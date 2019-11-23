@@ -1,0 +1,82 @@
+matrix:
+  include:
+    # linux
+    - os: linux
+      dist: xenial
+      env: 
+        - BUILD_TARGET=linux 
+        - GEN_BINDING_AND_COCOSFILE=true
+        - secure: Xn48eX1TD6DAPcVPU+a+CD3b/BKGVCHk555zl8rZiLq4GH4rWSES23rKcY8uz/X9GizETWYQK2luNvph4/BA29XEZ7l+Q0V9AZwrahWPzCuDBgxSPAr4KlETGM9I3xEvRIKBeddko7JTFHZCcNsItPRA0CovndQzdKE6texm13A=
+        - secure: M31OQaUIBV13aUMylPs2PieKThGs+ED0tj9SKbCKGKxwojl+N2ZhlS53D4Zqoj1ru/3P1X0pPeYvV0uVfM2dpEwRF4BmYVZQSrOKgjK1VfbcN5luWSeuAvq0LNGT99Ao02sKLbcHINiQ4axylPPgsY6+X/aoJNuKqBTQyaaVAo8=
+        - secure: M5lyDs0qai15mWHzJdkh0WPfVJJmVZu6SWtYULxatukGPXVwoQvmEtYAwAW+iz6aM+tXksQ/mk6nW5L8UFbHm+n6yrsa5bZU9sGXjilPE8p8bLFYDmIbPRazU+E6pBP3J2CDoAm0XnWkiYQ8feTxKTo6ysLnHAEjyaHTw0+Q1GM=
+      sudo: required
+      language: cpp
+    # mac_cmake
+    - os: osx
+      env: BUILD_TARGET=mac_cmake
+      language: cpp
+      osx_image: xcode10.3
+      sudo: required
+    # iOS_cmake
+    - os: osx
+      env: BUILD_TARGET=ios_cmake
+      language: cpp
+      osx_image: xcode11
+      sudo: required
+    # android cmake
+    - os: linux
+      env: BUILD_TARGET=android_cmake
+      language: android
+      sudo: required
+      dist: xenial
+    # android_lua cmake
+    - os: linux
+      env: BUILD_TARGET=android_lua_cmake
+      language: android
+      sudo: required
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+    # android_js cmake
+    # - os: linux
+    #   env: BUILD_TARGET=android_js_cmake
+    #   language: android
+    #   sudo: required
+    - os: linux
+      env: BUILD_TARGET=android_cocos_new_test
+      language: android
+      sudo: required
+      dist: xenial
+    - os: linux
+      dist: xenial
+      env: BUILD_TARGET=linux_cocos_new_test
+      language: cpp
+      sudo: required
+
+script:
+- tools/travis-scripts/run-script.sh
+before_install:
+- tools/travis-scripts/before-install.sh
+
+jdk:
+  - oraclejdk8
+
+cache:
+  bundler: true
+
+notifications:
+  email: false
+
+# blocklist
+branches:
+  except:
+  - v1
+  - v2
+  - v4-develop
+  - v3-doc
+  - v3.11_backup
+  - v35-for-tizen
