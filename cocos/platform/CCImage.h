@@ -78,6 +78,8 @@ public:
         JPG,
         //! PNG
         PNG,
+        //! BMP,
+        BMP,
         //! WebP
         WEBP,
         //! PVR
@@ -160,6 +162,7 @@ public:
 protected:
     bool initWithJpgData(const unsigned char *  data, ssize_t dataLen);
     bool initWithPngData(const unsigned char * data, ssize_t dataLen);
+    bool initWithBmpData(const unsigned char *data, ssize_t dataLen);
     bool initWithWebpData(const unsigned char * data, ssize_t dataLen);
     bool initWithPVRData(const unsigned char * data, ssize_t dataLen);
     bool initWithPVRv2Data(const unsigned char * data, ssize_t dataLen);
@@ -217,6 +220,7 @@ protected:
     Format detectFormat(const unsigned char * data, ssize_t dataLen);
     bool isPng(const unsigned char * data, ssize_t dataLen);
     bool isJpg(const unsigned char * data, ssize_t dataLen);
+    bool isBmp(const unsigned char * data, ssize_t dataLen);
     bool isWebp(const unsigned char * data, ssize_t dataLen);
     bool isPvr(const unsigned char * data, ssize_t dataLen);
     bool isEtc(const unsigned char * data, ssize_t dataLen);

@@ -31,7 +31,17 @@ THE SOFTWARE.
 #include <ctype.h>
 
 #include "base/ccConfig.h" // CC_USE_JPEG, CC_USE_WEBP
-#include "platform/CCGL.h"
+
+#define STBI_NO_JPEG
+#define STBI_NO_PNG
+#define STBI_NO_GIF
+#define STBI_NO_PSD
+#define STBI_NO_PIC
+#define STBI_NO_PNM
+#define STBI_NO_HDR
+#define STBI_NO_TGA
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
 
 extern "C"
 {
@@ -588,6 +598,9 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
         case Format::ATITC:
             ret = initWithATITCData(unpackedData, unpackedLen);
             break;
+        case Format::BMP:
+            ret = initWithBmpData(unpackedData, unpackedLen);
+            break;
         default:
             {
                 // load and detect image format
@@ -628,6 +641,10 @@ bool Image::isPng(const unsigned char * data, ssize_t dataLen)
     return memcmp(PNG_SIGNATURE, data, sizeof(PNG_SIGNATURE)) == 0;
 }
 
+bool Image::isBmp(const unsigned char * data, ssize_t dataLen)
+{
+    return dataLen > 54 && data[0] == 'B' && data[1] == 'M';
+}
 
 bool Image::isEtc(const unsigned char * data, ssize_t /*dataLen*/)
 {
@@ -706,6 +723,10 @@ Image::Format Image::detectFormat(const unsigned char * data, ssize_t dataLen)
     else if (isJpg(data, dataLen))
     {
         return Format::JPG;
+    }
+    else if (isBmp(data, dataLen))
+    {
+        return Format::BMP;
     }
     else if (isWebp(data, dataLen))
     {
@@ -1055,6 +1076,18 @@ bool Image::initWithPngData(const unsigned char * data, ssize_t dataLen)
     CCLOG("png is not enabled, please enable it in ccConfig.h");
     return false;
 #endif //CC_USE_PNG
+}
+
+bool Image::initWithBmpData(const unsigned char* data, ssize_t dataLen)
+{
+    const int nrChannels = 3;
+    _data = stbi_load_from_memory(data, dataLen, &_width, &_height, nullptr, nrChannels);
+    if (_data) {
+        _dataLen = _width * _height * nrChannels;
+        _fileType = Format::BMP;
+        _pixelFormat = backend::PixelFormat::RGB888;
+    }
+    return true;
 }
 
 namespace
