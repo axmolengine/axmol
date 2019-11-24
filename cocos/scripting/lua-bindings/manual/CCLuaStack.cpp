@@ -27,7 +27,6 @@
 #include "scripting/lua-bindings/manual/CCLuaStack.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include <string.h>
-#include "external/xxtea/xxtea.h"
 extern "C" {
 #include "lua.h"
 #include "tolua++.h"
@@ -776,19 +775,8 @@ int LuaStack::luaLoadChunksFromZIP(lua_State *L)
         bool isXXTEA = stack && stack->_xxteaEnabled && size >= stack->_xxteaSignLen
             && memcmp(stack->_xxteaSign, bytes, stack->_xxteaSignLen) == 0;
 
-
-        if (isXXTEA) { // decrypt XXTEA
-            xxtea_long len = 0;
-            buffer = xxtea_decrypt(bytes + stack->_xxteaSignLen,
-                                   (xxtea_long)size - (xxtea_long)stack->_xxteaSignLen,
-                                   (unsigned char*)stack->_xxteaKey,
-                                   (xxtea_long)stack->_xxteaKeyLen,
-                                   &len);
-            zip = ZipFile::createWithBuffer(buffer, len);
-        } else {
-            if (size > 0) {
-                zip = ZipFile::createWithBuffer(bytes, (unsigned long)size);
-            }
+        if (size > 0) {
+            zip = ZipFile::createWithBuffer(bytes, (unsigned long)size);
         }
 
         if (zip) {
@@ -865,26 +853,8 @@ int LuaStack::luaLoadBuffer(lua_State *L, const char *chunk, int chunkSize, cons
 {
     int r = 0;
 
-    if (_xxteaEnabled && strncmp(chunk, _xxteaSign, _xxteaSignLen) == 0)
-    {
-        // decrypt XXTEA
-        xxtea_long len = 0;
-        unsigned char* result = xxtea_decrypt((unsigned char*)chunk + _xxteaSignLen,
-                                              (xxtea_long)chunkSize - _xxteaSignLen,
-                                              (unsigned char*)_xxteaKey,
-                                              (xxtea_long)_xxteaKeyLen,
-                                              &len);
-        unsigned char* content = result;
-        xxtea_long contentSize = len;
-        skipBOM((const char*&)content, (int&)contentSize);
-        r = luaL_loadbuffer(L, (char*)content, contentSize, chunkName);
-        free(result);
-    }
-    else
-    {
-        skipBOM(chunk, chunkSize);
-        r = luaL_loadbuffer(L, chunk, chunkSize, chunkName);
-    }
+    skipBOM(chunk, chunkSize);
+    r = luaL_loadbuffer(L, chunk, chunkSize, chunkName);
 
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
     if (r)
