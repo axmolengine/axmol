@@ -175,7 +175,7 @@ namespace ui {
 
         int                         _fontType;
 
-        simple_timer::TIMER_ID      _continuousTouchDelayTimerID;
+        stimer::TIMER_ID            _continuousTouchDelayTimerID;
         float                       _continuousTouchDelayTime;
         std::function<void(const Point& worldPoint)>   _continuousTouchCallback;
 

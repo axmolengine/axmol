@@ -3,7 +3,7 @@
 //
 #include "LayoutHelper.h"
 
-namespace purelib {
+namespace LayoutHelper {
 cocos2d::Rect ScreenVisibleRect::s_ScreenVisibleRect;
 
 /// x-studio365: when design resolution changed, should call this func.
@@ -21,7 +21,7 @@ void ScreenVisibleRect::lazyInit()
         auto director = Director::getInstance();
         auto glview = director->getOpenGLView();
 
-        if (glview->getResolutionPolicy() == kResolutionNoBorder) {
+        if (glview->getResolutionPolicy() == ResolutionPolicy::NO_BORDER) {
             s_ScreenVisibleRect.origin = director->getVisibleOrigin();
             s_ScreenVisibleRect.size = director->getVisibleSize();
         }
@@ -1273,7 +1273,7 @@ void nodes_layout::scr::setNodeNormalizedTop(Node* pNode, const float ratioTop)
 void nodes_layout::scr::setNodeNormalizedPositionX(cocos2d::Node* pNode, float ratio)
 {
     CC_ASSERT(pNode);
-    cocos2d::Rect ScreenVisibleRect = purelib::ScreenVisibleRect::getScreenVisibleRect();
+    cocos2d::Rect ScreenVisibleRect = LayoutHelper::ScreenVisibleRect::getScreenVisibleRect();
     cocos2d::Point ptWorld(ScreenVisibleRect.size.width * ratio + ScreenVisibleRect.origin.x, 0);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPositionX(ptLocal.x);
@@ -1282,7 +1282,7 @@ void nodes_layout::scr::setNodeNormalizedPositionX(cocos2d::Node* pNode, float r
 void nodes_layout::scr::setNodeNormalizedPositionY(cocos2d::Node* pNode, float ratio)
 {
     CC_ASSERT(pNode);
-    cocos2d::Rect ScreenVisibleRect = purelib::ScreenVisibleRect::getScreenVisibleRect();
+    cocos2d::Rect ScreenVisibleRect = LayoutHelper::ScreenVisibleRect::getScreenVisibleRect();
 
     cocos2d::Point ptWorld(0, ScreenVisibleRect.size.height * ratio + ScreenVisibleRect.origin.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
@@ -1291,9 +1291,9 @@ void nodes_layout::scr::setNodeNormalizedPositionY(cocos2d::Node* pNode, float r
 void nodes_layout::scr::setNodeNormalizedPosition(Node* pNode, const cocos2d::Point& ratio)
 {
     CC_ASSERT(pNode);
-    pNode->ignoreAnchorPointForPosition(false);
+    pNode->setIgnoreAnchorPointForPosition(false);
     pNode->setAnchorPoint(cocos2d::Vec2(.5f, .5f));
-    cocos2d::Rect ScreenVisibleRect = purelib::ScreenVisibleRect::getScreenVisibleRect();
+    cocos2d::Rect ScreenVisibleRect = LayoutHelper::ScreenVisibleRect::getScreenVisibleRect();
     cocos2d::Point ptWorld(ScreenVisibleRect.size.width * ratio.x + ScreenVisibleRect.origin.x, ScreenVisibleRect.size.height * ratio.y + ScreenVisibleRect.origin.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPosition(ptLocal);

@@ -1,5 +1,6 @@
 ﻿/****************************************************************************
  Copyright (c) 2015 cocos2d-x.org
+Copyright (c) 2019-2020 simdsoft, @HALX99
  
  http://www.cocos2d-x.org
  

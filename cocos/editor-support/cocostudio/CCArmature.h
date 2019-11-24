@@ -1,5 +1,7 @@
 ﻿/****************************************************************************
-Copyright (c) 2013-2017 Chukong Technologies Inc.
+Copyright (c) 2013-2016 Chukong Technologies Inc.
+Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-2020 simdsoft, @HALX99
 
 http://www.cocos2d-x.org
 
@@ -98,7 +100,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~Armature(void);
+    virtual ~Armature();
 
     /**
      * Init the empty armature
@@ -175,7 +177,7 @@ public:
      *  @js NA
      *  @lua NA
      */
-    inline const cocos2d::BlendFunc &getBlendFunc(void) const override{ return _blendFunc; }
+    inline const cocos2d::BlendFunc &getBlendFunc() const override{ return _blendFunc; }
     
 
     /**

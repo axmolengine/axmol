@@ -1,5 +1,6 @@
 ﻿/****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
+Copyright (c) 2019-2020 simdsoft, @HALX99
 
 http://www.cocos2d-x.org
 
@@ -57,21 +58,6 @@ typedef struct AnimationInfo
     std::function<void()> clipEndCallBack;
 } AnimationClip;
 
-#if 0
-class CC_STUDIO_DLL ActionTimelineData : public cocos2d::Ref
-{
-public:
-    static ActionTimelineData* create(int actionTag);
-
-    virtual void setActionTag(int actionTag) { _actionTag = actionTag; }
-    virtual int getActionTag() const { return _actionTag; }
-CC_CONSTRUCTOR_ACCESS:
-    ActionTimelineData();
-    virtual bool init(int actionTag);
-protected:
-    int _actionTag;
-};
-#endif
 
 class CC_STUDIOP_DLL ActionTimeline : public cocos2d::Action, public cocos2d::PlayableProtocol
 {

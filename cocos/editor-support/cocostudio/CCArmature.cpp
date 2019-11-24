@@ -1,5 +1,7 @@
 /****************************************************************************
-Copyright (c) 2013-2017 Chukong Technologies Inc.
+Copyright (c) 2013-2016 Chukong Technologies Inc.
+Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-2020 simdsoft, @HALX99
 
 http://www.cocos2d-x.org
 
@@ -31,8 +33,6 @@ THE SOFTWARE.
 
 #include "renderer/CCRenderer.h"
 #include "renderer/CCGroupCommand.h"
-#include "renderer/CCGLProgramState.h"
-#include "2d/CCDrawingPrimitives.h"
 #include "base/CCDirector.h"
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
@@ -93,7 +93,7 @@ Armature::Armature()
 }
 
 
-Armature::~Armature(void)
+Armature::~Armature()
 {
     _boneDic.clear();
     _topBoneList.clear();
@@ -181,8 +181,6 @@ bool Armature::init(const std::string& name)
             _animation->setAnimationData(animationData);
 
         }
-
-        setGLProgramState(GLProgramState::getOrCreateWithGLProgramName(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR));
 
         setCascadeOpacityEnabled(true);
         setCascadeColorEnabled(true);
@@ -625,8 +623,7 @@ void Armature::drawContour()
 #pragma warning (push)
 #pragma warning (disable: 4996)
 #endif
-            
-            DrawPrimitives::drawPoly( points, (unsigned int)length, true );
+            cocos2d::log("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
 
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
 #pragma GCC diagnostic warning "-Wdeprecated-declarations"

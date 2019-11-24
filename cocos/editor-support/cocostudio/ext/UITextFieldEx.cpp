@@ -28,6 +28,18 @@ NS_CC_BEGIN
 #define nxbeep(t)
 #endif
 
+static Label* createLabel(const std::string& text, const std::string& font, float fontSize, const Size& dimensions  = Size::ZERO , TextHAlignment hAlignment  = TextHAlignment::LEFT , TextVAlignment vAlignment  = TextVAlignment::TOP )
+{
+    if (FileUtils::getInstance()->isFileExist(font))
+    {
+        return Label::createWithTTF(text, font, fontSize, dimensions, hAlignment, vAlignment);
+    }
+    else
+    {
+        return Label::createWithSystemFont(text, font, fontSize, dimensions, hAlignment, vAlignment);
+    }
+}
+
 static bool engine_inj_checkVisibility(Node* theNode)
 {
     // CC_ASSERT(theNode != NULL);
@@ -91,7 +103,7 @@ static Sprite* engine_inj_create_lump(const Color4B& color, int height, int widt
     // create cursor by pixels
     Texture2D* texture = new Texture2D();
 
-    texture->initWithData(pixels, height * width * sizeof(unsigned int), Texture2D::PixelFormat::RGBA8888, width, height, Size(width, height));
+    texture->initWithData(pixels, height * width * sizeof(unsigned int), backend::PixelFormat::RGBA8888, width, height, Size(width, height));
 
     auto cursor = Sprite::createWithTexture(texture);
 
@@ -166,7 +178,7 @@ namespace ui {
 
     static float internalCalcStringWidth(const std::string& s, const std::string& fontName, float fontSize)
     {
-        auto label = Label::create(s, fontName, fontSize);
+        auto label = createLabel(s, fontName, fontSize);
         return label->getContentSize().width;
     }
 
@@ -281,7 +293,7 @@ namespace ui {
     {
         this->placeHolder = placeholder;
 
-        this->renderLabel = Label::create(placeholder, fontName, fontSize, Size::ZERO, TextHAlignment::CENTER, TextVAlignment::CENTER);
+        this->renderLabel = createLabel(placeholder, fontName, fontSize, Size::ZERO, TextHAlignment::CENTER, TextVAlignment::CENTER);
         this->renderLabel->setAnchorPoint(Point::ANCHOR_MIDDLE_LEFT);
         this->addChild(this->renderLabel);
 
@@ -367,14 +379,14 @@ namespace ui {
             bool focus = (engine_inj_checkVisibility(this) && this->editable && this->enabled && engine_inj_containsTouchPoint(control, touch));
 
             if (this->_continuousTouchDelayTimerID != nullptr) {
-                simple_timer::kill(this->_continuousTouchDelayTimerID);
+                stimer::kill(this->_continuousTouchDelayTimerID);
                 this->_continuousTouchDelayTimerID = nullptr;
             }
 
             if (focus && this->cursorVisible) {
                 auto worldPoint = touch->getLocation();
                 if (this->_continuousTouchCallback) {
-                    this->_continuousTouchDelayTimerID = simple_timer::delay(this->_continuousTouchDelayTime, [=]() {
+                    this->_continuousTouchDelayTimerID = stimer::delay(this->_continuousTouchDelayTime, [=]() {
                         this->_continuousTouchCallback(worldPoint);
                     });
                 }
@@ -383,7 +395,7 @@ namespace ui {
         };
         touchListener->onTouchEnded = [control, this](Touch* touch, Event* e) {
             if (this->_continuousTouchDelayTimerID != nullptr) {
-                simple_timer::kill(this->_continuousTouchDelayTimerID);
+                stimer::kill(this->_continuousTouchDelayTimerID);
                 this->_continuousTouchDelayTimerID = nullptr;
             }
 
@@ -892,7 +904,7 @@ namespace ui {
         if (this->cursor) {
             this->cursorVisible = true;
             this->cursor->setVisible(true);
-            this->cursor->runAction(CCRepeatForever::create(CCBlink::create(1, 1)));
+            this->cursor->runAction(RepeatForever::create(Blink::create(1, 1)));
         }
     }
 

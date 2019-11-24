@@ -1,5 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
+Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-2020 simdsoft, @HALX99
 
 http://www.cocos2d-x.org
 
@@ -30,6 +32,7 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "2d/CCSpriteFrameCache.h"
 #include "2d/CCSpriteFrame.h"
+#include "base/ccUtils.h"
 
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 
@@ -358,9 +361,9 @@ Frame* ActionTimelineCache::loadColorFrame(const rapidjson::Value& json)
 {
     ColorFrame* frame = ColorFrame::create();
 
-    GLubyte red   = (GLubyte)DICTOOL->getIntValue_json(json, RED);
-    GLubyte green = (GLubyte)DICTOOL->getIntValue_json(json, GREEN);
-    GLubyte blue  = (GLubyte)DICTOOL->getIntValue_json(json, BLUE);
+    uint8_t red   = (uint8_t)DICTOOL->getIntValue_json(json, RED);
+    uint8_t green = (uint8_t)DICTOOL->getIntValue_json(json, GREEN);
+    uint8_t blue  = (uint8_t)DICTOOL->getIntValue_json(json, BLUE);
 
     frame->setColor(Color3B(red, green, blue));
 
@@ -748,7 +751,7 @@ Frame* ActionTimelineCache::loadTextureFrameWithFlatBuffers(const flatbuffers::T
             if (!FileUtils::getInstance()->isFileExist(path))
             {
                 path = "";
-            } // pitfall: x-studio365 spec, use fullPath will lead some asset managment solution not work  with ETC1 seperate ALPHA channel.
+            } // pitfall: x-studio spec, use fullPath will lead some asset managment solution not work  with ETC1 seperate ALPHA channel.
             /*if (FileUtils::getInstance()->isFileExist(path))
             {
                 std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
@@ -918,12 +921,12 @@ Frame* ActionTimelineCache::loadBlendFrameWithFlatBuffers(const flatbuffers::Ble
 {
     BlendFuncFrame* frame = BlendFuncFrame::create();
     cocos2d::BlendFunc blend;
-    blend.src = GL_ONE;
-    blend.dst = GL_ONE_MINUS_SRC_ALPHA;
+    blend.src = backend::BlendFactor::ONE;
+    blend.dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
     if (nullptr != flatbuffers->blendFunc())
     {
-        blend.src = flatbuffers->blendFunc()->src();
-        blend.dst = flatbuffers->blendFunc()->dst();
+        blend.src = utils::toBackendBlendFactor(flatbuffers->blendFunc()->src());
+        blend.dst = utils::toBackendBlendFactor(flatbuffers->blendFunc()->dst());
     }
     frame->setBlendFunc(blend);
 
