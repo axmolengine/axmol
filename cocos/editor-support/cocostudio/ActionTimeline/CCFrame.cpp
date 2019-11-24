@@ -1,5 +1,6 @@
 /****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
+Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
 http://www.cocos2d-x.org
 
@@ -768,7 +769,7 @@ void AlphaFrame::onApply(float percent)
 {
     if (nullptr != _node)
     {
-        GLubyte alpha = _alpha + _betweenAlpha * percent;
+        uint8_t alpha = _alpha + _betweenAlpha * percent;
         _node->setOpacity(alpha);
     }
 }

@@ -1,6 +1,9 @@
 
 #include "glslutils.hpp"
 
+#include "renderer/backend/ProgramCache.h"
+#include "renderer/backend/Device.h"
+
 static const char* s_wintell_hsv_frag = R"(
 #ifdef GL_ES
 precision mediump float;
@@ -88,12 +91,17 @@ bool glslutils::enableNodeIntelliShading(cocos2d::Node* node,
     if (node == nullptr)
         return false;
 
-    auto glProgram = addPositionTextureColorGLProgram("glsl.builtin.wintelli_hsv.frag", noMVP);
-    if (glProgram == nullptr) {
+    // TODO: cache it?
+    auto program = newHSVProgram();
+    if (program == nullptr) {
         return false;
     }
 
-    node->setGLProgramState(GLProgramState::create(glProgram));
+    auto programState = new backend::ProgramState(program);
+    program->release();
+
+    node->setProgramState(programState);
+    programState->release();
 
     updateNodeHsv(node, hsv, filter, forceShading, hsvShading);
 
@@ -112,39 +120,19 @@ void glslutils::updateNodeHsv(cocos2d::Node* node,
     setMatrixVal(&hsvMatrix, hsv.z);
 
     printmat3(hsvMatrix.m);
-    node->getGLProgramState()->setUniformCallback("u_mix_hsv", [hsvMatrix](cocos2d::GLProgram *p, cocos2d::Uniform *u) {
-        glUniformMatrix3fv(u->location, 1, GL_FALSE, (GLfloat*)&hsvMatrix.m[0]);
+
+    auto programState = node->getProgramState();
+    programState->setCallbackUniform(programState->getUniformLocation("u_mix_hsv"), [hsvMatrix](backend::ProgramState* programState, const backend::UniformLocation& location) {
+        programState->setUniform(location, &hsvMatrix.m[0], sizeof(hsvMatrix));
     });
 
-    node->getGLProgramState()->setUniformVec3("u_filter_rgb", filter);
-    node->getGLProgramState()->setUniformInt("u_force_shading", forceShading ? 1 : 0);
-    // node->getGLProgramState()->setUniformVec3("u_shading_hsv", hsvShading);
+    programState->setUniform(programState->getUniformLocation("u_filter_rgb"), &filter, sizeof(filter));
+    int32_t value = forceShading ? 1 : 0;
+    programState->setUniform(programState->getUniformLocation("u_force_shading"), &value, sizeof(value));
 }
 
-GLProgram* glslutils::addPositionTextureColorGLProgram(const std::string& fragFile, bool noMVP, bool refresh)
+backend::Program* glslutils::newHSVProgram()
 {
-    auto glProgram = (GLProgramCache::getInstance())->getGLProgram(fragFile);
-    if (!refresh  && glProgram != nullptr)
-        return glProgram;
-
-    auto fragSource = s_wintell_hsv_frag;// FileUtils::getInstance()->getStringFromFile(fragFile);
-    glProgram = new(std::nothrow) GLProgram();
-    const GLchar* vertSource = nullptr;
-    if (noMVP) {
-        vertSource = ccPositionTextureColor_noMVP_vert;
-    }
-    else {
-        vertSource = ccPositionTextureColor_vert;
-    }
-    if (glProgram != nullptr && glProgram->initWithByteArrays(vertSource, fragSource)) {
-        glProgram->link();
-        glProgram->updateUniforms();
-        GLProgramCache::getInstance()->addGLProgram(glProgram, fragFile);
-        glProgram->release();
-        return glProgram;
-    }
-
-    assert(false);
-    CC_SAFE_DELETE(glProgram);
-    return glProgram;
+    auto fragSource = s_wintell_hsv_frag;
+    return backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource);
 }

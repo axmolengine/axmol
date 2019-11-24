@@ -1,5 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
+Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-2020 simdsoft, @HALX99
 
 http://www.cocos2d-x.org
 
@@ -29,34 +31,6 @@ THE SOFTWARE.
 USING_NS_CC;
 
 NS_TIMELINE_BEGIN
-
-#if 0
-// ActionTimelineData
-ActionTimelineData* ActionTimelineData::create(int actionTag)
-{
-    ActionTimelineData * ret = new (std::nothrow) ActionTimelineData();
-    if (ret && ret->init(actionTag))
-    {
-        ret->autorelease();
-    }
-    else
-    {
-        CC_SAFE_DELETE(ret);
-    }
-    return ret;
-}
-
-ActionTimelineData::ActionTimelineData()
-    : _actionTag(0)
-{
-}
-
-bool ActionTimelineData::init(int actionTag)
-{
-    _actionTag = actionTag;
-    return true;
-}
-#endif
 
 // ActionTimeline
 ActionTimeline* ActionTimeline::create()
@@ -176,7 +150,7 @@ ActionTimeline* ActionTimeline::clone() const
     newAction->setDuration(_duration);
     newAction->setTimeSpeed(_timeSpeed);
 
-    for (auto timelines : _timelineMap)
+    for (const auto& timelines : _timelineMap)
     {
         for(auto timeline : timelines.second)
         {      
@@ -185,7 +159,7 @@ ActionTimeline* ActionTimeline::clone() const
         }
     }
     
-    for( auto info : _animationInfos)
+    for(const auto& info : _animationInfos)
     {
         newAction->addAnimationInfo(info.second);
     }
@@ -250,7 +224,7 @@ void ActionTimeline::startWithTarget(Node *target)
     this->setTag(target->getTag());
 
     foreachNodeDescendant(target, 
-        [this, target](Node* child)
+        [this](Node* child)
     {
         ComExtensionData* data = dynamic_cast<ComExtensionData*>(child->getComponent("ComExtensionData"));
 
@@ -416,7 +390,7 @@ void ActionTimeline::emitFrameEndCallFuncs(int frameIndex)
     if (clipEndCallsIter != _frameEndCallFuncs.end())
     {
         auto clipEndCalls = (*clipEndCallsIter).second;
-        for (auto call : clipEndCalls)
+        for (const auto& call : clipEndCalls)
             (call).second();
     }
 }

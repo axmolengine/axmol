@@ -325,7 +325,7 @@ bool ParticleSystem::initWithDictionary(ValueMap& dictionary, const std::string&
         if(this->initWithTotalParticles(maxParticles))
         {
             // Emitter name in particle designer 2.0
-            _configName = dictionary["configName"].asString();
+            _configName = dictionary["configName"].toString();
 
             // angle
             _angle = dictionary["angle"].asFloat();

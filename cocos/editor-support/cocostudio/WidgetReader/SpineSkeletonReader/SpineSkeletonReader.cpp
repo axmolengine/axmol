@@ -192,7 +192,7 @@ namespace cocostudio
         }
 #endif
 
-        flatbuffers::BlendFunc f_blendFunc(blendFunc.src, blendFunc.dst);
+        flatbuffers::BlendFunc f_blendFunc(utils::toGLBlendFactor(blendFunc.src), utils::toGLBlendFactor(blendFunc.dst));
 
         auto options = CreateSpineSkeletonOptions(*builder,
             nodeOptions,

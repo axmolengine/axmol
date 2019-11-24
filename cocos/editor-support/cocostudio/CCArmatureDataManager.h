@@ -1,5 +1,6 @@
 /****************************************************************************
-Copyright (c) 2013-2017 Chukong Technologies Inc.
+Copyright (c) 2013-2016 Chukong Technologies Inc.
+Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
 http://www.cocos2d-x.org
 
@@ -54,16 +55,16 @@ public:
     static ArmatureDataManager *getInstance();
     static void destroyInstance();
     
-protected:
+private:
     /**
      * @js ctor
      */
-    ArmatureDataManager(void);
+    ArmatureDataManager();
     /**
      * @js NA
      * @lua NA
      */
-    ~ArmatureDataManager(void);
+    ~ArmatureDataManager();
 
 public:
 
@@ -172,7 +173,7 @@ public:
     const cocos2d::Map<std::string, AnimationData*>&    getAnimationDatas() const;
     const cocos2d::Map<std::string, TextureData*>&      getTextureDatas() const;
 
-public:
+protected:
     void addRelativeData(const std::string& configFilePath);
     RelativeData *getRelativeData(const std::string& configFilePath);
 private:

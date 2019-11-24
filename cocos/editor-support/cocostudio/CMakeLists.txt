@@ -19,6 +19,7 @@ set(COCOS_CS_HEADER
     editor-support/cocostudio/ActionTimeline/CSLoader.h
     editor-support/cocostudio/ActionTimeline/CCActionTimelineCache.h
     editor-support/cocostudio/ActionTimeline/CCSkinNode.h
+    editor-support/cocostudio/ActionTimeline/CCActionTimelineData.h
     editor-support/cocostudio/CocosStudioExtension.h
     editor-support/cocostudio/CCTransformHelp.h
     editor-support/cocostudio/CocoStudio.h
@@ -53,6 +54,7 @@ set(COCOS_CS_HEADER
     editor-support/cocostudio/WidgetReader/WidgetReaderProtocol.h
     editor-support/cocostudio/WidgetReader/ButtonReader/ButtonReader.h
     editor-support/cocostudio/WidgetReader/Light3DReader/Light3DReader.h
+    editor-support/cocostudio/WidgetReader/SpineSkeletonReader/SpineSkeletonReader.h
     editor-support/cocostudio/WidgetReader/TabControlReader/TabControlReader.h
     editor-support/cocostudio/WidgetReader/TabControlReader/CSTabControl_generated.h
     editor-support/cocostudio/WidgetReader/TextReader/TextReader.h
@@ -75,6 +77,10 @@ set(COCOS_CS_HEADER
     editor-support/cocostudio/WidgetReader/SkeletonReader/BoneNodeReader.h
     editor-support/cocostudio/WidgetReader/ScrollViewReader/ScrollViewReader.h
     editor-support/cocostudio/WidgetReader/TextFieldReader/TextFieldReader.h
+    editor-support/cocostudio/WidgetReader/TextFieldReader/TextFieldExReader.h
+    editor-support/cocostudio/WidgetReader/RichTextReader/RichTextReader.h
+    editor-support/cocostudio/WidgetReader/RadioButtonReader/RadioButtonReader.h
+    editor-support/cocostudio/WidgetReader/RadioButtonReader/RadioButtonGroupReader.h
     editor-support/cocostudio/WidgetReader/NodeReaderProtocol.h
     editor-support/cocostudio/CCComAudio.h
     editor-support/cocostudio/CCDisplayFactory.h
@@ -92,6 +98,12 @@ set(COCOS_CS_HEADER
     editor-support/cocostudio/CCSSceneReader.h
     editor-support/cocostudio/CCSGUIReader.h
     editor-support/cocostudio/CCSkin.h
+    editor-support/cocostudio/ext/SimpleTimer.h
+    editor-support/cocostudio/ext/matrix3f.hpp
+    editor-support/cocostudio/ext/glslutils.hpp
+    editor-support/cocostudio/ext/LayoutHelper.h
+    editor-support/cocostudio/ext/UITextFieldEx.h
+    editor-support/cocostudio/ext/SpineSkeletonDataCache.h
     )
 
 set(COCOS_CS_SRC
@@ -146,6 +158,10 @@ set(COCOS_CS_SRC
     editor-support/cocostudio/WidgetReader/LoadingBarReader/LoadingBarReader.cpp
     editor-support/cocostudio/WidgetReader/ListViewReader/ListViewReader.cpp
     editor-support/cocostudio/WidgetReader/TextFieldReader/TextFieldReader.cpp
+    editor-support/cocostudio/WidgetReader/TextFieldReader/TextFieldExReader.cpp
+    editor-support/cocostudio/WidgetReader/RichTextReader/RichTextReader.cpp
+    editor-support/cocostudio/WidgetReader/RadioButtonReader/RadioButtonReader.cpp
+    editor-support/cocostudio/WidgetReader/RadioButtonReader/RadioButtonGroupReader.cpp
     editor-support/cocostudio/WidgetReader/WidgetReader.cpp
     editor-support/cocostudio/WidgetReader/CheckBoxReader/CheckBoxReader.cpp
     editor-support/cocostudio/WidgetReader/SliderReader/SliderReader.cpp
@@ -165,6 +181,7 @@ set(COCOS_CS_SRC
     editor-support/cocostudio/WidgetReader/ScrollViewReader/ScrollViewReader.cpp
     editor-support/cocostudio/WidgetReader/GameNode3DReader/GameNode3DReader.cpp
     editor-support/cocostudio/WidgetReader/Light3DReader/Light3DReader.cpp
+    editor-support/cocostudio/WidgetReader/SpineSkeletonReader/SpineSkeletonReader.cpp
     editor-support/cocostudio/ActionTimeline/CCActionTimelineCache.cpp
     editor-support/cocostudio/ActionTimeline/CCActionTimeline.cpp
     editor-support/cocostudio/ActionTimeline/CCActionTimelineNode.cpp
@@ -174,7 +191,14 @@ set(COCOS_CS_SRC
     editor-support/cocostudio/ActionTimeline/CCBoneNode.cpp
     editor-support/cocostudio/ActionTimeline/CCSkeletonNode.cpp
     editor-support/cocostudio/ActionTimeline/CCSkinNode.cpp
+    editor-support/cocostudio/ActionTimeline/CCActionTimelineData.cpp
     editor-support/cocostudio/FlatBuffersSerialize.cpp
     editor-support/cocostudio/WidgetReader/ArmatureNodeReader/ArmatureNodeReader.cpp
     editor-support/cocostudio/WidgetReader/TabControlReader/TabControlReader.cpp
+    editor-support/cocostudio/WidgetReader/NodeReaderProtocol.cpp
+    editor-support/cocostudio/ext/glslutils.cpp
+    editor-support/cocostudio/ext/LayoutHelper.cpp
+    editor-support/cocostudio/ext/SimpleTimer.cpp
+    editor-support/cocostudio/ext/UITextFieldEx.cpp
+    editor-support/cocostudio/ext/SpineSkeletonDataCache.cpp
     )

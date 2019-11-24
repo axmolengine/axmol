@@ -1,6 +1,8 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
-
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-2020 simdsoft, @HALX99
+ 
  http://www.cocos2d-x.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -239,7 +241,7 @@ CSLoader::CSLoader()
     CREATE_CLASS_NODE_READER_INFO(BoneNodeReader);
     CREATE_CLASS_NODE_READER_INFO(SkeletonNodeReader);
 
-    /// Added by x-studio365
+    /// Added by x-studio
     CREATE_CLASS_NODE_READER_INFO(RichTextReader);
     CREATE_CLASS_NODE_READER_INFO(SpineSkeletonReader);
     CREATE_CLASS_NODE_READER_INFO(ControlSwitchReader);
@@ -589,20 +591,20 @@ void CSLoader::initNode(Node* node, const rapidjson::Value& json)
     float rotation = DICTOOL->getFloatValue_json(json, ROTATION);
     float rotationSkewX = DICTOOL->getFloatValue_json(json, ROTATION_SKEW_X);
     float rotationSkewY = DICTOOL->getFloatValue_json(json, ROTATION_SKEW_Y);
-    float skewx = DICTOOL->getFloatValue_json(json, SKEW_X);
-    float skewy = DICTOOL->getFloatValue_json(json, SKEW_Y);
-    float anchorx = DICTOOL->getFloatValue_json(json, ANCHOR_X, 0.5f);
-    float anchory = DICTOOL->getFloatValue_json(json, ANCHOR_Y, 0.5f);
-    GLubyte alpha = (GLubyte)DICTOOL->getIntValue_json(json, ALPHA, 255);
-    GLubyte red = (GLubyte)DICTOOL->getIntValue_json(json, RED, 255);
-    GLubyte green = (GLubyte)DICTOOL->getIntValue_json(json, GREEN, 255);
-    GLubyte blue = (GLubyte)DICTOOL->getIntValue_json(json, BLUE, 255);
-    int zorder = DICTOOL->getIntValue_json(json, ZORDER);
-    int tag = DICTOOL->getIntValue_json(json, TAG);
-    int actionTag = DICTOOL->getIntValue_json(json, ACTION_TAG);
-    bool visible = DICTOOL->getBooleanValue_json(json, VISIBLE);
-
-    if (x != 0 || y != 0)
+    float skewx         = DICTOOL->getFloatValue_json(json, SKEW_X);
+    float skewy         = DICTOOL->getFloatValue_json(json, SKEW_Y);
+    float anchorx       = DICTOOL->getFloatValue_json(json, ANCHOR_X, 0.5f);
+    float anchory       = DICTOOL->getFloatValue_json(json, ANCHOR_Y, 0.5f);
+    uint8_t alpha       = (uint8_t)DICTOOL->getIntValue_json(json, ALPHA, 255);
+    uint8_t red         = (uint8_t)DICTOOL->getIntValue_json(json, RED, 255);
+    uint8_t green       = (uint8_t)DICTOOL->getIntValue_json(json, GREEN, 255);
+    uint8_t blue        = (uint8_t)DICTOOL->getIntValue_json(json, BLUE, 255);
+    int zorder          = DICTOOL->getIntValue_json(json, ZORDER);
+    int tag             = DICTOOL->getIntValue_json(json, TAG);
+    int actionTag       = DICTOOL->getIntValue_json(json, ACTION_TAG);
+    bool visible        = DICTOOL->getBooleanValue_json(json, VISIBLE);
+    
+    if(x != 0 || y != 0)
         node->setPosition(Point(x, y));
     if (scalex != 1)
         node->setScaleX(scalex);

@@ -11,13 +11,10 @@
 #ifndef _NXNODESLAYOUT_H_
 #define _NXNODESLAYOUT_H_
 
-#include "politedef.h"
 #include "cocos2d.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
 using namespace cocos2d;
-// using namespace cocos2d::extension;
-using namespace purelib;
 
 // f(x) = s * a + x
 #define adjust_coord(__sz__,__achor__,__coord__)             ( (__sz__) * (__achor__) + (__coord__) )
@@ -44,7 +41,7 @@ inline cocos2d::Size operator*(const cocos2d::Size& left, const cocos2d::Vec2& r
     return cocos2d::Size(left.width * right.x, left.height * right.y);
 }
 
-namespace purelib {
+namespace LayoutHelper {
 
     class CC_STUDIO_DLL ScreenVisibleRect
     {
@@ -69,7 +66,8 @@ namespace purelib {
     };
 
     class CC_STUDIO_DLL nodes_layout {
-        PLIB_STATICIZE_CLASS(nodes_layout);
+        nodes_layout() = delete;
+    public:
 
         static float adjustedScale;
         static cocos2d::Size designSize;
@@ -200,7 +198,7 @@ namespace purelib {
         static void centerNodeX(Node* pNode)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if (pNodeParent)
             {
                 nodes_layout::centerNodeX(pNode, pNodeParent->getContentSize());
             }
@@ -209,7 +207,7 @@ namespace purelib {
         static void centerNodeY(Node* pNode)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 nodes_layout::centerNodeY(pNode, pNodeParent->getContentSize());
             }
@@ -218,7 +216,7 @@ namespace purelib {
         static void centerNode(Node* pNode)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 nodes_layout::centerNode(pNode, pNodeParent->getContentSize());
             }
@@ -271,7 +269,7 @@ namespace purelib {
         static void setNodeLeft(Node* pNode, float left, float anchor = 0.0f)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 setNodeLeft(pNode, pNodeParent->getContentSize(), left, anchor);
             }
@@ -280,7 +278,7 @@ namespace purelib {
         static float getNodeLeft(Node* pNode, float anchor = 0.0f)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 return getNodeLeft(pNode, pNodeParent->getContentSize(), anchor);
             }
@@ -290,7 +288,7 @@ namespace purelib {
         static void setNodeTop(Node* pNode, float top, float anchor = 0.0f)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 nodes_layout::setNodeTop(pNode, pNodeParent->getContentSize(), top, anchor);
             }
@@ -299,7 +297,7 @@ namespace purelib {
         static float getNodeTop(Node* pNode, float anchor = 0.0f)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 return getNodeTop(pNode, pNodeParent->getContentSize(), anchor);
             }
@@ -309,7 +307,7 @@ namespace purelib {
         static void setNodeRight(Node* pNode, float right)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 nodes_layout::setNodeRight(pNode, pNodeParent->getContentSize(), right);
             }
@@ -317,7 +315,7 @@ namespace purelib {
         static float getNodeRight(Node* pNode, float anchor = 0.0f)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 return getNodeRight(pNode, pNodeParent->getContentSize(), anchor);
             }
@@ -327,7 +325,7 @@ namespace purelib {
         static void setNodeBottom(Node* pNode, float bottom, float anchor = .0f)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 nodes_layout::setNodeBottom(pNode, pNodeParent->getContentSize(), bottom, anchor);
             }
@@ -336,7 +334,7 @@ namespace purelib {
         static float getNodeBottom(Node* pNode, float anchor = 0.0f)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 return getNodeBottom(pNode, pNodeParent->getContentSize(), anchor);
             }
@@ -346,7 +344,7 @@ namespace purelib {
         static void setNodeLB(Node* pNode, const cocos2d::Point& p)
         { // left bottom
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 nodes_layout::setNodeLB(pNode, pNodeParent->getContentSize(), p);
             }
@@ -355,7 +353,7 @@ namespace purelib {
         static void setNodeRB(Node* pNode, const cocos2d::Point& p)
         { // right bottom
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 nodes_layout::setNodeRB(pNode, pNodeParent->getContentSize(), p);
             }
@@ -364,7 +362,7 @@ namespace purelib {
         static void setNodeLT(Node* pNode, const cocos2d::Point& p)
         { // left top
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 nodes_layout::setNodeLT(pNode, pNodeParent->getContentSize(), p);
             }
@@ -373,7 +371,7 @@ namespace purelib {
         static void setNodeRT(Node* pNode, const cocos2d::Point& p)
         { // right top
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 nodes_layout::setNodeRT(pNode, pNodeParent->getContentSize(), p);
             }
@@ -546,7 +544,7 @@ namespace purelib {
         static void setNodeNormalizedPositionX(cocos2d::Node* pNode, float ratio)
         {
             cocos2d::Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 setNodeNormalizedPositionX(pNode, pNodeParent->getContentSize(), ratio);
             }
@@ -555,7 +553,7 @@ namespace purelib {
         static void setNodeNormalizedPositionY(cocos2d::Node* pNode, float ratio)
         {
             cocos2d::Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 setNodeNormalizedPositionY(pNode, pNodeParent->getContentSize(), ratio);
             }
@@ -563,7 +561,7 @@ namespace purelib {
         static void setNodeNormalizedPosition(Node* pNode, const cocos2d::Point& ratio)
         {
             Node* pNodeParent = pNode->getParent();
-            if (_IsNotNull(pNodeParent))
+            if ((pNodeParent))
             {
                 setNodeNormalizedPosition(pNode, pNodeParent->getContentSize(), ratio);
             }
@@ -592,7 +590,8 @@ namespace purelib {
 
         ///// visible screen location methods //////
         class CC_STUDIO_DLL scr {
-            PLIB_STATICIZE_CLASS(scr);
+            scr() = delete;
+        public:
 
             static void setNodePosition(Node* pNode, const cocos2d::Point& p)
             {
@@ -833,10 +832,9 @@ namespace purelib {
 
 
     }; /* STATIC CLASS nodes_layout */
-
 }
 
-using namespace purelib;
+using namespace LayoutHelper;
 
 #endif
 

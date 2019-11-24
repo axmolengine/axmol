@@ -9,6 +9,9 @@
 #include "matrix3f.hpp"
 #include "cocos2d.h"
 #include <string>
+
+USING_NS_CC;
+
 typedef float _M3X3[3][3];
 typedef float _M4X4[4][4];
 
@@ -597,13 +600,13 @@ namespace glslutils
         identmat((float*)&mmat);
 
         /* rotate the grey vector into positive Z */
-        mag = sqrt(2.0);
-        xrs = 1.0 / mag;
-        xrc = 1.0 / mag;
+        mag = sqrt(2.0f);
+        xrs = 1.0f / mag;
+        xrc = 1.0f / mag;
         xrotatemat(mmat, xrs, xrc);
-        mag = sqrt(3.0);
+        mag = sqrt(3.0f);
         yrs = -1.0 / mag;
-        yrc = sqrt(2.0) / mag;
+        yrc = sqrt(2.0f) / mag;
         yrotatemat(mmat, yrs, yrc);
 
         /* shear the space to make the luminance plane horizontal */
@@ -825,7 +828,7 @@ namespace glslutils
         bool forceShading = false, 
         const cocos2d::Vec3& hsvShading = cocos2d::Vec3::ZERO);
 
-    backend::Program* addPositionTextureColorGLProgram(const std::string& fragFile, bool noMVP, bool refresh = false);
+    backend::Program* newHSVProgram();
 };
 
 #endif
