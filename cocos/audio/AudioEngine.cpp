@@ -338,7 +338,7 @@ void AudioEngine::remove(AUDIO_ID audioID)
         if (it->second.profileHelper) {
             it->second.profileHelper->audioIDs.remove(audioID);
         }
-        _audioPathIDMap[*it->second.filePath].remove(audioID);
+        _audioPathIDMap[it->second.filePath].remove(audioID);
         _audioIDInfoMap.erase(audioID);
     }
 }
