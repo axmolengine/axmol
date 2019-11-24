@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -25,7 +24,6 @@
 
 #include "editor-support/cocostudio/WidgetReader/SpriteReader/SpriteReader.h"
 
-#include "base/ccUtils.h"
 #include "2d/CCSprite.h"
 #include "2d/CCSpriteFrameCache.h"
 #include "platform/CCFileUtils.h"
@@ -35,8 +33,8 @@
 #include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
+#include "editor-support/cocostudio/ext/glslutils.hpp"
 
 USING_NS_CC;
 using namespace flatbuffers;
@@ -77,7 +75,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceSpriteReader);
     }
     
-    Offset<Table> SpriteReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                              flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -86,26 +84,45 @@ namespace cocostudio
         std::string path = "";
         std::string plistFile = "";
         int resourceType = 0;
+        bool intelliShadingEnabled = false;
+        cocos2d::Vec3 hsv;
+        cocos2d::Vec3 filter;
         
         cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
         
+        // attributes
+        auto attribute =  objectData.first_attribute();
+        while (attribute)
+        {
+            std::string attriname = attribute.name();
+            std::string value = attribute.value();
+
+            if (attriname == "IntelliShadingEnabled")
+            {
+                intelliShadingEnabled = (value == "True") ? true : false;
+                break;
+            }
+
+            attribute = attribute.next_attribute();
+        }
+
         // FileData
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
-            
+            std::string name = child.name();
+            pugi::xml_attribute attribute;
             if (name == "FileData")
             {
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -121,7 +138,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (resourceType == 1)
@@ -132,30 +149,75 @@ namespace cocostudio
             }
             else if (name == "BlendFunc")
             {
-                const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
-                
+                attribute = child.first_attribute();
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Src")
                     {
-                        blendFunc.src = utils::toBackendBlendFactor(atoi(value.c_str()));
+                        blendFunc.src = (backend::BlendFactor)atoi(value.c_str());
                     }
                     else if (name == "Dst")
                     {
-                        blendFunc.dst = utils::toBackendBlendFactor(atoi(value.c_str()));
+                        blendFunc.dst = (backend::BlendFactor)atoi(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
+                }
+            }
+            else if (name == "HSV") {
+                attribute = child.first_attribute();
+                while (attribute)
+                {
+                    name = attribute.name();
+                    std::string value = attribute.value();
+
+                    if (name == "X")
+                    {
+                        hsv.x = atof(value.c_str());
+                    }
+                    else if (name == "Y")
+                    {
+                        hsv.y = atof(value.c_str());
+                    }
+                    else if (name == "Z")
+                    {
+                        hsv.z = atof(value.c_str());
+                    }
+
+                    attribute = attribute.next_attribute();
+                }
+            }
+            else if (name == "FilterRGB") {
+                attribute = child.first_attribute();
+                while (attribute)
+                {
+                    name = attribute.name();
+                    std::string value = attribute.value();
+
+                    if (name == "X")
+                    {
+                        filter.x = atof(value.c_str());
+                    }
+                    else if (name == "Y")
+                    {
+                        filter.y = atof(value.c_str());
+                    }
+                    else if (name == "Z")
+                    {
+                        filter.z = atof(value.c_str());
+                    }
+
+                    attribute = attribute.next_attribute();
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
-        flatbuffers::BlendFunc f_blendFunc(utils::toGLBlendFactor(blendFunc.src), utils::toGLBlendFactor(blendFunc.dst));
+        flatbuffers::BlendFunc f_blendFunc((int)blendFunc.src, (int)blendFunc.dst);
 
         auto options = CreateSpriteOptions(*builder,
                                            nodeOptions,
@@ -163,7 +225,10 @@ namespace cocostudio
                                                               builder->CreateString(path),
                                                               builder->CreateString(plistFile),
                                                               resourceType),
-                                           &f_blendFunc);
+                                           &f_blendFunc, 
+                                           intelliShadingEnabled, 
+                                           (const FVec3*)&hsv, 
+                                           (const FVec3*)&filter);
         
         return *(Offset<Table>*)(&options);
     }
@@ -177,10 +242,12 @@ namespace cocostudio
         auto nodeReader = NodeReader::getInstance();
         nodeReader->setPropsWithFlatBuffers(node, (Table*)(options->nodeOptions()));
         
-        auto fileNameData = options->fileNameData();
+        auto fileNameData = cocos2d::wext::makeResourceData(options->fileNameData());
+
+        cocos2d::wext::onBeforeLoadObjectAsset(node, fileNameData, 0);
         
-        int resourceType = fileNameData->resourceType();
-        std::string path = fileNameData->path()->c_str();
+        int resourceType = fileNameData.type;
+        std::string& path = fileNameData.file;
         
         std::string errorFilePath = "";
         
@@ -201,7 +268,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = fileNameData->plistFile()->c_str();
+                std::string& plist = fileNameData.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path);
                 if (spriteFrame)
                 {
@@ -235,17 +302,17 @@ namespace cocostudio
         if (f_blendFunc)
         {
             cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
-            blendFunc.src = utils::toBackendBlendFactor(f_blendFunc->src());
-            blendFunc.dst = utils::toBackendBlendFactor(f_blendFunc->dst());
+            blendFunc.src = (backend::BlendFactor)f_blendFunc->src();
+            blendFunc.dst = (backend::BlendFactor)f_blendFunc->dst();
             sprite->setBlendFunc(blendFunc);
         }
         
         auto nodeOptions = options->nodeOptions();
         
-        uint8_t alpha       = (uint8_t)nodeOptions->color()->a();
-        uint8_t red         = (uint8_t)nodeOptions->color()->r();
-        uint8_t green       = (uint8_t)nodeOptions->color()->g();
-        uint8_t blue        = (uint8_t)nodeOptions->color()->b();
+        GLubyte alpha       = (GLubyte)nodeOptions->color()->a();
+        GLubyte red         = (GLubyte)nodeOptions->color()->r();
+        GLubyte green       = (GLubyte)nodeOptions->color()->g();
+        GLubyte blue        = (GLubyte)nodeOptions->color()->b();
         
         if (alpha != 255)
         {
@@ -263,11 +330,22 @@ namespace cocostudio
             sprite->setFlippedX(flipX);
         if(flipY != false)
             sprite->setFlippedY(flipY);
+
+        if (options->intelliShadingEnabled()) {
+            auto hsv = options->hsv();
+            auto filter = options->filter();
+            if (hsv != nullptr && filter != nullptr) {
+                glslutils::enableNodeIntelliShading(sprite,
+                    true,
+                    Vec3(hsv->x(), hsv->y(), hsv->z()),
+                    Vec3(filter->x(), filter->y(), filter->z()));
+            }
+        }
     }
     
     Node* SpriteReader::createNodeWithFlatBuffers(const flatbuffers::Table *spriteOptions)
     {
-        Sprite* sprite = Sprite::create();
+        Sprite* sprite = wext::aSprite();// Sprite::create();
         
         setPropsWithFlatBuffers(sprite, (Table*)spriteOptions);
         

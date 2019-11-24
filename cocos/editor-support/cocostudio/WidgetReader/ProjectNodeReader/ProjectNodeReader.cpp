@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -28,7 +27,6 @@
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -68,7 +66,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceProjectNodeReader);
     }
     
-    Offset<Table> ProjectNodeReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> ProjectNodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                   flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -77,34 +75,34 @@ namespace cocostudio
         std::string filename = "";
         float innerspeed = 1.0f;
 
-        const tinyxml2::XMLAttribute* objattri = objectData->FirstAttribute();
+        pugi::xml_attribute objattri = objectData.first_attribute();
         // inneraction speed
         while (objattri)
         {
-            std::string name = objattri->Name();
-            std::string value = objattri->Value();
+            std::string name = objattri.name();
+            std::string value = objattri.value();
             if (name == "InnerActionSpeed")
             {
-                    innerspeed = atof(objattri->Value());
+                    innerspeed = atof(objattri.value());
                     break;
             }
-            objattri = objattri->Next();
+            objattri = objattri.next_attribute();
         }
 
         // FileData
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "FileData")
             {
-                const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
+                auto attribute =  child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -113,11 +111,11 @@ namespace cocostudio
                         filename = convert;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         auto options = CreateProjectNodeOptions(*builder,

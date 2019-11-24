@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -39,7 +38,7 @@ THE SOFTWARE.
 
 #define CC_CREATE_NO_PARAM_NO_INIT(varType)\
 public: \
-    static inline varType *create(){ \
+    static inline varType *create(void){ \
     varType *var = new (std::nothrow) varType();\
     if (var)\
 {\
@@ -52,7 +51,7 @@ public: \
 
 #define CC_CREATE_NO_PARAM(varType)\
 public: \
-    static inline varType *create(){ \
+    static inline varType *create(void){ \
     varType *var = new (std::nothrow) varType();\
     if (var && var->init())\
 {\
@@ -83,7 +82,7 @@ public:
      * @js NA
      * @lua NA
      */
-    ~BaseData();
+    ~BaseData(void);
 
     /*
     * Copy data from node
@@ -154,7 +153,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~DisplayData() {}
+    virtual ~DisplayData(void) {}
 
     virtual void copy(DisplayData *displayData);
 
@@ -244,12 +243,12 @@ public:
     /**
      * @js ctor
      */
-    BoneData();
+    BoneData(void);
     /**
      * @js NA
      * @lua NA
      */
-    ~BoneData();
+    ~BoneData(void);
 
     virtual bool init();
 
@@ -376,7 +375,7 @@ public:
      * @js NA
      * @lua NA
      */
-    ~MovementBoneData();
+    ~MovementBoneData(void);
 
     virtual bool init();
 
@@ -403,12 +402,12 @@ public:
     /**
      * @js ctor
      */
-    MovementData();
+    MovementData(void);
     /**
      * @js NA
      * @lua NA
      */
-    ~MovementData();
+    ~MovementData(void);
 
     void addMovementBoneData(MovementBoneData *movBoneData);
     MovementBoneData *getMovementBoneData(const std::string& boneName);
@@ -465,12 +464,12 @@ public:
     /**
      * @js ctor
      */
-    AnimationData();
+    AnimationData(void);
     /**
      * @js NA
      * @lua NA
      */
-    ~AnimationData();
+    ~AnimationData(void);
 
     void addMovement(MovementData *movData);
     MovementData *getMovement(const std::string& movementName);
@@ -501,7 +500,7 @@ public:
      * @js NA
      * @lua NA
      */
-    ~ContourData();
+    ~ContourData(void);
 
     virtual bool init();
     virtual void addVertex(cocos2d::Vec2 &vertex);
@@ -530,7 +529,7 @@ public:
      * @js NA
      * @lua NA
      */
-    ~TextureData();
+    ~TextureData(void);
 
     virtual bool init();
 

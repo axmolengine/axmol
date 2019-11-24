@@ -1,6 +1,5 @@
 /****************************************************************************
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -63,7 +62,7 @@ void ActionManagerEx::initWithDictionary(const char* jsonName,const rapidjson::V
 {
     std::string path = jsonName;
     this->_studioVersionNumber = version;
-    ssize_t pos = path.find_last_of('/');
+    ssize_t pos = path.find_last_of("/");
     std::string fileName = path.substr(pos+1,path.length());
     cocos2d::Vector<ActionObject*> actionList;
     int actionCount = DICTOOL->getArrayCount_json(dic, "actionlist");
@@ -83,7 +82,7 @@ void ActionManagerEx::initWithDictionary(const char* jsonName,const rapidjson::V
                                          stExpCocoNode*     pCocoNode)
     {
         std::string path = file;
-        ssize_t pos = path.find_last_of('/');
+        ssize_t pos = path.find_last_of("/");
         std::string fileName = path.substr(pos+1,path.length());
         cocos2d::Vector<ActionObject*> actionList;
         
@@ -116,7 +115,7 @@ void ActionManagerEx::initWithDictionary(const char* jsonName,const rapidjson::V
 ActionObject* ActionManagerEx::getActionByName(const char* jsonName,const char* actionName)
 {
     std::string path = jsonName;
-    ssize_t pos = path.find_last_of('/');
+    ssize_t pos = path.find_last_of("/");
     std::string fileName = path.substr(pos+1,path.length());
     auto iterator = _actionDic.find(fileName);
     if (iterator == _actionDic.end())

@@ -1,27 +1,3 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 
 
 #include "editor-support/cocostudio/WidgetReader/SliderReader/SliderReader.h"
@@ -34,7 +10,6 @@
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -85,7 +60,7 @@ namespace cocostudio
         this->beginSetBasicProperties(widget);
         
         Slider* slider = static_cast<Slider*>(widget);
-        
+
         float barLength = 0.0f;
         int percent = slider->getPercent();
         stExpCocoNode *stChildArray = cocoNode->GetChildArray(cocoLoader);
@@ -112,8 +87,9 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
-                
-                slider->loadBarTexture(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(slider, fileData, 0);
+                slider->loadBarTexture(fileData.file, imageFileNameType);
                 
             }else if(key == P_Length){
                 barLength = valueToFloat(value);
@@ -124,8 +100,9 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
-                
-                slider->loadSlidBallTextureNormal(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(slider, fileData, 1);
+                slider->loadSlidBallTextureNormal(fileData.file, imageFileNameType);
 
             }else if(key == P_BallPressedData){
                 stExpCocoNode *backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
@@ -134,8 +111,9 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
-                
-                slider->loadSlidBallTexturePressed(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(slider, fileData, 2);
+                slider->loadSlidBallTexturePressed(fileData.file, imageFileNameType);
                 
             }else if(key == P_BallDisabledData){
                 stExpCocoNode *backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
@@ -144,8 +122,9 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
-                
-                slider->loadSlidBallTextureDisabled(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(slider, fileData, 3);
+                slider->loadSlidBallTextureDisabled(fileData.file, imageFileNameType);
                 
             }else if(key == P_ProgressBarData){
                 stExpCocoNode *backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
@@ -154,8 +133,9 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
-                
-                slider->loadProgressBarTexture(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(slider, fileData, 4);
+                slider->loadProgressBarTexture(fileData.file, imageFileNameType);
                 
             }
             
@@ -226,7 +206,7 @@ namespace cocostudio
         WidgetReader::setColorPropsFromJsonDictionary(widget, options);
     }        
     
-    Offset<Table> SliderReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> SliderReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                              flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -256,11 +236,11 @@ namespace cocostudio
         bool displaystate = true;
         
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string name = attribute->Name();
-            std::string value = attribute->Value();
+            std::string name = attribute.name();
+            std::string value = attribute.value();
             
             if (name == "PercentInfo")
             {
@@ -271,26 +251,26 @@ namespace cocostudio
                 displaystate = (value == "True") ? true : false;
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
         
         // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "BackGroundData")
             {
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -306,7 +286,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (barFileNameResourceType == 1)
@@ -320,12 +300,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -341,7 +321,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (ballNormalResourceType == 1)
@@ -355,12 +335,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -376,7 +356,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (ballPressedResourceType == 1)
@@ -390,12 +370,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -411,7 +391,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (ballDisabledResourceType == 1)
@@ -425,12 +405,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -446,7 +426,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (progressBarResourceType == 1)
@@ -456,7 +436,7 @@ namespace cocostudio
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         auto options = CreateSliderOptions(*builder,
@@ -490,6 +470,7 @@ namespace cocostudio
     void SliderReader::setPropsWithFlatBuffers(cocos2d::Node *node, const flatbuffers::Table *sliderOptions)
     {
         Slider* slider = static_cast<Slider*>(node);
+
         auto options = (SliderOptions*)sliderOptions;
         
         int percent = options->percent();
@@ -497,9 +478,10 @@ namespace cocostudio
         
         bool imageFileExist = false;
         std::string imageErrorFilePath = "";
-        auto imageFileNameDic = options->barFileNameData();
-        int imageFileNameType = imageFileNameDic->resourceType();
-        std::string imageFileName = imageFileNameDic->path()->c_str();
+        auto imageFileNameDic = cocos2d::wext::makeResourceData(options->barFileNameData());
+        int imageFileNameType = imageFileNameDic.type;
+        std::string& imageFileName = imageFileNameDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(slider, imageFileNameDic, 0);
         switch (imageFileNameType)
         {
             case 0:
@@ -507,11 +489,6 @@ namespace cocostudio
                 if (FileUtils::getInstance()->isFileExist(imageFileName))
                 {
                     imageFileExist = true;
-                }
-                else if(SpriteFrameCache::getInstance()->getSpriteFrameByName(imageFileName))
-                {
-                    imageFileExist = true;
-                    imageFileNameType = 1;
                 }
                 else
                 {
@@ -523,7 +500,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = imageFileNameDic->plistFile()->c_str();
+                std::string plist = imageFileNameDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imageFileName);
                 if (spriteFrame)
                 {
@@ -567,9 +544,10 @@ namespace cocostudio
         //loading normal slider ball texture
         bool normalFileExist = false;
         std::string normalErrorFilePath = "";
-        auto normalDic = options->ballNormalData();
-        int normalType = normalDic->resourceType();
-        std::string normalFileName = normalDic->path()->c_str();
+        auto normalDic = cocos2d::wext::makeResourceData(options->ballNormalData());
+        int normalType = normalDic.type;
+        std::string& normalFileName = normalDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(slider, normalDic, 1);
         switch (normalType)
         {
             case 0:
@@ -577,11 +555,6 @@ namespace cocostudio
                 if (FileUtils::getInstance()->isFileExist(normalFileName))
                 {
                     normalFileExist = true;
-                }
-                else if(SpriteFrameCache::getInstance()->getSpriteFrameByName(normalFileName))
-                {
-                    normalFileExist = true;
-                    normalType = 1;
                 }
                 else
                 {
@@ -593,7 +566,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = normalDic->plistFile()->c_str();
+                std::string plist = normalDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(normalFileName);
                 if (spriteFrame)
                 {
@@ -637,9 +610,10 @@ namespace cocostudio
         //loading slider ball press texture
         bool pressedFileExist = false;
         std::string pressedErrorFilePath = "";
-        auto pressedDic = options->ballPressedData();
-        int pressedType = pressedDic->resourceType();
-        std::string pressedFileName = pressedDic->path()->c_str();
+        auto pressedDic = cocos2d::wext::makeResourceData(options->ballPressedData());
+        int pressedType = pressedDic.type;
+        std::string& pressedFileName = pressedDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(slider, pressedDic, 2);
         switch (pressedType)
         {
             case 0:
@@ -647,11 +621,6 @@ namespace cocostudio
                 if (FileUtils::getInstance()->isFileExist(pressedFileName))
                 {
                     pressedFileExist = true;
-                }
-                else if(SpriteFrameCache::getInstance()->getSpriteFrameByName(pressedFileName))
-                {
-                    pressedFileExist = true;
-                    pressedType = 1;
                 }
                 else
                 {
@@ -663,7 +632,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = pressedDic->plistFile()->c_str();
+                std::string plist = pressedDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pressedFileName);
                 if (spriteFrame)
                 {
@@ -707,9 +676,10 @@ namespace cocostudio
         //loading slider ball disable texture
         bool disabledFileExist = false;
         std::string disabledErrorFilePath = "";
-        auto disabledDic = options->ballDisabledData();
-        int disabledType = disabledDic->resourceType();
-        std::string disabledFileName = disabledDic->path()->c_str();
+        auto disabledDic = cocos2d::wext::makeResourceData(options->ballDisabledData());
+        int disabledType = disabledDic.type;
+        std::string& disabledFileName = disabledDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(slider, disabledDic, 3);
         switch (disabledType)
         {
             case 0:
@@ -717,11 +687,6 @@ namespace cocostudio
                 if (FileUtils::getInstance()->isFileExist(disabledFileName))
                 {
                     disabledFileExist = true;
-                }
-                else if(SpriteFrameCache::getInstance()->getSpriteFrameByName(disabledFileName))
-                {
-                    disabledFileExist = true;
-                    disabledType = 1;
                 }
                 else
                 {
@@ -733,7 +698,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = disabledDic->plistFile()->c_str();
+                std::string plist = disabledDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(disabledFileName);
                 if (spriteFrame)
                 {
@@ -777,9 +742,10 @@ namespace cocostudio
         //load slider progress texture
         bool progressFileExist = false;
         std::string progressErrorFilePath = "";
-        auto progressBarDic = options->progressBarData();
-        int progressBarType = progressBarDic->resourceType();
-        std::string progressBarFileName = progressBarDic->path()->c_str();
+        auto progressBarDic = cocos2d::wext::makeResourceData(options->progressBarData());
+        int progressBarType = progressBarDic.type;
+        std::string& progressBarFileName = progressBarDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(slider, progressBarDic, 4);
         switch (progressBarType)
         {
             case 0:
@@ -787,11 +753,6 @@ namespace cocostudio
                 if (FileUtils::getInstance()->isFileExist(progressBarFileName))
                 {
                     progressFileExist = true;
-                }
-                else if(SpriteFrameCache::getInstance()->getSpriteFrameByName(progressBarFileName))
-                {
-                    progressFileExist = true;
-                    progressBarType = 1;
                 }
                 else
                 {
@@ -803,7 +764,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = progressBarDic->plistFile()->c_str();
+                std::string plist = progressBarDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(progressBarFileName);
                 if (spriteFrame)
                 {
@@ -855,7 +816,7 @@ namespace cocostudio
     
     Node* SliderReader::createNodeWithFlatBuffers(const flatbuffers::Table *sliderOptions)
     {
-        Slider* slider = Slider::create();
+        Slider* slider = wext::aSlider(); // Slider::create();
         
         setPropsWithFlatBuffers(slider, (Table*)sliderOptions);
         

@@ -1,27 +1,3 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 
 
 #include "editor-support/cocostudio/WidgetReader/TextAtlasReader/TextAtlasReader.h"
@@ -33,7 +9,6 @@
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -84,12 +59,13 @@ namespace cocostudio
 
         
         stExpCocoNode *stChildArray = cocoNode->GetChildArray(cocoLoader);
-        Widget::TextureResType type;
-        std::string charMapFileName;
+        //Widget::TextureResType type;
+        //std::string charMapFileName;
         std::string stringValue;
         std::string startCharMap;
         float itemWidth;
         float itemHeight;
+        cocos2d::ResourceData charmapFileData;
         for (int i = 0; i < cocoNode->GetChildNum(); ++i) {
             std::string key = stChildArray[i].GetName(cocoLoader);
             std::string value = stChildArray[i].GetValue(cocoLoader);
@@ -110,9 +86,9 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 
-                charMapFileName = backgroundValue;
-                type  = imageFileNameType;
-                
+                //charMapFileName = backgroundValue;
+                //type  = imageFileNameType;
+                charmapFileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
             }else if(key == P_ItemWidth){
                 itemWidth = valueToFloat(value);
             }else if(key == P_ItemHeight){
@@ -122,8 +98,9 @@ namespace cocostudio
             }
         } //end of for loop
         
-        if (type == (Widget::TextureResType)0) {
-            labelAtlas->setProperty(stringValue, charMapFileName, itemWidth, itemHeight, startCharMap);
+        if (charmapFileData.type == 0) {
+            cocos2d::wext::onBeforeLoadObjectAsset(labelAtlas, charmapFileData, 0);
+            labelAtlas->setProperty(stringValue, charmapFileData.file, itemWidth, itemHeight, startCharMap);
         }
         this->endSetBasicProperties(widget);
     }
@@ -170,7 +147,7 @@ namespace cocostudio
         WidgetReader::setColorPropsFromJsonDictionary(widget, options);
     }        
     
-    Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                 flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -186,11 +163,11 @@ namespace cocostudio
         std::string startCharMap = "";
         
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string name = attribute->Name();
-            std::string value = attribute->Value();
+            std::string name = attribute.name();
+            std::string value = attribute.value();
             
             if (name == "LabelText")
             {
@@ -209,26 +186,26 @@ namespace cocostudio
                 startCharMap = value;
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
         
         // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "LabelAtlasFileImage_CNB")
             {
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -244,11 +221,11 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         auto options = CreateTextAtlasOptions(*builder,
@@ -271,13 +248,14 @@ namespace cocostudio
         TextAtlas* labelAtlas = static_cast<TextAtlas*>(node);
         auto options = (TextAtlasOptions*)textAtlasOptions;
         
-        auto cmftDic = options->charMapFileData();
-        int cmfType = cmftDic->resourceType();
+        auto cmftDic = cocos2d::wext::makeResourceData(options->charMapFileData());
+        int cmfType = cmftDic.type;
+        cocos2d::wext::onBeforeLoadObjectAsset(labelAtlas, cmftDic, 0);
         switch (cmfType)
         {
             case 0:
             {
-                const char* cmfPath = cmftDic->path()->c_str();
+                const char* cmfPath = cmftDic.file.c_str();
                 
                 bool fileExist = false;
                 std::string errorFilePath = "";
@@ -320,7 +298,7 @@ namespace cocostudio
     
     Node* TextAtlasReader::createNodeWithFlatBuffers(const flatbuffers::Table *textAtlasOptions)
     {
-        TextAtlas* textAtlas = TextAtlas::create();
+        TextAtlas* textAtlas = wext::aTextAtlas(); // TextAtlas::create();
         
         setPropsWithFlatBuffers(textAtlas, (Table*)textAtlasOptions);
         

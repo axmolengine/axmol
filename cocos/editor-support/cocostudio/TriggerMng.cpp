@@ -1,6 +1,5 @@
 /****************************************************************************
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -37,14 +36,14 @@ namespace cocostudio {
     
 TriggerMng* TriggerMng::_sharedTriggerMng = nullptr;
 
-TriggerMng::TriggerMng()
+TriggerMng::TriggerMng(void)
 : _movementDispatches(new std::unordered_map<Armature*, ArmatureMovementDispatcher*>)
 {
     _eventDispatcher = Director::getInstance()->getEventDispatcher();
     _eventDispatcher->retain();
 }
 
-TriggerMng::~TriggerMng()
+TriggerMng::~TriggerMng(void)
 {
     removeAll();
 	_triggerObjs.clear();
@@ -157,7 +156,7 @@ TriggerObj* TriggerMng::getTriggerObj(unsigned int id) const
     return iter->second;
 }
 
-void TriggerMng::removeAll()
+void TriggerMng::removeAll(void)
 {
     auto etIter = _triggerObjs.begin();
     for (;etIter != _triggerObjs.end(); ++etIter)
@@ -189,7 +188,7 @@ bool TriggerMng::removeTriggerObj(unsigned int id)
 	return true;
 }
 
-bool TriggerMng::isEmpty() const
+bool TriggerMng::isEmpty(void) const
 {
     return _triggerObjs.empty();
 }
@@ -492,13 +491,13 @@ void TriggerMng::addEventListenerWithFixedPriority(cocos2d::EventListener* liste
     _eventDispatcher->addEventListenerWithFixedPriority(listener, fixedPriority);
 }
 
-ArmatureMovementDispatcher::ArmatureMovementDispatcher()
+ArmatureMovementDispatcher::ArmatureMovementDispatcher(void)
 : _mapEventAnimation(nullptr)
 {
 	_mapEventAnimation = new (std::nothrow) std::unordered_map<Ref*, SEL_MovementEventCallFunc> ;
 }
 
-ArmatureMovementDispatcher::~ArmatureMovementDispatcher()
+ArmatureMovementDispatcher::~ArmatureMovementDispatcher(void)
 {
 	_mapEventAnimation->clear();
 	CC_SAFE_DELETE(_mapEventAnimation);

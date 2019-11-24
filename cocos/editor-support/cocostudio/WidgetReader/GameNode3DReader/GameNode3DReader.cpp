@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -34,7 +33,6 @@
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -81,7 +79,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceNode3DReader);
     }
     
-    Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder *builder)
     {
         std::string name = "";
@@ -118,11 +116,11 @@ namespace cocostudio
         std::string customProperty = "";
 
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute = objectData.first_attribute();
         while (attribute)
         {
-            std::string attriname = attribute->Name();
-            std::string value = attribute->Value();
+            std::string attriname = attribute.name();
+            std::string value = attribute.value();
 
             if (attriname == "Name")
             {
@@ -153,25 +151,25 @@ namespace cocostudio
                 frameEvent = value;
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
 
         if (!skyBoxValid)
             skyBoxEnabled = false;
 
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string childName = child->Name();
+            std::string childName = child.name();
 
             if (childName == "LeftImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    std::string attributeName = attribute->Name();
-                    std::string value = attribute->Value();
+                    std::string attributeName = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attributeName == "Path")
                     {
@@ -186,7 +184,7 @@ namespace cocostudio
                         leftPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (leftResourceType == 1)
@@ -197,12 +195,12 @@ namespace cocostudio
             }
             else if (childName == "RightImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    std::string attributeName = attribute->Name();
-                    std::string value = attribute->Value();
+                    std::string attributeName = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attributeName == "Path")
                     {
@@ -217,7 +215,7 @@ namespace cocostudio
                         rightPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (rightResourceType == 1)
@@ -228,12 +226,12 @@ namespace cocostudio
             }
             else if (childName == "UpImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    std::string attributeName = attribute->Name();
-                    std::string value = attribute->Value();
+                    std::string attributeName = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attributeName == "Path")
                     {
@@ -248,7 +246,7 @@ namespace cocostudio
                         upPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (upResourceType == 1)
@@ -259,12 +257,12 @@ namespace cocostudio
             }
             else if (childName == "DownImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    std::string attributeName = attribute->Name();
-                    std::string value = attribute->Value();
+                    std::string attributeName = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attributeName == "Path")
                     {
@@ -279,7 +277,7 @@ namespace cocostudio
                         downPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (downResourceType == 1)
@@ -290,12 +288,12 @@ namespace cocostudio
             }
             else if (childName == "ForwardImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    std::string attributeName = attribute->Name();
-                    std::string value = attribute->Value();
+                    std::string attributeName = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attributeName == "Path")
                     {
@@ -310,7 +308,7 @@ namespace cocostudio
                         forwardPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (forwardResourceType == 1)
@@ -321,12 +319,12 @@ namespace cocostudio
             }
             else if (childName == "BackImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    std::string attributeName = attribute->Name();
-                    std::string value = attribute->Value();
+                    std::string attributeName = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attributeName == "Path")
                     {
@@ -341,7 +339,7 @@ namespace cocostudio
                         backPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (backResourceType == 1)
@@ -351,7 +349,7 @@ namespace cocostudio
                 }
             }
 
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
 
         auto options = CreateGameNode3DOption(*builder,

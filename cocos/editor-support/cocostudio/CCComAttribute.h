@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -40,17 +39,17 @@ public:
     /**
      * @js ctor
      */
-    ComAttribute();
+    ComAttribute(void);
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ComAttribute();
+    virtual ~ComAttribute(void);
     
 public:
     const static std::string COMPONENT_NAME;
 
-    static ComAttribute* create();
+    static ComAttribute* create(void);
     virtual bool init() override;
     virtual bool serialize(void* r) override;
     

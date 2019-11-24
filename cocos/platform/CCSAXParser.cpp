@@ -68,7 +68,7 @@ SAXParser::SAXParser()
     _delegator = nullptr;
 }
 
-SAXParser::~SAXParser(void)
+SAXParser::~SAXParser()
 {
 }
 

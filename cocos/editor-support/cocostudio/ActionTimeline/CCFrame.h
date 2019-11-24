@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
 http://www.cocos2d-x.org
 
@@ -40,7 +39,7 @@ NS_TIMELINE_BEGIN
 class Timeline;
 class ActionTimeline;
 
-class CC_STUDIO_DLL Frame : public cocos2d::Ref
+class CC_STUDIOP_DLL Frame : public cocos2d::Ref
 {
 public:
 
@@ -92,7 +91,7 @@ protected:
 };
 
 
-class CC_STUDIO_DLL VisibleFrame : public Frame
+class CC_STUDIOP_DLL VisibleFrame : public Frame
 {
 public:
     static VisibleFrame* create();
@@ -110,7 +109,7 @@ protected:
 };
 
 
-class CC_STUDIO_DLL TextureFrame : public Frame
+class CC_STUDIOP_DLL TextureFrame : public Frame
 {
 public:
     static TextureFrame* create();
@@ -130,7 +129,7 @@ protected:
     std::string _textureName;
 };
 
-class CC_STUDIO_DLL RotationFrame : public Frame
+class CC_STUDIOP_DLL RotationFrame : public Frame
 {
 public:
     static RotationFrame* create();
@@ -150,7 +149,7 @@ protected:
     float _betwennRotation;
 };
 
-class CC_STUDIO_DLL SkewFrame : public Frame
+class CC_STUDIOP_DLL SkewFrame : public Frame
 {
 public:
     static SkewFrame* create();
@@ -176,7 +175,7 @@ protected:
 };
 
 
-class CC_STUDIO_DLL RotationSkewFrame : public SkewFrame
+class CC_STUDIOP_DLL RotationSkewFrame : public SkewFrame
 {
 public:
     static RotationSkewFrame* create();
@@ -191,7 +190,7 @@ protected:
 };
 
 
-class CC_STUDIO_DLL PositionFrame : public Frame
+class CC_STUDIOP_DLL PositionFrame : public Frame
 {
 public:
     static PositionFrame* create();
@@ -219,7 +218,7 @@ protected:
 };
 
 
-class CC_STUDIO_DLL ScaleFrame : public Frame
+class CC_STUDIOP_DLL ScaleFrame : public Frame
 {
 public:
     static ScaleFrame* create();
@@ -247,7 +246,7 @@ protected:
 };
 
 
-class CC_STUDIO_DLL AnchorPointFrame : public Frame
+class CC_STUDIOP_DLL AnchorPointFrame : public Frame
 {
 public:
     static AnchorPointFrame* create();
@@ -276,7 +275,7 @@ enum InnerActionType
     SingleFrame
 };
 
-class CC_STUDIO_DLL InnerActionFrame : public Frame
+class CC_STUDIOP_DLL InnerActionFrame : public Frame
 {
 public:
     static const std::string AnimationAllName;
@@ -313,7 +312,7 @@ protected:
 };
 
 
-class CC_STUDIO_DLL ColorFrame : public Frame
+class CC_STUDIOP_DLL ColorFrame : public Frame
 {
 public:
     static ColorFrame* create();
@@ -323,8 +322,8 @@ public:
     virtual Frame* clone() override;
 
     /** @deprecated Use method setAlpha() and getAlpha() of AlphaFrame instead */
-    CC_DEPRECATED_ATTRIBUTE inline void    setAlpha(uint8_t alpha) { _alpha = alpha; }
-    CC_DEPRECATED_ATTRIBUTE inline uint8_t getAlpha() const { return _alpha; }
+    CC_DEPRECATED_ATTRIBUTE inline void    setAlpha(GLubyte alpha) { _alpha = alpha; }
+    CC_DEPRECATED_ATTRIBUTE inline GLubyte getAlpha() const { return _alpha; }
 
     inline void    setColor(const cocos2d::Color3B& color) { _color = color; }
     inline cocos2d::Color3B getColor() const { return _color; }
@@ -332,7 +331,7 @@ public:
 protected:
     virtual void onApply(float percent) override;
     
-    uint8_t _alpha;
+    GLubyte _alpha;
     cocos2d::Color3B _color;
 
     int _betweenRed;
@@ -340,7 +339,7 @@ protected:
     int _betweenBlue;
 };
 
-class CC_STUDIO_DLL AlphaFrame : public Frame
+class CC_STUDIOP_DLL AlphaFrame : public Frame
 {
 public:
     static AlphaFrame* create();
@@ -349,17 +348,17 @@ public:
     virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void    setAlpha(uint8_t alpha) { _alpha = alpha; }
-    inline uint8_t getAlpha() const { return _alpha; }
+    inline void    setAlpha(GLubyte alpha) { _alpha = alpha; }
+    inline GLubyte getAlpha() const { return _alpha; }
 
 protected:
     virtual void onApply(float percent) override;
     
-    uint8_t _alpha;
+    GLubyte _alpha;
     int _betweenAlpha;
 };
 
-class CC_STUDIO_DLL EventFrame : public Frame
+class CC_STUDIOP_DLL EventFrame : public Frame
 {
 public:
     static EventFrame* create();
@@ -380,7 +379,7 @@ protected:
     ActionTimeline* _action;
 };
 
-class CC_STUDIO_DLL ZOrderFrame : public Frame
+class CC_STUDIOP_DLL ZOrderFrame : public Frame
 {
 public:
     static ZOrderFrame* create();
@@ -398,7 +397,7 @@ protected:
 };
 
 
-class CC_STUDIO_DLL BlendFuncFrame : public Frame
+class CC_STUDIOP_DLL BlendFuncFrame : public Frame
 {
 public:
     static BlendFuncFrame* create();
@@ -415,7 +414,7 @@ protected:
     cocos2d::BlendFunc  _blendFunc;
 };
 
-class CC_STUDIO_DLL PlayableFrame : public Frame
+class CC_STUDIOP_DLL PlayableFrame : public Frame
 {
 public:
     static PlayableFrame* create();

@@ -1,6 +1,5 @@
 /****************************************************************************
-Copyright (c) 2015-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2015-2017 Chukong Technologies Inc.
  
 http://www.cocos2d-x.org
 
@@ -35,7 +34,7 @@ THE SOFTWARE.
 
 NS_TIMELINE_BEGIN
 
-class CC_STUDIO_DLL SkeletonNode : public BoneNode
+class CC_STUDIOP_DLL SkeletonNode : public BoneNode
 {
     friend class BoneNode;
 
@@ -84,19 +83,15 @@ protected:
 
     virtual void visit(cocos2d::Renderer *renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags) override;
     virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags) override;
+    virtual void onDraw(const cocos2d::Mat4 &transform, uint32_t flags) override;
 
 protected:
     cocos2d::Map<std::string, BoneNode*> _subBonesMap;
 
 private:
-    struct VertexData
-    {
-        cocos2d::Vec3 vertex;
-        cocos2d::Color4F color;
-    };
-
-    cocos2d::Vec2 _squareVertices[8];
-    VertexData _vertexData[8];
+    cocos2d::Vec2          _squareVertices[8];
+    cocos2d::Color4F       _squareColors[8];
+    cocos2d::Vec3          _noMVPVertices[8];
 
     std::map<std::string, std::map<std::string, std::string> > _skinGroupMap; // map< suit name, map< bone name, skin name> >
     CC_DISALLOW_COPY_AND_ASSIGN(SkeletonNode);
@@ -110,11 +105,12 @@ private:
     // for batch draw sub bones
     bool                           _subBonesDirty;
     bool                           _subBonesOrderDirty;
-    std::vector<VertexData> _batchedBoneVertexData;
+    std::vector<cocos2d::Vec3>     _batchedBoneVetices;
+    std::vector<cocos2d::Color4F>  _batchedBoneColors;
     int                            _batchedVeticesCount;
     cocos2d::CustomCommand         _batchBoneCommand;
 
-    void batchDrawAllSubBones();
+    void batchDrawAllSubBones(const cocos2d::Mat4 &transform);
 };
 
 NS_TIMELINE_END

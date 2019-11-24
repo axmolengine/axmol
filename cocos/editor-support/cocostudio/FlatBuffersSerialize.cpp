@@ -1,19 +1,18 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +25,6 @@
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 
 #include "base/ObjectFactory.h"
-#include "base/ccConstants.h"
 #include "ui/CocosGUI.h"
 #include "platform/CCFileUtils.h"
 #include "editor-support/cocostudio/CocoStudio.h"
@@ -58,7 +56,8 @@
 #include "editor-support/cocostudio/WidgetReader/PageViewReader/PageViewReader.h"
 #include "editor-support/cocostudio/WidgetReader/ListViewReader/ListViewReader.h"
 
-#include "tinyxml2.h"
+#include "editor-support/cocostudio/WidgetReader/TextFieldReader/TextFieldExReader.h"
+
 #include "flatbuffers/flatbuffers.h"
 #include "flatbuffers/util.h"
 
@@ -73,31 +72,31 @@ using namespace flatbuffers;
 namespace cocostudio {
 
 static const char* Property_VisibleForFrame = "VisibleForFrame";
-static const char* Property_Position        = "Position";
-static const char* Property_Scale           = "Scale";
-static const char* Property_RotationSkew    = "RotationSkew";
-static const char* Property_CColor          = "CColor";
-static const char* Property_FileData        = "FileData";
-static const char* Property_FrameEvent      = "FrameEvent";
-static const char* Property_Alpha           = "Alpha";
-static const char* Property_AnchorPoint     = "AnchorPoint";
-static const char* Property_ZOrder          = "ZOrder";
-static const char* Property_ActionValue     = "ActionValue";
-static const char* Property_BlendValue      = "BlendFunc";
+static const char* Property_Position = "Position";
+static const char* Property_Scale = "Scale";
+static const char* Property_RotationSkew = "RotationSkew";
+static const char* Property_CColor = "CColor";
+static const char* Property_FileData = "FileData";
+static const char* Property_FrameEvent = "FrameEvent";
+static const char* Property_Alpha = "Alpha";
+static const char* Property_AnchorPoint = "AnchorPoint";
+static const char* Property_ZOrder = "ZOrder";
+static const char* Property_ActionValue = "ActionValue";
+static const char* Property_BlendValue = "BlendFunc";
 
 static FlatBuffersSerialize* _instanceFlatBuffersSerialize = nullptr;
-    
+
 FlatBuffersSerialize::FlatBuffersSerialize()
-: _isSimulator(false)
-, _builder(nullptr)
-, _csparsebinary(nullptr)
+    : _isSimulator(false)
+    , _builder(nullptr)
+    , _csparsebinary(nullptr)
 {
     CREATE_CLASS_NODE_READER_INFO(NodeReader);
     CREATE_CLASS_NODE_READER_INFO(SingleNodeReader);
     CREATE_CLASS_NODE_READER_INFO(SpriteReader);
     CREATE_CLASS_NODE_READER_INFO(ParticleReader);
     CREATE_CLASS_NODE_READER_INFO(GameMapReader);
-    
+
     CREATE_CLASS_NODE_READER_INFO(ButtonReader);
     CREATE_CLASS_NODE_READER_INFO(CheckBoxReader);
     CREATE_CLASS_NODE_READER_INFO(ImageViewReader);
@@ -111,12 +110,13 @@ FlatBuffersSerialize::FlatBuffersSerialize()
     CREATE_CLASS_NODE_READER_INFO(ScrollViewReader);
     CREATE_CLASS_NODE_READER_INFO(PageViewReader);
     CREATE_CLASS_NODE_READER_INFO(ListViewReader);
-    
+    CREATE_CLASS_NODE_READER_INFO(TextFieldExReader);
+
 }
 
 FlatBuffersSerialize::~FlatBuffersSerialize()
 {
-    
+
 }
 
 FlatBuffersSerialize* FlatBuffersSerialize::getInstance()
@@ -125,20 +125,20 @@ FlatBuffersSerialize* FlatBuffersSerialize::getInstance()
     {
         _instanceFlatBuffersSerialize = new (std::nothrow) FlatBuffersSerialize();
     }
-    
+
     return _instanceFlatBuffersSerialize;
 }
-    
+
 void FlatBuffersSerialize::purge()
 {
     CC_SAFE_DELETE(_instanceFlatBuffersSerialize);
-    
+
 }
 
 void FlatBuffersSerialize::destroyInstance()
 {
     CC_SAFE_DELETE(_instanceFlatBuffersSerialize);
-	
+
 }
 
 void FlatBuffersSerialize::deleteFlatBufferBuilder()
@@ -150,50 +150,66 @@ void FlatBuffersSerialize::deleteFlatBufferBuilder()
     }
 }
 
-std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(const std::string &xmlFileName,
-                                                                  const std::string &flatbuffersFileName)
+std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(const std::string& xmlFileName, const std::string& flatbuffersFileName)
 {
-    
-    std::string inFullpath = FileUtils::getInstance()->fullPathForFilename(xmlFileName);
-    
+    std::string inFullpath = FileUtils::getInstance()->fullPathForFilename(xmlFileName).c_str();
+
     // xml read
     if (!FileUtils::getInstance()->isFileExist(inFullpath))
     {
-        return ".csd file does not exist.";
+        return ".csd file doesn't exists!";
     }
-    
-    std::string content = FileUtils::getInstance()->getStringFromFile(inFullpath);
-    
+
+    std::string xmlBuffer = FileUtils::getInstance()->getStringFromFile(inFullpath);
+    return serializeFlatBuffersWithXMLBuffer(xmlBuffer, flatbuffersFileName);
+}
+
+std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLBuffer(std::string& xmlBuffer,
+    const std::string& flatbuffersFileName)
+{
     // xml parse
-    tinyxml2::XMLDocument* document = new (std::nothrow) tinyxml2::XMLDocument();
-    document->Parse(content.c_str());
+    pugi::xml_document document;
+    if (!xmlBuffer.empty())
+        document.load_buffer_inplace(&xmlBuffer.front(), xmlBuffer.length());
+    if (document)
+        return serializeFlatBuffersWithOpaque(&document, flatbuffersFileName);
+    return "";
+}
+
+std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
+    const std::string& flatbuffersFileName)
+{
+    auto thiz = FlatBuffersSerialize::getInstance();
+
+    // xml parse
+    pugi::xml_document& document = *reinterpret_cast<pugi::xml_document*>(opaque);
     
-    const tinyxml2::XMLElement* rootElement = document->RootElement();// Root
-//    CCLOG("rootElement name = %s", rootElement->Name());
-    
-    const tinyxml2::XMLElement* element = rootElement->FirstChildElement();
-    
+    pugi::xml_node rootElement = document.document_element();// Root
+//    CCLOG("rootElement name = %s", rootelement.name());
+
+    pugi::xml_node element = rootElement.first_child();
+
     bool serializeEnabled = false;
     std::string rootType = "";
-    
+
     while (element)
     {
-//        CCLOG("entity name = %s", element->Name());
-        if (strcmp("PropertyGroup", element->Name()) == 0)
+        //        CCLOG("entity name = %s", element.name());
+        if (strcmp("PropertyGroup", element.name()) == 0)
         {
-            const tinyxml2::XMLAttribute* attribute = element->FirstAttribute();
-            while (attribute && strcmp("Version", attribute->Name()) != 0)
-                attribute = attribute->Next();
+            auto attribute =  element.first_attribute();
+            while (attribute && strcmp("Version", attribute.name()) != 0)
+                attribute = attribute.next_attribute();
             if (attribute)
-                _csdVersion = attribute->Value();
-            
-            _csdVersion = "2.1.0.0";
+                thiz->_csdVersion = attribute.value();
+
+            thiz->_csdVersion = "10.0.3000.0";
         }
 
-        if (strcmp("Content", element->Name()) == 0)
+        if (strcmp("Content", element.name()) == 0)
         {
-            const tinyxml2::XMLAttribute* attribute = element->FirstAttribute();
-            
+            auto attribute =  element.first_attribute();
+
             //
             if (!attribute)
             {
@@ -201,12 +217,12 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(const std::str
                 rootType = "NodeObjectData";
             }
             //
-            
+
             //
             //            while (attribute)
             //            {
-            //                std::string name = attribute->Name();
-            //                std::string value = attribute->Value();
+            //                std::string name = attribute.name();
+            //                std::string value = attribute.value();
             //                CCLOG("attribute name = %s, value = %s", name, value);
             //                if (name == "")
             //                {
@@ -219,232 +235,236 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(const std::str
             //                    break;
             //                }
             //
-            //                attribute = attribute->Next();
+            //                attribute = attribute.next_attribute();
             //            }
             //
         }
-        
+
         if (serializeEnabled)
         {
             break;
         }
-        
-        const tinyxml2::XMLElement* child = element->FirstChildElement();
+
+        auto child = element.first_child();
         if (child)
         {
             element = child;
         }
         else
         {
-            element = element->NextSiblingElement();
+            element = element.next_sibling();
         }
     }
-    
+
     if (serializeEnabled)
     {
-        _builder = new (std::nothrow) FlatBufferBuilder();
-        
+        thiz->_builder = new (std::nothrow) FlatBufferBuilder();
+
         Offset<NodeTree> nodeTree;
-        Offset<NodeAction> aciton;
+        Offset<NodeAction> action;
         std::vector<Offset<flatbuffers::AnimationInfo>> animationInfos;
-        
-        const tinyxml2::XMLElement* child = element->FirstChildElement();
-        
+
+        auto child = element.first_child();
+
         while (child)
         {
-            std::string name = child->Name();
-            
+            std::string name = child.name();
+
             if (name == "Animation") // action
             {
-                const tinyxml2::XMLElement* animation = child;
-                aciton = createNodeAction(animation);
+                pugi::xml_node animation = child;
+                action = thiz->createNodeAction(animation);
             }
             else if (name == "ObjectData") // nodeTree
             {
-                const tinyxml2::XMLElement* objectData = child;
+                pugi::xml_node objectData = child;
 
-                auto nameElem = objectData->FirstAttribute();
+                auto nameElem = objectData.first_attribute();
                 while (nameElem)
                 {
-                    if (0 == strcmp("ctype", nameElem->Name()))
+                    if (0 == strcmp("ctype", nameElem.name()))
                     {
-                        rootType = nameElem->Value();
+                        rootType = nameElem.value();
                         break;
                     }
                     else
-                        nameElem = nameElem->Next();
+                        nameElem = nameElem.next_attribute();
                 }
                 if (rootType == "GameNodeObjectData" || rootType == "GameLayerObjectData")  // for adaptate old version
                     rootType = "NodeObjectData";
 
-                nodeTree = createNodeTree(objectData, rootType);
+                nodeTree = thiz->createNodeTree(objectData, rootType);
             }
             else if (name == "AnimationList") // animation list
             {
-                const tinyxml2::XMLElement* animationinfoElement = child->FirstChildElement();
+                pugi::xml_node animationinfoElement = child.first_child();
                 while (animationinfoElement)
                 {
-                    auto animationinfo = createAnimationInfo(animationinfoElement);
+                    auto animationinfo = thiz->createAnimationInfo(animationinfoElement);
                     animationInfos.push_back(animationinfo);
-                    animationinfoElement = animationinfoElement->NextSiblingElement();
+                    animationinfoElement = animationinfoElement.next_sibling();
                 }
             }
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
 
-        
-        auto csparsebinary = CreateCSParseBinary(*_builder,
-                                                 _builder->CreateString(_csdVersion),
-                                                 _builder->CreateVector(_textures),
-                                                 _builder->CreateVector(_texturePngs),
-                                                 nodeTree,
-                                                 aciton,
-                                                 _builder->CreateVector(animationInfos));
-        _builder->Finish(csparsebinary);
-        
-        _textures.clear();
-        _texturePngs.clear();
-        
-        
+
+        auto csparsebinary = CreateCSParseBinary(*thiz->_builder,
+            thiz->_builder->CreateString(thiz->_csdVersion),
+            thiz->_builder->CreateVector(thiz->_textures),
+            thiz->_builder->CreateVector(thiz->_texturePngs),
+            nodeTree,
+            action,
+            thiz->_builder->CreateVector(animationInfos));
+        thiz->_builder->Finish(csparsebinary);
+
+        thiz->_textures.clear();
+        thiz->_texturePngs.clear();
+
+
         std::string outFullPath = FileUtils::getInstance()->fullPathForFilename(flatbuffersFileName);
         size_t pos = outFullPath.find_last_of('.');
         std::string convert = outFullPath.substr(0, pos).append(".csb");
         auto save = flatbuffers::SaveFile(convert.c_str(),
-										  reinterpret_cast<const char *>(_builder->GetBufferPointer()),
-										  _builder->GetSize(),
-                                          true);
+            reinterpret_cast<const char *>(thiz->_builder->GetBufferPointer()),
+            thiz->_builder->GetSize(),
+            true);
         if (!save)
         {
             return "couldn't save files!";
         }
-        
-        deleteFlatBufferBuilder();
+
+        thiz->deleteFlatBufferBuilder();
     }
-    
+
     return "";
 }
 
 // NodeTree
-Offset<NodeTree> FlatBuffersSerialize::createNodeTree(const tinyxml2::XMLElement *objectData,
-                                                      std::string classType)
+Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
+    std::string classType)
 {
     std::string classname = classType.substr(0, classType.find("ObjectData"));
-//    CCLOG("classname = %s", classname.c_str());
-    
+    //    CCLOG("classname = %s", classname.c_str());
+
     std::string name = "";
-    
+
     Offset<Options> options;
     std::vector<Offset<NodeTree>> children;
-    
+
     if (classname == "ProjectNode")
     {
         auto reader = ProjectNodeReader::getInstance();
-        options = CreateOptions(*_builder, reader->createOptionsWithFlatBuffers(objectData, _builder));
+        auto tempOptions = reader->createOptionsWithFlatBuffers(objectData, _builder);
+        
+        options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
     }
     else if (classname == "SimpleAudio")
     {
         auto reader = ComAudioReader::getInstance();
-        options = CreateOptions(*_builder, reader->createOptionsWithFlatBuffers(objectData, _builder));
+        auto tempOptions = reader->createOptionsWithFlatBuffers(objectData, _builder);
+        options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
     }
     else
     {
         std::string readername = getGUIClassName(classname);
         readername.append("Reader");
-        
+
         NodeReaderProtocol* reader = dynamic_cast<NodeReaderProtocol*>(ObjectFactory::getInstance()->createObject(readername));
         if (reader != nullptr)
         {
-            options = CreateOptions(*_builder, reader->createOptionsWithFlatBuffers(objectData, _builder));
+            auto tempOptions = reader->createOptionsWithFlatBuffers(objectData, _builder);
+            options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
         }
     }
-    
-    
+
+
     // children
     bool containChildrenElement = false;
-    const tinyxml2::XMLElement* child = objectData->FirstChildElement();
-    
+    auto child = objectData.first_child();
+
     while (child)
     {
-//        CCLOG("child name = %s", child->Name());
-        
-        if (strcmp("Children", child->Name()) == 0)
+        //        CCLOG("child name = %s", child.name());
+
+        if (strcmp("Children", child.name()) == 0)
         {
             containChildrenElement = true;
             break;
         }
-        
-        child = child->NextSiblingElement();
+
+        child = child.next_sibling();
     }
-    
+
     if (containChildrenElement)
     {
-        child = child->FirstChildElement();
-//        CCLOG("element name = %s", child->Name());
-        
+        child = child.first_child();
+        //        CCLOG("element name = %s", child.name());
+
         while (child)
         {
-            const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
+            auto attribute =  child.first_attribute();
             bool bHasType = false;
             while (attribute)
             {
-                std::string attriname = attribute->Name();
-                std::string value = attribute->Value();
-                
+                std::string attriname = attribute.name();
+                std::string value = attribute.value();
+
                 if (attriname == "ctype")
                 {
                     children.push_back(createNodeTree(child, value));
-                    
+
                     bHasType = true;
                     break;
                 }
-                
-                attribute = attribute->Next();
+
+                attribute = attribute.next_attribute();
             }
-            
-            if(!bHasType)
+
+            if (!bHasType)
             {
                 children.push_back(createNodeTree(child, "NodeObjectData"));
             }
-            
-            child = child->NextSiblingElement();
+
+            child = child.next_sibling();
         }
     }
     //
-    
+
     std::string customClassName = "";
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute->Name();
-        std::string value = attribute->Value();
-        
+        std::string attriname = attribute.name();
+        std::string value = attribute.value();
+
         if (attriname == "CustomClassName")
         {
             customClassName = value;
             break;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
+
     return CreateNodeTree(*_builder,
-                          _builder->CreateString(classname),
-                          _builder->CreateVector(children),
-                          options,
-                          _builder->CreateString(customClassName));
-    
+        _builder->CreateString(classname),
+        _builder->CreateVector(children),
+        options,
+        _builder->CreateString(customClassName));
+
 }
 
 int FlatBuffersSerialize::getResourceType(std::string key)
 {
-    if(key == "Normal" || key == "Default")
+    if (key == "Normal" || key == "Default")
     {
         return 	0;
     }
-    
-    if(_isSimulator)
+
+    if (_isSimulator)
     {
-        if(key == "MarkedSubImage")
+        if (key == "MarkedSubImage")
         {
             return 0;
         }
@@ -479,15 +499,15 @@ std::string FlatBuffersSerialize::getGUIClassName(const std::string &name)
     {
         convertedClassName = "TextBMFont";
     }
-    
-    
+
+
     return convertedClassName;
 }
 
 std::string FlatBuffersSerialize::getWidgetReaderClassName(Widget* widget)
 {
     std::string readerName;
-    
+
     // 1st., custom widget parse properties of parent widget with parent widget reader
     if (dynamic_cast<Button*>(widget))
     {
@@ -537,7 +557,7 @@ std::string FlatBuffersSerialize::getWidgetReaderClassName(Widget* widget)
     {
         readerName = "ScrollViewReader";
     }
-    
+
     else if (dynamic_cast<Layout*>(widget))
     {
         readerName = "LayoutReader";
@@ -546,28 +566,28 @@ std::string FlatBuffersSerialize::getWidgetReaderClassName(Widget* widget)
     {
         readerName = "WidgetReader";
     }
-    
+
     return readerName;
 }
 
 // NodeAction
-Offset<NodeAction> FlatBuffersSerialize::createNodeAction(const tinyxml2::XMLElement *objectData)
+Offset<NodeAction> FlatBuffersSerialize::createNodeAction(pugi::xml_node objectData)
 {
     int duration = 0;
     float speed = 0.0f;
     std::string currentAnimationName = "";
-    
-//    CCLOG("animation name = %s", objectData->Name());
-    
-    // ActionTimeline
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
-    
+
+    //    CCLOG("animation name = %s", objectData->Name());
+
+        // ActionTimeline
+    auto attribute =  objectData.first_attribute();
+
     // attributes
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string value = attribute->Value();
-        
+        std::string name = attribute.name();
+        std::string value = attribute.value();
+
         if (name == "Duration")
         {
             duration = atoi(value.c_str());
@@ -580,68 +600,68 @@ Offset<NodeAction> FlatBuffersSerialize::createNodeAction(const tinyxml2::XMLEle
         {
             currentAnimationName = value.c_str();
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
+
     // all Timeline
     std::vector<Offset<TimeLine>> timelines;
-    const tinyxml2::XMLElement* timelineElement = objectData->FirstChildElement();
+    pugi::xml_node timelineElement = objectData.first_child();
     while (timelineElement)
     {
         auto timeLine = createTimeLine(timelineElement);
         timelines.push_back(timeLine);
-        
-        timelineElement = timelineElement->NextSiblingElement();
+
+        timelineElement = timelineElement.next_sibling();
     }
-    
+
     return CreateNodeAction(*_builder,
-                            duration,
-                            speed,
-                            _builder->CreateVector(timelines),
-                            _builder->CreateString(currentAnimationName));
+        duration,
+        speed,
+        _builder->CreateVector(timelines),
+        _builder->CreateString(currentAnimationName));
 }
 
-Offset<flatbuffers::AnimationInfo> FlatBuffersSerialize::createAnimationInfo(const tinyxml2::XMLElement *objectData)
- {
-     std::string infoName = "";
-     int startIndex = 0;
-     int endIndex = 0;
- 
-     const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
-     while (attribute)
-     {
-         std::string attriname = attribute->Name();
-         std::string attrivalue = attribute->Value();
-         if (attriname == "Name")
-         {
-             infoName = attrivalue;
-         }
-         else if (attriname == "StartIndex")
-         {
-             startIndex = atoi(attrivalue.c_str());
-         }
-         else if (attriname == "EndIndex")
-         {
-             endIndex = atoi(attrivalue.c_str());
-         }
-         attribute = attribute->Next();
-     }
-     return CreateAnimationInfo(*_builder, _builder->CreateString(infoName), startIndex, endIndex);
- }
+Offset<flatbuffers::AnimationInfo> FlatBuffersSerialize::createAnimationInfo(pugi::xml_node objectData)
+{
+    std::string infoName = "";
+    int startIndex = 0;
+    int endIndex = 0;
 
-Offset<TimeLine> FlatBuffersSerialize::createTimeLine(const tinyxml2::XMLElement *objectData)
+    auto attribute =  objectData.first_attribute();
+    while (attribute)
+    {
+        std::string attriname = attribute.name();
+        std::string attrivalue = attribute.value();
+        if (attriname == "Name")
+        {
+            infoName = attrivalue;
+        }
+        else if (attriname == "StartIndex")
+        {
+            startIndex = atoi(attrivalue.c_str());
+        }
+        else if (attriname == "EndIndex")
+        {
+            endIndex = atoi(attrivalue.c_str());
+        }
+        attribute = attribute.next_attribute();
+    }
+    return CreateAnimationInfo(*_builder, _builder->CreateString(infoName), startIndex, endIndex);
+}
+
+Offset<TimeLine> FlatBuffersSerialize::createTimeLine(pugi::xml_node objectData)
 {
     int actionTag = 0;
     std::string property = "";
-    
+
     // TimelineData attributes
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string value = attribute->Value();
-        
+        std::string name = attribute.name();
+        std::string value = attribute.value();
+
         if (name == "ActionTag")
         {
             actionTag = atoi(value.c_str());
@@ -650,157 +670,157 @@ Offset<TimeLine> FlatBuffersSerialize::createTimeLine(const tinyxml2::XMLElement
         {
             property = value;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
+
     // all Frame
     std::vector<Offset<flatbuffers::Frame>> frames;
-    
-    const tinyxml2::XMLElement* frameElement = objectData->FirstChildElement();
+
+    pugi::xml_node frameElement = objectData.first_child();
     while (frameElement)
     {
         Offset<flatbuffers::Frame> frame;
-        
+
         if (property == Property_VisibleForFrame)
         {
             auto boolFrame = createBoolFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                0, // ScaleFrame
-                                0, // ColorFrame
-                                0, // TextureFrame
-                                0, // EventFrame
-                                0, // IntFrame
-                                boolFrame);
+                0, // PointFrame
+                0, // ScaleFrame
+                0, // ColorFrame
+                0, // TextureFrame
+                0, // EventFrame
+                0, // IntFrame
+                boolFrame);
         }
         else if (property == Property_Position)
         {
             auto pointFrame = createPointFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                pointFrame);
+                pointFrame);
         }
         else if (property == Property_Scale)
         {
             auto scaleFrame = createScaleFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                scaleFrame);
+                0, // PointFrame
+                scaleFrame);
         }
         else if (property == Property_RotationSkew)
         {
             auto scaleFrame = createScaleFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                scaleFrame);
+                0, // PointFrame
+                scaleFrame);
         }
         else if (property == Property_CColor)
         {
             auto colorFrame = createColorFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                0, // ScaleFrame
-                                colorFrame);
+                0, // PointFrame
+                0, // ScaleFrame
+                colorFrame);
         }
         else if (property == Property_FileData)
         {
             auto textureFrame = createTextureFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                0, // ScaleFrame
-                                0, // ColorFrame
-                                textureFrame);
+                0, // PointFrame
+                0, // ScaleFrame
+                0, // ColorFrame
+                textureFrame);
         }
         else if (property == Property_FrameEvent)
         {
             auto eventFrame = createEventFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                0, // ScaleFrame
-                                0, // ColorFrame
-                                0, // TextureFrame
-                                eventFrame);
+                0, // PointFrame
+                0, // ScaleFrame
+                0, // ColorFrame
+                0, // TextureFrame
+                eventFrame);
         }
         else if (property == Property_Alpha)
         {
             auto intFrame = createIntFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                0, // ScaleFrame
-                                0, // ColorFrame
-                                0, // TextureFrame
-                                0, // EventFrame
-                                intFrame);
+                0, // PointFrame
+                0, // ScaleFrame
+                0, // ColorFrame
+                0, // TextureFrame
+                0, // EventFrame
+                intFrame);
         }
         else if (property == Property_AnchorPoint)
         {
             auto scaleFrame = createScaleFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                scaleFrame);
+                0, // PointFrame
+                scaleFrame);
         }
         else if (property == Property_ZOrder)
         {
             auto intFrame = createIntFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                0, // ScaleFrame
-                                0, // ColorFrame
-                                0, // TextureFrame
-                                0, // EventFrame
-                                intFrame);
+                0, // PointFrame
+                0, // ScaleFrame
+                0, // ColorFrame
+                0, // TextureFrame
+                0, // EventFrame
+                intFrame);
         }
         else if (property == Property_ActionValue)
         {
             auto innerActionFrame = createInnerActionFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                0, // ScaleFrame
-                                0, // ColorFrame
-                                0, // TextureFrame
-                                0, // EventFrame
-                                0, // IntFrame
-                                0, // BoolFrame
-                                innerActionFrame);
+                0, // PointFrame
+                0, // ScaleFrame
+                0, // ColorFrame
+                0, // TextureFrame
+                0, // EventFrame
+                0, // IntFrame
+                0, // BoolFrame
+                innerActionFrame);
         }
         else if (property == Property_BlendValue)
         {
             auto blendFrame = createBlendFrame(frameElement);
             frame = CreateFrame(*_builder,
-                                0, // PointFrame
-                                0, // ScaleFrame
-                                0, // ColorFrame
-                                0, // TextureFrame
-                                0, // EventFrame
-                                0, // IntFrame
-                                0, // BoolFrame
-                                0, //InnerActionFrame
-                                blendFrame);
+                0, // PointFrame
+                0, // ScaleFrame
+                0, // ColorFrame
+                0, // TextureFrame
+                0, // EventFrame
+                0, // IntFrame
+                0, // BoolFrame
+                0, //InnerActionFrame
+                blendFrame);
         }
 
         frames.push_back(frame);
-                
-        frameElement = frameElement->NextSiblingElement();
+
+        frameElement = frameElement.next_sibling();
     }
-    
+
     return CreateTimeLine(*_builder,
-                          _builder->CreateString(property),
-                          actionTag,
-                          _builder->CreateVector(frames));
+        _builder->CreateString(property),
+        actionTag,
+        _builder->CreateVector(frames));
 }
-    
-Offset<flatbuffers::PointFrame> FlatBuffersSerialize::createPointFrame(const tinyxml2::XMLElement *objectData)
+
+Offset<flatbuffers::PointFrame> FlatBuffersSerialize::createPointFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
     bool tween = true;
     Vec2 position;
-    
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string value = attribute->Value();
-        
+        std::string name = attribute.name();
+        std::string value = attribute.value();
+
         if (name == "X")
         {
             position.x = atof(value.c_str());
@@ -817,33 +837,33 @@ Offset<flatbuffers::PointFrame> FlatBuffersSerialize::createPointFrame(const tin
         {
             tween = (value == "True") ? true : false;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
-    
-    
-    Position f_position(position.x, position.y);
-    
+
+
+
+    FVec2 f_position(position.x, position.y);
+
     return CreatePointFrame(*_builder,
-                            frameIndex,
-                            tween,
-                            &f_position,
-                            createEasingData(objectData->FirstChildElement()));
+        frameIndex,
+        tween,
+        &f_position,
+        createEasingData(objectData.first_child()));
 }
 
-Offset<flatbuffers::ScaleFrame> FlatBuffersSerialize::createScaleFrame(const tinyxml2::XMLElement *objectData)
+Offset<flatbuffers::ScaleFrame> FlatBuffersSerialize::createScaleFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
     bool tween = true;
     Vec2 scale;
-    
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string value = attribute->Value();
-        
+        std::string name = attribute.name();
+        std::string value = attribute.value();
+
         if (name == "X")
         {
             scale.x = atof(value.c_str());
@@ -860,31 +880,31 @@ Offset<flatbuffers::ScaleFrame> FlatBuffersSerialize::createScaleFrame(const tin
         {
             tween = (value == "True") ? true : false;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
+
     Scale f_scale(scale.x, scale.y);
-    
+
     return CreateScaleFrame(*_builder,
-                            frameIndex,
-                            tween,
-                            &f_scale,
-                            createEasingData(objectData->FirstChildElement()));
+        frameIndex,
+        tween,
+        &f_scale,
+        createEasingData(objectData.first_child()));
 }
 
-Offset<flatbuffers::ColorFrame> FlatBuffersSerialize::createColorFrame(const tinyxml2::XMLElement *objectData)
+Offset<flatbuffers::ColorFrame> FlatBuffersSerialize::createColorFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
     bool tween = true;
     Color3B color;
-    
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string value = attribute->Value();
-        
+        std::string name = attribute.name();
+        std::string value = attribute.value();
+
         if (name == "FrameIndex")
         {
             frameIndex = atoi(value.c_str());
@@ -893,20 +913,20 @@ Offset<flatbuffers::ColorFrame> FlatBuffersSerialize::createColorFrame(const tin
         {
             tween = (value == "True") ? true : false;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
+
     // color
-    const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+    auto child = objectData.first_child();
     while (child)
     {
-        attribute = child->FirstAttribute();
+        attribute = child.first_attribute();
         while (attribute)
         {
-            std::string name = attribute->Name();
-            std::string value = attribute->Value();
-            
+            std::string name = attribute.name();
+            std::string value = attribute.value();
+
             if (name == "R")
             {
                 color.r = atoi(value.c_str());
@@ -919,40 +939,40 @@ Offset<flatbuffers::ColorFrame> FlatBuffersSerialize::createColorFrame(const tin
             {
                 color.b = atoi(value.c_str());
             }
-            
-            attribute = attribute->Next();
+
+            attribute = attribute.next_attribute();
         }
-        
-        child = child->NextSiblingElement();
+
+        child = child.next_sibling();
     }
-    
+
     Color f_color(255, color.r, color.g, color.b);
-    
+
     return CreateColorFrame(*_builder,
-                            frameIndex,
-                            tween,
-                            &f_color,
-                            createEasingData(objectData->FirstChildElement()));
+        frameIndex,
+        tween,
+        &f_color,
+        createEasingData(objectData.first_child()));
 }
 
-Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(const tinyxml2::XMLElement *objectData)
+Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
     bool tween = true;
-    
+
     std::string path = "";
     std::string plistFile = "";
     int resourceType = 0;
-    
+
     std::string texture = "";
     std::string texturePng = "";
-    
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute->Name();
-        std::string value = attribute->Value();
-        
+        std::string attriname = attribute.name();
+        std::string value = attribute.value();
+
         if (attriname == "FrameIndex")
         {
             frameIndex = atoi(value.c_str());
@@ -961,19 +981,19 @@ Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(const
         {
             tween = (value == "True") ? true : false;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
-    const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+
+    auto child = objectData.first_child();
     while (child)
     {
-        attribute = child->FirstAttribute();
+        attribute = child.first_attribute();
         while (attribute)
         {
-            std::string attriname = attribute->Name();
-            std::string value = attribute->Value();
-            
+            std::string attriname = attribute.name();
+            std::string value = attribute.value();
+
             if (attriname == "Path")
             {
                 path = value;
@@ -987,40 +1007,40 @@ Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(const
                 plistFile = value;
                 texture = value;
             }
-            
-            attribute = attribute->Next();
+
+            attribute = attribute.next_attribute();
         }
-        
+
         if (resourceType == 1)
         {
             _textures.push_back(_builder->CreateString(texture));
         }
-        
-        child = child->NextSiblingElement();
+
+        child = child.next_sibling();
     }
-    
+
     return CreateTextureFrame(*_builder,
-                              frameIndex,
-                              tween,
-                              CreateResourceData(*_builder,
-                                                 _builder->CreateString(path),
-                                                 _builder->CreateString(plistFile),
-                                                 resourceType),
-                              createEasingData(objectData->FirstChildElement()));
+        frameIndex,
+        tween,
+        CreateResourceData(*_builder,
+            _builder->CreateString(path),
+            _builder->CreateString(plistFile),
+            resourceType),
+        createEasingData(objectData.first_child()));
 }
 
-Offset<flatbuffers::EventFrame> FlatBuffersSerialize::createEventFrame(const tinyxml2::XMLElement *objectData)
+Offset<flatbuffers::EventFrame> FlatBuffersSerialize::createEventFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
     bool tween = true;
     std::string value = "";
-    
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string attrivalue = attribute->Value();
-        
+        std::string name = attribute.name();
+        std::string attrivalue = attribute.value();
+
         if (name == "Value") // to be gonna modify
         {
             value = attrivalue;
@@ -1033,29 +1053,29 @@ Offset<flatbuffers::EventFrame> FlatBuffersSerialize::createEventFrame(const tin
         {
             tween = (attrivalue == "True") ? true : false;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
+
     return CreateEventFrame(*_builder,
-                            frameIndex,
-                            tween,
-                            _builder->CreateString(value),
-                            createEasingData(objectData->FirstChildElement()));
+        frameIndex,
+        tween,
+        _builder->CreateString(value),
+        createEasingData(objectData.first_child()));
 }
 
-Offset<flatbuffers::IntFrame> FlatBuffersSerialize::createIntFrame(const tinyxml2::XMLElement *objectData)
+Offset<flatbuffers::IntFrame> FlatBuffersSerialize::createIntFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
     bool tween = true;
     int value = 0;
-    
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string attrivalue = attribute->Value();
-        
+        std::string name = attribute.name();
+        std::string attrivalue = attribute.value();
+
         if (name == "Value") // to be gonna modify
         {
             value = atoi(attrivalue.c_str());
@@ -1068,29 +1088,29 @@ Offset<flatbuffers::IntFrame> FlatBuffersSerialize::createIntFrame(const tinyxml
         {
             tween = (attrivalue == "True") ? true : false;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
+
     return CreateIntFrame(*_builder,
-                          frameIndex,
-                          tween,
-                          value,
-                          createEasingData(objectData->FirstChildElement()));
+        frameIndex,
+        tween,
+        value,
+        createEasingData(objectData.first_child()));
 }
-    
-Offset<flatbuffers::BoolFrame> FlatBuffersSerialize::createBoolFrame(const tinyxml2::XMLElement *objectData)
+
+Offset<flatbuffers::BoolFrame> FlatBuffersSerialize::createBoolFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
     bool tween = true;
     bool value = true;
-    
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string attrivalue = attribute->Value();
-        
+        std::string name = attribute.name();
+        std::string attrivalue = attribute.value();
+
         if (name == "Value")
         {
             value = (attrivalue == "True") ? true : false;
@@ -1103,31 +1123,31 @@ Offset<flatbuffers::BoolFrame> FlatBuffersSerialize::createBoolFrame(const tinyx
         {
             tween = (attrivalue == "True") ? true : false;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
+
     return CreateBoolFrame(*_builder,
-                           frameIndex,
-                           tween,
-                           value,
-                           createEasingData(objectData->FirstChildElement()));
+        frameIndex,
+        tween,
+        value,
+        createEasingData(objectData.first_child()));
 }
-    
-Offset<flatbuffers::InnerActionFrame> FlatBuffersSerialize::createInnerActionFrame(const tinyxml2::XMLElement *objectData)
+
+Offset<flatbuffers::InnerActionFrame> FlatBuffersSerialize::createInnerActionFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
     bool tween = true;
     int innerActionType = 0;
     std::string currentAniamtionName = "";
     int singleFrameIndex = 0;
-    
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string attrivalue = attribute->Value();
-        
+        std::string name = attribute.name();
+        std::string attrivalue = attribute.value();
+
         if (name == "InnerActionType")
         {
             if (attrivalue == "LoopAction")
@@ -1159,32 +1179,32 @@ Offset<flatbuffers::InnerActionFrame> FlatBuffersSerialize::createInnerActionFra
         {
             tween = (attrivalue == "True") ? true : false;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
+
     return CreateInnerActionFrame(*_builder,
-                                  frameIndex,
-                                  tween,
-                                  innerActionType,
-                                  _builder->CreateString(currentAniamtionName),
-                                  singleFrameIndex,
-                                  createEasingData(objectData->FirstChildElement()));
+        frameIndex,
+        tween,
+        innerActionType,
+        _builder->CreateString(currentAniamtionName),
+        singleFrameIndex,
+        createEasingData(objectData.first_child()));
 }
 
-flatbuffers::Offset<flatbuffers::BlendFrame> FlatBuffersSerialize::createBlendFrame(const tinyxml2::XMLElement* objectData)
+flatbuffers::Offset<flatbuffers::BlendFrame> FlatBuffersSerialize::createBlendFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
     bool tween = true;
-    int32_t src = GLBlendConst::ONE, dst = GLBlendConst::ONE_MINUS_SRC_ALPHA;
+    int32_t src = GL_ONE, dst = GL_ONE_MINUS_SRC_ALPHA;
     std::string name = "";
     std::string value = "";
 
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        name = attribute->Name();
-        value = attribute->Value();
+        name = attribute.name();
+        value = attribute.value();
 
         if (name == "FrameIndex")
         {
@@ -1203,7 +1223,7 @@ flatbuffers::Offset<flatbuffers::BlendFrame> FlatBuffersSerialize::createBlendFr
             dst = atoi(value.c_str());
         }
 
-        attribute = attribute->Next();
+        attribute = attribute.next_attribute();
     }
 
     flatbuffers::Offset<flatbuffers::EasingData> easingData;
@@ -1215,47 +1235,47 @@ flatbuffers::Offset<flatbuffers::BlendFrame> FlatBuffersSerialize::createBlendFr
         easingData);
 }
 
-flatbuffers::Offset<flatbuffers::EasingData> FlatBuffersSerialize::createEasingData(const tinyxml2::XMLElement *objectData)
+flatbuffers::Offset<flatbuffers::EasingData> FlatBuffersSerialize::createEasingData(pugi::xml_node objectData)
 {
     if (!objectData)
     {
         return 0;
     }
-    
+
     int type = -1;
-    std::vector<flatbuffers::Position> points;
-    
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
-    
+    std::vector<flatbuffers::FVec2> points;
+
+    auto attribute =  objectData.first_attribute();
+
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string value = attribute->Value();
-        
+        std::string name = attribute.name();
+        std::string value = attribute.value();
+
         if (name == "Type")
         {
             type = atoi(value.c_str());
             break;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
-    const tinyxml2::XMLElement* Points = objectData->FirstChildElement();
+
+    pugi::xml_node Points = objectData.first_child();
     if (Points)
     {
-        const tinyxml2::XMLElement* PointF = Points->FirstChildElement();
+        pugi::xml_node PointF = Points.first_child();
         while (PointF)
         {
             Vec2 pointF;
-            
-            attribute = PointF->FirstAttribute();
-            
+
+            attribute = PointF.first_attribute();
+
             while (attribute)
             {
-                std::string name = attribute->Name();
-                std::string value = attribute->Value();
-                
+                std::string name = attribute.name();
+                std::string value = attribute.value();
+
                 if (name == "X")
                 {
                     pointF.x = atof(value.c_str());
@@ -1264,62 +1284,63 @@ flatbuffers::Offset<flatbuffers::EasingData> FlatBuffersSerialize::createEasingD
                 {
                     pointF.y = atof(value.c_str());
                 }
-                attribute = attribute->Next();
+                attribute = attribute.next_attribute();
             }
-            flatbuffers::Position f_PointF(pointF.x, pointF.y);
+            flatbuffers::FVec2 f_PointF(pointF.x, pointF.y);
             points.push_back(f_PointF);
-            
-            PointF = PointF->NextSiblingElement();
+
+            PointF = PointF.next_sibling();
         }
     }
-    
+
     return CreateEasingData(*_builder,
-                            type,
-                            _builder->CreateVectorOfStructs(points));
+        type,
+        _builder->CreateVectorOfStructs(points));
 }
-    
+
 
 /* create flat buffers with XML */
 FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulator(const std::string &xmlFileName)
-{    
+{
     std::string inFullpath = FileUtils::getInstance()->fullPathForFilename(xmlFileName);
-    
+
     // xml read
     if (!FileUtils::getInstance()->isFileExist(inFullpath))
     {
-//        CCLOG(".csd file does not exist.");
+        //        CCLOG(".csd file does not exist.");
     }
-    
+
     std::string content = FileUtils::getInstance()->getStringFromFile(inFullpath);
-    
+
     // xml parse
-    tinyxml2::XMLDocument* document = new (std::nothrow) tinyxml2::XMLDocument();
-    document->Parse(content.c_str());
-    
-    const tinyxml2::XMLElement* rootElement = document->RootElement();// Root
-//    CCLOG("rootElement name = %s", rootElement->Name());
-    
-    const tinyxml2::XMLElement* element = rootElement->FirstChildElement();
-    
+    pugi::xml_document document;
+    if(!content.empty())
+        document.load_buffer_inplace(&content.front(), content.length());
+
+    pugi::xml_node rootElement = document.document_element();// Root
+//    CCLOG("rootElement name = %s", rootelement.name());
+
+    pugi::xml_node element = rootElement.first_child();
+
     bool serializeEnabled = false;
     std::string rootType = "";
-    
+
     while (element)
     {
-//        CCLOG("entity name = %s", element->Name());
-        if (strcmp("PropertyGroup", element->Name()) == 0)
+        //        CCLOG("entity name = %s", element.name());
+        if (strcmp("PropertyGroup", element.name()) == 0)
         {
-            const tinyxml2::XMLAttribute* attribute = element->FirstAttribute();
-            while (attribute && strcmp("Version", attribute->Name()) != 0)
-                attribute = attribute->Next();
+            auto attribute =  element.first_attribute();
+            while (attribute && strcmp("Version", attribute.name()) != 0)
+                attribute = attribute.next_attribute();
             if (attribute)
-                _csdVersion = attribute->Value();
+                _csdVersion = attribute.value();
         }
-        
-        if (strcmp("Content", element->Name()) == 0)
+
+        if (strcmp("Content", element.name()) == 0)
         {
-            const tinyxml2::XMLAttribute* attribute = element->FirstAttribute();
-            
+            auto attribute =  element.first_attribute();
+
             //
             if (!attribute)
             {
@@ -1327,55 +1348,55 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
                 rootType = "NodeObjectData";
             }
         }
-        
+
         if (serializeEnabled)
         {
             break;
         }
-        
-        const tinyxml2::XMLElement* child = element->FirstChildElement();
+
+        auto child = element.first_child();
         if (child)
         {
             element = child;
         }
         else
         {
-            element = element->NextSiblingElement();
+            element = element.next_sibling();
         }
     }
-    
+
     if (serializeEnabled)
     {
         _builder = new (std::nothrow) FlatBufferBuilder();
 
         Offset<NodeTree> nodeTree;
-        Offset<NodeAction> aciton;
+        Offset<NodeAction> action;
         std::vector<Offset<flatbuffers::AnimationInfo> > animationInfos;
-        
-        const tinyxml2::XMLElement* child = element->FirstChildElement();
-        
+
+        auto child = element.first_child();
+
         while (child)
         {
-            std::string name = child->Name();
-            
+            std::string name = child.name();
+
             if (name == "Animation") // action
             {
-                const tinyxml2::XMLElement* animation = child;
-                aciton = createNodeAction(animation);
+                pugi::xml_node animation = child;
+                action = createNodeAction(animation);
             }
             else if (name == "ObjectData") // nodeTree
             {
-                const tinyxml2::XMLElement* objectData = child;
-                auto nameElem = objectData->FirstAttribute();
+                pugi::xml_node objectData = child;
+                auto nameElem = objectData.first_attribute();
                 while (nameElem)
                 {
-                    if (0 == strcmp("ctype", nameElem->Name()))
+                    if (0 == strcmp("ctype", nameElem.name()))
                     {
-                        rootType = nameElem->Value();
+                        rootType = nameElem.value();
                         break;
                     }
                     else
-                        nameElem = nameElem->Next();
+                        nameElem = nameElem.next_attribute();
                 }
                 if (rootType == "GameNodeObjectData" || rootType == "GameLayerObjectData")  // for adaptate old version
                     rootType = "NodeObjectData";
@@ -1383,16 +1404,16 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
             }
             else if (name == "AnimationList") // animation list
             {
-                const tinyxml2::XMLElement* animationinfoElement = child->FirstChildElement();
+                pugi::xml_node animationinfoElement = child.first_child();
                 while (animationinfoElement)
                 {
                     auto animationinfo = createAnimationInfo(animationinfoElement);
                     animationInfos.push_back(animationinfo);
-                    animationinfoElement = animationinfoElement->NextSiblingElement();
+                    animationinfoElement = animationinfoElement.next_sibling();
                 }
             }
-            
-            child = child->NextSiblingElement();
+
+            child = child.next_sibling();
         }
         
 		auto csparsebinary = CreateCSParseBinary(*_builder,
@@ -1400,203 +1421,208 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
                                                  _builder->CreateVector(_textures),
                                                  _builder->CreateVector(_texturePngs),
                                                  nodeTree,
-                                                 aciton,
+                                                 action,
                                                  _builder->CreateVector(animationInfos));
         _builder->Finish(csparsebinary);
-        
+
         _textures.clear();
         _texturePngs.clear();
     }
     return _builder;
 }
 
-Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(const tinyxml2::XMLElement *objectData,
-                                                                  std::string classType)
+Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node objectData,
+    std::string classType)
 {
     std::string classname = classType.substr(0, classType.find("ObjectData"));
-//    CCLOG("classname = %s", classname.c_str());
-    
+    //    CCLOG("classname = %s", classname.c_str());
+
     std::string name = "";
-    
+
     Offset<Options> options;
     std::vector<Offset<NodeTree>> children;
-    
+
     if (classname == "ProjectNode")
     {
         auto projectNodeOptions = createProjectNodeOptionsForSimulator(objectData);
-        options = CreateOptions(*_builder, *(Offset<Table>*)(&projectNodeOptions));
+        options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&projectNodeOptions));
     }
     else if (classname == "SimpleAudio")
     {
         auto reader = ComAudioReader::getInstance();
-        options = CreateOptions(*_builder, reader->createOptionsWithFlatBuffers(objectData, _builder));
+        auto tempOptions = reader->createOptionsWithFlatBuffers(objectData, _builder);
+        
+        options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
     }
     else
     {
         std::string readername = getGUIClassName(classname);
         readername.append("Reader");
-        
+
         NodeReaderProtocol* reader = dynamic_cast<NodeReaderProtocol*>(ObjectFactory::getInstance()->createObject(readername));
         if (reader != nullptr)
         {
-            options = CreateOptions(*_builder, reader->createOptionsWithFlatBuffers(objectData, _builder));
+            auto tempOptions = reader->createOptionsWithFlatBuffers(objectData, _builder);
+            
+            options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
         }
     }
-    
-    
+
+
     // children
     bool containChildrenElement = false;
-    const tinyxml2::XMLElement* child = objectData->FirstChildElement();
-    
+    auto child = objectData.first_child();
+
     while (child)
     {
-//        CCLOG("child name = %s", child->Name());
-        
-        if (strcmp("Children", child->Name()) == 0)
+        //        CCLOG("child name = %s", child.name());
+
+        if (strcmp("Children", child.name()) == 0)
         {
             containChildrenElement = true;
             break;
         }
-        
-        child = child->NextSiblingElement();
+
+        child = child.next_sibling();
     }
-    
+
     if (containChildrenElement)
     {
-        child = child->FirstChildElement();
-//        CCLOG("element name = %s", child->Name());
-        
+        child = child.first_child();
+        //        CCLOG("element name = %s", child.name());
+
         while (child)
         {
-            const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
+            auto attribute =  child.first_attribute();
             bool bHasType = false;
             while (attribute)
             {
-                std::string attriname = attribute->Name();
-                std::string value = attribute->Value();
-                
+                std::string attriname = attribute.name();
+                std::string value = attribute.value();
+
                 if (attriname == "ctype")
                 {
                     children.push_back(createNodeTreeForSimulator(child, value));
-                    
+
                     bHasType = true;
                     break;
                 }
-                
-                attribute = attribute->Next();
+
+                attribute = attribute.next_attribute();
             }
-            
-            if(!bHasType)
+
+            if (!bHasType)
             {
                 children.push_back(createNodeTreeForSimulator(child, "NodeObjectData"));
             }
-            
-            child = child->NextSiblingElement();
+
+            child = child.next_sibling();
         }
     }
     //
-    
-    
+
+
     std::string customClassName = "";
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute->Name();
-        std::string value = attribute->Value();
-        
+        std::string attriname = attribute.name();
+        std::string value = attribute.value();
+
         if (attriname == "CustomClassName")
         {
             customClassName = value;
             break;
         }
-        
-        attribute = attribute->Next();
+
+        attribute = attribute.next_attribute();
     }
-    
+
     return CreateNodeTree(*_builder,
-                          _builder->CreateString(classname),
-                          _builder->CreateVector(children),
-                          options,
-                          _builder->CreateString(customClassName));
+        _builder->CreateString(classname),
+        _builder->CreateVector(children),
+        options,
+        _builder->CreateString(customClassName));
 }
 
-Offset<ProjectNodeOptions> FlatBuffersSerialize::createProjectNodeOptionsForSimulator(const tinyxml2::XMLElement *objectData)
+Offset<ProjectNodeOptions> FlatBuffersSerialize::createProjectNodeOptionsForSimulator(pugi::xml_node objectData)
 {
     auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, _builder);
     auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
 
     std::string filename = "";
     float innerspeed = 1.0f;
-    
-    const tinyxml2::XMLAttribute* objattri = objectData->FirstAttribute();
+
+    pugi::xml_attribute objattri = objectData.first_attribute();
     // inneraction speed
     while (objattri)
     {
-        std::string name = objattri->Name();
-        std::string value = objattri->Value();
+        std::string name = objattri.name();
+        std::string value = objattri.value();
         if (name == "InnerActionSpeed")
         {
-            innerspeed = atof(objattri->Value());
+            innerspeed = atof(objattri.value());
             break;
         }
-        objattri = objattri->Next();
+        objattri = objattri.next_attribute();
     }
-    
+
     // FileData
-    const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+    auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child->Name();
-        
+        std::string name = child.name();
+
         if (name == "FileData")
         {
-            const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
-            
+            auto attribute =  child.first_attribute();
+
             while (attribute)
             {
-                name = attribute->Name();
-                std::string value = attribute->Value();
-                
+                name = attribute.name();
+                std::string value = attribute.value();
+
                 if (name == "Path")
                 {
                     filename = value;
                 }
-                
-                attribute = attribute->Next();
+
+                attribute = attribute.next_attribute();
             }
         }
-        
-        child = child->NextSiblingElement();
+
+        child = child.next_sibling();
     }
-    
+
     return CreateProjectNodeOptions(*_builder,
-                                    nodeOptions,
-                                    _builder->CreateString(filename),
-                                    innerspeed);
+        nodeOptions,
+        _builder->CreateString(filename),
+        innerspeed);
 }
 
 /* Serialize language XML file to Flat Buffers file. */
 std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData(const std::string& xmlFilePath,
-                                                                                 const std::string& flatBuffersFilePath,
-                                                                                 const std::string& languageName)
+    const std::string& flatBuffersFilePath,
+    const std::string& languageName)
 {
     //Read and parse XML data file.
     if (!FileUtils::getInstance()->isFileExist(xmlFilePath))
         return "Language XML file does not exist.";
     std::string content = FileUtils::getInstance()->getStringFromFile(xmlFilePath);
-    tinyxml2::XMLDocument* document = new (std::nothrow) tinyxml2::XMLDocument();
-    document->Parse(content.c_str());
-    const tinyxml2::XMLElement* element = document->RootElement();
-    element = element->FirstChildElement();
+    pugi::xml_document document;
+    if (!content.empty())
+        document.load_buffer_inplace(&content.front(), content.length());
+    pugi::xml_node element = document.document_element();
+    element = element.first_child();
 
     //Create FlatBuffers file using the language data in XML file.
     _builder = new (std::nothrow) FlatBufferBuilder();
     std::vector<Offset<LanguageItem>> langItemList;
     while (element)
     {
-        if (strcmp("language", element->Name()) != 0)
+        if (strcmp("language", element.name()) != 0)
         {
-            element = element->NextSiblingElement();
+            element = element.next_sibling();
             continue;
         }
 
@@ -1605,19 +1631,19 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
         std::string text = "";
         bool hasKeyReaded = false;
         bool hasTextReaded = false;
-        const tinyxml2::XMLElement* childElement = element->FirstChildElement();
+        pugi::xml_node childElement = element.first_child();
         while (childElement)
         {
             //Record language key.
-            if (strcmp("key", childElement->Name()) == 0)
+            if (strcmp("key", childElement.name()) == 0)
             {
-                key = childElement->GetText();
+                key = childElement.text().as_string();
                 hasKeyReaded = true;
             }
             //Record corresponding text.
-            else if (strcmp(languageName.c_str(), childElement->Name()) == 0)
+            else if (strcmp(languageName.c_str(), childElement.name()) == 0)
             {
-                const char* langText = childElement->GetText();
+                const char* langText = childElement.text().as_string();
                 if (langText && langText[0] != '\0')
                     text = langText;
                 else
@@ -1628,13 +1654,13 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
             if (hasKeyReaded && hasTextReaded)
                 break;
 
-            childElement = childElement->NextSiblingElement();
+            childElement = childElement.next_sibling();
         }
 
         Offset<flatbuffers::LanguageItem> langItem = CreateLanguageItem(*_builder, _builder->CreateString(key), _builder->CreateString(text));
         langItemList.push_back(langItem);
 
-        element = element->NextSiblingElement();
+        element = element.next_sibling();
     }
 
     auto langSet = CreateLanguageSet(*_builder, _builder->CreateVector(langItemList));

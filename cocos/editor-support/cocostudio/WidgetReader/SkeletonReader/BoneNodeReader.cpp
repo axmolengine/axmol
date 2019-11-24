@@ -1,6 +1,5 @@
 /****************************************************************************
-Copyright (c) 2015-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2015-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -23,14 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/WidgetReader/SkeletonReader/CSBoneBinary_generated.h"
 #include "editor-support/cocostudio/WidgetReader/SkeletonReader/BoneNodeReader.h"
 #include "editor-support/cocostudio/ActionTimeline/CCBoneNode.h"
-#include "base/ccUtils.h"
+
 
 USING_NS_CC;
 USING_NS_TIMELINE;
@@ -65,7 +63,7 @@ void BoneNodeReader::destroyInstance()
     CC_SAFE_DELETE(_instanceBoneNodeReader);
 }
 
-Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
     flatbuffers::FlatBufferBuilder *builder)
 {
 
@@ -75,48 +73,48 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(const tinyxml2::XMLEl
     float length = 0;
     cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
 
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute->Name();
-        std::string value = attribute->Value();
+        std::string name = attribute.name();
+        std::string value = attribute.value();
 
         if (name == "Length")
         {
             length = atof(value.c_str());
         }
-        attribute = attribute->Next();
+        attribute = attribute.next_attribute();
     }
 
-    const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+    auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child->Name();
+        std::string name = child.name();
         if (name == "BlendFunc")
         {
-            const tinyxml2::XMLAttribute* battribute = child->FirstAttribute();
+            pugi::xml_attribute battribute = child.first_attribute();
 
             while (battribute)
             {
-                name = battribute->Name();
-                std::string value = battribute->Value();
+                name = battribute.name();
+                std::string value = battribute.value();
 
                 if (name == "Src")
                 {
-                    blendFunc.src = utils::toBackendBlendFactor(atoi(value.c_str()));
+                    blendFunc.src = atoi(value.c_str());
                 }
                 else if (name == "Dst")
                 {
-                    blendFunc.dst = utils::toBackendBlendFactor(atoi(value.c_str()));
+                    blendFunc.dst = atoi(value.c_str());
                 }
 
-                battribute = battribute->Next();
+                battribute = battribute.next_attribute();
             }
         }
 
-        child = child->NextSiblingElement();
+        child = child.next_sibling();
     }
-    flatbuffers::BlendFunc f_blendFunc(utils::toGLBlendFactor(blendFunc.src), utils::toGLBlendFactor(blendFunc.dst));
+    flatbuffers::BlendFunc f_blendFunc(blendFunc.src, blendFunc.dst);
 
     auto options = CreateBoneOptions(*builder,
         nodeOptions,
@@ -140,15 +138,15 @@ void BoneNodeReader::setPropsWithFlatBuffers(cocos2d::Node *node,
     if (f_blendFunc)
     {
         cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
-        blendFunc.src = utils::toBackendBlendFactor(f_blendFunc->src());
-        blendFunc.dst = utils::toBackendBlendFactor(f_blendFunc->dst());
+        blendFunc.src = f_blendFunc->src();
+        blendFunc.dst = f_blendFunc->dst();
         bone->setBlendFunc(blendFunc);
     }
 }
 
 cocos2d::Node*  BoneNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table *nodeOptions)
 {
-    auto bone = BoneNode::create();
+    auto bone = wext::aBoneNode(); // BoneNode::create();
 
     // self options
     auto options = (flatbuffers::BoneOptions*)nodeOptions;

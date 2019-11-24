@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2015 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -24,7 +23,7 @@
  ****************************************************************************/
 
 #include "editor-support/cocostudio/CCComExtensionData.h"
-#include "editor-support/cocostudio/ActionTimeline/CCActionTimeline.h"
+#include "editor-support/cocostudio/ActionTimeline/CCActionTimelineData.h"
 
 namespace cocostudio
 {

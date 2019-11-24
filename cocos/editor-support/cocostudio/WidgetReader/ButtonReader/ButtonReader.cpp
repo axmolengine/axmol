@@ -1,27 +1,3 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 
 
 #include "editor-support/cocostudio/WidgetReader/ButtonReader/ButtonReader.h"
@@ -35,7 +11,6 @@
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 #include "editor-support/cocostudio/LocalizationManager.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -132,7 +107,10 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 
-                button->loadTextureNormal(backgroundValue, imageFileNameType);
+                // assets[0] = backgroundValue;
+                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(button, fileData, 0);
+                button->loadTextureNormal(fileData.file, imageFileNameType);
                 
             }
             else if (key == P_PressedData){
@@ -144,7 +122,9 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 
-                button->loadTexturePressed(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(button, fileData, 1);
+                button->loadTexturePressed(fileData.file, imageFileNameType);
                 
             }
             else if (key == P_DisabledData){
@@ -156,7 +136,9 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 
-                button->loadTextureDisabled(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(button, fileData, 2);
+                button->loadTextureDisabled(fileData.file, imageFileNameType);
                 
             }else if (key == P_Text){
                 button->setTitleText(value);
@@ -182,7 +164,9 @@ namespace cocostudio
             }else if(key == P_FontSize){
                 button->setTitleFontSize(valueToFloat(value));
             }else if(key == P_FontName){
-                button->setTitleFontName(value);
+                auto fileData = cocos2d::wext::makeResourceData(value);
+                cocos2d::wext::onBeforeLoadObjectAsset(button, fileData, 3);
+                button->setTitleFontName(fileData.file); // fonts
             }
             
         } //end of for loop
@@ -205,6 +189,12 @@ namespace cocostudio
         
         
         Button* button = static_cast<Button*>(widget);
+
+        auto pHackAssets = new std::vector<std::string>();
+        button->setUserData(pHackAssets);
+        auto& hackAssets = *pHackAssets;
+        hackAssets.resize(4);
+
         bool scale9Enable = DICTOOL->getBooleanValue_json(options, P_Scale9Enable);
         button->setScale9Enabled(scale9Enable);
         
@@ -212,6 +202,7 @@ namespace cocostudio
         const rapidjson::Value& normalDic = DICTOOL->getSubDictionary_json(options, P_NormalData);
         int normalType = DICTOOL->getIntValue_json(normalDic, P_ResourceType);
         std::string normalTexturePath = this->getResourcePath(normalDic, P_Path, (Widget::TextureResType)normalType);
+        hackAssets[0] = normalTexturePath;
         button->loadTextureNormal(normalTexturePath, (Widget::TextureResType)normalType);
         
         
@@ -219,6 +210,7 @@ namespace cocostudio
         int pressedType = DICTOOL->getIntValue_json(pressedDic, P_ResourceType);
         
         std::string pressedTexturePath = this->getResourcePath(pressedDic, P_Path, (Widget::TextureResType)pressedType);
+        hackAssets[1] = pressedTexturePath;
         button->loadTexturePressed(pressedTexturePath, (Widget::TextureResType)pressedType);
         
         
@@ -226,6 +218,7 @@ namespace cocostudio
         int disabledType = DICTOOL->getIntValue_json(disabledDic, P_ResourceType);
         
         std::string disabledTexturePath = this->getResourcePath(disabledDic, P_Path, (Widget::TextureResType)disabledType);
+        hackAssets[2] = disabledTexturePath;
         button->loadTextureDisabled(disabledTexturePath, (Widget::TextureResType)disabledType);
        
         if (scale9Enable)
@@ -266,13 +259,13 @@ namespace cocostudio
         
 
         button->setTitleFontName(DICTOOL->getStringValue_json(options, P_FontName, ""));
-        
+        hackAssets[3] = button->getTitleFontName();
         
         
         WidgetReader::setColorPropsFromJsonDictionary(widget, options);
     }    
     
-    Offset<Table> ButtonReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData, flatbuffers::FlatBufferBuilder *builder)
+    Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectData, flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
         auto widgetOptions = *(Offset<WidgetOptions>*)(&temp);
@@ -310,13 +303,18 @@ namespace cocostudio
         Color4B shadowColor = Color4B::BLACK;
         Size shadowOffset = Size(2, -2);
         int shadowBlurRadius = 0;
+
+		bool glowEnabled = false;
+		Color4B glowColor = Color4B::BLACK;
+
+        bool boldEnabled = false, underlineEnabled = false, italicsEnabled = false, strikethroughEnabled = false;
         
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string name = attribute->Name();
-            std::string value = attribute->Value();
+            std::string name = attribute.name();
+            std::string value = attribute.value();
             
             if (name == "Scale9Enable")
             {
@@ -385,24 +383,40 @@ namespace cocostudio
             {
                 shadowBlurRadius = atoi(value.c_str());
             }
-            
-            attribute = attribute->Next();
+			else if (name == "GlowEnabled") {
+				glowEnabled = (value == "True") ? true : false;
+			}
+            else if (name == "BoldEnabled")
+            {
+                boldEnabled = (value == "True") ? true : false;
+            }
+            else if (name == "UnderlineEnabled") {
+                underlineEnabled = (value == "True") ? true : false;
+            }
+            else if (name == "ItalicsEnabled") {
+                italicsEnabled = (value == "True") ? true : false;
+            }
+            else if (name == "StrikethroughEnabled") {
+                strikethroughEnabled = (value == "True") ? true : false;
+            }
+
+            attribute = attribute.next_attribute();
         }
         
         // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "Size" && scale9Enabled)
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "X")
                     {
@@ -413,16 +427,16 @@ namespace cocostudio
                         scale9Size.height = atof(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "TextColor")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "R")
                     {
@@ -437,7 +451,7 @@ namespace cocostudio
                         textColor.b = atoi(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "DisabledFileData")
@@ -445,12 +459,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -466,7 +480,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (disabledResourceType == 1)
@@ -480,12 +494,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -501,7 +515,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (pressedResourceType == 1)
@@ -515,12 +529,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -536,7 +550,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (normalResourceType == 1)
@@ -547,12 +561,12 @@ namespace cocostudio
             }
             else if (name == "FontResource")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -567,17 +581,17 @@ namespace cocostudio
                         fontResourcePlistFile = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "OutlineColor")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "A")
                     {
@@ -596,17 +610,17 @@ namespace cocostudio
                         outlineColor.b = atoi(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "ShadowColor")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "A")
                     {
@@ -625,11 +639,39 @@ namespace cocostudio
                         shadowColor.b = atoi(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
+			else if (name == "GlowColor") {
+				attribute = child.first_attribute();
+
+				while (attribute)
+				{
+					name = attribute.name();
+					std::string value = attribute.value();
+
+					if (name == "A")
+					{
+						glowColor.a = atoi(value.c_str());
+					}
+					else if (name == "R")
+					{
+						glowColor.r = atoi(value.c_str());
+					}
+					else if (name == "G")
+					{
+						glowColor.g = atoi(value.c_str());
+					}
+					else if (name == "B")
+					{
+						glowColor.b = atoi(value.c_str());
+					}
+
+					attribute = attribute.next_attribute();
+				}
+			}
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         Color f_textColor(255, textColor.r, textColor.g, textColor.b);
@@ -637,6 +679,7 @@ namespace cocostudio
         FlatSize f_scale9Size(scale9Size.width, scale9Size.height);
         flatbuffers::Color f_outlineColor(outlineColor.a, outlineColor.r, outlineColor.g, outlineColor.b);
         flatbuffers::Color f_shadowColor(shadowColor.a, shadowColor.r, shadowColor.g, shadowColor.b);
+		flatbuffers::Color f_glowColor(glowColor.a, glowColor.r, glowColor.g, glowColor.b);
         
         auto options = CreateButtonOptions(*builder,
                                            widgetOptions,
@@ -672,7 +715,9 @@ namespace cocostudio
                                            shadowOffset.width,
                                            shadowOffset.height,
                                            shadowBlurRadius,
-                                           isLocalized);
+			                               glowEnabled,
+                                           isLocalized,
+		                                   &f_glowColor, boldEnabled, underlineEnabled, italicsEnabled, strikethroughEnabled);
         
         return *(Offset<Table>*)(&options);
     }
@@ -680,6 +725,7 @@ namespace cocostudio
     void ButtonReader::setPropsWithFlatBuffers(cocos2d::Node *node, const flatbuffers::Table *buttonOptions)
     {
         Button* button = static_cast<Button*>(node);
+
         auto options = (ButtonOptions*)buttonOptions;
         
         bool scale9Enabled = options->scale9Enabled() != 0;
@@ -687,9 +733,10 @@ namespace cocostudio
         
         bool normalFileExist = false;
         std::string normalErrorFilePath = "";
-        auto normalDic = options->normalData();
-        int normalType = normalDic->resourceType();
-        std::string normalTexturePath = normalDic->path()->c_str();
+        auto normalDic = cocos2d::wext::makeResourceData(options->normalData());
+        int normalType = normalDic.type;
+        std::string& normalTexturePath = normalDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(button, normalDic, 0);
         switch (normalType)
         {
             case 0:
@@ -711,7 +758,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = normalDic->plistFile()->c_str();
+                std::string& plist = normalDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(normalTexturePath);
                 if (spriteFrame)
                 {
@@ -748,9 +795,10 @@ namespace cocostudio
         
         bool pressedFileExist = false;
         std::string pressedErrorFilePath = "";
-        auto pressedDic = options->pressedData();
-        int pressedType = pressedDic->resourceType();
-        std::string pressedTexturePath = pressedDic->path()->c_str();
+        auto pressedDic = cocos2d::wext::makeResourceData(options->pressedData());
+        int pressedType = pressedDic.type;
+        std::string& pressedTexturePath = pressedDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(button, pressedDic, 1);
         switch (pressedType)
         {
             case 0:
@@ -769,7 +817,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = pressedDic->plistFile()->c_str();
+                std::string& plist = pressedDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pressedTexturePath);
                 if (spriteFrame)
                 {
@@ -806,9 +854,10 @@ namespace cocostudio
         
         bool disabledFileExist = false;
         std::string disabledErrorFilePath = "";
-        auto disabledDic = options->disabledData();
-        int disabledType = disabledDic->resourceType();
-        std::string disabledTexturePath = disabledDic->path()->c_str();
+        auto disabledDic = cocos2d::wext::makeResourceData(options->disabledData());
+        int disabledType = disabledDic.type;
+        std::string& disabledTexturePath = disabledDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(button, disabledDic, 2);
         switch (disabledType)
         {
             case 0:
@@ -827,7 +876,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = disabledDic->plistFile()->c_str();
+                std::string& plist = disabledDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(disabledTexturePath);
                 if (spriteFrame)
                 {
@@ -878,16 +927,15 @@ namespace cocostudio
         Color3B titleColor(textColor->r(), textColor->g(), textColor->b());
         button->setTitleColor(titleColor);
         
-        int titleFontSize = options->fontSize();
-        button->setTitleFontSize(titleFontSize);
-        
+
         std::string titleFontName = options->fontName()->c_str();
         button->setTitleFontName(titleFontName);
         
-        auto resourceData = options->fontResource();
+        auto resourceData = cocos2d::wext::makeResourceData(options->fontResource());
         bool fileExist = false;
         std::string errorFilePath = "";
-        std::string path = resourceData->path()->c_str();
+        std::string& path = resourceData.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(button, resourceData, 3); // font
         if (path != "")
         {
             if (FileUtils::getInstance()->isFileExist(path))
@@ -905,6 +953,9 @@ namespace cocostudio
             }
         }
         
+        int titleFontSize = options->fontSize();
+        button->setTitleFontSize(titleFontSize);
+
         bool displaystate = options->displaystate() != 0;
         button->setBright(displaystate);
         button->setEnabled(displaystate);
@@ -932,6 +983,16 @@ namespace cocostudio
                 label->enableShadow(shadowColor, Size(options->shadowOffsetX(), options->shadowOffsetY()), options->shadowBlurRadius());
             }
         }
+
+		if (options->glowEnabled() != 0) {
+			auto f_glowColor = options->glowColor();
+			if (f_glowColor)
+			{
+				Color4B glowColor(f_glowColor->r(), f_glowColor->g(), f_glowColor->b(), f_glowColor->a());
+				auto label = button->getTitleRenderer();
+				label->enableGlow(glowColor);
+			}
+		}
         
         auto widgetReader = WidgetReader::getInstance();
         widgetReader->setPropsWithFlatBuffers(node, (Table*)options->widgetOptions());
@@ -955,11 +1016,23 @@ namespace cocostudio
         }
 
         button->setBright(displaystate);
+
+        auto labelRenderer = dynamic_cast<cocos2d::Label*>(button->getTitleRenderer());
+        if (labelRenderer != nullptr) {
+            if (options->boldEnabled())
+                labelRenderer->enableBold();
+            if (options->underlineEnabled())
+                labelRenderer->enableUnderline();
+            if (options->italicsEnabled())
+                labelRenderer->enableItalics();
+            if (options->strikethroughEnabled())
+                labelRenderer->enableStrikethrough();
+        }
     }
     
     Node* ButtonReader::createNodeWithFlatBuffers(const flatbuffers::Table *buttonOptions)
     {
-        Button* button = Button::create();
+        Button* button = wext::aButton();// Button::create();
         
         setPropsWithFlatBuffers(button, (Table*)buttonOptions);
         

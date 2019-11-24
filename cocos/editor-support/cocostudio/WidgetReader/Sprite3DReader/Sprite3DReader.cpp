@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -36,7 +35,6 @@
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 #include "editor-support/cocostudio/WidgetReader/Node3DReader/Node3DReader.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -78,7 +76,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceSprite3DReader);
     }
     
-    Vec2 Sprite3DReader::getVec2Attribute(const tinyxml2::XMLAttribute* attribute) const
+    Vec2 Sprite3DReader::getVec2Attribute(pugi::xml_attribute attribute) const
     {
         if(!attribute)
             return Vec2::ZERO;
@@ -88,8 +86,8 @@ namespace cocostudio
         
         while (attribute)
         {
-            attriname = attribute->Name();
-            std::string value = attribute->Value();
+            attriname = attribute.name();
+            std::string value = attribute.value();
             
             if (attriname == "X")
             {
@@ -100,13 +98,13 @@ namespace cocostudio
                 ret.y = atof(value.c_str());
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
 
         return ret;
     }
     
-    Offset<Table> Sprite3DReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> Sprite3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                              flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = Node3DReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -119,11 +117,11 @@ namespace cocostudio
         int lightFlag = 0;
         
         std::string attriname;
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while(attribute)
         {
-            attriname = attribute->Name();
-            std::string value = attribute->Value();
+            attriname = attribute.name();
+            std::string value = attribute.value();
             
             if(attriname == "RunAction3D")
             {
@@ -150,23 +148,23 @@ namespace cocostudio
                 else if (value == "LIGHT12") lightFlag = (int)LightFlag::LIGHT12;
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
 
         // FileData
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "FileData")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -184,11 +182,11 @@ namespace cocostudio
                         }
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         auto options = CreateSprite3DOptions(*builder,
@@ -231,10 +229,10 @@ namespace cocostudio
         
         auto nodeOptions = options->node3DOption()->nodeOptions();
         
-        uint8_t alpha       = (uint8_t)nodeOptions->color()->a();
-        uint8_t red         = (uint8_t)nodeOptions->color()->r();
-        uint8_t green       = (uint8_t)nodeOptions->color()->g();
-        uint8_t blue        = (uint8_t)nodeOptions->color()->b();
+        GLubyte alpha       = (GLubyte)nodeOptions->color()->a();
+        GLubyte red         = (GLubyte)nodeOptions->color()->r();
+        GLubyte green       = (GLubyte)nodeOptions->color()->g();
+        GLubyte blue        = (GLubyte)nodeOptions->color()->b();
         
         if (alpha != 255)
         {
@@ -247,7 +245,7 @@ namespace cocostudio
         if (isFlipped)
         {
             sprite3D->setCullFaceEnabled(true);
-            sprite3D->setCullFace(CullFaceSide::FRONT);
+            sprite3D->setCullFace(GL_FRONT);
         }
 
         if (lightFlag <= 0)

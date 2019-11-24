@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -34,7 +33,6 @@
 #include "editor-support/cocostudio/WidgetReader/Node3DReader/Node3DReader.h"
 #include "editor-support/cocostudio/WidgetReader/GameNode3DReader/GameNode3DReader.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -76,7 +74,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceUserCameraReader);
     }
     
-    Vec2 UserCameraReader::getVec2Attribute(const tinyxml2::XMLAttribute* attribute) const
+    Vec2 UserCameraReader::getVec2Attribute(pugi::xml_attribute attribute) const
     {
         if(!attribute)
             return Vec2::ZERO;
@@ -86,8 +84,8 @@ namespace cocostudio
         
         while (attribute)
         {
-            attriname = attribute->Name();
-            std::string value = attribute->Value();
+            attriname = attribute.name();
+            std::string value = attribute.value();
             
             if (attriname == "X")
             {
@@ -98,13 +96,13 @@ namespace cocostudio
                 ret.y = atof(value.c_str());
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
 
         return ret;
     }
     
-    Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                              flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = Node3DReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -116,11 +114,11 @@ namespace cocostudio
         bool skyBoxValid = true;
 
         std::string attriname;
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while(attribute)
         {
-            attriname = attribute->Name();
-            std::string value = attribute->Value();
+            attriname = attribute.name();
+            std::string value = attribute.value();
             
             if(attriname == "Fov")
             {
@@ -152,7 +150,7 @@ namespace cocostudio
                 skyBoxValid = (value == "True") ? true : false;
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
 
         if (!skyBoxValid)
@@ -185,24 +183,24 @@ namespace cocostudio
         int backResourceType = 0;
         
         // FileData
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "ClipPlane")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 clipPlane = getVec2Attribute(attribute);
             }
             else if (name == "LeftImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "Path")
                     {
@@ -217,7 +215,7 @@ namespace cocostudio
                         leftPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (leftResourceType == 1)
@@ -228,12 +226,12 @@ namespace cocostudio
             }
             else if (name == "RightImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "Path")
                     {
@@ -248,7 +246,7 @@ namespace cocostudio
                         rightPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (rightResourceType == 1)
@@ -259,12 +257,12 @@ namespace cocostudio
             }
             else if (name == "UpImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "Path")
                     {
@@ -279,7 +277,7 @@ namespace cocostudio
                         upPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (upResourceType == 1)
@@ -290,12 +288,12 @@ namespace cocostudio
             }
             else if (name == "DownImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "Path")
                     {
@@ -310,7 +308,7 @@ namespace cocostudio
                         downPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (downResourceType == 1)
@@ -321,12 +319,12 @@ namespace cocostudio
             }
             else if (name == "ForwardImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "Path")
                     {
@@ -341,7 +339,7 @@ namespace cocostudio
                         forwardPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (forwardResourceType == 1)
@@ -352,12 +350,12 @@ namespace cocostudio
             }
             else if (name == "BackImage")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "Path")
                     {
@@ -372,7 +370,7 @@ namespace cocostudio
                         backPlistFile = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (backResourceType == 1)
@@ -382,7 +380,7 @@ namespace cocostudio
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         auto options = CreateUserCameraOptions(*builder,

@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -36,9 +35,9 @@ namespace cocostudio {
 class CC_STUDIO_DLL BaseTriggerCondition : public cocos2d::Ref
 {
 protected:
-    BaseTriggerCondition();
+    BaseTriggerCondition(void);
 public:
-    virtual ~BaseTriggerCondition();
+    virtual ~BaseTriggerCondition(void);
     virtual bool init();
     virtual bool detect();
     virtual void serialize(const rapidjson::Value &val);
@@ -49,9 +48,9 @@ public:
 class CC_STUDIO_DLL BaseTriggerAction : public cocos2d::Ref
 {
 protected:
-    BaseTriggerAction();
+    BaseTriggerAction(void);
 public:
-    virtual ~BaseTriggerAction();
+    virtual ~BaseTriggerAction(void);
     virtual bool init();
     virtual void done();
     virtual void serialize(const rapidjson::Value &val);
@@ -63,10 +62,10 @@ public:
 class CC_STUDIO_DLL TriggerObj : public cocos2d::Ref
 {
 public:
-    TriggerObj();
-    virtual ~TriggerObj();
+    TriggerObj(void);
+    virtual ~TriggerObj(void);
     virtual bool init();
-    static TriggerObj* create();
+    static TriggerObj* create(void);
     
     virtual bool detect();
     virtual void done();

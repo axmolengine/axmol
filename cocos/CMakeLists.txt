@@ -118,6 +118,7 @@ use_cocos2dx_libs_depend(cocos2d)
 
 target_include_directories(cocos2d
     PUBLIC ${COCOS2DX_ROOT_PATH}
+    PUBLIC ${COCOS2DX_ROOT_PATH}/external
     PUBLIC ${COCOS2DX_ROOT_PATH}/cocos
     PUBLIC ${COCOS2DX_ROOT_PATH}/extensions
     PUBLIC ${COCOS2DX_ROOT_PATH}/cocos/platform

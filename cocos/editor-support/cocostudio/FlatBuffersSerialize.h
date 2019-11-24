@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -33,6 +32,8 @@
 #include "editor-support/cocostudio/CocosStudioExport.h"
 #include "platform/CCPlatformMacros.h"
 #include "ui/UIWidget.h"
+
+#include "pugixml/pugixml_imp.hpp"
 
 namespace flatbuffers
 {
@@ -86,11 +87,6 @@ namespace flatbuffers
     struct BlendFrame;
 }
 
-namespace tinyxml2
-{
-    class XMLElement;
-}
-
 namespace cocostudio {
     
 class CC_STUDIO_DLL FlatBuffersSerialize
@@ -111,30 +107,35 @@ public:
                      const std::string& flatbuffersFileName);
     
     /* serialize flat buffers with XML */
-    std::string serializeFlatBuffersWithXMLFile(const std::string& xmlFileName,
+    static std::string serializeFlatBuffersWithXMLFile(const std::string& xmlFileName,
                                                 const std::string& flatbuffersFileName);
-
+    /* x-studio365 spec: serialize flat buffers with XML buffer */
+    static std::string serializeFlatBuffersWithXMLBuffer(std::string& xmlBuffer,
+        const std::string& flatbuffersFileName);
+    static std::string serializeFlatBuffersWithOpaque(void* opaque,
+        const std::string& flatbuffersFileName);
+    
     // NodeTree
-    flatbuffers::Offset<flatbuffers::NodeTree> createNodeTree(const tinyxml2::XMLElement* objectData,
+    flatbuffers::Offset<flatbuffers::NodeTree> createNodeTree(pugi::xml_node objectData,
                                                               std::string classType);
     
     // NodeAction
-    flatbuffers::Offset<flatbuffers::NodeAction> createNodeAction(const tinyxml2::XMLElement* objectData);
-    flatbuffers::Offset<flatbuffers::TimeLine> createTimeLine(const tinyxml2::XMLElement* objectData);    
-    flatbuffers::Offset<flatbuffers::PointFrame> createPointFrame(const tinyxml2::XMLElement* objectData);
-    flatbuffers::Offset<flatbuffers::ScaleFrame> createScaleFrame(const tinyxml2::XMLElement* objectData);    
-    flatbuffers::Offset<flatbuffers::ColorFrame> createColorFrame(const tinyxml2::XMLElement* objectData);
-    flatbuffers::Offset<flatbuffers::TextureFrame> createTextureFrame(const tinyxml2::XMLElement* objectData);
-    flatbuffers::Offset<flatbuffers::EventFrame> createEventFrame(const tinyxml2::XMLElement* objectData);
-    flatbuffers::Offset<flatbuffers::IntFrame> createIntFrame(const tinyxml2::XMLElement* objectData);
-    flatbuffers::Offset<flatbuffers::BoolFrame> createBoolFrame(const tinyxml2::XMLElement* objectData);
-    flatbuffers::Offset<flatbuffers::InnerActionFrame> createInnerActionFrame(const tinyxml2::XMLElement* objectData);
-    flatbuffers::Offset<flatbuffers::BlendFrame> createBlendFrame(const tinyxml2::XMLElement* objectData);
+    flatbuffers::Offset<flatbuffers::NodeAction> createNodeAction(pugi::xml_node objectData);
+    flatbuffers::Offset<flatbuffers::TimeLine> createTimeLine(pugi::xml_node objectData);    
+    flatbuffers::Offset<flatbuffers::PointFrame> createPointFrame(pugi::xml_node objectData);
+    flatbuffers::Offset<flatbuffers::ScaleFrame> createScaleFrame(pugi::xml_node objectData);    
+    flatbuffers::Offset<flatbuffers::ColorFrame> createColorFrame(pugi::xml_node objectData);
+    flatbuffers::Offset<flatbuffers::TextureFrame> createTextureFrame(pugi::xml_node objectData);
+    flatbuffers::Offset<flatbuffers::EventFrame> createEventFrame(pugi::xml_node objectData);
+    flatbuffers::Offset<flatbuffers::IntFrame> createIntFrame(pugi::xml_node objectData);
+    flatbuffers::Offset<flatbuffers::BoolFrame> createBoolFrame(pugi::xml_node objectData);
+    flatbuffers::Offset<flatbuffers::InnerActionFrame> createInnerActionFrame(pugi::xml_node objectData);
+    flatbuffers::Offset<flatbuffers::BlendFrame> createBlendFrame(pugi::xml_node objectData);
     
-    flatbuffers::Offset<flatbuffers::EasingData> createEasingData(const tinyxml2::XMLElement* objectData);
+    flatbuffers::Offset<flatbuffers::EasingData> createEasingData(pugi::xml_node objectData);
 
     //Animation Info
-    flatbuffers::Offset<flatbuffers::AnimationInfo> createAnimationInfo(const tinyxml2::XMLElement* objectData);
+    flatbuffers::Offset<flatbuffers::AnimationInfo> createAnimationInfo(pugi::xml_node objectData);
     /**/
     
     int getResourceType(std::string key);
@@ -143,9 +144,9 @@ public:
     
     /* create flat buffers with XML */
     flatbuffers::FlatBufferBuilder* createFlatBuffersWithXMLFileForSimulator(const std::string& xmlFileName);
-    flatbuffers::Offset<flatbuffers::NodeTree> createNodeTreeForSimulator(const tinyxml2::XMLElement* objectData,
+    flatbuffers::Offset<flatbuffers::NodeTree> createNodeTreeForSimulator(pugi::xml_node objectData,
                                                                           std::string classType);
-    flatbuffers::Offset<flatbuffers::ProjectNodeOptions> createProjectNodeOptionsForSimulator(const tinyxml2::XMLElement* objectData);
+    flatbuffers::Offset<flatbuffers::ProjectNodeOptions> createProjectNodeOptionsForSimulator(pugi::xml_node objectData);
 	/**/
     std::string getCsdVersion() { return _csdVersion; }
 

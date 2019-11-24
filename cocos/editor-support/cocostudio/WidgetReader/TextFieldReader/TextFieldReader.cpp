@@ -1,27 +1,3 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 
 
 #include "editor-support/cocostudio/WidgetReader/TextFieldReader/TextFieldReader.h"
@@ -32,7 +8,6 @@
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/LocalizationManager.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -104,7 +79,9 @@ namespace cocostudio
             }else if(key == P_FontSize){
                 textField->setFontSize(valueToInt(value));
             }else if(key == P_FontName){
-                textField->setFontName(value);
+                auto fontData = cocos2d::wext::makeResourceData(value);
+                cocos2d::wext::onBeforeLoadObjectAsset(textField, fontData, 0);
+                textField->setFontName(fontData.file);
             }else if(key == P_TouchSizeWidth){
                 textField->setTouchSize(Size(valueToFloat(value), textField->getTouchSize().height));
             }else if(key == P_TouchSizeHeight){
@@ -177,7 +154,7 @@ namespace cocostudio
         WidgetReader::setColorPropsFromJsonDictionary(widget, options);
     }        
     
-    Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                 flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -202,11 +179,11 @@ namespace cocostudio
         
         
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string name = attribute->Name();
-            std::string value = attribute->Value();
+            std::string name = attribute.name();
+            std::string value = attribute.value();
             
             if (name == "PlaceHolderText")
             {
@@ -250,23 +227,23 @@ namespace cocostudio
             }
             
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
         
         // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "FontResource")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -281,11 +258,11 @@ namespace cocostudio
                         plistFile = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         auto options = CreateTextFieldOptions(*builder,
@@ -304,8 +281,8 @@ namespace cocostudio
                                               maxLength,
                                               areaWidth,
                                               areaHeight,
-                                              isCustomSize,
-                                              isLocalized);
+                                              isCustomSize, 
+                                              isLocalized /*pitfall v3.15 use this order */);
         
         return *(Offset<Table>*)(&options);
     }
@@ -324,7 +301,7 @@ namespace cocostudio
         {
             ILocalizationManager* lm = LocalizationHelper::getCurrentManager();
             std::string localizedTxt = lm->getLocalizationString(text);
-            std::string::size_type newlineIndex = localizedTxt.find('\n');
+            std::string::size_type newlineIndex = localizedTxt.find("\n");
             if (newlineIndex != std::string::npos)
                 localizedTxt = localizedTxt.substr(0, newlineIndex);
             textField->setString(localizedTxt);
@@ -359,8 +336,9 @@ namespace cocostudio
         
         bool fileExist = false;
         std::string errorFilePath = "";
-        auto resourceData = options->fontResource();
-        std::string path = resourceData->path()->c_str();
+        auto resourceData = cocos2d::wext::makeResourceData(options->fontResource());
+        std::string& path = resourceData.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(textField, resourceData, 0);
         if (path != "")
         {
             if (FileUtils::getInstance()->isFileExist(path))
@@ -397,7 +375,7 @@ namespace cocostudio
     
     Node* TextFieldReader::createNodeWithFlatBuffers(const flatbuffers::Table *textFieldOptions)
     {
-        TextField* textField = TextField::create();
+        TextField* textField = wext::aTextField();// TextField::create();
         
         setPropsWithFlatBuffers(textField, (Table*)textFieldOptions);
         

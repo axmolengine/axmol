@@ -1,39 +1,15 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 
 
 #include "editor-support/cocostudio/WidgetReader/TextReader/TextReader.h"
 
 #include "ui/UIText.h"
+#include "2d/CCLabel.h"
 #include "platform/CCFileUtils.h"
 
 #include "editor-support/cocostudio/CocoLoader.h"
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/LocalizationManager.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -109,10 +85,12 @@ namespace cocostudio
             }else if(key == P_FontName){
                 std::string fontFilePath;
                 fontFilePath = binaryFilePath.append(value);
+                auto fontData = cocos2d::wext::makeResourceData(std::move(fontFilePath));
+                cocos2d::wext::onBeforeLoadObjectAsset(label, fontData, 0);
                 if (FileUtils::getInstance()->isFileExist(fontFilePath)) {
-                    label->setFontName(fontFilePath);
+                    label->setFontName(fontData.file);
                 }else{
-                    label->setFontName(value);
+                    label->setFontName(fontData.file);
                 }
             }else if(key == P_AreaWidth){
                 label->setTextAreaSize(Size(valueToFloat(value), label->getTextAreaSize().height));
@@ -176,7 +154,7 @@ namespace cocostudio
         WidgetReader::setColorPropsFromJsonDictionary(widget, options);
     }        
     
-    Offset<Table> TextReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                            flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -199,17 +177,23 @@ namespace cocostudio
         Color4B shadowColor = Color4B::BLACK;
         Size shadowOffset = Size(2, -2);
         int shadowBlurRadius = 0;
+
+        // since x-studio365 reader 10.0.593.0
+		bool glowEnabled = false;
+		Color4B glowColor = Color4B::BLACK;
+
+        bool boldEnabled = false, underlineEnabled = false, italicsEnabled = false, strikethroughEnabled = false;
         
         std::string path = "";
         std::string plistFile = "";
         int resourceType = 0;
         
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string name = attribute->Name();
-            std::string value = attribute->Value();
+            std::string name = attribute.name();
+            std::string value = attribute.value();
             
             if (name == "TouchScaleChangeAble")
             {
@@ -297,24 +281,40 @@ namespace cocostudio
             {
                 shadowBlurRadius = atoi(value.c_str());
             }
+			else if (name == "GlowEnabled") {
+				glowEnabled = (value == "True") ? true : false;
+			}
+            else if (name == "BoldEnabled")
+            {
+                boldEnabled = (value == "True") ? true : false;
+            }
+            else if (name == "UnderlineEnabled") {
+                underlineEnabled = (value == "True") ? true : false;
+            }
+            else if (name == "ItalicsEnabled") {
+                italicsEnabled = (value == "True") ? true : false;
+            }
+            else if (name == "StrikethroughEnabled") {
+                strikethroughEnabled = (value == "True") ? true : false;
+            }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
         
         // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "FontResource")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -329,17 +329,17 @@ namespace cocostudio
                         plistFile = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "OutlineColor")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "A")
                     {
@@ -358,17 +358,17 @@ namespace cocostudio
                         outlineColor.b = atoi(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "ShadowColor")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "A")
                     {
@@ -387,15 +387,44 @@ namespace cocostudio
                         shadowColor.b = atoi(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
+			else if(name == "GlowColor") {
+				attribute = child.first_attribute();
+
+				while (attribute)
+				{
+					name = attribute.name();
+					std::string value = attribute.value();
+
+					if (name == "A")
+					{
+						glowColor.a = atoi(value.c_str());
+					}
+					else if (name == "R")
+					{
+						glowColor.r = atoi(value.c_str());
+					}
+					else if (name == "G")
+					{
+						glowColor.g = atoi(value.c_str());
+					}
+					else if (name == "B")
+					{
+						glowColor.b = atoi(value.c_str());
+					}
+
+					attribute = attribute.next_attribute();
+				}
+			}
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         flatbuffers::Color f_outlineColor(outlineColor.a, outlineColor.r, outlineColor.g, outlineColor.b);
         flatbuffers::Color f_shadowColor(shadowColor.a, shadowColor.r, shadowColor.g, shadowColor.b);
+		flatbuffers::Color f_glowColor(glowColor.a, glowColor.r, glowColor.g, glowColor.b);
         
         auto options = CreateTextOptions(*builder,
                                          widgetOptions,
@@ -420,7 +449,9 @@ namespace cocostudio
                                          shadowOffset.width,
                                          shadowOffset.height,
                                          shadowBlurRadius,
-                                         isLocalized);
+                                         isLocalized,
+			                             glowEnabled,
+			                             &f_glowColor, boldEnabled, underlineEnabled, italicsEnabled, strikethroughEnabled);
         
         return *(Offset<Table>*)(&options);
     }
@@ -442,8 +473,9 @@ namespace cocostudio
             label->setTextAreaSize(areaSize);
         }
 
-        auto resourceData = options->fontResource();
-        std::string path = resourceData->path()->c_str();
+        auto resourceData = cocos2d::wext::makeResourceData(options->fontResource());
+        std::string& path = resourceData.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(label, resourceData, 0);
         if (!path.empty() && FileUtils::getInstance()->isFileExist(path))
         {
             label->setFontName(path);
@@ -482,6 +514,15 @@ namespace cocostudio
             }
         }
 
+		if (options->glowEnabled() != 0) {
+			auto f_glowColor = options->glowColor();
+			if (f_glowColor)
+			{
+				Color4B glowColor(f_glowColor->r(), f_glowColor->g(), f_glowColor->b(), f_glowColor->a());
+				label->enableGlow(glowColor);
+			}
+		}
+
         std::string text = options->text()->c_str();
         bool isLocalized = options->isLocalized() != 0;
         if (isLocalized)
@@ -518,11 +559,21 @@ namespace cocostudio
             Size contentSize(widgetOptions->size()->width(), widgetOptions->size()->height());
             label->setContentSize(contentSize);
         }
+
+        auto labelRenderer = dynamic_cast<cocos2d::Label*>(label->getVirtualRenderer());
+        if (options->boldEnabled())
+            labelRenderer->enableBold();
+        if (options->underlineEnabled())
+            labelRenderer->enableUnderline();
+        if (options->italicsEnabled())
+            labelRenderer->enableItalics();
+        if (options->strikethroughEnabled())
+            labelRenderer->enableStrikethrough();
     }
     
     Node* TextReader::createNodeWithFlatBuffers(const flatbuffers::Table *textOptions)
     {
-        Text* text = Text::create();
+        Text* text = wext::aText(); // Text::create();
         
         setPropsWithFlatBuffers(text, (Table*)textOptions);
         

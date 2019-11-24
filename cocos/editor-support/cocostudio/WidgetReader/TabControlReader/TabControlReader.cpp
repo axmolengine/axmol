@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2015-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2015-2017 Chukong Technologies Inc.
  
  http://www.cocos2d-x.org
  
@@ -24,7 +23,6 @@
  ****************************************************************************/
 
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 #include "editor-support/cocostudio/WidgetReader/WidgetReader.h"
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
@@ -64,7 +62,7 @@ void TabControlReader::destroyInstance()
 }
 
 flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatBuffers(
-                                                                                       const tinyxml2::XMLElement* objectData, flatbuffers::FlatBufferBuilder* builder)
+                                                                                       pugi::xml_node objectData, flatbuffers::FlatBufferBuilder* builder)
 {
     auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
     auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
@@ -77,11 +75,11 @@ flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatB
     bool ignoretexturesize = true;
 
     std::vector<Offset<TabItemOption>>  tabItems;
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute->Name();
-        std::string value = attribute->Value();
+        std::string attriname = attribute.name();
+        std::string value = attribute.value();
         
         if (attriname == "HeaderPlace")
         {
@@ -115,33 +113,33 @@ flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatB
         {
             ignoretexturesize = FLATSTR_TO_BOOL(value);
         }
-        attribute = attribute->Next();
+        attribute = attribute.next_attribute();
     }
     
     bool containChildrenElement = false;
-    const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+    auto child = objectData.first_child();
     while (child)
     {
-        if (strcmp("Children", child->Name()) == 0)
+        if (strcmp("Children", child.name()) == 0)
         {
             containChildrenElement = true;
             break;
         }
         
-        child = child->NextSiblingElement();
+        child = child.next_sibling();
     }
     
     if (containChildrenElement)
     {
-        child = child->FirstChildElement(); //first child
+        child = child.first_child(); //first child
         bool hasItem = true;
         while (child && hasItem)
         {
-            const tinyxml2::XMLAttribute* childattribute = child->FirstAttribute();
+            pugi::xml_attribute childattribute = child.first_attribute();
             while (childattribute)
             {
-                std::string attriname = childattribute->Name();
-                std::string value = childattribute->Value();
+                std::string attriname = childattribute.name();
+                std::string value = childattribute.value();
                 
                 if (attriname == "ctype")
                 {
@@ -156,9 +154,9 @@ flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatB
                     
                     break;
                 }
-                childattribute = childattribute->Next();
+                childattribute = childattribute.next_attribute();
             }
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
     }
     
@@ -242,7 +240,7 @@ void TabHeaderReader::destroyInstance()
 }
 
 flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBuffers(
-                                                                                      const tinyxml2::XMLElement* objectData, flatbuffers::FlatBufferBuilder* builder)
+                                                                                      pugi::xml_node objectData, flatbuffers::FlatBufferBuilder* builder)
 {
     auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
     auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
@@ -278,11 +276,11 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
     std::string fontResourcePlistFile = "";
     int fontResourceResourceType = 0;
     
-    const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+    auto attribute =  objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute->Name();
-        std::string value = attribute->Value();
+        std::string attriname = attribute.name();
+        std::string value = attribute.value();
         
         if (attriname.compare("FontSize") == 0)
         {
@@ -292,22 +290,22 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
         {
             text = value;
         }
-        attribute = attribute->Next();
+        attribute = attribute.next_attribute();
     }
     
     
-    const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+    auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child->Name();
+        std::string name = child.name();
         
         if (name == "TextColor")
         {
-            attribute = child->FirstAttribute();
+            attribute = child.first_attribute();
             while (attribute)
             {
-                name = attribute->Name();
-                std::string value = attribute->Value();
+                name = attribute.name();
+                std::string value = attribute.value();
                 
                 if (name == "R")
                 {
@@ -322,7 +320,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
                     textColor.b = atoi(value.c_str());
                 }
                 
-                attribute = attribute->Next();
+                attribute = attribute.next_attribute();
             }
         }
         else if (name == "NormalBackFileData")
@@ -330,12 +328,12 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             std::string texture = "";
             std::string texturePng = "";
             
-            attribute = child->FirstAttribute();
+            attribute = child.first_attribute();
             
             while (attribute)
             {
-                name = attribute->Name();
-                std::string value = attribute->Value();
+                name = attribute.name();
+                std::string value = attribute.value();
                 
                 if (name == "Path")
                 {
@@ -351,7 +349,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
                     texture = value;
                 }
                 
-                attribute = attribute->Next();
+                attribute = attribute.next_attribute();
             }
             
             if (backgroundboxResourceType == 1)
@@ -365,12 +363,12 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             std::string texture = "";
             std::string texturePng = "";
             
-            attribute = child->FirstAttribute();
+            attribute = child.first_attribute();
             
             while (attribute)
             {
-                name = attribute->Name();
-                std::string value = attribute->Value();
+                name = attribute.name();
+                std::string value = attribute.value();
                 
                 if (name == "Path")
                 {
@@ -386,7 +384,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
                     texture = value;
                 }
                 
-                attribute = attribute->Next();
+                attribute = attribute.next_attribute();
             }
             
             if (backGroundBoxSelectedResourceType == 1)
@@ -400,12 +398,12 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             std::string texture = "";
             std::string texturePng = "";
             
-            attribute = child->FirstAttribute();
+            attribute = child.first_attribute();
             
             while (attribute)
             {
-                name = attribute->Name();
-                std::string value = attribute->Value();
+                name = attribute.name();
+                std::string value = attribute.value();
                 
                 if (name == "Path")
                 {
@@ -421,7 +419,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
                     texture = value;
                 }
                 
-                attribute = attribute->Next();
+                attribute = attribute.next_attribute();
             }
             
             if (frontCrossResourceType == 1)
@@ -435,12 +433,12 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             std::string texture = "";
             std::string texturePng = "";
             
-            attribute = child->FirstAttribute();
+            attribute = child.first_attribute();
             
             while (attribute)
             {
-                name = attribute->Name();
-                std::string value = attribute->Value();
+                name = attribute.name();
+                std::string value = attribute.value();
                 
                 if (name == "Path")
                 {
@@ -456,7 +454,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
                     texture = value;
                 }
                 
-                attribute = attribute->Next();
+                attribute = attribute.next_attribute();
             }
             
             if (backGroundBoxDisabledResourceType == 1)
@@ -470,12 +468,12 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             std::string texture = "";
             std::string texturePng = "";
             
-            attribute = child->FirstAttribute();
+            attribute = child.first_attribute();
             
             while (attribute)
             {
-                name = attribute->Name();
-                std::string value = attribute->Value();
+                name = attribute.name();
+                std::string value = attribute.value();
                 
                 if (name == "Path")
                 {
@@ -491,7 +489,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
                     texture = value;
                 }
                 
-                attribute = attribute->Next();
+                attribute = attribute.next_attribute();
             }
             
             if (frontCrossDisabledResourceType == 1)
@@ -502,12 +500,12 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
         }
         else if (name == "FontResource")
         {
-            attribute = child->FirstAttribute();
+            attribute = child.first_attribute();
             
             while (attribute)
             {
-                name = attribute->Name();
-                std::string value = attribute->Value();
+                name = attribute.name();
+                std::string value = attribute.value();
                 
                 if (name == "Path")
                 {
@@ -522,11 +520,11 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
                     fontResourcePlistFile = value;
                 }
                 
-                attribute = attribute->Next();
+                attribute = attribute.next_attribute();
             }
         }
         
-        child = child->NextSiblingElement();
+        child = child.next_sibling();
     }
     Color f_textColor(255, textColor.r, textColor.g, textColor.b);
     auto option = CreateTabHeaderOption(*builder,
@@ -946,21 +944,21 @@ void TabItemReader::destroyInstance()
 
 
 flatbuffers::Offset<flatbuffers::TabItemOption> TabItemReader::createTabItemOptionWithFlatBuffers(
-                                                                                                  const tinyxml2::XMLElement* objectData, flatbuffers::FlatBufferBuilder* builder)
+                                                                                                  pugi::xml_node objectData, flatbuffers::FlatBufferBuilder* builder)
 {
     
     flatbuffers::Offset<Table> header;
     flatbuffers::Offset<NodeTree> container;
-    tinyxml2::XMLElement* containerData = nullptr;
-    tinyxml2::XMLElement* containerChildrenData = nullptr;
+    pugi::xml_node containerData;
+    pugi::xml_node containerChildrenData;
     
-    const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+    auto child = objectData.first_child();
     while (child)
     {
-        std::string attriName = child->Name();
+        std::string attriName = child.name();
         if (attriName.compare("Children") == 0)
         {
-            containerChildrenData = const_cast<tinyxml2::XMLElement*>(child);
+            containerChildrenData = child;
         }
         if (attriName.compare("Header") == 0)
         {
@@ -968,14 +966,14 @@ flatbuffers::Offset<flatbuffers::TabItemOption> TabItemReader::createTabItemOpti
         }
         else if (attriName.compare("Container") == 0)
         {
-            containerData = const_cast<tinyxml2::XMLElement*>(child);
+            containerData = child;
         }
-        child = child->NextSiblingElement();
+        child = child.next_sibling();
     }
     
     if (containerChildrenData != nullptr)
     {
-        containerData->InsertEndChild(containerChildrenData);
+        containerData.append_copy(containerChildrenData);
     }
     
     container = FlatBuffersSerialize::getInstance()->createNodeTree(containerData, "PanelObjectData");
@@ -999,7 +997,7 @@ cocos2d::Node* TabItemReader::createNodeWithFlatBuffers(const flatbuffers::Table
 }
 
 flatbuffers::Offset<flatbuffers::Table> TabItemReader::createOptionsWithFlatBuffers(
-                                                                                    const tinyxml2::XMLElement* /*objectData*/, flatbuffers::FlatBufferBuilder* /*builder*/)
+                                                                                    pugi::xml_node /*objectData*/, flatbuffers::FlatBufferBuilder* /*builder*/)
 {
     
     // nothing
