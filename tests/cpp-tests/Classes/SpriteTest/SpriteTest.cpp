@@ -292,7 +292,11 @@ bool Sprite1ETC1Alpha::init()
     if (!SpriteTestDemo::init())
         return false;
 
-    _background = Sprite::create("Images/background2.png");
+    auto& canvasSize = getContentSize();
+    _background = LayerColor::create(Color4B(15, 19, 42, 255), canvasSize.width, canvasSize.height);
+    _background->setIgnoreAnchorPointForPosition(false);
+    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+
     auto s = Director::getInstance()->getWinSize();
     _background->setPosition(Vec2(s.width / 2, s.height / 2));
     this->addChild(_background);
@@ -306,6 +310,7 @@ void Sprite1ETC1Alpha::addNewSpriteWithCoords(Vec2 p)
     auto sprite = Sprite::create("Images/grossini_dance_08.png");
     Texture2D *etcTexture = _director->getTextureCache()->addImage("Images/etc1-alpha.pkm");
     sprite->setTexture(etcTexture);
+    sprite->setTextureRect(Rect(Vec2::ZERO, etcTexture->getContentSize()));
 
     _background->addChild(sprite);
 
