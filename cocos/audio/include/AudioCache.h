@@ -1,7 +1,6 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2018 HALX99.
 
  http://www.cocos2d-x.org
 
@@ -27,14 +26,16 @@
 #pragma once
 
 #include "platform/CCPlatformConfig.h"
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
-
-#import <OpenAL/al.h>
 
 #include <string>
 #include <mutex>
 #include <vector>
-
+#include <memory>
+#ifdef OPENAL_PLAIN_INCLUDES
+#include <al.h>
+#else
+#include <AL/al.h>
+#endif
 #include "platform/CCPlatformMacros.h"
 #include "audio/include/AudioMacros.h"
 
@@ -43,7 +44,7 @@ NS_CC_BEGIN
 class AudioEngineImpl;
 class AudioPlayer;
 
-class AudioCache
+class CC_DLL AudioCache
 {
 public:
 
@@ -84,7 +85,7 @@ protected:
     char* _pcmData;
 
     /*Queue buffer related stuff
-     *  Streaming in openal when sizeInBytes greater then PCMDATA_CACHEMAXSIZE
+     *  Streaming in OpenAL when sizeInBytes greater then PCMDATA_CACHEMAXSIZE
      */
     char* _queBuffers[QUEUEBUFFER_NUM];
     ALsizei _queBufferSize[QUEUEBUFFER_NUM];
@@ -111,5 +112,3 @@ protected:
 };
 
 NS_CC_END
-
-#endif

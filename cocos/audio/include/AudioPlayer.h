@@ -26,23 +26,25 @@
 #pragma once
 
 #include "platform/CCPlatformConfig.h"
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 
-#include "platform/CCPlatformMacros.h"
-#include "audio/include/AudioMacros.h"
-
+#include <string>
 #include <condition_variable>
 #include <mutex>
-#include <string>
 #include <thread>
-#include <OpenAL/al.h>
+#ifdef OPENAL_PLAIN_INCLUDES
+#include <al.h>
+#else
+#include <AL/al.h>
+#endif
+#include "audio/include/AudioMacros.h"
+#include "platform/CCPlatformMacros.h"
 
 NS_CC_BEGIN
 
 class AudioCache;
 class AudioEngineImpl;
 
-class AudioPlayer
+class CC_DLL AudioPlayer
 {
 public:
     AudioPlayer();
@@ -55,17 +57,18 @@ public:
     float getTime() { return _currTime;}
     bool setLoop(bool loop);
 
+    bool isFinished() const;
+
 protected:
     void setCache(AudioCache* cache);
     void rotateBufferThread(int offsetFrame);
     bool play2d();
-    void wakeupRotateThread();
 
     AudioCache* _audioCache;
 
     float _volume;
     bool _loop;
-    std::function<void (int, const std::string &)> _finishCallbak;
+    std::function<void (AUDIO_ID, const std::string &)> _finishCallbak;
 
     bool _isDestroyed;
     bool _removeByAudioEngine;
@@ -75,21 +78,17 @@ protected:
     //play by circular buffer
     float _currTime;
     bool _streamingSource;
-    ALuint _bufferIds[QUEUEBUFFER_NUM];
+    ALuint _bufferIds[3];
     std::thread* _rotateBufferThread;
     std::condition_variable _sleepCondition;
     std::mutex _sleepMutex;
     bool _timeDirty;
     bool _isRotateThreadExited;
-    std::atomic_bool _needWakeupRotateThread;
 
     std::mutex _play2dMutex;
 
     unsigned int _id;
-
     friend class AudioEngineImpl;
 };
 
 NS_CC_END
-
-#endif

@@ -26,39 +26,58 @@
 
 #pragma once
 
-#include <stdint.h>
-#import <AudioToolbox/ExtendedAudioFile.h>
+#include "audio/include/AudioDecoder.h"
+#include "platform/PXFileStream.h"
+
+#pragma pack(push,1)
+// http://soundfile.sapp.org/doc/WaveFormat/
+struct WAV_FILE_HEADER {
+    uint32_t ChunkID;
+    uint32_t ChunkSize;
+    uint32_t Format;
+    uint32_t Subchunk1ID;
+    uint32_t Subchunk1Size;
+    uint16_t AudioFormat;
+    uint16_t NumChannels;
+    uint32_t SampleRate;
+    uint32_t ByteRate;
+    uint16_t BlockAlign;
+    uint16_t BitsPerSample;
+    uint32_t Subchunk2ID;
+    uint32_t Subchunk2Size;
+};
+#pragma pack(pop)
+
+struct WAV_FILE
+{
+    WAV_FILE_HEADER FileHeader;
+    uint32_t PcmDataOffset;
+    uint32_t BytesPerFrame;
+    uint16_t ExtraParamSize;
+    uint32_t Samples;
+    uint32_t ChannelMask;
+    cocos2d::PXFileStream FileStream;
+};
 
 namespace cocos2d {
 
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
  */
-class AudioDecoder
+class AudioDecoderWav : public AudioDecoder
 {
 public:
-    static const uint32_t INVALID_FRAME_INDEX = UINT32_MAX;
-
-    AudioDecoder();
-    ~AudioDecoder();
-
     /**
      * @brief Opens an audio file specified by a file path.
      * @return true if succeed, otherwise false.
      */
-    bool open(const char* path);
-
-    /**
-     * @brief Checks whether decoder has opened file successfully.
-     * @return true if succeed, otherwise false.
-     */
-    bool isOpened() const;
+    virtual bool open(const char* path) override;
 
     /**
      * @brief Closes opened audio file.
      * @note The method will also be automatically invoked in the destructor.
      */
-    void close();
+    virtual void close() override;
 
     /**
      * @brief Reads audio frames of PCM format.
@@ -66,56 +85,27 @@ public:
      * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| * _bytesPerFrame.
      * @return The number of frames actually read, it's probably less than 'framesToRead'. Returns 0 means reach the end of file.
      */
-    uint32_t read(uint32_t framesToRead, char* pcmBuf);
-
-    /**
-     * @brief Reads fixed audio frames of PCM format.
-     * @param framesToRead The number of frames excepted to be read.
-     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| * _bytesPerFrame.
-     * @return The number of frames actually read, it's probably less than |framesToRead|. Returns 0 means reach the end of file.
-     * @note The different between |read| and |readFixedFrames| is |readFixedFrames| will do multiple reading operations if |framesToRead| frames
-     *       isn't filled entirely, while |read| just does reading operation once whatever |framesToRead| is or isn't filled entirely.
-     *       If current position reaches the end of frames, the return value may smaller than |framesToRead| and the remaining
-     *       buffer in |pcmBuf| will be set with silence data (0x00).
-     */
-    uint32_t readFixedFrames(uint32_t framesToRead, char* pcmBuf);
+    virtual uint32_t read(uint32_t framesToRead, char* pcmBuf) override;
 
     /**
      * @brief Sets frame offest to be read.
      * @param frameOffset The frame offest to be set.
      * @return true if succeed, otherwise false
      */
-    bool seek(uint32_t frameOffset);
+    virtual bool seek(uint32_t frameOffset) override;
 
     /**
      * @brief Tells the current frame offset.
      * @return The current frame offset.
      */
-    uint32_t tell() const;
+    virtual uint32_t tell() const override;
 
-    /** Gets total frames of current audio.*/
-    uint32_t getTotalFrames() const;
+protected:
+    AudioDecoderWav();
+    ~AudioDecoderWav();
 
-    /** Gets bytes per frame of current audio.*/
-    uint32_t getBytesPerFrame() const;
-
-    /** Gets sample rate of current audio.*/
-    uint32_t getSampleRate() const;
-
-    /** Gets the channel count of current audio.
-     * @note Currently we only support 1 or 2 channels.
-     */
-    uint32_t getChannelCount() const;
-
-private:
-    bool _isOpened;
-    ExtAudioFileRef _extRef;
-    uint32_t _totalFrames;
-    uint32_t _bytesPerFrame;
-    uint32_t _sampleRate;
-    uint32_t _channelCount;
-
-    AudioStreamBasicDescription _outputFormat;
+    mutable WAV_FILE _wavf;
+    friend class AudioDecoderManager;
 };
 
 } // namespace cocos2d {

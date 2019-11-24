@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
+ Copyright (c) 2018 HALX99.
  http://www.cocos2d-x.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,20 +22,24 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+
 #pragma once
 
+#include "platform/CCPlatformConfig.h"
+#include "platform/CCPlatformMacros.h"
+#include "audio/include/Export.h"
 #include <functional>
 #include <list>
 #include <string>
 #include <unordered_map>
 
-#include "platform/CCPlatformConfig.h"
-#include "platform/CCPlatformMacros.h"
-#include "audio/include/Export.h"
-
 #ifdef ERROR
 #undef ERROR
 #endif // ERROR
+
+#if !defined(AUDIO_ID)
+#define AUDIO_ID int
+#endif
 
 /**
  * @addtogroup audio
@@ -43,6 +47,7 @@
  */
 
 NS_CC_BEGIN
+
 /**
  * @class AudioProfile
  *
@@ -128,7 +133,7 @@ public:
      *
      * @see `AudioProfile`
      */
-    static int play2d(const std::string& filePath, bool loop = false, float volume = 1.0f, const AudioProfile *profile = nullptr);
+    static AUDIO_ID play2d(const std::string& filePath, bool loop = false, float volume = 1.0f, const AudioProfile *profile = nullptr);
     
     /** 
      * Sets whether an audio instance loop or not.
@@ -136,7 +141,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @param loop Whether audio instance loop or not.
      */
-    static void setLoop(int audioID, bool loop);
+    static void setLoop(AUDIO_ID audioID, bool loop);
 
     /** 
      * Checks whether an audio instance is loop.
@@ -144,7 +149,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return Whether or not an audio instance is loop.
      */
-    static bool isLoop(int audioID);
+    static bool isLoop(AUDIO_ID audioID);
 
     /** 
      * Sets volume for an audio instance.
@@ -152,7 +157,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @param volume Volume value (range from 0.0 to 1.0).
      */
-    static void setVolume(int audioID, float volume);
+    static void setVolume(AUDIO_ID audioID, float volume);
 
     /** 
      * Gets the volume value of an audio instance.
@@ -160,14 +165,14 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return Volume value (range from 0.0 to 1.0).
      */
-    static float getVolume(int audioID);
+    static float getVolume(AUDIO_ID audioID);
 
     /** 
      * Pause an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
      */
-    static void pause(int audioID);
+    static void pause(AUDIO_ID audioID);
 
     /** Pause all playing audio instances. */
     static void pauseAll();
@@ -177,7 +182,7 @@ public:
      *
      * @param audioID An audioID returned by the play2d function.
      */
-    static void resume(int audioID);
+    static void resume(AUDIO_ID audioID);
 
     /** Resume all suspended audio instances. */
     static void resumeAll();
@@ -187,7 +192,7 @@ public:
      *
      * @param audioID An audioID returned by the play2d function.
      */
-    static void stop(int audioID);
+    static void stop(AUDIO_ID audioID);
 
     /** Stop all audio instances. */
     static void stopAll();
@@ -199,7 +204,7 @@ public:
      * @param sec       The offset in seconds from the start to seek to.
      * @return 
      */
-    static bool setCurrentTime(int audioID, float sec);
+    static bool setCurrentTime(AUDIO_ID audioID, float sec);
 
     /** 
      * Gets the current playback position of an audio instance.
@@ -207,7 +212,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return The current playback position of an audio instance.
      */
-    static float getCurrentTime(int audioID);
+    static float getCurrentTime(AUDIO_ID audioID);
 
     /** 
      * Gets the duration of an audio instance.
@@ -215,7 +220,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return The duration of an audio instance.
      */
-    static float getDuration(int audioID);
+    static float getDuration(AUDIO_ID audioID);
 
     /** 
      * Returns the state of an audio instance.
@@ -223,7 +228,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return The status of an audio instance.
      */
-    static AudioState getState(int audioID);
+    static AudioState getState(AUDIO_ID audioID);
 
     /** 
      * Register a callback to be invoked when an audio instance has completed playing.
@@ -231,7 +236,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @param callback
      */
-    static void setFinishCallback(int audioID, const std::function<void(int,const std::string&)>& callback);
+    static void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID,const std::string&)>& callback);
     
     /**
      * Gets the maximum number of simultaneous audio instance of AudioEngine.
@@ -267,7 +272,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @return The audio profile.
      */
-    static AudioProfile* getProfile(int audioID);
+    static AudioProfile* getProfile(AUDIO_ID audioID);
 
     /**  
      * Gets an audio profile by name.
@@ -307,7 +312,7 @@ public:
     
 protected:
     static void addTask(const std::function<void()>& task);
-    static void remove(int audioID);
+    static void remove(AUDIO_ID audioID);
     
     struct ProfileHelper
     {
@@ -344,10 +349,10 @@ protected:
     };
 
     //audioID,audioAttribute
-    static std::unordered_map<int, AudioInfo> _audioIDInfoMap;
+    static std::unordered_map<AUDIO_ID, AudioInfo> _audioIDInfoMap;
     
     //audio file path,audio IDs
-    static std::unordered_map<std::string,std::list<int>> _audioPathIDMap;
+    static std::unordered_map<std::string,std::list<AUDIO_ID>> _audioPathIDMap;
     
     //profileName,ProfileHelper
     static std::unordered_map<std::string, ProfileHelper> _audioPathProfileHelperMap;
