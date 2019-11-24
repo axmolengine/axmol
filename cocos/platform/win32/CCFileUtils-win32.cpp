@@ -118,11 +118,6 @@ bool FileUtilsWin32::isDirectoryExistInternal(const std::string& dirPath) const
     return false;
 }
 
-std::string FileUtilsWin32::getSuitableFOpen(const std::string& filenameUtf8) const
-{
-    return UTF8StringToMultiByte(filenameUtf8);
-}
-
 long FileUtilsWin32::getFileSize(const std::string &filepath)
 {
     WIN32_FILE_ATTRIBUTE_DATA fad;

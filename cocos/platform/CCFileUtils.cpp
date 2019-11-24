@@ -584,10 +584,8 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
     if (fullPath.empty())
         return Status::NotExists;
 
-    std::string suitableFullPath = fs->getSuitableFOpen(fullPath);
-
     struct stat statBuf;
-    if (stat(suitableFullPath.c_str(), &statBuf) == -1) {
+    if (stat(fullPath.c_str(), &statBuf) == -1) {
         return Status::ReadFailed;
     }
 
@@ -595,7 +593,7 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
         return Status::NotRegularFileType;
     }
 
-    FILE *fp = fopen(suitableFullPath.c_str(), "rb");
+    FILE *fp = fopen(fullPath.c_str(), "rb");
     if (!fp)
         return Status::OpenFailed;
 
@@ -1182,12 +1180,6 @@ bool FileUtils::renameFile(const std::string &path, const std::string &oldname, 
     return false;
 }
 
-std::string FileUtils::getSuitableFOpen(const std::string& filenameUtf8) const
-{
-    CCASSERT(false, "getSuitableFOpen should be override by platform FileUtils");
-    return filenameUtf8;
-}
-
 long FileUtils::getFileSize(const std::string &filepath) const
 {
     CCASSERT(false, "getFileSize should be override by platform FileUtils");
@@ -1361,11 +1353,6 @@ bool FileUtils::renameFile(const std::string &path, const std::string &oldname, 
     std::string newPath = path + name;
 
     return this->renameFile(oldPath, newPath);
-}
-
-std::string FileUtils::getSuitableFOpen(const std::string& filenameUtf8) const
-{
-    return filenameUtf8;
 }
 
 long FileUtils::getFileSize(const std::string &filepath) const
