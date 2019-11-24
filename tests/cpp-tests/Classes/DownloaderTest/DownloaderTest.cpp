@@ -213,17 +213,14 @@ struct DownloaderTest : public TestCase
         this->addChild(bottomRightView);
 
         // define progress callback
-        downloader->onTaskProgress = [this](const network::DownloadTask& task,
-                                          int64_t bytesReceived,
-                                          int64_t totalBytesReceived,
-                                          int64_t totalBytesExpected)
+        downloader->onTaskProgress = [this](const network::DownloadTask& task)
         {
             Node* view = this->getChildByName(task.identifier);
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
-            float percent = float(totalBytesReceived * 100) / totalBytesExpected;
+            float percent = float(task.progressInfo.totalBytesReceived * 100) / task.progressInfo.totalBytesExpected;
             bar->setPercent(percent);
             char buf[32];
-            sprintf(buf, "%.1f%%[total %d KB]", percent, int(totalBytesExpected/1024));
+            sprintf(buf, "%.1f%%[total %d KB]", percent, int(task.progressInfo.totalBytesExpected/1024));
             auto status = (Label*)view->getChildByTag(TAG_STATUS);
             status->setString(buf);
         };
