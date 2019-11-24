@@ -1,27 +1,3 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 
 
 #include "editor-support/cocostudio/WidgetReader/TextBMFontReader/TextBMFontReader.h"
@@ -33,7 +9,6 @@
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/LocalizationManager.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -97,8 +72,11 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
+
+                auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(labelBMFont, fileData, 0);
                 if (imageFileNameType == (Widget::TextureResType)0) {
-                    labelBMFont->setFntFile(backgroundValue);
+                    labelBMFont->setFntFile(fileData.file);
                 }
                 
             }else if(key == P_Text){
@@ -143,7 +121,7 @@ namespace cocostudio
         WidgetReader::setColorPropsFromJsonDictionary(widget, options);
     }        
     
-    Offset<Table> TextBMFontReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> TextBMFontReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                  flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -157,11 +135,11 @@ namespace cocostudio
         int resourceType = 0;
         
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string name = attribute->Name();
-            std::string value = attribute->Value();
+            std::string name = attribute.name();
+            std::string value = attribute.value();
             
             if (name == "LabelText")
             {
@@ -172,23 +150,23 @@ namespace cocostudio
                 isLocalized = (value == "True") ? true : false;
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
         
         // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "LabelBMFontFile_CNB")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -203,11 +181,11 @@ namespace cocostudio
                         plistFlie = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         auto options = CreateTextBMFontOptions(*builder,
@@ -227,12 +205,13 @@ namespace cocostudio
         TextBMFont* labelBMFont = static_cast<TextBMFont*>(node);
         auto options = (TextBMFontOptions*)textBMFontOptions;
         
-        auto cmftDic = options->fileNameData();
+        auto cmftDic = cocos2d::wext::makeResourceData(options->fileNameData());
         bool fileExist = false;
         std::string errorFilePath = "";
         std::string errorContent = "";
-        std::string path = cmftDic->path()->c_str();
-        int cmfType = cmftDic->resourceType();
+        std::string& path = cmftDic.file;
+        int cmfType = cmftDic.type;
+        cocos2d::wext::onBeforeLoadObjectAsset(labelBMFont, cmftDic, 0);
         switch (cmfType)
         {
             case 0:
@@ -281,7 +260,7 @@ namespace cocostudio
     
     Node* TextBMFontReader::createNodeWithFlatBuffers(const flatbuffers::Table *textBMFontOptions)
     {
-        TextBMFont* textBMFont = TextBMFont::create();
+        TextBMFont* textBMFont = wext::aTextBMFont(); // TextBMFont::create();
         
         setPropsWithFlatBuffers(textBMFont, (Table*)textBMFontOptions);
         

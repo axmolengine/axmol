@@ -1,6 +1,5 @@
 /****************************************************************************
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -28,8 +27,6 @@ THE SOFTWARE.
 #include "base/CCScheduler.h"
 #include "base/ccUtils.h"
 
-#include "tinyxml2.h"
-
 #include "editor-support/cocostudio/CCDataReaderHelper.h"
 #include "editor-support/cocostudio/CCArmatureDataManager.h"
 #include "editor-support/cocostudio/CCTransformHelp.h"
@@ -38,7 +35,6 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CCDatas.h"
 
 #include "editor-support/cocostudio/CocoLoader.h"
-
 
 using namespace cocos2d;
 
@@ -296,7 +292,7 @@ void DataReaderHelper::addDataFromFile(const std::string& filePath)
 
     //! find the base file path
     std::string basefilePath = filePath;
-    size_t pos = basefilePath.find_last_of('/');
+    size_t pos = basefilePath.find_last_of("/");
 
     if (pos != std::string::npos)
     {
@@ -362,7 +358,7 @@ void DataReaderHelper::addDataFromFileAsync(const std::string& imagePath, const 
 
     //! find the base file path
     std::string basefilePath = filePath;
-    size_t pos = basefilePath.find_last_of('/');
+    size_t pos = basefilePath.find_last_of("/");
 
     if (pos != std::string::npos)
     {
@@ -519,20 +515,17 @@ void DataReaderHelper::removeConfigFile(const std::string& configFile)
 
 void DataReaderHelper::addDataFromCache(const std::string& pFileContent, DataInfo *dataInfo)
 {
-    tinyxml2::XMLDocument document;
-    document.Parse(pFileContent.c_str());
+    pugi::xml_document document;
+    document.load_string(pFileContent.c_str());
 
-    tinyxml2::XMLElement *root = document.RootElement();
-    CCASSERT(root, "XML error  or  XML is empty.");
-
-    root->QueryFloatAttribute(VERSION, &dataInfo->flashToolVersion);
-
-
+    auto root = document.document_element();
+    dataInfo->flashToolVersion = root.attribute(VERSION).as_float();
+ 
     /*
     * Begin decode armature data from xml
     */
-    tinyxml2::XMLElement *armaturesXML = root->FirstChildElement(ARMATURES);
-    tinyxml2::XMLElement *armatureXML = armaturesXML->FirstChildElement(ARMATURE);
+    auto armaturesXML = root.child(ARMATURES);
+    auto armatureXML = armaturesXML.child(ARMATURE);
     while(armatureXML)
     {
         ArmatureData *armatureData = DataReaderHelper::decodeArmature(armatureXML, dataInfo);
@@ -548,15 +541,15 @@ void DataReaderHelper::addDataFromCache(const std::string& pFileContent, DataInf
             _dataReaderHelper->_addDataMutex.unlock();
         }
 
-        armatureXML = armatureXML->NextSiblingElement(ARMATURE);
+        armatureXML = armatureXML.next_sibling(ARMATURE);
     }
 
 
     /*
     * Begin decode animation data from xml
     */
-    tinyxml2::XMLElement *animationsXML = root->FirstChildElement(ANIMATIONS);
-    tinyxml2::XMLElement *animationXML = animationsXML->FirstChildElement(ANIMATION);
+    auto animationsXML = root.child(ANIMATIONS);
+    auto animationXML = animationsXML.child(ANIMATION);
     while(animationXML)
     {
         AnimationData *animationData = DataReaderHelper::decodeAnimation(animationXML, dataInfo);
@@ -570,15 +563,15 @@ void DataReaderHelper::addDataFromCache(const std::string& pFileContent, DataInf
         {
             _dataReaderHelper->_addDataMutex.unlock();
         }
-        animationXML = animationXML->NextSiblingElement(ANIMATION);
+        animationXML = animationXML.next_sibling(ANIMATION);
     }
 
 
     /*
     * Begin decode texture data from xml
     */
-    tinyxml2::XMLElement *texturesXML = root->FirstChildElement(TEXTURE_ATLAS);
-    tinyxml2::XMLElement *textureXML = texturesXML->FirstChildElement(SUB_TEXTURE);
+    auto texturesXML = root.child(TEXTURE_ATLAS);
+    auto textureXML = texturesXML.child(SUB_TEXTURE);
     while(textureXML)
     {
         TextureData *textureData = DataReaderHelper::decodeTexture(textureXML, dataInfo);
@@ -593,38 +586,38 @@ void DataReaderHelper::addDataFromCache(const std::string& pFileContent, DataInf
         {
             _dataReaderHelper->_addDataMutex.unlock();
         }
-        textureXML = textureXML->NextSiblingElement(SUB_TEXTURE);
+        textureXML = textureXML.next_sibling(SUB_TEXTURE);
     }
 }
 
-ArmatureData *DataReaderHelper::decodeArmature(tinyxml2::XMLElement *armatureXML, DataInfo *dataInfo)
+ArmatureData *DataReaderHelper::decodeArmature(pugi::xml_node& armatureXML, DataInfo *dataInfo)
 {
     ArmatureData *armatureData = new (std::nothrow) ArmatureData();
     armatureData->init();
 
-    armatureData->name = armatureXML->Attribute(A_NAME);
+    armatureData->name = armatureXML.attribute(A_NAME).as_string();
 
 
-    tinyxml2::XMLElement *boneXML = armatureXML->FirstChildElement(BONE);
+    pugi::xml_node boneXML = armatureXML.child(BONE);
 
     while( boneXML )
     {
         /*
         *  If this bone have parent, then get the parent bone xml
         */
-        const char *parentName = boneXML->Attribute(A_PARENT);
-        tinyxml2::XMLElement *parentXML = nullptr;
+        const char *parentName = boneXML.attribute(A_PARENT).as_string();
+        pugi::xml_node parentXML;
         if (parentName)
         {
-            parentXML = armatureXML->FirstChildElement(BONE);
+            parentXML = armatureXML.child(BONE);
             std::string parentNameStr = parentName;
             while (parentXML)
             {
-                if (parentNameStr == parentXML->Attribute(A_NAME))
+                if (parentNameStr == parentXML.attribute(A_NAME).as_string())
                 {
                     break;
                 }
-                parentXML = parentXML->NextSiblingElement(BONE);
+                parentXML = parentXML.next_sibling(BONE);
             }
         }
 
@@ -632,48 +625,50 @@ ArmatureData *DataReaderHelper::decodeArmature(tinyxml2::XMLElement *armatureXML
         armatureData->addBoneData(boneData);
         boneData->release();
 
-        boneXML = boneXML->NextSiblingElement(BONE);
+        boneXML = boneXML.next_sibling(BONE);
     }
 
     return armatureData;
 }
 
-BoneData *DataReaderHelper::decodeBone(tinyxml2::XMLElement *boneXML, tinyxml2::XMLElement* /*parentXml*/, DataInfo *dataInfo)
+BoneData *DataReaderHelper::decodeBone(pugi::xml_node& boneXML, pugi::xml_node& /*parentXml*/, DataInfo *dataInfo)
 {
     BoneData *boneData = new (std::nothrow) BoneData();
     boneData->init();
 
-    std::string name = boneXML->Attribute(A_NAME);
-    boneData->name = name;
+    boneData->name = boneXML.attribute(A_NAME).as_string();
 
-    if( boneXML->Attribute(A_PARENT) != nullptr )
+    auto aparent = boneXML.attribute(A_PARENT);
+    if(aparent)
     {
-        boneData->parentName = boneXML->Attribute(A_PARENT);
+        boneData->parentName = aparent.as_string();
     }
 
-    boneXML->QueryIntAttribute(A_Z, &boneData->zOrder);
+    boneData->zOrder = boneXML.attribute(A_Z).as_int();
 
-    tinyxml2::XMLElement *displayXML = boneXML->FirstChildElement(DISPLAY);
+    pugi::xml_node displayXML = boneXML.child(DISPLAY);
     while(displayXML)
     {
         DisplayData *displayData = decodeBoneDisplay(displayXML, dataInfo);
         boneData->addDisplayData(displayData);
         displayData->release();
 
-        displayXML = displayXML->NextSiblingElement(DISPLAY);
+        displayXML = displayXML.next_sibling(DISPLAY);
     }
 
     return boneData;
 }
 
-DisplayData *DataReaderHelper::decodeBoneDisplay(tinyxml2::XMLElement *displayXML, DataInfo* /*dataInfo*/)
+DisplayData *DataReaderHelper::decodeBoneDisplay(pugi::xml_node& displayXML, DataInfo* /*dataInfo*/)
 {
     int _isArmature = 0;
 
     DisplayData *displayData;
 
-    if( displayXML->QueryIntAttribute(A_IS_ARMATURE, &(_isArmature)) == tinyxml2::XML_SUCCESS )
+    auto isArmatureDS = displayXML.attribute(A_IS_ARMATURE);
+    if(isArmatureDS)
     {
+        _isArmature = isArmatureDS.as_int();
         if(!_isArmature)
         {
             displayData = new (std::nothrow) SpriteDisplayData();
@@ -692,16 +687,16 @@ DisplayData *DataReaderHelper::decodeBoneDisplay(tinyxml2::XMLElement *displayXM
         displayData->displayType  = CS_DISPLAY_SPRITE;
     }
 
-
-    if(displayXML->Attribute(A_NAME) != nullptr )
+    auto nameDS = displayXML.attribute(A_NAME);
+    if(nameDS)
     {
         if(!_isArmature)
         {
-            ((SpriteDisplayData *)displayData)->displayName = displayXML->Attribute(A_NAME);
+            ((SpriteDisplayData *)displayData)->displayName = nameDS.as_string();
         }
         else
         {
-            ((ArmatureDisplayData *)displayData)->displayName = displayXML->Attribute(A_NAME);
+            ((ArmatureDisplayData *)displayData)->displayName = nameDS.as_string();
         }
 
     }
@@ -709,17 +704,17 @@ DisplayData *DataReaderHelper::decodeBoneDisplay(tinyxml2::XMLElement *displayXM
     return displayData;
 }
 
-AnimationData *DataReaderHelper::decodeAnimation(tinyxml2::XMLElement *animationXML, DataInfo *dataInfo)
+AnimationData *DataReaderHelper::decodeAnimation(pugi::xml_node& animationXML, DataInfo *dataInfo)
 {
     AnimationData *aniData =  new AnimationData();
 
-    const char	*name = animationXML->Attribute(A_NAME);
+    const char	*name = animationXML.attribute(A_NAME).as_string();
 
     ArmatureData *armatureData = ArmatureDataManager::getInstance()->getArmatureData(name);
 
     aniData->name = name;
 
-    tinyxml2::XMLElement *movementXML = animationXML->FirstChildElement(MOVEMENT);
+    pugi::xml_node movementXML = animationXML.child(MOVEMENT);
 
     while( movementXML )
     {
@@ -727,50 +722,33 @@ AnimationData *DataReaderHelper::decodeAnimation(tinyxml2::XMLElement *animation
         aniData->addMovement(movementData);
         movementData->release();
 
-        movementXML = movementXML->NextSiblingElement(MOVEMENT);
+        movementXML = movementXML.next_sibling(MOVEMENT);
 
     }
 
     return aniData;
 }
 
-MovementData *DataReaderHelper::decodeMovement(tinyxml2::XMLElement *movementXML, ArmatureData *armatureData, DataInfo *dataInfo)
+MovementData *DataReaderHelper::decodeMovement(pugi::xml_node& movementXML, ArmatureData *armatureData, DataInfo *dataInfo)
 {
     MovementData *movementData = new (std::nothrow) MovementData();
 
-    const char *movName = movementXML->Attribute(A_NAME);
+    const char *movName = movementXML.attribute(A_NAME).as_string();
     movementData->name = movName;
 
-
-    int duration, durationTo, durationTween, loop, tweenEasing = 0;
-
-    if( movementXML->QueryIntAttribute(A_DURATION, &(duration)) == tinyxml2::XML_SUCCESS)
-    {
-        movementData->duration  = duration;
-    }
-    if( movementXML->QueryIntAttribute(A_DURATION_TO, &(durationTo)) == tinyxml2::XML_SUCCESS)
-    {
-        movementData->durationTo = durationTo;
-    }
-    if( movementXML->QueryIntAttribute(A_DURATION_TWEEN, &(durationTween)) == tinyxml2::XML_SUCCESS)
-    {
-        movementData->durationTween = durationTween;
-    }
-    if( movementXML->QueryIntAttribute(A_LOOP, &(loop)) == tinyxml2::XML_SUCCESS)
-    {
-        movementData->loop = (loop != 0);
-    }
-
-    const char *_easing = movementXML->Attribute(A_TWEEN_EASING);
+    pugiext::query_attribute(movementXML, A_DURATION, &movementData->duration);
+    pugiext::query_attribute(movementXML, A_DURATION_TO, &movementData->durationTo);
+    pugiext::query_attribute(movementXML, A_DURATION_TWEEN, &movementData->durationTween);
+    pugiext::query_attribute(movementXML, A_LOOP, &movementData->loop);
+    
+    const char *_easing = movementXML.attribute(A_TWEEN_EASING).as_string();
     if(_easing != nullptr)
     {
         std::string str = _easing;
-        if(str != FL_NAN)
+        if(strcmp(_easing, FL_NAN) != 0)
         {
-            if( movementXML->QueryIntAttribute(A_TWEEN_EASING, &(tweenEasing)) == tinyxml2::XML_SUCCESS)
-            {
-                movementData->tweenEasing = tweenEasing == 2 ? cocos2d::tweenfunc::Sine_EaseInOut : (TweenType)tweenEasing;
-            }
+            int tweenEasing = atoi(_easing);
+            movementData->tweenEasing = tweenEasing == 2 ? cocos2d::tweenfunc::Sine_EaseInOut : (TweenType)tweenEasing;
         }
         else
         {
@@ -778,14 +756,14 @@ MovementData *DataReaderHelper::decodeMovement(tinyxml2::XMLElement *movementXML
         }
     }
 
-    tinyxml2::XMLElement *movBoneXml = movementXML->FirstChildElement(BONE);
+    pugi::xml_node movBoneXml = movementXML.child(BONE);
     while(movBoneXml)
     {
-        const char *boneName = movBoneXml->Attribute(A_NAME);
+        const char *boneName = movBoneXml.attribute(A_NAME).as_string();
 
         if (movementData->getMovementBoneData(boneName))
         {
-            movBoneXml = movBoneXml->NextSiblingElement();
+            movBoneXml = movBoneXml.next_sibling();
             continue;
         }
 
@@ -795,18 +773,18 @@ MovementData *DataReaderHelper::decodeMovement(tinyxml2::XMLElement *movementXML
         std::string parentName = boneData->parentName;
 
 
-        tinyxml2::XMLElement *parentXml = nullptr;
+        pugi::xml_node parentXml;
         if (!parentName.empty())
         {
-            parentXml = movementXML->FirstChildElement(BONE);
+            parentXml = movementXML.child(BONE);
 
             while (parentXml)
             {
-                if (parentName == parentXml->Attribute(A_NAME))
+                if (parentName == parentXml.attribute(A_NAME).as_string())
                 {
                     break;
                 }
-                parentXml = parentXml->NextSiblingElement(BONE);
+                parentXml = parentXml.next_sibling(BONE);
             }
         }
 
@@ -814,27 +792,23 @@ MovementData *DataReaderHelper::decodeMovement(tinyxml2::XMLElement *movementXML
         movementData->addMovementBoneData(moveBoneData);
         moveBoneData->release();
 
-        movBoneXml = movBoneXml->NextSiblingElement(BONE);
+        movBoneXml = movBoneXml.next_sibling(BONE);
     }
 
     return movementData;
 }
 
 
-MovementBoneData *DataReaderHelper::decodeMovementBone(tinyxml2::XMLElement *movBoneXml, tinyxml2::XMLElement *parentXml, BoneData *boneData, DataInfo *dataInfo)
+MovementBoneData *DataReaderHelper::decodeMovementBone(pugi::xml_node& movBoneXml, pugi::xml_node& parentXml, BoneData *boneData, DataInfo *dataInfo)
 {
     MovementBoneData *movBoneData = new (std::nothrow) MovementBoneData();
     movBoneData->init();
 
-    float scale, delay;
-
     if( movBoneXml )
     {
-        if( movBoneXml->QueryFloatAttribute(A_MOVEMENT_SCALE, &scale) == tinyxml2::XML_SUCCESS )
-        {
-            movBoneData->scale = scale;
-        }
-        if( movBoneXml->QueryFloatAttribute(A_MOVEMENT_DELAY, &delay) == tinyxml2::XML_SUCCESS )
+        pugiext::query_attribute(movBoneXml, A_MOVEMENT_SCALE, &movBoneData->scale);
+        float delay;
+        if(pugiext::query_attribute(movBoneXml, A_MOVEMENT_DELAY, &delay))
         {
             if(delay > 0)
             {
@@ -849,23 +823,21 @@ MovementBoneData *DataReaderHelper::decodeMovementBone(tinyxml2::XMLElement *mov
     int parentTotalDuration = 0;
     int currentDuration = 0;
 
-    tinyxml2::XMLElement *parentFrameXML = nullptr;
+    pugi::xml_node parentFrameXML;
 
-    std::vector<tinyxml2::XMLElement *> parentXmlList;
+    std::vector<pugi::xml_node> parentXmlList;
 
     /*
     *  get the parent frame xml list, we need get the origin data
     */
     if( parentXml != nullptr )
     {
-        parentFrameXML = parentXml->FirstChildElement(FRAME);
+        parentFrameXML = parentXml.child(FRAME);
         while (parentFrameXML)
         {
             parentXmlList.push_back(parentFrameXML);
-            parentFrameXML = parentFrameXML->NextSiblingElement(FRAME);
+            parentFrameXML = parentFrameXML.next_sibling(FRAME);
         }
-
-        parentFrameXML = nullptr;
 
         length = parentXmlList.size();
     }
@@ -873,11 +845,9 @@ MovementBoneData *DataReaderHelper::decodeMovementBone(tinyxml2::XMLElement *mov
 
     int totalDuration = 0;
 
-    std::string name = movBoneXml->Attribute(A_NAME);
+    movBoneData->name = movBoneXml.attribute(A_NAME).as_string();
 
-    movBoneData->name = name;
-
-    tinyxml2::XMLElement *frameXML = movBoneXml->FirstChildElement(FRAME);
+    pugi::xml_node frameXML = movBoneXml.child(FRAME);
 
     while( frameXML )
     {
@@ -890,7 +860,7 @@ MovementBoneData *DataReaderHelper::decodeMovementBone(tinyxml2::XMLElement *mov
             {
                 parentFrameXML = parentXmlList[index];
                 parentTotalDuration += currentDuration;
-                parentFrameXML->QueryIntAttribute(A_DURATION, &currentDuration);
+                pugiext::query_attribute(parentFrameXML, A_DURATION, &currentDuration);
                 index++;
             }
         }
@@ -903,7 +873,7 @@ MovementBoneData *DataReaderHelper::decodeMovementBone(tinyxml2::XMLElement *mov
         totalDuration += frameData->duration;
         movBoneData->duration = totalDuration;
 
-        frameXML = frameXML->NextSiblingElement(FRAME);
+        frameXML = frameXML.next_sibling(FRAME);
     }
 
 
@@ -939,97 +909,56 @@ MovementBoneData *DataReaderHelper::decodeMovementBone(tinyxml2::XMLElement *mov
     return movBoneData;
 }
 
-FrameData *DataReaderHelper::decodeFrame(tinyxml2::XMLElement *frameXML,  tinyxml2::XMLElement *parentFrameXml, BoneData* /*boneData*/, DataInfo *dataInfo)
+FrameData *DataReaderHelper::decodeFrame(pugi::xml_node& frameXML,  pugi::xml_node& parentFrameXml, BoneData* /*boneData*/, DataInfo *dataInfo)
 {
     float x = 0, y = 0, scale_x = 0, scale_y = 0, skew_x = 0, skew_y = 0, tweenRotate = 0;
     int duration = 0, displayIndex = 0, zOrder = 0, tweenEasing = 0, blendType = 0;
 
     FrameData *frameData = new (std::nothrow) FrameData();
 
-    if(frameXML->Attribute(A_MOVEMENT) != nullptr)
-    {
-        frameData->strMovement = frameXML->Attribute(A_MOVEMENT);
-    }
-    if(frameXML->Attribute(A_EVENT) != nullptr)
-    {
-        frameData->strEvent = frameXML->Attribute(A_EVENT);
-    }
-    if(frameXML->Attribute(A_SOUND) != nullptr)
-    {
-        frameData->strSound = frameXML->Attribute(A_SOUND);
-    }
-    if(frameXML->Attribute(A_SOUND_EFFECT) != nullptr)
-    {
-        frameData->strSoundEffect = frameXML->Attribute(A_SOUND_EFFECT);
-    }
-
-    bool tweenFrame = false;
-    if (frameXML->QueryBoolAttribute(A_TWEEN_FRAME, &tweenFrame) == tinyxml2::XML_SUCCESS)
-    {
-        frameData->isTween = tweenFrame;
-    }
+    pugiext::query_attribute(frameXML, A_MOVEMENT, &frameData->strMovement);
+    pugiext::query_attribute(frameXML, A_SOUND, &frameData->strSound);
+    pugiext::query_attribute(frameXML, A_SOUND_EFFECT, &frameData->strSoundEffect);
+    
+    pugiext::query_attribute(frameXML, A_SOUND_EFFECT, &frameData->isTween);
 
 
     if (dataInfo->flashToolVersion >= VERSION_2_0)
     {
-        if(frameXML->QueryFloatAttribute(A_COCOS2DX_X, &x) == tinyxml2::XML_SUCCESS)
+        if(pugiext::query_attribute(frameXML, A_COCOS2DX_X, &frameData->x))
         {
-            frameData->x = x;
             frameData->x *= s_PositionReadScale;
         }
-        if(frameXML->QueryFloatAttribute(A_COCOS2DX_Y, &y) == tinyxml2::XML_SUCCESS)
+        if(pugiext::query_attribute(frameXML, A_COCOS2DX_Y, &frameData->y))
         {
-            frameData->y = -y;
             frameData->y *= s_PositionReadScale;
         }
     }
     else
     {
-        if(frameXML->QueryFloatAttribute(A_X, &x) == tinyxml2::XML_SUCCESS)
+        if(pugiext::query_attribute(frameXML, A_X, &frameData->x))
         {
-            frameData->x = x;
             frameData->x *= s_PositionReadScale;
         }
-        if(frameXML->QueryFloatAttribute(A_Y, &y) == tinyxml2::XML_SUCCESS)
+        if(pugiext::query_attribute(frameXML, A_Y, &frameData->y))
         {
-            frameData->y = -y;
             frameData->y *= s_PositionReadScale;
         }
     }
 
-    if( frameXML->QueryFloatAttribute(A_SCALE_X, &scale_x) == tinyxml2::XML_SUCCESS )
-    {
-        frameData->scaleX = scale_x;
-    }
-    if( frameXML->QueryFloatAttribute(A_SCALE_Y, &scale_y) == tinyxml2::XML_SUCCESS )
-    {
-        frameData->scaleY = scale_y;
-    }
-    if( frameXML->QueryFloatAttribute(A_SKEW_X, &skew_x) == tinyxml2::XML_SUCCESS )
-    {
-        frameData->skewX = CC_DEGREES_TO_RADIANS(skew_x);
-    }
-    if( frameXML->QueryFloatAttribute(A_SKEW_Y, &skew_y) == tinyxml2::XML_SUCCESS )
-    {
-        frameData->skewY = CC_DEGREES_TO_RADIANS(-skew_y);
-    }
-    if( frameXML->QueryIntAttribute(A_DURATION, &duration) == tinyxml2::XML_SUCCESS )
-    {
-        frameData->duration = duration;
-    }
-    if(  frameXML->QueryIntAttribute(A_DISPLAY_INDEX, &displayIndex) == tinyxml2::XML_SUCCESS )
-    {
-        frameData->displayIndex = displayIndex;
-    }
-    if(  frameXML->QueryIntAttribute(A_Z, &zOrder) == tinyxml2::XML_SUCCESS )
-    {
-        frameData->zOrder = zOrder;
-    }
-    if(  frameXML->QueryFloatAttribute(A_TWEEN_ROTATE, &tweenRotate) == tinyxml2::XML_SUCCESS )
-    {
-        frameData->tweenRotate = tweenRotate;
-    }
-    if (  frameXML->QueryIntAttribute(A_BLEND_TYPE, &blendType) == tinyxml2::XML_SUCCESS )
+    auto degrees2radius = [](float v) {return CC_DEGREES_TO_RADIANS(v); };
+
+    pugiext::query_attribute(frameXML, A_SCALE_X, &frameData->scaleX);
+    pugiext::query_attribute(frameXML, A_SCALE_Y, &frameData->scaleY);
+    pugiext::query_attribute(frameXML, A_SKEW_X, &frameData->skewX, degrees2radius);
+    pugiext::query_attribute(frameXML, A_SKEW_Y, &frameData->skewY, degrees2radius);
+    pugiext::query_attribute(frameXML, A_DURATION, &frameData->duration);
+    pugiext::query_attribute(frameXML, A_DISPLAY_INDEX, &frameData->displayIndex);
+    pugiext::query_attribute(frameXML, A_Z, &frameData->zOrder);
+    pugiext::query_attribute(frameXML, A_TWEEN_ROTATE, &frameData->tweenRotate);
+
+    
+    if (pugiext::query_attribute(frameXML, A_BLEND_TYPE, &blendType))
     {
         switch (blendType)
         {
@@ -1040,20 +969,20 @@ FrameData *DataReaderHelper::decodeFrame(tinyxml2::XMLElement *frameXML,  tinyxm
             break;
         case BLEND_ADD:
             {
-                frameData->blendFunc.src = backend::BlendFactor::SRC_ALPHA;
-                frameData->blendFunc.dst = backend::BlendFactor::ONE;
+                frameData->blendFunc.src = GL_SRC_ALPHA;
+                frameData->blendFunc.dst = GL_ONE;
             }
             break;
         case BLEND_MULTIPLY:
             {
-                frameData->blendFunc.src = backend::BlendFactor::DST_COLOR;
-                frameData->blendFunc.dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+                frameData->blendFunc.src = GL_DST_COLOR;
+                frameData->blendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
             }
             break;
         case BLEND_SCREEN:
             {
-                frameData->blendFunc.src = backend::BlendFactor::ONE;
-                frameData->blendFunc.dst = backend::BlendFactor::ONE_MINUS_SRC_COLOR;
+                frameData->blendFunc.src = GL_ONE;
+                frameData->blendFunc.dst = GL_ONE_MINUS_SRC_COLOR;
             }
             break;
         default:
@@ -1065,21 +994,21 @@ FrameData *DataReaderHelper::decodeFrame(tinyxml2::XMLElement *frameXML,  tinyxm
         }
     }
 
-    tinyxml2::XMLElement *colorTransformXML = frameXML->FirstChildElement(A_COLOR_TRANSFORM);
+    pugi::xml_node colorTransformXML = frameXML.child(A_COLOR_TRANSFORM);
     if (colorTransformXML)
     {
         int alpha, red, green, blue = 100;
         int alphaOffset, redOffset, greenOffset, blueOffset = 0;
 
-        colorTransformXML->QueryIntAttribute(A_ALPHA, &alpha);
-        colorTransformXML->QueryIntAttribute(A_RED, &red);
-        colorTransformXML->QueryIntAttribute(A_GREEN, &green);
-        colorTransformXML->QueryIntAttribute(A_BLUE, &blue) ;
+        pugiext::query_attribute(colorTransformXML, A_ALPHA, &alpha);
+        pugiext::query_attribute(colorTransformXML, A_RED, &red);
+        pugiext::query_attribute(colorTransformXML, A_GREEN, &green);
+        pugiext::query_attribute(colorTransformXML, A_BLUE, &blue) ;
 
-        colorTransformXML->QueryIntAttribute(A_ALPHA_OFFSET, &alphaOffset);
-        colorTransformXML->QueryIntAttribute(A_RED_OFFSET, &redOffset);
-        colorTransformXML->QueryIntAttribute(A_GREEN_OFFSET, &greenOffset);
-        colorTransformXML->QueryIntAttribute(A_BLUE_OFFSET, &blueOffset) ;
+        pugiext::query_attribute(colorTransformXML, A_ALPHA_OFFSET, &alphaOffset);
+        pugiext::query_attribute(colorTransformXML, A_RED_OFFSET, &redOffset);
+        pugiext::query_attribute(colorTransformXML, A_GREEN_OFFSET, &greenOffset);
+        pugiext::query_attribute(colorTransformXML, A_BLUE_OFFSET, &blueOffset) ;
 
         frameData->a = 2.55 * alphaOffset + alpha;
         frameData->r = 2.55 * redOffset + red;
@@ -1089,17 +1018,13 @@ FrameData *DataReaderHelper::decodeFrame(tinyxml2::XMLElement *frameXML,  tinyxm
         frameData->isUseColorInfo = true;
     }
 
-
-    const char *_easing = frameXML->Attribute(A_TWEEN_EASING);
-    if(_easing != nullptr)
+    const char* _easing = nullptr;
+    if(pugiext::query_attribute(frameXML, A_TWEEN_EASING, &_easing))
     {
-        std::string str = _easing;
-        if(str != FL_NAN)
+        if(strcmp(_easing, FL_NAN) != 0)
         {
-            if( frameXML->QueryIntAttribute(A_TWEEN_EASING, &(tweenEasing)) == tinyxml2::XML_SUCCESS)
-            {
-                frameData->tweenEasing = tweenEasing == 2 ? cocos2d::tweenfunc::Sine_EaseInOut : (cocos2d::tweenfunc::TweenType)tweenEasing;
-            }
+            tweenEasing = atoi(_easing);
+            frameData->tweenEasing = tweenEasing == 2 ? cocos2d::tweenfunc::Sine_EaseInOut : (cocos2d::tweenfunc::TweenType)tweenEasing;
         }
         else
         {
@@ -1115,18 +1040,18 @@ FrameData *DataReaderHelper::decodeFrame(tinyxml2::XMLElement *frameXML,  tinyxm
         BaseData helpNode;
         if (dataInfo->flashToolVersion >= VERSION_2_0)
         {
-            parentFrameXml->QueryFloatAttribute(A_COCOS2DX_X, &helpNode.x);
-            parentFrameXml->QueryFloatAttribute(A_COCOS2DX_Y, &helpNode.y);
+            pugiext::query_attribute(parentFrameXml, A_COCOS2DX_X, &helpNode.x);
+            pugiext::query_attribute(parentFrameXml, A_COCOS2DX_Y, &helpNode.y);
         }
         else
         {
-            parentFrameXml->QueryFloatAttribute(A_X, &helpNode.x);
-            parentFrameXml->QueryFloatAttribute(A_Y, &helpNode.y);
+            pugiext::query_attribute(parentFrameXml, A_X, &helpNode.x);
+            pugiext::query_attribute(parentFrameXml, A_Y, &helpNode.y);
         }
 
 
-        parentFrameXml->QueryFloatAttribute(A_SKEW_X, &helpNode.skewX);
-        parentFrameXml->QueryFloatAttribute(A_SKEW_Y, &helpNode.skewY);
+        pugiext::query_attribute(parentFrameXml, A_SKEW_X, &helpNode.skewX);
+        pugiext::query_attribute(parentFrameXml, A_SKEW_Y, &helpNode.skewY);
 
         helpNode.y = -helpNode.y;
         helpNode.skewX = CC_DEGREES_TO_RADIANS(helpNode.skewX);
@@ -1137,31 +1062,28 @@ FrameData *DataReaderHelper::decodeFrame(tinyxml2::XMLElement *frameXML,  tinyxm
     return frameData;
 }
 
-TextureData *DataReaderHelper::decodeTexture(tinyxml2::XMLElement *textureXML, DataInfo *dataInfo)
+TextureData *DataReaderHelper::decodeTexture(pugi::xml_node& textureXML, DataInfo *dataInfo)
 {
     TextureData *textureData = new (std::nothrow) TextureData();
     textureData->init();
 
-    if( textureXML->Attribute(A_NAME) != nullptr)
-    {
-        textureData->name = textureXML->Attribute(A_NAME);
-    }
+    pugiext::query_attribute(textureXML, A_NAME, &textureData->name);
 
     float px, py, width, height = 0;
 
     if(dataInfo->flashToolVersion >= VERSION_2_0)
     {
-        textureXML->QueryFloatAttribute(A_COCOS2D_PIVOT_X, &px);
-        textureXML->QueryFloatAttribute(A_COCOS2D_PIVOT_Y, &py);
+        pugiext::query_attribute(textureXML, A_COCOS2D_PIVOT_X, &px);
+        pugiext::query_attribute(textureXML, A_COCOS2D_PIVOT_Y, &py);
     }
     else
     {
-        textureXML->QueryFloatAttribute(A_PIVOT_X, &px);
-        textureXML->QueryFloatAttribute(A_PIVOT_Y, &py);
+        pugiext::query_attribute(textureXML, A_PIVOT_X, &px);
+        pugiext::query_attribute(textureXML, A_PIVOT_Y, &py);
     }
 
-    textureXML->QueryFloatAttribute(A_WIDTH, &width);
-    textureXML->QueryFloatAttribute(A_HEIGHT, &height);
+    pugiext::query_attribute(textureXML, A_WIDTH, &width);
+    pugiext::query_attribute(textureXML, A_HEIGHT, &height);
 
     float anchorPointX = px / width;
     float anchorPointY = (height - py) / height;
@@ -1169,7 +1091,7 @@ TextureData *DataReaderHelper::decodeTexture(tinyxml2::XMLElement *textureXML, D
     textureData->pivotX = anchorPointX;
     textureData->pivotY = anchorPointY;
 
-    tinyxml2::XMLElement *contourXML = textureXML->FirstChildElement(CONTOUR);
+    pugi::xml_node contourXML = textureXML.child(CONTOUR);
 
     while (contourXML)
     {
@@ -1177,30 +1099,30 @@ TextureData *DataReaderHelper::decodeTexture(tinyxml2::XMLElement *textureXML, D
         textureData->addContourData(contourData);
         contourData->release();
 
-        contourXML = contourXML->NextSiblingElement(CONTOUR);
+        contourXML = contourXML.next_sibling(CONTOUR);
     }
 
     return textureData;
 }
 
-ContourData *DataReaderHelper::decodeContour(tinyxml2::XMLElement *contourXML, DataInfo* /*dataInfo*/)
+ContourData *DataReaderHelper::decodeContour(pugi::xml_node& contourXML, DataInfo* /*dataInfo*/)
 {
     ContourData *contourData = new (std::nothrow) ContourData();
     contourData->init();
 
-    tinyxml2::XMLElement *vertexDataXML = contourXML->FirstChildElement(CONTOUR_VERTEX);
+    pugi::xml_node vertexDataXML = contourXML.child(CONTOUR_VERTEX);
 
     while (vertexDataXML)
     {
         Vec2 vertex;
 
-        vertexDataXML->QueryFloatAttribute(A_X, &vertex.x);
-        vertexDataXML->QueryFloatAttribute(A_Y, &vertex.y);
+        pugiext::query_attribute(vertexDataXML, A_X, &vertex.x);
+        pugiext::query_attribute(vertexDataXML, A_Y, &vertex.y);
 
         vertex.y = -vertex.y;
         contourData->vertexList.push_back(vertex);
 
-        vertexDataXML = vertexDataXML->NextSiblingElement(CONTOUR_VERTEX);
+        vertexDataXML = vertexDataXML.next_sibling(CONTOUR_VERTEX);
     }
 
     return contourData;
@@ -1305,7 +1227,7 @@ void DataReaderHelper::addDataFromJsonCache(const std::string& fileContent, Data
             }
 
             std::string filePath = path;
-            filePath = filePath.erase(filePath.find_last_of('.'));
+            filePath = filePath.erase(filePath.find_last_of("."));
 
             if (dataInfo->asyncStruct)
             {
@@ -1608,8 +1530,8 @@ FrameData *DataReaderHelper::decodeFrame(const rapidjson::Value& json, DataInfo 
 
 	frameData->tweenEasing = (TweenType)(DICTOOL->getIntValue_json(json, A_TWEEN_EASING, cocos2d::tweenfunc::Linear));
 	frameData->displayIndex = DICTOOL->getIntValue_json(json, A_DISPLAY_INDEX);
-	frameData->blendFunc.src = utils::toBackendBlendFactor(DICTOOL->getIntValue_json(json, A_BLEND_SRC, utils::toGLBlendFactor(BlendFunc::ALPHA_PREMULTIPLIED.src)));
-	frameData->blendFunc.dst = utils::toBackendBlendFactor(DICTOOL->getIntValue_json(json, A_BLEND_DST, utils::toGLBlendFactor(BlendFunc::ALPHA_PREMULTIPLIED.dst)));
+	frameData->blendFunc.src = (GLenum)(DICTOOL->getIntValue_json(json, A_BLEND_SRC, BlendFunc::ALPHA_PREMULTIPLIED.src));
+	frameData->blendFunc.dst = (GLenum)(DICTOOL->getIntValue_json(json, A_BLEND_DST, BlendFunc::ALPHA_PREMULTIPLIED.dst));
 	frameData->isTween = DICTOOL->getBooleanValue_json(json, A_TWEEN_FRAME, true);
 
 	const char *event =  DICTOOL->getStringValue_json(json, A_EVENT);
@@ -1844,7 +1766,7 @@ void DataReaderHelper::decodeNode(BaseData *node, const rapidjson::Value& json, 
                             }
 
                             std::string filePath = path;
-                            filePath = filePath.erase(filePath.find_last_of('.'));
+                            filePath = filePath.erase(filePath.find_last_of("."));
 
                             if (dataInfo->asyncStruct)
                             {
@@ -2315,14 +2237,14 @@ void DataReaderHelper::decodeNode(BaseData *node, const rapidjson::Value& json, 
             {
                 if(str != nullptr)
                 {
-                    frameData->blendFunc.src = utils::toBackendBlendFactor(atoi(str));
+                    frameData->blendFunc.src = (GLenum)(atoi(str));
                 }
             }
             else if (key.compare(A_BLEND_DST) == 0)
             {
                 if(str != nullptr)
                 {
-                    frameData->blendFunc.dst = utils::toBackendBlendFactor(atoi(str));
+                    frameData->blendFunc.dst = (GLenum)(atoi(str));
                 }
             }
             else if (key.compare(A_TWEEN_FRAME) == 0)

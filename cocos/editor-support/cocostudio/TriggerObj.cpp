@@ -1,6 +1,5 @@
 /****************************************************************************
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -29,11 +28,11 @@ using namespace cocos2d;
 
 namespace cocostudio {
     
-BaseTriggerCondition::BaseTriggerCondition()
+BaseTriggerCondition::BaseTriggerCondition(void)
 {
 }
 
-BaseTriggerCondition::~BaseTriggerCondition()
+BaseTriggerCondition::~BaseTriggerCondition(void)
 {
 }
 
@@ -60,11 +59,11 @@ void BaseTriggerCondition::removeAll()
 {
 }
 
-BaseTriggerAction::BaseTriggerAction()
+BaseTriggerAction::BaseTriggerAction(void)
 {
 }
 
-BaseTriggerAction::~BaseTriggerAction()
+BaseTriggerAction::~BaseTriggerAction(void)
 {
 }
 
@@ -90,13 +89,13 @@ void BaseTriggerAction::removeAll()
 {
 }
 
-TriggerObj::TriggerObj()
+TriggerObj::TriggerObj(void)
 :_id(UINT_MAX)
 ,_enabled(true)
 {
 }
 
-TriggerObj::~TriggerObj()
+TriggerObj::~TriggerObj(void)
 {
 }
 

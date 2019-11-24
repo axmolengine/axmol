@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -29,7 +28,6 @@
 #include "editor-support/cocostudio/ActionTimeline/CCActionTimeline.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 
@@ -73,7 +71,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceSingleNodeReader);
     }
     
-    Offset<Table> SingleNodeReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> SingleNodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                  flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -96,7 +94,7 @@ namespace cocostudio
     
     Node* SingleNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table *singleNodeOptions)
     {
-        Node* node = Node::create();
+        Node* node = wext::aNode();
         
         setPropsWithFlatBuffers(node, singleNodeOptions);
         

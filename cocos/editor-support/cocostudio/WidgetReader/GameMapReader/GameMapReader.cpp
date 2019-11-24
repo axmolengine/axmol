@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -29,11 +28,11 @@
 #include "2d/CCTMXXMLParser.h"
 #include "2d/CCTMXTiledMap.h"
 #include "platform/CCFileUtils.h"
+#include "deprecated/CCString.h"
 
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -70,7 +69,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceTMXTiledMapReader);
     }
     
-    Offset<Table> GameMapReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> GameMapReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                               flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -81,19 +80,19 @@ namespace cocostudio
         int resourceType = 0;
         
         // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "FileData")
             {
-                const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
+                auto attribute =  child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -108,11 +107,11 @@ namespace cocostudio
                         plistFile = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         auto options = CreateGameMapOptions(*builder,
@@ -229,9 +228,7 @@ namespace cocostudio
                 Node* node = Node::create();
                 setPropsWithFlatBuffers(node, (Table*)gameMapOptions);
                 auto label = Label::create();
-                //TODO couslonwang
-                cocos2d::log("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
-//                label->setString(__String::createWithFormat("Some error of gid are in TMX Layer '%s'", layerName.c_str())->getCString());
+                label->setString(__String::createWithFormat("Some error of gid are in TMX Layer '%s'", layerName.c_str())->getCString());
                 node->setScale(1.0f);
                 node->addChild(label);
                 return node;

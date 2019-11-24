@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -55,8 +54,8 @@ enum AnimationType
 class  CC_STUDIO_DLL ProcessBase : public cocos2d::Ref
 {
 public:
-    ProcessBase();
-    virtual ~ProcessBase();
+    ProcessBase(void);
+    virtual ~ProcessBase(void);
 
     /**
      * Play animation by animation name.

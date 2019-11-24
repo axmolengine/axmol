@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
 http://www.cocos2d-x.org
 
@@ -27,6 +26,7 @@ THE SOFTWARE.
 #define __CCTIMELINE_ACTION_H__
 
 #include "editor-support/cocostudio/ActionTimeline/CCTimeLine.h"
+#include "editor-support/cocostudio/ActionTimeline/CCActionTimelineData.h"
 #include "base/CCProtocols.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 #include "2d/CCAction.h"
@@ -57,6 +57,7 @@ typedef struct AnimationInfo
     std::function<void()> clipEndCallBack;
 } AnimationClip;
 
+#if 0
 class CC_STUDIO_DLL ActionTimelineData : public cocos2d::Ref
 {
 public:
@@ -70,9 +71,9 @@ CC_CONSTRUCTOR_ACCESS:
 protected:
     int _actionTag;
 };
+#endif
 
-
-class CC_STUDIO_DLL ActionTimeline : public cocos2d::Action, public cocos2d::PlayableProtocol
+class CC_STUDIOP_DLL ActionTimeline : public cocos2d::Action, public cocos2d::PlayableProtocol
 {
 public:
     friend class Frame;

@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -32,7 +31,6 @@
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 #include "editor-support/cocostudio/WidgetReader/Node3DReader/Node3DReader.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -74,7 +72,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceLight3DReader);
     }
     
-    Offset<Table> Light3DReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> Light3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                              flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = Node3DReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -88,11 +86,11 @@ namespace cocostudio
         float outerAngle = 30.0f;
 
         std::string attriname;
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute = objectData.first_attribute();
         while(attribute)
         {
-            attriname = attribute->Name();
-            std::string value = attribute->Value();
+            attriname = attribute.name();
+            std::string value = attribute.value();
             
             if (attriname == "Type")
             {
@@ -134,7 +132,7 @@ namespace cocostudio
                 enabled = (value == "True") ? true : false;
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
         
         auto options = CreateLight3DOption(*builder,node3DOptions,enabled,type,flag,intensity,range,outerAngle);

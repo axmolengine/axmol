@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -29,7 +28,6 @@
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -69,7 +67,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceComAudioReader);
     }
     
-    Offset<Table> ComAudioReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> ComAudioReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -84,11 +82,11 @@ namespace cocostudio
         std::string plist = "";
         int resourceType = 0;
         
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string attriname = attribute->Name();
-            std::string value = attribute->Value();
+            std::string attriname = attribute.name();
+            std::string value = attribute.value();
             
             if (attriname == "Loop")
             {
@@ -103,23 +101,23 @@ namespace cocostudio
                 name = value;
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
         
         // FileData
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string attriname = child->Name();
+            std::string attriname = child.name();
             
             if (attriname == "FileData")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (attriname == "Path")
                     {
@@ -134,11 +132,11 @@ namespace cocostudio
                         plist = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         auto options = CreateComAudioOptions(*builder,

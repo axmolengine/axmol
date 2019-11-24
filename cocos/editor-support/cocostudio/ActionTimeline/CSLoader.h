@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -79,7 +78,7 @@ public:
     CC_DEPRECATED_ATTRIBUTE void purge();    
     
     void init();
-    
+
     static cocos2d::Node* createNode(const std::string& filename);
     static cocos2d::Node* createNode(const std::string& filename, const ccNodeLoadCallback& callback);
     static cocos2d::Node* createNode(const Data& data);

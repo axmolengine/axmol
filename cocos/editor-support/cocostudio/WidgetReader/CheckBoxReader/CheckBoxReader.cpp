@@ -1,27 +1,3 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 
 
 #include "editor-support/cocostudio/WidgetReader/CheckBoxReader/CheckBoxReader.h"
@@ -33,7 +9,6 @@
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -99,8 +74,11 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
-                
-                checkBox->loadTextureBackGround(backgroundValue, imageFileNameType);
+
+                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(checkBox, fileData, 0);
+
+                checkBox->loadTextureBackGround(fileData.file, imageFileNameType);
             }else if(key == P_BackGroundBoxSelectedData){
                 stExpCocoNode *backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
                 std::string resType = backGroundChildren[2].GetValue(cocoLoader);
@@ -108,8 +86,9 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
-                
-                checkBox->loadTextureBackGroundSelected(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(checkBox, fileData, 1);
+                checkBox->loadTextureBackGroundSelected(fileData.file, imageFileNameType);
             }else if(key == P_FrontCrossData){
                 stExpCocoNode *backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
                 std::string resType = backGroundChildren[2].GetValue(cocoLoader);
@@ -117,8 +96,9 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
-                
-                checkBox->loadTextureFrontCross(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(checkBox, fileData, 2);
+                checkBox->loadTextureFrontCross(fileData.file, imageFileNameType);
             }else if(key == P_BackGroundBoxDisabledData){
                 stExpCocoNode *backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
                 std::string resType = backGroundChildren[2].GetValue(cocoLoader);
@@ -126,8 +106,9 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
-                
-                checkBox->loadTextureBackGroundDisabled(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(checkBox, fileData, 3);
+                checkBox->loadTextureBackGroundDisabled(fileData.file, imageFileNameType);
             }else if (key == P_FrontCrossDisabledData){
                 stExpCocoNode *backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
                 std::string resType = backGroundChildren[2].GetValue(cocoLoader);
@@ -135,8 +116,9 @@ namespace cocostudio
                 Widget::TextureResType imageFileNameType = (Widget::TextureResType)valueToInt(resType);
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
-                
-                checkBox->loadTextureFrontCrossDisabled(backgroundValue, imageFileNameType);
+                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
+                cocos2d::wext::onBeforeLoadObjectAsset(checkBox, fileData, 4);
+                checkBox->loadTextureFrontCrossDisabled(fileData.file, imageFileNameType);
             }
 //            else if (key == "selectedState"){
 //                checkBox->setSelectedState(valueToBool(value));
@@ -153,42 +135,49 @@ namespace cocostudio
         WidgetReader::setPropsFromJsonDictionary(widget, options);
         
         CheckBox* checkBox = static_cast<CheckBox*>(widget);
+
+        auto pHackAssets = new std::vector<std::string>();
+        checkBox->setUserData(pHackAssets);
+        auto& hackAssets = *pHackAssets;
+        hackAssets.resize(5);
        
         //load background image
         const rapidjson::Value& backGroundDic = DICTOOL->getSubDictionary_json(options, P_BackGroundBoxData);
         int backGroundType = DICTOOL->getIntValue_json(backGroundDic,P_ResourceType);
         std::string backGroundTexturePath = this->getResourcePath(backGroundDic, P_Path, (Widget::TextureResType)backGroundType);
          checkBox->loadTextureBackGround(backGroundTexturePath, (Widget::TextureResType)backGroundType);
-        
+         
+         hackAssets[0] = backGroundTexturePath;
+
        //load background selected image
         const rapidjson::Value& backGroundSelectedDic = DICTOOL->getSubDictionary_json(options, P_BackGroundBoxSelectedData);
         int backGroundSelectedType = DICTOOL->getIntValue_json(backGroundSelectedDic, P_ResourceType);
         std::string backGroundSelectedTexturePath = this->getResourcePath(backGroundSelectedDic, P_Path, (Widget::TextureResType)backGroundSelectedType);
         checkBox->loadTextureBackGroundSelected(backGroundSelectedTexturePath, (Widget::TextureResType)backGroundSelectedType);
-        
+        hackAssets[1] = backGroundSelectedTexturePath;
         //load frontCross image
         const rapidjson::Value& frontCrossDic = DICTOOL->getSubDictionary_json(options, P_FrontCrossData);
         int frontCrossType = DICTOOL->getIntValue_json(frontCrossDic, P_ResourceType);
         std::string frontCrossFileName = this->getResourcePath(frontCrossDic, P_Path, (Widget::TextureResType)frontCrossType);
         checkBox->loadTextureFrontCross(frontCrossFileName, (Widget::TextureResType)frontCrossType);
-        
+        hackAssets[2] = frontCrossFileName;
        //load backGroundBoxDisabledData
         const rapidjson::Value& backGroundDisabledDic = DICTOOL->getSubDictionary_json(options, P_BackGroundBoxDisabledData);
         int backGroundDisabledType = DICTOOL->getIntValue_json(backGroundDisabledDic, P_ResourceType);
         std::string backGroundDisabledFileName = this->getResourcePath(backGroundDisabledDic, P_Path, (Widget::TextureResType)backGroundDisabledType);
         checkBox->loadTextureBackGroundDisabled(backGroundDisabledFileName, (Widget::TextureResType)backGroundDisabledType);
-        
+        hackAssets[3] = backGroundDisabledFileName;
         ///load frontCrossDisabledData
         const rapidjson::Value& frontCrossDisabledDic = DICTOOL->getSubDictionary_json(options, P_FrontCrossDisabledData);
         int frontCrossDisabledType = DICTOOL->getIntValue_json(frontCrossDisabledDic, P_ResourceType);
         std::string frontCrossDisabledFileName = this->getResourcePath(frontCrossDisabledDic, P_Path, (Widget::TextureResType)frontCrossDisabledType);
         checkBox->loadTextureFrontCrossDisabled(frontCrossDisabledFileName, (Widget::TextureResType)frontCrossDisabledType);
-        
+        hackAssets[4] = frontCrossDisabledFileName;
         
         WidgetReader::setColorPropsFromJsonDictionary(widget, options);
     }        
     
-    Offset<Table> CheckBoxReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> CheckBoxReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -219,11 +208,11 @@ namespace cocostudio
         std::string frontCrossDisabledPlistFile = "";
         
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string name = attribute->Name();
-            std::string value = attribute->Value();
+            std::string name = attribute.name();
+            std::string value = attribute.value();
             
             if (name == "CheckedState")
             {
@@ -233,26 +222,26 @@ namespace cocostudio
             {
                 displaystate = (value == "True") ? true : false;
             }
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
         
         // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "NormalBackFileData")
             {
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -268,7 +257,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (backgroundboxResourceType == 1)
@@ -282,12 +271,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -303,7 +292,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (backGroundBoxSelectedResourceType == 1)
@@ -317,12 +306,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -338,7 +327,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (frontCrossResourceType == 1)
@@ -352,12 +341,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -373,7 +362,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (backGroundBoxDisabledResourceType == 1)
@@ -387,12 +376,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
                 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -408,7 +397,7 @@ namespace cocostudio
                         texture = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
                 
                 if (frontCrossDisabledResourceType == 1)
@@ -418,7 +407,7 @@ namespace cocostudio
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         auto options = CreateCheckBoxOptions(*builder,
@@ -461,9 +450,10 @@ namespace cocostudio
         //load background image
         bool backGroundFileExist = false;
         std::string backGroundErrorFilePath = "";
-        auto backGroundDic = options->backGroundBoxData();
-        int backGroundType = backGroundDic->resourceType();
-        std::string backGroundTexturePath = backGroundDic->path()->c_str();
+        auto backGroundDic = cocos2d::wext::makeResourceData(options->backGroundBoxData());
+        int backGroundType = backGroundDic.type;
+        std::string& backGroundTexturePath = backGroundDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, backGroundDic, 0);
         switch (backGroundType)
         {
             case 0:
@@ -482,7 +472,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = backGroundDic->plistFile()->c_str();
+                std::string plist = backGroundDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundTexturePath);
                 if (spriteFrame)
                 {
@@ -520,9 +510,10 @@ namespace cocostudio
         //load background selected image
         bool backGroundSelectedfileExist = false;
         std::string backGroundSelectedErrorFilePath = "";
-        auto backGroundSelectedDic = options->backGroundBoxSelectedData();
-        int backGroundSelectedType = backGroundSelectedDic->resourceType();
-        std::string backGroundSelectedTexturePath = backGroundSelectedDic->path()->c_str();
+        auto backGroundSelectedDic = cocos2d::wext::makeResourceData(options->backGroundBoxSelectedData());
+        int backGroundSelectedType = backGroundSelectedDic.type;
+        std::string& backGroundSelectedTexturePath = backGroundSelectedDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, backGroundSelectedDic, 1);
         switch (backGroundSelectedType)
         {
             case 0:
@@ -541,7 +532,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = backGroundSelectedDic->plistFile()->c_str();
+                std::string plist = backGroundSelectedDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundSelectedTexturePath);
                 if (spriteFrame)
                 {
@@ -579,9 +570,10 @@ namespace cocostudio
         //load frontCross image
         bool frontCrossFileExist = false;
         std::string frontCrossErrorFilePath = "";
-        auto frontCrossDic = options->frontCrossData();
-        int frontCrossType = frontCrossDic->resourceType();
-        std::string frontCrossFileName = frontCrossDic->path()->c_str();
+        auto frontCrossDic = cocos2d::wext::makeResourceData(options->frontCrossData());
+        int frontCrossType = frontCrossDic.type;
+        std::string& frontCrossFileName = frontCrossDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, frontCrossDic, 2);
         switch (frontCrossType)
         {
             case 0:
@@ -600,7 +592,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = frontCrossDic->plistFile()->c_str();
+                std::string plist = frontCrossDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frontCrossFileName);
                 if (spriteFrame)
                 {
@@ -638,9 +630,10 @@ namespace cocostudio
         //load backGroundBoxDisabledData
         bool backGroundBoxDisabledFileExist = false;
         std::string backGroundBoxDisabledErrorFilePath = "";
-        auto backGroundDisabledDic = options->backGroundBoxDisabledData();
-        int backGroundDisabledType = backGroundDisabledDic->resourceType();
-        std::string backGroundDisabledFileName = backGroundDisabledDic->path()->c_str();
+        auto backGroundDisabledDic = cocos2d::wext::makeResourceData(options->backGroundBoxDisabledData());
+        int backGroundDisabledType = backGroundDisabledDic.type;
+        std::string& backGroundDisabledFileName = backGroundDisabledDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, backGroundDisabledDic, 3);
         switch (backGroundDisabledType)
         {
             case 0:
@@ -659,7 +652,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = backGroundDisabledDic->plistFile()->c_str();
+                std::string plist = backGroundDisabledDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundDisabledFileName);
                 if (spriteFrame)
                 {
@@ -697,9 +690,10 @@ namespace cocostudio
         ///load frontCrossDisabledData
         bool frontCrossDisabledFileExist = false;
         std::string frontCrossDisabledErrorFilePath = "";
-        auto frontCrossDisabledDic = options->frontCrossDisabledData();
-        int frontCrossDisabledType = frontCrossDisabledDic->resourceType();
-        std::string frontCrossDisabledFileName = frontCrossDisabledDic->path()->c_str();
+        auto frontCrossDisabledDic = cocos2d::wext::makeResourceData(options->frontCrossDisabledData());
+        int frontCrossDisabledType = frontCrossDisabledDic.type;
+        std::string& frontCrossDisabledFileName = frontCrossDisabledDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, frontCrossDisabledDic, 4);
         switch (frontCrossDisabledType)
         {
             case 0:
@@ -718,7 +712,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = frontCrossDisabledDic->plistFile()->c_str();
+                std::string plist = frontCrossDisabledDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frontCrossDisabledFileName);
                 if (spriteFrame)
                 {
@@ -768,7 +762,7 @@ namespace cocostudio
     
     Node* CheckBoxReader::createNodeWithFlatBuffers(const flatbuffers::Table *checkBoxOptions)
     {
-        CheckBox* checkBox = CheckBox::create();
+        CheckBox* checkBox = wext::aCheckBox();// CheckBox::create();
         
         setPropsWithFlatBuffers(checkBox, (Table*)checkBoxOptions);
         

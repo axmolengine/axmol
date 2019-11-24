@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -31,11 +30,6 @@
 #include "editor-support/cocostudio/WidgetReader/NodeReaderProtocol.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReaderDefine.h"
 
-namespace tinyxml2
-{
-    class XMLAttribute;
-}
-
 namespace cocostudio
 {
     class CC_STUDIO_DLL Node3DReader : public cocos2d::Ref, public NodeReaderProtocol
@@ -51,15 +45,15 @@ namespace cocostudio
         CC_DEPRECATED_ATTRIBUTE static void purge();
         static void destroyInstance();
         
-        flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+        flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                              flatbuffers::FlatBufferBuilder* builder);
         void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* node3DOptions);
         cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* node3DOptions);
         
     protected:
-        flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffersForNode(const tinyxml2::XMLElement* objectData,
+        flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffersForNode(pugi::xml_node objectData,
                                                                                     flatbuffers::FlatBufferBuilder* builder);
-        cocos2d::Vec3 getVec3Attribute(const tinyxml2::XMLAttribute* attribute) const;
+        cocos2d::Vec3 getVec3Attribute(pugi::xml_attribute attribute) const;
     };
 }
 

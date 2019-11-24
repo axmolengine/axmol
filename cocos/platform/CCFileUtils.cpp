@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include "platform/CCSAXParser.h"
 //#include "base/ccUtils.h"
 
-#include "tinyxml2/tinyxml2.h"
 #ifdef MINIZIP_FROM_SYSTEM
 #include <minizip/unzip.h>
 #else // from our embedded sources
@@ -42,7 +41,8 @@ THE SOFTWARE.
 #endif
 #include <sys/stat.h>
 
-#define DECLARE_GUARD std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
+#include "pugixml/pugixml_imp.hpp"
+#define DECLARE_GUARD (void)0
 
 NS_CC_BEGIN
 
@@ -90,8 +90,6 @@ public:
     DictMaker()
         : _resultType(SAX_RESULT_NONE)
         , _state(SAX_NONE)
-        , _curDict(nullptr)
-        , _curArray(nullptr)
     {
     }
 
@@ -352,11 +350,11 @@ ValueVector FileUtils::getValueVectorFromFile(const std::string& filename) const
 /*
  * forward statement
  */
-static tinyxml2::XMLElement* generateElementForArray(const ValueVector& array, tinyxml2::XMLDocument *doc);
-static tinyxml2::XMLElement* generateElementForDict(const ValueMap& dict, tinyxml2::XMLDocument *doc);
+static void generateElementForArray(const ValueVector& array, pugi::xml_node& innerArray);
+static void generateElementForDict(const ValueMap& dict, pugi::xml_node& innerDict);
 
 /*
- * Use tinyxml2 to write plist files
+ * Use pugixml to write plist files
  */
 bool FileUtils::writeToFile(const ValueMap& dict, const std::string &fullPath) const
 {
@@ -365,168 +363,80 @@ bool FileUtils::writeToFile(const ValueMap& dict, const std::string &fullPath) c
 
 bool FileUtils::writeValueMapToFile(const ValueMap& dict, const std::string& fullPath) const
 {
-    tinyxml2::XMLDocument *doc = new (std::nothrow)tinyxml2::XMLDocument();
-    if (nullptr == doc)
-        return false;
+    pugi::xml_document doc;
+	doc.load_string(R"(<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist />)", pugi::parse_full);
 
-    tinyxml2::XMLDeclaration *declaration = doc->NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
-    if (nullptr == declaration)
-    {
-        delete doc;
-        return false;
-    }
+	auto rootEle = doc.document_element();
+	auto innerDict = rootEle.append_child("dict");
+    generateElementForDict(dict, innerDict);
 
-    doc->LinkEndChild(declaration);
-    tinyxml2::XMLElement *docType = doc->NewElement("!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\"");
-    doc->LinkEndChild(docType);
-
-    tinyxml2::XMLElement *rootEle = doc->NewElement("plist");
-    if (nullptr == rootEle)
-    {
-        delete doc;
-        return false;
-    }
-    rootEle->SetAttribute("version", "1.0");
-    doc->LinkEndChild(rootEle);
-
-    tinyxml2::XMLElement *innerDict = generateElementForDict(dict, doc);
-    if (nullptr == innerDict)
-    {
-        delete doc;
-        return false;
-    }
-    rootEle->LinkEndChild(innerDict);
-
-    bool ret = tinyxml2::XML_SUCCESS == doc->SaveFile(getSuitableFOpen(fullPath).c_str());
-
-    delete doc;
-    return ret;
+	return doc.save_file(fullPath.c_str());
 }
 
 bool FileUtils::writeValueVectorToFile(const ValueVector& vecData, const std::string& fullPath) const
 {
-    tinyxml2::XMLDocument *doc = new (std::nothrow)tinyxml2::XMLDocument();
-    if (nullptr == doc)
-        return false;
+	pugi::xml_document doc;
+	doc.load_string(R"(<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist />)", pugi::parse_full);
 
-    tinyxml2::XMLDeclaration *declaration = doc->NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
-    if (nullptr == declaration)
-    {
-        delete doc;
-        return false;
-    }
+	auto rootEle = doc.document_element();
+	auto innerArray = rootEle.append_child("array");
+    generateElementForArray(vecData, innerArray);
 
-    doc->LinkEndChild(declaration);
-    tinyxml2::XMLElement *docType = doc->NewElement("!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\"");
-    doc->LinkEndChild(docType);
-
-    tinyxml2::XMLElement *rootEle = doc->NewElement("plist");
-    if (nullptr == rootEle)
-    {
-        delete doc;
-        return false;
-    }
-    rootEle->SetAttribute("version", "1.0");
-    doc->LinkEndChild(rootEle);
-
-    tinyxml2::XMLElement *innerDict = generateElementForArray(vecData, doc);
-    if (nullptr == innerDict)
-    {
-        delete doc;
-        return false;
-    }
-    rootEle->LinkEndChild(innerDict);
-
-    bool ret = tinyxml2::XML_SUCCESS == doc->SaveFile(getSuitableFOpen(fullPath).c_str());
-
-    delete doc;
-    return ret;
+	return doc.save_file(fullPath.c_str());
 }
 
-/*
- * Generate tinyxml2::XMLElement for Object through a tinyxml2::XMLDocument
- */
-static tinyxml2::XMLElement* generateElementForObject(const Value& value, tinyxml2::XMLDocument *doc)
+static void generateElementForObject(const Value& value, pugi::xml_node& parent)
 {
     // object is String
     if (value.getType() == Value::Type::STRING)
     {
-        tinyxml2::XMLElement* node = doc->NewElement("string");
-        tinyxml2::XMLText* content = doc->NewText(value.asString().c_str());
-        node->LinkEndChild(content);
-        return node;
+		auto node = parent.append_child("string");
+		node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString().c_str());
     }
-
     // object is integer
-    if (value.getType() == Value::Type::INTEGER)
+    else if (value.getType() == Value::Type::INTEGER)
     {
-        tinyxml2::XMLElement* node = doc->NewElement("integer");
-        tinyxml2::XMLText* content = doc->NewText(value.asString().c_str());
-        node->LinkEndChild(content);
-        return node;
+		auto node = parent.append_child("integer");
+		node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.toString().c_str());
     }
-
     // object is real
-    if (value.getType() == Value::Type::FLOAT || value.getType() == Value::Type::DOUBLE)
+    else if (value.getType() == Value::Type::FLOAT || value.getType() == Value::Type::DOUBLE)
     {
-        tinyxml2::XMLElement* node = doc->NewElement("real");
-        tinyxml2::XMLText* content = doc->NewText(value.asString().c_str());
-        node->LinkEndChild(content);
-        return node;
+		auto node = parent.append_child("real");
+		node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.toString().c_str());
     }
-
     //object is bool
-    if (value.getType() == Value::Type::BOOLEAN) {
-        tinyxml2::XMLElement* node = doc->NewElement(value.asString().c_str());
-        return node;
+    else if (value.getType() == Value::Type::BOOLEAN) {
+		parent.append_child(value.toString().c_str());
     }
-
     // object is Array
-    if (value.getType() == Value::Type::VECTOR)
-        return generateElementForArray(value.asValueVector(), doc);
-
+    else if (value.getType() == Value::Type::VECTOR)
+        generateElementForArray(value.asValueVector(), parent);
     // object is Dictionary
-    if (value.getType() == Value::Type::MAP)
-        return generateElementForDict(value.asValueMap(), doc);
-
-    CCLOG("This type cannot appear in property list");
-    return nullptr;
+    else if (value.getType() == Value::Type::MAP)
+        generateElementForDict(value.asValueMap(), parent);
 }
 
-/*
- * Generate tinyxml2::XMLElement for Dictionary through a tinyxml2::XMLDocument
- */
-static tinyxml2::XMLElement* generateElementForDict(const ValueMap& dict, tinyxml2::XMLDocument *doc)
+static void generateElementForDict(const ValueMap& dict, pugi::xml_node& innerDict)
 {
-    tinyxml2::XMLElement* rootNode = doc->NewElement("dict");
-
     for (const auto &iter : dict)
     {
-        tinyxml2::XMLElement* tmpNode = doc->NewElement("key");
-        rootNode->LinkEndChild(tmpNode);
-        tinyxml2::XMLText* content = doc->NewText(iter.first.c_str());
-        tmpNode->LinkEndChild(content);
+		auto key = innerDict.append_child("key");
+		key.set_value(iter.first.c_str());
 
-        tinyxml2::XMLElement *element = generateElementForObject(iter.second, doc);
-        if (element)
-            rootNode->LinkEndChild(element);
+        generateElementForObject(iter.second, innerDict);
     }
-    return rootNode;
 }
 
-/*
- * Generate tinyxml2::XMLElement for Array through a tinyxml2::XMLDocument
- */
-static tinyxml2::XMLElement* generateElementForArray(const ValueVector& array, tinyxml2::XMLDocument *pDoc)
+static void generateElementForArray(const ValueVector& array, pugi::xml_node& innerArray)
 {
-    tinyxml2::XMLElement* rootNode = pDoc->NewElement("array");
-
     for(const auto &value : array) {
-        tinyxml2::XMLElement *element = generateElementForObject(value, pDoc);
-        if (element)
-            rootNode->LinkEndChild(element);
+        generateElementForObject(value, innerArray);
     }
-    return rootNode;
 }
 
 #else
@@ -593,7 +503,7 @@ bool FileUtils::writeDataToFile(const Data& data, const std::string& fullPath) c
     do
     {
         // Read the file from hardware
-        FILE *fp = fopen(fileutils->getSuitableFOpen(fullPath).c_str(), mode);
+        FILE *fp = fopen(fullPath.c_str(), mode);
         CC_BREAK_IF(!fp);
         size = data.getSize();
 
@@ -618,7 +528,7 @@ bool FileUtils::init()
 {
     DECLARE_GUARD;
     _searchPathArray.push_back(_defaultResRootPath);
-    _searchResolutionsOrderArray.push_back("");
+    _searchResolutionsOrderArray.emplace_back("");
     return true;
 }
 
@@ -711,7 +621,7 @@ unsigned char* FileUtils::getFileDataFromZip(const std::string& zipFilePath, con
     {
         CC_BREAK_IF(zipFilePath.empty());
 
-        file = unzOpen(FileUtils::getInstance()->getSuitableFOpen(zipFilePath).c_str());
+        file = unzOpen(zipFilePath.c_str());
         CC_BREAK_IF(!file);
 
         // minizip 1.2.0 is same with other platforms

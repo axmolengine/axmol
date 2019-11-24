@@ -1,27 +1,3 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 
 
 #include "editor-support/cocostudio/WidgetReader/ScrollViewReader/ScrollViewReader.h"
@@ -33,7 +9,6 @@
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -123,7 +98,7 @@ namespace cocostudio
         LayoutReader::setColorPropsFromJsonDictionary(widget, options);
     }
 
-    Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -138,7 +113,7 @@ namespace cocostudio
         Color3B bgStartColor;
         Color3B bgEndColor;
         int colorType = 0;
-        uint8_t bgColorOpacity = 255;
+        GLubyte bgColorOpacity = 255;
         Vec2 colorVector(0.0f, -0.5f);
         Rect capInsets;
         Size scale9Size;
@@ -151,11 +126,11 @@ namespace cocostudio
         float scrollbarAutoHideTime = 0.2f;
 
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string name = attribute->Name();
-            std::string value = attribute->Value();
+            std::string name = attribute.name();
+            std::string value = attribute.value();
 
             if (name == "ClipAble")
             {
@@ -220,22 +195,22 @@ namespace cocostudio
             {
                 scrollbarAutoHideTime = atof(value.c_str());
             }
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
 
         // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
 
             if (name == "InnerNodeSize")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "Width")
                     {
@@ -246,17 +221,17 @@ namespace cocostudio
                         innerSize.height = atof(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "Size" && backGroundScale9Enabled)
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "X")
                     {
@@ -267,17 +242,17 @@ namespace cocostudio
                         scale9Size.height = atof(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "SingleColor")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "R")
                     {
@@ -292,17 +267,17 @@ namespace cocostudio
                         bgColor.b = atoi(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "EndColor")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "R")
                     {
@@ -317,17 +292,17 @@ namespace cocostudio
                         bgEndColor.b = atoi(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "FirstColor")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "R")
                     {
@@ -342,16 +317,16 @@ namespace cocostudio
                         bgStartColor.b = atoi(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "ColorVector")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "ScaleX")
                     {
@@ -362,7 +337,7 @@ namespace cocostudio
                         colorVector.y = atof(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "FileData")
@@ -370,12 +345,12 @@ namespace cocostudio
                 std::string texture = "";
                 std::string texturePng = "";
 
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
 
                     if (name == "Path")
                     {
@@ -391,7 +366,7 @@ namespace cocostudio
                         texture = value;
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
 
                 if (resourceType == 1)
@@ -401,7 +376,7 @@ namespace cocostudio
                 }
             }
 
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
 
         Color f_bgColor(255, bgColor.r, bgColor.g, bgColor.b);
@@ -473,9 +448,10 @@ namespace cocostudio
 
         bool fileExist = false;
         std::string errorFilePath = "";
-        auto imageFileNameDic = options->backGroundImageData();
-        int imageFileNameType = imageFileNameDic->resourceType();
-        std::string imageFileName = imageFileNameDic->path()->c_str();
+        auto imageFileNameDic = cocos2d::wext::makeResourceData(options->backGroundImageData());
+        int imageFileNameType = imageFileNameDic.type;
+        std::string& imageFileName = imageFileNameDic.file;
+        cocos2d::wext::onBeforeLoadObjectAsset(scrollView, imageFileNameDic, 0);
         if (imageFileName != "")
         {
             switch (imageFileNameType)
@@ -496,7 +472,7 @@ namespace cocostudio
 
             case 1:
             {
-                std::string plist = imageFileNameDic->plistFile()->c_str();
+                std::string& plist = imageFileNameDic.plist;
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imageFileName);
                 if (spriteFrame)
                 {
@@ -584,7 +560,7 @@ namespace cocostudio
 
     Node* ScrollViewReader::createNodeWithFlatBuffers(const flatbuffers::Table *scrollViewOptions)
     {
-        ScrollView* scrollView = ScrollView::create();
+        ScrollView* scrollView = wext::aScrollView(); // ScrollView::create();
 
         setPropsWithFlatBuffers(scrollView, (Table*)scrollViewOptions);
 

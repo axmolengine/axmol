@@ -691,7 +691,19 @@ bool Value::asBool() const
     return false;
 }
 
-std::string Value::asString() const
+std::string& Value::asString()
+{
+    CCASSERT(_type == Type::STRING, "The value type isn't Type::STRING");
+    return *_field.strVal;
+}
+
+const std::string& Value::asString() const
+{
+    CCASSERT(_type == Type::STRING, "The value type isn't Type::STRING");
+    return *_field.strVal;
+}
+
+std::string Value::toString() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
 
@@ -727,6 +739,7 @@ std::string Value::asString() const
     }
     return ret.str();
 }
+
 
 ValueVector& Value::asValueVector()
 {
@@ -834,7 +847,7 @@ static std::string visit(const Value& v, int depth)
         case Value::Type::DOUBLE:
         case Value::Type::BOOLEAN:
         case Value::Type::STRING:
-            ret << v.asString() << "\n";
+            ret << v.toString() << "\n";
             break;
         case Value::Type::VECTOR:
             ret << visitVector(v.asValueVector(), depth);

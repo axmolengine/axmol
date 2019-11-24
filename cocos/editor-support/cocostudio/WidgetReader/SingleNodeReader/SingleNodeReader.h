@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -46,7 +45,7 @@ namespace cocostudio
         CC_DEPRECATED_ATTRIBUTE static void purge();
         static void destroyInstance();
         
-        flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+        flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                              flatbuffers::FlatBufferBuilder* builder);
         void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* singleNodeOptions);
         cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* singleNodeOptions);

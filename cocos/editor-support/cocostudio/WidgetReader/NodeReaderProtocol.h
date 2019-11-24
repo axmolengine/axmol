@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -27,6 +26,10 @@
 #define __cocos2d_libs__NodeReaderProtocol__
 
 #include "editor-support/cocostudio/CocosStudioExport.h"
+#include "editor-support/cocostudio/CocosStudioExtension.h"
+
+#include "pugixml/pugixml_imp.hpp"
+#include "pugixml/pugiext.hpp"
 
 namespace flatbuffers
 {
@@ -34,11 +37,8 @@ namespace flatbuffers
     template<typename T> struct Offset;
     
     class Table;
-}
 
-namespace tinyxml2
-{
-    class XMLElement;
+    struct ResourceData; // x-studio365 spec, csb batch load support, assets hook functions.
 }
 
 namespace cocos2d
@@ -48,17 +48,95 @@ namespace cocos2d
 
 namespace cocostudio
 {
-    class CC_STUDIO_DLL NodeReaderProtocol
+    class CC_STUDIOP_DLL NodeReaderProtocol
     {
     public:
         NodeReaderProtocol() {};
         virtual ~NodeReaderProtocol() {};
         
-        virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+        virtual void setCurrentCustomClassName(const char* className) {};
+        virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                                      flatbuffers::FlatBufferBuilder* builder) = 0;
         virtual void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions) = 0;
         virtual cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) = 0;
     };
 }
+
+// x-studio365 spec, csb batch load support, assets hook functions.
+
+namespace cocostudio
+{
+    class Armature;
+    namespace timeline {
+        class SkeletonNode;
+        class BoneNode;
+    }
+};
+
+namespace cocos2d {
+
+    // builtin ui predecl
+    class Sprite;
+    class ParticleSystemQuad;
+    namespace ui {
+        class ImageView;
+
+        class Button;
+        class CheckBox;
+        class Slider;
+        class LoadingBar;
+
+        class Text;
+        class TextField;
+        class TextAtlas;
+        class TextBMFont;
+
+        class Layout;
+        class ScrollView;
+        class ListView;
+        class PageView;
+
+        class Widget;
+    }
+    typedef void(*APP_LOGERROR_FUNC)(const char* pszFormat, ...);
+    namespace wext {
+        // engine extends APIs
+        CC_DLL extern APP_LOGERROR_FUNC getAppErrorLogFunc();
+
+		CC_STUDIOP_DLL extern void(*onLoadSpriteFramesWithFile)(std::string& file);
+
+		CC_STUDIOP_DLL extern cocos2d::ResourceData makeResourceData(const flatbuffers::ResourceData* data);
+		CC_STUDIOP_DLL extern cocos2d::ResourceData makeResourceData(const std::string& path, int type = 0);
+		CC_STUDIOP_DLL extern cocos2d::ResourceData makeResourceData(std::string&& path, int type = 0);
+		CC_STUDIOP_DLL extern void resetReaderAllHooks();
+
+        /// Assets Hooks
+		CC_STUDIOP_DLL extern bool(*onBeforeLoadObjectAsset)(cocos2d::Node*, cocos2d::ResourceData& assets, int index/*= 0*/);
+		CC_STUDIOP_DLL extern bool(*onAfterLoadObjectAsset)(cocos2d::Node*, cocos2d::ResourceData& assets, int index/*= 0*/);
+
+        // Object creator Hooks
+		CC_STUDIOP_DLL extern cocos2d::Node*(*aNode)();
+        CC_STUDIOP_DLL extern cocos2d::ui::Widget*(*aWidget)();
+		CC_STUDIOP_DLL extern cocos2d::Sprite*(*aSprite)();
+		CC_STUDIOP_DLL extern cocos2d::ui::ImageView*(*aImageView)();
+        CC_STUDIOP_DLL extern cocos2d::ui::Button*(*aButton)();
+        CC_STUDIOP_DLL extern cocos2d::ui::CheckBox*(*aCheckBox)();
+        CC_STUDIOP_DLL extern cocos2d::ui::Slider*(*aSlider)();
+        CC_STUDIOP_DLL extern cocos2d::ui::LoadingBar*(*aLoadingBar)();
+        CC_STUDIOP_DLL extern cocos2d::ui::Text*(*aText)();
+        CC_STUDIOP_DLL extern cocos2d::ui::TextField*(*aTextField)();
+        CC_STUDIOP_DLL extern cocos2d::ui::TextAtlas*(*aTextAtlas)();
+        CC_STUDIOP_DLL extern cocos2d::ui::TextBMFont*(*aTextBMFont)();
+        CC_STUDIOP_DLL extern cocos2d::ui::Layout*(*aLayout)();
+        CC_STUDIOP_DLL extern cocos2d::ui::ScrollView*(*aScrollView)();
+        CC_STUDIOP_DLL extern cocos2d::ui::ListView*(*aListView)();
+        CC_STUDIOP_DLL extern cocos2d::ui::PageView*(*aPageView)();
+        CC_STUDIOP_DLL extern cocos2d::Node*(*aArmatureNode)();
+        CC_STUDIOP_DLL extern cocostudio::timeline::SkeletonNode*(*aSkeletonNode)();
+        CC_STUDIOP_DLL extern cocostudio::timeline::BoneNode*(*aBoneNode)();
+        CC_STUDIOP_DLL extern cocos2d::ParticleSystemQuad*(*aParticleSystemQuad)(const std::string&);
+        CC_STUDIOP_DLL extern cocos2d::Node*(*aNestingNode)(std::string);
+    };
+};
 
 #endif /* defined(__cocos2d_libs__NodeReaderProtocol__) */

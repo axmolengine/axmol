@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -29,6 +28,9 @@
 
 #include "editor-support/cocostudio/DictionaryHelper.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
+
+#include "pugixml/pugixml_imp.hpp"
+#include "pugixml/pugiext.hpp"
 
 namespace protocolbuffers
 {

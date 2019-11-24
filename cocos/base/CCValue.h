@@ -166,8 +166,13 @@ public:
     double asDouble() const;
     /** Gets as a bool value. Will convert to bool if possible, or will trigger assert error. */
     bool asBool() const;
+
     /** Gets as a string value. Will convert to string if possible, or will trigger assert error. */
-    std::string asString() const;
+    std::string& asString();
+    /** Gets as a string value. Will convert to string if possible, or will trigger assert error. */
+    const std::string& asString() const;
+	/** to as a string value. Will convert to string if possible, or will trigger assert error. */
+    std::string toString() const;
 
     /** Gets as a ValueVector reference. Will convert to ValueVector if possible, or will trigger assert error. */
     ValueVector& asValueVector();

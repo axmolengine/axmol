@@ -1,6 +1,5 @@
 ﻿/****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
 http://www.cocos2d-x.org
 
@@ -34,7 +33,7 @@ NS_TIMELINE_BEGIN
 
 class ActionTimeline;
 
-class CC_STUDIO_DLL Timeline : public cocos2d::Ref
+class CC_STUDIOP_DLL Timeline : public cocos2d::Ref
 {
 public:
     static Timeline* create();

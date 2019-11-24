@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -29,7 +28,6 @@
 #include "editor-support/cocostudio/ActionTimeline/CCActionTimeline.h"
 #include "editor-support/cocostudio/CCComExtensionData.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 #include "ui/UILayoutComponent.h"
 
@@ -85,7 +83,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceNodeReader);
     }
     
-    Offset<Table> NodeReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                            flatbuffers::FlatBufferBuilder *builder)
     {
         std::string name = "";
@@ -93,7 +91,7 @@ namespace cocostudio
         Vec2 rotationSkew;
         int zOrder = 0;
         bool visible = true;
-        uint8_t alpha = 255;
+        GLubyte alpha = 255;
         int tag = 0;
         Vec2 position;
         Vec2 scale(1.0f, 1.0f);
@@ -124,13 +122,17 @@ namespace cocostudio
         float rightMargin = 0;
         float topMargin = 0;
         float bottomMargin = 0;
+
+		// x-studio365 spec: read from .csb.
+		bool cascadeColorEnabled = false;
+		bool cascadeOpacityEnabled = false;
         
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string attriname = attribute->Name();
-            std::string value = attribute->Value();
+            std::string attriname = attribute.name();
+            std::string value = attribute.value();
             
             if (attriname == "Name")
             {
@@ -184,6 +186,14 @@ namespace cocostudio
             {
                 touchEnabled = (value == "True") ? true : false;
             }
+			else if (attriname == "CascadeColorEnabled")
+			{
+				cascadeColorEnabled = (value == "True") ? true : false;
+			}
+			else if (attriname == "CascadeOpacityEnabled")
+			{
+				cascadeOpacityEnabled = (value == "True") ? true : false;
+			}
             else if (attriname == "UserData")
             {
                 customProperty = value;
@@ -241,21 +251,21 @@ namespace cocostudio
                 bottomMargin = atof(value.c_str());
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
         
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string attriname = child->Name();
+            std::string attriname = child.name();
             if (attriname == "Position")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (attriname == "X")
                     {
@@ -266,17 +276,17 @@ namespace cocostudio
                         position.y = atof(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (attriname == "Scale")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (attriname == "ScaleX")
                     {
@@ -287,17 +297,17 @@ namespace cocostudio
                         scale.y = atof(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (attriname == "AnchorPoint")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (attriname == "ScaleX")
                     {
@@ -308,17 +318,17 @@ namespace cocostudio
                         anchorPoint.y = atof(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (attriname == "CColor")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (attriname == "A")
                     {
@@ -337,17 +347,17 @@ namespace cocostudio
                         color.b = atoi(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (attriname == "Size")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
                 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (attriname == "X")
                     {
@@ -358,17 +368,17 @@ namespace cocostudio
                         size.y = atof(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (attriname == "PrePosition")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attriname == "X")
                     {
@@ -379,17 +389,17 @@ namespace cocostudio
                         positionYPercent = atof(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (attriname == "PreSize")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attriname == "X")
                     {
@@ -400,14 +410,14 @@ namespace cocostudio
                         sizeYPercent = atof(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
         RotationSkew f_rotationskew(rotationSkew.x, rotationSkew.y);
-        Position f_position(position.x, position.y);
+        FVec2 f_position(position.x, position.y);
         Scale f_scale(scale.x, scale.y);
         AnchorPoint f_anchortpoint(anchorPoint.x, anchorPoint.y);
         Color f_color(color.a, color.r, color.g, color.b);
@@ -451,7 +461,9 @@ namespace cocostudio
                                            builder->CreateString(customProperty),
                                            0,
                                            0,
-                                           f_layoutComponent);
+                                           f_layoutComponent,
+                                           cascadeColorEnabled,
+                                           cascadeOpacityEnabled);
         
         return *(Offset<Table>*)(&options);
     }
@@ -479,6 +491,11 @@ namespace cocostudio
         float h             = options->size()->height();
         int alpha           = options->alpha();
         Color3B color(options->color()->r(), options->color()->g(), options->color()->b());
+
+		// x-studio365 10.0.593.0: read from .csb.
+		node->setCascadeColorEnabled(options->cascadeColorEnabled());
+		node->setCascadeOpacityEnabled(options->cascadeOpacityEnabled());
+
         std::string customProperty = options->customProperty()->c_str();
         
         node->setName(name);
@@ -495,7 +512,7 @@ namespace cocostudio
             node->setRotationSkewX(rotationSkewX);
         if (rotationSkewY != 0)
             node->setRotationSkewY(rotationSkewY);
-        if(anchorx != 0.5f || anchory != 0.5f)
+        // if(anchorx != 0.5f || anchory != 0.5f) x-studio365 spec: fix bugs, No need to check
             node->setAnchorPoint(Point(anchorx, anchory));
         if(zorder != 0)
             node->setLocalZOrder(zorder);
@@ -518,10 +535,6 @@ namespace cocostudio
             node->removeComponent(ComExtensionData::COMPONENT_NAME);
         }
         node->addComponent(extensionData);
-        
-        
-        node->setCascadeColorEnabled(true);
-        node->setCascadeOpacityEnabled(true);
 
         setLayoutComponentPropsWithFlatBuffers(node, nodeOptions);
     }
@@ -597,7 +610,7 @@ namespace cocostudio
 
     Node* NodeReader::createNodeWithFlatBuffers(const flatbuffers::Table *nodeOptions)
     {
-        Node* node = Node::create();
+        Node* node = wext::aNode(); // Node::create();
         
         setPropsWithFlatBuffers(node, nodeOptions);
         

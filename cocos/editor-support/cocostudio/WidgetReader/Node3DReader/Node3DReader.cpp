@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -31,7 +30,6 @@
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -73,7 +71,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceNode3DReader);
     }
     
-    Vec3 Node3DReader::getVec3Attribute(const tinyxml2::XMLAttribute* attribute) const
+    Vec3 Node3DReader::getVec3Attribute(pugi::xml_attribute attribute) const
     {
         if(!attribute)
             return Vec3::ZERO;
@@ -83,8 +81,8 @@ namespace cocostudio
         
         while (attribute)
         {
-            attriname = attribute->Name();
-            std::string value = attribute->Value();
+            attriname = attribute.name();
+            std::string value = attribute.value();
             
             if (attriname == "X")
             {
@@ -99,13 +97,13 @@ namespace cocostudio
                 ret.z = atof(value.c_str());
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
 
         return ret;
     }
     
-    Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(const tinyxml2::XMLElement *objectData,
+    Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder *builder)
     {
         std::string name = "";
@@ -113,7 +111,7 @@ namespace cocostudio
         Vec2 rotationSkew = Vec2::ZERO;
         int zOrder = 0;
         bool visible = true;
-        uint8_t alpha = 255;
+        GLubyte alpha = 255;
         int tag = 0;
         Vec2 position = Vec2::ZERO;
         Vec2 scale = Vec2(1.0f, 1.0f);
@@ -146,11 +144,11 @@ namespace cocostudio
         float bottomMargin = 0;
 
         // attributes
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while (attribute)
         {
-            std::string attriname = attribute->Name();
-            std::string value = attribute->Value();
+            std::string attriname = attribute.name();
+            std::string value = attribute.value();
 
             if (attriname == "Name")
             {
@@ -181,21 +179,21 @@ namespace cocostudio
                 frameEvent = value;
             }
 
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
 
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string attriname = child->Name();
+            std::string attriname = child.name();
             if (attriname == "Position3D")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attriname == "X")
                     {
@@ -206,17 +204,17 @@ namespace cocostudio
                         position.y = atof(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (attriname == "Scale3D")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attriname == "X")
                     {
@@ -227,17 +225,17 @@ namespace cocostudio
                         scale.y = atof(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (attriname == "CColor")
             {
-                attribute = child->FirstAttribute();
+                attribute = child.first_attribute();
 
                 while (attribute)
                 {
-                    attriname = attribute->Name();
-                    std::string value = attribute->Value();
+                    attriname = attribute.name();
+                    std::string value = attribute.value();
 
                     if (attriname == "A")
                     {
@@ -256,14 +254,14 @@ namespace cocostudio
                         color.b = atoi(value.c_str());
                     }
 
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
 
         RotationSkew f_rotationskew(rotationSkew.x, rotationSkew.y);
-        Position f_position(position.x, position.y);
+        FVec2 f_position(position.x, position.y);
         Scale f_scale(scale.x, scale.y);
         AnchorPoint f_anchortpoint(anchorPoint.x, anchorPoint.y);
         Color f_color(color.a, color.r, color.g, color.b);
@@ -307,12 +305,15 @@ namespace cocostudio
             builder->CreateString(customProperty),
             0,
             0,
-            f_layoutComponent);
+            f_layoutComponent,
+            false, // 3D Node currently: fixed: cascadeColorEnabled = false
+            false// 3D Node currently: fixed: cascadeOpacityEnabled = false
+            );
 
         return *(Offset<Table>*)(&options);
     }
 
-    Offset<Table> Node3DReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> Node3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                              flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = createOptionsWithFlatBuffersForNode(objectData, builder);
@@ -324,45 +325,45 @@ namespace cocostudio
         int cameraMask = 0;
 
         std::string attriname;
-        const tinyxml2::XMLAttribute* attribute = objectData->FirstAttribute();
+        auto attribute =  objectData.first_attribute();
         while(attribute)
         {
-            attriname = attribute->Name();
-            std::string value = attribute->Value();
+            attriname = attribute.name();
+            std::string value = attribute.value();
             
             if(attriname == "CameraFlagMode")
             {
                 cameraMask = atoi(value.c_str());
             }
             
-            attribute = attribute->Next();
+            attribute = attribute.next_attribute();
         }
         
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
 
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "Position3D")
             {
-                position = getVec3Attribute(child->FirstAttribute());
+                position = getVec3Attribute(child.first_attribute());
             }
             else if(name == "Rotation3D")
             {
-                rotation = getVec3Attribute(child->FirstAttribute());
+                rotation = getVec3Attribute(child.first_attribute());
             }
             else if(name == "Scale3D")
             {
-                scale = getVec3Attribute(child->FirstAttribute());
+                scale = getVec3Attribute(child.first_attribute());
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
-        Vector3 position3D(position.x, position.y, position.z);
-        Vector3 rotation3D(rotation.x, rotation.y, rotation.z);
-        Vector3 scale3D(scale.x, scale.y, scale.z);
+        FVec3 position3D(position.x, position.y, position.z);
+        FVec3 rotation3D(rotation.x, rotation.y, rotation.z);
+        FVec3 scale3D(scale.x, scale.y, scale.z);
 
         auto options = CreateNode3DOption(*builder,
                                            nodeOptions,
@@ -380,9 +381,9 @@ namespace cocostudio
     {
         auto options = (Node3DOption*)node3DOptions;
         
-        const Vector3* position = options->position3D();
-        const Vector3* rotation = options->rotation3D();
-        const Vector3* scale = options->scale3D();
+        const FVec3* position = options->position3D();
+        const FVec3* rotation = options->rotation3D();
+        const FVec3* scale = options->scale3D();
         int cameraMask = options->cameramask();
         
         if(position)

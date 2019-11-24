@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2016 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -42,7 +41,7 @@ public:
     static TabControlReader* getInstance();
     static void destroyInstance();
     
-    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder) override;
     
     void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOption) override;
@@ -63,7 +62,7 @@ public:
     static TabHeaderReader* getInstance();
     static void destroyInstance();
     
-    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder) override;
     
     void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOption) override;
@@ -87,7 +86,7 @@ public:
     static void destroyInstance();
     
     flatbuffers::Offset<flatbuffers::TabItemOption> createTabItemOptionWithFlatBuffers(
-                                                                                       const tinyxml2::XMLElement* objectData,
+                                                                                       pugi::xml_node objectData,
                                                                                        flatbuffers::FlatBufferBuilder* builder);
     
     void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOption) override;
@@ -95,7 +94,7 @@ public:
     cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
     
     virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
-                                                                                 const tinyxml2::XMLElement* objectData, flatbuffers::FlatBufferBuilder* builder) override;
+                                                                                 pugi::xml_node objectData, flatbuffers::FlatBufferBuilder* builder) override;
     
 private:
     static TabItemReader* _tabItemReaderInstance;

@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
@@ -26,13 +25,11 @@
 #include "editor-support/cocostudio/WidgetReader/ParticleReader/ParticleReader.h"
 
 #include "base/ccTypes.h"
-#include "base/ccUtils.h"
 #include "2d/CCParticleSystemQuad.h"
 #include "platform/CCFileUtils.h"
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReader/NodeReader.h"
 
-#include "tinyxml2.h"
 #include "flatbuffers/flatbuffers.h"
 
 USING_NS_CC;
@@ -74,7 +71,7 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceParticleReader);
     }
     
-    Offset<Table> ParticleReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
+    Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                flatbuffers::FlatBufferBuilder *builder)
     {
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -87,19 +84,19 @@ namespace cocostudio
         cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
         
         // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+        auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child->Name();
+            std::string name = child.name();
             
             if (name == "FileData")
             {
-                const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
+                auto attribute =  child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Path")
                     {
@@ -114,35 +111,35 @@ namespace cocostudio
                         plistFile = value;
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             else if (name == "BlendFunc")
             {
-                const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
+                auto attribute =  child.first_attribute();
                 
                 while (attribute)
                 {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
+                    name = attribute.name();
+                    std::string value = attribute.value();
                     
                     if (name == "Src")
                     {
-                        blendFunc.src = utils::toBackendBlendFactor(atoi(value.c_str()));
+                        blendFunc.src = atoi(value.c_str());
                     }
                     else if (name == "Dst")
                     {
-                        blendFunc.dst = utils::toBackendBlendFactor(atoi(value.c_str()));
+                        blendFunc.dst = atoi(value.c_str());
                     }
                     
-                    attribute = attribute->Next();
+                    attribute = attribute.next_attribute();
                 }
             }
             
-            child = child->NextSiblingElement();
+            child = child.next_sibling();
         }
         
-        flatbuffers::BlendFunc f_blendFunc(utils::toGLBlendFactor(blendFunc.src), utils::toGLBlendFactor(blendFunc.dst));
+        flatbuffers::BlendFunc f_blendFunc(blendFunc.src, blendFunc.dst);
         
         auto options = CreateParticleSystemOptions(*builder,
                                                    nodeOptions,
@@ -165,8 +162,8 @@ namespace cocostudio
         if (particle && f_blendFunc)
         {
             cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
-            blendFunc.src = utils::toBackendBlendFactor(f_blendFunc->src());
-            blendFunc.dst = utils::toBackendBlendFactor(f_blendFunc->dst());
+            blendFunc.src = f_blendFunc->src();
+            blendFunc.dst = f_blendFunc->dst();
             particle->setBlendFunc(blendFunc);
         }
         
@@ -179,12 +176,12 @@ namespace cocostudio
         ParticleSystemQuad* particle = nullptr;
         
         auto options = (ParticleSystemOptions*)particleOptions;
-        auto fileNameData = options->fileNameData();
+        auto fileNameData = cocos2d::wext::makeResourceData(options->fileNameData());
         
         bool fileExist = false;
         std::string errorFilePath = "";
-        std::string path = fileNameData->path()->c_str();
-        int resourceType = fileNameData->resourceType();
+        std::string& path = fileNameData.file;
+        int resourceType = fileNameData.type;
         switch (resourceType)
         {
             case 0:
@@ -206,7 +203,9 @@ namespace cocostudio
         }
         if (fileExist)
         {
-            particle = ParticleSystemQuad::create(path);
+            cocos2d::wext::onBeforeLoadObjectAsset(nullptr, fileNameData, 0); // consider, currently only particle is nullptr
+            particle = wext::aParticleSystemQuad(path); // ParticleSystemQuad::create(path);
+            // cocos2d::wext::onAfterLoadObjectAsset(particle, fileNameData, 0);
             if (particle)
             {
                 setPropsWithFlatBuffers(particle, (Table*)particleOptions);
@@ -215,7 +214,7 @@ namespace cocostudio
         }
         else
         {
-            Node* node = Node::create();
+            Node* node = wext::aNode();// Node::create();
             setPropsWithFlatBuffers(node, (Table*)particleOptions);
             return node;
         }
