@@ -25,34 +25,43 @@
 
 #include "network/CCDownloader.h"
 
-// include platform specific implement class
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
-#include "network/CCDownloader-apple.h"
-#define DownloaderImpl  DownloaderApple
-
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
-#include "network/CCDownloader-android.h"
-#define DownloaderImpl  DownloaderAndroid
-
-#else
-
 #include "network/CCDownloader-curl.h"
 #define DownloaderImpl  DownloaderCURL
-
-#endif
 
 namespace cocos2d { namespace network {
 
     DownloadTask::DownloadTask()
     {
         DLLOG("Construct DownloadTask %p", this);
+    }   
+
+    DownloadTask::DownloadTask(const std::string& srcUrl, const std::string& identifier)
+    {
+        this->requestURL = srcUrl;
+        this->identifier = identifier;
+    }
+
+    DownloadTask::DownloadTask(const std::string& srcUrl,
+        const std::string& storagePath,
+        const std::string& md5checksum,
+        const std::string& identifier)
+    {
+        this->requestURL = srcUrl;
+        this->storagePath = storagePath;
+        this->md5checksum = md5checksum;
+        this->identifier = identifier;
     }
 
     DownloadTask::~DownloadTask()
     {
         DLLOG("Destruct DownloadTask %p", this);
+    }
+
+
+    void DownloadTask::cancel()
+    {
+        if (_coTask)
+            _coTask->cancel();
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -64,14 +73,11 @@ namespace cocos2d { namespace network {
         DLLOG("Construct Downloader %p", this);
          _impl.reset(new DownloaderImpl(hints));
         _impl->onTaskProgress = [this](const DownloadTask& task,
-                                       int64_t bytesReceived,
-                                       int64_t totalBytesReceived,
-                                       int64_t totalBytesExpected,
                                        std::function<int64_t(void *buffer, int64_t len)>& /*transferDataToBuffer*/)
         {
             if (onTaskProgress)
             {
-                onTaskProgress(task, bytesReceived, totalBytesReceived, totalBytesExpected);
+                onTaskProgress(task);
             }
         };
 
@@ -114,15 +120,13 @@ namespace cocos2d { namespace network {
         DLLOG("Destruct Downloader %p", this);
     }
 
-    std::shared_ptr<const DownloadTask> Downloader::createDownloadDataTask(const std::string& srcUrl, const std::string& identifier/* = ""*/)
+    std::shared_ptr<DownloadTask> Downloader::createDownloadDataTask(const std::string& srcUrl, const std::string& identifier/* = ""*/)
     {
-        DownloadTask *task_ = new (std::nothrow) DownloadTask();
-        std::shared_ptr<const DownloadTask> task(task_);
+        auto task = std::make_shared<DownloadTask>(srcUrl, identifier);
+
         do
         {
-            task_->requestURL    = srcUrl;
-            task_->identifier    = identifier;
-            if (0 == srcUrl.length())
+            if (srcUrl.empty())
             {
                 if (onTaskError)
                 {
@@ -131,24 +135,21 @@ namespace cocos2d { namespace network {
                 task.reset();
                 break;
             }
-            task_->_coTask.reset(_impl->createCoTask(task));
+            task->_coTask.reset(_impl->createCoTask(task));
         } while (0);
 
         return task;
     }
 
-    std::shared_ptr<const DownloadTask> Downloader::createDownloadFileTask(const std::string& srcUrl,
+    std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(const std::string& srcUrl,
                                                                            const std::string& storagePath,
+		                                                                   const std::string& md5checksum,
                                                                            const std::string& identifier/* = ""*/)
     {
-        DownloadTask *task_ = new (std::nothrow) DownloadTask();
-        std::shared_ptr<const DownloadTask> task(task_);
+        auto task = std::make_shared< DownloadTask>(srcUrl, storagePath, md5checksum, identifier);
         do
         {
-            task_->requestURL    = srcUrl;
-            task_->storagePath   = storagePath;
-            task_->identifier    = identifier;
-            if (0 == srcUrl.length() || 0 == storagePath.length())
+            if (srcUrl.empty() || storagePath.empty())
             {
                 if (onTaskError)
                 {
@@ -157,7 +158,7 @@ namespace cocos2d { namespace network {
                 task.reset();
                 break;
             }
-            task_->_coTask.reset(_impl->createCoTask(task));
+            task->_coTask.reset(_impl->createCoTask(task));
         } while (0);
 
         return task;

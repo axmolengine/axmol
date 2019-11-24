@@ -35,14 +35,15 @@ namespace cocos2d { namespace network
 {
     class DownloadTaskCURL;
     class DownloaderHints;
-
+	class DownloaderCURL;
+	typedef std::pair< std::shared_ptr<DownloadTask>, DownloadTaskCURL *> TaskWrapper;
     class DownloaderCURL : public IDownloaderImpl
     {
     public:
         DownloaderCURL(const DownloaderHints& hints);
         virtual ~DownloaderCURL();
 
-        virtual IDownloadTask *createCoTask(std::shared_ptr<const DownloadTask>& task) override;
+        virtual IDownloadTask *createCoTask(std::shared_ptr<DownloadTask>& task) override;
 
     protected:
         class Impl;
@@ -53,7 +54,9 @@ namespace cocos2d { namespace network
         std::function<int64_t(void*, int64_t)> _transferDataToBuffer;
 
         // scheduler for update processing and finished task in main schedule
-        void _onSchedule(float);
+        void _onDownloadProgress();
+
+		void _onDownloadFinished(TaskWrapper&& task, int checkState = 0);
         std::string             _schedulerKey;
         Scheduler*              _scheduler;
     };

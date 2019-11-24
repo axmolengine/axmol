@@ -839,6 +839,20 @@ public:
      */
     virtual std::string getNewFilename(const std::string &filename) const;
 
+    /**
+     *  Checks whether a file exists without considering search paths and resolution orders.
+     *  @param filename The file (with absolute path) to look up for
+     *  @return Returns true if the file found at the given absolute path, otherwise returns false
+     */
+    virtual bool isFileExistInternal(const std::string& filename) const = 0;
+
+    /**
+     *  Checks whether a directory exists without considering search paths and resolution orders.
+     *  @param dirPath The directory (with absolute path) to look up for
+     *  @return Returns true if the directory found at the given absolute path, otherwise returns false
+     */
+    virtual bool isDirectoryExistInternal(const std::string& dirPath) const;
+
 protected:
     /**
      *  The default constructor.
@@ -854,20 +868,6 @@ protected:
      *
      */
     virtual bool init();
-
-    /**
-     *  Checks whether a file exists without considering search paths and resolution orders.
-     *  @param filename The file (with absolute path) to look up for
-     *  @return Returns true if the file found at the given absolute path, otherwise returns false
-     */
-    virtual bool isFileExistInternal(const std::string& filename) const = 0;
-
-    /**
-     *  Checks whether a directory exists without considering search paths and resolution orders.
-     *  @param dirPath The directory (with absolute path) to look up for
-     *  @return Returns true if the directory found at the given absolute path, otherwise returns false
-     */
-    virtual bool isDirectoryExistInternal(const std::string& dirPath) const;
 
     /**
      *  Gets full path for filename, resolution directory and search path.
