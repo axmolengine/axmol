@@ -38,7 +38,7 @@
 #include "unzip.h"
 #endif
 
-NS_CC_EXT_BEGIN;
+NS_CC_EXT_BEGIN
 
 using namespace std;
 using namespace cocos2d;
@@ -77,15 +77,12 @@ AssetsManager::AssetsManager(const char* packageUrl/* =nullptr */, const char* v
         {
             return;
         }
-        auto err = (DownloadTask::ERROR_FILE_OP_FAILED == errorCode) ? ErrorCode::CREATE_FILE : ErrorCode::NETWORK;
+        auto err = (DownloadTask::ERROR_OPEN_FILE_FAILED == errorCode) ? ErrorCode::CREATE_FILE : ErrorCode::NETWORK;
         _delegate->onError(err);
     };
     
     // progress callback
-    _downloader->onTaskProgress = [this](const DownloadTask& task,
-                                         int64_t /*bytesReceived*/,
-                                         int64_t totalBytesReceived,
-                                         int64_t totalBytesExpected)
+    _downloader->onTaskProgress = [this](const DownloadTask& task)
     {
         if(FileUtils::getInstance()->getFileExtension(task.requestURL) != ".zip")
         {
@@ -98,7 +95,7 @@ AssetsManager::AssetsManager(const char* packageUrl/* =nullptr */, const char* v
             return;
         }
         
-        int percent = totalBytesExpected ? int(totalBytesReceived * 100 / totalBytesExpected) : 0;
+        int percent = task.progressInfo.totalBytesExpected ? int(task.progressInfo.totalBytesReceived * 100 / task.progressInfo.totalBytesExpected) : 0;
         _delegate->onProgress(percent);
         CCLOG("downloading... %d%%", percent);
     };
@@ -168,7 +165,7 @@ AssetsManager::~AssetsManager()
 
 void AssetsManager::checkStoragePath()
 {
-    if (_storagePath.size() > 0 && _storagePath[_storagePath.size() - 1] != '/')
+    if (!_storagePath.empty() && _storagePath[_storagePath.size() - 1] != '/')
     {
         _storagePath.append("/");
     }
@@ -196,7 +193,7 @@ std::string AssetsManager::keyOfDownloadedVersion() const
 
 bool AssetsManager::checkUpdate()
 {
-    if (_versionFileUrl.size() == 0 || _isDownloading) return false;
+    if (_versionFileUrl.empty() || _isDownloading) return false;
     
     // Clear _version before assign new value.
     _version.clear();
@@ -226,7 +223,7 @@ void AssetsManager::downloadAndUncompress()
             Director::getInstance()->getScheduler()->performFunctionInCocosThread([&, this] {
                 
                 // Record new version code.
-                UserDefault::getInstance()->setStringForKey(this->keyOfVersion().c_str(), this->_version.c_str());
+                UserDefault::getInstance()->setStringForKey(this->keyOfVersion().c_str(), this->_version);
                 
                 // Unrecord downloaded version code.
                 UserDefault::getInstance()->setStringForKey(this->keyOfDownloadedVersion().c_str(), "");
@@ -262,7 +259,7 @@ bool AssetsManager::uncompress()
 {
     // Open the zip file
     string outFileName = _storagePath + TEMP_PACKAGE_FILE_NAME;
-    unzFile zipfile = unzOpen(FileUtils::getInstance()->getSuitableFOpen(outFileName).c_str());
+    unzFile zipfile = unzOpen(outFileName.c_str());
     if (! zipfile)
     {
         CCLOG("can not open downloaded zip file %s", outFileName.c_str());
@@ -334,7 +331,7 @@ bool AssetsManager::uncompress()
             {
                 const string dir=_storagePath+fileNameStr.substr(0,index);
                 
-                FILE *out = fopen(FileUtils::getInstance()->getSuitableFOpen(dir).c_str(), "r");
+                FILE *out = fopen(dir.c_str(), "r");
                 
                 if(!out)
                 {
@@ -371,7 +368,7 @@ bool AssetsManager::uncompress()
             }
             
             // Create a file to store current file.
-            FILE *out = fopen(FileUtils::getInstance()->getSuitableFOpen(fullPath).c_str(), "wb");
+            FILE *out = fopen(fullPath.c_str(), "wb");
             if (! out)
             {
                 CCLOG("can not open destination file %s", fullPath.c_str());
@@ -513,4 +510,4 @@ AssetsManager* AssetsManager::create(const char* packageUrl, const char* version
     return manager;
 }
 
-NS_CC_EXT_END;
+NS_CC_EXT_END

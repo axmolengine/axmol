@@ -72,12 +72,9 @@ AssetsManagerEx::AssetsManagerEx(const std::string& manifestUrl, const std::stri
     };
     _downloader = std::shared_ptr<network::Downloader>(new network::Downloader(hints));
     _downloader->onTaskError = std::bind(&AssetsManagerEx::onError, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4);
-    _downloader->onTaskProgress = [this](const network::DownloadTask& task,
-                                         int64_t /*bytesReceived*/,
-                                         int64_t totalBytesReceived,
-                                         int64_t totalBytesExpected)
+    _downloader->onTaskProgress = [this](const network::DownloadTask& task)
     {
-        this->onProgress(totalBytesExpected, totalBytesReceived, task.requestURL, task.identifier);
+        this->onProgress(task.progressInfo.totalBytesExpected, task.progressInfo.totalBytesReceived, task.requestURL, task.identifier);
     };
     _downloader->onFileTaskSuccess = [this](const network::DownloadTask& task)
     {
@@ -301,7 +298,7 @@ void AssetsManagerEx::setStoragePath(const std::string& storagePath)
 
 void AssetsManagerEx::adjustPath(std::string &path)
 {
-    if (path.size() > 0 && path[path.size() - 1] != '/')
+    if (!path.empty() && path[path.size() - 1] != '/')
     {
         path.append("/");
     }
@@ -319,7 +316,7 @@ bool AssetsManagerEx::decompress(const std::string &zip)
     const std::string rootPath = zip.substr(0, pos+1);
     
     // Open the zip file
-    unzFile zipfile = unzOpen(FileUtils::getInstance()->getSuitableFOpen(zip).c_str());
+    unzFile zipfile = unzOpen(zip.c_str());
     if (! zipfile)
     {
         CCLOG("AssetsManagerEx : can not open downloaded zip file %s\n", zip.c_str());
@@ -395,7 +392,7 @@ bool AssetsManagerEx::decompress(const std::string &zip)
             }
             
             // Create a file to store current file.
-            FILE *out = fopen(FileUtils::getInstance()->getSuitableFOpen(fullPath).c_str(), "wb");
+            FILE *out = fopen(fullPath.c_str(), "wb");
             if (!out)
             {
                 CCLOG("AssetsManagerEx : can not create decompress destination file %s (errno: %d)\n", fullPath.c_str(), errno);
@@ -529,7 +526,7 @@ void AssetsManagerEx::downloadVersion()
 
     std::string versionUrl = _localManifest->getVersionFileUrl();
 
-    if (versionUrl.size() > 0)
+    if (!versionUrl.empty())
     {
         _updateState = State::DOWNLOADING_VERSION;
         // Download version file asynchronously
@@ -597,7 +594,7 @@ void AssetsManagerEx::downloadManifest()
         manifestUrl = _localManifest->getManifestFileUrl();
     }
 
-    if (manifestUrl.size() > 0)
+    if (!manifestUrl.empty())
     {
         _updateState = State::DOWNLOADING_MANIFEST;
         // Download version file asynchronously
@@ -691,7 +688,7 @@ void AssetsManagerEx::startUpdate()
         
         // Check difference between local manifest and remote manifest
         std::unordered_map<std::string, Manifest::AssetDiff> diff_map = _localManifest->genDiff(_remoteManifest);
-        if (diff_map.size() == 0)
+        if (diff_map.empty())
         {
             updateSucceed();
         }
@@ -1142,7 +1139,7 @@ void AssetsManagerEx::queueDowload()
         return;
     }
     
-    while (_currConcurrentTask < _maxConcurrentTask && _queue.size() > 0)
+    while (_currConcurrentTask < _maxConcurrentTask && !_queue.empty())
     {
         std::string key = _queue.back();
         _queue.pop_back();
@@ -1165,7 +1162,7 @@ void AssetsManagerEx::queueDowload()
 void AssetsManagerEx::onDownloadUnitsFinished()
 {
     // Finished with error check
-    if (_failedUnits.size() > 0)
+    if (!_failedUnits.empty())
     {
         // Save current download manifest information for resuming
         _tempManifest->saveToFile(_tempManifestPath);
