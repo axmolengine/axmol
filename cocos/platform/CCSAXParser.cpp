@@ -28,39 +28,62 @@
 #include <vector> // because its based on windows 8 build :P
 
 #include "platform/CCFileUtils.h"
-#include "rapidxml/rapidxml_sax3.hpp"
+#include "xsxml/xsxml.hpp"
 
 NS_CC_BEGIN
 
-/// rapidxml SAX handler
-class RapidXmlSaxHander : public rapidxml::xml_sax2_handler
+/// xsxml SAX2 handler
+class SAX2Hander
 {
-
+    friend class SAXParser;
 public:
-    RapidXmlSaxHander() :_ccsaxParserImp(0) {};
+    SAX2Hander() :_ccsaxParserImp(0) 
+    {
+        _curEleAttrs.reserve(64);
+
+        _sax3Handler.xml_start_element_cb = [=](char* name, size_t size) {
+            _curEleName = xsxml::string_view(name, size);
+        };
+        _sax3Handler.xml_attr_cb = [=](const char* name, size_t,
+            const char* value, size_t) {
+                _curEleAttrs.push_back(name);
+                _curEleAttrs.push_back(value);
+        };
+        _sax3Handler.xml_end_attr_cb = [=]() {
+            if (!_curEleAttrs.empty()) {
+                _curEleAttrs.push_back(nullptr);
+                SAXParser::startElement(_ccsaxParserImp, (const CC_XML_CHAR*)_curEleName.c_str(), (const CC_XML_CHAR**)&_curEleAttrs[0]);
+                _curEleAttrs.clear();
+            }
+            else {
+                const char* attr = nullptr;
+                const char** attrs = &attr;
+                SAXParser::startElement(_ccsaxParserImp, (const CC_XML_CHAR*)_curEleName.c_str(), (const CC_XML_CHAR**)attrs);
+            }
+        };
+        _sax3Handler.xml_end_element_cb = [=](const char* name, size_t len) {
+            SAXParser::endElement(_ccsaxParserImp, (const CC_XML_CHAR*)name);
+        };
+        _sax3Handler.xml_text_cb = [=](const char* s, size_t len) {
+            SAXParser::textHandler(_ccsaxParserImp, (const CC_XML_CHAR*)s, len);
+        };
+    };
 
     void setSAXParserImp(SAXParser* parser)
     {
         _ccsaxParserImp = parser;
     }
 
-    void xmlSAX2StartElement(const char *name, size_t /*len*/, const char **atts, size_t /*attslen*/) override
+    operator xsxml::xml_sax3_parse_cb* ()  
     {
-        SAXParser::startElement(_ccsaxParserImp, (const CC_XML_CHAR *)name, (const CC_XML_CHAR **)atts);
-    }
-
-    void xmlSAX2EndElement(const char *name, size_t /*len*/) override
-    {
-        SAXParser::endElement(_ccsaxParserImp, (const CC_XML_CHAR *)name);
-    }
-
-    void xmlSAX2Text(const char *s, size_t len) override
-    {
-        SAXParser::textHandler(_ccsaxParserImp, (const CC_XML_CHAR *)s, len);
+        return &_sax3Handler;
     }
 
 private:
     SAXParser *_ccsaxParserImp;
+    xsxml::string_view _curEleName;
+    std::vector<const char*> _curEleAttrs;
+    xsxml::xml_sax3_parse_cb _sax3Handler;
 };
 
 SAXParser::SAXParser()
@@ -101,15 +124,14 @@ bool SAXParser::parse(const std::string& filename)
 
 bool SAXParser::parseIntrusive(char* xmlData, size_t dataLength)
 {
-    RapidXmlSaxHander printer;
-    printer.setSAXParserImp(this);
+    SAX2Hander handler;
+    handler.setSAXParserImp(this);
 
-    rapidxml::xml_sax3_parser<> parser(&printer);
     try {
-        parser.parse<>(xmlData, static_cast<int>(dataLength));
+        xsxml::xml_sax3_parser::parse(xmlData, static_cast<int>(dataLength), handler);
         return true;
     }
-    catch (rapidxml::parse_error& e)
+    catch (xsxml::parse_error& e)
     {
         CCLOG("cocos2d: SAXParser: Error parsing xml: %s at %s", e.what(), e.where<char>());
         return false;
