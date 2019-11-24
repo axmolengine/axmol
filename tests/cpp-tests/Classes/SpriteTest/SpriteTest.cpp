@@ -59,6 +59,7 @@ enum
 SpriteTests::SpriteTests()
 {
     ADD_TEST_CASE(Sprite1);
+    ADD_TEST_CASE(Sprite1BMP);
     ADD_TEST_CASE(Sprite1ETC1Alpha);
     ADD_TEST_CASE(SpriteBatchNode1);
     ADD_TEST_CASE(SpriteAnchorPoint);
@@ -208,6 +209,73 @@ std::string Sprite1::subtitle() const
 
 //------------------------------------------------------------------
 //
+// Sprite1BMP
+//
+//------------------------------------------------------------------
+
+Sprite1BMP::Sprite1BMP()
+{
+    auto listener = EventListenerTouchAllAtOnce::create();
+    listener->onTouchesEnded = CC_CALLBACK_2(Sprite1BMP::onTouchesEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+    auto s = Director::getInstance()->getWinSize();
+    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+}
+
+void Sprite1BMP::addNewSpriteWithCoords(Vec2 p)
+{
+    int idx = (int)(CCRANDOM_0_1() * 1400.0f / 100.0f);
+    int x = (idx % 5) * 85;
+    int y = (idx / 5) * 121;
+
+
+    auto sprite = Sprite::create("Images/x-studio_64.bmp");
+    addChild(sprite);
+
+    sprite->setPosition(Vec2(p.x, p.y));
+
+    ActionInterval* action;
+    float random = CCRANDOM_0_1();
+
+    if (random < 0.20)
+        action = ScaleBy::create(3, 2);
+    else if (random < 0.40)
+        action = RotateBy::create(3, 360);
+    else if (random < 0.60)
+        action = Blink::create(1, 3);
+    else if (random < 0.8)
+        action = TintBy::create(2, 0, -255, -255);
+    else
+        action = FadeOut::create(2);
+    auto action_back = action->reverse();
+    auto seq = Sequence::create(action, action_back, nullptr);
+
+    sprite->runAction(RepeatForever::create(seq));
+}
+
+void Sprite1BMP::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+{
+    for (auto touch : touches)
+    {
+        auto location = touch->getLocation();
+
+        addNewSpriteWithCoords(location);
+    }
+}
+
+std::string Sprite1BMP::title() const
+{
+    return "Testing SpriteBMP";
+}
+
+std::string Sprite1BMP::subtitle() const
+{
+    return "Tap screen to add more sprites";
+}
+
+//------------------------------------------------------------------
+//
 // Sprite1ETC1Alpha
 //
 //------------------------------------------------------------------
@@ -238,7 +306,7 @@ void Sprite1ETC1Alpha::addNewSpriteWithCoords(Vec2 p)
     auto sprite = Sprite::create("Images/grossini_dance_08.png");
     Texture2D *etcTexture = _director->getTextureCache()->addImage("Images/etc1-alpha.pkm");
     sprite->setTexture(etcTexture);
-    
+
     _background->addChild(sprite);
 
     sprite->setPosition(Vec2(p.x, p.y));
