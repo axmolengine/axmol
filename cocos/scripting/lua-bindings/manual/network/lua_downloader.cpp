@@ -229,17 +229,14 @@ static int lua_downloader_setOnTaskProgress(lua_State *L)
     luaL_argcheck(L, lua_isfunction(L, 2), 2, "should be a function");
     saveCallback(L, d, "setOnTaskProgress");
 
-    d->setOnTaskProgress([d, L](const DownloadTask &task,
-        int64_t bytesReceived,
-        int64_t totalBytesReceived,
-        int64_t totalBytesExpected) {
+    d->setOnTaskProgress([d, L](const DownloadTask &task) {
         int ret = getCallback(L, d, "setOnTaskProgress"); //stack callbackfn
         if (ret)
         {
             pushTaskTable(L, task);                          //stack callbackfn, task
-            lua_pushnumber(L, (lua_Number)bytesReceived);
-            lua_pushnumber(L, (lua_Number)totalBytesReceived);
-            lua_pushnumber(L, (lua_Number)totalBytesExpected);
+            lua_pushnumber(L, (lua_Number)task.progressInfo.bytesReceived);
+            lua_pushnumber(L, (lua_Number)task.progressInfo.totalBytesReceived);
+            lua_pushnumber(L, (lua_Number)task.progressInfo.totalBytesExpected);
             if (lua_pcall(L, 4, 0, 0) != 0)
             {
                 lua_pop(L, 1);                                // remove callback or nil
