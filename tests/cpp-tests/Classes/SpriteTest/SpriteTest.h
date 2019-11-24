@@ -76,7 +76,7 @@ public:
     void addNewSpriteWithCoords(cocos2d::Vec2 p);
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 
-    cocos2d::Sprite* _background;
+    cocos2d::Node* _background;
 };
 
 class SpriteBatchNode1: public SpriteTestDemo
