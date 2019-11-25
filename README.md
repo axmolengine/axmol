@@ -1,6 +1,6 @@
 # engine-v5
 [![Build Status](https://travis-ci.org/simdsoft/engine-v5.svg?branch=master)](https://travis-ci.org/simdsoft/engine-v5)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/2gceoc8kkows9o7g/branch/master?svg=true)]
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/2gceoc8kkows9o7g/branch/master?svg=true)
 
 This is another more radical fork of cocos2d-x game engine, use opanal for all platforms, single texture multi gpu texture handler, c++17...  
   
