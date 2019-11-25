@@ -1,7 +1,9 @@
 # engine-v5
-This is another more radical fork of cocos2d-x game engine, use opanal for all platforms, single texture multi gpu texture handler, c++17...
-
-
+This is another more radical fork of cocos2d-x game engine, use opanal for all platforms, single texture multi gpu texture handler, c++17...  
+  
+The readme of cocos2d-x v4: https://github.com/simdsoft/engine-v5/blob/master/README.ccv4.md  
+  
+  
 ### Goals summary:
 1. C++17
 2. forcus on native game dev only
