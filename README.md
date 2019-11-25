@@ -31,7 +31,7 @@ _USRSTUDIOPDLL
   - [x] 1. Refactor audio engine, OpenAL for all platforms.
   - [x] 2. Remove SimpleAudio
   - [ ] 3. Remove offthread file operation
-  - [x] 4. Remove getSutiableOpen, avoid reduce performance, there is another better solution for support: ```just doesn't convert path to utf-8 in FileUtils manually implementation```
+  - [x] 4. Remove getSutiableFOpen, avoid reduce performance, there is another better solution for support: ```just doesn't convert path to utf-8 in FileUtils manually implementation```
   - [x] 5. Optimize CCDownloader, curl for all platforms
   - [ ] 7. Refactor engine-v5-deps, all compile as vs2019 MSVC 19.22.27905.0
   - [x] 8. minizip-1.2.0
