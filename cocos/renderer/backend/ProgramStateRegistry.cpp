@@ -1,5 +1,3 @@
-#pragma once
-
 #include "ProgramStateRegistry.h"
 
 CC_BACKEND_BEGIN
