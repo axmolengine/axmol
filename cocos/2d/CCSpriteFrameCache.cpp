@@ -369,7 +369,7 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& plist)
     {
         ValueMap& metadataDict = dict["metadata"].asValueMap();
         // try to read  texture file name from meta data
-        texturePath = metadataDict["textureFileName"].asString();
+        texturePath = metadataDict["textureFileName"].toString();
     }
 
     if (!texturePath.empty())
@@ -674,7 +674,7 @@ bool SpriteFrameCache::reloadTexture(const std::string& plist)
     {
         ValueMap& metadataDict = dict["metadata"].asValueMap();
         // try to read  texture file name from meta data
-        texturePath = metadataDict["textureFileName"].asString();
+        texturePath = metadataDict["textureFileName"].toString();
     }
 
     if (!texturePath.empty())

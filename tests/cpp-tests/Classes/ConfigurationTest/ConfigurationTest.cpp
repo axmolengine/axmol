@@ -71,8 +71,8 @@ void ConfigurationQuery::onEnter()
 {
     ConfigurationBase::onEnter();
 
-	log("cocos2d version: %s", Configuration::getInstance()->getValue("cocos2d.x.version").asString().c_str() );
-	log("OpenGL version: %s", Configuration::getInstance()->getValue("gl.version").asString().c_str() );
+	log("cocos2d version: %s", Configuration::getInstance()->getValue("cocos2d.x.version").toString().c_str() );
+	log("OpenGL version: %s", Configuration::getInstance()->getValue("gl.version").toString().c_str() );
 }
 
 std::string ConfigurationQuery::subtitle() const
@@ -106,7 +106,7 @@ void ConfigurationDefault::onEnter()
 {
     ConfigurationBase::onEnter();
 
-    std::string c_value = Configuration::getInstance()->getValue("invalid.key", Value("no key")).asString();
+    std::string c_value = Configuration::getInstance()->getValue("invalid.key", Value("no key")).toString();
 	if( c_value != "no key" )
 		log("1. Test failed!");
 	else
