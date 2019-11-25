@@ -867,7 +867,7 @@ void FileUtils::addSearchResolutionsOrder(const std::string &order,const bool fr
 
     std::string resOrder = order;
     if (!resOrder.empty() && resOrder[resOrder.length()-1] != '/')
-        resOrder.append("/");
+        resOrder.push_back('/');
 
     if (front) {
         _searchResolutionsOrderArray.insert(_searchResolutionsOrderArray.begin(), resOrder);
@@ -1406,7 +1406,7 @@ std::vector<std::string> FileUtils::listFiles(const std::string& dirPath) const
 
                 if (file.is_dir)
                 {
-                    filepath.append("/");
+                    filepath.push_back('/');
                 }
                 files.push_back(filepath);
 
@@ -1447,7 +1447,7 @@ void FileUtils::listFilesRecursively(const std::string& dirPath, std::vector<std
                     std::string filepath = file.path;
                     if (file.is_dir)
                     {
-                        filepath.append("/");
+                        filepath.push_back('/');
                         files->push_back(filepath);
                         listFilesRecursively(filepath, files);
                     }

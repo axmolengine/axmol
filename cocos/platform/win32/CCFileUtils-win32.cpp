@@ -244,7 +244,7 @@ void FileUtilsWin32::listFilesRecursively(const std::string& dirPath, std::vecto
                     std::string filepath = StringWideCharToUtf8(file.path);
                     if (file.is_dir)
                     {
-                        filepath.append("/");
+                        filepath.push_back('/');
                         files->push_back(filepath);
                         listFilesRecursively(filepath, files);
                     }
@@ -298,7 +298,7 @@ std::vector<std::string> FileUtilsWin32::listFiles(const std::string& dirPath) c
                 std::string filepath = StringWideCharToUtf8(file.path);
                 if (file.is_dir)
                 {
-                    filepath.append("/");
+                    filepath.push_back('/');
                 }
                 files.push_back(filepath);
 
@@ -486,7 +486,7 @@ bool FileUtilsWin32::removeDirectory(const std::string& dirPath) const
     std::string dirPathCopy = dirPath;
     if (dirPath.length() > 0 && dirPath[dirPath.length() - 1] != '/' && dirPath[dirPath.length() - 1] != '\\')
     {
-        dirPathCopy.append("/");
+        dirPathCopy.push_back('/');
     }
     std::wstring wpath = StringUtf8ToWideChar(dirPathCopy);
     std::wstring files = wpath + L"*.*";

@@ -167,7 +167,7 @@ void AssetsManager::checkStoragePath()
 {
     if (!_storagePath.empty() && _storagePath[_storagePath.size() - 1] != '/')
     {
-        _storagePath.append("/");
+        _storagePath.push_back('/');
     }
 }
 
