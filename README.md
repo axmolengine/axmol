@@ -12,9 +12,9 @@ The readme of cocos2d-x v4: https://github.com/simdsoft/engine-v5/blob/master/RE
 5. If you have any other excellent goals, welcome
 6. Excellent PR from any guys is welcome
 
-### 
-preprocessors notes: 
+### preprocessors notes: 
 
+```txt
 CC_STATIC  
   
 _USRDLL  
@@ -24,7 +24,8 @@ _EXPORT_DLL_
   
 _USRSTUDIODLL  
 _USRSTUDIOPDLL  
-  
+```
+
 ### Refactor core & extensions libs
 - [ ] engine-v5-core.dll(node tree, multi-renderer-backends, filesystem, audio, platform spec, and other):
   - [x] 1. Refactor audio engine, OpenAL for all platforms.
