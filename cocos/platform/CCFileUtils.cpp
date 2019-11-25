@@ -352,7 +352,7 @@ ValueVector FileUtils::getValueVectorFromFile(const std::string& filename) const
 /*
  * forward statement
  */
-static void generateElementForArray(const ValueVector& array, pugi::xml_node& innerArray);
+static void generateElementForArray(const ValueVector& array, pugi::xml_node& parent);
 static void generateElementForDict(const ValueMap& dict, pugi::xml_node& innerDict);
 
 /*
@@ -371,8 +371,8 @@ bool FileUtils::writeValueMapToFile(const ValueMap& dict, const std::string& ful
 <plist />)", pugi::parse_full);
 
 	auto rootEle = doc.document_element();
-	auto innerDict = rootEle.append_child("dict");
-    generateElementForDict(dict, innerDict);
+	
+    generateElementForDict(dict, rootEle);
 
 	return doc.save_file(fullPath.c_str());
 }
@@ -385,8 +385,7 @@ bool FileUtils::writeValueVectorToFile(const ValueVector& vecData, const std::st
 <plist />)", pugi::parse_full);
 
 	auto rootEle = doc.document_element();
-	auto innerArray = rootEle.append_child("array");
-    generateElementForArray(vecData, innerArray);
+    generateElementForArray(vecData, rootEle);
 
 	return doc.save_file(fullPath.c_str());
 }
@@ -423,21 +422,23 @@ static void generateElementForObject(const Value& value, pugi::xml_node& parent)
         generateElementForDict(value.asValueMap(), parent);
 }
 
-static void generateElementForDict(const ValueMap& dict, pugi::xml_node& innerDict)
+static void generateElementForDict(const ValueMap& dict, pugi::xml_node& parent)
 {
+    auto dictDS = parent.append_child("dict");
     for (const auto &iter : dict)
     {
-		auto key = innerDict.append_child("key");
-		key.set_value(iter.first.c_str());
+		auto key = dictDS.append_child("key");
+		key.append_child(pugi::xml_node_type::node_pcdata).set_value(iter.first.c_str());
 
-        generateElementForObject(iter.second, innerDict);
+        generateElementForObject(iter.second, dictDS);
     }
 }
 
-static void generateElementForArray(const ValueVector& array, pugi::xml_node& innerArray)
+static void generateElementForArray(const ValueVector& array, pugi::xml_node& parent)
 {
+    auto arrayDS = parent.append_child("array");
     for(const auto &value : array) {
-        generateElementForObject(value, innerArray);
+        generateElementForObject(value, arrayDS);
     }
 }
 
