@@ -57,8 +57,6 @@ namespace cocos2d { namespace network
         void _onDownloadProgress();
 
 		void _onDownloadFinished(TaskWrapper&& task, int checkState = 0);
-        std::string             _schedulerKey;
-        Scheduler*              _scheduler;
     };
 
 }}  // namespace cocos2d::network
