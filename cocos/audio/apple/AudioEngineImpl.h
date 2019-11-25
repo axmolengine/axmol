@@ -35,7 +35,7 @@
 
 #include "base/CCRef.h"
 #include "audio/include/AudioMacros.h"
-#include "audio/apple/AudioCache.h"
+#include "audio/include/AudioCache.h"
 #include "audio/apple/AudioPlayer.h"
 
 NS_CC_BEGIN
