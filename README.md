@@ -10,7 +10,7 @@ The readme of cocos2d-x v4: https://github.com/simdsoft/engine-v5/blob/master/RE
 3. Remove unnecessary sources
 4. build engine as static or dynamic library support
 5. If you have any other excellent goals, welcome
-6. Excellent PRs from any guys are welcome
+6. Excellent PRs from any guys are welcome, I will review & merge ASAP
 
 ### preprocessors notes: 
 
