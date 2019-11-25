@@ -8,9 +8,9 @@ The readme of cocos2d-x v4: https://github.com/simdsoft/engine-v5/blob/master/RE
 1. C++17
 2. forcus on native game dev only
 3. Remove unnecessary sources
-4. build engine as static or dynamic library support
+4. build engine as static or dynamic library support.
 5. If you have any other excellent goals, welcome
-6. Excellent PRs from any guys are welcome, I will review & merge ASAP
+6. Excellent PR from any guys is welcome
 
 ### preprocessors notes: 
 
@@ -60,7 +60,7 @@ _USRSTUDIOPDLL
   - [x] XX5. Remove CCB(already removed in v4)
   - [ ] XX6. Sync 3rd bin
   - [ ] XX7. Purely offthread load texture, use shared gl context
-  - [ ] XX8. Use git submodule to manage 3rd libs.  
+  - [ ] Use git submodule to manage 3rd libs.  
   
 - [ ] Upgrade 3rd stubs to latest stable edition for all platforms
   - [ ] zlib to 1.2.11  
