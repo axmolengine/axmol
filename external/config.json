@@ -1,8 +1,8 @@
 {
-    "version": "metal-support-22",
-    "zip_file_size": "146254799",
-    "repo_name": "cocos2d-x-3rd-party-libs-bin",
-    "repo_parent": "https://github.com/cocos2d/",
+    "version": "v5-deps-1",
+    "zip_file_size": "103868946",
+    "repo_name": "engine-v5-3rd",
+    "repo_parent": "https://github.com/simdsoft/",
     "move_dirs": {
         "fbx-conv": "tools"
     }
