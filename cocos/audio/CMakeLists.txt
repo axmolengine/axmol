@@ -79,7 +79,6 @@ elseif(APPLE)
     set(COCOS_AUDIO_PLATFORM_HEADER
         audio/apple/AudioDecoder.h
         audio/apple/AudioPlayer.h
-        audio/apple/AudioMacros.h
         audio/apple/AudioCache.h
         audio/apple/AudioEngineImpl.h
         )

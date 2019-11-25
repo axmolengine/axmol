@@ -35,7 +35,7 @@ _USRSTUDIOPDLL
   - [x] 2. Remove SimpleAudio
   - [ ] 3. Remove offthread file operation
   - [x] 4. Remove getSutiableFOpen, avoid reduce performance, there is another better solution for support: ```just doesn't convert path to utf-8 in FileUtils manually implementation```
-  - [x] 5. Optimize CCDownloader, curl for all platforms
+  - [x] 5. Refactor CCDownloader, curl for all platforms, don't use scheduler to retrive progress info, make it more reuseable
   - [ ] 7. Refactor engine-v5-deps, all compile as vs2019 MSVC 19.22.27905.0
   - [x] 8. minizip-1.2.0
   - [x] 9. ccMessageBox
