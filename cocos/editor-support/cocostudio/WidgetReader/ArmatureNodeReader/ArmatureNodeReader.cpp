@@ -190,7 +190,7 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(cocos2d::Node *node,
 			const auto dragonBonesData = sharedFactory->loadDragonBonesData(filepath, filepath);
 
 			if (dragonBonesData != nullptr) {
-				auto slash = filepath.rfind("/");
+				auto slash = filepath.rfind('/');
 				if (slash == std::string::npos)
 					slash = filepath.rfind("\\");
 				if (slash != std::string::npos) {
@@ -221,7 +221,7 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(cocos2d::Node *node,
 		else {
 			std::string fullpath = FileUtils::getInstance()->fullPathForFilename(filepath);
 
-			std::string dirpath = fullpath.substr(0, fullpath.find_last_of("/"));
+			std::string dirpath = fullpath.substr(0, fullpath.find_last_of('/'));
 			FileUtils::getInstance()->addSearchPath(dirpath);
 
 			ArmatureDataManager::getInstance()->addArmatureFileInfo(filepath);
@@ -266,8 +266,8 @@ std::string ArmatureNodeReader::getArmatureName(const std::string& exporJsonPath
 {
 	//FileUtils.getFileData(exporJsonPath, "r", size)   // need read armature name in exportJsonPath
 	size_t end = exporJsonPath.find_last_of(".");
-	size_t start = exporJsonPath.find_last_of("\\") + 1;
-	size_t start1 = exporJsonPath.find_last_of("/") + 1;
+	size_t start = exporJsonPath.find_last_of('\\') + 1;
+	size_t start1 = exporJsonPath.find_last_of('/') + 1;
 	if (start < start1)
 		start = start1;
 

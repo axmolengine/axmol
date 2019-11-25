@@ -300,7 +300,7 @@ void AssetsManagerEx::adjustPath(std::string &path)
 {
     if (!path.empty() && path[path.size() - 1] != '/')
     {
-        path.append("/");
+        path.push_back('/');
     }
 }
 

@@ -276,7 +276,7 @@ std::vector<std::string> Manifest::getSearchPaths() const
     {
         std::string path = _searchPaths[i];
         if (!path.empty() && path[path.size() - 1] != '/')
-            path.append("/");
+            path.push_back('/');
         path = _manifestRoot + path;
         searchPaths.push_back(path);
     }
@@ -298,7 +298,7 @@ void Manifest::prependSearchPaths()
     {
         std::string path = _searchPaths[i];
         if (!path.empty() && path[path.size() - 1] != '/')
-            path.append("/");
+            path.push_back('/');
         path = _manifestRoot + path;
         iter = searchPaths.begin();
         searchPaths.insert(iter, path);
@@ -504,7 +504,7 @@ void Manifest::loadManifest(const rapidjson::Document &json)
         // Append automatically "/"
         if (!_packageUrl.empty() && _packageUrl[_packageUrl.size() - 1] != '/')
         {
-            _packageUrl.append("/");
+            _packageUrl.push_back('/');
         }
     }
     
