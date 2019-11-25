@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "audio/apple/AudioDecoder.h"
-#include "audio/apple/AudioMacros.h"
+#include "audio/include/AudioMacros.h"
 
 #import <Foundation/Foundation.h>
 
