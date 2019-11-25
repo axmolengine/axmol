@@ -119,7 +119,7 @@ function genernate_binding_codes()
 
     echo "Create auto-generated luabinding glue codes."
     pushd "$COCOS2DX_ROOT/tools/tolua"
-    python ./genbindings.py
+    # python ./genbindings.py
     popd
 }
 
