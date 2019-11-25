@@ -232,12 +232,12 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
     }
     if (elementName == "map")
     {
-        std::string version = attributeDict["version"].asString();
+        std::string version = attributeDict["version"].toString();
         if ( version != "1.0")
         {
             CCLOG("cocos2d: TMXFormat: Unsupported TMX version: %s", version.c_str());
         }
-        std::string orientationStr = attributeDict["orientation"].asString();
+        std::string orientationStr = attributeDict["orientation"].toString();
         if (orientationStr == "orthogonal") {
             tmxMapInfo->setOrientation(TMXOrientationOrtho);
         }
@@ -254,7 +254,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
             CCLOG("cocos2d: TMXFomat: Unsupported orientation: %d", tmxMapInfo->getOrientation());
         }
         
-        std::string staggerAxisStr = attributeDict["staggeraxis"].asString();
+        std::string staggerAxisStr = attributeDict["staggeraxis"].toString();
         if (staggerAxisStr == "x") {
             tmxMapInfo->setStaggerAxis(TMXStaggerAxis_X);
         }
@@ -262,7 +262,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
             tmxMapInfo->setStaggerAxis(TMXStaggerAxis_Y);
         }
 
-        std::string staggerIndex = attributeDict["staggerindex"].asString();
+        std::string staggerIndex = attributeDict["staggerindex"].toString();
         if (staggerIndex == "odd") {
             tmxMapInfo->setStaggerIndex(TMXStaggerIndex_Odd);
         }
@@ -291,7 +291,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
     else if (elementName == "tileset") 
     {
         // If this is an external tileset then start parsing that
-        std::string externalTilesetFilename = attributeDict["source"].asString();
+        std::string externalTilesetFilename = attributeDict["source"].toString();
         if (externalTilesetFilename != "")
         {
             _externalTilesetFilename = externalTilesetFilename;
@@ -320,7 +320,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
         else
         {
             TMXTilesetInfo *tileset = new (std::nothrow) TMXTilesetInfo();
-            tileset->_name = attributeDict["name"].asString();
+            tileset->_name = attributeDict["name"].toString();
             
             if (_recordFirstGID)
             {
@@ -374,7 +374,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
     else if (elementName == "layer")
     {
         TMXLayerInfo *layer = new (std::nothrow) TMXLayerInfo();
-        layer->_name = attributeDict["name"].asString();
+        layer->_name = attributeDict["name"].toString();
 
         Size s;
         s.width = attributeDict["width"].asFloat();
@@ -400,7 +400,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
     else if (elementName == "objectgroup")
     {
         TMXObjectGroup *objectGroup = new (std::nothrow) TMXObjectGroup();
-        objectGroup->setGroupName(attributeDict["name"].asString());
+        objectGroup->setGroupName(attributeDict["name"].toString());
         Vec2 positionOffset;
         positionOffset.x = attributeDict["x"].asFloat() * tmxMapInfo->getTileSize().width;
         positionOffset.y = attributeDict["y"].asFloat() * tmxMapInfo->getTileSize().height;
@@ -428,7 +428,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
         TMXTilesetInfo* tileset = tmxMapInfo->getTilesets().back();
 
         // build full path
-        std::string imagename = attributeDict["source"].asString();
+        std::string imagename = attributeDict["source"].toString();
         tileset->_originSourceImage = imagename;
 
         if (_TMXFileName.find_last_of('/') != string::npos)
@@ -443,8 +443,8 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
     } 
     else if (elementName == "data")
     {
-        std::string encoding = attributeDict["encoding"].asString();
-        std::string compression = attributeDict["compression"].asString();
+        std::string encoding = attributeDict["encoding"].toString();
+        std::string compression = attributeDict["compression"].toString();
 
         if (encoding == "")
         {
@@ -532,13 +532,13 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
         if ( tmxMapInfo->getParentElement() == TMXPropertyNone ) 
         {
             CCLOG( "TMX tile map: Parent element is unsupported. Cannot add property named '%s' with value '%s'",
-                  attributeDict["name"].asString().c_str(), attributeDict["value"].asString().c_str() );
+                  attributeDict["name"].toString().c_str(), attributeDict["value"].toString().c_str() );
         } 
         else if ( tmxMapInfo->getParentElement() == TMXPropertyMap )
         {
             // The parent element is the map
             Value value = attributeDict["value"];
-            std::string key = attributeDict["name"].asString();
+            std::string key = attributeDict["name"].toString();
             tmxMapInfo->getProperties().emplace(key, value);
         }
         else if ( tmxMapInfo->getParentElement() == TMXPropertyLayer )
@@ -546,7 +546,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
             // The parent element is the last layer
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
             Value value = attributeDict["value"];
-            std::string key = attributeDict["name"].asString();
+            std::string key = attributeDict["name"].toString();
             // Add the property to the layer
             layer->getProperties().emplace(key, value);
         }
@@ -555,7 +555,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
             // The parent element is the last object group
             TMXObjectGroup* objectGroup = tmxMapInfo->getObjectGroups().back();
             Value value = attributeDict["value"];
-            std::string key = attributeDict["name"].asString();
+            std::string key = attributeDict["name"].toString();
             objectGroup->getProperties().emplace(key, value);
         }
         else if ( tmxMapInfo->getParentElement() == TMXPropertyObject )
@@ -564,14 +564,14 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
             TMXObjectGroup* objectGroup = tmxMapInfo->getObjectGroups().back();
             ValueMap& dict = objectGroup->getObjects().rbegin()->asValueMap();
 
-            std::string propertyName = attributeDict["name"].asString();
+            std::string propertyName = attributeDict["name"].toString();
             dict[propertyName] = attributeDict["value"];
         }
         else if ( tmxMapInfo->getParentElement() == TMXPropertyTile ) 
         {
             ValueMap& dict = tmxMapInfo->getTileProperties().at(tmxMapInfo->getParentGID()).asValueMap();
 
-            std::string propertyName = attributeDict["name"].asString();
+            std::string propertyName = attributeDict["name"].toString();
             dict[propertyName] = attributeDict["value"];
         }
     }
@@ -582,7 +582,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
         ValueMap& dict = objectGroup->getObjects().rbegin()->asValueMap();
 
         // get points value string
-        std::string value = attributeDict["points"].asString();
+        std::string value = attributeDict["points"].toString();
         if (!value.empty())
         {
             ValueVector pointsArray;
@@ -627,7 +627,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
         ValueMap& dict = objectGroup->getObjects().rbegin()->asValueMap();
         
         // get points value string
-        std::string value = attributeDict["points"].asString();
+        std::string value = attributeDict["points"].toString();
         if (!value.empty())
         {
             ValueVector pointsArray;
