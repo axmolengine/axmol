@@ -62,8 +62,7 @@ AudioEngine::AudioEngineThreadPool* AudioEngine::s_threadPool = nullptr;
 bool AudioEngine::_isEnabled = true;
 
 AudioEngine::AudioInfo::AudioInfo()
-: filePath(nullptr)
-, profileHelper(nullptr)
+: profileHelper(nullptr)
 , volume(1.0f)
 , loop(false)
 , duration(TIME_UNKNOWN)
