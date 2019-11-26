@@ -34,7 +34,7 @@ void ProgramStateRegistry::registerProgram(ProgramType programType, int textureF
     uint32_t key = (static_cast<uint32_t>(programType) << 16) | textureFormatEXT;
     auto it = this->_registry.find(key);
     if (it == this->_registry.end())
-        this->_registry.emplace(key, program).first;
+        this->_registry.emplace(key, program);
     else
         it->second = program;
 }
