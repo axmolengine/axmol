@@ -716,7 +716,7 @@ void AudioEngineImpl::update(float dt)
             std::string filePath;
             if (player->_finishCallbak) {
                 auto& audioInfo = AudioEngine::_audioIDInfoMap[audioID];
-                filePath = *audioInfo.filePath;
+                filePath = audioInfo.filePath;
             }
 
             AudioEngine::remove(audioID);
