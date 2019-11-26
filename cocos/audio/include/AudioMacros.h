@@ -62,7 +62,7 @@
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
 #define CHECK_AL_ERROR_DEBUG() \
 do { \
-    ALenum __error = alGetError(); \
+    GLenum __error = alGetError(); \
     if (__error) { \
         ALOGE("OpenAL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
     } \
@@ -82,5 +82,6 @@ do { \
         break; \
     }
 
+#if !defined(AUDIO_ID)
 #define AUDIO_ID int
-#define AUDIO_ID_PRID "%d"
+#endif

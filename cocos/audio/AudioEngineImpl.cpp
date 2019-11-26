@@ -233,7 +233,7 @@ void AudioEngineImpl::setVolume(AUDIO_ID audioID,float volume)
 
         auto error = alGetError();
         if (error != AL_NO_ERROR) {
-            ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x", __FUNCTION__,audioID,error);
+            ALOGE("%s: audio id = %d, error = %x", __FUNCTION__,audioID,error);
         }
     }
 }
@@ -254,7 +254,7 @@ void AudioEngineImpl::setLoop(AUDIO_ID audioID, bool loop)
 
             auto error = alGetError();
             if (error != AL_NO_ERROR) {
-                ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x", __FUNCTION__,audioID,error);
+                ALOGE("%s: audio id = %d, error = %x", __FUNCTION__,audioID,error);
             }
         }
     }
@@ -271,7 +271,7 @@ bool AudioEngineImpl::pause(AUDIO_ID audioID)
     auto error = alGetError();
     if (error != AL_NO_ERROR) {
         ret = false;
-        ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x\n", __FUNCTION__,audioID,error);
+        ALOGE("%s: audio id = %d, error = %x\n", __FUNCTION__,audioID,error);
     }
 
     return ret;
@@ -285,7 +285,7 @@ bool AudioEngineImpl::resume(AUDIO_ID audioID)
     auto error = alGetError();
     if (error != AL_NO_ERROR) {
         ret = false;
-        ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x\n", __FUNCTION__,audioID,error);
+        ALOGE("%s: audio id = %d, error = %x\n", __FUNCTION__,audioID,error);
     }
 
     return ret;
@@ -342,7 +342,7 @@ float AudioEngineImpl::getCurrentTime(AUDIO_ID audioID)
 
             auto error = alGetError();
             if (error != AL_NO_ERROR) {
-                ALOGE("%s, audio id:" AUDIO_ID_PRID ",error code:%x", __FUNCTION__,audioID,error);
+                ALOGE("%s, audio id:%d,error code:%x", __FUNCTION__,audioID,error);
             }
         }
     }
@@ -367,7 +367,7 @@ bool AudioEngineImpl::setCurrentTime(AUDIO_ID audioID, float time)
         else {
             if (player->_audioCache->_framesRead != player->_audioCache->_totalFrames &&
                 (time * player->_audioCache->_sampleRate) > player->_audioCache->_framesRead) {
-                ALOGE("%s: audio id = " AUDIO_ID_PRID, __FUNCTION__,audioID);
+                ALOGE("%s: audio id = %d", __FUNCTION__,audioID);
                 break;
             }
 
@@ -375,7 +375,7 @@ bool AudioEngineImpl::setCurrentTime(AUDIO_ID audioID, float time)
 
             auto error = alGetError();
             if (error != AL_NO_ERROR) {
-                ALOGE("%s: audio id = " AUDIO_ID_PRID ", error = %x", __FUNCTION__,audioID,error);
+                ALOGE("%s: audio id = %d, error = %x", __FUNCTION__,audioID,error);
             }
             ret = true;
         }
