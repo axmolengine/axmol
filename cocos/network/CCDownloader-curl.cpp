@@ -34,7 +34,9 @@
 #include "platform/CCFileUtils.h"
 #include "network/CCDownloader.h"
 #include "platform/PXFileStream.h"
+#include "base/ccUTF8.h"
 #include "md5/md5.h"
+#include "yasio/xxsocket.hpp"
 
 // **NOTE**
 // In the file:
