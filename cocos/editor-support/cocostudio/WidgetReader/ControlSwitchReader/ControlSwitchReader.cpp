@@ -563,10 +563,10 @@ namespace cocostudio
         // set Node Options
        // auto nodeOptions = options->nodeOptions();
 
-       // GLubyte alpha = (GLubyte)nodeOptions->color()->a();
-       // GLubyte red = (GLubyte)nodeOptions->color()->r();
-       // GLubyte green = (GLubyte)nodeOptions->color()->g();
-       // GLubyte blue = (GLubyte)nodeOptions->color()->b();
+       // uint8_t alpha = (uint8_t)nodeOptions->color()->a();
+       // uint8_t red = (uint8_t)nodeOptions->color()->r();
+       // uint8_t green = (uint8_t)nodeOptions->color()->g();
+       // uint8_t blue = (uint8_t)nodeOptions->color()->b();
 
         //skeletonAnimation->setScaleX(nodeOptions->scale()->scaleX());
         //skeletonAnimation->setScaleY(nodeOptions->scale()->scaleY());
