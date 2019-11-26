@@ -1,6 +1,6 @@
 #include "SimpleTimer.h"
 #include "yasio/detail/object_pool.hpp"
-#include "yasio/detail/ref_ptr.hpp"
+#include "yasio/detail/ref_ptr.h"
 #include "cocos2d.h"
 
 USING_NS_CC;
