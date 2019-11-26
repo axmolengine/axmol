@@ -83,22 +83,20 @@ PongLayer::PongLayer()
     
     Vector<Paddle*> paddlesM(4);
     
-    float paddleStep =(VisibleRect::getVisibleRect().size.height - kStatusBarHeight - 30 - 3*paddleTexture->getPixelsHigh())/3 + paddleTexture->getPixelsHigh();
-    float nextPaddlePos = VisibleRect::bottom().y + 15;
     Paddle* paddle = Paddle::createWithTexture(paddleTexture);
-    paddle->setPosition( Vec2(VisibleRect::center().x, nextPaddlePos));
+    paddle->setPosition( Vec2(VisibleRect::center().x, VisibleRect::bottom().y + 15) );
 	paddlesM.pushBack( paddle );
     
     paddle = Paddle::createWithTexture( paddleTexture );
-    paddle->setPosition( Vec2(VisibleRect::center().x, nextPaddlePos+=paddleStep) );
+    paddle->setPosition( Vec2(VisibleRect::center().x, VisibleRect::top().y - kStatusBarHeight - 15) );
     paddlesM.pushBack( paddle );
-
+    
     paddle = Paddle::createWithTexture( paddleTexture );
-    paddle->setPosition( Vec2(VisibleRect::center().x, nextPaddlePos+=paddleStep) );
+    paddle->setPosition( Vec2(VisibleRect::center().x, VisibleRect::bottom().y + 100) );
     paddlesM.pushBack( paddle );
-
+    
     paddle = Paddle::createWithTexture( paddleTexture );
-    paddle->setPosition( Vec2(VisibleRect::center().x, nextPaddlePos+=paddleStep) );
+    paddle->setPosition( Vec2(VisibleRect::center().x, VisibleRect::top().y - kStatusBarHeight - 100) );
     paddlesM.pushBack( paddle );
     
     _paddles = paddlesM;
