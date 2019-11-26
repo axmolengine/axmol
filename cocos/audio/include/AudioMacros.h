@@ -82,6 +82,5 @@ do { \
         break; \
     }
 
-#if !defined(AUDIO_ID)
 #define AUDIO_ID int
-#endif
+#define AUDIO_ID_PRID "%d"
