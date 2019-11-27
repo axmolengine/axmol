@@ -107,7 +107,7 @@ protected:
 
 	virtual FileUtils::Status getContents(const std::string& filename, ResizableBuffer* buffer) const override;
 
-    virtual long getFileSize(const std::string &filepath) const override;
+    virtual int64_t getFileSize(const std::string &filepath) const override;
 
     /**
      *  Gets full path for filename, resolution directory and search path.

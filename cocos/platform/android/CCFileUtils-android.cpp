@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "base/ZipUtils.h"
 
 #include <stdlib.h>
+#include <sys/types.h>
 #include <sys/stat.h>
 
 #define  LOG_TAG    "CCFileUtils-android.cpp"
@@ -191,12 +192,9 @@ bool FileUtilsAndroid::isFileExistInternal(const std::string& strFilePath) const
     }
     else
     {
-        FILE *fp = fopen(strFilePath.c_str(), "r");
-        if (fp)
-        {
-            bFound = true;
-            fclose(fp);
-        }
+        struct stat64 st;
+        if (0 == ::stat64(strFilePath.c_str(), &st))
+              bFound = st.st_mode & S_IFREG;
     }
     return bFound;
 }
@@ -266,10 +264,10 @@ bool FileUtilsAndroid::isAbsolutePath(const std::string& strPath) const
     return false;
 }
 
-long FileUtilsAndroid::getFileSize(const std::string& filepath) const
+int64_t FileUtilsAndroid::getFileSize(const std::string& filepath) const
 {
     DECLARE_GUARD;
-    long size = FileUtils::getFileSize(filepath);
+    int64_t size = FileUtils::getFileSize(filepath);
     if (size != -1) {
         return size;
     }

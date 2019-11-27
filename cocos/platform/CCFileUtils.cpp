@@ -1117,7 +1117,7 @@ void FileUtils::renameFile(const std::string &oldfullpath, const std::string &ne
     }, std::move(callback));
 }
 
-void FileUtils::getFileSize(const std::string &filepath, std::function<void(long)> callback) const
+void FileUtils::getFileSize(const std::string &filepath, std::function<void(int64_t)> callback) const
 {
     auto fullPath = fullPathForFilename(filepath);
     performOperationOffthread([fullPath]() {
@@ -1181,7 +1181,7 @@ bool FileUtils::renameFile(const std::string &path, const std::string &oldname, 
     return false;
 }
 
-long FileUtils::getFileSize(const std::string &filepath) const
+int64_t FileUtils::getFileSize(const std::string &filepath) const
 {
     CCASSERT(false, "getFileSize should be override by platform FileUtils");
     return 0;
@@ -1356,7 +1356,7 @@ bool FileUtils::renameFile(const std::string &path, const std::string &oldname, 
     return this->renameFile(oldPath, newPath);
 }
 
-long FileUtils::getFileSize(const std::string &filepath) const
+int64_t FileUtils::getFileSize(const std::string &filepath) const
 {
     CCASSERT(!filepath.empty(), "Invalid path");
 
@@ -1368,9 +1368,9 @@ long FileUtils::getFileSize(const std::string &filepath) const
             return 0;
     }
 
-    struct stat info;
+    struct stat64 info;
     // Get data associated with "crt_stat.c":
-    int result = stat(fullpath.c_str(), &info);
+    int result = ::stat64(fullpath.c_str(), &info);
 
     // Check if statistics are valid:
     if (result != 0)
@@ -1380,7 +1380,7 @@ long FileUtils::getFileSize(const std::string &filepath) const
     }
     else
     {
-        return (long)(info.st_size);
+        return info.st_size;
     }
 }
 

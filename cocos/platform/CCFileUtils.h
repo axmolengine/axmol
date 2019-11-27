@@ -769,7 +769,7 @@ public:
      *  @param filepath The path of the file, it could be a relative or absolute path.
      *  @return The file size.
      */
-    virtual long getFileSize(const std::string &filepath) const;
+    virtual int64_t getFileSize(const std::string &filepath) const;
 
     /**
      *  Retrieve the file size, async off the main cocos thread.
@@ -779,7 +779,7 @@ public:
      *  @param callback The function that will be called when the operation is complete. Will have one long
      * argument, the file size.
      */
-    virtual void getFileSize(const std::string &filepath, std::function<void(long)> callback) const;
+    virtual void getFileSize(const std::string &filepath, std::function<void(int64_t)> callback) const;
 
     /**
      *  List all files in a directory.
