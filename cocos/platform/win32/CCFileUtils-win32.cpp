@@ -231,11 +231,11 @@ void FileUtilsWin32::listFilesRecursively(const std::string& dirPath, std::vecto
                     // Error getting file
                     break;
                 }
-                std::string fileName = StringWideCharToChar(file.name);
+                std::string fileName = StringWideCharToMultiByte(file.name);
 
                 if (fileName != "." && fileName != "..")
                 {
-                    std::string filepath = StringWideCharToChar(file.path);
+                    std::string filepath = StringWideCharToMultiByte(file.path);
                     if (file.is_dir)
                     {
                         filepath.push_back('/');
@@ -289,7 +289,7 @@ std::vector<std::string> FileUtilsWin32::listFiles(const std::string& dirPath) c
                     break;
                 }
 
-                std::string filepath = StringWideCharToChar(file.path);
+                std::string filepath = StringWideCharToMultiByte(file.path);
                 if (file.is_dir)
                 {
                     filepath.push_back('/');
@@ -359,7 +359,7 @@ string FileUtilsWin32::getWritablePath() const
         retPath = retPath.substr(0, retPath.rfind(L"\\") + 1);
     }
 
-    return convertPathFormatToUnixStyle(StringWideCharToChar(retPath));
+    return convertPathFormatToUnixStyle(StringWideCharToMultiByte(retPath));
 }
 
 bool FileUtilsWin32::renameFile(const std::string &oldfullpath, const std::string& newfullpath) const
@@ -444,7 +444,7 @@ bool FileUtilsWin32::createDirectory(const std::string& dirPath) const
         {
             subpath += dirs[i];
 
-            std::string utf8Path = StringWideCharToChar(subpath);
+            std::string utf8Path = StringWideCharToMultiByte(subpath);
             if (!isDirectoryExist(utf8Path))
             {
                 BOOL ret = CreateDirectory(subpath.c_str(), NULL);
@@ -500,7 +500,7 @@ bool FileUtilsWin32::removeDirectory(const std::string& dirPath) const
                 if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
                     temp += '/';
-                    ret = ret && this->removeDirectory(StringWideCharToChar(temp));
+                    ret = ret && this->removeDirectory(StringWideCharToMultiByte(temp));
                 }
                 else
                 {
