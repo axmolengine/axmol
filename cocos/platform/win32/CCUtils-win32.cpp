@@ -55,31 +55,6 @@ std::wstring StringUtf8ToWideChar(const std::string& strUtf8)
     return ret;
 }
 
-std::string StringWideCharToUtf8(const std::wstring& strWideChar)
-{
-    std::string ret;
-    if (!strWideChar.empty())
-    {
-        int nNum = WideCharToMultiByte(CP_UTF8, 0, strWideChar.c_str(), -1, nullptr, 0, nullptr, FALSE);
-        if (nNum)
-        {
-            char* utf8String = new char[nNum + 1];
-            utf8String[0] = 0;
-
-            nNum = WideCharToMultiByte(CP_UTF8, 0, strWideChar.c_str(), -1, utf8String, nNum + 1, nullptr, FALSE);
-
-            ret = utf8String;
-            delete[] utf8String;
-        }
-        else
-        {
-            CCLOG("Wrong convert to Utf8 code:0x%x", GetLastError());
-        }
-    }
-
-    return ret;
-}
-
 std::string StringWideCharToMultiByte(const std::wstring& strWideChar, unsigned int cp)
 {
     int cchMultiByte = WideCharToMultiByte(cp, 0, strWideChar.c_str(), static_cast<int>(strWideChar.length()), NULL, 0, NULL, NULL);
