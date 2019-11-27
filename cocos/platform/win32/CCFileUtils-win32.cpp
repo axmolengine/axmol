@@ -259,14 +259,16 @@ void FileUtilsWin32::listFilesRecursively(const std::string& dirPath, std::vecto
     }
 }
 
-long FileUtilsWin32::getFileSize(const std::string &filepath) const
+int64_t FileUtilsWin32::getFileSize(const std::string &filepath) const
 {
-    struct _stat tmp;
-    if (_stat(filepath.c_str(), &tmp) == 0)
-    {
-        return (long)tmp.st_size;
-    }
-    return 0;
+    if (filepath.empty())
+        return -1;
+    WIN32_FILE_ATTRIBUTE_DATA attrs = { 0 };
+    if (GetFileAttributesExA(filepath.c_str(), GetFileExInfoStandard, &attrs) &&
+        !(attrs.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+        return static_cast<long long>(attrs.nFileSizeHigh) << 32 |
+        static_cast<unsigned long long>(attrs.nFileSizeLow);
+    return -1;
 }
 
 std::vector<std::string> FileUtilsWin32::listFiles(const std::string& dirPath) const
