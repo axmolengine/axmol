@@ -33,6 +33,7 @@ NS_CC_BEGIN
 
 std::wstring CC_DLL StringUtf8ToWideChar(const std::string& strUtf8);
 std::string CC_DLL StringWideCharToUtf8(const std::wstring& strWideChar);
+std::string CC_DLL StringWideCharToChar(const std::wstring& strWideChar, unsigned int cp = CP_ACP);
 std::string CC_DLL UTF8StringToMultiByte(const std::string& strUtf8);
 
 NS_CC_END

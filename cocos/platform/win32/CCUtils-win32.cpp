@@ -80,6 +80,14 @@ std::string StringWideCharToUtf8(const std::wstring& strWideChar)
     return ret;
 }
 
+std::string StringWideCharToMultiByte(const std::wstring& strWideChar, unsigned int cp)
+{
+    int cchMultiByte = WideCharToMultiByte(cp, 0, strWideChar.c_str(), static_cast<int>(strWideChar.length()), NULL, 0, NULL, NULL);
+    std::string buffer(cchMultiByte, '\0');
+    WideCharToMultiByte(cp, 0, strWideChar.c_str(), static_cast<int>(strWideChar.length()), &buffer.front(), cchMultiByte, NULL, NULL);
+    return buffer;
+}
+
 std::string UTF8StringToMultiByte(const std::string& strUtf8)
 {
     std::string ret;
