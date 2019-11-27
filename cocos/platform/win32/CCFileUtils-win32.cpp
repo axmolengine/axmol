@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 using namespace std;
 
-#define DECLARE_GUARD std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
+#define DECLARE_GUARD (void)0 // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
 NS_CC_BEGIN
 
@@ -110,18 +110,14 @@ bool FileUtilsWin32::init()
 bool FileUtilsWin32::isDirectoryExistInternal(const std::string& dirPath) const
 {
     unsigned long fAttrib = GetFileAttributes(StringUtf8ToWideChar(dirPath).c_str());
-    if (fAttrib != INVALID_FILE_ATTRIBUTES &&
-        (fAttrib & FILE_ATTRIBUTE_DIRECTORY))
-    {
-        return true;
-    }
-    return false;
+    return (fAttrib != INVALID_FILE_ATTRIBUTES &&
+        (fAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
 long FileUtilsWin32::getFileSize(const std::string &filepath)
 {
     WIN32_FILE_ATTRIBUTE_DATA fad;
-    if (!GetFileAttributesEx(StringUtf8ToWideChar(filepath).c_str(), GetFileExInfoStandard, &fad))
+    if (!GetFileAttributesExA(filepath.c_str(), GetFileExInfoStandard, &fad))
     {
         return 0; // error condition, could call GetLastError to find out more
     }
@@ -146,9 +142,7 @@ bool FileUtilsWin32::isFileExistInternal(const std::string& strFilePath) const
     }
 
     DWORD attr = GetFileAttributesW(StringUtf8ToWideChar(strPath).c_str());
-    if(attr == INVALID_FILE_ATTRIBUTES || (attr & FILE_ATTRIBUTE_DIRECTORY))
-        return false;   //  not a file
-    return true;
+    return (attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY));
 }
 
 bool FileUtilsWin32::isAbsolutePath(const std::string& strPath) const
@@ -237,11 +231,11 @@ void FileUtilsWin32::listFilesRecursively(const std::string& dirPath, std::vecto
                     // Error getting file
                     break;
                 }
-                std::string fileName = StringWideCharToUtf8(file.name);
+                std::string fileName = StringWideCharToChar(file.name);
 
                 if (fileName != "." && fileName != "..")
                 {
-                    std::string filepath = StringWideCharToUtf8(file.path);
+                    std::string filepath = StringWideCharToChar(file.path);
                     if (file.is_dir)
                     {
                         filepath.push_back('/');
@@ -295,7 +289,7 @@ std::vector<std::string> FileUtilsWin32::listFiles(const std::string& dirPath) c
                     break;
                 }
 
-                std::string filepath = StringWideCharToUtf8(file.path);
+                std::string filepath = StringWideCharToChar(file.path);
                 if (file.is_dir)
                 {
                     filepath.push_back('/');
@@ -365,7 +359,7 @@ string FileUtilsWin32::getWritablePath() const
         retPath = retPath.substr(0, retPath.rfind(L"\\") + 1);
     }
 
-    return convertPathFormatToUnixStyle(StringWideCharToUtf8(retPath));
+    return convertPathFormatToUnixStyle(StringWideCharToChar(retPath));
 }
 
 bool FileUtilsWin32::renameFile(const std::string &oldfullpath, const std::string& newfullpath) const
@@ -450,7 +444,7 @@ bool FileUtilsWin32::createDirectory(const std::string& dirPath) const
         {
             subpath += dirs[i];
 
-            std::string utf8Path = StringWideCharToUtf8(subpath);
+            std::string utf8Path = StringWideCharToChar(subpath);
             if (!isDirectoryExist(utf8Path))
             {
                 BOOL ret = CreateDirectory(subpath.c_str(), NULL);
@@ -506,7 +500,7 @@ bool FileUtilsWin32::removeDirectory(const std::string& dirPath) const
                 if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
                     temp += '/';
-                    ret = ret && this->removeDirectory(StringWideCharToUtf8(temp));
+                    ret = ret && this->removeDirectory(StringWideCharToChar(temp));
                 }
                 else
                 {
