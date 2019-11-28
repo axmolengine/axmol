@@ -1368,9 +1368,9 @@ int64_t FileUtils::getFileSize(const std::string &filepath) const
             return 0;
     }
 
-    struct stat64 info;
+    struct stat info;
     // Get data associated with "crt_stat.c":
-    int result = ::stat64(fullpath.c_str(), &info);
+    int result = ::stat(fullpath.c_str(), &info);
 
     // Check if statistics are valid:
     if (result != 0)
