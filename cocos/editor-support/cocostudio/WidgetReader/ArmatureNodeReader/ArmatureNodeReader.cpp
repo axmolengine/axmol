@@ -7,8 +7,9 @@
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 #include "editor-support/cocostudio/WidgetReader/ArmatureNodeReader/CSArmatureNode_generated.h"
 #include "editor-support/cocostudio/CCArmature.h"
+#if defined(CC_BUILD_WITH_DRANGBONES) && CC_BUILD_WITH_DRANGBONES
 #include "editor-support/dragonBones/CCDragonBonesHeaders.h"
-
+#endif
 
 USING_NS_CC;
 using namespace cocostudio;
@@ -122,27 +123,6 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
 				attribute = attribute.next_attribute();
 			}
 		}
-        /*else if (attriname == "TextureInfoFileData")
-        {
-            attribute = child.first_attribute();
-
-            while (attribute)
-            {
-                attriname = attribute.name();
-                std::string value = attribute.value();
-
-                if (attriname == "Type")
-                {
-                    textureInfoFileType = 0;
-                }
-                else if (attriname == "Path")
-                {
-                    textureInfoFilePath = value;
-                }
-
-                attribute = attribute.next_attribute();
-            }
-        }*/
 
 		child = child.next_sibling();
 	}
@@ -157,11 +137,7 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
 		builder->CreateString(currentAnimationName),
         builder->CreateString(currentArmatureName),
         timeScale,
-        armatureScale
-        /*
-        CreateResourceItemData(*builder,
-            textureInfoFileType, 
-            builder->CreateString(textureInfoFilePath))*/);
+        armatureScale);
 
 	return *(Offset<Table>*)(&options);
 }
@@ -180,7 +156,7 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(cocos2d::Node *node,
 	if (FileUtils::getInstance()->isFileExist(filepath))
 	{
 		fileExist = true;
-
+#if defined(CC_BUILD_WITH_DRANGBONES) && CC_BUILD_WITH_DRANGBONES
 		auto filep = filepath.rfind('.');
 		if (filep != std::string::npos && strcmp(&filepath[filep], ".json") == 0)
 		{ // Currently, adjust by file ext, regard as DragonBones 4.5/5.0
@@ -218,7 +194,9 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(cocos2d::Node *node,
 				}
 			}
 		}
-		else {
+		else 
+#endif
+        {
 			std::string fullpath = FileUtils::getInstance()->fullPathForFilename(filepath);
 
 			std::string dirpath = fullpath.substr(0, fullpath.find_last_of('/'));

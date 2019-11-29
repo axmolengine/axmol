@@ -4,6 +4,7 @@
 #include "spine/spine.h"
 #include "spine/spine-cocos2dx.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
+#include <functional>
 
 class CC_STUDIO_DLL SpineSkeletonDataCache
 {
@@ -23,9 +24,11 @@ public:
 		spSkeletonData* data;
 	};
 
-	static void setErrorLogFunc(void(*)(const char* pszFormat, ...));
-
 	static SpineSkeletonDataCache* getInstance();
+
+    SpineSkeletonDataCache();
+
+    void setErrorReportFunc(void(*errorfunc)(const char* pszFormat, ...));
 
 	SkeletonData* addData(const char* dataFile, const char* atlasFile, float scale);
 
@@ -36,6 +39,7 @@ public:
 
 public:
 	std::map<std::string, SkeletonData*> _cacheTable;
+    void(*_reportError)(const char* pszFormat, ...);
 };
 
 #endif
