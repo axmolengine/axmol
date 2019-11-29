@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "audio/apple/AudioDecoder.h"
+#include "audio/apple/AudioDecoderEXT.h"
 #include "audio/include/AudioMacros.h"
 
 #import <Foundation/Foundation.h>
@@ -33,31 +33,26 @@
 
 namespace cocos2d {
 
-    AudioDecoder::AudioDecoder()
-    : _isOpened(false)
-    , _extRef(nullptr)
-    , _totalFrames(0)
-    , _bytesPerFrame(0)
-    , _sampleRate(0)
-    , _channelCount(0)
+    AudioDecoderEXT::AudioDecoderEXT()
+    : _extRef(nullptr)
     {
         memset(&_outputFormat, 0, sizeof(_outputFormat));
     }
 
-    AudioDecoder::~AudioDecoder()
+    AudioDecoderEXT::~AudioDecoderEXT()
     {
         close();
     }
 
-    bool AudioDecoder::open(const char* path)
+    bool AudioDecoderEXT::open(const std::string& fullPath)
     {
         bool ret = false;
         CFURLRef fileURL = nil;
         do
         {
-            BREAK_IF_ERR_LOG(path == nullptr || strlen(path) == 0, "Invalid path!");
+            BREAK_IF_ERR_LOG(fullPath.empty(), "Invalid path!");
 
-            NSString *fileFullPath = [[NSString alloc] initWithCString:path encoding:NSUTF8StringEncoding];
+            NSString *fileFullPath = [[NSString alloc] initWithCString:fullPath.c_str() encoding:NSUTF8StringEncoding];
             fileURL = (CFURLRef)[[NSURL alloc] initFileURLWithPath:fileFullPath];
             [fileFullPath release];
             BREAK_IF_ERR_LOG(fileURL == nil, "Converting path to CFURLRef failed!");
@@ -97,7 +92,7 @@ namespace cocos2d {
             propertySize = sizeof(totalFrames);
             status = ExtAudioFileGetProperty(_extRef, kExtAudioFileProperty_FileLengthFrames, &propertySize, &totalFrames);
             BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileGetProperty(kExtAudioFileProperty_FileLengthFrames) FAILED, Error = %d",(int)status);
-            BREAK_IF_ERR_LOG(totalFrames <= 0, "Total frames is 0, it's an invalid audio file: %s", path);
+            BREAK_IF_ERR_LOG(totalFrames <= 0, "Total frames is 0, it's an invalid audio file: %s", fullPath.c_str());
             _totalFrames = static_cast<uint32_t>(totalFrames);
             _isOpened = true;
 
@@ -115,21 +110,16 @@ namespace cocos2d {
         return ret;
     }
 
-    void AudioDecoder::close()
+    void AudioDecoderEXT::close()
     {
         if (_extRef != nullptr)
         {
             ExtAudioFileDispose(_extRef);
             _extRef = nullptr;
-
-            _totalFrames = 0;
-            _bytesPerFrame = 0;
-            _sampleRate = 0;
-            _channelCount = 0;
         }
     }
 
-    uint32_t AudioDecoder::read(uint32_t framesToRead, char* pcmBuf)
+    uint32_t AudioDecoderEXT::read(uint32_t framesToRead, char* pcmBuf)
     {
         uint32_t ret = 0;
         do
@@ -154,25 +144,7 @@ namespace cocos2d {
         return ret;
     }
 
-    uint32_t AudioDecoder::readFixedFrames(uint32_t framesToRead, char* pcmBuf)
-    {
-        uint32_t framesRead = 0;
-        uint32_t framesReadOnce = 0;
-        do
-        {
-            framesReadOnce = read(framesToRead - framesRead, pcmBuf + framesRead * _bytesPerFrame);
-            framesRead += framesReadOnce;
-        } while (framesReadOnce != 0 && framesRead < framesToRead);
-
-        if (framesRead < framesToRead)
-        {
-            memset(pcmBuf + framesRead * _bytesPerFrame, 0x00, (framesToRead - framesRead) * _bytesPerFrame);
-        }
-
-        return framesRead;
-    }
-
-    bool AudioDecoder::seek(uint32_t frameOffset)
+    bool AudioDecoderEXT::seek(uint32_t frameOffset)
     {
         bool ret = false;
         do
@@ -187,7 +159,7 @@ namespace cocos2d {
         return ret;
     }
 
-    uint32_t AudioDecoder::tell() const
+    uint32_t AudioDecoderEXT::tell() const
     {
         uint32_t ret = INVALID_FRAME_INDEX;
         do
@@ -200,31 +172,6 @@ namespace cocos2d {
         } while(false);
 
         return ret;
-    }
-
-    uint32_t AudioDecoder::getTotalFrames() const
-    {
-        return _totalFrames;
-    }
-
-    uint32_t AudioDecoder::getBytesPerFrame() const
-    {
-        return _bytesPerFrame;
-    }
-
-    uint32_t AudioDecoder::getSampleRate() const
-    {
-        return _sampleRate;
-    }
-
-    uint32_t AudioDecoder::getChannelCount() const
-    {
-        return _channelCount;
-    }
-
-    bool AudioDecoder::isOpened() const
-    {
-        return _isOpened;
     }
 
 } // namespace cocos2d {

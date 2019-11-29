@@ -195,10 +195,8 @@ namespace cocos2d {
         close();
     }
 
-    bool AudioDecoderWav::open(const char* path)
+    bool AudioDecoderWav::open(const std::string& fullPath)
     {
-        std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
-
         if (wav_open(fullPath, &_wavf))
         {
             _sampleRate = _wavf.FileHeader.SampleRate;

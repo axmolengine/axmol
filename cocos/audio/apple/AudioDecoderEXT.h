@@ -28,37 +28,32 @@
 
 #include <stdint.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
+#include "audio/include/AudioDecoder.h"
 
 namespace cocos2d {
 
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
  */
-class AudioDecoder
+class AudioDecoderEXT : public AudioDecoder
 {
 public:
     static const uint32_t INVALID_FRAME_INDEX = UINT32_MAX;
 
-    AudioDecoder();
-    ~AudioDecoder();
+    AudioDecoderEXT();
+    ~AudioDecoderEXT();
 
     /**
      * @brief Opens an audio file specified by a file path.
      * @return true if succeed, otherwise false.
      */
-    bool open(const char* path);
-
-    /**
-     * @brief Checks whether decoder has opened file successfully.
-     * @return true if succeed, otherwise false.
-     */
-    bool isOpened() const;
+    bool open(const std::string& path) override;
 
     /**
      * @brief Closes opened audio file.
      * @note The method will also be automatically invoked in the destructor.
      */
-    void close();
+    void close() override;
 
     /**
      * @brief Reads audio frames of PCM format.
@@ -66,7 +61,7 @@ public:
      * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| * _bytesPerFrame.
      * @return The number of frames actually read, it's probably less than 'framesToRead'. Returns 0 means reach the end of file.
      */
-    uint32_t read(uint32_t framesToRead, char* pcmBuf);
+    uint32_t read(uint32_t framesToRead, char* pcmBuf) override;
 
     /**
      * @brief Reads fixed audio frames of PCM format.
@@ -78,42 +73,23 @@ public:
      *       If current position reaches the end of frames, the return value may smaller than |framesToRead| and the remaining
      *       buffer in |pcmBuf| will be set with silence data (0x00).
      */
-    uint32_t readFixedFrames(uint32_t framesToRead, char* pcmBuf);
+    // uint32_t readFixedFrames(uint32_t framesToRead, char* pcmBuf) override;
 
     /**
      * @brief Sets frame offest to be read.
      * @param frameOffset The frame offest to be set.
      * @return true if succeed, otherwise false
      */
-    bool seek(uint32_t frameOffset);
+    bool seek(uint32_t frameOffset) override;
 
     /**
      * @brief Tells the current frame offset.
      * @return The current frame offset.
      */
-    uint32_t tell() const;
-
-    /** Gets total frames of current audio.*/
-    uint32_t getTotalFrames() const;
-
-    /** Gets bytes per frame of current audio.*/
-    uint32_t getBytesPerFrame() const;
-
-    /** Gets sample rate of current audio.*/
-    uint32_t getSampleRate() const;
-
-    /** Gets the channel count of current audio.
-     * @note Currently we only support 1 or 2 channels.
-     */
-    uint32_t getChannelCount() const;
+    uint32_t tell() const override;
 
 private:
-    bool _isOpened;
     ExtAudioFileRef _extRef;
-    uint32_t _totalFrames;
-    uint32_t _bytesPerFrame;
-    uint32_t _sampleRate;
-    uint32_t _channelCount;
 
     AudioStreamBasicDescription _outputFormat;
 };
