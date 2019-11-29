@@ -78,7 +78,7 @@ protected:
     //play by circular buffer
     float _currTime;
     bool _streamingSource;
-    ALuint _bufferIds[3];
+    ALuint _bufferIds[QUEUEBUFFER_NUM];
     std::thread* _rotateBufferThread;
     std::condition_variable _sleepCondition;
     std::mutex _sleepMutex;

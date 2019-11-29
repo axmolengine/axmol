@@ -241,11 +241,12 @@ bool AudioPlayer::play2d()
 void AudioPlayer::rotateBufferThread(int offsetFrame)
 {
     char* tmpBuffer = nullptr;
-    AudioDecoder* decoder = AudioDecoderManager::createDecoder(_audioCache->_fileFullPath.c_str());
+    auto& fullPath = _audioCache->_fileFullPath;
+    AudioDecoder* decoder = AudioDecoderManager::createDecoder(fullPath);
     long long rotateSleepTime = static_cast<long long>(QUEUEBUFFER_TIME_STEP * 1000) / 2;
     do
     {
-        BREAK_IF(decoder == nullptr || !decoder->open(_audioCache->_fileFullPath.c_str()));
+        BREAK_IF(decoder == nullptr || !decoder->open(fullPath));
 
         uint32_t framesRead = 0;
         const uint32_t framesToRead = _audioCache->_queBufferFrames;
