@@ -83,7 +83,7 @@ elseif(APPLE)
         audio/include/AudioDecoderWav.h
         audio/include/AudioCache.h
         audio/apple/AudioPlayer.h
-		audio/apple/AudioDecoderEXT.h
+        audio/apple/AudioDecoderEXT.h
         audio/apple/AudioEngineImpl.h
         )
     set(COCOS_AUDIO_PLATFORM_SRC
