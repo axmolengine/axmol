@@ -68,9 +68,8 @@ namespace cocos2d {
         close();
     }
 
-    bool AudioDecoderOgg::open(const char* path)
+    bool AudioDecoderOgg::open(const std::string& fullPath)
     {
-        std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
         if (!_fileStream.open(fullPath))
         {
             ALOGE("Trouble with ogg(1): %s\n", strerror(errno));

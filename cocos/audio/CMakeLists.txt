@@ -77,14 +77,22 @@ elseif(LINUX)
 elseif(APPLE)
     # common
     set(COCOS_AUDIO_PLATFORM_HEADER
-        audio/apple/AudioDecoder.h
-        audio/apple/AudioPlayer.h
+        audio/include/AudioDecoderManager.h
+        audio/include/AudioDecoder.h
+        audio/include/AudioDecoderOgg.h
+        audio/include/AudioDecoderWav.h
         audio/include/AudioCache.h
+        audio/apple/AudioPlayer.h
+		audio/apple/AudioDecoderEXT.h
         audio/apple/AudioEngineImpl.h
         )
     set(COCOS_AUDIO_PLATFORM_SRC
+        audio/AudioDecoderManager.cpp
+        audio/AudioDecoder.cpp
+        audio/AudioDecoderOgg.cpp
+        audio/AudioDecoderWav.cpp
+	    audio/apple/AudioDecoderEXT.mm
         audio/apple/AudioCache.mm
-        audio/apple/AudioDecoder.mm
         audio/apple/AudioEngineImpl.mm
         audio/apple/AudioPlayer.mm
         )

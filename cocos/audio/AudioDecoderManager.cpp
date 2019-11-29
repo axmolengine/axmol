@@ -28,11 +28,16 @@ THE SOFTWARE.
 
 #include "audio/include/AudioDecoderManager.h"
 #include "audio/include/AudioDecoderOgg.h"
-#include "audio/include/AudioDecoderMp3.h"
 #include "audio/include/AudioDecoderWav.h"
 #include "audio/include/AudioMacros.h"
 #include "platform/CCFileUtils.h"
 #include "base/CCConsole.h"
+
+#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
+#include "audio/include/AudioDecoderMp3.h"
+#else
+#include "audio/apple/AudioDecoderEXT.h"
+#endif
 
 namespace cocos2d {
 
@@ -43,10 +48,12 @@ bool AudioDecoderManager::init()
 
 void AudioDecoderManager::destroy()
 {
+#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
     AudioDecoderMp3::destroy();
+#endif
 }
 
-AudioDecoder* AudioDecoderManager::createDecoder(const char* path)
+AudioDecoder* AudioDecoderManager::createDecoder(const std::string& path)
 {
     std::string suffix = FileUtils::getInstance()->getFileExtension(path);
     if (suffix == ".ogg")
@@ -55,7 +62,11 @@ AudioDecoder* AudioDecoderManager::createDecoder(const char* path)
     }
     else if (suffix == ".mp3")
     {
+#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
         return new (std::nothrow) AudioDecoderMp3();
+#else
+        return new (std::nothrow) AudioDecoderEXT();
+#endif
     }
     else if (suffix == ".wav") {
         return new (std::nothrow) AudioDecoderWav();

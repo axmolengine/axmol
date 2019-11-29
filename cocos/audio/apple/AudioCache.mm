@@ -37,7 +37,8 @@
 #include "base/CCDirector.h"
 #include "base/CCScheduler.h"
 
-#include "audio/apple/AudioDecoder.h"
+#include "audio/include/AudioDecoder.h"
+#include "audio/include/AudioDecoderManager.h"
 
 #ifdef VERY_VERY_VERBOSE_LOGGING
 #define ALOGVV ALOGV
@@ -163,16 +164,16 @@ void AudioCache::readDataTask(unsigned int selfId)
     _readDataTaskMutex.lock();
     _state = State::LOADING;
 
-    AudioDecoder decoder;
+    AudioDecoder* decoder = AudioDecoderManager::createDecoder(_fileFullPath);
     do
     {
-        if (!decoder.open(_fileFullPath.c_str()))
+        if (decoder == nullptr || !decoder->open(_fileFullPath))
             break;
 
-        const uint32_t originalTotalFrames = decoder.getTotalFrames();
-        const uint32_t bytesPerFrame = decoder.getBytesPerFrame();
-        const uint32_t sampleRate = decoder.getSampleRate();
-        const uint32_t channelCount = decoder.getChannelCount();
+        const uint32_t originalTotalFrames = decoder->getTotalFrames();
+        const uint32_t bytesPerFrame = decoder->getBytesPerFrame();
+        const uint32_t sampleRate = decoder->getSampleRate();
+        const uint32_t channelCount = decoder->getChannelCount();
 
         uint32_t totalFrames = originalTotalFrames;
         uint32_t dataSize = totalFrames * bytesPerFrame;
@@ -189,7 +190,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             uint32_t framesRead = 0;
             const uint32_t framesToReadOnce = std::min(totalFrames, static_cast<uint32_t>(sampleRate * QUEUEBUFFER_TIME_STEP * QUEUEBUFFER_NUM));
 
-            BREAK_IF_ERR_LOG(!decoder.seek(totalFrames), "AudioDecoder::seek(%u) error", totalFrames);
+            BREAK_IF_ERR_LOG(!decoder->seek(totalFrames), "AudioDecoder::seek(%u) error", totalFrames);
 
             char* tmpBuf = (char*)malloc(framesToReadOnce * bytesPerFrame);
             std::vector<char> adjustFrameBuf;
@@ -199,7 +200,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             // This is a workaround for https://github.com/cocos2d/cocos2d-x/issues/16938
             do
             {
-                framesRead = decoder.read(framesToReadOnce, tmpBuf);
+                framesRead = decoder->read(framesToReadOnce, tmpBuf);
                 if (framesRead > 0)
                 {
                     adjustFrames += framesRead;
@@ -221,7 +222,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             free(tmpBuf);
 
             // Reset to frame 0
-            BREAK_IF_ERR_LOG(!decoder.seek(0), "AudioDecoder::seek(0) failed!");
+            BREAK_IF_ERR_LOG(!decoder->seek(0), "AudioDecoder::seek(0) failed!");
 
             _pcmData = (char*)malloc(dataSize);
             memset(_pcmData, 0x00, dataSize);
@@ -235,7 +236,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             if (*_isDestroyed)
                 break;
 
-            framesRead = decoder.readFixedFrames(std::min(framesToReadOnce, remainingFrames), _pcmData + _framesRead * bytesPerFrame);
+            framesRead = decoder->readFixedFrames(std::min(framesToReadOnce, remainingFrames), _pcmData + _framesRead * bytesPerFrame);
             _framesRead += framesRead;
             remainingFrames -= framesRead;
 
@@ -250,7 +251,7 @@ void AudioCache::readDataTask(unsigned int selfId)
                 {
                     frames = originalTotalFrames - _framesRead;
                 }
-                framesRead = decoder.read(frames, _pcmData + _framesRead * bytesPerFrame);
+                framesRead = decoder->read(frames, _pcmData + _framesRead * bytesPerFrame);
                 if (framesRead == 0)
                     break;
                 _framesRead += framesRead;
@@ -290,7 +291,7 @@ void AudioCache::readDataTask(unsigned int selfId)
                 _queBuffers[index] = (char*)malloc(queBufferBytes);
                 _queBufferSize[index] = queBufferBytes;
 
-                decoder.readFixedFrames(_queBufferFrames, _queBuffers[index]);
+                decoder->readFixedFrames(_queBufferFrames, _queBuffers[index]);
             }
 
             _state = State::READY;
@@ -302,7 +303,9 @@ void AudioCache::readDataTask(unsigned int selfId)
         CC_SAFE_FREE(_pcmData);
     }
 
-    decoder.close();
+    if(decoder)
+        decoder->close();
+    AudioDecoderManager::destroyDecoder(decoder);
 
     //FIXME: Why to invoke play callback first? Should it be after 'load' callback?
     invokingPlayCallbacks();

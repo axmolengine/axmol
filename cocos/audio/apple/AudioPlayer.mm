@@ -33,7 +33,8 @@
 #include "audio/apple/AudioPlayer.h"
 #include "audio/include/AudioCache.h"
 #include "platform/CCFileUtils.h"
-#include "audio/apple/AudioDecoder.h"
+#include "audio/include/AudioDecoder.h"
+#include "audio/include/AudioDecoderManager.h"
 
 #ifdef VERY_VERY_VERBOSE_LOGGING
 #define ALOGVV ALOGV
@@ -260,20 +261,21 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
     pthread_setname_np("ALStreaming");
 
     char* tmpBuffer = nullptr;
-    AudioDecoder decoder;
+    auto& fullPath = _audioCache->_fileFullPath;
+    AudioDecoder* decoder = AudioDecoderManager::createDecoder(fullPath);
     long long rotateSleepTime = static_cast<long long>(QUEUEBUFFER_TIME_STEP * 1000) / 2;
     do
     {
-        BREAK_IF(!decoder.open(_audioCache->_fileFullPath.c_str()));
+        BREAK_IF(decoder == nullptr || !decoder->open(fullPath));
 
         uint32_t framesRead = 0;
         const uint32_t framesToRead = _audioCache->_queBufferFrames;
-        const uint32_t bufferSize = framesToRead * decoder.getBytesPerFrame();
+        const uint32_t bufferSize = framesToRead * decoder->getBytesPerFrame();
         tmpBuffer = (char*)malloc(bufferSize);
         memset(tmpBuffer, 0, bufferSize);
 
         if (offsetFrame != 0) {
-            decoder.seek(offsetFrame);
+            decoder->seek(offsetFrame);
         }
 
         ALint sourceState;
@@ -288,8 +290,8 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
                     bufferProcessed--;
                     if (_timeDirty) {
                         _timeDirty = false;
-                        offsetFrame = _currTime * decoder.getSampleRate();
-                        decoder.seek(offsetFrame);
+                        offsetFrame = _currTime * decoder->getSampleRate();
+                        decoder->seek(offsetFrame);
                     }
                     else {
                         _currTime += QUEUEBUFFER_TIME_STEP;
@@ -302,12 +304,12 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
                         }
                     }
 
-                    framesRead = decoder.readFixedFrames(framesToRead, tmpBuffer);
+                    framesRead = decoder->readFixedFrames(framesToRead, tmpBuffer);
 
                     if (framesRead == 0) {
                         if (_loop) {
-                            decoder.seek(0);
-                            framesRead = decoder.readFixedFrames(framesToRead, tmpBuffer);
+                            decoder->seek(0);
+                            framesRead = decoder->readFixedFrames(framesToRead, tmpBuffer);
                         } else {
                             needToExitThread = true;
                             break;
@@ -321,7 +323,7 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
                      */
                     ALuint bid;
                     alSourceUnqueueBuffers(_alSource, 1, &bid);
-                    alBufferData(bid, _audioCache->_format, tmpBuffer, framesRead * decoder.getBytesPerFrame(), decoder.getSampleRate());
+                    alBufferData(bid, _audioCache->_format, tmpBuffer, framesRead * decoder->getBytesPerFrame(), decoder->getSampleRate());
                     alSourceQueueBuffers(_alSource, 1, &bid);
                 }
             }
@@ -342,7 +344,9 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
     } while(false);
 
     ALOGVV("Exit rotate buffer thread ...");
-    decoder.close();
+    if(decoder)
+        decoder->close();
+    AudioDecoderManager::destroyDecoder(decoder);
     free(tmpBuffer);
     _isRotateThreadExited = true;
 }

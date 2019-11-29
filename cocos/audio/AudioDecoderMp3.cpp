@@ -95,10 +95,8 @@ namespace cocos2d {
         close();
     }
 
-    bool AudioDecoderMp3::open(const char* path)
+    bool AudioDecoderMp3::open(const std::string& fullPath)
     {
-        std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
-
         long rate = 0;
         int error = MPG123_OK;
         int mp3Encoding = 0;
