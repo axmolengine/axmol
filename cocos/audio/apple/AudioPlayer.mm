@@ -327,6 +327,25 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
                     alSourceQueueBuffers(_alSource, 1, &bid);
                 }
             }
+            /* Make sure the source hasn't underrun */
+            else if (sourceState != AL_PAUSED)
+            {
+                ALint queued;
+
+                /* If no buffers are queued, playback is finished */
+                alGetSourcei(_alSource, AL_BUFFERS_QUEUED, &queued);
+                if (queued == 0) {
+                    needToExitThread = true;
+                }
+                else {
+                    alSourcePlay(_alSource);
+                    if (alGetError() != AL_NO_ERROR)
+                    {
+                        ALOGE("Error restarting playback!");
+                        needToExitThread = true;
+                    }
+                }
+            }
 
             std::unique_lock<std::mutex> lk(_sleepMutex);
             if (_isDestroyed || needToExitThread) {
@@ -355,6 +374,16 @@ void AudioPlayer::wakeupRotateThread()
 {
     _needWakeupRotateThread = true;
     _sleepCondition.notify_all();
+}
+
+bool AudioPlayer::isFinished() const
+{
+    if(_streamingSource) return _isRotateThreadExited;
+    else {
+        ALint sourceState;
+        alGetSourcei(_alSource, AL_SOURCE_STATE, &sourceState);
+        return sourceState == AL_STOPPED;
+    }
 }
 
 bool AudioPlayer::setLoop(bool loop)

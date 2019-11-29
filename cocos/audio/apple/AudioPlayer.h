@@ -55,6 +55,8 @@ public:
     float getTime() { return _currTime;}
     bool setLoop(bool loop);
 
+    bool isFinished() const;
+
 protected:
     void setCache(AudioCache* cache);
     void rotateBufferThread(int offsetFrame);
@@ -65,7 +67,7 @@ protected:
 
     float _volume;
     bool _loop;
-    std::function<void (int, const std::string &)> _finishCallbak;
+    std::function<void (AUDIO_ID, const std::string &)> _finishCallbak;
 
     bool _isDestroyed;
     bool _removeByAudioEngine;
