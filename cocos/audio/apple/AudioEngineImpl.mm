@@ -448,10 +448,10 @@ AUDIO_ID AudioEngineImpl::play2d(const std::string &filePath ,bool loop ,float v
 
 void AudioEngineImpl::_play2d(AudioCache *cache, AUDIO_ID audioID)
 {
-    _threadMutex.lock();
-    //Note: It maybe in sub thread or main thread :(
+    //Note: It may bn in sub thread or main thread :(
     if (!*cache->_isDestroyed && cache->_state == AudioCache::State::READY)
     {
+        _threadMutex.lock();
         auto playerIt = _audioPlayers.find(audioID);
         if (playerIt != _audioPlayers.end() && playerIt->second->play2d()) {
             _scheduler->performFunctionInCocosThread([audioID](){
@@ -461,6 +461,7 @@ void AudioEngineImpl::_play2d(AudioCache *cache, AUDIO_ID audioID)
                 }
             });
         }
+        _threadMutex.unlock();
     }
     else
     {
@@ -471,7 +472,6 @@ void AudioEngineImpl::_play2d(AudioCache *cache, AUDIO_ID audioID)
             iter->second->_removeByAudioEngine = true;
         }
     }
-    _threadMutex.unlock();
 }
 
 ALuint AudioEngineImpl::findValidSource()
@@ -711,7 +711,7 @@ void AudioEngineImpl::update(float dt)
             delete player;
             _unusedSourcesPool.push_back(alSource);
         }
-        else if (player->_ready && sourceState == AL_STOPPED) {
+        else if (player->_ready && player->isFinished()) {
 
             std::string filePath;
             if (player->_finishCallbak) {
