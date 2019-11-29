@@ -1,21 +1,19 @@
 #include "SpineSkeletonDataCache.h"
 
-static auto error_log = &cocos2d::log;
-
-namespace spine {
-    extern void(*onLoadTextureFailed)(const char* format, ...);
-}
-
-void SpineSkeletonDataCache::setErrorLogFunc(void(*errorfunc)(const char* pszFormat, ...))
-{
-	error_log = errorfunc;
-	spine::onLoadTextureFailed = errorfunc;
-}
-
 SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 {
 	static SpineSkeletonDataCache internalShared;
 	return &internalShared;
+}
+
+SpineSkeletonDataCache::SpineSkeletonDataCache()
+{
+    _reportError = &cocos2d::log;
+}
+
+void SpineSkeletonDataCache::setErrorReportFunc(void(*errorfunc)(const char* pszFormat, ...))
+{
+    _reportError = std::move(errorfunc);
 }
 
 void SpineSkeletonDataCache::removeData(const char* dataFile)
@@ -65,7 +63,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
             skeletonData = spSkeletonBinary_readSkeletonDataFile(binary, dataFile);
             if ((binary->error != nullptr)) {
                 ++failed;
-                error_log("#parse spine .skel data file failed, error:%s", binary->error);
+                _reportError("#parse spine .skel data file failed, error:%s", binary->error);
             }
 
             spSkeletonBinary_dispose(binary);
@@ -81,7 +79,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
             skeletonData = spSkeletonJson_readSkeletonDataFile(json, dataFile);
             if ((json->error != nullptr)) {
                 ++failed;
-                error_log("#parse spine .json data file failed, error:%s", json->error);
+                _reportError("#parse spine .json data file failed, error:%s", json->error);
             }
 
             spSkeletonJson_dispose(json);
@@ -89,7 +87,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
 
 		if ((loader->error1 != nullptr)) {
 			++failed;
-			error_log("#parse spine attachment failed, error:%s%s", loader->error1, loader->error2);
+            _reportError("#parse spine attachment failed, error:%s%s", loader->error1, loader->error2);
 		}
 		
 		if (failed > 0) {
