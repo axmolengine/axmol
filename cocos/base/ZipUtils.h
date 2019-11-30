@@ -207,9 +207,15 @@ typedef struct unz_file_info_s unz_file_info;
     };
 
     // forward declaration
+    struct ZipEntryInfo;
     class ZipFilePrivate;
     struct unz_file_info_s;
 
+    struct ZipFileStream
+    {
+        ZipEntryInfo* entry;
+        long offset;
+    };
     /**
     * Zip file - reader helper class.
     *
@@ -285,8 +291,17 @@ typedef struct unz_file_info_s unz_file_info;
 
         std::string getFirstFilename();
         std::string getNextFilename();
-        
+
         static ZipFile *createWithBuffer(const void* buffer, unsigned long size);
+
+        /**
+        * zipFile Streaming support, !!!important, the file in zip must no compress level, otherwise
+        *  stream seek doesn't work.
+        */
+        bool zfopen(const std::string& fileName, ZipFileStream* zfs);
+        int zfread(ZipFileStream* zfs, void* buf, unsigned int size);
+        long zfseek(ZipFileStream* zfs, long offset, int origin);
+        void zfclose(ZipFileStream* zfs);
         
     private:
         /* Only used internal for createWithBuffer() */
