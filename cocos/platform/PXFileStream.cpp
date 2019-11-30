@@ -90,7 +90,7 @@ static PXIoF pfs_asset_iof = {
 
 // android obb
 static int pfs_obb_read(PXFileHandle& handle, void* buf, unsigned int size) { return FileUtilsAndroid::getObbFile()->zfread(&handle._zfs, buf, size); }
-static long pfs_obb_seek(PXFileHandle& handle, long offset, int origin) { return FileUtilsAndroid::getObbFile()->zfeek(&handle._zfs, offset, origin); }
+static long pfs_obb_seek(PXFileHandle& handle, long offset, int origin) { return FileUtilsAndroid::getObbFile()->zfseek(&handle._zfs, offset, origin); }
 static int pfs_obb_close(PXFileHandle& handle) {
     FileUtilsAndroid::getObbFile()->zfclose(&handle._zfs);
     return 0;
