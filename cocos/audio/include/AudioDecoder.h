@@ -26,6 +26,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <string>
 
 namespace cocos2d {
 

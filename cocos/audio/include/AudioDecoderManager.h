@@ -24,6 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #pragma once
+#include <string>
 
 namespace cocos2d {
 
