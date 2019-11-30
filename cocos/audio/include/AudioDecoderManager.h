@@ -24,6 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #pragma once
+#include <string>
 
 namespace cocos2d {
 
@@ -34,7 +35,7 @@ class AudioDecoderManager
 public:
     static bool init();
     static void destroy();
-    static AudioDecoder* createDecoder(const char* path);
+    static AudioDecoder* createDecoder(const std::string& path);
     static void destroyDecoder(AudioDecoder* decoder);
 };
 

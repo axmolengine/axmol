@@ -26,8 +26,7 @@
 #pragma once
 
 #include <stdint.h>
-
-#include "vorbis/vorbisfile.h"
+#include <string>
 
 namespace cocos2d {
 
@@ -43,7 +42,7 @@ public:
      * @brief Opens an audio file specified by a file path.
      * @return true if succeed, otherwise false.
      */
-    virtual bool open(const char* path) = 0;
+    virtual bool open(const std::string& path) = 0;
 
     /**
      * @brief Checks whether decoder has opened file successfully.

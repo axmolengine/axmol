@@ -42,7 +42,7 @@ public:
      * @brief Opens an audio file specified by a file path.
      * @return true if succeed, otherwise false.
      */
-    virtual bool open(const char* path) override;
+    virtual bool open(const std::string& path) override;
 
     /**
      * @brief Closes opened audio file.
