@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "base/ccUtils.h"
 #include "platform/CCCommon.h"
 #include "base/base64.h"
+#include "platform/CCFileUtils.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "platform/android/jni/JniHelper.h"
