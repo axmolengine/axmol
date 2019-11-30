@@ -20,6 +20,7 @@
 #include <jni.h>
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
+#include "base/ZipUtils.h"
 #endif
 
 NS_CC_BEGIN
@@ -29,7 +30,7 @@ union PXFileHandle {
     int _fd = -1;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     AAsset* _asset;
-    UnzFileStream* _uzfs;
+    ZipFileStream _zfs;
 #endif
 };
 
