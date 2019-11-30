@@ -512,7 +512,7 @@ class ZipFilePrivate
 {
 public:
     unzFile zipFile;
-	std::mutex zipFileMtx;
+    std::mutex zipFileMtx;
     std::unique_ptr<ourmemory_s> memfs;
     
     // std::unordered_map is faster if available on the platform
