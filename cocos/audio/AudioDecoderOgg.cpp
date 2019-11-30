@@ -40,7 +40,7 @@ namespace cocos2d {
 
     static size_t ov_fread_r(void* buffer, size_t element_size, size_t element_count, void* handle)
     {
-        return ((PXFileStream*)handle)->read(buffer, element_size * element_count);
+        return ((PXFileStream*)handle)->read(buffer, static_cast<uint32_t>(element_size * element_count));
     }
 
     static int ov_fseek_r(void * handle, ogg_int64_t offset, int whence)

@@ -28,16 +28,18 @@ THE SOFTWARE.
 
 #include "audio/include/AudioDecoderManager.h"
 #include "audio/include/AudioDecoderOgg.h"
-#include "audio/include/AudioDecoderWav.h"
 #include "audio/include/AudioMacros.h"
 #include "platform/CCFileUtils.h"
 #include "base/CCConsole.h"
 
 #if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
 #include "audio/include/AudioDecoderMp3.h"
+#include "audio/include/AudioDecoderWav.h"
 #else
 #include "audio/apple/AudioDecoderEXT.h"
 #endif
+
+#include "yasio/cxx17/string_view.hpp"
 
 namespace cocos2d {
 
@@ -55,12 +57,12 @@ void AudioDecoderManager::destroy()
 
 AudioDecoder* AudioDecoderManager::createDecoder(const std::string& path)
 {
-    std::string suffix = FileUtils::getInstance()->getFileExtension(path);
-    if (suffix == ".ogg")
+    cxx17::string_view svPath(path);
+    if (cxx20::ic::ends_with(svPath, ".ogg"))
     {
         return new (std::nothrow) AudioDecoderOgg();
     }
-    else if (suffix == ".mp3")
+    else if (cxx20::ic::ends_with(svPath, ".mp3"))
     {
 #if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
         return new (std::nothrow) AudioDecoderMp3();
@@ -68,8 +70,12 @@ AudioDecoder* AudioDecoderManager::createDecoder(const std::string& path)
         return new (std::nothrow) AudioDecoderEXT();
 #endif
     }
-    else if (suffix == ".wav") {
+    else if (cxx20::ic::ends_with(svPath, ".wav")) {
+#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
         return new (std::nothrow) AudioDecoderWav();
+#else
+        return new (std::nothrow) AudioDecoderEXT();
+#endif
     }
 
     return nullptr;
