@@ -192,8 +192,8 @@ bool FileUtilsAndroid::isFileExistInternal(const std::string& strFilePath) const
     }
     else
     {
-        struct stat64 st;
-        if (0 == ::stat64(strFilePath.c_str(), &st))
+        struct stat st;
+        if (::stat(strFilePath.c_str(), &st) == 0)
               bFound = S_ISREG(st.st_mode);
     }
     return bFound;
