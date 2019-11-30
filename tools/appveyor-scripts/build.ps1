@@ -111,7 +111,7 @@ If ($env:build_type -eq "android_cpp_tests") {
     & cmake -DCMAKE_BUILD_TYPE=Release ..
     if ($lastexitcode -ne 0) {throw}
 
-    & cmake --build . --config Release
+    & cmake --build . --config Release --target cpp-tests
     if ($lastexitcode -ne 0) {throw}
 
     & 7z a release_win32.7z $env:APPVEYOR_BUILD_FOLDER\win32-build\bin\

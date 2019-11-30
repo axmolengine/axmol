@@ -43,8 +43,6 @@ __inline int IsEqualGUID(const GUID& rguid1, const GUID& rguid2)
 }
 #endif
 
-static const size_t WAV_FILE_HEADER_SIZE = sizeof(WAV_FILE_HEADER);
-
 // 00000001-0000-0010-8000-00aa00389b71
 static const GUID WavSubTypePCM = {
     0x00000001, 0x0000, 0x0010, { 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 }
@@ -161,7 +159,7 @@ bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
     return true;
 }
 
-int wav_read(WAV_FILE* wavf, char* pcmBuf, size_t bytesToRead)
+int wav_read(WAV_FILE* wavf, char* pcmBuf, uint32_t bytesToRead)
 {
     return wavf->FileStream.read(pcmBuf, bytesToRead);
 }
