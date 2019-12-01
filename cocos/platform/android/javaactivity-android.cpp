@@ -30,7 +30,6 @@ THE SOFTWARE.
 #include "base/CCEventDispatcher.h"
 #include "renderer/CCTextureCache.h"
 #include "platform/android/jni/JniHelper.h"
-#include "network/CCDownloader-android.h"
 
 #include <android/log.h>
 #include <android/api-level.h>
@@ -98,7 +97,6 @@ JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, j
         director->setGLDefaultValues();
         cocos2d::VolatileTextureMgr::reloadAllTextures();
     }
-    cocos2d::network::_preloadJavaDownloaderClass();
 }
 
 JNIEXPORT jintArray Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextAttrs(JNIEnv*  env, jobject thiz)
