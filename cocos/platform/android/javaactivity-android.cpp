@@ -40,8 +40,6 @@ THE SOFTWARE.
 
 void cocos_android_app_init(JNIEnv* env) __attribute__((weak));
 
-void cocos_audioengine_focus_change(int focusChange);
-
 using namespace cocos2d;
 
 extern "C"
@@ -116,7 +114,7 @@ JNIEXPORT jintArray Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextAttrs(JNI
 
 JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxAudioFocusManager_nativeOnAudioFocusChange(JNIEnv* env, jobject thiz, jint focusChange)
 {
-    cocos_audioengine_focus_change(focusChange);
+    // cocos_audioengine_focus_change(focusChange);
 }
 
 JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnSurfaceChanged(JNIEnv*  env, jobject thiz, jint w, jint h)
