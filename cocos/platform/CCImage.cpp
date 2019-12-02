@@ -117,6 +117,7 @@ extern "C"
 #include "base/ZipUtils.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "platform/android/CCFileUtils-android.h"
+#include "platform/CCGL.h"
 #endif
 
 #define CC_GL_ATC_RGB_AMD                                          0x8C92
