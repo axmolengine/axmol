@@ -386,19 +386,10 @@ else()
     add_library(${APP_NAME} SHARED ${all_code_files})
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
+    target_link_libraries(${APP_NAME} -Wl,--whole-archive ext_ogg ext_vorbis ext_ssl ext_crypto -Wl,--no-whole-archive)
 endif()
 
-# add_subdirectory(${COCOS2DX_ROOT_PATH}/external)
-target_link_libraries(${APP_NAME} cocos2d 
-    ext_openal
-    ext_mpg123
-    ext_ogg
-    ext_vorbis
-    ext_vorbisfile
-    ext_curl
-    ext_ssl
-    ext_crypto
-)
+target_link_libraries(${APP_NAME} cocos2d)
 
 target_include_directories(${APP_NAME}
         PRIVATE Classes
