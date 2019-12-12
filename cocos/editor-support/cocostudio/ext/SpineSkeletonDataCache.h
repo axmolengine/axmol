@@ -12,16 +12,16 @@ public:
 	class SkeletonData : public cocos2d::Ref
 	{
 	public:
-		SkeletonData(spSkeletonData* d, spAttachmentLoader* loader) : data(d), attachmentLoader(loader) {}
+		SkeletonData(spine::SkeletonData* d, spine::AttachmentLoader* loader) : data(d), attachmentLoader(loader) {}
 		~SkeletonData()
 		{
 			if (data != nullptr)
-				spSkeletonData_dispose(data);
+				delete (data);
 			if (attachmentLoader != nullptr)
-				spAttachmentLoader_dispose(attachmentLoader);
+				delete (attachmentLoader);
 		}
-		spAttachmentLoader* attachmentLoader;
-		spSkeletonData* data;
+		spine::AttachmentLoader* attachmentLoader;
+        spine::SkeletonData* data;
 	};
 
 	static SpineSkeletonDataCache* getInstance();
