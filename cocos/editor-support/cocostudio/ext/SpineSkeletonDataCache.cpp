@@ -32,19 +32,21 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
 		return target->second;
 	}
 
-	spSkeletonData* skeletonData = nullptr;
-	spAttachmentLoader* loader = nullptr;
+	spine::SkeletonData* skeletonData = nullptr;
+    spine::AttachmentLoader* loader = nullptr;
 	bool ok = false;
 
     auto fileExtension = cocos2d::FileUtils::getInstance()->getFileExtension(dataFile);
 
+    static spine::Cocos2dTextureLoader s_textureLoader;
+
 	do {
-		spAtlas* atlas = spAtlas_createFromFile(atlasFile, 0);
+		auto atlas = new (__FILE__, __LINE__) spine::Atlas(atlasFile, &s_textureLoader);
 
 		if (nullptr == (atlas))
 			break;
 
-		loader = (spAttachmentLoader*)Cocos2dAttachmentLoader_create(atlas);
+		loader = new (__FILE__, __LINE__) spine::Cocos2dAtlasAttachmentLoader(atlas);
 
         int failed = 0;
 
@@ -53,49 +55,42 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
         ** Cache, we just need SkeletonData & atlas.
         */
         if (fileExtension == ".skel") {
-            auto binary = spSkeletonBinary_createWithLoader(loader);
+            /*auto binary = new (__FILE__, __LINE__) spine::SkeletonBinary(loader);
             if (nullptr == binary) {
-                spAtlas_dispose(atlas);
+                delete (atlas);
                 break;
-            }
+            }*/
+            spine::SkeletonBinary binary(loader);
 
-            binary->scale = scale;
-            skeletonData = spSkeletonBinary_readSkeletonDataFile(binary, dataFile);
-            if ((binary->error != nullptr)) {
+            binary.setScale(scale);
+            skeletonData = binary.readSkeletonDataFile(dataFile); // spSkeletonBinary_readSkeletonDataFile(binary, dataFile);
+            if ((!binary.getError().isEmpty())) {
                 ++failed;
-                _reportError("#parse spine .skel data file failed, error:%s", binary->error);
+                _reportError("#parse spine .skel data file failed, error:%s", binary.getError().buffer());
             }
-
-            spSkeletonBinary_dispose(binary);
         }
         else {
-            spSkeletonJson* json = spSkeletonJson_createWithLoader(loader); 
-            if (nullptr == json) {
-                spAtlas_dispose(atlas);
-                break;
-            }
+            spine::SkeletonJson json(loader);
 
-            json->scale = scale;
-            skeletonData = spSkeletonJson_readSkeletonDataFile(json, dataFile);
-            if ((json->error != nullptr)) {
+            json.setScale(scale);
+            skeletonData = json.readSkeletonDataFile(dataFile);
+            if ((!json.getError().isEmpty())) {
                 ++failed;
-                _reportError("#parse spine .json data file failed, error:%s", json->error);
+                _reportError("#parse spine .json data file failed, error:%s", json.getError().buffer());
             }
-
-            spSkeletonJson_dispose(json);
         }
 
-		if ((loader->error1 != nullptr)) {
+		/*if ((loader->error1 != nullptr)) {
 			++failed;
             _reportError("#parse spine attachment failed, error:%s%s", loader->error1, loader->error2);
-		}
+		}*/
 		
 		if (failed > 0) {
 			if (skeletonData != nullptr)
-				spSkeletonData_dispose(skeletonData);
+				delete (skeletonData);
 
-			spAtlas_dispose(atlas);
-			spAttachmentLoader_dispose(loader);
+			delete (atlas);
+			delete (loader);
 			break;
 		}
 

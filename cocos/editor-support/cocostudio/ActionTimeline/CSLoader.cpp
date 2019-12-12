@@ -80,7 +80,6 @@
 
 #include "editor-support/cocostudio/WidgetReader/SpineSkeletonReader/SpineSkeletonReader.h"
 #include "editor-support/cocostudio/WidgetReader/RichTextReader/RichTextReader.h"
-#include "editor-support/cocostudio/WidgetReader/ControlSwitchReader/ControlSwitchReader.h"
 #include "editor-support/cocostudio/WidgetReader/RadioButtonReader/RadioButtonReader.h"
 #include "editor-support/cocostudio/WidgetReader/RadioButtonReader/RadioButtonGroupReader.h"
 #include "editor-support/cocostudio/WidgetReader/TextFieldReader/TextFieldExReader.h"
@@ -244,7 +243,6 @@ CSLoader::CSLoader()
     /// Added by x-studio
     CREATE_CLASS_NODE_READER_INFO(RichTextReader);
     CREATE_CLASS_NODE_READER_INFO(SpineSkeletonReader);
-    CREATE_CLASS_NODE_READER_INFO(ControlSwitchReader);
     CREATE_CLASS_NODE_READER_INFO(RadioButtonReader);
     CREATE_CLASS_NODE_READER_INFO(RadioButtonGroupReader);
 
