@@ -48,7 +48,8 @@ LuaSkeletonAnimation::~LuaSkeletonAnimation()
 LuaSkeletonAnimation* LuaSkeletonAnimation::createWithFile (const char* skeletonDataFile, const char* atlasFile, float scale)
 {
 	LuaSkeletonAnimation* node = new (std::nothrow) LuaSkeletonAnimation();
-    spAtlas* atlas = spAtlas_createFromFile(atlasFile, nullptr);
+    static spine::Cocos2dTextureLoader s_loader;
+    spine::Atlas* atlas = new spine::Atlas(atlasFile, &s_loader);
     node->initWithJsonFile(skeletonDataFile, atlas, scale);
 	node->autorelease();
 	return node;
