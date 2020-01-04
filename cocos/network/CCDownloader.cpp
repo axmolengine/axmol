@@ -43,12 +43,12 @@ namespace cocos2d { namespace network {
 
     DownloadTask::DownloadTask(const std::string& srcUrl,
         const std::string& storagePath,
-        const std::string& md5checksum,
+        const std::string& checksum,
         const std::string& identifier)
     {
         this->requestURL = srcUrl;
         this->storagePath = storagePath;
-        this->md5checksum = md5checksum;
+        this->checksum = checksum;
         this->identifier = identifier;
     }
 

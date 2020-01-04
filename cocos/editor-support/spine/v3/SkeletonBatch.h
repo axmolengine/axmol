@@ -27,27 +27,53 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#include <spine/AttachmentVertices.h>
+#ifndef SPINE_SKELETONBATCH_H_
+#define SPINE_SKELETONBATCH_H_
 
-USING_NS_CC;
+#include "cocos2d.h"
+#if COCOS2D_VERSION < 0x00040000
+
+#include <spine/spine.h>
+#include <vector>
 
 namespace spine {
 
-AttachmentVertices::AttachmentVertices (Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount) {
-	_texture = texture;
-	if (_texture) _texture->retain();
+	class SkeletonBatch {
+	public:
+		static SkeletonBatch* getInstance ();
 
-	_triangles = new TrianglesCommand::Triangles();
-	_triangles->verts = new V3F_C4B_T2F[verticesCount];
-	_triangles->vertCount = verticesCount;
-	_triangles->indices = triangles;
-	_triangles->indexCount = trianglesCount;
+		static void destroyInstance ();
+
+		void update (float delta);
+
+		cocos2d::V3F_C4B_T2F* allocateVertices(uint32_t numVertices);
+		void deallocateVertices(uint32_t numVertices);
+		unsigned short* allocateIndices(uint32_t numIndices);
+		void deallocateIndices(uint32_t numVertices);
+		cocos2d::TrianglesCommand* addCommand(cocos2d::Renderer* renderer, float globalOrder, cocos2d::Texture2D* texture, cocos2d::GLProgramState* glProgramState, cocos2d::BlendFunc blendType, const cocos2d::TrianglesCommand::Triangles& triangles, const cocos2d::Mat4& mv, uint32_t flags);
+
+	protected:
+		SkeletonBatch ();
+		virtual ~SkeletonBatch ();
+
+		void reset ();
+
+		cocos2d::TrianglesCommand* nextFreeCommand ();
+
+		// pool of commands
+		std::vector<cocos2d::TrianglesCommand*> _commandsPool;
+		uint32_t _nextFreeCommand;
+
+		// pool of vertices
+		std::vector<cocos2d::V3F_C4B_T2F> _vertices;
+		uint32_t _numVertices;
+
+		// pool of indices
+		Vector<unsigned short> _indices;
+	};
+
 }
 
-AttachmentVertices::~AttachmentVertices () {
-	delete [] _triangles->verts;
-	delete _triangles;
-	if (_texture) _texture->release();
-}
+#endif
 
-}
+#endif // SPINE_SKELETONBATCH_H_
