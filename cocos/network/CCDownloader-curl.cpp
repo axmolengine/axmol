@@ -29,12 +29,12 @@
 
 #include <curl/curl.h>
 #include <thread>
+#include "base/ccUtils.h"
 #include "base/CCDirector.h"
 #include "base/CCScheduler.h"
 #include "platform/CCFileUtils.h"
 #include "network/CCDownloader.h"
 #include "platform/PXFileStream.h"
-#include "base/ccUTF8.h"
 #include "md5/md5.h"
 #include "yasio/xxsocket.hpp"
 
@@ -178,30 +178,40 @@ namespace cocos2d { namespace network {
 
         void cancel()  override
         {
-            if (this->_sockfd != -1)
-            {
-                ::shutdown(this->_sockfd, SD_BOTH); // will cause curl CURLE_SEND_ERROR(55) or CURLE_RECV_ERROR(56)
-                this->_sockfd = -1;
+            lock_guard<std::recursive_mutex> lock(_mutex);
+
+            if (!_cancelled) {
+                _cancelled = true;
+                if (this->_sockfd != -1)
+                {
+                    ::shutdown(this->_sockfd, SD_BOTH); // may cause curl CURLE_SEND_ERROR(55) or CURLE_RECV_ERROR(56)
+                    this->_sockfd = -1;
+                }
             }
         }
 
         curl_socket_t openSocket(curlsocktype propose, curl_sockaddr* addr)
         {
-            this->_sockfd = ::socket(addr->family, addr->socktype, addr->protocol);
-            return this->_sockfd;
+            lock_guard<std::recursive_mutex> lock(_mutex);
+
+            if (!_cancelled) {
+                this->_sockfd = ::socket(addr->family, addr->socktype, addr->protocol);
+                return this->_sockfd;
+            }
+            return -1;
         }
 
 		/*
 		retval: 0. don't check, 1. check succeed, 2. check failed
 		*/
-		int checkFileMd5(const std::string& md5checksum, std::string* outsum = nullptr) {
+		int checkFileMd5(const std::string& checksum, std::string* outsum = nullptr) {
 			int status = 0;
-			if (!md5checksum.empty()) {
+			if (!checksum.empty()) {
 				std::string digest(16, '\0');
 				auto state = _md5State; // Excellent, make a copy, don't modify the origin state.
 				md5_finish(&state, (md5_byte_t*)&digest.front());
-                auto checksum = "";// nsc::bin2hex(digest);
-				status = md5checksum == checksum ? kCheckSumStateSucceed : kCheckSumStateFailed;
+                auto checksum = utils::bin2hex(digest);
+				status = checksum == checksum ? kCheckSumStateSucceed : kCheckSumStateFailed;
 
 				if (outsum != nullptr)
 					*outsum = std::move(checksum);
@@ -211,13 +221,13 @@ namespace cocos2d { namespace network {
 
         void initProc()
         {
-            lock_guard<mutex> lock(_mutex);
+            lock_guard<std::recursive_mutex> lock(_mutex);
             _initInternal();
         }
 
         void setErrorProc(int code, int codeInternal, const char *desc)
         {
-            lock_guard<mutex> lock(_mutex);
+            lock_guard<std::recursive_mutex> lock(_mutex);
             _errCode = code;
             _errCodeInternal = codeInternal;
             _errDescription = desc;
@@ -225,7 +235,7 @@ namespace cocos2d { namespace network {
 
         size_t writeDataProc(unsigned char *buffer, size_t size, size_t count)
         {
-            lock_guard<mutex> lock(_mutex);
+            lock_guard<std::recursive_mutex> lock(_mutex);
             size_t ret = 0;
 
 			auto bytes_transferred = size * count;
@@ -264,7 +274,7 @@ namespace cocos2d { namespace network {
         friend class DownloaderCURL;
 
         // for lock object instance
-        mutex _mutex;
+        std::recursive_mutex _mutex;
 
         // header info
         bool    _acceptRanges;
@@ -274,6 +284,7 @@ namespace cocos2d { namespace network {
         double _speed;
         CURL* _curl;
         curl_socket_t _sockfd = -1; // store the sockfd to support cancel download manually
+        bool _cancelled = false;
 
         string  _header;        // temp buffer for receive header string, only used in thread proc
 
@@ -339,7 +350,7 @@ namespace cocos2d { namespace network {
 
         void addTask(std::shared_ptr<DownloadTask> task, DownloadTaskCURL* coTask)
         {
-			int status = coTask->checkFileMd5(task->md5checksum);
+			int status = coTask->checkFileMd5(task->checksum);
 
 			if (status & kCheckSumStateSucceed || DownloadTask::ERROR_NO_ERROR != coTask->_errCode)
 			{
@@ -418,7 +429,7 @@ namespace cocos2d { namespace network {
 			return 0;
 		}
 
-        static int _openSocketCallback(DownloadTaskCURL& pTask, curlsocktype propose, curl_sockaddr* addr)
+        static curl_socket_t _openSocketCallback(DownloadTaskCURL& pTask, curlsocktype propose, curl_sockaddr* addr)
         {
             return pTask.openSocket(propose, addr);
         }
@@ -553,7 +564,7 @@ namespace cocos2d { namespace network {
                 }
 
                 // set header info to coTask
-                lock_guard<mutex> lock(coTask._mutex);
+                lock_guard<std::recursive_mutex> lock(coTask._mutex);
                 coTask._totalBytesExpected = (int64_t)contentLen;
                 coTask._acceptRanges = acceptRanges;
                 if (acceptRanges && fileSize > 0)
@@ -940,11 +951,11 @@ public:
 
 				// Try check sum with md5 digest
 				std::string realMd5;
-				if (coTask.checkFileMd5(task.md5checksum, &realMd5) & kCheckSumStateFailed) {
+				if (coTask.checkFileMd5(task.checksum, &realMd5) & kCheckSumStateFailed) {
 					coTask._errCode = DownloadTask::ERROR_CHECK_SUM_FAILED;
 					coTask._errCodeInternal = 0;
 					coTask._errDescription = StringUtils::format("Check file: %s md5 failed, required:%s, real:%s", coTask._fileName.c_str(),
-						task.md5checksum.c_str(),
+						task.checksum.c_str(),
 						realMd5.c_str());
 
                     pFileUtils->removeFile(coTask._checksumFileName);
@@ -988,7 +999,7 @@ public:
             const DownloadTask& task = *wrapper.first;
             DownloadTaskCURL& coTask = *wrapper.second;
 
-            lock_guard<mutex> lock(coTask._mutex);
+            lock_guard<std::recursive_mutex> lock(coTask._mutex);
             if (coTask._bytesReceived)
             {
                 _currTask = &coTask;
