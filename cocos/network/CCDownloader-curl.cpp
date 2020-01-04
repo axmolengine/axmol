@@ -30,6 +30,7 @@
 #include <curl/curl.h>
 #include <thread>
 #include "base/ccUtils.h"
+#include "base/ccUTF8.h"
 #include "base/CCDirector.h"
 #include "base/CCScheduler.h"
 #include "platform/CCFileUtils.h"
