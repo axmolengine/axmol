@@ -23,7 +23,6 @@
  ****************************************************************************/
 
 #include "platform/CCPlatformConfig.h"
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_MAC) && (CC_TARGET_PLATFORM != CC_PLATFORM_IOS) && (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
 #include "CurlTest.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -126,4 +125,3 @@ CurlTest::~CurlTest()
 {
     _label->release();
 }
-#endif
