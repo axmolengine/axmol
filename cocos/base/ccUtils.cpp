@@ -686,6 +686,41 @@ std::vector<int> parseIntegerList(const std::string &intsString) {
     return result;
 }
 
+std::string bin2hex(const std::string& binary /*charstring also regard as binary in C/C++*/, int delim, bool prefix)
+{
+    char low;
+    char high;
+    size_t len = binary.length();
+
+    bool delim_needed = delim != -1 || delim == ' ';
+
+    std::string result;
+    result.reserve((len << 1) + (delim_needed ? len : 0) + (prefix ? (len << 1) : 0));
+
+
+    for (size_t i = 0; i < len; ++i)
+    {
+        auto ch = binary[i];
+        high = (ch >> 4) & 0x0f;
+        low = ch & 0x0f;
+        if (prefix) {
+            result.push_back('0');
+            result.push_back('x');
+        }
+
+        auto hic = CC_HEX2CHAR(high);
+        auto lic = CC_HEX2CHAR(low);
+        result.push_back(hic);
+        result.push_back(lic);
+        if (delim_needed)
+        {
+            result.push_back(delim);
+        }
+    }
+
+    return result;
+}
+
 }
 
 NS_CC_END

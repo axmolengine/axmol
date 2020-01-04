@@ -69,7 +69,7 @@ namespace cocos2d { namespace network {
         DownloadTask(const std::string& srcUrl, const std::string& identifier);
         DownloadTask(const std::string& srcUrl,
             const std::string& storagePath,
-            const std::string& md5checksum,
+            const std::string& checksum, // currently is MD5
             const std::string& identifier);
 
         virtual ~DownloadTask();
@@ -77,7 +77,7 @@ namespace cocos2d { namespace network {
         // Cancel the download, it's useful for ios platform switch wifi to 4g
         void cancel();
 
-		std::string md5checksum; // For check only when download finished.
+		std::string checksum; // The MD5 checksum for check only when download finished.
 		
     private:
         friend class Downloader;
@@ -122,7 +122,7 @@ namespace cocos2d { namespace network {
 
         std::shared_ptr<DownloadTask> createDownloadDataTask(const std::string& srcUrl, const std::string& identifier = "");
 
-        std::shared_ptr<DownloadTask> createDownloadFileTask(const std::string& srcUrl, const std::string& storagePath, const std::string& md5checksum = "", const std::string& identifier = "");
+        std::shared_ptr<DownloadTask> createDownloadFileTask(const std::string& srcUrl, const std::string& storagePath, const std::string& checksum = "", const std::string& identifier = "");
 
     private:
         std::unique_ptr<IDownloaderImpl> _impl;

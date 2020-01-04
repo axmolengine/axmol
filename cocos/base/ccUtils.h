@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "renderer/backend/Types.h"
 #include "math/Mat4.h"
 
+#define CC_HEX2CHAR(hex) (hex < 0xa ? (hex + '0') : (hex + 'a' - 10))
+
 /** @file ccUtils.h
 Misc free functions
 */
@@ -214,6 +216,14 @@ namespace utils
     * @lua NA
     */
     CC_DLL std::vector<int> parseIntegerList(const std::string &intsString);
+	
+	/**
+    @brief translate charstring/binarystream to hexstring.
+    @return hexstring.
+    * @js NA
+    * @lua NA
+    */
+    CC_DLL std::string bin2hex(const std::string& binary /*charstring also regard as binary in C/C++*/, int delim = -1, bool prefix = false);
 }
 
 NS_CC_END
