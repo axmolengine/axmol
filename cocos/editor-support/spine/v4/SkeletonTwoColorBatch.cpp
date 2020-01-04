@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated May 1, 2019. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2019, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -15,18 +15,21 @@
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
- * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
- * NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
- * INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
+ * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
-#include <spine/SkeletonTwoColorBatch.h>
+
+#include <spine/spine-cocos2dx.h>
+#if COCOS2D_VERSION >= 0x00040000
+
 #include <spine/Extension.h>
 #include <algorithm>
 #include <stddef.h> // offsetof
@@ -103,7 +106,7 @@ namespace {
             return;
         }
         auto program = backend::Device::getInstance()->newProgram(TWO_COLOR_TINT_VERTEX_SHADER, TWO_COLOR_TINT_FRAGMENT_SHADER);
-        auto *programState = new backend::ProgramState(program);
+        auto* programState = new backend::ProgramState(program);
         program->autorelease();
 
         __locPMatrix = programState->getUniformLocation("u_PMatrix");
@@ -111,10 +114,15 @@ namespace {
 
         auto layout = programState->getVertexLayout();
 
-        layout->setAttribute("a_position", 0, backend::VertexFormat::FLOAT3, offsetof(spine::V3F_C4B_C4B_T2F, position), false);
-        layout->setAttribute("a_color", 1, backend::VertexFormat::UBYTE4, offsetof(spine::V3F_C4B_C4B_T2F, color), true);
-        layout->setAttribute("a_color2", 2, backend::VertexFormat::UBYTE4, offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
-        layout->setAttribute("a_texCoords", 3, backend::VertexFormat::FLOAT2, offsetof(spine::V3F_C4B_C4B_T2F, texCoords), false);
+        auto locPosition = programState->getAttributeLocation("a_position");
+        auto locTexcoord = programState->getAttributeLocation("a_texCoords");
+        auto locColor = programState->getAttributeLocation("a_color");
+        auto locColor2 = programState->getAttributeLocation("a_color2");
+
+        layout->setAttribute("a_position", locPosition, backend::VertexFormat::FLOAT3, offsetof(spine::V3F_C4B_C4B_T2F, position), false);
+        layout->setAttribute("a_color", locColor, backend::VertexFormat::UBYTE4, offsetof(spine::V3F_C4B_C4B_T2F, color), true);
+        layout->setAttribute("a_color2", locColor2, backend::VertexFormat::UBYTE4, offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
+        layout->setAttribute("a_texCoords", locTexcoord, backend::VertexFormat::FLOAT2, offsetof(spine::V3F_C4B_C4B_T2F, texCoords), false);
         layout->setLayout(sizeof(spine::V3F_C4B_C4B_T2F));
 
         __twoColorProgramState = std::shared_ptr<backend::ProgramState>(programState);
@@ -124,7 +132,7 @@ namespace {
 
 namespace spine {
 
-TwoColorTrianglesCommand::TwoColorTrianglesCommand() :_materialID(0), _texture(nullptr), _blendType(BlendFunc::DISABLE), _alphaTextureID(0) {
+TwoColorTrianglesCommand::TwoColorTrianglesCommand() :_materialID(0), _texture(nullptr), _blendType(BlendFunc::DISABLE) {
 	_type = RenderCommand::Type::CUSTOM_COMMAND;
 }
 
@@ -132,7 +140,7 @@ void TwoColorTrianglesCommand::init(float globalOrder, cocos2d::Texture2D *textu
 
     updateCommandPipelineDescriptor();
     const cocos2d::Mat4& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    
+
     auto finalMatrix = projectionMat * mv;
 
     _programState->setUniform(_locPMatrix, finalMatrix.m, sizeof(finalMatrix.m));
@@ -151,11 +159,11 @@ void TwoColorTrianglesCommand::init(float globalOrder, cocos2d::Texture2D *textu
     _mv = mv;
 
     if (_blendType.src != blendType.src || _blendType.dst != blendType.dst ||
-        _texture != texture->getBackendTexture() || _pipelineDescriptor.programState != _programState) 
+        _texture != texture->getBackendTexture() || _pipelineDescriptor.programState != _programState)
     {
 		_texture = texture->getBackendTexture();
 		_blendType = blendType;
-		
+
         _prog = _programState->getProgram();
 
         auto& blendDescriptor = _pipelineDescriptor.blendDescriptor;
@@ -177,13 +185,13 @@ void TwoColorTrianglesCommand::updateCommandPipelineDescriptor()
     }
 
     CC_SAFE_RELEASE_NULL(_programState);
-    _programState                           = __twoColorProgramState->clone();
-    _locPMatrix                             = __locPMatrix;
-    _locTexture                             = __locTexture;
-    _pipelineDescriptor.programState        = _programState;
+    _programState = __twoColorProgramState->clone();
+    _locPMatrix = __locPMatrix;
+    _locTexture = __locTexture;
+    _pipelineDescriptor.programState = _programState;
 }
 
-TwoColorTrianglesCommand::~TwoColorTrianglesCommand() 
+TwoColorTrianglesCommand::~TwoColorTrianglesCommand()
 {
     CC_SAFE_RELEASE_NULL(_programState);
 }
@@ -223,7 +231,7 @@ void TwoColorTrianglesCommand::updateVertexAndIndexBuffer(Renderer *r, V3F_C4B_C
         createVertexBuffer(sizeof(V3F_C4B_C4B_T2F), verticesSize, CustomCommand::BufferUsage::DYNAMIC);
     if(indicesSize != _indexCapacity)
         createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, indicesSize, CustomCommand::BufferUsage::DYNAMIC);
-    
+
     updateVertexBuffer(vertices, sizeof(V3F_C4B_C4B_T2F) * verticesSize);
     updateIndexBuffer(indices, sizeof(uint16_t) * indicesSize);
 }
@@ -248,20 +256,20 @@ SkeletonTwoColorBatch::SkeletonTwoColorBatch () : _vertexBuffer(0), _indexBuffer
 	for (unsigned int i = 0; i < INITIAL_SIZE; i++) {
 		_commandsPool.push_back(new TwoColorTrianglesCommand());
 	}
-	
+
 	reset ();
-	
+
 	// callback after drawing is finished so we can clear out the batch state
 	// for the next frame
 	Director::getInstance()->getEventDispatcher()->addCustomEventListener(EVENT_AFTER_DRAW_RESET_POSITION, [this](EventCustom* eventCustom){
 		this->update(0);
 	});
-	
+
 }
 
 SkeletonTwoColorBatch::~SkeletonTwoColorBatch () {
 	Director::getInstance()->getEventDispatcher()->removeCustomEventListeners(EVENT_AFTER_DRAW_RESET_POSITION);
-	
+
 	for (unsigned int i = 0; i < _commandsPool.size(); i++) {
 		delete _commandsPool[i];
 		_commandsPool[i] = nullptr;
@@ -271,7 +279,7 @@ SkeletonTwoColorBatch::~SkeletonTwoColorBatch () {
 	delete[] _indexBuffer;
 }
 
-void SkeletonTwoColorBatch::update (float delta) {	
+void SkeletonTwoColorBatch::update (float delta) {
 	reset();
 }
 
@@ -286,13 +294,13 @@ V3F_C4B_C4B_T2F* SkeletonTwoColorBatch::allocateVertices(uint32_t numVertices) {
 			triangles.verts = newData + (triangles.verts - oldData);
 		}
 	}
-	
+
 	V3F_C4B_C4B_T2F* vertices = _vertices.data() + _numVertices;
 	_numVertices += numVertices;
 	return vertices;
 }
-	
-	
+
+
 void SkeletonTwoColorBatch::deallocateVertices(uint32_t numVertices) {
 	_numVertices -= numVertices;
 }
@@ -312,7 +320,7 @@ unsigned short* SkeletonTwoColorBatch::allocateIndices(uint32_t numIndices) {
 			}
 		}
 	}
-	
+
 	unsigned short* indices = _indices.buffer() + _indices.size();
 	_indices.setSize(_indices.size() + numIndices, 0);
 	return indices;
@@ -326,45 +334,45 @@ TwoColorTrianglesCommand* SkeletonTwoColorBatch::addCommand(cocos2d::Renderer* r
 	TwoColorTrianglesCommand* command = nextFreeCommand();
 	command->init(globalOrder, texture, blendType, triangles, mv, flags);
     command->updateVertexAndIndexBuffer(renderer, triangles.verts, triangles.vertCount, triangles.indices, triangles.indexCount);
-	renderer->addCommand(command);	
+	renderer->addCommand(command);
 	return command;
 }
-	
+
 void SkeletonTwoColorBatch::batch (cocos2d::Renderer *renderer, TwoColorTrianglesCommand* command) {
 	if (_numVerticesBuffer + command->getTriangles().vertCount >= MAX_VERTICES || _numIndicesBuffer + command->getTriangles().indexCount >= MAX_INDICES) {
 		flush(renderer, _lastCommand);
 	}
-	
+
 	uint32_t materialID = command->getMaterialID();
 	if (_lastCommand && _lastCommand->getMaterialID() != materialID) {
 		flush(renderer, _lastCommand);
 	}
-	
+
 	memcpy(_vertexBuffer + _numVerticesBuffer, command->getTriangles().verts, sizeof(V3F_C4B_C4B_T2F) * command->getTriangles().vertCount);
 	const Mat4& modelView = command->getModelView();
 	for (int i = _numVerticesBuffer; i < _numVerticesBuffer + command->getTriangles().vertCount; i++) {
 		modelView.transformPoint(&_vertexBuffer[i].position);
 	}
-	
+
 	unsigned short vertexOffset = (unsigned short)_numVerticesBuffer;
 	unsigned short* indices = command->getTriangles().indices;
 	for (int i = 0, j = _numIndicesBuffer; i < command->getTriangles().indexCount; i++, j++) {
 		_indexBuffer[j] = indices[i] + vertexOffset;
 	}
-	
+
 	_numVerticesBuffer += command->getTriangles().vertCount;
 	_numIndicesBuffer += command->getTriangles().indexCount;
-	
+
 	if (command->isForceFlush()) {
 		flush(renderer, command);
 	}
 	_lastCommand = command;
 }
-	
+
 void SkeletonTwoColorBatch::flush (cocos2d::Renderer *renderer, TwoColorTrianglesCommand* materialCommand) {
 	if (!materialCommand)
 		return;
-	
+
     materialCommand->updateVertexAndIndexBuffer(renderer, _vertexBuffer, _numVerticesBuffer, _indexBuffer, _numIndicesBuffer);
 
     renderer->addCommand(materialCommand);
@@ -396,3 +404,5 @@ TwoColorTrianglesCommand* SkeletonTwoColorBatch::nextFreeCommand() {
 	return command;
 }
 }
+
+#endif

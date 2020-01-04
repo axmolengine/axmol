@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated May 1, 2019. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2019, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -15,16 +15,16 @@
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
- * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
- * NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
- * INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
+ * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #include <spine/spine-cocos2dx.h>
@@ -48,7 +48,7 @@ static void setAttachmentVertices(RegionAttachment* attachment) {
 		vertices[i].texCoords.u = attachment->getUVs()[ii];
 		vertices[i].texCoords.v = attachment->getUVs()[ii + 1];
 	}
-	attachment->setRendererObject(attachmentVertices, deleteAttachmentVertices);	
+	attachment->setRendererObject(attachmentVertices, deleteAttachmentVertices);
 }
 
 static void setAttachmentVertices(MeshAttachment* attachment) {
@@ -63,7 +63,7 @@ static void setAttachmentVertices(MeshAttachment* attachment) {
 	attachment->setRendererObject(attachmentVertices, deleteAttachmentVertices);
 }
 
-Cocos2dAtlasAttachmentLoader::Cocos2dAtlasAttachmentLoader(Atlas* atlas): AtlasAttachmentLoader(atlas) {	
+Cocos2dAtlasAttachmentLoader::Cocos2dAtlasAttachmentLoader(Atlas* atlas): AtlasAttachmentLoader(atlas) {
 }
 
 Cocos2dAtlasAttachmentLoader::~Cocos2dAtlasAttachmentLoader() { }
@@ -107,29 +107,29 @@ backend::SamplerFilter filter (TextureFilter filter) {
 #else
 
 GLuint wrap (TextureWrap wrap) {
-    return wrap ==  TextureWrap_ClampToEdge ? GL_CLAMP_TO_EDGE : GL_REPEAT;
+	return wrap ==  TextureWrap_ClampToEdge ? GL_CLAMP_TO_EDGE : GL_REPEAT;
 }
 
 GLuint filter (TextureFilter filter) {
-    switch (filter) {
-        case TextureFilter_Unknown:
-            break;
-        case TextureFilter_Nearest:
-            return GL_NEAREST;
-        case TextureFilter_Linear:
-            return GL_LINEAR;
-        case TextureFilter_MipMap:
-            return GL_LINEAR_MIPMAP_LINEAR;
-        case TextureFilter_MipMapNearestNearest:
-            return GL_NEAREST_MIPMAP_NEAREST;
-        case TextureFilter_MipMapLinearNearest:
-            return GL_LINEAR_MIPMAP_NEAREST;
-        case TextureFilter_MipMapNearestLinear:
-            return GL_NEAREST_MIPMAP_LINEAR;
-        case TextureFilter_MipMapLinearLinear:
-            return GL_LINEAR_MIPMAP_LINEAR;
-    }
-    return GL_LINEAR;
+	switch (filter) {
+	case TextureFilter_Unknown:
+		break;
+	case TextureFilter_Nearest:
+		return GL_NEAREST;
+	case TextureFilter_Linear:
+		return GL_LINEAR;
+	case TextureFilter_MipMap:
+		return GL_LINEAR_MIPMAP_LINEAR;
+	case TextureFilter_MipMapNearestNearest:
+		return GL_NEAREST_MIPMAP_NEAREST;
+	case TextureFilter_MipMapLinearNearest:
+		return GL_LINEAR_MIPMAP_NEAREST;
+	case TextureFilter_MipMapNearestLinear:
+		return GL_NEAREST_MIPMAP_LINEAR;
+	case TextureFilter_MipMapLinearLinear:
+		return GL_LINEAR_MIPMAP_LINEAR;
+	}
+	return GL_LINEAR;
 }
 
 #endif
@@ -140,32 +140,36 @@ Cocos2dTextureLoader::~Cocos2dTextureLoader() { }
 void Cocos2dTextureLoader::load(AtlasPage& page, const spine::String& path) {
 	Texture2D* texture = Director::getInstance()->getTextureCache()->addImage(path.buffer());
 	CCASSERT(texture != nullptr, "Invalid image");
-	texture->retain();
+	if (texture) {
+		texture->retain();
 #if COCOS2D_VERSION >= 0x0040000
-	Texture2D::TexParams textureParams(filter(page.minFilter), filter(page.magFilter), wrap(page.uWrap), wrap(page.vWrap));
+		Texture2D::TexParams textureParams(filter(page.minFilter), filter(page.magFilter), wrap(page.uWrap), wrap(page.vWrap));
 #else
-    Texture2D::TexParams textureParams = {filter(page.minFilter), filter(page.magFilter), wrap(page.uWrap), wrap(page.vWrap)};
+		Texture2D::TexParams textureParams = {filter(page.minFilter), filter(page.magFilter), wrap(page.uWrap), wrap(page.vWrap)};
 #endif
-	texture->setTexParameters(textureParams);
-	
-	page.setRendererObject(texture);
-	page.width = texture->getPixelsWide();
-	page.height = texture->getPixelsHigh();
+		texture->setTexParameters(textureParams);
+
+		page.setRendererObject(texture);
+		page.width = texture->getPixelsWide();
+		page.height = texture->getPixelsHigh();
+	}
 }
-	
+
 void Cocos2dTextureLoader::unload(void* texture) {
-	((Texture2D*)texture)->release();
+	if (texture) {
+		((Texture2D*)texture)->release();
+	}
 }
 
 
 Cocos2dExtension::Cocos2dExtension() : DefaultSpineExtension() { }
-	
+
 Cocos2dExtension::~Cocos2dExtension() { }
 
 char *Cocos2dExtension::_readFile(const spine::String &path, int *length) {
 	Data data = FileUtils::getInstance()->getDataFromFile(FileUtils::getInstance()->fullPathForFilename(path.buffer()));
-	if (data.isNull()) return 0;
-	
+	if (data.isNull()) return nullptr;
+
 	// avoid buffer overflow (int is shorter than ssize_t in certain platforms)
 #if COCOS2D_VERSION >= 0x00031200
 	ssize_t tmpLen;
@@ -180,8 +184,6 @@ char *Cocos2dExtension::_readFile(const spine::String &path, int *length) {
 #endif
 }
 
-//SpineExtension *spine::getDefaultExtension () {
-//	return new Cocos2dExtension();
-//}
-
-static int __preinit_spine_extension = (spine::SpineExtension::setInstance(new Cocos2dExtension()), 0);
+SpineExtension *spine::getDefaultExtension () {
+	return new Cocos2dExtension();
+}
