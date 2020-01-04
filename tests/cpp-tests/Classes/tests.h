@@ -51,6 +51,8 @@
 #include "WindowTest/WindowTest.h"
 #endif
 
+#include "YAsioTest/YAsioTest.h"
+
 // sort them alphabetically. thanks
 #include "ActionManagerTest/ActionManagerTest.h"
 #include "ActionsEaseTest/ActionsEaseTest.h"

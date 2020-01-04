@@ -56,10 +56,8 @@ public:
         addTest("Click and Move", [](){return new ClickAndMoveTest(); });
         addTest("Configuration", []() { return new ConfigurationTests(); });
         addTest("Console", []() { return new ConsoleTests(); });
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_MAC) && (CC_TARGET_PLATFORM != CC_PLATFORM_IOS) && (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
-        // android and ios don't use CURL
         addTest("Curl", []() { return new CurlTests(); });
-#endif
+        addTest("yasio", []() { return new YAsioTests(); });
         addTest("Current Language", []() { return new CurrentLanguageTests(); });
         addTest("Downloader Test", []() { return new DownloaderTests(); });
         addTest("EventDispatcher", []() { return new EventDispatcherTests(); });
