@@ -205,14 +205,14 @@ namespace cocos2d { namespace network {
 		/*
 		retval: 0. don't check, 1. check succeed, 2. check failed
 		*/
-		int checkFileMd5(const std::string& checksum, std::string* outsum = nullptr) {
+		int checkFileMd5(const std::string& requiredsum, std::string* outsum = nullptr) {
 			int status = 0;
-			if (!checksum.empty()) {
+			if (!requiredsum.empty()) {
 				std::string digest(16, '\0');
 				auto state = _md5State; // Excellent, make a copy, don't modify the origin state.
 				md5_finish(&state, (md5_byte_t*)&digest.front());
                 auto checksum = utils::bin2hex(digest);
-				status = checksum == checksum ? kCheckSumStateSucceed : kCheckSumStateFailed;
+				status = requiredsum == checksum ? kCheckSumStateSucceed : kCheckSumStateFailed;
 
 				if (outsum != nullptr)
 					*outsum = std::move(checksum);
