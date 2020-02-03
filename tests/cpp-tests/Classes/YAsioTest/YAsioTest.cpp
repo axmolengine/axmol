@@ -96,7 +96,7 @@ void yasioTest()
             if (--max_request_count > 0)
             {
                 udpconn_delay.expires_from_now(std::chrono::seconds(1));
-                udpconn_delay.async_wait([&](bool) { service.open(0, YCM_SSL_CLIENT); });
+                udpconn_delay.async_wait([&]() { service.open(0, YCM_SSL_CLIENT); });
             }
             else
                 service.stop_service();
