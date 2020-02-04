@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com.
  
  http://www.cocos2d-x.org
  
@@ -58,50 +59,50 @@ UserDefaultTest::UserDefaultTest()
     doTest();
 }
 
-template<typename T>
-void logData(const char* key)
-{
-    Data data = UserDefault::getInstance()->getDataForKey(key);
-    T* buffer = (T*) data.getBytes();
-    ssize_t length = data.getSize() / sizeof(T);
+//template<typename T>
+//void logData(const char* key)
+//{
+//    Data data = UserDefault::getInstance()->getDataForKey(key);
+//    T* buffer = (T*) data.getBytes();
+//    ssize_t length = data.getSize() / sizeof(T);
+//
+//    std::ostringstream ss;
+//    ss << setprecision(2) << std::fixed;
+//    for (int i = 0; i < length; i++)
+//    {
+//        ss << buffer[i] << " ";
+//    }
+//
+//    CCLOG("%s is %s", key, ss.str().c_str());
+//}
 
-    std::ostringstream ss;
-    ss << setprecision(2) << std::fixed;
-    for (int i = 0; i < length; i++)
-    {
-        ss << buffer[i] << " ";
-    }
-
-    CCLOG("%s is %s", key, ss.str().c_str());
-}
-
-template<typename T>
-void setData(const char* key)
-{
-    Data data;
-    vector<T> v;
-
-    for (int i = 0; i <= 5; i++)
-    {
-        v.push_back(static_cast<T>(i));
-    }
-    data.copy((unsigned char*) v.data(), v.size() * sizeof(T));
-    UserDefault::getInstance()->setDataForKey(key, data);
-}
-
-template<typename T>
-void setData2(const char* key)
-{
-    Data data;
-    vector<T> v;
-
-    for (int i = 5; i >= 0; i--)
-    {
-        v.push_back(static_cast<T>(i));
-    }
-    data.copy((unsigned char*) v.data(), v.size() * sizeof(T));
-    UserDefault::getInstance()->setDataForKey(key, data);
-}
+//template<typename T>
+//void setData(const char* key)
+//{
+//    Data data;
+//    vector<T> v;
+//
+//    for (int i = 0; i <= 5; i++)
+//    {
+//        v.push_back(static_cast<T>(i));
+//    }
+//    data.copy((unsigned char*) v.data(), v.size() * sizeof(T));
+//    UserDefault::getInstance()->setDataForKey(key, data);
+//}
+//
+//template<typename T>
+//void setData2(const char* key)
+//{
+//    Data data;
+//    vector<T> v;
+//
+//    for (int i = 5; i >= 0; i--)
+//    {
+//        v.push_back(static_cast<T>(i));
+//    }
+//    data.copy((unsigned char*) v.data(), v.size() * sizeof(T));
+//    UserDefault::getInstance()->setDataForKey(key, data);
+//}
 
 void UserDefaultTest::doTest()
 {
@@ -116,15 +117,15 @@ void UserDefaultTest::doTest()
     UserDefault::getInstance()->setBoolForKey("bool", true);
 
     // test saving of Data buffers
-    setData<int>("int_data");
-    setData<float>("float_data");
-    setData<double>("double_data");
+//    setData<int>("int_data");
+//    setData<float>("float_data");
+//    setData<double>("double_data");
 
     printValue();
 
-    logData<int>("int_data");
-    logData<float>("float_data");
-    logData<double>("double_data");
+//    logData<int>("int_data");
+//    logData<float>("float_data");
+//    logData<double>("double_data");
 
     //CCUserDefault::getInstance()->flush();
 
@@ -138,18 +139,18 @@ void UserDefaultTest::doTest()
     UserDefault::getInstance()->setDoubleForKey("double", 2.6);
     UserDefault::getInstance()->setBoolForKey("bool", false);
 
-    setData2<int>("int_data");
-    setData2<float>("float_data");
-    setData2<double>("double_data");
+//    setData2<int>("int_data");
+//    setData2<float>("float_data");
+//    setData2<double>("double_data");
 
     UserDefault::getInstance()->flush();
 
     // print value
     printValue();
 
-    logData<int>("int_data");
-    logData<float>("float_data");
-    logData<double>("double_data");
+//    logData<int>("int_data");
+//    logData<float>("float_data");
+//    logData<double>("double_data");
 
     this->_label->setString(this->_label->getString() + "\n" + "********************** after delete value ***********************");
 
