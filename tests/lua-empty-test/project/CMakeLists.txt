@@ -98,8 +98,8 @@ else()
     target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive ext_ogg ext_vorbis ext_ssl ext_crypto -Wl,--no-whole-archive)
 
-    configure_file(${OPENAL_SO_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src/main/jniLibs/${ANDROID_ABI}/ COPYONLY)
-    configure_file(${MPG123_SO_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src/main/jniLibs/${ANDROID_ABI}/ COPYONLY)
+    configure_file(${OPENAL_SO_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src/main/jniLibs/${ANDROID_ABI}/${OPENAL_SO_NAME} COPYONLY)
+    configure_file(${MPG123_SO_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src/main/jniLibs/${ANDROID_ABI}/${MPG123_SO_NAME} COPYONLY)
 endif()
 
 target_link_libraries(${APP_NAME} luacocos2d)
