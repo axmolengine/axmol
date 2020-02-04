@@ -1,8 +1,8 @@
 {
-    "version": "v24",
-    "zip_file_size": "10786378",
+    "version": "v25",
+    "zip_file_size": "107642814",
     "repo_name": "engine-v5-3rd",
-    "repo_parent": "https://github.com/simdsoft/",
+    "repo_parent": "https://github.com/c4games/",
     "move_dirs": {
         "fbx-conv": "tools"
     }
