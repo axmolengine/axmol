@@ -30,7 +30,10 @@ import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
 public class AppActivity extends Cocos2dxActivity{
-
+    static {
+        System.loadLibrary("mpg123");
+        System.loadLibrary("openal");
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.setEnableVirtualButton(false);
