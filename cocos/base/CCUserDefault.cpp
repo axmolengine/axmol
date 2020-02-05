@@ -71,6 +71,8 @@ THE SOFTWARE.
 
 #define USER_DEFAULT_FILENAME "UserDefault.bin"
 
+typedef int32_t udflen_t;
+
 NS_CC_BEGIN
 
 /**
@@ -79,15 +81,31 @@ NS_CC_BEGIN
 
 UserDefault* UserDefault::_userDefault = nullptr;
 
+static void updateMapValue(std::unordered_map<std::string, std::string>& valueMap, const char* key, const char* value)
+{
+    auto it = valueMap.find(key);
+    if (it != valueMap.end())
+        it->second = value;
+    else
+        valueMap.emplace(key, value);
+}
+
 UserDefault::~UserDefault()
 {
-    _rwmmap.reset();
-    if (_fd != -1)
-        posix_close(_fd);
+    closeFileMapping();
 }
 
 UserDefault::UserDefault()
 {
+}
+
+void UserDefault::closeFileMapping()
+{
+    _rwmmap.reset();
+    if (_fd != -1) {
+        posix_close(_fd);
+        _fd = -1;
+    }
 }
 
 bool UserDefault::getBoolForKey(const char* pKey)
@@ -203,20 +221,32 @@ void UserDefault::setDoubleForKey(const char* pKey, double value)
 
 void UserDefault::setStringForKey(const char* pKey, const std::string & value)
 {
-    // check key
-    if (! pKey)
+    // ignore empty key
+    if (! pKey || !*pKey)
     {
         return;
     }
 
-    auto it = this->_values.find(pKey);
+    updateMapValue(_values, pKey, value.c_str());
 
-    if (it != this->_values.end())
-        it->second = value;
-    else
-        this->_values.emplace(pKey, value);
+    if (_rwmmap) {
+        yasio::obstream obs;
+        obs.write_v(pKey);
+        obs.write_v(value);
+        if ((_realSize + obs.length() + sizeof(udflen_t)) < _curMapSize)
+        {
+            // increase entities count
+            auto count = yasio::endian::ntohv(*(udflen_t*)_rwmmap->data());
+            *(udflen_t*)_rwmmap->data() = yasio::endian::htonv(count + 1);
 
-    flush();
+            // append entities
+            ::memcpy(_rwmmap->data() + sizeof(udflen_t) + _realSize, obs.data(), obs.length());
+            _realSize += obs.length();
+        }
+        else {
+            flush();
+        }
+    }
 }
 
 UserDefault* UserDefault::getInstance()
@@ -259,23 +289,30 @@ void UserDefault::init()
         int filesize = posix_lseek(_fd, 0, SEEK_END);
         posix_lseek(_fd, 0, SEEK_SET);
 
-        if (filesize < _curMapSize) {
+        if (filesize < _curMapSize) { // construct a empty file mapping
             posix_fsetsize(_fd, _curMapSize);
+            _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, _curMapSize);
         }
-        /// load to memory _values
-        _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, _curMapSize);
-        if (_rwmmap->is_mapped()) { // no error
-            yasio::ibstream_view ibs(_rwmmap->data(), _rwmmap->length());
+        else { /// load to memory _values
+            _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, mio::map_entire_file);
+            if (_rwmmap->is_mapped()) { // no error
+                yasio::ibstream_view ibs(_rwmmap->data(), _rwmmap->length());
 
-            if (ibs.length() > 0) {
-                // count
-                // key/value --> string/string
-                int count = ibs.read_i7();
-                for (auto i = 0; i < count; ++i) {
-                    auto key = ibs.read_v();
-                    auto value = ibs.read_v();
-                    this->_values.emplace(key, value);
+                if (ibs.length() > 0) {
+                    // read count of keyvals.
+                    int count = ibs.read_i<int>();
+                    for (auto i = 0; i < count; ++i) {
+                        auto key = ibs.read_v();
+                        auto value = ibs.read_v();
+                        updateMapValue(this->_values, key.data(), value.data());
+                    }
+                    _realSize = ibs.seek(0, SEEK_CUR) - sizeof(udflen_t);
                 }
+            }
+            else {
+                closeFileMapping();
+                ::remove(_filePath.c_str());
+                log("[Warnning] UserDefault::init map file '%s' failed, we can't save data persisit this time, next time we will retry!", _filePath.c_str());
             }
         }
 
@@ -285,23 +322,33 @@ void UserDefault::init()
 
 void UserDefault::flush()
 {
-    // TODO: Win32 store to UserDefault.plain file?
-    yasio::obstream obs;
-    obs.write_i7(this->_values.size());
-    for (auto& item : this->_values) {
-        obs.write_v(item.first);
-        obs.write_v(item.second);
-    }
+    // TODO: Win32 store to UserDefault.plain file
+    if (_rwmmap) {
+        yasio::obstream obs;
+        obs.write_i<int>(static_cast<int>(this->_values.size()));
+        for (auto& item : this->_values) {
+            obs.write_v(item.first);
+            obs.write_v(item.second);
+        }
 
-    if (obs.length() > _curMapSize) {
-        _rwmmap->unmap();
-        std::error_code error;
-        _curMapSize <<= 1; // X2
-        _rwmmap->map(posix_fd2fh(_fd), 0, _curMapSize, error);
-    }
+        if (obs.length() > _curMapSize) {
+            _rwmmap->unmap();
+            std::error_code error;
+            _curMapSize <<= 1; // X2
+            _rwmmap->map(posix_fd2fh(_fd), 0, _curMapSize, error);
+        }
 
-    if (_rwmmap->is_mapped())
-        memcpy(_rwmmap->data(), obs.data(), obs.length());
+        if (_rwmmap->is_mapped()) 
+        { // mapping status is good
+            ::memcpy(_rwmmap->data(), obs.data(), obs.length());
+            _realSize = obs.length() - sizeof(udflen_t);
+        }
+        else {
+            // close file mapping and do a simple workaround fix to don't do persist later at this time
+            closeFileMapping();
+            ::remove(_filePath.c_str());
+        }
+    }
 }
 
 void UserDefault::deleteValueForKey(const char* key)

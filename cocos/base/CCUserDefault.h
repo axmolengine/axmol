@@ -220,6 +220,8 @@ protected:
     virtual ~UserDefault();
     
     void init();
+
+    void closeFileMapping();
 private:
 
     std::unordered_map<std::string, std::string> _values;
@@ -229,6 +231,7 @@ private:
     int _fd = -1; // the file handle for data persistence
     std::shared_ptr<mio::mmap_sink> _rwmmap;
     int _curMapSize = 4096; // init mapsize is 4K
+    int _realSize = 0; // real data size
     bool _initialized = false;
 };
 
