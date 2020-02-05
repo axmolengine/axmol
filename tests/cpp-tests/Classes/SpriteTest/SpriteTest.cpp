@@ -61,7 +61,6 @@ SpriteTests::SpriteTests()
     ADD_TEST_CASE(Sprite1);
     ADD_TEST_CASE(Sprite1BMP);
     ADD_TEST_CASE(Sprite1ETC1Alpha);
-    ADD_TEST_CASE(SpriteASTC);
     ADD_TEST_CASE(SpriteBatchNode1);
     ADD_TEST_CASE(SpriteAnchorPoint);
     ADD_TEST_CASE(SpriteBatchNodeAnchorPoint);
@@ -352,69 +351,6 @@ std::string Sprite1ETC1Alpha::title() const
 }
 
 std::string Sprite1ETC1Alpha::subtitle() const
-{
-    return "Tap screen to add more sprites";
-}
-
-//------------------------------------------------------------------
-//
-// SpriteASTC
-//
-//------------------------------------------------------------------
-
-SpriteASTC::SpriteASTC()
-{
-    auto listener = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(SpriteASTC::onTouchesEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-}
-
-bool SpriteASTC::init()
-{
-    if (!SpriteTestDemo::init())
-        return false;
-
-    auto& canvasSize = getContentSize();
-    _background = LayerColor::create(Color4B(15, 19, 42, 255), canvasSize.width, canvasSize.height);
-    _background->setIgnoreAnchorPointForPosition(false);
-    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-
-    auto s = Director::getInstance()->getWinSize();
-    _background->setPosition(Vec2(s.width / 2, s.height / 2));
-    this->addChild(_background);
-
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
-    return true;
-}
-
-void SpriteASTC::addNewSpriteWithCoords(Vec2 p)
-{
-    auto sprite = Sprite::create("Images/grossini_dance_08.astc");
-    //Texture2D* etcTexture = _director->getTextureCache()->addImage("Images/etc1-alpha.pkm");
-    //sprite->setTexture(etcTexture);
-    //sprite->setScale(0.4);
-
-    _background->addChild(sprite);
-
-    sprite->setPosition(Vec2(p.x, p.y));
-}
-
-void SpriteASTC::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
-{
-    for (auto touch : touches)
-    {
-        auto location = touch->getLocation();
-
-        addNewSpriteWithCoords(location);
-    }
-}
-
-std::string SpriteASTC::title() const
-{
-    return "Testing Sprite ASTC support";
-}
-
-std::string SpriteASTC::subtitle() const
 {
     return "Tap screen to add more sprites";
 }

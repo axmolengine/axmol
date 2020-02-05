@@ -46,7 +46,6 @@ Configuration::Configuration()
 , _supportsETC1(false)
 , _supportsS3TC(false)
 , _supportsATITC(false)
-, _supportsASTC(false)
 , _supportsNPOT(false)
 , _supportsBGRA8888(false)
 , _supportsDiscardFramebuffer(false)
@@ -112,8 +111,6 @@ std::string Configuration::getInfo() const
 void Configuration::gatherGPUInfo()
 {
     auto _deviceInfo = backend::Device::getInstance()->getDeviceInfo();
-    CCLOG("weichao %s",_deviceInfo->getExtension());
-
     _valueDict["vendor"] = Value(_deviceInfo->getVendor());
     _valueDict["renderer"] = Value(_deviceInfo->getRenderer());
     _valueDict["version"] = Value(_deviceInfo->getVersion());
@@ -134,10 +131,6 @@ void Configuration::gatherGPUInfo()
     
     _supportsATITC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::AMD_COMPRESSED_ATC);
     _valueDict["supports_ATITC"] = Value(_supportsATITC);
-
-    //_supportsASTC = checkForGLExtension("GL_OES_texture_compression_astc");
-    _supportsASTC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ASTC);
-    _valueDict["gl.supports_ASTC"] = Value(_supportsASTC);
     
     _supportsPVRTC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::PVRTC);
     _valueDict["supports_PVRTC"] = Value(_supportsPVRTC);
@@ -229,11 +222,6 @@ bool Configuration::supportsS3TC() const
 bool Configuration::supportsATITC() const
 {
     return _supportsATITC;
-}
-
-bool Configuration::supportsASTC() const
-{
-    return _supportsASTC;
 }
 
 bool Configuration::supportsBGRA8888() const

@@ -124,8 +124,6 @@ extern "C"
 #define CC_GL_ATC_RGBA_EXPLICIT_ALPHA_AMD                          0x8C93
 #define CC_GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD                      0x87EE
 
-#define ASTC_MAGIC_FILE_CONSTANT 0x5CA1AB13
-
 NS_CC_BEGIN
 
 //////////////////////////////////////////////////////////////////////////
@@ -437,24 +435,6 @@ namespace
 
 //////////////////////////////////////////////////////////////////////////
 
-//struct and data for ASTC struct
-namespace
-{
-    struct ASTCTexHeader
-    {
-        uint8_t magic[4];
-        uint8_t blockdim_x;
-        uint8_t blockdim_y;
-        uint8_t blockdim_z;
-        uint8_t xsize[3];			// x-size = xsize[0] + xsize[1] + xsize[2]
-        uint8_t ysize[3];			// x-size, y-size and z-size are given in texels;
-        uint8_t zsize[3];			// block count is inferred
-    };
-}
-//atitc struct end
-
-//////////////////////////////////////////////////////////////////////////
-
 namespace
 {
     typedef struct 
@@ -619,9 +599,6 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
         case Format::ATITC:
             ret = initWithATITCData(unpackedData, unpackedLen);
             break;
-        case Format::ASTC:
-            ret = initWithASTCData(unpackedData, unpackedLen);
-            break;
         case Format::BMP:
             ret = initWithBmpData(unpackedData, unpackedLen);
             break;
@@ -693,19 +670,6 @@ bool Image::isATITC(const unsigned char *data, ssize_t /*dataLen*/)
     ATITCTexHeader *header = (ATITCTexHeader *)data;
     
     if (strncmp(&header->identifier[1], "KTX", 3) != 0)
-    {
-        return false;
-    }
-    return true;
-}
-
-bool Image::isASTC(const unsigned char* data, ssize_t /*dataLen*/)
-{
-    ASTCTexHeader* hdr = (ASTCTexHeader*)data;
-
-    uint32_t magicval = hdr->magic[0] + 256 * (uint32_t)(hdr->magic[1]) + 65536 * (uint32_t)(hdr->magic[2]) + 16777216 * (uint32_t)(hdr->magic[3]);
-
-    if (magicval != ASTC_MAGIC_FILE_CONSTANT)
     {
         return false;
     }
@@ -784,10 +748,6 @@ Image::Format Image::detectFormat(const unsigned char * data, ssize_t dataLen)
     else if (isATITC(data, dataLen))
     {
         return Format::ATITC;
-    }
-    else if (isASTC(data, dataLen))
-    {
-        return Format::ASTC;
     }
     else
     {
@@ -1563,44 +1523,6 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
     if (ownData) free((void*)data);
     return false;
 }
-
-
-bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen)
-{
-    ASTCTexHeader* header = (ASTCTexHeader*)data;
-
-    _width = header->xsize[0] + 256 * header->xsize[1] + 65536 * header->xsize[2];
-    _height = header->ysize[0] + 256 * header->ysize[1] + 65536 * header->ysize[2];
-
-    if (0 == _width || 0 == _height)
-    {
-        return false;
-    }
-
-    int xdim = header->blockdim_x;
-    int ydim = header->blockdim_y;
-
-    if ((xdim != 4 && xdim != 8) || (ydim != 4 && ydim != 8))
-    {
-        CCLOG("unly support 4x4|8x8£¬becouse cocos unly support int bpp");
-        return false;
-    }
-
-    if (Configuration::getInstance()->supportsASTC())
-    {
-        _pixelFormat = backend::PixelFormat::ASTC;
-        _dataLen = dataLen;
-        _data = (unsigned char*)data;
-        _offset = 16; //ASTC Header Length
-        return true;
-    }
-    else
-    {
-    }
-
-    return false;
-}
-
 
 bool Image::initWithTGAData(tImageTGA* tgaData)
 {
