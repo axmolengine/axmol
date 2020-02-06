@@ -239,7 +239,7 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
             auto count = yasio::endian::ntohv(*(udflen_t*)_rwmmap->data());
             *(udflen_t*)_rwmmap->data() = yasio::endian::htonv(count + 1);
 
-            // append entities
+            // append entity
             ::memcpy(_rwmmap->data() + sizeof(udflen_t) + _realSize, obs.data(), obs.length());
             _realSize += obs.length();
         }
@@ -331,14 +331,15 @@ void UserDefault::flush()
             obs.write_v(item.second);
         }
 
+        std::error_code error;
         if (obs.length() > _curMapSize) {
             _rwmmap->unmap();
-            std::error_code error;
             _curMapSize <<= 1; // X2
+            posix_fsetsize(_fd, _curMapSize);
             _rwmmap->map(posix_fd2fh(_fd), 0, _curMapSize, error);
         }
 
-        if (_rwmmap->is_mapped()) 
+        if (!error && _rwmmap->is_mapped())
         { // mapping status is good
             ::memcpy(_rwmmap->data(), obs.data(), obs.length());
             _realSize = obs.length() - sizeof(udflen_t);
