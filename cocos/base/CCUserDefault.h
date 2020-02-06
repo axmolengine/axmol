@@ -231,7 +231,7 @@ private:
     int _fd = -1; // the file handle for data persistence
     std::shared_ptr<mio::mmap_sink> _rwmmap;
     int _curMapSize = 4096; // init mapsize is 4K
-    int _realSize = 0; // real data size
+    int _realSize = 0; // real data size without key/value entities count field
     bool _initialized = false;
 };
 
