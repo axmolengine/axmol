@@ -119,12 +119,6 @@ enum class PixelFormat
     MTL_BGR5A1,
     MTL_ABGR4,
 
-    ASTC4,
-    //! ASTC compressed texture: ASTC 4x4 block
-    ASTC8,
-    //! ASTC compressed texture: ASTC 8x8 block
-
-
     // A packed 32-bit combined depth and stencil pixel format with two nomorlized unsigned integer
     // components: 24 bits, typically used for a depth render target, and 8 bits, typically used for
     // a stencil render target.
