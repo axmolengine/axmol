@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2017-2020 c4games.com.
 
 http://www.cocos2d-x.org
 
@@ -23,6 +24,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
+#if defined(_WIN32)
+#include <io.h>
+#include <direct.h>
+#else
+#include <unistd.h>
+#include <errno.h>
+#endif
+#include <fcntl.h>
+#include <sys/stat.h>
+
 #include "base/CCUserDefault.h"
 #include "platform/CCCommon.h"
 #include "platform/CCFileUtils.h"
@@ -30,108 +41,71 @@ THE SOFTWARE.
 #include "base/base64.h"
 #include "base/ccUtils.h"
 
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS && CC_TARGET_PLATFORM != CC_PLATFORM_MAC && CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
+#include "yasio/ibstream.hpp"
+#include "yasio/obstream.hpp"
+#include "yasio/detail/sz.hpp"
 
-// root name of xml
-#define USERDEFAULT_ROOT_NAME    "userDefaultRoot"
+#if defined(_WIN32)
+#define O_READ_FLAGS O_BINARY | O_RDONLY, S_IREAD
+#define O_WRITE_FLAGS O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
+#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
+#define posix_open ::_open
+#define posix_close ::_close
+#define posix_lseek ::_lseek
+#define posix_read ::_read
+#define posix_write ::_write
+#define posix_fd2fh(fd) reinterpret_cast<HANDLE>(_get_osfhandle(fd))
+#define posix_fsetsize(fd, size) ::_chsize(fd, size)
+#else
+#define O_READ_FLAGS O_RDONLY, S_IRUSR
+#define O_WRITE_FLAGS O_CREAT | O_RDWR, S_IRWXU
+#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
+#define posix_open ::open
+#define posix_close ::close
+#define posix_lseek ::lseek
+#define posix_read ::read
+#define posix_write ::write
+#define posix_fd2fh(fd) (fd)
+#define posix_fsetsize(fd, size) ::ftruncate(fd, size), ::lseek(fd, 0, SEEK_SET)
+#endif
 
-#define XML_FILE_NAME "UserDefault.xml"
+#define USER_DEFAULT_FILENAME "UserDefault.bin"
 
-using namespace std;
+typedef int32_t udflen_t;
 
 NS_CC_BEGIN
-
-/**
- * define the functions here because we don't want to
- * export xmlNodePtr and other types in "CCUserDefault.h"
- */
-
-static pugi::xml_node getXMLNodeForKey(const char* pKey, pugi::xml_node& rootNode, pugi::xml_document& doc)
-{
-    pugi::xml_node curNode;
-
-    // check the key value
-    if (! pKey)
-    {
-        return pugi::xml_node{};
-    }
-
-    do 
-    {
-        std::string xmlBuffer = FileUtils::getInstance()->getStringFromFile(UserDefault::getInstance()->getXMLFilePath());
-
-        if (!xmlBuffer.empty())
-        {
-            doc.load_buffer_inplace(&xmlBuffer.front(), xmlBuffer.size());
-
-            // get root node
-            rootNode = doc.document_element();
-        }
-
-        if (!rootNode)
-        {
-            // create root element
-            auto rootEle = doc.append_child(USERDEFAULT_ROOT_NAME);
-            if (!rootEle)
-                break;
-
-            rootNode = rootEle;
-        }
-
-        curNode = rootNode.child(pKey);
-
-    } while (0);
-
-    return curNode;
-}
-
-static void setValueForKey(const char* pKey, const char* pValue)
-{
-    pugi::xml_node rootNode;
-    pugi::xml_document doc;
-    pugi::xml_node node;
-    // check the params
-    if (! pKey || ! pValue)
-    {
-        return;
-    }
-    // find the node
-    node = getXMLNodeForKey(pKey, rootNode, doc);
-    // if node exist, change the content
-    if (node)
-    {
-        node.set_value(pValue);
-    }
-    else
-    {
-        if (rootNode)
-        {
-            node = rootNode.append_child(pKey);
-            node.set_value(pValue);
-        }    
-    }
-
-    // save file and free doc
-    if (doc)
-    {
-        doc.save_file(UserDefault::getInstance()->getXMLFilePath().c_str(), "  ");
-    }
-}
 
 /**
  * implements of UserDefault
  */
 
 UserDefault* UserDefault::_userDefault = nullptr;
-string UserDefault::_filePath = string("");
-bool UserDefault::_isFilePathInitialized = false;
+
+static void updateMapValue(std::unordered_map<std::string, std::string>& valueMap, const char* key, const char* value)
+{
+    auto it = valueMap.find(key);
+    if (it != valueMap.end())
+        it->second = value;
+    else
+        valueMap.emplace(key, value);
+}
 
 UserDefault::~UserDefault()
 {
+    closeFileMapping();
 }
 
 UserDefault::UserDefault()
 {
+}
+
+void UserDefault::closeFileMapping()
+{
+    _rwmmap.reset();
+    if (_fd != -1) {
+        posix_close(_fd);
+        _fd = -1;
+    }
 }
 
 bool UserDefault::getBoolForKey(const char* pKey)
@@ -141,25 +115,11 @@ bool UserDefault::getBoolForKey(const char* pKey)
 
 bool UserDefault::getBoolForKey(const char* pKey, bool defaultValue)
 {
-    const char* value = nullptr;
-    pugi::xml_node rootNode;
-    pugi::xml_document doc;
-    pugi::xml_node node;
-    node = getXMLNodeForKey(pKey, rootNode, doc);
-    // find the node
-    if (node)
-    {
-        value = (const char*)node.text().as_string();
-    }
+    auto it = this->_values.find(pKey);
+    if (it != this->_values.end())
+        return it->second == "1";
 
-    bool ret = defaultValue;
-
-    if (value)
-    {
-        ret = (! strcmp(value, "true"));
-    }
-
-    return ret;
+    return defaultValue;
 }
 
 int UserDefault::getIntegerForKey(const char* pKey)
@@ -169,25 +129,11 @@ int UserDefault::getIntegerForKey(const char* pKey)
 
 int UserDefault::getIntegerForKey(const char* pKey, int defaultValue)
 {
-    const char* value = nullptr;
-    pugi::xml_node rootNode;
-    pugi::xml_document doc;
-    pugi::xml_node node;
-    node = getXMLNodeForKey(pKey, rootNode, doc);
-    // find the node
-    if (node)
-    {
-        value = (const char*)(const char*)node.text().as_string();
-    }
+    auto it = this->_values.find(pKey);
+    if (it != this->_values.end())
+        return atoi(it->second.c_str());
 
-    int ret = defaultValue;
-
-    if (value)
-    {
-        ret = atoi(value);
-    }
-
-    return ret;
+    return defaultValue;
 }
 
 float UserDefault::getFloatForKey(const char* pKey)
@@ -209,25 +155,11 @@ double  UserDefault::getDoubleForKey(const char* pKey)
 
 double UserDefault::getDoubleForKey(const char* pKey, double defaultValue)
 {
-    const char* value = nullptr;
-    pugi::xml_node rootNode;
-    pugi::xml_document doc;
-    pugi::xml_node node;
-    node = getXMLNodeForKey(pKey, rootNode, doc);
-    // find the node
-    if (node)
-    {
-        value = (const char*)(const char*)node.text().as_string();
-    }
+    auto it = this->_values.find(pKey);
+    if (it != this->_values.end())
+        return utils::atof(it->second.c_str());
 
-    double ret = defaultValue;
-
-    if (value)
-    {
-        ret = utils::atof(value);
-    }
-
-    return ret;
+    return defaultValue;
 }
 
 std::string UserDefault::getStringForKey(const char* pKey)
@@ -235,79 +167,19 @@ std::string UserDefault::getStringForKey(const char* pKey)
     return getStringForKey(pKey, "");
 }
 
-string UserDefault::getStringForKey(const char* pKey, const std::string & defaultValue)
+std::string UserDefault::getStringForKey(const char* pKey, const std::string & defaultValue)
 {
-    const char* value = nullptr;
-    pugi::xml_node rootNode;
-    pugi::xml_document doc;
-    pugi::xml_node node;
-    node = getXMLNodeForKey(pKey, rootNode, doc);
-    // find the node
-    if (node)
-    {
-        value = (const char*)(const char*)node.text().as_string();
-    }
+    auto it = this->_values.find(pKey);
+    if (it != this->_values.end())
+        return it->second;
 
-    string ret = defaultValue;
-
-    if (value)
-    {
-        ret = string(value);
-    }
-
-    return ret;
+    return defaultValue;
 }
-
-Data UserDefault::getDataForKey(const char* pKey)
-{
-    return getDataForKey(pKey, Data::Null);
-}
-
-Data UserDefault::getDataForKey(const char* pKey, const Data& defaultValue)
-{
-    const char* encodedData = nullptr;
-    pugi::xml_node rootNode;
-    pugi::xml_document doc;
-    pugi::xml_node node;
-    node = getXMLNodeForKey(pKey, rootNode, doc);
-    // find the node
-    if (node)
-    {
-        encodedData = (const char*)(const char*)node.text().as_string();
-    }
-    
-    Data ret;
-    
-    if (encodedData)
-    {
-        unsigned char * decodedData = nullptr;
-        int decodedDataLen = base64Decode((unsigned char*)encodedData, (unsigned int)strlen(encodedData), &decodedData);
-        
-        if (decodedData) {
-            ret.fastSet(decodedData, decodedDataLen);
-        }
-    }
-    else
-    {
-        ret = defaultValue;
-    }
-
-    return ret;    
-}
-
 
 void UserDefault::setBoolForKey(const char* pKey, bool value)
 {
     // save bool value as string
-
-    if (true == value)
-    {
-        setStringForKey(pKey, "true");
-    }
-    else
-    {
-        setStringForKey(pKey, "false");
-    }
+    setStringForKey(pKey, value ? "true" : "false");
 }
 
 void UserDefault::setIntegerForKey(const char* pKey, int value)
@@ -323,7 +195,7 @@ void UserDefault::setIntegerForKey(const char* pKey, int value)
     memset(tmp, 0, 50);
     sprintf(tmp, "%d", value);
 
-    setValueForKey(pKey, tmp);
+    setStringForKey(pKey, tmp);
 }
 
 void UserDefault::setFloatForKey(const char* pKey, float value)
@@ -344,51 +216,45 @@ void UserDefault::setDoubleForKey(const char* pKey, double value)
     memset(tmp, 0, 50);
     sprintf(tmp, "%f", value);
 
-    setValueForKey(pKey, tmp);
+    setStringForKey(pKey, tmp);
 }
 
 void UserDefault::setStringForKey(const char* pKey, const std::string & value)
 {
-    // check key
-    if (! pKey)
+    // ignore empty key
+    if (! pKey || !*pKey)
     {
         return;
     }
 
-    setValueForKey(pKey, value.c_str());
-}
+    updateMapValue(_values, pKey, value.c_str());
 
-void UserDefault::setDataForKey(const char* pKey, const Data& value) {
-    // check key
-    if (! pKey)
-    {
-        return;
+    if (_rwmmap) {
+        yasio::obstream obs;
+        obs.write_v(pKey);
+        obs.write_v(value);
+        if ((_realSize + obs.length() + sizeof(udflen_t)) < _curMapSize)
+        {
+            // increase entities count
+            auto count = yasio::endian::ntohv(*(udflen_t*)_rwmmap->data());
+            *(udflen_t*)_rwmmap->data() = yasio::endian::htonv(count + 1);
+
+            // append entity
+            ::memcpy(_rwmmap->data() + sizeof(udflen_t) + _realSize, obs.data(), obs.length());
+            _realSize += obs.length();
+        }
+        else {
+            flush();
+        }
     }
-
-    char *encodedData = nullptr;
-    
-    base64Encode(value.getBytes(), static_cast<unsigned int>(value.getSize()), &encodedData);
-        
-    setValueForKey(pKey, encodedData);
-    
-    if (encodedData)
-        free(encodedData);
 }
 
 UserDefault* UserDefault::getInstance()
 {
     if (!_userDefault)
     {
-        initXMLFilePath();
-
-        // only create xml file one time
-        // the file exists after the program exit
-        if ((!isXMLFileExist()) && (!createXMLFile()))
-        {
-            return nullptr;
-        }
-
         _userDefault = new (std::nothrow) UserDefault();
+        _userDefault->init();
     }
 
     return _userDefault;
@@ -407,76 +273,89 @@ void UserDefault::setDelegate(UserDefault *delegate)
     _userDefault = delegate;
 }
 
-
-bool UserDefault::isXMLFileExist()
+void UserDefault::init()
 {
-    return FileUtils::getInstance()->isFileExist(_filePath);
-}
-
-void UserDefault::initXMLFilePath()
-{
-    if (! _isFilePathInitialized)
+    if (! _initialized)
     {
-        _filePath += FileUtils::getInstance()->getWritablePath() + XML_FILE_NAME;
-        _isFilePathInitialized = true;
+        _filePath = FileUtils::getInstance()->getWritablePath() + USER_DEFAULT_FILENAME;
+
+        // construct file mapping
+        _fd = posix_open(_filePath.c_str(), O_WRITE_FLAGS);
+        if (_fd == -1) {
+            log("[Warnning] UserDefault::init open storage file '%s' failed!", _filePath.c_str());
+            return;
+        }
+
+        int filesize = posix_lseek(_fd, 0, SEEK_END);
+        posix_lseek(_fd, 0, SEEK_SET);
+
+        if (filesize < _curMapSize) { // construct a empty file mapping
+            posix_fsetsize(_fd, _curMapSize);
+            _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, _curMapSize);
+        }
+        else { /// load to memory _values
+            _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, mio::map_entire_file);
+            if (_rwmmap->is_mapped()) { // no error
+                yasio::ibstream_view ibs(_rwmmap->data(), _rwmmap->length());
+
+                if (ibs.length() > 0) {
+                    // read count of keyvals.
+                    int count = ibs.read_i<int>();
+                    for (auto i = 0; i < count; ++i) {
+                        auto key = ibs.read_v();
+                        auto value = ibs.read_v();
+                        updateMapValue(this->_values, key.data(), value.data());
+                    }
+                    _realSize = ibs.seek(0, SEEK_CUR) - sizeof(udflen_t);
+                }
+            }
+            else {
+                closeFileMapping();
+                ::remove(_filePath.c_str());
+                log("[Warnning] UserDefault::init map file '%s' failed, we can't save data persisit this time, next time we will retry!", _filePath.c_str());
+            }
+        }
+
+        _initialized = true;
     }    
-}
-
-// create new xml file
-bool UserDefault::createXMLFile()
-{
-    bool bRet = false;  
-
-    pugi::xml_document doc;
-    doc.load_string(R"(<?xml version="1.0" encoding="UTF-8" ?>)"
-"<" USERDEFAULT_ROOT_NAME " />", pugi::parse_full);
-
-    bRet = doc.save_file(_filePath.c_str(), " ");
-
-    return bRet;
-}
-
-const string& UserDefault::getXMLFilePath()
-{
-    return _filePath;
 }
 
 void UserDefault::flush()
 {
+    // TODO: Win32 store to UserDefault.plain file
+    if (_rwmmap) {
+        yasio::obstream obs;
+        obs.write_i<int>(static_cast<int>(this->_values.size()));
+        for (auto& item : this->_values) {
+            obs.write_v(item.first);
+            obs.write_v(item.second);
+        }
+
+        std::error_code error;
+        if (obs.length() > _curMapSize) {
+            _rwmmap->unmap();
+            _curMapSize <<= 1; // X2
+            posix_fsetsize(_fd, _curMapSize);
+            _rwmmap->map(posix_fd2fh(_fd), 0, _curMapSize, error);
+        }
+
+        if (!error && _rwmmap->is_mapped())
+        { // mapping status is good
+            ::memcpy(_rwmmap->data(), obs.data(), obs.length());
+            _realSize = obs.length() - sizeof(udflen_t);
+        }
+        else {
+            // close file mapping and do a simple workaround fix to don't do persist later at this time
+            closeFileMapping();
+            ::remove(_filePath.c_str());
+        }
+    }
 }
 
 void UserDefault::deleteValueForKey(const char* key)
 {
-    pugi::xml_node rootNode;
-    pugi::xml_document doc;
-    pugi::xml_node node;
-
-    // check the params
-    if (!key)
-    {
-        CCLOG("the key is invalid");
-        return;
-    }
-
-    // find the node
-    node = getXMLNodeForKey(key, rootNode, doc);
-
-    // if node not exist, don't need to delete
-    if (!node)
-    {
-        return;
-    }
-
-    // save file and free doc
-    if (doc)
-    {
-        rootNode.remove_child(node);
-        doc.save_file(UserDefault::getInstance()->getXMLFilePath().c_str(), "  ");
-    }
-
-    flush();
+    if(this->_values.erase(key) > 0)
+        flush();
 }
 
 NS_CC_END
-
-#endif // (CC_TARGET_PLATFORM != CC_PLATFORM_IOS && CC_PLATFORM != CC_PLATFORM_ANDROID)
