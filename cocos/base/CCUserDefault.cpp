@@ -69,7 +69,13 @@ THE SOFTWARE.
 #define posix_fsetsize(fd, size) ::ftruncate(fd, size), ::lseek(fd, 0, SEEK_SET)
 #endif
 
+#define USER_DEFAULT_PLAIN_MODE 0
+
+#if !USER_DEFAULT_PLAIN_MODE
 #define USER_DEFAULT_FILENAME "UserDefault.bin"
+#else
+#define USER_DEFAULT_FILENAME "UserDefault.xml"
+#endif
 
 typedef int32_t udflen_t;
 
@@ -229,6 +235,7 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
 
     updateMapValue(_values, pKey, value.c_str());
 
+#if !USER_DEFAULT_PLAIN_MODE
     if (_rwmmap) {
         yasio::obstream obs;
         obs.write_v(pKey);
@@ -247,6 +254,9 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
             flush();
         }
     }
+#else
+    flush();
+#endif
 }
 
 UserDefault* UserDefault::getInstance()
@@ -279,6 +289,7 @@ void UserDefault::init()
     {
         _filePath = FileUtils::getInstance()->getWritablePath() + USER_DEFAULT_FILENAME;
 
+#if !USER_DEFAULT_PLAIN_MODE
         // construct file mapping
         _fd = posix_open(_filePath.c_str(), O_WRITE_FLAGS);
         if (_fd == -1) {
@@ -315,6 +326,17 @@ void UserDefault::init()
                 log("[Warnning] UserDefault::init map file '%s' failed, we can't save data persisit this time, next time we will retry!", _filePath.c_str());
             }
         }
+#else
+        pugi::xml_document doc;
+        pugi::xml_parse_result ret = doc.load_file(_filePath.c_str());
+        if (ret) {
+            for (auto& elem : doc.document_element())
+                updateMapValue(_values, elem.name(), elem.text().as_string());
+        }
+        else {
+            log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
+        }
+#endif
 
         _initialized = true;
     }    
@@ -322,7 +344,7 @@ void UserDefault::init()
 
 void UserDefault::flush()
 {
-    // TODO: Win32 store to UserDefault.plain file
+#if !USER_DEFAULT_PLAIN_MODE
     if (_rwmmap) {
         yasio::obstream obs;
         obs.write_i<int>(static_cast<int>(this->_values.size()));
@@ -350,6 +372,17 @@ void UserDefault::flush()
             ::remove(_filePath.c_str());
         }
     }
+#else
+    pugi::xml_document doc;
+    doc.load_string(R"(<?xml version="1.0" ?>
+<r />)");
+    auto r = doc.document_element();
+    for(auto& kv : _values)
+        r.append_child(kv.first.c_str())
+        .append_child(pugi::xml_node_type::node_pcdata)
+        .set_value(kv.second.c_str());
+    doc.save_file(_filePath.c_str(), "  ");
+#endif
 }
 
 void UserDefault::deleteValueForKey(const char* key)
