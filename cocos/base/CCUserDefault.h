@@ -2,7 +2,6 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2017-2020 c4games.com.
 
 http://www.cocos2d-x.org
 
@@ -29,9 +28,7 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformMacros.h"
 #include <string>
-
-#include <unordered_map>
-#include "mio/mio.hpp"
+#include "base/CCData.h"
 
 /**
  * @addtogroup base
@@ -142,6 +139,23 @@ public:
      */
     virtual std::string getStringForKey(const char* key, const std::string & defaultValue);
     
+    /**
+     * Get Data value by key, if the key doesn't exist, will return an empty Data.
+     * @param key The key to get value.
+     * @return Data value of the key.
+     * @js NA
+     */
+    Data getDataForKey(const char* key);
+    
+    /**
+     * Get Data value by key, if the key doesn't exist, will return an empty Data.
+     * @param key The key to get value.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return Data value of the key.
+     * @js NA
+     */
+    virtual Data getDataForKey(const char* key, const Data& defaultValue);
+
     // set value methods
 
     /**
@@ -179,7 +193,13 @@ public:
      * @js NA
      */
     virtual void setStringForKey(const char* key, const std::string & value);
-
+    /**
+     * Set Data value by key.
+     * @param key The key to set.
+     * @param value A Data value to set to the key.
+     * @js NA
+     */
+    virtual void setDataForKey(const char* key, const Data& value);
     /**
      * You should invoke this function to save values set by setXXXForKey().
      * @js NA
@@ -215,24 +235,28 @@ public:
     */
     static void setDelegate(UserDefault *delegate);
 
+    /** All supported platforms other iOS & Android use xml file to save values. This function is return the file path of the xml path.
+     * @js NA
+     */
+    static const std::string& getXMLFilePath();
+    /** All supported platforms other iOS & Android use xml file to save values. This function checks whether the xml file exists or not.
+     * @return True if the xml file exists, false if not.
+     * @js NA
+     */
+    static bool isXMLFileExist();
+
 protected:
     UserDefault();
     virtual ~UserDefault();
     
-    void init();
-
-    void closeFileMapping();
 private:
-
-    std::unordered_map<std::string, std::string> _values;
+    
+    static bool createXMLFile();
+    static void initXMLFilePath();
     
     static UserDefault* _userDefault;
-    std::string _filePath;
-    int _fd = -1; // the file handle for data persistence
-    std::shared_ptr<mio::mmap_sink> _rwmmap;
-    int _curMapSize = 4096; // init mapsize is 4K
-    int _realSize = 0; // real data size without key/value entities count field
-    bool _initialized = false;
+    static std::string _filePath;
+    static bool _isFilePathInitialized;
 };
 
 
