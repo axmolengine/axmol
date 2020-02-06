@@ -88,7 +88,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewSpriteWithCoords();
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 
     cocos2d::Node* _background;

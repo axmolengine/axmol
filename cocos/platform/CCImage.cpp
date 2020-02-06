@@ -1588,7 +1588,11 @@ bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen)
 
     if (Configuration::getInstance()->supportsASTC())
     {
-        _pixelFormat = backend::PixelFormat::ASTC;
+        _pixelFormat = backend::PixelFormat::ASTC4;
+        if (xdim==8 && ydim==8)
+        {
+            _pixelFormat = backend::PixelFormat::ASTC8;
+        }
         _dataLen = dataLen;
         _data = (unsigned char*)data;
         _offset = 16; //ASTC Header Length

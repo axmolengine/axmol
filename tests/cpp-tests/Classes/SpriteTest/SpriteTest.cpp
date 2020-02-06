@@ -383,30 +383,35 @@ bool SpriteASTC::init()
     _background->setPosition(Vec2(s.width / 2, s.height / 2));
     this->addChild(_background);
 
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    addNewSpriteWithCoords();
     return true;
 }
 
-void SpriteASTC::addNewSpriteWithCoords(Vec2 p)
+void SpriteASTC::addNewSpriteWithCoords()
 {
-    auto sprite = Sprite::create("Images/grossini_dance_08.astc");
-    //Texture2D* etcTexture = _director->getTextureCache()->addImage("Images/etc1-alpha.pkm");
-    //sprite->setTexture(etcTexture);
-    //sprite->setScale(0.4);
+    auto s = Director::getInstance()->getWinSize();
+    auto sprite4 = Sprite::create("Images/ASTC_RGBA_4x4.astc");
+    sprite4->setPosition(Vec2(s.width * 0.2, s.height * 0.5));
+    _background->addChild(sprite4);
 
-    _background->addChild(sprite);
+    auto spriteA4 = Sprite::create("Images/ASTC_RGB_4x4.astc");
+    spriteA4->setPosition(Vec2(s.width * 0.5, s.height * 0.5));
+    _background->addChild(spriteA4);
 
-    sprite->setPosition(Vec2(p.x, p.y));
+    auto sprite8 = Sprite::create("Images/ASTC_RGBA_8x8.astc");
+    sprite8->setPosition(Vec2(s.width * 0.8, s.height * 0.5));
+    _background->addChild(sprite8);
+
 }
 
 void SpriteASTC::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto touch : touches)
-    {
-        auto location = touch->getLocation();
+    //for (auto touch : touches)
+    //{
+    //    auto location = touch->getLocation();
 
-        addNewSpriteWithCoords(location);
-    }
+    //    addNewSpriteWithCoords();
+    //}
 }
 
 std::string SpriteASTC::title() const
@@ -416,7 +421,7 @@ std::string SpriteASTC::title() const
 
 std::string SpriteASTC::subtitle() const
 {
-    return "Tap screen to add more sprites";
+    return "";
 }
 
 //------------------------------------------------------------------
