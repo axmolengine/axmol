@@ -1,5 +1,5 @@
 # engine-v5
-[![Build Status](https://travis-ci.org/simdsoft/engine-v5.svg?branch=master)](https://travis-ci.org/simdsoft/engine-v5)
+[![Build Status](https://travis-ci.org/c4games/engine-v5.svg?branch=master)](https://travis-ci.org/c4games/engine-v5)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/2gceoc8kkows9o7g/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/engine-v5)
 
 This is another more radical fork of cocos2d-x game engine, use opanal for all platforms, single texture multi gpu texture handler, c++17...  
@@ -112,4 +112,25 @@ _USRSTUDIOPDLL
     NDK 推荐 20.1
   ```
 
-
+#### ios
+  确保最新版xcode已安装
+  安装brew: ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```  
+  brew安装完成后，确保如下工具安装:  
+  ```sh
+    brew update
+    brew install git
+    brew install cmake
+    brew install autoconf
+    brew install automake
+    brew install libtool
+  ```
+  执行如下命令确保cmake能成功生成xcode工程:  
+  ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
+  生成xcode工程, 进入engine-v5根目录执行如下命令:  
+  ```sh
+    mkdir build
+    cd build
+    cmake .. -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos -DCMAKE_C_COMPILER=/Applications/Xcode.app/Contents/Developer/usr/bin/gcc -DCMAKE_CXX_COMPILER=/Applications/Xcode.app/Contents/Developer/usr/bin/g++
+  ```
+  之后就可以用xcode打开了
+  
