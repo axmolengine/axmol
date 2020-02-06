@@ -216,7 +216,7 @@ public:
     */
     static void setDelegate(UserDefault *delegate);
 
-    /* AES cbc128 encrypt support
+    /* AES cfb128 encrypt support
     ** @params:
     **   key: 16bytes key
     **   iv: 16bytes iv
