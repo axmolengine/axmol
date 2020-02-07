@@ -130,7 +130,7 @@ _USRSTUDIOPDLL
   ```sh
     mkdir build
     cd build
-    cmake .. -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos -DCMAKE_C_COMPILER=/Applications/Xcode.app/Contents/Developer/usr/bin/gcc -DCMAKE_CXX_COMPILER=/Applications/Xcode.app/Contents/Developer/usr/bin/g++
+    cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS -DENABLE_ARC=0
   ```
   之后就可以用xcode打开了
   
