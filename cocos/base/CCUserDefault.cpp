@@ -34,6 +34,9 @@ THE SOFTWARE.
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#include "openssl/aes.h"
+#include "openssl/modes.h"
+
 #include "base/CCUserDefault.h"
 #include "platform/CCCommon.h"
 #include "platform/CCFileUtils.h"
@@ -87,13 +90,56 @@ NS_CC_BEGIN
 
 UserDefault* UserDefault::_userDefault = nullptr;
 
-static void updateMapValue(std::unordered_map<std::string, std::string>& valueMap, const char* key, const char* value)
-{
-    auto it = valueMap.find(key);
-    if (it != valueMap.end())
-        it->second = value;
+bool UserDefault::_encryptEnabled = false;
+std::string UserDefault::_key;
+std::string UserDefault::_iv;
+
+static void ud_setkey(std::string& lhs, const cxx17::string_view& rhs) {
+    static const size_t keyLen = 16;
+    if (!rhs.empty()) {
+        lhs.assign(rhs.data(), std::min(rhs.length(), keyLen));
+        if (lhs.size() < keyLen)
+            lhs.insert(lhs.end(), keyLen - lhs.size(), '\0'); // fill 0, if key insufficient
+    }
     else
-        valueMap.emplace(key, value);
+        lhs.assign(keyLen, '\0');
+}
+
+static void ud_write_v_s(yasio::obstream& obs, const cxx17::string_view value) 
+{
+    size_t valpos = obs.length();
+    obs.write_v(value);
+    if(!value.empty())
+        UserDefault::encrypt(obs.wptr(valpos + sizeof(int32_t)), obs.length() - valpos - sizeof(int32_t), AES_ENCRYPT);
+}
+
+void UserDefault::setEncryptEnabled(bool enabled, const cxx17::string_view& key, const cxx17::string_view& iv)
+{
+    _encryptEnabled = enabled;
+    if (_encryptEnabled) {
+        ud_setkey(_key, key);
+        ud_setkey(_iv, iv);
+    }
+}
+
+void UserDefault::encrypt(std::string& inout, int enc)
+{
+    if (!inout.empty())
+        encrypt(&inout.front(), inout.size(), enc);
+}
+
+void UserDefault::encrypt(char* inout, size_t size, int enc)
+{
+    if (size > 0) {
+        AES_KEY aeskey;
+        AES_set_encrypt_key((const unsigned char*)_key.c_str(), 128, &aeskey);
+
+        unsigned char iv[16] = { 0 };
+        memcpy(iv, _iv.c_str(), std::min(sizeof(iv), _iv.size()));
+
+        int ignored_num = 0;
+        AES_cfb128_encrypt((unsigned char*)inout, (unsigned char*)inout, size, &aeskey, iv, &ignored_num, enc);
+    }
 }
 
 UserDefault::~UserDefault()
@@ -233,13 +279,21 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
         return;
     }
 
-    updateMapValue(_values, pKey, value.c_str());
+    setValueForKey(pKey, value);
 
 #if !USER_DEFAULT_PLAIN_MODE
     if (_rwmmap) {
         yasio::obstream obs;
-        obs.write_v(pKey);
-        obs.write_v(value);
+        if (_encryptEnabled)
+        {
+            ud_write_v_s(obs, pKey);
+            ud_write_v_s(obs, value);
+        }
+        else {
+            obs.write_v(pKey);
+            obs.write_v(value);
+        }
+
         if ((_realSize + obs.length() + sizeof(udflen_t)) < _curMapSize)
         {
             // increase entities count
@@ -257,6 +311,15 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
 #else
     flush();
 #endif
+}
+
+void UserDefault::setValueForKey(const std::string& key, const std::string& value)
+{
+    auto it = _values.find(key);
+    if (it != _values.end())
+        it->second = value;
+    else
+        _values.emplace(key, value);
 }
 
 UserDefault* UserDefault::getInstance()
@@ -313,9 +376,14 @@ void UserDefault::init()
                     // read count of keyvals.
                     int count = ibs.read_i<int>();
                     for (auto i = 0; i < count; ++i) {
-                        auto key = ibs.read_v();
-                        auto value = ibs.read_v();
-                        updateMapValue(this->_values, key.data(), value.data());
+                        std::string key(ibs.read_v());
+                        std::string value(ibs.read_v());
+                        if (_encryptEnabled)
+                        {
+                            UserDefault::encrypt(key, AES_DECRYPT);
+                            UserDefault::encrypt(value, AES_DECRYPT);
+                        }
+                        setValueForKey(key, value);
                     }
                     _realSize = ibs.seek(0, SEEK_CUR) - sizeof(udflen_t);
                 }
@@ -331,7 +399,7 @@ void UserDefault::init()
         pugi::xml_parse_result ret = doc.load_file(_filePath.c_str());
         if (ret) {
             for (auto& elem : doc.document_element())
-                updateMapValue(_values, elem.name(), elem.text().as_string());
+                setValueForKey(elem.name(), elem.text().as_string());
         }
         else {
             log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
@@ -349,8 +417,15 @@ void UserDefault::flush()
         yasio::obstream obs;
         obs.write_i<int>(static_cast<int>(this->_values.size()));
         for (auto& item : this->_values) {
-            obs.write_v(item.first);
-            obs.write_v(item.second);
+            if (_encryptEnabled)
+            {
+                ud_write_v_s(obs, item.first);
+                ud_write_v_s(obs, item.second);
+            }
+            else {
+                obs.write_v(item.first);
+                obs.write_v(item.second);
+            }
         }
 
         std::error_code error;

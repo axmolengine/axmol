@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include <unordered_map>
 #include "mio/mio.hpp"
+#include "yasio/cxx17/string_view.hpp"
 
 /**
  * @addtogroup base
@@ -215,6 +216,16 @@ public:
     */
     static void setDelegate(UserDefault *delegate);
 
+    /* AES cfb128 encrypt support
+    ** @params:
+    **   key: 16bytes key
+    **   iv: 16bytes iv
+    */
+    static void setEncryptEnabled(bool enabled, const cxx17::string_view& key, const cxx17::string_view& iv);
+
+    static void encrypt(std::string& inout, int enc);
+    static void encrypt(char* inout, size_t size, int enc);
+
 protected:
     UserDefault();
     virtual ~UserDefault();
@@ -222,6 +233,8 @@ protected:
     void init();
 
     void closeFileMapping();
+
+    void setValueForKey(const std::string& key, const std::string& value);
 private:
 
     std::unordered_map<std::string, std::string> _values;
@@ -233,6 +246,11 @@ private:
     int _curMapSize = 4096; // init mapsize is 4K
     int _realSize = 0; // real data size without key/value entities count field
     bool _initialized = false;
+
+    // cfb128 encrpyt args
+    static bool _encryptEnabled;
+    static std::string _key;
+    static std::string _iv;
 };
 
 
