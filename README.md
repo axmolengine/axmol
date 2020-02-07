@@ -1,6 +1,6 @@
 # engine-v5
-[![Build Status](https://travis-ci.org/simdsoft/engine-v5.svg?branch=master)](https://travis-ci.org/simdsoft/engine-v5)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/2gceoc8kkows9o7g/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/engine-v5)
+[![Build Status](https://travis-ci.org/c4games/engine-v5.svg?branch=master)](https://travis-ci.org/c4games/engine-v5)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/lk8nd0l5qppp3mqi/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/engine-v5)
 
 This is another more radical fork of cocos2d-x game engine, use opanal for all platforms, single texture multi gpu texture handler, c++17...  
   
@@ -87,3 +87,50 @@ _USRSTUDIOPDLL
 !!!! future of future:
    - [ ] Use sol2 for binding framework instead tolua++
    - [ ] Use bgfx for multi renderer backend support
+
+
+
+### 快速开始
+#### windows
+  安装CMake，要求3.6以上<br>
+  根据安装的 Visual Studio 版本，执行下面的命令，解决方案就生成在 build 目录下了。<br>
+  打开cpp-tests.sln，编译运行。<br>
+  ```
+  cd engine-v5\tests\cpp-tests
+  cmake -S .\ -B .\build -G “Visual Studio 14 2015 Win32”
+  or 
+  cmake -S .\ -B .\build -G “Visual Studio 16 2019” -A Win32
+  ``` 
+
+#### android
+  安装 Android Studio (推荐3.5.3)，打开 SDKManager，安装下列工具。<br>
+  打开project，目录在engine-v5\tests\cpp-tests\proj.android<br>
+  等待Gradle sync完成后，Build APKs，安装运行<br>
+  ```
+    LLDB 推荐3.1
+    CMake 推荐 3.10.2
+    NDK 推荐 20.1
+  ```
+
+#### ios
+  确保最新版xcode已安装
+  安装brew: ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```  
+  brew安装完成后，确保如下工具安装:  
+  ```sh
+    brew update
+    brew install git
+    brew install cmake
+    brew install autoconf
+    brew install automake
+    brew install libtool
+  ```
+  执行如下命令确保cmake能成功生成xcode工程:  
+  ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
+  生成xcode工程, 进入engine-v5根目录执行如下命令:  
+  ```sh
+    mkdir build
+    cd build
+    cmake .. -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos -DCMAKE_C_COMPILER=/Applications/Xcode.app/Contents/Developer/usr/bin/gcc -DCMAKE_CXX_COMPILER=/Applications/Xcode.app/Contents/Developer/usr/bin/g++
+  ```
+  之后就可以用xcode打开了
+  
