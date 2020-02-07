@@ -1,5 +1,5 @@
 # engine-v5
-[![Build Status](https://travis-ci.org/c4games/engine-v5.svg?branch=master)](https://travis-ci.org/c4games/engine-v5)
+[![Build Status](https://travis-ci.com/c4games/engine-v5.svg?branch=master)](https://travis-ci.com/c4games/engine-v5)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/lk8nd0l5qppp3mqi/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/engine-v5)
 
 This is another more radical fork of cocos2d-x game engine, use opanal for all platforms, single texture multi gpu texture handler, c++17...  
