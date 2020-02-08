@@ -125,12 +125,12 @@ _USRSTUDIOPDLL
     brew install libtool
   ```
   执行如下命令确保cmake能成功生成xcode工程:  
-  ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
+  ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
   生成xcode工程, 进入engine-v5根目录执行如下命令:  
   ```sh
     mkdir build
     cd build
-    cmake .. -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator
+    cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS -DENABLE_ARC=0
   ```
   之后就可以用xcode打开了
   
