@@ -132,5 +132,5 @@ _USRSTUDIOPDLL
     cd build
     cmake .. -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator
   ```
-  之后就可以用xcode打开了
+  之后就可以用xcode打开, 选择cpp-tests编译运行，其他targets目前均无法编译或运行
   
