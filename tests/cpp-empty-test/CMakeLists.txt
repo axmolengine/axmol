@@ -123,13 +123,10 @@ else()
     add_library(${APP_NAME} SHARED ${all_code_files})
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
+    target_link_libraries(${APP_NAME} -Wl,--whole-archive ext_ogg ext_vorbis ext_ssl ext_crypto -Wl,--no-whole-archive)
     
     configure_file(${OPENAL_SO_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src/main/jniLibs/${ANDROID_ABI}/${OPENAL_SO_NAME} COPYONLY)
     configure_file(${MPG123_SO_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src/main/jniLibs/${ANDROID_ABI}/${MPG123_SO_NAME} COPYONLY)
-endif()
-
-if(ANDROID OR APPLE)
-    target_link_libraries(${APP_NAME} -Wl,--whole-archive ext_ogg ext_vorbis ext_ssl ext_crypto -Wl,--no-whole-archive)
 endif()
 
 target_link_libraries(${APP_NAME} cocos2d)
@@ -138,6 +135,7 @@ target_include_directories(${APP_NAME} PRIVATE Classes)
 
 setup_cocos_app_config(${APP_NAME})
 if(APPLE)
+    target_link_libraries(${APP_NAME} -Wl,--whole-archive ext_ogg ext_vorbis ext_ssl ext_crypto)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
 
