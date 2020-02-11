@@ -135,7 +135,7 @@ target_include_directories(${APP_NAME} PRIVATE Classes)
 
 setup_cocos_app_config(${APP_NAME})
 if(APPLE)
-    target_link_libraries(${APP_NAME} -Wl,--whole-archive ext_ogg ext_vorbis ext_ssl ext_crypto)
+    target_link_libraries(${APP_NAME} ext_ogg ext_vorbis ext_ssl ext_crypto)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
 
