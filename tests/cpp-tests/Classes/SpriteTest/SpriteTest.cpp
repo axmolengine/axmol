@@ -390,11 +390,11 @@ bool SpriteASTC::init()
 void SpriteASTC::addNewSpriteWithCoords()
 {
     auto s = Director::getInstance()->getWinSize();
-    auto sprite4 = Sprite::create("Images/ASTC_RGBA_4x4.astc");
+    auto sprite4 = Sprite::create("Images/ASTC_RGBA.astc");
     sprite4->setPosition(Vec2(s.width * 0.2, s.height * 0.5));
     _background->addChild(sprite4);
 
-    auto spriteA4 = Sprite::create("Images/ASTC_RGB_4x4.astc");
+    auto spriteA4 = Sprite::create("Images/ASTC_RGB.astc");
     spriteA4->setPosition(Vec2(s.width * 0.5, s.height * 0.5));
     _background->addChild(spriteA4);
 

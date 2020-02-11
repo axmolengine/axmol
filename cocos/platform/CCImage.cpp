@@ -93,6 +93,8 @@ extern "C"
 #endif //CC_USE_PNG
 
 #include "base/etc1.h"
+
+#include "base/astc.h"
     
 #if CC_USE_JPEG
 #include "jpeglib.h"
@@ -620,7 +622,7 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
             ret = initWithATITCData(unpackedData, unpackedLen);
             break;
         case Format::ASTC:
-            ret = initWithASTCData(unpackedData, unpackedLen);
+            ret = initWithASTCData(unpackedData, unpackedLen, ownData);
             break;
         case Format::BMP:
             ret = initWithBmpData(unpackedData, unpackedLen);
@@ -1565,7 +1567,7 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
 }
 
 
-bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen)
+bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ownData)
 {
     ASTCTexHeader* header = (ASTCTexHeader*)data;
 
@@ -1577,8 +1579,8 @@ bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen)
         return false;
     }
 
-    int xdim = header->blockdim_x;
-    int ydim = header->blockdim_y;
+    uint8_t xdim = header->blockdim_x;
+    uint8_t ydim = header->blockdim_y;
 
     if ((xdim != 4 && xdim != 8) || (ydim != 4 && ydim != 8))
     {
@@ -1589,17 +1591,39 @@ bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen)
     if (Configuration::getInstance()->supportsASTC())
     {
         _pixelFormat = backend::PixelFormat::ASTC4;
-        if (xdim==8 && ydim==8)
+        if (xdim == 8 && ydim == 8)
         {
             _pixelFormat = backend::PixelFormat::ASTC8;
         }
         _dataLen = dataLen;
         _data = (unsigned char*)data;
-        _offset = 16; //ASTC Header Length
+        _offset = ASTC_HEAD_SIZE; 
         return true;
     }
     else
     {
+        CCLOG("cocos2d: Hardware ASTC decoder not present. Using software decoder");
+
+        bool ret = true;
+        _pixelFormat = backend::PixelFormat::RGBA8888;
+
+        _dataLen = _width * _height * 32;
+        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+
+        uint8_t result = decompress_astc(static_cast<const unsigned char*>(data) + ASTC_HEAD_SIZE, _data, _width, _height, xdim, ydim, _dataLen);
+        if (result != 0)
+        {
+            _dataLen = 0;
+            if (_data != nullptr)
+            {
+                free(_data);
+                _data = nullptr;
+            }
+            ret = false;
+        }
+
+        if (ownData) free((void*)data);
+        return ret;
     }
 
     return false;

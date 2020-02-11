@@ -172,7 +172,7 @@ protected:
     bool initWithETCData(const unsigned char* data, ssize_t dataLen, bool ownData);
     bool initWithS3TCData(const unsigned char * data, ssize_t dataLen);
     bool initWithATITCData(const unsigned char *data, ssize_t dataLen);
-    bool initWithASTCData(const unsigned char* data, ssize_t dataLen);
+    bool initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ownData);
     typedef struct sImageTGA tImageTGA;
     bool initWithTGAData(tImageTGA* tgaData);
 
