@@ -134,7 +134,7 @@ target_link_libraries(${APP_NAME} cocos2d)
 target_include_directories(${APP_NAME} PRIVATE Classes)
 
 setup_cocos_app_config(${APP_NAME})
-if(XCODE)
+if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
 
