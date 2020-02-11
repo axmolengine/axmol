@@ -45,7 +45,7 @@
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #include <android/log.h>
 #define AUDIO_LOG(fmt, ...) __android_log_print(ANDROID_LOG_DEBUG, "AudioEngine", fmt, ##__VA_ARGS__)
-#else // other platforms
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
 #define AUDIO_LOG(fmt,...) printf(fmt "\n", ##__VA_ARGS__)
 #endif
 

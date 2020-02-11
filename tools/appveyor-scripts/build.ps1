@@ -1,5 +1,5 @@
 Set-PSDebug -Trace 1
-$python = "D:\\Python27\\python.exe"
+$python = "C:\\Python27\\python.exe"
 
 Write-Host "Set environment"
 # gradlew
@@ -108,16 +108,16 @@ If ($env:build_type -eq "android_cpp_tests") {
     # if ($lastexitcode -ne 0) {throw} # mkdir return no-zero
 
     Push-Location $env:APPVEYOR_BUILD_FOLDER\win32-build
-    & cmake -A Win32 -DCMAKE_BUILD_TYPE=Release ..
+    & cmake -DCMAKE_BUILD_TYPE=Release ..
     if ($lastexitcode -ne 0) {throw}
 
     & cmake --build . --config Release --target cpp-tests
     if ($lastexitcode -ne 0) {throw}
 
-    # & 7z a release_win32.7z $env:APPVEYOR_BUILD_FOLDER\win32-build\bin\
-    # if ($lastexitcode -ne 0) {throw}
+    & 7z a release_win32.7z $env:APPVEYOR_BUILD_FOLDER\win32-build\bin\
+    if ($lastexitcode -ne 0) {throw}
 
-    # Push-AppveyorArtifact release_win32.7z
+    Push-AppveyorArtifact release_win32.7z
     Pop-Location
 }
 Else {
