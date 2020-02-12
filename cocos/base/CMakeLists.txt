@@ -15,6 +15,7 @@ elseif(LINUX OR WINDOWS)
 endif()
 
 set(COCOS_BASE_HEADER
+    base/astc.h
     base/pvr.h
     base/CCValue.h
     base/CCEventListenerMouse.h
@@ -131,5 +132,6 @@ set(COCOS_BASE_SRC
     base/etc1.cpp
     base/pvr.cpp
     base/s3tc.cpp
+    base/astc.cpp
     ${COCOS_BASE_SPECIFIC_SRC}
     )
