@@ -324,7 +324,6 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     }
     else if (image->isCompressed())
     {   
-        CCLOG("weichao renderFormat %d,%d", renderFormat, image->getPixelFormat());
         if (renderFormat != image->getPixelFormat())
         {
             CCLOG("cocos2d: WARNING: This image is compressed and we can't convert it for now");
