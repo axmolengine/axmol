@@ -337,7 +337,6 @@ enum class ProgramType : size_t
     POSITION_COLOR_LENGTH_TEXTURE,          //positionColorLengthTexture_vert, positionColorLengthTexture_frag
     POSITION_COLOR_TEXTURE_AS_POINTSIZE,    //positionColorTextureAsPointsize_vert, positionColor_frag
     POSITION_COLOR,                         //positionColor_vert,           positionColor_frag
-    POSITION,                               //position_vert,                positionColor_frag
     POSITION_UCOLOR,                        //positionUColor_vert,          positionUColor_frag
     POSITION_TEXTURE,                       //positionTexture_vert,         positionTexture_frag
     POSITION_TEXTURE_COLOR,                 //positionTextureColor_vert,    positionTextureColor_frag
