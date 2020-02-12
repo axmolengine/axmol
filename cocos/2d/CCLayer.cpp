@@ -288,7 +288,7 @@ LayerColor::LayerColor()
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR); // TODO: noMVP?
+    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR);
     _programState = new (std::nothrow) backend::ProgramState(program);
     pipelineDescriptor.programState = _programState;
     

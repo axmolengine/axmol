@@ -120,22 +120,14 @@ void ProgramGL::compileProgram()
     
     glAttachShader(_program, vertShader);
     glAttachShader(_program, fragShader);
-
+    
     glLinkProgram(_program);
-
+    
     GLint status = 0;
     glGetProgramiv(_program, GL_LINK_STATUS, &status);
     if (GL_FALSE == status)
     {
-        GLint errorInfoLen = 0;
-        glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &errorInfoLen);
-        if (errorInfoLen) {
-            std::string errorInfo(errorInfoLen, '\0');
-            glGetProgramInfoLog(_program, errorInfoLen, NULL, &errorInfo.front());
-            log("cocos2d: ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.c_str());
-        }
-        else
-            log("cocos2d: ERROR: %s: failed to link program ", __FUNCTION__);
+        printf("cocos2d: ERROR: %s: failed to link program ", __FUNCTION__);
         glDeleteProgram(_program);
         _program = 0;
     }
