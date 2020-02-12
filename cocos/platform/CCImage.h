@@ -92,8 +92,6 @@ public:
         ATITC,
         //! TGA
         TGA,
-        //£¡ASTC
-        ASTC,
         //! Raw Data
         RAW_DATA,
         //! Unknown format
@@ -172,7 +170,6 @@ protected:
     bool initWithETCData(const unsigned char* data, ssize_t dataLen, bool ownData);
     bool initWithS3TCData(const unsigned char * data, ssize_t dataLen);
     bool initWithATITCData(const unsigned char *data, ssize_t dataLen);
-    bool initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ownData);
     typedef struct sImageTGA tImageTGA;
     bool initWithTGAData(tImageTGA* tgaData);
 
@@ -229,7 +226,6 @@ protected:
     bool isEtc(const unsigned char * data, ssize_t dataLen);
     bool isS3TC(const unsigned char * data,ssize_t dataLen);
     bool isATITC(const unsigned char *data, ssize_t dataLen);
-    bool isASTC(const unsigned char* data, ssize_t dataLen);
 };
 
 // end of platform group

@@ -91,7 +91,6 @@ bool ProgramCache::init()
     addProgram(ProgramType::POSITION_COLOR_LENGTH_TEXTURE);
     addProgram(ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE);
     addProgram(ProgramType::POSITION_COLOR);
-    addProgram(ProgramType::POSITION);
     addProgram(ProgramType::LAYER_RADIA_GRADIENT);
     addProgram(ProgramType::POSITION_TEXTURE);
     addProgram(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
@@ -156,8 +155,6 @@ void ProgramCache::addProgram(ProgramType type)
         case ProgramType::POSITION_COLOR:
             program = backend::Device::getInstance()->newProgram(positionColor_vert, positionColor_frag);
             break;
-        case ProgramType::POSITION:
-            program = backend::Device::getInstance()->newProgram(position_vert, positionColor_frag);
             break;
         case ProgramType::LAYER_RADIA_GRADIENT:
             program = backend::Device::getInstance()->newProgram(position_vert, layer_radialGradient_frag);

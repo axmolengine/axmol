@@ -119,12 +119,6 @@ enum class PixelFormat
     MTL_BGR5A1,
     MTL_ABGR4,
 
-    ASTC4,
-    //! ASTC compressed texture: ASTC 4x4 block
-    ASTC8,
-    //! ASTC compressed texture: ASTC 8x8 block
-
-
     // A packed 32-bit combined depth and stencil pixel format with two nomorlized unsigned integer
     // components: 24 bits, typically used for a depth render target, and 8 bits, typically used for
     // a stencil render target.
@@ -337,7 +331,6 @@ enum class ProgramType : size_t
     POSITION_COLOR_LENGTH_TEXTURE,          //positionColorLengthTexture_vert, positionColorLengthTexture_frag
     POSITION_COLOR_TEXTURE_AS_POINTSIZE,    //positionColorTextureAsPointsize_vert, positionColor_frag
     POSITION_COLOR,                         //positionColor_vert,           positionColor_frag
-    POSITION,                               //position_vert,                positionColor_frag
     POSITION_UCOLOR,                        //positionUColor_vert,          positionUColor_frag
     POSITION_TEXTURE,                       //positionTexture_vert,         positionTexture_frag
     POSITION_TEXTURE_COLOR,                 //positionTextureColor_vert,    positionTextureColor_frag
