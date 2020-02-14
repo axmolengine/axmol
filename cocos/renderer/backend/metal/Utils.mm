@@ -123,6 +123,10 @@ MTLPixelFormat Utils::toMTLPixelFormat(PixelFormat textureFormat)
             return MTLPixelFormatPVRTC_RGB_2BPP;
         case PixelFormat::ETC:
             return MTLPixelFormatETC2_RGB8;
+        case PixelFormat::ASTC4:
+            return MTLPixelFormatASTC_4x4_LDR;
+        case PixelFormat::ASTC8:
+            return MTLPixelFormatASTC_8x8_LDR;
 #else
         case PixelFormat::S3TC_DXT1:
             return MTLPixelFormatBC1_RGBA;
