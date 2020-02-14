@@ -121,8 +121,9 @@ Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*){
-        glGenTextures(1, &(this->_textureInfo.textures[0]));
-        _textureInfo.setTexParameters(GL_TEXTURE_2D);
+        glGenTextures(1, &(_textureInfo.textures[0]));
+        _textureInfo.apply(0);
+        _textureInfo.setCurrentTexParameters(GL_TEXTURE_2D);
         // this->initWithZeros();
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
@@ -340,8 +341,9 @@ TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*){
-        glGenTextures(1, &(this->_textureInfo.textures[0]));
-        _textureInfo.setTexParameters(GL_TEXTURE_CUBE_MAP);
+        glGenTextures(1, &(_textureInfo.textures[0]));
+        _textureInfo.apply(0);
+        _textureInfo.setCurrentTexParameters(GL_TEXTURE_CUBE_MAP);
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif

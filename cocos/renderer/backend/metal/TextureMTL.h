@@ -53,7 +53,7 @@ struct TextureInfoMTL
     id<MTLTexture> ensure(int index, int target);
     void destroy();
 
-    id<MTLTexture> createTexture(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor, int target)
+    id<MTLTexture> createTexture(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor, int target);
     void recreateSampler(const SamplerDescriptor &descriptor);
 
     MTLSamplerAddressMode _sAddressMode;
@@ -165,7 +165,7 @@ public:
      * Get MTLSamplerState object
      * @return A MTLSamplerState object.
      */
-    inline id<MTLSamplerState> getMTLSamplerState() const { return _mtlSamplerState; }
+    inline id<MTLSamplerState> getMTLSamplerState() const { return _textureInfo._mtlSamplerState; }
     
 private:
 
@@ -230,7 +230,7 @@ public:
      * Get MTLSamplerState object
      * @return A MTLSamplerState object.
      */
-    inline id<MTLSamplerState> getMTLSamplerState() const { return _mtlSamplerState; }
+    inline id<MTLSamplerState> getMTLSamplerState() const { return _textureInfo._mtlSamplerState; }
     
 private:
 
