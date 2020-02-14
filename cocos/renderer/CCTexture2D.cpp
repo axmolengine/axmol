@@ -280,7 +280,6 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     case PixelFormat::ETC:
     case PixelFormat::ASTC4:
     case PixelFormat::ASTC8:
-        case 
         renderFormat = imagePixelFormat;
     default:
         break;
