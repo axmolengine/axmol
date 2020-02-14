@@ -114,7 +114,7 @@ GLuint TextureInfoGL::ensure(int index, GLenum target)
     return texID;
 }
 
-Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor) : Texture2DBackend(descriptor)
+Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
 {
     updateTextureDescriptor(descriptor);
 
@@ -141,6 +141,7 @@ void Texture2DGL::initWithZeros()
 void Texture2DGL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index)
 {
     TextureBackend::updateTextureDescriptor(descriptor, index);
+
     UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type, _isCompressed);
 
     bool isPow2 = ISPOW2(_width) && ISPOW2(_height);
@@ -331,12 +332,10 @@ void Texture2DGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std:
 }
 
 TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
-    :TextureCubemapBackend(descriptor)
 {
     assert(_width == _height);
     _textureType = TextureType::TEXTURE_CUBE;
-    UtilsGL::toGLTypes(_textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type, _isCompressed);
-    updateSamplerDescriptor(descriptor.samplerDescriptor);
+    updateTextureDescriptor(descriptor);
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
@@ -351,8 +350,10 @@ TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
 
 void TextureCubeGL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index)
 {
+    backend::TextureCubemapBackend::updateTextureDescriptor(descriptor, index);
+    
     UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type, _isCompressed);
-    _textureFormat = descriptor.textureFormat;
+    
     updateSamplerDescriptor(descriptor.samplerDescriptor);
 }
 

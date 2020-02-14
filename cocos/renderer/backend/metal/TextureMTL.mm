@@ -275,7 +275,7 @@ void TextureInfoMTL::recreateSampler(const SamplerDescriptor &descriptor)
 
 /// CLASS TextureMTL
 TextureMTL::TextureMTL(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor)
-: backend::Texture2DBackend(descriptor), _textureInfo(mtlDevice)
+: _textureInfo(mtlDevice)
 {
     updateTextureDescriptor(descriptor);
 }
@@ -291,8 +291,9 @@ void TextureMTL::updateSamplerDescriptor(const SamplerDescriptor &sampler)
 
 void TextureMTL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index)
 {
-    _textureInfo._descriptor = descriptor;
     TextureBackend::updateTextureDescriptor(descriptor, index);
+
+    _textureInfo._descriptor = descriptor;
     _textureInfo.ensure(index, MTL_TEXTURE_2D);
     updateSamplerDescriptor(descriptor.samplerDescriptor);
     if (PixelFormat::RGB888 == _textureFormat)
@@ -391,7 +392,7 @@ void TextureMTL::generateMipmaps()
 
 /// CLASS TextureCubeMTL
 TextureCubeMTL::TextureCubeMTL(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor)
-: backend::TextureCubemapBackend(descriptor), _textureInfo(mtlDevice)
+: _textureInfo(mtlDevice)
 {
     updateTextureDescriptor(descriptor);
 }
@@ -402,7 +403,7 @@ TextureCubeMTL::~TextureCubeMTL()
 
 void TextureCubeMTL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index)
 {
-    TextureBackend::updateTextureDescriptor(descriptor);
+    TextureBackend::updateTextureDescriptor(descriptor, index);
 
     _textureInfo._descriptor = descriptor;
     _textureInfo.ensure(index, MTL_TEXTURE_CUBE);
