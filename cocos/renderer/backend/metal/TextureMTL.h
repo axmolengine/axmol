@@ -124,7 +124,7 @@ public:
      * Get MTLTexture object.
      * @return A MTLTexture object.
      */
-    inline id<MTLTexture> getMTLTexture(int index = 0) const { return _mtlTextures[index]; }
+    inline id<MTLTexture> getMTLTexture() const { return _mtlTextures[0]; }
     
     /**
      * Get MTLSamplerState object
