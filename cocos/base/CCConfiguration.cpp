@@ -112,7 +112,7 @@ std::string Configuration::getInfo() const
 void Configuration::gatherGPUInfo()
 {
     auto _deviceInfo = backend::Device::getInstance()->getDeviceInfo();
-    CCLOG("weichao %s",_deviceInfo->getExtension());
+    CCLOG("Supported extensions: %s",_deviceInfo->getExtension());
 
     _valueDict["vendor"] = Value(_deviceInfo->getVendor());
     _valueDict["renderer"] = Value(_deviceInfo->getRenderer());
