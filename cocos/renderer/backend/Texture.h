@@ -60,7 +60,7 @@ public:
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
-    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler, int index = 0) = 0;
+    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler) = 0;
     
     /**
      * Read a block of pixels from the drawable texture
@@ -104,7 +104,7 @@ public:
      */
     inline bool hasMipmaps() const { return _hasMipmaps; }
 
-    inline int getCount() const { return _maxTextureIndex + 1; };
+    virtual int getCount() const { return 1; };
 
 protected:
     /**
@@ -119,8 +119,6 @@ protected:
     bool _isCompressed = false;
     uint32_t _width = 0;
     uint32_t _height = 0;
-
-    int _maxTextureIndex = 0;
 
     TextureType _textureType = TextureType::TEXTURE_2D;
     PixelFormat _textureFormat = PixelFormat::RGBA8888;
@@ -205,7 +203,7 @@ public:
      * @param side Specifies which slice texture of cube to be update.
      * @param data Specifies a pointer to the image data in memory.
      */
-    virtual void updateFaceData(TextureCubeFace side, void *data) = 0;
+    virtual void updateFaceData(TextureCubeFace side, void *data, int index = 0) = 0;
         
 protected:
     /**
