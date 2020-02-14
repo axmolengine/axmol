@@ -278,6 +278,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     case PixelFormat::PVRTC2:
     case PixelFormat::A8:
     case PixelFormat::ETC:
+    case PixelFormat::ASTC4:
+    case PixelFormat::ASTC8:
         renderFormat = imagePixelFormat;
     default:
         break;
@@ -324,6 +326,14 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     }
     else if (image->isCompressed())
     {   
+        switch (imagePixelFormat) {
+        case PixelFormat::ASTC4:
+        case PixelFormat::ASTC8:
+        case PixelFormat::ETC:
+            renderFormat = imagePixelFormat;
+        default:;
+        }
+
         if (renderFormat != image->getPixelFormat())
         {
             CCLOG("cocos2d: WARNING: This image is compressed and we can't convert it for now");
