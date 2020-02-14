@@ -259,6 +259,7 @@ void UtilsGL::toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint
         internalFormat = GL_COMPRESSED_RGBA_ASTC_4x4_KHR;
         format = 0xFFFFFFFF;
         type = 0xFFFFFFFF;
+        isCompressed = true;
         break;
 #endif
 #ifdef GL_COMPRESSED_RGBA_ASTC_8x8_KHR
@@ -266,6 +267,7 @@ void UtilsGL::toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint
         internalFormat = GL_COMPRESSED_RGBA_ASTC_8x8_KHR;
         format = 0xFFFFFFFF;
         type = 0xFFFFFFFF;
+        isCompressed = true;
         break;
 #endif
 #ifdef GL_ETC1_RGB8_OES
