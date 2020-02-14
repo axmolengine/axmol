@@ -297,8 +297,7 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
         if ((_realSize + obs.length() + sizeof(udflen_t)) < _curMapSize)
         {
             // increase entities count
-            auto count = yasio::endian::ntohv(*(udflen_t*)_rwmmap->data());
-            *(udflen_t*)_rwmmap->data() = yasio::endian::htonv(count + 1);
+            yasio::obstream::swrite_i(_rwmmap->data(), 1 + yasio::ibstream::sread_i<udflen_t>(_rwmmap->data()));
 
             // append entity
             ::memcpy(_rwmmap->data() + sizeof(udflen_t) + _realSize, obs.data(), obs.length());
