@@ -85,7 +85,7 @@ Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor) : Texture2DBackend
     // Listen this event to restored texture id after coming to foreground on Android.
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*){
         glGenTextures(1, &(this->_textureInfo.textures[0]));
-        this->initWithZeros();
+        // this->initWithZeros();
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
@@ -116,7 +116,8 @@ void Texture2DGL::updateTextureDescriptor(const cocos2d::backend::TextureDescrip
 
     // Update data here because `updateData()` may not be invoked later.
     // For example, a texture used as depth buffer will not invoke updateData().
-    initWithZeros();
+    // FIXME, Don't call, now it's unused, when the texture is compressed, initWithZeros will cause GL Error: 0x501
+    // initWithZeros();
 }
 
 Texture2DGL::~Texture2DGL()
@@ -157,6 +158,8 @@ void Texture2DGL::updateSamplerDescriptor(const SamplerDescriptor &sampler, int 
 
 void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t height, std::size_t level, int index)
 {
+    CHECK_GL_ERROR_DEBUG();
+
     //Set the row align only when mipmapsNum == 1 and the data is uncompressed
     auto mipmapEnalbed = isMipmapEnabled(_textureInfo.minFilterGL) || isMipmapEnabled(_textureInfo.magFilterGL);
     if(!mipmapEnalbed)
@@ -192,6 +195,7 @@ void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t heig
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _textureInfo.sAddressModeGL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _textureInfo.tAddressModeGL);
 
+    CHECK_GL_ERROR_DEBUG();
 
     glTexImage2D(GL_TEXTURE_2D,
                 level,
