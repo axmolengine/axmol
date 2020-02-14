@@ -116,15 +116,13 @@ public:
      */
     virtual void updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index = 0) override;
     
-    int getCount() const override { return _mtlMaxTexIdx + 1; };
-    
     id<MTLTexture> ensure(int index);
     
     /**
      * Get MTLTexture object.
      * @return A MTLTexture object.
      */
-    inline id<MTLTexture> getMTLTexture() const { return _mtlTextures[0]; }
+    inline id<MTLTexture> getMTLTexture(int index = 0) const { return _mtlTextures[index]; }
     
     /**
      * Get MTLSamplerState object
@@ -146,7 +144,7 @@ private:
     
     id<MTLDevice> _mtlDevice = nil;
     std::array<id<MTLTexture>, CC_META_TEXTURES + 1> _mtlTextures;
-    int _mtlMaxTexIdx = 0;
+
     id<MTLSamplerState> _mtlSamplerState = nil;
     unsigned int _bytesPerRow = 0;
 };

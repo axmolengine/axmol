@@ -104,7 +104,7 @@ public:
      */
     inline bool hasMipmaps() const { return _hasMipmaps; }
 
-    virtual int getCount() const { return 1; };
+    inline int getCount() const { return _maxTextureIndex + 1; };
 
 protected:
     /**
@@ -119,6 +119,8 @@ protected:
     bool _isCompressed = false;
     uint32_t _width = 0;
     uint32_t _height = 0;
+
+    int _maxTextureIndex = 0;
 
     TextureType _textureType = TextureType::TEXTURE_2D;
     PixelFormat _textureFormat = PixelFormat::RGBA8888;

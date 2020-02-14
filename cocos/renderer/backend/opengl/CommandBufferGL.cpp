@@ -487,8 +487,7 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
             int i = 0;
             for (const auto& texture: textures)
             {
-                applyTexture(texture, slot[i]);
-                ++i;
+                applyTexture(texture, slot[i++]);
             }
             
             auto arrayCount = slot.size();

@@ -140,30 +140,6 @@ namespace
         return bytesPerRow;
     }
     
-    std::size_t getBytesPerRowASTC(MTLPixelFormat pixleFormat, std::size_t width)
-    {
-        std::size_t bytesPerRow = 0;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        uint32_t bytesPerBlock = 0;
-        switch (pixleFormat) {
-            case MTLPixelFormatASTC_4x4_sRGB:
-            case MTLPixelFormatASTC_4x4_LDR:
-            case MTLPixelFormatASTC_4x4_HDR:
-                bytesPerBlock = 4;
-                break;
-            case MTLPixelFormatASTC_8x8_sRGB:
-            case MTLPixelFormatASTC_8x8_LDR:
-            case MTLPixelFormatASTC_8x8_HDR:
-                bytesPerBlock = 8;
-                break;
-            default:
-                CCASSERT(false, "Not supported ASTC format!");
-        }
-        bytesPerRow = width * bytesPerBlock;
-#endif
-        return bytesPerRow;
-    }
-    
     std::size_t getBytesPerRowS3TC(MTLPixelFormat pixleFormat, std::size_t width)
     {
         std::size_t bytesPerRow = 0;
@@ -199,10 +175,6 @@ namespace
         else if (textureFormat == PixelFormat::ETC)
         {
             bytesPerRow = getBytesPerRowETC(pixelFormat, width);
-        }
-        else if (textureFormat == PixelFormat::ASTC4 || textureFormat == PixelFormat::ASTC8)
-        {
-            bytesPerRow = getBytesPerRowASTC(pixelFormat, width);
         }
         else if(textureFormat >= PixelFormat::S3TC_DXT1 &&
                 textureFormat <= PixelFormat::S3TC_DXT5)
@@ -398,7 +370,7 @@ id<MTLTexture> TextureMTL::ensure(int index)
         id<MTLTexture>& mtlTexture = _mtlTextures[index];
         if(mtlTexture) return mtlTexture;
         createTexture(_mtlDevice, _textureDescriptor, index);
-        if(_mtlMaxTexIdx < index) _mtlMaxTexIdx = index;
+        if(_maxTextureIndex < index) _maxTextureIndex = index;
         return mtlTexture;
     }
     return nil;
