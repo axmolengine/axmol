@@ -151,7 +151,7 @@ public:
      * Get texture object.
      * @return Texture object.
      */
-    inline GLuint getHandler() const { return _textureInfo.textures[0]; }
+    inline GLuint getHandler(int index = 0) const { return _textureInfo.textures[index]; }
 
     /**
      * Set texture to pipeline
@@ -161,13 +161,10 @@ public:
 
     GLuint ensure(int index);
 
-    int getCount() const override { return _maxTextureIndex + 1; }
-
 private:
     void initWithZeros();
 
     TextureInfoGL _textureInfo;
-    int _maxTextureIndex = 0;
     EventListener* _backToForegroundListener = nullptr;
 };
 
@@ -218,15 +215,13 @@ public:
      * Get texture object.
      * @return Texture object.
      */
-    inline GLuint getHandler() const { return _textureInfo.textures[0]; }
+    inline GLuint getHandler(int index = 0) const { return _textureInfo.textures[index]; }
 
     /**
      * Set texture to pipeline
      * @param index Specifies the texture image unit selector.
      */
     void apply(int index) const;
-
-    int getCount() const override { return 1; }
 
 private:
     void setTexParameters();

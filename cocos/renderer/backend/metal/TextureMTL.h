@@ -116,8 +116,6 @@ public:
      */
     virtual void updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index = 0) override;
     
-    int getCount() const override { return _mtlMaxTexIdx + 1; };
-    
     id<MTLTexture> ensure(int index);
     
     /**
@@ -146,7 +144,7 @@ private:
     
     id<MTLDevice> _mtlDevice = nil;
     std::array<id<MTLTexture>, CC_META_TEXTURES + 1> _mtlTextures;
-    int _mtlMaxTexIdx = 0;
+
     id<MTLSamplerState> _mtlSamplerState = nil;
     unsigned int _bytesPerRow = 0;
 };

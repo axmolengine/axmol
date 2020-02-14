@@ -370,7 +370,7 @@ id<MTLTexture> TextureMTL::ensure(int index)
         id<MTLTexture>& mtlTexture = _mtlTextures[index];
         if(mtlTexture) return mtlTexture;
         createTexture(_mtlDevice, _textureDescriptor, index);
-        if(_mtlMaxTexIdx < index) _mtlMaxTexIdx = index;
+        if(_maxTextureIndex < index) _maxTextureIndex = index;
         return mtlTexture;
     }
     return nil;
