@@ -25,6 +25,6 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "GL/glew.h"
+#include "glad/glad.h"
 
 #define CC_GL_DEPTH24_STENCIL8      GL_DEPTH24_STENCIL8
