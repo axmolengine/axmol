@@ -36,9 +36,14 @@ CC_BACKEND_BEGIN
  */
 struct TextureInfoGL
 {
-    void applySamplerDescriptor(const SamplerDescriptor &desc, bool isPow2, bool hasMipmaps);
+    void applySampler(const SamplerDescriptor &desc, bool isPow2, bool hasMipmaps, GLenum target);
+    void setCurrentTexParameters(GLenum target);
+
     TextureInfoGL() {
         textures.fill(0);
+    }
+    ~TextureInfoGL() {
+        destroy();
     }
 
     template<typename _Fty>
@@ -48,6 +53,16 @@ struct TextureInfoGL
         while ((texID = textures[idx]))
             cb(texID, idx++);
     }
+
+    GLuint ensure(int index, GLenum target = GL_TEXTURE_2D);
+    void recreateAll(GLenum target = GL_TEXTURE_2D);
+
+    void destroy() {
+        foreach([=](GLuint texID, int) { glDeleteTextures(1, &texID); });
+        textures.fill(0);
+    }
+
+    void apply(int index, GLenum target = GL_TEXTURE_2D) const;
 
     GLint magFilterGL = GL_LINEAR;
     GLint minFilterGL = GL_LINEAR;
@@ -60,6 +75,7 @@ struct TextureInfoGL
     GLenum type = GL_UNSIGNED_BYTE;
 
     std::array<GLuint, CC_META_TEXTURES + 1> textures;
+    int maxIdx = 0;
 };
 
 /**
@@ -125,7 +141,7 @@ public:
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
-    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler, int index = 0)  override;
+    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler)  override;
     
     /**
      * Read a block of pixels from the drawable texture
@@ -151,23 +167,20 @@ public:
      * Get texture object.
      * @return Texture object.
      */
-    inline GLuint getHandler() const { return _textureInfo.textures[0]; }
+    inline GLuint getHandler(int index = 0) const { return _textureInfo.textures[index]; }
 
     /**
      * Set texture to pipeline
      * @param index Specifies the texture image unit selector.
      */
-    void apply(int index) const;
+    void apply(int index) const { _textureInfo.apply(index); }
 
-    GLuint ensure(int index);
-
-    int getCount() const override { return _maxTextureIndex + 1; }
+    int getCount() const override { return _textureInfo.maxIdx + 1; }
 
 private:
     void initWithZeros();
 
     TextureInfoGL _textureInfo;
-    int _maxTextureIndex = 0;
     EventListener* _backToForegroundListener = nullptr;
 };
 
@@ -187,14 +200,14 @@ public:
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
-    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler, int index = 0) override;
+    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler) override;
     
     /**
      * Update texutre cube data in give slice side.
      * @param side Specifies which slice texture of cube to be update.
      * @param data Specifies a pointer to the image data in memory.
      */
-    virtual void updateFaceData(TextureCubeFace side, void *data) override;
+    virtual void updateFaceData(TextureCubeFace side, void *data, int index = 0) override;
     
     /**
      * Read a block of pixels from the drawable texture
@@ -218,18 +231,17 @@ public:
      * Get texture object.
      * @return Texture object.
      */
-    inline GLuint getHandler() const { return _textureInfo.textures[0]; }
+    inline GLuint getHandler(int index = 0) const { return _textureInfo.textures[index]; }
 
     /**
      * Set texture to pipeline
      * @param index Specifies the texture image unit selector.
      */
-    void apply(int index) const;
+    void apply(int index) const { _textureInfo.apply(index, GL_TEXTURE_CUBE_MAP); }
 
-    int getCount() const override { return 1; }
+    int getCount() const override { return _textureInfo.maxIdx + 1; }
 
 private:
-    void setTexParameters();
 
     TextureInfoGL _textureInfo;
     EventListener* _backToForegroundListener = nullptr;

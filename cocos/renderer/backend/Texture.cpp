@@ -98,16 +98,6 @@ namespace
     }
 }
 
-TextureBackend::TextureBackend(const TextureDescriptor& descriptor)
-    : _bitsPerElement(computeBitsPerElement(descriptor.textureFormat))
-    , _width(descriptor.width)
-    , _height(descriptor.height)
-    , _textureType(descriptor.textureType)
-    , _textureFormat(descriptor.textureFormat)
-    , _textureUsage(descriptor.textureUsage)
-{
-}
-
 TextureBackend::~TextureBackend()
 {}
 
@@ -119,17 +109,6 @@ void TextureBackend::updateTextureDescriptor(const cocos2d::backend::TextureDesc
     _textureUsage = descriptor.textureUsage;
     _width = descriptor.width;
     _height = descriptor.height;
-}
-
-Texture2DBackend::Texture2DBackend(const TextureDescriptor& descriptor)
-    : TextureBackend(descriptor)
-{
-}
-
-TextureCubemapBackend::TextureCubemapBackend(const TextureDescriptor &descriptor)
-    : TextureBackend(descriptor)
-{
-
 }
 
 CC_BACKEND_END

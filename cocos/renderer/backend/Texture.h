@@ -60,7 +60,7 @@ public:
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
-    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler, int index = 0) = 0;
+    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler) = 0;
     
     /**
      * Read a block of pixels from the drawable texture
@@ -110,7 +110,7 @@ protected:
     /**
      * @param descriptor Specifies the texture descirptor.
      */
-    TextureBackend(const TextureDescriptor& descriptor);
+    TextureBackend() {}
     virtual ~TextureBackend();
         
     /// The bytes of all components.
@@ -184,12 +184,6 @@ public:
      * @return Texture height.
      */
     inline std::size_t getHeight() const { return _height; }
-
-protected:
-    /**
-     * @param descriptor Specifies the texture descriptor.
-     */
-    Texture2DBackend(const TextureDescriptor& descriptor);
 };
 
 /**
@@ -203,13 +197,7 @@ public:
      * @param side Specifies which slice texture of cube to be update.
      * @param data Specifies a pointer to the image data in memory.
      */
-    virtual void updateFaceData(TextureCubeFace side, void *data) = 0;
-        
-protected:
-    /**
-     * @param descriptor Specifies the texture descriptor.
-     */
-    TextureCubemapBackend(const TextureDescriptor& descriptor);
+    virtual void updateFaceData(TextureCubeFace side, void *data, int index = 0) = 0;
 };
 
 //end of _backend group

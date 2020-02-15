@@ -178,14 +178,14 @@ namespace
         return mtlDescritpor;
     }
     
-    id<MTLTexture> getMTLTexture(TextureBackend* texture)
+    id<MTLTexture> getMTLTexture(TextureBackend* texture, int index = 0)
     {
         switch (texture->getTextureType())
         {
             case TextureType::TEXTURE_2D:
-                return static_cast<TextureMTL*>(texture)->getMTLTexture();
+                return static_cast<TextureMTL*>(texture)->getMTLTexture(index);
             case TextureType::TEXTURE_CUBE:
-                return static_cast<TextureCubeMTL*>(texture)->getMTLTexture();
+                return static_cast<TextureCubeMTL*>(texture)->getMTLTexture(index);
             default:
                 assert(false);
                 return nil;
@@ -422,27 +422,29 @@ void CommandBufferMTL::doSetTextures(bool isVertex) const
 
     for(const auto& iter : bindTextureInfos)
     {
-        //FIXME: should support texture array.
-        int i = 0;
         auto location = iter.first;
         const auto& textures = iter.second.textures;
+        const auto& slot = iter.second.slot;
         
-        if (isVertex)
+        int i = 0;
+        for (const auto& texture : textures)
         {
-            [_mtlRenderEncoder setVertexTexture:getMTLTexture(textures[i])
-                                    atIndex:location];
-            [_mtlRenderEncoder setVertexSamplerState:getMTLSamplerState(textures[i])
-                                         atIndex:location];
+            if (isVertex)
+            {
+                [_mtlRenderEncoder setVertexTexture:getMTLTexture(texture, slot[i])
+                                        atIndex:location];
+                [_mtlRenderEncoder setVertexSamplerState:getMTLSamplerState(texture)
+                                             atIndex:location];
+            }
+            else
+            {
+                [_mtlRenderEncoder setFragmentTexture:getMTLTexture(texture, slot[i])
+                                          atIndex:location];
+                [_mtlRenderEncoder setFragmentSamplerState:getMTLSamplerState(texture)
+                                               atIndex:location];
+            }
+            ++i;
         }
-        else
-        {
-            [_mtlRenderEncoder setFragmentTexture:getMTLTexture(textures[i])
-                                      atIndex:location];
-            [_mtlRenderEncoder setFragmentSamplerState:getMTLSamplerState(textures[i])
-                                           atIndex:location];
-        }
-        
-        ++i;
     }
 }
 
