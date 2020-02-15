@@ -133,11 +133,11 @@ protected:
     GLViewImpl(bool initglfw = true);
     virtual ~GLViewImpl();
 
-    bool initGlew();
-
     bool initWithRect(const std::string& viewName, Rect rect, float frameZoomFactor, bool resizable);
     bool initWithFullScreen(const std::string& viewName);
     bool initWithFullscreen(const std::string& viewname, const GLFWvidmode &videoMode, GLFWmonitor *monitor);
+
+    bool loadGL();
 
     void updateFrameSize();
 
@@ -155,7 +155,6 @@ protected:
     void onGLFWWindowFocusCallback(GLFWwindow* window, int focused);
 
     bool _captured;
-    bool _supportTouch;
     bool _isInRetinaMonitor;
     bool _isRetinaEnabled;
     int  _retinaFactor;  // Should be 1 or 2
