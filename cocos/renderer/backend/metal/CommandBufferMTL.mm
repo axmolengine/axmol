@@ -185,7 +185,7 @@ namespace
             case TextureType::TEXTURE_2D:
                 return static_cast<TextureMTL*>(texture)->getMTLTexture(index);
             case TextureType::TEXTURE_CUBE:
-                return static_cast<TextureCubeMTL*>(texture)->getMTLTexture();
+                return static_cast<TextureCubeMTL*>(texture)->getMTLTexture(index);
             default:
                 assert(false);
                 return nil;
@@ -427,23 +427,23 @@ void CommandBufferMTL::doSetTextures(bool isVertex) const
         const auto& slot = iter.second.slot;
         
         int i = 0;
-        for (const auto& texture: textures)
+        for (const auto& texture : textures)
         {
-            int metaIdx = slot[i++];
             if (isVertex)
             {
-                [_mtlRenderEncoder setVertexTexture:getMTLTexture(texture, metaIdx)
+                [_mtlRenderEncoder setVertexTexture:getMTLTexture(texture, slot[i])
                                         atIndex:location];
                 [_mtlRenderEncoder setVertexSamplerState:getMTLSamplerState(texture)
                                              atIndex:location];
             }
             else
             {
-                [_mtlRenderEncoder setFragmentTexture:getMTLTexture(texture, metaIdx)
+                [_mtlRenderEncoder setFragmentTexture:getMTLTexture(texture, slot[i])
                                           atIndex:location];
                 [_mtlRenderEncoder setFragmentSamplerState:getMTLSamplerState(texture)
                                                atIndex:location];
             }
+            ++i;
         }
     }
 }
