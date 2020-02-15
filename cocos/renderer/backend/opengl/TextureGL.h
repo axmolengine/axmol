@@ -55,6 +55,8 @@ struct TextureInfoGL
     }
 
     GLuint ensure(int index, GLenum target = GL_TEXTURE_2D);
+    void recreateAll(GLenum target = GL_TEXTURE_2D);
+
     void destroy() {
         foreach([=](GLuint texID, int) { glDeleteTextures(1, &texID); });
         textures.fill(0);
