@@ -56,6 +56,11 @@ _USRSTUDIOPDLL
   - [ ] 24. Since getSuitableFopen removed, don't convert to utf-8 for win32, or in the future, windows 10 will support utf-8 file path, such as: For Chinese system language users:
 在 控制面板-区域-更改系统区域设置 中
 勾选 Beta版：使用 Unicode UTF=8 提供全球语言支持(U) 选项
+  - [x] 25. ASTC 4x4, 8x8 support for all platforms.
+  - [x] 26. Refine backend sources.
+  - [x] 27. Refactor UserDefault based on file mapping with aes-cfb encrypt support.
+  - [x] 28. Fix OpenGL error 0x501 when load incorrect & unused shader.
+  - [x] 29. Fix OpenGL error 0x501 when use compressd texture on device, caused by backend TextureGL: initWithZeros
   - [ ] XX1. Cache ProgramState or use object_pool
   - [ ] XX2. Remove socket.io websockets, use yasio for socket connection solution
   - [ ] XX3. Fully streaming play for all media file: .mp4, .mp3, .ogg, .wav

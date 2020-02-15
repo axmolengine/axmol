@@ -296,6 +296,21 @@ public:
     virtual bool handleAssert(const char *msg);
     
     /**
+     * Set the key and sign for xxtea encryption algorithm.
+     *
+     * @param key a string pointer
+     * @param keyLen the length of key
+     * @param sign a string sign
+     * @param signLen the length of sign
+     */
+    virtual void setXXTEAKeyAndSign(const char *key, int keyLen, const char *sign, int signLen);
+    
+    /**
+     * free the key and sign for xxtea encryption algorithm.
+     */
+    virtual void cleanupXXTEAKeyAndSign();
+    
+    /**
      * Loads a buffer as a Lua chunk.This function uses lua_load to load the Lua chunk in the buffer pointed to by chunk with size chunkSize.
      * If it supports xxtea encryption algorithm, the chunk and the chunkSize would be processed by calling xxtea_decrypt to the real buffer and buffer size.
      *
@@ -327,6 +342,11 @@ protected:
     LuaStack()
     : _state(nullptr)
     , _callFromLua(0)
+    , _xxteaEnabled(false)
+    , _xxteaKey(nullptr)
+    , _xxteaKeyLen(0)
+    , _xxteaSign(nullptr)
+    , _xxteaSignLen(0)
     {
     }
     
@@ -335,6 +355,11 @@ protected:
     
     lua_State *_state;
     int _callFromLua;
+    bool  _xxteaEnabled;
+    char* _xxteaKey;
+    int   _xxteaKeyLen;
+    char* _xxteaSign;
+    int   _xxteaSignLen;
 };
 
 NS_CC_END

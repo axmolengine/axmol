@@ -704,6 +704,44 @@ int LuaStack::reload(const char* moduleFileName)
     return executeString(require.c_str());
 }
 
+void LuaStack::setXXTEAKeyAndSign(const char *key, int keyLen, const char *sign, int signLen)
+{
+    cleanupXXTEAKeyAndSign();
+
+    if (key && keyLen && sign && signLen)
+    {
+        _xxteaKey = (char*)malloc(keyLen);
+        memcpy(_xxteaKey, key, keyLen);
+        _xxteaKeyLen = keyLen;
+
+        _xxteaSign = (char*)malloc(signLen);
+        memcpy(_xxteaSign, sign, signLen);
+        _xxteaSignLen = signLen;
+
+        _xxteaEnabled = true;
+    }
+    else
+    {
+        _xxteaEnabled = false;
+    }
+}
+
+void LuaStack::cleanupXXTEAKeyAndSign()
+{
+    if (_xxteaKey)
+    {
+        free(_xxteaKey);
+        _xxteaKey = nullptr;
+        _xxteaKeyLen = 0;
+    }
+    if (_xxteaSign)
+    {
+        free(_xxteaSign);
+        _xxteaSign = nullptr;
+        _xxteaSignLen = 0;
+    }
+}
+
 int LuaStack::loadChunksFromZIP(const char *zipFilePath)
 {
     pushString(zipFilePath);
@@ -734,12 +772,15 @@ int LuaStack::luaLoadChunksFromZIP(lua_State *L)
         unsigned char* bytes = zipFileData.getBytes();
         ssize_t size = zipFileData.getSize();
 
+        bool isXXTEA = stack && stack->_xxteaEnabled && size >= stack->_xxteaSignLen
+            && memcmp(stack->_xxteaSign, bytes, stack->_xxteaSignLen) == 0;
+
         if (size > 0) {
             zip = ZipFile::createWithBuffer(bytes, (unsigned long)size);
         }
 
         if (zip) {
-            CCLOG("lua_loadChunksFromZIP() - load zip file: %s", zipFilePath.c_str());
+            CCLOG("lua_loadChunksFromZIP() - load zip file: %s%s", zipFilePath.c_str(), isXXTEA ? "*" : "");
             lua_getglobal(L, "package");
             lua_getfield(L, -1, "preload");
 
