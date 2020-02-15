@@ -52,6 +52,7 @@ namespace {
     }
 }
 
+/// CLASS TextureInfoGL
 void TextureInfoGL::applySampler(const SamplerDescriptor& descriptor, bool isPow2, bool hasMipmaps, GLenum target)
 {
     if (descriptor.magFilter != SamplerFilter::DONT_CARE)
@@ -114,6 +115,20 @@ GLuint TextureInfoGL::ensure(int index, GLenum target)
     return texID;
 }
 
+void TextureInfoGL::recreateAll(GLenum target)
+{
+    int idx = 0;
+    for (auto& texID : textures) {
+        if (texID) {
+            glDeleteTextures(1, &texID);
+            texID = 0;
+            ensure(idx, target);
+        }
+        ++idx;
+    }
+}
+
+/// CLASS Texture2DGL
 Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
 {
     updateTextureDescriptor(descriptor);
@@ -121,17 +136,26 @@ Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*){
-        glGenTextures(1, &(_textureInfo.textures[0]));
-        _textureInfo.apply(0);
-        _textureInfo.setCurrentTexParameters(GL_TEXTURE_2D);
-        // this->initWithZeros();
+        _textureInfo.recreateAll(GL_TEXTURE_2D);
+        this->initWithZeros();
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
+
+    // Update data here because `updateData()` may not be invoked later.
+    // For example, a texture used as depth buffer will not invoke updateData(), see cpp-tests 'Effect Basic/Effects Advanced'.
+    // FIXME: Don't call at Texture2DGL::updateTextureDescriptor, when the texture is compressed, initWithZeros will cause GL Error: 0x501
+    // We call at here once to ensure depth buffer works well.
+    initWithZeros();
 }
 
 void Texture2DGL::initWithZeros()
 {
+    // Ensure the final data size at least 1 byte
+    _width = (std::max)(_width, (uint32_t)1);
+    _width = (std::max)(_height, (uint32_t)1);
+    _bitsPerElement = (std::max)(_bitsPerElement, (uint8_t)8);
+
     auto size = _width * _height * _bitsPerElement / 8;
     uint8_t* data = (uint8_t*)malloc(size);
     memset(data, 0, size);
@@ -332,6 +356,7 @@ void Texture2DGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std:
     glDeleteFramebuffers(1, &frameBuffer);
 }
 
+/// CLASS TextureCubeGL
 TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
 {
     assert(_width == _height);
@@ -341,9 +366,7 @@ TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*){
-        glGenTextures(1, &(_textureInfo.textures[0]));
-        _textureInfo.apply(0);
-        _textureInfo.setCurrentTexParameters(GL_TEXTURE_CUBE_MAP);
+        _textureInfo.recreateAll(GL_TEXTURE_CUBE_MAP);
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
