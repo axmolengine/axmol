@@ -54,15 +54,15 @@ namespace
         }
     }
 
-    void applyTexture(TextureBackend* texture, int slot)
+    void applyTexture(TextureBackend* texture, int index)
     {
         switch (texture->getTextureType())
         {
         case TextureType::TEXTURE_2D:
-            static_cast<Texture2DGL*>(texture)->apply(slot);
+            static_cast<Texture2DGL*>(texture)->apply(index);
             break;
         case TextureType::TEXTURE_CUBE:
-            static_cast<TextureCubeGL*>(texture)->apply(slot);
+            static_cast<TextureCubeGL*>(texture)->apply(index);
             break;
         default:
             assert(false);
