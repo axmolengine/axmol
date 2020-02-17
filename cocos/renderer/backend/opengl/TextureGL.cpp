@@ -82,7 +82,7 @@ void TextureInfoGL::applySampler(const SamplerDescriptor& descriptor, bool isPow
         setCurrentTexParameters(target);
 
         glBindTexture(target, 0); // unbind
-        });
+    });
 }
 
 void TextureInfoGL::setCurrentTexParameters(GLenum target)
@@ -169,19 +169,7 @@ void Texture2DGL::updateTextureDescriptor(const cocos2d::backend::TextureDescrip
 
     UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type, _isCompressed);
 
-    bool isPow2 = ISPOW2(_width) && ISPOW2(_height);
-    _textureInfo.magFilterGL = UtilsGL::toGLMagFilter(descriptor.samplerDescriptor.magFilter);
-    _textureInfo.minFilterGL = UtilsGL::toGLMinFilter(descriptor.samplerDescriptor.minFilter, _hasMipmaps, isPow2);
-
-    _textureInfo.sAddressModeGL = UtilsGL::toGLAddressMode(descriptor.samplerDescriptor.sAddressMode, isPow2);
-    _textureInfo.tAddressModeGL = UtilsGL::toGLAddressMode(descriptor.samplerDescriptor.tAddressMode, isPow2);
-
     updateSamplerDescriptor(descriptor.samplerDescriptor);
-
-    // Update data here because `updateData()` may not be invoked later.
-    // For example, a texture used as depth buffer will not invoke updateData().
-    // FIXME, Don't call, now it's unused, when the texture is compressed, initWithZeros will cause GL Error: 0x501
-    // initWithZeros();
 }
 
 Texture2DGL::~Texture2DGL()
@@ -227,8 +215,6 @@ void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t heig
     {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     }
-
-    CHECK_GL_ERROR_DEBUG();
 
     glTexImage2D(GL_TEXTURE_2D,
                 level,
