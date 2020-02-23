@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com.
 
  http://www.cocos2d-x.org
 
@@ -28,6 +29,7 @@
 
 #include <cstdint>
 #include <string>
+#include "base/bitmask.h"
 
 CC_BACKEND_BEGIN
 
@@ -235,15 +237,21 @@ enum class BlendFactor : uint32_t
     BLEND_CLOLOR
 };
 
-enum class ColorWriteMask: uint32_t
+enum class ColorWriteMask : uint32_t
 {
-    NONE = 0x00000000,
-    RED = 0x00000001,
-    GREEN = 0x00000002,
-    BLUE = 0x00000004,
-    ALPHA = 0x00000008,
+    RED_BIT = 0,
+    GREEN_BIT = 1,
+    BLUE_BIT = 2,
+    ALPHA_BIT = 3,
+    NONE = 0,
+    RED = 1 << RED_BIT,
+    GREEN = 1 << GREEN_BIT,
+    BLUE = 1 << BLUE_BIT,
+    ALPHA = 1 << ALPHA_BIT,
     ALL = 0x0000000F
 };
+CC_ENABLE_BITMASK_OPS(ColorWriteMask)
+CC_ENABLE_BITSHIFT_OPS(ColorWriteMask)
 
 struct SamplerDescriptor
 {
