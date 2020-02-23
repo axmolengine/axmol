@@ -1,19 +1,20 @@
-# engine-v5
+# engine-x
 [![Build Status](https://travis-ci.com/c4games/engine-x.svg?branch=master)](https://travis-ci.com/c4games/engine-x)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/4936wev2r2ot606s/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/engine-x)
 
 This is another more radical fork of cocos2d-x game engine, use opanal for all platforms, single texture multi gpu texture handler, c++17...  
   
-The readme of cocos2d-x v4: https://github.com/simdsoft/engine-v5/blob/master/README.ccv4.md  
+The readme of cocos2d-x v4: https://github.com/simdsoft/engine-x/blob/master/README.ccv4.md  
   
   
 ### Goals summary:
 1. C++17
 2. forcus on native game dev only
 3. Remove unnecessary sources
-4. build engine as static or dynamic library support
-5. If you have any other excellent goals, welcome
-6. Excellent PRs from any guys are welcome, I will review & merge ASAP
+4. Fix bugs ASAP
+5. Review PR ASAP
+6. If you have any other excellent goals, welcome
+7. Excellent PRs from any guys are welcome, I will review & merge ASAP
 
 ### preprocessors notes: 
 
@@ -30,13 +31,13 @@ _USRSTUDIOPDLL
 ```
 
 ### Refactor core & extensions libs
-- [ ] engine-v5-core.dll(node tree, multi-renderer-backends, filesystem, audio, platform spec, and other):
+- [ ] engine-x-core.dll(node tree, multi-renderer-backends, filesystem, audio, platform spec, and other):
   - [x] 1. Refactor audio engine, OpenAL for all platforms.
   - [x] 2. Remove SimpleAudio
   - [ ] 3. Remove offthread file operation
   - [x] 4. Remove getSutiableFOpen, avoid reduce performance, there is another better solution for support: ```just doesn't convert path to utf-8 in FileUtils manually implementation```
   - [x] 5. Refactor CCDownloader, curl for all platforms, don't use scheduler to retrive progress info, make it more reuseable
-  - [ ] 7. Refactor engine-v5-deps, all compile as vs2019 MSVC 19.22.27905.0
+  - [ ] 7. Refactor engine-x-3rd, all compile as vs2019 MSVC 19.22.27905.0
   - [x] 8. minizip-1.2.0
   - [x] 9. ccMessageBox
   - [x] 10. BMP support with stb_image
@@ -74,15 +75,15 @@ _USRSTUDIOPDLL
   - [ ] zlib to 1.2.11  
   
 --------------------------------------------------------------------------    
-- [ ] engine-v5.ui.dll: The original v3-ui framework may remove in the future
-- [ ] engine-v5.ext.lib: old GUI ui(could be remove), physics-nodes, pu3d
-- [ ] engine-v5.dragonbones.lib
-- [ ] engine-v5.ccs20.dll: x-studio
-- [ ] engine-v5.ccs21.dll: x-studio
-- [ ] engine-v5.xs.dll: x-studio
-- [ ] engine-v5.spine.lib  
+- [ ] engine-x.ui.dll: The original v3-ui framework may remove in the future
+- [ ] engine-x.ext.lib: old GUI ui(could be remove), physics-nodes, pu3d
+- [ ] engine-x.dragonbones.lib
+- [ ] engine-x.ccs20.dll: x-studio
+- [ ] engine-x.ccs21.dll: x-studio
+- [ ] engine-x.xs.dll: x-studio
+- [ ] engine-x.spine.lib  
 ----------------------------------------------------------------------------  
-- [ ] engine-v5-lua.lib:
+- [ ] engine-x-lua.lib:
   - [x] Lua53 compat
   - [ ] make lua test works well
   - [ ] Remvoe luasocket, use yasio for socket connection solution
@@ -101,7 +102,7 @@ _USRSTUDIOPDLL
   根据安装的 Visual Studio 版本，执行下面的命令，解决方案就生成在 build 目录下了。<br>
   打开cpp-tests.sln，编译运行。<br>
   ```
-  cd engine-v5\tests\cpp-tests
+  cd engine-x\tests\cpp-tests
   cmake -S .\ -B .\build -G “Visual Studio 14 2015 Win32”
   or 
   cmake -S .\ -B .\build -G “Visual Studio 16 2019” -A Win32
@@ -109,7 +110,7 @@ _USRSTUDIOPDLL
 
 #### android
   安装 Android Studio (推荐3.5.3)，打开 SDKManager，安装下列工具。<br>
-  打开project，目录在engine-v5\tests\cpp-tests\proj.android<br>
+  打开project，目录在engine-x\tests\cpp-tests\proj.android<br>
   等待Gradle sync完成后，Build APKs，安装运行<br>
   ```
     LLDB 推荐3.1
@@ -131,7 +132,7 @@ _USRSTUDIOPDLL
   ```
   执行如下命令确保cmake能成功生成xcode工程:  
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
-  生成xcode工程, 进入engine-v5根目录执行如下命令:  
+  生成xcode工程, 进入engine-x根目录执行如下命令:  
   ```sh
     mkdir build
     cd build
