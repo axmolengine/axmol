@@ -591,13 +591,13 @@ void Renderer::drawBatchedTriangles()
         }
         else
         {
-			// is this the first one?
-			if (!firstCommand)
-			{
-				batchesTotal++;
-				_triBatchesToDraw[batchesTotal].offset = _triBatchesToDraw[batchesTotal - 1].offset + _triBatchesToDraw[batchesTotal - 1].indicesToDraw;
-			}
-            
+            // is this the first one?
+            if (!firstCommand)
+            {
+                batchesTotal++;
+                _triBatchesToDraw[batchesTotal].offset = _triBatchesToDraw[batchesTotal - 1].offset + _triBatchesToDraw[batchesTotal - 1].indicesToDraw;
+            }
+
             _triBatchesToDraw[batchesTotal].cmd = cmd;
             _triBatchesToDraw[batchesTotal].indicesToDraw = (int) cmd->getIndexCount();
             
