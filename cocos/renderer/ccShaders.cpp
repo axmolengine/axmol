@@ -3,7 +3,6 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2012 		cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2020 c4games.com.
 
 http://www.cocos2d-x.org
 
@@ -46,6 +45,7 @@ NS_CC_BEGIN
 #include "renderer/shaders/positionColorLengthTexture.frag"
 #include "renderer/shaders/positionColorTextureAsPointsize.vert"
 #include "renderer/shaders/position.vert"
+#include "renderer/shaders/positionNoMVP.vert"
 #include "renderer/shaders/layer_radialGradient.frag"
 #include "renderer/shaders/ui_Gray.frag"
 #include "renderer/shaders/positionTextureUColor.vert"
