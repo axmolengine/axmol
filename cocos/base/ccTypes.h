@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 c4games.com.
 
 http://www.cocos2d-x.org
 
@@ -32,7 +33,6 @@ THE SOFTWARE.
 #include "math/CCGeometry.h"
 #include "math/CCMath.h"
 #include "base/CCRef.h"
-#include "base/CCEnumClass.h"
 #include "renderer/backend/Types.h"
 
 /**
@@ -660,7 +660,7 @@ enum class ClearFlag : uint8_t
     STENCIL = 1 << 2,
     ALL = COLOR | DEPTH | STENCIL
 };
-ENABLE_BITMASK_OPERATORS(ClearFlag)
+CC_ENABLE_BITMASK_OPS(ClearFlag)
 
 enum class RenderTargetFlag : uint8_t
 {
@@ -669,7 +669,7 @@ enum class RenderTargetFlag : uint8_t
     STENCIL = 1 << 2,
     ALL = COLOR | DEPTH | STENCIL
 };
-ENABLE_BITMASK_OPERATORS(RenderTargetFlag)
+CC_ENABLE_BITMASK_OPS(RenderTargetFlag)
 using TextureUsage = backend::TextureUsage;
 using PixelFormat = backend::PixelFormat;
 

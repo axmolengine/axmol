@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com.
 
  http://www.cocos2d-x.org
 
@@ -594,10 +595,9 @@ void Renderer::drawBatchedTriangles()
             if (!firstCommand)
             {
                 batchesTotal++;
-                _triBatchesToDraw[batchesTotal].offset =
-                    _triBatchesToDraw[batchesTotal-1].offset + _triBatchesToDraw[batchesTotal-1].indicesToDraw;
+                _triBatchesToDraw[batchesTotal].offset = _triBatchesToDraw[batchesTotal - 1].offset + _triBatchesToDraw[batchesTotal - 1].indicesToDraw;
             }
-            
+
             _triBatchesToDraw[batchesTotal].cmd = cmd;
             _triBatchesToDraw[batchesTotal].indicesToDraw = (int) cmd->getIndexCount();
             
@@ -778,7 +778,7 @@ void Renderer::beginRenderPass(RenderCommand* cmd)
 void Renderer::setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachment, Texture2D* depthAttachment, Texture2D* stencilAttachment)
 {
     _renderTargetFlag = flags;
-    if (flags & RenderTargetFlag::COLOR)
+    if (_Bitmask_includes(RenderTargetFlag::COLOR, flags))
     {
         _renderPassDescriptor.needColorAttachment = true;
         if (colorAttachment)
@@ -795,7 +795,7 @@ void Renderer::setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachmen
         _renderPassDescriptor.colorAttachmentsTexture[0] = nullptr;
     }
 
-    if (flags & RenderTargetFlag::DEPTH)
+    if (_Bitmask_includes(RenderTargetFlag::DEPTH, flags))
     {
         _renderPassDescriptor.depthTestEnabled = true;
         if (depthAttachment)
@@ -812,7 +812,7 @@ void Renderer::setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachmen
         _depthAttachment = nullptr;
     }
 
-    if (flags & RenderTargetFlag::STENCIL)
+    if (_Bitmask_includes(RenderTargetFlag::STENCIL, flags))
     {
         _stencilAttachment = stencilAttachment;
         _renderPassDescriptor.stencilTestEnabled = true;
@@ -838,7 +838,7 @@ void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigne
     command->func = [=]() -> void {
         backend::RenderPassDescriptor descriptor;
 
-        if (flags & ClearFlag::COLOR)
+        if (_Bitmask_includes(ClearFlag::COLOR, flags))
         {
             _clearColor = color;
             descriptor.clearColorValue = {color.r, color.g, color.b, color.a};
@@ -846,14 +846,14 @@ void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigne
             descriptor.needColorAttachment = true;
             descriptor.colorAttachmentsTexture[0] = _renderPassDescriptor.colorAttachmentsTexture[0];
         }
-        if (flags & ClearFlag::DEPTH)
+        if (_Bitmask_includes(ClearFlag::DEPTH, flags))
         {
             descriptor.clearDepthValue = depth;
             descriptor.needClearDepth = true;
             descriptor.depthTestEnabled = true;
             descriptor.depthAttachmentTexture = _renderPassDescriptor.depthAttachmentTexture;
         }
-        if (flags & ClearFlag::STENCIL)
+        if (_Bitmask_includes(ClearFlag::STENCIL, flags))
         {
             descriptor.clearStencilValue = stencil;
             descriptor.needClearStencil = true;

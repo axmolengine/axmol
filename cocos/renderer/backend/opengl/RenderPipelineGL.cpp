@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 c4games.com.
 
  http://www.cocos2d-x.org
 
@@ -53,10 +54,10 @@ void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)
     auto destinationRGBBlendFactor = UtilsGL::toGLBlendFactor(descriptor.destinationRGBBlendFactor);
     auto sourceAlphaBlendFactor = UtilsGL::toGLBlendFactor(descriptor.sourceAlphaBlendFactor);
     auto destinationAlphaBlendFactor = UtilsGL::toGLBlendFactor(descriptor.destinationAlphaBlendFactor);
-    auto writeMaskRed = (uint32_t)descriptor.writeMask & (uint32_t)ColorWriteMask::RED;
-    auto writeMaskGreen = (uint32_t)descriptor.writeMask & (uint32_t)ColorWriteMask::GREEN;
-    auto writeMaskBlue = (uint32_t)descriptor.writeMask & (uint32_t)ColorWriteMask::BLUE;
-    auto writeMaskAlpha = (uint32_t)descriptor.writeMask & (uint32_t)ColorWriteMask::ALPHA;
+    GLboolean writeMaskRed = (GLboolean)((descriptor.writeMask & ColorWriteMask::RED) >> ColorWriteMask::RED_BIT);
+    GLboolean writeMaskGreen = (GLboolean)((descriptor.writeMask & ColorWriteMask::GREEN) >> ColorWriteMask::GREEN_BIT);
+    GLboolean writeMaskBlue = (GLboolean)((descriptor.writeMask & ColorWriteMask::BLUE) >> ColorWriteMask::BLUE_BIT);
+    GLboolean writeMaskAlpha = (GLboolean)((descriptor.writeMask & ColorWriteMask::ALPHA) >> ColorWriteMask::ALPHA_BIT);
 
     if (blendEnabled)
     {
