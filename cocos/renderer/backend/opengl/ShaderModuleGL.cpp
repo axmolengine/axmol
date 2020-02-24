@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com.
 
  http://www.cocos2d-x.org
 
@@ -53,10 +54,9 @@ void ShaderModuleGL::compileShader(ShaderStage stage, const std::string &source)
     
     GLint status = 0;
     glGetShaderiv(_shader, GL_COMPILE_STATUS, &status);
-    if (! status)
+    if (!status)
     {
-        CCLOG("cocos2d: ERROR: Failed to compile shader:\n%s", source.c_str());
-        CCLOG("cocos2d: %s", getErrorLog(_shader));
+        cocos2d::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", getErrorLog(_shader), source.c_str());
         deleteShader();
         CCASSERT(false, "Shader compile failed!");
     }
