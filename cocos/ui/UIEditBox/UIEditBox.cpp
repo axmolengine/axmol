@@ -787,14 +787,6 @@ void EditBox::draw(Renderer *renderer, const Mat4 &parentTransform, uint32_t par
 
 void EditBox::onEnter()
 {
-#if CC_ENABLE_SCRIPT_BINDING
-    if (_scriptType == kScriptTypeJavascript)
-    {
-        if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnEnter))
-            return;
-    }
-#endif
-
     Widget::onEnter();
     if (_editBoxImpl != nullptr)
     {
@@ -814,14 +806,6 @@ void EditBox::updatePosition(float dt)
 
 void EditBox::onExit()
 {
-#if CC_ENABLE_SCRIPT_BINDING
-    if (_scriptType == kScriptTypeJavascript)
-    {
-        if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnExit))
-            return;
-    }
-#endif
-
     Widget::onExit();
     if (_editBoxImpl != nullptr)
     {

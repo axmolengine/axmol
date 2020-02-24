@@ -164,61 +164,24 @@ void ScriptEngineManager::destroyInstance()
     }
 }
 
-bool ScriptEngineManager::sendActionEventToJS(Action* actionObject, int eventType, void* param)
-{
-    auto scriptEngine = getInstance()->getScriptEngine();
-    
-    ActionObjectScriptData data(actionObject,(int*)&eventType, param);
-    ScriptEvent scriptEvent(kScriptActionEvent,(void*)&data);
-    if (scriptEngine->sendEvent(&scriptEvent))
-        return true;
-    
-    return false;
-}
-
-bool ScriptEngineManager::sendNodeEventToJS(Node* node, int action)
-{
-    auto scriptEngine = getInstance()->getScriptEngine();
-    
-    if (scriptEngine->isCalledFromScript())
-    {
-        // Should only be invoked at root class Node
-        scriptEngine->setCalledFromScript(false);
-    }
-    else
-    {
-        BasicScriptData data(node,(void*)&action);
-        ScriptEvent scriptEvent(kNodeEvent,(void*)&data);
-        if (scriptEngine->sendEvent(&scriptEvent))
-            return true;
-    }
-    
-    return false;
-}
-
-bool ScriptEngineManager::sendNodeEventToJSExtended(Node* node, int action)
-{
-    auto scriptEngine = getInstance()->getScriptEngine();
-    
-    if (!scriptEngine->isCalledFromScript())
-    {
-        BasicScriptData data(node,(void*)&action);
-        ScriptEvent scriptEvent(kNodeEvent,(void*)&data);
-        if (scriptEngine->sendEvent(&scriptEvent))
-            return true;
-    }
-    
-    return false;
-}
-
 void ScriptEngineManager::sendNodeEventToLua(Node* node, int action)
 {
     auto scriptEngine = getInstance()->getScriptEngine();
-    
-    BasicScriptData data(node,(void*)&action);
-    ScriptEvent scriptEvent(kNodeEvent,(void*)&data);
-    
-    scriptEngine->sendEvent(&scriptEvent);
+    if (scriptEngine) {
+
+        BasicScriptData data(node, (void*)&action);
+        ScriptEvent scriptEvent(kNodeEvent, (void*)&data);
+
+        scriptEngine->sendEvent(scriptEvent);
+    }
+}
+
+int ScriptEngineManager::sendEventToLua(const ScriptEvent& event)
+{
+    auto scriptEngine = getInstance()->getScriptEngine();
+    if (scriptEngine)
+        return scriptEngine->sendEvent(event);
+    return 0;
 }
 
 NS_CC_END

@@ -196,7 +196,7 @@ public:
      * @param message the ScriptEvent object that has ScriptEventType and the pointer to information data.
      * @return default return 0 otherwise return values the same as handleNodeEvent, handleMenuClickedEvent or handleCallFuncActionEvent,etc.
      */
-    virtual int sendEvent(ScriptEvent* message) override;
+    virtual int sendEvent(const ScriptEvent& message) override;
     
     /**
      * Pass on the events related with ScrollView,TableCell,AssertManager, Armature, Accelerometer, Keyboard, Touch, Touches ,Mouse and Custom event to lua to handle.

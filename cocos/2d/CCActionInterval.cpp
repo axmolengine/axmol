@@ -99,13 +99,6 @@ bool ActionInterval::initWithDuration(float d)
 
 bool ActionInterval::sendUpdateEventToScript(float dt, Action *actionObject)
 {
-#if CC_ENABLE_SCRIPT_BINDING
-    if (_scriptType == kScriptTypeJavascript)
-    {
-        if (ScriptEngineManager::sendActionEventToJS(actionObject, kActionUpdate, (void *)&dt))
-            return true;
-    }
-#endif
     return false;
 }
 
