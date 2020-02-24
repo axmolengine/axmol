@@ -231,7 +231,7 @@ void TimerScriptHandler::trigger(float dt)
     {
         SchedulerScriptData data(_scriptHandler,dt);
         ScriptEvent event(kScheduleEvent,&data);
-        ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&event);
+        ScriptEngineManager::sendEventToLua(event);
     }
 }
 

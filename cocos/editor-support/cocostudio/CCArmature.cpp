@@ -448,28 +448,12 @@ void Armature::draw(cocos2d::Renderer *renderer, const Mat4 &transform, uint32_t
 
 void Armature::onEnter()
 {
-#if CC_ENABLE_SCRIPT_BINDING
-    if (_scriptType == kScriptTypeJavascript)
-    {
-        if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnEnter))
-            return;
-    }
-#endif
-    
     Node::onEnter();
     scheduleUpdate();
 }
 
 void Armature::onExit()
 {
-#if CC_ENABLE_SCRIPT_BINDING
-    if (_scriptType == kScriptTypeJavascript)
-    {
-        if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnExit))
-            return;
-    }
-#endif
-    
     Node::onExit();
     unscheduleUpdate();
 }

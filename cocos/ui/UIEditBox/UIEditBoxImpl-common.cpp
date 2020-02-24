@@ -347,7 +347,7 @@ void EditBoxImplCommon::editBoxEditingDidBegin()
     {
         cocos2d::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "began", _editBox);
         cocos2d::ScriptEvent event(cocos2d::kCommonEvent, (void *)&data);
-        cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&event);
+        cocos2d::ScriptEngineManager::sendEventToLua(event);
     }
 #endif
 }
@@ -369,11 +369,11 @@ void EditBoxImplCommon::editBoxEditingDidEnd(const std::string& text, EditBoxDel
     {
         cocos2d::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "ended", _editBox);
         cocos2d::ScriptEvent event(cocos2d::kCommonEvent, (void *)&data);
-        cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&event);
+        cocos2d::ScriptEngineManager::sendEventToLua(event);
         memset(data.eventName, 0, sizeof(data.eventName));
         strncpy(data.eventName, "return", sizeof(data.eventName));
         event.data = (void *)&data;
-        cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&event);
+        cocos2d::ScriptEngineManager::sendEventToLua(event);
     }
 #endif
 
@@ -398,7 +398,7 @@ void EditBoxImplCommon::editBoxEditingChanged(const std::string& text)
     {
         cocos2d::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "changed", _editBox);
         cocos2d::ScriptEvent event(cocos2d::kCommonEvent, (void *)&data);
-        cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&event);
+        cocos2d::ScriptEngineManager::sendEventToLua(event);
     }
 #endif
 }
