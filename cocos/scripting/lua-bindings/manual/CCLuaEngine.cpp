@@ -202,61 +202,58 @@ bool LuaEngine::parseConfig(ConfigType type, const std::string& str)
     return _stack->executeFunction(2);
 }
 
-int LuaEngine::sendEvent(ScriptEvent* evt)
+int LuaEngine::sendEvent(const ScriptEvent& evt)
 {
-    if (NULL == evt)
-        return 0;
-    
-    switch (evt->type)
+    switch (evt.type)
     {
         case kNodeEvent:
             {
-               return handleNodeEvent(evt->data);
+               return handleNodeEvent(evt.data);
             }
             break;
         case kMenuClickedEvent:
             {
-                return handleMenuClickedEvent(evt->data);
+                return handleMenuClickedEvent(evt.data);
             }
             break;
         case kCallFuncEvent:
             {
-                return handleCallFuncActionEvent(evt->data);
+                return handleCallFuncActionEvent(evt.data);
             }
             break;
         case kScheduleEvent:
             {
-                return handleScheduler(evt->data);
+                return handleScheduler(evt.data);
             }
             break;
         case kTouchEvent:
             {
-                return handleTouchEvent(evt->data);
+                return handleTouchEvent(evt.data);
             }
             break;
         case kTouchesEvent:
             {
-                return handleTouchesEvent(evt->data);
+                return handleTouchesEvent(evt.data);
             }
             break;
         case kKeypadEvent:
             {
-                return handleKeypadEvent(evt->data);
+                return handleKeypadEvent(evt.data);
             }
             break;
         case kAccelerometerEvent:
             {
-                return handleAccelerometerEvent(evt->data);
+                return handleAccelerometerEvent(evt.data);
             }
             break;
         case kCommonEvent:
             {
-                return handleCommonEvent(evt->data);
+                return handleCommonEvent(evt.data);
             }
             break;
         case kControlEvent:
             {
-                return handlerControlEvent(evt->data);
+                return handlerControlEvent(evt.data);
             }
             break;
         default:

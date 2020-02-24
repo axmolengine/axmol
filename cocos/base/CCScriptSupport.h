@@ -57,7 +57,6 @@ class Action;
 enum ccScriptType {
     kScriptTypeNone = 0,
     kScriptTypeLua,
-    kScriptTypeJavascript
 };
 
 /**
@@ -744,7 +743,7 @@ public:
      * @lua NA
      * @js NA
      */
-    virtual int sendEvent(ScriptEvent* evt) = 0;
+    virtual int sendEvent(const ScriptEvent& evt) = 0;
     
     /** 
      * Handle the assert message.
@@ -870,27 +869,7 @@ public:
      * @js NA
      */
     static void destroyInstance();
-    /**
-     *
-     *
-     * @lua NA
-     * @js NA
-     */
-    static bool sendActionEventToJS(Action* actionObject, int eventType, void* param);
-    /**
-     *
-     *
-     * @lua NA
-     * @js NA
-     */
-    static bool sendNodeEventToJS(Node* node, int action);
-    /**
-     *
-     *
-     * @lua NA
-     * @js NA
-     */
-    static bool sendNodeEventToJSExtended(Node* node, int action);
+    
     /**
      * Call the Lua function when the event of node is triggered.
      * 
@@ -901,6 +880,16 @@ public:
      * @js NA
      */
     static void sendNodeEventToLua(Node* node, int action);
+
+    /**
+    * Send a event to lua script
+    *
+    * @param event: the script event
+    *
+    * @lua NA
+    * @js NA
+    */
+    static int sendEventToLua(const ScriptEvent& event);
     
 private:
     ScriptEngineManager()
