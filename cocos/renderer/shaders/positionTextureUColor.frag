@@ -24,17 +24,18 @@
  */
 
 const char* positionTextureUColor_frag = R"(
+
 #ifdef GL_ES
-varying mediump vec2 v_texCoord;
-#else
-varying vec2 v_texCoord;
+precision lowp float;
 #endif
 
 uniform vec4 u_color;
-uniform sampler2D u_texture;
+uinform sampler2D u_texture;
+
+varying vec2 v_texCoord;
 
 void main()
 {
-    gl_FragColor =  u_color * texture2D(u_texture, v_texCoord);
+    gl_FragColor =  texture2D(u_texture, v_texCoord) * u_color;
 }
 )";

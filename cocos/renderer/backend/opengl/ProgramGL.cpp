@@ -1,6 +1,5 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2020 c4games.com.
 
  http://www.cocos2d-x.org
 
@@ -33,18 +32,18 @@
 #include "renderer/backend/opengl/UtilsGL.h"
 
 CC_BACKEND_BEGIN
-
 namespace {
-    static const std::string SHADER_PREDEFINE = "#version 100\n precision highp float;\n precision highp int;\n";
+    std::string vsPreDefine("#version 100\n precision highp float;\n precision highp int;\n");
+    std::string fsPreDefine("precision mediump float;\n precision mediump int;\n");
 }
 
 ProgramGL::ProgramGL(const std::string& vertexShader, const std::string& fragmentShader)
 : Program(vertexShader, fragmentShader)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    // some device required manually specify the precision qualifiers for vertex shader.
-    _vertexShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(std::move(SHADER_PREDEFINE + _vertexShader)));
-    _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(std::move(SHADER_PREDEFINE + _fragmentShader)));
+    //some device required manually specify the precision qualifiers for vertex shader.
+    _vertexShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(std::move(vsPreDefine + _vertexShader)));
+    _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(std::move(fsPreDefine +  _fragmentShader)));
 #else
     _vertexShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(_vertexShader));
     _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(_fragmentShader));
@@ -89,8 +88,8 @@ void ProgramGL::reloadProgram()
     _activeUniformInfos.clear();
     _mapToCurrentActiveLocation.clear();
     _mapToOriginalLocation.clear();
-    static_cast<ShaderModuleGL*>(_vertexShaderModule)->compileShader(backend::ShaderStage::VERTEX, std::move(SHADER_PREDEFINE + _vertexShader));
-    static_cast<ShaderModuleGL*>(_fragmentShaderModule)->compileShader(backend::ShaderStage::FRAGMENT, std::move(SHADER_PREDEFINE + _fragmentShader));
+    static_cast<ShaderModuleGL*>(_vertexShaderModule)->compileShader(backend::ShaderStage::VERTEX, std::move(vsPreDefine + _vertexShader));
+    static_cast<ShaderModuleGL*>(_fragmentShaderModule)->compileShader(backend::ShaderStage::FRAGMENT, std::move(fsPreDefine + _fragmentShader));
     compileProgram();
     computeUniformInfos();
 

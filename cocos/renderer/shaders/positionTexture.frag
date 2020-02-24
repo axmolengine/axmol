@@ -26,10 +26,10 @@
 const char* positionTexture_frag = R"(
 
 #ifdef GL_ES
-varying mediump vec2 v_texCoord;
-#else
-varying vec2 v_texCoord;
+precision lowp float;
 #endif
+
+varying vec2 v_texCoord;
 
 uniform sampler2D u_texture;
 
