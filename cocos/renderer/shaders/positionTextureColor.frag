@@ -25,11 +25,12 @@
 
 const char* positionTextureColor_frag = R"(
 #ifdef GL_ES
-precision lowp float;
-#endif
-
+varying lowp vec4 v_fragmentColor;
+varying mediump vec2 v_texCoord;
+#else
 varying vec4 v_fragmentColor;
 varying vec2 v_texCoord;
+#endif
 
 uniform sampler2D u_texture;
 
