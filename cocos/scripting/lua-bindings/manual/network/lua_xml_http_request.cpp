@@ -305,7 +305,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
                 CCLOG("come in handler, handler is %d", handler);
                 cocos2d::CommonScriptData data(handler,"");
                 cocos2d::ScriptEvent event(cocos2d::ScriptEventType::kCommonEvent,(void*)&data);
-                cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&event);
+                cocos2d::ScriptEngineManager::sendEventToLua(event);
             }
             return;
         }
@@ -343,7 +343,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
         {
             cocos2d::CommonScriptData data(handler,"");
             cocos2d::ScriptEvent event(cocos2d::ScriptEventType::kCommonEvent,(void*)&data);
-            cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&event);
+            cocos2d::ScriptEngineManager::sendEventToLua(event);
         }
         release();
     });

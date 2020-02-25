@@ -50,7 +50,7 @@ public:
             {
                 CommonScriptData data(handler,"");
                 ScriptEvent event(kCommonEvent,(void*)&data);
-                LuaEngine::getInstance()->sendEvent(&event);
+                LuaEngine::getInstance()->sendEvent(event);
             }
             
         }
@@ -65,7 +65,7 @@ public:
             {
                 CommonScriptData data(handler,"");
                 ScriptEvent event(kCommonEvent,(void*)&data);
-                LuaEngine::getInstance()->sendEvent(&event);
+                LuaEngine::getInstance()->sendEvent(event);
             }
         }
     }
