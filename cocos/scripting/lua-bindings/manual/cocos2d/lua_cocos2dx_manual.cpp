@@ -715,14 +715,14 @@ static int executeScriptTouchHandler(Layer* layer, EventTouch::EventCode eventTy
 {
     TouchScriptData data(eventType, layer, touch, event);
     ScriptEvent scriptEvent(kTouchEvent, &data);
-    return ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&scriptEvent);
+    return ScriptEngineManager::sendEventToLua(scriptEvent);
 }
 
 static int executeScriptTouchesHandler(Layer* layer, EventTouch::EventCode eventType, const std::vector<Touch*>& touches, Event* event)
 {
     TouchesScriptData data(eventType, layer, touches, event);
     ScriptEvent scriptEvent(kTouchesEvent, &data);
-    return ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&scriptEvent);
+    return ScriptEngineManager::sendEventToLua(scriptEvent);
 }
 
 static void setTouchEnabledForLayer(Layer* layer, bool enabled)
@@ -1197,7 +1197,7 @@ static int lua_cocos2dx_Layer_setKeyboardEnabled(lua_State* L)
             listener->onKeyReleased = [self](EventKeyboard::KeyCode keyCode, Event* event){
                 KeypadScriptData data(keyCode, self);
                 ScriptEvent scriptEvent(kKeypadEvent,&data);
-                ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&scriptEvent);
+                ScriptEngineManager::sendEventToLua(scriptEvent);
             };
             CCLOG("come in the keyboardEnable");
             dispatcher->addEventListenerWithSceneGraphPriority(listener, self);
@@ -1316,7 +1316,7 @@ static int lua_cocos2dx_Layer_setAccelerometerEnabled(lua_State* L)
             auto listener = EventListenerAcceleration::create([self](Acceleration* acc, Event* event){
                 BasicScriptData data(self,(void*)acc);
                 ScriptEvent accEvent(kAccelerometerEvent,&data);
-                ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&accEvent);
+                ScriptEngineManager::sendEventToLua(accEvent);
             });
 
             dispatcher->addEventListenerWithSceneGraphPriority(listener, self);

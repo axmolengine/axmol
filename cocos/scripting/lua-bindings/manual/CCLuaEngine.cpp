@@ -207,57 +207,26 @@ int LuaEngine::sendEvent(const ScriptEvent& evt)
     switch (evt.type)
     {
         case kNodeEvent:
-            {
-               return handleNodeEvent(evt.data);
-            }
-            break;
+            return handleNodeEvent(evt.data);
         case kMenuClickedEvent:
-            {
-                return handleMenuClickedEvent(evt.data);
-            }
-            break;
+            return handleMenuClickedEvent(evt.data);
         case kCallFuncEvent:
-            {
-                return handleCallFuncActionEvent(evt.data);
-            }
-            break;
+            return handleCallFuncActionEvent(evt.data);
         case kScheduleEvent:
-            {
-                return handleScheduler(evt.data);
-            }
-            break;
+            return handleScheduler(evt.data);
         case kTouchEvent:
-            {
-                return handleTouchEvent(evt.data);
-            }
-            break;
+            return handleTouchEvent(evt.data);
         case kTouchesEvent:
-            {
-                return handleTouchesEvent(evt.data);
-            }
-            break;
+            return handleTouchesEvent(evt.data);
         case kKeypadEvent:
-            {
-                return handleKeypadEvent(evt.data);
-            }
-            break;
+            return handleKeypadEvent(evt.data);
         case kAccelerometerEvent:
-            {
-                return handleAccelerometerEvent(evt.data);
-            }
-            break;
+            return handleAccelerometerEvent(evt.data);
         case kCommonEvent:
-            {
-                return handleCommonEvent(evt.data);
-            }
-            break;
+            return handleCommonEvent(evt.data);
         case kControlEvent:
-            {
-                return handlerControlEvent(evt.data);
-            }
-            break;
-        default:
-            break;
+            return handlerControlEvent(evt.data);
+        default: ;
     }
     
     return 0;
