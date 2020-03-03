@@ -73,22 +73,22 @@ static id convertCCValueToNSObject(const cocos2d::Value &value)
             return [NSString stringWithCString:value.asString().c_str() encoding:NSUTF8StringEncoding];
             
         case Value::Type::BYTE:
-            return [NSNumber numberWithInt:value.toByte()];
+            return [NSNumber numberWithInt:value.asByte()];
             
         case Value::Type::INTEGER:
-            return [NSNumber numberWithInt:value.toInt()];
+            return [NSNumber numberWithInt:value.asInt()];
             
         case Value::Type::UNSIGNED:
-            return [NSNumber numberWithUnsignedInt:value.toUnsignedInt()];
+            return [NSNumber numberWithUnsignedInt:value.asUnsignedInt()];
             
         case Value::Type::FLOAT:
-            return [NSNumber numberWithFloat:value.toFloat()];
+            return [NSNumber numberWithFloat:value.asFloat()];
             
         case Value::Type::DOUBLE:
-            return [NSNumber numberWithDouble:value.toDouble()];
+            return [NSNumber numberWithDouble:value.asDouble()];
             
         case Value::Type::BOOLEAN:
-            return [NSNumber numberWithBool:value.toBool()];
+            return [NSNumber numberWithBool:value.asBool()];
             
         case Value::Type::VECTOR: {
             NSMutableArray *array = [NSMutableArray array];
