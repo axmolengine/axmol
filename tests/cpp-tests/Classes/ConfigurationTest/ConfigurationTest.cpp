@@ -112,13 +112,13 @@ void ConfigurationDefault::onEnter()
 	else
 		log("1. Test OK!");
 
-	bool b_value = Configuration::getInstance()->getValue("invalid.key", Value(true)).asBool();
+	bool b_value = Configuration::getInstance()->getValue("invalid.key", Value(true)).toBool();
 	if( ! b_value )
 		log("2. Test failed!");
 	else
 		log("2. Test OK!");
 
-	double d_value = Configuration::getInstance()->getValue("invalid.key", Value(42.42)).asDouble();
+	double d_value = Configuration::getInstance()->getValue("invalid.key", Value(42.42)).toDouble();
 	if( d_value != 42.42 )
 		log("3. Test failed!");
 	else

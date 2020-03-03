@@ -57,6 +57,7 @@ class CC_DLL Value
 public:
     /** A predefined Value that has not value. */
     static const Value Null;
+    static const std::string NullString;
 
     /** Default constructor. */
     Value();
@@ -155,24 +156,23 @@ public:
     bool operator== (const Value& v) const;
 
     /** Gets as a byte value. Will convert to unsigned char if possible, or will trigger assert error. */
-    unsigned char asByte() const;
+    unsigned char toByte() const;
     /** Gets as an integer value. Will convert to integer if possible, or will trigger assert error. */
-    int asInt() const;
+    int toInt() const;
     /** Gets as an unsigned value. Will convert to unsigned if possible, or will trigger assert error. */
-    unsigned int asUnsignedInt() const;
+    unsigned int toUnsignedInt() const;
     /** Gets as a float value. Will convert to float if possible, or will trigger assert error. */
-    float asFloat() const;
+    float toFloat() const;
     /** Gets as a double value. Will convert to double if possible, or will trigger assert error. */
-    double asDouble() const;
+    double toDouble() const;
     /** Gets as a bool value. Will convert to bool if possible, or will trigger assert error. */
-    bool asBool() const;
+    bool toBool() const;
+    /** to as a string value. Will convert to string if possible, or will trigger assert error. */
+    std::string toString() const;
 
     /** Gets as a string value. Will convert to string if possible, or will trigger assert error. */
-    std::string& asString();
-    /** Gets as a string value. Will convert to string if possible, or will trigger assert error. */
     const std::string& asString() const;
-	/** to as a string value. Will convert to string if possible, or will trigger assert error. */
-    std::string toString() const;
+    const std::string& asStringUnsafe() const;
 
     /** Gets as a ValueVector reference. Will convert to ValueVector if possible, or will trigger assert error. */
     ValueVector& asValueVector();
