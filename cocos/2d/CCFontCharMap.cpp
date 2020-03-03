@@ -39,13 +39,13 @@ FontCharMap * FontCharMap::create(const std::string& plistFile)
 
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(pathStr);
 
-    CCASSERT(dict["version"].asInt() == 1, "Unsupported version. Upgrade cocos2d version");
+    CCASSERT(dict["version"].toInt() == 1, "Unsupported version. Upgrade cocos2d version");
 
     std::string textureFilename = relPathStr + dict["textureFilename"].asString();
 
-    unsigned int width = dict["itemWidth"].asInt();
-    unsigned int height = dict["itemHeight"].asInt();
-    unsigned int startChar = dict["firstChar"].asInt();
+    unsigned int width = dict["itemWidth"].toInt();
+    unsigned int height = dict["itemHeight"].toInt();
+    unsigned int startChar = dict["firstChar"].toInt();
 
     Texture2D *tempTexture = Director::getInstance()->getTextureCache()->addImage(textureFilename);
     if (!tempTexture)

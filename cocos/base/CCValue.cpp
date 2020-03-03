@@ -37,6 +37,8 @@ const ValueMapIntKey ValueMapIntKeyNull;
 
 const Value Value::Null;
 
+const std::string Value::NullString;
+
 Value::Value()
 : _type(Type::NONE)
 {
@@ -440,7 +442,7 @@ bool Value::operator== (const Value& v) const
 }
 
 /// Convert value to a specified type
-unsigned char Value::asByte() const
+unsigned char Value::toByte() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
 
@@ -482,7 +484,7 @@ unsigned char Value::asByte() const
     return 0;
 }
 
-int Value::asInt() const
+int Value::toInt() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
     if (_type == Type::INTEGER)
@@ -525,7 +527,7 @@ int Value::asInt() const
 }
 
 
-unsigned int Value::asUnsignedInt() const
+unsigned int Value::toUnsignedInt() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
     if (_type == Type::UNSIGNED)
@@ -568,7 +570,7 @@ unsigned int Value::asUnsignedInt() const
     return 0u;
 }
 
-float Value::asFloat() const
+float Value::toFloat() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
     if (_type == Type::FLOAT)
@@ -609,7 +611,7 @@ float Value::asFloat() const
     return 0.0f;
 }
 
-double Value::asDouble() const
+double Value::toDouble() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
     if (_type == Type::DOUBLE)
@@ -650,7 +652,7 @@ double Value::asDouble() const
     return 0.0;
 }
 
-bool Value::asBool() const
+bool Value::toBool() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
     if (_type == Type::BOOLEAN)
@@ -691,18 +693,6 @@ bool Value::asBool() const
     return false;
 }
 
-std::string& Value::asString()
-{
-    CCASSERT(_type == Type::STRING, "The value type isn't Type::STRING");
-    return *_field.strVal;
-}
-
-const std::string& Value::asString() const
-{
-    CCASSERT(_type == Type::STRING, "The value type isn't Type::STRING");
-    return *_field.strVal;
-}
-
 std::string Value::toString() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
@@ -740,6 +730,18 @@ std::string Value::toString() const
     return ret.str();
 }
 
+const std::string& Value::asString() const
+{
+    if (_type == Type::STRING)
+        return *_field.strVal;
+    return Value::NullString;
+}
+
+const std::string& Value::asStringUnsafe() const
+{
+    CCASSERT(_type == Type::STRING, "The value type isn't Type::STRING");
+    return *_field.strVal;
+}
 
 ValueVector& Value::asValueVector()
 {

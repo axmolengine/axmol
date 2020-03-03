@@ -91,7 +91,7 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
     {
         const ValueMap& animationDict = anim.second.asValueMap();
         const ValueVector& frameNames = animationDict.at("frames").asValueVector();
-        float delay = animationDict.at("delay").asFloat();
+        float delay = animationDict.at("delay").toFloat();
         Animation* animation = nullptr;
 
         if ( frameNames.empty() )
@@ -143,7 +143,7 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
         ValueMap& animationDict = const_cast<ValueMap&>(anim.second.asValueMap());
 
         const Value& loops = animationDict["loops"];
-        bool restoreOriginalFrame = animationDict["restoreOriginalFrame"].asBool();
+        bool restoreOriginalFrame = animationDict["restoreOriginalFrame"].toBool();
 
         ValueVector& frameArray = animationDict["frames"].asValueVector();
 
@@ -168,7 +168,7 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
                 continue;
             }
 
-            float delayUnits = entry["delayUnits"].asFloat();
+            float delayUnits = entry["delayUnits"].toFloat();
             Value& userInfo = entry["notification"];
 
             AnimationFrame *animFrame = AnimationFrame::create(spriteFrame, delayUnits, userInfo.getType() == Value::Type::MAP ? userInfo.asValueMap() : ValueMapNull);
@@ -176,8 +176,8 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
             array.pushBack(animFrame);
         }
 
-        float delayPerUnit = animationDict["delayPerUnit"].asFloat();
-        Animation *animation = Animation::create(array, delayPerUnit, loops.getType() != Value::Type::NONE ? loops.asInt() : 1);
+        float delayPerUnit = animationDict["delayPerUnit"].toFloat();
+        Animation *animation = Animation::create(array, delayPerUnit, loops.getType() != Value::Type::NONE ? loops.toInt() : 1);
 
         animation->setRestoreOriginalFrame(restoreOriginalFrame);
 
@@ -201,7 +201,7 @@ void AnimationCache::addAnimationsWithDictionary(const ValueMap& dictionary,cons
     if(propsItr != dictionary.end() )
     {
         const ValueMap& properties = propsItr->second.asValueMap();
-        version = properties.at("format").asInt();
+        version = properties.at("format").toInt();
         const ValueVector& spritesheets = properties.at("spritesheets").asValueVector();
 
         for(const auto &value : spritesheets) {

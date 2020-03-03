@@ -1002,7 +1002,7 @@ void FileUtils::loadFilenameLookupDictionaryFromFile(const std::string &filename
         if (!dict.empty())
         {
             ValueMap& metadata =  dict["metadata"].asValueMap();
-            int version = metadata["version"].asInt();
+            int version = metadata["version"].toInt();
             if (version != 1)
             {
                 CCLOG("cocos2d: ERROR: Invalid filenameLookup dictionary version: %d. Filename: %s", version, filename.c_str());
