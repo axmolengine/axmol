@@ -817,16 +817,16 @@ void TestWriteValueMap::onEnter()
     readDataStr += "  vectorValue:[2]" + readVectorInMap.at(1).asString() + "\n";
 
     // read bool data
-    readDataStr += "  boolValue:" + StringUtils::format("%d", readValueMap["data3"].asBool()) + "\n";
+    readDataStr += "  boolValue:" + StringUtils::format("%d", readValueMap["data3"].toBool()) + "\n";
 
     // read int data
-    readDataStr += "  intValue:" + StringUtils::format("%d", readValueMap["data4"].asInt()) + "\n";
+    readDataStr += "  intValue:" + StringUtils::format("%d", readValueMap["data4"].toInt()) + "\n";
 
     // read float data
-    readDataStr += "  floatValue:" + StringUtils::format("%f", readValueMap["data5"].asFloat()) + "\n";
+    readDataStr += "  floatValue:" + StringUtils::format("%f", readValueMap["data5"].toFloat()) + "\n";
 
     // read double data
-    readDataStr += "  doubleValue:" + StringUtils::format("%f", readValueMap["data6"].asDouble()) + "\n";
+    readDataStr += "  doubleValue:" + StringUtils::format("%f", readValueMap["data6"].toDouble()) + "\n";
 
     readResult->setString(readDataStr);
 }
@@ -920,16 +920,16 @@ void TestWriteValueVector::onEnter()
     readDataStr += "  vectorValue:[2]" + readVectorInArray.at(1).asString() + "\n";
 
     // read bool data
-    readDataStr += "  boolValue:" + StringUtils::format("%d", readArray.at(3).asBool()) + "\n";
+    readDataStr += "  boolValue:" + StringUtils::format("%d", readArray.at(3).toBool()) + "\n";
 
     // read int data
-    readDataStr += "  intValue:" + StringUtils::format("%d", readArray.at(4).asInt()) + "\n";
+    readDataStr += "  intValue:" + StringUtils::format("%d", readArray.at(4).toInt()) + "\n";
 
     // read float data
-    readDataStr += "  floatValue:" + StringUtils::format("%f", readArray.at(5).asFloat()) + "\n";
+    readDataStr += "  floatValue:" + StringUtils::format("%f", readArray.at(5).toFloat()) + "\n";
 
     // read double data
-    readDataStr += "  doubleValue:" + StringUtils::format("%f", readArray.at(6).asDouble()) + "\n";
+    readDataStr += "  doubleValue:" + StringUtils::format("%f", readArray.at(6).toDouble()) + "\n";
 
     readResult->setString(readDataStr);
 }

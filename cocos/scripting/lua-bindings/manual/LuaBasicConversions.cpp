@@ -2758,14 +2758,14 @@ void ccvalue_to_luaval(lua_State* L,const cocos2d::Value& inValue)
     switch (obj.getType())
     {
         case Value::Type::BOOLEAN:
-            lua_pushboolean(L, obj.asBool());
+            lua_pushboolean(L, obj.toBool());
             break;
         case Value::Type::FLOAT:
         case Value::Type::DOUBLE:
-            lua_pushnumber(L, obj.asDouble());
+            lua_pushnumber(L, obj.toDouble());
             break;
         case Value::Type::INTEGER:
-            lua_pushinteger(L, obj.asInt());
+            lua_pushinteger(L, obj.toInt());
             break;
         case Value::Type::STRING:
             lua_pushstring(L, obj.asString().c_str());
@@ -2799,7 +2799,7 @@ void ccvaluemap_to_luaval(lua_State* L,const cocos2d::ValueMap& inValue)
             case Value::Type::BOOLEAN:
                 {
                     lua_pushstring(L, key.c_str());
-                    lua_pushboolean(L, obj.asBool());
+                    lua_pushboolean(L, obj.toBool());
                     lua_rawset(L, -3);
                 }
                 break;
@@ -2807,14 +2807,14 @@ void ccvaluemap_to_luaval(lua_State* L,const cocos2d::ValueMap& inValue)
             case Value::Type::DOUBLE:
                 {
                     lua_pushstring(L, key.c_str());
-                    lua_pushnumber(L, obj.asDouble());
+                    lua_pushnumber(L, obj.toDouble());
                     lua_rawset(L, -3);
                 }
                 break;
             case Value::Type::INTEGER:
                 {
                     lua_pushstring(L, key.c_str());
-                    lua_pushinteger(L, obj.asInt());
+                    lua_pushinteger(L, obj.toInt());
                     lua_rawset(L, -3);
                 }
                 break;
@@ -2871,7 +2871,7 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const cocos2d::ValueMapIntKey& inV
             case Value::Type::BOOLEAN:
                 {
                     lua_pushstring(L, key.c_str());
-                    lua_pushboolean(L, obj.asBool());
+                    lua_pushboolean(L, obj.toBool());
                     lua_rawset(L, -3);
                 }
                 break;
@@ -2879,14 +2879,14 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const cocos2d::ValueMapIntKey& inV
             case Value::Type::DOUBLE:
                 {
                     lua_pushstring(L, key.c_str());
-                    lua_pushnumber(L, obj.asDouble());
+                    lua_pushnumber(L, obj.toDouble());
                     lua_rawset(L, -3);
                 }
                 break;
             case Value::Type::INTEGER:
                 {
                     lua_pushstring(L, key.c_str());
-                    lua_pushinteger(L, obj.asInt());
+                    lua_pushinteger(L, obj.toInt());
                     lua_rawset(L, -3);
                 }
                 break;
@@ -2938,7 +2938,7 @@ void ccvaluevector_to_luaval(lua_State* L, const cocos2d::ValueVector& inValue)
             case Value::Type::BOOLEAN:
                 {
                     lua_pushnumber(L, (lua_Number)index);
-                    lua_pushboolean(L, obj.asBool());
+                    lua_pushboolean(L, obj.toBool());
                     lua_rawset(L, -3);
                     ++index;
                 }
@@ -2947,7 +2947,7 @@ void ccvaluevector_to_luaval(lua_State* L, const cocos2d::ValueVector& inValue)
             case Value::Type::DOUBLE:
                 {
                     lua_pushnumber(L, (lua_Number)index);
-                    lua_pushnumber(L, obj.asDouble());
+                    lua_pushnumber(L, obj.toDouble());
                     lua_rawset(L, -3);
                     ++index;
                 }
@@ -2955,7 +2955,7 @@ void ccvaluevector_to_luaval(lua_State* L, const cocos2d::ValueVector& inValue)
             case Value::Type::INTEGER:
                 {
                     lua_pushnumber(L, (lua_Number)index);
-                    lua_pushnumber(L, obj.asInt());
+                    lua_pushnumber(L, obj.toInt());
                     lua_rawset(L, -3);
                     ++index;
                 }

@@ -429,16 +429,16 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText)
             src = tagAttrValueMap.at("src").asString();
         }
         if (tagAttrValueMap.find("height") != tagAttrValueMap.end()) {
-            height = tagAttrValueMap.at("height").asInt();
+            height = tagAttrValueMap.at("height").toInt();
         }
         if (tagAttrValueMap.find("width") != tagAttrValueMap.end()) {
-            width = tagAttrValueMap.at("width").asInt();
+            width = tagAttrValueMap.at("width").toInt();
         }
         if (tagAttrValueMap.find("type") != tagAttrValueMap.end()) {
             // texture type
             // 0: normal file path
             // 1: sprite frame name
-            int type = tagAttrValueMap.at("type").asInt();
+            int type = tagAttrValueMap.at("type").toInt();
             resType = type == 0 ? Widget::TextureResType::LOCAL : Widget::TextureResType::PLIST;
         }
         
@@ -643,7 +643,7 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char *elementName, const ch
                 Attributes attributes;
                 
                 if (attrValueMap.find(RichText::KEY_FONT_SIZE) != attrValueMap.end()) {
-                    attributes.fontSize = attrValueMap.at(RichText::KEY_FONT_SIZE).asFloat();
+                    attributes.fontSize = attrValueMap.at(RichText::KEY_FONT_SIZE).toFloat();
                 }
                 if (attrValueMap.find(RichText::KEY_FONT_SMALL) != attrValueMap.end()) {
                     attributes.fontSize = getFontSize() * 0.8f;
@@ -711,7 +711,7 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char *elementName, const ch
                             attributes.outlineColor = _richText->color3BWithString(attrValueMap.at(RichText::KEY_TEXT_OUTLINE_COLOR).asString());
                         }
                         if (attrValueMap.find(RichText::KEY_TEXT_OUTLINE_SIZE) != attrValueMap.end()) {
-                            attributes.outlineSize = attrValueMap.at(RichText::KEY_TEXT_OUTLINE_SIZE).asInt();
+                            attributes.outlineSize = attrValueMap.at(RichText::KEY_TEXT_OUTLINE_SIZE).toInt();
                         }
                     }
                     else if (keyTextStyle == RichText::VALUE_TEXT_STYLE_SHADOW) {
@@ -721,11 +721,11 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char *elementName, const ch
                         }
                         if ((attrValueMap.find(RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH) != attrValueMap.end())
                                 && (attrValueMap.find(RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT) != attrValueMap.end())) {
-                            attributes.shadowOffset = Size(attrValueMap.at(RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH).asFloat(),
-                                                           attrValueMap.at(RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT).asFloat());
+                            attributes.shadowOffset = Size(attrValueMap.at(RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH).toFloat(),
+                                                           attrValueMap.at(RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT).toFloat());
                         }
                         if (attrValueMap.find(RichText::KEY_TEXT_SHADOW_BLUR_RADIUS) != attrValueMap.end()) {
-                            attributes.shadowBlurRadius = attrValueMap.at(RichText::KEY_TEXT_SHADOW_BLUR_RADIUS).asInt();
+                            attributes.shadowBlurRadius = attrValueMap.at(RichText::KEY_TEXT_SHADOW_BLUR_RADIUS).toInt();
                         }
                     }
                     else if (keyTextStyle == RichText::VALUE_TEXT_STYLE_GLOW) {
@@ -995,12 +995,12 @@ void RichText::removeElement(RichElement *element)
 
 RichText::WrapMode RichText::getWrapMode() const
 {
-    return static_cast<RichText::WrapMode>(_defaults.at(KEY_WRAP_MODE).asInt());
+    return static_cast<RichText::WrapMode>(_defaults.at(KEY_WRAP_MODE).toInt());
 }
 
 void RichText::setWrapMode(RichText::WrapMode wrapMode)
 {
-    if (static_cast<RichText::WrapMode>(_defaults.at(KEY_WRAP_MODE).asInt()) != wrapMode)
+    if (static_cast<RichText::WrapMode>(_defaults.at(KEY_WRAP_MODE).toInt()) != wrapMode)
     {
         _defaults[KEY_WRAP_MODE] = static_cast<int>(wrapMode);
         _formatTextDirty = true;
@@ -1009,12 +1009,12 @@ void RichText::setWrapMode(RichText::WrapMode wrapMode)
 
 RichText::HorizontalAlignment RichText::getHorizontalAlignment() const
 {
-	return static_cast<RichText::HorizontalAlignment>(_defaults.at(KEY_HORIZONTAL_ALIGNMENT).asInt());
+	return static_cast<RichText::HorizontalAlignment>(_defaults.at(KEY_HORIZONTAL_ALIGNMENT).toInt());
 }
 
 void RichText::setHorizontalAlignment(cocos2d::ui::RichText::HorizontalAlignment a)
 {
-	if (static_cast<RichText::HorizontalAlignment>(_defaults.at(KEY_HORIZONTAL_ALIGNMENT).asInt()) != a)
+	if (static_cast<RichText::HorizontalAlignment>(_defaults.at(KEY_HORIZONTAL_ALIGNMENT).toInt()) != a)
 	{
 		_defaults[KEY_HORIZONTAL_ALIGNMENT] = static_cast<int>(a);
 		_formatTextDirty = true;
@@ -1043,7 +1043,7 @@ void RichText::setFontSize(float size)
 
 float RichText::getFontSize()
 {
-    return _defaults.at(KEY_FONT_SIZE).asFloat();
+    return _defaults.at(KEY_FONT_SIZE).toFloat();
 }
 
 void RichText::setFontFace(const std::string& face)
@@ -1078,7 +1078,7 @@ void RichText::setAnchorTextBold(bool enable)
 
 bool RichText::isAnchorTextBoldEnabled()
 {
-    return _defaults[KEY_ANCHOR_TEXT_BOLD].asBool();
+    return _defaults[KEY_ANCHOR_TEXT_BOLD].toBool();
 }
 
 void RichText::setAnchorTextItalic(bool enable)
@@ -1088,7 +1088,7 @@ void RichText::setAnchorTextItalic(bool enable)
 
 bool RichText::isAnchorTextItalicEnabled()
 {
-    return _defaults[KEY_ANCHOR_TEXT_ITALIC].asBool();
+    return _defaults[KEY_ANCHOR_TEXT_ITALIC].toBool();
 }
 
 void RichText::setAnchorTextDel(bool enable)
@@ -1143,7 +1143,7 @@ Color3B RichText::getAnchorTextOutlineColor3B()
 int RichText::getAnchorTextOutlineSize()
 {
     if (_defaults.find(KEY_ANCHOR_TEXT_OUTLINE_SIZE) != _defaults.end()) {
-        return _defaults.at(KEY_ANCHOR_TEXT_OUTLINE_SIZE).asInt();
+        return _defaults.at(KEY_ANCHOR_TEXT_OUTLINE_SIZE).toInt();
     }
     return -1;
 }
@@ -1178,10 +1178,10 @@ Size RichText::getAnchorTextShadowOffset()
     float width = 2.0f;
     float height = -2.0f;
     if (_defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH) != _defaults.end()) {
-        width = _defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH).asFloat();
+        width = _defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH).toFloat();
     }
     if (_defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT) != _defaults.end()) {
-        height = _defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT).asFloat();
+        height = _defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT).toFloat();
     }
     return Size(width, height);
 }
@@ -1189,7 +1189,7 @@ Size RichText::getAnchorTextShadowOffset()
 int RichText::getAnchorTextShadowBlurRadius()
 {
     if (_defaults.find(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS) != _defaults.end()) {
-        return _defaults.at(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS).asInt();
+        return _defaults.at(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS).toInt();
     }
     return 0;
 }
@@ -1219,19 +1219,19 @@ Color3B RichText::getAnchorTextGlowColor3B()
 void RichText::setDefaults(const ValueMap& defaults)
 {
     if (defaults.find(KEY_VERTICAL_SPACE) != defaults.end()) {
-        _defaults[KEY_VERTICAL_SPACE] = defaults.at(KEY_VERTICAL_SPACE).asFloat();
+        _defaults[KEY_VERTICAL_SPACE] = defaults.at(KEY_VERTICAL_SPACE).toFloat();
     }
     if (defaults.find(KEY_WRAP_MODE) != defaults.end()) {
-        _defaults[KEY_WRAP_MODE] = defaults.at(KEY_WRAP_MODE).asInt();
+        _defaults[KEY_WRAP_MODE] = defaults.at(KEY_WRAP_MODE).toInt();
     }
 	if (defaults.find(KEY_HORIZONTAL_ALIGNMENT) != defaults.end()) {
-		_defaults[KEY_HORIZONTAL_ALIGNMENT] = defaults.at(KEY_HORIZONTAL_ALIGNMENT).asInt();
+		_defaults[KEY_HORIZONTAL_ALIGNMENT] = defaults.at(KEY_HORIZONTAL_ALIGNMENT).toInt();
 	}
     if (defaults.find(KEY_FONT_COLOR_STRING) != defaults.end()) {
         _defaults[KEY_FONT_COLOR_STRING] = defaults.at(KEY_FONT_COLOR_STRING).asString();
     }
     if (defaults.find(KEY_FONT_SIZE) != defaults.end()) {
-        _defaults[KEY_FONT_SIZE] = defaults.at(KEY_FONT_SIZE).asFloat();
+        _defaults[KEY_FONT_SIZE] = defaults.at(KEY_FONT_SIZE).toFloat();
     }
     if (defaults.find(KEY_FONT_FACE) != defaults.end()) {
         _defaults[KEY_FONT_FACE] = defaults.at(KEY_FONT_FACE).asString();
@@ -1240,10 +1240,10 @@ void RichText::setDefaults(const ValueMap& defaults)
         _defaults[KEY_ANCHOR_FONT_COLOR_STRING] = defaults.at(KEY_ANCHOR_FONT_COLOR_STRING).asString();
     }
     if (defaults.find(KEY_ANCHOR_TEXT_BOLD) != defaults.end()) {
-        _defaults[KEY_ANCHOR_TEXT_BOLD] = defaults.at(KEY_ANCHOR_TEXT_BOLD).asBool();
+        _defaults[KEY_ANCHOR_TEXT_BOLD] = defaults.at(KEY_ANCHOR_TEXT_BOLD).toBool();
     }
     if (defaults.find(KEY_ANCHOR_TEXT_ITALIC) != defaults.end()) {
-        _defaults[KEY_ANCHOR_TEXT_ITALIC] = defaults.at(KEY_ANCHOR_TEXT_ITALIC).asBool();
+        _defaults[KEY_ANCHOR_TEXT_ITALIC] = defaults.at(KEY_ANCHOR_TEXT_ITALIC).toBool();
     }
     if (defaults.find(KEY_ANCHOR_TEXT_LINE) != defaults.end()) {
         _defaults[KEY_ANCHOR_TEXT_LINE] = defaults.at(KEY_ANCHOR_TEXT_LINE).asString();
@@ -1255,19 +1255,19 @@ void RichText::setDefaults(const ValueMap& defaults)
         _defaults[KEY_ANCHOR_TEXT_OUTLINE_COLOR] = defaults.at(KEY_ANCHOR_TEXT_OUTLINE_COLOR).asString();
     }
     if (defaults.find(KEY_ANCHOR_TEXT_OUTLINE_SIZE) != defaults.end()) {
-        _defaults[KEY_ANCHOR_TEXT_OUTLINE_SIZE] = defaults.at(KEY_ANCHOR_TEXT_OUTLINE_SIZE).asInt();
+        _defaults[KEY_ANCHOR_TEXT_OUTLINE_SIZE] = defaults.at(KEY_ANCHOR_TEXT_OUTLINE_SIZE).toInt();
     }
     if (defaults.find(KEY_ANCHOR_TEXT_SHADOW_COLOR) != defaults.end()) {
         _defaults[KEY_ANCHOR_TEXT_SHADOW_COLOR] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_COLOR).asString();
     }
     if (defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH) != defaults.end()) {
-        _defaults[KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH).asFloat();
+        _defaults[KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_WIDTH).toFloat();
     }
     if (defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT) != defaults.end()) {
-        _defaults[KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT).asFloat();
+        _defaults[KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT).toFloat();
     }
     if (defaults.find(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS) != defaults.end()) {
-        _defaults[KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS).asInt();
+        _defaults[KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS] = defaults.at(KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS).toInt();
     }
     if (defaults.find(KEY_ANCHOR_TEXT_GLOW_COLOR) != defaults.end()) {
         _defaults[KEY_ANCHOR_TEXT_GLOW_COLOR] = defaults.at(KEY_ANCHOR_TEXT_GLOW_COLOR).asString();
@@ -1645,7 +1645,7 @@ void RichText::handleTextRenderer(const std::string& text, const std::string& fo
                                   const Color3B& glowColor)
 {
     bool fileExist = FileUtils::getInstance()->isFileExist(fontName);
-    RichText::WrapMode wrapMode = static_cast<RichText::WrapMode>(_defaults.at(KEY_WRAP_MODE).asInt());
+    RichText::WrapMode wrapMode = static_cast<RichText::WrapMode>(_defaults.at(KEY_WRAP_MODE).toInt());
 
     // split text by \n
     std::stringstream ss(text);
@@ -1784,8 +1784,8 @@ void RichText::addNewLine()
     
 void RichText::formatRenderers()
 {
-    float verticalSpace = _defaults[KEY_VERTICAL_SPACE].asFloat();
-    float fontSize = _defaults[KEY_FONT_SIZE].asFloat();
+    float verticalSpace = _defaults[KEY_VERTICAL_SPACE].toFloat();
+    float fontSize = _defaults[KEY_FONT_SIZE].toFloat();
 
     if (_ignoreSize)
     {
@@ -1890,7 +1890,7 @@ namespace {
 }
 
 void RichText::doHorizontalAlignment(const Vector<cocos2d::Node*> &row, float rowWidth) {
-    const auto alignment = static_cast<HorizontalAlignment>(_defaults.at(KEY_HORIZONTAL_ALIGNMENT).asInt());
+    const auto alignment = static_cast<HorizontalAlignment>(_defaults.at(KEY_HORIZONTAL_ALIGNMENT).toInt());
     if ( alignment != HorizontalAlignment::LEFT ) {
         const auto diff = stripTrailingWhitespace(row);
         const auto leftOver = getContentSize().width - (rowWidth + diff);

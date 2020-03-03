@@ -339,7 +339,7 @@ void Configuration::loadConfigFile(const std::string& filename)
         
 		if (formatIter != metadata.cend())
         {
-			int format = formatIter->second.asInt();
+			int format = formatIter->second.toInt();
 
 			// Support format: 1
 			if (format == 1)
@@ -376,25 +376,25 @@ void Configuration::loadConfigFile(const std::string& filename)
     //light info
     std::string name = "cocos2d.x.3d.max_dir_light_in_shader";
 	if (_valueDict.find(name) != _valueDict.end())
-        _maxDirLightInShader = _valueDict[name].asInt();
+        _maxDirLightInShader = _valueDict[name].toInt();
     else
         _valueDict[name] = Value(_maxDirLightInShader);
     
     name = "cocos2d.x.3d.max_point_light_in_shader";
 	if (_valueDict.find(name) != _valueDict.end())
-        _maxPointLightInShader = _valueDict[name].asInt();
+        _maxPointLightInShader = _valueDict[name].toInt();
     else
         _valueDict[name] = Value(_maxPointLightInShader);
     
     name = "cocos2d.x.3d.max_spot_light_in_shader";
 	if (_valueDict.find(name) != _valueDict.end())
-        _maxSpotLightInShader = _valueDict[name].asInt();
+        _maxSpotLightInShader = _valueDict[name].toInt();
     else
         _valueDict[name] = Value(_maxSpotLightInShader);
     
     name = "cocos2d.x.3d.animate_quality";
     if (_valueDict.find(name) != _valueDict.end())
-        _animate3DQuality = (Animate3DQuality)_valueDict[name].asInt();
+        _animate3DQuality = (Animate3DQuality)_valueDict[name].toInt();
     else
         _valueDict[name] = Value((int)_animate3DQuality);
     

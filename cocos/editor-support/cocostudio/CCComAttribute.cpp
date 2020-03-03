@@ -73,7 +73,7 @@ int ComAttribute::getInt(const std::string& key, int def) const
     if (_dict.find(key) != _dict.end())
     {
         const cocos2d::Value& v = _dict.at(key);
-        return v.asInt();
+        return v.toInt();
     }
    
     if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))
@@ -89,7 +89,7 @@ float ComAttribute::getFloat(const std::string& key, float def) const
     if (_dict.find(key) != _dict.end())
     {
         const cocos2d::Value& v = _dict.at(key);
-        return v.asFloat();
+        return v.toFloat();
     }
 
     if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))
@@ -104,7 +104,7 @@ bool ComAttribute::getBool(const std::string& key, bool def) const
     if (_dict.find(key) != _dict.end())
     {
         const cocos2d::Value& v = _dict.at(key);
-        return v.asBool();
+        return v.toBool();
     }
     
     if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))

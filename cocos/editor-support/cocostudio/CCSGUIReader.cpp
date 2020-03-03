@@ -158,8 +158,8 @@ cocos2d::Size GUIReader::getFileDesignSize(const char* fileName) const
     keyWidth.append("width");
     std::string keyHeight = fileName;
     keyHeight.append("height");
-    float w = _fileDesignSizes.at(keyWidth).asFloat();
-    float h = _fileDesignSizes.at(keyHeight).asFloat();
+    float w = _fileDesignSizes.at(keyWidth).toFloat();
+    float h = _fileDesignSizes.at(keyHeight).toFloat();
     return Size(w, h);
 }
     
