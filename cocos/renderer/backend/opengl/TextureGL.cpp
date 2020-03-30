@@ -332,11 +332,13 @@ void Texture2DGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std:
         }
         callback(flippedImage, width, height);
         CC_SAFE_DELETE_ARRAY(flippedImage);
-    } else
-    {
-        callback(image, width, height);
-        CC_SAFE_DELETE_ARRAY(image);
     }
+    else
+    {
+        callback(image, width, height); 
+    }
+ 
+    CC_SAFE_DELETE_ARRAY(image);
 
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
     glDeleteFramebuffers(1, &frameBuffer);
@@ -425,11 +427,12 @@ void TextureCubeGL::getBytes(std::size_t x, std::size_t y, std::size_t width, st
         }
         callback(flippedImage, width, height);
         CC_SAFE_DELETE_ARRAY(flippedImage);
-    } else
+    } 
+    else
     {
         callback(image, width, height);
-        CC_SAFE_DELETE_ARRAY(image);
     }
+    CC_SAFE_DELETE_ARRAY(image);
 
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
     glDeleteFramebuffers(1, &frameBuffer);
