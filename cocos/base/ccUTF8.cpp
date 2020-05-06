@@ -44,41 +44,62 @@ std::string format(const char* format, ...)
 {
 #define CC_VSNPRINTF_BUFFER_LENGTH 512
     va_list args;
-    std::string buffer(CC_VSNPRINTF_BUFFER_LENGTH, '\0');
+    std::string buf(CC_VSNPRINTF_BUFFER_LENGTH, '\0');
 
     va_start(args, format);
-    int nret = vsnprintf(&buffer.front(), buffer.length() + 1, format, args);
+    int nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
     va_end(args);
 
-    if (nret >= 0) {
-        if ((unsigned int)nret < buffer.length()) {
-            buffer.resize(nret);
+    if (nret >= 0)
+    {
+        if ((unsigned int)nret < buf.length())
+        {
+            buf.resize(nret);
         }
-        else if ((unsigned int)nret > buffer.length()) { // VS2015/2017 or later Visual Studio Version
-            buffer.resize(nret);
+        else if ((unsigned int)nret > buf.length())
+        { // handle return required length when buffer insufficient
+            buf.resize(nret);
 
             va_start(args, format);
-            nret = vsnprintf(&buffer.front(), buffer.length() + 1, format, args);
+            nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
             va_end(args);
-
-            assert(nret == buffer.length());
         }
         // else equals, do nothing.
     }
-    else { // less or equal VS2013 and Unix System glibc implement.
-        do {
-            buffer.resize(buffer.length() * 3 / 2);
+    else
+    { // handle return -1 when buffer insufficient
+      /*
+      vs2013/older & glibc <= 2.0.6, they would return -1 when the output was truncated.
+      see: http://man7.org/linux/man-pages/man3/vsnprintf.3.html
+      */
+#if (defined(__linux__) && ((__GLIBC__ < 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ < 1)))) ||    \
+(defined(_MSC_VER) && _MSC_VER < 1900)
+        enum : size_t
+        {
+            enlarge_limits = (1 << 20), // limits the buffer cost memory less than 2MB
+        };
+        do
+        {
+            buf.resize(buf.length() << 1);
 
             va_start(args, format);
-            nret = vsnprintf(&buffer.front(), buffer.length() + 1, format, args);
+            nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
             va_end(args);
 
-        } while (nret < 0);
-
-        buffer.resize(nret);
+        } while (nret < 0 && buf.size() <= enlarge_limits);
+        if (nret > 0)
+            buf.resize(nret);
+        else
+            buf = "strfmt: an error is encountered!";
+#else
+      /* other standard implementation
+      see: http://www.cplusplus.com/reference/cstdio/vsnprintf/
+      */
+        buf = "strfmt: an error is encountered!";
+#endif
     }
 
-    return buffer;
+    return buf;
 }
 
 /*
