@@ -29,7 +29,7 @@
 #include "base/CCData.h"
 #include "3d/CCBundle3DData.h"
 #include "3d/CCBundleReader.h"
-#include "json/document-wrapper.h"
+#include "rapidjson/document-wrapper.h"
 
 NS_CC_BEGIN
 

@@ -117,8 +117,6 @@ _USRSTUDIOPDLL
     CMake 推荐 3.10.2
     NDK 推荐 20.1
   ```
-  
-  如果报缺少Ninja, 从https://github.com/ninja-build/ninja/releases下载， 拷贝Ninja.exe到Cmake的bin目录即可
 
 #### ios
   确保最新版xcode已安装

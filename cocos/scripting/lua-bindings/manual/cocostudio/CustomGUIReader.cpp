@@ -24,8 +24,8 @@
 
 #include "scripting/lua-bindings/manual/cocostudio/CustomGUIReader.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#include "json/writer.h"
-#include "json/stringbuffer.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 
 USING_NS_CC;
 
