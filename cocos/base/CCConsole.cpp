@@ -121,80 +121,89 @@ namespace {
 
 void log(const char * format, ...)
 {
-    int bufferSize = MAX_LOG_LENGTH;
-    char* buf = nullptr;
-    int nret = 0;
+#define CC_VSNPRINTF_BUFFER_LENGTH 512
     va_list args;
-    do
-    {
-        buf = new (std::nothrow) char[bufferSize];
-        if (buf == nullptr)
-            return;
-        /*
-        pitfall: The behavior of vsnprintf between VS2013 and VS2015/2017 is different
-        VS2013 or Unix-Like System will return -1 when buffer not enough, but VS2015/2017 will return the actural needed length for buffer at this station
-        The _vsnprintf behavior is compatible API which always return -1 when buffer isn't enough at VS2013/2015/2017
-        Yes, The vsnprintf is more efficient implemented by MSVC 19.0 or later, AND it's also standard-compliant, see reference: http://www.cplusplus.com/reference/cstdio/vsnprintf/
-        */
-        va_start(args, format);
-        nret = vsnprintf(buf, bufferSize - 3, format, args);
-        va_end(args);
+    std::string buf(CC_VSNPRINTF_BUFFER_LENGTH, '\0');
 
-        if (nret >= 0)
-        { // VS2015/2017
-            if (nret <= bufferSize - 3)
-            {// success, so don't need to realloc
-                break;
-            }
-            else
-            {
-                bufferSize = nret + 3;
-                delete[] buf;
-            }
+    va_start(args, format);
+    int nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
+    va_end(args);
+
+    if (nret >= 0)
+    {
+        if ((unsigned int)nret < buf.length())
+        {
+            buf.resize(nret);
         }
-        else // < 0
-        {	// VS2013 or Unix-like System(GCC)
-            bufferSize *= 2;
-            delete[] buf;
+        else if ((unsigned int)nret > buf.length())
+        { // handle return required length when buffer insufficient
+            buf.resize(nret);
+
+            va_start(args, format);
+            nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
+            va_end(args);
         }
-    } while (true);
-    buf[nret] = '\n';
-    buf[++nret] = '\0';
+        // else equals, do nothing.
+    }
+    else
+    { // handle return -1 when buffer insufficient
+      /*
+      vs2013/older & glibc <= 2.0.6, they would return -1 when the output was truncated.
+      see: http://man7.org/linux/man-pages/man3/vsnprintf.3.html
+      */
+#if (defined(__linux__) && ((__GLIBC__ < 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ < 1)))) ||    \
+(defined(_MSC_VER) && _MSC_VER < 1900)
+        enum : size_t
+        {
+            enlarge_limits = (1 << 20), // limits the buffer cost memory less than 2MB
+        };
+        do
+        {
+            buf.resize(buf.length() << 1);
+
+            va_start(args, format);
+            nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
+            va_end(args);
+
+        } while (nret < 0 && buf.size() <= enlarge_limits);
+        if (nret > 0)
+            buf.resize(nret);
+        else
+            buf = "strfmt: an error is encountered!";
+#else
+      /* other standard implementation
+      see: http://www.cplusplus.com/reference/cstdio/vsnprintf/
+      */
+        buf = "strfmt: an error is encountered!";
+#endif
+    }
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    __android_log_print(ANDROID_LOG_DEBUG, "cocos2d-x debug info", "%s", buf);
+    __android_log_print(ANDROID_LOG_DEBUG, "cocos2d-x debug info", "%s", buffer.c_str());
 
 #elif CC_TARGET_PLATFORM ==  CC_PLATFORM_WIN32
+    buf.push_back('\n');
 
-    int pos = 0;
-    int len = nret;
-    char tempBuf[MAX_LOG_LENGTH + 1] = { 0 };
-    WCHAR wszBuf[MAX_LOG_LENGTH + 1] = { 0 };
+    // print to debugger output window
+    int cchWideChar = MultiByteToWideChar(CP_UTF8, 0, buf.c_str(), static_cast<int>(buf.length()), NULL, 0);
+    std::wstring wbuf(cchWideChar, '\0');
+    MultiByteToWideChar(CP_UTF8, 0, buf.c_str(), static_cast<int>(buf.length()), &wbuf.front(), cchWideChar);
+    OutputDebugStringW(wbuf.c_str());
 
-    do
-    {
-        std::copy(buf + pos, buf + pos + MAX_LOG_LENGTH, tempBuf);
-
-        tempBuf[MAX_LOG_LENGTH] = 0;
-
-        MultiByteToWideChar(CP_UTF8, 0, tempBuf, -1, wszBuf, sizeof(wszBuf));
-        OutputDebugStringW(wszBuf);
-        WideCharToMultiByte(CP_ACP, 0, wszBuf, -1, tempBuf, sizeof(tempBuf), nullptr, FALSE);
-        printf("%s", tempBuf);
-
-        pos += MAX_LOG_LENGTH;
-
-    } while (pos < len);
-    SendLogToWindow(buf);
+    // print to console if possible
+    printf("%Ls", wbuf.c_str());
     fflush(stdout);
+
+    // print to log window
+    SendLogToWindow(buf.c_str());
 #else
+    buffer.push_back('\n');
     // Linux, Mac, iOS, etc
-    fprintf(stdout, "%s", buf);
+    fprintf(stdout, "%s", buf.c_str());
     fflush(stdout);
 #endif
 
-    Director::getInstance()->getConsole()->log(buf);
-    delete[] buf;
+    Director::getInstance()->getConsole()->log(buf.c_str());
 }
 
 // FIXME: Deprecated
