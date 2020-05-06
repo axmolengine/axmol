@@ -24,8 +24,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "editor-support/cocostudio/TriggerMng.h"
-#include "json/prettywriter.h"
-#include "json/stringbuffer.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/stringbuffer.h"
 #include "base/CCDirector.h"
 #include "base/CCEventDispatcher.h"
 #include "base/ccUtils.h"

@@ -24,8 +24,8 @@
  ****************************************************************************/
 
 #include "Manifest.h"
-#include "json/prettywriter.h"
-#include "json/stringbuffer.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/stringbuffer.h"
 
 #include <fstream>
 #include <stdio.h>

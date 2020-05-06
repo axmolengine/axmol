@@ -28,7 +28,9 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "yasio/ibstream.hpp"
+#include "yasio/obstream.hpp"
 #include "yasio/yasio.hpp"
+#include "yasio/bindings/yasio_jni.cpp"
 
 USING_NS_CC;
 
@@ -37,13 +39,13 @@ using namespace yasio::inet;
 
 void yasioTest()
 {
-    yasio::inet::io_hostent endpoints[] = { {"www.baidu.com", 443} };
+    yasio::inet::io_hostent endpoints[] = { {"github.com", 443} };
 
     io_service service(endpoints, 1);
 
     resolv_fn_t resolv = [&](std::vector<ip::endpoint>& endpoints, const char* hostname,
         unsigned short port) {
-            return service.__builtin_resolv(endpoints, hostname, port);
+            return service.builtin_resolv(endpoints, hostname, port);
     };
     service.set_option(YOPT_S_RESOLV_FN, &resolv);
 
@@ -56,6 +58,7 @@ void yasioTest()
     int max_request_count = 3;
 
     std::string respRawData;
+    std::string finalMessage;
     service.start_service([&](event_ptr&& event) {
         switch (event->kind())
         {
@@ -74,7 +77,7 @@ void yasioTest()
                     obstream obs;
                     obs.write_bytes("GET / HTTP/1.1\r\n");
 
-                    obs.write_bytes("Host: www.baidu.com\r\n");
+                    obs.write_bytes("Host: github.com\r\n");
 
                     obs.write_bytes("User-Agent: Mozilla/5.0 (Windows NT 10.0; "
                         "WOW64) AppleWebKit/537.36 (KHTML, like Gecko) "
