@@ -179,7 +179,7 @@ void log(const char * format, ...)
     }
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    __android_log_print(ANDROID_LOG_DEBUG, "cocos2d-x debug info", "%s", buffer.c_str());
+    __android_log_print(ANDROID_LOG_DEBUG, "cocos2d-x debug info", "%s", buf.c_str());
 
 #elif CC_TARGET_PLATFORM ==  CC_PLATFORM_WIN32
     buf.push_back('\n');
