@@ -123,60 +123,11 @@ void log(const char * format, ...)
 {
 #define CC_VSNPRINTF_BUFFER_LENGTH 512
     va_list args;
-    std::string buf(CC_VSNPRINTF_BUFFER_LENGTH, '\0');
 
     va_start(args, format);
-    int nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
+    auto buf = StringUtils::vformat(format, args);
     va_end(args);
 
-    if (nret >= 0)
-    {
-        if ((unsigned int)nret < buf.length())
-        {
-            buf.resize(nret);
-        }
-        else if ((unsigned int)nret > buf.length())
-        { // handle return required length when buffer insufficient
-            buf.resize(nret);
-
-            va_start(args, format);
-            nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
-            va_end(args);
-        }
-        // else equals, do nothing.
-    }
-    else
-    { // handle return -1 when buffer insufficient
-      /*
-      vs2013/older & glibc <= 2.0.6, they would return -1 when the output was truncated.
-      see: http://man7.org/linux/man-pages/man3/vsnprintf.3.html
-      */
-#if (defined(__linux__) && ((__GLIBC__ < 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ < 1)))) ||    \
-(defined(_MSC_VER) && _MSC_VER < 1900)
-        enum : size_t
-        {
-            enlarge_limits = (1 << 20), // limits the buffer cost memory less than 2MB
-        };
-        do
-        {
-            buf.resize(buf.length() << 1);
-
-            va_start(args, format);
-            nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
-            va_end(args);
-
-        } while (nret < 0 && buf.size() <= enlarge_limits);
-        if (nret > 0)
-            buf.resize(nret);
-        else
-            buf = "strfmt: an error is encountered!";
-#else
-      /* other standard implementation
-      see: http://www.cplusplus.com/reference/cstdio/vsnprintf/
-      */
-        buf = "strfmt: an error is encountered!";
-#endif
-    }
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     __android_log_print(ANDROID_LOG_DEBUG, "cocos2d-x debug info", "%s", buf.c_str());

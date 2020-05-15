@@ -33,20 +33,27 @@
 NS_CC_BEGIN
 
 namespace StringUtils {
-
+std::string CC_DLL format(const char* format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    auto ret = vformat(format, args);
+    va_end(args);
+    return ret;
+}
 /*--- This a C++ universal sprintf in the future.
 **  @pitfall: The behavior of vsnprintf between VS2013 and VS2015/2017 is different
 **      VS2013 or Unix-Like System will return -1 when buffer not enough, but VS2015/2017 will return the actural needed length for buffer at this station
 **      The _vsnprintf behavior is compatible API which always return -1 when buffer isn't enough at VS2013/2015/2017
 **      Yes, The vsnprintf is more efficient implemented by MSVC 19.0 or later, AND it's also standard-compliant, see reference: http://www.cplusplus.com/reference/cstdio/vsnprintf/
 */
-std::string format(const char* format, ...)
+std::string vformat(const char* format, va_list ap)
 {
 #define CC_VSNPRINTF_BUFFER_LENGTH 512
-    va_list args;
     std::string buf(CC_VSNPRINTF_BUFFER_LENGTH, '\0');
 
-    va_start(args, format);
+    va_list args;
+    va_copy(args, ap);
     int nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
     va_end(args);
 
@@ -60,7 +67,7 @@ std::string format(const char* format, ...)
         { // handle return required length when buffer insufficient
             buf.resize(nret);
 
-            va_start(args, format);
+            va_copy(args, ap);
             nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
             va_end(args);
         }
@@ -82,7 +89,7 @@ std::string format(const char* format, ...)
         {
             buf.resize(buf.length() << 1);
 
-            va_start(args, format);
+            va_copy(args, ap);
             nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
             va_end(args);
 
