@@ -1,7 +1,6 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2018 HALX99.
+
+ Copyright (c) 2018-2020 HALX99.
 
  http://www.cocos2d-x.org
 
@@ -30,6 +29,10 @@
 #include "audio/include/AudioMacros.h"
 #include "platform/CCFileUtils.h"
 
+#if !defined(_FOURCC2ID)
+#define _FOURCC2ID(a,b,c,d) ((uint32_t)((a) | ((b) << 8) | ((c) << 16) | (((uint32_t)(d)) << 24)))
+#endif
+
 #if !defined(_WIN32)
 typedef struct _GUID {
     unsigned long  Data1;
@@ -43,6 +46,8 @@ __inline int IsEqualGUID(const GUID& rguid1, const GUID& rguid2)
 }
 #endif
 
+const uint32_t WAV_DATA_ID = _FOURCC2ID('d', 'a', 't', 'a');
+
 // 00000001-0000-0010-8000-00aa00389b71
 static const GUID WavSubTypePCM = {
     0x00000001, 0x0000, 0x0010, { 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 }
@@ -51,6 +56,17 @@ static const GUID WavSubTypePCM = {
 // 00000003-0000-0010-8000-00aa00389b71
 static const GUID WavSubTypeIEEE_FLOAT = {
     0x00000003, 0x0000, 0x0010, { 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 }
+};
+
+enum class WavFormat : uint16_t {
+    UNKNOWN = 0x0,       // Unknown Wave Format
+    PCM = 0x1,           // PCM Format
+    ADPCM = 0x2,         // Microsoft ADPCM Format
+    IEEE = 0x3,          // IEEE float/double
+    ALAW = 0x6,          // 8-bit ITU-T G.711 A-law
+    MULAW = 0x7,         // 8-bit ITU-T G.711 MUL-law
+    IMA_ADPCM = 0x11,    // IMA ADPCM Format
+    EXT = 0xFFFE         // Set via subformat
 };
 
 bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
@@ -63,33 +79,33 @@ bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
     wavf->PcmDataOffset = 0;
 
     // Read to BitsPerSample
-    int bytesToRead = offsetof(struct WAV_FILE_HEADER, Subchunk2ID) - offsetof(struct WAV_FILE_HEADER, ChunkID);
+    const int bytesToRead = offsetof(struct WAV_FILE_HEADER, Subchunk2ID) - offsetof(struct WAV_FILE_HEADER, ChunkID);
     fileStream.read(&wavf->FileHeader, bytesToRead);
     wavf->PcmDataOffset += bytesToRead;
 
     // check somthings
     auto h = &wavf->FileHeader;
      // Read PCM data or extensible data if exists.
-    if (h->Subchunk1Size == 16 && h->AudioFormat == 1)
+    if (h->Subchunk1Size == 16 && h->AudioFormat == (uint16_t)WavFormat::PCM)
     {
         // PCM
-        do {
+        for(;;) {
             // Note: 8-bit samples are stored as unsigned bytes, ranging from 0 to 255. 16-bit samples are stored as 2's-complement signed integers, ranging from -32768 to 32767.
             // data
-            fileStream.read(&h->Subchunk2ID, sizeof(uint32_t));    // 0x61746164, "data"
+            fileStream.read(&h->Subchunk2ID, sizeof(uint32_t)); 
             fileStream.read(&h->Subchunk2Size, sizeof(uint32_t));
             wavf->PcmDataOffset += 8;
 
-            if (h->Subchunk2ID == 0x61746164) { // Skip other non "data" chunk
+            if (h->Subchunk2ID == WAV_DATA_ID) {
                 break;
             }
-            else {
+            else { // Skip other non "data" chunk
                 fileStream.seek(h->Subchunk2Size, SEEK_CUR);
                 wavf->PcmDataOffset += h->Subchunk2Size;
             }
-        } while (true);
+        };
     }
-    else if (h->Subchunk1Size > 16 && h->AudioFormat == 0xFFFE)
+    else if (h->Subchunk1Size > 16 && h->AudioFormat == (uint16_t)WavFormat::EXT)
     {
         fileStream.read(&wavf->ExtraParamSize, sizeof(uint16_t));
         wavf->PcmDataOffset += 2;
@@ -121,10 +137,9 @@ bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
             {
                 wavf->PcmDataOffset += 4;
 
-                if (chunk == 0x61746164)
+                if (chunk == WAV_DATA_ID)
                 {
-                    // "data" chunk
-                    h->Subchunk2ID = chunk;  // 0x61746164, "data"
+                    h->Subchunk2ID = chunk;
                     fileStream.read(&h->Subchunk2Size, sizeof(uint32_t));
                     wavf->PcmDataOffset += 4;
                     break;
@@ -138,7 +153,7 @@ bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
                     wavf->PcmDataOffset += 4;
 
                     fileStream.seek(chunkSize, SEEK_CUR); // skip only
-                    wavf->PcmDataOffset += (int)chunkSize;
+                    wavf->PcmDataOffset += chunkSize;
                 }
             }
         }
