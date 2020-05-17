@@ -145,7 +145,11 @@ void AudioCache::readDataTask(unsigned int selfId)
         uint32_t remainingFrames = totalFrames;
         uint32_t adjustFrames = 0;
 
-        _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
+        if(bytesPerFrame > 1)
+            _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16; // bits depth: 16bits
+        else
+            _format = channelCount > 1 ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8; // bits depth: 8bits
+
         _sampleRate = (ALsizei)sampleRate;
         _duration = 1.0f * totalFrames / sampleRate;
         _totalFrames = totalFrames;
