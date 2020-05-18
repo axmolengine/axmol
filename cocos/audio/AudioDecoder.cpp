@@ -37,6 +37,7 @@ AudioDecoder::AudioDecoder()
     , _bytesPerFrame(0)
     , _sampleRate(0)
     , _channelCount(0)
+    , _sourceFormat(AUDIO_SOURCE_FORMAT::PCM_16)
     {
 
     }
@@ -89,4 +90,9 @@ AudioDecoder::AudioDecoder()
         return _channelCount;
     }
 
-} // namespace cocos2d {
+    AUDIO_SOURCE_FORMAT AudioDecoder::getSourceFormat() const
+    {
+        return _sourceFormat;
+    }
+
+}

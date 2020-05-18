@@ -131,10 +131,12 @@ namespace cocos2d {
             if (mp3Encoding == MPG123_ENC_SIGNED_16)
             {
                 _bytesPerFrame = 2 * _channelCount;
+                _sourceFormat = AUDIO_SOURCE_FORMAT::PCM_16;
             }
             else if (mp3Encoding == MPG123_ENC_FLOAT_32)
             {
                 _bytesPerFrame = 4 * _channelCount;
+                _sourceFormat = AUDIO_SOURCE_FORMAT::PCM_FLT32;
             }
             else
             {

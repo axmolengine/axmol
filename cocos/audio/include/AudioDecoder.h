@@ -29,6 +29,21 @@
 #include <string>
 
 namespace cocos2d {
+enum class AUDIO_SOURCE_FORMAT : uint16_t
+{
+    PCM_UNK, // Unknown
+    PCM_U8,
+    PCM_16,
+    PCM_24,
+    PCM_32,
+    PCM_64,
+    PCM_FLT32,
+    PCM_FLT64,
+    MULAW,
+    ALAW, 
+    ADPCM, // Microsoft ADPCM
+    IMA_ADPCM, // IMA ADPCM
+};
 
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
@@ -103,6 +118,8 @@ public:
      */
     virtual uint32_t getChannelCount() const;
 
+    virtual AUDIO_SOURCE_FORMAT getSourceFormat() const;
+
 protected:
     AudioDecoder();
     virtual ~AudioDecoder();
@@ -112,6 +129,7 @@ protected:
     uint32_t _bytesPerFrame;
     uint32_t _sampleRate;
     uint32_t _channelCount;
+    AUDIO_SOURCE_FORMAT _sourceFormat;
 
     friend class AudioDecoderManager;
 };
