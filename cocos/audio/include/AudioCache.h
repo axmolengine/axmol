@@ -35,15 +35,15 @@
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 #import <OpenAL/al.h>
-
+#import <OpenAL/alext.h>
 #else
-
 #ifdef OPENAL_PLAIN_INCLUDES
 #include <al.h>
+#include <alext.h>
 #else
 #include <AL/al.h>
+#include <AL/alext.h>
 #endif
-
 #endif
 
 #include "platform/CCPlatformMacros.h"

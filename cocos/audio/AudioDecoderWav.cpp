@@ -25,6 +25,7 @@
 #define LOG_TAG "AudioDecoderWav" 
 
 #include <stddef.h>
+#include <assert.h>
 #include "audio/include/AudioDecoderWav.h"
 #include "audio/include/AudioMacros.h"
 #include "platform/CCFileUtils.h"
@@ -33,174 +34,113 @@
 #define _FOURCC2ID(a,b,c,d) ((uint32_t)((a) | ((b) << 8) | ((c) << 16) | (((uint32_t)(d)) << 24)))
 #endif
 
-#if !defined(_WIN32)
-typedef struct _GUID {
-    unsigned long  Data1;
-    unsigned short Data2;
-    unsigned short Data3;
-    unsigned char  Data4[8];
-} GUID;
-__inline int IsEqualGUID(const GUID& rguid1, const GUID& rguid2)
-{
-    return !::memcmp(&rguid1, &rguid2, sizeof(GUID));
-}
-#endif
-
-const uint32_t WAV_DATA_ID = _FOURCC2ID('d', 'a', 't', 'a');
-
-// 00000001-0000-0010-8000-00aa00389b71
-static const GUID WavSubTypePCM = {
-    0x00000001, 0x0000, 0x0010, { 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 }
-};
-
-// 00000003-0000-0010-8000-00aa00389b71
-static const GUID WavSubTypeIEEE_FLOAT = {
-    0x00000003, 0x0000, 0x0010, { 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 }
-};
-
-enum class WavFormat : uint16_t {
-    UNKNOWN = 0x0,       // Unknown Wave Format
-    PCM = 0x1,           // PCM Format
-    ADPCM = 0x2,         // Microsoft ADPCM Format
-    IEEE = 0x3,          // IEEE float/double
-    ALAW = 0x6,          // 8-bit ITU-T G.711 A-law
-    MULAW = 0x7,         // 8-bit ITU-T G.711 MUL-law
-    IMA_ADPCM = 0x11,    // IMA ADPCM Format
-    EXT = 0xFFFE         // Set via subformat
-};
-
-bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
-{
-    bool succeed = wavf->FileStream.open(fullPath);
-    if (!succeed)
-        return false;
-    
-    auto& fileStream = wavf->FileStream;
-    wavf->PcmDataOffset = 0;
-
-    // Read to BitsPerSample
-    const int bytesToRead = offsetof(struct WAV_FILE_HEADER, Subchunk2ID) - offsetof(struct WAV_FILE_HEADER, ChunkID);
-    fileStream.read(&wavf->FileHeader, bytesToRead);
-    wavf->PcmDataOffset += bytesToRead;
-
-    // check somthings
-    auto h = &wavf->FileHeader;
-     // Read PCM data or extensible data if exists.
-    if (h->Subchunk1Size == 16 && h->AudioFormat == (uint16_t)WavFormat::PCM)
-    {
-        // PCM
-        for(;;) {
-            // Note: 8-bit samples are stored as unsigned bytes, ranging from 0 to 255. 16-bit samples are stored as 2's-complement signed integers, ranging from -32768 to 32767.
-            // data
-            fileStream.read(&h->Subchunk2ID, sizeof(uint32_t)); 
-            fileStream.read(&h->Subchunk2Size, sizeof(uint32_t));
-            wavf->PcmDataOffset += 8;
-
-            if (h->Subchunk2ID == WAV_DATA_ID) {
-                break;
-            }
-            else { // Skip other non "data" chunk
-                fileStream.seek(h->Subchunk2Size, SEEK_CUR);
-                wavf->PcmDataOffset += h->Subchunk2Size;
-            }
-        };
-    }
-    else if (h->Subchunk1Size > 16 && h->AudioFormat == (uint16_t)WavFormat::EXT)
-    {
-        fileStream.read(&wavf->ExtraParamSize, sizeof(uint16_t));
-        wavf->PcmDataOffset += 2;
-
-        if (wavf->ExtraParamSize == 22)
-        {
-            // if cbSize is set to 22 => WAVEFORMATEXTENSIBLE
-            fileStream.read(&wavf->Samples, sizeof(uint16_t));
-
-            // DWORD dwChannelMask; which channels are present in stream
-            fileStream.read(&wavf->ChannelMask, sizeof(uint32_t));
-
-            GUID GuidSubFormat = { 0 };
-            fileStream.read(&GuidSubFormat, sizeof(GUID));
-
-            wavf->PcmDataOffset += 22;
-
-            // Check sub-format.
-            if (!IsEqualGUID(GuidSubFormat, WavSubTypePCM)
-                && !IsEqualGUID(GuidSubFormat, WavSubTypeIEEE_FLOAT))
-            {
-                fileStream.close();
-                return false;
-            }
-
-            uint32_t chunk;
-            // Find "data" chunk.
-            while (fileStream.read(&chunk, sizeof(uint32_t)) == sizeof(uint32_t))
-            {
-                wavf->PcmDataOffset += 4;
-
-                if (chunk == WAV_DATA_ID)
-                {
-                    h->Subchunk2ID = chunk;
-                    fileStream.read(&h->Subchunk2Size, sizeof(uint32_t));
-                    wavf->PcmDataOffset += 4;
-                    break;
-                }
-                else
-                {
-                    // Read other non "data" chunks.
-                    uint32_t chunkSize;
-                    fileStream.read(&chunkSize, sizeof(uint32_t));
-
-                    wavf->PcmDataOffset += 4;
-
-                    fileStream.seek(chunkSize, SEEK_CUR); // skip only
-                    wavf->PcmDataOffset += chunkSize;
-                }
-            }
-        }
-        else
-        {
-            fileStream.close();
-            return false;
-        }
-    }
-    else
-    {
-        fileStream.close();
-        return false;
-    }
-
-    wavf->BytesPerFrame = h->BitsPerSample / 8 * h->NumChannels;
-
-    return true;
-}
-
-int wav_read(WAV_FILE* wavf, char* pcmBuf, uint32_t bytesToRead)
-{
-    return wavf->FileStream.read(pcmBuf, bytesToRead);
-}
-
-int wav_pcm_seek(WAV_FILE* wavf, int frameOffset)
-{
-    auto offset = frameOffset * wavf->BytesPerFrame + wavf->PcmDataOffset;
-    return wavf->FileStream.seek(offset, SEEK_SET) >= 0 ? 0 : -1;
-}
-
-int wav_pcm_tell(WAV_FILE* wavf)
-{
-    auto offset = wavf->FileStream.seek(0, SEEK_CUR);
-    return (offset - wavf->PcmDataOffset) / wavf->BytesPerFrame;
-}
-
-int wav_close(WAV_FILE* wavf)
-{
-    return  wavf->FileStream.close();
-}
-
 namespace cocos2d {
+    enum : uint32_t {
+        WAV_SIGN_ID = _FOURCC2ID('W', 'A', 'V', 'E'),
+        WAV_FMT_ID = _FOURCC2ID('f', 'm', 't', ' '),
+        WAV_DATA_ID = _FOURCC2ID('d', 'a', 't', 'a'),
+        WAV_HEADER_SIZE = sizeof(struct WAV_CHUNK_HEADER),
+        WAV_RIFF_SIZE = sizeof(WAV_RIFF_CHUNK),
+    };
+
+    static bool wav_scan_chunk(WAV_FILE* wavf, uint32_t chunkID, void* header, void* body, uint32_t bodySize) {
+        auto& fs = wavf->Stream;
+        auto h = (WAV_CHUNK_HEADER*)header;
+        for (; fs.read(h, WAV_HEADER_SIZE) == WAV_HEADER_SIZE; ) {
+            wavf->PcmDataOffset += WAV_HEADER_SIZE;
+            if (h->ChunkID == chunkID)
+            { // chunk found
+                if (body)
+                { // require read body?
+                    fs.read(body, h->ChunkSize);
+                    wavf->PcmDataOffset += h->ChunkSize;
+                }
+                return true;
+            }
+            else {
+                // Skip other non specified chunk
+                fs.seek(h->ChunkSize, SEEK_CUR);
+                wavf->PcmDataOffset += h->ChunkSize;
+            }
+        }
+        return false;
+    }
+    static bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
+    {
+        bool succeed = wavf->Stream.open(fullPath);
+        if (!succeed)
+            return false;
+
+        auto& fileStream = wavf->Stream;
+        wavf->PcmDataOffset = 0;
+
+        // Parsing RIFF chunk
+        fileStream.read(&wavf->FileHeader, WAV_RIFF_SIZE);
+        wavf->PcmDataOffset += WAV_RIFF_SIZE;
+
+        if (wavf->FileHeader.Riff.Format != WAV_SIGN_ID)
+            return false; // not .wav file
+
+        // check somthings
+        auto h = &wavf->FileHeader;
+
+        // Parsing FMT chunk
+        if (!wav_scan_chunk(wavf, WAV_FMT_ID, &wavf->FileHeader.Fmt, &wavf->FileHeader.Fmt.AudioFormat, sizeof(wavf->FileHeader.Fmt) - sizeof(WAV_RIFF_CHUNK)))
+            return false;
+
+        auto& fmtInfo = h->Fmt;
+        // Read PCM data or extensible data if exists.
+        switch (fmtInfo.AudioFormat)
+        { // Check supported format
+        case WAV_FORMAT::PCM:
+        case WAV_FORMAT::IEEE:
+            break;
+        default:
+            fileStream.close();
+            return false;;
+        }
+
+        wavf->BytesPerFrame = fmtInfo.BitsPerSample / 8 * fmtInfo.NumChannels;
+
+        int bitDepth = (wavf->BytesPerFrame / fmtInfo.NumChannels) << 3;
+        switch (bitDepth)
+        {
+        case 4: wavf->PcmFormat = PCM_FORMAT::PCM_16; break;
+        case 8: wavf->PcmFormat = PCM_FORMAT::PCM_U8; break;
+        case 16: wavf->PcmFormat = PCM_FORMAT::PCM_16; break;
+        case 24: wavf->PcmFormat = PCM_FORMAT::PCM_24; break;
+        case 32: wavf->PcmFormat = (fmtInfo.AudioFormat == WAV_FORMAT::IEEE) ? PCM_FORMAT::PCM_FLT32 : PCM_FORMAT::PCM_32; break;
+        case 64: wavf->PcmFormat = (fmtInfo.AudioFormat == WAV_FORMAT::IEEE) ? PCM_FORMAT::PCM_FLT64 : PCM_FORMAT::PCM_64; break;
+        }
+
+        return wav_scan_chunk(wavf, WAV_DATA_ID, &h->PcmData, nullptr, 0);
+    }
+
+    static int wav_read(WAV_FILE* wavf, char* pcmBuf, uint32_t bytesToRead)
+    {
+        return wavf->Stream.read(pcmBuf, bytesToRead);
+    }
+
+    static int wav_pcm_seek(WAV_FILE* wavf, int frameOffset)
+    {
+        auto offset = frameOffset * wavf->BytesPerFrame + wavf->PcmDataOffset;
+        return wavf->Stream.seek(offset, SEEK_SET) >= 0 ? 0 : -1;
+    }
+
+    static int wav_pcm_tell(WAV_FILE* wavf)
+    {
+        auto offset = wavf->Stream.seek(0, SEEK_CUR);
+        return (offset - wavf->PcmDataOffset) / wavf->BytesPerFrame;
+    }
+
+    static int wav_close(WAV_FILE* wavf)
+    {
+        return  wavf->Stream.close();
+    }
 
     AudioDecoderWav::AudioDecoderWav()
     {
-        memset(&_wavf, 0, offsetof(WAV_FILE, FileStream) );
+        memset(&_wavf, 0, offsetof(WAV_FILE, Stream));
     }
 
     AudioDecoderWav::~AudioDecoderWav()
@@ -212,10 +152,11 @@ namespace cocos2d {
     {
         if (wav_open(fullPath, &_wavf))
         {
-            _sampleRate = _wavf.FileHeader.SampleRate;
-            _channelCount = _wavf.FileHeader.NumChannels;
+            _sampleRate = _wavf.FileHeader.Fmt.SampleRate;
+            _channelCount = _wavf.FileHeader.Fmt.NumChannels;
             _bytesPerFrame = _wavf.BytesPerFrame;
-            _totalFrames = _wavf.FileHeader.Subchunk2Size / _bytesPerFrame;
+            _totalFrames = _wavf.FileHeader.PcmData.ChunkSize / _bytesPerFrame;
+            _pcmFormat = _wavf.PcmFormat;
 
             _isOpened = true;
             return true;
