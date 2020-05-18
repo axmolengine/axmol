@@ -151,7 +151,7 @@ void log(const char * format, ...)
     // print to log window
     SendLogToWindow(buf.c_str());
 #else
-    buffer.push_back('\n');
+    buf.push_back('\n');
     // Linux, Mac, iOS, etc
     fprintf(stdout, "%s", buf.c_str());
     fflush(stdout);
