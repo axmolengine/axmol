@@ -129,26 +129,38 @@ void AudioCache::readDataTask(unsigned int selfId)
     _readDataTaskMutex.lock();
     _state = State::LOADING;
 
-    AudioDecoder* decoder = AudioDecoderManager::createDecoder(_fileFullPath.c_str());
+    AudioDecoder* decoder = AudioDecoderManager::createDecoder(_fileFullPath);
     do
     {
-        if (decoder == nullptr || !decoder->open(_fileFullPath.c_str()))
+        if (decoder == nullptr || !decoder->open(_fileFullPath))
             break;
 
         const uint32_t originalTotalFrames = decoder->getTotalFrames();
         const uint32_t bytesPerFrame = decoder->getBytesPerFrame();
         const uint32_t sampleRate = decoder->getSampleRate();
         const uint32_t channelCount = decoder->getChannelCount();
+        const PCM_FORMAT pcmFormat = decoder->getPcmFormat();
 
         uint32_t totalFrames = originalTotalFrames;
         uint32_t dataSize = totalFrames * bytesPerFrame;
         uint32_t remainingFrames = totalFrames;
         uint32_t adjustFrames = 0;
 
-        if(bytesPerFrame > 1)
+        switch (pcmFormat) {
+        case PCM_FORMAT::PCM_16:
             _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16; // bits depth: 16bits
-        else
+            break;
+        case PCM_FORMAT::PCM_U8:
             _format = channelCount > 1 ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8; // bits depth: 8bits
+            break;
+        case PCM_FORMAT::PCM_FLT32:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_FLOAT32 : AL_FORMAT_MONO_FLOAT32;
+            break;
+        case PCM_FORMAT::PCM_FLT64:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_DOUBLE_EXT : AL_FORMAT_MONO_DOUBLE_EXT;
+            break;
+        default: assert(false);
+        }
 
         _sampleRate = (ALsizei)sampleRate;
         _duration = 1.0f * totalFrames / sampleRate;

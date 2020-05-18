@@ -29,22 +29,47 @@
 #include "audio/include/AudioDecoder.h"
 #include "platform/PXFileStream.h"
 
-#pragma pack(push,1)
+namespace cocos2d {
+
 // http://soundfile.sapp.org/doc/WaveFormat/
-struct WAV_FILE_HEADER {
+enum class WAV_FORMAT : uint16_t
+{
+    UNKNOWN = 0x0,       // Unknown Wave Format
+    PCM = 0x1,           // PCM Format
+    ADPCM = 0x2,         // Microsoft ADPCM Format
+    IEEE = 0x3,          // IEEE float/double
+    ALAW = 0x6,          // 8-bit ITU-T G.711 A-law
+    MULAW = 0x7,         // 8-bit ITU-T G.711 MUL-law
+    IMA_ADPCM = 0x11,    // IMA ADPCM Format
+    EXT = 0xFFFE         // Set via subformat
+};
+
+#pragma pack(push,1)
+struct WAV_CHUNK_HEADER {
     uint32_t ChunkID;
+    /*
+    ** The ChunkSize gives the size of the valid data in the chunk. It does not include the padding, the size of chunkID, or the size of chunkSize.
+    ** see: https://docs.microsoft.com/en-us/windows/win32/xaudio2/resource-interchange-file-format--riff-
+    */
     uint32_t ChunkSize;
+};
+struct WAV_RIFF_CHUNK {
+    WAV_CHUNK_HEADER Header;
     uint32_t Format;
-    uint32_t Subchunk1ID;
-    uint32_t Subchunk1Size;
-    uint16_t AudioFormat;
+};
+struct WAV_FMT_CHUNK {
+    WAV_CHUNK_HEADER Header;
+    WAV_FORMAT AudioFormat;
     uint16_t NumChannels;
     uint32_t SampleRate;
     uint32_t ByteRate;
     uint16_t BlockAlign;
     uint16_t BitsPerSample;
-    uint32_t Subchunk2ID;
-    uint32_t Subchunk2Size;
+};
+struct WAV_FILE_HEADER {
+    WAV_RIFF_CHUNK Riff;
+    WAV_FMT_CHUNK Fmt;
+    WAV_CHUNK_HEADER PcmData;
 };
 #pragma pack(pop)
 
@@ -53,13 +78,13 @@ struct WAV_FILE
     WAV_FILE_HEADER FileHeader;
     uint32_t PcmDataOffset;
     uint32_t BytesPerFrame;
-    uint16_t ExtraParamSize;
-    uint32_t Samples;
-    uint32_t ChannelMask;
-    cocos2d::PXFileStream FileStream;
+    PCM_FORMAT PcmFormat;
+    uint16_t ExtraParamSize; // unused
+    uint32_t Samples; // unused
+    uint32_t ChannelMask; // unused
+    cocos2d::PXFileStream Stream;
 };
 
-namespace cocos2d {
 
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
