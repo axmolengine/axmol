@@ -10,6 +10,8 @@ CURL="curl --retry 999 --retry-max-time 0"
 
 function install_android_ndk()
 {
+    sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    sudo python get-pip.py
     sudo python -m pip install retry
     if [ "$BUILD_TARGET" == "android_cmake" ]\
         || [ "$BUILD_TARGET" == "android_lua_cmake" ] ; then
