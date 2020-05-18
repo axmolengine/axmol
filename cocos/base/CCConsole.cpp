@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com.
 
  http://www.cocos2d-x.org
 
@@ -63,6 +64,8 @@
 #include "renderer/CCTextureCache.h"
 #include "base/base64.h"
 #include "base/ccUtils.h"
+#include "base/ccUTF8.h"
+
 NS_CC_BEGIN
 
 extern const char* cocos2dVersion(void);
