@@ -139,29 +139,41 @@ void AudioCache::readDataTask(unsigned int selfId)
         const uint32_t bytesPerFrame = decoder->getBytesPerFrame();
         const uint32_t sampleRate = decoder->getSampleRate();
         const uint32_t channelCount = decoder->getChannelCount();
-        const PCM_FORMAT pcmFormat = decoder->getPcmFormat();
+        const auto sourceFormat = decoder->getSourceFormat();
 
         uint32_t totalFrames = originalTotalFrames;
         uint32_t dataSize = totalFrames * bytesPerFrame;
         uint32_t remainingFrames = totalFrames;
         uint32_t adjustFrames = 0;
 
-        switch (pcmFormat) {
-        case PCM_FORMAT::PCM_16:
+        switch (sourceFormat) {
+        case AUDIO_SOURCE_FORMAT::PCM_16:
             _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16; // bits depth: 16bits
             break;
-        case PCM_FORMAT::PCM_U8:
+        case AUDIO_SOURCE_FORMAT::PCM_U8:
             _format = channelCount > 1 ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8; // bits depth: 8bits
             break;
-        case PCM_FORMAT::PCM_FLT32:
+        case AUDIO_SOURCE_FORMAT::PCM_FLT32:
             _format = channelCount > 1 ? AL_FORMAT_STEREO_FLOAT32 : AL_FORMAT_MONO_FLOAT32;
             break;
-        case PCM_FORMAT::PCM_FLT64:
+        case AUDIO_SOURCE_FORMAT::PCM_FLT64:
             _format = channelCount > 1 ? AL_FORMAT_STEREO_DOUBLE_EXT : AL_FORMAT_MONO_DOUBLE_EXT;
+            break;
+        case AUDIO_SOURCE_FORMAT::MULAW:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_MULAW_EXT : AL_FORMAT_MONO_MULAW_EXT;
+            break;
+        case AUDIO_SOURCE_FORMAT::ALAW:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_ALAW_EXT : AL_FORMAT_MONO_ALAW_EXT;
+            break;
+        case AUDIO_SOURCE_FORMAT::ADPCM:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_MSADPCM_SOFT : AL_FORMAT_MONO_MSADPCM_SOFT;
+            break;
+        case AUDIO_SOURCE_FORMAT::IMA_ADPCM:
+            _format = channelCount > 1 ? AL_FORMAT_IMA_ADPCM_STEREO16_EXT : AL_FORMAT_IMA_ADPCM_MONO16_EXT;
             break;
         default: assert(false);
         }
-
+      
         _sampleRate = (ALsizei)sampleRate;
         _duration = 1.0f * totalFrames / sampleRate;
         _totalFrames = totalFrames;

@@ -78,7 +78,7 @@ struct WAV_FILE
     WAV_FILE_HEADER FileHeader;
     uint32_t PcmDataOffset;
     uint32_t BytesPerFrame;
-    PCM_FORMAT PcmFormat;
+    AUDIO_SOURCE_FORMAT SourceFormat;
     uint16_t ExtraParamSize; // unused
     uint32_t Samples; // unused
     uint32_t ChannelMask; // unused

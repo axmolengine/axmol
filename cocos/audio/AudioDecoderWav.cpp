@@ -89,28 +89,42 @@ namespace cocos2d {
             return false;
 
         auto& fmtInfo = h->Fmt;
+        wavf->BytesPerFrame = fmtInfo.BitsPerSample / 8 * fmtInfo.NumChannels;
+
+        int bitDepth = (wavf->BytesPerFrame / fmtInfo.NumChannels) << 3;
+
         // Read PCM data or extensible data if exists.
         switch (fmtInfo.AudioFormat)
         { // Check supported format
         case WAV_FORMAT::PCM:
         case WAV_FORMAT::IEEE:
+            switch (bitDepth)
+            {
+            case 4: wavf->SourceFormat = AUDIO_SOURCE_FORMAT::PCM_16; break;
+            case 8: wavf->SourceFormat = AUDIO_SOURCE_FORMAT::PCM_U8; break;
+            case 16: wavf->SourceFormat = AUDIO_SOURCE_FORMAT::PCM_16; break;
+            case 24: wavf->SourceFormat = AUDIO_SOURCE_FORMAT::PCM_24; break;
+            case 32: wavf->SourceFormat = (fmtInfo.AudioFormat == WAV_FORMAT::IEEE) ? AUDIO_SOURCE_FORMAT::PCM_FLT32 : AUDIO_SOURCE_FORMAT::PCM_32; break;
+            case 64: wavf->SourceFormat = (fmtInfo.AudioFormat == WAV_FORMAT::IEEE) ? AUDIO_SOURCE_FORMAT::PCM_FLT64 : AUDIO_SOURCE_FORMAT::PCM_64; break;
+            }
+            break;
+        case WAV_FORMAT::MULAW:
+            wavf->SourceFormat = AUDIO_SOURCE_FORMAT::MULAW;
+            break;
+        case WAV_FORMAT::ALAW:
+            wavf->SourceFormat = AUDIO_SOURCE_FORMAT::MULAW;
+            break;
+        case WAV_FORMAT::ADPCM:
+            wavf->SourceFormat = AUDIO_SOURCE_FORMAT::ADPCM;
+            break;
+        case WAV_FORMAT::IMA_ADPCM:
+            wavf->SourceFormat = AUDIO_SOURCE_FORMAT::IMA_ADPCM;
             break;
         default:
+            ALOGW("The wav format %d doesn't supported currently!", (int)fmtInfo.AudioFormat);
             fileStream.close();
+            assert(false);
             return false;;
-        }
-
-        wavf->BytesPerFrame = fmtInfo.BitsPerSample / 8 * fmtInfo.NumChannels;
-
-        int bitDepth = (wavf->BytesPerFrame / fmtInfo.NumChannels) << 3;
-        switch (bitDepth)
-        {
-        case 4: wavf->PcmFormat = PCM_FORMAT::PCM_16; break;
-        case 8: wavf->PcmFormat = PCM_FORMAT::PCM_U8; break;
-        case 16: wavf->PcmFormat = PCM_FORMAT::PCM_16; break;
-        case 24: wavf->PcmFormat = PCM_FORMAT::PCM_24; break;
-        case 32: wavf->PcmFormat = (fmtInfo.AudioFormat == WAV_FORMAT::IEEE) ? PCM_FORMAT::PCM_FLT32 : PCM_FORMAT::PCM_32; break;
-        case 64: wavf->PcmFormat = (fmtInfo.AudioFormat == WAV_FORMAT::IEEE) ? PCM_FORMAT::PCM_FLT64 : PCM_FORMAT::PCM_64; break;
         }
 
         return wav_scan_chunk(wavf, WAV_DATA_ID, &h->PcmData, nullptr, 0);
@@ -156,7 +170,7 @@ namespace cocos2d {
             _channelCount = _wavf.FileHeader.Fmt.NumChannels;
             _bytesPerFrame = _wavf.BytesPerFrame;
             _totalFrames = _wavf.FileHeader.PcmData.ChunkSize / _bytesPerFrame;
-            _pcmFormat = _wavf.PcmFormat;
+            _sourceFormat = _wavf.SourceFormat;
 
             _isOpened = true;
             return true;
