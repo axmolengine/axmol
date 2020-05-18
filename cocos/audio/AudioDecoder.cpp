@@ -37,7 +37,7 @@ AudioDecoder::AudioDecoder()
     , _bytesPerFrame(0)
     , _sampleRate(0)
     , _channelCount(0)
-    , _pcmFormat(PCM_FORMAT::PCM_16)
+    , _sourceFormat(AUDIO_SOURCE_FORMAT::PCM_16)
     {
 
     }
@@ -90,9 +90,9 @@ AudioDecoder::AudioDecoder()
         return _channelCount;
     }
 
-    PCM_FORMAT AudioDecoder::getPcmFormat() const
+    AUDIO_SOURCE_FORMAT AudioDecoder::getSourceFormat() const
     {
-        return _pcmFormat;
+        return _sourceFormat;
     }
 
 }

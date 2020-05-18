@@ -29,7 +29,7 @@
 #include <string>
 
 namespace cocos2d {
-enum class PCM_FORMAT : uint16_t
+enum class AUDIO_SOURCE_FORMAT : uint16_t
 {
     PCM_UNK, // Unknown
     PCM_U8,
@@ -39,6 +39,10 @@ enum class PCM_FORMAT : uint16_t
     PCM_64,
     PCM_FLT32,
     PCM_FLT64,
+    MULAW,
+    ALAW, 
+    ADPCM, // Microsoft ADPCM
+    IMA_ADPCM, // IMA ADPCM
 };
 
 /**
@@ -114,7 +118,7 @@ public:
      */
     virtual uint32_t getChannelCount() const;
 
-    virtual PCM_FORMAT getPcmFormat() const;
+    virtual AUDIO_SOURCE_FORMAT getSourceFormat() const;
 
 protected:
     AudioDecoder();
@@ -125,7 +129,7 @@ protected:
     uint32_t _bytesPerFrame;
     uint32_t _sampleRate;
     uint32_t _channelCount;
-    PCM_FORMAT _pcmFormat;
+    AUDIO_SOURCE_FORMAT _sourceFormat;
 
     friend class AudioDecoderManager;
 };
