@@ -183,8 +183,48 @@ void AudioCache::readDataTask(unsigned int selfId)
             uint32_t framesRead = 0;
             const uint32_t framesToReadOnce = (std::min)(totalFrames, static_cast<uint32_t>(sampleRate * QUEUEBUFFER_TIME_STEP * QUEUEBUFFER_NUM));
 
+            std::vector<char> adjustFrameBuf;
+
+            if (decoder->seek(totalFrames))
+            {
+                char* tmpBuf = (char*)malloc(framesToReadOnce * bytesPerFrame);
+                adjustFrameBuf.reserve(framesToReadOnce * bytesPerFrame);
+
+                // Adjust total frames by setting position to the end of frames and try to read more data.
+                // This is a workaround for https://github.com/cocos2d/cocos2d-x/issues/16938
+                do
+                {
+                    framesRead = decoder->read(framesToReadOnce, tmpBuf);
+                    if (framesRead > 0)
+                    {
+                        adjustFrames += framesRead;
+                        adjustFrameBuf.insert(adjustFrameBuf.end(), tmpBuf, tmpBuf + framesRead * bytesPerFrame);
+                    }
+
+                } while (framesRead > 0);
+
+                if (adjustFrames > 0)
+                {
+                    ALOGV("Orignal total frames: %u, adjust frames: %u, current total frames: %u", totalFrames, adjustFrames, totalFrames + adjustFrames);
+                    totalFrames += adjustFrames;
+                    _totalFrames = remainingFrames = totalFrames;
+                }
+
+                // Reset dataSize
+                dataSize = totalFrames * bytesPerFrame;
+
+                free(tmpBuf);
+            }
+            // Reset to frame 0
+            BREAK_IF_ERR_LOG(!decoder->seek(0), "AudioDecoder::seek(0) failed!");
+
             _pcmData = (char*)malloc(dataSize);
             memset(_pcmData, 0x00, dataSize);
+
+            if (adjustFrames > 0)
+            {
+                memcpy(_pcmData + (dataSize - adjustFrameBuf.size()), adjustFrameBuf.data(), adjustFrameBuf.size());
+            }
 
             alGenBuffers(1, &_alBufferId);
             auto alError = alGetError();
