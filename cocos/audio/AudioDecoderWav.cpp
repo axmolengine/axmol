@@ -30,8 +30,6 @@
 #include "audio/include/AudioMacros.h"
 #include "platform/CCFileUtils.h"
 
-#include <mmreg.h>
-
 namespace cocos2d {
     enum : uint32_t {
         WAV_SIGN_ID = MAKE_FOURCC('W', 'A', 'V', 'E'),
@@ -157,8 +155,9 @@ namespace cocos2d {
 
     static int wav_pcm_seek(WAV_FILE* wavf, int frameOffset)
     {
-        auto offset = frameOffset * wavf->BytesPerFrame + wavf->PcmDataOffset;
-        return wavf->Stream.seek(offset, SEEK_SET) >= 0 ? 0 : -1;
+        auto offset = wavf->Stream.seek(frameOffset * wavf->BytesPerFrame + wavf->PcmDataOffset, SEEK_SET);
+        if (offset >= static_cast<int>(wavf->PcmDataOffset)) return (offset - wavf->PcmDataOffset) / wavf->BytesPerFrame;
+        return -1;
     }
 
     static int wav_pcm_tell(WAV_FILE* wavf)
@@ -216,7 +215,7 @@ namespace cocos2d {
 
     bool AudioDecoderWav::seek(uint32_t frameOffset)
     {
-        return wav_pcm_seek(&_wavf, frameOffset) == 0;
+        return wav_pcm_seek(&_wavf, frameOffset) == frameOffset;
     }
 
     uint32_t AudioDecoderWav::tell() const
