@@ -90,7 +90,7 @@ struct WAV_FMT_CHUNK {
             uint16_t SamplesPerBlock;
             uint16_t Reserved;
         } Samples;
-        DWORD        ChannelMask;
+        uint32_t     ChannelMask;
         GUID         SubFormat;
     } ExtParams;
 };
