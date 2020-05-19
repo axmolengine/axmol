@@ -29,6 +29,23 @@
 #include "audio/include/AudioDecoder.h"
 #include "platform/PXFileStream.h"
 
+#if !defined(MAKE_FOURCC)
+#define MAKE_FOURCC(a,b,c,d) ((uint32_t)((a) | ((b) << 8) | ((c) << 16) | (((uint32_t)(d)) << 24)))
+#endif
+
+#if !defined(_WIN32)
+typedef struct _GUID {
+    unsigned long  Data1;
+    unsigned short Data2;
+    unsigned short Data3;
+    unsigned char  Data4[8];
+} GUID;
+__inline int IsEqualGUID(const GUID& rguid1, const GUID& rguid2)
+{
+    return !::memcmp(&rguid1, &rguid2, sizeof(GUID));
+}
+#endif
+
 namespace cocos2d {
 
 // http://soundfile.sapp.org/doc/WaveFormat/
@@ -65,6 +82,17 @@ struct WAV_FMT_CHUNK {
     uint32_t ByteRate;
     uint16_t BlockAlign;
     uint16_t BitsPerSample;
+    struct {
+        /* The follow fields is optional */
+        uint16_t cbSize;
+        union {
+            uint16_t ValidBitsPerSample;
+            uint16_t SamplesPerBlock;
+            uint16_t Reserved;
+        } Samples;
+        DWORD        ChannelMask;
+        GUID         SubFormat;
+    } ExtParams;
 };
 struct WAV_FILE_HEADER {
     WAV_RIFF_CHUNK Riff;
@@ -76,12 +104,10 @@ struct WAV_FILE_HEADER {
 struct WAV_FILE
 {
     WAV_FILE_HEADER FileHeader;
+    AUDIO_SOURCE_FORMAT SourceFormat;
     uint32_t PcmDataOffset;
     uint32_t BytesPerFrame;
-    AUDIO_SOURCE_FORMAT SourceFormat;
-    uint16_t ExtraParamSize; // unused
-    uint32_t Samples; // unused
-    uint32_t ChannelMask; // unused
+
     cocos2d::PXFileStream Stream;
 };
 
