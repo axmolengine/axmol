@@ -30,17 +30,23 @@
 #include "audio/include/AudioMacros.h"
 #include "platform/CCFileUtils.h"
 
-#if !defined(_FOURCC2ID)
-#define _FOURCC2ID(a,b,c,d) ((uint32_t)((a) | ((b) << 8) | ((c) << 16) | (((uint32_t)(d)) << 24)))
-#endif
-
 namespace cocos2d {
     enum : uint32_t {
-        WAV_SIGN_ID = _FOURCC2ID('W', 'A', 'V', 'E'),
-        WAV_FMT_ID = _FOURCC2ID('f', 'm', 't', ' '),
-        WAV_DATA_ID = _FOURCC2ID('d', 'a', 't', 'a'),
+        WAV_SIGN_ID = MAKE_FOURCC('W', 'A', 'V', 'E'),
+        WAV_FMT_ID = MAKE_FOURCC('f', 'm', 't', ' '),
+        WAV_DATA_ID = MAKE_FOURCC('d', 'a', 't', 'a'),
         WAV_HEADER_SIZE = sizeof(struct WAV_CHUNK_HEADER),
         WAV_RIFF_SIZE = sizeof(WAV_RIFF_CHUNK),
+    };
+
+    // 00000001-0000-0010-8000-00aa00389b71
+    static const GUID WAV_SUBTYPE_PCM = {
+        0x00000001, 0x0000, 0x0010, { 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 }
+    };
+
+    // 00000003-0000-0010-8000-00aa00389b71
+    static const GUID WAV_SUBTYPE_IEEE_FLOAT = {
+        0x00000003, 0x0000, 0x0010, { 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 }
     };
 
     static bool wav_scan_chunk(WAV_FILE* wavf, uint32_t chunkID, void* header, void* body, uint32_t bodySize) {
@@ -52,7 +58,10 @@ namespace cocos2d {
             { // chunk found
                 if (body)
                 { // require read body?
-                    fs.read(body, h->ChunkSize);
+                    auto readsize = (std::min)(bodySize, h->ChunkSize);
+                    fs.read(body, readsize);
+                    if (h->ChunkSize > bodySize)
+                        fs.seek(h->ChunkSize - bodySize, SEEK_CUR);
                     wavf->PcmDataOffset += h->ChunkSize;
                 }
                 return true;
@@ -120,6 +129,15 @@ namespace cocos2d {
         case WAV_FORMAT::IMA_ADPCM:
             wavf->SourceFormat = AUDIO_SOURCE_FORMAT::IMA_ADPCM;
             break;
+        case WAV_FORMAT::EXT:
+            // Check sub-format.
+            if (!IsEqualGUID(fmtInfo.ExtParams.SubFormat, WAV_SUBTYPE_PCM)
+                && !IsEqualGUID(fmtInfo.ExtParams.SubFormat, WAV_SUBTYPE_IEEE_FLOAT))
+            {
+                fileStream.close();
+                return false;
+            }
+            break;
         default:
             ALOGW("The wav format %d doesn't supported currently!", (int)fmtInfo.AudioFormat);
             fileStream.close();
@@ -137,8 +155,9 @@ namespace cocos2d {
 
     static int wav_pcm_seek(WAV_FILE* wavf, int frameOffset)
     {
-        auto offset = frameOffset * wavf->BytesPerFrame + wavf->PcmDataOffset;
-        return wavf->Stream.seek(offset, SEEK_SET) >= 0 ? 0 : -1;
+        auto offset = wavf->Stream.seek(frameOffset * wavf->BytesPerFrame + wavf->PcmDataOffset, SEEK_SET);
+        if (offset >= static_cast<int>(wavf->PcmDataOffset)) return (offset - wavf->PcmDataOffset) / wavf->BytesPerFrame;
+        return -1;
     }
 
     static int wav_pcm_tell(WAV_FILE* wavf)
@@ -196,7 +215,7 @@ namespace cocos2d {
 
     bool AudioDecoderWav::seek(uint32_t frameOffset)
     {
-        return wav_pcm_seek(&_wavf, frameOffset) == 0;
+        return wav_pcm_seek(&_wavf, frameOffset) == frameOffset;
     }
 
     uint32_t AudioDecoderWav::tell() const
