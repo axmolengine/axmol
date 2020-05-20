@@ -2,6 +2,7 @@
  Copyright (c) 2012 cocos2d-x.org
  Copyright (c) 2010 Sangwoo Im
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com.
  
  http://www.cocos2d-x.org
  
@@ -32,6 +33,7 @@
 #include "2d/CCActionTween.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
+#include "renderer/CCCallbackCommand.h"
 
 /**
  * @addtogroup ui
@@ -382,8 +384,8 @@ protected:
     /** Touch listener */
     EventListenerTouchOneByOne* _touchListener;
     
-    CustomCommand _beforeDrawCommand;
-    CustomCommand _afterDrawCommand;
+    CallbackCommand  _beforeDrawCommand;
+    CallbackCommand  _afterDrawCommand;
 
     /**
      * Action created with setContentOffsetInDuration(), saved so it can be halted
