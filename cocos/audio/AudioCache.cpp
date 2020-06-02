@@ -168,7 +168,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             _format = channelCount > 1 ? AL_FORMAT_STEREO_ALAW_EXT : AL_FORMAT_MONO_ALAW_EXT;
             break;
         case AUDIO_SOURCE_FORMAT::ADPCM:
-            _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16; // AL_FORMAT_STEREO_IMA4 : AL_FORMAT_MONO_IMA4; // AL_FORMAT_STEREO_MSADPCM_SOFT : AL_FORMAT_MONO_MSADPCM_SOFT;
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_MSADPCM_SOFT : AL_FORMAT_MONO_MSADPCM_SOFT;
             break;
         case AUDIO_SOURCE_FORMAT::IMA_ADPCM:
             _format = channelCount > 1 ? AL_FORMAT_IMA_ADPCM_STEREO16_EXT : AL_FORMAT_IMA_ADPCM_MONO16_EXT;
