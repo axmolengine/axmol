@@ -34,7 +34,7 @@ namespace cocos2d {
 AudioDecoder::AudioDecoder()
     : _isOpened(false)
     , _totalFrames(0)
-    , _bytesPerFrame(0)
+    , _bitsPerFrame(0)
     , _sampleRate(0)
     , _channelCount(0)
     , _sourceFormat(AUDIO_SOURCE_FORMAT::PCM_16)
@@ -58,13 +58,13 @@ AudioDecoder::AudioDecoder()
         uint32_t framesReadOnce = 0;
         do
         {
-            framesReadOnce = read(framesToRead - framesRead, pcmBuf + framesRead * _bytesPerFrame);
+            framesReadOnce = read(framesToRead - framesRead, pcmBuf + ((framesRead * _bitsPerFrame) >> 3));
             framesRead += framesReadOnce;
         } while (framesReadOnce != 0 && framesRead < framesToRead);
 
         if (framesRead < framesToRead)
         {
-            memset(pcmBuf + framesRead * _bytesPerFrame, 0x00, (framesToRead - framesRead) * _bytesPerFrame);
+            memset(pcmBuf + ((framesRead * _bitsPerFrame) >> 3), 0x00, (((framesToRead - framesRead) * _bitsPerFrame)) >> 3);
         }
 
         return framesRead;
@@ -75,9 +75,9 @@ AudioDecoder::AudioDecoder()
         return _totalFrames;
     }
 
-    uint32_t AudioDecoder::getBytesPerFrame() const
+    uint32_t AudioDecoder::getBitsPerFrame() const
     {
-        return _bytesPerFrame;
+        return _bitsPerFrame;
     }
 
     uint32_t AudioDecoder::getSampleRate() const
