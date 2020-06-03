@@ -98,9 +98,9 @@ namespace cocos2d {
             return false;
 
         auto& fmtInfo = h->Fmt;
-        wavf->BytesPerFrame = fmtInfo.BitsPerSample / 8 * fmtInfo.NumChannels;
+        wavf->BitsPerFrame = fmtInfo.BitsPerSample * fmtInfo.NumChannels;
 
-        int bitDepth = (wavf->BytesPerFrame / fmtInfo.NumChannels) << 3;
+        int bitDepth = (wavf->BitsPerFrame / fmtInfo.NumChannels);
 
         // Read PCM data or extensible data if exists.
         switch (fmtInfo.AudioFormat)
@@ -109,7 +109,6 @@ namespace cocos2d {
         case WAV_FORMAT::IEEE:
             switch (bitDepth)
             {
-            case 4: wavf->SourceFormat = AUDIO_SOURCE_FORMAT::PCM_16; break;
             case 8: wavf->SourceFormat = AUDIO_SOURCE_FORMAT::PCM_U8; break;
             case 16: wavf->SourceFormat = AUDIO_SOURCE_FORMAT::PCM_16; break;
             case 24: wavf->SourceFormat = AUDIO_SOURCE_FORMAT::PCM_24; break;
@@ -155,15 +154,15 @@ namespace cocos2d {
 
     static int wav_pcm_seek(WAV_FILE* wavf, int frameOffset)
     {
-        auto offset = wavf->Stream.seek(frameOffset * wavf->BytesPerFrame + wavf->PcmDataOffset, SEEK_SET);
-        if (offset >= static_cast<int>(wavf->PcmDataOffset)) return (offset - wavf->PcmDataOffset) / wavf->BytesPerFrame;
+        auto offset = wavf->Stream.seek(((frameOffset * wavf->BitsPerFrame) >> 3) + wavf->PcmDataOffset, SEEK_SET);
+        if (offset >= static_cast<int>(wavf->PcmDataOffset)) return ((offset - wavf->PcmDataOffset) << 3) / wavf->BitsPerFrame;
         return -1;
     }
 
     static int wav_pcm_tell(WAV_FILE* wavf)
     {
         auto offset = wavf->Stream.seek(0, SEEK_CUR);
-        return (offset - wavf->PcmDataOffset) / wavf->BytesPerFrame;
+        return ((offset - wavf->PcmDataOffset) << 3) / wavf->BitsPerFrame;
     }
 
     static int wav_close(WAV_FILE* wavf)
@@ -187,8 +186,8 @@ namespace cocos2d {
         {
             _sampleRate = _wavf.FileHeader.Fmt.SampleRate;
             _channelCount = _wavf.FileHeader.Fmt.NumChannels;
-            _bytesPerFrame = _wavf.BytesPerFrame;
-            _totalFrames = _wavf.FileHeader.PcmData.ChunkSize / _bytesPerFrame;
+            _bitsPerFrame = _wavf.BitsPerFrame;
+            _totalFrames = (_wavf.FileHeader.PcmData.ChunkSize << 3) / _bitsPerFrame;
             _sourceFormat = _wavf.SourceFormat;
 
             _isOpened = true;
@@ -208,9 +207,9 @@ namespace cocos2d {
 
     uint32_t AudioDecoderWav::read(uint32_t framesToRead, char* pcmBuf)
     {
-        auto bytesToRead = _bytesPerFrame * framesToRead;
+        auto bytesToRead = (_bitsPerFrame * framesToRead) >> 3;
         long bytesRead = wav_read(&_wavf, pcmBuf, bytesToRead);
-        return static_cast<uint32_t>(bytesRead / _bytesPerFrame);
+        return static_cast<uint32_t>((bytesRead << 3) / _bitsPerFrame);
     }
 
     bool AudioDecoderWav::seek(uint32_t frameOffset)

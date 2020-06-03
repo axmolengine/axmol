@@ -50,6 +50,8 @@ unsigned int __idIndex = 0;
 #define INVALID_AL_BUFFER_ID 0xFFFFFFFF
 #define PCMDATA_CACHEMAXSIZE 1048576
 
+#define CC_ALIGN(d, a) (((d) + ((a)-1)) & ~((a)-1))
+
 using namespace cocos2d;
 
 AudioCache::AudioCache()
@@ -136,13 +138,13 @@ void AudioCache::readDataTask(unsigned int selfId)
             break;
 
         const uint32_t originalTotalFrames = decoder->getTotalFrames();
-        const uint32_t bytesPerFrame = decoder->getBytesPerFrame();
+        const uint32_t bitsPerFrame = decoder->getBitsPerFrame();
         const uint32_t sampleRate = decoder->getSampleRate();
         const uint32_t channelCount = decoder->getChannelCount();
         const auto sourceFormat = decoder->getSourceFormat();
 
         uint32_t totalFrames = originalTotalFrames;
-        uint32_t dataSize = totalFrames * bytesPerFrame;
+        uint32_t dataSize = (totalFrames * bitsPerFrame) >> 3;
         uint32_t remainingFrames = totalFrames;
         uint32_t adjustFrames = 0;
 
@@ -181,8 +183,8 @@ void AudioCache::readDataTask(unsigned int selfId)
         if (dataSize <= PCMDATA_CACHEMAXSIZE)
         {
             uint32_t framesRead = 0;
-            const uint32_t framesToReadOnce = (std::min)(totalFrames, static_cast<uint32_t>(sampleRate * QUEUEBUFFER_TIME_STEP * QUEUEBUFFER_NUM));
-
+            uint32_t framesToReadOnce = (std::min)(totalFrames, static_cast<uint32_t>(sampleRate * QUEUEBUFFER_TIME_STEP * QUEUEBUFFER_NUM));
+            framesToReadOnce = CC_ALIGN((framesToReadOnce * bitsPerFrame), 8) / bitsPerFrame;
             _pcmData = (char*)malloc(dataSize);
             memset(_pcmData, 0x00, dataSize);
 
@@ -196,7 +198,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             if (*_isDestroyed)
                 break;
 
-            framesRead = decoder->readFixedFrames((std::min)(framesToReadOnce, remainingFrames), _pcmData + _framesRead * bytesPerFrame);
+            framesRead = decoder->readFixedFrames((std::min)(framesToReadOnce, remainingFrames), _pcmData + ((_framesRead * bitsPerFrame) >> 3));
             _framesRead += framesRead;
             remainingFrames -= framesRead;
 
@@ -211,7 +213,7 @@ void AudioCache::readDataTask(unsigned int selfId)
                 {
                     frames = originalTotalFrames - _framesRead;
                 }
-                framesRead = decoder->read(frames, _pcmData + _framesRead * bytesPerFrame);
+                framesRead = decoder->read(frames, _pcmData + ((_framesRead * bitsPerFrame) >> 3));
                 if (framesRead == 0)
                     break;
                 _framesRead += framesRead;
@@ -223,13 +225,20 @@ void AudioCache::readDataTask(unsigned int selfId)
 
             if (_framesRead < originalTotalFrames)
             {
-                memset(_pcmData + _framesRead * bytesPerFrame, 0x00, (totalFrames - _framesRead) * bytesPerFrame);
+                memset(_pcmData + ((_framesRead * bitsPerFrame) >> 3), 0x00, (((totalFrames - _framesRead) * bitsPerFrame) >> 3));
             }
             ALOGV("pcm buffer was loaded successfully, total frames: %u, total read frames: %u, adjust frames: %u, remainingFrames: %u", totalFrames, _framesRead, adjustFrames, remainingFrames);
 
             _framesRead += adjustFrames;
 
             alBufferData(_alBufferId, _format, _pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
+
+            alError = alGetError();
+            if (alError != AL_NO_ERROR)
+            {
+                ALOGE("%s:alBufferData error code:%x", __FUNCTION__, alError);
+                break;
+            }
 
             _state = State::READY;
         }
@@ -238,7 +247,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             _queBufferFrames = sampleRate * QUEUEBUFFER_TIME_STEP;
             BREAK_IF_ERR_LOG(_queBufferFrames == 0, "_queBufferFrames == 0");
 
-            const uint32_t queBufferBytes = _queBufferFrames * bytesPerFrame;
+            const uint32_t queBufferBytes = ((_queBufferFrames * bitsPerFrame) >> 3);
 
             for (int index = 0; index < QUEUEBUFFER_NUM; ++index)
             {
