@@ -130,12 +130,12 @@ namespace cocos2d {
 
             if (mp3Encoding == MPG123_ENC_SIGNED_16)
             {
-                _bitsPerFrame = (_channelCount << 4); // 2 * 8
+                _bytesPerFrame = 2 * _channelCount;
                 _sourceFormat = AUDIO_SOURCE_FORMAT::PCM_16;
             }
             else if (mp3Encoding == MPG123_ENC_FLOAT_32)
             {
-                _bitsPerFrame = (_channelCount << 5); // 4 * 8
+                _bytesPerFrame = 4 * _channelCount;
                 _sourceFormat = AUDIO_SOURCE_FORMAT::PCM_FLT32;
             }
             else
@@ -181,7 +181,7 @@ namespace cocos2d {
 
     uint32_t AudioDecoderMp3::read(uint32_t framesToRead, char* pcmBuf)
     {
-        int bytesToRead = (framesToRead * _bitsPerFrame) >> 3;
+        int bytesToRead = (framesToRead * _bytesPerFrame);
         size_t bytesRead = 0;
         int err = mpg123_read(_mpg123handle, (unsigned char*)pcmBuf, bytesToRead, &bytesRead);
         if (err == MPG123_ERR)
@@ -190,7 +190,7 @@ namespace cocos2d {
             return 0;
         }
 
-        return static_cast<uint32_t>((bytesRead << 3 ) / _bitsPerFrame);
+        return static_cast<uint32_t>((bytesRead) / _bytesPerFrame);
     }
 
     bool AudioDecoderMp3::seek(uint32_t frameOffset)

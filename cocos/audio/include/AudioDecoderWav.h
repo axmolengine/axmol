@@ -125,6 +125,10 @@ public:
      */
     virtual bool open(const std::string& path) override;
 
+    uint32_t framesToBytes(uint32_t frames) const override;
+
+    uint32_t bytesToFrames(uint32_t bytes) const;
+
     /**
      * @brief Closes opened audio file.
      * @note The method will also be automatically invoked in the destructor.
@@ -151,6 +155,12 @@ public:
      * @return The current frame offset.
      */
     virtual uint32_t tell() const override;
+
+    /**
+    * @brief helpers function fo frames alignment when bytesPerFrame < 1
+    */
+    uint32_t getBytesPerBlock() const;
+    uint32_t getSamplesPerBlock() const;
 
 protected:
     AudioDecoderWav();

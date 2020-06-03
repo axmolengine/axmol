@@ -37,7 +37,6 @@
 
 namespace cocos2d {
 
-
     static size_t ov_fread_r(void* buffer, size_t element_size, size_t element_count, void* handle)
     {
         return ((PXFileStream*)handle)->read(buffer, static_cast<uint32_t>(element_size * element_count));
@@ -89,7 +88,7 @@ namespace cocos2d {
             vorbis_info* vi = ov_info(&_vf, -1);
             _sampleRate = static_cast<uint32_t>(vi->rate);
             _channelCount = vi->channels;
-            _bitsPerFrame = (vi->channels << 4); // 2 * 8
+            _bytesPerFrame = vi->channels * sizeof(short);
             _totalFrames = static_cast<uint32_t>(ov_pcm_total(&_vf, -1));
             _isOpened = true;
             return true;
@@ -109,9 +108,9 @@ namespace cocos2d {
     uint32_t AudioDecoderOgg::read(uint32_t framesToRead, char* pcmBuf)
     {
         int currentSection = 0;
-        int bytesToRead = (framesToRead * _bitsPerFrame) >> 3;
+        int bytesToRead = (framesToRead * _bytesPerFrame);
         long bytesRead = ov_read(&_vf, pcmBuf, bytesToRead, 0, 2, 1, &currentSection);
-        return static_cast<uint32_t>((bytesRead << 3) / _bitsPerFrame);
+        return static_cast<uint32_t>((bytesRead) / _bytesPerFrame);
     }
 
     bool AudioDecoderOgg::seek(uint32_t frameOffset)
