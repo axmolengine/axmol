@@ -186,14 +186,32 @@ namespace cocos2d {
         {
             _sampleRate = _wavf.FileHeader.Fmt.SampleRate;
             _channelCount = _wavf.FileHeader.Fmt.NumChannels;
-            _bitsPerFrame = _wavf.BitsPerFrame;
-            _totalFrames = (_wavf.FileHeader.PcmData.ChunkSize << 3) / _bitsPerFrame;
-            _sourceFormat = _wavf.SourceFormat;
+            _bytesPerFrame = _wavf.BitsPerFrame >> 3;
+           _sourceFormat = _wavf.SourceFormat;
+
+           if (_bytesPerFrame)
+               _totalFrames = (_wavf.FileHeader.PcmData.ChunkSize) / _bytesPerFrame;
+           else
+               _totalFrames = bytesToFrames(_wavf.FileHeader.PcmData.ChunkSize);
 
             _isOpened = true;
             return true;
         }
         return false;
+    }
+
+    uint32_t AudioDecoderWav::framesToBytes(uint32_t frames) const {
+        if (_bytesPerFrame > 0)
+            return _bytesPerFrame * frames;
+        
+        return frames / getSamplesPerBlock() * getBytesPerBlock();
+    }
+
+    uint32_t AudioDecoderWav::bytesToFrames(uint32_t bytes) const
+    {
+        if (_bytesPerFrame > 0)
+            return bytes / _bytesPerFrame;
+        return bytes / getBytesPerBlock() * getSamplesPerBlock();
     }
 
     void AudioDecoderWav::close()
@@ -207,9 +225,9 @@ namespace cocos2d {
 
     uint32_t AudioDecoderWav::read(uint32_t framesToRead, char* pcmBuf)
     {
-        auto bytesToRead = (_bitsPerFrame * framesToRead) >> 3;
+        auto bytesToRead = framesToBytes(framesToRead);
         long bytesRead = wav_read(&_wavf, pcmBuf, bytesToRead);
-        return static_cast<uint32_t>((bytesRead << 3) / _bitsPerFrame);
+        return bytesToFrames(bytesRead);
     }
 
     bool AudioDecoderWav::seek(uint32_t frameOffset)
@@ -220,6 +238,16 @@ namespace cocos2d {
     uint32_t AudioDecoderWav::tell() const
     {
         return wav_pcm_tell(&_wavf);
+    }
+
+    uint32_t AudioDecoderWav::getBytesPerBlock() const
+    {
+        return _wavf.FileHeader.Fmt.BlockAlign;;
+    }
+    uint32_t AudioDecoderWav::getSamplesPerBlock() const
+    {
+        auto bytesPerBlock = getBytesPerBlock();
+        return (bytesPerBlock / _channelCount - 7) * 2 + 2;
     }
 
 } // namespace cocos2d {

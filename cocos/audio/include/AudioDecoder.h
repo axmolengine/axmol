@@ -108,7 +108,7 @@ public:
     virtual uint32_t getTotalFrames() const;
 
     /** Gets bytes per frame of current audio.*/
-    virtual uint32_t getBitsPerFrame() const;
+    virtual uint32_t framesToBytes(uint32_t frames) const;
 
     /** Gets sample rate of current audio.*/
     virtual uint32_t getSampleRate() const;
@@ -126,7 +126,7 @@ protected:
 
     bool _isOpened;
     uint32_t _totalFrames;
-    uint32_t _bitsPerFrame;
+    uint32_t _bytesPerFrame;
     uint32_t _sampleRate;
     uint32_t _channelCount;
     AUDIO_SOURCE_FORMAT _sourceFormat;

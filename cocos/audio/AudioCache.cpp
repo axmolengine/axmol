@@ -138,15 +138,13 @@ void AudioCache::readDataTask(unsigned int selfId)
             break;
 
         const uint32_t originalTotalFrames = decoder->getTotalFrames();
-        const uint32_t bitsPerFrame = decoder->getBitsPerFrame();
         const uint32_t sampleRate = decoder->getSampleRate();
         const uint32_t channelCount = decoder->getChannelCount();
         const auto sourceFormat = decoder->getSourceFormat();
 
         uint32_t totalFrames = originalTotalFrames;
-        uint32_t dataSize = (totalFrames * bitsPerFrame) >> 3;
+        uint32_t dataSize = decoder->framesToBytes(totalFrames);
         uint32_t remainingFrames = totalFrames;
-        uint32_t adjustFrames = 0;
 
         switch (sourceFormat) {
         case AUDIO_SOURCE_FORMAT::PCM_16:
@@ -184,7 +182,8 @@ void AudioCache::readDataTask(unsigned int selfId)
         {
             uint32_t framesRead = 0;
             uint32_t framesToReadOnce = (std::min)(totalFrames, static_cast<uint32_t>(sampleRate * QUEUEBUFFER_TIME_STEP * QUEUEBUFFER_NUM));
-            framesToReadOnce = CC_ALIGN((framesToReadOnce * bitsPerFrame), 8) / bitsPerFrame;
+
+            // TODO: because bytesPerFrame my 0.5, so align framesToReadOnce align with wav blockSize in bytes
             _pcmData = (char*)malloc(dataSize);
             memset(_pcmData, 0x00, dataSize);
 
@@ -198,7 +197,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             if (*_isDestroyed)
                 break;
 
-            framesRead = decoder->readFixedFrames((std::min)(framesToReadOnce, remainingFrames), _pcmData + ((_framesRead * bitsPerFrame) >> 3));
+            framesRead = decoder->readFixedFrames((std::min)(framesToReadOnce, remainingFrames), _pcmData + decoder->framesToBytes(_framesRead));
             _framesRead += framesRead;
             remainingFrames -= framesRead;
 
@@ -213,7 +212,7 @@ void AudioCache::readDataTask(unsigned int selfId)
                 {
                     frames = originalTotalFrames - _framesRead;
                 }
-                framesRead = decoder->read(frames, _pcmData + ((_framesRead * bitsPerFrame) >> 3));
+                framesRead = decoder->read(frames, _pcmData + decoder->framesToBytes(_framesRead));
                 if (framesRead == 0)
                     break;
                 _framesRead += framesRead;
@@ -225,11 +224,9 @@ void AudioCache::readDataTask(unsigned int selfId)
 
             if (_framesRead < originalTotalFrames)
             {
-                memset(_pcmData + ((_framesRead * bitsPerFrame) >> 3), 0x00, (((totalFrames - _framesRead) * bitsPerFrame) >> 3));
+                memset(_pcmData + decoder->framesToBytes(_framesRead), 0x00, decoder->framesToBytes(totalFrames - _framesRead));
             }
-            ALOGV("pcm buffer was loaded successfully, total frames: %u, total read frames: %u, adjust frames: %u, remainingFrames: %u", totalFrames, _framesRead, adjustFrames, remainingFrames);
-
-            _framesRead += adjustFrames;
+            ALOGV("pcm buffer was loaded successfully, total frames: %u, total read frames: %u, remainingFrames: %u", totalFrames, _framesRead, remainingFrames);
 
             alBufferData(_alBufferId, _format, _pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
 
@@ -247,7 +244,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             _queBufferFrames = sampleRate * QUEUEBUFFER_TIME_STEP;
             BREAK_IF_ERR_LOG(_queBufferFrames == 0, "_queBufferFrames == 0");
 
-            const uint32_t queBufferBytes = ((_queBufferFrames * bitsPerFrame) >> 3);
+            const uint32_t queBufferBytes = decoder->framesToBytes(_queBufferFrames);
 
             for (int index = 0; index < QUEUEBUFFER_NUM; ++index)
             {
