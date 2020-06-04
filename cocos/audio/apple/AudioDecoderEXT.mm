@@ -79,10 +79,10 @@ namespace cocos2d {
 
             _sampleRate = _outputFormat.mSampleRate;
             _channelCount = _outputFormat.mChannelsPerFrame;
-            _bytesPerFrame = 2 * _outputFormat.mChannelsPerFrame;
+            _bytesPerBlock = 2 * _outputFormat.mChannelsPerFrame;
 
-            _outputFormat.mBytesPerPacket = _bytesPerFrame;
-            _outputFormat.mBytesPerFrame = _bytesPerFrame;
+            _outputFormat.mBytesPerPacket = _bytesPerBlock;
+            _outputFormat.mBytesPerFrame = _bytesPerBlock;
 
             status = ExtAudioFileSetProperty(_extRef, kExtAudioFileProperty_ClientDataFormat, sizeof(_outputFormat), &_outputFormat);
             BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileSetProperty FAILED, Error = %d", (int)status);
@@ -131,7 +131,7 @@ namespace cocos2d {
 
             AudioBufferList bufferList;
             bufferList.mNumberBuffers = 1;
-            bufferList.mBuffers[0].mDataByteSize = framesToRead * _bytesPerFrame;
+            bufferList.mBuffers[0].mDataByteSize = framesToRead * _bytesPerBlock;
             bufferList.mBuffers[0].mNumberChannels = _outputFormat.mChannelsPerFrame;
             bufferList.mBuffers[0].mData = pcmBuf;
 
@@ -158,20 +158,4 @@ namespace cocos2d {
         } while(false);
         return ret;
     }
-
-    uint32_t AudioDecoderEXT::tell() const
-    {
-        uint32_t ret = INVALID_FRAME_INDEX;
-        do
-        {
-            BREAK_IF_ERR_LOG(!isOpened(), "decoder isn't openned");
-            SInt64 frameIndex = INVALID_FRAME_INDEX;
-            OSStatus status = ExtAudioFileTell(_extRef, &frameIndex);
-            BREAK_IF(status != noErr);
-            ret = static_cast<uint32_t>(frameIndex);
-        } while(false);
-
-        return ret;
-    }
-
 } // namespace cocos2d {

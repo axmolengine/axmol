@@ -270,7 +270,7 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
 
         uint32_t framesRead = 0;
         const uint32_t framesToRead = _audioCache->_queBufferFrames;
-        const uint32_t bufferSize = framesToRead * decoder->getBytesPerFrame();
+        const uint32_t bufferSize = decoder->framesToBytes(framesToRead);
         tmpBuffer = (char*)malloc(bufferSize);
         memset(tmpBuffer, 0, bufferSize);
 
@@ -323,7 +323,7 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
                      */
                     ALuint bid;
                     alSourceUnqueueBuffers(_alSource, 1, &bid);
-                    alBufferData(bid, _audioCache->_format, tmpBuffer, framesRead * decoder->getBytesPerFrame(), decoder->getSampleRate());
+                    alBufferData(bid, _audioCache->_format, tmpBuffer, decoder->framesToBytes(framesRead), decoder->getSampleRate());
                     alSourceQueueBuffers(_alSource, 1, &bid);
                 }
             }
