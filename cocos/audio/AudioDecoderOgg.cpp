@@ -88,7 +88,7 @@ namespace cocos2d {
             vorbis_info* vi = ov_info(&_vf, -1);
             _sampleRate = static_cast<uint32_t>(vi->rate);
             _channelCount = vi->channels;
-            _bytesPerFrame = vi->channels * sizeof(short);
+            _bytesPerBlock = vi->channels * sizeof(short);
             _totalFrames = static_cast<uint32_t>(ov_pcm_total(&_vf, -1));
             _isOpened = true;
             return true;
@@ -108,19 +108,13 @@ namespace cocos2d {
     uint32_t AudioDecoderOgg::read(uint32_t framesToRead, char* pcmBuf)
     {
         int currentSection = 0;
-        int bytesToRead = (framesToRead * _bytesPerFrame);
+        int bytesToRead = framesToBytes(framesToRead);
         long bytesRead = ov_read(&_vf, pcmBuf, bytesToRead, 0, 2, 1, &currentSection);
-        return static_cast<uint32_t>((bytesRead) / _bytesPerFrame);
+        return bytesToFrames(bytesRead);
     }
 
     bool AudioDecoderOgg::seek(uint32_t frameOffset)
     {
         return 0 == ov_pcm_seek(&_vf, frameOffset);
     }
-
-    uint32_t AudioDecoderOgg::tell() const
-    {
-        return static_cast<uint32_t>(ov_pcm_tell(const_cast<OggVorbis_File*>(&_vf)));
-    }
-
 } // namespace cocos2d {

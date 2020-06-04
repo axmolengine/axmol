@@ -147,11 +147,11 @@ void AudioCache::readDataTask(unsigned int selfId)
         uint32_t remainingFrames = totalFrames;
 
         switch (sourceFormat) {
-        case AUDIO_SOURCE_FORMAT::PCM_16:
-            _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16; // bits depth: 16bits
-            break;
         case AUDIO_SOURCE_FORMAT::PCM_U8:
             _format = channelCount > 1 ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8; // bits depth: 8bits
+            break;
+        case AUDIO_SOURCE_FORMAT::PCM_16:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16; // bits depth: 16bits
             break;
         case AUDIO_SOURCE_FORMAT::PCM_FLT32:
             _format = channelCount > 1 ? AL_FORMAT_STEREO_FLOAT32 : AL_FORMAT_MONO_FLOAT32;
@@ -169,11 +169,11 @@ void AudioCache::readDataTask(unsigned int selfId)
             _format = channelCount > 1 ? AL_FORMAT_STEREO_MSADPCM_SOFT : AL_FORMAT_MONO_MSADPCM_SOFT;
             break;
         case AUDIO_SOURCE_FORMAT::IMA_ADPCM:
-            _format = channelCount > 1 ? AL_FORMAT_IMA_ADPCM_STEREO16_EXT : AL_FORMAT_IMA_ADPCM_MONO16_EXT;
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_IMA4 : AL_FORMAT_MONO_IMA4;
             break;
         default: assert(false);
         }
-      
+
         _sampleRate = (ALsizei)sampleRate;
         _duration = 1.0f * totalFrames / sampleRate;
         _totalFrames = totalFrames;
@@ -183,7 +183,6 @@ void AudioCache::readDataTask(unsigned int selfId)
             uint32_t framesRead = 0;
             uint32_t framesToReadOnce = (std::min)(totalFrames, static_cast<uint32_t>(sampleRate * QUEUEBUFFER_TIME_STEP * QUEUEBUFFER_NUM));
 
-            // TODO: because bytesPerFrame my 0.5, so align framesToReadOnce align with wav blockSize in bytes
             _pcmData = (char*)malloc(dataSize);
             memset(_pcmData, 0x00, dataSize);
 
@@ -228,6 +227,8 @@ void AudioCache::readDataTask(unsigned int selfId)
             }
             ALOGV("pcm buffer was loaded successfully, total frames: %u, total read frames: %u, remainingFrames: %u", totalFrames, _framesRead, remainingFrames);
 
+            if(sourceFormat == AUDIO_SOURCE_FORMAT::ADPCM || sourceFormat == AUDIO_SOURCE_FORMAT::IMA_ADPCM)
+                alBufferi(_alBufferId, AL_UNPACK_BLOCK_ALIGNMENT_SOFT, decoder->getSamplesPerBlock());
             alBufferData(_alBufferId, _format, _pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
 
             alError = alGetError();

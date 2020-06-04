@@ -74,7 +74,7 @@ public:
     /**
      * @brief Reads audio frames of PCM format.
      * @param framesToRead The number of frames excepted to be read.
-     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| * _bytesPerFrame.
+     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| / samplesPerBlock * _bytesPerBlock.
      * @return The number of frames actually read, it's probably less than 'framesToRead'. Returns 0 means reach the end of file.
      */
     virtual uint32_t read(uint32_t framesToRead, char* pcmBuf) = 0;
@@ -82,7 +82,7 @@ public:
     /**
      * @brief Reads fixed audio frames of PCM format.
      * @param framesToRead The number of frames excepted to be read.
-     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| * _bytesPerFrame.
+     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| / samplesPerBlock * _bytesPerBlock.
      * @return The number of frames actually read, it's probably less than |framesToRead|. Returns 0 means reach the end of file.
      * @note The different between |read| and |readFixedFrames| is |readFixedFrames| will do multiple reading operations if |framesToRead| frames
      *       isn't filled entirely, while |read| just does reading operation once whatever |framesToRead| is or isn't filled entirely.
@@ -98,17 +98,18 @@ public:
      */
     virtual bool seek(uint32_t frameOffset) = 0;
 
-    /**
-     * @brief Tells the current frame offset.
-     * @return The current frame offset.
-     */
-    virtual uint32_t tell() const = 0;
-
     /** Gets total frames of current audio.*/
     virtual uint32_t getTotalFrames() const;
 
-    /** Gets bytes per frame of current audio.*/
+    /**
+    * @brief The helper function for convert frames to bytes
+    */
     virtual uint32_t framesToBytes(uint32_t frames) const;
+
+    /**
+    * @brief The helper function for convert bytes to frames
+    */
+    virtual uint32_t bytesToFrames(uint32_t bytes) const;
 
     /** Gets sample rate of current audio.*/
     virtual uint32_t getSampleRate() const;
@@ -118,6 +119,11 @@ public:
      */
     virtual uint32_t getChannelCount() const;
 
+    /*
+    * @brief Gets samples per block, usually is 1 for .mp3 or .ogg, .wav may > 1
+    */
+    uint32_t getSamplesPerBlock() const;
+
     virtual AUDIO_SOURCE_FORMAT getSourceFormat() const;
 
 protected:
@@ -126,7 +132,8 @@ protected:
 
     bool _isOpened;
     uint32_t _totalFrames;
-    uint32_t _bytesPerFrame;
+    uint32_t _bytesPerBlock; // Same as bytesPerFrame when _samplesPerBlock is 1
+    uint32_t _samplesPerBlock;
     uint32_t _sampleRate;
     uint32_t _channelCount;
     AUDIO_SOURCE_FORMAT _sourceFormat;

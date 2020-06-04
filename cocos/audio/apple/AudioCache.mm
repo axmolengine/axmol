@@ -171,12 +171,11 @@ void AudioCache::readDataTask(unsigned int selfId)
             break;
 
         const uint32_t originalTotalFrames = decoder->getTotalFrames();
-        const uint32_t bytesPerFrame = decoder->getBytesPerFrame();
         const uint32_t sampleRate = decoder->getSampleRate();
         const uint32_t channelCount = decoder->getChannelCount();
 
         uint32_t totalFrames = originalTotalFrames;
-        uint32_t dataSize = totalFrames * bytesPerFrame;
+        uint32_t dataSize = decoder->framesToBytes(totalFrames);
         uint32_t remainingFrames = totalFrames;
         uint32_t adjustFrames = 0;
 
@@ -192,9 +191,9 @@ void AudioCache::readDataTask(unsigned int selfId)
 
             BREAK_IF_ERR_LOG(!decoder->seek(totalFrames), "AudioDecoder::seek(%u) error", totalFrames);
 
-            char* tmpBuf = (char*)malloc(framesToReadOnce * bytesPerFrame);
+            char* tmpBuf = (char*)malloc(decoder->framesToBytes(framesToReadOnce));
             std::vector<char> adjustFrameBuf;
-            adjustFrameBuf.reserve(framesToReadOnce * bytesPerFrame);
+            adjustFrameBuf.reserve(decoder->framesToBytes(framesToReadOnce));
 
             // Adjust total frames by setting position to the end of frames and try to read more data.
             // This is a workaround for https://github.com/cocos2d/cocos2d-x/issues/16938
@@ -204,7 +203,7 @@ void AudioCache::readDataTask(unsigned int selfId)
                 if (framesRead > 0)
                 {
                     adjustFrames += framesRead;
-                    adjustFrameBuf.insert(adjustFrameBuf.end(), tmpBuf, tmpBuf + framesRead * bytesPerFrame);
+                    adjustFrameBuf.insert(adjustFrameBuf.end(), tmpBuf, tmpBuf + decoder->framesToBytes(framesRead));
                 }
 
             } while (framesRead > 0);
@@ -217,7 +216,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             }
 
             // Reset dataSize
-            dataSize = totalFrames * bytesPerFrame;
+            dataSize = decoder->framesToBytes(totalFrames);
 
             free(tmpBuf);
 
@@ -236,7 +235,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             if (*_isDestroyed)
                 break;
 
-            framesRead = decoder->readFixedFrames(std::min(framesToReadOnce, remainingFrames), _pcmData + _framesRead * bytesPerFrame);
+            framesRead = decoder->readFixedFrames(std::min(framesToReadOnce, remainingFrames), _pcmData + decoder->framesToBytes(_framesRead));
             _framesRead += framesRead;
             remainingFrames -= framesRead;
 
@@ -251,7 +250,7 @@ void AudioCache::readDataTask(unsigned int selfId)
                 {
                     frames = originalTotalFrames - _framesRead;
                 }
-                framesRead = decoder->read(frames, _pcmData + _framesRead * bytesPerFrame);
+                framesRead = decoder->read(frames, _pcmData + decoder->framesToBytes(_framesRead));
                 if (framesRead == 0)
                     break;
                 _framesRead += framesRead;
@@ -260,7 +259,7 @@ void AudioCache::readDataTask(unsigned int selfId)
 
             if (_framesRead < originalTotalFrames)
             {
-                memset(_pcmData + _framesRead * bytesPerFrame, 0x00, (totalFrames - _framesRead) * bytesPerFrame);
+                memset(_pcmData + decoder->framesToBytes(_framesRead), 0x00, decoder->framesToBytes(totalFrames - _framesRead));
             }
 
             ALOGV("pcm buffer was loaded successfully, total frames: %u, total read frames: %u, adjust frames: %u, remainingFrames: %u", totalFrames, _framesRead, adjustFrames, remainingFrames);
@@ -284,7 +283,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             _queBufferFrames = sampleRate * QUEUEBUFFER_TIME_STEP;
             BREAK_IF_ERR_LOG(_queBufferFrames == 0, "_queBufferFrames == 0");
 
-            const uint32_t queBufferBytes = _queBufferFrames * bytesPerFrame;
+            const uint32_t queBufferBytes = decoder->framesToBytes(_queBufferFrames);
 
             for (int index = 0; index < QUEUEBUFFER_NUM; ++index)
             {
