@@ -50,8 +50,6 @@ unsigned int __idIndex = 0;
 #define INVALID_AL_BUFFER_ID 0xFFFFFFFF
 #define PCMDATA_CACHEMAXSIZE 1048576
 
-#define CC_ALIGN(d, a) (((d) + ((a)-1)) & ~((a)-1))
-
 using namespace cocos2d;
 
 AudioCache::AudioCache()
