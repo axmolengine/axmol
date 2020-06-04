@@ -76,6 +76,7 @@ AudioPlayer::~AudioPlayer()
 
 void AudioPlayer::destroy()
 {
+    std::unique_lock<std::mutex> lck(_play2dMutex);
     if (_isDestroyed)
         return;
 
@@ -98,10 +99,6 @@ void AudioPlayer::destroy()
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
         }
-
-        // Wait for play2d to be finished.
-        _play2dMutex.lock();
-        _play2dMutex.unlock();
 
         if (_streamingSource)
         {
@@ -142,7 +139,7 @@ void AudioPlayer::setCache(AudioCache* cache)
 
 bool AudioPlayer::play2d()
 {
-    _play2dMutex.lock();
+    std::unique_lock<std::mutex> lck(_play2dMutex);
     ALOGV("AudioPlayer::play2d, _alSource: %u, player id=%u", _alSource, _id);
 
     /*********************************************************************/
@@ -234,7 +231,6 @@ bool AudioPlayer::play2d()
         _removeByAudioEngine = true;
     }
 
-    _play2dMutex.unlock();
     return ret;
 }
 
