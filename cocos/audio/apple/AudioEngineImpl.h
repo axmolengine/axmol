@@ -1,8 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2018 HALX99.
-
+ Copyright (c) 2018-2020 HALX99.
  http://www.cocos2d-x.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -68,6 +67,7 @@ public:
     void update(float dt);
 
 private:
+    void _updateLocked(float dt);
     void _play2d(AudioCache *cache, AUDIO_ID audioID);
     ALuint findValidSource();
 
@@ -83,7 +83,7 @@ private:
 
     //audioID,AudioInfo
     std::unordered_map<AUDIO_ID, AudioPlayer*>  _audioPlayers;
-    std::mutex _threadMutex;
+    std::recursive_mutex _threadMutex;
 
     //finish callbacks
     std::vector<std::function<void()>> _finishCallbacks;

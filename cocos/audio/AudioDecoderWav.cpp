@@ -155,7 +155,6 @@ namespace cocos2d {
     {
         auto newOffset = wavf->Stream.seek(wavf->PcmDataOffset + offset, SEEK_SET);
         return newOffset >= wavf->PcmDataOffset ? newOffset - wavf->PcmDataOffset : -1;
-        //return -1;
     }
 
     static int wav_close(WAV_FILE* wavf)
