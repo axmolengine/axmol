@@ -98,9 +98,8 @@ namespace cocos2d {
             return false;
 
         auto& fmtInfo = h->Fmt;
-        wavf->BitsPerFrame = fmtInfo.BitsPerSample * fmtInfo.NumChannels;
 
-        int bitDepth = (wavf->BitsPerFrame / fmtInfo.NumChannels);
+        int bitDepth = (fmtInfo.BitsPerSample);
 
         // Read PCM data or extensible data if exists.
         switch (fmtInfo.AudioFormat)
@@ -152,17 +151,11 @@ namespace cocos2d {
         return wavf->Stream.read(pcmBuf, bytesToRead);
     }
 
-    static int wav_pcm_seek(WAV_FILE* wavf, int frameOffset)
+    static int wav_seek(WAV_FILE* wavf, int offset)
     {
-        auto offset = wavf->Stream.seek(((frameOffset * wavf->BitsPerFrame) >> 3) + wavf->PcmDataOffset, SEEK_SET);
-        if (offset >= static_cast<int>(wavf->PcmDataOffset)) return ((offset - wavf->PcmDataOffset) << 3) / wavf->BitsPerFrame;
-        return -1;
-    }
-
-    static int wav_pcm_tell(WAV_FILE* wavf)
-    {
-        auto offset = wavf->Stream.seek(0, SEEK_CUR);
-        return ((offset - wavf->PcmDataOffset) << 3) / wavf->BitsPerFrame;
+        auto newOffset = wavf->Stream.seek(wavf->PcmDataOffset + offset, SEEK_SET);
+        return newOffset >= wavf->PcmDataOffset ? newOffset - wavf->PcmDataOffset : -1;
+        //return -1;
     }
 
     static int wav_close(WAV_FILE* wavf)
@@ -184,15 +177,24 @@ namespace cocos2d {
     {
         if (wav_open(fullPath, &_wavf))
         {
-            _sampleRate = _wavf.FileHeader.Fmt.SampleRate;
-            _channelCount = _wavf.FileHeader.Fmt.NumChannels;
-            _bytesPerFrame = _wavf.BitsPerFrame >> 3;
-           _sourceFormat = _wavf.SourceFormat;
+            auto& fmtInfo = _wavf.FileHeader.Fmt;
+            _sampleRate = fmtInfo.SampleRate;
+            _channelCount = fmtInfo.NumChannels;
+            _bytesPerBlock = fmtInfo.BlockAlign; // == fmtInfo.BitsPerSample * _channelCount / 8;
+            _sourceFormat = _wavf.SourceFormat;
 
-           if (_bytesPerFrame)
-               _totalFrames = (_wavf.FileHeader.PcmData.ChunkSize) / _bytesPerFrame;
-           else
-               _totalFrames = bytesToFrames(_wavf.FileHeader.PcmData.ChunkSize);
+            // See: https://github.com/openalext/openalext/wiki/AL_SOFT_block_alignment
+            switch (_sourceFormat) {
+            case AUDIO_SOURCE_FORMAT::ADPCM:
+                _samplesPerBlock = (_bytesPerBlock / _channelCount - 7) * 2 + 2;
+                break;
+            case AUDIO_SOURCE_FORMAT::IMA_ADPCM:
+                _samplesPerBlock = (_bytesPerBlock / _channelCount - 4) / 4 * 8 + 1;
+                break;
+            default:;
+            }
+
+            _totalFrames = bytesToFrames(_wavf.FileHeader.PcmData.ChunkSize);
 
             _isOpened = true;
             return true;
@@ -201,17 +203,17 @@ namespace cocos2d {
     }
 
     uint32_t AudioDecoderWav::framesToBytes(uint32_t frames) const {
-        if (_bytesPerFrame > 0)
-            return _bytesPerFrame * frames;
-        
-        return frames / getSamplesPerBlock() * getBytesPerBlock();
+        if (_samplesPerBlock == 1)
+            return _bytesPerBlock * frames;
+
+        return frames / _samplesPerBlock * _bytesPerBlock;
     }
 
     uint32_t AudioDecoderWav::bytesToFrames(uint32_t bytes) const
     {
-        if (_bytesPerFrame > 0)
-            return bytes / _bytesPerFrame;
-        return bytes / getBytesPerBlock() * getSamplesPerBlock();
+        if (_samplesPerBlock == 1)
+            return bytes / _bytesPerBlock;
+        return bytes / _bytesPerBlock * _samplesPerBlock;
     }
 
     void AudioDecoderWav::close()
@@ -232,22 +234,7 @@ namespace cocos2d {
 
     bool AudioDecoderWav::seek(uint32_t frameOffset)
     {
-        return wav_pcm_seek(&_wavf, frameOffset) == frameOffset;
+        auto offset = framesToBytes(frameOffset);
+        return wav_seek(&_wavf, offset) == offset;
     }
-
-    uint32_t AudioDecoderWav::tell() const
-    {
-        return wav_pcm_tell(&_wavf);
-    }
-
-    uint32_t AudioDecoderWav::getBytesPerBlock() const
-    {
-        return _wavf.FileHeader.Fmt.BlockAlign;;
-    }
-    uint32_t AudioDecoderWav::getSamplesPerBlock() const
-    {
-        auto bytesPerBlock = getBytesPerBlock();
-        return (bytesPerBlock / _channelCount - 7) * 2 + 2;
-    }
-
 } // namespace cocos2d {
