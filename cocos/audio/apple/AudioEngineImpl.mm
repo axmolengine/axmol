@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2018 HALX99.
+ Copyright (c) 2018-2020 HALX99.
 
  http://www.cocos2d-x.org
 
@@ -23,8 +23,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
-#define LOG_TAG "AudioEngineImpl.mm"
+#define LOG_TAG "AudioEngineImpl"
 
 #include "platform/CCPlatformConfig.h"
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
@@ -448,12 +447,16 @@ AUDIO_ID AudioEngineImpl::play2d(const std::string &filePath ,bool loop ,float v
 
 void AudioEngineImpl::_play2d(AudioCache *cache, AUDIO_ID audioID)
 {
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    auto iter = _audioPlayers.find(audioID);
+    if (iter == _audioPlayers.end())
+        return;
+    auto player = iter->second;
+
     //Note: It maybe in sub thread or main thread :(
     if (!*cache->_isDestroyed && cache->_state == AudioCache::State::READY)
     {
-        _threadMutex.lock();
-        auto playerIt = _audioPlayers.find(audioID);
-        if (playerIt != _audioPlayers.end() && playerIt->second->play2d()) {
+        if (player->play2d()) {
             _scheduler->performFunctionInCocosThread([audioID](){
 
                 if (AudioEngine::_audioIDInfoMap.find(audioID) != AudioEngine::_audioIDInfoMap.end()) {
@@ -461,16 +464,11 @@ void AudioEngineImpl::_play2d(AudioCache *cache, AUDIO_ID audioID)
                 }
             });
         }
-        _threadMutex.unlock();
     }
     else
     {
         ALOGD("AudioEngineImpl::_play2d, cache was destroyed or not ready!");
-        auto iter = _audioPlayers.find(audioID);
-        if (iter != _audioPlayers.end())
-        {
-            iter->second->_removeByAudioEngine = true;
-        }
+        player->_removeByAudioEngine = true;
     }
 }
 
@@ -488,7 +486,7 @@ ALuint AudioEngineImpl::findValidSource()
 
 void AudioEngineImpl::setVolume(AUDIO_ID audioID,float volume)
 {
-    std::unique_lock<std::mutex> lck(_threadMutex);
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
     if(iter == _audioPlayers.end())
         return;
@@ -510,7 +508,7 @@ void AudioEngineImpl::setVolume(AUDIO_ID audioID,float volume)
 
 void AudioEngineImpl::setLoop(AUDIO_ID audioID, bool loop)
 {
-    std::unique_lock<std::mutex> lck(_threadMutex);
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
     if(iter == _audioPlayers.end())
         return;
@@ -542,10 +540,10 @@ void AudioEngineImpl::setLoop(AUDIO_ID audioID, bool loop)
 
 bool AudioEngineImpl::pause(AUDIO_ID audioID)
 {
-    std::unique_lock<std::mutex> lck(_threadMutex);
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
     if(iter == _audioPlayers.end())
-        return true;
+        return false;
     
     auto player = iter->second;
     
@@ -566,10 +564,10 @@ bool AudioEngineImpl::pause(AUDIO_ID audioID)
 bool AudioEngineImpl::resume(AUDIO_ID audioID)
 {
     bool ret = true;
-    std::unique_lock<std::mutex> lck(_threadMutex);
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
     if(iter == _audioPlayers.end())
-        return true;
+        return false;
     
     auto player = iter->second;
     lck.unlock();
@@ -587,54 +585,69 @@ bool AudioEngineImpl::resume(AUDIO_ID audioID)
 
 void AudioEngineImpl::stop(AUDIO_ID audioID)
 {
-    std::unique_lock<std::mutex> lck(_threadMutex);
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
     if(iter == _audioPlayers.end())
         return;
     
     auto player = iter->second;
-    lck.unlock();
-    
+
     player->destroy();
 
     // Call 'update' method to cleanup immediately since the schedule may be cancelled without any notification.
-    update(0.0f);
+    _updateLocked(0.0f);
 }
 
 void AudioEngineImpl::stopAll()
 {
+    std::lock_guard<std::recursive_mutex> lck(_threadMutex);
     for(auto&& player : _audioPlayers)
     {
         player.second->destroy();
     }
+    //Note: Don't set the flag to false here, it should be set in 'update' function.
+    // Otherwise, the state got from alSourceState may be wrong
+//    for(int index = 0; index < MAX_AUDIOINSTANCES; ++index)
+//    {
+//        _alSourceUsed[_alSources[index]] = false;
+//    }
 
     // Call 'update' method to cleanup immediately since the schedule may be cancelled without any notification.
-    update(0.0f);
+    _updateLocked(0.0f);
 }
 
 float AudioEngineImpl::getDuration(AUDIO_ID audioID)
 {
-    auto player = _audioPlayers[audioID];
-    if(player->_ready){
-        return player->_audioCache->_duration;
-    } else {
-        return AudioEngine::TIME_UNKNOWN;
+    std::lock_guard<std::recursive_mutex> lck(_threadMutex);
+    auto it = _audioPlayers.find(audioID);
+    if (it != _audioPlayers.end()) {
+        auto player = it->second;
+        if (player->_ready) {
+            return player->_audioCache->_duration;
+        }
     }
+    return AudioEngine::TIME_UNKNOWN;
 }
 
 float AudioEngineImpl::getCurrentTime(AUDIO_ID audioID)
 {
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    auto it = _audioPlayers.find(audioID); 
+    if (it == _audioPlayers.end())
+        return 0.0f;
+
     float ret = 0.0f;
-    auto player = _audioPlayers[audioID];
-    if(player->_ready){
+    auto player = it->second;
+    if (player->_ready) {
         if (player->_streamingSource) {
             ret = player->getTime();
-        } else {
+        }
+        else {
             alGetSourcef(player->_alSource, AL_SEC_OFFSET, &ret);
 
             auto error = alGetError();
             if (error != AL_NO_ERROR) {
-                ALOGE("%s, audio id:" AUDIO_ID_PRID ",error code:%x", __PRETTY_FUNCTION__,audioID,error);
+                ALOGE("%s, audio id:" AUDIO_ID_PRID ",error code:%x", __PRETTY_FUNCTION__, audioID, error);
             }
         }
     }
@@ -645,7 +658,12 @@ float AudioEngineImpl::getCurrentTime(AUDIO_ID audioID)
 bool AudioEngineImpl::setCurrentTime(AUDIO_ID audioID, float time)
 {
     bool ret = false;
-    auto player = _audioPlayers[audioID];
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    auto iter = _audioPlayers.find(audioID);
+    if(iter == _audioPlayers.end())
+        return false;
+    
+    auto player = iter->second;
 
     do {
         if (!player->_ready) {
@@ -678,7 +696,7 @@ bool AudioEngineImpl::setCurrentTime(AUDIO_ID audioID, float time)
 
 void AudioEngineImpl::setFinishCallback(AUDIO_ID audioID, const std::function<void (AUDIO_ID, const std::string &)> &callback)
 {
-    std::unique_lock<std::mutex> lck(_threadMutex);
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioID);
     if(iter == _audioPlayers.end())
         return;
@@ -691,22 +709,26 @@ void AudioEngineImpl::setFinishCallback(AUDIO_ID audioID, const std::function<vo
 
 void AudioEngineImpl::update(float dt)
 {
-    ALint sourceState;
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    _updateLocked(dt);
+}
+
+void AudioEngineImpl::_updateLocked(float dt)
+{
     AUDIO_ID audioID;
     AudioPlayer* player;
     ALuint alSource;
 
 //    ALOGV("AudioPlayer count: %d", (int)_audioPlayers.size());
-    _threadMutex.lock();
     for (auto it = _audioPlayers.begin(); it != _audioPlayers.end(); ) {
         audioID = it->first;
         player = it->second;
         alSource = player->_alSource;
-        alGetSourcei(alSource, AL_SOURCE_STATE, &sourceState);
 
         if (player->_removeByAudioEngine)
         {
             AudioEngine::remove(audioID);
+            
             it = _audioPlayers.erase(it);
             delete player;
             _unusedSourcesPool.push_back(alSource);
@@ -739,12 +761,10 @@ void AudioEngineImpl::update(float dt)
         }
     }
 
-    if(_audioPlayers.empty()){
+    if(_audioPlayers.empty()) {
         _lazyInitLoop = true;
         _scheduler->unschedule(CC_SCHEDULE_SELECTOR(AudioEngineImpl::update), this);
     }
-    _threadMutex.unlock();
-    
     if (!_finishCallbacks.empty()) {
         for (auto& finishCallback : _finishCallbacks)
             finishCallback();
