@@ -200,8 +200,10 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
             _texture2D->setRenderTarget(true);
             texture->release();
         }
-        else
+        else {
+            texture->release();
             break;
+        }
 
         _renderTargetFlags = RenderTargetFlag::COLOR;
 
@@ -474,16 +476,15 @@ void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool fli
     //        it should be cut
     int savedBufferWidth = (int)s.width;
     int savedBufferHeight = (int)s.height;
-    
+    bool hasPremultipliedAlpha = _texture2D->hasPremultipliedAlpha();
+
     Image *image = new (std::nothrow) Image();
-    
-    auto initCallback = [&, savedBufferWidth, savedBufferHeight, imageCallback](Image* image, const unsigned char* tempData){
-        image->initWithRawData(tempData, savedBufferWidth * savedBufferHeight * 4, savedBufferWidth, savedBufferHeight, 8, _texture2D->hasPremultipliedAlpha());
-        imageCallback(image);
-    };
-    auto callback = std::bind(initCallback, image, std::placeholders::_1);
-    
-    _texture2D->getBackendTexture()->getBytes(0, 0, savedBufferWidth, savedBufferHeight, flipImage, callback);
+    if (image) {
+        _texture2D->getBackendTexture()->getBytes(0, 0, savedBufferWidth, savedBufferHeight, flipImage, [=](const unsigned char* tempData, size_t, size_t) {
+            image->initWithRawData(tempData, savedBufferWidth * savedBufferHeight * 4, savedBufferWidth, savedBufferHeight, 8, hasPremultipliedAlpha);
+            imageCallback(image);
+            });
+    }
     
 //    do
 //    {
