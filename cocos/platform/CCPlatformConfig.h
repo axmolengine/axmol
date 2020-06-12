@@ -117,5 +117,7 @@ THE SOFTWARE.
     #define CC_USE_GL
 #endif
 
+#define CC_USE_GLES_ON_DESKTOP 1
+
 /// @endcond
 #endif  // __BASE_CC_PLATFORM_CONFIG_H__
