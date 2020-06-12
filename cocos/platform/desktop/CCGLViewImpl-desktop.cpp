@@ -47,8 +47,6 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-GLViewImpl* GLFWEventHandler::_view = nullptr;
-
 const std::string GLViewImpl::EVENT_WINDOW_RESIZED = "glview_window_resized";
 const std::string GLViewImpl::EVENT_WINDOW_FOCUSED = "glview_window_focused";
 const std::string GLViewImpl::EVENT_WINDOW_UNFOCUSED = "glview_window_unfocused";
@@ -194,6 +192,91 @@ static keyCodeItem g_keyCodeStructArray[] = {
 };
 
 //////////////////////////////////////////////////////////////////////////
+// GLFW Event forward handler
+//////////////////////////////////////////////////////////////////////////
+class GLFWEventHandler
+{
+public:
+    static void onGLFWError(int errorID, const char* errorDesc)
+    {
+        if (_view)
+            _view->onGLFWError(errorID, errorDesc);
+    }
+
+    static void onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify)
+    {
+        if (_view)
+            _view->onGLFWMouseCallBack(window, button, action, modify);
+    }
+
+    static void onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
+    {
+        if (_view)
+            _view->onGLFWMouseMoveCallBack(window, x, y);
+    }
+
+    static void onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
+    {
+        if (_view)
+            _view->onGLFWMouseScrollCallback(window, x, y);
+    }
+
+    static void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
+        if (_view)
+            _view->onGLFWKeyCallback(window, key, scancode, action, mods);
+    }
+
+    static void onGLFWCharCallback(GLFWwindow* window, unsigned int character)
+    {
+        if (_view)
+            _view->onGLFWCharCallback(window, character);
+    }
+
+    static void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y)
+    {
+        if (_view)
+            _view->onGLFWWindowPosCallback(windows, x, y);
+    }
+
+    static void onGLFWFrameBufferSizeCallback(GLFWwindow* window, int w, int h)
+    {
+        if (_view)
+            _view->onGLFWFramebufferSizeCallback(window, w, h);
+    }
+
+    static void onGLFWWindowSizeCallback(GLFWwindow* window, int width, int height)
+    {
+        if (_view)
+            _view->onGLFWWindowSizeCallback(window, width, height);
+    }
+
+    static void setGLViewImpl(GLViewImpl* view)
+    {
+        _view = view;
+    }
+
+    static void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified)
+    {
+        if (_view)
+        {
+            _view->onGLFWWindowIconifyCallback(window, iconified);
+        }
+    }
+
+    static void onGLFWWindowFocusCallback(GLFWwindow* window, int focused)
+    {
+        if (_view)
+        {
+            _view->onGLFWWindowFocusCallback(window, focused);
+        }
+    }
+
+private:
+    static GLViewImpl* _view;
+};
+GLViewImpl* GLFWEventHandler::_view = nullptr;
+
 // implement GLViewImpl
 //////////////////////////////////////////////////////////////////////////
 
@@ -286,6 +369,13 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
 
     _frameZoomFactor = frameZoomFactor;
 
+#if CC_USE_GLES_ON_DESKTOP
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+#endif
+
     glfwWindowHint(GLFW_RESIZABLE,resizable?GL_TRUE:GL_FALSE);
     glfwWindowHint(GLFW_RED_BITS,_glContextAttrs.redBits);
     glfwWindowHint(GLFW_GREEN_BITS,_glContextAttrs.greenBits);
@@ -348,21 +438,19 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
     glfwSetCharCallback(_mainWindow, GLFWEventHandler::onGLFWCharCallback);
     glfwSetKeyCallback(_mainWindow, GLFWEventHandler::onGLFWKeyCallback);
     glfwSetWindowPosCallback(_mainWindow, GLFWEventHandler::onGLFWWindowPosCallback);
-    glfwSetFramebufferSizeCallback(_mainWindow, GLFWEventHandler::onGLFWframebuffersize);
-    glfwSetWindowSizeCallback(_mainWindow, GLFWEventHandler::onGLFWWindowSizeFunCallback);
+    glfwSetFramebufferSizeCallback(_mainWindow, GLFWEventHandler::onGLFWFrameBufferSizeCallback);
+    glfwSetWindowSizeCallback(_mainWindow, GLFWEventHandler::onGLFWWindowSizeCallback);
     glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
     glfwSetWindowFocusCallback(_mainWindow, GLFWEventHandler::onGLFWWindowFocusCallback);
 
     setFrameSize(rect.size.width, rect.size.height);
 
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
-
     loadGL();
-    
+
     // check OpenGL version at first
     const GLubyte* glVersion = glGetString(GL_VERSION);
 
-    if ( utils::atof((const char*)glVersion) < 1.5 )
+    if ( utils::atof((const char*)glVersion) < 1.5 && nullptr == strstr((const char*)glVersion, "ANGLE") )
     {
         char strComplain[256] = {0};
         sprintf(strComplain,
@@ -371,23 +459,23 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
         ccMessageBox(strComplain, "OpenGL version too old");
         return false;
     }
-
+    
+    // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
+#if !CC_USE_GLES_ON_DESKTOP
     // Enable point size by default.
 #if defined(GL_VERSION_2_0)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 #else
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE_ARB);
 #endif
-    
-    if(_glContextAttrs.multisamplingCount > 0)
+    if (_glContextAttrs.multisamplingCount > 0)
         glEnable(GL_MULTISAMPLE);
-
+#endif
     CHECK_GL_ERROR_DEBUG();
 
 //    // GLFW v3.2 no longer emits "onGLFWWindowSizeFunCallback" at creation time. Force default viewport:
 //    setViewPortInPoints(0, 0, neededWidth, neededHeight);
 //
-#endif
     return true;
 }
 
@@ -816,12 +904,10 @@ void GLViewImpl::onGLFWMouseScrollCallback(GLFWwindow* /*window*/, double x, dou
 
 void GLViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int /*mods*/)
 {
-    if (GLFW_REPEAT != action)
-    {
-        EventKeyboard event(g_keyCodeMap[key], GLFW_PRESS == action);
-        auto dispatcher = Director::getInstance()->getEventDispatcher();
-        dispatcher->dispatchEvent(&event);
-    }
+    // x-studio spec, for repeat press key support.
+    EventKeyboard event(g_keyCodeMap[key], action);
+    auto dispatcher = Director::getInstance()->getEventDispatcher();
+    dispatcher->dispatchEvent(&event);
 
     if (GLFW_RELEASE != action)
     {
@@ -876,8 +962,9 @@ void GLViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int /*x*/, int 
     Director::getInstance()->setViewport();
 }
 
-void GLViewImpl::onGLFWframebuffersize(GLFWwindow* window, int w, int h)
-{
+void GLViewImpl::onGLFWFramebufferSizeCallback(GLFWwindow* window, int w, int h)
+{ // win32 glfw never invoke this callback
+#if CC_TARGET_PLATFORM != CC_PLATFORM_WIN32
     float frameSizeW = _screenSize.width;
     float frameSizeH = _screenSize.height;
     float factorX = frameSizeW / w * _retinaFactor * _frameZoomFactor;
@@ -895,7 +982,7 @@ void GLViewImpl::onGLFWframebuffersize(GLFWwindow* window, int w, int h)
             _retinaFactor = 2;
         }
 
-        glfwSetWindowSize(window, static_cast<int>(frameSizeW * 0.5f * _retinaFactor * _frameZoomFactor), static_cast<int>(frameSizeH * 0.5f * _retinaFactor * _frameZoomFactor));
+        glfwSetWindowSize(window, static_cast<int>(frameSizeW * 0.5f * _retinaFactor * _frameZoomFactor) , static_cast<int>(frameSizeH * 0.5f * _retinaFactor * _frameZoomFactor));
     }
     else if (std::abs(factorX - 2.0f) < FLT_EPSILON && std::abs(factorY - 2.0f) < FLT_EPSILON)
     {
@@ -903,20 +990,16 @@ void GLViewImpl::onGLFWframebuffersize(GLFWwindow* window, int w, int h)
         _retinaFactor = 1;
         glfwSetWindowSize(window, static_cast<int>(frameSizeW * _retinaFactor * _frameZoomFactor), static_cast<int>(frameSizeH * _retinaFactor * _frameZoomFactor));
     }
+#endif
 }
 
-void GLViewImpl::onGLFWWindowSizeFunCallback(GLFWwindow* /*window*/, int width, int height)
+void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
-    if (width && height && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
+    if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
-        Size baseDesignSize = _designResolutionSize;
-        ResolutionPolicy baseResolutionPolicy = _resolutionPolicy;
+    	// x-studio spec, fix view size incorrect when window size changed.
+        updateDesignResolutionSize();
 
-        float frameWidth = width / _frameZoomFactor;
-        float frameHeight = height / _frameZoomFactor;
-        setFrameSize(frameWidth, frameHeight);
-        setDesignResolutionSize(baseDesignSize.width, baseDesignSize.height, baseResolutionPolicy);
-        Director::getInstance()->setViewport();
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
     }
 }
@@ -1033,6 +1116,7 @@ bool GLViewImpl::loadGL()
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
+#if !CC_USE_GLES_ON_DESKTOP
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         log("glad: Failed to Load GL");
@@ -1045,14 +1129,15 @@ bool GLViewImpl::loadGL()
     {
         log("Not totally ready :(");
     }
-
-    if (!loadFboExtensions())
+#else
+    if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress))
+    {
+        log("glad: Failed to Load GLES2");
         return false;
-	
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-	// close _vsync_ default for nvidia display card
-    ::glfwSwapInterval(0);
+    }
 #endif
+
+    loadFboExtensions();
 
 #endif // (CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
 

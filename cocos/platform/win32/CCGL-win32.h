@@ -25,6 +25,64 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
+#include "platform/CCPlatformConfig.h"
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+
 #include "glad/glad.h"
 
+#if CC_USE_GLES_ON_DESKTOP
+#undef glClearDepth
+#undef glMapBuffer
+#undef glUnmapBuffer
+#undef glBindVertexArray
+#undef glDeleteVertexArrays
+#undef glGenVertexArrays
+// #undef glBlendFuncSeparate
+// #undef glBlendEquation
+#if defined(GL_VERSION_ES_CM_1_0)
+#undef glIsRenderbuffer
+#undef glBindRenderbuffer
+#undef glDeleteRenderbuffers
+#undef glGenRenderbuffers
+#undef glRenderbufferStorage
+#undef glIsFramebuffer
+#undef glBindFramebuffer
+#undef glDeleteFramebuffers
+#undef glGenFramebuffers
+#undef glCheckFramebufferStatus
+#undef glFramebufferRenderbuffer
+#undef glFramebufferTexture2D
+#undef glGetFramebufferAttachmentParameteriv
+#undef glGenerateMipmap
+#endif
+
+#define glClearDepth glClearDepthf
+#define glMapBuffer glMapBufferOES
+#define glUnmapBuffer glUnmapBufferOES
+#define glBindVertexArray glBindVertexArrayOES
+#define glDeleteVertexArrays glDeleteVertexArraysOES
+#define glGenVertexArrays glGenVertexArraysOES
+// #define glBlendFuncSeparate glBlendFuncSeparateOES
+// #define glBlendEquation glBlendEquationOES
+#if defined(GL_VERSION_ES_CM_1_0)
+#define glIsRenderbuffer glIsRenderbufferOES
+#define glBindRenderbuffer glBindRenderbufferOES
+#define glDeleteRenderbuffers glDeleteRenderbuffersOES
+#define glGenRenderbuffers glGenRenderbuffersOES
+#define glRenderbufferStorage glRenderbufferStorageOES
+#define glIsFramebuffer glIsFramebufferOES
+#define glBindFramebuffer glBindFramebufferOES
+#define glDeleteFramebuffers glDeleteFramebuffersOES
+#define glGenFramebuffers glGenFramebuffersOES
+#define glCheckFramebufferStatus glCheckFramebufferStatusOES
+#define glFramebufferRenderbuffer glFramebufferRenderbufferOES
+#define glFramebufferTexture2D glFramebufferTexture2DOES
+#define glGetFramebufferAttachmentParameteriv glGetFramebufferAttachmentParameterivOES
+#define glGenerateMipmap glGenerateMipmapOES
+#endif
+
+#endif
+
 #define CC_GL_DEPTH24_STENCIL8      GL_DEPTH24_STENCIL8
+
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
