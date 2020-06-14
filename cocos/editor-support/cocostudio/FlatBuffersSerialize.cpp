@@ -62,9 +62,6 @@
 #include "editor-support/cocostudio/WidgetReader/TextFieldReader/TextFieldExReader.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include "flatbuffers/util.h"
-
-
 
 USING_NS_CC;
 using namespace cocos2d::ui;
@@ -328,10 +325,9 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
         std::string outFullPath = FileUtils::getInstance()->fullPathForFilename(flatbuffersFileName);
         size_t pos = outFullPath.find_last_of('.');
         std::string convert = outFullPath.substr(0, pos).append(".csb");
-        auto save = flatbuffers::SaveFile(convert.c_str(),
-            reinterpret_cast<const char *>(thiz->_builder->GetBufferPointer()),
+        auto save = FileUtils::writeBinaryToFile(thiz->_builder->GetBufferPointer(),
             thiz->_builder->GetSize(),
-            true);
+            convert);
         if (!save)
         {
             return "couldn't save files!";
@@ -1668,10 +1664,8 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
 
     auto langSet = CreateLanguageSet(*_builder, _builder->CreateVector(langItemList));
     _builder->Finish(langSet);
-    bool isSuccess = flatbuffers::SaveFile(flatBuffersFilePath.c_str(),
-        reinterpret_cast<const char *>(_builder->GetBufferPointer()),
-        _builder->GetSize(),
-        true);
+    bool isSuccess = FileUtils::writeBinaryToFile(_builder->GetBufferPointer(),
+        _builder->GetSize(), flatBuffersFilePath);
 
     if (isSuccess)
         return "";

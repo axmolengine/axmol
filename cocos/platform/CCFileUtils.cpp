@@ -497,27 +497,7 @@ void FileUtils::writeStringToFile(std::string dataStr, const std::string& fullPa
 
 bool FileUtils::writeDataToFile(const Data& data, const std::string& fullPath) const
 {
-    size_t size = 0;
-    const char* mode = "wb";
-
-    CCASSERT(!fullPath.empty() && data.getSize() != 0, "Invalid parameters.");
-
-    auto fileutils = FileUtils::getInstance();
-    do
-    {
-        // Read the file from hardware
-        FILE *fp = fopen(fullPath.c_str(), mode);
-        CC_BREAK_IF(!fp);
-        size = data.getSize();
-
-        fwrite(data.getBytes(), size, 1, fp);
-
-        fclose(fp);
-
-        return true;
-    } while (0);
-
-    return false;
+    return FileUtils::writeBinaryToFile(data.getBytes(), data.getSize(), fullPath);
 }
 
 void FileUtils::writeDataToFile(Data data, const std::string& fullPath, std::function<void(bool)> callback) const
@@ -525,6 +505,28 @@ void FileUtils::writeDataToFile(Data data, const std::string& fullPath, std::fun
     performOperationOffthread([fullPath](const Data& dataIn) -> bool {
         return FileUtils::getInstance()->writeDataToFile(dataIn, fullPath);
     }, std::move(callback), std::move(data));
+}
+
+bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, const std::string& fullPath)
+{
+    const char* mode = "wb";
+
+    CCASSERT(!fullPath.empty() && dataSize > 0, "Invalid parameters.");
+
+    auto fileutils = FileUtils::getInstance();
+    do
+    {
+        // Read the file from hardware
+        FILE* fp = fopen(fullPath.c_str(), mode);
+        CC_BREAK_IF(!fp);
+        fwrite(data, dataSize, 1, fp);
+
+        fclose(fp);
+
+        return true;
+    } while (0);
+
+    return false;
 }
 
 bool FileUtils::init()

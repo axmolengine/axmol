@@ -542,6 +542,11 @@ public:
      *@return bool
      */
     virtual bool writeDataToFile(const Data& data, const std::string& fullPath) const;
+
+    /**
+    * save data to file
+    */
+    static bool writeBinaryToFile(const void* data, size_t dataSize, const std::string& fullPath);
     
 
     /**
