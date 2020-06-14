@@ -86,7 +86,6 @@
 #include "editor-support/cocostudio/CCComExtensionData.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include "flatbuffers/util.h"
 
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 

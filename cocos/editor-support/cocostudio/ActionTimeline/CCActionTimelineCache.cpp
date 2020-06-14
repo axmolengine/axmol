@@ -37,7 +37,6 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CSParseBinary_generated.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include "flatbuffers/util.h"
 
 #include "editor-support/cocostudio/FlatBuffersSerialize.h"
 
