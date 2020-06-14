@@ -41,6 +41,9 @@ THE SOFTWARE.
 #define STBI_NO_HDR
 #define STBI_NO_TGA
 #define STB_IMAGE_IMPLEMENTATION
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#define STBI_NO_THREAD_LOCALS
+#endif
 #include "stb/stb_image.h"
 
 extern "C"
