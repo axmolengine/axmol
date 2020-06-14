@@ -479,7 +479,7 @@ FileUtils::~FileUtils()
 
 bool FileUtils::writeStringToFile(const std::string& dataStr, const std::string& fullPath) const
 {
-    return FileUtils::writeBinaryToFile(dataStr.c_str(), dataStr.length(), fullPath);
+    return FileUtils::writeBinaryToFile(dataStr.c_str(), dataStr.size(), fullPath);
 }
 
 void FileUtils::writeStringToFile(std::string dataStr, const std::string& fullPath, std::function<void(bool)> callback) const
