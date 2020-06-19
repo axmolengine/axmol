@@ -142,3 +142,6 @@ _USRSTUDIOPDLL
   ```
   之后就可以用xcode打开, 选择cpp-tests编译运行，其他targets目前均无法编译或运行
   
+  ### QQ交流群
+
+  点击链接加入群聊【engine-x交流群】：https://jq.qq.com/?_wv=1027&k=nvNmzOIY
