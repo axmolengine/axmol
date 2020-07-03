@@ -303,6 +303,9 @@ GLViewImpl::GLViewImpl(bool initglfw)
     if (initglfw)
     {
         glfwSetErrorCallback(GLFWEventHandler::onGLFWError);
+#if CC_USE_GLES_ON_DESKTOP && GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4
+        glfwInitHint(GLFW_ANGLE_PLATFORM_TYPE, GLFW_ANGLE_PLATFORM_TYPE_D3D11); // since glfw-3.4
+#endif
         glfwInit();
     }
 }
