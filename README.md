@@ -54,9 +54,7 @@ _USRSTUDIOPDLL
   - [x] 21. Remove xxtea
   - [x] 22. Remove rapidxml dep
   - [x] 23. fix etc1 alpha test case, content size incorrect
-  - [ ] 24. Since getSuitableFopen removed, don't convert to utf-8 for win32, or in the future, windows 10 will support utf-8 file path, such as: For Chinese system language users:
-在 控制面板-区域-更改系统区域设置 中
-勾选 Beta版：使用 Unicode UTF=8 提供全球语言支持(U) 选项
+  - [ ] 24. Since we use fully c++11 feature which the compiler must support u8 prefix, so remove getSuitableFopen, you should always add u8 prefix at program when your path contains non ascii charactors. 
   - [x] 25. ASTC 4x4, 8x8 support for all platforms.
   - [x] 26. Refine backend sources.
   - [x] 27. Refactor UserDefault based on file mapping with aes-cfb encrypt support.
