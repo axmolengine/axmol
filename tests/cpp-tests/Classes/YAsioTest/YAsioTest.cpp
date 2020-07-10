@@ -30,7 +30,7 @@
 #include "yasio/ibstream.hpp"
 #include "yasio/obstream.hpp"
 #include "yasio/yasio.hpp"
-#include "yasio/bindings/yasio_jni.cpp"
+#include "yasio/platform/yasio_jni.cpp"
 
 USING_NS_CC;
 
