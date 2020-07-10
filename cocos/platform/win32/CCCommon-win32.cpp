@@ -25,7 +25,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "platform/CCCommon.h"
 #include "platform/CCStdC.h"
-#include "platform/win32/CCUtils-win32.h"
+#include "win32-specific/ntcvt/ntcvt.hpp"
 
 NS_CC_BEGIN
 
@@ -33,17 +33,18 @@ NS_CC_BEGIN
 
 void ccMessageBox(const char * pszMsg, const char * pszTitle)
 {
-    std::wstring wsMsg = cocos2d::StringUtf8ToWideChar(pszMsg);
-    std::wstring wsTitle = cocos2d::StringUtf8ToWideChar(pszTitle);
+    std::wstring wsMsg = ntcvt::from_chars(pszMsg);
+    std::wstring wsTitle = ntcvt::from_chars(pszTitle);
     MessageBoxW(nullptr, wsMsg.c_str(), wsTitle.c_str(), MB_OK);
 }
 
 void LuaLog(const char *pszMsg)
 {
-    OutputDebugStringW(cocos2d::StringUtf8ToWideChar(pszMsg).c_str());
-    OutputDebugStringA("\n");
+    auto wsMsg = ntcvt::from_chars(pszMsg);
+    OutputDebugStringW(wsMsg.c_str());
+    OutputDebugStringW(L"\n");
 
-    puts(UTF8StringToMultiByte(pszMsg).c_str());
+    _putws(wsMsg.c_str());
 }
 
 NS_CC_END

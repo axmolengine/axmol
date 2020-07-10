@@ -24,7 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "platform/win32/CCFileUtils-win32.h"
-#include "platform/win32/CCUtils-win32.h"
 #include "platform/CCCommon.h"
 #include "tinydir/tinydir.h"
 #include <Shlobj.h>
@@ -34,6 +33,8 @@ THE SOFTWARE.
 
 #include <sys/types.h>  
 #include <sys/stat.h>  
+
+#include "win32-specific/ntcvt/ntcvt.hpp"
 
 using namespace std;
 
@@ -73,8 +74,7 @@ static void _checkPath()
         // We need only directory part without exe
         WCHAR *pUtf16DirEnd = wcsrchr(pUtf16ExePath, L'\\');
 
-        char utf8ExeDir[CC_MAX_PATH] = { 0 };
-        int nNum = WideCharToMultiByte(CP_UTF8, 0, pUtf16ExePath, pUtf16DirEnd-pUtf16ExePath+1, utf8ExeDir, sizeof(utf8ExeDir), nullptr, nullptr);
+        auto utf8ExeDir = ntcvt::wcbs2a<std::string>(pUtf16ExePath, pUtf16DirEnd - pUtf16ExePath + 1);
 
         s_resourcePath = convertPathFormatToUnixStyle(utf8ExeDir);
     }
@@ -109,7 +109,7 @@ bool FileUtilsWin32::init()
 
 bool FileUtilsWin32::isDirectoryExistInternal(const std::string& dirPath) const
 {
-    unsigned long fAttrib = GetFileAttributes(StringUtf8ToWideChar(dirPath).c_str());
+    unsigned long fAttrib = GetFileAttributesW(ntcvt::from_chars(dirPath).c_str());
     return (fAttrib != INVALID_FILE_ATTRIBUTES &&
         (fAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
@@ -141,7 +141,7 @@ bool FileUtilsWin32::isFileExistInternal(const std::string& strFilePath) const
         strPath.insert(0, _defaultResRootPath);
     }
 
-    DWORD attr = GetFileAttributesW(StringUtf8ToWideChar(strPath).c_str());
+    DWORD attr = GetFileAttributesW(ntcvt::from_chars(strPath).c_str());
     return (attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY));
 }
 
@@ -165,7 +165,7 @@ FileUtils::Status FileUtilsWin32::getContents(const std::string& filename, Resiz
     // read the file from hardware
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
 
-    HANDLE fileHandle = ::CreateFile(StringUtf8ToWideChar(fullPath).c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, NULL, nullptr);
+    HANDLE fileHandle = ::CreateFileW(ntcvt::from_chars(fullPath).c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, NULL, nullptr);
     if (fileHandle == INVALID_HANDLE_VALUE)
         return FileUtils::Status::OpenFailed;
 
@@ -219,7 +219,7 @@ void FileUtilsWin32::listFilesRecursively(const std::string& dirPath, std::vecto
     if (isDirectoryExist(fullpath))
     {
         tinydir_dir dir;
-        std::wstring fullpathstr = StringUtf8ToWideChar(fullpath);
+        std::wstring fullpathstr = ntcvt::from_chars(fullpath);
 
         if (tinydir_open(&dir, &fullpathstr[0]) != -1)
         {
@@ -231,11 +231,11 @@ void FileUtilsWin32::listFilesRecursively(const std::string& dirPath, std::vecto
                     // Error getting file
                     break;
                 }
-                std::string fileName = StringWideCharToMultiByte(file.name);
+                std::string fileName = ntcvt::from_chars(file.name);
 
                 if (fileName != "." && fileName != "..")
                 {
-                    std::string filepath = StringWideCharToMultiByte(file.path);
+                    std::string filepath = ntcvt::from_chars(file.path);
                     if (file.is_dir)
                     {
                         filepath.push_back('/');
@@ -278,7 +278,7 @@ std::vector<std::string> FileUtilsWin32::listFiles(const std::string& dirPath) c
     if (isDirectoryExist(fullpath))
     {
         tinydir_dir dir;
-        std::wstring fullpathstr = StringUtf8ToWideChar(fullpath);
+        std::wstring fullpathstr = ntcvt::from_chars(fullpath);
 
         if (tinydir_open(&dir, &fullpathstr[0]) != -1)
         {
@@ -291,7 +291,7 @@ std::vector<std::string> FileUtilsWin32::listFiles(const std::string& dirPath) c
                     break;
                 }
 
-                std::string filepath = StringWideCharToMultiByte(file.path);
+                std::string filepath = ntcvt::from_chars(file.path);
                 if (file.is_dir)
                 {
                     filepath.push_back('/');
@@ -320,7 +320,7 @@ string FileUtilsWin32::getWritablePath() const
 
     // Get full path of executable, e.g. c:\Program Files (x86)\My Game Folder\MyGame.exe
     WCHAR full_path[CC_MAX_PATH + 1] = { 0 };
-    ::GetModuleFileName(nullptr, full_path, CC_MAX_PATH + 1);
+    ::GetModuleFileNameW(nullptr, full_path, CC_MAX_PATH + 1);
 
     // Debug app uses executable directory; Non-debug app uses local app data directory
 //#ifndef _DEBUG
@@ -332,7 +332,7 @@ string FileUtilsWin32::getWritablePath() const
         WCHAR app_data_path[CC_MAX_PATH + 1];
 
         // Get local app data directory, e.g. C:\Documents and Settings\username\Local Settings\Application Data
-        if (SUCCEEDED(SHGetFolderPath(nullptr, CSIDL_LOCAL_APPDATA, nullptr, SHGFP_TYPE_CURRENT, app_data_path)))
+        if (SUCCEEDED(SHGetFolderPathW(nullptr, CSIDL_LOCAL_APPDATA, nullptr, SHGFP_TYPE_CURRENT, app_data_path)))
         {
             wstring ret(app_data_path);
 
@@ -345,7 +345,7 @@ string FileUtilsWin32::getWritablePath() const
             ret += L"\\";
 
             // Create directory
-            if (SUCCEEDED(SHCreateDirectoryEx(nullptr, ret.c_str(), nullptr)))
+            if (SUCCEEDED(SHCreateDirectoryExW(nullptr, ret.c_str(), nullptr)))
             {
                 retPath = ret;
             }
@@ -361,7 +361,7 @@ string FileUtilsWin32::getWritablePath() const
         retPath = retPath.substr(0, retPath.rfind(L"\\") + 1);
     }
 
-    return convertPathFormatToUnixStyle(StringWideCharToMultiByte(retPath));
+    return convertPathFormatToUnixStyle(ntcvt::from_chars(retPath));
 }
 
 bool FileUtilsWin32::renameFile(const std::string &oldfullpath, const std::string& newfullpath) const
@@ -369,8 +369,8 @@ bool FileUtilsWin32::renameFile(const std::string &oldfullpath, const std::strin
     CCASSERT(!oldfullpath.empty(), "Invalid path");
     CCASSERT(!newfullpath.empty(), "Invalid path");
 
-    std::wstring _wNew = StringUtf8ToWideChar(newfullpath);
-    std::wstring _wOld = StringUtf8ToWideChar(oldfullpath);
+    std::wstring _wNew = ntcvt::from_chars(newfullpath);
+    std::wstring _wOld = ntcvt::from_chars(oldfullpath);
 
     if (FileUtils::getInstance()->isFileExist(newfullpath))
     {
@@ -380,7 +380,7 @@ bool FileUtilsWin32::renameFile(const std::string &oldfullpath, const std::strin
         }
     }
 
-    if (MoveFile(_wOld.c_str(), _wNew.c_str()))
+    if (MoveFileW(_wOld.c_str(), _wNew.c_str()))
     {
         return true;
     }
@@ -411,7 +411,7 @@ bool FileUtilsWin32::createDirectory(const std::string& dirPath) const
     if (isDirectoryExist(dirPath))
         return true;
 
-    std::wstring path = StringUtf8ToWideChar(dirPath);
+    std::wstring path = ntcvt::from_chars(dirPath);
 
     // Split the path
     size_t start = 0;
@@ -439,17 +439,17 @@ bool FileUtilsWin32::createDirectory(const std::string& dirPath) const
         }
     }
 
-    if ((GetFileAttributes(path.c_str())) == INVALID_FILE_ATTRIBUTES)
+    if ((GetFileAttributesW(path.c_str())) == INVALID_FILE_ATTRIBUTES)
     {
         subpath = L"";
         for (unsigned int i = 0, size = dirs.size(); i < size; ++i)
         {
             subpath += dirs[i];
 
-            std::string utf8Path = StringWideCharToMultiByte(subpath);
+            std::string utf8Path = ntcvt::from_chars(subpath);
             if (!isDirectoryExist(utf8Path))
             {
-                BOOL ret = CreateDirectory(subpath.c_str(), NULL);
+                BOOL ret = CreateDirectoryW(subpath.c_str(), NULL);
                 if (!ret && ERROR_ALREADY_EXISTS != GetLastError())
                 {
                     CCLOGERROR("Fail create directory %s !Error code is 0x%x", utf8Path.c_str(), GetLastError());
@@ -466,7 +466,7 @@ bool FileUtilsWin32::removeFile(const std::string &filepath) const
     std::regex pat("\\/");
     std::string win32path = std::regex_replace(filepath, pat, "\\");
 
-    if (DeleteFile(StringUtf8ToWideChar(win32path).c_str()))
+    if (DeleteFileW(ntcvt::from_chars(win32path).c_str()))
     {
         return true;
     }
@@ -484,7 +484,7 @@ bool FileUtilsWin32::removeDirectory(const std::string& dirPath) const
     {
         dirPathCopy.push_back('/');
     }
-    std::wstring wpath = StringUtf8ToWideChar(dirPathCopy);
+    std::wstring wpath = ntcvt::from_chars(dirPathCopy);
     std::wstring files = wpath + L"*.*";
     WIN32_FIND_DATA wfd;
     HANDLE  search = FindFirstFileEx(files.c_str(), FindExInfoStandard, &wfd, FindExSearchNameMatch, NULL, 0);
@@ -502,19 +502,19 @@ bool FileUtilsWin32::removeDirectory(const std::string& dirPath) const
                 if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
                     temp += '/';
-                    ret = ret && this->removeDirectory(StringWideCharToMultiByte(temp));
+                    ret = ret && this->removeDirectory(ntcvt::from_chars(temp));
                 }
                 else
                 {
-                    SetFileAttributes(temp.c_str(), FILE_ATTRIBUTE_NORMAL);
-                    ret = ret && DeleteFile(temp.c_str());
+                    SetFileAttributesW(temp.c_str(), FILE_ATTRIBUTE_NORMAL);
+                    ret = ret && DeleteFileW(temp.c_str());
                 }
             }
             find = FindNextFile(search, &wfd);
         }
         FindClose(search);
     }
-    if (ret && RemoveDirectory(wpath.c_str()))
+    if (ret && RemoveDirectoryW(wpath.c_str()))
     {
         return true;
     }
