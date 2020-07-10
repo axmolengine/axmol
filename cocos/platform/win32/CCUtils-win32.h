@@ -23,27 +23,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/CCCommon.h"
-#include "platform/CCStdC.h"
-#include "platform/win32/CCUtils-win32.h"
+#pragma once
+
+#include "platform/CCPlatformMacros.h"
+
+#include <string>
 
 NS_CC_BEGIN
 
-#define MAX_LEN         (cocos2d::kMaxLogLen + 1)
-
-void ccMessageBox(const char * pszMsg, const char * pszTitle)
-{
-    std::wstring wsMsg = cocos2d::StringUtf8ToWideChar(pszMsg);
-    std::wstring wsTitle = cocos2d::StringUtf8ToWideChar(pszTitle);
-    MessageBoxW(nullptr, wsMsg.c_str(), wsTitle.c_str(), MB_OK);
-}
-
-void LuaLog(const char *pszMsg)
-{
-    OutputDebugStringW(cocos2d::StringUtf8ToWideChar(pszMsg).c_str());
-    OutputDebugStringA("\n");
-
-    puts(UTF8StringToMultiByte(pszMsg).c_str());
-}
+std::wstring CC_DLL StringUtf8ToWideChar(const std::string& strUtf8);
+std::string CC_DLL StringWideCharToMultiByte(const std::wstring& strWideChar, unsigned int cp = CP_ACP);
+std::string CC_DLL UTF8StringToMultiByte(const std::string& strUtf8);
 
 NS_CC_END
