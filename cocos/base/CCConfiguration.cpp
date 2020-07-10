@@ -161,8 +161,6 @@ void Configuration::gatherGPUInfo()
     _valueDict["supports_OES_depth24"] = Value(_supportsOESDepth24);
     
     _glExtensions = _deviceInfo->getExtension();
-	
-	CHECK_GL_ERROR_DEBUG();
 }
 
 Configuration* Configuration::getInstance()
@@ -267,7 +265,7 @@ bool Configuration::supportsMapBuffer() const
     // is always implemented in OpenGL.
 
     // XXX: Warning. On iOS this is always `true`. Avoiding the comparison.
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_USE_GLES_ON_DESKTOP)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     return _supportsOESMapBuffer;
 #else
     return true;
