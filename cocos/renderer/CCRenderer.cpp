@@ -569,7 +569,7 @@ void Renderer::drawBatchedTriangles()
     _triBatchesToDraw[0].cmd = nullptr;
     
     int batchesTotal = 0;
-    int prevMaterialID = -1;
+    uint32_t prevMaterialID = 0;
     bool firstCommand = true;
 
     _filledVertex = 0;
@@ -603,7 +603,7 @@ void Renderer::drawBatchedTriangles()
             
             // is this a single batch ? Prevent creating a batch group then
             if (!batchable)
-                currentMaterialID = -1;
+                 currentMaterialID = 0;
         }
         
         // capacity full ?
