@@ -25,6 +25,8 @@
 #include "HelloWorldScene.h"
 #include "AppMacros.h"
 
+#include "pugixml_imp.hpp"
+
 USING_NS_CC;
 
 
@@ -42,7 +44,23 @@ bool HelloWorld::init()
     {
         return false;
     }
-    
+
+    bool shouldExist = FileUtils::getInstance()->isFileExist(u8R"(D:\dev\simdsoft\xsux\中文路径，测试支持情况哇哦哦\skins20\layout\dmindex.xml)");
+
+    // pugi::xml_document doc;
+    // pugi::xml_parse_result result = doc.load_file(R"(D:\dev\simdsoft\xsux\skins20\layout\xml\splash.xml)", pugi::parse_default, pugi::encoding_utf8);
+    // const char* old_value = "default";
+    // pugi::xml_attribute attr;
+    // if (result) {
+    //     attr = doc.document_element().child("root").first_child().next_sibling().attribute("text");
+    // }
+    // 
+    // old_value = attr.as_string();
+    // 
+    // attr.set_value("v10.0\\n.9000.\n12");
+    // 
+    // doc.save_file(R"(D:\dev\simdsoft\xsux\skins20\layout\xml\splash-1.xml)");
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     auto origin = Director::getInstance()->getVisibleOrigin();
 
