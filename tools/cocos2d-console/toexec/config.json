@@ -1,0 +1,117 @@
+{
+    "copy_config" : 
+    {
+        "common": [
+            {
+                "from" : "bin/cocos2d.ini",
+                "to": ""
+            },
+            {
+                "from" : "bin/strings.json",
+                "to": ""
+            },
+            {
+                "from": "plugins/plugin_jscompile/bin",
+                "to": "bin",
+                "include": [
+                    "compiler.jar"
+                ]
+            },
+            {
+                "from": "plugins/plugin_luacompile/bin",
+                "to": "bin",
+                "include": [
+                    "lua/jit/*"
+                ]
+            },
+            {
+                "from": "plugins/plugin_compile/build_web",
+                "to": "",
+                "exclude": [
+                    "*.py$",
+                    "*.pyc$"
+                ]
+            },
+            {
+                "from": "plugins/plugin_package/helper/template",
+                "to": "helper/template"
+            },
+            {
+                "from": "plugins/plugin_generate",
+                "to": "",
+                "include": [
+                    "bin-templates",
+                    "configs"
+                ]
+            }
+        ],
+        "darwin": [
+            {
+                "from": "plugins/plugin_jscompile/bin",
+                "to": "bin",
+                "include": [
+                    "jsbcc$"
+                ]
+            },
+            {
+                "from": "plugins/plugin_luacompile/bin",
+                "to": "bin",
+                "include": [
+                    "lua/luajit-mac"
+                ]
+            },
+            {
+                "from": "plugins/plugin_run/bin",
+                "to": "bin"
+            }
+        ],
+        "win32": [
+            {
+                "from": "plugins/plugin_jscompile/bin",
+                "to": "bin",
+                "include": [
+                    "jsbcc.exe",
+                    "*.dll"
+                ]
+            },
+            {
+                "from": "plugins/plugin_luacompile/bin",
+                "to": "bin",
+                "include": [
+                    "luajit.exe",
+                    "*.dll"
+                ]
+            },
+            {
+                "from": "plugins/plugin_generate/proj_modifier/plutil-win32",
+                "to": "plutil-win32"
+            }
+        ],
+        "linux": [
+            {
+                "from": "plugins/plugin_jscompile/bin",
+                "to": "bin",
+                "include": [
+                    "linux/*"
+                ]
+            },
+            {
+                "from": "plugins/plugin_luacompile/bin",
+                "to": "bin",
+                "include": [
+                    "lua/luajit-linux"
+                ]
+            }
+        ]
+    },
+    "modify_config" : [
+        {
+            "file_path" : "cocos2d.ini",
+            "pattern": "plugins=.*",
+            "replace_string": "plugins=\n"
+        }
+    ],
+    "hidden_import" : {
+        "cocos_stat" : "bin/cocos_stat.py"
+    }
+}

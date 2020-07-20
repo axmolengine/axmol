@@ -1,0 +1,306 @@
+{
+    "copy_from_engine" : [
+        {
+            "from": "templates/cpp-template-default",
+            "to": "cpp-template-binary",
+            "exclude": [
+                "*android-studio",
+                "*win10",
+                "*linux",
+                "*CMakeLists.txt",
+                "Resources",
+                "cocos-project-template.json"
+            ]
+        },
+        {
+            "from": "templates/lua-template-default",
+            "to": "lua-template-binary",
+            "include" : [
+                "config.json",
+                ".settings",
+                ".project"
+            ]
+        },
+        {
+            "from": "templates/lua-template-default/frameworks",
+            "to": "lua-template-binary/frameworks",
+            "exclude": [
+                "*android-studio",
+                "*win10",
+                "*linux",
+                "*CMakeLists.txt"
+            ]
+        },
+        {
+            "from": "templates/lua-template-default/src",
+            "to": "lua-template-binary/src",
+            "exclude": [
+                "app/*"
+            ]
+        },
+        {
+            "from": "templates/js-template-default",
+            "to": "js-template-binary",
+            "exclude": [
+                "*android-studio",
+                "*win10",
+                "*linux",
+                "*CMakeLists.txt",
+                "res/*",
+                "runtime/*"
+            ]
+        },
+        {
+            "from": "cocos/scripting/lua-bindings/manual",
+            "to": "lua-template-binary/frameworks/runtime-src/Classes",
+            "include": [
+                "lua_module_register.h"
+            ]
+        },
+        {
+            "from": "tools/simulator/frameworks/runtime-src/proj.ios_mac/ios",
+            "to": "lua-template-binary/frameworks/runtime-src/proj.ios_mac/ios",
+            "exclude": [
+                "RootViewController.*",
+                "Info.plist"
+            ]
+        },
+        {
+            "from": "tools/simulator/frameworks/runtime-src/proj.ios_mac/mac",
+            "to": "lua-template-binary/frameworks/runtime-src/proj.ios_mac/mac",
+            "exclude": [
+                "Info.plist",
+                "Icon.icns",
+                "build-cfg.json"
+            ]
+        },
+        {
+            "from": "tools/simulator/frameworks/runtime-src/proj.win32",
+            "to": "lua-template-binary/frameworks/runtime-src/proj.win32/",
+            "include": [
+                "game.rc",
+                "main.cpp",
+                "main.h",
+                "res",
+                "resource.h",
+                "SimulatorWin.cpp",
+                "SimulatorWin.h"
+            ]
+        },
+        {
+            "from": "cocos/scripting/js-bindings/manual",
+            "to": "js-template-binary/frameworks/runtime-src/Classes",
+            "include": [
+                "js_module_register.h"
+            ]
+        },
+        {
+            "from": "tools/simulator/frameworks/runtime-src/proj.ios_mac/ios",
+            "to": "js-template-binary/frameworks/runtime-src/proj.ios_mac/ios",
+            "exclude": [
+                "RootViewController.*",
+                "Info.plist"
+            ]
+        },
+        {
+            "from": "tools/simulator/frameworks/runtime-src/proj.ios_mac/mac",
+            "to": "js-template-binary/frameworks/runtime-src/proj.ios_mac/mac",
+            "exclude": [
+                "Info.plist",
+                "Icon.icns",
+                "build-cfg.json"
+            ]
+        },
+        {
+            "from": "cocos/platform/android/java/src",
+            "to": "cpp-template-binary/proj.android/src"
+        },
+        {
+            "from": "cocos/platform/android/java/src",
+            "to": "lua-template-binary/frameworks/runtime-src/proj.android/src"
+        },
+        {
+            "from": "cocos/platform/android/java/src",
+            "to": "js-template-binary/frameworks/runtime-src/proj.android/src"
+        },
+        {
+            "from": "cocos/platform/android/java/libs",
+            "to": "cpp-template-binary/proj.android/libs"
+        },
+        {
+            "from": "cocos/platform/android/java/libs",
+            "to": "lua-template-binary/frameworks/runtime-src/proj.android/libs"
+        },
+        {
+            "from": "cocos/platform/android/java/libs",
+            "to": "js-template-binary/frameworks/runtime-src/proj.android/libs"
+        },
+        {
+            "from": "cocos/2d/",
+            "to": "cpp-template-binary/proj.win32/",
+            "include": [
+                "cocos2dx.props"
+            ]
+        },
+        {
+            "from": "cocos/2d/",
+            "to": "lua-template-binary/frameworks/runtime-src/proj.win32/",
+            "include": [
+                "cocos2dx.props"
+            ]
+        },
+        {
+            "from": "cocos/2d/",
+            "to": "js-template-binary/frameworks/runtime-src/proj.win32/",
+            "include": [
+                "cocos2dx.props"
+            ]
+        }
+    ],
+    "copy_from_bin_templates" : [
+        {
+            "from": "cpp-template-default",
+            "to": "cpp-template-binary"
+        },
+        {
+            "from": "lua-template-runtime",
+            "to": "lua-template-binary"
+        },
+        {
+            "from": "js-template-runtime",
+            "to": "js-template-binary"
+        }
+    ],
+    "vs_projs" : [
+        "cpp-template-binary/proj.win32/HelloCpp.vcxproj",
+        "lua-template-binary/frameworks/runtime-src/proj.win32/HelloLua.vcxproj",
+        "js-template-binary/frameworks/runtime-src/proj.win32/HelloJavascript.vcxproj"
+    ],
+    "win32_cfg" : {
+        "main_cpps" : [
+            "cpp-template-binary/proj.win32/main.cpp",
+            "lua-template-binary/frameworks/runtime-src/proj.win32/main.cpp",
+            "js-template-binary/frameworks/runtime-src/proj.win32/main.cpp"
+        ],
+        "link_libs" : {
+            "base" : [
+                "libcocos2d.lib", "libbox2d.lib", "libSpine.lib",
+                "librecast.lib", "libbullet.lib"
+            ],
+            "lua" : [
+                "libluacocos2d", "libsimulator"
+            ],
+            "js" : [
+                "libjscocos2d", "libsimulator"
+            ]
+        }
+    },
+    "xcode_projs" : [
+        "cpp-template-binary/proj.ios_mac/HelloCpp.xcodeproj/project.pbxproj",
+        "lua-template-binary/frameworks/runtime-src/proj.ios_mac/HelloLua.xcodeproj/project.pbxproj",
+        "js-template-binary/frameworks/runtime-src/proj.ios_mac/HelloJavascript.xcodeproj/project.pbxproj"
+    ],
+    "modify_files" : [
+        {
+            "file_path": "cpp-template-binary/proj.android/project.properties",
+            "pattern": ".*cocos/platform/android/java\\s$",
+            "replace_string": ""
+        },
+        {
+            "file_path": "lua-template-binary/frameworks/runtime-src/proj.android/project.properties",
+            "pattern": ".*cocos/platform/android/java\\s$",
+            "replace_string": ""
+        },
+        {
+            "file_path": "js-template-binary/frameworks/runtime-src/proj.android/project.properties",
+            "pattern": ".*cocos/platform/android/java\\s$",
+            "replace_string": ""
+        },
+        {
+            "file_path": "cpp-template-binary/proj.android/jni/Android.mk",
+            "pattern": "\\$\\(call[ \\t]+import-module,([^\\)]*)\\)",
+            "replace_string": "$(call import-module,\\1/prebuilt-mk)"
+        },
+        {
+            "file_path": "cpp-template-binary/proj.android/jni/Android.mk",
+            "pattern": "\\$\\(call import-add-path.*",
+            "replace_string": ""
+        },
+        {
+            "file_path": "lua-template-binary/frameworks/runtime-src/proj.android/jni/Android.mk",
+            "pattern": "\\$\\(call[ \\t]+import-module,([^\\)]*)\\)",
+            "replace_string": "$(call import-module,\\1/prebuilt-mk)"
+        },
+        {
+            "file_path": "js-template-binary/frameworks/runtime-src/proj.android/jni/Android.mk",
+            "pattern": "\\$\\(call[ \\t]+import-module,([^\\)]*)\\)",
+            "replace_string": "$(call import-module,\\1/prebuilt-mk)"
+        },
+        {
+            "file_path": "js-template-binary/project.json",
+            "pattern": "\\\"modules\\\"[ \\t]*:[ \\t]*\\[(.*)\\]",
+            "replace_string": "\"modules\" : [\\1, \"cocostudio\"]"
+        },
+        {
+            "file_path": "cpp-template-binary/proj.win32/cocos2dx.props",
+            "pattern": "(libbox2d\\.lib;)|(libSpine\\.lib;)",
+            "replace_string": ""
+        },
+        {
+            "file_path": "lua-template-binary/frameworks/runtime-src/proj.win32/cocos2dx.props",
+            "pattern": "(libbox2d\\.lib;)|(libSpine\\.lib;)",
+            "replace_string": ""
+        },
+        {
+            "file_path": "js-template-binary/frameworks/runtime-src/proj.win32/cocos2dx.props",
+            "pattern": "(libbox2d\\.lib;)|(libSpine\\.lib;)",
+            "replace_string": ""
+        }
+    ],
+    "build_cfg_files" : {
+        "cpp-template-binary/proj.android/build-cfg.json" : {
+            "replace_string" : [
+                {
+                    "src_str" : "../cocos2d",
+                    "dst_str" : "${FW_VERSION_PATH}"
+                }
+            ]
+        },
+        "lua-template-binary/frameworks/runtime-src/proj.android/build-cfg.json" : {
+            "replace_string" : [
+                {
+                    "src_str" : "../../cocos2d-x",
+                    "dst_str" : "${FW_VERSION_PATH}"
+                }
+            ]
+        },
+        "js-template-binary/frameworks/runtime-src/proj.android/build-cfg.json" : {
+            "replace_string" : [
+                {
+                    "src_str" : "../../cocos2d-x/cocos/scripting/js-bindings/script",
+                    "dst_str" : "../../../script"
+                },
+                {
+                    "src_str" : "../../cocos2d-x",
+                    "dst_str" : "${FW_VERSION_PATH}"
+                }
+            ]
+        },
+        "lua-template-binary/frameworks/runtime-src/proj.win32/build-cfg.json" : {
+            "replace_string" : [
+                {
+                    "src_str" : "../../cocos2d-x/external/lua/luasocket",
+                    "dst_str" : "../../luasocket"
+                }
+            ]
+        },
+        "js-template-binary/frameworks/runtime-src/proj.win32/build-cfg.json" : {
+            "replace_string" : [
+                {
+                    "src_str" : "../../cocos2d-x/cocos/scripting/js-bindings/script",
+                    "dst_str" : "../../../script"
+                }
+            ]
+        }
+    }
+}
