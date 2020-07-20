@@ -1,0 +1,34 @@
+[
+	{
+		"command": "add_project",
+		"name": "__PACKAGE_NAME__",
+		"platform": "android"
+	},
+	{
+		"command": "add_project",
+		"name": "__PACKAGE_NAME__",
+		"id": "__XCODE_PROJ_ID__",
+		"mac_lib":
+		{
+			"remoteGlobalIDString": "__MAC_LIB_ORI_ID__",
+			"remoteInfo": "__PACKAGE_NAME__ MAC",
+			"container": "__MAC_LIB_CTN_ID__",
+			"lib_id": "__MAC_LIB_PRJ_ID__",
+			"build_id": "__MAC_LIB_BLD_ID__"
+		},
+		"ios_lib":
+		{
+			"remoteGlobalIDString": "__IOS_LIB_ORI_ID__",
+			"remoteInfo": "__PACKAGE_NAME__ IOS",
+			"container": "__IOS_LIB_CTN_ID__",
+			"lib_id": "__IOS_LIB_PRJ_ID__",
+			"build_id": "__IOS_LIB_BLD_ID__"
+		},
+		"ProductGroup": "__XCODE_PRDGRP_ID__",
+		"platform": "ios_mac"
+	},
+	{
+		"command": "add_entry_function",
+		"declare": "void package___PACKAGE_NAME___register();"
+	}
+]

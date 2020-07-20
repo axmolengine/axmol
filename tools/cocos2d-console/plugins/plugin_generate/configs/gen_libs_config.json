@@ -1,0 +1,56 @@
+{
+    "libs_output_dir" : "prebuilt",
+    "xcode_projs_info" : {
+        "cpp" : {
+            "targets"   : "libcocos2d",
+            "proj_path" : "build/cocos2d_libs.xcodeproj"
+        },
+        "lua" : {
+            "targets"   : "libluacocos2d",
+            "proj_path" : "cocos/scripting/lua-bindings/proj.ios_mac/cocos2d_lua_bindings.xcodeproj"
+        },
+        "js" : {
+            "targets"   : "libjscocos2d",
+            "proj_path" : "cocos/scripting/js-bindings/proj.ios_mac/cocos2d_js_bindings.xcodeproj"
+        }
+    },
+    "vs_projs_info" : {
+        "proj_path": "tools/simulator/frameworks/runtime-src/proj.win32/simulator.sln",
+        "cpp" : {
+            "build_targets" : [
+                "libcocos2d", "libSpine", "librecast"
+            ]
+        },
+        "lua" : {
+            "build_targets" : [
+                "libcocos2d", "libSpine", "librecast", "libluacocos2d"
+            ]
+        },
+        "js" : {
+            "build_targets" : [
+                "libcocos2d", "libSpine", "librecast", "libjscocos2d"
+            ]
+        }
+    },
+    "android_mks" : [
+        "cocos/Android.mk",
+        "cocos/audio/android/Android.mk",
+        "cocos/scripting/js-bindings/proj.android/Android.mk",
+        "cocos/scripting/lua-bindings/proj.android/Android.mk",
+        "cocos/storage/local-storage/Android.mk",
+        "external/recast/Android.mk",
+        "external/flatbuffers/Android.mk",
+        "external/Box2D/Android.mk",
+        "external/android-specific/tremolo/Android.mk",
+        "external/android-specific/pvmp3dec/Android.mk",
+        "cocos/editor-support/cocosbuilder/Android.mk",
+        "extensions/Android.mk",
+        "cocos/3d/Android.mk",
+        "cocos/ui/Android.mk",
+        "cocos/editor-support/cocostudio/Android.mk",
+        "cocos/network/Android.mk",
+        "cocos/platform/android/Android.mk",
+        "cocos/editor-support/spine/Android.mk"
+    ],
+    "support_vs_versions" : [ 2015 ] 
+}
