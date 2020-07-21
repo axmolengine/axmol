@@ -161,8 +161,6 @@ void Configuration::gatherGPUInfo()
     _valueDict["supports_OES_depth24"] = Value(_supportsOESDepth24);
     
     _glExtensions = _deviceInfo->getExtension();
-	
-	CHECK_GL_ERROR_DEBUG();
 }
 
 Configuration* Configuration::getInstance()
