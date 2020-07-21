@@ -2144,12 +2144,19 @@ void Node::updateProgramStateTexture(Texture2D* texture)
 
 void Node::setProgramState(backend::ProgramState* programState)
 {
+    if(attachProgramState(programState))
+        programState->retain();
+}
+
+bool Node::attachProgramState(backend::ProgramState* programState)
+{
     if (_programState != programState)
     {
         CC_SAFE_RELEASE(_programState);
         _programState = programState;
-        CC_SAFE_RETAIN(programState);
+        return !!_programState;
     }
+    return false;
 }
 
 backend::ProgramState* Node::getProgramState() const

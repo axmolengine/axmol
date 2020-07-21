@@ -54,7 +54,7 @@ bool SkeletonNode::init()
     // init _customCommand  
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program = cocos2d::backend::Program::getBuiltinProgram(cocos2d::backend::ProgramType::POSITION_COLOR); // TODO: noMVP?
-    _programState = new (std::nothrow) cocos2d::backend::ProgramState(program);
+    attachProgramState(new (std::nothrow) cocos2d::backend::ProgramState(program));
     pipelineDescriptor.programState = _programState;
 
     _mvpLocation = _programState->getUniformLocation("u_MVPMatrix");

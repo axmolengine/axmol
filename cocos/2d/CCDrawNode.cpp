@@ -72,7 +72,6 @@ DrawNode::~DrawNode()
     free(_bufferGLLine);
     _bufferGLLine = nullptr;
     
-    CC_SAFE_RELEASE(_programState);
     CC_SAFE_RELEASE(_programStatePoint);
     CC_SAFE_RELEASE(_programStateLine);
 }
@@ -150,9 +149,8 @@ bool DrawNode::init()
 
 void DrawNode::updateShader()
 {
-    CC_SAFE_RELEASE(_programState);
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE);
-    _programState = new (std::nothrow) backend::ProgramState(program);
+    setProgramState(new (std::nothrow) backend::ProgramState(program));
     _customCommand.getPipelineDescriptor().programState = _programState;
     setVertexLayout(_customCommand);
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);

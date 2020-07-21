@@ -221,12 +221,7 @@ void MotionStreak::setProgramState(backend::ProgramState* programState)
 {
     CCASSERT(programState, "argument should not be nullptr");
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
-    if (_programState != programState)
-    {
-        CC_SAFE_RELEASE(_programState);
-        _programState = programState;
-        CC_SAFE_RETAIN(programState);
-    }
+    Node::setProgramState(programState);
     pipelineDescriptor.programState = _programState;
 
     _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");

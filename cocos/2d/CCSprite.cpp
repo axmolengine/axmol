@@ -399,12 +399,7 @@ void Sprite::setProgramState(backend::ProgramState *programState)
 {
     CCASSERT(programState, "argument should not be nullptr");
     auto& pipelineDescriptor = _trianglesCommand.getPipelineDescriptor();
-    if (_programState != programState)
-    {
-        CC_SAFE_RELEASE(_programState);
-        _programState = programState;
-        CC_SAFE_RETAIN(programState);
-    }
+    Node::setProgramState(programState);
     pipelineDescriptor.programState = _programState;
 
     _mvpMatrixLocation = pipelineDescriptor.programState->getUniformLocation(backend::Uniform::MVP_MATRIX);
