@@ -137,28 +137,9 @@ _USRSTUDIOPDLL
     mkdir build
     cd build
     cmake .. -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator
-    # for simulator64
-    # cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR64 -DENABLE_ARC=0 -DENABLE_BITCODE=0
-    # for (armv7, armv7s, arm64)
-    # cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS -DENABLE_ARC=0 -DENABLE_BITCODE=0
-    # for device 64
-    # cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS64 -DENABLE_ARC=0 -DENABLE_BITCODE=0
   ```
   之后就可以用xcode打开, 选择cpp-tests编译运行，其他targets目前均无法编译或运行
   
   ### QQ交流群
 
   点击链接加入群聊【engine-x交流群】：https://jq.qq.com/?_wv=1027&k=nvNmzOIY
-  
-  FAQ
-  
-  Q1: -lnsl -lsocket -lrt找不到
-  A1: 删除
-  
-  Q2: 
-Showing Recent Messages
-: Targeted OS version does not support use of thread local variables in __ZN12_GLOBAL__N_19ThreadCtxD1Ev for architecture x86_64
-
-  A2: 修改iOS Deploymement Target to iOS 9.3
-  
-  Q3: _programState inherited from Node should care about managment.
