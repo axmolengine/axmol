@@ -178,7 +178,8 @@ public:
     * Sets the arrival order when this node has a same ZOrder with other children.
     *
     * A node which called addChild subsequently will take a larger arrival order,
-    * If two children have the same Z order, the child with larger arrival order will be drawn later.
+    * If two children have the same Z order, the child with larger arrival order will be
+     n later.
     *
     * @warning This method is used internally for localZOrder sorting, don't change this manually
     *
@@ -1768,6 +1769,7 @@ public:
     virtual void setCameraMask(unsigned short mask, bool applyChildren = true);
     
     virtual void setProgramState(backend::ProgramState* programState);
+    bool attachProgramState(backend::ProgramState* programState);
 
     void setProgramStateWithRegistry(backend::ProgramType programType, Texture2D* texture);
     void updateProgramStateTexture(Texture2D* texture);

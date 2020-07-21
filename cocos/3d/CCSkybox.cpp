@@ -65,7 +65,7 @@ bool Skybox::init()
 
     // create and set our custom shader
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::SKYBOX_3D);
-    _programState = new backend::ProgramState(program);
+    attachProgramState(new backend::ProgramState(program));
 
     auto &pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto layout = _programState->getVertexLayout();

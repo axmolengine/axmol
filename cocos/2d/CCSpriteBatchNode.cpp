@@ -152,12 +152,7 @@ void SpriteBatchNode::setProgramState(backend::ProgramState *programState)
 {
     CCASSERT(programState, "programState should not be nullptr");
     auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
-    if (_programState != programState)
-    {
-        CC_SAFE_RELEASE(_programState);
-        _programState = programState;
-        CC_SAFE_RETAIN(programState);
-    }
+    Node::setProgramState(programState);
     pipelineDescriptor.programState = _programState;
     
     setVertexLayout();

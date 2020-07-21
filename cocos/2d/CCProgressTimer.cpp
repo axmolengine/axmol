@@ -112,9 +112,9 @@ bool ProgressTimer::initWithSprite(Sprite* sp)
     setBarChangeRate(Vec2(1,1));
     setSprite(sp);
 
-    CC_SAFE_RELEASE(_programState);
+    // TODO: Use ProgramState Vector to Node
     CC_SAFE_RELEASE(_programState2);
-    _programState = initPipelineDescriptor(_customCommand, true, _locMVP1, _locTex1); 
+    attachProgramState(initPipelineDescriptor(_customCommand, true, _locMVP1, _locTex1));
     _programState2 = initPipelineDescriptor(_customCommand2, false, _locMVP2, _locTex2);
     
     return true;
@@ -123,7 +123,6 @@ bool ProgressTimer::initWithSprite(Sprite* sp)
 ProgressTimer::~ProgressTimer()
 {
     CC_SAFE_RELEASE(_sprite);
-    CC_SAFE_RELEASE(_programState);
     CC_SAFE_RELEASE(_programState2);
 }
 

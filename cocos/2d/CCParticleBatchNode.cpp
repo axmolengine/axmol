@@ -49,7 +49,7 @@ ParticleBatchNode::ParticleBatchNode()
 {
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    _programState = new (std::nothrow) backend::ProgramState(program);
+    attachProgramState(new (std::nothrow) backend::ProgramState(program));
     pipelineDescriptor.programState = _programState;
     _mvpMatrixLocaiton = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     _textureLocation = pipelineDescriptor.programState->getUniformLocation("u_texture");

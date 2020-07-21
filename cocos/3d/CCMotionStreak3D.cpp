@@ -119,7 +119,7 @@ bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const 
 
     // shader state
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    _programState = new backend::ProgramState(program);
+    attachProgramState(new backend::ProgramState(program));
 
     _customCommand.getPipelineDescriptor().programState = _programState;
 

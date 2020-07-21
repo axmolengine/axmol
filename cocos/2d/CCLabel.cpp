@@ -664,12 +664,7 @@ void Label::setVertexLayout(PipelineDescriptor& pipelineDescriptor)
 
 void Label::setProgramState(backend::ProgramState *programState)
 {
-    if (_programState != programState)
-    {
-        CC_SAFE_RELEASE_NULL(_programState);
-        _programState = programState;
-        CC_SAFE_RETAIN(programState);
-    }
+    Node::setProgramState(programState);
     updateUniformLocations();
     for (auto &batch : _batchCommands)
     {
@@ -730,9 +725,8 @@ void Label::updateShaderProgram()
         }
     }
 
-    CC_SAFE_RELEASE(_programState);
     auto* program = backend::Program::getBuiltinProgram(programType);
-    _programState = new backend::ProgramState(program);
+    attachProgramState(new backend::ProgramState(program));
 
     updateUniformLocations();
 
