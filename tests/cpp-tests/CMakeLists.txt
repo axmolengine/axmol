@@ -433,6 +433,7 @@ if(WINDOWS)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
 endif()
 
+# Copy win32 angle binaries
 if(WIN32)
     add_custom_command(TARGET ${APP_NAME}
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different

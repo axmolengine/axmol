@@ -156,6 +156,7 @@ if(LINUX OR WINDOWS)
     cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
 endif()
 
+# Copy win32 angle binaries
 if(WIN32)
     add_custom_command(TARGET ${APP_NAME}
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
