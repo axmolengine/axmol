@@ -74,7 +74,7 @@ static void DrawShape(cpShape *shape, DrawNode *renderer)
     cpBody *body = cpShapeGetBody(shape);
     Color4F color = ColorForBody(body);
     
-    switch (shape->CP_PRIVATE(klass)->type)
+    switch (shape->klass->type)
     {
         case CP_CIRCLE_SHAPE:
         {
