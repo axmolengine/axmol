@@ -109,6 +109,9 @@ tags
 # ignore all build
 /build
 
+# ignore jniLibs android
+/**/jniLibs/*/*.so
+
 # Cmake files
 CMakeCache.txt
 CMakeFiles
