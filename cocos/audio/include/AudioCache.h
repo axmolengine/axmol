@@ -91,7 +91,6 @@ protected:
      * Cache pcm data when sizeInBytes less than PCMDATA_CACHEMAXSIZE
      */
     ALuint _alBufferId;
-    char* _pcmData;
 
     /*Queue buffer related stuff
      *  Streaming in OpenAL when sizeInBytes greater then PCMDATA_CACHEMAXSIZE

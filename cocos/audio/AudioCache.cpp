@@ -2,6 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2018-2020 HALX99.
+ Copyright (c) 2020 c4games.com.
 
  http://www.cocos2d-x.org
 
@@ -58,7 +59,6 @@ AudioCache::AudioCache()
 , _format(-1)
 , _duration(0.0f)
 , _alBufferId(INVALID_AL_BUFFER_ID)
-, _pcmData(nullptr)
 , _queBufferFrames(0)
 , _state(State::INITIAL)
 , _isDestroyed(std::make_shared<bool>(false))
@@ -90,25 +90,19 @@ AudioCache::~AudioCache()
     }
     //wait for the 'readDataTask' task to exit
     _readDataTaskMutex.lock();
-    _readDataTaskMutex.unlock();
 
-    if (_pcmData)
+    if (_state == State::READY)
     {
-        if (_state == State::READY)
+        if (_alBufferId != INVALID_AL_BUFFER_ID && alIsBuffer(_alBufferId))
         {
-            if (_alBufferId != INVALID_AL_BUFFER_ID && alIsBuffer(_alBufferId))
-            {
-                ALOGV("~AudioCache(id=%u), delete buffer: %u", _id, _alBufferId);
-                alDeleteBuffers(1, &_alBufferId);
-                _alBufferId = INVALID_AL_BUFFER_ID;
-            }
+            ALOGV("~AudioCache(id=%u), delete buffer: %u", _id, _alBufferId);
+            alDeleteBuffers(1, &_alBufferId);
+            _alBufferId = INVALID_AL_BUFFER_ID;
         }
-        else
-        {
-            ALOGW("AudioCache (%p), id=%u, buffer isn't ready, state=%d", this, _id, (int)_state);
-        }
-
-        free(_pcmData);
+    }
+    else
+    {
+        ALOGW("AudioCache (%p), id=%u, buffer isn't ready, state=%d", this, _id, (int)_state);
     }
 
     if (_queBufferFrames > 0)
@@ -119,6 +113,7 @@ AudioCache::~AudioCache()
         }
     }
     ALOGVV("~AudioCache() %p, id=%u, end", this, _id);
+    _readDataTaskMutex.unlock();
 }
 
 void AudioCache::readDataTask(unsigned int selfId)
@@ -181,8 +176,8 @@ void AudioCache::readDataTask(unsigned int selfId)
             uint32_t framesRead = 0;
             uint32_t framesToReadOnce = (std::min)(totalFrames, static_cast<uint32_t>(sampleRate * QUEUEBUFFER_TIME_STEP * QUEUEBUFFER_NUM));
 
-            _pcmData = (char*)malloc(dataSize);
-            memset(_pcmData, 0x00, dataSize);
+            std::vector<char> pcmBuffer(dataSize, 0);
+            auto pcmData = pcmBuffer.data();
 
             alGenBuffers(1, &_alBufferId);
             auto alError = alGetError();
@@ -194,7 +189,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             if (*_isDestroyed)
                 break;
 
-            framesRead = decoder->readFixedFrames((std::min)(framesToReadOnce, remainingFrames), _pcmData + decoder->framesToBytes(_framesRead));
+            framesRead = decoder->readFixedFrames((std::min)(framesToReadOnce, remainingFrames), pcmData + decoder->framesToBytes(_framesRead));
             _framesRead += framesRead;
             remainingFrames -= framesRead;
 
@@ -209,7 +204,7 @@ void AudioCache::readDataTask(unsigned int selfId)
                 {
                     frames = originalTotalFrames - _framesRead;
                 }
-                framesRead = decoder->read(frames, _pcmData + decoder->framesToBytes(_framesRead));
+                framesRead = decoder->read(frames, pcmData + decoder->framesToBytes(_framesRead));
                 if (framesRead == 0)
                     break;
                 _framesRead += framesRead;
@@ -221,13 +216,13 @@ void AudioCache::readDataTask(unsigned int selfId)
 
             if (_framesRead < originalTotalFrames)
             {
-                memset(_pcmData + decoder->framesToBytes(_framesRead), 0x00, decoder->framesToBytes(totalFrames - _framesRead));
+                memset(pcmData + decoder->framesToBytes(_framesRead), 0x00, decoder->framesToBytes(totalFrames - _framesRead));
             }
             ALOGV("pcm buffer was loaded successfully, total frames: %u, total read frames: %u, remainingFrames: %u", totalFrames, _framesRead, remainingFrames);
 
             if(sourceFormat == AUDIO_SOURCE_FORMAT::ADPCM || sourceFormat == AUDIO_SOURCE_FORMAT::IMA_ADPCM)
                 alBufferi(_alBufferId, AL_UNPACK_BLOCK_ALIGNMENT_SOFT, decoder->getSamplesPerBlock());
-            alBufferData(_alBufferId, _format, _pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
+            alBufferData(_alBufferId, _format, pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
 
             alError = alGetError();
             if (alError != AL_NO_ERROR)
@@ -257,11 +252,6 @@ void AudioCache::readDataTask(unsigned int selfId)
         }
 
     } while (false);
-
-    if (decoder != nullptr)
-    {
-        decoder->close();
-    }
 
     AudioDecoderManager::destroyDecoder(decoder);
 
