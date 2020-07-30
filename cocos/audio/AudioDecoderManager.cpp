@@ -83,6 +83,7 @@ AudioDecoder* AudioDecoderManager::createDecoder(const std::string& path)
 
 void AudioDecoderManager::destroyDecoder(AudioDecoder* decoder)
 {
+    if (decoder) decoder->close();
     delete decoder;
 }
 
