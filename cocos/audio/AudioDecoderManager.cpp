@@ -62,21 +62,19 @@ AudioDecoder* AudioDecoderManager::createDecoder(const std::string& path)
     {
         return new (std::nothrow) AudioDecoderOgg();
     }
+#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
     else if (cxx20::ic::ends_with(svPath, ".mp3"))
     {
-#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
         return new (std::nothrow) AudioDecoderMp3();
-#else
-        return new (std::nothrow) AudioDecoderEXT();
-#endif
     }
     else if (cxx20::ic::ends_with(svPath, ".wav")) {
-#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
         return new (std::nothrow) AudioDecoderWav();
-#else
-        return new (std::nothrow) AudioDecoderEXT();
-#endif
     }
+#else
+    else {
+        return new (std::nothrow) AudioDecoderEXT();
+    }
+#endif
 
     return nullptr;
 }
