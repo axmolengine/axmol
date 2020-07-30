@@ -76,26 +76,46 @@ elseif(LINUX)
 
 elseif(APPLE)
     # common
+    message(STATUS "[AudioEngine] CC_USE_ALSOFT_ON_APPLE=${CC_USE_ALSOFT_ON_APPLE}")
+    
     set(COCOS_AUDIO_PLATFORM_HEADER
         audio/include/AudioDecoderManager.h
         audio/include/AudioDecoder.h
         audio/include/AudioDecoderOgg.h
         audio/include/AudioDecoderWav.h
         audio/include/AudioCache.h
-        audio/apple/AudioPlayer.h
         audio/apple/AudioDecoderEXT.h
-        audio/apple/AudioEngineImpl.h
         )
+    
     set(COCOS_AUDIO_PLATFORM_SRC
         audio/AudioDecoderManager.cpp
         audio/AudioDecoder.cpp
         audio/AudioDecoderOgg.cpp
         audio/AudioDecoderWav.cpp
         audio/apple/AudioDecoderEXT.mm
-        audio/apple/AudioCache.mm
-        audio/apple/AudioEngineImpl.mm
-        audio/apple/AudioPlayer.mm
         )
+
+    if(CC_USE_ALSOFT_ON_APPLE)
+        set(COCOS_AUDIO_PLATFORM_HEADER ${COCOS_AUDIO_PLATFORM_HEADER}
+          audio/include/AudioPlayer.h
+          audio/include/AudioEngineImpl.h
+        )
+        set(COCOS_AUDIO_PLATFORM_SRC ${COCOS_AUDIO_PLATFORM_SRC}
+          audio/AudioCache.cpp
+          audio/AudioPlayer.cpp
+          audio/AudioEngineImpl.cpp
+        )
+    else()
+        set(COCOS_AUDIO_PLATFORM_HEADER ${COCOS_AUDIO_PLATFORM_HEADER}
+          audio/apple/AudioPlayer.h
+          audio/apple/AudioEngineImpl.h
+        )
+        set(COCOS_AUDIO_PLATFORM_SRC ${COCOS_AUDIO_PLATFORM_SRC}
+          audio/apple/AudioCache.mm
+          audio/apple/AudioPlayer.mm
+          audio/apple/AudioEngineImpl.mm
+        )
+    endif()
 endif()
 
 set(COCOS_AUDIO_HEADER

@@ -51,6 +51,13 @@ include(audio/CMakeLists.txt)
 option(BUILD_EDITOR_COCOSTUDIO "Build editor support for cocostudio" ON)
 option(BUILD_EDITOR_SPINE "Build editor support for spine" ON)
 option(BUILD_EXTENSIONS "Build extension library" ON)
+option(CC_USE_ALSOFT_ON_APPLE "Use openal-soft on apple platform" OFF)
+
+set(CC_USE_ALSOFT_ON_APPLE ${CC_USE_ALSOFT_ON_APPLE} CACHE BOOL "Use openal-soft on apple platform" FORCE)
+
+if(CC_USE_ALSOFT_ON_APPLE)
+    add_definitions(-DCC_USE_ALSOFT_ON_APPLE=1)
+endif()
 
 if(BUILD_EDITOR_COCOSTUDIO)
     include(editor-support/cocostudio/CMakeLists.txt)
