@@ -751,9 +751,9 @@ void AudioEngineImpl::_updateLocked(float dt)
                 _finishCallbacks.push_back([finishCallback = std::move(player->_finishCallbak), audioID, filePath = std::move(filePath)](){
                     finishCallback(audioID, filePath); // FIXME: callback will delay 50ms
                 });
-                player->setCache(nullptr); // it's safe for player didn't free audio cache
             }
-
+            // clear cache when audio player finsihed properly
+            player->setCache(nullptr);
             delete player;
             _unusedSourcesPool.push_back(alSource);
         }
