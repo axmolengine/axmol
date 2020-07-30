@@ -46,6 +46,7 @@ class AudioEngineImpl;
 
 class CC_DLL AudioPlayer
 {
+    friend class AudioEngineImpl;
 public:
     AudioPlayer();
     ~AudioPlayer();
