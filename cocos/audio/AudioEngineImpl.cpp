@@ -41,6 +41,7 @@
 #include "base/CCScheduler.h"
 #include "platform/CCFileUtils.h"
 #include "audio/include/AudioDecoderManager.h"
+#include "audio/include/AudioPlayer.h"
 
 using namespace cocos2d;
 
@@ -494,6 +495,7 @@ void AudioEngineImpl::_updateLocked(float dt)
                     finishCallback(audioID, filePath); //FIXME: callback will delay 50ms
                 });
 #endif
+                player->setCache(nullptr); // it's safe for player didn't free audio cache
             }
             delete player;
             _alSourceUsed[alSource] = false;
@@ -521,6 +523,10 @@ void AudioEngineImpl::uncache(const std::string &filePath)
 
 void AudioEngineImpl::uncacheAll()
 {
+    // prevent player hold invalid AudioCache* pointer, since all audio caches purged
+    for (auto& player : _audioPlayers)
+        player.second->setCache(nullptr);
+
     _audioCaches.clear();
 }
 
