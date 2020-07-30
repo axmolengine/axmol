@@ -495,8 +495,9 @@ void AudioEngineImpl::_updateLocked(float dt)
                     finishCallback(audioID, filePath); //FIXME: callback will delay 50ms
                 });
 #endif
-                player->setCache(nullptr); // it's safe for player didn't free audio cache
             }
+            // clear cache when audio player finsihed properly
+            player->setCache(nullptr);
             delete player;
             _alSourceUsed[alSource] = false;
         }

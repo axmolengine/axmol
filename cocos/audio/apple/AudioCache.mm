@@ -306,11 +306,13 @@ void AudioCache::readDataTask(unsigned int selfId)
         decoder->close();
     AudioDecoderManager::destroyDecoder(decoder);
 
+    // Set before invokingPlayCallbacks, otherwise, may cause dead-lock
+    _isLoadingFinished = true;
+
     //FIXME: Why to invoke play callback first? Should it be after 'load' callback?
     invokingPlayCallbacks();
     invokingLoadCallbacks();
 
-    _isLoadingFinished = true;
     if (_state != State::READY)
     {
         _state = State::FAILED;

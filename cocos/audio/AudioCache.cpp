@@ -276,11 +276,13 @@ void AudioCache::readDataTask(unsigned int selfId)
         }
     }
 
+    // Set before invokingPlayCallbacks, otherwise, may cause dead-lock
+    _isLoadingFinished = true;
+
     //FIXME: Why to invoke play callback first? Should it be after 'load' callback?
     invokingPlayCallbacks();
     invokingLoadCallbacks();
 
-    _isLoadingFinished = true;
     _readDataTaskMutex.unlock();
     ALOGVV("readDataTask end, cache id=%u", selfId);
 }
