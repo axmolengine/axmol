@@ -73,7 +73,7 @@ private:
 #endif
     ALuint _alSources[MAX_AUDIOINSTANCES];
 
-    //source,used
+    //available sources
     std::queue<ALuint> _unusedSourcesPool;
 
     //filePath,bufferInfo
