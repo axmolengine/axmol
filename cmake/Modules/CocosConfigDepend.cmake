@@ -26,18 +26,24 @@ macro(cocos2dx_depend)
         include_directories(/System/Library/Frameworks)
         find_library(AUDIOTOOLBOX_LIBRARY AudioToolbox)
         find_library(FOUNDATION_LIBRARY Foundation)
-        find_library(OPENAL_LIBRARY OpenAL)
         find_library(QUARTZCORE_LIBRARY QuartzCore)
         find_library(GAMECONTROLLER_LIBRARY GameController)
         find_library(METAL_LIBRARY Metal)
         set(COCOS_APPLE_LIBS
-            ${OPENAL_LIBRARY}
             ${AUDIOTOOLBOX_LIBRARY}
             ${QUARTZCORE_LIBRARY}
             ${FOUNDATION_LIBRARY}
             ${GAMECONTROLLER_LIBRARY}
             ${METAL_LIBRARY}
             )
+
+        if(NOT CC_USE_ALSOFT_ON_APPLE)
+            find_library(OPENAL_LIBRARY OpenAL)
+            set(COCOS_APPLE_LIBS 
+            ${OPENAL_LIBRARY}
+            ${COCOS_APPLE_LIBS}
+            )
+        endif()
             
         if(MACOSX)
             list(APPEND PREBUILT_SPECIFIC_LIBS GLFW3)
