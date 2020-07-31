@@ -34,6 +34,7 @@
 
 #include "audio/include/AudioMacros.h"
 #include "platform/CCPlatformMacros.h"
+#include "audio/include/alconfig.h"
 
 NS_CC_BEGIN
 
@@ -60,7 +61,7 @@ protected:
     void setCache(AudioCache* cache);
     void rotateBufferThread(int offsetFrame);
     bool play2d();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) && !CC_USE_ALSOFT_ON_APPLE
+#if !CC_USE_ALSOFT
     void wakeupRotateThread();
 #endif
 
@@ -84,7 +85,7 @@ protected:
     std::mutex _sleepMutex;
     bool _timeDirty;
     bool _isRotateThreadExited;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) && !CC_USE_ALSOFT_ON_APPLE
+#if !CC_USE_ALSOFT
     std::atomic_bool _needWakeupRotateThread;
 #endif
 

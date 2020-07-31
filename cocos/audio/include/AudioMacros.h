@@ -84,17 +84,3 @@ do { \
 
 #define AUDIO_ID int
 #define AUDIO_ID_PRID "%d"
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) && !CC_USE_ALSOFT_ON_APPLE
-#import <OpenAL/al.h>
-#define MAX_AUDIOINSTANCES 24
-#else
-#ifdef OPENAL_PLAIN_INCLUDES
-#include <al.h>
-#include <alext.h>
-#else
-#include <AL/al.h>
-#include <AL/alext.h>
-#endif
-#define MAX_AUDIOINSTANCES 32
-#endif

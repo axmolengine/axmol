@@ -68,7 +68,7 @@ private:
     void _updateLocked(float dt);
     void _play2d(AudioCache *cache, AUDIO_ID audioID);
     ALuint findValidSource();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) && !CC_USE_ALSOFT_ON_APPLE
+#if !CC_USE_ALSOFT
     static ALvoid myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData);
 #endif
     ALuint _alSources[MAX_AUDIOINSTANCES];

@@ -35,6 +35,7 @@
 
 #include "platform/CCPlatformMacros.h"
 #include "audio/include/AudioMacros.h"
+#include "audio/include/alconfig.h"
 
 NS_CC_BEGIN
 
