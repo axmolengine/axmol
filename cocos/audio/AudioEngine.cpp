@@ -139,6 +139,10 @@ private:
 
 void AudioEngine::end()
 {
+    // make sure everythings cleanup before delete audio engine
+    // fix #127
+    uncacheAll();
+
     if (s_threadPool)
     {
         delete s_threadPool;
