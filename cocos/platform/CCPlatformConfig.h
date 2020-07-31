@@ -123,10 +123,5 @@ THE SOFTWARE.
 #define CC_USE_GLES_ON_DESKTOP 1
 #endif
 
-// whether use https://github.com/kcat/openal-soft on apple platform
-#ifndef CC_USE_ALSOFT_ON_APPLE
-#define CC_USE_ALSOFT_ON_APPLE 0
-#endif
-
 /// @endcond
 #endif  // __BASE_CC_PLATFORM_CONFIG_H__
