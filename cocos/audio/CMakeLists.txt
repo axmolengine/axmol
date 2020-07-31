@@ -2,6 +2,8 @@
 set(COCOS_AUDIO_SRC
     audio/AudioEngine.cpp
     )
+    
+message(STATUS "[AudioEngine] CC_USE_ALSOFT_ON_APPLE=${CC_USE_ALSOFT_ON_APPLE}") 
 
 if(WINDOWS)
 
@@ -76,8 +78,6 @@ elseif(LINUX)
 
 elseif(APPLE)
     # common
-    message(STATUS "[AudioEngine] CC_USE_ALSOFT_ON_APPLE=${CC_USE_ALSOFT_ON_APPLE}")
-    
     set(COCOS_AUDIO_PLATFORM_HEADER
         audio/include/AudioDecoderManager.h
         audio/include/AudioDecoder.h

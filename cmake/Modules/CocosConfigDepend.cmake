@@ -37,7 +37,6 @@ macro(cocos2dx_depend)
             ${METAL_LIBRARY}
             )
 
-        message(STATUS "[AudioBackend] CC_USE_ALSOFT_ON_APPLE=${CC_USE_ALSOFT_ON_APPLE}")
         if(NOT CC_USE_ALSOFT_ON_APPLE)
             find_library(OPENAL_LIBRARY OpenAL)
             set(COCOS_APPLE_LIBS 
