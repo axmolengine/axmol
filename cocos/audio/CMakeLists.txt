@@ -3,7 +3,7 @@ set(COCOS_AUDIO_SRC
     audio/AudioEngine.cpp
     )
     
-message(STATUS "[AudioEngine] CC_USE_ALSOFT_ON_APPLE=${CC_USE_ALSOFT_ON_APPLE}") 
+message(STATUS "CC_USE_ALSOFT_ON_APPLE:${CC_USE_ALSOFT_ON_APPLE}") 
 
 if(WINDOWS)
 
