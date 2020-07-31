@@ -31,11 +31,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <thread>
-#ifdef OPENAL_PLAIN_INCLUDES
-#include <al.h>
-#else
-#include <AL/al.h>
-#endif
+
 #include "audio/include/AudioMacros.h"
 #include "platform/CCPlatformMacros.h"
 
@@ -64,6 +60,9 @@ protected:
     void setCache(AudioCache* cache);
     void rotateBufferThread(int offsetFrame);
     bool play2d();
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+    void wakeupRotateThread();
+#endif
 
     AudioCache* _audioCache;
 
@@ -85,6 +84,9 @@ protected:
     std::mutex _sleepMutex;
     bool _timeDirty;
     bool _isRotateThreadExited;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+    std::atomic_bool _needWakeupRotateThread;
+#endif
 
     std::mutex _play2dMutex;
 

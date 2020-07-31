@@ -84,6 +84,8 @@ elseif(APPLE)
         audio/include/AudioDecoderOgg.h
         audio/include/AudioDecoderWav.h
         audio/include/AudioCache.h
+        audio/include/AudioPlayer.h
+        audio/include/AudioEngineImpl.h
         audio/apple/AudioDecoderEXT.h
         )
     
@@ -96,20 +98,12 @@ elseif(APPLE)
         )
 
     if(CC_USE_ALSOFT_ON_APPLE)
-        set(COCOS_AUDIO_PLATFORM_HEADER ${COCOS_AUDIO_PLATFORM_HEADER}
-          audio/include/AudioPlayer.h
-          audio/include/AudioEngineImpl.h
-        )
         set(COCOS_AUDIO_PLATFORM_SRC ${COCOS_AUDIO_PLATFORM_SRC}
           audio/AudioCache.cpp
           audio/AudioPlayer.cpp
           audio/AudioEngineImpl.cpp
         )
     else()
-        set(COCOS_AUDIO_PLATFORM_HEADER ${COCOS_AUDIO_PLATFORM_HEADER}
-          audio/apple/AudioPlayer.h
-          audio/apple/AudioEngineImpl.h
-        )
         set(COCOS_AUDIO_PLATFORM_SRC ${COCOS_AUDIO_PLATFORM_SRC}
           audio/apple/AudioCache.mm
           audio/apple/AudioPlayer.mm

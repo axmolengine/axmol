@@ -32,11 +32,7 @@
 #include "platform/CCFileUtils.h"
 #include "base/ccUtils.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) && !CC_USE_ALSOFT_ON_APPLE
-#include "audio/apple/AudioEngineImpl.h"
-#else
 #include "audio/include/AudioEngineImpl.h"
-#endif
 
 #define TIME_DELAY_PRECISION 0.0001
 

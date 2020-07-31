@@ -28,7 +28,7 @@
 #include "platform/CCPlatformConfig.h"
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 
-#include "audio/apple/AudioEngineImpl.h"
+#include "audio/include/AudioEngineImpl.h"
 
 #import <OpenAL/alc.h>
 #import <AVFoundation/AVFoundation.h>
@@ -298,7 +298,7 @@ bool AudioEngineImpl::init()
             }
 
             for (int i = 0; i < MAX_AUDIOINSTANCES; ++i) {
-                _unusedSourcesPool.push_back(_alSources[i]);
+                _unusedSourcesPool.push(_alSources[i]);
                 alSourceAddNotificationExt(_alSources[i], AL_BUFFERS_PROCESSED, myAlSourceNotificationCallback, nullptr);
             }
 
@@ -478,7 +478,7 @@ ALuint AudioEngineImpl::findValidSource()
     if (!_unusedSourcesPool.empty())
     {
         sourceId = _unusedSourcesPool.front();
-        _unusedSourcesPool.pop_front();
+        _unusedSourcesPool.pop();
     }
 
     return sourceId;
@@ -731,7 +731,7 @@ void AudioEngineImpl::_updateLocked(float dt)
             
             it = _audioPlayers.erase(it);
             delete player;
-            _unusedSourcesPool.push_back(alSource);
+            _unusedSourcesPool.push(alSource);
         }
         else if (player->_ready && player->isFinished()) {
 
@@ -755,7 +755,7 @@ void AudioEngineImpl::_updateLocked(float dt)
             // clear cache when audio player finsihed properly
             player->setCache(nullptr);
             delete player;
-            _unusedSourcesPool.push_back(alSource);
+            _unusedSourcesPool.push(alSource);
         }
         else{
             ++it;
@@ -779,9 +779,9 @@ void AudioEngineImpl::uncache(const std::string &filePath)
 }
 
 void AudioEngineImpl::uncacheAll()
-{   
+{
     // prevent player hold invalid AudioCache* pointer, since all audio caches purged
-    for(auto& player : _audioPlayers)
+    for (auto& player : _audioPlayers)
         player.second->setCache(nullptr);
 
     _audioCaches.clear();

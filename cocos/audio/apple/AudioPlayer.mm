@@ -30,7 +30,7 @@
 
 #import <Foundation/Foundation.h>
 
-#include "audio/apple/AudioPlayer.h"
+#include "audio/include/AudioPlayer.h"
 #include "audio/include/AudioCache.h"
 #include "platform/CCFileUtils.h"
 #include "audio/include/AudioDecoder.h"

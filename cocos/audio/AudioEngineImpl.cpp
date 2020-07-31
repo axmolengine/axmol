@@ -101,7 +101,7 @@ bool AudioEngineImpl::init()
             }
 
             for (int i = 0; i < MAX_AUDIOINSTANCES; ++i) {
-                _alSourceUsed[_alSources[i]] = false;
+                _unusedSourcesPool.push(_alSources[i]);
             }
 
             _scheduler = Director::getInstance()->getScheduler();
@@ -150,17 +150,9 @@ AUDIO_ID AudioEngineImpl::play2d(const std::string &filePath ,bool loop ,float v
         return AudioEngine::INVALID_AUDIO_ID;
     }
 
-    bool sourceFlag = false;
-    ALuint alSource = 0;
-    for (int i = 0; i < MAX_AUDIOINSTANCES; ++i) {
-        alSource = _alSources[i];
-
-        if ( !_alSourceUsed[alSource]) {
-            sourceFlag = true;
-            break;
-        }
-    }
-    if(!sourceFlag){
+    ALuint alSource = findValidSource();
+    if (alSource == AL_INVALID)
+    {
         return AudioEngine::INVALID_AUDIO_ID;
     }
 
@@ -183,8 +175,6 @@ AUDIO_ID AudioEngineImpl::play2d(const std::string &filePath ,bool loop ,float v
     _threadMutex.lock();
     _audioPlayers.emplace(++_currentAudioID, player);
     _threadMutex.unlock();
-
-    _alSourceUsed[alSource] = true;
 
     audioCache->addPlayCallback(std::bind(&AudioEngineImpl::_play2d,this,audioCache,_currentAudioID));
 
@@ -221,6 +211,18 @@ void AudioEngineImpl::_play2d(AudioCache *cache, AUDIO_ID audioID)
         ALOGD("AudioEngineImpl::_play2d, cache was destroyed or not ready!");
         player->_removeByAudioEngine = true;
     }
+}
+
+ALuint AudioEngineImpl::findValidSource()
+{
+    ALuint sourceId = AL_INVALID;
+    if (!_unusedSourcesPool.empty())
+    {
+        sourceId = _unusedSourcesPool.front();
+        _unusedSourcesPool.pop();
+    }
+
+    return sourceId;
 }
 
 void AudioEngineImpl::setVolume(AUDIO_ID audioID,float volume)
@@ -470,7 +472,7 @@ void AudioEngineImpl::_updateLocked(float dt)
             
             it = _audioPlayers.erase(it);
             delete player;
-            _alSourceUsed[alSource] = false;
+            _unusedSourcesPool.push(alSource);
         }
         else if (player->_ready && player->isFinished()) {
 
@@ -485,21 +487,16 @@ void AudioEngineImpl::_updateLocked(float dt)
             it = _audioPlayers.erase(it);
 
             if (player->_finishCallbak) {
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-                _finishCallbacks.push_back([finishCallback = std::move(player->_finishCallbak), audioID, filePath = std::move(filePath)] {
-                    finishCallback(audioID, filePath); //FIXME: callback will delay 50ms
+                /// ###IMPORTANT: don't call immidiately, because at callback, user-end may play a new audio
+                /// cause _audioPlayers' iterator goan to invalid.
+                _finishCallbacks.push_back([finishCallback = std::move(player->_finishCallbak), audioID, filePath = std::move(filePath)](){
+                    finishCallback(audioID, filePath); // FIXME: callback will delay 50ms
                 });
-#else
-                auto finishCallback = std::move(player->_finishCallbak);
-                _finishCallbacks.push_back([=]{
-                    finishCallback(audioID, filePath); //FIXME: callback will delay 50ms
-                });
-#endif
             }
             // clear cache when audio player finsihed properly
             player->setCache(nullptr);
             delete player;
-            _alSourceUsed[alSource] = false;
+            _unusedSourcesPool.push(alSource);
         }
         else{
             ++it;

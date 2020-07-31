@@ -29,6 +29,7 @@
 #include "platform/CCPlatformConfig.h"
 
 #include <unordered_map>
+#include <queue>
 
 #include "base/CCRef.h"
 #include "audio/include/AudioMacros.h"
@@ -38,8 +39,6 @@
 NS_CC_BEGIN
 
 class Scheduler;
-
-#define MAX_AUDIOINSTANCES 32
 
 class CC_DLL AudioEngineImpl : public cocos2d::Ref
 {
@@ -68,11 +67,14 @@ public:
 private:
     void _updateLocked(float dt);
     void _play2d(AudioCache *cache, AUDIO_ID audioID);
-
+    ALuint findValidSource();
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+    static ALvoid myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData);
+#endif
     ALuint _alSources[MAX_AUDIOINSTANCES];
 
-    //source,used
-    std::unordered_map<ALuint, bool> _alSourceUsed;
+    //available sources
+    std::queue<ALuint> _unusedSourcesPool;
 
     //filePath,bufferInfo
     std::unordered_map<std::string, AudioCache> _audioCaches;
