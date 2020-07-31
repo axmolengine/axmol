@@ -33,18 +33,6 @@
 #include <vector>
 #include <memory>
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) && !CC_USE_ALSOFT_ON_APPLE
-#import <OpenAL/al.h>
-#else
-#ifdef OPENAL_PLAIN_INCLUDES
-#include <al.h>
-#include <alext.h>
-#else
-#include <AL/al.h>
-#include <AL/alext.h>
-#endif
-#endif
-
 #include "platform/CCPlatformMacros.h"
 #include "audio/include/AudioMacros.h"
 

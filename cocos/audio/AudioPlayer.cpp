@@ -142,6 +142,9 @@ bool AudioPlayer::play2d()
     std::unique_lock<std::mutex> lck(_play2dMutex);
     ALOGV("AudioPlayer::play2d, _alSource: %u, player id=%u", _alSource, _id);
 
+    if (_isDestroyed)
+        return false;
+    
     /*********************************************************************/
     /*       Note that it may be in sub thread or in main thread.       **/
     /*********************************************************************/
