@@ -76,6 +76,28 @@ private:
     cocos2d::Label* _playOverLabel;
 };
 
+class AudioWavTest : public AudioEngineTestDemo
+{
+public:
+    CREATE_FUNC(AudioWavTest);
+
+    virtual ~AudioWavTest();
+
+    virtual bool init() override;
+
+    void onEnter() override;
+
+    virtual std::string title() const override;
+
+private:
+    int _audioID = -1;
+
+    int _curIndex = -1;
+    std::vector<std::string> _wavFiles;
+
+    cocos2d::Label* _stateLabel = nullptr;
+};
+
 class PlaySimultaneouslyTest : public AudioEngineTestDemo
 {
 public:

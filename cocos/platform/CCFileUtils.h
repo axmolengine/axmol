@@ -649,6 +649,13 @@ public:
     virtual std::string getFileExtension(const std::string& filePath) const;
 
     /**
+   *  Gets filename shotName
+   *  @param filePath The path of the file, it could be a relative or absolute path.
+   *  @return fileName.Extension without path
+   */
+    static std::string getFileShortName(const std::string& filePath);
+
+    /**
      *  Checks whether the path is an absolute path.
      *
      *  @note On Android, if the parameter passed in is relative to "assets/", this method will treat it as an absolute path.
