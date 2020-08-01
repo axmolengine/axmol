@@ -291,12 +291,16 @@ std::vector<std::string> FileUtilsWin32::listFiles(const std::string& dirPath) c
                     break;
                 }
 
-                std::string filepath = ntcvt::from_chars(file.path);
-                if (file.is_dir)
+                std::string fileName = ntcvt::from_chars(file.name);
+                if (fileName != "." && fileName != "..")
                 {
-                    filepath.push_back('/');
+                    std::string filepath = ntcvt::from_chars(file.path);
+                    if (file.is_dir)
+                    {
+                        filepath.push_back('/');
+                    }
+                    files.push_back(filepath);
                 }
-                files.push_back(filepath);
 
                 if (tinydir_next(&dir) == -1)
                 {

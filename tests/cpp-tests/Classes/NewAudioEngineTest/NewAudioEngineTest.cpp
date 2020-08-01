@@ -33,6 +33,7 @@ using namespace cocos2d::ui;
 AudioEngineTests::AudioEngineTests()
 {
     ADD_TEST_CASE(AudioControlTest);
+    ADD_TEST_CASE(AudioWavTest);
     ADD_TEST_CASE(AudioLoadTest);
     ADD_TEST_CASE(PlaySimultaneouslyTest);
     ADD_TEST_CASE(AudioProfileTest);
@@ -442,6 +443,65 @@ std::string AudioLoadTest::title() const
     return "Audio preload/uncache test";
 }
 
+// AudioWavTest
+AudioWavTest::~AudioWavTest()
+{
+}
+
+std::string AudioWavTest::title() const
+{
+    return "Audio wav test";
+}
+
+bool AudioWavTest::init()
+{
+    if (AudioEngineTestDemo::init())
+    {
+        // list wav files, the wav samples download from wav wiki
+        _wavFiles = FileUtils::getInstance()->listFiles("wav-samples");
+
+        auto& layerSize = this->getContentSize();
+
+        _stateLabel = Label::createWithTTF("wav file:", "fonts/arial.ttf", 30);
+        _stateLabel->setPosition(layerSize.width / 2, layerSize.height * 0.7f);
+        addChild(_stateLabel);
+
+        auto playPrev = TextButton::create("Play Prev", [=](TextButton* button) {
+            if (_curIndex > 0) {
+                AudioEngine::stop(_audioID);
+                _audioID = AudioEngine::play2d(_wavFiles[--_curIndex]);
+                _stateLabel->setString(StringUtils::format("[index: %d] %s", _curIndex, FileUtils::getFileShortName(_wavFiles[_curIndex]).c_str()));
+            }
+            });
+        playPrev->setPosition(layerSize.width * 0.35f, layerSize.height * 0.5f);
+        addChild(playPrev);
+
+        auto playNext = TextButton::create("Play Next", [=](TextButton* button) {
+            if (_curIndex != -1 && _curIndex < (_wavFiles.size() - 1)) {
+                AudioEngine::stop(_audioID);
+                _audioID = AudioEngine::play2d(_wavFiles[++_curIndex]);
+                _stateLabel->setString(StringUtils::format("[index: %d] %s", _curIndex, FileUtils::getFileShortName(_wavFiles[_curIndex]).c_str()));
+            }
+            });
+        playNext->setPosition(layerSize.width * 0.65f, layerSize.height * 0.5f);
+        addChild(playNext);
+
+        return true;
+    }
+
+    return false;
+}
+
+void AudioWavTest::onEnter()
+{
+    AudioEngineTestDemo::onEnter();
+
+    if (!_wavFiles.empty()) {
+        _curIndex = 0;
+        _audioID = AudioEngine::play2d(_wavFiles[_curIndex]);
+        _stateLabel->setString(StringUtils::format("[index: %d] %s", _curIndex, FileUtils::getFileShortName(_wavFiles[_curIndex]).c_str()));
+    }
+}
 
 // PlaySimultaneouslyTest
 bool PlaySimultaneouslyTest::init()

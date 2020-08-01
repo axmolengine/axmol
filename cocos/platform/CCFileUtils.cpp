@@ -1496,6 +1496,18 @@ std::string FileUtils::getFileExtension(const std::string& filePath) const
     return fileExtension;
 }
 
+std::string FileUtils::getFileShortName(const std::string& filePath)
+{
+    std::string fileExtension;
+    size_t pos = filePath.find_last_of("/\\");
+    if (pos != std::string::npos)
+    {
+        return filePath.substr(pos + 1);
+    }
+
+    return filePath;
+}
+
 void FileUtils::valueMapCompact(ValueMap& /*valueMap*/) const
 {
 }
