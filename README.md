@@ -103,7 +103,7 @@ _USRSTUDIOPDLL
   ```
 	0_download-deps.py    				// downloading third party libs (Chipmunk2D, etc...)
 	1_win32_build_VS2019_sln.cmd		// create engine-x.sln (Cocos2d-x.sln) and all other <project>.sln
-	2_win32_msbuild_engine-x.cmd		// build engine-x and all other projects
+	2_win32_msbuild_engine-x.cmd		// build engine-x and all other executables
   ```
   
   Or call this commands below after downloading third party libs:
@@ -113,7 +113,11 @@ _USRSTUDIOPDLL
   or 
   cmake -S .\ -B .\build -G “Visual Studio 16 2019” -A Win32
   ```
-
+  
+  Creating a 'new' empty test please call:
+  ```
+  3_win32_create_new_empty_tests.cmd	// makes a copy of the cpp-empty-test (and create cpp-empty-test.sln and build executable)
+  ```
 #### android
   安装 Android Studio (推荐3.5.3)，打开 SDKManager，安装下列工具。<br>
   打开project，目录在engine-x\tests\cpp-tests\proj.android<br>
