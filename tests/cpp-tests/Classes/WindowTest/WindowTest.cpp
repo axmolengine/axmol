@@ -32,6 +32,7 @@ WindowTests::WindowTests() {
     ADD_TEST_CASE(WindowTestWindowed2);
     ADD_TEST_CASE(WindowTestFullscreen1);
     ADD_TEST_CASE(WindowTestFullscreen2);
+    ADD_TEST_CASE(WindowTestFullscreen3);
 }
 
 std::string WindowTest::title() const {
@@ -76,6 +77,16 @@ void WindowTestFullscreen2::onEnter() {
 
 std::string WindowTestFullscreen2::subtitle() const {
     return "Fullscreen Monitor 2 (if present)";
+}
+
+void WindowTestFullscreen3::onEnter() {
+    WindowTest::onEnter();
+    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    view->setFullscreen(2);
+}
+
+std::string WindowTestFullscreen3::subtitle() const {
+    return "Fullscreen Monitor 3 (if present)";
 }
 
 #endif
