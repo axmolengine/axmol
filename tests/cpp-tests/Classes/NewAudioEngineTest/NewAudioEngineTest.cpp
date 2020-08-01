@@ -238,7 +238,7 @@ bool AudioControlTest::init()
     
     auto playItem = TextButton::create("play", [&](TextButton* button){
         if (_audioID == AudioEngine::INVALID_AUDIO_ID) {
-            _audioID = AudioEngine::play2d("wav-samples/8kadpcm.wav", _loopEnabled, _volume);
+            _audioID = AudioEngine::play2d("background.mp3", _loopEnabled, _volume);
             
             if(_audioID != AudioEngine::INVALID_AUDIO_ID) {
                 _isStopped = false;

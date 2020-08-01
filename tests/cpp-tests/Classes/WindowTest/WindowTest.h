@@ -67,6 +67,13 @@ public:
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 };
+class WindowTestFullscreen3 : public WindowTest
+{
+public:
+    CREATE_FUNC(WindowTestFullscreen3);
+    virtual void onEnter() override;
+    virtual std::string subtitle() const override;
+};
 
 #endif /* __WINDOWTEST_H__ */
 
