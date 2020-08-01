@@ -96,15 +96,23 @@ _USRSTUDIOPDLL
 
 ### 快速开始
 #### windows
-  安装CMake，要求3.6以上<br>
-  根据安装的 Visual Studio 版本，执行下面的命令，解决方案就生成在 build 目录下了。<br>
-  打开cpp-tests.sln，编译运行。<br>
+  CMake 3.6
+  Visual Studio 2019 build cpp-tests.sln
+  
+  Use the scripts:
+  ```
+	0_download-deps.py    				// downloading third party libs (Chipmunk2D, etc...)
+	1_win32_build_VS2019_sln.cmd		// create engine-x.sln (Cocos2d-x.sln) and all other <project>.sln
+	2_win32_msbuild_engine-x.cmd		// build engine-x and all other projects
+  ```
+  
+  Or call this commands below after downloading third party libs:
   ```
   cd engine-x\tests\cpp-tests
   cmake -S .\ -B .\build -G “Visual Studio 14 2015 Win32”
   or 
   cmake -S .\ -B .\build -G “Visual Studio 16 2019” -A Win32
-  ``` 
+  ```
 
 #### android
   安装 Android Studio (推荐3.5.3)，打开 SDKManager，安装下列工具。<br>
