@@ -86,6 +86,7 @@ public:
     void setFullscreen(int monitorIndex);
     void setFullscreen(const GLFWvidmode &videoMode, GLFWmonitor *monitor);
     void setWindowed(int width, int height);
+
     int getMonitorCount() const;
     Size getMonitorSize() const;
 
@@ -138,6 +139,9 @@ protected:
     bool initWithFullscreen(const std::string& viewname, const GLFWvidmode &videoMode, GLFWmonitor *monitor);
 
     bool loadGL();
+
+    /* update frame layout when enter/exit full screen mode */
+    void updateWindowSize();
 
     void updateFrameSize();
 
