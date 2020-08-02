@@ -545,7 +545,7 @@ void GLViewImpl::pollEvents()
 }
 
 void GLViewImpl::enableRetina(bool enabled)
-{
+{ // official v4 comment follow sources
 // #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 //     _isRetinaEnabled = enabled;
 //     if (_isRetinaEnabled)
@@ -673,6 +673,8 @@ void GLViewImpl::setFullscreen(int monitorIndex) {
 void GLViewImpl::setFullscreen(const GLFWvidmode &videoMode, GLFWmonitor *monitor) {
     _monitor = monitor;
     glfwSetWindowMonitor(_mainWindow, _monitor, 0, 0, videoMode.width, videoMode.height, videoMode.refreshRate);
+
+    updateWindowSize();
 }
 
 void GLViewImpl::setWindowed(int width, int height) {
@@ -690,7 +692,20 @@ void GLViewImpl::setWindowed(int width, int height) {
         // on mac window will sometimes lose title when windowed
         glfwSetWindowTitle(_mainWindow, _viewName.c_str());
 #endif
+
+        updateWindowSize();
     }
+}
+
+void GLViewImpl::updateWindowSize()
+{
+    int w = 0, h = 0;
+    glfwGetFramebufferSize(_mainWindow, &w, &h);
+    int frameWidth = w / _frameZoomFactor;
+    int frameHeight = h / _frameZoomFactor;
+    setFrameSize(frameWidth, frameHeight);
+    updateDesignResolutionSize();
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
 }
 
 int GLViewImpl::getMonitorCount() const {
@@ -726,21 +741,21 @@ void GLViewImpl::updateFrameSize()
         int frameBufferW = 0, frameBufferH = 0;
         glfwGetFramebufferSize(_mainWindow, &frameBufferW, &frameBufferH);
 
-        // if (frameBufferW == 2 * w && frameBufferH == 2 * h)
-        // {
-        //     if (_isRetinaEnabled)
-        //     {
-        //         _retinaFactor = 1;
-        //     }
-        //     else
-        //     {
-        //         _retinaFactor = 2;
-        //     }
-        //     glfwSetWindowSize(_mainWindow, _screenSize.width/2 * _retinaFactor * _frameZoomFactor, _screenSize.height/2 * _retinaFactor * _frameZoomFactor);
+        if (frameBufferW == 2 * w && frameBufferH == 2 * h)
+        {
+            if (_isRetinaEnabled)
+            {
+                _retinaFactor = 1;
+            }
+            else
+            {
+                _retinaFactor = 2;
+            }
+            glfwSetWindowSize(_mainWindow, _screenSize.width/2 * _retinaFactor * _frameZoomFactor, _screenSize.height/2 * _retinaFactor * _frameZoomFactor);
 
-        //     _isInRetinaMonitor = true;
-        // }
-        // else
+            _isInRetinaMonitor = true;
+        }
+        else
         {
             if (_isInRetinaMonitor)
             {
@@ -966,7 +981,7 @@ void GLViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int /*x*/, int 
 }
 
 void GLViewImpl::onGLFWFramebufferSizeCallback(GLFWwindow* window, int w, int h)
-{ // win32 glfw never invoke this callback
+{ // win32 glfw same with onGLFWWindowSizeCallback
 #if CC_TARGET_PLATFORM != CC_PLATFORM_WIN32
     float frameSizeW = _screenSize.width;
     float frameSizeH = _screenSize.height;
@@ -1000,14 +1015,19 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
-        Size baseDesignSize = _designResolutionSize;
-        ResolutionPolicy baseResolutionPolicy = _resolutionPolicy;
-
-        int frameWidth = w / _frameZoomFactor;
-        int frameHeight = h / _frameZoomFactor;
-        setFrameSize(frameWidth, frameHeight);
-        setDesignResolutionSize(baseDesignSize.width, baseDesignSize.height, baseResolutionPolicy);
-
+        /* 
+         x-studio spec, fix view size incorrect when window size changed.
+         The original code behavior:
+         1. first time enter full screen: w,h=1920,1080
+         2. second or later enter full screen: will trigger 2 times WindowSizeCallback
+           1). w,h=976,679
+           2). w,h=1024,768
+         
+         @remark: we should use glfwSetWindowMonitor to control the window size in full screen mode
+         @see also: updateWindowSize (call after enter/exit full screen mode)
+        */
+        updateDesignResolutionSize();
+		
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
     }
 }
