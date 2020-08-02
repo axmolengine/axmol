@@ -94,9 +94,9 @@ public:
     /// Sets monitor full screen with w*h(refresh rate)
     /// </summary>
     /// <param name="monitorIndex">the 0 based index of monitor</param>
-    /// <param name="w">the width of hardware resolution in full screen</param>
-    /// <param name="h">the height of hardware resolution in full screen</param>
-    /// <param name="refreshRate">the display refresh rate, usually 60</param>
+    /// <param name="w">the width of hardware resolution in full screen, -1 use default value</param>
+    /// <param name="h">the height of hardware resolution in full screen, -1 use default value</param>
+    /// <param name="refreshRate">the display refresh rate, usually 60, -1 use default value</param>
     void setFullscreen(int monitorIndex, int w, int h, int refreshRate);
 
     /* for internal use */
