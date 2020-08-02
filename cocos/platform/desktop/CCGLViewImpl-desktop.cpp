@@ -682,7 +682,6 @@ void GLViewImpl::setFullscreen(GLFWmonitor *monitor, int w, int h, int refreshRa
     _monitor = monitor;
 
     const GLFWvidmode* videoMode = glfwGetVideoMode(_monitor);
-
     if (w == -1)
         w = videoMode->width;
     if (h == -1)
