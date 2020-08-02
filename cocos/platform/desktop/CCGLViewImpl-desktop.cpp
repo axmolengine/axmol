@@ -645,8 +645,7 @@ bool GLViewImpl::isFullscreen() const {
 
 void GLViewImpl::setFullscreen()
 {
-    const GLFWvidmode* videoMode = glfwGetVideoMode(_monitor);
-    setFullscreen(videoMode->width, videoMode->height, videoMode->refreshRate);
+    setFullscreen(-1, -1, -1);
 }
 
 void GLViewImpl::setFullscreen(int w, int h, int refreshRate) {
@@ -661,8 +660,7 @@ void GLViewImpl::setFullscreen(int w, int h, int refreshRate) {
 
 void GLViewImpl::setFullscreen(int monitorIndex)
 {
-    const GLFWvidmode* videoMode = glfwGetVideoMode(_monitor);
-    setFullscreen(monitorIndex, videoMode->width, videoMode->height, videoMode->refreshRate);
+    setFullscreen(monitorIndex, -1, -1, -1);
 }
 
 void GLViewImpl::setFullscreen(int monitorIndex, int w, int h, int refreshRate) {
@@ -682,6 +680,15 @@ void GLViewImpl::setFullscreen(int monitorIndex, int w, int h, int refreshRate) 
 
 void GLViewImpl::setFullscreen(GLFWmonitor *monitor, int w, int h, int refreshRate) {
     _monitor = monitor;
+
+    if (w == -1 || h == -1 || refreshRate == -1)
+    {
+        const GLFWvidmode* videoMode = glfwGetVideoMode(_monitor);
+        w = videoMode->width;
+        h = videoMode->height;
+        refreshRate = videoMode->refreshRate;
+    }
+
     glfwSetWindowMonitor(_mainWindow, _monitor, 0, 0, w, h, refreshRate);
 
     updateWindowSize();
