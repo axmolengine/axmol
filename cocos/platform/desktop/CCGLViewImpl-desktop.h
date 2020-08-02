@@ -83,7 +83,7 @@ public:
 
     bool isFullscreen() const;
 
-    /* Sets primary monitor full screen with w*h(refresh rate) */
+    /* Sets primary monitor full screen with default w*h(refresh rate) */
     void setFullscreen();
     /* Sets primary monitor full screen with w*h(refresh rate) */
     void setFullscreen(int w, int h, int refreshRate);
