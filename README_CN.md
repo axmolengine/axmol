@@ -4,6 +4,7 @@
 
 **这是另外一个基于 ```cocos2d-x-4.0``` 持续维护的分支, 全平台基于OpenAL, 删除不必要的平台相关, c++14/17...**
   
+**[English](README.md)**
   
 ### 目标概览:
 1. C++14/17
@@ -21,7 +22,7 @@
   3. 执行下面的命令
   ```bat
   cd engine-x
-  cmake -S .\ -B .\build -G “Visual Studio 16 2019” -A Win32
+  cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
   ``` 
   4. 之后就可以用vs打开```engine-x/build/Cocos2d-x.sln```启动cpp-tests等测试工程了
 

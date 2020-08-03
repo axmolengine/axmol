@@ -4,6 +4,8 @@
 
 **This is another more radical fork of ```cocos2d-x v4```, use opanal for all platforms, single texture multi gpu texture handler, c++14/17...**  
   
+**[简体中文](README_CN.md)**
+  
 ### Goals summary:
 1. C++14/17
 2. forcus on native game dev only
@@ -20,7 +22,7 @@
   3. Execute follow command at command line(Console, Window Terminal or Powershell)
   ```bat
   cd engine-x\
-  cmake -S .\ -B .\build -G "Visual Studio 16 2019" -A Win32
+  cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
   ```
   
 
