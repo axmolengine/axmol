@@ -31,7 +31,7 @@
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/cocos2d/LuaScriptHandlerMgr.h"
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
-#include "cocostudio/CocoStudio.h"
+#include "editor-support/cocostudio/CocoStudio.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
 #include "scripting/lua-bindings/manual/cocostudio/CustomGUIReader.h"
 

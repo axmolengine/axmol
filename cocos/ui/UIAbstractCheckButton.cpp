@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 #include "ui/UIAbstractCheckButton.h"
 #include "2d/CCSprite.h"
+#include "editor-support/cocostudio/CocosStudioExtension.h"
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramStateRegistry.h"
 
