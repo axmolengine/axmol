@@ -37,7 +37,7 @@
 
 
 #include "flatbuffers/flatbuffers.h"
-#include "cocostudio/ext/glslutils.hpp"
+#include "renderer/CCColorizer.h"
 
 USING_NS_CC;
 using namespace flatbuffers;
@@ -246,8 +246,6 @@ namespace cocostudio
         nodeReader->setPropsWithFlatBuffers(node, (Table*)(options->nodeOptions()));
         
         auto fileNameData = cocos2d::wext::makeResourceData(options->fileNameData());
-
-        cocos2d::wext::onBeforeLoadObjectAsset(node, fileNameData, 0);
         
         int resourceType = fileNameData.type;
         std::string& path = fileNameData.file;
@@ -338,7 +336,7 @@ namespace cocostudio
             auto hsv = options->hsv();
             auto filter = options->filter();
             if (hsv != nullptr && filter != nullptr) {
-                glslutils::enableNodeIntelliShading(sprite,
+                Colorizer::enableNodeIntelliShading(sprite,
                     true,
                     Vec3(hsv->x(), hsv->y(), hsv->z()),
                     Vec3(filter->x(), filter->y(), filter->z()));
@@ -348,7 +346,7 @@ namespace cocostudio
     
     Node* SpriteReader::createNodeWithFlatBuffers(const flatbuffers::Table *spriteOptions)
     {
-        Sprite* sprite = wext::aSprite();// Sprite::create();
+        Sprite* sprite = Sprite::create();
         
         setPropsWithFlatBuffers(sprite, (Table*)spriteOptions);
         

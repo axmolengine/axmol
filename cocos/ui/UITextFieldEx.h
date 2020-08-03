@@ -5,18 +5,17 @@
 #define _UITEXTFIELDEX_H_
 
 #include "cocos2d.h"
-#include "cocostudio/CocosStudioExport.h"
-
-#include "SimpleTimer.h"
+#include "base/ccMacros.h"
+#include "base/SimpleTimer.h"
 
 NS_CC_BEGIN
 
 namespace ui {
 
     /**
-    @brief  A extension implementation of ui::TextField 
+    @brief  A extension implementation of ui::TextField
     */
-    class CC_STUDIO_DLL TextFieldEx : public cocos2d::Node, public IMEDelegate
+    class CC_DLL TextFieldEx : public cocos2d::Node, public IMEDelegate
     {
     public:
         /**
@@ -29,7 +28,7 @@ namespace ui {
          */
         virtual ~TextFieldEx();
 
-        static TextFieldEx * create(const std::string& placeholder, const std::string& fontName, float fontSize, float cursorWidth = 2, const Color4B& color = Color4B::WHITE);
+        static TextFieldEx* create(const std::string& placeholder, const std::string& fontName, float fontSize, float cursorWidth = 2, const Color4B& color = Color4B::WHITE);
 
         bool initWithPlaceHolder(const std::string& placeholder, const std::string& fontName, float fontSize, float cursorWidth = 2, const Color4B& color = Color4B::WHITE);
 
@@ -41,20 +40,20 @@ namespace ui {
         inline int                getCharCount() const { return charCount; };
 
         virtual void              setPlaceholderColor(const Color4B& color);
-        virtual const Color4B&    getPlaceholderColor() const;
+        virtual const Color4B& getPlaceholderColor() const;
 
         virtual void              setTextColor(const Color4B& textColor);
-        virtual const Color4B&    getTextColor(void) const;
+        virtual const Color4B& getTextColor(void) const;
 
         void                      setCursorColor(const Color3B& color);
-        const Color3B&            getCursorColor(void) const;
+        const Color3B& getCursorColor(void) const;
 
         // input text property
         virtual void               setString(const std::string& text);
         virtual const std::string& getString() const;
 
         // Continuous touch event trigger support.
-        void setContinuousTouchDelayTime(float delay) { _continuousTouchDelayTime = delay;  }
+        void setContinuousTouchDelayTime(float delay) { _continuousTouchDelayTime = delay; }
         float getContinuousTouchDelayTime() const { return _continuousTouchDelayTime; }
         void setContinuousTouchCallback(std::function<void(const Point& worldPoint)> callback) { _continuousTouchCallback = std::move(callback); }
 
@@ -70,12 +69,12 @@ namespace ui {
 
         bool                 empty(void) const { return this->charCount == 0 || this->inputText.empty(); }
 
-        virtual const Size&  getContentSize() const override;
+        virtual const Size& getContentSize() const override;
 
         virtual void         setEnabled(bool bEnabled);
         virtual bool         isEnabled(void) const;
 
-        void                 setEditable(bool bEditable){ editable = bEditable; }
+        void                 setEditable(bool bEditable) { editable = bEditable; }
         bool                 isEditable(void) const { return editable; }
 
         void                 setMaxLength(int maxLength) { setCharLimit(maxLength); }
@@ -90,7 +89,7 @@ namespace ui {
 
         CC_SYNTHESIZE(size_t, charLimit, CharLimit);
 
-        bool isSystemFont(void) const{ return systemFontUsed; }
+        bool isSystemFont(void) const { return systemFontUsed; }
 
     public:
         std::function<void(void)>   onTextModify;
@@ -101,18 +100,18 @@ namespace ui {
         void openIME(void);
         void closeIME(void);
 
-        virtual void insertText(const char * text, size_t len) override;
+        virtual void insertText(const char* text, size_t len) override;
     protected:
         //////////////////////////////////////////////////////////////////////////
 
 
         virtual bool canAttachWithIME() override;
         virtual bool canDetachWithIME() override;
-        
+
         virtual void deleteBackward() override;
         virtual const std::string& getContentText() override;
 
-        void handleDeleteKeyEvent() ;
+        void handleDeleteKeyEvent();
 
         /**
         @brief    Open keyboard and receive input text.
@@ -147,7 +146,7 @@ namespace ui {
 
         bool                        editable;
 
-        Label*                      renderLabel;
+        Label* renderLabel;
 
         size_t                      charCount;
         std::string                 inputText;
@@ -158,7 +157,7 @@ namespace ui {
 
         bool                        secureTextEntry;
 
-        Sprite*                     cursor;
+        Sprite* cursor;
         bool                        cursorVisible;
 
         int                         insertPosUtf8;
@@ -168,14 +167,14 @@ namespace ui {
         bool                        enabled;
 
         EventListenerTouchOneByOne* touchListener;
-        EventListenerKeyboard*      kbdListener;
+        EventListenerKeyboard* kbdListener;
 
         bool                        touchCursorControlEnabled;
         float                       asteriskWidth;
 
         int                         _fontType;
 
-        stimer::TIMER_ID            _continuousTouchDelayTimerID;
+        cocos2d::stimer::TIMER_ID   _continuousTouchDelayTimerID;
         float                       _continuousTouchDelayTime;
         std::function<void(const Point& worldPoint)>   _continuousTouchCallback;
 

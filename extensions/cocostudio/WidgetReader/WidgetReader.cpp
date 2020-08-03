@@ -951,7 +951,7 @@ namespace cocostudio
     
     Node* WidgetReader::createNodeWithFlatBuffers(const flatbuffers::Table *widgetOptions)
     {
-        Widget* widget = wext::aWidget();// Widget::create();
+        Widget* widget = Widget::create();
         
         setPropsWithFlatBuffers(widget, (Table*)widgetOptions);
         

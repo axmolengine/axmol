@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2014-2017 purelib - All Rights Reserved
+// Copyright (c) 2014-2020 @HALX99 - All Rights Reserved
 //
 #ifndef _UITEXTFIELD_CPP_H_
 #define _UITEXTFIELD_CPP_H_
@@ -94,7 +94,7 @@ static Sprite* engine_inj_create_lump(const Color4B& color, int height, int widt
 
     // Fill Pixels
     uint32_t* ptr = pixels;
-    const Color4B fillColor = Color4B::BLACK;
+    const Color4B fillColor = Color4B::WHITE;
     for (int i = 0; i < height * width; ++i)
     {
         ptr[i] = engine_inj_c4b2dw(fillColor);// 0xffffffff;
@@ -995,7 +995,7 @@ namespace ui {
         }
         else
         {
-            if (!this->inputText.empty()) {
+            if (!this->inputText.empty()) { 
                 displayText = renderLabel->getString();
             }
         }

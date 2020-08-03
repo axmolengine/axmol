@@ -129,6 +129,7 @@ set(COCOS_BASE_SRC
     base/ccTypes.cpp
     base/ccUTF8.cpp
     base/ccUtils.cpp
+    base/SimpleTimer.cpp
     base/etc1.cpp
     base/pvr.cpp
     base/s3tc.cpp

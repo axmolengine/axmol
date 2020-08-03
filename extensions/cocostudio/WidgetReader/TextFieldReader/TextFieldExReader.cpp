@@ -2,7 +2,7 @@
 
 #include "cocostudio/WidgetReader/TextFieldReader/TextFieldExReader.h"
 
-#include "cocostudio/ext/UITextFieldEx.h"
+#include "ui/UITextFieldEx.h"
 #include "platform/CCFileUtils.h"
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"
@@ -320,7 +320,6 @@ namespace cocostudio
         std::string errorFilePath = "";
         auto resourceData = cocos2d::wext::makeResourceData(options->fontResource());
         std::string& path = resourceData.file;
-        // cocos2d::wext::onBeforeLoadObjectAsset(textField, resourceData, 0);
         if (path != "")
         {
             if (FileUtils::getInstance()->isFileExist(path))

@@ -1,5 +1,6 @@
 //
-// Copyright (c) 2014-2017 purelib - All Rights Reserved
+//
+// Copyright (c) 2014-2020 Simdsoft Limited - All Rights Reserved
 //
 #include "LayoutHelper.h"
 

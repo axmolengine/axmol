@@ -109,7 +109,6 @@ namespace cocostudio
                 
                 // assets[0] = backgroundValue;
                 auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(button, fileData, 0);
                 button->loadTextureNormal(fileData.file, imageFileNameType);
                 
             }
@@ -123,7 +122,6 @@ namespace cocostudio
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 
                 auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(button, fileData, 1);
                 button->loadTexturePressed(fileData.file, imageFileNameType);
                 
             }
@@ -137,7 +135,6 @@ namespace cocostudio
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 
                 auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(button, fileData, 2);
                 button->loadTextureDisabled(fileData.file, imageFileNameType);
                 
             }else if (key == P_Text){
@@ -165,7 +162,6 @@ namespace cocostudio
                 button->setTitleFontSize(valueToFloat(value));
             }else if(key == P_FontName){
                 auto fileData = cocos2d::wext::makeResourceData(value);
-                cocos2d::wext::onBeforeLoadObjectAsset(button, fileData, 3);
                 button->setTitleFontName(fileData.file); // fonts
             }
             
@@ -736,7 +732,6 @@ namespace cocostudio
         auto normalDic = cocos2d::wext::makeResourceData(options->normalData());
         int normalType = normalDic.type;
         std::string& normalTexturePath = normalDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(button, normalDic, 0);
         switch (normalType)
         {
             case 0:
@@ -798,7 +793,6 @@ namespace cocostudio
         auto pressedDic = cocos2d::wext::makeResourceData(options->pressedData());
         int pressedType = pressedDic.type;
         std::string& pressedTexturePath = pressedDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(button, pressedDic, 1);
         switch (pressedType)
         {
             case 0:
@@ -857,7 +851,6 @@ namespace cocostudio
         auto disabledDic = cocos2d::wext::makeResourceData(options->disabledData());
         int disabledType = disabledDic.type;
         std::string& disabledTexturePath = disabledDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(button, disabledDic, 2);
         switch (disabledType)
         {
             case 0:
@@ -935,7 +928,6 @@ namespace cocostudio
         bool fileExist = false;
         std::string errorFilePath = "";
         std::string& path = resourceData.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(button, resourceData, 3); // font
         if (path != "")
         {
             if (FileUtils::getInstance()->isFileExist(path))
@@ -1032,7 +1024,7 @@ namespace cocostudio
     
     Node* ButtonReader::createNodeWithFlatBuffers(const flatbuffers::Table *buttonOptions)
     {
-        Button* button = wext::aButton();// Button::create();
+        Button* button = Button::create();
         
         setPropsWithFlatBuffers(button, (Table*)buttonOptions);
         

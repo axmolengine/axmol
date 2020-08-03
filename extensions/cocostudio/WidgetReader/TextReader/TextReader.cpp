@@ -86,7 +86,6 @@ namespace cocostudio
                 std::string fontFilePath;
                 fontFilePath = binaryFilePath.append(value);
                 auto fontData = cocos2d::wext::makeResourceData(std::move(fontFilePath));
-                cocos2d::wext::onBeforeLoadObjectAsset(label, fontData, 0);
                 if (FileUtils::getInstance()->isFileExist(fontFilePath)) {
                     label->setFontName(fontData.file);
                 }else{
@@ -475,7 +474,6 @@ namespace cocostudio
 
         auto resourceData = cocos2d::wext::makeResourceData(options->fontResource());
         std::string& path = resourceData.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(label, resourceData, 0);
         if (!path.empty() && FileUtils::getInstance()->isFileExist(path))
         {
             label->setFontName(path);
@@ -573,7 +571,7 @@ namespace cocostudio
     
     Node* TextReader::createNodeWithFlatBuffers(const flatbuffers::Table *textOptions)
     {
-        Text* text = wext::aText(); // Text::create();
+        Text* text = Text::create();
         
         setPropsWithFlatBuffers(text, (Table*)textOptions);
         

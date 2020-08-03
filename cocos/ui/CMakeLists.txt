@@ -142,4 +142,5 @@ set(COCOS_UI_SRC
     ui/UILayoutComponent.cpp
     ui/UIEditBox/UIEditBoxImpl-common.cpp
     ui/UITabControl.cpp
+    ui/UITextFieldEx.cpp
     )

@@ -88,7 +88,6 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(slider, fileData, 0);
                 slider->loadBarTexture(fileData.file, imageFileNameType);
                 
             }else if(key == P_Length){
@@ -101,7 +100,6 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(slider, fileData, 1);
                 slider->loadSlidBallTextureNormal(fileData.file, imageFileNameType);
 
             }else if(key == P_BallPressedData){
@@ -112,7 +110,6 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(slider, fileData, 2);
                 slider->loadSlidBallTexturePressed(fileData.file, imageFileNameType);
                 
             }else if(key == P_BallDisabledData){
@@ -123,7 +120,6 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(slider, fileData, 3);
                 slider->loadSlidBallTextureDisabled(fileData.file, imageFileNameType);
                 
             }else if(key == P_ProgressBarData){
@@ -134,7 +130,6 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(slider, fileData, 4);
                 slider->loadProgressBarTexture(fileData.file, imageFileNameType);
                 
             }
@@ -481,7 +476,6 @@ namespace cocostudio
         auto imageFileNameDic = cocos2d::wext::makeResourceData(options->barFileNameData());
         int imageFileNameType = imageFileNameDic.type;
         std::string& imageFileName = imageFileNameDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(slider, imageFileNameDic, 0);
         switch (imageFileNameType)
         {
             case 0:
@@ -547,7 +541,6 @@ namespace cocostudio
         auto normalDic = cocos2d::wext::makeResourceData(options->ballNormalData());
         int normalType = normalDic.type;
         std::string& normalFileName = normalDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(slider, normalDic, 1);
         switch (normalType)
         {
             case 0:
@@ -613,7 +606,6 @@ namespace cocostudio
         auto pressedDic = cocos2d::wext::makeResourceData(options->ballPressedData());
         int pressedType = pressedDic.type;
         std::string& pressedFileName = pressedDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(slider, pressedDic, 2);
         switch (pressedType)
         {
             case 0:
@@ -679,7 +671,6 @@ namespace cocostudio
         auto disabledDic = cocos2d::wext::makeResourceData(options->ballDisabledData());
         int disabledType = disabledDic.type;
         std::string& disabledFileName = disabledDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(slider, disabledDic, 3);
         switch (disabledType)
         {
             case 0:
@@ -745,7 +736,6 @@ namespace cocostudio
         auto progressBarDic = cocos2d::wext::makeResourceData(options->progressBarData());
         int progressBarType = progressBarDic.type;
         std::string& progressBarFileName = progressBarDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(slider, progressBarDic, 4);
         switch (progressBarType)
         {
             case 0:
@@ -816,7 +806,7 @@ namespace cocostudio
     
     Node* SliderReader::createNodeWithFlatBuffers(const flatbuffers::Table *sliderOptions)
     {
-        Slider* slider = wext::aSlider(); // Slider::create();
+        Slider* slider = Slider::create();
         
         setPropsWithFlatBuffers(slider, (Table*)sliderOptions);
         

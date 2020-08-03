@@ -964,7 +964,6 @@ Node * CSLoader::createNode(const Data& data, const ccNodeLoadCallback &callback
         for (int i = 0; i < textureSize; ++i)
         {
             std::string plist = textures->Get(i)->c_str();
-            wext::onLoadSpriteFramesWithFile(plist);
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
         }
 
@@ -1093,7 +1092,6 @@ Node* CSLoader::nodeWithFlatBuffersFile(const std::string &fileName, const ccNod
     for (int i = 0; i < textureSize; ++i)
     {
         std::string plist = textures->Get(i)->c_str();
-        wext::onLoadSpriteFramesWithFile(plist);
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plist);
     }
 
@@ -1134,7 +1132,7 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree *nodetree, const
             }
             else
             {
-                node = wext::aNode(); // Node::create();
+                node = Node::create();
             }
             reader->setPropsWithFlatBuffers(node, (const flatbuffers::Table*)options->data());
             if (action)
@@ -1146,7 +1144,7 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree *nodetree, const
         }
         else if (classname == "SimpleAudio")
         {
-            node = wext::aNode(); // Node::create();
+            node = Node::create();
             auto reader = ComAudioReader::getInstance();
             Component* component = reader->createComAudioWithFlatBuffers((const flatbuffers::Table*)options->data());
             if (component)
@@ -1499,7 +1497,7 @@ Node* CSLoader::nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree *nod
         }
         else
         {
-            node = wext::aNode(); // Node::create();
+            node = Node::create();
         }
         reader->setPropsWithFlatBuffers(node, (const flatbuffers::Table*)options->data());
         if (action)
@@ -1511,7 +1509,7 @@ Node* CSLoader::nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree *nod
     }
     else if (classname == "SimpleAudio")
     {
-        node = wext::aNode(); // Node::create();
+        node = Node::create();
         auto reader = ComAudioReader::getInstance();
         Component* component = reader->createComAudioWithFlatBuffers((const flatbuffers::Table*)options->data());
         if (component)
