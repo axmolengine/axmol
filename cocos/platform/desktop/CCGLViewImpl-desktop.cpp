@@ -649,13 +649,11 @@ void GLViewImpl::setFullscreen()
 }
 
 void GLViewImpl::setFullscreen(int w, int h, int refreshRate) {
-    if (this->isFullscreen()) 
-        return;
-    _monitor = glfwGetPrimaryMonitor();
-    if (nullptr == _monitor) {
+    auto monitor = glfwGetPrimaryMonitor();
+    if (nullptr == monitor || monitor == _monitor) {
         return;
     }
-    this->setFullscreen(_monitor, w, h, refreshRate);
+    this->setFullscreen(monitor, w, h, refreshRate);
 }
 
 void GLViewImpl::setFullscreen(int monitorIndex)
@@ -664,15 +662,13 @@ void GLViewImpl::setFullscreen(int monitorIndex)
 }
 
 void GLViewImpl::setFullscreen(int monitorIndex, int w, int h, int refreshRate) {
-    if (this->isFullscreen())
-        return;
     int count = 0;
     GLFWmonitor** monitors = glfwGetMonitors(&count);
     if (monitorIndex < 0 || monitorIndex >= count) {
         return;
     }
     GLFWmonitor* monitor = monitors[monitorIndex];
-    if (nullptr == monitor) {
+    if (nullptr == monitor || _monitor == monitor) {
         return;
     }
     this->setFullscreen(monitor, w, h, refreshRate);
