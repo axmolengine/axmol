@@ -15,6 +15,24 @@ option(BUILD_EXTENSION_COCOSTUDIO "Build extension cocostudio" ON)
 
 message(STATUS "BUILD_EXTENSION_COCOSTUDIO:${BUILD_EXTENSION_COCOSTUDIO}")
 
+function(setup_cocos_extension_config target_name)
+  if(ANDROID)
+    target_link_libraries(${target_name} INTERFACE cocos2d)
+    target_include_directories(${target_name} PRIVATE $<TARGET_PROPERTY:cocos2d,INTERFACE_INCLUDE_DIRECTORIES>)
+  else()
+    target_link_libraries(${target_name} cocos2d)
+  endif()
+  
+  set_target_properties(${target_name}
+      PROPERTIES
+      ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+      LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+      FOLDER "Extensions"
+  )
+
+  set(CC_EXTENSION_LIBS "${target_name};${CC_EXTENSION_LIBS}" CACHE INTERNAL "extensions for auto link to target application")
+endfunction()
+
 if(BUILD_EXTENSION_ASSETMANAGER)
   add_subdirectory(assets-manager)
 endif()

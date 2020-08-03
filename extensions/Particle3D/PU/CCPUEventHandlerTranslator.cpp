@@ -25,9 +25,9 @@
  ****************************************************************************/
 
 #include "CCPUEventHandlerTranslator.h"
-#include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
-#include "extensions/Particle3D/PU/CCPUEventHandlerManager.h"
-#include "extensions/Particle3D/PU/CCPUObserver.h"
+#include "Particle3D/PU/CCPUParticleSystem3D.h"
+#include "Particle3D/PU/CCPUEventHandlerManager.h"
+#include "Particle3D/PU/CCPUObserver.h"
 
 NS_CC_BEGIN
 
