@@ -2,11 +2,11 @@
 [![Build Status](https://travis-ci.com/c4games/engine-x.svg?branch=master)](https://travis-ci.com/c4games/engine-x)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/4936wev2r2ot606s/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/engine-x)
 
-**This is another more radical fork of ```cocos2d-x v4```, use opanal for all platforms, single texture multi gpu texture handler, c++14/17...**  
+**这是另外一个基于 ```cocos2d-x-4.0``` 持续维护的分支, 全平台基于OpenAL, 删除不必要的平台相关, c++14/17...**
   
-**[简体中文](README_CN.md)**
+**[English](README.md)**
   
-### Goals summary:
+### 目标概览:
 1. C++14/17
 2. forcus on native game dev only
 3. Remove unnecessary sources
@@ -17,44 +17,43 @@
 
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
 
-### Quick Start
+### 快速开始
 #### Windows
-  1. Install [CMake](https://cmake.org/) 3.6+  
-  2. Install Visual Studio 2019 build(we strong recommand you install this version)  
-  3. Execute follow command at command line(Console, Window Terminal or Powershell)
+  1. 安装CMake，要求3.6以上  
+  2. 确保Visual Studio 2019以正确安装
+  3. 执行下面的命令
   ```bat
-  cd engine-x\
+  cd engine-x
   cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
-  ```
-  
+  ``` 
+  4. 之后就可以用vs打开```engine-x/build/Cocos2d-x.sln```启动cpp-tests等测试工程了
 
 #### Android
-  1. Install Android Studio 3.5.3+
-  2. Start Android and choose [Open an existing Android Studio Project] to open ```engine-x\tests\cpp-tests\proj.android```
-  3. Start Android Studio and Open [Tools][SDKManager] and install sdk tools:  
+  1. 安装 Android Studio 3.5.3或更高版本
+  2. 启动 Android Studio并打开engine-x\tests\cpp-tests\proj.android
+  3. 通过 [Tools][SdkManagers] 打开sdk管理工具，安装如下工具  
     LLDB 3.1+  
     CMake 3.10.2+  
     NDK 20.1+  
 
-  4. Waiting for ```Gradle sync``` finish.
-  
-  5. Remark: If missing Ninja, could be download from https://github.com/ninja-build/ninja/releases, then copy Ninja.exe to Cmake's bin directory
+  4. 等待Gradle sync完成后，Build APKs，安装运行  
+  5. 如果报缺少Ninja, 从https://github.com/ninja-build/ninja/releases下载， 拷贝Ninja.exe到Cmake的bin目录即可
 
 #### iOS
-  1. Ensure xcode11+ installed
-  2. Install brew: ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```  
-  when finish, install follow tools:
+  1. 确保已安装xcode11+
+  2. 安装brew: ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```  
+  brew安装完成后，确保如下工具安装:  
   ```sh
-      brew update
-      brew install git
-      brew install cmake
-      brew install autoconf
-      brew install automake
-      brew install libtool
+    brew update
+    brew install git
+    brew install cmake
+    brew install autoconf
+    brew install automake
+    brew install libtool
   ```
-  3. Execute follow command   
+  3. 执行如下命令确保cmake能成功生成xcode工程:  
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
-  4. Generate xcode project
+  4. 生成xcode工程, 进入engine-x根目录执行如下命令:  
   ```sh
     mkdir engine-x/build
     cd engine-x/build
@@ -66,14 +65,18 @@
     # for device 64
     # cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS64 -DENABLE_ARC=0 -DENABLE_BITCODE=0
   ```
-  5. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.
+  5. 之后就可以用xcode打开, 选择cpp-tests编译运行
 
-### Pitfalls
-  * ThreadLocalStorage(TLS) 
+### 注意
+  * ThreadLocalStorage线程本地存储
     - ios x86 simulator ios>=10
     - ios x64 or devices(armv7,arm64) ios sdk>=9.0
     - the openal-soft maintained by kcat use TLS
 
-### Reference links
+### QQ交流群
+
+  点击链接加入群聊【engine-x交流群】：https://jq.qq.com/?_wv=1027&k=nvNmzOIY
+  
+### 参考链接
   * engine-x-3rd: https://github.com/c4games/engine-x-3rd
   * official v4: https://github.com/cocos2d/cocos2d-x
