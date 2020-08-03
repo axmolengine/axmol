@@ -25,7 +25,7 @@
 #include "extensions/cocos-ext.h"
 #include "UIScene.h"
 #include "UISceneManager.h"
-#include "editor-support/cocostudio/CCSGUIReader.h"
+#include "cocostudio/CCSGUIReader.h"
 #include "CocosGUIScene.h"
 
 USING_NS_CC;
