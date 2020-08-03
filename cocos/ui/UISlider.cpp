@@ -28,7 +28,6 @@ THE SOFTWARE.
 #include "ui/UIHelper.h"
 #include "2d/CCSprite.h"
 #include "2d/CCCamera.h"
-#include "editor-support/cocostudio/CocosStudioExtension.h"
 #include "renderer/ccShaders.h"
 NS_CC_BEGIN
 

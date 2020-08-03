@@ -255,6 +255,7 @@ function(setup_cocos_app_config app_name)
         cocos_def_copy_resource_target(${app_name})
     endif()
 
+    target_link_libraries(${app_name} ${CC_EXTENSION_LIBS})
 endfunction()
 
 # if cc_variable not set, then set it cc_value

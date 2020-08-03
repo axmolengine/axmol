@@ -26,7 +26,7 @@
 
 #ifndef LUASKELETONANIMATION_H_
 #define LUASKELETONANIMATION_H_
-#include "editor-support/spine/spine-cocos2dx.h"
+#include "spine/spine-cocos2dx.h"
 
 /// @cond
 class LuaSkeletonAnimation: public spine::SkeletonAnimation {
