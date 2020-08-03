@@ -34,10 +34,6 @@ set(COCOS2D_X_VERSION 4.0)
 set(COCOS_CORE_LIB cocos2d)
 project(cocos2d_libs)
 
-# default value for cocos2dx extensions modules build
-option(BUILD_EDITOR_COCOSTUDIO "Build editor support for cocostudio" ON)
-option(BUILD_EDITOR_SPINE "Build editor support for spine" ON)
-option(BUILD_EXTENSIONS "Build extension library" ON)
 option(CC_USE_ALSOFT_ON_APPLE "Use openal-soft on apple platform" OFF)
 
 set(CC_USE_ALSOFT_ON_APPLE ${CC_USE_ALSOFT_ON_APPLE} CACHE BOOL "Use openal-soft on apple platform" FORCE)
@@ -59,24 +55,6 @@ include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
-if(BUILD_EDITOR_COCOSTUDIO)
-    include(editor-support/cocostudio/CMakeLists.txt)
-    set(COCOS_EDITOR_SUPPORT_SRC ${COCOS_EDITOR_SUPPORT_SRC} ${COCOS_CS_SRC} ${COCOS_CS_HEADER})
-endif(BUILD_EDITOR_COCOSTUDIO)
-
-if(BUILD_EDITOR_SPINE)
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/editor-support/spine/CMakeLists.txt")
-        include(editor-support/spine/CMakeLists.txt)
-    else()
-        message(WARNING "${CMAKE_CURRENT_SOURCE_DIR}/editor-support/spine/CMakeLists.txt not found!")
-    endif()
-    set(COCOS_EDITOR_SUPPORT_SRC ${COCOS_EDITOR_SUPPORT_SRC} ${COCOS_SPINE_SRC} ${COCOS_SPINE_HEADER})
-endif(BUILD_EDITOR_SPINE)
-
-if(BUILD_EXTENSIONS)
-    include(../extensions/CMakeLists.txt)
-endif(BUILD_EXTENSIONS)
-
 set(COCOS_HEADER cocos2d.h
     ${COCOS_2D_HEADER}
     ${COCOS_3D_HEADER}
@@ -90,8 +68,6 @@ set(COCOS_HEADER cocos2d.h
     ${COCOS_AUDIO_HEADER}
     ${COCOS_UI_HEADER}
     ${COCOS_NETWORK_HEADER}
-    ${COCOS_EDITOR_SUPPORT_HEADER}
-    ${COCOS_EXTENSIONS_HEADER}
     )
 
 set(COCOS_SRC cocos2d.cpp
@@ -107,8 +83,6 @@ set(COCOS_SRC cocos2d.cpp
     ${COCOS_AUDIO_SRC}
     ${COCOS_UI_SRC}
     ${COCOS_NETWORK_SRC}
-    ${COCOS_EDITOR_SUPPORT_SRC}
-    ${COCOS_EXTENSIONS_SRC}
     )
 
 list(APPEND COCOS_SRC ${COCOS_HEADER})
@@ -129,10 +103,11 @@ use_cocos2dx_libs_depend(cocos2d)
 target_include_directories(cocos2d
     PUBLIC ${COCOS2DX_ROOT_PATH}
     PUBLIC ${COCOS2DX_ROOT_PATH}/external
-    PUBLIC ${COCOS2DX_ROOT_PATH}/cocos
     PUBLIC ${COCOS2DX_ROOT_PATH}/extensions
+    PUBLIC ${COCOS2DX_ROOT_PATH}/cocos
     PUBLIC ${COCOS2DX_ROOT_PATH}/cocos/platform
-    PUBLIC ${COCOS2DX_ROOT_PATH}/cocos/editor-support
+
+    INTERFACE ${COCOS2DX_ROOT_PATH}/extensions
     INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/base
     INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/audio/include
     INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/platform/${PLATFORM_FOLDER}
@@ -163,6 +138,9 @@ if(WINDOWS)
     # compile c as c++. needed for precompiled header
     set_source_files_properties(${COCOS_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
 endif()
+
+# engine extensions
+add_subdirectory(${COCOS2DX_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+

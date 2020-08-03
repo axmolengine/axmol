@@ -35,7 +35,7 @@ extern "C" {
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 
 #include "scripting/lua-bindings/manual/Lua-BindingsExport.h"
-#include "editor-support/cocostudio/CocosStudioExtension.h"
+#include "cocostudio/CocosStudioExtension.h"
 #include "2d/CCLabel.h"
 #include "2d/CCSprite.h"
 #include "3d/CCBundle3D.h"

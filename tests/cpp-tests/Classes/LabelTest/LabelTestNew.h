@@ -29,7 +29,7 @@
 #include "renderer/CCCustomCommand.h"
 #include "ui/CocosGUI.h"
 #include "extensions/cocos-ext.h"
-#include "editor-support/cocostudio/LocalizationManager.h"
+#include "cocostudio/LocalizationManager.h"
 
 DEFINE_TEST_SUITE(NewLabelTests);
 
