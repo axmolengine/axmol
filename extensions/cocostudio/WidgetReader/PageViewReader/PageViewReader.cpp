@@ -350,7 +350,6 @@ namespace cocostudio
         auto imageFileNameDic = cocos2d::wext::makeResourceData(options->backGroundImageData());
         int imageFileNameType = imageFileNameDic.type;
         std::string& imageFileName = imageFileNameDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(pageView, imageFileNameDic, 0);
         if (imageFileName != "")
         {
             switch (imageFileNameType)
@@ -441,7 +440,7 @@ namespace cocostudio
     
     Node* PageViewReader::createNodeWithFlatBuffers(const flatbuffers::Table *pageViewOptions)
     {
-        PageView* pageView = wext::aPageView(); // PageView::create();
+        PageView* pageView = PageView::create();
         
         setPropsWithFlatBuffers(pageView, (Table*)pageViewOptions);
         

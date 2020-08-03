@@ -60,6 +60,7 @@ set(COCOS_RENDERER_SRC
     renderer/CCTextureUtils.cpp
     renderer/CCTrianglesCommand.cpp
     renderer/ccShaders.cpp
+    renderer/CCColorizer.cpp
 
     renderer/backend/CommandBuffer.cpp
     renderer/backend/DepthStencilState.cpp

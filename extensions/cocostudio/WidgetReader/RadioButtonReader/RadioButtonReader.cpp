@@ -326,7 +326,6 @@ namespace cocostudio
         auto backGroundDic = cocos2d::wext::makeResourceData(options->backGroundBoxData());
         int backGroundType = backGroundDic.type;
         std::string& backGroundTexturePath = backGroundDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, backGroundDic, 0);
         switch (backGroundType)
         {
             case 0:
@@ -386,7 +385,6 @@ namespace cocostudio
         auto backGroundSelectedDic = cocos2d::wext::makeResourceData(options->backGroundBoxSelectedData());
         int backGroundSelectedType = backGroundSelectedDic.type;
         std::string& backGroundSelectedTexturePath = backGroundSelectedDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, backGroundSelectedDic, 1);
         switch (backGroundSelectedType)
         {
             case 0:
@@ -446,7 +444,6 @@ namespace cocostudio
         auto frontCrossDic = cocos2d::wext::makeResourceData(options->frontCrossData());
         int frontCrossType = frontCrossDic.type;
         std::string& frontCrossFileName = frontCrossDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, frontCrossDic, 2);
         switch (frontCrossType)
         {
             case 0:
@@ -506,7 +503,6 @@ namespace cocostudio
         auto backGroundDisabledDic = cocos2d::wext::makeResourceData(options->backGroundBoxDisabledData());
         int backGroundDisabledType = backGroundDisabledDic.type;
         std::string& backGroundDisabledFileName = backGroundDisabledDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, backGroundDisabledDic, 3);
         switch (backGroundDisabledType)
         {
             case 0:
@@ -566,7 +562,6 @@ namespace cocostudio
         auto frontCrossDisabledDic = cocos2d::wext::makeResourceData(options->frontCrossDisabledData());
         int frontCrossDisabledType = frontCrossDisabledDic.type;
         std::string& frontCrossDisabledFileName = frontCrossDisabledDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, frontCrossDisabledDic, 4);
         switch (frontCrossDisabledType)
         {
             case 0:
@@ -635,7 +630,7 @@ namespace cocostudio
     
     Node* RadioButtonReader::createNodeWithFlatBuffers(const flatbuffers::Table *checkBoxOptions)
     {
-        auto radioButton = ui::RadioButton::create();// wext::aCheckBox();// CheckBox::create();
+        auto radioButton = ui::RadioButton::create();
         
         setPropsWithFlatBuffers(radioButton, (Table*)checkBoxOptions);
         

@@ -437,7 +437,6 @@ namespace cocostudio
         auto imageFileNameDic = cocos2d::wext::makeResourceData(options->backGroundImageData());
         int imageFileNameType = imageFileNameDic.type;
         std::string& imageFileName = imageFileNameDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(listView, imageFileNameDic, 0);
         if (imageFileName != "")
         {
             switch (imageFileNameType)
@@ -578,7 +577,7 @@ namespace cocostudio
     
     Node* ListViewReader::createNodeWithFlatBuffers(const flatbuffers::Table *listViewOptions)
     {
-        ListView* listView = wext::aListView(); // ListView::create();
+        ListView* listView = ListView::create();
         
         setPropsWithFlatBuffers(listView, (Table*)listViewOptions);
         

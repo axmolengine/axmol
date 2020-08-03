@@ -145,7 +145,6 @@ namespace cocostudio
                     
                     std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                     auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
-                    cocos2d::wext::onBeforeLoadObjectAsset(panel, fileData, 0);
                     panel->setBackGroundImage(fileData.file, imageFileNameType);
                 }
                 
@@ -624,7 +623,6 @@ namespace cocostudio
         auto imageFileNameDic = cocos2d::wext::makeResourceData(options->backGroundImageData());
         int imageFileNameType = imageFileNameDic.type;
         std::string& imageFileName = imageFileNameDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(panel, imageFileNameDic, 0);
         if (imageFileName != "")
         {
             switch (imageFileNameType)
@@ -716,7 +714,7 @@ namespace cocostudio
     
     Node* LayoutReader::createNodeWithFlatBuffers(const flatbuffers::Table *layoutOptions)
     {
-        Layout* layout = wext::aLayout(); // Layout::create();
+        Layout* layout = Layout::create();
         
         setPropsWithFlatBuffers(layout, (Table*)layoutOptions);
         

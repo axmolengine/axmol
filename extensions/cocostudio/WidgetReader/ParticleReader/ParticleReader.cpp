@@ -204,9 +204,7 @@ namespace cocostudio
         }
         if (fileExist)
         {
-            cocos2d::wext::onBeforeLoadObjectAsset(nullptr, fileNameData, 0); // consider, currently only particle is nullptr
-            particle = wext::aParticleSystemQuad(path); // ParticleSystemQuad::create(path);
-            // cocos2d::wext::onAfterLoadObjectAsset(particle, fileNameData, 0);
+            particle = ParticleSystemQuad::create(path);
             if (particle)
             {
                 setPropsWithFlatBuffers(particle, (Table*)particleOptions);
@@ -215,7 +213,7 @@ namespace cocostudio
         }
         else
         {
-            Node* node = wext::aNode();// Node::create();
+            Node* node = Node::create();
             setPropsWithFlatBuffers(node, (Table*)particleOptions);
             return node;
         }

@@ -99,44 +99,10 @@ namespace cocos2d {
 
         class Widget;
     }
-    typedef void(*APP_LOGERROR_FUNC)(const char* pszFormat, ...);
     namespace wext {
-        // engine extends APIs
-        CC_DLL extern APP_LOGERROR_FUNC getAppErrorLogFunc();
-
-		CC_STUDIOP_DLL extern void(*onLoadSpriteFramesWithFile)(std::string& file);
-
 		CC_STUDIOP_DLL extern cocos2d::ResourceData makeResourceData(const flatbuffers::ResourceData* data);
 		CC_STUDIOP_DLL extern cocos2d::ResourceData makeResourceData(const std::string& path, int type = 0);
 		CC_STUDIOP_DLL extern cocos2d::ResourceData makeResourceData(std::string&& path, int type = 0);
-		CC_STUDIOP_DLL extern void resetReaderAllHooks();
-
-        /// Assets Hooks
-		CC_STUDIOP_DLL extern bool(*onBeforeLoadObjectAsset)(cocos2d::Node*, cocos2d::ResourceData& assets, int index/*= 0*/);
-		CC_STUDIOP_DLL extern bool(*onAfterLoadObjectAsset)(cocos2d::Node*, cocos2d::ResourceData& assets, int index/*= 0*/);
-
-        // Object creator Hooks
-		CC_STUDIOP_DLL extern cocos2d::Node*(*aNode)();
-        CC_STUDIOP_DLL extern cocos2d::ui::Widget*(*aWidget)();
-		CC_STUDIOP_DLL extern cocos2d::Sprite*(*aSprite)();
-		CC_STUDIOP_DLL extern cocos2d::ui::ImageView*(*aImageView)();
-        CC_STUDIOP_DLL extern cocos2d::ui::Button*(*aButton)();
-        CC_STUDIOP_DLL extern cocos2d::ui::CheckBox*(*aCheckBox)();
-        CC_STUDIOP_DLL extern cocos2d::ui::Slider*(*aSlider)();
-        CC_STUDIOP_DLL extern cocos2d::ui::LoadingBar*(*aLoadingBar)();
-        CC_STUDIOP_DLL extern cocos2d::ui::Text*(*aText)();
-        CC_STUDIOP_DLL extern cocos2d::ui::TextField*(*aTextField)();
-        CC_STUDIOP_DLL extern cocos2d::ui::TextAtlas*(*aTextAtlas)();
-        CC_STUDIOP_DLL extern cocos2d::ui::TextBMFont*(*aTextBMFont)();
-        CC_STUDIOP_DLL extern cocos2d::ui::Layout*(*aLayout)();
-        CC_STUDIOP_DLL extern cocos2d::ui::ScrollView*(*aScrollView)();
-        CC_STUDIOP_DLL extern cocos2d::ui::ListView*(*aListView)();
-        CC_STUDIOP_DLL extern cocos2d::ui::PageView*(*aPageView)();
-        CC_STUDIOP_DLL extern cocos2d::Node*(*aArmatureNode)();
-        CC_STUDIOP_DLL extern cocostudio::timeline::SkeletonNode*(*aSkeletonNode)();
-        CC_STUDIOP_DLL extern cocostudio::timeline::BoneNode*(*aBoneNode)();
-        CC_STUDIOP_DLL extern cocos2d::ParticleSystemQuad*(*aParticleSystemQuad)(const std::string&);
-        CC_STUDIOP_DLL extern cocos2d::Node*(*aNestingNode)(std::string);
     };
 };
 

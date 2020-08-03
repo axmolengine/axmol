@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "cocostudio/WidgetReader/SpineSkeletonReader/SpineSkeletonReader.h"
-#include "cocostudio/ext/SpineSkeletonDataCache.h"
+#include "cocostudio/SpineSkeletonDataCache.h"
 
 #include "2d/CCSprite.h"
 #include "2d/CCSpriteFrameCache.h"
@@ -249,7 +249,6 @@ namespace cocostudio
     Node* SpineSkeletonReader::createNodeWithFlatBuffers(const flatbuffers::Table *spriteOptions)
     {
         Node* node = nullptr;
-        // Sprite* sprite = wext::aSprite(); // Sprite::create();
         // #Hack
         setPropsWithFlatBuffers((Node*)(&node), (Table*)spriteOptions);
 

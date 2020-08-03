@@ -76,7 +76,6 @@ namespace cocostudio
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
 
                 auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(checkBox, fileData, 0);
 
                 checkBox->loadTextureBackGround(fileData.file, imageFileNameType);
             }else if(key == P_BackGroundBoxSelectedData){
@@ -87,7 +86,7 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(checkBox, fileData, 1);
+
                 checkBox->loadTextureBackGroundSelected(fileData.file, imageFileNameType);
             }else if(key == P_FrontCrossData){
                 stExpCocoNode *backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
@@ -97,7 +96,7 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(checkBox, fileData, 2);
+
                 checkBox->loadTextureFrontCross(fileData.file, imageFileNameType);
             }else if(key == P_BackGroundBoxDisabledData){
                 stExpCocoNode *backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
@@ -107,7 +106,6 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(checkBox, fileData, 3);
                 checkBox->loadTextureBackGroundDisabled(fileData.file, imageFileNameType);
             }else if (key == P_FrontCrossDisabledData){
                 stExpCocoNode *backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
@@ -117,7 +115,6 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(checkBox, fileData, 4);
                 checkBox->loadTextureFrontCrossDisabled(fileData.file, imageFileNameType);
             }
 //            else if (key == "selectedState"){
@@ -453,7 +450,7 @@ namespace cocostudio
         auto backGroundDic = cocos2d::wext::makeResourceData(options->backGroundBoxData());
         int backGroundType = backGroundDic.type;
         std::string& backGroundTexturePath = backGroundDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, backGroundDic, 0);
+
         switch (backGroundType)
         {
             case 0:
@@ -513,7 +510,7 @@ namespace cocostudio
         auto backGroundSelectedDic = cocos2d::wext::makeResourceData(options->backGroundBoxSelectedData());
         int backGroundSelectedType = backGroundSelectedDic.type;
         std::string& backGroundSelectedTexturePath = backGroundSelectedDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, backGroundSelectedDic, 1);
+
         switch (backGroundSelectedType)
         {
             case 0:
@@ -573,7 +570,6 @@ namespace cocostudio
         auto frontCrossDic = cocos2d::wext::makeResourceData(options->frontCrossData());
         int frontCrossType = frontCrossDic.type;
         std::string& frontCrossFileName = frontCrossDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, frontCrossDic, 2);
         switch (frontCrossType)
         {
             case 0:
@@ -633,7 +629,6 @@ namespace cocostudio
         auto backGroundDisabledDic = cocos2d::wext::makeResourceData(options->backGroundBoxDisabledData());
         int backGroundDisabledType = backGroundDisabledDic.type;
         std::string& backGroundDisabledFileName = backGroundDisabledDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, backGroundDisabledDic, 3);
         switch (backGroundDisabledType)
         {
             case 0:
@@ -693,7 +688,6 @@ namespace cocostudio
         auto frontCrossDisabledDic = cocos2d::wext::makeResourceData(options->frontCrossDisabledData());
         int frontCrossDisabledType = frontCrossDisabledDic.type;
         std::string& frontCrossDisabledFileName = frontCrossDisabledDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(checkBox, frontCrossDisabledDic, 4);
         switch (frontCrossDisabledType)
         {
             case 0:
@@ -762,7 +756,7 @@ namespace cocostudio
     
     Node* CheckBoxReader::createNodeWithFlatBuffers(const flatbuffers::Table *checkBoxOptions)
     {
-        CheckBox* checkBox = wext::aCheckBox();// CheckBox::create();
+        CheckBox* checkBox = CheckBox::create();
         
         setPropsWithFlatBuffers(checkBox, (Table*)checkBoxOptions);
         

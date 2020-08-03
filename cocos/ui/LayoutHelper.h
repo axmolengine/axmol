@@ -1,18 +1,19 @@
 //
-// Copyright (c) 2014-2017 purelib,x-studio365 - All Rights Reserved
-// This module is used by x-studio365 UI Editor to layout UI elements
+// Copyright (c) 2014-2020 Simdsoft Limited - All Rights Reserved
+// This module is used by x-studio UI Editor to layout UI elements
 // It's very useful for programer to operate UI elements in runtime,
 // so, we publish it to here.
 // usage:
-//      #include "cocostudio/ext/LayoutHelper"
+//      #include "ui/LayoutHelper.h"
 //          nodes_layout::centerNode(node); // the node should be already have parent.
 //          nodes_layout::makeVerticalSpacingEqual(nodes); // all the nodes shoud be in the same parent.
 // 
-#ifndef _NXNODESLAYOUT_H_
-#define _NXNODESLAYOUT_H_
+#pragma once
+#ifndef _LAYOUTHELPER_H_
+#define _LAYOUTHELPER_H_
 
 #include "cocos2d.h"
-#include "cocostudio/CocosStudioExport.h"
+#include "base/ccMacros.h"
 
 using namespace cocos2d;
 
@@ -43,7 +44,7 @@ inline cocos2d::Size operator*(const cocos2d::Size& left, const cocos2d::Vec2& r
 
 namespace LayoutHelper {
 
-    class CC_STUDIO_DLL ScreenVisibleRect
+    class CC_DLL ScreenVisibleRect
     {
     public:
         static void   refresh(void);
@@ -65,10 +66,8 @@ namespace LayoutHelper {
         static cocos2d::Rect s_ScreenVisibleRect;
     };
 
-    class CC_STUDIO_DLL nodes_layout {
-        nodes_layout() = delete;
+    class CC_DLL nodes_layout {
     public:
-
         static float adjustedScale;
         static cocos2d::Size designSize;
 
@@ -589,10 +588,8 @@ namespace LayoutHelper {
         }
 
         ///// visible screen location methods //////
-        class CC_STUDIO_DLL scr {
-            scr() = delete;
+        class CC_DLL scr {
         public:
-
             static void setNodePosition(Node* pNode, const cocos2d::Point& p)
             {
                 setNodeNormalizedPosition(pNode, cocos2d::Vec2(p.x / designSize.width * nodes_layout::adjustedScale, p.y / designSize.height * nodes_layout::adjustedScale));
@@ -693,139 +690,139 @@ namespace LayoutHelper {
         ** @remark:
         */
         /// <summary>
-        /// 水平居中
+        /// Center horiz to parent
         /// </summary>
         /// <param name="nodes"></param>
         static void centerHorizontally(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 垂直居中
+        /// Center vertical to parent
         /// </summary>
         /// <param name="nodes"></param>
         static void centerVertically(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 居中
+        /// Center to parent
         /// </summary>
         /// <param name="nodes"></param>
-        static void centerHoriVerti(const std::vector<Node*>& nodes);
+        static void centerToParent(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 左对齐
+        /// Align lefts
         /// </summary>
         /// <param name="nodes"></param>
         static void alignLefts(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 右对齐
+        /// Align rights
         /// </summary>
         /// <param name="nodes"></param>
         static void alignRights(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 顶端对齐
+        /// Align tops
         /// </summary>
         /// <param name="nodes"></param>
         static void alignTops(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 底端对齐
+        /// Align bottoms
         /// </summary>
         /// <param name="nodes"></param>
         static void alignBottoms(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 水平对齐
+        /// Align horiz
         /// </summary>
         /// <param name="nodes"></param>
         static void alignHorizontals(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 垂直对齐
+        /// Align vertical
         /// </summary>
         /// <param name="nodes"></param>
         static void alignVerticals(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 中心原点对齐
+        /// Align centers
         /// </summary>
         /// <param name="nodes"></param>
         static void alignCenters(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 使宽度相等
+        /// Make same width
         /// </summary>
         /// <param name="nodes"></param>
         static void makeSameWidth(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 使高度相等
+        /// Make same height
         /// </summary>
         /// <param name="nodes"></param>
         static void makeSameHeight(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 使得大小相等
+        /// Make same size
         /// </summary>
         /// <param name="nodes"></param>
         static void makeSameSize(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 使水平间距相等
+        /// Make horiz spacing equal
         /// </summary>
         /// <param name="nodes"></param>
         static void makeHorizontalSpacingEqual(std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 使垂直间距相等
+        /// Make vertical spacing equal
         /// </summary>
         /// <param name="nodes"></param>
         static void makeVerticalSpacingEqual(std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 增加水平间距
+        /// Increease horiz spacing
         /// </summary>
         /// <param name="nodes"></param>
         static void increaseHorizontalSpacing(std::vector<Node*>& nodes, float theSpacing);
 
         /// <summary>
-        /// 增加垂直间距
+        /// Increase vertical spacing
         /// </summary>
         /// <param name="nodes"></param>
         static void increaseVerticalSpacing(std::vector<Node*>& nodes, float theSpacing);
 
         /// <summary>
-        /// 减少水平间距
+        /// Decrease horiz spacing
         /// </summary>
         /// <param name="nodes"></param>
         static void decreaseHorizontalSpacing(std::vector<Node*>& nodes, float theSpacing);
 
         /// <summary>
-        /// 减少垂直间距
+        /// Decrease vertical spacing
         /// </summary>
         /// <param name="nodes"></param>
         static void decreaseVerticalSpacing(std::vector<Node*>& nodes, float theSpacing);
 
         /// <summary>
-        /// 移除水平间距
+        /// Remove horiz spacing
         /// </summary>
         /// <param name="nodes"></param>
         static void removeHorizontalSpacing(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 移除垂直间距
+        /// Remove Vertical spacing
         /// </summary>
         /// <param name="nodes"></param>
         static void removeVerticalSpacing(const std::vector<Node*>& nodes);
 
         /// <summary>
-        /// 使水平间距相等 maybe for internal use
+        /// maybe for internal use
         /// </summary>
         /// <param name="nodes"></param>
         static void makeHorizontalSpacingEqual(const std::vector<Node*>& nodes, float theSpacing);
 
         /// <summary>
-        /// 使垂直间距相等 maybe for internal use
+        /// maybe for internal use
         /// </summary>
         /// <param name="nodes"></param>
         static void makeVerticalSpacingEqual(const std::vector<Node*>& nodes, float theSpacing);

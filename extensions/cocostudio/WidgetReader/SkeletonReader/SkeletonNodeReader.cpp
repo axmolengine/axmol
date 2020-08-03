@@ -64,7 +64,7 @@ void SkeletonNodeReader::destroyInstance()
 
 cocos2d::Node*  SkeletonNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table *nodeOptions)
 {
-    auto bone = wext::aSkeletonNode(); // SkeletonNode::create();
+    auto bone = SkeletonNode::create();
 
     // self options
     auto options = (flatbuffers::BoneOptions*)nodeOptions;

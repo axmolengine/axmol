@@ -86,7 +86,6 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(imageView, fileData, 0);
                 imageView->loadTexture(fileData.file, imageFileNameType);
                 
             }
@@ -304,7 +303,6 @@ namespace cocostudio
         auto imageFileNameDic = cocos2d::wext::makeResourceData(options->fileNameData());
         int imageFileNameType = imageFileNameDic.type;
         std::string& imageFileName = imageFileNameDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(imageView, imageFileNameDic, 0);
         switch (imageFileNameType)
         {
             case 0:
@@ -387,7 +385,7 @@ namespace cocostudio
     
     Node* ImageViewReader::createNodeWithFlatBuffers(const flatbuffers::Table *imageViewOptions)
     {
-        ImageView* imageView = wext::aImageView();// ImageView::create();
+        ImageView* imageView = ImageView::create();
         
         setPropsWithFlatBuffers(imageView, (Table*)imageViewOptions);
         

@@ -451,7 +451,6 @@ namespace cocostudio
         auto imageFileNameDic = cocos2d::wext::makeResourceData(options->backGroundImageData());
         int imageFileNameType = imageFileNameDic.type;
         std::string& imageFileName = imageFileNameDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(scrollView, imageFileNameDic, 0);
         if (imageFileName != "")
         {
             switch (imageFileNameType)
@@ -560,7 +559,7 @@ namespace cocostudio
 
     Node* ScrollViewReader::createNodeWithFlatBuffers(const flatbuffers::Table *scrollViewOptions)
     {
-        ScrollView* scrollView = wext::aScrollView(); // ScrollView::create();
+        ScrollView* scrollView = ScrollView::create();
 
         setPropsWithFlatBuffers(scrollView, (Table*)scrollViewOptions);
 

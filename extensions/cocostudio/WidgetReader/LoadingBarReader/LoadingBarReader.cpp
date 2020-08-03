@@ -88,7 +88,6 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
-                cocos2d::wext::onBeforeLoadObjectAsset(loadingBar, fileData, 0);
                 loadingBar->loadTexture(fileData.file, imageFileNameType);
                 
             }
@@ -256,7 +255,6 @@ namespace cocostudio
         auto imageFileNameDic = cocos2d::wext::makeResourceData(options->textureData());
         int imageFileNameType = imageFileNameDic.type;
         std::string& imageFileName = imageFileNameDic.file;
-        cocos2d::wext::onBeforeLoadObjectAsset(loadingBar, imageFileNameDic, 0);
         switch (imageFileNameType)
         {
             case 0:
@@ -327,7 +325,7 @@ namespace cocostudio
     
     Node* LoadingBarReader::createNodeWithFlatBuffers(const flatbuffers::Table *loadingBarOptions)
     {
-        LoadingBar* loadingBar = wext::aLoadingBar();// LoadingBar::create();
+        LoadingBar* loadingBar = LoadingBar::create();
         
         setPropsWithFlatBuffers(loadingBar, (Table*)loadingBarOptions);
         

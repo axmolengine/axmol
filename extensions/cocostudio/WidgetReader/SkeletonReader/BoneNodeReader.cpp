@@ -147,7 +147,7 @@ void BoneNodeReader::setPropsWithFlatBuffers(cocos2d::Node *node,
 
 cocos2d::Node*  BoneNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table *nodeOptions)
 {
-    auto bone = wext::aBoneNode(); // BoneNode::create();
+    auto bone = BoneNode::create();
 
     // self options
     auto options = (flatbuffers::BoneOptions*)nodeOptions;

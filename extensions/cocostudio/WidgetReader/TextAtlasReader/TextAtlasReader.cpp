@@ -99,7 +99,6 @@ namespace cocostudio
         } //end of for loop
         
         if (charmapFileData.type == 0) {
-            cocos2d::wext::onBeforeLoadObjectAsset(labelAtlas, charmapFileData, 0);
             labelAtlas->setProperty(stringValue, charmapFileData.file, itemWidth, itemHeight, startCharMap);
         }
         this->endSetBasicProperties(widget);
@@ -250,7 +249,6 @@ namespace cocostudio
         
         auto cmftDic = cocos2d::wext::makeResourceData(options->charMapFileData());
         int cmfType = cmftDic.type;
-        cocos2d::wext::onBeforeLoadObjectAsset(labelAtlas, cmftDic, 0);
         switch (cmfType)
         {
             case 0:
@@ -298,7 +296,7 @@ namespace cocostudio
     
     Node* TextAtlasReader::createNodeWithFlatBuffers(const flatbuffers::Table *textAtlasOptions)
     {
-        TextAtlas* textAtlas = wext::aTextAtlas(); // TextAtlas::create();
+        TextAtlas* textAtlas = TextAtlas::create();
         
         setPropsWithFlatBuffers(textAtlas, (Table*)textAtlasOptions);
         
