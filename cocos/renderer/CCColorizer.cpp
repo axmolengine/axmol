@@ -1,6 +1,6 @@
 #include "CCColorizer.h"
 #include "math/Mat3.h"
-#include "base/ccTypes.h"
+#include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramCache.h"
 #include "renderer/backend/Device.h"
 
