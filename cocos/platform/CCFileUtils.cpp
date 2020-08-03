@@ -48,6 +48,8 @@ NS_CC_BEGIN
 
 // Implement DictMaker
 
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS) && (CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
+
 typedef enum
 {
     SAX_NONE = 0,
@@ -346,6 +348,7 @@ ValueVector FileUtils::getValueVectorFromFile(const std::string& filename) const
     return tMaker.arrayWithContentsOfFile(fullPath);
 }
 
+
 /*
  * forward statement
  */
@@ -439,8 +442,15 @@ static void generateElementForArray(const ValueVector& array, pugi::xml_node& pa
     }
 }
 
+#else
 
+/* The subclass FileUtilsApple should override these two method. */
+ValueMap FileUtils::getValueMapFromFile(const std::string& /*filename*/) const {return ValueMap();}
+ValueMap FileUtils::getValueMapFromData(const char* /*filedata*/, int /*filesize*/) const {return ValueMap();}
+ValueVector FileUtils::getValueVectorFromFile(const std::string& /*filename*/) const {return ValueVector();}
+bool FileUtils::writeToFile(const ValueMap& /*dict*/, const std::string &/*fullPath*/) const {return false;}
 
+#endif /* (CC_TARGET_PLATFORM != CC_PLATFORM_IOS) && (CC_TARGET_PLATFORM != CC_PLATFORM_MAC) */
 
 // Implement FileUtils
 FileUtils* FileUtils::s_sharedFileUtils = nullptr;
