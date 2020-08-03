@@ -84,7 +84,7 @@ std::string WindowTestFullscreen2::subtitle() const {
 
 bool WindowTestFullscreen3::init() {
     GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
-    view->setFullscreen(3);
+    view->setFullscreen(2);
     return WindowTest::init();
 }
 
