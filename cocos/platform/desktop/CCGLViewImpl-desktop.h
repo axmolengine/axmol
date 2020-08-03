@@ -82,27 +82,10 @@ public:
     GLFWwindow* getWindow() const { return _mainWindow; }
 
     bool isFullscreen() const;
-
-    /* Sets primary monitor full screen with default w*h(refresh rate) */
     void setFullscreen();
-    /* Sets primary monitor full screen with w*h(refresh rate) */
-    void setFullscreen(int w, int h, int refreshRate);
-
-    /* Sets monitor full screen with default w*h(refresh rate) */
     void setFullscreen(int monitorIndex);
-    /// <summary>
-    /// Sets monitor full screen with w*h(refresh rate)
-    /// </summary>
-    /// <param name="monitorIndex">the 0 based index of monitor</param>
-    /// <param name="w">the width of hardware resolution in full screen, -1 use default value</param>
-    /// <param name="h">the height of hardware resolution in full screen, -1 use default value</param>
-    /// <param name="refreshRate">the display refresh rate, usually 60, -1 use default value</param>
-    void setFullscreen(int monitorIndex, int w, int h, int refreshRate);
-
-    /* for internal use */
-    void setFullscreen(GLFWmonitor *monitor, int w, int h, int refreshRate);
+    void setFullscreen(const GLFWvidmode &videoMode, GLFWmonitor *monitor);
     void setWindowed(int width, int height);
-
     int getMonitorCount() const;
     Size getMonitorSize() const;
 
@@ -155,9 +138,6 @@ protected:
     bool initWithFullscreen(const std::string& viewname, const GLFWvidmode &videoMode, GLFWmonitor *monitor);
 
     bool loadGL();
-
-    /* update frame layout when enter/exit full screen mode */
-    void updateWindowSize();
 
     void updateFrameSize();
 
