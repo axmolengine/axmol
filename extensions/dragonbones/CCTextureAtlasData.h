@@ -32,10 +32,6 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @version DragonBones 3.0
  * @language en_US
  */
-/**
- * @version DragonBones 3.0
- * @language zh_CN
- */
 class CCTextureAtlasData : public TextureAtlasData
 {
     BIND_CLASS_TYPE_B(CCTextureAtlasData);
@@ -66,11 +62,6 @@ public:
      * The Cocos2d texture.
      * @version DragonBones 3.0
      * @language en_US
-     */
-    /**
-     * Cocos2d ÌùÍ¼¡£
-     * @version DragonBones 3.0
-     * @language zh_CN
      */
     inline cocos2d::Texture2D* getRenderTexture() const 
     {
