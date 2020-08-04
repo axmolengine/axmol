@@ -385,14 +385,6 @@ void Sprite::updateShaders(const char* vert, const char* frag)
 void Sprite::setProgramState(backend::ProgramType type)
 {
     setProgramStateWithRegistry(type, _texture);
-    /*if(_programState != nullptr &&
-       _programState->getProgram()->getProgramType() == type)
-        return;
-    
-    auto* program = backend::Program::getBuiltinProgram(type);
-    auto programState = new (std::nothrow) backend::ProgramState(program);
-    setProgramState(programState);
-    CC_SAFE_RELEASE_NULL(programState);*/
 }
 
 void Sprite::setProgramState(backend::ProgramState *programState)
