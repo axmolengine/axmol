@@ -82,38 +82,38 @@ namespace cocostudio
     Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder *builder)
     {
-        std::string name = "";
+        std::string name;
         bool useDefaultLight = false;
         int skyBoxMask = 1;
         bool skyBoxEnabled = false;
         bool skyBoxValid = true;
 
-        std::string leftPath = "";
-        std::string leftPlistFile = "";
+        std::string leftPath;
+        std::string leftPlistFile;
         int leftResourceType = 0;
 
-        std::string rightPath = "";
-        std::string rightPlistFile = "";
+        std::string rightPath;
+        std::string rightPlistFile;
         int rightResourceType = 0;
 
-        std::string upPath = "";
-        std::string upPlistFile = "";
+        std::string upPath;
+        std::string upPlistFile;
         int upResourceType = 0;
 
-        std::string downPath = "";
-        std::string downPlistFile = "";
+        std::string downPath;
+        std::string downPlistFile;
         int downResourceType = 0;
 
-        std::string forwardPath = "";
-        std::string forwardPlistFile = "";
+        std::string forwardPath;
+        std::string forwardPlistFile;
         int forwardResourceType = 0;
 
-        std::string backPath = "";
-        std::string backPlistFile = "";
+        std::string backPath;
+        std::string backPlistFile;
         int backResourceType = 0;
 
-        std::string frameEvent = "";
-        std::string customProperty = "";
+        std::string frameEvent;
+        std::string customProperty;
 
         // attributes
         auto attribute = objectData.first_attribute();

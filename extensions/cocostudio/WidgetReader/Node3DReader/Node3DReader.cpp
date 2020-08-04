@@ -106,7 +106,7 @@ namespace cocostudio
     Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder *builder)
     {
-        std::string name = "";
+        std::string name;
         long actionTag = 0;
         Vec2 rotationSkew = Vec2::ZERO;
         int zOrder = 0;
@@ -123,8 +123,8 @@ namespace cocostudio
         bool flipY = false;
         bool ignoreSize = false;
         bool touchEnabled = false;
-        std::string frameEvent = "";
-        std::string customProperty = "";
+        std::string frameEvent;
+        std::string customProperty;
 
         bool positionXPercentEnabled = false;
         bool positionYPercentEnabled = false;

@@ -73,13 +73,13 @@ namespace cocostudio
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
         auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
         
-        std::string name = "";
+        std::string name;
         bool enabled = false;
         bool loop = false;
         float volume = 0;
         
-        std::string path = "";
-        std::string plist = "";
+        std::string path;
+        std::string plist;
         int resourceType = 0;
         
         auto attribute =  objectData.first_attribute();

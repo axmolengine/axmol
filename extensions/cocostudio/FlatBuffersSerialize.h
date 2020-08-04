@@ -109,7 +109,7 @@ public:
     /* serialize flat buffers with XML */
     static std::string serializeFlatBuffersWithXMLFile(const std::string& xmlFileName,
                                                 const std::string& flatbuffersFileName);
-    /* x-studio365 spec: serialize flat buffers with XML buffer */
+    /* x-studio spec: serialize flat buffers with XML buffer */
     static std::string serializeFlatBuffersWithXMLBuffer(std::string& xmlBuffer,
         const std::string& flatbuffersFileName);
     static std::string serializeFlatBuffersWithOpaque(void* opaque,

@@ -247,33 +247,33 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
     
     
     int fontsize = 12;
-    std::string text = "";
+    std::string text;
     cocos2d::Color4B textColor(255, 255, 255, 255);
     std::string fontName;
     
     int backgroundboxResourceType = 0;
-    std::string backgroundboxPath = "";
-    std::string backgroundboxPlistFile = "";
+    std::string backgroundboxPath;
+    std::string backgroundboxPlistFile;
     
     int backGroundBoxSelectedResourceType = 0;
-    std::string backGroundBoxSelectedPath = "";
-    std::string backGroundBoxSelectedPlistFile = "";
+    std::string backGroundBoxSelectedPath;
+    std::string backGroundBoxSelectedPlistFile;
     
     int frontCrossResourceType = 0;
-    std::string frontCrossPath = "";
-    std::string frontCrossPlistFile = "";
+    std::string frontCrossPath;
+    std::string frontCrossPlistFile;
     
     int backGroundBoxDisabledResourceType = 0;
-    std::string backGroundBoxDisabledPath = "";
-    std::string backGroundBoxDisabledPlistFile = "";
+    std::string backGroundBoxDisabledPath;
+    std::string backGroundBoxDisabledPlistFile;
     
     int frontCrossDisabledResourceType = 0;
-    std::string frontCrossDisabledPath = "";
-    std::string frontCrossDisabledPlistFile = "";
+    std::string frontCrossDisabledPath;
+    std::string frontCrossDisabledPlistFile;
     
     
-    std::string fontResourcePath = "";
-    std::string fontResourcePlistFile = "";
+    std::string fontResourcePath;
+    std::string fontResourcePlistFile;
     int fontResourceResourceType = 0;
     
     auto attribute =  objectData.first_attribute();
@@ -325,8 +325,8 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
         }
         else if (name == "NormalBackFileData")
         {
-            std::string texture = "";
-            std::string texturePng = "";
+            std::string texture;
+            std::string texturePng;
             
             attribute = child.first_attribute();
             
@@ -360,8 +360,8 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
         }
         else if (name == "PressedBackFileData")
         {
-            std::string texture = "";
-            std::string texturePng = "";
+            std::string texture;
+            std::string texturePng;
             
             attribute = child.first_attribute();
             
@@ -395,8 +395,8 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
         }
         else if (name == "NodeNormalFileData")
         {
-            std::string texture = "";
-            std::string texturePng = "";
+            std::string texture;
+            std::string texturePng;
             
             attribute = child.first_attribute();
             
@@ -430,8 +430,8 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
         }
         else if (name == "DisableBackFileData")
         {
-            std::string texture = "";
-            std::string texturePng = "";
+            std::string texture;
+            std::string texturePng;
             
             attribute = child.first_attribute();
             
@@ -465,8 +465,8 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
         }
         else if (name == "NodeDisableFileData")
         {
-            std::string texture = "";
-            std::string texturePng = "";
+            std::string texture;
+            std::string texturePng;
             
             attribute = child.first_attribute();
             
@@ -574,7 +574,7 @@ void TabHeaderReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuf
     
     auto resourceData = options->fontRes();
     bool fileExist = false;
-    std::string errorFilePath = "";
+    std::string errorFilePath;
     std::string path = resourceData->path()->c_str();
     if (path != "")
     {
@@ -594,7 +594,7 @@ void TabHeaderReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuf
     }
     
     bool backGroundFileExist = false;
-    std::string backGroundErrorFilePath = "";
+    std::string backGroundErrorFilePath;
     auto backGroundDic = options->normalBackFile();
     int backGroundType = backGroundDic->resourceType();
     std::string backGroundTexturePath = backGroundDic->path()->c_str();
@@ -653,7 +653,7 @@ void TabHeaderReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuf
     
     //load background selected image
     bool backGroundSelectedfileExist = false;
-    std::string backGroundSelectedErrorFilePath = "";
+    std::string backGroundSelectedErrorFilePath;
     auto backGroundSelectedDic = options->pressBackFile();
     int backGroundSelectedType = backGroundSelectedDic->resourceType();
     std::string backGroundSelectedTexturePath = backGroundSelectedDic->path()->c_str();
@@ -712,7 +712,7 @@ void TabHeaderReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuf
     
     //load frontCross image
     bool frontCrossFileExist = false;
-    std::string frontCrossErrorFilePath = "";
+    std::string frontCrossErrorFilePath;
     auto frontCrossDic = options->crossNormalFile();
     int frontCrossType = frontCrossDic->resourceType();
     std::string frontCrossFileName = frontCrossDic->path()->c_str();
@@ -771,7 +771,7 @@ void TabHeaderReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuf
     
     //load backGroundBoxDisabledData
     bool backGroundBoxDisabledFileExist = false;
-    std::string backGroundBoxDisabledErrorFilePath = "";
+    std::string backGroundBoxDisabledErrorFilePath;
     auto backGroundDisabledDic = options->disableBackFile();
     int backGroundDisabledType = backGroundDisabledDic->resourceType();
     std::string backGroundDisabledFileName = backGroundDisabledDic->path()->c_str();
@@ -830,7 +830,7 @@ void TabHeaderReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuf
     
     ///load frontCrossDisabledData
     bool frontCrossDisabledFileExist = false;
-    std::string frontCrossDisabledErrorFilePath = "";
+    std::string frontCrossDisabledErrorFilePath;
     auto frontCrossDisabledDic = options->crossDisableFile();
     int frontCrossDisabledType = frontCrossDisabledDic->resourceType();
     std::string frontCrossDisabledFileName = frontCrossDisabledDic->path()->c_str();

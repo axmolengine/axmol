@@ -133,8 +133,8 @@ namespace cocostudio
 
             if (name == "DataFile")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
 
                 auto attribute =  child.first_attribute();
 

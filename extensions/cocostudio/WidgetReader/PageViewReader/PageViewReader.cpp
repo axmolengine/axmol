@@ -62,8 +62,8 @@ namespace cocostudio
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
         auto widgetOptions = *(Offset<WidgetOptions>*)(&temp);
         
-        std::string path = "";
-        std::string plistFile = "";
+        std::string path;
+        std::string plistFile;
         int resourceType = 0;
         
         bool clipEnabled = false;
@@ -248,8 +248,8 @@ namespace cocostudio
             }
             else if (name == "FileData")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
                 
                 attribute = child.first_attribute();
                 
@@ -346,10 +346,10 @@ namespace cocostudio
         
         
         bool fileExist = false;
-        std::string errorFilePath = "";
-        auto imageFileNameDic = cocos2d::wext::makeResourceData(options->backGroundImageData());
-        int imageFileNameType = imageFileNameDic.type;
-        std::string& imageFileName = imageFileNameDic.file;
+        std::string errorFilePath;
+        auto imageFileNameDic = (options->backGroundImageData());
+        int imageFileNameType = imageFileNameDic->resourceType();
+        std::string imageFileName = imageFileNameDic->path()->c_str();
         if (imageFileName != "")
         {
             switch (imageFileNameType)
@@ -370,7 +370,7 @@ namespace cocostudio
                     
                 case 1:
                 {
-                    std::string& plist = imageFileNameDic.plist;
+                    std::string plist = imageFileNameDic->plistFile()->c_str();
                     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imageFileName);
                     if (spriteFrame)
                     {

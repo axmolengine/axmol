@@ -431,7 +431,7 @@ Node* CSLoader::createNodeFromJson(const std::string& filename)
     else
     {
         GUIReader::getInstance()->setFilePath("");
-        _jsonPath = "";
+        _jsonPath;
     }
 
     Node* node = loadNodeWithFile(filename);

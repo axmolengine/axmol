@@ -83,14 +83,8 @@ namespace cocostudio
             }else if(key == P_FontSize){
                 label->setFontSize(valueToInt(value));
             }else if(key == P_FontName){
-                std::string fontFilePath;
-                fontFilePath = binaryFilePath.append(value);
-                auto fontData = cocos2d::wext::makeResourceData(std::move(fontFilePath));
-                if (FileUtils::getInstance()->isFileExist(fontFilePath)) {
-                    label->setFontName(fontData.file);
-                }else{
-                    label->setFontName(fontData.file);
-                }
+                auto& fontFilePath = binaryFilePath.append(value);
+                label->setFontName(fontFilePath);
             }else if(key == P_AreaWidth){
                 label->setTextAreaSize(Size(valueToFloat(value), label->getTextAreaSize().height));
             }else if(key == P_AreaHeight){
@@ -161,7 +155,7 @@ namespace cocostudio
         
         bool touchScaleEnabled = false;
         bool isCustomSize = false;
-        std::string fontName = "";
+        std::string fontName;
         int fontSize = 20;
         std::string text = "Text Label";
         bool isLocalized = false;
@@ -177,14 +171,14 @@ namespace cocostudio
         Size shadowOffset = Size(2, -2);
         int shadowBlurRadius = 0;
 
-        // since x-studio365 reader 10.0.593.0
+        // since x-studio reader 10.0.593.0
 		bool glowEnabled = false;
 		Color4B glowColor = Color4B::BLACK;
 
         bool boldEnabled = false, underlineEnabled = false, italicsEnabled = false, strikethroughEnabled = false;
         
-        std::string path = "";
-        std::string plistFile = "";
+        std::string path;
+        std::string plistFile;
         int resourceType = 0;
         
         // attributes
@@ -472,16 +466,16 @@ namespace cocostudio
             label->setTextAreaSize(areaSize);
         }
 
-        auto resourceData = cocos2d::wext::makeResourceData(options->fontResource());
-        std::string& path = resourceData.file;
+        auto resourceDataDic = (options->fontResource());
+        std::string path = resourceDataDic->path()->c_str();
         if (!path.empty() && FileUtils::getInstance()->isFileExist(path))
         {
             label->setFontName(path);
         }
         else
         {
-            std::string fontName = options->fontName()->c_str();
-            label->setFontName(fontName);
+            path = options->fontName()->c_str();
+            label->setFontName(path);
         }
         
         TextHAlignment h_alignment = (TextHAlignment)options->hAlignment();

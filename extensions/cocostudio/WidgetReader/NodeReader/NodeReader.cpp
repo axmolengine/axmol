@@ -86,7 +86,7 @@ namespace cocostudio
     Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                            flatbuffers::FlatBufferBuilder *builder)
     {
-        std::string name = "";
+        std::string name;
         long actionTag = 0;
         Vec2 rotationSkew;
         int zOrder = 0;
@@ -103,8 +103,8 @@ namespace cocostudio
         bool flipY = false;
         bool ignoreSize = false;
         bool touchEnabled = false;
-        std::string frameEvent = "";
-        std::string customProperty = "";
+        std::string frameEvent;
+        std::string customProperty;
 
         bool positionXPercentEnabled = false;
         bool positionYPercentEnabled = false;
@@ -123,7 +123,7 @@ namespace cocostudio
         float topMargin = 0;
         float bottomMargin = 0;
 
-		// x-studio365 spec: read from .csb.
+		// since x-studio 10.0.593.0: read from .csb.
 		bool cascadeColorEnabled = false;
 		bool cascadeOpacityEnabled = false;
         
@@ -492,7 +492,7 @@ namespace cocostudio
         int alpha           = options->alpha();
         Color3B color(options->color()->r(), options->color()->g(), options->color()->b());
 
-		// x-studio365 10.0.593.0: read from .csb.
+		// x-studio 10.0.593.0: read from .csb.
 		node->setCascadeColorEnabled(options->cascadeColorEnabled());
 		node->setCascadeOpacityEnabled(options->cascadeOpacityEnabled());
 
@@ -512,7 +512,7 @@ namespace cocostudio
             node->setRotationSkewX(rotationSkewX);
         if (rotationSkewY != 0)
             node->setRotationSkewY(rotationSkewY);
-        // if(anchorx != 0.5f || anchory != 0.5f) x-studio365 spec: fix bugs, No need to check
+        // if(anchorx != 0.5f || anchory != 0.5f) x-studio spec: fix bugs, No need to check
             node->setAnchorPoint(Point(anchorx, anchory));
         if(zorder != 0)
             node->setLocalZOrder(zorder);

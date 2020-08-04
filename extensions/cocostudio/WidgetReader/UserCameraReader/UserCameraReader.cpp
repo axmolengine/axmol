@@ -158,28 +158,28 @@ namespace cocostudio
 
         Vec2 clipPlane(1, 1000);
 
-        std::string leftPath = "";
-        std::string leftPlistFile = "";
+        std::string leftPath;
+        std::string leftPlistFile;
         int leftResourceType = 0;
 
-        std::string rightPath = "";
-        std::string rightPlistFile = "";
+        std::string rightPath;
+        std::string rightPlistFile;
         int rightResourceType = 0;
 
-        std::string upPath = "";
-        std::string upPlistFile = "";
+        std::string upPath;
+        std::string upPlistFile;
         int upResourceType = 0;
 
-        std::string downPath = "";
-        std::string downPlistFile = "";
+        std::string downPath;
+        std::string downPlistFile;
         int downResourceType = 0;
 
-        std::string forwardPath = "";
-        std::string forwardPlistFile = "";
+        std::string forwardPath;
+        std::string forwardPlistFile;
         int forwardResourceType = 0;
 
-        std::string backPath = "";
-        std::string backPlistFile = "";
+        std::string backPath;
+        std::string backPlistFile;
         int backResourceType = 0;
         
         // FileData

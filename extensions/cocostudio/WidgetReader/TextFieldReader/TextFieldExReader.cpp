@@ -75,13 +75,13 @@ namespace cocostudio
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
         auto widgetOptions = *(Offset<WidgetOptions>*)(&temp);
 
-        std::string path = "";
-        std::string plistFile = "";
+        std::string path;
+        std::string plistFile;
         int resourceType = 0;
 
-        std::string fontName = "";
+        std::string fontName;
         int fontSize = 20;
-        std::string text = "";
+        std::string text;
         bool isLocalized = false;
         std::string placeHolder = "Text Field Extend";
         bool passwordEnabled = false;
@@ -317,9 +317,9 @@ namespace cocostudio
         std::string fontName = options->fontName()->c_str();
 
         bool fileExist = false;
-        std::string errorFilePath = "";
-        auto resourceData = cocos2d::wext::makeResourceData(options->fontResource());
-        std::string& path = resourceData.file;
+        std::string errorFilePath;
+        auto resourceDataDic = (options->fontResource());
+        std::string path = resourceDataDic->path()->c_str();
         if (path != "")
         {
             if (FileUtils::getInstance()->isFileExist(path))

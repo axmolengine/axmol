@@ -73,9 +73,8 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
 
-                auto fileData = cocos2d::wext::makeResourceData(std::move(backgroundValue), (int)imageFileNameType);
                 if (imageFileNameType == (Widget::TextureResType)0) {
-                    labelBMFont->setFntFile(fileData.file);
+                    labelBMFont->setFntFile(backgroundValue);
                 }
                 
             }else if(key == P_Text){
@@ -129,8 +128,8 @@ namespace cocostudio
         std::string text = "Fnt Text Label";
         bool isLocalized = false;
         
-        std::string path = "";
-        std::string plistFlie = "";
+        std::string path;
+        std::string plistFlie;
         int resourceType = 0;
         
         // attributes
@@ -204,12 +203,12 @@ namespace cocostudio
         TextBMFont* labelBMFont = static_cast<TextBMFont*>(node);
         auto options = (TextBMFontOptions*)textBMFontOptions;
         
-        auto cmftDic = cocos2d::wext::makeResourceData(options->fileNameData());
+        auto cmftDic = (options->fileNameData());
         bool fileExist = false;
-        std::string errorFilePath = "";
-        std::string errorContent = "";
-        std::string& path = cmftDic.file;
-        int cmfType = cmftDic.type;
+        std::string errorFilePath;
+        std::string errorContent;
+        std::string path = cmftDic->path()->c_str();
+        int cmfType = cmftDic->resourceType();
         switch (cmfType)
         {
             case 0:

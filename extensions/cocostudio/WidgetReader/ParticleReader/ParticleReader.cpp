@@ -78,8 +78,8 @@ namespace cocostudio
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
         auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
         
-        std::string path = "";
-        std::string plistFile = "";
+        std::string path;
+        std::string plistFile;
         int resourceType = 0;
         
         cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
@@ -177,12 +177,12 @@ namespace cocostudio
         ParticleSystemQuad* particle = nullptr;
         
         auto options = (ParticleSystemOptions*)particleOptions;
-        auto fileNameData = cocos2d::wext::makeResourceData(options->fileNameData());
+        auto fileNameDataDic = (options->fileNameData());
         
         bool fileExist = false;
-        std::string errorFilePath = "";
-        std::string& path = fileNameData.file;
-        int resourceType = fileNameData.type;
+        std::string errorFilePath;
+        std::string path = fileNameDataDic->path()->c_str();
+        int resourceType = fileNameDataDic->resourceType();
         switch (resourceType)
         {
             case 0:
