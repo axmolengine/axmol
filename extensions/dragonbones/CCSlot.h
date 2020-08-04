@@ -23,7 +23,7 @@
 #ifndef DRAGONBONES_CC_SLOT_H
 #define DRAGONBONES_CC_SLOT_H
 
-#include "editor-support/dragonBones/DragonBonesHeaders.h"
+#include "dragonBones/DragonBonesHeaders.h"
 #include "cocos2d.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
