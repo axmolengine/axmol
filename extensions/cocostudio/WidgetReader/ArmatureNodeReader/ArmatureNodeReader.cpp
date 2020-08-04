@@ -8,7 +8,7 @@
 #include "cocostudio/WidgetReader/ArmatureNodeReader/CSArmatureNode_generated.h"
 #include "cocostudio/CCArmature.h"
 #if defined(CC_BUILD_WITH_DRANGBONES) && CC_BUILD_WITH_DRANGBONES
-#include "dragonBones/CCDragonBonesHeaders.h"
+#include "dragonbones/CCDragonBonesHeaders.h"
 #endif
 
 USING_NS_CC;
