@@ -31,36 +31,69 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
             {
                 const auto defaultPixelFormat = cocos2d::Texture2D::getDefaultAlphaPixelFormat();
                 auto pixelFormat = defaultPixelFormat;
+#if COCOS2D_VERSION >= 0x00040000
                 switch (textureAtlasData->format)
                 {
                     case TextureFormat::RGBA8888:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::RGBA8888;
+                        pixelFormat = cocos2d::backend::PixelFormat::RGBA8888;
                         break;
 
                     case TextureFormat::BGRA8888:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::BGRA8888;
+                        pixelFormat = cocos2d::backend::PixelFormat::BGRA8888;
                         break;
 
                     case TextureFormat::RGBA4444:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::RGBA4444;
+                        pixelFormat = cocos2d::backend::PixelFormat::RGBA4444;
                         break;
 
                     case TextureFormat::RGB888:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::RGB888;
+                        pixelFormat = cocos2d::backend::PixelFormat::RGB888;
                         break;
 
                     case TextureFormat::RGB565:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::RGB565;
+                        pixelFormat = cocos2d::backend::PixelFormat::RGB565;
                         break;
 
                     case TextureFormat::RGBA5551:
-                        pixelFormat = cocos2d::Texture2D::PixelFormat::RGB5A1;
+                        pixelFormat = cocos2d::backend::PixelFormat::RGB5A1;
                         break;
 
                     case TextureFormat::DEFAULT:
                     default:
                         break;
                 }
+#else
+                switch (textureAtlasData->format)
+                {
+                case TextureFormat::RGBA8888:
+                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGBA8888;
+                    break;
+
+                case TextureFormat::BGRA8888:
+                    pixelFormat = cocos2d::Texture2D::PixelFormat::BGRA8888;
+                    break;
+
+                case TextureFormat::RGBA4444:
+                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGBA4444;
+                    break;
+
+                case TextureFormat::RGB888:
+                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGB888;
+                    break;
+
+                case TextureFormat::RGB565:
+                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGB565;
+                    break;
+
+                case TextureFormat::RGBA5551:
+                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGB5A1;
+                    break;
+
+                case TextureFormat::DEFAULT:
+                default:
+                    break;
+                }
+#endif
 
                 cocos2d::Texture2D::setDefaultAlphaPixelFormat(pixelFormat);
                 texture = textureCache->addImage(textureAtlasData->imagePath);

@@ -23,7 +23,7 @@
 #ifndef DRAGONBONES_CC_TEXTUREATLAS_DATA_H
 #define DRAGONBONES_CC_TEXTUREATLAS_DATA_H
 
-#include "dragonBones/DragonBonesHeaders.h"
+#include "DragonBonesHeaders.h"
 #include "cocos2d.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
@@ -31,11 +31,6 @@ DRAGONBONES_NAMESPACE_BEGIN
  * The Cocos2d texture atlas data.
  * @version DragonBones 3.0
  * @language en_US
- */
-/**
- * Cocos2d ÌùÍ¼¼¯Êý¾Ý¡£
- * @version DragonBones 3.0
- * @language zh_CN
  */
 class CCTextureAtlasData : public TextureAtlasData
 {
@@ -67,11 +62,6 @@ public:
      * The Cocos2d texture.
      * @version DragonBones 3.0
      * @language en_US
-     */
-    /**
-     * Cocos2d ÌùÍ¼¡£
-     * @version DragonBones 3.0
-     * @language zh_CN
      */
     inline cocos2d::Texture2D* getRenderTexture() const 
     {

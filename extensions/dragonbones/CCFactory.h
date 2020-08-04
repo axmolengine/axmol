@@ -23,7 +23,7 @@
 #ifndef DRAGONBONES_CC_FACTORY_H
 #define DRAGONBONES_CC_FACTORY_H
 
-#include "editor-support/dragonBones/DragonBonesHeaders.h"
+#include "DragonBonesHeaders.h"
 #include "cocos2d.h"
 #include "CCArmatureDisplay.h"
 
@@ -34,7 +34,7 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * Cocos2d ¹¤³§¡£
+ * Cocos2d å·¥å‚ã€‚
  * @version DragonBones 3.0
  * @language zh_CN
  */
@@ -53,7 +53,7 @@ public:
      * @language en_US
      */
     /**
-     * Ò»¸ö¿ÉÒÔÖ±½ÓÊ¹ÓÃµÄÈ«¾Ö¹¤³§ÊµÀı¡£
+     * ä¸€ä¸ªå¯ä»¥ç›´æ¥ä½¿ç”¨çš„å…¨å±€å·¥å‚å®ä¾‹ã€‚
      * @version DragonBones 4.7
      * @language zh_CN
      */
@@ -122,11 +122,11 @@ public:
      * @language en_US
      */
     /**
-     * - ´Ó±¾µØ¼ÓÔØ²¢½âÎöÒ»¸öÌùÍ¼¼¯Êı¾İºÍÌùÍ¼²¢»º´æµ½¹¤³§ÖĞ¡£
-     * @param filePath - ÌùÍ¼¼¯Êı¾İÎÄ¼şÂ·¾¶¡£
-     * @param name - Îª¸ÃÊµÀıÖ¸¶¨Ò»¸ö»º´æÃû³Æ£¬ÒÔ±ã¿ÉÒÔÍ¨¹ı´ËÃû³Æ»ñÈ¡¸ÃÊµÀı¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬ÔòÊ¹ÓÃ¸ÃÊµÀıÖĞµÄÃû³Æ£©
-     * @param scale - ÎªÌùÍ¼¼¯Ö¸¶¨Ò»¸öËõ·ÅÖµ¡£ £¨Ä¬ÈÏ²»Ëõ·Å£©
-     * @returns TextureAtlasData ÊµÀı¡£
+     * - ä»æœ¬åœ°åŠ è½½å¹¶è§£æä¸€ä¸ªè´´å›¾é›†æ•°æ®å’Œè´´å›¾å¹¶ç¼“å­˜åˆ°å·¥å‚ä¸­ã€‚
+     * @param filePath - è´´å›¾é›†æ•°æ®æ–‡ä»¶è·¯å¾„ã€‚
+     * @param name - ä¸ºè¯¥å®ä¾‹æŒ‡å®šä¸€ä¸ªç¼“å­˜åç§°ï¼Œä»¥ä¾¿å¯ä»¥é€šè¿‡æ­¤åç§°è·å–è¯¥å®ä¾‹ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œåˆ™ä½¿ç”¨è¯¥å®ä¾‹ä¸­çš„åç§°ï¼‰
+     * @param scale - ä¸ºè´´å›¾é›†æŒ‡å®šä¸€ä¸ªç¼©æ”¾å€¼ã€‚ ï¼ˆé»˜è®¤ä¸ç¼©æ”¾ï¼‰
+     * @returns TextureAtlasData å®ä¾‹ã€‚
      * @version DragonBones 4.5
      * @example
      * <pre>
@@ -150,12 +150,12 @@ public:
      * @language en_US
      */
     /**
-     * - Í¨¹ı»º´æµÄ DragonBonesData ÊµÀıºÍ TextureAtlasData ÊµÀı´´½¨Ò»¸ö¹Ç¼Ü£¬²¢ÓÃ {@link #clock} ¸üĞÂ¸Ã¹Ç¼Ü¡£
-     * Çø±ğÔÚÓÚÓÉ {@link #buildArmature} ´´½¨µÄ¹Ç¼ÜÃ»ÓĞ WorldClock ÊµÀıÇı¶¯¡£
-     * @param armatureName - ¹Ç¼ÜÊı¾İÃû³Æ¡£
-     * @param dragonBonesName - DragonBonesData ÊµÀıµÄ»º´æÃû³Æ¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬½«¼ìË÷ËùÓĞµÄ DragonBonesData ÊµÀı£¬µ±¶à¸ö DragonBonesData ÊµÀıÖĞ°üº¬Í¬ÃûµÄ¹Ç¼ÜÊı¾İÊ±£¬¿ÉÄÜÎŞ·¨×¼È·µÄ´´½¨³öÌØ¶¨µÄ¹Ç¼Ü£©
-     * @param skinName - Æ¤·ôÃû³Æ£¬¿ÉÒÔÉèÖÃÒ»¸öÆäËû¹Ç¼ÜÊı¾İÃû³ÆÀ´¹²ÏíÆäÆ¤·ôÊı¾İ¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬ÔòÊ¹ÓÃÄ¬ÈÏµÄÆ¤·ôÊı¾İ£©
-     * @returns ¹Ç¼ÜµÄÏÔÊ¾ÈİÆ÷¡£
+     * - é€šè¿‡ç¼“å­˜çš„ DragonBonesData å®ä¾‹å’Œ TextureAtlasData å®ä¾‹åˆ›å»ºä¸€ä¸ªéª¨æ¶ï¼Œå¹¶ç”¨ {@link #clock} æ›´æ–°è¯¥éª¨æ¶ã€‚
+     * åŒºåˆ«åœ¨äºç”± {@link #buildArmature} åˆ›å»ºçš„éª¨æ¶æ²¡æœ‰ WorldClock å®ä¾‹é©±åŠ¨ã€‚
+     * @param armatureName - éª¨æ¶æ•°æ®åç§°ã€‚
+     * @param dragonBonesName - DragonBonesData å®ä¾‹çš„ç¼“å­˜åç§°ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œå°†æ£€ç´¢æ‰€æœ‰çš„ DragonBonesData å®ä¾‹ï¼Œå½“å¤šä¸ª DragonBonesData å®ä¾‹ä¸­åŒ…å«åŒåçš„éª¨æ¶æ•°æ®æ—¶ï¼Œå¯èƒ½æ— æ³•å‡†ç¡®çš„åˆ›å»ºå‡ºç‰¹å®šçš„éª¨æ¶ï¼‰
+     * @param skinName - çš®è‚¤åç§°ï¼Œå¯ä»¥è®¾ç½®ä¸€ä¸ªå…¶ä»–éª¨æ¶æ•°æ®åç§°æ¥å…±äº«å…¶çš®è‚¤æ•°æ®ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œåˆ™ä½¿ç”¨é»˜è®¤çš„çš®è‚¤æ•°æ®ï¼‰
+     * @returns éª¨æ¶çš„æ˜¾ç¤ºå®¹å™¨ã€‚
      * @version DragonBones 4.5
      * @example
      * <pre>
@@ -172,9 +172,9 @@ public:
      * @language en_US
      */
     /**
-     * - ´´½¨´øÓĞÖ¸¶¨ÌùÍ¼µÄÏÔÊ¾¶ÔÏó¡£
-     * @param textureName - ÌùÍ¼Êı¾İÃû³Æ¡£
-     * @param textureAtlasName - ÌùÍ¼¼¯Êı¾İÃû³Æ¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬½«¼ìË÷ËùÓĞµÄÌùÍ¼¼¯Êı¾İ£©
+     * - åˆ›å»ºå¸¦æœ‰æŒ‡å®šè´´å›¾çš„æ˜¾ç¤ºå¯¹è±¡ã€‚
+     * @param textureName - è´´å›¾æ•°æ®åç§°ã€‚
+     * @param textureAtlasName - è´´å›¾é›†æ•°æ®åç§°ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œå°†æ£€ç´¢æ‰€æœ‰çš„è´´å›¾é›†æ•°æ®ï¼‰
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -186,8 +186,8 @@ public:
      * @language en_US
      */
     /**
-     * - È«¾ÖÉùÒôÊÂ¼ş¹ÜÀíÆ÷¡£
-     * ÉùÒôÊÂ¼ş¿ÉÒÔ´Ó¸Ã¹ÜÀíÆ÷Í³Ò»ÕìÌı¡£
+     * - å…¨å±€å£°éŸ³äº‹ä»¶ç®¡ç†å™¨ã€‚
+     * å£°éŸ³äº‹ä»¶å¯ä»¥ä»è¯¥ç®¡ç†å™¨ç»Ÿä¸€ä¾¦å¬ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -202,7 +202,7 @@ public:
      * @language en_US
      */
     /**
-     * ÒÑ·ÏÆú£¬Çë²Î¿¼ {@link #clock}¡£
+     * å·²åºŸå¼ƒï¼Œè¯·å‚è€ƒ {@link #clock}ã€‚
      * @deprecated
      * @language zh_CN
      */

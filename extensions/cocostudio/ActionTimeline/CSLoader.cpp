@@ -78,7 +78,9 @@
 #include "cocostudio/WidgetReader/SkeletonReader/BoneNodeReader.h"
 #include "cocostudio/WidgetReader/SkeletonReader/SkeletonNodeReader.h"
 
+#if defined(CC_BUILD_WITH_SPINE) && CC_BUILD_WITH_SPINE
 #include "cocostudio/WidgetReader/SpineSkeletonReader/SpineSkeletonReader.h"
+#endif
 #include "cocostudio/WidgetReader/RichTextReader/RichTextReader.h"
 #include "cocostudio/WidgetReader/RadioButtonReader/RadioButtonReader.h"
 #include "cocostudio/WidgetReader/RadioButtonReader/RadioButtonGroupReader.h"
@@ -241,7 +243,9 @@ CSLoader::CSLoader()
 
     /// Added by x-studio
     CREATE_CLASS_NODE_READER_INFO(RichTextReader);
+#if defined(CC_BUILD_WITH_SPINE) && CC_BUILD_WITH_SPINE
     CREATE_CLASS_NODE_READER_INFO(SpineSkeletonReader);
+#endif
     CREATE_CLASS_NODE_READER_INFO(RadioButtonReader);
     CREATE_CLASS_NODE_READER_INFO(RadioButtonGroupReader);
 
