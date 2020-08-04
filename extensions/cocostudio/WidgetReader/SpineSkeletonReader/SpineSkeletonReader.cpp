@@ -23,6 +23,8 @@
  ****************************************************************************/
 
 #include "cocostudio/WidgetReader/SpineSkeletonReader/SpineSkeletonReader.h"
+
+#if defined(CC_BUILD_WITH_SPINE) && CC_BUILD_WITH_SPINE
 #include "cocostudio/SpineSkeletonDataCache.h"
 
 #include "2d/CCSprite.h"
@@ -273,3 +275,5 @@ namespace cocostudio
         return 1;
     }
 }
+
+#endif

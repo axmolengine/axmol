@@ -23,7 +23,7 @@
 #ifndef DRAGONBONES_CC_SLOT_H
 #define DRAGONBONES_CC_SLOT_H
 
-#include "editor-support/dragonBones/DragonBonesHeaders.h"
+#include "DragonBonesHeaders.h"
 #include "cocos2d.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
@@ -31,11 +31,6 @@ DRAGONBONES_NAMESPACE_BEGIN
  * The Cocos2d slot.
  * @version DragonBones 3.0
  * @language en_US
- */
-/**
- * Cocos2d 插槽。
- * @version DragonBones 3.0
- * @language zh_CN
  */
 class CCSlot : public Slot
 {
@@ -72,12 +67,6 @@ public:
      * @see #display
      * @version DragonBones 3.0
      * @language en_US
-     */
-    /**
-     * 插槽此时显示的显示对象。
-     * @see #display
-     * @version DragonBones 3.0
-     * @language zh_CN
      */
     inline cocos2d::Node* getCCDisplay() const
     {

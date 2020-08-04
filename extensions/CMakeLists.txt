@@ -9,7 +9,7 @@ option(BUILD_EXTENSION_PARTICLE3D "Build extension Particle3D" ON)
 option(BUILD_EXTENSION_PHYSICS_NODE "Build extension physics-nodes" ON)
 
 option(BUILD_EXTENSION_SPINE "Build extension spine" ON)
-option(BUILD_EXTENSION_DRAGONBONES "Build extension DragonBones" OFF)
+option(BUILD_EXTENSION_DRAGONBONES "Build extension DragonBones" ON)
 
 option(BUILD_EXTENSION_COCOSTUDIO "Build extension cocostudio" ON)
 
@@ -59,6 +59,10 @@ endif()
 
 if(BUILD_EXTENSION_COCOSTUDIO)
   add_subdirectory(cocostudio)
+  if(BUILD_EXTENSION_DRAGONBONES)
+    target_compile_definitions(cocostudio PRIVATE CC_BUILD_WITH_DRANGBONES=1)
+    target_compile_definitions(cocostudio PUBLIC CC_BUILD_WITH_SPINE=1)
+  endif()
 endif()
 
 if(BUILD_EXTENSION_FAIRYGUI)

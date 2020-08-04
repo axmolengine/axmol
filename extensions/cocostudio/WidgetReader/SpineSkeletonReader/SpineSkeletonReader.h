@@ -29,6 +29,7 @@
 #include "cocostudio/WidgetReader/NodeReaderProtocol.h"
 #include "cocostudio/WidgetReader/NodeReaderDefine.h"
 
+#if defined(CC_BUILD_WITH_SPINE) && CC_BUILD_WITH_SPINE
 
 namespace cocostudio
 {
@@ -53,5 +54,7 @@ namespace cocostudio
         int getResourceType(std::string key);        
     };
 }
+
+#endif
 
 #endif /* defined(__cocos2d_libs__SpriteReader__) */

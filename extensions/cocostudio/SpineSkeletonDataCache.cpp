@@ -1,5 +1,6 @@
 #include "SpineSkeletonDataCache.h"
 
+#if defined(CC_BUILD_WITH_SPINE) && CC_BUILD_WITH_SPINE
 SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 {
 	static SpineSkeletonDataCache internalShared;
@@ -127,3 +128,5 @@ void SpineSkeletonDataCache::removeAllUnusedData(void)
 		++_First;
 	}
 }
+
+#endif
