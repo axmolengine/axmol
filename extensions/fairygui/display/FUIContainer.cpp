@@ -211,7 +211,7 @@ void FUIContainer::setInverted(bool inverted)
 
 void FUIContainer::onEnter()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING && COCOS2D_VERSION < 0x00040000
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnEnter))
@@ -230,7 +230,7 @@ void FUIContainer::onEnter()
 
 void FUIContainer::onEnterTransitionDidFinish()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING && COCOS2D_VERSION < 0x00040000
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnEnterTransitionDidFinish))
@@ -248,7 +248,7 @@ void FUIContainer::onEnterTransitionDidFinish()
 
 void FUIContainer::onExitTransitionDidStart()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING && COCOS2D_VERSION < 0x00040000
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnExitTransitionDidStart))
@@ -263,7 +263,7 @@ void FUIContainer::onExitTransitionDidStart()
 
 void FUIContainer::onExit()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING && COCOS2D_VERSION < 0x00040000
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnExit))
