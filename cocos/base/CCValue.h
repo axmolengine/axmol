@@ -155,6 +155,13 @@ public:
     /** == operator overloading */
     bool operator== (const Value& v) const;
 
+    unsigned char asByte() const { return toByte(); }
+    int asInt() const { return toInt(); }
+    unsigned int asUnsignedInt() const { return toUnsignedInt(); }
+    float asFloat() const { return toFloat(); }
+    double asDouble() const { return toDouble(); }
+    bool asBool() const { return toBool(); }
+
     /** Gets as a byte value. Will convert to unsigned char if possible, or will trigger assert error. */
     unsigned char toByte() const;
     /** Gets as an integer value. Will convert to integer if possible, or will trigger assert error. */

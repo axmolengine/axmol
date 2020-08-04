@@ -309,9 +309,9 @@ THE SOFTWARE.
 #define CC_USE_WEBP  1
 #endif // CC_USE_WEBP
 
-/** Enable Script binding. */
+/** Enable Script binding. v4 or engine-x already remove js, leave follow always 0 */
 #ifndef CC_ENABLE_SCRIPT_BINDING
-#define CC_ENABLE_SCRIPT_BINDING 1
+#define CC_ENABLE_SCRIPT_BINDING 0
 #endif
 
 /** When CC_ENABLE_SCRIPT_BINDING and CC_ENABLE_GC_FOR_NATIVE_OBJECTS are both 1
