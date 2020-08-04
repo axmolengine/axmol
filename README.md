@@ -26,7 +26,7 @@
 * Set default C++ standard to 14
 * Set min deploy target ios sdk to 9.0
 * Remove tinyxml2, use more fast pugixml instead
-* Use curl for HttpClient,CCDownloader on all platforms
+* Use curl for HttpClient,Downloader on all platforms
 * Use SAX parser for all plist file, remove apple platform spec for getValueMapFromFile stubs
 
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
