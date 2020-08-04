@@ -72,7 +72,7 @@ namespace cocostudio
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
         auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
         
-        std::string filename = "";
+        std::string filename;
         float innerspeed = 1.0f;
 
         pugi::xml_attribute objattri = objectData.first_attribute();

@@ -190,7 +190,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
     pugi::xml_node element = rootElement.first_child();
 
     bool serializeEnabled = false;
-    std::string rootType = "";
+    std::string rootType;
 
     while (element)
     {
@@ -346,7 +346,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
     std::string classname = classType.substr(0, classType.find("ObjectData"));
     //    CCLOG("classname = %s", classname.c_str());
 
-    std::string name = "";
+    std::string name;
 
     Offset<Options> options;
     std::vector<Offset<NodeTree>> children;
@@ -430,7 +430,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
     }
     //
 
-    std::string customClassName = "";
+    std::string customClassName;
     auto attribute =  objectData.first_attribute();
     while (attribute)
     {
@@ -574,7 +574,7 @@ Offset<NodeAction> FlatBuffersSerialize::createNodeAction(pugi::xml_node objectD
 {
     int duration = 0;
     float speed = 0.0f;
-    std::string currentAnimationName = "";
+    std::string currentAnimationName;
 
     //    CCLOG("animation name = %s", objectData->Name());
 
@@ -623,7 +623,7 @@ Offset<NodeAction> FlatBuffersSerialize::createNodeAction(pugi::xml_node objectD
 
 Offset<flatbuffers::AnimationInfo> FlatBuffersSerialize::createAnimationInfo(pugi::xml_node objectData)
 {
-    std::string infoName = "";
+    std::string infoName;
     int startIndex = 0;
     int endIndex = 0;
 
@@ -652,7 +652,7 @@ Offset<flatbuffers::AnimationInfo> FlatBuffersSerialize::createAnimationInfo(pug
 Offset<TimeLine> FlatBuffersSerialize::createTimeLine(pugi::xml_node objectData)
 {
     int actionTag = 0;
-    std::string property = "";
+    std::string property;
 
     // TimelineData attributes
     auto attribute =  objectData.first_attribute();
@@ -959,12 +959,12 @@ Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(pugi:
     int frameIndex = 0;
     bool tween = true;
 
-    std::string path = "";
-    std::string plistFile = "";
+    std::string path;
+    std::string plistFile;
     int resourceType = 0;
 
-    std::string texture = "";
-    std::string texturePng = "";
+    std::string texture;
+    std::string texturePng;
 
     auto attribute =  objectData.first_attribute();
     while (attribute)
@@ -1032,7 +1032,7 @@ Offset<flatbuffers::EventFrame> FlatBuffersSerialize::createEventFrame(pugi::xml
 {
     int frameIndex = 0;
     bool tween = true;
-    std::string value = "";
+    std::string value;
 
     auto attribute =  objectData.first_attribute();
     while (attribute)
@@ -1138,7 +1138,7 @@ Offset<flatbuffers::InnerActionFrame> FlatBuffersSerialize::createInnerActionFra
     int frameIndex = 0;
     bool tween = true;
     int innerActionType = 0;
-    std::string currentAniamtionName = "";
+    std::string currentAniamtionName;
     int singleFrameIndex = 0;
 
     auto attribute =  objectData.first_attribute();
@@ -1196,8 +1196,8 @@ flatbuffers::Offset<flatbuffers::BlendFrame> FlatBuffersSerialize::createBlendFr
     int frameIndex = 0;
     bool tween = true;
     int32_t src = GLBlendConst::ONE, dst = GLBlendConst::ONE_MINUS_SRC_ALPHA;
-    std::string name = "";
-    std::string value = "";
+    std::string name;
+    std::string value;
 
     auto attribute =  objectData.first_attribute();
     while (attribute)
@@ -1322,7 +1322,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
     pugi::xml_node element = rootElement.first_child();
 
     bool serializeEnabled = false;
-    std::string rootType = "";
+    std::string rootType;
 
     while (element)
     {
@@ -1436,7 +1436,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
     std::string classname = classType.substr(0, classType.find("ObjectData"));
     //    CCLOG("classname = %s", classname.c_str());
 
-    std::string name = "";
+    std::string name;
 
     Offset<Options> options;
     std::vector<Offset<NodeTree>> children;
@@ -1521,7 +1521,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
     //
 
 
-    std::string customClassName = "";
+    std::string customClassName;
     auto attribute =  objectData.first_attribute();
     while (attribute)
     {
@@ -1549,7 +1549,7 @@ Offset<ProjectNodeOptions> FlatBuffersSerialize::createProjectNodeOptionsForSimu
     auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, _builder);
     auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
 
-    std::string filename = "";
+    std::string filename;
     float innerspeed = 1.0f;
 
     pugi::xml_attribute objattri = objectData.first_attribute();
@@ -1626,8 +1626,8 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
         }
 
         //Read all of the Key-Values in the XML file.
-        std::string key = "";
-        std::string text = "";
+        std::string key;
+        std::string text;
         bool hasKeyReaded = false;
         bool hasTextReaded = false;
         pugi::xml_node childElement = element.first_child();

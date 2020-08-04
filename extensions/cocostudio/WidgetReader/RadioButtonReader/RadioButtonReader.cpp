@@ -62,25 +62,25 @@ namespace cocostudio
         bool displaystate = true;
         
         int backgroundboxResourceType = 0;
-        std::string backgroundboxPath = "";
-        std::string backgroundboxPlistFile = "";
+        std::string backgroundboxPath;
+        std::string backgroundboxPlistFile;
         
         int backGroundBoxSelectedResourceType = 0;
-        std::string backGroundBoxSelectedPath = "";
-        std::string backGroundBoxSelectedPlistFile = "";
+        std::string backGroundBoxSelectedPath;
+        std::string backGroundBoxSelectedPlistFile;
         
         int frontCrossResourceType = 0;
-        std::string frontCrossPath = "";
-        std::string frontCrossPlistFile = "";
+        std::string frontCrossPath;
+        std::string frontCrossPlistFile;
         
         int backGroundBoxDisabledResourceType = 0;
-        std::string backGroundBoxDisabledPath = "";
-        std::string backGroundBoxDisabledPlistFile = "";
+        std::string backGroundBoxDisabledPath;
+        std::string backGroundBoxDisabledPlistFile;
         
         
         int frontCrossDisabledResourceType = 0;
-        std::string frontCrossDisabledPath = "";
-        std::string frontCrossDisabledPlistFile = "";
+        std::string frontCrossDisabledPath;
+        std::string frontCrossDisabledPlistFile;
         
         // attributes
         auto attribute =  objectData.first_attribute();
@@ -108,8 +108,8 @@ namespace cocostudio
             
             if (name == "NormalBackFileData")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
                 
                 attribute = child.first_attribute();
                 
@@ -143,8 +143,8 @@ namespace cocostudio
             }
             else if (name == "PressedBackFileData")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
                 
                 attribute = child.first_attribute();
                 
@@ -178,8 +178,8 @@ namespace cocostudio
             }
             else if (name == "NodeNormalFileData")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
                 
                 attribute = child.first_attribute();
                 
@@ -213,8 +213,8 @@ namespace cocostudio
             }
             else if (name == "DisableBackFileData")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
                 
                 attribute = child.first_attribute();
                 
@@ -248,8 +248,8 @@ namespace cocostudio
             }
             else if (name == "NodeDisableFileData")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
                 
                 attribute = child.first_attribute();
                 
@@ -322,10 +322,10 @@ namespace cocostudio
         
         //load background image
         bool backGroundFileExist = false;
-        std::string backGroundErrorFilePath = "";
-        auto backGroundDic = cocos2d::wext::makeResourceData(options->backGroundBoxData());
-        int backGroundType = backGroundDic.type;
-        std::string& backGroundTexturePath = backGroundDic.file;
+        std::string backGroundErrorFilePath;
+        auto backGroundDic = (options->backGroundBoxData());
+        int backGroundType = backGroundDic->resourceType();
+        std::string backGroundTexturePath = backGroundDic->path()->c_str();
         switch (backGroundType)
         {
             case 0:
@@ -344,7 +344,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = backGroundDic.plist;
+                std::string plist = backGroundDic->plistFile()->c_str();
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundTexturePath);
                 if (spriteFrame)
                 {
@@ -381,10 +381,10 @@ namespace cocostudio
         
         //load background selected image
         bool backGroundSelectedfileExist = false;
-        std::string backGroundSelectedErrorFilePath = "";
-        auto backGroundSelectedDic = cocos2d::wext::makeResourceData(options->backGroundBoxSelectedData());
-        int backGroundSelectedType = backGroundSelectedDic.type;
-        std::string& backGroundSelectedTexturePath = backGroundSelectedDic.file;
+        std::string backGroundSelectedErrorFilePath;
+        auto backGroundSelectedDic = (options->backGroundBoxSelectedData());
+        int backGroundSelectedType = backGroundSelectedDic->resourceType();
+        std::string backGroundSelectedTexturePath = backGroundSelectedDic->path()->c_str();
         switch (backGroundSelectedType)
         {
             case 0:
@@ -403,7 +403,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = backGroundSelectedDic.plist;
+                std::string plist = backGroundSelectedDic->plistFile()->c_str();
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundSelectedTexturePath);
                 if (spriteFrame)
                 {
@@ -440,10 +440,10 @@ namespace cocostudio
         
         //load frontCross image
         bool frontCrossFileExist = false;
-        std::string frontCrossErrorFilePath = "";
-        auto frontCrossDic = cocos2d::wext::makeResourceData(options->frontCrossData());
-        int frontCrossType = frontCrossDic.type;
-        std::string& frontCrossFileName = frontCrossDic.file;
+        std::string frontCrossErrorFilePath;
+        auto frontCrossDic = (options->frontCrossData());
+        int frontCrossType = frontCrossDic->resourceType();
+        std::string frontCrossFileName = frontCrossDic->path()->c_str();
         switch (frontCrossType)
         {
             case 0:
@@ -462,7 +462,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = frontCrossDic.plist;
+                std::string plist = frontCrossDic->plistFile()->c_str();
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frontCrossFileName);
                 if (spriteFrame)
                 {
@@ -499,10 +499,10 @@ namespace cocostudio
         
         //load backGroundBoxDisabledData
         bool backGroundBoxDisabledFileExist = false;
-        std::string backGroundBoxDisabledErrorFilePath = "";
-        auto backGroundDisabledDic = cocos2d::wext::makeResourceData(options->backGroundBoxDisabledData());
-        int backGroundDisabledType = backGroundDisabledDic.type;
-        std::string& backGroundDisabledFileName = backGroundDisabledDic.file;
+        std::string backGroundBoxDisabledErrorFilePath;
+        auto backGroundDisabledDic = (options->backGroundBoxDisabledData());
+        int backGroundDisabledType = backGroundDisabledDic->resourceType();
+        std::string backGroundDisabledFileName = backGroundDisabledDic->path()->c_str();
         switch (backGroundDisabledType)
         {
             case 0:
@@ -521,7 +521,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = backGroundDisabledDic.plist;
+                std::string plist = backGroundDisabledDic->plistFile()->c_str();
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundDisabledFileName);
                 if (spriteFrame)
                 {
@@ -558,10 +558,10 @@ namespace cocostudio
         
         ///load frontCrossDisabledData
         bool frontCrossDisabledFileExist = false;
-        std::string frontCrossDisabledErrorFilePath = "";
-        auto frontCrossDisabledDic = cocos2d::wext::makeResourceData(options->frontCrossDisabledData());
-        int frontCrossDisabledType = frontCrossDisabledDic.type;
-        std::string& frontCrossDisabledFileName = frontCrossDisabledDic.file;
+        std::string frontCrossDisabledErrorFilePath;
+        auto frontCrossDisabledDic = (options->frontCrossDisabledData());
+        int frontCrossDisabledType = frontCrossDisabledDic->resourceType();
+        std::string frontCrossDisabledFileName = frontCrossDisabledDic->path()->c_str();
         switch (frontCrossDisabledType)
         {
             case 0:
@@ -580,7 +580,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string plist = frontCrossDisabledDic.plist;
+                std::string plist = frontCrossDisabledDic->plistFile()->c_str();
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frontCrossDisabledFileName);
                 if (spriteFrame)
                 {

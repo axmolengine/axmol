@@ -733,9 +733,9 @@ Frame* ActionTimelineCache::loadColorFrameWithFlatBuffers(const flatbuffers::Col
 
 Frame* ActionTimelineCache::loadTextureFrameWithFlatBuffers(const flatbuffers::TextureFrame *flatbuffers)
 {
-    std::string path = "";
+    std::string path;
     int resourceType = 0;
-    std::string plist = "";
+    std::string plist;
     
     TextureFrame* frame = TextureFrame::create();
     
@@ -747,19 +747,13 @@ Frame* ActionTimelineCache::loadTextureFrameWithFlatBuffers(const flatbuffers::T
         case 0:
         {
             path = fileNameData->path()->c_str();
-            if (!FileUtils::getInstance()->isFileExist(path))
-            {
-                path = "";
-            } // pitfall: x-studio spec, use fullPath will lead some asset managment solution not work  with ETC1 seperate ALPHA channel.
+            // pitfall: use fullPath will lead some asset managment solution not work with ETC1 seperate ALPHA channel.
             /*if (FileUtils::getInstance()->isFileExist(path))
             {
                 std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
                 path = fullPath;
             }
-            else
-            {
-                path = "";
-            }*/
+            */
             break;
         }
             
@@ -772,7 +766,7 @@ Frame* ActionTimelineCache::loadTextureFrameWithFlatBuffers(const flatbuffers::T
             }
             else
             {
-                path = "";
+                path;
             }
             break;
         }

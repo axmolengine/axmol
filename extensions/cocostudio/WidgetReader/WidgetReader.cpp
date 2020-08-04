@@ -400,7 +400,7 @@ namespace cocostudio
     
     Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectData, flatbuffers::FlatBufferBuilder *builder)
     {
-        std::string name = "";
+        std::string name;
         long actionTag = 0;
         Vec2 rotationSkew;
         int zOrder = 0;
@@ -416,10 +416,10 @@ namespace cocostudio
         bool flipY = false;
         bool ignoreSize = false;
         bool touchEnabled = false;
-        std::string frameEvent = "";
-        std::string customProperty = "";
-        std::string callbackType = "";
-        std::string callbackName = "";
+        std::string frameEvent;
+        std::string customProperty;
+        std::string callbackType;
+        std::string callbackName;
 
         bool positionXPercentEnabled = false;
         bool positionYPercentEnabled = false;
@@ -438,7 +438,7 @@ namespace cocostudio
         float topMargin = 0;
         float bottomMargin = 0;
 
-		// x-studio365 10.0.593.0: read from .csb.
+		// x-studio 10.0.593.0: read from .csb.
 		bool cascadeColorEnabled = false;
 		bool cascadeOpacityEnabled = false;
 
@@ -798,7 +798,7 @@ namespace cocostudio
         
         auto options = (WidgetOptions*)widgetOptions;
         
-		// x-studio365 10.0.593.0: read from .csb
+		// x-studio 10.0.593.0: read from .csb
 		node->setCascadeColorEnabled(options->cascadeColorEnabled());
 		node->setCascadeOpacityEnabled(options->cascadeOpacityEnabled());
 

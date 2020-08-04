@@ -79,8 +79,7 @@ namespace cocostudio
             }else if(key == P_FontSize){
                 textField->setFontSize(valueToInt(value));
             }else if(key == P_FontName){
-                auto fontData = cocos2d::wext::makeResourceData(value);
-                textField->setFontName(fontData.file);
+                textField->setFontName(value);
             }else if(key == P_TouchSizeWidth){
                 textField->setTouchSize(Size(valueToFloat(value), textField->getTouchSize().height));
             }else if(key == P_TouchSizeHeight){
@@ -159,13 +158,13 @@ namespace cocostudio
         auto temp = WidgetReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
         auto widgetOptions = *(Offset<WidgetOptions>*)(&temp);
         
-        std::string path = "";
-        std::string plistFile = "";
+        std::string path;
+        std::string plistFile;
         int resourceType = 0;
         
-        std::string fontName = "";
+        std::string fontName;
         int fontSize = 20;
-        std::string text = "";
+        std::string text;
         bool isLocalized = false;
         std::string placeHolder = "Text Field";
         bool passwordEnabled = false;
@@ -334,9 +333,9 @@ namespace cocostudio
         
         
         bool fileExist = false;
-        std::string errorFilePath = "";
-        auto resourceData = cocos2d::wext::makeResourceData(options->fontResource());
-        std::string& path = resourceData.file;
+        std::string errorFilePath;
+        auto resourceDataDic = (options->fontResource());
+        std::string path = resourceDataDic->path()->c_str();
         if (path != "")
         {
             if (FileUtils::getInstance()->isFileExist(path))

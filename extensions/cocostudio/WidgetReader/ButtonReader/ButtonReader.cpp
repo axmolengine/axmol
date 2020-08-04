@@ -108,8 +108,7 @@ namespace cocostudio
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 
                 // assets[0] = backgroundValue;
-                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                button->loadTextureNormal(fileData.file, imageFileNameType);
+                button->loadTextureNormal(backgroundValue, imageFileNameType);
                 
             }
             else if (key == P_PressedData){
@@ -121,8 +120,7 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 
-                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                button->loadTexturePressed(fileData.file, imageFileNameType);
+                button->loadTexturePressed(backgroundValue, imageFileNameType);
                 
             }
             else if (key == P_DisabledData){
@@ -134,8 +132,7 @@ namespace cocostudio
                 
                 std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
                 
-                auto fileData = cocos2d::wext::makeResourceData(backgroundValue, (int)imageFileNameType);
-                button->loadTextureDisabled(fileData.file, imageFileNameType);
+                button->loadTextureDisabled(backgroundValue, imageFileNameType);
                 
             }else if (key == P_Text){
                 button->setTitleText(value);
@@ -161,8 +158,7 @@ namespace cocostudio
             }else if(key == P_FontSize){
                 button->setTitleFontSize(valueToFloat(value));
             }else if(key == P_FontName){
-                auto fileData = cocos2d::wext::makeResourceData(value);
-                button->setTitleFontName(fileData.file); // fonts
+                button->setTitleFontName(value); // fonts
             }
             
         } //end of for loop
@@ -269,27 +265,27 @@ namespace cocostudio
         bool displaystate = true;
         bool scale9Enabled = false;
         Rect capInsets;
-        std::string text = "";
+        std::string text;
         bool isLocalized = false;
         int fontSize = 14;
-        std::string fontName = "";
+        std::string fontName;
         cocos2d::Size scale9Size;
         Color4B textColor(255, 255, 255, 255);
         
-        std::string normalPath = "";
-        std::string normalPlistFile = "";
+        std::string normalPath;
+        std::string normalPlistFile;
         int normalResourceType = 0;
         
-        std::string pressedPath = "";
-        std::string pressedPlistFile = "";
+        std::string pressedPath;
+        std::string pressedPlistFile;
         int pressedResourceType = 0;
         
-        std::string disabledPath = "";
-        std::string disabledPlistFile = "";
+        std::string disabledPath;
+        std::string disabledPlistFile;
         int disabledResourceType = 0;
         
-        std::string fontResourcePath = "";
-        std::string fontResourcePlistFile = "";
+        std::string fontResourcePath;
+        std::string fontResourcePlistFile;
         int fontResourceResourceType = 0;
         
         bool outlineEnabled = false;
@@ -452,8 +448,8 @@ namespace cocostudio
             }
             else if (name == "DisabledFileData")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
                 
                 attribute = child.first_attribute();
                 
@@ -487,8 +483,8 @@ namespace cocostudio
             }
             else if (name == "PressedFileData")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
                 
                 attribute = child.first_attribute();
                 
@@ -522,8 +518,8 @@ namespace cocostudio
             }
             else if (name == "NormalFileData")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
                 
                 attribute = child.first_attribute();
                 
@@ -728,10 +724,10 @@ namespace cocostudio
         button->setScale9Enabled(scale9Enabled);
         
         bool normalFileExist = false;
-        std::string normalErrorFilePath = "";
-        auto normalDic = cocos2d::wext::makeResourceData(options->normalData());
-        int normalType = normalDic.type;
-        std::string& normalTexturePath = normalDic.file;
+        std::string normalErrorFilePath;
+        auto normalDic = options->normalData();
+        int normalType = normalDic->resourceType();
+        std::string normalTexturePath = normalDic->path()->c_str();
         switch (normalType)
         {
             case 0:
@@ -746,14 +742,14 @@ namespace cocostudio
                 }
                 else
                 {
-                    normalErrorFilePath = normalTexturePath;
+                    normalErrorFilePath = std::move(normalTexturePath);
                     normalFileExist = false;
                 }
                 break;
                 
             case 1:
             {
-                std::string& plist = normalDic.plist;
+                std::string plist = normalDic->plistFile()->c_str();
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(normalTexturePath);
                 if (spriteFrame)
                 {
@@ -765,7 +761,7 @@ namespace cocostudio
                     {
                         ValueMap value = FileUtils::getInstance()->getValueMapFromFile(plist);
                         ValueMap metadata = value["metadata"].asValueMap();
-                        std::string textureFileName = metadata["textureFileName"].asString();
+                        auto& textureFileName = metadata["textureFileName"].asString();
                         if (!FileUtils::getInstance()->isFileExist(textureFileName))
                         {
                             normalErrorFilePath = textureFileName;
@@ -773,7 +769,7 @@ namespace cocostudio
                     }
                     else
                     {
-                        normalErrorFilePath = plist;
+                        normalErrorFilePath = std::move(plist);
                     }
                     normalFileExist = false;
                 }
@@ -789,10 +785,10 @@ namespace cocostudio
         }
         
         bool pressedFileExist = false;
-        std::string pressedErrorFilePath = "";
-        auto pressedDic = cocos2d::wext::makeResourceData(options->pressedData());
-        int pressedType = pressedDic.type;
-        std::string& pressedTexturePath = pressedDic.file;
+        std::string pressedErrorFilePath;
+        auto pressedDic = options->pressedData();
+        int pressedType = pressedDic->resourceType();
+        std::string pressedTexturePath = pressedDic->path()->c_str();
         switch (pressedType)
         {
             case 0:
@@ -811,7 +807,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string& plist = pressedDic.plist;
+                std::string plist = pressedDic->plistFile()->c_str();
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pressedTexturePath);
                 if (spriteFrame)
                 {
@@ -823,7 +819,7 @@ namespace cocostudio
                     {
                         ValueMap value = FileUtils::getInstance()->getValueMapFromFile(plist);
                         ValueMap metadata = value["metadata"].asValueMap();
-                        std::string textureFileName = metadata["textureFileName"].asString();
+                        auto& textureFileName = metadata["textureFileName"].asString();
                         if (!FileUtils::getInstance()->isFileExist(textureFileName))
                         {
                             pressedErrorFilePath = textureFileName;
@@ -831,7 +827,7 @@ namespace cocostudio
                     }
                     else
                     {
-                        pressedErrorFilePath = plist;
+                        pressedErrorFilePath = std::move(plist);
                     }
                     pressedFileExist = false;
                 }
@@ -847,10 +843,10 @@ namespace cocostudio
         }
         
         bool disabledFileExist = false;
-        std::string disabledErrorFilePath = "";
-        auto disabledDic = cocos2d::wext::makeResourceData(options->disabledData());
-        int disabledType = disabledDic.type;
-        std::string& disabledTexturePath = disabledDic.file;
+        std::string disabledErrorFilePath;
+        auto disabledDic = options->disabledData();
+        int disabledType = disabledDic->resourceType();
+        std::string disabledTexturePath = disabledDic->path()->c_str();
         switch (disabledType)
         {
             case 0:
@@ -869,7 +865,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string& plist = disabledDic.plist;
+                std::string plist = disabledDic->plistFile()->c_str();
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(disabledTexturePath);
                 if (spriteFrame)
                 {
@@ -881,7 +877,7 @@ namespace cocostudio
                     {
                         ValueMap value = FileUtils::getInstance()->getValueMapFromFile(plist);
                         ValueMap metadata = value["metadata"].asValueMap();
-                        std::string textureFileName = metadata["textureFileName"].asString();
+                        auto& textureFileName = metadata["textureFileName"].asString();
                         if (!FileUtils::getInstance()->isFileExist(textureFileName))
                         {
                             disabledErrorFilePath = textureFileName;
@@ -889,7 +885,7 @@ namespace cocostudio
                     }
                     else
                     {
-                        disabledErrorFilePath = plist;
+                        disabledErrorFilePath = std::move(plist);
                     }
                     disabledFileExist = false;
                 }
@@ -924,25 +920,15 @@ namespace cocostudio
         std::string titleFontName = options->fontName()->c_str();
         button->setTitleFontName(titleFontName);
         
-        auto resourceData = cocos2d::wext::makeResourceData(options->fontResource());
-        bool fileExist = false;
-        std::string errorFilePath = "";
-        std::string& path = resourceData.file;
-        if (path != "")
+        auto resourceData = options->fontResource();
+        std::string errorFilePath;
+        std::string path = resourceData->path()->c_str();
+        if (!path.empty())
         {
             if (FileUtils::getInstance()->isFileExist(path))
-            {
-                fileExist = true;
-            }
-            else
-            {
-                errorFilePath = path;
-                fileExist = false;
-            }
-            if (fileExist)
-            {
                 button->setTitleFontName(path);
-            }
+            else
+                errorFilePath = path;
         }
         
         int titleFontSize = options->fontSize();

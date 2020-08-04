@@ -56,7 +56,7 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
     std::string currentArmatureName;
 
 	int type = 0;
-	std::string path = "";
+	std::string path;
 
     float armatureScale = 1.0f;
     float timeScale = 1.0f;
@@ -149,7 +149,7 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(cocos2d::Node *node,
 	auto options = (flatbuffers::CSArmatureNodeOption*)nodeOptions;
 
 	bool fileExist = false;
-	std::string errorFilePath = "";
+	std::string errorFilePath;
 
 	std::string filepath(options->fileData()->path()->c_str());
 

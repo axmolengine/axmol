@@ -84,8 +84,8 @@ namespace cocostudio
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
         auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
         
-        std::string path = "";
-        std::string plistFile = "";
+        std::string path;
+        std::string plistFile;
         int resourceType = 0;
         bool intelliShadingEnabled = false;
         cocos2d::Vec3 hsv;
@@ -117,8 +117,8 @@ namespace cocostudio
             pugi::xml_attribute attribute;
             if (name == "FileData")
             {
-                std::string texture = "";
-                std::string texturePng = "";
+                std::string texture;
+                std::string texturePng;
                 
                 attribute = child.first_attribute();
                 
@@ -245,12 +245,12 @@ namespace cocostudio
         auto nodeReader = NodeReader::getInstance();
         nodeReader->setPropsWithFlatBuffers(node, (Table*)(options->nodeOptions()));
         
-        auto fileNameData = cocos2d::wext::makeResourceData(options->fileNameData());
+        auto fileNameDataDic = (options->fileNameData());
         
-        int resourceType = fileNameData.type;
-        std::string& path = fileNameData.file;
+        int resourceType = fileNameDataDic->resourceType();
+        std::string path = fileNameDataDic->path()->c_str();
         
-        std::string errorFilePath = "";
+        std::string errorFilePath;
         
         switch (resourceType)
         {
@@ -269,7 +269,7 @@ namespace cocostudio
                 
             case 1:
             {
-                std::string& plist = fileNameData.plist;
+                std::string plist = fileNameDataDic->plistFile()->c_str();
                 SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path);
                 if (spriteFrame)
                 {

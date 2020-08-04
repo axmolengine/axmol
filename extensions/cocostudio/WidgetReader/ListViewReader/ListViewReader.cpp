@@ -433,10 +433,10 @@ namespace cocostudio
         
         
         bool fileExist = false;
-        std::string errorFilePath = "";
-        auto imageFileNameDic = cocos2d::wext::makeResourceData(options->backGroundImageData());
-        int imageFileNameType = imageFileNameDic.type;
-        std::string& imageFileName = imageFileNameDic.file;
+        std::string errorFilePath;
+        auto imageFileNameDic = (options->backGroundImageData());
+        int imageFileNameType = imageFileNameDic->resourceType();
+        std::string imageFileName = imageFileNameDic->path()->c_str();
         if (imageFileName != "")
         {
             switch (imageFileNameType)
@@ -457,7 +457,7 @@ namespace cocostudio
                     
                 case 1:
                 {
-                    std::string& plist = imageFileNameDic.plist;
+                    std::string plist = imageFileNameDic->plistFile()->c_str();
                     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imageFileName);
                     if (spriteFrame)
                     {

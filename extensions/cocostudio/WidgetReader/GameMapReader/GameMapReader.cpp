@@ -75,8 +75,8 @@ namespace cocostudio
         auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
         auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
         
-        std::string path = "";
-        std::string plistFile = "";
+        std::string path;
+        std::string plistFile;
         int resourceType = 0;
         
         // child elements
@@ -140,7 +140,7 @@ namespace cocostudio
         auto fileNameData = options->fileNameData();
         
         bool fileExist = false;
-        std::string errorFilePath = "";
+        std::string errorFilePath;
         std::string path = fileNameData->path()->c_str();
         int resourceType = fileNameData->resourceType();
         switch (resourceType)
@@ -168,7 +168,7 @@ namespace cocostudio
             auto mapInfo = TMXMapInfo::create(path);
             auto& layers = mapInfo->getLayers();
             bool valid = false;
-            std::string layerName = "";
+            std::string layerName;
             for (const auto &layerInfo : layers)
             {
                 valid = false;

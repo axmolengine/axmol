@@ -39,7 +39,7 @@ namespace flatbuffers
     
     class Table;
 
-    struct ResourceData; // x-studio365 spec, csb batch load support, assets hook functions.
+    struct ResourceData;
 }
 
 namespace cocos2d
@@ -62,8 +62,6 @@ namespace cocostudio
         virtual cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) = 0;
     };
 }
-
-// x-studio365 spec, csb batch load support, assets hook functions.
 
 namespace cocostudio
 {
@@ -99,11 +97,6 @@ namespace cocos2d {
 
         class Widget;
     }
-    namespace wext {
-		CC_STUDIOP_DLL extern cocos2d::ResourceData makeResourceData(const flatbuffers::ResourceData* data);
-		CC_STUDIOP_DLL extern cocos2d::ResourceData makeResourceData(const std::string& path, int type = 0);
-		CC_STUDIOP_DLL extern cocos2d::ResourceData makeResourceData(std::string&& path, int type = 0);
-    };
 };
 
 #endif /* defined(__cocos2d_libs__NodeReaderProtocol__) */

@@ -379,7 +379,7 @@ Widget* GUIReader::widgetFromBinaryFile(const char *fileName)
     auto fileDataBytes = fileData.getBytes();
     auto fileDataSize = fileData.getSize();
     
-    const char* fileVersion = "";
+    const char* fileVersion;
     ui::Widget* widget = nullptr;
 
     if (fileDataBytes != nullptr && fileDataSize > 0)
