@@ -8,12 +8,10 @@
   
 ### 宗旨:
 * C++14/17
-* forcus on native game dev only
-* Remove unnecessary sources
+* Forcus on native game dev only
 * Fix bugs ASAP
 * Review PR ASAP
-* If you have any other excellent goals, welcome
-* Excellent PRs from any guys are welcome, I will review & merge ASAP
+* Excellent PRs from any guys are welcome, we will review & merge ASAP
   
 ### 主要特性:
 * 重构AudioEngine, 全平台OpenAL, 在iOS平台可以通过```-DCC_USE_ALSOFT_ON_APPLE```切换为 [openal-soft](https://github.com/kcat/openal-soft), 苹果公司已经在iOS12将OpenAL framework标记为废弃的
