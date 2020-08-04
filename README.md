@@ -8,7 +8,7 @@
   
 ### Purpose Summary:
 * C++14/17
-* forcus on native game dev only
+* Forcus on native game dev only
 * Remove unnecessary sources
 * Fix bugs ASAP
 * Review PR ASAP
