@@ -145,14 +145,3 @@ if(LINUX OR WINDOWS)
     cocos_copy_lua_scripts(${APP_NAME} ${res_src_folders} ${APP_RES_DIR}/src )
     cocos_copy_lua_scripts(${APP_NAME} ${res_script_folders} ${APP_RES_DIR}/src/cocos)
 endif()
-
-# Copy win32 angle binaries
-if(WIN32)
-    add_custom_command(TARGET ${APP_NAME}
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/libGLESv2.dll
-                ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/libEGL.dll
-                ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/d3dcompiler_47.dll
-                $<TARGET_FILE_DIR:${APP_NAME}>
-            )
-endif()
