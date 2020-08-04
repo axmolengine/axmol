@@ -1,5 +1,6 @@
 set(COCOS_MATH_HEADER
     math/Vec2.h
+    math/Mat3.h
     math/Mat4.h
     math/Quaternion.h
     math/TransformUtils.h
@@ -17,6 +18,7 @@ set(COCOS_MATH_SRC
     math/CCAffineTransform.cpp
     math/CCGeometry.cpp
     math/CCVertex.cpp
+    math/Mat3.cpp
     math/Mat4.cpp
     math/MathUtil.cpp
     math/Quaternion.cpp

@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "CCPUFlockCenteringAffector.h"
-#include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
+#include "Particle3D/PU/CCPUParticleSystem3D.h"
 
 NS_CC_BEGIN
 //-----------------------------------------------------------------------
