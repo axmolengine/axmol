@@ -13,8 +13,6 @@ option(BUILD_EXTENSION_DRAGONBONES "Build extension DragonBones" OFF)
 
 option(BUILD_EXTENSION_COCOSTUDIO "Build extension cocostudio" ON)
 
-message(STATUS "BUILD_EXTENSION_COCOSTUDIO:${BUILD_EXTENSION_COCOSTUDIO}")
-
 function(setup_cocos_extension_config target_name)
   if(ANDROID)
     target_link_libraries(${target_name} INTERFACE cocos2d)
