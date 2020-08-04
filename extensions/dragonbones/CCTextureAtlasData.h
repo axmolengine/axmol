@@ -23,7 +23,7 @@
 #ifndef DRAGONBONES_CC_TEXTUREATLAS_DATA_H
 #define DRAGONBONES_CC_TEXTUREATLAS_DATA_H
 
-#include "dragonBones/DragonBonesHeaders.h"
+#include "DragonBonesHeaders.h"
 #include "cocos2d.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
@@ -33,7 +33,6 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * Cocos2d Ã˘ÕººØ ˝æ›°£
  * @version DragonBones 3.0
  * @language zh_CN
  */
@@ -69,7 +68,7 @@ public:
      * @language en_US
      */
     /**
-     * Cocos2d Ã˘Õº°£
+     * Cocos2d √å√π√ç¬º¬°¬£
      * @version DragonBones 3.0
      * @language zh_CN
      */
