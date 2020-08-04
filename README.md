@@ -9,11 +9,9 @@
 ### Purpose Summary:
 * C++14/17
 * Forcus on native game dev only
-* Remove unnecessary sources
 * Fix bugs ASAP
 * Review PR ASAP
-* If you have any other excellent goals, welcome
-* Excellent PRs from any guys are welcome, I will review & merge ASAP
+* Excellent PRs from any guys are welcome, we will review & merge ASAP
   
 ### Highlight Features:
 * Refactor AudioEngine, OpenAL for all platforms, and on iOS, can switch to [openal-soft](https://github.com/kcat/openal-soft) through ```-DCC_USE_ALSOFT_ON_APPLE``` since Apple mark OpenAL framework ```deprecated``` on iOS12
