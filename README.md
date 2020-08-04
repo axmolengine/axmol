@@ -6,14 +6,28 @@
   
 **[简体中文](README_CN.md)**
   
-### Goals summary:
-1. C++14/17
-2. forcus on native game dev only
-3. Remove unnecessary sources
-4. Fix bugs ASAP
-5. Review PR ASAP
-6. If you have any other excellent goals, welcome
-7. Excellent PRs from any guys are welcome, I will review & merge ASAP
+### Purpose Summary:
+* C++14/17
+* forcus on native game dev only
+* Remove unnecessary sources
+* Fix bugs ASAP
+* Review PR ASAP
+* If you have any other excellent goals, welcome
+* Excellent PRs from any guys are welcome, I will review & merge ASAP
+  
+### Highlight Features:
+* Refactor AudioEngine, OpenAL for all platforms, and on iOS, can switch to [openal-soft](https://github.com/kcat/openal-soft) through ```-DCC_USE_ALSOFT_ON_APPLE``` since Apple mark OpenAL framework ```deprecated``` on iOS12
+* Refactor UserDefault with [mio](https://github.com/mandreyel/mio), very fast
+* Modularize all optional extension, all move from engine core to folder extensions
+* Add engine extension 'fairygui' support
+* Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM...
+* Use modern gl loader ```glad``` to instead glew
+* Add google angle renderer backend support
+* Set default C++ standard to 14
+* Set min deploy target ios sdk to 9.0
+* Remove tinyxml2, use more fast pugixml instead
+* Use curl for HttpClient,CCDownloader on all platforms
+* Use SAX parser for all plist file, remove apple platform spec for getValueMapFromFile stubs
 
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
 
