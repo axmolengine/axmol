@@ -26,6 +26,8 @@
 * Remove tinyxml2, use more fast pugixml instead
 * Use curl for HttpClient,Downloader on all platforms
 * Use SAX parser for all plist file, remove apple platform spec for getValueMapFromFile stubs
+* Spine 3.8 support
+* FairyGUI support
 
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
 
