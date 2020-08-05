@@ -26,6 +26,8 @@
 * 使用更快的xml解析库pugixml代替tinyxml2
 * HttpClient, Downloader全平台统一实现，均基于curl
 * 全平台统一使用XML SAX解析plist文件, 移除Apple平台的实现
+* Spine 3.8支持
+* FairyGUI支持
   
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
   
