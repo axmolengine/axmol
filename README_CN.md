@@ -17,7 +17,6 @@
 * 重构AudioEngine, 全平台OpenAL, 在iOS平台可以通过```-DCC_USE_ALSOFT_ON_APPLE```切换为 [openal-soft](https://github.com/kcat/openal-soft), 苹果公司已经在iOS12将OpenAL framework标记为废弃的
 * 重构UserDefault, 全平台基于内存映射文件 [mio](https://github.com/mandreyel/mio), 性能提升百倍
 * 模块化所有引擎扩展库, 所有扩展库放到extensions目录下，如cocostudio, spine
-* 新增引擎扩展 'fairygui' 支持
 * AudioEngine实现wav所有 ```openal-soft``` 支持的封装格式, 例如MS-ADPCM, ADPCM等
 * 使用现代化的GL加载器glad代替glew
 * 增加google angle渲染后端支持
@@ -27,7 +26,7 @@
 * HttpClient, Downloader全平台统一实现，均基于curl
 * 全平台统一使用XML SAX解析plist文件, 移除Apple平台的实现
 * Spine 3.8支持
-* FairyGUI支持
+* 新增FairyGUI支持
   
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
   

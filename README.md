@@ -17,7 +17,6 @@
 * Refactor AudioEngine, OpenAL for all platforms, and on iOS, can switch to [openal-soft](https://github.com/kcat/openal-soft) through ```-DCC_USE_ALSOFT_ON_APPLE``` since Apple mark OpenAL framework ```deprecated``` on iOS12
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio), very fast
 * Modularize all optional extension, all move from engine core to folder extensions
-* Add engine extension 'fairygui' support
 * Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM...
 * Use modern gl loader ```glad``` to instead glew
 * Add google angle renderer backend support
@@ -26,8 +25,8 @@
 * Remove tinyxml2, use more fast pugixml instead
 * Use curl for HttpClient,Downloader on all platforms
 * Use SAX parser for all plist file, remove apple platform spec for getValueMapFromFile stubs
-* Spine 3.8 support
-* FairyGUI support
+* Spine-3.8 support
+* Add engine extension ```FairyGUI``` support
 
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
 
