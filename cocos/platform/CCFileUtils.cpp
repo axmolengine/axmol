@@ -560,6 +560,8 @@ void FileUtils::getDataFromFile(const std::string& filename, std::function<void(
     }, std::move(callback));
 }
 
+
+
 FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableBuffer* buffer) const
 {
     if (filename.empty())
@@ -571,24 +573,28 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
     if (fullPath.empty())
         return Status::NotExists;
 
-    struct stat statBuf;
-    if (stat(fullPath.c_str(), &statBuf) == -1) {
-        return Status::ReadFailed;
-    }
-
-    if (!(statBuf.st_mode & S_IFREG)) { 
-        return Status::NotRegularFileType;
-    }
-
     FILE *fp = fopen(fullPath.c_str(), "rb");
     if (!fp)
         return Status::OpenFailed;
 
+    struct AutoFileHandle {
+        void operator()(FILE* fp) {
+            fclose(fp);
+        }
+    };
+    std::unique_ptr<FILE, AutoFileHandle> autohandle(fp);
+
+    struct stat statBuf;
+    if (fstat(fileno(fp), &statBuf) == -1)
+        return Status::ReadFailed;
+
+    if (!(statBuf.st_mode & S_IFREG))
+        return Status::NotRegularFileType;
+
     size_t size = statBuf.st_size;
 
     buffer->resize(size);
-    size_t readsize = fread(buffer->buffer(), 1, size, fp);
-    fclose(fp);
+    size_t readsize = fread(buffer->buffer(), 1, statBuf.st_size, fp);
 
     if (readsize < size) {
         buffer->resize(readsize);
