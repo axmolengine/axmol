@@ -65,6 +65,10 @@
 #include "base/base64.h"
 #include "base/ccUtils.h"
 #include "base/ccUTF8.h"
+#ifdef _WIN32
+#define NTCVT_CP_DEFAULT CP_UTF8
+#include "win32-specific/ntcvt/ntcvt.hpp"
+#endif
 
 NS_CC_BEGIN
 
@@ -139,13 +143,10 @@ void log(const char * format, ...)
     buf.push_back('\n');
 
     // print to debugger output window
-    int cchWideChar = MultiByteToWideChar(CP_UTF8, 0, buf.c_str(), static_cast<int>(buf.length()), NULL, 0);
-    std::wstring wbuf(cchWideChar, '\0');
-    MultiByteToWideChar(CP_UTF8, 0, buf.c_str(), static_cast<int>(buf.length()), &wbuf.front(), cchWideChar);
-    OutputDebugStringW(wbuf.c_str());
+    std::wstring wbuf = ntcvt::from_chars(buf);
 
     // print to console if possible
-    printf("%Ls", wbuf.c_str());
+    wprintf(L"%s", wbuf.c_str());
     fflush(stdout);
 
     // print to log window
