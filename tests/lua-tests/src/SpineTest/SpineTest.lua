@@ -16,7 +16,7 @@ function SpineTestLayerNormal:ctor()
 end
 
 function SpineTestLayerNormal:init()
-  local skeletonNode = sp.SkeletonAnimation:create("spine/spineboy-ess.json", "spine/spineboy.atlas", 0.6)
+  local skeletonNode = sp.SkeletonAnimation:create("spine/spineboy-pro.json", "spine/spineboy.atlas", 0.6)
   skeletonNode:setScale(0.5)
 
   skeletonNode:registerSpineEventHandler(function (event)
