@@ -1,0 +1,26 @@
+#!/bin/bash -l
+
+COCOS_CONSOLE_BIN_DIRECTORY=$(dirname "$0")
+COCOS_CONSOLE_BIN_DIRECTORY=$(cd "$COCOS_CONSOLE_BIN_DIRECTORY" && pwd -P)
+
+
+if hash python2 2>/dev/null; then
+    PYTHON=python2
+else
+    if hash python 2>/dev/null; then
+        VERSION="python --version"
+        if  $VERSION 2>&1 >/dev/null | grep "Python 2" ; then
+            PYTHON=python
+        else
+            echo "require Python 2,but $($VERSION) found"
+            exit 1;
+        fi
+    else
+        echo "Python 2 required."
+        exit 1
+    fi
+fi
+
+
+$PYTHON "$COCOS_CONSOLE_BIN_DIRECTORY/cocos.py" "$@"
+
