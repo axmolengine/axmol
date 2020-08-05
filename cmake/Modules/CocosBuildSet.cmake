@@ -14,7 +14,7 @@ if(CMAKE_TOOLCHAIN_FILE)
     message(STATUS "using toolchain file:" ${CMAKE_TOOLCHAIN_FILE})
 endif()
 
-find_program(PYTHON_COMMAND NAMES python2 python)
+find_program(PYTHON_COMMAND NAMES python3 python2 python)
 find_program(COCOS_COMMAND NAME cocos
     PATHS ${COCOS2DX_ROOT_PATH}/tools/cocos2d-console/bin $ENV{COCOS_CONSOLE_ROOT})
 

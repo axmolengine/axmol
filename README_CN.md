@@ -32,6 +32,10 @@
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
   
 ### 快速开始
+
+#### 必要工具 [python](https://www.python.org/downloads/)
+  * python-2.7.17+, python-3.7+都可以
+
 #### Windows
   1. 安装CMake，要求3.6以上  
   2. 确保Visual Studio 2019以正确安装

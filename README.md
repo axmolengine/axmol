@@ -32,6 +32,9 @@
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
 
 ### Quick Start
+#### Common Requirement [python](https://www.python.org/downloads/)
+  * python-2.7.17+, python-3.7+ also works
+
 #### Windows
   1. Install [CMake](https://cmake.org/) 3.6+  
   2. Install Visual Studio 2019 build(we strong recommand you install this version)  
