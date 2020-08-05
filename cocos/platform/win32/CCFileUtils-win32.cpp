@@ -115,19 +115,6 @@ bool FileUtilsWin32::isDirectoryExistInternal(const std::string& dirPath) const
         (fAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-long FileUtilsWin32::getFileSize(const std::string &filepath)
-{
-    WIN32_FILE_ATTRIBUTE_DATA fad;
-    if (!GetFileAttributesExA(filepath.c_str(), GetFileExInfoStandard, &fad))
-    {
-        return 0; // error condition, could call GetLastError to find out more
-    }
-    LARGE_INTEGER size;
-    size.HighPart = fad.nFileSizeHigh;
-    size.LowPart = fad.nFileSizeLow;
-    return (long)size.QuadPart;
-}
-
 bool FileUtilsWin32::isFileExistInternal(const std::string& strFilePath) const
 {
     DECLARE_GUARD;
@@ -265,7 +252,7 @@ int64_t FileUtilsWin32::getFileSize(const std::string &filepath) const
     if (filepath.empty())
         return -1;
     WIN32_FILE_ATTRIBUTE_DATA attrs = { 0 };
-    if (GetFileAttributesExA(filepath.c_str(), GetFileExInfoStandard, &attrs) &&
+    if (GetFileAttributesExW(ntcvt::from_chars(filepath).c_str(), GetFileExInfoStandard, &attrs) &&
         !(attrs.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         return static_cast<long long>(attrs.nFileSizeHigh) << 32 |
         static_cast<unsigned long long>(attrs.nFileSizeLow);

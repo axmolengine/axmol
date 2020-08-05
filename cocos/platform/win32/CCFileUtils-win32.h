@@ -49,7 +49,6 @@ public:
     bool init();
     virtual std::string getWritablePath() const override;
     virtual bool isAbsolutePath(const std::string& strPath) const override;
-    virtual long getFileSize(const std::string &filepath);
 protected:
 
     virtual bool isFileExistInternal(const std::string& strFilePath) const override;
