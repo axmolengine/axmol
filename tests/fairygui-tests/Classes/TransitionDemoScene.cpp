@@ -76,8 +76,8 @@ void TransitionDemoScene::__play5(EventContext* context)
     _startValue = 10000;
     int add = 1000 + rand_0_1() * 2000;
     _endValue = _startValue + add;
-    _g5->getChild("value")->setText(Value(_startValue).asString());
-    _g5->getChild("add_value")->setText(Value(add).asString());
+    _g5->getChild("value")->setText(std::to_string(_startValue));
+    _g5->getChild("add_value")->setText(std::to_string(add));
     t->play([this]()
     {
         _btnGroup->setVisible(true);
@@ -89,6 +89,6 @@ void TransitionDemoScene::playNum()
 {
     GTween::to(_startValue, _endValue, 0.3f)->onUpdate([this](GTweener* tweener)
     {
-        _g5->getChild("value")->setText(Value((int)floor(tweener->value.x)).asString());
+        _g5->getChild("value")->setText(std::to_string((int)floor(tweener->value.x)));
     });
 }

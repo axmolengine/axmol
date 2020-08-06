@@ -23,7 +23,7 @@ void LoopListScene::continueInit()
 void LoopListScene::renderListItem(int index, GObject* obj)
 {
     obj->setPivot(0.5f, 0.5f);
-    obj->setIcon("ui://LoopList/n" + Value(index + 1).asString());
+    obj->setIcon("ui://LoopList/n" + std::to_string(index + 1));
 }
 
 void LoopListScene::doSpecialEffect(EventContext*)
@@ -44,5 +44,5 @@ void LoopListScene::doSpecialEffect(EventContext*)
         }
     }
 
-    _view->getChild("n3")->setText(Value((_list->getFirstChildInView() + 1) % _list->getNumItems()).asString());
+    _view->getChild("n3")->setText(std::to_string((_list->getFirstChildInView() + 1) % _list->getNumItems()));
 }

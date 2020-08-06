@@ -29,5 +29,5 @@ void VirtualListScene::renderListItem(int index, GObject* obj)
     item->setFetched(index % 3 == 0);
     item->setRead(index % 2 == 0);
     item->setTime("5 Nov 2015 16:24:33");
-    item->setText(Value(index).asString() + " Mail title here");
+    item->setText(std::to_string(index) + " Mail title here");
 }

@@ -16,7 +16,7 @@ void Window1::onShown()
     for (int i = 0; i < 6; i++)
     {
         GButton* item = list->addItemFromPool()->as<GButton>();
-        item->setTitle(Value(i).asString());
+        item->setTitle(std::to_string(i));
         item->setIcon("ui://Basics/r4");
     }
 }

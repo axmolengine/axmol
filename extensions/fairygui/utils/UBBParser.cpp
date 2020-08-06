@@ -155,7 +155,7 @@ void UBBParser::onTag_IMG(const std::string & tagName, bool end, const std::stri
             return;
 
         if (defaultImgWidth != 0)
-            replacement = "<img src=\"" + src + "\" width=\"" + Value(defaultImgWidth).asString() + "\" height=\"" + Value(defaultImgHeight).asString() + "\"/>";
+            replacement = "<img src=\"" + src + "\" width=\"" + std::to_string(defaultImgWidth) + "\" height=\"" + std::to_string(defaultImgHeight) + "\"/>";
         else
             replacement = "<img src=\"" + src + "\"/>";
     }

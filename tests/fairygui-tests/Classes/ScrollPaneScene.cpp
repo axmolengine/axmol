@@ -22,7 +22,7 @@ void ScrollPaneScene::continueInit()
 void ScrollPaneScene::renderListItem(int index, GObject* obj)
 {
     GButton* item = obj->as<GButton>();
-    item->setTitle("Item " + Value(index).asString());
+    item->setTitle("Item " + std::to_string(index));
     item->getScrollPane()->setPosX(0); //reset scroll pos
 
     //Be carefull, RenderListItem is calling repeatedly, add tag to avoid adding duplicately.

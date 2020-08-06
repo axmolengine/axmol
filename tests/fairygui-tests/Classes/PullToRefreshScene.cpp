@@ -66,12 +66,12 @@ void PullToRefreshScene::continueInit()
 
 void PullToRefreshScene::renderListItem1(int index, GObject* obj)
 {
-    obj->setText("Item " + Value(_list1->getNumItems() - index - 1).asString());
+    obj->setText("Item " + std::to_string(_list1->getNumItems() - index - 1));
 }
 
 void PullToRefreshScene::renderListItem2(int index, GObject* obj)
 {
-    obj->setText("Item " + Value(index).asString());
+    obj->setText("Item " + std::to_string(index));
 }
 
 void PullToRefreshScene::onPullDownToRefresh(EventContext*)
