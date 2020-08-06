@@ -49,13 +49,11 @@
   1. 安装 Android Studio 3.5.3或更高版本
   2. 第一次启动Android Studio, 会引导安装一些工具，默认安装即可，如果不需要模拟器可以把```Virutal Device```勾选去掉
   2. 启动 Android Studio并打开engine-x\tests\cpp-tests\proj.android
-  3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下工具  
+  3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下工具后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
      * Android SDK Build-Tools 29.0.2  
      * NDK 20.1+  
      * CMake 3.10.2+  
 
-    点击按钮 ```Apply``` 一路跟着引导安装即可  
-  
   5. 等待Gradle sync完成后，Build APKs，安装运行  
   6. 如果报缺少Ninja, 从https://github.com/ninja-build/ninja/releases下载， 拷贝Ninja.exe到Cmake的bin目录即可
 

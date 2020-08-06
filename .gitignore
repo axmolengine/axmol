@@ -188,3 +188,6 @@ temp/
 # external libs zip
 *.zip
 **/simulator/
+
+# New .cxx temp folder
+**/.cxx
