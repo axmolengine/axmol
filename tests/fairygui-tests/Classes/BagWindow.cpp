@@ -16,8 +16,8 @@ void BagWindow::onInit()
 
 void BagWindow::renderListItem(int index, GObject* obj)
 {
-    obj->setIcon("icons/i" + Value((int)(rand_0_1() * 10)).asString() + ".png");
-    obj->setText(Value((int)(rand_0_1() * 100)).asString());
+    obj->setIcon("icons/i" + std::to_string((int)(rand_0_1() * 10)) + ".png");
+    obj->setText(std::to_string((int)(rand_0_1() * 100)));
 }
 
 void BagWindow::doShowAnimation()

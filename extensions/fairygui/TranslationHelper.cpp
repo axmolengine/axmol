@@ -124,7 +124,7 @@ void TranslationHelper::translateComponent(PackageItem* item)
                     const string& page = buffer->readS();
                     if (!page.empty())
                     {
-                        if ((it = strings.find(elementId + "-texts_" + Value(k).asString())) != strings.end())
+                        if ((it = strings.find(elementId + "-texts_" + std::to_string(k))) != strings.end())
                             buffer->writeS(it->second);
                         else
                             buffer->skip(2);
@@ -192,13 +192,13 @@ void TranslationHelper::translateComponent(PackageItem* item)
                     buffer->skip(2);
 
                 //title
-                if ((it = strings.find(elementId + "-" + Value(j).asString())) != strings.end())
+                if ((it = strings.find(elementId + "-" + std::to_string(j))) != strings.end())
                     buffer->writeS(it->second);
                 else
                     buffer->skip(2);
 
                 //selected title
-                if ((it = strings.find(elementId + "-" + Value(j).asString() + "-0")) != strings.end())
+                if ((it = strings.find(elementId + "-" + std::to_string(j) + "-0")) != strings.end())
                     buffer->writeS(it->second);
                 else
                     buffer->skip(2);
@@ -213,7 +213,7 @@ void TranslationHelper::translateComponent(PackageItem* item)
                     {
                         std::string target = buffer->readS();
                         int propertyId = buffer->readShort();
-                        if (propertyId == 0 && (it = strings.find(elementId + "-" + Value(j).asString() + "-" + target)) != strings.end())
+                        if (propertyId == 0 && (it = strings.find(elementId + "-" + std::to_string(j) + "-" + target)) != strings.end())
                             buffer->writeS(it->second);
                         else
                             buffer->skip(2);
@@ -268,7 +268,7 @@ void TranslationHelper::translateComponent(PackageItem* item)
                     int nextPos = buffer->readShort();
                     nextPos += buffer->getPos();
 
-                    if ((it = strings.find(elementId + "-" + Value(j).asString())) != strings.end())
+                    if ((it = strings.find(elementId + "-" + std::to_string(j))) != strings.end())
                         buffer->writeS(it->second);
 
                     buffer->setPos(nextPos);

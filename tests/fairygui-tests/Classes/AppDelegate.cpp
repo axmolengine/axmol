@@ -41,7 +41,7 @@ AppDelegate::~AppDelegate()
 void AppDelegate::initGLContextAttrs()
 {
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil
-    GLContextAttrs glContextAttrs = { 8, 8, 8, 8, 24, 8, 0 };
+    GLContextAttrs glContextAttrs = { 8, 8, 8, 8, 24, 8 };
 
     GLView::setGLContextAttrs(glContextAttrs);
 }
@@ -91,7 +91,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setContentScaleFactor(MIN(smallResolutionSize.height / designResolutionSize.height, smallResolutionSize.width / designResolutionSize.width));
     }*/
 
-    // ?will cause guide clip seems incorrect @fairygui
     director->setClearColor(Color4F(Color4B(0x36, 0x3B, 0x44, 0xFF)));
 
     register_all_packages();

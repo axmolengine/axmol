@@ -30,7 +30,7 @@ void TreeViewScene::continueInit()
     for (int i = 0; i < 5; i++)
     {
         GTreeNode* node = GTreeNode::create();
-        node->setData(Value("Hello " + Value(i).asString()));
+        node->setData(Value("Hello " + std::to_string(i)));
         topNode->addChild(node);
     }
 
@@ -40,14 +40,14 @@ void TreeViewScene::continueInit()
     for (int i = 0; i < 5; i++)
     {
         GTreeNode* node = GTreeNode::create();
-        node->setData(Value("Good " + Value(i).asString()));
+        node->setData(Value("Good " + std::to_string(i)));
         aFolderNode->addChild(node);
     }
 
     for (int i = 0; i < 3; i++)
     {
         GTreeNode* node = GTreeNode::create();
-        node->setData(Value("World " + Value(i).asString()));
+        node->setData(Value("World " + std::to_string(i)));
         topNode->addChild(node);
     }
 
