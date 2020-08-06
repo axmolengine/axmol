@@ -702,7 +702,7 @@ std::string Value::toString() const
         return *_field.strVal;
     }
 
-    enum { REAL_MAX_DIGITS = 63 };
+    enum { NUMBER_MAX_DIGITS = 63 };
 
     std::string ret;
     size_t n = 0;
@@ -718,13 +718,13 @@ std::string Value::toString() const
             ret = std::to_string(_field.unsignedVal);
             break;
         case Type::FLOAT:
-            ret.resize(REAL_MAX_DIGITS);
-            n = snprintf(&ret.front(), REAL_MAX_DIGITS+1, "%.*g", 7/*precision*/, _field.floatVal);
+            ret.resize(NUMBER_MAX_DIGITS);
+            n = snprintf(&ret.front(), NUMBER_MAX_DIGITS + 1, "%.*g", 7/*precision*/, _field.floatVal);
             if (n > 0) ret.resize(n);
             break;
         case Type::DOUBLE:
-            ret.resize(REAL_MAX_DIGITS);
-            n = snprintf(&ret.front(), REAL_MAX_DIGITS + 1, "%.*g", 17/*precision*/, _field.doubleVal);
+            ret.resize(NUMBER_MAX_DIGITS);
+            n = snprintf(&ret.front(), NUMBER_MAX_DIGITS + 1, "%.*g", 17/*precision*/, _field.doubleVal);
             if (n > 0) ret.resize(n);
             break;
         case Type::BOOLEAN:
