@@ -46,15 +46,16 @@
 
 #### Android
   1. Install Android Studio 3.5.3+
-  2. Start Android and choose [Open an existing Android Studio Project] to open ```engine-x\tests\cpp-tests\proj.android```
-  3. Start Android Studio and Open [Tools][SDKManager] and install sdk tools:  
-    LLDB 3.1+  
-    CMake 3.10.2+  
-    NDK 20.1+  
-
-  4. Waiting for ```Gradle sync``` finish.
+  2. When first start Android Studio, It will guide you to install sdk and other tools, just install them
+  3. Start Android and choose [Open an existing Android Studio Project] to open ```engine-x\tests\cpp-tests\proj.android```
+  4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose follow tools and click the button ```Apply``` to install them:  
+     * CMake 3.10.2+  
+     * NDK 20.1+  
+     * Android SDK Build-Tools 29.0.2  
+    
+  5. Waiting for ```Gradle sync``` finish.
   
-  5. Remark: If missing Ninja, could be download from https://github.com/ninja-build/ninja/releases, then copy Ninja.exe to Cmake's bin directory
+  6. Remark: If missing Ninja, could be download from https://github.com/ninja-build/ninja/releases, then copy Ninja.exe to Cmake's bin directory
 
 #### iOS
   1. Ensure xcode11+ installed
