@@ -702,45 +702,50 @@ std::string Value::toString() const
         return *_field.strVal;
     }
 
-    std::stringstream ret;
+    enum { REAL_MAX_DIGITS = 63 };
 
+    std::string ret;
+    size_t n = 0;
     switch (_type)
     {
         case Type::BYTE:
-            ret << _field.byteVal;
+            ret = std::to_string(_field.byteVal);
             break;
         case Type::INTEGER:
-            ret << _field.intVal;
+            ret = std::to_string(_field.intVal);
             break;
         case Type::UNSIGNED:
-            ret << _field.unsignedVal;
+            ret = std::to_string(_field.unsignedVal);
             break;
         case Type::FLOAT:
-            ret << std::fixed << std::setprecision( 7 )<< _field.floatVal;
+            ret.resize(REAL_MAX_DIGITS);
+            n = snprintf(&ret.front(), REAL_MAX_DIGITS+1, "%.*g", 7/*precision*/, _field.floatVal);
+            if (n > 0) ret.resize(n);
             break;
         case Type::DOUBLE:
-            ret << std::fixed << std::setprecision( 16 ) << _field.doubleVal;
+            ret.resize(REAL_MAX_DIGITS);
+            n = snprintf(&ret.front(), REAL_MAX_DIGITS + 1, "%.*g", 17/*precision*/, _field.doubleVal);
+            if (n > 0) ret.resize(n);
             break;
         case Type::BOOLEAN:
-            ret << (_field.boolVal ? "true" : "false");
+            ret = (_field.boolVal ? "true" : "false");
             break;
         default:
             break;
     }
-    return ret.str();
+    return ret;
 }
 
-const std::string& Value::asString() const
+const std::string Value::asString() const
+{
+    return this->toString();
+}
+
+const std::string& Value::asStringFixed() const
 {
     if (_type == Type::STRING)
         return *_field.strVal;
     return Value::NullString;
-}
-
-const std::string& Value::asStringUnsafe() const
-{
-    CCASSERT(_type == Type::STRING, "The value type isn't Type::STRING");
-    return *_field.strVal;
 }
 
 ValueVector& Value::asValueVector()
