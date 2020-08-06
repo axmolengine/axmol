@@ -1837,8 +1837,6 @@ protected:
     Vec2 _position;                 ///< position of the node
     float _positionZ;               ///< OpenGL real Z position
     Vec2 _normalizedPosition;
-    bool _usingNormalizedPosition;
-    bool _normalizedPositionDirty;
 
     float _skewX;                   ///< skew angle on x-axis
     float _skewY;                   ///< skew angle on y-axis
@@ -1847,18 +1845,12 @@ protected:
     Vec2 _anchorPoint;              ///< anchor point normalized (NOT in points)
 
     Size _contentSize;              ///< untransformed size of the node
-    bool _contentSizeDirty;         ///< whether or not the contentSize is dirty
 
     Mat4 _modelViewTransform;       ///< ModelView transform of the Node.
-
     // "cache" variables are allowed to be mutable
     mutable Mat4 _transform;        ///< transform
-    mutable bool _transformDirty;   ///< transform dirty flag
     mutable Mat4 _inverse;          ///< inverse transform
-    mutable bool _inverseDirty;     ///< inverse transform dirty flag
     mutable Mat4* _additionalTransform; ///< two transforms needed by additional transforms
-    mutable bool _additionalTransformDirty; ///< transform dirty ?
-    bool _transformUpdated;         ///< Whether or not the Transform object was updated since the last frame
 
 #if CC_LITTLE_ENDIAN
     union {
@@ -1899,15 +1891,26 @@ protected:
 
     EventDispatcher* _eventDispatcher;  ///< event dispatcher used to dispatch all kinds of events
 
+    bool _reorderChildDirty;          ///< children order dirty flag
     bool _running;                  ///< is running
-
     bool _visible;                  ///< is this node visible
-
     bool _ignoreAnchorPointForPosition; ///< true if the Anchor Vec2 will be (0,0) when you position the Node, false otherwise.
                                           ///< Used by Layer and Scene.
 
-    bool _reorderChildDirty;          ///< children order dirty flag
     bool _isTransitionFinished;       ///< flag to indicate whether the transition was finished
+    bool _cascadeColorEnabled;
+    bool _cascadeOpacityEnabled;
+    bool _contentSizeDirty;         ///< whether or not the contentSize is dirty
+
+    mutable bool _transformDirty;   ///< transform dirty flag
+    mutable bool _inverseDirty;     ///< inverse transform dirty flag
+    mutable bool _additionalTransformDirty; ///< transform dirty ?
+    bool _transformUpdated;         ///< Whether or not the Transform object was updated since the last frame
+
+    bool _usingNormalizedPosition;
+    bool _normalizedPositionDirty;
+    // camera mask, it is visible only when _cameraMask & current camera' camera flag is true
+    unsigned short _cameraMask;
 
 #if CC_ENABLE_SCRIPT_BINDING
     int _scriptHandler;               ///< script handler for onEnter() & onExit(), used in Javascript binding and Lua binding.
@@ -1917,16 +1920,11 @@ protected:
     ComponentContainer *_componentContainer;        ///< Dictionary of components
     
     // opacity controls
-    uint8_t     _displayedOpacity;
-    uint8_t     _realOpacity;
     Color3B     _displayedColor;
+    uint8_t     _displayedOpacity;
     Color3B     _realColor;
-    bool        _cascadeColorEnabled;
-    bool        _cascadeOpacityEnabled;
+    uint8_t     _realOpacity;
 
-    // camera mask, it is visible only when _cameraMask & current camera' camera flag is true
-    unsigned short _cameraMask;
-    
     std::function<void()> _onEnterCallback;
     std::function<void()> _onExitCallback;
     std::function<void()> _onEnterTransitionDidFinishCallback;
