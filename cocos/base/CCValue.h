@@ -177,9 +177,11 @@ public:
     /** to as a string value. Will convert to string if possible, or will trigger assert error. */
     std::string toString() const;
 
-    /** Gets as a string value. Will convert to string if possible, or will trigger assert error. */
-    const std::string& asString() const;
-    const std::string& asStringUnsafe() const;
+    /** Gets as a string value. Will convert to string if possible, compatible with cocos2d-x-3.x or 4.x */
+    const std::string asString() const;
+
+    /** Gets as a string value fixed, if value type is not string will return "" */
+    const std::string& asStringFixed() const;
 
     /** Gets as a ValueVector reference. Will convert to ValueVector if possible, or will trigger assert error. */
     ValueVector& asValueVector();
