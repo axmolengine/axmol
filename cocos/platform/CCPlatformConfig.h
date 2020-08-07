@@ -120,7 +120,7 @@ THE SOFTWARE.
 // whether use google angleproject GLES on desktop
 // https://github.com/google/angle
 #ifndef CC_USE_GLES_ON_DESKTOP
-#define CC_USE_GLES_ON_DESKTOP 1
+#define CC_USE_GLES_ON_DESKTOP 0
 #endif
 
 /// @endcond
