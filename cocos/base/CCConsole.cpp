@@ -76,8 +76,8 @@
 #define CC_LOG_MULTITHREAD 1
 #endif
 
-#if !defined(CC_CONSOLE_CONSOLE)
-#define CC_OUTPUT_LOG_TO_CONSOLE 1
+#if !defined(CC_LOG_TO_CONSOLE)
+#define CC_LOG_TO_CONSOLE 1
 #endif
 
 NS_CC_BEGIN
