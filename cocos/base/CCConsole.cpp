@@ -70,6 +70,16 @@
 #include "win32-specific/ntcvt/ntcvt.hpp"
 #endif
 
+// !FIXME: the previous version of cocos2d::log not thread safe
+// since egnx make it multi-threading safe by default
+#if !defined(CC_LOG_MULTITHREAD)
+#define CC_LOG_MULTITHREAD 1
+#endif
+
+#if !defined(CC_CONSOLE_CONSOLE)
+#define CC_OUTPUT_LOG_TO_CONSOLE 1
+#endif
+
 NS_CC_BEGIN
 
 extern const char* cocos2dVersion(void);
@@ -145,12 +155,18 @@ void log(const char * format, ...)
     // print to debugger output window
     std::wstring wbuf = ntcvt::from_chars(buf);
 
+    OutputDebugStringW(wbuf.c_str());
+
+#if CC_OUTPUT_LOG_TO_CONSOLE
     // print to console if possible
     wprintf(L"%s", wbuf.c_str());
     fflush(stdout);
+#endif
 
+#if !CC_LOG_MULTITHREAD
     // print to log window
     SendLogToWindow(buf.c_str());
+#endif
 #else
     buf.push_back('\n');
     // Linux, Mac, iOS, etc
@@ -158,7 +174,9 @@ void log(const char * format, ...)
     fflush(stdout);
 #endif
 
+#if !CC_LOG_MULTITHREAD
     Director::getInstance()->getConsole()->log(buf.c_str());
+#endif
 }
 
 // FIXME: Deprecated
