@@ -676,7 +676,7 @@ SpritePolygonTestNoCrash::SpritePolygonTestNoCrash()
 void SpritePolygonTestNoCrash::initSprites()
 {
     auto s = Director::getInstance()->getWinSize();
-    auto pinfo = AutoPolygon::generatePolygon("Images/sprite_polygon_crash.png", Rect::ZERO, 1);
+    auto pinfo = AutoPolygon::generatePolygon("Images/sprite_polygon_crash.png", Rect::ZERO, 0.5);
     auto sprite = Sprite::create(pinfo);
     addChild(sprite);
     sprite->setPosition(s.width/2, s.height/2);
