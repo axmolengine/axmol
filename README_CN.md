@@ -51,7 +51,7 @@
   2. 启动 Android Studio并打开engine-x\tests\cpp-tests\proj.android
   3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下工具后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
      * Android SDK Build-Tools 29.0.2  
-     * NDK 20.1+  
+     * NDK r16b+  
      * CMake 3.10.2+  
 
   5. 等待Gradle sync完成后，Build APKs，安装运行  
