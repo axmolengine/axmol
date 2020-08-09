@@ -47,7 +47,6 @@ public:
 
     YNSM() : _service(1) // 1 channel
     {
-        yasio::inet::io_hostent endpoints[] = { {"github.com", 443} };
         _service.start([&](event_ptr&& event) {
             switch (event->kind())
             {
