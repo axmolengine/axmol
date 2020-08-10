@@ -56,7 +56,7 @@
      * CMake 3.6  
 
   5. 等待Gradle sync完成后，Build APKs，安装运行  
-  6. 如果使用非sdk自动安装的CMake版本, 需要从https://github.com/ninja-build/ninja/releases下载```ninja```， 并且拷贝```ninja.exe```到CMake的bin目录
+  6. 如果使用非sdk自动安装的CMake版本, 需要从https://github.com/ninja-build/ninja/releases下载 ```ninja```， 并且拷贝```ninja.exe```到CMake的bin目录
 
 #### iOS
   1. 确保已安装xcode11+
