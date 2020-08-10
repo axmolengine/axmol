@@ -53,10 +53,10 @@
      * Android SDK Platform 28 r3  (在SDK Platforms页签)
      * Android SDK Build-Tools 28.0.3  
      * NDK r16b+  
-     * CMake 3.6+  
+     * CMake 3.6  
 
   5. 等待Gradle sync完成后，Build APKs，安装运行  
-  6. 如果报缺少Ninja, 从https://github.com/ninja-build/ninja/releases下载， 拷贝Ninja.exe到Cmake的bin目录即可
+  6. 如果使用非sdk自动安装的CMake版本, 需要从https://github.com/ninja-build/ninja/releases下载```ninja```， 并且拷贝```ninja.exe```到CMake的bin目录
 
 #### iOS
   1. 确保已安装xcode11+
