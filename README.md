@@ -56,7 +56,7 @@
     
   5. Waiting for ```Gradle sync``` finish.
   
-  6. Remark: If missing Ninja, could be download from https://github.com/ninja-build/ninja/releases, then copy Ninja.exe to Cmake's bin directory
+  6. Remark: If you use non-sdk provided CMake edition, you need download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to Cmake's bin directory
 
 #### iOS
   1. Ensure xcode11+ installed
