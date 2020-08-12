@@ -32,11 +32,13 @@
 set(COCOS2D_X_VERSION 4.0)
 
 set(COCOS_CORE_LIB cocos2d)
+
 project(cocos2d_libs)
 
 option(CC_USE_ALSOFT_ON_APPLE "Use openal-soft on apple platform" OFF)
 
 set(CC_USE_ALSOFT_ON_APPLE ${CC_USE_ALSOFT_ON_APPLE} CACHE BOOL "Use openal-soft on apple platform" FORCE)
+message(STATUS "CC_USE_ALSOFT_ON_APPLE:${CC_USE_ALSOFT_ON_APPLE}") 
 
 if(CC_USE_ALSOFT_ON_APPLE)
     add_definitions(-DCC_USE_ALSOFT_ON_APPLE=1)
@@ -88,6 +90,10 @@ set(COCOS_SRC cocos2d.cpp
 list(APPEND COCOS_SRC ${COCOS_HEADER})
 
 add_library(cocos2d ${COCOS_SRC})
+
+# if (NOT APPLE)
+#   set_source_files_properties("audio/src/AudioEngineImpl.mm" PROPERTIES LANGUAGE CXX)
+# endif()
 
 # use external libs
 add_subdirectory(${COCOS2DX_ROOT_PATH}/external ${ENGINE_BINARY_PATH}/external)

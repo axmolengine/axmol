@@ -36,7 +36,7 @@ THE SOFTWARE.
 #include "audio/include/AudioDecoderMp3.h"
 #include "audio/include/AudioDecoderWav.h"
 #else
-#include "audio/apple/AudioDecoderEXT.h"
+#include "audio/include/AudioDecoderEXT.h"
 #endif
 
 #include "yasio/cxx17/string_view.hpp"
@@ -45,6 +45,9 @@ namespace cocos2d {
 
 bool AudioDecoderManager::init()
 {
+#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
+    AudioDecoderMp3::lazyInit();
+#endif
     return true;
 }
 

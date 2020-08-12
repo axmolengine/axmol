@@ -28,19 +28,16 @@
 #define LOG_TAG "AudioCache"
 
 #include "platform/CCPlatformConfig.h"
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 
 #include "audio/include/AudioCache.h"
-
-#import <Foundation/Foundation.h>
-#import <OpenAL/alc.h>
 #include <thread>
 #include "base/CCDirector.h"
 #include "base/CCScheduler.h"
 
-#include "audio/include/AudioDecoder.h"
 #include "audio/include/AudioDecoderManager.h"
+#include "audio/include/AudioDecoder.h"
 
+#define VERY_VERY_VERBOSE_LOGGING
 #ifdef VERY_VERY_VERBOSE_LOGGING
 #define ALOGVV ALOGV
 #else
@@ -136,13 +133,43 @@ void AudioCache::readDataTask(unsigned int selfId)
         const uint32_t originalTotalFrames = decoder->getTotalFrames();
         const uint32_t sampleRate = decoder->getSampleRate();
         const uint32_t channelCount = decoder->getChannelCount();
+        const auto sourceFormat = decoder->getSourceFormat();
 
         uint32_t totalFrames = originalTotalFrames;
         uint32_t dataSize = decoder->framesToBytes(totalFrames);
         uint32_t remainingFrames = totalFrames;
-        uint32_t adjustFrames = 0;
 
-        _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
+
+        switch (sourceFormat) {
+        case AUDIO_SOURCE_FORMAT::PCM_16:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16; // bits depth: 16bits
+            break;
+#if CC_USE_ALSOFT
+        case AUDIO_SOURCE_FORMAT::PCM_U8:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8; // bits depth: 8bits
+            break;
+        case AUDIO_SOURCE_FORMAT::PCM_FLT32:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_FLOAT32 : AL_FORMAT_MONO_FLOAT32;
+            break;
+        case AUDIO_SOURCE_FORMAT::PCM_FLT64:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_DOUBLE_EXT : AL_FORMAT_MONO_DOUBLE_EXT;
+            break;
+        case AUDIO_SOURCE_FORMAT::MULAW:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_MULAW_EXT : AL_FORMAT_MONO_MULAW_EXT;
+            break;
+        case AUDIO_SOURCE_FORMAT::ALAW:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_ALAW_EXT : AL_FORMAT_MONO_ALAW_EXT;
+            break;
+        case AUDIO_SOURCE_FORMAT::ADPCM:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_MSADPCM_SOFT : AL_FORMAT_MONO_MSADPCM_SOFT;
+            break;
+        case AUDIO_SOURCE_FORMAT::IMA_ADPCM:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_IMA4 : AL_FORMAT_MONO_IMA4;
+            break;
+ #endif
+        default: assert(false);
+        }
+
         _sampleRate = (ALsizei)sampleRate;
         _duration = 1.0f * totalFrames / sampleRate;
         _totalFrames = totalFrames;
@@ -152,6 +179,59 @@ void AudioCache::readDataTask(unsigned int selfId)
             uint32_t framesRead = 0;
             const uint32_t framesToReadOnce = std::min(totalFrames, static_cast<uint32_t>(sampleRate * QUEUEBUFFER_TIME_STEP * QUEUEBUFFER_NUM));
 
+            alGenBuffers(1, &_alBufferId);
+            auto alError = alGetError();
+            if (alError != AL_NO_ERROR) {
+                ALOGE("%s: attaching audio to buffer fail: %x", __FUNCTION__, alError);
+                break;
+            }
+
+            std::vector<char> pcmBuffer(dataSize, 0);
+            auto pcmData = pcmBuffer.data();
+
+            if (*_isDestroyed)
+                break;
+
+            framesRead = decoder->readFixedFrames((std::min)(framesToReadOnce, remainingFrames), pcmData + decoder->framesToBytes(_framesRead));
+            _framesRead += framesRead;
+            remainingFrames -= framesRead;
+
+            if (*_isDestroyed)
+                break;
+
+            uint32_t frames = 0;
+            while (!*_isDestroyed && _framesRead < originalTotalFrames)
+            {
+                frames = (std::min)(framesToReadOnce, remainingFrames);
+                if (_framesRead + frames > originalTotalFrames)
+                {
+                    frames = originalTotalFrames - _framesRead;
+                }
+                framesRead = decoder->read(frames, pcmData + decoder->framesToBytes(_framesRead));
+                if (framesRead == 0)
+                    break;
+                _framesRead += framesRead;
+                remainingFrames -= framesRead;
+            }
+
+            if (*_isDestroyed)
+                break;
+
+            if (_framesRead < originalTotalFrames)
+            {
+                memset(pcmData + decoder->framesToBytes(_framesRead), 0x00, decoder->framesToBytes(totalFrames - _framesRead));
+            }
+
+#if CC_USE_ALSOFT
+            ALOGV("pcm buffer was loaded successfully, total frames: %u, total read frames: %u, remainingFrames: %u", totalFrames, _framesRead, remainingFrames);
+            if(sourceFormat == AUDIO_SOURCE_FORMAT::ADPCM || sourceFormat == AUDIO_SOURCE_FORMAT::IMA_ADPCM)
+                alBufferi(_alBufferId, AL_UNPACK_BLOCK_ALIGNMENT_SOFT, decoder->getSamplesPerBlock());
+            alBufferData(_alBufferId, _format, pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
+#else
+#if !CC_USE_ALSOFT
+            /// Apple OpenAL framework, try adjust frames
+            /// May don't need, xcode11 sdk works well
+            uint32_t adjustFrames = 0;
             BREAK_IF_ERR_LOG(!decoder->seek(totalFrames), "AudioDecoder::seek(%u) error", totalFrames);
 
             char* tmpBuf = (char*)malloc(decoder->framesToBytes(framesToReadOnce));
@@ -178,68 +258,29 @@ void AudioCache::readDataTask(unsigned int selfId)
                 _totalFrames = remainingFrames = totalFrames;
             }
 
-            // Reset dataSize
-            dataSize = decoder->framesToBytes(totalFrames);
-
             free(tmpBuf);
 
             // Reset to frame 0
             BREAK_IF_ERR_LOG(!decoder->seek(0), "AudioDecoder::seek(0) failed!");
-
-            std::vector<char> pcmBuffer(dataSize, 0);
-            auto pcmData = pcmBuffer.data();
-            ALOGV("  id=%u pcmData alloc: %p", selfId, pcmData);
-
-            if (adjustFrames > 0)
-            {
-                memcpy(pcmData + (dataSize - adjustFrameBuf.size()), adjustFrameBuf.data(), adjustFrameBuf.size());
+            
+            if (adjustFrames > 0) {
+                pcmBuffer.insert(pcmBuffer.end(), adjustFrameBuf.data(), adjustFrameBuf.data() + adjustFrameBuf.size());
+                pcmData = pcmBuffer.data();
+                dataSize = static_cast<uint32_t>(pcmBuffer.size());
             }
-
-            if (*_isDestroyed)
-                break;
-
-            framesRead = decoder->readFixedFrames(std::min(framesToReadOnce, remainingFrames), pcmData + decoder->framesToBytes(_framesRead));
-            _framesRead += framesRead;
-            remainingFrames -= framesRead;
-
-            if (*_isDestroyed)
-                break;
-
-            uint32_t frames = 0;
-            while (!*_isDestroyed && _framesRead < originalTotalFrames)
-            {
-                frames = std::min(framesToReadOnce, remainingFrames);
-                if (_framesRead + frames > originalTotalFrames)
-                {
-                    frames = originalTotalFrames - _framesRead;
-                }
-                framesRead = decoder->read(frames, pcmData + decoder->framesToBytes(_framesRead));
-                if (framesRead == 0)
-                    break;
-                _framesRead += framesRead;
-                remainingFrames -= framesRead;
-            }
-
-            if (_framesRead < originalTotalFrames)
-            {
-                memset(pcmData + decoder->framesToBytes(_framesRead), 0x00, decoder->framesToBytes(totalFrames - _framesRead));
-            }
-
+#endif /* Adjust frames, may not needed */
             ALOGV("pcm buffer was loaded successfully, total frames: %u, total read frames: %u, adjust frames: %u, remainingFrames: %u", totalFrames, _framesRead, adjustFrames, remainingFrames);
             _framesRead += adjustFrames;
-
-            alGenBuffers(1, &_alBufferId);
-            auto alError = alGetError();
-            if (alError != AL_NO_ERROR) {
-                ALOGE("%s: attaching audio to buffer fail: %x", __PRETTY_FUNCTION__, alError);
+            alBufferData(_alBufferId, _format, pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
+#endif
+            alError = alGetError();
+            if (alError != AL_NO_ERROR)
+            {
+                ALOGE("%s:alBufferData error code:%x", __FUNCTION__, alError);
                 break;
             }
-            ALOGV("  id=%u generated alGenBuffers: %u  for pcmData: %p", selfId, _alBufferId, pcmData);
-            ALOGV("  id=%u pcmData alBufferData: %p", selfId, pcmData);
-            alBufferData(_alBufferId, _format, pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
-            _state = State::READY;
-            invokingPlayCallbacks();
 
+            _state = State::READY;
         }
         else
         {
@@ -368,4 +409,3 @@ void AudioCache::invokingLoadCallbacks()
     });
 }
 
-#endif
