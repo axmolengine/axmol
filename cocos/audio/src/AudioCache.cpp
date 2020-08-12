@@ -166,9 +166,9 @@ void AudioCache::readDataTask(unsigned int selfId)
         case AUDIO_SOURCE_FORMAT::IMA_ADPCM:
             _format = channelCount > 1 ? AL_FORMAT_STEREO_IMA4 : AL_FORMAT_MONO_IMA4;
             break;
+ #endif
         default: assert(false);
         }
-#endif
 
         _sampleRate = (ALsizei)sampleRate;
         _duration = 1.0f * totalFrames / sampleRate;
