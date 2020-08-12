@@ -1,6 +1,4 @@
 
-message(STATUS "CC_USE_ALSOFT_ON_APPLE:${CC_USE_ALSOFT_ON_APPLE}") 
-
 # common headers and sources
 set(COCOS_AUDIO_HEADER
     audio/include/AudioEngine.h
@@ -21,9 +19,18 @@ set(COCOS_AUDIO_SRC
     audio/src/AudioDecoderOgg.cpp
     audio/src/AudioPlayer.cpp
     audio/src/AudioCache.cpp
-    audio/src/AudioEngineImpl.mm
     )
- 
+    
+# stupid, clang always compie .mm as objc/cpp mix obj
+if(ANDROID)
+    set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
+        audio/src/AudioEngineImpl.cpp
+    )
+else()
+    set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
+        audio/src/AudioEngineImpl.mm
+    )
+endif()
 
 # Apple, we use system audio decoder
 if(APPLE)
