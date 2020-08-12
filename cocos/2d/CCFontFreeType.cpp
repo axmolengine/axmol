@@ -299,16 +299,23 @@ unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar, long &outWidth, lo
         if (_fontRef == nullptr)
             break;
 
-        if (_distanceFieldEnabled)
-        {
-            if (FT_Load_Char(_fontRef, static_cast<FT_ULong>(theChar), FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT))
-                break;
+        // @remark: glyph_index=0 means 
+        auto glyph_index = FT_Get_Char_Index(_fontRef, static_cast<FT_ULong>(theChar));
+        if (FT_Load_Glyph(_fontRef, glyph_index, _distanceFieldEnabled ? 
+            (FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT) : 
+            (FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT)))
+            break;
+
+#if defined(_DEBUG)
+        if (glyph_index == 0) {
+            std::u32string charUTF32(1, theChar);
+            std::string charUTF8;
+            cocos2d::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);
+
+            if (charUTF8 == "\n") charUTF8 = "\\n";
+            cocos2d::log("The font face: %s doesn't contains char: <%s>", _fontRef->charmap->face->family_name, charUTF8.c_str());
         }
-        else
-        {
-            if (FT_Load_Char(_fontRef, static_cast<FT_ULong>(theChar), FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))
-                break;
-        }
+#endif
 
         auto& metrics = _fontRef->glyph->metrics;
         outRect.origin.x = static_cast<float>(metrics.horiBearingX >> 6);
