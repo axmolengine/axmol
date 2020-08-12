@@ -31,6 +31,7 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) && !CC_USE_ALSOFT_ON_APPLE
 #import <OpenAL/al.h>
+#import <OpenAL/alc.h>
 #define MAX_AUDIOINSTANCES 24
 #define CC_USE_ALSOFT 0
 #else

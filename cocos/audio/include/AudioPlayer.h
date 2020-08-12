@@ -61,7 +61,7 @@ protected:
     void setCache(AudioCache* cache);
     void rotateBufferThread(int offsetFrame);
     bool play2d();
-#if !CC_USE_ALSOFT
+#if defined(__APPLE__)
     void wakeupRotateThread();
 #endif
 
@@ -85,7 +85,7 @@ protected:
     std::mutex _sleepMutex;
     bool _timeDirty;
     bool _isRotateThreadExited;
-#if !CC_USE_ALSOFT
+#if defined(__APPLE__)
     std::atomic_bool _needWakeupRotateThread;
 #endif
 

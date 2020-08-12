@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "audio/apple/AudioDecoderEXT.h"
+#include "audio/include/AudioDecoderEXT.h"
 #include "audio/include/AudioMacros.h"
 
 #import <Foundation/Foundation.h>
