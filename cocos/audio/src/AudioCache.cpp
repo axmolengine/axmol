@@ -139,13 +139,14 @@ void AudioCache::readDataTask(unsigned int selfId)
         uint32_t dataSize = decoder->framesToBytes(totalFrames);
         uint32_t remainingFrames = totalFrames;
 
-#if CC_USE_ALSOFT
+
         switch (sourceFormat) {
-        case AUDIO_SOURCE_FORMAT::PCM_U8:
-            _format = channelCount > 1 ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8; // bits depth: 8bits
-            break;
         case AUDIO_SOURCE_FORMAT::PCM_16:
             _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16; // bits depth: 16bits
+            break;
+#if CC_USE_ALSOFT
+        case AUDIO_SOURCE_FORMAT::PCM_U8:
+            _format = channelCount > 1 ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8; // bits depth: 8bits
             break;
         case AUDIO_SOURCE_FORMAT::PCM_FLT32:
             _format = channelCount > 1 ? AL_FORMAT_STEREO_FLOAT32 : AL_FORMAT_MONO_FLOAT32;
@@ -167,9 +168,6 @@ void AudioCache::readDataTask(unsigned int selfId)
             break;
         default: assert(false);
         }
-#else // Apple OpenAL framework
-        uint32_t adjustFrames = 0;
-        _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
 #endif
 
         _sampleRate = (ALsizei)sampleRate;
@@ -233,6 +231,7 @@ void AudioCache::readDataTask(unsigned int selfId)
 #if !CC_USE_ALSOFT
             /// Apple OpenAL framework, try adjust frames
             /// May don't need, xcode11 sdk works well
+            uint32_t adjustFrames = 0;
             BREAK_IF_ERR_LOG(!decoder->seek(totalFrames), "AudioDecoder::seek(%u) error", totalFrames);
 
             char* tmpBuf = (char*)malloc(decoder->framesToBytes(framesToReadOnce));
