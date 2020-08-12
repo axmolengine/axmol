@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2018 HALX99.
+ Copyright (c) 2018-2020 HALX99.
  http://www.cocos2d-x.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,10 +26,6 @@
 #define LOG_TAG "AudioPlayer"
 
 #include "platform/CCPlatformConfig.h"
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
-
-#import <Foundation/Foundation.h>
-
 #include "audio/include/AudioPlayer.h"
 #include "audio/include/AudioCache.h"
 #include "platform/CCFileUtils.h"
@@ -59,7 +55,9 @@ AudioPlayer::AudioPlayer()
 , _rotateBufferThread(nullptr)
 , _timeDirty(false)
 , _isRotateThreadExited(false)
+#if defined(__APPLE__)
 , _needWakeupRotateThread(false)
+#endif
 , _id(++__idIndex)
 {
     memset(_bufferIds, 0, sizeof(_bufferIds));
@@ -159,7 +157,7 @@ void AudioPlayer::setCache(AudioCache* cache)
 bool AudioPlayer::play2d()
 {
     std::unique_lock<std::mutex> lck(_play2dMutex);
-    ALOGV("AudioPlayer::play2d, _alSource: %u", _alSource);
+    ALOGV("AudioPlayer::play2d, _alSource: %u, player id=%u", _alSource, _id);
 
     if (_isDestroyed)
         return false;
@@ -203,7 +201,7 @@ bool AudioPlayer::play2d()
             }
             else
             {
-                ALOGE("%s:alGenBuffers error code:%x", __PRETTY_FUNCTION__,alError);
+                ALOGE("%s:alGenBuffers error code:%x", __FUNCTION__,alError);
                 break;
             }
             _streamingSource = true;
@@ -233,13 +231,17 @@ bool AudioPlayer::play2d()
         auto alError = alGetError();
         if (alError != AL_NO_ERROR)
         {
-            ALOGE("%s:alSourcePlay error code:%x", __PRETTY_FUNCTION__,alError);
+            ALOGE("%s:alSourcePlay error code:%x", __FUNCTION__,alError);
             break;
         }
 
         ALint state;
         alGetSourcei(_alSource, AL_SOURCE_STATE, &state);
-        // assert(state == AL_PLAYING); // sometime when switch audio too fast, the result state will error, but there is no any alError, so just skip for workaround.
+        if (state != AL_PLAYING)
+            ALOGE("state isn't playing, %d, %s, cache id=%u, player id=%u", state, _audioCache->_fileFullPath.c_str(), _audioCache->_id, _id);
+
+		// OpenAL framework: sometime when switch audio too fast, the result state will error, but there is no any alError, so just skip for workaround.
+        assert(state == AL_PLAYING);
         _ready = true;
         ret = true;
     } while (false);
@@ -248,14 +250,16 @@ bool AudioPlayer::play2d()
     {
         _removeByAudioEngine = true;
     }
-    
+
     return ret;
 }
 
 // rotateBufferThread is used to rotate alBufferData for _alSource when playing big audio file
 void AudioPlayer::rotateBufferThread(int offsetFrame)
 {
+#if defined(__APPLE__)
     pthread_setname_np("ALStreaming");
+#endif
 
     char* tmpBuffer = nullptr;
     auto& fullPath = _audioCache->_fileFullPath;
@@ -268,6 +272,9 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
         uint32_t framesRead = 0;
         const uint32_t framesToRead = _audioCache->_queBufferFrames;
         const uint32_t bufferSize = decoder->framesToBytes(framesToRead);
+#if CC_USE_ALSOFT
+        const auto sourceFormat = decoder->getSourceFormat();
+#endif
         tmpBuffer = (char*)malloc(bufferSize);
         memset(tmpBuffer, 0, bufferSize);
 
@@ -320,6 +327,10 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
                      */
                     ALuint bid;
                     alSourceUnqueueBuffers(_alSource, 1, &bid);
+#if CC_USE_ALSOFT
+                    if (sourceFormat == AUDIO_SOURCE_FORMAT::ADPCM || sourceFormat == AUDIO_SOURCE_FORMAT::IMA_ADPCM)
+                        alBufferi(bid, AL_UNPACK_BLOCK_ALIGNMENT_SOFT, decoder->getSamplesPerBlock());
+#endif
                     alBufferData(bid, _audioCache->_format, tmpBuffer, decoder->framesToBytes(framesRead), decoder->getSampleRate());
                     alSourceQueueBuffers(_alSource, 1, &bid);
                 }
@@ -348,13 +359,16 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
             if (_isDestroyed || needToExitThread) {
                 break;
             }
-
+#if defined(__APPLE__)
             if (!_needWakeupRotateThread)
             {
                 _sleepCondition.wait_for(lk,std::chrono::milliseconds(rotateSleepTime));
             }
 
             _needWakeupRotateThread = false;
+#else
+            _sleepCondition.wait_for(lk, std::chrono::milliseconds(rotateSleepTime));
+#endif
         }
 
     } while(false);
@@ -367,11 +381,13 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
     _isRotateThreadExited = true;
 }
 
+#if defined(__APPLE__)
 void AudioPlayer::wakeupRotateThread()
 {
     _needWakeupRotateThread = true;
     _sleepCondition.notify_all();
 }
+#endif
 
 bool AudioPlayer::isFinished() const
 {
@@ -405,4 +421,3 @@ bool AudioPlayer::setTime(float time)
     return false;
 }
 
-#endif

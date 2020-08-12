@@ -28,32 +28,231 @@
 #include "platform/CCPlatformConfig.h"
 
 #include "audio/include/AudioEngineImpl.h"
+#include "audio/include/AudioDecoderManager.h"
 
-#ifdef OPENAL_PLAIN_INCLUDES
-#include "alc.h"
-#include "alext.h"
-#else
-#include "AL/alc.h"
-#include "AL/alext.h"
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+#import <AVFoundation/AVFoundation.h>
 #endif
+
 #include "audio/include/AudioEngine.h"
+#include "platform/CCFileUtils.h"
 #include "base/CCDirector.h"
 #include "base/CCScheduler.h"
-#include "platform/CCFileUtils.h"
-#include "audio/include/AudioDecoderManager.h"
-#include "audio/include/AudioPlayer.h"
+#include "base/ccUtils.h"
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#import <UIKit/UIKit.h>
+#endif
 
 using namespace cocos2d;
 
-static ALCdevice *s_ALDevice = nullptr;
-static ALCcontext *s_ALContext = nullptr;
+static ALCdevice* s_ALDevice = nullptr;
+static ALCcontext* s_ALContext = nullptr;
+static AudioEngineImpl* s_instance = nullptr;
+
+#if defined(__APPLE__)
+
+typedef ALvoid (*alSourceNotificationProc)(ALuint sid, ALuint notificationID, ALvoid* userData);
+typedef ALenum (*alSourceAddNotificationProcPtr)(ALuint sid, ALuint notificationID, alSourceNotificationProc notifyProc, ALvoid* userData);
+static ALenum alSourceAddNotificationExt(ALuint sid, ALuint notificationID, alSourceNotificationProc notifyProc, ALvoid* userData)
+{
+    static alSourceAddNotificationProcPtr proc = nullptr;
+
+    if (proc == nullptr)
+    {
+        proc = (alSourceAddNotificationProcPtr)alcGetProcAddress(nullptr, "alSourceAddNotification");
+    }
+
+    if (proc)
+    {
+        return proc(sid, notificationID, notifyProc, userData);
+    }
+    return AL_INVALID_VALUE;
+}
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+@interface AudioEngineSessionHandler : NSObject
+{
+}
+
+-(id) init;
+-(void)handleInterruption:(NSNotification*)notification;
+
+@end
+
+@implementation AudioEngineSessionHandler
+
+// only enable it on iOS. Disable it on tvOS
+#if !defined(CC_TARGET_OS_TVOS)
+void AudioEngineInterruptionListenerCallback(void* user_data, UInt32 interruption_state)
+{
+    if (kAudioSessionBeginInterruption == interruption_state)
+    {
+      alcMakeContextCurrent(nullptr);
+    }
+    else if (kAudioSessionEndInterruption == interruption_state)
+    {
+      OSStatus result = AudioSessionSetActive(true);
+      if (result) NSLog(@"Error setting audio session active! %d\n", static_cast<int>(result));
+
+      alcMakeContextCurrent(s_ALContext);
+    }
+}
+#endif
+
+-(id) init
+{
+    if (self = [super init])
+    {
+      if ([[[UIDevice currentDevice] systemVersion] intValue] > 5) {
+          [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
+          [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleInterruption:) name:UIApplicationDidBecomeActiveNotification object:nil];
+          [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleInterruption:) name:UIApplicationWillResignActiveNotification object:nil];
+      }
+    // only enable it on iOS. Disable it on tvOS
+    // AudioSessionInitialize removed from tvOS
+#if !defined(CC_TARGET_OS_TVOS)
+      else {
+        AudioSessionInitialize(NULL, NULL, AudioEngineInterruptionListenerCallback, self);
+      }
+#endif
+    
+    BOOL success = [[AVAudioSession sharedInstance]
+                    setCategory: AVAudioSessionCategoryAmbient
+                    error: nil];
+    if (!success)
+        ALOGE("Fail to set audio session.");
+    }
+    return self;
+}
+
+-(void)handleInterruption:(NSNotification*)notification
+{
+    static bool isAudioSessionInterrupted = false;
+    static bool resumeOnBecomingActive = false;
+    static bool pauseOnResignActive = false;
+
+    if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification])
+    {
+        NSInteger reason = [[[notification userInfo] objectForKey:AVAudioSessionInterruptionTypeKey] integerValue];
+        if (reason == AVAudioSessionInterruptionTypeBegan)
+        {
+            isAudioSessionInterrupted = true;
+
+            if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive)
+            {
+                ALOGD("AVAudioSessionInterruptionTypeBegan, application != UIApplicationStateActive, alcMakeContextCurrent(nullptr)");
+                alcMakeContextCurrent(nullptr);
+            }
+            else
+            {
+                ALOGD("AVAudioSessionInterruptionTypeBegan, application == UIApplicationStateActive, pauseOnResignActive = true");
+                pauseOnResignActive = true;
+            }
+        }
+
+        if (reason == AVAudioSessionInterruptionTypeEnded)
+        {
+            isAudioSessionInterrupted = false;
+
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
+            {
+                ALOGD("AVAudioSessionInterruptionTypeEnded, application == UIApplicationStateActive, alcMakeContextCurrent(s_ALContext)");
+                NSError *error = nil;
+                [[AVAudioSession sharedInstance] setActive:YES error:&error];
+                if (alcGetCurrentContext() != nullptr) 
+                    alcMakeContextCurrent(nullptr);
+                alcMakeContextCurrent(s_ALContext);
+                if (Director::getInstance()->isPaused())
+                {
+                    ALOGD("AVAudioSessionInterruptionTypeEnded, director was paused, try to resume it.");
+                    Director::getInstance()->resume();
+                }
+            }
+            else
+            {
+                ALOGD("AVAudioSessionInterruptionTypeEnded, application != UIApplicationStateActive, resumeOnBecomingActive = true");
+                resumeOnBecomingActive = true;
+            }
+        }
+    }
+    else if ([notification.name isEqualToString:UIApplicationWillResignActiveNotification])
+    {
+        ALOGD("UIApplicationWillResignActiveNotification");
+        if (pauseOnResignActive)
+        {
+            pauseOnResignActive = false;
+            ALOGD("UIApplicationWillResignActiveNotification, alcMakeContextCurrent(nullptr)");
+            alcMakeContextCurrent(nullptr);
+        }
+    }
+    else if ([notification.name isEqualToString:UIApplicationDidBecomeActiveNotification])
+    {
+        ALOGD("UIApplicationDidBecomeActiveNotification");
+        if (resumeOnBecomingActive)
+        {
+            resumeOnBecomingActive = false;
+            ALOGD("UIApplicationDidBecomeActiveNotification, alcMakeContextCurrent(s_ALContext)");
+            NSError *error = nil;
+            BOOL success = [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryAmbient error: &error];
+            if (!success) {
+                ALOGE("Fail to set audio session.");
+                return;
+            }
+            [[AVAudioSession sharedInstance] setActive:YES error:&error];
+            
+            if (alcGetCurrentContext() != nullptr) 
+                alcMakeContextCurrent(nullptr);
+            alcMakeContextCurrent(s_ALContext);
+        }
+        else if (isAudioSessionInterrupted)
+        {
+            ALOGD("Audio session is still interrupted, pause director!");
+            // Director::getInstance()->pause();
+        }
+    }
+}
+
+-(void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+
+    [super dealloc];
+}
+@end
+
+static id s_AudioEngineSessionHandler = nullptr;
+#endif
+
+ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData)
+{
+    // Currently, we only care about AL_BUFFERS_PROCESSED event
+    if (notificationID != AL_BUFFERS_PROCESSED)
+        return;
+
+    AudioPlayer* player = nullptr;
+    s_instance->_threadMutex.lock();
+    for (const auto& e : s_instance->_audioPlayers)
+    {
+        player = e.second;
+        if (player->_alSource == sid && player->_streamingSource)
+        {
+            player->wakeupRotateThread();
+        }
+    }
+    s_instance->_threadMutex.unlock();
+}
+
+#endif
 
 AudioEngineImpl::AudioEngineImpl()
 : _lazyInitLoop(true)
 , _currentAudioID(0)
 , _scheduler(nullptr)
 {
-
+    s_instance = this;
 }
 
 AudioEngineImpl::~AudioEngineImpl()
@@ -79,12 +278,21 @@ AudioEngineImpl::~AudioEngineImpl()
     }
 
     AudioDecoderManager::destroy();
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+    [s_AudioEngineSessionHandler release];
+#endif
+    s_instance = nullptr;
 }
 
 bool AudioEngineImpl::init()
 {
     bool ret = false;
     do{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+        s_AudioEngineSessionHandler = [[AudioEngineSessionHandler alloc] init];
+#endif
+
         s_ALDevice = alcOpenDevice(nullptr);
 
         if (s_ALDevice) {
@@ -102,7 +310,71 @@ bool AudioEngineImpl::init()
 
             for (int i = 0; i < MAX_AUDIOINSTANCES; ++i) {
                 _unusedSourcesPool.push(_alSources[i]);
+#if defined(__APPLE__)
+                alSourceAddNotificationExt(_alSources[i], AL_BUFFERS_PROCESSED, myAlSourceNotificationCallback, nullptr);
+#endif
             }
+
+            // fixed #16170: Random crash in alGenBuffers(AudioCache::readDataTask) at startup
+            // Please note that, as we know the OpenAL operation is atomic (threadsafe),
+            // 'alGenBuffers' may be invoked by different threads. But in current implementation of 'alGenBuffers',
+            // When the first time it's invoked, application may crash!!!
+            // Why? OpenAL is opensource by Apple and could be found at
+            // http://opensource.apple.com/source/OpenAL/OpenAL-48.7/Source/OpenAL/oalImp.cpp .
+            /*
+
+            void InitializeBufferMap()
+            {
+                if (gOALBufferMap == NULL) // Position 1
+                {
+                    gOALBufferMap = new OALBufferMap ();  // Position 2
+
+                    // Position Gap
+
+                    gBufferMapLock = new CAGuard("OAL:BufferMapLock"); // Position 3
+                    gDeadOALBufferMap = new OALBufferMap ();
+
+                    OALBuffer   *newBuffer = new OALBuffer (AL_NONE);
+                    gOALBufferMap->Add(AL_NONE, &newBuffer);
+                }
+            }
+
+            AL_API ALvoid AL_APIENTRY alGenBuffers(ALsizei n, ALuint *bids)
+            {
+                ...
+
+                try {
+                    if (n < 0)
+                    throw ((OSStatus) AL_INVALID_VALUE);
+
+                    InitializeBufferMap();
+                    if (gOALBufferMap == NULL)
+                    throw ((OSStatus) AL_INVALID_OPERATION);
+
+                    CAGuard::Locker locked(*gBufferMapLock);  // Position 4
+                ...
+                ...
+            }
+
+             */
+            // 'gBufferMapLock' will be initialized in the 'InitializeBufferMap' function,
+            // that's the problem. It means that 'InitializeBufferMap' may be invoked in different threads.
+            // It will be very dangerous in multi-threads environment.
+            // Imagine there're two threads (Thread A, Thread B), they call 'alGenBuffers' simultaneously.
+            // While A goto 'Position Gap', 'gOALBufferMap' was assigned, then B goto 'Position 1' and find
+            // that 'gOALBufferMap' isn't NULL, B just jump over 'InitialBufferMap' and goto 'Position 4'.
+            // Meanwhile, A is still at 'Position Gap', B will crash at '*gBufferMapLock' since 'gBufferMapLock'
+            // is still a null pointer. Oops, how could Apple implemented this method in this fucking way?
+
+            // Workaround is do an unused invocation in the mainthread right after OpenAL is initialized successfully
+            // as bellow.
+            // ================ Workaround begin ================ //
+#if !CC_USE_ALSOFT
+            ALuint unusedAlBufferId = 0;
+            alGenBuffers(1, &unusedAlBufferId);
+            alDeleteBuffers(1, &unusedAlBufferId);
+#endif
+            // ================ Workaround end ================ //
 
             _scheduler = Director::getInstance()->getScheduler();
             ret = AudioDecoderManager::init();
@@ -527,4 +799,3 @@ void AudioEngineImpl::uncacheAll()
 
     _audioCaches.clear();
 }
-
