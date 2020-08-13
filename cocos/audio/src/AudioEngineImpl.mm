@@ -50,6 +50,27 @@ static ALCdevice* s_ALDevice = nullptr;
 static ALCcontext* s_ALContext = nullptr;
 static AudioEngineImpl* s_instance = nullptr;
 
+static void ccALPauseDevice() {
+    ALOGD("%s", "===> ccALPauseDevice");
+#if CC_USE_ALSOFT
+    alcDevicePauseSOFT(s_ALDevice);
+#else
+    if(alcGetCurrentContext())
+        alcMakeContextCurrent(nullptr);
+#endif
+}
+
+static void ccALResumeDevice() {
+    ALOGD("%s", "===> ccALResumeDevice");
+#if CC_USE_ALSOFT
+    alcDeviceResumeSOFT(s_ALDevice);
+#else
+    if(alcGetCurrentContext())
+        alcMakeContextCurrent(nullptr);
+    alcMakeContextCurrent(s_ALContext);
+#endif
+}
+
 #if defined(__APPLE__)
 
 typedef ALvoid (*alSourceNotificationProc)(ALuint sid, ALuint notificationID, ALvoid* userData);
@@ -82,46 +103,21 @@ static ALenum alSourceAddNotificationExt(ALuint sid, ALuint notificationID, alSo
 
 @implementation AudioEngineSessionHandler
 
-// only enable it on iOS. Disable it on tvOS
-#if !defined(CC_TARGET_OS_TVOS)
-void AudioEngineInterruptionListenerCallback(void* user_data, UInt32 interruption_state)
-{
-    if (kAudioSessionBeginInterruption == interruption_state)
-    {
-      alcMakeContextCurrent(nullptr);
-    }
-    else if (kAudioSessionEndInterruption == interruption_state)
-    {
-      OSStatus result = AudioSessionSetActive(true);
-      if (result) NSLog(@"Error setting audio session active! %d\n", static_cast<int>(result));
-
-      alcMakeContextCurrent(s_ALContext);
-    }
-}
-#endif
-
 -(id) init
 {
     if (self = [super init])
     {
-      if ([[[UIDevice currentDevice] systemVersion] intValue] > 5) {
-          [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
-          [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleInterruption:) name:UIApplicationDidBecomeActiveNotification object:nil];
-          [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleInterruption:) name:UIApplicationWillResignActiveNotification object:nil];
-      }
-    // only enable it on iOS. Disable it on tvOS
-    // AudioSessionInitialize removed from tvOS
-#if !defined(CC_TARGET_OS_TVOS)
-      else {
-        AudioSessionInitialize(NULL, NULL, AudioEngineInterruptionListenerCallback, self);
-      }
-#endif
-    
-    BOOL success = [[AVAudioSession sharedInstance]
+        int deviceVer = [[[UIDevice currentDevice] systemVersion] intValue];
+        ALOGD("===> The device version: %d", deviceVer);
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleInterruption:) name:UIApplicationDidBecomeActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleInterruption:) name:UIApplicationWillResignActiveNotification object:nil];
+
+        BOOL success = [[AVAudioSession sharedInstance]
                     setCategory: AVAudioSessionCategoryAmbient
                     error: nil];
-    if (!success)
-        ALOGE("Fail to set audio session.");
+        if (!success)
+            ALOGE("Fail to set audio session.");
     }
     return self;
 }
@@ -142,16 +138,16 @@ void AudioEngineInterruptionListenerCallback(void* user_data, UInt32 interruptio
             if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive)
             {
                 ALOGD("AVAudioSessionInterruptionTypeBegan, application != UIApplicationStateActive, alcMakeContextCurrent(nullptr)");
-                alcMakeContextCurrent(nullptr);
             }
             else
             {
                 ALOGD("AVAudioSessionInterruptionTypeBegan, application == UIApplicationStateActive, pauseOnResignActive = true");
-                pauseOnResignActive = true;
             }
+            
+            // We always pause device when interruption began
+            ccALPauseDevice();
         }
-
-        if (reason == AVAudioSessionInterruptionTypeEnded)
+        else if (reason == AVAudioSessionInterruptionTypeEnded)
         {
             isAudioSessionInterrupted = false;
 
@@ -160,9 +156,7 @@ void AudioEngineInterruptionListenerCallback(void* user_data, UInt32 interruptio
                 ALOGD("AVAudioSessionInterruptionTypeEnded, application == UIApplicationStateActive, alcMakeContextCurrent(s_ALContext)");
                 NSError *error = nil;
                 [[AVAudioSession sharedInstance] setActive:YES error:&error];
-                if (alcGetCurrentContext() != nullptr) 
-                    alcMakeContextCurrent(nullptr);
-                alcMakeContextCurrent(s_ALContext);
+                ccALResumeDevice();
                 if (Director::getInstance()->isPaused())
                 {
                     ALOGD("AVAudioSessionInterruptionTypeEnded, director was paused, try to resume it.");
@@ -183,7 +177,7 @@ void AudioEngineInterruptionListenerCallback(void* user_data, UInt32 interruptio
         {
             pauseOnResignActive = false;
             ALOGD("UIApplicationWillResignActiveNotification, alcMakeContextCurrent(nullptr)");
-            alcMakeContextCurrent(nullptr);
+            ccALPauseDevice();
         }
     }
     else if ([notification.name isEqualToString:UIApplicationDidBecomeActiveNotification])
@@ -201,14 +195,11 @@ void AudioEngineInterruptionListenerCallback(void* user_data, UInt32 interruptio
             }
             [[AVAudioSession sharedInstance] setActive:YES error:&error];
             
-            if (alcGetCurrentContext() != nullptr) 
-                alcMakeContextCurrent(nullptr);
-            alcMakeContextCurrent(s_ALContext);
+            ccALResumeDevice();
         }
         else if (isAudioSessionInterrupted)
         {
-            ALOGD("Audio session is still interrupted, pause director!");
-            // Director::getInstance()->pause();
+            ALOGD("Audio session is still interrupted!");
         }
     }
 }
