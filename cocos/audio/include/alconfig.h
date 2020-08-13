@@ -35,13 +35,10 @@
 #define MAX_AUDIOINSTANCES 24
 #define CC_USE_ALSOFT 0
 #else
-#ifdef OPENAL_PLAIN_INCLUDES
-#include <al.h>
-#include <alext.h>
-#else
-#include <AL/al.h>
-#include <AL/alext.h>
-#endif
+#define AL_ALEXT_PROTOTYPES 1
+#include "AL/al.h"
+#include "AL/alc.h"
+#include "AL/alext.h"
 #define MAX_AUDIOINSTANCES 32
 #define CC_USE_ALSOFT 1
 #endif
