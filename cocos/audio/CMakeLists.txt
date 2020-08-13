@@ -24,7 +24,7 @@ set(COCOS_AUDIO_SRC
 # stupid, clang always compie .mm as objc/cpp mix obj
 if(ANDROID)
     set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
-        audio/src/AudioEngineImpl.cpp
+        audio/src/alink.cpp
     )
 else()
     set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
