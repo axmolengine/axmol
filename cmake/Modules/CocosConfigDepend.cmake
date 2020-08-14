@@ -37,7 +37,7 @@ macro(cocos2dx_depend)
             ${METAL_LIBRARY}
             )
 
-        if(NOT CC_USE_ALSOFT_ON_APPLE)
+        if(NOT (CC_USE_ALSOFT OR CC_USE_MOJOAL))
             find_library(OPENAL_LIBRARY OpenAL)
             set(COCOS_APPLE_LIBS 
             ${OPENAL_LIBRARY}
