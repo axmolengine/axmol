@@ -15,8 +15,8 @@
   
 ### Highlight Features:
 * Refactor AudioEngine, OpenAL for all platforms
-  * [mojoal](https://www.icculus.org/mojoAL), pass -DCC_USE_MOJOAL=ON to cmake to enable it
-  * [openal-soft](https://github.com/kcat/openal-soft), pass -DCC_USE_ALSOFT to cmake to enable it
+  * [mojoal](https://www.icculus.org/mojoAL), pass -DCC_USE_MOJOAL=ON to cmake to force enable it
+  * [openal-soft](https://github.com/kcat/openal-soft), pass -DCC_USE_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```CC_USE_MOJOAL``` and ```CC_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio), very fast
 * Modularize all optional extension, all move from engine core to folder extensions
