@@ -44,6 +44,14 @@ macro(cocos2dx_depend)
             ${COCOS_APPLE_LIBS}
             )
         endif()
+
+        if(CC_USE_MOJOAL)
+            find_library(COREBLUETOOTH_LIBRARY CoreBluetooth)
+            set(COCOS_APPLE_LIBS 
+            ${COREBLUETOOTH_LIBRARY}
+            ${COCOS_APPLE_LIBS}
+            )
+        endif()
             
         if(MACOSX)
             list(APPEND PREBUILT_SPECIFIC_LIBS GLFW3)
