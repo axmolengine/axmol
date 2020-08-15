@@ -17,7 +17,7 @@
 * 重构AudioEngine, 全平台OpenAL
   * [mojoal](https://www.icculus.org/mojoAL), pass -DCC_USE_MOJOAL=ON to cmake to enable it
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DCC_USE_ALSOFT to cmake to enable it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```CC_USE_MOJOAL``` and ```CC_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, eventhrough it's was mark as deprecated, but still avaiable.
+  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```CC_USE_MOJOAL``` and ```CC_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
 * 重构UserDefault, 全平台基于内存映射文件 [mio](https://github.com/mandreyel/mio), 性能提升百倍
 * 模块化所有引擎扩展库, 所有扩展库放到extensions目录下，如cocostudio, spine
 * AudioEngine实现wav所有 ```openal-soft``` 支持的封装格式, 例如MS-ADPCM, ADPCM等
