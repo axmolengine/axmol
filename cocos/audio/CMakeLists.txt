@@ -1,6 +1,7 @@
 
 # common headers and sources
 set(COCOS_AUDIO_HEADER
+    audio/include/alconfig.h
     audio/include/AudioEngine.h
     audio/include/Export.h
     audio/include/AudioMacros.h

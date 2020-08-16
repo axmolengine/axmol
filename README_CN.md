@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.com/c4games/engine-x.svg?branch=master)](https://travis-ci.com/c4games/engine-x)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/4936wev2r2ot606s/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/engine-x)
 
-**这是另外一个基于 ```cocos2d-x-4.0``` 持续维护的分支, 全平台基于OpenAL, 删除不必要的平台相关, c++14/17...**
+**这是另外一个基于 ```cocos2d-x-4.0``` 持续维护的分支, 全平台基于OpenAL,, c++14/17...**
   
 **[English](README.md)**
   
@@ -14,7 +14,10 @@
 * Excellent PRs from any guys are welcome, we will review & merge ASAP
   
 ### 主要特性:
-* 重构AudioEngine, 全平台OpenAL, 在iOS平台可以通过```-DCC_USE_ALSOFT_ON_APPLE```切换为 [openal-soft](https://github.com/kcat/openal-soft), 苹果公司已经在iOS12将OpenAL framework标记为废弃的
+* 重构AudioEngine, 全平台OpenAL
+  * [mojoal](https://www.icculus.org/mojoAL), pass -DCC_USE_MOJOAL=ON to cmake to enable force it
+  * [openal-soft](https://github.com/kcat/openal-soft), pass -DCC_USE_ALSOFT=ON to cmake to force enable it
+  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```CC_USE_MOJOAL``` and ```CC_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
 * 重构UserDefault, 全平台基于内存映射文件 [mio](https://github.com/mandreyel/mio), 性能提升百倍
 * 模块化所有引擎扩展库, 所有扩展库放到extensions目录下，如cocostudio, spine
 * AudioEngine实现wav所有 ```openal-soft``` 支持的封装格式, 例如MS-ADPCM, ADPCM等

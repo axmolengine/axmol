@@ -35,14 +35,30 @@ set(COCOS_CORE_LIB cocos2d)
 
 project(cocos2d_libs)
 
-option(CC_USE_ALSOFT_ON_APPLE "Use openal-soft on apple platform" OFF)
+option(CC_USE_MOJOAL "Use mojoAL for all platforms" OFF)
+option(CC_USE_ALSOFT "Use openal-soft on apple platform" OFF)
 
-set(CC_USE_ALSOFT_ON_APPLE ${CC_USE_ALSOFT_ON_APPLE} CACHE BOOL "Use openal-soft on apple platform" FORCE)
-message(STATUS "CC_USE_ALSOFT_ON_APPLE:${CC_USE_ALSOFT_ON_APPLE}") 
-
-if(CC_USE_ALSOFT_ON_APPLE)
-    add_definitions(-DCC_USE_ALSOFT_ON_APPLE=1)
+# checking MojoAL first
+if(CC_USE_MOJOAL)
+    add_definitions(-DCC_USE_MOJOAL=1)
+else() # choose openal-soft or apple openal framework
+    if(NOT APPLE)
+        set(CC_USE_ALSOFT ON CACHE BOOL "Use openal-soft on apple platform" FORCE)
+    else()
+        set(CC_USE_ALSOFT ${CC_USE_ALSOFT} CACHE BOOL "Use openal-soft on apple platform" FORCE)
+    endif()
+    if(CC_USE_ALSOFT)
+        add_definitions(-DCC_USE_ALSOFT=1)
+    endif()
 endif()
+
+# store al choice to cache
+set(CC_USE_MOJOAL ${CC_USE_MOJOAL} CACHE BOOL "Use mojoAL platform" FORCE)
+set(CC_USE_ALSOFT ${CC_USE_ALSOFT} CACHE BOOL "Use OpenAL-soft platform" FORCE)
+
+# print al backend
+message(STATUS "CC_USE_MOJOAL:${CC_USE_MOJOAL}") 
+message(STATUS "CC_USE_ALSOFT:${CC_USE_ALSOFT}") 
 
 include(2d/CMakeLists.txt)
 include(3d/CMakeLists.txt)

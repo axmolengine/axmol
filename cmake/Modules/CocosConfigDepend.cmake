@@ -37,10 +37,18 @@ macro(cocos2dx_depend)
             ${METAL_LIBRARY}
             )
 
-        if(NOT CC_USE_ALSOFT_ON_APPLE)
+        if(NOT (CC_USE_ALSOFT OR CC_USE_MOJOAL))
             find_library(OPENAL_LIBRARY OpenAL)
             set(COCOS_APPLE_LIBS 
             ${OPENAL_LIBRARY}
+            ${COCOS_APPLE_LIBS}
+            )
+        endif()
+
+        if(CC_USE_MOJOAL)
+            find_library(COREBLUETOOTH_LIBRARY CoreBluetooth)
+            set(COCOS_APPLE_LIBS 
+            ${COREBLUETOOTH_LIBRARY}
             ${COCOS_APPLE_LIBS}
             )
         endif()

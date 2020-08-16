@@ -144,10 +144,10 @@ void AudioCache::readDataTask(unsigned int selfId)
         case AUDIO_SOURCE_FORMAT::PCM_16:
             _format = channelCount > 1 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16; // bits depth: 16bits
             break;
-#if CC_USE_ALSOFT
         case AUDIO_SOURCE_FORMAT::PCM_U8:
             _format = channelCount > 1 ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8; // bits depth: 8bits
             break;
+#if CC_USE_ALSOFT
         case AUDIO_SOURCE_FORMAT::PCM_FLT32:
             _format = channelCount > 1 ? AL_FORMAT_STEREO_FLOAT32 : AL_FORMAT_MONO_FLOAT32;
             break;
