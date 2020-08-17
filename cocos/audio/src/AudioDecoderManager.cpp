@@ -21,7 +21,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+THE SOFTWARE. 
 ****************************************************************************/
 
 #define LOG_TAG "AudioDecoderManager"
@@ -67,7 +67,7 @@ AudioDecoder* AudioDecoderManager::createDecoder(const std::string& path)
     }
 #if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
     else if (cxx20::ic::ends_with(svPath, ".mp3"))
-    {
+    { 
         return new (std::nothrow) AudioDecoderMp3();
     }
     else if (cxx20::ic::ends_with(svPath, ".wav")) {
