@@ -97,8 +97,7 @@ else()
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/cocos/lua-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
 
-    configure_file(${OPENAL_SO_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src/main/jniLibs/${ANDROID_ABI}/${OPENAL_SO_NAME} COPYONLY)
-    configure_file(${MPG123_SO_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src/main/jniLibs/${ANDROID_ABI}/${MPG123_SO_NAME} COPYONLY)
+    config_android_shared_libs("org.cocos2dx.${APP_NAME}" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
 target_link_libraries(${APP_NAME} luacocos2d)
