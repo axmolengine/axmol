@@ -15,8 +15,8 @@
   
 ### Highlight Features:
 * Refactor AudioEngine, OpenAL for all platforms
-  * [openal-soft](https://github.com/kcat/openal-soft), pass -DCC_USE_ALSOFT=ON to cmake to force enable it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```CC_USE_MOJOAL``` and ```CC_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
+  * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOF=ON to cmake to force enable it
+  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOF``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio), very fast
 * Modularize all optional extension, all move from engine core to folder extensions
 * Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM...

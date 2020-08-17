@@ -2,6 +2,8 @@ macro(cocos2dx_depend)
     # confim the libs, prepare to link
     set(PLATFORM_SPECIFIC_LIBS)
 
+    message(STATUS "BUILD_EXT_ALSOFT=${BUILD_EXT_ALSOFT}")
+
     if(WINDOWS)
         list(APPEND PLATFORM_SPECIFIC_LIBS ws2_32 userenv psapi winmm Version Iphlpapi opengl32)
     elseif(LINUX)
@@ -37,18 +39,10 @@ macro(cocos2dx_depend)
             ${METAL_LIBRARY}
             )
 
-        if(NOT (CC_USE_ALSOFT OR CC_USE_MOJOAL))
+        if(NOT BUILD_EXT_ALSOFT)
             find_library(OPENAL_LIBRARY OpenAL)
             set(COCOS_APPLE_LIBS 
             ${OPENAL_LIBRARY}
-            ${COCOS_APPLE_LIBS}
-            )
-        endif()
-
-        if(CC_USE_MOJOAL)
-            find_library(COREBLUETOOTH_LIBRARY CoreBluetooth)
-            set(COCOS_APPLE_LIBS 
-            ${COREBLUETOOTH_LIBRARY}
             ${COCOS_APPLE_LIBS}
             )
         endif()
