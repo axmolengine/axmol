@@ -332,7 +332,7 @@ std::vector<std::string> FileUtilsAndroid::listFiles(const std::string& dirPath)
     {
         string filepath(tmpDir);
         if(isDirectoryExistInternal(filepath)) filepath += "/";
-        fileList.push_back(filepath);
+        fileList.push_back(fullPath + filepath);
     }
     AAssetDir_close(dir);
     return fileList;
