@@ -15,7 +15,6 @@
   
 ### 主要特性:
 * 重构AudioEngine, 全平台OpenAL
-  * [mojoal](https://www.icculus.org/mojoAL), pass -DCC_USE_MOJOAL=ON to cmake to enable force it
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DCC_USE_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```CC_USE_MOJOAL``` and ```CC_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
 * 重构UserDefault, 全平台基于内存映射文件 [mio](https://github.com/mandreyel/mio), 性能提升百倍
