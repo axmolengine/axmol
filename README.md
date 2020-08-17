@@ -15,9 +15,8 @@
   
 ### Highlight Features:
 * Refactor AudioEngine, OpenAL for all platforms
-  * [mojoal](https://www.icculus.org/mojoAL), pass -DCC_USE_MOJOAL=ON to cmake to force enable it
-  * [openal-soft](https://github.com/kcat/openal-soft), pass -DCC_USE_ALSOFT=ON to cmake to force enable it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```CC_USE_MOJOAL``` and ```CC_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
+  * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOF=ON to cmake to force enable it
+  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOF``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio), very fast
 * Modularize all optional extension, all move from engine core to folder extensions
 * Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM...
@@ -48,12 +47,12 @@
   
 
 #### Android
-  1. Install Android Studio 3.5.3+
+  1. Install Android Studio 4.0+
   2. When first start Android Studio, It will guide you to install sdk and other tools, just install them
   3. Start Android and choose [Open an existing Android Studio Project] to open ```engine-x\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose follow tools and click the button ```Apply``` to install them:  
      * Android SDK Platform 28 r3  
-     * Android SDK Build-Tools 28.0.3  
+     * Android SDK Build-Tools 29.0.2  
      * NDK r16b+  
      * CMake 3.6  
     
