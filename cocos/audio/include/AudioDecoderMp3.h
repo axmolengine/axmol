@@ -28,7 +28,15 @@
 #include "audio/include/AudioDecoder.h"
 #include "platform/PXFileStream.h"
 
-struct mpg123_handle_struct;
+#if !defined(CC_USE_MPG123)
+#define CC_USE_MPG123 0
+#endif
+
+#if !CC_USE_MPG123
+typedef struct mp3dec_impl* mp3dec_handle_t;
+#else
+typedef struct mpg123_handle_struct* mp3dec_handle_t;
+#endif
 
 namespace cocos2d {
 
@@ -74,7 +82,7 @@ protected:
     static void destroy();
 
     PXFileStream _fileStream;
-    struct mpg123_handle_struct* _mpg123handle;
+    mp3dec_handle_t _handle;
 
     friend class AudioDecoderManager;
 };
