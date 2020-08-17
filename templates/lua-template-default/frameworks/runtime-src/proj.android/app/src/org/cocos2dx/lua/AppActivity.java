@@ -30,6 +30,11 @@ import android.os.Bundle;
 import org.cocos2dx.lib.Cocos2dxActivity;
 
 public class AppActivity extends Cocos2dxActivity{
+    static {
+        // DNT remove, some android simulator require explicit load shared libraries, otherwise will crash
+        SharedLoader.load();
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.setEnableVirtualButton(false);
