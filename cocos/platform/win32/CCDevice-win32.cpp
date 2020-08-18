@@ -164,7 +164,7 @@ public:
             // delete old font
             removeCustomFont();
 
-            if (fontPath.size() > 0)
+            if (!fontPath.empty())
             {
                 _curFontPath = fontPath;
                 wchar_t * pwszBuffer = utf8ToUtf16(_curFontPath);
@@ -461,7 +461,7 @@ private:
             _font = hDefFont;
         }
         // release temp font resource
-        if (_curFontPath.size() > 0)
+        if (!_curFontPath.empty())
         {
             wchar_t * pwszBuffer = utf8ToUtf16(_curFontPath);
             if (pwszBuffer)

@@ -50,7 +50,7 @@ void HttpCookie::readFile()
 
         for(auto& cookie : cookiesVec)
         {
-            if(cookie.length() == 0)
+            if(cookie.empty())
                 continue;
 
             if(cookie.find("#HttpOnly_") != std::string::npos)

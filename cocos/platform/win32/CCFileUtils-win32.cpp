@@ -135,13 +135,9 @@ bool FileUtilsWin32::isFileExistInternal(const std::string& strFilePath) const
 
 bool FileUtilsWin32::isAbsolutePath(const std::string& strPath) const
 {
-    if (   (strPath.length() > 2
-        && ( (strPath[0] >= 'a' && strPath[0] <= 'z') || (strPath[0] >= 'A' && strPath[0] <= 'Z') )
-        && strPath[1] == ':') || (strPath[0] == '/' && strPath[1] == '/'))
-    {
-        return true;
-    }
-    return false;
+    return ((strPath.length() > 2
+        && ((strPath[0] >= 'a' && strPath[0] <= 'z') || (strPath[0] >= 'A' && strPath[0] <= 'Z'))
+        && strPath[1] == ':') || (strPath[0] == '/' && strPath[1] == '/'));
 }
 
 
@@ -472,7 +468,7 @@ bool FileUtilsWin32::removeFile(const std::string &filepath) const
 bool FileUtilsWin32::removeDirectory(const std::string& dirPath) const
 {
     std::string dirPathCopy = dirPath;
-    if (dirPath.length() > 0 && dirPath[dirPath.length() - 1] != '/' && dirPath[dirPath.length() - 1] != '\\')
+    if (!dirPath.empty() && dirPath[dirPath.length() - 1] != '/' && dirPath[dirPath.length() - 1] != '\\')
     {
         dirPathCopy.push_back('/');
     }

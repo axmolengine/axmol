@@ -76,7 +76,7 @@ static bool splitWithForm(const std::string& content, strArray& strs)
 
         const std::string pointStr = content.substr(nPosLeft + 1, nPosRight - nPosLeft - 1);
         // nothing between '{' and '}'
-        CC_BREAK_IF(pointStr.length() == 0);
+        CC_BREAK_IF(pointStr.empty());
 
         size_t nPos1 = pointStr.find('{');
         size_t nPos2 = pointStr.find('}');
@@ -84,7 +84,7 @@ static bool splitWithForm(const std::string& content, strArray& strs)
         CC_BREAK_IF(nPos1 != std::string::npos || nPos2 != std::string::npos);
 
         split(pointStr, ",", strs);
-        if (strs.size() != 2 || strs[0].length() == 0 || strs[1].length() == 0)
+        if (strs.size() != 2 || strs[0].empty() || strs[1].empty())
         {
             strs.clear();
             break;

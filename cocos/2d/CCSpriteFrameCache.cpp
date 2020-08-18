@@ -787,7 +787,7 @@ bool SpriteFrameCache::PlistFramesCache::hasFrame(const std::string &frame) cons
 bool SpriteFrameCache::PlistFramesCache::isPlistUsed(const std::string &plist) const
 {
     auto frames = _indexPlist2Frames.find(plist);
-    return frames != _indexPlist2Frames.end() && frames->second.size() > 0;
+    return frames != _indexPlist2Frames.end() && !frames->second.empty();
 } 
 
 SpriteFrame * SpriteFrameCache::PlistFramesCache::at(const std::string &frame)

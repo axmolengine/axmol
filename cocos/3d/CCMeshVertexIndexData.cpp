@@ -82,7 +82,7 @@ MeshIndexData::MeshIndexData()
 void MeshIndexData::setIndexData(const cocos2d::MeshData::IndexArray &indexdata)
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    if(_indexData.size() > 0)
+    if(!_indexData.empty())
         return;
     _indexData = indexdata;
 #endif
@@ -100,7 +100,7 @@ MeshIndexData::~MeshIndexData()
 void MeshVertexData::setVertexData(const std::vector<float> &vertexData)
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    if(_vertexData.size() > 0)
+    if(!_vertexData.empty())
         return;
     _vertexData = vertexData;
 #endif

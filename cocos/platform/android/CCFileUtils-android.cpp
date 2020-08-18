@@ -257,11 +257,7 @@ bool FileUtilsAndroid::isAbsolutePath(const std::string& strPath) const
     // 1) Files in APK, e.g. assets/path/path/file.png
     // 2) Files not in APK, e.g. /data/data/org.cocos2dx.hellocpp/cache/path/path/file.png, or /sdcard/path/path/file.png.
     // So these two situations need to be checked on Android.
-    if (strPath[0] == '/' || strPath.find(_defaultResRootPath) == 0)
-    {
-        return true;
-    }
-    return false;
+    return (strPath[0] == '/' || strPath.find(_defaultResRootPath) == 0);
 }
 
 int64_t FileUtilsAndroid::getFileSize(const std::string& filepath) const
@@ -300,7 +296,7 @@ std::vector<std::string> FileUtilsAndroid::listFiles(const std::string& dirPath)
     string fullPath = fullPathForDirectory(dirPath);
 
     static const std::string apkprefix("assets/");
-    string relativePath = "";
+    std::string relativePath;
     size_t position = fullPath.find(apkprefix);
     if (0 == position) {
         // "assets/" is at the beginning of the path and we don't want it
@@ -344,12 +340,12 @@ FileUtils::Status FileUtilsAndroid::getContents(const std::string& filename, Res
     if (filename.empty())
         return FileUtils::Status::NotExists;
 
-    string fullPath = fullPathForFilename(filename);
+    auto fullPath = fullPathForFilename(filename);
 
     if (fullPath[0] == '/')
         return FileUtils::getContents(fullPath, buffer);
 
-    string relativePath = string();
+    std::string relativePath;
     size_t position = fullPath.find(apkprefix);
     if (0 == position) {
         // "assets/" is at the beginning of the path and we don't want it
@@ -390,23 +386,15 @@ FileUtils::Status FileUtilsAndroid::getContents(const std::string& filename, Res
     return FileUtils::Status::OK;
 }
 
-string FileUtilsAndroid::getWritablePath() const
+std::string FileUtilsAndroid::getWritablePath() const
 {
     // Fix for Nexus 10 (Android 4.2 multi-user environment)
     // the path is retrieved through Java Context.getCacheDir() method
-    string dir("");
-    string tmp = JniHelper::callStaticStringMethod("org.cocos2dx.lib.Cocos2dxHelper", "getCocos2dxWritablePath");
-
-    if (tmp.length() > 0)
-    {
-        dir.append(tmp).append("/");
-
-        return dir;
-    }
-    else
-    {
-        return "";
-    }
+    std::string path = JniHelper::callStaticStringMethod("org.cocos2dx.lib.Cocos2dxHelper", "getCocos2dxWritablePath");
+    if (!path.empty())
+        path.append("/");
+    
+    return path;
 }
 
 NS_CC_END
