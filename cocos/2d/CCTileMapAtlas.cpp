@@ -144,7 +144,7 @@ void TileMapAtlas::setTile(const Color3B& tile, const Vec2& position)
         // FIXME:: this method consumes a lot of memory
         // FIXME:: a tree of something like that shall be implemented
         std::string key = StringUtils::toString(position.x) + "," + StringUtils::toString(position.y);
-        int num = _posToAtlasIndex[key].toInt();
+        int num = _posToAtlasIndex[key].asInt();
 
         this->updateAtlasValueAt(position, tile, num);
     }    

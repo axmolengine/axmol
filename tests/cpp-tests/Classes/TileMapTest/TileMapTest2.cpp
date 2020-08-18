@@ -671,10 +671,10 @@ TMXOrthoObjectsTestNew::TMXOrthoObjectsTestNew()
     {
         ValueMap& dict = obj.asValueMap();
         
-        float x = dict["x"].toFloat();
-        float y = dict["y"].toFloat();
-        float width = dict["width"].toFloat();
-        float height = dict["height"].toFloat();
+        float x = dict["x"].asFloat();
+        float y = dict["y"].asFloat();
+        float width = dict["width"].asFloat();
+        float height = dict["height"].asFloat();
         
         drawNode->drawLine(Vec2(x, y), Vec2(x + width, y), color);
         drawNode->drawLine(Vec2(x + width, y), Vec2(x + width, y + height), color);
@@ -722,10 +722,10 @@ TMXIsoObjectsTestNew::TMXIsoObjectsTestNew()
     {
         ValueMap& dict = obj.asValueMap();
         
-        float x = dict["x"].toFloat();
-        float y = dict["y"].toFloat();
-        float width = dict["width"].toFloat();
-        float height = dict["height"].toFloat();
+        float x = dict["x"].asFloat();
+        float y = dict["y"].asFloat();
+        float width = dict["width"].asFloat();
+        float height = dict["height"].asFloat();
         
         drawNode->drawLine(Vec2(x, y), Vec2(x + width, y), color);
         drawNode->drawLine(Vec2(x + width, y), Vec2(x + width, y + height), color);
@@ -1364,10 +1364,10 @@ TMXGIDObjectsTestNew::TMXGIDObjectsTestNew()
     {
         ValueMap& dict = obj.asValueMap();
         
-        float x = dict["x"].toFloat();
-        float y = dict["y"].toFloat();
-        float width = dict["width"].toFloat();
-        float height = dict["height"].toFloat();
+        float x = dict["x"].asFloat();
+        float y = dict["y"].asFloat();
+        float width = dict["width"].asFloat();
+        float height = dict["height"].asFloat();
         
         drawNode->drawLine(Vec2(x, y), Vec2(x + width, y), color);
         drawNode->drawLine(Vec2(x + width, y), Vec2(x + width, y + height), color);

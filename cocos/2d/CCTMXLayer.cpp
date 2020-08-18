@@ -247,7 +247,7 @@ void TMXLayer::parseInternalProperties()
         {
             _useAutomaticVertexZ = true;
             auto alphaFuncVal = getProperty("cc_alpha_func");
-            float alphaFuncValue = alphaFuncVal.toFloat();
+            float alphaFuncValue = alphaFuncVal.asFloat();
 
             setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, nullptr);
 
@@ -259,7 +259,7 @@ void TMXLayer::parseInternalProperties()
         }
         else
         {
-            _vertexZvalue = vertexz.toInt();
+            _vertexZvalue = vertexz.asInt();
         }
     }
 }

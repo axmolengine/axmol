@@ -399,17 +399,17 @@ static void generateElementForObject(const Value& value, pugi::xml_node& parent)
     else if (value.getType() == Value::Type::INTEGER)
     {
 		auto node = parent.append_child("integer");
-		node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.toString().c_str());
+		node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString().c_str());
     }
     // object is real
     else if (value.getType() == Value::Type::FLOAT || value.getType() == Value::Type::DOUBLE)
     {
 		auto node = parent.append_child("real");
-		node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.toString().c_str());
+		node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString().c_str());
     }
     //object is bool
     else if (value.getType() == Value::Type::BOOLEAN) {
-		parent.append_child(value.toString().c_str());
+		parent.append_child(value.asString().c_str());
     }
     // object is Array
     else if (value.getType() == Value::Type::VECTOR)
@@ -994,7 +994,7 @@ void FileUtils::loadFilenameLookupDictionaryFromFile(const std::string &filename
         if (!dict.empty())
         {
             ValueMap& metadata =  dict["metadata"].asValueMap();
-            int version = metadata["version"].toInt();
+            int version = metadata["version"].asInt();
             if (version != 1)
             {
                 CCLOG("cocos2d: ERROR: Invalid filenameLookup dictionary version: %d. Filename: %s", version, filename.c_str());

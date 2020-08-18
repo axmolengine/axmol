@@ -763,11 +763,11 @@ void FastTMXLayer::parseInternalProperties()
     {
         _useAutomaticVertexZ = true;
         auto alphaFuncVal = getProperty("cc_alpha_func");
-        _alphaFuncValue = alphaFuncVal.toFloat();
+        _alphaFuncValue = alphaFuncVal.asFloat();
     }
     else
     {
-        _vertexZvalue = vertexz.toInt();
+        _vertexZvalue = vertexz.asInt();
     }
 }
 
