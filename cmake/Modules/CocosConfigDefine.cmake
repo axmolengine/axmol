@@ -57,10 +57,17 @@ define_property(TARGET
     FULL_DOCS "use to save depend libs of cocos2d lua project"
 ) 
 
+if(NOT DEFINED CXX_STD)
+    set(CXX_STD 14)
+endif()
+
+message(STATUS "C_STD=11")
+message(STATUS "CXX_STD=${CXX_STD}")
+
 # check c++ standard
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD ${CXX_STD})
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
