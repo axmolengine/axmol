@@ -28,7 +28,7 @@
 
 cmake_minimum_required(VERSION 3.6)
 
-project(Cocos2d-x)
+project(EGNX)
 
 # set default minimum deployment target
 # if(XCODE)
