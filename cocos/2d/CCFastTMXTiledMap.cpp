@@ -197,7 +197,7 @@ void FastTMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
 // public
 FastTMXLayer * FastTMXTiledMap::getLayer(const std::string& layerName) const
 {
-    CCASSERT(layerName.size() > 0, "Invalid layer name!");
+    CCASSERT(!layerName.empty(), "Invalid layer name!");
     
     for (auto& child : _children)
     {
@@ -217,7 +217,7 @@ FastTMXLayer * FastTMXTiledMap::getLayer(const std::string& layerName) const
 
 TMXObjectGroup * FastTMXTiledMap::getObjectGroup(const std::string& groupName) const
 {
-    CCASSERT(groupName.size() > 0, "Invalid group name!");
+    CCASSERT(!groupName.empty(), "Invalid group name!");
 
     if (_objectGroups.size()>0)
     {

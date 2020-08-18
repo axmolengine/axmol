@@ -522,7 +522,7 @@ void Sprite3D::createNode(NodeData* nodedata, Node* root, const MaterialDatas& m
     {
         if(it)
         {
-            if(it->bones.size() > 0 || singleSprite)
+            if(!it->bones.empty() || singleSprite)
             {
                 if(singleSprite && root!=nullptr)
                     root->setName(nodedata->id);
@@ -761,7 +761,7 @@ void Sprite3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 #if CC_USE_CULLING
     //TODO new-renderer: interface isVisibleInFrustum removal
     // camera clipping
-//    if(_children.size() == 0 && Camera::getVisitingCamera() && !Camera::getVisitingCamera()->isVisibleInFrustum(&getAABB()))
+//    if(_children.empty() && Camera::getVisitingCamera() && !Camera::getVisitingCamera()->isVisibleInFrustum(&getAABB()))
 //        return;
 #endif
     

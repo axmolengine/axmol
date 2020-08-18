@@ -203,7 +203,7 @@ void TMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
 // public
 TMXLayer * TMXTiledMap::getLayer(const std::string& layerName) const
 {
-    CCASSERT(layerName.size() > 0, "Invalid layer name!");
+    CCASSERT(!layerName.empty(), "Invalid layer name!");
     
     for (auto& child : _children)
     {
@@ -223,7 +223,7 @@ TMXLayer * TMXTiledMap::getLayer(const std::string& layerName) const
 
 TMXObjectGroup * TMXTiledMap::getObjectGroup(const std::string& groupName) const
 {
-    CCASSERT(groupName.size() > 0, "Invalid group name!");
+    CCASSERT(!groupName.empty(), "Invalid group name!");
 
     for (const auto objectGroup : _objectGroups)
     {

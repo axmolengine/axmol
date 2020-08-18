@@ -290,7 +290,7 @@ void ClippingNode::setStencil(Node *stencil)
 
 bool ClippingNode::hasContent() const
 {
-    return _children.size() > 0;
+    return !_children.empty();
 }
 
 float ClippingNode::getAlphaThreshold() const

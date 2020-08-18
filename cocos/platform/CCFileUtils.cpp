@@ -717,6 +717,14 @@ std::string FileUtils::fullPathForFilename(const std::string &filename) const
         return "";
     }
 
+    /*
+    * As we know, this function 'fullPathForFilename' will be calling when load any file, how to ensure this thread safe
+    * Step:
+    *    a. call this function at main-thread always
+    *    b. use the really fullPath to call getStringFromFile/getDataFromFile at sub-thread
+    *    c. then this function will call again with really fullPath
+    *    d. then isAbsolutePath avoid to access _fullPathCache _fullPathCache concurrent
+    */
     if (isAbsolutePath(filename))
     {
         return filename;
@@ -839,7 +847,7 @@ void FileUtils::setSearchResolutionsOrder(const std::vector<std::string>& search
             existDefault = true;
         }
 
-        if (resolutionDirectory.length() > 0 && resolutionDirectory[resolutionDirectory.length()-1] != '/')
+        if (!resolutionDirectory.empty() && resolutionDirectory[resolutionDirectory.length()-1] != '/')
         {
             resolutionDirectory += "/";
         }

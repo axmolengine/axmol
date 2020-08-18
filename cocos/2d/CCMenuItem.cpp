@@ -780,7 +780,7 @@ void MenuItemToggle::cleanup()
 
 void MenuItemToggle::setSelectedIndex(unsigned int index)
 {
-    if( index != _selectedIndex && _subItems.size() > 0 )
+    if( index != _selectedIndex && !_subItems.empty())
     {
         _selectedIndex = index;
         if (_selectedItem)

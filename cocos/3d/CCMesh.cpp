@@ -413,7 +413,7 @@ void Mesh::draw(Renderer* renderer, float globalZOrder, const Mat4& transform, u
         if (_skin)
             pass->setUniformMatrixPalette(_skin->getMatrixPalette(), _skin->getMatrixPaletteSizeInBytes());
 
-        if (scene && scene->getLights().size() > 0)
+        if (scene && !scene->getLights().empty())
         {
             setLightUniforms(pass, scene, color, lightMask);
         }
