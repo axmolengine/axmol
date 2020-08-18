@@ -140,7 +140,7 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
     if (metaItr != dictionary.end())
     {
         ValueMap& metadataDict = metaItr->second.asValueMap();
-        format = metadataDict["format"].toInt();
+        format = metadataDict["format"].asInt();
 
         if(metadataDict.find("size") != metadataDict.end())
         {
@@ -166,14 +166,14 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
         
         if(format == 0) 
         {
-            float x = frameDict["x"].toFloat();
-            float y = frameDict["y"].toFloat();
-            float w = frameDict["width"].toFloat();
-            float h = frameDict["height"].toFloat();
-            float ox = frameDict["offsetX"].toFloat();
-            float oy = frameDict["offsetY"].toFloat();
-            int ow = frameDict["originalWidth"].toInt();
-            int oh = frameDict["originalHeight"].toInt();
+            float x = frameDict["x"].asFloat();
+            float y = frameDict["y"].asFloat();
+            float w = frameDict["width"].asFloat();
+            float h = frameDict["height"].asFloat();
+            float ox = frameDict["offsetX"].asFloat();
+            float oy = frameDict["offsetY"].asFloat();
+            int ow = frameDict["originalWidth"].asInt();
+            int oh = frameDict["originalHeight"].asInt();
             // check ow/oh
             if(!ow || !oh)
             {
@@ -198,7 +198,7 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
             // rotation
             if (format == 2)
             {
-                rotated = frameDict["rotated"].toBool();
+                rotated = frameDict["rotated"].asBool();
             }
 
             Vec2 offset = PointFromString(frameDict["offset"].asString());
@@ -219,7 +219,7 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
             Vec2 spriteOffset = PointFromString(frameDict["spriteOffset"].asString());
             Size spriteSourceSize = SizeFromString(frameDict["spriteSourceSize"].asString());
             Rect textureRect = RectFromString(frameDict["textureRect"].asString());
-            bool textureRotated = frameDict["textureRotated"].toBool();
+            bool textureRotated = frameDict["textureRotated"].asBool();
 
             // get aliases
             ValueVector& aliases = frameDict["aliases"].asValueVector();
@@ -369,7 +369,7 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& plist)
     {
         ValueMap& metadataDict = dict["metadata"].asValueMap();
         // try to read  texture file name from meta data
-        texturePath = metadataDict["textureFileName"].toString();
+        texturePath = metadataDict["textureFileName"].asString();
     }
 
     if (!texturePath.empty())
@@ -554,7 +554,7 @@ void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap& dictionary, Te
     if (dictionary.find("metadata") != dictionary.end())
     {
         ValueMap& metadataDict = dictionary["metadata"].asValueMap();
-        format = metadataDict["format"].toInt();
+        format = metadataDict["format"].asInt();
     }
 
     // check the format
@@ -571,14 +571,14 @@ void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap& dictionary, Te
 
         if (format == 0)
         {
-            float x = frameDict["x"].toFloat();
-            float y = frameDict["y"].toFloat();
-            float w = frameDict["width"].toFloat();
-            float h = frameDict["height"].toFloat();
-            float ox = frameDict["offsetX"].toFloat();
-            float oy = frameDict["offsetY"].toFloat();
-            int ow = frameDict["originalWidth"].toInt();
-            int oh = frameDict["originalHeight"].toInt();
+            float x = frameDict["x"].asFloat();
+            float y = frameDict["y"].asFloat();
+            float w = frameDict["width"].asFloat();
+            float h = frameDict["height"].asFloat();
+            float ox = frameDict["offsetX"].asFloat();
+            float oy = frameDict["offsetY"].asFloat();
+            int ow = frameDict["originalWidth"].asInt();
+            int oh = frameDict["originalHeight"].asInt();
             // check ow/oh
             if (!ow || !oh)
             {
@@ -603,7 +603,7 @@ void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap& dictionary, Te
             // rotation
             if (format == 2)
             {
-                rotated = frameDict["rotated"].toBool();
+                rotated = frameDict["rotated"].asBool();
             }
 
             Vec2 offset = PointFromString(frameDict["offset"].asString());
@@ -624,7 +624,7 @@ void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap& dictionary, Te
             Vec2 spriteOffset = PointFromString(frameDict["spriteOffset"].asString());
             Size spriteSourceSize = SizeFromString(frameDict["spriteSourceSize"].asString());
             Rect textureRect = RectFromString(frameDict["textureRect"].asString());
-            bool textureRotated = frameDict["textureRotated"].toBool();
+            bool textureRotated = frameDict["textureRotated"].asBool();
 
             // get aliases
             ValueVector& aliases = frameDict["aliases"].asValueVector();
@@ -674,7 +674,7 @@ bool SpriteFrameCache::reloadTexture(const std::string& plist)
     {
         ValueMap& metadataDict = dict["metadata"].asValueMap();
         // try to read  texture file name from meta data
-        texturePath = metadataDict["textureFileName"].toString();
+        texturePath = metadataDict["textureFileName"].asString();
     }
 
     if (!texturePath.empty())

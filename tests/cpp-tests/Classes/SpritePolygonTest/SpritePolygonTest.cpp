@@ -207,13 +207,13 @@ void SpritePolygonTest1::initSprites()
     TTFConfig ttfConfig("fonts/arial.ttf", 8);
     std::string temp = "Sprite:\nPixels drawn: ";
     auto spSize = _normalSprite->getContentSize();
-    auto spArea = Label::createWithTTF(ttfConfig, temp+Value((int)spSize.width*(int)spSize.height).toString());
+    auto spArea = Label::createWithTTF(ttfConfig, temp+Value((int)spSize.width*(int)spSize.height).asString());
     _normalSprite->addChild(spArea);
     spArea->setAnchorPoint(Vec2(0,1));
     
     temp = "SpritePolygon:\nPixels drawn: ";
-    auto vertCount = "\nverts:"+Value((int)pinfo.getVertCount()).toString();
-    auto sppArea = Label::createWithTTF(ttfConfig, temp+Value((int)pinfo.getArea()).toString()+vertCount);
+    auto vertCount = "\nverts:"+Value((int)pinfo.getVertCount()).asString();
+    auto sppArea = Label::createWithTTF(ttfConfig, temp+Value((int)pinfo.getArea()).asString()+vertCount);
     _polygonSprite->addChild(sppArea);
     sppArea->setAnchorPoint(Vec2(0,1));
     
@@ -262,13 +262,13 @@ void SpritePolygonTest2::initSprites()
     TTFConfig ttfConfig("fonts/arial.ttf", 8);
     std::string temp = "Sprite:\nPixels drawn: ";
     auto spSize = _normalSprite->getContentSize();
-    auto spArea = Label::createWithTTF(ttfConfig, temp+Value((int)spSize.width*(int)spSize.height).toString());
+    auto spArea = Label::createWithTTF(ttfConfig, temp+Value((int)spSize.width*(int)spSize.height).asString());
     _normalSprite->addChild(spArea);
     spArea->setAnchorPoint(Vec2(0,1));
     
     temp = "SpritePolygon:\nPixels drawn: ";
-    auto vertCount = "\nverts:"+Value((int)pinfo.getVertCount()).toString();
-    auto sppArea = Label::createWithTTF(ttfConfig, temp+Value((int)pinfo.getArea()).toString()+vertCount);
+    auto vertCount = "\nverts:"+Value((int)pinfo.getVertCount()).asString();
+    auto sppArea = Label::createWithTTF(ttfConfig, temp+Value((int)pinfo.getArea()).asString()+vertCount);
     _polygonSprite->addChild(sppArea);
     sppArea->setAnchorPoint(Vec2(0,1));
     
@@ -334,7 +334,7 @@ void SpritePolygonTestSlider::changeEpsilon(cocos2d::Ref *pSender, cocos2d::ui::
                 updateLabel(sp, pinfo);
             }
         }
-        _epsilonLabel->setString("Epsilon: "+ Value(epsilon).toString());
+        _epsilonLabel->setString("Epsilon: "+ Value(epsilon).asString());
         updateDrawNode();
     }
 }
@@ -344,7 +344,7 @@ void SpritePolygonTestSlider::updateLabel(const cocos2d::Sprite *sp, const Polyg
     Label *label = (Label*)(sp->getChildByName(sp->getName()));
     auto filename = sp->getName();
     auto size = pinfo.getRect().size/Director::getInstance()->getContentScaleFactor();
-    label->setString(filename+"\nVerts: "+Value((int)pinfo.getVertCount()).toString()+ "\nPixels: "+Value((int)(pinfo.getArea()/(size.width*size.height)*100)).toString()+"%");
+    label->setString(filename+"\nVerts: "+Value((int)pinfo.getVertCount()).asString()+ "\nPixels: "+Value((int)(pinfo.getArea()/(size.width*size.height)*100)).asString()+"%");
 }
 
 Sprite* SpritePolygonTestSlider::makeSprite(const std::string &filename, const Vec2 &pos)
@@ -368,7 +368,7 @@ Sprite* SpritePolygonTestSlider::makeSprite(const std::string &filename, const V
  
     //Label
     auto ttfConfig = TTFConfig("fonts/arial.ttf", 8);
-    auto spArea = Label::createWithTTF(ttfConfig, filename+"\nVerts: "+Value((int)pinfo.getVertCount()).toString()+ "\nPixels: "+Value((int)(pinfo.getArea()/originalSize*100)).toString()+"%");
+    auto spArea = Label::createWithTTF(ttfConfig, filename+"\nVerts: "+Value((int)pinfo.getVertCount()).asString()+ "\nPixels: "+Value((int)(pinfo.getArea()/originalSize*100)).asString()+"%");
     ret->addChild(spArea);
     spArea->setAnchorPoint(Vec2(0.0f,1.0f));
     spArea->setName(filename);
@@ -550,9 +550,9 @@ bool SpritePolygonPerformance::init()
 
 void SpritePolygonPerformance::updateLabel()
 {
-    std::string temp = "Nodes: " + Value(_spriteCount).toString() + " Triangles: " + Value(_triCount).toString() + "\nPixels: " + Value(_pixelCount).toString() + " Vertices: " + Value(_vertCount).toString();
+    std::string temp = "Nodes: " + Value(_spriteCount).asString() + " Triangles: " + Value(_triCount).asString() + "\nPixels: " + Value(_pixelCount).asString() + " Vertices: " + Value(_vertCount).asString();
     if(!ended)
-    _perfLabel->setString("Nodes: " + Value(_spriteCount).toString() + "   Triangles: " + Value(_triCount).toString() + "\nPixels: " + Value(_pixelCount).toString() + "   Vertices: " + Value(_vertCount).toString());
+    _perfLabel->setString("Nodes: " + Value(_spriteCount).asString() + "   Triangles: " + Value(_triCount).asString() + "\nPixels: " + Value(_pixelCount).asString() + "   Vertices: " + Value(_vertCount).asString());
 }
 
 Node *SpritePolygonPerformance::makeSprite()
@@ -606,7 +606,7 @@ void SpritePolygonPerformance::update(float dt)
         // its now 1 seconds with high DT time, time to end
         ended = true;
         unscheduleUpdate();
-        _perfLabel->setString("Test ended in " + Value(_elapsedTime).toString() + " seconds\nNodes: " + Value(_spriteCount).toString() + "   Triangles: " + Value(_triCount).toString() + "\nPixels: " + Value(_pixelCount).toString() + "   Vertices: " + Value(_vertCount).toString());
+        _perfLabel->setString("Test ended in " + Value(_elapsedTime).asString() + " seconds\nNodes: " + Value(_spriteCount).asString() + "   Triangles: " + Value(_triCount).asString() + "\nPixels: " + Value(_pixelCount).asString() + "   Vertices: " + Value(_vertCount).asString());
         _subtitleLabel->setString("Test ended");
     }
     else{
@@ -849,13 +849,13 @@ void Issue14017Test::initSprites()
     TTFConfig ttfConfig("fonts/arial.ttf", 8);
     std::string temp = "Sprite:\nPixels drawn: ";
     auto spSize = _normalSprite->getContentSize();
-    auto spArea = Label::createWithTTF(ttfConfig, temp+Value((int)spSize.width*(int)spSize.height).toString());
+    auto spArea = Label::createWithTTF(ttfConfig, temp+Value((int)spSize.width*(int)spSize.height).asString());
     _normalSprite->addChild(spArea);
     spArea->setAnchorPoint(Vec2(0,1));
 
     temp = "SpritePolygon:\nPixels drawn: ";
-    auto vertCount = "\nverts:"+Value((int)pinfo.getVertCount()).toString();
-    auto sppArea = Label::createWithTTF(ttfConfig, temp+Value((int)pinfo.getArea()).toString()+vertCount);
+    auto vertCount = "\nverts:"+Value((int)pinfo.getVertCount()).asString();
+    auto sppArea = Label::createWithTTF(ttfConfig, temp+Value((int)pinfo.getArea()).asString()+vertCount);
     _polygonSprite->addChild(sppArea);
     sppArea->setAnchorPoint(Vec2(0,1));
 

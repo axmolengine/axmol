@@ -364,7 +364,7 @@ void Menu::alignItemsInColumnsWithArray(const ValueVector& rows)
     for(const auto &child : _children) {
         CCASSERT(row < rows.size(), "row should less than rows.size()!");
         
-        rowColumns = rows[row].toInt();
+        rowColumns = rows[row].asInt();
         // can not have zero columns on a row
         CCASSERT(rowColumns, "rowColumns can't be 0.");
         
@@ -397,7 +397,7 @@ void Menu::alignItemsInColumnsWithArray(const ValueVector& rows)
     for(const auto &child : _children) {
         if (rowColumns == 0)
         {
-            rowColumns = rows[row].toInt();
+            rowColumns = rows[row].asInt();
             w = winSize.width / (1 + rowColumns);
             x = w;
         }
@@ -460,7 +460,7 @@ void Menu::alignItemsInRowsWithArray(const ValueVector& columns)
         // check if too many menu items for the amount of rows/columns
         CCASSERT(column < columns.size(), "column should be less than columns.size().");
 
-        columnRows = columns[column].toInt();
+        columnRows = columns[column].asInt();
         // can't have zero rows on a column
         CCASSERT(columnRows, "columnRows can't be 0.");
 
@@ -498,7 +498,7 @@ void Menu::alignItemsInRowsWithArray(const ValueVector& columns)
     for(const auto &child : _children) {
         if (columnRows == 0)
         {
-            columnRows = columns[column].toInt();
+            columnRows = columns[column].asInt();
             y = (float) columnHeights[column];
         }
 

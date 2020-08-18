@@ -442,258 +442,182 @@ bool Value::operator== (const Value& v) const
 }
 
 /// Convert value to a specified type
-unsigned char Value::toByte() const
+unsigned char Value::asByte() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
 
-    if (_type == Type::BYTE)
-    {
+    switch (_type) {
+    case Type::BYTE:
         return _field.byteVal;
-    }
-
-    if (_type == Type::INTEGER)
-    {
+    case Type::INTEGER:
         return static_cast<unsigned char>(_field.intVal);
-    }
 
-    if (_type == Type::UNSIGNED)
-    {
+    case Type::UNSIGNED:
         return static_cast<unsigned char>(_field.unsignedVal);
-    }
 
-    if (_type == Type::STRING)
-    {
+    case Type::STRING:
         return static_cast<unsigned char>(atoi(_field.strVal->c_str()));
-    }
 
-    if (_type == Type::FLOAT)
-    {
+    case Type::FLOAT:
         return static_cast<unsigned char>(_field.floatVal);
-    }
 
-    if (_type == Type::DOUBLE)
-    {
+    case Type::DOUBLE:
         return static_cast<unsigned char>(_field.doubleVal);
-    }
 
-    if (_type == Type::BOOLEAN)
-    {
+    case Type::BOOLEAN:
         return _field.boolVal ? 1 : 0;
     }
 
     return 0;
 }
 
-int Value::toInt() const
+int Value::asInt() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
-    if (_type == Type::INTEGER)
-    {
+    switch (_type) {
+    case Type::INTEGER:
         return _field.intVal;
-    }
 
-    if (_type == Type::UNSIGNED)
-    {
+    case Type::UNSIGNED:
         CCASSERT(_field.unsignedVal < INT_MAX, "Can only convert values < INT_MAX");
         return (int)_field.unsignedVal;
-    }
 
-    if (_type == Type::BYTE)
-    {
+    case Type::BYTE:
         return _field.byteVal;
-    }
 
-    if (_type == Type::STRING)
-    {
+    case Type::STRING:
         return atoi(_field.strVal->c_str());
-    }
 
-    if (_type == Type::FLOAT)
-    {
+    case Type::FLOAT:
         return static_cast<int>(_field.floatVal);
-    }
 
-    if (_type == Type::DOUBLE)
-    {
+    case Type::DOUBLE:
         return static_cast<int>(_field.doubleVal);
-    }
 
-    if (_type == Type::BOOLEAN)
-    {
+    case Type::BOOLEAN:
         return _field.boolVal ? 1 : 0;
     }
-
     return 0;
 }
 
 
-unsigned int Value::toUnsignedInt() const
+unsigned int Value::asUnsignedInt() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
-    if (_type == Type::UNSIGNED)
-    {
+    switch (_type) {
+    case Type::UNSIGNED:
         return _field.unsignedVal;
-    }
 
-    if (_type == Type::INTEGER)
-    {
+    case Type::INTEGER:
         CCASSERT(_field.intVal >= 0, "Only values >= 0 can be converted to unsigned");
         return static_cast<unsigned int>(_field.intVal);
-    }
 
-    if (_type == Type::BYTE)
-    {
+    case Type::BYTE:
         return static_cast<unsigned int>(_field.byteVal);
-    }
 
-    if (_type == Type::STRING)
-    {
+    case Type::STRING:
         // NOTE: strtoul is required (need to augment on unsupported platforms)
         return static_cast<unsigned int>(strtoul(_field.strVal->c_str(), nullptr, 10));
-    }
 
-    if (_type == Type::FLOAT)
-    {
+    case Type::FLOAT:
         return static_cast<unsigned int>(_field.floatVal);
-    }
 
-    if (_type == Type::DOUBLE)
-    {
+    case Type::DOUBLE:
         return static_cast<unsigned int>(_field.doubleVal);
-    }
 
-    if (_type == Type::BOOLEAN)
-    {
+    case Type::BOOLEAN:
         return _field.boolVal ? 1u : 0u;
     }
 
     return 0u;
 }
 
-float Value::toFloat() const
+float Value::asFloat() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
-    if (_type == Type::FLOAT)
-    {
+    switch (_type) {
+    case Type::FLOAT:
         return _field.floatVal;
-    }
 
-    if (_type == Type::BYTE)
-    {
+    case Type::BYTE:
         return static_cast<float>(_field.byteVal);
-    }
 
-    if (_type == Type::STRING)
-    {
+    case Type::STRING:
         return utils::atof(_field.strVal->c_str());
-    }
 
-    if (_type == Type::INTEGER)
-    {
+    case Type::INTEGER:
         return static_cast<float>(_field.intVal);
-    }
 
-    if (_type == Type::UNSIGNED)
-    {
+    case Type::UNSIGNED:
         return static_cast<float>(_field.unsignedVal);
-    }
 
-    if (_type == Type::DOUBLE)
-    {
+    case Type::DOUBLE:
         return static_cast<float>(_field.doubleVal);
-    }
 
-    if (_type == Type::BOOLEAN)
-    {
+    case Type::BOOLEAN:
         return _field.boolVal ? 1.0f : 0.0f;
     }
-
     return 0.0f;
 }
 
-double Value::toDouble() const
+double Value::asDouble() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
-    if (_type == Type::DOUBLE)
-    {
+    switch (_type) {
+    case Type::DOUBLE:
         return _field.doubleVal;
-    }
 
-    if (_type == Type::BYTE)
-    {
+    case Type::BYTE:
         return static_cast<double>(_field.byteVal);
-    }
 
-    if (_type == Type::STRING)
-    {
+    case Type::STRING:
         return static_cast<double>(utils::atof(_field.strVal->c_str()));
-    }
 
-    if (_type == Type::INTEGER)
-    {
+    case Type::INTEGER:
         return static_cast<double>(_field.intVal);
-    }
 
-    if (_type == Type::UNSIGNED)
-    {
+    case Type::UNSIGNED:
         return static_cast<double>(_field.unsignedVal);
-    }
 
-    if (_type == Type::FLOAT)
-    {
+    case Type::FLOAT:
         return static_cast<double>(_field.floatVal);
-    }
 
-    if (_type == Type::BOOLEAN)
-    {
+    case Type::BOOLEAN:
         return _field.boolVal ? 1.0 : 0.0;
     }
-
     return 0.0;
 }
 
-bool Value::toBool() const
+bool Value::asBool() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
-    if (_type == Type::BOOLEAN)
-    {
+    switch (_type) {
+    case Type::BOOLEAN:
         return _field.boolVal;
-    }
 
-    if (_type == Type::BYTE)
-    {
+    case Type::BYTE:
         return _field.byteVal == 0 ? false : true;
-    }
 
-    if (_type == Type::STRING)
-    {
+    case Type::STRING:
         return (*_field.strVal == "0" || *_field.strVal == "false") ? false : true;
-    }
 
-    if (_type == Type::INTEGER)
-    {
+    case Type::INTEGER:
         return _field.intVal == 0 ? false : true;
-    }
 
-    if (_type == Type::UNSIGNED)
-    {
+    case Type::UNSIGNED:
         return _field.unsignedVal == 0 ? false : true;
-    }
 
-    if (_type == Type::FLOAT)
-    {
+    case Type::FLOAT:
         return _field.floatVal == 0.0f ? false : true;
-    }
 
-    if (_type == Type::DOUBLE)
-    {
+    case Type::DOUBLE:
         return _field.doubleVal == 0.0 ? false : true;
     }
 
     return false;
 }
 
-std::string Value::toString() const
+std::string Value::asString() const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
 
@@ -736,12 +660,7 @@ std::string Value::toString() const
     return ret;
 }
 
-const std::string Value::asString() const
-{
-    return this->toString();
-}
-
-const std::string& Value::asStringFixed() const
+const std::string& Value::asStringRef() const
 {
     if (_type == Type::STRING)
         return *_field.strVal;
@@ -854,7 +773,7 @@ static std::string visit(const Value& v, int depth)
         case Value::Type::DOUBLE:
         case Value::Type::BOOLEAN:
         case Value::Type::STRING:
-            ret << v.toString() << "\n";
+            ret << v.asStringRef() << "\n";
             break;
         case Value::Type::VECTOR:
             ret << visitVector(v.asValueVector(), depth);

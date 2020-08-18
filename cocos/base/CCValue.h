@@ -155,33 +155,23 @@ public:
     /** == operator overloading */
     bool operator== (const Value& v) const;
 
-    unsigned char asByte() const { return toByte(); }
-    int asInt() const { return toInt(); }
-    unsigned int asUnsignedInt() const { return toUnsignedInt(); }
-    float asFloat() const { return toFloat(); }
-    double asDouble() const { return toDouble(); }
-    bool asBool() const { return toBool(); }
-
     /** Gets as a byte value. Will convert to unsigned char if possible, or will trigger assert error. */
-    unsigned char toByte() const;
+    unsigned char asByte() const;
     /** Gets as an integer value. Will convert to integer if possible, or will trigger assert error. */
-    int toInt() const;
+    int asInt() const;
     /** Gets as an unsigned value. Will convert to unsigned if possible, or will trigger assert error. */
-    unsigned int toUnsignedInt() const;
+    unsigned int asUnsignedInt() const;
     /** Gets as a float value. Will convert to float if possible, or will trigger assert error. */
-    float toFloat() const;
+    float asFloat() const;
     /** Gets as a double value. Will convert to double if possible, or will trigger assert error. */
-    double toDouble() const;
+    double asDouble() const;
     /** Gets as a bool value. Will convert to bool if possible, or will trigger assert error. */
-    bool toBool() const;
+    bool asBool() const;
     /** to as a string value. Will convert to string if possible, or will trigger assert error. */
-    std::string toString() const;
-
-    /** Gets as a string value. Will convert to string if possible, compatible with cocos2d-x-3.x or 4.x */
-    const std::string asString() const;
-
-    /** Gets as a string value fixed, if value type is not string will return "" */
-    const std::string& asStringFixed() const;
+    std::string asString() const;
+    
+    /** Gets as a string value reference without conversion, if value type is not string will return "" */
+    const std::string& asStringRef() const;
 
     /** Gets as a ValueVector reference. Will convert to ValueVector if possible, or will trigger assert error. */
     ValueVector& asValueVector();

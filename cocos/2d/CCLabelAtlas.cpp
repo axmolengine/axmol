@@ -109,13 +109,13 @@ bool LabelAtlas::initWithString(const std::string& theString, const std::string&
     
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(pathStr);
 
-    CCASSERT(dict["version"].toInt() == 1, "Unsupported version. Upgrade cocos2d version");
+    CCASSERT(dict["version"].asInt() == 1, "Unsupported version. Upgrade cocos2d version");
 
     std::string textureFilename = relPathStr + dict["textureFilename"].asString();
 
-    unsigned int width = dict["itemWidth"].toInt() / CC_CONTENT_SCALE_FACTOR();
-    unsigned int height = dict["itemHeight"].toInt() / CC_CONTENT_SCALE_FACTOR();
-    unsigned int startChar = dict["firstChar"].toInt();
+    unsigned int width = dict["itemWidth"].asInt() / CC_CONTENT_SCALE_FACTOR();
+    unsigned int height = dict["itemHeight"].asInt() / CC_CONTENT_SCALE_FACTOR();
+    unsigned int startChar = dict["firstChar"].asInt();
 
 
     this->initWithString(theString, textureFilename, width, height, startChar);
