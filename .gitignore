@@ -191,3 +191,5 @@ temp/
 
 # New .cxx temp folder
 **/.cxx
+
+**/SharedLoader.java
