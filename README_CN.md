@@ -45,7 +45,7 @@
   cd engine-x
   cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
   ``` 
-  4. 之后就可以用vs打开```engine-x/build/Cocos2d-x.sln```启动cpp-tests等测试工程了
+  4. 之后就可以用vs打开```engine-x/build/EGNX.sln```启动cpp-tests等测试工程了
 
 #### Android
   1. 安装 Android Studio 4.0或更高版本
