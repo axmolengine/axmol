@@ -39,7 +39,7 @@ THE SOFTWARE.
 
 using namespace std;
 
-#define DECLARE_GUARD std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
+#define DECLARE_GUARD (void)0 // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
 NS_CC_BEGIN
 
