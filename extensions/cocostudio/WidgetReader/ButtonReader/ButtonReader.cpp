@@ -761,7 +761,7 @@ namespace cocostudio
                     {
                         ValueMap value = FileUtils::getInstance()->getValueMapFromFile(plist);
                         ValueMap metadata = value["metadata"].asValueMap();
-                        auto& textureFileName = metadata["textureFileName"].asString();
+                        auto textureFileName = metadata["textureFileName"].asString();
                         if (!FileUtils::getInstance()->isFileExist(textureFileName))
                         {
                             normalErrorFilePath = textureFileName;
@@ -819,7 +819,7 @@ namespace cocostudio
                     {
                         ValueMap value = FileUtils::getInstance()->getValueMapFromFile(plist);
                         ValueMap metadata = value["metadata"].asValueMap();
-                        auto& textureFileName = metadata["textureFileName"].asString();
+                        auto textureFileName = metadata["textureFileName"].asString();
                         if (!FileUtils::getInstance()->isFileExist(textureFileName))
                         {
                             pressedErrorFilePath = textureFileName;
@@ -877,7 +877,7 @@ namespace cocostudio
                     {
                         ValueMap value = FileUtils::getInstance()->getValueMapFromFile(plist);
                         ValueMap metadata = value["metadata"].asValueMap();
-                        auto& textureFileName = metadata["textureFileName"].asString();
+                        auto textureFileName = metadata["textureFileName"].asString();
                         if (!FileUtils::getInstance()->isFileExist(textureFileName))
                         {
                             disabledErrorFilePath = textureFileName;
