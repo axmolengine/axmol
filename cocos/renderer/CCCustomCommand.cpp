@@ -43,26 +43,26 @@ CustomCommand::~CustomCommand()
 
 CustomCommand::CustomCommand(const CustomCommand& rhs)
 {
-    this->copyAssign(rhs);
+    this->assign(rhs);
 }
 
 CustomCommand::CustomCommand(CustomCommand&& rhs)
 {
-    this->moveAssign(std::move(rhs));
+    this->assign(std::move(rhs));
 }
 
 CustomCommand& CustomCommand::operator=(const CustomCommand& rhs)
 {
-    this->copyAssign(rhs);
+    this->assign(rhs);
     return *this;
 }
 CustomCommand& CustomCommand::operator=(CustomCommand&& rhs)
 {
-    this->moveAssign(std::move(rhs));
+    this->assign(std::move(rhs));
     return *this;
 }
 
-void CustomCommand::copyAssign(const CustomCommand& rhs)
+void CustomCommand::assign(const CustomCommand& rhs)
 {
     if (this != &rhs) {
         memcpy(this, &rhs, sizeof(rhs));
@@ -71,7 +71,7 @@ void CustomCommand::copyAssign(const CustomCommand& rhs)
     }
 }
 
-void CustomCommand::moveAssign(CustomCommand&& rhs)
+void CustomCommand::assign(CustomCommand&& rhs)
 {
     if (this != &rhs) {
         memcpy(this, &rhs, sizeof(rhs));
