@@ -41,6 +41,44 @@ CustomCommand::~CustomCommand()
     CC_SAFE_RELEASE(_indexBuffer);
 }
 
+CustomCommand::CustomCommand(const CustomCommand& rhs)
+{
+    this->copyAssign(rhs);
+}
+
+CustomCommand::CustomCommand(CustomCommand&& rhs)
+{
+    this->moveAssign(std::move(rhs));
+}
+
+CustomCommand& CustomCommand::operator=(const CustomCommand& rhs)
+{
+    this->copyAssign(rhs);
+    return *this;
+}
+CustomCommand& CustomCommand::operator=(CustomCommand&& rhs)
+{
+    this->moveAssign(std::move(rhs));
+    return *this;
+}
+
+void CustomCommand::copyAssign(const CustomCommand& rhs)
+{
+    if (this != &rhs) {
+        memcpy(this, &rhs, sizeof(rhs));
+        CC_SAFE_RETAIN(_vertexBuffer);
+        CC_SAFE_RETAIN(_indexBuffer);
+    }
+}
+
+void CustomCommand::moveAssign(CustomCommand&& rhs)
+{
+    if (this != &rhs) {
+        memcpy(this, &rhs, sizeof(rhs));
+        rhs._vertexBuffer = rhs._indexBuffer = nullptr;
+    }
+}
+
 void CustomCommand::init(float depth, const cocos2d::Mat4 &modelViewTransform, unsigned int flags)
 {
     RenderCommand::init(depth, modelViewTransform, flags);
