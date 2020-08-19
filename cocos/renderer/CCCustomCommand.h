@@ -77,8 +77,8 @@ public:
     CustomCommand& operator=(CustomCommand&& rhs);
 
 protected:
-    void copyAssign(const CustomCommand& rhs);
-    void moveAssign(CustomCommand&& rhs);
+    void assign(const CustomCommand& rhs);
+    void assign(CustomCommand&& rhs);
     
 public:
 	/**
