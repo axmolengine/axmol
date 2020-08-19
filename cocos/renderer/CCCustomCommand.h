@@ -68,10 +68,18 @@ public:
 
 	/**Constructor.*/
     CustomCommand();
+    CustomCommand(const CustomCommand& rhs);
+    CustomCommand(CustomCommand&& rhs);
     /**Destructor.*/
     ~CustomCommand();
-    
 
+    CustomCommand& operator=(const CustomCommand& rhs);
+    CustomCommand& operator=(CustomCommand&& rhs);
+
+protected:
+    void copyAssign(const CustomCommand& rhs);
+    void moveAssign(CustomCommand&& rhs);
+    
 public:
 	/**
     TODO: should remove it.
