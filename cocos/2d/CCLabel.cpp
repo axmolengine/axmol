@@ -245,7 +245,7 @@ void Label::BatchCommand::setProgramState(backend::ProgramState* programState)
 
 std::array<CustomCommand*, 3> Label::BatchCommand::getCommandArray()
 {
-    return std::array<CustomCommand*, 3>{&textCommand, & shadowCommand, & outLineCommand};
+    return std::array<CustomCommand*, 3>{&textCommand, &shadowCommand, &outLineCommand};
 }
 
 Label* Label::create()
@@ -1911,8 +1911,7 @@ void Label::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
                     continue;
 
                 auto &batch = _batchCommands[i++];
-                auto &&commands = batch.getCommandArray();
-                for (auto command : commands)
+                for (auto command : batch.getCommandArray())
                 {
                     auto *programState = command->getPipelineDescriptor().programState;
                     Vec4 textColor(_textColorF.r, _textColorF.g, _textColorF.b, _textColorF.a);
@@ -1932,7 +1931,7 @@ void Label::updateBlendState()
     setOpacityModifyRGB(_blendFunc != BlendFunc::ALPHA_NON_PREMULTIPLIED);
     for(auto &batch: _batchCommands)
     {
-        for(auto *command : batch.getCommandArray()) {
+        for(auto command : batch.getCommandArray()) {
             auto & blendDescriptor = command->getPipelineDescriptor().blendDescriptor;
             updateBlend(blendDescriptor, _blendFunc);
         }
