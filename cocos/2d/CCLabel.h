@@ -702,13 +702,16 @@ protected:
 
     struct BatchCommand {
         BatchCommand();
+        BatchCommand(BatchCommand&& rhs);
         ~BatchCommand();
+
+        void setProgramState(backend::ProgramState* state);
+
+        std::array<CustomCommand*, 3> getCommandArray();
 
         CustomCommand textCommand;
         CustomCommand outLineCommand;
         CustomCommand shadowCommand;
-
-        std::array<CustomCommand*, 3> getCommandArray();
     };
 
     virtual void setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled = false, bool useA8Shader = false);
@@ -757,7 +760,7 @@ protected:
     virtual void updateColor() override;
     
     void updateUniformLocations();
-    void setVertexLayout(PipelineDescriptor& vertexLayout);
+    void setVertexLayout();
     void updateBlendState();
     void updateEffectUniforms(BatchCommand &batch, TextureAtlas* textureAtlas, Renderer *renderer, const Mat4 &transform);
     void updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customCommand);
