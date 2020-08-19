@@ -209,11 +209,38 @@ Label::BatchCommand::BatchCommand()
     outLineCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
 }
 
+Label::BatchCommand::BatchCommand(BatchCommand&& rhs) : 
+    textCommand(std::move(rhs.textCommand)),
+    shadowCommand(std::move(rhs.shadowCommand)),
+    outLineCommand(std::move(rhs.outLineCommand))
+{
+    rhs.textCommand.getPipelineDescriptor().programState = nullptr;
+    rhs.shadowCommand.getPipelineDescriptor().programState = nullptr;
+    rhs.outLineCommand.getPipelineDescriptor().programState = nullptr;
+}
+
 Label::BatchCommand::~BatchCommand()
 {
-    CC_SAFE_RELEASE_NULL(textCommand.getPipelineDescriptor().programState);
-    CC_SAFE_RELEASE_NULL(shadowCommand.getPipelineDescriptor().programState);
-    CC_SAFE_RELEASE_NULL(outLineCommand.getPipelineDescriptor().programState);
+    CC_SAFE_RELEASE(textCommand.getPipelineDescriptor().programState);
+    CC_SAFE_RELEASE(shadowCommand.getPipelineDescriptor().programState);
+    CC_SAFE_RELEASE(outLineCommand.getPipelineDescriptor().programState);
+}
+
+void Label::BatchCommand::setProgramState(backend::ProgramState* programState)
+{
+    assert(programState);
+
+    auto& programStateText = textCommand.getPipelineDescriptor().programState;
+    CC_SAFE_RELEASE(programStateText);
+    programStateText = programState->clone();
+
+    auto& programStateShadow = shadowCommand.getPipelineDescriptor().programState;
+    CC_SAFE_RELEASE(programStateShadow);
+    programStateShadow = programState->clone();
+
+    auto& programStateOutline = outLineCommand.getPipelineDescriptor().programState;
+    CC_SAFE_RELEASE(programStateOutline);
+    programStateOutline = programState->clone();
 }
 
 std::array<CustomCommand*, 3> Label::BatchCommand::getCommandArray()
@@ -636,7 +663,7 @@ static Texture2D* _getTexture(Label* label)
     return texture;
 }
 
-void Label::setVertexLayout(PipelineDescriptor& pipelineDescriptor)
+void Label::setVertexLayout()
 {
     auto vertexLayout = _programState->getVertexLayout();
     ///a_position
@@ -672,7 +699,7 @@ void Label::setProgramState(backend::ProgramState *programState)
     }
 
     auto &quadPipeline = _quadCommand.getPipelineDescriptor();
-    setVertexLayout(quadPipeline);
+    setVertexLayout();
     quadPipeline.programState = _programState;
 }
 
@@ -736,29 +763,14 @@ void Label::updateShaderProgram()
     }
 
     auto &quadPipeline = _quadCommand.getPipelineDescriptor();
-    setVertexLayout(quadPipeline);
+    setVertexLayout();
     quadPipeline.programState = _programState;
 }
 
 void Label::updateBatchCommand(Label::BatchCommand &batch)
 {
     CCASSERT(_programState, "programState should be set!");
-
-    auto& pipelineDescriptor = batch.textCommand.getPipelineDescriptor();
-    CC_SAFE_RELEASE_NULL(pipelineDescriptor.programState);
-    pipelineDescriptor.programState = _programState->clone();
-    setVertexLayout(pipelineDescriptor);
-
-    auto &pipelineShadow = batch.shadowCommand.getPipelineDescriptor();
-    CC_SAFE_RELEASE_NULL(pipelineShadow.programState);
-    pipelineShadow.programState = _programState->clone();;
-    setVertexLayout(pipelineShadow);
-
-    auto &pipelineOutline = batch.outLineCommand.getPipelineDescriptor();
-    CC_SAFE_RELEASE_NULL(pipelineOutline.programState);
-    pipelineOutline.programState = _programState->clone();
-    setVertexLayout(pipelineOutline);
-
+    batch.setProgramState(_programState);
 }
 
 void Label::updateUniformLocations()
@@ -1899,8 +1911,7 @@ void Label::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
                     continue;
 
                 auto &batch = _batchCommands[i++];
-                auto &&commands = batch.getCommandArray();
-                for (auto command : commands)
+                for (auto command : batch.getCommandArray())
                 {
                     auto *programState = command->getPipelineDescriptor().programState;
                     Vec4 textColor(_textColorF.r, _textColorF.g, _textColorF.b, _textColorF.a);
@@ -1920,7 +1931,7 @@ void Label::updateBlendState()
     setOpacityModifyRGB(_blendFunc != BlendFunc::ALPHA_NON_PREMULTIPLIED);
     for(auto &batch: _batchCommands)
     {
-        for(auto *command : batch.getCommandArray()) {
+        for(auto command : batch.getCommandArray()) {
             auto & blendDescriptor = command->getPipelineDescriptor().blendDescriptor;
             updateBlend(blendDescriptor, _blendFunc);
         }
