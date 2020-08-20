@@ -24,8 +24,8 @@
 * Add google angle renderer backend support
 * Set default C++ standard to 14
 * Set min deploy target ios sdk to 9.0
-* Remove tinyxml2, use more fast pugixml instead
-* Use curl for HttpClient downloader on all platforms
+* Use more fast pugixml instead tinyxml2
+* Using curl for transferring data with URL syntax
 * Use SAX parser for all plist file, remove apple platform spec for getValueMapFromFile stubs
 * Spine-3.8 support
 * Add engine extension ```FairyGUI``` support
