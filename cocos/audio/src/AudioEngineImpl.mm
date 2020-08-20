@@ -369,7 +369,9 @@ bool AudioEngineImpl::init()
 
             _scheduler = Director::getInstance()->getScheduler();
             ret = AudioDecoderManager::init();
-            ALOGI("OpenAL was initialized successfully!");
+            const char* vender = alGetString(AL_VENDOR);
+            const char* version = alGetString(AL_VERSION);
+            ALOGI("OpenAL was initialized successfully, vender:%s, version:%s", vender, version);
         }
     }while (false);
 
