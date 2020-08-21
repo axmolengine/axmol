@@ -61,13 +61,12 @@
   6. Remark: If you use non-sdk provided CMake edition, you need download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
 
 #### iOS
-  1. Ensure xcode11+ installed
+  1. Ensure xcode11+ & **cmake-3.18.2+** installed
   2. Install brew: ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```  
   when finish, install follow tools:
   ```sh
       brew update
       brew install git
-      brew install cmake
       brew install autoconf
       brew install automake
       brew install libtool
@@ -76,17 +75,11 @@
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   4. Generate xcode project
   ```sh
-    mkdir engine-x/build
-    cd engine-x/build
-    cmake .. -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator
-    # for simulator64
-    # cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR64 -DENABLE_ARC=0
-    # for (armv7, armv7s, arm64)
-    # cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS -DENABLE_ARC=0
-    # for device 64
-    # cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS64 -DENABLE_ARC=0
+    cmake -S . -B build -GXcode -DCMAKE_SYSTEM_NAME=iOS
   ```
-  5. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.
+   **Note: if you don't want upgrade your cmake to 3.18.2, please [click here](https://github.com/c4games/engine-x/wiki/Build-ios-device-with-CMake--version-less-than-3.18.2) to see xcode generate command.**  
+  5. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
+   **Note: the code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**
 
 ### Pitfalls
   * ThreadLocalStorage(TLS) 
