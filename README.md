@@ -77,9 +77,11 @@
   ```sh
     cmake -S . -B build -GXcode -DCMAKE_SYSTEM_NAME=iOS
   ```
-   **Note: if you don't want upgrade your cmake to 3.18.2, please [click here](https://github.com/c4games/engine-x/wiki/Build-ios-device-with-CMake--version-less-than-3.18.2) to see xcode generate command.**  
   5. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
-   **Note: the code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**
+
+  6. Notes  
+    a. **If you don't want upgrade your cmake to 3.18.2, please [click here](https://github.com/c4games/engine-x/wiki/Build-ios-device-with-CMake--version-less-than-3.18.2) to see xcode generate command.**  
+    b. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**
 
 ### Pitfalls
   * ThreadLocalStorage(TLS) 
