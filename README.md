@@ -8,23 +8,23 @@
   
 ### Purpose Summary:
 * C++14/17
-* Focus on native game dev
+* Focus on native game dev only
 * Bugfixes ASAP
 * Review/Merge PR ASAP
-* Excellent PRs from YOU are welcome.
+* Excellent PRs from YOU are welcome, we will review & merge ASAP
   
 ### Highlight Features:
 * Refactor AudioEngine, OpenAL for all platforms
-  * [openal-soft](https://github.com/kcat/openal-s14 oft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
+  * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio), very fast
 * Modularize all optional extension, all move from engine core to folder extensions
 * Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM...
 * Use modern gl loader ```glad``` to instead glew
 * Add google angle renderer backend support
-* C++14 standard
-* IOS SDK 9.0 as minimal deplyment
-* Use fast pugixml instead of tinyxml2
+* Set default C++ standard to 14
+* Set min deploy target ios sdk to 9.0
+* Use more fast pugixml instead tinyxml2
 * Using curl for transferring data with URL syntax
 * Use SAX parser for all plist file, remove apple platform spec for getValueMapFromFile stubs
 * Spine-3.8 support
