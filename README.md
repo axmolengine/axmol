@@ -61,7 +61,7 @@
   6. Remark: If you use non-sdk provided CMake edition, you need download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
 
 #### iOS
-  1. Ensure xcode11+ & **cmake-3.18.2+** installed
+  1. Ensure xcode11+ & cmake3.6+ installed
   2. Install brew: ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```  
   when finish, install follow tools:
   ```sh
