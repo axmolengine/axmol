@@ -8,10 +8,10 @@
   
 ### Purpose Summary:
 * C++14/17
-* Focus on native game dev
+* Focus on native game dev only
 * Bugfixes ASAP
 * Review/Merge PR ASAP
-* Excellent PRs from **you** are welcome.
+* Excellent PRs from YOU are welcome, we will review & merge ASAP
   
 ### Highlight Features:
 * Refactor AudioEngine, OpenAL for all platforms
@@ -22,9 +22,9 @@
 * Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM...
 * Use modern gl loader ```glad``` to instead glew
 * Add google angle renderer backend support
-* C++14 standard
-* IOS SDK 9.0 as minimal deployment
-* Use fast pugixml instead of tinyxml2
+* Set default C++ standard to 14
+* Set min deploy target ios sdk to 9.0
+* Use more fast pugixml instead tinyxml2
 * Using curl for transferring data with URL syntax
 * Use SAX parser for all plist file, remove apple platform spec for getValueMapFromFile stubs
 * Spine-3.8 support

@@ -123,6 +123,15 @@
 # *****************************************************************************
 #
 
+# The workaround for solve try_compile failed with code sign
+# since cmake-3.18.2, not required
+# everyting for cmake toolchain config before project(xxx) is better
+set(CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
+    "CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED"
+    "CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED")
+set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED NO)
+set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED NO)
+
 # Fix for PThread library not in path
 set(CMAKE_THREAD_LIBS_INIT "-lpthread")
 set(CMAKE_HAVE_THREADS_LIBRARY 1)
@@ -386,8 +395,8 @@ set(ENABLE_VISIBILITY_INT ${ENABLE_VISIBILITY} CACHE BOOL "Whether or not to hid
 # Set strict compiler checks or not
 if(NOT DEFINED ENABLE_STRICT_TRY_COMPILE)
   # Unless specified, disable strict try_compile()
-  set(ENABLE_STRICT_TRY_COMPILE FALSE)
-  message(STATUS "Using NON-strict compiler checks by default. ENABLE_STRICT_TRY_COMPILE not provided!")
+  set(ENABLE_STRICT_TRY_COMPILE TRUE)
+  message(STATUS "Using strict compiler checks by default. ENABLE_STRICT_TRY_COMPILE not provided!")
 endif()
 set(ENABLE_STRICT_TRY_COMPILE_INT ${ENABLE_STRICT_TRY_COMPILE} CACHE BOOL "Whether or not to use strict compiler checks" ${FORCE_CACHE})
 # Get the SDK version information.
