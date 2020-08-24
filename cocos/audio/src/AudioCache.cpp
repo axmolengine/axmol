@@ -155,7 +155,7 @@ void AudioCache::readDataTask(unsigned int selfId)
             _format = channelCount > 1 ? AL_FORMAT_STEREO_DOUBLE_EXT : AL_FORMAT_MONO_DOUBLE_EXT;
             break;
         case AUDIO_SOURCE_FORMAT::MULAW:
-            _format = channelCount > 1 ? AL_FORMAT_STEREO_MULAW_EXT : AL_FORMAT_MONO_MULAW_EXT;
+            _format = channelCount > 1 ? AL_FORMAT_STEREO_MULAW : AL_FORMAT_MONO_MULAW;
             break;
         case AUDIO_SOURCE_FORMAT::ALAW:
             _format = channelCount > 1 ? AL_FORMAT_STEREO_ALAW_EXT : AL_FORMAT_MONO_ALAW_EXT;
