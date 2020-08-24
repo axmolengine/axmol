@@ -34,8 +34,8 @@ function build_linux()
     source ../environment.sh
     cd $COCOS2DX_ROOT
     set -x
-    cmake . -G "Unix Makefiles" -Blinux-build-release -DCMAKE_BUILD_TYPE=Release
-    cmake --build linux-build-release -- -j `nproc`
+    cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release
+    cmake --build build -- -j `nproc`
     set +x
 }
 
@@ -48,8 +48,8 @@ function build_mac_cmake()
     # popd
     # cd $COCOS2DX_ROOT/cocos_new_test
     cd $COCOS2DX_ROOT
-    mkdir -p mac_cmake_build
-    cd mac_cmake_build
+    mkdir -p build
+    cd build
     cmake .. -GXcode
     cmake --build . --config Release -- -quiet
     #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES build  | xcpretty
@@ -67,11 +67,11 @@ function build_ios_cmake()
     # popd
     # cd $COCOS2DX_ROOT/cocos_new_test
     cd $COCOS2DX_ROOT
-    mkdir -p ios_cmake_build
-    cd ios_cmake_build
-    cmake .. -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator -DBUILD_EXT_ALSOFT=ON
+    # mkdir -p build
+
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator -DBUILD_EXT_ALSOFT=ON
     # cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS -DENABLE_ARC=0   # too much logs on console when "cmake --build ."
-    cmake --build . --config Release --target cpp-tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" 
+    cmake --build build --config Release --target cpp-tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" 
 
     #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" build  | xcpretty
     ##the following commands must not be removed
