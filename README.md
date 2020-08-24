@@ -75,13 +75,20 @@
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   4. Generate xcode project
   ```sh
-    cmake -S . -B build -GXcode -DCMAKE_SYSTEM_NAME=iOS
+    # for device arm64
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
+
+    # for device combined armv7,arm64
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"
+
+    # for simulator x86_64
+    # cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator
   ```
   5. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
 
   6. Notes  
-    a. **If you don't want upgrade your cmake to 3.18.2, please [click here](https://github.com/c4games/engine-x/wiki/Build-ios-device-with-CMake--version-less-than-3.18.2) to see xcode generate command.**  
-    b. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**
+    a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**
+    b. **EGNX only provide armv7,arm64,x86_64 prebuilt libraries for ios**
 
 ### Pitfalls
   * ThreadLocalStorage(TLS) 

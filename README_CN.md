@@ -76,15 +76,14 @@
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   4. 生成xcode工程, 进入engine-x根目录执行如下命令:  
   ```sh
-    mkdir engine-x/build
-    cd engine-x/build
-    cmake .. -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator
-    # for simulator64
-    # cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR64 -DENABLE_ARC=0
-    # for (armv7, armv7s, arm64)
-    # cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS -DENABLE_ARC=0
-    # for device 64
-    # cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS64 -DENABLE_ARC=0
+    # for device arm64
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
+
+    # for device combined armv7,arm64
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"
+
+    # for simulator x86_64
+    # cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator
   ```
   5. 之后就可以用xcode打开, 选择cpp-tests编译运行
 
