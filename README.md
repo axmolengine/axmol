@@ -87,7 +87,7 @@
   5. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
 
   6. Notes  
-    a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**
+    a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**  
     b. **EGNX only provide armv7,arm64,x86_64 prebuilt libraries for ios**
 
 ### Pitfalls
