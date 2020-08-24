@@ -11,11 +11,11 @@
 * Focus on native game dev
 * Bugfixes ASAP
 * Review/Merge PR ASAP
-* Excellent PRs from YOU are welcome.
+* Excellent PRs from **you** are welcome.
   
 ### Highlight Features:
 * Refactor AudioEngine, OpenAL for all platforms
-  * [openal-soft](https://github.com/kcat/openal-s14 oft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
+  * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio), very fast
 * Modularize all optional extension, all move from engine core to folder extensions
@@ -23,7 +23,7 @@
 * Use modern gl loader ```glad``` to instead glew
 * Add google angle renderer backend support
 * C++14 standard
-* IOS SDK 9.0 as minimal deplyment
+* IOS SDK 9.0 as minimal deployment
 * Use fast pugixml instead of tinyxml2
 * Using curl for transferring data with URL syntax
 * Use SAX parser for all plist file, remove apple platform spec for getValueMapFromFile stubs
