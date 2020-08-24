@@ -61,7 +61,7 @@
   6. 如果使用非sdk自动安装的CMake版本, 需要从https://github.com/ninja-build/ninja/releases下载 ```ninja```， 并且拷贝```ninja.exe```到CMake的bin目录
 
 #### iOS
-  1. 确保已安装xcode11+
+  1. 确保已安装xcode11+和cmake3.6+
   2. 安装brew: ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```  
   brew安装完成后，确保如下工具安装:  
   ```sh
