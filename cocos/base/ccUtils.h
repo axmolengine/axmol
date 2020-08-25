@@ -153,8 +153,8 @@ namespace utils
 
      * @return  Returns found node or nullptr with specified type 'T'
      */
-    template<typename T> inline
-    T findChild(Node* levelRoot, const std::string& name)
+    template<typename T>
+    inline T findChild(Node* levelRoot, const std::string& name)
     {
         return dynamic_cast<T>(findChild(levelRoot, name));
     }
@@ -164,10 +164,44 @@ namespace utils
 
      * @return  Returns found node or nullptr with specified type 'T'
      */
-    template<typename T> inline
-    T findChild(Node* levelRoot, int tag)
+    template<typename T>
+    inline T findChild(Node* levelRoot, int tag)
     {
         return dynamic_cast<T>(findChild(levelRoot, tag));
+    }
+
+    /**
+     * Create a Game Object instance, like CREATE_FUNC, but more powerful
+
+     * @return  Returns a autorelease game object
+     * @limition: the init function finit must be public
+     */
+    template<typename T, typename F, typename...Ts>
+    inline T* createInstance(F&& finit, Ts&&... args)
+    {
+        T* pRet = new(std::nothrow) T();
+        if (pRet && std::mem_fn(finit)(pRet, std::forward<_Types>(args)...)) {
+            pRet->autorelease();
+            return pRet;
+        }
+        else
+        {
+            delete pRet;
+            pRet = nullptr;
+            return nullptr;
+        }
+    }
+
+    /**
+     * Create a Game Object instance with 'bool T::init()' function, like CREATE_FUNC, but more powerful
+
+     * @return  Returns a autorelease game object
+     * @limition: the init function finit must be public
+     */
+    template<typename T>
+    inline T* createInstance()
+    {
+        return ::cocos2d::utils::createInstance<T>(&T::init);
     }
 
     /**
