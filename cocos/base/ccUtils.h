@@ -23,8 +23,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __SUPPORT_CC_UTILS_H__
-#define __SUPPORT_CC_UTILS_H__
+#ifndef __CC_UTILS_H__
+#define __CC_UTILS_H__
 
 #include <vector>
 #include <string>
@@ -153,8 +153,8 @@ namespace utils
 
      * @return  Returns found node or nullptr with specified type 'T'
      */
-    template<typename T> inline
-    T findChild(Node* levelRoot, const std::string& name)
+    template<typename T>
+    inline T findChild(Node* levelRoot, const std::string& name)
     {
         return dynamic_cast<T>(findChild(levelRoot, name));
     }
@@ -164,10 +164,44 @@ namespace utils
 
      * @return  Returns found node or nullptr with specified type 'T'
      */
-    template<typename T> inline
-    T findChild(Node* levelRoot, int tag)
+    template<typename T>
+    inline T findChild(Node* levelRoot, int tag)
     {
         return dynamic_cast<T>(findChild(levelRoot, tag));
+    }
+
+    /**
+     * Create a Game Object instance, like CREATE_FUNC, but more powerful
+
+     * @return  Returns a autorelease game object
+     * @limition: the init function finit must be public
+     */
+    template<typename T, typename F, typename...Ts>
+    inline T* createInstance(F&& finit, Ts&&... args)
+    {
+        T* pRet = new(std::nothrow) T();
+        if (pRet && std::mem_fn(finit)(pRet, std::forward<Ts>(args)...)) {
+            pRet->autorelease();
+            return pRet;
+        }
+        else
+        {
+            delete pRet;
+            pRet = nullptr;
+            return nullptr;
+        }
+    }
+
+    /**
+     * Create a Game Object instance with 'bool T::init()' function, like CREATE_FUNC, but more powerful
+
+     * @return  Returns a autorelease game object
+     * @limition: the init function finit must be public
+     */
+    template<typename T>
+    inline T* createInstance()
+    {
+        return ::cocos2d::utils::createInstance<T>(&T::init);
     }
 
     /**
