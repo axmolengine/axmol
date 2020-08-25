@@ -26,6 +26,11 @@
 
 USING_NS_CC;
 
+Scene* HelloWorld::createScene()
+{
+    return HelloWorld::create();
+}
+
 // Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)
 {
