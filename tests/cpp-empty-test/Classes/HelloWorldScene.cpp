@@ -29,12 +29,6 @@
 
 USING_NS_CC;
 
-
-Scene* HelloWorld::scene()
-{
-     return HelloWorld::create();
-}
-
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {

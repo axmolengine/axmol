@@ -141,7 +141,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setAnimationInterval(1.0f / 60);
 
     // Create a scene. it's an autorelease object
-    auto scene = HelloWorld::scene();
+    auto scene = utils::createInstance<HelloWorld>();
 
     // Run
     director->runWithScene(scene);
