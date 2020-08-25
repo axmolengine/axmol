@@ -20,7 +20,7 @@ int store_dds_uncompressed_image(const astc_codec_image* img, const char* filena
 int store_tga_image(const astc_codec_image* img, const char* tga_filename, int bitness) { return 0; }
 
 
-extern int ASTC_INIT = 0;
+static int ASTC_INIT = 0;
 
 uint8_t float2byte(float f) {
 
