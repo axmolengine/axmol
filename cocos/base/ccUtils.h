@@ -23,8 +23,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __SUPPORT_CC_UTILS_H__
-#define __SUPPORT_CC_UTILS_H__
+#ifndef __CC_UTILS_H__
+#define __CC_UTILS_H__
 
 #include <vector>
 #include <string>
@@ -180,7 +180,7 @@ namespace utils
     inline T* createInstance(F&& finit, Ts&&... args)
     {
         T* pRet = new(std::nothrow) T();
-        if (pRet && std::mem_fn(finit)(pRet, std::forward<_Types>(args)...)) {
+        if (pRet && std::mem_fn(finit)(pRet, std::forward<Ts>(args)...)) {
             pRet->autorelease();
             return pRet;
         }
