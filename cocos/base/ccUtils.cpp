@@ -30,10 +30,9 @@ THE SOFTWARE.
 #include <cmath>
 #include <stdlib.h>
 
+#include <signal.h>
 #if !defined(_WIN32)
 // for unix/linux kill
-#include <sys/types.h>
-#include <signal.h>
 #include <unistd.h>
 #endif
 
@@ -734,6 +733,8 @@ void killCurrentProcess()
 {
 #if !defined(_WIN32)
     ::kill(::getpid(), SIGKILL);
+#else
+    ::TerminateProcess(::GetCurrentProcess(), SIGTERM);
 #endif
 }
 
