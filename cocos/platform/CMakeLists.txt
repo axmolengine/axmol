@@ -144,7 +144,7 @@ set(COCOS_PLATFORM_HEADER
     platform/CCPlatformMacros.h
     platform/CCSAXParser.h
     platform/CCStdC.h
-    platform/PXFileStream.h
+    platform/CCFileStream.h
     )
 
 set(COCOS_PLATFORM_SRC
@@ -153,5 +153,5 @@ set(COCOS_PLATFORM_SRC
     platform/CCGLView.cpp
     platform/CCFileUtils.cpp
     platform/CCImage.cpp
-    platform/PXFileStream.cpp
+    platform/CCFileStream.cpp
     )
