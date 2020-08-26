@@ -28,7 +28,6 @@
 #pragma once
 
 #include "audio/include/AudioDecoder.h"
-#include "platform/PXFileStream.h"
 
 #if !defined(MAKE_FOURCC)
 #define MAKE_FOURCC(a,b,c,d) ((uint32_t)((a) | ((b) << 8) | ((c) << 16) | (((uint32_t)(d)) << 24)))
