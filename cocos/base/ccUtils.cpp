@@ -2,6 +2,7 @@
 Copyright (c) 2010      cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 c4games.com
 
 http://www.cocos2d-x.org
 
@@ -28,6 +29,13 @@ THE SOFTWARE.
 
 #include <cmath>
 #include <stdlib.h>
+
+#include <signal.h>
+#if !defined(_WIN32)
+// for unix/linux kill
+#include <unistd.h>
+#endif
+
 #include "md5/md5.h"
 
 #include "base/CCDirector.h"
@@ -719,6 +727,15 @@ std::string bin2hex(const std::string& binary /*charstring also regard as binary
     }
 
     return result;
+}
+
+void killCurrentProcess()
+{
+#if !defined(_WIN32)
+    ::kill(::getpid(), SIGKILL);
+#else
+    ::TerminateProcess(::GetCurrentProcess(), SIGTERM);
+#endif
 }
 
 }
