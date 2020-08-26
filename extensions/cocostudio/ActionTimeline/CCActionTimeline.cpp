@@ -54,6 +54,7 @@ ActionTimeline::ActionTimeline()
     , _currentFrame(0)
     , _startFrame(0)
     , _endFrame(0)
+    , _loop(false)
     , _frameEventListener(nullptr)
     , _lastFrameListener(nullptr)
 {
@@ -147,8 +148,8 @@ void ActionTimeline::setCurrentFrame(int frameIndex)
 ActionTimeline* ActionTimeline::clone() const
 {
     ActionTimeline* newAction = ActionTimeline::create();
-    newAction->setDuration(_duration);
-    newAction->setTimeSpeed(_timeSpeed);
+    newAction->_duration = _duration;
+    newAction->_timeSpeed = _timeSpeed;
 
     for (const auto& timelines : _timelineMap)
     {
