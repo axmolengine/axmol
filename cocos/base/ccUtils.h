@@ -2,7 +2,6 @@
 Copyright (c) 2010      cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2020 c4games.com
 
 http://www.cocos2d-x.org
 
@@ -259,14 +258,6 @@ namespace utils
     * @lua NA
     */
     CC_DLL std::string bin2hex(const std::string& binary /*charstring also regard as binary in C/C++*/, int delim = -1, bool prefix = false);
-
-    /**
-    @brief killCurrentProcess immidiately, any object's destructor never call
-    @return NA.
-    * @js NA
-    * @lua NA
-    */
-    CC_DLL void killCurrentProcess();
 }
 
 NS_CC_END
