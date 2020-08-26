@@ -26,7 +26,6 @@
 #pragma once
 
 #include "audio/include/AudioDecoder.h"
-#include "platform/PXFileStream.h"
 
 #if !defined(CC_USE_MPG123)
 #define CC_USE_MPG123 0

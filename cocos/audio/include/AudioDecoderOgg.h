@@ -29,8 +29,6 @@
 
 #include "vorbis/vorbisfile.h"
 
-#include "platform/CCFileStream.h"
-
 namespace cocos2d {
 
 /**
