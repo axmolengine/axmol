@@ -80,7 +80,7 @@ set(COCOS_UI_HEADER
     ui/UIAbstractCheckButton.h
     ui/UIButton.h
     ui/UICheckBox.h
-#    ui/UIDeprecated.h
+    ui/LayoutHelper.h
     ui/UIHBox.h
     ui/UIHelper.h
     ui/UIImageView.h
@@ -115,7 +115,7 @@ set(COCOS_UI_SRC
     ui/UIAbstractCheckButton.cpp
     ui/UICheckBox.cpp
     ui/UIRadioButton.cpp
- #   ui/UIDeprecated.cpp
+    ui/LayoutHelper.cpp
     ui/UIHBox.cpp
     ui/UIHelper.cpp
     ui/UIImageView.cpp
