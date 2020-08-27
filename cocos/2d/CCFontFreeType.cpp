@@ -31,12 +31,14 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 #include "base/ccUTF8.h"
 #include "platform/CCFileUtils.h"
+#include "platform/CCFileStream.h"
 
 NS_CC_BEGIN
 
 
 FT_Library FontFreeType::_FTlibrary;
 bool       FontFreeType::_FTInitialized = false;
+bool       FontFreeType::_streamingParsingEnabled = true;
 const int  FontFreeType::DistanceMapSpread = 3;
 
 const char* FontFreeType::_glyphASCII = "\"!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ ";
@@ -49,6 +51,28 @@ typedef struct _DataRef
 }DataRef;
 
 static std::unordered_map<std::string, DataRef> s_cacheFontData;
+
+// ------ freetype2 stream parsing support ---
+static unsigned long ft_stream_read_callback(FT_Stream stream, unsigned long offset, unsigned char* buf, unsigned long size) {
+    auto fd = (FileStream*)stream->descriptor.pointer;
+    if (!fd) return 1;
+    if (!size && offset >= stream->size) return 1;
+
+    if (stream->pos != offset)
+        fd->seek(offset, SEEK_SET);
+
+    if (buf)
+        return fd->read(buf, size);
+
+    return 0;
+}
+
+static void ft_stream_close_callback(FT_Stream stream) {
+    auto fd = (FileStream*)stream->descriptor.pointer;
+    if (fd) delete fd;
+    stream->size = 0;
+    stream->descriptor.pointer = nullptr;
+}
 
 FontFreeType * FontFreeType::create(const std::string &fontName, float fontSize, GlyphCollection glyphs, const char *customGlyphs,bool distanceFieldEnabled /* = false */,float outline /* = 0 */)
 {
@@ -126,24 +150,51 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
     // save font name locally
     _fontName = fontName;
 
-    auto it = s_cacheFontData.find(fontName);
-    if (it != s_cacheFontData.end())
-    {
-        (*it).second.referenceCount += 1;
-    }
-    else
-    {
-        s_cacheFontData[fontName].referenceCount = 1;
-        s_cacheFontData[fontName].data = FileUtils::getInstance()->getDataFromFile(fontName);    
-
-        if (s_cacheFontData[fontName].data.isNull())
+    if (!_streamingParsingEnabled) {
+        auto it = s_cacheFontData.find(fontName);
+        if (it != s_cacheFontData.end())
         {
-            return false;
+            (*it).second.referenceCount += 1;
         }
-    }
+        else
+        {
+            s_cacheFontData[fontName].referenceCount = 1;
+            s_cacheFontData[fontName].data = FileUtils::getInstance()->getDataFromFile(fontName);
 
-    if (FT_New_Memory_Face(getFTLibrary(), s_cacheFontData[fontName].data.getBytes(), s_cacheFontData[fontName].data.getSize(), 0, &face ))
-        return false;
+            if (s_cacheFontData[fontName].data.isNull())
+            {
+                return false;
+            }
+        }
+
+        if (FT_New_Memory_Face(getFTLibrary(), s_cacheFontData[fontName].data.getBytes(), s_cacheFontData[fontName].data.getSize(), 0, &face))
+            return false;
+    }
+    else {
+        auto fullPath = FileUtils::getInstance()->fullPathForFilename(fontName);
+        if (fullPath.empty()) return false;
+
+        FileStream fs;
+        if (!fs.open(fullPath, FileStream::Mode::READ))
+            return false;
+
+        std::unique_ptr<FT_StreamRec> fts(new FT_StreamRec());
+        fts->read = ft_stream_read_callback;
+        fts->close = ft_stream_close_callback;
+        fts->size = fs.seek(0, SEEK_END);
+        fs.seek(0, SEEK_SET);
+
+        fts->descriptor.pointer = new FileStream(std::move(fs));
+
+        FT_Open_Args args = { 0 };
+        args.flags = FT_OPEN_STREAM;
+        args.stream = fts.get();;
+
+        if (FT_Open_Face(getFTLibrary(), &args, 0, &face))
+            return false;
+
+        _fontStream = std::move(fts);
+    }
 
     if (FT_Select_Charmap(face, FT_ENCODING_UNICODE))
     {
