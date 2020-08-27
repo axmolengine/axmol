@@ -42,6 +42,9 @@ public:
     FileStream();
     ~FileStream();
 
+    FileStream(FileStream&& rhs);
+    FileStream& operator=(FileStream&& rhs);
+
     enum class Mode {
         READ,
         WRITE,
@@ -59,8 +62,11 @@ public:
     operator bool() const;
 
 private:
-   PXFileHandle _handle;
-   const PXIoF* _iof;
+    void zeroset();
+    void assign(FileStream&& rhs);
+
+    PXFileHandle _handle;
+    const PXIoF* _iof;
 };
 
 NS_CC_END

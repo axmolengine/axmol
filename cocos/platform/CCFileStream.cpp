@@ -103,8 +103,9 @@ static PXIoF pfs_obb_iof = {
 };
 #endif
 
-FileStream::FileStream() : _iof(&pfs_posix_iof)
+FileStream::FileStream()
 {
+    zeroset();
 }
 
 FileStream::~FileStream()
@@ -112,10 +113,35 @@ FileStream::~FileStream()
     this->close();
 }
 
+FileStream::FileStream(FileStream&& rhs)
+{
+    zeroset();
+    assign(std::forward<FileStream>(rhs));
+}
+
+FileStream& FileStream::operator=(FileStream&& rhs)
+{
+    assign(std::forward<FileStream>(rhs));
+    return *this;
+}
+
+void FileStream::zeroset()
+{
+    memset(this, 0, sizeof(FileStream));
+}
+
+void FileStream::assign(FileStream&& rhs)
+{
+    this->close();
+    memcpy(this, &rhs, sizeof(FileStream));
+    rhs.zeroset();
+}
+
 bool FileStream::open(const std::string& path, FileStream::Mode mode)
 {
+    bool ok = false;
 #if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
-    return pfs_posix_open(path, mode, _handle) != -1;
+    ok = pfs_posix_open(path, mode, _handle) != -1;
 #else // Android
     if (path[0] != '/') { // from package, always readonly
         std::string relativePath;
@@ -131,26 +157,30 @@ bool FileStream::open(const std::string& path, FileStream::Mode mode)
         }
 
         auto obb = FileUtilsAndroid::getObbFile();
-        if (obb != nullptr && obb->zfopen(relativePath, &_handle._zfs)) {
+        ok = obb != nullptr && obb->zfopen(relativePath, &_handle._zfs);
+        if (ok) {
             this->_iof = &pfs_obb_iof;
-            return true;
         }
         else {
             AAssetManager* asMgr = FileUtilsAndroid::getAssetManager();
             AAsset* asset = AAssetManager_open(asMgr, relativePath.c_str(), AASSET_MODE_UNKNOWN);
-            if (asset == nullptr)
-                return false;
-
-            _handle._asset = asset;
-            // setup file read/seek/close at here
-            this->_iof = &pfs_asset_iof;
-            return true;
+            ok = !!asset;
+            if (ok) {
+                _handle._asset = asset;
+                // setup file read/seek/close at here
+                this->_iof = &pfs_asset_iof;
+            }
         }
     }
     else { // otherwise, as a absolutely path
-        return pfs_posix_open(path, mode, _handle) != -1;
+        ok = pfs_posix_open(path, mode, _handle) != -1;
     }
 #endif
+
+    if (ok && !_iof)
+        _iof = &pfs_posix_iof;
+
+    return ok;
 }
 
 FileStream::operator bool() const
@@ -164,7 +194,12 @@ FileStream::operator bool() const
 
 int FileStream::close()
 {
-    return _iof->close(_handle);
+    if (_iof) {
+        int ret = _iof->close(_handle);
+        _iof = nullptr;
+        return ret;
+    }
+    return 0;
 }
 
 int FileStream::seek(long offset, int origin)

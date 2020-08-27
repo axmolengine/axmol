@@ -49,6 +49,15 @@ public:
 
     static void shutdownFreeType();
 
+    /*
+    * @remark: if you want enable stream parsing, you need do one of follow steps
+    *          a. disable .ttf compress on .apk, see: 
+    *             https://simdsoft.com/notes/#build-apk-config-nocompress-file-type-at-appbuildgradle
+    *          b. uncomporess .ttf to disk by yourself.
+    */
+    static bool setStreamParsingEnabled(bool bEnabled) { _streamParsingEnabled = bEnabled; }
+    static bool isStreamParsingEnabled() { return _streamParsingEnabled; }
+
     bool isDistanceFieldEnabled() const { return _distanceFieldEnabled;}
 
     float getOutlineSize() const { return _outlineSize; }
@@ -75,6 +84,7 @@ private:
     static const char* _glyphNEHE;
     static FT_Library _FTlibrary;
     static bool _FTInitialized;
+    static bool _streamParsingEnabled;
 
     FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
@@ -91,6 +101,7 @@ private:
     const char* getGlyphCollection() const;
     
     FT_Face _fontRef;
+    std::unique_ptr<FT_StreamRec> _fontStream;
     FT_Stroker _stroker;
     FT_Encoding _encoding;
 
