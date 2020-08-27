@@ -62,18 +62,9 @@
 
 #### iOS
   1. Ensure xcode11+ & cmake3.6+ installed
-  2. Install brew: ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```  
-  when finish, install follow tools:
-  ```sh
-      brew update
-      brew install git
-      brew install autoconf
-      brew install automake
-      brew install libtool
-  ```
-  3. Execute follow command   
+  2. Execute follow command   
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
-  4. Generate xcode project
+  3. Generate xcode project
   ```sh
     # for device arm64
     cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
@@ -84,9 +75,9 @@
     # for simulator x86_64
     # cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator
   ```
-  5. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
+  4. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
 
-  6. Notes  
+  5. Notes  
     a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**  
     b. **EGNX only provide armv7,arm64,x86_64 prebuilt libraries for ios**
 

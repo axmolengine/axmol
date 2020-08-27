@@ -62,19 +62,9 @@
 
 #### iOS
   1. 确保已安装xcode11+和cmake3.6+
-  2. 安装brew: ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```  
-  brew安装完成后，确保如下工具安装:  
-  ```sh
-    brew update
-    brew install git
-    brew install cmake
-    brew install autoconf
-    brew install automake
-    brew install libtool
-  ```
-  3. 执行如下命令确保cmake能成功生成xcode工程:  
+  2. 执行如下命令确保cmake能成功生成xcode工程:  
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
-  4. 生成xcode工程, 进入engine-x根目录执行如下命令:  
+  3. 生成xcode工程, 进入engine-x根目录执行如下命令:  
   ```sh
     # for device arm64
     cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
@@ -85,7 +75,7 @@
     # for simulator x86_64
     # cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator
   ```
-  5. 之后就可以用xcode打开, 选择cpp-tests编译运行
+  4. 之后就可以用xcode打开, 选择cpp-tests编译运行
 
 ### 注意
   * ThreadLocalStorage线程本地存储
