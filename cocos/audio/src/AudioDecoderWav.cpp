@@ -76,7 +76,7 @@ namespace cocos2d {
     }
     static bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
     {
-        bool succeed = wavf->Stream.open(fullPath);
+        bool succeed = wavf->Stream.open(fullPath, FileStream::Mode::READ);
         if (!succeed)
             return false;
 

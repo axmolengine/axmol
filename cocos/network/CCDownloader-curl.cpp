@@ -151,7 +151,7 @@ namespace cocos2d { namespace network {
                     }
                 }
                 // open file
-                _fs.open(_tempFileName, FileStream::kModeAppend);
+                _fs.open(_tempFileName, FileStream::Mode::APPEND);
                 if (!_fs)
                 {
                     _errCode = DownloadTask::ERROR_OPEN_FILE_FAILED;
@@ -163,7 +163,7 @@ namespace cocos2d { namespace network {
 
 				// init md5 state
 				_checksumFileName = filename + ".chksum";
-				_fsMd5.open(_checksumFileName.c_str(), FileStream::kModeWrite);
+				_fsMd5.open(_checksumFileName.c_str(), FileStream::Mode::WRITE);
 				if (_fsMd5.seek(0, SEEK_END) != sizeof(md5_state_s)) {
 					md5_init(&_md5State);
 				}
@@ -902,7 +902,7 @@ public:
 				if (checkState & kCheckSumStateSucceed) // No need download 
 				{
 					FileStream fsOrigin;
-					if (fsOrigin.open(coTask._fileName)) {
+					if (fsOrigin.open(coTask._fileName, FileStream::Mode::READ)) {
 						task.progressInfo.totalBytesExpected = fsOrigin.seek(0, SEEK_END);
 						task.progressInfo.bytesReceived = task.progressInfo.totalBytesExpected;
 						task.progressInfo.totalBytesReceived = task.progressInfo.totalBytesExpected;

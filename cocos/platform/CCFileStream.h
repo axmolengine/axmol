@@ -42,13 +42,13 @@ public:
     FileStream();
     ~FileStream();
 
-    enum Mode {
-        kModeReadOnly,
-        kModeWrite,
-        kModeAppend,
+    enum class Mode {
+        READ,
+        WRITE,
+        APPEND,
     };
 
-    bool open(const std::string& path, int mode = kModeReadOnly);
+    bool open(const std::string& path, Mode mode);
     int close();
 
     int seek(long offset, int origin);
