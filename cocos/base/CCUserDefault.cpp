@@ -36,6 +36,7 @@ THE SOFTWARE.
 
 #include "openssl/aes.h"
 #include "openssl/modes.h"
+#include "openssl/rc4.h"
 
 #include "base/CCUserDefault.h"
 #include "platform/CCCommon.h"
@@ -90,10 +91,6 @@ NS_CC_BEGIN
 
 UserDefault* UserDefault::_userDefault = nullptr;
 
-bool UserDefault::_encryptEnabled = false;
-std::string UserDefault::_key;
-std::string UserDefault::_iv;
-
 static void ud_setkey(std::string& lhs, const cxx17::string_view& rhs) {
     static const size_t keyLen = 16;
     if (!rhs.empty()) {
@@ -110,7 +107,7 @@ static void ud_write_v_s(yasio::obstream& obs, const cxx17::string_view value)
     size_t valpos = obs.length();
     obs.write_v(value);
     if(!value.empty())
-        UserDefault::encrypt(obs.wptr(valpos + sizeof(int32_t)), obs.length() - valpos - sizeof(int32_t), AES_ENCRYPT);
+        UserDefault::getInstance()->encrypt(obs.wptr(valpos + sizeof(int32_t)), obs.length() - valpos - sizeof(int32_t), AES_ENCRYPT);
 }
 
 void UserDefault::setEncryptEnabled(bool enabled, const cxx17::string_view& key, const cxx17::string_view& iv)
