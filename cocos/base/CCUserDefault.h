@@ -223,13 +223,13 @@ public:
     */
     virtual void setEncryptEnabled(bool enabled, const cxx17::string_view& key, const cxx17::string_view& iv);
 
-    void encrypt(std::string& inout, int enc);
-
     /*
     *  Mark encrypt function as virtual, default use AES cfb128 encrypt/decrypt
     *  you can write your own delegate to replace encrypt/decrypt algorithm
     */
     virtual void encrypt(char* inout, size_t size, int enc);
+
+    void encrypt(std::string& inout, int enc);
 
 protected:
     UserDefault();
