@@ -216,15 +216,20 @@ public:
     */
     static void setDelegate(UserDefault *delegate);
 
-    /* AES cfb128 encrypt support
+    /*
     ** @params:
     **   key: 16bytes key
     **   iv: 16bytes iv
     */
-    static void setEncryptEnabled(bool enabled, const cxx17::string_view& key, const cxx17::string_view& iv);
+    virtual void setEncryptEnabled(bool enabled, const cxx17::string_view& key, const cxx17::string_view& iv);
 
-    static void encrypt(std::string& inout, int enc);
-    static void encrypt(char* inout, size_t size, int enc);
+    void encrypt(std::string& inout, int enc);
+
+    /*
+    *  Mark encrypt function as virtual, default use AES cfb128 encrypt/decrypt
+    *  you can write your own delegate to replace encrypt/decrypt algorithm
+    */
+    virtual void encrypt(char* inout, size_t size, int enc);
 
 protected:
     UserDefault();
@@ -235,7 +240,8 @@ protected:
     void closeFileMapping();
 
     void setValueForKey(const std::string& key, const std::string& value);
-private:
+
+protected:
 
     std::unordered_map<std::string, std::string> _values;
     
@@ -247,10 +253,10 @@ private:
     int _realSize = 0; // real data size without key/value entities count field
     bool _initialized = false;
 
-    // cfb128 encrpyt args
-    static bool _encryptEnabled;
-    static std::string _key;
-    static std::string _iv;
+    // encrpyt args
+    bool _encryptEnabled;
+    std::string _key;
+    std::string _iv;
 };
 
 
