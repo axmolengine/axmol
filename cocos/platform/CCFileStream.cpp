@@ -1,5 +1,6 @@
 // Copyright (c) 2018-2019 HALX99.
-#include "platform/PXFileStream.h"
+// Copyright (c) 2020 c4games.com
+#include "platform/CCFileStream.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #include "base/ZipUtils.h"
@@ -36,16 +37,16 @@ struct PXIoF {
     int(*close)(PXFileHandle& handle);
 };
 
-static int pfs_posix_open(const std::string& path, int mode, PXFileHandle& handle)
+static int pfs_posix_open(const std::string& path, FileStream::Mode mode, PXFileHandle& handle)
 {
     switch (mode) {
-    case PXFileStream::kModeReadOnly:
+    case FileStream::Mode::READ:
         handle._fd = posix_open(path.c_str(), O_READ_FLAGS);
         break;
-    case PXFileStream::kModeWrite:
+    case FileStream::Mode::WRITE:
         handle._fd = posix_open(path.c_str(), O_WRITE_FLAGS);
         break;
-    case PXFileStream::kModeAppend:
+    case FileStream::Mode::APPEND:
         handle._fd = posix_open(path.c_str(), O_APPEND_FLAGS);
         break;
     default:
@@ -102,16 +103,16 @@ static PXIoF pfs_obb_iof = {
 };
 #endif
 
-PXFileStream::PXFileStream() : _iof(&pfs_posix_iof)
+FileStream::FileStream() : _iof(&pfs_posix_iof)
 {
 }
 
-PXFileStream::~PXFileStream()
+FileStream::~FileStream()
 {
     this->close();
 }
 
-bool PXFileStream::open(const std::string& path, int mode)
+bool FileStream::open(const std::string& path, FileStream::Mode mode)
 {
 #if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
     return pfs_posix_open(path, mode, _handle) != -1;
@@ -152,7 +153,7 @@ bool PXFileStream::open(const std::string& path, int mode)
 #endif
 }
 
-PXFileStream::operator bool() const
+FileStream::operator bool() const
 {
 #if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
     return _handle._fd != -1;
@@ -161,22 +162,22 @@ PXFileStream::operator bool() const
 #endif
 }
 
-int PXFileStream::close()
+int FileStream::close()
 {
     return _iof->close(_handle);
 }
 
-int PXFileStream::seek(long offset, int origin)
+int FileStream::seek(long offset, int origin)
 {
     return _iof->seek(_handle, offset, origin);
 }
 
-int PXFileStream::read(void* buf, unsigned int size)
+int FileStream::read(void* buf, unsigned int size)
 {
     return _iof->read(_handle, buf, size);
 }
 
-int PXFileStream::write(const void* buf, unsigned int size)
+int FileStream::write(const void* buf, unsigned int size)
 {
     return posix_write(_handle._fd, buf, size);
 }

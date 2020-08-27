@@ -27,6 +27,7 @@
 
 #include <stdint.h>
 #include <string>
+#include "platform/CCFileStream.h"
 
 namespace cocos2d {
 enum class AUDIO_SOURCE_FORMAT : uint16_t

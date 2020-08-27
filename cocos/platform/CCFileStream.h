@@ -1,4 +1,5 @@
-// Copyright (c) 2018-2019 HALX99, TODO: may rename this file to PXFileStream
+// Copyright (c) 2018-2019 HALX99
+// Copyright (c) 2020 c4games.com
 #pragma once
 
 #include "platform/CCPlatformConfig.h"
@@ -36,18 +37,18 @@ union PXFileHandle {
 
 struct PXIoF;
 
-class CC_DLL PXFileStream {
+class CC_DLL FileStream {
 public:
-    PXFileStream();
-    ~PXFileStream();
+    FileStream();
+    ~FileStream();
 
-    enum Mode {
-        kModeReadOnly,
-        kModeWrite,
-        kModeAppend,
+    enum class Mode {
+        READ,
+        WRITE,
+        APPEND,
     };
 
-    bool open(const std::string& path, int mode = kModeReadOnly);
+    bool open(const std::string& path, Mode mode);
     int close();
 
     int seek(long offset, int origin);

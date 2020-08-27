@@ -29,8 +29,6 @@
 
 #include "vorbis/vorbisfile.h"
 
-#include "platform/PXFileStream.h"
-
 namespace cocos2d {
 
 /**
@@ -70,7 +68,7 @@ protected:
     AudioDecoderOgg();
     ~AudioDecoderOgg();
 
-    PXFileStream _fileStream;
+    FileStream _fileStream;
     OggVorbis_File _vf;
 
     friend class AudioDecoderManager;

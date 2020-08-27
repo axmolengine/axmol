@@ -56,28 +56,28 @@ namespace cocos2d {
 #if !CC_USE_MPG123
     static size_t minimp3_read_r(void* buf, size_t size, void* user_data)
     {
-        return ((PXFileStream*)user_data)->read(buf, size);
+        return ((FileStream*)user_data)->read(buf, size);
     }
 
     static int minimp3_seek_r(uint64_t position, void* user_data)
     {
-        return ((PXFileStream*)user_data)->seek(position, SEEK_SET) >= 0 ? 0 : -1;
+        return ((FileStream*)user_data)->seek(position, SEEK_SET) >= 0 ? 0 : -1;
     }
 #else
     static bool __mp3Inited = false;
     
     static ssize_t mpg123_read_r(void * handle, void * buffer, size_t count)
     {
-        return ((PXFileStream*)handle)->read(buffer, count);
+        return ((FileStream*)handle)->read(buffer, count);
     }
 
     static off_t mpg123_lseek_r(void * handle, off_t offset, int whence)
     {
-        return ((PXFileStream*)handle)->seek(offset, whence);
+        return ((FileStream*)handle)->seek(offset, whence);
     }
 
     void mpg123_close_r(void* handle) {
-        ((PXFileStream*)handle)->close();
+        ((FileStream*)handle)->close();
     }
 #endif
     bool AudioDecoderMp3::lazyInit()
@@ -128,7 +128,7 @@ namespace cocos2d {
 #if !CC_USE_MPG123
         do
         {
-            if (!_fileStream.open(fullPath))
+            if (!_fileStream.open(fullPath, FileStream::Mode::READ))
             {
                 ALOGE("Trouble with minimp3(1): %s\n", strerror(errno));
                 break;
