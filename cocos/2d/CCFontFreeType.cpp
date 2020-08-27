@@ -38,7 +38,7 @@ NS_CC_BEGIN
 
 FT_Library FontFreeType::_FTlibrary;
 bool       FontFreeType::_FTInitialized = false;
-bool       FontFreeType::_streamingParsingEnabled = true;
+bool       FontFreeType::_streamParsingEnabled = false;
 const int  FontFreeType::DistanceMapSpread = 3;
 
 const char* FontFreeType::_glyphASCII = "\"!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ ";
@@ -150,7 +150,7 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
     // save font name locally
     _fontName = fontName;
 
-    if (!_streamingParsingEnabled) {
+    if (!_streamParsingEnabled) {
         auto it = s_cacheFontData.find(fontName);
         if (it != s_cacheFontData.end())
         {

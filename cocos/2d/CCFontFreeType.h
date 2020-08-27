@@ -55,8 +55,8 @@ public:
     *             https://simdsoft.com/notes/#build-apk-config-nocompress-file-type-at-appbuildgradle
     *          b. uncomporess .ttf to disk by yourself.
     */
-    static bool setStreamParsingEnabled(bool bEnabled) { _streamingParsingEnabled = bEnabled; }
-    static bool isStreamParsingEnabled() { return _streamingParsingEnabled; }
+    static bool setStreamParsingEnabled(bool bEnabled) { _streamParsingEnabled = bEnabled; }
+    static bool isStreamParsingEnabled() { return _streamParsingEnabled; }
 
     bool isDistanceFieldEnabled() const { return _distanceFieldEnabled;}
 
@@ -84,7 +84,7 @@ private:
     static const char* _glyphNEHE;
     static FT_Library _FTlibrary;
     static bool _FTInitialized;
-    static bool _streamingParsingEnabled;
+    static bool _streamParsingEnabled;
 
     FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
