@@ -54,10 +54,10 @@ void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)
     auto destinationRGBBlendFactor = UtilsGL::toGLBlendFactor(descriptor.destinationRGBBlendFactor);
     auto sourceAlphaBlendFactor = UtilsGL::toGLBlendFactor(descriptor.sourceAlphaBlendFactor);
     auto destinationAlphaBlendFactor = UtilsGL::toGLBlendFactor(descriptor.destinationAlphaBlendFactor);
-    GLboolean writeMaskRed = (GLboolean)((descriptor.writeMask & ColorWriteMask::RED) >> ColorWriteMask::RED_BIT);
-    GLboolean writeMaskGreen = (GLboolean)((descriptor.writeMask & ColorWriteMask::GREEN) >> ColorWriteMask::GREEN_BIT);
-    GLboolean writeMaskBlue = (GLboolean)((descriptor.writeMask & ColorWriteMask::BLUE) >> ColorWriteMask::BLUE_BIT);
-    GLboolean writeMaskAlpha = (GLboolean)((descriptor.writeMask & ColorWriteMask::ALPHA) >> ColorWriteMask::ALPHA_BIT);
+    GLboolean writeMaskRed = _Bitmask_includes(descriptor.writeMask, ColorWriteMask::RED);
+    GLboolean writeMaskGreen = _Bitmask_includes(descriptor.writeMask, ColorWriteMask::GREEN);
+    GLboolean writeMaskBlue = _Bitmask_includes(descriptor.writeMask, ColorWriteMask::BLUE);
+    GLboolean writeMaskAlpha = _Bitmask_includes(descriptor.writeMask, ColorWriteMask::ALPHA);
 
     if (blendEnabled)
     {
