@@ -37,16 +37,16 @@ struct PXIoF {
     int(*close)(PXFileHandle& handle);
 };
 
-static int pfs_posix_open(const std::string& path, int mode, PXFileHandle& handle)
+static int pfs_posix_open(const std::string& path, FileStream::Mode mode, PXFileHandle& handle)
 {
     switch (mode) {
-    case FileStream::kModeReadOnly:
+    case FileStream::Mode::READ:
         handle._fd = posix_open(path.c_str(), O_READ_FLAGS);
         break;
-    case FileStream::kModeWrite:
+    case FileStream::Mode::WRITE:
         handle._fd = posix_open(path.c_str(), O_WRITE_FLAGS);
         break;
-    case FileStream::kModeAppend:
+    case FileStream::Mode::APPEND:
         handle._fd = posix_open(path.c_str(), O_APPEND_FLAGS);
         break;
     default:
@@ -112,7 +112,7 @@ FileStream::~FileStream()
     this->close();
 }
 
-bool FileStream::open(const std::string& path, int mode)
+bool FileStream::open(const std::string& path, FileStream::Mode mode)
 {
 #if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
     return pfs_posix_open(path, mode, _handle) != -1;

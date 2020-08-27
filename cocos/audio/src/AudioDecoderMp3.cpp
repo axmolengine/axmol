@@ -128,7 +128,7 @@ namespace cocos2d {
 #if !CC_USE_MPG123
         do
         {
-            if (!_fileStream.open(fullPath))
+            if (!_fileStream.open(fullPath, FileStream::Mode::READ))
             {
                 ALOGE("Trouble with minimp3(1): %s\n", strerror(errno));
                 break;
