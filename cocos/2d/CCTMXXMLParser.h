@@ -83,6 +83,48 @@ typedef enum TMXTileFlags_ {
     kTMXFlippedMask         = ~(kTMXFlipedAll)
 } TMXTileFlags;
 
+
+/**
+ * @addtogroup _2d
+ * @{
+ */
+
+ /** Possible orientations of the TMX map. */
+enum
+{
+    /** Orthogonal orientation. */
+    TMXOrientationOrtho,
+
+    /** Hexagonal orientation. */
+    TMXOrientationHex,
+
+    /** Isometric orientation. */
+    TMXOrientationIso,
+
+    /** Isometric staggered orientation. */
+    TMXOrientationStaggered,
+};
+
+/** Possible stagger axis of the TMX map. */
+enum
+{
+    /** Stagger Axis x. */
+    TMXStaggerAxis_X,
+
+    /** Stagger Axis y. */
+    TMXStaggerAxis_Y,
+};
+
+/** Possible stagger index of the TMX map. */
+enum
+{
+    /** Stagger Index: Odd */
+    TMXStaggerIndex_Odd,
+
+    /** Stagger Index: Even */
+    TMXStaggerIndex_Even,
+};
+
 // Bits on the far end of the 32-bit global tile ID (GID's) are used for tile flags
 
 /** @brief TMXLayerInfo contains the information about the layers like:
