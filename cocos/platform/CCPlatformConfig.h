@@ -103,24 +103,36 @@ THE SOFTWARE.
 #endif
 #endif  // CC_PLATFORM_WIN32
 
+/*
+* Windows: https://github.com/google/angle
+* iOS: Use Apple GLES
+*/
+#ifndef CC_FORCE_USE_GLES
+#define CC_FORCE_USE_GLES 0
+#endif
+
 #if ((CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS))
     #define CC_PLATFORM_MOBILE
 #else
     #define CC_PLATFORM_PC
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) 
     #define CC_USE_METAL
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    #if !CC_FORCE_USE_GLES
+        #define CC_USE_METAL
+    #else
+        #define CC_USE_GLES
+    #endif
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     #define CC_USE_GLES
 #else
-    #define CC_USE_GL
-#endif
-
-// whether use google angleproject GLES on desktop
-// https://github.com/google/angle
-#ifndef CC_USE_GLES_ON_DESKTOP
-#define CC_USE_GLES_ON_DESKTOP 0
+    #if !CC_FORCE_USE_GLES
+        #define CC_USE_GL
+    #else
+        #define CC_USE_GLES
+    #endif
 #endif
 
 /// @endcond

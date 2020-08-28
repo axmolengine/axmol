@@ -265,7 +265,7 @@ bool Configuration::supportsMapBuffer() const
     // is always implemented in OpenGL.
 
     // XXX: Warning. On iOS this is always `true`. Avoiding the comparison.
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_USE_GLES_ON_DESKTOP)
+#if defined(CC_USE_GLES) && !defined(__APPLE__)
     return _supportsOESMapBuffer;
 #else
     return true;

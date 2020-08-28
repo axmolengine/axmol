@@ -303,7 +303,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
     if (initglfw)
     {
         glfwSetErrorCallback(GLFWEventHandler::onGLFWError);
-#if CC_USE_GLES_ON_DESKTOP && GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4
+#if defined(CC_USE_GLES) && GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4
         glfwInitHint(GLFW_ANGLE_PLATFORM_TYPE, GLFW_ANGLE_PLATFORM_TYPE_D3D11); // since glfw-3.4
 #endif
         glfwInit();
@@ -372,7 +372,7 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
 
     _frameZoomFactor = frameZoomFactor;
 
-#if CC_USE_GLES_ON_DESKTOP
+#if defined(CC_USE_GLES)
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -464,7 +464,7 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
     }
     
     // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
-#if !CC_USE_GLES_ON_DESKTOP
+#if defined(CC_USE_GL)
     // Enable point size by default.
 #if defined(GL_VERSION_2_0)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
@@ -1157,7 +1157,7 @@ bool GLViewImpl::loadGL()
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-#if !CC_USE_GLES_ON_DESKTOP
+#if defined(CC_USE_GL)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         log("glad: Failed to Load GL");

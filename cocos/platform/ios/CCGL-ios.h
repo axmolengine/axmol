@@ -24,21 +24,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __PLATFORM_CCGL_H__
-#define __PLATFORM_CCGL_H__
-/// @cond DO_NOT_SHOW
+#ifndef __PLATFORM_IOS_CCGL_H__
+#define __PLATFORM_IOS_CCGL_H__
 
 #include "platform/CCPlatformConfig.h"
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-#include "platform/android/CCGL-android.h"
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-#include "platform/win32/CCGL-win32.h"
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
-#include "platform/linux/CCGL-linux.h"
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS && !defined(CC_USE_METAL)
-#include "platform/ios/CCGL-ios.h"
-#endif
+#define glClearDepth                glClearDepthf
+#define glDeleteVertexArrays        glDeleteVertexArraysOES
+#define glGenVertexArrays           glGenVertexArraysOES
+#define glBindVertexArray           glBindVertexArrayOES
+#define glMapBuffer                 glMapBufferOES
+#define glUnmapBuffer               glUnmapBufferOES
 
-/// @endcond
-#endif /* __PLATFORM_CCPLATFORMDEFINE_H__*/
+#define GL_DEPTH24_STENCIL8         GL_DEPTH24_STENCIL8_OES
+#define GL_WRITE_ONLY               GL_WRITE_ONLY_OES
+
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+
+#endif // CC_PLATFORM_IOS
+
+#endif // __PLATFORM_IOS_CCGL_H__
+

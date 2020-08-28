@@ -109,6 +109,8 @@ tags
 # ignore all build
 /build
 
+/build_*
+
 # ignore jniLibs android
 /**/jniLibs/*/*.so
 
