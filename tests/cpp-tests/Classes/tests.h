@@ -109,7 +109,6 @@
 #include "Texture2dTest/Texture2dTest.h"
 #include "TextureCacheTest/TextureCacheTest.h"
 #include "TexturePackerEncryptionTest/TextureAtlasEncryptionTest.h"
-#include "TileMapTest/TileMapTest.h"
 #include "TileMapTest/TileMapTest2.h"
 #include "TouchesTest/TouchesTest.h"
 #include "TransitionsTest/TransitionsTest.h"

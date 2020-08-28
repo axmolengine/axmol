@@ -131,7 +131,7 @@ list(APPEND GAME_HEADER
      Classes/MaterialSystemTest/MaterialSystemTest.h
      Classes/IntervalTest/IntervalTest.h
      Classes/TileMapTest/TileMapTest2.h
-     Classes/TileMapTest/TileMapTest.h
+     # Classes/TileMapTest/TileMapTest.h
      Classes/NewEventDispatcherTest/NewEventDispatcherTest.h
      Classes/ActionsProgressTest/ActionsProgressTest.h
      Classes/RotateWorldTest/RotateWorldTest.h
@@ -291,7 +291,7 @@ list(APPEND GAME_SOURCE
      Classes/Texture2dTest/Texture2dTest.cpp
      Classes/TextureCacheTest/TextureCacheTest.cpp
      Classes/TexturePackerEncryptionTest/TextureAtlasEncryptionTest.cpp
-     Classes/TileMapTest/TileMapTest.cpp
+     #Classes/TileMapTest/TileMapTest.cpp
      Classes/TileMapTest/TileMapTest2.cpp
      Classes/TouchesTest/Ball.cpp
      Classes/TouchesTest/Paddle.cpp

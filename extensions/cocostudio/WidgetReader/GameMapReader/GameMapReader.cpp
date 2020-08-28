@@ -26,7 +26,7 @@
 
 #include "2d/CCLabel.h"
 #include "2d/CCTMXXMLParser.h"
-#include "2d/CCTMXTiledMap.h"
+#include "2d/CCFastTMXTiledMap.h"
 #include "platform/CCFileUtils.h"
 #include "base/ccUTF8.h"
 
@@ -134,7 +134,7 @@ namespace cocostudio
     
     Node* GameMapReader::createNodeWithFlatBuffers(const flatbuffers::Table *gameMapOptions)
     {
-        TMXTiledMap* tmx = nullptr;
+        FastTMXTiledMap* tmx = nullptr;
         
         auto options = (GameMapOptions*)gameMapOptions;
         auto fileNameData = options->fileNameData();
@@ -235,7 +235,7 @@ namespace cocostudio
             }
             /**/
             
-            tmx = TMXTiledMap::create(path);
+            tmx = FastTMXTiledMap::create(path);
             if (tmx)
             {
                 //prevent that editor's data does not match in size and resources
