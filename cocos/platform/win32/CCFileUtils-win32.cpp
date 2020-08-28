@@ -228,7 +228,7 @@ void FileUtilsWin32::listFilesRecursively(const std::string& dirPath, std::vecto
                     }
                     else
                     {
-                        files->push_back(filepath);
+                        files->push_back(std::move(filepath));
                     }
                 }
 
@@ -283,7 +283,7 @@ std::vector<std::string> FileUtilsWin32::listFiles(const std::string& dirPath) c
                     {
                         filepath.push_back('/');
                     }
-                    files.push_back(filepath);
+                    files.push_back(std::move(filepath));
                 }
 
                 if (tinydir_next(&dir) == -1)
