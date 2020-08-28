@@ -77,7 +77,7 @@ set(COCOS_RENDERER_SRC
     renderer/backend/RenderPassDescriptor.cpp
     )
 
-if(ANDROID OR WINDOWS OR LINUX) 
+if(ANDROID OR WINDOWS OR LINUX OR (IOS AND CC_FORCE_USE_GLES)) 
 
 list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/opengl/BufferGL.h

@@ -65,6 +65,10 @@ if(NOT DEFINED EGNX_CORE_LIB)
     set(EGNX_CORE_LIB cocos2d CACHE INTERNAL "The EGNX core lib name" )
 endif()
 
+if (NOT DEFINED CC_FORCE_USE_GLES)
+    set(CC_FORCE_USE_GLES FALSE CACHE INTERNAL "Force use GLES" )
+endif()
+
 project(cocos2d_libs)
 
 include(2d/CMakeLists.txt)

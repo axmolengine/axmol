@@ -41,7 +41,7 @@ namespace {
 ProgramGL::ProgramGL(const std::string& vertexShader, const std::string& fragmentShader)
 : Program(vertexShader, fragmentShader)
 {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_USE_GLES_ON_DESKTOP
+#if defined(CC_USE_GLES)
     // some device required manually specify the precision qualifiers for vertex shader.
     _vertexShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(SHADER_PREDEFINE + _vertexShader));
     _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(SHADER_PREDEFINE + _fragmentShader));
