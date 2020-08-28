@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 c4games.com
 
 http://www.cocos2d-x.org
 
@@ -30,7 +31,7 @@ THE SOFTWARE.
 
 #include "glad/glad.h"
 
-#if CC_USE_GLES_ON_DESKTOP
+#if defined(CC_USE_GLES)
 #undef glClearDepth
 #undef glMapBuffer
 #undef glUnmapBuffer

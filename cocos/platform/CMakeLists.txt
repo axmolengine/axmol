@@ -100,6 +100,21 @@ elseif(APPLE)
             platform/ios/CCImage-ios.mm
             platform/ios/CCInputView-ios.mm
             )
+
+        if(CC_FORCE_USE_GLES)
+            set(COCOS_PLATFORM_SPECIFIC_HEADER
+                ${COCOS_PLATFORM_SPECIFIC_HEADER}
+                platform/ios/CCES2Renderer-ios.h
+                platform/ios/CCES2Renderer-ios.h
+                platform/ios/CCESRenderer-ios.h
+                platform/ios/CCGL-ios.h
+                platform/ios/OpenGL_Internal-ios.h
+            )
+            set(COCOS_PLATFORM_SPECIFIC_SRC
+                ${COCOS_PLATFORM_SPECIFIC_SRC}
+                platform/ios/CCES2Renderer-ios.m
+            )
+        endif()
     endif()
 
 elseif(LINUX)
