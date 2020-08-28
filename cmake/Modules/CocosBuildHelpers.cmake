@@ -247,6 +247,11 @@ function(setup_cocos_app_config app_name)
     if(APPLE)
         # output macOS/iOS .app
         set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
+        if(IOS AND (NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
+            message(STATUS "Building for ios arm devices, set CODE_SIGNING_REQUIRED=YES")
+            set_xcode_property(${APP_NAME} CODE_SIGNING_REQUIRED "YES")
+            set_xcode_property(${APP_NAME} CODE_SIGNING_ALLOWED "YES")
+        endif()
     elseif(MSVC)
         # visual studio default is Console app, but we need Windows app
         set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "/SUBSYSTEM:WINDOWS")
