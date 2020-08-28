@@ -72,6 +72,8 @@ bool FastTMXTiledMap::initWithTMXFile(const std::string& tmxFile)
     CCASSERT( !mapInfo->getTilesets().empty(), "FastTMXTiledMap: Map not found. Please check the filename.");
     buildWithMapInfo(mapInfo);
 
+    _tmxFile = tmxFile;
+
     return true;
 }
 
@@ -192,6 +194,8 @@ void FastTMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
             idx++;
         }
     }
+
+    _layerCount = idx;
 }
 
 // public

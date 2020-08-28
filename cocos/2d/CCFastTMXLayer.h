@@ -291,10 +291,14 @@ public:
     TMXTileAnimManager* getTileAnimManager() const {
         return _tileAnimManager;
     }
+
+CC_CONSTRUCTOR_ACCESS:
+    bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+
 protected:
     virtual void setOpacity(uint8_t opacity) override;
 
-    bool initWithTilesetInfo(TMXTilesetInfo *tilesetInfo, TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo);
+
     void updateTiles(const Rect& culledRect);
     Vec2 calculateLayerOffset(const Vec2& offset);
 

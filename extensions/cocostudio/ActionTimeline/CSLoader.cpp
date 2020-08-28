@@ -32,7 +32,7 @@
 #include "ui/CocosGUI.h"
 #include "2d/CCSpriteFrameCache.h"
 #include "2d/CCParticleSystemQuad.h"
-#include "2d/CCTMXTiledMap.h"
+#include "2d/CCFastTMXTiledMap.h"
 #include "platform/CCFileUtils.h"
 
 #include "cocostudio/ActionTimeline/CCActionTimelineCache.h"

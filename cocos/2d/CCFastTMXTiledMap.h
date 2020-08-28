@@ -205,7 +205,14 @@ public:
      *  animations are not enabled by default
      */
     void setTileAnimEnabled(bool enabled);
-protected:
+
+    CC_DEPRECATED_ATTRIBUTE int getLayerNum() const { return getLayerCount(); }
+
+    int getLayerCount() const { return _layerCount; }
+
+    const std::string& getResourceFile() const { return _tmxFile; }
+
+CC_CONSTRUCTOR_ACCESS:
     /**
      * @js ctor
      */
@@ -222,6 +229,7 @@ protected:
     /** initializes a TMX Tiled Map with a TMX formatted XML string and a path to TMX resources */
     bool initWithXML(const std::string& tmxString, const std::string& resourcePath);
     
+protected:
     FastTMXLayer * parseLayer(TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo);
     TMXTilesetInfo * tilesetForLayer(TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo);
     void buildWithMapInfo(TMXMapInfo* mapInfo);
@@ -240,6 +248,9 @@ protected:
     //! tile properties
     ValueMapIntKey _tileProperties;
 
+    int _layerCount = 0;
+
+    std::string _tmxFile;
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(FastTMXTiledMap);
 

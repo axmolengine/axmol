@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "cocostudio/CocoStudio.h"
 
 #include "platform/CCFileUtils.h"
-#include "2d/CCTMXTiledMap.h"
+#include "2d/CCFastTMXTiledMap.h"
 #include "2d/CCParticleSystemQuad.h"
 #include "2d/CCSpriteFrameCache.h"
 
