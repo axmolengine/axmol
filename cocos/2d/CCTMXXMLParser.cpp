@@ -665,6 +665,19 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char *name, const char **atts
             dict["polylinePoints"] = Value(pointsArray);
         }
     }
+    else if (elementName == "animation")
+    {
+        TMXTilesetInfo* info = tmxMapInfo->getTilesets().back();
+        info->_animationInfo.insert(tmxMapInfo->getParentGID(), TMXTileAnimInfo::create(tmxMapInfo->getParentGID()));
+        tmxMapInfo->setParentElement(TMXPropertyAnimation);
+    }
+    else if (elementName == "frame")
+    {
+        TMXTilesetInfo* info = tmxMapInfo->getTilesets().back();
+        auto animInfo = info->_animationInfo.at(tmxMapInfo->getParentGID());
+        // calculate gid of frame
+        animInfo->_frames.emplace_back(TMXTileAnimFrame(info->_firstGid + attributeDict["tileid"].asInt(), attributeDict["duration"].asFloat()));
+    }
 }
 
 void TMXMapInfo::endElement(void* /*ctx*/, const char *name)
@@ -785,6 +798,10 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char *name)
     {
         _recordFirstGID = true;
     }
+    else if (elementName == "animation")
+    {
+        tmxMapInfo->setParentElement(TMXPropertyNone);
+    }
 }
 
 void TMXMapInfo::textHandler(void* /*ctx*/, const char *ch, size_t len)
@@ -799,5 +816,29 @@ void TMXMapInfo::textHandler(void* /*ctx*/, const char *ch, size_t len)
         tmxMapInfo->setCurrentString(currentString);
     }
 }
+
+TMXTileAnimFrame::TMXTileAnimFrame(uint32_t tileID, float duration)
+    : _tileID(tileID)
+    , _duration(duration)
+{
+}
+
+TMXTileAnimInfo::TMXTileAnimInfo(uint32_t tileID)
+    : _tileID(tileID)
+{
+}
+
+TMXTileAnimInfo* TMXTileAnimInfo::create(uint32_t tileID)
+{
+    TMXTileAnimInfo* ret = new (std::nothrow) TMXTileAnimInfo(tileID);
+    if (ret)
+    {
+        ret->autorelease();
+        return ret;
+    }
+    CC_SAFE_DELETE(ret);
+    return nullptr;
+}
+
 
 NS_CC_END

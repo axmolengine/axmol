@@ -66,6 +66,7 @@ FastTileMapTests::FastTileMapTests()
     ADD_TEST_CASE(TMXBug987New);
     ADD_TEST_CASE(TMXBug787New);
     ADD_TEST_CASE(TMXGIDObjectsTestNew);
+    ADD_TEST_CASE(TileAnimTestNew);
 }
 
 TileDemoNew::TileDemoNew()
@@ -1385,4 +1386,36 @@ std::string TMXGIDObjectsTestNew::title() const
 std::string TMXGIDObjectsTestNew::subtitle() const
 {
     return "Tiles are created from an object group";
+}
+
+//------------------------------------------------------------------
+//
+// TileAnimTestNew
+//
+//------------------------------------------------------------------
+TileAnimTestNew::TileAnimTestNew()
+{
+
+    map = FastTMXTiledMap::create("TileMaps/tile_animation_test.tmx");
+    addChild(map, 0, kTagTileMap);
+
+    auto listener = EventListenerTouchAllAtOnce::create();
+    listener->onTouchesBegan = CC_CALLBACK_2(TileAnimTestNew::onTouchBegan, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+    Size CC_UNUSED s = map->getContentSize();
+    CCLOG("ContentSize: %f, %f", s.width, s.height);
+
+    map->setTileAnimEnabled(_animStarted);
+}
+
+std::string TileAnimTestNew::title() const
+{
+    return "Tile animation test. Click to toggle the animation";
+}
+
+void TileAnimTestNew::onTouchBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event)
+{
+    _animStarted = !_animStarted;
+    map->setTileAnimEnabled(_animStarted);
 }

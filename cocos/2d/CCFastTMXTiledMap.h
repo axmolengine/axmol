@@ -201,6 +201,10 @@ public:
 
     virtual std::string getDescription() const override;
 
+    /** Set all tile animations enabled or not.
+     *  animations are not enabled by default
+     */
+    void setTileAnimEnabled(bool enabled);
 protected:
     /**
      * @js ctor
@@ -243,6 +247,8 @@ private:
 
 // end of tilemap_parallax_nodes group
 /** @} */
-    
+
+// @API compatible
+typedef FastTMXTiledMap TMXTiledMap;
 
 NS_CC_END

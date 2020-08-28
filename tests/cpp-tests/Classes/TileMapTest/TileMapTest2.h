@@ -334,4 +334,16 @@ public:
     virtual std::string subtitle() const override;   
 };
 
+class TileAnimTestNew : public TileDemoNew
+{
+public:
+    CREATE_FUNC(TileAnimTestNew);
+    TileAnimTestNew();
+    virtual std::string title() const override;
+
+    cocos2d::FastTMXTiledMap* map;
+    bool _animStarted = true;
+    void onTouchBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+};
+
 #endif

@@ -257,4 +257,22 @@ std::string FastTMXTiledMap::getDescription() const
     return StringUtils::format("<FastTMXTiledMap | Tag = %d, Layers = %d", _tag, static_cast<int>(_children.size()));
 }
 
+void FastTMXTiledMap::setTileAnimEnabled(bool enabled)
+{
+    for (auto& child : _children)
+    {
+        FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
+        if (layer)
+        {
+            if (layer->hasTileAnimation())
+            {
+                if (enabled)
+                    layer->getTileAnimManager()->startAll();
+                else
+                    layer->getTileAnimManager()->stopAll();
+            }
+        }
+    }
+}
+
 NS_CC_END
