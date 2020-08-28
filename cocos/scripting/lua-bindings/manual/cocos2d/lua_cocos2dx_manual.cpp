@@ -46,8 +46,6 @@
 #include "2d/CCParticleSystem.h"
 #include "2d/CCScene.h"
 #include "2d/CCSpriteBatchNode.h"
-#include "2d/CCTMXLayer.h"
-#include "2d/CCTMXTiledMap.h"
 #include "2d/CCFastTMXLayer.h"
 #include "2d/CCFastTMXTiledMap.h"
 #include "2d/CCRenderTexture.h"
