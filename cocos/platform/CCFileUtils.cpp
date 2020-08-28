@@ -1405,11 +1405,13 @@ std::vector<std::string> FileUtils::listFiles(const std::string& dirPath) const
                 }
                 std::string filepath = file.path;
 
-                if (file.is_dir)
+                if(strcmp(file.name, ".") != 0 && strcmp(file.name, "..") != 0)
                 {
-                    filepath.push_back('/');
+                    if (file.is_dir)
+                        filepath.push_back('/');
+
+                    files.push_back(std::move(filepath));
                 }
-                files.push_back(filepath);
 
                 if (tinydir_next(&dir) == -1)
                 {
@@ -1441,9 +1443,8 @@ void FileUtils::listFilesRecursively(const std::string& dirPath, std::vector<std
                     // Error getting file
                     break;
                 }
-                std::string fileName = file.name;
-
-                if (fileName != "." && fileName != "..")
+                
+                if(strcmp(file.name, ".") != 0 && strcmp(file.name, "..") != 0)
                 {
                     std::string filepath = file.path;
                     if (file.is_dir)
@@ -1454,7 +1455,7 @@ void FileUtils::listFilesRecursively(const std::string& dirPath, std::vector<std
                     }
                     else
                     {
-                        files->push_back(filepath);
+                        files->push_back(std::move(filepath));
                     }
                 }
 
