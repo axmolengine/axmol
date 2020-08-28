@@ -248,7 +248,6 @@ function(setup_cocos_app_config app_name)
         # output macOS/iOS .app
         set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
         if(IOS AND (NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
-            message(STATUS "Building for ios arm devices, set CODE_SIGNING_REQUIRED=YES")
             set_xcode_property(${APP_NAME} CODE_SIGNING_REQUIRED "YES")
             set_xcode_property(${APP_NAME} CODE_SIGNING_ALLOWED "YES")
         endif()
