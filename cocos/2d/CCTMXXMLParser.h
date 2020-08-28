@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "math/CCGeometry.h"
 #include "platform/CCSAXParser.h"
 #include "base/CCVector.h"
+#include "base/CCMap.h"
 #include "base/CCValue.h"
 #include "2d/CCTMXObjectGroup.h" // needed for Vector<TMXObjectGroup*> for binding
 
@@ -72,7 +73,8 @@ enum {
     TMXPropertyLayer,
     TMXPropertyObjectGroup,
     TMXPropertyObject,
-    TMXPropertyTile
+    TMXPropertyTile,
+    TMXPropertyAnimation
 };
 
 typedef enum TMXTileFlags_ {
@@ -82,6 +84,77 @@ typedef enum TMXTileFlags_ {
     kTMXFlipedAll           = (kTMXTileHorizontalFlag|kTMXTileVerticalFlag|kTMXTileDiagonalFlag),
     kTMXFlippedMask         = ~(kTMXFlipedAll)
 } TMXTileFlags;
+
+
+/**
+ * @addtogroup _2d
+ * @{
+ */
+
+ /** Possible orientations of the TMX map. */
+enum
+{
+    /** Orthogonal orientation. */
+    TMXOrientationOrtho,
+
+    /** Hexagonal orientation. */
+    TMXOrientationHex,
+
+    /** Isometric orientation. */
+    TMXOrientationIso,
+
+    /** Isometric staggered orientation. */
+    TMXOrientationStaggered,
+};
+
+/** Possible stagger axis of the TMX map. */
+enum
+{
+    /** Stagger Axis x. */
+    TMXStaggerAxis_X,
+
+    /** Stagger Axis y. */
+    TMXStaggerAxis_Y,
+};
+
+/** Possible stagger index of the TMX map. */
+enum
+{
+    /** Stagger Index: Odd */
+    TMXStaggerIndex_Odd,
+
+    /** Stagger Index: Even */
+    TMXStaggerIndex_Even,
+};
+
+/** @brief TMXTileAnimFrame contains the information about the frame of a animated tile like:
+- Frame gid
+- duration of this frame
+
+This information is obtained from the TMX file.
+*/
+struct CC_DLL TMXTileAnimFrame
+{
+    TMXTileAnimFrame(uint32_t tileID, float duration);
+    /** gid of the frame */
+    uint32_t _tileID = 0;
+    /** duration of the frame */
+    float _duration = 0.0f;
+};
+
+/** @brief TMXTileAnimInfo contains the information about the animated tile like:
+- Animated Tile gid
+- frames the animated tile contains
+
+This information is obtained from the TMX file.
+*/
+struct CC_DLL TMXTileAnimInfo : public Ref
+{
+    static TMXTileAnimInfo* create(uint32_t  tileID);
+    explicit TMXTileAnimInfo(uint32_t  tileID);
+    uint32_t _tileID = 0;
+    std::vector<TMXTileAnimFrame> _frames;
+};
 
 // Bits on the far end of the 32-bit global tile ID (GID's) are used for tile flags
 
@@ -143,7 +216,8 @@ public:
     //! size in pixels of the image
     Size            _imageSize;
     std::string     _originSourceImage;
-
+    //! map from gid of animated tile to its animation info
+    Map<uint32_t, TMXTileAnimInfo*> _animationInfo;
 public:
     /**
      * @js ctor

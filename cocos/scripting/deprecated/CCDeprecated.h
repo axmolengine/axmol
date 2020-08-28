@@ -58,9 +58,9 @@
 #include "2d/CCParticleSystemQuad.h"
 #include "2d/CCProgressTimer.h"
 #include "2d/CCSpriteFrameCache.h"
-#include "2d/CCTMXLayer.h"
+#include "2d/CCFastTMXLayer.h"
 #include "2d/CCTMXObjectGroup.h"
-#include "2d/CCTMXTiledMap.h"
+#include "2d/CCFastTMXTiledMap.h"
 #include "2d/CCTMXXMLParser.h"
 #include "2d/CCTextFieldTTF.h"
 #include "2d/CCTileMapAtlas.h"
@@ -811,8 +811,8 @@ CC_DEPRECATED_ATTRIBUTE typedef TMXObjectGroup CCTMXObjectGroup;
 CC_DEPRECATED_ATTRIBUTE typedef TMXLayerInfo CCTMXLayerInfo;
 CC_DEPRECATED_ATTRIBUTE typedef TMXTilesetInfo CCTMXTilesetInfo;
 CC_DEPRECATED_ATTRIBUTE typedef TMXMapInfo CCTMXMapInfo;
-CC_DEPRECATED_ATTRIBUTE typedef TMXLayer CCTMXLayer;
-CC_DEPRECATED_ATTRIBUTE typedef TMXTiledMap CCTMXTiledMap;
+//CC_DEPRECATED_ATTRIBUTE typedef TMXLayer CCTMXLayer;
+//CC_DEPRECATED_ATTRIBUTE typedef TMXTiledMap CCTMXTiledMap;
 CC_DEPRECATED_ATTRIBUTE typedef TileMapAtlas CCTileMapAtlas;
 CC_DEPRECATED_ATTRIBUTE typedef Timer CCTimer;
 CC_DEPRECATED_ATTRIBUTE typedef Scheduler CCScheduler;

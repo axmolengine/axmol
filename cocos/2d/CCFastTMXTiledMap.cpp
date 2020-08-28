@@ -72,6 +72,8 @@ bool FastTMXTiledMap::initWithTMXFile(const std::string& tmxFile)
     CCASSERT( !mapInfo->getTilesets().empty(), "FastTMXTiledMap: Map not found. Please check the filename.");
     buildWithMapInfo(mapInfo);
 
+    _tmxFile = tmxFile;
+
     return true;
 }
 
@@ -192,6 +194,8 @@ void FastTMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
             idx++;
         }
     }
+
+    _layerCount = idx;
 }
 
 // public
@@ -255,6 +259,24 @@ Value FastTMXTiledMap::getPropertiesForGID(int GID) const
 std::string FastTMXTiledMap::getDescription() const
 {
     return StringUtils::format("<FastTMXTiledMap | Tag = %d, Layers = %d", _tag, static_cast<int>(_children.size()));
+}
+
+void FastTMXTiledMap::setTileAnimEnabled(bool enabled)
+{
+    for (auto& child : _children)
+    {
+        FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
+        if (layer)
+        {
+            if (layer->hasTileAnimation())
+            {
+                if (enabled)
+                    layer->getTileAnimManager()->startAll();
+                else
+                    layer->getTileAnimManager()->stopAll();
+            }
+        }
+    }
 }
 
 NS_CC_END

@@ -100719,7 +100719,7 @@ int lua_cocos2dx_TMXLayer_releaseMap(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_TMXLayer_releaseMap'", nullptr);
             return 0;
         }
-        cobj->releaseMap();
+        // cobj->release();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -102274,7 +102274,7 @@ int lua_cocos2dx_TMXTiledMap_getProperties(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_TMXTiledMap_getProperties'", nullptr);
             return 0;
         }
-        cocos2d::ValueMap& ret = cobj->getProperties();
+        auto& ret = cobj->getProperties();
         ccvaluemap_to_luaval(tolua_S, ret);
         return 1;
     }
