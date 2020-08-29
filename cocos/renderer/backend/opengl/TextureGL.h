@@ -63,7 +63,7 @@ struct TextureInfoGL
     }
 
     /// <summary>
-    /// update shader texture
+    /// Apply shader texture
     /// </summary>
     /// <param name="slot">the slot in shader</param>
     /// <param name="index">the index in meta textrues</param>
