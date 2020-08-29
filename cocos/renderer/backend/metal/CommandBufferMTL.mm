@@ -422,28 +422,32 @@ void CommandBufferMTL::doSetTextures(bool isVertex) const
 
     for(const auto& iter : bindTextureInfos)
     {
+        /* About mutli textures support
+        *  a. TODO: sampler2DArray, not implemented in Metal Renderer currently
+        *  b. texture slot, one BackendTexture, multi GPU texture handlers, used by etc1, restrict: textures must have same size
+        *  c. Bind multi BackendTexture to 1 Shader Program, see the ShaderTest
+        *  d. iter.second.slots not used for Metal Renderer
+        */
         auto location = iter.first;
-        const auto& textures = iter.second.textures;
-        const auto& slot = iter.second.slot;
+        auto& textures = iter.second.textures;
+        auto& indexs = iter.second.indexs;
         
-        int i = 0;
-        for (const auto& texture : textures)
+        auto texture = textures[0];
+        auto index = indexs[0];
+
+        if (isVertex)
         {
-            if (isVertex)
-            {
-                [_mtlRenderEncoder setVertexTexture:getMTLTexture(texture, slot[i])
-                                        atIndex:location];
-                [_mtlRenderEncoder setVertexSamplerState:getMTLSamplerState(texture)
-                                             atIndex:location];
-            }
-            else
-            {
-                [_mtlRenderEncoder setFragmentTexture:getMTLTexture(texture, slot[i])
-                                          atIndex:location];
-                [_mtlRenderEncoder setFragmentSamplerState:getMTLSamplerState(texture)
-                                               atIndex:location];
-            }
-            ++i;
+            [_mtlRenderEncoder setVertexTexture:getMTLTexture(texture, index)
+                                    atIndex:location];
+            [_mtlRenderEncoder setVertexSamplerState:getMTLSamplerState(texture)
+                                         atIndex:location];
+        }
+        else
+        {
+            [_mtlRenderEncoder setFragmentTexture:getMTLTexture(texture, index)
+                                      atIndex:location];
+            [_mtlRenderEncoder setFragmentSamplerState:getMTLSamplerState(texture)
+                                           atIndex:location];
         }
     }
 }

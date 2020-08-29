@@ -77,7 +77,7 @@ void TextureInfoGL::applySampler(const SamplerDescriptor& descriptor, bool isPow
 
     // apply sampler for all internal textures
     foreach([=](GLuint texID, int index) {
-        apply(index, target);
+        glBindTexture(target, textures[index]);
 
         setCurrentTexParameters(target);
 
@@ -93,16 +93,16 @@ void TextureInfoGL::setCurrentTexParameters(GLenum target)
     glTexParameteri(target, GL_TEXTURE_WRAP_T, tAddressModeGL);
 }
 
-void TextureInfoGL::apply(int index, GLenum target) const
+void TextureInfoGL::apply(int slot, int index, GLenum target) const
 {
-    glActiveTexture(GL_TEXTURE0 + index);
+    glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(target, index < CC_META_TEXTURES ? textures[index] : textures[0]);
 }
 
 GLuint TextureInfoGL::ensure(int index, GLenum target)
 {
     if (index >= CC_META_TEXTURES) return 0;
-    glActiveTexture(GL_TEXTURE0 + index);
+    // glActiveTexture(GL_TEXTURE0 + index);
     auto& texID = this->textures[index];
     if (!texID)
         glGenTextures(1, &texID);
@@ -186,7 +186,7 @@ void Texture2DGL::updateSamplerDescriptor(const SamplerDescriptor &sampler) {
 
 void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t height, std::size_t level, int index)
 {
-    if (!_textureInfo.ensure(index)) return;
+    if (!_textureInfo.ensure(index, GL_TEXTURE_2D)) return;
 
     //Set the row align only when mipmapsNum == 1 and the data is uncompressed
     auto mipmapEnalbed = isMipmapEnabled(_textureInfo.minFilterGL) || isMipmapEnabled(_textureInfo.magFilterGL);
@@ -235,7 +235,7 @@ void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t heig
 void Texture2DGL::updateCompressedData(uint8_t *data, std::size_t width, std::size_t height,
                                        std::size_t dataLen, std::size_t level, int index)
 {
-    if (!_textureInfo.ensure(index)) return;
+    if (!_textureInfo.ensure(index, GL_TEXTURE_2D)) return;
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -255,7 +255,7 @@ void Texture2DGL::updateCompressedData(uint8_t *data, std::size_t width, std::si
 
 void Texture2DGL::updateSubData(std::size_t xoffset, std::size_t yoffset, std::size_t width, std::size_t height, std::size_t level, uint8_t* data, int index)
 {
-    if (!_textureInfo.ensure(index)) return;
+    if (!_textureInfo.ensure(index, GL_TEXTURE_2D)) return;
 
     glTexSubImage2D(GL_TEXTURE_2D,
                     level,
@@ -276,7 +276,7 @@ void Texture2DGL::updateCompressedSubData(std::size_t xoffset, std::size_t yoffs
                                           std::size_t height, std::size_t dataLen, std::size_t level,
                                           uint8_t *data, int index)
 {
-    if (!_textureInfo.ensure(index)) return;
+    if (!_textureInfo.ensure(index, GL_TEXTURE_2D)) return;
 
     glCompressedTexSubImage2D(GL_TEXTURE_2D,
                               level,
