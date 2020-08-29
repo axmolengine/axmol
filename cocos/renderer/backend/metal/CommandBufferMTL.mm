@@ -422,10 +422,14 @@ void CommandBufferMTL::doSetTextures(bool isVertex) const
 
     for(const auto& iter : bindTextureInfos)
     {
+        /* About mutli textures support
+        *  a. sampler2DArray, not implemented in Metal Renderer
+        *  b. texture slot, one BackendTexture, multi GPU texture handlers, used by etc1
+        *  c. Bind multi BackendTexture to 1 Shader Program, see the ShaderTest
+        *  d. iter.second.slots not used for Metal Renderer
+        */
         auto location = iter.first;
         auto& textures = iter.second.textures;
-        // auto& slots = iter.second.slots;
-        // TODO: 1 location, mutli-slots like OpenGL?
         auto& indexs = iter.second.indexs;
         
         int i = 0;
