@@ -125,6 +125,7 @@ void TextureInfo::releaseTextures()
 {
     for (auto& texture : textures)
         CC_SAFE_RELEASE(texture);
+    textures.clear();
 }
 
 TextureInfo& TextureInfo::operator=(const TextureInfo& other) noexcept
