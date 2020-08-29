@@ -480,7 +480,7 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
         {
             /* About mutli textures support
             *  a. sampler2DArray, sampler2D[2], bind BackendTexture one by one, not use GL_TEXTURE_2D_ARRAY, not used at all engine interanl
-            *  b. texture slot, one BackendTexture, multi GPU texture handlers, used by etc1
+            *  b. texture slot, one BackendTexture, multi GPU texture handlers, used by etc1, restrict: textures must have same size
             *  c. Bind multi BackendTexture to 1 Shader Program, see the ShaderTest
             */
             auto& textures = iter.second.textures;
@@ -498,7 +498,7 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
             }
             
             auto arrayCount = slots.size();
-            if (arrayCount == 1) // If not use sampler2DArray, always 1
+            if (arrayCount == 1) // Most of the time， not use sampler2DArray, should be 1
                 glUniform1i(location, slots[0]);
             else
                 glUniform1iv(location, (uint32_t)arrayCount, (GLint*)slots.data());
