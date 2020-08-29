@@ -132,7 +132,7 @@ namespace
                 break;
             default:
                 CCASSERT(false, "Not supported ETC format!");
-                break;
+                return 0;
         }
         auto blocksPerRow = (width + (blockWidth - 1)) / blockWidth;
         bytesPerRow = blocksPerRow * bytesPerBlock;
@@ -144,22 +144,25 @@ namespace
     {
         std::size_t bytesPerRow = 0;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        uint32_t bytesPerBlock = 0;
+        // @ASTC: bytesPerBlock always 16
+        uint32_t bytesPerBlock = 16, blockWidth = 0;
         switch (pixleFormat) {
             case MTLPixelFormatASTC_4x4_sRGB:
             case MTLPixelFormatASTC_4x4_LDR:
             case MTLPixelFormatASTC_4x4_HDR:
-                bytesPerBlock = 4;
+                blockWidth = 4;
                 break;
             case MTLPixelFormatASTC_8x8_sRGB:
             case MTLPixelFormatASTC_8x8_LDR:
             case MTLPixelFormatASTC_8x8_HDR:
-                bytesPerBlock = 8;
+                blockWidth = 8;
                 break;
             default:
                 CCASSERT(false, "Not supported ASTC format!");
+                return 0;
         }
-        bytesPerRow = width * bytesPerBlock;
+        auto blocksPerRow = (width + (blockWidth - 1)) / blockWidth;
+        bytesPerRow = blocksPerRow * bytesPerBlock;
 #endif
         return bytesPerRow;
     }
@@ -178,7 +181,7 @@ namespace
                 bytesPerBlock = 16;
                 break;
             default:
-                break;
+                return 0;
         }
         auto blocksPerRow = (width + (blockWidth - 1)) / blockWidth;
         bytesPerRow = blocksPerRow * bytesPerBlock;
