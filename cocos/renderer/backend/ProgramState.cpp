@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com
 
  http://www.cocos2d-x.org
 
@@ -142,6 +143,8 @@ void TextureInfo::assign(const TextureInfo& other)
 {
     if (this != &other)
     {
+        releaseTextures();
+        
         indexs = other.indexs;
         slots = other.slots;
         textures = other.textures;
