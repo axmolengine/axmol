@@ -478,6 +478,11 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
         const auto& textureInfo = _programState->getVertexTextureInfos();
         for(const auto& iter : textureInfo)
         {
+            /* About mutli textures support
+            *  a. sampler2DArray, sampler2D[2], bind BackendTexture one by one, not use GL_TEXTURE_2D_ARRAY, not used at all engine interanl
+            *  b. texture slot, one BackendTexture, multi GPU texture handlers, used by etc1
+            *  c. Bind multi BackendTexture to 1 Shader Program, see the ShaderTest
+            */
             auto& textures = iter.second.textures;
             auto& slots = iter.second.slots;
             auto& indexs = iter.second.indexs;
@@ -493,10 +498,10 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
             }
             
             auto arrayCount = slots.size();
-            if (arrayCount > 1)
-                glUniform1iv(location, (uint32_t)arrayCount, (GLint*)slots.data());
-            else
+            if (arrayCount == 1) // If not use sampler2DArray, always 1
                 glUniform1i(location, slots[0]);
+            else
+                glUniform1iv(location, (uint32_t)arrayCount, (GLint*)slots.data());
         }
     }
 }
