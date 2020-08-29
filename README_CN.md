@@ -89,4 +89,4 @@
   
 ### 参考链接
   * engine-x-3rd: https://github.com/c4games/engine-x-3rd
-  * official v4: https://github.com/cocos2d/cocos2d-x
+  * official v4: https://gitee.com/mirrors/cocos2d-x
