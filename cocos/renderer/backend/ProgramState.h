@@ -51,7 +51,6 @@ class VertexLayout;
   */
 struct TextureInfo
 {
-    // TextureInfo(const std::vector<uint32_t>& _slots, const std::vector<backend::TextureBackend*> _textures);
     TextureInfo(std::vector<uint16_t>&& _slots, std::vector<backend::TextureBackend*>&& _textures);
     TextureInfo(std::vector<uint16_t>&& _slots, std::vector<uint16_t>&& _indexs, std::vector<backend::TextureBackend*>&& _textures);
     TextureInfo() = default;
