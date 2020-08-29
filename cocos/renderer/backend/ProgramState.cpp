@@ -85,21 +85,28 @@ namespace {
 //static field
 std::vector<ProgramState::AutoBindingResolver*> ProgramState::_customAutoBindingResolvers;
 
-TextureInfo::TextureInfo(const std::vector<uint32_t>& _slots, const std::vector<backend::TextureBackend*> _textures)
-: slot(_slots)
-, textures(_textures)
+TextureInfo::TextureInfo(std::vector<uint16_t>&& _slots, std::vector<backend::TextureBackend*>&& _textures)
+: TextureInfo(std::move(_slots), std::vector<uint16_t>(_slots.size(), 0), std::move(_textures))
+{
+}
+
+TextureInfo::TextureInfo(std::vector<uint16_t>&& _slots, std::vector<uint16_t>&& _indexs, std::vector<backend::TextureBackend*>&& _textures)
+    : slots(std::move(_slots)),
+    indexs(std::move(_indexs)),
+    textures(std::move(_textures))
 {
     retainTextures();
 }
 
+/* CLASS TextureInfo */
 TextureInfo::TextureInfo(const TextureInfo &other)
-    : slot(other.slot)
-    , textures(other.textures)
-#if CC_ENABLE_CACHE_TEXTURE_DATA
-    , location(other.location)
-#endif
 {
-    retainTextures();
+    this->assign(other);
+}
+
+TextureInfo::TextureInfo(TextureInfo&& other)
+{
+    this->assign(std::move(other));
 }
 
 TextureInfo::~TextureInfo()
@@ -119,42 +126,51 @@ void TextureInfo::releaseTextures()
         CC_SAFE_RELEASE(texture);
 }
 
-TextureInfo& TextureInfo::operator=(TextureInfo&& rhs)
+TextureInfo& TextureInfo::operator=(const TextureInfo& other) noexcept
 {
-    if (this != &rhs)
-    {
-        slot = rhs.slot;
-        
-        rhs.retainTextures();
-        releaseTextures();
-        textures = rhs.textures;
-        
-        //release the textures before cleaning the vertor
-        rhs.releaseTextures();
-        rhs.textures.clear();
-
-#if CC_ENABLE_CACHE_TEXTURE_DATA
-        location = rhs.location;
-#endif
-    }
+    this->assign(other);
     return *this;
 }
 
-TextureInfo& TextureInfo::operator=(const TextureInfo& rhs)
+TextureInfo& TextureInfo::operator=(TextureInfo&& other) noexcept
 {
-    if (this != &rhs)
+    this->assign(std::move(other));
+    return *this;
+}
+
+void TextureInfo::assign(const TextureInfo& other)
+{
+    if (this != &other)
     {
-        slot = rhs.slot;
-        textures = rhs.textures;
+        indexs = other.indexs;
+        slots = other.slots;
+        textures = other.textures;
         retainTextures();
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-        location = rhs.location;
+        location = other.location;
 #endif
     }
-    return *this;
 }
 
+void TextureInfo::assign(TextureInfo&& other)
+{
+    if (this != &other)
+    {
+        releaseTextures();
+
+        indexs = std::move(other.indexs);
+        slots = std::move(other.slots);
+        textures = std::move(other.textures);
+
+#if CC_ENABLE_CACHE_TEXTURE_DATA
+        location = other.location;
+        other.location = -1;
+#endif
+    }
+}
+
+/* CLASS ProgramState */
 ProgramState::ProgramState(Program* program)
 {
     init(program);
@@ -383,72 +399,75 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
 
 void ProgramState::setTexture(backend::TextureBackend* texture)
 {
-    for (int index = 0; index < texture->getCount() && index < CC_META_TEXTURES; ++index) {
-        auto location = getUniformLocation((backend::Uniform)(backend::Uniform::TEXTURE + index));
-        setTexture(location, index, texture);
+    for (int slot = 0; slot < texture->getCount() && slot < CC_META_TEXTURES; ++slot) {
+        auto location = getUniformLocation((backend::Uniform)(backend::Uniform::TEXTURE + slot));
+        setTexture(location, slot, slot, texture);
     }
 }
 
-void ProgramState::setTexture(const backend::UniformLocation& uniformLocation, uint32_t slot, backend::TextureBackend* texture)
+void ProgramState::setTexture(const backend::UniformLocation& uniformLocation, uint16_t slot, backend::TextureBackend* texture)
+{
+    setTexture(uniformLocation, slot, 0, texture);
+}
+
+void ProgramState::setTexture(const backend::UniformLocation& uniformLocation, uint16_t slot, uint16_t index, backend::TextureBackend* texture)
 {
     switch (uniformLocation.shaderStage)
     {
         case backend::ShaderStage::VERTEX:
-            setTexture(uniformLocation.location[0], slot, texture, _vertexTextureInfos);
+            setTexture(uniformLocation.location[0], slot, index, texture, _vertexTextureInfos);
             break;
         case backend::ShaderStage::FRAGMENT:
-            setTexture(uniformLocation.location[1], slot, texture, _fragmentTextureInfos);
+            setTexture(uniformLocation.location[1], slot, index, texture, _fragmentTextureInfos);
             break;
         case backend::ShaderStage::VERTEX_AND_FRAGMENT:
-            setTexture(uniformLocation.location[0], slot, texture, _vertexTextureInfos);
-            setTexture(uniformLocation.location[1], slot, texture, _fragmentTextureInfos);
+            setTexture(uniformLocation.location[0], slot, index, texture, _vertexTextureInfos);
+            setTexture(uniformLocation.location[1], slot, index, texture, _fragmentTextureInfos);
             break;
         default:
             break;
     }
 }
 
-void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocation, const std::vector<uint32_t>& slots, const std::vector<backend::TextureBackend*> textures)
+void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocation, std::vector<uint16_t> slots, std::vector<backend::TextureBackend*> textures)
 {
     switch (uniformLocation.shaderStage)
     {
         case backend::ShaderStage::VERTEX:
-            setTextureArray(uniformLocation.location[0], slots, textures, _vertexTextureInfos);
+            setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _vertexTextureInfos);
             break;
         case backend::ShaderStage::FRAGMENT:
-            setTextureArray(uniformLocation.location[1], slots, textures, _fragmentTextureInfos);
+            setTextureArray(uniformLocation.location[1], std::move(slots), std::move(textures), _fragmentTextureInfos);
             break;
         case backend::ShaderStage::VERTEX_AND_FRAGMENT:
-            setTextureArray(uniformLocation.location[0], slots, textures, _vertexTextureInfos);
-            setTextureArray(uniformLocation.location[1], slots, textures, _fragmentTextureInfos);
+            setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _vertexTextureInfos);
+            setTextureArray(uniformLocation.location[1], std::move(slots), std::move(textures), _fragmentTextureInfos);
             break;
         default:
             break;
     }
 }
 
-void ProgramState::setTexture(int location, uint32_t slot, backend::TextureBackend* texture, std::unordered_map<int, TextureInfo>& textureInfo)
+void ProgramState::setTexture(int location, uint16_t slot, uint16_t index, backend::TextureBackend* texture, std::unordered_map<int, TextureInfo>& textureInfo)
 {
     if(location < 0)
         return;
-    TextureInfo& info = textureInfo[location];
-    info.releaseTextures();
-    info.slot = {slot};
-    info.textures = {texture};
-    info.retainTextures();
+
+    auto& info = textureInfo[location];
+    info = { {slot}, {index}, {texture} };
+
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     info.location = location;
 #endif
 }
 
-void ProgramState::setTextureArray(int location, const std::vector<uint32_t>& slots, const std::vector<backend::TextureBackend*> textures, std::unordered_map<int, TextureInfo>& textureInfo)
+void ProgramState::setTextureArray(int location, std::vector<uint16_t> slots, std::vector<backend::TextureBackend*> textures, std::unordered_map<int, TextureInfo>& textureInfo)
 {
     assert(slots.size() == textures.size());
-    TextureInfo& info = textureInfo[location];
-    info.releaseTextures();
-    info.slot = slots;
-    info.textures = textures;
-    info.retainTextures();
+
+    auto& info = textureInfo[location];
+    info = { std::move(slots), std::move(textures) };
+
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     info.location = location;
 #endif

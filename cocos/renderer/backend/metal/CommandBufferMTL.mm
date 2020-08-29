@@ -423,22 +423,24 @@ void CommandBufferMTL::doSetTextures(bool isVertex) const
     for(const auto& iter : bindTextureInfos)
     {
         auto location = iter.first;
-        const auto& textures = iter.second.textures;
-        const auto& slot = iter.second.slot;
+        auto& textures = iter.second.textures;
+        // auto& slots = iter.second.slots;
+        // TODO: 1 location, mutli-slots like OpenGL?
+        auto& indexs = iter.second.indexs;
         
         int i = 0;
         for (const auto& texture : textures)
         {
             if (isVertex)
             {
-                [_mtlRenderEncoder setVertexTexture:getMTLTexture(texture, slot[i])
+                [_mtlRenderEncoder setVertexTexture:getMTLTexture(texture, indexs[i])
                                         atIndex:location];
                 [_mtlRenderEncoder setVertexSamplerState:getMTLSamplerState(texture)
                                              atIndex:location];
             }
             else
             {
-                [_mtlRenderEncoder setFragmentTexture:getMTLTexture(texture, slot[i])
+                [_mtlRenderEncoder setFragmentTexture:getMTLTexture(texture, indexs[i])
                                           atIndex:location];
                 [_mtlRenderEncoder setFragmentSamplerState:getMTLSamplerState(texture)
                                                atIndex:location];

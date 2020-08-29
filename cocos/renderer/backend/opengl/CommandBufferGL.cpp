@@ -54,15 +54,15 @@ namespace
         }
     }
 
-    void applyTexture(TextureBackend* texture, int index)
+    void applyTexture(TextureBackend* texture, int slot, int index)
     {
         switch (texture->getTextureType())
         {
         case TextureType::TEXTURE_2D:
-            static_cast<Texture2DGL*>(texture)->apply(index);
+            static_cast<Texture2DGL*>(texture)->apply(slot, index);
             break;
         case TextureType::TEXTURE_CUBE:
-            static_cast<TextureCubeGL*>(texture)->apply(index);
+            static_cast<TextureCubeGL*>(texture)->apply(slot, index);
             break;
         default:
             assert(false);
@@ -478,8 +478,9 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
         const auto& textureInfo = _programState->getVertexTextureInfos();
         for(const auto& iter : textureInfo)
         {
-            const auto& textures = iter.second.textures;
-            const auto& slot = iter.second.slot;
+            auto& textures = iter.second.textures;
+            auto& slots = iter.second.slots;
+            auto& indexs = iter.second.indexs;
             auto location = iter.first;
 #if CC_ENABLE_CACHE_TEXTURE_DATA
             location = iter.second.location;
@@ -487,14 +488,15 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
             int i = 0;
             for (const auto& texture: textures)
             {
-                applyTexture(texture, slot[i++]);
+                applyTexture(texture, slots[i], indexs[i]);
+                ++i;
             }
             
-            auto arrayCount = slot.size();
+            auto arrayCount = slots.size();
             if (arrayCount > 1)
-                glUniform1iv(location, (uint32_t)arrayCount, (GLint*)slot.data());
+                glUniform1iv(location, (uint32_t)arrayCount, (GLint*)slots.data());
             else
-                glUniform1i(location, slot[0]);
+                glUniform1i(location, slots[0]);
         }
     }
 }

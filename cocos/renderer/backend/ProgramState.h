@@ -51,17 +51,26 @@ class VertexLayout;
   */
 struct TextureInfo
 {
-    TextureInfo(const std::vector<uint32_t>& _slots, const std::vector<backend::TextureBackend*> _textures);
+    // TextureInfo(const std::vector<uint32_t>& _slots, const std::vector<backend::TextureBackend*> _textures);
+    TextureInfo(std::vector<uint16_t>&& _slots, std::vector<backend::TextureBackend*>&& _textures);
+    TextureInfo(std::vector<uint16_t>&& _slots, std::vector<uint16_t>&& _indexs, std::vector<backend::TextureBackend*>&& _textures);
     TextureInfo() = default;
-    TextureInfo(const TextureInfo &);
+    TextureInfo(const TextureInfo&);
+    TextureInfo(TextureInfo&& rhs);
+
     ~TextureInfo();
-    TextureInfo& operator=(TextureInfo&& rhs);
-    TextureInfo& operator=(const TextureInfo& rhs);
+
+    TextureInfo& operator=(const TextureInfo& other) noexcept;
+    TextureInfo& operator=(TextureInfo&& other) noexcept;
+
+    void assign(const TextureInfo& other);
+    void assign(TextureInfo&& other);
 
     void retainTextures();
     void releaseTextures();
 
-    std::vector<uint32_t> slot;
+    std::vector<uint16_t> slots;
+    std::vector<uint16_t> indexs;
     std::vector<backend::TextureBackend*> textures;
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     int location = -1;
@@ -145,7 +154,6 @@ public:
     /**
      * Set texture.
      * @param uniformLocation Specifies texture location.
-     * @param slot Specifies texture slot selector.
      * @param texture Specifies a pointer to backend texture.
      */
     void setTexture(backend::TextureBackend* texture);
@@ -156,7 +164,16 @@ public:
      * @param slot Specifies texture slot selector.
      * @param texture Specifies a pointer to backend texture.
      */
-    void setTexture(const backend::UniformLocation& uniformLocation, uint32_t slot, backend::TextureBackend* texture);
+    void setTexture(const backend::UniformLocation& uniformLocation, uint16_t slot, backend::TextureBackend* texture);
+
+    /**
+     * Set texture.
+     * @param uniformLocation Specifies texture location.
+     * @param slot Specifies texture slot selector.
+     * @param index Specifies texture index selector
+     * @param texture Specifies a pointer to backend texture.
+     */
+    void setTexture(const backend::UniformLocation& uniformLocation, uint16_t slot, uint16_t index, backend::TextureBackend* texture);
 
     /**
      * Set textures in array.
@@ -164,7 +181,7 @@ public:
      * @param slots Specifies texture slot selector.
      * @param textures Specifies a vector of backend texture object.
      */
-    void setTextureArray(const backend::UniformLocation& uniformLocation, const std::vector<uint32_t>& slots, const std::vector<backend::TextureBackend*> textures);
+    void setTextureArray(const backend::UniformLocation& uniformLocation, std::vector<uint16_t> slots, std::vector<backend::TextureBackend*> textures);
 
     /**
      * Get vertex texture informations
@@ -288,7 +305,7 @@ protected:
      * @param texture Specifies the texture to set in given location.
      * @param textureInfo Specifies the texture information to update.
      */
-    void setTexture(int location, uint32_t slot, backend::TextureBackend* texture, std::unordered_map<int, TextureInfo>& textureInfo);
+    void setTexture(int location, uint16_t slot, uint16_t index, backend::TextureBackend* texture, std::unordered_map<int, TextureInfo>& textureInfo);
     
     /**
      * Set textures in array.
@@ -297,7 +314,7 @@ protected:
      * @param textures Specifies the texture to set in given location.
      * @param textureInfo Specifies the texture information to update.
      */
-    void setTextureArray(int location, const std::vector<uint32_t>& slots, const std::vector<backend::TextureBackend*> textures, std::unordered_map<int, TextureInfo>& textureInfo);
+    void setTextureArray(int location, std::vector<uint16_t> slots, std::vector<backend::TextureBackend*> textures, std::unordered_map<int, TextureInfo>& textureInfo);
     
     /**
      * Reset uniform informations when EGL context lost
