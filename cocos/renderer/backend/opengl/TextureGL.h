@@ -54,15 +54,21 @@ struct TextureInfoGL
             cb(texID, idx++);
     }
 
-    GLuint ensure(int index, GLenum target = GL_TEXTURE_2D);
-    void recreateAll(GLenum target = GL_TEXTURE_2D);
+    GLuint ensure(int index, GLenum target);
+    void recreateAll(GLenum target);
 
     void destroy() {
         foreach([=](GLuint texID, int) { glDeleteTextures(1, &texID); });
         textures.fill(0);
     }
 
-    void apply(int index, GLenum target = GL_TEXTURE_2D) const;
+    /// <summary>
+    /// update shader texture
+    /// </summary>
+    /// <param name="slot">the slot in shader</param>
+    /// <param name="index">the index in meta textrues</param>
+    /// <param name="target">the target GL_TEXTURE_2D,GL_TEXTURE_CUBE_MAP</param>
+    void apply(int slot, int index, GLenum target) const;
 
     GLint magFilterGL = GL_LINEAR;
     GLint minFilterGL = GL_LINEAR;
@@ -173,7 +179,7 @@ public:
      * Set texture to pipeline
      * @param index Specifies the texture image unit selector.
      */
-    void apply(int index) const { _textureInfo.apply(index); }
+    void apply(int slot, int index) const { _textureInfo.apply(slot, index, GL_TEXTURE_2D); }
 
     int getCount() const override { return _textureInfo.maxIdx + 1; }
 
@@ -237,7 +243,7 @@ public:
      * Set texture to pipeline
      * @param index Specifies the texture image unit selector.
      */
-    void apply(int index) const { _textureInfo.apply(index, GL_TEXTURE_CUBE_MAP); }
+    void apply(int slot, int index) const { _textureInfo.apply(slot, index, GL_TEXTURE_CUBE_MAP); }
 
     int getCount() const override { return _textureInfo.maxIdx + 1; }
 
