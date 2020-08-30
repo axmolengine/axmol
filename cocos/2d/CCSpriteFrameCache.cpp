@@ -754,6 +754,7 @@ bool SpriteFrameCache::PlistFramesCache::eraseFrames(const std::vector<std::stri
     }
     _indexPlist2Frames.clear();
     _indexFrame2plist.clear();
+    _isPlistFull.clear();
     return ret;
 }
 
