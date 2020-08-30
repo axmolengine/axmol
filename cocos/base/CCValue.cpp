@@ -773,7 +773,7 @@ static std::string visit(const Value& v, int depth)
         case Value::Type::DOUBLE:
         case Value::Type::BOOLEAN:
         case Value::Type::STRING:
-            ret << v.asStringRef() << "\n";
+            ret << v.asString() << "\n";
             break;
         case Value::Type::VECTOR:
             ret << visitVector(v.asValueVector(), depth);
