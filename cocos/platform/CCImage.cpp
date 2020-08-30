@@ -96,6 +96,7 @@ extern "C"
 #endif //CC_USE_PNG
 
 #include "base/etc1.h"
+#include "base/etc2.h"
 
 #include "base/astc.h"
     
@@ -618,6 +619,9 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
         case Format::ETC:
             ret = initWithETCData(unpackedData, unpackedLen, ownData);
             break;
+        case Format::ETC2:
+            ret = initWithETC2Data(unpackedData, unpackedLen, ownData);
+            break;
         case Format::S3TC:
             ret = initWithS3TCData(unpackedData, unpackedLen);
             break;
@@ -677,31 +681,27 @@ bool Image::isBmp(const unsigned char * data, ssize_t dataLen)
 
 bool Image::isEtc(const unsigned char * data, ssize_t /*dataLen*/)
 {
-    return etc1_pkm_is_valid((etc1_byte*)data) ? true : false;
+    return !!etc1_pkm_is_valid((etc1_byte*)data);
 }
 
+bool Image::isEtc2(const unsigned char* data, ssize_t dataLen)
+{
+    return !!etc2_pkm_is_valid((etc2_byte*)data);
+}
 
 bool Image::isS3TC(const unsigned char * data, ssize_t /*dataLen*/)
 {
 
     S3TCTexHeader *header = (S3TCTexHeader *)data;
     
-    if (strncmp(header->fileCode, "DDS", 3) != 0)
-    {
-        return false;
-    }
-    return true;
+    return (strncmp(header->fileCode, "DDS", 3) == 0);
 }
 
 bool Image::isATITC(const unsigned char *data, ssize_t /*dataLen*/)
 {
     ATITCTexHeader *header = (ATITCTexHeader *)data;
     
-    if (strncmp(&header->identifier[1], "KTX", 3) != 0)
-    {
-        return false;
-    }
-    return true;
+    return (strncmp(&header->identifier[1], "KTX", 3) == 0);
 }
 
 bool Image::isASTC(const unsigned char* data, ssize_t /*dataLen*/)
@@ -710,11 +710,7 @@ bool Image::isASTC(const unsigned char* data, ssize_t /*dataLen*/)
 
     uint32_t magicval = hdr->magic[0] + 256 * (uint32_t)(hdr->magic[1]) + 65536 * (uint32_t)(hdr->magic[2]) + 16777216 * (uint32_t)(hdr->magic[3]);
 
-    if (magicval != ASTC_MAGIC_FILE_CONSTANT)
-    {
-        return false;
-    }
-    return true;
+    return (magicval == ASTC_MAGIC_FILE_CONSTANT);
 }
 
 bool Image::isJpg(const unsigned char * data, ssize_t dataLen)
@@ -781,6 +777,10 @@ Image::Format Image::detectFormat(const unsigned char * data, ssize_t dataLen)
     else if (isEtc(data, dataLen))
     {
         return Format::ETC;
+    }
+    else if (isEtc2(data, dataLen))
+    {
+        return Format::ETC2;
     }
     else if (isS3TC(data, dataLen))
     {
@@ -1569,6 +1569,43 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
     return false;
 }
 
+bool Image::initWithETC2Data(const unsigned char* data, ssize_t dataLen, bool ownData)
+{
+    const etc2_byte* header = static_cast<const etc2_byte*>(data);
+
+    //check the data
+    if (!etc2_pkm_is_valid(header))
+    {
+        return  false;
+    }
+
+    _width = etc2_pkm_get_width(header);
+    _height = etc2_pkm_get_height(header);
+
+    if (0 == _width || 0 == _height)
+    {
+        return false;
+    }
+
+    etc2_uint32 format = etc2_pkm_get_format(header);
+
+    if (Configuration::getInstance()->supportsETC2()) {
+        _pixelFormat = format == ETC2_RGBA_NO_MIPMAPS ? backend::PixelFormat::ETC2_RGBA : backend::PixelFormat::ETC2_RGB;
+
+        if (ownData) _data = (unsigned char*)data;
+        else {
+            _data = (unsigned char*)malloc(dataLen);
+            if (_data) memcpy(_data, data, dataLen);
+        }
+        _dataLen = dataLen;
+        _offset = ETC2_PKM_HEADER_SIZE;
+    }
+    else {
+        ; // TODO: software decoder
+    }
+
+    return true;
+}
 
 bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ownData)
 {
