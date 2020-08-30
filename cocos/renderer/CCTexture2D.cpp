@@ -83,6 +83,8 @@ namespace {
         
 #if defined(GL_ETC1_RGB8_OES) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         PixelFormatInfoMapValue(backend::PixelFormat::ETC, Texture2D::PixelFormatInfo(4, true, false)),
+        PixelFormatInfoMapValue(backend::PixelFormat::ETC2_RGB, Texture2D::PixelFormatInfo(4, true, false)),
+        PixelFormatInfoMapValue(backend::PixelFormat::ETC2_RGBA, Texture2D::PixelFormatInfo(8, true, true)),
 #endif
         
 #if defined(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
@@ -396,6 +398,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
 
     if (info.compressed && !Configuration::getInstance()->supportsPVRTC()
         && !Configuration::getInstance()->supportsETC()
+        && !Configuration::getInstance()->supportsETC2()
         && !Configuration::getInstance()->supportsS3TC()
         && !Configuration::getInstance()->supportsASTC()
         && !Configuration::getInstance()->supportsATITC())
@@ -715,6 +718,12 @@ const char* Texture2D::getStringForFormat() const
             
         case backend::PixelFormat::ETC:
             return "ETC";
+
+        case backend::PixelFormat::ETC2_RGB:
+            return "ETC2_RGB";
+
+        case backend::PixelFormat::ETC2_RGBA:
+            return "ETC_RGBA";
 
         case backend::PixelFormat::S3TC_DXT1:
             return "S3TC_DXT1";

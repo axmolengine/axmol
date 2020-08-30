@@ -44,6 +44,7 @@ Configuration::Configuration()
 : _maxModelviewStackDepth(0)
 , _supportsPVRTC(false)
 , _supportsETC1(false)
+, _supportsETC2(false)
 , _supportsS3TC(false)
 , _supportsATITC(false)
 , _supportsASTC(false)
@@ -126,9 +127,18 @@ void Configuration::gatherGPUInfo()
     _supportsNPOT = true;
     _valueDict["supports_NPOT"] = Value(_supportsNPOT);
     
+    _supportsETC2 = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ETC2);
+    _valueDict["supports_ETC2"] = Value(_supportsETC2);
+
+#if defined(_WIN32)
+    // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
+    // format is forwards compatible so just use the ETC2 format.
+    _supportsETC1 = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ETC1) || _supportsETC2;
+#else
     _supportsETC1 = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ETC1);
+#endif
     _valueDict["supports_ETC1"] = Value(_supportsETC1);
-    
+
     _supportsS3TC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::S3TC);
     _valueDict["supports_S3TC"] = Value(_supportsS3TC);
     
@@ -219,6 +229,11 @@ bool Configuration::supportsPVRTC() const
 bool Configuration::supportsETC() const
 {
     return _supportsETC1;
+}
+
+bool Configuration::supportsETC2() const
+{
+    return _supportsETC2;
 }
 
 bool Configuration::supportsS3TC() const

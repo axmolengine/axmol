@@ -25,6 +25,16 @@
 #include "DeviceInfoGL.h"
 #include "platform/CCGL.h"
 
+#if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
+#define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
+// #define GL_COMPRESSED_RGB8_ETC2 0x9274
+#endif
+
+#if !defined(GL_COMPRESSED_RGBA_ASTC_4x4)
+#define GL_COMPRESSED_RGBA_ASTC_4x4 0x93B0
+// #define GL_COMPRESSED_RGBA_ASTC_8x8 0x93B7
+#endif
+
 CC_BACKEND_BEGIN
 
 bool DeviceInfoGL::init()
@@ -61,9 +71,12 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
     switch (feature)
     {
     case FeatureType::ETC1:
-#ifdef GL_ETC1_RGB8_OES //GL_ETC1_RGB8_OES is not defined in old opengl version
+#ifdef GL_ETC1_RGB8_OES // GL_ETC1_RGB8_OES is not defined in old opengl version
         featureSupported = checkForGLExtension("GL_OES_compressed_ETC1_RGB8_texture");
 #endif
+        break;
+    case FeatureType::ETC2:
+        featureSupported = checkSupportsCompressedFormat(GL_COMPRESSED_RGBA8_ETC2_EAC);
         break;
     case FeatureType::S3TC:
 #ifdef GL_EXT_texture_compression_s3tc
@@ -99,7 +112,7 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
         featureSupported = checkForGLExtension("GL_OES_depth24");
         break;
     case FeatureType::ASTC:
-        featureSupported = checkForGLExtension("GL_OES_texture_compression_astc");
+        featureSupported = checkForGLExtension("GL_OES_texture_compression_astc") || checkSupportsCompressedFormat(GL_COMPRESSED_RGBA_ASTC_4x4);
         break;
     default:
         break;
@@ -110,6 +123,35 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
 bool DeviceInfoGL::checkForGLExtension(const std::string &searchName) const
 {
     return _glExtensions.find(searchName) != std::string::npos;
+}
+
+bool DeviceInfoGL::checkSupportsCompressedFormat(int compressedFormat)
+{
+    const int MAX_ALLOCA_SIZE = 512;
+    
+    GLint numFormats = 0;
+    glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &numFormats);
+    GLint* formats = nullptr;
+    int buffersize = numFormats * sizeof(GLint);
+    if(buffersize <= MAX_ALLOCA_SIZE)
+        formats = (GLint*)alloca(buffersize);
+    else
+        formats = (GLint*)malloc(buffersize);
+    glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, formats);
+
+    bool supported = false;
+    for (GLint i = 0; i < numFormats; ++i)
+    {
+        if (formats[i] == compressedFormat) {
+            supported = true;
+            break;
+        }
+    }
+
+    if (buffersize > MAX_ALLOCA_SIZE)
+        free(formats);
+
+    return supported;
 }
 
 CC_BACKEND_END
