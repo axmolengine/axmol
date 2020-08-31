@@ -165,22 +165,27 @@ public:
     void reversePremultipliedAlpha();   
 
 protected:
+    typedef struct sImageTGA tImageTGA;
+    
     // all internal init function have chance to own the data for fast forward data to hardware decoder
     // see: initWithImageData
     bool initWithJpgData(unsigned char *  data, ssize_t dataLen);
     bool initWithPngData(unsigned char * data, ssize_t dataLen);
     bool initWithBmpData(unsigned char *data, ssize_t dataLen);
     bool initWithWebpData(unsigned char * data, ssize_t dataLen);
-    bool initWithPVRData(unsigned char * data, ssize_t dataLen);
-    bool initWithPVRv2Data(unsigned char * data, ssize_t dataLen);
-    bool initWithPVRv3Data(unsigned char * data, ssize_t dataLen);
-    bool initWithETCData(unsigned char* data, ssize_t dataLen);
-    bool initWithETC2Data(unsigned char* data, ssize_t dataLen);
-    bool initWithS3TCData(unsigned char * data, ssize_t dataLen);
-    bool initWithATITCData(unsigned char *data, ssize_t dataLen);
-    bool initWithASTCData(unsigned char* data, ssize_t dataLen);
-    typedef struct sImageTGA tImageTGA;
     bool initWithTGAData(tImageTGA* tgaData);
+    
+    bool initWithPVRData(unsigned char * data, ssize_t dataLen, bool ownData);
+    bool initWithPVRv2Data(unsigned char * data, ssize_t dataLen, bool ownData);
+    bool initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownData);
+    bool initWithETCData(unsigned char* data, ssize_t dataLen, bool ownData);
+    bool initWithETC2Data(unsigned char* data, ssize_t dataLen, bool ownData);
+    bool initWithASTCData(unsigned char* data, ssize_t dataLen, bool ownData);
+    bool initWithS3TCData(unsigned char * data, ssize_t dataLen, bool ownData);
+    bool initWithATITCData(unsigned char *data, ssize_t dataLen, bool ownData);
+    
+    // fast forward pixels to GPU if ownData
+    void forwardPixels(unsigned char* data, ssize_t dataLen, int offset, bool ownData);
 
     bool saveImageToPNG(const std::string& filePath, bool isToRGB = true);
     bool saveImageToJPG(const std::string& filePath);
