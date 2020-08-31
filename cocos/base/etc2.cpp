@@ -3,6 +3,12 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 c4games.com
+
+//
+// Copyright 2013 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
  
  http://www.cocos2d-x.org
  
@@ -82,13 +88,7 @@ etc2_uint32 etc2_pkm_get_format(const uint8_t* pHeader) {
     return readBEUint16(pHeader + ETC2_PKM_FORMAT_OFFSET);
 }
 
-/// The etc2 software decode implementation is modified from angleproject
-/// only support ETC2_RGB and ETC2_RGBA
-//
-// Copyright 2013 The ANGLE Project Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-//
+// The etc2 software decode implementation is modified from angleproject, and only support ETC2_RGB and ETC2_RGBA
 #define UNREACHABLE()
 
 namespace {
