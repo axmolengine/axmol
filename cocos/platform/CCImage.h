@@ -199,7 +199,7 @@ protected:
     static bool PNG_PREMULTIPLIED_ALPHA_ENABLED;
     unsigned char *_data;
     ssize_t _dataLen;
-    ssize_t _offset;
+    ssize_t _offset; // useful for hardware decoder present to hold data without copy
     int _width;
     int _height;
     bool _unpack;
