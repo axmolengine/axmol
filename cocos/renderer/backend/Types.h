@@ -100,8 +100,12 @@ enum class PixelFormat
     PVRTC2,
     //! 2-bit PVRTC-compressed texture: PVRTC2 (has alpha channel)
     PVRTC2A,
-    //! ETC-compressed texture: ETC
+    //! ETC-compressed texture: ETC1_RGB
     ETC,
+    //! ETC2-compressed texture: ETC2_RGB
+    ETC2_RGB,
+    //! ETC2-compressed texture: ETC2_RGBA
+    ETC2_RGBA,
     //! S3TC-compressed texture: S3TC_Dxt1
     S3TC_DXT1,
     //! S3TC-compressed texture: S3TC_Dxt3

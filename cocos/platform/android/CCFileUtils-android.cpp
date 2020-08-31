@@ -365,9 +365,9 @@ FileUtils::Status FileUtilsAndroid::getContents(const std::string& filename, Res
         return FileUtils::Status::NotInitialized;
     }
 
-    AAsset* asset = AAssetManager_open(assetmanager, relativePath.c_str(), AASSET_MODE_UNKNOWN);
+    AAsset* asset = AAssetManager_open(assetmanager, relativePath.data(), AASSET_MODE_UNKNOWN);
     if (nullptr == asset) {
-        LOGD("AAssetManager_open %s failed", relativePath.c_str());
+        LOGD("asset is nullptr");
         return FileUtils::Status::OpenFailed;
     }
 
