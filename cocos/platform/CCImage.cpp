@@ -600,6 +600,12 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
             unpackedLen = dataLen;
         }
 
+        if (unpackedData != data) 
+        { // free old data and own the unpackedData
+            if (ownData) free((void*)data);
+            ownData = true;
+        }
+
         _fileType = detectFormat(unpackedData, unpackedLen);
 
         switch (_fileType)
@@ -617,10 +623,10 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
             ret = initWithPVRData(unpackedData, unpackedLen);
             break;
         case Format::ETC:
-            ret = initWithETCData(unpackedData, unpackedLen, ownData);
+            ret = initWithETCData(unpackedData, unpackedLen);
             break;
         case Format::ETC2:
-            ret = initWithETC2Data(unpackedData, unpackedLen, ownData);
+            ret = initWithETC2Data(unpackedData, unpackedLen);
             break;
         case Format::S3TC:
             ret = initWithS3TCData(unpackedData, unpackedLen);
@@ -629,7 +635,7 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
             ret = initWithATITCData(unpackedData, unpackedLen);
             break;
         case Format::ASTC:
-            ret = initWithASTCData(unpackedData, unpackedLen, ownData);
+            ret = initWithASTCData(unpackedData, unpackedLen);
             break;
         case Format::BMP:
             ret = initWithBmpData(unpackedData, unpackedLen);
@@ -653,10 +659,8 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
             }
         }
         
-        if(unpackedData != data)
-        {
-            free(unpackedData);
-        }
+        if (_data != unpackedData && ownData) free(unpackedData);
+        // else, the hardware texture decoder used, the compressed data was stored directly
     } while (0);
     
     return ret;
@@ -874,7 +878,7 @@ namespace
 #endif // CC_USE_JPEG
 }
 
-bool Image::initWithJpgData(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithJpgData(unsigned char * data, ssize_t dataLen)
 {
 #if CC_USE_JPEG
     /* these are standard libjpeg structures for reading(decompression) */
@@ -967,7 +971,7 @@ bool Image::initWithJpgData(const unsigned char * data, ssize_t dataLen)
 #endif // CC_USE_JPEG
 }
 
-bool Image::initWithPngData(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithPngData(unsigned char * data, ssize_t dataLen)
 {
 #if CC_USE_PNG
     // length of bytes to check if it is a valid png file
@@ -1124,7 +1128,7 @@ bool Image::initWithPngData(const unsigned char * data, ssize_t dataLen)
 #endif //CC_USE_PNG
 }
 
-bool Image::initWithBmpData(const unsigned char* data, ssize_t dataLen)
+bool Image::initWithBmpData(unsigned char* data, ssize_t dataLen)
 {
     const int nrChannels = 3;
     _data = stbi_load_from_memory(data, dataLen, &_width, &_height, nullptr, nrChannels);
@@ -1175,7 +1179,7 @@ namespace
     }
 }
 
-bool Image::initWithPVRv2Data(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen)
 {
     int dataLength = 0, dataOffset = 0, dataSize = 0;
     int blockSize = 0, widthBlocks = 0, heightBlocks = 0;
@@ -1282,7 +1286,7 @@ bool Image::initWithPVRv2Data(const unsigned char * data, ssize_t dataLen)
                 heightBlocks = height / 4;
                 break;
             case PVR2TexturePixelFormat::BGRA8888:
-                if (Configuration::getInstance()->supportsBGRA8888() == false)
+                if (!Configuration::getInstance()->supportsBGRA8888())
                 {
                     CCLOG("cocos2d: Image. BGRA8888 not supported on this device");
                     return false;
@@ -1332,7 +1336,7 @@ bool Image::initWithPVRv2Data(const unsigned char * data, ssize_t dataLen)
     return true;
 }
 
-bool Image::initWithPVRv3Data(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen)
 {
     if (static_cast<size_t>(dataLen) < sizeof(PVRv3TexHeader))
     {
@@ -1504,7 +1508,7 @@ bool Image::initWithPVRv3Data(const unsigned char * data, ssize_t dataLen)
     return true;
 }
 
-bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool ownData)
+bool Image::initWithETCData(unsigned char* data, ssize_t dataLen)
 {
     const etc1_byte* header = static_cast<const etc1_byte*>(data);
     
@@ -1537,11 +1541,7 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
         //old opengl version has no define for GL_ETC1_RGB8_OES, add macro to make compiler happy. 
 #if defined(GL_ETC1_RGB8_OES) || defined(CC_USE_METAL)
         _pixelFormat = compressedFormat;
-        if(ownData) _data = (unsigned char*)data;
-        else {
-            _data = (unsigned char*)malloc(dataLen);
-            if(_data) memcpy(_data, data, dataLen);
-        }
+        _data = (unsigned char*)data;
         _dataLen = dataLen;
         _offset = ETC_PKM_HEADER_SIZE;
         return true;
@@ -1569,16 +1569,13 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
             ret = false;
         }
 
-        if (ownData) free((void*)data);
-
         return ret;
     }
 
-    if (ownData) free((void*)data);
     return false;
 }
 
-bool Image::initWithETC2Data(const unsigned char* data, ssize_t dataLen, bool ownData)
+bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen)
 {
     const etc2_byte* header = static_cast<const etc2_byte*>(data);
 
@@ -1604,11 +1601,7 @@ bool Image::initWithETC2Data(const unsigned char* data, ssize_t dataLen, bool ow
     if (Configuration::getInstance()->supportsETC2()) {
         _pixelFormat = format == ETC2_RGBA_NO_MIPMAPS ? backend::PixelFormat::ETC2_RGBA : backend::PixelFormat::ETC2_RGB;
 
-        if (ownData) _data = (unsigned char*)data;
-        else {
-            _data = (unsigned char*)malloc(dataLen);
-            if (_data) memcpy(_data, data, dataLen);
-        }
+        _data = (unsigned char*)data;
         _dataLen = dataLen;
         _offset = ETC2_PKM_HEADER_SIZE;
         return true;
@@ -1634,13 +1627,11 @@ bool Image::initWithETC2Data(const unsigned char* data, ssize_t dataLen, bool ow
             ret = false;
         }
 
-        if (ownData) free((void*)data);
-
         return ret;
     }
 }
 
-bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ownData)
+bool Image::initWithASTCData(unsigned char* data, ssize_t dataLen)
 {
     ASTCTexHeader* header = (ASTCTexHeader*)data;
 
@@ -1694,8 +1685,6 @@ bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ow
             }
             ret = false;
         }
-
-        if (ownData) free((void*)data);
         return ret;
     }
 
@@ -1787,7 +1776,7 @@ namespace
     }
 }
 
-bool Image::initWithS3TCData(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen)
 {
     const uint32_t FOURCC_DXT1 = makeFourCC('D', 'X', 'T', '1');
     const uint32_t FOURCC_DXT3 = makeFourCC('D', 'X', 'T', '3');
@@ -1913,7 +1902,7 @@ bool Image::initWithS3TCData(const unsigned char * data, ssize_t dataLen)
 }
 
 
-bool Image::initWithATITCData(const unsigned char *data, ssize_t dataLen)
+bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen)
 {
     /* load the .ktx file */
     ATITCTexHeader *header = (ATITCTexHeader *)data;
@@ -1948,7 +1937,7 @@ bool Image::initWithATITCData(const unsigned char *data, ssize_t dataLen)
     {
         _dataLen = dataLen - sizeof(ATITCTexHeader) - header->bytesOfKeyValueData - 4;
         _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        memcpy((void *)_data,(void *)pixelData , _dataLen);
+        memcpy((void*)_data, (void*)pixelData, _dataLen);
     }
     else                                               //decompressed data length
     {
@@ -2042,12 +2031,12 @@ bool Image::initWithATITCData(const unsigned char *data, ssize_t dataLen)
     return true;
 }
 
-bool Image::initWithPVRData(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithPVRData(unsigned char * data, ssize_t dataLen)
 {
     return initWithPVRv2Data(data, dataLen) || initWithPVRv3Data(data, dataLen);
 }
 
-bool Image::initWithWebpData(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithWebpData(unsigned char * data, ssize_t dataLen)
 {
 #if CC_USE_WEBP
     bool ret = false;
