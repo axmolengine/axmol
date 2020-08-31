@@ -502,10 +502,68 @@ backend::PixelFormat getDevicePixelFormat(backend::PixelFormat format)
         case backend::PixelFormat::ETC:
             if(Configuration::getInstance()->supportsETC())
                 return format;
+        case backend::PixelFormat::ETC2_RGB:
+        case backend::PixelFormat::ETC2_RGBA:
+            if(Configuration::getInstance()->supportsETC2())
+                return format;
             else
-                return backend::PixelFormat::RGB888;
+                return backend::PixelFormat::RGBA8888;
+        case backend::PixelFormat::ASTC4:
+        case backend::PixelFormat::ASTC8:
+            if(Configuration::getInstance()->supportsASTC())
+                return format;
+            else
+                return backend::PixelFormat::RGBA8888;
         default:
             return format;
+    }
+}
+
+namespace
+{
+    bool testFormatForPvr2TCSupport(PVR2TexturePixelFormat /*format*/)
+    {
+        return true;
+    }
+    
+    bool testFormatForPvr3TCSupport(PVR3TexturePixelFormat format)
+    {
+        switch (format) {
+            case PVR3TexturePixelFormat::DXT1:
+            case PVR3TexturePixelFormat::DXT3:
+            case PVR3TexturePixelFormat::DXT5:
+                return Configuration::getInstance()->supportsS3TC();
+                
+            case PVR3TexturePixelFormat::BGRA8888:
+                return Configuration::getInstance()->supportsBGRA8888();
+                
+            case PVR3TexturePixelFormat::PVRTC2BPP_RGB:
+            case PVR3TexturePixelFormat::PVRTC2BPP_RGBA:
+            case PVR3TexturePixelFormat::PVRTC4BPP_RGB:
+            case PVR3TexturePixelFormat::PVRTC4BPP_RGBA:
+            case PVR3TexturePixelFormat::ETC1:
+            case PVR3TexturePixelFormat::RGBA8888:
+            case PVR3TexturePixelFormat::RGBA4444:
+            case PVR3TexturePixelFormat::RGBA5551:
+            case PVR3TexturePixelFormat::RGB565:
+            case PVR3TexturePixelFormat::RGB888:
+            case PVR3TexturePixelFormat::A8:
+            case PVR3TexturePixelFormat::L8:
+            case PVR3TexturePixelFormat::LA88:
+                return true;
+                
+            default:
+                return false;
+        }
+    }
+}
+
+namespace
+{
+    static uint32_t makeFourCC(char ch0, char ch1, char ch2, char ch3)
+    {
+        const uint32_t fourCC = ((uint32_t)(char)(ch0) | ((uint32_t)(char)(ch1) << 8) | ((uint32_t)(char)(ch2) << 16) | ((uint32_t)(char)(ch3) << 24 ));
+        return fourCC;
     }
 }
 
@@ -621,22 +679,22 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
             ret = initWithWebpData(unpackedData, unpackedLen);
             break;
         case Format::PVR:
-            ret = initWithPVRData(unpackedData, unpackedLen);
+            ret = initWithPVRData(unpackedData, unpackedLen, ownData);
             break;
         case Format::ETC:
-            ret = initWithETCData(unpackedData, unpackedLen);
+            ret = initWithETCData(unpackedData, unpackedLen, ownData);
             break;
         case Format::ETC2:
-            ret = initWithETC2Data(unpackedData, unpackedLen);
+            ret = initWithETC2Data(unpackedData, unpackedLen, ownData);
             break;
         case Format::S3TC:
-            ret = initWithS3TCData(unpackedData, unpackedLen);
+            ret = initWithS3TCData(unpackedData, unpackedLen, ownData);
             break;
         case Format::ATITC:
-            ret = initWithATITCData(unpackedData, unpackedLen);
+            ret = initWithATITCData(unpackedData, unpackedLen, ownData);
             break;
         case Format::ASTC:
-            ret = initWithASTCData(unpackedData, unpackedLen);
+            ret = initWithASTCData(unpackedData, unpackedLen, ownData);
             break;
         case Format::BMP:
             ret = initWithBmpData(unpackedData, unpackedLen);
@@ -1141,46 +1199,82 @@ bool Image::initWithBmpData(unsigned char* data, ssize_t dataLen)
     return true;
 }
 
-namespace
+bool Image::initWithTGAData(tImageTGA* tgaData)
 {
-    bool testFormatForPvr2TCSupport(PVR2TexturePixelFormat /*format*/)
-    {
-        return true;
-    }
+    bool ret = false;
     
-    bool testFormatForPvr3TCSupport(PVR3TexturePixelFormat format)
+    do
     {
-        switch (format) {
-            case PVR3TexturePixelFormat::DXT1:
-            case PVR3TexturePixelFormat::DXT3:
-            case PVR3TexturePixelFormat::DXT5:
-                return Configuration::getInstance()->supportsS3TC();
-                
-            case PVR3TexturePixelFormat::BGRA8888:
-                return Configuration::getInstance()->supportsBGRA8888();
-                
-            case PVR3TexturePixelFormat::PVRTC2BPP_RGB:
-            case PVR3TexturePixelFormat::PVRTC2BPP_RGBA:
-            case PVR3TexturePixelFormat::PVRTC4BPP_RGB:
-            case PVR3TexturePixelFormat::PVRTC4BPP_RGBA:
-            case PVR3TexturePixelFormat::ETC1:
-            case PVR3TexturePixelFormat::RGBA8888:
-            case PVR3TexturePixelFormat::RGBA4444:
-            case PVR3TexturePixelFormat::RGBA5551:
-            case PVR3TexturePixelFormat::RGB565:
-            case PVR3TexturePixelFormat::RGB888:
-            case PVR3TexturePixelFormat::A8:
-            case PVR3TexturePixelFormat::L8:
-            case PVR3TexturePixelFormat::LA88:
-                return true;
-                
-            default:
-                return false;
+        CC_BREAK_IF(tgaData == nullptr);
+        
+        // tgaLoadBuffer only support type 2, 3, 10
+        if (2 == tgaData->type || 10 == tgaData->type)
+        {
+            // true color
+            // unsupported RGB555
+            if (tgaData->pixelDepth == 16)
+            {
+                _pixelFormat = backend::PixelFormat::RGB5A1;
+            }
+            else if(tgaData->pixelDepth == 24)
+            {
+                _pixelFormat = backend::PixelFormat::RGB888;
+            }
+            else if(tgaData->pixelDepth == 32)
+            {
+                _pixelFormat = backend::PixelFormat::RGBA8888;
+            }
+            else
+            {
+                CCLOG("Image WARNING: unsupported true color tga data pixel format. FILE: %s", _filePath.c_str());
+                break;
+            }
+        }
+        else if(3 == tgaData->type)
+        {
+            // gray
+            if (8 == tgaData->pixelDepth)
+            {
+                _pixelFormat = backend::PixelFormat::I8;
+            }
+            else
+            {
+                // actually this won't happen, if it happens, maybe the image file is not a tga
+                CCLOG("Image WARNING: unsupported gray tga data pixel format. FILE: %s", _filePath.c_str());
+                break;
+            }
+        }
+        
+        _width = tgaData->width;
+        _height = tgaData->height;
+        _data = tgaData->imageData;
+        _dataLen = _width * _height * tgaData->pixelDepth / 8;
+        _fileType = Format::TGA;
+
+        ret = true;
+        
+    }while(false);
+    
+    if (ret)
+    {
+        if (FileUtils::getInstance()->getFileExtension(_filePath) != ".tga")
+        {
+                    CCLOG("Image WARNING: the image file suffix is not tga, but parsed as a tga image file. FILE: %s", _filePath.c_str());
         }
     }
+    else
+    {
+        if (tgaData && tgaData->imageData != nullptr)
+        {
+            free(tgaData->imageData);
+            _data = nullptr;
+        }
+    }
+    
+    return ret;
 }
 
-bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen)
+bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen, bool ownData)
 {
     int blockSize = 0, widthBlocks = 0, heightBlocks = 0;
     int width = 0, height = 0;
@@ -1329,9 +1423,7 @@ bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen)
     }
     
     if (!_unpack) { // hardware decoder, hold data directly
-        _data = data;
-        _dataLen = dataLen;
-        _offset = pixelOffset;
+        forwardPixels(data, dataLen, pixelOffset, ownData);
     }
     else {
         _data = _mipmaps[0].address;
@@ -1341,7 +1433,7 @@ bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen)
     return true;
 }
 
-bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen)
+bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownData)
 {
     if (static_cast<size_t>(dataLen) < sizeof(PVRv3TexHeader))
     {
@@ -1506,9 +1598,7 @@ bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen)
     }
     
     if (!_unpack) {
-        _data = data;
-        _dataLen = dataLen;
-        _offset = pixelOffset;
+        forwardPixels(data, dataLen, pixelOffset, ownData);
     }
     else {
         _data = _mipmaps[0].address;
@@ -1518,7 +1608,7 @@ bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen)
     return true;
 }
 
-bool Image::initWithETCData(unsigned char* data, ssize_t dataLen)
+bool Image::initWithETCData(unsigned char* data, ssize_t dataLen, bool ownData)
 {
     const etc1_byte* header = static_cast<const etc1_byte*>(data);
     
@@ -1548,14 +1638,9 @@ bool Image::initWithETCData(unsigned char* data, ssize_t dataLen)
 
     if (compressedFormat != backend::PixelFormat::NONE)
     {
-        //old opengl version has no define for GL_ETC1_RGB8_OES, add macro to make compiler happy. 
-#if defined(GL_ETC1_RGB8_OES) || defined(CC_USE_METAL)
         _pixelFormat = compressedFormat;
-        _data = data;
-        _dataLen = dataLen;
-        _offset = ETC_PKM_HEADER_SIZE;
+        forwardPixels(data, dataLen, ETC_PKM_HEADER_SIZE, ownData);
         return true;
-#endif
     }
     else
     {
@@ -1585,7 +1670,7 @@ bool Image::initWithETCData(unsigned char* data, ssize_t dataLen)
     return false;
 }
 
-bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen)
+bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen, bool ownData)
 {
     const etc2_byte* header = static_cast<const etc2_byte*>(data);
 
@@ -1611,9 +1696,7 @@ bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen)
     if (Configuration::getInstance()->supportsETC2()) {
         _pixelFormat = format == ETC2_RGBA_NO_MIPMAPS ? backend::PixelFormat::ETC2_RGBA : backend::PixelFormat::ETC2_RGB;
 
-        _data = data;
-        _dataLen = dataLen;
-        _offset = ETC2_PKM_HEADER_SIZE;
+        forwardPixels(data, dataLen, ETC2_PKM_HEADER_SIZE, ownData);
         return true;
     }
     else {
@@ -1641,7 +1724,7 @@ bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen)
     }
 }
 
-bool Image::initWithASTCData(unsigned char* data, ssize_t dataLen)
+bool Image::initWithASTCData(unsigned char* data, ssize_t dataLen, bool ownData)
 {
     ASTCTexHeader* header = (ASTCTexHeader*)data;
 
@@ -1670,9 +1753,7 @@ bool Image::initWithASTCData(unsigned char* data, ssize_t dataLen)
             _pixelFormat = backend::PixelFormat::ASTC8;
         }
 
-        _data = data;
-        _dataLen = dataLen;
-        _offset = ASTC_HEAD_SIZE; 
+        forwardPixels(data, dataLen, ASTC_HEAD_SIZE, ownData);
         return true;
     }
     else
@@ -1702,92 +1783,7 @@ bool Image::initWithASTCData(unsigned char* data, ssize_t dataLen)
     return false;
 }
 
-
-bool Image::initWithTGAData(tImageTGA* tgaData)
-{
-    bool ret = false;
-    
-    do
-    {
-        CC_BREAK_IF(tgaData == nullptr);
-        
-        // tgaLoadBuffer only support type 2, 3, 10
-        if (2 == tgaData->type || 10 == tgaData->type)
-        {
-            // true color
-            // unsupported RGB555
-            if (tgaData->pixelDepth == 16)
-            {
-                _pixelFormat = backend::PixelFormat::RGB5A1;
-            }
-            else if(tgaData->pixelDepth == 24)
-            {
-                _pixelFormat = backend::PixelFormat::RGB888;
-            }
-            else if(tgaData->pixelDepth == 32)
-            {
-                _pixelFormat = backend::PixelFormat::RGBA8888;
-            }
-            else
-            {
-                CCLOG("Image WARNING: unsupported true color tga data pixel format. FILE: %s", _filePath.c_str());
-                break;
-            }
-        }
-        else if(3 == tgaData->type)
-        {
-            // gray
-            if (8 == tgaData->pixelDepth)
-            {
-                _pixelFormat = backend::PixelFormat::I8;
-            }
-            else
-            {
-                // actually this won't happen, if it happens, maybe the image file is not a tga
-                CCLOG("Image WARNING: unsupported gray tga data pixel format. FILE: %s", _filePath.c_str());
-                break;
-            }
-        }
-        
-        _width = tgaData->width;
-        _height = tgaData->height;
-        _data = tgaData->imageData;
-        _dataLen = _width * _height * tgaData->pixelDepth / 8;
-        _fileType = Format::TGA;
-
-        ret = true;
-        
-    }while(false);
-    
-    if (ret)
-    {
-        if (FileUtils::getInstance()->getFileExtension(_filePath) != ".tga")
-        {
-                    CCLOG("Image WARNING: the image file suffix is not tga, but parsed as a tga image file. FILE: %s", _filePath.c_str());
-        }
-    }
-    else
-    {
-        if (tgaData && tgaData->imageData != nullptr)
-        {
-            free(tgaData->imageData);
-            _data = nullptr;
-        }
-    }
-    
-    return ret;
-}
-
-namespace
-{
-    static uint32_t makeFourCC(char ch0, char ch1, char ch2, char ch3)
-    {
-        const uint32_t fourCC = ((uint32_t)(char)(ch0) | ((uint32_t)(char)(ch1) << 8) | ((uint32_t)(char)(ch2) << 16) | ((uint32_t)(char)(ch3) << 24 ));
-        return fourCC;
-    }
-}
-
-bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen)
+bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen, bool ownData)
 {
     const uint32_t FOURCC_DXT1 = makeFourCC('D', 'X', 'T', '1');
     const uint32_t FOURCC_DXT3 = makeFourCC('D', 'X', 'T', '3');
@@ -1897,16 +1893,14 @@ bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen)
     /* end load the mipmaps */
 
     if (hardware) {
-        _data = data;
-        _dataLen = dataLen;
-        _offset = pixelOffset;
+        forwardPixels(data, dataLen, pixelOffset, ownData);
     }
 
     return true;
 }
 
 
-bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen)
+bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen, bool ownData)
 {
     /* load the .ktx file */
     ATITCTexHeader *header = (ATITCTexHeader *)data;
@@ -2030,17 +2024,29 @@ bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen)
     /* end load the mipmaps */
 
     if (hardware) {
-        _data = data;
-        _dataLen = dataLen;
-        _offset = pixelOffset;
+        forwardPixels(data, dataLen, pixelOffset, ownData);
     }
     
     return true;
 }
 
-bool Image::initWithPVRData(unsigned char * data, ssize_t dataLen)
+bool Image::initWithPVRData(unsigned char * data, ssize_t dataLen, bool ownData)
 {
-    return initWithPVRv2Data(data, dataLen) || initWithPVRv3Data(data, dataLen);
+    return initWithPVRv2Data(data, dataLen, ownData) || initWithPVRv3Data(data, dataLen, ownData);
+}
+
+void Image::forwardPixels(unsigned char* data, ssize_t dataLen, int offset, bool ownData)
+{
+    if(ownData) {
+        _data = data;
+        _dataLen = dataLen;
+        _offset = offset;
+    }
+    else {
+        _dataLen = dataLen - offset;
+        _data = (unsigned char*)malloc(_dataLen);
+        memcpy(_data, data + offset, _dataLen);
+    }
 }
 
 bool Image::initWithWebpData(unsigned char * data, ssize_t dataLen)
