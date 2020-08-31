@@ -28,6 +28,10 @@
 #include "base/etc2.h"
 #include <stdint.h>
 #include <string.h>
+#include <assert.h>
+#include <type_traits>
+#include <algorithm>
+#include <limits>
 
 static const char kMagic[] = { 'P', 'K', 'M', ' ', '2', '0' };
 
