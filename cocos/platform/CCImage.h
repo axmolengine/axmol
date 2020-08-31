@@ -86,6 +86,8 @@ public:
         PVR,
         //! ETC
         ETC,
+        //! ETC2
+        ETC2,
         //! S3TC
         S3TC,
         //! ATITC
@@ -126,6 +128,7 @@ public:
     @brief Load image from stream buffer.
     @param data  stream buffer which holds the image data.
     @param dataLen  data length expressed in (number of) bytes.
+    @param ownData whether take the data memory management.
     @return true if loaded correctly.
     * @js NA
     * @lua NA
@@ -162,17 +165,20 @@ public:
     void reversePremultipliedAlpha();   
 
 protected:
-    bool initWithJpgData(const unsigned char *  data, ssize_t dataLen);
-    bool initWithPngData(const unsigned char * data, ssize_t dataLen);
-    bool initWithBmpData(const unsigned char *data, ssize_t dataLen);
-    bool initWithWebpData(const unsigned char * data, ssize_t dataLen);
-    bool initWithPVRData(const unsigned char * data, ssize_t dataLen);
-    bool initWithPVRv2Data(const unsigned char * data, ssize_t dataLen);
-    bool initWithPVRv3Data(const unsigned char * data, ssize_t dataLen);
-    bool initWithETCData(const unsigned char* data, ssize_t dataLen, bool ownData);
-    bool initWithS3TCData(const unsigned char * data, ssize_t dataLen);
-    bool initWithATITCData(const unsigned char *data, ssize_t dataLen);
-    bool initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ownData);
+    // all internal init function have chance to own the data for fast forward data to hardware decoder
+    // see: initWithImageData
+    bool initWithJpgData(unsigned char *  data, ssize_t dataLen);
+    bool initWithPngData(unsigned char * data, ssize_t dataLen);
+    bool initWithBmpData(unsigned char *data, ssize_t dataLen);
+    bool initWithWebpData(unsigned char * data, ssize_t dataLen);
+    bool initWithPVRData(unsigned char * data, ssize_t dataLen);
+    bool initWithPVRv2Data(unsigned char * data, ssize_t dataLen);
+    bool initWithPVRv3Data(unsigned char * data, ssize_t dataLen);
+    bool initWithETCData(unsigned char* data, ssize_t dataLen);
+    bool initWithETC2Data(unsigned char* data, ssize_t dataLen);
+    bool initWithS3TCData(unsigned char * data, ssize_t dataLen);
+    bool initWithATITCData(unsigned char *data, ssize_t dataLen);
+    bool initWithASTCData(unsigned char* data, ssize_t dataLen);
     typedef struct sImageTGA tImageTGA;
     bool initWithTGAData(tImageTGA* tgaData);
 
@@ -227,6 +233,7 @@ protected:
     bool isWebp(const unsigned char * data, ssize_t dataLen);
     bool isPvr(const unsigned char * data, ssize_t dataLen);
     bool isEtc(const unsigned char * data, ssize_t dataLen);
+    bool isEtc2(const unsigned char* data, ssize_t dataLen);
     bool isS3TC(const unsigned char * data,ssize_t dataLen);
     bool isATITC(const unsigned char *data, ssize_t dataLen);
     bool isASTC(const unsigned char* data, ssize_t dataLen);

@@ -96,6 +96,7 @@ extern "C"
 #endif //CC_USE_PNG
 
 #include "base/etc1.h"
+#include "base/etc2.h"
 
 #include "base/astc.h"
     
@@ -599,6 +600,12 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
             unpackedLen = dataLen;
         }
 
+        if (unpackedData != data) 
+        { // free old data and own the unpackedData
+            if (ownData) free((void*)data);
+            ownData = true;
+        }
+
         _fileType = detectFormat(unpackedData, unpackedLen);
 
         switch (_fileType)
@@ -616,7 +623,10 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
             ret = initWithPVRData(unpackedData, unpackedLen);
             break;
         case Format::ETC:
-            ret = initWithETCData(unpackedData, unpackedLen, ownData);
+            ret = initWithETCData(unpackedData, unpackedLen);
+            break;
+        case Format::ETC2:
+            ret = initWithETC2Data(unpackedData, unpackedLen);
             break;
         case Format::S3TC:
             ret = initWithS3TCData(unpackedData, unpackedLen);
@@ -625,7 +635,7 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
             ret = initWithATITCData(unpackedData, unpackedLen);
             break;
         case Format::ASTC:
-            ret = initWithASTCData(unpackedData, unpackedLen, ownData);
+            ret = initWithASTCData(unpackedData, unpackedLen);
             break;
         case Format::BMP:
             ret = initWithBmpData(unpackedData, unpackedLen);
@@ -649,10 +659,8 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
             }
         }
         
-        if(unpackedData != data)
-        {
-            free(unpackedData);
-        }
+        if (_data != unpackedData && ownData) free(unpackedData);
+        // else, the hardware texture decoder used, the compressed data was stored directly
     } while (0);
     
     return ret;
@@ -677,31 +685,27 @@ bool Image::isBmp(const unsigned char * data, ssize_t dataLen)
 
 bool Image::isEtc(const unsigned char * data, ssize_t /*dataLen*/)
 {
-    return etc1_pkm_is_valid((etc1_byte*)data) ? true : false;
+    return !!etc1_pkm_is_valid((etc1_byte*)data);
 }
 
+bool Image::isEtc2(const unsigned char* data, ssize_t dataLen)
+{
+    return !!etc2_pkm_is_valid((etc2_byte*)data);
+}
 
 bool Image::isS3TC(const unsigned char * data, ssize_t /*dataLen*/)
 {
 
     S3TCTexHeader *header = (S3TCTexHeader *)data;
     
-    if (strncmp(header->fileCode, "DDS", 3) != 0)
-    {
-        return false;
-    }
-    return true;
+    return (strncmp(header->fileCode, "DDS", 3) == 0);
 }
 
 bool Image::isATITC(const unsigned char *data, ssize_t /*dataLen*/)
 {
     ATITCTexHeader *header = (ATITCTexHeader *)data;
     
-    if (strncmp(&header->identifier[1], "KTX", 3) != 0)
-    {
-        return false;
-    }
-    return true;
+    return (strncmp(&header->identifier[1], "KTX", 3) == 0);
 }
 
 bool Image::isASTC(const unsigned char* data, ssize_t /*dataLen*/)
@@ -710,11 +714,7 @@ bool Image::isASTC(const unsigned char* data, ssize_t /*dataLen*/)
 
     uint32_t magicval = hdr->magic[0] + 256 * (uint32_t)(hdr->magic[1]) + 65536 * (uint32_t)(hdr->magic[2]) + 16777216 * (uint32_t)(hdr->magic[3]);
 
-    if (magicval != ASTC_MAGIC_FILE_CONSTANT)
-    {
-        return false;
-    }
-    return true;
+    return (magicval == ASTC_MAGIC_FILE_CONSTANT);
 }
 
 bool Image::isJpg(const unsigned char * data, ssize_t dataLen)
@@ -781,6 +781,10 @@ Image::Format Image::detectFormat(const unsigned char * data, ssize_t dataLen)
     else if (isEtc(data, dataLen))
     {
         return Format::ETC;
+    }
+    else if (isEtc2(data, dataLen))
+    {
+        return Format::ETC2;
     }
     else if (isS3TC(data, dataLen))
     {
@@ -874,7 +878,7 @@ namespace
 #endif // CC_USE_JPEG
 }
 
-bool Image::initWithJpgData(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithJpgData(unsigned char * data, ssize_t dataLen)
 {
 #if CC_USE_JPEG
     /* these are standard libjpeg structures for reading(decompression) */
@@ -967,7 +971,7 @@ bool Image::initWithJpgData(const unsigned char * data, ssize_t dataLen)
 #endif // CC_USE_JPEG
 }
 
-bool Image::initWithPngData(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithPngData(unsigned char * data, ssize_t dataLen)
 {
 #if CC_USE_PNG
     // length of bytes to check if it is a valid png file
@@ -1124,7 +1128,7 @@ bool Image::initWithPngData(const unsigned char * data, ssize_t dataLen)
 #endif //CC_USE_PNG
 }
 
-bool Image::initWithBmpData(const unsigned char* data, ssize_t dataLen)
+bool Image::initWithBmpData(unsigned char* data, ssize_t dataLen)
 {
     const int nrChannels = 3;
     _data = stbi_load_from_memory(data, dataLen, &_width, &_height, nullptr, nrChannels);
@@ -1175,7 +1179,7 @@ namespace
     }
 }
 
-bool Image::initWithPVRv2Data(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen)
 {
     int dataLength = 0, dataOffset = 0, dataSize = 0;
     int blockSize = 0, widthBlocks = 0, heightBlocks = 0;
@@ -1282,7 +1286,7 @@ bool Image::initWithPVRv2Data(const unsigned char * data, ssize_t dataLen)
                 heightBlocks = height / 4;
                 break;
             case PVR2TexturePixelFormat::BGRA8888:
-                if (Configuration::getInstance()->supportsBGRA8888() == false)
+                if (!Configuration::getInstance()->supportsBGRA8888())
                 {
                     CCLOG("cocos2d: Image. BGRA8888 not supported on this device");
                     return false;
@@ -1332,7 +1336,7 @@ bool Image::initWithPVRv2Data(const unsigned char * data, ssize_t dataLen)
     return true;
 }
 
-bool Image::initWithPVRv3Data(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen)
 {
     if (static_cast<size_t>(dataLen) < sizeof(PVRv3TexHeader))
     {
@@ -1504,7 +1508,7 @@ bool Image::initWithPVRv3Data(const unsigned char * data, ssize_t dataLen)
     return true;
 }
 
-bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool ownData)
+bool Image::initWithETCData(unsigned char* data, ssize_t dataLen)
 {
     const etc1_byte* header = static_cast<const etc1_byte*>(data);
     
@@ -1522,16 +1526,22 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
         return false;
     }
 
+    // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
+   // format is forwards compatible so just use the ETC2 format.
+    backend::PixelFormat compressedFormat;
     if (Configuration::getInstance()->supportsETC())
+        compressedFormat = backend::PixelFormat::ETC;
+    else if (Configuration::getInstance()->supportsETC2())
+        compressedFormat = backend::PixelFormat::ETC2_RGB;
+    else
+        compressedFormat = backend::PixelFormat::NONE;
+
+    if (compressedFormat != backend::PixelFormat::NONE)
     {
         //old opengl version has no define for GL_ETC1_RGB8_OES, add macro to make compiler happy. 
 #if defined(GL_ETC1_RGB8_OES) || defined(CC_USE_METAL)
-        _pixelFormat = backend::PixelFormat::ETC;
-        if(ownData) _data = (unsigned char*)data;
-        else {
-            _data = (unsigned char*)malloc(dataLen);
-            if(_data) memcpy(_data, data, dataLen);
-        }
+        _pixelFormat = compressedFormat;
+        _data = (unsigned char*)data;
         _dataLen = dataLen;
         _offset = ETC_PKM_HEADER_SIZE;
         return true;
@@ -1542,15 +1552,13 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
         CCLOG("cocos2d: Hardware ETC1 decoder not present. Using software decoder");
 
         bool ret = true;
-         //if it is not gles or device do not support ETC, decode texture by software
-        int bytePerPixel = 3;
-        unsigned int stride = _width * bytePerPixel;
-        _pixelFormat = backend::PixelFormat::RGB888;
-        
-        _dataLen =  _width * _height * bytePerPixel;
+        // if it is not gles or device do not support ETC1, decode texture by software
+        // directly decode ETC1_RGB to RGBA8888
+        _pixelFormat = backend::PixelFormat::RGBA8888;
+
+        _dataLen = _width * _height * 4;
         _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        
-        if (etc1_decode_image(static_cast<const unsigned char*>(data) + ETC_PKM_HEADER_SIZE, static_cast<etc1_byte*>(_data), _width, _height, bytePerPixel, stride) != 0)
+        if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) != 0)
         {
             _dataLen = 0;
             if (_data != nullptr)
@@ -1561,16 +1569,69 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
             ret = false;
         }
 
-        if (ownData) free((void*)data);
         return ret;
     }
 
-    if (ownData) free((void*)data);
     return false;
 }
 
+bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen)
+{
+    const etc2_byte* header = static_cast<const etc2_byte*>(data);
 
-bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ownData)
+    //check the data
+    if (!etc2_pkm_is_valid(header))
+    {
+        return  false;
+    }
+
+    _width = etc2_pkm_get_width(header);
+    _height = etc2_pkm_get_height(header);
+
+    if (0 == _width || 0 == _height)
+    {
+        return false;
+    }
+
+    etc2_uint32 format = etc2_pkm_get_format(header);
+
+    // We only support ETC2_RGBA_NO_MIPMAPS and ETC2_RGB_NO_MIPMAPS
+    assert(format == ETC2_RGBA_NO_MIPMAPS || format == ETC2_RGB_NO_MIPMAPS);
+
+    if (Configuration::getInstance()->supportsETC2()) {
+        _pixelFormat = format == ETC2_RGBA_NO_MIPMAPS ? backend::PixelFormat::ETC2_RGBA : backend::PixelFormat::ETC2_RGB;
+
+        _data = (unsigned char*)data;
+        _dataLen = dataLen;
+        _offset = ETC2_PKM_HEADER_SIZE;
+        return true;
+    }
+    else {
+        CCLOG("cocos2d: Hardware ETC2 decoder not present. Using software decoder");
+
+        bool ret = true;
+        // if it is not gles or device do not support ETC2, decode texture by software
+        // etc2_decode_image always decode to RGBA8888
+        _pixelFormat = backend::PixelFormat::RGBA8888;
+
+        _dataLen = _width * _height * 4;
+        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+        if (etc2_decode_image(format, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) != 0)
+        {
+            _dataLen = 0;
+            if (_data != nullptr)
+            {
+                free(_data);
+                _data = nullptr;
+            }
+            ret = false;
+        }
+
+        return ret;
+    }
+}
+
+bool Image::initWithASTCData(unsigned char* data, ssize_t dataLen)
 {
     ASTCTexHeader* header = (ASTCTexHeader*)data;
 
@@ -1624,8 +1685,6 @@ bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ow
             }
             ret = false;
         }
-
-        if (ownData) free((void*)data);
         return ret;
     }
 
@@ -1717,7 +1776,7 @@ namespace
     }
 }
 
-bool Image::initWithS3TCData(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen)
 {
     const uint32_t FOURCC_DXT1 = makeFourCC('D', 'X', 'T', '1');
     const uint32_t FOURCC_DXT3 = makeFourCC('D', 'X', 'T', '3');
@@ -1843,7 +1902,7 @@ bool Image::initWithS3TCData(const unsigned char * data, ssize_t dataLen)
 }
 
 
-bool Image::initWithATITCData(const unsigned char *data, ssize_t dataLen)
+bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen)
 {
     /* load the .ktx file */
     ATITCTexHeader *header = (ATITCTexHeader *)data;
@@ -1878,7 +1937,7 @@ bool Image::initWithATITCData(const unsigned char *data, ssize_t dataLen)
     {
         _dataLen = dataLen - sizeof(ATITCTexHeader) - header->bytesOfKeyValueData - 4;
         _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        memcpy((void *)_data,(void *)pixelData , _dataLen);
+        memcpy((void*)_data, (void*)pixelData, _dataLen);
     }
     else                                               //decompressed data length
     {
@@ -1972,12 +2031,12 @@ bool Image::initWithATITCData(const unsigned char *data, ssize_t dataLen)
     return true;
 }
 
-bool Image::initWithPVRData(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithPVRData(unsigned char * data, ssize_t dataLen)
 {
     return initWithPVRv2Data(data, dataLen) || initWithPVRv3Data(data, dataLen);
 }
 
-bool Image::initWithWebpData(const unsigned char * data, ssize_t dataLen)
+bool Image::initWithWebpData(unsigned char * data, ssize_t dataLen)
 {
 #if CC_USE_WEBP
     bool ret = false;
