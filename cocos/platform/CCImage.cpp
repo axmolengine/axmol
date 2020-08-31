@@ -1532,7 +1532,7 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
     else
         compressedFormat = backend::PixelFormat::NONE;
 
-    if (compressedFormat != backend::PixelFormat::NONE)
+    if (compressedFormat != backend::PixelFormat::NONE && false)
     {
         //old opengl version has no define for GL_ETC1_RGB8_OES, add macro to make compiler happy. 
 #if defined(GL_ETC1_RGB8_OES) || defined(CC_USE_METAL)
@@ -1552,15 +1552,13 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
         CCLOG("cocos2d: Hardware ETC1 decoder not present. Using software decoder");
 
         bool ret = true;
-         //if it is not gles or device do not support ETC, decode texture by software
-        int bytePerPixel = 3;
-        unsigned int stride = _width * bytePerPixel;
-        _pixelFormat = backend::PixelFormat::RGB888;
-        
-        _dataLen =  _width * _height * bytePerPixel;
+        // if it is not gles or device do not support ETC1, decode texture by software
+        // directly decode ETC1_RGB to RGBA8888
+        _pixelFormat = backend::PixelFormat::RGBA8888;
+
+        _dataLen = _width * _height * 4;
         _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        
-        if (etc1_decode_image(static_cast<const unsigned char*>(data) + ETC_PKM_HEADER_SIZE, static_cast<etc1_byte*>(_data), _width, _height, bytePerPixel, stride) != 0)
+        if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) != 0)
         {
             _dataLen = 0;
             if (_data != nullptr)
@@ -1572,6 +1570,7 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
         }
 
         if (ownData) free((void*)data);
+
         return ret;
     }
 
