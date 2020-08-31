@@ -2,22 +2,21 @@
 [![Build Status](https://travis-ci.com/c4games/engine-x.svg?branch=master)](https://travis-ci.com/c4games/engine-x)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/4936wev2r2ot606s/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/engine-x)
 
-**This is another more radical fork of ```cocos2d-x v4```, use OpneAL for all platforms, single texture multi GPU texture handler, C++14/17 etc.**  
+**This is another more radical fork of ```cocos2d-x v4```, use OpenAL for all platforms, single texture multi GPU texture handler, C++14/17, etc.**  
   
 **[简体中文](README_CN.md)**
   
 ### Purpose Summary:
 * C++14/17
-* Focus on native game dev
+* Focus on native game dev (quick starting, easy to use, fast)
 * Bugfixes ASAP
-* Review/Merge PR ASAP
-* Excellent PRs from **you** are welcome.
+* Usefull PRs from **you** are welcome (review/merge ASAP)
   
 ### Highlight Features:
 * Refactor AudioEngine, OpenAL for all platforms
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
-* Refactor UserDefault with [mio](https://github.com/mandreyel/mio), very fast
+* Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
 * Modularize all optional extension, all move from engine core to folder extensions
 * Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM...
 * Use modern gl loader ```glad``` to instead glew
@@ -26,7 +25,7 @@
 * IOS SDK 9.0 as minimal deployment
 * Use fast pugixml instead of tinyxml2
 * Using curl for transferring data with URL syntax
-* Use SAX parser for all plist file, remove apple platform spec for getValueMapFromFile stubs
+* Use SAX parser for all plist file
 * Spine-3.8 support
 * Add engine extension ```FairyGUI``` support
 
@@ -34,11 +33,11 @@
 
 ### Quick Start
 #### Common Requirement [python](https://www.python.org/downloads/)
-  * python-2.7.17+, python-3.7+ also works
+  * python-2.7.17+, python-3.7+ 
 
 #### Windows
   1. Install [CMake](https://cmake.org/) 3.6+  
-  2. Install Visual Studio 2019 build(we strong recommend you install this version)  
+  2. Install Visual Studio 2019 build(we strong recommend you use this version)  
   3. Execute follow command at command line(Console, Window Terminal or Powershell)
   ```bat
   cd engine-x\
