@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
  <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
-  <image source="./tmw_desert_spacing.png" width="265" height="199"/>
+  <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <tile id="0">
    <animation>
     <frame tileid="37" duration="200"/>
