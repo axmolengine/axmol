@@ -32,7 +32,6 @@ set(COCOS_BASE_HEADER
     base/CCEventListenerController.h
     base/s3tc.h
     base/etc1.h
-    base/etc2.h
     base/CCGameController.h
     base/CCConsole.h
     base/ccConstants.h
@@ -132,7 +131,6 @@ set(COCOS_BASE_SRC
     base/ccUtils.cpp
     base/SimpleTimer.cpp
     base/etc1.cpp
-    base/etc2.cpp
     base/pvr.cpp
     base/s3tc.cpp
     base/astc.cpp

@@ -316,6 +316,7 @@ bool ParticleSystem::initWithDictionary(ValueMap& dictionary, const std::string&
 {
     bool ret = false;
     unsigned char *buffer = nullptr;
+    unsigned char *deflated = nullptr;
     Image *image = nullptr;
     do 
     {
@@ -522,14 +523,13 @@ bool ParticleSystem::initWithDictionary(ValueMap& dictionary, const std::string&
                         CCASSERT( buffer != nullptr, "CCParticleSystem: error decoding textureImageData");
                         CC_BREAK_IF(!buffer);
                         
-                        unsigned char* deflated = nullptr;
                         ssize_t deflatedLen = ZipUtils::inflateMemory(buffer, decodeLen, &deflated);
                         CCASSERT( deflated != nullptr, "CCParticleSystem: error ungzipping textureImageData");
                         CC_BREAK_IF(!deflated);
                         
                         // For android, we should retain it in VolatileTexture::addImage which invoked in Director::getInstance()->getTextureCache()->addUIImage()
                         image = new (std::nothrow) Image();
-                        bool isOK = image->initWithImageData(deflated, deflatedLen, true);
+                        bool isOK = image->initWithImageData(deflated, deflatedLen);
                         CCASSERT(isOK, "CCParticleSystem: error init image with Data");
                         CC_BREAK_IF(!isOK);
                         
@@ -548,6 +548,7 @@ bool ParticleSystem::initWithDictionary(ValueMap& dictionary, const std::string&
         }
     } while (0);
     free(buffer);
+    free(deflated);
     return ret;
 }
 

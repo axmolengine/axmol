@@ -330,8 +330,9 @@ Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key)
         int length = base64Decode((const unsigned char*)base64String, (unsigned int)strlen(base64String), &decoded);
 
         Image *image = new (std::nothrow) Image();
-        bool imageResult = image->initWithImageData(decoded, length, true);
+        bool imageResult = image->initWithImageData(decoded, length);
         CCASSERT(imageResult, "Failed to create image from base64!");
+        free(decoded);
 
         if (!imageResult) {
             CC_SAFE_RELEASE_NULL(image);
@@ -353,8 +354,9 @@ Sprite* createSpriteFromBase64(const char* base64String)
     int length = base64Decode((const unsigned char*)base64String, (unsigned int)strlen(base64String), &decoded);
 
     Image *image = new (std::nothrow) Image();
-    bool imageResult = image->initWithImageData(decoded, length, decoded);
+    bool imageResult = image->initWithImageData(decoded, length);
     CCASSERT(imageResult, "Failed to create image from base64!");
+    free(decoded);
 
     if (!imageResult) {
         CC_SAFE_RELEASE_NULL(image);

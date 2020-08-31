@@ -44,7 +44,6 @@ Configuration::Configuration()
 : _maxModelviewStackDepth(0)
 , _supportsPVRTC(false)
 , _supportsETC1(false)
-, _supportsETC2(false)
 , _supportsS3TC(false)
 , _supportsATITC(false)
 , _supportsASTC(false)
@@ -129,10 +128,7 @@ void Configuration::gatherGPUInfo()
     
     _supportsETC1 = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ETC1);
     _valueDict["supports_ETC1"] = Value(_supportsETC1);
-
-    _supportsETC2 = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ETC2);
-    _valueDict["supports_ETC2"] = Value(_supportsETC2);
-
+    
     _supportsS3TC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::S3TC);
     _valueDict["supports_S3TC"] = Value(_supportsS3TC);
     
@@ -223,11 +219,6 @@ bool Configuration::supportsPVRTC() const
 bool Configuration::supportsETC() const
 {
     return _supportsETC1;
-}
-
-bool Configuration::supportsETC2() const
-{
-    return _supportsETC2;
 }
 
 bool Configuration::supportsS3TC() const
