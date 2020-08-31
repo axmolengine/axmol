@@ -25,6 +25,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+/* The etc1/etc2 compression tools
+* https://developer.arm.com/tools-and-software/graphics-and-gaming/mali-texture-compression-tool
+* https://github.com/google/etc2comp
+*/
+
 #ifndef __etc2_h__
 #define __etc2_h__
 /// @cond DO_NOT_SHOW
