@@ -96,7 +96,6 @@ extern "C"
 #endif //CC_USE_PNG
 
 #include "base/etc1.h"
-#include "base/etc2.h"
 
 #include "base/astc.h"
     
@@ -619,9 +618,6 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
         case Format::ETC:
             ret = initWithETCData(unpackedData, unpackedLen, ownData);
             break;
-        case Format::ETC2:
-            ret = initWithETC2Data(unpackedData, unpackedLen, ownData);
-            break;
         case Format::S3TC:
             ret = initWithS3TCData(unpackedData, unpackedLen);
             break;
@@ -681,27 +677,31 @@ bool Image::isBmp(const unsigned char * data, ssize_t dataLen)
 
 bool Image::isEtc(const unsigned char * data, ssize_t /*dataLen*/)
 {
-    return !!etc1_pkm_is_valid((etc1_byte*)data);
+    return etc1_pkm_is_valid((etc1_byte*)data) ? true : false;
 }
 
-bool Image::isEtc2(const unsigned char* data, ssize_t dataLen)
-{
-    return !!etc2_pkm_is_valid((etc2_byte*)data);
-}
 
 bool Image::isS3TC(const unsigned char * data, ssize_t /*dataLen*/)
 {
 
     S3TCTexHeader *header = (S3TCTexHeader *)data;
     
-    return (strncmp(header->fileCode, "DDS", 3) == 0);
+    if (strncmp(header->fileCode, "DDS", 3) != 0)
+    {
+        return false;
+    }
+    return true;
 }
 
 bool Image::isATITC(const unsigned char *data, ssize_t /*dataLen*/)
 {
     ATITCTexHeader *header = (ATITCTexHeader *)data;
     
-    return (strncmp(&header->identifier[1], "KTX", 3) == 0);
+    if (strncmp(&header->identifier[1], "KTX", 3) != 0)
+    {
+        return false;
+    }
+    return true;
 }
 
 bool Image::isASTC(const unsigned char* data, ssize_t /*dataLen*/)
@@ -710,7 +710,11 @@ bool Image::isASTC(const unsigned char* data, ssize_t /*dataLen*/)
 
     uint32_t magicval = hdr->magic[0] + 256 * (uint32_t)(hdr->magic[1]) + 65536 * (uint32_t)(hdr->magic[2]) + 16777216 * (uint32_t)(hdr->magic[3]);
 
-    return (magicval == ASTC_MAGIC_FILE_CONSTANT);
+    if (magicval != ASTC_MAGIC_FILE_CONSTANT)
+    {
+        return false;
+    }
+    return true;
 }
 
 bool Image::isJpg(const unsigned char * data, ssize_t dataLen)
@@ -777,10 +781,6 @@ Image::Format Image::detectFormat(const unsigned char * data, ssize_t dataLen)
     else if (isEtc(data, dataLen))
     {
         return Format::ETC;
-    }
-    else if (isEtc2(data, dataLen))
-    {
-        return Format::ETC2;
     }
     else if (isS3TC(data, dataLen))
     {
@@ -1522,21 +1522,11 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
         return false;
     }
 
-    // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
-   // format is forwards compatible so just use the ETC2 format.
-    backend::PixelFormat compressedFormat;
     if (Configuration::getInstance()->supportsETC())
-        compressedFormat = backend::PixelFormat::ETC;
-    else if (Configuration::getInstance()->supportsETC2())
-        compressedFormat = backend::PixelFormat::ETC2_RGB;
-    else
-        compressedFormat = backend::PixelFormat::NONE;
-
-    if (compressedFormat != backend::PixelFormat::NONE)
     {
         //old opengl version has no define for GL_ETC1_RGB8_OES, add macro to make compiler happy. 
 #if defined(GL_ETC1_RGB8_OES) || defined(CC_USE_METAL)
-        _pixelFormat = compressedFormat;
+        _pixelFormat = backend::PixelFormat::ETC;
         if(ownData) _data = (unsigned char*)data;
         else {
             _data = (unsigned char*)malloc(dataLen);
@@ -1552,13 +1542,15 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
         CCLOG("cocos2d: Hardware ETC1 decoder not present. Using software decoder");
 
         bool ret = true;
-        // if it is not gles or device do not support ETC1, decode texture by software
-        // directly decode ETC1_RGB to RGBA8888
-        _pixelFormat = backend::PixelFormat::RGBA8888;
-
-        _dataLen = _width * _height * 4;
+         //if it is not gles or device do not support ETC, decode texture by software
+        int bytePerPixel = 3;
+        unsigned int stride = _width * bytePerPixel;
+        _pixelFormat = backend::PixelFormat::RGB888;
+        
+        _dataLen =  _width * _height * bytePerPixel;
         _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) != 0)
+        
+        if (etc1_decode_image(static_cast<const unsigned char*>(data) + ETC_PKM_HEADER_SIZE, static_cast<etc1_byte*>(_data), _width, _height, bytePerPixel, stride) != 0)
         {
             _dataLen = 0;
             if (_data != nullptr)
@@ -1570,7 +1562,6 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
         }
 
         if (ownData) free((void*)data);
-
         return ret;
     }
 
@@ -1578,67 +1569,6 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
     return false;
 }
 
-bool Image::initWithETC2Data(const unsigned char* data, ssize_t dataLen, bool ownData)
-{
-    const etc2_byte* header = static_cast<const etc2_byte*>(data);
-
-    //check the data
-    if (!etc2_pkm_is_valid(header))
-    {
-        return  false;
-    }
-
-    _width = etc2_pkm_get_width(header);
-    _height = etc2_pkm_get_height(header);
-
-    if (0 == _width || 0 == _height)
-    {
-        return false;
-    }
-
-    etc2_uint32 format = etc2_pkm_get_format(header);
-
-    // We only support ETC2_RGBA_NO_MIPMAPS and ETC2_RGB_NO_MIPMAPS
-    assert(format == ETC2_RGBA_NO_MIPMAPS || format == ETC2_RGB_NO_MIPMAPS);
-
-    if (Configuration::getInstance()->supportsETC2()) {
-        _pixelFormat = format == ETC2_RGBA_NO_MIPMAPS ? backend::PixelFormat::ETC2_RGBA : backend::PixelFormat::ETC2_RGB;
-
-        if (ownData) _data = (unsigned char*)data;
-        else {
-            _data = (unsigned char*)malloc(dataLen);
-            if (_data) memcpy(_data, data, dataLen);
-        }
-        _dataLen = dataLen;
-        _offset = ETC2_PKM_HEADER_SIZE;
-        return true;
-    }
-    else {
-        CCLOG("cocos2d: Hardware ETC2 decoder not present. Using software decoder");
-
-        bool ret = true;
-        // if it is not gles or device do not support ETC2, decode texture by software
-        // etc2_decode_image always decode to RGBA8888
-        _pixelFormat = backend::PixelFormat::RGBA8888;
-
-        _dataLen = _width * _height * 4;
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        if (etc2_decode_image(format, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) != 0)
-        {
-            _dataLen = 0;
-            if (_data != nullptr)
-            {
-                free(_data);
-                _data = nullptr;
-            }
-            ret = false;
-        }
-
-        if (ownData) free((void*)data);
-
-        return ret;
-    }
-}
 
 bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ownData)
 {

@@ -33,7 +33,6 @@ CC_BACKEND_BEGIN
 enum class FeatureType : uint32_t
 {
     ETC1,
-    ETC2,
     S3TC,
     AMD_COMPRESSED_ATC,
     PVRTC,

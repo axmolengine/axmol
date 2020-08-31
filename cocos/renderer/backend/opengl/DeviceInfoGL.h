@@ -80,8 +80,6 @@ public:
 private:
     bool checkForGLExtension(const std::string &searchName) const;
 
-    static bool checkSupportsCompressedFormat(int compressedFormat);
-
     std::string _glExtensions;
 };
 
