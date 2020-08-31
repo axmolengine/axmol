@@ -26,6 +26,13 @@
 #include "ProgramGL.h"
 #include "renderer/backend/Types.h"
 
+#if !defined(GL_COMPRESSED_RGB8_ETC2)
+#define GL_COMPRESSED_RGB8_ETC2 0x9274
+#endif
+#if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
+#define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
+#endif
+
 CC_BACKEND_BEGIN
 
 
@@ -273,6 +280,18 @@ void UtilsGL::toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint
 #ifdef GL_ETC1_RGB8_OES
     case PixelFormat::ETC:
         internalFormat = GL_ETC1_RGB8_OES;
+        format = 0xFFFFFFFF;
+        type = 0xFFFFFFFF;
+        isCompressed = true;
+        break;
+    case PixelFormat::ETC2_RGB:
+        internalFormat = GL_COMPRESSED_RGB8_ETC2;
+        format = 0xFFFFFFFF;
+        type = 0xFFFFFFFF;
+        isCompressed = true;
+        break;
+    case PixelFormat::ETC2_RGBA:
+        internalFormat = GL_COMPRESSED_RGBA8_ETC2_EAC;
         format = 0xFFFFFFFF;
         type = 0xFFFFFFFF;
         isCompressed = true;
