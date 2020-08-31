@@ -1,6 +1,7 @@
 # EGNX
 [![Build Status](https://travis-ci.com/c4games/engine-x.svg?branch=master)](https://travis-ci.com/c4games/engine-x)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/4936wev2r2ot606s/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/engine-x)
+[![dev](https://img.shields.io/badge/v1.0.0-alpha15-yellow.svg)](https://github.com/c4games/engine-x/releases)
 
 **这是另外一个基于 ```cocos2d-x-4.0``` 持续维护的分支, 全平台基于OpenAL, c++14/17...**
   
@@ -29,6 +30,8 @@
 * 全平台统一使用XML SAX解析plist文件, 移除Apple平台的实现
 * Spine 3.8支持
 * 新增FairyGUI支持
+* 新增硬件压缩纹理格式ASTC 4x4/8x8支持，支持软解
+* 新增硬件压缩纹理格式ETC2 RGB/RGBA支持，支持软解
   
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
   
