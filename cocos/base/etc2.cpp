@@ -980,7 +980,7 @@ namespace {
         size_t outputDepthPitch);
 }
 
-int etc2_decode_image(int format, const etc2_byte* input, etc2_byte* output, size_t width, size_t height)
+int etc2_decode_image(int format, const etc2_byte* input, etc2_byte* output, etc2_uint32 width, etc2_uint32 height)
 {
     size_t outputRowPitch = 4 * width;
     size_t outputDepthPitch = outputRowPitch * height;

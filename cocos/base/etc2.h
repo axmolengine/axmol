@@ -73,7 +73,7 @@ extern "C" {
     /// <param name="width">pixelsHeight</param>
     /// <param name="height">pixelsWidth</param>
     /// <returns>0: success, -1: failed</returns>
-    int etc2_decode_image(int format, const etc2_byte* input, etc2_byte* output, size_t width, size_t height);
+    int etc2_decode_image(int format, const etc2_byte* input, etc2_byte* output, etc2_uint32 width, etc2_uint32 height);
 
 #if defined(__cplusplus)
 }
