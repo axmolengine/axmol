@@ -1532,7 +1532,7 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
     else
         compressedFormat = backend::PixelFormat::NONE;
 
-    if (compressedFormat != backend::PixelFormat::NONE && false)
+    if (compressedFormat != backend::PixelFormat::NONE)
     {
         //old opengl version has no define for GL_ETC1_RGB8_OES, add macro to make compiler happy. 
 #if defined(GL_ETC1_RGB8_OES) || defined(CC_USE_METAL)
