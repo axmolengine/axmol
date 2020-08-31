@@ -280,6 +280,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     case PixelFormat::PVRTC2:
     case PixelFormat::A8:
     case PixelFormat::ETC:
+    case PixelFormat::ETC2_RGB:
+    case PixelFormat::ETC2_RGBA:
     case PixelFormat::ASTC4:
     case PixelFormat::ASTC8:
         renderFormat = imagePixelFormat;
@@ -331,6 +333,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 #ifndef CC_USE_METAL
         switch (imagePixelFormat) {
         case PixelFormat::ETC:
+        case PixelFormat::ETC2_RGB:
+        case PixelFormat::ETC2_RGBA:
         case PixelFormat::ASTC4:
         case PixelFormat::ASTC8:
             renderFormat = imagePixelFormat;
@@ -723,7 +727,7 @@ const char* Texture2D::getStringForFormat() const
             return "ETC2_RGB";
 
         case backend::PixelFormat::ETC2_RGBA:
-            return "ETC_RGBA";
+            return "ETC2_RGBA";
 
         case backend::PixelFormat::S3TC_DXT1:
             return "S3TC_DXT1";

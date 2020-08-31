@@ -2,6 +2,7 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com
  
  http://www.cocos2d-x.org
  
@@ -40,34 +41,41 @@ typedef unsigned int etc2_uint32;
 #define GL_COMPRESSED_RGBA8_ETC2_EAC      0x9278
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
     
 // Size of a PKM header, in bytes.
-
 #define ETC2_PKM_HEADER_SIZE 16
     
 #define ETC2_RGB_NO_MIPMAPS 1
 #define ETC2_RGBA_NO_MIPMAPS 3
 
 // Check if a PKM header is correctly formatted.
+#if defined(__cplusplus)
+extern "C" {
+#endif
+    etc2_bool etc2_pkm_is_valid(const etc2_byte* pHeader);
 
-etc2_bool etc2_pkm_is_valid(const etc2_byte* pHeader);
+    // Read the image width from a PKM header
+    etc2_uint32 etc2_pkm_get_width(const etc2_byte* pHeader);
 
-// Read the image width from a PKM header
+    // Read the image height from a PKM header
+    etc2_uint32 etc2_pkm_get_height(const etc2_byte* pHeader);
 
-etc2_uint32 etc2_pkm_get_width(const etc2_byte* pHeader);
+    // Read the image format from a PKM header
+    etc2_uint32 etc2_pkm_get_format(const etc2_byte* pHeader);
 
-// Read the image height from a PKM header
+    /// <summary>
+    /// Decode ETC2_RGB/ETC2_RGBA to RGBA8888
+    /// Copy from:  https://github.com/google/angle/tree/master/src/image_util
+    /// </summary>
+    /// <param name="format">Must be ETC2_RGBA_NO_MIPMAPS or ETC2_RGB_NO_MIPMAPS</param>
+    /// <param name="input"></param>
+    /// <param name="output"></param>
+    /// <param name="width">pixelsHeight</param>
+    /// <param name="height">pixelsWidth</param>
+    /// <returns>0: success, -1: failed</returns>
+    int etc2_decode_image(int format, const etc2_byte* input, etc2_byte* output, size_t width, size_t height);
 
-etc2_uint32 etc2_pkm_get_height(const etc2_byte* pHeader);
-
-// Read the image format from a PKM header
-
-etc2_uint32 etc2_pkm_get_format(const etc2_byte* pHeader);
-
-#ifdef __cplusplus
+#if defined(__cplusplus)
 }
 #endif
 
