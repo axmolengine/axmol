@@ -1522,11 +1522,21 @@ bool Image::initWithETCData(const unsigned char* data, ssize_t dataLen, bool own
         return false;
     }
 
+    // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
+   // format is forwards compatible so just use the ETC2 format.
+    backend::PixelFormat compressedFormat;
     if (Configuration::getInstance()->supportsETC())
+        compressedFormat = backend::PixelFormat::ETC;
+    else if (Configuration::getInstance()->supportsETC2())
+        compressedFormat = backend::PixelFormat::ETC2_RGB;
+    else
+        compressedFormat = backend::PixelFormat::NONE;
+
+    if (compressedFormat != backend::PixelFormat::NONE)
     {
         //old opengl version has no define for GL_ETC1_RGB8_OES, add macro to make compiler happy. 
 #if defined(GL_ETC1_RGB8_OES) || defined(CC_USE_METAL)
-        _pixelFormat = backend::PixelFormat::ETC;
+        _pixelFormat = compressedFormat;
         if(ownData) _data = (unsigned char*)data;
         else {
             _data = (unsigned char*)malloc(dataLen);
@@ -1589,6 +1599,9 @@ bool Image::initWithETC2Data(const unsigned char* data, ssize_t dataLen, bool ow
 
     etc2_uint32 format = etc2_pkm_get_format(header);
 
+    // We only support ETC2_RGBA_NO_MIPMAPS and ETC2_RGB_NO_MIPMAPS
+    assert(format == ETC2_RGBA_NO_MIPMAPS || format == ETC2_RGB_NO_MIPMAPS);
+
     if (Configuration::getInstance()->supportsETC2()) {
         _pixelFormat = format == ETC2_RGBA_NO_MIPMAPS ? backend::PixelFormat::ETC2_RGBA : backend::PixelFormat::ETC2_RGB;
 
@@ -1599,12 +1612,33 @@ bool Image::initWithETC2Data(const unsigned char* data, ssize_t dataLen, bool ow
         }
         _dataLen = dataLen;
         _offset = ETC2_PKM_HEADER_SIZE;
+        return true;
     }
     else {
-        ; // TODO: software decoder
-    }
+        CCLOG("cocos2d: Hardware ETC2 decoder not present. Using software decoder");
 
-    return true;
+        bool ret = true;
+        // if it is not gles or device do not support ETC2, decode texture by software
+        // etc2_decode_image always decode to RGBA8888
+        _pixelFormat = backend::PixelFormat::RGBA8888;
+
+        _dataLen = _width * _height * 4;
+        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+        if (etc2_decode_image(format, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) != 0)
+        {
+            _dataLen = 0;
+            if (_data != nullptr)
+            {
+                free(_data);
+                _data = nullptr;
+            }
+            ret = false;
+        }
+
+        if (ownData) free((void*)data);
+
+        return ret;
+    }
 }
 
 bool Image::initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ownData)
