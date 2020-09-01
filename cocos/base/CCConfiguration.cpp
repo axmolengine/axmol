@@ -3,6 +3,7 @@ Copyright (c) 2010      Ricardo Quesada
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 c4games.com
 
 http://www.cocos2d-x.org
 
@@ -139,7 +140,6 @@ void Configuration::gatherGPUInfo()
     _supportsATITC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::AMD_COMPRESSED_ATC);
     _valueDict["supports_ATITC"] = Value(_supportsATITC);
 
-    //_supportsASTC = checkForGLExtension("GL_OES_texture_compression_astc");
     _supportsASTC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ASTC);
     _valueDict["gl.supports_ASTC"] = Value(_supportsASTC);
     
