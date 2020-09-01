@@ -270,7 +270,7 @@ namespace
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC4BPP_RGB,       backend::PixelFormat::PVRTC4),
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC4BPP_RGBA,      backend::PixelFormat::PVRTC4A),
 
-        _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC1,        backend::PixelFormat::ETC),
+        _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC1,        backend::PixelFormat::ETC1),
     };
         
     static const int PVR3_MAX_TABLE_ELEMENTS = sizeof(v3_pixel_formathash_value) / sizeof(v3_pixel_formathash_value[0]);
@@ -488,7 +488,11 @@ namespace
 #endif //CC_USE_PNG
 }
 
-backend::PixelFormat getDevicePixelFormat(backend::PixelFormat format)
+/*
+* Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and egnx only support pvrtc and etc1
+* see: https://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
+*/
+static backend::PixelFormat getDevicePVRPixelFormat(backend::PixelFormat format)
 {
     switch (format) {
         case backend::PixelFormat::PVRTC4:
@@ -499,19 +503,11 @@ backend::PixelFormat getDevicePixelFormat(backend::PixelFormat format)
                 return format;
             else
                 return backend::PixelFormat::RGBA8888;
-        case backend::PixelFormat::ETC:
-            if(Configuration::getInstance()->supportsETC())
+        case backend::PixelFormat::ETC1:
+            if (Configuration::getInstance()->supportsETC1())
                 return format;
-        case backend::PixelFormat::ETC2_RGB:
-        case backend::PixelFormat::ETC2_RGBA:
-            if(Configuration::getInstance()->supportsETC2())
-                return format;
-            else
-                return backend::PixelFormat::RGBA8888;
-        case backend::PixelFormat::ASTC4:
-        case backend::PixelFormat::ASTC8:
-            if(Configuration::getInstance()->supportsASTC())
-                return format;
+            else if (Configuration::getInstance()->supportsETC2())
+                return backend::PixelFormat::ETC2_RGB;
             else
                 return backend::PixelFormat::RGBA8888;
         default:
@@ -681,7 +677,7 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
         case Format::PVR:
             ret = initWithPVRData(unpackedData, unpackedLen, ownData);
             break;
-        case Format::ETC:
+        case Format::ETC1:
             ret = initWithETCData(unpackedData, unpackedLen, ownData);
             break;
         case Format::ETC2:
@@ -725,6 +721,31 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
     return ret;
 }
 
+bool Image::initWithRawData(const unsigned char* data, ssize_t /*dataLen*/, int width, int height, int /*bitsPerComponent*/, bool preMulti)
+{
+    bool ret = false;
+    do
+    {
+        CC_BREAK_IF(0 == width || 0 == height);
+
+        _height = height;
+        _width = width;
+        _hasPremultipliedAlpha = preMulti;
+        _pixelFormat = backend::PixelFormat::RGBA8888;
+
+        // only RGBA8888 supported
+        int bytesPerComponent = 4;
+        _dataLen = height * width * bytesPerComponent;
+        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+        CC_BREAK_IF(!_data);
+        memcpy(_data, data, _dataLen);
+
+        ret = true;
+    } while (0);
+
+    return ret;
+}
+
 bool Image::isPng(const unsigned char * data, ssize_t dataLen)
 {
     if (dataLen <= 8)
@@ -742,7 +763,7 @@ bool Image::isBmp(const unsigned char * data, ssize_t dataLen)
     return dataLen > 54 && data[0] == 'B' && data[1] == 'M';
 }
 
-bool Image::isEtc(const unsigned char * data, ssize_t /*dataLen*/)
+bool Image::isEtc1(const unsigned char * data, ssize_t /*dataLen*/)
 {
     return !!etc1_pkm_is_valid((etc1_byte*)data);
 }
@@ -837,9 +858,9 @@ Image::Format Image::detectFormat(const unsigned char * data, ssize_t dataLen)
     {
         return Format::PVR;
     }
-    else if (isEtc(data, dataLen))
+    else if (isEtc1(data, dataLen))
     {
-        return Format::ETC;
+        return Format::ETC1;
     }
     else if (isEtc2(data, dataLen))
     {
@@ -1199,6 +1220,50 @@ bool Image::initWithBmpData(unsigned char* data, ssize_t dataLen)
     return true;
 }
 
+bool Image::initWithWebpData(unsigned char* data, ssize_t dataLen)
+{
+#if CC_USE_WEBP
+    bool ret = false;
+
+    do
+    {
+        WebPDecoderConfig config;
+        if (WebPInitDecoderConfig(&config) == 0) break;
+        if (WebPGetFeatures(static_cast<const uint8_t*>(data), dataLen, &config.input) != VP8_STATUS_OK) break;
+        if (config.input.width == 0 || config.input.height == 0) break;
+
+        config.output.colorspace = config.input.has_alpha ? MODE_rgbA : MODE_RGB;
+        _pixelFormat = config.input.has_alpha ? backend::PixelFormat::RGBA8888 : backend::PixelFormat::RGB888;
+        _width = config.input.width;
+        _height = config.input.height;
+
+        //we ask webp to give data with premultiplied alpha
+        _hasPremultipliedAlpha = (config.input.has_alpha != 0);
+
+        _dataLen = _width * _height * (config.input.has_alpha ? 4 : 3);
+        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+
+        config.output.u.RGBA.rgba = static_cast<uint8_t*>(_data);
+        config.output.u.RGBA.stride = _width * (config.input.has_alpha ? 4 : 3);
+        config.output.u.RGBA.size = _dataLen;
+        config.output.is_external_memory = 1;
+
+        if (WebPDecode(static_cast<const uint8_t*>(data), dataLen, &config) != VP8_STATUS_OK)
+        {
+            free(_data);
+            _data = nullptr;
+            break;
+        }
+
+        ret = true;
+    } while (0);
+    return ret;
+#else 
+    CCLOG("webp is not enabled, please enable it in ccConfig.h");
+    return false;
+#endif // CC_USE_WEBP
+}
+
 bool Image::initWithTGAData(tImageTGA* tgaData)
 {
     bool ret = false;
@@ -1321,7 +1386,7 @@ bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen, bool ownDat
         return false;
     }
     
-    auto it = Texture2D::getPixelFormatInfoMap().find(getDevicePixelFormat(v2_pixel_formathash.at(formatFlags)));
+    auto it = Texture2D::getPixelFormatInfoMap().find(getDevicePVRPixelFormat(v2_pixel_formathash.at(formatFlags)));
 
     if (it == Texture2D::getPixelFormatInfoMap().end())
     {
@@ -1467,7 +1532,7 @@ bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownDat
         return false;
     }
 
-    auto it = Texture2D::getPixelFormatInfoMap().find(getDevicePixelFormat(v3_pixel_formathash.at(pixelFormat)));
+    auto it = Texture2D::getPixelFormatInfoMap().find(getDevicePVRPixelFormat(v3_pixel_formathash.at(pixelFormat)));
 
     if (it == Texture2D::getPixelFormatInfoMap().end())
     {
@@ -1539,15 +1604,14 @@ bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownDat
                 heightBlocks = height / 4;
                 break;
             case PVR3TexturePixelFormat::ETC1:
-                if (!Configuration::getInstance()->supportsETC())
+                if (!Configuration::getInstance()->supportsETC1())
                 {
                     CCLOG("cocos2d: Hardware ETC1 decoder not present. Using software decoder");
-                    int bytePerPixel = 3;
-                    unsigned int stride = width * bytePerPixel;
+                    const int bytePerPixel = 4;
                     _unpack = true;
                     _mipmaps[i].len = width*height*bytePerPixel;
                     _mipmaps[i].address = (unsigned char*)malloc(width*height*bytePerPixel);
-                    if (etc1_decode_image(static_cast<const unsigned char*>(pixelData + dataOffset), static_cast<etc1_byte*>(_mipmaps[i].address), width, height, bytePerPixel, stride) != 0)
+                    if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, pixelData + dataOffset, static_cast<etc1_byte*>(_mipmaps[i].address), width, height) != 0)
                     {
                         return false;
                     }
@@ -1629,8 +1693,8 @@ bool Image::initWithETCData(unsigned char* data, ssize_t dataLen, bool ownData)
     // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
    // format is forwards compatible so just use the ETC2 format.
     backend::PixelFormat compressedFormat;
-    if (Configuration::getInstance()->supportsETC())
-        compressedFormat = backend::PixelFormat::ETC;
+    if (Configuration::getInstance()->supportsETC1())
+        compressedFormat = backend::PixelFormat::ETC1;
     else if (Configuration::getInstance()->supportsETC2())
         compressedFormat = backend::PixelFormat::ETC2_RGB;
     else
@@ -1646,28 +1710,20 @@ bool Image::initWithETCData(unsigned char* data, ssize_t dataLen, bool ownData)
     {
         CCLOG("cocos2d: Hardware ETC1 decoder not present. Using software decoder");
 
-        bool ret = true;
-        // if it is not gles or device do not support ETC1, decode texture by software
-        // directly decode ETC1_RGB to RGBA8888
-        _pixelFormat = backend::PixelFormat::RGBA8888;
-
         _dataLen = _width * _height * 4;
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) != 0)
-        {
-            _dataLen = 0;
-            if (_data != nullptr)
-            {
-                free(_data);
-                _data = nullptr;
-            }
-            ret = false;
+        _data = static_cast<unsigned char*>(malloc(_dataLen));
+        if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) == 0)
+        { // if it is not gles or device do not support ETC1, decode texture by software
+          // directly decode ETC1_RGB to RGBA8888
+            _pixelFormat = backend::PixelFormat::RGBA8888;
+            return true;
         }
 
-        return ret;
+        // software decode fail, release pixels data
+        CC_SAFE_FREE(_data);
+        _dataLen = 0;
+        return false;
     }
-
-    return false;
 }
 
 bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen, bool ownData)
@@ -1702,25 +1758,20 @@ bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen, bool ownData)
     else {
         CCLOG("cocos2d: Hardware ETC2 decoder not present. Using software decoder");
 
-        bool ret = true;
-        // if it is not gles or device do not support ETC2, decode texture by software
+        // if device do not support ETC2, decode texture by software
         // etc2_decode_image always decode to RGBA8888
-        _pixelFormat = backend::PixelFormat::RGBA8888;
-
         _dataLen = _width * _height * 4;
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        if (etc2_decode_image(format, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) != 0)
+        _data = static_cast<unsigned char*>(malloc(_dataLen));
+        if (etc2_decode_image(format, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) == 0)
         {
-            _dataLen = 0;
-            if (_data != nullptr)
-            {
-                free(_data);
-                _data = nullptr;
-            }
-            ret = false;
+            _pixelFormat = backend::PixelFormat::RGBA8888;
+            return true;
         }
 
-        return ret;
+        // software decode fail, release pixels data
+        CC_SAFE_FREE(_data);
+        _dataLen = 0;
+        return false;
     }
 }
 
@@ -1760,27 +1811,17 @@ bool Image::initWithASTCData(unsigned char* data, ssize_t dataLen, bool ownData)
     {
         CCLOG("cocos2d: Hardware ASTC decoder not present. Using software decoder");
 
-        bool ret = true;
-        _pixelFormat = backend::PixelFormat::RGBA8888;
-
-        _dataLen = _width * _height * 32;
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-
-        uint8_t result = decompress_astc(static_cast<const unsigned char*>(data) + ASTC_HEAD_SIZE, _data, _width, _height, xdim, ydim, _dataLen);
-        if (result != 0)
-        {
-            _dataLen = 0;
-            if (_data != nullptr)
-            {
-                free(_data);
-                _data = nullptr;
-            }
-            ret = false;
+        _dataLen = _width * _height * 4;
+        _data = static_cast<unsigned char*>(malloc(_dataLen));
+        if (decompress_astc(static_cast<const unsigned char*>(data) + ASTC_HEAD_SIZE, _data, _width, _height, xdim, ydim, _dataLen) == 0) {
+            _pixelFormat = backend::PixelFormat::RGBA8888;
+            return true;
         }
-        return ret;
-    }
 
-    return false;
+        CC_SAFE_FREE(_data);
+        _dataLen = 0;
+        return false;
+    }
 }
 
 bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen, bool ownData)
@@ -2048,77 +2089,6 @@ void Image::forwardPixels(unsigned char* data, ssize_t dataLen, int offset, bool
         memcpy(_data, data + offset, _dataLen);
     }
 }
-
-bool Image::initWithWebpData(unsigned char * data, ssize_t dataLen)
-{
-#if CC_USE_WEBP
-    bool ret = false;
-
-    do
-    {
-        WebPDecoderConfig config;
-        if (WebPInitDecoderConfig(&config) == 0) break;
-        if (WebPGetFeatures(static_cast<const uint8_t*>(data), dataLen, &config.input) != VP8_STATUS_OK) break;
-        if (config.input.width == 0 || config.input.height == 0) break;
-        
-        config.output.colorspace = config.input.has_alpha?MODE_rgbA:MODE_RGB;
-        _pixelFormat = config.input.has_alpha?backend::PixelFormat::RGBA8888:backend::PixelFormat::RGB888;
-        _width    = config.input.width;
-        _height   = config.input.height;
-        
-        //we ask webp to give data with premultiplied alpha
-        _hasPremultipliedAlpha = (config.input.has_alpha != 0);
-        
-        _dataLen = _width * _height * (config.input.has_alpha?4:3);
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        
-        config.output.u.RGBA.rgba = static_cast<uint8_t*>(_data);
-        config.output.u.RGBA.stride = _width * (config.input.has_alpha?4:3);
-        config.output.u.RGBA.size = _dataLen;
-        config.output.is_external_memory = 1;
-        
-        if (WebPDecode(static_cast<const uint8_t*>(data), dataLen, &config) != VP8_STATUS_OK)
-        {
-            free(_data);
-            _data = nullptr;
-            break;
-        }
-        
-        ret = true;
-    } while (0);
-    return ret;
-#else 
-    CCLOG("webp is not enabled, please enable it in ccConfig.h");
-    return false;
-#endif // CC_USE_WEBP
-}
-
-
-bool Image::initWithRawData(const unsigned char * data, ssize_t /*dataLen*/, int width, int height, int /*bitsPerComponent*/, bool preMulti)
-{
-    bool ret = false;
-    do 
-    {
-        CC_BREAK_IF(0 == width || 0 == height);
-
-        _height   = height;
-        _width    = width;
-        _hasPremultipliedAlpha = preMulti;
-        _pixelFormat = backend::PixelFormat::RGBA8888;
-
-        // only RGBA8888 supported
-        int bytesPerComponent = 4;
-        _dataLen = height * width * bytesPerComponent;
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        CC_BREAK_IF(! _data);
-        memcpy(_data, data, _dataLen);
-
-        ret = true;
-    } while (0);
-
-    return ret;
-}
-
 
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
 bool Image::saveToFile(const std::string& filename, bool isToRGB)

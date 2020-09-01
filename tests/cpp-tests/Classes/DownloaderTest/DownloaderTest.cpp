@@ -234,7 +234,7 @@ struct DownloaderTest : public TestCase
             do
             {
                 Image img;
-                if (false == img.initWithImageData(data.data(), data.size()))
+                if (false == img.initWithImageData(data.data(), data.size(), false))
                 {
                     break;
                 }

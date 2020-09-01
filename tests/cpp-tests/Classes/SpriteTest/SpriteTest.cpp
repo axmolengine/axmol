@@ -2168,7 +2168,7 @@ void SpriteFramesFromFileContent::onEnter()
 	Data image_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".png");
 
     Image* image = new (std::nothrow) Image();
-	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize());
+	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize(), false);
 	Texture2D* texture = new (std::nothrow) Texture2D();
 	texture->initWithImage(image);
 	texture->autorelease();
