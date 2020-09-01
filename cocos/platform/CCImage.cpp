@@ -1210,14 +1210,15 @@ bool Image::initWithPngData(unsigned char * data, ssize_t dataLen)
 
 bool Image::initWithBmpData(unsigned char* data, ssize_t dataLen)
 {
-    const int nrChannels = 3;
+    const int nrChannels = 4;
     _data = stbi_load_from_memory(data, dataLen, &_width, &_height, nullptr, nrChannels);
     if (_data) {
         _dataLen = _width * _height * nrChannels;
         _fileType = Format::BMP;
-        _pixelFormat = backend::PixelFormat::RGB888;
+        _pixelFormat = backend::PixelFormat::RGBA8888;
+        return true;
     }
-    return true;
+    return false;
 }
 
 bool Image::initWithWebpData(unsigned char* data, ssize_t dataLen)
