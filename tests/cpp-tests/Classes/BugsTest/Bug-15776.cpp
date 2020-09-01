@@ -47,7 +47,7 @@ bool Bug15776Layer::init()
     if (BugsTestBase::init())
     {
         cocos2d::Image *cocos2dxImage = new cocos2d::Image();
-        cocos2dxImage->initWithImageData(nullptr, 0);
+        cocos2dxImage->initWithImageData(nullptr, 0, false);
         // should not crash. invalid cocos2dImage
         auto texture2d = Director::getInstance()->getTextureCache()->addImage(cocos2dxImage, "unused");
         return texture2d;

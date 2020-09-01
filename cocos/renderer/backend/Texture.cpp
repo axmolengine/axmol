@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com
 
  http://www.cocos2d-x.org
 
@@ -51,8 +52,12 @@ namespace
                 return byte(2);
             case PixelFormat::AI88:
                 return byte(2);
-            case PixelFormat::ETC:
+            case PixelFormat::ETC1:
                 return bit(4);
+            case PixelFormat::ETC2_RGB:
+                return bit(4);
+            case PixelFormat::ETC2_RGBA:
+                return bit(8);
             case PixelFormat::ATC_RGB:
                 return bit(4);
             case PixelFormat::ATC_EXPLICIT_ALPHA:

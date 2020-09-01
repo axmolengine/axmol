@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 c4games.com
 
 http://www.cocos2d-x.org
 
@@ -279,7 +280,7 @@ void TextureCache::loadImage()
         asyncStruct->loadSuccess = asyncStruct->image.initWithImageFileThreadSafe(asyncStruct->filename);
 
         // ETC1 ALPHA supports.
-        if (asyncStruct->loadSuccess && asyncStruct->image.getFileType() == Image::Format::ETC && !s_etc1AlphaFileSuffix.empty())
+        if (asyncStruct->loadSuccess && asyncStruct->image.getFileType() == Image::Format::ETC1 && !s_etc1AlphaFileSuffix.empty())
         { // check whether alpha texture exists & load it
             auto alphaFile = asyncStruct->filename + s_etc1AlphaFileSuffix;
             if (FileUtils::getInstance()->isFileExist(alphaFile))
@@ -347,7 +348,7 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
 
                 texture->autorelease();
                 // ETC1 ALPHA supports.
-                if (asyncStruct->imageAlpha.getFileType() == Image::Format::ETC) {
+                if (asyncStruct->imageAlpha.getFileType() == Image::Format::ETC1) {
                     texture->updateWithImage(&asyncStruct->imageAlpha, Texture2D::getDefaultAlphaPixelFormat(), 1, TextureFormatEXT::ETC1_ALPHA);
                 }
             }
@@ -415,7 +416,7 @@ Texture2D * TextureCache::addImage(const std::string &path)
 
                 //-- ANDROID ETC1 ALPHA SUPPORTS.
                 std::string alphaFullPath = path + s_etc1AlphaFileSuffix;
-                if (image->getFileType() == Image::Format::ETC && !s_etc1AlphaFileSuffix.empty() && FileUtils::getInstance()->isFileExist(alphaFullPath))
+                if (image->getFileType() == Image::Format::ETC1 && !s_etc1AlphaFileSuffix.empty() && FileUtils::getInstance()->isFileExist(alphaFullPath))
                 {
                     Image imageAlpha;
                     if (imageAlpha.initWithImageFile(alphaFullPath))

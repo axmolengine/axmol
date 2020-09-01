@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com
 
  http://www.cocos2d-x.org
 
@@ -79,6 +80,8 @@ public:
     
 private:
     bool checkForGLExtension(const std::string &searchName) const;
+
+    static bool checkSupportsCompressedFormat(int compressedFormat);
 
     std::string _glExtensions;
 };

@@ -62,6 +62,7 @@ SpriteTests::SpriteTests()
     ADD_TEST_CASE(Sprite1BMP);
     ADD_TEST_CASE(Sprite1ETC1Alpha);
     ADD_TEST_CASE(SpriteASTC);
+    ADD_TEST_CASE(SpriteETC2);
     ADD_TEST_CASE(SpriteBatchNode1);
     ADD_TEST_CASE(SpriteAnchorPoint);
     ADD_TEST_CASE(SpriteBatchNodeAnchorPoint);
@@ -358,6 +359,69 @@ std::string Sprite1ETC1Alpha::subtitle() const
 
 //------------------------------------------------------------------
 //
+// SpriteETC2
+//
+//------------------------------------------------------------------
+
+SpriteETC2::SpriteETC2()
+{
+    auto listener = EventListenerTouchAllAtOnce::create();
+    listener->onTouchesEnded = CC_CALLBACK_2(SpriteETC2::onTouchesEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+bool SpriteETC2::init()
+{
+    if (!SpriteTestDemo::init())
+        return false;
+
+    auto& canvasSize = getContentSize();
+    _background = LayerColor::create(Color4B(15, 19, 42, 255), canvasSize.width, canvasSize.height);
+    _background->setIgnoreAnchorPointForPosition(false);
+    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+
+    auto s = Director::getInstance()->getWinSize();
+    _background->setPosition(Vec2(s.width / 2, s.height / 2));
+    this->addChild(_background);
+
+    addNewSpriteWithCoords();
+    return true;
+}
+
+void SpriteETC2::addNewSpriteWithCoords()
+{
+    auto s = Director::getInstance()->getWinSize();
+    auto sprite4 = Sprite::create("Images/etc2_rgb.pkm");
+    sprite4->setPosition(Vec2(s.width * 0.3, s.height * 0.5));
+    _background->addChild(sprite4);
+
+    auto spriteA4 = Sprite::create("Images/etc2_rgba.pkm");
+    spriteA4->setPosition(Vec2(s.width * 0.7, s.height * 0.5));
+    _background->addChild(spriteA4);
+}
+
+void SpriteETC2::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+{
+    //for (auto touch : touches)
+    //{
+    //    auto location = touch->getLocation();
+
+    //    addNewSpriteWithCoords();
+    //}
+}
+
+std::string SpriteETC2::title() const
+{
+    return "Testing Sprite ETC2 support";
+}
+
+std::string SpriteETC2::subtitle() const
+{
+    return "";
+}
+
+//------------------------------------------------------------------
+//
 // SpriteASTC
 //
 //------------------------------------------------------------------
@@ -401,7 +465,6 @@ void SpriteASTC::addNewSpriteWithCoords()
     auto sprite8 = Sprite::create("Images/ASTC_RGBA_8x8.astc");
     sprite8->setPosition(Vec2(s.width * 0.8, s.height * 0.5));
     _background->addChild(sprite8);
-
 }
 
 void SpriteASTC::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
@@ -2105,7 +2168,7 @@ void SpriteFramesFromFileContent::onEnter()
 	Data image_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".png");
 
     Image* image = new (std::nothrow) Image();
-	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize());
+	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize(), false);
 	Texture2D* texture = new (std::nothrow) Texture2D();
 	texture->initWithImage(image);
 	texture->autorelease();

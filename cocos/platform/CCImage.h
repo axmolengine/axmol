@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 c4games.com
 
 http://www.cocos2d-x.org
 
@@ -35,10 +36,10 @@ THE SOFTWARE.
 // premultiply alpha, or the effect will be wrong when using other pixel formats in Texture2D,
 // such as RGB888, RGB5A1
 #define CC_RGB_PREMULTIPLY_ALPHA(vr, vg, vb, va) \
-    (unsigned)(((unsigned)((unsigned char)(vr) * ((unsigned char)(va) + 1)) >> 8) | \
-    ((unsigned)((unsigned char)(vg) * ((unsigned char)(va) + 1) >> 8) << 8) | \
-    ((unsigned)((unsigned char)(vb) * ((unsigned char)(va) + 1) >> 8) << 16) | \
-    ((unsigned)(unsigned char)(va) << 24))
+    (unsigned)(((unsigned)((uint8_t)(vr) * ((uint8_t)(va) + 1)) >> 8) | \
+    ((unsigned)((uint8_t)(vg) * ((uint8_t)(va) + 1) >> 8) << 8) | \
+    ((unsigned)((uint8_t)(vb) * ((uint8_t)(va) + 1) >> 8) << 16) | \
+    ((unsigned)(uint8_t)(va) << 24))
 
 NS_CC_BEGIN
 
@@ -52,7 +53,7 @@ NS_CC_BEGIN
  */
 typedef struct _MipmapInfo
 {
-    unsigned char* address;
+    uint8_t* address;
     int len;
     _MipmapInfo():address(NULL),len(0){}
 }MipmapInfo;
@@ -84,8 +85,10 @@ public:
         WEBP,
         //! PVR
         PVR,
-        //! ETC
-        ETC,
+        //! ETC1
+        ETC1,
+        //! ETC2
+        ETC2,
         //! S3TC
         S3TC,
         //! ATITC
@@ -126,17 +129,18 @@ public:
     @brief Load image from stream buffer.
     @param data  stream buffer which holds the image data.
     @param dataLen  data length expressed in (number of) bytes.
+    @param ownData whether take the data memory management.
     @return true if loaded correctly.
     * @js NA
     * @lua NA
     */
-    bool initWithImageData(const unsigned char * data, ssize_t dataLen, bool ownData = false);
+    bool initWithImageData(const uint8_t* data, ssize_t dataLen, bool ownData = false);
 
     // @warning kFmtRawData only support RGBA8888
-    bool initWithRawData(const unsigned char * data, ssize_t dataLen, int width, int height, int bitsPerComponent, bool preMulti = false);
+    bool initWithRawData(const uint8_t* data, ssize_t dataLen, int width, int height, int bitsPerComponent, bool preMulti = false);
 
     // Getters
-    unsigned char *   getData()               { return _data + _offset; }
+    uint8_t *   getData()               { return _data + _offset; }
     ssize_t           getDataLen()            { return _dataLen - _offset; }
     Format            getFileType()           { return _fileType; }
     backend::PixelFormat getPixelFormat()  { return _pixelFormat; }
@@ -162,25 +166,31 @@ public:
     void reversePremultipliedAlpha();   
 
 protected:
-    bool initWithJpgData(const unsigned char *  data, ssize_t dataLen);
-    bool initWithPngData(const unsigned char * data, ssize_t dataLen);
-    bool initWithBmpData(const unsigned char *data, ssize_t dataLen);
-    bool initWithWebpData(const unsigned char * data, ssize_t dataLen);
-    bool initWithPVRData(const unsigned char * data, ssize_t dataLen);
-    bool initWithPVRv2Data(const unsigned char * data, ssize_t dataLen);
-    bool initWithPVRv3Data(const unsigned char * data, ssize_t dataLen);
-    bool initWithETCData(const unsigned char* data, ssize_t dataLen, bool ownData);
-    bool initWithS3TCData(const unsigned char * data, ssize_t dataLen);
-    bool initWithATITCData(const unsigned char *data, ssize_t dataLen);
-    bool initWithASTCData(const unsigned char* data, ssize_t dataLen, bool ownData);
     typedef struct sImageTGA tImageTGA;
+
+    bool initWithJpgData(uint8_t* data, ssize_t dataLen);
+    bool initWithPngData(uint8_t* data, ssize_t dataLen);
+    bool initWithBmpData(uint8_t* data, ssize_t dataLen);
+    bool initWithWebpData(uint8_t* data, ssize_t dataLen);
     bool initWithTGAData(tImageTGA* tgaData);
+    
+    // All internal init function have chance to own the data for fast forward data to hardware decoder
+    // see: initWithImageData
+    bool initWithPVRData(uint8_t* data, ssize_t dataLen, bool ownData);
+    bool initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData);
+    bool initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData);
+    bool initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData);
+    bool initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData);
+    bool initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData);
+    bool initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData);
+    bool initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData);
+    
+    // fast forward pixels to GPU if ownData
+    void forwardPixels(uint8_t* data, ssize_t dataLen, int offset, bool ownData);
 
     bool saveImageToPNG(const std::string& filePath, bool isToRGB = true);
     bool saveImageToJPG(const std::string& filePath);
-    
 
-    
 protected:
     /**
      @brief Determine how many mipmaps can we have.
@@ -191,9 +201,9 @@ protected:
      @brief Determine whether we premultiply alpha for png files.
      */
     static bool PNG_PREMULTIPLIED_ALPHA_ENABLED;
-    unsigned char *_data;
+    uint8_t *_data;
     ssize_t _dataLen;
-    ssize_t _offset;
+    ssize_t _offset; // useful for hardware decoder present to hold data without copy
     int _width;
     int _height;
     bool _unpack;
@@ -220,16 +230,17 @@ protected:
      */
     bool initWithImageFileThreadSafe(const std::string& fullpath);
     
-    Format detectFormat(const unsigned char * data, ssize_t dataLen);
-    bool isPng(const unsigned char * data, ssize_t dataLen);
-    bool isJpg(const unsigned char * data, ssize_t dataLen);
-    bool isBmp(const unsigned char * data, ssize_t dataLen);
-    bool isWebp(const unsigned char * data, ssize_t dataLen);
-    bool isPvr(const unsigned char * data, ssize_t dataLen);
-    bool isEtc(const unsigned char * data, ssize_t dataLen);
-    bool isS3TC(const unsigned char * data,ssize_t dataLen);
-    bool isATITC(const unsigned char *data, ssize_t dataLen);
-    bool isASTC(const unsigned char* data, ssize_t dataLen);
+    Format detectFormat(const uint8_t* data, ssize_t dataLen);
+    bool isPng(const uint8_t* data, ssize_t dataLen);
+    bool isJpg(const uint8_t* data, ssize_t dataLen);
+    bool isBmp(const uint8_t* data, ssize_t dataLen);
+    bool isWebp(const uint8_t* data, ssize_t dataLen);
+    bool isPvr(const uint8_t* data, ssize_t dataLen);
+    bool isEtc1(const uint8_t* data, ssize_t dataLen);
+    bool isEtc2(const uint8_t* data, ssize_t dataLen);
+    bool isS3TC(const uint8_t* data, ssize_t dataLen);
+    bool isATITC(const uint8_t* data, ssize_t dataLen);
+    bool isASTC(const uint8_t* data, ssize_t dataLen);
 };
 
 // end of platform group

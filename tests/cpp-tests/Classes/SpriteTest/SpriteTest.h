@@ -79,6 +79,21 @@ public:
     cocos2d::Node* _background;
 };
 
+class SpriteETC2 : public SpriteTestDemo
+{
+public:
+    CREATE_FUNC(SpriteETC2);
+    SpriteETC2();
+    bool init() override;
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+    void addNewSpriteWithCoords();
+    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+
+    cocos2d::Node* _background;
+};
+
 class SpriteASTC : public SpriteTestDemo
 {
 public:

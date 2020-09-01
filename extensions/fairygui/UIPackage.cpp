@@ -644,7 +644,7 @@ void UIPackage::loadAtlas(PackageItem* item)
         }
 
 #if defined(ENGINEX_VERSION)
-        if(image->getFileType() == Image::Format::ETC)
+        if(image->getFileType() == Image::Format::ETC1)
             tex->updateWithImage(image, Texture2D::getDefaultAlphaPixelFormat(), 1, TextureFormatEXT::ETC1_ALPHA);
 #else
         tex = new Texture2D();

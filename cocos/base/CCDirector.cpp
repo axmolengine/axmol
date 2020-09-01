@@ -1250,7 +1250,7 @@ void Director::createStatsLabel()
     getFPSImageData(&data, &dataLength);
 
     Image* image = new (std::nothrow) Image();
-    bool isOK = image ? image->initWithImageData(data, dataLength) : false;
+    bool isOK = image ? image->initWithImageData(data, dataLength, false) : false;
     if (! isOK) {
         if(image)
             delete image;

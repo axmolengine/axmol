@@ -2018,7 +2018,7 @@ std::string TextureETC1::title() const
 
 std::string TextureETC1::subtitle() const
 {
-    bool isSupportETCHardwareDecode = Configuration::getInstance()->supportsETC();
+    bool isSupportETCHardwareDecode = Configuration::getInstance()->supportsETC1();
     Application::Platform platform = Application::getInstance()->getTargetPlatform();
     std::string ret;
 

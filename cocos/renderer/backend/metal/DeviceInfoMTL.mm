@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com
 
  http://www.cocos2d-x.org
 
@@ -428,6 +429,7 @@ bool DeviceInfoMTL::checkForFeatureSupported(FeatureType feature)
         featureSupported = supportPVRTC(_featureSet);
         break;
     case FeatureType::ETC1:
+    case FeatureType::ETC2:
         featureSupported = supportEACETC(_featureSet);
         break;
     case FeatureType::S3TC:
