@@ -166,7 +166,7 @@ namespace
     static const char gPVRTexIdentifier[5] = "PVR!";
     
     // v2
-    enum class PVR2TexturePixelFormat : unsigned char
+    enum class PVR2TexturePixelFormat : uint8_t
     {
         RGBA4444 = 0x10,
         RGBA5551,
@@ -466,7 +466,7 @@ namespace
 {
     typedef struct 
     {
-        const unsigned char * data;
+        const uint8_t * data;
         ssize_t size;
         int offset;
     }tImageSource;
@@ -630,7 +630,7 @@ bool Image::initWithImageFileThreadSafe(const std::string& fullpath)
     return ret;
 }
 
-bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool ownData)
+bool Image::initWithImageData(const uint8_t* data, ssize_t dataLen, bool ownData)
 {
     bool ret = false;
     
@@ -638,7 +638,7 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
     {
         CC_BREAK_IF(!data || dataLen == 0);
         
-        unsigned char* unpackedData = nullptr;
+        uint8_t* unpackedData = nullptr;
         ssize_t unpackedLen = 0;
         
         //detect and unzip the compress file
@@ -648,11 +648,11 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
         }
         else if (ZipUtils::isGZipBuffer(data, dataLen))
         {
-            unpackedLen = ZipUtils::inflateMemory(const_cast<unsigned char*>(data), dataLen, &unpackedData);
+            unpackedLen = ZipUtils::inflateMemory(const_cast<uint8_t*>(data), dataLen, &unpackedData);
         }
         else
         {
-            unpackedData = const_cast<unsigned char*>(data);
+            unpackedData = const_cast<uint8_t*>(data);
             unpackedLen = dataLen;
         }
 
@@ -722,7 +722,7 @@ bool Image::initWithImageData(const unsigned char* data, ssize_t dataLen, bool o
     return ret;
 }
 
-bool Image::initWithRawData(const unsigned char* data, ssize_t /*dataLen*/, int width, int height, int /*bitsPerComponent*/, bool preMulti)
+bool Image::initWithRawData(const uint8_t* data, ssize_t /*dataLen*/, int width, int height, int /*bitsPerComponent*/, bool preMulti)
 {
     bool ret = false;
     do
@@ -737,7 +737,7 @@ bool Image::initWithRawData(const unsigned char* data, ssize_t /*dataLen*/, int 
         // only RGBA8888 supported
         int bytesPerComponent = 4;
         _dataLen = height * width * bytesPerComponent;
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+        _data = static_cast<uint8_t*>(malloc(_dataLen));
         CC_BREAK_IF(!_data);
         memcpy(_data, data, _dataLen);
 
@@ -747,34 +747,34 @@ bool Image::initWithRawData(const unsigned char* data, ssize_t /*dataLen*/, int 
     return ret;
 }
 
-bool Image::isPng(const unsigned char * data, ssize_t dataLen)
+bool Image::isPng(const uint8_t * data, ssize_t dataLen)
 {
     if (dataLen <= 8)
     {
         return false;
     }
 
-    static const unsigned char PNG_SIGNATURE[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
+    static const uint8_t PNG_SIGNATURE[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
 
     return memcmp(PNG_SIGNATURE, data, sizeof(PNG_SIGNATURE)) == 0;
 }
 
-bool Image::isBmp(const unsigned char * data, ssize_t dataLen)
+bool Image::isBmp(const uint8_t * data, ssize_t dataLen)
 {
     return dataLen > 54 && data[0] == 'B' && data[1] == 'M';
 }
 
-bool Image::isEtc1(const unsigned char * data, ssize_t /*dataLen*/)
+bool Image::isEtc1(const uint8_t * data, ssize_t /*dataLen*/)
 {
     return !!etc1_pkm_is_valid((etc1_byte*)data);
 }
 
-bool Image::isEtc2(const unsigned char* data, ssize_t dataLen)
+bool Image::isEtc2(const uint8_t* data, ssize_t dataLen)
 {
     return !!etc2_pkm_is_valid((etc2_byte*)data);
 }
 
-bool Image::isS3TC(const unsigned char * data, ssize_t /*dataLen*/)
+bool Image::isS3TC(const uint8_t * data, ssize_t /*dataLen*/)
 {
 
     S3TCTexHeader *header = (S3TCTexHeader *)data;
@@ -782,14 +782,14 @@ bool Image::isS3TC(const unsigned char * data, ssize_t /*dataLen*/)
     return (strncmp(header->fileCode, "DDS", 3) == 0);
 }
 
-bool Image::isATITC(const unsigned char *data, ssize_t /*dataLen*/)
+bool Image::isATITC(const uint8_t *data, ssize_t /*dataLen*/)
 {
     ATITCTexHeader *header = (ATITCTexHeader *)data;
     
     return (strncmp(&header->identifier[1], "KTX", 3) == 0);
 }
 
-bool Image::isASTC(const unsigned char* data, ssize_t /*dataLen*/)
+bool Image::isASTC(const uint8_t* data, ssize_t /*dataLen*/)
 {
     ASTCTexHeader* hdr = (ASTCTexHeader*)data;
 
@@ -798,19 +798,19 @@ bool Image::isASTC(const unsigned char* data, ssize_t /*dataLen*/)
     return (magicval == ASTC_MAGIC_FILE_CONSTANT);
 }
 
-bool Image::isJpg(const unsigned char * data, ssize_t dataLen)
+bool Image::isJpg(const uint8_t * data, ssize_t dataLen)
 {
     if (dataLen <= 4)
     {
         return false;
     }
 
-    static const unsigned char JPG_SOI[] = {0xFF, 0xD8};
+    static const uint8_t JPG_SOI[] = {0xFF, 0xD8};
 
     return memcmp(data, JPG_SOI, 2) == 0;
 }
 
-bool Image::isWebp(const unsigned char * data, ssize_t dataLen)
+bool Image::isWebp(const uint8_t * data, ssize_t dataLen)
 {
     if (dataLen <= 12)
     {
@@ -821,10 +821,10 @@ bool Image::isWebp(const unsigned char * data, ssize_t dataLen)
     static const char* WEBP_WEBP = "WEBP";
 
     return memcmp(data, WEBP_RIFF, 4) == 0 
-        && memcmp(static_cast<const unsigned char*>(data) + 8, WEBP_WEBP, 4) == 0;
+        && memcmp(static_cast<const uint8_t*>(data) + 8, WEBP_WEBP, 4) == 0;
 }
 
-bool Image::isPvr(const unsigned char * data, ssize_t dataLen)
+bool Image::isPvr(const uint8_t * data, ssize_t dataLen)
 {
     if (static_cast<size_t>(dataLen) < sizeof(PVRv2TexHeader) || static_cast<size_t>(dataLen) < sizeof(PVRv3TexHeader))
     {
@@ -837,7 +837,7 @@ bool Image::isPvr(const unsigned char * data, ssize_t dataLen)
     return memcmp(&headerv2->pvrTag, gPVRTexIdentifier, strlen(gPVRTexIdentifier)) == 0 || CC_SWAP_INT32_BIG_TO_HOST(headerv3->version) == 0x50565203;
 }
 
-Image::Format Image::detectFormat(const unsigned char * data, ssize_t dataLen)
+Image::Format Image::detectFormat(const uint8_t * data, ssize_t dataLen)
 {
     if (isPng(data, dataLen))
     {
@@ -959,7 +959,7 @@ namespace
 #endif // CC_USE_JPEG
 }
 
-bool Image::initWithJpgData(unsigned char * data, ssize_t dataLen)
+bool Image::initWithJpgData(uint8_t * data, ssize_t dataLen)
 {
 #if CC_USE_JPEG
     /* these are standard libjpeg structures for reading(decompression) */
@@ -993,7 +993,7 @@ bool Image::initWithJpgData(unsigned char * data, ssize_t dataLen)
         jpeg_create_decompress( &cinfo );
 
 #ifndef CC_TARGET_QT5
-        jpeg_mem_src(&cinfo, const_cast<unsigned char*>(data), dataLen);
+        jpeg_mem_src(&cinfo, const_cast<uint8_t*>(data), dataLen);
 #endif /* CC_TARGET_QT5 */
 
         /* reading the image header which contains image information */
@@ -1022,7 +1022,7 @@ bool Image::initWithJpgData(unsigned char * data, ssize_t dataLen)
         _height = cinfo.output_height;
 
         _dataLen = cinfo.output_width*cinfo.output_height*cinfo.output_components;
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+        _data = static_cast<uint8_t*>(malloc(_dataLen));
         CC_BREAK_IF(! _data);
 
         /* now actually read the jpeg into the raw buffer */
@@ -1052,7 +1052,7 @@ bool Image::initWithJpgData(unsigned char * data, ssize_t dataLen)
 #endif // CC_USE_JPEG
 }
 
-bool Image::initWithPngData(unsigned char * data, ssize_t dataLen)
+bool Image::initWithPngData(uint8_t * data, ssize_t dataLen)
 {
 #if CC_USE_PNG
     // length of bytes to check if it is a valid png file
@@ -1083,7 +1083,7 @@ bool Image::initWithPngData(unsigned char * data, ssize_t dataLen)
 
         // set the read call back function
         tImageSource imageSource;
-        imageSource.data    = (unsigned char*)data;
+        imageSource.data    = (uint8_t*)data;
         imageSource.size    = dataLen;
         imageSource.offset  = 0;
         png_set_read_fn(png_ptr, &imageSource, pngReadCallback);
@@ -1157,7 +1157,7 @@ bool Image::initWithPngData(unsigned char * data, ssize_t dataLen)
         rowbytes = png_get_rowbytes(png_ptr, info_ptr);
 
         _dataLen = rowbytes * _height;
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+        _data = static_cast<uint8_t*>(malloc(_dataLen));
         if (!_data)
         {
             if (row_pointers != nullptr)
@@ -1209,7 +1209,7 @@ bool Image::initWithPngData(unsigned char * data, ssize_t dataLen)
 #endif //CC_USE_PNG
 }
 
-bool Image::initWithBmpData(unsigned char* data, ssize_t dataLen)
+bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
 {
     const int nrChannels = 4;
     _data = stbi_load_from_memory(data, dataLen, &_width, &_height, nullptr, nrChannels);
@@ -1222,7 +1222,7 @@ bool Image::initWithBmpData(unsigned char* data, ssize_t dataLen)
     return false;
 }
 
-bool Image::initWithWebpData(unsigned char* data, ssize_t dataLen)
+bool Image::initWithWebpData(uint8_t* data, ssize_t dataLen)
 {
 #if CC_USE_WEBP
     bool ret = false;
@@ -1243,7 +1243,7 @@ bool Image::initWithWebpData(unsigned char* data, ssize_t dataLen)
         _hasPremultipliedAlpha = (config.input.has_alpha != 0);
 
         _dataLen = _width * _height * (config.input.has_alpha ? 4 : 3);
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+        _data = static_cast<uint8_t*>(malloc(_dataLen));
 
         config.output.u.RGBA.rgba = static_cast<uint8_t*>(_data);
         config.output.u.RGBA.stride = _width * (config.input.has_alpha ? 4 : 3);
@@ -1341,7 +1341,7 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
     return ret;
 }
 
-bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen, bool ownData)
+bool Image::initWithPVRv2Data(uint8_t * data, ssize_t dataLen, bool ownData)
 {
     int blockSize = 0, widthBlocks = 0, heightBlocks = 0;
     int width = 0, height = 0;
@@ -1409,7 +1409,7 @@ bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen, bool ownDat
 
     //Move by size of header
     const int pixelOffset = sizeof(PVRv2TexHeader);
-    unsigned char* pixelData = data + pixelOffset;
+    uint8_t* pixelData = data + pixelOffset;
 
     int dataOffset = 0, dataSize = 0;
     //Get ptr to where data starts..
@@ -1425,7 +1425,7 @@ bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen, bool ownDat
                     CCLOG("cocos2d: Hardware PVR decoder not present. Using software decoder");
                     _unpack = true;
                     _mipmaps[_numberOfMipmaps].len = width*height*4;
-                    _mipmaps[_numberOfMipmaps].address = (unsigned char*)malloc(width*height*4);
+                    _mipmaps[_numberOfMipmaps].address = (uint8_t*)malloc(width*height*4);
                     PVRTDecompressPVRTC(pixelData + dataOffset,width,height,_mipmaps[_numberOfMipmaps].address, true);
                     bpp = 2;
                 }
@@ -1439,7 +1439,7 @@ bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen, bool ownDat
                     CCLOG("cocos2d: Hardware PVR decoder not present. Using software decoder");
                     _unpack = true;
                     _mipmaps[_numberOfMipmaps].len = width*height*4;
-                    _mipmaps[_numberOfMipmaps].address = (unsigned char*)malloc(width*height*4);
+                    _mipmaps[_numberOfMipmaps].address = (uint8_t*)malloc(width*height*4);
                     PVRTDecompressPVRTC(pixelData + dataOffset,width,height,_mipmaps[_numberOfMipmaps].address, false);
                     bpp = 4;
                 }
@@ -1500,7 +1500,7 @@ bool Image::initWithPVRv2Data(unsigned char * data, ssize_t dataLen, bool ownDat
     return true;
 }
 
-bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownData)
+bool Image::initWithPVRv3Data(uint8_t * data, ssize_t dataLen, bool ownData)
 {
     if (static_cast<size_t>(dataLen) < sizeof(PVRv3TexHeader))
     {
@@ -1562,7 +1562,7 @@ bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownDat
     _height = height;
 
     const int pixelOffset = (sizeof(PVRv3TexHeader) + header->metadataLength);
-    unsigned char* pixelData = data + pixelOffset;
+    uint8_t* pixelData = data + pixelOffset;
     int pixelLen = dataLen - pixelOffset;
 
     int dataOffset = 0, dataSize = 0;
@@ -1582,7 +1582,7 @@ bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownDat
                     CCLOG("cocos2d: Hardware PVR decoder not present. Using software decoder");
                     _unpack = true;
                     _mipmaps[i].len = width*height*4;
-                    _mipmaps[i].address = (unsigned char*)malloc(width*height*4);
+                    _mipmaps[i].address = (uint8_t*)malloc(width*height*4);
                     PVRTDecompressPVRTC(pixelData + dataOffset,width,height,_mipmaps[i].address, true);
                     bpp = 2;
                 }
@@ -1597,7 +1597,7 @@ bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownDat
                     CCLOG("cocos2d: Hardware PVR decoder not present. Using software decoder");
                     _unpack = true;
                     _mipmaps[i].len = width*height*4;
-                    _mipmaps[i].address = (unsigned char*)malloc(width*height*4);
+                    _mipmaps[i].address = (uint8_t*)malloc(width*height*4);
                     PVRTDecompressPVRTC(pixelData + dataOffset,width,height,_mipmaps[i].address, false);
                     bpp = 4;
                 }
@@ -1612,7 +1612,7 @@ bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownDat
                     const int bytePerPixel = 4;
                     _unpack = true;
                     _mipmaps[i].len = width*height*bytePerPixel;
-                    _mipmaps[i].address = (unsigned char*)malloc(width*height*bytePerPixel);
+                    _mipmaps[i].address = (uint8_t*)malloc(width*height*bytePerPixel);
                     if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, pixelData + dataOffset, static_cast<etc1_byte*>(_mipmaps[i].address), width, height) != 0)
                     {
                         return false;
@@ -1674,7 +1674,7 @@ bool Image::initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownDat
     return true;
 }
 
-bool Image::initWithETCData(unsigned char* data, ssize_t dataLen, bool ownData)
+bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
     const etc1_byte* header = static_cast<const etc1_byte*>(data);
     
@@ -1713,8 +1713,8 @@ bool Image::initWithETCData(unsigned char* data, ssize_t dataLen, bool ownData)
         CCLOG("cocos2d: Hardware ETC1 decoder not present. Using software decoder");
 
         _dataLen = _width * _height * 4;
-        _data = static_cast<unsigned char*>(malloc(_dataLen));
-        if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) == 0)
+        _data = static_cast<uint8_t*>(malloc(_dataLen));
+        if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const uint8_t*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) == 0)
         { // if it is not gles or device do not support ETC1, decode texture by software
           // directly decode ETC1_RGB to RGBA8888
             _pixelFormat = backend::PixelFormat::RGBA8888;
@@ -1728,7 +1728,7 @@ bool Image::initWithETCData(unsigned char* data, ssize_t dataLen, bool ownData)
     }
 }
 
-bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen, bool ownData)
+bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
 {
     const etc2_byte* header = static_cast<const etc2_byte*>(data);
 
@@ -1763,8 +1763,8 @@ bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen, bool ownData)
         // if device do not support ETC2, decode texture by software
         // etc2_decode_image always decode to RGBA8888
         _dataLen = _width * _height * 4;
-        _data = static_cast<unsigned char*>(malloc(_dataLen));
-        if (etc2_decode_image(format, static_cast<const unsigned char*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) == 0)
+        _data = static_cast<uint8_t*>(malloc(_dataLen));
+        if (etc2_decode_image(format, static_cast<const uint8_t*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) == 0)
         {
             _pixelFormat = backend::PixelFormat::RGBA8888;
             return true;
@@ -1777,7 +1777,7 @@ bool Image::initWithETC2Data(unsigned char* data, ssize_t dataLen, bool ownData)
     }
 }
 
-bool Image::initWithASTCData(unsigned char* data, ssize_t dataLen, bool ownData)
+bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
     ASTCTexHeader* header = (ASTCTexHeader*)data;
 
@@ -1814,8 +1814,8 @@ bool Image::initWithASTCData(unsigned char* data, ssize_t dataLen, bool ownData)
         CCLOG("cocos2d: Hardware ASTC decoder not present. Using software decoder");
 
         _dataLen = _width * _height * 4;
-        _data = static_cast<unsigned char*>(malloc(_dataLen));
-        if (decompress_astc(static_cast<const unsigned char*>(data) + ASTC_HEAD_SIZE, _data, _width, _height, xdim, ydim, _dataLen) == 0) {
+        _data = static_cast<uint8_t*>(malloc(_dataLen));
+        if (decompress_astc(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE, _data, _width, _height, xdim, ydim, _dataLen) == 0) {
             _pixelFormat = backend::PixelFormat::RGBA8888;
             return true;
         }
@@ -1826,7 +1826,7 @@ bool Image::initWithASTCData(unsigned char* data, ssize_t dataLen, bool ownData)
     }
 }
 
-bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen, bool ownData)
+bool Image::initWithS3TCData(uint8_t * data, ssize_t dataLen, bool ownData)
 {
     const uint32_t FOURCC_DXT1 = makeFourCC('D', 'X', 'T', '1');
     const uint32_t FOURCC_DXT3 = makeFourCC('D', 'X', 'T', '3');
@@ -1847,7 +1847,7 @@ bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen, bool ownData
     int height = _height;
     
     const int pixelOffset = sizeof(S3TCTexHeader);
-    unsigned char* pixelData = data + pixelOffset;
+    uint8_t* pixelData = data + pixelOffset;
 
     bool hardware = Configuration::getInstance()->supportsS3TC();
     /* if hardware supports s3tc, set pixelformat before loading mipmaps, to support non-mipmapped textures  */
@@ -1880,7 +1880,7 @@ bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen, bool ownData
             width >>= 1;
             height >>= 1;
         }
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+        _data = static_cast<uint8_t*>(malloc(_dataLen));
     }
     
     /* load the mipmaps */
@@ -1897,7 +1897,7 @@ bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen, bool ownData
                 
         if (Configuration::getInstance()->supportsS3TC())
         {   //decode texture through hardware
-            _mipmaps[i].address = (unsigned char *)pixelData + encodeOffset;
+            _mipmaps[i].address = (uint8_t *)pixelData + encodeOffset;
             _mipmaps[i].len = size;
         }
         else
@@ -1908,7 +1908,7 @@ bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen, bool ownData
             int bytePerPixel = 4;
             unsigned int stride = width * bytePerPixel;
 
-            std::vector<unsigned char> decodeImageData(stride * height);
+            std::vector<uint8_t> decodeImageData(stride * height);
             if (FOURCC_DXT1 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC)
             {
                 s3tc_decode(pixelData + encodeOffset, &decodeImageData[0], width, height, S3TCDecodeFlag::DXT1);
@@ -1922,7 +1922,7 @@ bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen, bool ownData
                 s3tc_decode(pixelData + encodeOffset, &decodeImageData[0], width, height, S3TCDecodeFlag::DXT5);
             }
             
-            _mipmaps[i].address = (unsigned char *)_data + decodeOffset;
+            _mipmaps[i].address = (uint8_t *)_data + decodeOffset;
             _mipmaps[i].len = (stride * height);
             memcpy((void *)_mipmaps[i].address, (void *)&decodeImageData[0], _mipmaps[i].len);
             decodeOffset += stride * height;
@@ -1943,7 +1943,7 @@ bool Image::initWithS3TCData(unsigned char * data, ssize_t dataLen, bool ownData
 }
 
 
-bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen, bool ownData)
+bool Image::initWithATITCData(uint8_t *data, ssize_t dataLen, bool ownData)
 {
     /* load the .ktx file */
     ATITCTexHeader *header = (ATITCTexHeader *)data;
@@ -1969,7 +1969,7 @@ bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen, bool ownData
     
     /* pixelData point to the compressed data address */
     int pixelOffset = sizeof(ATITCTexHeader) + header->bytesOfKeyValueData + 4;
-    unsigned char *pixelData = (unsigned char *)data + pixelOffset;
+    uint8_t *pixelData = (uint8_t *)data + pixelOffset;
     
     /* calculate the dataLen */
     int width = _width;
@@ -2012,7 +2012,7 @@ bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen, bool ownData
             width >>= 1;
             height >>= 1;
         }
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+        _data = static_cast<uint8_t*>(malloc(_dataLen));
     }
     
     /* load the mipmaps */
@@ -2030,7 +2030,7 @@ bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen, bool ownData
         if (hardware)
         {
             /* decode texture through hardware */
-            _mipmaps[i].address = (unsigned char *)pixelData + encodeOffset;
+            _mipmaps[i].address = (uint8_t *)pixelData + encodeOffset;
             _mipmaps[i].len = size;
         }
         else
@@ -2038,7 +2038,7 @@ bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen, bool ownData
             int bytePerPixel = 4;
             unsigned int stride = width * bytePerPixel;
 
-            std::vector<unsigned char> decodeImageData(stride * height);
+            std::vector<uint8_t> decodeImageData(stride * height);
             switch (header->glInternalFormat)
             {
                 case CC_GL_ATC_RGB_AMD:
@@ -2054,7 +2054,7 @@ bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen, bool ownData
                     break;
             }
 
-            _mipmaps[i].address = (unsigned char *)_data + decodeOffset;
+            _mipmaps[i].address = (uint8_t *)_data + decodeOffset;
             _mipmaps[i].len = (stride * height);
             memcpy((void *)_mipmaps[i].address, (void *)&decodeImageData[0], _mipmaps[i].len);
             decodeOffset += stride * height;
@@ -2073,12 +2073,12 @@ bool Image::initWithATITCData(unsigned char *data, ssize_t dataLen, bool ownData
     return true;
 }
 
-bool Image::initWithPVRData(unsigned char * data, ssize_t dataLen, bool ownData)
+bool Image::initWithPVRData(uint8_t * data, ssize_t dataLen, bool ownData)
 {
     return initWithPVRv2Data(data, dataLen, ownData) || initWithPVRv3Data(data, dataLen, ownData);
 }
 
-void Image::forwardPixels(unsigned char* data, ssize_t dataLen, int offset, bool ownData)
+void Image::forwardPixels(uint8_t* data, ssize_t dataLen, int offset, bool ownData)
 {
     if(ownData) {
         _data = data;
@@ -2087,7 +2087,7 @@ void Image::forwardPixels(unsigned char* data, ssize_t dataLen, int offset, bool
     }
     else {
         _dataLen = dataLen - offset;
-        _data = (unsigned char*)malloc(_dataLen);
+        _data = (uint8_t*)malloc(_dataLen);
         memcpy(_data, data + offset, _dataLen);
     }
 }
@@ -2196,7 +2196,7 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
         {
             if (isToRGB)
             {
-                unsigned char *tempData = static_cast<unsigned char*>(malloc(_width * _height * 3 * sizeof(unsigned char)));
+                uint8_t *tempData = static_cast<uint8_t*>(malloc(_width * _height * 3));
                 if (nullptr == tempData)
                 {
                     fclose(fp);
@@ -2295,7 +2295,7 @@ bool Image::saveImageToJPG(const std::string& filePath)
 
         if (hasAlpha())
         {
-            unsigned char *tempData = static_cast<unsigned char*>(malloc(_width * _height * 3 * sizeof(unsigned char)));
+            uint8_t *tempData = static_cast<uint8_t*>(malloc(_width * _height * 3));
             if (nullptr == tempData)
             {
                 jpeg_finish_compress(&cinfo);
@@ -2358,7 +2358,7 @@ void Image::premultiplyAlpha()
     unsigned int* fourBytes = (unsigned int*)_data;
     for(int i = 0; i < _width * _height; i++)
     {
-        unsigned char* p = _data + i * 4;
+        uint8_t* p = _data + i * 4;
         fourBytes[i] = CC_RGB_PREMULTIPLY_ALPHA(p[0], p[1], p[2], p[3]);
     }
     
@@ -2366,8 +2366,8 @@ void Image::premultiplyAlpha()
 #endif
 }
 
-static inline unsigned char clamp(int x) {
-    return (unsigned char)(x >= 0 ? (x < 255 ? x : 255) : 0);
+static inline uint8_t clamp(int x) {
+    return (uint8_t)(x >= 0 ? (x < 255 ? x : 255) : 0);
 }
 
 void Image::reversePremultipliedAlpha()
@@ -2377,7 +2377,7 @@ void Image::reversePremultipliedAlpha()
     unsigned int* fourBytes = (unsigned int*)_data;
     for (int i = 0; i < _width * _height; i++)
     {
-        unsigned char* p = _data + i * 4;
+        uint8_t* p = _data + i * 4;
         if (p[3] > 0)
         {
             fourBytes[i] = clamp(int(std::ceil((p[0] * 255.0f) / p[3]))) |
