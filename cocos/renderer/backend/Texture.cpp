@@ -51,7 +51,7 @@ namespace
                 return byte(2);
             case PixelFormat::AI88:
                 return byte(2);
-            case PixelFormat::ETC:
+            case PixelFormat::ETC1:
                 return bit(4);
             case PixelFormat::ETC2_RGB:
                 return bit(4);

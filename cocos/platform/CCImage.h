@@ -84,8 +84,8 @@ public:
         WEBP,
         //! PVR
         PVR,
-        //! ETC
-        ETC,
+        //! ETC1
+        ETC1,
         //! ETC2
         ETC2,
         //! S3TC
@@ -166,15 +166,15 @@ public:
 
 protected:
     typedef struct sImageTGA tImageTGA;
-    
-    // all internal init function have chance to own the data for fast forward data to hardware decoder
-    // see: initWithImageData
+
     bool initWithJpgData(unsigned char *  data, ssize_t dataLen);
     bool initWithPngData(unsigned char * data, ssize_t dataLen);
     bool initWithBmpData(unsigned char *data, ssize_t dataLen);
     bool initWithWebpData(unsigned char * data, ssize_t dataLen);
     bool initWithTGAData(tImageTGA* tgaData);
     
+    // All internal init function have chance to own the data for fast forward data to hardware decoder
+    // see: initWithImageData
     bool initWithPVRData(unsigned char * data, ssize_t dataLen, bool ownData);
     bool initWithPVRv2Data(unsigned char * data, ssize_t dataLen, bool ownData);
     bool initWithPVRv3Data(unsigned char * data, ssize_t dataLen, bool ownData);
@@ -189,9 +189,7 @@ protected:
 
     bool saveImageToPNG(const std::string& filePath, bool isToRGB = true);
     bool saveImageToJPG(const std::string& filePath);
-    
 
-    
 protected:
     /**
      @brief Determine how many mipmaps can we have.
@@ -237,7 +235,7 @@ protected:
     bool isBmp(const unsigned char * data, ssize_t dataLen);
     bool isWebp(const unsigned char * data, ssize_t dataLen);
     bool isPvr(const unsigned char * data, ssize_t dataLen);
-    bool isEtc(const unsigned char * data, ssize_t dataLen);
+    bool isEtc1(const unsigned char * data, ssize_t dataLen);
     bool isEtc2(const unsigned char* data, ssize_t dataLen);
     bool isS3TC(const unsigned char * data,ssize_t dataLen);
     bool isATITC(const unsigned char *data, ssize_t dataLen);

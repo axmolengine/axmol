@@ -92,7 +92,7 @@ int lua_register_cocos2dx_backend_PixelFormat(lua_State* tolua_S)
         tolua_constant(tolua_S, "PVRTC4A", 11);
         tolua_constant(tolua_S, "PVRTC2", 12);
         tolua_constant(tolua_S, "PVRTC2A", 13);
-        tolua_constant(tolua_S, "ETC", 14);
+        tolua_constant(tolua_S, "ETC1", 14);
         tolua_constant(tolua_S, "S3TC_DXT1", 15);
         tolua_constant(tolua_S, "S3TC_DXT3", 16);
         tolua_constant(tolua_S, "S3TC_DXT5", 17);

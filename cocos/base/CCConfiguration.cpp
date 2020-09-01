@@ -220,7 +220,7 @@ bool Configuration::supportsPVRTC() const
 	return _supportsPVRTC;
 }
 
-bool Configuration::supportsETC() const
+bool Configuration::supportsETC1() const
 {
     return _supportsETC1;
 }
