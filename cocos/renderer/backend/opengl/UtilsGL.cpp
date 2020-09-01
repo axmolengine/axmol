@@ -278,7 +278,6 @@ void UtilsGL::toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint
         isCompressed = true;
         break;
 #endif
-#ifdef GL_ETC1_RGB8_OES
     case PixelFormat::ETC1:
         internalFormat = GL_ETC1_RGB8_OES;
         format = 0xFFFFFFFF;
@@ -297,7 +296,6 @@ void UtilsGL::toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint
         type = 0xFFFFFFFF;
         isCompressed = true;
         break;
-#endif // GL_ETC1_RGB8_OES
 #ifdef GL_ATC_RGB_AMD
     case PixelFormat::ATC_RGB:
         internalFormat = GL_ATC_RGB_AMD;

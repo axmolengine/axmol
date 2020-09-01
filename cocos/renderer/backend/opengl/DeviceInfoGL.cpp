@@ -72,9 +72,7 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
     switch (feature)
     {
     case FeatureType::ETC1:
-#ifdef GL_ETC1_RGB8_OES // GL_ETC1_RGB8_OES is not defined in old opengl version
         featureSupported = checkForGLExtension("GL_OES_compressed_ETC1_RGB8_texture");
-#endif
         break;
     case FeatureType::ETC2:
         featureSupported = checkSupportsCompressedFormat(GL_COMPRESSED_RGBA8_ETC2_EAC);
