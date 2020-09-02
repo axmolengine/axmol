@@ -107,6 +107,8 @@ public:
 
     virtual int getCount() const { return 1; };
 
+    virtual uintptr_t getGPUHandler(int index = 0) const { return 0; }
+
 protected:
     /**
      * @param descriptor Specifies the texture descirptor.

@@ -69,6 +69,7 @@ struct TextureInfoGL
     /// <param name="index">the index in meta textrues</param>
     /// <param name="target">the target GL_TEXTURE_2D,GL_TEXTURE_CUBE_MAP</param>
     void apply(int slot, int index, GLenum target) const;
+    GLuint getName(int index) const { return textures[0]; }
 
     GLint magFilterGL = GL_LINEAR;
     GLint minFilterGL = GL_LINEAR;
@@ -182,6 +183,8 @@ public:
     void apply(int slot, int index) const { _textureInfo.apply(slot, index, GL_TEXTURE_2D); }
 
     int getCount() const override { return _textureInfo.maxIdx + 1; }
+
+    uintptr_t getGPUHandler(int index) const override { return _textureInfo.getName(index); }
 
 private:
     void initWithZeros();
