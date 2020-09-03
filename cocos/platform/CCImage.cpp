@@ -1794,7 +1794,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
     if (xdim < 4 || ydim < 4)
     {
-        CCLOG("cocos2d: The ASTC block with and height should greater or equals 4");
+        CCLOG("cocos2d: The ASTC block with and height should be >= 4");
         return false;
     }
 
