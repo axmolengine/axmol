@@ -3,6 +3,9 @@
  ASTC Texture Decompression.
  astc compression tool: https://github.com/ARM-software/astc-encoder/releases
  
+ command: 
+   astcenc-sse4.2 -cl xxx.png xxx.astc 6x6 -medium
+
  ******************************************************************************/
 
 #ifndef __ASTC_H__
