@@ -1,6 +1,7 @@
 /******************************************************************************
  
  ASTC Texture Decompression.
+ astc compression tool: https://github.com/ARM-software/astc-encoder/releases
  
  ******************************************************************************/
 
