@@ -38,6 +38,58 @@ public:
     virtual void onEnter() override;
 };
 
+class TextureASTC : public TextureDemo
+{
+public:
+    CREATE_FUNC(TextureASTC);
+    virtual std::string title() const override;
+    virtual void onEnter() override;
+
+
+    cocos2d::Node* _background;
+};
+
+class TextureETC1Alpha : public TextureDemo
+{
+public:
+    CREATE_FUNC(TextureETC1Alpha);
+    TextureETC1Alpha();
+    bool init() override;
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+
+    cocos2d::Node* _background;
+};
+
+class TextureETC2 : public TextureDemo
+{
+public:
+    CREATE_FUNC(TextureETC2);
+    TextureETC2();
+    bool init() override;
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+    void addNewSpriteWithCoords();
+    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+
+    cocos2d::Node* _background;
+};
+
+class TextureBMP : public TextureDemo
+{
+public:
+    CREATE_FUNC(TextureBMP);
+    TextureBMP();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+};
 
 class TextureTGA : public TextureDemo
 {
@@ -508,17 +560,6 @@ public:
     virtual std::string subtitle() const override;
     
     void transformSprite(cocos2d::Sprite *sprite);
-};
-
-// ETC1 texture format test
-class TextureETC1 : public TextureDemo
-{
-public:
-    CREATE_FUNC(TextureETC1);
-    TextureETC1();
-    
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
 };
 
 // S3TC Dxt1 texture format test

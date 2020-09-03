@@ -31,7 +31,9 @@ CC_BACKEND_BEGIN
 #define bit(n) (n)
 namespace
 {
-    uint8_t computeBitsPerElement(PixelFormat textureFormat)
+    // !!!FIXME: GPU supported compression texture formats, bpp could be ignore and doesn't to set, leave it=0
+    // ASTC have float bpp, such as ASTC6x6 3.56 BPP
+    static uint8_t computeBitsPerElement(PixelFormat textureFormat)
     {
         switch (textureFormat)
         {
@@ -52,12 +54,6 @@ namespace
                 return byte(2);
             case PixelFormat::AI88:
                 return byte(2);
-            case PixelFormat::ETC1:
-                return bit(4);
-            case PixelFormat::ETC2_RGB:
-                return bit(4);
-            case PixelFormat::ETC2_RGBA:
-                return bit(8);
             case PixelFormat::ATC_RGB:
                 return bit(4);
             case PixelFormat::ATC_EXPLICIT_ALPHA:
@@ -84,10 +80,6 @@ namespace
                 return byte(2);
             case PixelFormat::MTL_ABGR4:
                 return byte(2);
-            case PixelFormat::ASTC4:
-                return bit(8);
-            case PixelFormat::ASTC8:
-                return bit(2);
             case PixelFormat::D24S8:
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 //ios use MTLPixelFormatDepth32Float_Stencil8 as DepthStencil combined format, its 64 bits
