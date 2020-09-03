@@ -1800,7 +1800,6 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
     if (Configuration::getInstance()->supportsASTC())
     {
-        
         if (xdim == 4 && ydim == 4) {
             _pixelFormat = backend::PixelFormat::ASTC4x4;
         }
