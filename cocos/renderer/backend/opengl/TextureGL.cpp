@@ -284,7 +284,7 @@ void Texture2DGL::updateCompressedSubData(std::size_t xoffset, std::size_t yoffs
                               yoffset,
                               width,
                               height,
-                              _textureInfo.format,
+                              _textureInfo.internalFormat,
                               dataLen,
                               data);
     CHECK_GL_ERROR_DEBUG();
