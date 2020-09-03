@@ -152,6 +152,11 @@ namespace
             case MTLPixelFormatASTC_4x4_HDR:
                 blockWidth = 4;
                 break;
+            case MTLPixelFormatASTC_6x6_sRGB:
+            case MTLPixelFormatASTC_6x6_LDR:
+            case MTLPixelFormatASTC_6x6_HDR:
+                blockWidth = 6;
+                break;
             case MTLPixelFormatASTC_8x8_sRGB:
             case MTLPixelFormatASTC_8x8_LDR:
             case MTLPixelFormatASTC_8x8_HDR:
@@ -203,7 +208,7 @@ namespace
         {
             bytesPerRow = getBytesPerRowETC(pixelFormat, width);
         }
-        else if (textureFormat == PixelFormat::ASTC4 || textureFormat == PixelFormat::ASTC8)
+        else if (textureFormat == PixelFormat::ASTC4x4 || textureFormat == PixelFormat::ASTC6x6 || textureFormat == PixelFormat::ASTC8x8)
         {
             bytesPerRow = getBytesPerRowASTC(pixelFormat, width);
         }

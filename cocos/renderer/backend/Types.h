@@ -100,11 +100,11 @@ enum class PixelFormat
     PVRTC2,
     //! 2-bit PVRTC-compressed texture: PVRTC2 (has alpha channel)
     PVRTC2A,
-    //! ETC1-compressed texture: ETC1
+    //! ETC1-compressed texture: ETC1 4 BPP
     ETC1,
-    //! ETC2-compressed texture: ETC2_RGB
+    //! ETC2-compressed texture: ETC2_RGB 4 BPP
     ETC2_RGB,
-    //! ETC2-compressed texture: ETC2_RGBA
+    //! ETC2-compressed texture: ETC2_RGBA 8 BPP
     ETC2_RGBA,
     //! S3TC-compressed texture: S3TC_Dxt1
     S3TC_DXT1,
@@ -125,11 +125,12 @@ enum class PixelFormat
     MTL_BGR5A1,
     MTL_ABGR4,
 
-    ASTC4,
-    //! ASTC compressed texture: ASTC 4x4 block
-    ASTC8,
-    //! ASTC compressed texture: ASTC 8x8 block
-
+    ASTC4x4,      //!< ASTC 4x4 8.0 BPP
+    //ASTC5x5,      //!< ASTC 5x5 5.12 BPP
+    ASTC6x6,      //!< ASTC 6x6 3.56 BPP
+    //ASTC8x5,      //!< ASTC 8x5 3.20 BPP
+    ASTC8x8,      //!< ASTC 8x6 2 BPP
+    //ASTC10x5,     //!< ASTC 10x5 2.56 BPP
 
     // A packed 32-bit combined depth and stencil pixel format with two nomorlized unsigned integer
     // components: 24 bits, typically used for a depth render target, and 8 bits, typically used for

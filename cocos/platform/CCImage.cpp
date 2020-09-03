@@ -1792,18 +1792,23 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
     uint8_t xdim = header->blockdim_x;
     uint8_t ydim = header->blockdim_y;
 
-    if ((xdim != 4 && xdim != 8) || (ydim != 4 && ydim != 8))
+    if (xdim < 4 || ydim < 4)
     {
-        CCLOG("unly support 4x4|8x8£¬becouse cocos unly support int bpp");
+        CCLOG("cocos2d: The ASTC block with and height should be >= 4");
         return false;
     }
 
     if (Configuration::getInstance()->supportsASTC())
     {
-        _pixelFormat = backend::PixelFormat::ASTC4;
+        if (xdim == 4 && ydim == 4) {
+            _pixelFormat = backend::PixelFormat::ASTC4x4;
+        }
+        else if (xdim == 6 && ydim == 6) {
+            _pixelFormat = backend::PixelFormat::ASTC6x6;
+        }
         if (xdim == 8 && ydim == 8)
         {
-            _pixelFormat = backend::PixelFormat::ASTC8;
+            _pixelFormat = backend::PixelFormat::ASTC8x8;
         }
 
         forwardPixels(data, dataLen, ASTC_HEAD_SIZE, ownData);
