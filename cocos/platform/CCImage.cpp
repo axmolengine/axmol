@@ -1794,8 +1794,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
     if (xdim < 4 || ydim < 4)
     {
-        // bpp for hadware decoder could be ignore
-        // CCLOG("unly support 4x4|8x8£¬becouse cocos unly support int bpp");
+        CCLOG("cocos2d: The ASTC block with and height should greater or equals 4");
         return false;
     }
 
