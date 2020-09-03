@@ -38,6 +38,16 @@ enum {
 
 Texture2DTests::Texture2DTests()
 {
+    ADD_TEST_CASE(TextureASTC);
+
+    ADD_TEST_CASE(TextureETC1Alpha);
+    ADD_TEST_CASE(TextureETC2);
+    ADD_TEST_CASE(TextureBMP);
+    ADD_TEST_CASE(TexturePNG);
+    ADD_TEST_CASE(TextureJPEG);
+    ADD_TEST_CASE(TextureTGA);
+    ADD_TEST_CASE(TextureWEBP);
+
     ADD_TEST_CASE(TextureMipMap);
     ADD_TEST_CASE(TextureMemoryAlloc);
     ADD_TEST_CASE(TextureAlias);
@@ -76,10 +86,6 @@ Texture2DTests::Texture2DTests()
     ADD_TEST_CASE(TexturePVRv3Premult);
     
     ADD_TEST_CASE(TexturePVRBadEncoding);
-    ADD_TEST_CASE(TexturePNG);
-    ADD_TEST_CASE(TextureJPEG);
-    ADD_TEST_CASE(TextureTGA);
-    ADD_TEST_CASE(TextureWEBP);
     ADD_TEST_CASE(TextureWEBPNoAlpha)
     ADD_TEST_CASE(TexturePixelFormat);
     ADD_TEST_CASE(TextureBlend);
@@ -90,8 +96,6 @@ Texture2DTests::Texture2DTests()
     ADD_TEST_CASE(TextureCache1);
     ADD_TEST_CASE(TextureDrawAtPoint);
     ADD_TEST_CASE(TextureDrawInRect);
-
-    ADD_TEST_CASE(TextureETC1);
 
     ADD_TEST_CASE(TextureS3TCDxt1);
     ADD_TEST_CASE(TextureS3TCDxt3);
@@ -131,6 +135,258 @@ TextureDemo::~TextureDemo()
     log("%s\n", textureCache->getCachedTextureInfo().c_str());
 }
 
+//------------------------------------------------------------------
+//
+// TextureASTC
+//
+//------------------------------------------------------------------
+
+void TextureASTC::onEnter()
+{
+    TextureDemo::onEnter();
+
+    auto& s = getContentSize();
+    _background = LayerColor::create(Color4B(15, 19, 42, 255), s.width, s.height);
+    _background->setIgnoreAnchorPointForPosition(false);
+    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+
+    _background->setPosition(Vec2(s.width / 2, s.height / 2));
+    this->addChild(_background);
+
+    auto sprite4 = Sprite::create("Images/ASTC_RGBA.astc");
+    sprite4->setPosition(Vec2(s.width * 0.2, s.height * 0.5));
+    _background->addChild(sprite4);
+
+    auto spriteA4 = Sprite::create("Images/ASTC_RGB.astc");
+    spriteA4->setPosition(Vec2(s.width * 0.5, s.height * 0.5));
+    _background->addChild(spriteA4);
+
+    auto sprite8 = Sprite::create("Images/ASTC_RGBA_8x8.astc");
+    sprite8->setPosition(Vec2(s.width * 0.8, s.height * 0.5));
+    _background->addChild(sprite8);
+
+    /*auto img = Sprite::create("Images/astc/astc_6x6.astc");
+    img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
+    this->addChild(img);*/
+    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+}
+
+std::string TextureASTC::title() const
+{
+    return "ASTC Test";
+}
+
+//------------------------------------------------------------------
+//
+// TextureETC1Alpha
+//
+//------------------------------------------------------------------
+
+TextureETC1Alpha::TextureETC1Alpha()
+{
+    auto listener = EventListenerTouchAllAtOnce::create();
+    listener->onTouchesEnded = CC_CALLBACK_2(TextureETC1Alpha::onTouchesEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+bool TextureETC1Alpha::init()
+{
+    if (!TextureDemo::init())
+        return false;
+
+    auto& canvasSize = getContentSize();
+    _background = LayerColor::create(Color4B(15, 19, 42, 255), canvasSize.width, canvasSize.height);
+    _background->setIgnoreAnchorPointForPosition(false);
+    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+
+    auto s = Director::getInstance()->getWinSize();
+    _background->setPosition(Vec2(s.width / 2, s.height / 2));
+    this->addChild(_background);
+
+    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    return true;
+}
+
+void TextureETC1Alpha::addNewSpriteWithCoords(Vec2 p)
+{
+    auto sprite = Sprite::create("Images/grossini_dance_08.png");
+    Texture2D* etcTexture = _director->getTextureCache()->addImage("Images/etc1-alpha.pkm");
+    sprite->setTexture(etcTexture);
+    sprite->setTextureRect(Rect(Vec2::ZERO, etcTexture->getContentSize()));
+
+    _background->addChild(sprite);
+
+    sprite->setPosition(Vec2(p.x, p.y));
+
+    ActionInterval* action;
+    float random = CCRANDOM_0_1();
+
+    if (random < 0.20)
+        action = ScaleBy::create(3, 2);
+    else if (random < 0.40)
+        action = RotateBy::create(3, 360);
+    else if (random < 0.60)
+        action = Blink::create(1, 3);
+    else if (random < 0.8)
+        action = TintBy::create(2, 0, -255, -255);
+    else
+        action = FadeOut::create(2);
+    auto action_back = action->reverse();
+    auto seq = Sequence::create(action, action_back, nullptr);
+
+    sprite->runAction(RepeatForever::create(seq));
+}
+
+void TextureETC1Alpha::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+{
+    for (auto touch : touches)
+    {
+        auto location = touch->getLocation();
+
+        addNewSpriteWithCoords(location);
+    }
+}
+
+std::string TextureETC1Alpha::title() const
+{
+    return "Testing Sprite ETC1 Alpha support";
+}
+
+std::string TextureETC1Alpha::subtitle() const
+{
+    return "Tap screen to add more sprites";
+}
+
+//------------------------------------------------------------------
+//
+// TextureETC2
+//
+//------------------------------------------------------------------
+
+TextureETC2::TextureETC2()
+{
+    auto listener = EventListenerTouchAllAtOnce::create();
+    listener->onTouchesEnded = CC_CALLBACK_2(TextureETC2::onTouchesEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+bool TextureETC2::init()
+{
+    if (!TextureDemo::init())
+        return false;
+
+    auto& canvasSize = getContentSize();
+    _background = LayerColor::create(Color4B(15, 19, 42, 255), canvasSize.width, canvasSize.height);
+    _background->setIgnoreAnchorPointForPosition(false);
+    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+
+    auto s = Director::getInstance()->getWinSize();
+    _background->setPosition(Vec2(s.width / 2, s.height / 2));
+    this->addChild(_background);
+
+    addNewSpriteWithCoords();
+    return true;
+}
+
+void TextureETC2::addNewSpriteWithCoords()
+{
+    auto s = Director::getInstance()->getWinSize();
+    auto sprite4 = Sprite::create("Images/etc2_rgb.pkm");
+    sprite4->setPosition(Vec2(s.width * 0.3, s.height * 0.5));
+    _background->addChild(sprite4);
+
+    auto spriteA4 = Sprite::create("Images/etc2_rgba.pkm");
+    spriteA4->setPosition(Vec2(s.width * 0.7, s.height * 0.5));
+    _background->addChild(spriteA4);
+}
+
+void TextureETC2::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+{
+    //for (auto touch : touches)
+    //{
+    //    auto location = touch->getLocation();
+
+    //    addNewSpriteWithCoords();
+    //}
+}
+
+std::string TextureETC2::title() const
+{
+    return "Testing Texture ETC2 support";
+}
+
+std::string TextureETC2::subtitle() const
+{
+    return "";
+}
+
+
+//------------------------------------------------------------------
+//
+// TextureBMP
+//
+//------------------------------------------------------------------
+
+TextureBMP::TextureBMP()
+{
+    auto listener = EventListenerTouchAllAtOnce::create();
+    listener->onTouchesEnded = CC_CALLBACK_2(TextureBMP::onTouchesEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+    auto s = Director::getInstance()->getWinSize();
+    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+}
+
+void TextureBMP::addNewSpriteWithCoords(Vec2 p)
+{
+    int idx = (int)(CCRANDOM_0_1() * 1400.0f / 100.0f);
+    int x = (idx % 5) * 85;
+    int y = (idx / 5) * 121;
+
+
+    auto sprite = Sprite::create("Images/x-studio_64.bmp");
+    addChild(sprite);
+
+    sprite->setPosition(Vec2(p.x, p.y));
+
+    ActionInterval* action;
+    float random = CCRANDOM_0_1();
+
+    if (random < 0.20)
+        action = ScaleBy::create(3, 2);
+    else if (random < 0.40)
+        action = RotateBy::create(3, 360);
+    else if (random < 0.60)
+        action = Blink::create(1, 3);
+    else if (random < 0.8)
+        action = TintBy::create(2, 0, -255, -255);
+    else
+        action = FadeOut::create(2);
+    auto action_back = action->reverse();
+    auto seq = Sequence::create(action, action_back, nullptr);
+
+    sprite->runAction(RepeatForever::create(seq));
+}
+
+void TextureBMP::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+{
+    for (auto touch : touches)
+    {
+        auto location = touch->getLocation();
+
+        addNewSpriteWithCoords(location);
+    }
+}
+
+std::string TextureBMP::title() const
+{
+    return "Testing TextureBMP";
+}
+
+std::string TextureBMP::subtitle() const
+{
+    return "Tap screen to add more sprites";
+}
 
 //------------------------------------------------------------------
 //
@@ -1998,60 +2254,6 @@ void TexturePVRv3Premult::transformSprite(cocos2d::Sprite *sprite)
     auto seq = Sequence::create(fade, fadein, dl, nullptr);
     auto repeat = RepeatForever::create(seq);
     sprite->runAction(repeat);
-}
-
-// Implementation of ETC1
-TextureETC1::TextureETC1()
-{
-    auto sprite = Sprite::create("Images/ETC1.pkm");
-    
-    auto size = Director::getInstance()->getWinSize();
-    sprite->setPosition(Vec2(size.width/2, size.height/2));
-    
-    addChild(sprite);
-}
-
-std::string TextureETC1::title() const
-{
-    return "ETC1 texture";
-}
-
-std::string TextureETC1::subtitle() const
-{
-    bool isSupportETCHardwareDecode = Configuration::getInstance()->supportsETC1();
-    Application::Platform platform = Application::getInstance()->getTargetPlatform();
-    std::string ret;
-
-    static std::unordered_map<int, const char*> platformMap = {
-        {(int)Application::Platform::OS_WINDOWS, "Windows"},
-        {(int)Application::Platform::OS_LINUX, "Linux"},
-        {(int)Application::Platform::OS_MAC, "macOS"},
-        {(int)Application::Platform::OS_ANDROID, "Android"},
-        {(int)Application::Platform::OS_IPHONE, "iPhone"},
-        {(int)Application::Platform::OS_IPAD, "iPad"},
-    };
-
-    if (isSupportETCHardwareDecode)
-    {
-        ret += "Hardware decode ETC1 on ";
-
-    }
-    else
-    {
-        ret += "Software decode ETC1 on ";
-    }
-
-    auto iter = platformMap.find((int)platform);
-    if (iter != platformMap.end())
-    {
-        ret += iter->second;
-    }
-    else
-    {
-        ret += "Unknown Platform";
-    }
-
-    return ret;
 }
 
 //Implement of S3TC Dxt1

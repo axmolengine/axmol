@@ -60,6 +60,7 @@ NS_CC_BEGIN
 
 
 namespace {
+    // !!!Note: bpp only for print information, not relay it, hardware texture format will have float bpp
     typedef Texture2D::PixelFormatInfoMap::value_type PixelFormatInfoMapValue;
     static const PixelFormatInfoMapValue TexturePixelFormatInfoTablesValue[] =
     {
@@ -72,8 +73,9 @@ namespace {
         PixelFormatInfoMapValue(backend::PixelFormat::A8, Texture2D::PixelFormatInfo(8, false, false)),
         PixelFormatInfoMapValue(backend::PixelFormat::I8, Texture2D::PixelFormatInfo(8, false, false)),
         PixelFormatInfoMapValue(backend::PixelFormat::AI88, Texture2D::PixelFormatInfo(16, false, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::ASTC4, Texture2D::PixelFormatInfo(8, true, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::ASTC8, Texture2D::PixelFormatInfo(2, true, true)),
+        PixelFormatInfoMapValue(backend::PixelFormat::ASTC4x4, Texture2D::PixelFormatInfo(8, true, true)),
+        PixelFormatInfoMapValue(backend::PixelFormat::ASTC6x6, Texture2D::PixelFormatInfo(3/*3.56 BPP*/, true, true)),
+        PixelFormatInfoMapValue(backend::PixelFormat::ASTC8x8, Texture2D::PixelFormatInfo(2, true, true)),
 
 #if defined( GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         PixelFormatInfoMapValue(backend::PixelFormat::PVRTC2, Texture2D::PixelFormatInfo(2, true, false)),
@@ -280,8 +282,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     case PixelFormat::ETC1:
     case PixelFormat::ETC2_RGB:
     case PixelFormat::ETC2_RGBA:
-    case PixelFormat::ASTC4:
-    case PixelFormat::ASTC8:
+    case PixelFormat::ASTC4x4:
+    case PixelFormat::ASTC8x8:
         renderFormat = imagePixelFormat;
         break;
     default:;
@@ -333,8 +335,9 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
         case PixelFormat::ETC1:
         case PixelFormat::ETC2_RGB:
         case PixelFormat::ETC2_RGBA:
-        case PixelFormat::ASTC4:
-        case PixelFormat::ASTC8:
+        case PixelFormat::ASTC4x4:
+        case PixelFormat::ASTC6x6:
+        case PixelFormat::ASTC8x8:
             renderFormat = imagePixelFormat;
             break;
         default:;
@@ -754,10 +757,12 @@ const char* Texture2D::getStringForFormat() const
         case backend::PixelFormat::MTL_BGR5A1:
             return "MTL_BGR5A1";
            
-        case backend::PixelFormat::ASTC4:
-            return "ASTC4";
-        case backend::PixelFormat::ASTC8:
-            return "ASTC8";
+        case backend::PixelFormat::ASTC4x4:
+            return "ASTC4x4";
+        case backend::PixelFormat::ASTC6x6:
+            return "ASTC6x6";
+        case backend::PixelFormat::ASTC8x8:
+            return "ASTC8x8";
 
         default:
             CCASSERT(false , "unrecognized pixel format");

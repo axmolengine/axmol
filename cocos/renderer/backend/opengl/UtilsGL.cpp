@@ -262,22 +262,24 @@ void UtilsGL::toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint
         type = GL_UNSIGNED_SHORT_5_5_5_1;
         break;
 
-#ifdef GL_COMPRESSED_RGBA_ASTC_4x4_KHR
-    case PixelFormat::ASTC4:
+    case PixelFormat::ASTC4x4:
         internalFormat = GL_COMPRESSED_RGBA_ASTC_4x4_KHR;
         format = 0xFFFFFFFF;
         type = 0xFFFFFFFF;
         isCompressed = true;
         break;
-#endif
-#ifdef GL_COMPRESSED_RGBA_ASTC_8x8_KHR
-    case PixelFormat::ASTC8:
+    case PixelFormat::ASTC6x6:
+        internalFormat = GL_COMPRESSED_RGBA_ASTC_6x6_KHR;
+        format = 0xFFFFFFFF;
+        type = 0xFFFFFFFF;
+        isCompressed = true;
+        break;
+    case PixelFormat::ASTC8x8:
         internalFormat = GL_COMPRESSED_RGBA_ASTC_8x8_KHR;
         format = 0xFFFFFFFF;
         type = 0xFFFFFFFF;
         isCompressed = true;
         break;
-#endif
     case PixelFormat::ETC1:
         internalFormat = GL_ETC1_RGB8_OES;
         format = 0xFFFFFFFF;
