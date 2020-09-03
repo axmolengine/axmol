@@ -208,7 +208,7 @@ namespace
         {
             bytesPerRow = getBytesPerRowETC(pixelFormat, width);
         }
-        else if (textureFormat == PixelFormat::ASTC4x4 || textureFormat == PixelFormat::ASTC8x8)
+        else if (textureFormat == PixelFormat::ASTC4x4 || textureFormat == PixelFormat::ASTC6x6 || textureFormat == PixelFormat::ASTC8x8)
         {
             bytesPerRow = getBytesPerRowASTC(pixelFormat, width);
         }

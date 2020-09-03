@@ -283,6 +283,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     case PixelFormat::ETC2_RGB:
     case PixelFormat::ETC2_RGBA:
     case PixelFormat::ASTC4x4:
+    case PixelFormat::ASTC6x6:
     case PixelFormat::ASTC8x8:
         renderFormat = imagePixelFormat;
         break;

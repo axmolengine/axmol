@@ -129,6 +129,8 @@ MTLPixelFormat Utils::toMTLPixelFormat(PixelFormat textureFormat)
             return MTLPixelFormatEAC_RGBA8;
         case PixelFormat::ASTC4x4:
             return MTLPixelFormatASTC_4x4_LDR;
+        case PixelFormat::ASTC6x6:
+            return MTLPixelFormatASTC_6x6_LDR;
         case PixelFormat::ASTC8x8:
             return MTLPixelFormatASTC_8x8_LDR;
 #else
