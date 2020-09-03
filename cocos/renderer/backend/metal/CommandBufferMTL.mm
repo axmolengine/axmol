@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 c4games.com
 
  http://www.cocos2d-x.org
 
@@ -370,6 +371,8 @@ void CommandBufferMTL::endFrame()
 
     [_mtlCommandBuffer commit];
     [_mtlCommandBuffer release];
+    _mtlCommandBuffer = nil;
+
     DeviceMTL::resetCurrentDrawable();
     [_autoReleasePool drain];
 }
