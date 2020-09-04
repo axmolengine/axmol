@@ -9,11 +9,11 @@ matrix:
     #  sudo: required
     #  language: cpp
     # mac_cmake
-    # - os: osx
-    #  env: BUILD_TARGET=mac_cmake
-    #  language: cpp
-    #  osx_image: xcode10.3
-    #  sudo: required
+    - os: osx
+     env: BUILD_TARGET=mac_cmake
+     language: cpp
+     osx_image: xcode11
+     sudo: required
     # iOS_cmake
     - os: osx
       env: BUILD_TARGET=ios_cmake
