@@ -2,39 +2,10 @@
 
 NS_CC_MATH_BEGIN
 
-/**
-* Constructor instantiates a new Mat3 object. The initial
-* values for the matrix is that of the identity matrix.
-* 默认构造单位矩阵
-*
-*/
-
-Mat3::Mat3() {
+Mat3::Mat3()
+{
     loadIdentity();
 }
-
-/**
-* constructs a matrix with the given values.
-*
-* @param m[0]
-*            0x0 in the matrix.
-* @param m[1]
-*            0x1 in the matrix.
-* @param m[2]
-*            0x2 in the matrix.
-* @param m[3]
-*            1x0 in the matrix.
-* @param m[4]
-*            1x1 in the matrix.
-* @param m[5]
-*            1x2 in the matrix.
-* @param m[6]
-*            2x0 in the matrix.
-* @param m[7]
-*            2x1 in the matrix.
-* @param m[8]
-*            2x2 in the matrix.
-*/
 
 Mat3::Mat3(float m[9]) {
 
@@ -45,21 +16,9 @@ Mat3::Mat3(float m[9]) {
     this->m[4] = m[4];
     this->m[5] = m[5];
     this->m[6] = m[6];
-    this->m[8] = m[7];
-    this->m[9] = m[8];
+    this->m[7] = m[7];
+    this->m[8] = m[8];
 }
-
-/**
-* get retrieves a value from the matrix at the given position.
-* If the position is invalid a JmeException is thrown.
-* 获取指定位置的元素值
-*
-* @param i
-*            the row index.行索引（取值范围：0、1、2）
-* @param j
-*            the colum index.列索引（取值范围：0、1、2）
-* @return the value at (i, j).
-*/
 
 float Mat3::get(int i, int j) {
     switch (i) {
@@ -96,19 +55,6 @@ float Mat3::get(int i, int j) {
     // throw new JmeException("Invalid indices into matrix.");
 }
 
-/**
-* getColumn returns one of three columns specified by the
-* parameter. This column is returned as a cocos2d::Vec3 object.
-* 获取指定列构造的向量
-*
-* @param i
-*            the column to retrieve. Must be between 0 and 2.
-* @param store
-*            the vector object to store the result in. if null, a new one
-*            is created.
-* @return the column specified by the index.
-*/
-
 cocos2d::Vec3 Mat3::getColumn(int i) {
     cocos2d::Vec3 store;
     switch (i) {
@@ -133,19 +79,6 @@ cocos2d::Vec3 Mat3::getColumn(int i) {
     }
     return store;
 }
-
-/**
-* getRow returns one of three rows as specified by the
-* parameter. This row is returned as a cocos2d::Vec3 object.
-* 获取指定行构造的向量
-*
-* @param i
-*            the row to retrieve. Must be between 0 and 2.
-* @param store
-*            the vector object to store the result in. if null, a new one
-*            is created.
-* @return the row specified by the index.
-*/
 
 cocos2d::Vec3 Mat3::getRow(int i) {
     cocos2d::Vec3 store;
@@ -175,18 +108,6 @@ std::string Mat3::toString() {
     return "";
 }
 
-/**
-*
-* setColumn sets a particular column of this matrix to that
-* represented by the provided vector.
-* 根据给定列向量设置矩阵的列
-*
-* @param i
-*            the column to set.
-* @param column
-*            the data to set.
-*/
-
 void Mat3::setColumn(int i, const cocos2d::Vec3& column) {
 
     switch (i) {
@@ -211,18 +132,6 @@ void Mat3::setColumn(int i, const cocos2d::Vec3& column) {
     }
 }
 
-/**
-*
-* setRow sets a particular row of this matrix to that
-* represented by the provided vector.
-* 根据给定行向量设置矩阵的行
-*
-* @param i
-*            the row to set.
-* @param row
-*            the data to set.
-*/
-
 void Mat3::setRow(int i, const cocos2d::Vec3& row) {
     switch (i) {
     case 0:
@@ -245,20 +154,6 @@ void Mat3::setRow(int i, const cocos2d::Vec3& row) {
         // throw new JmeException("Invalid row index. " + i);
     }
 }
-
-/**
-* set places a given value into the matrix at the given
-* position. If the position is invalid a JmeException is
-* thrown.
-* 设定某位置的值
-*
-* @param i
-*            the row index.
-* @param j
-*            the colum index.
-* @param value
-*            the value for (i, j).
-*/
 
 void Mat3::set(int i, int j, float value) {
     switch (i) {
@@ -304,18 +199,6 @@ void Mat3::set(int i, int j, float value) {
     //throw new JmeException("Invalid indices into matrix.");
 }
 
-/**
-*
-* set sets the values of the matrix to those supplied by the
-* 3x3 two dimenion array.
-* 用二维数组设置矩阵各元素值
-*
-* @param matrix
-*            the new values of the matrix.
-* @throws JmeException
-*             if the array is not of size 9.
-*/
-
 void Mat3::set(float matrix[3][3]) {
     //if (matrix.length != 3 || matrix[0].length != 3) {
     //    throw new JmeException("Array must be of size 9.");
@@ -332,18 +215,6 @@ void Mat3::set(float matrix[3][3]) {
     m[8] = matrix[2][2];
 }
 
-/**
-* Recreate Matrix using the provided axis.
-* 根据给定各列向量构造矩阵
-*
-* @param uAxis
-*            cocos2d::Vec3
-* @param vAxis
-*            cocos2d::Vec3
-* @param wAxis
-*            cocos2d::Vec3
-*/
-
 void Mat3::set(const cocos2d::Vec3& uAxis, const cocos2d::Vec3& vAxis, const cocos2d::Vec3& wAxis) {
     m[0] = uAxis.x;
     m[3] = uAxis.y;
@@ -357,16 +228,6 @@ void Mat3::set(const cocos2d::Vec3& uAxis, const cocos2d::Vec3& vAxis, const coc
     m[5] = wAxis.y;
     m[8] = wAxis.z;
 }
-
-/**
-* set sets the values of this matrix from an array of values;
-* 根据给定数组按行或列设置矩阵
-*
-* @param matrix
-*            the matrix to set the value to.
-* @param rowMajor
-*            whether the incoming data is in row or column major order.
-*/
 
 void Mat3::set(float matrix[9], bool rowMajor) {
     //if (matrix.length != 9)
@@ -395,80 +256,6 @@ void Mat3::set(float matrix[9], bool rowMajor) {
         m[8] = matrix[8];
     }
 }
-
-/**
-* fromAngleNormalAxis sets this matrix4f to the values
-* specified by an angle and a normalized axis of rotation.
-* 绕轴axis（单位向量）旋转angle（弧度）角的3D旋转矩阵
-*
-* @param angle
-*            the angle to rotate (in radians).
-* @param axis
-*            the axis of rotation (already normalized).
-*/
-
-
-/**
-* Creates a matrix describing a rotation around the z-axis.
-*
-* @param angle The angle of rotation (in radians).
-* @param dst A matrix to store the result in.
-*/
-
-
-/**
-* Creates a matrix describing a rotation around the y-axis.
-*
-* @param angle The angle of rotation (in radians).
-* @param dst A matrix to store the result in.
-*/
-
-
-/**
-* Creates a matrix describing a rotation around the x-axis.
-*
-* @param angle The angle of rotation (in radians).
-* @param dst A matrix to store the result in.
-*/
-
-
-/**
-* Creates a matrix describing a rotation around the z-axis.
-*
-* @param angle The angle of rotation (in radians).
-* @param dst A matrix to store the result in.
-*/
-
-
-/**
-* Creates a matrix describing a rotation around the y-axis.
-*
-* @param angle The angle of rotation (in radians).
-* @param dst A matrix to store the result in.
-*/
-
-
-/**
-* Creates a matrix describing a rotation around the x-axis.
-*
-* @param angle The angle of rotation (in radians).
-* @param dst A matrix to store the result in.
-*/
-
-
-/**
-* 是否单位矩阵
-*
-* @return true if this matrix is identity
-*/
-
-
-/**
-* loadIdentity sets this matrix to the identity matrix. Where
-* all values are zero except those along the diagonal which are one.
-* 单位矩阵
-*
-*/
 
 void Mat3::loadIdentity() {
     m[1] = m[2] = m[3] = m[5] = m[6] = m[7] = 0;
@@ -559,13 +346,6 @@ void Mat3::createRotation(const cocos2d::Vec3& axis, float fSin, float fCos) {
     m[8] = fZ2 * fOneMinusCos + fCos;
 }
 
-/**
-* Creates a matrix describing a rotation around the x-axis.
-*
-* @param angle The angle of rotation (in radians).
-* @param dst A matrix to store the result in.
-*/
-
 void Mat3::createRotationX(float s, float c)
 {
     m[4] = c;
@@ -574,13 +354,6 @@ void Mat3::createRotationX(float s, float c)
     m[8] = c;
 }
 
-/**
-* Creates a matrix describing a rotation around the y-axis.
-*
-* @param angle The angle of rotation (in radians).
-* @param dst A matrix to store the result in.
-*/
-
 void Mat3::createRotationY(float s, float c)
 {
     m[0] = c;
@@ -588,13 +361,6 @@ void Mat3::createRotationY(float s, float c)
     m[6] = s;
     m[8] = c;
 }
-
-/**
-* Creates a matrix describing a rotation around the z-axis.
-*
-* @param angle The angle of rotation (in radians).
-* @param dst A matrix to store the result in.
-*/
 
 void Mat3::createRotationZ(float s, float c)
 {
@@ -633,16 +399,6 @@ Mat3& Mat3::mult(const Mat3& mat, Mat3& product) const
     return product;
 }
 
-/**
-* Multiplies this 3x3 matrix by the 1x3 Vector vec and stores the result in
-* product.
-* 矩阵乘以向量，结果存入参数product中
-*
-* @param vec
-*            The cocos2d::Vec3 to multiply.
-* @return The given product vector.
-*/
-
 cocos2d::Vec3 Mat3::mult(const cocos2d::Vec3& vec) const {
 
     cocos2d::Vec3 product;
@@ -658,16 +414,6 @@ cocos2d::Vec3 Mat3::mult(const cocos2d::Vec3& vec) const {
     return product;
 }
 
-/**
-* multLocal multiplies this matrix internally by a given float
-* scale factor.
-* 矩阵标量乘
-*
-* @param scale
-*            the value to scale by.
-* @return this Mat3
-*/
-
 Mat3& Mat3::multLocal(float scale) {
     m[0] *= scale;
     m[1] *= scale;
@@ -680,14 +426,6 @@ Mat3& Mat3::multLocal(float scale) {
     m[8] *= scale;
     return *this;
 }
-
-/**
-* add adds the values of a parameter matrix to this matrix.
-* 矩阵加法
-*
-* @param mat
-*            the matrix to add to this.
-*/
 
 Mat3& Mat3::addLocal(const Mat3& mat) {
     m[0] += mat.m[0];
@@ -702,26 +440,12 @@ Mat3& Mat3::addLocal(const Mat3& mat) {
     return *this;
 }
 
-/**
-* Transposes this matrix in place. Returns this matrix for chaining
-* 转置矩阵
-*
-* @return This matrix after transpose
-*/
-
 Mat3& Mat3::transposeLocal() {
     float tmp[9];
     get(tmp, false);
     set(tmp, true);
     return *this;
 }
-
-/**
-* Inverts this matrix and stores it in the given store.
-* 逆矩阵，保存在参数中，不改变自身
-*
-* @return The store
-*/
 
 Mat3 Mat3::invertNew(void) {
     Mat3 store;
@@ -742,13 +466,6 @@ Mat3 Mat3::invertNew(void) {
     store.multLocal(1 / det);
     return store;
 }
-
-/**
-* Inverts this matrix locally.
-* 逆矩阵，改变自身
-*
-* @return this
-*/
 
 Mat3& Mat3::invertLocal() {
     float det = determinant();
@@ -779,16 +496,6 @@ Mat3& Mat3::invertLocal() {
     return *this;
 }
 
-/**
-* Places the adjoint of this matrix in store (creates store if null.)
-* 伴随矩阵
-*
-* @param store
-*            The matrix to store the result in. If null, a new matrix is
-*            created.
-* @return store
-*/
-
 Mat3 Mat3::adjoint() {
     Mat3 store;
 
@@ -805,13 +512,6 @@ Mat3 Mat3::adjoint() {
     return store;
 }
 
-/**
-* determinant generates the determinate of this matrix.
-* 矩阵的行列式
-*
-* @return the determinate
-*/
-
 float Mat3::determinant() {
     float fCo00 = m[4] * m[8] - m[5] * m[7];
     float fCo10 = m[5] * m[6] - m[3] * m[8];
@@ -820,55 +520,19 @@ float Mat3::determinant() {
     return fDet;
 }
 
-/**
-* Sets all of the values in this matrix to zero.
-* 重置矩阵，各元素置为0
-*
-* @return this matrix
-*/
-
 Mat3& Mat3::zero() {
     m[0] = m[1] = m[2] = m[3] = m[4] = m[5] = m[6] = m[7] = m[8] = 0.0f;
     return *this;
 }
-
-/**
-* transposeNew returns a transposed version of this matrix.
-* 转置矩阵
-*
-* @return The new Mat3 object.
-*/
 
 Mat3 Mat3::transposeNew() {
     float temp[9] = { m[0], m[3], m[6], m[1], m[4], m[7], m[2], m[5], m[8] };
     return Mat3(temp);
 }
 
-/**
-* are these two matrices the same? they are is they both have the same mXX
-* values.
-*
-* @param o
-*            the object to compare for equality
-* @return true if they are equal
-*/
-
 bool Mat3::equals(const Mat3& o) const {
     return memcmp(&o, this, sizeof(o)) == 0;
 }
-
-/**
-* A function for creating a rotation matrix that rotates a vector called
-* "start" into another vector called "end".
-* 创建一个旋转矩阵，从向量start旋转到end
-*
-* @param start
-*            normalized non-zero starting vector
-* @param end
-*            normalized non-zero ending vector
-* @see "Tomas M?ller, John Hughes /"Efficiently Building a Matrix to Rotate
-*      / One Vector to Another/" Journal of Graphics Tools, 4(4):1-4, 1999"
-*/
 
 void Mat3::fromStartEndVectors(cocos2d::Vec3 start, cocos2d::Vec3 end) {
     cocos2d::Vec3 v;
@@ -953,15 +617,6 @@ void Mat3::fromStartEndVectors(cocos2d::Vec3 start, cocos2d::Vec3 end) {
         set(2, 2, e + hvz * v.z);
     }
 }
-
-/**
-* scale scales the operation performed by this matrix on a
-* per-component basis.
-* 标量乘行向量，各列分别相乘
-*
-* @param scale
-*            The scale applied to each of the X, Y and Z output values.
-*/
 
 void Mat3::scale(const cocos2d::Vec3& scale) {
     m[0] *= scale.x;
