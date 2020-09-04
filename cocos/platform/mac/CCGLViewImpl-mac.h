@@ -52,9 +52,10 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-
+class GLFWEventHandler;
 class CC_DLL GLViewImpl : public GLView
 {
+    friend class GLFWEventHandler;
 public:
     static GLViewImpl* create(const std::string& viewName);
     static GLViewImpl* create(const std::string& viewName, bool resizable);
@@ -80,10 +81,27 @@ public:
     GLFWwindow* getWindow() const { return _mainWindow; }
 
     bool isFullscreen() const;
+
+    /* Sets primary monitor full screen with default w*h(refresh rate) */
     void setFullscreen();
+    /* Sets primary monitor full screen with w*h(refresh rate) */
+    void setFullscreen(int w, int h, int refreshRate);
+
+    /* Sets monitor full screen with default w*h(refresh rate) */
     void setFullscreen(int monitorIndex);
-    void setFullscreen(const GLFWvidmode &videoMode, GLFWmonitor *monitor);
+    /// <summary>
+    /// Sets monitor full screen with w*h(refresh rate)
+    /// </summary>
+    /// <param name="monitorIndex">the 0 based index of monitor</param>
+    /// <param name="w">the width of hardware resolution in full screen, -1 use default value</param>
+    /// <param name="h">the height of hardware resolution in full screen, -1 use default value</param>
+    /// <param name="refreshRate">the display refresh rate, usually 60, -1 use default value</param>
+    void setFullscreen(int monitorIndex, int w, int h, int refreshRate);
+
+    /* for internal use */
+    void setFullscreen(GLFWmonitor *monitor, int w, int h, int refreshRate);
     void setWindowed(int width, int height);
+
     int getMonitorCount() const;
     Size getMonitorSize() const;
 
@@ -128,8 +146,8 @@ protected:
     bool initWithRect(const std::string& viewName, Rect rect, float frameZoomFactor, bool resizable);
     bool initWithFullScreen(const std::string& viewName);
     bool initWithFullscreen(const std::string& viewname, const GLFWvidmode &videoMode, GLFWmonitor *monitor);
-
-    bool initGlew();
+    /* update frame layout when enter/exit full screen mode */
+    void updateWindowSize();
 
     void updateFrameSize();
 
@@ -141,13 +159,11 @@ protected:
     void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     void onGLFWCharCallback(GLFWwindow* window, unsigned int character);
     void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y);
-    void onGLFWframebuffersize(GLFWwindow* window, int w, int h);
-    void onGLFWWindowSizeFunCallback(GLFWwindow *window, int width, int height);
+    void onGLFWWindowSizeCallback(GLFWwindow *window, int width, int height);
     void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
     void onGLFWWindowFocusCallback(GLFWwindow* window, int focused);
 
     bool _captured;
-    bool _supportTouch;
     bool _isInRetinaMonitor;
     bool _isRetinaEnabled;
     int  _retinaFactor;  // Should be 1 or 2
@@ -162,8 +178,6 @@ protected:
     float _mouseX;
     float _mouseY;
 
-    friend class GLFWEventHandler;
-    
 public:
     // View will trigger an event when window is resized, gains or loses focus
     static const std::string EVENT_WINDOW_RESIZED;
@@ -172,89 +186,6 @@ public:
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(GLViewImpl);
-};
-
-
-class CC_DLL GLFWEventHandler
-{
-public:
-    static void onGLFWError(int errorID, const char* errorDesc)
-    {
-        if (_view)
-            _view->onGLFWError(errorID, errorDesc);
-    }
-
-    static void onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify)
-    {
-        if (_view)
-            _view->onGLFWMouseCallBack(window, button, action, modify);
-    }
-
-    static void onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
-    {
-        if (_view)
-            _view->onGLFWMouseMoveCallBack(window, x, y);
-    }
-
-    static void onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
-    {
-        if (_view)
-            _view->onGLFWMouseScrollCallback(window, x, y);
-    }
-
-    static void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-    {
-        if (_view)
-            _view->onGLFWKeyCallback(window, key, scancode, action, mods);
-    }
-
-    static void onGLFWCharCallback(GLFWwindow* window, unsigned int character)
-    {
-        if (_view)
-            _view->onGLFWCharCallback(window, character);
-    }
-
-    static void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y)
-    {
-        if (_view)
-            _view->onGLFWWindowPosCallback(windows, x, y);
-    }
-
-    static void onGLFWframebuffersize(GLFWwindow* window, int w, int h)
-    {
-        if (_view)
-            _view->onGLFWframebuffersize(window, w, h);
-    }
-
-    static void onGLFWWindowSizeFunCallback(GLFWwindow *window, int width, int height)
-    {
-        if (_view)
-            _view->onGLFWWindowSizeFunCallback(window, width, height);
-    }
-
-    static void setGLViewImpl(GLViewImpl* view)
-    {
-        _view = view;
-    }
-
-    static void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified)
-    {
-        if (_view)
-        {
-            _view->onGLFWWindowIconifyCallback(window, iconified);
-        }
-    }
-
-    static void onGLFWWindowFocusCallback(GLFWwindow* window, int focused)
-    {
-        if (_view)
-        {
-            _view->onGLFWWindowFocusCallback(window, focused);
-        }
-    }
-
-private:
-    static GLViewImpl* _view;
 };
 
 NS_CC_END   // end of namespace   cocos2d
