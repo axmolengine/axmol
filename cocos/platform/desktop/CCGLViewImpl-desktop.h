@@ -57,6 +57,7 @@ NS_CC_BEGIN
 class GLFWEventHandler;
 class CC_DLL GLViewImpl : public GLView
 {
+    friend class GLFWEventHandler;
 public:
     static GLViewImpl* create(const std::string& viewName);
     static GLViewImpl* create(const std::string& viewName, bool resizable);
@@ -169,7 +170,6 @@ protected:
     void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     void onGLFWCharCallback(GLFWwindow* window, unsigned int character);
     void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y);
-    void onGLFWFramebufferSizeCallback(GLFWwindow* window, int w, int h);
     void onGLFWWindowSizeCallback(GLFWwindow *window, int width, int height);
     void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
     void onGLFWWindowFocusCallback(GLFWwindow* window, int focused);
@@ -189,8 +189,6 @@ protected:
     float _mouseX;
     float _mouseY;
 
-    friend class GLFWEventHandler;
-    
 public:
     // View will trigger an event when window is resized, gains or loses focus
     static const std::string EVENT_WINDOW_RESIZED;
