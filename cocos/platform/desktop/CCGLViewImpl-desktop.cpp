@@ -47,6 +47,90 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
+class GLFWEventHandler
+{
+public:
+    static void onGLFWError(int errorID, const char* errorDesc)
+    {
+        if (_view)
+            _view->onGLFWError(errorID, errorDesc);
+    }
+
+    static void onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify)
+    {
+        if (_view)
+            _view->onGLFWMouseCallBack(window, button, action, modify);
+    }
+
+    static void onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
+    {
+        if (_view)
+            _view->onGLFWMouseMoveCallBack(window, x, y);
+    }
+
+    static void onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
+    {
+        if (_view)
+            _view->onGLFWMouseScrollCallback(window, x, y);
+    }
+
+    static void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
+        if (_view)
+            _view->onGLFWKeyCallback(window, key, scancode, action, mods);
+    }
+
+    static void onGLFWCharCallback(GLFWwindow* window, unsigned int character)
+    {
+        if (_view)
+            _view->onGLFWCharCallback(window, character);
+    }
+
+    static void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y)
+    {
+        if (_view)
+            _view->onGLFWWindowPosCallback(windows, x, y);
+    }
+
+    // Notes: Unused on windows or macos Metal renderer backend
+    // static void onGLFWframebufferSize(GLFWwindow* window, int w, int h)
+    // {
+    //     if (_view)
+    //         _view->onGLFWframebufferSize(window, w, h);
+    // }
+
+    static void onGLFWWindowSizeCallback(GLFWwindow *window, int width, int height)
+    {
+        if (_view)
+            _view->onGLFWWindowSizeCallback(window, width, height);
+    }
+
+    static void setGLViewImpl(GLViewImpl* view)
+    {
+        _view = view;
+    }
+
+    static void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified)
+    {
+        if (_view)
+        {
+            _view->onGLFWWindowIconifyCallback(window, iconified);
+        }
+    }
+
+    static void onGLFWWindowFocusCallback(GLFWwindow* window, int focused)
+    {
+        if (_view)
+        {
+            _view->onGLFWWindowFocusCallback(window, focused);
+        }
+    }
+
+private:
+    static GLViewImpl* _view;
+};
+GLViewImpl* GLFWEventHandler::_view = nullptr;
+
 const std::string GLViewImpl::EVENT_WINDOW_RESIZED = "glview_window_resized";
 const std::string GLViewImpl::EVENT_WINDOW_FOCUSED = "glview_window_focused";
 const std::string GLViewImpl::EVENT_WINDOW_UNFOCUSED = "glview_window_unfocused";
@@ -192,91 +276,6 @@ static keyCodeItem g_keyCodeStructArray[] = {
 };
 
 //////////////////////////////////////////////////////////////////////////
-// GLFW Event forward handler
-//////////////////////////////////////////////////////////////////////////
-class GLFWEventHandler
-{
-public:
-    static void onGLFWError(int errorID, const char* errorDesc)
-    {
-        if (_view)
-            _view->onGLFWError(errorID, errorDesc);
-    }
-
-    static void onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify)
-    {
-        if (_view)
-            _view->onGLFWMouseCallBack(window, button, action, modify);
-    }
-
-    static void onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
-    {
-        if (_view)
-            _view->onGLFWMouseMoveCallBack(window, x, y);
-    }
-
-    static void onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
-    {
-        if (_view)
-            _view->onGLFWMouseScrollCallback(window, x, y);
-    }
-
-    static void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-    {
-        if (_view)
-            _view->onGLFWKeyCallback(window, key, scancode, action, mods);
-    }
-
-    static void onGLFWCharCallback(GLFWwindow* window, unsigned int character)
-    {
-        if (_view)
-            _view->onGLFWCharCallback(window, character);
-    }
-
-    static void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y)
-    {
-        if (_view)
-            _view->onGLFWWindowPosCallback(windows, x, y);
-    }
-
-    static void onGLFWFrameBufferSizeCallback(GLFWwindow* window, int w, int h)
-    {
-        if (_view)
-            _view->onGLFWFramebufferSizeCallback(window, w, h);
-    }
-
-    static void onGLFWWindowSizeCallback(GLFWwindow* window, int width, int height)
-    {
-        if (_view)
-            _view->onGLFWWindowSizeCallback(window, width, height);
-    }
-
-    static void setGLViewImpl(GLViewImpl* view)
-    {
-        _view = view;
-    }
-
-    static void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified)
-    {
-        if (_view)
-        {
-            _view->onGLFWWindowIconifyCallback(window, iconified);
-        }
-    }
-
-    static void onGLFWWindowFocusCallback(GLFWwindow* window, int focused)
-    {
-        if (_view)
-        {
-            _view->onGLFWWindowFocusCallback(window, focused);
-        }
-    }
-
-private:
-    static GLViewImpl* _view;
-};
-GLViewImpl* GLFWEventHandler::_view = nullptr;
-
 // implement GLViewImpl
 //////////////////////////////////////////////////////////////////////////
 
@@ -441,7 +440,6 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
     glfwSetCharCallback(_mainWindow, GLFWEventHandler::onGLFWCharCallback);
     glfwSetKeyCallback(_mainWindow, GLFWEventHandler::onGLFWKeyCallback);
     glfwSetWindowPosCallback(_mainWindow, GLFWEventHandler::onGLFWWindowPosCallback);
-    glfwSetFramebufferSizeCallback(_mainWindow, GLFWEventHandler::onGLFWFrameBufferSizeCallback);
     glfwSetWindowSizeCallback(_mainWindow, GLFWEventHandler::onGLFWWindowSizeCallback);
     glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
     glfwSetWindowFocusCallback(_mainWindow, GLFWEventHandler::onGLFWWindowFocusCallback);
@@ -805,7 +803,6 @@ void GLViewImpl::setScissorInPoints(float x , float y , float w , float h)
     auto height1 = (unsigned int)(h * _scaleY * _retinaFactor * _frameZoomFactor);
     auto renderer = Director::getInstance()->getRenderer();
     renderer->setScissorRect(x1, y1, width1, height1);
-
 }
 
 Rect GLViewImpl::getScissorRect() const
@@ -993,37 +990,6 @@ void GLViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int /*x*/, int 
     Director::getInstance()->setViewport();
 }
 
-void GLViewImpl::onGLFWFramebufferSizeCallback(GLFWwindow* window, int w, int h)
-{ // win32 glfw same with onGLFWWindowSizeCallback
-#if CC_TARGET_PLATFORM != CC_PLATFORM_WIN32
-    float frameSizeW = _screenSize.width;
-    float frameSizeH = _screenSize.height;
-    float factorX = frameSizeW / w * _retinaFactor * _frameZoomFactor;
-    float factorY = frameSizeH / h * _retinaFactor * _frameZoomFactor;
-
-    if (std::abs(factorX - 0.5f) < FLT_EPSILON && std::abs(factorY - 0.5f) < FLT_EPSILON)
-    {
-        _isInRetinaMonitor = true;
-        if (_isRetinaEnabled)
-        {
-            _retinaFactor = 1;
-        }
-        else
-        {
-            _retinaFactor = 2;
-        }
-
-        glfwSetWindowSize(window, static_cast<int>(frameSizeW * 0.5f * _retinaFactor * _frameZoomFactor) , static_cast<int>(frameSizeH * 0.5f * _retinaFactor * _frameZoomFactor));
-    }
-    else if (std::abs(factorX - 2.0f) < FLT_EPSILON && std::abs(factorY - 2.0f) < FLT_EPSILON)
-    {
-        _isInRetinaMonitor = false;
-        _retinaFactor = 1;
-        glfwSetWindowSize(window, static_cast<int>(frameSizeW * _retinaFactor * _frameZoomFactor), static_cast<int>(frameSizeH * _retinaFactor * _frameZoomFactor));
-    }
-#endif
-}
-
 void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
@@ -1044,6 +1010,7 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
     }
 }
+
 
 void GLViewImpl::onGLFWWindowIconifyCallback(GLFWwindow* /*window*/, int iconified)
 {
