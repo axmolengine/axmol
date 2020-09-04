@@ -1,13 +1,6 @@
+language: cpp
 matrix:
   include:
-    # linux
-    #- os: linux
-    #  dist: xenial
-    #  env: 
-    #    - BUILD_TARGET=linux 
-    #    - GEN_BINDING_AND_COCOSFILE=true
-    #  sudo: required
-    #  language: cpp
     # mac_cmake
     - os: osx
       env: BUILD_TARGET=mac_cmake
