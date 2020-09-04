@@ -172,40 +172,6 @@ namespace utils
     }
 
     /**
-     * Create a Game Object instance, like CREATE_FUNC, but more powerful
-
-     * @return  Returns a autorelease game object
-     * @limition: the init function finit must be public
-     */
-    template<typename T, typename F, typename...Ts>
-    inline T* createInstance(F&& finit, Ts&&... args)
-    {
-        T* pRet = new(std::nothrow) T();
-        if (pRet && std::mem_fn(finit)(pRet, std::forward<Ts>(args)...)) {
-            pRet->autorelease();
-            return pRet;
-        }
-        else
-        {
-            delete pRet;
-            pRet = nullptr;
-            return nullptr;
-        }
-    }
-
-    /**
-     * Create a Game Object instance with 'bool T::init()' function, like CREATE_FUNC, but more powerful
-
-     * @return  Returns a autorelease game object
-     * @limition: the init function finit must be public
-     */
-    template<typename T>
-    inline T* createInstance()
-    {
-        return ::cocos2d::utils::createInstance<T>(&T::init);
-    }
-
-    /**
      *  Gets the md5 hash for the given file.
      *  @param filename The file to calculate md5 hash.
      *  @return The md5 hash for the file
@@ -267,6 +233,138 @@ namespace utils
     * @lua NA
     */
     CC_DLL void killCurrentProcess();
+
+    /*
+    * The deleter of cocos2d::Ref for std::unique_ptr
+    */
+    template<typename T>
+    struct instance_delete
+    {
+        constexpr instance_delete() noexcept = default;
+
+        template <class T2, std::enable_if_t<std::is_convertible<T2*, T*>::value, int> = 0>
+        instance_delete(const instance_delete<T2>&) noexcept {}
+
+        void operator()(T* _Ptr) const noexcept /* strengthened */ { // delete a pointer
+            static_assert(0 < sizeof(T), "can't release an incomplete type");
+            if (_Ptr) _Ptr->release();
+        }
+    };
+
+    /*
+    * The helper template for use cocos2d::Ref + std::unique_ptr
+    * std::vector<utils::instance_ptr<Node>> nodes;
+    */
+    template<typename T>
+    using instance_ptr = std::unique_ptr<T, instance_delete<T>>;
+
+    /**
+    * Create a Game Object, like CREATE_FUNC, but more powerful
+
+    * @return  Returns a instance_ptr<T> game object
+    * @remark  Auto manage cocos2d::Ref reference count, use std::unique_ptr
+    * @limition  The init function finit must be public
+    */
+    template <typename T, typename F, typename... Ts>
+    static instance_ptr<T> makeInstance(F&& memf, Ts&&... args)
+    {
+        T* pRet = new(std::nothrow) T();
+        if (pRet && std::mem_fn(memf)(pRet, std::forward<Ts>(args)...))
+        {
+            return instance_ptr<T>(pRet);
+        }
+        else
+        {
+            delete pRet;
+            pRet = nullptr;
+            return nullptr;
+        }
+    }
+
+   /**
+   * Create a Game Object with 'bool T::init()', like CREATE_FUNC, but more powerful
+
+   * @return  Returns a autorelease game object
+   * @remark  Auto manage cocos2d::Ref reference count, use std::unique_ptr
+   * @limition  The init function finit must be public
+   */
+    template<typename T> inline
+        static instance_ptr<T> makeInstance()
+    {
+        return makeInstance<T>(&T::init);
+    }
+
+    /**
+    * Create a Game Object, like CREATE_FUNC, but more powerful
+
+    * @return  Returns a autorelease game object
+    * @remark  Auto manage cocos2d::Ref reference count, use AutoReleasePool
+    * @limition The init function finit must be public
+    */
+    template<typename T, typename F, typename...Ts>
+    inline T* createInstance(F&& finit, Ts&&... args)
+    {
+        T* pRet = new(std::nothrow) T();
+        if (pRet && std::mem_fn(finit)(pRet, std::forward<Ts>(args)...)) {
+            pRet->autorelease();
+            return pRet;
+        }
+        else
+        {
+            delete pRet;
+            pRet = nullptr;
+            return nullptr;
+        }
+    }
+
+    /**
+   * Create a Game Object with 'bool T::init()', like CREATE_FUNC, but more powerful
+
+   * @return  Returns a autorelease game object
+   * @remark  Auto manage cocos2d::Ref reference count, use AutoReleasePool
+   * @limition  The init function finit must be public
+   */
+    template<typename T>
+    inline T* createInstance()
+    {
+        return ::cocos2d::utils::createInstance<T>(&T::init);
+    }
+
+    /**
+   * Create a Game Object with 'bool T::init()', like CREATE_FUNC, but more powerful
+
+   * @return  Returns a game object
+   * @remark  You need call release after you don't want use it manually
+   * @limition  The init function finit must be public
+   */
+    template <typename T, typename F, typename... Ts>
+    static T* newInstance(F&& memf, Ts&&... args)
+    {
+        T* pRet = new(std::nothrow) T();
+        if (pRet && std::mem_fn(memf)(pRet, std::forward<Ts>(args)...))
+        {
+            return pRet;
+        }
+        else
+        {
+            delete pRet;
+            pRet = nullptr;
+            return nullptr;
+        }
+    }
+
+    /**
+    * Create a Game Object with 'bool T::init()', like CREATE_FUNC, but more powerful
+    
+    * @return  Returns a game object
+    * @remark  You need call release after you don't want use it manually
+    * @limition  The init function finit must be public
+    */
+    template<typename T> inline
+        static T* newInstance()
+    {
+        return newInstance<T>(&T::init);
+    }
 }
 
 NS_CC_END
