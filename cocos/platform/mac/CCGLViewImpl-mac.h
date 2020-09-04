@@ -164,7 +164,6 @@ protected:
     void onGLFWWindowFocusCallback(GLFWwindow* window, int focused);
 
     bool _captured;
-    bool _supportTouch;
     bool _isInRetinaMonitor;
     bool _isRetinaEnabled;
     int  _retinaFactor;  // Should be 1 or 2

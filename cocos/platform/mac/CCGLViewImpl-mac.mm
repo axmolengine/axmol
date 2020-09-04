@@ -283,7 +283,6 @@ static keyCodeItem g_keyCodeStructArray[] = {
 
 GLViewImpl::GLViewImpl(bool initglfw)
 : _captured(false)
-, _supportTouch(false)
 , _isInRetinaMonitor(false)
 , _isRetinaEnabled(false)
 , _retinaFactor(1)
