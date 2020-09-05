@@ -358,6 +358,10 @@ THE SOFTWARE.
 #define CC_STRIP_FPS 0
 #endif
 
+#ifndef CC_REDUCE_PAUSED_CPU_USAGE
+#define CC_REDUCE_PAUSED_CPU_USAGE 0
+#endif
+
 #ifndef CC_META_TEXTURES
 #define CC_META_TEXTURES 2
 #endif

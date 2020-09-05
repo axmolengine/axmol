@@ -258,7 +258,7 @@ void Director::drawScene()
     }
 
     //tick before glClear: issue #533
-    if (! _paused)
+    if (!_paused)
     {
         _eventDispatcher->dispatchEvent(_eventBeforeUpdate);
         _scheduler->update(_deltaTime);
@@ -1120,8 +1120,10 @@ void Director::pause()
 
     _oldAnimationInterval = _animationInterval;
 
+#if CC_REDUCE_PAUSED_CPU_USAGE
     // when paused, don't consume CPU
     setAnimationInterval(1 / 4.0, SetIntervalReason::BY_DIRECTOR_PAUSE);
+#endif
     _paused = true;
 }
 
@@ -1132,7 +1134,9 @@ void Director::resume()
         return;
     }
 
+#if CC_REDUCE_PAUSED_CPU_USAGE
     setAnimationInterval(_oldAnimationInterval, SetIntervalReason::BY_ENGINE);
+#endif
 
     _paused = false;
     _deltaTime = 0;
