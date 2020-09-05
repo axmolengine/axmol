@@ -3,6 +3,118 @@
 
 NS_CC_EXT_BEGIN
 
+static uint32_t fourccValue(const std::string& str) {
+	if (str.empty() || str[0] != '#') return (uint32_t)-1;
+	uint32_t value = 0;
+	memcpy(&value, str.c_str() + 1, std::min(sizeof(value), str.size() - 1));
+	return value;
+}
+
+class ImGuiEXTRenderer : public Layer
+{
+CC_CONSTRUCTOR_ACCESS:
+    bool initWithImGuiEXT(ImGuiEXT* guiext)
+	{
+		if (!Layer::init())
+			return false;
+
+		_imguiext = guiext; // weak ref the singleton instance
+
+#ifdef CC_PLATFORM_PC
+		// note: when at the first click to focus the window, this will not take effect
+		auto listener = EventListenerTouchOneByOne::create();
+		listener->setSwallowTouches(true);
+		listener->onTouchBegan = [this](Touch* touch, Event*) -> bool {
+			if (!_visible)
+				return false;
+			return ImGui::IsAnyWindowHovered();
+		};
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+		// add by halx99
+		auto stopAnyMouse = [=](EventMouse* event) {
+			if (ImGui::IsAnyWindowHovered()) {
+				event->stopPropagation();
+			}
+		};
+		auto mouseListener = EventListenerMouse::create();
+		mouseListener->onMouseDown = mouseListener->onMouseUp = stopAnyMouse;
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+#endif
+		// add an empty sprite to avoid render problem
+		// const auto sp = Sprite::create();
+		// sp->setGlobalZOrder(1);
+		// sp->setOpacity(0);
+		// addChild(sp, 1);
+
+		/*
+		* There a 3 choice for schedule frame for ImGui render loop
+		* a. at visit/draw to call beginFrame/endFrame, but at ImGui loop, we can't game object and add to Scene directly, will cause damage iterator
+		* b. scheduleUpdate at onEnter to call beginFrame, at visit/draw to call endFrame, it's solve iterator damage problem, but when director is paused
+		*    the director will stop call 'update' function of Scheduler
+		*    And need modify engine code to call _scheduler->update(_deltaTime) even director is paused, pass 0 for update
+		* c. Director::EVENT_BEFORE_DRAW call beginFrame, EVENT_AFTER_VISIT call endFrame
+		*/
+		/*
+		* !!!All of methods, we should calculate delta at imgui_impl_cocos2dx manually
+		*/
+		_eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom*) { beginFrame(); });
+		_eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [=](EventCustom*) { endFrame(); });
+
+		return true;
+	}
+
+	~ImGuiEXTRenderer() 
+	{
+		_eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
+		_eventDispatcher->removeCustomEventListeners(Director::EVENT_BEFORE_DRAW);
+	}
+
+protected:
+
+	/*void onEnter() override
+	{
+		Layer::onEnter();
+		scheduleUpdate();
+	}
+
+	void update(float dt) {
+
+	}*/
+
+	/*virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags) override
+	{
+		Layer::draw(renderer, parentTransform, parentFlags);
+
+		endFrame();
+	}*/
+
+	/*
+	* begin ImGui frame and draw ImGui stubs 
+	*/
+	void beginFrame()
+	{
+		// create frame
+		ImGui_ImplCocos2dx_NewFrame();
+
+		// draw all gui
+		_imguiext->update();
+
+		// render
+		ImGui::Render();
+	}
+
+	/* 
+	* flush ImGui draw data to engine
+	*/
+	void endFrame() {
+		ImGui_ImplCocos2dx_RenderDrawData(ImGui::GetDrawData());
+		ImGui_ImplCocos2dx_RenderPlatform();
+	}
+
+	ImGuiEXT* _imguiext = nullptr;
+};
+
 static ImGuiEXT* _instance = nullptr;
 std::function<void(ImGuiEXT*)> ImGuiEXT::_onInit;
 
@@ -27,8 +139,8 @@ void ImGuiEXT::destroyInstance()
 {
 	if (_instance)
 	{
-		delete _instance;
 		ImGui_ImplCocos2dx_Shutdown();
+		delete _instance;
 		_instance = nullptr;
 	}
 }
@@ -38,30 +150,46 @@ void ImGuiEXT::setOnInit(const std::function<void(ImGuiEXT*)>& callBack)
 	_onInit = callBack;
 }
 
-void ImGuiEXT::onDraw()
-{
+void ImGuiEXT::update()
+{ // drived by ImGuiEXTRenderer
+
 	// clear things from last frame
 	usedCCRefIdMap.clear();
 	usedCCRef.clear();
 	// drawing commands
-	auto iter = _callPiplines.begin();
-	for (; iter != _callPiplines.end(); ++iter)
-	{
-		iter->second();
-	}
+	for (auto& pipline : _renderPiplines)
+		pipline.second.frame();
+
 	// commands will be processed after update
 }
 
-void ImGuiEXT::addCallback(const std::function<void()>& callBack, const std::string& name)
+bool ImGuiEXT::addRenderLoop(const std::string& id, Scene* scene, std::function<void()> onFrame)
 {
-	_callPiplines[name] = callBack;
+	// TODO: check whether exist
+	auto fourccId = fourccValue(id);
+	if (_renderPiplines.find(fourccId) != _renderPiplines.end())
+	{
+		return false;
+	}
+
+	auto renderer = utils::newInstance<ImGuiEXTRenderer>(&ImGuiEXTRenderer::initWithImGuiEXT, this);
+	scene->addChild(renderer, INT_MAX, fourccId);
+	_renderPiplines.emplace(fourccId, RenderPipline{ renderer, std::move(onFrame) });
+
+    return true;
 }
 
-void ImGuiEXT::removeCallback(const std::string& name)
+void ImGuiEXT::removeRenderLoop(const std::string& id)
 {
-	const auto iter = _callPiplines.find(name);
-	if (iter != _callPiplines.end())
-		_callPiplines.erase(iter);
+	auto fourccId = fourccValue(id);
+	 const auto iter = _renderPiplines.find(fourccId);
+	 if (iter != _renderPiplines.end()) {
+		 auto renderer = iter->second.renderer;
+		 if (renderer->getParent())
+			 renderer->removeFromParent();
+		 renderer->release();
+		 _renderPiplines.erase(iter);
+	 }
 }
 
 static std::tuple<ImVec2, ImVec2> getTextureUV(Sprite* sp)
