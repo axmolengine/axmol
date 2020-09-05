@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "base/CCConsole.h"
 
-#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
+#if !defined(__APPLE__)
 #include "audio/include/AudioDecoderMp3.h"
 #include "audio/include/AudioDecoderWav.h"
 #else
@@ -45,7 +45,7 @@ namespace cocos2d {
 
 bool AudioDecoderManager::init()
 {
-#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
+#if !defined(__APPLE__)
     AudioDecoderMp3::lazyInit();
 #endif
     return true;
@@ -53,7 +53,7 @@ bool AudioDecoderManager::init()
 
 void AudioDecoderManager::destroy()
 {
-#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
+#if !defined(__APPLE__)
     AudioDecoderMp3::destroy();
 #endif
 }
@@ -65,7 +65,7 @@ AudioDecoder* AudioDecoderManager::createDecoder(const std::string& path)
     {
         return new (std::nothrow) AudioDecoderOgg();
     }
-#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS
+#if !defined(__APPLE__)
     else if (cxx20::ic::ends_with(svPath, ".mp3"))
     { 
         return new (std::nothrow) AudioDecoderMp3();
