@@ -45,6 +45,9 @@ static GLFWmousebuttonfun   g_PrevUserCallbackMousebutton = nullptr;
 static GLFWscrollfun        g_PrevUserCallbackScroll = nullptr;
 static GLFWkeyfun           g_PrevUserCallbackKey = nullptr;
 static GLFWcharfun          g_PrevUserCallbackChar = nullptr;
+
+static GLFWmonitorfun       g_PrevUserCallbackMonitor = nullptr;
+
 static bool                 g_WantUpdateMonitors = true;
 
 // Forward Declarations
@@ -53,6 +56,11 @@ static void ImGui_ImplGlfw_ShutdownPlatformInterface();
 static void ImGui_ImplGlfw_UpdateMonitors();
 
 #endif // CC_PLATFORM_PC
+
+// fps macro
+#define CC_IMGUI_DEFAULT_DELTA (1 / 60.f)
+#define CC_IMGUI_MIN_DELTA (1 / 1000.f)
+#define CC_IMGUI_MAX_DELTA (1 / 30.f)
 
 struct ProgramInfo
 {
@@ -487,7 +495,7 @@ static void ImGui_ImplOpenGL2_RenderWindow(ImGuiViewport* viewport, void*)
 	ImGui_ImplCocos2dx_RenderDrawData(viewport->DrawData);
 }
 
-bool ImGui_ImplCocos2dx_Init(bool install_callbacks)
+bool ImGui_ImplCocos2dx_Init(bool install_callbacks /*TODO: need check whether callbacks installed at shutdown*/)
 {
     g_Time = 0.0;
     ImGui::CreateContext();
@@ -589,18 +597,21 @@ bool ImGui_ImplCocos2dx_Init(bool install_callbacks)
         g_PrevUserCallbackChar = glfwSetCharCallback(window, ImGui_ImplCocos2dx_CharCallback);
     }
 
-	// Update monitors the first time (note: monitor callback are broken in GLFW 3.2 and earlier, see github.com/glfw/glfw/issues/784)
-	ImGui_ImplGlfw_UpdateMonitors();
-	glfwSetMonitorCallback(ImGui_ImplGlfw_MonitorCallback);
-
 	// Our mouse update function expect PlatformHandle to be filled for the main viewport
 	ImGuiViewport* main_viewport = ImGui::GetMainViewport();
 	main_viewport->PlatformHandle = (void*)window;
+
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 	main_viewport->PlatformHandleRaw = glfwGetWin32Window(window);
 #endif
+
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		ImGui_ImplGlfw_InitPlatformInterface();
+	else {
+		// Update monitors the first time (note: monitor callback are broken in GLFW 3.2 and earlier, see github.com/glfw/glfw/issues/784)
+		ImGui_ImplGlfw_UpdateMonitors();
+		g_PrevUserCallbackMonitor = glfwSetMonitorCallback(ImGui_ImplGlfw_MonitorCallback);
+	}
 #else
 	/*
 	auto e = cocos2d::EventListenerMouse::create();
@@ -688,14 +699,38 @@ bool ImGui_ImplCocos2dx_Init(bool install_callbacks)
 
 void ImGui_ImplCocos2dx_Shutdown()
 {
+	const auto window = ImGui_ImplCocos2dx_GetWindow();
+
 	ImGui::DestroyPlatformWindows();
+
 #ifdef CC_PLATFORM_PC
+	glfwSetMonitorCallback(g_PrevUserCallbackMonitor);
+	g_PrevUserCallbackMonitor = nullptr;
+
+	// Restore mouse and char callback
+	glfwSetMouseButtonCallback(window, g_PrevUserCallbackMousebutton);
+	glfwSetScrollCallback(window, g_PrevUserCallbackScroll);
+	glfwSetKeyCallback(window, g_PrevUserCallbackKey);
+	glfwSetCharCallback(window, g_PrevUserCallbackChar);
+	g_PrevUserCallbackMousebutton = nullptr;
+	g_PrevUserCallbackScroll = nullptr;
+	g_PrevUserCallbackKey = nullptr;
+	g_PrevUserCallbackChar = nullptr;
+
+	// Restore monitor callback
+	if (g_PrevUserCallbackMonitor) {
+		glfwSetMonitorCallback(g_PrevUserCallbackMonitor);
+		g_PrevUserCallbackChar = nullptr;
+	}
+
+	// Destroy cursors
     for (ImGuiMouseCursor cursor_n = 0; cursor_n < ImGuiMouseCursor_COUNT; cursor_n++)
     {
         glfwDestroyCursor(g_MouseCursors[cursor_n]);
         g_MouseCursors[cursor_n] = nullptr;
     }
 #endif // CC_PLATFORM_PC
+
     ImGui_ImplCocos2dx_DestroyDeviceObjects();
 	ImGui::DestroyContext();
 }
@@ -911,6 +946,14 @@ static void ImGui_ImplGlfw_UpdateMonitors()
 
 void ImGui_ImplCocos2dx_NewFrame()
 {
+	static std::chrono::steady_clock::time_point s_lastFrameTime;
+
+	// Calculate deltaTime by self to avoid error when pause cocos2d::Director
+	auto now = std::chrono::steady_clock::now();
+	auto deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(now - s_lastFrameTime).count() / 1000000.0f;
+	deltaTime = cocos2d::clampf(deltaTime, CC_IMGUI_MIN_DELTA, CC_IMGUI_MAX_DELTA);
+	s_lastFrameTime = now;
+
 	g_CallbackCommands.clear();
 	g_CustomCommands.clear();
 	g_ProgramStates.clear();
@@ -945,7 +988,7 @@ void ImGui_ImplCocos2dx_NewFrame()
 #endif // CC_PLATFORM_PC
 
     // Setup time step
-	io.DeltaTime = Director::getInstance()->getDeltaTime();
+	io.DeltaTime = deltaTime;
 
     ImGui_ImplCocos2dx_UpdateMousePosAndButtons();
     ImGui_ImplCocos2dx_UpdateMouseCursor();
@@ -1307,7 +1350,7 @@ static void ImGui_ImplGlfw_InitPlatformInterface()
 
 	// Note: monitor callback are broken GLFW 3.2 and earlier (see github.com/glfw/glfw/issues/784)
 	ImGui_ImplGlfw_UpdateMonitors();
-	glfwSetMonitorCallback(ImGui_ImplGlfw_MonitorCallback);
+	g_PrevUserCallbackMonitor = glfwSetMonitorCallback(ImGui_ImplGlfw_MonitorCallback);
 
 	// Register main window handle (which is owned by the main application, not by us)
 	// This is mostly for simplicity and consistency, so that our code (e.g. mouse handling etc.) can use same logic for main and secondary viewports.

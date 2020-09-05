@@ -10,18 +10,29 @@
 
 NS_CC_EXT_BEGIN
 
-class ImGuiLayer;
+class ImGuiEXTRenderer;
 class ImGuiEXT
 {
-	friend class ImGuiLayer;
+	friend class ImGuiEXTRenderer;
 	void init();
 public:
 	static ImGuiEXT* getInstance();
 	static void destroyInstance();
 	static void setOnInit(const std::function<void(ImGuiEXT*)>& callBack);
 
-	void addCallback(const std::function<void()>& callBack, const std::string& name);
-	void removeCallback(const std::string& name);
+	/// <summary>
+	/// Add a ImGui render loop to specific scene
+	/// </summary>
+	/// <param name="id">FOURCC starts with '#', such as "#abcd"</id>
+	/// <param name="scene">the scene to render ImGui</param>
+	/// <param name="onFrame">the ImGui render loop</param>
+	bool addRenderLoop(const std::string& id, Scene* scene, std::function<void()> onFrame);
+
+	/// <summary>
+	/// Remove ImGui render loop
+	/// </summary>
+	/// <param name="id">FOURCC starts with '#', such as "#abcd"</id>
+	void removeRenderLoop(const std::string& id);
 
     // imgui helper
     void image(
@@ -90,12 +101,18 @@ public:
 
 private:
 	// perform draw ImGui stubs
-	void onDraw();
+	void update();
 
 private:
 	static std::function<void(ImGuiEXT*)> _onInit;
 	
-    std::unordered_map<std::string, std::function<void()>> _callPiplines;
+	struct RenderPipline {
+		ImGuiEXTRenderer* renderer;
+		std::function<void()> frame;
+	};
+
+    std::unordered_map<uint32_t, RenderPipline> _renderPiplines;
+
     std::unordered_map<Ref*, int> usedCCRefIdMap;
 	// cocos objects should be retained until next frame
     Vector<Ref*> usedCCRef;

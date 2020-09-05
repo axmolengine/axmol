@@ -1,4 +1,4 @@
-set(target_name ImGui)
+set(target_name ImGuiEXT)
 
 #~ if(WINDOWS)
 #~     include_directories(${COCOS2DX_ROOT_PATH}/external/win32-specific/gles/include/OGLES)
@@ -7,7 +7,6 @@ include_directories(imgui)
 
 set(HEADER
     CCImGuiEXT.h
-    CCImGuiLayer.h
     # CCImGuiColorTextEdit.h
     imgui_impl_cocos2dx.h
     imgui/imconfig.h
@@ -24,7 +23,6 @@ set(HEADER
 
 set(SOURCE
     CCImGuiEXT.cpp
-    CCImGuiLayer.cpp
     # CCImGuiColorTextEdit.cpp
     imgui_impl_cocos2dx.cpp
     imgui/imgui.cpp
