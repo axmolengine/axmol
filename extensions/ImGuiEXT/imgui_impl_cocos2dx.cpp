@@ -508,7 +508,10 @@ bool ImGui_ImplCocos2dx_Init(bool install_callbacks /*TODO: need check whether c
 
 #ifdef CC_PLATFORM_PC
 	// Enable Multi-Viewport / Platform Windows
+    // TODO: mac osx have problem when create new window, the game scene will go to black
+#if defined(_WIN32)
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+#endif
 	//io.ConfigViewportsNoAutoMerge = true;
 	//io.ConfigViewportsNoTaskBarIcon = true;
     const auto window = ImGui_ImplCocos2dx_GetWindow();
