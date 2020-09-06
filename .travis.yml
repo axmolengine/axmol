@@ -5,13 +5,13 @@ matrix:
     - os: osx
       env: BUILD_TARGET=mac_cmake
       language: cpp
-      osx_image: xcode11.6
+      osx_image: xcode11
       sudo: required
     # iOS_cmake
     - os: osx
       env: BUILD_TARGET=ios_cmake
       language: cpp
-      osx_image: xcode11.6
+      osx_image: xcode11
       sudo: required
     # android cmake
     - os: linux

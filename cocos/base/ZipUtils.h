@@ -304,6 +304,16 @@ namespace cocos2d
         int zfread(ZipFileStream* zfs, void* buf, unsigned int size);
         long zfseek(ZipFileStream* zfs, long offset, int origin);
         void zfclose(ZipFileStream* zfs);
+
+        /**
+        *  Gets resource file data from a zip file.
+        *
+        *  @param[in]  filename The resource file name which contains the relative path of the zip file.
+        *  @param[out] size If the file read operation succeeds, it will be the data size, otherwise 0.
+        *  @return Upon success, a pointer to the data is returned, otherwise nullptr.
+        *  @warning Recall: you are responsible for calling free() on any Non-nullptr pointer returned.
+        */
+        CC_DEPRECATED() static unsigned char* getFileDataFromZip(const std::string& zipFilePath, const std::string& filename, ssize_t* size);
         
     private:
         /* Only used internal for createWithBuffer() */
