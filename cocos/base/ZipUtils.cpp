@@ -835,5 +835,46 @@ void ZipFile::zfclose(ZipFileStream* zfs)
     }
 }
 
+unsigned char* ZipFile::getFileDataFromZip(const std::string& zipFilePath, const std::string& filename, ssize_t* size)
+{
+    unsigned char* buffer = nullptr;
+    unzFile file = nullptr;
+    *size = 0;
+
+    do
+    {
+        CC_BREAK_IF(zipFilePath.empty());
+
+        file = unzOpen(zipFilePath.c_str());
+        CC_BREAK_IF(!file);
+
+        // minizip 1.2.0 is same with other platforms
+        int ret = unzLocateFile(file, filename.c_str(), nullptr);
+
+        CC_BREAK_IF(UNZ_OK != ret);
+
+        char filePathA[260];
+        unz_file_info fileInfo;
+        ret = unzGetCurrentFileInfo(file, &fileInfo, filePathA, sizeof(filePathA), nullptr, 0, nullptr, 0);
+        CC_BREAK_IF(UNZ_OK != ret);
+
+        ret = unzOpenCurrentFile(file);
+        CC_BREAK_IF(UNZ_OK != ret);
+
+        buffer = (unsigned char*)malloc(fileInfo.uncompressed_size);
+        int CC_UNUSED readedSize = unzReadCurrentFile(file, buffer, static_cast<unsigned>(fileInfo.uncompressed_size));
+        CCASSERT(readedSize == 0 || readedSize == (int)fileInfo.uncompressed_size, "the file size is wrong");
+
+        *size = fileInfo.uncompressed_size;
+        unzCloseCurrentFile(file);
+    } while (0);
+
+    if (file)
+    {
+        unzClose(file);
+    }
+
+    return buffer;
+}
 
 NS_CC_END
