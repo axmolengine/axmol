@@ -16,17 +16,45 @@ class ImGuiEXT
 	friend class ImGuiEXTRenderer;
 	void init();
 public:
+
+	enum class CHS_GLYPH_RANGE {
+		NONE,
+		GENERAL,
+		FULL
+	};
+
+	enum {
+		DEFAULT_FONT_SIZE = 13 // see imgui.cpp
+	};
+
 	static ImGuiEXT* getInstance();
 	static void destroyInstance();
 	static void setOnInit(const std::function<void(ImGuiEXT*)>& callBack);
 
 	/// <summary>
+	/// Scale ImGui with majorMoniter DPI scaling
+	/// </summary>
+	/// <param name="userScale">Usually is 1.0</param>
+	/// <param name="fontFile">The full path of .ttc/.ttf file</param>
+	/// <returns>The final contentZoomFactor = userScale * dpiScale</returns>
+	float scaleAllByDPI(float userScale);
+        float getContentZoomFactor() const { return _contentZoomFactor; }
+
+	/// <summary>
+	/// Add ImGui font
+	/// </summary>
+	/// <param name="fontFile"></param>
+	/// <param name="glyphRange"></param>
+	void addFont(const std::string& fontFile, float fontSize = DEFAULT_FONT_SIZE, CHS_GLYPH_RANGE glyphRange = CHS_GLYPH_RANGE::NONE);
+	void clearFonts();
+
+	/// <summary>
 	/// Add a ImGui render loop to specific scene
 	/// </summary>
-	/// <param name="id">FOURCC starts with '#', such as "#abcd"</id>
-	/// <param name="scene">the scene to render ImGui</param>
-	/// <param name="onFrame">the ImGui render loop</param>
-	bool addRenderLoop(const std::string& id, Scene* scene, std::function<void()> onFrame);
+	/// <param name="id">The FOURCC id of render loop, starts with '#', such as "#abcd"</id>
+	/// <param name="target">the target scene to render ImGui</param>
+	/// <param name="func">the ImGui render loop</param>
+	bool addRenderLoop(const std::string& id, Scene* target, std::function<void()> func);
 
 	/// <summary>
 	/// Remove ImGui render loop
@@ -34,15 +62,15 @@ public:
 	/// <param name="id">FOURCC starts with '#', such as "#abcd"</id>
 	void removeRenderLoop(const std::string& id);
 
-    // imgui helper
-    void image(
+        // imgui helper
+        void image(
 		Texture2D* tex,
 		const ImVec2& size,
 		const ImVec2& uv0 = ImVec2(0, 0),
 		const ImVec2& uv1 = ImVec2(1, 1),
 		const ImVec4& tint_col = ImVec4(1, 1, 1, 1),
 		const ImVec4& border_col = ImVec4(0, 0, 0, 0));
-    void image(
+        void image(
 		Sprite* sprite,
 		const ImVec2& size,
 		const ImVec4& tint_col = ImVec4(1, 1, 1, 1),
@@ -113,12 +141,14 @@ private:
 		std::function<void()> frame;
 	};
 
-    std::unordered_map<uint32_t, RenderPipline> _renderPiplines;
+        std::unordered_map<uint32_t, RenderPipline> _renderPiplines;
 
-    std::unordered_map<Ref*, int> usedCCRefIdMap;
+        std::unordered_map<Ref*, int> usedCCRefIdMap;
 	// cocos objects should be retained until next frame
-    Vector<Ref*> usedCCRef;
+        Vector<Ref*> usedCCRef;
 	std::unordered_map<std::string, std::vector<ImWchar>> glyphRanges;
+
+	float _contentZoomFactor = 1.0f;
 };
 
 NS_CC_EXT_END
