@@ -101,7 +101,9 @@ public:
 
 private:
 	// perform draw ImGui stubs
+	void beginFrame();
 	void update();
+	void endFrame();
 
 private:
 	static std::function<void(ImGuiEXT*)> _onInit;
