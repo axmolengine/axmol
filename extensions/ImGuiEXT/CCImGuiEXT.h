@@ -41,7 +41,7 @@ public:
         float getContentZoomFactor() const { return _contentZoomFactor; }
 
 	/// <summary>
-	/// Add ImGui font
+	/// Add ImGui font with contentZoomFactor
 	/// </summary>
 	/// <param name="fontFile"></param>
 	/// <param name="glyphRange"></param>
