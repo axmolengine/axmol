@@ -10,15 +10,15 @@ static uint32_t fourccValue(const std::string& str) {
 	return value;
 }
 
+// TODO: Rename to ImGuiEXTLayerBlock
+// Because it's only used for block event when ImGui::IsAnyWindowHovered() == 'true'
 class ImGuiEXTRenderer : public Layer
 {
 CC_CONSTRUCTOR_ACCESS:
-    bool initWithImGuiEXT(ImGuiEXT* guiext)
+    bool initWithImGuiEXT()
 	{
 		if (!Layer::init())
 			return false;
-
-		_imguiext = guiext; // weak ref the singleton instance
 
 #ifdef CC_PLATFORM_PC
 		// note: when at the first click to focus the window, this will not take effect
@@ -55,64 +55,12 @@ CC_CONSTRUCTOR_ACCESS:
 		*    And need modify engine code to call _scheduler->update(_deltaTime) even director is paused, pass 0 for update
 		* c. Director::EVENT_BEFORE_DRAW call beginFrame, EVENT_AFTER_VISIT call endFrame
 		*/
-		/*
-		* !!!All of methods, we should calculate delta at imgui_impl_cocos2dx manually
-		*/
-		_eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom*) { beginFrame(); });
-		_eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [=](EventCustom*) { endFrame(); });
-
 		return true;
 	}
 
 	~ImGuiEXTRenderer() 
 	{
-		_eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
-		_eventDispatcher->removeCustomEventListeners(Director::EVENT_BEFORE_DRAW);
 	}
-
-protected:
-
-	/*void onEnter() override
-	{
-		Layer::onEnter();
-		scheduleUpdate();
-	}
-
-	void update(float dt) {
-
-	}*/
-
-	/*virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags) override
-	{
-		Layer::draw(renderer, parentTransform, parentFlags);
-
-		endFrame();
-	}*/
-
-	/*
-	* begin ImGui frame and draw ImGui stubs 
-	*/
-	void beginFrame()
-	{
-		// create frame
-		ImGui_ImplCocos2dx_NewFrame();
-
-		// draw all gui
-		_imguiext->update();
-
-		// render
-		ImGui::Render();
-	}
-
-	/* 
-	* flush ImGui draw data to engine
-	*/
-	void endFrame() {
-		ImGui_ImplCocos2dx_RenderDrawData(ImGui::GetDrawData());
-		ImGui_ImplCocos2dx_RenderPlatform();
-	}
-
-	ImGuiEXT* _imguiext = nullptr;
 };
 
 static ImGuiEXT* _instance = nullptr;
@@ -121,6 +69,10 @@ std::function<void(ImGuiEXT*)> ImGuiEXT::_onInit;
 void ImGuiEXT::init()
 {
 	ImGui_ImplCocos2dx_Init(true);
+
+	auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+	eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom*) { beginFrame(); });
+	eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [=](EventCustom*) { endFrame(); });
 }
 
 ImGuiEXT* ImGuiEXT::getInstance()
@@ -139,6 +91,10 @@ void ImGuiEXT::destroyInstance()
 {
 	if (_instance)
 	{
+		auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+		eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
+		eventDispatcher->removeCustomEventListeners(Director::EVENT_BEFORE_DRAW);
+
 		ImGui_ImplCocos2dx_Shutdown();
 		delete _instance;
 		_instance = nullptr;
@@ -148,6 +104,29 @@ void ImGuiEXT::destroyInstance()
 void ImGuiEXT::setOnInit(const std::function<void(ImGuiEXT*)>& callBack)
 {
 	_onInit = callBack;
+}
+
+/*
+	* begin ImGui frame and draw ImGui stubs
+	*/
+void ImGuiEXT::beginFrame()
+{
+	// create frame
+	ImGui_ImplCocos2dx_NewFrame();
+
+	// draw all gui
+	this->update();
+
+	// render
+	ImGui::Render();
+}
+
+/*
+* flush ImGui draw data to engine
+*/
+void ImGuiEXT::endFrame() {
+	ImGui_ImplCocos2dx_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplCocos2dx_RenderPlatform();
 }
 
 void ImGuiEXT::update()
@@ -172,7 +151,7 @@ bool ImGuiEXT::addRenderLoop(const std::string& id, Scene* scene, std::function<
 		return false;
 	}
 
-	auto renderer = utils::newInstance<ImGuiEXTRenderer>(&ImGuiEXTRenderer::initWithImGuiEXT, this);
+	auto renderer = utils::newInstance<ImGuiEXTRenderer>(&ImGuiEXTRenderer::initWithImGuiEXT);
 	scene->addChild(renderer, INT_MAX, fourccId);
 	_renderPiplines.emplace(fourccId, RenderPipline{ renderer, std::move(onFrame) });
 
