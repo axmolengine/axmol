@@ -16,9 +16,36 @@ class ImGuiEXT
 	friend class ImGuiEXTRenderer;
 	void init();
 public:
+
+	enum class CHS_GLYPH_RANGE {
+		NONE,
+		GENERAL,
+		FULL
+	};
+
+	enum {
+		DEFAULT_FONT_SIZE = 13 // see imgui.cpp
+	};
+
 	static ImGuiEXT* getInstance();
 	static void destroyInstance();
 	static void setOnInit(const std::function<void(ImGuiEXT*)>& callBack);
+
+	/// <summary>
+	/// Scale ImGui with majorMoniter DPI scaling
+	/// </summary>
+	/// <param name="userScale">Usually is 1.0</param>
+	/// <param name="fontFile">The full path of .ttc/.ttf file</param>
+	/// <returns>finalScale = userScale * dpiScale</returns>
+	float scaleAllByDPI(float userScale);
+
+	/// <summary>
+	/// Add ImGui font
+	/// </summary>
+	/// <param name="fontFile"></param>
+	/// <param name="glyphRange"></param>
+	void addFont(const std::string& fontFile, float fontSize = DEFAULT_FONT_SIZE, CHS_GLYPH_RANGE glyphRange = CHS_GLYPH_RANGE::NONE);
+	void clearFonts();
 
 	/// <summary>
 	/// Add a ImGui render loop to specific scene
@@ -119,6 +146,8 @@ private:
 	// cocos objects should be retained until next frame
     Vector<Ref*> usedCCRef;
 	std::unordered_map<std::string, std::vector<ImWchar>> glyphRanges;
+
+	float _contentZoomFactor = 1.0f;
 };
 
 NS_CC_EXT_END

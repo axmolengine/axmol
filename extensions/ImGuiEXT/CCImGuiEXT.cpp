@@ -70,6 +70,8 @@ void ImGuiEXT::init()
 {
 	ImGui_ImplCocos2dx_Init(true);
 
+	ImGui::StyleColorsClassic();
+
 	auto eventDispatcher = Director::getInstance()->getEventDispatcher();
 	eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom*) { beginFrame(); });
 	eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [=](EventCustom*) { endFrame(); });
@@ -104,6 +106,56 @@ void ImGuiEXT::destroyInstance()
 void ImGuiEXT::setOnInit(const std::function<void(ImGuiEXT*)>& callBack)
 {
 	_onInit = callBack;
+}
+
+float ImGuiEXT::scaleAllByDPI(float userScale)
+{
+	// Gets scale
+	float xscale = 1.0f;
+	glfwGetMonitorContentScale(glfwGetPrimaryMonitor(), &xscale, nullptr);
+	auto zoomFactor = userScale * xscale;
+
+	auto imFonts = ImGui::GetIO().Fonts;
+
+	// clear before add new font
+	auto fontConf = imFonts->ConfigData; // copy font config data
+
+	if (zoomFactor != _contentZoomFactor) {
+		for (auto& fontConf : imFonts->ConfigData)
+		{
+			fontConf.SizePixels = (fontConf.SizePixels / _contentZoomFactor) * zoomFactor;
+		}
+
+		// Destory font informations, let implcocos2dx recreate at newFrame
+		ImGui_ImplCocos2dx_DestroyDeviceObjects();
+
+		ImGui::GetStyle().ScaleAllSizes(zoomFactor);
+
+		_contentZoomFactor = zoomFactor;
+	}
+
+	return zoomFactor;
+}
+
+void ImGuiEXT::addFont(const std::string& fontFile, float fontSize, CHS_GLYPH_RANGE glyphRange)
+{
+	auto imFonts = ImGui::GetIO().Fonts;
+	const ImWchar* imChars = nullptr;
+	switch (glyphRange) {
+	case CHS_GLYPH_RANGE::GENERAL:
+		imChars = imFonts->GetGlyphRangesChineseSimplifiedCommon();
+		break;
+	case CHS_GLYPH_RANGE::FULL:
+		imChars = imFonts->GetGlyphRangesChineseFull();
+		break;
+	}
+
+	imFonts->AddFontFromFileTTF(fontFile.c_str(), fontSize * _contentZoomFactor, nullptr, imChars);
+}
+
+void ImGuiEXT::clearFonts()
+{
+	ImGui::GetIO().Fonts->Clear();
 }
 
 /*
