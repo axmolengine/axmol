@@ -35,3 +35,11 @@ public:
 }
 
 ```
+More about use imgui widgets, please see: https://github.com/ocornut/imgui
+
+## Tested devices
+* win32
+* macOS
+
+## Known issues
+* Can't enable muti-viewports on macOS, so we disable it for macOS
