@@ -2,11 +2,13 @@
 Sync from https://github.com/Xrysnow/cocos2d-x-imgui and do a little changes
 
 ## Improvements
-* Simple API, use add/remove renderLoop present ImGui GUI widgets
+* Simplify API, use add/remove renderLoop present ImGui GUI widgets
 * Optimize call pipeline flow, support add/remove Node to Scene at ImGui render loop without container iterator damage
 * Calculate deltaTime at ```ImGui_ImplCocos2dx_NewFrame``` to avoid error when ```cc.Director``` paused
 * Refine ```Init/Shutdown```, Restore all callbacks for glfw to solve recreate ```ImGuiEXT``` instance support
-* Use FOURCC for key of ImGui render loop
+* Use ```FOURCC``` for key of ImGui render loop
+* Add dpi scale support, use ```ImGuiEXT::getInstance()->scaleAllByDPI(1.0);```
+* Easy font manager, stable API ```addFont,removeFont,clearFonts``` to manage ImGui fonts, with ImGui API, very hard to do correctly.
 
 ## How to use
 1. Enable by cmake option -DBUILD_EXTENSION_IMGUIEXT=ON
