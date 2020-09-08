@@ -2131,7 +2131,9 @@ int Node::getAttachedNodeCount()
 void Node::setProgramStateWithRegistry(backend::ProgramType programType, Texture2D* texture)
 {
     auto formatEXT = texture ? texture->getTextureFormatEXT() : 0;
-    setProgramState(backend::ProgramStateRegistry::getInstance()->getProgramState(programType, formatEXT));
+    auto programState = backend::ProgramStateRegistry::getInstance()->newProgramState(programType, formatEXT);
+    setProgramState(programState);
+    programState->release();
 }
 
 void Node::updateProgramStateTexture(Texture2D* texture)
