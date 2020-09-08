@@ -5,7 +5,7 @@ NS_FGUI_BEGIN
 USING_NS_CC;
 using namespace std;
 
-static std::unordered_map<uint64_t, GObject*> _weakPointers;
+std::unordered_map<uint64_t, GObject*> _weakPointers;
 
 WeakPtr::WeakPtr() :_id(0)
 {
@@ -90,7 +90,7 @@ bool WeakPtr::operator==(const GObject * v)
 
 GObject * WeakPtr::ptr() const
 {
-    if (_id == 0)
+    if (_id == 0 || _weakPointers.empty())
         return nullptr;
 
     auto it = _weakPointers.find(_id);
@@ -121,6 +121,9 @@ uint64_t WeakPtr::add(GObject * obj)
 
 GObject* WeakPtr::remove(uint64_t id)
 {
+    if (_weakPointers.empty())
+        return nullptr;
+
     auto it = _weakPointers.find(id);
     if (it != _weakPointers.end())
     {
@@ -136,6 +139,9 @@ GObject* WeakPtr::remove(uint64_t id)
 
 void WeakPtr::markDisposed(GObject * obj)
 {
+    if (_weakPointers.empty())
+        return;
+
     auto it = _weakPointers.find(obj->_uid);
     if (it != _weakPointers.end())
         _weakPointers.erase(it);

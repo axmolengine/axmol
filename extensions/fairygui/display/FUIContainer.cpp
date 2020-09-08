@@ -285,14 +285,6 @@ void FUIContainer::setCameraMask(unsigned short mask, bool applyChildren)
         _stencilClippingSupport->_stencil->setCameraMask(mask, applyChildren);
 }
 
-void FUIContainer::setContentSize(const Size & contentSize)
-{
-    Node::setContentSize(contentSize);
-
-    if (_rectClippingSupport)
-        _rectClippingSupport->_clippingRectDirty = true;
-}
-
 #if COCOS2D_VERSION >= 0x00040000
 void FUIContainer::setProgramStateRecursively(Node* node, backend::ProgramState* programState)
 {
@@ -478,7 +470,7 @@ void FUIContainer::visit(cocos2d::Renderer * renderer, const cocos2d::Mat4 & par
     }
     else if (_rectClippingSupport != nullptr && _rectClippingSupport->_clippingEnabled)
     {
-        if (parentFlags & FLAGS_DIRTY_MASK)
+        if (_transformUpdated || _contentSizeDirty || (parentFlags & FLAGS_DIRTY_MASK))
         {
             _rectClippingSupport->_clippingRectDirty = true;
         }
