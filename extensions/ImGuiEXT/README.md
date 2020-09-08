@@ -20,7 +20,7 @@ class GameScene : public Scene {
 public:
     void onEnter() override
     {
-        ImGuiEXT::getInstance()->addRenderLoop("#im01", this, CC_CALLBACK_0(GameScene::onImGuiDraw, this));
+        ImGuiEXT::getInstance()->addRenderLoop("#im01", CC_CALLBACK_0(GameScene::onImGuiDraw, this), this);
     }
     void onExit() override
     {
