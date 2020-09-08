@@ -573,8 +573,7 @@ void ImGuiEXT::mergeFontGlyphs(ImFont* dst, ImFont* src, ImWchar start, ImWchar 
         const auto g = src->FindGlyphNoFallback(i);
         if (g)
         {
-            // TODO
-            // dst->AddGlyph(g->Codepoint, g->X0, g->Y0, g->X1, g->Y1, g->U0, g->V0, g->U1, g->V1, g->AdvanceX);
+            dst->AddGlyph(nullptr, g->Codepoint, g->X0, g->Y0, g->X1, g->Y1, g->U0, g->V0, g->U1, g->V1, g->AdvanceX);
         }
     }
     dst->BuildLookupTable();
