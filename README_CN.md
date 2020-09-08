@@ -32,7 +32,7 @@
 * 新增FairyGUI支持
 * 新增硬件压缩纹理格式ASTC 4x4/6x6/8x8支持，支持软解
 * 新增硬件压缩纹理格式ETC2 RGB/RGBA支持，支持软解
-* **ImGui集成，非常方便些游戏内嵌小工具，用法详见[ImGuiEXT](extensions/ImGuiEXT/README.md)**
+* **ImGui集成，非常方便写游戏内嵌小工具，用法详见[ImGuiEXT](extensions/ImGuiEXT/README.md)**
   
 ### [Roadmap](https://github.com/c4games/engine-x/issues/1)
   
