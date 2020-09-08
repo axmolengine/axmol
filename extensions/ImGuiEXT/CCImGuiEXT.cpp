@@ -234,9 +234,8 @@ void ImGuiEXT::addFont(const std::string& fontFile, float fontSize, CHS_GLYPH_RA
 {
     if (FileUtils::getInstance()->isFileExistInternal(fontFile)) {
         _fontsInfoMap.emplace(fontFile, FontInfo{ fontSize, glyphRange });
+        ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
     }
-
-    ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
 }
 
 void ImGuiEXT::removeFont(const std::string& fontFile)
@@ -249,8 +248,10 @@ void ImGuiEXT::removeFont(const std::string& fontFile)
 
 void ImGuiEXT::clearFonts()
 {
+    bool haveCustomFonts = !_fontsInfoMap.empty();
     _fontsInfoMap.clear();
-    ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
+    if(haveCustomFonts)
+        ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
 
     // auto drawData = ImGui::GetDrawData();
     // if(drawData) drawData->Clear();
