@@ -44,6 +44,9 @@ public:
     RootTests()
     {
 //        addTest("Node: Scene3D", [](){return new (std::nothrow) Scene3DTests(); });
+#if defined(CC_PLATFORM_PC)
+        addTest("ImGuiEXT", []() {return new ImGuiEXTTests(); });
+#endif
         addTest("Texture2D", []() {return new Texture2DTests(); });
         addTest("ActionManager", [](){return new (std::nothrow) ActionManagerTests(); });
         addTest("Actions - Basic", [](){ return new (std::nothrow) ActionsTests(); });

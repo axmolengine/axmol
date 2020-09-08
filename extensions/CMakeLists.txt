@@ -15,7 +15,11 @@ option(BUILD_EXTENSION_COCOSTUDIO "Build extension cocostudio" ON)
 
 option(BUILD_EXTENSION_FAIRYGUI "Build extension FairyGUI" ON)
 
-option(BUILD_EXTENSION_IMGUIEXT "Build extension ImGuiEXT" OFF)
+if(WINDOWS OR MACOSX)
+  option(BUILD_EXTENSION_IMGUIEXT "Build extension ImGuiEXT" ON)
+else()
+  set(BUILD_EXTENSION_IMGUIEXT OFF)
+endif()
 
 function(setup_cocos_extension_config target_name)
   if(ANDROID)

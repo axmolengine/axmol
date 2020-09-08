@@ -1,5 +1,7 @@
 #include "CCImGuiEXT.h"
+#include <assert.h>
 #include "imgui_impl_cocos2dx.h"
+#include "imgui_internal.h"
 
 NS_CC_EXT_BEGIN
 
@@ -125,17 +127,6 @@ public:
 static ImGuiEXT* _instance = nullptr;
 std::function<void(ImGuiEXT*)> ImGuiEXT::_onInit;
 
-void ImGuiEXT::init()
-{
-    ImGui_ImplCocos2dx_Init(true);
-
-    ImGui::StyleColorsClassic();
-
-    auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-    eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom*) { beginFrame(); });
-    eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [=](EventCustom*) { endFrame(); });
-}
-
 ImGuiEXT* ImGuiEXT::getInstance()
 {
     if (_instance == nullptr)
@@ -152,19 +143,62 @@ void ImGuiEXT::destroyInstance()
 {
     if (_instance)
     {
-        auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-        eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
-        eventDispatcher->removeCustomEventListeners(Director::EVENT_BEFORE_DRAW);
-
-        ImGui_ImplCocos2dx_Shutdown();
+        _instance->cleanup();
         delete _instance;
         _instance = nullptr;
     }
 }
 
+void ImGuiEXT::init()
+{
+    ImGui_ImplCocos2dx_Init(true);
+    ImGui_ImplCocos2dx_SetCustomFontLoader(&ImGuiEXT::loadCustomFonts, this);
+
+    ImGui::StyleColorsClassic();
+
+    auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+    eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom*) { beginFrame(); });
+    eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [=](EventCustom*) { endFrame(); });
+}
+
+void ImGuiEXT::cleanup()
+{
+    auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+    eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
+    eventDispatcher->removeCustomEventListeners(Director::EVENT_BEFORE_DRAW);
+
+    ImGui_ImplCocos2dx_SetCustomFontLoader(nullptr, nullptr);
+    ImGui_ImplCocos2dx_Shutdown();
+
+    CC_SAFE_RELEASE_NULL(_fontsTexture);
+}
+
 void ImGuiEXT::setOnInit(const std::function<void(ImGuiEXT*)>& callBack)
 {
     _onInit = callBack;
+}
+
+void ImGuiEXT::loadCustomFonts(void* ud)
+{
+    auto thiz = (ImGuiEXT*)ud;
+
+    auto imFonts = ImGui::GetIO().Fonts;
+    imFonts->Clear();
+
+    auto contentZoomFactor = thiz->_contentZoomFactor;
+    for (auto& fontInfo : thiz->_fontsInfoMap) {
+        const ImWchar* imChars = nullptr;
+        switch (fontInfo.second.glyphRange) {
+        case CHS_GLYPH_RANGE::GENERAL:
+            imChars = imFonts->GetGlyphRangesChineseSimplifiedCommon();
+            break;
+        case CHS_GLYPH_RANGE::FULL:
+            imChars = imFonts->GetGlyphRangesChineseFull();
+            break;
+        }
+
+        imFonts->AddFontFromFileTTF(fontInfo.first.c_str(), fontInfo.second.fontSize * contentZoomFactor, nullptr, imChars);
+    }
 }
 
 float ImGuiEXT::scaleAllByDPI(float userScale)
@@ -186,7 +220,7 @@ float ImGuiEXT::scaleAllByDPI(float userScale)
         }
 
         // Destory font informations, let implcocos2dx recreate at newFrame
-        ImGui_ImplCocos2dx_DestroyDeviceObjects();
+        ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
 
         ImGui::GetStyle().ScaleAllSizes(zoomFactor);
 
@@ -198,23 +232,28 @@ float ImGuiEXT::scaleAllByDPI(float userScale)
 
 void ImGuiEXT::addFont(const std::string& fontFile, float fontSize, CHS_GLYPH_RANGE glyphRange)
 {
-    auto imFonts = ImGui::GetIO().Fonts;
-    const ImWchar* imChars = nullptr;
-    switch (glyphRange) {
-    case CHS_GLYPH_RANGE::GENERAL:
-        imChars = imFonts->GetGlyphRangesChineseSimplifiedCommon();
-        break;
-    case CHS_GLYPH_RANGE::FULL:
-        imChars = imFonts->GetGlyphRangesChineseFull();
-        break;
+    if (FileUtils::getInstance()->isFileExistInternal(fontFile)) {
+        _fontsInfoMap.emplace(fontFile, FontInfo{ fontSize, glyphRange });
     }
 
-    imFonts->AddFontFromFileTTF(fontFile.c_str(), fontSize * _contentZoomFactor, nullptr, imChars);
+    ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
+}
+
+void ImGuiEXT::removeFont(const std::string& fontFile)
+{
+    auto count = _fontsInfoMap.size();
+    _fontsInfoMap.erase(fontFile);
+    if(count != _fontsInfoMap.size())
+        ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
 }
 
 void ImGuiEXT::clearFonts()
 {
-    ImGui::GetIO().Fonts->Clear();
+    _fontsInfoMap.clear();
+    ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
+
+    // auto drawData = ImGui::GetDrawData();
+    // if(drawData) drawData->Clear();
 }
 
 /*
@@ -222,22 +261,39 @@ void ImGuiEXT::clearFonts()
     */
 void ImGuiEXT::beginFrame()
 {
-    // create frame
-    ImGui_ImplCocos2dx_NewFrame();
+    if (!_renderPiplines.empty()) {
+        // create frame
+        ImGui_ImplCocos2dx_NewFrame();
 
-    // draw all gui
-    this->update();
+        // move to endFrame?
+        _fontsTexture = (Texture2D*)ImGui_ImplCocos2dx_GetFontsTexture();
+        assert(_fontsTexture != nullptr);
+        _fontsTexture->retain();
 
-    // render
-    ImGui::Render();
+        // draw all gui
+        this->update();
+
+        ++_beginFrames;
+    }
 }
 
 /*
 * flush ImGui draw data to engine
 */
 void ImGuiEXT::endFrame() {
-    ImGui_ImplCocos2dx_RenderDrawData(ImGui::GetDrawData());
-    ImGui_ImplCocos2dx_RenderPlatform();
+    if (_beginFrames > 0) {
+        // render
+        ImGui::Render();
+
+        auto drawData = ImGui::GetDrawData();
+        if (drawData)
+            ImGui_ImplCocos2dx_RenderDrawData(drawData);
+
+        ImGui_ImplCocos2dx_RenderPlatform();
+        --_beginFrames;
+
+        CC_SAFE_RELEASE_NULL(_fontsTexture);
+    }
 }
 
 void ImGuiEXT::update()
@@ -283,6 +339,23 @@ void ImGuiEXT::removeRenderLoop(const std::string& id)
         auto tracker = iter->second.tracker;
         delete tracker;
         _renderPiplines.erase(iter);
+    }
+
+    if (_renderPiplines.empty())
+        deactiveImGuiViewports();
+}
+
+void ImGuiEXT::deactiveImGuiViewports() {
+    ImGuiContext& g = *GImGui;
+    if (!(g.ConfigFlagsCurrFrame & ImGuiConfigFlags_ViewportsEnable))
+        return;
+
+    // Create/resize/destroy platform windows to match each active viewport.
+    // Skip the main viewport (index 0), which is always fully handled by the application!
+    for (int i = 1; i < g.Viewports.Size; i++)
+    {
+        ImGuiViewportP* viewport = g.Viewports[i];
+        viewport->Window->Active = false;
     }
 }
 
