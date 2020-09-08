@@ -43,7 +43,7 @@ void ProgramStateRegistry::clearPrograms() {
     this->_registry.clear();
 }
 
-ProgramState* ProgramStateRegistry::getProgramState(ProgramType programType, int textureFormatEXT)
+ProgramState* ProgramStateRegistry::newProgramState(ProgramType programType, int textureFormatEXT)
 {
     uint32_t key = (static_cast<uint32_t>(programType) << 16) | textureFormatEXT;
     auto it = this->_registry.find(key);

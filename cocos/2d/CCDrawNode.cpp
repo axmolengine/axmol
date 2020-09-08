@@ -150,7 +150,7 @@ bool DrawNode::init()
 void DrawNode::updateShader()
 {
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE);
-    setProgramState(new (std::nothrow) backend::ProgramState(program));
+    attachProgramState(new (std::nothrow) backend::ProgramState(program));
     _customCommand.getPipelineDescriptor().programState = _programState;
     setVertexLayout(_customCommand);
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);

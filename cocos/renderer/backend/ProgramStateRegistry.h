@@ -41,7 +41,7 @@ public:
 
     void registerProgram(ProgramType programType, int textureFormatEXT, Program*);
 
-    ProgramState* getProgramState(ProgramType programType, int textureFormatEXT);
+    ProgramState* newProgramState(ProgramType programType, int textureFormatEXT);
     ProgramType getProgramType(ProgramType programType, int textureFormatEXT);
 
 protected:
