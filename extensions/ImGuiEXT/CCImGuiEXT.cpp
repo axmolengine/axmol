@@ -233,8 +233,8 @@ float ImGuiEXT::scaleAllByDPI(float userScale)
 void ImGuiEXT::addFont(const std::string& fontFile, float fontSize, CHS_GLYPH_RANGE glyphRange)
 {
     if (FileUtils::getInstance()->isFileExistInternal(fontFile)) {
-        _fontsInfoMap.emplace(fontFile, FontInfo{ fontSize, glyphRange });
-        ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
+        if(_fontsInfoMap.emplace(fontFile, FontInfo{ fontSize, glyphRange }).second)
+            ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
     }
 }
 
@@ -258,10 +258,10 @@ void ImGuiEXT::clearFonts()
 }
 
 /*
-    * begin ImGui frame and draw ImGui stubs
-    */
+* begin ImGui frame and draw ImGui stubs
+*/
 void ImGuiEXT::beginFrame()
-{
+{ // drived by event Director::EVENT_BEFORE_DRAW from engine mainLoop
     if (!_renderPiplines.empty()) {
         // create frame
         ImGui_ImplCocos2dx_NewFrame();
@@ -298,7 +298,7 @@ void ImGuiEXT::endFrame() {
 }
 
 void ImGuiEXT::update()
-{ // drived by ImGuiEXTRenderer
+{
 
     // clear things from last frame
     usedCCRefIdMap.clear();
@@ -365,7 +365,7 @@ static std::tuple<ImVec2, ImVec2> getTextureUV(Sprite* sp)
     ImVec2 uv0, uv1;
     if (!sp || !sp->getTexture())
         return { uv0,uv1 };
-    const auto rect = sp->getTextureRect();
+    const auto& rect = sp->getTextureRect();
     const auto tex = sp->getTexture();
     const float atlasWidth = (float)tex->getPixelsWide();
     const float atlasHeight = (float)tex->getPixelsHigh();
@@ -394,7 +394,7 @@ void ImGuiEXT::image(Sprite* sprite, const ImVec2& size, const ImVec4& tint_col,
     if (!sprite || !sprite->getTexture())
         return;
     auto size_ = size;
-    const auto rect = sprite->getTextureRect();
+    const auto& rect = sprite->getTextureRect();
     if (size_.x <= 0.f) size_.x = rect.size.width;
     if (size_.y <= 0.f) size_.y = rect.size.height;
     ImVec2 uv0, uv1;
@@ -425,7 +425,7 @@ bool ImGuiEXT::imageButton(Sprite* sprite, const ImVec2& size, int frame_padding
     if (!sprite || !sprite->getTexture())
         return false;
     auto size_ = size;
-    const auto rect = sprite->getTextureRect();
+    const auto& rect = sprite->getTextureRect();
     if (size_.x <= 0.f) size_.x = rect.size.width;
     if (size_.y <= 0.f) size_.y = rect.size.height;
     ImVec2 uv0, uv1;
