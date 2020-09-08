@@ -11,8 +11,6 @@ Sync from https://github.com/Xrysnow/cocos2d-x-imgui and do a little changes
 * Easy font manager, stable API ```addFont,removeFont,clearFonts``` to manage ImGui fonts, with ImGui API, very hard to do correctly.
 
 ## How to use
-1. Enable by cmake option -DBUILD_EXTENSION_IMGUIEXT=ON
-2. 
 ```cpp
 #include "ImGuiEXT/CCImGuiEXT.h"
 USING_NS_CC;
@@ -22,10 +20,12 @@ class GameScene : public Scene {
 public:
     void onEnter() override
     {
+        Scene::onEnter();
         ImGuiEXT::getInstance()->addRenderLoop("#im01", CC_CALLBACK_0(GameScene::onImGuiDraw, this), this);
     }
     void onExit() override
     {
+        Scene::onExit();
         ImGuiEXT::getInstance()->removeRenderLoop("#im01");
     }
     void onImGuiDraw()
