@@ -65,7 +65,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview = GLViewImpl::create("Cpp Tests");   
+        glview = GLViewImpl::createWithRect("Cpp Tests", Rect(0, 0, 1280, 720));   
         director->setOpenGLView(glview);
     }
     
@@ -80,7 +80,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     
     if (screenSize.height > 320)
     {
-        auto resourceSize = Size(960, 640);
+        auto resourceSize = Size(1280, 720);
         searchPaths.push_back("hd");
         searchPaths.push_back("ccs-res/hd");
         searchPaths.push_back("ccs-res");

@@ -51,11 +51,15 @@ static GLFWcharfun          g_PrevUserCallbackChar = nullptr;
 
 static GLFWmonitorfun       g_PrevUserCallbackMonitor = nullptr;
 
+static ImGuiImplCocos2dxLoadFontFun g_loadCustomFont = nullptr;
+static void* g_loadCustomFontUserData = nullptr;
 
 // Forward Declarations
 static void ImGui_ImplGlfw_InitPlatformInterface();
 static void ImGui_ImplGlfw_ShutdownPlatformInterface();
 static void ImGui_ImplGlfw_UpdateMonitors();
+
+static bool ImGui_ImplCocos2dx_createShaderPrograms();
 
 #endif // CC_PLATFORM_PC
 
@@ -78,6 +82,7 @@ struct ProgramInfo
 };
 static ProgramInfo g_ProgramInfo;
 static ProgramInfo g_ProgramFontInfo;
+static bool g_fontDeviceObjectsDirty = false;
 static Texture2D* g_FontTexture = nullptr;
 static Mat4 g_Projection;
 constexpr IndexFormat g_IndexFormat = sizeof(ImDrawIdx) == 2 ? IndexFormat::U_SHORT : IndexFormat::U_INT;
@@ -367,39 +372,42 @@ void ImGui_ImplGlfw_MonitorCallback(GLFWmonitor*, int)
 
 #endif
 
-bool ImGui_ImplCocos2dx_CreateFontsTexture()
+void ImGui_ImplCocos2dx_SetCustomFontLoader(ImGuiImplCocos2dxLoadFontFun fun, void* userdata)
 {
-    // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height;
-	// Load as RGBA 32-bits (75% of the memory is wasted, but default font is so small)
-	// because it is more likely to be compatible with user's existing shaders.
-	// If your ImTextureId represent a higher-level concept than just a GL texture id,
-	// consider calling GetTexDataAsAlpha8() instead to save on GPU memory.
-	io.Fonts->GetTexDataAsAlpha8(&pixels, &width, &height);
-
-	CC_SAFE_RELEASE(g_FontTexture);
-	g_FontTexture = new Texture2D();
-
-	g_FontTexture->setAntiAliasTexParameters();
-	g_FontTexture->initWithData(pixels, width*height,
-		backend::PixelFormat::A8, width, height, Size(width, height));
-	io.Fonts->TexID = (ImTextureID)g_FontTexture;
-    return true;
+	g_loadCustomFont = fun;
+	g_loadCustomFontUserData = userdata;
 }
 
-void ImGui_ImplCocos2dx_DestroyFontsTexture()
+void* ImGui_ImplCocos2dx_GetFontsTexture()
 {
-	if (g_FontTexture)
-	{
-		ImGui::GetIO().Fonts->TexID = nullptr;
-		CC_SAFE_DELETE(g_FontTexture);
-	}
+	return g_FontTexture;
+}
+
+void ImGui_ImplCocos2dx_SetDeviceObjectsDirty()
+{
+	g_fontDeviceObjectsDirty = true;
 }
 
 bool ImGui_ImplCocos2dx_CreateDeviceObjects()
 {
+	if (g_loadCustomFont)
+		g_loadCustomFont(g_loadCustomFontUserData);
+
+	ImGui_ImplCocos2dx_createShaderPrograms();
+    ImGui_ImplCocos2dx_CreateFontsTexture();
+
+	g_fontDeviceObjectsDirty = false;
+    return true;
+}
+
+void ImGui_ImplCocos2dx_DestroyDeviceObjects()
+{
+	CC_SAFE_RELEASE_NULL(g_ProgramInfo.program);
+	CC_SAFE_RELEASE_NULL(g_ProgramFontInfo.program);
+    ImGui_ImplCocos2dx_DestroyFontsTexture();
+}
+
+static bool ImGui_ImplCocos2dx_createShaderPrograms() {
 	static auto vertex_shader =
 		"uniform mat4 u_MVPMatrix;\n"
 		"attribute vec2 a_position;\n"
@@ -470,15 +478,38 @@ bool ImGui_ImplCocos2dx_CreateDeviceObjects()
 		layout.setLayout(sizeof(ImDrawVert));
 	}
 
-    ImGui_ImplCocos2dx_CreateFontsTexture();
-    return true;
+	return true;
 }
 
-void ImGui_ImplCocos2dx_DestroyDeviceObjects()
+bool ImGui_ImplCocos2dx_CreateFontsTexture()
 {
-	CC_SAFE_RELEASE_NULL(g_ProgramInfo.program);
-	CC_SAFE_RELEASE_NULL(g_ProgramFontInfo.program);
-    ImGui_ImplCocos2dx_DestroyFontsTexture();
+	// Build texture atlas
+	ImGuiIO& io = ImGui::GetIO();
+	unsigned char* pixels;
+	int width, height;
+	// Load as RGBA 32-bits (75% of the memory is wasted, but default font is so small)
+	// because it is more likely to be compatible with user's existing shaders.
+	// If your ImTextureId represent a higher-level concept than just a GL texture id,
+	// consider calling GetTexDataAsAlpha8() instead to save on GPU memory.
+	io.Fonts->GetTexDataAsAlpha8(&pixels, &width, &height);
+
+	CC_SAFE_RELEASE(g_FontTexture);
+	g_FontTexture = new Texture2D();
+
+	g_FontTexture->setAntiAliasTexParameters();
+	g_FontTexture->initWithData(pixels, width * height,
+		backend::PixelFormat::A8, width, height, Size(width, height));
+	io.Fonts->TexID = (ImTextureID)g_FontTexture;
+	return true;
+}
+
+void ImGui_ImplCocos2dx_DestroyFontsTexture()
+{
+	if (g_FontTexture)
+	{
+		ImGui::GetIO().Fonts->TexID = nullptr;
+		CC_SAFE_RELEASE_NULL(g_FontTexture);
+	}
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -962,6 +993,11 @@ void ImGui_ImplCocos2dx_NewFrame()
 
     if (!g_FontTexture)
         ImGui_ImplCocos2dx_CreateDeviceObjects();
+	else if(g_fontDeviceObjectsDirty)
+	{ // recreate device objects, fonts also should be device objects
+		ImGui_ImplCocos2dx_DestroyDeviceObjects();
+		ImGui_ImplCocos2dx_CreateDeviceObjects();
+	}
 
     ImGuiIO& io = ImGui::GetIO();
     IM_ASSERT(io.Fonts->IsBuilt() &&

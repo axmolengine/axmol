@@ -1,61 +1,37 @@
 language: cpp
-matrix:
+jobs:
   include:
     # mac_cmake
     - os: osx
       env: BUILD_TARGET=mac_cmake
-      language: cpp
       osx_image: xcode11.6
-      sudo: required
     # iOS_cmake
     - os: osx
       env: BUILD_TARGET=ios_cmake
-      language: cpp
       osx_image: xcode11.6
-      sudo: required
     # android cmake
     - os: linux
       env: BUILD_TARGET=android_cmake
       language: android
-      sudo: required
-      dist: xenial
     # android_lua cmake
     #- os: linux
     #  env: BUILD_TARGET=android_lua_cmake
-      language: android
-      sudo: required
-      dist: xenial
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
-    # android_js cmake
-    # - os: linux
-    #   env: BUILD_TARGET=android_js_cmake
-    #   language: android
-    #   sudo: required
+    #  addons:
+    #    apt:
+    #      sources:
+    #        - ubuntu-toolchain-r-test
+    #      packages:
+    #        - g++-6
     #- os: linux
     #  env: BUILD_TARGET=android_cocos_new_test
-    #  language: android
-    #  sudo: required
-    #  dist: xenial
     #- os: linux
-    #  dist: xenial
     #  env: BUILD_TARGET=linux_cocos_new_test
-    #  language: cpp
-    #  sudo: required
     #- os: osx
     #  env: BUILD_TARGET=ios_cocos_new_lua_test
-    #  language: cpp
     #  osx_image: xcode11
-    #  sudo: required
     #- os: osx
     #  env: BUILD_TARGET=ios_cocos_new_cpp_test
-    #  language: cpp
     #  osx_image: xcode11
-    #  sudo: required
 
 script:
 - tools/travis-scripts/run-script.sh

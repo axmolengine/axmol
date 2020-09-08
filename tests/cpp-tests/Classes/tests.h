@@ -119,4 +119,7 @@
 #include "ZwoptexTest/ZwoptexTest.h"
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "ZipTest/ZipTests.h"
+#if defined(CC_PLATFORM_PC)
+#include "ImGuiEXTTest/ImGuiEXTTest.h"
+#endif
 #endif
