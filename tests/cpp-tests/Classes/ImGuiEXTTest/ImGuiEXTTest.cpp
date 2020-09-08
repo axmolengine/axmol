@@ -38,7 +38,7 @@ void ImGuiEXTTest::onExit()
 void ImGuiEXTTest::onDrawImGui()
 {
     // 1. Show a simple window
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
+    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
     {
         static float f = 0.0f;
         ImGui::Text("Hello, world!");
