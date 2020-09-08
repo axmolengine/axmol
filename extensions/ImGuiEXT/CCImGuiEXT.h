@@ -1,10 +1,12 @@
 #pragma once
 
+#include <stdint.h>
+#include <tuple>
+
 #include "cocos2d.h"
 #include "ExtensionMacros.h"
 
 #include "imgui/imgui.h"
-#include <tuple>
 
 // #define HAVE_IMGUI_MARKDOWN 1
 
@@ -15,6 +17,7 @@ class ImGuiEXT
 {
     friend class ImGuiEXTRenderer;
     void init();
+    void cleanup();
 public:
 
     enum class CHS_GLYPH_RANGE {
@@ -46,6 +49,7 @@ public:
     /// <param name="fontFile"></param>
     /// <param name="glyphRange"></param>
     void addFont(const std::string& fontFile, float fontSize = DEFAULT_FONT_SIZE, CHS_GLYPH_RANGE glyphRange = CHS_GLYPH_RANGE::NONE);
+    void removeFont(const std::string& fontFile);
     void clearFonts();
 
     /// <summary>
@@ -128,10 +132,14 @@ public:
 #endif
 
 private:
+    static void loadCustomFonts(void*);
+
     // perform draw ImGui stubs
     void beginFrame();
     void update();
     void endFrame();
+
+    static void deactiveImGuiViewports();
 
 private:
     static std::function<void(ImGuiEXT*)> _onInit;
@@ -149,6 +157,17 @@ private:
     std::unordered_map<std::string, std::vector<ImWchar>> glyphRanges;
 
     float _contentZoomFactor = 1.0f;
+
+    int64_t _beginFrames = 0;
+
+    Texture2D* _fontsTexture = nullptr;
+
+    struct FontInfo {
+        float fontSize;
+        CHS_GLYPH_RANGE glyphRange;
+    };
+
+    std::unordered_map<std::string, FontInfo> _fontsInfoMap;
 };
 
 NS_CC_EXT_END
