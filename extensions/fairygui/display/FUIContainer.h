@@ -78,8 +78,6 @@ public:
     void visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTransform, uint32_t parentFlags) override;
     void setCameraMask(unsigned short mask, bool applyChildren = true) override;
 
-    virtual void setContentSize(const cocos2d::Size& contentSize) override;
-
     GObject* gOwner;
 private:
     void onBeforeVisitScissor();

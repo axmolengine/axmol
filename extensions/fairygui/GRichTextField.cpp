@@ -1,6 +1,7 @@
 #include "GRichTextField.h"
 #include "utils/UBBParser.h"
 #include "utils/ByteBuffer.h"
+#include "utils/html/HtmlObject.h"
 
 NS_FGUI_BEGIN
 USING_NS_CC;
@@ -94,6 +95,11 @@ void GRichTextField::updateSize()
     _updatingSize = false;
 }
 
+HtmlObject* GRichTextField::getControl(const std::string& name) const
+{
+    return _richText->getControl(name);
+}
+
 void GRichTextField::handleSizeChanged()
 {
     if (_updatingSize)
@@ -109,6 +115,19 @@ void GRichTextField::handleSizeChanged()
                 setSizeDirectly(_size.width, _richText->getContentSize().height);
         }
     }
+}
+
+GObject* GRichTextField::hitTest(const cocos2d::Vec2& worldPoint, const cocos2d::Camera* camera)
+{
+    const std::vector<HtmlObject*>& objs = _richText->getControls();
+    for (auto &obj : objs)
+    {
+        GObject* target = obj->getUI()->hitTest(worldPoint, camera);
+        if (target)
+            return target;
+    }
+
+    return GTextField::hitTest(worldPoint, camera);
 }
 
 NS_FGUI_END
