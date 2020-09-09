@@ -211,9 +211,6 @@ void MotionStreak::setTexture(Texture2D *texture)
         _texture = texture;
 
         setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, _texture);
-
-        if (_texture)
-            _programState->setTexture(_texture->getBackendTexture());
     }
 }
 
@@ -245,6 +242,8 @@ bool MotionStreak::attachProgramState(backend::ProgramState* programState)
             vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4, 4 * sizeof(float), true);
         }
         vertexLayout->setLayout(4 * sizeof(float) + 4 * sizeof(uint8_t));
+
+        updateProgramStateTexture(_texture);
         return true;
     }
     return false;
