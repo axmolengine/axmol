@@ -1228,22 +1228,6 @@ void Director::getFPSImageData(unsigned char** datapointer, ssize_t* length)
     *length = cc_fps_images_len();
 }
 
-template <typename T, typename F, typename... Ts>
-static T* newInstance2(std::function<bool(T*, Ts&&... args)> pFunc, Ts&&... args)
-{
-    T* pRet = new(std::nothrow) T();
-    if (pRet && std::mem_fn(memf)(pRet, std::forward<Ts>(args)...))
-    {
-        return pRet;
-    }
-    else
-    {
-        delete pRet;
-        pRet = nullptr;
-        return nullptr;
-    }
-}
-
 void Director::createStatsLabel()
 {
     Texture2D *texture = nullptr;
