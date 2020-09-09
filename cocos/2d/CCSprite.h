@@ -418,14 +418,9 @@ public:
     TextureAtlas* getTextureAtlas() const { return _textureAtlas; }
 
     /**
-    * Set ProgramState
+    * Attach new ProgramState
     */
-    virtual void setProgramState(backend::ProgramState *programState) override;
-
-    /**
-    * Get current ProgramState
-    */
-    virtual backend::ProgramState *getProgramState() const override;
+    bool attachProgramState(backend::ProgramState *programState) override;
 
     /**
      * Sets the weak reference of the TextureAtlas when the sprite is rendered using via SpriteBatchNode.
@@ -625,6 +620,7 @@ CC_CONSTRUCTOR_ACCESS :
     virtual void setVertexLayout();
     virtual void updateShaders(const char* vert, const char* frag);
 
+    using Node::setProgramState;
     void setProgramState(backend::ProgramType type);
 
 protected:
@@ -663,7 +659,6 @@ protected:
     TrianglesCommand _trianglesCommand;
     
     backend::UniformLocation _mvpMatrixLocation;
-    backend::UniformLocation _textureLocation;
 #if CC_SPRITE_DEBUG_DRAW
     DrawNode *_debugDrawNode = nullptr;
 #endif //CC_SPRITE_DEBUG_DRAW

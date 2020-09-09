@@ -376,9 +376,7 @@ void Sprite::setVertexLayout()
 void Sprite::updateShaders(const char* vert, const char* frag)
 {
     auto* program = backend::Device::getInstance()->newProgram(vert, frag);
-    auto programState = new (std::nothrow) backend::ProgramState(program);
-    setProgramState(programState);
-    CC_SAFE_RELEASE(programState);
+    attachProgramState(new (std::nothrow) backend::ProgramState(program));
     CC_SAFE_RELEASE(program);
 }
 
@@ -387,25 +385,25 @@ void Sprite::setProgramState(backend::ProgramType type)
     setProgramStateWithRegistry(type, _texture);
 }
 
-void Sprite::setProgramState(backend::ProgramState *programState)
+bool Sprite::attachProgramState(backend::ProgramState *programState)
 {
     CCASSERT(programState, "argument should not be nullptr");
-    auto& pipelineDescriptor = _trianglesCommand.getPipelineDescriptor();
-    Node::setProgramState(programState);
-    pipelineDescriptor.programState = _programState;
+    if (Node::attachProgramState(programState)) {
+        auto& pipelineDescriptor = _trianglesCommand.getPipelineDescriptor();
+        pipelineDescriptor.programState = _programState;
 
-    _mvpMatrixLocation = pipelineDescriptor.programState->getUniformLocation(backend::Uniform::MVP_MATRIX);
-    _textureLocation = pipelineDescriptor.programState->getUniformLocation(backend::Uniform::TEXTURE);
+        _mvpMatrixLocation = _programState->getUniformLocation(backend::Uniform::MVP_MATRIX);
 
-    setVertexLayout();
-    updateProgramStateTexture(_texture);
-    setMVPMatrixUniform();
+        setVertexLayout();
+        updateProgramStateTexture(_texture);
+        setMVPMatrixUniform();
+        return true;
+    }
+    return false;
 }
 
 void Sprite::setTexture(Texture2D *texture)
 {
-    setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, texture);
-
     CCASSERT(! _batchNode || (texture &&  texture == _batchNode->getTexture()), "CCSprite: Batched sprites should use the same texture as the batchnode");
     // accept texture==nil as argument
     CCASSERT( !texture || dynamic_cast<Texture2D*>(texture), "setTexture expects a Texture2D. Invalid argument");
@@ -437,7 +435,8 @@ void Sprite::setTexture(Texture2D *texture)
         }
         updateBlendFunc();
     }
-    updateProgramStateTexture(_texture);
+
+    setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
 }
 
 Texture2D* Sprite::getTexture() const
@@ -1727,11 +1726,6 @@ void Sprite::setMVPMatrixUniform()
     auto programState = _trianglesCommand.getPipelineDescriptor().programState;
     if (programState && _mvpMatrixLocation)
         programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
-}
-
-backend::ProgramState* Sprite::getProgramState() const
-{
-    return _programState;
 }
 
 NS_CC_END

@@ -212,9 +212,9 @@ public:
     virtual std::string getDescription() const override;
     
     /**
-    * Set ProgramState
+    * Attach new ProgramState
     */
-    virtual void setProgramState(backend::ProgramState *programState) override;
+    bool attachProgramState(backend::ProgramState *programState) override;
 
     /** Inserts a quad at a certain index into the texture atlas. The Sprite won't be added into the children array.
      * This method should be called only when you are dealing with very big AtlasSprite and when most of the Sprite won't be updated.

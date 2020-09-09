@@ -103,7 +103,6 @@ bool SpriteBatchNode::initWithTexture(Texture2D *tex, ssize_t capacity/* = DEFAU
     _textureAtlas->initWithTexture(tex, capacity);
 
     setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, tex);
-    updateProgramStateTexture(_textureAtlas->getTexture());
 
     updateBlendFunc();
 
@@ -148,15 +147,19 @@ void SpriteBatchNode::setVertexLayout()
     vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
 }
 
-void SpriteBatchNode::setProgramState(backend::ProgramState *programState)
+bool SpriteBatchNode::attachProgramState(backend::ProgramState *programState)
 {
     CCASSERT(programState, "programState should not be nullptr");
-    auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
-    Node::setProgramState(programState);
-    pipelineDescriptor.programState = _programState;
-    
-    setVertexLayout();
-    setUniformLocation();
+    if (Node::attachProgramState(programState)) {
+        auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
+        pipelineDescriptor.programState = _programState;
+
+        setVertexLayout();
+        updateProgramStateTexture(_textureAtlas->getTexture());
+        setUniformLocation();
+        return true;
+    }
+    return false;
 }
 
 bool SpriteBatchNode::init()
@@ -694,7 +697,6 @@ void SpriteBatchNode::setTexture(Texture2D *texture)
 {
     _textureAtlas->setTexture(texture);
     setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, texture);
-    updateProgramStateTexture(texture);
     updateBlendFunc();
 }
 

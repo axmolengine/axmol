@@ -1275,22 +1275,19 @@ void Director::createStatsLabel()
      */
     float scaleFactor = 1 / CC_CONTENT_SCALE_FACTOR();
 
-    _FPSLabel = LabelAtlas::create();
+    _FPSLabel = LabelAtlas::create(fpsString, texture, 12, 32, '.');
     _FPSLabel->retain();
     _FPSLabel->setIgnoreContentScaleFactor(true);
-    _FPSLabel->initWithString(fpsString, texture, 12, 32 , '.');
     _FPSLabel->setScale(scaleFactor);
 
-    _drawnBatchesLabel = LabelAtlas::create();
+    _drawnBatchesLabel = LabelAtlas::create(drawBatchString, texture, 12, 32, '.');
     _drawnBatchesLabel->retain();
     _drawnBatchesLabel->setIgnoreContentScaleFactor(true);
-    _drawnBatchesLabel->initWithString(drawBatchString, texture, 12, 32, '.');
     _drawnBatchesLabel->setScale(scaleFactor);
 
-    _drawnVerticesLabel = LabelAtlas::create();
+    _drawnVerticesLabel = LabelAtlas::create(drawVerticesString, texture, 12, 32, '.');
     _drawnVerticesLabel->retain();
     _drawnVerticesLabel->setIgnoreContentScaleFactor(true);
-    _drawnVerticesLabel->initWithString(drawVerticesString, texture, 12, 32, '.');
     _drawnVerticesLabel->setScale(scaleFactor);
 
 

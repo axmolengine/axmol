@@ -56,12 +56,6 @@ NS_CC_BEGIN
 class CC_DLL LabelAtlas : public AtlasNode, public LabelProtocol
 {
 public:
-    /** 
-     * Creates an empty LabelAtlas.
-     * User need to call initWithString(...) later to make this object work properly.
-     */
-    static LabelAtlas* create();
-    
     /** Creates the LabelAtlas with a string, a char map file(the atlas), the width and height of each element and the starting char of the atlas. */
     static LabelAtlas* create(const std::string& string, const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap);
     
@@ -70,6 +64,11 @@ public:
      * @since v2.0
      */
     static LabelAtlas* create(const std::string& string, const std::string& fntFile);
+
+    /**
+    * Creates the LabelAtlas with a string, a texture, the width and height of each element and the starting char of the atlas.
+    */
+    static LabelAtlas* create(const std::string& string, Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
 
     /** Initializes the LabelAtlas with a string, a char map file(the atlas), the width and height of each element and the starting char of the atlas. */
     bool initWithString(const std::string& string, const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap);

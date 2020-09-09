@@ -42,38 +42,6 @@ NS_CC_BEGIN
 
 // AtlasNode - Creation & Init
 
-AtlasNode::AtlasNode()
-{
-    auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    attachProgramState(new (std::nothrow) backend::ProgramState(program));
-    pipelineDescriptor.programState = _programState;
-    _mvpMatrixLocation = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation = pipelineDescriptor.programState->getUniformLocation("u_texture");
-  
-    auto vertexLayout = _programState->getVertexLayout();
-  //a_position
-    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION, 
-                               _programState->getAttributeLocation(backend::Attribute::POSITION), 
-                               backend::VertexFormat::FLOAT3, 
-                               0, 
-                               false);
-   
-    //a_texCoord
-    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_TEXCOORD, 
-                               _programState->getAttributeLocation(backend::Attribute::TEXCOORD), 
-                               backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords), 
-                               false);
-   
-    //a_color
-    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR, 
-                               _programState->getAttributeLocation(backend::Attribute::COLOR),
-                               backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors),
-                               true);
-    
-    vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
-}
-
 AtlasNode::~AtlasNode()
 {
     CC_SAFE_RELEASE(_textureAtlas);
@@ -117,8 +85,9 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
     }
     
     _textureAtlas->initWithTexture(texture, itemsToRender);
-    
-    updateProgramStateTexture(texture);
+
+    setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, texture);
+
     this->updateBlendFunc();
     this->updateOpacityModifyRGB();
 
@@ -129,6 +98,41 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
     return true;
 }
 
+bool AtlasNode::attachProgramState(backend::ProgramState* programState)
+{
+    if (Node::attachProgramState(programState))
+    {
+        auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
+        pipelineDescriptor.programState = _programState;
+        _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
+
+        auto vertexLayout = _programState->getVertexLayout();
+        //a_position
+        vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION,
+            _programState->getAttributeLocation(backend::Attribute::POSITION),
+            backend::VertexFormat::FLOAT3,
+            0,
+            false);
+
+        //a_texCoord
+        vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_TEXCOORD,
+            _programState->getAttributeLocation(backend::Attribute::TEXCOORD),
+            backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords),
+            false);
+
+        //a_color
+        vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR,
+            _programState->getAttributeLocation(backend::Attribute::COLOR),
+            backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors),
+            true);
+
+        vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
+
+        updateProgramStateTexture(_textureAtlas->getTexture());
+        return true;
+    }
+    return false;
+}
 
 // AtlasNode - Atlas generation
 
