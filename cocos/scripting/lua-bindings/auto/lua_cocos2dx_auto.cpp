@@ -56367,16 +56367,6 @@ int lua_cocos2dx_LabelAtlas_create(lua_State* tolua_S)
     ok  = true;
     do 
     {
-        if (argc == 0)
-        {
-            cocos2d::LabelAtlas* ret = cocos2d::LabelAtlas::create();
-            object_to_luaval<cocos2d::LabelAtlas>(tolua_S, "cc.LabelAtlas",(cocos2d::LabelAtlas*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    do 
-    {
         if (argc == 2)
         {
             std::string arg0;
