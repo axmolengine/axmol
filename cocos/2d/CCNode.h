@@ -1768,13 +1768,22 @@ public:
      */
     virtual void setCameraMask(unsigned short mask, bool applyChildren = true);
     
+    /**
+     * Sets ProgramState with retain
+     * @param programState
+     */
     virtual void setProgramState(backend::ProgramState* programState);
-    bool attachProgramState(backend::ProgramState* programState);
+    backend::ProgramState* getProgramState() const;
 
     void setProgramStateWithRegistry(backend::ProgramType programType, Texture2D* texture);
-    void updateProgramStateTexture(Texture2D* texture);
 
-    virtual backend::ProgramState* getProgramState() const;
+    /**
+     * Attach/Change current ProgramState without retain, override me
+     * @param programState should be new or retain if it has other owner
+     */
+    virtual bool attachProgramState(backend::ProgramState* programState);
+
+    void updateProgramStateTexture(Texture2D* texture);
 
 CC_CONSTRUCTOR_ACCESS:
     // Nodes should be created using create();

@@ -2132,16 +2132,7 @@ void Node::setProgramStateWithRegistry(backend::ProgramType programType, Texture
 {
     auto formatEXT = texture ? texture->getTextureFormatEXT() : 0;
     auto programState = backend::ProgramStateRegistry::getInstance()->newProgramState(programType, formatEXT);
-    setProgramState(programState);
-    programState->release();
-}
-
-void Node::updateProgramStateTexture(Texture2D* texture)
-{
-    if (texture == nullptr || texture->getBackendTexture() == nullptr || _programState == nullptr)
-        return;
-
-    _programState->setTexture(texture->getBackendTexture());
+    attachProgramState(programState);
 }
 
 void Node::setProgramState(backend::ProgramState* programState)
@@ -2159,6 +2150,14 @@ bool Node::attachProgramState(backend::ProgramState* programState)
         return !!_programState;
     }
     return false;
+}
+
+void Node::updateProgramStateTexture(Texture2D* texture)
+{
+    if (texture == nullptr || texture->getBackendTexture() == nullptr || _programState == nullptr)
+        return;
+
+    _programState->setTexture(texture->getBackendTexture());
 }
 
 backend::ProgramState* Node::getProgramState() const

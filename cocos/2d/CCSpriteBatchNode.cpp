@@ -148,15 +148,18 @@ void SpriteBatchNode::setVertexLayout()
     vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
 }
 
-void SpriteBatchNode::setProgramState(backend::ProgramState *programState)
+bool SpriteBatchNode::attachProgramState(backend::ProgramState *programState)
 {
     CCASSERT(programState, "programState should not be nullptr");
-    auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
-    Node::setProgramState(programState);
-    pipelineDescriptor.programState = _programState;
-    
-    setVertexLayout();
-    setUniformLocation();
+    if (Node::attachProgramState(programState)) {
+        auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
+        pipelineDescriptor.programState = _programState;
+
+        setVertexLayout();
+        setUniformLocation();
+        return true;
+    }
+    return false;
 }
 
 bool SpriteBatchNode::init()

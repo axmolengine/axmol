@@ -639,9 +639,9 @@ public:
     float getAdditionalKerning() const;
 
     /**
-    * set ProgramState of current render command
+    * Attach ProgramState of current render command
     */
-    virtual void setProgramState(backend::ProgramState *programState) override;
+    bool attachProgramState(backend::ProgramState *programState) override;
 
     FontAtlas* getFontAtlas() { return _fontAtlas; }
 

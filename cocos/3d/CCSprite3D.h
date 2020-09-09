@@ -119,8 +119,8 @@ public:
     virtual const BlendFunc &getBlendFunc() const override;
     
     // overrides
-    /** set ProgramState, you should bind attributes by yourself */
-    virtual void setProgramState(backend::ProgramState *programState) override;
+    /** Sets ProgramState, you should bind attributes by yourself */
+    void setProgramState(backend::ProgramState *programState) override;
 
     /*
      * Get AABB
