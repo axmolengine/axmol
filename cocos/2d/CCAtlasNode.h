@@ -99,8 +99,10 @@ public:
     void setQuadsToDraw(ssize_t quadsToDraw);
     size_t getQuadsToDraw() const;
 
+    bool attachProgramState(backend::ProgramState* programState) override;
+
 CC_CONSTRUCTOR_ACCESS:
-    AtlasNode();
+    AtlasNode() = default;
     virtual ~AtlasNode();
 
     /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
@@ -141,7 +143,6 @@ protected:
     bool _ignoreContentScaleFactor = false;
     
     QuadCommand _quadCommand;
-    backend::UniformLocation _textureLocation;
     backend::UniformLocation _mvpMatrixLocation;
     
 private:

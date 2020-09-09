@@ -103,7 +103,6 @@ bool SpriteBatchNode::initWithTexture(Texture2D *tex, ssize_t capacity/* = DEFAU
     _textureAtlas->initWithTexture(tex, capacity);
 
     setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, tex);
-    updateProgramStateTexture(_textureAtlas->getTexture());
 
     updateBlendFunc();
 
@@ -156,6 +155,7 @@ bool SpriteBatchNode::attachProgramState(backend::ProgramState *programState)
         pipelineDescriptor.programState = _programState;
 
         setVertexLayout();
+        updateProgramStateTexture(_textureAtlas->getTexture());
         setUniformLocation();
         return true;
     }
@@ -697,7 +697,6 @@ void SpriteBatchNode::setTexture(Texture2D *texture)
 {
     _textureAtlas->setTexture(texture);
     setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, texture);
-    updateProgramStateTexture(texture);
     updateBlendFunc();
 }
 
