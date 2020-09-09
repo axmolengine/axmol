@@ -147,7 +147,7 @@ public:
         _startingPositionInitialized = bStartingPositionInitialized; 
     }
     
-    void setProgramState(backend::ProgramState* programState) override;
+    bool attachProgramState(backend::ProgramState* programState) override;
 
 CC_CONSTRUCTOR_ACCESS:
     MotionStreak();

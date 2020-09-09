@@ -975,7 +975,7 @@ public:
         sprite->setProgramState(programState);
         return sprite;
     }
-    virtual void setProgramState(backend::ProgramState* programState) override;
+    bool attachProgramState(backend::ProgramState* programState) override;
     virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
 
 protected:
@@ -983,16 +983,19 @@ protected:
 
 };
 
-void MySprite::setProgramState(backend::ProgramState* programState)
+bool MySprite::attachProgramState(backend::ProgramState* programState)
 {
-    Sprite::setProgramState(programState);
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
-    pipelineDescriptor.programState = programState;
+    if (Sprite::attachProgramState(programState)) {
+        auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
+        pipelineDescriptor.programState = programState;
 
-    _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
-    _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
-    _customCommand.createVertexBuffer(sizeof(V3F_C4B_T2F), 4, CustomCommand::BufferUsage::STATIC);
-    _customCommand.updateVertexBuffer(&_quad, 4*sizeof(V3F_C4B_T2F));
+        _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
+        _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
+        _customCommand.createVertexBuffer(sizeof(V3F_C4B_T2F), 4, CustomCommand::BufferUsage::STATIC);
+        _customCommand.updateVertexBuffer(&_quad, 4 * sizeof(V3F_C4B_T2F));
+        return true;
+    }
+    return false;
 }
 
 void MySprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)

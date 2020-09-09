@@ -217,34 +217,37 @@ void MotionStreak::setTexture(Texture2D *texture)
     }
 }
 
-void MotionStreak::setProgramState(backend::ProgramState* programState)
+bool MotionStreak::attachProgramState(backend::ProgramState* programState)
 {
-    CCASSERT(programState, "argument should not be nullptr");
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
-    Node::setProgramState(programState);
-    pipelineDescriptor.programState = _programState;
+    if (Node::attachProgramState(programState)) {
+        CCASSERT(programState, "argument should not be nullptr");
+        auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
+        pipelineDescriptor.programState = _programState;
 
-    _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation = _programState->getUniformLocation("u_texture");
+        _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
+        _textureLocation = _programState->getUniformLocation("u_texture");
 
-    auto vertexLayout = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
+        auto vertexLayout = _programState->getVertexLayout();
+        const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+        auto iter = attributeInfo.find("a_position");
+        if (iter != attributeInfo.end())
+        {
+            vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
+        }
+        iter = attributeInfo.find("a_texCoord");
+        if (iter != attributeInfo.end())
+        {
+            vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, 2 * sizeof(float), false);
+        }
+        iter = attributeInfo.find("a_color");
+        if (iter != attributeInfo.end())
+        {
+            vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4, 4 * sizeof(float), true);
+        }
+        vertexLayout->setLayout(4 * sizeof(float) + 4 * sizeof(uint8_t));
+        return true;
     }
-    iter = attributeInfo.find("a_texCoord");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, 2 * sizeof(float), false);
-    }
-    iter = attributeInfo.find("a_color");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4, 4 * sizeof(float), true);
-    }
-    vertexLayout->setLayout(4 * sizeof(float) + 4 * sizeof(uint8_t));
+    return false;
 }
 
 void MotionStreak::setBlendFunc(const BlendFunc &blendFunc)

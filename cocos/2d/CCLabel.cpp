@@ -689,18 +689,21 @@ void Label::setVertexLayout()
     vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
 }
 
-void Label::setProgramState(backend::ProgramState *programState)
+bool Label::attachProgramState(backend::ProgramState* programState)
 {
-    Node::setProgramState(programState);
-    updateUniformLocations();
-    for (auto &batch : _batchCommands)
-    {
-        updateBatchCommand(batch);
-    }
+    if (Node::attachProgramState(programState)) {
+        updateUniformLocations();
+        for (auto& batch : _batchCommands)
+        {
+            updateBatchCommand(batch);
+        }
 
-    auto &quadPipeline = _quadCommand.getPipelineDescriptor();
-    setVertexLayout();
-    quadPipeline.programState = _programState;
+        auto& quadPipeline = _quadCommand.getPipelineDescriptor();
+        setVertexLayout();
+        quadPipeline.programState = _programState;
+        return true;
+    }
+    return false;
 }
 
 void Label::updateShaderProgram()
