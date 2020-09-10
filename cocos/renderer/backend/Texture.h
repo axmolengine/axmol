@@ -51,11 +51,14 @@ struct TextureDescriptor
     SamplerDescriptor samplerDescriptor;
 };
 
+class UtilsGL;
+
 /**
  * A base texture
  */
 class TextureBackend : public Ref
 {
+    friend class UtilsGL;
 public:
     /**
      * Update sampler
@@ -98,7 +101,7 @@ public:
 
     virtual int getCount() const { return 1; };
 
-    virtual uintptr_t getGPUHandler(int index = 0) const { return 0; }
+    virtual uintptr_t getHandler(int index = 0) const { return 0; }
     
     int getWidth() const { return _width; }
     int getHeight() const { return _height; }

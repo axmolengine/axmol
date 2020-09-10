@@ -165,7 +165,7 @@ public:
      * Get texture object.
      * @return Texture object.
      */
-    inline GLuint getHandler(int index = 0) const { return _textureInfo.textures[index]; }
+    uintptr_t getHandler(int index = 0) const override { return _textureInfo.textures[index]; }
 
     /**
      * Set texture to pipeline
@@ -174,8 +174,6 @@ public:
     void apply(int slot, int index) const { _textureInfo.apply(slot, index, GL_TEXTURE_2D); }
 
     int getCount() const override { return _textureInfo.maxIdx + 1; }
-
-    uintptr_t getGPUHandler(int index) const override { return _textureInfo.getName(index); }
 
 private:
     void initWithZeros();
@@ -222,7 +220,7 @@ public:
      * Get texture object.
      * @return Texture object.
      */
-    inline GLuint getHandler(int index = 0) const { return _textureInfo.textures[index]; }
+    uintptr_t getHandler(int index = 0) const override { return _textureInfo.textures[index]; }
 
     /**
      * Set texture to pipeline

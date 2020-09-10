@@ -628,32 +628,43 @@ void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float wid
     }
 }
 
-void CommandBufferGL::captureScreen(std::function<void(const unsigned char*, int, int)> callback)
+void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback)
 {
-    int bufferSize = _viewPort.w * _viewPort.h *4;
-    std::shared_ptr<GLubyte> buffer(new GLubyte[bufferSize], [](GLubyte* p){ CC_SAFE_DELETE_ARRAY(p); });
-    memset(buffer.get(), 0, bufferSize);
-    if (!buffer)
-    {
-        callback(nullptr, 0, 0);
-        return;
-    }
-    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glReadPixels(0, 0, _viewPort.w, _viewPort.h, GL_RGBA, GL_UNSIGNED_BYTE, buffer.get());
+    PixelBufferDescriptor pbd;
+    if (!texture) { // screen capture
 
-    std::shared_ptr<GLubyte> flippedBuffer(new GLubyte[bufferSize], [](GLubyte* p) { CC_SAFE_DELETE_ARRAY(p); });
-    memset(flippedBuffer.get(), 0, bufferSize);
-    if (!flippedBuffer)
-    {
-        callback(nullptr, 0, 0);
-        return;
+        int bufferSize = _viewPort.w * _viewPort.h * 4;
+        std::unique_ptr<GLubyte[]> buffer(new GLubyte[bufferSize]);
+        memset(buffer.get(), 0, bufferSize);
+        if (!buffer)
+        {
+            callback(pbd);
+            return;
+        }
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glReadPixels(0, 0, _viewPort.w, _viewPort.h, GL_RGBA, GL_UNSIGNED_BYTE, buffer.get());
+
+        GLubyte* flippedBuffer = (GLubyte*)malloc(bufferSize);
+        memset(flippedBuffer, 0, bufferSize);
+        if (!flippedBuffer)
+        {
+            callback(pbd);
+            return;
+        }
+        for (int row = 0; row < _viewPort.h; ++row)
+        {
+            memcpy(flippedBuffer + (_viewPort.h - row - 1) * _viewPort.w * 4, buffer.get() + row * _viewPort.w * 4, _viewPort.w * 4);
+        }
+
+        pbd._width = _viewPort.w;
+        pbd._height = _viewPort.h;
+        pbd._data.fastSet(flippedBuffer, bufferSize);
     }
-    for (int row = 0; row < _viewPort.h; ++row)
-    {
-        memcpy(flippedBuffer.get() + (_viewPort.h - row - 1) * _viewPort.w * 4, buffer.get() + row * _viewPort.w * 4, _viewPort.w * 4);
+    else {
+        UtilsGL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), true, pbd);
     }
 
-    callback(flippedBuffer.get(), _viewPort.w, _viewPort.h);
+    callback(pbd);
 }
 
 CC_BACKEND_END

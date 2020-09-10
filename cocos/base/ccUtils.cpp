@@ -71,81 +71,6 @@ int ccNextPOT(int x)
 
 namespace utils
 {
-/**
-* Capture screen implementation, don't use it directly.
-*/
-void onCaptureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename, const unsigned char* imageData, int width, int height)
-{
-    if(!imageData)
-    {
-        afterCaptured(false, "");
-        return;
-    }
-    
-    static bool startedCapture = false;
-
-    if (startedCapture)
-    {
-        CCLOG("Screen capture is already working");
-        if (afterCaptured)
-        {
-            afterCaptured(false, filename);
-        }
-        return;
-    }
-    else
-    {
-        startedCapture = true;
-    }
-
-    bool succeed = false;
-    std::string outputFile = "";
-
-    do
-    {
-        Image* image = new (std::nothrow) Image;
-        if (image)
-        {
-            image->initWithRawData(imageData, width * height * 4, width, height, 8);
-            if (FileUtils::getInstance()->isAbsolutePath(filename))
-            {
-                outputFile = filename;
-            }
-            else
-            {
-                CCASSERT(filename.find('/') == std::string::npos, "The existence of a relative path is not guaranteed!");
-                outputFile = FileUtils::getInstance()->getWritablePath() + filename;
-            }
-
-            // Save image in AsyncTaskPool::TaskType::TASK_IO thread, and call afterCaptured in mainThread
-            static bool succeedSaveToFile = false;
-            std::function<void(void*)> mainThread = [afterCaptured, outputFile](void* /*param*/)
-            {
-                if (afterCaptured)
-                {
-                    afterCaptured(succeedSaveToFile, outputFile);
-                }
-                startedCapture = false;
-            };
-
-            AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO, std::move(mainThread), nullptr, [image, outputFile]()
-            {
-                succeedSaveToFile = image->saveToFile(outputFile);
-                delete image;
-            });
-        }
-        else
-        {
-            CCLOG("Malloc Image memory failed!");
-            if (afterCaptured)
-            {
-                afterCaptured(succeed, outputFile);
-            }
-            startedCapture = false;
-        }
-    } while (0);
-}
-
 /*
  * Capture screen interface
  */
@@ -164,7 +89,6 @@ void captureScreen(std::function<void(Image*)> imageCallback)
             auto image = new(std::nothrow) Image();
             image->initWithRawData(pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8);
             imageCallback(image);
-            image->release();
         }
         else imageCallback(nullptr);
     };
