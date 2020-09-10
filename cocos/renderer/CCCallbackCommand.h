@@ -61,8 +61,8 @@ public:
     std::function<void()> func;
 };
 
-/** TODO: rename to CaptureCallbackCommand
- * CaptureScreenCallbackCommand is used to capture the screen.
+/**
+ * CaptureCallbackCommand is used to capture the screen or node.
  */
 class CC_DLL CaptureCallbackCommand : public RenderCommand
 {
