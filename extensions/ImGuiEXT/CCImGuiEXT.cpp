@@ -257,11 +257,21 @@ void ImGuiEXT::clearFonts()
     // if(drawData) drawData->Clear();
 }
 
+void ImGuiEXT::end()
+{
+    _purgeNextLoop = true;
+}
+
 /*
 * begin ImGui frame and draw ImGui stubs
 */
 void ImGuiEXT::beginFrame()
 { // drived by event Director::EVENT_BEFORE_DRAW from engine mainLoop
+    if(_purgeNextLoop)
+    {
+        Director::getInstance()->end();
+        return;
+    }
     if (!_renderPiplines.empty()) {
         // create frame
         ImGui_ImplCocos2dx_NewFrame();
@@ -299,7 +309,6 @@ void ImGuiEXT::endFrame() {
 
 void ImGuiEXT::update()
 {
-
     // clear things from last frame
     usedCCRefIdMap.clear();
     usedCCRef.clear();

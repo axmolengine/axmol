@@ -65,6 +65,8 @@ public:
     /// </summary>
     /// <param name="id">FOURCC starts with '#', such as "#abcd"</id>
     void removeRenderLoop(const std::string& id);
+    
+    void end();
 
     // imgui helper
     void image(
@@ -168,6 +170,8 @@ private:
     };
 
     std::unordered_map<std::string, FontInfo> _fontsInfoMap;
+    
+    bool _purgeNextLoop = false;
 };
 
 NS_CC_EXT_END
