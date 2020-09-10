@@ -31,7 +31,6 @@
 
 #include "Macros.h"
 #include "Types.h"
-#include "Texture.h"
 #include "RenderPassDescriptor.h"
 #include "PixelBufferDescriptor.h"
 #include "CCStdC.h"
@@ -47,6 +46,7 @@ class RenderPass;
 class RenderPipeline;
 class Buffer;
 class DepthStencilState;
+class TextureBackend;
 
 /**
  * @addtogroup _backend
@@ -172,7 +172,7 @@ public:
      * Get a screen snapshot
      * @param callback A callback to deal with screen snapshot image.
      */
-    virtual void capture(Texture2DBackend* texture2d, std::function<void(const PixelBufferDescriptor&)> callback) = 0;
+    virtual void capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback) = 0;
     
     /**
      * Update both front and back stencil reference value.

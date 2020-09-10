@@ -169,7 +169,7 @@ public:
      * Get a screen snapshot
      * @param callback A callback to deal with screen snapshot image.
      */
-    virtual void capture(Texture2DBackend* texture2d, std::function<void(const PixelBufferDescriptor&)> callback) override;
+    virtual void capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback) override;
     
 private:
     void prepareDrawing() const;
@@ -178,6 +178,7 @@ private:
     void setUniformBuffer() const;
     void afterDraw();
     void flush();
+    void flushCaptureCommands();
     id<MTLRenderCommandEncoder> getRenderCommandEncoder(const RenderPassDescriptor& renderPassDescriptor);
 
     id<MTLCommandBuffer> _mtlCommandBuffer = nil;
@@ -197,7 +198,7 @@ private:
     RenderPassDescriptor _prevRenderPassDescriptor;
     NSAutoreleasePool* _autoReleasePool = nil;
     
-    std::vector<std::pair<Texture2DBackend*,std::function<void(const PixelBufferDescriptor&)>>> _captureCallbacks;
+    std::vector<std::pair<TextureBackend*,std::function<void(const PixelBufferDescriptor&)>>> _captureCallbacks;
 };
 
 // end of _metal group

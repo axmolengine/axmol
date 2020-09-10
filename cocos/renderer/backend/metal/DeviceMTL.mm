@@ -29,7 +29,6 @@
 #include "ShaderModuleMTL.h"
 #include "DepthStencilStateMTL.h"
 #include "TextureMTL.h"
-#include "Utils.h"
 #include "ProgramMTL.h"
 #include "DeviceInfoMTL.h"
 
