@@ -485,7 +485,6 @@ void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool fli
             auto image = new(std::nothrow) Image();
             image->initWithRawData(pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8);
             imageCallback(image);
-            image->release();
         }
         else imageCallback(nullptr);
     };
