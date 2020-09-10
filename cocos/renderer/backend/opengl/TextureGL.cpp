@@ -306,44 +306,6 @@ void Texture2DGL::generateMipmaps()
     }
 }
 
-void Texture2DGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
-{
-    GLint defaultFBO = 0;
-    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
-
-    GLuint frameBuffer = 0;
-    glGenFramebuffers(1, &frameBuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->getHandler(), 0);
-    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-
-    auto bytePerRow = width * _bitsPerElement / 8;
-    unsigned char* image = new unsigned char[bytePerRow * height];
-    glReadPixels(x,y,width, height,GL_RGBA,GL_UNSIGNED_BYTE, image);
-
-    if(flipImage)
-    {
-        unsigned char* flippedImage = new unsigned char[bytePerRow * height];
-        for (int i = 0; i < height; ++i)
-        {
-            memcpy(&flippedImage[i * bytePerRow],
-                   &image[(height - i - 1) * bytePerRow],
-                   bytePerRow);
-        }
-        callback(flippedImage, width, height);
-        CC_SAFE_DELETE_ARRAY(flippedImage);
-    }
-    else
-    {
-        callback(image, width, height); 
-    }
- 
-    CC_SAFE_DELETE_ARRAY(image);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
-    glDeleteFramebuffers(1, &frameBuffer);
-}
-
 /// CLASS TextureCubeGL
 TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
 {
@@ -402,41 +364,42 @@ void TextureCubeGL::updateFaceData(TextureCubeFace side, void *data, int index)
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
-void TextureCubeGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
-{
-    GLint defaultFBO = 0;
-    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
-    GLuint frameBuffer = 0;
-    glGenFramebuffers(1, &frameBuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP, this->getHandler(), 0);
-    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+// void TextureCubeGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
+// {
+//     GLint defaultFBO = 0;
+//     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
+//     GLuint frameBuffer = 0;
+//     glGenFramebuffers(1, &frameBuffer);
+//     glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer); 
+//     GL_TEXTURE_2D
+//     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP, this->getHandler(), 0);
+//     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-    auto bytePerRow = width * _bitsPerElement / 8;
-    unsigned char* image = new unsigned char[bytePerRow * height];
-    glReadPixels(x,y,width, height,GL_RGBA,GL_UNSIGNED_BYTE, image);
+//     auto bytePerRow = width * _bitsPerElement / 8;
+//     unsigned char* image = new unsigned char[bytePerRow * height];
+//     glReadPixels(x,y,width, height,GL_RGBA,GL_UNSIGNED_BYTE, image);
 
-    if(flipImage)
-    {
-        unsigned char* flippedImage = new unsigned char[bytePerRow * height];
-        for (int i = 0; i < height; ++i)
-        {
-            memcpy(&flippedImage[i * bytePerRow],
-                   &image[(height - i - 1) * bytePerRow],
-                   bytePerRow);
-        }
-        callback(flippedImage, width, height);
-        CC_SAFE_DELETE_ARRAY(flippedImage);
-    } 
-    else
-    {
-        callback(image, width, height);
-    }
-    CC_SAFE_DELETE_ARRAY(image);
+//     if(flipImage)
+//     {
+//         unsigned char* flippedImage = new unsigned char[bytePerRow * height];
+//         for (int i = 0; i < height; ++i)
+//         {
+//             memcpy(&flippedImage[i * bytePerRow],
+//                    &image[(height - i - 1) * bytePerRow],
+//                    bytePerRow);
+//         }
+//         callback(flippedImage, width, height);
+//         CC_SAFE_DELETE_ARRAY(flippedImage);
+//     } 
+//     else
+//     {
+//         callback(image, width, height);
+//     }
+//     CC_SAFE_DELETE_ARRAY(image);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
-    glDeleteFramebuffers(1, &frameBuffer);
-}
+//     glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
+//     glDeleteFramebuffers(1, &frameBuffer);
+// }
 
 void TextureCubeGL::generateMipmaps()
 {
