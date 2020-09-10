@@ -178,6 +178,7 @@ private:
     void doSetTextures(bool isVertex) const;
     void setUniformBuffer() const;
     void afterDraw();
+    void flush();
     id<MTLRenderCommandEncoder> getRenderCommandEncoder(const RenderPassDescriptor& renderPassDescriptor);
 
     id<MTLCommandBuffer> _mtlCommandBuffer = nil;
