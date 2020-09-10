@@ -34,12 +34,13 @@ CC_BACKEND_BEGIN
  * @{
  */
 
+class TextureBackend;
+
 /**
  * Convert backend enum class to corresponding opengl defined value.
  */
-class UtilsGL
+struct UtilsGL
 {
-public:
     /**
      * Convert attribute enum classs type to GLenum type. i.e. convert VertexFormat::FLOAT4 to GL_FLOAT.
      * @param vertexFormat Specifies the attribute data type to convert.
@@ -152,6 +153,16 @@ public:
      * @return Cull mode.
      */
     static GLenum toGLCullMode(CullMode mode);
+
+    /**
+     * Read a block of pixels from the given texture
+     * @param texture Specifies the texture to get the image.
+     * @param origX,origY Specify the window coordinates of the first pixel that is read from the given texture. This location is the lower left corner of a rectangular block of pixels.
+     * @param rectWidth,rectHeight Specify the dimensions of the pixel rectangle. rectWidth and rectHeight of one correspond to a single pixel.
+     * @param outbuffer, the output buffer for fill texels data
+     * @remark: !!!this function only can call after endFrame, then it's could be works well.
+    */
+    static void readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& outbuffer);
 };
 //end of _opengl group
 /// @}

@@ -116,7 +116,7 @@ list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/metal/RenderPipelineMTL.h
     renderer/backend/metal/ShaderModuleMTL.h
     renderer/backend/metal/TextureMTL.h
-    renderer/backend/metal/Utils.h
+    renderer/backend/metal/UtilsMTL.h
     renderer/backend/metal/ProgramMTL.h
     renderer/backend/metal/DeviceInfoMTL.h
 )
@@ -130,7 +130,7 @@ list(APPEND COCOS_RENDERER_SRC
     renderer/backend/metal/RenderPipelineMTL.mm
     renderer/backend/metal/ShaderModuleMTL.mm
     renderer/backend/metal/TextureMTL.mm
-    renderer/backend/metal/Utils.mm
+    renderer/backend/metal/UtilsMTL.mm
     renderer/backend/metal/ProgramMTL.mm
     renderer/backend/metal/DeviceInfoMTL.mm
 )

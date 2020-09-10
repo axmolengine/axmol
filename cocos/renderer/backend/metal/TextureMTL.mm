@@ -23,7 +23,7 @@
  ****************************************************************************/
  
 #include "TextureMTL.h"
-#include "Utils.h"
+#include "UtilsMTL.h"
 #include "base/ccMacros.h"
 
 CC_BACKEND_BEGIN
@@ -196,7 +196,7 @@ namespace
     
     std::size_t getBytesPerRow(PixelFormat textureFormat, std::size_t width, std::size_t bitsPerElement)
     {
-        MTLPixelFormat pixelFormat = Utils::toMTLPixelFormat(textureFormat);
+        MTLPixelFormat pixelFormat = UtilsMTL::toMTLPixelFormat(textureFormat);
         std::size_t bytesPerRow = 0;
         
         if(textureFormat >= PixelFormat::PVRTC4 &&
@@ -254,7 +254,7 @@ void TextureInfoMTL::destroy() {
 
 id<MTLTexture> TextureInfoMTL::createTexture(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor, int target)
 {
-    MTLPixelFormat pixelFormat = Utils::toMTLPixelFormat(descriptor.textureFormat);
+    MTLPixelFormat pixelFormat = UtilsMTL::toMTLPixelFormat(descriptor.textureFormat);
     if(pixelFormat == MTLPixelFormatInvalid)
         return nil;
     
@@ -411,7 +411,7 @@ void TextureMTL::updateCompressedSubData(std::size_t xoffset, std::size_t yoffse
 //        }
 //    };
 //    auto flipImageCallback = std::bind(flipImageFunc, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-//    Utils::getTextureBytes(x, y, width, height, this->getMTLTexture(), flipImageCallback);
+//    UtilsMTL::getTextureBytes(x, y, width, height, this->getMTLTexture(), flipImageCallback);
 //}
 
 void TextureMTL::generateMipmaps()
@@ -422,7 +422,7 @@ void TextureMTL::generateMipmaps()
     if(!_hasMipmaps)
     {
         _hasMipmaps = true;
-        Utils::generateMipmaps(this->getMTLTexture());
+        UtilsMTL::generateMipmaps(this->getMTLTexture());
     }
 }
 
@@ -483,7 +483,7 @@ void TextureCubeMTL::generateMipmaps()
     if(!_hasMipmaps)
     {
         _hasMipmaps = true;
-        Utils::generateMipmaps(this->getMTLTexture());
+        UtilsMTL::generateMipmaps(this->getMTLTexture());
     }
 }
 

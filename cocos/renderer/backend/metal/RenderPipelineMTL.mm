@@ -26,7 +26,7 @@
 #include "DeviceMTL.h"
 #include "ShaderModuleMTL.h"
 #include "DepthStencilStateMTL.h"
-#include "Utils.h"
+#include "UtilsMTL.h"
 #include "ProgramMTL.h"
 #include "xxhash.h"
 
@@ -351,11 +351,11 @@ void RenderPipelineMTL::setBlendStateAndFormat(const BlendDescriptor& blendDescr
         if (PixelFormat::NONE == _colorAttachmentsFormat[i])
             continue;
         
-        _mtlRenderPipelineDescriptor.colorAttachments[i].pixelFormat = Utils::toMTLPixelFormat(_colorAttachmentsFormat[i]);
+        _mtlRenderPipelineDescriptor.colorAttachments[i].pixelFormat = UtilsMTL::toMTLPixelFormat(_colorAttachmentsFormat[i]);
         setBlendState(_mtlRenderPipelineDescriptor.colorAttachments[i], blendDescriptor);
     }
-    _mtlRenderPipelineDescriptor.depthAttachmentPixelFormat = Utils::toMTLPixelFormat(_depthAttachmentFormat);
-    _mtlRenderPipelineDescriptor.stencilAttachmentPixelFormat = Utils::toMTLPixelFormat(_stencilAttachmentFormat);
+    _mtlRenderPipelineDescriptor.depthAttachmentPixelFormat = UtilsMTL::toMTLPixelFormat(_depthAttachmentFormat);
+    _mtlRenderPipelineDescriptor.stencilAttachmentPixelFormat = UtilsMTL::toMTLPixelFormat(_stencilAttachmentFormat);
 }
 
 CC_BACKEND_END

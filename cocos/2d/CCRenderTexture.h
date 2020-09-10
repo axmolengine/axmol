@@ -383,7 +383,7 @@ protected:
     CallbackCommand _beginCommand;
     CallbackCommand _endCommand;
     
-    CaptureScreenCallbackCommand _captureCommand;
+    CaptureCallbackCommand _captureCommand;
 
     CallbackCommand _beforeClearAttachmentCommand;
     CallbackCommand _afterClearAttachmentCommand;

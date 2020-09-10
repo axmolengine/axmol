@@ -36,7 +36,7 @@ NS_CC_BEGIN
 
 namespace backend
 {
-class Texture2DBackend;
+class TextureBackend;
 }
 
 /**
@@ -64,17 +64,17 @@ public:
 /** TODO: rename to CaptureCallbackCommand
  * CaptureScreenCallbackCommand is used to capture the screen.
  */
-class CC_DLL CaptureScreenCallbackCommand : public RenderCommand
+class CC_DLL CaptureCallbackCommand : public RenderCommand
 {
 public:
-    CaptureScreenCallbackCommand();
+    CaptureCallbackCommand();
     
     void init(float globalZOrder);
     
     /**Capture source, nullptr for screen
      *
      */
-    RefPtr<backend::Texture2DBackend> src = nullptr;
+    RefPtr<backend::TextureBackend> src = nullptr;
     
     /**
      * A callback function to do with the image after capture from the color buffer.
