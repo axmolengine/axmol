@@ -479,7 +479,7 @@ void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool fli
     bool hasPremultipliedAlpha = _texture2D->hasPremultipliedAlpha();
     
     _captureCommand.init((std::numeric_limits<float>::max)());
-    _captureCommand.src = RefPtr<backend::Texture2DBackend>(static_cast<backend::Texture2DBackend*>(_texture2D->getBackendTexture()));
+    _captureCommand.src = RefPtr<backend::TextureBackend>(_texture2D->getBackendTexture());
     _captureCommand.func = [=](const backend::PixelBufferDescriptor& pbd) {
         if(pbd) {
             auto image = new(std::nothrow) Image();
