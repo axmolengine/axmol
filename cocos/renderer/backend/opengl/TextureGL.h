@@ -151,15 +151,6 @@ public:
     virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler)  override;
     
     /**
-     * Read a block of pixels from the drawable texture
-     * @param x,y Specify the window coordinates of the first pixel that is read from the drawable texture. This location is the lower left corner of a rectangular block of pixels.
-     * @param width,height Specify the dimensions of the pixel rectangle. width and height of one correspond to a single pixel.
-     * @param flipImage Specifies if needs to flip the image.
-     * @param callback Specifies a call back function to deal with the image.
-     */
-    virtual void getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback) override;
-    
-    /**
      * Generate mipmaps.
      */
     virtual void generateMipmaps() override;
@@ -217,15 +208,6 @@ public:
      * @param data Specifies a pointer to the image data in memory.
      */
     virtual void updateFaceData(TextureCubeFace side, void *data, int index = 0) override;
-    
-    /**
-     * Read a block of pixels from the drawable texture
-     * @param x,y Specify the window coordinates of the first pixel that is read from the drawable texture. This location is the lower left corner of a rectangular block of pixels.
-     * @param width,height Specify the dimensions of the pixel rectangle. width and height of one correspond to a single pixel.
-     * @param flipImage Specifies if needs to flip the image.
-     * @param callback
-     */
-    virtual void getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback) override;
     
     /// Generate mipmaps.
     virtual void generateMipmaps() override;
