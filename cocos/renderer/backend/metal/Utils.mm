@@ -258,4 +258,50 @@ void Utils::getTextureBytes(std::size_t origX, std::size_t origY, std::size_t re
     [commandBuffer commit];
 }
 
+void Utils::readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& outbuffer)
+{
+    NSUInteger texWidth = texture.width;
+    NSUInteger texHeight = texture.height;
+    MTLRegion region = MTLRegionMake2D(0, 0, texWidth, texHeight);
+    MTLRegion imageRegion = MTLRegionMake2D(origX, origY, rectWidth, rectHeight);
+    
+    MTLTextureDescriptor* textureDescriptor =
+    [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:[texture pixelFormat]
+                                                       width:texWidth
+                                                      height:texHeight
+                                                   mipmapped:NO];
+    id<MTLDevice> device = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLDevice();
+    id<MTLTexture> readPixelsTexture = [device newTextureWithDescriptor:textureDescriptor];
+    
+    id<MTLCommandQueue> commandQueue = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLCommandQueue();
+    auto commandBuffer = [commandQueue commandBuffer];
+    // [commandBuffer enqueue];
+    
+    id<MTLBlitCommandEncoder> blitCommandEncoder = [commandBuffer blitCommandEncoder];
+    [blitCommandEncoder copyFromTexture:texture sourceSlice:0 sourceLevel:0 sourceOrigin:region.origin sourceSize:region.size toTexture:readPixelsTexture destinationSlice:0 destinationLevel:0 destinationOrigin:region.origin];
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+    [blitCommandEncoder synchronizeResource:readPixelsTexture];
+#endif
+    [blitCommandEncoder endEncoding];
+   
+    [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
+       auto bytePerRow = rectWidth * getBitsPerElement(texture.pixelFormat) / 8;
+       uint8_t* texelsData = (uint8_t*)malloc(bytePerRow * rectHeight);
+       if(texelsData != nullptr)
+       {
+          [readPixelsTexture getBytes:texelsData bytesPerRow:bytePerRow fromRegion:imageRegion mipmapLevel:0];
+          swizzleImage(texelsData, rectWidth, rectHeight, readPixelsTexture.pixelFormat);
+       }
+       // callback(image, rectWidth, rectHeight);
+       // CC_SAFE_DELETE_ARRAY(image);
+       outbuffer._data.fastSet(texelsData, bytePerRow * rectHeight);
+       outbuffer._width = rectWidth;
+       outbuffer._height = rectHeight;
+       [readPixelsTexture release];
+    }];
+    [commandBuffer commit];
+    [commandBuffer waitUntilCompleted];
+}
+
 CC_BACKEND_END

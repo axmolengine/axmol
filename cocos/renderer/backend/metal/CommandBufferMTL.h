@@ -26,7 +26,6 @@
 
 #include "../CommandBuffer.h"
 #include "DeviceMTL.h"
-
 #include <unordered_map>
 
 CC_BACKEND_BEGIN
@@ -170,7 +169,7 @@ public:
      * Get a screen snapshot
      * @param callback A callback to deal with screen snapshot image.
      */
-    virtual void captureScreen(std::function<void(const unsigned char*, int, int)> callback) override;
+    virtual void capture(Texture2DBackend* texture2d, std::function<void(const PixelBufferDescriptor&)> callback) override;
     
 private:
     void prepareDrawing() const;
@@ -197,6 +196,8 @@ private:
     dispatch_semaphore_t _frameBoundarySemaphore;
     RenderPassDescriptor _prevRenderPassDescriptor;
     NSAutoreleasePool* _autoReleasePool = nil;
+    
+    std::vector<std::pair<Texture2DBackend*,std::function<void(const PixelBufferDescriptor&)>>> _captureCallbacks;
 };
 
 // end of _metal group

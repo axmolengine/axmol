@@ -382,6 +382,8 @@ protected:
     GroupCommand _groupCommand;
     CallbackCommand _beginCommand;
     CallbackCommand _endCommand;
+    
+    CaptureScreenCallbackCommand _captureCommand;
 
     CallbackCommand _beforeClearAttachmentCommand;
     CallbackCommand _afterClearAttachmentCommand;

@@ -477,14 +477,27 @@ void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool fli
     int savedBufferWidth = (int)s.width;
     int savedBufferHeight = (int)s.height;
     bool hasPremultipliedAlpha = _texture2D->hasPremultipliedAlpha();
-
-    Image *image = new (std::nothrow) Image();
-    if (image) {
-        _texture2D->getBackendTexture()->getBytes(0, 0, savedBufferWidth, savedBufferHeight, flipImage, [=](const unsigned char* tempData, size_t, size_t) {
-            image->initWithRawData(tempData, savedBufferWidth * savedBufferHeight * 4, savedBufferWidth, savedBufferHeight, 8, hasPremultipliedAlpha);
+    
+    _captureCommand.init((std::numeric_limits<float>::max)());
+    _captureCommand.src = RefPtr<backend::Texture2DBackend>(static_cast<backend::Texture2DBackend*>(_texture2D->getBackendTexture()));
+    _captureCommand.func = [=](const backend::PixelBufferDescriptor& pbd) {
+        if(!pbd.isNull()) {
+            auto image = new(std::nothrow) Image();
+            image->initWithRawData(pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8);
             imageCallback(image);
-            });
-    }
+            image->release();
+        }
+        else imageCallback(nullptr);
+    };
+    _director->getRenderer()->addCommand(&_captureCommand);
+
+//    Image *image = new (std::nothrow) Image();
+//    if (image) {
+//        _texture2D->getBackendTexture()->getBytes(0, 0, savedBufferWidth, savedBufferHeight, flipImage, [=](const unsigned char* tempData, size_t, size_t) {
+//            image->initWithRawData(tempData, savedBufferWidth * savedBufferHeight * 4, savedBufferWidth, savedBufferHeight, 8, hasPremultipliedAlpha);
+//            imageCallback(image);
+//            });
+//    }
     
 //    do
 //    {

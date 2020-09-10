@@ -351,14 +351,19 @@ void CommandBufferMTL::drawElements(PrimitiveType primitiveType, IndexFormat ind
 void CommandBufferMTL::endRenderPass()
 {
     afterDraw();
+
 }
 
-void CommandBufferMTL::captureScreen(std::function<void(const unsigned char*, int, int)> callback)
+void CommandBufferMTL::capture(Texture2DBackend* texture2d, std::function<void(const PixelBufferDescriptor&)> callback)
 {
+#if 0
     [_mtlCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
         Utils::getTextureBytes(0, 0, _drawableTexture.width, _drawableTexture.height, _drawableTexture, callback);
         Device::getInstance()->setFrameBufferOnly(true);
     }];
+#endif
+    CC_SAFE_RETAIN(texture2d);
+    _captureCallbacks.emplace_back(texture2d, std::move(callback));
 }
 
 void CommandBufferMTL::endFrame()
@@ -386,6 +391,33 @@ void CommandBufferMTL::flush()
     if(_mtlCommandBuffer) {
         assert(_mtlCommandBuffer.status != MTLCommandBufferStatusCommitted);
         [_mtlCommandBuffer commit];
+        
+        if(!_captureCallbacks.empty()) {
+            [_mtlCommandBuffer waitUntilCompleted];
+            PixelBufferDescriptor screenPixelData;
+            
+            bool screenPixelsReady = false;
+            for(auto& cb : _captureCallbacks) {
+                if(cb.first == nil) {
+                    if(!screenPixelsReady) {
+                        Utils::readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height], screenPixelData);
+                        screenPixelsReady = true;
+                    }
+                    cb.second(screenPixelData);
+                }
+                else {
+                    PixelBufferDescriptor pixelData;
+                    auto texture2d = dynamic_cast<TextureMTL*>(cb.first);
+                    assert(texture2d != nullptr);
+                    auto mtlTexture = texture2d->getMTLTexture();
+                    Utils::readPixels(mtlTexture, 0, 0, [mtlTexture width], [mtlTexture height], pixelData);
+                    CC_SAFE_RELEASE(texture2d);
+                    cb.second(pixelData);
+                }
+            }
+            _captureCallbacks.clear();
+        }
+        
         [_mtlCommandBuffer release];
         _mtlCommandBuffer = nil;
     }

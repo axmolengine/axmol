@@ -70,9 +70,9 @@ namespace utils
      * @param afterCaptured specify the callback function which will be invoked after the snapshot is done.
      * @param filename specify a filename where the snapshot is stored. This parameter can be either an absolute path or a simple
      * base filename ("hello.png" etc.), don't use a relative path containing directory names.("mydir/hello.png" etc.).
-     * @since v3.2
+     * @since v4.0 with egnx
      */
-    CC_DLL void  captureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename);
+    CC_DLL void  captureScreen(std::function<void(Image*)> imageCallback);
 
     /** Capture a specific Node.
     * @param startNode specify the snapshot Node. It should be cocos2d::Scene

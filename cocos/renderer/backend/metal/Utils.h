@@ -26,6 +26,7 @@
 
 #include "../Macros.h"
 #include "../Types.h"
+#include "../PixelBufferDescriptor.h"
 #import <Metal/Metal.h>
 #include <functional>
 
@@ -90,6 +91,8 @@ public:
      * @param callback Specifies a call back function to deal with the image.
      */
     static void getTextureBytes(std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, id<MTLTexture> texture, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback);
+    
+    static void readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& outbuffer);
     
     /**
      * Swizzle the iamge form the given format to MTLPixelFormatRGBA8Unorm.
