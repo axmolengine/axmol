@@ -92,6 +92,14 @@ public:
      */
     static void getTextureBytes(std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, id<MTLTexture> texture, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback);
     
+    /**
+     * Read a block of pixels from the given texture
+     * @param texture Specifies the texture to get the image.
+     * @param origX,origY Specify the window coordinates of the first pixel that is read from the given texture. This location is the lower left corner of a rectangular block of pixels.
+     * @param rectWidth,rectHeight Specify the dimensions of the pixel rectangle. rectWidth and rectHeight of one correspond to a single pixel.
+     * @param outbuffer, the output buffer for fill texels data
+     * @remark: !!!this function only can call after endFrame, then it's could be works well.
+    */
     static void readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& outbuffer);
     
     /**
