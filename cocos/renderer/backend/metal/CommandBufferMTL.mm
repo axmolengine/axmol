@@ -394,14 +394,12 @@ void CommandBufferMTL::flush()
         
         if(!_captureCallbacks.empty()) {
             [_mtlCommandBuffer waitUntilCompleted];
-            PixelBufferDescriptor screenPixelData;
             
-            bool screenPixelsReady = false;
+            PixelBufferDescriptor screenPixelData;
             for(auto& cb : _captureCallbacks) {
                 if(cb.first == nil) {
-                    if(!screenPixelsReady) {
+                    if(!screenPixelData) {
                         Utils::readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height], screenPixelData);
-                        screenPixelsReady = true;
                     }
                     cb.second(screenPixelData);
                 }
