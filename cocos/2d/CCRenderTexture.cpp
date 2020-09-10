@@ -481,7 +481,7 @@ void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool fli
     _captureCommand.init((std::numeric_limits<float>::max)());
     _captureCommand.src = RefPtr<backend::Texture2DBackend>(static_cast<backend::Texture2DBackend*>(_texture2D->getBackendTexture()));
     _captureCommand.func = [=](const backend::PixelBufferDescriptor& pbd) {
-        if(!pbd.isNull()) {
+        if(pbd) {
             auto image = new(std::nothrow) Image();
             image->initWithRawData(pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8);
             imageCallback(image);

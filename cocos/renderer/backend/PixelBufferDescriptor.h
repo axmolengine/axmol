@@ -13,7 +13,9 @@ struct PixelBufferDescriptor
     PixelBufferDescriptor(PixelBufferDescriptor&& rhs) : _data(std::move(rhs._data)), _width(rhs._width), _height(rhs._height) {
         
     }
-    bool isNull() const { return _data.isNull(); }
+    
+    explicit operator bool() const { return !_data.isNull(); }
+    
     Data _data;
     int _width;
     int _height;
