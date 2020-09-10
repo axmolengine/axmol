@@ -220,6 +220,12 @@ CommandBufferMTL::CommandBufferMTL(DeviceMTL* deviceMTL)
 
 CommandBufferMTL::~CommandBufferMTL()
 {
+    // Wait for all frames to finish by submitting and waiting on a dummy command buffer.
+    flush();
+    id<MTLCommandBuffer> oneOffBuffer = [_mtlCommandQueue commandBuffer];
+    [oneOffBuffer commit];
+    [oneOffBuffer waitUntilCompleted];
+    
     dispatch_semaphore_signal(_frameBoundarySemaphore);
 }
 
@@ -369,12 +375,20 @@ void CommandBufferMTL::endFrame()
         dispatch_semaphore_signal(_frameBoundarySemaphore);
     }];
 
-    [_mtlCommandBuffer commit];
-    [_mtlCommandBuffer release];
-    _mtlCommandBuffer = nil;
+    flush();
 
     DeviceMTL::resetCurrentDrawable();
     [_autoReleasePool drain];
+}
+
+void CommandBufferMTL::flush()
+{
+    if(_mtlCommandBuffer) {
+        assert(_mtlCommandBuffer.status != MTLCommandBufferStatusCommitted);
+        [_mtlCommandBuffer commit];
+        [_mtlCommandBuffer release];
+        _mtlCommandBuffer = nil;
+    }
 }
 
 void CommandBufferMTL::afterDraw()
