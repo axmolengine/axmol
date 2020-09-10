@@ -49,6 +49,7 @@ THE SOFTWARE.
 #include "renderer/CCTextureCache.h"
 #include "renderer/CCRenderState.h"
 #include "renderer/backend/Types.h"
+#include "renderer/backend/PixelBufferDescriptor.h"
 
 #include "platform/CCImage.h"
 #include "platform/CCFileUtils.h"
@@ -150,7 +151,7 @@ void onCaptureScreen(const std::function<void(bool, const std::string&)>& afterC
  */
 static EventListenerCustom* s_captureScreenListener;
 static CaptureScreenCallbackCommand s_captureScreenCommand;
-void captureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename)
+void captureScreen(std::function<void(Image*)> imageCallback)
 {
     if (s_captureScreenListener)
     {
@@ -158,7 +159,15 @@ void captureScreen(const std::function<void(bool, const std::string&)>& afterCap
         return;
     }
     s_captureScreenCommand.init(std::numeric_limits<float>::max());
-    s_captureScreenCommand.func = std::bind(onCaptureScreen, afterCaptured, filename, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    s_captureScreenCommand.func = [=](const backend::PixelBufferDescriptor& pbd) {
+        if(!pbd.isNull()) {
+            auto image = new(std::nothrow) Image();
+            image->initWithRawData(pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8);
+            imageCallback(image);
+            image->release();
+        }
+        else imageCallback(nullptr);
+    };
     
     s_captureScreenListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_DRAW, [](EventCustom* /*event*/) {
         auto director = Director::getInstance();

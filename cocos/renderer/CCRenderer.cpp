@@ -310,7 +310,8 @@ void Renderer::processRenderCommand(RenderCommand* command)
 
 void Renderer::captureScreen(RenderCommand *command)
 {
-    _commandBuffer->captureScreen(static_cast<CaptureScreenCallbackCommand*>(command)->func);
+    auto captureCmd = static_cast<CaptureScreenCallbackCommand*>(command);
+    _commandBuffer->capture(captureCmd->src.get(), captureCmd->func);
 }
 
 void Renderer::visitRenderQueue(RenderQueue& queue)

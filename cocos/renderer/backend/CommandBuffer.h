@@ -27,10 +27,13 @@
 #include <cstdint>
 
 #include "base/CCRef.h"
+#include "base/CCData.h"
 
 #include "Macros.h"
 #include "Types.h"
+#include "Texture.h"
 #include "RenderPassDescriptor.h"
+#include "PixelBufferDescriptor.h"
 #include "CCStdC.h"
 #include "ProgramState.h"
 #include "VertexLayout.h"
@@ -169,7 +172,7 @@ public:
      * Get a screen snapshot
      * @param callback A callback to deal with screen snapshot image.
      */
-    virtual void captureScreen(std::function<void(const unsigned char*, int, int)> callback) = 0;
+    virtual void capture(Texture2DBackend* texture2d, std::function<void(const PixelBufferDescriptor&)> callback) = 0;
     
     /**
      * Update both front and back stencil reference value.
