@@ -76,7 +76,7 @@ namespace utils
  */
 static EventListenerCustom* s_captureScreenListener;
 static CaptureCallbackCommand s_captureScreenCommand;
-void captureScreen(std::function<void(Image*)> imageCallback)
+void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
 {
     if (s_captureScreenListener)
     {
@@ -86,8 +86,7 @@ void captureScreen(std::function<void(Image*)> imageCallback)
     s_captureScreenCommand.init(std::numeric_limits<float>::max());
     s_captureScreenCommand.func = [=](const backend::PixelBufferDescriptor& pbd) {
         if(pbd) {
-            auto image = new(std::nothrow) Image();
-            image->initWithRawData(pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8);
+            auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, false);
             imageCallback(image);
         }
         else imageCallback(nullptr);
@@ -104,7 +103,7 @@ void captureScreen(std::function<void(Image*)> imageCallback)
 }
 
 static std::unordered_map<Node*, EventListenerCustom*> s_captureNodeListener;
-void captureNode(Node* startNode, std::function<void(Image*)> imageCallback, float scale)
+void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallback, float scale)
 {
     if (s_captureNodeListener.find(startNode) != s_captureNodeListener.end())
     {
@@ -151,6 +150,7 @@ void captureNode(Node* startNode, std::function<void(Image*)> imageCallback, flo
             sprite->visit();
             finalRtx->end();
         }
+
         Director::getInstance()->getRenderer()->render();
         
         finalRtx->newImage(imageCallback);
@@ -159,6 +159,21 @@ void captureNode(Node* startNode, std::function<void(Image*)> imageCallback, flo
     auto listener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_DRAW, callback);
     
     s_captureNodeListener[startNode] = listener;
+}
+
+// [DEPRECATED]
+void captureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename)
+{
+    std::string outfile;
+    if (FileUtils::getInstance()->isAbsolutePath(filename))
+        outfile = filename;
+    else
+        outfile = FileUtils::getInstance()->getWritablePath() + filename;
+    captureScreen([=,fullPath=std::move(outfile)](RefPtr<Image> image) {
+        bool ok = image && image->saveToFile(fullPath, false);
+        
+        afterCaptured(ok, fullPath);
+    });
 }
 
 std::vector<Node*> findChildren(const Node &node, const std::string &name)

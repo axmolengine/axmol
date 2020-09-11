@@ -158,7 +158,7 @@ public:
      * @return An image.
      * @js NA
      */
-    void newImage(std::function<void(Image*)> imageCallback, bool flipImage = true);
+    void newImage(std::function<void(RefPtr<Image>)> imageCallback, bool flipImage = true);
     
     /** Saves the texture into a file using JPEG format. The file will be saved in the Documents folder.
      * Returns true if the operation is successful.

@@ -460,7 +460,7 @@ void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool 
 }
 
 /* get buffer as Image */
-void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool flipImage)
+void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, bool flipImage)
 {
     CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8888, "only RGBA8888 can be saved as image");
 
@@ -482,8 +482,7 @@ void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool fli
     _captureCommand.src = RefPtr<backend::TextureBackend>(_texture2D->getBackendTexture());
     _captureCommand.func = [=](const backend::PixelBufferDescriptor& pbd) {
         if(pbd) {
-            auto image = new(std::nothrow) Image();
-            image->initWithRawData(pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8);
+            auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, hasPremultipliedAlpha);
             imageCallback(image);
         }
         else imageCallback(nullptr);

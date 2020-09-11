@@ -162,7 +162,7 @@ struct UtilsGL
      * @param outbuffer, the output buffer for fill texels data
      * @remark: !!!this function only can call after endFrame, then it's could be works well.
     */
-    static void readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, bool flipImage, PixelBufferDescriptor& outbuffer);
+    static void readPixels(TextureBackend* texture, std::size_t x, std::size_t y, std::size_t width, std::size_t height, PixelBufferDescriptor& outbuffer);
 };
 //end of _opengl group
 /// @}
