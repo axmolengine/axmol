@@ -51,7 +51,7 @@ void CallbackCommand::execute()
 
 CaptureCallbackCommand::CaptureCallbackCommand()
 {
-    _type = RenderCommand::Type::CAPTURE_SCREEN_COMMAND;
+    _type = RenderCommand::Type::CAPTURE_COMMAND;
 }
 
 void CaptureCallbackCommand::init(float globalOrder)

@@ -298,9 +298,9 @@ void Renderer::processRenderCommand(RenderCommand* command)
             flush();
            static_cast<CallbackCommand*>(command)->execute();
             break;
-        case RenderCommand::Type::CAPTURE_SCREEN_COMMAND:
+        case RenderCommand::Type::CAPTURE_COMMAND:
             flush();
-            captureScreen(command);
+            processCaptureCommand(command);
             break;
         default:
             assert(false);
@@ -308,7 +308,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
     }
 }
 
-void Renderer::captureScreen(RenderCommand *command)
+void Renderer::processCaptureCommand(RenderCommand *command)
 {
     auto captureCmd = static_cast<CaptureCallbackCommand*>(command);
     _commandBuffer->capture(captureCmd->src.get(), captureCmd->func);
