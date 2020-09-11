@@ -311,7 +311,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
 void Renderer::processCaptureCommand(RenderCommand *command)
 {
     auto captureCmd = static_cast<CaptureCallbackCommand*>(command);
-    _commandBuffer->capture(captureCmd->src.get(), captureCmd->func);
+    _commandBuffer->capture(captureCmd->src, captureCmd->func);
 }
 
 void Renderer::visitRenderQueue(RenderQueue& queue)

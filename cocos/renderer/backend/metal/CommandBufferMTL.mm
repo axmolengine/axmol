@@ -356,12 +356,6 @@ void CommandBufferMTL::endRenderPass()
 
 void CommandBufferMTL::capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback)
 {
-#if 0
-    [_mtlCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
-        Utils::getTextureBytes(0, 0, _drawableTexture.width, _drawableTexture.height, _drawableTexture, callback);
-        Device::getInstance()->setFrameBufferOnly(true);
-    }];
-#endif
     CC_SAFE_RETAIN(texture);
     _captureCallbacks.emplace_back(texture, std::move(callback));
 }
@@ -402,6 +396,10 @@ void CommandBufferMTL::flush()
 void CommandBufferMTL::flushCaptureCommands()
 {
     if(!_captureCallbacks.empty()) {
+        // !!!important, if have capture request, must wait pending commandBuffer finish at this frame,
+        // because readPixels require sync operation to get screen pixels properly without data race issue,
+        // otherwise, will lead dead-lock
+        // !!!Notes, MTL is mutli-threading, all GPU handler is dispatch at GPU threads
         [_mtlCommandBuffer waitUntilCompleted];
         
         PixelBufferDescriptor screenPixelData;
