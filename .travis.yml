@@ -34,7 +34,7 @@ jobs:
     #  osx_image: xcode11
 
 script:
-- tools/travis-scripts/run-script.sh
+- travis_wait 180 tools/travis-scripts/run-script.sh
 before_install:
 - tools/travis-scripts/before-install.sh
 
