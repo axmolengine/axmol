@@ -73,6 +73,12 @@ NS_CC_BEGIN
     \
     }   while (0);
 
+// Tell RefPtr, the object already referenced, not need to retain again
+template<typename T>
+struct ReferencedObject {
+    T* _ptr;
+};
+
 /**
  * Wrapper class which maintains a strong reference to a cocos2dx cocos2d::Ref* type object.
  * Similar in concept to a boost smart pointer.
@@ -103,6 +109,10 @@ public:
         : _ptr(ptr)
     {
         CC_REF_PTR_SAFE_RETAIN(_ptr);
+    }
+
+    template<typename _Other>
+    RefPtr(ReferencedObject<_Other>&& ptr) : _ptr(ptr._ptr) {
     }
     
     RefPtr(std::nullptr_t ptr)
@@ -227,7 +237,7 @@ public:
     bool operator <= (typename std::remove_const<T>::type * other) const { return _ptr <= other; }
     
         
-    operator bool() const { return _ptr != nullptr; }
+    explicit operator bool() const { return _ptr != nullptr; }
         
     void reset()
     {

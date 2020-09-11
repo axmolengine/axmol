@@ -661,7 +661,7 @@ void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const 
         pbd._data.fastSet(flippedBuffer, bufferSize);
     }
     else {
-        UtilsGL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), true, pbd);
+        UtilsGL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pbd);
     }
 
     callback(pbd);
