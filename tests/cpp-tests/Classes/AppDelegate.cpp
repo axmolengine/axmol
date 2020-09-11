@@ -54,18 +54,22 @@ void AppDelegate::initGLContextAttrs()
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
+// static Size resourceSize(960, 640);
+static Size resourceSize(1280, 720);
+static Size designSize(480, 320);
+
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // As an example, load config file
     // FIXME:: This should be loaded before the Director is initialized,
     // FIXME:: but at this point, the director is already initialized
     Configuration::getInstance()->loadConfigFile("configs/config-example.plist");
-    
+
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview = GLViewImpl::createWithRect("Cpp Tests", Rect(0, 0, 1280, 720));   
+        glview = GLViewImpl::createWithRect("Cpp Tests", Rect(0, 0, resourceSize.width, resourceSize.height));
         director->setOpenGLView(glview);
     }
     
@@ -73,14 +77,13 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setAnimationInterval(1.0f / 60);
 
     auto screenSize = glview->getFrameSize();
-    auto designSize = Size(480, 320);
+
 
     auto fileUtils = FileUtils::getInstance();
     std::vector<std::string> searchPaths;
     
     if (screenSize.height > 320)
     {
-        auto resourceSize = Size(1280, 720);
         searchPaths.push_back("hd");
         searchPaths.push_back("ccs-res/hd");
         searchPaths.push_back("ccs-res");
