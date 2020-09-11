@@ -73,7 +73,7 @@ NS_CC_BEGIN
     \
     }   while (0);
 
-// Tell RefPtr, the object already referenced, not need to retain again
+// Tell RefPtr, the object already referenced, no need to retain again
 template<typename T>
 struct ReferencedObject {
     T* _ptr;
