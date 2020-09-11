@@ -38,7 +38,7 @@ class ImGuiEXTTest : public TestCase
 public:
     CREATE_FUNC(ImGuiEXTTest);
 
-    std::string title() const { return "ImGuiEXT Test"; }
+    std::string title() const override { return "ImGuiEXT Test"; }
 
     void onEnter() override;
     void onDrawImGui();
