@@ -385,35 +385,6 @@ void TextureMTL::updateCompressedSubData(std::size_t xoffset, std::size_t yoffse
     updateSubData(xoffset, yoffset, width, height, level, data, index);
 }
 
-//void TextureMTL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
-//{
-//    CC_ASSERT(width <= _width && height <= _height);
-//
-//    auto bitsPerElement = _bitsPerElement;
-//    auto flipImageFunc = [callback, flipImage, bitsPerElement](const unsigned char* image, int width, int height){
-//        //consistent with opengl behavior
-//        auto bytePerRow = width * bitsPerElement / 8;
-//        if(!flipImage)
-//        {
-//            unsigned char* flippedImage = new unsigned char[bytePerRow * height];
-//            for (int i = 0; i < height; ++i)
-//            {
-//                memcpy(&flippedImage[i * bytePerRow],
-//                       &image[(height - i - 1) * bytePerRow],
-//                       bytePerRow);
-//            }
-//            callback(flippedImage, width, height);
-//            CC_SAFE_DELETE_ARRAY(flippedImage);
-//        }
-//        else
-//        {
-//            callback(image, width, height);
-//        }
-//    };
-//    auto flipImageCallback = std::bind(flipImageFunc, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-//    UtilsMTL::getTextureBytes(x, y, width, height, this->getMTLTexture(), flipImageCallback);
-//}
-
 void TextureMTL::generateMipmaps()
 {
     if (TextureUsage::RENDER_TARGET == _textureUsage || isColorRenderable(_textureFormat) == false)
