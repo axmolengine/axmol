@@ -27,6 +27,7 @@
 #include "base/ccMacros.h"
 #include "platform/CCGL.h"
 #include "renderer/backend/Types.h"
+#include "renderer/backend/PixelBufferDescriptor.h"
 
 CC_BACKEND_BEGIN
 /**

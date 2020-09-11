@@ -51,14 +51,14 @@ struct TextureDescriptor
     SamplerDescriptor samplerDescriptor;
 };
 
-class UtilsGL;
+struct UtilsGL;
 
 /**
  * A base texture
  */
 class TextureBackend : public Ref
 {
-    friend class UtilsGL;
+    friend struct UtilsGL;
 public:
     /**
      * Update sampler

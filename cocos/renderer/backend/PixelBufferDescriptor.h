@@ -17,8 +17,8 @@ struct PixelBufferDescriptor
     explicit operator bool() const { return !_data.isNull(); }
     
     Data _data;
-    int _width;
-    int _height;
+    int _width = 0;
+    int _height = 0;
 };
 
 CC_BACKEND_END

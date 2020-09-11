@@ -127,6 +127,16 @@ ssize_t Data::copy(const unsigned char* bytes, const ssize_t size)
     return _size;
 }
 
+void Data::resize(ssize_t size)
+{
+    if (_size < size) {
+        auto newmb = (uint8_t*)realloc(_bytes, size);
+        if (!newmb) return;
+        _bytes = newmb;
+    }
+    _size = size;
+}
+
 void Data::fastSet(unsigned char* bytes, const ssize_t size)
 {
     CCASSERT(size >= 0, "fastSet size should be non-negative");

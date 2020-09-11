@@ -101,6 +101,8 @@ public:
      */
     ssize_t copy(const unsigned char* bytes, const ssize_t size);
 
+    void resize(ssize_t size);
+
     /** Fast set the buffer pointer and its size. Please use it carefully.
      *  @param bytes The buffer pointer, note that it have to be allocated by 'malloc' or 'calloc',
      *         since in the destructor of Data, the buffer will be deleted by 'free'.
