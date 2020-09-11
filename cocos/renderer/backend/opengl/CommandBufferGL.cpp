@@ -632,7 +632,6 @@ void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const 
 {
     PixelBufferDescriptor pbd;
     if (!texture) { // screen capture
-
         int bufferSize = _viewPort.w * _viewPort.h * 4;
         std::unique_ptr<GLubyte[]> buffer(new GLubyte[bufferSize]);
         memset(buffer.get(), 0, bufferSize);
