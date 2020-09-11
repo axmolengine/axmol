@@ -31,6 +31,14 @@
 
 #define MAX_INFLIGHT_BUFFER 3
 
+// compatibility with non-clang compilers...
+#ifndef __has_attribute
+#define __has_attribute(x) 0
+#endif
+#ifndef __has_builtin
+#define __has_builtin(x) 0
+#endif
+
  /*
   * helps the compiler's optimizer predicting branches
   */

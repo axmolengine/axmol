@@ -86,7 +86,8 @@ CommandBufferGL::CommandBufferGL()
 
 CommandBufferGL::~CommandBufferGL()
 {
-    glDeleteFramebuffers(1, &_generatedFBO);
+    if(_generatedFBO)
+        glDeleteFramebuffers(1, &_generatedFBO);
     CC_SAFE_RELEASE_NULL(_renderPipeline);
 
     cleanResources();
@@ -378,6 +379,7 @@ void CommandBufferGL::endRenderPass()
 
 void CommandBufferGL::endFrame()
 {
+    // executeGpuCommandsCompleteOps();
 }
 
 void CommandBufferGL::setDepthStencilState(DepthStencilState* depthStencilState)	
@@ -631,7 +633,43 @@ void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float wid
 void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback)
 {
     PixelBufferDescriptor pbd;
+
     if (!texture) { // screen capture
+#if defined(GL_VERSION_2_1)
+        auto width = _viewPort.w + _viewPort.x;
+        auto height = _viewPort.h + _viewPort.y;
+        int bufferSize = width * height * 4;
+
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+        GLuint pbo;
+        glGenBuffers(1, &pbo);
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+        glBufferData(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
+        glReadPixels(_viewPort.x, _viewPort.y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        
+        // glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
+        auto mappedBuffer = (uint8_t*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY); 
+        if (mappedBuffer) {
+            // now we need to flip the buffer vertically to match our API
+            auto left = 0;
+            auto top = 0;
+            pbd._data.resize(bufferSize);
+            pbd._width = width;
+            pbd._height = height;
+
+            auto buffer = pbd._data.getBytes();
+
+            for (int row = 0; row < height; ++row)
+            {
+                memcpy(buffer + (height - row - 1) * width * 4, mappedBuffer + row * width * 4, width * 4);
+            }
+
+            glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+        }
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+        glDeleteBuffers(1, &pbo);
+#else
         int bufferSize = _viewPort.w * _viewPort.h * 4;
         std::unique_ptr<GLubyte[]> buffer(new GLubyte[bufferSize]);
         memset(buffer.get(), 0, bufferSize);
@@ -658,11 +696,11 @@ void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const 
         pbd._width = _viewPort.w;
         pbd._height = _viewPort.h;
         pbd._data.fastSet(flippedBuffer, bufferSize);
+#endif
     }
     else {
         UtilsGL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pbd);
     }
-
     callback(pbd);
 }
 
