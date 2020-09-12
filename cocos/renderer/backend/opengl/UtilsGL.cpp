@@ -592,7 +592,7 @@ GLenum UtilsGL::toGLCullMode(CullMode mode)
         return GL_FRONT;
 }
 
-void UtilsGL::readPixels(TextureBackend* texture, std::size_t x, std::size_t y, std::size_t width, std::size_t height, PixelBufferDescriptor& outbuffer)
+void UtilsGL::readPixels(TextureBackend* texture, std::size_t x, std::size_t y, std::size_t width, std::size_t height, PixelBufferDescriptor& pbd)
 {
     GLint defaultFBO = 0;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
@@ -622,19 +622,19 @@ void UtilsGL::readPixels(TextureBackend* texture, std::size_t x, std::size_t y, 
     auto bytePerRow = width * texture->_bitsPerElement / 8;
     auto bufferSize = bytePerRow * height;
     std::unique_ptr<uint8_t[]> buffer(new uint8_t[bufferSize]);
-    glReadPixels(x,y,width, height,GL_RGBA,GL_UNSIGNED_BYTE, buffer.get());
+    glReadPixels(x,y,width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer.get());
 
-    outbuffer._width = width;
-    outbuffer._height = height;
-
-    uint8_t* flippedImage = (uint8_t*)malloc(bytePerRow * height);
-    for (int i = 0; i < height; ++i)
-    {
-        memcpy(&flippedImage[i * bytePerRow],
-            &buffer[(height - i - 1) * bytePerRow],
-            bytePerRow);
+    uint8_t* flippedPixels = pbd._data.resize(bufferSize);
+    if (flippedPixels) {
+        for (int i = 0; i < height; ++i)
+        {
+            memcpy(&flippedPixels[i * bytePerRow],
+                &buffer[(height - i - 1) * bytePerRow],
+                bytePerRow);
+        }
+        pbd._width = width;
+        pbd._height = height;
     }
-    outbuffer._data.fastSet(flippedImage, bytePerRow * height);
 
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
     glDeleteFramebuffers(1, &frameBuffer);

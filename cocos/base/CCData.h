@@ -84,7 +84,7 @@ public:
      *
      * @return Pointer of bytes used internal in Data.
      */
-    unsigned char* getBytes() const;
+    uint8_t* getBytes() const;
 
     /**
      * Gets the size of the bytes.
@@ -101,7 +101,7 @@ public:
      */
     ssize_t copy(const unsigned char* bytes, const ssize_t size);
 
-    void resize(ssize_t size);
+    uint8_t* resize(ssize_t size);
 
     /** Fast set the buffer pointer and its size. Please use it carefully.
      *  @param bytes The buffer pointer, note that it have to be allocated by 'malloc' or 'calloc',
@@ -110,7 +110,7 @@ public:
      *        2. The pointer should not be used outside after it was passed to this method.
      *  @see Data::copy
      */
-    void fastSet(unsigned char* bytes, const ssize_t size);
+    void fastSet(uint8_t* bytes, const ssize_t size);
 
     /**
      * Clears data, free buffer and reset data size.
@@ -149,7 +149,7 @@ private:
     void move(Data& other);
 
 private:
-    unsigned char* _bytes;
+    uint8_t* _bytes;
     ssize_t _size;
 };
 
