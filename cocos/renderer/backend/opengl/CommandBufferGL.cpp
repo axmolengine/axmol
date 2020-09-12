@@ -635,9 +635,9 @@ void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const 
     PixelBufferDescriptor pbd;
 
     if (!texture) { // screen capture
-#if defined(GL_VERSION_2_1)
-        auto width = _viewPort.w + _viewPort.x;
-        auto height = _viewPort.h + _viewPort.y;
+#if defined(GL_VERSION_2_1) && 0
+        auto width = _viewPort.w;
+        auto height = _viewPort.h;
         int bufferSize = width * height * 4;
 
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -679,7 +679,7 @@ void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const 
             return;
         }
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
-        glReadPixels(0, 0, _viewPort.w, _viewPort.h, GL_RGBA, GL_UNSIGNED_BYTE, buffer.get());
+        glReadPixels(_viewPort.x, _viewPort.y, _viewPort.w, _viewPort.h, GL_RGBA, GL_UNSIGNED_BYTE, buffer.get());
 
         GLubyte* flippedBuffer = (GLubyte*)malloc(bufferSize);
         memset(flippedBuffer, 0, bufferSize);
