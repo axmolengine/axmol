@@ -635,7 +635,7 @@ void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const 
     PixelBufferDescriptor pbd;
 
     if (!texture) { // screen capture
-#if defined(GL_VERSION_2_1) && 0
+#if defined(GL_VERSION_2_1)
         auto width = _viewPort.w;
         auto height = _viewPort.h;
         int bufferSize = width * height * 4;
