@@ -79,8 +79,7 @@ namespace utils
     * @param startNode specify the snapshot Node. It should be cocos2d::Scene
     * @param scale
     * @returns: return a Image, then can call saveToFile to save the image as "xxx.png or xxx.jpg".
-    * @since v3.11
-    * !!! remark: Caller is responsible for releasing it by calling delete.
+    * @since v4.0 with egnx
     */
     CC_DLL void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallback, float scale = 1.0f);
 
