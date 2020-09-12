@@ -629,7 +629,7 @@ void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float wid
         glDisable(GL_SCISSOR_TEST);
     }
 }
-
+ 
 void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback)
 {
     PixelBufferDescriptor pbd;
@@ -651,28 +651,21 @@ void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const 
         // glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
         auto mappedBuffer = (uint8_t*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY); 
         if (mappedBuffer) {
-            // now we need to flip the buffer vertically to match our API
-            auto left = 0;
-            auto top = 0;
-            pbd._data.resize(bufferSize);
-            pbd._width = width;
-            pbd._height = height;
-
-            auto buffer = pbd._data.getBytes();
-
-            for (int row = 0; row < height; ++row)
-            {
-                memcpy(buffer + (height - row - 1) * width * 4, mappedBuffer + row * width * 4, width * 4);
+            // now we need to flip the buffer vertically
+            auto buffer = pbd._data.resize(bufferSize);
+            if (buffer) {
+                for (int row = 0; row < height; ++row)
+                    memcpy(buffer + (height - row - 1) * width * 4, mappedBuffer + row * width * 4, width * 4);
+                pbd._width = width;
+                pbd._height = height;
             }
-
             glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
         }
         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
         glDeleteBuffers(1, &pbo);
 #else
         int bufferSize = _viewPort.w * _viewPort.h * 4;
-        std::unique_ptr<GLubyte[]> buffer(new GLubyte[bufferSize]);
-        memset(buffer.get(), 0, bufferSize);
+        std::unique_ptr<uint8_t[]> buffer(new(std::nothrow) uint8_t[bufferSize]);
         if (!buffer)
         {
             callback(pbd);
@@ -681,21 +674,19 @@ void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const 
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
         glReadPixels(_viewPort.x, _viewPort.y, _viewPort.w, _viewPort.h, GL_RGBA, GL_UNSIGNED_BYTE, buffer.get());
 
-        GLubyte* flippedBuffer = (GLubyte*)malloc(bufferSize);
-        memset(flippedBuffer, 0, bufferSize);
+        auto flippedBuffer = pbd._data.resize(bufferSize);
         if (!flippedBuffer)
         {
             callback(pbd);
             return;
         }
+
+        // now we need to flip the buffer vertically
         for (int row = 0; row < _viewPort.h; ++row)
-        {
             memcpy(flippedBuffer + (_viewPort.h - row - 1) * _viewPort.w * 4, buffer.get() + row * _viewPort.w * 4, _viewPort.w * 4);
-        }
 
         pbd._width = _viewPort.w;
         pbd._height = _viewPort.h;
-        pbd._data.fastSet(flippedBuffer, bufferSize);
 #endif
     }
     else {

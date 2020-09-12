@@ -217,19 +217,19 @@ void UtilsMTL::swizzleImage(unsigned char *image, std::size_t width, std::size_t
     }
 }
 
-void UtilsMTL::readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& outbuffer)
+void UtilsMTL::readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
 {
     switch(texture->getTextureType()){
         case TextureType::TEXTURE_2D:
-            UtilsMTL::readPixels(static_cast<TextureMTL*>(texture)->getMTLTexture(), origX, origY, rectWidth, rectHeight, outbuffer);
+            UtilsMTL::readPixels(static_cast<TextureMTL*>(texture)->getMTLTexture(), origX, origY, rectWidth, rectHeight, pbd);
             break;
         case TextureType::TEXTURE_CUBE:
-            UtilsMTL::readPixels(static_cast<TextureCubeMTL*>(texture)->getMTLTexture(), origX, origY, rectWidth, rectHeight, outbuffer);
+            UtilsMTL::readPixels(static_cast<TextureCubeMTL*>(texture)->getMTLTexture(), origX, origY, rectWidth, rectHeight, pbd);
             break;
     }
 }
 
-void UtilsMTL::readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& outbuffer)
+void UtilsMTL::readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
 {
     NSUInteger texWidth = texture.width;
     NSUInteger texHeight = texture.height;
@@ -258,15 +258,14 @@ void UtilsMTL::readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t
    
     [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
        auto bytePerRow = rectWidth * getBitsPerElement(texture.pixelFormat) / 8;
-       uint8_t* texelsData = (uint8_t*)malloc(bytePerRow * rectHeight);
-       if(texelsData != nullptr)
+       auto texelData = pbd._data.resize(bytePerRow * rectHeight);
+       if(texelData != nullptr)
        {
-          [readPixelsTexture getBytes:texelsData bytesPerRow:bytePerRow fromRegion:imageRegion mipmapLevel:0];
-          swizzleImage(texelsData, rectWidth, rectHeight, readPixelsTexture.pixelFormat);
+          [readPixelsTexture getBytes:texelData bytesPerRow:bytePerRow fromRegion:imageRegion mipmapLevel:0];
+          swizzleImage(texelData, rectWidth, rectHeight, readPixelsTexture.pixelFormat);
+          pbd._width = rectWidth;
+          pbd._height = rectHeight;
        }
-       outbuffer._data.fastSet(texelsData, bytePerRow * rectHeight);
-       outbuffer._width = rectWidth;
-       outbuffer._height = rectHeight;
        [readPixelsTexture release];
     }];
     [commandBuffer commit];
