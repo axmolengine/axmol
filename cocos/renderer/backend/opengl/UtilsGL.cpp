@@ -592,52 +592,77 @@ GLenum UtilsGL::toGLCullMode(CullMode mode)
         return GL_FRONT;
 }
 
-void UtilsGL::readPixels(TextureBackend* texture, std::size_t x, std::size_t y, std::size_t width, std::size_t height, PixelBufferDescriptor& pbd)
+void UtilsGL::readPixels(TextureBackend* texture, GLint x, GLint y, std::size_t width, std::size_t height, PixelBufferDescriptor& pbd)
 {
     GLint defaultFBO = 0;
-    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
     GLuint frameBuffer = 0;
-    glGenFramebuffers(1, &frameBuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer); 
-    
-    /** Notes from cocos2d-x v3
-    // TODO: move this to configuration, so we don't check it every time
-    // Certain Qualcomm Adreno GPU's will retain data in memory after a frame buffer switch which corrupts the render to the texture. The solution is to clear the frame buffer before rendering to the texture. However, calling glClear has the unintended result of clearing the current texture. Create a temporary texture to overcome this. At the end of RenderTexture::begin(), switch the attached texture to the second one, call glClear, and then switch back to the original texture. This solution is unnecessary for other devices as they don't have the same issue with switching frame buffers.
 
-    if (Configuration::getInstance()->checkForGLExtension("GL_QCOM"))
-    {
-        // -- bind a temporary texture so we can clear the render buffer without losing our texture
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _textureCopy->getName(), 0);
-        CHECK_GL_ERROR_DEBUG();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->getName(), 0);
+    std::size_t bytesPerRow = 0;
+    if (UTILS_LIKELY(!texture)) // read pixels from screen
+        bytesPerRow = width * 4;
+    else { // read pixels from GPU texture
+        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
+
+        glGenFramebuffers(1, &frameBuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+        /** Notes from cocos2d-x v3
+        // TODO: move this to configuration, so we don't check it every time
+        // Certain Qualcomm Adreno GPU's will retain data in memory after a frame buffer switch which corrupts the render to the texture. The solution is to clear the frame buffer before rendering to the texture. However, calling glClear has the unintended result of clearing the current texture. Create a temporary texture to overcome this. At the end of RenderTexture::begin(), switch the attached texture to the second one, call glClear, and then switch back to the original texture. This solution is unnecessary for other devices as they don't have the same issue with switching frame buffers.
+
+        if (Configuration::getInstance()->checkForGLExtension("GL_QCOM"))
+        {
+            // -- bind a temporary texture so we can clear the render buffer without losing our texture
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _textureCopy->getName(), 0);
+            CHECK_GL_ERROR_DEBUG();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->getName(), 0);
+        }
+        */
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+            texture->getTextureType() == TextureType::TEXTURE_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
+            static_cast<GLuint>(texture->getHandler()),
+            0);
+
+        bytesPerRow = width * texture->_bitsPerElement / 8;
     }
-    */
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
-        texture->getTextureType() == TextureType::TEXTURE_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP, 
-        static_cast<GLuint>(texture->getHandler()), 
-        0);
+
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-    auto bytePerRow = width * texture->_bitsPerElement / 8;
-    auto bufferSize = bytePerRow * height;
-    std::unique_ptr<uint8_t[]> buffer(new uint8_t[bufferSize]);
-    glReadPixels(x,y,width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer.get());
-
-    uint8_t* flippedPixels = pbd._data.resize(bufferSize);
-    if (flippedPixels) {
-        for (int i = 0; i < height; ++i)
-        {
-            memcpy(&flippedPixels[i * bytePerRow],
-                &buffer[(height - i - 1) * bytePerRow],
-                bytePerRow);
+    auto bufferSize = bytesPerRow * height;
+#if defined(GL_VERSION_2_1)
+    GLuint pbo;
+    glGenBuffers(1, &pbo);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+    glBufferData(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
+    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    auto buffer = (uint8_t*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+#else
+    std::unique_ptr<uint8_t[]> bufferStorage(new uint8_t[bufferSize]);
+    auto buffer = bufferStorage.get();
+    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+#endif
+    uint8_t* wptr = pbd._data.resize(bufferSize);
+    if (wptr) {
+        auto rptr = buffer + (height - 1) * bytesPerRow;
+        for (int row = 0; row < height; ++row) {
+            memcpy(wptr, rptr, bytesPerRow);
+            wptr += bytesPerRow;
+            rptr -= bytesPerRow;
         }
         pbd._width = width;
         pbd._height = height;
     }
+#if defined(GL_VERSION_2_1)
+    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+    glDeleteBuffers(1, &pbo);
+#endif
 
-    glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
-    glDeleteFramebuffers(1, &frameBuffer);
+    if (UTILS_UNLIKELY(frameBuffer)) {
+        glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
+        glDeleteFramebuffers(1, &frameBuffer);
+    }
 }
 
 CC_BACKEND_END
