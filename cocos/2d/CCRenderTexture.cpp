@@ -312,7 +312,7 @@ void RenderTexture::beginWithClear(float r, float g, float b, float a, float dep
     setClearStencil(stencilValue);
     setClearFlags(flags);
     begin();
-    Director::getInstance()->getRenderer()->clear(_clearFlags, _clearColor, _clearDepth, _clearStencil, _globalZOrder);
+    _director->getRenderer()->clear(_clearFlags, _clearColor, _clearDepth, _clearStencil, _globalZOrder);
 }
 
 void RenderTexture::clear(float r, float g, float b, float a)
@@ -342,12 +342,11 @@ void RenderTexture::visit(Renderer *renderer, const Mat4 &parentTransform, uint3
     
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
-    Director* director = Director::getInstance();
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 
     _sprite->visit(renderer, _modelViewTransform, flags);
     if (isVisitableByVisitingCamera())
@@ -355,7 +354,7 @@ void RenderTexture::visit(Renderer *renderer, const Mat4 &parentTransform, uint3
         draw(renderer, _modelViewTransform, flags);
     }
     
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
@@ -418,7 +417,7 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName, Image::Forma
     _saveToFileCommand.init(_globalZOrder);
     _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, true);
 
-    Director::getInstance()->getRenderer()->addCommand(&_saveToFileCommand);
+    _director->getRenderer()->addCommand(&_saveToFileCommand);
     return true;
 }
 
@@ -435,7 +434,7 @@ bool RenderTexture::saveToFile(const std::string& fileName, Image::Format format
     _saveToFileCommand.init(_globalZOrder);
     _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
     
-    Director::getInstance()->getRenderer()->addCommand(&_saveToFileCommand);
+    _director->getRenderer()->addCommand(&_saveToFileCommand);
     return true;
 }
 
@@ -570,35 +569,32 @@ void RenderTexture::onEnd()
 
 void RenderTexture::begin()
 {
-    Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    _projectionMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    _projectionMatrix = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _transformMatrix = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _transformMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
     if(!_keepMatrix)
     {
-        director->setProjection(director->getProjection());
+        _director->setProjection(_director->getProjection());
         
         const Size& texSize = _texture2D->getContentSizeInPixels();
         
         // Calculate the adjustment ratios based on the old and new projections
-        Size size = director->getWinSizeInPixels();
+        Size size = _director->getWinSizeInPixels();
         
         float widthRatio = size.width / texSize.width;
         float heightRatio = size.height / texSize.height;
         
         Mat4 orthoMatrix;
         Mat4::createOrthographicOffCenter((float)-1.0 / widthRatio, (float)1.0 / widthRatio, (float)-1.0 / heightRatio, (float)1.0 / heightRatio, -1, 1, &orthoMatrix);
-        director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
+        _director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
     }
 
     _groupCommand.init(_globalZOrder);
 
-    Renderer *renderer =  Director::getInstance()->getRenderer();
+    Renderer *renderer = _director->getRenderer();
     renderer->addCommand(&_groupCommand);
     renderer->pushGroup(_groupCommand.getRenderQueueID());
 
@@ -612,15 +608,12 @@ void RenderTexture::end()
     _endCommand.init(_globalZOrder);
     _endCommand.func = CC_CALLBACK_0(RenderTexture::onEnd, this);
 
-    Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-    
-    Renderer *renderer = director->getRenderer();
+    Renderer *renderer = _director->getRenderer();
     renderer->addCommand(&_endCommand);
     renderer->popGroup();
 
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void RenderTexture::setClearFlags(ClearFlag clearFlags)
@@ -635,7 +628,7 @@ void RenderTexture::setClearFlags(ClearFlag clearFlags)
 
 void RenderTexture::clearColorAttachment()
 {
-    auto renderer = Director::getInstance()->getRenderer();
+    auto renderer = _director->getRenderer();
     _beforeClearAttachmentCommand.func = [=]() -> void {
         _oldColorAttachment = renderer->getColorAttachment();
         renderer->setRenderTarget(RenderTargetFlag::COLOR, _texture2D, nullptr, nullptr);
