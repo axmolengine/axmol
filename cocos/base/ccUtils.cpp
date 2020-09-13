@@ -74,32 +74,15 @@ namespace utils
 /*
  * Capture screen interface
  */
-static EventListenerCustom* s_captureScreenListener;
-static CaptureCallbackCommand s_captureScreenCommand;
 void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
 {
-    if (s_captureScreenListener)
-    {
-        CCLOG("Warning: CaptureScreen has been called already, don't call more than once in one frame.");
-        return;
-    }
-    s_captureScreenCommand.init(std::numeric_limits<float>::max());
-    s_captureScreenCommand.func = [=](const backend::PixelBufferDescriptor& pbd) {
+    Director::getInstance()->getRenderer()->readPixels(nullptr, [=](const backend::PixelBufferDescriptor& pbd) {
         if(pbd) {
             auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, false);
             imageCallback(image);
         }
         else imageCallback(nullptr);
-    };
-    
-    s_captureScreenListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_DRAW, [](EventCustom* /*event*/) {
-        auto director = Director::getInstance();
-        director->getEventDispatcher()->removeEventListener((EventListener*)(s_captureScreenListener));
-        s_captureScreenListener = nullptr;
-        director->getRenderer()->addCommand(&s_captureScreenCommand);
-        director->getRenderer()->render();
     });
-
 }
 
 static std::unordered_map<Node*, EventListenerCustom*> s_captureNodeListener;

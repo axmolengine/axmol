@@ -478,16 +478,13 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
     int savedBufferHeight = (int)s.height;
     bool hasPremultipliedAlpha = _texture2D->hasPremultipliedAlpha();
     
-    _captureCommand.init((std::numeric_limits<float>::max)());
-    _captureCommand.src = RefPtr<backend::TextureBackend>(_texture2D->getBackendTexture());
-    _captureCommand.func = [=](const backend::PixelBufferDescriptor& pbd) {
+    _director->getRenderer()->readPixels(_texture2D->getBackendTexture(), [=](const backend::PixelBufferDescriptor& pbd) {
         if(pbd) {
             auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, hasPremultipliedAlpha);
             imageCallback(image);
         }
         else imageCallback(nullptr);
-    };
-    _director->getRenderer()->addCommand(&_captureCommand);
+    });
 }
 
 void RenderTexture::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)

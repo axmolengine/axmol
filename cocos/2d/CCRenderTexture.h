@@ -383,8 +383,6 @@ protected:
     CallbackCommand _beginCommand;
     CallbackCommand _endCommand;
     
-    CaptureCallbackCommand _captureCommand;
-
     CallbackCommand _beforeClearAttachmentCommand;
     CallbackCommand _afterClearAttachmentCommand;
     /*this command is used to encapsulate saveToFile,
