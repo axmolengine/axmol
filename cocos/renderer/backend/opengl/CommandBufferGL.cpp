@@ -86,7 +86,8 @@ CommandBufferGL::CommandBufferGL()
 
 CommandBufferGL::~CommandBufferGL()
 {
-    glDeleteFramebuffers(1, &_generatedFBO);
+    if(_generatedFBO)
+        glDeleteFramebuffers(1, &_generatedFBO);
     CC_SAFE_RELEASE_NULL(_renderPipeline);
 
     cleanResources();
@@ -378,6 +379,7 @@ void CommandBufferGL::endRenderPass()
 
 void CommandBufferGL::endFrame()
 {
+    // executeGpuCommandsCompleteOps();
 }
 
 void CommandBufferGL::setDepthStencilState(DepthStencilState* depthStencilState)	
@@ -627,33 +629,15 @@ void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float wid
         glDisable(GL_SCISSOR_TEST);
     }
 }
-
-void CommandBufferGL::captureScreen(std::function<void(const unsigned char*, int, int)> callback)
+ 
+void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback)
 {
-    int bufferSize = _viewPort.w * _viewPort.h *4;
-    std::shared_ptr<GLubyte> buffer(new GLubyte[bufferSize], [](GLubyte* p){ CC_SAFE_DELETE_ARRAY(p); });
-    memset(buffer.get(), 0, bufferSize);
-    if (!buffer)
-    {
-        callback(nullptr, 0, 0);
-        return;
-    }
-    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glReadPixels(0, 0, _viewPort.w, _viewPort.h, GL_RGBA, GL_UNSIGNED_BYTE, buffer.get());
-
-    std::shared_ptr<GLubyte> flippedBuffer(new GLubyte[bufferSize], [](GLubyte* p) { CC_SAFE_DELETE_ARRAY(p); });
-    memset(flippedBuffer.get(), 0, bufferSize);
-    if (!flippedBuffer)
-    {
-        callback(nullptr, 0, 0);
-        return;
-    }
-    for (int row = 0; row < _viewPort.h; ++row)
-    {
-        memcpy(flippedBuffer.get() + (_viewPort.h - row - 1) * _viewPort.w * 4, buffer.get() + row * _viewPort.w * 4, _viewPort.w * 4);
-    }
-
-    callback(flippedBuffer.get(), _viewPort.w, _viewPort.h);
+    PixelBufferDescriptor pbd;
+    if (!texture)
+        UtilsGL::readPixels(nullptr, _viewPort.x, _viewPort.y, _viewPort.w, _viewPort.h, pbd);
+    else
+        UtilsGL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pbd);
+    callback(pbd);
 }
 
 CC_BACKEND_END

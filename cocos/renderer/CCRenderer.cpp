@@ -298,19 +298,10 @@ void Renderer::processRenderCommand(RenderCommand* command)
             flush();
            static_cast<CallbackCommand*>(command)->execute();
             break;
-        case RenderCommand::Type::CAPTURE_SCREEN_COMMAND:
-            flush();
-            captureScreen(command);
-            break;
         default:
             assert(false);
             break;
     }
-}
-
-void Renderer::captureScreen(RenderCommand *command)
-{
-    _commandBuffer->captureScreen(static_cast<CaptureScreenCallbackCommand*>(command)->func);
 }
 
 void Renderer::visitRenderQueue(RenderQueue& queue)
@@ -745,6 +736,13 @@ bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
     visibleRect.size.height += wshh * 2;
     bool ret = visibleRect.containsPoint(v2p);
     return ret;
+}
+
+void Renderer::readPixels(backend::TextureBackend* texture, std::function<void(const backend::PixelBufferDescriptor&)> callback)
+{
+    if(!texture) // read pixels from screen, metal renderer backend: screen texture must not be a framebufferOnly
+        backend::Device::getInstance()->setFrameBufferOnly(false);
+    _commandBuffer->capture(texture, std::move(callback));
 }
 
 void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor, const backend::RenderPassDescriptor& renderPassDescriptor)

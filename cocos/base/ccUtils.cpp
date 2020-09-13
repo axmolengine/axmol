@@ -49,6 +49,7 @@ THE SOFTWARE.
 #include "renderer/CCTextureCache.h"
 #include "renderer/CCRenderState.h"
 #include "renderer/backend/Types.h"
+#include "renderer/backend/PixelBufferDescriptor.h"
 
 #include "platform/CCImage.h"
 #include "platform/CCFileUtils.h"
@@ -70,108 +71,22 @@ int ccNextPOT(int x)
 
 namespace utils
 {
-/**
-* Capture screen implementation, don't use it directly.
-*/
-void onCaptureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename, const unsigned char* imageData, int width, int height)
-{
-    if(!imageData)
-    {
-        afterCaptured(false, "");
-        return;
-    }
-    
-    static bool startedCapture = false;
-
-    if (startedCapture)
-    {
-        CCLOG("Screen capture is already working");
-        if (afterCaptured)
-        {
-            afterCaptured(false, filename);
-        }
-        return;
-    }
-    else
-    {
-        startedCapture = true;
-    }
-
-    bool succeed = false;
-    std::string outputFile = "";
-
-    do
-    {
-        Image* image = new (std::nothrow) Image;
-        if (image)
-        {
-            image->initWithRawData(imageData, width * height * 4, width, height, 8);
-            if (FileUtils::getInstance()->isAbsolutePath(filename))
-            {
-                outputFile = filename;
-            }
-            else
-            {
-                CCASSERT(filename.find('/') == std::string::npos, "The existence of a relative path is not guaranteed!");
-                outputFile = FileUtils::getInstance()->getWritablePath() + filename;
-            }
-
-            // Save image in AsyncTaskPool::TaskType::TASK_IO thread, and call afterCaptured in mainThread
-            static bool succeedSaveToFile = false;
-            std::function<void(void*)> mainThread = [afterCaptured, outputFile](void* /*param*/)
-            {
-                if (afterCaptured)
-                {
-                    afterCaptured(succeedSaveToFile, outputFile);
-                }
-                startedCapture = false;
-            };
-
-            AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO, std::move(mainThread), nullptr, [image, outputFile]()
-            {
-                succeedSaveToFile = image->saveToFile(outputFile);
-                delete image;
-            });
-        }
-        else
-        {
-            CCLOG("Malloc Image memory failed!");
-            if (afterCaptured)
-            {
-                afterCaptured(succeed, outputFile);
-            }
-            startedCapture = false;
-        }
-    } while (0);
-}
-
 /*
  * Capture screen interface
  */
-static EventListenerCustom* s_captureScreenListener;
-static CaptureScreenCallbackCommand s_captureScreenCommand;
-void captureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename)
+void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
 {
-    if (s_captureScreenListener)
-    {
-        CCLOG("Warning: CaptureScreen has been called already, don't call more than once in one frame.");
-        return;
-    }
-    s_captureScreenCommand.init(std::numeric_limits<float>::max());
-    s_captureScreenCommand.func = std::bind(onCaptureScreen, afterCaptured, filename, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-    
-    s_captureScreenListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_DRAW, [](EventCustom* /*event*/) {
-        auto director = Director::getInstance();
-        director->getEventDispatcher()->removeEventListener((EventListener*)(s_captureScreenListener));
-        s_captureScreenListener = nullptr;
-        director->getRenderer()->addCommand(&s_captureScreenCommand);
-        director->getRenderer()->render();
+    Director::getInstance()->getRenderer()->readPixels(nullptr, [=](const backend::PixelBufferDescriptor& pbd) {
+        if(pbd) {
+            auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, false);
+            imageCallback(image);
+        }
+        else imageCallback(nullptr);
     });
-
 }
 
 static std::unordered_map<Node*, EventListenerCustom*> s_captureNodeListener;
-void captureNode(Node* startNode, std::function<void(Image*)> imageCallback, float scale)
+void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallback, float scale)
 {
     if (s_captureNodeListener.find(startNode) != s_captureNodeListener.end())
     {
@@ -218,6 +133,7 @@ void captureNode(Node* startNode, std::function<void(Image*)> imageCallback, flo
             sprite->visit();
             finalRtx->end();
         }
+
         Director::getInstance()->getRenderer()->render();
         
         finalRtx->newImage(imageCallback);
@@ -226,6 +142,21 @@ void captureNode(Node* startNode, std::function<void(Image*)> imageCallback, flo
     auto listener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_DRAW, callback);
     
     s_captureNodeListener[startNode] = listener;
+}
+
+// [DEPRECATED]
+void captureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename)
+{
+    std::string outfile;
+    if (FileUtils::getInstance()->isAbsolutePath(filename))
+        outfile = filename;
+    else
+        outfile = FileUtils::getInstance()->getWritablePath() + filename;
+    captureScreen([=,fullPath=std::move(outfile)](RefPtr<Image> image) {
+        bool ok = image && image->saveToFile(fullPath, false);
+        
+        afterCaptured(ok, fullPath);
+    });
 }
 
 std::vector<Node*> findChildren(const Node &node, const std::string &name)

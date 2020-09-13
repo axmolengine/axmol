@@ -99,7 +99,7 @@ bool Data::isNull() const
     return (_bytes == nullptr || _size == 0);
 }
 
-unsigned char* Data::getBytes() const
+uint8_t* Data::getBytes() const
 {
     return _bytes;
 }
@@ -127,7 +127,18 @@ ssize_t Data::copy(const unsigned char* bytes, const ssize_t size)
     return _size;
 }
 
-void Data::fastSet(unsigned char* bytes, const ssize_t size)
+uint8_t* Data::resize(ssize_t size)
+{
+    if (_size < size) {
+        auto newmb = (uint8_t*)realloc(_bytes, size);
+        if (!newmb) return _bytes;
+        _bytes = newmb;
+    }
+    _size = size;
+    return _bytes;
+}
+
+void Data::fastSet(uint8_t* bytes, const ssize_t size)
 {
     CCASSERT(size >= 0, "fastSet size should be non-negative");
     //CCASSERT(bytes, "bytes should not be nullptr");
@@ -142,7 +153,7 @@ void Data::clear()
     _size = 0;
 }
 
-unsigned char* Data::takeBuffer(ssize_t* size)
+uint8_t* Data::takeBuffer(ssize_t* size)
 {
     auto buffer = getBytes();
     if (size)

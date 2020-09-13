@@ -28,7 +28,7 @@
 #include "DeviceMTL.h"
 #include "RenderPipelineMTL.h"
 #include "TextureMTL.h"
-#include "Utils.h"
+#include "UtilsMTL.h"
 #include "../Macros.h"
 #include "BufferManager.h"
 #include "DepthStencilStateMTL.h"
@@ -144,7 +144,7 @@ namespace
                 if (descriptor.depthAttachmentTexture)
                     mtlDescritpor.depthAttachment.texture = static_cast<TextureMTL*>(descriptor.depthAttachmentTexture)->getMTLTexture();
                 else
-                    mtlDescritpor.depthAttachment.texture = Utils::getDefaultDepthStencilTexture();
+                    mtlDescritpor.depthAttachment.texture = UtilsMTL::getDefaultDepthStencilTexture();
                 
                 if (descriptor.needClearDepth)
                 {
@@ -162,7 +162,7 @@ namespace
                 if (descriptor.stencilAttachmentTexture)
                     mtlDescritpor.stencilAttachment.texture = static_cast<TextureMTL*>(descriptor.stencilAttachmentTexture)->getMTLTexture();
                 else
-                    mtlDescritpor.stencilAttachment.texture = Utils::getDefaultDepthStencilTexture();
+                    mtlDescritpor.stencilAttachment.texture = UtilsMTL::getDefaultDepthStencilTexture();
                 
                 if (descriptor.needClearStencil)
                 {
@@ -235,7 +235,8 @@ void CommandBufferMTL::beginFrame()
     dispatch_semaphore_wait(_frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
 
     _mtlCommandBuffer = [_mtlCommandQueue commandBuffer];
-    [_mtlCommandBuffer enqueue];
+    // [_mtlCommandBuffer enqueue];
+    // commit will enqueue automatically
     [_mtlCommandBuffer retain];
 
     BufferManager::beginFrame();
@@ -351,14 +352,13 @@ void CommandBufferMTL::drawElements(PrimitiveType primitiveType, IndexFormat ind
 void CommandBufferMTL::endRenderPass()
 {
     afterDraw();
+
 }
 
-void CommandBufferMTL::captureScreen(std::function<void(const unsigned char*, int, int)> callback)
+void CommandBufferMTL::capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback)
 {
-    [_mtlCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
-        Utils::getTextureBytes(0, 0, _drawableTexture.width, _drawableTexture.height, _drawableTexture, callback);
-        Device::getInstance()->setFrameBufferOnly(true);
-    }];
+    CC_SAFE_RETAIN(texture);
+    _captureCallbacks.emplace_back(texture, std::move(callback));
 }
 
 void CommandBufferMTL::endFrame()
@@ -386,8 +386,43 @@ void CommandBufferMTL::flush()
     if(_mtlCommandBuffer) {
         assert(_mtlCommandBuffer.status != MTLCommandBufferStatusCommitted);
         [_mtlCommandBuffer commit];
+        
+        flushCaptureCommands();
+        
         [_mtlCommandBuffer release];
         _mtlCommandBuffer = nil;
+    }
+}
+
+void CommandBufferMTL::flushCaptureCommands()
+{
+    if(!_captureCallbacks.empty()) {
+        // !!!important, if have capture request, must wait pending commandBuffer finish at this frame,
+        // because readPixels require sync operation to get screen pixels properly without data race issue,
+        // otherwise, will lead dead-lock
+        // !!!Notes, MTL is mutli-threading, all GPU handler is dispatch at GPU threads
+        [_mtlCommandBuffer waitUntilCompleted];
+        
+        PixelBufferDescriptor screenPixelData;
+        for(auto& cb : _captureCallbacks) {
+            if(cb.first == nil) { // screen capture
+                if(!screenPixelData) {
+                    UtilsMTL::readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height], screenPixelData);
+                    // screen framebuffer copied, restore screen framebuffer only to true
+                    backend::Device::getInstance()->setFrameBufferOnly(true);
+                }
+                cb.second(screenPixelData);
+            }
+            else {
+                PixelBufferDescriptor pixelData;
+                auto texture = cb.first;
+                assert(texture != nullptr);
+                UtilsMTL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pixelData);
+                CC_SAFE_RELEASE(texture);
+                cb.second(pixelData);
+            }
+        }
+        _captureCallbacks.clear();
     }
 }
 

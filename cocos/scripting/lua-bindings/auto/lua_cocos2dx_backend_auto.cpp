@@ -1899,7 +1899,9 @@ int lua_cocos2dx_backend_TextureBackend_getBytes(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_backend_TextureBackend_getBytes'", nullptr);
             return 0;
         }
-        cobj->getBytes(arg0, arg1, arg2, arg3, arg4, arg5);
+        // actual it's unused, and will crash, because the callback arg5 is empty
+        // futher new lua bindings sol2
+        // cobj->getBytes(arg0, arg1, arg2, arg3, arg4, arg5);
         lua_settop(tolua_S, 1);
         return 1;
     }

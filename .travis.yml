@@ -34,9 +34,11 @@ jobs:
     #  osx_image: xcode11
 
 script:
-- tools/travis-scripts/run-script.sh
+  - while sleep 9m; do echo "=====[ Build is still running after $SECONDS seconds ]====="; done &
+  - tools/travis-scripts/run-script.sh
+  - kill %1
 before_install:
-- tools/travis-scripts/before-install.sh
+  - tools/travis-scripts/before-install.sh
 
 jdk:
   - oraclejdk8

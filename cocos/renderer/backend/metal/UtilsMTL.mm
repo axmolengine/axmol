@@ -23,16 +23,17 @@
  THE SOFTWARE.
  ****************************************************************************/
  
-#include "Utils.h"
+#include "UtilsMTL.h"
 #include "DeviceMTL.h"
+#include "TextureMTL.h"
 #include "base/CCConfiguration.h"
 
 #define COLOR_ATTAHCMENT_PIXEL_FORMAT MTLPixelFormatBGRA8Unorm
 
 CC_BACKEND_BEGIN
 
-id<MTLTexture> Utils::_defaultColorAttachmentTexture = nil;
-id<MTLTexture> Utils::_defaultDepthStencilAttachmentTexture = nil;
+id<MTLTexture> UtilsMTL::_defaultColorAttachmentTexture = nil;
+id<MTLTexture> UtilsMTL::_defaultDepthStencilAttachmentTexture = nil;
 
 namespace {
 #define byte(n) ((n) * 8)
@@ -80,30 +81,30 @@ namespace {
     }
 }
 
-MTLPixelFormat Utils::getDefaultDepthStencilAttachmentPixelFormat()
+MTLPixelFormat UtilsMTL::getDefaultDepthStencilAttachmentPixelFormat()
 {
     return getSupportedDepthStencilFormat();
 }
 
-MTLPixelFormat Utils::getDefaultColorAttachmentPixelFormat()
+MTLPixelFormat UtilsMTL::getDefaultColorAttachmentPixelFormat()
 {
     return COLOR_ATTAHCMENT_PIXEL_FORMAT;
 }
 
-id<MTLTexture> Utils::getDefaultDepthStencilTexture()
+id<MTLTexture> UtilsMTL::getDefaultDepthStencilTexture()
 {
     if (! _defaultDepthStencilAttachmentTexture)
-        _defaultDepthStencilAttachmentTexture = Utils::createDepthStencilAttachmentTexture();
+        _defaultDepthStencilAttachmentTexture = UtilsMTL::createDepthStencilAttachmentTexture();
     
     return _defaultDepthStencilAttachmentTexture;
 }
 
-void Utils::updateDefaultColorAttachmentTexture(id<MTLTexture> texture)
+void UtilsMTL::updateDefaultColorAttachmentTexture(id<MTLTexture> texture)
 {
-    Utils::_defaultColorAttachmentTexture = texture;
+    UtilsMTL::_defaultColorAttachmentTexture = texture;
 }
 
-MTLPixelFormat Utils::toMTLPixelFormat(PixelFormat textureFormat)
+MTLPixelFormat UtilsMTL::toMTLPixelFormat(PixelFormat textureFormat)
 {
     switch (textureFormat)
     {
@@ -162,14 +163,14 @@ MTLPixelFormat Utils::toMTLPixelFormat(PixelFormat textureFormat)
     }
 }
 
-void Utils::resizeDefaultAttachmentTexture(std::size_t width, std::size_t height)
+void UtilsMTL::resizeDefaultAttachmentTexture(std::size_t width, std::size_t height)
 {
     [backend::DeviceMTL::getCAMetalLayer() setDrawableSize:CGSizeMake(width, height)];
     [_defaultDepthStencilAttachmentTexture release];
-    _defaultDepthStencilAttachmentTexture = Utils::createDepthStencilAttachmentTexture();
+    _defaultDepthStencilAttachmentTexture = UtilsMTL::createDepthStencilAttachmentTexture();
 }
 
-id<MTLTexture> Utils::createDepthStencilAttachmentTexture()
+id<MTLTexture> UtilsMTL::createDepthStencilAttachmentTexture()
 {
     auto CAMetalLayer = DeviceMTL::getCAMetalLayer();
     MTLTextureDescriptor* textureDescriptor = [[MTLTextureDescriptor alloc] init];
@@ -184,7 +185,7 @@ id<MTLTexture> Utils::createDepthStencilAttachmentTexture()
     return ret;
 }
 
-void Utils::generateMipmaps(id<MTLTexture> texture)
+void UtilsMTL::generateMipmaps(id<MTLTexture> texture)
 {
     auto commandQueue = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLCommandQueue();
     auto commandBuffer = [commandQueue commandBuffer];
@@ -194,7 +195,7 @@ void Utils::generateMipmaps(id<MTLTexture> texture)
     [commandBuffer commit];
 }
 
-void Utils::swizzleImage(unsigned char *image, std::size_t width, std::size_t height, MTLPixelFormat format)
+void UtilsMTL::swizzleImage(unsigned char *image, std::size_t width, std::size_t height, MTLPixelFormat format)
 {
     if(!image)
         return;
@@ -216,7 +217,19 @@ void Utils::swizzleImage(unsigned char *image, std::size_t width, std::size_t he
     }
 }
 
-void Utils::getTextureBytes(std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, id<MTLTexture> texture, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
+void UtilsMTL::readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
+{
+    switch(texture->getTextureType()){
+        case TextureType::TEXTURE_2D:
+            UtilsMTL::readPixels(static_cast<TextureMTL*>(texture)->getMTLTexture(), origX, origY, rectWidth, rectHeight, pbd);
+            break;
+        case TextureType::TEXTURE_CUBE:
+            UtilsMTL::readPixels(static_cast<TextureCubeMTL*>(texture)->getMTLTexture(), origX, origY, rectWidth, rectHeight, pbd);
+            break;
+    }
+}
+
+void UtilsMTL::readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
 {
     NSUInteger texWidth = texture.width;
     NSUInteger texHeight = texture.height;
@@ -229,33 +242,34 @@ void Utils::getTextureBytes(std::size_t origX, std::size_t origY, std::size_t re
                                                       height:texHeight
                                                    mipmapped:NO];
     id<MTLDevice> device = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLDevice();
-    id<MTLTexture> copiedTexture = [device newTextureWithDescriptor:textureDescriptor];
+    id<MTLTexture> readPixelsTexture = [device newTextureWithDescriptor:textureDescriptor];
     
     id<MTLCommandQueue> commandQueue = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLCommandQueue();
     auto commandBuffer = [commandQueue commandBuffer];
-    [commandBuffer enqueue];
+    // [commandBuffer enqueue];
     
     id<MTLBlitCommandEncoder> blitCommandEncoder = [commandBuffer blitCommandEncoder];
-    [blitCommandEncoder copyFromTexture:texture sourceSlice:0 sourceLevel:0 sourceOrigin:region.origin sourceSize:region.size toTexture:copiedTexture destinationSlice:0 destinationLevel:0 destinationOrigin:region.origin];
+    [blitCommandEncoder copyFromTexture:texture sourceSlice:0 sourceLevel:0 sourceOrigin:region.origin sourceSize:region.size toTexture:readPixelsTexture destinationSlice:0 destinationLevel:0 destinationOrigin:region.origin];
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-    [blitCommandEncoder synchronizeResource:copiedTexture];
+    [blitCommandEncoder synchronizeResource:readPixelsTexture];
 #endif
     [blitCommandEncoder endEncoding];
    
     [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
-        auto bytePerRow = rectWidth * getBitsPerElement(texture.pixelFormat) / 8;
-        unsigned char* image = new (std::nothrow) unsigned char[bytePerRow * rectHeight];
-        if(image != nullptr)
-        {
-            [copiedTexture getBytes:image bytesPerRow:bytePerRow fromRegion:imageRegion mipmapLevel:0];
-            swizzleImage(image, rectWidth, rectHeight, texture.pixelFormat);
-        }
-        callback(image, rectWidth, rectHeight);
-        CC_SAFE_DELETE_ARRAY(image);
-        [copiedTexture release];
+       auto bytePerRow = rectWidth * getBitsPerElement(texture.pixelFormat) / 8;
+       auto texelData = pbd._data.resize(bytePerRow * rectHeight);
+       if(texelData != nullptr)
+       {
+          [readPixelsTexture getBytes:texelData bytesPerRow:bytePerRow fromRegion:imageRegion mipmapLevel:0];
+          swizzleImage(texelData, rectWidth, rectHeight, readPixelsTexture.pixelFormat);
+          pbd._width = rectWidth;
+          pbd._height = rectHeight;
+       }
+       [readPixelsTexture release];
     }];
     [commandBuffer commit];
+    [commandBuffer waitUntilCompleted];
 }
 
 CC_BACKEND_END

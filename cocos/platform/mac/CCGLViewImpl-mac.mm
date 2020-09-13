@@ -44,7 +44,7 @@ THE SOFTWARE.
 #endif /* CC_ICON_SET_SUPPORT */
 #include "renderer/backend/metal/DeviceMTL.h"
 #include "renderer/CCRenderer.h"
-#include "renderer/backend/metal/Utils.h"
+#include "renderer/backend/metal/UtilsMTL.h"
 
 NS_CC_BEGIN
 
@@ -987,7 +987,7 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int width, int
         //update metal attachment texture size.
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
-        backend::Utils::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
+        backend::UtilsMTL::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
     }
 }
 

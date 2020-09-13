@@ -49,15 +49,4 @@ void CallbackCommand::execute()
    }
 }
 
-CaptureScreenCallbackCommand::CaptureScreenCallbackCommand()
-{
-    _type = RenderCommand::Type::CAPTURE_SCREEN_COMMAND;
-}
-
-void CaptureScreenCallbackCommand::init(float globalOrder)
-{
-    backend::Device::getInstance()->setFrameBufferOnly(false);
-    _globalOrder = globalOrder;
-}
-
 NS_CC_END

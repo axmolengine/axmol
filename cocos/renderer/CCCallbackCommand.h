@@ -23,7 +23,9 @@
  ****************************************************************************/
 #pragma once
 
+#include "renderer/backend/PixelBufferDescriptor.h"
 #include "renderer/CCRenderCommand.h"
+#include "base/CCRefPtr.h"
 
 /**
  * @addtogroup renderer
@@ -31,6 +33,11 @@
  */
 
 NS_CC_BEGIN
+
+namespace backend
+{
+class TextureBackend;
+}
 
 /**
 Callback command is used to invoke a callback function when this command is
@@ -52,22 +59,6 @@ public:
     void execute();
     /**Callback function.*/
     std::function<void()> func;
-};
-
-/**
- * CaptureScreenCallbackCommand is used to capture the screen.
- */
-class CC_DLL CaptureScreenCallbackCommand : public RenderCommand
-{
-public:
-    CaptureScreenCallbackCommand();
-    
-    void init(float globalZOrder);
-    
-    /**
-     * A callback function to do with the image after capture from the color buffer.
-     */
-    std::function<void(const unsigned char*, int, int)> func;
 };
 
 NS_CC_END

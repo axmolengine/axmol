@@ -45,11 +45,13 @@ using Winding = backend::Winding;
 
 namespace backend
 {
-    class Buffer;
-    class CommandBuffer;
-    class RenderPipeline;
-    class RenderPass;
-    struct RenderPipelineDescriptor;
+class Buffer;
+class CommandBuffer;
+class RenderPipeline;
+class RenderPass;
+class TextureBackend;
+struct RenderPipelineDescriptor;
+struct PixelBufferDescriptor;
 }
 
 class EventListenerCustom;
@@ -405,6 +407,9 @@ public:
     /** returns whether or not a rectangle is visible or not */
     bool checkVisibility(const Mat4& transform, const Size& size);
     
+    /** read pixels from texture or screen framebuffer */
+    void readPixels(backend::TextureBackend* texture, std::function<void(const backend::PixelBufferDescriptor&)> callback);
+    
 protected:
     friend class Director;
     friend class GroupCommand;
@@ -450,7 +455,6 @@ protected:
     void drawBatchedTriangles();
     void drawCustomCommand(RenderCommand* command);
     void drawMeshCommand(RenderCommand* command);
-    void captureScreen(RenderCommand* command);
 
     void beginFrame(); /// Indicate the begining of a frame
     void endFrame(); /// Finish a frame.

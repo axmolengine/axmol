@@ -460,7 +460,7 @@ void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool 
 }
 
 /* get buffer as Image */
-void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool flipImage)
+void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, bool flipImage)
 {
     CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8888, "only RGBA8888 can be saved as image");
 
@@ -477,29 +477,14 @@ void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool fli
     int savedBufferWidth = (int)s.width;
     int savedBufferHeight = (int)s.height;
     bool hasPremultipliedAlpha = _texture2D->hasPremultipliedAlpha();
-
-    Image *image = new (std::nothrow) Image();
-    if (image) {
-        _texture2D->getBackendTexture()->getBytes(0, 0, savedBufferWidth, savedBufferHeight, flipImage, [=](const unsigned char* tempData, size_t, size_t) {
-            image->initWithRawData(tempData, savedBufferWidth * savedBufferHeight * 4, savedBufferWidth, savedBufferHeight, 8, hasPremultipliedAlpha);
-            imageCallback(image);
-            });
-    }
     
-//    do
-//    {
-////        // TODO: move this to configuration, so we don't check it every time
-////        /*  Certain Qualcomm Adreno GPU's will retain data in memory after a frame buffer switch which corrupts the render to the texture. The solution is to clear the frame buffer before rendering to the texture. However, calling glClear has the unintended result of clearing the current texture. Create a temporary texture to overcome this. At the end of RenderTexture::begin(), switch the attached texture to the second one, call glClear, and then switch back to the original texture. This solution is unnecessary for other devices as they don't have the same issue with switching frame buffers.
-////         */
-////        if (Configuration::getInstance()->checkForGLExtension("GL_QCOM"))
-////        {
-////            // -- bind a temporary texture so we can clear the render buffer without losing our texture
-////            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _textureCopy->getName(), 0);
-////            CHECK_GL_ERROR_DEBUG();
-////            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-////            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->getName(), 0);
-////        }
-//    } while (0);
+    _director->getRenderer()->readPixels(_texture2D->getBackendTexture(), [=](const backend::PixelBufferDescriptor& pbd) {
+        if(pbd) {
+            auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, hasPremultipliedAlpha);
+            imageCallback(image);
+        }
+        else imageCallback(nullptr);
+    });
 }
 
 void RenderTexture::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)

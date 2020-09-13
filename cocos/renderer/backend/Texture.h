@@ -51,26 +51,20 @@ struct TextureDescriptor
     SamplerDescriptor samplerDescriptor;
 };
 
+struct UtilsGL;
+
 /**
  * A base texture
  */
 class TextureBackend : public Ref
 {
+    friend struct UtilsGL;
 public:
     /**
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
     virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler) = 0;
-    
-    /**
-     * Read a block of pixels from the drawable texture
-     * @param x,y Specify the window coordinates of the first pixel that is read from the drawable texture. This location is the lower left corner of a rectangular block of pixels.
-     * @param width,height Specify the dimensions of the pixel rectangle. width and height of one correspond to a single pixel.
-     * @param flipImage Specifies if needs to flip the image.
-     * @param callback Specifies a call back function to deal with the image.
-     */
-    virtual void getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback) = 0;
     
     /// Generate mipmaps.
     virtual void generateMipmaps() = 0;
@@ -107,7 +101,10 @@ public:
 
     virtual int getCount() const { return 1; };
 
-    virtual uintptr_t getGPUHandler(int index = 0) const { return 0; }
+    virtual uintptr_t getHandler(int index = 0) const { return 0; }
+    
+    int getWidth() const { return _width; }
+    int getHeight() const { return _height; }
 
 protected:
     /**

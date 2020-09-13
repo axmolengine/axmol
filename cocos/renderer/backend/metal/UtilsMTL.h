@@ -26,10 +26,13 @@
 
 #include "../Macros.h"
 #include "../Types.h"
+#include "../PixelBufferDescriptor.h"
 #import <Metal/Metal.h>
 #include <functional>
 
 CC_BACKEND_BEGIN
+
+class TextureBackend;
 
 /**
  * @addtogroup _metal
@@ -41,9 +44,8 @@ CC_BACKEND_BEGIN
  * generate mipmaps.
  * read pixles from texture.
  */
-class Utils
+struct UtilsMTL
 {
-public:
     /**
      * Update default color attachment texture.
      * @param texture Specifies the texture to be setted to the color attachemnt.
@@ -84,12 +86,14 @@ public:
     
     /**
      * Read a block of pixels from the given texture
+     * @param texture Specifies the texture to get the image.
      * @param origX,origY Specify the window coordinates of the first pixel that is read from the given texture. This location is the lower left corner of a rectangular block of pixels.
      * @param rectWidth,rectHeight Specify the dimensions of the pixel rectangle. rectWidth and rectHeight of one correspond to a single pixel.
-     * @param texture Specifies the texture to get the image.
-     * @param callback Specifies a call back function to deal with the image.
-     */
-    static void getTextureBytes(std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, id<MTLTexture> texture, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback);
+     * @param pbd, the output buffer for fill texels data
+     * @remark: !!!this function only can call after endFrame, then it's could be works well.
+    */
+    static void readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd);
+    static void readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd);
     
     /**
      * Swizzle the iamge form the given format to MTLPixelFormatRGBA8Unorm.

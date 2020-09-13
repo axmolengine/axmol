@@ -151,15 +151,6 @@ public:
     virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler)  override;
     
     /**
-     * Read a block of pixels from the drawable texture
-     * @param x,y Specify the window coordinates of the first pixel that is read from the drawable texture. This location is the lower left corner of a rectangular block of pixels.
-     * @param width,height Specify the dimensions of the pixel rectangle. width and height of one correspond to a single pixel.
-     * @param flipImage Specifies if needs to flip the image.
-     * @param callback Specifies a call back function to deal with the image.
-     */
-    virtual void getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback) override;
-    
-    /**
      * Generate mipmaps.
      */
     virtual void generateMipmaps() override;
@@ -174,7 +165,7 @@ public:
      * Get texture object.
      * @return Texture object.
      */
-    inline GLuint getHandler(int index = 0) const { return _textureInfo.textures[index]; }
+    uintptr_t getHandler(int index = 0) const override { return _textureInfo.textures[index]; }
 
     /**
      * Set texture to pipeline
@@ -183,8 +174,6 @@ public:
     void apply(int slot, int index) const { _textureInfo.apply(slot, index, GL_TEXTURE_2D); }
 
     int getCount() const override { return _textureInfo.maxIdx + 1; }
-
-    uintptr_t getGPUHandler(int index) const override { return _textureInfo.getName(index); }
 
 private:
     void initWithZeros();
@@ -218,15 +207,6 @@ public:
      */
     virtual void updateFaceData(TextureCubeFace side, void *data, int index = 0) override;
     
-    /**
-     * Read a block of pixels from the drawable texture
-     * @param x,y Specify the window coordinates of the first pixel that is read from the drawable texture. This location is the lower left corner of a rectangular block of pixels.
-     * @param width,height Specify the dimensions of the pixel rectangle. width and height of one correspond to a single pixel.
-     * @param flipImage Specifies if needs to flip the image.
-     * @param callback
-     */
-    virtual void getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback) override;
-    
     /// Generate mipmaps.
     virtual void generateMipmaps() override;
 
@@ -240,7 +220,7 @@ public:
      * Get texture object.
      * @return Texture object.
      */
-    inline GLuint getHandler(int index = 0) const { return _textureInfo.textures[index]; }
+    uintptr_t getHandler(int index = 0) const override { return _textureInfo.textures[index]; }
 
     /**
      * Set texture to pipeline

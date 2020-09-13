@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include <string>
 #include "2d/CCNode.h"
 #include "base/ccMacros.h"
+#include "base/CCRefPtr.h"
 #include "base/CCData.h"
 #include "renderer/backend/Types.h"
 #include "math/Mat4.h"
@@ -70,18 +71,27 @@ namespace utils
      * @param afterCaptured specify the callback function which will be invoked after the snapshot is done.
      * @param filename specify a filename where the snapshot is stored. This parameter can be either an absolute path or a simple
      * base filename ("hello.png" etc.), don't use a relative path containing directory names.("mydir/hello.png" etc.).
-     * @since v3.2
+     * @since v4.0 with egnx
      */
-    CC_DLL void  captureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename);
+    CC_DLL void  captureScreen(std::function<void(RefPtr<Image>)> imageCallback);
 
     /** Capture a specific Node.
     * @param startNode specify the snapshot Node. It should be cocos2d::Scene
     * @param scale
     * @returns: return a Image, then can call saveToFile to save the image as "xxx.png or xxx.jpg".
-    * @since v3.11
-    * !!! remark: Caller is responsible for releasing it by calling delete.
+    * @since v4.0 with egnx
     */
-    CC_DLL void captureNode(Node* startNode, std::function<void(Image*)> imageCallback, float scale = 1.0f);
+    CC_DLL void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallback, float scale = 1.0f);
+
+    /** Capture the entire screen. V4-copmatiable only, [DEPRECATED]
+    * To ensure the snapshot is applied after everything is updated and rendered in the current frame,
+    * we need to wrap the operation with a custom command which is then inserted into the tail of the render queue.
+    * @param afterCaptured specify the callback function which will be invoked after the snapshot is done.
+    * @param filename specify a filename where the snapshot is stored. This parameter can be either an absolute path or a simple
+    * base filename ("hello.png" etc.), don't use a relative path containing directory names.("mydir/hello.png" etc.).
+    * @since v4.0
+    */
+    CC_DLL void captureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename);
     
     /** Find children by name, it will return all child that has the same name.
      * It supports c++ 11 regular expression. It is  a helper function of `Node::enumerateChildren()`.
@@ -234,51 +244,22 @@ namespace utils
     */
     CC_DLL void killCurrentProcess();
 
-    /*
-    * The deleter of cocos2d::Ref for std::unique_ptr
-    */
-    template<typename T>
-    struct instance_delete
-    {
-        constexpr instance_delete() noexcept = default;
-
-        template <class T2, std::enable_if_t<std::is_convertible<T2*, T*>::value, int> = 0>
-        instance_delete(const instance_delete<T2>&) noexcept {}
-
-        void operator()(T* _Ptr) const noexcept /* strengthened */ { // delete a pointer
-            static_assert(0 < sizeof(T), "can't release an incomplete type");
-            if (_Ptr) _Ptr->release();
-        }
-    };
-
-    /*
-    * The helper template for use cocos2d::Ref + std::unique_ptr
-    * std::vector<utils::instance_ptr<Node>> nodes;
-    */
-    template<typename T>
-    using instance_ptr = std::unique_ptr<T, instance_delete<T>>;
-
     /**
     * Create a Game Object, like CREATE_FUNC, but more powerful
 
-    * @return  Returns a instance_ptr<T> game object
+    * @return  Returns a RefPtr<T> game object
     * @remark  Auto manage cocos2d::Ref reference count, use std::unique_ptr
     * @limition  The init function finit must be public
     */
     template <typename T, typename F, typename... Ts>
-    static instance_ptr<T> makeInstance(F&& memf, Ts&&... args)
+    static RefPtr<T> makeInstance(F&& memf, Ts&&... args)
     {
-        T* pRet = new(std::nothrow) T();
-        if (pRet && std::mem_fn(memf)(pRet, std::forward<Ts>(args)...))
-        {
-            return instance_ptr<T>(pRet);
-        }
-        else
-        {
-            delete pRet;
-            pRet = nullptr;
-            return nullptr;
-        }
+        RefPtr<T> pRet(ReferencedObject<T>{new(std::nothrow) T()});
+        if (pRet && std::mem_fn(memf)(pRet.get(), std::forward<Ts>(args)...))
+            return pRet;
+        
+        pRet.reset();
+        return pRet;
     }
 
    /**
@@ -289,7 +270,7 @@ namespace utils
    * @limition  The init function finit must be public
    */
     template<typename T> inline
-        static instance_ptr<T> makeInstance()
+        static RefPtr<T> makeInstance()
     {
         return makeInstance<T>(&T::init);
     }
