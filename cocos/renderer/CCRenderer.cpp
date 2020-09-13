@@ -298,20 +298,10 @@ void Renderer::processRenderCommand(RenderCommand* command)
             flush();
            static_cast<CallbackCommand*>(command)->execute();
             break;
-        case RenderCommand::Type::CAPTURE_COMMAND:
-            flush();
-            processCaptureCommand(command);
-            break;
         default:
             assert(false);
             break;
     }
-}
-
-void Renderer::processCaptureCommand(RenderCommand *command)
-{
-    auto captureCmd = static_cast<CaptureCallbackCommand*>(command);
-    _commandBuffer->capture(captureCmd->src, captureCmd->func);
 }
 
 void Renderer::visitRenderQueue(RenderQueue& queue)

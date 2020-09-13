@@ -49,15 +49,4 @@ void CallbackCommand::execute()
    }
 }
 
-CaptureCallbackCommand::CaptureCallbackCommand()
-{
-    _type = RenderCommand::Type::CAPTURE_COMMAND;
-}
-
-void CaptureCallbackCommand::init(float globalOrder)
-{
-    backend::Device::getInstance()->setFrameBufferOnly(false);
-    _globalOrder = globalOrder;
-}
-
 NS_CC_END

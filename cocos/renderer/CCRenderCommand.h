@@ -59,7 +59,6 @@ public:
         TRIANGLES_COMMAND,
         /**Callback command, used for calling callback for rendering.*/
         CALLBACK_COMMAND,
-        CAPTURE_COMMAND
     };
 
     /**
