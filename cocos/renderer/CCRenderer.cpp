@@ -748,6 +748,11 @@ bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
     return ret;
 }
 
+void Renderer::capture(backend::TextureBackend* texture, std::function<void(const backend::PixelBufferDescriptor&)> callback)
+{
+    _commandBuffer->capture(texture, std::move(callback));
+}
+
 void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor, const backend::RenderPassDescriptor& renderPassDescriptor)
 {
     auto device = backend::Device::getInstance();
