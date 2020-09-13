@@ -158,7 +158,7 @@ void CommandBufferGL::applyRenderPassDescriptor(const RenderPassDescriptor& desc
         glFramebufferTexture2D(GL_FRAMEBUFFER,
                                GL_STENCIL_ATTACHMENT,
                                GL_TEXTURE_2D,
-                               getHandler(descirptor.depthAttachmentTexture),
+                               getHandler(descirptor.stencilAttachmentTexture),
                                0);
         CHECK_GL_ERROR_DEBUG();
 
