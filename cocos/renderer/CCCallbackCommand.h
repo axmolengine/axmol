@@ -61,27 +61,6 @@ public:
     std::function<void()> func;
 };
 
-/**
- * CaptureCallbackCommand is used to capture the screen or node.
- */
-class CC_DLL CaptureCallbackCommand : public RenderCommand
-{
-public:
-    CaptureCallbackCommand();
-    
-    void init(float globalZOrder);
-    
-    /**Capture source, nullptr for screen
-     *
-     */
-    RefPtr<backend::TextureBackend> src = nullptr;
-    
-    /**
-     * A callback function to do with the image after capture from the color buffer.
-     */
-    std::function<void(const backend::PixelBufferDescriptor&)> func;
-};
-
 NS_CC_END
 /**
  end of support group

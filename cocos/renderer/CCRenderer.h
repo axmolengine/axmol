@@ -455,7 +455,6 @@ protected:
     void drawBatchedTriangles();
     void drawCustomCommand(RenderCommand* command);
     void drawMeshCommand(RenderCommand* command);
-    void processCaptureCommand(RenderCommand* command);
 
     void beginFrame(); /// Indicate the begining of a frame
     void endFrame(); /// Finish a frame.
