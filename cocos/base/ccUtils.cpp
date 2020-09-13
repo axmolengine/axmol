@@ -101,7 +101,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
         s_captureNodeListener.erase(startNode);
         auto& size = startNode->getContentSize();
         
-        Director::getInstance()->setNextDeltaTimeZero(true);
+        director->setNextDeltaTimeZero(true);
         
         RenderTexture* finalRtx = nullptr;
         
@@ -134,7 +134,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
             finalRtx->end();
         }
 
-        Director::getInstance()->getRenderer()->render();
+        director->getRenderer()->render();
         
         finalRtx->newImage(imageCallback);
     };
