@@ -750,6 +750,8 @@ bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
 
 void Renderer::capture(backend::TextureBackend* texture, std::function<void(const backend::PixelBufferDescriptor&)> callback)
 {
+    if(!texture) // capture screen, metal renderer backend screen texture must not be a framebufferOnly
+        backend::Device::getInstance()->setFrameBufferOnly(false);
     _commandBuffer->capture(texture, std::move(callback));
 }
 

@@ -408,6 +408,8 @@ void CommandBufferMTL::flushCaptureCommands()
             if(cb.first == nil) { // screen capture
                 if(!screenPixelData) {
                     UtilsMTL::readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height], screenPixelData);
+                    // screen framebuffer copied, restore screen framebuffer only to true
+                    backend::Device::getInstance()->setFrameBufferOnly(true);
                 }
                 cb.second(screenPixelData);
             }
