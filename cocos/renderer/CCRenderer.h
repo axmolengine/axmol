@@ -407,7 +407,7 @@ public:
     /** returns whether or not a rectangle is visible or not */
     bool checkVisibility(const Mat4& transform, const Size& size);
     
-    /** readPixels pixels from texture or screen framebuffer */
+    /** read pixels from texture or screen framebuffer */
     void readPixels(backend::TextureBackend* texture, std::function<void(const backend::PixelBufferDescriptor&)> callback);
     
 protected:
