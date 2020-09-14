@@ -88,23 +88,18 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     auto renderer = director->getRenderer();
     auto eventDispatcher = director->getEventDispatcher();
 
-    s_captureScreenCommand.init((std::numeric_limits<float>::max)());
-    s_captureScreenCommand.func = [=]{
-        renderer->readPixels(nullptr, [=](const backend::PixelBufferDescriptor& pbd) {
-                if(pbd) {
-                    auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, false);
-                    imageCallback(image);
-                }
-                else imageCallback(nullptr);
-            });
-    };
-
     s_captureScreenListener = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW, [=](EventCustom* /*event*/) {
         eventDispatcher->removeEventListener(s_captureScreenListener);
         s_captureScreenListener = nullptr;
-
-        renderer->addCommand(&s_captureScreenCommand);
-        renderer->render();
+        
+        // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
+        renderer->readPixels(nullptr, [=](const backend::PixelBufferDescriptor& pbd) {
+            if (pbd) {
+                auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, false);
+                imageCallback(image);
+            }
+            else imageCallback(nullptr);
+            });
     });
 }
 
