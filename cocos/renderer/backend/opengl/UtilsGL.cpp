@@ -644,7 +644,7 @@ void UtilsGL::readPixels(TextureBackend* texture, GLint x, GLint y, std::size_t 
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 #endif
     uint8_t* wptr = pbd._data.resize(bufferSize);
-    if (wptr) {
+    if (buffer && wptr) {
         auto rptr = buffer + (height - 1) * bytesPerRow;
         for (int row = 0; row < height; ++row) {
             memcpy(wptr, rptr, bytesPerRow);
