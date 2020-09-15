@@ -163,17 +163,22 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
 }
 
 // [DEPRECATED]
-void captureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename)
+void captureScreen(std::function<void(bool, const std::string&)> afterCap, const std::string& filename)
 {
     std::string outfile;
     if (FileUtils::getInstance()->isAbsolutePath(filename))
         outfile = filename;
     else
         outfile = FileUtils::getInstance()->getWritablePath() + filename;
-    captureScreen([=,fullPath=std::move(outfile)](RefPtr<Image> image) {
-        bool ok = image && image->saveToFile(fullPath, false);
-        
-        afterCaptured(ok, fullPath);
+
+    captureScreen([_afterCap = std::move(afterCap), _outfile = std::move(outfile)](RefPtr<Image> image) mutable {
+        AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO, [_afterCap = std::move(_afterCap), image = std::move(image), _outfile = std::move(_outfile)]() mutable
+        {
+            bool ok = image->saveToFile(_outfile);
+            Director::getInstance()->getScheduler()->performFunctionInCocosThread([ok, _afterCap = std::move(_afterCap), _outfile = std::move(_outfile)]{
+                _afterCap(ok, _outfile);
+                });
+        });
     });
 }
 
