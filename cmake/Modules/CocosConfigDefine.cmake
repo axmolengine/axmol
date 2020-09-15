@@ -124,7 +124,7 @@ endif()
             PUBLIC _UNICODE
             PUBLIC _CRT_SECURE_NO_WARNINGS
             PUBLIC _SCL_SECURE_NO_WARNINGS
-            PUBLIC GLAD_GLAPI_EXPORT
+            # PUBLIC GLAD_GLAPI_EXPORT
         )
         if(BUILD_SHARED_LIBS)
             target_compile_definitions(${target} 
