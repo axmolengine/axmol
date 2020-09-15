@@ -113,6 +113,9 @@ endif()
         target_compile_definitions(${target} PUBLIC ANDROID)
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
     elseif(WINDOWS)
+        if(CC_FORCE_USE_GLES)
+            target_compile_definitions(${target} PUBLIC CC_FORCE_USE_GLES=1)
+        endif()
         target_compile_definitions(${target} 
             PUBLIC WIN32
             PUBLIC _WIN32
