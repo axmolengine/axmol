@@ -91,7 +91,7 @@ namespace utils
     * base filename ("hello.png" etc.), don't use a relative path containing directory names.("mydir/hello.png" etc.).
     * @since v4.0
     */
-    CC_DLL void captureScreen(const std::function<void(bool, const std::string&)>& afterCaptured, const std::string& filename);
+    CC_DLL void captureScreen(std::function<void(bool, const std::string&)> afterCap, const std::string& filename);
     
     /** Find children by name, it will return all child that has the same name.
      * It supports c++ 11 regular expression. It is  a helper function of `Node::enumerateChildren()`.
