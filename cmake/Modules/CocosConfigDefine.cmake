@@ -113,6 +113,9 @@ endif()
         target_compile_definitions(${target} PUBLIC ANDROID)
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
     elseif(WINDOWS)
+        if(CC_FORCE_USE_GLES)
+            target_compile_definitions(${target} PUBLIC CC_FORCE_USE_GLES=1)
+        endif()
         target_compile_definitions(${target} 
             PUBLIC WIN32
             PUBLIC _WIN32
@@ -121,7 +124,7 @@ endif()
             PUBLIC _UNICODE
             PUBLIC _CRT_SECURE_NO_WARNINGS
             PUBLIC _SCL_SECURE_NO_WARNINGS
-            PUBLIC GLAD_GLAPI_EXPORT
+            # PUBLIC GLAD_GLAPI_EXPORT
         )
         if(BUILD_SHARED_LIBS)
             target_compile_definitions(${target} 

@@ -630,13 +630,14 @@ void UtilsGL::readPixels(TextureBackend* texture, GLint x, GLint y, std::size_t 
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
     auto bufferSize = bytesPerRow * height;
-#if defined(GL_VERSION_2_1)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
+    (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
     GLuint pbo;
     glGenBuffers(1, &pbo);
     glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
     glBufferData(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    auto buffer = (uint8_t*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+    auto buffer = (uint8_t*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
 #else
     std::unique_ptr<uint8_t[]> bufferStorage(new uint8_t[bufferSize]);
     auto buffer = bufferStorage.get();
@@ -653,7 +654,8 @@ void UtilsGL::readPixels(TextureBackend* texture, GLint x, GLint y, std::size_t 
         pbd._width = width;
         pbd._height = height;
     }
-#if defined(GL_VERSION_2_1)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
+    (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     glDeleteBuffers(1, &pbo);
