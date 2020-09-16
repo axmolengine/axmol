@@ -62,6 +62,20 @@ CustomCommand& CustomCommand::operator=(CustomCommand&& rhs)
     return *this;
 }
 
+// Note: The use of offsetof below is technically undefined until C++17
+// because State is not a standard layout type. However, all compilers
+// currently provide well-defined behavior as an extension (which is
+// demonstrated since constexpr evaluation must diagnose all undefined
+// behavior). However, GCC and Clang also warn about this use of offsetof,
+// which must be suppressed.
+// see also: https://github.com/google/benchmark/pull/629
+#if defined(__INTEL_COMPILER)
+#pragma warning push
+#pragma warning(disable:1875)
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Winvalid-offsetof"
+#endif
 void CustomCommand::assign(const CustomCommand& rhs)
 {
     if (this != &rhs) {
@@ -90,6 +104,11 @@ void CustomCommand::assign(CustomCommand&& rhs)
         rhs._vertexBuffer = rhs._indexBuffer = nullptr;
     }
 }
+#if defined(__INTEL_COMPILER)
+#pragma warning pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 void CustomCommand::init(float depth, const cocos2d::Mat4 &modelViewTransform, unsigned int flags)
 {
