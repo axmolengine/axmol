@@ -222,7 +222,10 @@ void AtlasNode::updateOpacityModifyRGB()
 
 void AtlasNode::setIgnoreContentScaleFactor(bool ignoreContentScaleFactor)
 {
-    _ignoreContentScaleFactor = ignoreContentScaleFactor;
+    if (_ignoreContentScaleFactor != ignoreContentScaleFactor) {
+        _ignoreContentScaleFactor = ignoreContentScaleFactor;
+        this->calculateMaxItems();
+    }
 }
 
 // AtlasNode - CocosNodeTexture protocol
