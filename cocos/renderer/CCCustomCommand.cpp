@@ -65,16 +65,28 @@ CustomCommand& CustomCommand::operator=(CustomCommand&& rhs)
 void CustomCommand::assign(const CustomCommand& rhs)
 {
     if (this != &rhs) {
-        memcpy(this, &rhs, sizeof(rhs));
+        auto podOffset = offsetof(CustomCommand, _type);
+        auto podSize = offsetof(CustomCommand, _beforeCallback);
+        memcpy((uint8_t*)this + podOffset, (const uint8_t*)&rhs + podOffset, podSize);
+        
         CC_SAFE_RETAIN(_vertexBuffer);
         CC_SAFE_RETAIN(_indexBuffer);
+
+        _beforeCallback = rhs._beforeCallback;
+        _afterCallback = rhs._afterCallback;
     }
 }
 
 void CustomCommand::assign(CustomCommand&& rhs)
 {
     if (this != &rhs) {
-        memcpy(this, &rhs, sizeof(rhs));
+        auto podOffset = offsetof(CustomCommand, _type);
+        auto podSize = offsetof(CustomCommand, _beforeCallback);
+        memcpy((uint8_t*)this + podOffset, (const uint8_t*)&rhs + podOffset, podSize);
+
+        _beforeCallback = std::move(rhs._beforeCallback);
+        _afterCallback = std::move(rhs._afterCallback);
+
         rhs._vertexBuffer = rhs._indexBuffer = nullptr;
     }
 }
