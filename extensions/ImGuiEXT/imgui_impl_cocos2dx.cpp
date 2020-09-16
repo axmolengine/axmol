@@ -63,6 +63,13 @@ static bool ImGui_ImplCocos2dx_createShaderPrograms();
 
 #endif // CC_PLATFORM_PC
 
+// TODO: mac metal
+#if defined(CC_PLATFORM_PC) && (defined(CC_USE_GL) || defined(CC_USE_GLES))
+#define CC_IMGUI_ENABLE_MULTI_VIEWPORT 1
+#else
+#define CC_IMGUI_ENABLE_MULTI_VIEWPORT 0
+#endif
+
 // fps macro
 #define CC_IMGUI_DEFAULT_DELTA (1 / 60.f)
 #define CC_IMGUI_MIN_DELTA (1 / 1000.f)
@@ -542,7 +549,7 @@ bool ImGui_ImplCocos2dx_Init(bool install_callbacks /*TODO: need check whether c
 #ifdef CC_PLATFORM_PC
 	// Enable Multi-Viewport / Platform Windows
     // TODO: mac osx have problem when create new window, the game scene will go to black
-#if defined(_WIN32)
+#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 #endif
 	//io.ConfigViewportsNoAutoMerge = true;
@@ -1115,7 +1122,7 @@ static void ImGui_ImplGlfw_CreateWindow(ImGuiViewport* viewport)
 #if GLFW_HAS_WINDOW_TOPMOST
 	glfwWindowHint(GLFW_FLOATING, (viewport->Flags & ImGuiViewportFlags_TopMost) ? true : false);
 #endif
-#ifdef CC_USE_GL
+#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
 	GLFWwindow* share_window = ImGui_ImplCocos2dx_GetWindow();
 #else
 	GLFWwindow* share_window = nullptr;
@@ -1136,7 +1143,8 @@ static void ImGui_ImplGlfw_CreateWindow(ImGuiViewport* viewport)
 	glfwSetWindowCloseCallback(data->Window, ImGui_ImplGlfw_WindowCloseCallback);
 	glfwSetWindowPosCallback(data->Window, ImGui_ImplGlfw_WindowPosCallback);
 	glfwSetWindowSizeCallback(data->Window, ImGui_ImplGlfw_WindowSizeCallback);
-#ifdef CC_USE_GL
+#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
+	// TODO: metal
 	const auto window = data->Window;
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(0);
@@ -1308,7 +1316,7 @@ static void ImGui_ImplGlfw_SetWindowAlpha(ImGuiViewport* viewport, float alpha)
 static void ImGui_ImplGlfw_RenderWindow(ImGuiViewport* viewport, void*)
 {
 	ImGuiViewportDataGlfw* data = (ImGuiViewportDataGlfw*)viewport->PlatformUserData;
-#ifdef CC_USE_GL
+#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
 	const auto window = data->Window;
 	glfwMakeContextCurrent(window);
 	AddRendererCommand([=]()
@@ -1321,7 +1329,7 @@ static void ImGui_ImplGlfw_RenderWindow(ImGuiViewport* viewport, void*)
 static void ImGui_ImplGlfw_SwapBuffers(ImGuiViewport* viewport, void*)
 {
 	ImGuiViewportDataGlfw* data = (ImGuiViewportDataGlfw*)viewport->PlatformUserData;
-#ifdef CC_USE_GL
+#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
 	const auto window = data->Window;
 	glfwMakeContextCurrent(window);
 	AddRendererCommand([=]()
