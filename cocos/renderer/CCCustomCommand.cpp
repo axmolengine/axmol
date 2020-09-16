@@ -66,7 +66,7 @@ void CustomCommand::assign(const CustomCommand& rhs)
 {
     if (this != &rhs) {
         auto podOffset = offsetof(CustomCommand, _type);
-        auto podSize = offsetof(CustomCommand, _beforeCallback);
+        auto podSize = offsetof(CustomCommand, _beforeCallback) - podOffset;
         memcpy((uint8_t*)this + podOffset, (const uint8_t*)&rhs + podOffset, podSize);
         
         CC_SAFE_RETAIN(_vertexBuffer);
@@ -81,7 +81,7 @@ void CustomCommand::assign(CustomCommand&& rhs)
 {
     if (this != &rhs) {
         auto podOffset = offsetof(CustomCommand, _type);
-        auto podSize = offsetof(CustomCommand, _beforeCallback);
+        auto podSize = offsetof(CustomCommand, _beforeCallback) - podOffset;
         memcpy((uint8_t*)this + podOffset, (const uint8_t*)&rhs + podOffset, podSize);
 
         _beforeCallback = std::move(rhs._beforeCallback);
