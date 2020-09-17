@@ -68,15 +68,14 @@ public:
 
 	/**Constructor.*/
     CustomCommand();
-    CustomCommand(const CustomCommand& rhs);
+    CustomCommand(const CustomCommand& rhs) = delete;
     CustomCommand(CustomCommand&& rhs);
     /**Destructor.*/
     ~CustomCommand();
 
-    CustomCommand& operator=(const CustomCommand& rhs);
+    CustomCommand& operator=(const CustomCommand& rhs) = delete;
     CustomCommand& operator=(CustomCommand&& rhs);
 
-protected:
     void assign(const CustomCommand& rhs);
     void assign(CustomCommand&& rhs);
     
