@@ -209,16 +209,6 @@ Label::BatchCommand::BatchCommand()
     outLineCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
 }
 
-Label::BatchCommand::BatchCommand(BatchCommand&& rhs) : 
-    textCommand(std::move(rhs.textCommand)),
-    shadowCommand(std::move(rhs.shadowCommand)),
-    outLineCommand(std::move(rhs.outLineCommand))
-{
-    rhs.textCommand.getPipelineDescriptor().programState = nullptr;
-    rhs.shadowCommand.getPipelineDescriptor().programState = nullptr;
-    rhs.outLineCommand.getPipelineDescriptor().programState = nullptr;
-}
-
 Label::BatchCommand::~BatchCommand()
 {
     CC_SAFE_RELEASE(textCommand.getPipelineDescriptor().programState);
