@@ -59,7 +59,6 @@ enum {
 
 NewLabelTests::NewLabelTests()
 {
-    ADD_TEST_CASE(LabelIssue20523);
     ADD_TEST_CASE(LabelFNTGlyphDesigner);
     ADD_TEST_CASE(LabelFNTColor);
     ADD_TEST_CASE(LabelFNTOpacity);
@@ -3620,36 +3619,6 @@ std::string LabelIssue17902::title() const
 std::string LabelIssue17902::subtitle() const
 {
     return "";
-}
-
-//
-// LabelIssue20523
-//
-LabelIssue20523::LabelIssue20523()
-{
-    auto size = Director::getInstance()->getWinSize();
-    auto _crashingLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 120);
-    _crashingLabel->setPosition(Vec2(size.width / 2, size.height / 2));
-    _crashingLabel->setColor(cocos2d::Color3B(200, 200, 200));
-    addChild(_crashingLabel, 1);
-    //_crashingLabel->setWidth(size.width);
-
-    this->schedule([this, _crashingLabel](float)
-        {
-            ++_i;
-            _crashingLabel->setString(std::to_string(_i));
-        }, 1, CC_REPEAT_FOREVER, 0, "repeat");
-
-}
-
-std::string LabelIssue20523::title() const
-{
-    return "Github Issue 20523";
-}
-
-std::string LabelIssue20523::subtitle() const
-{
-    return "Should not crash after 7 seconds";
 }
 
 //
