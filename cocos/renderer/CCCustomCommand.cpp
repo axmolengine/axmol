@@ -41,27 +41,16 @@ CustomCommand::~CustomCommand()
     CC_SAFE_RELEASE(_indexBuffer);
 }
 
-CustomCommand::CustomCommand(const CustomCommand& rhs)
-{
-    this->assign(rhs);
-}
-
 CustomCommand::CustomCommand(CustomCommand&& rhs)
 {
     this->assign(std::move(rhs));
 }
 
-CustomCommand& CustomCommand::operator=(const CustomCommand& rhs)
-{
-    this->assign(rhs);
-    return *this;
-}
 CustomCommand& CustomCommand::operator=(CustomCommand&& rhs)
 {
     this->assign(std::move(rhs));
     return *this;
 }
-
 // Note: The use of offsetof below is technically undefined until C++17
 // because State is not a standard layout type. However, all compilers
 // currently provide well-defined behavior as an extension (which is
@@ -82,7 +71,7 @@ void CustomCommand::assign(const CustomCommand& rhs)
         auto podOffset = offsetof(CustomCommand, _type);
         auto podSize = offsetof(CustomCommand, _beforeCallback) - podOffset;
         memcpy((uint8_t*)this + podOffset, (const uint8_t*)&rhs + podOffset, podSize);
-        
+
         CC_SAFE_RETAIN(_vertexBuffer);
         CC_SAFE_RETAIN(_indexBuffer);
 
@@ -102,6 +91,7 @@ void CustomCommand::assign(CustomCommand&& rhs)
         _afterCallback = std::move(rhs._afterCallback);
 
         rhs._vertexBuffer = rhs._indexBuffer = nullptr;
+        rhs._pipelineDescriptor.programState = nullptr;
     }
 }
 #if defined(__INTEL_COMPILER)
@@ -203,10 +193,10 @@ void CustomCommand::updateIndexBuffer(void* data, std::size_t length)
 
 std::size_t CustomCommand::computeIndexSize() const
 {
-if (IndexFormat::U_SHORT == _indexFormat)
-    return sizeof(unsigned short);
-else
-    return sizeof(unsigned int);
+    if (IndexFormat::U_SHORT == _indexFormat)
+        return sizeof(unsigned short);
+    else
+        return sizeof(unsigned int);
 }
 
 NS_CC_END

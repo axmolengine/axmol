@@ -702,8 +702,12 @@ protected:
 
     struct BatchCommand {
         BatchCommand();
-        BatchCommand(BatchCommand&& rhs);
+        BatchCommand(const BatchCommand& rhs) = delete;
+        BatchCommand(BatchCommand&& rhs) = default;
         ~BatchCommand();
+
+        BatchCommand& operator=(const BatchCommand& rhs) = delete;
+        BatchCommand& operator=(BatchCommand&& rhs) = default;
 
         void setProgramState(backend::ProgramState* state);
 
