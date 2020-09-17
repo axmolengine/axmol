@@ -58,7 +58,7 @@ public:
 
     MeshCommand();
     virtual ~MeshCommand();
-    MeshCommand(const MeshCommand &) = default;
+    MeshCommand(MeshCommand&&) = default;
 
     /**
     Init function. The render command will be in 2D mode.
