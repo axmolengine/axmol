@@ -31,9 +31,9 @@ bool RenderPassParams::operator==(const RenderPassParams& descriptor) const
     return (clearDepthValue == descriptor.clearDepthValue &&
         clearStencilValue == descriptor.clearStencilValue &&
         clearColorValue == descriptor.clearColorValue &&
-        needColorAttachment == descriptor.needColorAttachment &&
-        depthTestEnabled == descriptor.depthTestEnabled &&
-        stencilTestEnabled == descriptor.stencilTestEnabled &&
+//        needColorAttachment == descriptor.needColorAttachment &&
+//        depthTestEnabled == descriptor.depthTestEnabled &&
+//        stencilTestEnabled == descriptor.stencilTestEnabled &&
         flags.clear == descriptor.flags.clear &&
         flags.discardStart == descriptor.flags.discardStart &&
         flags.discardEnd == descriptor.flags.discardEnd);

@@ -47,6 +47,7 @@
 #include "xxhash.h"
 
 #include "renderer/backend/Backend.h"
+#include "renderer/backend/RenderTarget.h"
 
 NS_CC_BEGIN
 
@@ -406,7 +407,8 @@ void Renderer::clean()
 void Renderer::setDepthTest(bool value)
 {
     _depthStencilDescriptor.depthTestEnabled = value;
-    _renderPassParams.depthTestEnabled = value;
+    _currentRT->modifyTargetFlags(value ? TargetBufferFlags::DEPTH : TargetBufferFlags::NONE,
+                                  value ? TargetBufferFlags::NONE : TargetBufferFlags::DEPTH);
 }
 
 void Renderer::setDepthWrite(bool value)
@@ -437,7 +439,9 @@ bool Renderer::getDepthWrite() const
 void Renderer::setStencilTest(bool value)
 {
     _depthStencilDescriptor.stencilTestEnabled = value;
-    _renderPassParams.stencilTestEnabled = value;
+    
+    _currentRT->modifyTargetFlags(value ? TargetBufferFlags::STENCIL : TargetBufferFlags::NONE,
+    value ? TargetBufferFlags::NONE : TargetBufferFlags::STENCIL);
 }
 
 void Renderer::setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)
@@ -761,8 +765,7 @@ void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor, c
     auto device = backend::Device::getInstance();
     _renderPipeline->update(pipelineDescriptor, _currentRT, renderPassParams);
     backend::DepthStencilState* depthStencilState = nullptr;
-    auto needDepthStencilAttachment = renderPassParams.depthTestEnabled || renderPassParams.stencilTestEnabled;
-    if (needDepthStencilAttachment)
+    if (bitmask::any(_currentRT->getTargetFlags(), RenderTargetFlag::DEPTH_AND_STENCIL))
     {
         depthStencilState = device->createDepthStencilState(_depthStencilDescriptor);
     }

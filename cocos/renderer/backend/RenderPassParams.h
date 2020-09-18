@@ -66,18 +66,18 @@ struct RenderPassParams
 {
     RenderPassParams& operator=(const RenderPassParams& descriptor) = default;
     bool operator==(const RenderPassParams& descriptor) const;
-    bool needDepthStencilAttachment() const { return depthTestEnabled || stencilTestEnabled; }
+    // bool needDepthStencilAttachment() const { return depthTestEnabled || stencilTestEnabled; }
 
     float clearDepthValue = 0.f;
     float clearStencilValue = 0.f;
     std::array<float, 4> clearColorValue {{0.f, 0.f, 0.f, 0.f}}; // double-braces required in C++11
     
     // TODO: renderTarget flags
-    bool needColorAttachment = true;
+    //bool needColorAttachment = true;
 
     // TODO: renderTarget flags For setup Default RenderTarget pipeline
-    bool depthTestEnabled = false;
-    bool stencilTestEnabled = false;
+    //bool depthTestEnabled = false;
+    //bool stencilTestEnabled = false;
 
     // TODO: explicit use, only clear flag needed?
     RenderPassFlags flags{};
