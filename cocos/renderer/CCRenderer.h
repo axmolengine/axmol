@@ -50,6 +50,7 @@ class CommandBuffer;
 class RenderPipeline;
 class RenderPass;
 class TextureBackend;
+class RenderTarget;
 struct RenderPipelineDescriptor;
 struct PixelBufferDescriptor;
 }
@@ -187,7 +188,11 @@ public:
      @stencilAttachment The value to replace stencil attachment. Depth attachment and stencil attachment
                         can be the same value.
      */
-    void setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachment, Texture2D* depthAttachment, Texture2D* stencilAttachment);
+    backend::RenderTarget* getRenderTarget() const { return _currentRT; }
+    void setRenderTarget(backend::RenderTarget* rt) { _currentRT = rt; };
+
+    backend::RenderTarget* getDefaultRenderTarget() const { return _defaultRT; }
+
     /**
     Set clear values for each attachment.
     @flags Flags to indicate which attachment clear value to be modified.
@@ -407,8 +412,8 @@ public:
     /** returns whether or not a rectangle is visible or not */
     bool checkVisibility(const Mat4& transform, const Size& size);
     
-    /** read pixels from texture or screen framebuffer */
-    void readPixels(backend::TextureBackend* texture, std::function<void(const backend::PixelBufferDescriptor&)> callback);
+    /** read pixels from RenderTarget or screen framebuffer */
+    void readPixels(backend::RenderTarget* rt, std::function<void(const backend::PixelBufferDescriptor&)> callback);
     
 protected:
     friend class Director;
@@ -474,15 +479,15 @@ protected:
     void doVisitRenderQueue(const std::vector<RenderCommand*>&);
 
     void fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int vertexBufferOffset);
-    void beginRenderPass(RenderCommand*); /// Begin a render pass.
+    void beginRenderPass(); /// Begin a render pass.
     
     /**
      * Building a programmable pipeline involves an expensive evaluation of GPU state.
      * So a new render pipeline object will be created only if it hasn't been created before.
      * @param pipelineDescriptor Specifies the pipeline descriptor.
-     * @param renderPassDescriptor Specifies the render pass descriptor.
+     * @param renderPassParams Specifies the render pass descriptor.
      */
-    void setRenderPipeline(const PipelineDescriptor&, const backend::RenderPassDescriptor&);
+    void setRenderPipeline(const PipelineDescriptor&, const backend::RenderPassParams&);
 
     void pushStateBlock();
 
@@ -508,7 +513,7 @@ protected:
     TriangleCommandBufferManager _triangleCommandBufferManager;
     
     backend::CommandBuffer* _commandBuffer = nullptr;
-    backend::RenderPassDescriptor _renderPassDescriptor;
+    backend::RenderPassParams _renderPassParams;
     backend::DepthStencilDescriptor _depthStencilDescriptor;
 
     // Internal structure that has the information for the batches
@@ -541,10 +546,14 @@ protected:
 
     unsigned int _stencilRef = 0;
 
-    // weak reference
+    backend::RenderTarget* _defaultRT = nullptr;
+    backend::RenderTarget* _currentRT = nullptr; // weak ref
+
+    // weak reference, TODO: unused
     Texture2D* _colorAttachment = nullptr;
     Texture2D* _depthAttachment = nullptr;
     Texture2D* _stencilAttachment = nullptr;
+	
     Color4F _clearColor = Color4F::BLACK;
     ClearFlag _clearFlag;
     RenderTargetFlag _renderTargetFlag = RenderTargetFlag::COLOR;

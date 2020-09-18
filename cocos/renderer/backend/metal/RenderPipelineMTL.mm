@@ -24,6 +24,7 @@
  
 #include "RenderPipelineMTL.h"
 #include "DeviceMTL.h"
+#include "RenderTargetMTL.h"
 #include "ShaderModuleMTL.h"
 #include "DepthStencilStateMTL.h"
 #include "UtilsMTL.h"
@@ -163,7 +164,8 @@ RenderPipelineMTL::RenderPipelineMTL(id<MTLDevice> mtlDevice)
 }
 
 void RenderPipelineMTL::update(const PipelineDescriptor & pipelineDescirptor,
-                               const RenderPassDescriptor& renderPassDescriptor)
+                               const RenderTarget* renderTarget,
+                               const RenderPassParams& renderPassParams)
 {
     struct
     {
@@ -185,7 +187,7 @@ void RenderPipelineMTL::update(const PipelineDescriptor & pipelineDescirptor,
     
     memset(&hashMe, 0, sizeof(hashMe));
     const auto& blendDescriptor = pipelineDescirptor.blendDescriptor;
-    getAttachmentFormat(renderPassDescriptor, _colorAttachmentsFormat[0], _depthAttachmentFormat, _stencilAttachmentFormat);
+    getAttachmentFormat(renderTarget, renderPassParams, _colorAttachmentsFormat[0], _depthAttachmentFormat, _stencilAttachmentFormat);
     auto program = static_cast<ProgramMTL*>(pipelineDescirptor.programState->getProgram());
     hashMe.vertexShaderHash = program->getVertexShader()->getHashValue();
     hashMe.fragmentShaderHash = program->getFragmentShader()->getHashValue();
@@ -232,7 +234,7 @@ void RenderPipelineMTL::update(const PipelineDescriptor & pipelineDescirptor,
     setShaderModules(pipelineDescirptor);
     setVertexLayout(_mtlRenderPipelineDescriptor, pipelineDescirptor);
     
-    setBlendStateAndFormat(pipelineDescirptor.blendDescriptor, renderPassDescriptor);
+    setBlendStateAndFormat(pipelineDescirptor.blendDescriptor);
     
     NSError *error = nil;
     _mtlRenderPipelineState = [_mtlDevice newRenderPipelineStateWithDescriptor:_mtlRenderPipelineDescriptor error:&error];
@@ -299,43 +301,28 @@ void RenderPipelineMTL::setShaderModules(const PipelineDescriptor& descriptor)
     _mtlRenderPipelineDescriptor.fragmentFunction = fragShaderModule->getMTLFunction();
 }
 
-void RenderPipelineMTL::getAttachmentFormat(const RenderPassDescriptor& descriptor,
+void RenderPipelineMTL::getAttachmentFormat(const RenderTarget* renderTarget,
+                                            const RenderPassParams& params,
                                             PixelFormat& colorFormat,
                                             PixelFormat& depthFormat,
                                             PixelFormat& stencilFormat)
 {
-    if (descriptor.needColorAttachment)
+    auto rtMTL = static_cast<const RenderTargetMTL*>(renderTarget);
+    auto rtflags = rtMTL->getTargetFlags();
+    if (bitmask::any(rtflags, RenderTargetFlag::COLOR))
     {
         // FIXME: now just handle color attachment 0.
-        if (descriptor.colorAttachmentsTexture[0])
-            colorFormat = descriptor.colorAttachmentsTexture[0]->getTextureFormat();
-        else
-            colorFormat = PixelFormat::DEFAULT;
+        colorFormat = rtMTL->getColorAttachmentPixelFormat(0);
     }
     else
     {
         colorFormat = PixelFormat::DEFAULT;
     }
     
-    if (descriptor.needDepthStencilAttachment())
+    if (bitmask::any(rtflags, RenderTargetFlag::DEPTH_AND_STENCIL))
     {
-        if(descriptor.depthAttachmentTexture)
-        {
-            depthFormat = descriptor.depthAttachmentTexture->getTextureFormat();
-        }
-        else
-        {
-            depthFormat = PixelFormat::D24S8;
-        }
-        
-        if (descriptor.stencilAttachmentTexture)
-        {
-            stencilFormat = descriptor.stencilAttachmentTexture->getTextureFormat();
-        }
-        else
-        {
-            stencilFormat = PixelFormat::D24S8;
-        }
+        depthFormat = rtMTL->getDepthAttachmentPixelFormat();
+        stencilFormat =rtMTL->getStencilAttachmentPixelFormat();
     }
     else
     {
@@ -343,8 +330,7 @@ void RenderPipelineMTL::getAttachmentFormat(const RenderPassDescriptor& descript
     }
 }
 
-void RenderPipelineMTL::setBlendStateAndFormat(const BlendDescriptor& blendDescriptor,
-                                               const RenderPassDescriptor& renderPassDescriptor)
+void RenderPipelineMTL::setBlendStateAndFormat(const BlendDescriptor& blendDescriptor)
 {
     for (int i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
     {

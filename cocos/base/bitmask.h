@@ -66,16 +66,11 @@ Copyright (c) 2020 c4games.com.
         return static_cast<_BITMASK>(~static_cast<_IntTy>(_Left));                                                  \
     }                                                                                                               \
                                                                                                                     \
-    constexpr bool _Bitmask_includes(                                                                               \
-        _BITMASK _Left, _BITMASK _Elements) noexcept { /* return (_Left & _Elements) != _BITMASK{} */               \
-        return (_Left & _Elements) != _BITMASK{};                                                                   \
-    }                                                                                                               \
-                                                                                                                    \
-    constexpr bool _Bitmask_includes_all(                                                                           \
-        _BITMASK _Left, _BITMASK _Elements) noexcept { /* return (_Left & _Elements) == _Elements */                \
-        return (_Left & _Elements) == _Elements;                                                                    \
+    constexpr bool operator!(_BITMASK _Left) noexcept { /* return ~_Left */                                         \
+        using _IntTy = _STD underlying_type<_BITMASK>::type;                                                        \
+        return !static_cast<_IntTy>(_Left);                                                                         \
     }
-
+                                                                                                                    
 // BITSHIFT OPERATIONS, inspired from msvc++ <type_traits>.
 #define CC_ENABLE_BITSHIFT_OPS(_BITMASK)                                                                            \
     constexpr _BITMASK operator>>(_BITMASK _Left, _BITMASK _Right) noexcept { /* return _Left & _Right */           \
@@ -87,3 +82,20 @@ Copyright (c) 2020 c4games.com.
         using _IntTy = _STD underlying_type<_BITMASK>::type;                                                        \
         return static_cast<_BITMASK>(static_cast<_IntTy>(_Left) << static_cast<_IntTy>(_Right));                    \
     }     
+
+namespace bitmask {
+    template<typename _BITMASK>
+    constexpr bool none(_BITMASK _Left, _BITMASK _Elements) noexcept {
+        return !(_Left & _Elements);
+    }
+
+    template<typename _BITMASK>
+    constexpr bool any(_BITMASK _Left, _BITMASK _Elements) noexcept {
+        return !!(_Left & _Elements);
+    }
+
+    template<typename _BITMASK>
+    constexpr bool only(_BITMASK _Left, _BITMASK _Elements) noexcept {
+        return (_Left & _Elements) == _Elements;
+    }
+} // namespace bitmask

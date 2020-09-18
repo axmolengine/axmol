@@ -61,11 +61,11 @@ public:
     virtual void beginFrame() override;
     
     /**
-     * Create a MTLRenderCommandEncoder object for graphics rendering to an attachment in a RenderPassDescriptor.
-     * MTLRenderCommandEncoder is cached if current RenderPassDescriptor is identical to previous one.
+     * Create a MTLRenderCommandEncoder object for graphics rendering to an attachment in a RenderPassParams.
+     * MTLRenderCommandEncoder is cached if current RenderPassParams is identical to previous one.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderPassDescriptor& descriptor) override;
+    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassParams& descriptor) override;
     
     /**
      * Sets the current render pipeline state object.
@@ -169,7 +169,7 @@ public:
      * Get a screen snapshot
      * @param callback A callback to deal with screen snapshot image.
      */
-    virtual void capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback) override;
+    virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
     
 private:
     void prepareDrawing() const;
@@ -179,7 +179,7 @@ private:
     void afterDraw();
     void flush();
     void flushCaptureCommands();
-    id<MTLRenderCommandEncoder> getRenderCommandEncoder(const RenderPassDescriptor& renderPassDescriptor);
+    id<MTLRenderCommandEncoder> getRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassParams& renderPassParams);
 
     id<MTLCommandBuffer> _mtlCommandBuffer = nil;
     id<MTLCommandQueue> _mtlCommandQueue = nil;
@@ -195,7 +195,8 @@ private:
     unsigned int _renderTargetHeight = 0;
     
     dispatch_semaphore_t _frameBoundarySemaphore;
-    RenderPassDescriptor _prevRenderPassDescriptor;
+    const RenderTarget* _currentRenderTarget = nil; // weak ref
+    RenderPassParams _currentRenderPassParams;
     NSAutoreleasePool* _autoReleasePool = nil;
     
     std::vector<std::pair<TextureBackend*,std::function<void(const PixelBufferDescriptor&)>>> _captureCallbacks;

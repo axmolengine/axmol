@@ -31,6 +31,7 @@
 #include "TextureMTL.h"
 #include "ProgramMTL.h"
 #include "DeviceInfoMTL.h"
+#include "RenderTargetMTL.h"
 
 #include "base/ccMacros.h"
 
@@ -106,6 +107,27 @@ TextureBackend* DeviceMTL::newTexture(const TextureDescriptor& descriptor)
             CCASSERT(false, "invalidate texture type");
             return nullptr;
     }
+}
+
+RenderTarget* DeviceMTL::newDefaultRenderTarget(TargetBufferFlags rtf)
+{
+    auto rtGL = new RenderTargetMTL(true);
+    rtGL->setTargetFlags(rtf);
+    return rtGL;
+}
+
+RenderTarget* DeviceMTL::newRenderTarget(TargetBufferFlags rtf,
+    TextureBackend* colorAttachment,
+    TextureBackend* depthAttachment,
+    TextureBackend* stencilAttachhment)
+{
+    auto rtGL = new RenderTargetMTL(false);
+    rtGL->setTargetFlags(rtf);
+    rtGL->bindFrameBuffer();
+    rtGL->setColorAttachment(RenderTarget::ColorAttachment{ { colorAttachment, 0 } });
+    rtGL->setDepthAttachment(depthAttachment);
+    rtGL->setStencilAttachment(stencilAttachhment);
+    return rtGL;
 }
 
 ShaderModule* DeviceMTL::newShaderModule(ShaderStage stage, const std::string& source)

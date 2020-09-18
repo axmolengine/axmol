@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "renderer/CCTextureCache.h"
 #include "renderer/backend/Device.h"
 #include "renderer/backend/Texture.h"
+#include "renderer/backend/RenderTarget.h"
 
 NS_CC_BEGIN
 
@@ -57,6 +58,7 @@ RenderTexture::RenderTexture()
 
 RenderTexture::~RenderTexture()
 {
+    CC_SAFE_RELEASE(_renderTarget);
     CC_SAFE_RELEASE(_sprite);
     CC_SAFE_RELEASE(_texture2DCopy);
     CC_SAFE_RELEASE(_depthStencilTexture);
@@ -207,8 +209,6 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
 
         _renderTargetFlags = RenderTargetFlag::COLOR;
 
-        clearColorAttachment();
-
         if (PixelFormat::D24S8 == depthStencilFormat)
         {
             _renderTargetFlags = RenderTargetFlag::ALL;
@@ -227,6 +227,14 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
             _depthStencilTexture->initWithBackendTexture(texture);
             texture->release();
         }
+
+        _renderTarget = backend::Device::getInstance()->newRenderTarget(_renderTargetFlags,
+            _texture2D ? _texture2D->getBackendTexture() : nullptr,
+            _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
+            _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr
+        );
+
+        clearColorAttachment();
 
         _texture2D->setAntiAliasTexParameters();
         if (_texture2DCopy)
@@ -477,7 +485,7 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
     int savedBufferHeight = (int)s.height;
     bool hasPremultipliedAlpha = _texture2D->hasPremultipliedAlpha();
     
-    _director->getRenderer()->readPixels(_texture2D->getBackendTexture(), [=](const backend::PixelBufferDescriptor& pbd) {
+    _director->getRenderer()->readPixels(_renderTarget, [=](const backend::PixelBufferDescriptor& pbd) {
         if(pbd) {
             auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, hasPremultipliedAlpha);
             imageCallback(image);
@@ -548,12 +556,8 @@ void RenderTexture::onBegin()
     _oldViewport = renderer->getViewport();
     renderer->setViewPort(viewport.origin.x, viewport.origin.y, viewport.size.width, viewport.size.height);
 
-    _oldColorAttachment = renderer->getColorAttachment();
-    _oldDepthAttachment = renderer->getDepthAttachment();
-    _oldStencilAttachment = renderer->getStencilAttachment();
-    _oldRenderTargetFlag = renderer->getRenderTargetFlag();
-
-    renderer->setRenderTarget(_renderTargetFlags, _texture2D, _depthStencilTexture, _depthStencilTexture);
+    _oldRenderTarget = renderer->getRenderTarget();
+    renderer->setRenderTarget(_renderTarget);
 }
 
 void RenderTexture::onEnd()
@@ -564,7 +568,8 @@ void RenderTexture::onEnd()
     
     Renderer *renderer =  Director::getInstance()->getRenderer();
     renderer->setViewPort(_oldViewport.x, _oldViewport.y, _oldViewport.w, _oldViewport.h);
-    renderer->setRenderTarget(_oldRenderTargetFlag, _oldColorAttachment, _oldDepthAttachment, _oldStencilAttachment);
+
+    renderer->setRenderTarget(_oldRenderTarget);
 }
 
 void RenderTexture::begin()
@@ -629,19 +634,10 @@ void RenderTexture::setClearFlags(ClearFlag clearFlags)
 void RenderTexture::clearColorAttachment()
 {
     auto renderer = _director->getRenderer();
-    _beforeClearAttachmentCommand.func = [=]() -> void {
-        _oldColorAttachment = renderer->getColorAttachment();
-        renderer->setRenderTarget(RenderTargetFlag::COLOR, _texture2D, nullptr, nullptr);
-    };
-    renderer->addCommand(&_beforeClearAttachmentCommand);
-
-    Color4F color(0.f, 0.f, 0.f, 0.f);
-    renderer->clear(ClearFlag::COLOR, color, 1, 0, _globalZOrder);
-
-    _afterClearAttachmentCommand.func = [=]() -> void {
-        renderer->setRenderTarget(RenderTargetFlag::COLOR, _oldColorAttachment, nullptr, nullptr);
-    };
-    renderer->addCommand(&_afterClearAttachmentCommand);
+    _oldRenderTarget = renderer->getRenderTarget();
+    renderer->setRenderTarget(_renderTarget);
+    renderer->clear(TargetBufferFlags::COLOR, Color4F{0.f, 0.f, 0.f, 0.f}, 1, 0, _globalZOrder);
+    renderer->setRenderTarget(_oldRenderTarget);
 }
 
 NS_CC_END

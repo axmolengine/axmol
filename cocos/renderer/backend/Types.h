@@ -258,6 +258,33 @@ enum class ColorWriteMask : uint32_t
 CC_ENABLE_BITMASK_OPS(ColorWriteMask)
 CC_ENABLE_BITSHIFT_OPS(ColorWriteMask)
 
+
+/**
+ * Bitmask for selecting render buffers
+ */
+enum class TargetBufferFlags : uint8_t {
+    NONE = 0x0u,                            //!< No buffer selected.
+    COLOR0 = 0x1u,                          //!< Color buffer selected.
+    COLOR1 = 0x2u,                          //!< Color buffer selected.
+    COLOR2 = 0x4u,                          //!< Color buffer selected.
+    COLOR3 = 0x8u,                          //!< Color buffer selected.
+    COLOR = COLOR0,                         //!< \deprecated
+    COLOR_ALL = COLOR0 | COLOR1 | COLOR2 | COLOR3,
+    DEPTH = 0x10u,                          //!< Depth buffer selected.
+    STENCIL = 0x20u,                        //!< Stencil buffer selected.
+    DEPTH_AND_STENCIL = DEPTH | STENCIL,    //!< depth and stencil buffer selected.
+    ALL = COLOR_ALL | DEPTH | STENCIL       //!< Color, depth and stencil buffer selected.
+};
+CC_ENABLE_BITMASK_OPS(TargetBufferFlags)
+
+inline TargetBufferFlags getMRTColorFlag(size_t index) noexcept {
+    assert(index < 4);
+    return TargetBufferFlags(1u << index);
+}
+
+typedef TargetBufferFlags ClearFlag;
+typedef TargetBufferFlags RenderTargetFlag;
+
 struct SamplerDescriptor
 {
     SamplerFilter magFilter = SamplerFilter::LINEAR;
@@ -418,4 +445,6 @@ struct BlendDescriptor
     BlendFactor sourceAlphaBlendFactor = BlendFactor::ONE;
     BlendFactor destinationAlphaBlendFactor = BlendFactor::ZERO;
 };
+
+
 CC_BACKEND_END

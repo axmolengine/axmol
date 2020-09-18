@@ -146,6 +146,10 @@ public:
     
     int getCount() const override { return _textureInfo._maxIdx + 1; }
     
+    uintptr_t getHandler(int index = 0) const override {
+        return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
+    }
+    
     /**
      * Get MTLTexture object.
      * @return A MTLTexture object.
@@ -201,6 +205,10 @@ public:
     virtual void updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index = 0) override;
     
     int getCount() const override { return _textureInfo._maxIdx + 1; }
+    
+    uintptr_t getHandler(int index = 0) const override {
+        return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
+    }
 
     /**
      * Get MTLTexture object.

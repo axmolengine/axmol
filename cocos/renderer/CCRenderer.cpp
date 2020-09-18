@@ -191,6 +191,8 @@ void Renderer::init()
 
     auto device = backend::Device::getInstance();
     _commandBuffer = device->newCommandBuffer();
+    _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR0 | TargetBufferFlags::DEPTH);
+    _currentRT = _defaultRT;
     _renderPipeline = device->newRenderPipeline();
     _commandBuffer->setRenderPipeline(_renderPipeline);
 }
@@ -404,7 +406,7 @@ void Renderer::clean()
 void Renderer::setDepthTest(bool value)
 {
     _depthStencilDescriptor.depthTestEnabled = value;
-    _renderPassDescriptor.depthTestEnabled = value;
+    _renderPassParams.depthTestEnabled = value;
 }
 
 void Renderer::setDepthWrite(bool value)
@@ -435,7 +437,7 @@ bool Renderer::getDepthWrite() const
 void Renderer::setStencilTest(bool value)
 {
     _depthStencilDescriptor.stencilTestEnabled = value;
-    _renderPassDescriptor.stencilTestEnabled = value;
+    _renderPassParams.stencilTestEnabled = value;
 }
 
 void Renderer::setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)
@@ -615,24 +617,30 @@ void Renderer::drawBatchedTriangles()
     _vertexBuffer->updateData(_verts, _filledVertex * sizeof(_verts[0]));
     _indexBuffer->updateData(_indices,  _filledIndex * sizeof(_indices[0]));
 #endif
-
+    
     /************** 2: Draw *************/
+    beginRenderPass();
     for (int i = 0; i < batchesTotal; ++i)
     {
-        beginRenderPass(_triBatchesToDraw[i].cmd);
+        
+        auto& drawInfo = _triBatchesToDraw[i];
+        setRenderPipeline(drawInfo.cmd->getPipelineDescriptor(), _renderPassParams);
         _commandBuffer->setVertexBuffer(_vertexBuffer);
         _commandBuffer->setIndexBuffer(_indexBuffer);
-        auto& pipelineDescriptor = _triBatchesToDraw[i].cmd->getPipelineDescriptor();
+        auto& pipelineDescriptor = drawInfo.cmd->getPipelineDescriptor();
         _commandBuffer->setProgramState(pipelineDescriptor.programState);
         _commandBuffer->drawElements(backend::PrimitiveType::TRIANGLE,
                                      backend::IndexFormat::U_SHORT,
-                                     _triBatchesToDraw[i].indicesToDraw,
-                                     _triBatchesToDraw[i].offset * sizeof(_indices[0]));
-        _commandBuffer->endRenderPass();
+                                     drawInfo.indicesToDraw,
+                                     drawInfo.offset * sizeof(_indices[0]));
+       
 
         _drawnBatches++;
         _drawnVertices += _triBatchesToDraw[i].indicesToDraw;
+        
     }
+	_commandBuffer->endRenderPass();
+
 
     /************** 3: Cleanup *************/
     _queuedTriangleCommands.clear();
@@ -649,7 +657,8 @@ void Renderer::drawCustomCommand(RenderCommand *command)
 
     if (cmd->getBeforeCallback()) cmd->getBeforeCallback()();
 
-    beginRenderPass(command);
+    beginRenderPass();
+    setRenderPipeline(cmd->getPipelineDescriptor(), _renderPassParams);
     _commandBuffer->setVertexBuffer(cmd->getVertexBuffer());
     _commandBuffer->setProgramState(cmd->getPipelineDescriptor().programState);
     
@@ -738,19 +747,21 @@ bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
     return ret;
 }
 
-void Renderer::readPixels(backend::TextureBackend* texture, std::function<void(const backend::PixelBufferDescriptor&)> callback)
+void Renderer::readPixels(backend::RenderTarget* rt, std::function<void(const backend::PixelBufferDescriptor&)> callback)
 {
-    if(!texture) // read pixels from screen, metal renderer backend: screen texture must not be a framebufferOnly
+    assert(!!rt);
+    if(rt == _defaultRT) // read pixels from screen, metal renderer backend: screen texture must not be a framebufferOnly
         backend::Device::getInstance()->setFrameBufferOnly(false);
-    _commandBuffer->capture(texture, std::move(callback));
+
+    _commandBuffer->readPixels(rt, std::move(callback));
 }
 
-void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor, const backend::RenderPassDescriptor& renderPassDescriptor)
+void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor, const backend::RenderPassParams& renderPassParams)
 {
     auto device = backend::Device::getInstance();
-    _renderPipeline->update(pipelineDescriptor, renderPassDescriptor);
+    _renderPipeline->update(pipelineDescriptor, _currentRT, renderPassParams);
     backend::DepthStencilState* depthStencilState = nullptr;
-    auto needDepthStencilAttachment = renderPassDescriptor.depthTestEnabled || renderPassDescriptor.stencilTestEnabled;
+    auto needDepthStencilAttachment = renderPassParams.depthTestEnabled || renderPassParams.stencilTestEnabled;
     if (needDepthStencilAttachment)
     {
         depthStencilState = device->createDepthStencilState(_depthStencilDescriptor);
@@ -761,110 +772,38 @@ void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor, c
 #endif
 }
 
-void Renderer::beginRenderPass(RenderCommand* cmd)
+void Renderer::beginRenderPass()
 {
-     _commandBuffer->beginRenderPass(_renderPassDescriptor);
-     _commandBuffer->setViewport(_viewport.x, _viewport.y, _viewport.w, _viewport.h);
-     _commandBuffer->setCullMode(_cullMode);
-     _commandBuffer->setWinding(_winding);
-     _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y, _scissorState.rect.width, _scissorState.rect.height);
-     setRenderPipeline(cmd->getPipelineDescriptor(), _renderPassDescriptor);
-
+    _commandBuffer->beginRenderPass(_currentRT, _renderPassParams);
+    _commandBuffer->setViewport(_viewport.x, _viewport.y, _viewport.w, _viewport.h);
+    _commandBuffer->setCullMode(_cullMode);
+    _commandBuffer->setWinding(_winding);
+    _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y, _scissorState.rect.width, _scissorState.rect.height);
+    // TODO: metal?
+    // setRenderPipeline(cmd->getPipelineDescriptor(), _renderPassParams);
     _commandBuffer->setStencilReferenceValue(_stencilRef);
-}
-
-void Renderer::setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachment, Texture2D* depthAttachment, Texture2D* stencilAttachment)
-{
-    _renderTargetFlag = flags;
-    if (_Bitmask_includes(RenderTargetFlag::COLOR, flags))
-    {
-        _renderPassDescriptor.needColorAttachment = true;
-        if (colorAttachment)
-            _renderPassDescriptor.colorAttachmentsTexture[0] = colorAttachment->getBackendTexture();
-        else
-            _renderPassDescriptor.colorAttachmentsTexture[0] = nullptr;
-
-        _colorAttachment = colorAttachment;
-    }
-    else
-    {
-        _colorAttachment = nullptr;
-        _renderPassDescriptor.needColorAttachment = false;
-        _renderPassDescriptor.colorAttachmentsTexture[0] = nullptr;
-    }
-
-    if (_Bitmask_includes(RenderTargetFlag::DEPTH, flags))
-    {
-        _renderPassDescriptor.depthTestEnabled = true;
-        if (depthAttachment)
-            _renderPassDescriptor.depthAttachmentTexture = depthAttachment->getBackendTexture();
-        else
-            _renderPassDescriptor.depthAttachmentTexture = nullptr;
-
-        _depthAttachment = depthAttachment;
-    }
-    else
-    {
-        _renderPassDescriptor.depthTestEnabled = false;
-        _renderPassDescriptor.depthAttachmentTexture = nullptr;
-        _depthAttachment = nullptr;
-    }
-
-    if (_Bitmask_includes(RenderTargetFlag::STENCIL, flags))
-    {
-        _stencilAttachment = stencilAttachment;
-        _renderPassDescriptor.stencilTestEnabled = true;
-        if (_stencilAttachment)
-            _renderPassDescriptor.stencilAttachmentTexture = stencilAttachment->getBackendTexture();
-        else
-            _renderPassDescriptor.stencilAttachmentTexture = nullptr;
-    }
-    else
-    {
-        _stencilAttachment = nullptr;
-        _renderPassDescriptor.stencilTestEnabled = false;
-        _renderPassDescriptor.stencilAttachmentTexture = nullptr;
-    }
 }
 
 void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder)
 {
     _clearFlag = flags;
 
-    CallbackCommand* command = new CallbackCommand();
-    command->init(globalOrder);
-    command->func = [=]() -> void {
-        backend::RenderPassDescriptor descriptor;
+    backend::RenderPassParams descriptor;
 
-        if (_Bitmask_includes(ClearFlag::COLOR, flags))
-        {
-            _clearColor = color;
-            descriptor.clearColorValue = {color.r, color.g, color.b, color.a};
-            descriptor.needClearColor = true;
-            descriptor.needColorAttachment = true;
-            descriptor.colorAttachmentsTexture[0] = _renderPassDescriptor.colorAttachmentsTexture[0];
-        }
-        if (_Bitmask_includes(ClearFlag::DEPTH, flags))
-        {
-            descriptor.clearDepthValue = depth;
-            descriptor.needClearDepth = true;
-            descriptor.depthTestEnabled = true;
-            descriptor.depthAttachmentTexture = _renderPassDescriptor.depthAttachmentTexture;
-        }
-        if (_Bitmask_includes(ClearFlag::STENCIL, flags))
-        {
-            descriptor.clearStencilValue = stencil;
-            descriptor.needClearStencil = true;
-            descriptor.stencilTestEnabled = true;
-            descriptor.stencilAttachmentTexture = _renderPassDescriptor.stencilAttachmentTexture;
-        }
+    descriptor.flags.clear = flags;
+    if (bitmask::any(flags, ClearFlag::COLOR)) {
+        _clearColor = color;
+        descriptor.clearColorValue = { color.r, color.g, color.b, color.a };
+    }
 
-        _commandBuffer->beginRenderPass(descriptor);
-        _commandBuffer->endRenderPass();
+    if(bitmask::any(flags, ClearFlag::DEPTH))
+        descriptor.clearDepthValue = depth;
 
-        delete command;
-    };
-    addCommand(command);
+    if(bitmask::any(flags, ClearFlag::STENCIL))
+        descriptor.clearStencilValue = stencil;
+
+    _commandBuffer->beginRenderPass(_currentRT, descriptor);
+    _commandBuffer->endRenderPass();
 }
 
 Texture2D* Renderer::getColorAttachment() const
@@ -889,12 +828,12 @@ const Color4F& Renderer::getClearColor() const
 
 float Renderer::getClearDepth() const
 {
-    return _renderPassDescriptor.clearDepthValue;
+    return _renderPassParams.clearDepthValue;
 }
 
 unsigned int Renderer::getClearStencil() const
 {
-    return _renderPassDescriptor.clearStencilValue;
+    return _renderPassParams.clearStencilValue;
 }
 
 ClearFlag Renderer::getClearFlag() const

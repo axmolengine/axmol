@@ -31,7 +31,7 @@
 
 #include "Macros.h"
 #include "Types.h"
-#include "RenderPassDescriptor.h"
+#include "RenderPassParams.h"
 #include "PixelBufferDescriptor.h"
 #include "CCStdC.h"
 #include "ProgramState.h"
@@ -47,6 +47,7 @@ class RenderPipeline;
 class Buffer;
 class DepthStencilState;
 class TextureBackend;
+class RenderTarget;
 
 /**
  * @addtogroup _backend
@@ -70,7 +71,7 @@ public:
      * Begin a render pass, initial color, depth and stencil attachment.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderPassDescriptor& descriptor) = 0;
+    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassParams& descriptor) = 0;
     
     /**
      * Sets the current render pipeline state object.
@@ -172,7 +173,7 @@ public:
      * Get a screen snapshot
      * @param callback A callback to deal with screen snapshot image.
      */
-    virtual void capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback) = 0;
+    virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) = 0;
     
     /**
      * Update both front and back stencil reference value.

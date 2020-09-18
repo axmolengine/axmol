@@ -31,6 +31,7 @@
 #include "DepthStencilStateGL.h"
 #include "ProgramGL.h"
 #include "DeviceInfoGL.h"
+#include "RenderTargetGL.h"
 
 CC_BACKEND_BEGIN
 
@@ -80,6 +81,27 @@ TextureBackend* DeviceGL::newTexture(const TextureDescriptor& descriptor)
     default:
         return nullptr;
     }
+}
+
+RenderTarget* DeviceGL::newDefaultRenderTarget(TargetBufferFlags rtf)
+{
+    auto rtGL = new RenderTargetGL(true);
+    rtGL->setTargetFlags(rtf);
+    return rtGL;
+}
+
+RenderTarget* DeviceGL::newRenderTarget(TargetBufferFlags rtf,
+    TextureBackend* colorAttachment,
+    TextureBackend* depthAttachment,
+    TextureBackend* stencilAttachhment)
+{
+    auto rtGL = new RenderTargetGL(false);
+    rtGL->setTargetFlags(rtf);
+    rtGL->bindFrameBuffer();
+    rtGL->setColorAttachment({ RenderTarget::ColorAttachment{ {colorAttachment, 0} } });
+    rtGL->setDepthAttachment(depthAttachment);
+    rtGL->setStencilAttachment(stencilAttachhment);
+    return rtGL;
 }
 
 ShaderModule* DeviceGL::newShaderModule(ShaderStage stage, const std::string& source)

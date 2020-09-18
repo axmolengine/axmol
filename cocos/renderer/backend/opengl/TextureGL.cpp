@@ -151,10 +151,10 @@ Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
 
 void Texture2DGL::initWithZeros()
 {
-    // Ensure the final data size at least 1 byte
+    // Ensure the final data size at least 4 byte
     _width = (std::max)(_width, (uint32_t)1);
     _height = (std::max)(_height, (uint32_t)1);
-    _bitsPerElement = (std::max)(_bitsPerElement, (uint8_t)8);
+    _bitsPerElement = (std::max)(_bitsPerElement, (uint8_t)(8 * 4));
 
     auto size = _width * _height * _bitsPerElement / 8;
     uint8_t* data = (uint8_t*)malloc(size);
