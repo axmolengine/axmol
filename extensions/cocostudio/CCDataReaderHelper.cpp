@@ -366,10 +366,6 @@ void DataReaderHelper::addDataFromFileAsync(const std::string& imagePath, const 
     {
         basefilePath = basefilePath.substr(0, pos + 1);
     }
-    else
-    {
-        basefilePath;
-    }
 
 
     // lazy init

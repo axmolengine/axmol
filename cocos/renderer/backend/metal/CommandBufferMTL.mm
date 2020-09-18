@@ -94,7 +94,7 @@ namespace
     
     static MTLRenderPassDescriptor* toMTLRenderPassDescriptor(const RenderTarget* rt, const RenderPassParams& params)
     {
-        MTLRenderPassDescriptor* mtlDescritpor = [MTLRenderPassDescriptor RenderPassDescriptor];
+        MTLRenderPassDescriptor* mtlDescritpor = [MTLRenderPassDescriptor renderPassDescriptor];
         
         auto rtMTL = static_cast<const RenderTargetMTL*>(rt);
         rtMTL->applyRenderPassAttachments(params, mtlDescritpor);

@@ -116,12 +116,12 @@ namespace ui {
         /**
         @brief    Open keyboard and receive input text.
         */
-        virtual bool attachWithIME();
+        virtual bool attachWithIME() override;
 
         /**
         @brief    End text input and close keyboard.
         */
-        virtual bool detachWithIME();
+        virtual bool detachWithIME() override;
 
         void keyboardDidShow(IMEKeyboardNotificationInfo& /*info*/) override;
         void keyboardDidHide(IMEKeyboardNotificationInfo& /*info*/) override;
