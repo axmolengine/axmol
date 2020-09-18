@@ -219,14 +219,7 @@ void UtilsMTL::swizzleImage(unsigned char *image, std::size_t width, std::size_t
 
 void UtilsMTL::readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
 {
-    switch(texture->getTextureType()){
-        case TextureType::TEXTURE_2D:
-            UtilsMTL::readPixels(static_cast<TextureMTL*>(texture)->getMTLTexture(), origX, origY, rectWidth, rectHeight, pbd);
-            break;
-        case TextureType::TEXTURE_CUBE:
-            UtilsMTL::readPixels(static_cast<TextureCubeMTL*>(texture)->getMTLTexture(), origX, origY, rectWidth, rectHeight, pbd);
-            break;
-    }
+    UtilsMTL::readPixels(reinterpret_cast<id<MTLTexture>>(texture->getHandler()), origX, origY, rectWidth, rectHeight, pbd);
 }
 
 void UtilsMTL::readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)

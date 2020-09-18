@@ -40,21 +40,6 @@ CC_BACKEND_BEGIN
 
 namespace
 {
-
-    GLuint getHandler(TextureBackend *texture)
-    {
-        switch (texture->getTextureType())
-        {
-        case TextureType::TEXTURE_2D:
-            return static_cast<Texture2DGL*>(texture)->getHandler();
-        case TextureType::TEXTURE_CUBE:
-            return static_cast<TextureCubeGL*>(texture)->getHandler();
-        default:
-            assert(false);
-            return 0;
-        }
-    }
-
     void applyTexture(TextureBackend* texture, int slot, int index)
     {
         switch (texture->getTextureType())

@@ -38,7 +38,7 @@ CC_BACKEND_BEGIN
 
 namespace
 {
-    MTLWinding toMTLWinding(Winding winding)
+    static MTLWinding toMTLWinding(Winding winding)
     {
         if (Winding::CLOCK_WISE == winding)
             return MTLWindingClockwise;
@@ -46,7 +46,7 @@ namespace
             return MTLWindingCounterClockwise;
     }
 
-    MTLPrimitiveType toMTLPrimitive(PrimitiveType primitiveType)
+    static MTLPrimitiveType toMTLPrimitive(PrimitiveType primitiveType)
     {
         MTLPrimitiveType ret = MTLPrimitiveTypeTriangle;
         switch (primitiveType)
@@ -72,7 +72,7 @@ namespace
         return ret;
     }
     
-    MTLIndexType toMTLIndexType(IndexFormat indexFormat)
+    static MTLIndexType toMTLIndexType(IndexFormat indexFormat)
     {
         if (IndexFormat::U_SHORT == indexFormat)
             return MTLIndexTypeUInt16;
@@ -80,7 +80,7 @@ namespace
             return MTLIndexTypeUInt32;
     }
     
-    MTLCullMode toMTLCullMode(CullMode mode)
+    static MTLCullMode toMTLCullMode(CullMode mode)
     {
         switch (mode) {
             case CullMode::NONE:
@@ -92,30 +92,21 @@ namespace
         }
     }
     
-    MTLRenderPassDescriptor* toMTLRenderPassDescriptor(const RenderTarget* rt, const RenderPassParams& descriptor)
+    static MTLRenderPassDescriptor* toMTLRenderPassDescriptor(const RenderTarget* rt, const RenderPassParams& params)
     {
-        MTLRenderPassDescriptor* mtlDescritpor = [MTLRenderPassDescriptor renderPassParams];
+        MTLRenderPassDescriptor* mtlDescritpor = [MTLRenderPassDescriptor RenderPassDescriptor];
         
         auto rtMTL = static_cast<const RenderTargetMTL*>(rt);
-        rtMTL->applyRenderPassAttachments(descriptor, mtlDescritpor);
+        rtMTL->applyRenderPassAttachments(params, mtlDescritpor);
         return mtlDescritpor;
     }
     
-    id<MTLTexture> getMTLTexture(TextureBackend* texture, int index = 0)
+    static id<MTLTexture> getMTLTexture(TextureBackend* texture, int index)
     {
-        switch (texture->getTextureType())
-        {
-            case TextureType::TEXTURE_2D:
-                return static_cast<TextureMTL*>(texture)->getMTLTexture(index);
-            case TextureType::TEXTURE_CUBE:
-                return static_cast<TextureCubeMTL*>(texture)->getMTLTexture(index);
-            default:
-                assert(false);
-                return nil;
-        }
+        return reinterpret_cast<id<MTLTexture>>(texture->getHandler(index));
     }
     
-    id<MTLSamplerState> getMTLSamplerState(TextureBackend* texture)
+    static id<MTLSamplerState> getMTLSamplerState(TextureBackend* texture)
     {
         switch (texture->getTextureType())
         {

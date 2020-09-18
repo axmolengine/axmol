@@ -146,15 +146,13 @@ public:
     
     int getCount() const override { return _textureInfo._maxIdx + 1; }
     
+    /**
+     * Get MTLTexture object. reinterpret_cast<id<MTLTexture>>(handler);
+     * @return A MTLTexture object.
+     */
     uintptr_t getHandler(int index = 0) const override {
         return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
     }
-    
-    /**
-     * Get MTLTexture object.
-     * @return A MTLTexture object.
-     */
-    inline id<MTLTexture> getMTLTexture(int index = 0) const { return _textureInfo._mtlTextures[index]; }
     
     /**
      * Get MTLSamplerState object
@@ -210,12 +208,6 @@ public:
         return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
     }
 
-    /**
-     * Get MTLTexture object.
-     * @return A MTLTexture object.
-     */
-    inline id<MTLTexture> getMTLTexture(int index = 0) const { return _textureInfo._mtlTextures[index]; }
-    
     /**
      * Get MTLSamplerState object
      * @return A MTLSamplerState object.

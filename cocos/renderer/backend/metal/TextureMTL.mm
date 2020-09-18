@@ -393,7 +393,7 @@ void TextureMTL::generateMipmaps()
     if(!_hasMipmaps)
     {
         _hasMipmaps = true;
-        UtilsMTL::generateMipmaps(this->getMTLTexture());
+        UtilsMTL::generateMipmaps(reinterpret_cast<id<MTLTexture>>(this->getHandler()));
     }
 }
 
@@ -454,7 +454,7 @@ void TextureCubeMTL::generateMipmaps()
     if(!_hasMipmaps)
     {
         _hasMipmaps = true;
-        UtilsMTL::generateMipmaps(this->getMTLTexture());
+        UtilsMTL::generateMipmaps(reinterpret_cast<id<MTLTexture>(this->getHandler()));
     }
 }
 
