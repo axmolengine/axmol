@@ -192,10 +192,10 @@ void Renderer::init()
 
     auto device = backend::Device::getInstance();
     _commandBuffer = device->newCommandBuffer();
-    _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR0 | TargetBufferFlags::DEPTH_AND_STENCIL);
+    // MTL: default render target flags should have DEPTH_AND_STENCIL make sure further clear could set pipeline state properly
+    _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
     _currentRT = _defaultRT;
     _renderPipeline = device->newRenderPipeline();
-//    _renderPipeline->update(, <#const RenderTarget *renderTarget#>, <#const RenderPassParams &renderPassParams#>)
     _commandBuffer->setRenderPipeline(_renderPipeline);
 }
 
@@ -768,6 +768,8 @@ void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor, c
     backend::DepthStencilState* depthStencilState = nullptr;
     if (bitmask::any(_currentRT->getTargetFlags(), RenderTargetFlag::DEPTH_AND_STENCIL))
     {
+        // FIXME: don't use autorelease at draw frame
+        // Now the depthStencilState is in autoreleasepool
         depthStencilState = device->createDepthStencilState(_depthStencilDescriptor);
     }
     _commandBuffer->setDepthStencilState(depthStencilState);
