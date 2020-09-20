@@ -36,39 +36,6 @@ id<MTLTexture> UtilsMTL::_defaultColorAttachmentTexture = nil;
 id<MTLTexture> UtilsMTL::_defaultDepthStencilAttachmentTexture = nil;
 
 namespace {
-#define byte(n) ((n) * 8)
-#define bit(n) (n)
-    
-    uint8_t getBitsPerElement(MTLPixelFormat pixleFormat)
-    {
-        switch (pixleFormat)
-        {
-            case MTLPixelFormatDepth32Float_Stencil8:
-                return byte(8);
-            case MTLPixelFormatBGRA8Unorm:
-            case MTLPixelFormatRGBA8Unorm:
-            case MTLPixelFormatDepth32Float:
-                return byte(4);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-            case MTLPixelFormatDepth24Unorm_Stencil8:
-                return byte(4);
-#else
-            case MTLPixelFormatABGR4Unorm:
-            case MTLPixelFormatBGR5A1Unorm:
-            case MTLPixelFormatB5G6R5Unorm:
-            case MTLPixelFormatA1BGR5Unorm:
-                return byte(2);
-#endif
-            case MTLPixelFormatA8Unorm:
-            case MTLPixelFormatR8Unorm:
-                return byte(1);
-            default:
-                assert(false);
-                break;
-        }
-        return 0;
-    }
-    
     MTLPixelFormat getSupportedDepthStencilFormat()
     {
         MTLPixelFormat pixelFormat = MTLPixelFormatDepth32Float_Stencil8;

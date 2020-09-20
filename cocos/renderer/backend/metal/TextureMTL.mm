@@ -194,7 +194,8 @@ namespace
         return bytesPerRow;
     }
     
-    std::size_t getBytesPerRow(PixelFormat textureFormat, std::size_t width, std::size_t bitsPerElement)
+    // TODO: tidy APIs, compression pixelFormat and non-compression pixelFormat
+    std::size_t getBytesPerRowMTL(PixelFormat textureFormat, std::size_t width, std::size_t bitsPerElement)
     {
         MTLPixelFormat pixelFormat = UtilsMTL::toMTLPixelFormat(textureFormat);
         std::size_t bytesPerRow = 0;
@@ -361,7 +362,7 @@ void TextureMTL::updateSubData(std::size_t xoffset, std::size_t yoffset, std::si
                                  width * height,
                                  _textureFormat, &convertedData);
     
-    std::size_t bytesPerRow = getBytesPerRow(_textureFormat, width, _bitsPerElement);
+    std::size_t bytesPerRow = getBytesPerRowMTL(_textureFormat, width, _bitsPerElement);
     
     [mtlTexture replaceRegion:region
                    mipmapLevel:level

@@ -38,6 +38,39 @@ CC_BACKEND_BEGIN
 
 namespace
 {
+
+#define byte(n) ((n) * 8)
+#define bit(n) (n)
+    static uint8_t getBitsPerElementMTL(MTLPixelFormat pixleFormat)
+    {
+        switch (pixleFormat)
+        {
+            case MTLPixelFormatDepth32Float_Stencil8:
+                return byte(8);
+            case MTLPixelFormatBGRA8Unorm:
+            case MTLPixelFormatRGBA8Unorm:
+            case MTLPixelFormatDepth32Float:
+                return byte(4);
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+            case MTLPixelFormatDepth24Unorm_Stencil8:
+                return byte(4);
+    #else
+            case MTLPixelFormatABGR4Unorm:
+            case MTLPixelFormatBGR5A1Unorm:
+            case MTLPixelFormatB5G6R5Unorm:
+            case MTLPixelFormatA1BGR5Unorm:
+                return byte(2);
+    #endif
+            case MTLPixelFormatA8Unorm:
+            case MTLPixelFormatR8Unorm:
+                return byte(1);
+            default:
+                assert(false);
+                break;
+        }
+        return 0;
+    }
+
     static MTLWinding toMTLWinding(Winding winding)
     {
         if (Winding::CLOCK_WISE == winding)
@@ -273,7 +306,9 @@ void CommandBufferMTL::readPixels(RenderTarget* rt, std::function<void(const Pix
 {
     auto rtMTL = static_cast<RenderTargetMTL*>(rt);
  
-    auto texture = rtMTL->_color[0]; // we only read form color attachment 0
+    // we only read form color attachment 0
+    // if it's nullptr, will regard as screen to perform capture
+    auto texture = rtMTL->_color[0].texture;
     CC_SAFE_RETAIN(texture);
     _captureCallbacks.emplace_back(texture, std::move(callback));
 }
@@ -324,7 +359,7 @@ void CommandBufferMTL::flushCaptureCommands()
         for(auto& cb : _captureCallbacks) {
             if(cb.first == nil) { // screen capture
                 if(!screenPixelData) {
-                    UtilsMTL::readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height], screenPixelData);
+                    CommandBufferMTL::readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height], screenPixelData);
                     // screen framebuffer copied, restore screen framebuffer only to true
                     backend::Device::getInstance()->setFrameBufferOnly(true);
                 }
@@ -334,7 +369,7 @@ void CommandBufferMTL::flushCaptureCommands()
                 PixelBufferDescriptor pixelData;
                 auto texture = cb.first;
                 assert(texture != nullptr);
-                UtilsMTL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pixelData);
+                CommandBufferMTL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pixelData);
                 CC_SAFE_RELEASE(texture);
                 cb.second(pixelData);
             }
@@ -520,12 +555,12 @@ void CommandBufferMTL::readPixels(id<MTLTexture> texture, std::size_t origX, std
     [blitCommandEncoder endEncoding];
    
     [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
-       auto bytePerRow = rectWidth * getBitsPerElement(texture.pixelFormat) / 8;
+       auto bytePerRow = rectWidth * getBitsPerElementMTL(texture.pixelFormat) / 8;
        auto texelData = pbd._data.resize(bytePerRow * rectHeight);
        if(texelData != nullptr)
        {
           [readPixelsTexture getBytes:texelData bytesPerRow:bytePerRow fromRegion:imageRegion mipmapLevel:0];
-          swizzleImage(texelData, rectWidth, rectHeight, readPixelsTexture.pixelFormat);
+          UtilsMTL::swizzleImage(texelData, rectWidth, rectHeight, readPixelsTexture.pixelFormat);
           pbd._width = rectWidth;
           pbd._height = rectHeight;
        }
