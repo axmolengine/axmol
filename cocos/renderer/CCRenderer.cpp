@@ -192,7 +192,7 @@ void Renderer::init()
 
     auto device = backend::Device::getInstance();
     _commandBuffer = device->newCommandBuffer();
-    _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR0 | TargetBufferFlags::DEPTH);
+    _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR0);
     _currentRT = _defaultRT;
     _renderPipeline = device->newRenderPipeline();
     _commandBuffer->setRenderPipeline(_renderPipeline);

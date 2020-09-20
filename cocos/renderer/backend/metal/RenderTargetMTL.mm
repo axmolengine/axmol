@@ -69,7 +69,6 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassParams& params,
             continue;
         }
         
-#if 1
         descriptor.colorAttachments[i].texture = attachment.texture;
         descriptor.colorAttachments[i].level = attachment.level;
         // descriptor.colorAttachments[i].slice = attachment.layer;
@@ -77,7 +76,6 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassParams& params,
         descriptor.colorAttachments[i].storeAction = getStoreAction(params, getMRTColorFlag(i));
         descriptor.colorAttachments[i].clearColor = MTLClearColorMake(
                                                                       params.clearColorValue[0], params.clearColorValue[1], params.clearColorValue[2], params.clearColorValue[3]);
-#endif
 #if 0
         if (multisampledColor[i]) {
             // We're rendering into our temporary MSAA texture and doing an automatic resolve.
@@ -166,18 +164,18 @@ PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const
     if(isDefaultRenderTarget() && index == 0)
         return PixelFormat::DEFAULT;
     auto& rb = this->_color[index];
-    return rb ? rb.texture->getTextureFormat() : PixelFormat::DEFAULT;
+    return rb ? rb.texture->getTextureFormat() : PixelFormat::NONE;
 }
 
 PixelFormat RenderTargetMTL::getDepthAttachmentPixelFormat() const
-{
+{ // FIXME: egnx only support D24S8
     if(isDefaultRenderTarget() || !_depth)
         return PixelFormat::D24S8;
     return _depth.texture->getTextureFormat();
 }
 
 PixelFormat RenderTargetMTL::getStencilAttachmentPixelFormat() const
-{
+{ // FIXME: egnx only support D24S8
     if(isDefaultRenderTarget() || !_stencil)
         return PixelFormat::D24S8;
     return _stencil.texture->getTextureFormat();

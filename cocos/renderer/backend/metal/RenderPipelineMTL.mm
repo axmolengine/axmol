@@ -172,7 +172,7 @@ void RenderPipelineMTL::update(const PipelineDescriptor & pipelineDescirptor,
         size_t vertexShaderHash;
         size_t fragmentShaderHash;
         unsigned int vertexLayoutInfo[32];
-        backend::PixelFormat colorAttachment;
+        backend::PixelFormat colorAttachment[MAX_COLOR_ATTCHMENT];
         backend::PixelFormat depthAttachment;
         backend::PixelFormat stencilAttachment;
         bool blendEnabled;
@@ -187,11 +187,11 @@ void RenderPipelineMTL::update(const PipelineDescriptor & pipelineDescirptor,
     
     memset(&hashMe, 0, sizeof(hashMe));
     const auto& blendDescriptor = pipelineDescirptor.blendDescriptor;
-    getAttachmentFormat(renderTarget, renderPassParams, _colorAttachmentsFormat[0], _depthAttachmentFormat, _stencilAttachmentFormat);
+    getAttachmentFormat(renderTarget, renderPassParams, _colorAttachmentsFormat, _depthAttachmentFormat, _stencilAttachmentFormat);
     auto program = static_cast<ProgramMTL*>(pipelineDescirptor.programState->getProgram());
     hashMe.vertexShaderHash = program->getVertexShader()->getHashValue();
     hashMe.fragmentShaderHash = program->getFragmentShader()->getHashValue();
-    hashMe.colorAttachment = _colorAttachmentsFormat[0];
+    memcpy(&hashMe.colorAttachment, &_colorAttachmentsFormat, sizeof(_colorAttachmentsFormat));
     hashMe.depthAttachment = _depthAttachmentFormat;
     hashMe.stencilAttachment =_stencilAttachmentFormat;
     hashMe.blendEnabled = blendDescriptor.blendEnabled;
@@ -303,20 +303,21 @@ void RenderPipelineMTL::setShaderModules(const PipelineDescriptor& descriptor)
 
 void RenderPipelineMTL::getAttachmentFormat(const RenderTarget* renderTarget,
                                             const RenderPassParams& params,
-                                            PixelFormat& colorFormat,
+                                            PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
                                             PixelFormat& depthFormat,
                                             PixelFormat& stencilFormat)
 {
     auto rtMTL = static_cast<const RenderTargetMTL*>(renderTarget);
     auto rtflags = rtMTL->getTargetFlags();
-    if (bitmask::any(rtflags, RenderTargetFlag::COLOR))
-    {
-        // FIXME: now just handle color attachment 0.
-        colorFormat = rtMTL->getColorAttachmentPixelFormat(0);
-    }
-    else
-    {
-        colorFormat = PixelFormat::DEFAULT;
+    for(auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i) {
+        if (bitmask::any(rtflags, getMRTColorFlag(i)))
+        {
+            colorAttachmentsFormat[i] = rtMTL->getColorAttachmentPixelFormat(i);
+        }
+        else
+        {
+            colorAttachmentsFormat[i] = PixelFormat::NONE;
+        }
     }
     
     if (bitmask::any(rtflags, RenderTargetFlag::DEPTH_AND_STENCIL))
@@ -334,8 +335,10 @@ void RenderPipelineMTL::setBlendStateAndFormat(const BlendDescriptor& blendDescr
 {
     for (int i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
     {
-        if (PixelFormat::NONE == _colorAttachmentsFormat[i])
+        if (PixelFormat::NONE == _colorAttachmentsFormat[i]) {
+            _mtlRenderPipelineDescriptor.colorAttachments[i].pixelFormat = MTLPixelFormat::MTLPixelFormatInvalid;
             continue;
+        }
         
         _mtlRenderPipelineDescriptor.colorAttachments[i].pixelFormat = UtilsMTL::toMTLPixelFormat(_colorAttachmentsFormat[i]);
         setBlendState(_mtlRenderPipelineDescriptor.colorAttachments[i], blendDescriptor);
