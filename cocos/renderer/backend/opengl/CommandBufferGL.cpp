@@ -485,24 +485,22 @@ void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float wid
 void CommandBufferGL::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback)
 {
     PixelBufferDescriptor pbd;
-    readPixels(rt, _viewPort.x, _viewPort.y, _viewPort.w, _viewPort.h, pbd);
+    if(rt->isDefaultRenderTarget()) 
+    { // read pixels from screen
+        readPixels(rt, _viewPort.x, _viewPort.y, _viewPort.w, _viewPort.h, _viewPort.w * 4, pbd);
+    }
+    else {
+        // we only readPixels from the COLOR0 attachment.
+        auto colorAttachment = rt->_color[0].texture;
+        if(colorAttachment) {
+            readPixels(rt, 0, 0, colorAttachment->getWidth(),colorAttachment->getHeight(), colorAttachment->getBytesPerRow(), pbd);
+        }
+    }
     callback(pbd);
 }
 
-void CommandBufferGL::readPixels(RenderTarget* rt, GLint x, GLint y, std::size_t width, std::size_t height, PixelBufferDescriptor& pbd)
+void CommandBufferGL::readPixels(RenderTarget* rt, int x, int y, uint32_t width, uint32_t height, uint32_t bytesPerRow, PixelBufferDescriptor& pbd)
 {
-    std::size_t bytesPerRow = 0;
-    auto colorAttachment = rt->_color[0].texture;
-    if (UTILS_LIKELY(!colorAttachment)) // read pixels from screen
-        bytesPerRow = width * 4;
-    else { // read pixels from GPU texture
-        bytesPerRow = width * colorAttachment->getBitsPerElement() / 8;
-
-        width = colorAttachment->getWidth();
-        height = colorAttachment->getHeight();
-        x = y = 0;
-    }
-
     rt->bindFrameBuffer();
 
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -539,6 +537,9 @@ void CommandBufferGL::readPixels(RenderTarget* rt, GLint x, GLint y, std::size_t
     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     glDeleteBuffers(1, &pbo);
 #endif
+
+    if (!rt->isDefaultRenderTarget())
+        rt->unbindFrameBuffer();
 }
 
 CC_BACKEND_END

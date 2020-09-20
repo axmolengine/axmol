@@ -103,7 +103,7 @@ public:
     int getWidth() const { return _width; }
     int getHeight() const { return _height; }
 
-    int getBitsPerElement() const { return _bitsPerElement; }
+    int getBytesPerRow() const { return _width * _bitsPerElement / 8; }
 
 protected:
     /**

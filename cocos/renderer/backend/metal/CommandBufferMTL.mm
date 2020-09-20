@@ -272,9 +272,10 @@ void CommandBufferMTL::endRenderPass()
 void CommandBufferMTL::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback)
 {
     auto rtMTL = static_cast<RenderTargetMTL*>(rt);
-    // CC_SAFE_RETAIN(texture);
-    // TODO:
-    // _captureCallbacks.emplace_back(texture, std::move(callback));
+ 
+    auto texture = rtMTL->_color[0]; // we only read form color attachment 0
+    CC_SAFE_RETAIN(texture);
+    _captureCallbacks.emplace_back(texture, std::move(callback));
 }
 
 void CommandBufferMTL::endFrame()
@@ -486,5 +487,52 @@ void CommandBufferMTL::setScissorRect(bool isEnabled, float x, float y, float wi
     [_mtlRenderEncoder setScissorRect:scissorRect];
 }
 
+void CommandBufferMTL::readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
+{
+    CommandBufferMTL::readPixels(reinterpret_cast<id<MTLTexture>>(texture->getHandler()), origX, origY, rectWidth, rectHeight, pbd);
+}
+
+void CommandBufferMTL::readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
+{
+    NSUInteger texWidth = texture.width;
+    NSUInteger texHeight = texture.height;
+    MTLRegion region = MTLRegionMake2D(0, 0, texWidth, texHeight);
+    MTLRegion imageRegion = MTLRegionMake2D(origX, origY, rectWidth, rectHeight);
+    
+    MTLTextureDescriptor* textureDescriptor =
+    [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:[texture pixelFormat]
+                                                       width:texWidth
+                                                      height:texHeight
+                                                   mipmapped:NO];
+    id<MTLDevice> device = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLDevice();
+    id<MTLTexture> readPixelsTexture = [device newTextureWithDescriptor:textureDescriptor];
+    
+    id<MTLCommandQueue> commandQueue = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLCommandQueue();
+    auto commandBuffer = [commandQueue commandBuffer];
+    // [commandBuffer enqueue];
+    
+    id<MTLBlitCommandEncoder> blitCommandEncoder = [commandBuffer blitCommandEncoder];
+    [blitCommandEncoder copyFromTexture:texture sourceSlice:0 sourceLevel:0 sourceOrigin:region.origin sourceSize:region.size toTexture:readPixelsTexture destinationSlice:0 destinationLevel:0 destinationOrigin:region.origin];
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+    [blitCommandEncoder synchronizeResource:readPixelsTexture];
+#endif
+    [blitCommandEncoder endEncoding];
+   
+    [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
+       auto bytePerRow = rectWidth * getBitsPerElement(texture.pixelFormat) / 8;
+       auto texelData = pbd._data.resize(bytePerRow * rectHeight);
+       if(texelData != nullptr)
+       {
+          [readPixelsTexture getBytes:texelData bytesPerRow:bytePerRow fromRegion:imageRegion mipmapLevel:0];
+          swizzleImage(texelData, rectWidth, rectHeight, readPixelsTexture.pixelFormat);
+          pbd._width = rectWidth;
+          pbd._height = rectHeight;
+       }
+       [readPixelsTexture release];
+    }];
+    [commandBuffer commit];
+    [commandBuffer waitUntilCompleted];
+}
 
 CC_BACKEND_END

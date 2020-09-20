@@ -166,10 +166,22 @@ public:
     virtual void setDepthStencilState(DepthStencilState* depthStencilState) override;
     
     /**
-     * Get a screen snapshot
-     * @param callback A callback to deal with screen snapshot image.
+     * Read pixels from RenderTarget
+     * @param callback A callback to deal with pixel data read.
      */
     virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
+    
+protected:  
+    /**
+     * Read a block of pixels from the given texture
+     * @param texture Specifies the texture to get the image.
+     * @param origX,origY Specify the window coordinates of the first pixel that is read from the given texture. This location is the lower left corner of a rectangular block of pixels.
+     * @param rectWidth,rectHeight Specify the dimensions of the pixel rectangle. rectWidth and rectHeight of one correspond to a single pixel.
+     * @param pbd, the output buffer for fill texels data
+     * @remark: !!!this function only can call after endFrame, then it's could be works well.
+    */
+    static void readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd);
+    static void readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd);
     
 private:
     void prepareDrawing() const;

@@ -169,7 +169,8 @@ public:
      */
     virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
 
-    void readPixels(RenderTarget* rt, GLint x, GLint y, std::size_t width, std::size_t height, PixelBufferDescriptor& pbd);
+protected:
+    void readPixels(RenderTarget* rt, int x, int y, uint32_t width, uint32_t height, uint32_t bytesPerRow, PixelBufferDescriptor& pbd);
 
 private:
     struct Viewport
