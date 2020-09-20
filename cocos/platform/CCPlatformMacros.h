@@ -296,6 +296,8 @@ private: varType varName; public: virtual inline varType get##funName() const { 
 #elif defined(__has_attribute)
   #if __has_attribute(format)
   #define CC_FORMAT_PRINTF(formatPos, argPos) __attribute__((__format__(printf, formatPos, argPos)))
+  #else
+  #define CC_FORMAT_PRINTF(formatPos, argPos)
   #endif // __has_attribute(format)
 #else
 #define CC_FORMAT_PRINTF(formatPos, argPos)

@@ -93060,7 +93060,8 @@ int lua_cocos2dx_Renderer_setRenderTarget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_setRenderTarget'", nullptr);
             return 0;
         }
-        cobj->setRenderTarget(arg0, arg1, arg2, arg3);
+        // TODO:
+        // cobj->setRenderTarget(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }

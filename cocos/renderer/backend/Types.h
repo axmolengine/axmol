@@ -27,6 +27,7 @@
 
 #include "Macros.h"
 
+#include <assert.h>
 #include <cstdint>
 #include <string>
 #include "base/bitmask.h"
