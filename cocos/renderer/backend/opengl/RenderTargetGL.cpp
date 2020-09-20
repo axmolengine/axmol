@@ -9,9 +9,6 @@ RenderTargetGL::RenderTargetGL(bool defaultRenderTarget) : RenderTarget(defaultR
     }
     else {
         _FBO = 0;
-        // GLint defaultFBO = 0;
-        // glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
-        // _FBO = defaultFBO;
     }
 }
 RenderTargetGL::~RenderTargetGL()
@@ -37,6 +34,7 @@ RenderTargetGL::~RenderTargetGL()
             0,
             0);
 
+        unbindFrameBuffer();
         glDeleteFramebuffers(1, &_FBO);
         CHECK_GL_ERROR_DEBUG();
     }

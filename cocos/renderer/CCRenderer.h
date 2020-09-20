@@ -203,24 +203,6 @@ public:
     void clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder);
 
     /**
-     * Get color attachment.
-     * @return Color attachment.
-     */
-    Texture2D* getColorAttachment() const;
-
-    /**
-     * Get depth attachment.
-     * @return Depth attachment.
-     */
-    Texture2D* getDepthAttachment() const;
-
-    /**
-     * Get stencil attachment.
-     * @return Stencil attachment.
-     */
-    Texture2D* getStencilAttachment() const;
-
-    /**
      * Get color clear value.
      * @return Color clear value.
      */
@@ -549,14 +531,8 @@ protected:
     backend::RenderTarget* _defaultRT = nullptr;
     backend::RenderTarget* _currentRT = nullptr; // weak ref
 
-    // weak reference, TODO: unused
-    Texture2D* _colorAttachment = nullptr;
-    Texture2D* _depthAttachment = nullptr;
-    Texture2D* _stencilAttachment = nullptr;
-	
     Color4F _clearColor = Color4F::BLACK;
     ClearFlag _clearFlag;
-    RenderTargetFlag _renderTargetFlag = RenderTargetFlag::COLOR;
 
     struct ScissorState
     {

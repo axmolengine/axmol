@@ -785,8 +785,6 @@ void Renderer::beginRenderPass()
     _commandBuffer->setCullMode(_cullMode);
     _commandBuffer->setWinding(_winding);
     _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y, _scissorState.rect.width, _scissorState.rect.height);
-    // TODO: metal?
-    // setRenderPipeline(cmd->getPipelineDescriptor(), _renderPassParams);
     _commandBuffer->setStencilReferenceValue(_stencilRef);
 }
 
@@ -812,20 +810,20 @@ void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigne
     _commandBuffer->endRenderPass();
 }
 
-Texture2D* Renderer::getColorAttachment() const
-{
-    return _colorAttachment;
-}
-
-Texture2D* Renderer::getDepthAttachment() const
-{
-    return _depthAttachment;
-}
-
-Texture2D* Renderer::getStencilAttachment() const
-{
-    return _stencilAttachment;
-}
+//Texture2D* Renderer::getColorAttachment() const
+//{
+//    return _colorAttachment;
+//}
+//
+//Texture2D* Renderer::getDepthAttachment() const
+//{
+//    return _depthAttachment;
+//}
+//
+//Texture2D* Renderer::getStencilAttachment() const
+//{
+//    return _stencilAttachment;
+//}
 
 const Color4F& Renderer::getClearColor() const
 {
@@ -849,7 +847,7 @@ ClearFlag Renderer::getClearFlag() const
 
 RenderTargetFlag Renderer::getRenderTargetFlag() const
 {
-    return _renderTargetFlag;
+    return _currentRT->getTargetFlags();
 }
 
 void Renderer::setScissorTest(bool enabled)
