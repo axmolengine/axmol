@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Device.h"
+#include "renderer/backend/RenderTarget.h"
 #include "2d/CCCamera.h"
 
 
@@ -154,6 +155,8 @@ GridBase::~GridBase()
 {
     CCLOGINFO("deallocing GridBase: %p", this);
 
+    CC_SAFE_RELEASE(_renderTarget);
+
     //TODO: ? why 2.0 comments this line:        setActive(false);
     CC_SAFE_RELEASE(_texture);
     
@@ -216,16 +219,13 @@ void GridBase::beforeDraw()
         Size    size = director->getWinSizeInPixels();
         renderer->setViewPort(0, 0, (unsigned int)size.width, (unsigned int)size.height);
 
-        RenderTargetFlag flags = RenderTargetFlag::COLOR;
-        _oldColorAttachment = renderer->getColorAttachment();
-        _oldDepthAttachment = renderer->getDepthAttachment();
-        _oldStencilAttachment = renderer->getStencilAttachment();
-        _oldRenderTargetFlag = renderer->getRenderTargetFlag();
-
-        renderer->setRenderTarget(flags, _texture, nullptr, nullptr);
+        _oldRenderTarget = renderer->getRenderTarget();
+        CC_SAFE_RELEASE(_renderTarget);
+        _renderTarget = backend::Device::getInstance()->newRenderTarget(TargetBufferFlags::COLOR, _texture->getBackendTexture());
+        renderer->setRenderTarget(_renderTarget);
+        renderer->clear(TargetBufferFlags::COLOR, _clearColor, 1, 0, 0.0);
     };
     renderer->addCommand(&_beforeDrawCommand);
-    renderer->clear(ClearFlag::COLOR, _clearColor, 1, 0, 0.0);
 }
 
 void GridBase::afterDraw(cocos2d::Node * /*target*/)
@@ -238,7 +238,7 @@ void GridBase::afterDraw(cocos2d::Node * /*target*/)
         director->setProjection(_directorProjection);
         const auto& vp = Camera::getDefaultViewport();
         renderer->setViewPort(vp.x, vp.y, vp.w, vp.h);
-        renderer->setRenderTarget(_oldRenderTargetFlag, _oldColorAttachment, _oldDepthAttachment, _oldStencilAttachment);
+        renderer->setRenderTarget(_oldRenderTarget);
     };
     renderer->addCommand(&_afterDrawCommand);
 

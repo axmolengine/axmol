@@ -32,12 +32,46 @@
 #include "../Macros.h"
 #include "BufferManager.h"
 #include "DepthStencilStateMTL.h"
+#include "RenderTargetMTL.h"
 
 CC_BACKEND_BEGIN
 
 namespace
 {
-    MTLWinding toMTLWinding(Winding winding)
+
+#define byte(n) ((n) * 8)
+#define bit(n) (n)
+    static uint8_t getBitsPerElementMTL(MTLPixelFormat pixleFormat)
+    {
+        switch (pixleFormat)
+        {
+            case MTLPixelFormatDepth32Float_Stencil8:
+                return byte(8);
+            case MTLPixelFormatBGRA8Unorm:
+            case MTLPixelFormatRGBA8Unorm:
+            case MTLPixelFormatDepth32Float:
+                return byte(4);
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+            case MTLPixelFormatDepth24Unorm_Stencil8:
+                return byte(4);
+    #else
+            case MTLPixelFormatABGR4Unorm:
+            case MTLPixelFormatBGR5A1Unorm:
+            case MTLPixelFormatB5G6R5Unorm:
+            case MTLPixelFormatA1BGR5Unorm:
+                return byte(2);
+    #endif
+            case MTLPixelFormatA8Unorm:
+            case MTLPixelFormatR8Unorm:
+                return byte(1);
+            default:
+                assert(false);
+                break;
+        }
+        return 0;
+    }
+
+    static MTLWinding toMTLWinding(Winding winding)
     {
         if (Winding::CLOCK_WISE == winding)
             return MTLWindingClockwise;
@@ -45,7 +79,7 @@ namespace
             return MTLWindingCounterClockwise;
     }
 
-    MTLPrimitiveType toMTLPrimitive(PrimitiveType primitiveType)
+    static MTLPrimitiveType toMTLPrimitive(PrimitiveType primitiveType)
     {
         MTLPrimitiveType ret = MTLPrimitiveTypeTriangle;
         switch (primitiveType)
@@ -71,7 +105,7 @@ namespace
         return ret;
     }
     
-    MTLIndexType toMTLIndexType(IndexFormat indexFormat)
+    static MTLIndexType toMTLIndexType(IndexFormat indexFormat)
     {
         if (IndexFormat::U_SHORT == indexFormat)
             return MTLIndexTypeUInt16;
@@ -79,7 +113,7 @@ namespace
             return MTLIndexTypeUInt32;
     }
     
-    MTLCullMode toMTLCullMode(CullMode mode)
+    static MTLCullMode toMTLCullMode(CullMode mode)
     {
         switch (mode) {
             case CullMode::NONE:
@@ -91,109 +125,21 @@ namespace
         }
     }
     
-    MTLRenderPassDescriptor* toMTLRenderPassDescriptor(const RenderPassDescriptor& descriptor)
+    static MTLRenderPassDescriptor* toMTLRenderPassDescriptor(const RenderTarget* rt, const RenderPassParams& params)
     {
         MTLRenderPassDescriptor* mtlDescritpor = [MTLRenderPassDescriptor renderPassDescriptor];
         
-        // Set color attachments.
-        if (descriptor.needColorAttachment)
-        {
-            bool hasCustomColorAttachment = false;
-            for (int i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
-            {
-                if (! descriptor.colorAttachmentsTexture[i])
-                    continue;
-                
-                mtlDescritpor.colorAttachments[i].texture = static_cast<TextureMTL*>(descriptor.colorAttachmentsTexture[i])->getMTLTexture();
-                if (descriptor.needClearColor)
-                {
-                    mtlDescritpor.colorAttachments[i].loadAction = MTLLoadActionClear;
-                    mtlDescritpor.colorAttachments[i].clearColor = MTLClearColorMake(descriptor.clearColorValue[0],
-                                                                                     descriptor.clearColorValue[1],
-                                                                                     descriptor.clearColorValue[2],
-                                                                                     descriptor.clearColorValue[3]);
-                }
-                else
-                    mtlDescritpor.colorAttachments[i].loadAction = MTLLoadActionLoad;
-                
-                hasCustomColorAttachment = true;
-            }
-            
-            if (!hasCustomColorAttachment)
-            {
-                mtlDescritpor.colorAttachments[0].texture = DeviceMTL::getCurrentDrawable().texture;
-                if (descriptor.needClearColor)
-                {
-                    mtlDescritpor.colorAttachments[0].loadAction = MTLLoadActionClear;
-                    mtlDescritpor.colorAttachments[0].clearColor = MTLClearColorMake(descriptor.clearColorValue[0],
-                                                                                     descriptor.clearColorValue[1],
-                                                                                     descriptor.clearColorValue[2],
-                                                                                     descriptor.clearColorValue[3]);
-                }
-                else
-                    mtlDescritpor.colorAttachments[0].loadAction = MTLLoadActionLoad;
-            }
-
-            mtlDescritpor.colorAttachments[0].storeAction = MTLStoreActionStore;
-        }
-        
-        if(descriptor.needDepthStencilAttachment())
-        {
-            // Set depth attachment
-            {
-                if (descriptor.depthAttachmentTexture)
-                    mtlDescritpor.depthAttachment.texture = static_cast<TextureMTL*>(descriptor.depthAttachmentTexture)->getMTLTexture();
-                else
-                    mtlDescritpor.depthAttachment.texture = UtilsMTL::getDefaultDepthStencilTexture();
-                
-                if (descriptor.needClearDepth)
-                {
-                    mtlDescritpor.depthAttachment.loadAction = MTLLoadActionClear;
-                    mtlDescritpor.depthAttachment.clearDepth = descriptor.clearDepthValue;
-                }
-                else
-                    mtlDescritpor.depthAttachment.loadAction = MTLLoadActionLoad;
-
-                mtlDescritpor.depthAttachment.storeAction = MTLStoreActionStore;
-            }
-            
-            // Set stencil attachment
-            {
-                if (descriptor.stencilAttachmentTexture)
-                    mtlDescritpor.stencilAttachment.texture = static_cast<TextureMTL*>(descriptor.stencilAttachmentTexture)->getMTLTexture();
-                else
-                    mtlDescritpor.stencilAttachment.texture = UtilsMTL::getDefaultDepthStencilTexture();
-                
-                if (descriptor.needClearStencil)
-                {
-                    mtlDescritpor.stencilAttachment.loadAction = MTLLoadActionClear;
-                    mtlDescritpor.stencilAttachment.clearStencil = descriptor.clearStencilValue;
-                }
-                else
-                    mtlDescritpor.stencilAttachment.loadAction = MTLLoadActionLoad;
-
-                mtlDescritpor.stencilAttachment.storeAction = MTLStoreActionStore;
-            }
-        }
-        
+        auto rtMTL = static_cast<const RenderTargetMTL*>(rt);
+        rtMTL->applyRenderPassAttachments(params, mtlDescritpor);
         return mtlDescritpor;
     }
     
-    id<MTLTexture> getMTLTexture(TextureBackend* texture, int index = 0)
+    static id<MTLTexture> getMTLTexture(TextureBackend* texture, int index)
     {
-        switch (texture->getTextureType())
-        {
-            case TextureType::TEXTURE_2D:
-                return static_cast<TextureMTL*>(texture)->getMTLTexture(index);
-            case TextureType::TEXTURE_CUBE:
-                return static_cast<TextureCubeMTL*>(texture)->getMTLTexture(index);
-            default:
-                assert(false);
-                return nil;
-        }
+        return reinterpret_cast<id<MTLTexture>>(texture->getHandler(index));
     }
     
-    id<MTLSamplerState> getMTLSamplerState(TextureBackend* texture)
+    static id<MTLSamplerState> getMTLSamplerState(TextureBackend* texture)
     {
         switch (texture->getTextureType())
         {
@@ -242,15 +188,16 @@ void CommandBufferMTL::beginFrame()
     BufferManager::beginFrame();
 }
 
-id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const RenderPassDescriptor& renderPassDescriptor)
+id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassParams& renderPassParams)
 {
-    if(_mtlRenderEncoder != nil && _prevRenderPassDescriptor == renderPassDescriptor)
+    if(_mtlRenderEncoder != nil && _currentRenderPassParams == renderPassParams && _currentRenderTarget == renderTarget)
     {
         return _mtlRenderEncoder;
     }
     else
     {
-        _prevRenderPassDescriptor = renderPassDescriptor;
+        _currentRenderTarget = renderTarget;
+        _currentRenderPassParams = renderPassParams;
     }
     
     if(_mtlRenderEncoder != nil)
@@ -260,7 +207,7 @@ id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const Rend
         _mtlRenderEncoder = nil;
     }
 
-    auto mtlDescriptor = toMTLRenderPassDescriptor(renderPassDescriptor);
+    auto mtlDescriptor = toMTLRenderPassDescriptor(renderTarget, renderPassParams);
     _renderTargetWidth = (unsigned int)mtlDescriptor.colorAttachments[0].texture.width;
     _renderTargetHeight = (unsigned int)mtlDescriptor.colorAttachments[0].texture.height;
     id<MTLRenderCommandEncoder> mtlRenderEncoder = [_mtlCommandBuffer renderCommandEncoderWithDescriptor:mtlDescriptor];
@@ -269,9 +216,9 @@ id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const Rend
     return mtlRenderEncoder;
 }
 
-void CommandBufferMTL::beginRenderPass(const RenderPassDescriptor& descriptor)
+void CommandBufferMTL::beginRenderPass(const RenderTarget* renderTarget, const RenderPassParams& descriptor)
 {
-    _mtlRenderEncoder = getRenderCommandEncoder(descriptor);
+    _mtlRenderEncoder = getRenderCommandEncoder(renderTarget, descriptor);
 //    [_mtlRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
 }
 
@@ -355,8 +302,13 @@ void CommandBufferMTL::endRenderPass()
 
 }
 
-void CommandBufferMTL::capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback)
+void CommandBufferMTL::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback)
 {
+    auto rtMTL = static_cast<RenderTargetMTL*>(rt);
+ 
+    // we only read form color attachment 0
+    // if it's nullptr, will regard as screen to perform capture
+    auto texture = rtMTL->_color[0].texture;
     CC_SAFE_RETAIN(texture);
     _captureCallbacks.emplace_back(texture, std::move(callback));
 }
@@ -407,7 +359,7 @@ void CommandBufferMTL::flushCaptureCommands()
         for(auto& cb : _captureCallbacks) {
             if(cb.first == nil) { // screen capture
                 if(!screenPixelData) {
-                    UtilsMTL::readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height], screenPixelData);
+                    CommandBufferMTL::readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height], screenPixelData);
                     // screen framebuffer copied, restore screen framebuffer only to true
                     backend::Device::getInstance()->setFrameBufferOnly(true);
                 }
@@ -417,7 +369,7 @@ void CommandBufferMTL::flushCaptureCommands()
                 PixelBufferDescriptor pixelData;
                 auto texture = cb.first;
                 assert(texture != nullptr);
-                UtilsMTL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pixelData);
+                CommandBufferMTL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pixelData);
                 CC_SAFE_RELEASE(texture);
                 cb.second(pixelData);
             }
@@ -570,5 +522,52 @@ void CommandBufferMTL::setScissorRect(bool isEnabled, float x, float y, float wi
     [_mtlRenderEncoder setScissorRect:scissorRect];
 }
 
+void CommandBufferMTL::readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
+{
+    CommandBufferMTL::readPixels(reinterpret_cast<id<MTLTexture>>(texture->getHandler()), origX, origY, rectWidth, rectHeight, pbd);
+}
+
+void CommandBufferMTL::readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
+{
+    NSUInteger texWidth = texture.width;
+    NSUInteger texHeight = texture.height;
+    MTLRegion region = MTLRegionMake2D(0, 0, texWidth, texHeight);
+    MTLRegion imageRegion = MTLRegionMake2D(origX, origY, rectWidth, rectHeight);
+    
+    MTLTextureDescriptor* textureDescriptor =
+    [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:[texture pixelFormat]
+                                                       width:texWidth
+                                                      height:texHeight
+                                                   mipmapped:NO];
+    id<MTLDevice> device = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLDevice();
+    id<MTLTexture> readPixelsTexture = [device newTextureWithDescriptor:textureDescriptor];
+    
+    id<MTLCommandQueue> commandQueue = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLCommandQueue();
+    auto commandBuffer = [commandQueue commandBuffer];
+    // [commandBuffer enqueue];
+    
+    id<MTLBlitCommandEncoder> blitCommandEncoder = [commandBuffer blitCommandEncoder];
+    [blitCommandEncoder copyFromTexture:texture sourceSlice:0 sourceLevel:0 sourceOrigin:region.origin sourceSize:region.size toTexture:readPixelsTexture destinationSlice:0 destinationLevel:0 destinationOrigin:region.origin];
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+    [blitCommandEncoder synchronizeResource:readPixelsTexture];
+#endif
+    [blitCommandEncoder endEncoding];
+   
+    [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
+       auto bytePerRow = rectWidth * getBitsPerElementMTL(texture.pixelFormat) / 8;
+       auto texelData = pbd._data.resize(bytePerRow * rectHeight);
+       if(texelData != nullptr)
+       {
+          [readPixelsTexture getBytes:texelData bytesPerRow:bytePerRow fromRegion:imageRegion mipmapLevel:0];
+          UtilsMTL::swizzleImage(texelData, rectWidth, rectHeight, readPixelsTexture.pixelFormat);
+          pbd._width = rectWidth;
+          pbd._height = rectHeight;
+       }
+       [readPixelsTexture release];
+    }];
+    [commandBuffer commit];
+    [commandBuffer waitUntilCompleted];
+}
 
 CC_BACKEND_END

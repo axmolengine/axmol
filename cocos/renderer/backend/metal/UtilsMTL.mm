@@ -36,39 +36,6 @@ id<MTLTexture> UtilsMTL::_defaultColorAttachmentTexture = nil;
 id<MTLTexture> UtilsMTL::_defaultDepthStencilAttachmentTexture = nil;
 
 namespace {
-#define byte(n) ((n) * 8)
-#define bit(n) (n)
-    
-    uint8_t getBitsPerElement(MTLPixelFormat pixleFormat)
-    {
-        switch (pixleFormat)
-        {
-            case MTLPixelFormatDepth32Float_Stencil8:
-                return byte(8);
-            case MTLPixelFormatBGRA8Unorm:
-            case MTLPixelFormatRGBA8Unorm:
-            case MTLPixelFormatDepth32Float:
-                return byte(4);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-            case MTLPixelFormatDepth24Unorm_Stencil8:
-                return byte(4);
-#else
-            case MTLPixelFormatABGR4Unorm:
-            case MTLPixelFormatBGR5A1Unorm:
-            case MTLPixelFormatB5G6R5Unorm:
-            case MTLPixelFormatA1BGR5Unorm:
-                return byte(2);
-#endif
-            case MTLPixelFormatA8Unorm:
-            case MTLPixelFormatR8Unorm:
-                return byte(1);
-            default:
-                assert(false);
-                break;
-        }
-        return 0;
-    }
-    
     MTLPixelFormat getSupportedDepthStencilFormat()
     {
         MTLPixelFormat pixelFormat = MTLPixelFormatDepth32Float_Stencil8;
@@ -215,61 +182,6 @@ void UtilsMTL::swizzleImage(unsigned char *image, std::size_t width, std::size_t
         default:
             break;
     }
-}
-
-void UtilsMTL::readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
-{
-    switch(texture->getTextureType()){
-        case TextureType::TEXTURE_2D:
-            UtilsMTL::readPixels(static_cast<TextureMTL*>(texture)->getMTLTexture(), origX, origY, rectWidth, rectHeight, pbd);
-            break;
-        case TextureType::TEXTURE_CUBE:
-            UtilsMTL::readPixels(static_cast<TextureCubeMTL*>(texture)->getMTLTexture(), origX, origY, rectWidth, rectHeight, pbd);
-            break;
-    }
-}
-
-void UtilsMTL::readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd)
-{
-    NSUInteger texWidth = texture.width;
-    NSUInteger texHeight = texture.height;
-    MTLRegion region = MTLRegionMake2D(0, 0, texWidth, texHeight);
-    MTLRegion imageRegion = MTLRegionMake2D(origX, origY, rectWidth, rectHeight);
-    
-    MTLTextureDescriptor* textureDescriptor =
-    [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:[texture pixelFormat]
-                                                       width:texWidth
-                                                      height:texHeight
-                                                   mipmapped:NO];
-    id<MTLDevice> device = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLDevice();
-    id<MTLTexture> readPixelsTexture = [device newTextureWithDescriptor:textureDescriptor];
-    
-    id<MTLCommandQueue> commandQueue = static_cast<DeviceMTL*>(DeviceMTL::getInstance())->getMTLCommandQueue();
-    auto commandBuffer = [commandQueue commandBuffer];
-    // [commandBuffer enqueue];
-    
-    id<MTLBlitCommandEncoder> blitCommandEncoder = [commandBuffer blitCommandEncoder];
-    [blitCommandEncoder copyFromTexture:texture sourceSlice:0 sourceLevel:0 sourceOrigin:region.origin sourceSize:region.size toTexture:readPixelsTexture destinationSlice:0 destinationLevel:0 destinationOrigin:region.origin];
-    
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-    [blitCommandEncoder synchronizeResource:readPixelsTexture];
-#endif
-    [blitCommandEncoder endEncoding];
-   
-    [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
-       auto bytePerRow = rectWidth * getBitsPerElement(texture.pixelFormat) / 8;
-       auto texelData = pbd._data.resize(bytePerRow * rectHeight);
-       if(texelData != nullptr)
-       {
-          [readPixelsTexture getBytes:texelData bytesPerRow:bytePerRow fromRegion:imageRegion mipmapLevel:0];
-          swizzleImage(texelData, rectWidth, rectHeight, readPixelsTexture.pixelFormat);
-          pbd._width = rectWidth;
-          pbd._height = rectHeight;
-       }
-       [readPixelsTexture release];
-    }];
-    [commandBuffer commit];
-    [commandBuffer waitUntilCompleted];
 }
 
 CC_BACKEND_END

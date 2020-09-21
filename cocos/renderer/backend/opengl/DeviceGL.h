@@ -61,6 +61,12 @@ public:
      */
     virtual TextureBackend* newTexture(const TextureDescriptor& descriptor) override;
 
+    RenderTarget* newDefaultRenderTarget(TargetBufferFlags rtf) override;
+    RenderTarget* newRenderTarget(TargetBufferFlags rtf,
+        TextureBackend* colorAttachment,
+        TextureBackend* depthAttachment, 
+        TextureBackend* stencilAttachhment) override;
+
     /**
      * Create an auto released DepthStencilState object.
      * @param descriptor Specifies depth and stencil description.

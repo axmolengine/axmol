@@ -385,15 +385,9 @@ void UtilsGL::toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint
         //            internalFormat = GL_DEPTH_COMPONENT;
         //            type = GL_UNSIGNED_INT;
     case PixelFormat::D24S8:
-#ifdef CC_USE_GLES
         format = GL_DEPTH_STENCIL_OES;
         internalFormat = GL_DEPTH_STENCIL_OES;
         type = GL_UNSIGNED_INT_24_8_OES;
-#else
-        format = GL_DEPTH_STENCIL;
-        internalFormat = GL_DEPTH24_STENCIL8;
-        type = GL_UNSIGNED_INT_24_8;
-#endif
         break;
     default:
         break;
@@ -590,81 +584,6 @@ GLenum UtilsGL::toGLCullMode(CullMode mode)
         return GL_BACK;
     else
         return GL_FRONT;
-}
-
-void UtilsGL::readPixels(TextureBackend* texture, GLint x, GLint y, std::size_t width, std::size_t height, PixelBufferDescriptor& pbd)
-{
-    GLint defaultFBO = 0;
-    GLuint frameBuffer = 0;
-
-    std::size_t bytesPerRow = 0;
-    if (UTILS_LIKELY(!texture)) // read pixels from screen
-        bytesPerRow = width * 4;
-    else { // read pixels from GPU texture
-        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
-
-        glGenFramebuffers(1, &frameBuffer);
-        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-
-        /** Notes from cocos2d-x v3
-        // TODO: move this to configuration, so we don't check it every time
-        // Certain Qualcomm Adreno GPU's will retain data in memory after a frame buffer switch which corrupts the render to the texture. The solution is to clear the frame buffer before rendering to the texture. However, calling glClear has the unintended result of clearing the current texture. Create a temporary texture to overcome this. At the end of RenderTexture::begin(), switch the attached texture to the second one, call glClear, and then switch back to the original texture. This solution is unnecessary for other devices as they don't have the same issue with switching frame buffers.
-
-        if (Configuration::getInstance()->checkForGLExtension("GL_QCOM"))
-        {
-            // -- bind a temporary texture so we can clear the render buffer without losing our texture
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _textureCopy->getName(), 0);
-            CHECK_GL_ERROR_DEBUG();
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->getName(), 0);
-        }
-        */
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-            texture->getTextureType() == TextureType::TEXTURE_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP,
-            static_cast<GLuint>(texture->getHandler()),
-            0);
-
-        bytesPerRow = width * texture->_bitsPerElement / 8;
-    }
-
-    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-
-    auto bufferSize = bytesPerRow * height;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
-    (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
-    GLuint pbo;
-    glGenBuffers(1, &pbo);
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
-    glBufferData(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
-    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    auto buffer = (uint8_t*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
-#else
-    std::unique_ptr<uint8_t[]> bufferStorage(new uint8_t[bufferSize]);
-    auto buffer = bufferStorage.get();
-    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-#endif
-    uint8_t* wptr = pbd._data.resize(bufferSize);
-    if (buffer && wptr) {
-        auto rptr = buffer + (height - 1) * bytesPerRow;
-        for (int row = 0; row < height; ++row) {
-            memcpy(wptr, rptr, bytesPerRow);
-            wptr += bytesPerRow;
-            rptr -= bytesPerRow;
-        }
-        pbd._width = width;
-        pbd._height = height;
-    }
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
-    (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
-    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-    glDeleteBuffers(1, &pbo);
-#endif
-
-    if (UTILS_UNLIKELY(frameBuffer)) {
-        glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
-        glDeleteFramebuffers(1, &frameBuffer);
-    }
 }
 
 CC_BACKEND_END

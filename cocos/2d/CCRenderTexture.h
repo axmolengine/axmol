@@ -39,6 +39,7 @@ NS_CC_BEGIN
 namespace backend
 {
     class TextureBackend;
+    class RenderTarget;
 }
 
 class EventCustom;
@@ -358,11 +359,11 @@ protected:
     Texture2D* _texture2D = nullptr;
     Texture2D* _depthStencilTexture = nullptr;
     Texture2D* _texture2DCopy = nullptr;    // a copy of _texture
-    Texture2D* _oldColorAttachment = nullptr;
-    Texture2D* _oldDepthAttachment = nullptr;
-    Texture2D* _oldStencilAttachment = nullptr;
-    RenderTargetFlag _renderTargetFlags;
-    RenderTargetFlag _oldRenderTargetFlag;
+	
+    backend::RenderTarget* _renderTarget = nullptr;
+    backend::RenderTarget* _oldRenderTarget = nullptr;
+    RenderTargetFlag _renderTargetFlags{};
+
     Image*     _UITextureImage = nullptr;
     backend::PixelFormat _pixelFormat = backend::PixelFormat::RGBA8888;
     

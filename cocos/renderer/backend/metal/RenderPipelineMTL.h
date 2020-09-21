@@ -49,7 +49,7 @@ public:
      */
     RenderPipelineMTL(id<MTLDevice> mtlDevice);
     ~RenderPipelineMTL();
-    virtual void update(const PipelineDescriptor&, const RenderPassDescriptor&) override;
+    virtual void update(const PipelineDescriptor&, const RenderTarget* renderTarget, const RenderPassParams& renderPassParams) override;
     
     /**
      * Get a MTLRenderPipelineState object.
@@ -61,14 +61,14 @@ private:
     void setVertexLayout(MTLRenderPipelineDescriptor*, const PipelineDescriptor&);
     void setBlendState(MTLRenderPipelineColorAttachmentDescriptor*, const BlendDescriptor&);
     void setShaderModules(const PipelineDescriptor&);
-    void setBlendStateAndFormat(const BlendDescriptor&, const RenderPassDescriptor&);
-    void getAttachmentFormat(const RenderPassDescriptor&, PixelFormat&, PixelFormat&, PixelFormat&);
+    void setBlendStateAndFormat(const BlendDescriptor&);
+    void getAttachmentFormat(const RenderTarget* renderTarget, const RenderPassParams& renderPassParams, PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT], PixelFormat&, PixelFormat&);
     
     id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
     id<MTLDevice> _mtlDevice = nil;
    
     MTLRenderPipelineDescriptor* _mtlRenderPipelineDescriptor = nil;
-    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = { PixelFormat::DEFAULT };
+    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = { PixelFormat::NONE };
     PixelFormat _depthAttachmentFormat = PixelFormat::NONE;
     PixelFormat _stencilAttachmentFormat = PixelFormat::NONE;
     NSMutableDictionary* _mtlRenderPipelineStateCache = nil;

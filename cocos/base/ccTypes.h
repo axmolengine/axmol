@@ -634,6 +634,7 @@ struct CC_DLL ScissorRect
     float height = 0;
 };
 
+// TODO: Move to renderer/backend/Types.h
 struct TextureFormatEXT
 {
     enum {
@@ -652,26 +653,12 @@ struct TextureFlag
     };
 };
 
-enum class ClearFlag : uint8_t
-{
-    NONE = 0,
-    COLOR = 1,
-    DEPTH = 1 << 1,
-    STENCIL = 1 << 2,
-    ALL = COLOR | DEPTH | STENCIL
-};
-CC_ENABLE_BITMASK_OPS(ClearFlag)
-
-enum class RenderTargetFlag : uint8_t
-{
-    COLOR = 1,
-    DEPTH = 1 << 1,
-    STENCIL = 1 << 2,
-    ALL = COLOR | DEPTH | STENCIL
-};
-CC_ENABLE_BITMASK_OPS(RenderTargetFlag)
 using TextureUsage = backend::TextureUsage;
 using PixelFormat = backend::PixelFormat;
+
+using TargetBufferFlags = backend::TargetBufferFlags;
+using RenderTargetFlag = backend::RenderTargetFlag;
+using ClearFlag = backend::ClearFlag;
 
 NS_CC_END
 // end group
