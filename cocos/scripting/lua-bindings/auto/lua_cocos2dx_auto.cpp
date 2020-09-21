@@ -91251,9 +91251,9 @@ int lua_cocos2dx_Renderer_getStencilAttachment(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_getStencilAttachment'", nullptr);
             return 0;
         }
-        cocos2d::Texture2D* ret = cobj->getStencilAttachment();
-        object_to_luaval<cocos2d::Texture2D>(tolua_S, "cc.Texture2D",(cocos2d::Texture2D*)ret);
-        return 1;
+        // cocos2d::Texture2D* ret = cobj->getStencilAttachment();
+        // object_to_luaval<cocos2d::Texture2D>(tolua_S, "cc.Texture2D",(cocos2d::Texture2D*)ret);
+        return 0;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Renderer:getStencilAttachment",argc, 0);
     return 0;
@@ -91698,9 +91698,9 @@ int lua_cocos2dx_Renderer_getColorAttachment(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_getColorAttachment'", nullptr);
             return 0;
         }
-        cocos2d::Texture2D* ret = cobj->getColorAttachment();
-        object_to_luaval<cocos2d::Texture2D>(tolua_S, "cc.Texture2D",(cocos2d::Texture2D*)ret);
-        return 1;
+        // cocos2d::Texture2D* ret = cobj->getColorAttachment();
+        // object_to_luaval<cocos2d::Texture2D>(tolua_S, "cc.Texture2D",(cocos2d::Texture2D*)ret);
+        return 0;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Renderer:getColorAttachment",argc, 0);
     return 0;
@@ -93108,9 +93108,9 @@ int lua_cocos2dx_Renderer_getDepthAttachment(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_getDepthAttachment'", nullptr);
             return 0;
         }
-        cocos2d::Texture2D* ret = cobj->getDepthAttachment();
-        object_to_luaval<cocos2d::Texture2D>(tolua_S, "cc.Texture2D",(cocos2d::Texture2D*)ret);
-        return 1;
+        // cocos2d::Texture2D* ret = cobj->getDepthAttachment();
+        // object_to_luaval<cocos2d::Texture2D>(tolua_S, "cc.Texture2D",(cocos2d::Texture2D*)ret);
+        return 0;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Renderer:getDepthAttachment",argc, 0);
     return 0;
