@@ -197,7 +197,7 @@ void Renderer::init()
     _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
     _currentRT = _defaultRT;
     _renderPipeline = device->newRenderPipeline();
-    _commandBuffer->setRenderPipeline(_renderPipeline);
+    // _commandBuffer->setRenderPipeline(_renderPipeline);
 }
 
 void Renderer::addCommand(RenderCommand* command)
@@ -763,17 +763,9 @@ void Renderer::readPixels(backend::RenderTarget* rt, std::function<void(const ba
 }
 
 void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor)
-{
-    auto device = backend::Device::getInstance();
+{ // TODO: refactor to CommandBuffer::updateRenderPipelineState
     _renderPipeline->update(pipelineDescriptor, _currentRT);
-    backend::DepthStencilState* depthStencilState = nullptr;
-    if (bitmask::any(_currentRT->getTargetFlags(), RenderTargetFlag::DEPTH_AND_STENCIL))
-    {
-        // FIXME: don't use autorelease at draw frame
-        // Now the depthStencilState is in autoreleasepool
-        depthStencilState = device->createDepthStencilState(_depthStencilDescriptor);
-    }
-    _commandBuffer->setDepthStencilState(depthStencilState);
+    
 #ifdef CC_USE_METAL
     _commandBuffer->setRenderPipeline(_renderPipeline);
 #endif
@@ -787,6 +779,17 @@ void Renderer::beginRenderPass()
     _commandBuffer->setWinding(_winding);
     _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y, _scissorState.rect.width, _scissorState.rect.height);
     _commandBuffer->setStencilReferenceValue(_stencilRef);
+    
+    // TODO: refactor to CommandBuffer::updateDepthStencilState
+    backend::DepthStencilState* depthStencilState = nullptr;
+    if (bitmask::any(_currentRT->getTargetFlags(), RenderTargetFlag::DEPTH_AND_STENCIL))
+    {
+        // FIXME: don't use autorelease at draw frame
+        // Now the depthStencilState is in autoreleasepool
+        auto device = backend::Device::getInstance();
+        depthStencilState = device->createDepthStencilState(_depthStencilDescriptor);
+    }
+    _commandBuffer->setDepthStencilState(depthStencilState);
 }
 
 void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder)
