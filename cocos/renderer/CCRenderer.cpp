@@ -181,6 +181,7 @@ Renderer::~Renderer()
     
     CC_SAFE_RELEASE(_commandBuffer);
     CC_SAFE_RELEASE(_renderPipeline);
+    CC_SAFE_RELEASE(_defaultRT);
 }
 
 void Renderer::init()
