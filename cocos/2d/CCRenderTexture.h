@@ -360,15 +360,10 @@ protected:
     Texture2D* _depthStencilTexture = nullptr;
     Texture2D* _texture2DCopy = nullptr;    // a copy of _texture
 	
-    //Texture2D* _oldColorAttachment = nullptr;
-    //Texture2D* _oldDepthAttachment = nullptr;
-    //Texture2D* _oldStencilAttachment = nullptr;
-
     backend::RenderTarget* _renderTarget = nullptr;
     backend::RenderTarget* _oldRenderTarget = nullptr;
-
     RenderTargetFlag _renderTargetFlags{};
-    //RenderTargetFlag _oldRenderTargetFlag;
+
     Image*     _UITextureImage = nullptr;
     backend::PixelFormat _pixelFormat = backend::PixelFormat::RGBA8888;
     

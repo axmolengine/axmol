@@ -811,21 +811,6 @@ void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigne
     _commandBuffer->endRenderPass();
 }
 
-//Texture2D* Renderer::getColorAttachment() const
-//{
-//    return _colorAttachment;
-//}
-//
-//Texture2D* Renderer::getDepthAttachment() const
-//{
-//    return _depthAttachment;
-//}
-//
-//Texture2D* Renderer::getStencilAttachment() const
-//{
-//    return _stencilAttachment;
-//}
-
 const Color4F& Renderer::getClearColor() const
 {
     return _clearColor;
