@@ -33,7 +33,7 @@ Copyright (c) 2020 c4games.com.
 
 CC_BACKEND_BEGIN
 
-void RenderPipelineGL::update(const PipelineDescriptor& pipelineDescirptor, const RenderTarget*, const RenderPassParams&)
+void RenderPipelineGL::update(const PipelineDescriptor& pipelineDescirptor, const RenderTarget*)
 {
     if(_programGL != pipelineDescirptor.programState->getProgram())
     {

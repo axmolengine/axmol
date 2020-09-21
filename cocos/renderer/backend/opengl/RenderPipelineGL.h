@@ -51,7 +51,7 @@ public:
     RenderPipelineGL() = default;
     ~RenderPipelineGL();
 
-    virtual void update(const PipelineDescriptor & pipelineDescirptor, const RenderTarget* renderTarget, const RenderPassParams& renderParams) override;
+    virtual void update(const PipelineDescriptor & pipelineDescirptor, const RenderTarget* renderTarget) override;
     /**
      * Get program instance.
      * @return Program instance.
