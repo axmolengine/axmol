@@ -1,4 +1,5 @@
 #include "RenderTargetGL.h"
+#include "base/ccMacros.h"
 
 CC_BACKEND_BEGIN
 
@@ -55,8 +56,8 @@ void RenderTargetGL::setColorAttachment(ColorAttachment attachment)
     RenderTarget::setColorAttachment(attachment);
 
     if (!_defaultRenderTarget && bitmask::any(_flags, TargetBufferFlags::COLOR_ALL)) {
-        GLenum bufs[4] = { GL_NONE };
-        for (size_t i = 0; i < 4; i++) {
+        GLenum bufs[MAX_COLOR_ATTCHMENT] = { GL_NONE };
+        for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; ++i) {
             if (bitmask::any(_flags, getMRTColorFlag(i))) {
                 auto textureInfo = attachment[i];
                 auto textureHandler = textureInfo.texture != nullptr ? textureInfo.texture->getHandler() : 0;
@@ -68,8 +69,9 @@ void RenderTargetGL::setColorAttachment(ColorAttachment attachment)
                 bufs[i] = GL_COLOR_ATTACHMENT0 + i;
             }
         }
-        glDrawBuffers(4, bufs);
-
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+        glDrawBuffers(MAX_COLOR_ATTCHMENT, bufs);
+#endif
         CHECK_GL_ERROR_DEBUG();
     }
 }
