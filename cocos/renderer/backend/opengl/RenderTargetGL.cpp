@@ -1,5 +1,4 @@
 #include "RenderTargetGL.h"
-#include "platform/CCGL.h"
 
 CC_BACKEND_BEGIN
 
@@ -17,7 +16,7 @@ RenderTargetGL::~RenderTargetGL()
     if (!_defaultRenderTarget) {
         bindFrameBuffer();
 
-        for (auto slot = 0; slot < _ARRAYSIZE(_color); ++slot)
+        for (auto slot = 0; slot < MAX_COLOR_ATTCHMENT; ++slot)
             glFramebufferTexture2D(GL_FRAMEBUFFER,
                 GL_COLOR_ATTACHMENT0 + slot,
                 GL_TEXTURE_2D,

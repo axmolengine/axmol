@@ -1,5 +1,6 @@
 #pragma once
 #include "../RenderTarget.h"
+#include "platform/CCGL.h"
 
 CC_BACKEND_BEGIN
 
