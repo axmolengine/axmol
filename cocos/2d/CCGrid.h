@@ -40,6 +40,11 @@ class Texture2D;
 // class GLProgram;
 class Node;
 
+namespace backend
+{
+class RenderTarget;
+}
+
 /**
  * @addtogroup _2d
  * @{
@@ -153,10 +158,10 @@ protected:
     CallbackCommand _afterDrawCommand;
     CallbackCommand _beforeBlitCommand;
     CallbackCommand _afterBlitCommand;
-    RenderTargetFlag _oldRenderTargetFlag;
-    Texture2D* _oldColorAttachment = nullptr;
-    Texture2D* _oldDepthAttachment = nullptr;
-    Texture2D* _oldStencilAttachment = nullptr;
+
+    // New
+    backend::RenderTarget* _oldRenderTarget = nullptr;
+    backend::RenderTarget* _renderTarget = nullptr;
     
     backend::UniformLocation _mvpMatrixLocation;
     backend::UniformLocation _textureLocation;

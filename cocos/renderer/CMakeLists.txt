@@ -28,7 +28,7 @@ set(COCOS_RENDERER_HEADER
     renderer/backend/Program.h
     renderer/backend/ProgramCache.h
     renderer/backend/Macros.h
-    renderer/backend/RenderPassDescriptor.h
+    renderer/backend/RenderPassParams.h
     renderer/backend/RenderPipeline.h
     renderer/backend/RenderPipelineDescriptor.h
     renderer/backend/ShaderModule.h
@@ -74,7 +74,7 @@ set(COCOS_RENDERER_SRC
     renderer/backend/ProgramState.cpp
     renderer/backend/ProgramStateRegistry.cpp
     renderer/backend/ShaderCache.cpp
-    renderer/backend/RenderPassDescriptor.cpp
+    renderer/backend/RenderPassParams.cpp
     )
 
 if(ANDROID OR WINDOWS OR LINUX OR (IOS AND CC_FORCE_USE_GLES)) 
@@ -90,6 +90,7 @@ list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/opengl/TextureGL.h
     renderer/backend/opengl/UtilsGL.h
     renderer/backend/opengl/DeviceInfoGL.h
+    renderer/backend/opengl/RenderTargetGL.h
 )
 
 list(APPEND COCOS_RENDERER_SRC
@@ -103,6 +104,7 @@ list(APPEND COCOS_RENDERER_SRC
     renderer/backend/opengl/TextureGL.cpp
     renderer/backend/opengl/UtilsGL.cpp
     renderer/backend/opengl/DeviceInfoGL.cpp
+    renderer/backend/opengl/RenderTargetGL.cpp
 )
 
 else()
@@ -111,6 +113,7 @@ list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/metal/BufferMTL.h
     renderer/backend/metal/BufferManager.h
     renderer/backend/metal/CommandBufferMTL.h
+    renderer/backend/metal/RenderTargetMTL.h
     renderer/backend/metal/DepthStencilStateMTL.h
     renderer/backend/metal/DeviceMTL.h
     renderer/backend/metal/RenderPipelineMTL.h
@@ -125,6 +128,7 @@ list(APPEND COCOS_RENDERER_SRC
     renderer/backend/metal/BufferMTL.mm
     renderer/backend/metal/BufferManager.mm
     renderer/backend/metal/CommandBufferMTL.mm
+    renderer/backend/metal/RenderTargetMTL.mm
     renderer/backend/metal/DepthStencilStateMTL.mm
     renderer/backend/metal/DeviceMTL.mm
     renderer/backend/metal/RenderPipelineMTL.mm

@@ -195,6 +195,7 @@ void ImGuiEXT::loadCustomFonts(void* ud)
         case CHS_GLYPH_RANGE::FULL:
             imChars = imFonts->GetGlyphRangesChineseFull();
             break;
+        default:;
         }
 
         imFonts->AddFontFromFileTTF(fontInfo.first.c_str(), fontInfo.second.fontSize * contentZoomFactor, nullptr, imChars);

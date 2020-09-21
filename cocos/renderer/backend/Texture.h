@@ -51,14 +51,11 @@ struct TextureDescriptor
     SamplerDescriptor samplerDescriptor;
 };
 
-struct UtilsGL;
-
 /**
  * A base texture
  */
 class TextureBackend : public Ref
 {
-    friend struct UtilsGL;
 public:
     /**
      * Update sampler
@@ -105,6 +102,8 @@ public:
     
     int getWidth() const { return _width; }
     int getHeight() const { return _height; }
+
+    int getBytesPerRow() const { return _width * _bitsPerElement / 8; }
 
 protected:
     /**

@@ -33,27 +33,13 @@
 #include "base/CCEventType.h"
 #include "base/CCDirector.h"
 #include "renderer/backend/opengl/UtilsGL.h"
+#include "RenderTargetGL.h"
 #include <algorithm>
 
 CC_BACKEND_BEGIN
 
 namespace
 {
-
-    GLuint getHandler(TextureBackend *texture)
-    {
-        switch (texture->getTextureType())
-        {
-        case TextureType::TEXTURE_2D:
-            return static_cast<Texture2DGL*>(texture)->getHandler();
-        case TextureType::TEXTURE_CUBE:
-            return static_cast<TextureCubeGL*>(texture)->getHandler();
-        default:
-            assert(false);
-            return 0;
-        }
-    }
-
     void applyTexture(TextureBackend* texture, int slot, int index)
     {
         switch (texture->getTextureType())
@@ -101,199 +87,66 @@ void CommandBufferGL::beginFrame()
 {
 }
 
-void CommandBufferGL::beginRenderPass(const RenderPassDescriptor& descirptor)
+void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassParams& descirptor)
 {
-    applyRenderPassDescriptor(descirptor);
-}
-
-void CommandBufferGL::applyRenderPassDescriptor(const RenderPassDescriptor& descirptor)
-{
-    bool useColorAttachmentExternal = descirptor.needColorAttachment && descirptor.colorAttachmentsTexture[0];
-    bool useDepthAttachmentExternal = descirptor.depthTestEnabled && descirptor.depthAttachmentTexture;
-    bool useStencilAttachmentExternal = descirptor.stencilTestEnabled && descirptor.stencilAttachmentTexture;
-    bool useGeneratedFBO = false;
-    if (useColorAttachmentExternal || useDepthAttachmentExternal || useStencilAttachmentExternal)
-    {
-        if(_generatedFBO == 0)
-        {
-            glGenFramebuffers(1, &_generatedFBO);
-        }
-        _currentFBO = _generatedFBO;
-        useGeneratedFBO = true;
-    }
-    else
-    {
-        _currentFBO = _defaultFBO;
-    }
-    glBindFramebuffer(GL_FRAMEBUFFER, _currentFBO);
+    auto rtGL = static_cast<const RenderTargetGL*>(rt);
     
-    if (useDepthAttachmentExternal)
-    {
-        glFramebufferTexture2D(GL_FRAMEBUFFER,
-                               GL_DEPTH_ATTACHMENT,
-                               GL_TEXTURE_2D,
-                               getHandler(descirptor.depthAttachmentTexture),
-                               0);
-        CHECK_GL_ERROR_DEBUG();
+    rtGL->bindFrameBuffer();
+ 
+    auto clearFlags = descirptor.flags.clear;
 
-        _generatedFBOBindDepth = true;
-    }
-    else
-    {
-        if (_generatedFBOBindDepth && useGeneratedFBO)
-        {
-            glFramebufferTexture2D(GL_FRAMEBUFFER,
-                                   GL_DEPTH_ATTACHMENT,
-                                   GL_TEXTURE_2D,
-                                   0,
-                                   0);
-            CHECK_GL_ERROR_DEBUG();
-
-            _generatedFBOBindDepth = false;
-        }
-    }
-        
-    if (useStencilAttachmentExternal)
-    {
-        glFramebufferTexture2D(GL_FRAMEBUFFER,
-                               GL_STENCIL_ATTACHMENT,
-                               GL_TEXTURE_2D,
-                               getHandler(descirptor.stencilAttachmentTexture),
-                               0);
-        CHECK_GL_ERROR_DEBUG();
-
-        _generatedFBOBindStencil = true;
-    }
-    else
-    {
-        if (_generatedFBOBindStencil && useGeneratedFBO)
-        {
-            glFramebufferTexture2D(GL_FRAMEBUFFER,
-                                   GL_STENCIL_ATTACHMENT,
-                                   GL_TEXTURE_2D,
-                                   0,
-                                   0);
-            CHECK_GL_ERROR_DEBUG();
-
-            _generatedFBOBindStencil = false;
-        }
-    }
-    
-    if (descirptor.needColorAttachment)
-    {
-        int i = 0;
-        for (const auto& texture : descirptor.colorAttachmentsTexture)
-        {
-            if (texture)
-            {
-                // TODO: support texture cube
-                glFramebufferTexture2D(GL_FRAMEBUFFER,
-                                       GL_COLOR_ATTACHMENT0 + i,
-                                       GL_TEXTURE_2D,
-                                       getHandler(texture),
-                                       0);
-            }
-            CHECK_GL_ERROR_DEBUG();
-            ++i;
-        }
-
-        if (useGeneratedFBO)
-            _generatedFBOBindColor = true;
-
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
-        if (_framebufferReadWriteDisabled)
-        {
-            if (useGeneratedFBO) //user-defined framebuffer
-            {
-                glDrawBuffer(GL_COLOR_ATTACHMENT0);
-                glReadBuffer(GL_COLOR_ATTACHMENT0);
-            } 
-            else //default framebuffer
-            {
-                glDrawBuffer(GL_BACK);
-                glReadBuffer(GL_BACK);
-            }
-            _framebufferReadWriteDisabled = false;
-        }
-#endif
-    }
-    else
-    {
-        if (_generatedFBOBindColor && useGeneratedFBO)
-        {
-           // FIXME: Now only support attaching to attachment 0.
-           glFramebufferTexture2D(GL_FRAMEBUFFER,
-                                  GL_COLOR_ATTACHMENT0,
-                                  GL_TEXTURE_2D,
-                                  0,
-                                  0);
-
-            _generatedFBOBindColor = false;
-        }
-
-        // If not draw buffer is needed, should invoke this line explicitly, or it will cause
-        // GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER and GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER error.
-        // https://stackoverflow.com/questions/28313782/porting-opengl-es-framebuffer-to-opengl
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
-        glDrawBuffer(GL_NONE);
-        glReadBuffer(GL_NONE);
-        _framebufferReadWriteDisabled = true;
-#endif
-    }
-    CHECK_GL_ERROR_DEBUG();
-    
     // set clear color, depth and stencil
     GLbitfield mask = 0;
-    if (descirptor.needClearColor)
+    if (bitmask::any(clearFlags, TargetBufferFlags::COLOR))
     {
         mask |= GL_COLOR_BUFFER_BIT;
         const auto& clearColor = descirptor.clearColorValue;
         glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
     }
-    
+
     CHECK_GL_ERROR_DEBUG();
-    
+
     GLboolean oldDepthWrite = GL_FALSE;
     GLboolean oldDepthTest = GL_FALSE;
     GLfloat oldDepthClearValue = 0.f;
     GLint oldDepthFunc = GL_LESS;
-    if (descirptor.needClearDepth)
+    if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH))
     {
         glGetBooleanv(GL_DEPTH_WRITEMASK, &oldDepthWrite);
         glGetBooleanv(GL_DEPTH_TEST, &oldDepthTest);
         glGetFloatv(GL_DEPTH_CLEAR_VALUE, &oldDepthClearValue);
         glGetIntegerv(GL_DEPTH_FUNC, &oldDepthFunc);
-        
+
         mask |= GL_DEPTH_BUFFER_BIT;
         glClearDepth(descirptor.clearDepthValue);
         glEnable(GL_DEPTH_TEST);
         glDepthMask(GL_TRUE);
         glDepthFunc(GL_ALWAYS);
     }
-    
+
     CHECK_GL_ERROR_DEBUG();
-    
-    if (descirptor.needClearStencil)
+
+    if (bitmask::any(clearFlags, TargetBufferFlags::STENCIL))
     {
         mask |= GL_STENCIL_BUFFER_BIT;
         glClearStencil(descirptor.clearStencilValue);
     }
 
-    if(mask) glClear(mask);
-    
+    if (mask) glClear(mask);
+
     CHECK_GL_ERROR_DEBUG();
-    
+
     // restore depth test
-    if (descirptor.needClearDepth)
+    if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH))
     {
         if (!oldDepthTest)
             glDisable(GL_DEPTH_TEST);
-        
+
         glDepthMask(oldDepthWrite);
         glDepthFunc(oldDepthFunc);
         glClearDepth(oldDepthClearValue);
     }
-    
+
     CHECK_GL_ERROR_DEBUG();
 }
 
@@ -379,7 +232,6 @@ void CommandBufferGL::endRenderPass()
 
 void CommandBufferGL::endFrame()
 {
-    // executeGpuCommandsCompleteOps();
 }
 
 void CommandBufferGL::setDepthStencilState(DepthStencilState* depthStencilState)	
@@ -630,14 +482,64 @@ void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float wid
     }
 }
  
-void CommandBufferGL::capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback)
+void CommandBufferGL::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback)
 {
     PixelBufferDescriptor pbd;
-    if (!texture)
-        UtilsGL::readPixels(nullptr, _viewPort.x, _viewPort.y, _viewPort.w, _viewPort.h, pbd);
-    else
-        UtilsGL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pbd);
+    if(rt->isDefaultRenderTarget()) 
+    { // read pixels from screen
+        readPixels(rt, _viewPort.x, _viewPort.y, _viewPort.w, _viewPort.h, _viewPort.w * 4, pbd);
+    }
+    else {
+        // we only readPixels from the COLOR0 attachment.
+        auto colorAttachment = rt->_color[0].texture;
+        if(colorAttachment) {
+            readPixels(rt, 0, 0, colorAttachment->getWidth(),colorAttachment->getHeight(), colorAttachment->getBytesPerRow(), pbd);
+        }
+    }
     callback(pbd);
+}
+
+void CommandBufferGL::readPixels(RenderTarget* rt, int x, int y, uint32_t width, uint32_t height, uint32_t bytesPerRow, PixelBufferDescriptor& pbd)
+{
+    rt->bindFrameBuffer();
+
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+    auto bufferSize = bytesPerRow * height;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
+    (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
+    GLuint pbo;
+    glGenBuffers(1, &pbo);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+    glBufferData(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
+    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    auto buffer = (uint8_t*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
+#else
+    std::unique_ptr<uint8_t[]> bufferStorage(new uint8_t[bufferSize]);
+    auto buffer = bufferStorage.get();
+    memset(buffer, 0, bufferSize);
+    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+#endif
+    uint8_t* wptr = nullptr;
+    if (buffer && (wptr = pbd._data.resize(bufferSize))) {
+        auto rptr = buffer + (height - 1) * bytesPerRow;
+        for (int row = 0; row < height; ++row) {
+            memcpy(wptr, rptr, bytesPerRow);
+            wptr += bytesPerRow;
+            rptr -= bytesPerRow;
+        }
+        pbd._width = width;
+        pbd._height = height;
+    }
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
+    (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
+    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+    glDeleteBuffers(1, &pbo);
+#endif
+
+    if (!rt->isDefaultRenderTarget())
+        rt->unbindFrameBuffer();
 }
 
 CC_BACKEND_END

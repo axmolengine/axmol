@@ -34,9 +34,6 @@ CC_BACKEND_BEGIN
  * @addtogroup _opengl
  * @{
  */
-
-class TextureBackend;
-
 /**
  * Convert backend enum class to corresponding opengl defined value.
  */
@@ -154,16 +151,6 @@ struct UtilsGL
      * @return Cull mode.
      */
     static GLenum toGLCullMode(CullMode mode);
-
-    /**
-     * Read a block of pixels from the given texture
-     * @param texture Specifies the texture to get the image, nullptr: read pixels from screen framebuffer
-     * @param origX,origY Specify the window coordinates of the first pixel that is read from the given texture. This location is the lower left corner of a rectangular block of pixels.
-     * @param rectWidth,rectHeight Specify the dimensions of the pixel rectangle. rectWidth and rectHeight of one correspond to a single pixel.
-     * @param pbd, the output pixel buffer for fill texels data
-     * @remark: !!!this function only can call after endFrame, then it's could be works well.
-    */
-    static void readPixels(TextureBackend* texture, GLint x, GLint y, std::size_t width, std::size_t height, PixelBufferDescriptor& pbd);
 };
 //end of _opengl group
 /// @}

@@ -75,7 +75,6 @@ namespace utils
  * Capture screen interface
  */
 static EventListenerCustom* s_captureScreenListener;
-static CallbackCommand s_captureScreenCommand;
 void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
 {
     if (s_captureScreenListener)
@@ -91,9 +90,8 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     s_captureScreenListener = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW, [=](EventCustom* /*event*/) {
         eventDispatcher->removeEventListener(s_captureScreenListener);
         s_captureScreenListener = nullptr;
-        
         // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
-        renderer->readPixels(nullptr, [=](const backend::PixelBufferDescriptor& pbd) {
+        renderer->readPixels(renderer->getDefaultRenderTarget(), [=](const backend::PixelBufferDescriptor& pbd) {
             if (pbd) {
                 auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, false);
                 imageCallback(image);

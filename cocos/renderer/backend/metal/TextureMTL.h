@@ -147,10 +147,12 @@ public:
     int getCount() const override { return _textureInfo._maxIdx + 1; }
     
     /**
-     * Get MTLTexture object.
+     * Get MTLTexture object. reinterpret_cast<id<MTLTexture>>(handler);
      * @return A MTLTexture object.
      */
-    inline id<MTLTexture> getMTLTexture(int index = 0) const { return _textureInfo._mtlTextures[index]; }
+    uintptr_t getHandler(int index = 0) const override {
+        return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
+    }
     
     /**
      * Get MTLSamplerState object
@@ -201,13 +203,11 @@ public:
     virtual void updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index = 0) override;
     
     int getCount() const override { return _textureInfo._maxIdx + 1; }
-
-    /**
-     * Get MTLTexture object.
-     * @return A MTLTexture object.
-     */
-    inline id<MTLTexture> getMTLTexture(int index = 0) const { return _textureInfo._mtlTextures[index]; }
     
+    uintptr_t getHandler(int index = 0) const override {
+        return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
+    }
+
     /**
      * Get MTLSamplerState object
      * @return A MTLSamplerState object.

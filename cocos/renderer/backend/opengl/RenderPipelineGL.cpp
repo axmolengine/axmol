@@ -33,7 +33,7 @@ Copyright (c) 2020 c4games.com.
 
 CC_BACKEND_BEGIN
 
-void RenderPipelineGL::update(const PipelineDescriptor& pipelineDescirptor, const RenderPassDescriptor& renderpassDescriptor)
+void RenderPipelineGL::update(const PipelineDescriptor& pipelineDescirptor, const RenderTarget*, const RenderPassParams&)
 {
     if(_programGL != pipelineDescirptor.programState->getProgram())
     {
@@ -54,10 +54,10 @@ void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)
     auto destinationRGBBlendFactor = UtilsGL::toGLBlendFactor(descriptor.destinationRGBBlendFactor);
     auto sourceAlphaBlendFactor = UtilsGL::toGLBlendFactor(descriptor.sourceAlphaBlendFactor);
     auto destinationAlphaBlendFactor = UtilsGL::toGLBlendFactor(descriptor.destinationAlphaBlendFactor);
-    GLboolean writeMaskRed = _Bitmask_includes(descriptor.writeMask, ColorWriteMask::RED);
-    GLboolean writeMaskGreen = _Bitmask_includes(descriptor.writeMask, ColorWriteMask::GREEN);
-    GLboolean writeMaskBlue = _Bitmask_includes(descriptor.writeMask, ColorWriteMask::BLUE);
-    GLboolean writeMaskAlpha = _Bitmask_includes(descriptor.writeMask, ColorWriteMask::ALPHA);
+    GLboolean writeMaskRed = bitmask::any(descriptor.writeMask, ColorWriteMask::RED);
+    GLboolean writeMaskGreen = bitmask::any(descriptor.writeMask, ColorWriteMask::GREEN);
+    GLboolean writeMaskBlue = bitmask::any(descriptor.writeMask, ColorWriteMask::BLUE);
+    GLboolean writeMaskAlpha = bitmask::any(descriptor.writeMask, ColorWriteMask::ALPHA);
 
     if (blendEnabled)
     {

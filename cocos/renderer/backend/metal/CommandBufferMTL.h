@@ -61,11 +61,11 @@ public:
     virtual void beginFrame() override;
     
     /**
-     * Create a MTLRenderCommandEncoder object for graphics rendering to an attachment in a RenderPassDescriptor.
-     * MTLRenderCommandEncoder is cached if current RenderPassDescriptor is identical to previous one.
+     * Create a MTLRenderCommandEncoder object for graphics rendering to an attachment in a RenderPassParams.
+     * MTLRenderCommandEncoder is cached if current RenderPassParams is identical to previous one.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderPassDescriptor& descriptor) override;
+    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassParams& descriptor) override;
     
     /**
      * Sets the current render pipeline state object.
@@ -166,10 +166,22 @@ public:
     virtual void setDepthStencilState(DepthStencilState* depthStencilState) override;
     
     /**
-     * Get a screen snapshot
-     * @param callback A callback to deal with screen snapshot image.
+     * Read pixels from RenderTarget
+     * @param callback A callback to deal with pixel data read.
      */
-    virtual void capture(TextureBackend* texture, std::function<void(const PixelBufferDescriptor&)> callback) override;
+    virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
+    
+protected:  
+    /**
+     * Read a block of pixels from the given texture
+     * @param texture Specifies the texture to get the image.
+     * @param origX,origY Specify the window coordinates of the first pixel that is read from the given texture. This location is the lower left corner of a rectangular block of pixels.
+     * @param rectWidth,rectHeight Specify the dimensions of the pixel rectangle. rectWidth and rectHeight of one correspond to a single pixel.
+     * @param pbd, the output buffer for fill texels data
+     * @remark: !!!this function only can call after endFrame, then it's could be works well.
+    */
+    static void readPixels(TextureBackend* texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd);
+    static void readPixels(id<MTLTexture> texture, std::size_t origX, std::size_t origY, std::size_t rectWidth, std::size_t rectHeight, PixelBufferDescriptor& pbd);
     
 private:
     void prepareDrawing() const;
@@ -179,7 +191,7 @@ private:
     void afterDraw();
     void flush();
     void flushCaptureCommands();
-    id<MTLRenderCommandEncoder> getRenderCommandEncoder(const RenderPassDescriptor& renderPassDescriptor);
+    id<MTLRenderCommandEncoder> getRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassParams& renderPassParams);
 
     id<MTLCommandBuffer> _mtlCommandBuffer = nil;
     id<MTLCommandQueue> _mtlCommandQueue = nil;
@@ -195,7 +207,8 @@ private:
     unsigned int _renderTargetHeight = 0;
     
     dispatch_semaphore_t _frameBoundarySemaphore;
-    RenderPassDescriptor _prevRenderPassDescriptor;
+    const RenderTarget* _currentRenderTarget = nil; // weak ref
+    RenderPassParams _currentRenderPassParams;
     NSAutoreleasePool* _autoReleasePool = nil;
     
     std::vector<std::pair<TextureBackend*,std::function<void(const PixelBufferDescriptor&)>>> _captureCallbacks;

@@ -50,7 +50,7 @@ function build_mac_cmake()
     cd $COCOS2DX_ROOT
     mkdir -p build
     cmake -S . -B build -GXcode -DBUILD_EXTENSION_IMGUI=ON
-    cmake --build build --config Release -- -quiet
+    cmake --build build --config Release --target cpp-tests -- -quiet
     #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES build  | xcpretty
     ##the following commands must not be removed
     #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES build

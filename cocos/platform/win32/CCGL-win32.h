@@ -32,6 +32,9 @@ THE SOFTWARE.
 #include "glad/glad.h"
 
 #if defined(CC_USE_GLES)
+#undef GL_DEPTH_STENCIL
+#undef GL_DEPTH24_STENCIL8
+#undef GL_UNSIGNED_INT_24_8
 #undef glClearDepth
 #undef glMapBuffer
 #undef glUnmapBuffer
@@ -57,6 +60,9 @@ THE SOFTWARE.
 #undef glGenerateMipmap
 #endif
 
+#define GL_DEPTH_STENCIL GL_DEPTH_STENCIL_OES
+#define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
+#define GL_UNSIGNED_INT_24_8 GL_UNSIGNED_INT_24_8_OES
 #define glClearDepth glClearDepthf
 #define glMapBuffer glMapBufferOES
 #define glUnmapBuffer glUnmapBufferOES
@@ -83,7 +89,5 @@ THE SOFTWARE.
 #endif
 
 #endif
-
-#define CC_GL_DEPTH24_STENCIL8      GL_DEPTH24_STENCIL8
 
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32

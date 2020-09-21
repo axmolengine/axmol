@@ -22,45 +22,21 @@
  THE SOFTWARE.
  ****************************************************************************/
  
-#pragma once
-
-#include <array>
-#include <vector>
-
-#include "Macros.h"
-#include "Types.h"
+#include "RenderPassParams.h"
 
 CC_BACKEND_BEGIN
 
-class TextureBackend;
-/**
- * @addtogroup _backend
- * @{
- */
-
-/**
- * Store values about color, depth and stencil attachment.
- */
-struct RenderPassDescriptor
+bool RenderPassParams::operator==(const RenderPassParams& descriptor) const
 {
-    RenderPassDescriptor& operator=(const RenderPassDescriptor& descriptor);
-    bool operator==(const RenderPassDescriptor& descriptor) const;
-    bool needDepthStencilAttachment() const { return depthTestEnabled || stencilTestEnabled; }
+    return (clearDepthValue == descriptor.clearDepthValue &&
+        clearStencilValue == descriptor.clearStencilValue &&
+        clearColorValue == descriptor.clearColorValue &&
+//        needColorAttachment == descriptor.needColorAttachment &&
+//        depthTestEnabled == descriptor.depthTestEnabled &&
+//        stencilTestEnabled == descriptor.stencilTestEnabled &&
+        flags.clear == descriptor.flags.clear &&
+        flags.discardStart == descriptor.flags.discardStart &&
+        flags.discardEnd == descriptor.flags.discardEnd);
+}
 
-    float clearDepthValue = 0.f;
-    float clearStencilValue = 0.f;
-    std::array<float, 4> clearColorValue {{0.f, 0.f, 0.f, 0.f}}; // double-braces required in C++11
-    bool needColorAttachment = true;
-    bool depthTestEnabled = false;
-    bool stencilTestEnabled = false;
-    bool needClearColor = false;
-    bool needClearDepth = false;
-    bool needClearStencil = false;
-    TextureBackend* depthAttachmentTexture = nullptr;
-    TextureBackend* stencilAttachmentTexture = nullptr;
-    TextureBackend* colorAttachmentsTexture[MAX_COLOR_ATTCHMENT] = { nullptr };
-};
-
-//end of _backend group
-/// @}
 CC_BACKEND_END

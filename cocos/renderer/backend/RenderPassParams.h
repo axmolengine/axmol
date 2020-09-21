@@ -24,30 +24,58 @@
  
 #pragma once
 
+#include <array>
+#include <vector>
+
 #include "Macros.h"
 #include "Types.h"
-#include "base/CCRef.h"
-#include "renderer/CCPipelineDescriptor.h"
-#include "renderer/backend/RenderPassParams.h"
 
 CC_BACKEND_BEGIN
+
+class TextureBackend;
 /**
  * @addtogroup _backend
  * @{
  */
-class RenderTarget;
+
+struct RenderPassFlags {
+    /**
+     * bitmask indicating which buffers to clear at the beginning of a render pass.
+     * This implies discard.
+     */
+    TargetBufferFlags clear;
+
+    /**
+     * bitmask indicating which buffers to discard at the beginning of a render pass.
+     * Discarded buffers have uninitialized content, they must be entirely drawn over or cleared.
+     */
+    TargetBufferFlags discardStart;
+
+    /**
+     * bitmask indicating which buffers to discard at the end of a render pass.
+     * Discarded buffers' content becomes invalid, they must not be read from again.
+     */
+    TargetBufferFlags discardEnd;
+};
+
 
 /**
- * Render pipeline
+ * Store values about color, depth and stencil attachment.
  */
-class RenderPipeline : public cocos2d::Ref
+struct RenderPassParams
 {
-public:
-    virtual void update(const PipelineDescriptor & pipelineDescirptor, const RenderTarget* renderTarget, const RenderPassParams& renderPassParams) = 0;
+    RenderPassParams& operator=(const RenderPassParams& descriptor) = default;
+    bool operator==(const RenderPassParams& descriptor) const;
+
+    float clearDepthValue = 0.f;
+    float clearStencilValue = 0.f;
+    std::array<float, 4> clearColorValue {{0.f, 0.f, 0.f, 0.f}}; // double-braces required in C++11
     
-protected:
-    virtual ~RenderPipeline() = default;
+    // Now, only clear flag used
+    RenderPassFlags flags{};
 };
+typedef RenderPassParams RenderPassParams;
+
 //end of _backend group
 /// @}
 CC_BACKEND_END
