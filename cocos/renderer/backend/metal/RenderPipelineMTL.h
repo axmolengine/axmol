@@ -49,7 +49,7 @@ public:
      */
     RenderPipelineMTL(id<MTLDevice> mtlDevice);
     ~RenderPipelineMTL();
-    virtual void update(const PipelineDescriptor&, const RenderTarget* renderTarget, const RenderPassParams& renderPassParams) override;
+    virtual void update(const PipelineDescriptor&, const RenderTarget* renderTarget) override;
     
     /**
      * Get a MTLRenderPipelineState object.
@@ -62,7 +62,7 @@ private:
     void setBlendState(MTLRenderPipelineColorAttachmentDescriptor*, const BlendDescriptor&);
     void setShaderModules(const PipelineDescriptor&);
     void setBlendStateAndFormat(const BlendDescriptor&);
-    void getAttachmentFormat(const RenderTarget* renderTarget, const RenderPassParams& renderPassParams, PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT], PixelFormat&, PixelFormat&);
+    void getAttachmentFormat(const RenderTarget* renderTarget, PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT], PixelFormat&, PixelFormat&);
     
     id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
     id<MTLDevice> _mtlDevice = nil;

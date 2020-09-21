@@ -630,7 +630,7 @@ void Renderer::drawBatchedTriangles()
     {
         
         auto& drawInfo = _triBatchesToDraw[i];
-        setRenderPipeline(drawInfo.cmd->getPipelineDescriptor(), _renderPassParams);
+        setRenderPipeline(drawInfo.cmd->getPipelineDescriptor());
         _commandBuffer->setVertexBuffer(_vertexBuffer);
         _commandBuffer->setIndexBuffer(_indexBuffer);
         auto& pipelineDescriptor = drawInfo.cmd->getPipelineDescriptor();
@@ -664,7 +664,7 @@ void Renderer::drawCustomCommand(RenderCommand *command)
     if (cmd->getBeforeCallback()) cmd->getBeforeCallback()();
 
     beginRenderPass();
-    setRenderPipeline(cmd->getPipelineDescriptor(), _renderPassParams);
+    setRenderPipeline(cmd->getPipelineDescriptor());
     _commandBuffer->setVertexBuffer(cmd->getVertexBuffer());
     _commandBuffer->setProgramState(cmd->getPipelineDescriptor().programState);
     
@@ -762,10 +762,10 @@ void Renderer::readPixels(backend::RenderTarget* rt, std::function<void(const ba
     _commandBuffer->readPixels(rt, std::move(callback));
 }
 
-void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor, const backend::RenderPassParams& renderPassParams)
+void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor)
 {
     auto device = backend::Device::getInstance();
-    _renderPipeline->update(pipelineDescriptor, _currentRT, renderPassParams);
+    _renderPipeline->update(pipelineDescriptor, _currentRT);
     backend::DepthStencilState* depthStencilState = nullptr;
     if (bitmask::any(_currentRT->getTargetFlags(), RenderTargetFlag::DEPTH_AND_STENCIL))
     {

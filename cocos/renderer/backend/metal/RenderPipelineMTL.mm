@@ -164,8 +164,7 @@ RenderPipelineMTL::RenderPipelineMTL(id<MTLDevice> mtlDevice)
 }
 
 void RenderPipelineMTL::update(const PipelineDescriptor & pipelineDescirptor,
-                               const RenderTarget* renderTarget,
-                               const RenderPassParams& renderPassParams)
+                               const RenderTarget* renderTarget)
 {
     struct
     {
@@ -187,7 +186,7 @@ void RenderPipelineMTL::update(const PipelineDescriptor & pipelineDescirptor,
     
     memset(&hashMe, 0, sizeof(hashMe));
     const auto& blendDescriptor = pipelineDescirptor.blendDescriptor;
-    getAttachmentFormat(renderTarget, renderPassParams, _colorAttachmentsFormat, _depthAttachmentFormat, _stencilAttachmentFormat);
+    getAttachmentFormat(renderTarget, _colorAttachmentsFormat, _depthAttachmentFormat, _stencilAttachmentFormat);
     auto program = static_cast<ProgramMTL*>(pipelineDescirptor.programState->getProgram());
     hashMe.vertexShaderHash = program->getVertexShader()->getHashValue();
     hashMe.fragmentShaderHash = program->getFragmentShader()->getHashValue();
@@ -302,7 +301,6 @@ void RenderPipelineMTL::setShaderModules(const PipelineDescriptor& descriptor)
 }
 
 void RenderPipelineMTL::getAttachmentFormat(const RenderTarget* renderTarget,
-                                            const RenderPassParams& params,
                                             PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
                                             PixelFormat& depthFormat,
                                             PixelFormat& stencilFormat)
