@@ -183,7 +183,6 @@ void CommandBufferMTL::setDepthStencilState(DepthStencilState* depthStencilState
 void CommandBufferMTL::setRenderPipeline(RenderPipeline* renderPipeline)
 {
     _renderPipelineMTL = static_cast<RenderPipelineMTL*>(renderPipeline);
-    // [_mtlRenderEncoder setRenderPipelineState:_renderPipelineMTL->getMTLRenderPipelineState()];
 }
 
 void CommandBufferMTL::beginFrame()
@@ -403,15 +402,6 @@ void CommandBufferMTL::afterDraw()
     
     CC_SAFE_RELEASE_NULL(_programState);
 }
-
-//void CommandBufferMTL::setDepthStencilState(DepthStencilState* depthStencilState)
-//{
-//    if (depthStencilState)
-//        _mtlDepthStencilState = static_cast<DepthStencilStateMTL*>(depthStencilState)->getMTLDepthStencilState();
-//    else
-//        _mtlDepthStencilState = nil;
-//
-//}
 
 void CommandBufferMTL::prepareDrawing() const
 {
