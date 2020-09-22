@@ -225,6 +225,13 @@ void AtlasNode::setIgnoreContentScaleFactor(bool ignoreContentScaleFactor)
     if (_ignoreContentScaleFactor != ignoreContentScaleFactor) {
         _ignoreContentScaleFactor = ignoreContentScaleFactor;
         this->calculateMaxItems();
+        this->updateAtlasValues();
+
+        auto label = dynamic_cast<LabelProtocol*>(this);
+        if (label) {
+            Size s = Size(label->getString().size() * _itemWidth, _itemHeight);
+            this->setContentSize(s);
+        }
     }
 }
 
