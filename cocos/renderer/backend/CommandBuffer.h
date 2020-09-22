@@ -40,7 +40,10 @@
 #include <memory>
 #include <vector>
 
-CC_BACKEND_BEGIN
+NS_CC_BEGIN
+struct PipelineDescriptor;
+
+namespace backend {
 
 class RenderPass;
 class RenderPipeline;
@@ -48,6 +51,7 @@ class Buffer;
 class DepthStencilState;
 class TextureBackend;
 class RenderTarget;
+struct DepthStencilDescriptor;
 
 /**
  * @addtogroup _backend
@@ -61,6 +65,18 @@ class RenderTarget;
 class CommandBuffer : public cocos2d::Ref
 {
 public:
+    /**
+     * Set depthStencil status once
+     * @param depthStencilState Specifies the depth and stencil status
+     */
+    virtual void setDepthStencilState(DepthStencilState* depthStencilState) = 0;
+
+    /**
+     * Sets the current render pipeline state object once
+     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render pass.
+     */
+    virtual void setRenderPipeline(RenderPipeline* renderPipeline) = 0;
+    
     /// @name Setters & Getters
     /**
      * @brief Indicate the begining of a frame
@@ -73,12 +89,22 @@ public:
      */
     virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassParams& descriptor) = 0;
     
+
     /**
-     * Sets the current render pipeline state object.
-     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render pass.
+     * Update depthStencil status, improvment: for metal backend cache it
+     * @param depthStencilState Specifies the depth and stencil status
      */
-    virtual void setRenderPipeline(RenderPipeline* renderPipeline) = 0;
-    
+    virtual void updateDepthStencilState(const DepthStencilDescriptor& descriptor) = 0;
+
+    /**
+     * Update render pipeline status
+     * Building a programmable pipeline involves an expensive evaluation of GPU state.
+     * So a new render pipeline object will be created only if it hasn't been created before.
+     * @param rt Specifies the render target.
+     * @param pipelineDescriptor Specifies the pipeline descriptor.
+     */
+    virtual void updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor) = 0;
+
     /**
      * Fixed-function state
      * @param x The x coordinate of the upper-left corner of the viewport.
@@ -162,12 +188,6 @@ public:
      * @param height Specifies the height of the scissor box
      */
     virtual void setScissorRect(bool isEnabled, float x, float y, float width, float height) = 0;
-
-    /**
-     * Set depthStencil status
-     * @param depthStencilState Specifies the depth and stencil status
-     */
-    virtual void setDepthStencilState(DepthStencilState* depthStencilState) = 0;
 
     /**
      * Get a screen snapshot

@@ -57,12 +57,13 @@ struct StencilDescriptor
 struct DepthStencilDescriptor
 {
     CompareFunction depthCompareFunction = CompareFunction::LESS;
-    bool depthWriteEnabled = false;
-    bool depthTestEnabled = false;
-    
-    bool stencilTestEnabled = false;
     StencilDescriptor backFaceStencil;
     StencilDescriptor frontFaceStencil;
+    bool depthWriteEnabled = false;
+    TargetBufferFlags depthStencilFlags = {};
+
+    void addFlag(TargetBufferFlags flag) { depthStencilFlags |= flag; }
+    void removeFlag(TargetBufferFlags flag) { depthStencilFlags &= ~flag; }
 };
 
 /**
@@ -70,14 +71,18 @@ struct DepthStencilDescriptor
  */
 class DepthStencilState : public cocos2d::Ref
 {
+public:
+    virtual void update(const DepthStencilDescriptor& descriptor);
+    const DepthStencilDescriptor& getDepthStencilInfo()const { return _depthStencilInfo; }
+    bool isEnabled() const { return bitmask::any(_depthStencilInfo.depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL); }
 protected:
     /**
      * @param descriptor Specifies depth and stencil descriptor.
      */
-    DepthStencilState(const DepthStencilDescriptor& descriptor);
+    DepthStencilState() = default;
     virtual ~DepthStencilState();
     
-    DepthStencilDescriptor _depthStencilInfo; ///< depth and stencil descriptor.
+    DepthStencilDescriptor _depthStencilInfo{}; ///< depth and stencil descriptor.
     bool _isBackFrontStencilEqual = false; ///< Does front stencil status equals to back stencil's.
 };
 

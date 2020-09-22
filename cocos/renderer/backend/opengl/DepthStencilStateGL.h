@@ -44,7 +44,7 @@ public:
     /**
      * @param descriptor Specifies the depth and stencil status.
      */
-    DepthStencilStateGL(const DepthStencilDescriptor& descriptor);
+    DepthStencilStateGL() = default;
 
     /**
      * Set depth and stencil status to pipeline.

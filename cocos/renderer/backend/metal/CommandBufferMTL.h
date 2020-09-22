@@ -31,6 +31,7 @@
 CC_BACKEND_BEGIN
 
 class RenderPipelineMTL;
+class DepthStencilStateMTL;
 
 /**
  * @addtogroup _metal
@@ -51,6 +52,19 @@ public:
     CommandBufferMTL(DeviceMTL* deviceMTL);
     ~CommandBufferMTL();
     
+    /**
+     * Set depthStencil status
+     * @param depthStencilState Specifies the depth and stencil status
+     */
+    virtual void setDepthStencilState(DepthStencilState* depthStencilState) override;
+    
+    /**
+     * Sets the current render pipeline state object once
+     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render pass.
+     */
+    virtual void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    
+    
     /// @name Setters & Getters
     /**
      * @brief Indicate the begining of a frame
@@ -66,12 +80,21 @@ public:
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
     virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassParams& descriptor) override;
-    
+
     /**
-     * Sets the current render pipeline state object.
-     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render pass.
+     * Update depthStencil status, improvment: for metal backend cache it
+     * @param depthStencilState Specifies the depth and stencil status
      */
-    virtual void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    virtual void updateDepthStencilState(const DepthStencilDescriptor& descriptor) override;
+
+    /**
+     * Update render pipeline status
+     * Building a programmable pipeline involves an expensive evaluation of GPU state.
+     * So a new render pipeline object will be created only if it hasn't been created before.
+     * @param rt Specifies the render target.
+     * @param pipelineDescriptor Specifies the pipeline descriptor.
+     */
+    virtual void updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor) override;
     
     /**
      * Fixed-function state
@@ -160,12 +183,6 @@ public:
     virtual void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
     
     /**
-     * Set depthStencil status
-     * @param depthStencilState Specifies the depth and stencil status
-     */
-    virtual void setDepthStencilState(DepthStencilState* depthStencilState) override;
-    
-    /**
      * Read pixels from RenderTarget
      * @param callback A callback to deal with pixel data read.
      */
@@ -199,9 +216,9 @@ private:
     id<MTLBuffer> _mtlIndexBuffer = nil;
     id<MTLTexture> _drawableTexture = nil;
     
+    DepthStencilStateMTL* _depthStencilStateMTL = nullptr;
     RenderPipelineMTL* _renderPipelineMTL = nullptr;
     ProgramState* _programState = nullptr;
-    id<MTLDepthStencilState> _mtlDepthStencilState = nil;
     
     unsigned int _renderTargetWidth = 0;
     unsigned int _renderTargetHeight = 0;

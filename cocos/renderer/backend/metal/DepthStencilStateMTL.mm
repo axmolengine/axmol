@@ -23,6 +23,7 @@
  ****************************************************************************/
  
 #include "DepthStencilStateMTL.h"
+#include "xxhash.h"
 
 CC_BACKEND_BEGIN
 
@@ -103,34 +104,68 @@ namespace
     }
 }
 
-DepthStencilStateMTL::DepthStencilStateMTL(id<MTLDevice> mtlDevice, const DepthStencilDescriptor& descriptor)
-: DepthStencilState(descriptor)
+DepthStencilStateMTL::DepthStencilStateMTL(id<MTLDevice> mtlDevice) : _mtlDevice(mtlDevice)
 {
-    if (!descriptor.depthTestEnabled && !descriptor.stencilTestEnabled && !descriptor.depthWriteEnabled)
+    
+}
+
+uint32_t DepthStencilStateMTL::hashValue() const
+{
+    DepthStencilDescriptor hashMe;
+    memset(&hashMe, 0, sizeof(hashMe));
+    
+    hashMe.depthCompareFunction = _depthStencilInfo.depthCompareFunction;
+    hashMe.backFaceStencil = _depthStencilInfo.backFaceStencil;
+    hashMe.frontFaceStencil = _depthStencilInfo.frontFaceStencil;
+    hashMe.depthWriteEnabled = _depthStencilInfo.depthWriteEnabled;
+    hashMe.depthStencilFlags = _depthStencilInfo.depthStencilFlags;
+    
+    return XXH32((const void*)&hashMe, sizeof(hashMe), 0);
+}
+
+void DepthStencilStateMTL::update(const DepthStencilDescriptor& descriptor)
+{
+    DepthStencilState::update(descriptor);
+    if(!isEnabled()) {
+        _mtlDepthStencilState = nil;
         return;
+    }
+    
+    auto key = hashValue();
+    auto it = _mtlStateCache.find(key);
+    if(it != _mtlStateCache.end()) {
+        _mtlDepthStencilState = it->second;
+        return;
+    }
     
     MTLDepthStencilDescriptor* mtlDescriptor = [[MTLDepthStencilDescriptor alloc] init];
 
-    if (descriptor.depthTestEnabled)
+    if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::DEPTH))
         mtlDescriptor.depthCompareFunction = toMTLCompareFunction(descriptor.depthCompareFunction);
     else
         mtlDescriptor.depthCompareFunction = MTLCompareFunctionAlways;
 
     mtlDescriptor.depthWriteEnabled = descriptor.depthWriteEnabled;
 
-    if (descriptor.stencilTestEnabled)
+    if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::STENCIL))
     {
         setMTLStencilDescriptor(mtlDescriptor.frontFaceStencil, descriptor.frontFaceStencil);
         setMTLStencilDescriptor(mtlDescriptor.backFaceStencil, descriptor.backFaceStencil);
     }
 
-    _mtlDepthStencilState = [mtlDevice newDepthStencilStateWithDescriptor:mtlDescriptor];
+    _mtlDepthStencilState = [_mtlDevice newDepthStencilStateWithDescriptor:mtlDescriptor];
     [mtlDescriptor release];
+    
+    // emplace to state cache
+    _mtlStateCache.emplace(key, _mtlDepthStencilState);
 }
 
 DepthStencilStateMTL::~DepthStencilStateMTL()
 {
-    [_mtlDepthStencilState release];
+    _mtlDepthStencilState = nullptr;
+    for(auto& stateItem : _mtlStateCache)
+        [stateItem.second release];
+    _mtlStateCache.clear();
 }
 
 CC_BACKEND_END
