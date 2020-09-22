@@ -126,7 +126,10 @@ uint32_t DepthStencilStateMTL::hashValue() const
 void DepthStencilStateMTL::update(const DepthStencilDescriptor& descriptor)
 {
     DepthStencilState::update(descriptor);
-    if(!isEnabled()) return;
+    if(!isEnabled()) {
+        _mtlDepthStencilState = nil;
+        return;
+    }
     
     auto key = hashValue();
     auto it = _mtlStateCache.find(key);
