@@ -18,13 +18,13 @@
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
-* Modularize all optional extension, all move from engine core to folder extensions
-* Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM...
-* Use modern gl loader ```glad``` to instead glew
+* Modularize all optional extension, move from engine core to folder extensions
+* Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM, ...
+* Use modern gl loader ```glad``` (instead of glew)
 * Add google angle renderer backend support
 * C++14 standard
 * IOS SDK 9.0 as minimal deployment
-* Use fast pugixml instead of tinyxml2
+* Use fast pugixml
 * Using curl for transferring data with URL syntax
 * Use SAX parser for all plist file
 * Spine-3.8 support
