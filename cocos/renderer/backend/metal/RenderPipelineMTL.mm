@@ -163,8 +163,7 @@ RenderPipelineMTL::RenderPipelineMTL(id<MTLDevice> mtlDevice)
     [_mtlRenderPipelineStateCache retain];
 }
 
-void RenderPipelineMTL::update(const PipelineDescriptor & pipelineDescirptor,
-                               const RenderTarget* renderTarget)
+void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineDescriptor & pipelineDescirptor)
 {
     struct
     {

@@ -72,10 +72,7 @@ struct DepthStencilDescriptor
 class DepthStencilState : public cocos2d::Ref
 {
 public:
-    void update(const DepthStencilDescriptor& descriptor) {
-        _depthStencilInfo = descriptor;
-        _isBackFrontStencilEqual = descriptor.backFaceStencil == descriptor.frontFaceStencil;
-    }
+    virtual void update(const DepthStencilDescriptor& descriptor);
     const DepthStencilDescriptor& getDepthStencilInfo()const { return _depthStencilInfo; }
     bool isEnabled() const { return bitmask::any(_depthStencilInfo.depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL); }
 protected:

@@ -65,6 +65,18 @@ struct DepthStencilDescriptor;
 class CommandBuffer : public cocos2d::Ref
 {
 public:
+    /**
+     * Set depthStencil status once
+     * @param depthStencilState Specifies the depth and stencil status
+     */
+    virtual void setDepthStencilState(DepthStencilState* depthStencilState) = 0;
+
+    /**
+     * Sets the current render pipeline state object once
+     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render pass.
+     */
+    virtual void setRenderPipeline(RenderPipeline* renderPipeline) = 0;
+    
     /// @name Setters & Getters
     /**
      * @brief Indicate the begining of a frame
@@ -77,18 +89,6 @@ public:
      */
     virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassParams& descriptor) = 0;
     
-    /**
-     * Set depthStencil status
-     * @param depthStencilState Specifies the depth and stencil status
-     */
-    virtual void setDepthStencilState(DepthStencilState* depthStencilState) = 0;
-
-    /**
-     * Sets the current render pipeline state object.
-     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render pass.
-     */
-    virtual void setRenderPipeline(RenderPipeline* renderPipeline) = 0;
-
 
     /**
      * Update depthStencil status, improvment: for metal backend cache it

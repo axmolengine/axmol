@@ -135,13 +135,9 @@ ShaderModule* DeviceMTL::newShaderModule(ShaderStage stage, const std::string& s
     return new (std::nothrow) ShaderModuleMTL(_mtlDevice, stage, source);
 }
 
-DepthStencilState* DeviceMTL::createDepthStencilState(const DepthStencilDescriptor& descriptor)
+DepthStencilState* DeviceMTL::newDepthStencilState()
 {
-    auto ret = new (std::nothrow) DepthStencilStateMTL(_mtlDevice, descriptor);
-    if (ret)
-        ret->autorelease();
-    
-    return ret;
+    return new (std::nothrow) DepthStencilStateMTL(_mtlDevice);
 }
 
 RenderPipeline* DeviceMTL::newRenderPipeline()
