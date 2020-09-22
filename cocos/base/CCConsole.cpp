@@ -157,10 +157,12 @@ void log(const char * format, ...)
 
     OutputDebugStringW(wbuf.c_str());
 
-#if CC_OUTPUT_LOG_TO_CONSOLE
-    // print to console if possible
-    wprintf(L"%s", wbuf.c_str());
-    fflush(stdout);
+#if CC_LOG_TO_CONSOLE
+    if (GetStdHandle(STD_INPUT_HANDLE)) {
+        // print to console if possible
+        wprintf(L"%s", wbuf.c_str());
+        fflush(stdout);
+    }
 #endif
 
 #if !CC_LOG_MULTITHREAD
