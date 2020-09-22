@@ -179,6 +179,7 @@ Renderer::~Renderer()
     
     free(_triBatchesToDraw);
     
+    CC_SAFE_RELEASE(_depthStencilState);
     CC_SAFE_RELEASE(_commandBuffer);
     CC_SAFE_RELEASE(_renderPipeline);
     CC_SAFE_RELEASE(_defaultRT);
@@ -197,7 +198,10 @@ void Renderer::init()
     _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
     _currentRT = _defaultRT;
     _renderPipeline = device->newRenderPipeline();
-    // _commandBuffer->setRenderPipeline(_renderPipeline);
+    _commandBuffer->setRenderPipeline(_renderPipeline);
+
+    _depthStencilState = device->newDepthStencilState();
+    _commandBuffer->setDepthStencilState(_depthStencilState);
 }
 
 void Renderer::addCommand(RenderCommand* command)
@@ -408,9 +412,26 @@ void Renderer::clean()
 
 void Renderer::setDepthTest(bool value)
 {
-    _depthStencilDescriptor.depthTestEnabled = value;
-    _currentRT->modifyTargetFlags(value ? TargetBufferFlags::DEPTH : TargetBufferFlags::NONE,
-                                  value ? TargetBufferFlags::NONE : TargetBufferFlags::DEPTH);
+    if (value) {
+        _currentRT->addFlag(TargetBufferFlags::DEPTH);
+        _depthStencilDescriptor.addFlag(TargetBufferFlags::DEPTH);
+    }
+    else {
+        _currentRT->removeFlag(TargetBufferFlags::DEPTH);
+        _depthStencilDescriptor.removeFlag(TargetBufferFlags::DEPTH);
+    }
+}
+
+void Renderer::setStencilTest(bool value)
+{
+    if (value) {
+        _currentRT->addFlag(TargetBufferFlags::STENCIL);
+        _depthStencilDescriptor.addFlag(TargetBufferFlags::STENCIL);
+    }
+    else {
+        _currentRT->removeFlag(TargetBufferFlags::STENCIL);
+        _depthStencilDescriptor.removeFlag(TargetBufferFlags::STENCIL);
+    }
 }
 
 void Renderer::setDepthWrite(bool value)
@@ -430,20 +451,17 @@ backend::CompareFunction Renderer::getDepthCompareFunction() const
 
 bool Renderer::Renderer::getDepthTest() const
 {
-    return _depthStencilDescriptor.depthTestEnabled;
+    return bitmask::any(_depthStencilDescriptor.depthStencilFlags, TargetBufferFlags::DEPTH);
+}
+
+bool Renderer::getStencilTest() const
+{
+    return bitmask::any(_depthStencilDescriptor.depthStencilFlags, TargetBufferFlags::STENCIL);
 }
 
 bool Renderer::getDepthWrite() const
 {
     return _depthStencilDescriptor.depthWriteEnabled;
-}
-
-void Renderer::setStencilTest(bool value)
-{
-    _depthStencilDescriptor.stencilTestEnabled = value;
-    
-    _currentRT->modifyTargetFlags(value ? TargetBufferFlags::STENCIL : TargetBufferFlags::NONE,
-    value ? TargetBufferFlags::NONE : TargetBufferFlags::STENCIL);
 }
 
 void Renderer::setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)
@@ -475,11 +493,6 @@ void Renderer::setStencilWriteMask(unsigned int mask)
 {
     _depthStencilDescriptor.frontFaceStencil.writeMask = mask;
     _depthStencilDescriptor.backFaceStencil.writeMask = mask;
-}
-
-bool Renderer::getStencilTest() const
-{
-    return _depthStencilDescriptor.stencilTestEnabled;
 }
 
 backend::StencilOperation Renderer::getStencilFailureOperation() const
@@ -630,7 +643,7 @@ void Renderer::drawBatchedTriangles()
     {
         
         auto& drawInfo = _triBatchesToDraw[i];
-        setRenderPipeline(drawInfo.cmd->getPipelineDescriptor());
+        _commandBuffer->updatePipelineState(_currentRT, drawInfo.cmd->getPipelineDescriptor());
         _commandBuffer->setVertexBuffer(_vertexBuffer);
         _commandBuffer->setIndexBuffer(_indexBuffer);
         auto& pipelineDescriptor = drawInfo.cmd->getPipelineDescriptor();
@@ -664,7 +677,7 @@ void Renderer::drawCustomCommand(RenderCommand *command)
     if (cmd->getBeforeCallback()) cmd->getBeforeCallback()();
 
     beginRenderPass();
-    setRenderPipeline(cmd->getPipelineDescriptor());
+    _commandBuffer->updatePipelineState(_currentRT, cmd->getPipelineDescriptor());
     _commandBuffer->setVertexBuffer(cmd->getVertexBuffer());
     _commandBuffer->setProgramState(cmd->getPipelineDescriptor().programState);
     
@@ -762,14 +775,14 @@ void Renderer::readPixels(backend::RenderTarget* rt, std::function<void(const ba
     _commandBuffer->readPixels(rt, std::move(callback));
 }
 
-void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor)
-{ // TODO: refactor to CommandBuffer::updateRenderPipelineState
-    _renderPipeline->update(pipelineDescriptor, _currentRT);
-    
-#ifdef CC_USE_METAL
-    _commandBuffer->setRenderPipeline(_renderPipeline);
-#endif
-}
+//void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor)
+//{ // TODO: refactor to CommandBuffer::updatePipelineState
+//    _renderPipeline->update(pipelineDescriptor, _currentRT);
+//    
+//#ifdef CC_USE_METAL
+//    _commandBuffer->setRenderPipeline(_renderPipeline);
+//#endif
+//}
 
 void Renderer::beginRenderPass()
 {
@@ -779,17 +792,7 @@ void Renderer::beginRenderPass()
     _commandBuffer->setWinding(_winding);
     _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y, _scissorState.rect.width, _scissorState.rect.height);
     _commandBuffer->setStencilReferenceValue(_stencilRef);
-    
-    // TODO: refactor to CommandBuffer::updateDepthStencilState
-    backend::DepthStencilState* depthStencilState = nullptr;
-    if (bitmask::any(_currentRT->getTargetFlags(), RenderTargetFlag::DEPTH_AND_STENCIL))
-    {
-        // FIXME: don't use autorelease at draw frame
-        // Now the depthStencilState is in autoreleasepool
-        auto device = backend::Device::getInstance();
-        depthStencilState = device->createDepthStencilState(_depthStencilDescriptor);
-    }
-    _commandBuffer->setDepthStencilState(depthStencilState);
+    _commandBuffer->updateDepthStencilState(_depthStencilDescriptor);
 }
 
 void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder)

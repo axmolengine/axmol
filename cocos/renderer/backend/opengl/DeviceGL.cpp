@@ -109,12 +109,9 @@ ShaderModule* DeviceGL::newShaderModule(ShaderStage stage, const std::string& so
     return new (std::nothrow) ShaderModuleGL(stage, source);
 }
 
-DepthStencilState* DeviceGL::createDepthStencilState(const DepthStencilDescriptor& descriptor)
+DepthStencilState* DeviceGL::newDepthStencilState()
 {
-    auto ret = new (std::nothrow) DepthStencilStateGL(descriptor);
-    if (ret)
-        ret->autorelease();
-    
+    auto ret = new (std::nothrow) DepthStencilStateGL();
     return ret;
 }
 

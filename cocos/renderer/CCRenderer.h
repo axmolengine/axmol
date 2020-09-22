@@ -463,14 +463,6 @@ protected:
     void fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int vertexBufferOffset);
     void beginRenderPass(); /// Begin a render pass.
     
-    /**
-     * Building a programmable pipeline involves an expensive evaluation of GPU state.
-     * So a new render pipeline object will be created only if it hasn't been created before.
-     * @param pipelineDescriptor Specifies the pipeline descriptor.
-     * @param renderPassParams Specifies the render pass descriptor.
-     */
-    void setRenderPipeline(const PipelineDescriptor&);
-
     void pushStateBlock();
 
     void popStateBlock();
@@ -496,6 +488,8 @@ protected:
     
     backend::CommandBuffer* _commandBuffer = nullptr;
     backend::RenderPassParams _renderPassParams;
+
+    backend::DepthStencilState* _depthStencilState = nullptr;
     backend::DepthStencilDescriptor _depthStencilDescriptor;
 
     // Internal structure that has the information for the batches

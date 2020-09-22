@@ -67,12 +67,8 @@ public:
         TextureBackend* depthAttachment, 
         TextureBackend* stencilAttachhment) override;
 
-    /**
-     * Create an auto released DepthStencilState object.
-     * @param descriptor Specifies depth and stencil description.
-     * @return An auto release DepthStencilState object.
-     */
-    virtual DepthStencilState* createDepthStencilState(const DepthStencilDescriptor& descriptor) override;
+
+    virtual DepthStencilState* newDepthStencilState() override;
 
     /**
      * New a RenderPipeline object, not auto released.
