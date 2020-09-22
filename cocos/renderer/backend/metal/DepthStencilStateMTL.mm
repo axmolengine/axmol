@@ -135,7 +135,7 @@ void DepthStencilStateMTL::update(const DepthStencilDescriptor& descriptor)
         return;
     }
     
-    MTLDepthStencilDescriptor* mtlDescriptor = [MTLDepthStencilDescriptor new];
+    MTLDepthStencilDescriptor* mtlDescriptor = [[MTLDepthStencilDescriptor alloc] init];
 
     if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::DEPTH))
         mtlDescriptor.depthCompareFunction = toMTLCompareFunction(descriptor.depthCompareFunction);

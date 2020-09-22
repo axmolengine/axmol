@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "tsl/robin_map.h"
 #import <Metal/Metal.h>
 
 CC_BACKEND_BEGIN
@@ -71,7 +72,8 @@ private:
     PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = { PixelFormat::NONE };
     PixelFormat _depthAttachmentFormat = PixelFormat::NONE;
     PixelFormat _stencilAttachmentFormat = PixelFormat::NONE;
-    NSMutableDictionary* _mtlRenderPipelineStateCache = nil;
+    
+    tsl::robin_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
 };
 
 // end of _metal group

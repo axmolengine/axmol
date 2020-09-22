@@ -159,8 +159,6 @@ namespace
 RenderPipelineMTL::RenderPipelineMTL(id<MTLDevice> mtlDevice)
 : _mtlDevice(mtlDevice)
 {
-    _mtlRenderPipelineStateCache = [NSMutableDictionary dictionaryWithCapacity:100];
-    [_mtlRenderPipelineStateCache retain];
 }
 
 void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineDescriptor & pipelineDescirptor)
@@ -219,11 +217,9 @@ void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineD
     }
     
     unsigned int hash = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
-    NSNumber* key = @(hash);
-    id obj = [_mtlRenderPipelineStateCache objectForKey:key];
-    if (obj != nil)
-    {
-        _mtlRenderPipelineState = obj;
+    auto it = _mtlStateCache.find(hash);
+    if(it != _mtlStateCache.end()) {
+        _mtlRenderPipelineState = it->second;
         return;
     }
     
@@ -240,17 +236,14 @@ void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineD
         NSLog(@"Can not create renderpipeline state: %@", error);
     
     [_mtlRenderPipelineDescriptor release];
-    [_mtlRenderPipelineStateCache setObject:_mtlRenderPipelineState forKey:key];
+    
+    _mtlStateCache.emplace(hash, _mtlRenderPipelineState);
 }
 
 RenderPipelineMTL::~RenderPipelineMTL()
 {
-    NSArray* values = [_mtlRenderPipelineStateCache allValues];
-    for(id value in values)
-    {
-        [value release];
-    }
-    [_mtlRenderPipelineStateCache release];
+    for(auto& item : _mtlStateCache)
+        [item.second release];
 }
 
 void RenderPipelineMTL::setVertexLayout(MTLRenderPipelineDescriptor* mtlDescriptor, const PipelineDescriptor& descriptor)
