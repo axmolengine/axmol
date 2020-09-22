@@ -233,10 +233,10 @@ void CommandBufferMTL::beginRenderPass(const RenderTarget* renderTarget, const R
 //    [_mtlRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
 }
 
-// Now, the depth state is shared for all draw calls per frame
+
 void CommandBufferMTL::updateDepthStencilState(const DepthStencilDescriptor& descriptor)
-{ // TODO:
-    
+{
+    _depthStencilStateMTL->update(descriptor);
 }
 
 void CommandBufferMTL::updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor)

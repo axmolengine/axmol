@@ -775,15 +775,6 @@ void Renderer::readPixels(backend::RenderTarget* rt, std::function<void(const ba
     _commandBuffer->readPixels(rt, std::move(callback));
 }
 
-//void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor)
-//{ // TODO: refactor to CommandBuffer::updatePipelineState
-//    _renderPipeline->update(pipelineDescriptor, _currentRT);
-//    
-//#ifdef CC_USE_METAL
-//    _commandBuffer->setRenderPipeline(_renderPipeline);
-//#endif
-//}
-
 void Renderer::beginRenderPass()
 {
     _commandBuffer->beginRenderPass(_currentRT, _renderPassParams);
