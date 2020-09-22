@@ -254,7 +254,7 @@ protected:
     bool _initialized = false;
 
     // encrpyt args
-    bool _encryptEnabled;
+    bool _encryptEnabled = false;
     std::string _key;
     std::string _iv;
 };
