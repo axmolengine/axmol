@@ -175,6 +175,16 @@ CommandBufferMTL::~CommandBufferMTL()
     dispatch_semaphore_signal(_frameBoundarySemaphore);
 }
 
+void CommandBufferMTL::setDepthStencilState(DepthStencilState* depthStencilState)
+{
+    _depthStencilStateMTL = static_cast<DepthStencilStateMTL*>(depthStencilState);
+}
+
+void CommandBufferMTL::setRenderPipeline(RenderPipeline* renderPipeline)
+{
+    _renderPipelineMTL = static_cast<RenderPipelineMTL*>(renderPipeline);
+}
+
 void CommandBufferMTL::beginFrame()
 {
     _autoReleasePool = [[NSAutoreleasePool alloc] init];
@@ -222,11 +232,15 @@ void CommandBufferMTL::beginRenderPass(const RenderTarget* renderTarget, const R
 //    [_mtlRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
 }
 
-void CommandBufferMTL::setRenderPipeline(RenderPipeline* renderPipeline)
+
+void CommandBufferMTL::updateDepthStencilState(const DepthStencilDescriptor& descriptor)
 {
-    CC_SAFE_RETAIN(renderPipeline);
-    CC_SAFE_RELEASE(_renderPipelineMTL);
-    _renderPipelineMTL = static_cast<RenderPipelineMTL*>(renderPipeline);
+    _depthStencilStateMTL->update(descriptor);
+}
+
+void CommandBufferMTL::updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor)
+{
+    _renderPipelineMTL->update(rt, descriptor);
     [_mtlRenderEncoder setRenderPipelineState:_renderPipelineMTL->getMTLRenderPipelineState()];
 }
 
@@ -389,23 +403,15 @@ void CommandBufferMTL::afterDraw()
     CC_SAFE_RELEASE_NULL(_programState);
 }
 
-void CommandBufferMTL::setDepthStencilState(DepthStencilState* depthStencilState)
-{
-    if (depthStencilState)
-        _mtlDepthStencilState = static_cast<DepthStencilStateMTL*>(depthStencilState)->getMTLDepthStencilState();
-    else
-        _mtlDepthStencilState = nil;
-    
-}
-
 void CommandBufferMTL::prepareDrawing() const
 {
     setUniformBuffer();
     setTextures();
     
-    if (_mtlDepthStencilState)
+    auto mtlDepthStencilState = _depthStencilStateMTL->getMTLDepthStencilState();
+    if (mtlDepthStencilState)
     {
-        [_mtlRenderEncoder setDepthStencilState:_mtlDepthStencilState];
+        [_mtlRenderEncoder setDepthStencilState:mtlDepthStencilState];
         [_mtlRenderEncoder setStencilFrontReferenceValue:_stencilReferenceValueFront
                                       backReferenceValue:_stencilReferenceValueBack];
     }

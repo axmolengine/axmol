@@ -54,7 +54,18 @@ class CommandBufferGL final : public CommandBuffer
 public:
     CommandBufferGL();
     ~CommandBufferGL();
-    
+    /**
+     * Set depthStencil status once
+     * @param depthStencilState Specifies the depth and stencil status
+     */
+    virtual void setDepthStencilState(DepthStencilState* depthStencilState) override;
+
+    /**
+     * Sets the current render pipeline state object once
+     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render pass.
+     */
+    virtual void setRenderPipeline(RenderPipeline* renderPipeline) override;
+
     /// @name Setters & Getters
     /**
      * @brief Indicate the begining of a frame
@@ -68,10 +79,16 @@ public:
     virtual void beginRenderPass(const RenderTarget* rt, const RenderPassParams& descriptor) override;
 
     /**
-     * Sets the current render pipeline state object.
-     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render pass.
+     * Update depthStencil status, improvment: for metal backend cache it
+     * @param depthStencilState Specifies the depth and stencil status
      */
-    virtual void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    virtual void updateDepthStencilState(const DepthStencilDescriptor& descriptor) override;
+
+    /**
+     * Update render pipeline status
+     * @param depthStencilState Specifies the depth and stencil status
+     */
+    virtual void updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor) override;
     
     /**
      * Fixed-function state
@@ -156,12 +173,6 @@ public:
      * @param height Specifies the height of the scissor box
      */
     virtual void setScissorRect(bool isEnabled, float x, float y, float width, float height) override;
-
-    /**
-     * Set depthStencil status
-     * @param depthStencilState Specifies the depth and stencil status
-     */
-    virtual void setDepthStencilState(DepthStencilState* depthStencilState) override;
 
     /**
      * Get a screen snapshot

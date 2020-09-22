@@ -43,7 +43,7 @@ class RenderTarget;
 class RenderPipeline : public cocos2d::Ref
 {
 public:
-    virtual void update(const PipelineDescriptor & pipelineDescirptor, const RenderTarget* renderTarget) = 0;
+    virtual void update(const RenderTarget*, const PipelineDescriptor & pipelineDescirptor) = 0;
     
 protected:
     virtual ~RenderPipeline() = default;

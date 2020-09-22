@@ -27,6 +27,8 @@
 #include "../DepthStencilState.h"
 #import <Metal/Metal.h>
 
+#include "tsl/robin_map.h"
+
 CC_BACKEND_BEGIN
 
 /**
@@ -45,8 +47,12 @@ public:
     /**
      * @param mtlDevice The device for which MTLDepthStencilState object was created.
      */
-    DepthStencilStateMTL(id<MTLDevice> mtlDevice, const DepthStencilDescriptor& descriptor);
+    DepthStencilStateMTL(id<MTLDevice> mtlDevice);
     ~DepthStencilStateMTL();
+    
+    uint32_t hashValue() const;
+    
+    void update(const DepthStencilDescriptor& descriptor) override;
     
     /// @name Setters & Getters
     /**
@@ -55,7 +61,12 @@ public:
     inline id<MTLDepthStencilState> getMTLDepthStencilState() const { return _mtlDepthStencilState; }
     
 private:
+    id<MTLDevice> _mtlDevice = nil;
+    
+    // the current depth stencil state
     id<MTLDepthStencilState> _mtlDepthStencilState = nil;
+    
+    tsl::robin_map<uint32_t,id<MTLDepthStencilState>> _mtlStateCache;
 };
 
 // end of _metal group

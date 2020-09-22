@@ -97,12 +97,7 @@ public:
         TextureBackend* depthAttachment = nullptr,
         TextureBackend* stencilAttachhment = nullptr) = 0;
 
-    /**
-     * Create an auto released DepthStencilState object.
-     * @param descriptor Specifies depth and stencil description.
-     * @return An auto release DepthStencilState object.
-     */
-    virtual DepthStencilState* createDepthStencilState(const DepthStencilDescriptor& descriptor) = 0;
+    virtual DepthStencilState* newDepthStencilState() = 0;
 
     /**
      * New a RenderPipeline object, not auto released.

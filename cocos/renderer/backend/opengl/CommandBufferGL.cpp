@@ -74,7 +74,6 @@ CommandBufferGL::~CommandBufferGL()
 {
     if(_generatedFBO)
         glDeleteFramebuffers(1, &_generatedFBO);
-    CC_SAFE_RELEASE_NULL(_renderPipeline);
 
     cleanResources();
 
@@ -150,16 +149,32 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassPa
     CHECK_GL_ERROR_DEBUG();
 }
 
+void CommandBufferGL::setDepthStencilState(DepthStencilState* depthStencilState)
+{
+    _depthStencilStateGL = static_cast<DepthStencilStateGL*>(depthStencilState);
+}
+
 void CommandBufferGL::setRenderPipeline(RenderPipeline* renderPipeline)
 {
-    assert(renderPipeline != nullptr);
-    if (renderPipeline == nullptr)
-        return;
-    
-    RenderPipelineGL* rp = static_cast<RenderPipelineGL*>(renderPipeline);
-    rp->retain();
-    CC_SAFE_RELEASE(_renderPipeline);
-    _renderPipeline = rp;
+    _renderPipeline = static_cast<RenderPipelineGL*>(renderPipeline);
+}
+
+/**
+* Update depthStencil status, improvment: for metal backend cache it
+* @param depthStencilState Specifies the depth and stencil status
+*/
+void CommandBufferGL::updateDepthStencilState(const DepthStencilDescriptor& descriptor)
+{
+    _depthStencilStateGL->update(descriptor);
+}
+
+/**
+ * Update render pipeline status
+ * @param depthStencilState Specifies the depth and stencil status
+ */
+void CommandBufferGL::updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor)
+{
+    _renderPipeline->update(rt, descriptor);
 }
 
 void CommandBufferGL::setViewport(int x, int y, unsigned int w, unsigned int h)
@@ -234,18 +249,6 @@ void CommandBufferGL::endFrame()
 {
 }
 
-void CommandBufferGL::setDepthStencilState(DepthStencilState* depthStencilState)	
-{	
-    if (depthStencilState)	
-    {	
-        _depthStencilStateGL = static_cast<DepthStencilStateGL*>(depthStencilState);	
-    }	
-    else	
-    {	
-        _depthStencilStateGL = nullptr;	
-    }	
-}
-
 void CommandBufferGL::prepareDrawing() const
 {   
     const auto& program = _renderPipeline->getProgram();
@@ -255,11 +258,8 @@ void CommandBufferGL::prepareDrawing() const
     setUniforms(program);
 
     // Set depth/stencil state.
-    if (_depthStencilStateGL)
-    {
+    if (_depthStencilStateGL->isEnabled())
         _depthStencilStateGL->apply(_stencilReferenceValueFront, _stencilReferenceValueBack);
-    }
-        
     else
         DepthStencilStateGL::reset();
     

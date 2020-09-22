@@ -27,11 +27,9 @@ public:
     }
     void setTargetFlags(TargetBufferFlags flags) { _flags = flags; }
     TargetBufferFlags getTargetFlags() const { return _flags; }
-    void modifyTargetFlags(TargetBufferFlags flagsToAdd, TargetBufferFlags flagsToRemove)
-    {
-        _flags |= flagsToAdd;
-        _flags &= ~flagsToRemove;
-    }
+
+    void addFlag(TargetBufferFlags flag) { _flags |= flag; }
+    void removeFlag(TargetBufferFlags flag) { _flags &= ~flag; }
 
     virtual void bindFrameBuffer() const {};
     virtual void unbindFrameBuffer() const {};
