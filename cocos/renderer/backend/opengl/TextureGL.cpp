@@ -221,7 +221,7 @@ void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t heig
                 _textureInfo.internalFormat,
                 width,
                 height,
-                0,
+                0, // border
                 _textureInfo.format,
                 _textureInfo.type,
                 data);
@@ -244,7 +244,7 @@ void Texture2DGL::updateCompressedData(uint8_t *data, std::size_t width, std::si
                            _textureInfo.internalFormat,
                            (GLsizei)width,
                            (GLsizei)height,
-                           0,
+                           0, // border
                            dataLen,
                            data);
     CHECK_GL_ERROR_DEBUG();
@@ -351,14 +351,14 @@ void TextureCubeGL::updateFaceData(TextureCubeFace side, void *data, int index)
     CHECK_GL_ERROR_DEBUG();
     int i = static_cast<int>(side);
     glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-        0,                  // level
-        GL_RGBA,            // internal format
-        _width,              // width
-        _height,              // height
-        0,                  // border
-        _textureInfo.internalFormat,            // format
-        _textureInfo.type,  // type
-        data);              // pixel data
+        0, // level
+        _textureInfo.internalFormat,
+        _width,
+        _height,
+        0, // border
+        _textureInfo.format,
+        _textureInfo.type,
+        data);
 
     CHECK_GL_ERROR_DEBUG();
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
