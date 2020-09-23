@@ -115,116 +115,6 @@ namespace
                 return false;
         }
     }
-    
-    std::size_t getBytesPerRowETC(MTLPixelFormat pixleFormat, std::size_t width)
-    {
-        std::size_t bytesPerRow = 0;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        uint32_t bytesPerBlock = 0, blockWidth = 4;
-        switch (pixleFormat) {
-            case MTLPixelFormatETC2_RGB8:
-            case MTLPixelFormatETC2_RGB8A1:
-            case MTLPixelFormatEAC_R11Unorm:
-                bytesPerBlock = 8;
-                break;
-            case MTLPixelFormatEAC_RGBA8:
-            case MTLPixelFormatEAC_RG11Unorm:
-                bytesPerBlock = 16;
-                break;
-            default:
-                CCASSERT(false, "Not supported ETC format!");
-                return 0;
-        }
-        auto blocksPerRow = (width + (blockWidth - 1)) / blockWidth;
-        bytesPerRow = blocksPerRow * bytesPerBlock;
-#endif
-        return bytesPerRow;
-    }
-    
-    std::size_t getBytesPerRowASTC(MTLPixelFormat pixleFormat, std::size_t width)
-    {
-        std::size_t bytesPerRow = 0;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        // @ASTC: bytesPerBlock always 16
-        uint32_t bytesPerBlock = 16, blockWidth = 0;
-        switch (pixleFormat) {
-            case MTLPixelFormatASTC_4x4_sRGB:
-            case MTLPixelFormatASTC_4x4_LDR:
-            case MTLPixelFormatASTC_4x4_HDR:
-                blockWidth = 4;
-                break;
-            case MTLPixelFormatASTC_6x6_sRGB:
-            case MTLPixelFormatASTC_6x6_LDR:
-            case MTLPixelFormatASTC_6x6_HDR:
-                blockWidth = 6;
-                break;
-            case MTLPixelFormatASTC_8x8_sRGB:
-            case MTLPixelFormatASTC_8x8_LDR:
-            case MTLPixelFormatASTC_8x8_HDR:
-                blockWidth = 8;
-                break;
-            default:
-                CCASSERT(false, "Not supported ASTC format!");
-                return 0;
-        }
-        auto blocksPerRow = (width + (blockWidth - 1)) / blockWidth;
-        bytesPerRow = blocksPerRow * bytesPerBlock;
-#endif
-        return bytesPerRow;
-    }
-    
-    std::size_t getBytesPerRowS3TC(MTLPixelFormat pixleFormat, std::size_t width)
-    {
-        std::size_t bytesPerRow = 0;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-        uint32_t bytesPerBlock = 0, blockWidth = 4;
-        switch (pixleFormat) {
-            case MTLPixelFormatBC1_RGBA:
-                bytesPerBlock = 8;
-                break;
-            case MTLPixelFormatBC2_RGBA:
-            case MTLPixelFormatBC3_RGBA:
-                bytesPerBlock = 16;
-                break;
-            default:
-                return 0;
-        }
-        auto blocksPerRow = (width + (blockWidth - 1)) / blockWidth;
-        bytesPerRow = blocksPerRow * bytesPerBlock;
-#endif
-        return bytesPerRow;
-    }
-    
-    // TODO: tidy APIs, compression pixelFormat and non-compression pixelFormat
-    std::size_t getBytesPerRowMTL(PixelFormat textureFormat, std::size_t width, std::size_t bitsPerElement)
-    {
-        MTLPixelFormat pixelFormat = UtilsMTL::toMTLPixelFormat(textureFormat);
-        std::size_t bytesPerRow = 0;
-        
-        if(textureFormat >= PixelFormat::PVRTC4 &&
-           textureFormat <= PixelFormat::PVRTC2A)
-        {
-            bytesPerRow = 0;
-        }
-        else if (textureFormat == PixelFormat::ETC1 || textureFormat == PixelFormat::ETC2_RGBA || textureFormat == PixelFormat::ETC2_RGB)
-        {
-            bytesPerRow = getBytesPerRowETC(pixelFormat, width);
-        }
-        else if (textureFormat == PixelFormat::ASTC4x4 || textureFormat == PixelFormat::ASTC6x6 || textureFormat == PixelFormat::ASTC8x8)
-        {
-            bytesPerRow = getBytesPerRowASTC(pixelFormat, width);
-        }
-        else if(textureFormat >= PixelFormat::S3TC_DXT1 &&
-                textureFormat <= PixelFormat::S3TC_DXT5)
-        {
-            bytesPerRow = getBytesPerRowS3TC(pixelFormat, width);
-        }
-        else
-        {
-            bytesPerRow = width * bitsPerElement / 8;
-        }
-        return bytesPerRow;
-    }
 }
 
 /// CLASS TextureInfoMTL
@@ -334,6 +224,8 @@ void TextureMTL::updateTextureDescriptor(const cocos2d::backend::TextureDescript
     _textureInfo._descriptor = descriptor;
     _textureInfo.ensure(index, MTL_TEXTURE_2D);
     updateSamplerDescriptor(descriptor.samplerDescriptor);
+    
+    // TODO: Metal doesn't support RGB888/RGBA4444, so should convert to RGBA888;
     if (PixelFormat::RGB8 == _textureFormat)
     {
         _bitsPerPixel = 4 * 8;
@@ -363,7 +255,7 @@ void TextureMTL::updateSubData(std::size_t xoffset, std::size_t yoffset, std::si
                                  width * height,
                                  _textureFormat, &convertedData);
     
-    std::size_t bytesPerRow = PixelFormatUtils::computeRowPitch(_textureFormat, width);
+    auto bytesPerRow = PixelFormatUtils::computeRowPitch(_textureFormat, width);
     
     [mtlTexture replaceRegion:region
                    mipmapLevel:level

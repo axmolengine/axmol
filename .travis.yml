@@ -15,7 +15,6 @@ jobs:
       language: android
     # linux
     - os: linux
-      dist: xenial
       env: 
         - BUILD_TARGET=linux 
         - GEN_BINDING_AND_COCOSFILE=false
