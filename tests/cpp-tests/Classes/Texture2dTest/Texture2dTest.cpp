@@ -108,8 +108,8 @@ Texture2DTests::Texture2DTests()
 
     ADD_TEST_CASE(TextureConvertRGB888);
     ADD_TEST_CASE(TextureConvertRGBA8888);
-    ADD_TEST_CASE(TextureConvertI8);
-    ADD_TEST_CASE(TextureConvertAI88);
+    ADD_TEST_CASE(TextureConvertL8);
+    ADD_TEST_CASE(TextureConvertLA8);
 };
 
 //------------------------------------------------------------------
@@ -2408,8 +2408,8 @@ void TextureConvertRGB888::onEnter()
     addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3*s.width/9, s.height/2+32, img, backend::PixelFormat::RGB565);
     addImageToDemo(*this, 4*s.width/9, s.height/2-32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::I8);
-    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::AI8);
+    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::L8);
+    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::LA8);
     addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB5A1);
     
@@ -2442,8 +2442,8 @@ void TextureConvertRGBA8888::onEnter()
     addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3*s.width/9, s.height/2+32, img, backend::PixelFormat::RGB565);
     addImageToDemo(*this, 4*s.width/9, s.height/2-32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::I8);
-    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::AI8);
+    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::L8);
+    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::LA8);
     addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB5A1);
     
@@ -2461,8 +2461,8 @@ std::string TextureConvertRGBA8888::subtitle() const
 {
     return "RGBA8888,RGB888,RGB565,A8,I8,AI88,RGBA4444,RGB5A1";
 }
-//TextureConvertI8
-void TextureConvertI8::onEnter()
+//TextureConvertL8
+void TextureConvertL8::onEnter()
 {
     TextureDemo::onEnter();
     
@@ -2476,8 +2476,8 @@ void TextureConvertI8::onEnter()
     addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3*s.width/9, s.height/2+32, img, backend::PixelFormat::RGB565);
     addImageToDemo(*this, 4*s.width/9, s.height/2-32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::I8);
-    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::AI8);
+    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::L8);
+    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::LA8);
     addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB5A1);
     
@@ -2486,17 +2486,17 @@ void TextureConvertI8::onEnter()
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-std::string TextureConvertI8::title() const
+std::string TextureConvertL8::title() const
 {
     return "I8 convert test";
 }
 
-std::string TextureConvertI8::subtitle() const
+std::string TextureConvertL8::subtitle() const
 {
     return "RGBA8888,RGB888,RGB565,A8,I8,AI88,RGBA4444,RGB5A1";
 }
-//TextureConvertAI88
-void TextureConvertAI88::onEnter()
+//TextureConvertLA8
+void TextureConvertLA8::onEnter()
 {
     TextureDemo::onEnter();
     
@@ -2510,8 +2510,8 @@ void TextureConvertAI88::onEnter()
     addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3*s.width/9, s.height/2+32, img, backend::PixelFormat::RGB565);
     addImageToDemo(*this, 4*s.width/9, s.height/2-32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::I8);
-    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::AI8);
+    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::L8);
+    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::LA8);
     addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB5A1);
     
@@ -2520,12 +2520,12 @@ void TextureConvertAI88::onEnter()
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-std::string TextureConvertAI88::title() const
+std::string TextureConvertLA8::title() const
 {
     return "AI88 convert test";
 }
 
-std::string TextureConvertAI88::subtitle() const
+std::string TextureConvertLA8::subtitle() const
 {
     return "RGBA8888,RGB888,RGB565,A8,I8,AI88,RGBA4444,RGB5A1";
 }

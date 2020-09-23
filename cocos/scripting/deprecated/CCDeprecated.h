@@ -876,8 +876,8 @@ CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_RGBA8
 CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_RGB888 = backend::PixelFormat::RGB8;
 CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_RGB565 = backend::PixelFormat::RGB565;
 CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_A8 = backend::PixelFormat::A8;
-CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_I8 = backend::PixelFormat::I8;
-CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_AI88 = backend::PixelFormat::AI8;
+CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_I8 = backend::PixelFormat::L8;
+CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_AI88 = backend::PixelFormat::LA8;
 CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_RGBA4444 = backend::PixelFormat::RGBA4;
 CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_RGB5A1 = backend::PixelFormat::RGB5A1;
 CC_DEPRECATED_ATTRIBUTE const backend::PixelFormat kCCTexture2DPixelFormat_PVRTC4 = backend::PixelFormat::PVRTC4;

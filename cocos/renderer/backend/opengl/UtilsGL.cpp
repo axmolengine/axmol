@@ -131,8 +131,8 @@ static GPUTextureFormatInfo s_textureFormats[] =
     { GL_RGB8,                                     GL_SRGB8,                                     GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_BYTE,                }, // RGB8
     { GL_RGB565,                                   GL_ZERO,                                      GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_SHORT_5_6_5/*_REV*/, }, // R5G6B5 TO-COMFIRM
     { GL_ALPHA,                                    GL_ZERO,                                      GL_ALPHA,                                    GL_ALPHA,                                    GL_UNSIGNED_BYTE,                }, // A8
-    { GL_LUMINANCE,                                GL_ZERO,                                      GL_LUMINANCE,                                GL_LUMINANCE,                                GL_UNSIGNED_BYTE,                }, // I8
-    { GL_LUMINANCE_ALPHA,                          GL_ZERO,                                      GL_LUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_UNSIGNED_BYTE,               }, // AI8
+    { GL_LUMINANCE,                                GL_ZERO,                                      GL_LUMINANCE,                                GL_LUMINANCE,                                GL_UNSIGNED_BYTE,                }, // L8
+    { GL_LUMINANCE_ALPHA,                          GL_ZERO,                                      GL_LUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_UNSIGNED_BYTE,               }, // LA8
     { GL_RGBA4,                                    GL_ZERO,                                      GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_SHORT_4_4_4_4/*_REV*/}, // RGBA4 TO-COMFIRM
     { GL_RGB5_A1,                                  GL_ZERO,                                      GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_SHORT_5_5_5_1/*_REV*/}, // RGB5A1 TO-COMFIRM
 

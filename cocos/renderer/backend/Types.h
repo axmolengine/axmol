@@ -126,10 +126,10 @@ enum class PixelFormat : uint32_t
     RGB565,
     //! 8-bit textures used as masks
     A8,
-    //! 8-bit intensity texture
-    I8,
-    //! 16-bit textures used as masks
-    AI8,
+    //! 8-bit Luminance texture
+    L8,
+    //! 16-bit Luminance with alpha used as masks
+    LA8,
     //! 16-bit textures: RGBA4444
     RGBA4,
     //! 16-bit textures: RGB5A1

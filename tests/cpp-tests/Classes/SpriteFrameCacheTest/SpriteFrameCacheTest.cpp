@@ -53,7 +53,7 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
     // load atlas definition with specified PixelFormat and check that it matches to expected format
     loadSpriteFrames("Images/sprite_frames_test/test_A8.plist", backend::PixelFormat::A8);
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
-    loadSpriteFrames("Images/sprite_frames_test/test_AI88.plist", backend::PixelFormat::AI8);
+    loadSpriteFrames("Images/sprite_frames_test/test_AI88.plist", backend::PixelFormat::LA8);
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
     loadSpriteFrames("Images/sprite_frames_test/test_RGB565.plist", backend::PixelFormat::RGB565);
     loadSpriteFrames("Images/sprite_frames_test/test_RGB888.plist", backend::PixelFormat::RGB8);

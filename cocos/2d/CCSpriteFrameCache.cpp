@@ -296,9 +296,9 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dict, const std::
         {"RGB565", backend::PixelFormat::RGB565},
         {"A8", backend::PixelFormat::A8},
         {"ALPHA", backend::PixelFormat::A8},
-        {"I8", backend::PixelFormat::I8},
-        {"AI88", backend::PixelFormat::AI8},
-        {"ALPHA_INTENSITY", backend::PixelFormat::AI8},
+        {"I8", backend::PixelFormat::L8},
+        {"AI88", backend::PixelFormat::LA8},
+        {"ALPHA_INTENSITY", backend::PixelFormat::LA8},
         //{"BGRA8888", backend::PixelFormat::BGRA8}, no Image conversion RGBA -> BGRA
         {"RGB888", backend::PixelFormat::RGB8}
     };

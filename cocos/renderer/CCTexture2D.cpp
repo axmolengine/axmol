@@ -242,8 +242,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     case PixelFormat::RGB5A1:
     case PixelFormat::RGBA4:
 #endif
-    case PixelFormat::I8:
-    case PixelFormat::AI8:
+    case PixelFormat::L8:
+    case PixelFormat::LA8:
         //TODO: conversion RGBA8888 -> I8(AI88) -> RGBA8888 may happends
         renderFormat = PixelFormat::RGBA8;
         break;
@@ -635,13 +635,13 @@ const char* Texture2D::getStringForFormat() const
         case backend::PixelFormat::RGB5A1:
             return  "RGB5A1";
 
-        case backend::PixelFormat::AI8:
+        case backend::PixelFormat::LA8:
             return  "AI88";
 
         case backend::PixelFormat::A8:
             return  "A8";
 
-        case backend::PixelFormat::I8:
+        case backend::PixelFormat::L8:
             return  "I8";
 
         case backend::PixelFormat::PVRTC4:

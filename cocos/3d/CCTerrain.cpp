@@ -379,7 +379,7 @@ float Terrain::getImageHeight(int pixel_x, int pixel_y) const
     case  backend::PixelFormat::RGB8:
         byte_stride = 3;
         break;
-    case backend::PixelFormat::I8:
+    case backend::PixelFormat::L8:
         byte_stride = 1;
         break;
     default:

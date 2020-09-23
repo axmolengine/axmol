@@ -243,8 +243,8 @@ namespace
         _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB565,      backend::PixelFormat::RGB565),
         _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB888,      backend::PixelFormat::RGB8),
         _pixel2_formathash::value_type(PVR2TexturePixelFormat::A8,          backend::PixelFormat::A8),
-        _pixel2_formathash::value_type(PVR2TexturePixelFormat::I8,          backend::PixelFormat::I8),
-        _pixel2_formathash::value_type(PVR2TexturePixelFormat::AI88,            backend::PixelFormat::AI8),
+        _pixel2_formathash::value_type(PVR2TexturePixelFormat::I8,          backend::PixelFormat::L8),
+        _pixel2_formathash::value_type(PVR2TexturePixelFormat::AI88,            backend::PixelFormat::LA8),
             
         _pixel2_formathash::value_type(PVR2TexturePixelFormat::PVRTC2BPP_RGBA,      backend::PixelFormat::PVRTC2A),
         _pixel2_formathash::value_type(PVR2TexturePixelFormat::PVRTC4BPP_RGBA,      backend::PixelFormat::PVRTC4A),
@@ -264,8 +264,8 @@ namespace
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB565,      backend::PixelFormat::RGB565),
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB888,      backend::PixelFormat::RGB8),
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::A8,          backend::PixelFormat::A8),
-        _pixel3_formathash::value_type(PVR3TexturePixelFormat::L8,          backend::PixelFormat::I8),
-        _pixel3_formathash::value_type(PVR3TexturePixelFormat::LA88,        backend::PixelFormat::AI8),
+        _pixel3_formathash::value_type(PVR3TexturePixelFormat::L8,          backend::PixelFormat::L8),
+        _pixel3_formathash::value_type(PVR3TexturePixelFormat::LA88,        backend::PixelFormat::LA8),
             
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC2BPP_RGB,       backend::PixelFormat::PVRTC2),
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC2BPP_RGBA,      backend::PixelFormat::PVRTC2A),
@@ -1008,7 +1008,7 @@ bool Image::initWithJpgData(uint8_t * data, ssize_t dataLen)
         // we only support RGB or grayscale
         if (cinfo.jpeg_color_space == JCS_GRAYSCALE)
         {
-            _pixelFormat = backend::PixelFormat::I8;
+            _pixelFormat = backend::PixelFormat::L8;
         }else
         {
             cinfo.out_color_space = JCS_RGB;
@@ -1136,10 +1136,10 @@ bool Image::initWithPngData(uint8_t * data, ssize_t dataLen)
         switch (color_type)
         {
         case PNG_COLOR_TYPE_GRAY:
-            _pixelFormat = backend::PixelFormat::I8;
+            _pixelFormat = backend::PixelFormat::L8;
             break;
         case PNG_COLOR_TYPE_GRAY_ALPHA:
-            _pixelFormat = backend::PixelFormat::AI8;
+            _pixelFormat = backend::PixelFormat::LA8;
             break;
         case PNG_COLOR_TYPE_RGB:
             _pixelFormat = backend::PixelFormat::RGB8;
@@ -1303,7 +1303,7 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
             // gray
             if (8 == tgaData->pixelDepth)
             {
-                _pixelFormat = backend::PixelFormat::I8;
+                _pixelFormat = backend::PixelFormat::L8;
             }
             else
             {
