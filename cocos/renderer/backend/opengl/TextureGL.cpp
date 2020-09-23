@@ -154,9 +154,9 @@ void Texture2DGL::initWithZeros()
     // Ensure the final data size at least 4 byte
     _width = (std::max)(_width, (uint32_t)1);
     _height = (std::max)(_height, (uint32_t)1);
-    _bitsPerElement = (std::max)(_bitsPerElement, (uint8_t)(8 * 4));
+    _bitsPerPixel = (std::max)(_bitsPerPixel, (uint8_t)(8 * 4));
 
-    auto size = _width * _height * _bitsPerElement / 8;
+    auto size = _width * _height * _bitsPerPixel / 8;
     uint8_t* data = (uint8_t*)malloc(size);
     memset(data, 0, size);
     updateData(data, _width, _height, 0);
@@ -192,7 +192,7 @@ void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t heig
     auto mipmapEnalbed = isMipmapEnabled(_textureInfo.minFilterGL) || isMipmapEnabled(_textureInfo.magFilterGL);
     if(!mipmapEnalbed)
     {
-        unsigned int bytesPerRow = width * _bitsPerElement / 8;
+        unsigned int bytesPerRow = width * _bitsPerPixel / 8;
 
         if(bytesPerRow % 8 == 0)
         {

@@ -54,3 +54,5 @@
 #   define UTILS_LIKELY( exp )    (!!(exp))
 #   define UTILS_UNLIKELY( exp )  (!!(exp))
 #endif
+
+#define CC_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))

@@ -22,13 +22,94 @@
  THE SOFTWARE.
  ****************************************************************************/
  
-#include "CCTextureUtils.h"
+#include "renderer/backend/TextureUtils.h"
 
 
 NS_CC_BEGIN
 
 namespace backend { namespace PixelFormatUtils {
     
+    ///
+    struct EncodingType
+    {
+        enum Enum ///
+        {
+            Unorm,
+            Int,
+            Uint,
+            Float,
+            Snorm,
+            Count
+        };
+    };
+
+    static const PixelBlockInfo s_pixelBlockInfo[] =
+    {
+        //  +--------------------------------------------- bpp
+        //  |   +----------------------------------------- block width
+        //  |   |  +-------------------------------------- block height
+        //  |   |  |   +---------------------------------- block size
+        //  |   |  |   |  +------------------------------- min blocks x
+        //  |   |  |   |  |  +---------------------------- min blocks y
+        //  |   |  |   |  |  |   +------------------------ depth bits
+        //  |   |  |   |  |  |   |  +--------------------- stencil bits
+        //  |   |  |   |  |  |   |  |   +---+---+---+----- r, g, b, a bits
+        //  |   |  |   |  |  |   |  |   r   g   b   a  +-- encoding type
+        //  |   |  |   |  |  |   |  |   |   |   |   |  |
+        {   4,  4, 4,  8, 2, 2,  0, 0,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // PVRTC4
+        {   4,  4, 4,  8, 2, 2,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // PVRTC4A
+        {   2,  8, 4,  8, 2, 2,  0, 0,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // PVRTC2
+        {   2,  8, 4,  8, 2, 2,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // PVTC2A
+        // {   4,  4, 4,  8, 2, 2,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // PVRTC4A v2
+        // {   2,  8, 4,  8, 2, 2,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // PVTC2A v2
+        {   4,  4, 4,  8, 1, 1,  0, 0,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // ETC1
+        {   4,  4, 4,  8, 1, 1,  0, 0,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // ETC2
+        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ETC2A
+        {   4,  4, 4,  8, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // S3TC_DXT1
+        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // S3TC_DXT3
+        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // S3TC_DXT5
+        {   4,  4, 4,  8, 1, 1,  0, 0,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // ATC_RGB
+        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ATC_EXPLICIT_ALPHA
+        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ATC_INTERPOLATED_ALPHA
+        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC4x4
+        {   6,  5, 5, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC5x5
+        {   4,  6, 6, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC6x6
+        {   4,  8, 5, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC8x5
+        {   3,  8, 6, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC8x6
+        {   2,  8, 8, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC8x8
+        {   3, 10, 5, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC10x5
+        {  32,  1, 1,  4, 1, 1,  0, 0,  8,  8,  8,  8, uint8_t(EncodingType::Unorm) }, // RGBA8
+        {  32,  1, 1,  4, 1, 1,  0, 0,  8,  8,  8,  8, uint8_t(EncodingType::Unorm) }, // BGRA8
+        {  24,  1, 1,  3, 1, 1,  0, 0,  8,  8,  8,  0, uint8_t(EncodingType::Unorm) }, // RGB8
+        {  16,  1, 1,  2, 1, 1,  0, 0,  5,  6,  5,  0, uint8_t(EncodingType::Unorm) }, // R5G6B5
+        {   8,  1, 1,  1, 1, 1,  0, 0,  0,  0,  0,  8, uint8_t(EncodingType::Unorm) }, // A8
+        {   8,  1, 1,  1, 1, 1,  0, 0,  8,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // I8
+        {  16,  1, 1,  2, 1, 1,  0, 0,  8,  8,  0,  0, uint8_t(EncodingType::Unorm) }, // AI8
+        {  16,  1, 1,  2, 1, 1,  0, 0,  4,  4,  4,  4, uint8_t(EncodingType::Unorm) }, // RGBA4
+        {  16,  1, 1,  2, 1, 1,  0, 0,  5,  5,  5,  1, uint8_t(EncodingType::Unorm) }, // RGB5A1
+        {  16,  1, 1,  2, 1, 1,  0, 0,  5,  6,  5,  0, uint8_t(EncodingType::Unorm) }, // MTL_B5G6R5
+        {  16,  1, 1,  2, 1, 1,  0, 0,  5,  5,  5,  1, uint8_t(EncodingType::Unorm) }, // MTL_BGR5A1
+        {  16,  1, 1,  2, 1, 1,  0, 0,  4,  4,  4,  4, uint8_t(EncodingType::Unorm) }, // MTL_ABGR4
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
+        {  32,  1, 1,  4, 1, 1, 24, 8,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // D24S8
+#else
+        {  64,  1, 1,  8, 1, 1, 32, 8,  0,  0,  0,  0, uint8_t(EncodingType::Float) }, // D32F8 iOS
+#endif
+    };
+
+    static_assert(_countof(s_pixelBlockInfo) == (int)PixelFormat::COUNT, "The texture block info table incomplete!");
+
+    //////////////////////////////////////////////////////////////////////////
+    //pixel block info function
+    const PixelBlockInfo& getBlockInfo(PixelFormat format)
+    {
+        if(UTILS_LIKELY(format < PixelFormat::COUNT) )
+            return s_pixelBlockInfo[(uint32_t)format];
+
+        static const PixelBlockInfo s_invalidInfo = {};
+        return s_invalidInfo;
+    }
+
     //////////////////////////////////////////////////////////////////////////
     //convertor function
     
@@ -594,12 +675,12 @@ namespace backend { namespace PixelFormatUtils {
     {
         switch (format)
         {
-            case PixelFormat::RGBA8888:
+            case PixelFormat::RGBA8:
                 *outDataLen = dataLen*4;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertI8ToRGBA8888(data, dataLen, *outData);
                 break;
-            case PixelFormat::RGB888:
+            case PixelFormat::RGB8:
                 *outDataLen = dataLen*3;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertI8ToRGB888(data, dataLen, *outData);
@@ -609,12 +690,12 @@ namespace backend { namespace PixelFormatUtils {
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertI8ToRGB565(data, dataLen, *outData);
                 break;
-            case PixelFormat::AI88:
+            case PixelFormat::AI8:
                 *outDataLen = dataLen*2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertI8ToAI88(data, dataLen, *outData);
                 break;
-            case PixelFormat::RGBA4444:
+            case PixelFormat::RGBA4:
                 *outDataLen = dataLen*2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertI8ToRGBA4444(data, dataLen, *outData);
@@ -645,7 +726,7 @@ namespace backend { namespace PixelFormatUtils {
                 break;
             default:
                 // unsupported conversion or don't need to convert
-                if (format != PixelFormat::AUTO && format != PixelFormat::I8)
+                if (format != PixelFormat::I8)
                 {
                     CCLOG("Can not convert image format PixelFormat::I8 to format ID:%d, we will use it's origin format PixelFormat::I8", static_cast<int>(format));
                 }
@@ -662,12 +743,12 @@ namespace backend { namespace PixelFormatUtils {
     {
         switch (format)
         {
-            case PixelFormat::RGBA8888:
+            case PixelFormat::RGBA8:
                 *outDataLen = dataLen*2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertAI88ToRGBA8888(data, dataLen, *outData);
                 break;
-            case PixelFormat::RGB888:
+            case PixelFormat::RGB8:
                 *outDataLen = dataLen/2*3;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertAI88ToRGB888(data, dataLen, *outData);
@@ -687,7 +768,7 @@ namespace backend { namespace PixelFormatUtils {
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertAI88ToI8(data, dataLen, *outData);
                 break;
-            case PixelFormat::RGBA4444:
+            case PixelFormat::RGBA4:
                 *outDataLen = dataLen;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertAI88ToRGBA4444(data, dataLen, *outData);
@@ -714,14 +795,14 @@ namespace backend { namespace PixelFormatUtils {
                 break;
             default:
                 // unsupported conversion or don't need to convert
-                if (format != PixelFormat::AUTO && format != PixelFormat::AI88)
+                if (format != PixelFormat::AI8)
                 {
-                    CCLOG("Can not convert image format PixelFormat::AI88 to format ID:%d, we will use it's origin format PixelFormat::AI88", static_cast<int>(format));
+                    CCLOG("Can not convert image format PixelFormat::AI8 to format ID:%d, we will use it's origin format PixelFormat::AI8", static_cast<int>(format));
                 }
                 
                 *outData = (unsigned char*)data;
                 *outDataLen = dataLen;
-                return PixelFormat::AI88;
+                return PixelFormat::AI8;
                 break;
         }
         
@@ -732,7 +813,7 @@ namespace backend { namespace PixelFormatUtils {
     {
         switch (format)
         {
-            case PixelFormat::RGBA8888:
+            case PixelFormat::RGBA8:
                 *outDataLen = dataLen/3*4;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGB888ToRGBA8888(data, dataLen, *outData);
@@ -752,12 +833,12 @@ namespace backend { namespace PixelFormatUtils {
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGB888ToI8(data, dataLen, *outData);
                 break;
-            case PixelFormat::AI88:
+            case PixelFormat::AI8:
                 *outDataLen = dataLen/3*2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGB888ToAI88(data, dataLen, *outData);
                 break;
-            case PixelFormat::RGBA4444:
+            case PixelFormat::RGBA4:
                 *outDataLen = dataLen/3*2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGB888ToRGBA4444(data, dataLen, *outData);
@@ -784,14 +865,14 @@ namespace backend { namespace PixelFormatUtils {
                 break;
             default:
                 // unsupported conversion or don't need to convert
-                if (format != PixelFormat::AUTO && format != PixelFormat::RGB888)
+                if (format != PixelFormat::RGB8)
                 {
-                    CCLOG("Can not convert image format PixelFormat::RGB888 to format ID:%d, we will use it's origin format PixelFormat::RGB888", static_cast<int>(format));
+                    CCLOG("Can not convert image format PixelFormat::RGB8 to format ID:%d, we will use it's origin format PixelFormat::RGB8", static_cast<int>(format));
                 }
                 
                 *outData = (unsigned char*)data;
                 *outDataLen = dataLen;
-                return PixelFormat::RGB888;
+                return PixelFormat::RGB8;
         }
         return format;
     }
@@ -801,7 +882,7 @@ namespace backend { namespace PixelFormatUtils {
         
         switch (format)
         {
-            case PixelFormat::RGB888:
+            case PixelFormat::RGB8:
                 *outDataLen = dataLen/4*3;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGBA8888ToRGB888(data, dataLen, *outData);
@@ -821,12 +902,12 @@ namespace backend { namespace PixelFormatUtils {
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGBA8888ToI8(data, dataLen, *outData);
                 break;
-            case PixelFormat::AI88:
+            case PixelFormat::AI8:
                 *outDataLen = dataLen/2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGBA8888ToAI88(data, dataLen, *outData);
                 break;
-            case PixelFormat::RGBA4444:
+            case PixelFormat::RGBA4:
                 *outDataLen = dataLen/2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGBA8888ToRGBA4444(data, dataLen, *outData);
@@ -853,14 +934,14 @@ namespace backend { namespace PixelFormatUtils {
                 break;
             default:
                 // unsupported conversion or don't need to convert
-                if (format != PixelFormat::AUTO && format != PixelFormat::RGBA8888)
+                if (format != PixelFormat::RGBA8)
                 {
-                    CCLOG("Can not convert image format PixelFormat::RGBA8888 to format ID:%d, we will use it's origin format PixelFormat::RGBA8888", static_cast<int>(format));
+                    CCLOG("Can not convert image format PixelFormat::RGBA8 to format ID:%d, we will use it's origin format PixelFormat::RGBA8", static_cast<int>(format));
                 }
                 
                 *outData = (unsigned char*)data;
                 *outDataLen = dataLen;
-                return PixelFormat::RGBA8888;
+                return PixelFormat::RGBA8;
         }
         
         return format;
@@ -870,7 +951,7 @@ namespace backend { namespace PixelFormatUtils {
     {
         switch (format)
         {
-            case PixelFormat::RGBA8888:
+            case PixelFormat::RGBA8:
                 *outDataLen = dataLen/2*4;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGB5A1ToRGBA8888(data, dataLen, *outData);
@@ -882,13 +963,13 @@ namespace backend { namespace PixelFormatUtils {
                 break;
             default:
                 // unsupported conversion or don't need to convert
-                if (format != PixelFormat::AUTO && format != PixelFormat::RGBA8888)
+                if (format != PixelFormat::RGBA8)
                 {
                     CCLOG("Can not convert image format PixelFormat::RGB5A1 to format ID:%d, we will use it's origin format PixelFormat::RGB51A", static_cast<int>(format));
                 }
                 *outData = (unsigned char*)data;
                 *outDataLen = dataLen;
-                return PixelFormat::RGBA8888;
+                return PixelFormat::RGBA8;
         }
         
         return format;
@@ -898,7 +979,7 @@ namespace backend { namespace PixelFormatUtils {
     {
         switch (format)
         {
-            case PixelFormat::RGBA8888:
+            case PixelFormat::RGBA8:
                 *outDataLen = dataLen/2*4;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGB565ToRGBA8888(data, dataLen, *outData);
@@ -911,13 +992,13 @@ namespace backend { namespace PixelFormatUtils {
                 break;
             default:
                 // unsupported conversion or don't need to convert
-                if (format != PixelFormat::AUTO && format != PixelFormat::RGBA8888)
+                if (format != PixelFormat::RGBA8)
                 {
                     CCLOG("Can not convert image format PixelFormat::RGB565 to format ID:%d, we will use it's origin format PixelFormat::RGB565", static_cast<int>(format));
                 }
                 *outData = (unsigned char*)data;
                 *outDataLen = dataLen;
-                return PixelFormat::RGBA8888;
+                return PixelFormat::RGBA8;
         }
         
         return format;
@@ -927,20 +1008,20 @@ namespace backend { namespace PixelFormatUtils {
     {
         switch (format)
         {
-            case PixelFormat::RGBA8888:
+            case PixelFormat::RGBA8:
                 *outDataLen = dataLen*4;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertA8ToRGBA8888(data, dataLen, *outData);
                 break;
             default:
                 // unsupported conversion or don't need to convert
-                if (format != PixelFormat::AUTO && format != PixelFormat::RGBA8888)
+                if (format != PixelFormat::RGBA8)
                 {
                     CCLOG("Can not convert image format PixelFormat::A8 to format ID:%d, we will use it's origin format PixelFormat::A8", static_cast<int>(format));
                 }
                 *outData = (unsigned char*)data;
                 *outDataLen = dataLen;
-                return PixelFormat::RGBA8888;
+                return PixelFormat::RGBA8;
         }
         
         return format;
@@ -950,7 +1031,7 @@ namespace backend { namespace PixelFormatUtils {
     {
         switch (format)
         {
-            case PixelFormat::RGBA8888:
+            case PixelFormat::RGBA8:
                 *outDataLen = dataLen/ 2 * 4;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGBA4444ToRGBA8888(data, dataLen, *outData);
@@ -962,13 +1043,13 @@ namespace backend { namespace PixelFormatUtils {
                 break;
             default:
                 // unsupported conversion or don't need to convert
-                if (format != PixelFormat::AUTO && format != PixelFormat::RGBA8888)
+                if (format != PixelFormat::RGBA8)
                 {
-                    CCLOG("Can not convert image format PixelFormat::RGBA444 to format ID:%d, we will use it's origin format PixelFormat::RGBA4444", static_cast<int>(format));
+                    CCLOG("Can not convert image format PixelFormat::RGBA444 to format ID:%d, we will use it's origin format PixelFormat::RGBA4", static_cast<int>(format));
                 }
                 *outData = (unsigned char*)data;
                 *outDataLen = dataLen;
-                return PixelFormat::RGBA8888;
+                return PixelFormat::RGBA8;
         }
         
         return format;
@@ -977,7 +1058,7 @@ namespace backend { namespace PixelFormatUtils {
     PixelFormat convertBGRA8888ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen)
     {
         switch (format) {
-            case PixelFormat::RGBA8888:
+            case PixelFormat::RGBA8:
                 *outDataLen = dataLen;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertBGRA8888ToRGBA8888(data, dataLen, *outData);
@@ -991,13 +1072,13 @@ namespace backend { namespace PixelFormatUtils {
     
     /*
      convert map:
-     1.PixelFormat::RGBA8888
-     2.PixelFormat::RGB888
+     1.PixelFormat::RGBA8
+     2.PixelFormat::RGB8
      3.PixelFormat::RGB565
      4.PixelFormat::A8
      5.PixelFormat::I8
-     6.PixelFormat::AI88
-     7.PixelFormat::RGBA4444
+     6.PixelFormat::AI8
+     7.PixelFormat::RGBA4
      8.PixelFormat::RGB5A1
      
      gray(5) -> 1235678
@@ -1009,7 +1090,7 @@ namespace backend { namespace PixelFormatUtils {
     cocos2d::backend::PixelFormat convertDataToFormat(const unsigned char* data, size_t dataLen, PixelFormat originFormat, PixelFormat format, unsigned char** outData, size_t* outDataLen)
     {
         // don't need to convert
-        if (format == originFormat || format == PixelFormat::AUTO)
+        if (format == originFormat)
         {
             *outData = (unsigned char*)data;
             *outDataLen = dataLen;
@@ -1020,24 +1101,24 @@ namespace backend { namespace PixelFormatUtils {
         {
             case PixelFormat::I8:
                 return convertI8ToFormat(data, dataLen, format, outData, outDataLen);
-            case PixelFormat::AI88:
+            case PixelFormat::AI8:
                 return convertAI88ToFormat(data, dataLen, format, outData, outDataLen);
-            case PixelFormat::RGB888:
+            case PixelFormat::RGB8:
                 return convertRGB888ToFormat(data, dataLen, format, outData, outDataLen);
-            case PixelFormat::RGBA8888:
+            case PixelFormat::RGBA8:
                 return convertRGBA8888ToFormat(data, dataLen, format, outData, outDataLen);
             case PixelFormat::RGB5A1:
                 return convertRGB5A1ToFormat(data, dataLen, format, outData, outDataLen);
             case PixelFormat::RGB565:
                 return convertRGB565ToFormat(data, dataLen, format, outData, outDataLen);
 #ifdef CC_USE_METAL
-            case PixelFormat::RGBA4444:
+            case PixelFormat::RGBA4:
                 return convertRGBA4444ToFormat(data, dataLen, format, outData, outDataLen);
             case PixelFormat::A8:
                 return convertA8ToFormat(data, dataLen, format, outData, outDataLen);
                 
 #endif
-            case PixelFormat::BGRA8888:
+            case PixelFormat::BGRA8:
                 return convertBGRA8888ToFormat(data, dataLen, format, outData, outDataLen);
             default:
                 CCLOG("unsupported conversion from format %d to format %d", static_cast<int>(originFormat), static_cast<int>(format));

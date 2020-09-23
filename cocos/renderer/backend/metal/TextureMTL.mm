@@ -84,7 +84,7 @@ namespace
         bool converted = false;
         switch (format)
         {
-            case PixelFormat::RGB888:
+            case PixelFormat::RGB8:
                 {
                     *out = (uint8_t*)malloc(length * 4);
                     convertRGB2RGBA(src, *out, length);
@@ -101,9 +101,9 @@ namespace
     {
         switch (textureFormat)
         {
-            case PixelFormat::RGBA8888:
-            case PixelFormat::RGB888:
-            case PixelFormat::RGBA4444:
+            case PixelFormat::RGBA8:
+            case PixelFormat::RGB8:
+            case PixelFormat::RGBA4:
             case PixelFormat::RGB565:
             case PixelFormat::RGB5A1:
             case PixelFormat::MTL_BGR5A1:
@@ -333,12 +333,12 @@ void TextureMTL::updateTextureDescriptor(const cocos2d::backend::TextureDescript
     _textureInfo._descriptor = descriptor;
     _textureInfo.ensure(index, MTL_TEXTURE_2D);
     updateSamplerDescriptor(descriptor.samplerDescriptor);
-    if (PixelFormat::RGB888 == _textureFormat)
+    if (PixelFormat::RGB8 == _textureFormat)
     {
-        _bitsPerElement = 4 * 8;
+        _bitsPerPixel = 4 * 8;
     }
     
-    _textureInfo._bytesPerRow = descriptor.width * _bitsPerElement / 8 ;
+    _textureInfo._bytesPerRow = descriptor.width * _bitsPerPixel / 8 ;
 }
 
 void TextureMTL::updateData(uint8_t* data, std::size_t width , std::size_t height, std::size_t level, int index)
@@ -362,7 +362,7 @@ void TextureMTL::updateSubData(std::size_t xoffset, std::size_t yoffset, std::si
                                  width * height,
                                  _textureFormat, &convertedData);
     
-    std::size_t bytesPerRow = getBytesPerRowMTL(_textureFormat, width, _bitsPerElement);
+    std::size_t bytesPerRow = getBytesPerRowMTL(_textureFormat, width, _bitsPerPixel);
     
     [mtlTexture replaceRegion:region
                    mipmapLevel:level
@@ -418,12 +418,12 @@ void TextureCubeMTL::updateTextureDescriptor(const cocos2d::backend::TextureDesc
     updateSamplerDescriptor(descriptor.samplerDescriptor);
     
     // Metal doesn't support RGB888/RGBA4444, so should convert to RGBA888;
-    if (PixelFormat::RGB888 == _textureFormat)
+    if (PixelFormat::RGB8 == _textureFormat)
     {
-        _bitsPerElement = 4 * 8;
+        _bitsPerPixel = 4 * 8;
     }
     
-    _textureInfo._bytesPerRow = descriptor.width * _bitsPerElement / 8 ;
+    _textureInfo._bytesPerRow = descriptor.width * _bitsPerPixel / 8 ;
     _bytesPerImage = _textureInfo._bytesPerRow * descriptor.width;
     _region = MTLRegionMake2D(0, 0, descriptor.width, descriptor.height);
 }

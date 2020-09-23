@@ -373,10 +373,10 @@ float Terrain::getImageHeight(int pixel_x, int pixel_y) const
     int byte_stride = 1;
     switch (_heightMapImage->getPixelFormat())
     {
-    case backend::PixelFormat::BGRA8888:
+    case backend::PixelFormat::BGRA8:
         byte_stride = 4;
         break;
-    case  backend::PixelFormat::RGB888:
+    case  backend::PixelFormat::RGB8:
         byte_stride = 3;
         break;
     case backend::PixelFormat::I8:

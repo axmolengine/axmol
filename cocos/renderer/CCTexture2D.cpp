@@ -48,7 +48,7 @@ THE SOFTWARE.
 #include "renderer/backend/Device.h"
 #include "renderer/backend/ProgramState.h"
 #include "renderer/ccShaders.h"
-#include "renderer/CCTextureUtils.h"
+#include "renderer/backend/TextureUtils.h"
 #include "renderer/CCRenderer.h"
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
@@ -58,80 +58,14 @@ THE SOFTWARE.
 NS_CC_BEGIN
 
 
-
-namespace {
-    // !!!Note: bpp only for print information, not relay it, hardware texture format will have float bpp
-    typedef Texture2D::PixelFormatInfoMap::value_type PixelFormatInfoMapValue;
-    static const PixelFormatInfoMapValue TexturePixelFormatInfoTablesValue[] =
-    {
-        PixelFormatInfoMapValue(backend::PixelFormat::BGRA8888, Texture2D::PixelFormatInfo(32, false, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::RGBA8888, Texture2D::PixelFormatInfo(32, false, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::RGBA4444, Texture2D::PixelFormatInfo(16, false, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::RGB5A1, Texture2D::PixelFormatInfo(16, false, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::RGB565, Texture2D::PixelFormatInfo(16, false, false)),
-        PixelFormatInfoMapValue(backend::PixelFormat::RGB888, Texture2D::PixelFormatInfo(24, false, false)),
-        PixelFormatInfoMapValue(backend::PixelFormat::A8, Texture2D::PixelFormatInfo(8, false, false)),
-        PixelFormatInfoMapValue(backend::PixelFormat::I8, Texture2D::PixelFormatInfo(8, false, false)),
-        PixelFormatInfoMapValue(backend::PixelFormat::AI88, Texture2D::PixelFormatInfo(16, false, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::ASTC4x4, Texture2D::PixelFormatInfo(8, true, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::ASTC6x6, Texture2D::PixelFormatInfo(3/*3.56 BPP*/, true, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::ASTC8x8, Texture2D::PixelFormatInfo(2, true, true)),
-
-#if defined( GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        PixelFormatInfoMapValue(backend::PixelFormat::PVRTC2, Texture2D::PixelFormatInfo(2, true, false)),
-        PixelFormatInfoMapValue(backend::PixelFormat::PVRTC2A, Texture2D::PixelFormatInfo(2, true, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::PVRTC4, Texture2D::PixelFormatInfo(4, true, false)),
-        PixelFormatInfoMapValue(backend::PixelFormat::PVRTC4A, Texture2D::PixelFormatInfo(4, true, true)),
-#endif
-        PixelFormatInfoMapValue(backend::PixelFormat::ETC1, Texture2D::PixelFormatInfo(4, true, false)),
-        PixelFormatInfoMapValue(backend::PixelFormat::ETC2_RGB, Texture2D::PixelFormatInfo(4, true, false)),
-        PixelFormatInfoMapValue(backend::PixelFormat::ETC2_RGBA, Texture2D::PixelFormatInfo(8, true, true)),
-
-#if defined(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-        PixelFormatInfoMapValue(backend::PixelFormat::S3TC_DXT1, Texture2D::PixelFormatInfo(4, true, false)),
-#endif
-        
-#if defined(GL_COMPRESSED_RGBA_S3TC_DXT3_EXT) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-        PixelFormatInfoMapValue(backend::PixelFormat::S3TC_DXT3, Texture2D::PixelFormatInfo(8, true, false)),
-#endif
-        
-#if defined(GL_COMPRESSED_RGBA_S3TC_DXT5_EXT) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-        PixelFormatInfoMapValue(backend::PixelFormat::S3TC_DXT5, Texture2D::PixelFormatInfo(8, true, false)),
-#endif
-        
-#ifdef GL_ATC_RGB_AMD
-        PixelFormatInfoMapValue(backend::PixelFormat::ATC_RGB, Texture2D::PixelFormatInfo(4, true, false)),
-#endif
-        
-#ifdef GL_ATC_RGBA_EXPLICIT_ALPHA_AMD
-        PixelFormatInfoMapValue(backend::PixelFormat::ATC_EXPLICIT_ALPHA, Texture2D::PixelFormatInfo(8, true, false)),
-#endif
-        
-#ifdef GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD
-        PixelFormatInfoMapValue(backend::PixelFormat::ATC_INTERPOLATED_ALPHA, Texture2D::PixelFormatInfo(8, true, false)),
-#endif
-        //metal formats
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        PixelFormatInfoMapValue(backend::PixelFormat::MTL_ABGR4, Texture2D::PixelFormatInfo(16, false, true)),
-        PixelFormatInfoMapValue(backend::PixelFormat::MTL_B5G6R5, Texture2D::PixelFormatInfo(16, false, false)),
-        PixelFormatInfoMapValue(backend::PixelFormat::MTL_BGR5A1, Texture2D::PixelFormatInfo(16, false, true)),
-#endif
-    };
-}
-
 //CLASS IMPLEMENTATIONS:
-
-//The PixpelFormat corresponding information
-const Texture2D::PixelFormatInfoMap Texture2D::_pixelFormatInfoTables(TexturePixelFormatInfoTablesValue,
-                                                                     TexturePixelFormatInfoTablesValue + sizeof(TexturePixelFormatInfoTablesValue) / sizeof(TexturePixelFormatInfoTablesValue[0]));
 
 // If the image has alpha, you can create RGBA8 (32-bit) or RGBA4 (16-bit) or RGB5A1 (16-bit)
 // Default is: RGBA8888 (32-bit textures)
-static backend::PixelFormat g_defaultAlphaPixelFormat = backend::PixelFormat::DEFAULT;
-
+static backend::PixelFormat g_defaultAlphaPixelFormat = backend::PixelFormat::BGRA8;
 
 Texture2D::Texture2D()
-: _pixelFormat(backend::PixelFormat::DEFAULT)
+: _pixelFormat(backend::PixelFormat::NONE)
 , _pixelsWide(0)
 , _pixelsHigh(0)
 , _maxS(0.0)
@@ -266,7 +200,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 
     unsigned char* tempData = image->getData();
     Size             imageSize = Size((float)imageWidth, (float)imageHeight);
-    backend::PixelFormat      renderFormat = ((PixelFormat::NONE == format) || (PixelFormat::AUTO == format)) ? image->getPixelFormat() : format;
+    backend::PixelFormat      renderFormat = (PixelFormat::NONE == format) ? image->getPixelFormat() : format;
     backend::PixelFormat      imagePixelFormat = image->getPixelFormat();
     size_t           tempDataLen = image->getDataLen();
 
@@ -297,7 +231,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     case PixelFormat::RGB565:
         renderFormat = PixelFormat::MTL_B5G6R5;
         break;
-    case PixelFormat::RGBA4444:
+    case PixelFormat::RGBA4:
         renderFormat = PixelFormat::MTL_ABGR4;
         break;
     case PixelFormat::RGB5A1:
@@ -306,12 +240,12 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 #else
     case PixelFormat::RGB565:
     case PixelFormat::RGB5A1:
-    case PixelFormat::RGBA4444:
+    case PixelFormat::RGBA4:
 #endif
     case PixelFormat::I8:
-    case PixelFormat::AI88:
+    case PixelFormat::AI8:
         //TODO: conversion RGBA8888 -> I8(AI88) -> RGBA8888 may happends
-        renderFormat = PixelFormat::RGBA8888;
+        renderFormat = PixelFormat::RGBA8;
         break;
     default:
         break;
@@ -380,7 +314,7 @@ bool Texture2D::updateWithData(const void* data, ssize_t dataLen, backend::Pixel
 bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, bool preMultipliedAlpha, int index)
 {
     //the pixelFormat must be a certain value 
-    CCASSERT(pixelFormat != PixelFormat::NONE && pixelFormat != PixelFormat::AUTO, "the \"pixelFormat\" param must be a certain value!");
+    CCASSERT(pixelFormat != PixelFormat::NONE, "the \"pixelFormat\" param must be a certain value!");
     CCASSERT(pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
 
     if (mipmapsNum <= 0)
@@ -390,8 +324,8 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
     }
 
 
-    auto formatItr = _pixelFormatInfoTables.find(pixelFormat);
-    if (formatItr == _pixelFormatInfoTables.end())
+    auto& info = backend::PixelFormatUtils::getBlockInfo(pixelFormat);
+    if (!info.bpp)
     {
         CCLOG("cocos2d: WARNING: unsupported pixelformat: %lx", (unsigned long)pixelFormat);
 #ifdef CC_USE_METAL
@@ -400,9 +334,9 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
         return false;
     }
 
-    const PixelFormatInfo& info = formatItr->second;
+    bool compressed = backend::PixelFormatUtils::isCompressed(pixelFormat);
 
-    if (info.compressed && !Configuration::getInstance()->supportsPVRTC()
+    if (compressed && !Configuration::getInstance()->supportsPVRTC()
         && !Configuration::getInstance()->supportsETC1()
         && !Configuration::getInstance()->supportsETC2()
         && !Configuration::getInstance()->supportsS3TC()
@@ -441,7 +375,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
         unsigned char* outData = data;
         size_t outDataLen = dataLen;
 
-        if (renderFormat != oriPixelFormat && !info.compressed) //need conversion
+        if (renderFormat != oriPixelFormat && !compressed) //need conversion
         {
             auto convertedFormat = backend::PixelFormatUtils::convertDataToFormat(data, dataLen, oriPixelFormat, renderFormat, &outData, &outDataLen);
 #ifdef CC_USE_METAL
@@ -456,7 +390,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
         if (_texture->getTextureFormat() != textureDescriptor.textureFormat)
             _texture->updateTextureDescriptor(textureDescriptor, index);
 
-        if (info.compressed)
+        if (compressed)
         {
             _texture->updateCompressedData(data, width, height, dataLen, i, index);
         }
@@ -608,7 +542,7 @@ bool Texture2D::initWithString(const char *text, const FontDefinition& textDefin
     }
 
     Size  imageSize = Size((float)imageWidth, (float)imageHeight);
-    pixelFormat = backend::PixelFormatUtils::convertDataToFormat(outData.getBytes(), imageWidth*imageHeight*4, PixelFormat::RGBA8888, pixelFormat, &outTempData, &outTempDataLen);
+    pixelFormat = backend::PixelFormatUtils::convertDataToFormat(outData.getBytes(), imageWidth*imageHeight*4, PixelFormat::RGBA8, pixelFormat, &outTempData, &outTempDataLen);
 
     ret = initWithData(outTempData, outTempDataLen, pixelFormat, imageWidth, imageHeight, imageSize);
 
@@ -686,22 +620,22 @@ const char* Texture2D::getStringForFormat() const
 {
     switch (_pixelFormat) 
     {
-        case backend::PixelFormat::RGBA8888:
+        case backend::PixelFormat::RGBA8:
             return  "RGBA8888";
 
-        case backend::PixelFormat::RGB888:
+        case backend::PixelFormat::RGB8:
             return  "RGB888";
 
         case backend::PixelFormat::RGB565:
             return  "RGB565";
 
-        case backend::PixelFormat::RGBA4444:
+        case backend::PixelFormat::RGBA4:
             return  "RGBA4444";
 
         case backend::PixelFormat::RGB5A1:
             return  "RGB5A1";
 
-        case backend::PixelFormat::AI88:
+        case backend::PixelFormat::AI8:
             return  "AI88";
 
         case backend::PixelFormat::A8:
@@ -789,24 +723,14 @@ backend::PixelFormat Texture2D::getDefaultAlphaPixelFormat()
     return g_defaultAlphaPixelFormat;
 }
 
-unsigned int Texture2D::getBitsPerPixelForFormat(backend::PixelFormat format) const
+unsigned int Texture2D::getBitsPerPixelForFormat(backend::PixelFormat format)
 {
-    if (format == PixelFormat::NONE || format == PixelFormat::DEFAULT)
-    {
-        return 0;
-    }
-    
-    return _pixelFormatInfoTables.at(format).bpp;
+    return backend::PixelFormatUtils::getBlockInfo(format).bpp;
 }
 
 unsigned int Texture2D::getBitsPerPixelForFormat() const
 {
     return this->getBitsPerPixelForFormat(_pixelFormat);
-}
-
-const Texture2D::PixelFormatInfoMap& Texture2D::getPixelFormatInfoMap()
-{
-    return _pixelFormatInfoTables;
 }
 
 void Texture2D::addSpriteFrameCapInset(SpriteFrame* spritframe, const Rect& capInsets)

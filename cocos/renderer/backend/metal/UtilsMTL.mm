@@ -28,8 +28,6 @@
 #include "TextureMTL.h"
 #include "base/CCConfiguration.h"
 
-#define COLOR_ATTAHCMENT_PIXEL_FORMAT MTLPixelFormatBGRA8Unorm
-
 CC_BACKEND_BEGIN
 
 id<MTLTexture> UtilsMTL::_defaultColorAttachmentTexture = nil;
@@ -109,21 +107,19 @@ MTLPixelFormat UtilsMTL::toMTLPixelFormat(PixelFormat textureFormat)
         case PixelFormat::S3TC_DXT5:
             return MTLPixelFormatBC3_RGBA;
 #endif
-        case PixelFormat::RGBA8888:
+        case PixelFormat::RGBA8:
             return MTLPixelFormatRGBA8Unorm;
             // Should transfer the data to match pixel format when updating data.
-        case PixelFormat::RGB888:
+        case PixelFormat::RGB8:
             return MTLPixelFormatRGBA8Unorm;
         case PixelFormat::A8:
             return MTLPixelFormatA8Unorm;
-        case PixelFormat::BGRA8888:
+        case PixelFormat::BGRA8:
             return MTLPixelFormatBGRA8Unorm;
            
         //on mac, D24S8 means MTLPixelFormatDepth24Unorm_Stencil8, while on ios it means MTLPixelFormatDepth32Float_Stencil8
         case PixelFormat::D24S8:
             return getSupportedDepthStencilFormat();
-        case PixelFormat::DEFAULT:
-            return COLOR_ATTAHCMENT_PIXEL_FORMAT;
         case PixelFormat::NONE:
         default:
             return MTLPixelFormatInvalid;

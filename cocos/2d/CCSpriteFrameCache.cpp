@@ -289,18 +289,18 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dict, const std::
     
     Texture2D *texture = nullptr;
     static std::unordered_map<std::string, backend::PixelFormat> pixelFormats = {
-        {"RGBA8888", backend::PixelFormat::RGBA8888},
-        {"RGBA4444", backend::PixelFormat::RGBA4444},
+        {"RGBA8888", backend::PixelFormat::RGBA8},
+        {"RGBA4444", backend::PixelFormat::RGBA4},
         {"RGB5A1", backend::PixelFormat::RGB5A1},
         {"RGBA5551", backend::PixelFormat::RGB5A1},
         {"RGB565", backend::PixelFormat::RGB565},
         {"A8", backend::PixelFormat::A8},
         {"ALPHA", backend::PixelFormat::A8},
         {"I8", backend::PixelFormat::I8},
-        {"AI88", backend::PixelFormat::AI88},
-        {"ALPHA_INTENSITY", backend::PixelFormat::AI88},
-        //{"BGRA8888", backend::PixelFormat::BGRA8888}, no Image conversion RGBA -> BGRA
-        {"RGB888", backend::PixelFormat::RGB888}
+        {"AI88", backend::PixelFormat::AI8},
+        {"ALPHA_INTENSITY", backend::PixelFormat::AI8},
+        //{"BGRA8888", backend::PixelFormat::BGRA8}, no Image conversion RGBA -> BGRA
+        {"RGB888", backend::PixelFormat::RGB8}
     };
 
     auto pixelFormatIt = pixelFormats.find(pixelFormatName);

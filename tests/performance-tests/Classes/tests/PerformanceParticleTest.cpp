@@ -319,11 +319,11 @@ void ParticleMainScene::createParticleSystem()
     switch( subtestNumber)
     {
     case 1:
-        Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+        Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
         particleSystem->setTexture(Director::getInstance()->getTextureCache()->addImage("Images/fire.png"));
         break;
     case 2:
-        Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4444);
+        Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4);
         particleSystem->setTexture(Director::getInstance()->getTextureCache()->addImage("Images/fire.png"));
         break;            
     case 3:
@@ -336,11 +336,11 @@ void ParticleMainScene::createParticleSystem()
 //         particleSystem->setTexture(Director::getInstance()->getTextureCache()->addImage("Images/fire.png"));
 //         break;
 //    case 4:
-//        Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+//        Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
 //        particleSystem->setTexture(Director::getInstance()->getTextureCache()->addImage("Images/fire.png"));
 //        break;
 //    case 5:
-//        Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4444);
+//        Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4);
 //        particleSystem->setTexture(Director::getInstance()->getTextureCache()->addImage("Images/fire.png"));
 //        break;            
 //    case 6:
@@ -361,7 +361,7 @@ void ParticleMainScene::createParticleSystem()
     doTest();
 
     // restore the default pixel format
-    Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+    Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
 }
 
 void ParticleMainScene::doTest()

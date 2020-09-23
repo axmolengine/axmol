@@ -162,7 +162,7 @@ RenderTargetMTL::Attachment RenderTargetMTL::getStencilAttachment() const
 PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const
 {
     if(isDefaultRenderTarget() && index == 0)
-        return PixelFormat::DEFAULT;
+        return PixelFormat::RGBA8;
     auto& rb = this->_color[index];
     return rb ? rb.texture->getTextureFormat() : PixelFormat::NONE;
 }

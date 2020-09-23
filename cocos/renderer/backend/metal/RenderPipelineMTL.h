@@ -25,7 +25,6 @@
 #pragma once
 
 #include "../RenderPipeline.h"
-#include "../RenderPipelineDescriptor.h"
 #include <string>
 #include <vector>
 #include <memory>

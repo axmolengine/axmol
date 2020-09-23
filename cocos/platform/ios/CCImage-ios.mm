@@ -36,10 +36,10 @@ NS_CC_BEGIN
 
 bool cocos2d::Image::saveToFile(const std::string& filename, bool isToRGB)
 {
-    //only support for backend::PixelFormat::RGB888 or backend::PixelFormat::RGBA8888 uncompressed data
-    if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB888 && _pixelFormat != backend::PixelFormat::RGBA8888))
+    //only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
+    if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))
     {
-        CCLOG("cocos2d: Image: saveToFile is only support for backend::PixelFormat::RGB888 or backend::PixelFormat::RGBA8888 uncompressed data for now");
+        CCLOG("cocos2d: Image: saveToFile is only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data for now");
         return false;
     }
     bool saveToPNG = false;

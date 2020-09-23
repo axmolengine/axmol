@@ -85,8 +85,6 @@ public:
         bool alpha;
     };
     
-    typedef std::map<backend::PixelFormat, const PixelFormatInfo> PixelFormatInfoMap;
-    
     /**
      * Extension to set the Min / Mag filter
      */
@@ -97,9 +95,9 @@ public:
      
      @param format
      If the UIImage contains alpha channel, then the options are:
-     - generate 32-bit textures: backend::PixelFormat::RGBA8888 (default one)
-     - generate 24-bit textures: backend::PixelFormat::RGB888
-     - generate 16-bit textures: backend::PixelFormat::RGBA4444
+     - generate 32-bit textures: backend::PixelFormat::RGBA8 (default one)
+     - generate 24-bit textures: backend::PixelFormat::RGB8
+     - generate 16-bit textures: backend::PixelFormat::RGBA4
      - generate 16-bit textures: backend::PixelFormat::RGB5A1
      - generate 16-bit textures: backend::PixelFormat::RGB565
      - generate 8-bit textures: backend::PixelFormat::A8 (only use it if you use just 1 color)
@@ -216,7 +214,7 @@ public:
     Initializes a texture from a UIImage object.
 
     We will use the format you passed to the function to convert the image format to the texture format.
-    If you pass PixelFormat::Automatic, we will auto detect the image render type and use that type for texture to render.
+    If you pass PixelFormat::NONE, we will auto detect the image render type and use that type for texture to render.
     @param image An UIImage object.
     @param format Texture pixel formats.
     **/
@@ -289,7 +287,7 @@ public:
     /** Helper functions that returns bits per pixels for a given format.
      @since v2.0
      */
-    unsigned int getBitsPerPixelForFormat(backend::PixelFormat format) const;
+    static unsigned int getBitsPerPixelForFormat(backend::PixelFormat format);
 
     /** Get content size. */
     const Size& getContentSizeInPixels();
@@ -327,10 +325,6 @@ public:
     Size getContentSize() const;
 
     std::string getPath()const { return _filePath; }
-    
-public:
-    /** Get pixel info map, the key-value pairs is PixelFormat and PixelFormatInfo.*/
-    static const PixelFormatInfoMap& getPixelFormatInfoMap();
     
 private:
     /**
@@ -402,8 +396,6 @@ protected:
     Size _contentSize;
 
     int _flagsAndFormatEXT;
-
-    static const PixelFormatInfoMap _pixelFormatInfoTables;
 
     NinePatchInfo* _ninePatchInfo;
     friend class SpriteFrameCache;

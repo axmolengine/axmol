@@ -16,7 +16,6 @@ set(COCOS_RENDERER_HEADER
     renderer/CCTextureAtlas.h
     renderer/CCTextureCache.h
     renderer/CCTextureCube.h
-    renderer/CCTextureUtils.h
     renderer/CCTrianglesCommand.h
     renderer/ccShaders.h
 
@@ -30,9 +29,9 @@ set(COCOS_RENDERER_HEADER
     renderer/backend/Macros.h
     renderer/backend/RenderPassParams.h
     renderer/backend/RenderPipeline.h
-    renderer/backend/RenderPipelineDescriptor.h
     renderer/backend/ShaderModule.h
     renderer/backend/Texture.h
+    renderer/backend/TextureUtils.h
     renderer/backend/Types.h
     renderer/backend/VertexLayout.h
     renderer/backend/ProgramState.h
@@ -57,7 +56,6 @@ set(COCOS_RENDERER_SRC
     renderer/CCTextureAtlas.cpp
     renderer/CCTextureCache.cpp
     renderer/CCTextureCube.cpp
-    renderer/CCTextureUtils.cpp
     renderer/CCTrianglesCommand.cpp
     renderer/ccShaders.cpp
     renderer/CCColorizer.cpp
@@ -67,6 +65,7 @@ set(COCOS_RENDERER_SRC
     renderer/backend/Device.cpp
     renderer/backend/ShaderModule.cpp
     renderer/backend/Texture.cpp
+    renderer/backend/TextureUtils.cpp
     renderer/backend/Types.cpp
     renderer/backend/VertexLayout.cpp
     renderer/backend/ProgramCache.cpp

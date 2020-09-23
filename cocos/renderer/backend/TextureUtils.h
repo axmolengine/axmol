@@ -33,10 +33,31 @@ namespace backend {
     namespace PixelFormatUtils {
         typedef cocos2d::backend::PixelFormat PixelFormat;
 
+        struct PixelBlockInfo
+        {
+            uint8_t bpp; // bitsPerPixel: !!!regard bpp=0 as invalid pixel format
+            uint8_t blockWidth;
+            uint8_t blockHeight;
+            uint8_t blockSize;
+            uint8_t minBlockX;
+            uint8_t minBlockY;
+            uint8_t depthBits;
+            uint8_t stencilBits;
+            uint8_t rBits; // for compression texture is 0
+            uint8_t gBits; // for compression texture is 0
+            uint8_t bBits; // for compression texture is 0
+            uint8_t aBits; // for compression texture, 0: no alpha, 1: has alpha
+            uint8_t encoding;
+        };
+
+        const PixelBlockInfo& getBlockInfo(PixelFormat format);
+        inline uint8_t getBitsPerPixel(PixelFormat format) { return getBlockInfo(format).bpp; }
+        inline bool isCompressed(PixelFormat format) { return format < PixelFormat::RGBA8; }
+
         /**convert functions*/
 
         /**
-        Convert the format to the format param you specified, if the format is PixelFormat::Automatic, it will detect it automatically and convert to the closest format for you.
+        Convert the format to the format param you specified, if the format is PixelFormat::NONE, it will detect it automatically and convert to the closest format for you.
         It will return the converted format to you. if the outData != data, you must delete it manually.
         */
         PixelFormat convertDataToFormat(const unsigned char* data, size_t dataLen, PixelFormat originFormat, PixelFormat format, unsigned char** outData, size_t* outDataLen);

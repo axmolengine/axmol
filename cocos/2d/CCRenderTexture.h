@@ -365,7 +365,7 @@ protected:
     RenderTargetFlag _renderTargetFlags{};
 
     Image*     _UITextureImage = nullptr;
-    backend::PixelFormat _pixelFormat = backend::PixelFormat::RGBA8888;
+    backend::PixelFormat _pixelFormat = backend::PixelFormat::RGBA8;
     
     Color4F _clearColor;
     float _clearDepth = 1.f;
