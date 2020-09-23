@@ -13,8 +13,8 @@ function install_android_ndk()
     sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     sudo python get-pip.py
     sudo python -m pip install retry
-    if [ "$BUILD_TARGET" == "android_cmake" ]\
-        || [ "$BUILD_TARGET" == "android_lua_cmake" ] ; then
+    if [ "$BUILD_TARGET" == "android" ]\
+        || [ "$BUILD_TARGET" == "android_lua" ] ; then
         python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py
     else
         python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py --ndk_only
