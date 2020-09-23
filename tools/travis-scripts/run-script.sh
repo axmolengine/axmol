@@ -110,7 +110,7 @@ function genernate_binding_codes()
         strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBC
         ls -l /usr/lib/x86_64-linux-gnu/libstdc++*
         dpkg-query -W libstdc++6
-        # ldd $COCOS2DX_ROOT/tools/bindings-generator/libclang/libclang.so
+        ldd $COCOS2DX_ROOT/tools/bindings-generator/libclang/libclang.so
     fi
 
     source ../environment.sh
@@ -264,14 +264,14 @@ function run_pull_request()
     fi
     
     if [ $BUILD_TARGET == 'osx' ]; then
-        genernate_binding_codes
+        # genernate_binding_codes
         set -x
         build_osx
         exit 0
     fi
 
     if [ $BUILD_TARGET == 'ios' ]; then
-        genernate_binding_codes
+        # genernate_binding_codes
         set -x
         build_ios
         exit 0
@@ -279,7 +279,7 @@ function run_pull_request()
 
     # linux
     if [ $BUILD_TARGET == 'linux' ]; then
-        genernate_binding_codes
+        # genernate_binding_codes
         build_linux
     fi
 
