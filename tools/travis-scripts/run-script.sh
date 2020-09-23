@@ -110,7 +110,7 @@ function genernate_binding_codes()
         strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBC
         ls -l /usr/lib/x86_64-linux-gnu/libstdc++*
         dpkg-query -W libstdc++6
-        ldd $COCOS2DX_ROOT/tools/bindings-generator/libclang/libclang.so
+        # ldd $COCOS2DX_ROOT/tools/bindings-generator/libclang/libclang.so
     fi
 
     source ../environment.sh
