@@ -35,7 +35,7 @@ function build_linux()
     cd $COCOS2DX_ROOT
     set -x
     cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release
-    cmake --build build -- -j `nproc`
+    cmake --build build --target cpp-tests -- -j `nproc`
     set +x
 }
 
