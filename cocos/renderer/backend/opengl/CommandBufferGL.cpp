@@ -493,7 +493,11 @@ void CommandBufferGL::readPixels(RenderTarget* rt, std::function<void(const Pixe
         // we only readPixels from the COLOR0 attachment.
         auto colorAttachment = rt->_color[0].texture;
         if(colorAttachment) {
-            readPixels(rt, 0, 0, colorAttachment->getWidth(),colorAttachment->getHeight(), colorAttachment->getBytesPerRow(), pbd);
+            readPixels(rt,
+            0, 0, 
+            colorAttachment->getWidth(),colorAttachment->getHeight(), 
+            colorAttachment->getWidth() * 4,
+            pbd);
         }
     }
     callback(pbd);
