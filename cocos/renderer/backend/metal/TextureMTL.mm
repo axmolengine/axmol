@@ -25,6 +25,7 @@
 #include "TextureMTL.h"
 #include "UtilsMTL.h"
 #include "base/ccMacros.h"
+#include "../TextureUtils.h"
 
 CC_BACKEND_BEGIN
 
@@ -362,7 +363,7 @@ void TextureMTL::updateSubData(std::size_t xoffset, std::size_t yoffset, std::si
                                  width * height,
                                  _textureFormat, &convertedData);
     
-    std::size_t bytesPerRow = getBytesPerRowMTL(_textureFormat, width, _bitsPerPixel);
+    std::size_t bytesPerRow = PixelFormatUtils::computeRowPitch(_textureFormat, width);
     
     [mtlTexture replaceRegion:region
                    mipmapLevel:level
@@ -417,13 +418,13 @@ void TextureCubeMTL::updateTextureDescriptor(const cocos2d::backend::TextureDesc
     _textureInfo.ensure(index, MTL_TEXTURE_CUBE);
     updateSamplerDescriptor(descriptor.samplerDescriptor);
     
-    // Metal doesn't support RGB888/RGBA4444, so should convert to RGBA888;
+    // TODO: Metal doesn't support RGB888/RGBA4444, so should convert to RGBA888;
     if (PixelFormat::RGB8 == _textureFormat)
     {
         _bitsPerPixel = 4 * 8;
     }
     
-    _textureInfo._bytesPerRow = descriptor.width * _bitsPerPixel / 8 ;
+    _textureInfo._bytesPerRow = PixelFormatUtils::computeRowPitch(descriptor.textureFormat, descriptor.width);
     _bytesPerImage = _textureInfo._bytesPerRow * descriptor.width;
     _region = MTLRegionMake2D(0, 0, descriptor.width, descriptor.height);
 }

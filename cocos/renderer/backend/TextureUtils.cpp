@@ -22,7 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
  
-#include "renderer/backend/TextureUtils.h"
+#include "TextureUtils.h"
+#include "Macros.h"
 
 
 NS_CC_BEGIN
@@ -97,7 +98,7 @@ namespace backend { namespace PixelFormatUtils {
 #endif
     };
 
-    static_assert(_countof(s_pixelBlockInfo) == (int)PixelFormat::COUNT, "The texture block info table incomplete!");
+    static_assert(CC_ARRAYSIZE(s_pixelBlockInfo) == (int)PixelFormat::COUNT, "The texture block info table incomplete!");
 
     //////////////////////////////////////////////////////////////////////////
     //pixel block info function
@@ -108,6 +109,19 @@ namespace backend { namespace PixelFormatUtils {
 
         static const PixelBlockInfo s_invalidInfo = {};
         return s_invalidInfo;
+    }
+
+    uint32_t computeRowPitch(PixelFormat format, uint32_t width)
+    {
+        if(UTILS_LIKELY(format < PixelFormat::COUNT) ) {
+            auto& info = s_pixelBlockInfo[(uint32_t)format];
+            if(format < PixelFormat::RGBA8) {
+                auto blocksPerRow = (width + (info.blockWidth - 1)) / info.blockWidth;
+                return blocksPerRow * info.blockSize;
+            }
+            return width * info.bpp / 8;
+        }
+        return 0;
     }
 
     //////////////////////////////////////////////////////////////////////////

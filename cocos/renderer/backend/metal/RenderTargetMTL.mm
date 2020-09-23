@@ -154,15 +154,17 @@ RenderTargetMTL::Attachment RenderTargetMTL::getDepthAttachment() const
 RenderTargetMTL::Attachment RenderTargetMTL::getStencilAttachment() const
 {
     if(isDefaultRenderTarget())
-        return {UtilsMTL::getDefaultDepthStencilTexture(), 0};
+        return RenderTargetMTL::Attachment{UtilsMTL::getDefaultDepthStencilTexture(), 0};
     auto& rb = this->_stencil;
     return RenderTargetMTL::Attachment{!!rb ? (id<MTLTexture>)(rb.texture->getHandler()) : nil, rb.level};
 }
 
 PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const
 {
+    // !!!important
+    // the default framebuffer pixel format is: MTLPixelFormatBGRA8Unorm
     if(isDefaultRenderTarget() && index == 0)
-        return PixelFormat::RGBA8;
+        return PixelFormat::BGRA8;
     auto& rb = this->_color[index];
     return rb ? rb.texture->getTextureFormat() : PixelFormat::NONE;
 }

@@ -60,12 +60,6 @@ struct UtilsMTL
     static MTLPixelFormat getDefaultDepthStencilAttachmentPixelFormat();
     
     /**
-     * Get the default color attachment pixel format.
-     * @return The default color attachment pixel format.
-     */
-    static MTLPixelFormat getDefaultColorAttachmentPixelFormat();
-    
-    /**
      * Get the default combined depth and stencil texture.
      * @return The default combined depth and stencil texture.
      */

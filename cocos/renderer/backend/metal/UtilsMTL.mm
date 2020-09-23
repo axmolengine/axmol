@@ -26,6 +26,7 @@
 #include "UtilsMTL.h"
 #include "DeviceMTL.h"
 #include "TextureMTL.h"
+#include "../TextureUtils.h"
 #include "base/CCConfiguration.h"
 
 CC_BACKEND_BEGIN
@@ -49,11 +50,6 @@ namespace {
 MTLPixelFormat UtilsMTL::getDefaultDepthStencilAttachmentPixelFormat()
 {
     return getSupportedDepthStencilFormat();
-}
-
-MTLPixelFormat UtilsMTL::getDefaultColorAttachmentPixelFormat()
-{
-    return COLOR_ATTAHCMENT_PIXEL_FORMAT;
 }
 
 id<MTLTexture> UtilsMTL::getDefaultDepthStencilTexture()

@@ -51,9 +51,10 @@ namespace backend {
         };
 
         const PixelBlockInfo& getBlockInfo(PixelFormat format);
+        uint32_t computeRowPitch(PixelFormat format, uint32_t width);
         inline uint8_t getBitsPerPixel(PixelFormat format) { return getBlockInfo(format).bpp; }
         inline bool isCompressed(PixelFormat format) { return format < PixelFormat::RGBA8; }
-
+        
         /**convert functions*/
 
         /**
