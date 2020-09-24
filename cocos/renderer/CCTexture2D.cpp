@@ -204,25 +204,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     backend::PixelFormat      imagePixelFormat = image->getPixelFormat();
     size_t           tempDataLen = image->getDataLen();
 
-
 #ifdef CC_USE_METAL
-    //compressed format does not need conversion
-    switch (imagePixelFormat) {
-    case PixelFormat::PVRTC4A:
-    case PixelFormat::PVRTC4:
-    case PixelFormat::PVRTC2A:
-    case PixelFormat::PVRTC2:
-    case PixelFormat::A8:
-    case PixelFormat::ETC1:
-    case PixelFormat::ETC2_RGB:
-    case PixelFormat::ETC2_RGBA:
-    case PixelFormat::ASTC4x4:
-    case PixelFormat::ASTC6x6:
-    case PixelFormat::ASTC8x8:
-        renderFormat = imagePixelFormat;
-        break;
-    default:;
-    }
     //override renderFormat, since some render format is not supported by metal
     switch (renderFormat)
     {
@@ -256,25 +238,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
         updateWithMipmaps(image->getMipmaps(), image->getNumberOfMipmaps(), image->getPixelFormat(), renderFormat, imageWidth, imageHeight, image->hasPremultipliedAlpha(), index);
     }
     else if (image->isCompressed())
-    {   
-#ifndef CC_USE_METAL
-        switch (imagePixelFormat) {
-        case PixelFormat::ETC1:
-        case PixelFormat::ETC2_RGB:
-        case PixelFormat::ETC2_RGBA:
-        case PixelFormat::ASTC4x4:
-        case PixelFormat::ASTC6x6:
-        case PixelFormat::ASTC8x8:
-            renderFormat = imagePixelFormat;
-            break;
-        default:;
-        }
-#endif
-        if (renderFormat != image->getPixelFormat())
-        {
-            CCLOG("cocos2d: WARNING: This image is compressed and we can't convert it for now");
-        }
-
+    { // !Only hardware support texture will be compression PixelFormat, otherwise, will convert to RGBA8 duraing image load
+        renderFormat = imagePixelFormat;
         updateWithData(tempData, tempDataLen, image->getPixelFormat(), image->getPixelFormat(), imageWidth, imageHeight, imageSize, image->hasPremultipliedAlpha(), index);
     }
     else
