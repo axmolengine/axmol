@@ -27,6 +27,7 @@
 #include "renderer/backend/Buffer.h"
 #include "renderer/backend/Device.h"
 #include "base/ccUtils.h"
+#include <stddef.h>
 
 NS_CC_BEGIN
 
