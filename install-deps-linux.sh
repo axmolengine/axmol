@@ -31,5 +31,6 @@ DEPENDS+=' libglew-dev'
 DEPENDS+=' libssl-dev'
 DEPENDS+=' libgtk-3-dev'
 DEPENDS+=' binutils'
+DEPENDS+=' libbsd-dev'
 
 sudo apt-get install --force-yes --yes $DEPENDS > /dev/null
