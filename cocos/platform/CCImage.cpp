@@ -888,7 +888,7 @@ Image::Format Image::detectFormat(const uint8_t * data, ssize_t dataLen)
 
 int Image::getBitPerPixel()
 {
-    return backend::PixelFormatUtils::getBlockInfo(_pixelFormat).bpp;
+    return Texture2D::getBitsPerPixelForFormat(_pixelFormat);
 }
 
 bool Image::hasAlpha()

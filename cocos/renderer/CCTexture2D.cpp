@@ -282,8 +282,8 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
     }
 
 
-    auto& info = backend::PixelFormatUtils::getBlockInfo(pixelFormat);
-    if (!info.bpp)
+    auto& pfd = backend::PixelFormatUtils::getFormatDescriptor(pixelFormat);
+    if (!pfd.bpp)
     {
         CCLOG("cocos2d: WARNING: unsupported pixelformat: %lx", (unsigned long)pixelFormat);
 #ifdef CC_USE_METAL
@@ -576,85 +576,7 @@ void Texture2D::setAntiAliasTexParameters()
 
 const char* Texture2D::getStringForFormat() const
 {
-    switch (_pixelFormat) 
-    {
-        case backend::PixelFormat::RGBA8:
-            return  "RGBA8888";
-
-        case backend::PixelFormat::RGB8:
-            return  "RGB888";
-
-        case backend::PixelFormat::RGB565:
-            return  "RGB565";
-
-        case backend::PixelFormat::RGBA4:
-            return  "RGBA4444";
-
-        case backend::PixelFormat::RGB5A1:
-            return  "RGB5A1";
-
-        case backend::PixelFormat::LA8:
-            return  "AI88";
-
-        case backend::PixelFormat::A8:
-            return  "A8";
-
-        case backend::PixelFormat::L8:
-            return  "I8";
-
-        case backend::PixelFormat::PVRTC4:
-            return  "PVRTC4";
-
-        case backend::PixelFormat::PVRTC2:
-            return  "PVRTC2";
-
-        case backend::PixelFormat::PVRTC2A:
-            return "PVRTC2A";
-        
-        case backend::PixelFormat::PVRTC4A:
-            return "PVRTC4A";
-            
-        case backend::PixelFormat::ETC1:
-            return "ETC1";
-
-        case backend::PixelFormat::ETC2_RGB:
-            return "ETC2_RGB";
-
-        case backend::PixelFormat::ETC2_RGBA:
-            return "ETC2_RGBA";
-
-        case backend::PixelFormat::S3TC_DXT1:
-            return "S3TC_DXT1";
-            
-        case backend::PixelFormat::S3TC_DXT3:
-            return "S3TC_DXT3";
-
-        case backend::PixelFormat::S3TC_DXT5:
-            return "S3TC_DXT5";
-            
-        case backend::PixelFormat::ATC_RGB:
-            return "ATC_RGB";
-
-        case backend::PixelFormat::ATC_EXPLICIT_ALPHA:
-            return "ATC_EXPLICIT_ALPHA";
-
-        case backend::PixelFormat::ATC_INTERPOLATED_ALPHA:
-            return "ATC_INTERPOLATED_ALPHA";
-
-        case backend::PixelFormat::ASTC4x4:
-            return "ASTC4x4";
-        case backend::PixelFormat::ASTC6x6:
-            return "ASTC6x6";
-        case backend::PixelFormat::ASTC8x8:
-            return "ASTC8x8";
-
-        default:
-            CCASSERT(false , "unrecognized pixel format");
-            CCLOG("stringForFormat: %ld, cannot give useful result", (long)_pixelFormat);
-            break;
-    }
-
-    return  nullptr;
+    return backend::PixelFormatUtils::getFormatDescriptor(_pixelFormat).name;
 }
 
 //
@@ -674,12 +596,12 @@ backend::PixelFormat Texture2D::getDefaultAlphaPixelFormat()
 
 unsigned int Texture2D::getBitsPerPixelForFormat(backend::PixelFormat format)
 {
-    return backend::PixelFormatUtils::getBlockInfo(format).bpp;
+    return backend::PixelFormatUtils::getFormatDescriptor(format).bpp;
 }
 
 unsigned int Texture2D::getBitsPerPixelForFormat() const
 {
-    return this->getBitsPerPixelForFormat(_pixelFormat);
+    return getBitsPerPixelForFormat(_pixelFormat);
 }
 
 void Texture2D::addSpriteFrameCapInset(SpriteFrame* spritframe, const Rect& capInsets)

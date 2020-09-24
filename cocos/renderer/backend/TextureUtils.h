@@ -33,7 +33,7 @@ namespace backend {
     namespace PixelFormatUtils {
         typedef cocos2d::backend::PixelFormat PixelFormat;
 
-        struct PixelBlockInfo
+        struct PixelFormatDescriptor
         {
             uint8_t bpp; // bitsPerPixel: !!!regard bpp=0 as invalid pixel format
             uint8_t blockWidth;
@@ -42,11 +42,12 @@ namespace backend {
             uint8_t minBlockX;
             uint8_t minBlockY;
             bool    alpha; // with alpha channel?
+            const char* name;
         };
 
-        const PixelBlockInfo& getBlockInfo(PixelFormat format);
+        const PixelFormatDescriptor& getFormatDescriptor(PixelFormat format);
         uint32_t computeRowPitch(PixelFormat format, uint32_t width);
-        inline uint8_t getBitsPerPixel(PixelFormat format) { return getBlockInfo(format).bpp; }
+        inline uint8_t getBitsPerPixel(PixelFormat format) { return getFormatDescriptor(format).bpp; }
         inline bool isCompressed(PixelFormat format) { return format < PixelFormat::RGBA8; }
         
         /**convert functions*/

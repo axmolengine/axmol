@@ -29,22 +29,8 @@
 NS_CC_BEGIN
 
 namespace backend { namespace PixelFormatUtils {
-    
-    ///
-    struct EncodingType
-    {
-        enum Enum ///
-        {
-            Unorm,
-            Int,
-            Uint,
-            Float,
-            Snorm,
-            Count
-        };
-    };
 
-    static const PixelBlockInfo s_pixelBlockInfo[] =
+    static const PixelFormatDescriptor s_pixelFormatDescriptors[] =
     {
         //  +--------------------------------------------- bpp
         //  |   +----------------------------------------- block width
@@ -53,66 +39,65 @@ namespace backend { namespace PixelFormatUtils {
         //  |   |  |   |  +------------------------------- min blocks x
         //  |   |  |   |  |  +---------------------------- min blocks y
         //  |   |  |   |  |  |   +------------------------ alpha
-        {   4,  4, 4,  8, 2, 2,  false, }, // PVRTC4
-        {   4,  4, 4,  8, 2, 2,  true,  }, // PVRTC4A
-        {   2,  8, 4,  8, 2, 2,  false, }, // PVRTC2
-        {   2,  8, 4,  8, 2, 2,  true,  }, // PVTC2A
-        // {   4,  4, 4,  8, 2, 2,  true, }, // PVRTC4A v2
-        // {   2,  8, 4,  8, 2, 2,  true, }, // PVTC2A v2
-        {   4,  4, 4,  8, 1, 1,  false, }, // ETC1
-        {   4,  4, 4,  8, 1, 1,  false, }, // ETC2
-        {   8,  4, 4, 16, 1, 1,  true,  }, // ETC2A
-        {   4,  4, 4,  8, 1, 1,  true,  }, // S3TC_DXT1
-        {   8,  4, 4, 16, 1, 1,  true,  }, // S3TC_DXT3
-        {   8,  4, 4, 16, 1, 1,  true,  }, // S3TC_DXT5
-        {   4,  4, 4,  8, 1, 1,  false, }, // ATC_RGB
-        {   8,  4, 4, 16, 1, 1,  true,  }, // ATC_EXPLICIT_ALPHA
-        {   8,  4, 4, 16, 1, 1,  true,  }, // ATC_INTERPOLATED_ALPHA
-        {   8,  4, 4, 16, 1, 1,  true,  }, // ASTC4x4
-        {   6,  5, 5, 16, 1, 1,  true,  }, // ASTC5x5
-        {   4,  6, 6, 16, 1, 1,  true,  }, // ASTC6x6
-        {   4,  8, 5, 16, 1, 1,  true,  }, // ASTC8x5
-        {   3,  8, 6, 16, 1, 1,  true,  }, // ASTC8x6
-        {   2,  8, 8, 16, 1, 1,  true,  }, // ASTC8x8
-        {   3, 10, 5, 16, 1, 1,  true,  }, // ASTC10x5
-        {  32,  1, 1,  4, 1, 1,  true,  }, // RGBA8
-        {  32,  1, 1,  4, 1, 1,  true,  }, // BGRA8
-        {  24,  1, 1,  3, 1, 1,  false, }, // RGB8
-        {  16,  1, 1,  2, 1, 1,  false, }, // R5G6B5
-        {  16,  1, 1,  2, 1, 1,  true,  }, // RGBA4
-        {  16,  1, 1,  2, 1, 1,  true,  }, // RGB5A1
-        {   8,  1, 1,  1, 1, 1,  true,  }, // A8
-        {   8,  1, 1,  1, 1, 1,  false, }, // L8
-        {  16,  1, 1,  2, 1, 1,  true,  }, // LA8
+        //  |   |  |   |  |  |   |        +--------------- name
+        {   4,  4, 4,  8, 2, 2,  false,   "PVRTC4"   }, // PVRTC4
+        {   4,  4, 4,  8, 2, 2,  true,    "PVRTC4A"  }, // PVRTC4A
+        {   2,  8, 4,  8, 2, 2,  false,   "PVRTC2"   }, // PVRTC2
+        {   2,  8, 4,  8, 2, 2,  true,    "PVRTC2A"  }, // PVTC2A
+        {   4,  4, 4,  8, 1, 1,  false,   "ETC1"     }, // ETC1
+        {   4,  4, 4,  8, 1, 1,  false,   "ETC2"     }, // ETC2
+        {   8,  4, 4, 16, 1, 1,  true,    "ETC2A"    }, // ETC2A
+        {   4,  4, 4,  8, 1, 1,  true,    "BC1"      }, // S3TC_DXT1
+        {   8,  4, 4, 16, 1, 1,  true,    "BC2"      }, // S3TC_DXT3
+        {   8,  4, 4, 16, 1, 1,  true,    "BC3"      }, // S3TC_DXT5
+        {   4,  4, 4,  8, 1, 1,  false,   "ATC"      }, // ATC_RGB
+        {   8,  4, 4, 16, 1, 1,  true,    "ATCE"     }, // ATC_EXPLICIT_ALPHA
+        {   8,  4, 4, 16, 1, 1,  true,    "ATCI"     }, // ATC_INTERPOLATED_ALPHA
+        {   8,  4, 4, 16, 1, 1,  true,    "ASTC4x4"  }, // ASTC4x4
+        {   6,  5, 5, 16, 1, 1,  true,    "ASTC5x5"  }, // ASTC5x5
+        {   4,  6, 6, 16, 1, 1,  true,    "ASTC6x6"  }, // ASTC6x6
+        {   4,  8, 5, 16, 1, 1,  true,    "ASTC8x5"  }, // ASTC8x5
+        {   3,  8, 6, 16, 1, 1,  true,    "ASTC8x6"  }, // ASTC8x6
+        {   2,  8, 8, 16, 1, 1,  true,    "ASTC8x8"  }, // ASTC8x8
+        {   3, 10, 5, 16, 1, 1,  true,    "ASTC10x5" }, // ASTC10x5
+        {  32,  1, 1,  4, 1, 1,  true,    "RGBA8"    }, // RGBA8
+        {  32,  1, 1,  4, 1, 1,  true,    "BGRA8"    }, // BGRA8
+        {  24,  1, 1,  3, 1, 1,  false,   "RGB8"     }, // RGB8
+        {  16,  1, 1,  2, 1, 1,  false,   "R5G6B5"   }, // R5G6B5
+        {  16,  1, 1,  2, 1, 1,  true,    "RGBA4"    }, // RGBA4
+        {  16,  1, 1,  2, 1, 1,  true,    "RGB5A1"   }, // RGB5A1
+        {   8,  1, 1,  1, 1, 1,  true,    "A8"       }, // A8
+        {   8,  1, 1,  1, 1, 1,  false,   "L8"       }, // L8
+        {  16,  1, 1,  2, 1, 1,  true,    "LA8"      }, // LA8
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
-        {  32,  1, 1,  4, 1, 1,  false, }, // D24S8
+        {  32,  1, 1,  4, 1, 1,  false,   "D24S8"    }, // D24S8
 #else
-        {  64,  1, 1,  8, 1, 1,  false, }, // D32F8 iOS
+        {  64,  1, 1,  8, 1, 1,  false,   "D32FS8"   }, // D32FS8 iOS
 #endif
     };
 
-    static_assert(CC_ARRAYSIZE(s_pixelBlockInfo) == (int)PixelFormat::COUNT, "The texture block info table incomplete!");
+    static_assert(CC_ARRAYSIZE(s_pixelFormatDescriptors) == (int)PixelFormat::COUNT, "The pixel format descriptor table incomplete!");
 
     //////////////////////////////////////////////////////////////////////////
-    //pixel block info function
-    const PixelBlockInfo& getBlockInfo(PixelFormat format)
+    // pixel format helper functions
+    const PixelFormatDescriptor& getFormatDescriptor(PixelFormat format)
     {
         if(UTILS_LIKELY(format < PixelFormat::COUNT) )
-            return s_pixelBlockInfo[(uint32_t)format];
+            return s_pixelFormatDescriptors[(uint32_t)format];
 
-        static const PixelBlockInfo s_invalidInfo = {};
-        return s_invalidInfo;
+        static const PixelFormatDescriptor s_invalidDescriptor = {};
+        return s_invalidDescriptor;
     }
 
     uint32_t computeRowPitch(PixelFormat format, uint32_t width)
     {
         if(UTILS_LIKELY(format < PixelFormat::COUNT) ) {
-            auto& info = s_pixelBlockInfo[(uint32_t)format];
+            auto& descriptor = s_pixelFormatDescriptors[(uint32_t)format];
             if(format < PixelFormat::RGBA8) {
-                auto blocksPerRow = (width + (info.blockWidth - 1)) / info.blockWidth;
-                return blocksPerRow * info.blockSize;
+                auto blocksPerRow = (width + (descriptor.blockWidth - 1)) / descriptor.blockWidth;
+                return blocksPerRow * descriptor.blockSize;
             }
-            return width * info.bpp / 8;
+            return width * descriptor.bpp / 8;
         }
         return 0;
     }
