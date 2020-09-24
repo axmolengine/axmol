@@ -222,13 +222,7 @@ void TextureMTL::updateTextureDescriptor(const cocos2d::backend::TextureDescript
     _textureInfo.ensure(index, MTL_TEXTURE_2D);
     updateSamplerDescriptor(descriptor.samplerDescriptor);
     
-    // TODO: Metal doesn't support RGB888/RGBA4444, so should convert to RGBA888;
-    if (PixelFormat::RGB8 == _textureFormat)
-    {
-        _bitsPerPixel = 4 * 8;
-    }
-    
-    _textureInfo._bytesPerRow = descriptor.width * _bitsPerPixel / 8 ;
+    _textureInfo._bytesPerRow = PixelFormatUtils::computeRowPitch(descriptor.textureFormat, descriptor.width);
 }
 
 void TextureMTL::updateData(uint8_t* data, std::size_t width , std::size_t height, std::size_t level, int index)
@@ -306,12 +300,6 @@ void TextureCubeMTL::updateTextureDescriptor(const cocos2d::backend::TextureDesc
     _textureInfo._descriptor = descriptor;
     _textureInfo.ensure(index, MTL_TEXTURE_CUBE);
     updateSamplerDescriptor(descriptor.samplerDescriptor);
-    
-    // TODO: Metal doesn't support RGB888/RGBA4444, so should convert to RGBA888;
-    if (PixelFormat::RGB8 == _textureFormat)
-    {
-        _bitsPerPixel = 4 * 8;
-    }
     
     _textureInfo._bytesPerRow = PixelFormatUtils::computeRowPitch(descriptor.textureFormat, descriptor.width);
     _bytesPerImage = _textureInfo._bytesPerRow * descriptor.width;

@@ -218,6 +218,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 #endif
     case PixelFormat::L8:
     case PixelFormat::LA8:
+    case PixelFormat::RGB8: // Metal doesn' support RGB8, so switch at here.
         //TODO: conversion RGBA8888 -> I8(AI88) -> RGBA8888 may happends
         renderFormat = PixelFormat::RGBA8;
         break;
