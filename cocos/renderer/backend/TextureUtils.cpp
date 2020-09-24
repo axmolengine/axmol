@@ -636,7 +636,7 @@ namespace backend { namespace PixelFormatUtils {
     }
     
     // AAAABBBBGGGGRRRR -> AAAABBBB GGGGRRRR
-    //void convertRGBA4ToABGR4444(const unsigned char *data, ssize_t dataLen, unsigned char *out)
+    //void convertRGBA4ToABGR4(const unsigned char *data, ssize_t dataLen, unsigned char *out)
     
     void convertA8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData)
     {
@@ -974,7 +974,7 @@ namespace backend { namespace PixelFormatUtils {
             case PixelFormat::RGBA4:
                 *outDataLen = dataLen;
                 *outData = (unsigned char *)data;
-                //convertRGBA4ToABGR4444(data, dataLen, *outData);
+                //convertRGBA4ToABGR4(data, dataLen, *outData);
                 break;
             default:
                 // unsupported conversion or don't need to convert
