@@ -92,12 +92,15 @@ namespace backend { namespace PixelFormatUtils {
     uint32_t computeRowPitch(PixelFormat format, uint32_t width)
     {
         if(UTILS_LIKELY(format < PixelFormat::COUNT) ) {
-            auto& descriptor = s_pixelFormatDescriptors[(uint32_t)format];
-            if(format < PixelFormat::RGBA8) {
-                auto blocksPerRow = (width + (descriptor.blockWidth - 1)) / descriptor.blockWidth;
-                return blocksPerRow * descriptor.blockSize;
+            if(UTILS_LIKELY(format >= PixelFormat::ETC1))
+            { // @MTL: PVRTC.rowPitc must be 0
+                auto& descriptor = s_pixelFormatDescriptors[(uint32_t)format];
+                if(format < PixelFormat::RGBA8) {
+                    auto blocksPerRow = (width + (descriptor.blockWidth - 1)) / descriptor.blockWidth;
+                    return blocksPerRow * descriptor.blockSize;
+                }
+                return width * descriptor.bpp / 8;
             }
-            return width * descriptor.bpp / 8;
         }
         return 0;
     }
