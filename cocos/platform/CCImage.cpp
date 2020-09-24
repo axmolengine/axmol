@@ -893,7 +893,7 @@ int Image::getBitPerPixel()
 
 bool Image::hasAlpha()
 {
-    return !!backend::PixelFormatUtils::getBlockInfo(_pixelFormat).aBits;
+    return backend::PixelFormatUtils::getBlockInfo(_pixelFormat).alpha;
 }
 
 bool Image::isCompressed()

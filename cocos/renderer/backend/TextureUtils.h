@@ -41,13 +41,7 @@ namespace backend {
             uint8_t blockSize;
             uint8_t minBlockX;
             uint8_t minBlockY;
-            uint8_t depthBits;
-            uint8_t stencilBits;
-            uint8_t rBits; // for compression texture is 0
-            uint8_t gBits; // for compression texture is 0
-            uint8_t bBits; // for compression texture is 0
-            uint8_t aBits; // for compression texture, 0: no alpha, 1: has alpha
-            uint8_t encoding;
+            bool    alpha; // with alpha channel?
         };
 
         const PixelBlockInfo& getBlockInfo(PixelFormat format);

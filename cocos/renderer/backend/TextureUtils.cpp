@@ -52,46 +52,42 @@ namespace backend { namespace PixelFormatUtils {
         //  |   |  |   +---------------------------------- block size
         //  |   |  |   |  +------------------------------- min blocks x
         //  |   |  |   |  |  +---------------------------- min blocks y
-        //  |   |  |   |  |  |   +------------------------ depth bits
-        //  |   |  |   |  |  |   |  +--------------------- stencil bits
-        //  |   |  |   |  |  |   |  |   +---+---+---+----- r, g, b, a bits
-        //  |   |  |   |  |  |   |  |   r   g   b   a  +-- encoding type
-        //  |   |  |   |  |  |   |  |   |   |   |   |  |
-        {   4,  4, 4,  8, 2, 2,  0, 0,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // PVRTC4
-        {   4,  4, 4,  8, 2, 2,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // PVRTC4A
-        {   2,  8, 4,  8, 2, 2,  0, 0,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // PVRTC2
-        {   2,  8, 4,  8, 2, 2,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // PVTC2A
-        // {   4,  4, 4,  8, 2, 2,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // PVRTC4A v2
-        // {   2,  8, 4,  8, 2, 2,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // PVTC2A v2
-        {   4,  4, 4,  8, 1, 1,  0, 0,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // ETC1
-        {   4,  4, 4,  8, 1, 1,  0, 0,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // ETC2
-        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ETC2A
-        {   4,  4, 4,  8, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // S3TC_DXT1
-        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // S3TC_DXT3
-        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // S3TC_DXT5
-        {   4,  4, 4,  8, 1, 1,  0, 0,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // ATC_RGB
-        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ATC_EXPLICIT_ALPHA
-        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ATC_INTERPOLATED_ALPHA
-        {   8,  4, 4, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC4x4
-        {   6,  5, 5, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC5x5
-        {   4,  6, 6, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC6x6
-        {   4,  8, 5, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC8x5
-        {   3,  8, 6, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC8x6
-        {   2,  8, 8, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC8x8
-        {   3, 10, 5, 16, 1, 1,  0, 0,  0,  0,  0,  1, uint8_t(EncodingType::Unorm) }, // ASTC10x5
-        {  32,  1, 1,  4, 1, 1,  0, 0,  8,  8,  8,  8, uint8_t(EncodingType::Unorm) }, // RGBA8
-        {  32,  1, 1,  4, 1, 1,  0, 0,  8,  8,  8,  8, uint8_t(EncodingType::Unorm) }, // BGRA8
-        {  24,  1, 1,  3, 1, 1,  0, 0,  8,  8,  8,  0, uint8_t(EncodingType::Unorm) }, // RGB8
-        {  16,  1, 1,  2, 1, 1,  0, 0,  5,  6,  5,  0, uint8_t(EncodingType::Unorm) }, // R5G6B5
-        {  16,  1, 1,  2, 1, 1,  0, 0,  4,  4,  4,  4, uint8_t(EncodingType::Unorm) }, // RGBA4
-        {  16,  1, 1,  2, 1, 1,  0, 0,  5,  5,  5,  1, uint8_t(EncodingType::Unorm) }, // RGB5A1
-        {   8,  1, 1,  1, 1, 1,  0, 0,  0,  0,  0,  8, uint8_t(EncodingType::Unorm) }, // A8
-        {   8,  1, 1,  1, 1, 1,  0, 0,  8,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // L8
-        {  16,  1, 1,  2, 1, 1,  0, 0,  8,  8,  0,  0, uint8_t(EncodingType::Unorm) }, // LA8
+        //  |   |  |   |  |  |   +------------------------ alpha
+        {   4,  4, 4,  8, 2, 2,  false, }, // PVRTC4
+        {   4,  4, 4,  8, 2, 2,  true,  }, // PVRTC4A
+        {   2,  8, 4,  8, 2, 2,  false, }, // PVRTC2
+        {   2,  8, 4,  8, 2, 2,  true,  }, // PVTC2A
+        // {   4,  4, 4,  8, 2, 2,  true, }, // PVRTC4A v2
+        // {   2,  8, 4,  8, 2, 2,  true, }, // PVTC2A v2
+        {   4,  4, 4,  8, 1, 1,  false, }, // ETC1
+        {   4,  4, 4,  8, 1, 1,  false, }, // ETC2
+        {   8,  4, 4, 16, 1, 1,  true,  }, // ETC2A
+        {   4,  4, 4,  8, 1, 1,  true,  }, // S3TC_DXT1
+        {   8,  4, 4, 16, 1, 1,  true,  }, // S3TC_DXT3
+        {   8,  4, 4, 16, 1, 1,  true,  }, // S3TC_DXT5
+        {   4,  4, 4,  8, 1, 1,  false, }, // ATC_RGB
+        {   8,  4, 4, 16, 1, 1,  true,  }, // ATC_EXPLICIT_ALPHA
+        {   8,  4, 4, 16, 1, 1,  true,  }, // ATC_INTERPOLATED_ALPHA
+        {   8,  4, 4, 16, 1, 1,  true,  }, // ASTC4x4
+        {   6,  5, 5, 16, 1, 1,  true,  }, // ASTC5x5
+        {   4,  6, 6, 16, 1, 1,  true,  }, // ASTC6x6
+        {   4,  8, 5, 16, 1, 1,  true,  }, // ASTC8x5
+        {   3,  8, 6, 16, 1, 1,  true,  }, // ASTC8x6
+        {   2,  8, 8, 16, 1, 1,  true,  }, // ASTC8x8
+        {   3, 10, 5, 16, 1, 1,  true,  }, // ASTC10x5
+        {  32,  1, 1,  4, 1, 1,  true,  }, // RGBA8
+        {  32,  1, 1,  4, 1, 1,  true,  }, // BGRA8
+        {  24,  1, 1,  3, 1, 1,  false, }, // RGB8
+        {  16,  1, 1,  2, 1, 1,  false, }, // R5G6B5
+        {  16,  1, 1,  2, 1, 1,  true,  }, // RGBA4
+        {  16,  1, 1,  2, 1, 1,  true,  }, // RGB5A1
+        {   8,  1, 1,  1, 1, 1,  true,  }, // A8
+        {   8,  1, 1,  1, 1, 1,  false, }, // L8
+        {  16,  1, 1,  2, 1, 1,  true,  }, // LA8
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
-        {  32,  1, 1,  4, 1, 1, 24, 8,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // D24S8
+        {  32,  1, 1,  4, 1, 1,  false, }, // D24S8
 #else
-        {  64,  1, 1,  8, 1, 1, 32, 8,  0,  0,  0,  0, uint8_t(EncodingType::Float) }, // D32F8 iOS
+        {  64,  1, 1,  8, 1, 1,  false, }, // D32F8 iOS
 #endif
     };
 
