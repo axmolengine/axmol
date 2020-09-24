@@ -60,57 +60,57 @@ namespace backend {
 
         PixelFormat convertL8ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
         PixelFormat convertLA8ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
-        PixelFormat convertRGB888ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
-        PixelFormat convertRGBA8888ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
+        PixelFormat convertRGB8ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
+        PixelFormat convertRGBA8ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
         PixelFormat convertRGB5A1ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
         PixelFormat convertRGB565ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
         PixelFormat convertA8ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
-        PixelFormat convertRGBA4444ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
-        PixelFormat convertBGRA8888ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
+        PixelFormat convertRGBA4ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
+        PixelFormat convertBGRA8ToFormat(const unsigned char* data, size_t dataLen, PixelFormat format, unsigned char** outData, size_t* outDataLen);
 
         //L8 to XXX
-        void convertL8ToRGB888(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertL8ToRGBA8888(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertL8ToRGB8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertL8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
         void convertL8ToRGB565(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertL8ToRGBA4444(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertL8ToRGBA4(const unsigned char* data, size_t dataLen, unsigned char* outData);
         void convertL8ToRGB5A1(const unsigned char* data, size_t dataLen, unsigned char* outData);
         void convertL8ToLA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
 
         //LA8 to XXX
-        void convertLA8ToRGB888(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertLA8ToRGBA8888(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertLA8ToRGB8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertLA8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
         void convertLA8ToRGB565(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertLA8ToRGBA4444(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertLA8ToRGBA4(const unsigned char* data, size_t dataLen, unsigned char* outData);
         void convertLA8ToRGB5A1(const unsigned char* data, size_t dataLen, unsigned char* outData);
         void convertLA8ToA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
         void convertLA8ToL8(const unsigned char* data, size_t dataLen, unsigned char* outData);
 
-        //RGB888 to XXX
-        void convertRGB888ToRGBA8888(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGB888ToRGB565(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGB888ToA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGB888ToL8(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGB888ToLA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGB888ToRGBA4444(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGB888ToRGB5A1(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        //RGB8 to XXX
+        void convertRGB8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGB8ToRGB565(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGB8ToA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGB8ToL8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGB8ToLA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGB8ToRGBA4(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGB8ToRGB5A1(const unsigned char* data, size_t dataLen, unsigned char* outData);
 
-        //RGBA8888 to XXX
-        void convertRGBA8888ToRGB888(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGBA8888ToRGB565(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGBA8888ToA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGBA8888ToL8(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGBA8888ToLA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGBA8888ToRGBA4444(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGBA8888ToRGB5A1(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        //RGBA8 to XXX
+        void convertRGBA8ToRGB8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGBA8ToRGB565(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGBA8ToA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGBA8ToL8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGBA8ToLA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGBA8ToRGBA4(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGBA8ToRGB5A1(const unsigned char* data, size_t dataLen, unsigned char* outData);
 
 
-        void convertRGB5A1ToRGBA8888(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGB565ToRGBA8888(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertA8ToRGBA8888(const unsigned char* data, size_t dataLen, unsigned char* outData);
-        void convertRGBA4444ToRGBA8888(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGB5A1ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGB565ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertA8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        void convertRGBA4ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
         
-        //BGRA8888 to XXX
-        void convertBGRA8888ToRGBA8888(const unsigned char* data, size_t dataLen, unsigned char* outData);
+        //BGRA8 to XXX
+        void convertBGRA8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
     };
 }
 NS_CC_END
