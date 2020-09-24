@@ -28,41 +28,7 @@
 #include "TextureGL.h"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/TextureUtils.h"
-
-#if !defined(GL_COMPRESSED_RGB8_ETC2)
-#define GL_COMPRESSED_RGB8_ETC2 0x9274
-#endif
-#if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
-#define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
-#endif
-
-#if !defined(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR)
-#   define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4 0x93D0
-#endif
-
-#if !defined(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR)
-#   define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5 0x93D2
-#endif
-
-#if !defined(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR)
-#   define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6 0x93D4
-#endif
-
-#if !defined(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR)
-#   define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5 0x93D5
-#endif
-
-#if !defined(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR)
-#   define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6 0x93D6
-#endif
-
-#if !defined(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR)
-#   define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8 0x93D7
-#endif
-
-#if !defined(GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR)
-#   define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5 0x93D8
-#endif
+#include "platform/CCGL.h"
 
  // In desktop OpenGL 4+ and OpenGL ES 3.0+, specific GL formats GL_x_INTEGER are used for integer textures.
  // For older desktop OpenGL contexts, GL names without _INTEGER suffix were used.
@@ -103,8 +69,8 @@ static GPUTextureFormatInfo s_textureFormats[] =
 
     /* etc */
     { GL_ETC1_RGB8_OES,                            GL_ZERO,                                      GL_ETC1_RGB8_OES,                            GL_ETC1_RGB8_OES,                            GL_ZERO, }, // ETC1
-    { GL_COMPRESSED_RGB8_ETC2,                     GL_ZERO,                                      GL_COMPRESSED_RGB8_ETC2,                     GL_COMPRESSED_RGB8_ETC2,                     GL_ZERO, }, // ETC2
-    { GL_COMPRESSED_RGBA8_ETC2_EAC,                GL_COMPRESSED_SRGB8_ETC2,                     GL_COMPRESSED_RGBA8_ETC2_EAC,                GL_COMPRESSED_RGBA8_ETC2_EAC,                GL_ZERO, }, // ETC2A
+    { GL_COMPRESSED_RGB8_ETC2,                     GL_COMPRESSED_SRGB8_ETC2,                     GL_COMPRESSED_RGB8_ETC2,                     GL_COMPRESSED_RGB8_ETC2,                     GL_ZERO, }, // ETC2
+    { GL_COMPRESSED_RGBA8_ETC2_EAC,                GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC,          GL_COMPRESSED_RGBA8_ETC2_EAC,                GL_COMPRESSED_RGBA8_ETC2_EAC,                GL_ZERO, }, // ETC2A
 
     /* s3tc */
     { GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,            GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT,       GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,            GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,            GL_ZERO, }, // S3TC_DXT1
@@ -125,9 +91,9 @@ static GPUTextureFormatInfo s_textureFormats[] =
     { GL_COMPRESSED_RGBA_ASTC_8x8_KHR,             GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR,      GL_COMPRESSED_RGBA_ASTC_8x8_KHR,             GL_COMPRESSED_RGBA_ASTC_8x8_KHR,             GL_ZERO, }, // ASTC8x8
     { GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR,     GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_ZERO, }, // ASTC10x5
 
-    { GL_RGBA8,                                    GL_SRGB8_ALPHA8,                              GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_BYTE,                }, // RGBA8
-    { GL_RGBA8,                                    GL_SRGB8_ALPHA8,                              GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_BYTE,                }, // RGBA8
-    { GL_RGB8,                                     GL_SRGB8,                                     GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_BYTE,                }, // RGB8
+    { GL_RGBA,                                     GL_SRGB8_ALPHA8_EXT,                          GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_BYTE,                }, // RGBA8
+    { GL_RGBA,                                     GL_SRGB8_ALPHA8_EXT,                          GL_BGRA_EXT,                                 GL_BGRA_EXT,                                 GL_UNSIGNED_BYTE,                }, // BGRA8
+    { GL_RGB,                                      GL_SRGB_EXT,                                  GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_BYTE,                }, // RGB8
     { GL_RGB565,                                   GL_ZERO,                                      GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_SHORT_5_6_5/*_REV*/, }, // R5G6B5 TO-COMFIRM
     { GL_ALPHA,                                    GL_ZERO,                                      GL_ALPHA,                                    GL_ALPHA,                                    GL_UNSIGNED_BYTE,                }, // A8
     { GL_LUMINANCE,                                GL_ZERO,                                      GL_LUMINANCE,                                GL_LUMINANCE,                                GL_UNSIGNED_BYTE,                }, // L8
@@ -324,10 +290,7 @@ GLint UtilsGL::toGLAddressMode(SamplerAddressMode addressMode, bool isPow2)
 
 
 void UtilsGL::toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint &format, GLenum &type, bool &isCompressed)
-{   //        case PixelFormat::D16:
-    //            format = GL_DEPTH_COMPONENT;
-    //            internalFormat = GL_DEPTH_COMPONENT;
-    //            type = GL_UNSIGNED_INT;
+{
     if (UTILS_LIKELY(textureFormat < PixelFormat::COUNT)) {
         auto& info = s_textureFormats[(int)textureFormat];
         internalFormat = info.internalFmt;
