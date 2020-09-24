@@ -59,12 +59,6 @@ struct UtilsMTL
     static void resizeDefaultAttachmentTexture(std::size_t width, std::size_t height);
     
     /**
-     * Get the default combined depth and stencil attachment pixel format.
-     * @return The default combined depth and stencil attachment pixel format.
-     */
-    static MTLPixelFormat getDefaultDepthStencilAttachmentPixelFormat();
-    
-    /**
      * Get the default combined depth and stencil texture.
      * @return The default combined depth and stencil texture.
      */

@@ -122,10 +122,12 @@ public:
      */
     virtual bool checkForFeatureSupported(FeatureType feature) override;
     
+    static bool supportD24S8() {return _isDepth24Stencil8PixelFormatSupported; }
+    
 private:
     std::string _deviceName;
     FeatureSet _featureSet = FeatureSet::Unknown;
-    bool _isDepth24Stencil8PixelFormatSupported = false;
+    static bool _isDepth24Stencil8PixelFormatSupported;
 };
 
 // end of _metal group

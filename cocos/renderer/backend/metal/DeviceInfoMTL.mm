@@ -368,6 +368,8 @@ namespace {
     }
 }
 
+bool DeviceInfoMTL::_isDepth24Stencil8PixelFormatSupported = false;
+
 DeviceInfoMTL::DeviceInfoMTL(id<MTLDevice> device)
 {
    _deviceName = [device.name UTF8String];
