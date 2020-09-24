@@ -249,7 +249,7 @@ void TextureETC1Alpha::onTouchesEnded(const std::vector<Touch*>& touches, Event*
 
 std::string TextureETC1Alpha::title() const
 {
-    return "Testing Sprite ETC1 Alpha support";
+    return "Testing Texture ETC1 Alpha support";
 }
 
 std::string TextureETC1Alpha::subtitle() const
