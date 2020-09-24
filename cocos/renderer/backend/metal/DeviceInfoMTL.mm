@@ -26,6 +26,7 @@
 
 #include "DeviceInfoMTL.h"
 #include "base/ccMacros.h"
+#include "UtilsMTL.h"
 CC_BACKEND_BEGIN
 
 namespace {
@@ -388,6 +389,8 @@ DeviceInfoMTL::DeviceInfoMTL(id<MTLDevice> device)
             break;
         }
     }
+    
+    UtilsMTL::initGPUTextureFormats();
 }
 
 bool DeviceInfoMTL::init()

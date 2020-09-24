@@ -46,6 +46,11 @@ class TextureBackend;
  */
 struct UtilsMTL
 {
+    /*
+     * init GPU texture supported formats
+     */
+    static void initGPUTextureFormats();
+    
     /**
      * Update default color attachment texture.
      * @param texture Specifies the texture to be setted to the color attachemnt.
