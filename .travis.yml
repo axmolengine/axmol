@@ -1,4 +1,5 @@
 language: cpp
+dist: bionic
 jobs:
   include:
     # osx
