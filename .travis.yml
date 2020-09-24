@@ -1,5 +1,4 @@
 language: cpp
-dist: bionic
 jobs:
   include:
     # osx
@@ -12,10 +11,12 @@ jobs:
       osx_image: xcode11.6
     # android
     - os: linux
+      dist: xenial
       env: BUILD_TARGET=android
       language: android
     # linux
     - os: linux
+      dist: bionic
       env: 
         - BUILD_TARGET=linux 
         - GEN_BINDING_AND_COCOSFILE=false
