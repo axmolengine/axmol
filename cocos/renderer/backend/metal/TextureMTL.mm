@@ -107,9 +107,6 @@ namespace
             case PixelFormat::RGBA4:
             case PixelFormat::RGB565:
             case PixelFormat::RGB5A1:
-            case PixelFormat::MTL_BGR5A1:
-            case PixelFormat::MTL_B5G6R5:
-            case PixelFormat::MTL_ABGR4:
                 return true;
             default:
                 return false;
