@@ -558,17 +558,17 @@ namespace backend { namespace PixelFormatUtils {
             (((data[i * 4 + 0] & 0xF8) << 8));             //r
         }
     }
-    
+
     // RRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA -> AAAABBBB GGGGRRRR
     void convertRGBA8888ToABGR4(const unsigned char *data, size_t dataLen, unsigned char *out)
     {
         uint16_t *outData = (uint16_t*)out;
         for(size_t i=0;i < dataLen; i+=4 )
         {
-            *outData++ = ((data[i] & 0xF0) << 8) |     //r
-            ((data[i + 1] & 0xF0) << 4) |              //g
-            ((data[i + 2] & 0xF0)) |                   //b
-            ((data[i + 3] & 0xF0) >> 4);               //a
+            *outData++ = (data[i] & 0x00F0) >> 4 //R
+                | (data[i + 1] & 0x00F0)         //G
+                | (data[i + 2] & 0x00F0) << 4    //B
+                | (data[i + 3] & 0x00F0) << 8;   //A
         }
     }
     
