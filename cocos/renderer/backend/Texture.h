@@ -103,8 +103,6 @@ public:
     int getWidth() const { return _width; }
     int getHeight() const { return _height; }
 
-    int getBytesPerRow() const { return _width * _bitsPerPixel / 8; }
-
 protected:
     /**
      * @param descriptor Specifies the texture descirptor.
