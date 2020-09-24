@@ -95,20 +95,18 @@ static GPUTextureFormatInfo s_textureFormats[] =
     { MTLPixelFormatInvalid,                        MTLPixelFormatInvalid                       }, // ASTC10x5
 #endif
     
-    /* Normal pixel format */
+    /* normal */
     { MTLPixelFormatRGBA8Unorm,                     MTLPixelFormatRGBA8Unorm_sRGB               }, // RGBA8
     { MTLPixelFormatBGRA8Unorm,                     MTLPixelFormatBGRA8Unorm_sRGB               }, // BGRA8
     { MTLPixelFormatInvalid,                        MTLPixelFormatInvalid                       }, // RGB8
     { MTLPixelFormat(40/*B5G6R5Unorm*/),            MTLPixelFormatInvalid                       }, // R5G6B5
+    { MTLPixelFormat(42/*ABGR4Unorm*/),             MTLPixelFormatInvalid                       }, // RGBA4
+    { MTLPixelFormat(41/*A1BGR5Unorm*/),            MTLPixelFormatInvalid                       }, // RGB5A1
     { MTLPixelFormatA8Unorm,                        MTLPixelFormatInvalid                       }, // A8
     { MTLPixelFormatInvalid,                        MTLPixelFormatInvalid                       }, // L8
     { MTLPixelFormatInvalid,                        MTLPixelFormatInvalid                       }, // LA8
-    { MTLPixelFormat(42/*ABGR4Unorm*/),             MTLPixelFormatInvalid                       }, // RGBA4
-    { MTLPixelFormat(41/*A1BGR5Unorm*/),            MTLPixelFormatInvalid                       }, // RGB5A1
-    { MTLPixelFormat(40/*B5G6R5Unorm*/),            MTLPixelFormatInvalid                       }, // MTL_B5G6R5
-    { MTLPixelFormat(41/*A1BGR5Unorm*/),            MTLPixelFormatInvalid                       }, // MTL_BGR5A1
-    { MTLPixelFormat(42/*ABGR4Unorm*/),             MTLPixelFormatInvalid                       }, // MTL_ABGR4
-    
+   
+    /* depth stencil */
     { MTLPixelFormat(255/*Depth24Unorm_Stencil8*/), MTLPixelFormatInvalid                       }, // D24S8
 };
 static_assert(CC_ARRAYSIZE(s_textureFormats) == (int)PixelFormat::COUNT, "The OpenGL GPU texture format info table incomplete!");

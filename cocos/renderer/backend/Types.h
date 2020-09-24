@@ -123,22 +123,18 @@ enum class PixelFormat : uint32_t
     //! 24-bit texture: RGBA888
     RGB8,
     //! 16-bit texture without Alpha channel
-    RGB565,
+    RGB565, // !render as BGR565
+    //! 16-bit textures: RGBA4444
+    RGBA4,  // !render as ABGR4
+    //! 16-bit textures: RGB5A1
+    RGB5A1, // !render as BGR5A1
     //! 8-bit textures used as masks
     A8,
     //! 8-bit Luminance texture
     L8,
     //! 16-bit Luminance with alpha used as masks
     LA8,
-    //! 16-bit textures: RGBA4444
-    RGBA4,
-    //! 16-bit textures: RGB5A1
-    RGB5A1,
 
-    MTL_B5G6R5,
-    //MTL_A1BGR5,
-    MTL_BGR5A1,
-    MTL_ABGR4,
     //!!!Please append normal pixel format
 
     /* below is depth compression format */
