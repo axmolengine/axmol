@@ -95,9 +95,9 @@ static GPUTextureFormatInfo s_textureFormats[] =
     { GL_RGBA,                                     GL_SRGB8_ALPHA8_EXT,                          GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_BYTE, }, // RGBA8
     { GL_RGBA,                                     GL_SRGB8_ALPHA8_EXT,                          GL_BGRA_EXT,                                 GL_BGRA_EXT,                                 GL_UNSIGNED_BYTE, }, // BGRA8
     { GL_RGB,                                      GL_SRGB_EXT,                                  GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_BYTE, }, // RGB8
-    { GL_RGB565,                                   GL_ZERO,                                      GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_SHORT_5_6_5}, // RGB565 match to MTLPixelFormatB5G6R5Unorm
+    { GL_RGB565,                                   GL_ZERO,                                      GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_SHORT_5_6_5}, // RGB565 TO-CHECK: match to MTLPixelFormatB5G6R5Unorm
     { GL_RGBA4,                                    GL_ZERO,                                      GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_SHORT_4_4_4_4}, // RGBA4 === MTLPixelFormatABGR4Unorm
-    { GL_RGB5_A1,                                  GL_ZERO,                                      GL_BGRA_EXT,                                 GL_BGRA_EXT/*GL_BGRA_EXT*/,                  GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT}, // RGB5A1 TODO: match to MTLPixelFormatBGR5A1Unorm
+    { GL_RGB5_A1,                                  GL_ZERO,                                      GL_BGRA_EXT,                                 GL_BGRA_EXT/*GL_BGRA_EXT*/,                  GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT}, // RGB5A1 TO-CHECK: match to MTLPixelFormatBGR5A1Unorm
     { GL_ALPHA,                                    GL_ZERO,                                      GL_ALPHA,                                    GL_ALPHA,                                    GL_UNSIGNED_BYTE, }, // A8
     { GL_LUMINANCE,                                GL_ZERO,                                      GL_LUMINANCE,                                GL_LUMINANCE,                                GL_UNSIGNED_BYTE, }, // L8
     { GL_LUMINANCE_ALPHA,                          GL_ZERO,                                      GL_LUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_UNSIGNED_BYTE, }, // LA8
@@ -106,6 +106,13 @@ static GPUTextureFormatInfo s_textureFormats[] =
     { GL_DEPTH24_STENCIL8,                         GL_ZERO,                                      GL_DEPTH_STENCIL,                            GL_DEPTH_STENCIL,                            GL_UNSIGNED_INT_24_8, }, // D24S8
 };
 static_assert(CC_ARRAYSIZE(s_textureFormats) == (int)PixelFormat::COUNT, "The OpenGL GPU texture format info table incomplete!");
+
+/*
+* !!!Note:
+* PixelFormat::RGBA4: 
+*   GL_BGRA_EXT, GL_BGRA_EXT, GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT not match MTLPixelFormatABGR4Unorm
+*   Unexpected render result is FPS label is PAN-BLUE
+*/
 
 GLenum UtilsGL::toGLAttributeType(VertexFormat vertexFormat)
 {
