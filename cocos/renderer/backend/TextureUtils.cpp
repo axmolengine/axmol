@@ -83,14 +83,11 @@ namespace backend { namespace PixelFormatUtils {
         {  32,  1, 1,  4, 1, 1,  0, 0,  8,  8,  8,  8, uint8_t(EncodingType::Unorm) }, // BGRA8
         {  24,  1, 1,  3, 1, 1,  0, 0,  8,  8,  8,  0, uint8_t(EncodingType::Unorm) }, // RGB8
         {  16,  1, 1,  2, 1, 1,  0, 0,  5,  6,  5,  0, uint8_t(EncodingType::Unorm) }, // R5G6B5
+        {  16,  1, 1,  2, 1, 1,  0, 0,  4,  4,  4,  4, uint8_t(EncodingType::Unorm) }, // RGBA4
+        {  16,  1, 1,  2, 1, 1,  0, 0,  5,  5,  5,  1, uint8_t(EncodingType::Unorm) }, // RGB5A1
         {   8,  1, 1,  1, 1, 1,  0, 0,  0,  0,  0,  8, uint8_t(EncodingType::Unorm) }, // A8
         {   8,  1, 1,  1, 1, 1,  0, 0,  8,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // L8
         {  16,  1, 1,  2, 1, 1,  0, 0,  8,  8,  0,  0, uint8_t(EncodingType::Unorm) }, // LA8
-        {  16,  1, 1,  2, 1, 1,  0, 0,  4,  4,  4,  4, uint8_t(EncodingType::Unorm) }, // RGBA4
-        {  16,  1, 1,  2, 1, 1,  0, 0,  5,  5,  5,  1, uint8_t(EncodingType::Unorm) }, // RGB5A1
-        {  16,  1, 1,  2, 1, 1,  0, 0,  5,  6,  5,  0, uint8_t(EncodingType::Unorm) }, // MTL_B5G6R5
-        {  16,  1, 1,  2, 1, 1,  0, 0,  5,  5,  5,  1, uint8_t(EncodingType::Unorm) }, // MTL_BGR5A1
-        {  16,  1, 1,  2, 1, 1,  0, 0,  4,  4,  4,  4, uint8_t(EncodingType::Unorm) }, // MTL_ABGR4
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
         {  32,  1, 1,  4, 1, 1, 24, 8,  0,  0,  0,  0, uint8_t(EncodingType::Unorm) }, // D24S8
 #else
@@ -702,41 +699,26 @@ namespace backend { namespace PixelFormatUtils {
             case PixelFormat::RGB565:
                 *outDataLen = dataLen*2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertL8ToRGB565(data, dataLen, *outData);
-                break;
-            case PixelFormat::LA8:
-                *outDataLen = dataLen*2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertL8ToLA8(data, dataLen, *outData);
+                convertL8ToBGR565(data, dataLen, *outData);
                 break;
             case PixelFormat::RGBA4:
-                *outDataLen = dataLen*2;
+                *outDataLen = dataLen * 2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertL8ToRGBA4444(data, dataLen, *outData);
+                convertL8ToABGR4(data, dataLen, *outData);
                 break;
             case PixelFormat::RGB5A1:
-                *outDataLen = dataLen*2;
+                *outDataLen = dataLen * 2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertL8ToRGB5A1(data, dataLen, *outData);
+                convertL8ToBGR5A1(data, dataLen, *outData);
                 break;
             case PixelFormat::A8:
                 *outData = (unsigned char*)data;
                 *outDataLen = dataLen;
                 break;
-            case PixelFormat::MTL_BGR5A1:
-                *outDataLen = dataLen * 2;
+            case PixelFormat::LA8:
+                *outDataLen = dataLen*2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertL8ToBGR5A1(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_ABGR4:
-                *outDataLen = dataLen * 2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertL8ToABGR4(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_B5G6R5:
-                *outDataLen = dataLen * 2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertL8ToBGR565(data, dataLen, *outData);
+                convertL8ToLA8(data, dataLen, *outData);
                 break;
             default:
                 // unsupported conversion or don't need to convert
@@ -770,7 +752,17 @@ namespace backend { namespace PixelFormatUtils {
             case PixelFormat::RGB565:
                 *outDataLen = dataLen;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertLA8ToRGB565(data, dataLen, *outData);
+                convertLA8ToBGR565(data, dataLen, *outData);
+                break;
+            case PixelFormat::RGBA4:
+                *outDataLen = dataLen;
+                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+                convertLA8ToABGR4(data, dataLen, *outData);
+                break;
+            case PixelFormat::RGB5A1:
+                *outDataLen = dataLen;
+                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+                convertLA8ToBGR5A1(data, dataLen, *outData);
                 break;
             case PixelFormat::A8:
                 *outDataLen = dataLen/2;
@@ -782,38 +774,12 @@ namespace backend { namespace PixelFormatUtils {
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertLA8ToL8(data, dataLen, *outData);
                 break;
-            case PixelFormat::RGBA4:
-                *outDataLen = dataLen;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertLA8ToRGBA4444(data, dataLen, *outData);
-                break;
-            case PixelFormat::RGB5A1:
-                *outDataLen = dataLen;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertLA8ToRGB5A1(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_ABGR4:
-                *outDataLen = dataLen;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertLA8ToABGR4(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_B5G6R5:
-                *outDataLen = dataLen;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertLA8ToBGR565(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_BGR5A1:
-                *outDataLen = dataLen;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertLA8ToBGR5A1(data, dataLen, *outData);
-                break;
             default:
                 // unsupported conversion or don't need to convert
                 if (format != PixelFormat::LA8)
                 {
                     CCLOG("Can not convert image format PixelFormat::LA8 to format ID:%d, we will use it's origin format PixelFormat::LA8", static_cast<int>(format));
                 }
-                
                 *outData = (unsigned char*)data;
                 *outDataLen = dataLen;
                 return PixelFormat::LA8;
@@ -835,7 +801,17 @@ namespace backend { namespace PixelFormatUtils {
             case PixelFormat::RGB565:
                 *outDataLen = dataLen/3*2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGB888ToRGB565(data, dataLen, *outData);
+                convertRGB888ToB5G6R5(data, dataLen, *outData);
+                break;
+            case PixelFormat::RGBA4:
+                *outDataLen = dataLen / 3 * 2;
+                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+                convertRGB888ToABGR4(data, dataLen, *outData);
+                break;
+            case PixelFormat::RGB5A1:
+                *outDataLen = dataLen / 3 * 2;
+                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+                convertRGB888ToBGR5A1(data, dataLen, *outData);
                 break;
             case PixelFormat::A8:
                 *outDataLen = dataLen/3;
@@ -851,31 +827,6 @@ namespace backend { namespace PixelFormatUtils {
                 *outDataLen = dataLen/3*2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGB888ToLA8(data, dataLen, *outData);
-                break;
-            case PixelFormat::RGBA4:
-                *outDataLen = dataLen/3*2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGB888ToRGBA4444(data, dataLen, *outData);
-                break;
-            case PixelFormat::RGB5A1:
-                *outDataLen = dataLen/3*2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGB888ToRGB5A1(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_B5G6R5:
-                *outDataLen = dataLen/3*2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGB888ToB5G6R5(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_BGR5A1:
-                *outDataLen = dataLen/3*2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGB888ToBGR5A1(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_ABGR4:
-                *outDataLen = dataLen/3*2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGB888ToABGR4(data, dataLen, *outData);
                 break;
             default:
                 // unsupported conversion or don't need to convert
@@ -904,7 +855,17 @@ namespace backend { namespace PixelFormatUtils {
             case PixelFormat::RGB565:
                 *outDataLen = dataLen/2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGBA8888ToRGB565(data, dataLen, *outData);
+                convertRGBA8888ToBGR565(data, dataLen, *outData);
+                break;
+            case PixelFormat::RGBA4:
+                *outDataLen = dataLen / 2;
+                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+                convertRGBA8888ToABGR4(data, dataLen, *outData);
+                break;
+            case PixelFormat::RGB5A1:
+                *outDataLen = dataLen / 2;
+                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
+                convertRGBA8888ToBGR5A1(data, dataLen, *outData);
                 break;
             case PixelFormat::A8:
                 *outDataLen = dataLen/4;
@@ -920,31 +881,6 @@ namespace backend { namespace PixelFormatUtils {
                 *outDataLen = dataLen/2;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGBA8888ToLA8(data, dataLen, *outData);
-                break;
-            case PixelFormat::RGBA4:
-                *outDataLen = dataLen/2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGBA8888ToRGBA4444(data, dataLen, *outData);
-                break;
-            case PixelFormat::RGB5A1:
-                *outDataLen = dataLen/2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGBA8888ToRGB5A1(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_B5G6R5:
-                *outDataLen = dataLen/2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGBA8888ToBGR565(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_ABGR4:
-                *outDataLen = dataLen/2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGBA8888ToABGR4(data, dataLen, *outData);
-                break;
-            case PixelFormat::MTL_BGR5A1:
-                *outDataLen = dataLen/2;
-                *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
-                convertRGBA8888ToBGR5A1(data, dataLen, *outData);
                 break;
             default:
                 // unsupported conversion or don't need to convert
@@ -970,7 +906,7 @@ namespace backend { namespace PixelFormatUtils {
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGB5A1ToRGBA8888(data, dataLen, *outData);
                 break;
-            case PixelFormat::MTL_BGR5A1:
+            case PixelFormat::RGB5A1:
                 *outDataLen = dataLen;
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGB5A1ToBGR5A1(data, dataLen, *outData);
@@ -998,7 +934,7 @@ namespace backend { namespace PixelFormatUtils {
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGB565ToRGBA8888(data, dataLen, *outData);
                 break;
-            case PixelFormat::MTL_B5G6R5:
+            case PixelFormat::RGB565:
                 *outDataLen = dataLen;
                 *outData = (unsigned char *)data;
                 // they are identical
@@ -1050,7 +986,7 @@ namespace backend { namespace PixelFormatUtils {
                 *outData = (unsigned char*)malloc(sizeof(unsigned char) * (*outDataLen));
                 convertRGBA4444ToRGBA8888(data, dataLen, *outData);
                 break;
-            case PixelFormat::MTL_ABGR4:
+            case PixelFormat::RGBA4:
                 *outDataLen = dataLen;
                 *outData = (unsigned char *)data;
                 //convertRGBA4444ToABGR4444(data, dataLen, *outData);

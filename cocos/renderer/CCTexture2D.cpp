@@ -228,15 +228,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS && !TARGET_OS_SIMULATOR)
         //packed 16 bits pixels only available on iOS
-    case PixelFormat::RGB565:
-        renderFormat = PixelFormat::MTL_B5G6R5;
-        break;
-    case PixelFormat::RGBA4:
-        renderFormat = PixelFormat::MTL_ABGR4;
-        break;
-    case PixelFormat::RGB5A1:
-        renderFormat = PixelFormat::MTL_BGR5A1;
-        break;
+    (void)0;
 #else
     case PixelFormat::RGB565:
     case PixelFormat::RGB5A1:
@@ -682,16 +674,7 @@ const char* Texture2D::getStringForFormat() const
 
         case backend::PixelFormat::ATC_INTERPOLATED_ALPHA:
             return "ATC_INTERPOLATED_ALPHA";
-        
-        case backend::PixelFormat::MTL_ABGR4:
-            return "MTL_ABGR4";
-        
-        case backend::PixelFormat::MTL_B5G6R5:
-            return "MTL_RGB565";
-        
-        case backend::PixelFormat::MTL_BGR5A1:
-            return "MTL_BGR5A1";
-           
+
         case backend::PixelFormat::ASTC4x4:
             return "ASTC4x4";
         case backend::PixelFormat::ASTC6x6:
