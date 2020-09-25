@@ -191,21 +191,11 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
         descriptor.height = powH;
         descriptor.textureUsage = TextureUsage::RENDER_TARGET;
         descriptor.textureFormat = PixelFormat::RGBA8;
-        auto texture = backend::Device::getInstance()->newTexture(descriptor);
-        if (! texture)
-            break;
-
         _texture2D = new (std::nothrow) Texture2D();
         if (_texture2D)
-        {
-            _texture2D->initWithBackendTexture(texture, CC_ENABLE_PREMULTIPLIED_ALPHA != 0);
-            _texture2D->setRenderTarget(true);
-            texture->release();
-        }
-        else {
-            texture->release();
+            _texture2D->updateTextureDescriptor(descriptor, CC_ENABLE_PREMULTIPLIED_ALPHA != 0);
+        else
             break;
-        }
 
         _renderTargetFlags = RenderTargetFlag::COLOR;
 
@@ -213,19 +203,13 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
         {
             _renderTargetFlags = RenderTargetFlag::ALL;
             descriptor.textureFormat = depthStencilFormat;
-            texture = backend::Device::getInstance()->newTexture(descriptor);
-            if (! texture)
-                break;
 
             _depthStencilTexture = new (std::nothrow) Texture2D;
             if (!_depthStencilTexture)
             {
-                texture->release();
                 break;
             }
-
-            _depthStencilTexture->initWithBackendTexture(texture);
-            texture->release();
+            _depthStencilTexture->updateTextureDescriptor(descriptor);
         }
 
         _renderTarget = backend::Device::getInstance()->newRenderTarget(_renderTargetFlags,
