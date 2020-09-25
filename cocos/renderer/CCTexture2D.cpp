@@ -205,21 +205,19 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     size_t           tempDataLen = image->getDataLen();
 
 #ifdef CC_USE_METAL
-    //override renderFormat, since some render format is not supported by metal
+    //!override renderFormat, since some render format is not supported by metal
     switch (renderFormat)
     {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS && !TARGET_OS_SIMULATOR)
-        //packed 16 bits pixels only available on iOS
-    (void)0;
-#else
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS || TARGET_OS_SIMULATOR)
+    //packed 16 bits pixels only available on iOS
     case PixelFormat::RGB565:
     case PixelFormat::RGB5A1:
     case PixelFormat::RGBA4:
 #endif
     case PixelFormat::L8:
     case PixelFormat::LA8:
-    case PixelFormat::RGB8: // Metal doesn' support RGB8, so switch at here.
-        //TODO: conversion RGBA8888 -> I8(AI88) -> RGBA8888 may happends
+    case PixelFormat::RGB8:
+        //Note: conversion to RGBA8 will happends
         renderFormat = PixelFormat::RGBA8;
         break;
     default:
