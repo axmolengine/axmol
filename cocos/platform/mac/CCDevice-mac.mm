@@ -232,7 +232,7 @@ static CGFloat _calculateTextDrawStartHeight(cocos2d::Device::TextAlign align, C
     return startH;
 }
 
-static bool _initWithString(const char * text, Device::TextAlign align, const char * fontName, int size, tImageInfo* info, const Color3B* fontColor, int fontAlpha, bool enableWrap, int overflow)
+static bool _initWithString(const char * text, Device::TextAlign align, const char * fontName, int size, tImageInfo* info, const Color3B* fontColor, int fontAlpha, bool enableWrap, int overflow, const FontStroke &stroke)
 {
     bool ret = false;
     
@@ -313,6 +313,25 @@ static bool _initWithString(const char * text, Device::TextAlign align, const ch
         NSGraphicsContext* g = [NSGraphicsContext graphicsContextWithBitmapImageRep:offscreenRep];
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:g];
+        
+        if (stroke._strokeSize > 0) {
+            NSColor *strokeColor = [NSColor colorWithDeviceRed:stroke._strokeColor.r/255.0
+                                                         green:stroke._strokeColor.g/255.0
+                                                          blue:stroke._strokeColor.b/255.0
+                                                         alpha:stroke._strokeAlpha/255.0];
+            NSNumber *strokeSize = [NSNumber numberWithFloat:stroke._strokeSize / size * 100.0];
+            NSDictionary *tokenAttributesDict2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                  foregroundColor,NSForegroundColorAttributeName,
+                                                  font, NSFontAttributeName,
+                                                  paragraphStyle, NSParagraphStyleAttributeName,
+                                                  strokeSize, NSStrokeWidthAttributeName,
+                                                  strokeColor, NSStrokeColorAttributeName,
+                                                  nil];
+            NSAttributedString *strokeString = [[[NSAttributedString alloc] initWithString:string
+                                                                               attributes:tokenAttributesDict2] autorelease];
+            [strokeString drawInRect:textRect];
+        }
+        
         [stringWithAttributes drawInRect:textRect];
         [NSGraphicsContext restoreGraphicsState];
 
@@ -341,8 +360,8 @@ Data Device::getTextureDataForText(const char * text, const FontDefinition& text
         tImageInfo info = {0};
         info.width = textDefinition._dimensions.width;
         info.height = textDefinition._dimensions.height;
-        
-        if (! _initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info, &textDefinition._fontFillColor, textDefinition._fontAlpha, textDefinition._enableWrap, textDefinition._overflow))
+
+        if (! _initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info, &textDefinition._fontFillColor, textDefinition._fontAlpha, textDefinition._enableWrap, textDefinition._overflow, textDefinition._stroke))
         {
             break;
         }
