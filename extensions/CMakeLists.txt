@@ -15,7 +15,7 @@ option(BUILD_EXTENSION_COCOSTUDIO "Build extension cocostudio" ON)
 
 option(BUILD_EXTENSION_FAIRYGUI "Build extension FairyGUI" ON)
 
-if(WINDOWS OR MACOSX)
+if(WINDOWS OR MACOSX OR LINUX)
   option(BUILD_EXTENSION_IMGUIEXT "Build extension ImGuiEXT" ON)
 else()
   set(BUILD_EXTENSION_IMGUIEXT OFF)

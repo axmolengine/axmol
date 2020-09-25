@@ -39,7 +39,7 @@ class SpriteFrame;
  * The class could parse a single .9 patch image and produce the capInsets
  * as well as a sprite atlas and store all the capInsets infos in a Texture2D.
  *  Note:
- *  - Currently only PixelFormat::RGBA8888 is supported.
+ *  - Currently only PixelFormat::RGBA8 is supported.
  *  - TexturePacker Trim mode is not supported at the moment.
  */
 

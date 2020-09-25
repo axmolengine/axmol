@@ -26,7 +26,6 @@
 
 #include "../Macros.h"
 #include "../Types.h"
-#include "../RenderPipelineDescriptor.h"
 #include "base/CCRef.h"
 #include "base/CCEventListenerCustom.h"
 #include "platform/CCGL.h"
@@ -84,11 +83,6 @@ public:
      * @return Program object.
      */
     inline GLuint getHandler() const { return _program; }
-
-    /**
-     * Calculate attribute information according to vertex layout.
-     */
-    void computeAttributeInfos(const RenderPipelineDescriptor& descriptor);
 
     /**
      * Get uniform location by name.

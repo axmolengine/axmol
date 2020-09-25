@@ -75,7 +75,7 @@ int lua_register_cocos2dx_backend_VertexFormat(lua_State* tolua_S)
 
 
 int lua_register_cocos2dx_backend_PixelFormat(lua_State* tolua_S)
-{
+{ // TODO: fix, use macro better
     tolua_module(tolua_S, "PixelFormat", 0);
     tolua_beginmodule(tolua_S,"PixelFormat");
         tolua_constant(tolua_S, "AUTO", 0);
@@ -99,10 +99,7 @@ int lua_register_cocos2dx_backend_PixelFormat(lua_State* tolua_S)
         tolua_constant(tolua_S, "ATC_RGB", 18);
         tolua_constant(tolua_S, "ATC_EXPLICIT_ALPHA", 19);
         tolua_constant(tolua_S, "ATC_INTERPOLATED_ALPHA", 20);
-        tolua_constant(tolua_S, "MTL_B5G6R5", 21);
-        tolua_constant(tolua_S, "MTL_BGR5A1", 22);
-        tolua_constant(tolua_S, "MTL_ABGR4", 23);
-        tolua_constant(tolua_S, "D24S8", 24);
+        tolua_constant(tolua_S, "D24S8", 21);
         tolua_constant(tolua_S, "DEFAULT", 0);
         tolua_constant(tolua_S, "NONE", -1);
     tolua_endmodule(tolua_S);

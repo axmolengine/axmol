@@ -35,19 +35,19 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
                 switch (textureAtlasData->format)
                 {
                     case TextureFormat::RGBA8888:
-                        pixelFormat = cocos2d::backend::PixelFormat::RGBA8888;
+                        pixelFormat = cocos2d::backend::PixelFormat::RGBA8;
                         break;
 
                     case TextureFormat::BGRA8888:
-                        pixelFormat = cocos2d::backend::PixelFormat::BGRA8888;
+                        pixelFormat = cocos2d::backend::PixelFormat::BGRA8;
                         break;
 
                     case TextureFormat::RGBA4444:
-                        pixelFormat = cocos2d::backend::PixelFormat::RGBA4444;
+                        pixelFormat = cocos2d::backend::PixelFormat::RGBA4;
                         break;
 
                     case TextureFormat::RGB888:
-                        pixelFormat = cocos2d::backend::PixelFormat::RGB888;
+                        pixelFormat = cocos2d::backend::PixelFormat::RGB8;
                         break;
 
                     case TextureFormat::RGB565:
@@ -66,19 +66,19 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
                 switch (textureAtlasData->format)
                 {
                 case TextureFormat::RGBA8888:
-                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGBA8888;
+                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGBA8;
                     break;
 
                 case TextureFormat::BGRA8888:
-                    pixelFormat = cocos2d::Texture2D::PixelFormat::BGRA8888;
+                    pixelFormat = cocos2d::Texture2D::PixelFormat::BGRA8;
                     break;
 
                 case TextureFormat::RGBA4444:
-                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGBA4444;
+                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGBA4;
                     break;
 
                 case TextureFormat::RGB888:
-                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGB888;
+                    pixelFormat = cocos2d::Texture2D::PixelFormat::RGB8;
                     break;
 
                 case TextureFormat::RGB565:

@@ -108,8 +108,8 @@ Texture2DTests::Texture2DTests()
 
     ADD_TEST_CASE(TextureConvertRGB888);
     ADD_TEST_CASE(TextureConvertRGBA8888);
-    ADD_TEST_CASE(TextureConvertI8);
-    ADD_TEST_CASE(TextureConvertAI88);
+    ADD_TEST_CASE(TextureConvertL8);
+    ADD_TEST_CASE(TextureConvertLA8);
 };
 
 //------------------------------------------------------------------
@@ -249,7 +249,7 @@ void TextureETC1Alpha::onTouchesEnded(const std::vector<Touch*>& touches, Event*
 
 std::string TextureETC1Alpha::title() const
 {
-    return "Testing Sprite ETC1 Alpha support";
+    return "Testing Texture ETC1 Alpha support";
 }
 
 std::string TextureETC1Alpha::subtitle() const
@@ -1601,7 +1601,7 @@ void TexturePixelFormat::onEnter()
     addChild(background, -1);
     
     // RGBA 8888 image (32-bit)
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8888);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     auto sprite1 = Sprite::create("Images/test-rgba1.png");
     sprite1->setPosition(Vec2(1*s.width/7, s.height/2+32));
     addChild(sprite1, 0);
@@ -1610,7 +1610,7 @@ void TexturePixelFormat::onEnter()
     Director::getInstance()->getTextureCache()->removeTexture(sprite1->getTexture());
 
     // RGBA 4444 image (16-bit)
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA4444);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA4);
     auto sprite2 = Sprite::create("Images/test-rgba1.png");
     sprite2->setPosition(Vec2(2*s.width/7, s.height/2-32));
     addChild(sprite2, 0);
@@ -1628,7 +1628,7 @@ void TexturePixelFormat::onEnter()
     Director::getInstance()->getTextureCache()->removeTexture(sprite3->getTexture());
 
     // RGB888 image
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGB888);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGB8);
     auto sprite4 = Sprite::create("Images/test-rgba1.png");
     sprite4->setPosition(Vec2(4*s.width/7, s.height/2-32));
     addChild(sprite4, 0);
@@ -1670,7 +1670,7 @@ void TexturePixelFormat::onEnter()
     sprite5->runAction(seq_4ever5);
 
     // restore default
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::DEFAULT);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
@@ -2228,7 +2228,7 @@ TexturePVRv3Premult::TexturePVRv3Premult()
     transformSprite(pvr2);
     
     // PNG
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8888);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     Director::getInstance()->getTextureCache()->removeTextureForKey("Images/grossinis_sister1-testalpha.png");
     auto png = Sprite::create("Images/grossinis_sister1-testalpha.png");
     addChild(png, 0);
@@ -2404,17 +2404,17 @@ void TextureConvertRGB888::onEnter()
     addChild(background, -1);
     
     const char* img = "Images/test_image_rgb888.png";
-    addImageToDemo(*this, 1*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA8888);
-    addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB888);
+    addImageToDemo(*this, 1*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA8);
+    addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3*s.width/9, s.height/2+32, img, backend::PixelFormat::RGB565);
     addImageToDemo(*this, 4*s.width/9, s.height/2-32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::I8);
-    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::AI88);
-    addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4444);
+    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::L8);
+    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::LA8);
+    addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB5A1);
     
     // restore default
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::DEFAULT);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
@@ -2438,17 +2438,17 @@ void TextureConvertRGBA8888::onEnter()
     addChild(background, -1);
     
     const char* img = "Images/test_image_rgba8888.png";
-    addImageToDemo(*this, 1*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA8888);
-    addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB888);
+    addImageToDemo(*this, 1*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA8);
+    addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3*s.width/9, s.height/2+32, img, backend::PixelFormat::RGB565);
     addImageToDemo(*this, 4*s.width/9, s.height/2-32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::I8);
-    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::AI88);
-    addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4444);
+    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::L8);
+    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::LA8);
+    addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB5A1);
     
     // restore default
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::DEFAULT);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
@@ -2461,8 +2461,8 @@ std::string TextureConvertRGBA8888::subtitle() const
 {
     return "RGBA8888,RGB888,RGB565,A8,I8,AI88,RGBA4444,RGB5A1";
 }
-//TextureConvertI8
-void TextureConvertI8::onEnter()
+//TextureConvertL8
+void TextureConvertL8::onEnter()
 {
     TextureDemo::onEnter();
     
@@ -2472,31 +2472,31 @@ void TextureConvertI8::onEnter()
     addChild(background, -1);
     
     const char* img = "Images/test_image_i8.png";
-    addImageToDemo(*this, 1*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA8888);
-    addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB888);
+    addImageToDemo(*this, 1*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA8);
+    addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3*s.width/9, s.height/2+32, img, backend::PixelFormat::RGB565);
     addImageToDemo(*this, 4*s.width/9, s.height/2-32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::I8);
-    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::AI88);
-    addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4444);
+    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::L8);
+    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::LA8);
+    addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB5A1);
     
     // restore default
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::DEFAULT);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-std::string TextureConvertI8::title() const
+std::string TextureConvertL8::title() const
 {
     return "I8 convert test";
 }
 
-std::string TextureConvertI8::subtitle() const
+std::string TextureConvertL8::subtitle() const
 {
     return "RGBA8888,RGB888,RGB565,A8,I8,AI88,RGBA4444,RGB5A1";
 }
-//TextureConvertAI88
-void TextureConvertAI88::onEnter()
+//TextureConvertLA8
+void TextureConvertLA8::onEnter()
 {
     TextureDemo::onEnter();
     
@@ -2506,26 +2506,26 @@ void TextureConvertAI88::onEnter()
     addChild(background, -1);
     
     const char* img = "Images/test_image_ai88.png";
-    addImageToDemo(*this, 1*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA8888);
-    addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB888);
+    addImageToDemo(*this, 1*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA8);
+    addImageToDemo(*this, 2*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB8);
     addImageToDemo(*this, 3*s.width/9, s.height/2+32, img, backend::PixelFormat::RGB565);
     addImageToDemo(*this, 4*s.width/9, s.height/2-32, img, backend::PixelFormat::A8);
-    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::I8);
-    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::AI88);
-    addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4444);
+    addImageToDemo(*this, 5*s.width/9, s.height/2+32, img, backend::PixelFormat::L8);
+    addImageToDemo(*this, 6*s.width/9, s.height/2-32, img, backend::PixelFormat::LA8);
+    addImageToDemo(*this, 7*s.width/9, s.height/2+32, img, backend::PixelFormat::RGBA4);
     addImageToDemo(*this, 8*s.width/9, s.height/2-32, img, backend::PixelFormat::RGB5A1);
     
     // restore default
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::DEFAULT);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-std::string TextureConvertAI88::title() const
+std::string TextureConvertLA8::title() const
 {
     return "AI88 convert test";
 }
 
-std::string TextureConvertAI88::subtitle() const
+std::string TextureConvertLA8::subtitle() const
 {
     return "RGBA8888,RGB888,RGB565,A8,I8,AI88,RGBA4444,RGB5A1";
 }

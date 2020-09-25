@@ -144,7 +144,7 @@ void FontAtlas::initTextureWithZeros(Texture2D *texture)
     if (outlineSize > 0)
     {    
         //metal do no support AI88 format
-        pixelFormat = backend::PixelFormat::RGBA8888;
+        pixelFormat = backend::PixelFormat::RGBA8;
         zeroBytes = CacheTextureWidth * CacheTextureWidth * 4;
     }
     else
@@ -383,7 +383,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
     FontLetterDefinition tempDef;
 
     auto scaleFactor = CC_CONTENT_SCALE_FACTOR();
-    auto  pixelFormat = _fontFreeType->getOutlineSize() > 0 ? backend::PixelFormat::AI88 : backend::PixelFormat::A8;
+    auto  pixelFormat = _fontFreeType->getOutlineSize() > 0 ? backend::PixelFormat::LA8 : backend::PixelFormat::A8;
 
     int startY = (int)_currentPageOrigY;
 
@@ -477,7 +477,7 @@ void FontAtlas::updateTextureContent(backend::PixelFormat format, int startY)
 {
     unsigned char *data = nullptr;
     auto outlineSize = _fontFreeType->getOutlineSize();
-    if (outlineSize > 0 && format == backend::PixelFormat::AI88)
+    if (outlineSize > 0 && format == backend::PixelFormat::LA8)
     {
         int nLen = CacheTextureWidth * ((int)_currentPageOrigY - startY + _currLineHeight);
         data = _currentPageData + CacheTextureWidth * (int)startY * 2;

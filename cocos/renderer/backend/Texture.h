@@ -43,7 +43,7 @@ CC_BACKEND_BEGIN
 struct TextureDescriptor
 {
     TextureType textureType = TextureType::TEXTURE_2D;
-    PixelFormat textureFormat = PixelFormat::RGBA8888;
+    PixelFormat textureFormat = PixelFormat::RGBA8;
     TextureUsage textureUsage = TextureUsage::READ;
     uint32_t width = 0;
     uint32_t height = 0;
@@ -103,8 +103,6 @@ public:
     int getWidth() const { return _width; }
     int getHeight() const { return _height; }
 
-    int getBytesPerRow() const { return _width * _bitsPerElement / 8; }
-
 protected:
     /**
      * @param descriptor Specifies the texture descirptor.
@@ -113,14 +111,14 @@ protected:
     virtual ~TextureBackend();
         
     /// The bytes of all components.
-    uint8_t _bitsPerElement = 0;
+    uint8_t _bitsPerPixel = 0;
     bool _hasMipmaps = false;
     bool _isCompressed = false;
     uint32_t _width = 0;
     uint32_t _height = 0;
 
     TextureType _textureType = TextureType::TEXTURE_2D;
-    PixelFormat _textureFormat = PixelFormat::RGBA8888;
+    PixelFormat _textureFormat = PixelFormat::RGBA8;
     TextureUsage _textureUsage = TextureUsage::READ;
 };
 

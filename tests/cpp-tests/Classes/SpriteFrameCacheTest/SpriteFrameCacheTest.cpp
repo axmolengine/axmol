@@ -52,12 +52,12 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
     
     // load atlas definition with specified PixelFormat and check that it matches to expected format
     loadSpriteFrames("Images/sprite_frames_test/test_A8.plist", backend::PixelFormat::A8);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8888);
-    loadSpriteFrames("Images/sprite_frames_test/test_AI88.plist", backend::PixelFormat::AI88);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8888);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_AI88.plist", backend::PixelFormat::LA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
     loadSpriteFrames("Images/sprite_frames_test/test_RGB565.plist", backend::PixelFormat::RGB565);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGB888.plist", backend::PixelFormat::RGB888);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA4444.plist", backend::PixelFormat::RGBA4444);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGB888.plist", backend::PixelFormat::RGB8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA4444.plist", backend::PixelFormat::RGBA4);
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA5551.plist", backend::PixelFormat::RGB5A1);
     
     if (Configuration::getInstance()->supportsPVRTC()) {
@@ -71,7 +71,7 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
     loadSpriteFrames("Images/sprite_frames_test/test_NoFormat.plist", backend::PixelFormat::RGB5A1);
     
     // restore default alpha pixel format
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8888);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
 }
 
 void SpriteFrameCachePixelFormatTest::loadSpriteFrames(const std::string &file, cocos2d::backend::PixelFormat expectedFormat)
@@ -97,10 +97,10 @@ SpriteFrameCacheLoadMultipleTimes::SpriteFrameCacheLoadMultipleTimes()
     const Size screenSize = Director::getInstance()->getWinSize();
 
     // load atlas definition with specified PixelFormat and check that it matches to expected format
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8888);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8888);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8888);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8888);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
 
 }
 
@@ -120,7 +120,7 @@ SpriteFrameCacheFullCheck::SpriteFrameCacheFullCheck()
 {
     const Size screenSize = Director::getInstance()->getWinSize();
     // load atlas definition with specified PixelFormat and check that it matches to expected format
-    loadSpriteFrames("Images/test_polygon.plist", backend::PixelFormat::RGBA8888);
+    loadSpriteFrames("Images/test_polygon.plist", backend::PixelFormat::RGBA8);
 }
 
 void SpriteFrameCacheFullCheck::loadSpriteFrames(const std::string &file, cocos2d::backend::PixelFormat expectedFormat)

@@ -35,11 +35,11 @@ function build_linux()
     cd $COCOS2DX_ROOT
     set -x
     cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release
-    cmake --build build -- -j `nproc`
+    cmake --build build --target cpp-tests -- -j `nproc`
     set +x
 }
 
-function build_mac_cmake()
+function build_osx()
 {
     NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
 
@@ -57,7 +57,7 @@ function build_mac_cmake()
     exit 0
 }
 
-function build_ios_cmake()
+function build_ios()
 {
     NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
 
@@ -78,7 +78,7 @@ function build_ios_cmake()
     exit 0
 }
 
-function build_android_cmake()
+function build_android()
 {
     # Build all samples
     echo "Building Android samples ..."
@@ -90,7 +90,7 @@ function build_android_cmake()
     popd
 }
 
-function build_android_lua_cmake()
+function build_android_lua()
 {
     # Build all samples
     echo "Building Android samples lua ..."
@@ -263,35 +263,35 @@ function run_pull_request()
         exit 0
     fi
     
-    if [ $BUILD_TARGET == 'mac_cmake' ]; then
-        genernate_binding_codes
+    if [ $BUILD_TARGET == 'osx' ]; then
+        # genernate_binding_codes
         set -x
-        build_mac_cmake
+        build_osx
         exit 0
     fi
 
-    if [ $BUILD_TARGET == 'ios_cmake' ]; then
-        genernate_binding_codes
+    if [ $BUILD_TARGET == 'ios' ]; then
+        # genernate_binding_codes
         set -x
-        build_ios_cmake
+        build_ios
         exit 0
     fi
 
     # linux
     if [ $BUILD_TARGET == 'linux' ]; then
-        genernate_binding_codes
+        # genernate_binding_codes
         build_linux
     fi
 
     # android
-    if [ $BUILD_TARGET == 'android_cmake' ]; then
-        build_android_cmake
+    if [ $BUILD_TARGET == 'android' ]; then
+        build_android
     fi
 
     # android_lua
-    if [ $BUILD_TARGET == 'android_lua_cmake' ]; then
+    if [ $BUILD_TARGET == 'android_lua' ]; then
         genernate_binding_codes
-        build_android_lua_cmake
+        build_android_lua
     fi
 }
 

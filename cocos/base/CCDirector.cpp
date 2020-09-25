@@ -223,9 +223,9 @@ void Director::setDefaultValues()
     // Default pixel format for PNG images with alpha
     std::string pixel_format = conf->getValue("cocos2d.x.texture.pixel_format_for_png", Value("rgba8888")).asString();
     if (pixel_format == "rgba8888")
-        Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8888);
+        Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     else if(pixel_format == "rgba4444")
-        Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA4444);
+        Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA4);
     else if(pixel_format == "rgba5551")
         Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGB5A1);
 
@@ -1248,7 +1248,7 @@ void Director::createStatsLabel()
     }
 
     backend::PixelFormat currentFormat = Texture2D::getDefaultAlphaPixelFormat();
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA4444);
+    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA4);
     unsigned char *data = nullptr;
     ssize_t dataLength = 0;
     getFPSImageData(&data, &dataLength);
