@@ -216,9 +216,6 @@ void TextureMTL::updateSubData(std::size_t xoffset, std::size_t yoffset, std::si
                      withBytes:data
                    bytesPerRow:bytesPerRow];
     
-    if (converted)
-        free(convertedData);
-    
     if(!_hasMipmaps && level > 0)
         _hasMipmaps = true;
 }
