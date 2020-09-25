@@ -67,43 +67,11 @@ namespace
         }
     }
     
-    void convertRGB2RGBA(uint8_t* src, uint8_t* dst, std::size_t length)
-    {
-        for (std::size_t i = 0; i < length; ++i)
-        {
-            *dst++ = *src++;
-            *dst++ = *src++;
-            *dst++ = *src++;
-            *dst++ = 255;
-        }
-    }
-
-    
-    bool convertData(uint8_t* src, std::size_t length, PixelFormat format, uint8_t** out)
-    {
-        *out = src;
-        bool converted = false;
-        switch (format)
-        {
-            case PixelFormat::RGB8:
-                {
-                    *out = (uint8_t*)malloc(length * 4);
-                    convertRGB2RGBA(src, *out, length);
-                    converted = true;
-                }
-                break;
-            default:
-                break;
-        }
-        return converted;
-    }
-    
     bool isColorRenderable(PixelFormat textureFormat)
     {
         switch (textureFormat)
         {
             case PixelFormat::RGBA8:
-            case PixelFormat::RGB8:
             case PixelFormat::RGBA4:
             case PixelFormat::RGB565:
             case PixelFormat::RGB5A1:
@@ -241,16 +209,11 @@ void TextureMTL::updateSubData(std::size_t xoffset, std::size_t yoffset, std::si
         {width, height, 1}      // MTLSize
     };
     
-    uint8_t* convertedData = nullptr;
-    bool converted = convertData(data,
-                                 width * height,
-                                 _textureFormat, &convertedData);
-    
     auto bytesPerRow = PixelFormatUtils::computeRowPitch(_textureFormat, width);
     
     [mtlTexture replaceRegion:region
                    mipmapLevel:level
-                     withBytes:convertedData
+                     withBytes:data
                    bytesPerRow:bytesPerRow];
     
     if (converted)
