@@ -240,11 +240,11 @@ public:
      */
     bool initWithString(const char *text, const FontDefinition& textDefinition);
     
-    //TODO: minggo: is it resaonable?
-    bool initWithBackendTexture(backend::TextureBackend* texture, bool preMultipliedAlpha = false);
+    //!!Used for render buffer, such depth stencil attachment
+    bool updateTextureDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha = false);
+
     void setRenderTarget(bool renderTarget);
     inline bool isRenderTarget() const { return _flagsAndFormatEXT & TextureFlag::RENDERTARGET; }
-
 
     void setTexParameters(const TexParams &params);
     

@@ -511,15 +511,16 @@ bool Texture2D::initWithString(const char *text, const FontDefinition& textDefin
     return ret;
 }
 
-bool Texture2D::initWithBackendTexture(backend::TextureBackend *texture, bool preMultipliedAlpha)
+bool Texture2D::updateTextureDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha)
 {
-    CC_SAFE_RETAIN(texture);
-    CC_SAFE_RELEASE(_texture);
-    _texture = dynamic_cast<backend::Texture2DBackend*>(texture);
     CC_ASSERT(_texture);
+
+    _texture->updateTextureDescriptor(descriptor);
     _pixelsWide = _contentSize.width = _texture->getWidth();
     _pixelsHigh = _contentSize.height = _texture->getHeight();
     setPremultipliedAlpha(preMultipliedAlpha);
+
+    setRenderTarget(descriptor.textureUsage == TextureUsage::RENDER_TARGET);
 
     return true;
 }
