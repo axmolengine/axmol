@@ -142,25 +142,7 @@ Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 
-    // Update data here because `updateData()` may not be invoked later.
-    // For example, a texture used as depth buffer will not invoke updateData(), see cpp-tests 'Effect Basic/Effects Advanced'.
-    // FIXME: Don't call at Texture2DGL::updateTextureDescriptor, when the texture is compressed, initWithZeros will cause GL Error: 0x501
-    // We call at here once to ensure depth buffer works well.
-    initWithZeros();
-}
 
-void Texture2DGL::initWithZeros()
-{
-    // Ensure the final data size at least 4 byte
-    _width = (std::max)(_width, (uint32_t)1);
-    _height = (std::max)(_height, (uint32_t)1);
-    _bitsPerPixel = (std::max)(_bitsPerPixel, (uint8_t)(8 * 4));
-
-    auto size = _width * _height * _bitsPerPixel / 8;
-    uint8_t* data = (uint8_t*)malloc(size);
-    memset(data, 0, size);
-    updateData(data, _width, _height, 0);
-    free(data);
 }
 
 void Texture2DGL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index)
@@ -170,6 +152,28 @@ void Texture2DGL::updateTextureDescriptor(const cocos2d::backend::TextureDescrip
     UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type, _isCompressed);
 
     updateSamplerDescriptor(descriptor.samplerDescriptor);
+
+    if (descriptor.textureUsage == TextureUsage::RENDER_TARGET)
+        initWithZeros();
+}
+
+void Texture2DGL::initWithZeros()
+{
+    // !!!Only used for depth stencil render buffer
+    // For example, a texture used as depth buffer will not invoke updateData(), see cpp-tests 'Effect Basic/Effects Advanced'.
+    // FIXME: Don't call at Texture2DGL::updateTextureDescriptor, when the texture is compressed, initWithZeros will cause GL Error: 0x501
+    // We call at here once to ensure depth buffer works well.
+    // Ensure the final data size at least 4 byte
+
+    _width = (std::max)(_width, (uint32_t)1);
+    _height = (std::max)(_height, (uint32_t)1);
+    _bitsPerPixel = (std::max)(_bitsPerPixel, (uint8_t)(8 * 4));
+
+    auto size = _width * _height * _bitsPerPixel / 8;
+    uint8_t* data = (uint8_t*)malloc(size);
+    memset(data, 0, size);
+    updateData(data, _width, _height, 0);
+    free(data);
 }
 
 Texture2DGL::~Texture2DGL()
