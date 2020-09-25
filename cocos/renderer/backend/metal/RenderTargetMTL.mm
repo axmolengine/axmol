@@ -171,16 +171,22 @@ PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const
 
 PixelFormat RenderTargetMTL::getDepthAttachmentPixelFormat() const
 { // FIXME: egnx only support D24S8
-    if(isDefaultRenderTarget() || !_depth)
-        return PixelFormat::D24S8;
-    return _depth.texture->getTextureFormat();
+    if(bitmask::any(_flags, TargetBufferFlags::DEPTH_AND_STENCIL)) {
+        if(isDefaultRenderTarget() || !_depth)
+            return PixelFormat::D24S8;
+        return _depth.texture->getTextureFormat();
+    }
+    return PixelFormat::NONE;
 }
 
 PixelFormat RenderTargetMTL::getStencilAttachmentPixelFormat() const
 { // FIXME: egnx only support D24S8
-    if(isDefaultRenderTarget() || !_stencil)
-        return PixelFormat::D24S8;
-    return _stencil.texture->getTextureFormat();
+    if(bitmask::any(_flags, TargetBufferFlags::DEPTH_AND_STENCIL)) {
+        if(isDefaultRenderTarget() || !_stencil)
+            return PixelFormat::D24S8;
+        return _stencil.texture->getTextureFormat();
+    }
+    return PixelFormat::NONE;
 }
 
 CC_BACKEND_END
