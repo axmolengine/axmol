@@ -194,8 +194,11 @@ void Renderer::init()
 
     auto device = backend::Device::getInstance();
     _commandBuffer = device->newCommandBuffer();
-    // MTL: default render target flags should have DEPTH_AND_STENCIL make sure further clear could set pipeline state properly
-    _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
+    // @MTL: the depth stencil flags must same render target and _depthStencilDescriptor
+    // TODO: can use one?
+    _depthStencilDescriptor.depthStencilFlags = TargetBufferFlags::DEPTH_AND_STENCIL;
+    _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | _depthStencilDescriptor.depthStencilFlags);
+    
     _currentRT = _defaultRT;
     _renderPipeline = device->newRenderPipeline();
     _commandBuffer->setRenderPipeline(_renderPipeline);
