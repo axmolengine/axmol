@@ -511,7 +511,7 @@ bool Texture2D::initWithString(const char *text, const FontDefinition& textDefin
     return ret;
 }
 
-bool Texture2D::initWithDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha)
+bool Texture2D::updateTextureDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha)
 {
     CC_ASSERT(_texture);
 

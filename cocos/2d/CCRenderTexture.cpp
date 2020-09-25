@@ -193,13 +193,9 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
         descriptor.textureFormat = PixelFormat::RGBA8;
         _texture2D = new (std::nothrow) Texture2D();
         if (_texture2D)
-        {
-            _texture2D->initWithDescriptor(descriptor, CC_ENABLE_PREMULTIPLIED_ALPHA != 0);
-            _texture2D->setRenderTarget(true);
-        }
-        else {
+            _texture2D->updateTextureDescriptor(descriptor, CC_ENABLE_PREMULTIPLIED_ALPHA != 0);
+        else
             break;
-        }
 
         _renderTargetFlags = RenderTargetFlag::COLOR;
 
@@ -213,8 +209,7 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
             {
                 break;
             }
-
-            _depthStencilTexture->initWithDescriptor(descriptor);
+            _depthStencilTexture->updateTextureDescriptor(descriptor);
         }
 
         _renderTarget = backend::Device::getInstance()->newRenderTarget(_renderTargetFlags,
