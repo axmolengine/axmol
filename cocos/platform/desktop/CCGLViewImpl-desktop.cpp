@@ -1036,7 +1036,6 @@ void GLViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
     }
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 static bool loadFboExtensions() {
     const char* gl_extensions = (const char*)glGetString(GL_EXTENSIONS);
 
@@ -1115,7 +1114,6 @@ static bool loadFboExtensions() {
     }
     return true;
 }
-#endif
 
 // helper
 bool GLViewImpl::loadGL()

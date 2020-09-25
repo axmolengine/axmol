@@ -46,24 +46,17 @@ class TextureBackend;
  */
 struct UtilsMTL
 {
+    /*
+     * init GPU texture supported formats
+     */
+    static void initGPUTextureFormats();
+    
     /**
      * Update default color attachment texture.
      * @param texture Specifies the texture to be setted to the color attachemnt.
      */
     static void updateDefaultColorAttachmentTexture(id<MTLTexture> texture);
     static void resizeDefaultAttachmentTexture(std::size_t width, std::size_t height);
-    
-    /**
-     * Get the default combined depth and stencil attachment pixel format.
-     * @return The default combined depth and stencil attachment pixel format.
-     */
-    static MTLPixelFormat getDefaultDepthStencilAttachmentPixelFormat();
-    
-    /**
-     * Get the default color attachment pixel format.
-     * @return The default color attachment pixel format.
-     */
-    static MTLPixelFormat getDefaultColorAttachmentPixelFormat();
     
     /**
      * Get the default combined depth and stencil texture.

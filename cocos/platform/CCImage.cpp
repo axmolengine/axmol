@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 
 #include "platform/CCImage.h"
+#include "renderer/backend/TextureUtils.h"
 
 #include <string>
 #include <ctype.h>
@@ -235,15 +236,15 @@ namespace
     
     static const _pixel2_formathash::value_type v2_pixel_formathash_value[] =
     {
-        _pixel2_formathash::value_type(PVR2TexturePixelFormat::BGRA8888,        backend::PixelFormat::BGRA8888),
-        _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA8888,        backend::PixelFormat::RGBA8888),
-        _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA4444,        backend::PixelFormat::RGBA4444),
+        _pixel2_formathash::value_type(PVR2TexturePixelFormat::BGRA8888,        backend::PixelFormat::BGRA8),
+        _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA8888,        backend::PixelFormat::RGBA8),
+        _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA4444,        backend::PixelFormat::RGBA4),
         _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA5551,        backend::PixelFormat::RGB5A1),
         _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB565,      backend::PixelFormat::RGB565),
-        _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB888,      backend::PixelFormat::RGB888),
+        _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB888,      backend::PixelFormat::RGB8),
         _pixel2_formathash::value_type(PVR2TexturePixelFormat::A8,          backend::PixelFormat::A8),
-        _pixel2_formathash::value_type(PVR2TexturePixelFormat::I8,          backend::PixelFormat::I8),
-        _pixel2_formathash::value_type(PVR2TexturePixelFormat::AI88,            backend::PixelFormat::AI88),
+        _pixel2_formathash::value_type(PVR2TexturePixelFormat::I8,          backend::PixelFormat::L8),
+        _pixel2_formathash::value_type(PVR2TexturePixelFormat::AI88,            backend::PixelFormat::LA8),
             
         _pixel2_formathash::value_type(PVR2TexturePixelFormat::PVRTC2BPP_RGBA,      backend::PixelFormat::PVRTC2A),
         _pixel2_formathash::value_type(PVR2TexturePixelFormat::PVRTC4BPP_RGBA,      backend::PixelFormat::PVRTC4A),
@@ -256,15 +257,15 @@ namespace
     typedef const std::map<PVR3TexturePixelFormat, backend::PixelFormat> _pixel3_formathash;
     static _pixel3_formathash::value_type v3_pixel_formathash_value[] =
     {
-        _pixel3_formathash::value_type(PVR3TexturePixelFormat::BGRA8888,    backend::PixelFormat::BGRA8888),
-        _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA8888,    backend::PixelFormat::RGBA8888),
-        _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA4444,    backend::PixelFormat::RGBA4444),
+        _pixel3_formathash::value_type(PVR3TexturePixelFormat::BGRA8888,    backend::PixelFormat::BGRA8),
+        _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA8888,    backend::PixelFormat::RGBA8),
+        _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA4444,    backend::PixelFormat::RGBA4),
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA5551,    backend::PixelFormat::RGB5A1),
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB565,      backend::PixelFormat::RGB565),
-        _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB888,      backend::PixelFormat::RGB888),
+        _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB888,      backend::PixelFormat::RGB8),
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::A8,          backend::PixelFormat::A8),
-        _pixel3_formathash::value_type(PVR3TexturePixelFormat::L8,          backend::PixelFormat::I8),
-        _pixel3_formathash::value_type(PVR3TexturePixelFormat::LA88,        backend::PixelFormat::AI88),
+        _pixel3_formathash::value_type(PVR3TexturePixelFormat::L8,          backend::PixelFormat::L8),
+        _pixel3_formathash::value_type(PVR3TexturePixelFormat::LA88,        backend::PixelFormat::LA8),
             
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC2BPP_RGB,       backend::PixelFormat::PVRTC2),
         _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC2BPP_RGBA,      backend::PixelFormat::PVRTC2A),
@@ -503,14 +504,14 @@ static backend::PixelFormat getDevicePVRPixelFormat(backend::PixelFormat format)
             if(Configuration::getInstance()->supportsPVRTC())
                 return format;
             else
-                return backend::PixelFormat::RGBA8888;
+                return backend::PixelFormat::RGBA8;
         case backend::PixelFormat::ETC1:
             if (Configuration::getInstance()->supportsETC1())
                 return format;
             else if (Configuration::getInstance()->supportsETC2())
                 return backend::PixelFormat::ETC2_RGB;
             else
-                return backend::PixelFormat::RGBA8888;
+                return backend::PixelFormat::RGBA8;
         default:
             return format;
     }
@@ -732,7 +733,7 @@ bool Image::initWithRawData(const uint8_t* data, ssize_t /*dataLen*/, int width,
         _height = height;
         _width = width;
         _hasPremultipliedAlpha = preMulti;
-        _pixelFormat = backend::PixelFormat::RGBA8888;
+        _pixelFormat = backend::PixelFormat::RGBA8;
 
         // only RGBA8888 supported
         int bytesPerComponent = 4;
@@ -887,17 +888,17 @@ Image::Format Image::detectFormat(const uint8_t * data, ssize_t dataLen)
 
 int Image::getBitPerPixel()
 {
-    return Texture2D::getPixelFormatInfoMap().at(_pixelFormat).bpp;
+    return Texture2D::getBitsPerPixelForFormat(_pixelFormat);
 }
 
 bool Image::hasAlpha()
 {
-    return Texture2D::getPixelFormatInfoMap().at(_pixelFormat).alpha;
+    return backend::PixelFormatUtils::getFormatDescriptor(_pixelFormat).alpha;
 }
 
 bool Image::isCompressed()
 {
-    return Texture2D::getPixelFormatInfoMap().at(_pixelFormat).compressed;
+    return backend::PixelFormatUtils::isCompressed(_pixelFormat);
 }
 
 namespace
@@ -1007,11 +1008,11 @@ bool Image::initWithJpgData(uint8_t * data, ssize_t dataLen)
         // we only support RGB or grayscale
         if (cinfo.jpeg_color_space == JCS_GRAYSCALE)
         {
-            _pixelFormat = backend::PixelFormat::I8;
+            _pixelFormat = backend::PixelFormat::L8;
         }else
         {
             cinfo.out_color_space = JCS_RGB;
-            _pixelFormat = backend::PixelFormat::RGB888;
+            _pixelFormat = backend::PixelFormat::RGB8;
         }
 
         /* Start decompression jpeg here */
@@ -1135,16 +1136,16 @@ bool Image::initWithPngData(uint8_t * data, ssize_t dataLen)
         switch (color_type)
         {
         case PNG_COLOR_TYPE_GRAY:
-            _pixelFormat = backend::PixelFormat::I8;
+            _pixelFormat = backend::PixelFormat::L8;
             break;
         case PNG_COLOR_TYPE_GRAY_ALPHA:
-            _pixelFormat = backend::PixelFormat::AI88;
+            _pixelFormat = backend::PixelFormat::LA8;
             break;
         case PNG_COLOR_TYPE_RGB:
-            _pixelFormat = backend::PixelFormat::RGB888;
+            _pixelFormat = backend::PixelFormat::RGB8;
             break;
         case PNG_COLOR_TYPE_RGB_ALPHA:
-            _pixelFormat = backend::PixelFormat::RGBA8888;
+            _pixelFormat = backend::PixelFormat::RGBA8;
             break;
         default:
             break;
@@ -1216,7 +1217,7 @@ bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
     if (_data) {
         _dataLen = _width * _height * nrChannels;
         _fileType = Format::BMP;
-        _pixelFormat = backend::PixelFormat::RGBA8888;
+        _pixelFormat = backend::PixelFormat::RGBA8;
         return true;
     }
     return false;
@@ -1235,7 +1236,7 @@ bool Image::initWithWebpData(uint8_t* data, ssize_t dataLen)
         if (config.input.width == 0 || config.input.height == 0) break;
 
         config.output.colorspace = config.input.has_alpha ? MODE_rgbA : MODE_RGB;
-        _pixelFormat = config.input.has_alpha ? backend::PixelFormat::RGBA8888 : backend::PixelFormat::RGB888;
+        _pixelFormat = config.input.has_alpha ? backend::PixelFormat::RGBA8 : backend::PixelFormat::RGB8;
         _width = config.input.width;
         _height = config.input.height;
 
@@ -1285,11 +1286,11 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
             }
             else if(tgaData->pixelDepth == 24)
             {
-                _pixelFormat = backend::PixelFormat::RGB888;
+                _pixelFormat = backend::PixelFormat::RGB8;
             }
             else if(tgaData->pixelDepth == 32)
             {
-                _pixelFormat = backend::PixelFormat::RGBA8888;
+                _pixelFormat = backend::PixelFormat::RGBA8;
             }
             else
             {
@@ -1302,7 +1303,7 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
             // gray
             if (8 == tgaData->pixelDepth)
             {
-                _pixelFormat = backend::PixelFormat::I8;
+                _pixelFormat = backend::PixelFormat::L8;
             }
             else
             {
@@ -1388,16 +1389,16 @@ bool Image::initWithPVRv2Data(uint8_t * data, ssize_t dataLen, bool ownData)
         return false;
     }
     
-    auto it = Texture2D::getPixelFormatInfoMap().find(getDevicePVRPixelFormat(v2_pixel_formathash.at(formatFlags)));
-
-    if (it == Texture2D::getPixelFormatInfoMap().end())
+    auto pixelFormat = getDevicePVRPixelFormat(v2_pixel_formathash.at(formatFlags));
+    auto& info = backend::PixelFormatUtils::getFormatDescriptor(pixelFormat);
+    int bpp = info.bpp;
+    if (!bpp)
     {
         CCLOG("cocos2d: WARNING: Unsupported PVR Pixel Format: 0x%02X. Re-encode it with a OpenGL pixel format variant", (int)formatFlags);
         return false;
     }
 
-    _pixelFormat = it->first;
-    int bpp = it->second.bpp;
+    _pixelFormat = pixelFormat;
 
     //Reset num of mipmaps
     _numberOfMipmaps = 0;
@@ -1534,18 +1535,18 @@ bool Image::initWithPVRv3Data(uint8_t * data, ssize_t dataLen, bool ownData)
         return false;
     }
 
-    auto it = Texture2D::getPixelFormatInfoMap().find(getDevicePVRPixelFormat(v3_pixel_formathash.at(pixelFormat)));
-
-    if (it == Texture2D::getPixelFormatInfoMap().end())
+    auto finalPixelFormat = getDevicePVRPixelFormat(v3_pixel_formathash.at(pixelFormat));
+    auto& info = backend::PixelFormatUtils::getFormatDescriptor(finalPixelFormat);
+    int bpp = info.bpp;
+    if (!info.bpp)
     {
         CCLOG("cocos2d: WARNING: Unsupported PVR Pixel Format: 0x%016llX. Re-encode it with a OpenGL pixel format variant",
               static_cast<unsigned long long>(pixelFormat));
         return false;
     }
 
-    _pixelFormat = it->first;
-    int bpp = it->second.bpp;
-    
+    _pixelFormat = finalPixelFormat;
+
     // flags
     int flags = CC_SWAP_INT32_LITTLE_TO_HOST(header->flags);
 
@@ -1575,8 +1576,8 @@ bool Image::initWithPVRv3Data(uint8_t * data, ssize_t dataLen, bool ownData)
     {
         switch ((PVR3TexturePixelFormat)pixelFormat)
         {
-            case PVR3TexturePixelFormat::PVRTC2BPP_RGB :
-            case PVR3TexturePixelFormat::PVRTC2BPP_RGBA :
+            case PVR3TexturePixelFormat::PVRTC2BPP_RGB:
+            case PVR3TexturePixelFormat::PVRTC2BPP_RGBA:
                 if (!Configuration::getInstance()->supportsPVRTC())
                 {
                     CCLOG("cocos2d: Hardware PVR decoder not present. Using software decoder");
@@ -1590,8 +1591,8 @@ bool Image::initWithPVRv3Data(uint8_t * data, ssize_t dataLen, bool ownData)
                 widthBlocks = width / 8;
                 heightBlocks = height / 4;
                 break;
-            case PVR3TexturePixelFormat::PVRTC4BPP_RGB :
-            case PVR3TexturePixelFormat::PVRTC4BPP_RGBA :
+            case PVR3TexturePixelFormat::PVRTC4BPP_RGB:
+            case PVR3TexturePixelFormat::PVRTC4BPP_RGBA:
                 if (!Configuration::getInstance()->supportsPVRTC())
                 {
                     CCLOG("cocos2d: Hardware PVR decoder not present. Using software decoder");
@@ -1717,7 +1718,7 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
         if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const uint8_t*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) == 0)
         { // if it is not gles or device do not support ETC1, decode texture by software
           // directly decode ETC1_RGB to RGBA8888
-            _pixelFormat = backend::PixelFormat::RGBA8888;
+            _pixelFormat = backend::PixelFormat::RGBA8;
             return true;
         }
 
@@ -1766,7 +1767,7 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         _data = static_cast<uint8_t*>(malloc(_dataLen));
         if (etc2_decode_image(format, static_cast<const uint8_t*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) == 0)
         {
-            _pixelFormat = backend::PixelFormat::RGBA8888;
+            _pixelFormat = backend::PixelFormat::RGBA8;
             return true;
         }
 
@@ -1803,12 +1804,24 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
         if (xdim == 4 && ydim == 4) {
             _pixelFormat = backend::PixelFormat::ASTC4x4;
         }
+        else if (xdim == 5 && ydim == 5) {
+            _pixelFormat = backend::PixelFormat::ASTC5x5;
+        }
         else if (xdim == 6 && ydim == 6) {
             _pixelFormat = backend::PixelFormat::ASTC6x6;
         }
-        if (xdim == 8 && ydim == 8)
+        else if (xdim == 8 && ydim == 5) {
+            _pixelFormat = backend::PixelFormat::ASTC8x5;
+        }
+        else if (xdim == 8 && ydim == 6) {
+            _pixelFormat = backend::PixelFormat::ASTC8x6;
+        }
+        else if (xdim == 8 && ydim == 8)
         {
             _pixelFormat = backend::PixelFormat::ASTC8x8;
+        }
+        else if (xdim == 10 && ydim == 5) {
+            _pixelFormat = backend::PixelFormat::ASTC10x5;
         }
 
         forwardPixels(data, dataLen, ASTC_HEAD_SIZE, ownData);
@@ -1821,7 +1834,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
         _dataLen = _width * _height * 4;
         _data = static_cast<uint8_t*>(malloc(_dataLen));
         if (decompress_astc(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE, _data, _width, _height, xdim, ydim, _dataLen) == 0) {
-            _pixelFormat = backend::PixelFormat::RGBA8888;
+            _pixelFormat = backend::PixelFormat::RGBA8;
             return true;
         }
 
@@ -1872,7 +1885,7 @@ bool Image::initWithS3TCData(uint8_t * data, ssize_t dataLen, bool ownData)
             _pixelFormat = backend::PixelFormat::S3TC_DXT5;
         }
     } else { //will software decode
-        _pixelFormat = backend::PixelFormat::RGBA8888;
+        _pixelFormat = backend::PixelFormat::RGBA8;
 
         // prepare data for software decompress
         for (int i = 0; i < _numberOfMipmaps && (width || height); ++i)
@@ -2005,7 +2018,7 @@ bool Image::initWithATITCData(uint8_t *data, ssize_t dataLen, bool ownData)
 
         CCLOG("cocos2d: Hardware ATITC decoder not present. Using software decoder");
 
-        _pixelFormat = backend::PixelFormat::RGBA8888;
+        _pixelFormat = backend::PixelFormat::RGBA8;
 
         for (int i = 0; i < _numberOfMipmaps && (width || height); ++i)
         {
@@ -2100,10 +2113,10 @@ void Image::forwardPixels(uint8_t* data, ssize_t dataLen, int offset, bool ownDa
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
 bool Image::saveToFile(const std::string& filename, bool isToRGB)
 {
-    //only support for backend::PixelFormat::RGB888 or backend::PixelFormat::RGBA8888 uncompressed data
-    if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB888 && _pixelFormat != backend::PixelFormat::RGBA8888))
+    //only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
+    if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))
     {
-        CCLOG("cocos2d: Image: saveToFile is only support for backend::PixelFormat::RGB888 or backend::PixelFormat::RGBA8888 uncompressed data for now");
+        CCLOG("cocos2d: Image: saveToFile is only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data for now");
         return false;
     }
 
@@ -2358,7 +2371,7 @@ void Image::premultiplyAlpha()
         _hasPremultipliedAlpha = false;
         return;
 #else
-    CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8888, "The pixel format should be RGBA8888!");
+    CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "The pixel format should be RGBA8888!");
     
     unsigned int* fourBytes = (unsigned int*)_data;
     for(int i = 0; i < _width * _height; i++)
@@ -2377,7 +2390,7 @@ static inline uint8_t clamp(int x) {
 
 void Image::reversePremultipliedAlpha()
 {
-    CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8888, "The pixel format should be RGBA8888!");
+    CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "The pixel format should be RGBA8888!");
 
     unsigned int* fourBytes = (unsigned int*)_data;
     for (int i = 0; i < _width * _height; i++)

@@ -26,7 +26,6 @@
 
 #include "renderer/backend/RenderPassParams.h"
 #include "renderer/backend/RenderPipeline.h"
-#include "renderer/backend/RenderPipelineDescriptor.h"
 #include "renderer/backend/Device.h"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/CommandBuffer.h"

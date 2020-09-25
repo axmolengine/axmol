@@ -374,7 +374,7 @@ static std::tuple<ImVec2, ImVec2> getTextureUV(Sprite* sp)
 {
     ImVec2 uv0, uv1;
     if (!sp || !sp->getTexture())
-        return { uv0,uv1 };
+        return std::tuple<ImVec2, ImVec2>{ uv0,uv1 };
     const auto& rect = sp->getTextureRect();
     const auto tex = sp->getTexture();
     const float atlasWidth = (float)tex->getPixelsWide();
@@ -383,7 +383,7 @@ static std::tuple<ImVec2, ImVec2> getTextureUV(Sprite* sp)
     uv0.y = rect.origin.y / atlasHeight;
     uv1.x = (rect.origin.x + rect.size.width) / atlasWidth;
     uv1.y = (rect.origin.y + rect.size.height) / atlasHeight;
-    return { uv0,uv1 };
+    return std::tuple<ImVec2, ImVec2>{ uv0,uv1 };
 }
 
 void ImGuiEXT::image(Texture2D* tex, const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1,
@@ -500,30 +500,30 @@ bool ImGuiEXT::nodeButton(Node* node, int frame_padding, const ImVec4& bg_col, c
 std::tuple<ImTextureID, int> ImGuiEXT::useTexture(Texture2D* texture)
 {
     if (!texture)
-        return { nullptr,0 };
-    return { (ImTextureID)texture,getCCRefId(texture) };
+        return std::tuple<ImTextureID, int>{ nullptr,0 };
+    return std::tuple<ImTextureID, int>{ (ImTextureID)texture,getCCRefId(texture) };
 }
 
 std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiEXT::useSprite(Sprite* sprite)
 {
     if (!sprite || !sprite->getTexture())
-        return { nullptr,{},{},0 };
+        return std::tuple<ImTextureID, ImVec2, ImVec2, int>{ nullptr,{},{},0 };
     ImVec2 uv0, uv1;
     std::tie(uv0, uv1) = getTextureUV(sprite);
-    return { (ImTextureID)sprite->getTexture(),uv0,uv1,getCCRefId(sprite) };
+    return std::tuple<ImTextureID, ImVec2, ImVec2, int>{ (ImTextureID)sprite->getTexture(),uv0,uv1,getCCRefId(sprite) };
 }
 
 std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiEXT::useNode(Node* node, const ImVec2& pos)
 {
     if (!node)
-        return { nullptr,{},{},0 };
+        return std::tuple<ImTextureID, ImVec2, ImVec2, int>{ nullptr,{},{},0 };
     const auto size = node->getContentSize();
     Mat4 tr;
     tr.m[5] = -1;
     tr.m[12] = pos.x;
     tr.m[13] = pos.y + size.height;
     node->setNodeToParentTransform(tr);
-    return { (ImTextureID)node,pos,ImVec2(pos.x + size.width,pos.y + size.height),getCCRefId(node) };
+    return std::tuple<ImTextureID, ImVec2, ImVec2, int>{ (ImTextureID)node,pos,ImVec2(pos.x + size.width,pos.y + size.height),getCCRefId(node) };
 }
 
 void ImGuiEXT::setNodeColor(Node* node, const ImVec4& col)

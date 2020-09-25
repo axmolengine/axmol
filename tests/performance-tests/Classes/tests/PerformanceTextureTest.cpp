@@ -57,7 +57,7 @@ void TexturePerformceTest::performTestsPNG(const char* filename, const char* fil
     Texture2D::PixelFormat defaultFormat = Texture2D::getDefaultAlphaPixelFormat();
 
     log("RGBA 8888");
-    Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+    Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
     gettimeofday(&now, nullptr);
     texture = cache->addImage(filename);
     if( texture )
@@ -73,7 +73,7 @@ void TexturePerformceTest::performTestsPNG(const char* filename, const char* fil
     cache->removeTexture(texture);
 
     log("RGBA 4444");
-    Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4444);
+    Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4);
     gettimeofday(&now, nullptr);
     texture = cache->addImage(filename);
     if( texture )

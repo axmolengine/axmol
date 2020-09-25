@@ -23,9 +23,9 @@ set(COCOS_AUDIO_SRC
     )
     
 # stupid, clang always compie .mm as objc/cpp mix obj
-if(ANDROID)
+if(ANDROID OR LINUX)
     set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
-        audio/src/android-link.cpp
+        audio/src/linux-link.cpp
     )
 else()
     set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}

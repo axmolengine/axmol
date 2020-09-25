@@ -28,7 +28,7 @@
 #include "platform/CCFileUtils.h"
 #include "renderer/backend/Texture.h"
 #include "renderer/backend/Device.h"
-#include "renderer/CCTextureUtils.h"
+#include "renderer/backend/TextureUtils.h"
 
 NS_CC_BEGIN
 
@@ -47,13 +47,13 @@ unsigned char* getImageData(Image* img, backend::PixelFormat&  ePixFmt)
     // compute pixel format
     if (bHasAlpha)
     {
-        ePixFmt = backend::PixelFormat::DEFAULT;
+        ePixFmt = backend::PixelFormat::RGBA8;
     }
     else
     {
         if (uBPP >= 8)
         {
-            ePixFmt = backend::PixelFormat::RGB888;
+            ePixFmt = backend::PixelFormat::RGB8;
         }
         else
         {
@@ -102,7 +102,7 @@ unsigned char* getImageData(Image* img, backend::PixelFormat&  ePixFmt)
         }
     }
 
-    if (bHasAlpha && ePixFmt == backend::PixelFormat::RGB888)
+    if (bHasAlpha && ePixFmt == backend::PixelFormat::RGB8)
     {
         // Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRRRRGGGGGGGGBBBBBBBB"
         inPixel32 = (unsigned int*)img->getData();
@@ -228,10 +228,10 @@ bool TextureCube::init(const std::string& positive_x, const std::string& negativ
         uint8_t *useData = pData;
 
         //convert pixel format to RGBA
-        if (ePixelFmt != backend::PixelFormat::RGBA8888 && ePixelFmt != backend::PixelFormat::DEFAULT)
+        if (ePixelFmt != backend::PixelFormat::RGBA8)
         {
             size_t len = 0;
-            backend::PixelFormatUtils::convertDataToFormat(pData, img->getDataLen(), ePixelFmt, backend::PixelFormat::RGBA8888, &cData, &len);
+            backend::PixelFormatUtils::convertDataToFormat(pData, img->getDataLen(), ePixelFmt, backend::PixelFormat::RGBA8, &cData, &len);
             if (cData != pData) //convert error
             {
                 useData = cData;

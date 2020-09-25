@@ -24,83 +24,16 @@
  ****************************************************************************/
  
 #include "Texture.h"
+#include "TextureUtils.h"
 #include <cassert>
 CC_BACKEND_BEGIN
-
-#define byte(n) ((n) * 8)
-#define bit(n) (n)
-namespace
-{
-    // !!!FIXME: GPU supported compression texture formats, bpp could be ignore and doesn't to set, leave it=0
-    // ASTC have float bpp, such as ASTC6x6 3.56 BPP
-    static uint8_t computeBitsPerElement(PixelFormat textureFormat)
-    {
-        switch (textureFormat)
-        {
-            case PixelFormat::RGBA8888:
-            case PixelFormat::BGRA8888:
-                return byte(4);
-            case PixelFormat::RGB888:
-                return byte(3);
-            case PixelFormat::RGBA4444:
-                return byte(2);
-            case PixelFormat::A8:
-                return byte(1);
-            case PixelFormat::I8:
-                return byte(1);
-            case PixelFormat::RGB565:
-                return byte(2);
-            case PixelFormat::RGB5A1:
-                return byte(2);
-            case PixelFormat::AI88:
-                return byte(2);
-            case PixelFormat::ATC_RGB:
-                return bit(4);
-            case PixelFormat::ATC_EXPLICIT_ALPHA:
-                return byte(1);
-            case PixelFormat::ATC_INTERPOLATED_ALPHA:
-                return byte(1);
-            case PixelFormat::PVRTC2:
-                return bit(2);
-            case PixelFormat::PVRTC2A:
-                return bit(2);
-            case PixelFormat::PVRTC4:
-                return bit(4);
-            case PixelFormat::PVRTC4A:
-                return bit(4);
-            case PixelFormat::S3TC_DXT1:
-                return bit(4);
-            case PixelFormat::S3TC_DXT3:
-                return byte(1);
-            case PixelFormat::S3TC_DXT5:
-                return byte(1);
-            case PixelFormat::MTL_BGR5A1:
-                return byte(2);
-            case PixelFormat::MTL_B5G6R5:
-                return byte(2);
-            case PixelFormat::MTL_ABGR4:
-                return byte(2);
-            case PixelFormat::D24S8:
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                //ios use MTLPixelFormatDepth32Float_Stencil8 as DepthStencil combined format, its 64 bits
-                return byte(8);
-#else
-                //mac and opengl use Depth24_Stnicl8 combined format, its 32 bits
-                return byte(4);
-#endif
-            default:
-                return byte(0); //"textureFormat pixel size in bytes not defined!";
-        }
-        return 0;
-    }
-}
 
 TextureBackend::~TextureBackend()
 {}
 
 void TextureBackend::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int /*index*/)
 {
-    _bitsPerElement = computeBitsPerElement(descriptor.textureFormat);
+    _bitsPerPixel = PixelFormatUtils::getBitsPerPixel(descriptor.textureFormat);
     _textureType = descriptor.textureType;
     _textureFormat = descriptor.textureFormat;
     _textureUsage = descriptor.textureUsage;

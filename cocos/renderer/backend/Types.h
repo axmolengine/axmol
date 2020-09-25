@@ -71,28 +71,11 @@ enum class VertexFormat : uint32_t
 /** @typedef backend::PixelFormat
      Possible texture pixel formats
      */
-enum class PixelFormat
+enum class PixelFormat : uint32_t
 {
-    //! auto detect the type
-    AUTO,
-    //! 32-bit texture: BGRA8888
-    BGRA8888,
-    //! 32-bit texture: RGBA8888
-    RGBA8888,
-    //! 24-bit texture: RGBA888
-    RGB888,
-    //! 16-bit texture without Alpha channel
-    RGB565,
-    //! 8-bit textures used as masks
-    A8,
-    //! 8-bit intensity texture
-    I8,
-    //! 16-bit textures used as masks
-    AI88,
-    //! 16-bit textures: RGBA4444
-    RGBA4444,
-    //! 16-bit textures: RGB5A1
-    RGB5A1,
+    /* below is compression format */
+
+    /* PVRTCV1, OpenGL support PVRTCv2, but Metal only support PVRTCv1*/
     //! 4-bit PVRTC-compressed texture: PVRTC4
     PVRTC4,
     //! 4-bit PVRTC-compressed texture: PVRTC4 (has alpha channel)
@@ -101,46 +84,70 @@ enum class PixelFormat
     PVRTC2,
     //! 2-bit PVRTC-compressed texture: PVRTC2 (has alpha channel)
     PVRTC2A,
+
     //! ETC1-compressed texture: ETC1 4 BPP
     ETC1,
     //! ETC2-compressed texture: ETC2_RGB 4 BPP
     ETC2_RGB,
     //! ETC2-compressed texture: ETC2_RGBA 8 BPP
     ETC2_RGBA,
+
     //! S3TC-compressed texture: S3TC_Dxt1
     S3TC_DXT1,
     //! S3TC-compressed texture: S3TC_Dxt3
     S3TC_DXT3,
     //! S3TC-compressed texture: S3TC_Dxt5
     S3TC_DXT5,
+
     //! ATITC-compressed texture: ATC_RGB
     ATC_RGB,
     //! ATITC-compressed texture: ATC_EXPLICIT_ALPHA
     ATC_EXPLICIT_ALPHA,
     //! ATITC-compressed texture: ATC_INTERPOLATED_ALPHA
     ATC_INTERPOLATED_ALPHA,
-    //! Default texture format: AUTO
-
-    MTL_B5G6R5,
-    //MTL_A1BGR5,
-    MTL_BGR5A1,
-    MTL_ABGR4,
 
     ASTC4x4,      //!< ASTC 4x4 8.0 BPP
-    //ASTC5x5,      //!< ASTC 5x5 5.12 BPP
+    ASTC5x5,      //!< ASTC 5x5 5.12 BPP
     ASTC6x6,      //!< ASTC 6x6 3.56 BPP
-    //ASTC8x5,      //!< ASTC 8x5 3.20 BPP
-    ASTC8x8,      //!< ASTC 8x6 2 BPP
-    //ASTC10x5,     //!< ASTC 10x5 2.56 BPP
+    ASTC8x5,      //!< ASTC 8x5 3.20 BPP
+    ASTC8x6,      //!< ASTC 8x6 2.67 BPP
+    ASTC8x8,      //!< ASTC 8x8 2.0 BPP
+    ASTC10x5,     //!< ASTC 10x5 2.56 BPP
+    //!!!Please append compression pixel format
 
+    /* below is normal pixel format */
+    //! 32-bit texture: RGBA8888
+    RGBA8,
+    //! 32-bit texture: BGRA8888
+    BGRA8,
+    //! 24-bit texture: RGBA888
+    RGB8,
+    //! 16-bit texture without Alpha channel
+    RGB565, // !render as BGR565
+    //! 16-bit textures: RGBA4444
+    RGBA4,  // !render as ABGR4
+    //! 16-bit textures: RGB5A1
+    RGB5A1, // !render as BGR5A1
+    //! 8-bit textures used as masks
+    A8,
+    //! 8-bit Luminance texture
+    L8,
+    //! 16-bit Luminance with alpha used as masks
+    LA8,
+
+    //!!!Please append normal pixel format
+
+    /* below is depth compression format */
     // A packed 32-bit combined depth and stencil pixel format with two nomorlized unsigned integer
     // components: 24 bits, typically used for a depth render target, and 8 bits, typically used for
     // a stencil render target.
     D24S8,
+    //!!!Please append depth stencil pixel format
 
-    DEFAULT = AUTO,
+    /* the count of pixel format supported by egnx */
+    COUNT,
 
-    NONE = -1
+    NONE = 0xffff
 };
 
 enum class TextureUsage : uint32_t

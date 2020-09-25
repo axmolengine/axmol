@@ -78,11 +78,11 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
             _UITextureImage = uiTextureImage;
             CC_SAFE_RETAIN(_UITextureImage);
             const Size& s = _texture2D->getContentSizeInPixels();
-            VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4, backend::PixelFormat::RGBA8888, s);
+            VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4, backend::PixelFormat::RGBA8, s);
 
             if ( _texture2DCopy )
             {
-                VolatileTextureMgr::addDataTexture(_texture2DCopy, uiTextureImage->getData(), s.width * s.height * 4, backend::PixelFormat::RGBA8888, s);
+                VolatileTextureMgr::addDataTexture(_texture2DCopy, uiTextureImage->getData(), s.width * s.height * 4, backend::PixelFormat::RGBA8, s);
             }
         }
         else
@@ -145,7 +145,7 @@ RenderTexture * RenderTexture::create(int w, int h)
 {
     RenderTexture *ret = new (std::nothrow) RenderTexture();
 
-    if(ret && ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8888, PixelFormat::NONE))
+    if(ret && ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8, PixelFormat::NONE))
     {
         ret->autorelease();
         return ret;
@@ -190,7 +190,7 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
         descriptor.width = powW;
         descriptor.height = powH;
         descriptor.textureUsage = TextureUsage::RENDER_TARGET;
-        descriptor.textureFormat = PixelFormat::RGBA8888;
+        descriptor.textureFormat = PixelFormat::RGBA8;
         auto texture = backend::Device::getInstance()->newTexture(descriptor);
         if (! texture)
             break;
@@ -469,7 +469,7 @@ void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool 
 /* get buffer as Image */
 void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, bool flipImage)
 {
-    CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8888, "only RGBA8888 can be saved as image");
+    CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "only RGBA8888 can be saved as image");
 
     if ((nullptr == _texture2D))
     {

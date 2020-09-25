@@ -26,6 +26,7 @@
 
 #include "DeviceInfoMTL.h"
 #include "base/ccMacros.h"
+#include "UtilsMTL.h"
 CC_BACKEND_BEGIN
 
 namespace {
@@ -367,6 +368,8 @@ namespace {
     }
 }
 
+bool DeviceInfoMTL::_isDepth24Stencil8PixelFormatSupported = false;
+
 DeviceInfoMTL::DeviceInfoMTL(id<MTLDevice> device)
 {
    _deviceName = [device.name UTF8String];
@@ -388,6 +391,8 @@ DeviceInfoMTL::DeviceInfoMTL(id<MTLDevice> device)
             break;
         }
     }
+    
+    UtilsMTL::initGPUTextureFormats();
 }
 
 bool DeviceInfoMTL::init()

@@ -51,7 +51,6 @@ class RenderPipeline;
 class RenderPass;
 class TextureBackend;
 class RenderTarget;
-struct RenderPipelineDescriptor;
 struct PixelBufferDescriptor;
 }
 

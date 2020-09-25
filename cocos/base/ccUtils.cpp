@@ -121,7 +121,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
         
         RenderTexture* finalRtx = nullptr;
         
-        auto rtx = RenderTexture::create(size.width, size.height, backend::PixelFormat::RGBA8888, PixelFormat::D24S8);
+        auto rtx = RenderTexture::create(size.width, size.height, backend::PixelFormat::RGBA8, PixelFormat::D24S8);
         // rtx->setKeepMatrix(true);
         Point savedPos = startNode->getPosition();
         Point anchor;
@@ -142,7 +142,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
             Sprite *sprite = Sprite::createWithTexture(rtx->getSprite()->getTexture(), finalRect);
             sprite->setAnchorPoint(Point(0, 0));
             sprite->setFlippedY(true);
-            finalRtx = RenderTexture::create(size.width * scale, size.height * scale, backend::PixelFormat::RGBA8888, PixelFormat::D24S8);
+            finalRtx = RenderTexture::create(size.width * scale, size.height * scale, backend::PixelFormat::RGBA8, PixelFormat::D24S8);
             
             sprite->setScale(scale); // or use finalRtx->setKeepMatrix(true);
             finalRtx->begin();

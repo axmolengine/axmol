@@ -661,20 +661,20 @@ public:
 };
 
 // I8 texture convert test
-class TextureConvertI8 : public TextureDemo
+class TextureConvertL8 : public TextureDemo
 {
 public:
-    CREATE_FUNC(TextureConvertI8);
+    CREATE_FUNC(TextureConvertL8);
     virtual void onEnter() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
 
 // AI88 texture convert test
-class TextureConvertAI88 : public TextureDemo
+class TextureConvertLA8 : public TextureDemo
 {
 public:
-    CREATE_FUNC(TextureConvertAI88);
+    CREATE_FUNC(TextureConvertLA8);
     virtual void onEnter() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;

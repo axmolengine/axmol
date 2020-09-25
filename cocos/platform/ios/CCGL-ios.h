@@ -45,6 +45,40 @@ THE SOFTWARE.
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 
+/* gles3/gl */
+#if !defined(GL_SRGB8)
+#define GL_SRGB8 0x8C41
+#endif
+
+#if !defined(GL_SRGB8_ALPHA8)
+#define GL_SRGB8_ALPHA8 0x8C43
+#endif
+
+#if !defined(GL_COMPRESSED_RGB8_ETC2)
+#define GL_COMPRESSED_RGB8_ETC2 0x9274
+#endif
+
+#if !defined(GL_COMPRESSED_SRGB8_ETC2)
+#define GL_COMPRESSED_SRGB8_ETC2 0x9275
+#endif
+
+#if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
+#define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
+#endif
+
+#if !defined(GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC)
+#define GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC 0x9279
+#endif
+
+/* gles2/glext */
+#ifndef GL_EXT_texture_compression_s3tc_srgb
+#define GL_EXT_texture_compression_s3tc_srgb 1
+#define GL_COMPRESSED_SRGB_S3TC_DXT1_EXT  0x8C4C
+#define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT 0x8C4D
+#define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT 0x8C4E
+#define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT 0x8C4F
+#endif /* GL_EXT_texture_compression_s3tc_srgb */
+
 #endif // CC_PLATFORM_IOS
 
 #endif // __PLATFORM_IOS_CCGL_H__

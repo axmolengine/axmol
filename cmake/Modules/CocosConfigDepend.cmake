@@ -8,7 +8,7 @@ macro(cocos2dx_depend)
         list(APPEND PLATFORM_SPECIFIC_LIBS ws2_32 userenv psapi winmm Version Iphlpapi opengl32)
     elseif(LINUX)
         # need review those libs: X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m
-        list(APPEND PLATFORM_SPECIFIC_LIBS dl X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m)
+        list(APPEND PLATFORM_SPECIFIC_LIBS dl X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m bsd)
         # use older cmake style on below linux libs
         cocos_find_package(Fontconfig FONTCONFIG REQUIRED)	
         cocos_find_package(GTK3 GTK3 REQUIRED)

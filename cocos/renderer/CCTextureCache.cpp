@@ -711,7 +711,7 @@ VolatileTexture::VolatileTexture(Texture2D *t)
 , _uiImage(nullptr)
 , _cashedImageType(kInvalid)
 , _textureData(nullptr)
-, _pixelFormat(backend::PixelFormat::RGBA8888)
+, _pixelFormat(backend::PixelFormat::RGBA8)
 , _fileName("")
 , _text("")
 {

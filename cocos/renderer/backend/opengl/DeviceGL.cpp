@@ -98,7 +98,8 @@ RenderTarget* DeviceGL::newRenderTarget(TargetBufferFlags rtf,
     auto rtGL = new RenderTargetGL(false);
     rtGL->setTargetFlags(rtf);
     rtGL->bindFrameBuffer();
-    rtGL->setColorAttachment({ RenderTarget::ColorAttachment{ {colorAttachment, 0} } });
+    RenderTarget::ColorAttachment colors{ {colorAttachment, 0} };
+    rtGL->setColorAttachment(colors);
     rtGL->setDepthAttachment(depthAttachment);
     rtGL->setStencilAttachment(stencilAttachhment);
     return rtGL;

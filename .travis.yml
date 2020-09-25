@@ -1,21 +1,28 @@
 language: cpp
 jobs:
   include:
-    # mac_cmake
+    # osx
     - os: osx
-      env: BUILD_TARGET=mac_cmake
+      env: BUILD_TARGET=osx
       osx_image: xcode11.6
-    # iOS_cmake
+    # ios
     - os: osx
-      env: BUILD_TARGET=ios_cmake
+      env: BUILD_TARGET=ios
       osx_image: xcode11.6
-    # android cmake
+    # android
     - os: linux
-      env: BUILD_TARGET=android_cmake
+      dist: xenial
+      env: BUILD_TARGET=android
       language: android
-    # android_lua cmake
+    # linux
+    - os: linux
+      dist: bionic
+      env: 
+        - BUILD_TARGET=linux 
+        - GEN_BINDING_AND_COCOSFILE=false
+    # android_lua
     #- os: linux
-    #  env: BUILD_TARGET=android_lua_cmake
+    #  env: BUILD_TARGET=android_lua
     #  addons:
     #    apt:
     #      sources:

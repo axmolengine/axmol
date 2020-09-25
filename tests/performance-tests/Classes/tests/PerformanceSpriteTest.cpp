@@ -124,67 +124,67 @@ void SubTest::initWithSubTest(int subtest, Node* p)
             ///
         case 1:
         case 2:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
             _parentNode = Node::create();
             break;
         case 3:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
             _parentNode = SpriteBatchNode::create("Images/grossinis_sister1.png", 100);
             break;
         case 4:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4444);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4);
             _parentNode = SpriteBatchNode::create("Images/grossinis_sister1.png", 100);
             break;
 
             ///
         case 5:
         case 6:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
             _parentNode = Node::create();
             break;
         case 7:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
             _parentNode = SpriteBatchNode::create("Images/grossini_dance_atlas.png", 100);
             break;
         case 8:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4444);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4);
             _parentNode = SpriteBatchNode::create("Images/grossini_dance_atlas.png", 100);
             break;
 
             ///
         case 9:
         case 10:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
             _parentNode = Node::create();
             break;
         case 11:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
             _parentNode = SpriteBatchNode::create("Images/spritesheet1.png", 100);
             break;
         case 12:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4444);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4);
             _parentNode = SpriteBatchNode::create("Images/spritesheet1.png", 100);
             break;
 
             ///
         case 13:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4444);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4);
             _parentNode = Node::create();
             break;
 
         case 14:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
             _parentNode = Node::create();
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/grossini_quad.plist"); // sprite sheet with rectangular frames
             break;
         case 15:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8);
             _parentNode = Node::create();
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/grossini_polygon.plist"); // sprite sheet with triangulation of sprite outlines
             break;
 
         case 16:
-            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4444);
+            Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA4);
             _parentNode = Node::create();
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/grossinis_sister1_sp.plist");
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/grossinis_sister2_sp.plist");
