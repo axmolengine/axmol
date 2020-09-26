@@ -111,8 +111,6 @@ protected:
 
     /**Rendered triangles.*/
     Triangles _triangles;
-    /**Model view matrix when rendering the triangles.*/
-    Mat4 _mv;
 
     // Cached value to determine to generate material id or not.
     BlendFunc _blendType = BlendFunc::DISABLE;
