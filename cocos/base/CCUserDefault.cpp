@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#include <inttypes.h>
+
 #include "openssl/aes.h"
 #include "openssl/modes.h"
 #include "openssl/rc4.h"
@@ -185,6 +187,20 @@ int UserDefault::getIntegerForKey(const char* pKey, int defaultValue)
     return defaultValue;
 }
 
+int64_t UserDefault::getLargeIntForKey(const char* key)
+{
+    return getLargeIntForKey(key, 0);
+}
+
+int64_t UserDefault::getLargeIntForKey(const char* key, int64_t defaultValue)
+{
+    auto it = this->_values.find(key);
+    if (it != this->_values.end())
+        return std::stoll(it->second);
+
+    return defaultValue;
+}
+
 float UserDefault::getFloatForKey(const char* pKey)
 {
     return getFloatForKey(pKey, 0.0f);
@@ -241,8 +257,23 @@ void UserDefault::setIntegerForKey(const char* pKey, int value)
 
     // format the value
     char tmp[50];
-    memset(tmp, 0, 50);
+    memset(tmp, 0, sizeof(tmp));
     sprintf(tmp, "%d", value);
+
+    setStringForKey(pKey, tmp);
+}
+
+void UserDefault::setLargeIntForKey(const char* pKey, int64_t value)
+{// check key
+    if (!pKey)
+    {
+        return;
+    }
+
+    // format the value
+    char tmp[96];
+    memset(tmp, 0, sizeof(tmp));
+    sprintf(tmp, "%" PRId64, value);
 
     setStringForKey(pKey, tmp);
 }
