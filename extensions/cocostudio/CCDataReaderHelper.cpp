@@ -302,7 +302,7 @@ void DataReaderHelper::addDataFromFile(const std::string& filePath)
     }
     else
     {
-        basefilePath;
+        basefilePath.clear();
     }
 
     std::string fileExtension = cocos2d::FileUtils::getInstance()->getFileExtension(filePath);
@@ -365,6 +365,10 @@ void DataReaderHelper::addDataFromFileAsync(const std::string& imagePath, const 
     if (pos != std::string::npos)
     {
         basefilePath = basefilePath.substr(0, pos + 1);
+    }
+    else
+    {
+        basefilePath.clear();
     }
 
 
