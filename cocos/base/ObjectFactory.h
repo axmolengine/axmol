@@ -63,7 +63,7 @@ public:
 protected:
     ObjectFactory();
     virtual ~ObjectFactory();
-private:
+
     static ObjectFactory *_sharedFactory;
     FactoryMap _typeMap;
 };
