@@ -315,10 +315,13 @@ public:
      *
      * @return std::vector<std::string> the string vector of custom-defined headers.
      */
-    std::vector<std::string> getHeaders() const
+    const std::vector<std::string>& getHeaders() const
     {
         return _headers;
     }
+
+    void setHosts(std::vector<std::string> hosts) { _hosts = std::move(hosts); }
+    const std::vector<std::string>& getHosts() const { return _hosts; }
 
 private:
     void doSetResponseCallback(Ref* pTarget, SEL_HttpResponse pSelector)
@@ -347,6 +350,7 @@ protected:
     ccHttpRequestCallback       _pCallback;      /// C++11 style callbacks
     void*                       _pUserData;      /// You can add your customed data here
     std::vector<std::string>    _headers;        /// custom http headers
+    std::vector<std::string>    _hosts;
 };
 
 }
