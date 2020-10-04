@@ -346,6 +346,13 @@ namespace utils
     {
         return newInstance<T>(&T::init);
     }
+
+
+    // check a number is power of two.
+    static bool isPOT(int number)
+    {
+        return ((number > 0) && (number & (number - 1)) == 0);
+    }
 }
 
 NS_CC_END

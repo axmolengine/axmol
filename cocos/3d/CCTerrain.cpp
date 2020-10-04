@@ -41,6 +41,7 @@ USING_NS_CC;
 #include "2d/CCCamera.h"
 #include "platform/CCImage.h"
 #include "3d/CC3DProgramInfo.h"
+#include "base/ccUtils.h"
 
 NS_CC_BEGIN
 
@@ -53,15 +54,6 @@ namespace {
         0xFF, 0xFF, 0xFF, 0xFF,
         0xFF, 0xFF, 0xFF, 0xFF
     };
-
-    // check a number is power of two.
-    static bool isPOT(int number)
-    {
-        bool flag = false;
-        if ((number > 0) && (number&(number - 1)) == 0)
-            flag = true;
-        return flag;
-    }
 }
 
 Terrain * Terrain::create(TerrainData &parameter, CrackFixedType fixedType)
@@ -220,7 +212,7 @@ bool Terrain::initHeightMap(const std::string& heightMap)
     _imageHeight = _heightMapImage->getHeight();
 
     //only the image size  is the Powers Of Two(POT) or POT+1
-    if ((isPOT(_imageWidth) && isPOT(_imageHeight)) || (isPOT(_imageWidth - 1) && isPOT(_imageHeight - 1)))
+    if ((utils::isPOT(_imageWidth) && utils::isPOT(_imageHeight)) || (utils::isPOT(_imageWidth - 1) && utils::isPOT(_imageHeight - 1)))
     {
         int chunk_amount_y = _imageHeight / _chunkSize.height;
         int chunk_amount_x = _imageWidth / _chunkSize.width;
