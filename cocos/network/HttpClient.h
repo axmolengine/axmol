@@ -30,7 +30,7 @@
 
 #include <thread>
 #include <condition_variable>
-#include "base/CCVector.h"
+#include <deque>
 #include "base/CCScheduler.h"
 #include "network/HttpRequest.h"
 #include "network/HttpResponse.h"
