@@ -508,7 +508,7 @@ void SceneReader::setPropertyFromJsonDict(CocoLoader *cocoLoader, stExpCocoNode 
     stExpCocoNode *stChildArray = cocoNode->GetChildArray(cocoLoader);
     float x = 0.0f, y = 0.0f, fScaleX = 1.0f, fScaleY = 1.0f, fRotationZ = 1.0f;
     bool bVisible = false;
-    const char *sName;
+    const char *sName = "";
     int nTag = 0, nZorder = -1;
     
     for (int i = 0; i < cocoNode->GetChildNum(); ++i)
