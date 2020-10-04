@@ -292,16 +292,15 @@ public:
     /// @param responseCode Null not allowed
     bool perform(long *responseCode)
     {
-        if (CURLE_OK != curl_easy_perform(_curl))
-            return false;
-        CURLcode code = curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, responseCode);
+        auto code = curl_easy_perform(_curl);
+        bool ok = code == CURLE_OK;
+        code = curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, responseCode);
         if (code != CURLE_OK || !(*responseCode >= 200 && *responseCode < 300)) {
             CCLOGERROR("Curl curl_easy_getinfo failed: %s", curl_easy_strerror(code));
             return false;
         }
         // Get some mor data.
-        
-        return true;
+        return ok;
     }
 };
 
