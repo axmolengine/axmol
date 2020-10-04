@@ -214,10 +214,12 @@ class CURLRaii
     CURL *_curl;
     /// Keeps custom header data
     curl_slist *_headers;
+    curl_slist *_hosts;
 public:
     CURLRaii()
         : _curl(curl_easy_init())
         , _headers(nullptr)
+        , _hosts(nullptr)
     {
     }
 
@@ -250,7 +252,7 @@ public:
             return false;
 
         /* get custom header data (if set) */
-        std::vector<std::string> headers=request->getHeaders();
+        auto& headers = request->getHeaders();
         if(!headers.empty())
         {
             /* append custom headers one by one */
@@ -258,6 +260,16 @@ public:
                 _headers = curl_slist_append(_headers,header.c_str());
             /* set custom headers for curl */
             if (!setOption(CURLOPT_HTTPHEADER, _headers))
+                return false;
+        }
+        /* get custom host data (if set) */
+        auto& hosts = request->getHosts();
+        if (!hosts.empty()) {
+            /* append hosts headers one by one */
+            for (auto& host : hosts)
+                _hosts = curl_slist_append(_hosts, host.c_str());
+            /* set custom hosts for curl */
+            if (!setOption(CURLOPT_RESOLVE, _hosts))
                 return false;
         }
         std::string cookieFilename = client->getCookieFilename();
@@ -269,7 +281,6 @@ public:
                 return false;
             }
         }
-
         return setOption(CURLOPT_URL, request->getUrl())
                 && setOption(CURLOPT_WRITEFUNCTION, callback)
                 && setOption(CURLOPT_WRITEDATA, stream)
