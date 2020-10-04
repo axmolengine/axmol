@@ -133,10 +133,12 @@ public:
      * If _responseCode is not 200, you should check the meaning for _responseCode by the net.
      * @return long the value of _responseCode
      */
-    long getResponseCode() const
+    int getResponseCode() const
     {
         return _responseCode;
     }
+
+    int getInternalCode() const { return _internalCode; }
 
     /**
      * Get the error buffer which will tell you more about the reason why http request failed.
@@ -184,9 +186,14 @@ public:
      * Set the http response code.
      * @param value the http response code that represent whether the request is successful or not.
      */
-    void setResponseCode(long value)
+    void setResponseCode(int value)
     {
         _responseCode = value;
+    }
+
+    void setInternalCode(int value) 
+    {
+        _internalCode = value;
     }
 
 
@@ -221,14 +228,13 @@ public:
     }
 
 protected:
-    bool initWithRequest(HttpRequest* request);
-
     // properties
     HttpRequest*        _pHttpRequest;  /// the corresponding HttpRequest pointer who leads to this response
     bool                _succeed;       /// to indicate if the http request is successful simply
     std::vector<char>   _responseData;  /// the returned raw data. You can also dump it as a string
     std::vector<char>   _responseHeader;  /// the returned raw header data. You can also dump it as a string
-    long                _responseCode;    /// the status code returned from libcurl, e.g. 200, 404
+    int                 _responseCode;    /// the status code returned from libcurl, e.g. 200, 404
+    int                 _internalCode;   /// the ret code of perform
     std::string         _errorBuffer;   /// if _responseCode != 200, please read _errorBuffer to find the reason
     std::string         _responseDataString; // the returned raw data. You can also dump it as a string
 

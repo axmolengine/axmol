@@ -212,10 +212,10 @@ private:
     Scheduler* _scheduler;
     std::mutex _schedulerMutex;
 
-    Vector<HttpRequest*>  _requestQueue;
+    std::deque<HttpRequest*>  _requestQueue;
     std::mutex _requestQueueMutex;
 
-    Vector<HttpResponse*> _responseQueue;
+    std::deque<HttpResponse*> _responseQueue;
     std::mutex _responseQueueMutex;
 
     std::string _cookieFilename;
