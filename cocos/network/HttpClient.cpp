@@ -26,7 +26,6 @@
  ****************************************************************************/
 
 #include "network/HttpClient.h"
-#include <queue>
 #include <errno.h>
 #include <curl/curl.h>
 #include "base/CCDirector.h"
@@ -35,10 +34,6 @@
 NS_CC_BEGIN
 
 namespace network {
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-typedef int int32_t;
-#endif
 
 static HttpClient* _httpClient = nullptr; // pointer to singleton
 
@@ -75,7 +70,7 @@ static int processGetTask(HttpClient* client, HttpRequest* request, write_callba
 static int processPostTask(HttpClient* client, HttpRequest* request, write_callback callback, void *stream, long *errorCode, write_callback headerCallback, void *headerStream, char* errorBuffer);
 static int processPutTask(HttpClient* client,  HttpRequest* request, write_callback callback, void *stream, long *errorCode, write_callback headerCallback, void *headerStream, char* errorBuffer);
 static int processDeleteTask(HttpClient* client,  HttpRequest* request, write_callback callback, void *stream, long *errorCode, write_callback headerCallback, void *headerStream, char* errorBuffer);
-// int processDownloadTask(HttpRequest *task, write_callback callback, void *stream, int32_t *errorCode);
+// int processDownloadTask(HttpRequest *task, write_callback callback, void *stream, int *errorCode);
 
 template<typename _Cont, typename _Fty>
 static void __clearQueue(_Cont& queue, _Fty pred) {
@@ -191,8 +186,7 @@ static bool configureCURL(HttpClient* client, CURL* handle, char* errorBuffer)
         return false;
     }
     
-    int32_t code;
-    code = curl_easy_setopt(handle, CURLOPT_ERRORBUFFER, errorBuffer);
+    int code = curl_easy_setopt(handle, CURLOPT_ERRORBUFFER, errorBuffer);
     if (code != CURLE_OK) {
         return false;
     }
