@@ -3,7 +3,6 @@
 set(COCOS_AUDIO_HEADER
     audio/include/alconfig.h
     audio/include/AudioEngine.h
-    audio/include/Export.h
     audio/include/AudioMacros.h
     audio/include/AudioDecoderManager.h
     audio/include/AudioDecoder.h

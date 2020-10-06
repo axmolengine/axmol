@@ -47,7 +47,7 @@ class ShaderModule;
 /**
  * A program.
  */
-class Program : public Ref
+class CC_DLL Program : public Ref
 {
 public:
     /**

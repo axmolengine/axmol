@@ -54,7 +54,7 @@ class RenderTarget;
 /**
  * New or create resources from Device.
  */
-class Device : public cocos2d::Ref
+class CC_DLL Device : public cocos2d::Ref
 {
 public:
     friend class ProgramCache;

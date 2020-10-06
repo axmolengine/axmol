@@ -28,7 +28,6 @@
 #include "platform/CCPlatformConfig.h"
 #include "platform/CCPlatformMacros.h"
 #include "audio/include/AudioMacros.h"
-#include "audio/include/Export.h"
 #include <functional>
 #include <list>
 #include <string>
@@ -51,7 +50,7 @@ NS_CC_BEGIN
  * @brief
  * @js NA
  */
-class EXPORT_DLL AudioProfile
+class CC_DLL AudioProfile
 {
 public:
     //Profile name can't be empty.
@@ -86,7 +85,7 @@ class AudioEngineImpl;
  * @js NA
  */
 
-class EXPORT_DLL AudioEngine
+class CC_DLL AudioEngine
 {
 public:
     /** AudioState enum,all possible states of an audio instance.*/

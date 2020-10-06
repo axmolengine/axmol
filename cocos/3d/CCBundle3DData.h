@@ -45,7 +45,7 @@ NS_CC_BEGIN
 * @js NA
 * @lua NA
 */
-struct MeshVertexAttrib
+struct CC_DLL MeshVertexAttrib
 {
     backend::VertexFormat type;
     shaderinfos::VertexKey vertexAttrib;
