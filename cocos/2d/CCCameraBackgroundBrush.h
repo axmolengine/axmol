@@ -260,6 +260,8 @@ public:
      * @param texture Skybox texture
      */
     void setTexture(TextureCube*  texture);
+
+    TextureCube* getTexture() const { return _texture; }
     
     /**
      * Draw background

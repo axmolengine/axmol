@@ -258,7 +258,7 @@ public:
      * set the background brush. See CameraBackgroundBrush for more information.
      * @param clearBrush Brush used to clear the background
      */
-    void setBackgroundBrush(CameraBackgroundBrush* clearBrush);
+    virtual void setBackgroundBrush(CameraBackgroundBrush* clearBrush);
 
     /**
      * Get clear brush

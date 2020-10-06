@@ -639,7 +639,7 @@ protected:
     ccTextFieldCallback _eventCallback;
     
     bool _textFieldRendererAdaptDirty;
-private:
+protected:
     enum class FontType
     {
         SYSTEM,
