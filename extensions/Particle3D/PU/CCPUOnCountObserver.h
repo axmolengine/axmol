@@ -38,7 +38,7 @@ NS_CC_BEGIN
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class CC_DLL PUOnCountObserver : public PUObserver
+class CC_EX_DLL PUOnCountObserver : public PUObserver
 {
 protected:
     unsigned int _count;

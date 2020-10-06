@@ -46,7 +46,7 @@ enum PUComparisionOperator
     CO_GREATER_THAN
 };
 
-class CC_DLL PUObserver : public Ref
+class CC_EX_DLL PUObserver : public Ref
 {
     friend class PUParticleSystem3D;
 public:

@@ -41,7 +41,7 @@ class PUParticleSystem3D;
 /**
  * 3d particle emitter
  */
-class CC_DLL PUEmitter : public Particle3DEmitter
+class CC_EX_DLL PUEmitter : public Particle3DEmitter
 {
     friend class PUParticleSystem3D;
 public:

@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUForceFieldAffector : public PUAffector
+class  CC_EX_DLL PUForceFieldAffector : public PUAffector
 {
 public:
     // Constants

@@ -34,7 +34,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUVortexAffector : public PUAffector
+class  CC_EX_DLL PUVortexAffector : public PUAffector
 {
 public:
     // Constants

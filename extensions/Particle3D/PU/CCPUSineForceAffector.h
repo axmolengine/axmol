@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUSineForceAffector : public PUBaseForceAffector
+class  CC_EX_DLL PUSineForceAffector : public PUBaseForceAffector
 {
 public:
     // Constants

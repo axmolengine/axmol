@@ -38,7 +38,7 @@ NS_CC_BEGIN
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class CC_DLL PUAffector : public Particle3DAffector
+class CC_EX_DLL PUAffector : public Particle3DAffector
 {
     friend class PUParticleSystem3D;
 public:

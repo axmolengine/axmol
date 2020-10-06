@@ -38,7 +38,7 @@ NS_CC_BEGIN
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class CC_DLL PUDoScaleEventHandler : public PUEventHandler
+class CC_EX_DLL PUDoScaleEventHandler : public PUEventHandler
 {
 public:
     enum ScaleType

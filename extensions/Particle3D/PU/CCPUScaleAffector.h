@@ -34,7 +34,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUScaleAffector : public PUAffector
+class  CC_EX_DLL PUScaleAffector : public PUAffector
 {
 public:
     // Constants

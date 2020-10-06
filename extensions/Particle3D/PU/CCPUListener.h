@@ -31,13 +31,14 @@
 #include "math/CCMath.h"
 #include <vector>
 #include <string>
+#include "ExtensionExport.h"
 
 NS_CC_BEGIN
 
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class CC_DLL PUListener
+class CC_EX_DLL PUListener
 {
 public:
     PUListener();

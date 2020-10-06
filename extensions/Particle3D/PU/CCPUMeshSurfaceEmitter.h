@@ -169,7 +169,7 @@ protected:
     It is also possible to define whether more particles emit on larger faces.
 */
 
-class CC_DLL PUMeshSurfaceEmitter : public PUEmitter
+class CC_EX_DLL PUMeshSurfaceEmitter : public PUEmitter
 {
 public:
     // Constants

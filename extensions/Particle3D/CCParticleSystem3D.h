@@ -31,6 +31,7 @@
 #include <vector>
 #include <map>
 #include <list>
+#include "ExtensionExport.h"
 
 NS_CC_BEGIN
 
@@ -41,7 +42,7 @@ class Particle3DEmitter;
 class Particle3DAffector;
 class Particle3DRender;
 
-struct CC_DLL Particle3D
+struct CC_EX_DLL Particle3D
 {
     Particle3D();
     virtual ~Particle3D();
@@ -60,7 +61,7 @@ struct CC_DLL Particle3D
 };
 
 template<typename T>
-class CC_DLL DataPool
+class CC_EX_DLL DataPool
 {
 public:
     typedef typename std::list<T*> PoolList;
@@ -146,7 +147,7 @@ private:
 
 typedef DataPool<Particle3D> ParticlePool;
 
-class CC_DLL ParticleSystem3D : public Node, public BlendProtocol
+class CC_EX_DLL ParticleSystem3D : public Node, public BlendProtocol
 {
 public:
 

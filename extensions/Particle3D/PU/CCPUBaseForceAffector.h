@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUBaseForceAffector : public PUAffector
+class  CC_EX_DLL PUBaseForceAffector : public PUAffector
 {
 public:
     enum ForceApplication

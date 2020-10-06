@@ -32,7 +32,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUCollisionAvoidanceAffector : public PUAffector
+class  CC_EX_DLL PUCollisionAvoidanceAffector : public PUAffector
 {
 public:
     // Constants

@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 struct PUParticle3D;
-class  CC_DLL PUParticle3DInterParticleCollider : public PUBaseCollider
+class  CC_EX_DLL PUParticle3DInterParticleCollider : public PUBaseCollider
 {
 public:
 

@@ -40,7 +40,7 @@ NS_CC_BEGIN
 // particle render for quad
 struct PUParticle3D;
 
-class CC_DLL PURender : public Particle3DRender
+class CC_EX_DLL PURender : public Particle3DRender
 {
 public:
 
@@ -63,7 +63,7 @@ protected:
     std::string _renderType;
 };
 
-class CC_DLL PUParticle3DEntityRender : public PURender
+class CC_EX_DLL PUParticle3DEntityRender : public PURender
 {
 public:
     void copyAttributesTo(PUParticle3DEntityRender *render);
@@ -114,7 +114,7 @@ protected:
     bool                        _rendererDepthWrite         = false;
 };
 
-class CC_DLL PUParticle3DQuadRender : public PUParticle3DEntityRender
+class CC_EX_DLL PUParticle3DQuadRender : public PUParticle3DEntityRender
 {
 public:
 
@@ -197,7 +197,7 @@ protected:
 };
 
 // particle render for Sprite3D
-class CC_DLL PUParticle3DModelRender : public PURender
+class CC_EX_DLL PUParticle3DModelRender : public PURender
 {
 public:
     static PUParticle3DModelRender* create(const std::string& modelFile, const std::string &texFile = "");
@@ -220,7 +220,7 @@ protected:
     Vec3 _spriteSize;
 };
 
-class CC_DLL PUParticle3DBoxRender : public PUParticle3DEntityRender
+class CC_EX_DLL PUParticle3DBoxRender : public PUParticle3DEntityRender
 {
 public:
 
@@ -239,7 +239,7 @@ protected:
     void reBuildIndices(unsigned short count);
 };
 
-class CC_DLL PUSphereRender : public PUParticle3DEntityRender
+class CC_EX_DLL PUSphereRender : public PUParticle3DEntityRender
 {
 public:
 

@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 struct PUParticle3D;
-class  CC_DLL PUGeometryRotator : public PUAffector
+class  CC_EX_DLL PUGeometryRotator : public PUAffector
 {
 public:
     // Constants

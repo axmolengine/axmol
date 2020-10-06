@@ -32,7 +32,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUAlignAffector : public PUAffector
+class  CC_EX_DLL PUAlignAffector : public PUAffector
 {
 public:
     // Constants

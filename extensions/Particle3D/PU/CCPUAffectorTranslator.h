@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  PUAffectorTranslator : public PUScriptTranslator
+class CC_EX_DLL PUAffectorTranslator : public PUScriptTranslator
 {
 protected:
 

@@ -32,7 +32,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUCircleEmitter : public PUEmitter
+class  CC_EX_DLL PUCircleEmitter : public PUEmitter
 {
 public:
     // Constants

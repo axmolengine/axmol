@@ -30,6 +30,7 @@
 #include "base/CCRef.h"
 #include <vector>
 #include <string>
+#include "ExtensionExport.h"
 
 NS_CC_BEGIN
 enum{

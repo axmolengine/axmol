@@ -75,7 +75,7 @@ public:
 };
 
 // particle render for quad
-class CC_DLL PURibbonTrailRender : public PURender, public PUListener
+class CC_EX_DLL PURibbonTrailRender : public PURender, public PUListener
 {
 public:
 

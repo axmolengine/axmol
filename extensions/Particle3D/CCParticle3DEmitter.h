@@ -28,6 +28,7 @@
 
 #include "base/CCRef.h"
 #include <vector>
+#include "ExtensionExport.h"
 
 NS_CC_BEGIN
 
@@ -36,7 +37,7 @@ struct Particle3D;
 /**
  * 3d particle emitter
  */
-class CC_DLL Particle3DEmitter : public Ref
+class CC_EX_DLL Particle3DEmitter : public Ref
 {
     friend class ParticleSystem3D;
 public:

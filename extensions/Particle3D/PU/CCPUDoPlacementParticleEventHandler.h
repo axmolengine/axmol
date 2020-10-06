@@ -41,7 +41,7 @@ class PUObserver;
 class PUEmitter;
 class PUParticleSystem3D;
 
-class CC_DLL PUDoPlacementParticleEventHandler : public PUEventHandler, public PUListener
+class CC_EX_DLL PUDoPlacementParticleEventHandler : public PUEventHandler, public PUListener
 {
 public:
     // Constants
