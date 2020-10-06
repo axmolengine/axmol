@@ -40,7 +40,7 @@ CC_BACKEND_BEGIN
 /**
  * Create and reuse shader module.
  */
-class ShaderCache : public Ref
+class CC_DLL ShaderCache : public Ref
 {
 public:
     /** returns the shared instance */

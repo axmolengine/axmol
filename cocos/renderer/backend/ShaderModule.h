@@ -62,7 +62,7 @@ enum Attribute : uint32_t
 /**
  * Create shader.
  */
-class ShaderModule : public cocos2d::Ref
+class CC_DLL ShaderModule : public cocos2d::Ref
 {
 public:
     /**

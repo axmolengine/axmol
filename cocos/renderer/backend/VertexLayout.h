@@ -42,7 +42,7 @@ CC_BACKEND_BEGIN
 /**
  * Store vertex attribute layout.
  */
-class VertexLayout
+class CC_DLL VertexLayout
 {
 public:
     struct Attribute

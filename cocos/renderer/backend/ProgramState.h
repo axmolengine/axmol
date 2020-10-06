@@ -49,7 +49,7 @@ class VertexLayout;
  /**
   * Store texture information.
   */
-struct TextureInfo
+struct CC_DLL TextureInfo
 {
     TextureInfo(std::vector<uint16_t>&& _slots, std::vector<backend::TextureBackend*>&& _textures);
     TextureInfo(std::vector<uint16_t>&& _slots, std::vector<uint16_t>&& _indexs, std::vector<backend::TextureBackend*>&& _textures);
@@ -80,7 +80,7 @@ struct TextureInfo
  * A program state object can create or reuse a program.
  * Each program state object keep its own unifroms and textures data.
  */
-class ProgramState : public Ref
+class CC_DLL ProgramState : public Ref
 {
 public:
     using UniformCallback = std::function<void(ProgramState*, const UniformLocation &)>;

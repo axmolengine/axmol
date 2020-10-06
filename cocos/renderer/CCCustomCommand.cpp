@@ -42,9 +42,20 @@ CustomCommand::~CustomCommand()
     CC_SAFE_RELEASE(_indexBuffer);
 }
 
+CustomCommand::CustomCommand(const CustomCommand& rhs)
+{
+    this->assign(std::move(rhs));
+}
+
 CustomCommand::CustomCommand(CustomCommand&& rhs)
 {
     this->assign(std::move(rhs));
+}
+
+CustomCommand& CustomCommand::operator=(const CustomCommand& rhs)
+{
+    this->assign(rhs);
+    return *this;
 }
 
 CustomCommand& CustomCommand::operator=(CustomCommand&& rhs)
