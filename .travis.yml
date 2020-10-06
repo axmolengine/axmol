@@ -11,7 +11,7 @@ jobs:
       osx_image: xcode11.6
     # android
     - os: linux
-      dist: xenial
+      dist: bionic
       env: BUILD_TARGET=android
       language: android
     # linux
