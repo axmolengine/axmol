@@ -67,6 +67,8 @@ public:
 
     backend::TextureBackend* getBackendTexture() { return _texture; }
 
+    const std::vector<std::string>& getImagePaths() const { return _imgPath; }
+
     /** reload texture cube after GLESContext reconstructed.*/
     bool reloadTexture();
 CC_CONSTRUCTOR_ACCESS:

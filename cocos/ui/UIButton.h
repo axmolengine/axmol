@@ -383,7 +383,7 @@ protected:
     TextureResType _pressedTexType;
     TextureResType _disabledTexType;
 
-private:
+protected:
     std::string _fontName;
 };
 

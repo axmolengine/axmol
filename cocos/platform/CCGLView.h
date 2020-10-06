@@ -88,6 +88,12 @@ struct GLContextAttrs
     int depthBits;
     int stencilBits;
     int multisamplingCount;
+    bool visible = true;
+    bool decorated = true;
+#if defined(_WIN32)
+    bool vsync = false;
+    void* viewParent = nullptr;
+#endif
 };
 
 NS_CC_BEGIN
