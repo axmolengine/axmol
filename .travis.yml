@@ -4,11 +4,11 @@ jobs:
     # osx
     - os: osx
       env: BUILD_TARGET=osx
-      osx_image: xcode11.6
+      osx_image: xcode12
     # ios
     - os: osx
       env: BUILD_TARGET=ios
-      osx_image: xcode11.6
+      osx_image: xcode12
     # android
     - os: linux
       dist: xenial
