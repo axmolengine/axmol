@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PURandomiser : public PUAffector
+class  CC_EX_DLL PURandomiser : public PUAffector
 {
 public:
     // Constants

@@ -34,7 +34,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUColorAffector : public PUAffector
+class  CC_EX_DLL PUColorAffector : public PUAffector
 {
 public:
     typedef std::map<float, Vec4> ColorMap;

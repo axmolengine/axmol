@@ -32,7 +32,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUPointEmitter : public PUEmitter
+class  CC_EX_DLL PUPointEmitter : public PUEmitter
 {
 public:
      static PUPointEmitter* create();

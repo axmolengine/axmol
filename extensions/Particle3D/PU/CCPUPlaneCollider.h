@@ -34,7 +34,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUPlaneCollider : public PUBaseCollider
+class  CC_EX_DLL PUPlaneCollider : public PUBaseCollider
 {
 public:
     // Constants

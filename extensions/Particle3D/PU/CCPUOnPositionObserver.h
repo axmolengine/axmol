@@ -37,7 +37,7 @@ NS_CC_BEGIN
 
 struct PUParticle3D;
 class PUParticleSystem3D;
-class CC_DLL PUOnPositionObserver : public PUObserver
+class CC_EX_DLL PUOnPositionObserver : public PUObserver
 {
 public:
     // Constants

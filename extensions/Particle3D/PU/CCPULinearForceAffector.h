@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PULinearForceAffector : public PUBaseForceAffector
+class  CC_EX_DLL PULinearForceAffector : public PUBaseForceAffector
 {
 public:
 

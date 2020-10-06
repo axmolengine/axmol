@@ -32,7 +32,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL CCPUBoxEmitter : public PUEmitter
+class  CC_EX_DLL CCPUBoxEmitter : public PUEmitter
 {
 public:
     // Constants

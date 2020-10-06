@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUParticleFollower : public PUAffector
+class  CC_EX_DLL PUParticleFollower : public PUAffector
 {
 public:
     // Constants

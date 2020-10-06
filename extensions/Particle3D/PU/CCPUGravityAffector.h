@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUGravityAffector : public PUAffector
+class  CC_EX_DLL PUGravityAffector : public PUAffector
 {
 public:
     // Constants

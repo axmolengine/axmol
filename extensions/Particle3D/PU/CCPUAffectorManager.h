@@ -59,7 +59,7 @@
 
 NS_CC_BEGIN
 
-class PUAffectorManager
+class CC_EX_DLL PUAffectorManager
 {
 public:
     

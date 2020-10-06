@@ -39,7 +39,7 @@ struct PUParticle3D;
 class PUObserver;
 class PUParticleSystem3D;
 
-class CC_DLL PUDoFreezeEventHandler : public PUEventHandler
+class CC_EX_DLL PUDoFreezeEventHandler : public PUEventHandler
 {
 public:
 

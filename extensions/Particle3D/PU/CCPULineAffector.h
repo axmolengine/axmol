@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PULineAffector : public PUAffector
+class  CC_EX_DLL PULineAffector : public PUAffector
 {
 public:
     // Constants

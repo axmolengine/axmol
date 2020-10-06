@@ -3,8 +3,7 @@ set(target_name assets-manager)
 FILE(GLOB ASSETS_MANAGER_HEADER *.h)
 FILE(GLOB ASSETS_MANAGER_SOURCE *.cpp)
 
-# TODO: dll
-add_library(${target_name} STATIC 
+add_library(${target_name} 
         ${ASSETS_MANAGER_HEADER} 
         ${ASSETS_MANAGER_SOURCE})
 

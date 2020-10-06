@@ -32,7 +32,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUBoxCollider : public PUBaseCollider
+class  CC_EX_DLL PUBoxCollider : public PUBaseCollider
 {
 public:
     static const float DEFAULT_WIDTH;

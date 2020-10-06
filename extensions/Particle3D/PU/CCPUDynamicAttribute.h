@@ -60,7 +60,7 @@ struct PUControlPointSorter
     but where implementation of this behaviour may not be scattered or duplicated within the application that needs 
     it.
 */
-class CC_DLL PUDynamicAttribute : public Ref
+class CC_EX_DLL PUDynamicAttribute : public Ref
 {
     public:
         enum DynamicAttributeType
@@ -109,7 +109,7 @@ class CC_DLL PUDynamicAttribute : public Ref
     Although use of a regular attribute within the class that needs it is preferred, its benefit is that it makes
     use of the generic 'getValue' mechanism of a DynamicAttribute.
 */
-class CC_DLL PUDynamicAttributeFixed : public PUDynamicAttribute
+class CC_EX_DLL PUDynamicAttributeFixed : public PUDynamicAttribute
 {
     public:
         /** Constructor
@@ -141,7 +141,7 @@ class CC_DLL PUDynamicAttributeFixed : public PUDynamicAttribute
 
 /* This class generates random values within a given minimum and maximum interval.
 */
-class CC_DLL PUDynamicAttributeRandom : public PUDynamicAttribute
+class CC_EX_DLL PUDynamicAttributeRandom : public PUDynamicAttribute
 {
     public:
         /** Constructor
@@ -181,7 +181,7 @@ protected:
     on these control points. Interpolation is done in different flavours. linear?provides linear interpolation
     of a value on the curve, while spline?generates a smooth curve and the returns a value that lies on that curve.
 */
-class CC_DLL PUDynamicAttributeCurved : public PUDynamicAttribute
+class CC_EX_DLL PUDynamicAttributeCurved : public PUDynamicAttribute
 {
     public:
         typedef std::vector<Vec2> ControlPointList;
@@ -261,7 +261,7 @@ class CC_DLL PUDynamicAttributeCurved : public PUDynamicAttribute
 
 /* This class generates values based on an oscillating function (i.e. Sine).
 */
-class CC_DLL PUDynamicAttributeOscillate : public PUDynamicAttribute
+class CC_EX_DLL PUDynamicAttributeOscillate : public PUDynamicAttribute
 {
     public:
         enum OscillationType

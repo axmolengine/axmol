@@ -78,7 +78,7 @@ class PUParticle3DBeamVisualData : public Ref
 };
 
 // particle render for quad
-class CC_DLL PUBeamRender : public PURender, public PUListener
+class CC_EX_DLL PUBeamRender : public PURender, public PUListener
 {
 public:
 

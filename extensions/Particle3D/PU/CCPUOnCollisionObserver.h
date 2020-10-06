@@ -36,7 +36,7 @@
 NS_CC_BEGIN
 
 struct PUParticle3D;
-class CC_DLL PUOnCollisionObserver : public PUObserver
+class CC_EX_DLL PUOnCollisionObserver : public PUObserver
 {
 public:
     static PUOnCollisionObserver* create();

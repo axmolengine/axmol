@@ -38,7 +38,7 @@ NS_CC_BEGIN
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class CC_DLL PUBehaviour : public Ref
+class CC_EX_DLL PUBehaviour : public Ref
 {
     friend class PUParticleSystem3D;
 public:

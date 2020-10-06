@@ -28,13 +28,14 @@
 
 #include "base/CCRef.h"
 #include <vector>
+#include "ExtensionExport.h"
 
 NS_CC_BEGIN
 
 class ParticleSystem3D;
 struct Particle3D;
 
-class CC_DLL Particle3DAffector : public Ref
+class CC_EX_DLL Particle3DAffector : public Ref
 {
     friend class ParticleSystem3D;
 public:

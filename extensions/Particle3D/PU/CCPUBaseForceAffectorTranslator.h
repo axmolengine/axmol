@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  PUBaseForceAffectorTranslator : public PUScriptTranslator
+class CC_EX_DLL PUBaseForceAffectorTranslator : public PUScriptTranslator
 {
 public:
     PUBaseForceAffectorTranslator();

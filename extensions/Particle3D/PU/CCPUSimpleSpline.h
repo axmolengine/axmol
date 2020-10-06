@@ -30,6 +30,7 @@
 #include "base/CCRef.h"
 #include "math/CCMath.h"
 #include <vector>
+#include "ExtensionExport.h"
 
 NS_CC_BEGIN
 class PUSimpleSpline

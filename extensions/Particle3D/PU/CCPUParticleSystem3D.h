@@ -56,7 +56,7 @@ enum PUComponentType
     CT_OBSERVER
 };
 
-struct CC_DLL PUParticle3D : public Particle3D
+struct CC_EX_DLL PUParticle3D : public Particle3D
 {
     static float DEFAULT_TTL;
     static float DEFAULT_MASS;
@@ -212,7 +212,7 @@ struct CC_DLL PUParticle3D : public Particle3D
     
 };
 
-class CC_DLL PUParticleSystem3D : public ParticleSystem3D
+class CC_EX_DLL PUParticleSystem3D : public ParticleSystem3D
 {
 public:
 

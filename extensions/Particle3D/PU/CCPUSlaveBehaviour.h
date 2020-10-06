@@ -39,7 +39,7 @@ NS_CC_BEGIN
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class CC_DLL PUSlaveBehaviour : public PUBehaviour
+class CC_EX_DLL PUSlaveBehaviour : public PUBehaviour
 {
 public:
 

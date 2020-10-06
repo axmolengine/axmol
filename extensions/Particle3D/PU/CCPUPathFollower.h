@@ -34,7 +34,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUPathFollower : public PUAffector
+class  CC_EX_DLL PUPathFollower : public PUAffector
 {
 public:
 

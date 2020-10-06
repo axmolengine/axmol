@@ -33,7 +33,7 @@
 NS_CC_BEGIN
 
 struct PUParticle3D;
-class  CC_DLL PULineEmitter : public PUEmitter
+class  CC_EX_DLL PULineEmitter : public PUEmitter
 {
 public:
     // Constants

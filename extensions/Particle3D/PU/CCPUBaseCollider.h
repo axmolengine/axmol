@@ -34,7 +34,7 @@
 NS_CC_BEGIN
 
 struct PUParticle3D;
-class  CC_DLL PUBaseCollider : public PUAffector
+class  CC_EX_DLL PUBaseCollider : public PUAffector
 {
 public:
     /** Determines how a particle collision should be determined. IT_POINT means that the position of 

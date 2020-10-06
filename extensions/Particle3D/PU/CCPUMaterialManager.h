@@ -29,10 +29,11 @@
 #include "math/CCMath.h"
 #include "base/ccTypes.h"
 #include <vector>
+#include "ExtensionExport.h"
 
 NS_CC_BEGIN
 
-class CC_DLL PUMaterial : public Ref
+class CC_EX_DLL PUMaterial : public Ref
 {
 public:
 
@@ -55,7 +56,7 @@ public:
     backend::SamplerAddressMode wrapMode;
 };
 
-class CC_DLL PUMaterialCache
+class CC_EX_DLL PUMaterialCache
 {
 public:
 

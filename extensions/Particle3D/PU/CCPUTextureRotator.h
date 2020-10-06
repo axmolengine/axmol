@@ -34,7 +34,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUTextureRotator : public PUAffector
+class  CC_EX_DLL PUTextureRotator : public PUAffector
 {
 public:
     // Constants

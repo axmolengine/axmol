@@ -34,7 +34,7 @@
 #include "renderer/backend/Buffer.h"
 #include "base/CCRef.h"
 #include "math/CCMath.h"
-
+#include "ExtensionExport.h"
 
 
 NS_CC_BEGIN
@@ -51,7 +51,7 @@ class Texture2D;
 /**
  * 3d particle render
  */
-class CC_DLL Particle3DRender : public Ref
+class CC_EX_DLL Particle3DRender : public Ref
 {
     friend class ParticleSystem3D;
 public:
@@ -94,7 +94,7 @@ protected:
 };
 
 // particle render for quad
-class CC_DLL Particle3DQuadRender : public Particle3DRender
+class CC_EX_DLL Particle3DQuadRender : public Particle3DRender
 {
 public:
     static Particle3DQuadRender* create(const std::string& texFile = "");
@@ -146,7 +146,7 @@ protected:
 };
 
 // particle render for Sprite3D
-class CC_DLL Particle3DModelRender : public Particle3DRender
+class CC_EX_DLL Particle3DModelRender : public Particle3DRender
 {
 public:
     static Particle3DModelRender* create(const std::string& modelFile, const std::string &texFile = "");

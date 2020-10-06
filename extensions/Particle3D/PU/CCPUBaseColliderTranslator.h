@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  PUBaseColliderTranslator : public PUScriptTranslator
+class CC_EX_DLL PUBaseColliderTranslator : public PUScriptTranslator
 {
 public:
     PUBaseColliderTranslator();

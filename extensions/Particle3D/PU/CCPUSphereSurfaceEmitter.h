@@ -32,7 +32,7 @@
 
 NS_CC_BEGIN
 
-class  CC_DLL PUSphereSurfaceEmitter : public PUEmitter
+class  CC_EX_DLL PUSphereSurfaceEmitter : public PUEmitter
 {
 public:
     // Constants

@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 //FIXME
-class  CC_DLL PUSlaveEmitter : public PUEmitter, public PUListener
+class  CC_EX_DLL PUSlaveEmitter : public PUEmitter, public PUListener
 {
 public:
 
