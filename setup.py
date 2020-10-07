@@ -53,6 +53,12 @@ import sys
 import fileinput
 import shutil
 import subprocess
+import ssl
+try:
+    ssl._create_default_https_context = ssl._create_unverified_context
+    print("==> setup.py set ssl context ok")
+except Exception:
+    pass
 from optparse import OptionParser
 
 COCOS_CONSOLE_ROOT = 'COCOS_CONSOLE_ROOT'
