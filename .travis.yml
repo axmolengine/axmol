@@ -1,4 +1,11 @@
 language: cpp
+python:
+  - "2.7.12"
+android:
+  licenses:
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gdk-license-.+  
 jobs:
   include:
     # osx
@@ -11,13 +18,9 @@ jobs:
       osx_image: xcode11.6
     # android
     - os: linux
-      dist: bionic
+      dist: xenial
       env: BUILD_TARGET=android
-      language: cpp
-      licenses:
-        - android-sdk-preview-license-.+
-        - android-sdk-license-.+
-        - google-gdk-license-.+   
+      language: android
     # linux
     - os: linux
       dist: bionic
