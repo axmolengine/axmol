@@ -10,9 +10,13 @@ CURL="curl --retry 999 --retry-max-time 0"
 
 function install_android_ndk()
 {
-    sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    sudo python get-pip.py
-    sudo python -m pip install retry
+    echo "Installing android ndk ..."
+    # sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    # sudo python get-pip.py
+    # sudo python -m pip install retry
+    which python
+    which pip
+    pip install retry
     if [ "$BUILD_TARGET" == "android" ]\
         || [ "$BUILD_TARGET" == "android_lua" ] ; then
         python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py
@@ -52,6 +56,7 @@ function install_environement_for_pull_request()
         sudo apt-get update
         sudo apt-get install ninja-build
         ninja --version
+        
         if [ "$BUILD_TARGET" == "linux" ]; then
             install_linux_environment
         fi
@@ -78,15 +83,27 @@ function install_environement_for_after_merge()
     download_deps
 }
 
-cmake --version
+# install newer python for android for ssl connection
+if [ "$BUILD_TARGET" == "android" ]; then
+    # upgrade pyenv
+    cd $(pyenv root) && git checkout master && git pull && cd -
+    pyenv install --list
+    pyenv install $PYENV_VERSION
+    pyenv versions
+    # pip install pyOpenSSL ndg-httpsclient pyasn1
+    # set by PYENV_VERSION environment variable implicit
+    # pyenv global $PYENV_VERSION
+fi
+
 python -V
+cmake --version
 
 if [ "$BUILD_TARGET" == "android_cocos_new_test" ]; then
     sudo apt-get update
     sudo apt-get install ninja-build
     ninja --version
     download_deps
-    sudo python -m pip install retry
+    sudo pip install retry
     python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py
     exit 0
 fi
@@ -95,7 +112,7 @@ if [ "$BUILD_TARGET" == "linux_cocos_new_test" ]; then
     download_deps
     install_linux_environment
     # linux new lua project, so need to install
-    sudo python -m pip install retry
+    sudo pip install retry
     python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py --ndk_only
     exit 0
 fi
