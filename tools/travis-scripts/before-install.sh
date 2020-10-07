@@ -53,16 +53,6 @@ function install_environement_for_pull_request()
         sudo apt-get install ninja-build
         ninja --version
         
-        sudo apt-get install build-essential checkinstall
-        sudo apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
-        wget https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz
-        tar -xvf Python-2.7.12.tgz
-        cd Python-2.7.12
-        ./configure
-        make
-        echo -e "y" | sudo checkinstall
-        cd ..
-        
         if [ "$BUILD_TARGET" == "linux" ]; then
             install_linux_environment
         fi
@@ -71,8 +61,6 @@ function install_environement_for_pull_request()
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         install_python_module_for_osx
     fi
-
-    python -V
 
     # use NDK's clang to generate binding codes
     install_android_ndk
@@ -91,7 +79,14 @@ function install_environement_for_after_merge()
     download_deps
 }
 
+# install newer python for android for ssl connection
+if [ "$BUILD_TARGET" == "android" ]; then
+    pyenv install $PYENV_VERSION
+    pyenv global $PYENV_VERSION
+fi
+
 cmake --version
+python -V
 
 if [ "$BUILD_TARGET" == "android_cocos_new_test" ]; then
     sudo apt-get update
