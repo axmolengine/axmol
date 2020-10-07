@@ -60,7 +60,7 @@ function install_environement_for_pull_request()
         cd Python-2.7.12
         ./configure
         make
-        sudo checkinstall
+        echo -e "y" | sudo checkinstall
         cd ..
         
         if [ "$BUILD_TARGET" == "linux" ]; then
