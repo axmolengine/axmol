@@ -82,7 +82,9 @@ function install_environement_for_after_merge()
 # install newer python for android for ssl connection
 if [ "$BUILD_TARGET" == "android" ]; then
     pyenv install $PYENV_VERSION
-    pyenv global $PYENV_VERSION
+    pyenv versions
+    # set by PYENV_VERSION environment variable implicit
+    # pyenv global $PYENV_VERSION
 fi
 
 cmake --version
