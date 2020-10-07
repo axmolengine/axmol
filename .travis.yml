@@ -1,4 +1,11 @@
 language: cpp
+python:
+  - "2.7.12"
+android:
+  licenses:
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gdk-license-.+  
 jobs:
   include:
     # osx
