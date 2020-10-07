@@ -13,7 +13,11 @@ jobs:
     - os: linux
       dist: bionic
       env: BUILD_TARGET=android
-      language: android
+      language: cpp
+      licenses:
+        - android-sdk-preview-license-.+
+        - android-sdk-license-.+
+        - google-gdk-license-.+   
     # linux
     - os: linux
       dist: bionic
