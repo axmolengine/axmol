@@ -52,6 +52,7 @@ function install_environement_for_pull_request()
         sudo apt-get update
         sudo apt-get install ninja-build
         ninja --version
+        sudo apt-get upgrade python
         if [ "$BUILD_TARGET" == "linux" ]; then
             install_linux_environment
         fi
@@ -60,6 +61,8 @@ function install_environement_for_pull_request()
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         install_python_module_for_osx
     fi
+
+    python -V
 
     # use NDK's clang to generate binding codes
     install_android_ndk
@@ -79,9 +82,6 @@ function install_environement_for_after_merge()
 }
 
 cmake --version
-sudo apt-get update
-sudo apt-get upgrade python
-python -V
 
 if [ "$BUILD_TARGET" == "android_cocos_new_test" ]; then
     sudo apt-get update
