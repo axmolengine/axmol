@@ -1,11 +1,4 @@
 language: cpp
-python:
-  - "2.7.12"
-android:
-  licenses:
-    - android-sdk-preview-license-.+
-    - android-sdk-license-.+
-    - google-gdk-license-.+  
 jobs:
   include:
     # osx
@@ -19,7 +12,9 @@ jobs:
     # android
     - os: linux
       dist: xenial
-      env: BUILD_TARGET=android
+      env: 
+        - BUILD_TARGET=android
+        - PYENV_VERSION=2.7.13
       language: android
     # linux
     - os: linux
