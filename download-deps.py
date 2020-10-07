@@ -44,12 +44,7 @@ import traceback
 import distutils
 import fileinput
 import json
-
 import ssl
-try:
-    ssl._create_default_https_context = ssl._create_unverified_context
-except Exception:
-    pass
 
 from optparse import OptionParser
 from time import time
@@ -356,6 +351,11 @@ def _check_python_version():
 
 
 def main():
+    try:
+        ssl._create_default_https_context = ssl._create_unverified_context
+        print("==> set ssl context ok")
+    except Exception:
+        pass
     workpath = os.path.dirname(os.path.realpath(__file__))
 
     if not _check_python_version():
