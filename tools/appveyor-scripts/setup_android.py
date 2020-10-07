@@ -10,6 +10,12 @@ import sys
 import subprocess
 import tempfile
 import argparse
+import ssl
+try:
+    ssl._create_default_https_context = ssl._create_unverified_context
+    print("==> setup_android.py set ssl context ok")
+except Exception:
+    pass
 from retry import retry
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
