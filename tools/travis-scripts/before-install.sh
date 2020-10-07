@@ -10,6 +10,8 @@ CURL="curl --retry 999 --retry-max-time 0"
 
 function install_android_ndk()
 {
+    echo "Installing android ndk ..."
+    python -V
     sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     sudo python get-pip.py
     sudo python -m pip install retry
@@ -81,7 +83,7 @@ function install_environement_for_after_merge()
 
 # install newer python for android for ssl connection
 if [ "$BUILD_TARGET" == "android" ]; then
-    cd /opt/pyenv/plugins/python-build/../.. && git checkout master && git pull && cd -
+    cd $(pyenv root) && git checkout master && git pull && cd -
     pyenv install --list
     pyenv install $PYENV_VERSION
     pyenv versions
