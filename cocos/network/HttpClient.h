@@ -147,9 +147,9 @@ public:
 
     HttpCookie* getCookie() const {return _cookie; }
 
-    std::mutex& getCookieFileMutex() {return _cookieFileMutex;}
+    std::recursive_mutex& getCookieFileMutex() {return _cookieFileMutex;}
 
-    std::mutex& getSSLCaFileMutex() {return _sslCaFileMutex;}
+    std::recursive_mutex& getSSLCaFileMutex() {return _sslCaFileMutex;}
     
     typedef std::function<bool(HttpRequest*)> ClearRequestPredicate;
     typedef std::function<bool(HttpResponse*)> ClearResponsePredicate;
@@ -177,6 +177,8 @@ public:
     */
     void setClearResponsePredicate(ClearResponsePredicate predicate) { _clearResponsePredicate = predicate; }
 
+    void setDispatchOnWorkThread(bool bVal) { _dispatchOnWorkThread = bVal; }
+    bool isDispatchOnWorkThread() const { return _dispatchOnWorkThread; }
         
 private:
     HttpClient();
@@ -199,30 +201,32 @@ private:
 
 private:
     bool _isInited;
+    
+    bool _dispatchOnWorkThread;
 
     int _timeoutForConnect;
-    std::mutex _timeoutForConnectMutex;
+    std::recursive_mutex _timeoutForConnectMutex;
 
     int _timeoutForRead;
-    std::mutex _timeoutForReadMutex;
+    std::recursive_mutex _timeoutForReadMutex;
 
     int  _threadCount;
-    std::mutex _threadCountMutex;
+    std::recursive_mutex _threadCountMutex;
 
     Scheduler* _scheduler;
-    std::mutex _schedulerMutex;
+    std::recursive_mutex _schedulerMutex;
 
     std::deque<HttpRequest*>  _requestQueue;
-    std::mutex _requestQueueMutex;
+    std::recursive_mutex _requestQueueMutex;
 
     std::deque<HttpResponse*> _responseQueue;
-    std::mutex _responseQueueMutex;
+    std::recursive_mutex _responseQueueMutex;
 
     std::string _cookieFilename;
-    std::mutex _cookieFileMutex;
+    std::recursive_mutex _cookieFileMutex;
 
     std::string _sslCaFilename;
-    std::mutex _sslCaFileMutex;
+    std::recursive_mutex _sslCaFileMutex;
 
     HttpCookie* _cookie;
 

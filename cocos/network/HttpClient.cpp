@@ -99,7 +99,7 @@ void HttpClient::networkThread()
 
         // step 1: send http request if the requestQueue isn't empty
         {
-            std::lock_guard<std::mutex> lock(_requestQueueMutex);
+            std::lock_guard<std::recursive_mutex> lock(_requestQueueMutex);
             while (_requestQueue.empty())
             {
                 _sleepCondition.wait(_requestQueueMutex);
@@ -125,12 +125,13 @@ void HttpClient::networkThread()
         _responseQueue.push_back(response);
         _responseQueueMutex.unlock();
 
-        _schedulerMutex.lock();
-        if (nullptr != _scheduler)
-        {
-            _scheduler->performFunctionInCocosThread(CC_CALLBACK_0(HttpClient::dispatchResponseCallbacks, this));
+        if (!_dispatchOnWorkThread) {
+            std::lock_guard<std::recursive_mutex> lck(_schedulerMutex);
+            if (_scheduler != nullptr)
+                _scheduler->performFunctionInCocosThread(CC_CALLBACK_0(HttpClient::dispatchResponseCallbacks, this));
         }
-        _schedulerMutex.unlock();
+        else
+            dispatchResponseCallbacks();
     }
     
     // cleanup: if worker thread received quit signal, clean up un-completed request queue
@@ -153,28 +154,31 @@ void HttpClient::networkThreadAlone(HttpRequest* request, HttpResponse* response
     char responseMessage[RESPONSE_BUFFER_SIZE] = { 0 };
     processResponse(response, responseMessage);
 
-    _schedulerMutex.lock();
-    if (nullptr != _scheduler)
-    {
-        _scheduler->performFunctionInCocosThread([this, response, request]{
-            const ccHttpRequestCallback& callback = request->getCallback();
-            Ref* pTarget = request->getTarget();
-            SEL_HttpResponse pSelector = request->getSelector();
+    auto dispatchFunc = [this, response, request] {
+        const ccHttpRequestCallback& callback = request->getCallback();
+        Ref* pTarget = request->getTarget();
+        SEL_HttpResponse pSelector = request->getSelector();
 
-            if (callback != nullptr)
-            {
-                callback(this, response);
-            }
-            else if (pTarget && pSelector)
-            {
-                (pTarget->*pSelector)(this, response);
-            }
-            response->release();
-            // do not release in other thread
-            request->release();
-        });
+        if (callback != nullptr)
+        {
+            callback(this, response);
+        }
+        else if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)(this, response);
+        }
+        response->release();
+        // do not release in other thread
+        request->release();
+    };
+
+    if (!_dispatchOnWorkThread) {
+        std::lock_guard<std::recursive_mutex> lck(_schedulerMutex);
+        if (_scheduler != nullptr)
+            _scheduler->performFunctionInCocosThread(dispatchFunc);
     }
-    _schedulerMutex.unlock();
+    else
+        dispatchFunc();
 
     decreaseThreadCountAndMayDeleteThis();
 }
@@ -398,7 +402,7 @@ void HttpClient::destroyInstance()
 
 void HttpClient::enableCookies(const char* cookieFile)
 {
-    std::lock_guard<std::mutex> lock(_cookieFileMutex);
+    std::lock_guard<std::recursive_mutex> lock(_cookieFileMutex);
     if (cookieFile)
     {
         _cookieFilename = std::string(cookieFile);
@@ -411,12 +415,13 @@ void HttpClient::enableCookies(const char* cookieFile)
     
 void HttpClient::setSSLVerification(const std::string& caFile)
 {
-    std::lock_guard<std::mutex> lock(_sslCaFileMutex);
+    std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     _sslCaFilename = caFile;
 }
 
 HttpClient::HttpClient()
 : _isInited(false)
+, _dispatchOnWorkThread(false)
 , _timeoutForConnect(30)
 , _timeoutForRead(60)
 , _threadCount(0)
@@ -635,37 +640,37 @@ void HttpClient::decreaseThreadCountAndMayDeleteThis()
 
 void HttpClient::setTimeoutForConnect(int value)
 {
-    std::lock_guard<std::mutex> lock(_timeoutForConnectMutex);
+    std::lock_guard<std::recursive_mutex> lock(_timeoutForConnectMutex);
     _timeoutForConnect = value;
 }
     
 int HttpClient::getTimeoutForConnect()
 {
-    std::lock_guard<std::mutex> lock(_timeoutForConnectMutex);
+    std::lock_guard<std::recursive_mutex> lock(_timeoutForConnectMutex);
     return _timeoutForConnect;
 }
     
 void HttpClient::setTimeoutForRead(int value)
 {
-    std::lock_guard<std::mutex> lock(_timeoutForReadMutex);
+    std::lock_guard<std::recursive_mutex> lock(_timeoutForReadMutex);
     _timeoutForRead = value;
 }
     
 int HttpClient::getTimeoutForRead()
 {
-    std::lock_guard<std::mutex> lock(_timeoutForReadMutex);
+    std::lock_guard<std::recursive_mutex> lock(_timeoutForReadMutex);
     return _timeoutForRead;
 }
     
 const std::string& HttpClient::getCookieFilename()
 {
-    std::lock_guard<std::mutex> lock(_cookieFileMutex);
+    std::lock_guard<std::recursive_mutex> lock(_cookieFileMutex);
     return _cookieFilename;
 }
     
 const std::string& HttpClient::getSSLVerification()
 {
-    std::lock_guard<std::mutex> lock(_sslCaFileMutex);
+    std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     return _sslCaFilename;
 }
 
