@@ -14,7 +14,7 @@ jobs:
       dist: xenial
       env: 
         - BUILD_TARGET=android
-        - PYENV_VERSION=2.7.9
+        - PYENV_VERSION=2.7.18
       language: android
     # linux
     - os: linux
