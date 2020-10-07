@@ -81,14 +81,16 @@ function install_environement_for_after_merge()
 
 # install newer python for android for ssl connection
 if [ "$BUILD_TARGET" == "android" ]; then
+    cd /opt/pyenv/plugins/python-build/../.. && git checkout master && git pull && cd -
+    pyenv install --list
     pyenv install $PYENV_VERSION
     pyenv versions
     # set by PYENV_VERSION environment variable implicit
     # pyenv global $PYENV_VERSION
 fi
 
-cmake --version
 python -V
+cmake --version
 
 if [ "$BUILD_TARGET" == "android_cocos_new_test" ]; then
     sudo apt-get update
