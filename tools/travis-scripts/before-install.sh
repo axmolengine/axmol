@@ -12,9 +12,12 @@ function install_android_ndk()
 {
     echo "Installing android ndk ..."
     python -V
-    sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    sudo python get-pip.py
-    sudo python -m pip install retry
+    # sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    # sudo python get-pip.py
+    # sudo python -m pip install retry
+    which python
+    which pip
+    pip install retry
     if [ "$BUILD_TARGET" == "android" ]\
         || [ "$BUILD_TARGET" == "android_lua" ] ; then
         python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py
