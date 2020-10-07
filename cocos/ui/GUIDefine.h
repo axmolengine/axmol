@@ -103,8 +103,8 @@ struct CC_DLL ResourceData
     ResourceData(int iType, std::string sFile, std::string sPlist)
     {
         type = iType;
-        file = sFile;
-        plist = sPlist;
+        file = std::move(sFile);
+        plist = std::move(sPlist);
     }
     ResourceData& operator=(const ResourceData& rv)
     {
