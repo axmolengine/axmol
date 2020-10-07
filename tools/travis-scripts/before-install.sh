@@ -87,6 +87,7 @@ if [ "$BUILD_TARGET" == "android" ]; then
     pyenv install --list
     pyenv install $PYENV_VERSION
     pyenv versions
+    python -m pip install pyOpenSSL ndg-httpsclient pyasn1
     # set by PYENV_VERSION environment variable implicit
     # pyenv global $PYENV_VERSION
 fi
