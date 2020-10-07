@@ -79,6 +79,8 @@ function install_environement_for_after_merge()
 }
 
 cmake --version
+apt-get update
+apt-get upgrade python
 python -V
 
 if [ "$BUILD_TARGET" == "android_cocos_new_test" ]; then
