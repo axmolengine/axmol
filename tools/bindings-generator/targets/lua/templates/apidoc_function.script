@@ -1,0 +1,26 @@
+--------------------------------
+-- ${comment}
+-- @function [parent=#${class_name}] ${func_name} 
+-- @param self
+#if $min_args > 0 
+    #set $count = 0
+    #for $arg in $arguments
+        #set $argValue = "arg" + str(count)
+        #if $arg.is_enum
+-- @param #int $argumtntTips[$count]
+        #else
+-- @param #$generator.lua_typename_from_natve($arg.namespaced_name) $argumtntTips[$count]
+        #end if
+        #set $count = $count + 1
+    #end for
+#end if
+#if str($ret_type) != "void"
+    #if $ret_type.is_enum
+-- @return int#int ret (return value: int)
+    #else
+-- @return $generator.lua_typename_from_natve($ret_type.namespaced_name, True)#$generator.lua_typename_from_natve($ret_type.namespaced_name, True) ret (return value: $generator.lua_typename_from_natve($ret_type.namespaced_name))
+    #end if
+#else
+-- @return $generator.lua_typename_from_natve($namespaced_class_name, True)#$generator.lua_typename_from_natve($namespaced_class_name, True) self (return value: $generator.lua_typename_from_natve($namespaced_class_name))
+#end if
+        
