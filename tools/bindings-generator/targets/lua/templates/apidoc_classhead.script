@@ -1,0 +1,7 @@
+#set generator = $current_class.generator
+#if $generator.target_ns
+--------------------------------------------------------
+-- the $generator.target_ns ${current_class.class_name}
+-- @field [parent=#$generator.target_ns] ${current_class.class_name}#${current_class.class_name} ${current_class.class_name} preloaded module
+#end if
+

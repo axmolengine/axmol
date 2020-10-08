@@ -1,34 +1,41 @@
-\#include "${out_file}.hpp"
-\#include "cocos2d_specifics.hpp"
+\#include "scripting/js-bindings/auto/${out_file}.hpp"
+#if $macro_judgement
+$macro_judgement
+#end if
+\#include "scripting/js-bindings/manual/cocos2d_specifics.hpp"
 #for header in $headers
-\#include "${os.path.basename(header)}"
+    #set include_header = os.path.basename(header)
+    #if $replace_headers.has_key(include_header)
+\#include "${replace_headers[include_header]}"
+    #else
+        #set relative = os.path.relpath(header, $search_path)
+        #if not '..' in relative
+\#include "${relative.replace(os.path.sep, '/')}"
+        #else
+\#include "${include_header}"
+        #end if
+    #end if
 #end for
+#if $cpp_headers
+#for header in $cpp_headers
+\#include "${header}"
+#end for
+#end if
 
 template<class T>
-static JSBool dummy_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
-	TypeTest<T> t;
-	T* cobj = new T();
-#if not $script_control_cpp
-	cocos2d::CCObject *_ccobj = dynamic_cast<cocos2d::CCObject *>(cobj);
-	if (_ccobj) {
-		_ccobj->autorelease();
-	}
-#end if
-	js_type_class_t *p;
-	uint32_t typeId = t.s_id();
-	HASH_FIND_INT(_js_global_type_ht, &typeId, p);
-	assert(p);
-	JSObject *_tmp = JS_NewObject(cx, p->jsclass, p->proto, p->parentProto);
-	js_proxy_t *pp = jsb_new_proxy(cobj, _tmp);
-#if not $script_control_cpp
-	JS_AddObjectRoot(cx, &pp->obj);
-#end if
-	JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(_tmp));
-
-	return JS_TRUE;
+static bool dummy_constructor(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS_ReportError(cx, "Constructor for the requested class is not available, please refer to the API reference.");
+    return false;
 }
 
-static JSBool empty_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
-	return JS_FALSE;
+static bool empty_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
+    return false;
 }
 
+static bool js_is_native_obj(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    args.rval().setBoolean(true);
+    return true;
+}
