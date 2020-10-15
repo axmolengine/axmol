@@ -432,7 +432,7 @@ bool RenderTexture::saveToFile(const std::string& fileName, Image::Format format
 
 void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool forceNonPMA)
 {
-    auto callbackFunc = [&, filename, isRGBA, forceNonPMA](Image* image){
+    auto callbackFunc = [&, filename, isRGBA, forceNonPMA](RefPtr<Image> image){
         if (image)
         {
             if (forceNonPMA && image->hasPremultipliedAlpha())
@@ -445,7 +445,6 @@ void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool 
         {
             _saveFileCallback(this, filename);
         }
-        CC_SAFE_DELETE(image);
     };
     newImage(callbackFunc);
 }
