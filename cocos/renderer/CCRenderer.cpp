@@ -177,6 +177,10 @@ Renderer::~Renderer()
     _renderGroups.clear();
     _groupCommandManager->release();
     
+    for(auto clearCommand : _clearCommandsPool)
+        delete clearCommand;
+    _clearCommandsPool.clear();
+    
     free(_triBatchesToDraw);
     
     CC_SAFE_RELEASE(_depthStencilState);
@@ -792,23 +796,40 @@ void Renderer::beginRenderPass()
 void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder)
 {
     _clearFlag = flags;
+    
+    CallbackCommand* command = nextClearCommand();
+    command->init(globalOrder);
+    command->func = [=]() -> void {
+        backend::RenderPassParams descriptor;
 
-    backend::RenderPassParams descriptor;
+        descriptor.flags.clear = flags;
+        if (bitmask::any(flags, ClearFlag::COLOR)) {
+            _clearColor = color;
+            descriptor.clearColorValue = { color.r, color.g, color.b, color.a };
+        }
 
-    descriptor.flags.clear = flags;
-    if (bitmask::any(flags, ClearFlag::COLOR)) {
-        _clearColor = color;
-        descriptor.clearColorValue = { color.r, color.g, color.b, color.a };
+        if(bitmask::any(flags, ClearFlag::DEPTH))
+            descriptor.clearDepthValue = depth;
+
+        if(bitmask::any(flags, ClearFlag::STENCIL))
+            descriptor.clearStencilValue = stencil;
+        
+        _commandBuffer->beginRenderPass(_currentRT, descriptor);
+        _commandBuffer->endRenderPass();
+        _clearCommandsPool.push_back(command);
+    };
+    addCommand(command);
+}
+
+CallbackCommand* Renderer::nextClearCommand()
+{
+    if(!_clearCommandsPool.empty()) {
+        auto clearCommand = _clearCommandsPool.back();
+        _clearCommandsPool.pop_back();
+        return clearCommand;
     }
-
-    if(bitmask::any(flags, ClearFlag::DEPTH))
-        descriptor.clearDepthValue = depth;
-
-    if(bitmask::any(flags, ClearFlag::STENCIL))
-        descriptor.clearStencilValue = stencil;
-
-    _commandBuffer->beginRenderPass(_currentRT, descriptor);
-    _commandBuffer->endRenderPass();
+    
+    return new CallbackCommand();
 }
 
 const Color4F& Renderer::getClearColor() const
