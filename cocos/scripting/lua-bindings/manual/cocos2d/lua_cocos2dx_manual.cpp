@@ -1943,7 +1943,7 @@ static int tolua_cocos2d_RenderTexture_newImage(lua_State* tolua_S)
         }
 #endif
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
-        auto callback = [=](cocos2d::Image* image){
+        auto callback = [=](RefPtr<cocos2d::Image> image){
             auto stack = LuaEngine::getInstance()->getLuaStack();
             stack->pushObject(image, "cc.Image");
             stack->executeFunctionByHandler(handler, 1);
