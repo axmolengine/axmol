@@ -465,6 +465,8 @@ protected:
     void pushStateBlock();
 
     void popStateBlock();
+    
+    CallbackCommand* nextClearCommand();
 
     backend::RenderPipeline* _renderPipeline = nullptr;
 
@@ -477,6 +479,9 @@ protected:
     std::vector<RenderQueue> _renderGroups;
 
     std::vector<TrianglesCommand*> _queuedTriangleCommands;
+    
+    // the pool for clear commands
+    std::vector<CallbackCommand*> _clearCommandsPool;
 
     //for TrianglesCommand
     V3F_C4B_T2F _verts[VBO_SIZE];
