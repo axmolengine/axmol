@@ -816,6 +816,8 @@ void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigne
         
         _commandBuffer->beginRenderPass(_currentRT, descriptor);
         _commandBuffer->endRenderPass();
+
+        // push to pool for reuse
         _clearCommandsPool.push_back(command);
     };
     addCommand(command);
