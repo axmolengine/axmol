@@ -1,7 +1,7 @@
 # EGNX
 [![Build Status](https://travis-ci.com/c4games/engine-x.svg?branch=master)](https://travis-ci.com/c4games/engine-x)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/4936wev2r2ot606s/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/engine-x)
-[![dev](https://img.shields.io/badge/v1.0.0-alpha17-yellow.svg)](https://github.com/c4games/engine-x/releases)
+[![dev](https://img.shields.io/badge/v1.0.0-alpha18-yellow.svg)](https://github.com/c4games/engine-x/releases)
 
 **This is another more radical fork of ```cocos2d-x v4```, use OpenAL for all platforms, single texture multi GPU texture handler, C++14/17, etc.**  
   
