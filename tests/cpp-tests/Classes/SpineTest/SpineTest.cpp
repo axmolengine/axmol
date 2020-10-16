@@ -28,6 +28,7 @@
 #include <fstream>
 #include <string.h>
 #include "spine/spine.h"
+#include "renderer/CCColorizer.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -332,6 +333,11 @@ bool MixAndMatchExample::init() {
     addChild(skeletonNode);
 
     SCALE_SKELETON_NODE(skeletonNode);
+
+    Colorizer::enableNodeIntelliShading(skeletonNode,
+        true,
+        Vec3(-40.41f, 18.37f, 60.42f),
+        Vec3::ZERO);
     return true;
 }
 

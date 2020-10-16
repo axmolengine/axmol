@@ -246,7 +246,7 @@ LayerColor::LayerColor()
     
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR); // TODO: noMVP?
-    attachProgramState(new (std::nothrow) backend::ProgramState(program));
+    setProgramState(new (std::nothrow) backend::ProgramState(program), false);
     pipelineDescriptor.programState = _programState;
     
     auto vertexLayout = _programState->getVertexLayout();
@@ -662,7 +662,7 @@ LayerRadialGradient::LayerRadialGradient()
 {
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::LAYER_RADIA_GRADIENT);
-    attachProgramState(new (std::nothrow) backend::ProgramState(program));
+    setProgramState(new (std::nothrow) backend::ProgramState(program), false);
     pipelineDescriptor.programState = _programState;
     _mvpMatrixLocation = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     _startColorLocation = pipelineDescriptor.programState->getUniformLocation("u_startColor");

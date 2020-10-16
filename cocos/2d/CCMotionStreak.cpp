@@ -214,9 +214,9 @@ void MotionStreak::setTexture(Texture2D *texture)
     }
 }
 
-bool MotionStreak::attachProgramState(backend::ProgramState* programState)
+bool MotionStreak::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
-    if (Node::attachProgramState(programState)) {
+    if (Node::setProgramState(programState, needsRetain)) {
         CCASSERT(programState, "argument should not be nullptr");
         auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = _programState;

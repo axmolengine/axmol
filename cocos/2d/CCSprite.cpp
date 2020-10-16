@@ -376,19 +376,19 @@ void Sprite::setVertexLayout()
 void Sprite::updateShaders(const char* vert, const char* frag)
 {
     auto* program = backend::Device::getInstance()->newProgram(vert, frag);
-    attachProgramState(new (std::nothrow) backend::ProgramState(program));
+    setProgramState(new (std::nothrow) backend::ProgramState(program), false);
     CC_SAFE_RELEASE(program);
 }
 
-void Sprite::setProgramState(backend::ProgramType type)
+void Sprite::setProgramState(uint32_t type)
 {
     setProgramStateWithRegistry(type, _texture);
 }
 
-bool Sprite::attachProgramState(backend::ProgramState *programState)
+bool Sprite::setProgramState(backend::ProgramState *programState, bool needsRetain)
 {
     CCASSERT(programState, "argument should not be nullptr");
-    if (Node::attachProgramState(programState)) {
+    if (Node::setProgramState(programState, needsRetain)) {
         auto& pipelineDescriptor = _trianglesCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = _programState;
 

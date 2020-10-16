@@ -29,7 +29,7 @@ bool ProgramStateRegistry::init()
     return true;
 }
 
-void ProgramStateRegistry::registerProgram(ProgramType programType, int textureFormatEXT, Program* program)
+void ProgramStateRegistry::registerProgram(uint32_t programType, int textureFormatEXT, Program* program)
 {
     uint32_t key = (static_cast<uint32_t>(programType) << 16) | textureFormatEXT;
     auto it = this->_registry.find(key);
@@ -43,9 +43,9 @@ void ProgramStateRegistry::clearPrograms() {
     this->_registry.clear();
 }
 
-ProgramState* ProgramStateRegistry::newProgramState(ProgramType programType, int textureFormatEXT)
+ProgramState* ProgramStateRegistry::newProgramState(uint32_t programType, int textureFormatEXT)
 {
-    uint32_t key = (static_cast<uint32_t>(programType) << 16) | textureFormatEXT;
+    uint32_t key = ((programType) << 16) | textureFormatEXT;
     auto it = this->_registry.find(key);
     if (it != this->_registry.end()) {
         auto fallback = it->second;
@@ -53,10 +53,10 @@ ProgramState* ProgramStateRegistry::newProgramState(ProgramType programType, int
             return new(std::nothrow) ProgramState(fallback);
     }
 
-    return new(std::nothrow) ProgramState(Program::getBuiltinProgram((ProgramType)programType));
+    return new(std::nothrow) ProgramState(Program::getBuiltinProgram(programType));
 }
 
-ProgramType ProgramStateRegistry::getProgramType(ProgramType programType, int textureFormatEXT)
+uint32_t ProgramStateRegistry::getProgramType(uint32_t programType, int textureFormatEXT)
 {
     uint32_t key = (static_cast<uint32_t>(programType) << 16) | textureFormatEXT;
     auto it = this->_registry.find(key);

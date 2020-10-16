@@ -80,6 +80,9 @@ extern CC_DLL const char * CC3D_skybox_frag;
 extern CC_DLL const char * CC3D_skybox_vert;
 extern CC_DLL const char * CC3D_terrain_frag;
 extern CC_DLL const char * CC3D_terrain_vert;
+
+extern CC_DLL const char* hsv_frag;
+extern CC_DLL const char* hsv_etc1_frag;
 NS_CC_END
 /**
  end of support group

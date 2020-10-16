@@ -803,11 +803,15 @@ void Sprite3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
     }
 }
 
-void Sprite3D::setProgramState(backend::ProgramState* programState)
+bool Sprite3D::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
-    for (auto state : _meshes) {
-        state->setProgramState(programState);
+    if (Node::setProgramState(programState, needsRetain)) {
+        for (auto state : _meshes) {
+            state->setProgramState(programState);
+        }
+        return true;
     }
+    return false;
 }
 
 void Sprite3D::setBlendFunc(const BlendFunc& blendFunc)

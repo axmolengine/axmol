@@ -74,4 +74,7 @@ NS_CC_BEGIN
 #include "renderer/shaders/lineColor.frag"
 #include "renderer/shaders/lineColor.vert"
 
+#include "renderer/shaders/hsv.frag"
+#include "renderer/shaders/hsv_etc1.frag"
+
 NS_CC_END
