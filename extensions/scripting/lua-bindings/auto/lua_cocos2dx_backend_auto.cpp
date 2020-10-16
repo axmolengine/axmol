@@ -821,7 +821,7 @@ int lua_cocos2dx_backend_Program_getBuiltinProgram(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        cocos2d::backend::ProgramType arg0;
+        uint32_t arg0;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccb.Program:getBuiltinProgram");
         if(!ok)
         {
