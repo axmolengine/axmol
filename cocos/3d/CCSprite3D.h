@@ -120,7 +120,7 @@ public:
     
     // overrides
     /** Sets ProgramState, you should bind attributes by yourself */
-    void setProgramState(backend::ProgramState *programState) override;
+    bool setProgramState(backend::ProgramState *programState, bool needsRetain = true) override;
 
     /*
      * Get AABB

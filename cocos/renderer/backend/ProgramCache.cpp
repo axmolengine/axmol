@@ -49,7 +49,6 @@ namespace
     }
 }
 
-std::unordered_map<backend::ProgramType, backend::Program*>  ProgramCache::_cachedPrograms;
 ProgramCache* ProgramCache::_sharedProgramCache = nullptr;
 
 ProgramCache* ProgramCache::getInstance()
@@ -82,35 +81,39 @@ ProgramCache::~ProgramCache()
 
 bool ProgramCache::init()
 {
-    addProgram(ProgramType::POSITION_TEXTURE_COLOR);
-    addProgram(ProgramType::ETC1);
-    addProgram(ProgramType::LABEL_DISTANCE_NORMAL);
-    addProgram(ProgramType::LABEL_NORMAL);
-    addProgram(ProgramType::LABLE_OUTLINE);
-    addProgram(ProgramType::LABLE_DISTANCEFIELD_GLOW);
-    addProgram(ProgramType::POSITION_COLOR_LENGTH_TEXTURE);
-    addProgram(ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE);
-    addProgram(ProgramType::POSITION_COLOR);
-    addProgram(ProgramType::LAYER_RADIA_GRADIENT);
-    addProgram(ProgramType::POSITION_TEXTURE);
-    addProgram(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-    addProgram(ProgramType::POSITION_UCOLOR);
-    addProgram(ProgramType::ETC1_GRAY);
-    addProgram(ProgramType::GRAY_SCALE);
-    addProgram(ProgramType::LINE_COLOR_3D);
-    addProgram(ProgramType::CAMERA_CLEAR);
-    addProgram(ProgramType::SKYBOX_3D);
-    addProgram(ProgramType::SKINPOSITION_TEXTURE_3D);
-    addProgram(ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D);
-    addProgram(ProgramType::POSITION_NORMAL_TEXTURE_3D);
-    addProgram(ProgramType::POSITION_TEXTURE_3D);
-    addProgram(ProgramType::POSITION_3D);
-    addProgram(ProgramType::POSITION_NORMAL_3D);
-    addProgram(ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D);
-    addProgram(ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D);
-    addProgram(ProgramType::TERRAIN_3D);
-    addProgram(ProgramType::PARTICLE_TEXTURE_3D);
-    addProgram(ProgramType::PARTICLE_COLOR_3D);
+    registerProgramFactory(ProgramType::POSITION_TEXTURE_COLOR, positionTextureColor_vert, positionTextureColor_frag);
+    registerProgramFactory(ProgramType::ETC1, positionTextureColor_vert, etc1_frag);
+    registerProgramFactory(ProgramType::LABEL_DISTANCE_NORMAL, positionTextureColor_vert, label_distanceNormal_frag);
+    registerProgramFactory(ProgramType::LABEL_NORMAL, positionTextureColor_vert, label_normal_frag);
+    registerProgramFactory(ProgramType::LABLE_OUTLINE, positionTextureColor_vert, labelOutline_frag);
+    registerProgramFactory(ProgramType::LABLE_DISTANCEFIELD_GLOW, positionTextureColor_vert, labelDistanceFieldGlow_frag);
+    registerProgramFactory(ProgramType::POSITION_COLOR_LENGTH_TEXTURE, positionColorLengthTexture_vert, positionColorLengthTexture_frag);
+    registerProgramFactory(ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE, positionColorTextureAsPointsize_vert, positionColor_frag);
+    registerProgramFactory(ProgramType::POSITION_COLOR, positionColor_vert, positionColor_frag);
+    registerProgramFactory(ProgramType::LAYER_RADIA_GRADIENT, position_vert, layer_radialGradient_frag);
+    registerProgramFactory(ProgramType::POSITION_TEXTURE, positionTexture_vert, positionTexture_frag);
+    registerProgramFactory(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vert, positionTextureColorAlphaTest_frag);
+    registerProgramFactory(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionUColor_frag);
+    registerProgramFactory(ProgramType::ETC1_GRAY, positionTextureColor_vert, etc1Gray_frag);
+    registerProgramFactory(ProgramType::GRAY_SCALE, positionTextureColor_vert, grayScale_frag);
+    registerProgramFactory(ProgramType::LINE_COLOR_3D, lineColor3D_vert, lineColor3D_frag);
+    registerProgramFactory(ProgramType::CAMERA_CLEAR, cameraClear_vert, cameraClear_frag);
+    registerProgramFactory(ProgramType::SKYBOX_3D, CC3D_skybox_vert, CC3D_skybox_frag);
+    registerProgramFactory(ProgramType::SKINPOSITION_TEXTURE_3D, CC3D_skinPositionTexture_vert, CC3D_colorTexture_frag);
+    auto lightDef = getShaderMacrosForLight();
+    registerProgramFactory(ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D, lightDef + CC3D_skinPositionNormalTexture_vert, lightDef + CC3D_colorNormalTexture_frag);
+    registerProgramFactory(ProgramType::POSITION_NORMAL_TEXTURE_3D, lightDef + CC3D_positionNormalTexture_vert, lightDef + CC3D_colorNormalTexture_frag);
+    registerProgramFactory(ProgramType::POSITION_TEXTURE_3D, CC3D_positionTexture_vert, CC3D_colorTexture_frag);
+    registerProgramFactory(ProgramType::POSITION_3D, CC3D_positionTexture_vert, CC3D_color_frag);
+    registerProgramFactory(ProgramType::POSITION_NORMAL_3D, lightDef + CC3D_positionNormalTexture_vert, lightDef + CC3D_colorNormal_frag);
+    const char* normalMapDef = "\n#define USE_NORMAL_MAPPING 1 \n";
+    registerProgramFactory(ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D, lightDef + normalMapDef + CC3D_positionNormalTexture_vert, lightDef + normalMapDef + CC3D_colorNormalTexture_frag);
+    registerProgramFactory(ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D, lightDef + normalMapDef + CC3D_skinPositionNormalTexture_vert, lightDef + normalMapDef + CC3D_colorNormalTexture_frag);
+    registerProgramFactory(ProgramType::TERRAIN_3D, CC3D_terrain_vert, CC3D_terrain_frag);
+    registerProgramFactory(ProgramType::PARTICLE_TEXTURE_3D, CC3D_particle_vert, CC3D_particleTexture_frag);
+    registerProgramFactory(ProgramType::PARTICLE_COLOR_3D, CC3D_particle_vert, CC3D_particleColor_frag);
+    registerProgramFactory(ProgramType::HSV, positionTextureColor_vert, hsv_frag);
+    registerProgramFactory(ProgramType::HSV_ETC1, positionTextureColor_vert, hsv_etc1_frag);
 
     /* FIXME: Naming style
     ** ETC1: POSITION_TEXTURE_COLOR_ETC1
@@ -121,134 +124,72 @@ bool ProgramCache::init()
         getBuiltinProgram(ProgramType::ETC1));
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::GRAY_SCALE, TextureFormatEXT::ETC1_ALPHA,
         getBuiltinProgram(ProgramType::ETC1_GRAY));
+
+    ProgramStateRegistry::getInstance()->registerProgram(ProgramType::HSV, TextureFormatEXT::ETC1_ALPHA,
+        getBuiltinProgram(ProgramType::HSV_ETC1));
     return true;
 }
 
-void ProgramCache::addProgram(ProgramType type)
+backend::Program* ProgramCache::getCustomProgram(uint32_t type) const
 {
-    Program* program = nullptr;
-    switch (type) {
-        case ProgramType::POSITION_TEXTURE_COLOR:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, positionTextureColor_frag);
-            break;
-        case ProgramType::ETC1:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, etc1_frag);
-            break;
-        case ProgramType::LABEL_DISTANCE_NORMAL:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, label_distanceNormal_frag);
-            break;
-        case ProgramType::LABEL_NORMAL:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, label_normal_frag);
-            break;
-        case ProgramType::LABLE_OUTLINE:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, labelOutline_frag);
-            break;
-        case ProgramType::LABLE_DISTANCEFIELD_GLOW:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, labelDistanceFieldGlow_frag);
-            break;
-        case ProgramType::POSITION_COLOR_LENGTH_TEXTURE:
-            program = backend::Device::getInstance()->newProgram(positionColorLengthTexture_vert, positionColorLengthTexture_frag);
-            break;
-        case ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE:
-            program = backend::Device::getInstance()->newProgram(positionColorTextureAsPointsize_vert, positionColor_frag);
-            break;
-        case ProgramType::POSITION_COLOR:
-            program = backend::Device::getInstance()->newProgram(positionColor_vert, positionColor_frag);
-            break;
-            break;
-        case ProgramType::LAYER_RADIA_GRADIENT:
-            program = backend::Device::getInstance()->newProgram(position_vert, layer_radialGradient_frag);
-            break;
-        case ProgramType::POSITION_TEXTURE:
-            program = backend::Device::getInstance()->newProgram(positionTexture_vert, positionTexture_frag);
-            break;
-        case ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, positionTextureColorAlphaTest_frag);
-            break;
-        case ProgramType::POSITION_UCOLOR:
-            program = backend::Device::getInstance()->newProgram(positionUColor_vert, positionUColor_frag);
-            break;
-        case ProgramType::ETC1_GRAY:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, etc1Gray_frag);
-            break;
-        case ProgramType::GRAY_SCALE:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, grayScale_frag);
-            break;
-        case ProgramType::LINE_COLOR_3D:
-            program = backend::Device::getInstance()->newProgram(lineColor3D_vert, lineColor3D_frag);
-            break;
-        case ProgramType::CAMERA_CLEAR:
-            program = backend::Device::getInstance()->newProgram(cameraClear_vert, cameraClear_frag);
-            break;
-        case ProgramType::SKYBOX_3D:
-            program = backend::Device::getInstance()->newProgram(CC3D_skybox_vert, CC3D_skybox_frag);
-            break;
-        case ProgramType::SKINPOSITION_TEXTURE_3D:
-            program = backend::Device::getInstance()->newProgram(CC3D_skinPositionTexture_vert, CC3D_colorTexture_frag);
-            break;
-        case ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D:
-            {
-                std::string def = getShaderMacrosForLight();
-                program = backend::Device::getInstance()->newProgram(def + CC3D_skinPositionNormalTexture_vert, def + CC3D_colorNormalTexture_frag);
-            }
-            break;
-        case ProgramType::POSITION_NORMAL_TEXTURE_3D:
-            {
-                std::string def = getShaderMacrosForLight();
-                program = backend::Device::getInstance()->newProgram(def + CC3D_positionNormalTexture_vert, def + CC3D_colorNormalTexture_frag);
-            }
-            break;
-        case ProgramType::POSITION_TEXTURE_3D:
-            program = backend::Device::getInstance()->newProgram(CC3D_positionTexture_vert, CC3D_colorTexture_frag);
-            break;
-        case ProgramType::POSITION_3D:
-            program = backend::Device::getInstance()->newProgram(CC3D_positionTexture_vert, CC3D_color_frag);
-            break;
-        case ProgramType::POSITION_NORMAL_3D:
-            {
-                std::string def = getShaderMacrosForLight();
-                program = backend::Device::getInstance()->newProgram(def + CC3D_positionNormalTexture_vert, def + CC3D_colorNormal_frag);
-            }
-            break;
-        case ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D:
-            {
-                std::string def = getShaderMacrosForLight();
-                std::string normalMapDef = "\n#define USE_NORMAL_MAPPING 1 \n";
-                program = backend::Device::getInstance()->newProgram(def + normalMapDef + CC3D_positionNormalTexture_vert, def + normalMapDef + CC3D_colorNormalTexture_frag);
-            }
-            break;
-        case ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D:
-            {
-                std::string def = getShaderMacrosForLight();
-                std::string normalMapDef = "\n#define USE_NORMAL_MAPPING 1 \n";
-                program = backend::Device::getInstance()->newProgram(def + normalMapDef + CC3D_skinPositionNormalTexture_vert, def + normalMapDef + CC3D_colorNormalTexture_frag);
-            }
-            break;
-        case ProgramType::TERRAIN_3D:
-            program = backend::Device::getInstance()->newProgram(CC3D_terrain_vert, CC3D_terrain_frag);
-            break;
-        case ProgramType::PARTICLE_TEXTURE_3D:
-            program = backend::Device::getInstance()->newProgram(CC3D_particle_vert, CC3D_particleTexture_frag);
-            break;
-        case ProgramType::PARTICLE_COLOR_3D:
-            program = backend::Device::getInstance()->newProgram(CC3D_particle_vert, CC3D_particleColor_frag);
-            break;
-        default:
-            CCASSERT(false, "Not built-in program type.");
-            break;
-    }
-    program->setProgramType(type);
-    ProgramCache::_cachedPrograms.emplace(type, program);
+    return getBuiltinProgram(type | ProgramType::CUSTOM_PROGRAM);
 }
 
-backend::Program* ProgramCache::getBuiltinProgram(ProgramType type) const
+backend::Program* ProgramCache::getBuiltinProgram(uint32_t type) const
 {
-    const auto& iter = ProgramCache::_cachedPrograms.find(type);
-    if (ProgramCache::_cachedPrograms.end() != iter)
-    {
+    auto iter = _cachedPrograms.find(type);
+    if (iter != _cachedPrograms.end())
         return iter->second;
+
+    return addProgram(type);
+}
+
+Program* ProgramCache::addProgram(uint32_t internalType) const
+{
+    Program* program = nullptr;
+    if (internalType < ProgramType::BUILTIN_COUNT)
+    {
+        auto& func = _builtinFactories[internalType];
+        if (func) program = func();
     }
-    return nullptr;
+    else {
+        auto iter = _customFactories.find(internalType);
+        if (iter != _customFactories.end()) {
+            auto& func = iter->second;
+            if (func) program = func();
+        }
+    }
+
+    if (program) {
+        program->setProgramType(internalType);
+        _cachedPrograms.emplace(internalType, program);
+    }
+
+    return program;
+}
+
+void ProgramCache::registerCustomProgramFactory(uint32_t type, std::string vertShaderSource, std::string fragShaderSource)
+{
+    auto internalType = ProgramType::CUSTOM_PROGRAM | type;
+    registerProgramFactory(internalType, std::move(vertShaderSource), std::move(fragShaderSource));
+}
+
+void ProgramCache::registerProgramFactory(uint32_t internalType, std::string&& vertShaderSource, std::string&& fragShaderSource)
+{
+    auto constructProgram = [vsrc = std::move(vertShaderSource), fsrc = std::move(fragShaderSource)]() {
+        return backend::Device::getInstance()->newProgram(vsrc, fsrc);
+    };
+
+    if (internalType < ProgramType::BUILTIN_COUNT) {
+        _builtinFactories[internalType] = constructProgram;
+    }
+    else {
+        auto it = _customFactories.find(internalType);
+        if (it == _customFactories.end())
+            _customFactories.emplace(internalType, constructProgram);
+        else
+            it->second = constructProgram;
+    }
 }
 
 void ProgramCache::removeProgram(backend::Program* program)

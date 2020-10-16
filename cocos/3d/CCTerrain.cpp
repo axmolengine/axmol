@@ -110,7 +110,7 @@ void cocos2d::Terrain::setLightDir(const Vec3& lightDir)
 bool Terrain::initProperties()
 {
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::TERRAIN_3D);
-    attachProgramState(new backend::ProgramState(program));
+    setProgramState(new backend::ProgramState(program), false);
 
     _stateBlock.depthWrite = true;
     _stateBlock.depthTest = true;

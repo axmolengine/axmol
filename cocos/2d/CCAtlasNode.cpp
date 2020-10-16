@@ -98,9 +98,9 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
     return true;
 }
 
-bool AtlasNode::attachProgramState(backend::ProgramState* programState)
+bool AtlasNode::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
-    if (Node::attachProgramState(programState))
+    if (Node::setProgramState(programState, needsRetain))
     {
         auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = _programState;

@@ -99,7 +99,7 @@ public:
     void setQuadsToDraw(ssize_t quadsToDraw);
     size_t getQuadsToDraw() const;
 
-    bool attachProgramState(backend::ProgramState* programState) override;
+    bool setProgramState(backend::ProgramState* programState, bool needsRetain = true) override;
 
 CC_CONSTRUCTOR_ACCESS:
     AtlasNode() = default;
