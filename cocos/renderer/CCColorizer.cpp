@@ -808,11 +808,8 @@ static void setMatrixVal(Mat3* dst, float value)
 }
 
 bool Colorizer::enableNodeIntelliShading(Node* node,
-    bool noMVP,
     const Vec3& hsv,
-    const Vec3& filter,
-    bool forceShading,
-    const Vec3& hsvShading)
+    const Vec3& filter)
 {
     if (node == nullptr)
         return false;
@@ -820,17 +817,14 @@ bool Colorizer::enableNodeIntelliShading(Node* node,
 
     node->setProgramState(backend::ProgramType::HSV);
 
-
-    updateNodeHsv(node, hsv, filter, forceShading, hsvShading);
+    updateNodeHsv(node, hsv, filter);
 
     return true;
 }
 
 void Colorizer::updateNodeHsv(Node* node,
     const Vec3& hsv,
-    const Vec3& filter,
-    bool forceShading,
-    const Vec3& hsvShading)
+    const Vec3& filter)
 {
     Mat3 hsvMatrix;
     setMatrixHueOptimized(&hsvMatrix, hsv.x);
@@ -843,11 +837,7 @@ void Colorizer::updateNodeHsv(Node* node,
     programState->setCallbackUniform(programState->getUniformLocation("u_mix_hsv"), [hsvMatrix](backend::ProgramState* programState, const backend::UniformLocation& location) {
         programState->setUniform(location, &hsvMatrix.m[0], sizeof(hsvMatrix));
     });
-
     programState->setUniform(programState->getUniformLocation("u_filter_rgb"), &filter, sizeof(filter));
-    int32_t value = forceShading ? 1 : 0;
-    programState->setUniform(programState->getUniformLocation("u_force_shading"), &value, sizeof(value));
 }
-
 
 NS_CC_END

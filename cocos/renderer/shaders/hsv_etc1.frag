@@ -15,12 +15,6 @@ uniform mat3 u_mix_hsv;
 // filter color RGB values
 uniform vec3 u_filter_rgb;
 
-// force shading HSV values
-uniform vec3 u_shading_hsv;
-
-// whether use force shading
-uniform int u_force_shading;
-
 vec3 rgb2hsv(vec3 c)
 {
     vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
@@ -58,21 +52,7 @@ void main()
          rgbColor.g *= v_fragmentColor.a;
          rgbColor.b *= v_fragmentColor.a;
     } 
-    else { // shading color
-        if(texColor.a > 0.0) {
-            if( u_force_shading != 0 ) {  // force shading color
-              if(gv > 0.115 && rgbColor.g > 0.115 && !(abs(rv - gv) < 0.10589 && abs(rv - bv) < 0.10589 && abs(gv - bv) < 0.0909) || ( rgbColor.b > 0.6280 && (bv - rv)  > 0.0599 ) ) { // currently is yellow, TODO: use hh,ss,vv
-                  rgbColor.r = min(1.0, rgbColor.g * 1.2525);
-                  rgbColor.b *= rgbColor.b;
-                  rgbColor.g *= 0.9025;
 
-                  rgbColor.r *= v_fragmentColor.a;
-                  rgbColor.g *= v_fragmentColor.a;
-                  rgbColor.b *= v_fragmentColor.a;
-              }
-           }
-       }
-    }
     rgbColor.rgb = rgbColor.rgb * v_fragmentColor.rgb;
     gl_FragColor = vec4(rgbColor, texColor.a * v_fragmentColor.a); 
 } 

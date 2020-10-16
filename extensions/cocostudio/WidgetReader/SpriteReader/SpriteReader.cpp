@@ -337,7 +337,6 @@ namespace cocostudio
             auto filter = options->filter();
             if (hsv != nullptr && filter != nullptr) {
                 Colorizer::enableNodeIntelliShading(sprite,
-                    true,
                     Vec3(hsv->x(), hsv->y(), hsv->z()),
                     Vec3(filter->x(), filter->y(), filter->z()));
             }

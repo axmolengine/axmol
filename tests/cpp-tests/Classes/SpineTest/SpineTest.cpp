@@ -334,10 +334,7 @@ bool MixAndMatchExample::init() {
 
     SCALE_SKELETON_NODE(skeletonNode);
 
-    Colorizer::enableNodeIntelliShading(skeletonNode,
-        true,
-        Vec3(-40.41f, 18.37f, 60.42f),
-        Vec3::ZERO);
+    Colorizer::enableNodeIntelliShading(skeletonNode, Vec3(92.0f, 1.0f, 1.2f), Vec3::ZERO);
     return true;
 }
 
@@ -371,8 +368,6 @@ void RaptorExample::update(float fDelta) {
     if (percent > 1) percent = 1 - (percent - 1);
     effect.setAngle(pow2.interpolate(-60.0f, 60.0f, percent));
 }
-
-
 
 bool SkeletonRendererSeparatorExample::init() {
     if (!SpineTestLayer::init()) return false;
