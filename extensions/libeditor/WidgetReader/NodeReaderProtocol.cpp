@@ -7,7 +7,7 @@
 //
 
 #include "libeditor/WidgetReader/NodeReaderProtocol.h"
-#include "libccs21/CSParseBinary_generated.h" // flatbuffers::ResourceData, it's ok for all revision of loaders
+#include "libccs30/CSParseBinary_generated.h" // flatbuffers::ResourceData, it's ok for all revision of loaders
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 #include "libeditor/CCArmature.h"
