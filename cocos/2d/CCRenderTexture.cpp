@@ -616,11 +616,20 @@ void RenderTexture::setClearFlags(ClearFlag clearFlags)
 
 void RenderTexture::clearColorAttachment()
 {
-    auto renderer = _director->getRenderer();
-    _oldRenderTarget = renderer->getRenderTarget();
-    renderer->setRenderTarget(_renderTarget);
-    renderer->clear(TargetBufferFlags::COLOR, Color4F{0.f, 0.f, 0.f, 0.f}, 1, 0, _globalZOrder);
-    renderer->setRenderTarget(_oldRenderTarget);
+    auto renderer = Director::getInstance()->getRenderer();
+    _beforeClearAttachmentCommand.func = [=]() -> void {
+        _oldRenderTarget = renderer->getRenderTarget();
+        renderer->setRenderTarget(_renderTarget);
+    };
+    renderer->addCommand(&_beforeClearAttachmentCommand);
+
+    Color4F color(0.f, 0.f, 0.f, 0.f);
+    renderer->clear(ClearFlag::COLOR, color, 1, 0, _globalZOrder);
+
+    _afterClearAttachmentCommand.func = [=]() -> void {
+        renderer->setRenderTarget(_oldRenderTarget);
+    };
+    renderer->addCommand(&_afterClearAttachmentCommand);
 }
 
 NS_CC_END

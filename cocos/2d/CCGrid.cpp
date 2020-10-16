@@ -221,9 +221,11 @@ void GridBase::beforeDraw()
         CC_SAFE_RELEASE(_renderTarget);
         _renderTarget = backend::Device::getInstance()->newRenderTarget(TargetBufferFlags::COLOR, _texture->getBackendTexture());
         renderer->setRenderTarget(_renderTarget);
-        renderer->clear(TargetBufferFlags::COLOR, _clearColor, 1, 0, 0.0);
     };
     renderer->addCommand(&_beforeDrawCommand);
+
+    // since we use clearCommand, should call at here to avoid iterator damage
+    renderer->clear(TargetBufferFlags::COLOR, _clearColor, 1, 0, 0.0);
 }
 
 void GridBase::afterDraw(cocos2d::Node * /*target*/)
