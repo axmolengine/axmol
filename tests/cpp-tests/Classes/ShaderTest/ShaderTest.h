@@ -152,16 +152,14 @@ protected:
     bool initWithVertex(const std::string &vert, const std::string &frag);
     void loadShaderVertex(const std::string &vert, const std::string &frag);
 
-    virtual void setProgramState(cocos2d::backend::ProgramState *programState) override
+    virtual bool setProgramState(cocos2d::backend::ProgramState *programState, bool needsRetain = true) override
     {
-        if (programState != _programState)
-        {
-            CC_SAFE_RELEASE_NULL(_programState);
-            _programState = programState;
-            CC_SAFE_RETAIN(_programState);
+        if (Node::setProgramState(programState, needsRetain)) {
+            _customCommand.getPipelineDescriptor().programState = programState;
+            updateUniforms();
+            return true;
         }
-        _customCommand.getPipelineDescriptor().programState = programState;
-        updateUniforms();
+        return false;
     }
 
     void updateUniforms();

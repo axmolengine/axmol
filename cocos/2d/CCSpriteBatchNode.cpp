@@ -147,10 +147,10 @@ void SpriteBatchNode::setVertexLayout()
     vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
 }
 
-bool SpriteBatchNode::attachProgramState(backend::ProgramState *programState)
+bool SpriteBatchNode::setProgramState(backend::ProgramState *programState, bool needsRetain)
 {
     CCASSERT(programState, "programState should not be nullptr");
-    if (Node::attachProgramState(programState)) {
+    if (Node::setProgramState(programState, needsRetain)) {
         auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = _programState;
 

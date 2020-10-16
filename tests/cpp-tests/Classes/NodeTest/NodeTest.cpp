@@ -971,11 +971,10 @@ public:
         sprite->autorelease();
         auto program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
         auto programState = new (std::nothrow) backend::ProgramState(program);
-        programState->autorelease();
-        sprite->setProgramState(programState);
+        sprite->setProgramState(programState, false);
         return sprite;
     }
-    bool attachProgramState(backend::ProgramState* programState) override;
+    bool setProgramState(backend::ProgramState* programState, bool needsRetain = true) override;
     virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
 
 protected:
@@ -983,9 +982,9 @@ protected:
 
 };
 
-bool MySprite::attachProgramState(backend::ProgramState* programState)
+bool MySprite::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
-    if (Sprite::attachProgramState(programState)) {
+    if (Sprite::setProgramState(programState, needsRetain)) {
         auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = programState;
 

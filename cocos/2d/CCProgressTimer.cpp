@@ -114,7 +114,7 @@ bool ProgressTimer::initWithSprite(Sprite* sp)
 
     // TODO: Use ProgramState Vector to Node
     CC_SAFE_RELEASE(_programState2);
-    attachProgramState(initPipelineDescriptor(_customCommand, true, _locMVP1, _locTex1));
+    setProgramState(initPipelineDescriptor(_customCommand, true, _locMVP1, _locTex1), false);
     _programState2 = initPipelineDescriptor(_customCommand2, false, _locMVP2, _locTex2);
     
     return true;

@@ -638,10 +638,7 @@ public:
      */
     float getAdditionalKerning() const;
 
-    /**
-    * Attach ProgramState of current render command
-    */
-    bool attachProgramState(backend::ProgramState *programState) override;
+    bool setProgramState(backend::ProgramState *programState, bool needsRetain = true) override;
 
     FontAtlas* getFontAtlas() { return _fontAtlas; }
 

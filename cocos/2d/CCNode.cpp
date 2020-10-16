@@ -2128,25 +2128,20 @@ int Node::getAttachedNodeCount()
     return __attachedNodeCount;
 }
 
-void Node::setProgramStateWithRegistry(backend::ProgramType programType, Texture2D* texture)
+void Node::setProgramStateWithRegistry(uint32_t programType, Texture2D* texture)
 {
     auto formatEXT = texture ? texture->getTextureFormatEXT() : 0;
     auto programState = backend::ProgramStateRegistry::getInstance()->newProgramState(programType, formatEXT);
-    attachProgramState(programState);
+    setProgramState(programState, false);
 }
 
-void Node::setProgramState(backend::ProgramState* programState)
-{
-    if(attachProgramState(programState))
-        programState->retain();
-}
-
-bool Node::attachProgramState(backend::ProgramState* programState)
+bool Node::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
     if (_programState != programState)
     {
         CC_SAFE_RELEASE(_programState);
         _programState = programState;
+        if(needsRetain) CC_SAFE_RETAIN(_programState);
         return !!_programState;
     }
     return false;

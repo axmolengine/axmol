@@ -679,9 +679,9 @@ void Label::setVertexLayout()
     vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
 }
 
-bool Label::attachProgramState(backend::ProgramState* programState)
+bool Label::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
-    if (Node::attachProgramState(programState)) {
+    if (Node::setProgramState(programState, needsRetain)) {
         updateUniformLocations();
         for (auto& batch : _batchCommands)
         {
@@ -698,7 +698,7 @@ bool Label::attachProgramState(backend::ProgramState* programState)
 
 void Label::updateShaderProgram()
 {
-    auto programType = backend::ProgramType::POSITION_TEXTURE_COLOR;
+    uint32_t programType = backend::ProgramType::POSITION_TEXTURE_COLOR;
     if (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP)
     {
         auto texture = _getTexture(this);
@@ -746,7 +746,7 @@ void Label::updateShaderProgram()
     }
 
     auto* program = backend::Program::getBuiltinProgram(programType);
-    attachProgramState(new backend::ProgramState(program));
+    setProgramState(new backend::ProgramState(program), false);
 
     updateUniformLocations();
 

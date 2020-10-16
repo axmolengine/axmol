@@ -53,8 +53,14 @@ public:
     static void destroyInstance();
     
     /// get built-in program
-    backend::Program* getBuiltinProgram(ProgramType type) const;
+    backend::Program* getBuiltinProgram(uint32_t type) const;
     
+    // get custom program, should call registerCustomProgramFactory first
+    backend::Program* getCustomProgram(uint32_t type) const;
+
+    // register custom program create factory
+    void registerCustomProgramFactory(uint32_t type, std::string vertShaderSource, std::string fragShaderSource);
+
     /**
      * Remove a program object from cache.
      * @param program Specifies the program object to move.
@@ -80,10 +86,13 @@ protected:
      */
     bool init();
 
-    /// Add built-in program
-    void addProgram(ProgramType type);
-    
-    static std::unordered_map<backend::ProgramType, backend::Program*> _cachedPrograms; ///< The cached program object.
+    void registerProgramFactory(uint32_t internalType, std::string&& vertShaderSource, std::string&& fragShaderSource);
+    Program* addProgram(uint32_t internalType) const;
+
+    std::function<Program* ()> _builtinFactories[(int)ProgramType::BUILTIN_COUNT];
+    std::unordered_map<uint32_t, std::function<Program* ()>> _customFactories;
+
+    mutable std::unordered_map<uint32_t, backend::Program*> _cachedPrograms; ///< The cached program object.
     static ProgramCache *_sharedProgramCache; ///< A shared instance of the program cache.
 };
 

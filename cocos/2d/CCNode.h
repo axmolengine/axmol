@@ -1767,21 +1767,17 @@ public:
      * @param applyChildren A boolean value to determine whether the mask bit should apply to its children or not.
      */
     virtual void setCameraMask(unsigned short mask, bool applyChildren = true);
-    
+
+    virtual void setProgramState(uint32_t programType) { setProgramStateWithRegistry(programType, nullptr); }
+    void setProgramStateWithRegistry(uint32_t programType, Texture2D* texture);
+
     /**
      * Sets ProgramState with retain
      * @param programState
      */
-    virtual void setProgramState(backend::ProgramState* programState);
+    virtual bool setProgramState(backend::ProgramState* programState, bool needsRetain = true);
+
     backend::ProgramState* getProgramState() const;
-
-    void setProgramStateWithRegistry(backend::ProgramType programType, Texture2D* texture);
-
-    /**
-     * Attach/Change current ProgramState without retain, override me
-     * @param programState should be new or retain if it has other owner
-     */
-    virtual bool attachProgramState(backend::ProgramState* programState);
 
     void updateProgramStateTexture(Texture2D* texture);
 

@@ -8,20 +8,6 @@
 #include <string>
 #include <unordered_map>
 
-namespace std
-{
-    template <>
-    struct hash<cocos2d::backend::ProgramType>
-    {
-        typedef cocos2d::backend::ProgramType argument_type;
-        typedef std::size_t result_type;
-        result_type operator()(argument_type const& v) const
-        {
-            return hash<int>()(static_cast<int>(v));
-        }
-    };
-};
-
 CC_BACKEND_BEGIN
 /**
  * @addtogroup _backend
@@ -39,10 +25,10 @@ public:
     bool init();
     void clearPrograms();
 
-    void registerProgram(ProgramType programType, int textureFormatEXT, Program*);
+    void registerProgram(uint32_t programType, int textureFormatEXT, Program*);
 
-    ProgramState* newProgramState(ProgramType programType, int textureFormatEXT);
-    ProgramType getProgramType(ProgramType programType, int textureFormatEXT);
+    ProgramState* newProgramState(uint32_t programType, int textureFormatEXT);
+    uint32_t getProgramType(uint32_t programType, int textureFormatEXT);
 
 protected:
 
