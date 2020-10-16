@@ -38,7 +38,7 @@
 
 namespace spine {
 
-	class SkeletonBatch {
+	class SP_API SkeletonBatch {
 	public:
 		static SkeletonBatch* getInstance ();
 

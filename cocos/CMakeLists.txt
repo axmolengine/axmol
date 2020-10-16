@@ -62,12 +62,14 @@ endif()
 set(EGNX_VERSION 1.0)
 
 if(NOT DEFINED EGNX_CORE_LIB)
-    set(EGNX_CORE_LIB cocos2d CACHE INTERNAL "The EGNX core lib name" )
+    set(EGNX_CORE_LIB libcocos2d CACHE INTERNAL "The EGNX core lib name" )
 endif()
 
 if (NOT DEFINED CC_FORCE_USE_GLES)
     set(CC_FORCE_USE_GLES FALSE CACHE INTERNAL "Force use GLES" )
 endif()
+
+set(LUA_ENGINE "luajit" CACHE INTERNAL "The Lua Engine, luajit or plainlua" )
 
 project(cocos2d_libs)
 
@@ -150,14 +152,15 @@ set_target_properties(${EGNX_CORE_LIB}
                       PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+                      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       VERSION "${EGNX_VERSION}"
                       FOLDER "Internal"
                       )
 
 ## Lua bindings lib
-if(BUILD_LUA_LIBS)
-    add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/scripting/lua-bindings ${ENGINE_BINARY_PATH}/cocos/lua-bindings)
-endif()
+# if(BUILD_LUA_LIBS)
+#     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/scripting/lua-bindings ${ENGINE_BINARY_PATH}/cocos/lua-bindings)
+# endif()
 
 if(XCODE OR VS)
     cocos_mark_code_files("${EGNX_CORE_LIB}")
@@ -174,6 +177,11 @@ endif()
 
 # engine extensions
 add_subdirectory(${COCOS2DX_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
+
+# copy all external libraries to ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
+# if (WINDOWS)
+#     copy_thirdparty_dlls(libcocos2d ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
+# endif()
 
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+

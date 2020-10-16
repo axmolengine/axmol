@@ -13,7 +13,7 @@ option(BUILD_EXTENSION_DRAGONBONES "Build extension DragonBones" ON)
 
 option(BUILD_EXTENSION_COCOSTUDIO "Build extension cocostudio" ON)
 
-option(BUILD_EXTENSION_FAIRYGUI "Build extension FairyGUI" ON)
+option(BUILD_EXTENSION_FAIRYGUI "Build extension FairyGUI" OFF)
 
 if(WINDOWS OR MACOSX OR LINUX)
   option(BUILD_EXTENSION_IMGUIEXT "Build extension ImGuiEXT" ON)
@@ -21,24 +21,41 @@ else()
   set(BUILD_EXTENSION_IMGUIEXT OFF)
 endif()
 
+cmake_policy(SET CMP0079 NEW)
+
 function(setup_cocos_extension_config target_name)
+    set(options DNTLINK opt_DNTLINK)
+    cmake_parse_arguments(opt "" "${options}" ""
+                          "" ${ARGN} )
+
   if(ANDROID)
-    target_link_libraries(${target_name} INTERFACE cocos2d)
-    target_include_directories(${target_name} PRIVATE $<TARGET_PROPERTY:cocos2d,INTERFACE_INCLUDE_DIRECTORIES>)
+    target_link_libraries(${target_name} INTERFACE ${EGNX_CORE_LIB})
+    target_include_directories(${target_name} PRIVATE $<TARGET_PROPERTY:${EGNX_CORE_LIB},INTERFACE_INCLUDE_DIRECTORIES>)
     # target_compile_definitions(${target_name} PRIVATE CP_USE_CGTYPES=0)
     # target_compile_definitions(${target_name} PRIVATE CP_USE_DOUBLES=0)
   else()
-    target_link_libraries(${target_name} cocos2d)
+    target_link_libraries(${target_name} ${EGNX_CORE_LIB})
   endif()
-  
+
+  if(BUILD_SHARED_LIBS)
+   target_compile_definitions(${target_name} PRIVATE _USREXDLL=1)
+  endif()
   set_target_properties(${target_name}
       PROPERTIES
       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
       FOLDER "Extensions"
   )
 
-  set(CC_EXTENSION_LIBS "${target_name};${CC_EXTENSION_LIBS}" CACHE INTERNAL "extensions for auto link to target application")
+  if(NOT opt_DNTLINK)
+      set(CC_EXTENSION_LIBS "${target_name};${CC_EXTENSION_LIBS}" CACHE INTERNAL "extensions for auto link to target application")
+  endif()
+
+  if(XCODE OR VS)
+    cocos_mark_code_files("${target_name}")
+  endif()
+
 endfunction()
 
 if(BUILD_EXTENSION_ASSETMANAGER)
@@ -65,20 +82,32 @@ if(BUILD_EXTENSION_DRAGONBONES)
   add_subdirectory(dragonbones)
 endif()
 
-if(BUILD_EXTENSION_COCOSTUDIO)
-  add_subdirectory(cocostudio)
-  if(BUILD_EXTENSION_DRAGONBONES)
-    target_compile_definitions(cocostudio PRIVATE CC_BUILD_WITH_DRANGBONES=1)
-    target_compile_definitions(cocostudio PUBLIC CC_BUILD_WITH_SPINE=1)
-  endif()
-endif()
-
 if(BUILD_EXTENSION_FAIRYGUI)
   add_subdirectory(fairygui)
+  target_link_libraries(fairygui spine)
 endif()
 
 if(BUILD_EXTENSION_IMGUIEXT)
   add_subdirectory(ImGuiEXT)
+endif()
+
+if(BUILD_EXTENSION_COCOSTUDIO)
+  add_subdirectory(libeditor)
+  if(BUILD_EXTENSION_SPINE)
+    target_compile_definitions(libeditor PUBLIC CC_BUILD_WITH_SPINE=1)
+    target_link_libraries(libeditor spine)
+  endif()
+  add_subdirectory(libccs30)
+  target_link_libraries(libccs30 libeditor particle3d)
+  if(BUILD_EXTENSION_DRAGONBONES)
+    target_compile_definitions(libccs30 PRIVATE CC_BUILD_WITH_DRANGBONES=1)
+    target_link_libraries(libccs30 dragonbones)
+  endif()
+endif()
+
+if(BUILD_LUA_LIBS) # TODO: rename to BUILD_EXTENSION_LUA
+  add_subdirectory(scripting/lua-bindings)
+  target_link_libraries(libcclua ${LUA_ENGINE} tolua libccs21)
 endif()
 
 message(STATUS "CC_EXTENSION_LIBS:${CC_EXTENSION_LIBS}")
