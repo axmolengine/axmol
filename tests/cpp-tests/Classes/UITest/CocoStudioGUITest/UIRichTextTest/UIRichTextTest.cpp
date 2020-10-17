@@ -23,8 +23,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "UIRichTextTest.h"
-#include "cocostudio/CCArmatureDataManager.h"
-#include "cocostudio/CCArmature.h"
+#include "libeditor/CCArmatureDataManager.h"
+#include "libeditor/CCArmature.h"
 
 USING_NS_CC;
 using namespace cocos2d::ui;
