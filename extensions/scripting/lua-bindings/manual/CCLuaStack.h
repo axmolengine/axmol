@@ -31,8 +31,6 @@ extern "C" {
 #include "lua.h"
 }
 
-#include "scripting/deprecated/CCArray.h"
-
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
 
 /**
@@ -261,19 +259,6 @@ public:
      * @return the return value is the same as executeFunction,please @see executeFunction.
      */
     virtual int executeFunctionByHandler(int nHandler, int numArgs);
-    
-    /**
-     * Execute the lua function corresponding to the handler by the numArgs variables passed.
-     * By calling this function, the number of return value is numResults(may be > 1).
-     * All the return values are stored in the resultArray.
-     *
-     * @param handler the index count corresponding to the lua function.
-     * @param numArgs the number of variables.
-     * @param numResults the number of return value.
-     * @param resultArray a array used to store the return value.
-     * @return 0 if it happen error or it hasn't return value, otherwise return 1.
-     */
-    virtual int executeFunctionReturnArray(int handler,int numArgs,int numResults,__Array& resultArray);
     
     /**
      * Execute the lua function corresponding to the handler by the numArgs variables passed.

@@ -29,6 +29,7 @@
 #include "platform/CCFileUtils.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
+#include "base/ccUTF8.h"
 
 NS_CC_BEGIN
 
