@@ -153,6 +153,49 @@ function(get_target_depends_ext_dlls cocos_target all_depend_dlls_out)
     set(${all_depend_dlls_out} ${all_depend_ext_dlls} PARENT_SCOPE)
 endfunction()
 
+function(copy_thirdparty_dlls cocos_target destDir)
+    # init dependency list with direct dependencies
+    get_property(DEPENDENCIES TARGET external PROPERTY LINK_LIBRARIES)
+    # We're not intersted in interface link libraries of the top-most target
+#     if (INCLUDE_INTERFACE_LINK_LIBRARIES)
+#        get_property(INTERFACE_LINK_LIBRARIES TARGET external PROPERTY
+#   INTERFACE_LINK_LIBRARIES)
+#        list(APPEND DEPENDENCIES ${INTERFACE_LINK_LIBRARIES})
+#     endif()
+
+    if(BUILD_LUA_LIBS) # TODO: rename to BUILD_EXTENSION_LUA
+        list(APPEND DEPENDENCIES ${LUA_ENGINE})
+        list(APPEND DEPENDENCIES tolua)
+    endif()
+
+    if (DEPENDENCIES)
+      list(REMOVE_DUPLICATES DEPENDENCIES)
+      # message (STATUS "${LIB} dependens on ${DEPENDENCIES}")
+    endif()
+
+    SET(EXT_LIB_FILES "")
+ 
+    foreach(DEPENDENCY ${DEPENDENCIES})
+      # message(STATUS ${DEPENDENCY} " depends by external")
+      get_property(IMPORTLIB TARGET ${DEPENDENCY} PROPERTY IMPORTED_IMPLIB)
+      get_property(IMPORTDLL TARGET ${DEPENDENCY} PROPERTY IMPORTED_LOCATION)
+      if(IMPORTLIB)
+          # message(STATUS "${DEPENDENCY} have import lib ${IMPORTLIB}")
+          list(APPEND EXT_LIB_FILES ${IMPORTLIB})
+      endif()
+      if(IMPORTDLL)
+          list(APPEND EXT_LIB_FILES ${IMPORTDLL})
+      endif()
+    endforeach()
+
+    message(STATUS "EXT_LIB_FILES=${EXT_LIB_FILES}")
+    add_custom_command(TARGET ${cocos_target}
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${EXT_LIB_FILES}
+        ${destDir} # ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
+    )
+endfunction()
+
 # copy the `cocos_target` needed dlls into TARGET_FILE_DIR
 function(cocos_copy_target_dll cocos_target)
     get_target_depends_ext_dlls(${cocos_target} all_depend_dlls)
@@ -167,6 +210,9 @@ function(cocos_copy_target_dll cocos_target)
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${cc_dll_file} "$<TARGET_FILE_DIR:${cocos_target}>/${cc_dll_name}"
         )
     endforeach()
+
+    # copy thirdparty dlls to target bin dir
+    # copy_thirdparty_dlls(${cocos_target} $<TARGET_FILE_DIR:${cocos_target}>)
 
     # Copy win32 angle binaries
     add_custom_command(TARGET ${cocos_target}
@@ -268,6 +314,11 @@ function(setup_cocos_app_config app_name)
         cocos_def_copy_resource_target(${app_name})
     endif()
 
+    if(BUILD_SHARED_LIBS)
+        target_compile_definitions(${app_name} PRIVATE SPINEPLUGIN_API=DLLIMPORT) # spine dll
+    else()
+        target_compile_definitions(${app_name} PRIVATE CC_STATIC=1)
+    endif()
     target_link_libraries(${app_name} ${CC_EXTENSION_LIBS})
 endfunction()
 
