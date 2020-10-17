@@ -115,17 +115,6 @@ int LuaEngine::executeMenuItemEvent(MenuItem* pMenuItem)
     return 0;
 }
 
-int LuaEngine::executeNotificationEvent(__NotificationCenter* pNotificationCenter, const char* pszName)
-{
-    int nHandler = pNotificationCenter->getObserverHandlerByName(pszName);
-    if (!nHandler) return 0;
-    
-    _stack->pushString(pszName);
-    int ret = _stack->executeFunctionByHandler(nHandler, 1);
-    _stack->clean();
-    return ret;
-}
-
 int LuaEngine::executeCallFuncActionEvent(CallFunc* pAction, Ref* pTarget/* = NULL*/)
 {
     return 0;
@@ -141,11 +130,6 @@ int LuaEngine::executeSchedule(int nHandler, float dt, Node* pNode/* = NULL*/)
 }
 
 int LuaEngine::executeLayerTouchEvent(Layer* pLayer, int eventType, Touch *pTouch)
-{
-    return 0;
-}
-
-int LuaEngine::executeLayerTouchesEvent(Layer* pLayer, int eventType, __Set *pTouches)
 {
     return 0;
 }

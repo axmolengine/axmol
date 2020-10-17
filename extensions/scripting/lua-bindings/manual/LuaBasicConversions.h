@@ -41,8 +41,6 @@ extern "C" {
 #include "3d/CCBundle3D.h"
 #include "base/CCValue.h"
 #include "base/ccTypes.h"
-#include "scripting/deprecated/CCArray.h"
-#include "scripting/deprecated/CCDictionary.h"
 #include "physics/CCPhysicsContact.h"
 #include "physics/CCPhysicsJoint.h"
 #include "physics/CCPhysicsShape.h"
@@ -357,18 +355,6 @@ extern bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outVa
 extern bool luaval_to_mat4(lua_State* L, int lo, cocos2d::Mat4* outValue , const char* funcName = "");
 
 /**
- * Get a __Array object value from the given acceptable index of stack.
- * Because __Array is deprecated, so this function would be not called anymore.
- */
-extern bool luaval_to_array(lua_State* L,int lo, __Array** outValue, const char* funcName = "");
-
-/**
- * Get a __Dictionary object value from the given acceptable index of stack.
- * Because __Dictionary is deprecated, so this function would be not called anymore.
- */
-extern bool luaval_to_dictionary(lua_State* L,int lo, __Dictionary** outValue, const char* funcName = "");
-
-/**
  * Get a array of Vec2 object from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
  *
@@ -380,12 +366,6 @@ extern bool luaval_to_dictionary(lua_State* L,int lo, __Dictionary** outValue, c
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_array_of_vec2(lua_State* L,int lo,cocos2d::Vec2 **points, int *numPoints, const char* funcName = "");
-
-/**
- * Get a __Array object value by the argc numbers of Lua values in the stack.
- * Because __Array is deprecated, so this function would be not called anymore.
- */
-extern bool luavals_variadic_to_array(lua_State* L,int argc, __Array** ret);
 
 /**
  * Get a cocos2d::ValueVector object value by the argc numbers of Lua values in the stack.
@@ -975,10 +955,6 @@ extern void affinetransform_to_luaval(lua_State* L,const AffineTransform& inValu
  * @param inValue a cocos2d::FontDefinition object.
  */
 extern void fontdefinition_to_luaval(lua_State* L,const FontDefinition& inValue);
-
-extern void array_to_luaval(lua_State* L, __Array* inValue);
-extern void dictionary_to_luaval(lua_State* L, __Dictionary* dict);
-
 
 /**
  * Push a table converted from a cocos2d::Mat4 object into the Lua stack.

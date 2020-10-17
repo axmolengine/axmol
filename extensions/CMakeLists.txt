@@ -4,7 +4,6 @@
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
 option(BUILD_EXTENSION_ASSETMANAGER "Build extension asset-manager" ON)
-option(BUILD_EXTENSION_GUI "Build extension GUI" ON)
 option(BUILD_EXTENSION_PARTICLE3D "Build extension Particle3D" ON)
 option(BUILD_EXTENSION_PHYSICS_NODE "Build extension physics-nodes" ON)
 
@@ -66,10 +65,6 @@ if(BUILD_EXTENSION_ASSETMANAGER)
   add_subdirectory(assets-manager)
 endif()
 
-if(BUILD_EXTENSION_GUI)
-  add_subdirectory(GUI)
-endif()
-
 if(BUILD_EXTENSION_PARTICLE3D)
   add_subdirectory(Particle3D)
 endif()
@@ -83,7 +78,7 @@ if(BUILD_EXTENSION_SPINE)
 endif()
 
 if(BUILD_EXTENSION_DRAGONBONES)
-  add_subdirectory(dragonbones)
+  add_subdirectory(DragonBones)
 endif()
 
 if(BUILD_EXTENSION_FAIRYGUI)
@@ -116,7 +111,7 @@ if(BUILD_EXTENSION_COCOSTUDIO)
   if(BUILD_EXTENSION_DRAGONBONES)
     target_compile_definitions(libccs30 PRIVATE CC_BUILD_WITH_DRANGBONES=1)
     if(BUILD_SHARED_LIBS)
-      target_link_libraries(libccs30 dragonbones)
+      target_link_libraries(libccs30 DragonBones)
     endif()
   endif()
 endif()
