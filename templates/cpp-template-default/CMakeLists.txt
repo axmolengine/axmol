@@ -36,7 +36,12 @@ if(XCODE)
 endif()
 
 if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
-    set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cocos2d)
+    if(NOT ("$ENV{COCOS2DX_ROOT}" STREQUAL ""))
+        message(STATUS "Using system env var COCOS2DX_ROOT=$ENV{COCOS2DX_ROOT}")
+        set(COCOS2DX_ROOT_PATH "$ENV{COCOS2DX_ROOT}")
+    else
+        message(FATAL_ERROR "Please add system env var 'COCOS2DX_ROOT' to specific the engine root")
+    endif()
     set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 
     include(CocosBuildSet)
