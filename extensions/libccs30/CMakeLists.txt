@@ -10,7 +10,7 @@ if(BUILD_SHARED_LIBS)
                         )
 else()
     target_compile_definitions(${target_name} 
-                        PRIVATE CC_STATIC=1
+                        PUBLIC CC_STATIC=1
                         )
 endif()
 
