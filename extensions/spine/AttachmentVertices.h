@@ -32,9 +32,11 @@
 
 #include "cocos2d.h"
 
+#include <spine/spine.h>
+
 namespace spine {
 
-class AttachmentVertices {
+class SP_API AttachmentVertices {
 public:
 	AttachmentVertices (cocos2d::Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount);
 	virtual ~AttachmentVertices ();

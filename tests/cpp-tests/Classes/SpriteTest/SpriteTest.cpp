@@ -30,7 +30,7 @@
 #include <algorithm>
 
 #include "../testResource.h"
-#include "cocostudio/CocosStudioExtension.h"
+#include "libeditor/CocosStudioExtension.h"
 
 USING_NS_CC;
 

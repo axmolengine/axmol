@@ -51,7 +51,7 @@ namespace spine {
 		int indexCount;
 	};
 
-	class TwoColorTrianglesCommand : public cocos2d::CustomCommand {
+	class SP_API TwoColorTrianglesCommand : public cocos2d::CustomCommand {
 	public:
 		TwoColorTrianglesCommand();
 
@@ -100,7 +100,7 @@ namespace spine {
 		bool _forceFlush;
 	};
 
-	class SkeletonTwoColorBatch {
+	class SP_API SkeletonTwoColorBatch {
 	public:
 		static SkeletonTwoColorBatch* getInstance ();
 
