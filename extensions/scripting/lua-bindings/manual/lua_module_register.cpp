@@ -34,9 +34,16 @@
 #include "scripting/lua-bindings/manual/physics3d/lua_cocos2dx_physics3d_manual.h"
 #include "scripting/lua-bindings/manual/navmesh/lua_cocos2dx_navmesh_manual.h"
 
+#if defined(CC_ENABLE_YASIO_LUA)
+#include "yasio/bindings/yasio_cclua.h"
+#endif
+
 
 int lua_module_register(lua_State* L)
 {
+#if defined(CC_ENABLE_YASIO_LUA)
+    luaopen_yasio_cclua(L);
+#endif
     // Don't change the module register order unless you know what your are doing
     register_network_module(L);
     register_cocostudio_module(L);

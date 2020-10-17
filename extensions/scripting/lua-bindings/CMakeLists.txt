@@ -139,7 +139,17 @@ elseif(ANDROID)
         )
 endif()
 
+option(BUILD_YASIO_LUA "Build yasio with cclua support" ON)
+
 include(../deprecated/CMakeLists.txt)
+
+if(BUILD_YASIO_LUA)
+    set(lua_bindings_files
+        ${lua_bindings_files}
+        ${cocos_root}/external/yasio/bindings/lyasio.cpp
+        ${cocos_root}/external/yasio/bindings/yasio_cclua.cpp)
+
+endif()
 
 set(lua_bindings_files
     ${lua_bindings_manual_files}
@@ -160,12 +170,17 @@ add_library(${EGNX_LUA_LIB} STATIC ${lua_bindings_files})
 target_link_libraries(${EGNX_LUA_LIB} ${EGNX_CORE_LIB})
 add_dependencies(${EGNX_LUA_LIB} ${EGNX_CORE_LIB})
 
+if(BUILD_YASIO_LUA)
+    target_compile_definitions(${EGNX_LUA_LIB} PRIVATE CC_ENABLE_YASIO_LUA=1)
+endif()
+
 get_target_property(lua_ext_depend external CC_LUA_DEPEND)
 target_link_libraries(${EGNX_LUA_LIB} ${lua_ext_depend})
 
 target_include_directories(${EGNX_LUA_LIB}
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
+    PRIVATE ${cocos_root}/extensions/spine/runtime/include
     INTERFACE ${cocos_root}/extensions/scripting/lua-bindings/auto
     INTERFACE ${cocos_root}/extensions/scripting/lua-bindings/manual
 )
