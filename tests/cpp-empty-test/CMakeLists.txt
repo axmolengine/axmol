@@ -34,7 +34,13 @@ if(XCODE)
 endif()
 
 if(NOT DEFINED BUILD_ENGINE_DONE)
-    set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+    if(NOT ("$ENV{COCOS2DX_ROOT}" STREQUAL ""))
+        message(STATUS "Using system env var COCOS2DX_ROOT=$ENV{COCOS2DX_ROOT}")
+        set(COCOS2DX_ROOT_PATH "$ENV{COCOS2DX_ROOT}")
+    else
+        set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+    endif()
+    
     set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 
     include(CocosBuildSet)
