@@ -13,7 +13,7 @@ option(BUILD_EXTENSION_DRAGONBONES "Build extension DragonBones" ON)
 
 option(BUILD_EXTENSION_COCOSTUDIO "Build extension cocostudio" ON)
 
-option(BUILD_EXTENSION_FAIRYGUI "Build extension FairyGUI" OFF)
+option(BUILD_EXTENSION_FAIRYGUI "Build extension FairyGUI" ON)
 
 if(WINDOWS OR MACOSX OR LINUX)
   option(BUILD_EXTENSION_IMGUIEXT "Build extension ImGuiEXT" ON)
@@ -21,7 +21,9 @@ else()
   set(BUILD_EXTENSION_IMGUIEXT OFF)
 endif()
 
-cmake_policy(SET CMP0079 NEW)
+if(BUILD_SHARED_LIBS)
+  cmake_policy(SET CMP0079 NEW)
+endif()
 
 function(setup_cocos_extension_config target_name)
     set(options DNTLINK opt_DNTLINK)
@@ -38,8 +40,9 @@ function(setup_cocos_extension_config target_name)
   endif()
 
   if(BUILD_SHARED_LIBS)
-   target_compile_definitions(${target_name} PRIVATE _USREXDLL=1)
+    target_compile_definitions(${target_name} PRIVATE _USREXDLL=1)
   endif()
+
   set_target_properties(${target_name}
       PROPERTIES
       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -49,9 +52,10 @@ function(setup_cocos_extension_config target_name)
   )
 
   if(NOT opt_DNTLINK)
+      message(STATUS "linking ${target_name}...")
       set(CC_EXTENSION_LIBS "${target_name};${CC_EXTENSION_LIBS}" CACHE INTERNAL "extensions for auto link to target application")
   endif()
-
+  
   if(XCODE OR VS)
     cocos_mark_code_files("${target_name}")
   endif()
@@ -84,7 +88,11 @@ endif()
 
 if(BUILD_EXTENSION_FAIRYGUI)
   add_subdirectory(fairygui)
-  target_link_libraries(fairygui spine)
+  if(BUILD_SHARED_LIBS)
+    target_link_libraries(fairygui spine)
+  else()
+    target_include_directories(fairygui PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/runtime/include)
+  endif()
 endif()
 
 if(BUILD_EXTENSION_IMGUIEXT)
@@ -95,19 +103,24 @@ if(BUILD_EXTENSION_COCOSTUDIO)
   add_subdirectory(libeditor)
   if(BUILD_EXTENSION_SPINE)
     target_compile_definitions(libeditor PUBLIC CC_BUILD_WITH_SPINE=1)
-    target_link_libraries(libeditor spine)
+    if(BUILD_SHARED_LIBS)
+      target_link_libraries(libeditor spine)
+    endif()
   endif()
   add_subdirectory(libccs30)
-  target_link_libraries(libccs30 libeditor particle3d)
+  if(BUILD_SHARED_LIBS)
+    target_link_libraries(libccs30 libeditor particle3d)
+  endif()
   if(BUILD_EXTENSION_DRAGONBONES)
     target_compile_definitions(libccs30 PRIVATE CC_BUILD_WITH_DRANGBONES=1)
-    target_link_libraries(libccs30 dragonbones)
+    if(BUILD_SHARED_LIBS)
+      target_link_libraries(libccs30 dragonbones)
+    endif()
   endif()
 endif()
 
 if(BUILD_LUA_LIBS) # TODO: rename to BUILD_EXTENSION_LUA
   add_subdirectory(scripting/lua-bindings)
-  target_link_libraries(libcclua ${LUA_ENGINE} tolua libccs21)
 endif()
 
 message(STATUS "CC_EXTENSION_LIBS:${CC_EXTENSION_LIBS}")
