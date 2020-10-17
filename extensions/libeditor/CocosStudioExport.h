@@ -56,9 +56,9 @@
 #endif
 #endif
 #elif defined(_SHARED_)
-#define CCS_DLL     __attribute__((visibility("default")))
+#define CCS_LDR_DLL     __attribute__((visibility("default")))
 #else
-#define CCS_DLL
+#define CCS_LDR_DLL
 #endif
 
 
