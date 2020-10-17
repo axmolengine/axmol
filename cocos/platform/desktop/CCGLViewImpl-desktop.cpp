@@ -311,9 +311,9 @@ GLViewImpl::GLViewImpl(bool initglfw)
         glfwInitHint(GLFW_ANGLE_PLATFORM_TYPE, GLFW_ANGLE_PLATFORM_TYPE_D3D11); // since glfw-3.4
 #endif
 #if defined(_WIN32)
-        glfwInit();
+        glfwxInit();
 #else
-		glfwxInit();
+        glfwInit();
 #endif
     }
 }
