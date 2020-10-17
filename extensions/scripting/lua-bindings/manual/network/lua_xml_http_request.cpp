@@ -213,7 +213,9 @@ void LuaMinXmlHttpRequest::_gotHeader(const std::string& header)
                 mystream << pch;
                 
                 pch = strtok (NULL, "\n");
-                mystream << " " << pch;
+                //Send request to a url on Tomcat9. It just returned http response code '200' only,not '200 OK'
+                if(pch != nullptr)
+                    mystream << " " << pch;
                 
                 _statusText = mystream.str();
                 
