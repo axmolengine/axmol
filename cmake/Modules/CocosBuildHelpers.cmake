@@ -316,8 +316,6 @@ function(setup_cocos_app_config app_name)
 
     if(BUILD_SHARED_LIBS)
         target_compile_definitions(${app_name} PRIVATE SPINEPLUGIN_API=DLLIMPORT) # spine dll
-    else()
-        target_compile_definitions(${app_name} PRIVATE CC_STATIC=1)
     endif()
     target_link_libraries(${app_name} ${CC_EXTENSION_LIBS})
 endfunction()
