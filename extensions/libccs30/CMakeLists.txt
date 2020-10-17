@@ -8,6 +8,10 @@ if(BUILD_SHARED_LIBS)
     target_compile_definitions(${target_name} 
                         PRIVATE _USRCCS_LDR_DLL=1
                         )
+else()
+    target_compile_definitions(${target_name} 
+                        PRIVATE CC_STATIC=1
+                        )
 endif()
 
 setup_cocos_extension_config(${target_name})

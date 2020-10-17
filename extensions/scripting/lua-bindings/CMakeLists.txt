@@ -166,8 +166,8 @@ target_link_libraries(${EGNX_LUA_LIB} ${lua_ext_depend})
 target_include_directories(${EGNX_LUA_LIB}
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
-    INTERFACE ${cocos_root}/cocos/scripting/lua-bindings/auto
-    INTERFACE ${cocos_root}/cocos/scripting/lua-bindings/manual
+    INTERFACE ${cocos_root}/extensions/scripting/lua-bindings/auto
+    INTERFACE ${cocos_root}/extensions/scripting/lua-bindings/manual
 )
 
 if(WINDOWS)
