@@ -119,15 +119,9 @@ void Control::sendActionsForControlEvents(EventType controlEvents)
                 invocation->invoke(this);
             }
 
-#if CC_ENABLE_SCRIPT_BINDING && COCOS2D_VERSION < 0x00040000
-            //Call ScriptFunc
-            if (kScriptTypeLua == _scriptType)
-#endif
-            {
-                cocos2d::BasicScriptData data(this,(void*)&controlEvents);
-                cocos2d::ScriptEvent event(cocos2d::kControlEvent,(void*)&data);
-                cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(event);
-            }
+            cocos2d::BasicScriptData data(this,(void*)&controlEvents);
+            cocos2d::ScriptEvent event(cocos2d::kControlEvent,(void*)&data);
+            cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(event);
         }
     }
 	release();
