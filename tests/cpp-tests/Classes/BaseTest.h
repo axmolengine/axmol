@@ -27,7 +27,10 @@
 #define _CPPTESTS_BASETEST_H__
 
 #include "cocos2d.h"
- #include "extensions/cocos-ext.h"
+#include "extensions/cocos-ext.h"
+#include "GUI/CCControlExtension/CCControlExtensions.h"
+#include "GUI/CCScrollView/CCScrollView.h"
+#include "GUI/CCScrollView/CCTableView.h"
 #include "VisibleRect.h"
 
 class TestSuite;
