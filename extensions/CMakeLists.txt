@@ -3,6 +3,8 @@
 # currently 7 extensions
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
+option(BUILD_EXTENSION_GUI "Build extension GUI" ON)
+
 option(BUILD_EXTENSION_ASSETMANAGER "Build extension asset-manager" ON)
 option(BUILD_EXTENSION_PARTICLE3D "Build extension Particle3D" ON)
 option(BUILD_EXTENSION_PHYSICS_NODE "Build extension physics-nodes" ON)
@@ -60,6 +62,10 @@ function(setup_cocos_extension_config target_name)
   endif()
 
 endfunction()
+
+if(BUILD_EXTENSION_GUI)
+  add_subdirectory(GUI)
+endif()
 
 if(BUILD_EXTENSION_ASSETMANAGER)
   add_subdirectory(assets-manager)

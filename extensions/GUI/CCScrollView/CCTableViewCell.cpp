@@ -1,4 +1,6 @@
 /****************************************************************************
+ Copyright (c) 2012 cocos2d-x.org
+ Copyright (c) 2010 Sangwoo Im
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -22,20 +24,23 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CUSTOMTABELVIEWCELL_H__
-#define __CUSTOMTABELVIEWCELL_H__
+#include "CCTableViewCell.h"
 
-#include "cocos2d.h"
-#include "extensions/cocos-ext.h"
-#include "GUI/CCControlExtension/CCControlExtensions.h"
-#include "GUI/CCScrollView/CCScrollView.h"
-#include "GUI/CCScrollView/CCTableView.h"
+NS_CC_EXT_BEGIN
 
-class CustomTableViewCell : public cocos2d::extension::TableViewCell
+void TableViewCell::reset()
 {
-public:
-	virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags) override;
-};
+    _idx = CC_INVALID_INDEX;
+}
 
-#endif /* __CUSTOMTABELVIEWCELL_H__ */
+ssize_t TableViewCell::getIdx() const
+{
+    return _idx;
+}
 
+void TableViewCell::setIdx(ssize_t idx)
+{
+    _idx = idx;
+}
+
+NS_CC_EXT_END

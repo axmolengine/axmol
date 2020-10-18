@@ -1,4 +1,6 @@
 /****************************************************************************
+ Copyright (c) 2012 cocos2d-x.org
+ Copyright (c) 2010 Sangwoo Im
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -22,20 +24,45 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CUSTOMTABELVIEWCELL_H__
-#define __CUSTOMTABELVIEWCELL_H__
+#ifndef __CCTABLEVIEWCELL_H__
+#define __CCTABLEVIEWCELL_H__
 
-#include "cocos2d.h"
-#include "extensions/cocos-ext.h"
-#include "GUI/CCControlExtension/CCControlExtensions.h"
-#include "GUI/CCScrollView/CCScrollView.h"
-#include "GUI/CCScrollView/CCTableView.h"
+#include "extensions/ExtensionMacros.h"
+#include "2d/CCNode.h"
+#include "extensions/ExtensionExport.h"
 
-class CustomTableViewCell : public cocos2d::extension::TableViewCell
+/**
+ * @addtogroup ui
+ * @{
+ */
+NS_CC_EXT_BEGIN
+
+
+/**
+ * Abstract class for SWTableView cell node
+ */
+class CC_EX_DLL TableViewCell: public Node
 {
 public:
-	virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags) override;
+    CREATE_FUNC(TableViewCell);
+    
+    TableViewCell() {}
+    /**
+     * The index used internally by SWTableView and its subclasses
+     */
+    ssize_t getIdx() const;
+    void setIdx(ssize_t uIdx);
+    /**
+     * Cleans up any resources linked to this cell and resets <code>idx</code> property.
+     */
+    void reset();
+
+private:
+    ssize_t _idx;
 };
 
-#endif /* __CUSTOMTABELVIEWCELL_H__ */
+NS_CC_EXT_END
+// end of ui group
+/// @}
 
+#endif /* __CCTABLEVIEWCELL_H__ */
