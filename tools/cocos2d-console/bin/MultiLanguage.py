@@ -93,16 +93,20 @@ class MultiLanguage(object):
 
         # get the strings info
         if os.path.isfile(cfg_file_path):
-            f = open(cfg_file_path)
+            if(sys.version_info.major >= 3):
+                f = open(cfg_file_path,'r', encoding='UTF-8')
+            else:
+                f = open(cfg_file_path)
             self.cfg_info = json.load(f, encoding='utf-8')
             f.close()
-
-            if self.cfg_info.has_key(cur_lang_key):
+            
+            # python3 if self.cfg_info.has_key(cur_lang_key):
+            if (cur_lang_key in self.cfg_info):
                 self.cur_lang_strings = self.cfg_info[cur_lang_key]
             else:
                 self.cur_lang_strings = None
 
-            if self.cfg_info.has_key(MultiLanguage.DEFAULT_LANGUAGE):
+            if MultiLanguage.DEFAULT_LANGUAGE in self.cfg_info: # if self.cfg_info.has_key(MultiLanguage.DEFAULT_LANGUAGE):
                 self.default_lang_strings = self.cfg_info[MultiLanguage.DEFAULT_LANGUAGE]
             else:
                 self.default_lang_strings = None
@@ -132,7 +136,7 @@ class MultiLanguage(object):
 
     def has_key(self, key, strings_info):
         ret = False
-        if strings_info is not None and strings_info.has_key(key):
+        if strings_info is not None and (key in strings_info): # if strings_info is not None and strings_info.has_key(key):
             ret = True
 
         return ret
@@ -154,7 +158,7 @@ class MultiLanguage(object):
         else:
             ret= key
 
-        if isinstance(ret, unicode):
+        if isinstance(ret, str): # if isinstance(ret, unicode):
             ret = ret.encode(self.encoding)
 
         return ret

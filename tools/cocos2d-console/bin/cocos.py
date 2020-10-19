@@ -37,8 +37,13 @@ COCOS2D_CONSOLE_VERSION = '2.3'
 
 class Cocos2dIniParser:
     def __init__(self):
-        import ConfigParser
-        self._cp = ConfigParser.ConfigParser(allow_no_value=True)
+        if(sys.version_info.major >= 3):
+            import configparser # import ConfigParser
+            self._cp = configparser.ConfigParser(allow_no_value=True)
+        else:
+            import ConfigParser
+            self._cp = ConfigParser.ConfigParser(allow_no_value=True)
+
         self._cp.optionxform = str
 
         # read global config file
@@ -460,7 +465,7 @@ class CCPlugin(object):
         if os.path.isdir(cocos2dx_path):
             return cocos2dx_path
 
-        if cls.get_cocos2d_mode() is not "distro":
+        if cls.get_cocos2d_mode() != "distro": # if cls.get_cocos2d_mode() is not "distro":
             # In 'distro' mode this is not a warning since
             # the source code is not expected to be installed
             Logging.warning(MultiLanguage.get_string('COCOS_WARNING_ENGINE_NOT_FOUND'))
@@ -975,7 +980,7 @@ def _check_python_version():
     major_ver = sys.version_info[0]
     minor_ver = sys.version_info[1]
     ret = True
-    if major_ver != 2:
+    if major_ver < 2:
         ret = False
     elif minor_ver < 7:
         ret = False
