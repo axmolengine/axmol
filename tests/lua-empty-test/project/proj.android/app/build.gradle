@@ -89,7 +89,7 @@ android.applicationVariants.all { variant ->
         }
 
         copy {
-            from "${projectDir}/../../../../../cocos/scripting/lua-bindings/script"
+            from "${projectDir}/../../../../../extensions/scripting/lua-bindings/script"
             into  "${projectDir}/assets/src/cocos"
         }
     }

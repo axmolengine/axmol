@@ -141,7 +141,7 @@ function update_cocos_files()
 function generate_pull_request_for_binding_codes_and_cocosfiles()
 {
     local COCOS_ROBOT_REMOTE="https://${GH_USER}:${GH_PASSWORD}@github.com/${GH_USER}/cocos2d-x.git"
-    local LUA_AUTO_GENERATE_SCRIPT_PATH="$COCOS2DX_ROOT/cocos/scripting/lua-bindings/auto"
+    local LUA_AUTO_GENERATE_SCRIPT_PATH="$COCOS2DX_ROOT/extensions/scripting/lua-bindings/auto"
     local ELAPSEDSECS=`date +%s`
     local COCOS_BRANCH="update_lua_bindings_$ELAPSEDSECS"
     local COMMITTAG="[ci skip][AUTO]: updating luabinding & cocos_file.json automatically"

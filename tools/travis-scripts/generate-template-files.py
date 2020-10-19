@@ -43,7 +43,7 @@ class CocosFileList:
         self.fileList_com=[]
         self.fileList_lua=[]
 
-        self.luaPath = ["cocos/scripting/lua-bindings", "external/lua", "tools/bindings-generator", "tools/tolua"]
+        self.luaPath = ["extensions/scripting/lua-bindings", "external/lua", "tools/bindings-generator", "tools/tolua"]
 
     def readIngoreFile(self, fileName):
         """

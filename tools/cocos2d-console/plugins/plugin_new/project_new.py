@@ -535,59 +535,6 @@ class TPCreator(object):
                         os.remove(dstfile)
                     shutil.copy2(srcfile, dstfile)
 
-    def append_x_engine(self, v):
-        # FIXME this is a hack, but in order to fix it correctly the cocos-project-template.json
-        # file probably will need to be re-designed.
-        # As a quick (horrible) fix, we check if we are in distro mode.
-        # If so, we don't do the "append_x_engine" step
-        if cocos.CCPlugin.get_cocos2d_mode() == 'distro':
-            return
-
-        src = os.path.join(self.cocos_root, v['from'])
-        dst = os.path.join(self.project_dir, v['to'])
-
-        # check cocos engine exist
-        cocosx_files_json = os.path.join(
-            src, 'templates', 'cocos2dx_files.json')
-        if not os.path.exists(cocosx_files_json):
-            message = MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT', cocosx_files_json)
-            raise cocos.CCPluginError(message, cocos.CCPluginError.ERROR_PATH_NOT_FOUND)
-
-        f = open(cocosx_files_json)
-        data = json.load(f)
-        f.close()
-
-        fileList = data['common']
-        if self.lang == 'lua':
-            fileList = fileList + data['lua']
-
-        if self.lang == 'js' and 'js' in data.keys():
-            fileList = fileList + data['js']
-
-        # begin copy engine
-        cocos.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_COPY_X'))
-
-        for index in range(len(fileList)):
-            srcfile = os.path.join(src, fileList[index])
-            dstfile = os.path.join(dst, fileList[index])
-
-            srcfile = cocos.add_path_prefix(srcfile)
-            dstfile = cocos.add_path_prefix(dstfile)
-
-            if not os.path.exists(os.path.dirname(dstfile)):
-                os.makedirs(cocos.add_path_prefix(os.path.dirname(dstfile)))
-
-            # copy file or folder
-            if os.path.exists(srcfile):
-                if os.path.isdir(srcfile):
-                    if os.path.exists(dstfile):
-                        shutil.rmtree(dstfile)
-                    shutil.copytree(srcfile, dstfile)
-                else:
-                    if os.path.exists(dstfile):
-                        os.remove(dstfile)
-                    shutil.copy2(srcfile, dstfile)
-
     def append_from_template(self, v):
         cocos.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_APPEND_TEMPLATE'))
         cocos.copy_files_with_config(v, self.tp_dir, self.project_dir)

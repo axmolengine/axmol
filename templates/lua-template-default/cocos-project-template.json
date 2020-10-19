@@ -14,7 +14,7 @@
         },
         "append_dir": [
             {
-                "from": "cocos/scripting/lua-bindings/script",
+                "from": "extensions/scripting/lua-bindings/script",
                 "to": "src/cocos",
                 "exclude": []
             },
@@ -29,42 +29,28 @@
                 "exclude": []
             },
             {
-                "from": "external/win32-specific/gles/prebuilt",
+                "from": "external/angle/prebuilt/win32",
                 "to": "runtime/win32",
                 "include": [
                     "*.dll"
                 ]
             },
             {
-                "from": "external/win32-specific/icon/prebuilt",
+                "from": "external/openal/prebuilt/win32",
                 "to": "runtime/win32",
                 "include": [
                     "*.dll"
                 ]
             },
             {
-                "from": "external/win32-specific/MP3Decoder/prebuilt",
+                "from": "external/win32-specific/iconv/prebuilt",
                 "to": "runtime/win32",
                 "include": [
                     "*.dll"
                 ]
             },
             {
-                "from": "external/win32-specific/OggDecoder/prebuilt",
-                "to": "runtime/win32",
-                "include": [
-                    "*.dll"
-                ]
-            },
-            {
-                "from": "external/win32-specific/OpenalSoft/prebuilt",
-                "to": "runtime/win32",
-                "include": [
-                    "*.dll"
-                ]
-            },
-            {
-                "from": "external/win32-specific/zlib/prebuilt",
+                "from": "external/zlib/prebuilt/win32",
                 "to": "runtime/win32",
                 "include": [
                     "*.dll"
@@ -79,13 +65,6 @@
             },
             {
                 "from": "external/lua/luajit/prebuilt/win32",
-                "to": "runtime/win32",
-                "include": [
-                    "*.dll"
-                ]
-            },
-            {
-                "from": "external/websockets/prebuilt/win32",
                 "to": "runtime/win32",
                 "include": [
                     "*.dll"
@@ -106,13 +85,9 @@
                 "proj.win32/HelloLua.sdf"
             ]
         },
-        "append_x_engine": {
-            "from": ".",
-            "to": "frameworks/cocos2d-x"
-        },
         "append_dir": [
             {
-                "from": "cocos/scripting/lua-bindings/manual/lua_module_register.h",
+                "from": "extensions/scripting/lua-bindings/manual/lua_module_register.h",
                 "to": "frameworks/runtime-src/Classes/"
             }
         ],

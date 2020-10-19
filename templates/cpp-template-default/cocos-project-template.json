@@ -1,9 +1,5 @@
 {
       "do_default":{
-         "append_x_engine":{
-            "from":".",
-            "to":"cocos2d"
-         },
          "project_rename":{
             "src_project_name":"HelloCpp",
             "files":[
