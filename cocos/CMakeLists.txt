@@ -62,7 +62,7 @@ endif()
 set(EGNX_VERSION 1.0)
 
 if(NOT DEFINED EGNX_CORE_LIB)
-    set(EGNX_CORE_LIB libcocos2d CACHE INTERNAL "The EGNX core lib name" )
+    set(EGNX_CORE_LIB cocos2d CACHE INTERNAL "The EGNX core lib name" )
 endif()
 
 if (NOT DEFINED CC_FORCE_USE_GLES)
