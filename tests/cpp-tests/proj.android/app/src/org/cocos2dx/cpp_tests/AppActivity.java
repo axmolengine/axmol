@@ -27,6 +27,7 @@ package org.cocos2dx.cpp_tests;
 import android.os.Bundle;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
+import org.cocos2dx.lib.SharedLoader;
 
 public class AppActivity extends Cocos2dxActivity {
     static {
