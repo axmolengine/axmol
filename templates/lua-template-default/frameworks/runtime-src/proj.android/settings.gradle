@@ -1,4 +1,5 @@
 include ':libcocos2dx'
-project(':libcocos2dx').projectDir = new File(settingsDir, '../../cocos2d-x/cocos/platform/android/libcocos2dx')
+project(':libcocos2dx').projectDir = new File(Paths.get("${System.env.COCOS2DX_ROOT}/cocos/platform/android/libcocos2dx").toUri())
 include ':HelloLua'
 project(':HelloLua').projectDir = new File(settingsDir, 'app')
+rootProject.name = "HelloLua"

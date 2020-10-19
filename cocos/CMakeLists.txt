@@ -159,7 +159,7 @@ set_target_properties(${EGNX_CORE_LIB}
 
 ## Lua bindings lib
 # if(BUILD_LUA_LIBS)
-#     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/scripting/lua-bindings ${ENGINE_BINARY_PATH}/cocos/lua-bindings)
+#     add_subdirectory(${COCOS2DX_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/cocos/lua-bindings)
 # endif()
 
 if(XCODE OR VS)

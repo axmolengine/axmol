@@ -13,7 +13,7 @@
             "to": "res"
         },
         {
-            "from": "../../../../cocos/scripting/lua-bindings/script",
+            "from": "../../../../extensions/scripting/lua-bindings/script",
             "to": "src/cocos"
         },
         {

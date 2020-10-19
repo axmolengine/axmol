@@ -94,7 +94,7 @@ android.applicationVariants.all { variant ->
         }
 
         // copy {
-        //     from "${projectDir}/../../../cocos2d-x/cocos/scripting/lua-bindings/script"
+        //     from "${projectDir}/../../../cocos2d-x/extensions/scripting/lua-bindings/script"
         //     into  dest_assets_folder + "/src/cocos"
         // }
     }

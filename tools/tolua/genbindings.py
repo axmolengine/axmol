@@ -196,7 +196,7 @@ def main():
     try:
 
         tolua_root = '%s/tools/tolua' % project_root
-        output_dir = '%s/cocos/scripting/lua-bindings/auto' % project_root
+        output_dir = '%s/extensions/scripting/lua-bindings/auto' % project_root
 
         cmd_args = {
                     'cocos2dx.ini' : ('cocos2d-x', 'lua_cocos2dx_auto'), \
