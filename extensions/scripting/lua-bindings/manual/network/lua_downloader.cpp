@@ -24,7 +24,6 @@ THE SOFTWARE.
 #include "lua_downloader.h"
 
 #include "network/CCDownloader.h"
-#include "lua_extensions.h"
 #include <iostream>
 
 #include <unordered_map>
