@@ -1,7 +1,7 @@
 #include "scripting/lua-bindings/auto/lua_cocos2dx_studio_auto.hpp"
 #include "libeditor/libeditor.h"
 #include "libeditor/CCComExtensionData.h"
-#include "libccs21/ActionTimeline/CCActionTimelineCache.h" // TODO-2020: does the timeline cache could common?
+#include "libccs30/ActionTimeline/CCActionTimelineCache.h" // TODO-2020: does the timeline cache could common?
 #include "scripting/lua-bindings/manual/cocostudio/lua-cocos-studio-conversions.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"

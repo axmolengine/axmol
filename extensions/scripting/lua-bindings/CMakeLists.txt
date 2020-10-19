@@ -160,7 +160,7 @@ set(lua_bindings_headers
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 
-set(EGNX_LUA_LIB libcclua CACHE INTERNAL "The EGNX lua bindings lib name" )
+set(EGNX_LUA_LIB luacocos2d CACHE INTERNAL "The EGNX lua bindings lib name" )
 
 add_library(${EGNX_LUA_LIB} STATIC ${lua_bindings_files})
 target_link_libraries(${EGNX_LUA_LIB} ${EGNX_CORE_LIB})

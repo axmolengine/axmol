@@ -32,7 +32,7 @@
 #include "scripting/lua-bindings/manual/cocos2d/LuaScriptHandlerMgr.h"
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
 #include "libeditor/libeditor.h"
-#include "libccs21/ActionTimeline/CCActionTimelineCache.h"
+#include "libccs30/ActionTimeline/CCActionTimelineCache.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
 #include "scripting/lua-bindings/manual/cocostudio/CustomGUIReader.h"
 
