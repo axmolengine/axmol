@@ -75,10 +75,10 @@ namespace cocostudio
     class CCS_DLL NodeReaderProtocol
     {
     public:
-        NodeReaderProtocol() {};
-        virtual ~NodeReaderProtocol() {};
+        NodeReaderProtocol();
+        virtual ~NodeReaderProtocol();
         
-        virtual void setCurrentCustomClassName(const char* className) {};
+        virtual void setCurrentCustomClassName(const char* className);
         virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                                      flatbuffers::FlatBufferBuilder* builder) = 0;
         virtual void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions) = 0;

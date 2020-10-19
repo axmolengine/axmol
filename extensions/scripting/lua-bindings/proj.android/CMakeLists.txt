@@ -14,7 +14,7 @@ add_library(${target_name} STATIC
   ${${target_name}_src}
 )
 
-get_target_property(lua_header ext_luajit INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(lua_header ${LUA_ENGINE} INTERFACE_INCLUDE_DIRECTORIES)
 get_target_property(tolua_header tolua INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(${target_name}
   PRIVATE ../../..
