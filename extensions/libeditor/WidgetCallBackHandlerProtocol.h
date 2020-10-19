@@ -34,8 +34,7 @@ namespace cocostudio {
     class CCS_DLL WidgetCallBackHandlerProtocol
     {
     public:
-        WidgetCallBackHandlerProtocol() {};
-        virtual ~WidgetCallBackHandlerProtocol() {};
+        virtual ~WidgetCallBackHandlerProtocol();
         
         virtual cocos2d::ui::Widget::ccWidgetTouchCallback onLocateTouchCallback(const std::string& callBackName);
         virtual cocos2d::ui::Widget::ccWidgetClickCallback onLocateClickCallback(const std::string& callBackName);

@@ -137,16 +137,6 @@ elseif(ANDROID)
         )
 endif()
 
-option(BUILD_YASIO_LUA "Build yasio with cclua support" ON)
-
-if(BUILD_YASIO_LUA)
-    set(lua_bindings_files
-        ${lua_bindings_files}
-        ${cocos_root}/external/yasio/bindings/lyasio.cpp
-        ${cocos_root}/external/yasio/bindings/yasio_cclua.cpp)
-
-endif()
-
 set(lua_bindings_files
     ${lua_bindings_manual_files}
     ${lua_bindings_auto_files}
@@ -157,6 +147,16 @@ set(lua_bindings_headers
     ${lua_bindings_auto_headers}
     ${COCOS_DEPRECATED_HEADER}
     )
+
+option(BUILD_YASIO_LUA "Build yasio with cclua support" ON)
+
+if(BUILD_YASIO_LUA)
+    message(STATUS "BUILD_YASIO_LUA=${BUILD_YASIO_LUA}")
+    set(lua_bindings_files
+        ${lua_bindings_files}
+        "${cocos_root}/external/yasio/bindings/lyasio.cpp"
+        "${cocos_root}/external/yasio/bindings/yasio_cclua.cpp")
+endif()
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 

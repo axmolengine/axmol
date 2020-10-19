@@ -42,6 +42,14 @@ static void onLoadSpriteFramesWithFileDummy(std::string&)
 {
 }
 
+namespace cocostudio
+{
+    NodeReaderProtocol::NodeReaderProtocol() {};
+    NodeReaderProtocol::~NodeReaderProtocol() {};
+        
+    void NodeReaderProtocol::setCurrentCustomClassName(const char* className) {};
+}
+
 namespace cocos2d {
     namespace wext {
         bool(*onBeforeLoadObjectAsset)(cocos2d::Node*, cocos2d::ResourceData& assets, int index/*= 0*/) = &onLoadObjectAssetDummy;
