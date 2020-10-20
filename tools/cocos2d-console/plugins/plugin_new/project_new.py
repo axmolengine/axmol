@@ -44,7 +44,7 @@ class CCPluginNew(cocos.CCPlugin):
 
     def init(self, args):
         self._projname = args.name
-        self._projdir = unicode(
+        self._projdir = cocos.encode_with(
             os.path.abspath(os.path.join(args.directory, self._projname)), "utf-8")
         self._lang = args.language
         self._package = args.package
@@ -57,7 +57,7 @@ class CCPluginNew(cocos.CCPlugin):
         # search for custom paths
         if args.engine_path is not None:
             self._cocosroot = os.path.abspath(args.engine_path)
-            self._cocosroot = unicode(self._cocosroot, "utf-8")
+            self._cocosroot = cocos.encode_with(self._cocosroot, "utf-8")
             tp_path = os.path.join(self._cocosroot, "templates")
             if os.path.isdir(tp_path):
                 self._templates_paths.append(tp_path)
@@ -248,7 +248,7 @@ class CCPluginNew(cocos.CCPlugin):
             data[cocos_project.Project.KEY_HAS_NATIVE] = True
 
         # record the engine version if not predefined
-        if not data.has_key(cocos_project.Project.KEY_ENGINE_VERSION):
+        if not (cocos_project.Project.KEY_ENGINE_VERSION in data):
             engine_version = utils.get_engine_version(self._cocosroot)
             if engine_version is not None:
                 data[cocos_project.Project.KEY_ENGINE_VERSION] = engine_version
@@ -420,9 +420,14 @@ class TPCreator(object):
             message = MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT', tp_json_path)
             raise cocos.CCPluginError(message, cocos.CCPluginError.ERROR_PATH_NOT_FOUND)
 
-        f = open(tp_json_path)
-        # keep the key order
-        tpinfo = json.load(f, encoding='utf8', object_pairs_hook=OrderedDict)
+        if(sys.version_info.major >= 3):
+            f = open(tp_json_path, encoding='utf8')
+            # keep the key order
+            tpinfo = json.load(f, object_pairs_hook=OrderedDict)
+        else:
+            f = open(tp_json_path)
+            # keep the key order
+            tpinfo = json.load(f, encoding='utf8', object_pairs_hook=OrderedDict)
 
         # read the default creating step
         if 'do_default' not in tpinfo:
@@ -473,7 +478,12 @@ class TPCreator(object):
         self.do_cmds(cmds)
 
     def do_cmds(self, cmds):
-        for k, v in cmds.iteritems():
+        items = None
+        if(sys.version_info.major >= 3):
+            items = cmds.items()
+        else:
+            items = cmds.iteritems()
+        for k, v in items:
             # call cmd method by method/cmd name
             # get from
             # http://stackoverflow.com/questions/3951840/python-how-to-invoke-an-function-on-an-object-dynamically-by-name
