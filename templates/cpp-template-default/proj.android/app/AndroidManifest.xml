@@ -14,7 +14,7 @@
         
         <!-- Tell Cocos2dxActivity the name of our .so -->
         <meta-data android:name="android.app.lib_name"
-                   android:value="MyGame" />
+                   android:value="HelloCpp" />
 
         <activity
             android:name="org.cocos2dx.cpp.AppActivity"

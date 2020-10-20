@@ -12,7 +12,7 @@
         
         <!-- Tell Cocos2dxActivity the name of our .so -->
 		<meta-data android:name="android.app.lib_name"
-				   android:value="cocos2dlua" />
+				   android:value="HelloLua" />
 		
         <activity
             android:name="org.cocos2dx.lua.AppActivity"

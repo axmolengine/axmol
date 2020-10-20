@@ -643,6 +643,29 @@ class TPCreator(object):
                 cocos.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
                                                                os.path.join(dst_project_dir, dst)))
 
+    def project_replace_so_name(self, v):
+        """ will modify the content of the file
+        """
+        src_so_name = v['src_so_name']
+        dst_so_name = self.project_name
+        if src_so_name == dst_so_name:
+            return
+
+        cocos.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_REPLACE_SO_FMT',
+                                                    (src_so_name, dst_so_name)))
+        files = v['files']
+        if not dst_so_name:
+            raise cocos.CCPluginError(MultiLanguage.get_string('NEW_ERROR_PKG_NAME_NOT_SPECIFIED'),
+                                      cocos.CCPluginError.ERROR_WRONG_ARGS)
+        for f in files:
+            dst = f.replace("PROJECT_NAME", self.project_name)
+            dstpath = os.path.join(self.project_dir, dst)
+            if os.path.exists(dstpath):
+                replace_string(dstpath, src_so_name, dst_so_name)
+            else:
+                cocos.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
+                                                               dstpath))
+
     def project_replace_mac_bundleid(self, v):
         """ will modify the content of the file
         """
