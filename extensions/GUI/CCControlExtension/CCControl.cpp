@@ -118,10 +118,11 @@ void Control::sendActionsForControlEvents(EventType controlEvents)
             for(const auto &invocation : invocationList) {
                 invocation->invoke(this);
             }
-
+#if CC_ENABLE_SCRIPT_BINDING
             cocos2d::BasicScriptData data(this,(void*)&controlEvents);
             cocos2d::ScriptEvent event(cocos2d::kControlEvent,(void*)&data);
             cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(event);
+#endif
         }
     }
 	release();
