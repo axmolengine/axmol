@@ -5,7 +5,7 @@ import os
 import sys
 import json
 import utils
-import modify_template
+from . import modify_template
 import re
 import cocos
 

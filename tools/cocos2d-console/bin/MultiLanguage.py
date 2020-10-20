@@ -35,7 +35,7 @@ class MultiLanguage(object):
         ret = []
         if info is not None:
             for key in info.keys():
-                if isinstance(key, unicode):
+                if cocos.isunicode(key):
                     ret.append(key.encode('utf-8'))
 
         return ret
@@ -56,12 +56,12 @@ class MultiLanguage(object):
             if isinstance(fmt_value, tuple):
                 dst_values = []
                 for value in fmt_value:
-                    if isinstance(value, unicode):
+                    if cocos.isunicode(value):
                         dst_values.append(value.encode(cls.get_instance().get_encoding()))
                     else:
                         dst_values.append(value)
                 ret = fmt % tuple(dst_values)
-            elif isinstance(fmt_value, unicode):
+            elif cocos.isunicode(fmt_value):
                 ret = fmt % fmt_value.encode(cls.get_instance().get_encoding())
             else:
                 ret = fmt % fmt_value
@@ -76,6 +76,7 @@ class MultiLanguage(object):
     def __init__(self):
         cfg_file_path = os.path.join(get_current_path(), MultiLanguage.CONFIG_FILE_NAME)
 
+        # python3 always unicode, so no needs to translate locale at python scripts
         try:
             sys_lang, self.encoding = locale.getdefaultlocale()
         except:
@@ -83,9 +84,9 @@ class MultiLanguage(object):
             self.encoding = None
             pass
 
-        if self.encoding is None:
+        if (self.encoding is None) or sys.version_info.major >= 3:
             self.encoding = 'utf-8'
-
+        
         if sys_lang is None:
             cur_lang_key = MultiLanguage.DEFAULT_LANGUAGE
         else:
@@ -94,10 +95,11 @@ class MultiLanguage(object):
         # get the strings info
         if os.path.isfile(cfg_file_path):
             if(sys.version_info.major >= 3):
-                f = open(cfg_file_path,'r', encoding='UTF-8')
+                f = open(cfg_file_path,'r', encoding='utf-8')
+                self.cfg_info = json.load(f)
             else:
                 f = open(cfg_file_path)
-            self.cfg_info = json.load(f, encoding='utf-8')
+                self.cfg_info = json.load(f, encoding='utf-8')
             f.close()
             
             # python3 if self.cfg_info.has_key(cur_lang_key):
@@ -158,7 +160,6 @@ class MultiLanguage(object):
         else:
             ret= key
 
-        if isinstance(ret, str): # if isinstance(ret, unicode):
-            ret = ret.encode(self.encoding)
+        ret = cocos.transcode(ret, self.encoding)
 
         return ret

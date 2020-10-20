@@ -21,7 +21,7 @@ import re
 import sys
 import shutil
 import json
-import build_web
+from . import build_web
 import utils
 
 class CCPluginCompile(cocos.CCPlugin):
@@ -221,7 +221,7 @@ class CCPluginCompile(cocos.CCPlugin):
         try:
             return multiprocessing.cpu_count()
         except Exception:
-            print MultiLanguage.get_string('COMPILE_DETECT_CPU_FAILED')
+            print(MultiLanguage.get_string('COMPILE_DETECT_CPU_FAILED'))
             return 1
 
     def _get_output_dir(self):

@@ -1,2 +1,2 @@
-from project_run import CCPluginRun
+from .project_run import CCPluginRun
 

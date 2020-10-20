@@ -16,11 +16,15 @@ import sys
 import os
 import cocos
 from MultiLanguage import MultiLanguage
-import BaseHTTPServer
 import webbrowser
 import threading
 import subprocess
 import re
+
+if(sys.version_info.major >= 3):
+    from http.server import BaseHTTPRequestHandler,HTTPServer
+else:
+    import BaseHTTPServer
 
 class CCPluginRun(cocos.CCPlugin):
     """
@@ -264,7 +268,10 @@ class CCPluginRun(cocos.CCPlugin):
 
         from SimpleHTTPServer import SimpleHTTPRequestHandler
         HandlerClass = SimpleHTTPRequestHandler
-        ServerClass  = BaseHTTPServer.HTTPServer
+        if(sys.version_info.major >= 3):
+            ServerClass  = HTTPServer.HTTPServer
+        else:
+            ServerClass  = BaseHTTPServer.BaseHTTPServer
         Protocol     = "HTTP/1.0"
         HandlerClass.protocol_version = Protocol
 

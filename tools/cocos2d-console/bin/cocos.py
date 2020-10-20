@@ -34,6 +34,29 @@ from MultiLanguage import MultiLanguage
 
 COCOS2D_CONSOLE_VERSION = '2.3'
 
+def encode_with(text,encoding):
+    if(sys.version_info.major >= 3):
+        return text
+    else:
+        return unicode(text, encoding)
+
+def str_join(s, v):
+    if(sys.version_info.major >= 3):
+        return s.join(v)
+    else:
+        return string.join(v, s)
+
+def isunicode(text):
+    if(sys.version_info.major >= 3):
+        return isinstance(text, str)
+    else:
+        return isinstance(text, unicode)
+
+def transcode(text,encoding):
+    if(sys.version_info.major >= 3 and encoding=="utf-8"):
+        return text
+    else:
+        return text.encode(encoding)
 
 class Cocos2dIniParser:
     def __init__(self):
@@ -474,7 +497,7 @@ class CCPlugin(object):
     @classmethod
     def get_console_path(cls):
         """returns the path where cocos console is installed"""
-        run_path = unicode(get_current_path(), "utf-8")
+        run_path = encode_with(get_current_path(), "utf-8")
         return run_path
 
     @classmethod
@@ -502,7 +525,7 @@ class CCPlugin(object):
             # Try two: cocos2d-x/../../templates
             possible_paths = [['templates'], ['..', '..', 'templates']]
             for p in possible_paths:
-                p = string.join(p, os.sep)
+                p = str_join(os.sep, p)
                 template_path = os.path.abspath(os.path.join(path, p))
                 try:
                     if os.path.isdir(template_path):

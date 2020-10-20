@@ -6,7 +6,7 @@ import sys
 import shutil
 import json
 import utils
-import gen_prebuilt_mk
+from . import gen_prebuilt_mk
 
 import cocos
 from MultiLanguage import MultiLanguage
