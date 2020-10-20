@@ -60,26 +60,11 @@ namespace
 CommandBufferGL::CommandBufferGL()
 {
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
-
-#if CC_ENABLE_CACHE_TEXTURE_DATA
-    _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*){
-       if(_generatedFBO)
-           glGenFramebuffers(1, &_generatedFBO); //recreate framebuffer
-    });
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
-#endif
 }
 
 CommandBufferGL::~CommandBufferGL()
 {
-    if(_generatedFBO)
-        glDeleteFramebuffers(1, &_generatedFBO);
-
     cleanResources();
-
-#if CC_ENABLE_CACHE_TEXTURE_DATA
-    Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
-#endif
 }
 
 void CommandBufferGL::beginFrame()
