@@ -103,7 +103,7 @@ namespace backend {
         void convertRGBA8ToRGBA4(const unsigned char* data, size_t dataLen, unsigned char* outData);
         void convertRGBA8ToRGB5A1(const unsigned char* data, size_t dataLen, unsigned char* outData);
 
-
+        //XXX to RGBA8
         void convertRGB5A1ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
         void convertRGB565ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
         void convertA8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
