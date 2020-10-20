@@ -115,6 +115,12 @@
                 "frameworks/runtime-src/proj.android/app/build.gradle",
                 "frameworks/runtime-src/proj.android/app/AndroidManifest.xml"            ]
         },
+        "project_replace_so_name": {
+            "src_so_name": "HelloLua",
+            "files": [
+                "frameworks/runtime-src/proj.android/app/AndroidManifest.xml"
+            ]
+        },
         "project_replace_mac_bundleid": {
             "src_bundle_id": "org.cocos2dx.hellolua",
             "files": [

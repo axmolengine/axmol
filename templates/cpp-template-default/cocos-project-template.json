@@ -24,6 +24,12 @@
                "proj.android/app/AndroidManifest.xml"
             ]
          },
+         "project_replace_so_name": {
+            "src_so_name": "HelloCpp",
+            "files": [
+                "proj.android/app/AndroidManifest.xml"
+            ]
+         },
          "project_replace_mac_bundleid": {
             "src_bundle_id": "org.cocos2dx.hellocpp",
             "files": [
