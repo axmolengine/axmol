@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "DictionaryHelper.h"
 #include "CocosStudioExport.h"
 
-#include "pugixml/pugixml_imp.hpp"
+#include "pugixml/pugixml.hpp"
 #include "pugixml/pugiext.hpp"
 
 #include "rapidjson/document-wrapper.h"

@@ -46,7 +46,7 @@ THE SOFTWARE.
 // #include "WidgetReader/ScrollViewReader/ScrollViewReader.h"
 // #include "WidgetReader/ListViewReader/ListViewReader.h"
 #include "CocoLoader.h"
-#include "pugixml/pugixml_imp.hpp"
+#include "pugixml/pugixml.hpp"
 
 
 using namespace cocos2d;
