@@ -102,7 +102,7 @@ static GPUTextureFormatInfo s_textureFormats[] =
     { MTLPixelFormatInvalid,                        MTLPixelFormatInvalid                       }, // RGB8
     { MTLPixelFormat(40/*B5G6R5Unorm*/),            MTLPixelFormatInvalid                       }, // R5G6B5
     { MTLPixelFormat(42/*ABGR4Unorm*/),             MTLPixelFormatInvalid                       }, // RGBA4
-    { MTLPixelFormat(43/*BGR5A1Unorm*/),            MTLPixelFormatInvalid                       }, // RGB5A1
+    { MTLPixelFormat(41/*A1BGR5Unorm*/),            MTLPixelFormatInvalid                       }, // RGB5A1
     { MTLPixelFormatA8Unorm,                        MTLPixelFormatInvalid                       }, // A8
     { MTLPixelFormatInvalid,                        MTLPixelFormatInvalid                       }, // L8
     { MTLPixelFormatInvalid,                        MTLPixelFormatInvalid                       }, // LA8
