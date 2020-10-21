@@ -27,9 +27,9 @@
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#include "libeditor/ActionTimeline/CCActionTimeline.h"
-#include "libccs30/ActionTimeline/CSLoader.h"
-#include "libeditor/ActionTimeline/CCActionTimelineNode.h"
+#include "ActionTimeline/CCActionTimeline.h"
+#include "ActionTimeline/CSLoader.h"
+#include "ActionTimeline/CCActionTimelineNode.h"
 
 int lua_cocos2dx_csloader_CSLoader_createTimeline(lua_State* tolua_S)
 {
