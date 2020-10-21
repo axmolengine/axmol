@@ -24,7 +24,7 @@
 
 #include "ParticleTest.h"
 #include "../testResource.h"
-#include "libeditor/CocosStudioExtension.h"
+#include "cocostudio/CocosStudioExtension.h"
 
 USING_NS_CC;
 
