@@ -350,7 +350,7 @@
         "PACKAGE_WIN_PROJ_NOT_FOUND" : "Not found project file for platform 'win'",
         "PACKAGE_NDK_MODULE_NOT_FOUND" : "Not found 'ndk_module_path' in build config file for platform 'Android'",
         "PACKAGE_NOT_XCODE_PROJ_FMT" : "'%s' is not an Xcode project",
-		"NEW_INFO_STEP_REPLACE_SO_FMT" : "> Replace the project SO name from '%s' to '%s'",
+        "NEW_INFO_STEP_REPLACE_SO_FMT" : "> Replace the project SO name from '%s' to '%s'",
     },
     "zh" : {
         "COCOS_AGREEMENT" : "使用Cocos命令行工具开发时，厦门雅基软件有限公司会搜集开发环境下的使用数据。该数据仅用于汇总分析，并不断创新和改进Cocos产品。收集的数据是匿名的，只位于开发端，包括但不限于：唯一的设备标识，软件版本号，Cocos相关工具产品和具体功能的使用情况。我们将严格保密您的个人隐私，绝不会分享或出售这些数据。您可以选择拒绝分享这些数据，但通过分享这些数据可以帮助Cocos成长。\n\n我们的整个政策可以在以下网址查看：http://www.cocos2d-x.org/licenses.\n\n如有问题，请发送电子邮件至privacy@cocos2d-x.org。\n\n您是否同意发送数据？[Y]同意，[N]不同意\n",
@@ -703,7 +703,7 @@
         "PACKAGE_WIN_PROJ_NOT_FOUND" : "未找到 win 平台的工程文件。",
         "PACKAGE_NDK_MODULE_NOT_FOUND" : "在 Android 平台的 build_cfg.json 文件中未找到 'ndk_module_path'。",
         "PACKAGE_NOT_XCODE_PROJ_FMT" : "'%s' 不是一个 xcode 工程。",
-		"NEW_INFO_STEP_REPLACE_SO_FMT" : "> 替换工程的SO名，'%s' 替换为 '%s'。"
+        "NEW_INFO_STEP_REPLACE_SO_FMT" : "> 替换工程的SO名，'%s' 替换为 '%s'。"
     },
     "zh_tr" : {
         "COCOS_AGREEMENT" : "使用Cocos命令行工具開發時，厦门雅基软件有限公司會搜集開發環境下的使用數據。該數據僅用於匯總分析，並不斷創新和改進Cocos產品。收集的數據是匿名的，只位於開發端，包括但不限於：唯一的設備標識，軟體版本號，Cocos相關工具產品和具體功能的使用情況。我們將嚴格保密您的個人隱私，絕不會分享或出售這些數據。您可以選擇拒絕分享這些數據，但通過分享這些數據可以幫助Cocos成長。\n\n我們的整個政策可以在以下網址查看：http：//www.cocos2d-x.org/licenses。\n\n如有問題，請發送電子郵件至privacy@cocos2d-x.org。\n\n您是否同意發送數據？[Y]同意，[N]不同意\n",
@@ -1055,6 +1055,6 @@
         "PACKAGE_WIN_PROJ_NOT_FOUND" : "未找到 win 平臺的工程檔案。",
         "PACKAGE_NDK_MODULE_NOT_FOUND" : "在 Android 平臺的 build_cfg.json 檔案中未找到 'ndk_module_path'。",
         "PACKAGE_NOT_XCODE_PROJ_FMT" : "'%s' 不是一個 xcode 工程。",
-		"NEW_INFO_STEP_REPLACE_SO_FMT" : "> 替換工程的SO名，'%s' 替換為 '%s'。"
+        "NEW_INFO_STEP_REPLACE_SO_FMT" : "> 替換工程的SO名，'%s' 替換為 '%s'。"
     }
 }
