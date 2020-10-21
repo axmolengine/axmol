@@ -11,13 +11,6 @@
                 "to": ""
             },
             {
-                "from": "plugins/plugin_jscompile/bin",
-                "to": "bin",
-                "include": [
-                    "compiler.jar"
-                ]
-            },
-            {
                 "from": "plugins/plugin_luacompile/bin",
                 "to": "bin",
                 "include": [
@@ -47,13 +40,6 @@
         ],
         "darwin": [
             {
-                "from": "plugins/plugin_jscompile/bin",
-                "to": "bin",
-                "include": [
-                    "jsbcc$"
-                ]
-            },
-            {
                 "from": "plugins/plugin_luacompile/bin",
                 "to": "bin",
                 "include": [
@@ -66,14 +52,6 @@
             }
         ],
         "win32": [
-            {
-                "from": "plugins/plugin_jscompile/bin",
-                "to": "bin",
-                "include": [
-                    "jsbcc.exe",
-                    "*.dll"
-                ]
-            },
             {
                 "from": "plugins/plugin_luacompile/bin",
                 "to": "bin",
@@ -88,13 +66,6 @@
             }
         ],
         "linux": [
-            {
-                "from": "plugins/plugin_jscompile/bin",
-                "to": "bin",
-                "include": [
-                    "linux/*"
-                ]
-            },
             {
                 "from": "plugins/plugin_luacompile/bin",
                 "to": "bin",
