@@ -122,22 +122,37 @@ class CocosZipInstaller(object):
         except OSError:
             pass
         print("==> Ready to download '%s' from '%s'" % (self._filename, self._url))
-        import urllib2
-        try:
-            u = urllib2.urlopen(self._url)
-        except urllib2.HTTPError as e:
-            if e.code == 404:
-                print("==> Error: Could not find the file from url: '%s'" % (self._url))
-            print("==> Http request failed, error code: " + str(e.code) + ", reason: " + e.read())
-            sys.exit(1)
-
-        f = open(self._filename, 'wb')
-        meta = u.info()
-        content_len = meta.getheaders("Content-Length")
+        
         file_size = 0
+        if(sys.version_info.major >= 3):
+            import urllib.request
+            import urllib.error
+            try:
+                u = urllib.request.urlopen(self._url)
+            except urllib.URLError as e:
+                if e.code == 404:
+                    print("==> Error: Could not find the file from url: '%s'" % (self._url))
+                print("==> Http request failed, error code: " + str(e.code) + ", reason: " + e.read())
+                sys.exit(1)
+            meta = u.info()
+            content_len = meta.get_all("Content-Length")
+        else:
+            import urllib2
+            try:
+                u = urllib2.urlopen(self._url)
+            except urllib2.HTTPError as e:
+                if e.code == 404:
+                    print("==> Error: Could not find the file from url: '%s'" % (self._url))
+                print("==> Http request failed, error code: " + str(e.code) + ", reason: " + e.read())
+                sys.exit(1)
+            meta = u.info()
+            content_len = meta.getheaders("Content-Length")
+        
+        f = open(self._filename, 'wb')
+        
         if content_len and len(content_len) > 0:
             file_size = int(content_len[0])
-        else:
+        if file_size <= 0:
             # github server may not reponse a header information which contains `Content-Length`,
             # therefore, the size needs to be written hardcode here. While server doesn't return
             # `Content-Length`, use it instead
@@ -247,7 +262,6 @@ class CocosZipInstaller(object):
             self.download_zip_file()
 
     def download_file_with_retry(self, times, delay):
-        import urllib2
         times_count = 0
         while(times_count < times):
             times_count += 1
@@ -342,8 +356,8 @@ class CocosZipInstaller(object):
 
 def _check_python_version():
     major_ver = sys.version_info[0]
-    if major_ver > 2:
-        print ("The python version is %d.%d. But python 2.x is required. (Version 2.7 is well tested)\n"
+    if major_ver < 2:
+        print ("The python version is %d.%d. But python 2.x+ is required. (Version 2.7 is well tested)\n"
                "Download it here: https://www.python.org/" % (major_ver, sys.version_info[1]))
         return False
 
