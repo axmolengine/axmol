@@ -350,7 +350,7 @@
         "PACKAGE_WIN_PROJ_NOT_FOUND" : "Not found project file for platform 'win'",
         "PACKAGE_NDK_MODULE_NOT_FOUND" : "Not found 'ndk_module_path' in build config file for platform 'Android'",
         "PACKAGE_NOT_XCODE_PROJ_FMT" : "'%s' is not an Xcode project",
-        "NEW_INFO_STEP_REPLACE_SO_FMT" : "> Replace the project SO name from '%s' to '%s'",
+        "NEW_INFO_STEP_REPLACE_SO_FMT" : "> Replace the project SO name from '%s' to '%s'"
     },
     "zh" : {
         "COCOS_AGREEMENT" : "使用Cocos命令行工具开发时，厦门雅基软件有限公司会搜集开发环境下的使用数据。该数据仅用于汇总分析，并不断创新和改进Cocos产品。收集的数据是匿名的，只位于开发端，包括但不限于：唯一的设备标识，软件版本号，Cocos相关工具产品和具体功能的使用情况。我们将严格保密您的个人隐私，绝不会分享或出售这些数据。您可以选择拒绝分享这些数据，但通过分享这些数据可以帮助Cocos成长。\n\n我们的整个政策可以在以下网址查看：http://www.cocos2d-x.org/licenses.\n\n如有问题，请发送电子邮件至privacy@cocos2d-x.org。\n\n您是否同意发送数据？[Y]同意，[N]不同意\n",
