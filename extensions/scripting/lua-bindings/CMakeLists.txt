@@ -177,8 +177,9 @@ target_include_directories(${EGNX_LUA_LIB}
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
     PRIVATE ${cocos_root}/extensions/spine/runtime/include
-    INTERFACE ${cocos_root}/extensions/scripting/lua-bindings/auto
+    PRIVATE ${cocos_root}/extensions/cocostudio
     INTERFACE ${cocos_root}/extensions/scripting/lua-bindings/manual
+    PRIVATE ${cocos_root}/extensions/spine/runtime/include
 )
 
 if(WINDOWS)
