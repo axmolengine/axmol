@@ -58,6 +58,12 @@ def transcode(text,encoding):
     else:
         return text.encode(encoding)
 
+def get_input(prompt):
+    if(sys.version_info.major >= 3):
+        return input(prompt)
+    else:
+        return raw_input(prompt)
+
 class Cocos2dIniParser:
     def __init__(self):
         if(sys.version_info.major >= 3):
@@ -371,7 +377,7 @@ class DataStatistic(object):
 
         if skip_agree_value is None:
             # show the agreement
-            input_value = raw_input(MultiLanguage.get_string('COCOS_AGREEMENT'))
+            input_value = get_input(MultiLanguage.get_string('COCOS_AGREEMENT'))
             agreed = (input_value.lower() != 'n' and input_value.lower() != 'no')
         else:
             # --agreement is used to skip the input
