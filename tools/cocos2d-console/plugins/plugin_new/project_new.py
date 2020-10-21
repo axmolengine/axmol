@@ -386,7 +386,7 @@ class Templates(object):
             cocos.Logging.warning('%d %s' % (i + 1, p[i]))
         cocos.Logging.warning(MultiLanguage.get_string('NEW_SELECT_TEMPLATE_TIP2'))
         while True:
-            option = raw_input()
+            option = cocos.get_input()
             if option.isdigit():
                 option = int(option) - 1
                 if option in range(len(p)):
