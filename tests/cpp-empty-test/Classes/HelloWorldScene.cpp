@@ -25,8 +25,6 @@
 #include "HelloWorldScene.h"
 #include "AppMacros.h"
 
-#include "pugixml_imp.hpp"
-
 USING_NS_CC;
 
 // on "init" you need to initialize your instance

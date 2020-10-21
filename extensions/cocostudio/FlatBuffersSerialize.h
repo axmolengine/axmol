@@ -33,7 +33,7 @@
 #include "platform/CCPlatformMacros.h"
 #include "ui/UIWidget.h"
 
-#include "pugixml/pugixml_imp.hpp"
+#include "pugixml/pugixml.hpp"
 
 namespace flatbuffers
 {

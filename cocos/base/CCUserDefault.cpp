@@ -43,7 +43,7 @@ THE SOFTWARE.
 #include "base/CCUserDefault.h"
 #include "platform/CCCommon.h"
 #include "platform/CCFileUtils.h"
-#include "pugixml/pugixml_imp.hpp"
+#include "pugixml/pugixml.hpp"
 #include "base/base64.h"
 #include "base/ccUtils.h"
 

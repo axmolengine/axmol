@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "base/CCScheduler.h"
 #include "base/ccUtils.h"
 
-#include "pugixml/pugixml_imp.hpp"
+#include "pugixml/pugixml.hpp"
 
 #include "CCDataReaderHelper.h"
 #include "CCArmatureDataManager.h"

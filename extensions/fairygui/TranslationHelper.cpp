@@ -2,7 +2,7 @@
 #include "PackageItem.h"
 #include "UIPackage.h"
 #if defined(ENGINEX_VERSION)
-#include "pugixml/pugixml_imp.hpp"
+#include "pugixml/pugixml.hpp"
 #else
 #include "tinyxml2/tinyxml2.h"
 #endif
