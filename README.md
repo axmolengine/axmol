@@ -35,6 +35,11 @@
 
 ### [Roadmap](https://github.com/c4games/cocos-re/issues/1)
 
+### Prepare for Quick Start
+  1. Enter ```cocos-re``` root directory
+  2. Run ```python download-deps.py```
+  3. Run ```python setup.py```, restart console after finish
+
 ### Quick Start
 #### Common Requirement [python](https://www.python.org/downloads/)
   * python-2.7.17+, python-3.7+ 
