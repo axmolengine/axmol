@@ -27,12 +27,6 @@ set(APP_NAME HelloLua)
 
 project(${APP_NAME})
 
-if(XCODE)
-    if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
-        SET (CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 8.0)
-    endif()
-endif()
-
 set(cocos_re_root "$ENV{COCOS_RE_ROOT}")
 if(cocos_re_root STREQUAL "")
     set(cocos_re_root "$ENV{COCOS2DX_ROOT}")

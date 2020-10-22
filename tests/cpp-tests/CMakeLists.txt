@@ -4,12 +4,6 @@ set(APP_NAME cpp-tests)
 
 project(${APP_NAME})
 
-if(XCODE)
-    if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
-        SET (CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 8.0)
-    endif()
-endif()
-
 if(NOT DEFINED BUILD_ENGINE_DONE)
     set(cocos_re_root "$ENV{COCOS_RE_ROOT}")
     if(cocos_re_root STREQUAL "")
