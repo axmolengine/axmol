@@ -41,6 +41,11 @@
 #### 必要工具 [python](https://www.python.org/downloads/)
   * python-2.7.17+, python-3.7+都可以
 
+#### 开始前准备步骤
+  1. 进入引擎```cocos-re```根目录
+  2. 执行```python download-deps.py```等待下载第三方库完成
+  3. 执行```python setup.py```后重启控制台
+
 #### Windows
   1. 安装CMake，要求3.14以上  
   2. 确保Visual Studio 2019以正确安装
