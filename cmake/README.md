@@ -10,14 +10,14 @@ CMake is an open-source, cross-platform family of tools designed to build, test 
   ```
 if the CMake version is lower than 3.6, please upgrade.
 
-2. You should use __out-of-source__ builds, this means you need to create a different directory than __cocos2d-x__ to execute the `cmake` command.
+2. You should use __out-of-source__ builds, this means you need to create a different directory than __cocos-re__ to execute the `cmake` command.
 
 ## Step by Step
 
 ### Linux
 
 ```sh
-cd cocos2d-x
+cd cocos-re
 mkdir linux-build && cd linux-build
 cmake ..
 make
@@ -28,9 +28,9 @@ Execute `make help` to see all build targets, `make <target>` build specified ta
 ### Generate Visual Studio projects
 
 ```sh
-cd cocos2d-x
+cd cocos-re
 mkdir win32-build && cd win32-build
-cmake .. -G"Visual Studio 15 2017" -Tv141
+cmake .. -G"Visual Studio 16 2019"
 ```
 
 Execute `cmake --build .` to compile,
@@ -38,31 +38,29 @@ Execute `cmake --build .` to compile,
 cmake --build . --config Debug
 cmake --build . --config Release
 ```
-or open __Cocos2d-x.sln__ in Explorer to use the generated project. 
-
-If can't found `MSVCR110.dll` issue occurs to you, please install this [Visual C++ Runtime Libraries](https://www.microsoft.com/en-us/download/details.aspx?id=30679), when runing the cpp-tests project
+or open __cocos-re.sln__ in Explorer to use the generated project. 
 
 ### Generate macOS Project
 
 ```sh
-cd cocos2d-x
+cd cocos-re
 mkdir mac-build && cd mac-build
 cmake .. -GXcode
-open Cocos2d-x.xcodeproj
+open cocos-re.xcodeproj
 ```
 
 ### Generate iOS Project
 
 ```sh
-cd cocos2d-x
+cd cocos-re
 mkdir ios-build && cd ios-build
-cmake .. -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos
-open Cocos2d-x.xcodeproj
+cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
+open cocos-re.xcodeproj
 ```
 
 #### How do I customize the generated Xcode project?
 
-Xcode project settings that you want to affect both the app project and the Cocos2d-X library project should be passed on the command
+Xcode project settings that you want to affect both the app project and the cocos-re library project should be passed on the command
 line when invoking `cmake`.
 
 Xcode project settings that you want to affect the app project only shoudl be put into the its `CMakeLists.txt` file.
@@ -81,7 +79,7 @@ set_xcode_property(${APP_NAME} XXX "Value")
 
 ##### Deployment Target
 
-As explained above, pass this on the command line so both the app the Cocos2d-x are built using the same version:
+As explained above, pass this on the command line so both the app the cocos-re are built using the same version:
 
 For iOS pass `-DCMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET=version`, where `version` is `9.0`, `10.0`, etc.
 
@@ -109,7 +107,7 @@ from `cmake`:
 
 ### Android Studio
 
-We use the Gradle for Android applications, and Gradle use cmake to build the native code, see  [gradle.properties](https://github.com/cocos2d/cocos2d-x/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/gradle.properties#L38): `PROP_NDK_MODE`, it controls how native builds work.
+We use the Gradle for Android applications, and Gradle use cmake to build the native code, see  [gradle.properties](https://github.com/c4games/cocos-re/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/gradle.properties#L38): `PROP_NDK_MODE`, it controls how native builds work.
 
 ```sh
 # android native code build type
@@ -119,7 +117,7 @@ We use the Gradle for Android applications, and Gradle use cmake to build the na
 PROP_BUILD_TYPE=cmake
 ```
 
-If you want to add cmake build arguments, please add it at [external Native Build](https://github.com/cocos2d/cocos2d-x/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/app/build.gradle#L25) block of __app/build.gradle__ file.
+If you want to add cmake build arguments, please add it at [external Native Build](https://github.com/c4games/cocos-re/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/app/build.gradle#L25) block of __app/build.gradle__ file.
 
 
 ## Build Options
@@ -129,7 +127,7 @@ If you want to add cmake build arguments, please add it at [external Native Buil
 1. __`-G`__, generate native build project you specified, for example
 
     * `-GXcode` generate Xcode project files.
-    * `-GVisual Studio 15 2017` generate Visual Studio 2017 project, the default toolset is v141, add `-T` option to specify toolset, like this `-Tv140`
+    * `-GVisual Studio 16 2019` generate Visual Studio 2019 project, the default toolset is v141, add `-T` option to specify toolset, like this `-Tv142`
 
 1. __`CMAKE_BUILD_TYPE`__, specify the build mode, Debug or Release
 
@@ -137,7 +135,7 @@ If you want to add cmake build arguments, please add it at [external Native Buil
 
 1. __`-H -B`__, `-H` specify the CMake project Home directory, `-B` specify CMake-generated project binary directory. for example
 
-    * `-H..\cocos2d-x -Bmsvc_build` the generated native project's location will be `msvc_build` directory.
+    * `-H..\cocos-re -Bmsvc_build` the generated native project's location will be `msvc_build` directory.
 
 1. __`--build  <dir>`__, build a CMake-generated project binary tree, for example
 
