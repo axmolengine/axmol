@@ -9,7 +9,7 @@
   
 ### 宗旨:
 * C++14/17
-* Forcus on native game dev only
+* Focus on native game dev only
 * Fix bugs ASAP
 * Review PR ASAP
 * Excellent PRs from any guys are welcome, we will review & merge ASAP
