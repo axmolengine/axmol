@@ -40,7 +40,7 @@
   * python-2.7.17+, python-3.7+ 
 
 #### Windows
-  1. Install [CMake](https://cmake.org/) 3.6+  
+  1. Install [CMake](https://cmake.org/) 3.14+  
   2. Install Visual Studio 2019 build(we strong recommend you use this version)  
   3. Execute follow command at command line(Console, Window Terminal or Powershell)
   ```bat

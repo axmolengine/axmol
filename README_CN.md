@@ -42,7 +42,7 @@
   * python-2.7.17+, python-3.7+都可以
 
 #### Windows
-  1. 安装CMake，要求3.6以上  
+  1. 安装CMake，要求3.14以上  
   2. 确保Visual Studio 2019以正确安装
   3. 执行下面的命令
   ```bat
