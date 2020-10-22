@@ -1,6 +1,6 @@
 # cocos-re - Cocos2dx Refine
 [![Build Status](https://travis-ci.com/c4games/cocos-re.svg?branch=master)](https://travis-ci.com/c4games/cocos-re)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/4936wev2r2ot606s/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/cocos-re)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/yyf7c9w0k0b6c33b/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/cocos-re)
 [![dev](https://img.shields.io/badge/v1.0.0-alpha18-yellow.svg)](https://github.com/c4games/cocos-re/releases)
 
 **This is another more radical fork of *Cocos2d-x-4.0*, use OpenAL for all platforms, single texture multi GPU texture handler, C++14/17, etc.**  
