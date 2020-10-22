@@ -111,7 +111,10 @@ class CocosZipInstaller(object):
             print("==> version file doesn't exist")
 
     def get_input_value(self, prompt):
-        ret = raw_input(prompt)
+        if(sys.version_info.major >= 3):
+            ret = input(prompt)
+        else:
+            ret = raw_input(prompt)
         ret.rstrip(" \t")
         return ret
 
