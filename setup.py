@@ -60,11 +60,6 @@ except Exception:
     pass
 from optparse import OptionParser
 
-if(sys.version_info.major >= 3):
-    import winreg as _winreg
-else:
-    import _winreg
-
 COCOS_RE_ROOT = 'COCOS_RE_ROOT'
 COCOS_RE_CONSOLE_ROOT = 'COCOS_RE_CONSOLE_ROOT'
 
@@ -688,6 +683,12 @@ if __name__ == '__main__':
 
     # set environment variables
     env = SetEnvVar()
+    if env._isWindows():
+        if(sys.version_info.major >= 3):
+            import winreg as _winreg
+        else:
+            import _winreg
+
     env.set_environment_variables(
         opts.ndk_root, opts.android_sdk_root, opts.quiet)
 
