@@ -82,7 +82,7 @@
 
   5. Notes  
     a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**  
-    b. **EGNX only provide armv7,arm64,x86_64 prebuilt libraries for ios**
+    b. **cocos-re only provide armv7,arm64,x86_64 prebuilt libraries for ios**
 
 ### Pitfalls
   * ThreadLocalStorage(TLS) 

@@ -144,7 +144,7 @@ enum class PixelFormat : uint32_t
     D24S8,
     //!!!Please append depth stencil pixel format
 
-    /* the count of pixel format supported by egnx */
+    /* the count of pixel format supported by cocos-re */
     COUNT,
 
     NONE = 0xffff

@@ -134,7 +134,7 @@ else()
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
-target_link_libraries(${APP_NAME} ${EGNX_CORE_LIB})
+target_link_libraries(${APP_NAME} ${COCOSRE_CORE_LIB})
 
 target_include_directories(${APP_NAME} PRIVATE Classes)
 

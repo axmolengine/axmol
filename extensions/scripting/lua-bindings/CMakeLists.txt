@@ -160,20 +160,20 @@ endif()
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 
-set(EGNX_LUA_LIB luacocos2d CACHE INTERNAL "The EGNX lua bindings lib name" )
+set(COCOSRE_LUA_LIB luacocos2d CACHE INTERNAL "The EGNX lua bindings lib name" )
 
-add_library(${EGNX_LUA_LIB} STATIC ${lua_bindings_files})
-target_link_libraries(${EGNX_LUA_LIB} ${EGNX_CORE_LIB})
-add_dependencies(${EGNX_LUA_LIB} ${EGNX_CORE_LIB})
+add_library(${COCOSRE_LUA_LIB} STATIC ${lua_bindings_files})
+target_link_libraries(${COCOSRE_LUA_LIB} ${COCOSRE_CORE_LIB})
+add_dependencies(${COCOSRE_LUA_LIB} ${COCOSRE_CORE_LIB})
 
 if(BUILD_YASIO_LUA)
-    target_compile_definitions(${EGNX_LUA_LIB} PRIVATE CC_ENABLE_YASIO_LUA=1)
+    target_compile_definitions(${COCOSRE_LUA_LIB} PRIVATE CC_ENABLE_YASIO_LUA=1)
 endif()
 
 get_target_property(lua_ext_depend external CC_LUA_DEPEND)
-target_link_libraries(${EGNX_LUA_LIB} ${lua_ext_depend})
+target_link_libraries(${COCOSRE_LUA_LIB} ${lua_ext_depend})
 
-target_include_directories(${EGNX_LUA_LIB}
+target_include_directories(${COCOSRE_LUA_LIB}
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
     PRIVATE ${cocos_root}/extensions/spine/runtime/include
@@ -183,12 +183,12 @@ target_include_directories(${EGNX_LUA_LIB}
 )
 
 if(WINDOWS)
-    target_compile_definitions(${EGNX_LUA_LIB} PUBLIC _USRLUASTATIC)
+    target_compile_definitions(${COCOSRE_LUA_LIB} PUBLIC _USRLUASTATIC)
 endif()
 
-target_compile_definitions(${EGNX_LUA_LIB} PUBLIC LUA_COMPAT_MODULE)
+target_compile_definitions(${COCOSRE_LUA_LIB} PUBLIC LUA_COMPAT_MODULE)
 
-set_target_properties(${EGNX_LUA_LIB}
+set_target_properties(${COCOSRE_LUA_LIB}
                       PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -196,6 +196,6 @@ set_target_properties(${EGNX_LUA_LIB}
                       )
 
 if(XCODE OR VS)
-    cocos_mark_code_files("${EGNX_LUA_LIB}")
+    cocos_mark_code_files("${COCOSRE_LUA_LIB}")
 endif()
 
