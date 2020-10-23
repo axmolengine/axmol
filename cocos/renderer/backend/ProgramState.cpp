@@ -33,6 +33,8 @@
 #include "base/CCDirector.h"
 #include <algorithm>
 
+#include "xxhash/xxhash.h"
+
 #ifdef CC_USE_METAL
 #include "glsl_optimizer.h"
 #endif

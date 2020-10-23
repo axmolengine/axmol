@@ -35,7 +35,10 @@
 #include "renderer/backend/Types.h"
 #include "renderer/backend/Program.h"
 #include "renderer/backend/VertexLayout.h"
-#include "xxhash/xxhash.h"
+
+#ifdef CC_USE_METAL
+struct XXH32_state_s;
+#endif
 
 CC_BACKEND_BEGIN
 
@@ -371,7 +374,7 @@ protected:
 
     uint32_t _uniformID = 0;
 #ifdef CC_USE_METAL
-    XXH32_state_t* _uniformHashState = nullptr;
+    struct XXH32_state_s* _uniformHashState = nullptr;
 #endif
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
