@@ -55,6 +55,10 @@ void TrianglesCommand::init(float globalOrder, Texture2D* texture, const BlendFu
         _programType = _pipelineDescriptor.programState->getProgram()->getProgramType();
         _texture = texture->getBackendTexture();
         _blendType = blendType;
+
+        //since it would be too expensive to check the uniforms, simplify enable batching for built-in program.
+        if (_programType == backend::ProgramType::CUSTOM_PROGRAM)
+            setSkipBatching(true);
         
         //TODO: minggo set it in Node?
         auto& blendDescriptor = _pipelineDescriptor.blendDescriptor;
