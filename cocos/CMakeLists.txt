@@ -142,6 +142,7 @@ target_include_directories(${COCOSRE_CORE_LIB}
     PUBLIC ${COCOS2DX_ROOT_PATH}/cocos
     PUBLIC ${COCOS2DX_ROOT_PATH}/cocos/platform
 
+    INTERFACE ${COCOS2DX_ROOT_PATH}/external
     INTERFACE ${COCOS2DX_ROOT_PATH}/extensions
     INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/base
     INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/audio/include
