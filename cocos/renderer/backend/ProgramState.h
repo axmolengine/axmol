@@ -273,7 +273,22 @@ public:
 
     inline std::shared_ptr<VertexLayout> getVertexLayout() const { return _vertexLayout; }
 
+    /**
+    * Sets uniformID, once call this funciton, will never use calculate with XXH32
+    * But you can still call updateUniformID to do that
+    */
+    void setUniformID(uint32_t uniformID);
+
+    /**
+    * Gets uniformID
+    */
     uint32_t getUniformID() const { return _uniformID; }
+
+    /**
+    * Update uniform id when uniform changed
+    */
+    void updateUniformID();
+
 protected:
     /**
      * Set the vertex uniform data.
@@ -290,11 +305,6 @@ protected:
      * @param size Specifies the uniform data size.
      */
     void setFragmentUniform(int location, const void* data, std::size_t size);
-
-    /**
-    * Update uniform id when uniform changed
-    */
-    void updateUniformID();
 
     /**
      * Set texture.
@@ -356,7 +366,10 @@ protected:
     std::shared_ptr<VertexLayout> _vertexLayout = std::make_shared<VertexLayout>();
 
     uint32_t _uniformID = 0;
+    bool _computeUniformID = true;
+#ifdef CC_USE_METAL
     XXH32_state_t* _uniformHashState = nullptr;
+#endif
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;

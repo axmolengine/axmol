@@ -199,6 +199,10 @@ bool ProgramState::init(Program* program)
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
+
+    //  HACK: HSV shader needs compute uniformID after custom uniform variables changed
+    _computeUniformID = _program->getProgramType() >= ProgramType::HSV;
+
     return true;
 }
 
@@ -248,6 +252,7 @@ ProgramState *ProgramState::clone() const
     memcpy(cp->_fragmentUniformBuffer, _fragmentUniformBuffer, _fragmentUniformBufferSize);
 #endif
     cp->_uniformID = _uniformID;
+    cp->_computeUniformID = _computeUniformID;
 
     return cp;
 }
@@ -355,6 +360,13 @@ void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniform
 }
 #endif
 
+
+void ProgramState::setUniformID(uint32_t uniformID)
+{
+    _uniformID = uniformID;
+    _computeUniformID = false;
+}
+
 void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset)
 {
     if(location < 0)
@@ -400,6 +412,7 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
 
 void ProgramState::updateUniformID()
 {
+    if (!_computeUniformID) return;
 #ifdef CC_USE_METAL
     XXH32_reset(_uniformHashState, 0);
     XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
