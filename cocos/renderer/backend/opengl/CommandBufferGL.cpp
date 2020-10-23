@@ -293,6 +293,10 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
         char* buffer = nullptr;
         _programState->getVertexUniformBuffer(&buffer, bufferSize);
 
+        auto& callbacks = _programState->getCallbackUniforms();
+        for (auto& cb : callbacks)
+            cb.second(_programState, cb.first);
+
         int i = 0;
         for(auto& iter : uniformInfos)
         {

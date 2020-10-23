@@ -15,7 +15,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
         set(COCOS2DX_ROOT_PATH "${cocos_re_root}")
         string(REPLACE "\\" "/" COCOS2DX_ROOT_PATH ${COCOS2DX_ROOT_PATH})
     else()
-        message(FATAL_ERROR "Please run setup.py add system env var 'COCOS_RE_ROOT' to specific the engine root")
+        set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../..)
     endif()
 
     set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
