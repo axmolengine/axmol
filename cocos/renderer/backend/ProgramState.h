@@ -36,6 +36,10 @@
 #include "renderer/backend/Program.h"
 #include "renderer/backend/VertexLayout.h"
 
+#ifdef CC_USE_METAL
+struct XXH32_state_s;
+#endif
+
 CC_BACKEND_BEGIN
 
 class TextureBackend;
@@ -277,10 +281,22 @@ public:
     void setParameterAutoBinding(const std::string &uniformName, const std::string &autoBinding);
 
     inline std::shared_ptr<VertexLayout> getVertexLayout() const { return _vertexLayout; }
+
+    /**
+    * Gets uniformID, it's part of materialID for batch draw
+    */
+    uint32_t getUniformID() const { return _uniformID; }
+
+    /**
+    * Updates uniformID, it's part of materialID for batch draw
+    * @param uniformID if not -1, will compute with uniform buffer by XXH32 algorithm and should call
+    *        this function after any unstable uniforms set
+    * @remark If your custom shader uniform not stable, you needs call this function to update uniformID for
+    * render to generate a different materialID
+    */
+    void updateUniformID(int uniformID = -1);
+
 protected:
-
-    ProgramState();
-
     /**
      * Set the vertex uniform data.
      * @param location Specifies the uniform location.
@@ -355,6 +371,11 @@ protected:
 
     static std::vector<AutoBindingResolver*>                _customAutoBindingResolvers;
     std::shared_ptr<VertexLayout> _vertexLayout = std::make_shared<VertexLayout>();
+
+    uint32_t _uniformID = 0;
+#ifdef CC_USE_METAL
+    struct XXH32_state_s* _uniformHashState = nullptr;
+#endif
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;
