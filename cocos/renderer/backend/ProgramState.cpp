@@ -223,10 +223,6 @@ void ProgramState::resetUniforms()
 #endif
 }
 
-//ProgramState::ProgramState()
-//{
-//}
-
 ProgramState::~ProgramState()
 {
 #ifdef CC_USE_METAL
