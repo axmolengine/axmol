@@ -31,7 +31,6 @@
 #include "base/CCEventDispatcher.h"
 #include "base/CCEventType.h"
 #include "base/CCDirector.h"
-
 #include <algorithm>
 
 #ifdef CC_USE_METAL
@@ -185,12 +184,13 @@ bool ProgramState::init(Program* program)
     CC_SAFE_RETAIN(program);
     _program = program;
     _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
-    _vertexUniformBuffer = new char[_vertexUniformBufferSize];
-    memset(_vertexUniformBuffer, 0, _vertexUniformBufferSize);
+    _vertexUniformBuffer = (char*)calloc(1, _vertexUniformBufferSize);
 #ifdef CC_USE_METAL
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
-    _fragmentUniformBuffer = new char[_fragmentUniformBufferSize];
-    memset(_fragmentUniformBuffer, 0, _fragmentUniformBufferSize);
+    _fragmentUniformBuffer = (char*)calloc(1, _fragmentUniformBufferSize);
+#endif
+#ifdef CC_USE_METAL
+    _uniformHashState = XXH32_createState();
 #endif
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
@@ -223,15 +223,18 @@ void ProgramState::resetUniforms()
 #endif
 }
 
-ProgramState::ProgramState()
-{
-}
+//ProgramState::ProgramState()
+//{
+//}
 
 ProgramState::~ProgramState()
 {
+#ifdef CC_USE_METAL
+    XXH32_freeState(_uniformHashState);
+#endif
     CC_SAFE_RELEASE(_program);
-    CC_SAFE_DELETE_ARRAY(_vertexUniformBuffer);
-    CC_SAFE_DELETE_ARRAY(_fragmentUniformBuffer);
+    CC_SAFE_FREE(_vertexUniformBuffer);
+    CC_SAFE_FREE(_fragmentUniformBuffer);
     
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
@@ -240,20 +243,15 @@ ProgramState::~ProgramState()
 
 ProgramState *ProgramState::clone() const
 {
-    ProgramState *cp = new ProgramState();
-    cp->_program = _program;
-    cp->_vertexUniformBufferSize = _vertexUniformBufferSize;
-    cp->_fragmentUniformBufferSize = _fragmentUniformBufferSize;
+    ProgramState *cp = new ProgramState(_program);
     cp->_vertexTextureInfos = _vertexTextureInfos;
     cp->_fragmentTextureInfos = _fragmentTextureInfos;
-    cp->_vertexUniformBuffer = new char[_vertexUniformBufferSize];
     memcpy(cp->_vertexUniformBuffer, _vertexUniformBuffer, _vertexUniformBufferSize);
     cp->_vertexLayout = _vertexLayout;
 #ifdef CC_USE_METAL
-    cp->_fragmentUniformBuffer = new char[_fragmentUniformBufferSize];
     memcpy(cp->_fragmentUniformBuffer, _fragmentUniformBuffer, _fragmentUniformBufferSize);
 #endif
-    CC_SAFE_RETAIN(cp->_program);
+    cp->_uniformID = _uniformID;
 
     return cp;
 }
@@ -380,6 +378,8 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
 #else
     memcpy(_vertexUniformBuffer + offset, data, size);
 #endif
+
+    updateUniformID();
 }
 
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size)
@@ -398,6 +398,19 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
     {
         memcpy(_fragmentUniformBuffer + location, data, size);
     }
+    updateUniformID();
+#endif
+}
+
+void ProgramState::updateUniformID()
+{
+#ifdef CC_USE_METAL
+    XXH32_reset(_uniformHashState, 0);
+    XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
+    XXH32_update(_uniformHashState, _fragmentUniformBuffer, _fragmentUniformBufferSize);
+    _uniformID = XXH32_digest(_uniformHashState);
+#else
+    _uniformID = XXH32(_vertexUniformBuffer, _vertexUniformBufferSize, 0);
 #endif
 }
 

@@ -35,6 +35,7 @@
 #include "renderer/backend/Types.h"
 #include "renderer/backend/Program.h"
 #include "renderer/backend/VertexLayout.h"
+#include "xxhash/xxhash.h"
 
 CC_BACKEND_BEGIN
 
@@ -277,6 +278,8 @@ public:
     void setParameterAutoBinding(const std::string &uniformName, const std::string &autoBinding);
 
     inline std::shared_ptr<VertexLayout> getVertexLayout() const { return _vertexLayout; }
+
+    uint32_t getUniformID() const { return _uniformID; }
 protected:
 
     ProgramState();
@@ -296,6 +299,11 @@ protected:
      * @param size Specifies the uniform data size.
      */
     void setFragmentUniform(int location, const void* data, std::size_t size);
+
+    /**
+    * Update uniform id when uniform changed
+    */
+    void updateUniformID();
 
     /**
      * Set texture.
@@ -355,6 +363,9 @@ protected:
 
     static std::vector<AutoBindingResolver*>                _customAutoBindingResolvers;
     std::shared_ptr<VertexLayout> _vertexLayout = std::make_shared<VertexLayout>();
+
+    uint32_t _uniformID = 0;
+    XXH32_state_t* _uniformHashState = nullptr;
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;

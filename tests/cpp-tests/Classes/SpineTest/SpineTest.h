@@ -118,6 +118,7 @@ public:
 
 private:
     spine::Skin* skin;
+    spine::Skin* skin2;
 };
 
 class RaptorExample : public SpineTestLayer {

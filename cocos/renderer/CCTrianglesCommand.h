@@ -115,6 +115,7 @@ protected:
     // Cached value to determine to generate material id or not.
     BlendFunc _blendType = BlendFunc::DISABLE;
     uint32_t _programType = backend::ProgramType::CUSTOM_PROGRAM;
+    uint32_t _uniformID = 0;
     backend::TextureBackend* _texture = nullptr;
 };
 

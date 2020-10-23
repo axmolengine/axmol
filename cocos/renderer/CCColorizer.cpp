@@ -834,9 +834,7 @@ void Colorizer::updateNodeHsv(Node* node,
     printmat3(hsvMatrix.m);
 
     auto programState = node->getProgramState();
-    programState->setCallbackUniform(programState->getUniformLocation("u_mix_hsv"), [hsvMatrix](backend::ProgramState* programState, const backend::UniformLocation& location) {
-        programState->setUniform(location, &hsvMatrix.m[0], sizeof(hsvMatrix));
-    });
+    programState->setUniform(programState->getUniformLocation("u_mix_hsv"), &hsvMatrix.m[0], sizeof(hsvMatrix));
     programState->setUniform(programState->getUniformLocation("u_filter_rgb"), &filter, sizeof(filter));
 }
 

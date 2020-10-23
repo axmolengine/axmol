@@ -302,6 +302,7 @@ bool IKExample::init() {
 
 MixAndMatchExample::~MixAndMatchExample() {
     delete skin;
+    delete skin2;
 }
 
 bool MixAndMatchExample::init() {
@@ -329,12 +330,40 @@ bool MixAndMatchExample::init() {
     skin->addSkin(skeletonData->findSkin("accessories/hat-red-yellow"));
     skeletonNode->getSkeleton()->setSkin(skin);
 
-    skeletonNode->setPosition(Vec2(_contentSize.width / 2, _contentSize.height / 2 - 100 ));
+    skeletonNode->setPosition(Vec2(_contentSize.width / 3, _contentSize.height / 2 - 100 ));
     addChild(skeletonNode);
 
     SCALE_SKELETON_NODE(skeletonNode);
 
     Colorizer::enableNodeIntelliShading(skeletonNode, Vec3(92.0f, 1.0f, 1.2f), Vec3::ZERO);
+
+    /* -------- skeletonNode2 with same spine animation file ------------ */
+    auto skeletonNode2 = SkeletonAnimation::createWithBinaryFile("mix-and-match-pro.skel", "mix-and-match.atlas", 0.5);
+    skeletonNode2->setAnimation(0, "dance", true);
+
+    // Create a new skin, by mixing and matching other skins
+    // that fit together. Items making up the girl are individual
+    // skins. Using the skin API, a new skin is created which is
+    // a combination of all these individual item skins.
+    SkeletonData* skeletonData2 = skeletonNode->getSkeleton()->getData();
+    skin2 = new (__FILE__, __LINE__) Skin("mix-and-match");
+    skin2->addSkin(skeletonData->findSkin("skin-base"));
+    skin2->addSkin(skeletonData->findSkin("nose/short"));
+    skin2->addSkin(skeletonData->findSkin("eyelids/girly"));
+    skin2->addSkin(skeletonData->findSkin("eyes/violet"));
+    skin2->addSkin(skeletonData->findSkin("hair/brown"));
+    skin2->addSkin(skeletonData->findSkin("clothes/hoodie-orange"));
+    skin2->addSkin(skeletonData->findSkin("legs/pants-jeans"));
+    skin2->addSkin(skeletonData->findSkin("accessories/bag"));
+    skin2->addSkin(skeletonData->findSkin("accessories/hat-red-yellow"));
+    skeletonNode2->getSkeleton()->setSkin(skin2);
+
+    skeletonNode2->setPosition(Vec2(_contentSize.width / 1.5, _contentSize.height / 2 - 100));
+    addChild(skeletonNode2);
+
+    SCALE_SKELETON_NODE(skeletonNode2);
+
+    Colorizer::enableNodeIntelliShading(skeletonNode2, Vec3(45.0f, 1.0f, 1.2f), Vec3::ZERO);
     return true;
 }
 

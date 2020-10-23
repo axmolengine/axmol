@@ -48,13 +48,18 @@ void TrianglesCommand::init(float globalOrder, Texture2D* texture, const BlendFu
     }
     _mv = mv;
 
-    if (_programType != _pipelineDescriptor.programState->getProgram()->getProgramType() ||
+    auto programType = _pipelineDescriptor.programState->getProgram()->getProgramType();
+    auto uniformID = _pipelineDescriptor.programState->getUniformID();
+    if (_programType != programType ||
         _texture != texture->getBackendTexture() ||
-        _blendType != blendType)
+        _blendType != blendType ||
+        _uniformID != uniformID
+        )
     {
-        _programType = _pipelineDescriptor.programState->getProgram()->getProgramType();
+        _programType = programType;
         _texture = texture->getBackendTexture();
         _blendType = blendType;
+        _uniformID = uniformID;
 
         //since it would be too expensive to check the uniforms, simplify enable batching for built-in program.
         if (_programType == backend::ProgramType::CUSTOM_PROGRAM)
@@ -87,6 +92,7 @@ void TrianglesCommand::generateMaterialID()
     {
         void* texture;
         uint32_t programType;
+        uint32_t uniformID;
         backend::BlendFactor src;
         backend::BlendFactor dst;
     }hashMe;
@@ -100,6 +106,7 @@ void TrianglesCommand::generateMaterialID()
     hashMe.src = _blendType.src;
     hashMe.dst = _blendType.dst;
     hashMe.programType = _programType;
+    hashMe.uniformID = _uniformID;
     _materialID = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
 }
 
