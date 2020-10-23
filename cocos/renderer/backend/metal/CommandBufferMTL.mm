@@ -466,13 +466,6 @@ void CommandBufferMTL::setUniformBuffer() const
 {
     if (_programState)
     {
-        auto &callbackUniforms = _programState->getCallbackUniforms();
-        
-        for(auto &cb : callbackUniforms)
-        {
-            cb.second(_programState, cb.first);
-        }
-        
         // Uniform buffer is bound to index 1.
         std::size_t bufferSize = 0;
         char* vertexBuffer = nullptr;

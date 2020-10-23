@@ -288,16 +288,10 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
 {
     if (_programState)
     {
-        auto& callbacks = _programState->getCallbackUniforms();
         auto& uniformInfos = _programState->getProgram()->getAllActiveUniformInfo(ShaderStage::VERTEX);
         std::size_t bufferSize = 0;
         char* buffer = nullptr;
         _programState->getVertexUniformBuffer(&buffer, bufferSize);
-
-        for (auto &cb : callbacks)
-        {
-            cb.second(_programState, cb.first);
-        }
 
         int i = 0;
         for(auto& iter : uniformInfos)

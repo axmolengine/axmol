@@ -268,7 +268,7 @@ backend::UniformLocation ProgramState::getUniformLocation(const std::string& uni
 
 void ProgramState::setCallbackUniform(const backend::UniformLocation& uniformLocation,const UniformCallback& callback)
 {
-    _callbackUniforms[uniformLocation] = callback;
+    callback(this, uniformLocation);
 }
 
 void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, const void* data, std::size_t size)
