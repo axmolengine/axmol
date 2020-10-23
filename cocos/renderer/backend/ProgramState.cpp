@@ -394,16 +394,21 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
 #endif
 }
 
-void ProgramState::updateUniformID()
+void ProgramState::updateUniformID(int uniformID)
 {
+    if (uniformID == -1) {
 #ifdef CC_USE_METAL
-    XXH32_reset(_uniformHashState, 0);
-    XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
-    XXH32_update(_uniformHashState, _fragmentUniformBuffer, _fragmentUniformBufferSize);
-    _uniformID = XXH32_digest(_uniformHashState);
+        XXH32_reset(_uniformHashState, 0);
+        XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
+        XXH32_update(_uniformHashState, _fragmentUniformBuffer, _fragmentUniformBufferSize);
+        _uniformID = XXH32_digest(_uniformHashState);
 #else
-    _uniformID = XXH32(_vertexUniformBuffer, _vertexUniformBufferSize, 0);
+        _uniformID = XXH32(_vertexUniformBuffer, _vertexUniformBufferSize, 0);
 #endif
+    }
+    else {
+        _uniformID = uniformID;
+    }
 }
 
 void ProgramState::setTexture(backend::TextureBackend* texture)

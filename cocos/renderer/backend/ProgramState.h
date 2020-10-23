@@ -280,15 +280,18 @@ public:
     inline std::shared_ptr<VertexLayout> getVertexLayout() const { return _vertexLayout; }
 
     /**
-    * Gets uniformID
+    * Gets uniformID, it's part of materialID for batch draw
     */
     uint32_t getUniformID() const { return _uniformID; }
 
     /**
-    * Updates uniformID with XXH32 uniform buffer after setUniform
-    * If your custom shader uniform not stable, you needs call this function to update uniformID for separate batch draw
+    * Updates uniformID, it's part of materialID for batch draw
+    * @param uniformID if not -1, will compute with uniform buffer by XXH32 algorithm and should call
+    *        this function after any unstable uniforms set
+    * @remark If your custom shader uniform not stable, you needs call this function to update uniformID for
+    * render to generate a different materialID
     */
-    void updateUniformID();
+    void updateUniformID(int uniformID = -1);
 
 protected:
     /**
