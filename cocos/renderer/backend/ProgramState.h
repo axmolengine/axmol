@@ -149,7 +149,7 @@ public:
      * @param uniformLocation Specifies the uniform location.
      * @param unifromCallback Specifies a callback function to update the uniform.
      */
-    void setCallbackUniform(const backend::UniformLocation&, const UniformCallback &);
+    CC_DEPRECATED_ATTRIBUTE void setCallbackUniform(const backend::UniformLocation&, const UniformCallback &);
 
     /**
      * Set texture.
@@ -194,12 +194,6 @@ public:
      * @return Fragment texture informations. Key is the texture location, Value store the texture informations
      */
     inline const std::unordered_map<int, TextureInfo>& getFragmentTextureInfos() const { return _fragmentTextureInfos; }
-
-    /**
-     * Get the uniform callback function.
-     * @return Uniform callback funciton.
-     */
-    inline const std::unordered_map<UniformLocation, UniformCallback, UniformLocation>& getCallbackUniforms() const { return _callbackUniforms; }
 
     /**
      * Get vertex uniform buffer. The buffer store all the vertex uniform's data.
