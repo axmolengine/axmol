@@ -836,6 +836,7 @@ void Colorizer::updateNodeHsv(Node* node,
     auto programState = node->getProgramState();
     programState->setUniform(programState->getUniformLocation("u_mix_hsv"), &hsvMatrix.m[0], sizeof(hsvMatrix));
     programState->setUniform(programState->getUniformLocation("u_filter_rgb"), &filter, sizeof(filter));
+    programState->updateUniformID();
 }
 
 NS_CC_END

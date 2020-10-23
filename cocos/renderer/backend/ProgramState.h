@@ -149,7 +149,7 @@ public:
      * @param uniformLocation Specifies the uniform location.
      * @param unifromCallback Specifies a callback function to update the uniform.
      */
-    CC_DEPRECATED_ATTRIBUTE void setCallbackUniform(const backend::UniformLocation&, const UniformCallback &);
+    void setCallbackUniform(const backend::UniformLocation&, const UniformCallback &);
 
     /**
      * Set texture.
@@ -194,6 +194,12 @@ public:
      * @return Fragment texture informations. Key is the texture location, Value store the texture informations
      */
     inline const std::unordered_map<int, TextureInfo>& getFragmentTextureInfos() const { return _fragmentTextureInfos; }
+
+    /**
+     * Get the uniform callback function.
+     * @return Uniform callback funciton.
+     */
+    inline const std::unordered_map<UniformLocation, UniformCallback, UniformLocation>& getCallbackUniforms() const { return _callbackUniforms; }
 
     /**
      * Get vertex uniform buffer. The buffer store all the vertex uniform's data.
@@ -274,18 +280,13 @@ public:
     inline std::shared_ptr<VertexLayout> getVertexLayout() const { return _vertexLayout; }
 
     /**
-    * Sets uniformID, once call this funciton, will never use calculate with XXH32
-    * But you can still call updateUniformID to do that
-    */
-    void setUniformID(uint32_t uniformID);
-
-    /**
     * Gets uniformID
     */
     uint32_t getUniformID() const { return _uniformID; }
 
     /**
-    * Update uniform id when uniform changed
+    * Updates uniformID with XXH32 uniform buffer after setUniform
+    * If your custom shader uniform not stable, you needs call this function to update uniformID for separate batch draw
     */
     void updateUniformID();
 
@@ -366,7 +367,6 @@ protected:
     std::shared_ptr<VertexLayout> _vertexLayout = std::make_shared<VertexLayout>();
 
     uint32_t _uniformID = 0;
-    bool _computeUniformID = true;
 #ifdef CC_USE_METAL
     XXH32_state_t* _uniformHashState = nullptr;
 #endif
