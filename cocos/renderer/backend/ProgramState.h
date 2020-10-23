@@ -275,9 +275,6 @@ public:
 
     uint32_t getUniformID() const { return _uniformID; }
 protected:
-
-    ProgramState();
-
     /**
      * Set the vertex uniform data.
      * @param location Specifies the uniform location.
