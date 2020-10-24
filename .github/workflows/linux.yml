@@ -33,7 +33,7 @@ jobs:
       run: tools/travis-scripts/before-install.sh
 
     - name: Build
-      working-directory: ${{runner.workspace}}
+      working-directory: $GITHUB_WORKSPACE
       shell: bash
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: tools/travis-scripts/run-script.sh
