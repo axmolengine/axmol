@@ -30,17 +30,17 @@ set(APP_NAME HelloCpp)
 project(${APP_NAME})
 
 if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
-    set(cocos_re_root "$ENV{COCOS_RE_ROOT}")
-    if(cocos_re_root STREQUAL "")
-        set(cocos_re_root "$ENV{COCOS2DX_ROOT}")
+    set(ENGINEX_ROOT "$ENV{ENGINEX_ROOT}")
+    if(ENGINEX_ROOT STREQUAL "")
+        set(ENGINEX_ROOT "$ENV{COCOS2DX_ROOT}")
     endif()
 
-    if(NOT (cocos_re_root STREQUAL ""))
-        message(STATUS "Using system env var COCOS_RE_ROOT=${cocos_re_root}")
-        set(COCOS2DX_ROOT_PATH "${cocos_re_root}")
+    if(NOT (ENGINEX_ROOT STREQUAL ""))
+        message(STATUS "Using system env var ENGINEX_ROOT=${ENGINEX_ROOT}")
+        set(COCOS2DX_ROOT_PATH "${ENGINEX_ROOT}")
         string(REPLACE "\\" "/" COCOS2DX_ROOT_PATH ${COCOS2DX_ROOT_PATH})
     else()
-        message(FATAL_ERROR "Please run setup.py add system env var 'COCOS_RE_ROOT' to specific the engine root")
+        message(FATAL_ERROR "Please run setup.py add system env var 'ENGINEX_ROOT' to specific the engine root")
     endif()
     set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 
@@ -135,7 +135,7 @@ else()
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
-target_link_libraries(${APP_NAME} ${COCOSRE_CORE_LIB})
+target_link_libraries(${APP_NAME} ${ENGINEX_CORE_LIB})
 target_include_directories(${APP_NAME}
         PRIVATE Classes
         PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/

@@ -170,7 +170,7 @@ PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const
 }
 
 PixelFormat RenderTargetMTL::getDepthAttachmentPixelFormat() const
-{ // FIXME: cocos-re only support D24S8
+{ // FIXME: engine-x only support D24S8
     if(bitmask::any(_flags, TargetBufferFlags::DEPTH_AND_STENCIL)) {
         if(isDefaultRenderTarget() || !_depth)
             return PixelFormat::D24S8;
@@ -180,7 +180,7 @@ PixelFormat RenderTargetMTL::getDepthAttachmentPixelFormat() const
 }
 
 PixelFormat RenderTargetMTL::getStencilAttachmentPixelFormat() const
-{ // FIXME: cocos-re only support D24S8
+{ // FIXME: engine-x only support D24S8
     if(bitmask::any(_flags, TargetBufferFlags::DEPTH_AND_STENCIL)) {
         if(isDefaultRenderTarget() || !_stencil)
             return PixelFormat::D24S8;
