@@ -1,7 +1,7 @@
 # cocos-re - Cocos2dx Refine
 [![Android Build Status](https://github.com/c4games/cocos-re/workflows/android/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Aandroid)
 [![iOS Build Status](https://github.com/c4games/cocos-re/workflows/ios/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Aios)
-[![Windows Build Status](https://github.com/c4games/cocos-re/workflows/windows/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Awindows)
+[![Windows Build Status](https://github.com/c4games/cocos-re/workflows/win32/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Awin32)
 [![Linux Build Status](https://github.com/c4games/cocos-re/workflows/linux/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Alinux)
 [![macOS Build Status](https://github.com/c4games/cocos-re/workflows/osx/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Aosx)  
 
