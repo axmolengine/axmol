@@ -88,6 +88,7 @@ if [ "$BUILD_TARGET" == "android" ]; then
     if [ $GITHUB_CI ]; then
         echo "Installing pyenv for github ci..."
         curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+        export PATH="/home/runner/.pyenv/bin:$PATH"
     else
         # upgrade pyenv
         cd $(pyenv root) && git checkout master && git pull && cd -
