@@ -1,0 +1,34 @@
+name: ios
+
+on: [push]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  # GITHUB_CI: true
+  BUILD_TYPE: Release
+  BUILD_TARGET: ios
+  TRAVIS_OS_NAME: osx
+  # Simple let github action to build all (TODO: optimize in the future)
+  TRAVIS_PULL_REQUEST: true
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+        
+    - name: Create Build Environment
+      # Some projects don't allow in-source building, so create a separate build directory
+      # We'll use this as our working directory for all
+      run: tools/travis-scripts/before-install.sh
+      
+    - name: Build
+      # Execute the build.  You can specify a specific target with "--target <NAME>"
+      run: tools/travis-scripts/run-script.sh
