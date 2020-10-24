@@ -1,10 +1,12 @@
-name: linux-ci
+name: android-ci
 on: [push]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  GITHUB_CI: true
   BUILD_TYPE: Release
   BUILD_TARGET: android
+  PYENV_VERSION: 2.7.18
   GEN_BINDING_AND_COCOSFILE: false
   TRAVIS_OS_NAME: linux
   # Simple let github action to build all (TODO: optimize in the future)
