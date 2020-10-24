@@ -1,6 +1,10 @@
 # cocos-re - Cocos2dx Refine
-[![Build Status](https://travis-ci.com/c4games/cocos-re.svg?branch=master)](https://travis-ci.com/c4games/cocos-re)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/yyf7c9w0k0b6c33b/branch/master?svg=true)](https://ci.appveyor.com/project/halx99/cocos-re)
+[![Android Build Status](https://github.com/c4games/cocos-re/workflows/android/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Aandroid)
+[![iOS Build Status](https://github.com/c4games/cocos-re/workflows/ios/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Aios)
+[![Windows Build Status](https://github.com/c4games/cocos-re/workflows/windows/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Awindows)
+[![Linux Build Status](https://github.com/c4games/cocos-re/workflows/linux/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Alinux)
+[![macOS Build Status](https://github.com/c4games/cocos-re/workflows/osx/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Aosx)  
+
 [![dev](https://img.shields.io/badge/v1.0.0-alpha19-yellow.svg)](https://github.com/c4games/cocos-re/releases)
 
 **这是另外一个基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++14/17...**
