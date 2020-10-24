@@ -26,11 +26,11 @@ THE SOFTWARE.
 
 '''
 This script will install environment variables needed to by cocos2d-x. It will set these envrironment variables:
-* COCOS_RE_CONSOLE_ROOT: used to run cocos console tools, more information about cocos console tools please refer to
+* ENGINEX_CONSOLE_ROOT: used to run cocos console tools, more information about cocos console tools please refer to
 https://github.com/cocos2d/cocos2d-console
 * ANDROID_NDK: used to build android native codes
 * ANDROID_SDK: used to generate applicatoin on Android through commands
-* COCOS_RE_ROOT: path where cocos2d-re is installed
+* ENGINEX_ROOT: path where cocos2d-re is installed
 
 On Max OS X, when start a shell, it will read these files and execute commands in sequence:
 
@@ -60,8 +60,8 @@ except Exception:
     pass
 from optparse import OptionParser
 
-COCOS_RE_ROOT = 'COCOS_RE_ROOT'
-COCOS_RE_CONSOLE_ROOT = 'COCOS_RE_CONSOLE_ROOT'
+ENGINEX_ROOT = 'ENGINEX_ROOT'
+ENGINEX_CONSOLE_ROOT = 'ENGINEX_CONSOLE_ROOT'
 
 ANDROID_NDK = 'ANDROID_NDK'
 ANDROID_SDK = 'ANDROID_SDK'
@@ -451,41 +451,41 @@ class SetEnvVar(object):
             print("  ->Add directory \"%s\" into PATH failed!\n" % add_dir)
 
     def set_console_root(self):
-        print("->Check environment variable %s" % COCOS_RE_CONSOLE_ROOT)
-        cocos_consle_root = os.path.join(
+        print("->Check environment variable %s" % ENGINEX_CONSOLE_ROOT)
+        enginex_console_root = os.path.join(
             self.current_absolute_path, 'tools', 'cocos2d-console', 'bin')
-        old_dir = self._find_environment_variable(COCOS_RE_CONSOLE_ROOT)
+        old_dir = self._find_environment_variable(ENGINEX_CONSOLE_ROOT)
         if old_dir is None:
             # add environment variable
             if self._isWindows():
-                self.set_windows_path(cocos_consle_root)
+                self.set_windows_path(enginex_console_root)
 
             self._set_environment_variable(
-                COCOS_RE_CONSOLE_ROOT, cocos_consle_root)
+                ENGINEX_CONSOLE_ROOT, enginex_console_root)
         else:
-            if old_dir == cocos_consle_root:
+            if old_dir == enginex_console_root:
                 # is same with before, nothing to do
                 return
 
             # update the environment variable
             if self._isWindows():
                 self.remove_dir_from_win_path(old_dir)
-                self.set_windows_path(cocos_consle_root)
+                self.set_windows_path(enginex_console_root)
 
-            self._force_update_env(COCOS_RE_CONSOLE_ROOT, cocos_consle_root)
+            self._force_update_env(ENGINEX_CONSOLE_ROOT, enginex_console_root)
 
-    def set_cocos_re_root(self):
-        print("->Check environment variable %s" % COCOS_RE_ROOT)
-        cocos_re_root = self.current_absolute_path
-        old_dir = self._find_environment_variable(COCOS_RE_ROOT)
+    def set_enginex_root(self):
+        print("->Check environment variable %s" % ENGINEX_ROOT)
+        enginex_root = self.current_absolute_path
+        old_dir = self._find_environment_variable(ENGINEX_ROOT)
         if old_dir is None:
             # add environment variable
-            self._set_environment_variable(COCOS_RE_ROOT, cocos_re_root)
+            self._set_environment_variable(ENGINEX_ROOT, enginex_root)
         else:
-            if old_dir == cocos_re_root:
+            if old_dir == enginex_root:
                 # is same with before, nothing to do
                 return
-            self._force_update_env(COCOS_RE_ROOT, cocos_re_root)
+            self._force_update_env(ENGINEX_ROOT, enginex_root)
 
     def _force_update_unix_env(self, var_name, value):
         import re
@@ -642,10 +642,9 @@ class SetEnvVar(object):
 
         self.file_used_for_setup = self._get_filepath_for_setup()
 
-        self.set_cocos_re_root()
+        self.set_enginex_root()
         self.set_console_root()
         
-
         if self._isWindows():
             print(
                 '->Configuration for Android platform only, you can also skip and manually edit your environment variables\n')

@@ -17,7 +17,7 @@ if the CMake version is lower than 3.6, please upgrade.
 ### Linux
 
 ```sh
-cd cocos-re
+cd engine-x
 mkdir linux-build && cd linux-build
 cmake ..
 make
@@ -28,7 +28,7 @@ Execute `make help` to see all build targets, `make <target>` build specified ta
 ### Generate Visual Studio projects
 
 ```sh
-cd cocos-re
+cd engine-x
 mkdir win32-build && cd win32-build
 cmake .. -G"Visual Studio 16 2019"
 ```
@@ -43,24 +43,24 @@ or open __cocos-re.sln__ in Explorer to use the generated project.
 ### Generate macOS Project
 
 ```sh
-cd cocos-re
+cd engine-x
 mkdir mac-build && cd mac-build
 cmake .. -GXcode
-open cocos-re.xcodeproj
+open engine-x.xcodeproj
 ```
 
 ### Generate iOS Project
 
 ```sh
-cd cocos-re
+cd engine-x
 mkdir ios-build && cd ios-build
 cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
-open cocos-re.xcodeproj
+open engine-x.xcodeproj
 ```
 
 #### How do I customize the generated Xcode project?
 
-Xcode project settings that you want to affect both the app project and the cocos-re library project should be passed on the command
+Xcode project settings that you want to affect both the app project and the engine-x library project should be passed on the command
 line when invoking `cmake`.
 
 Xcode project settings that you want to affect the app project only shoudl be put into the its `CMakeLists.txt` file.
@@ -79,7 +79,7 @@ set_xcode_property(${APP_NAME} XXX "Value")
 
 ##### Deployment Target
 
-As explained above, pass this on the command line so both the app the cocos-re are built using the same version:
+As explained above, pass this on the command line so both the app the engine-x are built using the same version:
 
 For iOS pass `-DCMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET=version`, where `version` is `9.0`, `10.0`, etc.
 
@@ -107,7 +107,7 @@ from `cmake`:
 
 ### Android Studio
 
-We use the Gradle for Android applications, and Gradle use cmake to build the native code, see  [gradle.properties](https://github.com/c4games/cocos-re/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/gradle.properties#L38): `PROP_NDK_MODE`, it controls how native builds work.
+We use the Gradle for Android applications, and Gradle use cmake to build the native code, see  [gradle.properties](https://github.com/c4games/engine-x/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/gradle.properties#L38): `PROP_NDK_MODE`, it controls how native builds work.
 
 ```sh
 # android native code build type
@@ -117,7 +117,7 @@ We use the Gradle for Android applications, and Gradle use cmake to build the na
 PROP_BUILD_TYPE=cmake
 ```
 
-If you want to add cmake build arguments, please add it at [external Native Build](https://github.com/c4games/cocos-re/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/app/build.gradle#L25) block of __app/build.gradle__ file.
+If you want to add cmake build arguments, please add it at [external Native Build](https://github.com/c4games/engine-x/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/app/build.gradle#L25) block of __app/build.gradle__ file.
 
 
 ## Build Options
@@ -135,7 +135,7 @@ If you want to add cmake build arguments, please add it at [external Native Buil
 
 1. __`-H -B`__, `-H` specify the CMake project Home directory, `-B` specify CMake-generated project binary directory. for example
 
-    * `-H..\cocos-re -Bmsvc_build` the generated native project's location will be `msvc_build` directory.
+    * `-H..\engine-x -Bmsvc_build` the generated native project's location will be `msvc_build` directory.
 
 1. __`--build  <dir>`__, build a CMake-generated project binary tree, for example
 

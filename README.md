@@ -1,11 +1,11 @@
-# cocos-re - Cocos2dx Refine
-[![Android Build Status](https://github.com/c4games/cocos-re/workflows/android/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Aandroid)
-[![iOS Build Status](https://github.com/c4games/cocos-re/workflows/ios/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Aios)
-[![Windows Build Status](https://github.com/c4games/cocos-re/workflows/win32/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Awin32)
-[![Linux Build Status](https://github.com/c4games/cocos-re/workflows/linux/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Alinux)
-[![macOS Build Status](https://github.com/c4games/cocos-re/workflows/osx/badge.svg)](https://github.com/c4games/cocos-re/actions?query=workflow%3Aosx)  
+# Engine-x
+[![Android Build Status](https://github.com/c4games/engine-x/workflows/android/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Aandroid)
+[![iOS Build Status](https://github.com/c4games/engine-x/workflows/ios/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Aios)
+[![Windows Build Status](https://github.com/c4games/engine-x/workflows/win32/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Awin32)
+[![Linux Build Status](https://github.com/c4games/engine-x/workflows/linux/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Alinux)
+[![macOS Build Status](https://github.com/c4games/engine-x/workflows/osx/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Aosx)  
 
-[![dev](https://img.shields.io/badge/v1.0.0-alpha19-yellow.svg)](https://github.com/c4games/cocos-re/releases)
+[![dev](https://img.shields.io/badge/v1.0.0-alpha19-yellow.svg)](https://github.com/c4games/engine-x/releases)
 
 **This is another more radical fork of *Cocos2d-x-4.0*, use OpenAL for all platforms, single texture multi GPU texture handler, C++14/17, etc.**  
   
@@ -37,7 +37,7 @@
 * Add ETC2 RGB/RGBA support, if hardware decoder not present, use software decoder
 * **ImGui integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
 
-### [Roadmap](https://github.com/c4games/cocos-re/issues/1)
+### [Roadmap](https://github.com/c4games/engine-x/issues/1)
 
 
 
@@ -46,7 +46,7 @@
   * python-2.7.17+, python-3.7+ 
 
 #### Prerequisites
-  1. Enter ```cocos-re``` root directory
+  1. Enter ```engine-x``` root directory
   2. Run ```python download-deps.py```
   3. Run ```python setup.py```, restart console after finish
 
@@ -55,7 +55,7 @@
   2. Install Visual Studio 2019 build(we strong recommend you use this version)  
   3. Execute follow command at command line(Console, Window Terminal or Powershell)
   ```bat
-  cd cocos-re\
+  cd engine-x\
   cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
   ```
   
@@ -63,7 +63,7 @@
 #### Android
   1. Install Android Studio 4.0+
   2. When first start Android Studio, It will guide you to install sdk and other tools, just install them
-  3. Start Android and choose [Open an existing Android Studio Project] to open ```cocos-re\tests\cpp-tests\proj.android```
+  3. Start Android and choose [Open an existing Android Studio Project] to open ```engine-x\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose follow tools and click the button ```Apply``` to install them:  
      * Android SDK Platform 28 r3  
      * Android SDK Build-Tools 29.0.2  
@@ -93,7 +93,7 @@
 
   5. Notes  
     a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**  
-    b. **cocos-re only provide armv7,arm64,x86_64 prebuilt libraries for ios**
+    b. **engine-x only provide armv7,arm64,x86_64 prebuilt libraries for ios**
 
 ### Pitfalls
   * ThreadLocalStorage(TLS) 
@@ -102,5 +102,5 @@
     - the openal-soft maintained by kcat use TLS
 
 ### Reference links
-  * cocos-re: https://github.com/c4games/cocos-re-3rd
+  * engine-x-3rd: https://github.com/c4games/engine-x-3rd
   * official v4: https://github.com/cocos2d/cocos2d-x
