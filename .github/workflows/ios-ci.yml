@@ -1,15 +1,13 @@
-name: android
+name: osx
 
 on: [push]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  GITHUB_CI: true
+  # GITHUB_CI: true
   BUILD_TYPE: Release
-  BUILD_TARGET: android
-  PYENV_VERSION: 2.7.18
-  GEN_BINDING_AND_COCOSFILE: false
-  TRAVIS_OS_NAME: linux
+  BUILD_TARGET: ios
+  TRAVIS_OS_NAME: osx
   # Simple let github action to build all (TODO: optimize in the future)
   TRAVIS_PULL_REQUEST: true
 
@@ -19,7 +17,7 @@ jobs:
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: ubuntu-16.04
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
