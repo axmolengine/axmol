@@ -65,17 +65,17 @@
   2. When first start Android Studio, It will guide you to install sdk and other tools, just install them
   3. Start Android and choose [Open an existing Android Studio Project] to open ```engine-x\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose follow tools and click the button ```Apply``` to install them:  
-     * Android SDK Platform 28 r3  
+     * Android SDK Platform 29 r5  
      * Android SDK Build-Tools 29.0.2  
      * NDK r16b+  
-     * CMake 3.6  
+     * CMake 3.10+  
     
   5. Waiting for ```Gradle sync``` finish.
   
   6. Remark: If you use non-sdk provided CMake edition, you need download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
 
 #### iOS
-  1. Ensure xcode11+ & [cmake3.6+](https://github.com/Kitware/CMake/releases) installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
+  1. Ensure xcode11+ & [cmake3.14+](https://github.com/Kitware/CMake/releases) installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. Execute follow command   
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project

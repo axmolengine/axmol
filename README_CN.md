@@ -65,16 +65,16 @@
   2. 第一次启动Android Studio, 会引导安装一些工具，默认安装即可，如果不需要模拟器可以把```Virutal Device```勾选去掉
   2. 启动 Android Studio并打开engine-x\tests\cpp-tests\proj.android
   3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下SDK Platforms和SDK Tools后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
-     * Android SDK Platform 28 r3  (在SDK Platforms页签)
+     * Android SDK Platform 29 r5  (在SDK Platforms页签)
      * Android SDK Build-Tools 29.0.2  
      * NDK r16b+  
-     * CMake 3.6  
+     * CMake 3.10+  
 
   5. 等待Gradle sync完成后，Build APKs，安装运行  
   6. 如果使用非sdk自动安装的CMake版本, 需要从https://github.com/ninja-build/ninja/releases下载 ```ninja```， 并且拷贝```ninja.exe```到CMake的bin目录
 
 #### iOS
-  1. 确保已安装xcode11+和[cmake3.6+](https://github.com/Kitware/CMake/releases), 安装CMake命令行支持: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
+  1. 确保已安装xcode11+和[cmake3.14+](https://github.com/Kitware/CMake/releases), 安装CMake命令行支持: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. 执行如下命令确保cmake能成功生成xcode工程:  
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. 生成xcode工程, 进入engine-x根目录执行如下命令:  
