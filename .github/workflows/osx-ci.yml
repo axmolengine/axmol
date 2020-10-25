@@ -7,7 +7,7 @@ env:
   TRAVIS_OS_NAME: osx
   BUILD_TARGET: osx
   # Simple let github action to build all (TODO: optimize in the future)
-  TRAVIS_PULL_REQUEST: true
+  TRAVIS_PULL_REQUEST: false
   BUILD_TYPE: Release
   GITHUB_CI: true
 

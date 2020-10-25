@@ -15,8 +15,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
+        with:
+          submodules: 'recursive'
       - name: Setup Python
         uses: actions/setup-python@v2
       - name: Build
@@ -34,8 +34,8 @@ jobs:
       BUILD_TARGET: linux
     steps:
       - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
+        with:
+          submodules: 'recursive'
       - name: Build
         run: |
           tools/travis-scripts/before-install.sh
@@ -50,8 +50,8 @@ jobs:
       PYENV_VERSION: 2.7.18
     steps:
       - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
+        with:
+          submodules: 'recursive'
       - name: Build
         run: |
           tools/travis-scripts/before-install.sh
@@ -65,8 +65,8 @@ jobs:
       BUILD_TARGET: osx
     steps:
       - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
+        with:
+          submodules: 'recursive'
       - name: Build
         run: |
           tools/travis-scripts/before-install.sh
@@ -80,8 +80,8 @@ jobs:
       BUILD_TARGET: ios
     steps:
       - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
+        with:
+          submodules: 'recursive'
       - name: Build
         run: |
           tools/travis-scripts/before-install.sh
