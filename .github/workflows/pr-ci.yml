@@ -9,6 +9,8 @@ env:
   TRAVIS_PULL_REQUEST: true
   GITHUB_CI: true
 
+if: "!contains(github.event.commits[0].message, '[skip ci]')"
+
 jobs:
   build-win32:
     name: build-win32
