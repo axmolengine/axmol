@@ -1,0 +1,88 @@
+name: presubmit
+
+on: [pull_request]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+  # Simple let github action to build all (TODO: optimize in the future)
+  TRAVIS_PULL_REQUEST: true
+  GITHUB_CI: true
+
+jobs:
+  build-win32:
+    name: build-win32
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+      - name: Setup Python
+        uses: actions/setup-python@v2
+      - name: Build
+        shell: cmd
+        run: |
+          python download-deps.py --remove-download=False
+          cmake -S %GITHUB_WORKSPACE% -B %GITHUB_WORKSPACE%/build_x86 -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -A Win32 -DBUILD_EXTENSION_IMGUIEXT=ON
+          cmake --build %GITHUB_WORKSPACE%/build_x86 --config %BUILD_TYPE% --target cpp-tests
+
+  build-linux:
+    name: build-linux
+    runs-on: ubuntu-18.04
+    env:
+      TRAVIS_OS_NAME: linux
+      BUILD_TARGET: linux
+    steps:
+      - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+      - name: Build
+        run: |
+          tools/travis-scripts/before-install.sh
+          tools/travis-scripts/run-script.sh
+
+  build-android:
+    name: build-android
+    runs-on: ubuntu-16.04
+    env:
+      TRAVIS_OS_NAME: linux
+      BUILD_TARGET: android
+      PYENV_VERSION: 2.7.18
+    steps:
+      - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+      - name: Build
+        run: |
+          tools/travis-scripts/before-install.sh
+          tools/travis-scripts/run-script.sh
+
+  build-osx:
+    name: build-osx
+    runs-on: macos-latest
+    env:
+      TRAVIS_OS_NAME: osx
+      BUILD_TARGET: osx
+    steps:
+      - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+      - name: Build
+        run: |
+          tools/travis-scripts/before-install.sh
+          tools/travis-scripts/run-script.sh
+ 
+  build-ios:
+    name: build-ios
+    runs-on: macos-latest
+    env:
+      TRAVIS_OS_NAME: osx
+      BUILD_TARGET: ios
+    steps:
+      - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+      - name: Build
+        run: |
+          tools/travis-scripts/before-install.sh
+          tools/travis-scripts/run-script.sh
