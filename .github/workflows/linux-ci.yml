@@ -4,12 +4,12 @@ on: [push]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-  BUILD_TARGET: linux
-  GEN_BINDING_AND_COCOSFILE: false
   TRAVIS_OS_NAME: linux
+  BUILD_TARGET: linux
   # Simple let github action to build all (TODO: optimize in the future)
   TRAVIS_PULL_REQUEST: true
+  BUILD_TYPE: Release
+  GITHUB_CI: true
 
 jobs:
   build:

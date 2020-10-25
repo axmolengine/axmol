@@ -4,14 +4,13 @@ on: [push]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  GITHUB_CI: true
-  BUILD_TYPE: Release
-  BUILD_TARGET: android
-  PYENV_VERSION: 2.7.18
-  GEN_BINDING_AND_COCOSFILE: false
   TRAVIS_OS_NAME: linux
+  BUILD_TARGET: android
   # Simple let github action to build all (TODO: optimize in the future)
   TRAVIS_PULL_REQUEST: true
+  BUILD_TYPE: Release
+  GITHUB_CI: true
+  PYENV_VERSION: 2.7.18
 
 jobs:
   build:

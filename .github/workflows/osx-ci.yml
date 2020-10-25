@@ -4,12 +4,12 @@ on: [push]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  # GITHUB_CI: true
-  BUILD_TYPE: Release
-  BUILD_TARGET: osx
   TRAVIS_OS_NAME: osx
+  BUILD_TARGET: osx
   # Simple let github action to build all (TODO: optimize in the future)
   TRAVIS_PULL_REQUEST: true
+  BUILD_TYPE: Release
+  GITHUB_CI: true
 
 jobs:
   build:
