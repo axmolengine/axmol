@@ -3,7 +3,7 @@ if nil == ccs then
 end
 
 if not json then
-    require "cocos.cocos2d.json"
+    json = cjson
 end
 
 require "cocos.cocostudio.StudioConstants"

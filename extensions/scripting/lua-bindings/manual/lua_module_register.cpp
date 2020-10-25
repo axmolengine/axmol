@@ -34,6 +34,8 @@
 #include "scripting/lua-bindings/manual/physics3d/lua_cocos2dx_physics3d_manual.h"
 #include "scripting/lua-bindings/manual/navmesh/lua_cocos2dx_navmesh_manual.h"
 
+#include "scripting/lua-bindings/lua-cjson/lua_cjson.h"
+
 #if defined(CC_ENABLE_YASIO_LUA)
 #include "yasio/bindings/yasio_cclua.h"
 #endif
@@ -41,6 +43,7 @@
 
 int lua_module_register(lua_State* L)
 {
+    luaopen_cjson(L);
 #if defined(CC_ENABLE_YASIO_LUA)
     luaopen_yasio_cclua(L);
 #endif
