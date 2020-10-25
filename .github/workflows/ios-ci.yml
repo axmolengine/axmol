@@ -2,6 +2,8 @@ name: ios
 
 on: [push]
 
+if: "!contains(github.event.commits[0].message, '[skip ci]')"
+
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   TRAVIS_OS_NAME: osx
