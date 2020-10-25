@@ -574,7 +574,7 @@ local function ConvertToNode()
     end
 
     local function onTouchesEnded(touches, event)
-        local count = table.getn(touches)
+        local count = #(touches)
         for i = 1, count do
             local location = touches[i]:getLocation()
             for j = 1,3 do

@@ -217,7 +217,7 @@ local function OpenGLTestMainLayer()
             local vertices ={ x,y, x+w,y, x+w,y+h, x,y, x,y+h, x+w,y+h }
             local vbo = gl.createBuffer()
             gl.bindBuffer(gl.ARRAY_BUFFER, vbo)
-            gl.bufferData(gl.ARRAY_BUFFER, table.getn(vertices), vertices, gl.STATIC_DRAW)
+            gl.bufferData(gl.ARRAY_BUFFER, #(vertices), vertices, gl.STATIC_DRAW)
             gl.bindBuffer(gl.ARRAY_BUFFER, 0)
             return vbo
         end
@@ -320,7 +320,7 @@ local function OpenGLTestMainLayer()
                 print(strFmt)
                 local shadersTable         = gl.getAttachedShaders(p)
                 if type(shadersTable) == "table" then
-                    local count = table.getn(shadersTable)
+                    local count = #(shadersTable)
                     local i = 1
                     strFmt = ""
                     for i=1, count do
@@ -374,7 +374,7 @@ local function OpenGLTestMainLayer()
                 i = i + 1
             end
 
-            gl._texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 32, 32, 0, gl.RGBA, gl.UNSIGNED_BYTE, table.getn(pixels),pixels)
+            gl._texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 32, 32, 0, gl.RGBA, gl.UNSIGNED_BYTE, #(pixels),pixels)
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
             gl.bindTexture(gl.TEXTURE_2D, 0)
@@ -383,12 +383,12 @@ local function OpenGLTestMainLayer()
             squareVertexPositionBuffer.buffer_id = gl.createBuffer()
             gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer.buffer_id)
             local vertices = { 128, 128, 0, 128, 128, 0, 0, 0 }
-            gl.bufferData(gl.ARRAY_BUFFER,table.getn(vertices),vertices,gl.STATIC_DRAW)
+            gl.bufferData(gl.ARRAY_BUFFER,#(vertices),vertices,gl.STATIC_DRAW)
 
             squareVertexTextureBuffer.buffer_id = gl.createBuffer()
             gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexTextureBuffer.buffer_id)
             local texcoords = { 1, 1, 0, 1, 1, 0, 0, 0 }
-            gl.bufferData(gl.ARRAY_BUFFER,table.getn(texcoords),texcoords,gl.STATIC_DRAW)
+            gl.bufferData(gl.ARRAY_BUFFER,#(texcoords),texcoords,gl.STATIC_DRAW)
             gl.bindBuffer(gl.ARRAY_BUFFER,0)
         end
 
@@ -429,7 +429,7 @@ local function OpenGLTestMainLayer()
             print("error:return value not table")
             return
         end
-        local count = table.getn(supportExtensions)
+        local count = #(supportExtensions)
         local i = 1
         for i=1,count do
             print(supportExtensions[i])
@@ -659,14 +659,14 @@ local function OpenGLTestMainLayer()
         end
 
         local function setMatrixUniforms()
-            gl.uniformMatrix4fv(shaderProgram.pMatrixUniform,false,table.getn(pMatrix), pMatrix)
-            gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform,false,table.getn(mvMatrix),mvMatrix)
+            gl.uniformMatrix4fv(shaderProgram.pMatrixUniform,false,#(pMatrix), pMatrix)
+            gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform,false,#(mvMatrix),mvMatrix)
         end
 
         local function nodeWebGLDraw()
             gl.useProgram(shaderProgram.program_id)
-            gl.uniformMatrix4fv(shaderProgram.pMatrixUniform,false,table.getn(pMatrix),pMatrix)
-            gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform,false,table.getn(mvMatrix),mvMatrix)
+            gl.uniformMatrix4fv(shaderProgram.pMatrixUniform,false,#(pMatrix),pMatrix)
+            gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform,false,#(mvMatrix),mvMatrix)
 
             gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute)
             gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute)
@@ -860,10 +860,10 @@ local function OpenGLTestMainLayer()
             local oldUniformTable = gl.getUniform( program, loc )
 
             -- Set the new MVP matrix
-            gl.uniformMatrix4fv(loc, false, table.getn(pMatrix), pMatrix)
+            gl.uniformMatrix4fv(loc, false, #(pMatrix), pMatrix)
 
             local uniformTable = gl.getUniform( program, loc )
-            local count = table.getn(uniformTable)
+            local count = #(uniformTable)
             local strFmt = ""
             for i=1,count do
                 local  strTmp = string.format("%d: %.16f ",i - 1, uniformTable[i])
@@ -872,7 +872,7 @@ local function OpenGLTestMainLayer()
             print(strFmt)
 
             -- Revert to the old MVP matrix
-            gl.uniformMatrix4fv(loc, false, table.getn(oldUniformTable), oldUniformTable)
+            gl.uniformMatrix4fv(loc, false, #(oldUniformTable), oldUniformTable)
         end
 
         runTest()

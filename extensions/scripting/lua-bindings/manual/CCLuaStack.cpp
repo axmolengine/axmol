@@ -70,7 +70,7 @@ namespace {
             s = lua_tolstring(L, -1, &sz);  /* get result */
             if (s == NULL)
                 return luaL_error(L, LUA_QL("tostring") " must return a string to "
-                                  LUA_QL("print"));
+                    LUA_QL("print"));
             if (i>1) out->append("\t");
             out->append(s, sz);
             lua_pop(L, 1);  /* pop result */

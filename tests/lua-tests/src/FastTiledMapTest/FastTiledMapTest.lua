@@ -552,7 +552,7 @@ local function TMXOrthoObjectsTest()
 
     local  dict    = nil
     local  i       = 0
-    local  len     = table.getn(objects)
+    local  len     = #(objects)
 
     for i = 0, len-1, 1 do
         dict = objects[i + 1]
@@ -611,7 +611,7 @@ local function TMXIsoObjectsTest()
     --UxMutableDictionary<std:string>* dict
     local  dict = nil
     local  i = 0
-    local  len = table.getn(objects)
+    local  len = #(objects)
     for i = 0, len-1, 1 do
         dict = tolua.cast(objects[i + 1], "cc.Dictionary")
 
@@ -680,7 +680,7 @@ local function TMXIsoZorder()
     map:setPosition(cc.p(-s.width/2,0))
 
     m_tamara = cc.Sprite:create(s_pPathSister1)
-    map:addChild(m_tamara, table.getn(map:getChildren()))
+    map:addChild(m_tamara, #(map:getChildren()))
     m_tamara:retain()
     local mapWidth = map:getMapSize().width * map:getTileSize().width
     m_tamara:setPosition(CC_POINT_PIXELS_TO_POINTS(cc.p( mapWidth/2,0)))
@@ -740,7 +740,7 @@ local function TMXOrthoZorder()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
     m_tamara = cc.Sprite:create(s_pPathSister1)
-    map:addChild(m_tamara,  table.getn(map:getChildren()))
+    map:addChild(m_tamara,  #(map:getChildren()))
     m_tamara:retain()
     m_tamara:setAnchorPoint(cc.p(0.5,0))
 

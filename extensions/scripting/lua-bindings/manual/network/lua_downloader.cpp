@@ -336,8 +336,8 @@ int register_downloader(lua_State* L)
     lua_pushvalue(L, -2);    /* pushes the metatable */
     lua_settable(L, -3);     /* metatable.__index = metatable */
 
-    luaL_openlib(L, nullptr, downloaderMemberFns, 0);
-    luaL_openlib(L, "cc.Downloader", downloaderStaticFns, 0);
+    luaL_register(L, nullptr, downloaderMemberFns);
+    luaL_register(L, "cc.Downloader", downloaderStaticFns);
     return 1;
 }
 

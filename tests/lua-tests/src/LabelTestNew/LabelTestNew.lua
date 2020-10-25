@@ -1094,11 +1094,11 @@ function LabelTTFFontsTestNew.create()
     local ttfConfig = {}
     ttfConfig.fontFilePath = ttfPaths[0]
     ttfConfig.fontSize = 20
-    for i=1, table.getn(ttfPaths) do
+    for i=1, #(ttfPaths) do
         ttfConfig.fontFilePath = ttfPaths[i]
         local label = cc.Label:createWithTTF( ttfConfig, ttfPaths[i], cc.TEXT_ALIGNMENT_CENTER, 0)
         if nil ~= label then
-            label:setPosition( cc.p(s.width/2, ((s.height * 0.6)/table.getn(ttfPaths) * (i -1)) + (s.height/5)))
+            label:setPosition( cc.p(s.width/2, ((s.height * 0.6)/#(ttfPaths) * (i -1)) + (s.height/5)))
             layer:addChild(label)
             
             label:setAnchorPoint(cc.p(0.5, 0.5))

@@ -1,4 +1,4 @@
-require("json")
+local json = cjson
 
 local function XMLHttpRequestLayer()
     local layer = cc.Layer:create()

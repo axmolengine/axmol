@@ -124,7 +124,7 @@ local function updateLayer()
         end
     end
 
-    for i = 1, table.getn(menuItemNames) do
+    for i = 1, #(menuItemNames) do
         local item = cc.MenuItemFont:create(menuItemNames[i])
         item:registerScriptTapHandler(callbackFuncs[i])
         item:setPosition(winSize.width / 2, winSize.height - i * lineSpace)

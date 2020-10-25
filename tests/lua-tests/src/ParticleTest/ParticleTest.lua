@@ -1341,7 +1341,7 @@ local AddAndDeleteParticleSystems_batchNode = nil
 local function removeSystem(dt)
 	update(dt)
 
-	local ChildrenCount = table.getn(AddAndDeleteParticleSystems_batchNode:getChildren())
+	local ChildrenCount = #(AddAndDeleteParticleSystems_batchNode:getChildren())
     if ChildrenCount > 0 then
         cclog("remove random system")
         local rand = math.fmod(math.random(1, 999999), ChildrenCount - 1)
@@ -1418,7 +1418,7 @@ local function reorderSystem(dt)
 	update(dt)
 
     local childArray = ReorderParticleSystems_batchNode:getChildren()
-    local random     = math.random(1,table.getn(childArray))
+    local random     = math.random(1,#(childArray))
 	local child = childArray[random]
 	-- problem: there's no getLocalZOrder() for cc.Object
 	-- ReorderParticleSystems_batchNode:reorderChild(child, child:getLocalZOrder() - 1)

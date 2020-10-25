@@ -1531,9 +1531,9 @@ local createFunction =
 
 function nextEventDispatcherTest()
     curLayerIdx = curLayerIdx + 1
-    curLayerIdx = curLayerIdx % table.getn(createFunction)
+    curLayerIdx = curLayerIdx % #(createFunction)
     if 0 == curLayerIdx then
-        curLayerIdx = table.getn(createFunction)
+        curLayerIdx = #(createFunction)
     end
     return createFunction[curLayerIdx]()
 end
@@ -1541,7 +1541,7 @@ end
 function backEventDispatcherTest()
     curLayerIdx = curLayerIdx - 1
     if curLayerIdx <= 0 then
-        curLayerIdx = curLayerIdx + table.getn(createFunction)
+        curLayerIdx = curLayerIdx + #(createFunction)
     end
 
     return createFunction[curLayerIdx]()

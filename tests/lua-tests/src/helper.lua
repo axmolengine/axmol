@@ -39,7 +39,7 @@ Helper = {
 
 function Helper.nextAction()
     Helper.index = Helper.index + 1
-    if Helper.index > table.getn(Helper.createFunctionTable) then
+    if Helper.index > #(Helper.createFunctionTable) then
         Helper.index = 1
     end
 
@@ -49,7 +49,7 @@ end
 function  Helper.backAction()
     Helper.index = Helper.index - 1
     if Helper.index == 0 then
-        Helper.index = table.getn(Helper.createFunctionTable)
+        Helper.index = #(Helper.createFunctionTable)
     end
 
     return Helper.newScene()
@@ -154,7 +154,7 @@ TestCastScene = {
 
 function TestCastScene.nextAction()
     TestCastScene.index = TestCastScene.index + 1
-    if TestCastScene.index > table.getn(TestCastScene.createFunctionTable) then
+    if TestCastScene.index > #(TestCastScene.createFunctionTable) then
         TestCastScene.index = 1
     end
 
@@ -164,7 +164,7 @@ end
 function  TestCastScene.backAction()
     TestCastScene.index = TestCastScene.index - 1
     if TestCastScene.index == 0 then
-        TestCastScene.index = table.getn(TestCastScene.createFunctionTable)
+        TestCastScene.index = #(TestCastScene.createFunctionTable)
     end
 
     return TestCastScene.newScene()

@@ -54,7 +54,7 @@ local function setEnableRecursiveCascading(node, enable)
     end
 
     local i = 0
-    local len = table.getn(children)
+    local len = #(children)
     for i = 0, len-1, 1 do
         setEnableRecursiveCascading(children[i + 1], enable)
     end

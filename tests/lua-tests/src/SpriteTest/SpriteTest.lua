@@ -56,7 +56,7 @@ function Sprite1.addNewSpriteWithCoords(layer, point)
 end
 
 function Sprite1.onTouchesEnd(touches, event)
-    for i = 1,table.getn(touches) do
+    for i = 1,#(touches) do
         local location = touches[i]:getLocation()
         Sprite1.addNewSpriteWithCoords(Helper.currentLayer, location)
     end
@@ -117,7 +117,7 @@ function SpriteBatchNode1.addNewSpriteWithCoords(layer, point)
 end
 
 function SpriteBatchNode1.onTouchesEnd(touches,event)
-    for i = 1,table.getn(touches) do
+    for i = 1,#(touches) do
         local location = touches[i]:getLocation()
         SpriteBatchNode1.addNewSpriteWithCoords(Helper.currentLayer, location)
     end

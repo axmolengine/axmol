@@ -123,7 +123,7 @@ local function WebSocketTestLayer()
     end
 
     local function wsSendBinaryMessage(paramTable)
-        local length = table.getn(paramTable)
+        local length = #(paramTable)
         local i = 1
         local strInfo = "response bin msg: "
         for i = 1,length do

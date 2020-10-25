@@ -157,7 +157,7 @@ local _allTests = {
     { isSupported = true,  name = "ZwoptexTest"            , create_func   =               ZwoptexTestMain  }
 }
 
-local TESTS_COUNT = table.getn(_allTests)
+local TESTS_COUNT = #(_allTests)
 
 -- create scene
 local function CreateTestScene(nIdx)

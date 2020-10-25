@@ -146,7 +146,7 @@ local function MenuLayerMainMenu()
     local i        = 0
     local child    = nil
     local pArray   = menu:getChildren()
-    local len      = table.getn(pArray)
+    local len      = #(pArray)
     local pObject  = nil
     for i = 0, len-1 do
         pObject = pArray[i + 1]

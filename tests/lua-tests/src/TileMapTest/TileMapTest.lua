@@ -154,7 +154,7 @@ local function TMXOrthoTest()
     local  child = nil
     local  pObject = nil
     local i = 0
-    local len = table.getn(pChildrenArray)
+    local len = #(pChildrenArray)
     for i = 0, len-1, 1 do
         pObject = pChildrenArray[i + 1]
         child = pObject
@@ -208,7 +208,7 @@ local function TMXOrthoTest2()
     local  child          = nil
     local  pObject        = nil
     local  i              = 0
-    local  len            = table.getn(pChildrenArray)
+    local  len            = #(pChildrenArray)
 
     for i = 0, len-1, 1 do
         child = pChildrenArray[i + 1]
@@ -240,7 +240,7 @@ local function TMXOrthoTest3()
     local  child          = nil
     local  pObject        = nil
     local  i              = 0
-    local  len            = table.getn(pChildrenArray)
+    local  len            = #(pChildrenArray)
 
     for i = 0, len-1, 1 do
         child = pChildrenArray[i + 1]
@@ -274,7 +274,7 @@ local function TMXOrthoTest4()
     local  child          = nil
     local  pObject        = nil
     local  i              = 0
-    local  len            = table.getn(pChildrenArray)
+    local  len            = #(pChildrenArray)
 
     for i = 0, len-1, 1 do
         child = pChildrenArray[i + 1]
@@ -578,7 +578,7 @@ local function TMXUncompressedTest()
     local  pChildrenArray = map:getChildren()
     local layer = nil
     local i = 0
-    local len = table.getn(pChildrenArray)
+    local len = #(pChildrenArray)
     for i = 0, len-1, 1 do
         layer = pChildrenArray[i + 1]
         if layer == nil then
@@ -635,7 +635,7 @@ local function TMXOrthoObjectsTest()
 
     local  dict    = nil
     local  i       = 0
-    local  len     = table.getn(objects)
+    local  len     = #(objects)
 
     for i = 0, len-1, 1 do
         dict = objects[i + 1]
@@ -692,7 +692,7 @@ local function TMXIsoObjectsTest()
     --UxMutableDictionary<std:string>* dict
     local  dict = nil
     local  i = 0
-    local  len = table.getn(objects)
+    local  len = #(objects)
     for i = 0, len-1, 1 do
         dict = tolua.cast(objects[i + 1], "cc.Dictionary")
 
@@ -762,7 +762,7 @@ local function TMXIsoZorder()
     map:setPosition(cc.p(-s.width/2,0))
 
     m_tamara = cc.Sprite:create(s_pPathSister1)
-    map:addChild(m_tamara, table.getn(map:getChildren()))
+    map:addChild(m_tamara, #(map:getChildren()))
     m_tamara:retain()
     local mapWidth = map:getMapSize().width * map:getTileSize().width
     m_tamara:setPosition(CC_POINT_PIXELS_TO_POINTS(cc.p( mapWidth/2,0)))
@@ -821,7 +821,7 @@ local function TMXOrthoZorder()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
     m_tamara = cc.Sprite:create(s_pPathSister1)
-    map:addChild(m_tamara,  table.getn(map:getChildren()))
+    map:addChild(m_tamara,  #(map:getChildren()))
     m_tamara:retain()
     m_tamara:setAnchorPoint(cc.p(0.5,0))
 
@@ -1047,7 +1047,7 @@ local function TMXOrthoFlipTest()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
     local i = 0
-    for i = 0, table.getn(map:getChildren())-1, 1 do
+    for i = 0, #(map:getChildren())-1, 1 do
         local  child = map:getChildren()[i + 1]
         child:getTexture():setAntiAliasTexParameters()
     end
@@ -1072,7 +1072,7 @@ local function TMXOrthoFlipRunTimeTest()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
     local i = 0
-    for i = 0, table.getn(map:getChildren())-1, 1 do
+    for i = 0, #(map:getChildren())-1, 1 do
         local child = map:getChildren()[i + 1]
         child:getTexture():setAntiAliasTexParameters()
     end
@@ -1153,7 +1153,7 @@ local function TMXOrthoFromXMLTest()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
     local i = 0
-    local len = table.getn(map:getChildren())
+    local len = #(map:getChildren())
     for i = 0, len-1, 1 do
         local  child = map:getChildren()[i + 1]
         child:getTexture():setAntiAliasTexParameters()
@@ -1180,7 +1180,7 @@ local function TMXBug987()
     local  childs = map:getChildren()
 
     local i = 0
-    local len = table.getn(childs)
+    local len = #(childs)
     local pNode = nil
     for i = 0, len-1, 1 do
         pNode = childs[i + 1]

@@ -27,7 +27,7 @@ local Sprite3DBasicTest = {}
 Sprite3DBasicTest.__index = Sprite3DBasicTest
 
 function Sprite3DBasicTest.onTouchesEnd(touches, event)
-    for i = 1,table.getn(touches) do
+    for i = 1,#(touches) do
         local location = touches[i]:getLocation()
         Sprite3DBasicTest.addNewSpriteWithCoords(Helper.currentLayer, location.x, location.y )
     end
@@ -146,7 +146,7 @@ Sprite3DWithSkinTest._animateQuality = cc.Animate3DQuality.QUALITY_HIGH
 Sprite3DWithSkinTest._sprites = {}
 
 function Sprite3DWithSkinTest.onTouchesEnd(touches, event)
-    for i = 1,table.getn(touches) do
+    for i = 1,#(touches) do
         local location = touches[i]:getLocation()
         Sprite3DWithSkinTest.addNewSpriteWithCoords(Helper.currentLayer, location.x, location.y )
     end
@@ -278,7 +278,7 @@ function Animate3DTest:onEnter()
         self._state = State.HURT_TO_SWIMMING
     end
     local function onTouchesEnd(touches, event )
-        for i = 1,table.getn(touches) do
+        for i = 1,#(touches) do
             local location = touches[i]:getLocation()
             if self._sprite ~= nil then
                 local len = cc.pGetLength(cc.pSub(cc.p(self._sprite:getPosition()), location))

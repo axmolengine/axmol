@@ -12,7 +12,7 @@ local  fontList = {
     "fonts/Scissor Cuts.ttf"
 }
 
-local fontCount = table.getn(fontList)
+local fontCount = #(fontList)
 cclog("font count = "..fontCount)
 
 local vAlignIdx = 1
@@ -22,7 +22,7 @@ local verticalAlignment = {
     cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM,
 }
 
-local vAlignCount = table.getn(verticalAlignment)
+local vAlignCount = #(verticalAlignment)
 
 local function showFont(ret, pFont)
 

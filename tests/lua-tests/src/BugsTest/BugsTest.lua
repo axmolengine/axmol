@@ -337,7 +337,7 @@ local function BugTest914()
     
     -- handling touch events   
     local function onTouchMoved(touches, event)		
-		local count = table.getn(touches)	
+		local count = #(touches)	
 		print("Number of touches: ",count)
     end
     local function onTouchBegan(touches, event)
@@ -615,7 +615,7 @@ local function BugsTestMainLayer()
 	
 	-- add menu items for tests
     local pItemMenu = cc.Menu:create()
-    local nTestCount = table.getn(testNames)
+    local nTestCount = #(testNames)
     
     local i = 1
     for  i = 1, nTestCount do

@@ -145,14 +145,14 @@ local function drawPrimitivesMainLayer()
 
         --Draw polygons
         points = { cc.p(size.height/4, 0), cc.p(size.width, size.height / 5), cc.p(size.width / 3 * 2, size.height) }
-        draw:drawPolygon(points, table.getn(points), cc.c4f(1,0,0,0.5), 4, cc.c4f(0,0,1,1))
+        draw:drawPolygon(points, #(points), cc.c4f(1,0,0,0.5), 4, cc.c4f(0,0,1,1))
 
         local o = 80
         local w = 20
         local h = 50
         local star1 = { cc.p( o + w, o - h), cc.p(o + w * 2, o), cc.p(o + w * 2 + h, o + w), cc.p(o + w * 2, o + w * 2) }
         
-        draw:drawPolygon(star1, table.getn(star1), cc.c4f(1,0,0,0.5), 1, cc.c4f(0,0,1,1))
+        draw:drawPolygon(star1, #(star1), cc.c4f(1,0,0,0.5), 1, cc.c4f(0,0,1,1))
 
         o = 180
         w = 20
@@ -164,7 +164,7 @@ local function drawPrimitivesMainLayer()
             cc.p(o - h, o + w),                                              --left spike
         };
         
-        draw:drawPolygon(star2, table.getn(star2), cc.c4f(1,0,0,0.5), 1, cc.c4f(0,0,1,1))
+        draw:drawPolygon(star2, #(star2), cc.c4f(1,0,0,0.5), 1, cc.c4f(0,0,1,1))
 
         draw:drawSegment(cc.p(20,size.height), cc.p(20,size.height/2), 10, cc.c4f(0, 1, 0, 1))
 

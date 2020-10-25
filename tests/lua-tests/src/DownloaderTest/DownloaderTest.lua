@@ -1,4 +1,4 @@
-require("json")
+local json = cjson
 
 
 local imgURI = "https://forum.cocos.com/images/logo.png"

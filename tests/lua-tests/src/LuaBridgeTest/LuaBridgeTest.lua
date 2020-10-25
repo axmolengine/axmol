@@ -167,7 +167,7 @@ local function LuaBridgeLayer()
         end
     end
 
-    for i = 1, table.getn(LuaBridgeTestsName) do
+    for i = 1, #(LuaBridgeTestsName) do
         local item = cc.MenuItemFont:create(LuaBridgeTestsName[i])
         item:registerScriptTapHandler(menuCallback)
         item:setPosition(s.width / 2, s.height - i * LINE_SPACE)
