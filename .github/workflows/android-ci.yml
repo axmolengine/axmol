@@ -7,7 +7,7 @@ env:
   TRAVIS_OS_NAME: linux
   BUILD_TARGET: android
   # Simple let github action to build all (TODO: optimize in the future)
-  TRAVIS_PULL_REQUEST: true
+  TRAVIS_PULL_REQUEST: false
   BUILD_TYPE: Release
   GITHUB_CI: true
   PYENV_VERSION: 2.7.18
