@@ -47,15 +47,17 @@ NS_CC_BEGIN
 
 ParticleBatchNode::ParticleBatchNode()
 {
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
+    auto& pipelinePS = _customCommand.getPipelineDescriptor().programState;
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    setProgramState(new (std::nothrow) backend::ProgramState(program), false);
-    pipelineDescriptor.programState = _programState;
-    _mvpMatrixLocaiton = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation = pipelineDescriptor.programState->getUniformLocation("u_texture");
+    //!!! ParticleBatchNode private programState don't want affect by Node::_programState, so store at _customCommand
+    //!!! support etc1 with alpha?
+    pipelinePS = new (std::nothrow) backend::ProgramState(program);
     
-    auto layout = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+    _mvpMatrixLocaiton = pipelinePS->getUniformLocation("u_MVPMatrix");
+    _textureLocation = pipelinePS->getUniformLocation("u_texture");
+    
+    auto layout = pipelinePS->getVertexLayout();
+    const auto& attributeInfo = pipelinePS->getProgram()->getActiveAttributes();
     auto iter = attributeInfo.find("a_position");
     if(iter != attributeInfo.end())
     {
@@ -80,6 +82,7 @@ ParticleBatchNode::ParticleBatchNode()
 ParticleBatchNode::~ParticleBatchNode()
 {
     CC_SAFE_RELEASE(_textureAtlas);
+    CC_SAFE_RELEASE(_customCommand.getPipelineDescriptor().programState);
 }
 /*
  * creation with Texture2D
