@@ -86,7 +86,7 @@ function build_android()
 
     # build cpp-tests
     pushd $COCOS2DX_ROOT/tests/cpp-tests/proj.android
-    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake --parallel --info
+    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
     popd
 }
 
@@ -98,7 +98,7 @@ function build_android_lua()
 
     # build lua-tests
     pushd $COCOS2DX_ROOT/tests/lua-tests/project/proj.android
-    do_retry ./gradlew assembleDebug -PPROP_BUILD_TYPE=cmake --parallel --info
+    do_retry ./gradlew assembleDebug -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
     popd
 
 }
