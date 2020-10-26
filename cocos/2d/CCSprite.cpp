@@ -436,7 +436,8 @@ void Sprite::setTexture(Texture2D *texture)
         updateBlendFunc();
     }
 
-    setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+    if(_programState == nullptr || _programState->getProgram()->getProgramType() == backend::ProgramType::POSITION_TEXTURE_COLOR)
+        setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
 }
 
 Texture2D* Sprite::getTexture() const
