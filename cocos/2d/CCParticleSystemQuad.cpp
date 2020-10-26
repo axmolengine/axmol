@@ -47,15 +47,17 @@ NS_CC_BEGIN
 
 ParticleSystemQuad::ParticleSystemQuad()
 {
-    auto& pipelieDescriptor = _quadCommand.getPipelineDescriptor();
+    auto& pipelinePS = _quadCommand.getPipelineDescriptor().programState;
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    setProgramState(new (std::nothrow) backend::ProgramState(program), false);
-    pipelieDescriptor.programState = _programState;
-    _mvpMatrixLocaiton = pipelieDescriptor.programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation = pipelieDescriptor.programState->getUniformLocation("u_texture");
+
+    //!!! support etc1 with alpha?
+    pipelinePS = (new (std::nothrow) backend::ProgramState(program));
+
+    _mvpMatrixLocaiton = pipelinePS->getUniformLocation("u_MVPMatrix");
+    _textureLocation = pipelinePS->getUniformLocation("u_texture");
     
-    auto vertexLayout = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+    auto vertexLayout = pipelinePS->getVertexLayout();
+    const auto& attributeInfo = pipelinePS->getProgram()->getActiveAttributes();
     auto iter = attributeInfo.find("a_position");
     if(iter != attributeInfo.end())
     {
@@ -81,6 +83,8 @@ ParticleSystemQuad::~ParticleSystemQuad()
         CC_SAFE_FREE(_quads);
         CC_SAFE_FREE(_indices);
     }
+
+    CC_SAFE_RELEASE_NULL(_quadCommand.getPipelineDescriptor().programState);
 }
 
 // implementation ParticleSystemQuad

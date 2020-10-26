@@ -244,13 +244,14 @@ LayerColor::LayerColor()
     // default blend function
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR); // TODO: noMVP?
-    setProgramState(new (std::nothrow) backend::ProgramState(program), false);
-    pipelineDescriptor.programState = _programState;
+    auto& pipelinePS = _customCommand.getPipelineDescriptor().programState;
+    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR);
+
+    //!!! LayerColor private programState don't want affect by Node::_programState, so store at _customCommand
+    pipelinePS = new backend::ProgramState(program);
     
-    auto vertexLayout = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+    auto vertexLayout = pipelinePS->getVertexLayout();
+    const auto& attributeInfo = pipelinePS->getProgram()->getActiveAttributes();
     auto iter = attributeInfo.find("a_position");
     if(iter != attributeInfo.end())
     {
@@ -263,7 +264,7 @@ LayerColor::LayerColor()
     }
     vertexLayout->setLayout(sizeof(_vertexData[0]));
     
-    _mvpMatrixLocation = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
+    _mvpMatrixLocation = pipelinePS->getUniformLocation("u_MVPMatrix");
     
     _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, 6, CustomCommand::BufferUsage::STATIC);
     unsigned short indices[] = {0, 1, 2, 2, 1, 3};
@@ -277,6 +278,7 @@ LayerColor::LayerColor()
     
 LayerColor::~LayerColor()
 {
+    CC_SAFE_RELEASE_NULL(_customCommand.getPipelineDescriptor().programState);
 }
 
 /// blendFunc getter
@@ -660,19 +662,19 @@ LayerRadialGradient* LayerRadialGradient::create()
 
 LayerRadialGradient::LayerRadialGradient()
 {
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
+    auto& pipelinePS = _customCommand.getPipelineDescriptor().programState;
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::LAYER_RADIA_GRADIENT);
-    setProgramState(new (std::nothrow) backend::ProgramState(program), false);
-    pipelineDescriptor.programState = _programState;
-    _mvpMatrixLocation = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
-    _startColorLocation = pipelineDescriptor.programState->getUniformLocation("u_startColor");
-    _endColorLocation = pipelineDescriptor.programState->getUniformLocation("u_endColor");
-    _centerLocation = pipelineDescriptor.programState->getUniformLocation("u_center");
-    _radiusLocation = pipelineDescriptor.programState->getUniformLocation("u_radius");
-    _expandLocation = pipelineDescriptor.programState->getUniformLocation("u_expand");
+    //!!! LayerRadialGradient private programState don't want affect by Node::_programState, so store at _customCommand
+    pipelinePS = new backend::ProgramState(program);
+    _mvpMatrixLocation = pipelinePS->getUniformLocation("u_MVPMatrix");
+    _startColorLocation = pipelinePS->getUniformLocation("u_startColor");
+    _endColorLocation = pipelinePS->getUniformLocation("u_endColor");
+    _centerLocation = pipelinePS->getUniformLocation("u_center");
+    _radiusLocation = pipelinePS->getUniformLocation("u_radius");
+    _expandLocation = pipelinePS->getUniformLocation("u_expand");
 
-    auto vertexLayout = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+    auto vertexLayout = pipelinePS->getVertexLayout();
+    const auto& attributeInfo = pipelinePS->getProgram()->getActiveAttributes();
     auto iter = attributeInfo.find("a_position");
     if(iter != attributeInfo.end())
     {
@@ -687,6 +689,7 @@ LayerRadialGradient::LayerRadialGradient()
 
 LayerRadialGradient::~LayerRadialGradient()
 {
+    CC_SAFE_RELEASE_NULL(_customCommand.getPipelineDescriptor().programState);
 }
 
 bool LayerRadialGradient::initWithColor(const cocos2d::Color4B &startColor, const cocos2d::Color4B &endColor, float radius, const Vec2& center, float expand)
