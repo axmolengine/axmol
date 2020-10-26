@@ -72,8 +72,6 @@ DrawNode::~DrawNode()
     freeShaderInternal(_customCommandTriangle);
     freeShaderInternal(_customCommandPoint);
     freeShaderInternal(_customCommandLine);
-
-    cocos2d::log("DrawNode::~DrawNode() %08x, programState: %08x", this, _programState);
 }
 
 DrawNode* DrawNode::create(float defaultLineWidth)
@@ -145,7 +143,6 @@ bool DrawNode::init()
     _dirtyLine = true;
     _dirtyPoint = true;
 
-    cocos2d::log("DrawNode::init(): %08x, programState: %08x", this, _programState);
     return true;
 }
 
