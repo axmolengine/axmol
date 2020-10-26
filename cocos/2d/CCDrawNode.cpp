@@ -65,15 +65,15 @@ DrawNode::DrawNode(float lineWidth)
 
 DrawNode::~DrawNode()
 {
-    free(_buffer);
-    _buffer = nullptr;
-    free(_bufferGLPoint);
-    _bufferGLPoint = nullptr;
-    free(_bufferGLLine);
-    _bufferGLLine = nullptr;
+    CC_SAFE_FREE(_bufferTriangle);
+    CC_SAFE_FREE(_bufferPoint);
+    CC_SAFE_FREE(_bufferLine);
     
-    CC_SAFE_RELEASE(_programStatePoint);
-    CC_SAFE_RELEASE(_programStateLine);
+    freeShaderInternal(_customCommandTriangle);
+    freeShaderInternal(_customCommandPoint);
+    freeShaderInternal(_customCommandLine);
+
+    cocos2d::log("DrawNode::~DrawNode() %08x, programState: %08x", this, _programState);
 }
 
 DrawNode* DrawNode::create(float defaultLineWidth)
@@ -95,13 +95,13 @@ void DrawNode::ensureCapacity(int count)
 {
     CCASSERT(count>=0, "capacity must be >= 0");
     
-    if(_bufferCount + count > _bufferCapacity)
+    if(_bufferCountTriangle + count > _bufferCapacityTriangle)
     {
-        _bufferCapacity += MAX(_bufferCapacity, count);
-        _buffer = (V2F_C4B_T2F*)realloc(_buffer, _bufferCapacity*sizeof(V2F_C4B_T2F));
+        _bufferCapacityTriangle += MAX(_bufferCapacityTriangle, count);
+        _bufferTriangle = (V2F_C4B_T2F*)realloc(_bufferTriangle, _bufferCapacityTriangle * sizeof(V2F_C4B_T2F));
         
-        _customCommand.createVertexBuffer(sizeof(V2F_C4B_T2F), _bufferCapacity, CustomCommand::BufferUsage::STATIC);
-        _customCommand.updateVertexBuffer(_buffer, _bufferCapacity*sizeof(V2F_C4B_T2F));
+        _customCommandTriangle.createVertexBuffer(sizeof(V2F_C4B_T2F), _bufferCapacityTriangle, CustomCommand::BufferUsage::STATIC);
+        _customCommandTriangle.updateVertexBuffer(_bufferTriangle, _bufferCapacityTriangle * sizeof(V2F_C4B_T2F));
     }
 }
 
@@ -109,13 +109,13 @@ void DrawNode::ensureCapacityGLPoint(int count)
 {
     CCASSERT(count>=0, "capacity must be >= 0");
     
-    if(_bufferCountGLPoint + count > _bufferCapacityGLPoint)
+    if(_bufferCountPoint + count > _bufferCapacityPoint)
     {
-        _bufferCapacityGLPoint += MAX(_bufferCapacityGLPoint, count);
-        _bufferGLPoint = (V2F_C4B_T2F*)realloc(_bufferGLPoint, _bufferCapacityGLPoint*sizeof(V2F_C4B_T2F));
+        _bufferCapacityPoint += MAX(_bufferCapacityPoint, count);
+        _bufferPoint = (V2F_C4B_T2F*)realloc(_bufferPoint, _bufferCapacityPoint*sizeof(V2F_C4B_T2F));
         
-        _customCommandGLPoint.createVertexBuffer(sizeof(V2F_C4B_T2F), _bufferCapacityGLPoint, CustomCommand::BufferUsage::STATIC);
-        _customCommandGLPoint.updateVertexBuffer(_bufferGLPoint, _bufferCapacityGLPoint*sizeof(V2F_C4B_T2F));
+        _customCommandPoint.createVertexBuffer(sizeof(V2F_C4B_T2F), _bufferCapacityPoint, CustomCommand::BufferUsage::STATIC);
+        _customCommandPoint.updateVertexBuffer(_bufferPoint, _bufferCapacityPoint*sizeof(V2F_C4B_T2F));
     }
 }
 
@@ -123,13 +123,13 @@ void DrawNode::ensureCapacityGLLine(int count)
 {
     CCASSERT(count>=0, "capacity must be >= 0");
     
-    if(_bufferCountGLLine + count > _bufferCapacityGLLine)
+    if(_bufferCountLine + count > _bufferCapacityLine)
     {
-        _bufferCapacityGLLine += MAX(_bufferCapacityGLLine, count);
-        _bufferGLLine = (V2F_C4B_T2F*)realloc(_bufferGLLine, _bufferCapacityGLLine*sizeof(V2F_C4B_T2F));
+        _bufferCapacityLine += MAX(_bufferCapacityLine, count);
+        _bufferLine = (V2F_C4B_T2F*)realloc(_bufferLine, _bufferCapacityLine*sizeof(V2F_C4B_T2F));
         
-        _customCommandGLLine.createVertexBuffer(sizeof(V2F_C4B_T2F), _bufferCapacityGLLine, CustomCommand::BufferUsage::STATIC);
-        _customCommandGLLine.updateVertexBuffer(_bufferGLLine, _bufferCapacityGLLine*sizeof(V2F_C4B_T2F));
+        _customCommandLine.createVertexBuffer(sizeof(V2F_C4B_T2F), _bufferCapacityLine, CustomCommand::BufferUsage::STATIC);
+        _customCommandLine.updateVertexBuffer(_bufferLine, _bufferCapacityLine*sizeof(V2F_C4B_T2F));
     }
 }
 
@@ -141,36 +141,45 @@ bool DrawNode::init()
     ensureCapacityGLPoint(64);
     ensureCapacityGLLine(256);
     
-    _dirty = true;
-    _dirtyGLLine = true;
-    _dirtyGLPoint = true;
+    _dirtyTriangle = true;
+    _dirtyLine = true;
+    _dirtyPoint = true;
+
+    cocos2d::log("DrawNode::init(): %08x, programState: %08x", this, _programState);
     return true;
 }
 
 void DrawNode::updateShader()
 {
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE);
-    setProgramState(new (std::nothrow) backend::ProgramState(program), false);
-    _customCommand.getPipelineDescriptor().programState = _programState;
-    setVertexLayout(_customCommand);
-    _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
-    _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
+    updateShaderInternal(_customCommandTriangle, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE, 
+        CustomCommand::DrawType::ARRAY, 
+        CustomCommand::PrimitiveType::TRIANGLE);
 
-    CC_SAFE_RELEASE(_programStatePoint);
-    program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE);
-    _programStatePoint = new (std::nothrow) backend::ProgramState(program);
-    _customCommandGLPoint.getPipelineDescriptor().programState = _programStatePoint;
-    setVertexLayout(_customCommandGLPoint);
-    _customCommandGLPoint.setDrawType(CustomCommand::DrawType::ARRAY);
-    _customCommandGLPoint.setPrimitiveType(CustomCommand::PrimitiveType::POINT);
+    updateShaderInternal(_customCommandPoint, backend::ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE,
+        CustomCommand::DrawType::ARRAY,
+        CustomCommand::PrimitiveType::POINT);
 
-    CC_SAFE_RELEASE(_programStateLine);
-    program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE);
-    _programStateLine = new (std::nothrow) backend::ProgramState(program);
-    _customCommandGLLine.getPipelineDescriptor().programState = _programStateLine;
-    setVertexLayout(_customCommandGLLine);
-    _customCommandGLLine.setDrawType(CustomCommand::DrawType::ARRAY);
-    _customCommandGLLine.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
+    updateShaderInternal(_customCommandLine, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
+        CustomCommand::DrawType::ARRAY,
+        CustomCommand::PrimitiveType::LINE);
+}
+
+void DrawNode::updateShaderInternal(CustomCommand& cmd, uint32_t programType, CustomCommand::DrawType drawType, CustomCommand::PrimitiveType primitiveType)
+{
+    auto& pipelinePS = cmd.getPipelineDescriptor().programState;
+    CC_SAFE_RELEASE(pipelinePS);
+
+    auto program = backend::Program::getBuiltinProgram(programType);
+    pipelinePS = new (std::nothrow) backend::ProgramState(program);
+    setVertexLayout(cmd);
+    cmd.setPrimitiveType(primitiveType);
+    cmd.setDrawType(drawType);
+}
+
+void DrawNode::freeShaderInternal(CustomCommand& cmd)
+{
+    auto& pipelinePS = cmd.getPipelineDescriptor().programState;
+    CC_SAFE_RELEASE_NULL(pipelinePS);
 }
 
 void DrawNode::setVertexLayout(CustomCommand& cmd)
@@ -235,29 +244,29 @@ void DrawNode::updateUniforms(const Mat4 &transform, CustomCommand& cmd)
 
 void DrawNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-    if(_bufferCount)
+    if(_bufferCountTriangle)
     {
-        updateBlendState(_customCommand);
-        updateUniforms(transform, _customCommand);
-        _customCommand.init(_globalZOrder);
-        renderer->addCommand(&_customCommand);
+        updateBlendState(_customCommandTriangle);
+        updateUniforms(transform, _customCommandTriangle);
+        _customCommandTriangle.init(_globalZOrder);
+        renderer->addCommand(&_customCommandTriangle);
     }
     
-    if(_bufferCountGLPoint)
+    if(_bufferCountPoint)
     {
-        updateBlendState(_customCommandGLPoint);
-        updateUniforms(transform, _customCommandGLPoint);
-        _customCommandGLPoint.init(_globalZOrder);
-        renderer->addCommand(&_customCommandGLPoint);
+        updateBlendState(_customCommandPoint);
+        updateUniforms(transform, _customCommandPoint);
+        _customCommandPoint.init(_globalZOrder);
+        renderer->addCommand(&_customCommandPoint);
     }
     
-    if(_bufferCountGLLine)
+    if(_bufferCountLine)
     {
-        updateBlendState(_customCommandGLLine);
-        updateUniforms(transform, _customCommandGLLine);
-        _customCommandGLLine.setLineWidth(_lineWidth);
-        _customCommandGLLine.init(_globalZOrder);
-        renderer->addCommand(&_customCommandGLLine);
+        updateBlendState(_customCommandLine);
+        updateUniforms(transform, _customCommandLine);
+        _customCommandLine.setLineWidth(_lineWidth);
+        _customCommandLine.init(_globalZOrder);
+        renderer->addCommand(&_customCommandLine);
     }
 }
 
@@ -265,13 +274,13 @@ void DrawNode::drawPoint(const Vec2& position, const float pointSize, const Colo
 {
     ensureCapacityGLPoint(1);
     
-    V2F_C4B_T2F *point = _bufferGLPoint + _bufferCountGLPoint;
+    V2F_C4B_T2F *point = _bufferPoint + _bufferCountPoint;
     *point = {position, Color4B(color), Tex2F(pointSize,0)};
     
-    _customCommandGLPoint.updateVertexBuffer(point, _bufferCountGLPoint*sizeof(V2F_C4B_T2F), sizeof(V2F_C4B_T2F));
-    _bufferCountGLPoint += 1;
-    _dirtyGLPoint = true;
-    _customCommandGLPoint.setVertexDrawInfo(0, _bufferCountGLPoint);
+    _customCommandPoint.updateVertexBuffer(point, _bufferCountPoint*sizeof(V2F_C4B_T2F), sizeof(V2F_C4B_T2F));
+    _bufferCountPoint += 1;
+    _dirtyPoint = true;
+    _customCommandPoint.setVertexDrawInfo(0, _bufferCountPoint);
 }
 
 void DrawNode::drawPoints(const Vec2 *position, unsigned int numberOfPoints, const Color4F &color)
@@ -283,31 +292,31 @@ void DrawNode::drawPoints(const Vec2 *position, unsigned int numberOfPoints, con
 {
     ensureCapacityGLPoint(numberOfPoints);
     
-    V2F_C4B_T2F *point = _bufferGLPoint + _bufferCountGLPoint;
+    V2F_C4B_T2F *point = _bufferPoint + _bufferCountPoint;
     for(unsigned int i=0; i < numberOfPoints; i++)
     {
         *(point + i) = {position[i], Color4B(color), Tex2F(pointSize,0)};
     }
     
-    _customCommandGLPoint.updateVertexBuffer(point, _bufferCountGLPoint*sizeof(V2F_C4B_T2F), numberOfPoints*sizeof(V2F_C4B_T2F));
-    _bufferCountGLPoint += numberOfPoints;
-    _dirtyGLPoint = true;
-    _customCommandGLPoint.setVertexDrawInfo(0, _bufferCountGLPoint);
+    _customCommandPoint.updateVertexBuffer(point, _bufferCountPoint*sizeof(V2F_C4B_T2F), numberOfPoints*sizeof(V2F_C4B_T2F));
+    _bufferCountPoint += numberOfPoints;
+    _dirtyPoint = true;
+    _customCommandPoint.setVertexDrawInfo(0, _bufferCountPoint);
 }
 
 void DrawNode::drawLine(const Vec2 &origin, const Vec2 &destination, const Color4F &color)
 {
     ensureCapacityGLLine(2);
     
-    V2F_C4B_T2F *point = _bufferGLLine + _bufferCountGLLine;
+    V2F_C4B_T2F *point = _bufferLine + _bufferCountLine;
     
     *point = {origin, Color4B(color), Tex2F(0.0, 0.0)};
     *(point+1) = {destination, Color4B(color), Tex2F(0.0, 0.0)};
     
-    _customCommandGLLine.updateVertexBuffer(point, _bufferCountGLLine*sizeof(V2F_C4B_T2F), 2*sizeof(V2F_C4B_T2F));
-    _bufferCountGLLine += 2;
-    _dirtyGLLine = true;
-    _customCommandGLLine.setVertexDrawInfo(0, _bufferCountGLLine);
+    _customCommandLine.updateVertexBuffer(point, _bufferCountLine*sizeof(V2F_C4B_T2F), 2*sizeof(V2F_C4B_T2F));
+    _bufferCountLine += 2;
+    _dirtyLine = true;
+    _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
 }
 
 void DrawNode::drawRect(const Vec2 &origin, const Vec2 &destination, const Color4F &color)
@@ -332,7 +341,7 @@ void DrawNode::drawPoly(const Vec2 *poli, unsigned int numberOfPoints, bool clos
         ensureCapacityGLLine(vertex_count);
     }
     
-    V2F_C4B_T2F *point = _bufferGLLine + _bufferCountGLLine;
+    V2F_C4B_T2F *point = _bufferLine + _bufferCountLine;
     V2F_C4B_T2F *cursor = point;
     
     unsigned int i = 0;
@@ -348,9 +357,9 @@ void DrawNode::drawPoly(const Vec2 *poli, unsigned int numberOfPoints, bool clos
         *(point + 1) = {poli[0], Color4B(color), Tex2F(0.0, 0.0)};
     }
     
-    _customCommandGLLine.updateVertexBuffer(cursor, _bufferCountGLLine*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
-    _bufferCountGLLine += vertex_count;
-    _customCommandGLLine.setVertexDrawInfo(0, _bufferCountGLLine);
+    _customCommandLine.updateVertexBuffer(cursor, _bufferCountLine*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
+    _bufferCountLine += vertex_count;
+    _customCommandLine.setVertexDrawInfo(0, _bufferCountLine);
 }
 
 void DrawNode::drawCircle(const Vec2& center, float radius, float angle, unsigned int segments, bool drawLineToCenter, float scaleX, float scaleY, const Color4F &color)
@@ -482,16 +491,16 @@ void DrawNode::drawDot(const Vec2 &pos, float radius, const Color4F &color)
     V2F_C4B_T2F c = {Vec2(pos.x + radius, pos.y + radius), Color4B(color), Tex2F( 1.0,  1.0) };
     V2F_C4B_T2F d = {Vec2(pos.x + radius, pos.y - radius), Color4B(color), Tex2F( 1.0, -1.0) };
     
-    V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_buffer + _bufferCount);
+    V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle triangle0 = {a, b, c};
     V2F_C4B_T2F_Triangle triangle1 = {a, c, d};
     triangles[0] = triangle0;
     triangles[1] = triangle1;
     
-    _customCommand.updateVertexBuffer(triangles, _bufferCount*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
-    _bufferCount += vertex_count;
-    _dirty = true;
-    _customCommand.setVertexDrawInfo(0, _bufferCount);
+    _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
+    _bufferCountTriangle += vertex_count;
+    _dirtyTriangle = true;
+    _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
 }
 
 void DrawNode::drawRect(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, const Vec2& p4, const Color4F &color)
@@ -526,7 +535,7 @@ void DrawNode::drawSegment(const Vec2 &from, const Vec2 &to, float radius, const
     Vec2 v7 = a + (nw + tw);
     
     
-    V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_buffer + _bufferCount);
+    V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_bufferTriangle + _bufferCountTriangle);
     
     V2F_C4B_T2F_Triangle triangles0 = {
         {v0, Color4B(color), v2ToTex2F(-(n + t))},
@@ -570,10 +579,10 @@ void DrawNode::drawSegment(const Vec2 &from, const Vec2 &to, float radius, const
     };
     triangles[5] = triangles5;
     
-    _customCommand.updateVertexBuffer(triangles, _bufferCount*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
-    _bufferCount += vertex_count;
-    _dirty = true;
-    _customCommand.setVertexDrawInfo(0, _bufferCount);
+    _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
+    _bufferCountTriangle += vertex_count;
+    _dirtyTriangle = true;
+    _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
 }
 
 void DrawNode::drawPolygon(const Vec2 *verts, int count, const Color4F &fillColor, float borderWidth, const Color4F &borderColor)
@@ -586,7 +595,7 @@ void DrawNode::drawPolygon(const Vec2 *verts, int count, const Color4F &fillColo
     auto vertex_count = 3*triangle_count;
     ensureCapacity(vertex_count);
     
-    V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_buffer + _bufferCount);
+    V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle *cursor = triangles;
     
     for (int i = 0; i < count-2; i++)
@@ -652,10 +661,10 @@ void DrawNode::drawPolygon(const Vec2 *verts, int count, const Color4F &fillColo
         free(extrude);
     }
     
-    _customCommand.updateVertexBuffer(triangles, _bufferCount*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
-    _bufferCount += vertex_count;
-    _customCommand.setVertexDrawInfo(0, _bufferCount);
-    _dirty = true;
+    _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F), vertex_count * sizeof(V2F_C4B_T2F));
+    _bufferCountTriangle += vertex_count;
+    _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
+    _dirtyTriangle = true;
 }
 
 void DrawNode::drawSolidRect(const Vec2 &origin, const Vec2 &destination, const Color4F &color)
@@ -713,24 +722,24 @@ void DrawNode::drawTriangle(const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, cons
     V2F_C4B_T2F b = {p2, col, Tex2F(0.0,  0.0) };
     V2F_C4B_T2F c = {p3, col, Tex2F(0.0,  0.0) };
 
-    V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_buffer + _bufferCount);
+    V2F_C4B_T2F_Triangle *triangles = (V2F_C4B_T2F_Triangle *)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle triangle = {a, b, c};
     triangles[0] = triangle;
 
-    _customCommand.updateVertexBuffer(triangles, _bufferCount*sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
-    _bufferCount += vertex_count;
-    _dirty = true;
-    _customCommand.setVertexDrawInfo(0, _bufferCount);
+    _customCommandTriangle.updateVertexBuffer(triangles, _bufferCountTriangle * sizeof(V2F_C4B_T2F), vertex_count*sizeof(V2F_C4B_T2F));
+    _bufferCountTriangle += vertex_count;
+    _dirtyTriangle = true;
+    _customCommandTriangle.setVertexDrawInfo(0, _bufferCountTriangle);
 }
 
 void DrawNode::clear()
 {
-    _bufferCount = 0;
-    _dirty = true;
-    _bufferCountGLLine = 0;
-    _dirtyGLLine = true;
-    _bufferCountGLPoint = 0;
-    _dirtyGLPoint = true;
+    _bufferCountTriangle = 0;
+    _dirtyTriangle = true;
+    _bufferCountLine = 0;
+    _dirtyLine = true;
+    _bufferCountPoint = 0;
+    _dirtyPoint = true;
     _lineWidth = _defaultLineWidth;
 }
 

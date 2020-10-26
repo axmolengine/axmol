@@ -316,36 +316,36 @@ protected:
     void ensureCapacityGLLine(int count);
 
     void updateShader();
+    void updateShaderInternal(CustomCommand& cmd, uint32_t programType, CustomCommand::DrawType drawType, CustomCommand::PrimitiveType primitiveType);
+    void freeShaderInternal(CustomCommand& cmd);
+
     void setVertexLayout(CustomCommand& cmd);
     void updateBlendState(CustomCommand& cmd);
     void updateUniforms(const Mat4 &transform, CustomCommand& cmd);
 
-    int         _bufferCapacity = 0;
-    int         _bufferCount = 0;
-    V2F_C4B_T2F *_buffer = nullptr;
+    int         _bufferCapacityTriangle = 0;
+    int         _bufferCountTriangle = 0;
+    V2F_C4B_T2F *_bufferTriangle = nullptr;
     
-    int         _bufferCapacityGLPoint = 0;
-    int         _bufferCountGLPoint = 0;
-    V2F_C4B_T2F *_bufferGLPoint = nullptr;
+    int         _bufferCapacityPoint = 0;
+    int         _bufferCountPoint = 0;
+    V2F_C4B_T2F *_bufferPoint = nullptr;
     Color4F     _pointColor;
     int         _pointSize = 0;
     
-    int         _bufferCapacityGLLine = 0;
-    int         _bufferCountGLLine = 0;
-    V2F_C4B_T2F *_bufferGLLine = nullptr;
+    int         _bufferCapacityLine = 0;
+    int         _bufferCountLine = 0;
+    V2F_C4B_T2F *_bufferLine = nullptr;
 
     BlendFunc   _blendFunc;
     
-    backend::ProgramState* _programStatePoint = nullptr;
-    backend::ProgramState* _programStateLine = nullptr;
-    
-    CustomCommand _customCommand;
-    CustomCommand _customCommandGLPoint;
-    CustomCommand _customCommandGLLine;
+    CustomCommand _customCommandTriangle;
+    CustomCommand _customCommandPoint;
+    CustomCommand _customCommandLine;
 
-    bool        _dirty = false;
-    bool        _dirtyGLPoint = false;
-    bool        _dirtyGLLine = false;
+    bool        _dirtyTriangle = false;
+    bool        _dirtyPoint = false;
+    bool        _dirtyLine = false;
     bool        _isolated = false;
     float       _lineWidth = 0.0f;
     float       _defaultLineWidth = 0.0f;
