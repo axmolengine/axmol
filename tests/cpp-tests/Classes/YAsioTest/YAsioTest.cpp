@@ -77,7 +77,7 @@ public:
                     }
                     break;
                 case YEK_CONNECTION_LOST:
-                    cocos2d::log("yasio-ssl recv data: %s\n---> %d bytes transferred", _respRawData.c_str(), _respRawData.size());
+                    cocos2d::log("yasio-ssl recv data: %s\n---> %d bytes transferred", _respRawData.c_str(), static_cast<int>(_respRawData.size()));
                     _respRawData.clear();
                     break;
             }
