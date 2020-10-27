@@ -12,7 +12,6 @@ env:
 jobs:
   build-win32:
     name: build-win32
-    if: "!contains(github.event.commits[0].message, '[skip ci]')"
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +28,6 @@ jobs:
 
   build-linux:
     name: build-linux
-    if: "!contains(github.event.commits[0].message, '[skip ci]')"
     runs-on: ubuntu-18.04
     env:
       TRAVIS_OS_NAME: linux
@@ -45,7 +43,6 @@ jobs:
 
   build-android:
     name: build-android
-    if: "!contains(github.event.commits[0].message, '[skip ci]')"
     runs-on: ubuntu-16.04
     env:
       TRAVIS_OS_NAME: linux
@@ -62,7 +59,6 @@ jobs:
 
   build-osx:
     name: build-osx
-    if: "!contains(github.event.commits[0].message, '[skip ci]')"
     runs-on: macos-latest
     env:
       TRAVIS_OS_NAME: osx
@@ -78,7 +74,6 @@ jobs:
  
   build-ios:
     name: build-ios
-    if: "!contains(github.event.commits[0].message, '[skip ci]')"
     runs-on: macos-latest
     env:
       TRAVIS_OS_NAME: osx
