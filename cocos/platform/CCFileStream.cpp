@@ -9,26 +9,6 @@
 #include <sys/stat.h>
 #include <assert.h>
 
-#if defined(_WIN32)
-#define O_READ_FLAGS O_BINARY | O_RDONLY, S_IREAD
-#define O_WRITE_FLAGS O_CREAT | O_RDWR | O_BINARY | O_TRUNC, S_IWRITE | S_IREAD
-#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
-#define posix_open ::_open
-#define posix_close ::_close
-#define posix_lseek ::_lseek
-#define posix_read ::_read
-#define posix_write ::_write
-#else
-#define O_READ_FLAGS O_RDONLY, S_IRUSR
-#define O_WRITE_FLAGS O_CREAT | O_RDWR | O_TRUNC, S_IRWXU
-#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
-#define posix_open ::open
-#define posix_close ::close
-#define posix_lseek ::lseek
-#define posix_read ::read
-#define posix_write ::write
-#endif
-
 NS_CC_BEGIN
 
 struct PXIoF {

@@ -24,6 +24,36 @@
 #include "base/ZipUtils.h"
 #endif
 
+#if defined(_WIN32)
+#define O_READ_FLAGS O_BINARY | O_RDONLY, S_IREAD
+#define O_WRITE_FLAGS O_CREAT | O_RDWR | O_BINARY | O_TRUNC, S_IWRITE | S_IREAD
+#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
+
+#define O_OVERLAP_FLAGS O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
+
+#define posix_open ::_open
+#define posix_close ::_close
+#define posix_lseek ::_lseek
+#define posix_read ::_read
+#define posix_write ::_write
+#define posix_fd2fh(fd) reinterpret_cast<HANDLE>(_get_osfhandle(fd))
+#define posix_fsetsize(fd, size) ::_chsize(fd, size)
+#else
+#define O_READ_FLAGS O_RDONLY, S_IRUSR
+#define O_WRITE_FLAGS O_CREAT | O_RDWR | O_TRUNC, S_IRWXU
+#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
+
+#define O_OVERLAP_FLAGS O_CREAT | O_RDWR, S_IRWXU
+
+#define posix_open ::open
+#define posix_close ::close
+#define posix_lseek ::lseek
+#define posix_read ::read
+#define posix_write ::write
+#define posix_fd2fh(fd) (fd)
+#define posix_fsetsize(fd, size) ::ftruncate(fd, size), ::lseek(fd, 0, SEEK_SET)
+#endif
+
 NS_CC_BEGIN
 
 struct UnzFileStream;
