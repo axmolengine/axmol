@@ -7,13 +7,13 @@ env:
   TRAVIS_OS_NAME: osx
   BUILD_TARGET: ios
   # Simple let github action to build all (TODO: optimize in the future)
-  TRAVIS_PULL_REQUEST: false
+  TRAVIS_PULL_REQUEST: true
   BUILD_TYPE: Release
   GITHUB_CI: true
 
 jobs:
   build:
-    if: "!contains(github.event.commits[0].message, '[skip ci]')"
+    if: "contains(github.event.commits[0].message, '[ci build]')"
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
