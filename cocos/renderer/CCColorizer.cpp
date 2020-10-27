@@ -17,6 +17,8 @@ NS_CC_BEGIN
 #define GLUM    (0.6094)
 #define BLUM    (0.0820)
 
+#define CLZ_PRINTMAT 0
+
 typedef float _M3X3[3][3];
 typedef float _M4X4[4][4];
 
@@ -124,6 +126,7 @@ static void hsv2rgb(const unsigned char& src_h, const unsigned char& src_s, cons
     dst_b = (unsigned char)(b * 255); // dst_r : 0-255
 }
 
+#if CLZ_PRINTMAT
 static void printmat3(float mat[3][3])
 {
     int x, y;
@@ -163,6 +166,7 @@ inline void printmat4(float(&mat)[16])
 {
     printmat4((_M4X4&)mat);
 }
+#endif
 
 inline void createRotationX(Mat4* dst, float sv, float cv)
 {
@@ -831,7 +835,9 @@ void Colorizer::updateNodeHsv(Node* node,
     setMatrixSat(&hsvMatrix, hsv.y);
     setMatrixVal(&hsvMatrix, hsv.z);
 
+#if CLZ_PRINTMAT
     printmat3(hsvMatrix.m);
+#endif
 
     auto programState = node->getProgramState();
     programState->setUniform(programState->getUniformLocation("u_mix_hsv"), &hsvMatrix.m[0], sizeof(hsvMatrix));
