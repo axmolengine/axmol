@@ -5,10 +5,11 @@ on: [push]
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  TRAVIS_PULL_REQUEST: false
 
 jobs:
   build:
-    if: "!contains(github.event.commits[0].message, '[skip ci]')"
+    if: "!contains(github.event.commits[0].message, '[skip ci]') && contains(github.event.commits[0].message, 'Merge pull request')"
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
