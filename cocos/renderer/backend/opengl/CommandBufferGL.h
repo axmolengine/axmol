@@ -198,8 +198,6 @@ private:
     void setUniform(bool isArray, GLuint location, unsigned int size, GLenum uniformType, void* data) const;
     void cleanResources();
 
-    GLint _defaultFBO = 0;  // The value gets from glGetIntegerv, so need to use GLint
-    GLuint _currentFBO = 0;
     BufferGL* _vertexBuffer = nullptr;
     ProgramState* _programState = nullptr;
     BufferGL* _indexBuffer = nullptr;

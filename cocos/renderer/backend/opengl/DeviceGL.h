@@ -39,6 +39,8 @@ public:
     DeviceGL();
     ~DeviceGL();
 
+    GLint getDefaultFBO() const;
+
     /**
      * New a CommandBuffer object, not auto released.
      * @return A CommandBuffer object.
@@ -99,6 +101,7 @@ protected:
      */
     virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string& source) override;
 
+    GLint _defaultFBO = 0;// The value gets from glGetIntegerv, so need to use GLint
 };
 //end of _opengl group
 /// @}

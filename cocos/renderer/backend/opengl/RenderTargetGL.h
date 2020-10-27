@@ -4,13 +4,15 @@
 
 CC_BACKEND_BEGIN
 
+class DeviceGL;
+
 class RenderTargetGL : public RenderTarget
 {
 public:
     /*
     * generateFBO, false, use for screen framebuffer
     */
-    RenderTargetGL(bool defaultRenderTarget);
+    RenderTargetGL(bool defaultRenderTarget, DeviceGL* deviceGL);
     ~RenderTargetGL();
 
     void bindFrameBuffer() const override;

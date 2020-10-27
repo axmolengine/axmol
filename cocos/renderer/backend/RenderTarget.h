@@ -56,13 +56,13 @@ public:
     };
     
     bool isDefaultRenderTarget() const { return _defaultRenderTarget; }
-    
-    bool _defaultRenderTarget = false;
+
     ColorAttachment _color{};
     RenderBuffer _depth{};
     RenderBuffer _stencil{};
     TargetBufferFlags _flags{};
-    
+protected:
+    bool _defaultRenderTarget = false;
     // uint8_t samples = 1;
     
 };

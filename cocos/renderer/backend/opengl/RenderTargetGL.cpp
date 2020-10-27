@@ -1,15 +1,16 @@
 #include "RenderTargetGL.h"
+#include "DeviceGL.h"
 #include "base/ccMacros.h"
 
 CC_BACKEND_BEGIN
 
-RenderTargetGL::RenderTargetGL(bool defaultRenderTarget) : RenderTarget(defaultRenderTarget)
+RenderTargetGL::RenderTargetGL(bool defaultRenderTarget, DeviceGL* deviceGL) : RenderTarget(defaultRenderTarget)
 {
     if (!defaultRenderTarget) {
         glGenFramebuffers(1, &_FBO);
     }
     else {
-        _FBO = 0;
+        _FBO = deviceGL->getDefaultFBO();
     }
 }
 RenderTargetGL::~RenderTargetGL()
