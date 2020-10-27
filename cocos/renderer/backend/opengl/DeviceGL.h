@@ -23,6 +23,7 @@
  ****************************************************************************/
  
 #include "../Device.h"
+#include "platform/CCGL.h"
 
 CC_BACKEND_BEGIN
 /**
