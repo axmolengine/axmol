@@ -59,7 +59,6 @@ namespace
 
 CommandBufferGL::CommandBufferGL()
 {
-    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
 }
 
 CommandBufferGL::~CommandBufferGL()
