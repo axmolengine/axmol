@@ -243,12 +243,12 @@ const std::unordered_map<std::string, AttributeBindInfo> ProgramGL::getActiveAtt
 void ProgramGL::computeUniformInfos()
 {
     if (!_program)
-    return;
+        return;
     
     GLint numOfUniforms = 0;
     glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &numOfUniforms);
     if (!numOfUniforms)
-    return;
+        return;
     
 #define MAX_UNIFORM_NAME_LENGTH 256
     UniformInfo uniform;
@@ -256,7 +256,7 @@ void ProgramGL::computeUniformInfos()
     _totalBufferSize = 0;
     _maxLocation = -1;
     _activeUniformInfos.clear();
-    GLchar* uniformName = (GLchar*)malloc(MAX_UNIFORM_NAME_LENGTH + 1);
+    GLchar uniformName[MAX_UNIFORM_NAME_LENGTH + 1];
     for (int i = 0; i < numOfUniforms; ++i)
     {
         glGetActiveUniform(_program, i, MAX_UNIFORM_NAME_LENGTH, &length, &uniform.count, &uniform.type, uniformName);
@@ -278,7 +278,6 @@ void ProgramGL::computeUniformInfos()
         _totalBufferSize += uniform.size * uniform.count;
         _maxLocation = _maxLocation <= uniform.location ? (uniform.location + 1) : _maxLocation;
     }
-    free(uniformName);
 }
 
 int ProgramGL::getAttributeLocation(Attribute name) const
