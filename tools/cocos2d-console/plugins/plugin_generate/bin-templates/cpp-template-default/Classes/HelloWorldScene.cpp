@@ -1,5 +1,5 @@
 #include "HelloWorldScene.h"
-#include "editor-support/cocostudio/CocoStudio.h"
+#include "extensions/cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;

@@ -48,7 +48,7 @@
         "cocos/ui/Android.mk",
         "cocos/network/Android.mk",
         "cocos/platform/android/Android.mk",
-        "cocos/editor-support/spine/Android.mk"
+        "extensions/spine/Android.mk"
     ],
     "support_vs_versions" : [ 2015 ] 
 }
