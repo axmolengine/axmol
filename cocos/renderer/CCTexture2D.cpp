@@ -593,7 +593,7 @@ backend::PixelFormat Texture2D::getDefaultAlphaPixelFormat()
     return g_defaultAlphaPixelFormat;
 }
 
-unsigned int Texture2D::getBitsPerPixelForFormat(backend::PixelFormat format)
+unsigned int Texture2D::getBitsPerPixelForFormat(backend::PixelFormat format) const
 {
     return backend::PixelFormatUtils::getFormatDescriptor(format).bpp;
 }
