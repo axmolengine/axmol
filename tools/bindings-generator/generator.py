@@ -6,7 +6,6 @@
 
 from clang import cindex
 import sys
-import ConfigParser
 import yaml
 import re
 import os
@@ -14,6 +13,10 @@ import inspect
 import traceback
 from Cheetah.Template import Template
 
+if(sys.version_info.major >= 3):
+    import configparser as ConfigParser
+else:
+    import ConfigParser
 type_map = {
     cindex.TypeKind.VOID        : "void",
     cindex.TypeKind.BOOL        : "bool",
@@ -1189,7 +1192,7 @@ class NativeClass(object):
         elif self._current_visibility == cindex.AccessSpecifier.PUBLIC and cursor.kind == cindex.CursorKind.CONSTRUCTOR and not self.is_abstract:
             # Skip copy constructor
             if cursor.displayname == self.class_name + "(const " + self.namespaced_class_name + " &)":
-                # print "Skip copy constructor: " + cursor.displayname
+                # print("Skip copy constructor: " + cursor.displayname)
                 return True
 
             m = NativeFunction(cursor)
@@ -1379,19 +1382,19 @@ class Generator(object):
             for key in self.skip_classes.iterkeys():
                 if key == "*" or re.match("^" + key + "$", class_name):
                     if verbose:
-                        print "%s in skip_classes" % (class_name)
+                        print("%s in skip_classes" % (class_name))
                     if len(self.skip_classes[key]) == 1 and self.skip_classes[key][0] == "*":
                         if verbose:
-                            print "%s will be skipped completely" % (class_name)
+                            print("%s will be skipped completely" % (class_name))
                         return True
                     if method_name != None:
                         for func in self.skip_classes[key]:
                             if re.match(func, method_name):
                                 if verbose:
-                                    print "%s will skip method %s" % (class_name, method_name)
+                                    print("%s will skip method %s" % (class_name, method_name))
                                 return True
         if verbose:
-            print "%s will be accepted (%s, %s)" % (class_name, key, self.skip_classes[key])
+            print("%s will be accepted (%s, %s)" % (class_name, key, self.skip_classes[key]))
         return False
 
     def should_bind_field(self, class_name, field_name, verbose=False):
@@ -1403,16 +1406,16 @@ class Generator(object):
             for key in self.bind_fields.iterkeys():
                 if key == "*" or re.match("^" + key + "$", class_name):
                     if verbose:
-                        print "%s in bind_fields" % (class_name)
+                        print("%s in bind_fields" % (class_name))
                     if len(self.bind_fields[key]) == 1 and self.bind_fields[key][0] == "*":
                         if verbose:
-                            print "All public fields of %s will be bound" % (class_name)
+                            print("All public fields of %s will be bound" % (class_name))
                         return True
                     if field_name != None:
                         for field in self.bind_fields[key]:
                             if re.match(field, field_name):
                                 if verbose:
-                                    print "Field %s of %s will be bound" % (field_name, class_name)
+                                    print("Field %s of %s will be bound" % (field_name, class_name))
                                 return True
         return False
 
@@ -1529,8 +1532,8 @@ class Generator(object):
         print("====\nErrors in parsing headers:")
         severities=['Ignored', 'Note', 'Warning', 'Error', 'Fatal']
         for idx, d in enumerate(errors):
-            print "%s. <severity = %s,\n    location = %r,\n    details = %r>" % (
-                idx+1, severities[d.severity], d.location, d.spelling)
+            print("%s. <severity = %s,\n    location = %r,\n    details = %r>" % (
+                idx+1, severities[d.severity], d.location, d.spelling))
         print("====\n")
 
     def _parse_headers(self):
@@ -1792,7 +1795,7 @@ def main():
 
     userconfig = ConfigParser.SafeConfigParser()
     userconfig.read('userconf.ini')
-    print 'Using userconfig \n ', userconfig.items('DEFAULT')
+    print('Using userconfig \n ', userconfig.items('DEFAULT'))
 
     clang_lib_path = os.path.join(userconfig.get('DEFAULT', 'cxxgeneratordir'), 'libclang')
     cindex.Config.set_library_path(clang_lib_path);
@@ -1840,9 +1843,9 @@ def main():
         if t == ".svn" or t == ".cvs" or t == ".git" or t == ".gitignore":
             continue
 
-        print "\n.... Generating bindings for target", t
+        print( "\n.... Generating bindings for target", t)
         for s in sections:
-            print "\n.... .... Processing section", s, "\n"
+            print( "\n.... .... Processing section", s, "\n")
             gen_opts = {
                 'prefix': config.get(s, 'prefix'),
                 'headers':    (config.get(s, 'headers'        , 0, dict(userconfig.items('DEFAULT')))),
