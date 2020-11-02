@@ -9,7 +9,7 @@ On Windows:
 * Add the installed path of python (e.g. C:\Python27) to windows environment variable named 'PATH'.
 * Download pyyaml from http://pyyaml.org/download/pyyaml/PyYAML-3.11.win32-py2.7.exe and install it.
 * Download [Cheetah-2.4.4.tar.gz](https://pypi.python.org/packages/cd/b0/c2d700252fc251e91c08639ff41a8a5203b627f4e0a2ae18a6b662ab32ea/Cheetah-2.4.4.tar.gz#md5=853917116e731afbc8c8a43c37e6ddba), extract and install it by `python setup.py`.
-* Set environment variables `NDK_ROOT` and `PYTHON_BIN`
+* Set environment variables `ANDROID_NDK` and `PYTHON_BIN`
 * Go to "cocos2d-x/tools/tolua" folder, and run "genbindings.py". The generated codes will be under "cocos\scripting\auto-generated\lua-bindings".
 
 
@@ -31,7 +31,7 @@ On MAC:
 * Download NDK 64bit r10c or later from [Android Ndk](https://developer.android.com/ndk/downloads/index.html)
 * Run
 <pre>
-	export NDK_ROOT=/path/to/android-ndk-10c
+	export ANDROID_NDK=/path/to/android-ndk-10c
     ./genbindings.py
 </pre>
 
@@ -52,6 +52,6 @@ On Ubuntu Linux 12.04 64bit
 * Download NDK 64bit r10c or later from [Android Ndk](https://developer.android.com/ndk/downloads/index.html)
 * Go to "cocos2d-x/tools/tolua", Run
 <pre>
-	export NDK_ROOT=/path/to/android-ndk-r10c
+	export ANDROID_NDK=/path/to/android-ndk-r10c
     ./genbindings.py
 </pre>

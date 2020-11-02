@@ -48,7 +48,7 @@ Included in this repository is a simple test. Use this to confirm the generator 
 * If you are using python installed from other way, copy user.cfg.sample and rename it as `user.cfg` then set the absolute path to  python `PYTHON_BIN` in `user.cfg`
 * Run follow command, it will generate a `userconf.ini`, and check the values in it if it occorus any error.
 <pre>
-	export NDK_ROOT=/path/to/android-ndk-r16
+	export ANDROID_NDK=/path/to/android-ndk-r16
     ./test.sh
 </pre>
 
@@ -67,7 +67,7 @@ Included in this repository is a simple test. Use this to confirm the generator 
 * If you are using python installed from other way, copy user.cfg.sample and rename it as `user.cfg` then set the absolute path to  python `PYTHON_BIN` in `user.cfg`
 * Run follow command, it will generate a `userconf.ini`, and check the values in it if it occorus any error.
 <pre>
-	export NDK_ROOT=/path/to/android-ndk-r16
+	export ANDROID_NDK=/path/to/android-ndk-r16
     ./test.sh
 </pre>
 
@@ -77,7 +77,7 @@ Included in this repository is a simple test. Use this to confirm the generator 
 * Download pyyaml from http://pyyaml.org/download/pyyaml/PyYAML-3.10.win32-py2.7.exe and install it.
 * Download [Cheetah-2.4.4.tar.gz](https://pypi.python.org/packages/cd/b0/c2d700252fc251e91c08639ff41a8a5203b627f4e0a2ae18a6b662ab32ea/Cheetah-2.4.4.tar.gz#md5=853917116e731afbc8c8a43c37e6ddba), extract and install it by `python setup.py`.
 * Download [NDK r16](https://dl.google.com/android/repository/android-ndk-r16-windows-x86_64.zip) from [google](https://developer.android.com/ndk/downloads/index.html)
-* Set the environment variables (`PYTHON_ROOT` and `NDK_ROOT`) or just them in `test.bat`.
+* Set the environment variables (`PYTHON_ROOT` and `ANDROID_NDK`) or just them in `test.bat`.
 * Run "test.bat". The generated codes will be under "simple_test_bindings".
 
 
