@@ -287,7 +287,7 @@ public:
     /** Helper functions that returns bits per pixels for a given format.
      @since v2.0
      */
-    static unsigned int getBitsPerPixelForFormat(backend::PixelFormat format);
+    unsigned int getBitsPerPixelForFormat(backend::PixelFormat format) const;
 
     /** Get content size. */
     const Size& getContentSizeInPixels();

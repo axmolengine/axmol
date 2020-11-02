@@ -90,7 +90,7 @@ static void ud_write_v_s(yasio::obstream& obs, const cxx17::string_view value)
         UserDefault::getInstance()->encrypt(obs.wptr(valpos + sizeof(int32_t)), obs.length() - valpos - sizeof(int32_t), AES_ENCRYPT);
 }
 
-void UserDefault::setEncryptEnabled(bool enabled, const cxx17::string_view& key, const cxx17::string_view& iv)
+void UserDefault::setEncryptEnabled(bool enabled, const std::string& key, const std::string& iv)
 {
     _encryptEnabled = enabled;
     if (_encryptEnabled) {
