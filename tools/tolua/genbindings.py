@@ -7,23 +7,22 @@
 import sys
 import os, os.path
 import shutil
-import ConfigParser
 import subprocess
 import re
 from contextlib import contextmanager
 
 
 def _check_ndk_root_env():
-    ''' Checking the environment NDK_ROOT, which will be used for building
+    ''' Checking the environment ANDROID_NDK, which will be used for building
     '''
 
     try:
-        NDK_ROOT = os.environ['NDK_ROOT']
+        ANDROID_NDK = os.environ['ANDROID_NDK']
     except Exception:
-        print "NDK_ROOT not defined. Please define NDK_ROOT in your environment."
+        print("ANDROID_NDK not defined. Please define ANDROID_NDK in your environment.")
         sys.exit(1)
 
-    return NDK_ROOT
+    return ANDROID_NDK
 
 def _check_python_bin_env():
     ''' Checking the environment PYTHON_BIN, which will be used for building
@@ -32,7 +31,7 @@ def _check_python_bin_env():
     try:
         PYTHON_BIN = os.environ['PYTHON_BIN']
     except Exception:
-        print "PYTHON_BIN not defined, use current python."
+        print("PYTHON_BIN not defined, use current python.")
         PYTHON_BIN = sys.executable
 
     return PYTHON_BIN
@@ -62,7 +61,7 @@ def _find_all_files_match(dir, cond, all):
 def _find_toolchain_include_path():
     '''
     Search gcc prebuilt include path
-    for instance: "$NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/include"
+    for instance: "$ANDROID_NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/include"
     '''
     foundFiles = []
     _find_all_files_match(os.path.join(_check_ndk_root_env(), "toolchains"), lambda x : os.path.basename(x) == "stdarg.h" and "arm-linux-androideabi" in x , foundFiles)
@@ -74,7 +73,7 @@ def _find_toolchain_include_path():
 def _find_llvm_include_path():
     '''
     Search llvm prebuilt include path.
-    for instance: "$NDK_ROOT/toolchains/llvm/prebuilt/windows-x86_64/lib64/clang/6.0.2/include"
+    for instance: "$ANDROID_NDK/toolchains/llvm/prebuilt/windows-x86_64/lib64/clang/6.0.2/include"
     '''
     versionFile = _find_first_file_in_dir(_check_ndk_root_env(), "AndroidVersion.txt")
     if versionFile is None:
@@ -128,7 +127,7 @@ def main():
     elif 'linux' in platform:
         cur_platform = 'linux'
     else:
-        print 'Your platform is not supported!'
+        print('Your platform is not supported!')
         sys.exit(1)
 
     x86_llvm_path = ""
@@ -143,8 +142,8 @@ def main():
     elif os.path.isdir(x86_llvm_path):
         llvm_path = x86_llvm_path
     else:
-        print 'llvm toolchain not found!'
-        print 'path: %s or path: %s are not valid! ' % (x86_llvm_path, x64_llvm_path)
+        print('llvm toolchain not found!')
+        print('path: %s or path: %s are not valid! ' % (x86_llvm_path, x64_llvm_path))
         sys.exit(1)
 
     x86_gcc_toolchain_path = ""
@@ -159,8 +158,8 @@ def main():
     elif os.path.isdir(x86_gcc_toolchain_path):
         gcc_toolchain_path = x86_gcc_toolchain_path
     else:
-        print 'gcc toolchain not found!'
-        print 'path: %s or path: %s are not valid! ' % (x64_gcc_toolchain_path, x86_gcc_toolchain_path)
+        print('gcc toolchain not found!')
+        print('path: %s or path: %s are not valid! ' % (x64_gcc_toolchain_path, x86_gcc_toolchain_path))
         sys.exit(1)
 
 
@@ -169,8 +168,15 @@ def main():
     cxx_generator_root = os.path.abspath(os.path.join(project_root, 'tools/bindings-generator'))
 
     extraFlags = _defaultIncludePath()
+    
     # save config to file
-    config = ConfigParser.ConfigParser()
+    if(sys.version_info.major >= 3):
+        import configparser # import ConfigParser
+        config = configparser.ConfigParser()
+    else:
+        import ConfigParser
+        config = ConfigParser.ConfigParser()
+    
     config.set('DEFAULT', 'androidndkdir', ndk_root)
     config.set('DEFAULT', 'clangllvmdir', llvm_path)
     config.set('DEFAULT', 'gcc_toolchain_dir', gcc_toolchain_path)
@@ -180,7 +186,7 @@ def main():
 
     conf_ini_file = os.path.abspath(os.path.join(os.path.dirname(__file__), 'userconf.ini'))
 
-    print 'generating userconf.ini...'
+    print('generating userconf.ini...')
     with open(conf_ini_file, 'w') as configfile:
       config.write(configfile)
 
@@ -220,20 +226,20 @@ def main():
         for key in cmd_args.keys():
             args = cmd_args[key]
             cfg = '%s/%s' % (tolua_root, key)
-            print 'Generating bindings for %s...' % (key[:-4])
+            print('Generating bindings for %s...' % (key[:-4]))
             command = '%s %s %s -s %s -t %s -o %s -n %s' % (python_bin, generator_py, cfg, args[0], target, output_dir, args[1])
-            print command
+            print(command)
             _run_cmd(command)
 
-        print '---------------------------------'
-        print 'Generating lua bindings succeeds.'
-        print '---------------------------------'
+        print('---------------------------------')
+        print('Generating lua bindings succeeds.')
+        print('---------------------------------')
 
     except Exception as e:
         if e.__class__.__name__ == 'CmdError':
-            print '---------------------------------'
-            print 'Generating lua bindings fails.'
-            print '---------------------------------'
+            print('---------------------------------')
+            print('Generating lua bindings fails.')
+            print('---------------------------------')
             sys.exit(1)
         else:
             raise
