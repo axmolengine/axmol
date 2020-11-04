@@ -234,6 +234,7 @@ void GLoader3D::onChangeSpine()
     if (skeletonAni == nullptr)
         return;
 
+#if !defined(CC_USE_SPINE_CPP) || CC_USE_SPINE_CPP
     spine::AnimationState* state = skeletonAni->getState();
 
     spine::Animation* aniToUse = !_animationName.empty() ? skeletonAni->findAnimation(_animationName) : nullptr;
@@ -258,6 +259,32 @@ void GLoader3D::onChangeSpine()
         state->clearTrack(0);
 
     skeletonAni->setSkin(_skinName);
+#else
+    auto state = skeletonAni->getState();
+
+    auto aniToUse = !_animationName.empty() ? skeletonAni->findAnimation(_animationName) : nullptr;
+    if (aniToUse != nullptr)
+    {
+        auto entry = state->tracks[0];
+        if (entry == nullptr || strcmp(entry->animation->name, _animationName.c_str()) != 0
+            || (entry->trackTime >= (entry->animationEnd - entry->animationStart)) && !entry->loop)
+            entry = spAnimationState_setAnimation(state, 0, aniToUse, _loop);
+        else
+            entry->loop = _loop;
+
+        if (_playing)
+            entry->timeScale = 1;
+        else
+        {
+            entry->timeScale = 0;
+            entry->trackTime = MathUtil::lerp(0, entry->animationEnd - entry->animationStart, _frame / 100.0f);
+        }
+    }
+    else
+        spAnimationState_clearTrack(state, 0);
+
+    skeletonAni->setSkin(_skinName);
+#endif
 }
 
 void GLoader3D::loadExternal()
