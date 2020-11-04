@@ -1,5 +1,5 @@
-# The spine for engine-x
-* spine-runtime version: 3.8
+# The spine-runtime for engine-x
+* version: 3.8
 * based on spine-cpp
 
 # Reference links
