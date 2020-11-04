@@ -8024,8 +8024,6 @@ int register_all_cocos2dx_shaders_manual(lua_State *tolua_S)
         set_lua_field(position_vert);
         set_lua_field(layer_radialGradient_frag);
         set_lua_field(grayScale_frag);
-        set_lua_field(positionTextureUColor_vert);
-        set_lua_field(positionTextureUColor_frag);
         set_lua_field(positionUColor_vert);
         set_lua_field(positionUColor_frag);
         set_lua_field(etc1_frag);
