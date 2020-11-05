@@ -96,7 +96,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassParams& params,
 #endif
     }
     
-    if(bitmask::any(this->_flags, RenderTargetFlag::DEPTH)) {
+    if(bitmask::any(this->_flags, RenderTargetFlag::DEPTH_AND_STENCIL)) {
         auto depthAttachment = getDepthAttachment();
         if(depthAttachment){
             descriptor.depthAttachment.texture = depthAttachment.texture;
@@ -106,9 +106,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassParams& params,
             descriptor.depthAttachment.storeAction = getStoreAction(params, TargetBufferFlags::DEPTH);
             descriptor.depthAttachment.clearDepth = params.clearDepthValue;
         }
-    }
-    
-    if(bitmask::any(this->_flags, RenderTargetFlag::STENCIL)) {
+        
         auto stencilAttachment = getStencilAttachment();
         if(stencilAttachment) {
             descriptor.stencilAttachment.texture = stencilAttachment.texture;
@@ -119,6 +117,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassParams& params,
             descriptor.stencilAttachment.clearStencil = params.clearStencilValue;
         }
     }
+    
 #if 0
     if (multisampledDepth) {
         // We're rendering into our temporary MSAA texture and doing an automatic resolve.
