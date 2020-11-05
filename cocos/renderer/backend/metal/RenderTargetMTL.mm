@@ -96,24 +96,28 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassParams& params,
 #endif
     }
     
-    auto depthAttachment = getDepthAttachment();
-    if(depthAttachment){
-        descriptor.depthAttachment.texture = depthAttachment.texture;
-        descriptor.depthAttachment.level = depthAttachment.level;
-        // descriptor.depthAttachment.slice = depthAttachment.layer;
-        descriptor.depthAttachment.loadAction = getLoadAction(params, TargetBufferFlags::DEPTH);
-        descriptor.depthAttachment.storeAction = getStoreAction(params, TargetBufferFlags::DEPTH);
-        descriptor.depthAttachment.clearDepth = params.clearDepthValue;
+    if(bitmask::any(this->_flags, RenderTargetFlag::DEPTH)) {
+        auto depthAttachment = getDepthAttachment();
+        if(depthAttachment){
+            descriptor.depthAttachment.texture = depthAttachment.texture;
+            descriptor.depthAttachment.level = depthAttachment.level;
+            // descriptor.depthAttachment.slice = depthAttachment.layer;
+            descriptor.depthAttachment.loadAction = getLoadAction(params, TargetBufferFlags::DEPTH);
+            descriptor.depthAttachment.storeAction = getStoreAction(params, TargetBufferFlags::DEPTH);
+            descriptor.depthAttachment.clearDepth = params.clearDepthValue;
+        }
     }
     
-    auto stencilAttachment = getStencilAttachment();
-    if(stencilAttachment) {
-        descriptor.stencilAttachment.texture = stencilAttachment.texture;
-        descriptor.stencilAttachment.level = depthAttachment.level;
-        // descriptor.stencilAttachment.slice = depthAttachment.layer;
-        descriptor.stencilAttachment.loadAction = getLoadAction(params, TargetBufferFlags::STENCIL);
-        descriptor.stencilAttachment.storeAction = getStoreAction(params, TargetBufferFlags::STENCIL);
-        descriptor.stencilAttachment.clearStencil= params.clearStencilValue;
+    if(bitmask::any(this->_flags, RenderTargetFlag::STENCIL)) {
+        auto stencilAttachment = getStencilAttachment();
+        if(stencilAttachment) {
+            descriptor.stencilAttachment.texture = stencilAttachment.texture;
+            descriptor.stencilAttachment.level = stencilAttachment.level;
+            // descriptor.stencilAttachment.slice = depthAttachment.layer;
+            descriptor.stencilAttachment.loadAction = getLoadAction(params, TargetBufferFlags::STENCIL);
+            descriptor.stencilAttachment.storeAction = getStoreAction(params, TargetBufferFlags::STENCIL);
+            descriptor.stencilAttachment.clearStencil = params.clearStencilValue;
+        }
     }
 #if 0
     if (multisampledDepth) {
