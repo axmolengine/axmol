@@ -297,14 +297,14 @@ void RenderPipelineMTL::chooseAttachmentFormat(const RenderTarget* renderTarget,
                                             PixelFormat& depthFormat,
                                             PixelFormat& stencilFormat)
 {
-    // Sets color attachment format
+    // choose color attachment format
     auto rtMTL = static_cast<const RenderTargetMTL*>(renderTarget);
     auto rtflags = rtMTL->getTargetFlags();
     for(auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i) {
         colorAttachmentsFormat[i] = bitmask::any(rtflags, getMRTColorFlag(i)) ? rtMTL->getColorAttachmentPixelFormat(i) : PixelFormat::NONE;
     }
     
-    // Sets depth and stencil attachment format, match RenderTargetMTL::applyRenderPassAttachments
+    // choose depth and stencil attachment format, match RenderTargetMTL::applyRenderPassAttachments
     depthFormat = bitmask::any(rtflags, RenderTargetFlag::DEPTH) ? rtMTL->getDepthAttachmentPixelFormat() : PixelFormat::NONE;
     stencilFormat = bitmask::any(rtflags, RenderTargetFlag::STENCIL) ? rtMTL->getStencilAttachmentPixelFormat() : PixelFormat::NONE;
 }
