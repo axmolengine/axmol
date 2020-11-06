@@ -183,7 +183,7 @@ void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineD
     
     memset(&hashMe, 0, sizeof(hashMe));
     const auto& blendDescriptor = pipelineDescirptor.blendDescriptor;
-    getAttachmentFormat(renderTarget, _colorAttachmentsFormat, _depthAttachmentFormat, _stencilAttachmentFormat);
+    chooseAttachmentFormat(renderTarget, _colorAttachmentsFormat, _depthAttachmentFormat, _stencilAttachmentFormat);
     auto program = static_cast<ProgramMTL*>(pipelineDescirptor.programState->getProgram());
     hashMe.vertexShaderHash = program->getVertexShader()->getHashValue();
     hashMe.fragmentShaderHash = program->getFragmentShader()->getHashValue();
@@ -292,33 +292,21 @@ void RenderPipelineMTL::setShaderModules(const PipelineDescriptor& descriptor)
     _mtlRenderPipelineDescriptor.fragmentFunction = fragShaderModule->getMTLFunction();
 }
 
-void RenderPipelineMTL::getAttachmentFormat(const RenderTarget* renderTarget,
+void RenderPipelineMTL::chooseAttachmentFormat(const RenderTarget* renderTarget,
                                             PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
                                             PixelFormat& depthFormat,
                                             PixelFormat& stencilFormat)
 {
+    // Sets color attachment format
     auto rtMTL = static_cast<const RenderTargetMTL*>(renderTarget);
     auto rtflags = rtMTL->getTargetFlags();
     for(auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i) {
-        if (bitmask::any(rtflags, getMRTColorFlag(i)))
-        {
-            colorAttachmentsFormat[i] = rtMTL->getColorAttachmentPixelFormat(i);
-        }
-        else
-        {
-            colorAttachmentsFormat[i] = PixelFormat::NONE;
-        }
+        colorAttachmentsFormat[i] = bitmask::any(rtflags, getMRTColorFlag(i)) ? rtMTL->getColorAttachmentPixelFormat(i) : PixelFormat::NONE;
     }
     
-    if (bitmask::any(rtflags, RenderTargetFlag::DEPTH_AND_STENCIL))
-    {
-        depthFormat = rtMTL->getDepthAttachmentPixelFormat();
-        stencilFormat =rtMTL->getStencilAttachmentPixelFormat();
-    }
-    else
-    {
-        depthFormat = stencilFormat = PixelFormat::NONE;
-    }
+    // Sets depth and stencil attachment format, match RenderTargetMTL::applyRenderPassAttachments
+    depthFormat = bitmask::any(rtflags, RenderTargetFlag::DEPTH) ? rtMTL->getDepthAttachmentPixelFormat() : PixelFormat::NONE;
+    stencilFormat = bitmask::any(rtflags, RenderTargetFlag::STENCIL) ? rtMTL->getStencilAttachmentPixelFormat() : PixelFormat::NONE;
 }
 
 void RenderPipelineMTL::setBlendStateAndFormat(const BlendDescriptor& blendDescriptor)
