@@ -69,9 +69,6 @@ if (NOT DEFINED CC_FORCE_USE_GLES)
     set(CC_FORCE_USE_GLES FALSE CACHE INTERNAL "Force use GLES" )
 endif()
 
-set(LUA_ENGINE "plainlua" CACHE INTERNAL "The lua core lib, luajit or plainlua")
-set(LUA_VERSION "5.3.6" CACHE INTERNAL "The plainlua version")
-
 project(cocos2d_libs)
 
 include(2d/CMakeLists.txt)
