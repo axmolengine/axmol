@@ -199,7 +199,6 @@ void Renderer::init()
     auto device = backend::Device::getInstance();
     _commandBuffer = device->newCommandBuffer();
     // @MTL: the depth stencil flags must same render target and _depthStencilDescriptor
-    // TODO: can use one?
     _depthStencilDescriptor.depthStencilFlags = TargetBufferFlags::DEPTH_AND_STENCIL;
     _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | _depthStencilDescriptor.depthStencilFlags);
     
@@ -352,7 +351,6 @@ void Renderer::visitRenderQueue(RenderQueue& queue)
     //Process Global-Z > 0 Queue
     //
     doVisitRenderQueue(queue.getSubQueue(RenderQueue::QUEUE_GROUP::GLOBALZ_POS));
-
 }
 
 void Renderer::doVisitRenderQueue(const std::vector<RenderCommand*>& renderCommands)
