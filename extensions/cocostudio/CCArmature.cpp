@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
-#include "Box2D/Box2D.h"
+#include "box2d/box2d.h"
 #elif ENABLE_PHYSICS_CHIPMUNK_DETECT
 #include "chipmunk/chipmunk.h"
 #endif
