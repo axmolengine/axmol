@@ -86,7 +86,7 @@
     # cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"
 
     # for simulator x86_64
-    # cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64
+    # cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator
   ```
   4. 之后就可以用xcode打开, 选择cpp-tests编译运行
 
@@ -103,4 +103,3 @@
 ### 参考链接
   * engine-x-3rd: https://github.com/c4games/engine-x-3rd
   * official v4: https://gitee.com/mirrors/cocos2d-x
-  * Git快速手册: https://github.com/c4games/engine-x/wiki/Git-Guides

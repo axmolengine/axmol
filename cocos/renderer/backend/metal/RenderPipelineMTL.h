@@ -62,7 +62,7 @@ private:
     void setBlendState(MTLRenderPipelineColorAttachmentDescriptor*, const BlendDescriptor&);
     void setShaderModules(const PipelineDescriptor&);
     void setBlendStateAndFormat(const BlendDescriptor&);
-    void chooseAttachmentFormat(const RenderTarget* renderTarget, PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT], PixelFormat&, PixelFormat&);
+    void getAttachmentFormat(const RenderTarget* renderTarget, PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT], PixelFormat&, PixelFormat&);
     
     id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
     id<MTLDevice> _mtlDevice = nil;

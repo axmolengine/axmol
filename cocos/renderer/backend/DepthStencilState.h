@@ -74,7 +74,7 @@ class DepthStencilState : public cocos2d::Ref
 public:
     virtual void update(const DepthStencilDescriptor& descriptor);
     const DepthStencilDescriptor& getDepthStencilInfo()const { return _depthStencilInfo; }
-    bool isEnabled() const;
+    bool isEnabled() const { return bitmask::any(_depthStencilInfo.depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL); }
 protected:
     /**
      * @param descriptor Specifies depth and stencil descriptor.

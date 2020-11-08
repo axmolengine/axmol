@@ -96,31 +96,25 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassParams& params,
 #endif
     }
     
-    // Sets descriptor depth and stencil params, should match RenderTargetMTL::chooseAttachmentFormat
-    if(bitmask::any(this->_flags, RenderTargetFlag::DEPTH)) {
-        auto depthAttachment = getDepthAttachment();
-        if(depthAttachment){
-            descriptor.depthAttachment.texture = depthAttachment.texture;
-            descriptor.depthAttachment.level = depthAttachment.level;
-            // descriptor.depthAttachment.slice = depthAttachment.layer;
-            descriptor.depthAttachment.loadAction = getLoadAction(params, TargetBufferFlags::DEPTH);
-            descriptor.depthAttachment.storeAction = getStoreAction(params, TargetBufferFlags::DEPTH);
-            descriptor.depthAttachment.clearDepth = params.clearDepthValue;
-        }
+    auto depthAttachment = getDepthAttachment();
+    if(depthAttachment){
+        descriptor.depthAttachment.texture = depthAttachment.texture;
+        descriptor.depthAttachment.level = depthAttachment.level;
+        // descriptor.depthAttachment.slice = depthAttachment.layer;
+        descriptor.depthAttachment.loadAction = getLoadAction(params, TargetBufferFlags::DEPTH);
+        descriptor.depthAttachment.storeAction = getStoreAction(params, TargetBufferFlags::DEPTH);
+        descriptor.depthAttachment.clearDepth = params.clearDepthValue;
     }
     
-    if(bitmask::any(this->_flags, RenderTargetFlag::STENCIL)) {
-        auto stencilAttachment = getStencilAttachment();
-        if(stencilAttachment) {
-            descriptor.stencilAttachment.texture = stencilAttachment.texture;
-            descriptor.stencilAttachment.level = stencilAttachment.level;
-            // descriptor.stencilAttachment.slice = depthAttachment.layer;
-            descriptor.stencilAttachment.loadAction = getLoadAction(params, TargetBufferFlags::STENCIL);
-            descriptor.stencilAttachment.storeAction = getStoreAction(params, TargetBufferFlags::STENCIL);
-            descriptor.stencilAttachment.clearStencil = params.clearStencilValue;
-        }
+    auto stencilAttachment = getStencilAttachment();
+    if(stencilAttachment) {
+        descriptor.stencilAttachment.texture = stencilAttachment.texture;
+        descriptor.stencilAttachment.level = depthAttachment.level;
+        // descriptor.stencilAttachment.slice = depthAttachment.layer;
+        descriptor.stencilAttachment.loadAction = getLoadAction(params, TargetBufferFlags::STENCIL);
+        descriptor.stencilAttachment.storeAction = getStoreAction(params, TargetBufferFlags::STENCIL);
+        descriptor.stencilAttachment.clearStencil= params.clearStencilValue;
     }
-   
 #if 0
     if (multisampledDepth) {
         // We're rendering into our temporary MSAA texture and doing an automatic resolve.
@@ -177,7 +171,7 @@ PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const
 
 PixelFormat RenderTargetMTL::getDepthAttachmentPixelFormat() const
 { // FIXME: engine-x only support D24S8
-    if(bitmask::any(_flags, TargetBufferFlags::DEPTH)) {
+    if(bitmask::any(_flags, TargetBufferFlags::DEPTH_AND_STENCIL)) {
         if(isDefaultRenderTarget() || !_depth)
             return PixelFormat::D24S8;
         return _depth.texture->getTextureFormat();
@@ -187,7 +181,7 @@ PixelFormat RenderTargetMTL::getDepthAttachmentPixelFormat() const
 
 PixelFormat RenderTargetMTL::getStencilAttachmentPixelFormat() const
 { // FIXME: engine-x only support D24S8
-    if(bitmask::any(_flags, TargetBufferFlags::STENCIL)) {
+    if(bitmask::any(_flags, TargetBufferFlags::DEPTH_AND_STENCIL)) {
         if(isDefaultRenderTarget() || !_stencil)
             return PixelFormat::D24S8;
         return _stencil.texture->getTextureFormat();

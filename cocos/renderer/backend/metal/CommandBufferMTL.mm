@@ -200,17 +200,15 @@ void CommandBufferMTL::beginFrame()
 
 id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassParams& renderPassParams)
 {
-    if(_mtlRenderEncoder != nil &&
-       _currentRenderPassParams == renderPassParams &&
-       _currentRenderTarget == renderTarget &&
-       _currentRenderTargetFlags == renderTarget->getTargetFlags())
+    if(_mtlRenderEncoder != nil && _currentRenderPassParams == renderPassParams && _currentRenderTarget == renderTarget)
     {
         return _mtlRenderEncoder;
     }
-    
-    _currentRenderTarget = renderTarget;
-    _currentRenderPassParams = renderPassParams;
-    _currentRenderTargetFlags = renderTarget->getTargetFlags();
+    else
+    {
+        _currentRenderTarget = renderTarget;
+        _currentRenderPassParams = renderPassParams;
+    }
     
     if(_mtlRenderEncoder != nil)
     {
