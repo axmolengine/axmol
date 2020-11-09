@@ -89,7 +89,9 @@ function build_android()
     
     # generate local.properties to use system installed cmake since we require cmake-3.14+
     CMAKE_PATH=`which cmake`
-    echo "cmake.dir=$CMAKE_PATH">local.properties
+    CMAKE_DIR=`dirname ${CMAKE_PATH}`
+    echo "cmake.dir=${CMAKE_DIR}">local.properties
+    cat local.properties
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
     popd
 }
