@@ -77,7 +77,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # check visual studio version
- if(WINDOWS)
+if(WINDOWS)
     # not support other compile tools except MSVC for now
     if(MSVC)
         # Visual Studio 2015, MSVC_VERSION 1900      (v140 toolset)
@@ -92,8 +92,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
     endif()
 endif()
 
- # Set macro definitions for special platforms
- function(use_cocos2dx_compile_define target)
+# Set macro definitions for special platforms
+function(use_cocos2dx_compile_define target)
     target_compile_definitions(${target} PUBLIC $<$<CONFIG:Debug>:COCOS2D_DEBUG=1>)
     
     # !important engine-x not use double precision
@@ -137,11 +137,19 @@ endif()
     endif()
 endfunction()
 
- # Set compiler options
- function(use_cocos2dx_compile_options target)
+# Set compiler options
+function(use_cocos2dx_compile_options target)
     if(MSVC)
         target_compile_options(${target}
             PUBLIC /MP
         )
     endif()
- endfunction()
+endfunction()
+
+# softfp for android armv7a?
+# if(ANDROID)
+# 	if(${ANDROID_ABI} STREQUAL "armeabi-v7a")
+#         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfloat-abi=softfp")
+#         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfloat-abi=softfp")
+# 	endif()
+# endif()
