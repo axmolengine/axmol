@@ -157,7 +157,7 @@ endfunction()
 # Try enable asm & nasm compiler support
 set(can_use_assembler TRUE)
 enable_language(ASM)
-enable_language(ASM_NASM)
+enable_language(ASM_NASM OPTIONAL)
 message(STATUS "The nasm compiler speed up libraries: jpeg(libjpeg-turbo)")
 
 if(NOT CMAKE_ASM_NASM_COMPILER_LOADED)
