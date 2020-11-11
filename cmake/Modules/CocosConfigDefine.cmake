@@ -160,6 +160,7 @@ enable_language(ASM)
 enable_language(ASM_NASM OPTIONAL)
 message(STATUS "The nasm compiler speed up libraries: jpeg(libjpeg-turbo)")
 
-if(NOT CMAKE_ASM_NASM_COMPILER_LOADED)
+if(NOT EXISTS "${CMAKE_ASM_NASM_COMPILER}")
+   set(CMAKE_ASM_NASM_COMPILER_LOADED FALSE CACHE BOOL "Does cmake asm nasm compiler loaded" FORCE)
    message(WARNING "The nasm compiler doesn't present on your system PATH, please download from: https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/")
 endif()
