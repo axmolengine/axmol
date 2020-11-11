@@ -153,3 +153,13 @@ endfunction()
 #         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfloat-abi=softfp")
 # 	endif()
 # endif()
+
+# Try enable asm & nasm compiler support
+set(can_use_assembler TRUE)
+enable_language(ASM)
+enable_language(ASM_NASM)
+message(STATUS "The nasm compiler speed up libraries: jpeg(libjpeg-turbo)")
+
+if(NOT CMAKE_ASM_NASM_COMPILER_LOADED)
+   message(WARNING "The nasm compiler doesn't present on your system PATH, please download from: https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/")
+endif()
