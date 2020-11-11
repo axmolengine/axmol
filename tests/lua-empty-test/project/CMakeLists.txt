@@ -47,7 +47,6 @@ set(GAME_SOURCE
     )
 set(GAME_HEADER
     Classes/AppDelegate.h
-    Classes/lua_module_register.h
     )
 
 if(ANDROID)
