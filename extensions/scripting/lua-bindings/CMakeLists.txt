@@ -187,7 +187,6 @@ endif()
 
 target_compile_definitions(${ENGINEX_LUA_LIB} 
     PUBLIC LUA_COMPAT_MODULE
-    PRIVATE ENABLE_CJSON_GLOBAL=1
 )
 
 set_target_properties(${ENGINEX_LUA_LIB}
