@@ -80,7 +80,7 @@
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project
   ```sh
-    # for device arm64
+    # for any device
     cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
 
     # for device combined armv7,arm64
