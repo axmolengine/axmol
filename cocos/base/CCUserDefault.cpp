@@ -85,7 +85,7 @@ static void ud_setkey(std::string& lhs, const cxx17::string_view& rhs) {
 static void ud_write_v_s(yasio::obstream& obs, const cxx17::string_view value) 
 {
     size_t valpos = obs.length();
-    obs.write_v(value);
+    obs.write_v32(value);
     if(!value.empty())
         UserDefault::getInstance()->encrypt(obs.wptr(valpos + sizeof(int32_t)), obs.length() - valpos - sizeof(int32_t), AES_ENCRYPT);
 }
