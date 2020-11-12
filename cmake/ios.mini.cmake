@@ -33,7 +33,6 @@ endif()
 message(STATUS "Minimum ios deployment target is ${CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET}")
 
 # Sets CMAKE_SYSTEM_PROCESSOR for iphoneos and iphonesimulator
-message(STATUS "Before configure CMAKE_SYSTEM_PROCESSOR=${CMAKE_SYSTEM_PROCESSOR}")
 if("${CMAKE_OSX_SYSROOT}" MATCHES "iphonesimulator")
     if("${CMAKE_OSX_ARCHITECTURES}" MATCHES "i386")
         set(CMAKE_SYSTEM_PROCESSOR i386)
@@ -49,4 +48,3 @@ if("${CMAKE_OSX_SYSROOT}" MATCHES "iphonesimulator")
 else()
     set(CMAKE_SYSTEM_PROCESSOR arm64)
 endif()
-message(STATUS "After configure CMAKE_SYSTEM_PROCESSOR=${CMAKE_SYSTEM_PROCESSOR}")
