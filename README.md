@@ -18,6 +18,7 @@
 * Usefull PRs from **you** are welcome (review/merge ASAP)
   
 ### Highlight Features:
+* **More clearly thirdparty libs Upstram & Version & License for easy to publish your commercial apps based on engine-x**
 * Refactor AudioEngine, OpenAL for all platforms
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
