@@ -36,9 +36,9 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
     endif()
 
     if(NOT (ENGINEX_ROOT STREQUAL ""))
-        message(STATUS "Using system env var ENGINEX_ROOT=${ENGINEX_ROOT}")
         set(COCOS2DX_ROOT_PATH "${ENGINEX_ROOT}")
-        string(REPLACE "\\" "/" COCOS2DX_ROOT_PATH ${COCOS2DX_ROOT_PATH})
+        file(TO_CMAKE_PATH ${COCOS2DX_ROOT_PATH} COCOS2DX_ROOT_PATH)  # string(REPLACE "\\" "/" COCOS2DX_ROOT_PATH ${COCOS2DX_ROOT_PATH})
+        message(STATUS "Using system env var ENGINEX_ROOT=${ENGINEX_ROOT}")
     else()
         message(FATAL_ERROR "Please run setup.py add system env var 'ENGINEX_ROOT' to specific the engine root")
     endif()
