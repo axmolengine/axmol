@@ -30,7 +30,6 @@ endif()
 if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
     set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${CMAKE_OSX_DEPLOYMENT_TARGET} CACHE STRING "Minimum iphoneos deployment version")
 endif()
-message(STATUS "Minimum ios deployment target is ${CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET}")
 
 # Sets CMAKE_SYSTEM_PROCESSOR for iphoneos and iphonesimulator
 if("${CMAKE_OSX_SYSROOT}" MATCHES "iphonesimulator")
