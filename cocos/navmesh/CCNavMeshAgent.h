@@ -32,7 +32,7 @@
 
 #include "base/CCRef.h"
 #include "math/Vec3.h"
-#include "recast/DetourCrowd/DetourCrowd.h"
+#include "recast/DetourCrowd.h"
 
 class dtNavMeshQuery;
 NS_CC_BEGIN

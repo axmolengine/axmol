@@ -27,7 +27,7 @@
 #if CC_USE_NAVMESH
 
 #include "navmesh/CCNavMesh.h"
-#include "recast/DetourCrowd/DetourCrowd.h"
+#include "recast/DetourCrowd.h"
 #include "2d/CCNode.h"
 #include "2d/CCScene.h"
 #include <algorithm>

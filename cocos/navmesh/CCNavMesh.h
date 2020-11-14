@@ -31,10 +31,10 @@
 
 #include "base/CCRef.h"
 #include "math/Vec3.h"
-#include "recast/Detour/DetourNavMesh.h"
-#include "recast/Detour/DetourNavMeshQuery.h"
-#include "recast/DetourCrowd/DetourCrowd.h"
-#include "recast/DetourTileCache/DetourTileCache.h"
+#include "recast/DetourNavMesh.h"
+#include "recast/DetourNavMeshQuery.h"
+#include "recast/DetourCrowd.h"
+#include "recast/DetourTileCache.h"
 #include <string>
 #include <vector>
 

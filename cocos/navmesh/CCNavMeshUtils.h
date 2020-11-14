@@ -32,11 +32,11 @@
 #include "platform/CCPlatformMacros.h"
 #include "math/CCMath.h"
 
-#include "recast/Detour/DetourCommon.h"
-#include "recast/Detour/DetourNavMesh.h"
-#include "recast/Detour/DetourNavMeshQuery.h"
-#include "recast/DetourTileCache/DetourTileCache.h"
-#include "recast/DetourTileCache/DetourTileCacheBuilder.h"
+#include "recast/DetourCommon.h"
+#include "recast/DetourNavMesh.h"
+#include "recast/DetourNavMeshQuery.h"
+#include "recast/DetourTileCache.h"
+#include "recast/DetourTileCacheBuilder.h"
 
 NS_CC_BEGIN
 

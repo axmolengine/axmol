@@ -27,8 +27,8 @@
 
 #include "platform/CCFileUtils.h"
 #include "renderer/CCRenderer.h"
-#include "recast/Detour/DetourCommon.h"
-#include "recast/DebugUtils/DetourDebugDraw.h"
+#include "recast/DetourCommon.h"
+#include "recast/DetourDebugDraw.h"
 #include <sstream>
 
 NS_CC_BEGIN
