@@ -156,7 +156,10 @@ CC_CONSTRUCTOR_ACCESS:
     void setGhostPairCallback();
     
 protected:
+    void removePhysics3DConstraintFromBullet(Physics3DConstraint* constraint);
+
     std::vector<Physics3DObject*>      _objects;
+    std::vector<Physics3DConstraint*>  _constraints;
     std::vector<Physics3DComponent*>   _physicsComponents; //physics3d components
     bool _needCollisionChecking;
     bool _collisionCheckingFlag;

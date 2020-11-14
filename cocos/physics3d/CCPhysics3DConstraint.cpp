@@ -313,7 +313,7 @@ bool Physics3DHingeConstraint::getEnableAngularMotor() const
 }
 float Physics3DHingeConstraint::getMotorTargetVelosity() const
 {
-    return static_cast<btHingeConstraint*>(_constraint)->getMotorTargetVelosity();
+    return static_cast<btHingeConstraint*>(_constraint)->getMotorTargetVelocity();
 }
 float Physics3DHingeConstraint::getMaxMotorImpulse() const
 {
