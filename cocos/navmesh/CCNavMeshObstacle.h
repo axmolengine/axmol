@@ -33,8 +33,8 @@
 
 #include "base/CCRef.h"
 #include "math/Vec3.h"
-#include "recast/Detour/DetourNavMesh.h"
-#include "recast/DetourTileCache/DetourTileCache.h"
+#include "recast/DetourNavMesh.h"
+#include "recast/DetourTileCache.h"
 
 NS_CC_BEGIN
 

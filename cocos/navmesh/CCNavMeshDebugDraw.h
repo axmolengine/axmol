@@ -33,7 +33,7 @@
 #include "renderer/backend/Types.h"
 #include "renderer/backend/Buffer.h"
 #include "math/Vec3.h"
-#include "recast/DebugUtils/DebugDraw.h"
+#include "recast/DebugDraw.h"
 #include "renderer/CCGroupCommand.h"
 #include "renderer/CCCallbackCommand.h"
 #include "renderer/CCCustomCommand.h"
