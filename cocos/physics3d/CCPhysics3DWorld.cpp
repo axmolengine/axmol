@@ -184,6 +184,10 @@ void Physics3DWorld::removeAllPhysics3DObjects()
 
 void Physics3DWorld::addPhysics3DConstraint(Physics3DConstraint* constraint, bool disableCollisionsBetweenLinkedObjs)
 {
+    auto it = std::find(_constraints.begin(), _constraints.end(), constraint);
+    if (it != _constraints.end())
+        return;
+
     auto body = constraint->getBodyA();
     if (body)
         body->addConstraint(constraint);
@@ -194,18 +198,21 @@ void Physics3DWorld::addPhysics3DConstraint(Physics3DConstraint* constraint, boo
         body->addConstraint(constraint);
     }
     _btPhyiscsWorld->addConstraint(constraint->getbtContraint(), disableCollisionsBetweenLinkedObjs);
+
+    _constraints.push_back(constraint);
+    constraint->retain();
 }
 
 void Physics3DWorld::removePhysics3DConstraint(Physics3DConstraint* constraint)
 {
-    _btPhyiscsWorld->removeConstraint(constraint->getbtContraint());
-    
-    auto bodyA = constraint->getBodyA();
-    auto bodyB = constraint->getBodyB();
-    if (bodyA)
-        bodyA->removeConstraint(constraint);
-    if (bodyB)
-        bodyB->removeConstraint(constraint);
+    auto it = std::find(_constraints.begin(), _constraints.end(), constraint);
+
+    if (it != _constraints.end()) {
+        removePhysics3DConstraintFromBullet(constraint);
+
+        _constraints.erase(it);
+        constraint->release();
+    }
 }
 
 void Physics3DWorld::removeAllPhysics3DConstraints()
@@ -224,6 +231,23 @@ void Physics3DWorld::removeAllPhysics3DConstraints()
         }
     }
     
+    for (auto constraint : _constraints) {
+        removePhysics3DConstraintFromBullet(constraint);
+        constraint->release();
+    }
+    _constraints.clear();
+}
+
+void Physics3DWorld::removePhysics3DConstraintFromBullet(Physics3DConstraint* constraint)
+{
+    _btPhyiscsWorld->removeConstraint(constraint->getbtContraint());
+
+    auto bodyA = constraint->getBodyA();
+    auto bodyB = constraint->getBodyB();
+    if (bodyA)
+        bodyA->removeConstraint(constraint);
+    if (bodyB)
+        bodyB->removeConstraint(constraint);
 }
 
 void Physics3DWorld::stepSimulate(float dt)
