@@ -259,11 +259,18 @@ protected:
     UserDefault();
     virtual ~UserDefault();
     
-    void init();
+    void lazyInit();
 
     void closeFileMapping();
 
+    // The low level API of all getXXXForKey
+    const std::string* getValueForKey(const std::string& key);
+
+    // The low level API of all setXXXForKey
     void setValueForKey(const std::string& key, const std::string& value);
+
+    // For initializing only
+    void updateValueForKey(const std::string& key, const std::string& value);
 
 protected:
 
