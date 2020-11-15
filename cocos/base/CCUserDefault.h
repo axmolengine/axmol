@@ -83,7 +83,7 @@ public:
     int     getIntegerForKey(const char* key);
     
     /**
-     * Get bool value by key, if the key doesn't exist, will return passed default value.
+     * Get integer value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
      * @param defaultValue The default value to return if the key doesn't exist.
      * @return Integer value of the key.
@@ -92,7 +92,7 @@ public:
     virtual int getIntegerForKey(const char* key, int defaultValue);
 
     /**
-     * Get integer value by key, if the key doesn't exist, will return 0.
+     * Get large integer value by key, if the key doesn't exist, will return 0.
      * You can set the default value, or it is 0.
      * @param key The key to get value.
      * @return Integer value of the key.
@@ -101,7 +101,7 @@ public:
     int64_t   getLargeIntForKey(const char* key);
 
     /**
-     * Get bool value by key, if the key doesn't exist, will return passed default value.
+     * Get large integer value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
      * @param defaultValue The default value to return if the key doesn't exist.
      * @return Integer value of the key.
@@ -177,7 +177,7 @@ public:
      */
     virtual void setIntegerForKey(const char* key, int value);
     /**
-     * Set integer value by key.
+     * Set large integer value by key.
      * @param key The key to set.
      * @param value A integer value to set to the key.
      * @js NA
@@ -206,7 +206,9 @@ public:
     virtual void setStringForKey(const char* key, const std::string & value);
 
     /**
-     * You should invoke this function to save values set by setXXXForKey().
+     * Since we reimplement UserDefault with file mapping io,
+     * you don't needs call this function manually except you 
+     * define CC_USER_DEFAULT_PLAIN_MODE=1
      * @js NA
      */
     virtual void flush();
