@@ -84,10 +84,11 @@ static void ud_setkey(std::string& lhs, const cxx17::string_view& rhs) {
 
 static void ud_write_v_s(yasio::obstream& obs, const cxx17::string_view value) 
 {
-    size_t valpos = obs.length();
-    obs.write_v32(value);
+    size_t value_offset = obs.length();
+    obs.write_v(value);
+    value_offset += (obs.length() - value_offset - value.length());
     if(!value.empty())
-        UserDefault::getInstance()->encrypt(obs.wptr(valpos + sizeof(int32_t)), obs.length() - valpos - sizeof(int32_t), AES_ENCRYPT);
+        UserDefault::getInstance()->encrypt(obs.wptr(value_offset), value.length(), AES_ENCRYPT);
 }
 
 void UserDefault::setEncryptEnabled(bool enabled, const std::string& key, const std::string& iv)
@@ -144,9 +145,9 @@ bool UserDefault::getBoolForKey(const char* pKey)
 
 bool UserDefault::getBoolForKey(const char* pKey, bool defaultValue)
 {
-    auto it = this->_values.find(pKey);
-    if (it != this->_values.end())
-        return it->second == "true";
+    auto pValue = getValueForKey(pKey);
+    if (pValue)
+        return *pValue == "true";
 
     return defaultValue;
 }
@@ -158,9 +159,9 @@ int UserDefault::getIntegerForKey(const char* pKey)
 
 int UserDefault::getIntegerForKey(const char* pKey, int defaultValue)
 {
-    auto it = this->_values.find(pKey);
-    if (it != this->_values.end())
-        return atoi(it->second.c_str());
+    auto pValue = getValueForKey(pKey);
+    if (pValue)
+        return atoi(pValue->c_str());
 
     return defaultValue;
 }
@@ -172,9 +173,9 @@ int64_t UserDefault::getLargeIntForKey(const char* key)
 
 int64_t UserDefault::getLargeIntForKey(const char* key, int64_t defaultValue)
 {
-    auto it = this->_values.find(key);
-    if (it != this->_values.end())
-        return std::stoll(it->second);
+    auto pValue = getValueForKey(key);
+    if (pValue)
+        return std::stoll(pValue->c_str());
 
     return defaultValue;
 }
@@ -186,9 +187,7 @@ float UserDefault::getFloatForKey(const char* pKey)
 
 float UserDefault::getFloatForKey(const char* pKey, float defaultValue)
 {
-    float ret = (float)getDoubleForKey(pKey, (double)defaultValue);
- 
-    return ret;
+    return static_cast<float>(getDoubleForKey(pKey, defaultValue));
 }
 
 double  UserDefault::getDoubleForKey(const char* pKey)
@@ -198,9 +197,9 @@ double  UserDefault::getDoubleForKey(const char* pKey)
 
 double UserDefault::getDoubleForKey(const char* pKey, double defaultValue)
 {
-    auto it = this->_values.find(pKey);
-    if (it != this->_values.end())
-        return utils::atof(it->second.c_str());
+    auto pValue = getValueForKey(pKey);
+    if (pValue)
+        return utils::atof(pValue->c_str());
 
     return defaultValue;
 }
@@ -212,11 +211,22 @@ std::string UserDefault::getStringForKey(const char* pKey)
 
 std::string UserDefault::getStringForKey(const char* pKey, const std::string & defaultValue)
 {
-    auto it = this->_values.find(pKey);
-    if (it != this->_values.end())
-        return it->second;
+    auto pValue = getValueForKey(pKey);
+    if (pValue)
+        return *pValue;
 
     return defaultValue;
+}
+
+const std::string* UserDefault::getValueForKey(const std::string& key)
+{
+    // do lazyInit at here to make sure _encryptEnabled works well,
+    lazyInit();
+
+    auto it = this->_values.find(key);
+    if (it != this->_values.end())
+        return &it->second;
+    return nullptr;
 }
 
 void UserDefault::setBoolForKey(const char* pKey, bool value)
@@ -320,6 +330,14 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
 
 void UserDefault::setValueForKey(const std::string& key, const std::string& value)
 {
+    // do lazyInit at here to make sure _encryptEnabled works well
+    lazyInit();
+
+    updateValueForKey(key, value);
+}
+
+void UserDefault::updateValueForKey(const std::string& key, const std::string& value)
+{
     auto it = _values.find(key);
     if (it != _values.end())
         it->second = value;
@@ -329,13 +347,9 @@ void UserDefault::setValueForKey(const std::string& key, const std::string& valu
 
 UserDefault* UserDefault::getInstance()
 {
-    if (!_userDefault)
-    {
-        _userDefault = new (std::nothrow) UserDefault();
-        _userDefault->init();
-    }
+    if (_userDefault) return _userDefault;
 
-    return _userDefault;
+    return ( _userDefault = new (std::nothrow) UserDefault() );
 }
 
 void UserDefault::destroyInstance()
@@ -351,68 +365,67 @@ void UserDefault::setDelegate(UserDefault *delegate)
     _userDefault = delegate;
 }
 
-void UserDefault::init()
+void UserDefault::lazyInit()
 {
-    if (! _initialized)
-    {
-        _filePath = FileUtils::getInstance()->getWritablePath() + USER_DEFAULT_FILENAME;
+    if (_initialized) return;
+
+    _filePath = FileUtils::getInstance()->getWritablePath() + USER_DEFAULT_FILENAME;
 
 #if !USER_DEFAULT_PLAIN_MODE
-        // construct file mapping
-        _fd = posix_open(_filePath.c_str(), O_OVERLAP_FLAGS);
-        if (_fd == -1) {
-            log("[Warnning] UserDefault::init open storage file '%s' failed!", _filePath.c_str());
-            return;
-        }
+    // construct file mapping
+    _fd = posix_open(_filePath.c_str(), O_OVERLAP_FLAGS);
+    if (_fd == -1) {
+        log("[Warnning] UserDefault::init open storage file '%s' failed!", _filePath.c_str());
+        return;
+    }
 
-        int filesize = posix_lseek(_fd, 0, SEEK_END);
-        posix_lseek(_fd, 0, SEEK_SET);
+    int filesize = posix_lseek(_fd, 0, SEEK_END);
+    posix_lseek(_fd, 0, SEEK_SET);
 
-        if (filesize < _curMapSize) { // construct a empty file mapping
-            posix_fsetsize(_fd, _curMapSize);
-            _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, _curMapSize);
-        }
-        else { /// load to memory _values
-            _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, mio::map_entire_file);
-            if (_rwmmap->is_mapped()) { // no error
-                yasio::ibstream_view ibs(_rwmmap->data(), _rwmmap->length());
+    if (filesize < _curMapSize) { // construct a empty file mapping
+        posix_fsetsize(_fd, _curMapSize);
+        _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, _curMapSize);
+    }
+    else { /// load to memory _values
+        _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, mio::map_entire_file);
+        if (_rwmmap->is_mapped()) { // no error
+            yasio::ibstream_view ibs(_rwmmap->data(), _rwmmap->length());
 
-                if (ibs.length() > 0) {
-                    // read count of keyvals.
-                    int count = ibs.read_ix<int>();
-                    for (auto i = 0; i < count; ++i) {
-                        std::string key(ibs.read_v());
-                        std::string value(ibs.read_v());
-                        if (_encryptEnabled)
-                        {
-                            UserDefault::encrypt(key, AES_DECRYPT);
-                            UserDefault::encrypt(value, AES_DECRYPT);
-                        }
-                        setValueForKey(key, value);
+            if (ibs.length() > 0) {
+                // read count of keyvals.
+                int count = ibs.read_ix<int>();
+                for (auto i = 0; i < count; ++i) {
+                    std::string key(ibs.read_v());
+                    std::string value(ibs.read_v());
+                    if (_encryptEnabled)
+                    {
+                        this->encrypt(key, AES_DECRYPT);
+                        this->encrypt(value, AES_DECRYPT);
                     }
-                    _realSize = ibs.seek(0, SEEK_CUR) - sizeof(udflen_t);
+                    updateValueForKey(key, value);
                 }
+                _realSize = ibs.seek(0, SEEK_CUR) - sizeof(udflen_t);
             }
-            else {
-                closeFileMapping();
-                ::remove(_filePath.c_str());
-                log("[Warnning] UserDefault::init map file '%s' failed, we can't save data persisit this time, next time we will retry!", _filePath.c_str());
-            }
-        }
-#else
-        pugi::xml_document doc;
-        pugi::xml_parse_result ret = doc.load_file(_filePath.c_str());
-        if (ret) {
-            for (auto& elem : doc.document_element())
-                setValueForKey(elem.name(), elem.text().as_string());
         }
         else {
-            log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
+            closeFileMapping();
+            ::remove(_filePath.c_str());
+            log("[Warnning] UserDefault::init map file '%s' failed, we can't save data persisit this time, next time we will retry!", _filePath.c_str());
         }
+    }
+#else
+    pugi::xml_document doc;
+    pugi::xml_parse_result ret = doc.load_file(_filePath.c_str());
+    if (ret) {
+        for (auto& elem : doc.document_element())
+            setValueForKey(elem.name(), elem.text().as_string());
+    }
+    else {
+        log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
+    }
 #endif
 
-        _initialized = true;
-    }    
+    _initialized = true;
 }
 
 void UserDefault::flush()
