@@ -99,7 +99,7 @@ void UserDefault::setEncryptEnabled(bool enabled, const std::string& key, const 
         ud_setkey(_iv, iv);
     }
 }
-a
+
 void UserDefault::encrypt(std::string& inout, int enc)
 {
     if (!inout.empty())
