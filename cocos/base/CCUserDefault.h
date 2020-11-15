@@ -269,7 +269,7 @@ protected:
     // The low level API of all setXXXForKey
     void setValueForKey(const std::string& key, const std::string& value);
 
-    // For initializing only
+    // Update value without lazyInit
     void updateValueForKey(const std::string& key, const std::string& value);
 
 protected:
