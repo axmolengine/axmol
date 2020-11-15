@@ -82,13 +82,13 @@ static void ud_setkey(std::string& lhs, const cxx17::string_view& rhs) {
         lhs.assign(keyLen, '\0');
 }
 
-static void ud_write_v_s(yasio::obstream& obs, const cxx17::string_view value) 
+static void ud_write_v_s(UserDefault* ud, yasio::obstream& obs, const cxx17::string_view value) 
 {
     size_t value_offset = obs.length();
     obs.write_v(value);
     value_offset += (obs.length() - value_offset - value.length());
     if(!value.empty())
-        UserDefault::getInstance()->encrypt(obs.wptr(value_offset), value.length(), AES_ENCRYPT);
+        ud->encrypt(obs.wptr(value_offset), value.length(), AES_ENCRYPT);
 }
 
 void UserDefault::setEncryptEnabled(bool enabled, const std::string& key, const std::string& iv)
@@ -99,7 +99,7 @@ void UserDefault::setEncryptEnabled(bool enabled, const std::string& key, const 
         ud_setkey(_iv, iv);
     }
 }
-
+a
 void UserDefault::encrypt(std::string& inout, int enc)
 {
     if (!inout.empty())
@@ -302,8 +302,8 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
         yasio::obstream obs;
         if (_encryptEnabled)
         {
-            ud_write_v_s(obs, pKey);
-            ud_write_v_s(obs, value);
+            ud_write_v_s(this, obs, pKey);
+            ud_write_v_s(this, obs, value);
         }
         else {
             obs.write_v(pKey);
@@ -311,7 +311,7 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
         }
 
         if ((_realSize + obs.length() + sizeof(udflen_t)) < _curMapSize)
-        {
+        { // fast append entity without flush
             // increase entities count
             yasio::obstream::swrite_ix(_rwmmap->data(), 1 + yasio::ibstream::sread_ix<udflen_t>(_rwmmap->data()));
 
@@ -437,8 +437,8 @@ void UserDefault::flush()
         for (auto& item : this->_values) {
             if (_encryptEnabled)
             {
-                ud_write_v_s(obs, item.first);
-                ud_write_v_s(obs, item.second);
+                ud_write_v_s(this, obs, item.first);
+                ud_write_v_s(this, obs, item.second);
             }
             else {
                 obs.write_v(item.first);
