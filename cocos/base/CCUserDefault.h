@@ -207,8 +207,7 @@ public:
 
     /**
      * Since we reimplement UserDefault with file mapping io,
-     * you don't needs call this function manually except you 
-     * define CC_USER_DEFAULT_PLAIN_MODE=1
+     * you don't needs call this function manually
      * @js NA
      */
     virtual void flush();
