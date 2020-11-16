@@ -49,8 +49,7 @@
 
 #### Prerequisites
   1. Enter ```engine-x``` root directory
-  2. Run ```python download-deps.py```
-  3. Run ```python setup.py```, restart console after finish
+  2. Run ```python setup.py```, restart console after finish
 
 #### Windows
   1. Install [CMake](https://cmake.org/) 3.14+  

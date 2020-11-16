@@ -50,7 +50,6 @@
 
 #### 准备步骤
   1. 进入引擎```engine-x```根目录
-  2. 执行```python download-deps.py```等待下载第三方库完成
   3. 执行```python setup.py```后重启控制台
 
 #### Windows
