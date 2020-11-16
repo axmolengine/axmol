@@ -22,7 +22,6 @@ jobs:
       - name: Build
         shell: cmd
         run: |
-          python download-deps.py --remove-download=False
           cmake -S %GITHUB_WORKSPACE% -B %GITHUB_WORKSPACE%/build_x86 -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -A Win32 -DBUILD_EXTENSION_IMGUIEXT=ON
           cmake --build %GITHUB_WORKSPACE%/build_x86 --config %BUILD_TYPE% --target cpp-tests
 

@@ -23,10 +23,6 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v2
 
-    - name: Download dependecies
-      shell: cmd
-      run: python download-deps.py --remove-download=False
-
     - name: Configure CMake
       # Use a bash shell so we can use the same syntax for environment variable
       # access regardless of the host operating system
