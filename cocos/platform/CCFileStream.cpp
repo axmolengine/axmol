@@ -36,7 +36,7 @@ static int pfs_posix_open(const std::string& path, FileStream::Mode mode, PXFile
 }
 
 // posix standard wrappers
-static int pfs_posix_read(PXFileHandle& handle, void* buf, unsigned int size) { return posix_read(handle._fd, buf, size); }
+static int pfs_posix_read(PXFileHandle& handle, void* buf, unsigned int size) { return static_cast<int>(posix_read(handle._fd, buf, size)); }
 static long pfs_posix_seek(PXFileHandle& handle, long offst, int origin) { return posix_lseek(handle._fd, offst, origin); }
 static int pfs_posix_close(PXFileHandle& handle) {
     int fd = handle._fd;
@@ -184,7 +184,7 @@ int FileStream::close()
 
 int FileStream::seek(long offset, int origin)
 {
-    return _iof->seek(_handle, offset, origin);
+    return static_cast<int>(_iof->seek(_handle, offset, origin));
 }
 
 int FileStream::read(void* buf, unsigned int size)
@@ -194,7 +194,7 @@ int FileStream::read(void* buf, unsigned int size)
 
 int FileStream::write(const void* buf, unsigned int size)
 {
-    return posix_write(_handle._fd, buf, size);
+    return static_cast<int>(posix_write(_handle._fd, buf, size));
 }
 
 NS_CC_END
