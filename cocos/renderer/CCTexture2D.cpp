@@ -251,7 +251,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 
     // pitfall: because we do merge etc1 alpha at shader, so must mark as _hasPremultipliedAlpha = true to makesure alpha blend works well.
     if (formatEXT == TextureFormatEXT::ETC1_ALPHA)
-        setPremultipliedAlpha(true);
+        setPremultipliedAlpha(Image::isCompressedImageHavePMA(Image::CompressedImagePMAFlag::ETC1));
 
     return true;
 }

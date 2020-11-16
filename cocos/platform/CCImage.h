@@ -102,6 +102,16 @@ public:
         //! Unknown format
         UNKNOWN
     };
+    
+    struct CompressedImagePMAFlag {
+        enum : uint32_t {
+            ASTC  = 1,
+            ETC1  = 1 << 1, // ETC1_RGB + ETC1_ALPHA only
+            ETC2  = 1 << 2,
+            PVR   = 1 << 3,
+            ALL   = 0xffff,
+        };
+    };
 
     /**
      * Enables or disables premultiplied alpha for PNG files.
@@ -115,8 +125,21 @@ public:
      possible load them as if they have (or not) the alpha channel premultiplied.
      
      By default it is disabled.
+     !!!DEPRECATED, use setCompressedImagesHavePMA(CompressedImagePMAFlag::PVR, true) instead
      */
-    static void setPVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied);
+    CC_DEPRECATED_ATTRIBUTE static void setPVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied);
+    
+    /** The new APIs to treats (or not) compressed image files as if they have alpha premultiplied.
+    *
+    * By default, ETC1 + ETC1_ALPHA is enabled, because we do PMA at shader etc1.frag
+    * !!!IMPORTANT:
+    *   The spine-runtimes official always regard texture has PMA, so you needs
+    *   do compressed images PMA at texture convert tools or GPU fragment shader, such as
+    *   positionTexture.frag, positionTextureColor.frag and others which have texture sampler,
+    *   otherwise, the spine animations can't be render properly
+    */
+    static void setCompressedImagesHavePMA(uint32_t targets, bool havePMA);
+    static bool isCompressedImageHavePMA(uint32_t target);
 
     /**
     @brief Load the image from the specified path.
@@ -201,6 +224,8 @@ protected:
      @brief Determine whether we premultiply alpha for png files.
      */
     static bool PNG_PREMULTIPLIED_ALPHA_ENABLED;
+    static uint32_t COMPRESSED_IMAGE_PMA_FLAGS;
+
     uint8_t *_data;
     ssize_t _dataLen;
     ssize_t _offset; // useful for hardware decoder present to hold data without copy
