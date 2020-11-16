@@ -93,7 +93,7 @@ bool ProgramCache::init()
     registerProgramFactory(ProgramType::LAYER_RADIA_GRADIENT, position_vert, layer_radialGradient_frag);
     registerProgramFactory(ProgramType::POSITION_TEXTURE, positionTexture_vert, positionTexture_frag);
     registerProgramFactory(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vert, positionTextureColorAlphaTest_frag);
-    registerProgramFactory(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionUColor_frag);
+    registerProgramFactory(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionColor_frag);
     registerProgramFactory(ProgramType::ETC1_GRAY, positionTextureColor_vert, etc1Gray_frag);
     registerProgramFactory(ProgramType::GRAY_SCALE, positionTextureColor_vert, grayScale_frag);
     registerProgramFactory(ProgramType::LINE_COLOR_3D, lineColor3D_vert, lineColor3D_frag);

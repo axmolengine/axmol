@@ -49,7 +49,6 @@ NS_CC_BEGIN
 #include "renderer/shaders/layer_radialGradient.frag"
 #include "renderer/shaders/ui_Gray.frag"
 #include "renderer/shaders/positionUColor.vert"
-#include "renderer/shaders/positionUColor.frag"
 #include "renderer/shaders/etc1.frag"
 #include "renderer/shaders/etc1_Gray.frag"
 #include "renderer/shaders/cameraClear.vert"
