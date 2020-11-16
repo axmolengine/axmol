@@ -32,15 +32,6 @@ function install_linux_environment()
     echo "Installing linux dependence packages finished!"
 }
 
-function download_deps()
-{
-    # install dpes
-    pushd $COCOS2DX_ROOT
-    python download-deps.py -r=yes
-    popd
-    echo "Downloading cocos2d-x dependence finished!"
-}
-
 function install_python_module_for_osx()
 {
     pip install PyYAML
@@ -74,7 +65,6 @@ function install_environement_for_pull_request()
 
     # use NDK's clang to generate binding codes
     install_android_ndk
-    download_deps
 }
 
 # should generate binding codes & cocos_files.json after merging
@@ -86,7 +76,6 @@ function install_environement_for_after_merge()
 
     echo "Building merge commit ..."
     install_android_ndk
-    download_deps
 }
 
 # install newer python for android for ssl connection
@@ -114,14 +103,12 @@ if [ "$BUILD_TARGET" == "android_cocos_new_test" ]; then
     sudo apt-get update
     sudo apt-get install ninja-build
     ninja --version
-    download_deps
     sudo pip install retry
     python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py
     exit 0
 fi
 
 if [ "$BUILD_TARGET" == "linux_cocos_new_test" ]; then
-    download_deps
     install_linux_environment
     # linux new lua project, so need to install
     sudo pip install retry
