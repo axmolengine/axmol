@@ -192,11 +192,9 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
         descriptor.textureUsage = TextureUsage::RENDER_TARGET;
         descriptor.textureFormat = PixelFormat::RGBA8;
         _texture2D = new (std::nothrow) Texture2D();
-        if (_texture2D)
-            _texture2D->updateTextureDescriptor(descriptor, CC_ENABLE_PREMULTIPLIED_ALPHA != 0);
-        else
-            break;
+        CC_BREAK_IF(!_texture2D);
 
+        _texture2D->updateTextureDescriptor(descriptor, !!CC_ENABLE_PREMULTIPLIED_ALPHA);
         _renderTargetFlags = RenderTargetFlag::COLOR;
 
         if (PixelFormat::D24S8 == depthStencilFormat)
@@ -229,20 +227,21 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
         // retained
         setSprite(Sprite::createWithTexture(_texture2D));
 
-        _texture2D->release();
-
 #if defined(CC_USE_GL) || defined(CC_USE_GLES)
         _sprite->setFlippedY(true);
 #endif
 
-#if CC_ENABLE_PREMULTIPLIED_ALPHA != 0
-        _sprite->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
-        _sprite->setOpacityModifyRGB(true);
-#else
-        _sprite->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
-        _sprite->setOpacityModifyRGB(false);
-#endif
-        
+        if(_texture2D->hasPremultipliedAlpha()){
+            _sprite->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
+            _sprite->setOpacityModifyRGB(true);
+        }
+        else {
+            _sprite->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
+            _sprite->setOpacityModifyRGB(false);
+        }
+
+        _texture2D->release();
+
         // Disabled by default.
         _autoDraw = false;
         

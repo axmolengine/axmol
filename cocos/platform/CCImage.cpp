@@ -143,8 +143,6 @@ namespace
 {
     static const int PVR_TEXTURE_FLAG_TYPE_MASK = 0xff;
     
-    static bool _PVRHaveAlphaPremultiplied = false;
-    
     // Values taken from PVRTexture.h from http://www.imgtec.com
     enum class PVR2TextureFlag
     {
@@ -569,6 +567,20 @@ namespace
 // Implement Image
 //////////////////////////////////////////////////////////////////////////
 bool Image::PNG_PREMULTIPLIED_ALPHA_ENABLED = true;
+uint32_t Image::COMPRESSED_IMAGE_PMA_FLAGS = Image::CompressedImagePMAFlag::ETC1;
+
+void Image::setCompressedImagesHavePMA(uint32_t targets, bool havePMA)
+{
+    if (havePMA)
+        COMPRESSED_IMAGE_PMA_FLAGS |= targets;
+    else
+        COMPRESSED_IMAGE_PMA_FLAGS &= ~targets;
+}
+
+bool Image::isCompressedImageHavePMA(uint32_t target)
+{
+    return target & COMPRESSED_IMAGE_PMA_FLAGS;
+}
 
 Image::Image()
 : _data(nullptr)
@@ -1184,10 +1196,10 @@ bool Image::initWithPngData(uint8_t * data, ssize_t dataLen)
                 premultiplyAlpha();
             }
             else
-            {
-#if CC_ENABLE_PREMULTIPLIED_ALPHA != 0
-                _hasPremultipliedAlpha = true;
-#endif
+            { 
+                // if PNG_PREMULTIPLIED_ALPHA_ENABLED == false && CC_ENABLE_PREMULTIPLIED_ALPHA != 0, 
+                // you must do PMA at shader, such as modify positionTextureColor.frag
+                _hasPremultipliedAlpha = !!CC_ENABLE_PREMULTIPLIED_ALPHA;
             }
         }
 
@@ -1359,7 +1371,7 @@ bool Image::initWithPVRv2Data(uint8_t * data, ssize_t dataLen, bool ownData)
     Configuration *configuration = Configuration::getInstance();
     
     //can not detect the premultiplied alpha from pvr file, use _PVRHaveAlphaPremultiplied instead.
-    _hasPremultipliedAlpha = _PVRHaveAlphaPremultiplied;
+    _hasPremultipliedAlpha = isCompressedImageHavePMA(CompressedImagePMAFlag::PVR);
     
     unsigned int flags = CC_SWAP_INT32_LITTLE_TO_HOST(header->flags);
     PVR2TexturePixelFormat formatFlags = static_cast<PVR2TexturePixelFormat>(flags & PVR_TEXTURE_FLAG_TYPE_MASK);
@@ -1733,115 +1745,120 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
 {
     const etc2_byte* header = static_cast<const etc2_byte*>(data);
 
-    //check the data
-    if (!etc2_pkm_is_valid(header))
-    {
-        return  false;
-    }
+    do {
+        //check the data
+        if (!etc2_pkm_is_valid(header))
+            break;
 
-    _width = etc2_pkm_get_width(header);
-    _height = etc2_pkm_get_height(header);
+        _width = etc2_pkm_get_width(header);
+        _height = etc2_pkm_get_height(header);
 
-    if (0 == _width || 0 == _height)
-    {
-        return false;
-    }
+        if (0 == _width || 0 == _height)
+            break;
 
-    etc2_uint32 format = etc2_pkm_get_format(header);
+        etc2_uint32 format = etc2_pkm_get_format(header);
 
-    // We only support ETC2_RGBA_NO_MIPMAPS and ETC2_RGB_NO_MIPMAPS
-    assert(format == ETC2_RGBA_NO_MIPMAPS || format == ETC2_RGB_NO_MIPMAPS);
+        // We only support ETC2_RGBA_NO_MIPMAPS and ETC2_RGB_NO_MIPMAPS
+        assert(format == ETC2_RGBA_NO_MIPMAPS || format == ETC2_RGB_NO_MIPMAPS);
 
-    if (Configuration::getInstance()->supportsETC2()) {
-        _pixelFormat = format == ETC2_RGBA_NO_MIPMAPS ? backend::PixelFormat::ETC2_RGBA : backend::PixelFormat::ETC2_RGB;
+        if (Configuration::getInstance()->supportsETC2()) {
+            _pixelFormat = format == ETC2_RGBA_NO_MIPMAPS ? backend::PixelFormat::ETC2_RGBA : backend::PixelFormat::ETC2_RGB;
 
-        forwardPixels(data, dataLen, ETC2_PKM_HEADER_SIZE, ownData);
-        return true;
-    }
-    else {
-        CCLOG("cocos2d: Hardware ETC2 decoder not present. Using software decoder");
+            forwardPixels(data, dataLen, ETC2_PKM_HEADER_SIZE, ownData);
+        }
+        else {
+            CCLOG("cocos2d: Hardware ETC2 decoder not present. Using software decoder");
 
-        // if device do not support ETC2, decode texture by software
-        // etc2_decode_image always decode to RGBA8888
-        _dataLen = _width * _height * 4;
-        _data = static_cast<uint8_t*>(malloc(_dataLen));
-        if (etc2_decode_image(format, static_cast<const uint8_t*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) == 0)
-        {
+            // if device do not support ETC2, decode texture by software
+            // etc2_decode_image always decode to RGBA8888
+            _dataLen = _width * _height * 4;
+            _data = static_cast<uint8_t*>(malloc(_dataLen));
+            if (UTILS_UNLIKELY(etc2_decode_image(format, static_cast<const uint8_t*>(data) + ETC2_PKM_HEADER_SIZE, static_cast<etc2_byte*>(_data), _width, _height) != 0))
+            {
+                // software decode fail, release pixels data
+                CC_SAFE_FREE(_data);
+                _dataLen = 0;
+                break;
+            }
             _pixelFormat = backend::PixelFormat::RGBA8;
-            return true;
         }
 
-        // software decode fail, release pixels data
-        CC_SAFE_FREE(_data);
-        _dataLen = 0;
-        return false;
-    }
+        _hasPremultipliedAlpha = isCompressedImageHavePMA(CompressedImagePMAFlag::ETC2);
+
+        return true;
+    } while (false);
+
+    return false;
 }
 
 bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
     ASTCTexHeader* header = (ASTCTexHeader*)data;
 
-    _width = header->xsize[0] + 256 * header->xsize[1] + 65536 * header->xsize[2];
-    _height = header->ysize[0] + 256 * header->ysize[1] + 65536 * header->ysize[2];
+    do {
+        _width = header->xsize[0] + 256 * header->xsize[1] + 65536 * header->xsize[2];
+        _height = header->ysize[0] + 256 * header->ysize[1] + 65536 * header->ysize[2];
 
-    if (0 == _width || 0 == _height)
-    {
-        return false;
-    }
+        if (0 == _width || 0 == _height)
+            break;
 
-    uint8_t xdim = header->blockdim_x;
-    uint8_t ydim = header->blockdim_y;
+        uint8_t xdim = header->blockdim_x;
+        uint8_t ydim = header->blockdim_y;
 
-    if (xdim < 4 || ydim < 4)
-    {
-        CCLOG("cocos2d: The ASTC block with and height should be >= 4");
-        return false;
-    }
-
-    if (Configuration::getInstance()->supportsASTC())
-    {
-        if (xdim == 4 && ydim == 4) {
-            _pixelFormat = backend::PixelFormat::ASTC4x4;
-        }
-        else if (xdim == 5 && ydim == 5) {
-            _pixelFormat = backend::PixelFormat::ASTC5x5;
-        }
-        else if (xdim == 6 && ydim == 6) {
-            _pixelFormat = backend::PixelFormat::ASTC6x6;
-        }
-        else if (xdim == 8 && ydim == 5) {
-            _pixelFormat = backend::PixelFormat::ASTC8x5;
-        }
-        else if (xdim == 8 && ydim == 6) {
-            _pixelFormat = backend::PixelFormat::ASTC8x6;
-        }
-        else if (xdim == 8 && ydim == 8)
+        if (xdim < 4 || ydim < 4)
         {
-            _pixelFormat = backend::PixelFormat::ASTC8x8;
-        }
-        else if (xdim == 10 && ydim == 5) {
-            _pixelFormat = backend::PixelFormat::ASTC10x5;
+            CCLOG("cocos2d: The ASTC block with and height should be >= 4");
+            break;
         }
 
-        forwardPixels(data, dataLen, ASTC_HEAD_SIZE, ownData);
-        return true;
-    }
-    else
-    {
-        CCLOG("cocos2d: Hardware ASTC decoder not present. Using software decoder");
+        if (Configuration::getInstance()->supportsASTC())
+        {
+            if (xdim == 4 && ydim == 4) {
+                _pixelFormat = backend::PixelFormat::ASTC4x4;
+            }
+            else if (xdim == 5 && ydim == 5) {
+                _pixelFormat = backend::PixelFormat::ASTC5x5;
+            }
+            else if (xdim == 6 && ydim == 6) {
+                _pixelFormat = backend::PixelFormat::ASTC6x6;
+            }
+            else if (xdim == 8 && ydim == 5) {
+                _pixelFormat = backend::PixelFormat::ASTC8x5;
+            }
+            else if (xdim == 8 && ydim == 6) {
+                _pixelFormat = backend::PixelFormat::ASTC8x6;
+            }
+            else if (xdim == 8 && ydim == 8)
+            {
+                _pixelFormat = backend::PixelFormat::ASTC8x8;
+            }
+            else if (xdim == 10 && ydim == 5) {
+                _pixelFormat = backend::PixelFormat::ASTC10x5;
+            }
 
-        _dataLen = _width * _height * 4;
-        _data = static_cast<uint8_t*>(malloc(_dataLen));
-        if (decompress_astc(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE, _data, _width, _height, xdim, ydim, _dataLen) == 0) {
+            forwardPixels(data, dataLen, ASTC_HEAD_SIZE, ownData);
+        }
+        else
+        {
+            CCLOG("cocos2d: Hardware ASTC decoder not present. Using software decoder");
+
+            _dataLen = _width * _height * 4;
+            _data = static_cast<uint8_t*>(malloc(_dataLen));
+            if (UTILS_UNLIKELY(decompress_astc(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE, _data, _width, _height, xdim, ydim, _dataLen) != 0)) {
+                CC_SAFE_FREE(_data);
+                _dataLen = 0;
+                break;
+            }
+
             _pixelFormat = backend::PixelFormat::RGBA8;
-            return true;
         }
 
-        CC_SAFE_FREE(_data);
-        _dataLen = 0;
-        return false;
-    }
+        _hasPremultipliedAlpha = isCompressedImageHavePMA(CompressedImagePMAFlag::ASTC);
+
+        return true;
+    } while (false);
+
+    return false;
 }
 
 bool Image::initWithS3TCData(uint8_t * data, ssize_t dataLen, bool ownData)
@@ -2367,20 +2384,19 @@ bool Image::saveImageToJPG(const std::string& filePath)
 
 void Image::premultiplyAlpha()
 {
-#if CC_ENABLE_PREMULTIPLIED_ALPHA == 0
-        _hasPremultipliedAlpha = false;
-        return;
-#else
+#if CC_ENABLE_PREMULTIPLIED_ALPHA
     CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "The pixel format should be RGBA8888!");
-    
+
     unsigned int* fourBytes = (unsigned int*)_data;
-    for(int i = 0; i < _width * _height; i++)
+    for (int i = 0; i < _width * _height; i++)
     {
         uint8_t* p = _data + i * 4;
         fourBytes[i] = CC_RGB_PREMULTIPLY_ALPHA(p[0], p[1], p[2], p[3]);
     }
-    
+
     _hasPremultipliedAlpha = true;
+#else
+    _hasPremultipliedAlpha = false;
 #endif
 }
 
@@ -2410,7 +2426,7 @@ void Image::reversePremultipliedAlpha()
 
 void Image::setPVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied)
 {
-    _PVRHaveAlphaPremultiplied = haveAlphaPremultiplied;
+    setCompressedImagesHavePMA(CompressedImagePMAFlag::PVR, haveAlphaPremultiplied);
 }
 
 NS_CC_END
