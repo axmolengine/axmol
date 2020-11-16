@@ -32,19 +32,19 @@ THE SOFTWARE.
 #include "base/ccUtils.h"
 
 #include "CCActionManagerEx.h"
-// #include "WidgetReader/ButtonReader/ButtonReader.h"
-// #include "WidgetReader/CheckBoxReader/CheckBoxReader.h"
-// #include "WidgetReader/SliderReader/SliderReader.h"
-// #include "WidgetReader/ImageViewReader/ImageViewReader.h"
-// #include "WidgetReader/LoadingBarReader/LoadingBarReader.h"
-// #include "WidgetReader/TextAtlasReader/TextAtlasReader.h"
-// #include "WidgetReader/TextReader/TextReader.h"
-// #include "WidgetReader/TextBMFontReader/TextBMFontReader.h"
-// #include "WidgetReader/TextFieldReader/TextFieldReader.h"
-// #include "WidgetReader/LayoutReader/LayoutReader.h"
-// #include "WidgetReader/PageViewReader/PageViewReader.h"
-// #include "WidgetReader/ScrollViewReader/ScrollViewReader.h"
-// #include "WidgetReader/ListViewReader/ListViewReader.h"
+#include "WidgetReader/ButtonReader/ButtonReader.h"
+#include "WidgetReader/CheckBoxReader/CheckBoxReader.h"
+#include "WidgetReader/SliderReader/SliderReader.h"
+#include "WidgetReader/ImageViewReader/ImageViewReader.h"
+#include "WidgetReader/LoadingBarReader/LoadingBarReader.h"
+#include "WidgetReader/TextAtlasReader/TextAtlasReader.h"
+#include "WidgetReader/TextReader/TextReader.h"
+#include "WidgetReader/TextBMFontReader/TextBMFontReader.h"
+#include "WidgetReader/TextFieldReader/TextFieldReader.h"
+#include "WidgetReader/LayoutReader/LayoutReader.h"
+#include "WidgetReader/PageViewReader/PageViewReader.h"
+#include "WidgetReader/ScrollViewReader/ScrollViewReader.h"
+#include "WidgetReader/ListViewReader/ListViewReader.h"
 #include "CocoLoader.h"
 #include "pugixml/pugixml.hpp"
 
@@ -61,20 +61,19 @@ m_strFilePath("")
 {
     ObjectFactory* factoryCreate = ObjectFactory::getInstance();
     
-    // TODO:
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ButtonReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(CheckBoxReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(SliderReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ImageViewReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(LoadingBarReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextAtlasReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextBMFontReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextFieldReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(LayoutReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(PageViewReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ScrollViewReader));
-    // factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ListViewReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ButtonReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(CheckBoxReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(SliderReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ImageViewReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(LoadingBarReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextAtlasReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextBMFontReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(TextFieldReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(LayoutReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(PageViewReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ScrollViewReader));
+    factoryCreate->registerType(CREATE_CLASS_WIDGET_READER_INFO(ListViewReader));
     
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(Button));
     factoryCreate->registerType(CREATE_CLASS_GUI_INFO(CheckBox));
