@@ -379,7 +379,7 @@ void UserDefault::lazyInit()
         return;
     }
 
-    int filesize = posix_lseek(_fd, 0, SEEK_END);
+    int filesize = static_cast<int>(posix_lseek(_fd, 0, SEEK_END));
     posix_lseek(_fd, 0, SEEK_SET);
 
     if (filesize < _curMapSize) { // construct a empty file mapping
@@ -404,7 +404,7 @@ void UserDefault::lazyInit()
                     }
                     updateValueForKey(key, value);
                 }
-                _realSize = ibs.seek(0, SEEK_CUR) - sizeof(udflen_t);
+                _realSize = static_cast<int>(ibs.seek(0, SEEK_CUR) - sizeof(udflen_t));
             }
         }
         else {
@@ -457,7 +457,7 @@ void UserDefault::flush()
         if (!error && _rwmmap->is_mapped())
         { // mapping status is good
             ::memcpy(_rwmmap->data(), obs.data(), obs.length());
-            _realSize = obs.length() - sizeof(udflen_t);
+            _realSize = static_cast<int>(obs.length() - sizeof(udflen_t));
         }
         else {
             // close file mapping and do a simple workaround fix to don't do persist later at this time
