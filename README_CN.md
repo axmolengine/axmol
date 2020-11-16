@@ -95,7 +95,7 @@
 
 ### 注意
   * ThreadLocalStorage线程本地存储
-    - ios x86 simulator ios>=10
+    - ios x86 simulator ios>=10 and engine-x no longer provide x86 libraries
     - ios x64 or devices(armv7,arm64) ios sdk>=9.0
     - the openal-soft maintained by kcat use TLS
 

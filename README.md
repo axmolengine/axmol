@@ -97,9 +97,9 @@
     a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**  
     b. **engine-x only provide armv7,arm64,x86_64 prebuilt libraries for ios**
 
-### Pitfalls
+### Notes
   * ThreadLocalStorage(TLS) 
-    - ios x86 simulator ios>=10
+    - ios x86 simulator ios>=10 and engine-x no longer provide x86 libraries
     - ios x64 or devices(armv7,arm64) ios sdk>=9.0
     - the openal-soft maintained by kcat use TLS
 
