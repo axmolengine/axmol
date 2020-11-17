@@ -749,7 +749,7 @@
 @@ of a function in debug information.
 ** CHANGE it if you want a different size.
 */
-#cmakedefine LUA_IDSIZE	@LUA_IDSIZE@
+#define LUA_IDSIZE	128
 
 
 /*
@@ -784,6 +784,7 @@
 /*
 ** Local configuration. You can use this space to add your redefinitions
 ** without modifying the main part of the file.
+** !!!The follow definiations is engine-x specific, don't overwrite with official lua
 */
 /*
 @@ Whether lua bytecode compatible with x86/x64 apps
