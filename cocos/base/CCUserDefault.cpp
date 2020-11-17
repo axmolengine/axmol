@@ -418,7 +418,7 @@ void UserDefault::lazyInit()
     pugi::xml_parse_result ret = doc.load_file(_filePath.c_str());
     if (ret) {
         for (auto& elem : doc.document_element())
-            setValueForKey(elem.name(), elem.text().as_string());
+            updateValueForKey(elem.name(), elem.text().as_string());
     }
     else {
         log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
