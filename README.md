@@ -8,12 +8,12 @@
 [![Linux Build Status](https://github.com/c4games/engine-x/workflows/linux/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Alinux)
 [![macOS Build Status](https://github.com/c4games/engine-x/workflows/osx/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Aosx)  
 
-**This is another more radical fork of *Cocos2d-x-4.0*, use OpenAL for all platforms, single texture multi GPU texture handler, C++ 14/17 and some more (see 'Highlight Features' for more info).**  
+**This is another more radical fork of *Cocos2d-x-4.0*, use OpenAL for all platforms, single texture multi GPU texture handler, C++14/17, etc.**  
   
 **[简体中文](README_CN.md)**
   
 ### Purpose Summary:
-* C++ 14/17
+* C++14/17
 * Focus on native game dev (quick starting, easy to use, fast)
 * Bugfixes ASAP
 * Usefull PRs from **you** are welcome (review/merge ASAP)
@@ -28,7 +28,7 @@
 * Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM, ...
 * Use modern gl loader ```glad``` (instead of glew)
 * Add google angle renderer backend support
-* C++ 14 standard
+* C++14 standard
 * IOS SDK 9.0 as minimal deployment
 * Use fast pugixml
 * Using curl for transferring data with URL syntax
@@ -94,12 +94,12 @@
 
   5. Notes  
     a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**  
-    b. **engine-x only provide armv7, arm64, x86_64 prebuilt libraries for ios**
+    b. **engine-x only provide armv7,arm64,x86_64 prebuilt libraries for ios**
 
 ### Notes
   * ThreadLocalStorage(TLS) 
     - ios x86 simulator ios>=10 and engine-x no longer provide x86 libraries
-    - ios x64 or devices(armv7, arm64) ios sdk>=9.0
+    - ios x64 or devices(armv7,arm64) ios sdk>=9.0
     - the openal-soft maintained by kcat use TLS
 
 ### Reference links
