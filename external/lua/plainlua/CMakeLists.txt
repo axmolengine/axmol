@@ -9,9 +9,6 @@ project(${lib_name})
 
 include(../../cmake/CocosExternalConfig.cmake)
 
-set ( LUA_IDSIZE 128 CACHE STRING "The maximum size for the description of the source." )
-configure_file ( ${LUA_SRC_PATH}/luaconf.h.in ${LUA_SRC_PATH}/luaconf.h )
-
 aux_source_directory(${LUA_SRC_PATH} LUA_CORE)
 list(REMOVE_ITEM LUA_CORE ${LUA_SRC_PATH}/lua.c ${LUA_SRC_PATH}/luac.c)
 
@@ -26,11 +23,15 @@ if(${LUA_VERSION} VERSION_GREATER_EQUAL "5.4.0") # !important: traditional lua b
   target_compile_definitions(${target_name} PUBLIC LUA_COMPAT_APIINTCASTS=1)
 elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.3.0")
   target_compile_definitions(${target_name} 
-    PUBLIC LUA_COMPAT_5_1=1
-    PUBLIC LUA_COMPAT_5_2=1
+      PUBLIC LUA_COMPAT_5_1=1
+      PUBLIC LUA_COMPAT_5_2=1
+      PUBLIC LUA_COMPAT_MODULE=1
     )
 elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.2.0")
-  target_compile_definitions(${target_name} PUBLIC LUA_COMPAT_ALL=1)
+  target_compile_definitions(${target_name} 
+      PUBLIC LUA_COMPAT_ALL=1
+      PUBLIC LUA_COMPAT_MODULE=1
+    )
 endif()
 
 if(BUILD_SHARED_LIBS)
