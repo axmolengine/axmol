@@ -66,7 +66,7 @@ extern "C"
     }
 #endif // __ANDROID_API__ > 19
 
-JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved)
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
 {
     JniHelper::setJavaVM(vm);
 
@@ -75,7 +75,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved)
     return JNI_VERSION_1_4;
 }
 
-JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thiz, jint w, jint h)
+JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*, jclass, jint w, jint h)
 {
     auto director = cocos2d::Director::getInstance();
     auto glview = director->getOpenGLView();
@@ -97,7 +97,7 @@ JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, j
     }
 }
 
-JNIEXPORT jintArray Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextAttrs(JNIEnv*  env, jobject thiz)
+JNIEXPORT jintArray JNICALL Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextAttrs(JNIEnv*  env, jclass)
 {
     cocos2d::Application::getInstance()->initGLContextAttrs(); 
     GLContextAttrs _glContextAttrs = GLView::getGLContextAttrs();
@@ -112,7 +112,7 @@ JNIEXPORT jintArray Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextAttrs(JNI
     return glContextAttrsJava;
 }
 
-JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnSurfaceChanged(JNIEnv*  env, jobject thiz, jint w, jint h)
+JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
 {
     cocos2d::Application::getInstance()->applicationScreenSizeChanged(w, h);
 }

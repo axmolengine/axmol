@@ -78,7 +78,7 @@ extern "C" {
      * Method:    shouldStartLoading
      * Signature: (ILjava/lang/String;)Z
      */
-    JNIEXPORT jboolean JNICALL Java_org_cocos2dx_lib_Cocos2dxWebViewHelper_shouldStartLoading(JNIEnv *env, jclass, jint index, jstring jurl) {
+    JNIEXPORT jboolean JNICALL Java_org_cocos2dx_lib_Cocos2dxWebViewHelper_shouldStartLoading(JNIEnv* env, jclass, jint index, jstring jurl) {
         auto charUrl = env->GetStringUTFChars(jurl, NULL);
         std::string url = charUrl;
         env->ReleaseStringUTFChars(jurl, charUrl);
@@ -90,7 +90,7 @@ extern "C" {
      * Method:    didFinishLoading
      * Signature: (ILjava/lang/String;)V
      */
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxWebViewHelper_didFinishLoading(JNIEnv *env, jclass, jint index, jstring jurl) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxWebViewHelper_didFinishLoading(JNIEnv* env, jclass, jint index, jstring jurl) {
         // LOGD("didFinishLoading");
         auto charUrl = env->GetStringUTFChars(jurl, NULL);
         std::string url = charUrl;
@@ -103,7 +103,7 @@ extern "C" {
      * Method:    didFailLoading
      * Signature: (ILjava/lang/String;)V
      */
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxWebViewHelper_didFailLoading(JNIEnv *env, jclass, jint index, jstring jurl) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxWebViewHelper_didFailLoading(JNIEnv* env, jclass, jint index, jstring jurl) {
         // LOGD("didFailLoading");
         auto charUrl = env->GetStringUTFChars(jurl, NULL);
         std::string url = charUrl;
@@ -116,7 +116,7 @@ extern "C" {
      * Method:    onJsCallback
      * Signature: (ILjava/lang/String;)V
      */
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxWebViewHelper_onJsCallback(JNIEnv *env, jclass, jint index, jstring jmessage) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxWebViewHelper_onJsCallback(JNIEnv* env, jclass, jint index, jstring jmessage) {
         // LOGD("jsCallback");
         auto charMessage = env->GetStringUTFChars(jmessage, NULL);
         std::string message = charMessage;

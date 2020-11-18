@@ -38,11 +38,11 @@ using namespace cocos2d;
 
 extern "C" {
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeRender(JNIEnv* env) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeRender(JNIEnv*, jclass) {
         cocos2d::Director::getInstance()->mainLoop();
     }
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnPause(JNIEnv* env) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnPause(JNIEnv*, jclass) {
         if (Director::getInstance()->getOpenGLView()) {
                 Application::getInstance()->applicationDidEnterBackground();
                 cocos2d::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
@@ -50,7 +50,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnResume(JNIEnv* env) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnResume(JNIEnv*, jclass) {
         static bool firstTime = true;
         if (Director::getInstance()->getOpenGLView()) {
             // don't invoke at first to keep the same logic as iOS
@@ -65,20 +65,17 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInsertText(JNIEnv* env, jobject thiz, jstring text) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInsertText(JNIEnv* env, jclass, jstring text) {
         std::string  strValue = cocos2d::StringUtils::getStringUTFCharsJNI(env, text);
         const char* pszText = strValue.c_str();
         cocos2d::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
     }
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeDeleteBackward(JNIEnv* env, jobject thiz) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeDeleteBackward(JNIEnv*, jclass) {
         cocos2d::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
     }
 
-    JNIEXPORT jstring JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeGetContentText(JNIEnv* env) {
-        if (! env) {
-            return nullptr;
-        }
+    JNIEXPORT jstring JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeGetContentText(JNIEnv* env, jclass) {
         std::string pszText = cocos2d::IMEDispatcher::sharedDispatcher()->getContentText();
         return cocos2d::StringUtils::newStringUTFJNI(env, pszText);
     }
