@@ -19,7 +19,7 @@
 * Usefull PRs from **you** are welcome (review/merge ASAP)
   
 ### Highlight Features:
-* **More clearly thirdparty libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on engine-x**
+* **More clearly thirdparty libs Upstram & Version & License for easy to publish your commercial apps based on engine-x**
 * Refactor AudioEngine, OpenAL for all platforms
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
@@ -27,11 +27,11 @@
 * Modularize all optional extension, move from engine core to folder extensions
 * Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM, ...
 * Use modern gl loader ```glad``` (instead of glew)
-* Add Google [angle](https://github.com/google/angle) renderer backend support
+* Add google angle renderer backend support
 * C++ 14 standard
 * IOS SDK 9.0 as minimal deployment
 * Use fast pugixml
-* Using [curl](https://github.com/curl/curl) for transferring data with URL syntax
+* Using curl for transferring data with URL syntax
 * Use SAX parser for all plist file
 * Spine-3.8 support
 * Add engine extension ```FairyGUI``` support
@@ -93,7 +93,7 @@
   4. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
 
   5. Notes  
-    a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage signing solved**  
+    a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage siging solved**  
     b. **engine-x only provide armv7, arm64, x86_64 prebuilt libraries for ios**
 
 ### Notes
