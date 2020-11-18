@@ -185,10 +185,6 @@ if(WINDOWS)
     target_compile_definitions(${ENGINEX_LUA_LIB} PUBLIC _USRLUASTATIC)
 endif()
 
-target_compile_definitions(${ENGINEX_LUA_LIB} 
-    PUBLIC LUA_COMPAT_MODULE
-)
-
 set_target_properties(${ENGINEX_LUA_LIB}
                       PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
