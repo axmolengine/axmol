@@ -266,7 +266,7 @@ public class Cocos2dxHelper {
 
     private static native void nativeSetEditTextDialogResult(final byte[] pBytes);
 
-    private static native void nativeSetContext(final Context pContext, final AssetManager pAssetManager);
+    private static native void nativeSetContext(final Object pContext, final Object pAssetManager);
 
     private static native void nativeSetAudioDeviceInfo(boolean isSupportLowLatency, int deviceSampleRate, int audioBufferSizeInFames);
 
