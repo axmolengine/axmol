@@ -14,7 +14,6 @@ android {
 
         externalNativeBuild {
             cmake {
-                targets 'MyGame'
                 arguments "-DCMAKE_FIND_ROOT_PATH=", "-DANDROID_STL=c++_static", "-DANDROID_TOOLCHAIN=clang", "-DANDROID_ARM_NEON=TRUE"
                 cppFlags "-frtti -fexceptions -fsigned-char"
             }
