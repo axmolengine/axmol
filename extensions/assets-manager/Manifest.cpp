@@ -187,11 +187,11 @@ bool Manifest::versionGreater(const Manifest *b, const std::function<int(const s
     bool greater;
     if (handle)
     {
-        greater = handle(localVersion, bVersion) >= 0;
+        greater = handle(localVersion, bVersion) > 0;
     }
     else
     {
-        greater = cmpVersion(localVersion, bVersion) >= 0;
+        greater = cmpVersion(localVersion, bVersion) > 0;
     }
     return greater;
 }
