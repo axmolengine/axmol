@@ -33,17 +33,17 @@ THE SOFTWARE.
 using namespace cocos2d;
 
 extern "C" {
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesBegin(JNIEnv * env, jobject thiz, jint id, jfloat x, jfloat y) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y) {
         intptr_t idlong = id;
         cocos2d::Director::getInstance()->getOpenGLView()->handleTouchesBegin(1, &idlong, &x, &y);
     }
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesEnd(JNIEnv * env, jobject thiz, jint id, jfloat x, jfloat y) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y) {
         intptr_t idlong = id;
         cocos2d::Director::getInstance()->getOpenGLView()->handleTouchesEnd(1, &idlong, &x, &y);
     }
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesMove(JNIEnv * env, jobject thiz, jintArray ids, jfloatArray xs, jfloatArray ys) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesMove(JNIEnv* env, jclass, jintArray ids, jfloatArray xs, jfloatArray ys) {
         int size = env->GetArrayLength(ids);
         jint id[size];
         jfloat x[size];
@@ -60,7 +60,7 @@ extern "C" {
         cocos2d::Director::getInstance()->getOpenGLView()->handleTouchesMove(size, idlong, x, y);
     }
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesCancel(JNIEnv * env, jobject thiz, jintArray ids, jfloatArray xs, jfloatArray ys) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesCancel(JNIEnv* env, jclass, jintArray ids, jfloatArray xs, jfloatArray ys) {
         int size = env->GetArrayLength(ids);
         jint id[size];
         jfloat x[size];
@@ -101,7 +101,7 @@ extern "C" {
         
     };
     
-    JNIEXPORT jboolean JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeKeyEvent(JNIEnv * env, jobject thiz, jint keyCode, jboolean isPressed) {        
+    JNIEXPORT jboolean JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeKeyEvent(JNIEnv*, jclass, jint keyCode, jboolean isPressed) {        
         auto iterKeyCode = g_keyCodeMap.find(keyCode);
         if (iterKeyCode == g_keyCodeMap.end()) {
             return JNI_FALSE;

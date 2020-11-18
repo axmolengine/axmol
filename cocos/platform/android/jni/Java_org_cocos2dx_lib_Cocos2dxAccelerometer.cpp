@@ -33,7 +33,7 @@
 using namespace cocos2d;
 
 extern "C" {
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxAccelerometer_onSensorChanged(JNIEnv*  env, jobject thiz, jfloat x, jfloat y, jfloat z, jlong timeStamp) {
+    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxAccelerometer_onSensorChanged(JNIEnv*, jclass, jfloat x, jfloat y, jfloat z, jlong timeStamp) {
         Acceleration a;
         a.x = -((double)x / TG3_GRAVITY_EARTH);
         a.y = -((double)y / TG3_GRAVITY_EARTH);
