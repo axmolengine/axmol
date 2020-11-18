@@ -45,7 +45,7 @@
 - License: MIT
 
 ## edtaa3func
-- Upstream: NA
+- Upstream: https://github.com/zilongshanren/edtaa3func
 - Version: NA
 - License: MIT
 
