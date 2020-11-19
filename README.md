@@ -12,13 +12,13 @@
   
 **[简体中文](README_CN.md)**
   
-### Purpose Summary
+### Purpose Summary:
 * C++ 14/17
 * Focus on native game dev (quick starting, easy to use, fast)
 * Bugfixes ASAP
 * Usefull PRs from **you** are welcome (review/merge ASAP)
   
-### Highlight Features
+### Highlight Features:
 * **More clearly thirdparty libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on engine-x**
 * Refactor AudioEngine, OpenAL for all platforms
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
@@ -26,26 +26,26 @@
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
 * Modularize all optional extension, move from engine core to folder extensions
 * Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM, ...
-* Use modern GL loader ```glad``` (instead of glew)
-* Google [angle](https://github.com/google/angle) renderer backend support
+* Use modern gl loader ```glad``` (instead of glew)
+* Add Google [angle](https://github.com/google/angle) renderer backend support
 * C++ 14 standard
 * IOS SDK 9.0 as minimal deployment
 * Use fast pugixml
-* Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
+* Using [curl](https://github.com/curl/curl) for transferring data with URL syntax
 * Use SAX parser for all plist file
 * Spine-3.8 support
-* Extension ```FairyGUI``` support
-* ASTC 4x4/6x6/8x8 support (if hardware decoder not present, use software decoder)
-* ETC2 RGB/RGBA support    (if hardware decoder not present, use software decoder)
+* Add engine extension ```FairyGUI``` support
+* Add ASTC 4x4/6x6/8x8 support, if hardware decoder not present, use software decoder
+* Add ETC2 RGB/RGBA support, if hardware decoder not present, use software decoder
 * **ImGui integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
 
-### [Roadmap](issues/1)
+### [Roadmap](https://github.com/c4games/engine-x/issues/1)
+
+
 
 ### Quick Start
-Open [Wiki](wiki) for additional information too.
-
-#### Common Requirement [Python](https://www.python.org/downloads/)
-  * Python-2.7.17+, Python-3.7+ 
+#### Common Requirement [python](https://www.python.org/downloads/)
+  * python-2.7.17+, python-3.7+ 
 
 #### Prerequisites
   1. Enter ```engine-x``` root directory
@@ -53,13 +53,14 @@ Open [Wiki](wiki) for additional information too.
 
 #### Windows
   1. Install [CMake](https://cmake.org/) 3.14+  
-  2. Install Visual Studio 2019 build (it's strong recommend you use this version)  
-  3. Execute follow command at command line (Console, Window Terminal or Powershell)
+  2. Install Visual Studio 2019 build(we strong recommend you use this version)  
+  3. Execute follow command at command line(Console, Window Terminal or Powershell)
   ```bat
   cd engine-x\
   cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
   ```
   
+
 #### Android
   1. Install Android Studio 4.0+
   2. When first start Android Studio, It will guide you to install sdk and other tools, just install them
@@ -69,7 +70,9 @@ Open [Wiki](wiki) for additional information too.
      * Android SDK Build-Tools 29.0.2  
      * NDK r16b+  
      * CMake 3.10+  
+    
   5. Waiting for ```Gradle sync``` finish.
+  
   6. Remark: If you use non-sdk provided CMake edition, you need download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
 
 #### iOS
@@ -88,16 +91,17 @@ Open [Wiki](wiki) for additional information too.
     # cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64
   ```
   4. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
+
   5. Notes  
-    - **The code sign required to run ios app on device, just change bundle identifier until the auto manage signing solved**  
-    - **engine-x only provide armv7, arm64, x86_64 prebuilt libraries for ios**
+    a. **The code sign required to run ios app on device, just change bundle identifier until the auto manage signing solved**  
+    b. **engine-x only provide armv7, arm64, x86_64 prebuilt libraries for ios**
 
 ### Notes
-  * ThreadLocalStorage (TLS) 
+  * ThreadLocalStorage(TLS) 
     - ios x86 simulator ios>=10 and engine-x no longer provide x86 libraries
-    - ios x64 or devices (armv7, arm64) ios sdk>=9.0
+    - ios x64 or devices(armv7, arm64) ios sdk>=9.0
     - the openal-soft maintained by kcat use TLS
 
 ### Reference links
   * engine-x-3rd: https://github.com/c4games/engine-x-3rd
-  * Official Cocos2d-x: https://github.com/cocos2d/cocos2d-x
+  * official v4: https://github.com/cocos2d/cocos2d-x
