@@ -9,12 +9,12 @@
 - Version: NA
 - License: Apache-2.0
 
-## box2d
+## Box2D
 - Upstream: https://github.com/erincatto/box2d
 - Version: 2.4.1
 - License: MIT
 
-## bullet
+## Bullet
 - Upstream: https://github.com/bulletphysics/bullet3
 - Version: git 3.06-a72ce29 (8843)
 - License: zlib
@@ -24,12 +24,12 @@
 - Version: git 1.61.1-0d252eb (2021)
 - License: MIT
 
-## chipmunk
+## Chipmunk2D
 - Upstream: https://github.com/slembcke/Chipmunk2D
 - Version: git 7.0.3-1d01b2a (1452)
 - License: MIT
 
-## clipper
+## Clipper
 - Upstream: https://sourceforge.net/projects/polyclipping/files/
 - Version: 6.4.2
 - License: BSL-1.0
@@ -64,12 +64,12 @@
 - Version: 1.12.0
 - License: Apache-2.0
 
-## freetype
+## Freetype
 - Upstream: https://www.freetype.org/
 - Version: 2.10.4
 - License: BSD-style (The FreeType Project)
 
-## glad
+## GLAD
 - Upstream: https://github.com/Dav1dde/glad
 - Version: 0.1.34
 - License: MIT
@@ -141,12 +141,12 @@
   - Version: git 1.3.7-83a82dd (1569)
   - License: BSD-3-Clause
 
-## openal
+## OpenAL
 - Upstream: https://github.com/kcat/openal-soft
 - Version: 1.21.0-26b03f5 (7320)
 - License: LGPL-2.1
 
-## openssl
+## OpenSSL
 - Upstream: https://github.com/openssl/openssl
 - Version: 1.1.1h
 - License: Apache-2.0
@@ -176,7 +176,7 @@
 - Version: git 65b314a (747) with dtCrowd::getEditableAgentAnim
 - License: zlib
 
-## sol
+## sol2
 - Upstream: https://github.com/ThePhD/sol2
 - Version: 2.20.6 with vs2019 compile fixes
 - License: MIT
@@ -211,7 +211,7 @@
 - Version: 1.0
 - License: MIT
 
-## xxhash
+## xxHash
 - Upstream: https://github.com/Cyan4973/xxHash
 - Version: 0.8.0
 - License: BSD-2-Clause
@@ -226,7 +226,7 @@
 - Version: 1.2.11
 - License: zlib
 
-## iconv (libiconv)
+## libiconv (libiconv)
 - Upstream: https://savannah.gnu.org/projects/libiconv
 - Version: 1.16.0
 - License: LGPL-2.1
