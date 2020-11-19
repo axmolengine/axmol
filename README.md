@@ -19,7 +19,7 @@
 * Usefull PRs from **you** are welcome (review/merge ASAP)
   
 ### Highlight Features
-* **More clearly thirdparty libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on engine-x**
+* **More clearly third-party libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on engine-x**
 * Refactor AudioEngine, OpenAL for all platforms
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
@@ -42,7 +42,7 @@
 ### [Roadmap](issues/1)
 
 ### Quick Start
-Open [Wiki](wiki) for additional information too.
+Open [Wiki](https://github.com/c4games/engine-x/wiki) for additional information too.
 
 #### Common Requirement [Python](https://www.python.org/downloads/)
   * Python-2.7.17+, Python-3.7+ 
