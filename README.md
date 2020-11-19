@@ -99,5 +99,4 @@ Open [Wiki](https://github.com/c4games/engine-x/wiki) for additional information
     - the openal-soft maintained by kcat use TLS
 
 ### Reference links
-  * engine-x-3rd: https://github.com/c4games/engine-x-3rd
   * Official Cocos2d-x: https://github.com/cocos2d/cocos2d-x
