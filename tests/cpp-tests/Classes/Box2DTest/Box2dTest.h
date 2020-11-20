@@ -59,6 +59,5 @@ private:
 #endif
 } ;
 
-DEFINE_TEST_SUITE(Box2DTests);
 
 #endif
