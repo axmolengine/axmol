@@ -361,6 +361,10 @@ if(WINDOWS OR MACOSX OR LINUX)
          )
 endif()
 
+list(APPEND GAME_HEADER
+     Classes/Box2DTest/Box2dTest.h
+     )
+
 list(APPEND GAME_SOURCE
      Classes/Box2DTest/Box2dTest.cpp
      )
