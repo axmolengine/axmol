@@ -26,7 +26,7 @@
 #define _BOX2D_TEST_H_
 
 #include "cocos2d.h"
-#include "Box2D/Box2D.h"
+#include "box2d/box2d.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(Box2DTests);
