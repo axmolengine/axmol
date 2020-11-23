@@ -253,7 +253,7 @@ void CommandBufferMTL::setViewport(int x, int y, unsigned int w, unsigned int h)
     viewport.originY = (int)(_renderTargetHeight - y - h);
     viewport.width = w;
     viewport.height = h;
-    viewport.znear = -1;
+    viewport.znear = 0;
     viewport.zfar = 1;
     [_mtlRenderEncoder setViewport:viewport];
 }
