@@ -28,6 +28,7 @@
 #include "cocos2d.h"
 #include "box2d/box2d.h"
 #include "../BaseTest.h"
+#include "extensions/cocos-ext.h"
 
 DEFINE_TEST_SUITE(Box2DTests);
 
@@ -44,7 +45,7 @@ public:
 
     void initPhysics();
     void createResetButton();
-  //  virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
 
     void addNewSpriteAtPosition(cocos2d::Vec2 p);
     void update(float dt) override;
@@ -52,9 +53,12 @@ public:
 
 private:
     cocos2d::Mat4 _modelViewMV;
- //   void onDraw();
-    cocos2d::CustomCommand _customCommand;
+    void onDraw();
+    cocos2d::CallbackCommand  _customCommand;
     cocos2d::Texture2D* _spriteTexture;
+#if CC_ENABLE_BOX2D_INTEGRATION    
+    cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
+#endif
     b2World* world;
 #endif
 } ;
