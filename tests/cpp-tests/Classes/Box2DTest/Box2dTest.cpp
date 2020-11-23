@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -131,101 +131,103 @@ void Box2DTest::initPhysics()
     b2EdgeShape groundBox;
 
     // bottom
-    groundBox.SetTwoSided(b2Vec2(VisibleRect::leftBottom().x/PTM_RATIO,VisibleRect::leftBottom().y/PTM_RATIO), b2Vec2(VisibleRect::rightBottom().x/PTM_RATIO,VisibleRect::rightBottom().y/PTM_RATIO));
-    groundBody->CreateFixture(&groundBox,0);
+    groundBox.SetTwoSided(b2Vec2(VisibleRect::leftBottom().x / PTM_RATIO, VisibleRect::leftBottom().y / PTM_RATIO), b2Vec2(VisibleRect::rightBottom().x / PTM_RATIO, VisibleRect::rightBottom().y / PTM_RATIO));
+    groundBody->CreateFixture(&groundBox, 0);
 
     // top
-    groundBox.SetTwoSided(b2Vec2(VisibleRect::leftTop().x/PTM_RATIO,VisibleRect::leftTop().y/PTM_RATIO), b2Vec2(VisibleRect::rightTop().x/PTM_RATIO,VisibleRect::rightTop().y/PTM_RATIO));
-    groundBody->CreateFixture(&groundBox,0);
+    groundBox.SetTwoSided(b2Vec2(VisibleRect::leftTop().x / PTM_RATIO, VisibleRect::leftTop().y / PTM_RATIO), b2Vec2(VisibleRect::rightTop().x / PTM_RATIO, VisibleRect::rightTop().y / PTM_RATIO));
+    groundBody->CreateFixture(&groundBox, 0);
 
     // left
-    groundBox.SetTwoSided(b2Vec2(VisibleRect::leftTop().x/PTM_RATIO,VisibleRect::leftTop().y/PTM_RATIO), b2Vec2(VisibleRect::leftBottom().x/PTM_RATIO,VisibleRect::leftBottom().y/PTM_RATIO));
-    groundBody->CreateFixture(&groundBox,0);
+    groundBox.SetTwoSided(b2Vec2(VisibleRect::leftTop().x / PTM_RATIO, VisibleRect::leftTop().y / PTM_RATIO), b2Vec2(VisibleRect::leftBottom().x / PTM_RATIO, VisibleRect::leftBottom().y / PTM_RATIO));
+    groundBody->CreateFixture(&groundBox, 0);
 
     // right
-    groundBox.SetTwoSided(b2Vec2(VisibleRect::rightBottom().x/PTM_RATIO,VisibleRect::rightBottom().y/PTM_RATIO), b2Vec2(VisibleRect::rightTop().x/PTM_RATIO,VisibleRect::rightTop().y/PTM_RATIO));
-    groundBody->CreateFixture(&groundBox,0);
+    groundBox.SetTwoSided(b2Vec2(VisibleRect::rightBottom().x / PTM_RATIO, VisibleRect::rightBottom().y / PTM_RATIO), b2Vec2(VisibleRect::rightTop().x / PTM_RATIO, VisibleRect::rightTop().y / PTM_RATIO));
+    groundBody->CreateFixture(&groundBox, 0);
+
+//    b2World::SetDebugDraw(&Box2DTest::draw);
 }
 
 void Box2DTest::createResetButton()
 {
-    auto reset = MenuItemImage::create("Images/r1.png", "Images/r2.png", [&](Ref *sender) {
+    auto reset = MenuItemImage::create("Images/r1.png", "Images/r2.png", [&](Ref* sender) {
         getTestSuite()->restartCurrTest();
-	});
+        });
 
     auto menu = Menu::create(reset, nullptr);
 
     menu->setPosition(VisibleRect::bottom().x, VisibleRect::bottom().y + 30);
     this->addChild(menu, -1);
-
 }
 
-//void Box2DTest::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
-//{
-//    //
-//    // IMPORTANT:
-//    // This is only for debug purposes
-//    // It is recommend to disable it
-//    //
-//    Scene::draw(renderer, transform, flags);
-//
-//    GL::enableVertexAttribs( cocos2d::GL::VERTEX_ATTRIB_FLAG_POSITION );
-//    Director* director = Director::getInstance();
-//    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-//    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-//    
-//    _modelViewMV = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-//
-//    _customCommand.init(_globalZOrder);
-//    _customCommand.func = CC_CALLBACK_0(Box2DTest::onDraw, this);
-//    renderer->addCommand(&_customCommand);
-//
-//    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-//}
+void Box2DTest::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+{
+    //
+    // IMPORTANT:
+    // This is only for debug purposes
+    // It is recommend to disable it
+    //
+    Scene::draw(renderer, transform, flags);
 
-//void Box2DTest::onDraw()
-//{
-//    Director* director = Director::getInstance();
-//    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-//
-//    auto oldMV = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-//    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewMV);
-//    world->DrawDebugData();
-//    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, oldMV);
-//}
+  //  GL::enableVertexAttribs(cocos2d::GL::VERTEX_ATTRIB_FLAG_POSITION);
+    Director* director = Director::getInstance();
+    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+
+    _modelViewMV = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+
+    _customCommand.init(_globalZOrder);
+    _customCommand.func = CC_CALLBACK_0(Box2DTest::onDraw, this);
+    renderer->addCommand(&_customCommand);
+
+    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+}
+
+void Box2DTest::onDraw()
+{
+    Director* director = Director::getInstance();
+    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+
+    auto oldMV = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewMV);
+    world->DebugDraw();
+
+    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, oldMV);
+}
 
 
 void Box2DTest::addNewSpriteAtPosition(Vec2 p)
 {
-    CCLOG("Add sprite %0.2f x %02.f",p.x,p.y);
-    
+    CCLOG("Add sprite %0.2f x %02.f", p.x, p.y);
+
     // Define the dynamic body.
     //Set up a 1m squared box in the physics world
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(p.x/PTM_RATIO, p.y/PTM_RATIO);
+    bodyDef.position.Set(p.x / PTM_RATIO, p.y / PTM_RATIO);
 
-    b2Body *body = world->CreateBody(&bodyDef);
-    
+    b2Body* body = world->CreateBody(&bodyDef);
+
     // Define another box shape for our dynamic body.
     b2PolygonShape dynamicBox;
     dynamicBox.SetAsBox(.5f, .5f);//These are mid points for our 1m box
-    
+
     // Define the dynamic body fixture.
     b2FixtureDef fixtureDef;
-    fixtureDef.shape = &dynamicBox;    
+    fixtureDef.shape = &dynamicBox;
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 0.3f;
-    body->CreateFixture(&fixtureDef);    
-    
+    body->CreateFixture(&fixtureDef);
+
 #if CC_ENABLE_BOX2D_INTEGRATION
     auto parent = this->getChildByTag(kTagParentNode);
-    
+
     //We have a 64x64 sprite sheet with 4 different 32x32 images.  The following code is
     //just randomly picking one of the images
-    int idx = (CCRANDOM_0_1() > .5 ? 0:1);
-    int idy = (CCRANDOM_0_1() > .5 ? 0:1);
-    auto sprite = PhysicsSprite::createWithTexture(_spriteTexture,Rect(32 * idx,32 * idy,32,32));
+    int idx = (CCRANDOM_0_1() > .5 ? 0 : 1);
+    int idy = (CCRANDOM_0_1() > .5 ? 0 : 1);
+    auto sprite = PhysicsSprite::createWithTexture(_spriteTexture, Rect(32 * idx, 32 * idy, 32, 32));
     parent->addChild(sprite);
     sprite->setB2Body(body);
     sprite->setPTMRatio(PTM_RATIO);
@@ -239,13 +241,14 @@ void Box2DTest::update(float dt)
     //of the simulation, however, we are using a variable time step here.
     //You need to make an informed choice, the following URL is useful
     //http://gafferongames.com/game-physics/fix-your-timestep/
-    
+
     int velocityIterations = 8;
     int positionIterations = 1;
 
     // Instruct the world to perform a single step of simulation. It is
     // generally best to keep the time step and iterations fixed.
     world->Step(dt, velocityIterations, positionIterations);
+//    world->DebugDraw();
 }
 
 void Box2DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
@@ -254,12 +257,12 @@ void Box2DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 
     for (auto& touch : touches)
     {
-        if(!touch)
+        if (!touch)
             break;
 
         auto location = touch->getLocation();
-    
-        addNewSpriteAtPosition( location );
+
+        addNewSpriteAtPosition(location);
     }
 }
 
