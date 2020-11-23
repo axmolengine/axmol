@@ -1,3 +1,3 @@
 @echo off
-@python "%~dp0/cocos.py" %*
+"%~dp0/cocos.py" %*
 
