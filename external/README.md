@@ -218,7 +218,7 @@
 
 ## yasio
 - Upstream: https://github.com/yasio/yasio
-- Version: 3.33.8
+- Version: 3.33.9
 - License: MIT WITH Anti-996
 
 ## zlib
