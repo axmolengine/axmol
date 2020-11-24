@@ -153,10 +153,6 @@ enum
   //        b. you should set this option after your mobile network changed
   YOPT_S_DNS_DIRTY,
 
-  // Set whether ignore udp error, by default is 1: don't trigger handle_close,
-  // params: ignored : int(1)
-  YOPT_S_IGNORE_UDP_ERROR,
-
   // Sets channel length field based frame decode function, native C++ ONLY
   // params: index:int, func:decode_len_fn_t*
   YOPT_C_LFBFD_FN = 101,
@@ -442,6 +438,7 @@ public:
   io_service& get_service() { return timer_.service_; }
   int index() const { return index_; }
   u_short remote_port() const { return remote_port_; }
+  YASIO__DECL std::string format_destination() const;
 
 protected:
   YASIO__DECL void enable_multicast_group(const ip::endpoint& ep, int loopback);
@@ -538,6 +535,7 @@ private:
 #endif
 };
 
+// for tcp transport only
 class io_send_op {
 public:
   io_send_op(std::vector<char>&& buffer, completion_cb_t&& handler) : offset_(0), buffer_(std::move(buffer)), handler_(std::move(handler)) {}
@@ -554,6 +552,7 @@ public:
 #endif
 };
 
+// for udp transport only
 class io_sendto_op : public io_send_op {
 public:
   io_sendto_op(std::vector<char>&& buffer, completion_cb_t&& handler, const ip::endpoint& destination)
@@ -636,7 +635,7 @@ protected:
 
   io_channel* ctx_;
 
-  std::function<int(const void*, int)> write_cb_;
+  std::function<int(const void*, int, const ip::endpoint*)> write_cb_;
   std::function<int(void*, int)> read_cb_;
 
   privacy::concurrent_queue<send_op_ptr> send_queue_;
@@ -700,8 +699,8 @@ protected:
   // process received data from low level
   YASIO__DECL virtual int handle_input(const char* buf, int bytes_transferred, int& error, highp_time_t& wait_duration);
 
-  ip::endpoint peer_;                // for recv only
-  mutable ip::endpoint destination_; // for sendto only
+  ip::endpoint peer_;                // for recv only, unstable
+  mutable ip::endpoint destination_; // for sendto only, stable
   bool connected_ = false;
 };
 #if defined(YASIO_HAVE_KCP)
@@ -1094,7 +1093,6 @@ private:
     } tcp_keepalive_;
 
     bool no_new_thread_    = false;
-    bool ignore_udp_error_ = true;
 
     // The resolve function
     resolv_fn_t resolv_;
