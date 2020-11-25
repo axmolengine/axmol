@@ -475,31 +475,12 @@ static bool js_yasio_ibstream_read_bool(JSContext* ctx, uint32_t argc, jsval* vp
   cobj              = (yasio::ibstream*)(proxy ? proxy->ptr : nullptr);
   JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_ibstream_read_bool : Invalid Native Object");
 
-  args.rval().set(BOOLEAN_TO_JSVAL(cobj->read_ix<bool>()));
+  args.rval().set(BOOLEAN_TO_JSVAL(cobj->read<bool>()));
 
   return true;
 }
 
 // for variant int
-static bool js_yasio_ibstream_read_i(JSContext* ctx, uint32_t argc, jsval* vp)
-{
-  bool ok               = true;
-  yasio::ibstream* cobj = nullptr;
-
-  JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-  JS::RootedObject obj(ctx);
-  obj.set(args.thisv().toObjectOrNull());
-  js_proxy_t* proxy = jsb_get_js_proxy(obj);
-  cobj              = (yasio::ibstream*)(proxy ? proxy->ptr : nullptr);
-  JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_ibstream_read_i : Invalid Native Object");
-
-  args.rval().set(INT_TO_JSVAL(cobj->read_i()));
-
-  return true;
-}
-
-// for int8_t, int16_t, int32_t
-template <typename T>
 static bool js_yasio_ibstream_read_ix(JSContext* ctx, uint32_t argc, jsval* vp)
 {
   bool ok               = true;
@@ -512,7 +493,26 @@ static bool js_yasio_ibstream_read_ix(JSContext* ctx, uint32_t argc, jsval* vp)
   cobj              = (yasio::ibstream*)(proxy ? proxy->ptr : nullptr);
   JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_ibstream_read_ix : Invalid Native Object");
 
-  args.rval().set(INT_TO_JSVAL(cobj->read_ix<T>()));
+  args.rval().set(INT_TO_JSVAL(cobj->read_ix()));
+
+  return true;
+}
+
+// for int8_t, int16_t, int32_t
+template <typename T>
+static bool js_yasio_ibstream_read(JSContext* ctx, uint32_t argc, jsval* vp)
+{
+  bool ok               = true;
+  yasio::ibstream* cobj = nullptr;
+
+  JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+  JS::RootedObject obj(ctx);
+  obj.set(args.thisv().toObjectOrNull());
+  js_proxy_t* proxy = jsb_get_js_proxy(obj);
+  cobj              = (yasio::ibstream*)(proxy ? proxy->ptr : nullptr);
+  JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_ibstream_read : Invalid Native Object");
+
+  args.rval().set(INT_TO_JSVAL(cobj->read<T>()));
 
   return true;
 }
@@ -530,7 +530,7 @@ static bool js_yasio_ibstream_read_ux(JSContext* ctx, uint32_t argc, jsval* vp)
   cobj              = (yasio::ibstream*)(proxy ? proxy->ptr : nullptr);
   JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_ibstream_read_ux : Invalid Native Object");
 
-  args.rval().set(UINT_TO_JSVAL(cobj->read_ix<T>()));
+  args.rval().set(UINT_TO_JSVAL(cobj->read<T>()));
 
   return true;
 }
@@ -549,7 +549,7 @@ static bool js_yasio_ibstream_read_dx(JSContext* ctx, uint32_t argc, jsval* vp)
   cobj              = (yasio::ibstream*)(proxy ? proxy->ptr : nullptr);
   JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_ibstream_read_dx : Invalid Native Object");
 
-  args.rval().set(DOUBLE_TO_JSVAL(cobj->read_ix<T>()));
+  args.rval().set(DOUBLE_TO_JSVAL(cobj->read<T>()));
 
   return true;
 }
@@ -713,10 +713,10 @@ void js_register_yasio_ibstream(JSContext* ctx, JS::HandleObject global)
 
   static JSFunctionSpec funcs[] = {
       JS_FN("read_bool", js_yasio_ibstream_read_bool, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-      JS_FN("read_i", js_yasio_ibstream_read_i, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-      JS_FN("read_i8", js_yasio_ibstream_read_ix<int8_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-      JS_FN("read_i16", js_yasio_ibstream_read_ix<int16_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-      JS_FN("read_i32", js_yasio_ibstream_read_ix<int32_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+      JS_FN("read_ix", js_yasio_ibstream_read_ix, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+      JS_FN("read_i8", js_yasio_ibstream_read<int8_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+      JS_FN("read_i16", js_yasio_ibstream_read<int16_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+      JS_FN("read_i32", js_yasio_ibstream_read<int32_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("read_u8", js_yasio_ibstream_read_ux<uint8_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("read_u16", js_yasio_ibstream_read_ux<uint16_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("read_i24", js_yasio_ibstream_read_i24, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
@@ -967,14 +967,14 @@ bool js_yasio_obstream_write_bool(JSContext* ctx, uint32_t argc, jsval* vp)
   cobj              = (yasio::obstream*)(proxy ? proxy->ptr : nullptr);
   JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_obstream_write_bool : Invalid Native Object");
 
-  cobj->write_ix<bool>(args.get(0).toBoolean());
+  cobj->write<bool>(args.get(0).toBoolean());
 
   args.rval().setUndefined();
 
   return true;
 }
 
-bool js_yasio_obstream_write_i(JSContext* ctx, uint32_t argc, jsval* vp)
+bool js_yasio_obstream_write_ix(JSContext* ctx, uint32_t argc, jsval* vp)
 {
   bool ok               = true;
   yasio::obstream* cobj = nullptr;
@@ -984,9 +984,9 @@ bool js_yasio_obstream_write_i(JSContext* ctx, uint32_t argc, jsval* vp)
   obj.set(args.thisv().toObjectOrNull());
   js_proxy_t* proxy = jsb_get_js_proxy(obj);
   cobj              = (yasio::obstream*)(proxy ? proxy->ptr : nullptr);
-  JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_obstream_write_i : Invalid Native Object");
+  JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_obstream_write_ix : Invalid Native Object");
 
-  cobj->write_i(args.get(0).toInt32());
+  cobj->write_ix(args.get(0).toInt32());
 
   args.rval().setUndefined();
 
@@ -1005,7 +1005,7 @@ bool js_yasio_obstream_write_i8(JSContext* ctx, uint32_t argc, jsval* vp)
   cobj              = (yasio::obstream*)(proxy ? proxy->ptr : nullptr);
   JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_obstream_write_i8 : Invalid Native Object");
 
-  cobj->write_ix<uint8_t>(args.get(0).toInt32());
+  cobj->write<uint8_t>(args.get(0).toInt32());
 
   args.rval().setUndefined();
 
@@ -1024,7 +1024,7 @@ bool js_yasio_obstream_write_i16(JSContext* ctx, uint32_t argc, jsval* vp)
   cobj              = (yasio::obstream*)(proxy ? proxy->ptr : nullptr);
   JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_obstream_write_i16 : Invalid Native Object");
 
-  cobj->write_ix<uint16_t>(args.get(0).toInt32());
+  cobj->write<uint16_t>(args.get(0).toInt32());
 
   args.rval().setUndefined();
 
@@ -1062,7 +1062,7 @@ bool js_yasio_obstream_write_i32(JSContext* ctx, uint32_t argc, jsval* vp)
   cobj              = (yasio::obstream*)(proxy ? proxy->ptr : nullptr);
   JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_obstream_write_i32 : Invalid Native Object");
 
-  cobj->write_ix<uint32_t>(args.get(0).toInt32());
+  cobj->write<uint32_t>(args.get(0).toInt32());
 
   args.rval().setUndefined();
 
@@ -1083,7 +1083,7 @@ bool js_yasio_obstream_write_i64(JSContext* ctx, uint32_t argc, jsval* vp)
 
   double argval = 0;
   JS::ToNumber(ctx, args.get(0), &argval);
-  cobj->write_ix<int64_t>((int64_t)argval);
+  cobj->write<int64_t>((int64_t)argval);
 
   args.rval().setUndefined();
 
@@ -1103,7 +1103,7 @@ bool js_yasio_obstream_write_f(JSContext* ctx, uint32_t argc, jsval* vp)
 
   double argval = 0;
   JS::ToNumber(ctx, args.get(0), &argval);
-  cobj->write_i((float)argval);
+  cobj->write((float)argval);
 
   args.rval().setUndefined();
 
@@ -1123,7 +1123,7 @@ bool js_yasio_obstream_write_lf(JSContext* ctx, uint32_t argc, jsval* vp)
 
   double argval = 0;
   JS::ToNumber(ctx, args.get(0), &argval);
-  cobj->write_i(argval);
+  cobj->write(argval);
 
   args.rval().setUndefined();
 
@@ -1279,7 +1279,7 @@ void js_register_yasio_obstream(JSContext* ctx, JS::HandleObject global)
       JS_FN("pop16", js_yasio_obstream_pop16, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("pop8", js_yasio_obstream_pop8, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_bool", js_yasio_obstream_write_bool, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-      JS_FN("write_i", js_yasio_obstream_write_i, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+      JS_FN("write_ix", js_yasio_obstream_write_ix, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_i8", js_yasio_obstream_write_i8, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_i16", js_yasio_obstream_write_i16, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_i24", js_yasio_obstream_write_i24, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),

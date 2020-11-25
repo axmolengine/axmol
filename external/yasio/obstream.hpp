@@ -37,8 +37,7 @@ SOFTWARE.
 #include "yasio/detail/config.hpp"
 namespace yasio
 {
-class obstream
-{
+class obstream {
 public:
   YASIO__DECL obstream(size_t capacity = 128);
   YASIO__DECL obstream(const obstream& rhs);
@@ -65,9 +64,14 @@ public:
   YASIO__DECL obstream& operator=(obstream&& rhs);
 
   /* write 7bit encoded variant integer value
-  ** @.net BinaryWriter.Write7BitEncodedInt(Int32)
+  ** @.net BinaryWriter.Write7BitEncodedInt
   */
-  YASIO__DECL void write_i(int value);
+  void write_ix(int value) { write_ix_impl<int>(value); }
+
+  /* write 7bit encoded variant large integer value
+  ** @.net BinaryWriter.Write7BitEncodedInt64
+  */
+  void write_ix64(int64_t value) { write_ix_impl<int64_t>(value); }
 
   YASIO__DECL void write_i24(int32_t value);  // highest bit as sign
   YASIO__DECL void write_u24(uint32_t value); // highest byte ignored
@@ -81,10 +85,6 @@ public:
   YASIO__DECL void write_v16(cxx17::string_view);
   /* 8 bits length field */
   YASIO__DECL void write_v8(cxx17::string_view);
-
-  YASIO__DECL void write_v32(const void* v, int size);
-  YASIO__DECL void write_v16(const void* v, int size);
-  YASIO__DECL void write_v8(const void* v, int size);
 
   YASIO__DECL void write_byte(uint8_t v);
 
@@ -101,45 +101,56 @@ public:
 
   char* wptr(ptrdiff_t offset = 0) { return &buffer_.front() + offset; }
 
-  template <typename _Nty> inline void write_ix(_Nty value)
+  template <typename _Nty> inline void write(_Nty value)
   {
     auto nv = yasio::endian::htonv(value);
     write_bytes(&nv, sizeof(nv));
   }
 
-  template <typename _Nty> inline void pwrite_ix(ptrdiff_t offset, const _Nty value)
-  {
-    swrite_ix(wptr(offset), value);
-  }
-  template <typename _Nty> static void swrite_ix(void* dst, const _Nty value)
+  template <typename _Nty> inline void pwrite(ptrdiff_t offset, const _Nty value) { swrite(wptr(offset), value); }
+  template <typename _Nty> static void swrite(void* ptr, const _Nty value)
   {
     auto nv = yasio::endian::htonv(value);
-    ::memcpy(dst, &nv, sizeof(nv));
+    ::memcpy(ptr, &nv, sizeof(nv));
   }
 
-  template <typename _LenT> inline void write_vx(const void* v, int size)
-  {
-    write_ix<_LenT>(static_cast<_LenT>(size));
-    if (size > 0)
-      write_bytes(v, size);
-  }
   YASIO__DECL obstream sub(size_t offset, size_t count = -1);
 
-public:
   YASIO__DECL void save(const char* filename);
+
+private:
+  template <typename _LenT> inline void write_v_fx(cxx17::string_view value)
+  {
+    size_t size = value.size();
+    this->write<_LenT>(static_cast<_LenT>(size));
+    if (size)
+      write_bytes(value.data(), size);
+  }
+  template <typename _Ty> void write_ix_impl(_Ty value)
+  {
+    // Write out an int 7 bits at a time.  The high bit of the byte,
+    // when on, tells reader to continue reading more bytes.
+    auto v = (typename std::make_unsigned<_Ty>::type)value; // support negative numbers
+    while (v >= 0x80)
+    {
+      write_byte((uint8_t)((uint32_t)v | 0x80));
+      v >>= 7;
+    }
+    write_byte((uint8_t)v);
+  }
 
 protected:
   std::vector<char> buffer_;
   std::stack<size_t> offset_stack_;
 }; // CLASS obstream
 
-template <> inline void obstream::write_ix<float>(float value)
+template <> inline void obstream::write<float>(float value)
 {
   auto nv = htonf(value);
   write_bytes(&nv, sizeof(nv));
 }
 
-template <> inline void obstream::write_ix<double>(double value)
+template <> inline void obstream::write<double>(double value)
 {
   auto nv = htond(value);
   write_bytes(&nv, sizeof(nv));

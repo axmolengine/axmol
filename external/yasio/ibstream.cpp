@@ -54,26 +54,79 @@ void ibstream_view::reset(const void* data, size_t size)
   last_         = first_ + size;
 }
 
-int ibstream_view::read_i()
+int ibstream_view::read_ix()
 {
-  // Read out an Int32 7 bits at a time.  The high bit
-  // of the byte when on means to continue reading more bytes.
-  int count = 0;
-  int shift = 0;
-  uint8_t b;
-  do
-  {
-    // Check for a corrupted stream.  Read a max of 5 bytes.
-    // In a future version, add a DataFormatException.
-    if (shift == 5 * 7) // 5 bytes max per Int32, shift += 7
-      YASIO__THROW(std::logic_error("Format_Bad7BitInt32"), 0);
+  // Unlike writing, we can't delegate to the 64-bit read on
+  // 64-bit platforms. The reason for this is that we want to
+  // stop consuming bytes if we encounter an integer overflow.
+  uint32_t result = 0;
+  uint8_t byteReadJustNow;
 
+  // Read the integer 7 bits at a time. The high bit
+  // of the byte when on means to continue reading more bytes.
+  //
+  // There are two failure cases: we've read more than 5 bytes,
+  // or the fifth byte is about to cause integer overflow.
+  // This means that we can read the first 4 bytes without
+  // worrying about integer overflow.
+  const int MaxBytesWithoutOverflow = 4;
+  for (int shift = 0; shift < MaxBytesWithoutOverflow * 7; shift += 7)
+  {
     // ReadByte handles end of stream cases for us.
-    b = read_byte();
-    count |= (b & 0x7F) << shift;
-    shift += 7;
-  } while ((b & 0x80) != 0);
-  return count;
+    byteReadJustNow = read_byte();
+    result |= static_cast<uint32_t>(byteReadJustNow & 0x7Fu) << shift;
+
+    if (byteReadJustNow <= 0x7Fu)
+      return (int)result; // early exit
+  }
+
+  // Read the 5th byte. Since we already read 28 bits,
+  // the value of this byte must fit within 4 bits (32 - 28),
+  // and it must not have the high bit set.
+  byteReadJustNow = read_byte();
+  if (byteReadJustNow <= 0x0fu)
+  {
+    result |= (uint32_t)byteReadJustNow << (MaxBytesWithoutOverflow * 7);
+    return (int)result;
+  }
+
+  YASIO__THROW(std::logic_error("Format_Bad7BitInt32"), 0);
+}
+
+int64_t ibstream_view::read_ix64()
+{
+  uint64_t result = 0;
+  uint8_t byteReadJustNow;
+
+  // Read the integer 7 bits at a time. The high bit
+  // of the byte when on means to continue reading more bytes.
+  //
+  // There are two failure cases: we've read more than 10 bytes,
+  // or the tenth byte is about to cause integer overflow.
+  // This means that we can read the first 9 bytes without
+  // worrying about integer overflow.
+  const int MaxBytesWithoutOverflow = 9;
+  for (int shift = 0; shift < MaxBytesWithoutOverflow * 7; shift += 7)
+  {
+    // ReadByte handles end of stream cases for us.
+    byteReadJustNow = read_byte();
+    result |= static_cast<uint64_t>(byteReadJustNow & 0x7Fu) << shift;
+
+    if (byteReadJustNow <= 0x7Fu)
+      return (int64_t)result; // early exit
+  }
+
+  // Read the 10th byte. Since we already read 63 bits,
+  // the value of this byte must fit within 1 bit (64 - 63),
+  // and it must not have the high bit set.
+  byteReadJustNow = read_byte();
+  if (byteReadJustNow <= 1u)
+  {
+    result |= (uint64_t)byteReadJustNow << (MaxBytesWithoutOverflow * 7);
+    return (int64_t)result;
+  }
+
+  YASIO__THROW(std::logic_error("Format_Bad7BitInt64"), 0);
 }
 
 int32_t ibstream_view::read_i24()
@@ -99,35 +152,13 @@ uint32_t ibstream_view::read_u24()
 
 cxx17::string_view ibstream_view::read_v()
 {
-  int count = read_i();
+  int count = read_ix();
   return read_bytes(count);
 }
 
-void ibstream_view::read_v32(std::string& oav)
-{
-  auto sv = read_vx<uint32_t>();
-  oav.assign(sv.data(), sv.length());
-}
-
-void ibstream_view::read_v16(std::string& oav)
-{
-  auto sv = read_vx<uint16_t>();
-  oav.assign(sv.data(), sv.length());
-}
-
-void ibstream_view::read_v8(std::string& oav)
-{
-  auto sv = read_vx<uint8_t>();
-  oav.assign(sv.data(), sv.length());
-}
-
-cxx17::string_view ibstream_view::read_v32() { return read_vx<uint32_t>(); }
-cxx17::string_view ibstream_view::read_v16() { return read_vx<uint16_t>(); }
-cxx17::string_view ibstream_view::read_v8() { return read_vx<uint8_t>(); }
-
-void ibstream_view::read_v32(void* oav, int len) { read_vx<uint32_t>().copy((char*)oav, len); }
-void ibstream_view::read_v16(void* oav, int len) { read_vx<uint16_t>().copy((char*)oav, len); }
-void ibstream_view::read_v8(void* oav, int len) { read_vx<uint8_t>().copy((char*)oav, len); }
+cxx17::string_view ibstream_view::read_v32() { return read_v_fx<uint32_t>(); }
+cxx17::string_view ibstream_view::read_v16() { return read_v_fx<uint16_t>(); }
+cxx17::string_view ibstream_view::read_v8() { return read_v_fx<uint8_t>(); }
 
 uint8_t ibstream_view::read_byte() { return *consume(1); }
 
@@ -188,14 +219,8 @@ ptrdiff_t ibstream_view::seek(ptrdiff_t offset, int whence)
 }
 
 /// --------------------- CLASS ibstream ---------------------
-ibstream::ibstream(std::vector<char> blob) : ibstream_view(), blob_(std::move(blob))
-{
-  this->reset(blob_.data(), static_cast<int>(blob_.size()));
-}
-ibstream::ibstream(const obstream* obs) : ibstream_view(), blob_(obs->buffer())
-{
-  this->reset(blob_.data(), static_cast<int>(blob_.size()));
-}
+ibstream::ibstream(std::vector<char> blob) : ibstream_view(), blob_(std::move(blob)) { this->reset(blob_.data(), static_cast<int>(blob_.size())); }
+ibstream::ibstream(const obstream* obs) : ibstream_view(), blob_(obs->buffer()) { this->reset(blob_.data(), static_cast<int>(blob_.size())); }
 
 } // namespace yasio
 
