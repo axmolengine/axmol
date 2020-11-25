@@ -313,7 +313,7 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
         if ((_realSize + obs.length() + sizeof(udflen_t)) < _curMapSize)
         { // fast append entity without flush
             // increase entities count
-            yasio::obstream::swrite_ix(_rwmmap->data(), 1 + yasio::ibstream::sread_ix<udflen_t>(_rwmmap->data()));
+            yasio::obstream::swrite(_rwmmap->data(), 1 + yasio::ibstream::sread<udflen_t>(_rwmmap->data()));
 
             // append entity
             ::memcpy(_rwmmap->data() + sizeof(udflen_t) + _realSize, obs.data(), obs.length());
@@ -393,7 +393,7 @@ void UserDefault::lazyInit()
 
             if (ibs.length() > 0) {
                 // read count of keyvals.
-                int count = ibs.read_ix<int>();
+                int count = ibs.read<int>();
                 for (auto i = 0; i < count; ++i) {
                     std::string key(ibs.read_v());
                     std::string value(ibs.read_v());
@@ -433,7 +433,7 @@ void UserDefault::flush()
 #if !USER_DEFAULT_PLAIN_MODE
     if (_rwmmap) {
         yasio::obstream obs;
-        obs.write_ix<int>(static_cast<int>(this->_values.size()));
+        obs.write<int>(static_cast<int>(this->_values.size()));
         for (auto& item : this->_values) {
             if (_encryptEnabled)
             {
