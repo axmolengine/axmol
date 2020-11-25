@@ -54,7 +54,7 @@ void ibstream_view::reset(const void* data, size_t size)
   last_         = first_ + size;
 }
 
-int ibstream_view::read_ix()
+template <> int ibstream_view::read_ix<int>()
 {
   // Unlike writing, we can't delegate to the 64-bit read on
   // 64-bit platforms. The reason for this is that we want to
@@ -93,7 +93,7 @@ int ibstream_view::read_ix()
   YASIO__THROW(std::logic_error("Format_Bad7BitInt32"), 0);
 }
 
-int64_t ibstream_view::read_ix64()
+template <> int64_t ibstream_view::read_ix<int64_t>()
 {
   uint64_t result = 0;
   uint8_t byteReadJustNow;
@@ -152,7 +152,7 @@ uint32_t ibstream_view::read_u24()
 
 cxx17::string_view ibstream_view::read_v()
 {
-  int count = read_ix();
+  int count = read_ix<>();
   return read_bytes(count);
 }
 

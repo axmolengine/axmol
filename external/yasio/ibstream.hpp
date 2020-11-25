@@ -54,14 +54,9 @@ public:
   YASIO__DECL ibstream_view& operator=(ibstream_view&&) = delete;
 
   /* read 7bit encoded variant integer value
-  ** @.net BinaryReader.Read7BitEncodedInt
+  ** @.net BinaryReader.Read7BitEncodedInt(64)
   */
-  YASIO__DECL int read_ix();
-
-  /* read 7bit encoded variant large integer value
-  ** @.net BinaryReader.Read7BitEncodedInt64
-  */
-  YASIO__DECL int64_t read_ix64();
+  template <typename _IntType = int> _IntType read_ix();
 
   YASIO__DECL int32_t read_i24();
   YASIO__DECL uint32_t read_u24();
@@ -120,13 +115,21 @@ template <> inline float ibstream_view::sread<float>(const void* ptr)
   ::memcpy(&nv, ptr, sizeof(nv));
   return ntohf(nv);
 }
-
 template <> inline double ibstream_view::sread<double>(const void* ptr)
 {
   uint64_t nv;
   ::memcpy(&nv, ptr, sizeof(nv));
   return ntohd(nv);
 }
+
+template <> YASIO__DECL int ibstream_view::read_ix<int>();
+template <> YASIO__DECL int64_t ibstream_view::read_ix<int64_t>();
+
+#if defined(_WIN32) || !YASIO__64BITS
+template <> inline long ibstream_view::read_ix<long>() { return read_ix<int>(); }
+#elif defined(__APPLE__)
+template <> inline long ibstream_view::read_ix<long>() { return static_cast<long>(read_ix<int64_t>()); }
+#endif
 
 /// --------------------- CLASS ibstream ---------------------
 class ibstream : public ibstream_view {

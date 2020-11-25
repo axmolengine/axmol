@@ -382,7 +382,7 @@ static bool js_yasio_ibstream_read_ix(se::State& s)
   const auto& args = s.args();
   size_t argc      = args.size();
 
-  s.rval().setInt32(cobj->read_ix());
+  s.rval().setInt32(cobj->read_ix<int>());
 
   return true;
 }

@@ -63,16 +63,6 @@ public:
   YASIO__DECL obstream& operator=(const obstream& rhs);
   YASIO__DECL obstream& operator=(obstream&& rhs);
 
-  /* write 7bit encoded variant integer value
-  ** @.net BinaryWriter.Write7BitEncodedInt
-  */
-  void write_ix(int value) { write_ix_impl<int>(value); }
-
-  /* write 7bit encoded variant large integer value
-  ** @.net BinaryWriter.Write7BitEncodedInt64
-  */
-  void write_ix64(int64_t value) { write_ix_impl<int64_t>(value); }
-
   YASIO__DECL void write_i24(int32_t value);  // highest bit as sign
   YASIO__DECL void write_u24(uint32_t value); // highest byte ignored
 
@@ -106,6 +96,11 @@ public:
     auto nv = yasio::endian::htonv(value);
     write_bytes(&nv, sizeof(nv));
   }
+
+  /* write 7bit encoded variant integer value
+  ** @.net BinaryWriter.Write7BitEncodedInt(64)
+  */
+  template <typename _IntType> inline void write_ix(_IntType value);
 
   template <typename _Nty> inline void pwrite(ptrdiff_t offset, const _Nty value) { swrite(wptr(offset), value); }
   template <typename _Nty> static void swrite(void* ptr, const _Nty value)
@@ -155,6 +150,18 @@ template <> inline void obstream::write<double>(double value)
   auto nv = htond(value);
   write_bytes(&nv, sizeof(nv));
 }
+
+template <> inline void obstream::write_ix<int>(int value) { write_ix_impl<int>(value); }
+
+template <> inline void obstream::write_ix<int64_t>(int64_t value) { write_ix_impl<int64_t>(value); }
+
+/* long */
+#if defined(_WIN32) || !YASIO__64BITS
+template <> inline void obstream::write_ix<long>(long value) { write_ix_impl<int>(static_cast<int>(value)); }
+#elif defined(__APPLE__)
+template <> inline void obstream::write_ix<long>(long value) { write_ix_impl<int64_t>(static_cast<int64_t>(value)); }
+#endif
+
 } // namespace yasio
 
 #if defined(YASIO_HEADER_ONLY)

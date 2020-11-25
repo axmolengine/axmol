@@ -493,7 +493,7 @@ static bool js_yasio_ibstream_read_ix(JSContext* ctx, uint32_t argc, jsval* vp)
   cobj              = (yasio::ibstream*)(proxy ? proxy->ptr : nullptr);
   JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_ibstream_read_ix : Invalid Native Object");
 
-  args.rval().set(INT_TO_JSVAL(cobj->read_ix()));
+  args.rval().set(INT_TO_JSVAL(cobj->read_ix<int>()));
 
   return true;
 }
