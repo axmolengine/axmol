@@ -42,25 +42,25 @@ static inline float sp_EaseFunc(float t, float d)
 
 ScrollPane::ScrollPane(GComponent* owner)
     : _vtScrollBar(nullptr),
-    _hzScrollBar(nullptr),
-    _header(nullptr),
-    _footer(nullptr),
-    _pageController(nullptr),
-    _needRefresh(false),
-    _refreshBarAxis(0),
-    _aniFlag(0),
-    _loop(0),
-    _headerLockedSize(0),
-    _footerLockedSize(0),
-    _vScrollNone(false),
-    _hScrollNone(false),
-    _tweening(0),
-    _xPos(0),
-    _yPos(0),
-    _floating(false),
-    _dontClipMargin(false),
-    _mouseWheelEnabled(true),
-    _hover(false)
+      _hzScrollBar(nullptr),
+      _header(nullptr),
+      _footer(nullptr),
+      _pageController(nullptr),
+      _needRefresh(false),
+      _refreshBarAxis(0),
+      _aniFlag(0),
+      _loop(0),
+      _headerLockedSize(0),
+      _footerLockedSize(0),
+      _vScrollNone(false),
+      _hScrollNone(false),
+      _tweening(0),
+      _xPos(0),
+      _yPos(0),
+      _floating(false),
+      _dontClipMargin(false),
+      _mouseWheelEnabled(true),
+      _hover(false)
 {
     _owner = owner;
 
@@ -84,6 +84,10 @@ ScrollPane::ScrollPane(GComponent* owner)
     _owner->addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(ScrollPane::onTouchBegin, this));
     _owner->addEventListener(UIEventType::TouchMove, CC_CALLBACK_1(ScrollPane::onTouchMove, this));
     _owner->addEventListener(UIEventType::TouchEnd, CC_CALLBACK_1(ScrollPane::onTouchEnd, this));
+    _owner->addEventListener(UIEventType::Exit, [this](EventContext*) {
+        if (_draggingPane == this)
+            _draggingPane = nullptr;
+    });
 }
 
 ScrollPane::~ScrollPane()
@@ -99,6 +103,9 @@ ScrollPane::~ScrollPane()
         _header->release();
     if (_footer)
         _footer->release();
+
+    if (_draggingPane == this)
+        _draggingPane = nullptr;
 }
 
 void ScrollPane::setup(ByteBuffer* buffer)
@@ -796,10 +803,10 @@ void ScrollPane::handleSizeChanged()
         max += _footerLockedSize;
     if (_refreshBarAxis == 0)
         _container->setPosition2(clampf(_container->getPositionX(), -max, _headerLockedSize),
-            clampf(_container->getPositionY2(), -_overlapSize.height, 0));
+                                 clampf(_container->getPositionY2(), -_overlapSize.height, 0));
     else
         _container->setPosition2(clampf(_container->getPositionX(), -_overlapSize.width, 0),
-            clampf(_container->getPositionY2(), -max, _headerLockedSize));
+                                 clampf(_container->getPositionY2(), -max, _headerLockedSize));
 
     if (_header != nullptr)
     {
@@ -986,9 +993,9 @@ void ScrollPane::updateScrollBarVisible2(GScrollBar* bar)
     {
         if (bar->isVisible())
             GTween::to(1, 0, 0.5f)
-            ->setDelay(0.5f)
-            ->onComplete1(CC_CALLBACK_1(ScrollPane::onBarTweenComplete, this))
-            ->setTarget(bar, TweenPropType::Alpha);
+                ->setDelay(0.5f)
+                ->onComplete1(CC_CALLBACK_1(ScrollPane::onBarTweenComplete, this))
+                ->setTarget(bar, TweenPropType::Alpha);
     }
     else
     {
@@ -1230,7 +1237,7 @@ float ScrollPane::updateTargetAndDuration(float pos, int axis)
         {
             if (v2 > 1000)
                 ratio = pow((v2 - 1000) / 1000, 2);
-    }
+        }
 #endif
 
         if (ratio != 0)
@@ -1246,7 +1253,7 @@ float ScrollPane::updateTargetAndDuration(float pos, int axis)
             float change = (int)(v * duration * 0.4f);
             pos += change;
         }
-}
+    }
 
     if (duration < TWEEN_TIME_DEFAULT)
         duration = TWEEN_TIME_DEFAULT;
