@@ -69,7 +69,7 @@
 - Version: 2.10.4
 - License: BSD-style (The FreeType Project)
 
-## GLAD
+## Glad
 - Upstream: https://github.com/Dav1dde/glad
 - Version: 0.1.34
 - License: MIT
@@ -141,7 +141,7 @@
   - Version: git 1.3.7-83a82dd (1569)
   - License: BSD-3-Clause
 
-## OpenAL
+## OpenAL Soft
 - Upstream: https://github.com/kcat/openal-soft
 - Version: 1.21.0-26b03f5 (7320)
 - License: LGPL-2.1
