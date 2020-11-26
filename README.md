@@ -25,7 +25,7 @@
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
 * Modularize all optional extension, move from engine core to folder extensions
-* Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM, ...
+* Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
 * Use modern GL loader ```Glad```
 * Google [angle](https://github.com/google/angle) renderer backend support
 * C++ 14 standard
