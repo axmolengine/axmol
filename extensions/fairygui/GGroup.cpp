@@ -452,7 +452,7 @@ void GGroup::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
     {
         _excludeInvisibles = buffer->readBool();
         _autoSizeDisabled = buffer->readBool();
-        _mainChildIndex = buffer->readShort();
+        _mainGridIndex = buffer->readShort();
     }
 }
 

@@ -15,17 +15,17 @@ USING_NS_CC;
 using namespace std;
 
 GComponent::GComponent() : _container(nullptr),
-                           _scrollPane(nullptr),
-                           _childrenRenderOrder(ChildrenRenderOrder::ASCENT),
-                           _apexIndex(0),
-                           _boundsChanged(false),
-                           _trackBounds(false),
-                           _opaque(false),
-                           _sortingChildCount(0),
-                           _applyingController(nullptr),
-                           _buildingDisplayList(false),
-                           _maskOwner(nullptr),
-                           _hitArea(nullptr)
+_scrollPane(nullptr),
+_childrenRenderOrder(ChildrenRenderOrder::ASCENT),
+_apexIndex(0),
+_boundsChanged(false),
+_trackBounds(false),
+_opaque(false),
+_sortingChildCount(0),
+_applyingController(nullptr),
+_buildingDisplayList(false),
+_maskOwner(nullptr),
+_hitArea(nullptr)
 {
 }
 
@@ -445,8 +445,8 @@ void GComponent::applyController(GController* c)
 {
     _applyingController = c;
 
-    for (const auto& child : _children)
-        child->handleControllerChanged(c);
+    for (ssize_t i = 0; i < _children.size(); i++)
+        _children.at(i)->handleControllerChanged(c);
 
     _applyingController = nullptr;
 
