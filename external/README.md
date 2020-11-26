@@ -151,7 +151,7 @@
 - Version: 1.1.1h
 - License: Apache-2.0
 
-## png (libpng)
+## png
 - Upstream: https://github.com/glennrp/libpng
 - Version: git 1.6.38-dbe3e0c (4088) with arm64 neon detect fix
 - License: PNG Reference Library License version 2
@@ -201,7 +201,7 @@
 - Version: 1.2 with bugfixs & improvements
 - License: zlib
 
-## webp (libwebp)
+## webp
 - Upstream: https://github.com/webmproject/libwebp
 - Version: git 1.1.0-17fd4ba (4098)
 - License: Google Inc
@@ -226,7 +226,7 @@
 - Version: 1.2.11
 - License: zlib
 
-## libiconv (libiconv)
+## libiconv
 - Upstream: https://savannah.gnu.org/projects/libiconv
 - Version: 1.16.0
 - License: LGPL-2.1
