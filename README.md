@@ -21,12 +21,12 @@
 ### Highlight Features
 * **More clearly third-party libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on engine-x**
 * Refactor AudioEngine, OpenAL for all platforms
-  * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
+  * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
 * Modularize all optional extension, move from engine core to folder extensions
 * Implement all .wav formats supported by ```openal-soft```, such as MS-ADPCM, ADPCM, ...
-* Use modern GL loader ```Glad```
+* Use modern GL loader ```glad``` (instead of glew)
 * Google [angle](https://github.com/google/angle) renderer backend support
 * C++ 14 standard
 * IOS SDK 9.0 as minimal deployment
@@ -96,7 +96,7 @@ Open [Wiki](https://github.com/c4games/engine-x/wiki) for additional information
   * ThreadLocalStorage (TLS) 
     - ios x86 simulator ios>=10 and engine-x no longer provide x86 libraries
     - ios x64 or devices (armv7, arm64) ios sdk>=9.0
-    - the 'OpenAL Soft' maintained by kcat use TLS
+    - the openal-soft maintained by kcat use TLS
 
 ### Reference links
   * Official Cocos2d-x: https://github.com/cocos2d/cocos2d-x
