@@ -58,6 +58,7 @@ enum
 
 SpriteTests::SpriteTests()
 {
+    ADD_TEST_CASE(SpriteFramesFromFileContent);
     ADD_TEST_CASE(Sprite1);
     ADD_TEST_CASE(SpriteBatchNode1);
     ADD_TEST_CASE(SpriteAnchorPoint);
@@ -100,7 +101,6 @@ SpriteTests::SpriteTests()
     ADD_TEST_CASE(SpriteAnimationSplit);
     ADD_TEST_CASE(SpriteFrameTest);
     ADD_TEST_CASE(SpriteFrameAliasNameTest);
-    ADD_TEST_CASE(SpriteFramesFromFileContent);
     ADD_TEST_CASE(SpritePolygonFromFileContent);
     ADD_TEST_CASE(SpriteBatchNodeReorder);
     ADD_TEST_CASE(SpriteBatchNodeReorderIssue744);
@@ -1882,7 +1882,8 @@ void SpriteFramesFromFileContent::onEnter()
 	SpriteTestDemo::onEnter();
 	auto s = Director::getInstance()->getWinSize();
 
-	Data image_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".png");
+    Data plist_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".plist");
+    Data image_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".png");
 
     Image* image = new (std::nothrow) Image();
 	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize(), false);
@@ -1893,7 +1894,7 @@ void SpriteFramesFromFileContent::onEnter()
     CC_SAFE_RELEASE(image);
 
 	auto cache = SpriteFrameCache::getInstance();
-	cache->addSpriteFramesWithFile(sheetName() + ".plist", texture);
+	cache->addSpriteFramesWithFileContent(plist_content, texture);
 
 	//
 	// Animation using Sprite BatchNode

@@ -613,6 +613,16 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFil
     }
 }
 
+void SpriteFrameCache::addSpriteFramesWithFileContent(const Data& content, Texture2D* texture, const std::string& format)
+{
+    auto* loader = getSpriteSheetLoader(format);
+    if (loader)
+    {
+        loader->Load(content, texture, *this);
+    }
+}
+
+
 bool SpriteFrameCache::isSpriteFramesWithFileLoaded(const std::string& plist) const
 {
     return isSpriteSheetInUse(plist) && isPlistFull(plist);

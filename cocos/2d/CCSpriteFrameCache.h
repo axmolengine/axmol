@@ -196,6 +196,15 @@ public:
      */
     void addSpriteFramesWithFile(const std::string& spriteSheetFileName, Texture2D *texture, const std::string& format = "PLIST");
 
+    /** Adds multiple Sprite Frames from a plist file content. The texture will be associated with the created sprite frames.
+     * @js NA
+     * @lua addSpriteFrames
+     *
+     * @param plist_content Plist file content string.
+     * @param texture Texture pointer.
+     */
+    void addSpriteFramesWithFileContent(const Data& content, Texture2D* texture, const std::string& format = "PLIST");
+
     /** Adds an sprite frame with a given name.
      If the name already exists, then the contents of the old name will be replaced with the new one.
      *
