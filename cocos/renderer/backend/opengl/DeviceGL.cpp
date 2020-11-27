@@ -35,7 +35,7 @@
 
 CC_BACKEND_BEGIN
 
-#ifndef CC_USE_METAL
+#if defined(CC_USE_GL) || defined(CC_USE_GLES)
 Device* Device::getInstance()
 {
     if (!_instance)

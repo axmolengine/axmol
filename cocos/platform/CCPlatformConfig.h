@@ -119,7 +119,8 @@ other: GL
     #define CC_PLATFORM_PC
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
+#if defined(__APPLE__)
     #if CC_COMPAT_GL
         #define CC_USE_METAL (cocos2d::Device::isMetalSupported())
     #else
