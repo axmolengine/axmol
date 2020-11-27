@@ -75,7 +75,7 @@ set(COCOS_RENDERER_SRC
     renderer/backend/ShaderCache.cpp
     renderer/backend/RenderPassParams.cpp
     )
-
+if(ANDROID OR WINDOWS OR LINUX)
 list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/opengl/BufferGL.h
     renderer/backend/opengl/CommandBufferGL.h
@@ -103,7 +103,7 @@ list(APPEND COCOS_RENDERER_SRC
     renderer/backend/opengl/DeviceInfoGL.cpp
     renderer/backend/opengl/RenderTargetGL.cpp
 )
-if(IOS OR MACOSX)
+else()
 list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/metal/BufferMTL.h
     renderer/backend/metal/BufferManager.h
