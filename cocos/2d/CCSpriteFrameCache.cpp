@@ -337,7 +337,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
                 auto oneAlias = value.asString();
                 if (std::find(frameAliases.begin(), frameAliases.end(), oneAlias) == frameAliases.end())
                 {
-                    frameAliases.emplace_back(std::move(oneAlias));
+                    frameAliases.push_back(std::move(oneAlias));
                 }
                 else
                 {
@@ -540,7 +540,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict, Te
                 auto oneAlias = value.asString();
                 if (std::find(frameAliases.begin(), frameAliases.end(), oneAlias) == frameAliases.end())
                 {
-                    frameAliases.emplace_back(std::move(oneAlias));
+                    frameAliases.push_back(std::move(oneAlias));
                 }
                 else
                 {
@@ -652,7 +652,7 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
         auto* spriteFrame = iter.second;
         if( spriteFrame->getReferenceCount() == 1 )
         {
-            toRemoveFrames.emplace_back(iter.first);
+            toRemoveFrames.push_back(iter.first);
             spriteFrame->getTexture()->removeSpriteFrameCapInset(spriteFrame);
             CCLOG("cocos2d: SpriteFrameCache: removing unused frame: %s", iter.first.c_str());
             removed = true;
@@ -713,7 +713,7 @@ void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
     {
         if (findFrame(iter.first))
         {
-            keysToRemove.emplace_back(iter.first);
+            keysToRemove.push_back(iter.first);
         }
     }
 
@@ -730,7 +730,7 @@ void SpriteFrameCache::removeSpriteFramesFromTexture(Texture2D* texture)
         auto* frame = findFrame(key);
         if (frame && (frame->getTexture() == texture))
         {
-            keysToRemove.emplace_back(key);
+            keysToRemove.push_back(key);
         }
     }
 
