@@ -58,7 +58,6 @@ enum
 
 SpriteTests::SpriteTests()
 {
-    ADD_TEST_CASE(SpriteFramesFromFileContent);
     ADD_TEST_CASE(Sprite1);
     ADD_TEST_CASE(SpriteBatchNode1);
     ADD_TEST_CASE(SpriteAnchorPoint);
@@ -101,6 +100,7 @@ SpriteTests::SpriteTests()
     ADD_TEST_CASE(SpriteAnimationSplit);
     ADD_TEST_CASE(SpriteFrameTest);
     ADD_TEST_CASE(SpriteFrameAliasNameTest);
+    ADD_TEST_CASE(SpriteFramesFromFileContent);
     ADD_TEST_CASE(SpritePolygonFromFileContent);
     ADD_TEST_CASE(SpriteBatchNodeReorder);
     ADD_TEST_CASE(SpriteBatchNodeReorderIssue744);
