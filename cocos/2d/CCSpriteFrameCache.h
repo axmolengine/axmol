@@ -38,17 +38,79 @@ THE SOFTWARE.
 #include "base/CCRef.h"
 #include "base/CCValue.h"
 #include "base/CCMap.h"
+#include "base/CCData.h"
 
 NS_CC_BEGIN
 
 class Sprite;
 class Texture2D;
 class PolygonInfo;
+class SpriteFrameCache;
 
 /**
  * @addtogroup _2d
  * @{
  */
+
+class SpriteSheet
+{
+public:
+    std::string path;
+    std::string format;
+    std::set<std::string> frames;
+    bool full = false;
+};
+
+class ISpriteSheetLoader
+{
+public:
+    virtual ~ISpriteSheetLoader() = default;
+    virtual void Load(const std::string& filePath, SpriteFrameCache& cache) = 0;
+    virtual void Load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) = 0;
+    virtual void Load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) = 0;
+    virtual void Load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) = 0;
+    virtual void Reload(const std::string& filePath, SpriteFrameCache& cache) = 0;
+};
+
+class SpriteSheetLoader : public ISpriteSheetLoader
+{
+public:
+    /** Configures PolygonInfo class with the passed sizes + triangles */
+    void initializePolygonInfo(const Size& textureSize,
+        const Size& spriteSize,
+        const std::vector<int>& vertices,
+        const std::vector<int>& verticesUV,
+        const std::vector<int>& triangleIndices,
+        PolygonInfo& polygonInfo);
+
+    void Load(const std::string& filePath, SpriteFrameCache& cache) override = 0;
+    void Load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override = 0;
+    void Load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override = 0;
+    void Load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override = 0;
+    void Reload(const std::string& filePath, SpriteFrameCache& cache) override = 0;
+};
+
+class PlistSpriteSheetLoader : public SpriteSheetLoader
+{
+public:
+    void Load(const std::string& filePath, SpriteFrameCache& cache) override;
+    void Load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override;
+    void Load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override;
+    void Load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override;
+    void Reload(const std::string& filePath, SpriteFrameCache& cache) override;
+
+protected:
+    /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
+     */
+    void addSpriteFramesWithDictionary(ValueMap& dictionary, Texture2D* texture, const std::string& plist, SpriteFrameCache& cache);
+
+    /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
+     */
+    void addSpriteFramesWithDictionary(ValueMap& dict, const std::string& texturePath, const std::string& plist, SpriteFrameCache& cache);
+
+    void reloadSpriteFramesWithDictionary(ValueMap& dict, Texture2D* texture, const std::string& plist, SpriteFrameCache& cache);
+};
+
 
 /** @class SpriteFrameCache
  * @brief Singleton that handles the loading of the sprite frames.
@@ -88,52 +150,6 @@ class PolygonInfo;
  */
 class CC_DLL SpriteFrameCache : public Ref
 {
-protected:
-    /**
-    * used to wrap plist & frame names & SpriteFrames
-    */
-    class PlistFramesCache {
-    public:
-        PlistFramesCache() { }
-        void init() {
-            _spriteFrames.reserve(20); clear();
-        }
-        /**  Record SpriteFrame with plist and frame name, add frame name 
-        *    and plist to index
-        */
-        void insertFrame(const std::string &plist, const std::string &frame, SpriteFrame *frameObj);
-        /** Delete frame from cache, rebuild index
-        */
-        bool eraseFrame(const std::string &frame);
-        /** Delete a list of frames from cache, rebuild index
-        */
-        bool eraseFrames(const std::vector<std::string> &frame);
-        /** Delete frame from index and SpriteFrame is kept.
-        */
-        bool erasePlistIndex(const std::string &frame);
-        /** Clear index and all SpriteFrames.
-        */
-        void clear();
-
-        inline bool hasFrame(const std::string &frame) const;
-        inline bool isPlistUsed(const std::string &plist) const;
-
-        inline SpriteFrame *at(const std::string &frame);
-        inline Map<std::string, SpriteFrame*>& getSpriteFrames();
-
-        void markPlistFull(const std::string &plist, bool full) { _isPlistFull[plist] = full; }
-        bool isPlistFull(const std::string &plist) const
-        {
-            auto it = _isPlistFull.find(plist);
-            return it == _isPlistFull.end() ? false : it->second;
-        }
-    private:
-        Map<std::string, SpriteFrame*> _spriteFrames;
-        std::unordered_map<std::string, std::set<std::string>> _indexPlist2Frames;
-        std::unordered_map<std::string, std::string> _indexFrame2plist;
-        std::unordered_map<std::string, bool> _isPlistFull;
-    };
-
 public:
     /** Returns the shared instance of the Sprite Frame cache.
      *
@@ -165,37 +181,20 @@ public:
      * @js addSpriteFrames
      * @lua addSpriteFrames
      *
-     * @param plist Plist file name.
+     * @param spriteSheetFileName file name.
+     * @param format
      */
-    void addSpriteFramesWithFile(const std::string& plist);
-
-    /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames.
-     @since v0.99.5
-     * @js addSpriteFrames
-     * @lua addSpriteFrames
-     *
-     * @param plist Plist file name.
-     * @param textureFileName Texture file name.
-     */
-    void addSpriteFramesWithFile(const std::string& plist, const std::string& textureFileName);
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, const std::string& format = "PLIST");
 
     /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames. 
      * @js addSpriteFrames
      * @lua addSpriteFrames
      *
-     * @param plist Plist file name.
+     * @param spriteSheetFileName file name.
      * @param texture Texture pointer.
+     * @param format
      */
-    void addSpriteFramesWithFile(const std::string&plist, Texture2D *texture);
-
-    /** Adds multiple Sprite Frames from a plist file content. The texture will be associated with the created sprite frames. 
-     * @js NA
-     * @lua addSpriteFrames
-     *
-     * @param plist_content Plist file content string.
-     * @param texture Texture pointer.
-     */
-    void addSpriteFramesWithFileContent(const std::string& plist_content, Texture2D *texture);
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, Texture2D *texture, const std::string& format = "PLIST");
 
     /** Adds an sprite frame with a given name.
      If the name already exists, then the contents of the old name will be replaced with the new one.
@@ -272,37 +271,63 @@ public:
      */
     SpriteFrame* getSpriteFrameByName(const std::string& name);
 
-    bool reloadTexture(const std::string& plist);
+    bool reloadTexture(const std::string& spriteSheetFileName);
+
+    SpriteFrame* findFrame(const std::string& frame);
+
+    /**  Record SpriteFrame with plist and frame name, add frame name
+    *    and plist to index
+    */
+    void insertFrame(const std::shared_ptr<SpriteSheet>& spriteSheet, const std::string& frameName, SpriteFrame* frameObj);
+
+    /** Delete frame from cache, rebuild index
+    */
+    bool eraseFrame(const std::string& frameName);
+
+    void addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Rect& capInsets, Texture2D* texture);
+
+    void registerSpriteSheetLoader(std::string formatId, std::unique_ptr<ISpriteSheetLoader> loader);
+    void deregisterSpriteSheetLoader(const std::string& formatId);
+
+    ISpriteSheetLoader* getSpriteSheetLoader(const std::string& format);
 
 protected:
     // MARMALADE: Made this protected not private, as deriving from this class is pretty useful
     SpriteFrameCache(){}
 
-    /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
-     */
-    void addSpriteFramesWithDictionary(ValueMap& dictionary, Texture2D *texture, const std::string &plist);
-    
-    /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
-     */
-    void addSpriteFramesWithDictionary(ValueMap& dictionary, const std::string &texturePath, const std::string &plist);
-    
     /** Removes multiple Sprite Frames from Dictionary.
     * @since v0.99.5
     */
     void removeSpriteFramesFromDictionary(ValueMap& dictionary);
 
-    /** Configures PolygonInfo class with the passed sizes + triangles */
-    void initializePolygonInfo(const Size &textureSize,
-                               const Size &spriteSize,
-                               const std::vector<int> &vertices,
-                               const std::vector<int> &verticesUV,
-                               const std::vector<int> &triangleIndices,
-                               PolygonInfo &polygonInfo);
+    /** Delete a list of frames from cache, rebuild index
+    */
+    bool eraseFrames(const std::vector<std::string>& frame);
+    /** Delete frame from index and SpriteFrame is kept.
+    */
+    bool removeSpriteSheet(const std::string& spriteSheetFileName);
+    /** Clear index and all SpriteFrames.
+    */
+    void clear();
 
-    void reloadSpriteFramesWithDictionary(ValueMap& dictionary, Texture2D *texture, const std::string &plist);
+    inline bool hasFrame(const std::string& frame) const;
+    inline bool isSpriteSheetInUse(const std::string& spriteSheetFileName) const;
 
-    ValueMap _spriteFramesAliases;
-    PlistFramesCache _spriteFramesCache;
+    inline Map<std::string, SpriteFrame*>& getSpriteFrames();
+
+    void markPlistFull(const std::string& spriteSheetFileName, bool full) { _spriteSheets[spriteSheetFileName]->full = full; }
+    bool isPlistFull(const std::string& spriteSheetFileName) const
+    {
+        auto&& it = _spriteSheets.find(spriteSheetFileName);
+        return it == _spriteSheets.end() ? false : it->second->full;
+    }
+
+private:
+    Map<std::string, SpriteFrame*> _spriteFrames;
+    std::unordered_map<std::string, std::shared_ptr<SpriteSheet>> _spriteSheets;
+    std::unordered_map<std::string, std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
+
+    std::map<std::string, std::unique_ptr<ISpriteSheetLoader>> _spriteSheetLoaders;
 };
 
 // end of _2d group
