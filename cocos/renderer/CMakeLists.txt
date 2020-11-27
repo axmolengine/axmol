@@ -103,7 +103,7 @@ list(APPEND COCOS_RENDERER_SRC
     renderer/backend/opengl/DeviceInfoGL.cpp
     renderer/backend/opengl/RenderTargetGL.cpp
 )
-
+if(IOS OR MACOSX)
 list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/metal/BufferMTL.h
     renderer/backend/metal/BufferManager.h
@@ -133,3 +133,4 @@ list(APPEND COCOS_RENDERER_SRC
     renderer/backend/metal/ProgramMTL.mm
     renderer/backend/metal/DeviceInfoMTL.mm
 )
+endif()

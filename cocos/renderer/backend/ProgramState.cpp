@@ -34,9 +34,9 @@
 #include <algorithm>
 #include "platform/CCDevice.h"
 #include "xxhash.h"
-
+#if defined(__APPLE__)
 #include "glsl_optimizer.h"
-
+#endif
 CC_BACKEND_BEGIN
 
 namespace {
@@ -286,6 +286,7 @@ void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, c
 
 void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniformInfo, const void* srcData, std::size_t srcSize, void* buffer)
 {
+#if defined(__APPLE__)
     auto basicType = static_cast<glslopt_basic_type>(uniformInfo.type);
     char* convertedData = new char[uniformInfo.size];
     memset(convertedData, 0, uniformInfo.size);
@@ -349,6 +350,7 @@ void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniform
     
     memcpy((char*)buffer + uniformInfo.location, convertedData, uniformInfo.size);
     CC_SAFE_DELETE_ARRAY(convertedData);
+#endif
 }
 
 void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset)
