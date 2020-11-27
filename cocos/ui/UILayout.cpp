@@ -632,7 +632,6 @@ void Layout::supplyTheLayoutParameterLackToChild(Widget *child)
             break;
         case Type::HORIZONTAL:
         case Type::VERTICAL:
-        case Type::CENTER_VERTICAL:
         {
             LinearLayoutParameter* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter());
             if (!layoutParameter)
@@ -923,9 +922,6 @@ LayoutManager* Layout::createLayoutManager()
         case Type::VERTICAL:
             exe = LinearVerticalLayoutManager::create();
             break;
-        case Type::CENTER_VERTICAL:
-            exe = LinearCenterVerticalLayoutManager::create();
-            break;
         case Type::HORIZONTAL:
             exe = LinearHorizontalLayoutManager::create();
             break;
@@ -1047,7 +1043,7 @@ Size Layout::getLayoutAccumulatedSize()const
     {
         layoutSize = layoutSize - Size(0, layoutSize.height/widgetCount * (widgetCount-1));
     }
-    if (type == Type::VERTICAL || type == Type::CENTER_VERTICAL)
+    if (type == Type::VERTICAL)
     {
         layoutSize = layoutSize - Size(layoutSize.width/widgetCount * (widgetCount-1), 0);
     }
@@ -1638,8 +1634,7 @@ bool  Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction)c
     
     auto& container = parent->getChildren();
     ssize_t index = container.getIndex(widget);
-    const auto parentLayoutType = parent->getLayoutType();
-    if (parentLayoutType == Type::HORIZONTAL)
+    if (parent->getLayoutType() == Type::HORIZONTAL)
     {
         if (direction == FocusDirection::LEFT)
         {
@@ -1673,7 +1668,7 @@ bool  Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction)c
             return isLastWidgetInContainer(parent, direction);
         }
     }
-    else if (parentLayoutType == Type::VERTICAL || parentLayoutType == Type::CENTER_VERTICAL)
+    else if(parent->getLayoutType() == Type::VERTICAL)
     {
         if (direction == FocusDirection::UP)
         {
@@ -1726,7 +1721,7 @@ bool  Layout::isWidgetAncestorSupportLoopFocus(Widget* widget, FocusDirection di
     }
     if (parent->isLoopFocus())
     {
-        const auto layoutType = parent->getLayoutType();
+        auto layoutType = parent->getLayoutType();
         if (layoutType == Type::HORIZONTAL)
         {
             if (direction == FocusDirection::LEFT || direction == FocusDirection::RIGHT)
@@ -1738,7 +1733,7 @@ bool  Layout::isWidgetAncestorSupportLoopFocus(Widget* widget, FocusDirection di
                 return isWidgetAncestorSupportLoopFocus(parent, direction);
             }
         }
-        if (layoutType == Type::VERTICAL || layoutType == Type::CENTER_VERTICAL)
+        if (layoutType == Type::VERTICAL)
         {
             if (direction == FocusDirection::DOWN || direction == FocusDirection::UP)
             {
@@ -1828,7 +1823,7 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
                     break;
             }
         }
-        else if (_layoutType == Type::VERTICAL || _layoutType == Type::CENTER_VERTICAL)
+        else if (_layoutType == Type::VERTICAL)
         {
             switch (direction)
             {
