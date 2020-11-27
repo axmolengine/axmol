@@ -1882,7 +1882,6 @@ void SpriteFramesFromFileContent::onEnter()
 	SpriteTestDemo::onEnter();
 	auto s = Director::getInstance()->getWinSize();
 
-	std::string plist_content = FileUtils::getInstance()->getStringFromFile(sheetName() + ".plist");
 	Data image_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".png");
 
     Image* image = new (std::nothrow) Image();
@@ -1894,7 +1893,7 @@ void SpriteFramesFromFileContent::onEnter()
     CC_SAFE_RELEASE(image);
 
 	auto cache = SpriteFrameCache::getInstance();
-	cache->addSpriteFramesWithFileContent(plist_content, texture);
+	cache->addSpriteFramesWithFile(sheetName() + ".plist", texture);
 
 	//
 	// Animation using Sprite BatchNode
