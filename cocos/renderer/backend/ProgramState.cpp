@@ -32,12 +32,10 @@
 #include "base/CCEventType.h"
 #include "base/CCDirector.h"
 #include <algorithm>
-
+#include "platform/CCDevice.h"
 #include "xxhash.h"
 
-#ifdef CC_USE_METAL
 #include "glsl_optimizer.h"
-#endif
 
 CC_BACKEND_BEGIN
 
@@ -187,13 +185,12 @@ bool ProgramState::init(Program* program)
     _program = program;
     _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
     _vertexUniformBuffer = (char*)calloc(1, _vertexUniformBufferSize);
-#ifdef CC_USE_METAL
-    _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
-    _fragmentUniformBuffer = (char*)calloc(1, _fragmentUniformBufferSize);
-#endif
-#ifdef CC_USE_METAL
-    _uniformHashState = XXH32_createState();
-#endif
+    
+    if(CC_USE_METAL) {
+        _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
+        _fragmentUniformBuffer = (char*)calloc(1, _fragmentUniformBufferSize);
+        _uniformHashState = XXH32_createState();
+    }
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*){
@@ -227,9 +224,9 @@ void ProgramState::resetUniforms()
 
 ProgramState::~ProgramState()
 {
-#ifdef CC_USE_METAL
-    XXH32_freeState(_uniformHashState);
-#endif
+    if(CC_USE_METAL) {
+        XXH32_freeState(_uniformHashState);
+    }
     CC_SAFE_RELEASE(_program);
     CC_SAFE_FREE(_vertexUniformBuffer);
     CC_SAFE_FREE(_fragmentUniformBuffer);
@@ -246,9 +243,9 @@ ProgramState *ProgramState::clone() const
     cp->_fragmentTextureInfos = _fragmentTextureInfos;
     memcpy(cp->_vertexUniformBuffer, _vertexUniformBuffer, _vertexUniformBufferSize);
     cp->_vertexLayout = _vertexLayout;
-#ifdef CC_USE_METAL
-    memcpy(cp->_fragmentUniformBuffer, _fragmentUniformBuffer, _fragmentUniformBufferSize);
-#endif
+    if(CC_USE_METAL) {
+        memcpy(cp->_fragmentUniformBuffer, _fragmentUniformBuffer, _fragmentUniformBufferSize);
+    }
     cp->_uniformID = _uniformID;
     return cp;
 }
@@ -287,7 +284,6 @@ void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, c
     }
 }
 
-#ifdef CC_USE_METAL
 void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniformInfo, const void* srcData, std::size_t srcSize, void* buffer)
 {
     auto basicType = static_cast<glslopt_basic_type>(uniformInfo.type);
@@ -354,7 +350,6 @@ void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniform
     memcpy((char*)buffer + uniformInfo.location, convertedData, uniformInfo.size);
     CC_SAFE_DELETE_ARRAY(convertedData);
 }
-#endif
 
 void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset)
 {
@@ -362,19 +357,19 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
         return;
     
 //float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
-#ifdef CC_USE_METAL
-    const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::VERTEX, location);
-    if(uniformInfo.needConvert)
-    {
-        convertAndCopyUniformData(uniformInfo, data, size, _vertexUniformBuffer);
+    if(CC_USE_METAL) {
+        const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::VERTEX, location);
+        if(uniformInfo.needConvert)
+        {
+            convertAndCopyUniformData(uniformInfo, data, size, _vertexUniformBuffer);
+        }
+        else
+        {
+            memcpy(_vertexUniformBuffer + location, data, size);
+        }
+    } else {
+        memcpy(_vertexUniformBuffer + offset, data, size);
     }
-    else
-    {
-        memcpy(_vertexUniformBuffer + location, data, size);
-    }
-#else
-    memcpy(_vertexUniformBuffer + offset, data, size);
-#endif
 }
 
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size)
@@ -383,30 +378,30 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
         return;
    
 //float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
-#ifdef CC_USE_METAL
-    const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::FRAGMENT, location);
-    if(uniformInfo.needConvert)
-    {
-        convertAndCopyUniformData(uniformInfo, data, size, _fragmentUniformBuffer);
+    if(CC_USE_METAL) {
+        const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::FRAGMENT, location);
+        if(uniformInfo.needConvert)
+        {
+            convertAndCopyUniformData(uniformInfo, data, size, _fragmentUniformBuffer);
+        }
+        else
+        {
+            memcpy(_fragmentUniformBuffer + location, data, size);
+        }
     }
-    else
-    {
-        memcpy(_fragmentUniformBuffer + location, data, size);
-    }
-#endif
 }
 
 void ProgramState::updateUniformID(int uniformID)
 {
     if (uniformID == -1) {
-#ifdef CC_USE_METAL
-        XXH32_reset(_uniformHashState, 0);
-        XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
-        XXH32_update(_uniformHashState, _fragmentUniformBuffer, _fragmentUniformBufferSize);
-        _uniformID = XXH32_digest(_uniformHashState);
-#else
-        _uniformID = XXH32(_vertexUniformBuffer, _vertexUniformBufferSize, 0);
-#endif
+        if(CC_USE_METAL) {
+            XXH32_reset(_uniformHashState, 0);
+            XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
+            XXH32_update(_uniformHashState, _fragmentUniformBuffer, _fragmentUniformBufferSize);
+            _uniformID = XXH32_digest(_uniformHashState);
+        } else {
+            _uniformID = XXH32(_vertexUniformBuffer, _vertexUniformBufferSize, 0);
+        }
     }
     else {
         _uniformID = uniformID;

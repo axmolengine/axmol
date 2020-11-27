@@ -204,26 +204,26 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     backend::PixelFormat      imagePixelFormat = image->getPixelFormat();
     size_t           tempDataLen = image->getDataLen();
 
-#ifdef CC_USE_METAL
-    //!override renderFormat, since some render format is not supported by metal
-    switch (renderFormat)
-    {
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS || TARGET_OS_SIMULATOR)
-    //packed 16 bits pixels only available on iOS
-    case PixelFormat::RGB565:
-    case PixelFormat::RGB5A1:
-    case PixelFormat::RGBA4:
-#endif
-    case PixelFormat::L8:
-    case PixelFormat::LA8:
-    case PixelFormat::RGB8:
-        //Note: conversion to RGBA8 will happends
-        renderFormat = PixelFormat::RGBA8;
-        break;
-    default:
-        break;
+    if(CC_USE_METAL) {
+        //!override renderFormat, since some render format is not supported by metal
+        switch (renderFormat)
+        {
+    #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS || TARGET_OS_SIMULATOR)
+        //packed 16 bits pixels only available on iOS
+        case PixelFormat::RGB565:
+        case PixelFormat::RGB5A1:
+        case PixelFormat::RGBA4:
+    #endif
+        case PixelFormat::L8:
+        case PixelFormat::LA8:
+        case PixelFormat::RGB8:
+            //Note: conversion to RGBA8 will happends
+            renderFormat = PixelFormat::RGBA8;
+            break;
+        default:
+            break;
+        }
     }
-#endif
 
     if (image->getNumberOfMipmaps() > 1)
     {
@@ -284,9 +284,9 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
     if (!pfd.bpp)
     {
         CCLOG("cocos2d: WARNING: unsupported pixelformat: %lx", (unsigned long)pixelFormat);
-#ifdef CC_USE_METAL
-        CCASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
-#endif
+        if (CC_USE_METAL) {
+            CCASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
+        }
         return false;
     }
 
@@ -334,9 +334,10 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
         if (renderFormat != oriPixelFormat && !compressed) //need conversion
         {
             auto convertedFormat = backend::PixelFormatUtils::convertDataToFormat(data, dataLen, oriPixelFormat, renderFormat, &outData, &outDataLen);
-#ifdef CC_USE_METAL
-            CCASSERT(convertedFormat == renderFormat, "PixelFormat convert failed!");
-#endif
+            if (CC_USE_METAL) {
+                CCASSERT(convertedFormat == renderFormat, "PixelFormat convert failed!");
+            }
+
             if (convertedFormat == renderFormat) pixelFormat = renderFormat;
         }
 

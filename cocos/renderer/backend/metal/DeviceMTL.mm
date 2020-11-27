@@ -32,8 +32,9 @@
 #include "ProgramMTL.h"
 #include "DeviceInfoMTL.h"
 #include "RenderTargetMTL.h"
-
+#include "../opengl/DeviceGL.h"
 #include "base/ccMacros.h"
+#include "platform/CCDevice.h"
 
 CC_BACKEND_BEGIN
 
@@ -42,9 +43,13 @@ id<CAMetalDrawable> DeviceMTL::_currentDrawable = nil;
 
 Device* Device::getInstance()
 {
-    if (! Device::_instance)
-        Device::_instance = new (std::nothrow) DeviceMTL();
-
+    if (! Device::_instance) {
+        if (CC_USE_METAL) {
+            Device::_instance = new (std::nothrow) DeviceMTL();
+        } else {
+            Device::_instance = new (std::nothrow) DeviceGL();
+        }
+    }
     return Device::_instance;
 }
 

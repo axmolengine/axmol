@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "base/ccUTF8.h"
 #include "2d/CCCamera.h"
 #include "platform/CCFileUtils.h"
+#include "platform/CCDevice.h"
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Device.h"
@@ -1312,10 +1313,8 @@ void Sprite::setScaleX(float scaleX)
 
 void Sprite::setScaleY(float scaleY)
 {
-#ifdef CC_USE_METAL
-    if(_texture->isRenderTarget())
+    if(CC_USE_METAL && _texture->isRenderTarget())
        scaleY = std::abs(scaleY);
-#endif
     Node::setScaleY(scaleY);
     SET_DIRTY_RECURSIVELY();
 }
@@ -1442,10 +1441,9 @@ bool Sprite::isFlippedX() const
 
 void Sprite::setFlippedY(bool flippedY)
 {
-#ifdef CC_USE_METAL
-    if(_texture->isRenderTarget())
+    if(CC_USE_METAL && _texture->isRenderTarget())
         flippedY = !flippedY;
-#endif
+
     if (_flippedY != flippedY)
     {
         _flippedY = flippedY;

@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "2d/CCGrid.h"
-
+#include "platform/CCDevice.h"
 #include "base/ccMacros.h"
 #include "base/ccUtils.h"
 #include "2d/CCNode.h"
@@ -92,10 +92,9 @@ bool GridBase::initWithSize(const Size& gridSize, Texture2D *texture, bool flipp
     CC_SAFE_RETAIN(_texture);
     _isTextureFlipped = flipped;
 
-#ifdef CC_USE_METAL
-    _isTextureFlipped = !flipped;
-#endif
-    
+    if(CC_USE_METAL) {
+        _isTextureFlipped = !flipped;
+    }
     if (rect.equals(Rect::ZERO)) {
         auto size = _texture->getContentSize();
         _gridRect.setRect(0, 0, size.width, size.height);

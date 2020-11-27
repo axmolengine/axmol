@@ -99,10 +99,10 @@ elseif(APPLE)
             platform/ios/CCGLViewImpl-ios.mm
             platform/ios/CCImage-ios.mm
             platform/ios/CCInputView-ios.mm
+	    platform/ios/CCES2Renderer-ios.m
             )
 
-        if(NOT CC_COMPAT_GL)
-            set(COCOS_PLATFORM_SPECIFIC_HEADER
+        set(COCOS_PLATFORM_SPECIFIC_HEADER
                 ${COCOS_PLATFORM_SPECIFIC_HEADER}
                 platform/ios/CCES2Renderer-ios.h
                 platform/ios/CCES2Renderer-ios.h
@@ -110,11 +110,6 @@ elseif(APPLE)
                 platform/ios/CCGL-ios.h
                 platform/ios/OpenGL_Internal-ios.h
             )
-            set(COCOS_PLATFORM_SPECIFIC_SRC
-                ${COCOS_PLATFORM_SPECIFIC_SRC}
-                platform/ios/CCES2Renderer-ios.m
-            )
-        endif()
     endif()
 
 elseif(LINUX)

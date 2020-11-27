@@ -40,6 +40,7 @@ USING_NS_CC;
 #include "base/CCEventType.h"
 #include "2d/CCCamera.h"
 #include "platform/CCImage.h"
+#include "platform/CCDevice.h"
 #include "3d/CC3DProgramInfo.h"
 #include "base/ccUtils.h"
 
@@ -166,9 +167,9 @@ void Terrain::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, 
     {
         int hasLightMap = 0;
         _programState->setUniform(_lightMapCheckLocation, &hasLightMap, sizeof(hasLightMap));
-#ifdef CC_USE_METAL
-        _programState->setTexture(_lightMapLocation, 5, _dummyTexture->getBackendTexture());
-#endif
+        if(CC_USE_METAL) {
+            _programState->setTexture(_lightMapLocation, 5, _dummyTexture->getBackendTexture());
+        }
     }
     auto camera = Camera::getVisitingCamera();
 
@@ -269,14 +270,14 @@ Terrain::Terrain()
     );
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
-#ifdef CC_USE_METAL
-    auto image = new (std::nothrow)Image();
-    bool CC_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
-    CCASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
-    _dummyTexture = new (std::nothrow)Texture2D();
-    _dummyTexture->initWithImage(image);
-    CC_SAFE_RELEASE(image);
-#endif
+    if (CC_USE_METAL) {
+        auto image = new (std::nothrow)Image();
+        bool CC_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
+        CCASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
+        _dummyTexture = new (std::nothrow)Texture2D();
+        _dummyTexture->initWithImage(image);
+        CC_SAFE_RELEASE(image);
+    }
 }
 
 void Terrain::setChunksLOD(const Vec3& cameraPos)

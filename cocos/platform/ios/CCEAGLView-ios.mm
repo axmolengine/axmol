@@ -69,14 +69,12 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import "base/CCIMEDispatcher.h"
 #import "platform/ios/CCInputView-ios.h"
 
-#if defined(CC_USE_METAL)
 #import <Metal/Metal.h>
 #import "renderer/backend/metal/DeviceMTL.h"
-#else
 #import "platform/ios/CCGLViewImpl-ios.h"
 #import "platform/ios/CCES2Renderer-ios.h"
 #import "platform/ios/OpenGL_Internal-ios.h"
-#endif
+#import "platform/CCDevice.h"
 
 //CLASS IMPLEMENTATIONS:
 
@@ -93,9 +91,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 @synthesize surfaceSize=size_;
 @synthesize pixelFormat=pixelformat_, depthFormat=depthFormat_;
-#if !defined(CC_USE_METAL)
 @synthesize context=context_;
-#endif
 @synthesize multiSampling=multiSampling_;
 @synthesize keyboardShowNotification = keyboardShowNotification_;
 @synthesize isKeyboardShown;
@@ -103,11 +99,11 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 + (Class) layerClass
 {
-#if defined(CC_USE_METAL)
-    return [CAMetalLayer class];
-#else
-    return [CAEAGLLayer class];
-#endif
+    if (CC_USE_METAL) {
+        return [CAMetalLayer class];
+    } else {
+        return [CAEAGLLayer class];
+    }
 }
 
 + (id) viewWithFrame:(CGRect)frame
@@ -152,30 +148,29 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         {
             self.contentScaleFactor = [[UIScreen mainScreen] scale];
         }
-        
-#if defined(CC_USE_METAL)
-        id<MTLDevice> device = MTLCreateSystemDefaultDevice();
-        if (!device)
-        {
-             CCLOG("Doesn't support metal.");
-             return nil;
+        if (CC_USE_METAL) {
+            id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+            if (!device)
+            {
+                 CCLOG("Doesn't support metal.");
+                 return nil;
+            }
+            CAMetalLayer* metalLayer = (CAMetalLayer*)[self layer];
+            metalLayer.device = device;
+            metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+            metalLayer.framebufferOnly = YES;
+            cocos2d::backend::DeviceMTL::setCAMetalLayer(metalLayer);
+        } else {
+            pixelformat_ = format;
+            depthFormat_ = depth;
+            multiSampling_ = sampling;
+            requestedSamples_ = nSamples;
+            preserveBackbuffer_ = retained;
+            if( ! [self setupSurfaceWithSharegroup:sharegroup] ) {
+                [self release];
+                return nil;
+            }
         }
-        CAMetalLayer* metalLayer = (CAMetalLayer*)[self layer];
-        metalLayer.device = device;
-        metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
-        metalLayer.framebufferOnly = YES;
-        cocos2d::backend::DeviceMTL::setCAMetalLayer(metalLayer);
-#else
-        pixelformat_ = format;
-        depthFormat_ = depth;
-        multiSampling_ = sampling;
-        requestedSamples_ = nSamples;
-        preserveBackbuffer_ = retained;
-        if( ! [self setupSurfaceWithSharegroup:sharegroup] ) {
-            [self release];
-            return nil;
-        }
-#endif
     }
     
     return self;
@@ -186,22 +181,22 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if ( (self = [super initWithCoder:aDecoder]) )
     {
         self.textInputView = [[CCInputView alloc] initWithCoder:aDecoder];
-#if defined(CC_USE_METAL)
-        size_ = [self bounds].size;
-#else
-        CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
-        
-        pixelformat_ = kEAGLColorFormatRGB565;
-        depthFormat_ = 0; // GL_DEPTH_COMPONENT24_OES;
-        multiSampling_= NO;
-        requestedSamples_ = 0;
-        size_ = [eaglLayer bounds].size;
-        
-        if( ! [self setupSurfaceWithSharegroup:nil] ) {
-            [self release];
-            return nil;
+        if (CC_USE_METAL) {
+            size_ = [self bounds].size;
+        } else {
+            CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
+            
+            pixelformat_ = kEAGLColorFormatRGB565;
+            depthFormat_ = 0; // GL_DEPTH_COMPONENT24_OES;
+            multiSampling_= NO;
+            requestedSamples_ = 0;
+            size_ = [eaglLayer bounds].size;
+            
+            if( ! [self setupSurfaceWithSharegroup:nil] ) {
+                [self release];
+                return nil;
+            }
         }
-#endif
     }
     
     return self;
@@ -219,7 +214,6 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     return (int)bound.height * self.contentScaleFactor;
 }
 
-#if !defined(CC_USE_METAL)
 -(BOOL) setupSurfaceWithSharegroup:(EAGLSharegroup*)sharegroup
 {
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
@@ -252,14 +246,13 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     
     return YES;
 }
-#endif
 
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self]; // remove keyboard notification
-#if !defined(CC_USE_METAL)
-    [renderer_ release];
-#endif
+    if (!CC_USE_METAL) {
+        [renderer_ release];
+    }
     [self.textInputView release];
     [super dealloc];
 }
@@ -269,22 +262,22 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if (!cocos2d::Director::getInstance()->isValid())
         return;
     
-#if defined(CC_USE_METAL)
-    size_ = [self bounds].size;
-    size_.width *= self.contentScaleFactor;
-    size_.height *= self.contentScaleFactor;
-#else
-    [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
-    size_ = [renderer_ backingSize];
+    if (CC_USE_METAL) {
+        size_ = [self bounds].size;
+        size_.width *= self.contentScaleFactor;
+        size_.height *= self.contentScaleFactor;
+    } else {
+        [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
+        size_ = [renderer_ backingSize];
 
-    // Issue #914 #924
-//     Director *director = [Director sharedDirector];
-//     [director reshapeProjection:size_];
-    cocos2d::Size size;
-    size.width = size_.width;
-    size.height = size_.height;
-    //cocos2d::Director::getInstance()->reshapeProjection(size);
-#endif
+        // Issue #914 #924
+    //     Director *director = [Director sharedDirector];
+    //     [director reshapeProjection:size_];
+        cocos2d::Size size;
+        size.width = size_.width;
+        size.height = size_.height;
+        //cocos2d::Director::getInstance()->reshapeProjection(size);
+    }
 
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])
@@ -293,18 +286,15 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     }
 }
 
-#if defined(CC_USE_METAL)
-- (void) swapBuffers
-{
-}
-#else
 - (void) swapBuffers
 {
     // IMPORTANT:
         // - preconditions
         //    -> context_ MUST be the OpenGL context
         //    -> renderbuffer_ must be the RENDER BUFFER
-
+    if (CC_USE_METAL) {
+        return;
+    }
 #ifdef __IPHONE_4_0
     
     if (multiSampling_)
@@ -372,7 +362,6 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     
     return pFormat;
 }
-#endif
 
 #pragma mark CCEAGLView - Point conversion
 

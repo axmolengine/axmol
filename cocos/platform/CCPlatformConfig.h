@@ -119,28 +119,25 @@ other: GL
     #define CC_PLATFORM_PC
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) 
-    #if !CC_COMPAT_GL
-        #define CC_USE_METAL
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    #if CC_COMPAT_GL
+        #define CC_USE_METAL (cocos2d::Device::isMetalSupported())
     #else
-        #define CC_USE_GL
-    #endif
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    #if !CC_COMPAT_GL
-        #define CC_USE_METAL
-    #else
-        #define CC_USE_GLES
+        #define CC_USE_METAL 1
     #endif
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     #define CC_USE_GLES
+    #define CC_USE_METAL 0
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     #if !CC_COMPAT_GL
         #define CC_USE_GL
     #else
         #define CC_USE_GLES
     #endif
+    #define CC_USE_METAL 0
 #else
     #define CC_USE_GL
+    #define CC_USE_METAL 0
 #endif
 
 /// @endcond

@@ -40,6 +40,7 @@
 #import <CoreText/CoreText.h>
 // Vibrate
 #import <AudioToolbox/AudioToolbox.h>
+#import <Metal/Metal.h>
 
 const float MAX_MEASURE_HEIGHT = 10000;
 
@@ -286,6 +287,11 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
 //
 
 NS_CC_BEGIN
+
+bool Device::isMetalSupported() {
+    static bool supportMetal = MTLCreateSystemDefaultDevice() != nil;
+    return supportMetal;
+}
 
 int Device::getDPI()
 {

@@ -68,9 +68,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import <CoreFoundation/CoreFoundation.h>
 
 #import "platform/CCPlatformConfig.h"
-#if defined(CC_USE_GLES)
 #import "platform/ios/CCESRenderer-ios.h"
-#endif
 
 //CLASS INTERFACE:
 
@@ -81,9 +79,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
  */
 @interface CCEAGLView : UIView
 {
-#if defined(CC_USE_GLES)
     id<CCESRenderer>        renderer_;
-#endif
     BOOL                    preserveBackbuffer_;
     CGRect                  safeArea_;
     BOOL                    discardFramebufferSupported_;
@@ -116,10 +112,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 /** returns surface size in pixels */
 @property(nonatomic,readonly) CGSize surfaceSize;
 
-#if defined(CC_USE_GLES)
 /** OpenGL context */
 @property(nonatomic,readonly) EAGLContext *context;
-#endif
 
 @property(nonatomic,readwrite) BOOL multiSampling;
 @property(nonatomic, readonly) BOOL isKeyboardShown;

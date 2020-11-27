@@ -60,6 +60,12 @@ public:
         LEFT          = 0x31, /** Horizontal left and vertical center. */
         TOP_LEFT      = 0x11, /** Horizontal left and vertical top. */
     };
+    
+    /** Whether or not the GPU supports Metal
+     *
+     * @return Is true if supports Metal.
+     */
+    static bool isMetalSupported();
 
     /**
      *  Gets the DPI of device

@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "2d/CCRenderTexture.h"
-
+#include "platform/CCDevice.h"
 #include "base/ccUtils.h"
 #include "platform/CCFileUtils.h"
 #include "base/CCEventType.h"
@@ -227,10 +227,9 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
         // retained
         setSprite(Sprite::createWithTexture(_texture2D));
 
-#if defined(CC_USE_GL) || defined(CC_USE_GLES)
-        _sprite->setFlippedY(true);
-#endif
-
+        if(!CC_USE_METAL) {
+            _sprite->setFlippedY(true);
+        }
         if(_texture2D->hasPremultipliedAlpha()){
             _sprite->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
             _sprite->setOpacityModifyRGB(true);

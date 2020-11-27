@@ -36,9 +36,7 @@
 #include "renderer/backend/Program.h"
 #include "renderer/backend/VertexLayout.h"
 
-#ifdef CC_USE_METAL
 struct XXH32_state_s;
-#endif
 
 CC_BACKEND_BEGIN
 
@@ -339,7 +337,6 @@ protected:
     ///Initialize.
     bool init(Program* program);
     
-#ifdef CC_USE_METAL
     /**
      * float3 etc in Metal has both sizeof and alignment same as float4, convert it before fill into uniform buffer
      * @param uniformInfo Specifies the uniform information.
@@ -348,7 +345,7 @@ protected:
      * @param uniformBuffer Specifies the uniform buffer to update.
      */
     void convertAndCopyUniformData(const backend::UniformInfo& uniformInfo, const void* srcData, std::size_t srcSize, void* buffer);
-#endif
+
     /**
     * Applies the specified custom auto-binding.
     *
@@ -373,9 +370,7 @@ protected:
     std::shared_ptr<VertexLayout> _vertexLayout = std::make_shared<VertexLayout>();
 
     uint32_t _uniformID = 0;
-#ifdef CC_USE_METAL
     struct XXH32_state_s* _uniformHashState = nullptr;
-#endif
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;

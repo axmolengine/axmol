@@ -76,8 +76,6 @@ set(COCOS_RENDERER_SRC
     renderer/backend/RenderPassParams.cpp
     )
 
-if(ANDROID OR WINDOWS OR LINUX OR CC_COMPAT_GL) 
-
 list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/opengl/BufferGL.h
     renderer/backend/opengl/CommandBufferGL.h
@@ -105,8 +103,6 @@ list(APPEND COCOS_RENDERER_SRC
     renderer/backend/opengl/DeviceInfoGL.cpp
     renderer/backend/opengl/RenderTargetGL.cpp
 )
-
-else()
 
 list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/metal/BufferMTL.h
@@ -137,5 +133,3 @@ list(APPEND COCOS_RENDERER_SRC
     renderer/backend/metal/ProgramMTL.mm
     renderer/backend/metal/DeviceInfoMTL.mm
 )
-
-endif()
