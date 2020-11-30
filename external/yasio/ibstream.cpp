@@ -54,7 +54,7 @@ void ibstream_view::reset(const void* data, size_t size)
   last_         = first_ + size;
 }
 
-template <> int ibstream_view::read_ix<int>()
+template <> int32_t ibstream_view::read_ix<int32_t>()
 {
   // Unlike writing, we can't delegate to the 64-bit read on
   // 64-bit platforms. The reason for this is that we want to
