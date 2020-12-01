@@ -54,7 +54,7 @@
 
 #### Windows
   1. 安装CMake，要求3.14以上  
-  2. 确保Visual Studio 2019以正确安装
+  2. 确保 Visual Studio 2019 已正确安装
   3. 执行下面的命令
   ```bat
   cd engine-x
