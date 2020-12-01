@@ -32,7 +32,6 @@
 
 #include "ChipmunkTest.h"
 
-
 USING_NS_CC;
 USING_NS_CC_EXT;
 
@@ -47,7 +46,8 @@ enum {
 // callback to remove Shapes from the Space
 
 ChipmunkTest::ChipmunkTest()
-{   
+{
+#if CC_ENABLE_CHIPMUNK_INTEGRATION      
     // enable events
 
     auto touchListener = EventListenerTouchAllAtOnce::create();
@@ -91,6 +91,16 @@ ChipmunkTest::ChipmunkTest()
     menu->setPosition(VisibleRect::right().x-100, VisibleRect::top().y-60);
 
     scheduleUpdate();
+#else
+    auto label = Label::createWithTTF("Should define CC_ENABLE_CHIPMUNK_INTEGRATION=1\n to run this test case",
+                                            "fonts/arial.ttf",
+                                            18);
+    auto size = Director::getInstance()->getWinSize();
+    label->setPosition(size.width/2, size.height/2);
+    
+    addChild(label);
+    
+#endif
     
 }
 
@@ -121,7 +131,7 @@ ChipmunkTest::~ChipmunkTest()
 
 void ChipmunkTest::initPhysics()
 {
-
+#if CC_ENABLE_CHIPMUNK_INTEGRATION    
     // init chipmunk
     //cpInitChipmunk();
 
@@ -168,7 +178,7 @@ void ChipmunkTest::initPhysics()
     // Physics debug layer
     _debugLayer = PhysicsDebugNode::create(_space);
     this->addChild(_debugLayer, Z_PHYSICS_DEBUG);
-
+#endif
 }
 
 void ChipmunkTest::update(float delta)
@@ -204,6 +214,7 @@ void ChipmunkTest::reset(Ref* sender)
 
 void ChipmunkTest::addNewSpriteAtPosition(cocos2d::Vec2 pos)
 {
+#if CC_ENABLE_CHIPMUNK_INTEGRATION    
     int posx, posy;
 
     auto parent = getChildByTag(kTagParentNode);
@@ -233,12 +244,12 @@ void ChipmunkTest::addNewSpriteAtPosition(cocos2d::Vec2 pos)
     cpShapeSetFriction(shape, 0.5f);
     cpSpaceAddShape(_space, shape);
 
-    auto sprite = PhysicsSpriteChipmunk2D::createWithTexture(_spriteTexture, cocos2d::Rect(posx, posy, 85, 121));
+    auto sprite = PhysicsSprite::createWithTexture(_spriteTexture, cocos2d::Rect(posx, posy, 85, 121));
     parent->addChild(sprite);
 
     sprite->setCPBody(body);
     sprite->setPosition(pos);
-
+#endif
 }
 
 void ChipmunkTest::onEnter()

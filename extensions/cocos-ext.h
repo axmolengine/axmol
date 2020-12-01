@@ -30,9 +30,6 @@
 // Physics integration
 #include "physics-nodes/CCPhysicsDebugNode.h"
 #include "physics-nodes/CCPhysicsSprite.h"
-#include "physics-nodes/CCPhysicsSpriteBox2D.h"
-#include "physics-nodes/CCPhysicsSpriteChipmunk2D.h"
-
 
 #include "assets-manager/AssetsManager.h"
 #include "assets-manager/AssetsManagerEx.h"

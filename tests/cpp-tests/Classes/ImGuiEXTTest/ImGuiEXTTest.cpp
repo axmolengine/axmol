@@ -14,12 +14,6 @@ static ImVec4 clear_color = ImColor(114, 144, 154);
 
 ImGuiEXTTests::ImGuiEXTTests()
 {
-    static Size resourceSize(1280, 720);
-
-    auto director = Director::getInstance();
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
-    view->setWindowed(resourceSize.width, resourceSize.height);
-
     ADD_TEST_CASE(ImGuiEXTTest);
 }
 
@@ -37,10 +31,6 @@ void ImGuiEXTTest::onExit()
     ImGuiEXT::getInstance()->clearFonts();
 
     ImGuiEXT::destroyInstance();
-
-    static Size resourceSize(960, 640);
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
-    view->setWindowed(resourceSize.width, resourceSize.height);
 
     TestCase::onExit();
 }

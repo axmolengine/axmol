@@ -258,7 +258,7 @@ THE SOFTWARE.
 #if (CC_USE_PHYSICS)
 /** Use chipmunk physics 2d engine. */
 #ifndef CC_ENABLE_CHIPMUNK_INTEGRATION
-#define CC_ENABLE_CHIPMUNK_INTEGRATION 1
+#define CC_ENABLE_CHIPMUNK_INTEGRATION 0
 #endif
 
 /** or use box2d physics 2d engine. */
