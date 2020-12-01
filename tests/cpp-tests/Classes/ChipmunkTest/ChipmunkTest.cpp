@@ -96,14 +96,11 @@ ChipmunkTest::ChipmunkTest()
 
 void ChipmunkTest::toggleDebugCallback(Ref* sender)
 {
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
     _debugLayer->setVisible(! _debugLayer->isVisible());
-#endif
 }
 
 ChipmunkTest::~ChipmunkTest()
 {
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
     // manually Free rogue shapes
     for( int i=0;i<4;i++) {
         cpShapeFree( _walls[i] );
@@ -116,7 +113,6 @@ ChipmunkTest::~ChipmunkTest()
 #endif
 
     Device::setAccelerometerEnabled(false);
-#endif
 }
 
 void ChipmunkTest::initPhysics()
