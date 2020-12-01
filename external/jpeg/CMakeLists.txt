@@ -512,9 +512,11 @@ endif()
 
 # Generate files
 if(WIN32)
-  configure_file(win/jconfig.h.in ${CMAKE_CURRENT_LIST_DIR}/jconfig.h)
+  configure_file(win/jconfig.h.in ${CMAKE_CURRENT_LIST_DIR}/win/jconfig.h)
+  include_directories(${CMAKE_CURRENT_LIST_DIR}/win)
 else()
-  configure_file(jconfig.h.in ${CMAKE_CURRENT_LIST_DIR}/jconfig.h)
+  configure_file(jconfig.h.in ${CMAKE_CURRENT_LIST_DIR}/other/jconfig.h)
+  include_directories(${CMAKE_CURRENT_LIST_DIR}/other)
 endif()
 configure_file(jconfigint.h.in ${CMAKE_CURRENT_LIST_DIR}/jconfigint.h)
 if(UNIX)
