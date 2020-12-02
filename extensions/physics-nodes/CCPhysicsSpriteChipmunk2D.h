@@ -29,6 +29,8 @@
 #include "extensions/ExtensionExport.h"
 #include "base/CCEventListenerCustom.h"
 
+#if (CC_ENABLE_CHIPMUNK_INTEGRATION || CC_ENABLE_BOX2D_INTEGRATION)
+
 struct cpBody;
 class b2Body;
 
@@ -36,7 +38,9 @@ NS_CC_EXT_BEGIN
 
 /** A Sprite subclass that is bound to a physics body.
  It works with:
- - Chipmunk2D: 
+ - Chipmunk: Preprocessor macro CC_ENABLE_CHIPMUNK_INTEGRATION should be defined
+ - Objective-Chipmunk: Preprocessor macro CC_ENABLE_CHIPMUNK_INTEGRATION should be defined
+ - Box2d: Preprocessor macro CC_ENABLE_BOX2D_INTEGRATION should be defined
 
  Features and Limitations:
  - Scale and Skew properties are ignored.
@@ -145,5 +149,6 @@ protected:
 
 NS_CC_EXT_END
 
+#endif // CC_ENABLE_CHIPMUNK_INTEGRATION || CC_ENABLE_BOX2D_INTEGRATION
 
 #endif // __PHYSICSNODES_CCPhysicsSpriteChipmunk2DCHIPMUNK2D_H__

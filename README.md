@@ -42,7 +42,7 @@
 ### [Roadmap](issues/1)
 
 ### Quick Start
-Open [Wiki](https://github.com/c4games/engine-x/wiki) for additional information too.
+Open [Wiki](https://github.com/c4games/engine-x-wiki) for additional information too.
 
 #### Common Requirement [Python](https://www.python.org/downloads/)
   * Python-2.7.17+, Python-3.7+ 

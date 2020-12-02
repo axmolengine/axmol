@@ -65,8 +65,8 @@ if(NOT DEFINED ENGINEX_CORE_LIB)
     set(ENGINEX_CORE_LIB cocos2d CACHE INTERNAL "The engine-x core lib name" )
 endif()
 
-if (NOT DEFINED CC_FORCE_USE_GLES)
-    set(CC_FORCE_USE_GLES FALSE CACHE INTERNAL "Force use GLES" )
+if (NOT DEFINED CC_COMPAT_GL)
+    set(CC_COMPAT_GL FALSE CACHE INTERNAL "Enabling CC_COMPAT_GL" )
 endif()
 
 project(cocos2d_libs)
