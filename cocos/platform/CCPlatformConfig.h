@@ -103,12 +103,14 @@ THE SOFTWARE.
 #endif
 #endif  // CC_PLATFORM_WIN32
 
-/*
-* Windows: https://github.com/google/angle
-* iOS: Use Apple GLES
+/* 
+windows: https://github.com/google/angle 
+mac: GL
+iOS: GLES
+other: GL
 */
-#ifndef CC_FORCE_USE_GLES
-#define CC_FORCE_USE_GLES 0
+#ifndef CC_COMPAT_GL
+#define CC_COMPAT_GL 0
 #endif
 
 #if ((CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS))
@@ -118,21 +120,27 @@ THE SOFTWARE.
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) 
-    #define CC_USE_METAL
+    #if !CC_COMPAT_GL
+        #define CC_USE_METAL
+    #else
+        #define CC_USE_GL
+    #endif
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    #if !CC_FORCE_USE_GLES
+    #if !CC_COMPAT_GL
         #define CC_USE_METAL
     #else
         #define CC_USE_GLES
     #endif
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     #define CC_USE_GLES
-#else
-    #if !CC_FORCE_USE_GLES
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+    #if !CC_COMPAT_GL
         #define CC_USE_GL
     #else
         #define CC_USE_GLES
     #endif
+#else
+    #define CC_USE_GL
 #endif
 
 /// @endcond
