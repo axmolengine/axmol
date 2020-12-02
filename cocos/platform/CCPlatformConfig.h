@@ -107,6 +107,7 @@ THE SOFTWARE.
 windows: https://github.com/google/angle 
 mac: GL
 iOS: GLES
+other: GL
 */
 #ifndef CC_COMPAT_GL
 #define CC_COMPAT_GL 0
@@ -139,7 +140,7 @@ iOS: GLES
         #define CC_USE_GLES
     #endif
 #else
-    #error "Unsupported platform!"
+    #define CC_USE_GL
 #endif
 
 /// @endcond
