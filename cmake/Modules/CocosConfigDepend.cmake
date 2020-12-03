@@ -81,6 +81,8 @@ macro(cocos2dx_depend)
             find_library(CORE_GRAPHICS_LIBRARY CoreGraphics)
             find_library(AV_FOUNDATION_LIBRARY AVFoundation)
             find_library(WEBKIT_LIBRARY WebKit)
+            find_library(ZLIB z)
+            find_library(ICONVLIB iconv)
             list(APPEND PLATFORM_SPECIFIC_LIBS
                  ${UIKIT_LIBRARY}
                  ${OPENGLES_LIBRARY}
@@ -93,8 +95,8 @@ macro(cocos2dx_depend)
                  ${AV_FOUNDATION_LIBRARY}
                  ${WEBKIT_LIBRARY}
                  ${COCOS_APPLE_LIBS}
-                 "/usr/lib/libz.dylib"
-                 "/usr/lib/libiconv.dylib"
+                 ${ZLIB}
+                 ${ICONVLIB}
                  )
         endif()
     endif()
