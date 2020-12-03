@@ -163,7 +163,7 @@
 
 ## pugixml
 - Upstream: https://github.com/zeux/pugixml
-- Version: 1.10
+- Version: 1.11
 - License: MIT
 
 ## rapidjson
