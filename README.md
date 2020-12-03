@@ -86,8 +86,8 @@ Open [Wiki](https://github.com/c4games/engine-x-wiki) for additional information
 
   4. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
   5. Notes  
-    - **The code sign required to run ios app on device, just change bundle identifier until the auto manage signing solved**  
-    - **engine-x only provide armv7, arm64, x86_64 prebuilt libraries for ios**
+     - **The code sign required to run ios app on device, just change bundle identifier until the auto manage signing solved**  
+     - **engine-x only provide armv7, arm64, x86_64 prebuilt libraries for ios**
 
 ### Notes
   * ThreadLocalStorage (TLS) 
