@@ -86,7 +86,7 @@
 
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
-- Version: git 2.0.5-3e9e7c7 (2052) with CMakeLists.txt modified for sutiable as a thirdparty of CMake build system
+- Version: 2.0.6 with CMakeLists.txt modified for sutiable as a thirdparty of CMake build system
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
