@@ -25,6 +25,7 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
+#if defined(__arm__)
 
 #if defined(__linux__) && defined(__ELF__)
 .section .note.GNU-stack, "", %progbits  /* mark stack as non-executable */
@@ -36,9 +37,9 @@
 .arch armv7a
 .object_arch armv4
 #endif
+
 .arm
 .syntax unified
-
 
 #define RESPECT_STRICT_ALIGNMENT  1
 
@@ -2878,3 +2879,5 @@ asm_function jsimd_huff_encode_one_block_neon
 .purgem emit_byte
 .purgem put_bits
 .purgem checkbuf15
+
+#endif
