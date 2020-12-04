@@ -1799,6 +1799,7 @@ bool js_yasio_io_service_set_option(JSContext* ctx, uint32_t argc, jsval* vp)
         case YOPT_C_ENABLE_MCAST:
         case YOPT_C_LOCAL_ENDPOINT:
         case YOPT_C_REMOTE_ENDPOINT:
+        case YOPT_C_MOD_FLAGS:
           if (args[2].isString())
           {
             JSStringWrapper str(args[2].toString());
@@ -2038,6 +2039,10 @@ void jsb_register_yasio(JSContext* ctx, JS::HandleObject global)
   YASIO_EXPORT_ENUM(YOPT_C_ENABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_DISABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_KCP_CONV);
+  YASIO_EXPORT_ENUM(YOPT_C_MOD_FLAGS);
+
+  YASIO_EXPORT_ENUM(YCF_REUSEADDR);
+  YASIO_EXPORT_ENUM(YCF_EXCLUSIVEADDRUSE);
 
   YASIO_EXPORT_ENUM(YEK_CONNECT_RESPONSE);
   YASIO_EXPORT_ENUM(YEK_CONNECTION_LOST);

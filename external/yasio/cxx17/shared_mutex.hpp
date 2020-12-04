@@ -27,7 +27,6 @@ SOFTWARE.
 #ifndef YASIO__SHARED_MUTEX_HPP
 #define YASIO__SHARED_MUTEX_HPP
 
-
 #include "yasio/compiler/feature_test.hpp"
 
 /// The shared_mutex workaround on c++11
@@ -59,12 +58,12 @@ SOFTWARE.
 #    define yasio__smtx_unlock_exclusive(rwlock) pthread_rwlock_unlock(rwlock)
 #  endif
 #  define yaso__throw_error(e) throw std::system_error(std::make_error_code(e), "")
+#  include <mutex>
 
 // CLASS TEMPLATE shared_lock
 namespace cxx17
 {
-class shared_mutex
-{
+class shared_mutex {
 public:
   typedef yasio__smtx_t* native_handle_type;
 
@@ -117,8 +116,7 @@ private:
   yasio__smtx_t _Myhandle; // the lock object
 };
 // CLASS TEMPLATE shared_lock
-template <class _Mutex> class shared_lock
-{ // shareable lock
+template <class _Mutex> class shared_lock { // shareable lock
 public:
   using mutex_type = _Mutex;
 
@@ -129,12 +127,17 @@ public:
     _Mtx.lock_shared();
   }
 
+  explicit shared_lock(mutex_type& _Mtx, YASIO__STD defer_lock_t) : _Pmtx(YASIO__STD addressof(_Mtx)), _Owns(false) {} // // construct with unlocked mutex
+
+  explicit shared_lock(mutex_type& _Mtx, YASIO__STD try_to_lock_t)
+      : _Pmtx(YASIO__STD addressof(_Mtx)), _Owns(_Mtx.try_lock_shared()) {} // construct with mutex and try to lock shared
+
+  explicit shared_lock(mutex_type& _Mtx, YASIO__STD adopt_lock_t) : _Pmtx(YASIO__STD addressof(_Mtx)), _Owns(true) {} // construct with mutex and adopt owership
+
   ~shared_lock()
   {
     if (_Owns)
-    {
       _Pmtx->unlock_shared();
-    }
   }
 
   shared_lock(shared_lock&& _Other) : _Pmtx(_Other._Pmtx), _Owns(_Other._Owns)
@@ -146,9 +149,7 @@ public:
   shared_lock& operator=(shared_lock&& _Right)
   {
     if (_Owns)
-    {
       _Pmtx->unlock_shared();
-    }
 
     _Pmtx        = _Right._Pmtx;
     _Owns        = _Right._Owns;

@@ -1385,6 +1385,7 @@ bool js_yasio_io_service_set_option(se::State& s)
         case YOPT_C_ENABLE_MCAST:
         case YOPT_C_LOCAL_ENDPOINT:
         case YOPT_C_REMOTE_ENDPOINT:
+        case YOPT_C_MOD_FLAGS:
           service->set_option(opt, args[1].toInt32(), args[2].toString().c_str(),
                               args[3].toInt32());
           break;
@@ -1595,6 +1596,10 @@ bool jsb_register_yasio(se::Object* obj)
   YASIO_EXPORT_ENUM(YOPT_C_ENABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_DISABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_KCP_CONV);
+  YASIO_EXPORT_ENUM(YOPT_C_MOD_FLAGS);
+
+  YASIO_EXPORT_ENUM(YCF_REUSEADDR);
+  YASIO_EXPORT_ENUM(YCF_EXCLUSIVEADDRUSE);
 
   YASIO_EXPORT_ENUM(YEK_CONNECT_RESPONSE);
   YASIO_EXPORT_ENUM(YEK_CONNECTION_LOST);
