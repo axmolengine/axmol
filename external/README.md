@@ -64,7 +64,7 @@
 - Version: 1.12.0
 - License: Apache-2.0
 
-## Freetype
+## FreeType
 - Upstream: https://www.freetype.org/
 - Version: 2.10.4
 - License: BSD-style (The FreeType Project)
