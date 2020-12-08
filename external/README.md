@@ -16,7 +16,7 @@
 
 ## Bullet
 - Upstream: https://github.com/bulletphysics/bullet3
-- Version: git 3.06-a72ce29 (8843)
+- Version: 3.07
 - License: zlib
 
 ## c-ares
