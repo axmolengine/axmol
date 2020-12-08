@@ -831,10 +831,11 @@ public:
   ** Summary: init global state with custom print function, you must ensure thread safe of it.
   ** @remark:
   **   a. this function is not required, if you don't want print init log to custom console.
-  **   b.this function only works once
+  **   b. this function only works once
   **   c. you should call once before call any 'io_servic::start'
   */
   YASIO__DECL static void init_globals(const yasio::inet::print_fn2_t&);
+  YASIO__DECL static void cleanup_globals();
 
 public:
   YASIO__DECL io_service();

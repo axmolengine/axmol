@@ -218,12 +218,12 @@ struct yasio__global_state {
     yasio__min_wait_duration = std::thread::hardware_concurrency() > 1 ? 0LL : YASIO_MIN_WAIT_DURATION;
 #if defined(YASIO_HAVE_SSL)
     if (OPENSSL_init_ssl(0, NULL) == 1)
-      yasio__setbits(this->init_flags, INITF_SSL);
+      yasio__setbits(this->init_flags_, INITF_SSL);
 #endif
 #if defined(YASIO_HAVE_CARES)
     int ares_status = ::ares_library_init(ARES_LIB_INIT_ALL);
     if (ares_status == 0)
-      yasio__setbits(init_flags, INITF_CARES);
+      yasio__setbits(init_flags_, INITF_CARES);
     else
       YASIO_KLOGI("[global] c-ares library init failed, status=%d, detail:%s", ares_status, ::ares_strerror(ares_status));
 #  if defined(__ANDROID__)
@@ -241,12 +241,13 @@ struct yasio__global_state {
   ~yasio__global_state()
   {
 #if defined(YASIO_HAVE_CARES)
-    if (yasio__testbits(this->init_flags, INITF_CARES))
+    if (yasio__testbits(this->init_flags_, INITF_CARES))
       ::ares_library_cleanup();
 #endif
   }
 
-  int init_flags = 0;
+  int init_flags_ = 0;
+  print_fn2_t cprint_;
 };
 static yasio__global_state& yasio__shared_globals(const print_fn2_t& prt = nullptr)
 {
@@ -775,7 +776,8 @@ void io_transport_kcp::check_timeout(highp_time_t& wait_duration) const
 #endif
 
 // ------------------------ io_service ------------------------
-void io_service::init_globals(const yasio::inet::print_fn2_t& prt) { yasio__shared_globals(prt); }
+void io_service::init_globals(const yasio::inet::print_fn2_t& prt) { yasio__shared_globals(prt).cprint_ = prt; }
+void io_service::cleanup_globals() { yasio__shared_globals().cprint_ = nullptr; }
 io_service::io_service() { this->init(nullptr, 1); }
 io_service::io_service(int channel_count) { this->init(nullptr, channel_count); }
 io_service::io_service(const io_hostent& channel_ep) { this->init(&channel_ep, 1); }
@@ -793,7 +795,9 @@ void io_service::start(event_cb_t cb)
 {
   if (state_ == io_service::state::IDLE)
   {
-    yasio__shared_globals();
+    auto& global_state = yasio__shared_globals();
+    if (!this->options_.print_)
+      this->options_.print_ = global_state.cprint_;
 
     if (cb)
       options_.on_event_ = std::move(cb);
