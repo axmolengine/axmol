@@ -115,6 +115,21 @@ SOFTWARE.
 #  define YASIO__64BITS 0
 #endif
 
+// Try detect compiler exceptions
+#if !defined(__cpp_exceptions)
+#  define YASIO__NO_EXCEPTIONS 1
+#endif
+
+#if !defined(YASIO__NO_EXCEPTIONS)
+#  define YASIO__THROW(x, retval) throw(x)
+#  define YASIO__THROW0(x) throw(x)
+#  define YASIO__THROWV(x, val) throw(x), (val)
+#else
+#  define YASIO__THROW(x, retval) return (retval)
+#  define YASIO__THROW0(x) return
+#  define YASIO__THROWV(x, val) (val)
+#endif
+
 // Compatibility with non-clang compilers...
 #ifndef __has_attribute
 #  define __has_attribute(x) 0

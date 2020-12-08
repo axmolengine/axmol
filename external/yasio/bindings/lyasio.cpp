@@ -706,13 +706,14 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
 #endif /* YASIO__HAS_CXX17 */
 
 extern "C" {
-YASIO_LUA_API void lyasio_set_print_fn(void* inst, void (*pfn)(const char*))
+YASIO_LUA_API void luaregister_yasio(lua_State* L)
 {
-  if (inst)
-  {
-    auto service            = (io_service*)inst;
-    print_fn_t custom_print = pfn;
-    service->set_option(YOPT_S_PRINT_FN, &custom_print);
-  }
+  lua_getglobal(L, "package");
+  lua_getfield(L, -1, "preload");
+
+  lua_pushcfunction(L, luaopen_yasio);
+  lua_setfield(L, -2, "yasio");
+
+  lua_pop(L, 2);
 }
 }

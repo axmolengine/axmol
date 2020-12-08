@@ -378,21 +378,35 @@ public:
 };
 
 struct io_base {
-  enum class state : u_short
+  enum class state : uint8_t
   {
     CLOSED,
     OPENING,
     OPEN,
   };
+  enum class error_stage : uint8_t
+  {
+    NONE,
+    READ,
+    WRITE,
+  };
   io_base() : error_(0), state_(state::CLOSED), opmask_(0) {}
   virtual ~io_base() {}
-  void set_last_errno(int error) { error_ = error; }
+  void set_last_errno(int error, error_stage stage = error_stage::NONE)
+  {
+    error_       = error;
+    error_stage_ = stage;
+  }
 
   std::shared_ptr<xxsocket> socket_;
   int error_; // socket error(>= -1), application error(< -1)
+  // 0: none, 1: read, 2: write
+  error_stage error_stage_ = error_stage::NONE;
 
+  // mark whether pollout event registerred.
+  bool pollout_registerred_ = false;
   std::atomic<state> state_;
-  u_short opmask_;
+  uint8_t opmask_;
 };
 
 #if defined(YASIO_HAVE_SSL)
@@ -640,8 +654,6 @@ protected:
 
   privacy::concurrent_queue<send_op_ptr> send_queue_;
 
-  // mark whether pollout event registerred.
-  bool pollout_registerred_ = false;
 #if !defined(YASIO_MINIFY_EVENT)
 private:
   // The user data
@@ -1080,7 +1092,7 @@ private:
     highp_time_t dns_queries_timeout_ = 5LL * std::micro::den;
     int dns_queries_tries_            = 5;
 
-    bool dns_dirty_                   = true; // only for c-ares
+    bool dns_dirty_ = true; // only for c-ares
 
     bool deferred_event_ = true;
 
@@ -1092,7 +1104,7 @@ private:
       int probs    = 10;
     } tcp_keepalive_;
 
-    bool no_new_thread_    = false;
+    bool no_new_thread_ = false;
 
     // The resolve function
     resolv_fn_t resolv_;

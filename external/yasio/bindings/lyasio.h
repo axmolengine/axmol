@@ -45,8 +45,11 @@ SOFTWARE.
 #if defined(__cplusplus)
 extern "C" {
 #endif
+#if !defined(NS_SLUA)
 struct lua_State;
+#endif
 YASIO_LUA_API int luaopen_yasio(lua_State* L);
+YASIO_LUA_API void luaregister_yasio(lua_State* L); // register yasio to package.preload
 #if defined(__cplusplus)
 }
 #endif

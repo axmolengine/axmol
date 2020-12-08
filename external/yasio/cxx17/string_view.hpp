@@ -777,8 +777,7 @@ inline typename basic_string_view<_CharT, _Traits>::const_reference
 basic_string_view<_CharT, _Traits>::at(size_t pos) const
 {
   return pos < m_size ? m_str[pos]
-                      : throw std::out_of_range("Input out of range in basic_string_view::at"),
-         m_str[pos];
+                      : YASIO__THROWV(std::out_of_range("Input out of range in basic_string_view::at"), 0);
 }
 
 template <typename _CharT, typename _Traits>
@@ -848,7 +847,7 @@ inline typename basic_string_view<_CharT, _Traits>::size_type
 basic_string_view<_CharT, _Traits>::copy(char_type* dest, size_type count, size_type pos) const
 {
   if (pos >= m_size)
-    throw std::out_of_range("Index out of range in basic_string_view::copy");
+    YASIO__THROW(std::out_of_range("Index out of range in basic_string_view::copy"), 0);
 
   const size_type rcount = (std::min)(m_size - pos, count + 1);
   std::copy(m_str + pos, m_str + pos + rcount, dest);
@@ -863,7 +862,7 @@ basic_string_view<_CharT, _Traits>::substr(size_t pos, size_t len) const
 
   return pos < m_size
              ? basic_string_view<_CharT, _Traits>(m_str + pos, len > max_length ? max_length : len)
-             : throw std::out_of_range("Index out of range in basic_string_view::substr");
+             : YASIO__THROWV(std::out_of_range("Index out of range in basic_string_view::substr"), (basic_string_view<_CharT, _Traits>{}));
 }
 
 //--------------------------------------------------------------------------
