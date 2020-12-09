@@ -130,7 +130,7 @@ public class Cocos2dxEditBoxHelper {
                     public void afterTextChanged(final Editable s) {
                         if (!editBox.getChangedTextProgrammatically()) {
                             if ((Boolean) editBox.getTag()) {
-                                mCocos2dxActivity.runOnGLThread(new Runnable() {
+                                Cocos2dxHelper.runOnGLThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Cocos2dxEditBoxHelper.__editBoxEditingChanged(index, s.toString());
@@ -152,7 +152,7 @@ public class Cocos2dxEditBoxHelper {
                         editBox.setTag(true);
                         editBox.setChangedTextProgrammatically(false);
                         if (hasFocus) {
-                            mCocos2dxActivity.runOnGLThread(new Runnable() {
+                            Cocos2dxHelper.runOnGLThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     editBox.endAction = Cocos2dxEditBox.kEndActionUnknown;
@@ -168,7 +168,7 @@ public class Cocos2dxEditBoxHelper {
                             // Note that we must to copy a string to prevent string content is modified
                             // on UI thread while 's.toString' is invoked at the same time.
                             final String text = new String(editBox.getText().toString());
-                            mCocos2dxActivity.runOnGLThread(new Runnable() {
+                            Cocos2dxHelper.runOnGLThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     int action = editBox.endAction;
