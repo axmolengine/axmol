@@ -60,15 +60,15 @@ SOFTWARE.
 #endif
 
 // clang-format off
-#define YASIO_KLOG_CP(level, format, ...)                                                                                                   \
-  do                                                                                                                                        \
-  {                                                                                                                                         \
-    auto& custom_print = cprint();                                                                                                          \
-    auto msg           = ::yasio::strfmt(127, "[yasio][%lld]" format "\n", highp_clock<system_clock_t>() / std::milli::den, ##__VA_ARGS__); \
-    if (custom_print)                                                                                                                       \
-      custom_print(level, msg.c_str());                                                                                                     \
-    else                                                                                                                                    \
-      YASIO_LOG_TAG("", "%s", msg.c_str());                                                                                                 \
+#define YASIO_KLOG_CP(level, format, ...)                                                                                    \
+  do                                                                                                                         \
+  {                                                                                                                          \
+    auto& custom_print = cprint();                                                                                           \
+    auto msg           = ::yasio::strfmt(127, "[yasio][%lld]" format "\n", ::yasio::clock<system_clock_t>(), ##__VA_ARGS__); \
+    if (custom_print)                                                                                                        \
+      custom_print(level, msg.c_str());                                                                                      \
+    else                                                                                                                     \
+      YASIO_LOG_TAG("", "%s", msg.c_str());                                                                                  \
   } while (false)
 // clang-format on
 
@@ -345,11 +345,11 @@ int io_channel::configure_multicast_group(bool onoff)
     return socket_->set_optval(IPPROTO_IPV6, onoff ? IPV6_JOIN_GROUP : IPV6_LEAVE_GROUP, &mreq_v6, (int)sizeof(mreq_v6));
   }
 }
-void io_channel::set_host(std::string host)
+void io_channel::set_host(cxx17::string_view host)
 {
   if (this->remote_host_ != host)
   {
-    this->remote_host_ = std::move(host);
+    cxx17::assign(this->remote_host_, host);
     yasio__setbits(properties_, YCPF_HOST_MOD);
   }
 }
@@ -1222,7 +1222,6 @@ void io_service::do_nonblocking_connect(io_channel* ctx)
       ctx->socket_->reuse_address(true);
     if (yasio__testbits(ctx->properties_, YCF_EXCLUSIVEADDRUSE))
       ctx->socket_->exclusive_address(true);
-
     if (ctx->local_port_ != 0 || !ctx->local_host_.empty() || yasio__testbits(ctx->properties_, YCM_UDP))
     {
       if (yasio__likely(!yasio__testbits(ctx->properties_, YCM_UDS)))
@@ -1472,7 +1471,7 @@ void io_service::recreate_ares_channel()
     destroy_ares_channel();
 
   ares_options options = {};
-  options.timeout      = static_cast<int>(this->options_.dns_queries_timeout_ / std::micro::den);
+  options.timeout      = static_cast<int>(this->options_.dns_queries_timeout_ / std::milli::den);
   options.tries        = this->options_.dns_queries_tries_;
   int status           = ::ares_init_options(&ares_, &options, ARES_OPT_TIMEOUTMS | ARES_OPT_TRIES /* | ARES_OPT_LOOKUPS*/);
   if (status == ARES_SUCCESS)
@@ -1541,8 +1540,7 @@ void io_service::do_nonblocking_accept(io_channel* ctx)
     if (yasio__testbits(ctx->properties_, YCF_REUSEADDR))
       ctx->socket_->reuse_address(true);
     if (yasio__testbits(ctx->properties_, YCF_EXCLUSIVEADDRUSE))
-      ctx->socket_->reuse_address(false);
-
+      ctx->socket_->exclusive_address(false);
     if (ctx->socket_->bind(ep) != 0)
     {
       error = xxsocket::get_last_errno();
@@ -1648,11 +1646,10 @@ transport_handle_t io_service::do_dgram_accept(io_channel* ctx, const ip::endpoi
     if (yasio__testbits(ctx->properties_, YCF_REUSEADDR))
       client_sock->reuse_address(true);
     if (yasio__testbits(ctx->properties_, YCF_EXCLUSIVEADDRUSE))
-      client_sock->reuse_address(false);
+      client_sock->exclusive_address(false);
     if (client_sock->bind(YASIO_ADDR_ANY(peer.af()), ctx->remote_port_) == 0)
     {
       auto transport = static_cast<io_transport_udp*>(allocate_transport(ctx, std::move(client_sock)));
-
       // We always establish 4 tuple with clients
       transport->confgure_remote(peer);
 #if !defined(_WIN32)
@@ -2173,8 +2170,6 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
       options_.dns_cache_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::micro::den;
       break;
     case YOPT_S_DNS_QUERIES_TIMEOUT:
-      options_.dns_queries_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::micro::den;
-      break;
     case YOPT_S_DNS_QUERIES_TIMEOUTMS:
       options_.dns_queries_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::milli::den;
       break;

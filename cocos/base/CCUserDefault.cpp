@@ -88,7 +88,7 @@ static void ud_write_v_s(UserDefault* ud, yasio::obstream& obs, const cxx17::str
     obs.write_v(value);
     value_offset += (obs.length() - value_offset - value.length());
     if(!value.empty())
-        ud->encrypt(obs.wptr(value_offset), value.length(), AES_ENCRYPT);
+        ud->encrypt(obs.data() + value_offset, value.length(), AES_ENCRYPT);
 }
 
 void UserDefault::setEncryptEnabled(bool enabled, const std::string& key, const std::string& iv)

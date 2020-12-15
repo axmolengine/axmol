@@ -445,32 +445,6 @@ SE_BIND_FUNC(js_yasio_ibstream_read_i64)
 SE_BIND_FUNC(js_yasio_ibstream_read_f)
 SE_BIND_FUNC(js_yasio_ibstream_read_lf)
 
-static bool js_yasio_ibstream_read_i24(se::State& s)
-{
-  yasio::ibstream* cobj = (yasio::ibstream*)s.nativeThisObject();
-  SE_PRECONDITION2(cobj, false, ": Invalid Native Object");
-  const auto& args = s.args();
-  size_t argc      = args.size();
-
-  s.rval().setInt32(cobj->read_i24());
-
-  return true;
-}
-SE_BIND_FUNC(js_yasio_ibstream_read_i24)
-
-static bool js_yasio_ibstream_read_u24(se::State& s)
-{
-  yasio::ibstream* cobj = (yasio::ibstream*)s.nativeThisObject();
-  SE_PRECONDITION2(cobj, false, ": Invalid Native Object");
-  const auto& args = s.args();
-  size_t argc      = args.size();
-
-  s.rval().setUint32(cobj->read_u24());
-
-  return true;
-}
-SE_BIND_FUNC(js_yasio_ibstream_read_u24)
-
 static bool js_yasio_ibstream_read_v(se::State& s)
 {
   yasio::ibstream* cobj = (yasio::ibstream*)s.nativeThisObject();
@@ -489,6 +463,7 @@ static bool js_yasio_ibstream_read_v(se::State& s)
   switch (length_field_bits)
   {
     case -1: // variant bits
+    default:
       sv = cobj->read_v();
       break;
     case 32: // 32bits
@@ -497,8 +472,6 @@ static bool js_yasio_ibstream_read_v(se::State& s)
     case 16: // 16bits
       sv = cobj->read_v16();
       break;
-    default: // 8bits
-      sv = cobj->read_v8();
   }
 
   if (!raw)
@@ -583,12 +556,10 @@ void js_register_yasio_ibstream(se::Object* obj)
   DEFINE_IBSTREAM_FUNC(read_ix);
   DEFINE_IBSTREAM_FUNC(read_i8);
   DEFINE_IBSTREAM_FUNC(read_i16);
-  DEFINE_IBSTREAM_FUNC(read_i24);
   DEFINE_IBSTREAM_FUNC(read_i32);
   DEFINE_IBSTREAM_FUNC(read_i64);
   DEFINE_IBSTREAM_FUNC(read_u8);
   DEFINE_IBSTREAM_FUNC(read_u16);
-  DEFINE_IBSTREAM_FUNC(read_u24);
   DEFINE_IBSTREAM_FUNC(read_u32);
   DEFINE_IBSTREAM_FUNC(read_f);
   DEFINE_IBSTREAM_FUNC(read_lf);
@@ -672,43 +643,6 @@ static bool js_yasio_obstream_pop32(se::State& s)
   return true;
 }
 SE_BIND_FUNC(js_yasio_obstream_pop32)
-
-static bool js_yasio_obstream_push24(se::State& s)
-{
-  auto cobj = (yasio::obstream*)s.nativeThisObject();
-  SE_PRECONDITION2(cobj, false, ": Invalid Native Object");
-  const auto& args = s.args();
-  size_t argc      = args.size();
-
-  cobj->push24();
-
-  s.rval().setUndefined();
-
-  return true;
-}
-SE_BIND_FUNC(js_yasio_obstream_push24)
-
-static bool js_yasio_obstream_pop24(se::State& s)
-{
-  auto cobj = (yasio::obstream*)s.nativeThisObject();
-  SE_PRECONDITION2(cobj, false, ": Invalid Native Object");
-  const auto& args = s.args();
-  size_t argc      = args.size();
-
-  if (argc == 0)
-  {
-    cobj->pop24();
-  }
-  else if (argc == 1)
-  {
-    cobj->pop24(args[0].toInt32());
-  }
-
-  s.rval().setUndefined();
-
-  return true;
-}
-SE_BIND_FUNC(js_yasio_obstream_pop24)
 
 static bool js_yasio_obstream_push16(se::State& s)
 {
@@ -834,21 +768,6 @@ SE_BIND_FUNC(js_yasio_obstream_write_i8)
 SE_BIND_FUNC(js_yasio_obstream_write_i16)
 SE_BIND_FUNC(js_yasio_obstream_write_i32)
 
-static bool js_yasio_obstream_write_i24(se::State& s)
-{
-  auto cobj = (yasio::obstream*)s.nativeThisObject();
-  SE_PRECONDITION2(cobj, false, ": Invalid Native Object");
-  const auto& args = s.args();
-  size_t argc      = args.size();
-
-  cobj->write_i24(args[0].toUint32());
-
-  s.rval().setUndefined();
-
-  return true;
-}
-SE_BIND_FUNC(js_yasio_obstream_write_i24)
-
 template <typename T> static bool js_yasio_obstream_write_dx(se::State& s)
 {
   auto cobj = (yasio::obstream*)s.nativeThisObject();
@@ -886,6 +805,7 @@ bool js_yasio_obstream_write_v(se::State& s)
   switch (length_field_bits)
   {
     case -1: // variant bits
+    default:
       cobj->write_v(sv);
       break;
     case 32: // 32bits
@@ -894,8 +814,6 @@ bool js_yasio_obstream_write_v(se::State& s)
     case 16: // 16bits
       cobj->write_v16(sv);
       break;
-    default: // 8bits
-      cobj->write_v8(sv);
   }
 
   s.rval().setUndefined();
@@ -975,18 +893,15 @@ void js_register_yasio_obstream(se::Object* obj)
   auto cls = se::Class::create("obstream", obj, nullptr, _SE(jsb_yasio_obstream__ctor));
 
   DEFINE_OBSTREAM_FUNC(push32);
-  DEFINE_OBSTREAM_FUNC(push24);
   DEFINE_OBSTREAM_FUNC(push16);
   DEFINE_OBSTREAM_FUNC(push8);
   DEFINE_OBSTREAM_FUNC(pop32);
-  DEFINE_OBSTREAM_FUNC(pop24);
   DEFINE_OBSTREAM_FUNC(pop16);
   DEFINE_OBSTREAM_FUNC(pop8);
   DEFINE_OBSTREAM_FUNC(write_bool);
   DEFINE_OBSTREAM_FUNC(write_ix);
   DEFINE_OBSTREAM_FUNC(write_i8);
   DEFINE_OBSTREAM_FUNC(write_i16);
-  DEFINE_OBSTREAM_FUNC(write_i24);
   DEFINE_OBSTREAM_FUNC(write_i32);
   DEFINE_OBSTREAM_FUNC(write_i64);
   DEFINE_OBSTREAM_FUNC(write_f);
@@ -1385,8 +1300,11 @@ bool js_yasio_io_service_set_option(se::State& s)
         case YOPT_C_ENABLE_MCAST:
         case YOPT_C_LOCAL_ENDPOINT:
         case YOPT_C_REMOTE_ENDPOINT:
-        case YOPT_C_MOD_FLAGS:
           service->set_option(opt, args[1].toInt32(), args[2].toString().c_str(),
+                              args[3].toInt32());
+          break;
+        case YOPT_C_MOD_FLAGS:
+          service->set_option(opt, args[1].toInt32(), args[2].toInt32(),
                               args[3].toInt32());
           break;
         case YOPT_S_TCP_KEEPALIVE:

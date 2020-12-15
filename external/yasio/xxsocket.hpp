@@ -38,6 +38,7 @@ SOFTWARE.
 #include <chrono>
 #include <functional>
 #include "yasio/detail/config.hpp"
+#include "yasio/detail/logging.hpp"
 
 #if defined(_MSC_VER)
 #  pragma warning(push)

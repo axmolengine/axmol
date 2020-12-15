@@ -90,6 +90,22 @@ SOFTWARE.
 // #define YASIO_ENABLE_UDS 1
 
 /*
+** Uncomment or add compiler flag -DYASIO_NT_COMPAT_GAI for earlier versions of Windows XP
+** see: https://docs.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-getaddrinfo
+*/
+// #define YASIO_NT_COMPAT_GAI 1
+
+/*
+** Uncomment or add compiler flag -DYASIO_MINIFY_EVENT to minfy size of io_event
+*/
+// #define YASIO_MINIFY_EVENT 1
+
+/*
+** Uncomment or add compiler flag -DYASIO_HAVE_HALF_FLOAT to enable half-precision floating-point support
+*/
+// #define YASIO_HAVE_HALF_FLOAT 1
+
+/*
 ** Workaround for 'vs2013 without full c++11 support', in the future, drop vs2013 support and
 ** follow 3 lines code will be removed
 */
@@ -97,41 +113,10 @@ SOFTWARE.
 #  define YASIO_DISABLE_CONCURRENT_SINGLETON 1
 #endif
 
-/*
-** Uncomment or add compiler flag -DYASIO_NT_COMPAT_GAI for earlier versions of Windows XP
-** see: https://docs.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-getaddrinfo
-*/
-// #define YASIO_NT_COMPAT_GAI 1
-
-/*
-** Uncomment or add compiler flag -DYASIO_MINIFY_EVENT to minfy size of io_event 
-*/
-// #define YASIO_MINIFY_EVENT 1
-
 #if defined(YASIO_HEADER_ONLY)
 #  define YASIO__DECL inline
 #else
 #  define YASIO__DECL
-#endif
-
-#if defined(_WIN32)
-#  define YASIO_LOG_TAG(tag, format, ...)                                                          \
-    OutputDebugStringA(::yasio::strfmt(127, (tag format "\n"), ##__VA_ARGS__).c_str())
-#elif defined(ANDROID) || defined(__ANDROID__)
-#  include <android/log.h>
-#  include <jni.h>
-#  define YASIO_LOG_TAG(tag, format, ...)                                                          \
-    __android_log_print(ANDROID_LOG_INFO, "yasio", (tag format), ##__VA_ARGS__)
-#else
-#  define YASIO_LOG_TAG(tag, format, ...) printf((tag format "\n"), ##__VA_ARGS__)
-#endif
-
-#define YASIO_LOG(format, ...) YASIO_LOG_TAG("[yasio]", format, ##__VA_ARGS__)
-
-#if !defined(YASIO_VERBOSE_LOG)
-#  define YASIO_LOGV(fmt, ...) (void)0
-#else
-#  define YASIO_LOGV YASIO_LOG
 #endif
 
 #define YASIO_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
@@ -142,9 +127,8 @@ SOFTWARE.
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
 #  define YASIO_OBSOLETE_DEPRECATE(_Replacement) __attribute__((deprecated))
 #elif _MSC_VER >= 1400 // vs 2005 or higher
-#  define YASIO_OBSOLETE_DEPRECATE(_Replacement)                                                   \
-    __declspec(deprecated(                                                                         \
-        "This function will be removed in the future. Consider using " #_Replacement " instead."))
+#  define YASIO_OBSOLETE_DEPRECATE(_Replacement)                                                                                                               \
+    __declspec(deprecated("This function will be removed in the future. Consider using " #_Replacement " instead."))
 #else
 #  define YASIO_OBSOLETE_DEPRECATE(_Replacement)
 #endif
@@ -152,7 +136,7 @@ SOFTWARE.
 /*
 **  The yasio version macros
 */
-#define YASIO_VERSION_NUM 0x033401
+#define YASIO_VERSION_NUM 0x033500
 
 /*
 ** The macros used by io_service.
@@ -187,7 +171,5 @@ SOFTWARE.
 //   https://github.com/c-ares/c-ares/pull/148
 //   https://github.com/c-ares/c-ares/pull/29
 #define YASIO_CARES_FALLBACK_DNS "8.8.8.8,223.5.5.5,114.114.114.114"
-
-#include "strfmt.hpp"
 
 #endif

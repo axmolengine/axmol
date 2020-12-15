@@ -42,12 +42,13 @@ static auto obstream_write_v = [](yasio::obstream* obs, cxx17::string_view val,
   switch (length_field_bits)
   {
     case -1:
+    default:
       return obs->write_v(val);
     case 32:
       return obs->write_v32(val);
     case 16:
       return obs->write_v16(val);
-    default:
+    case 8:
       return obs->write_v8(val);
   }
 };
@@ -58,12 +59,13 @@ static auto ibstream_read_v = [](yasio::ibstream* ibs, int length_field_bits) {
   switch (length_field_bits)
   {
     case -1:
+    default:
       return ibs->read_v();
     case 32:
       return ibs->read_v32();
     case 16:
       return ibs->read_v16();
-    default:
+    case 8:
       return ibs->read_v8();
   }
 };
@@ -144,13 +146,13 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
             std::vector<io_hostent> hosts;
             auto host = channel_eps["host"];
             if (host.valid())
-              hosts.push_back(io_hostent(host, channel_eps["port"]));
+              hosts.push_back(io_hostent(host.get<cxx17::string_view>(), channel_eps["port"]));
             else
             {
               for (auto item : channel_eps)
               {
                 auto ep = item.second.as<sol::table>();
-                hosts.push_back(io_hostent(ep["host"], ep["port"]));
+                hosts.push_back(io_hostent(ep["host"].get<cxx17::string_view>(), ep["port"]));
               }
             }
             return new (&uninitialized_memory)
@@ -163,12 +165,12 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
         service->start([=](event_ptr ev) { cb(std::move(ev)); });
       },
       "stop", &io_service::stop, "set_option",
-      [](io_service* service, int opt, sol::variadic_args va) {
+      [](io_service* service, int opt, sol::variadic_args args) {
         switch (opt)
         {
           case YOPT_C_LOCAL_HOST:
           case YOPT_C_REMOTE_HOST:
-            service->set_option(opt, static_cast<int>(va[0]), va[1].as<const char*>());
+            service->set_option(opt, static_cast<int>(args[0]), args[1].as<const char*>());
             break;
 #  if YASIO_VERSION_NUM >= 0x033100
           case YOPT_C_LFBFD_IBTS:
@@ -176,34 +178,38 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
           case YOPT_C_LOCAL_PORT:
           case YOPT_C_REMOTE_PORT:
           case YOPT_C_KCP_CONV:
-            service->set_option(opt, static_cast<int>(va[0]), static_cast<int>(va[1]));
+            service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]));
             break;
           case YOPT_C_ENABLE_MCAST:
           case YOPT_C_LOCAL_ENDPOINT:
           case YOPT_C_REMOTE_ENDPOINT:
+            service->set_option(opt, static_cast<int>(args[0]), args[1].as<const char*>(),
+                                static_cast<int>(args[2]));
+            break;
           case YOPT_C_MOD_FLAGS:
-            service->set_option(opt, static_cast<int>(va[0]), va[1].as<const char*>(),
-                                static_cast<int>(va[2]));
+            service->set_option(opt, static_cast<int>(args[0]),
+                              static_cast<int>(args[1]),
+                              static_cast<int>(args[2]));
             break;
           case YOPT_S_TCP_KEEPALIVE:
-            service->set_option(opt, static_cast<int>(va[0]), static_cast<int>(va[1]),
-                                static_cast<int>(va[2]));
+            service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]),
+                                static_cast<int>(args[2]));
             break;
           case YOPT_C_LFBFD_PARAMS:
-            service->set_option(opt, static_cast<int>(va[0]), static_cast<int>(va[1]),
-                                static_cast<int>(va[2]), static_cast<int>(va[3]),
-                                static_cast<int>(va[4]));
+            service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]),
+                                static_cast<int>(args[2]), static_cast<int>(args[3]),
+                                static_cast<int>(args[4]));
             break;
           case YOPT_S_EVENT_CB:
             (void)0;
             {
-              sol::function fn     = va[0];
+              sol::function fn     = args[0];
               io_event_cb_t fnwrap = [=](event_ptr e) mutable -> void { fn(std::move(e)); };
               service->set_option(opt, std::addressof(fnwrap));
             }
             break;
           default:
-            service->set_option(opt, static_cast<int>(va[0]));
+            service->set_option(opt, static_cast<int>(args[0]));
         }
       },
       "dispatch", &io_service::dispatch, "open", &io_service::open, "is_open",
@@ -240,9 +246,6 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
       "obstream", "push32", &yasio::obstream::push32, "pop32",
       sol::overload(static_cast<void (yasio::obstream ::*)()>(&yasio::obstream::pop32),
                     static_cast<void (yasio::obstream ::*)(uint32_t)>(&yasio::obstream::pop32)),
-      "push24", &yasio::obstream::push24, "pop24",
-      sol::overload(static_cast<void (yasio::obstream ::*)()>(&yasio::obstream::pop24),
-                    static_cast<void (yasio::obstream ::*)(uint32_t)>(&yasio::obstream::pop24)),
       "push16", &yasio::obstream::push16, "pop16",
       sol::overload(static_cast<void (yasio::obstream ::*)()>(&yasio::obstream::pop16),
                     static_cast<void (yasio::obstream ::*)(uint16_t)>(&yasio::obstream::pop16)),
@@ -251,7 +254,7 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
                     static_cast<void (yasio::obstream ::*)(uint8_t)>(&yasio::obstream::pop8)),
       "write_ix", &yasio::obstream::write_ix<int64_t>,
       "write_bool", &yasio::obstream::write<bool>, "write_i8", &yasio::obstream::write<int8_t>,
-      "write_i16", &yasio::obstream::write<int16_t>, "write_i24", &yasio::obstream::write_i24,
+      "write_i16", &yasio::obstream::write<int16_t>, 
       "write_i32", &yasio::obstream::write<int32_t>, "write_i64",
       &yasio::obstream::write<int64_t>, "write_u8", &yasio::obstream::write<uint8_t>,
       "write_u16", &yasio::obstream::write<uint16_t>, "write_u32",
@@ -266,20 +269,21 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
       },
       "write_bytes",
       static_cast<void (yasio::obstream::*)(cxx17::string_view)>(&yasio::obstream::write_bytes),
-      "length", &yasio::obstream::length, "to_string",
-      [](yasio::obstream* obs) { return cxx17::string_view(obs->data(), obs->length()); });
+      "length", &yasio::obstream::length, 
+	  "to_string", [](yasio::obstream* obs) { return cxx17::string_view(obs->data(), obs->length()); }, 
+      "save", &yasio::obstream::save);
 
   // ##-- yasio::ibstream
   lyasio.new_usertype<yasio::ibstream>(
-      "ibstream",
-      sol::constructors<yasio::ibstream(std::vector<char>),
+      "ibstream", sol::constructors<yasio::ibstream(), yasio::ibstream(std::vector<char>),
                         yasio::ibstream(const yasio::obstream*)>(),
+      "load", &yasio::ibstream::load,
       "read_ix", &yasio::ibstream::read_ix<int64_t>,
       "read_bool", &yasio::ibstream::read<bool>, "read_i8", &yasio::ibstream::read<int8_t>,
-      "read_i16", &yasio::ibstream::read<int16_t>, "read_i24", &yasio::ibstream::read_i24,
+      "read_i16", &yasio::ibstream::read<int16_t>,
       "read_i32", &yasio::ibstream::read<int32_t>, "read_i64", &yasio::ibstream::read<int64_t>,
       "read_u8", &yasio::ibstream::read<uint8_t>, "read_u16", &yasio::ibstream::read<uint16_t>,
-      "read_u24", &yasio::ibstream::read_u24, "read_u32", &yasio::ibstream::read<uint32_t>,
+      "read_u32", &yasio::ibstream::read<uint32_t>,
       "read_u64", &yasio::ibstream::read<uint64_t>, "read_f", &yasio::ibstream::read<float>,
       "read_lf", &yasio::ibstream::read<double>, "read_v",
       [](yasio::ibstream* ibs, sol::variadic_args args) {
@@ -538,10 +542,14 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
                   case YOPT_C_ENABLE_MCAST:
                   case YOPT_C_LOCAL_ENDPOINT:
                   case YOPT_C_REMOTE_ENDPOINT:
-                  case YOPT_C_MOD_FLAGS:
                     service->set_option(opt, static_cast<int>(args[0]),
                                         static_cast<const char*>(args[1]),
                                         static_cast<int>(args[2]));
+                    break;
+                  case YOPT_C_MOD_FLAGS:
+                    service->set_option(opt, static_cast<int>(args[0]),
+                                      static_cast<int>(args[1]),
+                                      static_cast<int>(args[2]));
                     break;
                   case YOPT_S_TCP_KEEPALIVE:
                     service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]),
@@ -574,10 +582,6 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
           .addOverloadedFunctions(
               "pop32", static_cast<void (yasio::obstream ::*)()>(&yasio::obstream::pop32),
               static_cast<void (yasio::obstream ::*)(uint32_t)>(&yasio::obstream::pop32))
-          .addFunction("push24", &yasio::obstream::push24)
-          .addOverloadedFunctions(
-              "pop24", static_cast<void (yasio::obstream ::*)()>(&yasio::obstream::pop24),
-              static_cast<void (yasio::obstream ::*)(uint32_t)>(&yasio::obstream::pop24))
           .addFunction("push16", &yasio::obstream::push16)
           .addOverloadedFunctions(
               "pop16", static_cast<void (yasio::obstream ::*)()>(&yasio::obstream::pop16),
@@ -590,7 +594,6 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
           .addFunction("write_bool", &yasio::obstream::write<bool>)
           .addFunction("write_i8", &yasio::obstream::write<int8_t>)
           .addFunction("write_i16", &yasio::obstream::write<int16_t>)
-          .addFunction("write_i24", &yasio::obstream::write_i24)
           .addFunction("write_i32", &yasio::obstream::write<int32_t>)
           .addFunction("write_i64", &yasio::obstream::write<int64_t>)
           .addFunction("write_u8", &yasio::obstream::write<uint8_t>)
@@ -623,12 +626,10 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
           .addFunction("read_bool", &yasio::ibstream_view::read<bool>)
           .addFunction("read_i8", &yasio::ibstream_view::read<int8_t>)
           .addFunction("read_i16", &yasio::ibstream_view::read<int16_t>)
-          .addFunction("read_i24", &yasio::ibstream_view::read_i24)
           .addFunction("read_i32", &yasio::ibstream_view::read<int32_t>)
           .addFunction("read_i64", &yasio::ibstream_view::read<int64_t>)
           .addFunction("read_u8", &yasio::ibstream_view::read<uint8_t>)
           .addFunction("read_u16", &yasio::ibstream_view::read<uint16_t>)
-          .addFunction("read_u24", &yasio::ibstream_view::read_u24)
           .addFunction("read_u32", &yasio::ibstream_view::read<uint32_t>)
           .addFunction("read_u64", &yasio::ibstream_view::read<uint64_t>)
           .addFunction("read_f", &yasio::ibstream_view::read<float>)

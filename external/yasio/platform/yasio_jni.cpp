@@ -35,6 +35,7 @@ org/yasio/AppGlobals.java provide 2 function:
  2. init(Context ctx), please call after your android app initialized.
 */
 #include "yasio/detail/config.hpp"
+#include "yasio/detail/logging.hpp"
 
 #if defined(__ANDROID__) && defined(YASIO_HAVE_CARES)
 static JavaVM* yasio__jvm;

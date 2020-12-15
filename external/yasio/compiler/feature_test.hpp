@@ -123,7 +123,7 @@ SOFTWARE.
 #if !defined(YASIO__NO_EXCEPTIONS)
 #  define YASIO__THROW(x, retval) throw(x)
 #  define YASIO__THROW0(x) throw(x)
-#  define YASIO__THROWV(x, val) throw(x), (val)
+#  define YASIO__THROWV(x, val) (throw(x), (val))
 #else
 #  define YASIO__THROW(x, retval) return (retval)
 #  define YASIO__THROW0(x) return

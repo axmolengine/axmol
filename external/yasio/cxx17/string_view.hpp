@@ -1428,13 +1428,18 @@ inline cxx17::u32string_view operator"" _sv(const char32_t* _Str, size_t _Len)
 namespace cxx17
 {
 template <typename _CharT, typename _Traits, typename Allocator>
-void assign(std::basic_string<_CharT, _Traits, Allocator>& lhs,
-            const basic_string_view<_CharT, _Traits>& rhs)
+inline void assign(std::basic_string<_CharT, _Traits, Allocator>& lhs, const basic_string_view<_CharT, _Traits>& rhs)
 {
   if (!rhs.empty())
     lhs.assign(rhs.data(), rhs.size());
   else
     lhs.clear();
+}
+template <typename _CharT, typename _Traits, typename Allocator = std::allocator<_CharT>>
+inline std::basic_string<_CharT, _Traits, Allocator> svtos(const basic_string_view<_CharT, _Traits>& value)
+{
+    using string_type = std::basic_string<_CharT, _Traits, Allocator>;
+    return !value.empty() ? string_type(value.data(), value.size()) : string_type{};
 }
 } // namespace cxx17
 

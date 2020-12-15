@@ -81,25 +81,26 @@ namespace inet
 enum
 { // lgtm [cpp/irregular-enum-init]
 
-  // Set with deferred dispatch event, default is: 1
+  // Set with deferred dispatch event.
   // params: deferred_event:int(1)
   YOPT_S_DEFERRED_EVENT = 1,
 
-  // Set custom resolve function, native C++ ONLY
+  // Set custom resolve function, native C++ ONLY.
   // params: func:resolv_fn_t*
+  // remarks: you must ensure thread safe of it.
   YOPT_S_RESOLV_FN,
 
-  // Set custom print function, native C++ ONLY, you must ensure thread safe of it.
-  // remark:
+  // Set custom print function, native C++ ONLY.
   // parmas: func:print_fn_t
+  // remarks: you must ensure thread safe of it.
   YOPT_S_PRINT_FN,
 
-  // Set custom print function, native C++ ONLY, you must ensure thread safe of it.
-  // remark:
+  // Set custom print function, native C++ ONLY.
   // parmas: func:print_fn2_t
+  // remarks: you must ensure thread safe of it.
   YOPT_S_PRINT_FN2,
 
-  // Set custom print function
+  // Set event callback
   // params: func:event_cb_t*
   YOPT_S_EVENT_CB,
 
@@ -108,11 +109,11 @@ enum
   YOPT_S_TCP_KEEPALIVE,
 
   // Don't start a new thread to run event loop
-  // value:int(0)
+  // params: value:int(0)
   YOPT_S_NO_NEW_THREAD,
 
   // Sets ssl verification cert, if empty, don't verify
-  // value:const char*
+  // params: path:const char*
   YOPT_S_SSL_CACERT,
 
   // Set connect timeout in seconds
@@ -123,9 +124,9 @@ enum
   // params: dns_cache_timeout : int(600),
   YOPT_S_DNS_CACHE_TIMEOUT,
 
-  // Set dns queries timeout in seconds, default is: 5
-  // params: dns_queries_timeout : int(5)
-  // remark:
+  // Set dns queries timeout in milliseconds, default is: 5000
+  // params: dns_queries_timeout : int(5000)
+  // remarks:
   //         a. this option must be set before 'io_service::start'
   //         b. only works when have c-ares
   //         c. since v3.33.0 it's milliseconds, previous is seconds.
@@ -135,20 +136,19 @@ enum
   //         https://c-ares.haxx.se/ares_init_options.html
   YOPT_S_DNS_QUERIES_TIMEOUT,
 
-  // Set dns queries timeout in milliseconds, default is: 5000
-  // remark: same with YOPT_S_DNS_QUERIES_TIMEOUT, but in mmilliseconds
+  // [DEPRECATED], same with YOPT_S_DNS_QUERIES_TIMEOUT
   YOPT_S_DNS_QUERIES_TIMEOUTMS,
 
   // Set dns queries tries when timeout reached, default is: 5
   // params: dns_queries_tries : int(5)
-  // remark:
+  // remarks:
   //        a. this option must be set before 'io_service::start'
   //        b. relative option: YOPT_S_DNS_QUERIES_TIMEOUT
   YOPT_S_DNS_QUERIES_TRIES,
 
   // Set dns server dirty
   // params: reserved : int(1)
-  // remark:
+  // remarks:
   //        a. this option only works with c-ares enabled
   //        b. you should set this option after your mobile network changed
   YOPT_S_DNS_DIRTY,
@@ -166,7 +166,7 @@ enum
   //     length_adjustment:int(0),
   YOPT_C_LFBFD_PARAMS,
 
-  // Sets channel length field based frame decode initial bytes to strip, default is 0
+  // Sets channel length field based frame decode initial bytes to strip
   // params:
   //     index:int,
   //     initial_bytes_to_strip:int(0)
@@ -196,7 +196,7 @@ enum
   // params: index:int, ip:const char*, port:int
   YOPT_C_LOCAL_ENDPOINT,
 
-  // Sets channl flags
+  // Mods channl flags
   // params: index:int, flagsToAdd:int, flagsToRemove:int
   YOPT_C_MOD_FLAGS,
 
@@ -214,12 +214,12 @@ enum
 
   // Change 4-tuple association for io_transport_udp
   // params: transport:transport_handle_t
-  // remark: only works for udp client transport
+  // remarks: only works for udp client transport
   YOPT_T_CONNECT,
 
   // Dissolve 4-tuple association for io_transport_udp
   // params: transport:transport_handle_t
-  // remark: only works for udp client transport
+  // remarks: only works for udp client transport
   YOPT_T_DISCONNECT,
 
   // Sets io_base sockopt
@@ -320,10 +320,10 @@ typedef completion_cb_t io_completion_cb_t;
 
 struct io_hostent {
   io_hostent() = default;
-  io_hostent(std::string ip, u_short port) : host_(std::move(ip)), port_(port) {}
+  io_hostent(cxx17::string_view ip, u_short port) : host_(cxx17::svtos(ip)), port_(port) {}
   io_hostent(io_hostent&& rhs) : host_(std::move(rhs.host_)), port_(rhs.port_) {}
   io_hostent(const io_hostent& rhs) : host_(rhs.host_), port_(rhs.port_) {}
-  void set_ip(const std::string& value) { host_ = value; }
+  void set_ip(cxx17::string_view ip) { cxx17::assign(host_, ip); }
   const std::string& get_ip() const { return host_; }
   void set_port(u_short port) { port_ = port; }
   u_short get_port() const { return port_; }
@@ -463,13 +463,13 @@ protected:
 private:
   YASIO__DECL io_channel(io_service& service, int index);
 
-  void set_address(std::string host, u_short port)
+  void set_address(cxx17::string_view host, u_short port)
   {
     set_host(host);
     set_port(port);
   }
 
-  YASIO__DECL void set_host(std::string host);
+  YASIO__DECL void set_host(cxx17::string_view host);
   YASIO__DECL void set_port(u_short port);
 
   // configure address, check whether needs dns queries
