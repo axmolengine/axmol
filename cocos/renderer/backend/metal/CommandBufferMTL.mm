@@ -335,16 +335,21 @@ void CommandBufferMTL::endFrame()
     [_mtlRenderEncoder release];
     _mtlRenderEncoder = nil;
     
-    [_mtlCommandBuffer presentDrawable:DeviceMTL::getCurrentDrawable()];
-    _drawableTexture = DeviceMTL::getCurrentDrawable().texture;
-    [_mtlCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
-        // GPU work is complete
-        // Signal the semaphore to start the CPU work
+    auto drawable = DeviceMTL::getCurrentDrawable();
+    if(drawable) {
+        [_mtlCommandBuffer presentDrawable:drawable];
+        _drawableTexture = drawable.texture;
+        [_mtlCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
+            // GPU work is complete
+            // Signal the semaphore to start the CPU work
+            dispatch_semaphore_signal(_frameBoundarySemaphore);
+        }];
+
+        flush();
+    } else {
         dispatch_semaphore_signal(_frameBoundarySemaphore);
-    }];
-
-    flush();
-
+    }
+    
     DeviceMTL::resetCurrentDrawable();
     [_autoReleasePool drain];
 }
