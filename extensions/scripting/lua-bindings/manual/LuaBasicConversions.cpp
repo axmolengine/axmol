@@ -314,6 +314,32 @@ bool luaval_to_std_string(lua_State* L, int lo, std::string* outValue, const cha
     return ok;
 }
 
+bool luaval_to_std_string_view(lua_State* L, int lo, cxx17::string_view* outValue, const char* funcName)
+{
+    if (NULL == L || NULL == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_iscppstring(L, lo, 0, &tolua_err))
+    {
+#if COCOS2D_DEBUG >=1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        size_t size;
+        auto rawString = lua_tolstring(L, lo, &size);
+        *outValue = cxx17::string_view(rawString, size);
+    }
+
+    return ok;
+}
+
 bool luaval_to_vec2(lua_State* L,int lo,cocos2d::Vec2* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
