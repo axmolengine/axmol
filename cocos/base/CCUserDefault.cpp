@@ -91,7 +91,7 @@ static void ud_write_v_s(UserDefault* ud, yasio::obstream& obs, const cxx17::str
         ud->encrypt(obs.data() + value_offset, value.length(), AES_ENCRYPT);
 }
 
-void UserDefault::setEncryptEnabled(bool enabled, const std::string& key, const std::string& iv)
+void UserDefault::setEncryptEnabled(bool enabled, cxx17::string_view key, cxx17::string_view iv)
 {
     _encryptEnabled = enabled;
     if (_encryptEnabled) {
