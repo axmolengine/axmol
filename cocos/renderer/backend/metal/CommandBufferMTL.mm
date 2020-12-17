@@ -347,6 +347,10 @@ void CommandBufferMTL::endFrame()
 
         flush();
     } else {
+        if(_mtlCommandBuffer) {
+            [_mtlCommandBuffer release];
+            _mtlCommandBuffer = nil;
+        }
         dispatch_semaphore_signal(_frameBoundarySemaphore);
     }
     
