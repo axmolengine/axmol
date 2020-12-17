@@ -43,6 +43,12 @@ public:
     GLint getDefaultFBO() const;
 
     /**
+     * validate render device
+     * @return is validate device.
+     */
+    virtual bool isValid() override;
+
+    /**
      * New a CommandBuffer object, not auto released.
      * @return A CommandBuffer object.
      */

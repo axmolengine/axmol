@@ -68,6 +68,12 @@ public:
     virtual ~Device() = default;
     
     /**
+     * Judge device can render gl or metal
+     * @return Device can render
+     */
+    virtual bool isValid() = 0;
+    
+    /**
      * New a CommandBuffer object, not auto released.
      * @return A CommandBuffer object.
      */

@@ -21,7 +21,6 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
 #include "DeviceMTL.h"
 #include "CommandBufferMTL.h"
 #include "BufferMTL.h"
@@ -51,6 +50,10 @@ Device* Device::getInstance()
 void DeviceMTL::setCAMetalLayer(CAMetalLayer* metalLayer)
 {
     DeviceMTL::_metalLayer = metalLayer;
+}
+
+bool DeviceMTL::isValid() {
+    return DeviceMTL::getCurrentDrawable() != nil;
 }
 
 id<CAMetalDrawable> DeviceMTL::getCurrentDrawable()

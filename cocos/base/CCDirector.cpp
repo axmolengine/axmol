@@ -60,6 +60,7 @@ THE SOFTWARE.
 #include "base/ObjectFactory.h"
 #include "platform/CCApplication.h"
 #include "renderer/backend/ProgramCache.h"
+#include "renderer/backend/Device.h"
 
 #if CC_ENABLE_SCRIPT_BINDING
 #include "base/CCScriptSupport.h"
@@ -247,6 +248,9 @@ void Director::setGLDefaultValues()
 // Draw the Scene
 void Director::drawScene()
 {
+    if(cocos2d::backend::Device::getInstance()->isValid()) {
+        return;
+    }
     _renderer->beginFrame();
 
     // calculate "global" dt

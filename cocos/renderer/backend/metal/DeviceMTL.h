@@ -72,7 +72,13 @@ public:
     /// @name Constructor, Destructor and Initializers
     DeviceMTL();
     ~DeviceMTL();
-    
+
+    /**
+     * validate render device
+     * @return is validate device.
+     */
+    virtual bool isValid() override;
+
     /// @name Setters & Getters
     /**
      * New a CommandBuffer object.

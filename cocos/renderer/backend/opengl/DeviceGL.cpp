@@ -62,6 +62,10 @@ DeviceGL::~DeviceGL()
     _deviceInfo = nullptr;
 }
 
+bool DeviceGL::isValid() {
+    return true;
+}
+
 GLint DeviceGL::getDefaultFBO() const
 {
     return _defaultFBO;
