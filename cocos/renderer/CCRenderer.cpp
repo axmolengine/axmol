@@ -380,9 +380,9 @@ void Renderer::render()
     _isRendering = false;
 }
 
-void Renderer::beginFrame()
+bool Renderer::beginFrame()
 {
-    _commandBuffer->beginFrame();
+    return _commandBuffer->beginFrame();
 }
 
 void Renderer::endFrame()

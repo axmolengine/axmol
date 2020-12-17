@@ -81,7 +81,7 @@ public:
     /**
      * @brief Indicate the begining of a frame
      */
-    virtual void beginFrame() = 0;
+    virtual bool beginFrame() = 0;
     
     /**
      * Begin a render pass, initial color, depth and stencil attachment.
