@@ -72,7 +72,7 @@ public:
      * Then create MTLCommandBuffer and enqueue it to MTLCommandQueue.
      * Then start schedule available MTLBuffer
      */
-    virtual void beginFrame() override;
+    virtual bool beginFrame() override;
     
     /**
      * Create a MTLRenderCommandEncoder object for graphics rendering to an attachment in a RenderPassParams.
