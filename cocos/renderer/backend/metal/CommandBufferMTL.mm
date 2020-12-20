@@ -185,21 +185,17 @@ void CommandBufferMTL::setRenderPipeline(RenderPipeline* renderPipeline)
     _renderPipelineMTL = static_cast<RenderPipelineMTL*>(renderPipeline);
 }
 
-bool CommandBufferMTL::beginFrame()
+void CommandBufferMTL::beginFrame()
 {
-    if(DeviceMTL::getCurrentDrawable()) {
-        _autoReleasePool = [[NSAutoreleasePool alloc] init];
-        dispatch_semaphore_wait(_frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
+    _autoReleasePool = [[NSAutoreleasePool alloc] init];
+    dispatch_semaphore_wait(_frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
 
-        _mtlCommandBuffer = [_mtlCommandQueue commandBuffer];
-        // [_mtlCommandBuffer enqueue];
-        // commit will enqueue automatically
-        [_mtlCommandBuffer retain];
+    _mtlCommandBuffer = [_mtlCommandQueue commandBuffer];
+    // [_mtlCommandBuffer enqueue];
+    // commit will enqueue automatically
+    [_mtlCommandBuffer retain];
 
-        BufferManager::beginFrame();
-        return true;
-    }
-    return false;
+    BufferManager::beginFrame();
 }
 
 id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassParams& renderPassParams)
@@ -339,9 +335,8 @@ void CommandBufferMTL::endFrame()
     [_mtlRenderEncoder release];
     _mtlRenderEncoder = nil;
     
-    auto currentDrawable = DeviceMTL::getCurrentDrawable();
-    [_mtlCommandBuffer presentDrawable:currentDrawable];
-    _drawableTexture = currentDrawable.texture;
+    [_mtlCommandBuffer presentDrawable:DeviceMTL::getCurrentDrawable()];
+    _drawableTexture = DeviceMTL::getCurrentDrawable().texture;
     [_mtlCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
         // GPU work is complete
         // Signal the semaphore to start the CPU work

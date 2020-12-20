@@ -70,7 +70,7 @@ public:
     /**
      * @brief Indicate the begining of a frame
      */
-    virtual bool beginFrame() override;
+    virtual void beginFrame() override;
 
     /**
      * Begin a render pass, initial color, depth and stencil attachment.

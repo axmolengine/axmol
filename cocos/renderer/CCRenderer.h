@@ -442,7 +442,7 @@ protected:
     void drawCustomCommand(RenderCommand* command);
     void drawMeshCommand(RenderCommand* command);
 
-    bool beginFrame(); /// Indicate the begining of a frame
+    void beginFrame(); /// Indicate the begining of a frame
     void endFrame(); /// Finish a frame.
 
     ///Draw the previews queued triangles and flush previous context

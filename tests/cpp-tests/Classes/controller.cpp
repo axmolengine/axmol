@@ -93,11 +93,7 @@ public:
         addTest("Node: Particles", [](){return new ParticleTests(); });
         addTest("Node: Particle3D (PU)", [](){return new Particle3DTests(); });
 #if CC_USE_PHYSICS
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
-        addTest("Node: Physics (Chipmunk2D)", []() { return new PhysicsTests(); });
-#elif CC_ENABLE_BOX2D_INTEGRATION
-        addTest("Node: Physics (Box2D)", []() { return new PhysicsTests(); });
-#endif   
+        addTest("Node: Physics", []() { return new PhysicsTests(); });
 #endif
         addTest("Node: Physics3D", []() { return new Physics3DTests(); } );
         addTest("Node: RenderTexture", [](){return new RenderTextureTests(); });
