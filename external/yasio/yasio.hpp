@@ -81,7 +81,7 @@ namespace inet
 enum
 { // lgtm [cpp/irregular-enum-init]
 
-  // Set with deferred dispatch event.
+  // Set whether deferred dispatch event.
   // params: deferred_event:int(1)
   YOPT_S_DEFERRED_EVENT = 1,
 
@@ -102,7 +102,13 @@ enum
 
   // Set event callback
   // params: func:event_cb_t*
+  // remarks: this callback will be invoke at io_service::dispatch caller thread
   YOPT_S_EVENT_CB,
+
+  // Sets callback before defer dispatch event.
+  // params: func:defer_event_cb_t*
+  // remarks: this callback invoke at io_service thread
+  YOPT_S_DEFER_EVENT_CB,
 
   // Set tcp keepalive in seconds, probes is tries.
   // params: idle:int(7200), interal:int(75), probes:int(10)
@@ -304,6 +310,7 @@ typedef std::shared_ptr<highp_timer> highp_timer_ptr;
 typedef std::function<bool()> timer_cb_t;
 typedef std::function<void()> light_timer_cb_t;
 typedef std::function<void(event_ptr&&)> event_cb_t;
+typedef std::function<bool(event_ptr&)> defer_event_cb_t;
 typedef std::function<void(int, size_t)> completion_cb_t;
 typedef std::function<int(void* ptr, int len)> decode_len_fn_t;
 typedef std::function<int(std::vector<ip::endpoint>&, const char*, unsigned short)> resolv_fn_t;
@@ -1096,6 +1103,7 @@ private:
     bool dns_dirty_ = true; // only for c-ares
 
     bool deferred_event_ = true;
+    defer_event_cb_t on_defer_event_;
 
     // tcp keepalive settings
     struct __unnamed01 {

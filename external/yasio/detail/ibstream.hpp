@@ -114,13 +114,13 @@ template <typename _Stream> struct read_ix_helper<_Stream, int64_t> {
 };
 } // namespace detail
 
-template <typename _ConvertTraits> class basic_ibstream_view {
+template <typename _Traits> class basic_ibstream_view {
 public:
-  using traits_type = _ConvertTraits;
-  using my_type     = basic_ibstream_view<_ConvertTraits>;
+  using convert_traits_type = _Traits;
+  using this_type           = basic_ibstream_view<_Traits>;
   basic_ibstream_view() { this->reset("", 0); }
   basic_ibstream_view(const void* data, size_t size) { this->reset(data, size); }
-  basic_ibstream_view(const obstream* obs) { this->reset(obs->data(), obs->length()); }
+  basic_ibstream_view(const basic_obstream<_Traits>* obs) { this->reset(obs->data(), obs->length()); }
   basic_ibstream_view(const basic_ibstream_view&) = delete;
   basic_ibstream_view(basic_ibstream_view&&)      = delete;
 
@@ -138,7 +138,7 @@ public:
   /* read 7bit encoded variant integer value
   ** @dotnet BinaryReader.Read7BitEncodedInt(64)
   */
-  template <typename _Intty> _Intty read_ix() { return detail::read_ix_helper<my_type, _Intty>::read_ix(this); }
+  template <typename _Intty> _Intty read_ix() { return detail::read_ix_helper<this_type, _Intty>::read_ix(this); }
 
   /* read blob data with '7bit encoded int' length field */
   cxx17::string_view read_v()
@@ -205,7 +205,7 @@ public:
   {
     _Nty value;
     ::memcpy(&value, ptr, sizeof(value));
-    return traits_type::template from<_Nty>(value);
+    return convert_traits_type::template from<_Nty>(value);
   }
 
   template <typename _LenT> inline cxx17::string_view read_v_fx()
@@ -236,14 +236,11 @@ protected:
 };
 
 /// --------------------- CLASS ibstream ---------------------
-template <typename _ConvertTraits> class basic_ibstream : public basic_ibstream_view<_ConvertTraits> {
+template <typename _Traits> class basic_ibstream : public basic_ibstream_view<_Traits> {
 public:
   basic_ibstream() {}
-  basic_ibstream(std::vector<char> blob) : basic_ibstream_view<_ConvertTraits>(), blob_(std::move(blob))
-  {
-    this->reset(blob_.data(), static_cast<int>(blob_.size()));
-  }
-  basic_ibstream(const obstream* obs) : basic_ibstream_view<_ConvertTraits>(), blob_(obs->buffer())
+  basic_ibstream(std::vector<char> blob) : basic_ibstream_view<_Traits>(), blob_(std::move(blob)) { this->reset(blob_.data(), static_cast<int>(blob_.size())); }
+  basic_ibstream(const basic_obstream<_Traits>* obs) : basic_ibstream_view<_Traits>(), blob_(obs->buffer())
   {
     this->reset(blob_.data(), static_cast<int>(blob_.size()));
   }

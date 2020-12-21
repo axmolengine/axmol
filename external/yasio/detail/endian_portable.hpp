@@ -40,14 +40,7 @@ SOFTWARE.
 #  include <arpa/inet.h>
 #endif
 
-#include "yasio/detail/config.hpp"
-
-// IEEE 754 16-bit half-precision floating-point
-#if defined(YASIO_HAVE_HALF_FLOAT)
-#  include "half/half.hpp"
-typedef half_float::half fp16_t;
-#  define YASIO__SWAP_SHORT(s) ((((s) >> 8) & 0x00ff) | (((s) << 8) & 0xff00))
-#endif
+#include "yasio/detail/fp16.hpp"
 
 #if !defined(_MSC_VER) || (defined(_MSC_VER) && _MSC_VER < 1800) || (NTDDI_VERSION <= 0x06010000 && !defined(WINRT))
 

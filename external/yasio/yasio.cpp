@@ -1193,7 +1193,11 @@ int io_service::write_to(transport_handle_t transport, std::vector<char> buffer,
 void io_service::handle_event(event_ptr event)
 {
   if (options_.deferred_event_)
+  {
+    if (options_.on_defer_event_ && !options_.on_defer_event_(event))
+      return;
     events_.emplace(std::move(event));
+  }
   else
     options_.on_event_(std::move(event));
 }
@@ -2198,6 +2202,9 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
     }
     case YOPT_S_EVENT_CB:
       options_.on_event_ = *va_arg(ap, event_cb_t*);
+      break;
+    case YOPT_S_DEFER_EVENT_CB:
+      options_.on_defer_event_ = *va_arg(ap, defer_event_cb_t*);
       break;
     case YOPT_C_LFBFD_FN: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
