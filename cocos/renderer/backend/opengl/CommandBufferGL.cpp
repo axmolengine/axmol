@@ -66,8 +66,9 @@ CommandBufferGL::~CommandBufferGL()
     cleanResources();
 }
 
-void CommandBufferGL::beginFrame()
+bool CommandBufferGL::beginFrame()
 {
+    return true;
 }
 
 void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassParams& descirptor)

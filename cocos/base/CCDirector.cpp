@@ -247,7 +247,7 @@ void Director::setGLDefaultValues()
 // Draw the Scene
 void Director::drawScene()
 {
-    _renderer->beginFrame();
+    if(UTILS_UNLIKELY(!_renderer->beginFrame())) return;
 
     // calculate "global" dt
     calculateDeltaTime();
