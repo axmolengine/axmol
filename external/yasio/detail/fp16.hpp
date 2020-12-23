@@ -29,7 +29,6 @@ SOFTWARE.
 // Includes IEEE 754 16-bit half-precision floating-point library
 #  include "half/half.hpp"
 typedef half_float::half fp16_t;
-#  define YASIO__SWAP_SHORT(s) ((((s) >> 8) & 0x00ff) | (((s) << 8) & 0xff00))
 #endif
 
 #endif
