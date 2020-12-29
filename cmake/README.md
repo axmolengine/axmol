@@ -8,7 +8,7 @@ CMake is an open-source, cross-platform family of tools designed to build, test 
   ```sh
   cmake --version
   ```
-if the CMake version is lower than 3.6, please upgrade.
+if the CMake version is lower than 3.14, please upgrade.
 
 2. You should use __out-of-source__ builds, this means you need to create a different directory than __cocos-re__ to execute the `cmake` command.
 
@@ -29,23 +29,22 @@ Execute `make help` to see all build targets, `make <target>` build specified ta
 
 ```sh
 cd engine-x
-mkdir win32-build && cd win32-build
-cmake .. -G"Visual Studio 16 2019"
+mkdir win32-build
+cmake -B win32-build -G"Visual Studio 16 2019"
 ```
 
 Execute `cmake --build .` to compile,
 ```
-cmake --build . --config Debug
-cmake --build . --config Release
+cmake --build win32-build --config Debug
 ```
-or open __cocos-re.sln__ in Explorer to use the generated project. 
+or open **engine-x.sln** in Explorer to use the generated project. 
 
 ### Generate macOS Project
 
 ```sh
 cd engine-x
-mkdir mac-build && cd mac-build
-cmake .. -GXcode
+mkdir mac-build
+cmake -B mac-build -GXcode
 open engine-x.xcodeproj
 ```
 
@@ -53,8 +52,8 @@ open engine-x.xcodeproj
 
 ```sh
 cd engine-x
-mkdir ios-build && cd ios-build
-cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
+mkdir ios-build
+cmake -B ios-build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
 open engine-x.xcodeproj
 ```
 
