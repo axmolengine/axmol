@@ -10,7 +10,7 @@ CMake is an open-source, cross-platform family of tools designed to build, test 
   ```
 if the CMake version is lower than 3.14, please upgrade.
 
-2. You should use __out-of-source__ builds, this means you need to create a different directory than __cocos-re__ to execute the `cmake` command.
+2. You should use **out-of-source** builds, this means you need to create a different directory than **engine-x** to execute the `cmake` command.
 
 ## Step by Step
 
@@ -31,10 +31,7 @@ Execute `make help` to see all build targets, `make <target>` build specified ta
 cd engine-x
 mkdir win32-build
 cmake -B win32-build -G"Visual Studio 16 2019"
-```
-
-Execute `cmake --build .` to compile,
-```
+# build
 cmake --build win32-build --config Debug
 ```
 or open **engine-x.sln** in Explorer to use the generated project. 
@@ -45,7 +42,7 @@ or open **engine-x.sln** in Explorer to use the generated project.
 cd engine-x
 mkdir mac-build
 cmake -B mac-build -GXcode
-open engine-x.xcodeproj
+open mac-build/engine-x.xcodeproj
 ```
 
 ### Generate iOS Project
@@ -54,7 +51,7 @@ open engine-x.xcodeproj
 cd engine-x
 mkdir ios-build
 cmake -B ios-build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
-open engine-x.xcodeproj
+open ios-build/engine-x.xcodeproj
 ```
 
 #### How do I customize the generated Xcode project?
