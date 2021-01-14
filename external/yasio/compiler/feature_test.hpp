@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -106,6 +106,12 @@ SOFTWARE.
 #  else
 #    define YASIO__HAS_SA_LEN 0
 #  endif
+#endif
+
+#if !defined(_WIN32) || defined(NTDDI_VISTA)
+#  define YASIO__HAS_NTOP 1
+#else
+#  define YASIO__HAS_NTOP 0
 #endif
 
 // 64bits Sense Macros

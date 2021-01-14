@@ -1,10 +1,10 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asio (asynchronous socket I/O) 
-// for any client application, support windows & linux & apple & android & win10-universal.
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights

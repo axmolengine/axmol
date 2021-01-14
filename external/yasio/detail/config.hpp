@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -74,9 +74,11 @@ SOFTWARE.
 // #define YASIO_HAVE_KCP 1
 
 /*
-** Uncomment or add compiler flag -DYASIO_HAVE_SSL for SSL support
+** Uncomment or add compiler flag -DYASIO_SSL_BACKEND=1 for SSL support with OpenSSL
+** 1. -DYASIO_SSL_BACKEND=1: OpenSSL
+** 2. -DYASIO_SSL_BACKEND=2: mbedtls
 */
-#define YASIO_HAVE_SSL 1
+#define YASIO_SSL_BACKEND 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_DISABLE_CONCURRENT_SINGLETON to disable concurrent
@@ -136,7 +138,7 @@ SOFTWARE.
 /*
 **  The yasio version macros
 */
-#define YASIO_VERSION_NUM 0x033500
+#define YASIO_VERSION_NUM 0x033700
 
 /*
 ** The macros used by io_service.
@@ -144,10 +146,10 @@ SOFTWARE.
 // The default max listen count of tcp server.
 #define YASIO_SOMAXCONN 19
 
-// The max wait duration in macroseconds when io_service nothing to do.
+// The max wait duration in microseconds when io_service nothing to do.
 #define YASIO_MAX_WAIT_DURATION (5LL * 60LL * 1000LL * 1000LL)
 
-// The min wait duration in macroseconds when io_service have outstanding work to do.
+// The min wait duration in microseconds when io_service have outstanding work to do.
 // !!!Only affects Single Core CPU
 #define YASIO_MIN_WAIT_DURATION 10LL
 

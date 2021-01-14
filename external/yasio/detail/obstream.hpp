@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -235,8 +235,8 @@ protected:
   std::stack<size_t> offset_stack_;
 }; // CLASS basic_obstream
 
-using obstream      = basic_obstream<::yasio::endian::convert_traits<::yasio::endian::network_convert_tag>>;
-using fast_obstream = basic_obstream<::yasio::endian::convert_traits<::yasio::endian::host_convert_tag>>;
+using obstream      = basic_obstream<::yasio::convert_traits<::yasio::network_convert_tag>>;
+using fast_obstream = basic_obstream<::yasio::convert_traits<::yasio::host_convert_tag>>;
 
 } // namespace yasio
 

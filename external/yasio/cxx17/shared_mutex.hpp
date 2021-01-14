@@ -1,10 +1,11 @@
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+//////////////////////////////////////////////////////////////////////////////////////////
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -35,6 +36,9 @@ SOFTWARE.
 #else
 #  include <system_error>
 #  if defined(_WIN32)
+#    if !defined(WIN32_LEAN_AND_MEAN)
+#      define WIN32_LEAN_AND_MEAN
+#    endif
 #    include <Windows.h>
 #    define yasio__smtx_t SRWLOCK
 #    define yasio__smtx_init(rwlock, attr) InitializeSRWLock(rwlock)

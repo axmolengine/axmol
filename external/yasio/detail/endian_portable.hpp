@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,13 +33,14 @@ SOFTWARE.
 #include <stdint.h>
 
 #ifdef _WIN32
+#  if !defined(WIN32_LEAN_AND_MEAN)
+#    define WIN32_LEAN_AND_MEAN
+#  endif
 #  include <WinSock2.h>
-
 #  include <Windows.h>
 #else
 #  include <arpa/inet.h>
 #endif
-
 #include "yasio/detail/fp16.hpp"
 
 namespace yasio
@@ -79,6 +80,8 @@ inline uint64_t(ntohll)(uint64_t Value)
   const uint64_t Retval = YASIO__SWAP_LONGLONG(Value);
   return Retval;
 }
+
+YASIO__NS_INLINE
 namespace endian
 {
 template <typename _Ty, size_t n> struct byte_order_impl {};
@@ -155,6 +158,9 @@ template <> struct convert_traits<host_convert_tag> {
   template <typename _Ty> static inline _Ty from(_Ty value) { return value; }
 };
 } // namespace endian
+#if !YASIO__HAS_NS_INLINE
+using namespace yasio::endian;
+#endif
 
 namespace bits
 {
