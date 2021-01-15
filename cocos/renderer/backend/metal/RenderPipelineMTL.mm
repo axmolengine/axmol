@@ -305,8 +305,8 @@ void RenderPipelineMTL::chooseAttachmentFormat(const RenderTarget* renderTarget,
     }
     
     // choose depth and stencil attachment format, match RenderTargetMTL::applyRenderPassAttachments
-    depthFormat = bitmask::any(rtflags, RenderTargetFlag::DEPTH) ? rtMTL->getDepthAttachmentPixelFormat() : PixelFormat::NONE;
-    stencilFormat = bitmask::any(rtflags, RenderTargetFlag::STENCIL) ? rtMTL->getStencilAttachmentPixelFormat() : PixelFormat::NONE;
+    depthFormat = bitmask::any(rtflags, RenderTargetFlag::DEPTH_AND_STENCIL) ? rtMTL->getDepthAttachmentPixelFormat() : PixelFormat::NONE;
+    stencilFormat = bitmask::any(rtflags, RenderTargetFlag::DEPTH_AND_STENCIL) ? rtMTL->getStencilAttachmentPixelFormat() : PixelFormat::NONE;
 }
 
 void RenderPipelineMTL::setBlendStateAndFormat(const BlendDescriptor& blendDescriptor)
