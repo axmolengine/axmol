@@ -123,6 +123,8 @@ SOFTWARE.
 
 #define YASIO_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
 
+#define YASIO_SSIZEOF(T) static_cast<int>(sizeof(T))
+
 /*
 ** YASIO_OBSOLETE_DEPRECATE
 */
@@ -163,7 +165,7 @@ SOFTWARE.
 #define YASIO_MAX_PDU_BUFFER_SIZE static_cast<int>(1 * 1024 * 1024)
 
 // The max Initial Bytes To Strip for length field based frame decode mechanism
-#define YASIO_MAX_IBTS 32
+#define YASIO_UPARAMS_MAX_STRIP 32
 
 // The fallback name servers when c-ares can't get name servers from system config,
 // For Android 8 or later, yasio will try to retrive through jni automitically,

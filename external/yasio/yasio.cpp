@@ -358,35 +358,22 @@ void io_channel::configure_address()
         ep.port(this->remote_port_);
   }
 }
-int io_channel::__builtin_decode_len(void* ud, int n)
+int io_channel::__builtin_decode_len(void* d, int n)
 {
-  if (lfb_.length_field_offset >= 0)
+  int loffset = uparams_.length_field_offset;
+  int lsize   = uparams_.length_field_length;
+  if (loffset >= 0)
   {
-    if (n >= (lfb_.length_field_offset + lfb_.length_field_length))
+    int len = 0;
+    if (n >= (loffset + lsize))
     {
-      int32_t length = -1;
-      switch (lfb_.length_field_length)
-      {
-        case 4:
-          length = ntohl(*reinterpret_cast<int32_t*>((unsigned char*)ud + lfb_.length_field_offset)) + lfb_.length_adjustment;
-          break;
-        case 3:
-          length = 0;
-          memcpy(&length, (unsigned char*)ud + lfb_.length_field_offset, 3);
-          length = (ntohl(length) >> 8) + lfb_.length_adjustment;
-          break;
-        case 2:
-          length = ntohs(*reinterpret_cast<uint16_t*>((unsigned char*)ud + lfb_.length_field_offset)) + lfb_.length_adjustment;
-          break;
-        case 1:
-          length = *((unsigned char*)ud + lfb_.length_field_offset) + lfb_.length_adjustment;
-          break;
-      }
-      if (length > lfb_.max_frame_length)
-        length = -1;
-      return length;
+      ::memcpy(&len, (uint8_t*)d + loffset, lsize);
+      len = yasio::network_to_host(len, lsize);
+      len += uparams_.length_adjustment;
+      if (len > uparams_.max_frame_length)
+        len = -1;
     }
-    return 0;
+    return len;
   }
   return n;
 }
@@ -409,7 +396,7 @@ int io_transport::write(std::vector<char>&& buffer, completion_cb_t&& handler)
   get_service().interrupt();
   return n;
 }
-int io_transport::do_read(int revent, int& error, highp_time_t&) { return revent ? this->call_read(buffer_ + wpos_, sizeof(buffer_) - wpos_, error) : 0; }
+int io_transport::do_read(int revent, int& error, highp_time_t&) { return revent ? this->call_read(buffer_ + offset_, sizeof(buffer_) - offset_, error) : 0; }
 bool io_transport::do_write(highp_time_t& wait_duration)
 {
   bool ret = false;
@@ -723,7 +710,7 @@ int io_transport_kcp::do_read(int revent, int& error, highp_time_t& wait_duratio
     this->handle_input(rawbuf_.data(), n, error, wait_duration);
   if (!error)
   { // !important, should always try to call ikcp_recv when no error occured.
-    n = ::ikcp_recv(kcp_, buffer_ + wpos_, sizeof(buffer_) - wpos_);
+    n = ::ikcp_recv(kcp_, buffer_ + offset_, sizeof(buffer_) - offset_);
     if (n > 0) // If got data from kcp, don't wait
       wait_duration = yasio__min_wait_duration;
     else if (n < 0)
@@ -1839,20 +1826,20 @@ bool io_service::do_read(transport_handle_t transport, fd_set* fds_array)
     int n      = transport->do_read(revent, error, this->wait_duration_);
     if (n >= 0)
     {
-      YASIO_KLOGV("[index: %d] do_read status ok, bytes transferred: %d, buffer used: %d", transport->cindex(), n, n + transport->wpos_);
+      YASIO_KLOGV("[index: %d] do_read status ok, bytes transferred: %d, buffer used: %d", transport->cindex(), n, n + transport->offset_);
       if (transport->expected_size_ == -1)
       { // decode length
-        int length = transport->ctx_->decode_len_(transport->buffer_, transport->wpos_ + n);
+        int length = transport->ctx_->decode_len_(transport->buffer_, transport->offset_ + n);
         if (length > 0)
         {
-          int bytes_to_strip        = ::yasio::clamp(transport->ctx_->lfb_.initial_bytes_to_strip, 0, length - 1);
+          int bytes_to_strip        = ::yasio::clamp(transport->ctx_->uparams_.initial_bytes_to_strip, 0, length - 1);
           transport->expected_size_ = length;
           transport->expected_packet_.reserve((std::min)(length - bytes_to_strip,
                                                          YASIO_MAX_PDU_BUFFER_SIZE)); // #perfomance, avoid memory reallocte.
           unpack(transport, transport->expected_size_, n, bytes_to_strip);
         }
         else if (length == 0) // header insufficient, wait readfd ready at next event frame.
-          transport->wpos_ += n;
+          transport->offset_ += n;
         else
         {
           transport->set_last_errno(yasio::errc::invalid_packet, yasio::net::io_base::error_stage::READ);
@@ -1877,17 +1864,18 @@ bool io_service::do_read(transport_handle_t transport, fd_set* fds_array)
 }
 void io_service::unpack(transport_handle_t transport, int bytes_expected, int bytes_transferred, int bytes_to_strip)
 {
-  auto bytes_available = bytes_transferred + transport->wpos_;
+  auto& offset         = transport->offset_;
+  auto bytes_available = bytes_transferred + offset;
   transport->expected_packet_.insert(transport->expected_packet_.end(), transport->buffer_ + bytes_to_strip,
                                      transport->buffer_ + (std::min)(bytes_expected, bytes_available));
 
-  // set wpos to bytes of remain buffer
-  transport->wpos_ = bytes_available - bytes_expected;
-  if (transport->wpos_ >= 0)
+  // set 'offset' to bytes of remain buffer
+  offset = bytes_available - bytes_expected;
+  if (offset >= 0)
   { /* pdu received properly */
-    if (transport->wpos_ > 0)
-    { /* move remain data to head of buffer and hold wpos. */
-      ::memmove(transport->buffer_, transport->buffer_ + bytes_expected, transport->wpos_);
+    if (offset > 0)
+    { /* move remain data to head of buffer and hold 'offset'. */
+      ::memmove(transport->buffer_, transport->buffer_ + bytes_expected, offset);
       this->wait_duration_ = yasio__min_wait_duration;
     }
     // move properly pdu to ready queue, the other thread who care about will retrieve it.
@@ -1896,8 +1884,8 @@ void io_service::unpack(transport_handle_t transport, int bytes_expected, int by
                 transport->cindex(), transport->expected_size_);
     this->handle_event(event_ptr(new io_event(transport->cindex(), YEK_PACKET, transport, transport->fetch_packet())));
   }
-  else /* all buffer consumed, set wpos to ZERO, pdu incomplete, continue recv remain data. */
-    transport->wpos_ = 0;
+  else /* all buffer consumed, set 'offset' to ZERO, pdu incomplete, continue recv remain data. */
+    offset = 0;
 }
 highp_timer_ptr io_service::schedule(const std::chrono::microseconds& duration, timer_cb_t cb)
 {
@@ -2245,21 +2233,21 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
     case YOPT_S_DNS_DIRTY:
       options_.dns_dirty_ = true;
       break;
-    case YOPT_C_LFBFD_PARAMS: {
+    case YOPT_C_UNPACK_PARAMS: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)
       {
-        channel->lfb_.max_frame_length    = va_arg(ap, int);
-        channel->lfb_.length_field_offset = va_arg(ap, int);
-        channel->lfb_.length_field_length = va_arg(ap, int);
-        channel->lfb_.length_adjustment   = va_arg(ap, int);
+        channel->uparams_.max_frame_length    = va_arg(ap, int);
+        channel->uparams_.length_field_offset = va_arg(ap, int);
+        channel->uparams_.length_field_length = yasio::clamp(va_arg(ap, int), YASIO_SSIZEOF(int8_t), YASIO_SSIZEOF(int));
+        channel->uparams_.length_adjustment   = va_arg(ap, int);
       }
       break;
     }
-    case YOPT_C_LFBFD_IBTS: {
+    case YOPT_C_UNPACK_STRIP: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)
-        channel->lfb_.initial_bytes_to_strip = ::yasio::clamp(va_arg(ap, int), 0, YASIO_MAX_IBTS);
+        channel->uparams_.initial_bytes_to_strip = yasio::clamp(va_arg(ap, int), 0, YASIO_UPARAMS_MAX_STRIP);
       break;
     }
     case YOPT_S_EVENT_CB:

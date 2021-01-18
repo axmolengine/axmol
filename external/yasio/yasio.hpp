@@ -170,13 +170,15 @@ enum
   //     length_field_offset:int(-1),
   //     length_field_length:int(4),
   //     length_adjustment:int(0),
-  YOPT_C_LFBFD_PARAMS,
+  YOPT_C_UNPACK_PARAMS,
+  YOPT_C_LFBFD_PARAMS = YOPT_C_UNPACK_PARAMS,
 
   // Sets channel length field based frame decode initial bytes to strip
   // params:
   //     index:int,
   //     initial_bytes_to_strip:int(0)
-  YOPT_C_LFBFD_IBTS,
+  YOPT_C_UNPACK_STRIP,
+  YOPT_C_LFBFD_IBTS = YOPT_C_UNPACK_STRIP,
 
   // Sets channel remote host
   // params: index:int, ip:const char*
@@ -312,7 +314,7 @@ typedef std::function<void()> light_timer_cb_t;
 typedef std::function<void(event_ptr&&)> event_cb_t;
 typedef std::function<bool(event_ptr&)> defer_event_cb_t;
 typedef std::function<void(int, size_t)> completion_cb_t;
-typedef std::function<int(void* ptr, int len)> decode_len_fn_t;
+typedef std::function<int(void* d, int n)> decode_len_fn_t;
 typedef std::function<int(std::vector<ip::endpoint>&, const char*, unsigned short)> resolv_fn_t;
 typedef std::function<void(const char*)> print_fn_t;
 typedef std::function<void(int level, const char*)> print_fn2_t;
@@ -479,7 +481,7 @@ private:
   YASIO__DECL void configure_address();
 
   // -1 indicate failed, connection will be closed
-  YASIO__DECL int __builtin_decode_len(void* ptr, int len);
+  YASIO__DECL int __builtin_decode_len(void* d, int n);
 
   io_service& service_;
 
@@ -513,13 +515,14 @@ private:
   // The timer for check resolve & connect timeout
   highp_timer timer_;
 
+  // The stream mode application protocol (based on tcp/udp/kcp) unpack params
   struct __unnamed01 {
     int max_frame_length       = YASIO_SZ(10, M); // 10MBytes
-    int length_field_offset    = -1;              // -1: directly, >= 0: store as 1~4bytes integer, default value=-1
+    int length_field_offset    = -1;              // -1: directly, >= 0: store as 1~4bytes integer
     int length_field_length    = 4;               // 1,2,3,4
     int length_adjustment      = 0;
     int initial_bytes_to_strip = 0;
-  } lfb_;
+  } uparams_;
   decode_len_fn_t decode_len_;
 
   /*
@@ -647,7 +650,7 @@ protected:
   unsigned int id_;
 
   char buffer_[YASIO_INET_BUFFER_SIZE]; // recv buffer, 64K
-  int wpos_ = 0;                        // recv buffer write pos
+  int offset_ = 0;                      // recv buffer offset
 
   std::vector<char> expected_packet_;
   int expected_size_ = -1;
