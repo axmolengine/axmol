@@ -11,7 +11,7 @@
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
- * are also available at https://curl.haxx.se/docs/copyright.html.
+ * are also available at https://curl.se/docs/copyright.html.
  *
  * You may opt to use, copy, modify, merge, publish, distribute and/or sell
  * copies of the Software, and permit persons to whom the Software is
@@ -24,7 +24,7 @@
 
 /*
  * If you have libcurl problems, all docs and details are found here:
- *   https://curl.haxx.se/libcurl/
+ *   https://curl.se/libcurl/
  *
  * curl-library mailing list subscription and unsubscription web interface:
  *   https://cool.haxx.se/mailman/listinfo/curl-library/
@@ -74,7 +74,7 @@
 #if defined(_AIX) || defined(__NOVELL_LIBC__) || defined(__NetBSD__) || \
     defined(__minix) || defined(__SYMBIAN32__) || defined(__INTEGRITY) || \
     defined(ANDROID) || defined(__ANDROID__) || defined(__OpenBSD__) || \
-    defined(__CYGWIN__) || \
+    defined(__CYGWIN__) || defined(AMIGA) || \
    (defined(__FreeBSD_version) && (__FreeBSD_version < 800000))
 #include <sys/select.h>
 #endif
@@ -949,12 +949,41 @@ typedef enum {
 #define CURLHEADER_SEPARATE (1<<0)
 
 /* CURLALTSVC_* are bits for the CURLOPT_ALTSVC_CTRL option */
-#define CURLALTSVC_IMMEDIATELY  (1<<0)
-
 #define CURLALTSVC_READONLYFILE (1<<2)
 #define CURLALTSVC_H1           (1<<3)
 #define CURLALTSVC_H2           (1<<4)
 #define CURLALTSVC_H3           (1<<5)
+
+
+struct curl_hstsentry {
+  char *name;
+  size_t namelen;
+  unsigned int includeSubDomains:1;
+  char expire[18]; /* YYYYMMDD HH:MM:SS [null-terminated] */
+};
+
+struct curl_index {
+  size_t index; /* the provided entry's "index" or count */
+  size_t total; /* total number of entries to save */
+};
+
+typedef enum {
+  CURLSTS_OK,
+  CURLSTS_DONE,
+  CURLSTS_FAIL
+} CURLSTScode;
+
+typedef CURLSTScode (*curl_hstsread_callback)(CURL *easy,
+                                              struct curl_hstsentry *e,
+                                              void *userp);
+typedef CURLSTScode (*curl_hstswrite_callback)(CURL *easy,
+                                               struct curl_hstsentry *e,
+                                               struct curl_index *i,
+                                               void *userp);
+
+/* CURLHSTS_* are bits for the CURLOPT_HSTS option */
+#define CURLHSTS_ENABLE       (long)(1<<0)
+#define CURLHSTS_READONLYFILE (long)(1<<1)
 
 /* CURLPROTO_ defines are for the CURLOPT_*PROTOCOLS options */
 #define CURLPROTO_HTTP   (1<<0)
@@ -2031,6 +2060,19 @@ typedef enum {
    */
   CURLOPT(CURLOPT_SSL_EC_CURVES, CURLOPTTYPE_STRINGPOINT, 298),
 
+  /* HSTS bitmask */
+  CURLOPT(CURLOPT_HSTS_CTRL, CURLOPTTYPE_LONG, 299),
+  /* HSTS file name */
+  CURLOPT(CURLOPT_HSTS, CURLOPTTYPE_STRINGPOINT, 300),
+
+  /* HSTS read callback */
+  CURLOPT(CURLOPT_HSTSREADFUNCTION, CURLOPTTYPE_FUNCTIONPOINT, 301),
+  CURLOPT(CURLOPT_HSTSREADDATA, CURLOPTTYPE_CBPOINT, 302),
+
+  /* HSTS write callback */
+  CURLOPT(CURLOPT_HSTSWRITEFUNCTION, CURLOPTTYPE_FUNCTIONPOINT, 303),
+  CURLOPT(CURLOPT_HSTSWRITEDATA, CURLOPTTYPE_CBPOINT, 304),
+
   CURLOPT_LASTENTRY /* the last unused */
 } CURLoption;
 
@@ -2902,6 +2944,7 @@ typedef struct curl_version_info_data curl_version_info_data;
 #define CURL_VERSION_HTTP3        (1<<25) /* HTTP3 support built-in */
 #define CURL_VERSION_ZSTD         (1<<26) /* zstd features are present */
 #define CURL_VERSION_UNICODE      (1<<27) /* Unicode support on Windows */
+#define CURL_VERSION_HSTS         (1<<28) /* HSTS is supported */
 
  /*
  * NAME curl_version_info()

@@ -11,7 +11,7 @@
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
- * are also available at https://curl.haxx.se/docs/copyright.html.
+ * are also available at https://curl.se/docs/copyright.html.
  *
  * You may opt to use, copy, modify, merge, publish, distribute and/or sell
  * copies of the Software, and permit persons to whom the Software is
@@ -273,6 +273,7 @@ CURLWARNING(_curl_easy_getinfo_err_curl_off_t,
    (option) == CURLOPT_FTPPORT ||                                             \
    (option) == CURLOPT_FTP_ACCOUNT ||                                         \
    (option) == CURLOPT_FTP_ALTERNATIVE_TO_USER ||                             \
+   (option) == CURLOPT_HSTS ||                                                \
    (option) == CURLOPT_INTERFACE ||                                           \
    (option) == CURLOPT_ISSUERCERT ||                                          \
    (option) == CURLOPT_KEYPASSWD ||                                           \
@@ -356,6 +357,8 @@ CURLWARNING(_curl_easy_getinfo_err_curl_off_t,
    (option) == CURLOPT_DEBUGDATA ||                                           \
    (option) == CURLOPT_FNMATCH_DATA ||                                        \
    (option) == CURLOPT_HEADERDATA ||                                          \
+   (option) == CURLOPT_HSTSREADDATA ||                                        \
+   (option) == CURLOPT_HSTSWRITEDATA ||                                       \
    (option) == CURLOPT_INTERLEAVEDATA ||                                      \
    (option) == CURLOPT_IOCTLDATA ||                                           \
    (option) == CURLOPT_OPENSOCKETDATA ||                                      \
