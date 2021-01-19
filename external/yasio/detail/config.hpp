@@ -158,22 +158,22 @@ SOFTWARE.
 // The default ttl of multicast
 #define YASIO_DEFAULT_MULTICAST_TTL (int)128
 
+// The max internet buffer size
 #define YASIO_INET_BUFFER_SIZE 65536
 
-/* max pdu buffer length, avoid large memory allocation when application layer decode a huge length
- * field. */
+// The max pdu buffer length, avoid large memory allocation when application decode a huge length.
 #define YASIO_MAX_PDU_BUFFER_SIZE static_cast<int>(1 * 1024 * 1024)
 
-// The max Initial Bytes To Strip for length field based frame decode mechanism
-#define YASIO_UPARAMS_MAX_STRIP 32
+// The max Initial Bytes To Strip for unpack.
+#define YASIO_UNPACK_MAX_STRIP 32
 
 // The fallback name servers when c-ares can't get name servers from system config,
 // For Android 8 or later, yasio will try to retrive through jni automitically,
-// For iOS, c-ares doesn't retrive system dns, yasio will try through API 'res_getservers' provided by libresov
+// For iOS, since c-ares-1.16.1, it will use libresolv for retrieving DNS servers.
 // please see:
+//   https://c-ares.haxx.se/changelog.html
 //   https://github.com/c-ares/c-ares/issues/276
 //   https://github.com/c-ares/c-ares/pull/148
-//   https://github.com/c-ares/c-ares/pull/29
 #define YASIO_CARES_FALLBACK_DNS "8.8.8.8,223.5.5.5,114.114.114.114"
 
 #endif

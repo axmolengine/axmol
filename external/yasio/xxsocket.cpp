@@ -532,7 +532,10 @@ int xxsocket::accept_n(socket_native_type& new_sock) const
 
     // Check if operation succeeded.
     if (new_sock != invalid_socket)
+    {
+      xxsocket::set_nonblocking(new_sock, true);
       return 0;
+    }
 
     auto error = get_last_errno();
     // Retry operation if interrupted by signal.

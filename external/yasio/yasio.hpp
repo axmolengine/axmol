@@ -309,8 +309,8 @@ typedef std::unique_ptr<io_send_op> send_op_ptr;
 typedef std::unique_ptr<io_event> event_ptr;
 typedef std::shared_ptr<highp_timer> highp_timer_ptr;
 
-typedef std::function<bool()> timer_cb_t;
-typedef std::function<void()> light_timer_cb_t;
+typedef std::function<bool(io_service&)> timer_cb_t;
+typedef std::function<void(io_service&)> timerv_cb_t;
 typedef std::function<void(event_ptr&&)> event_cb_t;
 typedef std::function<bool(event_ptr&)> defer_event_cb_t;
 typedef std::function<void(int, size_t)> completion_cb_t;
@@ -351,14 +351,14 @@ public:
   void expires_from_now() { this->expire_time_ = steady_clock_t::now() + this->duration_; }
 
   // Wait timer timeout once.
-  void async_wait_once(io_service& service, light_timer_cb_t cb)
+  void async_wait_once(io_service& service, timerv_cb_t cb)
   {
 #if YASIO__HAS_CXX14
-    this->async_wait(service, [cb = std::move(cb)]() {
+    this->async_wait(service, [cb = std::move(cb)](io_service& service) {
 #else
-    this->async_wait(service, [cb]() {
+    this->async_wait(service, [cb](io_service& service) {
 #endif
-      cb();
+      cb(service);
       return true;
     });
   }
