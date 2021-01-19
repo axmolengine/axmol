@@ -6,6 +6,7 @@
  * Copyright (c) 2011      Marco Tillemans
  * Copyright (c) 2013-2016 Chukong Technologies Inc.
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ * Copyright (c) 2020-2021 C4games.com.
  *
  * http://www.cocos2d-x.org
  *
@@ -123,6 +124,8 @@ bool ParticleBatchNode::initWithTexture(Texture2D *tex, int capacity)
 {
     _textureAtlas = new (std::nothrow) TextureAtlas();
     _textureAtlas->initWithTexture(tex, capacity);
+    
+    updateProgramStateTexture();
 
     _children.reserve(capacity);
     
@@ -443,7 +446,6 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4 & transform, uint32_
     Mat4 finalMat = projectionMat * transform;
     auto programState = _customCommand.getPipelineDescriptor().programState;
     programState->setUniform(_mvpMatrixLocaiton, finalMat.m, sizeof(finalMat.m));
-
     if (_textureAtlas->isDirty())
     {
         const auto& quads = _textureAtlas->getQuads();
@@ -532,15 +534,18 @@ void ParticleBatchNode::updateBlendFunc()
 void ParticleBatchNode::setTexture(Texture2D* texture)
 {
     _textureAtlas->setTexture(texture);
-    if (texture) {
-        auto programState = _customCommand.getPipelineDescriptor().programState;
-        programState->setTexture(_textureAtlas->getTexture()->getBackendTexture());
-        // If the new texture has No premultiplied alpha, AND the blendFunc hasn't been changed, then update it
-        if (!texture->hasPremultipliedAlpha() && (_blendFunc.src == CC_BLEND_SRC && _blendFunc.dst == CC_BLEND_DST))
-        {
-            _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
-        }
-    }
+    updateProgramStateTexture();
+}
+
+void ParticleBatchNode::updateProgramStateTexture()
+{
+    auto texture = _textureAtlas->getTexture();
+    assert(texture != nullptr);
+    auto programState = _customCommand.getPipelineDescriptor().programState;
+    programState->setTexture(texture->getBackendTexture());
+    // If the new texture has No premultiplied alpha, AND the blendFunc hasn't been changed, then update it
+    if (!texture->hasPremultipliedAlpha() && (_blendFunc.src == CC_BLEND_SRC && _blendFunc.dst == CC_BLEND_DST))
+        _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
 }
 
 Texture2D* ParticleBatchNode::getTexture() const
