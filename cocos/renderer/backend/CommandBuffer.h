@@ -94,7 +94,7 @@ public:
      * Update depthStencil status, improvment: for metal backend cache it
      * @param depthStencilState Specifies the depth and stencil status
      */
-    virtual void updateDepthStencilState(const DepthStencilDescriptor& descriptor) = 0;
+    virtual void updateDepthStencilState(const RenderTarget* rt, const DepthStencilDescriptor& descriptor) = 0;
 
     /**
      * Update render pipeline status

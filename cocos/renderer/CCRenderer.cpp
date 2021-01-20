@@ -198,9 +198,8 @@ void Renderer::init()
 
     auto device = backend::Device::getInstance();
     _commandBuffer = device->newCommandBuffer();
-    // @MTL: the depth stencil flags must same render target and _depthStencilDescriptor
-    _depthStencilDescriptor.depthStencilFlags = TargetBufferFlags::DEPTH_AND_STENCIL;
-    _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | _depthStencilDescriptor.depthStencilFlags);
+    
+    _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
     
     _currentRT = _defaultRT;
     _renderPipeline = device->newRenderPipeline();
@@ -419,11 +418,9 @@ void Renderer::setDepthTest(bool value)
 {
     if (value) {
         _currentRT->addFlag(TargetBufferFlags::DEPTH);
-        _depthStencilDescriptor.addFlag(TargetBufferFlags::DEPTH);
     }
     else {
         _currentRT->removeFlag(TargetBufferFlags::DEPTH);
-        _depthStencilDescriptor.removeFlag(TargetBufferFlags::DEPTH);
     }
 }
 
@@ -431,11 +428,9 @@ void Renderer::setStencilTest(bool value)
 {
     if (value) {
         _currentRT->addFlag(TargetBufferFlags::STENCIL);
-        _depthStencilDescriptor.addFlag(TargetBufferFlags::STENCIL);
     }
     else {
         _currentRT->removeFlag(TargetBufferFlags::STENCIL);
-        _depthStencilDescriptor.removeFlag(TargetBufferFlags::STENCIL);
     }
 }
 
@@ -456,12 +451,12 @@ backend::CompareFunction Renderer::getDepthCompareFunction() const
 
 bool Renderer::Renderer::getDepthTest() const
 {
-    return bitmask::any(_depthStencilDescriptor.depthStencilFlags, TargetBufferFlags::DEPTH);
+    return bitmask::any(_currentRT->getTargetFlags(), TargetBufferFlags::DEPTH);
 }
 
 bool Renderer::getStencilTest() const
 {
-    return bitmask::any(_depthStencilDescriptor.depthStencilFlags, TargetBufferFlags::STENCIL);
+    return bitmask::any(_currentRT->getTargetFlags(), TargetBufferFlags::STENCIL);
 }
 
 bool Renderer::getDepthWrite() const
@@ -642,6 +637,10 @@ void Renderer::drawBatchedTriangles()
     _indexBuffer->updateData(_indices,  _filledIndex * sizeof(_indices[0]));
 #endif
     
+    if(!_currentRT->isDefaultRenderTarget()) {
+        int brk = 0;
+    }
+    
     /************** 2: Draw *************/
     beginRenderPass();
     for (int i = 0; i < batchesTotal; ++i)
@@ -788,7 +787,7 @@ void Renderer::beginRenderPass()
     _commandBuffer->setWinding(_winding);
     _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y, _scissorState.rect.width, _scissorState.rect.height);
     _commandBuffer->setStencilReferenceValue(_stencilRef);
-    _commandBuffer->updateDepthStencilState(_depthStencilDescriptor);
+    _commandBuffer->updateDepthStencilState(_currentRT, _depthStencilDescriptor);
 }
 
 void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder)

@@ -148,9 +148,9 @@ void CommandBufferGL::setRenderPipeline(RenderPipeline* renderPipeline)
 * Update depthStencil status, improvment: for metal backend cache it
 * @param depthStencilState Specifies the depth and stencil status
 */
-void CommandBufferGL::updateDepthStencilState(const DepthStencilDescriptor& descriptor)
+void CommandBufferGL::updateDepthStencilState(const RenderTarget* rt, const DepthStencilDescriptor& descriptor)
 {
-    _depthStencilStateGL->update(descriptor);
+    _depthStencilStateGL->update(rt, descriptor);
 }
 
 /**

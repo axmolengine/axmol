@@ -40,11 +40,7 @@ bool StencilDescriptor::operator==(const StencilDescriptor &rhs) const
 DepthStencilState::~DepthStencilState()
 {}
 
-bool DepthStencilState::isEnabled() const  {
-    return bitmask::any(_depthStencilInfo.depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL);
-}
-
-void DepthStencilState::update(const DepthStencilDescriptor& descriptor) {
+void DepthStencilState::update(const RenderTarget*, const DepthStencilDescriptor& descriptor) {
     _depthStencilInfo = descriptor;
     _isBackFrontStencilEqual = descriptor.backFaceStencil == descriptor.frontFaceStencil;
 }

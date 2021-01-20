@@ -30,6 +30,8 @@ public:
 
     void addFlag(TargetBufferFlags flag) { _flags |= flag; }
     void removeFlag(TargetBufferFlags flag) { _flags &= ~flag; }
+    
+    bool isDepthStencilEnabled() const { return bitmask::any(_flags, RenderTargetFlag::DEPTH_AND_STENCIL); }
 
     virtual void bindFrameBuffer() const {};
     virtual void unbindFrameBuffer() const {};

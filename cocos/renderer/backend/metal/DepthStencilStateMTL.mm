@@ -23,6 +23,7 @@
  ****************************************************************************/
  
 #include "DepthStencilStateMTL.h"
+#include "RenderTargetMTL.h"
 #include "xxhash.h"
 
 CC_BACKEND_BEGIN
@@ -109,29 +110,32 @@ DepthStencilStateMTL::DepthStencilStateMTL(id<MTLDevice> mtlDevice) : _mtlDevice
     
 }
 
-uint32_t DepthStencilStateMTL::hashValue() const
+void DepthStencilStateMTL::update(const RenderTarget* rt, const DepthStencilDescriptor& descriptor)
 {
-    DepthStencilDescriptor hashMe;
-    memset(&hashMe, 0, sizeof(hashMe));
-    
-    hashMe.depthCompareFunction = _depthStencilInfo.depthCompareFunction;
-    hashMe.backFaceStencil = _depthStencilInfo.backFaceStencil;
-    hashMe.frontFaceStencil = _depthStencilInfo.frontFaceStencil;
-    hashMe.depthWriteEnabled = _depthStencilInfo.depthWriteEnabled;
-    hashMe.depthStencilFlags = _depthStencilInfo.depthStencilFlags;
-    
-    return XXH32((const void*)&hashMe, sizeof(hashMe), 0);
-}
+    DepthStencilState::update(rt, descriptor);
 
-void DepthStencilStateMTL::update(const DepthStencilDescriptor& descriptor)
-{
-    DepthStencilState::update(descriptor);
-    if(!isEnabled()) {
+    if(!rt->isDepthStencilEnabled()) {
         _mtlDepthStencilState = nil;
         return;
     }
     
-    auto key = hashValue();
+    struct
+    { 
+        CompareFunction depthCompareFunction = CompareFunction::LESS;
+        StencilDescriptor backFaceStencil;
+        StencilDescriptor frontFaceStencil;
+        bool depthWriteEnabled = false;
+        TargetBufferFlags depthStencilFlags = {};
+    } hashMe;
+    memset(&hashMe, 0, sizeof(hashMe));
+
+    auto rtflags = rt->getTargetFlags();
+    hashMe.depthCompareFunction = _depthStencilInfo.depthCompareFunction;
+    hashMe.backFaceStencil = _depthStencilInfo.backFaceStencil;
+    hashMe.frontFaceStencil = _depthStencilInfo.frontFaceStencil;
+    hashMe.depthWriteEnabled = _depthStencilInfo.depthWriteEnabled;
+    hashMe.depthStencilFlags = rtflags;
+    uint32_t key = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
     auto it = _mtlStateCache.find(key);
     if(it != _mtlStateCache.end()) {
         _mtlDepthStencilState = it->second;
@@ -140,14 +144,14 @@ void DepthStencilStateMTL::update(const DepthStencilDescriptor& descriptor)
     
     MTLDepthStencilDescriptor* mtlDescriptor = [[MTLDepthStencilDescriptor alloc] init];
 
-    if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
+    if (bitmask::any(rtflags, TargetBufferFlags::DEPTH))
         mtlDescriptor.depthCompareFunction = toMTLCompareFunction(descriptor.depthCompareFunction);
     else
         mtlDescriptor.depthCompareFunction = MTLCompareFunctionAlways;
 
     mtlDescriptor.depthWriteEnabled = descriptor.depthWriteEnabled;
 
-    if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
+    if (bitmask::any(rtflags, TargetBufferFlags::STENCIL))
     {
         setMTLStencilDescriptor(mtlDescriptor.frontFaceStencil, descriptor.frontFaceStencil);
         setMTLStencilDescriptor(mtlDescriptor.backFaceStencil, descriptor.backFaceStencil);

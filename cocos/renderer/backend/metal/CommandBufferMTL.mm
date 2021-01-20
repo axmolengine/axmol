@@ -239,9 +239,9 @@ void CommandBufferMTL::beginRenderPass(const RenderTarget* renderTarget, const R
 }
 
 
-void CommandBufferMTL::updateDepthStencilState(const DepthStencilDescriptor& descriptor)
+void CommandBufferMTL::updateDepthStencilState(const RenderTarget* rt, const DepthStencilDescriptor& descriptor)
 {
-    _depthStencilStateMTL->update(descriptor);
+    _depthStencilStateMTL->update(rt, descriptor);
 }
 
 void CommandBufferMTL::updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor)
