@@ -140,14 +140,14 @@ void DepthStencilStateMTL::update(const DepthStencilDescriptor& descriptor)
     
     MTLDepthStencilDescriptor* mtlDescriptor = [[MTLDepthStencilDescriptor alloc] init];
 
-    if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
+    if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::DEPTH))
         mtlDescriptor.depthCompareFunction = toMTLCompareFunction(descriptor.depthCompareFunction);
     else
         mtlDescriptor.depthCompareFunction = MTLCompareFunctionAlways;
 
     mtlDescriptor.depthWriteEnabled = descriptor.depthWriteEnabled;
 
-    if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
+    if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::STENCIL))
     {
         setMTLStencilDescriptor(mtlDescriptor.frontFaceStencil, descriptor.frontFaceStencil);
         setMTLStencilDescriptor(mtlDescriptor.backFaceStencil, descriptor.backFaceStencil);
