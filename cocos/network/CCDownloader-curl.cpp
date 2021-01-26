@@ -38,6 +38,7 @@
 #include "platform/CCFileStream.h"
 #include "md5/md5.h"
 #include "yasio/xxsocket.hpp"
+#include <inttypes.h>
 
 // **NOTE**
 // In the file:
@@ -480,7 +481,7 @@ namespace cocos2d { namespace network {
                 if (coTask->_acceptRanges && coTask->_totalBytesReceived > 0)
                 {
                     char buf[128];
-                    sprintf(buf, "%lld-", coTask->_totalBytesReceived);
+                    sprintf(buf, "%" PRId64 "-", coTask->_totalBytesReceived);
                     curl_easy_setopt(handle, CURLOPT_RANGE, buf);
                     curl_easy_setopt(handle, CURLOPT_RESUME_FROM_LARGE,(curl_off_t)coTask->_totalBytesReceived);
                 }

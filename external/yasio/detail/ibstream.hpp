@@ -188,6 +188,7 @@ public:
   const char* data() const { return first_; }
 
   void advance(ptrdiff_t offset) { ptr_ += offset; }
+  ptrdiff_t tell() const { return ptr_ - first_; }
   ptrdiff_t seek(ptrdiff_t offset, int whence)
   {
     switch (whence)
