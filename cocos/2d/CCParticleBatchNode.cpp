@@ -540,7 +540,8 @@ void ParticleBatchNode::setTexture(Texture2D* texture)
 void ParticleBatchNode::updateProgramStateTexture()
 {
     auto texture = _textureAtlas->getTexture();
-    assert(texture != nullptr);
+    if (!texture) 
+        return;
     auto programState = _customCommand.getPipelineDescriptor().programState;
     programState->setTexture(texture->getBackendTexture());
     // If the new texture has No premultiplied alpha, AND the blendFunc hasn't been changed, then update it
