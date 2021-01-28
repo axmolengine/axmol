@@ -49,7 +49,7 @@ CustomCommand::CustomCommand(const CustomCommand& rhs)
 
 CustomCommand::CustomCommand(CustomCommand&& rhs)
 {
-    this->assign(rhs);
+    this->assign(std::move(rhs));
 }
 
 CustomCommand& CustomCommand::operator=(const CustomCommand& rhs)
@@ -60,7 +60,7 @@ CustomCommand& CustomCommand::operator=(const CustomCommand& rhs)
 
 CustomCommand& CustomCommand::operator=(CustomCommand&& rhs)
 {
-    this->assign(rhs);
+    this->assign(std::move(rhs));
     return *this;
 }
 // Note: The use of offsetof below is technically undefined until C++17

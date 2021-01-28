@@ -208,7 +208,7 @@ private:
     void afterDraw();
     void flush();
     void flushCaptureCommands();
-    id<MTLRenderCommandEncoder> getRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassDescriptor& renderPassParams);
+    void updateRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassDescriptor& renderPassParams);
 
     id<MTLCommandBuffer> _mtlCommandBuffer = nil;
     id<MTLCommandQueue> _mtlCommandQueue = nil;

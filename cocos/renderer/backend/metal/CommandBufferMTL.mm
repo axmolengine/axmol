@@ -202,7 +202,7 @@ bool CommandBufferMTL::beginFrame()
     return false;
 }
 
-id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassDescriptor& renderPassDesc)
+void CommandBufferMTL::updateRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassDescriptor& renderPassDesc)
 {
     if(_mtlRenderEncoder != nil &&
        _currentRenderPassDesc == renderPassDesc &&
@@ -226,15 +226,13 @@ id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const Rend
     auto mtlDescriptor = toMTLRenderPassDescriptor(renderTarget, renderPassDesc);
     _renderTargetWidth = (unsigned int)mtlDescriptor.colorAttachments[0].texture.width;
     _renderTargetHeight = (unsigned int)mtlDescriptor.colorAttachments[0].texture.height;
-    id<MTLRenderCommandEncoder> mtlRenderEncoder = [_mtlCommandBuffer renderCommandEncoderWithDescriptor:mtlDescriptor];
-    [mtlRenderEncoder retain];
-    
-    return mtlRenderEncoder;
+    _mtlRenderEncoder = [_mtlCommandBuffer renderCommandEncoderWithDescriptor:mtlDescriptor];
+    [_mtlRenderEncoder retain];
 }
 
 void CommandBufferMTL::beginRenderPass(const RenderTarget* renderTarget, const RenderPassDescriptor& renderPassDesc)
 {
-    _mtlRenderEncoder = getRenderCommandEncoder(renderTarget, renderPassDesc);
+    updateRenderCommandEncoder(renderTarget, renderPassDesc);
 //    [_mtlRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
 }
 
