@@ -3,7 +3,7 @@
 
 CC_BACKEND_BEGIN
 
-static MTLLoadAction getLoadAction(const RenderPassParams& params,
+static MTLLoadAction getLoadAction(const RenderPassDescriptor& params,
                                    TargetBufferFlags buffer) {
     const auto clearFlags = (TargetBufferFlags) params.flags.clear;
     const auto discardStartFlags = params.flags.discardStart;
@@ -15,7 +15,7 @@ static MTLLoadAction getLoadAction(const RenderPassParams& params,
     return MTLLoadActionLoad;
 }
 
-static MTLStoreAction getStoreAction(const RenderPassParams& params,
+static MTLStoreAction getStoreAction(const RenderPassDescriptor& params,
                                      TargetBufferFlags buffer) {
     const auto discardEndFlags = params.flags.discardEnd;
     if (bitmask::any(discardEndFlags, buffer)) {
@@ -59,7 +59,7 @@ void RenderTargetMTL::setStencilAttachment(TextureBackend* attachment, int level
     
 }
 
-void RenderTargetMTL::applyRenderPassAttachments(const RenderPassParams& params, MTLRenderPassDescriptor* descriptor) const
+void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& params, MTLRenderPassDescriptor* descriptor) const
 {
     const auto discardFlags = params.flags.discardEnd;
     

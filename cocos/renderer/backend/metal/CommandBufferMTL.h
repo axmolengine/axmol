@@ -75,11 +75,11 @@ public:
     virtual bool beginFrame() override;
     
     /**
-     * Create a MTLRenderCommandEncoder object for graphics rendering to an attachment in a RenderPassParams.
-     * MTLRenderCommandEncoder is cached if current RenderPassParams is identical to previous one.
+     * Create a MTLRenderCommandEncoder object for graphics rendering to an attachment in a RenderPassDescriptor.
+     * MTLRenderCommandEncoder is cached if current RenderPassDescriptor is identical to previous one.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassParams& descriptor) override;
+    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassDescriptor& descriptor) override;
 
     /**
      * Update depthStencil status, improvment: for metal backend cache it
@@ -208,7 +208,7 @@ private:
     void afterDraw();
     void flush();
     void flushCaptureCommands();
-    id<MTLRenderCommandEncoder> getRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassParams& renderPassParams);
+    id<MTLRenderCommandEncoder> getRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassDescriptor& renderPassParams);
 
     id<MTLCommandBuffer> _mtlCommandBuffer = nil;
     id<MTLCommandQueue> _mtlCommandQueue = nil;
@@ -225,7 +225,7 @@ private:
     
     dispatch_semaphore_t _frameBoundarySemaphore;
     const RenderTarget* _currentRenderTarget = nil; // weak ref
-    RenderPassParams _currentRenderPassParams;
+    RenderPassDescriptor _currentRenderPassDesc;
     TargetBufferFlags _currentRenderTargetFlags = TargetBufferFlags::NONE;
     NSAutoreleasePool* _autoReleasePool = nil;
     

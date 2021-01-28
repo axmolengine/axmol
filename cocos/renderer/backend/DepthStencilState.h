@@ -59,7 +59,6 @@ struct DepthStencilDescriptor
     CompareFunction depthCompareFunction = CompareFunction::LESS;
     StencilDescriptor backFaceStencil;
     StencilDescriptor frontFaceStencil;
-    bool depthWriteEnabled = false;
     TargetBufferFlags depthStencilFlags = {};
 
     void addFlag(TargetBufferFlags flag) { depthStencilFlags |= flag; }

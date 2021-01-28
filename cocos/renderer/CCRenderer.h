@@ -491,10 +491,10 @@ protected:
     TriangleCommandBufferManager _triangleCommandBufferManager;
     
     backend::CommandBuffer* _commandBuffer = nullptr;
-    backend::RenderPassParams _renderPassParams;
+    backend::RenderPassDescriptor _renderPassDesc;
 
     backend::DepthStencilState* _depthStencilState = nullptr;
-    backend::DepthStencilDescriptor _depthStencilDescriptor;
+    backend::DepthStencilDescriptor _depthStencilDesc;
 
     // Internal structure that has the information for the batches
     struct TriBatchToDraw

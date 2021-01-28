@@ -46,6 +46,9 @@ bool DepthStencilState::isEnabled() const  {
 
 void DepthStencilState::update(const DepthStencilDescriptor& descriptor) {
     _depthStencilInfo = descriptor;
+    auto& depthStencilFlags = _depthStencilInfo.depthStencilFlags;
+    if(!bitmask::any(depthStencilFlags, TargetBufferFlags::DEPTH))
+        _depthStencilInfo.removeFlag(TargetBufferFlags::DEPTH_WRITE);
     _isBackFrontStencilEqual = descriptor.backFaceStencil == descriptor.frontFaceStencil;
 }
 

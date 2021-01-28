@@ -280,6 +280,7 @@ enum class TargetBufferFlags : uint8_t {
     COLOR_ALL = COLOR0 | COLOR1 | COLOR2 | COLOR3,
     DEPTH = 0x10u,                          //!< Depth buffer selected.
     STENCIL = 0x20u,                        //!< Stencil buffer selected.
+    DEPTH_WRITE = 0x40u,                    //!< Depth write enabled, depends on DEPTH
     DEPTH_AND_STENCIL = DEPTH | STENCIL,    //!< depth and stencil buffer selected.
     ALL = COLOR_ALL | DEPTH | STENCIL       //!< Color, depth and stencil buffer selected.
 };

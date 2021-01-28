@@ -71,7 +71,7 @@ bool CommandBufferGL::beginFrame()
     return true;
 }
 
-void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassParams& descirptor)
+void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDescriptor& descirptor)
 {
     auto rtGL = static_cast<const RenderTargetGL*>(rt);
     

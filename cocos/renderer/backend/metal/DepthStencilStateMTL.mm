@@ -117,7 +117,6 @@ uint32_t DepthStencilStateMTL::hashValue() const
     hashMe.depthCompareFunction = _depthStencilInfo.depthCompareFunction;
     hashMe.backFaceStencil = _depthStencilInfo.backFaceStencil;
     hashMe.frontFaceStencil = _depthStencilInfo.frontFaceStencil;
-    hashMe.depthWriteEnabled = _depthStencilInfo.depthWriteEnabled;
     hashMe.depthStencilFlags = _depthStencilInfo.depthStencilFlags;
     
     return XXH32((const void*)&hashMe, sizeof(hashMe), 0);
@@ -126,7 +125,9 @@ uint32_t DepthStencilStateMTL::hashValue() const
 void DepthStencilStateMTL::update(const DepthStencilDescriptor& descriptor)
 {
     DepthStencilState::update(descriptor);
-    if(!isEnabled()) {
+    
+    auto depthStencilFlags = _depthStencilInfo.depthStencilFlags;
+    if(!bitmask::any(depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL)) {
         _mtlDepthStencilState = nil;
         return;
     }
@@ -140,17 +141,17 @@ void DepthStencilStateMTL::update(const DepthStencilDescriptor& descriptor)
     
     MTLDepthStencilDescriptor* mtlDescriptor = [[MTLDepthStencilDescriptor alloc] init];
 
-    if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::DEPTH))
-        mtlDescriptor.depthCompareFunction = toMTLCompareFunction(descriptor.depthCompareFunction);
+    if (bitmask::any(depthStencilFlags, TargetBufferFlags::DEPTH))
+        mtlDescriptor.depthCompareFunction = toMTLCompareFunction(_depthStencilInfo.depthCompareFunction);
     else
         mtlDescriptor.depthCompareFunction = MTLCompareFunctionAlways;
 
-    mtlDescriptor.depthWriteEnabled = descriptor.depthWriteEnabled;
+    mtlDescriptor.depthWriteEnabled = bitmask::any(depthStencilFlags, TargetBufferFlags::DEPTH_WRITE);
 
-    if (bitmask::any(descriptor.depthStencilFlags, TargetBufferFlags::STENCIL))
+    if (bitmask::any(depthStencilFlags, TargetBufferFlags::STENCIL))
     {
-        setMTLStencilDescriptor(mtlDescriptor.frontFaceStencil, descriptor.frontFaceStencil);
-        setMTLStencilDescriptor(mtlDescriptor.backFaceStencil, descriptor.backFaceStencil);
+        setMTLStencilDescriptor(mtlDescriptor.frontFaceStencil, _depthStencilInfo.frontFaceStencil);
+        setMTLStencilDescriptor(mtlDescriptor.backFaceStencil, _depthStencilInfo.backFaceStencil);
     }
 
     _mtlDepthStencilState = [_mtlDevice newDepthStencilStateWithDescriptor:mtlDescriptor];
