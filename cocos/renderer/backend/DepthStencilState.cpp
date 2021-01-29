@@ -41,9 +41,9 @@ bool StencilDescriptor::operator==(const StencilDescriptor &rhs) const
 DepthStencilState::~DepthStencilState()
 {}
 
-void DepthStencilState::update(const RenderTarget* rt) {
-    _depthStencilInfo = rt->_dsDesc;
-    _isBackFrontStencilEqual = _depthStencilInfo.backFaceStencil == _depthStencilInfo.frontFaceStencil;
+void DepthStencilState::update(const DepthStencilDescriptor& dsDesc) {
+    _depthStencilInfo = dsDesc;
+    _isBackFrontStencilEqual = dsDesc.backFaceStencil == dsDesc.frontFaceStencil;
 }
 
 CC_BACKEND_END

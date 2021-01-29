@@ -494,7 +494,7 @@ protected:
     backend::RenderPassDescriptor _renderPassDesc;
 
     backend::DepthStencilState* _depthStencilState = nullptr;
-    // backend::DepthStencilDescriptor _depthStencilDesc;
+    backend::DepthStencilDescriptor _dsDesc;
 
     // Internal structure that has the information for the batches
     struct TriBatchToDraw

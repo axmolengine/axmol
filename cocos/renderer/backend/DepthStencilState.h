@@ -60,6 +60,10 @@ struct DepthStencilDescriptor
     CompareFunction depthCompareFunction = CompareFunction::LESS;
     StencilDescriptor backFaceStencil;
     StencilDescriptor frontFaceStencil;
+    void addFlag(DepthStencilFlags flag) { this->flags |= flag; }
+    void removeFlag(DepthStencilFlags flag) { this->flags &= ~flag; }
+    // must match current render target
+    DepthStencilFlags flags = DepthStencilFlags::ALL;
 };
 
 /**
@@ -68,7 +72,7 @@ struct DepthStencilDescriptor
 class DepthStencilState : public cocos2d::Ref
 {
 public:
-    virtual void update(const RenderTarget* rt);
+    virtual void update(const DepthStencilDescriptor& desc);
     const DepthStencilDescriptor& getDepthStencilInfo()const { return _depthStencilInfo; }
 protected:
     /**

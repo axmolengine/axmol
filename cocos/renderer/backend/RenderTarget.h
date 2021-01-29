@@ -63,7 +63,6 @@ public:
     RenderBuffer _stencil{};
     TargetBufferFlags _flags{};
     
-    backend::DepthStencilDescriptor _dsDesc;
 protected:
     bool _defaultRenderTarget = false;
     // uint8_t samples = 1;

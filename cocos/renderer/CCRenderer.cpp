@@ -198,8 +198,8 @@ void Renderer::init()
 
     auto device = backend::Device::getInstance();
     _commandBuffer = device->newCommandBuffer();
-    // @MTL: the depth stencil flags must same render target and _currentRT->_dsDesc
-    // _currentRT->_dsDesc.depthStencilFlags = TargetBufferFlags::DEPTH_AND_STENCIL;
+    // @MTL: the depth stencil flags must same render target and _dsDesc
+    // _dsDesc.depthStencilFlags = TargetBufferFlags::DEPTH_AND_STENCIL;
     _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
     
     _currentRT = _defaultRT;
@@ -419,11 +419,11 @@ void Renderer::setDepthTest(bool value)
 {
     if (value) {
         _currentRT->addFlag(TargetBufferFlags::DEPTH);
-        // _currentRT->_dsDesc.addFlag(TargetBufferFlags::DEPTH);
+        _dsDesc.addFlag(DepthStencilFlags::DEPTH_TEST);
     }
     else {
         _currentRT->removeFlag(TargetBufferFlags::DEPTH);
-        // _currentRT->_dsDesc.removeFlag(TargetBufferFlags::DEPTH);
+        _dsDesc.removeFlag(DepthStencilFlags::DEPTH_TEST);
     }
 }
 
@@ -431,54 +431,54 @@ void Renderer::setStencilTest(bool value)
 {
     if (value) {
         _currentRT->addFlag(TargetBufferFlags::STENCIL);
-        // _currentRT->_dsDesc.addFlag(TargetBufferFlags::STENCIL);
+        _dsDesc.addFlag(DepthStencilFlags::STENCIL_TEST);
     }
     else {
         _currentRT->removeFlag(TargetBufferFlags::STENCIL);
-        // _currentRT->_dsDesc.removeFlag(TargetBufferFlags::STENCIL);
+        _dsDesc.removeFlag(DepthStencilFlags::STENCIL_TEST);
     }
 }
 
 void Renderer::setDepthWrite(bool value)
 {
     if(value)
-        _currentRT->addFlag(TargetBufferFlags::DEPTH_WRITE);
+        _dsDesc.addFlag(DepthStencilFlags::DEPTH_WRITE);
     else
-        _currentRT->removeFlag(TargetBufferFlags::DEPTH_WRITE);
+        _dsDesc.removeFlag(DepthStencilFlags::DEPTH_WRITE);
 }
 
 void Renderer::setDepthCompareFunction(backend::CompareFunction func)
 {
-    _currentRT->_dsDesc.depthCompareFunction = func;
+    _dsDesc.depthCompareFunction = func;
 }
 
 backend::CompareFunction Renderer::getDepthCompareFunction() const
 {
-    return _currentRT->_dsDesc.depthCompareFunction;
+    return _dsDesc.depthCompareFunction;
 }
 
 bool Renderer::Renderer::getDepthTest() const
 {
-    return bitmask::any(_currentRT->getTargetFlags(), TargetBufferFlags::DEPTH);
+    return bitmask::any(_dsDesc.flags, DepthStencilFlags::DEPTH_TEST);
 }
 
 bool Renderer::getStencilTest() const
 {
-    return bitmask::any(_currentRT->getTargetFlags(), TargetBufferFlags::STENCIL);
+    return bitmask::any(_dsDesc.flags, DepthStencilFlags::STENCIL_TEST);
 }
 
 bool Renderer::getDepthWrite() const
 {
-    return bitmask::any(_currentRT->getTargetFlags(), TargetBufferFlags::DEPTH_WRITE);
+    return bitmask::any(_dsDesc.flags, DepthStencilFlags::DEPTH_WRITE);
 }
 
 void Renderer::setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)
 {
-    _currentRT->_dsDesc.frontFaceStencil.stencilCompareFunction = func;
-    _currentRT->_dsDesc.backFaceStencil.stencilCompareFunction = func;
+    _dsDesc.frontFaceStencil.stencilCompareFunction = func;
+    _dsDesc.backFaceStencil.stencilCompareFunction = func;
 
-    _currentRT->_dsDesc.frontFaceStencil.readMask = readMask;
-    _currentRT->_dsDesc.backFaceStencil.readMask = readMask;
+    _dsDesc.frontFaceStencil.readMask = readMask;
+    _dsDesc.backFaceStencil.readMask = readMask;
 
     _stencilRef = ref;
 }
@@ -487,50 +487,50 @@ void Renderer::setStencilOperation(backend::StencilOperation stencilFailureOp,
                              backend::StencilOperation depthFailureOp,
                              backend::StencilOperation stencilDepthPassOp)
 {
-    _currentRT->_dsDesc.frontFaceStencil.stencilFailureOperation = stencilFailureOp;
-    _currentRT->_dsDesc.backFaceStencil.stencilFailureOperation = stencilFailureOp;
+    _dsDesc.frontFaceStencil.stencilFailureOperation = stencilFailureOp;
+    _dsDesc.backFaceStencil.stencilFailureOperation = stencilFailureOp;
 
-    _currentRT->_dsDesc.frontFaceStencil.depthFailureOperation = depthFailureOp;
-    _currentRT->_dsDesc.backFaceStencil.depthFailureOperation = depthFailureOp;
+    _dsDesc.frontFaceStencil.depthFailureOperation = depthFailureOp;
+    _dsDesc.backFaceStencil.depthFailureOperation = depthFailureOp;
 
-    _currentRT->_dsDesc.frontFaceStencil.depthStencilPassOperation = stencilDepthPassOp;
-    _currentRT->_dsDesc.backFaceStencil.depthStencilPassOperation = stencilDepthPassOp;
+    _dsDesc.frontFaceStencil.depthStencilPassOperation = stencilDepthPassOp;
+    _dsDesc.backFaceStencil.depthStencilPassOperation = stencilDepthPassOp;
 }
 
 void Renderer::setStencilWriteMask(unsigned int mask)
 {
-    _currentRT->_dsDesc.frontFaceStencil.writeMask = mask;
-    _currentRT->_dsDesc.backFaceStencil.writeMask = mask;
+    _dsDesc.frontFaceStencil.writeMask = mask;
+    _dsDesc.backFaceStencil.writeMask = mask;
 }
 
 backend::StencilOperation Renderer::getStencilFailureOperation() const
 {
-    return _currentRT->_dsDesc.frontFaceStencil.stencilFailureOperation;
+    return _dsDesc.frontFaceStencil.stencilFailureOperation;
 }
 
 backend::StencilOperation Renderer::getStencilPassDepthFailureOperation() const
 {
-    return _currentRT->_dsDesc.frontFaceStencil.depthFailureOperation;
+    return _dsDesc.frontFaceStencil.depthFailureOperation;
 }
 
 backend::StencilOperation Renderer::getStencilDepthPassOperation() const
 {
-    return _currentRT->_dsDesc.frontFaceStencil.depthStencilPassOperation;
+    return _dsDesc.frontFaceStencil.depthStencilPassOperation;
 }
 
 backend::CompareFunction Renderer::getStencilCompareFunction() const
 {
-    return _currentRT->_dsDesc.depthCompareFunction;
+    return _dsDesc.depthCompareFunction;
 }
 
 unsigned int Renderer::getStencilReadMask() const
 {
-    return _currentRT->_dsDesc.frontFaceStencil.readMask;
+    return _dsDesc.frontFaceStencil.readMask;
 }
 
 unsigned int Renderer::getStencilWriteMask() const
 {
-    return _currentRT->_dsDesc.frontFaceStencil.writeMask;
+    return _dsDesc.frontFaceStencil.writeMask;
 }
 
 unsigned int Renderer::getStencilReferenceValue() const
@@ -786,7 +786,7 @@ void Renderer::readPixels(backend::RenderTarget* rt, std::function<void(const ba
 void Renderer::beginRenderPass()
 {
     _commandBuffer->beginRenderPass(_currentRT, _renderPassDesc);
-    _commandBuffer->updateDepthStencilState(_currentRT->_dsDesc);
+    _commandBuffer->updateDepthStencilState(_dsDesc);
     _commandBuffer->setStencilReferenceValue(_stencilRef);
 
     _commandBuffer->setViewport(_viewport.x, _viewport.y, _viewport.w, _viewport.h);

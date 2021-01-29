@@ -657,6 +657,7 @@ using TextureUsage = backend::TextureUsage;
 using PixelFormat = backend::PixelFormat;
 
 using TargetBufferFlags = backend::TargetBufferFlags;
+using DepthStencilFlags = backend::DepthStencilFlags;
 using RenderTargetFlag = backend::RenderTargetFlag;
 using ClearFlag = backend::ClearFlag;
 
