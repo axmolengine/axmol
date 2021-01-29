@@ -187,19 +187,16 @@ void CommandBufferMTL::setRenderPipeline(RenderPipeline* renderPipeline)
 
 bool CommandBufferMTL::beginFrame()
 {
-    if(DeviceMTL::getCurrentDrawable()) {
-        _autoReleasePool = [[NSAutoreleasePool alloc] init];
-        dispatch_semaphore_wait(_frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
+    _autoReleasePool = [[NSAutoreleasePool alloc] init];
+    dispatch_semaphore_wait(_frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
 
-        _mtlCommandBuffer = [_mtlCommandQueue commandBuffer];
-        // [_mtlCommandBuffer enqueue];
-        // commit will enqueue automatically
-        [_mtlCommandBuffer retain];
+    _mtlCommandBuffer = [_mtlCommandQueue commandBuffer];
+    // [_mtlCommandBuffer enqueue];
+    // commit will enqueue automatically
+    [_mtlCommandBuffer retain];
 
-        BufferManager::beginFrame();
-        return true;
-    }
-    return false;
+    BufferManager::beginFrame();
+    return true;
 }
 
 void CommandBufferMTL::updateRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassDescriptor& renderPassDesc)

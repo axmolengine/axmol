@@ -87,7 +87,9 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     auto renderer = director->getRenderer();
     auto eventDispatcher = director->getEventDispatcher();
 
-    s_captureScreenListener = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW, [=](EventCustom* /*event*/) {
+    // Metal: needs setFrameBufferOnly before draw
+    // TODO: GL: needs AFTER_DRAW
+    s_captureScreenListener = eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom* /*event*/) {
         eventDispatcher->removeEventListener(s_captureScreenListener);
         s_captureScreenListener = nullptr;
         // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
