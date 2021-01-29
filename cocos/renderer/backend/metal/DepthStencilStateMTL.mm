@@ -113,7 +113,7 @@ void DepthStencilStateMTL::update(const DepthStencilDescriptor& dsDesc)
 {
     DepthStencilState::update(dsDesc);
     
-    if(!bitmask::any(dsDesc.flags, DepthStencilFlags::DEPTH_TEST | DepthStencilFlags::STENCIL_TEST)) {
+    if(!isEnabled()) {
         _mtlDepthStencilState = nil;
         return;
     }
