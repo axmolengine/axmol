@@ -108,7 +108,9 @@ private:
     void onAfterDraw();
     
 private:
-    cocos2d::RenderTexture* _rend;
+    cocos2d::Renderer* _renderer;
+    bool _stencilTest;
+    cocos2d::RenderTexture* _rtx;
     cocos2d::Sprite* _spriteDS;
     cocos2d::Sprite* _spriteDraw;
 };

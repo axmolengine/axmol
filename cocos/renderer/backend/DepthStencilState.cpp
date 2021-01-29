@@ -23,6 +23,7 @@
  ****************************************************************************/
  
 #include "DepthStencilState.h"
+#include "RenderTarget.h"
 
 CC_BACKEND_BEGIN
 
@@ -40,13 +41,9 @@ bool StencilDescriptor::operator==(const StencilDescriptor &rhs) const
 DepthStencilState::~DepthStencilState()
 {}
 
-bool DepthStencilState::isEnabled() const  {
-    return bitmask::any(_depthStencilInfo.depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL);
-}
-
-void DepthStencilState::update(const DepthStencilDescriptor& descriptor) {
-    _depthStencilInfo = descriptor;
-    _isBackFrontStencilEqual = descriptor.backFaceStencil == descriptor.frontFaceStencil;
+void DepthStencilState::update(const RenderTarget* rt) {
+    _depthStencilInfo = rt->_dsDesc;
+    _isBackFrontStencilEqual = _depthStencilInfo.backFaceStencil == _depthStencilInfo.frontFaceStencil;
 }
 
 CC_BACKEND_END

@@ -23,6 +23,7 @@
  ****************************************************************************/
  
 #include "DepthStencilStateMTL.h"
+#include "../RenderTarget.h"
 #include "xxhash.h"
 
 CC_BACKEND_BEGIN
@@ -109,30 +110,30 @@ DepthStencilStateMTL::DepthStencilStateMTL(id<MTLDevice> mtlDevice) : _mtlDevice
     
 }
 
-uint32_t DepthStencilStateMTL::hashValue() const
+void DepthStencilStateMTL::update(const RenderTarget* rt)
 {
-    DepthStencilDescriptor hashMe;
-    memset(&hashMe, 0, sizeof(hashMe));
+    DepthStencilState::update(rt);
     
-    hashMe.depthCompareFunction = _depthStencilInfo.depthCompareFunction;
-    hashMe.backFaceStencil = _depthStencilInfo.backFaceStencil;
-    hashMe.frontFaceStencil = _depthStencilInfo.frontFaceStencil;
-    hashMe.depthStencilFlags = _depthStencilInfo.depthStencilFlags;
-    
-    return XXH32((const void*)&hashMe, sizeof(hashMe), 0);
-}
-
-void DepthStencilStateMTL::update(const DepthStencilDescriptor& descriptor)
-{
-    DepthStencilState::update(descriptor);
-    
-    auto depthStencilFlags = _depthStencilInfo.depthStencilFlags;
+    auto depthStencilFlags = rt->getTargetFlags();
     if(!bitmask::any(depthStencilFlags, TargetBufferFlags::DEPTH_AND_STENCIL)) {
         _mtlDepthStencilState = nil;
         return;
     }
     
-    auto key = hashValue();
+    struct
+    {
+        CompareFunction depthCompareFunction;
+        StencilDescriptor backFaceStencil;
+        StencilDescriptor frontFaceStencil;
+        TargetBufferFlags depthStencilFlags;
+    } hashMe;
+    memset(&hashMe, 0, sizeof(hashMe));
+    hashMe.depthCompareFunction = _depthStencilInfo.depthCompareFunction;
+    hashMe.backFaceStencil = _depthStencilInfo.backFaceStencil;
+    hashMe.frontFaceStencil = _depthStencilInfo.frontFaceStencil;
+    hashMe.depthStencilFlags = depthStencilFlags;
+    
+    auto key = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
     auto it = _mtlStateCache.find(key);
     if(it != _mtlStateCache.end()) {
         _mtlDepthStencilState = it->second;

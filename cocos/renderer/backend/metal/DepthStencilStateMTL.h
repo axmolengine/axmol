@@ -50,9 +50,7 @@ public:
     DepthStencilStateMTL(id<MTLDevice> mtlDevice);
     ~DepthStencilStateMTL();
     
-    uint32_t hashValue() const;
-    
-    void update(const DepthStencilDescriptor& descriptor) override;
+    void update(const RenderTarget* rt) override;
     
     /// @name Setters & Getters
     /**
