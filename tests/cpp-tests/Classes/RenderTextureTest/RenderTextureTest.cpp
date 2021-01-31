@@ -510,17 +510,17 @@ RenderTextureTestDepthStencil::~RenderTextureTestDepthStencil()
 {
     CC_SAFE_RELEASE(_spriteDraw);
     CC_SAFE_RELEASE(_spriteDS);
-    _renderer->setStencilTest(_stencilTest); // restore it
+    // _renderer->setStencilTest(_stencilTest); // restore it, will cause render issue
 }
 
 void RenderTextureTestDepthStencil::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
     _rtx->beginWithClear(0, 0, 0, 0, 0, 0);
-    
+	
     _renderCmds[0].init(_globalZOrder);
     _renderCmds[0].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
     renderer->addCommand(&_renderCmds[0]);
-    
+
     _renderCmds[1].init(_globalZOrder);
     _renderCmds[1].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
     renderer->addCommand(&_renderCmds[1]);

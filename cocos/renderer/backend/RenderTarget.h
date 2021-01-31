@@ -2,7 +2,6 @@
 
 #include "base/CCRef.h"
 #include "Texture.h"
-#include "DepthStencilState.h"
 #include <assert.h>
 
 CC_BACKEND_BEGIN
@@ -62,7 +61,6 @@ public:
     RenderBuffer _depth{};
     RenderBuffer _stencil{};
     TargetBufferFlags _flags{};
-    
 protected:
     bool _defaultRenderTarget = false;
     // uint8_t samples = 1;

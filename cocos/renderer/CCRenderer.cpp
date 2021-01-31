@@ -199,7 +199,7 @@ void Renderer::init()
     auto device = backend::Device::getInstance();
     _commandBuffer = device->newCommandBuffer();
     // @MTL: the depth stencil flags must same render target and _dsDesc
-    // _dsDesc.depthStencilFlags = TargetBufferFlags::DEPTH_AND_STENCIL;
+    _dsDesc.flags = DepthStencilFlags::DEPTH_TEST | DepthStencilFlags::STENCIL_TEST;
     _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
     
     _currentRT = _defaultRT;
