@@ -31,7 +31,7 @@
 
 #include "Macros.h"
 #include "Types.h"
-#include "RenderPassParams.h"
+#include "RenderPassDescriptor.h"
 #include "PixelBufferDescriptor.h"
 #include "CCStdC.h"
 #include "ProgramState.h"
@@ -87,7 +87,7 @@ public:
      * Begin a render pass, initial color, depth and stencil attachment.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassParams& descriptor) = 0;
+    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassDescriptor& descriptor) = 0;
     
 
     /**
