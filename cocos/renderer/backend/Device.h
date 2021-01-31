@@ -26,7 +26,7 @@
 
 #include "Macros.h"
 #include "Types.h"
-#include "RenderPassParams.h"
+#include "RenderPassDescriptor.h"
 #include "Texture.h"
 #include "DepthStencilState.h"
 #include "ProgramCache.h"

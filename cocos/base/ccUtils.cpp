@@ -87,7 +87,12 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     auto renderer = director->getRenderer();
     auto eventDispatcher = director->getEventDispatcher();
 
+    // !!!Metal: needs setFrameBufferOnly before draw
+#if defined(CC_USE_METAL)
+    s_captureScreenListener = eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom* /*event*/) {
+#else
     s_captureScreenListener = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW, [=](EventCustom* /*event*/) {
+#endif
         eventDispatcher->removeEventListener(s_captureScreenListener);
         s_captureScreenListener = nullptr;
         // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
