@@ -647,13 +647,14 @@ void Renderer::drawBatchedTriangles()
     
     /************** 2: Draw *************/
     beginRenderPass();
+    _commandBuffer->setVertexBuffer(_vertexBuffer);
+    _commandBuffer->setIndexBuffer(_indexBuffer);
+    
     for (int i = 0; i < batchesTotal; ++i)
     {
         
         auto& drawInfo = _triBatchesToDraw[i];
         _commandBuffer->updatePipelineState(_currentRT, drawInfo.cmd->getPipelineDescriptor());
-        _commandBuffer->setVertexBuffer(_vertexBuffer);
-        _commandBuffer->setIndexBuffer(_indexBuffer);
         auto& pipelineDescriptor = drawInfo.cmd->getPipelineDescriptor();
         _commandBuffer->setProgramState(pipelineDescriptor.programState);
         _commandBuffer->drawElements(backend::PrimitiveType::TRIANGLE,

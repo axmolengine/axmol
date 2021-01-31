@@ -313,7 +313,6 @@ void CommandBufferMTL::drawElements(PrimitiveType primitiveType, IndexFormat ind
 void CommandBufferMTL::endRenderPass()
 {
     afterDraw();
-
 }
 
 void CommandBufferMTL::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback)
