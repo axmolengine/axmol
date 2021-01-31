@@ -297,7 +297,8 @@ enum class DepthStencilFlags : unsigned int {
     DEPTH_TEST = 1,
     DEPTH_WRITE = 1 << 1,
     STENCIL_TEST = 1 << 2,
-    ALL = DEPTH_TEST | DEPTH_WRITE | STENCIL_TEST,
+    DEPTH_STENCIL_TEST = DEPTH_TEST | STENCIL_TEST,
+    ALL = DEPTH_TEST | STENCIL_TEST | DEPTH_WRITE,
 };
 CC_ENABLE_BITMASK_OPS(DepthStencilFlags)
 CC_ENABLE_BITSHIFT_OPS(DepthStencilFlags)
