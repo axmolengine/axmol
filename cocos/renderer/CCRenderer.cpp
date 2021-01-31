@@ -662,7 +662,6 @@ void Renderer::drawBatchedTriangles()
     
     for (int i = 0; i < batchesTotal; ++i)
     {
-        
         auto& drawInfo = _triBatchesToDraw[i];
         _commandBuffer->updatePipelineState(_currentRT, drawInfo.cmd->getPipelineDescriptor());
         auto& pipelineDescriptor = drawInfo.cmd->getPipelineDescriptor();
@@ -675,8 +674,8 @@ void Renderer::drawBatchedTriangles()
 
         _drawnBatches++;
         _drawnVertices += _triBatchesToDraw[i].indicesToDraw;
-        
     }
+
 	_commandBuffer->endRenderPass();
 
 
@@ -696,8 +695,9 @@ void Renderer::drawCustomCommand(RenderCommand *command)
     if (cmd->getBeforeCallback()) cmd->getBeforeCallback()();
 
     beginRenderPass();
-    _commandBuffer->updatePipelineState(_currentRT, cmd->getPipelineDescriptor());
     _commandBuffer->setVertexBuffer(cmd->getVertexBuffer());
+
+    _commandBuffer->updatePipelineState(_currentRT, cmd->getPipelineDescriptor());
     _commandBuffer->setProgramState(cmd->getPipelineDescriptor().programState);
     
     auto drawType = cmd->getDrawType();
