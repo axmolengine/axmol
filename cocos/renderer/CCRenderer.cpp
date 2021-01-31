@@ -199,7 +199,7 @@ void Renderer::init()
     auto device = backend::Device::getInstance();
     _commandBuffer = device->newCommandBuffer();
     // @MTL: the depth stencil flags must same render target and _dsDesc
-    _dsDesc.flags = DepthStencilFlags::DEPTH_TEST | DepthStencilFlags::STENCIL_TEST;
+    _dsDesc.flags = DepthStencilFlags::ALL;
     _defaultRT = device->newDefaultRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL);
     
     _currentRT = _defaultRT;
@@ -536,6 +536,16 @@ unsigned int Renderer::getStencilWriteMask() const
 unsigned int Renderer::getStencilReferenceValue() const
 {
     return _stencilRef;
+}
+
+void Renderer::setDepthStencilDesc(const backend::DepthStencilDescriptor& dsDesc)
+{
+    _dsDesc = dsDesc;
+}
+
+const backend::DepthStencilDescriptor& Renderer::getDepthStencilDesc() const
+{
+    return _dsDesc;
 }
 
 void Renderer::setViewPort(int x, int y, unsigned int w, unsigned int h)

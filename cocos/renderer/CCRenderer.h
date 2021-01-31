@@ -337,6 +337,16 @@ public:
      * @see `setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)`
      */
     unsigned int getStencilReferenceValue() const;
+    
+    /**
+     * Sets depth stencil descriptor
+     */
+    void setDepthStencilDesc(const backend::DepthStencilDescriptor& dsDesc);
+    
+    /**
+     * Gets depth stencil descriptor
+     */
+    const backend::DepthStencilDescriptor& getDepthStencilDesc() const;
 
     /**
      * Fixed-function state
