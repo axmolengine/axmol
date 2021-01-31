@@ -486,7 +486,10 @@ RenderTextureTestDepthStencil::RenderTextureTestDepthStencil()
     auto s = _director->getWinSize();
 
     _renderer = _director->getRenderer();
-    _stencilTest = _renderer->getStencilTest();
+
+    /// store old depth stencil desc
+    _dsDesc = _renderer->getDepthStencilDesc();
+
     _spriteDS = Sprite::create("Images/fire.png");
     _spriteDS->retain();
     _spriteDS->setPosition(Vec2(s.width * 0.25f, 0.0f));
@@ -510,7 +513,10 @@ RenderTextureTestDepthStencil::~RenderTextureTestDepthStencil()
 {
     CC_SAFE_RELEASE(_spriteDraw);
     CC_SAFE_RELEASE(_spriteDS);
-    // _renderer->setStencilTest(_stencilTest); // restore it, will cause render issue
+    
+    // restore depth stencil desc
+    _renderer->setDepthStencilDesc(_dsDesc);
+    _renderer->setStencilTest(bitmask::any(_dsDesc.flags, DepthStencilFlags::STENCIL_TEST));
 }
 
 void RenderTextureTestDepthStencil::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
