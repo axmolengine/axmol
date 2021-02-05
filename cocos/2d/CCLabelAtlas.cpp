@@ -56,7 +56,7 @@ LabelAtlas* LabelAtlas::create(const std::string& string, const std::string& cha
 
 bool LabelAtlas::initWithString(const std::string& string, const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap)
 {
-    Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(charMapFile);
+    Texture2D *texture = _director->getTextureCache()->addImage(charMapFile);
     return initWithString(string, texture, itemWidth, itemHeight, startCharMap);
 }
 

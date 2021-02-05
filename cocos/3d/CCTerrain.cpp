@@ -131,7 +131,7 @@ void Terrain::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, 
         _quadRoot->preCalculateAABB(_terrainModelMatrix);
     }
 
-    auto &projectionMatrix = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    auto &projectionMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto finalMatrix = projectionMatrix * transform;
     _programState->setUniform(_mvpMatrixLocation, &finalMatrix.m, sizeof(finalMatrix.m));
 
@@ -267,7 +267,7 @@ Terrain::Terrain()
         reload();
     }
     );
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
+    _director->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
 #ifdef CC_USE_METAL
     auto image = new (std::nothrow)Image();
@@ -486,7 +486,7 @@ Terrain::~Terrain()
     }
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
+    _director->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
 
