@@ -88,7 +88,7 @@ bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const 
 {
     CCASSERT(!path.empty(), "Invalid filename");
 
-    Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(path);
+    Texture2D *texture = _director->getTextureCache()->addImage(path);
     return initWithFade(fade, minSeg, stroke, color, texture);
 }
 
@@ -415,7 +415,7 @@ void MotionStreak3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t fl
     _afterCommand.init(_globalZOrder);
     _customCommand.init(_globalZOrder, transform, flags);
     
-    auto pmatrix = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    auto pmatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto mvpMatrix = pmatrix * transform;
     
     _programState->setUniform(_locMVP, mvpMatrix.m, sizeof(mvpMatrix.m));
@@ -435,7 +435,7 @@ void MotionStreak3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t fl
 
 void MotionStreak3D::onBeforeDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto *renderer = _director->getRenderer();
     _rendererDepthTest = renderer->getDepthTest();
     _rendererCullface = renderer->getCullMode();
 
@@ -445,7 +445,7 @@ void MotionStreak3D::onBeforeDraw()
 
 void MotionStreak3D::onAfterDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto *renderer = _director->getRenderer();
     renderer->setDepthTest(_rendererDepthTest);
     renderer->setCullMode(_rendererCullface);
 }

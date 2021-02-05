@@ -241,10 +241,8 @@ void Layout::stencilClippingVisit(Renderer *renderer, const Mat4& parentTransfor
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
-    Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
     //Add group command
 
     _groupCommand.init(_globalZOrder);
@@ -313,17 +311,17 @@ void Layout::stencilClippingVisit(Renderer *renderer, const Mat4& parentTransfor
     
     renderer->popGroup();
     
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
     
 void Layout::onBeforeVisitScissor()
 {
-    auto glview = Director::getInstance()->getOpenGLView();
+    auto glview = _director->getOpenGLView();
     // apply scissor test
     _scissorOldState = glview->isScissorEnabled();
     if (false == _scissorOldState)
     {
-        auto renderer = Director::getInstance()->getRenderer();
+        auto renderer = _director->getRenderer();
         renderer->setScissorTest(true);
     }
 
@@ -346,7 +344,7 @@ void Layout::onAfterVisitScissor()
         // revert scissor box
         if (false == _clippingOldRect.equals(_clippingRect))
         {
-            auto glview = Director::getInstance()->getOpenGLView();
+            auto glview = _director->getOpenGLView();
             glview->setScissorInPoints(_clippingOldRect.origin.x,
                                        _clippingOldRect.origin.y,
                                        _clippingOldRect.size.width,
@@ -356,7 +354,7 @@ void Layout::onAfterVisitScissor()
     else
     {
         // revert scissor test
-        auto renderer = Director::getInstance()->getRenderer();
+        auto renderer = _director->getRenderer();
         renderer->setScissorTest(false);
     }
 }
@@ -368,10 +366,8 @@ void Layout::scissorClippingVisit(Renderer *renderer, const Mat4& parentTransfor
         _clippingRectDirty = true;
     }
     
-    Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
     
     _groupCommand.init(_globalZOrder);
     renderer->addCommand(&_groupCommand);
@@ -388,7 +384,7 @@ void Layout::scissorClippingVisit(Renderer *renderer, const Mat4& parentTransfor
     renderer->addCommand(&_afterVisitCmdScissor);
     
     renderer->popGroup();
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void Layout::setClippingEnabled(bool able)

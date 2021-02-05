@@ -187,9 +187,9 @@ void Camera::setAdditionalProjection(const Mat4& mat)
 
 bool Camera::initDefault()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = _director->getWinSize();
     //create default camera
-    auto projection = Director::getInstance()->getProjection();
+    auto projection = _director->getProjection();
     switch (projection)
     {
         case Director::Projection::_2D:
@@ -201,7 +201,7 @@ bool Camera::initDefault()
         }
         case Director::Projection::_3D:
         {
-            float zeye = Director::getInstance()->getZEye();
+            float zeye = _director->getZEye();
             initPerspective(60, (float)size.width / size.height, 10, zeye + size.height / 2.0f);
             Vec3 eye(size.width/2, size.height/2.0f, zeye), center(size.width/2, size.height/2, 0.0f), up(0.0f, 1.0f, 0.0f);
             setPosition3D(eye);
@@ -247,7 +247,7 @@ Vec2 Camera::project(const Vec3& src) const
 {
     Vec2 screenPos;
     
-    auto viewport = Director::getInstance()->getWinSize();
+    auto viewport = _director->getWinSize();
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
     
@@ -264,7 +264,7 @@ Vec2 Camera::projectGL(const Vec3& src) const
 {
     Vec2 screenPos;
     
-    auto viewport = Director::getInstance()->getWinSize();
+    auto viewport = _director->getWinSize();
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
     
@@ -280,14 +280,14 @@ Vec2 Camera::projectGL(const Vec3& src) const
 Vec3 Camera::unproject(const Vec3& src) const
 {
     Vec3 dst;
-    unproject(Director::getInstance()->getWinSize(), &src, &dst);
+    unproject(_director->getWinSize(), &src, &dst);
     return dst;
 }
 
 Vec3 Camera::unprojectGL(const Vec3& src) const
 {
     Vec3 dst;
-    unprojectGL(Director::getInstance()->getWinSize(), &src, &dst);
+    unprojectGL(_director->getWinSize(), &src, &dst);
     return dst;
 }
 
@@ -427,7 +427,7 @@ void Camera::apply()
 
 void Camera::applyViewport()
 {
-    Director::getInstance()->getRenderer()->setViewPort(_defaultViewport.x, _defaultViewport.y, _defaultViewport.w, _defaultViewport.h);
+    _director->getRenderer()->setViewPort(_defaultViewport.x, _defaultViewport.y, _defaultViewport.w, _defaultViewport.h);
 }
 
 int Camera::getRenderOrder() const
