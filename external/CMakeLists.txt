@@ -135,13 +135,10 @@ if(BUILD_EXT_JPEG)
             FOLDER "External"
         )
     endif()
-    if(WIN32)
-        target_include_directories(jpeg PUBLIC "${CMAKE_CURRENT_LIST_DIR}/jpeg/win")
-    else()
-        target_include_directories(jpeg PUBLIC "${CMAKE_CURRENT_LIST_DIR}/jpeg/other")
-    endif()
     target_link_libraries(external jpeg)
-    target_include_directories(external PUBLIC "${CMAKE_CURRENT_LIST_DIR}/jpeg")
+    target_include_directories(external INTERFACE 
+      "${CMAKE_CURRENT_LIST_DIR}/jpeg" 
+      "${JPEG_CONFIG_OUT_DIR}")
 endif(BUILD_EXT_JPEG)
 if(BUILD_EXT_OPENSSL)
     add_subdirectory(openssl)

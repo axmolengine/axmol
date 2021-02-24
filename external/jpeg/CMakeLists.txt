@@ -511,17 +511,17 @@ if(UNIX AND NOT APPLE)
 endif()
 
 # Generate files
+set(JPEG_CONFIG_OUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/inc CACHE INTERNAL "The jpeg config out dir")
 if(WIN32)
-  configure_file(win/jconfig.h.in ${CMAKE_CURRENT_LIST_DIR}/win/jconfig.h)
-  include_directories(${CMAKE_CURRENT_LIST_DIR}/win)
+  configure_file(win/jconfig.h.in ${JPEG_CONFIG_OUT_DIR}/jconfig.h)
 else()
-  configure_file(jconfig.h.in ${CMAKE_CURRENT_LIST_DIR}/other/jconfig.h)
-  include_directories(${CMAKE_CURRENT_LIST_DIR}/other)
+  configure_file(jconfig.h.in ${JPEG_CONFIG_OUT_DIR}/jconfig.h)
 endif()
-configure_file(jconfigint.h.in ${CMAKE_CURRENT_LIST_DIR}/jconfigint.h)
+configure_file(jconfigint.h.in ${JPEG_CONFIG_OUT_DIR}/jconfigint.h)
 if(UNIX)
-  configure_file(libjpeg.map.in ${CMAKE_CURRENT_LIST_DIR}/libjpeg.map)
+  configure_file(libjpeg.map.in ${JPEG_CONFIG_OUT_DIR}/libjpeg.map)
 endif()
+include_directories(${JPEG_CONFIG_OUT_DIR})
 
 # Include directories and compiler definitions
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
