@@ -1,7 +1,7 @@
 # The engine-x thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 2.1.0.4192 branch on chromium/4192
+- Version: 2.1.0.4439 branch on chromium/4439
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -41,7 +41,7 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.73.0
+- Version: 7.75.0
 - License: MIT
 
 ## edtaa3func
@@ -143,7 +143,7 @@
 
 ## OpenAL Soft
 - Upstream: https://github.com/kcat/openal-soft
-- Version: 1.21.0-26b03f5 (7320)
+- Version: 1.21.1-0f7ed49 (7533)
 - License: LGPL-2.1
 
 ## OpenSSL
