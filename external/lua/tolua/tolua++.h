@@ -47,7 +47,7 @@ typedef int lua_Object;
 
 #include "lua.h"
 #include "lauxlib.h"
-    
+
 #if LUA_VERSION_NUM >= 502
 #define lua_setfenv lua_setuservalue
 #define lua_getfenv lua_getuservalue
@@ -55,6 +55,16 @@ typedef int lua_Object;
 #if !defined(LUA_COMPAT_5_1) && !defined(LUA_COMPAT_ALL)
 #define lua_objlen(L,i)		lua_rawlen(L, (i))
 #endif
+#endif
+
+#if LUA_VERSION_NUM >= 504
+TOLUA_API const char* luaL_findtable(lua_State* L, int idx,
+    const char* fname, int szhint);
+TOLUA_API void luaL_pushmodule(lua_State* L, const char* modname,
+    int sizehint);
+TOLUA_API void luaL_openlib(lua_State* L, const char* libname,
+    const luaL_Reg* l, int nup);
+#define luaL_register(L,n,l)	(luaL_openlib(L,(n),(l),0))
 #endif
 
 struct tolua_Error
