@@ -42,7 +42,7 @@
 ## curl
 - Upstream: https://github.com/curl/curl
 - Version: 7.75.0
-- License: MIT
+- License: Curl (MIT/X)
 
 ## edtaa3func
 - Upstream: https://github.com/zilongshanren/edtaa3func
