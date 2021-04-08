@@ -14,12 +14,11 @@ function install_android_ndk()
     # sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     # sudo python get-pip.py
     # sudo python -m pip install retry
+    python -m pip install --upgrade pip
     which python
     which pip
     python -V
     pip -V
-    # fix install decorator-5.0.2 failed with invalid syntax on python2
-    pip install decorator==4.4.2
     pip install retry
     if [ "$BUILD_TARGET" == "android" ]\
         || [ "$BUILD_TARGET" == "android_lua" ] ; then
