@@ -16,6 +16,8 @@ function install_android_ndk()
     # sudo python -m pip install retry
     which python
     which pip
+    python -V
+    pip -V
     # fix install decorator-5.0.2 failed with invalid syntax on python2
     pip install decorator==4.4.2
     pip install retry
