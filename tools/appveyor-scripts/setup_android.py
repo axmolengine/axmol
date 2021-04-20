@@ -26,7 +26,7 @@ ROOT_DIR = os.path.abspath(os.path.join(COCOS2D_X, ".."))
 
 ANDROID_NDK = os.path.join(ROOT_DIR, "android-ndk-r16b")
 ANDROID_SDK = os.path.join(ROOT_DIR, "android-sdk")
-SDK_MANAGER = os.path.join(ROOT_DIR, "sdk_tools/tools/bin/sdkmanager")
+SDK_MANAGER = os.path.join(ROOT_DIR, "cmdline-tools/bin/sdkmanager")
 SYSTEM = platform.system().lower()
 if SYSTEM == "windows":
     SDK_MANAGER = SDK_MANAGER + ".bat"
@@ -79,13 +79,13 @@ def install_android_ndk():
 
 @retry(Exception, tries=5, delay=1, backoff=1)
 def install_android_sdk_tools():
-    file_name = "sdk-tools-{system}-3859397.zip".format(
+    file_name = "commandlinetools-{system}-6858069_latest.zip".format(
         system=platform.system().lower())
     url = "https://dl.google.com/android/repository/" + file_name
-    zip_file = os.path.abspath(os.path.join(ROOT_DIR, file_name))
+    zip_file = os.path.abspath(os.path.join(ROOT_DIR, file_name)) # folder is cmdline-tools
 
     download(url, zip_file)
-    unzip(zip_file, os.path.join(ROOT_DIR, "sdk_tools"))
+    unzip(zip_file, os.path.join(ROOT_DIR, ""))
 
 
 @retry(Exception, tries=5, delay=1, backoff=1)
@@ -93,10 +93,10 @@ def install_android_sdk():
     switches = " --verbose --sdk_root=" + ANDROID_SDK + " "
     cmd1 = SDK_MANAGER + switches
     packages = [
-        "platforms;android-28",
-        "build-tools;29.0.2",
-        "platform-tools",
-        "tools"
+        '"platform-tools"',
+        '"cmdline-tools;latest"',
+        '"platforms;android-28"',
+        '"build-tools;29.0.2'"
     ]
 
     cmd = cmd1 + " ".join(packages)
