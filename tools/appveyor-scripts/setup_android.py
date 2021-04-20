@@ -18,6 +18,9 @@ except Exception:
     pass
 from retry import retry
 
+if(sys.version_info.major >= 3):
+    import urllib.request
+
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 COCOS2D_X = os.path.abspath(os.path.join(DIR_PATH, "../.."))
@@ -65,7 +68,10 @@ def download(url, zip_file):
         os.remove(zip_file)
     except OSError:
         pass
-    urllib.urlretrieve(url, zip_file)
+    if(sys.version_info.major >= 3):
+        urllib.request.urlretrieve(url, zip_file)
+    else
+        urllib.urlretrieve(url, zip_file)
 
 
 @retry(Exception, tries=5, delay=1, backoff=1)
@@ -78,7 +84,7 @@ def install_android_ndk():
     unzip(zip_file, ROOT_DIR)
 
 @retry(Exception, tries=5, delay=1, backoff=1)
-def install_android_sdk_tools():
+def install_android_cmdline_tools():
     file_name = "commandlinetools-{system}-6858069_latest.zip".format(
         system=platform.system().lower())
     url = "https://dl.google.com/android/repository/" + file_name
@@ -96,10 +102,10 @@ def install_android_sdk():
     switches = " --verbose --sdk_root=" + ANDROID_SDK + " "
     cmd1 = SDK_MANAGER + switches
     packages = [
-        '"platform-tools"',
-        '"cmdline-tools;latest"',
-        '"platforms;android-28"',
-        '"build-tools;29.0.2"'
+        'platform-tools',
+        'cmdline-tools;latest',
+        'platforms;android-28',
+        'build-tools;29.0.2'
     ]
 
     cmd = cmd1 + " ".join(packages)
@@ -123,7 +129,7 @@ def export_environment(ndk_only):
 
 def main(ndk_only):
     if not ndk_only:
-        install_android_sdk_tools()
+        install_android_cmdline_tools()
         install_android_sdk()
     install_android_ndk()
     export_environment(ndk_only)
