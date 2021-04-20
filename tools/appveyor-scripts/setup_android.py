@@ -96,7 +96,7 @@ def install_android_sdk():
         '"platform-tools"',
         '"cmdline-tools;latest"',
         '"platforms;android-28"',
-        '"build-tools;29.0.2'"
+        '"build-tools;29.0.2"'
     ]
 
     cmd = cmd1 + " ".join(packages)
