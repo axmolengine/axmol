@@ -90,6 +90,9 @@ def install_android_sdk_tools():
 
 @retry(Exception, tries=5, delay=1, backoff=1)
 def install_android_sdk():
+    # list packages
+    run_with_yes(SDK_MANAGER + " --list --sdk_root=" + ANDROID_SDK)
+    
     switches = " --verbose --sdk_root=" + ANDROID_SDK + " "
     cmd1 = SDK_MANAGER + switches
     packages = [
