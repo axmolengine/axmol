@@ -101,6 +101,15 @@ android.applicationVariants.all { variant ->
     tasks.getByName("pre${targetName}Build").dependsOn copyTaskName
 }
 
+project.afterEvaluate {
+    if (tasks.findByName("externalNativeBuildDebug")) {
+        compileDebugJavaWithJavac.dependsOn externalNativeBuildDebug
+    }
+    if (tasks.findByName("externalNativeBuildRelease")) {
+        compileReleaseJavaWithJavac.dependsOn externalNativeBuildRelease  
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libcocos2dx')
