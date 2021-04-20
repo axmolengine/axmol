@@ -70,7 +70,7 @@ def download(url, zip_file):
         pass
     if(sys.version_info.major >= 3):
         urllib.request.urlretrieve(url, zip_file)
-    else
+    else:
         urllib.urlretrieve(url, zip_file)
 
 
