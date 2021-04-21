@@ -62,7 +62,7 @@ AtlasNode * AtlasNode::create(const std::string& tile, int tileWidth, int tileHe
 bool AtlasNode::initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
 {
     CCASSERT(!tile.empty(), "file size should not be empty");
-    Texture2D *texture = _director->getTextureCache()->addImage(tile);
+    Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(tile);
     return initWithTexture(texture, tileWidth, tileHeight, itemsToRender);
 }
 
@@ -162,7 +162,7 @@ void AtlasNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
     
     auto programState = _quadCommand.getPipelineDescriptor().programState;
 
-    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     
     _quadCommand.init(_globalZOrder, _textureAtlas->getTexture(), _blendFunc, _textureAtlas->getQuads(), _quadsToDraw, transform, flags);

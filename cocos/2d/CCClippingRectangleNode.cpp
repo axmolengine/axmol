@@ -62,7 +62,7 @@ void ClippingRectangleNode::onBeforeVisitScissor()
 {
     if (_clippingEnabled)
     {
-        auto renderer = _director->getRenderer();
+        auto renderer = Director::getInstance()->getRenderer();
         _oldScissorTest = renderer->getScissorTest();
         renderer->setScissorTest(true);
 
@@ -76,7 +76,7 @@ void ClippingRectangleNode::onBeforeVisitScissor()
         }
         
         const Point pos = convertToWorldSpace(Point(_clippingRegion.origin.x, _clippingRegion.origin.y));
-        GLView* glView = _director->getOpenGLView();
+        GLView* glView = Director::getInstance()->getOpenGLView();
         glView->setScissorInPoints(pos.x,
                                    pos.y,
                                    _clippingRegion.size.width * scaleX,
@@ -87,7 +87,7 @@ void ClippingRectangleNode::onBeforeVisitScissor()
 void ClippingRectangleNode::onAfterVisitScissor()
 {
     if (_clippingEnabled)
-        _director->getRenderer()->setScissorTest(_oldScissorTest);
+        Director::getInstance()->getRenderer()->setScissorTest(_oldScissorTest);
 }
 
 void ClippingRectangleNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)

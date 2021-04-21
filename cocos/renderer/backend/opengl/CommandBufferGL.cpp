@@ -66,12 +66,11 @@ CommandBufferGL::~CommandBufferGL()
     cleanResources();
 }
 
-bool CommandBufferGL::beginFrame()
+void CommandBufferGL::beginFrame()
 {
-    return true;
 }
 
-void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDescriptor& descirptor)
+void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassParams& descirptor)
 {
     auto rtGL = static_cast<const RenderTargetGL*>(rt);
     
@@ -228,8 +227,6 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType, IndexFormat inde
 
 void CommandBufferGL::endRenderPass()
 {
-    CC_SAFE_RELEASE_NULL(_indexBuffer);
-    CC_SAFE_RELEASE_NULL(_vertexBuffer);
 }
 
 void CommandBufferGL::endFrame()
@@ -439,7 +436,9 @@ void CommandBufferGL::setUniform(bool isArray, GLuint location, unsigned int siz
 
 void CommandBufferGL::cleanResources()
 {
+    CC_SAFE_RELEASE_NULL(_indexBuffer);
     CC_SAFE_RELEASE_NULL(_programState);  
+    CC_SAFE_RELEASE_NULL(_vertexBuffer);
 }
 
 void CommandBufferGL::setLineWidth(float lineWidth)

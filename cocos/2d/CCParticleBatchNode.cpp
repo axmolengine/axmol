@@ -6,7 +6,6 @@
  * Copyright (c) 2011      Marco Tillemans
  * Copyright (c) 2013-2016 Chukong Technologies Inc.
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- * Copyright (c) 2020-2021 C4games.com.
  *
  * http://www.cocos2d-x.org
  *
@@ -124,8 +123,6 @@ bool ParticleBatchNode::initWithTexture(Texture2D *tex, int capacity)
 {
     _textureAtlas = new (std::nothrow) TextureAtlas();
     _textureAtlas->initWithTexture(tex, capacity);
-    
-    updateProgramStateTexture();
 
     _children.reserve(capacity);
     
@@ -139,7 +136,7 @@ bool ParticleBatchNode::initWithTexture(Texture2D *tex, int capacity)
  */
 bool ParticleBatchNode::initWithFile(const std::string& fileImage, int capacity)
 {
-    Texture2D *tex = _director->getTextureCache()->addImage(fileImage);
+    Texture2D *tex = Director::getInstance()->getTextureCache()->addImage(fileImage);
     return initWithTexture(tex, capacity);
 }
 
@@ -168,12 +165,13 @@ void ParticleBatchNode::visit(Renderer *renderer, const Mat4 &parentTransform, u
         // IMPORTANT:d
         // To ease the migration to v3.0, we still support the Mat4 stack,
         // but it is deprecated and your code should not rely on it
-        _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-        _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+        Director* director = Director::getInstance();
+        director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+        director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
         
         draw(renderer, _modelViewTransform, flags);
         
-        _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+        director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     }
 }
 
@@ -441,10 +439,11 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4 & transform, uint32_
     _customCommand.init(_globalZOrder, _blendFunc);
     
     // Texture is set in TextureAtlas.
-    const cocos2d::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const cocos2d::Mat4& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 finalMat = projectionMat * transform;
     auto programState = _customCommand.getPipelineDescriptor().programState;
     programState->setUniform(_mvpMatrixLocaiton, finalMat.m, sizeof(finalMat.m));
+
     if (_textureAtlas->isDirty())
     {
         const auto& quads = _textureAtlas->getQuads();
@@ -533,19 +532,15 @@ void ParticleBatchNode::updateBlendFunc()
 void ParticleBatchNode::setTexture(Texture2D* texture)
 {
     _textureAtlas->setTexture(texture);
-    updateProgramStateTexture();
-}
-
-void ParticleBatchNode::updateProgramStateTexture()
-{
-    auto texture = _textureAtlas->getTexture();
-    if (!texture) 
-        return;
-    auto programState = _customCommand.getPipelineDescriptor().programState;
-    programState->setTexture(texture->getBackendTexture());
-    // If the new texture has No premultiplied alpha, AND the blendFunc hasn't been changed, then update it
-    if (!texture->hasPremultipliedAlpha() && (_blendFunc.src == CC_BLEND_SRC && _blendFunc.dst == CC_BLEND_DST))
-        _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
+    if (texture) {
+        auto programState = _customCommand.getPipelineDescriptor().programState;
+        programState->setTexture(_textureAtlas->getTexture()->getBackendTexture());
+        // If the new texture has No premultiplied alpha, AND the blendFunc hasn't been changed, then update it
+        if (!texture->hasPremultipliedAlpha() && (_blendFunc.src == CC_BLEND_SRC && _blendFunc.dst == CC_BLEND_DST))
+        {
+            _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
+        }
+    }
 }
 
 Texture2D* ParticleBatchNode::getTexture() const

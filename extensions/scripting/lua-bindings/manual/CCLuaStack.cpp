@@ -94,11 +94,6 @@ namespace {
 
         return 0;
     }
-
-    int lua_version(lua_State* L) {
-        lua_pushinteger(L, LUA_VERSION_NUM);
-        return 1;
-    }
 }
 
 NS_CC_BEGIN
@@ -137,7 +132,6 @@ bool LuaStack::init()
     const luaL_Reg global_functions [] = {
         {"print", lua_print},
         {"release_print",lua_release_print},
-        {"version", lua_version},
         {nullptr, nullptr}
     };
     luaL_register(_state, "_G", global_functions);

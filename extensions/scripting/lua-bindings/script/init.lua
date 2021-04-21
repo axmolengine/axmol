@@ -22,12 +22,6 @@ THE SOFTWARE.
 
 ]]
 
-if (math.pow == nil) then
-    math.pow = function (x,y)
-        return x ^ y
-    end
-end
-
 require "cocos.cocos2d.Cocos2d"
 require "cocos.cocos2d.Cocos2dConstants"
 require "cocos.cocos2d.functions"

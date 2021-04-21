@@ -3,7 +3,7 @@
 
 CC_BACKEND_BEGIN
 
-static MTLLoadAction getLoadAction(const RenderPassDescriptor& params,
+static MTLLoadAction getLoadAction(const RenderPassParams& params,
                                    TargetBufferFlags buffer) {
     const auto clearFlags = (TargetBufferFlags) params.flags.clear;
     const auto discardStartFlags = params.flags.discardStart;
@@ -15,7 +15,7 @@ static MTLLoadAction getLoadAction(const RenderPassDescriptor& params,
     return MTLLoadActionLoad;
 }
 
-static MTLStoreAction getStoreAction(const RenderPassDescriptor& params,
+static MTLStoreAction getStoreAction(const RenderPassParams& params,
                                      TargetBufferFlags buffer) {
     const auto discardEndFlags = params.flags.discardEnd;
     if (bitmask::any(discardEndFlags, buffer)) {
@@ -59,10 +59,9 @@ void RenderTargetMTL::setStencilAttachment(TextureBackend* attachment, int level
     
 }
 
-void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& params, MTLRenderPassDescriptor* descriptor) const
+void RenderTargetMTL::applyRenderPassAttachments(const RenderPassParams& params, MTLRenderPassDescriptor* descriptor) const
 {
-    // const auto discardFlags = params.flags.discardEnd;
-    auto clearFlags = params.flags.clear;
+    const auto discardFlags = params.flags.discardEnd;
     
     for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; i++) {
         auto attachment = getColorAttachment(i);
@@ -70,15 +69,12 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
             continue;
         }
         
-        const auto MRTColorFlag = getMRTColorFlag(i);
-        
         descriptor.colorAttachments[i].texture = attachment.texture;
         descriptor.colorAttachments[i].level = attachment.level;
         // descriptor.colorAttachments[i].slice = attachment.layer;
-        descriptor.colorAttachments[i].loadAction = getLoadAction(params, MRTColorFlag);
-        descriptor.colorAttachments[i].storeAction = getStoreAction(params,MRTColorFlag);
-        if(bitmask::any(clearFlags, MRTColorFlag))
-            descriptor.colorAttachments[i].clearColor = MTLClearColorMake(
+        descriptor.colorAttachments[i].loadAction = getLoadAction(params, getMRTColorFlag(i));
+        descriptor.colorAttachments[i].storeAction = getStoreAction(params, getMRTColorFlag(i));
+        descriptor.colorAttachments[i].clearColor = MTLClearColorMake(
                                                                       params.clearColorValue[0], params.clearColorValue[1], params.clearColorValue[2], params.clearColorValue[3]);
 #if 0
         if (multisampledColor[i]) {
@@ -101,7 +97,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
     }
     
     // Sets descriptor depth and stencil params, should match RenderTargetMTL::chooseAttachmentFormat
-    if(bitmask::any(this->_flags, RenderTargetFlag::DEPTH_AND_STENCIL)) {
+    if(bitmask::any(this->_flags, RenderTargetFlag::DEPTH)) {
         auto depthAttachment = getDepthAttachment();
         if(depthAttachment){
             descriptor.depthAttachment.texture = depthAttachment.texture;
@@ -109,10 +105,11 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
             // descriptor.depthAttachment.slice = depthAttachment.layer;
             descriptor.depthAttachment.loadAction = getLoadAction(params, TargetBufferFlags::DEPTH);
             descriptor.depthAttachment.storeAction = getStoreAction(params, TargetBufferFlags::DEPTH);
-            if(bitmask::any(clearFlags, TargetBufferFlags::DEPTH))
-                descriptor.depthAttachment.clearDepth = params.clearDepthValue;
+            descriptor.depthAttachment.clearDepth = params.clearDepthValue;
         }
-        
+    }
+    
+    if(bitmask::any(this->_flags, RenderTargetFlag::STENCIL)) {
         auto stencilAttachment = getStencilAttachment();
         if(stencilAttachment) {
             descriptor.stencilAttachment.texture = stencilAttachment.texture;
@@ -120,11 +117,10 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
             // descriptor.stencilAttachment.slice = depthAttachment.layer;
             descriptor.stencilAttachment.loadAction = getLoadAction(params, TargetBufferFlags::STENCIL);
             descriptor.stencilAttachment.storeAction = getStoreAction(params, TargetBufferFlags::STENCIL);
-            if(bitmask::any(clearFlags, TargetBufferFlags::STENCIL))
-                descriptor.stencilAttachment.clearStencil = params.clearStencilValue;
+            descriptor.stencilAttachment.clearStencil = params.clearStencilValue;
         }
     }
-    
+   
 #if 0
     if (multisampledDepth) {
         // We're rendering into our temporary MSAA texture and doing an automatic resolve.
@@ -181,7 +177,7 @@ PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const
 
 PixelFormat RenderTargetMTL::getDepthAttachmentPixelFormat() const
 { // FIXME: engine-x only support D24S8
-    if(bitmask::any(_flags, TargetBufferFlags::DEPTH_AND_STENCIL)) {
+    if(bitmask::any(_flags, TargetBufferFlags::DEPTH)) {
         if(isDefaultRenderTarget() || !_depth)
             return PixelFormat::D24S8;
         return _depth.texture->getTextureFormat();
@@ -191,7 +187,7 @@ PixelFormat RenderTargetMTL::getDepthAttachmentPixelFormat() const
 
 PixelFormat RenderTargetMTL::getStencilAttachmentPixelFormat() const
 { // FIXME: engine-x only support D24S8
-    if(bitmask::any(_flags, TargetBufferFlags::DEPTH_AND_STENCIL)) {
+    if(bitmask::any(_flags, TargetBufferFlags::STENCIL)) {
         if(isDefaultRenderTarget() || !_stencil)
             return PixelFormat::D24S8;
         return _stencil.texture->getTextureFormat();

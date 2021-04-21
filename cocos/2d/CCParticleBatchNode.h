@@ -170,9 +170,6 @@ private:
     int addChildHelper(ParticleSystem* child, int z, int aTag, const std::string &name, bool setTag);
     void addChildByTagOrName(ParticleSystem* child, int z, int tag, const std::string &name, bool setTag);
     void updateBlendFunc();
-    
-    void updateProgramStateTexture();
-    
     /** the texture atlas used for drawing the quads */
     TextureAtlas* _textureAtlas = nullptr;
 

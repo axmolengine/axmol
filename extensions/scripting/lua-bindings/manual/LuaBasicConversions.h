@@ -47,8 +47,6 @@ extern "C" {
 #include "renderer/backend/Types.h"
 #include "renderer/backend/VertexLayout.h"
 
-#include "yasio/cxx17/string_view.hpp"
-
 using namespace cocos2d;
 
 extern std::unordered_map<std::string, std::string>  g_luaType;
@@ -212,7 +210,6 @@ extern bool luaval_to_long_long(lua_State* L,int lo,long long* outValue, const c
  * @return Return true if the value at the given acceptable index of stack is a string or a number convertible to a string, otherwise return false.
  */
 extern CC_LUA_DLL bool luaval_to_std_string(lua_State* L, int lo, std::string* outValue, const char* funcName = "");
-extern CC_LUA_DLL bool luaval_to_std_string_view(lua_State* L, int lo, cxx17::string_view* outValue, const char* funcName = "");
 
 /**
  * Get a long value from the given acceptable index of stack.

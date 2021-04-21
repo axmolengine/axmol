@@ -62,10 +62,10 @@ struct RenderPassFlags {
 /**
  * Store values about color, depth and stencil attachment.
  */
-struct RenderPassDescriptor
+struct RenderPassParams
 {
-    RenderPassDescriptor& operator=(const RenderPassDescriptor& descriptor) = default;
-    bool operator==(const RenderPassDescriptor& descriptor) const;
+    RenderPassParams& operator=(const RenderPassParams& descriptor) = default;
+    bool operator==(const RenderPassParams& descriptor) const;
 
     float clearDepthValue = 0.f;
     float clearStencilValue = 0.f;
@@ -74,6 +74,8 @@ struct RenderPassDescriptor
     // Now, only clear flag used
     RenderPassFlags flags{};
 };
+typedef RenderPassParams RenderPassParams;
+
 //end of _backend group
 /// @}
 CC_BACKEND_END

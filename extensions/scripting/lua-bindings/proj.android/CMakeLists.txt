@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.6)
 
 # need to whole-archive this lib
 set(target_name lua_android_spec)

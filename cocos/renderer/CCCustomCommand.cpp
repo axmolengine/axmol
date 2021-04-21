@@ -44,7 +44,7 @@ CustomCommand::~CustomCommand()
 
 CustomCommand::CustomCommand(const CustomCommand& rhs)
 {
-    this->assign(rhs);
+    this->assign(std::move(rhs));
 }
 
 CustomCommand::CustomCommand(CustomCommand&& rhs)

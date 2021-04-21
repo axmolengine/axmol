@@ -738,7 +738,7 @@ void CaptureNodeTest::onCaptured(Ref*)
     _filename = FileUtils::getInstance()->getWritablePath() + "/CaptureNodeTest.png";
 
     // capture this
-    auto callback = [&](RefPtr<Image> image){
+    auto callback = [&](Image* image){
         // create a sprite with the captured image directly
         auto sp = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage(image, _filename));
         addChild(sp, 0, childTag);
@@ -747,6 +747,9 @@ void CaptureNodeTest::onCaptured(Ref*)
         
         // store to disk
         image->saveToFile(_filename);
+        
+        // release the captured image
+        image->release();
     };
     
     auto callbackFunction = std::bind(callback, std::placeholders::_1);

@@ -500,7 +500,7 @@ bool ParticleSystem::initWithDictionary(ValueMap& dictionary, const std::string&
                     // set not pop-up message box when load image failed
                     bool notify = FileUtils::getInstance()->isPopupNotify();
                     FileUtils::getInstance()->setPopupNotify(false);
-                    tex = _director->getTextureCache()->addImage(textureName);
+                    tex = Director::getInstance()->getTextureCache()->addImage(textureName);
                     // reset the value of UIImage notify
                     FileUtils::getInstance()->setPopupNotify(notify);
                 }
@@ -533,7 +533,7 @@ bool ParticleSystem::initWithDictionary(ValueMap& dictionary, const std::string&
                         CCASSERT(isOK, "CCParticleSystem: error init image with Data");
                         CC_BREAK_IF(!isOK);
                         
-                        setTexture(_director->getTextureCache()->addImage(image, _plistFile + textureName));
+                        setTexture(Director::getInstance()->getTextureCache()->addImage(image, _plistFile + textureName));
 
                         image->release();
                     }

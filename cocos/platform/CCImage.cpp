@@ -471,6 +471,19 @@ namespace
     }tImageSource;
  
 #if CC_USE_PNG
+    void pngWriteCallback(png_structp png_ptr, png_bytep data, size_t length)
+    {
+        if (png_ptr == NULL)
+            return;
+
+        FileStream* fileStream = (FileStream*)png_get_io_ptr(png_ptr);
+
+        const auto check = fileStream->write(data, length);
+
+        if (check != length)
+            png_error(png_ptr, "Write Error");
+    }
+
     static void pngReadCallback(png_structp png_ptr, png_bytep data, png_size_t length)
     {
         tImageSource* isource = (tImageSource*)png_get_io_ptr(png_ptr);
@@ -2161,36 +2174,38 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
     bool ret = false;
     do
     {
-        FILE *fp;
         png_structp png_ptr;
         png_infop info_ptr;
         png_bytep *row_pointers;
+        
+        auto* outStream = FileUtils::getInstance()->openFileStream(filePath, FileStream::Mode::WRITE);
 
-        fp = fopen(filePath.c_str(), "wb");
-        CC_BREAK_IF(nullptr == fp);
+        CC_BREAK_IF(nullptr == outStream || !outStream->isOpen());
 
         png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
         if (nullptr == png_ptr)
         {
-            fclose(fp);
+            delete outStream;
             break;
         }
 
         info_ptr = png_create_info_struct(png_ptr);
         if (nullptr == info_ptr)
         {
-            fclose(fp);
+            delete outStream;
             png_destroy_write_struct(&png_ptr, nullptr);
             break;
         }
         if (setjmp(png_jmpbuf(png_ptr)))
         {
-            fclose(fp);
+            delete outStream;
             png_destroy_write_struct(&png_ptr, &info_ptr);
             break;
         }
-        png_init_io(png_ptr, fp);
+
+        //png_init_io(png_ptr, outStream);
+        png_set_write_fn(png_ptr, outStream, pngWriteCallback, nullptr);
 
         if (!isToRGB && hasAlpha())
         {
@@ -2210,7 +2225,7 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
         row_pointers = (png_bytep *)malloc(_height * sizeof(png_bytep));
         if(row_pointers == nullptr)
         {
-            fclose(fp);
+            delete outStream;
             png_destroy_write_struct(&png_ptr, &info_ptr);
             break;
         }
@@ -2234,7 +2249,7 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
                 uint8_t *tempData = static_cast<uint8_t*>(malloc(_width * _height * 3));
                 if (nullptr == tempData)
                 {
-                    fclose(fp);
+                    delete outStream;
                     png_destroy_write_struct(&png_ptr, &info_ptr);
                     
                     free(row_pointers);
@@ -2285,7 +2300,7 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
 
         png_destroy_write_struct(&png_ptr, &info_ptr);
 
-        fclose(fp);
+        delete outStream;
 
         ret = true;
     } while (0);

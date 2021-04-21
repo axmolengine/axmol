@@ -94,12 +94,3 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libcocos2dx')
 }
-
-project.afterEvaluate {
-    if (tasks.findByName("externalNativeBuildDebug")) {
-        compileDebugJavaWithJavac.dependsOn externalNativeBuildDebug
-    }
-    if (tasks.findByName("externalNativeBuildRelease")) {
-        compileReleaseJavaWithJavac.dependsOn externalNativeBuildRelease  
-    }
-}

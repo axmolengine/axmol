@@ -38,7 +38,6 @@
 #include "platform/CCFileStream.h"
 #include "md5/md5.h"
 #include "yasio/xxsocket.hpp"
-#include <inttypes.h>
 
 // **NOTE**
 // In the file:
@@ -87,11 +86,8 @@ namespace cocos2d { namespace network {
                 }
             }
 
-            if (_fs)
-                _fs.close();
-
-			if (_fsMd5)
-				_fsMd5.close();
+            delete _fs;
+            delete _fsMd5;
 
             if (_requestHeaders)
                 curl_slist_free_all(_requestHeaders);
@@ -152,25 +148,28 @@ namespace cocos2d { namespace network {
                     }
                 }
                 // open file
-                _fs.open(_tempFileName, FileStream::Mode::APPEND);
-                if (!_fs)
+                _fs = FileUtils::getInstance()->openFileStream(_tempFileName, FileStream::Mode::APPEND);
+                if (!_fs->isOpen())
                 {
                     _errCode = DownloadTask::ERROR_OPEN_FILE_FAILED;
                     _errCodeInternal = 0;
                     _errDescription = "Can't open file:";
                     _errDescription.append(_tempFileName);
+                    delete _fs;
+                    _fs = nullptr;
 					break;
                 }
 
 				// init md5 state
 				_checksumFileName = filename + ".chksum";
-				_fsMd5.open(_checksumFileName.c_str(), FileStream::Mode::WRITE);
-				if (_fsMd5.seek(0, SEEK_END) != sizeof(md5_state_s)) {
+
+                _fsMd5 = FileUtils::getInstance()->openFileStream(_checksumFileName, FileStream::Mode::WRITE);
+				if (_fsMd5->seek(0, SEEK_END) != sizeof(md5_state_s)) {
 					md5_init(&_md5State);
 				}
 				else {
-					_fsMd5.seek(0, SEEK_SET);
-					_fsMd5.read(&_md5State, sizeof(md5_state_s));
+					_fsMd5->seek(0, SEEK_SET);
+					_fsMd5->read(&_md5State, sizeof(md5_state_s));
 				}
                 ret = true;
             } while (0);
@@ -242,9 +241,9 @@ namespace cocos2d { namespace network {
 
 			auto bytes_transferred = size * count;
 
-            if (_fs)
+            if (_fs->isOpen())
             {
-                ret = _fs.write(buffer, bytes_transferred);// fwrite(buffer, size, count, _fp);
+                ret = _fs->write(buffer, bytes_transferred);// fwrite(buffer, size, count, _fp);
             }
             else
             {
@@ -263,8 +262,8 @@ namespace cocos2d { namespace network {
                 _totalBytesReceived += ret;
 
 				::md5_append(&_md5State, buffer, bytes_transferred);
-				_fsMd5.seek(0, SEEK_SET);
-				_fsMd5.write(&_md5State, sizeof(_md5State));
+				_fsMd5->seek(0, SEEK_SET);
+				_fsMd5->write(&_md5State, sizeof(_md5State));
             }
 
             curl_easy_getinfo(_curl, CURLINFO_SPEED_DOWNLOAD, &_speed);
@@ -306,10 +305,10 @@ namespace cocos2d { namespace network {
         string _tempFileName;
 		std::string _checksumFileName;
         vector<unsigned char> _buf;
-        FileStream _fs;
+        FileStream* _fs;
 
 		// calculate md5 in downloading time support
-        FileStream _fsMd5; // store md5 state realtime
+        FileStream* _fsMd5; // store md5 state realtime
 		md5_state_s _md5State;
 		
 
@@ -481,7 +480,7 @@ namespace cocos2d { namespace network {
                 if (coTask->_acceptRanges && coTask->_totalBytesReceived > 0)
                 {
                     char buf[128];
-                    sprintf(buf, "%" PRId64 "-", coTask->_totalBytesReceived);
+                    sprintf(buf, "%lld-", coTask->_totalBytesReceived);
                     curl_easy_setopt(handle, CURLOPT_RANGE, buf);
                     curl_easy_setopt(handle, CURLOPT_RESUME_FROM_LARGE,(curl_off_t)coTask->_totalBytesReceived);
                 }
@@ -885,8 +884,7 @@ public:
 			task.progressInfo.totalBytesReceived = coTask._totalBytesReceived;
 			task.progressInfo.totalBytesExpected = coTask._totalBytesExpected;
 			task.progressInfo.speedInBytes = coTask._speed;
-			onTaskProgress(task,
-				_transferDataToBuffer);
+			onTaskProgress(task, _transferDataToBuffer);
 			coTask._bytesReceived = 0;
 			_currTask = nullptr;
 		}
@@ -897,14 +895,14 @@ public:
 			do
 			{
                 auto pFileUtils = FileUtils::getInstance();
-				coTask._fs.close();
-				coTask._fsMd5.close();
+				coTask._fs->close();
+				coTask._fsMd5->close();
 
 				if (checkState & kCheckSumStateSucceed) // No need download 
 				{
-					FileStream fsOrigin;
-					if (fsOrigin.open(coTask._fileName, FileStream::Mode::READ)) {
-						task.progressInfo.totalBytesExpected = fsOrigin.seek(0, SEEK_END);
+					FileStream* fsOrigin = FileUtils::getInstance()->openFileStream(coTask._fileName, FileStream::Mode::READ);
+					if (fsOrigin->isOpen()) {
+						task.progressInfo.totalBytesExpected = fsOrigin->seek(0, SEEK_END);
 						task.progressInfo.bytesReceived = task.progressInfo.totalBytesExpected;
 						task.progressInfo.totalBytesReceived = task.progressInfo.totalBytesExpected;
 						task.progressInfo.speedInBytes = task.progressInfo.totalBytesExpected;
@@ -914,8 +912,7 @@ public:
 
                         pFileUtils->removeFile(coTask._tempFileName);
 
-						onTaskProgress(task,
-							_transferDataToBuffer);
+						onTaskProgress(task,_transferDataToBuffer);
 					}
 					else {
 						coTask._errCode = DownloadTask::ERROR_ORIGIN_FILE_MISSING;
@@ -924,6 +921,9 @@ public:
 						pFileUtils->removeFile(coTask._checksumFileName);
 						pFileUtils->removeFile(coTask._tempFileName);
 					}
+
+                    delete fsOrigin;
+                    fsOrigin = nullptr;
 					break;
 				}
 
