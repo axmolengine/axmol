@@ -222,7 +222,8 @@ message(STATUS "CMAKE_ASM_FLAGS = ${EFFECTIVE_ASM_FLAGS}")
 # so we remove TurboJPEG official complex check logic which not properly works with
 # Apple xcode11+ clang
 message(STATUS "GAS is working properly")
-add_library(simd OBJECT ${CPU_TYPE}/jsimd_neon.S ${CPU_TYPE}/jsimd.c)
+# add_library(simd OBJECT ${CPU_TYPE}/jsimd_neon.S ${CPU_TYPE}/jsimd.c)
+add_library(simd OBJECT jsimd.c jsimd_neon.S)
 
 if(CMAKE_POSITION_INDEPENDENT_CODE OR ENABLE_SHARED)
   set_target_properties(simd PROPERTIES POSITION_INDEPENDENT_CODE 1)

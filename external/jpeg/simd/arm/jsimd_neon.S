@@ -36,9 +36,9 @@
 .arch armv7a
 .object_arch armv4
 #endif
+
 .arm
 .syntax unified
-
 
 #define RESPECT_STRICT_ALIGNMENT  1
 

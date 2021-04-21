@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 # ****************************************************************************/
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.10)
 
 set(APP_NAME cpp-empty-test)
 
@@ -34,7 +34,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     endif()
 
     if(NOT (ENGINEX_ROOT STREQUAL ""))
-        set(COCOS2DX_ROOT_PATH "$ENV{COCOS2DX_ROOT}")
+        set(COCOS2DX_ROOT_PATH "${ENGINEX_ROOT}")
         file(TO_CMAKE_PATH ${COCOS2DX_ROOT_PATH} COCOS2DX_ROOT_PATH) # string(REPLACE "\\" "/" COCOS2DX_ROOT_PATH ${COCOS2DX_ROOT_PATH})
         message(STATUS "Using system env var ENGINEX_ROOT=${ENGINEX_ROOT}")
     else()

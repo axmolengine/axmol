@@ -77,13 +77,13 @@ if __name__ == "__main__":
     parser.add_argument("-m", dest="mode", default=None)
     (args, unkonw) = parser.parse_known_args(sys.argv)
 
-    need_compile = True
+    need_compile = False
     # if args.luajit:
     #     print("  luajit mode '%s'" % (args.mode))
 
-    if args.mode == "Debug" and args.luajit:
-        need_compile = False
-        print(" -Skip luacompile in debug mode!")
+    # if args.mode == "Debug" and args.luajit:
+    #     need_compile = False
+    #     print(" -Skip luacompile in debug mode!")
         
 
     create_files = 0

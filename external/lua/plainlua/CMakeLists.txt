@@ -1,4 +1,3 @@
-cmake_minimum_required(VERSION 3.6)
 
 set(LUA_SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/lua-${LUA_VERSION}/src)
 
@@ -46,30 +45,39 @@ set_target_properties(${target_name}
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
     FOLDER "External"
 )
 
 if(WIN32 OR MACOSX)
-  # tool:plainluac compiling bytecode
-  set(target_name plainluac)
-  add_executable(${target_name} ${LUA_CORE} ${LUA_SRC_PATH}/luac.c)
-  if(${LUA_VERSION} VERSION_GREATER_EQUAL "5.4.0") # !important: traditional lua bindings solution tolua++ not support yet
-    target_compile_definitions(${target_name} PUBLIC LUA_COMPAT_APIINTCASTS=1)
-  elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.3.0")
-    target_compile_definitions(${target_name} 
-      PUBLIC LUA_COMPAT_5_1=1
-      PUBLIC LUA_COMPAT_5_2=1
-      )
-  elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.2.0")
-    target_compile_definitions(${target_name} PUBLIC LUA_COMPAT_ALL=1)
-  endif()
+  
+  function (add_lua_bin target_name src_files)
+    add_executable(${target_name} ${src_files})
+    if(${LUA_VERSION} VERSION_GREATER_EQUAL "5.4.0") # !important: traditional lua bindings solution tolua++ not support yet
+      target_compile_definitions(${target_name} PUBLIC LUA_COMPAT_APIINTCASTS=1)
+    elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.3.0")
+      target_compile_definitions(${target_name} 
+        PUBLIC LUA_COMPAT_5_1=1
+        PUBLIC LUA_COMPAT_5_2=1
+        )
+    elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.2.0")
+      target_compile_definitions(${target_name} PUBLIC LUA_COMPAT_ALL=1)
+    endif()
 
-  set_target_properties(${target_name}
-      PROPERTIES
-      ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-      LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-      FOLDER "Tools"
-  )
+    target_link_libraries(${target_name} plainlua)
+
+    set_target_properties(${target_name}
+        PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+        FOLDER "Tools"
+    )
+  endfunction()
+
+  # tool:luac the lua bytecode compiler
+  add_lua_bin(luac "${LUA_SRC_PATH}/luac.c;${LUA_SRC_PATH}/ldump.c;${LUA_SRC_PATH}/lopcodes.c")
+
+  # tool:lua the lua interpreter
+  add_lua_bin(lua "${LUA_SRC_PATH}/lua.c")
 endif()

@@ -484,7 +484,7 @@ void RenderTexture::draw(Renderer *renderer, const Mat4 &transform, uint32_t fla
         begin();
 
         //clear screen
-        Director::getInstance()->getRenderer()->clear(_clearFlags, _clearColor, _clearDepth, _clearStencil, _globalZOrder);
+        _director->getRenderer()->clear(_clearFlags, _clearColor, _clearDepth, _clearStencil, _globalZOrder);
 
         //! make sure all children are drawn
         sortAllChildren();
@@ -502,27 +502,25 @@ void RenderTexture::draw(Renderer *renderer, const Mat4 &transform, uint32_t fla
 
 void RenderTexture::onBegin()
 {
-    Director *director = Director::getInstance();
+    _oldProjMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _projectionMatrix);
 
-    _oldProjMatrix = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _projectionMatrix);
-
-    _oldTransMatrix = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _transformMatrix);
+    _oldTransMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _transformMatrix);
 
     if(!_keepMatrix)
     {
-        director->setProjection(director->getProjection());
+        _director->setProjection(_director->getProjection());
         const Size& texSize = _texture2D->getContentSizeInPixels();
 
         // Calculate the adjustment ratios based on the old and new projections
-        Size size = director->getWinSizeInPixels();
+        Size size = _director->getWinSizeInPixels();
         float widthRatio = size.width / texSize.width;
         float heightRatio = size.height / texSize.height;
 
         Mat4 orthoMatrix;
         Mat4::createOrthographicOffCenter((float)-1.0 / widthRatio, (float)1.0 / widthRatio, (float)-1.0 / heightRatio, (float)1.0 / heightRatio, -1, 1, &orthoMatrix);
-        director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
+        _director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
     }
 
     Rect viewport;
@@ -533,7 +531,7 @@ void RenderTexture::onBegin()
     viewport.origin.x = (_fullRect.origin.x - _rtTextureRect.origin.x) * viewPortRectWidthRatio;
     viewport.origin.y = (_fullRect.origin.y - _rtTextureRect.origin.y) * viewPortRectHeightRatio;
 
-    Renderer *renderer =  director->getRenderer();
+    Renderer *renderer = _director->getRenderer();
     
     _oldViewport = renderer->getViewport();
     renderer->setViewPort(viewport.origin.x, viewport.origin.y, viewport.size.width, viewport.size.height);
@@ -544,11 +542,10 @@ void RenderTexture::onBegin()
 
 void RenderTexture::onEnd()
 {
-    Director *director = Director::getInstance();
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _oldProjMatrix);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _oldTransMatrix);
+    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _oldProjMatrix);
+    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _oldTransMatrix);
     
-    Renderer *renderer =  Director::getInstance()->getRenderer();
+    Renderer *renderer = _director->getRenderer();
     renderer->setViewPort(_oldViewport.x, _oldViewport.y, _oldViewport.w, _oldViewport.h);
 
     renderer->setRenderTarget(_oldRenderTarget);
@@ -615,7 +612,7 @@ void RenderTexture::setClearFlags(ClearFlag clearFlags)
 
 void RenderTexture::clearColorAttachment()
 {
-    auto renderer = Director::getInstance()->getRenderer();
+    auto renderer = _director->getRenderer();
     _beforeClearAttachmentCommand.func = [=]() -> void {
         _oldRenderTarget = renderer->getRenderTarget();
         renderer->setRenderTarget(_renderTarget);

@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -554,40 +554,6 @@ static bool js_yasio_ibstream_read_dx(JSContext* ctx, uint32_t argc, jsval* vp)
   return true;
 }
 
-static bool js_yasio_ibstream_read_i24(JSContext* ctx, uint32_t argc, jsval* vp)
-{
-  bool ok               = true;
-  yasio::ibstream* cobj = nullptr;
-
-  JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-  JS::RootedObject obj(ctx);
-  obj.set(args.thisv().toObjectOrNull());
-  js_proxy_t* proxy = jsb_get_js_proxy(obj);
-  cobj              = (yasio::ibstream*)(proxy ? proxy->ptr : nullptr);
-  JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_ibstream_read_i24 : Invalid Native Object");
-
-  args.rval().set(INT_TO_JSVAL(cobj->read_i24()));
-
-  return true;
-}
-
-static bool js_yasio_ibstream_read_u24(JSContext* ctx, uint32_t argc, jsval* vp)
-{
-  bool ok               = true;
-  yasio::ibstream* cobj = nullptr;
-
-  JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-  JS::RootedObject obj(ctx);
-  obj.set(args.thisv().toObjectOrNull());
-  js_proxy_t* proxy = jsb_get_js_proxy(obj);
-  cobj              = (yasio::ibstream*)(proxy ? proxy->ptr : nullptr);
-  JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_ibstream_read_u24 : Invalid Native Object");
-
-  args.rval().set(UINT_TO_JSVAL(cobj->read_u24()));
-
-  return true;
-}
-
 static bool js_yasio_ibstream_read_v(JSContext* ctx, uint32_t argc, jsval* vp)
 {
   bool ok               = true;
@@ -611,6 +577,7 @@ static bool js_yasio_ibstream_read_v(JSContext* ctx, uint32_t argc, jsval* vp)
   switch (length_field_bits)
   {
     case -1: // variant bits
+    default:
       sv = cobj->read_v();
       break;
     case 32: // 32bits
@@ -619,8 +586,6 @@ static bool js_yasio_ibstream_read_v(JSContext* ctx, uint32_t argc, jsval* vp)
     case 16: // 16bits
       sv = cobj->read_v16();
       break;
-    default: // 8bits
-      sv = cobj->read_v8();
   }
 
   if (!raw)
@@ -719,8 +684,6 @@ void js_register_yasio_ibstream(JSContext* ctx, JS::HandleObject global)
       JS_FN("read_i32", js_yasio_ibstream_read<int32_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("read_u8", js_yasio_ibstream_read_ux<uint8_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("read_u16", js_yasio_ibstream_read_ux<uint16_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-      JS_FN("read_i24", js_yasio_ibstream_read_i24, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-      JS_FN("read_u24", js_yasio_ibstream_read_u24, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("read_u32", js_yasio_ibstream_read_ux<uint32_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("read_i64", js_yasio_ibstream_read_dx<int64_t>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("read_f", js_yasio_ibstream_read_dx<float>, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
@@ -816,50 +779,6 @@ bool js_yasio_obstream_pop32(JSContext* ctx, uint32_t argc, jsval* vp)
   else if (argc == 1)
   {
     cobj->pop32(args.get(0).toInt32());
-  }
-
-  args.rval().setUndefined();
-
-  return true;
-}
-
-bool js_yasio_obstream_push24(JSContext* ctx, uint32_t argc, jsval* vp)
-{
-  bool ok               = true;
-  yasio::obstream* cobj = nullptr;
-
-  JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-  JS::RootedObject obj(ctx);
-  obj.set(args.thisv().toObjectOrNull());
-  js_proxy_t* proxy = jsb_get_js_proxy(obj);
-  cobj              = (yasio::obstream*)(proxy ? proxy->ptr : nullptr);
-  JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_obstream_push24 : Invalid Native Object");
-
-  cobj->push24();
-
-  args.rval().setUndefined();
-
-  return true;
-}
-bool js_yasio_obstream_pop24(JSContext* ctx, uint32_t argc, jsval* vp)
-{
-  bool ok               = true;
-  yasio::obstream* cobj = nullptr;
-
-  JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-  JS::RootedObject obj(ctx);
-  obj.set(args.thisv().toObjectOrNull());
-  js_proxy_t* proxy = jsb_get_js_proxy(obj);
-  cobj              = (yasio::obstream*)(proxy ? proxy->ptr : nullptr);
-  JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_obstream_pop24 : Invalid Native Object");
-
-  if (argc == 0)
-  {
-    cobj->pop24();
-  }
-  else if (argc == 1)
-  {
-    cobj->pop24(args.get(0).toInt32());
   }
 
   args.rval().setUndefined();
@@ -1025,25 +944,6 @@ bool js_yasio_obstream_write_i16(JSContext* ctx, uint32_t argc, jsval* vp)
   JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_obstream_write_i16 : Invalid Native Object");
 
   cobj->write<uint16_t>(args.get(0).toInt32());
-
-  args.rval().setUndefined();
-
-  return true;
-}
-
-bool js_yasio_obstream_write_i24(JSContext* ctx, uint32_t argc, jsval* vp)
-{
-  bool ok               = true;
-  yasio::obstream* cobj = nullptr;
-
-  JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-  JS::RootedObject obj(ctx);
-  obj.set(args.thisv().toObjectOrNull());
-  js_proxy_t* proxy = jsb_get_js_proxy(obj);
-  cobj              = (yasio::obstream*)(proxy ? proxy->ptr : nullptr);
-  JSB_PRECONDITION2(cobj, ctx, false, "js_yasio_obstream_write_i24 : Invalid Native Object");
-
-  cobj->write_i24(args.get(0).toInt32());
 
   args.rval().setUndefined();
 
@@ -1271,18 +1171,15 @@ void js_register_yasio_obstream(JSContext* ctx, JS::HandleObject global)
 
   static JSFunctionSpec funcs[] = {
       JS_FN("push32", js_yasio_obstream_push32, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-      JS_FN("push24", js_yasio_obstream_push24, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("push16", js_yasio_obstream_push16, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("push8", js_yasio_obstream_push8, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("pop32", js_yasio_obstream_pop32, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-      JS_FN("pop24", js_yasio_obstream_pop24, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("pop16", js_yasio_obstream_pop16, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("pop8", js_yasio_obstream_pop8, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_bool", js_yasio_obstream_write_bool, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_ix", js_yasio_obstream_write_ix, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_i8", js_yasio_obstream_write_i8, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_i16", js_yasio_obstream_write_i16, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-      JS_FN("write_i24", js_yasio_obstream_write_i24, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_i32", js_yasio_obstream_write_i32, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_i64", js_yasio_obstream_write_i64, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
       JS_FN("write_f", js_yasio_obstream_write_f, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
@@ -1805,6 +1702,9 @@ bool js_yasio_io_service_set_option(JSContext* ctx, uint32_t argc, jsval* vp)
             service->set_option(opt, args[1].toInt32(), str.get(), args[3].toInt32());
           }
           break;
+        case YOPT_C_MOD_FLAGS:
+          service->set_option(opt, args[1].toInt32(), args[2].toInt32(), args[3].toInt32());
+          break;
         case YOPT_S_TCP_KEEPALIVE:
           service->set_option(opt, args[1].toInt32(), args[2].toInt32(), args[3].toInt32());
           break;
@@ -2019,7 +1919,7 @@ void jsb_register_yasio(JSContext* ctx, JS::HandleObject global)
   YASIO_EXPORT_ENUM(YCK_KCP_CLIENT);
   YASIO_EXPORT_ENUM(YCK_KCP_SERVER);
 #endif
-#if defined(YASIO_HAVE_SSL)
+#if defined(YASIO_SSL_BACKEND)
   YASIO_EXPORT_ENUM(YCK_SSL_CLIENT);
 #endif
 
@@ -2038,6 +1938,10 @@ void jsb_register_yasio(JSContext* ctx, JS::HandleObject global)
   YASIO_EXPORT_ENUM(YOPT_C_ENABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_DISABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_KCP_CONV);
+  YASIO_EXPORT_ENUM(YOPT_C_MOD_FLAGS);
+
+  YASIO_EXPORT_ENUM(YCF_REUSEADDR);
+  YASIO_EXPORT_ENUM(YCF_EXCLUSIVEADDRUSE);
 
   YASIO_EXPORT_ENUM(YEK_CONNECT_RESPONSE);
   YASIO_EXPORT_ENUM(YEK_CONNECTION_LOST);

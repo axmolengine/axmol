@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
 // detail/select_interrupter.hpp
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2016-2020 halx99 (halx99 at live dot com)
+// Copyright (c) 2012-2021 halx99 (halx99 at live dot com)
 // Copyright (c) 2003-2020 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying

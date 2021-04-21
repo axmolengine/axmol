@@ -1,7 +1,11 @@
 
--- avoid memory leak
-collectgarbage("setpause", 100) 
-collectgarbage("setstepmul", 5000)
+if(version() >= 504) then
+    collectgarbage("incremental")
+else
+    -- avoid memory leak
+    collectgarbage("setpause", 100) 
+    collectgarbage("setstepmul", 5000)
+end
 
 ----------------
 -- run
