@@ -174,21 +174,24 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
         auto fullPath = FileUtils::getInstance()->fullPathForFilename(fontName);
         if (fullPath.empty()) return false;
 
-        FileStream fs;
-        if (!fs.open(fullPath, FileStream::Mode::READ))
+        FileStream* fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
+        if (!fs->isOpen())
+        {
+            delete fs;
             return false;
+        }
 
         std::unique_ptr<FT_StreamRec> fts(new FT_StreamRec());
         fts->read = ft_stream_read_callback;
         fts->close = ft_stream_close_callback;
-        fts->size = fs.seek(0, SEEK_END);
-        fs.seek(0, SEEK_SET);
+        fts->size = fs->seek(0, SEEK_END);
+        fs->seek(0, SEEK_SET);
 
-        fts->descriptor.pointer = new FileStream(std::move(fs));
+        fts->descriptor.pointer = std::move(fs);
 
         FT_Open_Args args = { 0 };
         args.flags = FT_OPEN_STREAM;
-        args.stream = fts.get();;
+        args.stream = fts.get();
 
         if (FT_Open_Face(getFTLibrary(), &args, 0, &face))
             return false;

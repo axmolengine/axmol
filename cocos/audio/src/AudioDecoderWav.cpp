@@ -52,23 +52,23 @@ namespace cocos2d {
     static bool wav_scan_chunk(WAV_FILE* wavf, uint32_t chunkID, void* header, void* body, uint32_t bodySize) {
         auto& fs = wavf->Stream;
         auto h = (WAV_CHUNK_HEADER*)header;
-        for (; fs.read(h, WAV_HEADER_SIZE) == WAV_HEADER_SIZE; ) {
+        for (; fs->read(h, WAV_HEADER_SIZE) == WAV_HEADER_SIZE; ) {
             wavf->PcmDataOffset += WAV_HEADER_SIZE;
             if (h->ChunkID == chunkID)
             { // chunk found
                 if (body)
                 { // require read body?
                     auto readsize = (std::min)(bodySize, h->ChunkSize);
-                    fs.read(body, readsize);
+                    fs->read(body, readsize);
                     if (h->ChunkSize > bodySize)
-                        fs.seek(h->ChunkSize - bodySize, SEEK_CUR);
+                        fs->seek(h->ChunkSize - bodySize, SEEK_CUR);
                     wavf->PcmDataOffset += h->ChunkSize;
                 }
                 return true;
             }
             else {
                 // Skip other non specified chunk
-                fs.seek(h->ChunkSize, SEEK_CUR);
+                fs->seek(h->ChunkSize, SEEK_CUR);
                 wavf->PcmDataOffset += h->ChunkSize;
             }
         }
@@ -76,7 +76,9 @@ namespace cocos2d {
     }
     static bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
     {
-        bool succeed = wavf->Stream.open(fullPath, FileStream::Mode::READ);
+        delete wavf->Stream;
+        wavf->Stream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
+        bool succeed = wavf->Stream->isOpen();
         if (!succeed)
             return false;
 
@@ -84,7 +86,7 @@ namespace cocos2d {
         wavf->PcmDataOffset = 0;
 
         // Parsing RIFF chunk
-        fileStream.read(&wavf->FileHeader, WAV_RIFF_SIZE);
+        fileStream->read(&wavf->FileHeader, WAV_RIFF_SIZE);
         wavf->PcmDataOffset += WAV_RIFF_SIZE;
 
         if (wavf->FileHeader.Riff.Format != WAV_SIGN_ID)
@@ -132,13 +134,13 @@ namespace cocos2d {
             if (!IsEqualGUID(fmtInfo.ExtParams.SubFormat, WAV_SUBTYPE_PCM)
                 && !IsEqualGUID(fmtInfo.ExtParams.SubFormat, WAV_SUBTYPE_IEEE_FLOAT))
             {
-                fileStream.close();
+                fileStream->close();
                 return false;
             }
             break;
         default:
             ALOGW("The wav format %d doesn't supported currently!", (int)fmtInfo.AudioFormat);
-            fileStream.close();
+            fileStream->close();
             assert(false);
             return false;;
         }
@@ -148,18 +150,21 @@ namespace cocos2d {
 
     static int wav_read(WAV_FILE* wavf, char* pcmBuf, uint32_t bytesToRead)
     {
-        return wavf->Stream.read(pcmBuf, bytesToRead);
+        return wavf->Stream->read(pcmBuf, bytesToRead);
     }
 
     static int wav_seek(WAV_FILE* wavf, int offset)
     {
-        auto newOffset = wavf->Stream.seek(wavf->PcmDataOffset + offset, SEEK_SET);
+        auto newOffset = wavf->Stream->seek(wavf->PcmDataOffset + offset, SEEK_SET);
         return newOffset >= wavf->PcmDataOffset ? newOffset - wavf->PcmDataOffset : -1;
     }
 
     static int wav_close(WAV_FILE* wavf)
     {
-        return  wavf->Stream.close();
+        const auto result = wavf->Stream->close();
+        delete wavf->Stream;
+        wavf->Stream = nullptr;
+        return result;
     }
 
     AudioDecoderWav::AudioDecoderWav()

@@ -60,7 +60,7 @@ struct UnzFileStream;
 union PXFileHandle {
     int _fd = -1;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    AAsset* _asset;
+    AAsset* _asset; off_t 
     ZipFileStream _zfs;
 #endif
 };
@@ -69,11 +69,8 @@ struct PXIoF;
 
 class CC_DLL FileStream {
 public:
-    FileStream();
-    ~FileStream();
-
-    FileStream(FileStream&& rhs);
-    FileStream& operator=(FileStream&& rhs);
+    FileStream() = default;
+    virtual ~FileStream() = default;
 
     enum class Mode {
         READ,
@@ -81,19 +78,65 @@ public:
         APPEND,
     };
 
-    bool open(const std::string& path, Mode mode);
-    int close();
+    virtual int close() = 0;
 
-    int seek(long offset, int origin);
-    int read(void* buf, unsigned int size);
+    virtual int seek(long offset, int origin) = 0;
+    virtual int read(void* buf, unsigned int size) = 0;
 
-    int write(const void* buf, unsigned int size);
+    virtual int write(const void* buf, unsigned int size) = 0;
+    virtual int tell() = 0;
+    virtual bool isOpen() const = 0;
+};
 
-    operator bool() const;
+class CC_DLL PosixFileStream : public FileStream
+{
+public:
+    PosixFileStream(const std::string& path, FileStream::Mode mode);
+    virtual ~PosixFileStream();
+
+    PosixFileStream(const PosixFileStream& other) = delete;
+
+    PosixFileStream(PosixFileStream&& other) noexcept
+        : FileStream(std::move(other)),
+          _handle(std::move(other._handle)),
+          _iof(other._iof)
+    {
+        other.reset();
+    }
+
+    PosixFileStream& operator=(const PosixFileStream& other) = delete;
+
+    PosixFileStream& operator=(PosixFileStream&& other) noexcept
+    {
+        if (this == &other)
+            return *this;
+        FileStream::operator =(std::move(other));
+        _handle = std::move(other._handle);
+        _iof = other._iof;
+
+        other.reset();
+
+        return *this;
+    }
+
+    enum class Mode {
+        READ,
+        WRITE,
+        APPEND,
+    };
+
+    int close() override;
+
+    int seek(long offset, int origin) override;
+    int read(void* buf, unsigned int size) override;
+    int write(const void* buf, unsigned int size) override;
+    int tell() override;
+    bool isOpen() const override;
 
 private:
-    void zeroset();
-    void assign(FileStream&& rhs);
+    bool open(const std::string& path, FileStream::Mode mode);
+    int internalClose();
+    void reset();
 
     PXFileHandle _handle;
     const PXIoF* _iof;
