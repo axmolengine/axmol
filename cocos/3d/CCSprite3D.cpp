@@ -401,7 +401,7 @@ Sprite3D* Sprite3D::createSprite3DNode(NodeData* nodedata,ModelData* modeldata,c
                 textureData = materialData->getTextureData(NTextureData::Usage::Normal);
                 if (textureData)
                 {
-                    auto tex = Director::getInstance()->getTextureCache()->addImage(textureData->filename);
+                    auto tex = _director->getTextureCache()->addImage(textureData->filename);
                     if(tex)
                     {
                         Texture2D::TexParams texParams;
@@ -566,7 +566,7 @@ void Sprite3D::createNode(NodeData* nodedata, Node* root, const MaterialDatas& m
                             textureData = materialData->getTextureData(NTextureData::Usage::Normal);
                             if (textureData)
                             {
-                                auto tex = Director::getInstance()->getTextureCache()->addImage(textureData->filename);
+                                auto tex = _director->getTextureCache()->addImage(textureData->filename);
                                 if (tex)
                                 {
                                     Texture2D::TexParams texParams;
@@ -659,7 +659,7 @@ void  Sprite3D::addMesh(Mesh* mesh)
 
 void Sprite3D::setTexture(const std::string& texFile)
 {
-    auto tex = Director::getInstance()->getTextureCache()->addImage(texFile);
+    auto tex = _director->getTextureCache()->addImage(texFile);
     setTexture(tex);
 }
 
@@ -720,9 +720,8 @@ void Sprite3D::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTra
     flags |= FLAGS_RENDER_AS_3D;
     
     //
-    Director* director = Director::getInstance();
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
     
     bool visibleByCamera = isVisitableByVisitingCamera();
     
@@ -753,7 +752,7 @@ void Sprite3D::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTra
         this->draw(renderer, _modelViewTransform, flags);
     }
     
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void Sprite3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)

@@ -1,4 +1,3 @@
-cmake_minimum_required(VERSION 3.6)
 
 set(lib_name edtaa3func)
 set(target_name ${lib_name})

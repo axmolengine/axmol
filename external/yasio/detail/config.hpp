@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -74,9 +74,11 @@ SOFTWARE.
 // #define YASIO_HAVE_KCP 1
 
 /*
-** Uncomment or add compiler flag -DYASIO_HAVE_SSL for SSL support
+** Uncomment or add compiler flag -DYASIO_SSL_BACKEND=1 for SSL support with OpenSSL
+** 1. -DYASIO_SSL_BACKEND=1: OpenSSL
+** 2. -DYASIO_SSL_BACKEND=2: mbedtls
 */
-#define YASIO_HAVE_SSL 1
+#define YASIO_SSL_BACKEND 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_DISABLE_CONCURRENT_SINGLETON to disable concurrent
@@ -90,6 +92,22 @@ SOFTWARE.
 // #define YASIO_ENABLE_UDS 1
 
 /*
+** Uncomment or add compiler flag -DYASIO_NT_COMPAT_GAI for earlier versions of Windows XP
+** see: https://docs.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-getaddrinfo
+*/
+// #define YASIO_NT_COMPAT_GAI 1
+
+/*
+** Uncomment or add compiler flag -DYASIO_MINIFY_EVENT to minfy size of io_event
+*/
+// #define YASIO_MINIFY_EVENT 1
+
+/*
+** Uncomment or add compiler flag -DYASIO_HAVE_HALF_FLOAT to enable half-precision floating-point support
+*/
+// #define YASIO_HAVE_HALF_FLOAT 1
+
+/*
 ** Workaround for 'vs2013 without full c++11 support', in the future, drop vs2013 support and
 ** follow 3 lines code will be removed
 */
@@ -97,55 +115,15 @@ SOFTWARE.
 #  define YASIO_DISABLE_CONCURRENT_SINGLETON 1
 #endif
 
-/*
-** Uncomment or add compiler flag -DYASIO_NT_COMPAT_GAI for earlier versions of Windows XP
-** see: https://docs.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-getaddrinfo
-*/
-// #define YASIO_NT_COMPAT_GAI 1
-
-/*
-** Uncomment or add compiler flag -DYASIO_MINIFY_EVENT to minfy size of io_event 
-*/
-// #define YASIO_MINIFY_EVENT 1
-
-/*
-** Uncomment or add compiler flag -DYASIO_NO_EXCEPTIONS to disable exceptions
-*/
-// #define YASIO_NO_EXCEPTIONS 1
-
 #if defined(YASIO_HEADER_ONLY)
 #  define YASIO__DECL inline
 #else
 #  define YASIO__DECL
 #endif
 
-#if defined(_WIN32)
-#  define YASIO_LOG_TAG(tag, format, ...)                                                          \
-    OutputDebugStringA(::yasio::strfmt(127, (tag format "\n"), ##__VA_ARGS__).c_str())
-#elif defined(ANDROID) || defined(__ANDROID__)
-#  include <android/log.h>
-#  include <jni.h>
-#  define YASIO_LOG_TAG(tag, format, ...)                                                          \
-    __android_log_print(ANDROID_LOG_INFO, "yasio", (tag format), ##__VA_ARGS__)
-#else
-#  define YASIO_LOG_TAG(tag, format, ...) printf((tag format "\n"), ##__VA_ARGS__)
-#endif
-
-#define YASIO_LOG(format, ...) YASIO_LOG_TAG("[yasio]", format, ##__VA_ARGS__)
-
-#if !defined(YASIO_VERBOSE_LOG)
-#  define YASIO_LOGV(fmt, ...) (void)0
-#else
-#  define YASIO_LOGV YASIO_LOG
-#endif
-
-#if !defined(YASIO_NO_EXCEPTIONS)
-#  define YASIO__THROW(x, retval) throw(x)
-#else
-#  define YASIO__THROW(x, retval) return (retval)
-#endif
-
 #define YASIO_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
+
+#define YASIO_SSIZEOF(T) static_cast<int>(sizeof(T))
 
 /*
 ** YASIO_OBSOLETE_DEPRECATE
@@ -153,9 +131,8 @@ SOFTWARE.
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
 #  define YASIO_OBSOLETE_DEPRECATE(_Replacement) __attribute__((deprecated))
 #elif _MSC_VER >= 1400 // vs 2005 or higher
-#  define YASIO_OBSOLETE_DEPRECATE(_Replacement)                                                   \
-    __declspec(deprecated(                                                                         \
-        "This function will be removed in the future. Consider using " #_Replacement " instead."))
+#  define YASIO_OBSOLETE_DEPRECATE(_Replacement)                                                                                                               \
+    __declspec(deprecated("This function will be removed in the future. Consider using " #_Replacement " instead."))
 #else
 #  define YASIO_OBSOLETE_DEPRECATE(_Replacement)
 #endif
@@ -163,7 +140,7 @@ SOFTWARE.
 /*
 **  The yasio version macros
 */
-#define YASIO_VERSION_NUM 0x033400
+#define YASIO_VERSION_NUM 0x033700
 
 /*
 ** The macros used by io_service.
@@ -171,34 +148,32 @@ SOFTWARE.
 // The default max listen count of tcp server.
 #define YASIO_SOMAXCONN 19
 
-// The max wait duration in macroseconds when io_service nothing to do.
+// The max wait duration in microseconds when io_service nothing to do.
 #define YASIO_MAX_WAIT_DURATION (5LL * 60LL * 1000LL * 1000LL)
 
-// The min wait duration in macroseconds when io_service have outstanding work to do.
+// The min wait duration in microseconds when io_service have outstanding work to do.
 // !!!Only affects Single Core CPU
 #define YASIO_MIN_WAIT_DURATION 10LL
 
 // The default ttl of multicast
 #define YASIO_DEFAULT_MULTICAST_TTL (int)128
 
+// The max internet buffer size
 #define YASIO_INET_BUFFER_SIZE 65536
 
-/* max pdu buffer length, avoid large memory allocation when application layer decode a huge length
- * field. */
+// The max pdu buffer length, avoid large memory allocation when application decode a huge length.
 #define YASIO_MAX_PDU_BUFFER_SIZE static_cast<int>(1 * 1024 * 1024)
 
-// The max Initial Bytes To Strip for length field based frame decode mechanism
-#define YASIO_MAX_IBTS 32
+// The max Initial Bytes To Strip for unpack.
+#define YASIO_UNPACK_MAX_STRIP 32
 
 // The fallback name servers when c-ares can't get name servers from system config,
 // For Android 8 or later, yasio will try to retrive through jni automitically,
-// For iOS, c-ares doesn't retrive system dns, yasio will try through API 'res_getservers' provided by libresov
+// For iOS, since c-ares-1.16.1, it will use libresolv for retrieving DNS servers.
 // please see:
+//   https://c-ares.haxx.se/changelog.html
 //   https://github.com/c-ares/c-ares/issues/276
 //   https://github.com/c-ares/c-ares/pull/148
-//   https://github.com/c-ares/c-ares/pull/29
 #define YASIO_CARES_FALLBACK_DNS "8.8.8.8,223.5.5.5,114.114.114.114"
-
-#include "strfmt.hpp"
 
 #endif

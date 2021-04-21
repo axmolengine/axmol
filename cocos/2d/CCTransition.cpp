@@ -88,7 +88,7 @@ bool TransitionScene::initWithDuration(float t, Scene *scene)
 #endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         _inScene = scene;
         _inScene->retain();
-        _outScene = Director::getInstance()->getRunningScene();
+        _outScene = _director->getRunningScene();
         if (_outScene == nullptr)
         {
             _outScene = Scene::create();
@@ -152,10 +152,9 @@ void TransitionScene::setNewScene(float /*dt*/)
     this->unschedule(CC_SCHEDULE_SELECTOR(TransitionScene::setNewScene));
     
     // Before replacing, save the "send cleanup to scene"
-    Director *director = Director::getInstance();
-    _isSendCleanupToScene = director->isSendCleanupToScene();
+    _isSendCleanupToScene = _director->isSendCleanupToScene();
     
-    director->replaceScene(_inScene);
+    _director->replaceScene(_inScene);
 #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
@@ -329,7 +328,7 @@ TransitionJumpZoom* TransitionJumpZoom::create(float t, Scene* scene)
 void TransitionJumpZoom::onEnter()
 {
     TransitionScene::onEnter();
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
 
     _inScene->setScale(0.5f);
     _inScene->setPosition(s.width, 0);
@@ -412,7 +411,7 @@ ActionInterval* TransitionMoveInL::easeActionWithAction(ActionInterval* action)
 
 void TransitionMoveInL::initScenes()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     _inScene->setPosition(-s.width,0);
 }
 
@@ -440,7 +439,7 @@ TransitionMoveInR* TransitionMoveInR::create(float t, Scene* scene)
 
 void TransitionMoveInR::initScenes()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     _inScene->setPosition(s.width,0);
 }
 
@@ -468,7 +467,7 @@ TransitionMoveInT* TransitionMoveInT::create(float t, Scene* scene)
 
 void TransitionMoveInT::initScenes()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     _inScene->setPosition(0,s.height);
 }
 
@@ -496,7 +495,7 @@ TransitionMoveInB* TransitionMoveInB::create(float t, Scene* scene)
 
 void TransitionMoveInB::initScenes()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     _inScene->setPosition(0,-s.height);
 }
 
@@ -544,13 +543,13 @@ void TransitionSlideInL::sceneOrder()
 
 void TransitionSlideInL:: initScenes()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     _inScene->setPosition(-(s.width-ADJUST_FACTOR),0.0f);
 }
 
 ActionInterval* TransitionSlideInL::action()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     return MoveBy::create(_duration, Vec2(s.width-ADJUST_FACTOR,0.0f));
 }
 
@@ -600,14 +599,14 @@ void TransitionSlideInR::sceneOrder()
 
 void TransitionSlideInR::initScenes()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     _inScene->setPosition(s.width-ADJUST_FACTOR,0);
 }
 
 
 ActionInterval* TransitionSlideInR:: action()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     return MoveBy::create(_duration, Vec2(-(s.width-ADJUST_FACTOR),0.0f));
 }
 
@@ -641,14 +640,14 @@ void TransitionSlideInT::sceneOrder()
 
 void TransitionSlideInT::initScenes()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     _inScene->setPosition(0,s.height-ADJUST_FACTOR);
 }
 
 
 ActionInterval* TransitionSlideInT::action()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     return MoveBy::create(_duration, Vec2(0.0f,-(s.height-ADJUST_FACTOR)));
 }
 
@@ -681,14 +680,14 @@ void TransitionSlideInB::sceneOrder()
 
 void TransitionSlideInB:: initScenes()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     _inScene->setPosition(0,-(s.height-ADJUST_FACTOR));
 }
 
 
 ActionInterval* TransitionSlideInB:: action()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     return MoveBy::create(_duration, Vec2(0.0f,s.height-ADJUST_FACTOR));
 }
 
@@ -1289,7 +1288,7 @@ void TransitionCrossFade::onEnter()
     // create a transparent color layer
     // in which we are going to add our rendertextures
     Color4B  color(0,0,0,0);
-    Size size = Director::getInstance()->getWinSize();
+    Size size = _director->getWinSize();
     LayerColor* layer = LayerColor::create(color);
 
     // create the first render texture for inScene
@@ -1397,7 +1396,7 @@ void TransitionTurnOffTiles::onEnter()
     _outSceneProxy->setTarget(_outScene);
     _outSceneProxy->onEnter();
 
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     float aspect = s.width / s.height;
     int x = (int)(12 * aspect);
     int y = 12;
@@ -1593,7 +1592,7 @@ void TransitionFadeTR::onEnter()
     _outSceneProxy->setTarget(_outScene);
     _outSceneProxy->onEnter();
 
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     float aspect = s.width / s.height;
     int x = (int)(12 * aspect);
     int y = 12;

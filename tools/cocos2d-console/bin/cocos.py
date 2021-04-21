@@ -34,6 +34,12 @@ from MultiLanguage import MultiLanguage
 
 COCOS2D_CONSOLE_VERSION = '2.3'
 
+def dict_contains(dict,key):
+    if(sys.version_info.major >= 3):
+        return (key in dict)
+    else:
+        return dict.has_key(key)
+
 def encode_with(text,encoding):
     if(sys.version_info.major >= 3):
         return text

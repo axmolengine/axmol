@@ -85,7 +85,6 @@ void LinearHorizontalLayoutManager::doLayout(LayoutProtocol* layout)
     }
 }
     
-    
 //LinearVerticalLayoutManager
 LinearVerticalLayoutManager* LinearVerticalLayoutManager::create()
 {
@@ -142,7 +141,83 @@ void LinearVerticalLayoutManager::doLayout(LayoutProtocol* layout)
         }
     }
 }
-    
+
+
+//LinearCenterVerticalLayoutManager
+LinearCenterVerticalLayoutManager* LinearCenterVerticalLayoutManager::create()
+{
+    auto* exe = new (std::nothrow) LinearCenterVerticalLayoutManager();
+    if (exe)
+    {
+        exe->autorelease();
+        return exe;
+    }
+    CC_SAFE_DELETE(exe);
+    return nullptr;
+}
+
+void LinearCenterVerticalLayoutManager::doLayout(LayoutProtocol* layout)
+{
+    const auto layoutSize = layout->getLayoutContentSize();
+    auto&& container = layout->getLayoutElements();
+    auto topBoundary = layoutSize.height;
+
+    auto totalHeight = 0.f;
+    // need to get total sub-widget height
+    for (auto&& subWidget : container)
+    {
+        auto* child = dynamic_cast<LayoutParameterProtocol*>(subWidget);
+        if (child)
+        {
+            auto* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter());
+            if (layoutParameter)
+            {
+                auto&& mg = layoutParameter->getMargin();
+                totalHeight += subWidget->getBoundingBox().size.height + mg.top + mg.bottom;
+            }
+        }
+    }
+
+    topBoundary = topBoundary - (topBoundary - totalHeight) / 2.f;
+
+    for (auto&& subWidget : container)
+    {
+        auto* child = dynamic_cast<LayoutParameterProtocol*>(subWidget);
+        if (child)
+        {
+            auto* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter());
+
+            if (layoutParameter)
+            {
+                const auto childGravity = layoutParameter->getGravity();
+                const auto ap = subWidget->getAnchorPoint();
+                const auto cs = subWidget->getBoundingBox().size;
+                auto finalPosX = ap.x * cs.width;
+                auto finalPosY = topBoundary - ((1.0f - ap.y) * cs.height);
+                switch (childGravity)
+                {
+                case LinearLayoutParameter::LinearGravity::NONE:
+                case LinearLayoutParameter::LinearGravity::LEFT:
+                    break;
+                case LinearLayoutParameter::LinearGravity::RIGHT:
+                    finalPosX = layoutSize.width - ((1.0f - ap.x) * cs.width);
+                    break;
+                case LinearLayoutParameter::LinearGravity::CENTER_HORIZONTAL:
+                    finalPosX = layoutSize.width / 2.0f - cs.width * (0.5f - ap.x);
+                    break;
+                default:
+                    break;
+                }
+                auto&& mg = layoutParameter->getMargin();
+                finalPosX += mg.left;
+                finalPosY -= mg.top;
+                subWidget->setPosition(finalPosX, finalPosY);
+                topBoundary = subWidget->getPosition().y - subWidget->getAnchorPoint().y * subWidget->getBoundingBox().size.height - mg.bottom;
+            }
+        }
+    }
+}
+
 //RelativeLayoutManager
 
 RelativeLayoutManager* RelativeLayoutManager::create()

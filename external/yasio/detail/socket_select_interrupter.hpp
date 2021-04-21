@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store universal app
-//
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
 // detail/socket_select_interrupter.hpp
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2016-2020 halx99 (halx99 at live dot com)
+// Copyright (c) 2012-2021 halx99 (halx99 at live dot com)
 // Copyright (c) 2003-2020 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 // Copyright (c) 2008 Roelof Naude (roelof.naude at gmail dot com)
 //
@@ -99,8 +99,8 @@ private:
     server.set_nonblocking(true);
     server.set_optval(IPPROTO_TCP, TCP_NODELAY, 1);
 
-    read_descriptor_  = server.detach();
-    write_descriptor_ = client.detach();
+    read_descriptor_  = server.release_handle();
+    write_descriptor_ = client.release_handle();
   }
 
   // Close the descriptors.

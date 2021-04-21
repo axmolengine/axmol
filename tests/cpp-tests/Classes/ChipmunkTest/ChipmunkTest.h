@@ -52,10 +52,9 @@ public:
     virtual void onAcceleration(cocos2d::Acceleration* acc, cocos2d::Event* event);
 
 private:
-    cocos2d::Texture2D* _spriteTexture; // weak ref
-#if CC_ENABLE_CHIPMUNK_INTEGRATION    
+    cocos2d::Texture2D* _spriteTexture; // weak ref  
     cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
-#endif
+
     cpSpace* _space; // strong ref
     cpShape* _walls[4];
 };

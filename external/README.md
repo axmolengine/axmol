@@ -1,7 +1,7 @@
 # The engine-x thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 2.1.0.4192 branch on chromium/4192
+- Version: 2.1.0.4439 branch on chromium/4439
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -16,12 +16,12 @@
 
 ## Bullet
 - Upstream: https://github.com/bulletphysics/bullet3
-- Version: git 3.06-a72ce29 (8843)
+- Version: 3.09
 - License: zlib
 
 ## c-ares
 - Upstream: https://github.com/c-ares/c-ares
-- Version: git 1.61.1-0d252eb (2021)
+- Version: 1.17.1
 - License: MIT
 
 ## Chipmunk2D
@@ -41,8 +41,8 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.73.0
-- License: MIT
+- Version: 7.75.0
+- License: Curl (MIT/X)
 
 ## edtaa3func
 - Upstream: https://github.com/zilongshanren/edtaa3func
@@ -64,7 +64,7 @@
 - Version: 1.12.0
 - License: Apache-2.0
 
-## Freetype
+## FreeType
 - Upstream: https://www.freetype.org/
 - Version: 2.10.4
 - License: BSD-style (The FreeType Project)
@@ -86,7 +86,7 @@
 
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
-- Version: git 2.0.5-3e9e7c7 (2052) with CMakeLists.txt modified for sutiable as a thirdparty of CMake build system
+- Version: 2.0.6 with CMakeLists.txt modified for sutiable as a thirdparty of CMake build system
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -143,7 +143,7 @@
 
 ## OpenAL Soft
 - Upstream: https://github.com/kcat/openal-soft
-- Version: 1.21.0-26b03f5 (7320)
+- Version: 1.21.1-0f7ed49 (7533)
 - License: LGPL-2.1
 
 ## OpenSSL
@@ -163,7 +163,7 @@
 
 ## pugixml
 - Upstream: https://github.com/zeux/pugixml
-- Version: 1.10
+- Version: 1.11
 - License: MIT
 
 ## rapidjson
@@ -218,7 +218,7 @@
 
 ## yasio
 - Upstream: https://github.com/yasio/yasio
-- Version: 3.34.0
+- Version: 3.37.0
 - License: MIT WITH Anti-996
 
 ## zlib

@@ -38,8 +38,9 @@ void DepthStencilStateGL::reset()
 
 void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigned int stencilReferenceValueBack) const
 {
+    const auto dsFlags = _depthStencilInfo.flags;
     // depth test
-    if (bitmask::any(_depthStencilInfo.depthStencilFlags, TargetBufferFlags::DEPTH))
+    if (bitmask::any(dsFlags, DepthStencilFlags::DEPTH_TEST))
     {
         glEnable(GL_DEPTH_TEST); 
     }
@@ -48,7 +49,7 @@ void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigne
         glDisable(GL_DEPTH_TEST);
     }
     
-    if (_depthStencilInfo.depthWriteEnabled)
+    if (bitmask::any(dsFlags, DepthStencilFlags::DEPTH_WRITE))
         glDepthMask(GL_TRUE);
     else
         glDepthMask(GL_FALSE);
@@ -56,7 +57,7 @@ void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigne
     glDepthFunc(UtilsGL::toGLComareFunction(_depthStencilInfo.depthCompareFunction));
     
     // stencil test
-    if (bitmask::any(_depthStencilInfo.depthStencilFlags, TargetBufferFlags::STENCIL)) {
+    if (bitmask::any(dsFlags, DepthStencilFlags::STENCIL_TEST)) {
         glEnable(GL_STENCIL_TEST);
 
         if (_isBackFrontStencilEqual)

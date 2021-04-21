@@ -53,13 +53,12 @@ public:
         addTest("Actions - Ease", [](){return new (std::nothrow) ActionsEaseTests(); });
         addTest("Actions - Progress", [](){return new (std::nothrow) ActionsProgressTests(); });
         addTest("Audio - NewAudioEngine", []() { return new (std::nothrow) AudioEngineTests(); });
-#if CC_ENABLE_BOX2D_INTEGRATION
-        addTest("Box2d - Basic", []() { return new (std::nothrow) Box2DTests(); });
-//      addTest("Box2d - TestBed", []() { return new (std::nothrow) Box2dTestBedSuite(); });
-#endif
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
-       addTest("Chipmunk", []() { return new ChipmunkTests(); });
-#endif
+
+
+        addTest("Box2D - Basic", []() { return new (std::nothrow) Box2DTests(); });
+//      addTest("Box2D - TestBed", []() { return new (std::nothrow) Box2dTestBedSuite(); });
+        addTest("Chipmunk2D - Basic", []() { return new ChipmunkTests(); });
+
         addTest("Bugs", []() { return new BugsTests(); });
         addTest("Click and Move", [](){return new ClickAndMoveTest(); });
         addTest("Configuration", []() { return new ConfigurationTests(); });
@@ -81,7 +80,7 @@ public:
         addTest("Material System", [](){return new MaterialSystemTest(); });
         addTest("Navigation Mesh", [](){return new NavMeshTests(); });
         addTest("Node: BillBoard Test", [](){  return new BillBoardTests(); });
-        addTest("Node: Camera 3D Test", [](){  return new Camera3DTests(); });
+        addTest("Node: Camera3D Test", [](){  return new Camera3DTests(); });
         addTest("Node: Clipping", []() { return new ClippingNodeTests(); });
         addTest("Node: Draw", [](){return new DrawPrimitivesTests(); });
         addTest("Node: Label - New API", [](){return new NewLabelTests(); });
@@ -94,7 +93,7 @@ public:
         addTest("Node: Particles", [](){return new ParticleTests(); });
         addTest("Node: Particle3D (PU)", [](){return new Particle3DTests(); });
 #if CC_USE_PHYSICS
-       addTest("Node: Physics", []() { return new PhysicsTests(); });
+        addTest("Node: Physics", []() { return new PhysicsTests(); });
 #endif
         addTest("Node: Physics3D", []() { return new Physics3DTests(); } );
         addTest("Node: RenderTexture", [](){return new RenderTextureTests(); });

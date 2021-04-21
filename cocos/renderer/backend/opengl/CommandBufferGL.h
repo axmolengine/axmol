@@ -70,13 +70,13 @@ public:
     /**
      * @brief Indicate the begining of a frame
      */
-    virtual void beginFrame() override;
+    virtual bool beginFrame() override;
 
     /**
      * Begin a render pass, initial color, depth and stencil attachment.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderTarget* rt, const RenderPassParams& descriptor) override;
+    virtual void beginRenderPass(const RenderTarget* rt, const RenderPassDescriptor& descriptor) override;
 
     /**
      * Update depthStencil status, improvment: for metal backend cache it

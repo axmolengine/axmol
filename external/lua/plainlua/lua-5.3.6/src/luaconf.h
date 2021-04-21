@@ -801,8 +801,10 @@
 */
 #if defined(_MSC_VER)
 #define LUAI_USER_ALIGNMENT_T double
-#else
+#elif defined(__APPLE__)
 #define LUAI_USER_ALIGNMENT_T long double
+#else
+#define LUAI_USER_ALIGNMENT_T max_align_t
 #endif
 
 
