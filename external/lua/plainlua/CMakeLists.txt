@@ -1,4 +1,3 @@
-cmake_minimum_required(VERSION 3.6)
 
 set(LUA_SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/lua-${LUA_VERSION}/src)
 
