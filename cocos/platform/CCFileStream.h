@@ -60,7 +60,7 @@ struct UnzFileStream;
 union PXFileHandle {
     int _fd = -1;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    AAsset* _asset; off_t 
+    AAsset* _asset; 
     ZipFileStream _zfs;
 #endif
 };
