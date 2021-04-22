@@ -370,10 +370,8 @@ bool FileUtils::writeValueMapToFile(const ValueMap& dict, const std::string& ful
 	auto rootEle = doc.document_element();
 	
     generateElementForDict(dict, rootEle);
-    std::stringstream ss;
-    doc.save(ss, "  ");
-    return writeStringToFile(ss.str(), fullPath);
-	//return doc.save_file(fullPath.c_str());
+
+	return doc.save_file(fullPath.c_str());
 }
 
 bool FileUtils::writeValueVectorToFile(const ValueVector& vecData, const std::string& fullPath) const
@@ -385,10 +383,8 @@ bool FileUtils::writeValueVectorToFile(const ValueVector& vecData, const std::st
 
 	auto rootEle = doc.document_element();
     generateElementForArray(vecData, rootEle);
-    std::stringstream ss;
-    doc.save(ss, "  ");
-    return writeStringToFile(ss.str(), fullPath);
-	//return doc.save_file(fullPath.c_str());
+
+	return doc.save_file(fullPath.c_str());
 }
 
 static void generateElementForObject(const Value& value, pugi::xml_node& parent)
@@ -1111,11 +1107,6 @@ bool FileUtils::isDirectoryExistInternal(const std::string& dirPath) const
 {
     CCASSERT(false, "FileUtils not support isDirectoryExistInternal");
     return false;
-}
-
-FileStream* FileUtils::openFileStream(const std::string& dirPath, FileStream::Mode mode)
-{
-    return new PosixFileStream(dirPath, mode);
 }
 
 bool FileUtils::createDirectory(const std::string& path) const

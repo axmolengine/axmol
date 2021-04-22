@@ -28,6 +28,8 @@
 #include "renderer/CCRenderer.h"
 #include "renderer/CCCustomCommand.h"
 
+
+
 USING_NS_CC;
 USING_NS_CC_EXT;
 
@@ -48,7 +50,6 @@ bool Box2DTest::init()
     {
         return false;
     }
-#if CC_ENABLE_BOX2D_INTEGRATION
     auto dispatcher = Director::getInstance()->getEventDispatcher();
 
     auto touchListener = EventListenerTouchAllAtOnce::create();
@@ -81,20 +82,10 @@ bool Box2DTest::init()
     label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 50);
 
     scheduleUpdate();
-#else
-    auto label = Label::createWithTTF("Should define CC_ENABLE_BOX2D_INTEGRATION=1\n to run this test case",
-        "fonts/arial.ttf",
-        18);
-    auto size = Director::getInstance()->getWinSize();
-    label->setPosition(size.width / 2, size.height / 2);
-
-    addChild(label);
-#endif
 
     return true;
 }
 
-#if CC_ENABLE_BOX2D_INTEGRATION
 Box2DTest::Box2DTest()
     : _spriteTexture(nullptr)
     , world(nullptr)
@@ -220,19 +211,17 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
     fixtureDef.friction = 0.3f;
     body->CreateFixture(&fixtureDef);
 
-#if CC_ENABLE_BOX2D_INTEGRATION
     auto parent = this->getChildByTag(kTagParentNode);
 
     //We have a 64x64 sprite sheet with 4 different 32x32 images.  The following code is
     //just randomly picking one of the images
     int idx = (CCRANDOM_0_1() > .5 ? 0 : 1);
     int idy = (CCRANDOM_0_1() > .5 ? 0 : 1);
-    auto sprite = PhysicsSprite::createWithTexture(_spriteTexture, Rect(32 * idx, 32 * idy, 32, 32));
+    auto sprite = PhysicsSpriteBox2D::createWithTexture(_spriteTexture, Rect(32 * idx, 32 * idy, 32, 32));
     parent->addChild(sprite);
     sprite->setB2Body(body);
     sprite->setPTMRatio(PTM_RATIO);
     sprite->setPosition(cocos2d::Vec2(p.x, p.y));
-#endif
 }
 
 void Box2DTest::update(float dt)
@@ -265,5 +254,3 @@ void Box2DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
         addNewSpriteAtPosition(location);
     }
 }
-
-#endif

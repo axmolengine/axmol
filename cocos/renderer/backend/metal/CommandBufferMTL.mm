@@ -125,12 +125,12 @@ namespace
         }
     }
     
-    static MTLRenderPassDescriptor* toMTLRenderPassDescriptor(const RenderTarget* rt, const RenderPassParams& params)
+    static MTLRenderPassDescriptor* toMTLRenderPassDescriptor(const RenderTarget* rt, const RenderPassDescriptor& desc)
     {
         MTLRenderPassDescriptor* mtlDescritpor = [MTLRenderPassDescriptor renderPassDescriptor];
         
         auto rtMTL = static_cast<const RenderTargetMTL*>(rt);
-        rtMTL->applyRenderPassAttachments(params, mtlDescritpor);
+        rtMTL->applyRenderPassAttachments(desc, mtlDescritpor);
         return mtlDescritpor;
     }
     
@@ -185,7 +185,7 @@ void CommandBufferMTL::setRenderPipeline(RenderPipeline* renderPipeline)
     _renderPipelineMTL = static_cast<RenderPipelineMTL*>(renderPipeline);
 }
 
-void CommandBufferMTL::beginFrame()
+bool CommandBufferMTL::beginFrame()
 {
     _autoReleasePool = [[NSAutoreleasePool alloc] init];
     dispatch_semaphore_wait(_frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
@@ -196,12 +196,13 @@ void CommandBufferMTL::beginFrame()
     [_mtlCommandBuffer retain];
 
     BufferManager::beginFrame();
+    return true;
 }
 
-id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassParams& renderPassParams)
+void CommandBufferMTL::updateRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassDescriptor& renderPassDesc)
 {
     if(_mtlRenderEncoder != nil &&
-       _currentRenderPassParams == renderPassParams &&
+       _currentRenderPassDesc == renderPassDesc &&
        _currentRenderTarget == renderTarget &&
        _currentRenderTargetFlags == renderTarget->getTargetFlags())
     {
@@ -209,7 +210,7 @@ id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const Rend
     }
     
     _currentRenderTarget = renderTarget;
-    _currentRenderPassParams = renderPassParams;
+    _currentRenderPassDesc = renderPassDesc;
     _currentRenderTargetFlags = renderTarget->getTargetFlags();
     
     if(_mtlRenderEncoder != nil)
@@ -219,21 +220,18 @@ id<MTLRenderCommandEncoder> CommandBufferMTL::getRenderCommandEncoder(const Rend
         _mtlRenderEncoder = nil;
     }
 
-    auto mtlDescriptor = toMTLRenderPassDescriptor(renderTarget, renderPassParams);
+    auto mtlDescriptor = toMTLRenderPassDescriptor(renderTarget, renderPassDesc);
     _renderTargetWidth = (unsigned int)mtlDescriptor.colorAttachments[0].texture.width;
     _renderTargetHeight = (unsigned int)mtlDescriptor.colorAttachments[0].texture.height;
-    id<MTLRenderCommandEncoder> mtlRenderEncoder = [_mtlCommandBuffer renderCommandEncoderWithDescriptor:mtlDescriptor];
-    [mtlRenderEncoder retain];
-    
-    return mtlRenderEncoder;
+    _mtlRenderEncoder = [_mtlCommandBuffer renderCommandEncoderWithDescriptor:mtlDescriptor];
+    [_mtlRenderEncoder retain];
 }
 
-void CommandBufferMTL::beginRenderPass(const RenderTarget* renderTarget, const RenderPassParams& descriptor)
+void CommandBufferMTL::beginRenderPass(const RenderTarget* renderTarget, const RenderPassDescriptor& renderPassDesc)
 {
-    _mtlRenderEncoder = getRenderCommandEncoder(renderTarget, descriptor);
+    updateRenderCommandEncoder(renderTarget, renderPassDesc);
 //    [_mtlRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
 }
-
 
 void CommandBufferMTL::updateDepthStencilState(const DepthStencilDescriptor& descriptor)
 {
@@ -315,7 +313,6 @@ void CommandBufferMTL::drawElements(PrimitiveType primitiveType, IndexFormat ind
 void CommandBufferMTL::endRenderPass()
 {
     afterDraw();
-
 }
 
 void CommandBufferMTL::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback)
@@ -335,8 +332,9 @@ void CommandBufferMTL::endFrame()
     [_mtlRenderEncoder release];
     _mtlRenderEncoder = nil;
     
-    [_mtlCommandBuffer presentDrawable:DeviceMTL::getCurrentDrawable()];
-    _drawableTexture = DeviceMTL::getCurrentDrawable().texture;
+    auto currentDrawable = DeviceMTL::getCurrentDrawable();
+    [_mtlCommandBuffer presentDrawable:currentDrawable];
+    _drawableTexture = currentDrawable.texture;
     [_mtlCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
         // GPU work is complete
         // Signal the semaphore to start the CPU work

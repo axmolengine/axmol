@@ -106,7 +106,7 @@ struct WAV_FILE
     WAV_FILE_HEADER FileHeader;
     AUDIO_SOURCE_FORMAT SourceFormat;
     uint32_t PcmDataOffset;
-    cocos2d::FileStream* Stream = nullptr;
+    cocos2d::FileStream Stream;
 };
 
 

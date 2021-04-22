@@ -99,7 +99,7 @@ void TransitionPageTurn::onEnter()
     _inSceneProxy->onEnter();
     _outSceneProxy->onEnter();
     
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     int x,y;
     if (s.width > s.height)
     {

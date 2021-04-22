@@ -241,10 +241,8 @@ void Layout::stencilClippingVisit(Renderer *renderer, const Mat4& parentTransfor
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
-    Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
     //Add group command
 
     _groupCommand.init(_globalZOrder);
@@ -313,17 +311,17 @@ void Layout::stencilClippingVisit(Renderer *renderer, const Mat4& parentTransfor
     
     renderer->popGroup();
     
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
     
 void Layout::onBeforeVisitScissor()
 {
-    auto glview = Director::getInstance()->getOpenGLView();
+    auto glview = _director->getOpenGLView();
     // apply scissor test
     _scissorOldState = glview->isScissorEnabled();
     if (false == _scissorOldState)
     {
-        auto renderer = Director::getInstance()->getRenderer();
+        auto renderer = _director->getRenderer();
         renderer->setScissorTest(true);
     }
 
@@ -346,7 +344,7 @@ void Layout::onAfterVisitScissor()
         // revert scissor box
         if (false == _clippingOldRect.equals(_clippingRect))
         {
-            auto glview = Director::getInstance()->getOpenGLView();
+            auto glview = _director->getOpenGLView();
             glview->setScissorInPoints(_clippingOldRect.origin.x,
                                        _clippingOldRect.origin.y,
                                        _clippingOldRect.size.width,
@@ -356,7 +354,7 @@ void Layout::onAfterVisitScissor()
     else
     {
         // revert scissor test
-        auto renderer = Director::getInstance()->getRenderer();
+        auto renderer = _director->getRenderer();
         renderer->setScissorTest(false);
     }
 }
@@ -368,10 +366,8 @@ void Layout::scissorClippingVisit(Renderer *renderer, const Mat4& parentTransfor
         _clippingRectDirty = true;
     }
     
-    Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
     
     _groupCommand.init(_globalZOrder);
     renderer->addCommand(&_groupCommand);
@@ -388,7 +384,7 @@ void Layout::scissorClippingVisit(Renderer *renderer, const Mat4& parentTransfor
     renderer->addCommand(&_afterVisitCmdScissor);
     
     renderer->popGroup();
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void Layout::setClippingEnabled(bool able)
@@ -632,6 +628,7 @@ void Layout::supplyTheLayoutParameterLackToChild(Widget *child)
             break;
         case Type::HORIZONTAL:
         case Type::VERTICAL:
+        case Type::CENTER_VERTICAL:
         {
             LinearLayoutParameter* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter());
             if (!layoutParameter)
@@ -922,6 +919,9 @@ LayoutManager* Layout::createLayoutManager()
         case Type::VERTICAL:
             exe = LinearVerticalLayoutManager::create();
             break;
+        case Type::CENTER_VERTICAL:
+            exe = LinearCenterVerticalLayoutManager::create();
+            break;
         case Type::HORIZONTAL:
             exe = LinearHorizontalLayoutManager::create();
             break;
@@ -1043,7 +1043,7 @@ Size Layout::getLayoutAccumulatedSize()const
     {
         layoutSize = layoutSize - Size(0, layoutSize.height/widgetCount * (widgetCount-1));
     }
-    if (type == Type::VERTICAL)
+    if (type == Type::VERTICAL || type == Type::CENTER_VERTICAL)
     {
         layoutSize = layoutSize - Size(layoutSize.width/widgetCount * (widgetCount-1), 0);
     }
@@ -1634,7 +1634,8 @@ bool  Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction)c
     
     auto& container = parent->getChildren();
     ssize_t index = container.getIndex(widget);
-    if (parent->getLayoutType() == Type::HORIZONTAL)
+    const auto parentLayoutType = parent->getLayoutType();
+    if (parentLayoutType == Type::HORIZONTAL)
     {
         if (direction == FocusDirection::LEFT)
         {
@@ -1668,7 +1669,7 @@ bool  Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction)c
             return isLastWidgetInContainer(parent, direction);
         }
     }
-    else if(parent->getLayoutType() == Type::VERTICAL)
+    else if (parentLayoutType == Type::VERTICAL || parentLayoutType == Type::CENTER_VERTICAL)
     {
         if (direction == FocusDirection::UP)
         {
@@ -1721,7 +1722,7 @@ bool  Layout::isWidgetAncestorSupportLoopFocus(Widget* widget, FocusDirection di
     }
     if (parent->isLoopFocus())
     {
-        auto layoutType = parent->getLayoutType();
+        const auto layoutType = parent->getLayoutType();
         if (layoutType == Type::HORIZONTAL)
         {
             if (direction == FocusDirection::LEFT || direction == FocusDirection::RIGHT)
@@ -1733,7 +1734,7 @@ bool  Layout::isWidgetAncestorSupportLoopFocus(Widget* widget, FocusDirection di
                 return isWidgetAncestorSupportLoopFocus(parent, direction);
             }
         }
-        if (layoutType == Type::VERTICAL)
+        if (layoutType == Type::VERTICAL || layoutType == Type::CENTER_VERTICAL)
         {
             if (direction == FocusDirection::DOWN || direction == FocusDirection::UP)
             {
@@ -1823,7 +1824,7 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
                     break;
             }
         }
-        else if (_layoutType == Type::VERTICAL)
+        else if (_layoutType == Type::VERTICAL || _layoutType == Type::CENTER_VERTICAL)
         {
             switch (direction)
             {

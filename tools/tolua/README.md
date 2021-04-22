@@ -5,12 +5,13 @@ On Windows:
 ------------
 
 * Make sure that you have installed `android-ndk-r16` or later.
-* Download python2.7.3 (32bit) from (http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi).
-* Add the installed path of python (e.g. C:\Python27) to windows environment variable named 'PATH'.
-* Download pyyaml from http://pyyaml.org/download/pyyaml/PyYAML-3.11.win32-py2.7.exe and install it.
-* Download [Cheetah-2.4.4.tar.gz](https://pypi.python.org/packages/cd/b0/c2d700252fc251e91c08639ff41a8a5203b627f4e0a2ae18a6b662ab32ea/Cheetah-2.4.4.tar.gz#md5=853917116e731afbc8c8a43c37e6ddba), extract and install it by `python setup.py`.
-* Set environment variables `ANDROID_NDK` and `PYTHON_BIN`
-* Go to "cocos2d-x/tools/tolua" folder, and run "genbindings.py". The generated codes will be under "cocos\scripting\auto-generated\lua-bindings".
+* Install python2.7.18 (32bit) from http://www.python.org/ftp/python/2.7.18/python-2.7.18.msi with `Add to 'PATH'` install option.
+* Install python dependices by pip.
+<pre>
+    pip install PyYAML
+    pip install Cheetah
+</pre>
+* Go to "tools/tolua" folder, and run "genbindings.py". The generated codes will be under "cocos\scripting\auto-generated\lua-bindings".
 
 
 On MAC:
@@ -25,7 +26,7 @@ On MAC:
 <pre>
     sudo easy_install pip
     sudo pip install PyYAML
-	sudo pip install Cheetah
+    sudo pip install Cheetah
 </pre>
     
 * Download NDK 64bit r10c or later from [Android Ndk](https://developer.android.com/ndk/downloads/index.html)
@@ -50,7 +51,7 @@ On Ubuntu Linux 12.04 64bit
 	sudo pip install Cheetah
 </pre>
 * Download NDK 64bit r10c or later from [Android Ndk](https://developer.android.com/ndk/downloads/index.html)
-* Go to "cocos2d-x/tools/tolua", Run
+* Go to "tools/tolua", Run
 <pre>
 	export ANDROID_NDK=/path/to/android-ndk-r10c
     ./genbindings.py

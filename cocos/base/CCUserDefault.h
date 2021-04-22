@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include <unordered_map>
 #include "mio/mio.hpp"
+#include "yasio/cxx17/string_view.hpp"
 
 /**
  * @addtogroup base
@@ -246,7 +247,7 @@ public:
     **   key: 16bytes key
     **   iv: 16bytes iv
     */
-    virtual void setEncryptEnabled(bool enabled, const std::string& key, const std::string& iv);
+    virtual void setEncryptEnabled(bool enabled, cxx17::string_view key, cxx17::string_view iv);
 
     /*
     *  Mark encrypt function as virtual, default use AES cfb128 encrypt/decrypt

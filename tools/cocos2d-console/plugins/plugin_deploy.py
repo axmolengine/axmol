@@ -157,7 +157,7 @@ class CCPluginDeploy(cocos.CCPlugin):
         self.package = compile_dep.android_package
         self.activity = compile_dep.android_activity
         apk_path = compile_dep.apk_path
-        sdk_root = cocos.check_environment_variable('ANDROID_SDK_ROOT')
+        sdk_root = cocos.check_environment_variable('ANDROID_SDK')
         adb_path = cocos.CMDRunner.convert_path_to_cmd(os.path.join(sdk_root, 'platform-tools', 'adb'))
 
         if not self._no_uninstall:

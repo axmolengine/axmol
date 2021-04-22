@@ -14,7 +14,8 @@ import json
 import re
 from xml.dom import minidom
 
-import project_compile
+if(sys.version_info.major < 3):
+    import project_compile
 
 BUILD_CFIG_FILE="build-cfg.json"
 
@@ -52,7 +53,7 @@ class AndroidBuilder(object):
         self.build_type = build_type
 
         # check environment variable
-        self.sdk_root = cocos.check_environment_variable('ANDROID_SDK_ROOT')
+        self.sdk_root = cocos.check_environment_variable('ANDROID_SDK')
         self.ant_root = None
         if os.path.exists(os.path.join(self.app_android_root, "gradle.properties")):
             self.sign_prop_file = os.path.join(self.app_android_root, "gradle.properties")
@@ -85,7 +86,7 @@ class AndroidBuilder(object):
             raise cocos.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_PARSE_CFG_FAILED_FMT', self.cfg_path),
                                       cocos.CCPluginError.ERROR_PARSE_FILE)
 
-        if cfg.has_key(project_compile.CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES):
+        if cocos.dict_contains(cfg, project_compile.CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES):
             if self._no_res:
                 self.res_files = cfg[project_compile.CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES]
             else:
@@ -95,25 +96,25 @@ class AndroidBuilder(object):
 
         move_cfg = {}
         self.key_store = None
-        if cfg.has_key(AndroidBuilder.CFG_KEY_STORE):
+        if cocos.dict_contains(cfg, AndroidBuilder.CFG_KEY_STORE):
             self.key_store = cfg[AndroidBuilder.CFG_KEY_STORE]
             move_cfg[self.key_store_str] = self.key_store
             del cfg[AndroidBuilder.CFG_KEY_STORE]
 
         self.key_store_pass = None
-        if cfg.has_key(AndroidBuilder.CFG_KEY_STORE_PASS):
+        if cocos.dict_contains(cfg, AndroidBuilder.CFG_KEY_STORE_PASS):
             self.key_store_pass = cfg[AndroidBuilder.CFG_KEY_STORE_PASS]
             move_cfg[self.key_store_pass_str] = self.key_store_pass
             del cfg[AndroidBuilder.CFG_KEY_STORE_PASS]
 
         self.alias = None
-        if cfg.has_key(AndroidBuilder.CFG_KEY_ALIAS):
+        if cocos.dict_contains(cfg, AndroidBuilder.CFG_KEY_ALIAS):
             self.alias = cfg[AndroidBuilder.CFG_KEY_ALIAS]
             move_cfg[self.key_alias_str] = self.alias
             del cfg[AndroidBuilder.CFG_KEY_ALIAS]
 
         self.alias_pass = None
-        if cfg.has_key(AndroidBuilder.CFG_KEY_ALIAS_PASS):
+        if cocos.dict_contains(cfg, AndroidBuilder.CFG_KEY_ALIAS_PASS):
             self.alias_pass = cfg[AndroidBuilder.CFG_KEY_ALIAS_PASS]
             move_cfg[self.key_alias_pass_str] = self.alias_pass
             del cfg[AndroidBuilder.CFG_KEY_ALIAS_PASS]
@@ -209,7 +210,7 @@ class AndroidBuilder(object):
     def _write_local_properties(self, folder_path):
         local_porps_path = os.path.join(folder_path, 'local.properties')
         sdk_dir = self.sdk_root
-        ndk_dir = cocos.check_environment_variable('NDK_ROOT')
+        ndk_dir = cocos.check_environment_variable('ANDROID_NDK')
         if cocos.os_is_win32():
             # On Windows, the path should be like:
             # sdk.dir = C:\\path\\android-sdk
@@ -256,7 +257,7 @@ class AndroidBuilder(object):
 
     def do_ndk_build(self, ndk_build_param, mode, build_type, compile_obj):
         cocos.Logging.info(MultiLanguage.get_string('COMPILE_INFO_NDK_BUILD_TYPE', build_type))
-        ndk_root = cocos.check_environment_variable('NDK_ROOT')
+        ndk_root = cocos.check_environment_variable('ANDROID_NDK')
 
         toolchain_version = self.get_toolchain_version(ndk_root, compile_obj)
 
