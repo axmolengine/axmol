@@ -96,6 +96,12 @@ bool FileUtilsLinux::init()
 string FileUtilsLinux::getWritablePath() const
 {
     DECLARE_GUARD;
+    return getNativeWritableAbsolutePath();
+}
+
+std::string FileUtilsLinux::getNativeWritableAbsolutePath() const
+{
+    DECLARE_GUARD;
     struct stat st;
     stat(_writablePath.c_str(), &st);
     if (!S_ISDIR(st.st_mode)) {

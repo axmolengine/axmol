@@ -389,12 +389,17 @@ FileUtils::Status FileUtilsAndroid::getContents(const std::string& filename, Res
 
 std::string FileUtilsAndroid::getWritablePath() const
 {
+    return getNativeWritableAbsolutePath();
+}
+
+std::string FileUtilsAndroid::getNativeWritableAbsolutePath() const
+{
     // Fix for Nexus 10 (Android 4.2 multi-user environment)
     // the path is retrieved through Java Context.getCacheDir() method
     std::string path = JniHelper::callStaticStringMethod("org.cocos2dx.lib.Cocos2dxHelper", "getCocos2dxWritablePath");
     if (!path.empty())
         path.append("/");
-    
+
     return path;
 }
 
