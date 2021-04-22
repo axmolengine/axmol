@@ -367,11 +367,16 @@ namespace cocos2d { namespace network {
         void run()
         {
             lock_guard<mutex> lock(_threadMutex);
-            if (!_thread.joinable())
-            {
-                std::thread newThread(&DownloaderCURL::Impl::_threadProc, this);
-                _thread.swap(newThread);
+
+            if (_tasksFinished)
+            { // all tasks finished, make sure thread not joinable
+                if (_thread.joinable())
+                    _thread.join();
+                _tasksFinished = false;
             }
+
+            if (!_thread.joinable())
+                _thread = std::thread(&DownloaderCURL::Impl::_threadProc, this);
         }
 
         void stop()
@@ -390,12 +395,6 @@ namespace cocos2d { namespace network {
 
             if (_thread.joinable())
                 _thread.join();
-        }
-
-        bool stoped()
-        {
-            lock_guard<mutex> lock(_threadMutex);
-            return !_thread.joinable();
         }
 
         void getProcessTasks(vector<TaskWrapper>& outList)
@@ -808,11 +807,14 @@ namespace cocos2d { namespace network {
                 }
             } while (!coTaskMap.empty());
 
+            _tasksFinished = true;
+
             curl_multi_cleanup(curlmHandle);
             DLLOG("----DownloaderCURL::Impl::_threadProc end");
         }
 
         thread _thread;
+        std::atomic_bool _tasksFinished{};
         deque<TaskWrapper>  _requestQueue;
         set<TaskWrapper>    _processSet;
         // deque<TaskWrapper>  _finishedQueue;
