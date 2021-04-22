@@ -27,7 +27,7 @@ set(COCOS_RENDERER_HEADER
     renderer/backend/Program.h
     renderer/backend/ProgramCache.h
     renderer/backend/Macros.h
-    renderer/backend/RenderPassDescriptor.h
+    renderer/backend/RenderPassParams.h
     renderer/backend/RenderPipeline.h
     renderer/backend/ShaderModule.h
     renderer/backend/Texture.h
@@ -73,10 +73,10 @@ set(COCOS_RENDERER_SRC
     renderer/backend/ProgramState.cpp
     renderer/backend/ProgramStateRegistry.cpp
     renderer/backend/ShaderCache.cpp
-    renderer/backend/RenderPassDescriptor.cpp
+    renderer/backend/RenderPassParams.cpp
     )
 
-if(ANDROID OR WINDOWS OR LINUX OR CC_COMPAT_GL) 
+if(ANDROID OR WINDOWS OR LINUX OR (IOS AND CC_FORCE_USE_GLES)) 
 
 list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/opengl/BufferGL.h

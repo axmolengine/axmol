@@ -217,10 +217,10 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         msg.obj = new Cocos2dxHandler.DialogMessage(pTitle, pMessage);
         this.mHandler.sendMessage(msg);
     }
-
-    @Deprecated
-    public void runOnGLThread(final Runnable runnable) {
-        Cocos2dxHelper.runOnGLThread(runnable);
+    
+    @Override
+    public void runOnGLThread(final Runnable pRunnable) {
+        this.mGLSurfaceView.queueEvent(pRunnable);
     }
     
     @Override

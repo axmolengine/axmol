@@ -22,11 +22,11 @@
  THE SOFTWARE.
  ****************************************************************************/
  
-#include "RenderPassDescriptor.h"
+#include "RenderPassParams.h"
 
 CC_BACKEND_BEGIN
 
-bool RenderPassDescriptor::operator==(const RenderPassDescriptor& descriptor) const
+bool RenderPassParams::operator==(const RenderPassParams& descriptor) const
 {
     return (clearDepthValue == descriptor.clearDepthValue &&
         clearStencilValue == descriptor.clearStencilValue &&

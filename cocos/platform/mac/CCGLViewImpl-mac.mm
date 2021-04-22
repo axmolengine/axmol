@@ -379,10 +379,8 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
     
     glfwWindowHint(GLFW_SAMPLES, _glContextAttrs.multisamplingCount);
     
-#if defined(CC_USE_METAL)
     // Don't create gl context.
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-#endif
 
     int neededWidth = rect.size.width * _frameZoomFactor;
     int neededHeight = rect.size.height * _frameZoomFactor;
@@ -409,8 +407,7 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
     CGSize size;
     size.width = static_cast<CGFloat>(fbWidth);
     size.height = static_cast<CGFloat>(fbHeight);
-
-#if defined(CC_USE_METAL)
+    
     // Initialize device.
     id<MTLDevice> device = MTLCreateSystemDefaultDevice();
     if (!device)
@@ -428,7 +425,6 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
     [layer setDrawableSize:size];
     [contentView setLayer:layer];
     backend::DeviceMTL::setCAMetalLayer(layer);
-#endif
 
     /*
     *  Note that the created window and context may differ from what you requested,
@@ -450,10 +446,6 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
     {
         rect.size.height = realH / _frameZoomFactor;
     }
-
-#if defined(CC_USE_GL)
-    glfwMakeContextCurrent(_mainWindow);
-#endif
 
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
@@ -515,10 +507,8 @@ void GLViewImpl::end()
 
 void GLViewImpl::swapBuffers()
 {
-#if defined(CC_USE_GL)
-    if(_mainWindow)
-        glfwSwapBuffers(_mainWindow);
-#endif
+//    if(_mainWindow)
+//        glfwSwapBuffers(_mainWindow);
 }
 
 bool GLViewImpl::windowShouldClose()
@@ -994,12 +984,10 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int width, int
         Director::getInstance()->setViewport();
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
         
-#if defined(CC_USE_METAL)
         //update metal attachment texture size.
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
         backend::UtilsMTL::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
-#endif
     }
 }
 

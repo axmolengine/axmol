@@ -180,7 +180,7 @@ void Skybox::reload()
 
 void Skybox::onBeforeDraw()
 {
-    auto *renderer = _director->getRenderer();
+    auto *renderer = Director::getInstance()->getRenderer();
     
     _rendererDepthTestEnabled = renderer->getDepthTest();
     _rendererDepthCmpFunc = renderer->getDepthCompareFunction();
@@ -193,7 +193,7 @@ void Skybox::onBeforeDraw()
 
 void Skybox::onAfterDraw()
 {
-    auto *renderer = _director->getRenderer();
+    auto *renderer = Director::getInstance()->getRenderer();
     renderer->setDepthTest(_rendererDepthTestEnabled);
     renderer->setDepthCompareFunction(_rendererDepthCmpFunc);
     renderer->setCullMode(_rendererCullMode);

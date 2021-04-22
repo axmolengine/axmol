@@ -65,8 +65,8 @@ if(NOT DEFINED ENGINEX_CORE_LIB)
     set(ENGINEX_CORE_LIB cocos2d CACHE INTERNAL "The engine-x core lib name" )
 endif()
 
-if (NOT DEFINED CC_COMPAT_GL)
-    set(CC_COMPAT_GL FALSE CACHE INTERNAL "Enabling CC_COMPAT_GL" )
+if (NOT DEFINED CC_FORCE_USE_GLES)
+    set(CC_FORCE_USE_GLES FALSE CACHE INTERNAL "Force use GLES" )
 endif()
 
 project(cocos2d_libs)
@@ -151,7 +151,7 @@ set_target_properties(${ENGINEX_CORE_LIB}
                       PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-                      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+                      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       VERSION "${ENGINEX_VERSION}"
                       FOLDER "Internal"
                       )

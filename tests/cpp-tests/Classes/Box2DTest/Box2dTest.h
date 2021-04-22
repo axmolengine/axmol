@@ -39,6 +39,7 @@ public:
 
     virtual bool init() override;
 
+#if CC_ENABLE_BOX2D_INTEGRATION
     Box2DTest();
     ~Box2DTest();
 
@@ -55,10 +56,12 @@ private:
     void onDraw();
     cocos2d::CallbackCommand  _customCommand;
     cocos2d::Texture2D* _spriteTexture;
-
+#if CC_ENABLE_BOX2D_INTEGRATION    
     cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
-
+#endif
     b2World* world;
+#endif
 } ;
+
 
 #endif

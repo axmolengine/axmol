@@ -101,7 +101,7 @@ elseif(APPLE)
             platform/ios/CCInputView-ios.mm
             )
 
-        if(NOT CC_COMPAT_GL)
+        if(CC_FORCE_USE_GLES)
             set(COCOS_PLATFORM_SPECIFIC_HEADER
                 ${COCOS_PLATFORM_SPECIFIC_HEADER}
                 platform/ios/CCES2Renderer-ios.h

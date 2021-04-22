@@ -91,7 +91,6 @@ public:
 
     virtual void setAnchorPoint(const Vec2& anchorPoint) override {}
     virtual void setPosition(const Vec2& pos) override {}
-    virtual void setGlobalZOrder(float globalZOrder) override;
 
     /**
      * @js NA

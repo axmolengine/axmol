@@ -453,7 +453,7 @@ void ParticleSystemQuad::draw(Renderer *renderer, const Mat4 &transform, uint32_
     {
         auto programState = _quadCommand.getPipelineDescriptor().programState;
 
-        cocos2d::Mat4 projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        cocos2d::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
         programState->setUniform(_mvpMatrixLocaiton, projectionMat.m, sizeof(projectionMat.m));
         
         _quadCommand.init(_globalZOrder, _texture, _blendFunc, _quads, _particleCount, transform, flags);

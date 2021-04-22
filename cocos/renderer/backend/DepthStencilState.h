@@ -31,7 +31,6 @@
 
 CC_BACKEND_BEGIN
 
-class RenderTarget;
 /**
  * @addtogroup _backend
  * @{
@@ -60,10 +59,11 @@ struct DepthStencilDescriptor
     CompareFunction depthCompareFunction = CompareFunction::LESS;
     StencilDescriptor backFaceStencil;
     StencilDescriptor frontFaceStencil;
-    void addFlag(DepthStencilFlags flag) { this->flags |= flag; }
-    void removeFlag(DepthStencilFlags flag) { this->flags &= ~flag; }
-    // must match current render target
-    DepthStencilFlags flags = DepthStencilFlags::ALL;
+    bool depthWriteEnabled = false;
+    TargetBufferFlags depthStencilFlags = {};
+
+    void addFlag(TargetBufferFlags flag) { depthStencilFlags |= flag; }
+    void removeFlag(TargetBufferFlags flag) { depthStencilFlags &= ~flag; }
 };
 
 /**
@@ -72,9 +72,9 @@ struct DepthStencilDescriptor
 class DepthStencilState : public cocos2d::Ref
 {
 public:
-    virtual void update(const DepthStencilDescriptor& desc);
+    virtual void update(const DepthStencilDescriptor& descriptor);
     const DepthStencilDescriptor& getDepthStencilInfo()const { return _depthStencilInfo; }
-    bool isEnabled() const { return bitmask::any(_depthStencilInfo.flags, DepthStencilFlags::DEPTH_STENCIL_TEST); }
+    bool isEnabled() const;
 protected:
     /**
      * @param descriptor Specifies depth and stencil descriptor.

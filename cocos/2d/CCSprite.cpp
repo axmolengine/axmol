@@ -336,7 +336,7 @@ static unsigned char cc_2x2_white_image[] = {
 // MARK: texture
 void Sprite::setTexture(const std::string &filename)
 {
-    Texture2D *texture = _director->getTextureCache()->addImage(filename);
+    Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(filename);
     setTexture(texture);
     _unflippedOffsetPositionFromCenter = Vec2::ZERO;
     Rect rect = Rect::ZERO;
@@ -1716,7 +1716,7 @@ void Sprite::setPolygonInfo(const PolygonInfo& info)
 
 void Sprite::setMVPMatrixUniform()
 {
-    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto programState = _trianglesCommand.getPipelineDescriptor().programState;
     if (programState && _mvpMatrixLocation)
         programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));

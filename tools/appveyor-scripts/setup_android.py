@@ -18,9 +18,6 @@ except Exception:
     pass
 from retry import retry
 
-if(sys.version_info.major >= 3):
-    import urllib.request
-
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 COCOS2D_X = os.path.abspath(os.path.join(DIR_PATH, "../.."))
@@ -29,7 +26,7 @@ ROOT_DIR = os.path.abspath(os.path.join(COCOS2D_X, ".."))
 
 ANDROID_NDK = os.path.join(ROOT_DIR, "android-ndk-r16b")
 ANDROID_SDK = os.path.join(ROOT_DIR, "android-sdk")
-SDK_MANAGER = os.path.join(ROOT_DIR, "cmdline-tools/bin/sdkmanager")
+SDK_MANAGER = os.path.join(ROOT_DIR, "sdk_tools/tools/bin/sdkmanager")
 SYSTEM = platform.system().lower()
 if SYSTEM == "windows":
     SDK_MANAGER = SDK_MANAGER + ".bat"
@@ -68,10 +65,7 @@ def download(url, zip_file):
         os.remove(zip_file)
     except OSError:
         pass
-    if(sys.version_info.major >= 3):
-        urllib.request.urlretrieve(url, zip_file)
-    else:
-        urllib.urlretrieve(url, zip_file)
+    urllib.urlretrieve(url, zip_file)
 
 
 @retry(Exception, tries=5, delay=1, backoff=1)
@@ -84,28 +78,25 @@ def install_android_ndk():
     unzip(zip_file, ROOT_DIR)
 
 @retry(Exception, tries=5, delay=1, backoff=1)
-def install_android_cmdline_tools():
-    file_name = "commandlinetools-{system}-6858069_latest.zip".format(
+def install_android_sdk_tools():
+    file_name = "sdk-tools-{system}-3859397.zip".format(
         system=platform.system().lower())
     url = "https://dl.google.com/android/repository/" + file_name
-    zip_file = os.path.abspath(os.path.join(ROOT_DIR, file_name)) # folder is cmdline-tools
+    zip_file = os.path.abspath(os.path.join(ROOT_DIR, file_name))
 
     download(url, zip_file)
-    unzip(zip_file, os.path.join(ROOT_DIR, ""))
+    unzip(zip_file, os.path.join(ROOT_DIR, "sdk_tools"))
 
 
 @retry(Exception, tries=5, delay=1, backoff=1)
 def install_android_sdk():
-    # list packages
-    run_with_yes(SDK_MANAGER + " --list --sdk_root=" + ANDROID_SDK)
-    
     switches = " --verbose --sdk_root=" + ANDROID_SDK + " "
     cmd1 = SDK_MANAGER + switches
     packages = [
-        'platform-tools',
-        'cmdline-tools;latest',
-        'platforms;android-28',
-        'build-tools;29.0.2'
+        "platforms;android-28",
+        "build-tools;29.0.2",
+        "platform-tools",
+        "tools"
     ]
 
     cmd = cmd1 + " ".join(packages)
@@ -129,7 +120,7 @@ def export_environment(ndk_only):
 
 def main(ndk_only):
     if not ndk_only:
-        install_android_cmdline_tools()
+        install_android_sdk_tools()
         install_android_sdk()
     install_android_ndk()
     export_environment(ndk_only)

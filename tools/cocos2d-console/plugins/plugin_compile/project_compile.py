@@ -291,7 +291,7 @@ class CCPluginCompile(cocos.CCPlugin):
             open_file = None
             changed = False
             if key_of_copy is not None:
-                if cocos.dict_contains(cfg_info, key_of_copy):
+                if cfg_info.has_key(key_of_copy):
                     src_list = cfg_info[key_of_copy]
                     ret_list = self._convert_cfg_list(src_list, build_cfg_dir)
                     cfg_info[CCPluginCompile.CFG_KEY_COPY_RESOURCES] = ret_list
@@ -299,7 +299,7 @@ class CCPluginCompile(cocos.CCPlugin):
                     changed = True
 
             if key_of_must_copy is not None:
-                if cocos.dict_contains(cfg_info, key_of_must_copy):
+                if cfg_info.has_key(key_of_must_copy):
                     src_list = cfg_info[key_of_must_copy]
                     ret_list = self._convert_cfg_list(src_list, build_cfg_dir)
                     cfg_info[CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES] = ret_list
@@ -480,10 +480,7 @@ class CCPluginCompile(cocos.CCPlugin):
             gradle_support_ndk = True
             
 
-        if(sys.version_info.major >= 3):
-            from .build_android import AndroidBuilder
-        else:
-            from build_android import AndroidBuilder
+        from build_android import AndroidBuilder
         builder = AndroidBuilder(self._verbose, project_android_dir,
                                  self._no_res, self._project, self._mode, self._build_type,
                                  self.app_abi, gradle_support_ndk)
@@ -561,7 +558,7 @@ class CCPluginCompile(cocos.CCPlugin):
             open_file = open(cfg_file)
             cfg_info = json.load(open_file)
             open_file.close()
-            if cocos.dict_contains(cfg_info, "remove_res"):
+            if cfg_info.has_key("remove_res"):
                 remove_list = cfg_info["remove_res"]
                 for f in remove_list:
                     res = os.path.join(target_path, f)
@@ -976,7 +973,7 @@ class CCPluginCompile(cocos.CCPlugin):
     def _copy_resources(self, dst_path):
         data = self._get_build_cfg()
 
-        if cocos.dict_contains(data, CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES):
+        if data.has_key(CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES):
             if self._no_res:
                 fileList = data[CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES]
             else:

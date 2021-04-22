@@ -266,6 +266,7 @@ enum class ColorWriteMask : uint32_t
 CC_ENABLE_BITMASK_OPS(ColorWriteMask)
 CC_ENABLE_BITSHIFT_OPS(ColorWriteMask)
 
+
 /**
  * Bitmask for selecting render buffers
  */
@@ -291,17 +292,6 @@ inline TargetBufferFlags getMRTColorFlag(size_t index) noexcept {
 
 typedef TargetBufferFlags ClearFlag;
 typedef TargetBufferFlags RenderTargetFlag;
-
-enum class DepthStencilFlags : unsigned int {
-    NONE = 0,
-    DEPTH_TEST = 1,
-    DEPTH_WRITE = 1 << 1,
-    STENCIL_TEST = 1 << 2,
-    DEPTH_STENCIL_TEST = DEPTH_TEST | STENCIL_TEST,
-    ALL = DEPTH_TEST | STENCIL_TEST | DEPTH_WRITE,
-};
-CC_ENABLE_BITMASK_OPS(DepthStencilFlags)
-CC_ENABLE_BITSHIFT_OPS(DepthStencilFlags)
 
 struct SamplerDescriptor
 {
