@@ -5,36 +5,40 @@
 #define YASIO__REF_PTR_HPP
 #include <iostream>
 
-#define YASIO__DEFINE_REFERENCE_CLASS                                                              \
-private:                                                                                           \
-  unsigned int __strong_refs = 1;                                                                  \
-                                                                                                   \
-public:                                                                                            \
-  void retain() { ++__strong_refs; }                                                               \
-  void release()                                                                                   \
-  {                                                                                                \
-    --__strong_refs;                                                                               \
-    if (__strong_refs == 0)                                                                        \
-      delete this;                                                                                 \
-  }                                                                                                \
-                                                                                                   \
+// clang-format off
+#define YASIO__DEFINE_REFERENCE_CLASS  \
+private:                               \
+  unsigned int __strong_refs = 1;      \
+                                       \
+public:                                \
+  void retain() { ++__strong_refs; }   \
+  void release()                       \
+  {                                    \
+    --__strong_refs;                   \
+    if (__strong_refs == 0)            \
+      delete this;                     \
+  }                                    \
+                                       \
 private:
 
-#define YASIO__SAFE_RELEASE(p)                                                                     \
-  if (p)                                                                                           \
+#define YASIO__SAFE_RELEASE(p)         \
+  if (p)                               \
   (p)->release()
-#define YASIO__SAFE_RELEASE_NULL(p)                                                                \
-  do                                                                                               \
-  {                                                                                                \
-    if (p)                                                                                         \
-    {                                                                                              \
-      (p)->release();                                                                              \
-      (p) = nullptr;                                                                               \
-    }                                                                                              \
+
+#define YASIO__SAFE_RELEASE_NULL(p)    \
+  do                                   \
+  {                                    \
+    if (p)                             \
+    {                                  \
+      (p)->release();                  \
+      (p) = nullptr;                   \
+    }                                  \
   } while (0)
-#define YASIO__SAFE_RETAIN(p)                                                                      \
-  if (p)                                                                                           \
+
+#define YASIO__SAFE_RETAIN(p)          \
+  if (p)                               \
   (p)->retain()
+// clang-format on
 
 namespace yasio
 {
@@ -44,8 +48,7 @@ namespace gc
 // TEMPLATE CLASS ref_ptr, allow any time with functions 'retain' and 'release'
 template <typename _Ty> class ref_ptr;
 
-template <typename _Ty> class ref_ptr
-{ // wrap an object pointer to ensure destruction
+template <typename _Ty> class ref_ptr { // wrap an object pointer to ensure destruction
 public:
   typedef ref_ptr<_Ty> _Myt;
   typedef _Ty element_type;
@@ -170,13 +173,8 @@ public:
   { // relese designated object and store new pointer
     if (ptr_ != _Ptr)
     {
-
       if (ptr_ != nullptr)
-      {
-        if (ptr_ != _Ptr) // release old
-          YASIO__SAFE_RELEASE(ptr_);
-      }
-
+        YASIO__SAFE_RELEASE(ptr_);
       ptr_ = _Ptr;
     }
   }

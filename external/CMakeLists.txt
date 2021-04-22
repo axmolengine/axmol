@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+
 project(external)
 
 if(NOT APPLE)
@@ -136,7 +136,9 @@ if(BUILD_EXT_JPEG)
         )
     endif()
     target_link_libraries(external jpeg)
-    target_include_directories(external PUBLIC "${CMAKE_CURRENT_LIST_DIR}/jpeg")
+    target_include_directories(external INTERFACE 
+      "${CMAKE_CURRENT_LIST_DIR}/jpeg" 
+      "${JPEG_CONFIG_OUT_DIR}")
 endif(BUILD_EXT_JPEG)
 if(BUILD_EXT_OPENSSL)
     add_subdirectory(openssl)

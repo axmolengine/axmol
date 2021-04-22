@@ -73,8 +73,7 @@ Layer::~Layer()
 
 bool Layer::init()
 {
-    Director * director = Director::getInstance();
-    setContentSize(director->getWinSize());
+    setContentSize(_director->getWinSize());
     return true;
 }
 
@@ -332,7 +331,7 @@ LayerColor * LayerColor::create(const Color4B& color)
 
 bool LayerColor::init()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     return initWithColor(Color4B(0,0,0,0), s.width, s.height);
 }
 
@@ -365,7 +364,7 @@ bool LayerColor::initWithColor(const Color4B& color, float w, float h)
 
 bool LayerColor::initWithColor(const Color4B& color)
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = _director->getWinSize();
     return initWithColor(color, s.width, s.height);
 }
 
@@ -411,7 +410,7 @@ void LayerColor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
     
-    cocos2d::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    cocos2d::Mat4 projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     pipelineDescriptor.programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     
@@ -722,7 +721,7 @@ void LayerRadialGradient::draw(Renderer *renderer, const Mat4 &transform, uint32
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
 
-    const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto programState = _customCommand.getPipelineDescriptor().programState;
     Mat4 finalMat = projectionMat * transform;
     programState->setUniform(_mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));

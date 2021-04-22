@@ -1,4 +1,3 @@
-cmake_minimum_required(VERSION 3.6)
 
 set(lib_name poly2tri)
 set(target_name ${lib_name})

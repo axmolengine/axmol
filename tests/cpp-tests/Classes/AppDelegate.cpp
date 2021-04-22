@@ -54,11 +54,7 @@ void AppDelegate::initGLContextAttrs()
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
-#if defined(CC_PLATFORM_PC)
-static Size resourceSize(1280, 720);
-#else
 static Size resourceSize(960, 640);
-#endif
 static Size designSize(480, 320);
 
 bool AppDelegate::applicationDidFinishLaunching()

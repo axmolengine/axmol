@@ -28,7 +28,7 @@ public:
     void setDepthAttachment(TextureBackend* attachment, int level = 0) override;
     void setStencilAttachment(TextureBackend* attachment, int level = 0) override;
     
-    void applyRenderPassAttachments(const RenderPassParams& parmas, MTLRenderPassDescriptor* descriptor) const;
+    void applyRenderPassAttachments(const RenderPassDescriptor&, MTLRenderPassDescriptor*) const;
     
     Attachment getColorAttachment(int index) const;
     Attachment getDepthAttachment() const;

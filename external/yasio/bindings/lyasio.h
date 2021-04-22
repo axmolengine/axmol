@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,8 +45,11 @@ SOFTWARE.
 #if defined(__cplusplus)
 extern "C" {
 #endif
+#if !defined(NS_SLUA)
 struct lua_State;
+#endif
 YASIO_LUA_API int luaopen_yasio(lua_State* L);
+YASIO_LUA_API void luaregister_yasio(lua_State* L); // register yasio to package.preload
 #if defined(__cplusplus)
 }
 #endif

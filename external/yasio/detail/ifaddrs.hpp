@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store universal app
-//
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -789,7 +789,7 @@ static struct ifaddrs* get_link_address(const struct nlmsghdr* message,
   assert(message);
   net_address = reinterpret_cast<ifaddrmsg*>(NLMSG_DATA(message));
   length      = static_cast<ssize_t>(IFA_PAYLOAD(message));
-  YASIO_LOGV("   address data length: %u", length);
+  YASIO_LOGV("   address data length: %u", (unsigned int)length);
   if (length <= 0)
   {
     goto error;
@@ -810,7 +810,7 @@ static struct ifaddrs* get_link_address(const struct nlmsghdr* message,
   while (RTA_OK(attribute, length))
   {
     payload_size = RTA_PAYLOAD(attribute);
-    YASIO_LOGV("     attribute payload_size == %u", payload_size);
+    YASIO_LOGV("     attribute payload_size == %u", (unsigned int)payload_size);
     sa = NULL;
 
     switch (attribute->rta_type)
@@ -977,7 +977,7 @@ static struct ifaddrs* get_link_info(const struct nlmsghdr* message)
         break;
 
       case IFLA_BROADCAST:
-        YASIO_LOGV("   interface broadcast (%u bytes)", RTA_PAYLOAD(attribute));
+        YASIO_LOGV("   interface broadcast (%u bytes)", (unsigned int)RTA_PAYLOAD(attribute));
         if (fill_ll_address(&sa, net_interface, RTA_DATA(attribute), RTA_PAYLOAD(attribute)) < 0)
         {
           goto error;
@@ -986,7 +986,7 @@ static struct ifaddrs* get_link_info(const struct nlmsghdr* message)
         break;
 
       case IFLA_ADDRESS:
-        YASIO_LOGV("   interface address (%u bytes)", RTA_PAYLOAD(attribute));
+        YASIO_LOGV("   interface address (%u bytes)", (unsigned int)RTA_PAYLOAD(attribute));
         if (fill_ll_address(&sa, net_interface, RTA_DATA(attribute), RTA_PAYLOAD(attribute)) < 0)
         {
           goto error;

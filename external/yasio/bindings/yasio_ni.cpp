@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store universal app
-//
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -82,6 +82,10 @@ YASIO_NI_API void yasio_init_globals(void(YASIO_INTEROP_DECL* pfn)(int level, co
 {
   yasio::inet::print_fn2_t custom_print = pfn;
   io_service::init_globals(custom_print);
+}
+YASIO_NI_API void yasio_cleanup_globals()
+{
+  io_service::cleanup_globals();
 }
 YASIO_NI_API void yasio_start(int channel_count,
                               void(YASIO_INTEROP_DECL* event_cb)(uint32_t emask, int cidx,

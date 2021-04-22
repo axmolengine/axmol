@@ -1,5 +1,5 @@
 /*************************************************************************
- * GLFW 3.3 - www.glfw.org
+ * GLFW 3.4 - www.glfw.org
  * A library for OpenGL, window and input
  *------------------------------------------------------------------------
  * Copyright (c) 2002-2006 Marcus Geelnard
@@ -94,7 +94,7 @@ extern "C" {
  #if defined(__OBJC__)
   #import <Cocoa/Cocoa.h>
  #else
-  //#include <ApplicationServices/ApplicationServices.h>
+  // #include <ApplicationServices/ApplicationServices.h>
   typedef void* id;
  #endif
 #elif defined(GLFW_EXPOSE_NATIVE_X11) || defined(GLFW_EXPOSE_NATIVE_GLX)
@@ -200,7 +200,7 @@ GLFWAPI HGLRC glfwGetWGLContext(GLFWwindow* window);
  *
  *  @ingroup native
  */
-//GLFWAPI CGDirectDisplayID glfwGetCocoaMonitor(GLFWmonitor* monitor);
+GLFWAPI uint32_t glfwGetCocoaMonitor(GLFWmonitor* monitor);
 
 /*! @brief Returns the `NSWindow` of the specified window.
  *

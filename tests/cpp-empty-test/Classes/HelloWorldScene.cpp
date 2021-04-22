@@ -85,7 +85,7 @@ bool HelloWorld::init()
    drawNode->setPosition(Vec2(0, 0));
    addChild(drawNode);
 
-   Rect safeArea = Director::getInstance()->getSafeAreaRect();
+   auto safeArea = Director::getInstance()->getSafeAreaRect();
    drawNode->drawRect(safeArea.origin, safeArea.origin + safeArea.size, Color4F::BLUE);
 
     return true;
