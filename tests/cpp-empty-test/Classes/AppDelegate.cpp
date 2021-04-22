@@ -80,7 +80,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     // Set the design resolution
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
 
-    Size frameSize = glview->getFrameSize();
+    auto frameSize = glview->getFrameSize();
     
     vector<string> searchPath;
 

@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -108,11 +108,32 @@ SOFTWARE.
 #  endif
 #endif
 
+#if !defined(_WIN32) || defined(NTDDI_VISTA)
+#  define YASIO__HAS_NTOP 1
+#else
+#  define YASIO__HAS_NTOP 0
+#endif
+
 // 64bits Sense Macros
 #if defined(_M_X64) || defined(_WIN64) || defined(__LP64__) || defined(_LP64) || defined(__x86_64) || defined(__arm64__) || defined(__aarch64__)
 #  define YASIO__64BITS 1
 #else
 #  define YASIO__64BITS 0
+#endif
+
+// Try detect compiler exceptions
+#if !defined(__cpp_exceptions)
+#  define YASIO__NO_EXCEPTIONS 1
+#endif
+
+#if !defined(YASIO__NO_EXCEPTIONS)
+#  define YASIO__THROW(x, retval) throw(x)
+#  define YASIO__THROW0(x) throw(x)
+#  define YASIO__THROWV(x, val) (throw(x), (val))
+#else
+#  define YASIO__THROW(x, retval) return (retval)
+#  define YASIO__THROW0(x) return
+#  define YASIO__THROWV(x, val) (val)
 #endif
 
 // Compatibility with non-clang compilers...

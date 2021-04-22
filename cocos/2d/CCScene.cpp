@@ -51,7 +51,7 @@ NS_CC_BEGIN
 
 Scene::Scene()
 : _defaultCamera(Camera::create())
-, _event(Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_PROJECTION_CHANGED, std::bind(&Scene::onProjectionChanged, this, std::placeholders::_1)))
+, _event(_director->getEventDispatcher()->addCustomEventListener(Director::EVENT_PROJECTION_CHANGED, std::bind(&Scene::onProjectionChanged, this, std::placeholders::_1)))
 {
     _ignoreAnchorPointForPosition = true;
     setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -74,7 +74,7 @@ Scene::~Scene()
 #if CC_USE_NAVMESH
     CC_SAFE_RELEASE(_navMesh);
 #endif
-    Director::getInstance()->getEventDispatcher()->removeEventListener(_event);
+    _director->getEventDispatcher()->removeEventListener(_event);
     CC_SAFE_RELEASE(_event);
     
 #if CC_USE_PHYSICS
@@ -104,7 +104,7 @@ void Scene::setNavMesh(NavMesh* navMesh)
 
 bool Scene::init()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = _director->getWinSize();
     return initWithSize(size);
 }
 
@@ -174,7 +174,6 @@ const std::vector<Camera*>& Scene::getCameras()
 
 void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eyeProjection)
 {
-    auto director = Director::getInstance();
     Camera* defaultCamera = nullptr;
     const auto& transform = getNodeToParentTransform();
 
@@ -200,8 +199,8 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
             camera->setAdditionalProjection(*eyeProjection * camera->getProjectionMatrix().getInversed());
 
         camera->setAdditionalTransform(eyeTransform.getInversed());
-        director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-        director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, Camera::_visitingCamera->getViewProjectionMatrix());
+        _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, Camera::_visitingCamera->getViewProjectionMatrix());
 
         camera->apply();
         //clear background with max depth
@@ -217,7 +216,7 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
 
         renderer->render();
 
-        director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
 
         // we shouldn't restore the transform matrix since it could be used
         // from "update" or other parts of the game to calculate culling or something else.
@@ -233,8 +232,8 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
             physics3dDebugCamera->setAdditionalProjection(*eyeProjection * physics3dDebugCamera->getProjectionMatrix().getInversed());
 
         physics3dDebugCamera->setAdditionalTransform(eyeTransform.getInversed());
-        director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-        director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, physics3dDebugCamera->getViewProjectionMatrix());
+        _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, physics3dDebugCamera->getViewProjectionMatrix());
 
         physics3dDebugCamera->apply();
         physics3dDebugCamera->clearBackground();
@@ -242,7 +241,7 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         _physics3DWorld->debugDraw(renderer);
         renderer->render();
 
-        director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     }
 #endif
 
@@ -308,10 +307,7 @@ bool Scene::initWithPhysics()
     bool ret = false;
     do
     {
-        Director * director;
-        CC_BREAK_IF( ! (director = Director::getInstance()) );
-
-        this->setContentSize(director->getWinSize());
+        this->setContentSize(_director->getWinSize());
 
 #if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
         Physics3DWorldDes info;

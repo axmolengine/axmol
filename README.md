@@ -42,7 +42,7 @@
 ### [Roadmap](issues/1)
 
 ### Quick Start
-Open [Wiki](https://github.com/c4games/engine-x/wiki) for additional information too.
+Open [Wiki](https://github.com/c4games/engine-x-wiki) for additional information too.
 
 #### Common Requirement [Python](https://www.python.org/downloads/)
   * Python-2.7.17+, Python-3.7+ 
@@ -76,21 +76,18 @@ Open [Wiki](https://github.com/c4games/engine-x/wiki) for additional information
   1. Ensure xcode11+ & [cmake3.14+](https://github.com/Kitware/CMake/releases) installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. Execute follow command   
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
-  3. Generate xcode project
-  ```sh
-    # for any device
-    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
+  3. Generate xcode project  
+     - for any device   
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake```
+     - for arm64:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
+     - for simulator x86_64:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64``` 
 
-    # for device combined armv7,arm64
-    # cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"
-
-    # for simulator x86_64
-    # cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64
-  ```
   4. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
   5. Notes  
-    - **The code sign required to run ios app on device, just change bundle identifier until the auto manage signing solved**  
-    - **engine-x only provide armv7, arm64, x86_64 prebuilt libraries for ios**
+     - **The code sign required to run ios app on device, just change bundle identifier until the auto manage signing solved**  
+     - **engine-x only provide armv7, arm64, x86_64 prebuilt libraries for ios**
 
 ### Notes
   * ThreadLocalStorage (TLS) 

@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -62,9 +62,9 @@ public:
     static GUIReader* getInstance();
     static void destroyInstance();
     
-    static cocos2d::ui::Widget* widgetFromJsonFile(const char* fileName);
+    cocos2d::ui::Widget* widgetFromJsonFile(const char* fileName);
     
-	static cocos2d::ui::Widget* widgetFromBinaryFile(const char* fileName);
+    cocos2d::ui::Widget* widgetFromBinaryFile(const char* fileName);
     
     int getVersionInteger(const char* str);
     /**

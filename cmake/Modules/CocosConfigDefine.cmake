@@ -103,9 +103,13 @@ function(use_cocos2dx_compile_define target)
     if(APPLE)
         target_compile_definitions(${target} PUBLIC __APPLE__)
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
-        if(IOS AND CC_FORCE_USE_GLES)
-            target_compile_definitions(${target} PUBLIC CC_FORCE_USE_GLES=1)
+        if(CC_COMPAT_GL)
+            target_compile_definitions(${target} 
+                PUBLIC CC_COMPAT_GL=1 
+                PUBLIC GL_SILENCE_DEPRECATION=1
+            )
         endif()
+        
     elseif(LINUX)
         target_compile_definitions(${target} PUBLIC LINUX)
         target_compile_definitions(${target} PUBLIC _GNU_SOURCE)
@@ -113,8 +117,8 @@ function(use_cocos2dx_compile_define target)
         target_compile_definitions(${target} PUBLIC ANDROID)
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
     elseif(WINDOWS)
-        if(CC_FORCE_USE_GLES)
-            target_compile_definitions(${target} PUBLIC CC_FORCE_USE_GLES=1)
+        if(CC_COMPAT_GL)
+            target_compile_definitions(${target} PUBLIC CC_COMPAT_GL=1)
         endif()
         target_compile_definitions(${target} 
             PUBLIC WIN32

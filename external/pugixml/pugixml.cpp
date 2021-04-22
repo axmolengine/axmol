@@ -1,7 +1,7 @@
 /**
- * pugixml parser - version 1.10
+ * pugixml parser - version 1.11
  * --------------------------------------------------------
- * Copyright (C) 2006-2019, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
+ * Copyright (C) 2006-2020, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
  * Report bugs and download new versions at https://pugixml.org/
  *
  * This library is distributed under the MIT License. See notice at the end
@@ -4981,7 +4981,12 @@ PUGI__NS_BEGIN
 #if defined(PUGI__MSVC_CRT_VERSION) || defined(__BORLANDC__) || (defined(__MINGW32__) && (!defined(__STRICT_ANSI__) || defined(__MINGW64_VERSION_MAJOR)))
 	PUGI__FN FILE* open_file_wide(const wchar_t* path, const wchar_t* mode)
 	{
+#if defined(PUGI__MSVC_CRT_VERSION) && PUGI__MSVC_CRT_VERSION >= 1400
+		FILE* file = 0;
+		return _wfopen_s(&file, path, mode) == 0 ? file : 0;
+#else
 		return _wfopen(path, mode);
+#endif
 	}
 #else
 	PUGI__FN char* convert_path_heap(const wchar_t* str)
@@ -5024,6 +5029,16 @@ PUGI__NS_BEGIN
 		return result;
 	}
 #endif
+
+	PUGI__FN FILE* open_file(const char* path, const char* mode)
+	{
+#if defined(PUGI__MSVC_CRT_VERSION) && PUGI__MSVC_CRT_VERSION >= 1400
+		FILE* file = 0;
+		return fopen_s(&file, path, mode) == 0 ? file : 0;
+#else
+		return fopen(path, mode);
+#endif
+	}
 
 	PUGI__FN bool save_file_impl(const xml_document& doc, FILE* file, const char_t* indent, unsigned int flags, xml_encoding encoding)
 	{
@@ -6127,13 +6142,13 @@ namespace pugi
 		impl::xml_allocator& alloc = impl::get_allocator(_root);
 		if (!alloc.reserve()) return false;
 
-		for (xml_node_struct* child = _root->first_child; child; )
+		for (xml_node_struct* cur = _root->first_child; cur; )
 		{
-			xml_node_struct* next = child->next_sibling;
+			xml_node_struct* next = cur->next_sibling;
 
-			impl::destroy_node(child, alloc);
+			impl::destroy_node(cur, alloc);
 
-			child = next;
+			cur = next;
 		}
 
 		_root->first_child = 0;
@@ -7187,7 +7202,7 @@ namespace pugi
 		reset();
 
 		using impl::auto_deleter; // MSVC7 workaround
-		auto_deleter<FILE> file(fopen(path_, "rb"), impl::close_file);
+		auto_deleter<FILE> file(impl::open_file(path_, "rb"), impl::close_file);
 
 		return impl::load_file_impl(static_cast<impl::xml_document_struct*>(_root), file.data, options, encoding, &_buffer);
 	}
@@ -7270,7 +7285,7 @@ namespace pugi
 	PUGI__FN bool xml_document::save_file(const char* path_, const char_t* indent, unsigned int flags, xml_encoding encoding) const
 	{
 		using impl::auto_deleter; // MSVC7 workaround
-		auto_deleter<FILE> file(fopen(path_, (flags & format_save_file_text) ? "w" : "wb"), impl::close_file);
+		auto_deleter<FILE> file(impl::open_file(path_, (flags & format_save_file_text) ? "w" : "wb"), impl::close_file);
 
 		return impl::save_file_impl(*this, file.data, indent, flags, encoding);
 	}
@@ -12980,7 +12995,7 @@ namespace pugi
 #endif
 
 /**
- * Copyright (c) 2006-2019 Arseny Kapoulkine
+ * Copyright (c) 2006-2020 Arseny Kapoulkine
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation

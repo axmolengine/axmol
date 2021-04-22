@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 Copyright (c) 2016 Matthew Rodusek(matthew.rodusek@gmail.com) <http://rodusek.me>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -777,8 +777,7 @@ inline typename basic_string_view<_CharT, _Traits>::const_reference
 basic_string_view<_CharT, _Traits>::at(size_t pos) const
 {
   return pos < m_size ? m_str[pos]
-                      : throw std::out_of_range("Input out of range in basic_string_view::at"),
-         m_str[pos];
+                      : YASIO__THROWV(std::out_of_range("Input out of range in basic_string_view::at"), 0);
 }
 
 template <typename _CharT, typename _Traits>
@@ -848,7 +847,7 @@ inline typename basic_string_view<_CharT, _Traits>::size_type
 basic_string_view<_CharT, _Traits>::copy(char_type* dest, size_type count, size_type pos) const
 {
   if (pos >= m_size)
-    throw std::out_of_range("Index out of range in basic_string_view::copy");
+    YASIO__THROW(std::out_of_range("Index out of range in basic_string_view::copy"), 0);
 
   const size_type rcount = (std::min)(m_size - pos, count + 1);
   std::copy(m_str + pos, m_str + pos + rcount, dest);
@@ -863,7 +862,7 @@ basic_string_view<_CharT, _Traits>::substr(size_t pos, size_t len) const
 
   return pos < m_size
              ? basic_string_view<_CharT, _Traits>(m_str + pos, len > max_length ? max_length : len)
-             : throw std::out_of_range("Index out of range in basic_string_view::substr");
+             : YASIO__THROWV(std::out_of_range("Index out of range in basic_string_view::substr"), (basic_string_view<_CharT, _Traits>{}));
 }
 
 //--------------------------------------------------------------------------
@@ -1429,13 +1428,18 @@ inline cxx17::u32string_view operator"" _sv(const char32_t* _Str, size_t _Len)
 namespace cxx17
 {
 template <typename _CharT, typename _Traits, typename Allocator>
-void assign(std::basic_string<_CharT, _Traits, Allocator>& lhs,
-            const basic_string_view<_CharT, _Traits>& rhs)
+inline void assign(std::basic_string<_CharT, _Traits, Allocator>& lhs, const basic_string_view<_CharT, _Traits>& rhs)
 {
   if (!rhs.empty())
     lhs.assign(rhs.data(), rhs.size());
   else
     lhs.clear();
+}
+template <typename _CharT, typename _Traits, typename Allocator = std::allocator<_CharT>>
+inline std::basic_string<_CharT, _Traits, Allocator> svtos(const basic_string_view<_CharT, _Traits>& value)
+{
+    using string_type = std::basic_string<_CharT, _Traits, Allocator>;
+    return !value.empty() ? string_type(value.data(), value.size()) : string_type{};
 }
 } // namespace cxx17
 

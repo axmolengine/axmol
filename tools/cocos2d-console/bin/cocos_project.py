@@ -61,7 +61,7 @@ class Project(object):
             raise cocos.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_PARSE_FAILED_FMT',
                                       Project.CONFIG), cocos.CCPluginError.ERROR_PARSE_FILE)
 
-        if not project_info.has_key(Project.KEY_PROJ_TYPE):
+        if not cocos.dict_contains(project_info, Project.KEY_PROJ_TYPE):
             raise cocos.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_GET_VALUE_FAILED_FMT',
                                       (Project.KEY_PROJ_TYPE, Project.CONFIG)),
                                       cocos.CCPluginError.ERROR_WRONG_CONFIG)
@@ -81,12 +81,12 @@ class Project(object):
 
         # if is script project, record whether it has native or not
         self._has_native = False
-        if (self._is_script_project() and project_info.has_key(Project.KEY_HAS_NATIVE)):
+        if (self._is_script_project() and cocos.dict_contains(project_info, Project.KEY_HAS_NATIVE)):
             self._has_native = project_info[Project.KEY_HAS_NATIVE]
 
         # if has custom step script, record it
         self._custom_step = None
-        if (project_info.has_key(Project.KEY_CUSTOM_STEP_SCRIPT)):
+        if (cocos.dict_contains(project_info, Project.KEY_CUSTOM_STEP_SCRIPT)):
             script_path = project_info[Project.KEY_CUSTOM_STEP_SCRIPT]
             if not os.path.isabs(script_path):
                 script_path = os.path.join(self._project_dir, script_path)
@@ -138,7 +138,7 @@ class Project(object):
         f.close()
 
         ret = None
-        if project_info.has_key(key):
+        if cocos.dict_contains(project_info, key):
             ret = project_info[key]
 
         return ret
@@ -283,7 +283,7 @@ class Platforms(object):
                 continue
 
             cfg_key = "%s_cfg" % p
-            if proj_info.has_key(cfg_key):
+            if cocos.dict_contains(proj_info, cfg_key):
                 cfg_obj = cfg_class(root_path, self._project._is_script_project(), proj_info[cfg_key])
             else:
                 cfg_obj = cfg_class(root_path, self._project._is_script_project())
@@ -365,7 +365,7 @@ class PlatformConfig(object):
         pass
 
     def _parse_info(self, cfg_info):
-        if cfg_info.has_key(PlatformConfig.KEY_PROJ_PATH):
+        if cocos.dict_contains(cfg_info, PlatformConfig.KEY_PROJ_PATH):
             self.proj_path = os.path.join(self._proj_root_path, cfg_info[PlatformConfig.KEY_PROJ_PATH])
         else:
             self.proj_path = None
@@ -411,22 +411,22 @@ class LinuxConfig(PlatformConfig):
 
     def _parse_info(self, cfg_info):
         super(LinuxConfig, self)._parse_info(cfg_info)
-        if cfg_info.has_key(LinuxConfig.KEY_CMAKE_PATH):
+        if cocos.dict_contains(cfg_info, LinuxConfig.KEY_CMAKE_PATH):
             self.cmake_path = cfg_info[LinuxConfig.KEY_CMAKE_PATH]
         else:
             self.cmake_path = None
 
-        if cfg_info.has_key(LinuxConfig.KEY_BUILD_DIR):
+        if cocos.dict_contains(cfg_info, LinuxConfig.KEY_BUILD_DIR):
             self.build_dir = cfg_info[LinuxConfig.KEY_BUILD_DIR]
         else:
             self.build_dir = None
 
-        if cfg_info.has_key(LinuxConfig.KEY_PROJECT_NAME):
+        if cocos.dict_contains(cfg_info, LinuxConfig.KEY_PROJECT_NAME):
             self.project_name = cfg_info[LinuxConfig.KEY_PROJECT_NAME]
         else:
             self.project_name = None
 
-        if cfg_info.has_key(LinuxConfig.KEY_BUILD_RESULT_DIR):
+        if cocos.dict_contains(cfg_info, LinuxConfig.KEY_BUILD_RESULT_DIR):
             self.build_result_dir = cfg_info[LinuxConfig.KEY_BUILD_RESULT_DIR]
         else:
             self.build_result_dir = None
@@ -476,17 +476,17 @@ class WebConfig(PlatformConfig):
 
     def _parse_info(self, cfg_info):
         super(WebConfig, self)._parse_info(cfg_info)
-        if cfg_info.has_key(WebConfig.KEY_SUB_URL):
+        if cocos.dict_contains(cfg_info, WebConfig.KEY_SUB_URL):
             self.sub_url = cfg_info[WebConfig.KEY_SUB_URL]
         else:
             self.sub_url = None
 
-        if cfg_info.has_key(WebConfig.KEY_RUN_ROOT_DIR):
+        if cocos.dict_contains(cfg_info, WebConfig.KEY_RUN_ROOT_DIR):
             self.run_root_dir = os.path.join(self._proj_root_path, cfg_info[WebConfig.KEY_RUN_ROOT_DIR])
         else:
             self.run_root_dir = None
 
-        if cfg_info.has_key(WebConfig.KEY_COPY_RESOURCES):
+        if cocos.dict_contains(cfg_info, WebConfig.KEY_COPY_RESOURCES):
             self.copy_res = cfg_info[WebConfig.KEY_COPY_RESOURCES]
         else:
             self.copy_res = None

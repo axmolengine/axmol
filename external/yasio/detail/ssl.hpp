@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store universal app
-//
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,11 +29,41 @@ SOFTWARE.
 #ifndef YASIO__SSL_HPP
 #define YASIO__SSL_HPP
 
-#include <openssl/bio.h>
-#include <openssl/ssl.h>
-#include <openssl/err.h>
-#if OPENSSL_VERSION_NUMBER >= 0x10101000L
-#  define YASIO_HAVE_SSL_CTX_SET_POST_HANDSHAKE_AUTH
+#if YASIO_SSL_BACKEND == 1 // OpenSSL
+#  include <openssl/bio.h>
+#  include <openssl/ssl.h>
+#  include <openssl/err.h>
+#elif YASIO_SSL_BACKEND == 2 // mbedtls
+#  include "mbedtls/net_sockets.h"
+#  include "mbedtls/debug.h"
+#  include "mbedtls/ssl.h"
+#  include "mbedtls/entropy.h"
+#  include "mbedtls/ctr_drbg.h"
+#  include "mbedtls/error.h"
+#  include "mbedtls/certs.h"
+struct ssl_ctx_st {
+  mbedtls_ctr_drbg_context ctr_drbg;
+  mbedtls_entropy_context entropy;
+  mbedtls_x509_crt cacert;
+  mbedtls_ssl_config conf;
+};
+struct ssl_st : public mbedtls_ssl_context {
+  mbedtls_net_context bio;
+};
+inline ssl_st* mbedtls_ssl_new(ssl_ctx_st* ctx)
+{
+  auto ssl = new ssl_st();
+  ::mbedtls_ssl_init(ssl);
+  ::mbedtls_ssl_setup(ssl, &ctx->conf);
+  return ssl;
+}
+inline void mbedtls_ssl_set_fd(ssl_st* ssl, int fd)
+{
+  ssl->bio.fd = fd;
+  ::mbedtls_ssl_set_bio(ssl, &ssl->bio, ::mbedtls_net_send, ::mbedtls_net_recv, NULL /*  rev_timeout() */);
+}
+#else
+#  error "yasio - Unsupported ssl backend provided!"
 #endif
 
 #endif

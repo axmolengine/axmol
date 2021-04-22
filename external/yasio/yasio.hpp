@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store
-// universal app
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -60,7 +60,7 @@ SOFTWARE.
 typedef struct IKCPCB ikcpcb;
 #endif
 
-#if defined(YASIO_HAVE_SSL)
+#if defined(YASIO_SSL_BACKEND)
 typedef struct ssl_ctx_st SSL_CTX;
 typedef struct ssl_st SSL;
 #endif
@@ -81,38 +81,45 @@ namespace inet
 enum
 { // lgtm [cpp/irregular-enum-init]
 
-  // Set with deferred dispatch event, default is: 1
+  // Set whether deferred dispatch event.
   // params: deferred_event:int(1)
   YOPT_S_DEFERRED_EVENT = 1,
 
-  // Set custom resolve function, native C++ ONLY
+  // Set custom resolve function, native C++ ONLY.
   // params: func:resolv_fn_t*
+  // remarks: you must ensure thread safe of it.
   YOPT_S_RESOLV_FN,
 
-  // Set custom print function, native C++ ONLY, you must ensure thread safe of it.
-  // remark:
+  // Set custom print function, native C++ ONLY.
   // parmas: func:print_fn_t
+  // remarks: you must ensure thread safe of it.
   YOPT_S_PRINT_FN,
 
-  // Set custom print function, native C++ ONLY, you must ensure thread safe of it.
-  // remark:
+  // Set custom print function, native C++ ONLY.
   // parmas: func:print_fn2_t
+  // remarks: you must ensure thread safe of it.
   YOPT_S_PRINT_FN2,
 
-  // Set custom print function
+  // Set event callback
   // params: func:event_cb_t*
+  // remarks: this callback will be invoke at io_service::dispatch caller thread
   YOPT_S_EVENT_CB,
+
+  // Sets callback before defer dispatch event.
+  // params: func:defer_event_cb_t*
+  // remarks: this callback invoke at io_service thread
+  YOPT_S_DEFER_EVENT_CB,
 
   // Set tcp keepalive in seconds, probes is tries.
   // params: idle:int(7200), interal:int(75), probes:int(10)
   YOPT_S_TCP_KEEPALIVE,
 
   // Don't start a new thread to run event loop
-  // value:int(0)
+  // params: value:int(0)
   YOPT_S_NO_NEW_THREAD,
 
   // Sets ssl verification cert, if empty, don't verify
-  // value:const char*
+  // params: path:const char*
   YOPT_S_SSL_CACERT,
 
   // Set connect timeout in seconds
@@ -123,9 +130,9 @@ enum
   // params: dns_cache_timeout : int(600),
   YOPT_S_DNS_CACHE_TIMEOUT,
 
-  // Set dns queries timeout in seconds, default is: 5
-  // params: dns_queries_timeout : int(5)
-  // remark:
+  // Set dns queries timeout in milliseconds, default is: 5000
+  // params: dns_queries_timeout : int(5000)
+  // remarks:
   //         a. this option must be set before 'io_service::start'
   //         b. only works when have c-ares
   //         c. since v3.33.0 it's milliseconds, previous is seconds.
@@ -135,20 +142,19 @@ enum
   //         https://c-ares.haxx.se/ares_init_options.html
   YOPT_S_DNS_QUERIES_TIMEOUT,
 
-  // Set dns queries timeout in milliseconds, default is: 5000
-  // remark: same with YOPT_S_DNS_QUERIES_TIMEOUT, but in mmilliseconds
+  // [DEPRECATED], same with YOPT_S_DNS_QUERIES_TIMEOUT
   YOPT_S_DNS_QUERIES_TIMEOUTMS,
 
   // Set dns queries tries when timeout reached, default is: 5
   // params: dns_queries_tries : int(5)
-  // remark:
+  // remarks:
   //        a. this option must be set before 'io_service::start'
   //        b. relative option: YOPT_S_DNS_QUERIES_TIMEOUT
   YOPT_S_DNS_QUERIES_TRIES,
 
   // Set dns server dirty
   // params: reserved : int(1)
-  // remark:
+  // remarks:
   //        a. this option only works with c-ares enabled
   //        b. you should set this option after your mobile network changed
   YOPT_S_DNS_DIRTY,
@@ -164,13 +170,15 @@ enum
   //     length_field_offset:int(-1),
   //     length_field_length:int(4),
   //     length_adjustment:int(0),
-  YOPT_C_LFBFD_PARAMS,
+  YOPT_C_UNPACK_PARAMS,
+  YOPT_C_LFBFD_PARAMS = YOPT_C_UNPACK_PARAMS,
 
-  // Sets channel length field based frame decode initial bytes to strip, default is 0
+  // Sets channel length field based frame decode initial bytes to strip
   // params:
   //     index:int,
   //     initial_bytes_to_strip:int(0)
-  YOPT_C_LFBFD_IBTS,
+  YOPT_C_UNPACK_STRIP,
+  YOPT_C_LFBFD_IBTS = YOPT_C_UNPACK_STRIP,
 
   // Sets channel remote host
   // params: index:int, ip:const char*
@@ -196,7 +204,7 @@ enum
   // params: index:int, ip:const char*, port:int
   YOPT_C_LOCAL_ENDPOINT,
 
-  // Sets channl flags
+  // Mods channl flags
   // params: index:int, flagsToAdd:int, flagsToRemove:int
   YOPT_C_MOD_FLAGS,
 
@@ -214,12 +222,12 @@ enum
 
   // Change 4-tuple association for io_transport_udp
   // params: transport:transport_handle_t
-  // remark: only works for udp client transport
+  // remarks: only works for udp client transport
   YOPT_T_CONNECT,
 
   // Dissolve 4-tuple association for io_transport_udp
   // params: transport:transport_handle_t
-  // remark: only works for udp client transport
+  // remarks: only works for udp client transport
   YOPT_T_DISCONNECT,
 
   // Sets io_base sockopt
@@ -301,11 +309,12 @@ typedef std::unique_ptr<io_send_op> send_op_ptr;
 typedef std::unique_ptr<io_event> event_ptr;
 typedef std::shared_ptr<highp_timer> highp_timer_ptr;
 
-typedef std::function<bool()> timer_cb_t;
-typedef std::function<void()> light_timer_cb_t;
+typedef std::function<bool(io_service&)> timer_cb_t;
+typedef std::function<void(io_service&)> timerv_cb_t;
 typedef std::function<void(event_ptr&&)> event_cb_t;
+typedef std::function<bool(event_ptr&)> defer_event_cb_t;
 typedef std::function<void(int, size_t)> completion_cb_t;
-typedef std::function<int(void* ptr, int len)> decode_len_fn_t;
+typedef std::function<int(void* d, int n)> decode_len_fn_t;
 typedef std::function<int(std::vector<ip::endpoint>&, const char*, unsigned short)> resolv_fn_t;
 typedef std::function<void(const char*)> print_fn_t;
 typedef std::function<void(int level, const char*)> print_fn2_t;
@@ -320,10 +329,10 @@ typedef completion_cb_t io_completion_cb_t;
 
 struct io_hostent {
   io_hostent() = default;
-  io_hostent(std::string ip, u_short port) : host_(std::move(ip)), port_(port) {}
+  io_hostent(cxx17::string_view ip, u_short port) : host_(cxx17::svtos(ip)), port_(port) {}
   io_hostent(io_hostent&& rhs) : host_(std::move(rhs.host_)), port_(rhs.port_) {}
   io_hostent(const io_hostent& rhs) : host_(rhs.host_), port_(rhs.port_) {}
-  void set_ip(const std::string& value) { host_ = value; }
+  void set_ip(cxx17::string_view ip) { cxx17::assign(host_, ip); }
   const std::string& get_ip() const { return host_; }
   void set_port(u_short port) { port_ = port; }
   u_short get_port() const { return port_; }
@@ -333,9 +342,6 @@ struct io_hostent {
 
 class highp_timer {
 public:
-  ~highp_timer() {}
-  highp_timer(io_service& service) : service_(service) {}
-
   void expires_from_now(const std::chrono::microseconds& duration)
   {
     this->duration_    = duration;
@@ -345,14 +351,14 @@ public:
   void expires_from_now() { this->expire_time_ = steady_clock_t::now() + this->duration_; }
 
   // Wait timer timeout once.
-  void async_wait_once(light_timer_cb_t cb)
+  void async_wait_once(io_service& service, timerv_cb_t cb)
   {
 #if YASIO__HAS_CXX14
-    this->async_wait([cb = std::move(cb)]() {
+    this->async_wait(service, [cb = std::move(cb)](io_service& service) {
 #else
-    this->async_wait([cb]() {
+    this->async_wait(service, [cb](io_service& service) {
 #endif
-      cb();
+      cb(service);
       return true;
     });
   }
@@ -361,10 +367,10 @@ public:
   // @retval of timer_cb_t:
   //        true: wait once
   //        false: wait again after expired
-  YASIO__DECL void async_wait(timer_cb_t);
+  YASIO__DECL void async_wait(io_service& service, timer_cb_t);
 
   // Cancel the timer
-  YASIO__DECL void cancel();
+  YASIO__DECL void cancel(io_service& service);
 
   // Check if timer is expired?
   bool expired() const { return wait_duration().count() <= 0; }
@@ -372,30 +378,43 @@ public:
   // Gets wait duration of timer.
   std::chrono::microseconds wait_duration() const { return std::chrono::duration_cast<std::chrono::microseconds>(this->expire_time_ - steady_clock_t::now()); }
 
-  io_service& service_;
   std::chrono::microseconds duration_                  = {};
   std::chrono::time_point<steady_clock_t> expire_time_ = {};
 };
 
 struct io_base {
-  enum class state : u_short
+  enum class state : uint8_t
   {
     CLOSED,
     OPENING,
     OPEN,
   };
+  enum class error_stage : uint8_t
+  {
+    NONE,
+    READ,
+    WRITE,
+  };
   io_base() : error_(0), state_(state::CLOSED), opmask_(0) {}
   virtual ~io_base() {}
-  void set_last_errno(int error) { error_ = error; }
+  void set_last_errno(int error, error_stage stage = error_stage::NONE)
+  {
+    error_       = error;
+    error_stage_ = stage;
+  }
 
   std::shared_ptr<xxsocket> socket_;
   int error_; // socket error(>= -1), application error(< -1)
+  // 0: none, 1: read, 2: write
+  error_stage error_stage_ = error_stage::NONE;
 
+  // mark whether pollout event registerred.
+  bool pollout_registerred_ = false;
   std::atomic<state> state_;
-  u_short opmask_;
+  uint8_t opmask_;
 };
 
-#if defined(YASIO_HAVE_SSL)
+#if defined(YASIO_SSL_BACKEND)
 class ssl_auto_handle {
 public:
   ssl_auto_handle() : ssl_(nullptr) {}
@@ -435,7 +454,7 @@ class io_channel : public io_base {
   friend class io_transport_kcp;
 
 public:
-  io_service& get_service() { return timer_.service_; }
+  io_service& get_service() { return service_; }
   int index() const { return index_; }
   u_short remote_port() const { return remote_port_; }
   YASIO__DECL std::string format_destination() const;
@@ -449,20 +468,22 @@ protected:
 private:
   YASIO__DECL io_channel(io_service& service, int index);
 
-  void set_address(std::string host, u_short port)
+  void set_address(cxx17::string_view host, u_short port)
   {
     set_host(host);
     set_port(port);
   }
 
-  YASIO__DECL void set_host(std::string host);
+  YASIO__DECL void set_host(cxx17::string_view host);
   YASIO__DECL void set_port(u_short port);
 
   // configure address, check whether needs dns queries
   YASIO__DECL void configure_address();
 
   // -1 indicate failed, connection will be closed
-  YASIO__DECL int __builtin_decode_len(void* ptr, int len);
+  YASIO__DECL int __builtin_decode_len(void* d, int n);
+
+  io_service& service_;
 
   /* Since v3.33.0 mask,kind,flags,private_flags are stored to this field
   ** bit[1-8] mask & kinds
@@ -494,13 +515,14 @@ private:
   // The timer for check resolve & connect timeout
   highp_timer timer_;
 
+  // The stream mode application protocol (based on tcp/udp/kcp) unpack params
   struct __unnamed01 {
     int max_frame_length       = YASIO_SZ(10, M); // 10MBytes
-    int length_field_offset    = -1;              // -1: directly, >= 0: store as 1~4bytes integer, default value=-1
+    int length_field_offset    = -1;              // -1: directly, >= 0: store as 1~4bytes integer
     int length_field_length    = 4;               // 1,2,3,4
     int length_adjustment      = 0;
     int initial_bytes_to_strip = 0;
-  } lfb_;
+  } uparams_;
   decode_len_fn_t decode_len_;
 
   /*
@@ -526,7 +548,7 @@ private:
   int kcp_conv_ = 0;
 #endif
 
-#if defined(YASIO_HAVE_SSL)
+#if defined(YASIO_SSL_BACKEND)
   ssl_auto_handle ssl_;
 #endif
 
@@ -628,7 +650,7 @@ protected:
   unsigned int id_;
 
   char buffer_[YASIO_INET_BUFFER_SIZE]; // recv buffer, 64K
-  int wpos_ = 0;                        // recv buffer write pos
+  int offset_ = 0;                      // recv buffer offset
 
   std::vector<char> expected_packet_;
   int expected_size_ = -1;
@@ -640,8 +662,6 @@ protected:
 
   privacy::concurrent_queue<send_op_ptr> send_queue_;
 
-  // mark whether pollout event registerred.
-  bool pollout_registerred_ = false;
 #if !defined(YASIO_MINIFY_EVENT)
 private:
   // The user data
@@ -658,13 +678,13 @@ class io_transport_tcp : public io_transport {
 public:
   io_transport_tcp(io_channel* ctx, std::shared_ptr<xxsocket>& s);
 };
-#if defined(YASIO_HAVE_SSL)
+#if defined(YASIO_SSL_BACKEND)
 class io_transport_ssl : public io_transport_tcp {
 public:
   YASIO__DECL io_transport_ssl(io_channel* ctx, std::shared_ptr<xxsocket>& s);
   YASIO__DECL void set_primitives() override;
 
-#  if defined(YASIO_HAVE_SSL)
+#  if defined(YASIO_SSL_BACKEND)
 protected:
   ssl_auto_handle ssl_;
 #  endif
@@ -819,10 +839,14 @@ public:
   ** Summary: init global state with custom print function, you must ensure thread safe of it.
   ** @remark:
   **   a. this function is not required, if you don't want print init log to custom console.
-  **   b.this function only works once
+  **   b. this function only works once
   **   c. you should call once before call any 'io_servic::start'
   */
   YASIO__DECL static void init_globals(const yasio::inet::print_fn2_t&);
+  YASIO__DECL static void cleanup_globals();
+
+  // the additional API to get rtt of tcp transport
+  YASIO__DECL static uint32_t tcp_rtt(transport_handle_t);
 
 public:
   YASIO__DECL io_service();
@@ -831,12 +855,6 @@ public:
   YASIO__DECL io_service(const std::vector<io_hostent>& channel_eps);
   YASIO__DECL io_service(const io_hostent* channel_eps, int channel_count);
   YASIO__DECL ~io_service();
-
-  YASIO_OBSOLETE_DEPRECATE(io_service::start)
-  void start_service(event_cb_t cb) { this->start(std::move(cb)); }
-
-  YASIO_OBSOLETE_DEPRECATE(io_service::stop)
-  void stop_service() { this->stop(); };
 
   YASIO__DECL void start(event_cb_t cb);
   YASIO__DECL void stop();
@@ -864,9 +882,6 @@ public:
   YASIO__DECL void close(transport_handle_t);
   // close channel
   YASIO__DECL void close(int index);
-
-  // the additional API to get rtt of tcp transport
-  YASIO__DECL static uint32_t tcp_rtt(transport_handle_t);
 
   /*
   ** Summary: Write data to a TCP or connected UDP transport with last peer address
@@ -902,16 +917,7 @@ public:
   // The highp_timer support, !important, the callback is called on the thread of io_service
   YASIO__DECL highp_timer_ptr schedule(const std::chrono::microseconds& duration, timer_cb_t);
 
-  YASIO_OBSOLETE_DEPRECATE(io_service::resolve)
-  YASIO__DECL int builtin_resolv(std::vector<ip::endpoint>& endpoints, const char* hostname, unsigned short port = 0)
-  {
-    return this->resolve(endpoints, hostname, port);
-  }
-
   YASIO__DECL int resolve(std::vector<ip::endpoint>& endpoints, const char* hostname, unsigned short port = 0);
-
-  YASIO_OBSOLETE_DEPRECATE(io_service::channel_at)
-  io_channel* cindex_to_handle(size_t index) const { return channel_at(index); }
 
   // Gets channel by index
   YASIO__DECL io_channel* channel_at(size_t index) const;
@@ -956,10 +962,9 @@ private:
   YASIO__DECL void do_nonblocking_connect(io_channel*);
   YASIO__DECL void do_nonblocking_connect_completion(io_channel*, fd_set* fds_array);
 
-#if defined(YASIO_HAVE_SSL)
+#if defined(YASIO_SSL_BACKEND)
   YASIO__DECL void init_ssl_context();
   YASIO__DECL void cleanup_ssl_context();
-  YASIO__DECL SSL_CTX* get_ssl_context();
   YASIO__DECL void do_ssl_handshake(io_channel*);
 #endif
 
@@ -1080,9 +1085,10 @@ private:
     highp_time_t dns_queries_timeout_ = 5LL * std::micro::den;
     int dns_queries_tries_            = 5;
 
-    bool dns_dirty_                   = true; // only for c-ares
+    bool dns_dirty_ = true; // only for c-ares
 
     bool deferred_event_ = true;
+    defer_event_cb_t on_defer_event_;
 
     // tcp keepalive settings
     struct __unnamed01 {
@@ -1092,7 +1098,7 @@ private:
       int probs    = 10;
     } tcp_keepalive_;
 
-    bool no_new_thread_    = false;
+    bool no_new_thread_ = false;
 
     // The resolve function
     resolv_fn_t resolv_;
@@ -1101,15 +1107,15 @@ private:
     // The custom debug print function
     print_fn2_t print_;
 
-#if defined(YASIO_HAVE_SSL)
+#if defined(YASIO_SSL_BACKEND)
     // The full path cacert(.pem) file for ssl verifaction
-    std::string capath_;
+    std::string cafile_;
 #endif
   } options_;
 
   // The ip stack version supported by localhost
   u_short ipsv_ = 0;
-#if defined(YASIO_HAVE_SSL)
+#if defined(YASIO_SSL_BACKEND)
   SSL_CTX* ssl_ctx_ = nullptr;
 #endif
 #if defined(YASIO_HAVE_CARES)

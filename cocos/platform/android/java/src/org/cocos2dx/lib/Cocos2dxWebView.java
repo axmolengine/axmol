@@ -33,6 +33,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
+import org.cocos2dx.lib.Cocos2dxHelper;
+
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.concurrent.CountDownLatch;
@@ -109,7 +111,7 @@ public class Cocos2dxWebView extends WebView {
             try {
                 URI uri = URI.create(urlString);
                 if (uri != null && uri.getScheme().equals(mJSScheme)) {
-                    activity.runOnGLThread(new Runnable() {
+                    Cocos2dxHelper.runOnGLThread(new Runnable() {
                         @Override
                         public void run() {
                             Cocos2dxWebViewHelper._onJsCallback(mViewTag, urlString);
@@ -125,7 +127,7 @@ public class Cocos2dxWebView extends WebView {
             CountDownLatch latch = new CountDownLatch(1);
 
             // run worker on cocos thread
-            activity.runOnGLThread(new ShouldStartLoadingWorker(latch, result, mViewTag, urlString));
+            Cocos2dxHelper.runOnGLThread(new ShouldStartLoadingWorker(latch, result, mViewTag, urlString));
 
             // wait for result from cocos thread
             try {
@@ -140,8 +142,7 @@ public class Cocos2dxWebView extends WebView {
         @Override
         public void onPageFinished(WebView view, final String url) {
             super.onPageFinished(view, url);
-            Cocos2dxActivity activity = (Cocos2dxActivity)getContext();
-            activity.runOnGLThread(new Runnable() {
+            Cocos2dxHelper.runOnGLThread(new Runnable() {
                 @Override
                 public void run() {
                     Cocos2dxWebViewHelper._didFinishLoading(mViewTag, url);
@@ -153,7 +154,7 @@ public class Cocos2dxWebView extends WebView {
         public void onReceivedError(WebView view, int errorCode, String description, final String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
             Cocos2dxActivity activity = (Cocos2dxActivity)getContext();
-            activity.runOnGLThread(new Runnable() {
+            Cocos2dxHelper.runOnGLThread(new Runnable() {
                 @Override
                 public void run() {
                     Cocos2dxWebViewHelper._didFailLoading(mViewTag, failingUrl);

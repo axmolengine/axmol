@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A cross platform socket APIs, support ios & android & wp8 & window store universal app
-//
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2020 HALX99
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ org/yasio/AppGlobals.java provide 2 function:
  2. init(Context ctx), please call after your android app initialized.
 */
 #include "yasio/detail/config.hpp"
+#include "yasio/detail/logging.hpp"
 
 #if defined(__ANDROID__) && defined(YASIO_HAVE_CARES)
 static JavaVM* yasio__jvm;
