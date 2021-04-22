@@ -74,7 +74,7 @@ bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo *tilesetInfo, TMXLayerInfo
 
     if( tilesetInfo )
     {
-        _texture = _director->getTextureCache()->addImage(tilesetInfo->_sourceImage);
+        _texture = Director::getInstance()->getTextureCache()->addImage(tilesetInfo->_sourceImage);
         _texture->retain();
     }
 
@@ -135,7 +135,7 @@ void FastTMXLayer::draw(Renderer *renderer, const Mat4& transform, uint32_t flag
     
     if( flags != 0 || _dirty || _quadsDirty)
     {
-        Size s = _director->getVisibleSize();
+        Size s = Director::getInstance()->getVisibleSize();
         const Vec2 &anchor = getAnchorPoint();
         auto rect = Rect(Camera::getVisitingCamera()->getPositionX() - s.width * (anchor.x == 0.0f ? 0.5f : anchor.x),
                          Camera::getVisitingCamera()->getPositionY() - s.height * (anchor.y == 0.0f ? 0.5f : anchor.y),
@@ -153,7 +153,7 @@ void FastTMXLayer::draw(Renderer *renderer, const Mat4& transform, uint32_t flag
         _dirty = false;
     }
 
-    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 finalMat = projectionMat * _modelViewTransform;
     for (const auto& e : _customCommands)
     {
@@ -168,7 +168,7 @@ void FastTMXLayer::draw(Renderer *renderer, const Mat4& transform, uint32_t flag
 
 void FastTMXLayer::updateTiles(const Rect& culledRect)
 {
-    Rect visibleTiles = Rect(culledRect.origin, culledRect.size * _director->getContentScaleFactor());
+    Rect visibleTiles = Rect(culledRect.origin, culledRect.size * Director::getInstance()->getContentScaleFactor());
     Size mapTileSize = CC_SIZE_PIXELS_TO_POINTS(_mapTileSize);
     Size tileSize = CC_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
     Mat4 nodeToTileTransform = _tileToNodeTransform.getInversed();
@@ -300,7 +300,7 @@ void FastTMXLayer::setupTiles()
     // Parse cocos2d properties
     this->parseInternalProperties();
 
-    auto& screenSize = _director->getWinSize();
+    Size screenSize = Director::getInstance()->getWinSize();
 
     switch (_layerOrientation)
     {

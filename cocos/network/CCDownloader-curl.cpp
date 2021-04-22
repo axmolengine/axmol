@@ -38,7 +38,6 @@
 #include "platform/CCFileStream.h"
 #include "md5/md5.h"
 #include "yasio/xxsocket.hpp"
-#include <inttypes.h>
 
 // **NOTE**
 // In the file:
@@ -367,16 +366,11 @@ namespace cocos2d { namespace network {
         void run()
         {
             lock_guard<mutex> lock(_threadMutex);
-
-            if (_tasksFinished)
-            { // all tasks finished, make sure thread not joinable
-                if (_thread.joinable())
-                    _thread.join();
-                _tasksFinished = false;
-            }
-
             if (!_thread.joinable())
-                _thread = std::thread(&DownloaderCURL::Impl::_threadProc, this);
+            {
+                std::thread newThread(&DownloaderCURL::Impl::_threadProc, this);
+                _thread.swap(newThread);
+            }
         }
 
         void stop()
@@ -395,6 +389,12 @@ namespace cocos2d { namespace network {
 
             if (_thread.joinable())
                 _thread.join();
+        }
+
+        bool stoped()
+        {
+            lock_guard<mutex> lock(_threadMutex);
+            return !_thread.joinable();
         }
 
         void getProcessTasks(vector<TaskWrapper>& outList)
@@ -480,7 +480,7 @@ namespace cocos2d { namespace network {
                 if (coTask->_acceptRanges && coTask->_totalBytesReceived > 0)
                 {
                     char buf[128];
-                    sprintf(buf, "%" PRId64 "-", coTask->_totalBytesReceived);
+                    sprintf(buf, "%lld-", coTask->_totalBytesReceived);
                     curl_easy_setopt(handle, CURLOPT_RANGE, buf);
                     curl_easy_setopt(handle, CURLOPT_RESUME_FROM_LARGE,(curl_off_t)coTask->_totalBytesReceived);
                 }
@@ -807,14 +807,11 @@ namespace cocos2d { namespace network {
                 }
             } while (!coTaskMap.empty());
 
-            _tasksFinished = true;
-
             curl_multi_cleanup(curlmHandle);
             DLLOG("----DownloaderCURL::Impl::_threadProc end");
         }
 
         thread _thread;
-        std::atomic_bool _tasksFinished{};
         deque<TaskWrapper>  _requestQueue;
         set<TaskWrapper>    _processSet;
         // deque<TaskWrapper>  _finishedQueue;

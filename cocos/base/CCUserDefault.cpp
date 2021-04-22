@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include <sys/stat.h>
 
 #include <inttypes.h>
+#include <sstream>
 
 #include "openssl/aes.h"
 #include "openssl/modes.h"
@@ -53,7 +54,7 @@ THE SOFTWARE.
 
 #include "CCFileStream.h"
 
-#define USER_DEFAULT_PLAIN_MODE 0
+#define USER_DEFAULT_PLAIN_MODE 1
 
 #if !USER_DEFAULT_PLAIN_MODE
 #define USER_DEFAULT_FILENAME "UserDefault.bin"
@@ -132,10 +133,12 @@ UserDefault::UserDefault()
 void UserDefault::closeFileMapping()
 {
     _rwmmap.reset();
+#if !USER_DEFAULT_PLAIN_MODE
     if (_fd != -1) {
         posix_close(_fd);
         _fd = -1;
     }
+#endif
 }
 
 bool UserDefault::getBoolForKey(const char* pKey)
@@ -415,14 +418,20 @@ void UserDefault::lazyInit()
     }
 #else
     pugi::xml_document doc;
-    pugi::xml_parse_result ret = doc.load_file(_filePath.c_str());
-    if (ret) {
-        for (auto& elem : doc.document_element())
-            updateValueForKey(elem.name(), elem.text().as_string());
+
+    if (FileUtils::getInstance()->isFileExist(_filePath))
+    {
+        auto data = FileUtils::getInstance()->getDataFromFile(_filePath);
+        pugi::xml_parse_result ret = doc.load_buffer_inplace(data.getBytes(), data.getSize());
+        if (ret) {
+            for (auto& elem : doc.document_element())
+                updateValueForKey(elem.name(), elem.text().as_string());
+        }
+        else {
+            log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
+        }
     }
-    else {
-        log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
-    }
+
 #endif
 
     _initialized = true;
@@ -474,7 +483,10 @@ void UserDefault::flush()
         r.append_child(kv.first.c_str())
         .append_child(pugi::xml_node_type::node_pcdata)
         .set_value(kv.second.c_str());
-    doc.save_file(_filePath.c_str(), "  ");
+
+    std::stringstream ss;
+    doc.save(ss, "  ");
+    FileUtils::getInstance()->writeStringToFile(ss.str(), _filePath);
 #endif
 }
 

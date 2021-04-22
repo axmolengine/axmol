@@ -221,21 +221,6 @@ def normalize_type_str(s, depth=1):
             return 'std::string' + last_section
         else:
             return 'std::string'
-           
-    # for string_view
-    if sections[0] == 'const cxx17::basic_string_view' or sections[0] == 'const basic_string_view':
-        last_section = sections[len(sections) - 1]
-        if last_section == '&' or last_section == '*' or last_section.startswith('::'):
-            return 'const cxx17::string_view' + last_section
-        else:
-            return 'const cxx17::string_view'
-
-    elif sections[0] == 'cxx17::basic_string_view' or sections[0] == 'basic_string_view':
-        last_section = sections[len(sections) - 1]
-        if last_section == '&' or last_section == '*' or last_section.startswith('::'):
-            return 'cxx17::string_view' + last_section
-        else:
-            return 'cxx17::string_view'
 
     for i in range(1, section_len):
         sections[i] = normalize_type_str(sections[i], depth+1)
@@ -339,8 +324,6 @@ def native_name_from_type(ntype, underlying=False):
             return "std::string"
         elif cdecl.spelling == "function" and cparent and cparent.spelling == "std":
             return "std::function"
-        elif decl.spelling == "string_view" and parent and parent.spelling == "cxx17":
-            return "cxx17::string_view"
         else:
             # print >> sys.stderr, "probably a function pointer: " + str(decl.spelling)
             return const + decl.spelling
@@ -454,9 +437,7 @@ class NativeType(object):
             if decl.kind == cindex.CursorKind.CLASS_DECL \
                 and not nt.namespaced_name.startswith('std::function') \
                 and not nt.namespaced_name.startswith('std::string') \
-                and not nt.namespaced_name.startswith('std::basic_string') \
-                and not nt.namespaced_name.startswith('cxx17::string_view') \
-                and not nt.namespaced_name.startswith('cxx17::basic_string_view'):
+                and not nt.namespaced_name.startswith('std::basic_string'):
                 nt.is_object = True
                 displayname = decl.displayname.replace('::__ndk1', '')
                 nt.name = normalize_type_str(displayname)
@@ -489,11 +470,11 @@ class NativeType(object):
                 if None != cdecl.spelling and 0 == cmp(cdecl.spelling, "function"):
                     nt.name = "std::function"
 
-                if nt.name != INVALID_NATIVE_TYPE and nt.name != "std::string" and nt.name != "std::function" and nt.name != "cxx17::string_view":
+                if nt.name != INVALID_NATIVE_TYPE and nt.name != "std::string" and nt.name != "std::function":
                     if ntype.kind == cindex.TypeKind.UNEXPOSED or ntype.kind == cindex.TypeKind.TYPEDEF or ntype.kind == cindex.TypeKind.ELABORATED:
                         ret = NativeType.from_type(ntype.get_canonical())
                         if ret.name != "":
-                            if decl.kind == cindex.CursorKind.TYPEDEF_DECL or decl.kind == cindex.CursorKind.TYPE_ALIAS_DECL:
+                            if decl.kind == cindex.CursorKind.TYPEDEF_DECL:
                                 ret.canonical_type = nt
                             return ret
 
@@ -720,7 +701,7 @@ class NativeField(object):
     @staticmethod
     def can_parse(ntype):
         native_type = NativeType.from_type(ntype)
-        if ntype.kind == cindex.TypeKind.UNEXPOSED and native_type.name != "std::string" and native_type.name != "cxx17::string_view":
+        if ntype.kind == cindex.TypeKind.UNEXPOSED and native_type.name != "std::string":
             return False
         return True
 
@@ -1626,7 +1607,7 @@ class Generator(object):
             if k == namespace_name:
                 return namespace_class_name.replace("*","").replace("const ", "").replace(k, v)
         if namespace_class_name.find("::") >= 0:
-            if namespace_class_name.find("std::") == 0 or namespace_class_name.find("cxx17::") == 0:
+            if namespace_class_name.find("std::") == 0:
                 return namespace_class_name
             else:
                 raise Exception("The namespace (%s) conversion wasn't set in 'ns_map' section of the conversions.yaml" % namespace_class_name)
@@ -1636,7 +1617,7 @@ class Generator(object):
     def is_cocos_class(self, namespace_class_name):
         script_ns_dict = self.config['conversions']['ns_map']
         for (k, v) in script_ns_dict.items():
-            if namespace_class_name.find("std::") == 0 or namespace_class_name.find("cxx17::") == 0:
+            if namespace_class_name.find("std::") == 0:
                 return False
             if namespace_class_name.find(k) >= 0:
                 return True
@@ -1652,8 +1633,8 @@ class Generator(object):
 
     def js_typename_from_natve(self, namespace_class_name):
         script_ns_dict = self.config['conversions']['ns_map']
-        if namespace_class_name.find("std::") == 0 or namespace_class_name.find("cxx17::") == 0:
-            if namespace_class_name.find("std::string") == 0 or namespace_class_name.find("cxx17::string_view") == 0:
+        if namespace_class_name.find("std::") == 0:
+            if namespace_class_name.find("std::string") == 0:
                 return "String"
             if namespace_class_name.find("std::vector") == 0:
                 return "Array"
@@ -1694,11 +1675,9 @@ class Generator(object):
 
     def lua_typename_from_natve(self, namespace_class_name, is_ret = False):
         script_ns_dict = self.config['conversions']['ns_map']
-        if namespace_class_name.find("std::") == 0 or namespace_class_name.find("cxx17::") == 0:
+        if namespace_class_name.find("std::") == 0:
             if namespace_class_name.find("std::string") == 0:
                 return "string"
-            if namespace_class_name.find("cxx17::string_view") == 0:
-                return "string_view"
             if namespace_class_name.find("std::vector") == 0:
                 return "array_table"
             if namespace_class_name.find("std::map") == 0 or namespace_class_name.find("std::unordered_map") == 0:
@@ -1774,7 +1753,7 @@ class Generator(object):
         if lower_name.find("unsigned ") >= 0:
             lower_name = lower_name.replace("unsigned ","")
 
-        if lower_name == "std::string" or lower_name == "cxx17::string_view":
+        if lower_name == "std::string":
             return ""
 
         if lower_name == "char" or lower_name == "short" or lower_name == "int" or lower_name == "float" or lower_name == "double" or lower_name == "long":

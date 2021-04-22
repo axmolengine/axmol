@@ -28,7 +28,7 @@
 #include "Types.h"
 #include "base/CCRef.h"
 #include "renderer/CCPipelineDescriptor.h"
-#include "renderer/backend/RenderPassDescriptor.h"
+#include "renderer/backend/RenderPassParams.h"
 
 CC_BACKEND_BEGIN
 /**
