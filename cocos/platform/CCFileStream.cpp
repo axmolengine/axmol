@@ -46,6 +46,7 @@ static int pfs_posix_close(PXFileHandle& handle) {
     }
     return 0;
 }
+
 static PXIoF pfs_posix_iof = {
         pfs_posix_read,
         pfs_posix_seek,
@@ -83,41 +84,18 @@ static PXIoF pfs_obb_iof = {
 };
 #endif
 
-FileStream::FileStream()
+PosixFileStream::PosixFileStream(const std::string& path, FileStream::Mode mode)
+    : FileStream()
 {
-    zeroset();
+    open(path, mode);
 }
 
-FileStream::~FileStream()
+PosixFileStream::~PosixFileStream()
 {
-    this->close();
+    internalClose();
 }
 
-FileStream::FileStream(FileStream&& rhs)
-{
-    zeroset();
-    assign(std::forward<FileStream>(rhs));
-}
-
-FileStream& FileStream::operator=(FileStream&& rhs)
-{
-    assign(std::forward<FileStream>(rhs));
-    return *this;
-}
-
-void FileStream::zeroset()
-{
-    memset(this, 0, sizeof(FileStream));
-}
-
-void FileStream::assign(FileStream&& rhs)
-{
-    this->close();
-    memcpy(this, &rhs, sizeof(FileStream));
-    rhs.zeroset();
-}
-
-bool FileStream::open(const std::string& path, FileStream::Mode mode)
+bool PosixFileStream::open(const std::string& path, FileStream::Mode mode)
 {
     bool ok = false;
 #if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
@@ -163,16 +141,7 @@ bool FileStream::open(const std::string& path, FileStream::Mode mode)
     return ok;
 }
 
-FileStream::operator bool() const
-{
-#if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
-    return _handle._fd != -1;
-#else
-    return _handle._fd != -1 && _handle._asset != nullptr;
-#endif
-}
-
-int FileStream::close()
+int PosixFileStream::internalClose()
 {
     if (_iof) {
         int ret = _iof->close(_handle);
@@ -182,19 +151,44 @@ int FileStream::close()
     return 0;
 }
 
-int FileStream::seek(long offset, int origin)
+int PosixFileStream::close()
+{
+    return internalClose();
+}
+
+int PosixFileStream::seek(long offset, int origin)
 {
     return static_cast<int>(_iof->seek(_handle, offset, origin));
 }
 
-int FileStream::read(void* buf, unsigned int size)
+int PosixFileStream::read(void* buf, unsigned int size)
 {
     return _iof->read(_handle, buf, size);
 }
 
-int FileStream::write(const void* buf, unsigned int size)
+int PosixFileStream::write(const void* buf, unsigned int size)
 {
     return static_cast<int>(posix_write(_handle._fd, buf, size));
+}
+
+int PosixFileStream::tell()
+{
+    return static_cast<int>(_iof->seek(_handle, 0, SEEK_CUR));
+}
+
+bool PosixFileStream::isOpen() const
+{
+#if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
+    return _handle._fd != -1;
+#else
+    return _handle._fd != -1 && _handle._asset != nullptr;
+#endif
+}
+
+void PosixFileStream::reset()
+{
+    memset(&_handle, 0, sizeof(_handle));
+    _iof = nullptr;
 }
 
 NS_CC_END

@@ -80,7 +80,7 @@ protected:
     static bool lazyInit();
     static void destroy();
 
-    FileStream _fileStream;
+    FileStream* _fileStream = nullptr;
     mp3dec_handle_t _handle;
 
     friend class AudioDecoderManager;
