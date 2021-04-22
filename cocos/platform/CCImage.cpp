@@ -2319,7 +2319,7 @@ bool Image::saveImageToJPG(const std::string& filePath)
     {
         struct jpeg_compress_struct cinfo;
         struct jpeg_error_mgr jerr;
-        FILE * outfile;                 /* target file */
+        FileStream * outfile;                 /* target file */
         JSAMPROW row_pointer[1];        /* pointer to JSAMPLE row[s] */
         int     row_stride;          /* physical row width in image buffer */
 
@@ -2327,9 +2327,12 @@ bool Image::saveImageToJPG(const std::string& filePath)
         /* Now we can initialize the JPEG compression object. */
         jpeg_create_compress(&cinfo);
 
-        CC_BREAK_IF((outfile = fopen(filePath.c_str(), "wb")) == nullptr);
-        
-        jpeg_stdio_dest(&cinfo, outfile);
+        outfile = FileUtils::getInstance()->openFileStream(filePath, FileStream::Mode::WRITE);
+        CC_BREAK_IF((outfile == nullptr || !outfile->isOpen()));
+
+        unsigned char* outputBuffer = nullptr;
+        unsigned long outputSize = 0;
+        jpeg_mem_dest(&cinfo, &outputBuffer, &outputSize);
 
         cinfo.image_width = _width;    /* image width and height, in pixels */
         cinfo.image_height = _height;
@@ -2350,7 +2353,14 @@ bool Image::saveImageToJPG(const std::string& filePath)
             {
                 jpeg_finish_compress(&cinfo);
                 jpeg_destroy_compress(&cinfo);
-                fclose(outfile);
+
+                delete outfile;
+                outfile = nullptr;
+                if (outputBuffer)
+                {
+                    free(outputBuffer);
+                    outputBuffer = nullptr;
+                }
                 break;
             }
 
@@ -2385,7 +2395,16 @@ bool Image::saveImageToJPG(const std::string& filePath)
         }
 
         jpeg_finish_compress(&cinfo);
-        fclose(outfile);
+
+        outfile->write(outputBuffer, outputSize);
+        delete outfile; // closes FileStream automatically
+        outfile = nullptr;
+        if (outputBuffer)
+        {
+            free(outputBuffer);
+            outputBuffer = nullptr;
+        }
+
         jpeg_destroy_compress(&cinfo);
         
         ret = true;
