@@ -27,12 +27,14 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 
 #include <stack>
+#include <sstream>
 
 #include "base/CCData.h"
 #include "base/ccMacros.h"
 #include "base/CCDirector.h"
 #include "platform/CCSAXParser.h"
 //#include "base/ccUtils.h"
+#include "platform/CCPosixFileStream.h"
 
 #ifdef MINIZIP_FROM_SYSTEM
 #include <minizip/unzip.h>
@@ -373,7 +375,6 @@ bool FileUtils::writeValueMapToFile(const ValueMap& dict, const std::string& ful
     std::stringstream ss;
     doc.save(ss, "  ");
     return writeStringToFile(ss.str(), fullPath);
-	//return doc.save_file(fullPath.c_str());
 }
 
 bool FileUtils::writeValueVectorToFile(const ValueVector& vecData, const std::string& fullPath) const
@@ -388,7 +389,6 @@ bool FileUtils::writeValueVectorToFile(const ValueVector& vecData, const std::st
     std::stringstream ss;
     doc.save(ss, "  ");
     return writeStringToFile(ss.str(), fullPath);
-	//return doc.save_file(fullPath.c_str());
 }
 
 static void generateElementForObject(const Value& value, pugi::xml_node& parent)
@@ -1105,17 +1105,17 @@ void FileUtils::listFilesRecursivelyAsync(const std::string& dirPath, std::funct
     }, std::move(callback));
 }
 
+FileStream* FileUtils::openFileStream(const std::string& filePath, FileStream::Mode mode)
+{
+    return new PosixFileStream(filePath, mode); // PosixFileStream is the default implementation
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 // windows os implement should override in platform specific FileUtiles class
 bool FileUtils::isDirectoryExistInternal(const std::string& dirPath) const
 {
     CCASSERT(false, "FileUtils not support isDirectoryExistInternal");
     return false;
-}
-
-FileStream* FileUtils::openFileStream(const std::string& dirPath, FileStream::Mode mode)
-{
-    return new PosixFileStream(dirPath, mode);
 }
 
 bool FileUtils::createDirectory(const std::string& path) const

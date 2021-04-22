@@ -101,7 +101,7 @@ elseif(APPLE)
             platform/ios/CCInputView-ios.mm
             )
 
-        if(CC_FORCE_USE_GLES)
+        if(NOT CC_COMPAT_GL)
             set(COCOS_PLATFORM_SPECIFIC_HEADER
                 ${COCOS_PLATFORM_SPECIFIC_HEADER}
                 platform/ios/CCES2Renderer-ios.h
@@ -160,6 +160,7 @@ set(COCOS_PLATFORM_HEADER
     platform/CCSAXParser.h
     platform/CCStdC.h
     platform/CCFileStream.h
+    platform/CCPosixFileStream.h
     )
 
 set(COCOS_PLATFORM_SRC
@@ -169,4 +170,5 @@ set(COCOS_PLATFORM_SRC
     platform/CCFileUtils.cpp
     platform/CCImage.cpp
     platform/CCFileStream.cpp
+    platform/CCPosixFileStream.cpp
     )
