@@ -35,6 +35,7 @@ android {
 
     externalNativeBuild {
         cmake {
+            version "3.10.0+"
             path "../../CMakeLists.txt"
         }
     }
@@ -90,4 +91,13 @@ android.applicationVariants.all { variant ->
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libcocos2dx')
+}
+
+project.afterEvaluate {
+    if (tasks.findByName("externalNativeBuildDebug")) {
+        compileDebugJavaWithJavac.dependsOn externalNativeBuildDebug
+    }
+    if (tasks.findByName("externalNativeBuildRelease")) {
+        compileReleaseJavaWithJavac.dependsOn externalNativeBuildRelease  
+    }
 }

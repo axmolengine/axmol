@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include <type_traits>
 #include <mutex>
 
-#include "CCFileStream.h"
 #include "platform/CCPlatformMacros.h"
 #include "base/ccTypes.h"
 #include "base/CCValue.h"
@@ -839,8 +838,6 @@ public:
      *  @return Returns true if the directory found at the given absolute path, otherwise returns false
      */
     virtual bool isDirectoryExistInternal(const std::string& dirPath) const;
-
-    virtual FileStream* openFileStream(const std::string& dirPath, FileStream::Mode mode);
 
 protected:
     /**

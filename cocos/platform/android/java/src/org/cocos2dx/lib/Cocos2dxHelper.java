@@ -111,7 +111,7 @@ public class Cocos2dxHelper {
     // ===========================================================
 
     public static void runOnGLThread(final Runnable r) {
-        ((Cocos2dxActivity)sActivity).runOnGLThread(r);
+        nativeRunOnGLThread(r);
     }
 
     private static boolean sInited = false;
@@ -264,6 +264,8 @@ public class Cocos2dxHelper {
     // Methods
     // ===========================================================
 
+    private static native void nativeRunOnGLThread(final Object runnable);
+
     private static native void nativeSetEditTextDialogResult(final byte[] pBytes);
 
     private static native void nativeSetContext(final Object pContext, final Object pAssetManager);
@@ -394,7 +396,7 @@ public class Cocos2dxHelper {
         try {
             final byte[] bytesUTF8 = pResult.getBytes("UTF8");
 
-            Cocos2dxHelper.sCocos2dxHelperListener.runOnGLThread(new Runnable() {
+            Cocos2dxHelper.runOnGLThread(new Runnable() {
                 @Override
                 public void run() {
                     Cocos2dxHelper.nativeSetEditTextDialogResult(bytesUTF8);
@@ -608,8 +610,6 @@ public class Cocos2dxHelper {
 
     public static interface Cocos2dxHelperListener {
         public void showDialog(final String pTitle, final String pMessage);
-
-        public void runOnGLThread(final Runnable pRunnable);
     }
 
     //Enhance API modification begin

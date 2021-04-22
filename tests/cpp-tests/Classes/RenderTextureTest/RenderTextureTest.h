@@ -26,6 +26,7 @@
 #define _RENDERTEXTURE_TEST_H_
 
 #include "cocos2d.h"
+#include "renderer/backend/DepthStencilState.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(RenderTextureTests);
@@ -108,7 +109,9 @@ private:
     void onAfterDraw();
     
 private:
-    cocos2d::RenderTexture* _rend;
+    cocos2d::Renderer* _renderer;
+    cocos2d::backend::DepthStencilDescriptor _dsDesc;
+    cocos2d::RenderTexture* _rtx;
     cocos2d::Sprite* _spriteDS;
     cocos2d::Sprite* _spriteDraw;
 };

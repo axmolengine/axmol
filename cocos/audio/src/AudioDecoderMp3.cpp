@@ -128,14 +128,9 @@ namespace cocos2d {
 #if !CC_USE_MPG123
         do
         {
-            delete _fileStream;
-            _fileStream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
-            if (!_fileStream->isOpen())
+            if (!_fileStream.open(fullPath, FileStream::Mode::READ))
             {
                 ALOGE("Trouble with minimp3(1): %s\n", strerror(errno));
-
-                delete _fileStream;
-                _fileStream = nullptr;
                 break;
             }
 
@@ -143,7 +138,7 @@ namespace cocos2d {
 
             handle->_decIO.read = minimp3_read_r;
             handle->_decIO.seek = minimp3_seek_r;
-            handle->_decIO.read_data = handle->_decIO.seek_data = _fileStream;
+            handle->_decIO.read_data = handle->_decIO.seek_data = &_fileStream;
 
             if (mp3dec_ex_open_cb(&handle->_dec, &handle->_decIO, MP3D_SEEK_TO_SAMPLE) != 0)
             {
@@ -194,7 +189,7 @@ namespace cocos2d {
 
             mpg123_replace_reader_handle(_handle, mpg123_read_r, mpg123_lseek_r, mpg123_close_r);
 
-            if (mpg123_open_handle(_handle, _fileStream) != MPG123_OK
+            if (mpg123_open_handle(_handle, &_fileStream) != MPG123_OK
                 || mpg123_getformat(_handle, &rate, &channel, &mp3Encoding) != MPG123_OK)
             {
                 ALOGE("Trouble with mpg123(2): %s\n", mpg123_strerror(_handle));
@@ -253,8 +248,7 @@ namespace cocos2d {
                 delete _handle;
                 _handle = nullptr;
 
-                delete _fileStream;
-                _fileStream = nullptr;
+                _fileStream.close();
             }
 #else
             if (_handle != nullptr)
@@ -262,9 +256,6 @@ namespace cocos2d {
                 mpg123_close(_handle);
                 mpg123_delete(_handle);
                 _handle = nullptr;
-
-                delete _fileStream;
-                _fileStream = nullptr;
             }
 #endif
             _isOpened = false;

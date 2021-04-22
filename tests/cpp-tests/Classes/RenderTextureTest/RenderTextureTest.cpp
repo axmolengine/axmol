@@ -483,7 +483,12 @@ std::string RenderTexturePartTest::subtitle() const
 
 RenderTextureTestDepthStencil::RenderTextureTestDepthStencil()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = _director->getWinSize();
+
+    _renderer = _director->getRenderer();
+
+    /// store old depth stencil desc
+    _dsDesc = _renderer->getDepthStencilDesc();
 
     _spriteDS = Sprite::create("Images/fire.png");
     _spriteDS->retain();
@@ -497,27 +502,31 @@ RenderTextureTestDepthStencil::RenderTextureTestDepthStencil()
     //! move sprite half width and height, and draw only where not marked
     _spriteDraw->setPosition(_spriteDraw->getPosition() + Vec2(_spriteDraw->getContentSize().width * _spriteDraw->getScale() * 0.5f, _spriteDraw->getContentSize().height * _spriteDraw->getScale() * 0.5f));
     
-    _rend = RenderTexture::create(s.width, s.height, backend::PixelFormat::RGBA4, PixelFormat::D24S8);
+    _rtx = RenderTexture::create(s.width, s.height, backend::PixelFormat::RGBA4, PixelFormat::D24S8);
 
-    _rend->setPosition(Vec2(s.width * 0.5f, s.height * 0.5f));
+    _rtx->setPosition(Vec2(s.width * 0.5f, s.height * 0.5f));
 
-    this->addChild(_rend);
+    this->addChild(_rtx);
 }
 
 RenderTextureTestDepthStencil::~RenderTextureTestDepthStencil()
 {
     CC_SAFE_RELEASE(_spriteDraw);
     CC_SAFE_RELEASE(_spriteDS);
+    
+    // restore depth stencil desc
+    _renderer->setDepthStencilDesc(_dsDesc);
+    _renderer->setStencilTest(bitmask::any(_dsDesc.flags, DepthStencilFlags::STENCIL_TEST));
 }
 
 void RenderTextureTestDepthStencil::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
+    _rtx->beginWithClear(0, 0, 0, 0, 0, 0);
+	
     _renderCmds[0].init(_globalZOrder);
     _renderCmds[0].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
     renderer->addCommand(&_renderCmds[0]);
 
-    _rend->beginWithClear(0, 0, 0, 0, 0, 0);
-    
     _renderCmds[1].init(_globalZOrder);
     _renderCmds[1].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
     renderer->addCommand(&_renderCmds[1]);
@@ -530,35 +539,36 @@ void RenderTextureTestDepthStencil::draw(Renderer *renderer, const Mat4 &transfo
 
     _spriteDraw->visit();
     
-    _rend->end();
-    
     _renderCmds[3].init(_globalZOrder);
     _renderCmds[3].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this);
     renderer->addCommand(&_renderCmds[3]);
+    
+    /// !!!end will set current render target to default renderTarget
+    /// !!!all render target share one depthStencilDesc, TODO: optimize me?
+    _rtx->end();
 }
 
 void RenderTextureTestDepthStencil::onBeforeClear()
 {
-    Director::getInstance()->getRenderer()->setStencilWriteMask(0xFF);
+    _renderer->setStencilWriteMask(0xFF);
 }
 
 void RenderTextureTestDepthStencil::onBeforeStencil()
 {
     //! mark sprite quad into stencil buffer
-    auto renderer = Director::getInstance()->getRenderer();
-    renderer->setStencilTest(true);
-    renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, 1, 0xFF);
-    renderer->setStencilOperation(backend::StencilOperation::REPLACE, backend::StencilOperation::REPLACE, backend::StencilOperation::REPLACE);
+    _renderer->setStencilTest(true);
+    _renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, 1, 0xFF);
+    _renderer->setStencilOperation(backend::StencilOperation::REPLACE, backend::StencilOperation::REPLACE, backend::StencilOperation::REPLACE);
 }
 
 void RenderTextureTestDepthStencil::onBeforeDraw()
 {
-    Director::getInstance()->getRenderer()->setStencilCompareFunction(backend::CompareFunction::NOT_EQUAL, 1, 0xFF);
+    _renderer->setStencilCompareFunction(backend::CompareFunction::NOT_EQUAL, 1, 0xFF);
 }
 
 void RenderTextureTestDepthStencil::onAfterDraw()
 {
-    Director::getInstance()->getRenderer()->setStencilTest(false);
+    _renderer->setStencilTest(false);
 }
 
 std::string RenderTextureTestDepthStencil::title() const

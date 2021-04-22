@@ -174,7 +174,7 @@ bool SpriteBatchNode::init()
 */
 bool SpriteBatchNode::initWithFile(const std::string& fileImage, ssize_t capacity/* = DEFAULT_CAPACITY*/)
 {
-    Texture2D *texture2D = Director::getInstance()->getTextureCache()->addImage(fileImage);
+    Texture2D *texture2D = _director->getTextureCache()->addImage(fileImage);
     return initWithTexture(texture2D, capacity);
 }
 
@@ -435,7 +435,7 @@ void SpriteBatchNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t f
         child->updateTransform();
     }
     
-    const auto& matrixProjection = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& matrixProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto programState = _quadCommand.getPipelineDescriptor().programState;
     programState->setUniform(_mvpMatrixLocaiton, matrixProjection.m, sizeof(matrixProjection.m));
     _quadCommand.init(_globalZOrder, _textureAtlas->getTexture(), _blendFunc, _textureAtlas->getQuads(), _textureAtlas->getTotalQuads(), transform, flags);

@@ -196,7 +196,7 @@ bool TextFieldTTF::attachWithIME()
     if (ret)
     {
         // open keyboard
-        auto pGlView = Director::getInstance()->getOpenGLView();
+        auto pGlView = _director->getOpenGLView();
         if (pGlView)
         {
             pGlView->setIMEKeyboardState(true);
@@ -211,7 +211,7 @@ bool TextFieldTTF::detachWithIME()
     if (ret)
     {
         // close keyboard
-        auto glView = Director::getInstance()->getOpenGLView();
+        auto glView = _director->getOpenGLView();
         if (glView)
         {
             glView->setIMEKeyboardState(false);

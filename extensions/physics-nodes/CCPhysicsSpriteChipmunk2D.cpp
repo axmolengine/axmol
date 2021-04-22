@@ -21,22 +21,17 @@
  * SOFTWARE.
  */
 
-#include "CCPhysicsSprite.h"
+#include "CCPhysicsSpriteChipmunk2D.h"
 #include "base/CCDirector.h"
 #include "base/CCEventDispatcher.h"
 
-#if (CC_ENABLE_CHIPMUNK_INTEGRATION || CC_ENABLE_BOX2D_INTEGRATION)
 
-
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
 #include "chipmunk/chipmunk.h"
-#elif CC_ENABLE_BOX2D_INTEGRATION
-#include "box2d/box2d.h"
-#endif
+
 
 NS_CC_EXT_BEGIN
 
-PhysicsSprite::PhysicsSprite()
+PhysicsSpriteChipmunk2D::PhysicsSpriteChipmunk2D()
 : _ignoreBodyRotation(false)
 , _CPBody(nullptr)
 , _pB2Body(nullptr)
@@ -44,9 +39,9 @@ PhysicsSprite::PhysicsSprite()
 , _syncTransform(nullptr)
 {}
 
-PhysicsSprite* PhysicsSprite::create()
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create()
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
+    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
     if (pRet && pRet->init())
     {
         pRet->autorelease();
@@ -59,9 +54,9 @@ PhysicsSprite* PhysicsSprite::create()
     return pRet;
 }
 
-PhysicsSprite* PhysicsSprite::createWithTexture(Texture2D *pTexture)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D *pTexture)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
+    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
     if (pRet && pRet->initWithTexture(pTexture))
     {
         pRet->autorelease();
@@ -74,9 +69,9 @@ PhysicsSprite* PhysicsSprite::createWithTexture(Texture2D *pTexture)
     return pRet;
 }
 
-PhysicsSprite* PhysicsSprite::createWithTexture(Texture2D *pTexture, const Rect& rect)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D *pTexture, const Rect& rect)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
+    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
     if (pRet && pRet->initWithTexture(pTexture, rect))
     {
         pRet->autorelease();
@@ -89,9 +84,9 @@ PhysicsSprite* PhysicsSprite::createWithTexture(Texture2D *pTexture, const Rect&
     return pRet;
 }
 
-PhysicsSprite* PhysicsSprite::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
+    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
     if (pRet && pRet->initWithSpriteFrame(pSpriteFrame))
     {
         pRet->autorelease();
@@ -104,9 +99,9 @@ PhysicsSprite* PhysicsSprite::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
     return pRet;
 }
 
-PhysicsSprite* PhysicsSprite::createWithSpriteFrameName(const char *pszSpriteFrameName)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrameName(const char *pszSpriteFrameName)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
+    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
     if (pRet && pRet->initWithSpriteFrameName(pszSpriteFrameName))
     {
         pRet->autorelease();
@@ -119,9 +114,9 @@ PhysicsSprite* PhysicsSprite::createWithSpriteFrameName(const char *pszSpriteFra
     return pRet;
 }
 
-PhysicsSprite* PhysicsSprite::create(const char *pszFileName)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char *pszFileName)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
+    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
     if (pRet && pRet->initWithFile(pszFileName))
     {
         pRet->autorelease();
@@ -134,9 +129,9 @@ PhysicsSprite* PhysicsSprite::create(const char *pszFileName)
     return pRet;
 }
 
-PhysicsSprite* PhysicsSprite::create(const char *pszFileName, const Rect& rect)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char *pszFileName, const Rect& rect)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
+    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
     if (pRet && pRet->initWithFile(pszFileName, rect))
     {
         pRet->autorelease();
@@ -152,28 +147,28 @@ PhysicsSprite* PhysicsSprite::create(const char *pszFileName, const Rect& rect)
 // this method will only get called if the sprite is batched.
 // return YES if the physic's values (angles, position ) changed.
 // If you return NO, then getNodeToParentTransform won't be called.
-bool PhysicsSprite::isDirty() const
+bool PhysicsSpriteChipmunk2D::isDirty() const
 {
     return true;
 }
 
-bool PhysicsSprite::isIgnoreBodyRotation() const
+bool PhysicsSpriteChipmunk2D::isIgnoreBodyRotation() const
 {
     return _ignoreBodyRotation;
 }
 
-void PhysicsSprite::setIgnoreBodyRotation(bool bIgnoreBodyRotation)
+void PhysicsSpriteChipmunk2D::setIgnoreBodyRotation(bool bIgnoreBodyRotation)
 {
     _ignoreBodyRotation = bIgnoreBodyRotation;
 }
 
 // Override the setters and getters to always reflect the body's properties.
-const Vec2& PhysicsSprite::getPosition() const
+const Vec2& PhysicsSpriteChipmunk2D::getPosition() const
 {
     return getPosFromPhysics();
 }
 
-void PhysicsSprite::getPosition(float* x, float* y) const
+void PhysicsSpriteChipmunk2D::getPosition(float* x, float* y) const
 {
     if (x == nullptr || y == nullptr) {
         return;
@@ -183,17 +178,17 @@ void PhysicsSprite::getPosition(float* x, float* y) const
     *y = pos.y;
 }
 
-float PhysicsSprite::getPositionX() const
+float PhysicsSpriteChipmunk2D::getPositionX() const
 {
     return getPosFromPhysics().x;
 }
 
-float PhysicsSprite::getPositionY() const
+float PhysicsSpriteChipmunk2D::getPositionY() const
 {
     return getPosFromPhysics().y;
 }
 
-Vec3 PhysicsSprite::getPosition3D() const
+Vec3 PhysicsSpriteChipmunk2D::getPosition3D() const
 {
     Vec2 pos = getPosFromPhysics();
     return Vec3(pos.x, pos.y, 0);
@@ -205,168 +200,104 @@ Vec3 PhysicsSprite::getPosition3D() const
 
 
 
-cpBody* PhysicsSprite::getCPBody() const
+cpBody* PhysicsSpriteChipmunk2D::getCPBody() const
 {
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
     return _CPBody;
-#else
-    CCASSERT(false, "Can't call chipmunk methods when Chipmunk is disabled");
-    return nullptr;
-#endif
 }
 
-void PhysicsSprite::setCPBody(cpBody *pBody)
+void PhysicsSpriteChipmunk2D::setCPBody(cpBody *pBody)
 {
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
     _CPBody = pBody;
-#else
-    CCASSERT(false, "Can't call chipmunk methods when Chipmunk is disabled");
-#endif
 }
 
-b2Body* PhysicsSprite::getB2Body() const
+b2Body* PhysicsSpriteChipmunk2D::getB2Body() const
 {
-#if CC_ENABLE_BOX2D_INTEGRATION
-    return _pB2Body;
-#else
     CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
     return nullptr;
-#endif
 }
 
-void PhysicsSprite::setB2Body(b2Body *pBody)
+void PhysicsSpriteChipmunk2D::setB2Body(b2Body *pBody)
 {
-#if CC_ENABLE_BOX2D_INTEGRATION
-    _pB2Body = pBody;
-#else
     CC_UNUSED_PARAM(pBody);
     CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
-#endif
 }
 
-float PhysicsSprite::getPTMRatio() const
+float PhysicsSpriteChipmunk2D::getPTMRatio() const
 {
-#if CC_ENABLE_BOX2D_INTEGRATION
-    return _PTMRatio;
-#else
     CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
     return 0;
-#endif
 }
 
-void PhysicsSprite::setPTMRatio(float fRatio)
+void PhysicsSpriteChipmunk2D::setPTMRatio(float fRatio)
 {
-#if CC_ENABLE_BOX2D_INTEGRATION
-     _PTMRatio = fRatio;
-#else
     CC_UNUSED_PARAM(fRatio);
     CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
-#endif
 }
 
 //
 // Common to Box2d and Chipmunk
 //
 
-const Vec2& PhysicsSprite::getPosFromPhysics() const
+const Vec2& PhysicsSpriteChipmunk2D::getPosFromPhysics() const
 {
     static Vec2 s_physicPosion;
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
 
     cpVect cpPos = cpBodyGetPosition(_CPBody);
     s_physicPosion = Vec2(cpPos.x, cpPos.y);
 
-#elif CC_ENABLE_BOX2D_INTEGRATION
-
-    b2Vec2 pos = _pB2Body->GetPosition();
-    float x = pos.x * _PTMRatio;
-    float y = pos.y * _PTMRatio;
-    s_physicPosion.set(x,y);
-#endif
     return s_physicPosion;
 }
 
-void PhysicsSprite::setPosition(float x, float y)
+void PhysicsSpriteChipmunk2D::setPosition(float x, float y)
 {
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
-
     cpVect cpPos = cpv(x, y);
     cpBodySetPosition(_CPBody, cpPos);
-
-#elif CC_ENABLE_BOX2D_INTEGRATION
-    
-    float angle = _pB2Body->GetAngle();
-    _pB2Body->SetTransform(b2Vec2(x / _PTMRatio, y / _PTMRatio), angle);
-#endif
 }
 
-void PhysicsSprite::setPosition(const Vec2 &pos)
+void PhysicsSpriteChipmunk2D::setPosition(const Vec2 &pos)
 {
     setPosition(pos.x, pos.y);
 }
 
-void PhysicsSprite::setPositionX(float x)
+void PhysicsSpriteChipmunk2D::setPositionX(float x)
 {
     setPosition(x, getPositionY());
 }
 
-void PhysicsSprite::setPositionY(float y)
+void PhysicsSpriteChipmunk2D::setPositionY(float y)
 {
     setPosition(getPositionX(), y);
 }
 
-void PhysicsSprite::setPosition3D(const Vec3& position)
+void PhysicsSpriteChipmunk2D::setPosition3D(const Vec3& position)
 {
     setPosition(position.x, position.y);
 }
 
-float PhysicsSprite::getRotation() const
+float PhysicsSpriteChipmunk2D::getRotation() const
 {
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
-
     return (_ignoreBodyRotation ? Sprite::getRotation() : -CC_RADIANS_TO_DEGREES(cpBodyGetAngle(_CPBody)));
-
-#elif CC_ENABLE_BOX2D_INTEGRATION
-    
-    return (_ignoreBodyRotation ? Sprite::getRotation() :
-            CC_RADIANS_TO_DEGREES(_pB2Body->GetAngle()));
-#else
-    return 0.0f;
-#endif
-
 }
 
-void PhysicsSprite::setRotation(float fRotation)
+void PhysicsSpriteChipmunk2D::setRotation(float fRotation)
 {
     if (_ignoreBodyRotation)
     {
         Sprite::setRotation(fRotation);
     }
-
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
     else
     {
         cpBodySetAngle(_CPBody, -CC_DEGREES_TO_RADIANS(fRotation));
     }
 
-#elif CC_ENABLE_BOX2D_INTEGRATION
-    else
-    {
-        b2Vec2 p = _pB2Body->GetPosition();
-        float radians = CC_DEGREES_TO_RADIANS(fRotation);
-        _pB2Body->SetTransform(p, radians);
-    }
-#endif
-
 }
 
-void PhysicsSprite::syncPhysicsTransform() const
+void PhysicsSpriteChipmunk2D::syncPhysicsTransform() const
 {
     // Although scale is not used by physics engines, it is calculated just in case
     // the sprite is animated (scaled up/down) using actions.
     // For more info see: http://www.cocos2d-iphone.org/forum/topic/68990
     
-#if CC_ENABLE_CHIPMUNK_INTEGRATION
     
     cpVect rot = (_ignoreBodyRotation ? cpvforangle(-CC_DEGREES_TO_RADIANS(_rotationX)) : cpBodyGetRotation(_CPBody));
     float x = cpBodyGetPosition(_CPBody).x + rot.x * -_anchorPointInPoints.x * _scaleX - rot.y * -_anchorPointInPoints.y * _scaleY;
@@ -383,52 +314,17 @@ void PhysicsSprite::syncPhysicsTransform() const
         0,  0,  1,  0,
         x,    y,  0,  1};
     
-    
     _transform.set(mat);
-    
-#elif CC_ENABLE_BOX2D_INTEGRATION
-    
-    b2Vec2 pos  = _pB2Body->GetPosition();
-    
-    float x = pos.x * _PTMRatio;
-    float y = pos.y * _PTMRatio;
-    
-    if (_ignoreAnchorPointForPosition)
-    {
-        x += _anchorPointInPoints.x;
-        y += _anchorPointInPoints.y;
-    }
-    
-    // Make matrix
-    float radians = _pB2Body->GetAngle();
-    float c = cosf(radians);
-    float s = sinf(radians);
-    
-    if (!_anchorPointInPoints.isZero())
-    {
-        x += ((c * -_anchorPointInPoints.x * _scaleX) + (-s * -_anchorPointInPoints.y * _scaleY));
-        y += ((s * -_anchorPointInPoints.x * _scaleX) + (c * -_anchorPointInPoints.y * _scaleY));
-    }
-    
-    // Rot, Translate Matrix
-    
-    float mat[] = {  (float)c * _scaleX, (float)s * _scaleX, 0,  0,
-        (float)-s * _scaleY, (float)c * _scaleY,  0,  0,
-        0,  0,  1,  0,
-        x,    y,  0,  1};
-    
-    _transform.set(mat);
-#endif
 }
 
-void PhysicsSprite::onEnter()
+void PhysicsSpriteChipmunk2D::onEnter()
 {
     Node::onEnter();
-    _syncTransform = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, std::bind(&PhysicsSprite::afterUpdate, this, std::placeholders::_1));
+    _syncTransform = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, std::bind(&PhysicsSpriteChipmunk2D::afterUpdate, this, std::placeholders::_1));
     _syncTransform->retain();
 }
 
-void PhysicsSprite::onExit()
+void PhysicsSpriteChipmunk2D::onExit()
 {
     if (_syncTransform != nullptr)
     {
@@ -438,7 +334,7 @@ void PhysicsSprite::onExit()
     Node::onExit();
 }
 
-void PhysicsSprite::afterUpdate(EventCustom* /*event*/)
+void PhysicsSpriteChipmunk2D::afterUpdate(EventCustom* /*event*/)
 {
     syncPhysicsTransform();
     
@@ -448,5 +344,3 @@ void PhysicsSprite::afterUpdate(EventCustom* /*event*/)
 }
 
 NS_CC_EXT_END
-
-#endif // CC_ENABLE_CHIPMUNK_INTEGRATION || CC_ENABLE_BOX2D_INTEGRATION

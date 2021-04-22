@@ -5791,12 +5791,12 @@ TOLUA_API int register_all_cocos2dx_extension(lua_State* tolua_S)
 	tolua_beginmodule(tolua_S,"cc");
 
 	lua_register_cocos2dx_extension_AssetsManagerEx(tolua_S);
-	lua_register_cocos2dx_extension_ParticleSystem3D(tolua_S);
+	lua_register_cocos2dx_extension_EventListenerAssetsManagerEx(tolua_S);
 	lua_register_cocos2dx_extension_AssetsManager(tolua_S);
-	lua_register_cocos2dx_extension_PUParticleSystem3D(tolua_S);
 	lua_register_cocos2dx_extension_Manifest(tolua_S);
 	lua_register_cocos2dx_extension_EventAssetsManagerEx(tolua_S);
-	lua_register_cocos2dx_extension_EventListenerAssetsManagerEx(tolua_S);
+	lua_register_cocos2dx_extension_ParticleSystem3D(tolua_S);
+	lua_register_cocos2dx_extension_PUParticleSystem3D(tolua_S);
 
 	tolua_endmodule(tolua_S);
 	return 1;
