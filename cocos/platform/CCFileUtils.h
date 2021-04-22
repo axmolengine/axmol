@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include <type_traits>
 #include <mutex>
 
-#include "CCFileStream.h"
+#include "platform/CCFileStream.h"
 #include "platform/CCPlatformMacros.h"
 #include "base/ccTypes.h"
 #include "base/CCValue.h"
@@ -450,10 +450,18 @@ public:
     virtual const std::vector<std::string> getOriginalSearchPaths() const;
 
     /**
-     *  Gets the writable path.
+     *  Gets the writable path that may not be in the format of an absolute path
      *  @return  The path that can be write/read a file in
+     *  @note This may return the same value as getNativeWritableAbsolutePath(). If you require the absolute path
+     *  to the underlying file system, then call getNativeWritableAbsolutePath() instead.
      */
     virtual std::string getWritablePath() const = 0;
+
+    /**
+     *  Gets the writable path in the native file-system format
+     *  @return  The path that can be write/read a file in
+     */
+    virtual std::string getNativeWritableAbsolutePath() const = 0;
 
     /**
      *  Sets writable path.
@@ -840,7 +848,13 @@ public:
      */
     virtual bool isDirectoryExistInternal(const std::string& dirPath) const;
 
-    virtual FileStream* openFileStream(const std::string& dirPath, FileStream::Mode mode);
+    /**
+     *  Open a FileStream based on the implementation provided in openFileStream or its overrides
+     *  @param filePath The path to the file
+     *  @param mode The mode to open the file in, being READ | WRITE | APPEND
+     *  @return Returns a pointer to the file stream
+     */
+    virtual FileStream* openFileStream(const std::string& filePath, FileStream::Mode mode);
 
 protected:
     /**

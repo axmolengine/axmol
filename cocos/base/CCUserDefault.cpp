@@ -52,9 +52,9 @@ THE SOFTWARE.
 #include "yasio/obstream.hpp"
 #include "yasio/detail/sz.hpp"
 
-#include "CCFileStream.h"
+#include "CCPosixFileStream.h"
 
-#define USER_DEFAULT_PLAIN_MODE 1
+#define USER_DEFAULT_PLAIN_MODE 0
 
 #if !USER_DEFAULT_PLAIN_MODE
 #define USER_DEFAULT_FILENAME "UserDefault.bin"
@@ -372,9 +372,9 @@ void UserDefault::lazyInit()
 {
     if (_initialized) return;
 
-    _filePath = FileUtils::getInstance()->getWritablePath() + USER_DEFAULT_FILENAME;
-
 #if !USER_DEFAULT_PLAIN_MODE
+    _filePath = FileUtils::getInstance()->getNativeWritableAbsolutePath() + USER_DEFAULT_FILENAME;
+
     // construct file mapping
     _fd = posix_open(_filePath.c_str(), O_OVERLAP_FLAGS);
     if (_fd == -1) {
@@ -418,6 +418,8 @@ void UserDefault::lazyInit()
     }
 #else
     pugi::xml_document doc;
+
+    _filePath = FileUtils::getInstance()->getWritablePath() + USER_DEFAULT_FILENAME;
 
     if (FileUtils::getInstance()->isFileExist(_filePath))
     {

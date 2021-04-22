@@ -86,6 +86,12 @@ FileUtils* FileUtils::getInstance()
 std::string FileUtilsApple::getWritablePath() const
 {
     DECLARE_GUARD;
+    return getNativeWritableAbsolutePath();
+}
+
+std::string FileUtilsApple::getNativeWritableAbsolutePath() const
+{
+    DECLARE_GUARD;
     if (_writablePath.length())
     {
         return _writablePath;
