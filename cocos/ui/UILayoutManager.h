@@ -95,6 +95,23 @@ private:
 };
 
 /**
+ *@brief Linear vertical layouting class.
+ * Note: This class is used only by @see `Layout` class.
+ * @lua NA
+ * @js NA
+ */
+class CC_GUI_DLL LinearCenterVerticalLayoutManager : public LayoutManager
+{
+private:
+    LinearCenterVerticalLayoutManager() {};
+    virtual ~LinearCenterVerticalLayoutManager() {};
+    static LinearCenterVerticalLayoutManager* create();
+    virtual void doLayout(LayoutProtocol* layout) override;
+
+    friend class Layout;
+};
+
+/**
  *@brief Relative layouting class.
  *Note: This class is used only by `Layout` class.
  * @lua NA

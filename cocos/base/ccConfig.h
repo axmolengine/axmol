@@ -251,17 +251,17 @@ THE SOFTWARE.
 #endif
 
 /** Use physics integration API. */
+//  It works with:
+// Chipmunk2D or Box2D
 #ifndef CC_USE_PHYSICS
 #define CC_USE_PHYSICS 1
 #endif
-
 #if (CC_USE_PHYSICS)
-/** Use chipmunk physics 2d engine. */
+/** Use Chipmunk2D physics 2d engine on physics integration API. */
 #ifndef CC_ENABLE_CHIPMUNK_INTEGRATION
-#define CC_ENABLE_CHIPMUNK_INTEGRATION 0
+#define CC_ENABLE_CHIPMUNK_INTEGRATION 0   
 #endif
-
-/** or use box2d physics 2d engine. */
+/** or use Box2D physics 2d engine on physics integration API. */
 #ifndef CC_ENABLE_BOX2D_INTEGRATION
 #define CC_ENABLE_BOX2D_INTEGRATION 1
 #endif

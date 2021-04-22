@@ -14,9 +14,13 @@ function install_android_ndk()
     # sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     # sudo python get-pip.py
     # sudo python -m pip install retry
+    python -m pip install --upgrade pip
     which python
     which pip
+    python -V
+    pip -V
     pip install retry
+    mkdir -p ~/.android/ && touch ~/.android/repositories.cfg # Ensure cmdline-tools works well
     if [ "$BUILD_TARGET" == "android" ]\
         || [ "$BUILD_TARGET" == "android_lua" ] ; then
         python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py

@@ -466,7 +466,7 @@ namespace ui {
         if (ret)
         {
             // open keyboard
-            GLView * pGlView = Director::getInstance()->getOpenGLView();
+            GLView * pGlView = _director->getOpenGLView();
             if (pGlView)
             {
                 pGlView->setIMEKeyboardState(true);
@@ -481,7 +481,7 @@ namespace ui {
         if (ret)
         {
             // close keyboard
-            GLView * glView = Director::getInstance()->getOpenGLView();
+            GLView * glView = _director->getOpenGLView();
             if (glView)
             {
                 glView->setIMEKeyboardState(false);

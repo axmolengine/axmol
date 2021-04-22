@@ -120,6 +120,7 @@ public:
     {
         ABSOLUTE,
         VERTICAL,
+        CENTER_VERTICAL,
         HORIZONTAL,
         RELATIVE
     };

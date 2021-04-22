@@ -9,11 +9,17 @@ USING_NS_CC_EXT;
 #if defined(CC_PLATFORM_PC)
 
 static bool show_test_window = true;
-static bool show_another_window = false;
+static bool show_another_window = true;
 static ImVec4 clear_color = ImColor(114, 144, 154);
 
 ImGuiEXTTests::ImGuiEXTTests()
 {
+    // Resize (expand) window 
+    static Size resourceSize(1280, 720);
+    auto director = Director::getInstance();
+    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    view->setWindowed(resourceSize.width, resourceSize.height);
+
     ADD_TEST_CASE(ImGuiEXTTest);
 }
 
@@ -31,6 +37,10 @@ void ImGuiEXTTest::onExit()
     ImGuiEXT::getInstance()->clearFonts();
 
     ImGuiEXT::destroyInstance();
+
+    static Size resourceSize(960, 640);
+    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    view->setWindowed(resourceSize.width, resourceSize.height);
 
     TestCase::onExit();
 }
@@ -52,7 +62,7 @@ void ImGuiEXTTest::onDrawImGui()
     // 2. Show another simple window, this time using an explicit Begin/End pair
     if (show_another_window)
     {
-        ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowSize(ImVec2(170, 80), ImGuiCond_FirstUseEver);
         ImGui::Begin("Another Window", &show_another_window);
 
         ImGui::Text("Hello");

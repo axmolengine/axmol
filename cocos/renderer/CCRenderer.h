@@ -337,6 +337,16 @@ public:
      * @see `setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)`
      */
     unsigned int getStencilReferenceValue() const;
+    
+    /**
+     * Sets depth stencil descriptor
+     */
+    void setDepthStencilDesc(const backend::DepthStencilDescriptor& dsDesc);
+    
+    /**
+     * Gets depth stencil descriptor
+     */
+    const backend::DepthStencilDescriptor& getDepthStencilDesc() const;
 
     /**
      * Fixed-function state
@@ -442,7 +452,7 @@ protected:
     void drawCustomCommand(RenderCommand* command);
     void drawMeshCommand(RenderCommand* command);
 
-    void beginFrame(); /// Indicate the begining of a frame
+    bool beginFrame(); /// Indicate the begining of a frame
     void endFrame(); /// Finish a frame.
 
     ///Draw the previews queued triangles and flush previous context
@@ -491,10 +501,10 @@ protected:
     TriangleCommandBufferManager _triangleCommandBufferManager;
     
     backend::CommandBuffer* _commandBuffer = nullptr;
-    backend::RenderPassParams _renderPassParams;
+    backend::RenderPassDescriptor _renderPassDesc;
 
     backend::DepthStencilState* _depthStencilState = nullptr;
-    backend::DepthStencilDescriptor _depthStencilDescriptor;
+    backend::DepthStencilDescriptor _dsDesc;
 
     // Internal structure that has the information for the batches
     struct TriBatchToDraw

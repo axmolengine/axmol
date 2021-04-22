@@ -82,7 +82,7 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
 {
     CCASSERT(!path.empty(), "Invalid filename");
 
-    Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(path);
+    Texture2D *texture = _director->getTextureCache()->addImage(path);
     return initWithFade(fade, minSeg, stroke, color, texture);
 }
 
@@ -101,7 +101,7 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
     _stroke = stroke;
     _fadeDelta = 1.0f / fade;
     
-    double fps = 1 / Director::getInstance()->getAnimationInterval();
+    double fps = 1 / _director->getAnimationInterval();
     _maxPoints = (int)(fade * fps) + 2;
     
     _pointState = (float *)malloc(sizeof(float) * _maxPoints);
@@ -409,7 +409,7 @@ void MotionStreak::draw(Renderer *renderer, const Mat4 &transform, uint32_t flag
 
     auto programState = _customCommand.getPipelineDescriptor().programState;
 
-    const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 finalMat = projectionMat * transform;
     programState->setUniform(_mvpMatrixLocaiton, finalMat.m, sizeof(Mat4));
 
