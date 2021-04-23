@@ -187,7 +187,7 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
         fts->size = fs->seek(0, SEEK_END);
         fs->seek(0, SEEK_SET);
 
-        fts->descriptor.pointer = std::move(fs);
+        fts->descriptor.pointer = fs;
 
         FT_Open_Args args = { 0 };
         args.flags = FT_OPEN_STREAM;
