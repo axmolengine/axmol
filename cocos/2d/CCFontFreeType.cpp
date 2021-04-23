@@ -68,8 +68,8 @@ static unsigned long ft_stream_read_callback(FT_Stream stream, unsigned long off
 }
 
 static void ft_stream_close_callback(FT_Stream stream) {
-    auto fd = (FileStream*)stream->descriptor.pointer;
-    if (fd) delete fd;
+    const auto* fd = (FileStream*)stream->descriptor.pointer;
+    delete fd;
     stream->size = 0;
     stream->descriptor.pointer = nullptr;
 }
@@ -175,9 +175,8 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
         if (fullPath.empty()) return false;
 
         FileStream* fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
-        if (!fs->isOpen())
+        if (!fs)
         {
-            delete fs;
             return false;
         }
 

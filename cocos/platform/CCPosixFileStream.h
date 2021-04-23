@@ -71,55 +71,55 @@ struct PXIoF;
 class CC_DLL PosixFileStream : public FileStream
 {
 public:
-PosixFileStream(const std::string& path, FileStream::Mode mode);
-virtual ~PosixFileStream();
+    PosixFileStream() = default;
+    virtual ~PosixFileStream();
 
-PosixFileStream(const PosixFileStream& other) = delete;
+    PosixFileStream(const PosixFileStream& other) = delete;
 
-PosixFileStream(PosixFileStream&& other) noexcept
-: FileStream(std::move(other)),
-_handle(std::move(other._handle)),
-_iof(other._iof)
-{
-    other.reset();
-}
+    PosixFileStream(PosixFileStream&& other) noexcept
+        : FileStream(std::move(other)),
+        _handle(std::move(other._handle)),
+        _iof(other._iof)
+    {
+        other.reset();
+    }
 
-PosixFileStream& operator=(const PosixFileStream& other) = delete;
+    PosixFileStream& operator=(const PosixFileStream& other) = delete;
 
-PosixFileStream& operator=(PosixFileStream&& other) noexcept
-{
-if (this == &other)
-return *this;
-FileStream::operator =(std::move(other));
-_handle = std::move(other._handle);
-_iof = other._iof;
+    PosixFileStream& operator=(PosixFileStream&& other) noexcept
+    {
+        if (this == &other)
+            return *this;
+        FileStream::operator =(std::move(other));
+        _handle = std::move(other._handle);
+        _iof = other._iof;
 
-other.reset();
+        other.reset();
 
-return *this;
-}
+        return *this;
+    }
 
-enum class Mode {
-    READ,
-    WRITE,
-    APPEND,
-};
+    enum class Mode {
+        READ,
+        WRITE,
+        APPEND,
+    };
 
-int close() override;
+    bool open(const std::string& path, FileStream::Mode mode) override;
+    int close() override;
 
-int seek(long offset, int origin) override;
-int read(void* buf, unsigned int size) override;
-int write(const void* buf, unsigned int size) override;
-int tell() override;
-bool isOpen() const override;
+    int seek(long offset, int origin) override;
+    int read(void* buf, unsigned int size) override;
+    int write(const void* buf, unsigned int size) override;
+    int tell() override;
+    bool isOpen() const override;
 
 private:
-bool open(const std::string& path, FileStream::Mode mode);
-int internalClose();
-void reset();
+    int internalClose();
+    void reset();
 
-PXFileHandle _handle;
-const PXIoF* _iof;
+    PXFileHandle _handle;
+    const PXIoF* _iof;
 };
 
 NS_CC_END

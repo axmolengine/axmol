@@ -83,12 +83,6 @@ static PXIoF pfs_obb_iof = {
 };
 #endif
 
-PosixFileStream::PosixFileStream(const std::string& path, FileStream::Mode mode)
-        : FileStream()
-{
-    open(path, mode);
-}
-
 PosixFileStream::~PosixFileStream()
 {
     internalClose();
@@ -144,7 +138,7 @@ int PosixFileStream::internalClose()
 {
     if (_iof) {
         int ret = _iof->close(_handle);
-        _iof = nullptr;
+        reset();
         return ret;
     }
     return 0;
@@ -187,6 +181,7 @@ bool PosixFileStream::isOpen() const
 void PosixFileStream::reset()
 {
     memset(&_handle, 0, sizeof(_handle));
+    _handle._fd = -1;
     _iof = nullptr;
 }
 
