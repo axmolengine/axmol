@@ -130,12 +130,9 @@ namespace cocos2d {
         {
             delete _fileStream;
             _fileStream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
-            if (!_fileStream->isOpen())
+            if (!_fileStream)
             {
                 ALOGE("Trouble with minimp3(1): %s\n", strerror(errno));
-
-                delete _fileStream;
-                _fileStream = nullptr;
                 break;
             }
 

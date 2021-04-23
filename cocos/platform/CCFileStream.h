@@ -11,7 +11,6 @@ NS_CC_BEGIN
 
 class CC_DLL FileStream {
 public:
-    FileStream() = default;
     virtual ~FileStream() = default;
 
     enum class Mode {
@@ -20,6 +19,7 @@ public:
         APPEND,
     };
 
+    virtual bool open(const std::string& path, FileStream::Mode mode) = 0;
     virtual int close() = 0;
 
     virtual int seek(long offset, int origin) = 0;
@@ -28,6 +28,11 @@ public:
     virtual int write(const void* buf, unsigned int size) = 0;
     virtual int tell() = 0;
     virtual bool isOpen() const = 0;
+
+    virtual operator bool() const { return isOpen(); }
+
+protected:
+    FileStream() = default;
 };
 
 NS_CC_END

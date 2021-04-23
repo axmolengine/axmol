@@ -25,6 +25,7 @@
 
 #include "network/CCDownloader-curl.h"
 
+#include <cinttypes>
 #include <set>
 
 #include <curl/curl.h>
@@ -38,7 +39,6 @@
 #include "platform/CCFileStream.h"
 #include "md5/md5.h"
 #include "yasio/xxsocket.hpp"
-#include <inttypes.h>
 
 // **NOTE**
 // In the file:
@@ -150,14 +150,12 @@ namespace cocos2d { namespace network {
                 }
                 // open file
                 _fs = FileUtils::getInstance()->openFileStream(_tempFileName, FileStream::Mode::APPEND);
-                if (!_fs->isOpen())
+                if (!_fs)
                 {
                     _errCode = DownloadTask::ERROR_OPEN_FILE_FAILED;
                     _errCodeInternal = 0;
                     _errDescription = "Can't open file:";
                     _errDescription.append(_tempFileName);
-                    delete _fs;
-                    _fs = nullptr;
 					break;
                 }
 
@@ -904,7 +902,7 @@ public:
 				if (checkState & kCheckSumStateSucceed) // No need download 
 				{
 					FileStream* fsOrigin = FileUtils::getInstance()->openFileStream(coTask._fileName, FileStream::Mode::READ);
-					if (fsOrigin->isOpen()) {
+					if (fsOrigin) {
 						task.progressInfo.totalBytesExpected = fsOrigin->seek(0, SEEK_END);
 						task.progressInfo.bytesReceived = task.progressInfo.totalBytesExpected;
 						task.progressInfo.totalBytesReceived = task.progressInfo.totalBytesExpected;
@@ -916,6 +914,9 @@ public:
                         pFileUtils->removeFile(coTask._tempFileName);
 
 						onTaskProgress(task,_transferDataToBuffer);
+
+                        delete fsOrigin;
+                        fsOrigin = nullptr;
 					}
 					else {
 						coTask._errCode = DownloadTask::ERROR_ORIGIN_FILE_MISSING;
@@ -925,8 +926,6 @@ public:
 						pFileUtils->removeFile(coTask._tempFileName);
 					}
 
-                    delete fsOrigin;
-                    fsOrigin = nullptr;
 					break;
 				}
 

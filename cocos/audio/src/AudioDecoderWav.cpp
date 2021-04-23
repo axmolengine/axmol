@@ -78,8 +78,7 @@ namespace cocos2d {
     {
         delete wavf->Stream;
         wavf->Stream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
-        bool succeed = wavf->Stream->isOpen();
-        if (!succeed)
+        if (!wavf->Stream)
             return false;
 
         auto& fileStream = wavf->Stream;

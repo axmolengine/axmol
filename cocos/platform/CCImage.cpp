@@ -2180,7 +2180,7 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
         
         auto* outStream = FileUtils::getInstance()->openFileStream(filePath, FileStream::Mode::WRITE);
 
-        CC_BREAK_IF(nullptr == outStream || !outStream->isOpen());
+        CC_BREAK_IF(nullptr == outStream);
 
         png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
@@ -2328,7 +2328,7 @@ bool Image::saveImageToJPG(const std::string& filePath)
         jpeg_create_compress(&cinfo);
 
         outfile = FileUtils::getInstance()->openFileStream(filePath, FileStream::Mode::WRITE);
-        CC_BREAK_IF((outfile == nullptr || !outfile->isOpen()));
+        CC_BREAK_IF(nullptr == outfile);
 
         unsigned char* outputBuffer = nullptr;
         unsigned long outputSize = 0;

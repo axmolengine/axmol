@@ -1107,7 +1107,14 @@ void FileUtils::listFilesRecursivelyAsync(const std::string& dirPath, std::funct
 
 FileStream* FileUtils::openFileStream(const std::string& filePath, FileStream::Mode mode)
 {
-    return new PosixFileStream(filePath, mode); // PosixFileStream is the default implementation
+    PosixFileStream fs;
+
+    if (fs.open(filePath, mode))
+    {
+        return new PosixFileStream(std::move(fs)); // PosixFileStream is the default implementation
+    }
+
+    return nullptr;
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
