@@ -327,7 +327,7 @@ namespace cocos2d
         
         /** Internal data like zip file pointer / file list array and so on */
         ZipFilePrivate *_data;
-        zlib_filefunc_def _functionOverrides;
+        zlib_filefunc_def _functionOverrides{};
     };
 } // end of namespace cocos2d
 
