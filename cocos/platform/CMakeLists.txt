@@ -160,6 +160,7 @@ set(COCOS_PLATFORM_HEADER
     platform/CCSAXParser.h
     platform/CCStdC.h
     platform/CCFileStream.h
+    platform/CCPosixFileStream.h
     )
 
 set(COCOS_PLATFORM_SRC
@@ -169,4 +170,5 @@ set(COCOS_PLATFORM_SRC
     platform/CCFileUtils.cpp
     platform/CCImage.cpp
     platform/CCFileStream.cpp
+    platform/CCPosixFileStream.cpp
     )

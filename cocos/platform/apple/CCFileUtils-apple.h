@@ -50,6 +50,7 @@ public:
     virtual ~FileUtilsApple();
     /* override functions */
     virtual std::string getWritablePath() const override;
+    virtual std::string getNativeWritableAbsolutePath() const override;
     virtual std::string getFullPathForFilenameWithinDirectory(const std::string& directory, const std::string& filename) const override;
 
 #if CC_FILEUTILS_APPLE_ENABLE_OBJC

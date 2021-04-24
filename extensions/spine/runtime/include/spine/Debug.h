@@ -35,7 +35,7 @@
 #include <map>
 
 namespace spine {
-class DebugExtension : public SpineExtension {
+class SP_API DebugExtension : public SpineExtension {
 	struct Allocation {
 		void *address;
 		size_t size;

@@ -221,9 +221,6 @@ void ActionMovieClip::step(float dt)
 
     auto frames = _animation->getFrames();
     int frameCount = (int)frames.size();
-    if (frameCount == 0)
-        return;
-
     if (frameCount == 0 || _status == 3)
         return;
 
@@ -232,8 +229,6 @@ void ActionMovieClip::step(float dt)
 
     _frameElapsed += dt;
     float tt = (frames.at(_frame)->getDelayUnits() + ((_frame == 0 && _repeatedCount > 0) ? _repeatDelay : 0)) * _animation->getDelayPerUnit();
-    if (_frame == 0 && _repeatedCount > 0)
-        tt += _repeatDelay;
     if (_frameElapsed < tt)
         return;
 
@@ -360,8 +355,6 @@ void ActionMovieClip::advance(float time)
     while (true)
     {
         float tt = (frames.at(_frame)->getDelayUnits() + ((_frame == 0 && _repeatedCount > 0) ? _repeatDelay : 0)) * _animation->getDelayPerUnit();
-        if (_frame == 0 && _repeatedCount > 0)
-            tt += _repeatDelay;
         if (time < tt)
         {
             _frameElapsed = 0;
