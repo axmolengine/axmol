@@ -559,8 +559,6 @@ voidpf ZipFile_open_file_func(voidpf opaque, const char* filename, int mode)
 
 voidpf ZipFile_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_disk, int mode)
 {
-    voidpf ret = nullptr;
-
     if (stream == nullptr)
         return nullptr;
 
@@ -575,10 +573,10 @@ voidpf ZipFile_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_
         snprintf(&extensionBuffer[0], 5, ".z%02u", number_disk + 1);
         diskFilename.replace(pos, 4, extensionBuffer);
         delete[] extensionBuffer;
-        ret = ZipFile_open_file_func(opaque, diskFilename.c_str(), mode);
+        return ZipFile_open_file_func(opaque, diskFilename.c_str(), mode);
     }
 
-    return ret;
+    return nullptr;
 }
 
 uint32_t ZipFile_read_file_func(voidpf opaque, voidpf stream, void* buf, uint32_t size)
