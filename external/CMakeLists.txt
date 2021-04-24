@@ -63,9 +63,10 @@ if(BUILD_EXT_BOX2D)
     set_target_properties(box2d PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
         LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
         FOLDER "External"
     )
-    target_link_libraries(external box2d)
+    target_link_libraries(external box2d) 
 endif(BUILD_EXT_BOX2D)
 
 if(BUILD_EXT_CHIPMUNK)
@@ -290,6 +291,13 @@ if(BUILD_EXT_CARES)
     target_link_libraries(external c-ares)
     include_directories($<TARGET_FILE_DIR:c-ares>)
     include_directories("c-ares/include")
+    set_target_properties(c-ares
+        PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+        FOLDER "External"
+    )
 endif(BUILD_EXT_CARES)
 
 # put "external" into External folder, too
