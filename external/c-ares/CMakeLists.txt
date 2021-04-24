@@ -8,7 +8,7 @@ INCLUDE (CheckCSourceCompiles)
 INCLUDE (CheckStructHasMember)
 INCLUDE (CheckLibraryExists)
 
-PROJECT (c-ares LANGUAGES C VERSION "1.16.1" )
+PROJECT (c-ares LANGUAGES C VERSION "1.17.0" )
 
 # Set this version before release
 SET (CARES_VERSION "${PROJECT_VERSION}")
@@ -26,7 +26,7 @@ INCLUDE (GNUInstallDirs) # include this *AFTER* PROJECT(), otherwise paths are w
 # For example, a version of 4:0:2 would generate output such as:
 #    libname.so   -> libname.so.2
 #    libname.so.2 -> libname.so.2.2.0
-SET (CARES_LIB_VERSIONINFO "6:1:4")
+SET (CARES_LIB_VERSIONINFO "6:2:4")
 
 
 OPTION (CARES_STATIC     "Build as a static library"                                             OFF)
@@ -37,10 +37,11 @@ OPTION (CARES_BUILD_TESTS "Build and run tests"                                 
 OPTION (CARES_BUILD_CONTAINER_TESTS "Build and run container tests (implies CARES_BUILD_TESTS, Linux only)" OFF)
 OPTION (CARES_BUILD_TOOLS "Build tools"                                                          ON)
 
-# Tests require static to be enabled
-IF (CARES_BUILD_TESTS)
+# Tests require static to be enabled on Windows to be able to access otherwise hidden symbols
+IF (CARES_BUILD_TESTS AND (NOT CARES_STATIC) AND WIN32)
 	SET (CARES_STATIC ON)
 	SET (CARES_STATIC_PIC ON)
+	MESSAGE (WARNING "Static building was requested be disabled, but reenabled to support tests")
 ENDIF ()
 
 # allow linking against the static runtime library in msvc
@@ -74,6 +75,7 @@ SET (PACKAGE_DIRECTORY ${PROJECT_BINARY_DIR}/package)
 # Destinations for installing different kinds of targets (pass to install command).
 SET (TARGETS_INST_DEST
 	RUNTIME DESTINATION  ${CMAKE_INSTALL_BINDIR}
+	BUNDLE DESTINATION   ${CMAKE_INSTALL_BINDIR}
 	LIBRARY DESTINATION  ${CMAKE_INSTALL_LIBDIR}
 	ARCHIVE DESTINATION  ${CMAKE_INSTALL_LIBDIR}
 )
@@ -137,7 +139,7 @@ return 0;
 	MACOS_V1012)
 ENDIF ()
 
-IF ((IOS OR APPLE) AND HAVE_LIBRESOLV)
+IF ((IOS OR APPLE OR ZOS) AND HAVE_LIBRESOLV)
 	SET (CARES_USE_LIBRESOLV 1)
 ENDIF()
 
@@ -166,7 +168,6 @@ CHECK_INCLUDE_FILES (malloc.h              HAVE_MALLOC_H)
 CHECK_INCLUDE_FILES (memory.h              HAVE_MEMORY_H)
 CHECK_INCLUDE_FILES (netdb.h               HAVE_NETDB_H)
 CHECK_INCLUDE_FILES (netinet/in.h          HAVE_NETINET_IN_H)
-CHECK_INCLUDE_FILES (netinet/tcp.h         HAVE_NETINET_TCP_H)
 CHECK_INCLUDE_FILES (net/if.h              HAVE_NET_IF_H)
 CHECK_INCLUDE_FILES (signal.h              HAVE_SIGNAL_H)
 CHECK_INCLUDE_FILES (socket.h              HAVE_SOCKET_H)
@@ -179,14 +180,19 @@ CHECK_INCLUDE_FILES (stropts.h             HAVE_STROPTS_H)
 CHECK_INCLUDE_FILES (sys/ioctl.h           HAVE_SYS_IOCTL_H)
 CHECK_INCLUDE_FILES (sys/param.h           HAVE_SYS_PARAM_H)
 CHECK_INCLUDE_FILES (sys/select.h          HAVE_SYS_SELECT_H)
-CHECK_INCLUDE_FILES (sys/socket.h          HAVE_SYS_SOCKET_H)
 CHECK_INCLUDE_FILES (sys/stat.h            HAVE_SYS_STAT_H)
 CHECK_INCLUDE_FILES (sys/time.h            HAVE_SYS_TIME_H)
-CHECK_INCLUDE_FILES (sys/types.h           HAVE_SYS_TYPES_H)
 CHECK_INCLUDE_FILES (sys/uio.h             HAVE_SYS_UIO_H)
 CHECK_INCLUDE_FILES (time.h                HAVE_TIME_H)
 CHECK_INCLUDE_FILES (dlfcn.h               HAVE_DLFCN_H)
 CHECK_INCLUDE_FILES (unistd.h              HAVE_UNISTD_H)
+
+# On OpenBSD, you must include sys/types.h before netinet/tcp.h
+IF (HAVE_SYS_TYPES_H)
+  CHECK_INCLUDE_FILES ("sys/types.h;netinet/tcp.h"         HAVE_NETINET_TCP_H)
+ELSE ()
+  CHECK_INCLUDE_FILES (netinet/tcp.h                       HAVE_NETINET_TCP_H)
+ENDIF ()
 
 # Include order matters for these windows files.
 CHECK_INCLUDE_FILES ("winsock2.h;windows.h"            HAVE_WINSOCK2_H)
@@ -379,6 +385,10 @@ CHECK_FUNCTION_EXISTS (__system_property_get HAVE___SYSTEM_PROPERTY_GET)
 SET (CMAKE_EXTRA_INCLUDE_FILES)
 SET (CMAKE_REQUIRED_DEFINITIONS)
 SET (CMAKE_REQUIRED_LIBRARIES)
+
+
+find_file(CARES_RANDOM_FILE urandom /dev)
+mark_as_advanced(CARES_RANDOM_FILE)
 
 
 ################################################################################
