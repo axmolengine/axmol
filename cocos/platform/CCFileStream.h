@@ -2,78 +2,16 @@
 // Copyright (c) 2020 c4games.com
 #pragma once
 
-#include "platform/CCPlatformConfig.h"
 #include <string>
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-#include <io.h>
-#include <direct.h>
-#else
-#include <unistd.h>
-#include <errno.h>
-#endif
-#include <fcntl.h>
-#include <functional>
 
+#include "platform/CCPlatformConfig.h"
 #include "platform/CCPlatformMacros.h"
-
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-#include "platform/android/CCFileUtils-android.h"
-#include <jni.h>
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
-#include "base/ZipUtils.h"
-#endif
-
-#if defined(_WIN32)
-#define O_READ_FLAGS O_BINARY | O_RDONLY, S_IREAD
-#define O_WRITE_FLAGS O_CREAT | O_RDWR | O_BINARY | O_TRUNC, S_IWRITE | S_IREAD
-#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
-
-#define O_OVERLAP_FLAGS O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
-
-#define posix_open ::_open
-#define posix_close ::_close
-#define posix_lseek ::_lseek
-#define posix_read ::_read
-#define posix_write ::_write
-#define posix_fd2fh(fd) reinterpret_cast<HANDLE>(_get_osfhandle(fd))
-#define posix_fsetsize(fd, size) ::_chsize(fd, size)
-#else
-#define O_READ_FLAGS O_RDONLY, S_IRUSR
-#define O_WRITE_FLAGS O_CREAT | O_RDWR | O_TRUNC, S_IRWXU
-#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
-
-#define O_OVERLAP_FLAGS O_CREAT | O_RDWR, S_IRWXU
-
-#define posix_open ::open
-#define posix_close ::close
-#define posix_lseek ::lseek
-#define posix_read ::read
-#define posix_write ::write
-#define posix_fd2fh(fd) (fd)
-#define posix_fsetsize(fd, size) ::ftruncate(fd, size); ::lseek(fd, 0, SEEK_SET)
-#endif
 
 NS_CC_BEGIN
 
-struct UnzFileStream;
-union PXFileHandle {
-    int _fd = -1;
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    AAsset* _asset;
-    ZipFileStream _zfs;
-#endif
-};
-
-struct PXIoF;
-
 class CC_DLL FileStream {
 public:
-    FileStream();
-    ~FileStream();
-
-    FileStream(FileStream&& rhs);
-    FileStream& operator=(FileStream&& rhs);
+    virtual ~FileStream() = default;
 
     enum class Mode {
         READ,
@@ -81,22 +19,20 @@ public:
         APPEND,
     };
 
-    bool open(const std::string& path, Mode mode);
-    int close();
+    virtual bool open(const std::string& path, FileStream::Mode mode) = 0;
+    virtual int close() = 0;
 
-    int seek(long offset, int origin);
-    int read(void* buf, unsigned int size);
+    virtual int seek(long offset, int origin) = 0;
+    virtual int read(void* buf, unsigned int size) = 0;
 
-    int write(const void* buf, unsigned int size);
+    virtual int write(const void* buf, unsigned int size) = 0;
+    virtual int tell() = 0;
+    virtual bool isOpen() const = 0;
 
-    operator bool() const;
+    virtual operator bool() const { return isOpen(); }
 
-private:
-    void zeroset();
-    void assign(FileStream&& rhs);
-
-    PXFileHandle _handle;
-    const PXIoF* _iof;
+protected:
+    FileStream() = default;
 };
 
 NS_CC_END

@@ -27,12 +27,14 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 
 #include <stack>
+#include <sstream>
 
 #include "base/CCData.h"
 #include "base/ccMacros.h"
 #include "base/CCDirector.h"
 #include "platform/CCSAXParser.h"
 //#include "base/ccUtils.h"
+#include "platform/CCPosixFileStream.h"
 
 #ifdef MINIZIP_FROM_SYSTEM
 #include <minizip/unzip.h>
@@ -370,8 +372,9 @@ bool FileUtils::writeValueMapToFile(const ValueMap& dict, const std::string& ful
 	auto rootEle = doc.document_element();
 	
     generateElementForDict(dict, rootEle);
-
-	return doc.save_file(fullPath.c_str());
+    std::stringstream ss;
+    doc.save(ss, "  ");
+    return writeStringToFile(ss.str(), fullPath);
 }
 
 bool FileUtils::writeValueVectorToFile(const ValueVector& vecData, const std::string& fullPath) const
@@ -383,8 +386,9 @@ bool FileUtils::writeValueVectorToFile(const ValueVector& vecData, const std::st
 
 	auto rootEle = doc.document_element();
     generateElementForArray(vecData, rootEle);
-
-	return doc.save_file(fullPath.c_str());
+    std::stringstream ss;
+    doc.save(ss, "  ");
+    return writeStringToFile(ss.str(), fullPath);
 }
 
 static void generateElementForObject(const Value& value, pugi::xml_node& parent)
@@ -1099,6 +1103,18 @@ void FileUtils::listFilesRecursivelyAsync(const std::string& dirPath, std::funct
         FileUtils::getInstance()->listFilesRecursively(fullPath, &retval);
         return retval;
     }, std::move(callback));
+}
+
+FileStream* FileUtils::openFileStream(const std::string& filePath, FileStream::Mode mode)
+{
+    PosixFileStream fs;
+
+    if (fs.open(filePath, mode))
+    {
+        return new PosixFileStream(std::move(fs)); // PosixFileStream is the default implementation
+    }
+
+    return nullptr;
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

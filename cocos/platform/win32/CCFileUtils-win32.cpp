@@ -301,6 +301,12 @@ std::vector<std::string> FileUtilsWin32::listFiles(const std::string& dirPath) c
 string FileUtilsWin32::getWritablePath() const
 {
     DECLARE_GUARD;
+    return getNativeWritableAbsolutePath();
+}
+
+std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
+{
+    DECLARE_GUARD;
     if (_writablePath.length())
     {
         return _writablePath;
@@ -313,9 +319,9 @@ string FileUtilsWin32::getWritablePath() const
     // Debug app uses executable directory; Non-debug app uses local app data directory
 //#ifndef _DEBUG
     // Get filename of executable only, e.g. MyGame.exe
-    WCHAR *base_name = wcsrchr(full_path, '\\');
+    WCHAR* base_name = wcsrchr(full_path, '\\');
     wstring retPath;
-    if(base_name)
+    if (base_name)
     {
         WCHAR app_data_path[CC_MAX_PATH + 1];
 
