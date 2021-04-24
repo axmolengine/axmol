@@ -554,9 +554,7 @@ voidpf ZipFile_open_file_func(voidpf opaque, const char* filename, int mode)
     else
         return nullptr;
 
-    const std::string fsFilename = (char*)filename;
-
-    return FileUtils::getInstance()->openFileStream(fsFilename, fsMode);
+    return FileUtils::getInstance()->openFileStream(filename, fsMode);
 }
 
 voidpf ZipFile_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_disk, int mode)
