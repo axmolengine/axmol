@@ -5,7 +5,8 @@
 # https://releases.llvm.org/12.0.0/tools/clang/docs/ClangFormatStyleOptions.html
 
 ---
-Language:      Cpp11
+Language: Cpp
+Standard: Cpp11
 BasedOnStyle:  LLVM
 # AccessModifierOffset: -2
 AccessModifierOffset: -4
