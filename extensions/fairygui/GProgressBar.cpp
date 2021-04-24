@@ -71,11 +71,11 @@ void GProgressBar::tweenValue(double value, float duration)
 {
     double oldValule;
 
-    GTweener* twener = GTween::getTween(this, TweenPropType::Progress);
-    if (twener != nullptr)
+    GTweener* tweener = GTween::getTween(this, TweenPropType::Progress);
+    if (tweener != nullptr)
     {
-        oldValule = twener->value.d;
-        twener->kill(false);
+        oldValule = tweener->value.d;
+        tweener->kill(false);
     }
     else
         oldValule = _value;
