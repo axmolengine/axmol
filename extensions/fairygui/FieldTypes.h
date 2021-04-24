@@ -71,7 +71,7 @@ enum class ScrollType
     BOTH
 };
 
-enum ScrollBarDisplayType
+enum class ScrollBarDisplayType
 {
     DEFAULT,
     VISIBLE,
