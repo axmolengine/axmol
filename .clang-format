@@ -1,10 +1,11 @@
+# This file is copy from https://github.com/microsoft/STL with some modifications
 # Copyright (c) Microsoft Corporation.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 # https://releases.llvm.org/12.0.0/tools/clang/docs/ClangFormatStyleOptions.html
 
 ---
-# Language:        Cpp
+Language:      Cpp11
 BasedOnStyle:  LLVM
 # AccessModifierOffset: -2
 AccessModifierOffset: -4
