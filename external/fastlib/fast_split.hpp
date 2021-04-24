@@ -27,6 +27,7 @@
 #define SIMDSOFT_FAST_SPLIT_HPP
 #include <string.h>
 #include <string>
+#include <vector>
 
 namespace fastl {
 namespace internal {
