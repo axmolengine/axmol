@@ -118,8 +118,8 @@ private:
     int internalClose();
     void reset();
 
-    PXFileHandle _handle;
-    const PXIoF* _iof;
+    PXFileHandle _handle{};
+    const PXIoF* _iof{};
 };
 
 NS_CC_END
