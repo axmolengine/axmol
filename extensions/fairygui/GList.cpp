@@ -1073,6 +1073,7 @@ void GList::setNumItems(int value)
         if (_virtualListChanged != 0)
             CALL_LATER_CANCEL(GList, doRefreshVirtualList);
 
+        //����ˢ��
         doRefreshVirtualList();
     }
     else
