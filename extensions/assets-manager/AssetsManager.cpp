@@ -50,6 +50,116 @@ using namespace cocos2d::network;
 #define BUFFER_SIZE    8192
 #define MAX_FILENAME   512
 
+class AssetManagerZipFileInfo
+{
+public:
+    std::string zipFileName{};
+};
+
+// unzip overrides to support FileStream
+long AssetManager_tell_file_func(voidpf opaque, voidpf stream)
+{
+    if (stream == nullptr)
+        return -1;
+
+    auto* fs = (FileStream*)stream;
+
+    return fs->tell();
+}
+
+long AssetManager_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset, int origin)
+{
+    if (stream == nullptr)
+        return -1;
+
+    auto* fs = (FileStream*)stream;
+
+    return fs->seek((long)offset, origin); // must return 0 for success or -1 for error
+}
+
+voidpf AssetManager_open_file_func(voidpf opaque, const char* filename, int mode)
+{
+    FileStream::Mode fsMode;
+    if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) == ZLIB_FILEFUNC_MODE_READ)
+        fsMode = FileStream::Mode::READ;
+    else if (mode & ZLIB_FILEFUNC_MODE_EXISTING)
+        fsMode = FileStream::Mode::APPEND;
+    else if (mode & ZLIB_FILEFUNC_MODE_CREATE)
+        fsMode = FileStream::Mode::WRITE;
+    else
+        return nullptr;
+
+    return FileUtils::getInstance()->openFileStream(filename, fsMode);
+}
+
+voidpf AssetManager_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_disk, int mode)
+{
+    if (stream == nullptr)
+        return nullptr;
+
+    const auto zipFileInfo = static_cast<AssetManagerZipFileInfo*>(opaque);
+    std::string diskFilename = zipFileInfo->zipFileName;
+
+    const auto pos = diskFilename.rfind('.', std::string::npos);
+
+    if (pos != std::string::npos && pos != 0)
+    {
+        const size_t bufferSize = 5;
+        char extensionBuffer[bufferSize];
+        snprintf(&extensionBuffer[0], bufferSize, ".z%02u", number_disk + 1);
+        diskFilename.replace(pos, std::min((size_t)4, zipFileInfo->zipFileName.size() - pos), extensionBuffer);
+        return AssetManager_open_file_func(opaque, diskFilename.c_str(), mode);
+    }
+
+    return nullptr;
+}
+
+uint32_t AssetManager_read_file_func(voidpf opaque, voidpf stream, void* buf, uint32_t size)
+{
+    if (stream == nullptr)
+        return (uint32_t)-1;
+
+    auto* fs = (FileStream*)stream;
+    return fs->read(buf, size);
+}
+
+uint32_t AssetManager_write_file_func(voidpf opaque, voidpf stream, const void* buf, uint32_t size)
+{
+    if (stream == nullptr)
+        return (uint32_t)-1;
+
+    auto* fs = (FileStream*)stream;
+    return fs->write(buf, size);
+}
+
+int AssetManager_close_file_func(voidpf opaque, voidpf stream)
+{
+    if (stream == nullptr)
+        return -1;
+
+    auto* fs = (FileStream*)stream;
+    return fs->close(); // 0 for success, -1 for error
+}
+
+// THis isn't supported by FileStream, so just check if the stream is null and open
+int AssetManager_error_file_func(voidpf opaque, voidpf stream)
+{
+    if (stream == nullptr)
+    {
+        return -1;
+    }
+
+    auto* fs = (FileStream*)stream;
+
+    if (fs->isOpen())
+    {
+        return 0;
+    }
+
+    return -1;
+}
+// End of Overrides
+
 // Implementation of AssetsManager
 
 AssetsManager::AssetsManager(const char* packageUrl/* =nullptr */, const char* versionFileUrl/* =nullptr */, const char* storagePath/* =nullptr */)
@@ -259,7 +369,17 @@ bool AssetsManager::uncompress()
 {
     // Open the zip file
     string outFileName = _storagePath + TEMP_PACKAGE_FILE_NAME;
-    unzFile zipfile = unzOpen(outFileName.c_str());
+
+    zlib_filefunc_def zipFunctionOverrides;
+    fillZipFunctionOverrides(zipFunctionOverrides);
+
+    AssetManagerZipFileInfo zipFileInfo;
+    zipFileInfo.zipFileName = outFileName;
+
+    zipFunctionOverrides.opaque = &zipFileInfo;
+
+    // Open the zip file
+    unzFile zipfile = unzOpen2(outFileName.c_str(), &zipFunctionOverrides);
     if (! zipfile)
     {
         CCLOG("can not open downloaded zip file %s", outFileName.c_str());
@@ -330,10 +450,9 @@ bool AssetsManager::uncompress()
             while(index != std::string::npos)
             {
                 const string dir=_storagePath+fileNameStr.substr(0,index);
-                
-                FILE *out = fopen(dir.c_str(), "r");
-                
-                if(!out)
+
+                auto* fsOut = FileUtils::getInstance()->openFileStream(dir, FileStream::Mode::READ);
+                if (!fsOut)
                 {
                     if (!FileUtils::getInstance()->createDirectory(dir))
                     {
@@ -348,13 +467,12 @@ bool AssetsManager::uncompress()
                 }
                 else
                 {
-                    fclose(out);
+                    delete fsOut;
                 }
                 
                 startIndex=index+1;
                 
                 index=fileNameStr.find('/',startIndex);
-                
             }
 
             // Entry is a file, so extract it.
@@ -368,8 +486,8 @@ bool AssetsManager::uncompress()
             }
             
             // Create a file to store current file.
-            FILE *out = fopen(fullPath.c_str(), "wb");
-            if (! out)
+            auto* fsOut = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::WRITE);
+            if (!fsOut)
             {
                 CCLOG("can not open destination file %s", fullPath.c_str());
                 unzCloseCurrentFile(zipfile);
@@ -387,16 +505,17 @@ bool AssetsManager::uncompress()
                     CCLOG("can not read zip file %s, error code is %d", fileName, error);
                     unzCloseCurrentFile(zipfile);
                     unzClose(zipfile);
+                    delete fsOut;
                     return false;
                 }
                 
                 if (error > 0)
                 {
-                    fwrite(readBuffer, error, 1, out);
+                    fsOut->write(readBuffer, error);
                 }
             } while(error > 0);
-            
-            fclose(out);
+
+            delete fsOut;
         }
         
         unzCloseCurrentFile(zipfile);
@@ -508,6 +627,19 @@ AssetsManager* AssetsManager::create(const char* packageUrl, const char* version
     manager->_shouldDeleteDelegateWhenExit = true;
     manager->autorelease();
     return manager;
+}
+
+void AssetsManager::fillZipFunctionOverrides(zlib_filefunc_def& zipFunctionOverrides)
+{
+    zipFunctionOverrides.zopen_file = AssetManager_open_file_func;
+    zipFunctionOverrides.zopendisk_file = AssetManager_opendisk_file_func;
+    zipFunctionOverrides.zread_file = AssetManager_read_file_func;
+    zipFunctionOverrides.zwrite_file = AssetManager_write_file_func;
+    zipFunctionOverrides.ztell_file = AssetManager_tell_file_func;
+    zipFunctionOverrides.zseek_file = AssetManager_seek_file_func;
+    zipFunctionOverrides.zclose_file = AssetManager_close_file_func;
+    zipFunctionOverrides.zerror_file = AssetManager_error_file_func;
+    zipFunctionOverrides.opaque = nullptr;
 }
 
 NS_CC_EXT_END
