@@ -507,7 +507,6 @@ bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, const std::
         CC_BREAK_IF(!fileStream);
 
         fileStream->write(data, dataSize);
-        fileStream->close();
         delete fileStream;
         return true;
     } while (0);
