@@ -43,7 +43,7 @@ void GLoader3D::handleInit()
 
     _container = FUIContainer::create();
     _container->retain();
-    _container->setAnchorPoint(Vec2(0, 1));
+    _container->setAnchorPoint(Vec2::ZERO);
     _displayObject->addChild(_container);
 }
 
@@ -203,13 +203,14 @@ void GLoader3D::loadFromPackage()
                 skeletonAni = spine::SkeletonAnimation::createWithBinaryFile(_contentItem->file, atlasFile);
             else
                 skeletonAni = spine::SkeletonAnimation::createWithJsonFile(_contentItem->file, atlasFile);
-            skeletonAni->setPosition(_contentItem->skeletonAnchor->x, -_contentItem->skeletonAnchor->y);
+            skeletonAni->setPosition(_contentItem->skeletonAnchor->x, _contentItem->skeletonAnchor->y);
             skeletonAni->retain();
 
             _content = skeletonAni;
             _container->addChild(_content);
 
             onChangeSpine();
+            updateLayout();
         }
         else
         {
@@ -307,6 +308,12 @@ void GLoader3D::onExternalLoadFailed()
 void GLoader3D::clearContent()
 {
     clearErrorState();
+    if (_content != nullptr)
+    {
+        _container->removeChild(_content);
+        CC_SAFE_RELEASE_NULL(_content);
+    }
+    
     _contentItem = nullptr;
 }
 
