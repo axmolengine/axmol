@@ -671,6 +671,7 @@ if(WITH_TURBOJPEG)
   endif()
 endif()
 
+if(WITH_TOOLS)
 if(WIN32)
   set(USE_SETMODE "-DUSE_SETMODE")
 endif()
@@ -701,7 +702,7 @@ endif()
 add_executable(rdjpgcom rdjpgcom.c)
 
 add_executable(wrjpgcom wrjpgcom.c)
-
+endif()
 
 ###############################################################################
 # TESTS
