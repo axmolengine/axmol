@@ -569,9 +569,10 @@ voidpf ZipFile_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_
 
     if (pos != std::string::npos && pos != 0)
     {
-        auto* extensionBuffer = new char[5];
-        snprintf(&extensionBuffer[0], 5, ".z%02u", number_disk + 1);
-        diskFilename.replace(pos, 4, extensionBuffer);
+        const size_t bufferSize = 5;
+        char extensionBuffer[bufferSize];
+        snprintf(&extensionBuffer[0], bufferSize, ".z%02u", number_disk + 1);
+        diskFilename.replace(pos, std::min((size_t)4, zipFileInfo->zipFileName.size() - pos), extensionBuffer);
         delete[] extensionBuffer;
         return ZipFile_open_file_func(opaque, diskFilename.c_str(), mode);
     }
