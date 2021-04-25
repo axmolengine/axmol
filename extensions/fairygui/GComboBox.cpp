@@ -350,7 +350,7 @@ void GComboBox::setup_afterAdd(ByteBuffer* buffer, int beginPos)
         {
             if (!hasIcon)
             {
-                for (int j = 0; j < (int)_items.size() - 1; j++)
+                for (int i = 0; i < (int)_items.size() - 1; i++)
                     _icons.push_back(STD_STRING_EMPTY);
             }
             _icons.push_back(*str);

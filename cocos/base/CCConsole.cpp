@@ -1491,8 +1491,8 @@ void Console::commandUpload(int fd)
     static std::string writablePath = FileUtils::getInstance()->getWritablePath();
     std::string filepath = writablePath + std::string(buf);
 
-    FILE* fp = fopen(filepath.c_str(), "wb");
-    if(!fp)
+    auto* fs = FileUtils::getInstance()->openFileStream(filepath, FileStream::Mode::WRITE);
+    if(!fs)
     {
         const char err[] = "can't create file!\n";
         Console::Utility::sendToConsole(fd, err, strlen(err));
@@ -1517,11 +1517,12 @@ void Console::commandUpload(int fd)
         int dt = base64Decode(in, 4, &decode);
         if (dt > 0)
         {
-            fwrite(decode, dt, 1, fp);
+            fs->write(decode, dt);
         }
         free(decode);
     }
-    fclose(fp);
+    fs->close();
+    delete fs;
 }
 
 void Console::commandVersion(int fd, const std::string& /*args*/)

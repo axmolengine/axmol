@@ -295,4 +295,16 @@ void GTreeNode::setTree(GTree* value)
     }
 }
 
+void GTreeNode::setCell(GComponent* value)
+{
+    if (_cell != value)
+    {
+        CC_SAFE_RELEASE(_cell);
+        _cell = value;
+        CC_SAFE_RETAIN(_cell);
+        if (_cell)
+            _cell->setData(this);
+    }
+}
+
 NS_FGUI_END
