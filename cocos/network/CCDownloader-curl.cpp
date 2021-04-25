@@ -283,10 +283,10 @@ private:
     string _tempFileName;
     std::string _checksumFileName;
     vector<unsigned char> _buf;
-    FileStream* _fs;
+    FileStream* _fs = nullptr;
 
     // calculate md5 in downloading time support
-    FileStream* _fsMd5; // store md5 state realtime
+    FileStream* _fsMd5 = nullptr; // store md5 state realtime
     md5_state_s _md5State;
 
 
@@ -812,8 +812,10 @@ void DownloaderCURL::_onDownloadFinished(TaskWrapper&& wrapper, int checkState) 
     if (coTask._fs) {
         do {
             auto pFileUtils = FileUtils::getInstance();
-            coTask._fs->close();
-            coTask._fsMd5->close();
+            delete coTask._fs;
+            coTask._fs = nullptr;
+            delete coTask._fsMd5;
+            coTask._fsMd5 = nullptr;
 
             if (checkState & kCheckSumStateSucceed) // No need download
             {
