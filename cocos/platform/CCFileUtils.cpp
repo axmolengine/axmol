@@ -497,20 +497,17 @@ void FileUtils::writeDataToFile(Data data, const std::string& fullPath, std::fun
 
 bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, const std::string& fullPath)
 {
-    const char* mode = "wb";
-
     CCASSERT(!fullPath.empty() && dataSize > 0, "Invalid parameters.");
 
-    auto fileutils = FileUtils::getInstance();
+    auto* fileUtils = FileUtils::getInstance();
     do
     {
+        auto* fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::WRITE);
         // Read the file from hardware
-        FILE* fp = fopen(fullPath.c_str(), mode);
-        CC_BREAK_IF(!fp);
-        fwrite(data, dataSize, 1, fp);
+        CC_BREAK_IF(!fileStream);
 
-        fclose(fp);
-
+        fileStream->write(data, dataSize);
+        delete fileStream;
         return true;
     } while (0);
 
@@ -571,40 +568,45 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
     if (filename.empty())
         return Status::NotExists;
 
-    auto fs = FileUtils::getInstance();
+    auto fileUtils = FileUtils::getInstance();
 
-    std::string fullPath = fs->fullPathForFilename(filename);
-    if (fullPath.empty())
-        return Status::NotExists;
+    const auto fullPath = fileUtils->fullPathForFilename(filename);
 
-    FILE *fp = fopen(fullPath.c_str(), "rb");
-    if (!fp)
+    auto* fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::READ);
+    if (!fileStream)
         return Status::OpenFailed;
 
-    struct AutoFileHandle {
-        void operator()(FILE* fp) {
-            fclose(fp);
-        }
-    };
-    std::unique_ptr<FILE, AutoFileHandle> autohandle(fp);
+    if (fileStream->seek(0, SEEK_END) != 0)
+    {
+        delete fileStream;
+        return Status::ObtainSizeFailed;
+    }
 
-    struct stat statBuf;
-    if (fstat(fileno(fp), &statBuf) == -1)
-        return Status::ReadFailed;
+    const auto size = fileStream->tell();
+    if (size <= 0)
+    {
+        delete fileStream;
+        return Status::OK;
+    }
 
-    if (!(statBuf.st_mode & S_IFREG))
-        return Status::NotRegularFileType;
-
-    size_t size = statBuf.st_size;
+    if (size > ULONG_MAX)
+    {
+        delete fileStream;
+        return Status::TooLarge;
+    }
 
     buffer->resize(size);
-    size_t readsize = fread(buffer->buffer(), 1, statBuf.st_size, fp);
 
-    if (readsize < size) {
-        buffer->resize(readsize);
+    fileStream->seek(0, SEEK_SET);
+
+    const auto sizeRead = fileStream->read(buffer->buffer(), size);
+    if (sizeRead < size) {
+        buffer->resize(sizeRead);
+        delete fileStream;
         return Status::ReadFailed;
     }
 
+    delete fileStream;
     return Status::OK;
 }
 

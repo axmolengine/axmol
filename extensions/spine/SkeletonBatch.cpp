@@ -163,11 +163,10 @@ cocos2d::TrianglesCommand* SkeletonBatch::addCommand(cocos2d::Renderer* renderer
 	CCASSERT(programState, "programState should not be null");
 
 	auto& pipelinePS = command->getPipelineDescriptor().programState;
-	if (pipelinePS == nullptr || pipelinePS->getProgram() != programState->getProgram()) 
+	if (pipelinePS == nullptr || pipelinePS->getProgram() != programState->getProgram())
 	{
 		CC_SAFE_RELEASE(pipelinePS);
 		pipelinePS = programState->clone();
-
 		updateProgramStateLayout(pipelinePS);
 	}
 	
