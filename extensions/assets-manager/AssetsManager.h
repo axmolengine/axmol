@@ -26,7 +26,6 @@
 #ifndef __AssetsManager__
 #define __AssetsManager__
 
-#include <ioapi.h>
 #include <string>
 
 #include <mutex>
@@ -170,7 +169,6 @@ protected:
     bool uncompress();
     void setSearchPath();
     void downloadAndUncompress();
-    void fillZipFunctionOverrides(zlib_filefunc_def& zipFunctionOverrides);
 
 private:
     //! The path to store downloaded resources.

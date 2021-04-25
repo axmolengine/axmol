@@ -288,14 +288,6 @@ void EventQueue::drain() {
 	_drainDisabled = false;
 }
 
-const int Subsequent = 0;
-const int First = 1;
-const int Hold = 2;
-const int HoldMix = 3;
-
-const int Setup = 1;
-const int Current = 2;
-
 AnimationState::AnimationState(AnimationStateData *data) :
 		_data(data),
 		_queue(EventQueue::newEventQueue(*this, _trackEntryPool)),
@@ -836,7 +828,11 @@ float AnimationState::applyMixingFrom(TrackEntry *to, Skeleton &skeleton, MixBle
 					timelineBlend = MixBlend_Setup;
 					alpha = alphaMix;
 					break;
-				case Hold:
+			    case HoldSubsequent:
+			        timelineBlend = blend;
+			        alpha = alphaHold;
+			        break;
+				case HoldFirst:
 					timelineBlend = MixBlend_Setup;
 					alpha = alphaHold;
 					break;
@@ -1007,8 +1003,12 @@ void AnimationState::computeHold(TrackEntry *entry) {
 	if (to != NULL && to->_holdPrevious) {
 		for (size_t i = 0; i < timelinesCount; i++) {
 			int id = timelines[i]->getPropertyId();
-			if (!_propertyIDs.containsKey(id)) _propertyIDs.put(id, true);
-			timelineMode[i] = Hold;
+			if (!_propertyIDs.containsKey(id)) {
+			    _propertyIDs.put(id, true);
+                timelineMode[i] = HoldFirst;
+			} else {
+                timelineMode[i] = HoldSubsequent;
+            }
 		}
 		return;
 	}
@@ -1039,7 +1039,7 @@ void AnimationState::computeHold(TrackEntry *entry) {
 					}
 					break;
 				}
-				timelineMode[i] = Hold;
+				timelineMode[i] = HoldFirst;
 			}
 		}
 	}

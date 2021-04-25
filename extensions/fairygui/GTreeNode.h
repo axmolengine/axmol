@@ -54,7 +54,6 @@ private:
     bool init(bool isFolder, const std::string& resURL);
     int moveChild(GTreeNode* child, int oldIndex, int index);
     void setTree(GTree* value);
-    void setCell(GComponent* value);
 
     GTree* _tree;
     GTreeNode* _parent;

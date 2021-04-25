@@ -26,7 +26,6 @@
 #ifndef __AssetsManagerEx__
 #define __AssetsManagerEx__
 
-#include <ioapi.h>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -220,8 +219,7 @@ private:
 
     // Called when one DownloadUnits finished
     void onDownloadUnitsFinished();
-    void fillZipFunctionOverrides(zlib_filefunc_def &zipFunctionOverrides);
-
+    
     //! The event of the current AssetsManagerEx in event dispatcher
     std::string _eventName;
     
@@ -265,7 +263,7 @@ private:
     
     //! Remote manifest
     Manifest *_remoteManifest = nullptr;
-
+    
     //! Whether user have requested to update
     enum class UpdateEntry : char
     {
