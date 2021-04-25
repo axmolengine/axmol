@@ -68,7 +68,7 @@ protected:
     AudioDecoderOgg();
     ~AudioDecoderOgg();
 
-    FileStream* _fileStream;
+    FileStream* _fileStream = nullptr;
     OggVorbis_File _vf;
 
     friend class AudioDecoderManager;

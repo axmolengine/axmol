@@ -387,14 +387,6 @@ namespace spine {
 		void enableQueue();
 
 	private:
-		static const int Subsequent = 0;
-		static const int First = 1;
-		static const int HoldSubsequent = 2;
-		static const int HoldFirst = 3;
-		static const int HoldMix = 4;
-
-		static const int Setup = 1;
-		static const int Current = 2;
 
 		AnimationStateData* _data;
 
