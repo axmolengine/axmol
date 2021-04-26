@@ -583,10 +583,16 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
     }
 
     const auto size = fileStream->tell();
-    if (size <= 0)
+    if (size == 0)
     {
         delete fileStream;
         return Status::OK;
+    }
+
+    if (size < 0)
+    {
+        delete fileStream;
+        return Status::ObtainSizeFailed;
     }
 
     if (size > ULONG_MAX)
