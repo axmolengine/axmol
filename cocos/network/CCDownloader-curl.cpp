@@ -86,8 +86,8 @@ public:
             }
         }
 
-        delete _fs;
-        delete _fsMd5;
+        _fs.reset();
+        _fsMd5.reset();
 
         if (_requestHeaders)
             curl_slist_free_all(_requestHeaders);
@@ -284,10 +284,10 @@ private:
     string _tempFileName;
     std::string _checksumFileName;
     vector<unsigned char> _buf;
-    FileStream* _fs = nullptr;
+    std::unique_ptr<FileStream> _fs{};
 
     // calculate md5 in downloading time support
-    FileStream* _fsMd5 = nullptr; // store md5 state realtime
+    std::unique_ptr<FileStream> _fsMd5{}; // store md5 state realtime
     md5_state_s _md5State;
 
 
@@ -813,14 +813,12 @@ void DownloaderCURL::_onDownloadFinished(TaskWrapper&& wrapper, int checkState) 
     if (coTask._fs) {
         do {
             auto pFileUtils = FileUtils::getInstance();
-            delete coTask._fs;
-            coTask._fs = nullptr;
-            delete coTask._fsMd5;
-            coTask._fsMd5 = nullptr;
+            coTask._fs.reset();
+            coTask._fsMd5.reset();
 
             if (checkState & kCheckSumStateSucceed) // No need download
             {
-                auto* fsOrigin = pFileUtils->openFileStream(coTask._fileName, FileStream::Mode::READ);
+                auto fsOrigin = pFileUtils->openFileStream(coTask._fileName, FileStream::Mode::READ);
                 if (fsOrigin) {
                     fsOrigin->seek(0, SEEK_END);
                     task.progressInfo.totalBytesExpected = fsOrigin->tell();
@@ -835,7 +833,6 @@ void DownloaderCURL::_onDownloadFinished(TaskWrapper&& wrapper, int checkState) 
 
                     onTaskProgress(task, _transferDataToBuffer);
 
-                    delete fsOrigin;
                     fsOrigin = nullptr;
                 } else {
                     coTask._errCode         = DownloadTask::ERROR_ORIGIN_FILE_MISSING;

@@ -76,7 +76,6 @@ namespace cocos2d {
     }
     static bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
     {
-        delete wavf->Stream;
         wavf->Stream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
         if (!wavf->Stream)
             return false;
@@ -133,13 +132,13 @@ namespace cocos2d {
             if (!IsEqualGUID(fmtInfo.ExtParams.SubFormat, WAV_SUBTYPE_PCM)
                 && !IsEqualGUID(fmtInfo.ExtParams.SubFormat, WAV_SUBTYPE_IEEE_FLOAT))
             {
-                fileStream->close();
+                fileStream.reset();
                 return false;
             }
             break;
         default:
             ALOGW("The wav format %d doesn't supported currently!", (int)fmtInfo.AudioFormat);
-            fileStream->close();
+            fileStream.reset();
             assert(false);
             return false;
         }
@@ -162,8 +161,7 @@ namespace cocos2d {
     static int wav_close(WAV_FILE* wavf)
     {
         const auto result = wavf->Stream->close();
-        delete wavf->Stream;
-        wavf->Stream = nullptr;
+        wavf->Stream.reset();
         return result;
     }
 
