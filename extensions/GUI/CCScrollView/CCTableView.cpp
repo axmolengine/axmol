@@ -466,8 +466,9 @@ void TableView::_updateCellPositions()
 
 }
 
-void TableView::scrollViewDidScroll(ScrollView* /*view*/)
-{
+void TableView::scrollViewDidScroll(ScrollView* /*view*/) {
+    if (!_dataSource)
+        return;
     long countOfItems = _dataSource->numberOfCellsInTableView(this);
     if (0 == countOfItems)
     {
