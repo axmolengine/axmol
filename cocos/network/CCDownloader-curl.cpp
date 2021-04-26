@@ -163,7 +163,8 @@ namespace cocos2d { namespace network {
 				_checksumFileName = filename + ".chksum";
 
                 _fsMd5 = FileUtils::getInstance()->openFileStream(_checksumFileName, FileStream::Mode::WRITE);
-				if (_fsMd5->seek(0, SEEK_END) != sizeof(md5_state_s)) {
+                _fsMd5->seek(0, SEEK_END);
+				if (_fsMd5->tell() != sizeof(md5_state_s)) {
 					md5_init(&_md5State);
 				}
 				else {
@@ -903,7 +904,8 @@ public:
 				{
 					FileStream* fsOrigin = FileUtils::getInstance()->openFileStream(coTask._fileName, FileStream::Mode::READ);
 					if (fsOrigin) {
-						task.progressInfo.totalBytesExpected = fsOrigin->seek(0, SEEK_END);
+                        fsOrigin->seek(0, SEEK_END);
+						task.progressInfo.totalBytesExpected = fsOrigin->tell();
 						task.progressInfo.bytesReceived = task.progressInfo.totalBytesExpected;
 						task.progressInfo.totalBytesReceived = task.progressInfo.totalBytesExpected;
 						task.progressInfo.speedInBytes = task.progressInfo.totalBytesExpected;
