@@ -174,7 +174,7 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
         auto fullPath = FileUtils::getInstance()->fullPathForFilename(fontName);
         if (fullPath.empty()) return false;
 
-        FileStream* fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
+        auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ).release();
         if (!fs)
         {
             return false;

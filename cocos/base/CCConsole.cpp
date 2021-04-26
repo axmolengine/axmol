@@ -1491,7 +1491,7 @@ void Console::commandUpload(int fd)
     static std::string writablePath = FileUtils::getInstance()->getWritablePath();
     std::string filepath = writablePath + std::string(buf);
 
-    auto* fs = FileUtils::getInstance()->openFileStream(filepath, FileStream::Mode::WRITE);
+    auto fs = FileUtils::getInstance()->openFileStream(filepath, FileStream::Mode::WRITE);
     if(!fs)
     {
         const char err[] = "can't create file!\n";
@@ -1521,8 +1521,6 @@ void Console::commandUpload(int fd)
         }
         free(decode);
     }
-    fs->close();
-    delete fs;
 }
 
 void Console::commandVersion(int fd, const std::string& /*args*/)

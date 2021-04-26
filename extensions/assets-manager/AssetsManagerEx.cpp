@@ -92,7 +92,7 @@ voidpf AssetManagerEx_open_file_func(voidpf opaque, const char* filename, int mo
     else
         return nullptr;
 
-    return FileUtils::getInstance()->openFileStream(filename, fsMode);
+    return FileUtils::getInstance()->openFileStream(filename, fsMode).release();
 }
 
 voidpf AssetManagerEx_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_disk, int mode)
@@ -141,7 +141,9 @@ int AssetManagerEx_close_file_func(voidpf opaque, voidpf stream)
         return -1;
 
     auto* fs = (FileStream*)stream;
-    return fs->close(); // 0 for success, -1 for error
+    const auto result = fs->close(); // 0 for success, -1 for error
+    delete fs;
+    return result;
 }
 
 // THis isn't supported by FileStream, so just check if the stream is null and open
@@ -510,7 +512,7 @@ bool AssetsManagerEx::decompress(const std::string &zip)
             }
             
             // Create a file to store current file.
-            auto* fsOut = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::WRITE);
+            auto fsOut = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::WRITE);
             if (!fsOut)
             {
                 CCLOG("AssetsManagerEx : can not create decompress destination file %s (errno: %d)\n", fullPath.c_str(), errno);
@@ -527,7 +529,7 @@ bool AssetsManagerEx::decompress(const std::string &zip)
                 if (error < 0)
                 {
                     CCLOG("AssetsManagerEx : can not read zip file %s, error code is %d\n", fileName, error);
-                    delete fsOut;
+                    fsOut.reset();
                     unzCloseCurrentFile(zipfile);
                     unzClose(zipfile);
                     return false;
@@ -539,7 +541,7 @@ bool AssetsManagerEx::decompress(const std::string &zip)
                 }
             } while(error > 0);
             
-            delete fsOut;
+            fsOut.reset();
         }
         
         unzCloseCurrentFile(zipfile);

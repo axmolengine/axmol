@@ -502,12 +502,11 @@ bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, const std::
     auto* fileUtils = FileUtils::getInstance();
     do
     {
-        auto* fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::WRITE);
+        auto fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::WRITE);
         // Read the file from hardware
         CC_BREAK_IF(!fileStream);
 
         fileStream->write(data, dataSize);
-        delete fileStream;
         return true;
     } while (0);
 
@@ -572,32 +571,28 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
 
     const auto fullPath = fileUtils->fullPathForFilename(filename);
 
-    auto* fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::READ);
+    auto fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::READ);
     if (!fileStream)
         return Status::OpenFailed;
 
     if (fileStream->seek(0, SEEK_END) != 0)
     {
-        delete fileStream;
         return Status::ObtainSizeFailed;
     }
 
     const auto size = fileStream->tell();
     if (size == 0)
     {
-        delete fileStream;
         return Status::OK;
     }
 
     if (size < 0)
     {
-        delete fileStream;
         return Status::ObtainSizeFailed;
     }
 
     if (size > ULONG_MAX)
     {
-        delete fileStream;
         return Status::TooLarge;
     }
 
@@ -608,11 +603,9 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
     const auto sizeRead = fileStream->read(buffer->buffer(), size);
     if (sizeRead < size) {
         buffer->resize(sizeRead);
-        delete fileStream;
         return Status::ReadFailed;
     }
 
-    delete fileStream;
     return Status::OK;
 }
 
@@ -1113,13 +1106,13 @@ void FileUtils::listFilesRecursivelyAsync(const std::string& dirPath, std::funct
     }, std::move(callback));
 }
 
-FileStream* FileUtils::openFileStream(const std::string& filePath, FileStream::Mode mode)
+std::unique_ptr<FileStream> FileUtils::openFileStream(const std::string& filePath, FileStream::Mode mode)
 {
     PosixFileStream fs;
 
     if (fs.open(filePath, mode))
     {
-        return new PosixFileStream(std::move(fs)); // PosixFileStream is the default implementation
+        return std::make_unique<PosixFileStream>(std::move(fs)); // PosixFileStream is the default implementation
     }
 
     return nullptr;
