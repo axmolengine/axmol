@@ -348,7 +348,6 @@ public:
             fontPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fontPath);
             auto fileStream = cocos2d::FileUtils::getInstance()->openFileStream(fontPath, FileStream::Mode::READ);
             if ( fileStream ) {
-                fileStream = nullptr;
                 fontCache.insert(std::pair<std::string, std::string>(family_name, fontPath));
                 return fontPath;
             }

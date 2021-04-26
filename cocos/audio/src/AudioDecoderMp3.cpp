@@ -248,7 +248,7 @@ namespace cocos2d {
 
                 delete _handle;
                 _handle = nullptr;
-                _fileStream = nullptr;
+                _fileStream.reset();
             }
 #else
             if (_handle != nullptr)
@@ -257,8 +257,7 @@ namespace cocos2d {
                 mpg123_delete(_handle);
                 _handle = nullptr;
 
-                delete _fileStream;
-                _fileStream = nullptr;
+                _fileStream.reset();
             }
 #endif
             _isOpened = false;
