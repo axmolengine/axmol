@@ -213,7 +213,6 @@ std::pair<void*, DisplayType> BaseFactory::_getSlotDisplay(const BuildArmaturePa
             dataName = displayData->parent->parent->parent->name;
         }
     }
-        dataPackage != nullptr ? dataPackage->dataName : displayData->parent->parent->parent->name;
 
     std::pair<void*, DisplayType> display(nullptr, DisplayType::Image);
     switch (displayData->type)
