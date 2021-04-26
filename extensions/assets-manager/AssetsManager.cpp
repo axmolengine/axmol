@@ -89,7 +89,7 @@ voidpf AssetManager_open_file_func(voidpf opaque, const char* filename, int mode
     else
         return nullptr;
 
-    return FileUtils::getInstance()->openFileStream(filename, fsMode);
+    return FileUtils::getInstance()->openFileStream(filename, fsMode).release();
 }
 
 voidpf AssetManager_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_disk, int mode)
@@ -138,7 +138,9 @@ int AssetManager_close_file_func(voidpf opaque, voidpf stream)
         return -1;
 
     auto* fs = (FileStream*)stream;
-    return fs->close(); // 0 for success, -1 for error
+    const auto result = fs->close(); // 0 for success, -1 for error
+    delete fs;
+    return result;
 }
 
 // THis isn't supported by FileStream, so just check if the stream is null and open
@@ -451,7 +453,7 @@ bool AssetsManager::uncompress()
             {
                 const string dir=_storagePath+fileNameStr.substr(0,index);
 
-                auto* fsOut = FileUtils::getInstance()->openFileStream(dir, FileStream::Mode::READ);
+                auto fsOut = FileUtils::getInstance()->openFileStream(dir, FileStream::Mode::READ);
                 if (!fsOut)
                 {
                     if (!FileUtils::getInstance()->createDirectory(dir))
@@ -467,7 +469,7 @@ bool AssetsManager::uncompress()
                 }
                 else
                 {
-                    delete fsOut;
+                    fsOut = nullptr;
                 }
                 
                 startIndex=index+1;
@@ -486,7 +488,7 @@ bool AssetsManager::uncompress()
             }
             
             // Create a file to store current file.
-            auto* fsOut = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::WRITE);
+            auto fsOut = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::WRITE);
             if (!fsOut)
             {
                 CCLOG("can not open destination file %s", fullPath.c_str());
@@ -505,7 +507,7 @@ bool AssetsManager::uncompress()
                     CCLOG("can not read zip file %s, error code is %d", fileName, error);
                     unzCloseCurrentFile(zipfile);
                     unzClose(zipfile);
-                    delete fsOut;
+                    fsOut = nullptr;
                     return false;
                 }
                 
@@ -515,7 +517,7 @@ bool AssetsManager::uncompress()
                 }
             } while(error > 0);
 
-            delete fsOut;
+            fsOut = nullptr;
         }
         
         unzCloseCurrentFile(zipfile);

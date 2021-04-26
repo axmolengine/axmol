@@ -39,21 +39,25 @@ namespace cocos2d {
 
     static size_t ov_fread_r(void* buffer, size_t element_size, size_t element_count, void* handle)
     {
-        return ((FileStream*)handle)->read(buffer, static_cast<uint32_t>(element_size * element_count));
+        auto& fs = *static_cast<std::unique_ptr<FileStream>*>(handle);
+        return fs->read(buffer, static_cast<uint32_t>(element_size * element_count));
     }
 
     static int ov_fseek_r(void * handle, ogg_int64_t offset, int whence)
     {
-        return ((FileStream*)handle)->seek(offset, whence) < 0 ? -1 : 0;
+        auto& fs = *static_cast<std::unique_ptr<FileStream>*>(handle);
+        return fs->seek(offset, whence) < 0 ? -1 : 0;
     }
     
     static long ov_ftell_r(void * handle)
     {
-        return ((FileStream*)handle)->seek(0, SEEK_CUR);
+        auto& fs = *static_cast<std::unique_ptr<FileStream>*>(handle);
+        return fs->tell();
     }
 
     static int ov_fclose_r(void* handle) {
-        ((FileStream*)handle)->close();
+        auto& fs = *static_cast<std::unique_ptr<FileStream>*>(handle);
+        fs = nullptr;
         return 0;
     }
     
@@ -102,6 +106,7 @@ namespace cocos2d {
         {
             ov_clear(&_vf);
             _isOpened = false;
+            _fileStream = nullptr;
         }
     }
 

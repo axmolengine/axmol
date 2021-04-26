@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <type_traits>
 #include <mutex>
+#include <memory>
 
 #include "platform/CCFileStream.h"
 #include "platform/CCPlatformMacros.h"
@@ -854,7 +855,7 @@ public:
      *  @param mode The mode to open the file in, being READ | WRITE | APPEND
      *  @return Returns a pointer to the file stream
      */
-    virtual FileStream* openFileStream(const std::string& filePath, FileStream::Mode mode);
+    virtual std::unique_ptr<FileStream> openFileStream(const std::string& filePath, FileStream::Mode mode);
 
 protected:
     /**
