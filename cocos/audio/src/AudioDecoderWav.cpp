@@ -132,13 +132,13 @@ namespace cocos2d {
             if (!IsEqualGUID(fmtInfo.ExtParams.SubFormat, WAV_SUBTYPE_PCM)
                 && !IsEqualGUID(fmtInfo.ExtParams.SubFormat, WAV_SUBTYPE_IEEE_FLOAT))
             {
-                fileStream = nullptr;
+                fileStream.reset();
                 return false;
             }
             break;
         default:
             ALOGW("The wav format %d doesn't supported currently!", (int)fmtInfo.AudioFormat);
-            fileStream = nullptr;
+            fileStream.reset();
             assert(false);
             return false;
         }
