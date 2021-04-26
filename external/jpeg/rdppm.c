@@ -5,7 +5,7 @@
  * Copyright (C) 1991-1997, Thomas G. Lane.
  * Modified 2009 by Bill Allombert, Guido Vollbeding.
  * libjpeg-turbo Modifications:
- * Copyright (C) 2015-2017, 2020, D. R. Commander.
+ * Copyright (C) 2015-2017, 2020-2021, D. R. Commander.
  * For conditions of distribution and use, see the accompanying README.ijg
  * file.
  *
@@ -43,18 +43,8 @@
 
 /* Macros to deal with unsigned chars as efficiently as compiler allows */
 
-#ifdef HAVE_UNSIGNED_CHAR
 typedef unsigned char U_CHAR;
 #define UCH(x)  ((int)(x))
-#else /* !HAVE_UNSIGNED_CHAR */
-#ifdef __CHAR_UNSIGNED__
-typedef char U_CHAR;
-#define UCH(x)  ((int)(x))
-#else
-typedef char U_CHAR;
-#define UCH(x)  ((int)(x) & 0xFF)
-#endif
-#endif /* HAVE_UNSIGNED_CHAR */
 
 
 #define ReadOK(file, buffer, len) \
@@ -122,10 +112,9 @@ read_pbm_integer(j_compress_ptr cinfo, FILE *infile, unsigned int maxval)
   while ((ch = pbm_getc(infile)) >= '0' && ch <= '9') {
     val *= 10;
     val += ch - '0';
+    if (val > maxval)
+      ERREXIT(cinfo, JERR_PPM_OUTOFRANGE);
   }
-
-  if (val > maxval)
-    ERREXIT(cinfo, JERR_PPM_OUTOFRANGE);
 
   return val;
 }
@@ -526,6 +515,11 @@ get_word_rgb_row(j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
   register JSAMPLE *rescale = source->rescale;
   JDIMENSION col;
   unsigned int maxval = source->maxval;
+  register int rindex = rgb_red[cinfo->in_color_space];
+  register int gindex = rgb_green[cinfo->in_color_space];
+  register int bindex = rgb_blue[cinfo->in_color_space];
+  register int aindex = alpha_index[cinfo->in_color_space];
+  register int ps = rgb_pixelsize[cinfo->in_color_space];
 
   if (!ReadOK(source->pub.input_file, source->iobuffer, source->buffer_width))
     ERREXIT(cinfo, JERR_INPUT_EOF);
@@ -537,17 +531,20 @@ get_word_rgb_row(j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
     temp |= UCH(*bufferptr++);
     if (temp > maxval)
       ERREXIT(cinfo, JERR_PPM_OUTOFRANGE);
-    *ptr++ = rescale[temp];
+    ptr[rindex] = rescale[temp];
     temp  = UCH(*bufferptr++) << 8;
     temp |= UCH(*bufferptr++);
     if (temp > maxval)
       ERREXIT(cinfo, JERR_PPM_OUTOFRANGE);
-    *ptr++ = rescale[temp];
+    ptr[gindex] = rescale[temp];
     temp  = UCH(*bufferptr++) << 8;
     temp |= UCH(*bufferptr++);
     if (temp > maxval)
       ERREXIT(cinfo, JERR_PPM_OUTOFRANGE);
-    *ptr++ = rescale[temp];
+    ptr[bindex] = rescale[temp];
+    if (aindex >= 0)
+      ptr[aindex] = 0xFF;
+    ptr += ps;
   }
   return 1;
 }
@@ -589,6 +586,10 @@ start_input_ppm(j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
 
   if (w <= 0 || h <= 0 || maxval <= 0) /* error check */
     ERREXIT(cinfo, JERR_PPM_NOT);
+#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+  if (sinfo->max_pixels && (unsigned long long)w * h > sinfo->max_pixels)
+    ERREXIT(cinfo, JERR_WIDTH_OVERFLOW);
+#endif
 
   cinfo->data_precision = BITS_IN_JSAMPLE; /* we always rescale data to this */
   cinfo->image_width = (JDIMENSION)w;
@@ -634,7 +635,10 @@ start_input_ppm(j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
       cinfo->in_color_space = JCS_GRAYSCALE;
     TRACEMS2(cinfo, 1, JTRC_PGM, w, h);
     if (maxval > 255) {
-      source->pub.get_pixel_rows = get_word_gray_row;
+      if (cinfo->in_color_space == JCS_GRAYSCALE)
+        source->pub.get_pixel_rows = get_word_gray_row;
+      else
+        ERREXIT(cinfo, JERR_BAD_IN_COLORSPACE);
     } else if (maxval == MAXJSAMPLE && sizeof(JSAMPLE) == sizeof(U_CHAR) &&
                cinfo->in_color_space == JCS_GRAYSCALE) {
       source->pub.get_pixel_rows = get_raw_row;
@@ -657,7 +661,10 @@ start_input_ppm(j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
       cinfo->in_color_space = JCS_EXT_RGB;
     TRACEMS2(cinfo, 1, JTRC_PPM, w, h);
     if (maxval > 255) {
-      source->pub.get_pixel_rows = get_word_rgb_row;
+      if (IsExtRGB(cinfo->in_color_space))
+        source->pub.get_pixel_rows = get_word_rgb_row;
+      else
+        ERREXIT(cinfo, JERR_BAD_IN_COLORSPACE);
     } else if (maxval == MAXJSAMPLE && sizeof(JSAMPLE) == sizeof(U_CHAR) &&
 #if RGB_RED == 0 && RGB_GREEN == 1 && RGB_BLUE == 2 && RGB_PIXELSIZE == 3
                (cinfo->in_color_space == JCS_EXT_RGB ||
@@ -723,6 +730,8 @@ start_input_ppm(j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
       (*cinfo->mem->alloc_small) ((j_common_ptr)cinfo, JPOOL_IMAGE,
                                   (size_t)(((long)MAX(maxval, 255) + 1L) *
                                            sizeof(JSAMPLE)));
+    MEMZERO(source->rescale, (size_t)(((long)MAX(maxval, 255) + 1L) *
+                                      sizeof(JSAMPLE)));
     half_maxval = maxval / 2;
     for (val = 0; val <= (long)maxval; val++) {
       /* The multiplication here must be done in 32 bits to avoid overflow */
@@ -760,6 +769,9 @@ jinit_read_ppm(j_compress_ptr cinfo)
   /* Fill in method ptrs, except get_pixel_rows which start_input sets */
   source->pub.start_input = start_input_ppm;
   source->pub.finish_input = finish_input_ppm;
+#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+  source->pub.max_pixels = 0;
+#endif
 
   return (cjpeg_source_ptr)source;
 }
