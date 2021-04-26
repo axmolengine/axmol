@@ -820,8 +820,7 @@ void DownloaderCURL::_onDownloadFinished(TaskWrapper&& wrapper, int checkState) 
 
             if (checkState & kCheckSumStateSucceed) // No need download
             {
-                FileStream* fsOrigin =
-                    FileUtils::getInstance()->openFileStream(coTask._fileName, FileStream::Mode::READ);
+                auto* fsOrigin = pFileUtils->openFileStream(coTask._fileName, FileStream::Mode::READ);
                 if (fsOrigin) {
                     fsOrigin->seek(0, SEEK_END);
                     task.progressInfo.totalBytesExpected = fsOrigin->tell();
