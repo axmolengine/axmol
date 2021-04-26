@@ -52,7 +52,7 @@
 #define posix_read ::read
 #define posix_write ::write
 #define posix_fd2fh(fd) (fd)
-#define posix_fsetsize(fd, size) ::ftruncate(fd, size); ::lseek(fd, 0, SEEK_SET)
+#define posix_fsetsize(fd, size) (::ftruncate(fd, size), ::lseek(fd, 0, SEEK_SET))
 #endif
 
 NS_CC_BEGIN
