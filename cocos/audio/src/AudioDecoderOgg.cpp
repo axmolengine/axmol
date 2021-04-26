@@ -44,8 +44,7 @@ namespace cocos2d {
 
     static int ov_fseek_r(void * handle, ogg_int64_t offset, int whence)
     {
-        auto n = ((FileStream*)handle)->seek(offset, whence);
-        return n >= 0 ? 0 : -1;
+        return ((FileStream*)handle)->seek(offset, whence) < 0 ? -1 : 0;
     }
     
     static long ov_ftell_r(void * handle)

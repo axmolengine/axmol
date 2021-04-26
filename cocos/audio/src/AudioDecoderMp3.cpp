@@ -61,7 +61,7 @@ namespace cocos2d {
 
     static int minimp3_seek_r(uint64_t position, void* user_data)
     {
-        return ((FileStream*)user_data)->seek(position, SEEK_SET) >= 0 ? 0 : -1;
+        return ((FileStream*)user_data)->seek(position, SEEK_SET) < 0 ? -1 : 0;
     }
 #else
     static bool __mp3Inited = false;
