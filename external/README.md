@@ -21,7 +21,7 @@
 
 ## c-ares
 - Upstream: https://github.com/c-ares/c-ares
-- Version: 1.17.1
+- Version: 1.17.1-809d5e8 (2055)
 - License: MIT
 
 ## Chipmunk2D
@@ -86,7 +86,7 @@
 
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
-- Version: 2.0.6 with CMakeLists.txt modified for sutiable as a thirdparty of CMake build system
+- Version: 2.1.0 with CMakeLists.txt modified for sutiable as a thirdparty of CMake build system
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp

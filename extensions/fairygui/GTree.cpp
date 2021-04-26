@@ -94,7 +94,12 @@ void GTree::createCell(GTreeNode* node)
     GComponent* child = getItemPool()->getObject(url)->as<GComponent>();
     CCASSERT(child, "Unable to create tree cell");
     child->_treeNode = node;
-    node->setCell(child);
+    if (node->_cell != child)
+    {
+        CC_SAFE_RELEASE(node->_cell);
+        node->_cell = child;
+        CC_SAFE_RETAIN(node->_cell);
+    }
 
     GObject* indentObj = node->_cell->getChild("indent");
     if (indentObj != nullptr)

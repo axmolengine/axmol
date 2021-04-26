@@ -58,7 +58,6 @@ CSOURCES = ares__close_sockets.c	\
 
 HHEADERS = ares_android.h                        \
   ares_data.h				\
-  ares_dns.h                            \
   ares_getenv.h				\
   ares_inet_net_pton.h			\
   ares_iphlpapi.h			\
@@ -73,7 +72,7 @@ HHEADERS = ares_android.h                        \
   ares_strsplit.h			\
   ares_writev.h				\
   bitncmp.h				\
-  nameser.h				\
+  ares_nameser.h			\
   ares_setup.h				\
   setup_once.h
 
