@@ -141,7 +141,7 @@ namespace cocos2d {
             ALOGW("The wav format %d doesn't supported currently!", (int)fmtInfo.AudioFormat);
             fileStream->close();
             assert(false);
-            return false;
+            return false;;
         }
 
         return wav_scan_chunk(wavf, WAV_DATA_ID, &h->PcmData, nullptr, 0);
@@ -154,8 +154,7 @@ namespace cocos2d {
 
     static int wav_seek(WAV_FILE* wavf, int offset)
     {
-        wavf->Stream->seek(wavf->PcmDataOffset + offset, SEEK_SET);
-        const auto newOffset = wavf->Stream->tell();
+        auto newOffset = wavf->Stream->seek(wavf->PcmDataOffset + offset, SEEK_SET);
         return newOffset >= wavf->PcmDataOffset ? newOffset - wavf->PcmDataOffset : -1;
     }
 

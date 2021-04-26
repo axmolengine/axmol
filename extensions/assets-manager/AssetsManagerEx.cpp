@@ -53,116 +53,6 @@ NS_CC_EXT_BEGIN
 const std::string AssetsManagerEx::VERSION_ID = "@version";
 const std::string AssetsManagerEx::MANIFEST_ID = "@manifest";
 
-class AssetManagerExZipFileInfo
-{
-public:
-    std::string zipFileName{};
-};
-
-// unzip overrides to support FileStream
-long AssetManagerEx_tell_file_func(voidpf opaque, voidpf stream)
-{
-    if (stream == nullptr)
-        return -1;
-
-    auto* fs = (FileStream*)stream;
-
-    return fs->tell();
-}
-
-long AssetManagerEx_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset, int origin)
-{
-    if (stream == nullptr)
-        return -1;
-
-    auto* fs = (FileStream*)stream;
-
-    return fs->seek((long)offset, origin); // must return 0 for success or -1 for error
-}
-
-voidpf AssetManagerEx_open_file_func(voidpf opaque, const char* filename, int mode)
-{
-    FileStream::Mode fsMode;
-    if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) == ZLIB_FILEFUNC_MODE_READ)
-        fsMode = FileStream::Mode::READ;
-    else if (mode & ZLIB_FILEFUNC_MODE_EXISTING)
-        fsMode = FileStream::Mode::APPEND;
-    else if (mode & ZLIB_FILEFUNC_MODE_CREATE)
-        fsMode = FileStream::Mode::WRITE;
-    else
-        return nullptr;
-
-    return FileUtils::getInstance()->openFileStream(filename, fsMode);
-}
-
-voidpf AssetManagerEx_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_disk, int mode)
-{
-    if (stream == nullptr)
-        return nullptr;
-
-    const auto zipFileInfo = static_cast<AssetManagerExZipFileInfo*>(opaque);
-    std::string diskFilename = zipFileInfo->zipFileName;
-
-    const auto pos = diskFilename.rfind('.', std::string::npos);
-
-    if (pos != std::string::npos && pos != 0)
-    {
-        const size_t bufferSize = 5;
-        char extensionBuffer[bufferSize];
-        snprintf(&extensionBuffer[0], bufferSize, ".z%02u", number_disk + 1);
-        diskFilename.replace(pos, std::min((size_t)4, zipFileInfo->zipFileName.size() - pos), extensionBuffer);
-        return AssetManagerEx_open_file_func(opaque, diskFilename.c_str(), mode);
-    }
-
-    return nullptr;
-}
-
-uint32_t AssetManagerEx_read_file_func(voidpf opaque, voidpf stream, void* buf, uint32_t size)
-{
-    if (stream == nullptr)
-        return (uint32_t)-1;
-
-    auto* fs = (FileStream*)stream;
-    return fs->read(buf, size);
-}
-
-uint32_t AssetManagerEx_write_file_func(voidpf opaque, voidpf stream, const void* buf, uint32_t size)
-{
-    if (stream == nullptr)
-        return (uint32_t)-1;
-
-    auto* fs = (FileStream*)stream;
-    return fs->write(buf, size);
-}
-
-int AssetManagerEx_close_file_func(voidpf opaque, voidpf stream)
-{
-    if (stream == nullptr)
-        return -1;
-
-    auto* fs = (FileStream*)stream;
-    return fs->close(); // 0 for success, -1 for error
-}
-
-// THis isn't supported by FileStream, so just check if the stream is null and open
-int AssetManagerEx_error_file_func(voidpf opaque, voidpf stream)
-{
-    if (stream == nullptr)
-    {
-        return -1;
-    }
-
-    auto* fs = (FileStream*)stream;
-
-    if (fs->isOpen())
-    {
-        return 0;
-    }
-
-    return -1;
-}
-// End of Overrides
-
 // Implementation of AssetsManagerEx
 
 AssetsManagerEx::AssetsManagerEx(const std::string& manifestUrl, const std::string& storagePath)
@@ -424,17 +314,9 @@ bool AssetsManagerEx::decompress(const std::string &zip)
         return false;
     }
     const std::string rootPath = zip.substr(0, pos+1);
-
-    zlib_filefunc_def zipFunctionOverrides;
-    fillZipFunctionOverrides(zipFunctionOverrides);
-
-    AssetManagerExZipFileInfo zipFileInfo;
-    zipFileInfo.zipFileName = zip;
-
-    zipFunctionOverrides.opaque = &zipFileInfo;
-
+    
     // Open the zip file
-    unzFile zipfile = unzOpen2(zip.c_str(), &zipFunctionOverrides);
+    unzFile zipfile = unzOpen(zip.c_str());
     if (! zipfile)
     {
         CCLOG("AssetsManagerEx : can not open downloaded zip file %s\n", zip.c_str());
@@ -510,8 +392,8 @@ bool AssetsManagerEx::decompress(const std::string &zip)
             }
             
             // Create a file to store current file.
-            auto* fsOut = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::WRITE);
-            if (!fsOut)
+            FILE *out = fopen(fullPath.c_str(), "wb");
+            if (!out)
             {
                 CCLOG("AssetsManagerEx : can not create decompress destination file %s (errno: %d)\n", fullPath.c_str(), errno);
                 unzCloseCurrentFile(zipfile);
@@ -527,7 +409,7 @@ bool AssetsManagerEx::decompress(const std::string &zip)
                 if (error < 0)
                 {
                     CCLOG("AssetsManagerEx : can not read zip file %s, error code is %d\n", fileName, error);
-                    delete fsOut;
+                    fclose(out);
                     unzCloseCurrentFile(zipfile);
                     unzClose(zipfile);
                     return false;
@@ -535,11 +417,11 @@ bool AssetsManagerEx::decompress(const std::string &zip)
                 
                 if (error > 0)
                 {
-                    fsOut->write(readBuffer, error);
+                    fwrite(readBuffer, error, 1, out);
                 }
             } while(error > 0);
             
-            delete fsOut;
+            fclose(out);
         }
         
         unzCloseCurrentFile(zipfile);
@@ -648,7 +530,7 @@ void AssetsManagerEx::downloadVersion()
     {
         _updateState = State::DOWNLOADING_VERSION;
         // Download version file asynchronously
-        _downloader->createDownloadFileTask(versionUrl, _tempVersionPath, "", VERSION_ID);
+        _downloader->createDownloadFileTask(versionUrl, _tempVersionPath, VERSION_ID);
     }
     // No version file found
     else
@@ -716,7 +598,7 @@ void AssetsManagerEx::downloadManifest()
     {
         _updateState = State::DOWNLOADING_MANIFEST;
         // Download version file asynchronously
-        _downloader->createDownloadFileTask(manifestUrl, _tempManifestPath, "", MANIFEST_ID);
+        _downloader->createDownloadFileTask(manifestUrl, _tempManifestPath, MANIFEST_ID);
     }
     // No manifest file found
     else
@@ -1265,7 +1147,7 @@ void AssetsManagerEx::queueDowload()
         _currConcurrentTask++;
         DownloadUnit& unit = _downloadUnits[key];
         _fileUtils->createDirectory(basename(unit.storagePath));
-        _downloader->createDownloadFileTask(unit.srcUrl, unit.storagePath, "", unit.customId);
+        _downloader->createDownloadFileTask(unit.srcUrl, unit.storagePath, unit.customId);
         
         _tempManifest->setAssetDownloadState(key, Manifest::DownloadState::DOWNLOADING);
     }
@@ -1292,19 +1174,6 @@ void AssetsManagerEx::onDownloadUnitsFinished()
     {
         updateSucceed();
     }
-}
-
-void AssetsManagerEx::fillZipFunctionOverrides(zlib_filefunc_def& zipFunctionOverrides)
-{
-    zipFunctionOverrides.zopen_file = AssetManagerEx_open_file_func;
-    zipFunctionOverrides.zopendisk_file = AssetManagerEx_opendisk_file_func;
-    zipFunctionOverrides.zread_file = AssetManagerEx_read_file_func;
-    zipFunctionOverrides.zwrite_file = AssetManagerEx_write_file_func;
-    zipFunctionOverrides.ztell_file = AssetManagerEx_tell_file_func;
-    zipFunctionOverrides.zseek_file = AssetManagerEx_seek_file_func;
-    zipFunctionOverrides.zclose_file = AssetManagerEx_close_file_func;
-    zipFunctionOverrides.zerror_file = AssetManagerEx_error_file_func;
-    zipFunctionOverrides.opaque = nullptr;
 }
 
 NS_CC_EXT_END

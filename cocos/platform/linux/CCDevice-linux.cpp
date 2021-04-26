@@ -345,10 +345,11 @@ public:
         std::string lowerCasePath = fontPath;
         std::transform(lowerCasePath.begin(), lowerCasePath.end(), lowerCasePath.begin(), ::tolower);
         if ( lowerCasePath.find(".ttf") != std::string::npos ) {
-            fontPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fontPath);
-            auto* fileStream = cocos2d::FileUtils::getInstance()->openFileStream(fontPath, FileStream::Mode::READ);
-            if ( fileStream ) {
-                delete fileStream;
+            fontPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fontPath.c_str());
+
+            FILE *f = fopen(fontPath.c_str(), "r");
+            if ( f ) {
+                fclose(f);
                 fontCache.insert(std::pair<std::string, std::string>(family_name, fontPath));
                 return fontPath;
             }
