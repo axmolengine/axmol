@@ -69,7 +69,6 @@ protected:
     AudioDecoderOgg();
     ~AudioDecoderOgg();
 
-    std::unique_ptr<FileStream> _fileStream{};
     OggVorbis_File _vf;
 
     friend class AudioDecoderManager;
