@@ -27,7 +27,7 @@
 
 #include "recast/DetourCommon.h"
 #include "recast/DetourNavMeshBuilder.h"
-#include "fastlz/fastlz.h"
+#include "lz4/lz4.h"
 
 NS_CC_BEGIN
 
@@ -74,22 +74,22 @@ void LinearAllocator::resize(const int cap)
     capacity = cap;
 }
 
-int FastLZCompressor::maxCompressedSize(const int bufferSize)
+int LZ4Compressor::maxCompressedSize(const int bufferSize)
 {
-    return (int)(bufferSize* 1.05f);
+    return LZ4_compressBound(bufferSize);
 }
 
-dtStatus cocos2d::FastLZCompressor::decompress(const unsigned char* compressed, const int compressedSize
+dtStatus cocos2d::LZ4Compressor::decompress(const unsigned char* compressed, const int compressedSize
                                              , unsigned char* buffer, const int maxBufferSize, int* bufferSize)
 {
-    *bufferSize = fastlz_decompress(compressed, compressedSize, buffer, maxBufferSize);
+    *bufferSize = LZ4_decompress_safe((const char*) compressed, (char*) buffer, compressedSize, maxBufferSize);
     return *bufferSize < 0 ? DT_FAILURE : DT_SUCCESS;
 }
 
-dtStatus cocos2d::FastLZCompressor::compress(const unsigned char* buffer, const int bufferSize
-    , unsigned char* compressed, const int /*maxCompressedSize*/, int* compressedSize)
+dtStatus cocos2d::LZ4Compressor::compress(const unsigned char* buffer, const int bufferSize
+    , unsigned char* compressed, const int maxCompressedSize, int* compressedSize)
 {
-    *compressedSize = fastlz_compress((const void *const)buffer, bufferSize, compressed);
+    *compressedSize = LZ4_compress_default((const char*) buffer, (char*) compressed, bufferSize, maxCompressedSize);
     return DT_SUCCESS;
 }
 
