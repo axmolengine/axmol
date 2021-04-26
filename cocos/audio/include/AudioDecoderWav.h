@@ -107,7 +107,7 @@ struct WAV_FILE
     WAV_FILE_HEADER FileHeader;
     AUDIO_SOURCE_FORMAT SourceFormat;
     uint32_t PcmDataOffset;
-    std::unique_ptr<FileStream> Stream = nullptr;
+    std::unique_ptr<FileStream> Stream{};
 };
 
 

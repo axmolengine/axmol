@@ -161,7 +161,7 @@ namespace cocos2d {
     static int wav_close(WAV_FILE* wavf)
     {
         const auto result = wavf->Stream->close();
-        wavf->Stream = nullptr;
+        wavf->Stream.reset();
         return result;
     }
 

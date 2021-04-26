@@ -469,7 +469,7 @@ bool AssetsManager::uncompress()
                 }
                 else
                 {
-                    fsOut = nullptr;
+                    fsOut.reset();
                 }
                 
                 startIndex=index+1;
@@ -507,7 +507,7 @@ bool AssetsManager::uncompress()
                     CCLOG("can not read zip file %s, error code is %d", fileName, error);
                     unzCloseCurrentFile(zipfile);
                     unzClose(zipfile);
-                    fsOut = nullptr;
+                    fsOut.reset();
                     return false;
                 }
                 
@@ -517,7 +517,7 @@ bool AssetsManager::uncompress()
                 }
             } while(error > 0);
 
-            fsOut = nullptr;
+            fsOut.reset();
         }
         
         unzCloseCurrentFile(zipfile);

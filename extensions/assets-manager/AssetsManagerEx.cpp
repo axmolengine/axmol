@@ -529,7 +529,7 @@ bool AssetsManagerEx::decompress(const std::string &zip)
                 if (error < 0)
                 {
                     CCLOG("AssetsManagerEx : can not read zip file %s, error code is %d\n", fileName, error);
-                    fsOut = nullptr;
+                    fsOut.reset();
                     unzCloseCurrentFile(zipfile);
                     unzClose(zipfile);
                     return false;
@@ -541,7 +541,7 @@ bool AssetsManagerEx::decompress(const std::string &zip)
                 }
             } while(error > 0);
             
-            fsOut = nullptr;
+            fsOut.reset();
         }
         
         unzCloseCurrentFile(zipfile);

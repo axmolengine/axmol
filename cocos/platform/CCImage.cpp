@@ -2186,20 +2186,20 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
 
         if (nullptr == png_ptr)
         {
-            outStream = nullptr;
+            outStream.reset();
             break;
         }
 
         info_ptr = png_create_info_struct(png_ptr);
         if (nullptr == info_ptr)
         {
-            outStream = nullptr;
+            outStream.reset();
             png_destroy_write_struct(&png_ptr, nullptr);
             break;
         }
         if (setjmp(png_jmpbuf(png_ptr)))
         {
-            outStream = nullptr;
+            outStream.reset();
             png_destroy_write_struct(&png_ptr, &info_ptr);
             break;
         }
@@ -2225,7 +2225,7 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
         row_pointers = (png_bytep *)malloc(_height * sizeof(png_bytep));
         if(row_pointers == nullptr)
         {
-            outStream = nullptr;
+            outStream.reset();
             png_destroy_write_struct(&png_ptr, &info_ptr);
             break;
         }
@@ -2249,7 +2249,7 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
                 uint8_t *tempData = static_cast<uint8_t*>(malloc(_width * _height * 3));
                 if (nullptr == tempData)
                 {
-                    outStream = nullptr;
+                    outStream.reset();
                     png_destroy_write_struct(&png_ptr, &info_ptr);
                     
                     free(row_pointers);
@@ -2300,7 +2300,7 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
 
         png_destroy_write_struct(&png_ptr, &info_ptr);
 
-        outStream = nullptr;
+        outStream.reset();
 
         ret = true;
     } while (0);
@@ -2354,7 +2354,7 @@ bool Image::saveImageToJPG(const std::string& filePath)
                 jpeg_finish_compress(&cinfo);
                 jpeg_destroy_compress(&cinfo);
 
-                outfile = nullptr;
+                outfile.reset();
                 if (outputBuffer)
                 {
                     free(outputBuffer);
@@ -2396,7 +2396,7 @@ bool Image::saveImageToJPG(const std::string& filePath)
         jpeg_finish_compress(&cinfo);
 
         outfile->write(outputBuffer, outputSize);
-        outfile = nullptr;
+        outfile.reset();
 
         if (outputBuffer)
         {
