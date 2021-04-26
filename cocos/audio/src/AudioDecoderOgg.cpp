@@ -56,6 +56,8 @@ namespace cocos2d {
     }
 
     static int ov_fclose_r(void* handle) {
+        auto* fs = static_cast<FileStream*>(handle);
+        delete fs;
         return 0;
     }
     
@@ -70,8 +72,8 @@ namespace cocos2d {
 
     bool AudioDecoderOgg::open(const std::string& fullPath)
     {
-        _fileStream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
-        if (!_fileStream)
+        auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ).release();
+        if (!fs)
         {
             ALOGE("Trouble with ogg(1): %s\n", strerror(errno));
             return false;
@@ -83,8 +85,8 @@ namespace cocos2d {
                ov_fclose_r,
                ov_ftell_r
         };
-              
-        if (0 == ov_open_callbacks(_fileStream.get(), &_vf, nullptr, 0, OV_CALLBACKS_POSIX))
+
+        if (0 == ov_open_callbacks(fs, &_vf, nullptr, 0, OV_CALLBACKS_POSIX))
         {
             // header
             vorbis_info* vi = ov_info(&_vf, -1);
@@ -104,7 +106,6 @@ namespace cocos2d {
         {
             ov_clear(&_vf);
             _isOpened = false;
-            _fileStream.reset();
         }
     }
 
