@@ -54,11 +54,6 @@
 - Version: git f85644f
 - License: Apache-2.0
 
-## fastlz
-- Upstream: https://github.com/ariya/FastLZ
-- Version: git c3bdfad (79)
-- License: MIT
-
 ## flatbuffers
 - Upstream: https://github.com/google/flatbuffers
 - Version: 1.12.0
@@ -112,7 +107,7 @@
 
 ## lz4
 - Upstream: https://github.com/lz4/lz4
-- Version: git 1.9.3-8075157 (2489)
+- Version: git 1.9.3-bdc9d3b (2541)
 - License: BSD 2-Clause
 
 ## md5
