@@ -5,6 +5,8 @@
 #include <string>
 #include <stdexcept>
 
+#include "platform/CCFileUtils.h"
+
 NS_CC_BEGIN
 
 class filestreambuffer : public std::streambuf
