@@ -52,7 +52,7 @@
 #define posix_read ::read
 #define posix_write ::write
 #define posix_fd2fh(fd) (fd)
-#define posix_fsetsize(fd, size) ::ftruncate(fd, size); ::lseek(fd, 0, SEEK_SET)
+#define posix_fsetsize(fd, size) (::ftruncate(fd, size), ::lseek(fd, 0, SEEK_SET))
 #endif
 
 NS_CC_BEGIN
@@ -114,12 +114,16 @@ public:
     int tell() override;
     bool isOpen() const override;
 
+    int length() override;
+    bool isReadOnly() const override;
+
 private:
     int internalClose();
     void reset();
 
     PXFileHandle _handle{};
     const PXIoF* _iof{};
+    FileStream::Mode _mode{};
 };
 
 NS_CC_END

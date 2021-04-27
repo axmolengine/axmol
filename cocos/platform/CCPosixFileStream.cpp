@@ -90,6 +90,7 @@ PosixFileStream::~PosixFileStream()
 
 bool PosixFileStream::open(const std::string& path, FileStream::Mode mode)
 {
+    _mode = mode;
     bool ok = false;
 #if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
     ok = pfs_posix_open(path, mode, _handle) != -1;
@@ -134,6 +135,11 @@ bool PosixFileStream::open(const std::string& path, FileStream::Mode mode)
     return ok;
 }
 
+bool PosixFileStream::isReadOnly() const
+{
+    return _mode == FileStream::Mode::READ;
+}
+
 int PosixFileStream::internalClose()
 {
     if (_iof) {
@@ -176,6 +182,16 @@ bool PosixFileStream::isOpen() const
 #else
     return _handle._fd != -1 && _handle._asset != nullptr;
 #endif
+}
+
+int PosixFileStream::length()
+{
+    const auto currentPos = tell();
+    seek(0, SEEK_END);
+    const auto length = tell();
+    seek(currentPos, SEEK_SET);
+
+    return length;
 }
 
 void PosixFileStream::reset()

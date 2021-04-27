@@ -3,6 +3,8 @@
 #pragma once
 
 #include <string>
+#include <memory>
+#include <iostream>
 
 #include "platform/CCPlatformConfig.h"
 #include "platform/CCPlatformMacros.h"
@@ -18,6 +20,56 @@ public:
         WRITE,
         APPEND,
     };
+
+    class base_fstream
+    {
+    public:
+        base_fstream();
+        explicit base_fstream(std::unique_ptr<FileStream> file);
+        virtual ~base_fstream();
+        int length();
+
+        virtual void open(std::string const& filename, FileStream::Mode openMode) = 0;
+        virtual void close();
+        virtual bool is_open();
+
+    protected:
+        std::unique_ptr<FileStream> _fileStream;
+    };
+
+    class ifstream : public base_fstream, public std::istream
+    {
+    public:
+        ifstream();
+        explicit ifstream(std::string const& filename);
+        ~ifstream() override;
+
+        void open(std::string const& filename, FileStream::Mode openMode = Mode::READ) override;
+        void close() override;
+    };
+
+    class ofstream : public base_fstream, public std::ostream
+    {
+    public:
+        ofstream();
+        explicit ofstream(std::string const& filename, FileStream::Mode writeMode = FileStream::Mode::WRITE);
+        ~ofstream() override;
+
+        void open(std::string const& filename, FileStream::Mode openMode = FileStream::Mode::WRITE) override;
+        void close() override;
+    };
+
+    class fstream : public base_fstream, public std::iostream
+    {
+    public:
+        fstream();
+        explicit fstream(std::string const& filename, FileStream::Mode openMode = FileStream::Mode::READ);
+        ~fstream() override;
+
+        void open(std::string const& filename, FileStream::Mode openMode = FileStream::Mode::READ) override;
+        void close() override;
+    };
+
 
     /**
     *  Open a file
@@ -69,7 +121,15 @@ public:
     */
     virtual bool isOpen() const = 0;
 
+    /**
+    *  Get the stream length
+    *  @return -1 on error, else length
+    */
+    virtual int length() = 0;
+
     virtual operator bool() const { return isOpen(); }
+
+    virtual bool isReadOnly() const = 0;
 
 protected:
     FileStream() = default;
