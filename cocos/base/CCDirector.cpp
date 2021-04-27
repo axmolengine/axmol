@@ -231,7 +231,7 @@ void Director::setDefaultValues()
 
     // PVR v2 has alpha premultiplied ?
     bool pvr_alpha_premultiplied = conf->getValue("cocos2d.x.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
-    Image::setPVRImagesHavePremultipliedAlpha(pvr_alpha_premultiplied);
+    Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::PVR, pvr_alpha_premultiplied);
 }
 
 void Director::setGLDefaultValues()
