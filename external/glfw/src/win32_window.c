@@ -28,6 +28,7 @@
 //========================================================================
 
 #include "internal.h"
+#include "glfw3ext_internal.h" // x-studio spec
 
 #include <limits.h>
 #include <stdlib.h>
@@ -46,17 +47,23 @@ static DWORD getWindowStyle(const _GLFWwindow* window)
         style |= WS_POPUP;
     else
     {
-        style |= WS_SYSMENU | WS_MINIMIZEBOX;
-
-        if (window->decorated)
-        {
-            style |= WS_CAPTION;
-
-            if (window->resizable)
-                style |= WS_MAXIMIZEBOX | WS_THICKFRAME;
+        if (_glfwx.hwndGLParent != NULL) 
+        { // x-studio spec, create as child window supports
+            style |= (_glfwx.hwndGLParent != NULL ? WS_CHILD : WS_POPUP);
         }
-        else
-            style |= WS_POPUP;
+        else {
+            style |= WS_SYSMENU | WS_MINIMIZEBOX;
+
+            if (window->decorated)
+            {
+                style |= WS_CAPTION;
+
+                if (window->resizable)
+                    style |= WS_MAXIMIZEBOX | WS_THICKFRAME;
+            }
+            else
+                style |= WS_POPUP;
+        }
     }
 
     return style;
@@ -769,6 +776,11 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
             else
                 _glfwInputKey(window, key, scancode, action, mods);
 
+            if ((wParam == VK_MENU || wParam == VK_F10) && !window->win32.keymenu) {
+                // x-studio spec
+                // #Fix: disable system default ALT process, solve dead block problem when glfw-window is a cross-thread child window.
+                return 0;
+            }
             break;
         }
 
@@ -1264,7 +1276,7 @@ static int createNativeWindow(_GLFWwindow* window,
                                            style,
                                            xpos, ypos,
                                            fullWidth, fullHeight,
-                                           NULL, // No parent window
+		                                  _glfwx.hwndGLParent, // x-studio spec, create as child window support.
                                            NULL, // No window menu
                                            GetModuleHandleW(NULL),
                                            (LPVOID) wndconfig);
