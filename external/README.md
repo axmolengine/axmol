@@ -41,7 +41,7 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.75.0
+- Version: 7.76.1 with cmake modification: replace 'BUILD_SHARED_LIBS' with 'CURL_BUILD_SHARED_LIBS'
 - License: Curl (MIT/X)
 
 ## edtaa3func
@@ -69,9 +69,9 @@
 - Version: 0.1.34
 - License: MIT
 
-## glfw3
+## glfw
 - Upstream: https://github.com/glfw/glfw
-- Version: 3.3
+- Version: git 0e9ec77 (4239)
 - License: zlib
 
 ## glsl-optimizer
@@ -138,7 +138,7 @@
 
 ## OpenAL Soft
 - Upstream: https://github.com/kcat/openal-soft
-- Version: 1.21.1-0f7ed49 (7533)
+- Version: 1.21.1 with cmake modification: exclude target 'ex-common'
 - License: LGPL-2.1
 
 ## OpenSSL
