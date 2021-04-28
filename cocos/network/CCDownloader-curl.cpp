@@ -879,8 +879,7 @@ void DownloaderCURL::_onDownloadFinished(TaskWrapper&& wrapper, int checkState) 
                 break;
             }
 
-            // remove file firstly, confirm rename file work fine.
-            pFileUtils->removeFile(coTask._fileName);
+            // Rename file work fine.
             if (pFileUtils->renameFile(coTask._tempFileName, coTask._fileName)) {
                 // success, remove storage from set
                 DownloadTaskCURL::_sStoragePathSet.erase(coTask._tempFileName);
