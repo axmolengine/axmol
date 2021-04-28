@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <string>
 #include "2d/CCSpriteFrame.h"
+#include "2d/CCSpriteSheetLoader.h"
 #include "base/CCRef.h"
 #include "base/CCValue.h"
 #include "base/CCMap.h"
@@ -45,72 +46,11 @@ NS_CC_BEGIN
 class Sprite;
 class Texture2D;
 class PolygonInfo;
-class SpriteFrameCache;
 
 /**
  * @addtogroup _2d
  * @{
  */
-
-class SpriteSheet
-{
-public:
-    std::string path;
-    std::string format;
-    std::set<std::string> frames;
-    bool full = false;
-};
-
-class ISpriteSheetLoader
-{
-public:
-    virtual ~ISpriteSheetLoader() = default;
-    virtual void Load(const std::string& filePath, SpriteFrameCache& cache) = 0;
-    virtual void Load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) = 0;
-    virtual void Load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) = 0;
-    virtual void Load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) = 0;
-    virtual void Reload(const std::string& filePath, SpriteFrameCache& cache) = 0;
-};
-
-class SpriteSheetLoader : public ISpriteSheetLoader
-{
-public:
-    /** Configures PolygonInfo class with the passed sizes + triangles */
-    void initializePolygonInfo(const Size& textureSize,
-        const Size& spriteSize,
-        const std::vector<int>& vertices,
-        const std::vector<int>& verticesUV,
-        const std::vector<int>& triangleIndices,
-        PolygonInfo& polygonInfo);
-
-    void Load(const std::string& filePath, SpriteFrameCache& cache) override = 0;
-    void Load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override = 0;
-    void Load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override = 0;
-    void Load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override = 0;
-    void Reload(const std::string& filePath, SpriteFrameCache& cache) override = 0;
-};
-
-class PlistSpriteSheetLoader : public SpriteSheetLoader
-{
-public:
-    void Load(const std::string& filePath, SpriteFrameCache& cache) override;
-    void Load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override;
-    void Load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override;
-    void Load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override;
-    void Reload(const std::string& filePath, SpriteFrameCache& cache) override;
-
-protected:
-    /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
-     */
-    void addSpriteFramesWithDictionary(ValueMap& dictionary, Texture2D* texture, const std::string& plist, SpriteFrameCache& cache);
-
-    /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
-     */
-    void addSpriteFramesWithDictionary(ValueMap& dict, const std::string& texturePath, const std::string& plist, SpriteFrameCache& cache);
-
-    void reloadSpriteFramesWithDictionary(ValueMap& dict, Texture2D* texture, const std::string& plist, SpriteFrameCache& cache);
-};
-
 
 /** @class SpriteFrameCache
  * @brief Singleton that handles the loading of the sprite frames.

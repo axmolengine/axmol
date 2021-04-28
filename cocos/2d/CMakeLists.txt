@@ -66,6 +66,8 @@ set(COCOS_2D_HEADER
     #2d/CCTMXLayer.h
     2d/CCCamera.h
     2d/CCParallaxNode.h
+    2d/CCSpriteSheetLoader.h
+    2d/CCPlistSpriteSheetLoader.h
     )
 
 set(COCOS_2D_SRC
@@ -136,4 +138,6 @@ set(COCOS_2D_SRC
     2d/CCTransitionPageTurn.cpp
     2d/CCTransitionProgress.cpp
     2d/CCTweenFunction.cpp
+    2d/CCSpriteSheetLoader.cpp
+    2d/CCPlistSpriteSheetLoader.cpp
     )
