@@ -382,7 +382,9 @@ if(CMAKE_USE_SECTRANSP)
 endif()
 
 if(CMAKE_USE_OPENSSL)
-  find_package(OpenSSL REQUIRED)
+  if(NOT OPENSSL_INCLUDE_DIR)
+    find_package(OpenSSL REQUIRED)
+  endif()
   set(SSL_ENABLED ON)
   set(USE_OPENSSL ON)
 
