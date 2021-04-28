@@ -61,7 +61,7 @@
 
 ## FreeType
 - Upstream: https://www.freetype.org/
-- Version: 2.10.4
+- Version: 2.10.4 with modification: fix FindHarfBuzz.cmake min version doesn't work
 - License: BSD-style (The FreeType Project)
 
 ## Glad

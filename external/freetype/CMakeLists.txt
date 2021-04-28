@@ -208,6 +208,8 @@ endif ()
 set(HARFBUZZ_MIN_VERSION "1.8.0")
 if (FT_WITH_HARFBUZZ)
   find_package(HarfBuzz ${HARFBUZZ_MIN_VERSION} REQUIRED)
+else ()
+  find_package(HarfBuzz ${HARFBUZZ_MIN_VERSION})
 endif ()
 
 if (FT_WITH_PNG)
