@@ -850,6 +850,11 @@ void DeformTimelineState::init(Armature* armature, AnimationState* animationStat
         const auto frameIntOffset = _animationData->frameIntOffset + _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineFrameValueCount];
         vertexOffset = _frameIntArray[frameIntOffset + (unsigned)BinaryOffset::DeformVertexOffset];
 
+        if (vertexOffset < 0)
+        {
+            vertexOffset += 65536; // Fixed out of bouds bug. 
+        }
+
         _deformCount = _frameIntArray[frameIntOffset + (unsigned)BinaryOffset::DeformCount];
         _valueCount = _frameIntArray[frameIntOffset + (unsigned)BinaryOffset::DeformValueCount];
         _valueOffset = _frameIntArray[frameIntOffset + (unsigned)BinaryOffset::DeformValueOffset];

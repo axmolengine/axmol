@@ -151,8 +151,7 @@ int PosixFileStream::close()
 
 int PosixFileStream::seek(long offset, int origin)
 {
-    const auto result = _iof->seek(_handle, offset, origin); // this returns -1 for error, and resulting offset on success
-    return result < 0 ? -1 : 0; // return 0 for success
+    return static_cast<int>(_iof->seek(_handle, offset, origin));
 }
 
 int PosixFileStream::read(void* buf, unsigned int size)

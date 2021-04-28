@@ -84,7 +84,7 @@ static unsigned char* parseRow(unsigned char* buf, unsigned char* bufEnd, char* 
 }
 
 static const int TILECACHESET_MAGIC = 'T' << 24 | 'S' << 16 | 'E' << 8 | 'T'; //'TSET';
-static const int TILECACHESET_VERSION = 2; // 1: fastlz, 2: lz4
+static const int TILECACHESET_VERSION = 1;
 static const int MAX_AGENTS = 128;
 
 NavMesh* NavMesh::create(const std::string &navFilePath, const std::string &geomFilePath)
@@ -187,7 +187,7 @@ bool NavMesh::loadNavMeshFile()
     }
 
     _allocator = new (std::nothrow) LinearAllocator(32000);
-    _compressor = new (std::nothrow) LZ4Compressor();
+    _compressor = new (std::nothrow) FastLZCompressor;
     _meshProcess = new (std::nothrow) MeshProcess(_geomData);
     status = _tileCache->init(&header.cacheParams, _allocator, _compressor, _meshProcess);
 

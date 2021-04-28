@@ -26,7 +26,6 @@
 #pragma once
 
 #include "audio/include/AudioDecoder.h"
-#include <memory>
 
 #if !defined(CC_USE_MPG123)
 #define CC_USE_MPG123 0
@@ -81,7 +80,7 @@ protected:
     static bool lazyInit();
     static void destroy();
 
-    std::unique_ptr<FileStream> _fileStream{};
+    FileStream* _fileStream = nullptr;
     mp3dec_handle_t _handle;
 
     friend class AudioDecoderManager;

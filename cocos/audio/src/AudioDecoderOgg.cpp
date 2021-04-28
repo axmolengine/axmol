@@ -39,25 +39,22 @@ namespace cocos2d {
 
     static size_t ov_fread_r(void* buffer, size_t element_size, size_t element_count, void* handle)
     {
-        auto* fs = static_cast<FileStream*>(handle);
-        return fs->read(buffer, static_cast<uint32_t>(element_size * element_count));
+        return ((FileStream*)handle)->read(buffer, static_cast<uint32_t>(element_size * element_count));
     }
 
     static int ov_fseek_r(void * handle, ogg_int64_t offset, int whence)
     {
-        auto* fs = static_cast<FileStream*>(handle);
-        return fs->seek(offset, whence) < 0 ? -1 : 0;
+        auto n = ((FileStream*)handle)->seek(offset, whence);
+        return n >= 0 ? 0 : -1;
     }
     
     static long ov_ftell_r(void * handle)
     {
-        auto* fs = static_cast<FileStream*>(handle);
-        return fs->tell();
+        return ((FileStream*)handle)->seek(0, SEEK_CUR);
     }
 
     static int ov_fclose_r(void* handle) {
-        auto* fs = static_cast<FileStream*>(handle);
-        delete fs;
+        ((FileStream*)handle)->close();
         return 0;
     }
     
@@ -72,8 +69,8 @@ namespace cocos2d {
 
     bool AudioDecoderOgg::open(const std::string& fullPath)
     {
-        auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ).release();
-        if (!fs)
+        _fileStream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
+        if (!_fileStream)
         {
             ALOGE("Trouble with ogg(1): %s\n", strerror(errno));
             return false;
@@ -85,8 +82,8 @@ namespace cocos2d {
                ov_fclose_r,
                ov_ftell_r
         };
-
-        if (0 == ov_open_callbacks(fs, &_vf, nullptr, 0, OV_CALLBACKS_POSIX))
+              
+        if (0 == ov_open_callbacks(&_fileStream, &_vf, nullptr, 0, OV_CALLBACKS_POSIX))
         {
             // header
             vorbis_info* vi = ov_info(&_vf, -1);

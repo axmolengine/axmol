@@ -132,16 +132,6 @@ TestList::TestList()
     _shouldRestoreTableOffset = false;
 }
 
-TestList::~TestList() {
-    deatchTableView();
-}
-
-void TestList::deatchTableView() {
-    if (_tableView)
-        _tableView->setDataSource(nullptr);
-    CC_SAFE_RELEASE_NULL(_tableView);
-}
-
 void TestList::addTest(const std::string& testName, std::function<TestBase*()> callback)
 {
     if (!testName.empty())
@@ -159,19 +149,18 @@ void TestList::runThisTest()
 
     auto visibleSize = director->getVisibleSize();
     auto origin = director->getVisibleOrigin();
-    deatchTableView();
-    _tableView = TestCustomTableView::create(this, Size(400, visibleSize.height));
-    _tableView->retain();
-    _tableView->setPosition(origin.x + (visibleSize.width - 400) / 2, origin.y);
-    _tableView->setDirection(ScrollView::Direction::VERTICAL);
-    _tableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
-    _tableView->setDelegate(this);
-    scene->addChild(_tableView);
-    _tableView->reloadData();
+
+    auto tableView = TestCustomTableView::create(this, Size(400, visibleSize.height));
+    tableView->setPosition(origin.x + (visibleSize.width - 400) / 2, origin.y);
+    tableView->setDirection(ScrollView::Direction::VERTICAL);
+    tableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
+    tableView->setDelegate(this);
+    scene->addChild(tableView);
+    tableView->reloadData();
 
     if (_shouldRestoreTableOffset)
     {
-        _tableView->setContentOffset(_tableOffset);
+        tableView->setContentOffset(_tableOffset);
     }
 
     if (_parentTest)
