@@ -22,6 +22,7 @@ THE SOFTWARE.
 
 ]]
 
+-- lua-5.4
 if (math.pow == nil) then
     math.pow = function (x,y)
         return x ^ y

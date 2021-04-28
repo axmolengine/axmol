@@ -65,7 +65,7 @@ struct LinearAllocator : public dtTileCacheAlloc
     virtual void free(void* /*ptr*/);
 };
 
-struct FastLZCompressor : public dtTileCacheCompressor
+struct LZ4Compressor : public dtTileCacheCompressor
 {
     virtual int maxCompressedSize(const int bufferSize);
 
