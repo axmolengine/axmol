@@ -67,7 +67,7 @@ Open [Wiki](https://github.com/c4games/engine-x-wiki) for additional information
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose follow tools and click the button ```Apply``` to install them:  
      * Android SDK Platform 29 r5  
      * Android SDK Build-Tools 29.0.2  
-     * NDK r16b+  
+     * NDK r19c+  
      * CMake 3.10+  
   5. Waiting for ```Gradle sync``` finish.
   6. Remark: If you use non-sdk provided CMake edition, you need download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory

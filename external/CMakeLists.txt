@@ -35,6 +35,15 @@ set(ANDROID_SHARED_LOAD_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${ANDROID_SHARED_
 
 # cmake_policy(SET CMP0079 NEW)
 
+function(configure_target_outdir target)
+    set_target_properties(${target} PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+        FOLDER "External"
+    )
+endfunction(configure_lib_outdir)
+
 if(NOT DEFINED LUA_ENGINE)
     set(LUA_ENGINE "plainlua" CACHE INTERNAL "The lua core lib, luajit or plainlua")
 endif()
@@ -56,16 +65,18 @@ else()
     add_library(external STATIC kcp/kcp.c)
 endif()
 
+if(MACOSX OR ANDROID OR WINDOWS)
+    add_subdirectory(zlib)
+    target_link_libraries(external 
+        ext_zlib
+    )
+endif()
+
 if(BUILD_EXT_BOX2D)
     set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build the Box2D unit tests" FORCE)
     set(BOX2D_BUILD_TESTBED OFF CACHE BOOL "Build the Box2D testbed" FORCE)
     add_subdirectory(box2d)
-    set_target_properties(box2d PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-        FOLDER "External"
-    )
+    configure_target_outdir(box2d)
     target_link_libraries(external box2d) 
 endif(BUILD_EXT_BOX2D)
 
@@ -87,8 +98,11 @@ if(BUILD_EXT_CHIPMUNK)
     target_link_libraries(external chipmunk)
 endif(BUILD_EXT_CHIPMUNK)
 if(BUILD_EXT_FREETYPE)
+    set(FT_WITH_ZLIB ON CACHE BOOL "Use system zlib instead of internal library." FORCE)
     add_subdirectory(freetype)
-    target_link_libraries(external ext_freetype)
+    target_include_directories(external PUBLIC "freetype/include")
+    target_link_libraries(external freetype)
+    configure_target_outdir(freetype)
 endif(BUILD_EXT_FREETYPE)
 if(BUILD_EXT_RECAST)
     add_subdirectory(recast)
@@ -107,33 +121,13 @@ if(BUILD_EXT_JPEG)
     set(JTURBO_BUILD_TESTS FALSE CACHE BOOL "Build TurboJPEG tests and examples" FORCE)
     set(JTURBO_BUILD_BINARIES FALSE CACHE BOOL "Build TurboJPEG binaries" FORCE)
     add_subdirectory(jpeg)
-    set_target_properties(jpeg
-        PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-        FOLDER "External"
-    )
-    set_target_properties(simd
-        PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-        FOLDER "External"
-    )
+    configure_target_outdir(jpeg)
+    configure_target_outdir(simd)
     if(TARGET simd-objs)
-        set_target_properties(simd-objs
-            PROPERTIES
-            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            FOLDER "External"
-        )
+        configure_target_outdir(simd-objs)
     endif()
     if(TARGET jsimdcfg)
-        set_target_properties(jsimdcfg
-            PROPERTIES
-            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-            FOLDER "External"
-        )
+        configure_target_outdir(jsimdcfg)
     endif()
     target_link_libraries(external jpeg)
     target_include_directories(external INTERFACE 
@@ -143,10 +137,10 @@ endif(BUILD_EXT_JPEG)
 if(BUILD_EXT_OPENSSL)
     add_subdirectory(openssl)
     if(ANDROID OR LINUX)
-        target_link_libraries(ext_ssl INTERFACE ext_crypto)
-        target_link_libraries(external ext_ssl)
+        target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
+        target_link_libraries(external OpenSSL::SSL)
     else()
-        target_link_libraries(external ext_crypto ext_ssl)
+        target_link_libraries(external OpenSSL::Crypto OpenSSL::SSL)
     endif()
 endif(BUILD_EXT_OPENSSL)
 if(BUILD_EXT_WEBP)
@@ -199,11 +193,20 @@ endif()
 
 if(NOT LINUX)
     if(BUILD_EXT_CURL)
-        add_subdirectory(curl)
-        if(ANDROID OR LINUX)
-            target_link_libraries(ext_curl INTERFACE ext_ssl)
+        set(BUILD_CURL_EXE FALSE CACHE BOOL "Set to OFF to build curl executable." FORCE)
+        set(CURL_DISABLE_TESTS TRUE CACHE BOOL "Disable curl tests building." FORCE)
+        set(CMAKE_USE_OPENSSL TRUE CACHE BOOL "Use openssl for curl" FORCE)
+        if(WIN32)
+            set(CURL_BUILD_SHARED_LIBS TRUE CACHE BOOL "Set to ON to build curl executable." FORCE)
         endif()
-        target_link_libraries(external ext_curl)
+        message("######## OPENSSL_CRYPTO_LIBRARY=${OPENSSL_CRYPTO_LIBRARY}")
+        message("######## OPENSSL_SSL_LIBRARY=${OPENSSL_SSL_LIBRARY}")
+        add_subdirectory(curl)
+        configure_target_outdir(libcurl)
+        # if(ANDROID OR LINUX)
+        #     target_link_libraries(ext_curl INTERFACE ext_ssl)
+        # endif()
+        target_link_libraries(external libcurl)
     endif(BUILD_EXT_CURL)
 endif(NOT LINUX)
 
@@ -216,9 +219,15 @@ endif()
 
 # The openal-soft(LGPL 2.1)
 if(BUILD_EXT_ALSOFT)
+    set(ALSOFT_DLOPEN OFF CACHE BOOL "Check for the dlopen API for loading optional libs" FORCE)
+    set(ALSOFT_UTILS OFF CACHE BOOL "Build utility program" FORCE)
+    set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build example programs" FORCE)
+    set(ALSOFT_INSTALL OFF CACHE BOOL "Install main library" FORCE)
     add_subdirectory(openal)
+    configure_target_outdir(common)
+    configure_target_outdir(OpenAL)
     target_link_libraries(external
-        ext_openal
+        OpenAL
     )
     add_definitions(-DCC_USE_ALSOFT=1)
 endif()
@@ -238,17 +247,15 @@ if(WINDOWS)
 endif()
 
 if(WINDOWS OR MACOSX OR LINUX)
-    add_subdirectory(glfw3)
-    target_link_libraries(external 
-        ext_glfw3
-    )
-endif()
-
-if(MACOSX OR ANDROID OR WINDOWS)
-    add_subdirectory(zlib)
-    target_link_libraries(external 
-        ext_zlib
-    )
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation" FORCE)
+    set(GLFW_INSTALL OFF CACHE BOOL "Build the GLFW documentation" FORCE)
+    add_subdirectory(glfw)
+    configure_target_outdir(glfw)
+    target_link_libraries(external glfw)
+    if(NOT WINDOWS)
+        target_link_libraries(external pthread)
+    endif()
+    target_include_directories(external PUBLIC "glfw/include/GLFW")
 endif()
 
 if(NOT LINUX)
@@ -290,22 +297,11 @@ if(BUILD_EXT_CARES)
     target_link_libraries(external c-ares)
     include_directories($<TARGET_FILE_DIR:c-ares>)
     include_directories("c-ares/include")
-    set_target_properties(c-ares
-        PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-        FOLDER "External"
-    )
+    configure_target_outdir(c-ares)
 endif(BUILD_EXT_CARES)
 
 # put "external" into External folder, too
-set_target_properties(external
-    PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    FOLDER "External"
-)
+configure_target_outdir(external)
 
 if(MACOSX OR IOS)
     add_subdirectory(glsl-optimizer)
