@@ -213,20 +213,15 @@ function(cocos_copy_target_dll cocos_target)
 
     # copy thirdparty dlls to target bin dir
     # copy_thirdparty_dlls(${cocos_target} $<TARGET_FILE_DIR:${cocos_target}>)
-    add_custom_command(TARGET ${cocos_target} POST_BUILD
-       COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-        "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/libcurl.dll"
-        "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/OpenAL32.dll"
-         $<TARGET_FILE_DIR:${cocos_target}>)
 
     # Copy win32 angle binaries
-    add_custom_command(TARGET ${cocos_target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/libGLESv2.dll
-        ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/libEGL.dll
-        ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/d3dcompiler_47.dll
-        $<TARGET_FILE_DIR:${cocos_target}>
-    )
+    add_custom_command(TARGET ${cocos_target}
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/libGLESv2.dll
+                ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/libEGL.dll
+                ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/d3dcompiler_47.dll
+                $<TARGET_FILE_DIR:${cocos_target}>
+            )
 endfunction()
 
 # mark `FILES` as resources, files will be put into sub-dir tree depend on its absolute path
