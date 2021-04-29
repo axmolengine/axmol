@@ -2,78 +2,16 @@
 // Copyright (c) 2020 c4games.com
 #pragma once
 
-#include "platform/CCPlatformConfig.h"
 #include <string>
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-#include <io.h>
-#include <direct.h>
-#else
-#include <unistd.h>
-#include <errno.h>
-#endif
-#include <fcntl.h>
-#include <functional>
 
+#include "platform/CCPlatformConfig.h"
 #include "platform/CCPlatformMacros.h"
-
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-#include "platform/android/CCFileUtils-android.h"
-#include <jni.h>
-#include <android/asset_manager.h>
-#include <android/asset_manager_jni.h>
-#include "base/ZipUtils.h"
-#endif
-
-#if defined(_WIN32)
-#define O_READ_FLAGS O_BINARY | O_RDONLY, S_IREAD
-#define O_WRITE_FLAGS O_CREAT | O_RDWR | O_BINARY | O_TRUNC, S_IWRITE | S_IREAD
-#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
-
-#define O_OVERLAP_FLAGS O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
-
-#define posix_open ::_open
-#define posix_close ::_close
-#define posix_lseek ::_lseek
-#define posix_read ::_read
-#define posix_write ::_write
-#define posix_fd2fh(fd) reinterpret_cast<HANDLE>(_get_osfhandle(fd))
-#define posix_fsetsize(fd, size) ::_chsize(fd, size)
-#else
-#define O_READ_FLAGS O_RDONLY, S_IRUSR
-#define O_WRITE_FLAGS O_CREAT | O_RDWR | O_TRUNC, S_IRWXU
-#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
-
-#define O_OVERLAP_FLAGS O_CREAT | O_RDWR, S_IRWXU
-
-#define posix_open ::open
-#define posix_close ::close
-#define posix_lseek ::lseek
-#define posix_read ::read
-#define posix_write ::write
-#define posix_fd2fh(fd) (fd)
-#define posix_fsetsize(fd, size) ::ftruncate(fd, size); ::lseek(fd, 0, SEEK_SET)
-#endif
 
 NS_CC_BEGIN
 
-struct UnzFileStream;
-union PXFileHandle {
-    int _fd = -1;
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    AAsset* _asset;
-    ZipFileStream _zfs;
-#endif
-};
-
-struct PXIoF;
-
 class CC_DLL FileStream {
 public:
-    FileStream();
-    ~FileStream();
-
-    FileStream(FileStream&& rhs);
-    FileStream& operator=(FileStream&& rhs);
+    virtual ~FileStream() = default;
 
     enum class Mode {
         READ,
@@ -81,22 +19,60 @@ public:
         APPEND,
     };
 
-    bool open(const std::string& path, Mode mode);
-    int close();
+    /**
+    *  Open a file
+    *  @param path file to open
+    *  @param mode File open mode, being READ | WRITE | APPEND
+    *  @return true if successful, false if not
+    */
+    virtual bool open(const std::string& path, FileStream::Mode mode) = 0;
 
-    int seek(long offset, int origin);
-    int read(void* buf, unsigned int size);
+    /**
+    *  Close a file stream
+    *  @return 0 if successful, -1 if not
+    */
+    virtual int close() = 0;
 
-    int write(const void* buf, unsigned int size);
+    /**
+    *  Seek to position in a file stream
+    *  @param offset how many bytes to move within the stream
+    *  @param origin SEEK_SET | SEEK_CUR | SEEK_END
+    *  @return 0 if successful, -1 if not
+    */
+    virtual int seek(long offset, int origin) = 0;
 
-    operator bool() const;
+    /**
+    *  Read data from file stream
+    *  @param buf pointer to data
+    *  @param size the amount of data to read in bytes
+    *  @return amount of data read successfully, -1 if error
+    */
+    virtual int read(void* buf, unsigned int size) = 0;
 
-private:
-    void zeroset();
-    void assign(FileStream&& rhs);
+    /**
+    *  Write data to file stream
+    *  @param buf pointer to data
+    *  @param size the amount of data to write in bytes
+    *  @return amount of data written successfully, -1 if error
+    */
+    virtual int write(const void* buf, unsigned int size) = 0;
 
-    PXFileHandle _handle;
-    const PXIoF* _iof;
+    /**
+    *  Get the current position in the file stream
+    *  @return current position, -1 if error
+    */
+    virtual int tell() = 0;
+
+    /**
+    *  Get status of file stream
+    *  @return true if open, false if closed
+    */
+    virtual bool isOpen() const = 0;
+
+    virtual operator bool() const { return isOpen(); }
+
+protected:
+    FileStream() = default;
 };
 
 NS_CC_END

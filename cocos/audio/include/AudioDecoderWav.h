@@ -28,6 +28,7 @@
 #pragma once
 
 #include "audio/include/AudioDecoder.h"
+#include <memory>
 
 #if !defined(MAKE_FOURCC)
 #define MAKE_FOURCC(a,b,c,d) ((uint32_t)((a) | ((b) << 8) | ((c) << 16) | (((uint32_t)(d)) << 24)))
@@ -106,7 +107,7 @@ struct WAV_FILE
     WAV_FILE_HEADER FileHeader;
     AUDIO_SOURCE_FORMAT SourceFormat;
     uint32_t PcmDataOffset;
-    cocos2d::FileStream Stream;
+    std::unique_ptr<FileStream> Stream{};
 };
 
 

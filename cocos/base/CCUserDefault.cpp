@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include <sys/stat.h>
 
 #include <inttypes.h>
+#include <sstream>
 
 #include "openssl/aes.h"
 #include "openssl/modes.h"
@@ -51,7 +52,7 @@ THE SOFTWARE.
 #include "yasio/obstream.hpp"
 #include "yasio/detail/sz.hpp"
 
-#include "CCFileStream.h"
+#include "CCPosixFileStream.h"
 
 #define USER_DEFAULT_PLAIN_MODE 0
 
@@ -132,10 +133,12 @@ UserDefault::UserDefault()
 void UserDefault::closeFileMapping()
 {
     _rwmmap.reset();
+#if !USER_DEFAULT_PLAIN_MODE
     if (_fd != -1) {
         posix_close(_fd);
         _fd = -1;
     }
+#endif
 }
 
 bool UserDefault::getBoolForKey(const char* pKey)
@@ -369,9 +372,9 @@ void UserDefault::lazyInit()
 {
     if (_initialized) return;
 
-    _filePath = FileUtils::getInstance()->getWritablePath() + USER_DEFAULT_FILENAME;
-
 #if !USER_DEFAULT_PLAIN_MODE
+    _filePath = FileUtils::getInstance()->getNativeWritableAbsolutePath() + USER_DEFAULT_FILENAME;
+
     // construct file mapping
     _fd = posix_open(_filePath.c_str(), O_OVERLAP_FLAGS);
     if (_fd == -1) {
@@ -415,14 +418,22 @@ void UserDefault::lazyInit()
     }
 #else
     pugi::xml_document doc;
-    pugi::xml_parse_result ret = doc.load_file(_filePath.c_str());
-    if (ret) {
-        for (auto& elem : doc.document_element())
-            updateValueForKey(elem.name(), elem.text().as_string());
+
+    _filePath = FileUtils::getInstance()->getWritablePath() + USER_DEFAULT_FILENAME;
+
+    if (FileUtils::getInstance()->isFileExist(_filePath))
+    {
+        auto data = FileUtils::getInstance()->getDataFromFile(_filePath);
+        pugi::xml_parse_result ret = doc.load_buffer_inplace(data.getBytes(), data.getSize());
+        if (ret) {
+            for (auto& elem : doc.document_element())
+                updateValueForKey(elem.name(), elem.text().as_string());
+        }
+        else {
+            log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
+        }
     }
-    else {
-        log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
-    }
+
 #endif
 
     _initialized = true;
@@ -474,7 +485,10 @@ void UserDefault::flush()
         r.append_child(kv.first.c_str())
         .append_child(pugi::xml_node_type::node_pcdata)
         .set_value(kv.second.c_str());
-    doc.save_file(_filePath.c_str(), "  ");
+
+    std::stringstream ss;
+    doc.save(ss, "  ");
+    FileUtils::getInstance()->writeStringToFile(ss.str(), _filePath);
 #endif
 }
 

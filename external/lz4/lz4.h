@@ -1,7 +1,7 @@
 /*
  *  LZ4 - Fast LZ compression algorithm
  *  Header File
- *  Copyright (C) 2011-present, Yann Collet.
+ *  Copyright (C) 2011-2020, Yann Collet.
 
    BSD 2-Clause License (http://www.opensource.org/licenses/bsd-license.php)
 
@@ -502,7 +502,7 @@ LZ4LIB_STATIC_API void LZ4_attach_dictionary(LZ4_stream_t* workingStream, const 
 /*! In-place compression and decompression
  *
  * It's possible to have input and output sharing the same buffer,
- * for highly contrained memory environments.
+ * for highly constrained memory environments.
  * In both cases, it requires input to lay at the end of the buffer,
  * and decompression to start at beginning of the buffer.
  * Buffer size must feature some margin, hence be larger than final size.

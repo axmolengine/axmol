@@ -46,8 +46,9 @@ protected:
     FileUtilsWin32();
 public:
     /* override functions */
-    bool init();
+    bool init() override;
     virtual std::string getWritablePath() const override;
+    virtual std::string getNativeWritableAbsolutePath() const override;
     virtual bool isAbsolutePath(const std::string& strPath) const override;
 protected:
 

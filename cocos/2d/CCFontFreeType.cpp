@@ -68,8 +68,8 @@ static unsigned long ft_stream_read_callback(FT_Stream stream, unsigned long off
 }
 
 static void ft_stream_close_callback(FT_Stream stream) {
-    auto fd = (FileStream*)stream->descriptor.pointer;
-    if (fd) delete fd;
+    const auto* fd = (FileStream*)stream->descriptor.pointer;
+    delete fd;
     stream->size = 0;
     stream->descriptor.pointer = nullptr;
 }
@@ -174,21 +174,24 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
         auto fullPath = FileUtils::getInstance()->fullPathForFilename(fontName);
         if (fullPath.empty()) return false;
 
-        FileStream fs;
-        if (!fs.open(fullPath, FileStream::Mode::READ))
+        auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ).release();
+        if (!fs)
+        {
             return false;
+        }
 
         std::unique_ptr<FT_StreamRec> fts(new FT_StreamRec());
         fts->read = ft_stream_read_callback;
         fts->close = ft_stream_close_callback;
-        fts->size = fs.seek(0, SEEK_END);
-        fs.seek(0, SEEK_SET);
+        fs->seek(0, SEEK_END);
+        fts->size = fs->tell();
+        fs->seek(0, SEEK_SET);
 
-        fts->descriptor.pointer = new FileStream(std::move(fs));
+        fts->descriptor.pointer = fs;
 
         FT_Open_Args args = { 0 };
         args.flags = FT_OPEN_STREAM;
-        args.stream = fts.get();;
+        args.stream = fts.get();
 
         if (FT_Open_Face(getFTLibrary(), &args, 0, &face))
             return false;
