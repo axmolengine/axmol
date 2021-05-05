@@ -7,6 +7,7 @@ CCArmatureDisplay* CCArmatureDisplay::create()
 {
     CCArmatureDisplay* displayContainer = new (std::nothrow) CCArmatureDisplay();
     if (displayContainer && displayContainer->init())
+    if (displayContainer)
     {
         displayContainer->autorelease();
     }

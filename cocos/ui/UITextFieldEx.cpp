@@ -187,9 +187,9 @@ namespace ui {
         if (!utf8Text.empty() && length > 0) {
 
             // get the delete byte number
-            int deleteLen = 1;    // default, erase 1 byte
+            size_t deleteLen = 1;    // default, erase 1 byte
 
-            while (length >= deleteLen && 0x80 == (0xC0 & utf8Text.at(length - deleteLen)))
+            while ((length - deleteLen >= 0) && 0x80 == (0xC0 & utf8Text.at(length - deleteLen)))
             {
                 ++deleteLen;
             }
@@ -211,7 +211,7 @@ namespace ui {
             // get the delete byte number
             size_t addLen = 1;    // default, erase 1 byte
 
-            while ((length + addLen) < utf8Text.size() && 0x80 == (0xC0 & utf8Text.at(length + addLen)))
+            while ((length + addLen < utf8Text.size()) && 0x80 == (0xC0 & utf8Text.at(length + addLen)))
             {
                 ++addLen;
             }
@@ -424,6 +424,7 @@ namespace ui {
                 switch (code)
                 {
                 case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+                    cocos2d::log("******** Move Left ********* ");
                     this->__moveCursor(-1);
                     break;
                 case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
@@ -433,7 +434,6 @@ namespace ui {
                 case EventKeyboard::KeyCode::KEY_KP_DELETE:
                     this->handleDeleteKeyEvent();
                     break;
-                default:;
                 }
             }
         };

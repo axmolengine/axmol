@@ -554,7 +554,7 @@ voidpf ZipFile_open_file_func(voidpf opaque, const char* filename, int mode)
     else
         return nullptr;
 
-    return FileUtils::getInstance()->openFileStream(filename, fsMode).release();
+    return FileUtils::getInstance()->openFileStream(filename, fsMode);
 }
 
 voidpf ZipFile_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_disk, int mode)
@@ -603,9 +603,7 @@ int ZipFile_close_file_func(voidpf opaque, voidpf stream)
         return -1;
 
     auto* fs = (FileStream*)stream;
-    const auto result = fs->close(); // 0 for success, -1 for error
-    delete fs;
-    return result;
+    return fs->close(); // 0 for success, -1 for error
 }
 
 // THis isn't supported by FileStream, so just check if the stream is null and open

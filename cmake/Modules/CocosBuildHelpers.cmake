@@ -128,6 +128,7 @@ function(search_depend_libs_recursive cocos_target all_depends_out)
             break()
         endif()
     endwhile(true)
+    list(REMOVE_DUPLICATES all_depends_inner)
     set(${all_depends_out} ${all_depends_inner} PARENT_SCOPE)
 endfunction()
 
@@ -149,7 +150,7 @@ function(get_target_depends_ext_dlls cocos_target all_depend_dlls_out)
             endif()
         endif()
     endforeach()
-
+    list(REMOVE_DUPLICATES all_depend_ext_dlls)
     set(${all_depend_dlls_out} ${all_depend_ext_dlls} PARENT_SCOPE)
 endfunction()
 
@@ -213,20 +214,15 @@ function(cocos_copy_target_dll cocos_target)
 
     # copy thirdparty dlls to target bin dir
     # copy_thirdparty_dlls(${cocos_target} $<TARGET_FILE_DIR:${cocos_target}>)
-    add_custom_command(TARGET ${cocos_target} POST_BUILD
-       COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-        "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/libcurl.dll"
-        "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/OpenAL32.dll"
-         $<TARGET_FILE_DIR:${cocos_target}>)
 
     # Copy win32 angle binaries
-    add_custom_command(TARGET ${cocos_target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/libGLESv2.dll
-        ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/libEGL.dll
-        ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/d3dcompiler_47.dll
-        $<TARGET_FILE_DIR:${cocos_target}>
-    )
+    add_custom_command(TARGET ${cocos_target}
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/libGLESv2.dll
+                ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/libEGL.dll
+                ${COCOS2DX_ROOT_PATH}/external/angle/prebuilt/win32/d3dcompiler_47.dll
+                $<TARGET_FILE_DIR:${cocos_target}>
+            )
 endfunction()
 
 # mark `FILES` as resources, files will be put into sub-dir tree depend on its absolute path
@@ -346,8 +342,13 @@ endmacro()
 # custom Xcode property for iOS target
 macro(cocos_config_target_xcode_property cocos_target)
     if(IOS)
-        set_xcode_property(${cocos_target} ENABLE_BITCODE "NO")
-        set_xcode_property(${cocos_target} ONLY_ACTIVE_ARCH "YES")
+        set(real_target)
+        get_property(real_target TARGET ${cocos_target} PROPERTY ALIASED_TARGET)
+        if (NOT real_target)
+            set(real_target ${cocos_target})
+        endif()
+        set_xcode_property(${real_target} ENABLE_BITCODE "NO")
+        set_xcode_property(${real_target} ONLY_ACTIVE_ARCH "YES")
     endif()
 endmacro()
 

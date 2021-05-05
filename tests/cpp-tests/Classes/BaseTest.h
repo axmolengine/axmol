@@ -179,8 +179,6 @@ private:
     friend class TestController;
 };
 
-class TestCustomTableView;
-
 /**
  * An instance of TestList is a means for displaying hierarchical lists of TestSuite.
  */
@@ -188,7 +186,6 @@ class TestList : public TestBase, public cocos2d::extension::TableViewDataSource
 {
 public:
     TestList();
-    ~TestList();
 
     void addTest(const std::string& testName, std::function<TestBase*()> callback);
 
@@ -203,14 +200,12 @@ public:
     virtual void scrollViewDidScroll(cocos2d::extension::ScrollView* view) override{}
     virtual void scrollViewDidZoom(cocos2d::extension::ScrollView* view) override{}
 
-    void deatchTableView();
 private:
     std::vector<std::function<TestBase*()>> _testCallbacks;
     bool _cellTouchEnabled;
     bool _shouldRestoreTableOffset;
     cocos2d::Vec2 _tableOffset;
     friend class TestController;
-    TestCustomTableView* _tableView{};
 };
 
 

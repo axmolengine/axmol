@@ -61,7 +61,7 @@ namespace cocos2d {
 
     static int minimp3_seek_r(uint64_t position, void* user_data)
     {
-        return ((FileStream*)user_data)->seek(position, SEEK_SET) < 0 ? -1 : 0;
+        return ((FileStream*)user_data)->seek(position, SEEK_SET) >= 0 ? 0 : -1;
     }
 #else
     static bool __mp3Inited = false;
@@ -128,6 +128,7 @@ namespace cocos2d {
 #if !CC_USE_MPG123
         do
         {
+            delete _fileStream;
             _fileStream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
             if (!_fileStream)
             {
@@ -139,7 +140,7 @@ namespace cocos2d {
 
             handle->_decIO.read = minimp3_read_r;
             handle->_decIO.seek = minimp3_seek_r;
-            handle->_decIO.read_data = handle->_decIO.seek_data = _fileStream.get();
+            handle->_decIO.read_data = handle->_decIO.seek_data = _fileStream;
 
             if (mp3dec_ex_open_cb(&handle->_dec, &handle->_decIO, MP3D_SEEK_TO_SAMPLE) != 0)
             {
@@ -248,7 +249,9 @@ namespace cocos2d {
 
                 delete _handle;
                 _handle = nullptr;
-                _fileStream.reset();
+
+                delete _fileStream;
+                _fileStream = nullptr;
             }
 #else
             if (_handle != nullptr)
@@ -257,7 +260,8 @@ namespace cocos2d {
                 mpg123_delete(_handle);
                 _handle = nullptr;
 
-                _fileStream.reset();
+                delete _fileStream;
+                _fileStream = nullptr;
             }
 #endif
             _isOpened = false;

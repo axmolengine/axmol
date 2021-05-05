@@ -409,7 +409,7 @@ void HttpClient::enableCookies(const char* cookieFile)
     }
     else
     {
-        _cookieFilename = (FileUtils::getInstance()->getNativeWritableAbsolutePath() + "cookieFile.txt");
+        _cookieFilename = (FileUtils::getInstance()->getWritablePath() + "cookieFile.txt");
     }
 }
     
