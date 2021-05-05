@@ -198,7 +198,13 @@ void ImGuiEXT::loadCustomFonts(void* ud)
         default:;
         }
 
-        imFonts->AddFontFromFileTTF(fontInfo.first.c_str(), fontInfo.second.fontSize * contentZoomFactor, nullptr, imChars);
+        auto fontData = FileUtils::getInstance()->getDataFromFile(fontInfo.first);
+        CCASSERT(!fontData.isNull(), "Cannot load font for IMGUI");
+
+        long bufferSize = 0;
+        auto* buffer = fontData.takeBuffer(&bufferSize); // Buffer automatically freed by IMGUI
+
+        imFonts->AddFontFromMemoryTTF(buffer, bufferSize, fontInfo.second.fontSize * contentZoomFactor, nullptr, imChars);
     }
 }
 

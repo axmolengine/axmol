@@ -86,8 +86,8 @@ public:
             }
         }
 
-        delete _fs;
-        delete _fsMd5;
+        _fs.reset();
+        _fsMd5.reset();
 
         if (_requestHeaders)
             curl_slist_free_all(_requestHeaders);
@@ -154,7 +154,8 @@ public:
             _checksumFileName = filename + ".chksum";
 
             _fsMd5 = FileUtils::getInstance()->openFileStream(_checksumFileName, FileStream::Mode::WRITE);
-            if (_fsMd5->seek(0, SEEK_END) != sizeof(md5_state_s)) {
+            _fsMd5->seek(0, SEEK_END);
+            if (_fsMd5->tell() != sizeof(md5_state_s)) {
                 md5_init(&_md5State);
             } else {
                 _fsMd5->seek(0, SEEK_SET);
@@ -283,10 +284,10 @@ private:
     string _tempFileName;
     std::string _checksumFileName;
     vector<unsigned char> _buf;
-    FileStream* _fs;
+    std::unique_ptr<FileStream> _fs{};
 
     // calculate md5 in downloading time support
-    FileStream* _fsMd5; // store md5 state realtime
+    std::unique_ptr<FileStream> _fsMd5{}; // store md5 state realtime
     md5_state_s _md5State;
 
 
@@ -812,15 +813,15 @@ void DownloaderCURL::_onDownloadFinished(TaskWrapper&& wrapper, int checkState) 
     if (coTask._fs) {
         do {
             auto pFileUtils = FileUtils::getInstance();
-            coTask._fs->close();
-            coTask._fsMd5->close();
+            coTask._fs.reset();
+            coTask._fsMd5.reset();
 
             if (checkState & kCheckSumStateSucceed) // No need download
             {
-                FileStream* fsOrigin =
-                    FileUtils::getInstance()->openFileStream(coTask._fileName, FileStream::Mode::READ);
+                auto fsOrigin = pFileUtils->openFileStream(coTask._fileName, FileStream::Mode::READ);
                 if (fsOrigin) {
-                    task.progressInfo.totalBytesExpected = fsOrigin->seek(0, SEEK_END);
+                    fsOrigin->seek(0, SEEK_END);
+                    task.progressInfo.totalBytesExpected = fsOrigin->tell();
                     task.progressInfo.bytesReceived      = task.progressInfo.totalBytesExpected;
                     task.progressInfo.totalBytesReceived = task.progressInfo.totalBytesExpected;
                     task.progressInfo.speedInBytes       = task.progressInfo.totalBytesExpected;
@@ -832,7 +833,6 @@ void DownloaderCURL::_onDownloadFinished(TaskWrapper&& wrapper, int checkState) 
 
                     onTaskProgress(task, _transferDataToBuffer);
 
-                    delete fsOrigin;
                     fsOrigin = nullptr;
                 } else {
                     coTask._errCode         = DownloadTask::ERROR_ORIGIN_FILE_MISSING;
@@ -879,8 +879,7 @@ void DownloaderCURL::_onDownloadFinished(TaskWrapper&& wrapper, int checkState) 
                 break;
             }
 
-            // remove file firstly, confirm rename file work fine.
-            pFileUtils->removeFile(coTask._fileName);
+            // Rename file work fine.
             if (pFileUtils->renameFile(coTask._tempFileName, coTask._fileName)) {
                 // success, remove storage from set
                 DownloadTaskCURL::_sStoragePathSet.erase(coTask._tempFileName);

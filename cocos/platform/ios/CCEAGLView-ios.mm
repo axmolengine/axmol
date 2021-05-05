@@ -72,6 +72,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #if defined(CC_USE_METAL)
 #import <Metal/Metal.h>
 #import "renderer/backend/metal/DeviceMTL.h"
+#import "renderer/backend/metal/UtilsMTL.h"
 #else
 #import "platform/ios/CCGLViewImpl-ios.h"
 #import "platform/ios/CCES2Renderer-ios.h"
@@ -273,6 +274,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     size_ = [self bounds].size;
     size_.width *= self.contentScaleFactor;
     size_.height *= self.contentScaleFactor;
+    cocos2d::backend::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height); 
 #else
     [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
     size_ = [renderer_ backingSize];
@@ -285,7 +287,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     size.height = size_.height;
     //cocos2d::Director::getInstance()->reshapeProjection(size);
 #endif
-
+    
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])
     {

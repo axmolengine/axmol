@@ -69,7 +69,7 @@
   3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下SDK Platforms和SDK Tools后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
      * Android SDK Platform 29 r5  (在SDK Platforms页签)
      * Android SDK Build-Tools 29.0.2  
-     * NDK r16b+  
+     * NDK r19c+  
      * CMake 3.10+  
 
   5. 等待Gradle sync完成后，Build APKs，安装运行  
