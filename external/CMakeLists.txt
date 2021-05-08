@@ -194,6 +194,7 @@ endif()
 
 if(NOT LINUX)
     if(BUILD_EXT_CURL)
+        set(CMAKE_USE_LIBSSH2 OFF CACHE BOOL "" FORCE)
         set(BUILD_CURL_EXE FALSE CACHE BOOL "Set to OFF to build curl executable." FORCE)
         set(CURL_DISABLE_TESTS TRUE CACHE BOOL "Disable curl tests building." FORCE)
         set(CMAKE_USE_OPENSSL TRUE CACHE BOOL "Use openssl for curl" FORCE)
