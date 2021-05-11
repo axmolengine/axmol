@@ -34,5 +34,6 @@ DEPENDS+=' libgtk-3-dev'
 DEPENDS+=' binutils'
 DEPENDS+=' libbsd-dev'
 DEPENDS+=' libasound2-dev'
+DEPENDS+=' libxxf86vm-dev'
 
 sudo apt-get install --allow-unauthenticated --yes $DEPENDS > /dev/null
