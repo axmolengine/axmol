@@ -35,4 +35,4 @@ DEPENDS+=' binutils'
 DEPENDS+=' libbsd-dev'
 DEPENDS+=' libasound2-dev'
 
-sudo apt-get install --force-yes --yes $DEPENDS > /dev/null
+sudo apt-get install --allow-unauthenticated --yes $DEPENDS > /dev/null
