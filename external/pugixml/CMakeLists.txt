@@ -32,4 +32,5 @@ set_target_properties(${target_name}
   
 set_target_properties(${target_name} PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}"
+  INTERFACE_COMPILE_DEFINITIONS PUGIXML_API=__declspec\(dllimport\)
 )
