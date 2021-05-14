@@ -224,7 +224,7 @@ if(BUILD_EXT_ALSOFT)
     set(ALSOFT_UTILS OFF CACHE BOOL "Build utility program" FORCE)
     set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build example programs" FORCE)
     set(ALSOFT_INSTALL OFF CACHE BOOL "Install main library" FORCE)
-    add_subdirectory(openal)
+    add_subdirectory(openal EXCLUDE_FROM_ALL)
     configure_target_outdir(common)
     configure_target_outdir(OpenAL)
     target_link_libraries(external
