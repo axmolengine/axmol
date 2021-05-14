@@ -40,7 +40,7 @@
 #define posix_fd2fh(fd) reinterpret_cast<HANDLE>(_get_osfhandle(fd))
 #define posix_fsetsize(fd, size) ::_chsize(fd, size)
 #else
-#define O_READ_FLAGS O_RDONLY, S_IRUSR
+#define O_READ_FLAGS O_RDONLY
 #define O_WRITE_FLAGS O_CREAT | O_RDWR | O_TRUNC, S_IRWXU
 #define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
 
