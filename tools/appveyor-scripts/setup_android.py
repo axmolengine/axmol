@@ -100,20 +100,20 @@ def install_android_cmdline_tools():
 @retry(Exception, tries=5, delay=1, backoff=1)
 def install_android_sdk():
     # list packages
-    run_with_yes(SDK_MANAGER + " --list --sdk_root=" + ANDROID_SDK)
+    # run_with_yes(SDK_MANAGER + " --list --sdk_root=" + ANDROID_SDK)
     
     switches = " --verbose --sdk_root=" + ANDROID_SDK + " "
-    cmd1 = SDK_MANAGER + switches
+    cmd_base = SDK_MANAGER + switches
     packages = [
         'platform-tools',
         'cmdline-tools;latest',
         'platforms;android-28',
         'build-tools;29.0.2',
-        'ndk:' + NDK_VER
+        'ndk;' + NDK_VER
     ]
 
-    cmd = cmd1 + " ".join(packages)
-    run_with_yes(cmd)
+    run_with_yes(cmd_base + " ".join(packages))
+    # run_with_yes(cmd_base + " --install ndk;" + NDK_VER)
 
 
 def export_environment(ndk_only):
