@@ -61,7 +61,7 @@ Open [Wiki](https://github.com/c4games/engine-x-wiki) for additional information
   ```
   
 #### Android
-  1. Install Android Studio 4.0+
+  1. Install Android Studio 4.2+
   2. When first start Android Studio, It will guide you to install sdk and other tools, just install them
   3. Start Android and choose [Open an existing Android Studio Project] to open ```engine-x\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose follow tools and click the button ```Apply``` to install them:  

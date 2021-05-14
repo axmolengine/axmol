@@ -63,7 +63,7 @@
   4. 之后就可以用vs打开```engine-x/build/engine-x.sln```启动cpp-tests等测试工程了
 
 #### Android
-  1. 安装 Android Studio 4.0或更高版本
+  1. 安装 Android Studio 4.2或更高版本
   2. 第一次启动Android Studio, 会引导安装一些工具，默认安装即可，如果不需要模拟器可以把```Virutal Device```勾选去掉
   2. 启动 Android Studio并打开engine-x\tests\cpp-tests\proj.android
   3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下SDK Platforms和SDK Tools后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
