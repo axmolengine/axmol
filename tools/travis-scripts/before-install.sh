@@ -8,7 +8,7 @@ COCOS2DX_ROOT="$DIR"/../..
 HOST_NAME=""
 CURL="curl --retry 999 --retry-max-time 0"
 
-function install_android_ndk()
+function install_android_sdk()
 {
     echo "Installing android ndk ..."
     # sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -58,6 +58,10 @@ function install_environement_for_pull_request()
         if [ "$BUILD_TARGET" == "linux" ]; then
             install_linux_environment
         fi
+
+        if [ "$BUILD_TARGET" == "android" ]; then
+            install_android_sdk
+        fi
     fi
 
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -66,21 +70,17 @@ function install_environement_for_pull_request()
         
         install_python_module_for_osx
     fi
-
-    # use NDK's clang to generate binding codes
-    install_android_ndk
 }
 
 # should generate binding codes & cocos_files.json after merging
-function install_environement_for_after_merge()
-{
-    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-        install_python_module_for_osx
-    fi
+# function install_environement_for_after_merge()
+# {
+#     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+#         install_python_module_for_osx
+#     fi
 
-    echo "Building merge commit ..."
-    install_android_ndk
-}
+#     echo "Building merge commit ..."
+# }
 
 # install newer python for android for ssl connection
 if [ "$BUILD_TARGET" == "android" ]; then
@@ -128,11 +128,11 @@ fi
 # run after merging
 # - make cocos robot to send PR to cocos2d-x for new binding codes
 # - generate cocos_files.json for template
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    # only one job need to send PR, linux virtual machine has better performance
-    if [ $TRAVIS_OS_NAME == "linux" ] && [ x$GEN_BINDING_AND_COCOSFILE == x"true" ]; then
-        install_environement_for_after_merge
-    fi 
-fi
+# if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+#     # only one job need to send PR, linux virtual machine has better performance
+#     if [ $TRAVIS_OS_NAME == "linux" ] && [ x$GEN_BINDING_AND_COCOSFILE == x"true" ]; then
+#         install_environement_for_after_merge
+#     fi 
+# fi
 
 echo "before-install.sh execution finished!"
