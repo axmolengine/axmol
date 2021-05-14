@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "backends/solaris.h"
+#include "solaris.h"
 
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -39,11 +39,10 @@
 #include <thread>
 #include <functional>
 
-#include "alcmain.h"
 #include "albyte.h"
-#include "alu.h"
-#include "alconfig.h"
-#include "compat.h"
+#include "alc/alconfig.h"
+#include "core/device.h"
+#include "core/helpers.h"
 #include "core/logging.h"
 #include "threads.h"
 #include "vector.h"
@@ -59,7 +58,7 @@ std::string solaris_driver{"/dev/audio"};
 
 
 struct SolarisBackend final : public BackendBase {
-    SolarisBackend(ALCdevice *device) noexcept : BackendBase{device} { }
+    SolarisBackend(DeviceBase *device) noexcept : BackendBase{device} { }
     ~SolarisBackend() override;
 
     int mixerProc();
@@ -148,10 +147,14 @@ void SolarisBackend::open(const char *name)
         throw al::backend_exception{al::backend_error::NoDevice, "Device name \"%s\" not found",
             name};
 
-    mFd = ::open(solaris_driver.c_str(), O_WRONLY);
-    if(mFd == -1)
+    int fd{::open(solaris_driver.c_str(), O_WRONLY)};
+    if(fd == -1)
         throw al::backend_exception{al::backend_error::NoDevice, "Could not open %s: %s",
             solaris_driver.c_str(), strerror(errno)};
+
+    if(mFd != -1)
+        ::close(mFd);
+    mFd = fd;
 
     mDevice->DeviceName = name;
 }
@@ -291,7 +294,7 @@ std::string SolarisBackendFactory::probe(BackendType type)
     return outnames;
 }
 
-BackendPtr SolarisBackendFactory::createBackend(ALCdevice *device, BackendType type)
+BackendPtr SolarisBackendFactory::createBackend(DeviceBase *device, BackendType type)
 {
     if(type == BackendType::Playback)
         return BackendPtr{new SolarisBackend{device}};

@@ -15,9 +15,8 @@ struct BSincTag;
 struct FastBSincTag;
 
 
-/* SSE2 is required for any SSE support. */
-#if defined(__GNUC__) && !defined(__clang__) && !defined(__SSE2__)
-#pragma GCC target("sse2")
+#if defined(__GNUC__) && !defined(__clang__) && !defined(__SSE__)
+#pragma GCC target("sse")
 #endif
 
 namespace {
@@ -27,7 +26,7 @@ constexpr uint FracPhaseDiffOne{1 << FracPhaseBitDiff};
 
 #define MLA4(x, y, z) _mm_add_ps(x, _mm_mul_ps(y, z))
 
-inline void ApplyCoeffs(float2 *RESTRICT Values, const size_t IrSize, const HrirArray &Coeffs,
+inline void ApplyCoeffs(float2 *RESTRICT Values, const size_t IrSize, const ConstHrirSpan Coeffs,
     const float left, const float right)
 {
     const __m128 lrlr{_mm_setr_ps(left, right, left, right)};
@@ -83,6 +82,7 @@ float *Resample_<BSincTag,SSETag>(const InterpState *state, float *RESTRICT src,
     const float *const filter{state->bsinc.filter};
     const __m128 sf4{_mm_set1_ps(state->bsinc.sf)};
     const size_t m{state->bsinc.m};
+    ASSUME(m > 0);
 
     src -= state->bsinc.l;
     for(float &out_sample : dst)
@@ -95,10 +95,10 @@ float *Resample_<BSincTag,SSETag>(const InterpState *state, float *RESTRICT src,
         __m128 r4{_mm_setzero_ps()};
         {
             const __m128 pf4{_mm_set1_ps(pf)};
-            const float *fil{filter + m*pi*4};
-            const float *phd{fil + m};
-            const float *scd{phd + m};
-            const float *spd{scd + m};
+            const float *RESTRICT fil{filter + m*pi*2};
+            const float *RESTRICT phd{fil + m};
+            const float *RESTRICT scd{fil + BSincPhaseCount*2*m};
+            const float *RESTRICT spd{scd + m};
             size_t td{m >> 2};
             size_t j{0u};
 
@@ -129,6 +129,7 @@ float *Resample_<FastBSincTag,SSETag>(const InterpState *state, float *RESTRICT 
 {
     const float *const filter{state->bsinc.filter};
     const size_t m{state->bsinc.m};
+    ASSUME(m > 0);
 
     src -= state->bsinc.l;
     for(float &out_sample : dst)
@@ -141,8 +142,8 @@ float *Resample_<FastBSincTag,SSETag>(const InterpState *state, float *RESTRICT 
         __m128 r4{_mm_setzero_ps()};
         {
             const __m128 pf4{_mm_set1_ps(pf)};
-            const float *fil{filter + m*pi*4};
-            const float *phd{fil + m};
+            const float *RESTRICT fil{filter + m*pi*2};
+            const float *RESTRICT phd{fil + m};
             size_t td{m >> 2};
             size_t j{0u};
 
@@ -180,7 +181,7 @@ void MixHrtfBlend_<SSETag>(const float *InSamples, float2 *AccumSamples, const u
 }
 
 template<>
-void MixDirectHrtf_<SSETag>(FloatBufferLine &LeftOut, FloatBufferLine &RightOut,
+void MixDirectHrtf_<SSETag>(const FloatBufferSpan LeftOut, const FloatBufferSpan RightOut,
     const al::span<const FloatBufferLine> InSamples, float2 *AccumSamples,
     float *TempBuf, HrtfChannelState *ChanState, const size_t IrSize, const size_t BufferSize)
 {
