@@ -1,9 +1,18 @@
 import org.gradle.internal.os.OperatingSystem
+import java.nio.file.Paths
+import java.nio.file.Files
 
 apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
+
+    // setup ndk
+    ndkVersion = "19.2.5345600"
+    def ANDROID_NDK = Paths.get("${System.env.ANDROID_NDK}")
+    if(Files.exists(ANDROID_NDK)) {
+        ndkPath = ANDROID_NDK.toAbsolutePath().toString()
+    }
 
     defaultConfig {
         applicationId "org.cocos2dx.hellocpp"
