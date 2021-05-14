@@ -31,7 +31,7 @@ function do_retry()
 function build_linux()
 {
     echo "Building tests ..."
-    source ../environment.sh
+    # source ../environment.sh
     cd $COCOS2DX_ROOT
     set -x
     cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release
