@@ -21,6 +21,9 @@ function install_android_sdk()
     pip -V
     pip install retry
     mkdir -p ~/.android/ && touch ~/.android/repositories.cfg # Ensure cmdline-tools works well
+    # cmdlinetools: commandlinetools-mac-7302050_latest.zip commandlinetools-win-7302050_latest.zip commandlinetools-linux-7302050_latest.zip
+    # platforms:android-30 build-tools:30.0.3
+    # full cmd: echo yes|cmdline-tools/bin/sdkmanager --verbose --sdk_root=sdk platform-tools "cmdline-tools;latest" "platforms;android-28" "build-tools;29.0.2" "ndk;19.2.5345600"
     if [ "$BUILD_TARGET" == "android" ]\
         || [ "$BUILD_TARGET" == "android_lua" ] ; then
         python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py
