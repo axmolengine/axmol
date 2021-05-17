@@ -26,8 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "yasio/bindings/yasio_cclua.h"
-#include "yasio/bindings/lyasio.h"
+#include "yasio/bindings/yasio_cclua.hpp"
+#include "yasio/bindings/lyasio.hpp"
 #include "yasio/detail/object_pool.hpp"
 #include "yasio/detail/ref_ptr.hpp"
 #include "yasio/cxx17/string_view.hpp"

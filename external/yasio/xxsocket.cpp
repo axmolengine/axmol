@@ -865,8 +865,8 @@ void xxsocket::close(int shut_how)
   }
 }
 
-uint32_t xxsocket::tcp_rtt() const { return xxsocket::tcp_rtt(this->fd); }
-uint32_t xxsocket::tcp_rtt(socket_native_type s)
+unsigned int xxsocket::tcp_rtt() const { return xxsocket::tcp_rtt(this->fd); }
+unsigned int xxsocket::tcp_rtt(socket_native_type s)
 {
 #if defined(_WIN32)
 #  if defined(NTDDI_WIN10_RS2) && NTDDI_VERSION >= NTDDI_WIN10_RS2

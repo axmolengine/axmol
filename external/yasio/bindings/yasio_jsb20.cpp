@@ -28,22 +28,35 @@ SOFTWARE.
 #define YASIO_HEADER_ONLY 1
 #define YASIO_HAVE_KCP 1
 
-#include "yasio/bindings/yasio_jsb20.h"
+#include "yasio/bindings/yasio_jsb20.hpp"
 #include "yasio/yasio.hpp"
 #include "yasio/ibstream.hpp"
 #include "yasio/obstream.hpp"
 #include "yasio/detail/ref_ptr.hpp"
 
+#if __has_include(<cocos/bindings/jswrapper/SeApi.h>) || defined(YASIO_CREATOR_30_OR_LATER)
+#include "cocos/bindings/jswrapper/SeApi.h"
+#include "cocos/bindings/manual/jsb_conversions.h"
+#include "cocos/bindings/manual/jsb_global.h"
+#include "cocos/platform/Application.h"
+#include "cocos/base/Scheduler.h"
+#include "cocos/base/StringUtil.h"
+using namespace cc;
+#else
 #include "cocos2d.h"
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
 #include "cocos/scripting/js-bindings/manual/jsb_global.h"
 #include "cocos/platform/CCApplication.h"
 #include "cocos/base/CCScheduler.h"
+using namespace cocos2d;
+using StringUtil = StringUtils;
+#define CC_LOG_DEBUG CCLOG
+#endif
 
 using namespace yasio;
 using namespace yasio::inet;
-using namespace cocos2d;
+
 
 namespace yasio_jsb
 {
@@ -92,7 +105,7 @@ TIMER_ID loop(unsigned int n, float interval, vcallback_t callback)
 
     auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
-    std::string key = StringUtils::format("STMR#%p", timerId);
+    std::string key = StringUtil::format("STMR#%p", timerId);
 
     Application::getInstance()->getScheduler()->schedule(
         [timerObj](
@@ -113,7 +126,7 @@ TIMER_ID delay(float delay, vcallback_t callback)
     yasio::gc::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
     auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
-    std::string key = StringUtils::format("STMR#%p", timerId);
+    std::string key = StringUtil::format("STMR#%p", timerId);
     Application::getInstance()->getScheduler()->schedule(
         [timerObj](
             float /*dt*/) { // lambda expression hold the reference of timerObj automatically.
@@ -128,7 +141,7 @@ TIMER_ID delay(float delay, vcallback_t callback)
 
 void kill(TIMER_ID timerId)
 {
-  std::string key = StringUtils::format("STMR#%p", timerId);
+  std::string key = StringUtil::format("STMR#%p", timerId);
   Application::getInstance()->getScheduler()->unschedule(key, STIMER_TARGET_VALUE);
 }
 void clear()
@@ -337,7 +350,7 @@ template <typename T> static bool jsb_yasio__dtor(se::State& s)
   auto iter = se::NonRefNativePtrCreatedByCtorMap::find(s.nativeThisObject());
   if (iter != se::NonRefNativePtrCreatedByCtorMap::end())
   {
-    CCLOG("jsbindings: finalizing JS object(created by ctor) %p(%s)", s.nativeThisObject(),
+    CC_LOG_DEBUG("jsbindings: finalizing JS object(created by ctor) %p(%s)", s.nativeThisObject(),
           typeid(T).name());
     se::NonRefNativePtrCreatedByCtorMap::erase(iter);
     T* cobj = reinterpret_cast<T*>(s.nativeThisObject());
@@ -348,7 +361,7 @@ template <typename T> static bool jsb_yasio__dtor(se::State& s)
     auto iter2 = se::NativePtrToObjectMap::find(s.nativeThisObject());
     if (iter2 != se::NativePtrToObjectMap::end())
     {
-      CCLOG("jsbindings: finalizing JS object(created by native) %p(%s)", s.nativeThisObject(),
+      CC_LOG_DEBUG("jsbindings: finalizing JS object(created by native) %p(%s)", s.nativeThisObject(),
             typeid(T).name());
       T* cobj = reinterpret_cast<T*>(s.nativeThisObject());
       delete cobj;
@@ -740,7 +753,7 @@ static bool js_yasio_obstream_write_ix(se::State& s)
   const auto& args = s.args();
   size_t argc      = args.size();
 
-  cobj->write_ix(args[0].toUint32());
+  cobj->write_ix(args[0].toInt32());
 
   s.rval().setUndefined();
 
@@ -1367,7 +1380,7 @@ bool js_yasio_io_service_write(se::State& s)
         bool unrecognized_object = false;
         auto data                = seval_to_string_view(arg1, &unrecognized_object);
         if (!data.empty())
-          cobj->write(transport, std::vector<char>(data.c_str(), data.c_str() + data.size()));
+          cobj->write(transport, std::vector<char>(data.data(), data.data() + data.size()));
         else if (unrecognized_object)
         {
           yasio::obstream* obs = nullptr;
@@ -1410,7 +1423,7 @@ bool js_yasio_io_service_write_to(se::State& s)
         bool unrecognized_object = false;
         auto data                = seval_to_string_view(arg1, &unrecognized_object);
         if (!data.empty())
-          cobj->write_to(transport, std::vector<char>(data.c_str(), data.c_str() + data.size()),
+          cobj->write_to(transport, std::vector<char>(data.data(), data.data() + data.size()),
                          ip::endpoint{ip.data(), port});
         else if (unrecognized_object)
         {
@@ -1522,6 +1535,10 @@ bool jsb_register_yasio(se::Object* obj)
   YASIO_EXPORT_ENUM(YEK_CONNECT_RESPONSE);
   YASIO_EXPORT_ENUM(YEK_CONNECTION_LOST);
   YASIO_EXPORT_ENUM(YEK_PACKET);
+
+  YASIO_EXPORT_ENUM(YEK_ON_OPEN);
+  YASIO_EXPORT_ENUM(YEK_ON_CLOSE);
+  YASIO_EXPORT_ENUM(YEK_ON_PACKET);
 
   YASIO_EXPORT_ENUM(SEEK_CUR);
   YASIO_EXPORT_ENUM(SEEK_SET);

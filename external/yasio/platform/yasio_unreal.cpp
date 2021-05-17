@@ -21,28 +21,38 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef YASIO__UE4_HPP
-#define YASIO__UE4_HPP
 
-/*
-UE4 builtin namespace 'UI' conflicit with openssl typedef strcut st_UI UI;
-ossl_typ.h(143): error C2365: 'UI': redefinition; previous definition was 'namespace'
-*/
-#define UI UI_ST
+#include "Modules/ModuleManager.h"
 
-THIRD_PARTY_INCLUDES_START
-#pragma push_macro("check")
-#undef check
-#define YASIO_HEADER_ONLY 1
-#define YASIO_SSL_BACKEND 1
 #include "yasio/yasio.hpp"
-#include "yasio/obstream.hpp"
-#include "yasio/ibstream.hpp"
+
 using namespace yasio;
 using namespace yasio::inet;
-#pragma pop_macro("check")
-THIRD_PARTY_INCLUDES_END
 
-#undef UI
+DECLARE_LOG_CATEGORY_EXTERN(yasio_ue4, Log, All);
+DEFINE_LOG_CATEGORY(yasio_ue4);
 
+YASIO_API void yasio_unreal_init()
+{
+    print_fn2_t log_cb = [](int level, const char* msg) {
+        FString text(msg);
+        const TCHAR* tstr = *text;
+        UE_LOG(yasio_ue4, Log, TEXT("%s"), tstr);
+    };
+    io_service::init_globals(log_cb);
+}
+YASIO_API void yasio_unreal_cleanup()
+{
+    io_service::cleanup_globals();
+}
+
+#if defined(YASIO_INSIDE_UNREAL) && (YASIO_BUILD_AS_SHARED)
+class yasio_unreal_module : public IModuleInterface
+{
+public:
+    /** IModuleInterface implementation */
+    void StartupModule() override {}
+    void ShutdownModule() override {}
+};
+IMPLEMENT_MODULE(yasio_unreal_module, yasio)
 #endif
