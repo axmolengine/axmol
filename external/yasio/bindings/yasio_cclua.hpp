@@ -27,7 +27,7 @@ SOFTWARE.
 */
 #ifndef YASIO__CCLUA_HPP
 #define YASIO__CCLUA_HPP
-#include "lyasio.h"
+#include "lyasio.hpp"
 
 #if defined(__cplusplus)
 extern "C" {
