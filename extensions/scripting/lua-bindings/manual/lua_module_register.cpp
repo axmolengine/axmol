@@ -36,7 +36,7 @@
 #include "scripting/lua-bindings/manual/physics3d/lua_cocos2dx_physics3d_manual.h"
 #include "scripting/lua-bindings/manual/navmesh/lua_cocos2dx_navmesh_manual.h"
 #include "scripting/lua-bindings/lua-cjson/lua_cjson.h"
-#include "yasio/bindings/yasio_cclua.h"
+#include "yasio/bindings/yasio_cclua.hpp"
 
 static void lua_register_extensions(lua_State* L) {
 
