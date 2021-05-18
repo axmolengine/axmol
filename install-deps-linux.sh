@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "This Shell Script will install dependencies for adxe" 
+echo "This Shell Script will install dependencies for cocos2d-x" 
 echo -n "Are you continue? (y/n) "
 read answer
 if echo "$answer" | grep -iq "^y" ;then
