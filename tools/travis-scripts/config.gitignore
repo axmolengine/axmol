@@ -13,7 +13,7 @@ Thumbs.db
 /templates
 /tests
 /plugin/samples
-/tools/cocos2d-console
+/tools/console
 /tools/jenkins-scripts
 /tools/make-package
 /tools/travis-scripts
@@ -111,7 +111,7 @@ tags
 /web
 
 #include
-!/tools/cocos2d-console/console/bin/
+!/tools/console/bin/
 !/plugin-x/plugin-x_ios.xcworkspace/
 !/cocos/2d/platform/android/java/res/
 # Permit plugins to ship third-party libraries.

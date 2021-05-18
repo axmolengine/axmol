@@ -44,16 +44,16 @@ function build_osx()
     NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
 
     # pushd $ADXE_ROOT
-    # python -u tools/cocos2d-console/bin/cocos.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
+    # python -u tools/console/bin/adxe.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
     # popd
     # cd $ADXE_ROOT/cocos_new_test
     cd $ADXE_ROOT
     mkdir -p build
     cmake -S . -B build -GXcode -DBUILD_EXTENSION_IMGUIEXT=ON -DBUILD_EXT_ALSOFT=ON
     cmake --build build --config Release --target cpp-tests -- -quiet
-    #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES build  | xcpretty
+    #xcodebuild -project adxe.xcodeproj -alltargets -jobs $NUM_OF_CORES build  | xcpretty
     ##the following commands must not be removed
-    #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES build
+    #xcodebuild -project adxe.xcodeproj -alltargets -jobs $NUM_OF_CORES build
     exit 0
 }
 
@@ -62,7 +62,7 @@ function build_ios()
     NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
 
     # pushd $ADXE_ROOT
-    # python -u tools/cocos2d-console/bin/cocos.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
+    # python -u tools/console/bin/adxe.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
     # popd
     # cd $ADXE_ROOT/cocos_new_test
     cd $ADXE_ROOT
@@ -72,9 +72,9 @@ function build_ios()
     # cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS -DENABLE_ARC=0   # too much logs on console when "cmake --build ."
     cmake --build build --config Release --target cpp-tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" 
 
-    #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" build  | xcpretty
+    #xcodebuild -project adxe.xcodeproj -alltargets -jobs $NUM_OF_CORES  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" build  | xcpretty
     ##the following commands must not be removed
-    #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" build
+    #xcodebuild -project adxe.xcodeproj -alltargets -jobs $NUM_OF_CORES  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" build
     exit 0
 }
 
@@ -141,7 +141,7 @@ function update_cocos_files()
 
 function generate_pull_request_for_binding_codes_and_cocosfiles()
 {
-    local COCOS_ROBOT_REMOTE="https://${GH_USER}:${GH_PASSWORD}@github.com/${GH_USER}/cocos2d-x.git"
+    local COCOS_ROBOT_REMOTE="https://${GH_USER}:${GH_PASSWORD}@github.com/${GH_USER}/adxe.git"
     local LUA_AUTO_GENERATE_SCRIPT_PATH="$ADXE_ROOT/extensions/scripting/lua-bindings/auto"
     local ELAPSEDSECS=`date +%s`
     local COCOS_BRANCH="update_lua_bindings_$ELAPSEDSECS"
@@ -201,7 +201,7 @@ function run_pull_request()
         source ../environment.sh
         pushd $ADXE_ROOT
         update_cocos_files
-        python -u tools/cocos2d-console/bin/cocos.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
+        python -u tools/console/bin/adxe.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
         popd
         pushd $ADXE_ROOT/cocos_new_test/proj.android
         do_retry ./gradlew build
@@ -210,11 +210,11 @@ function run_pull_request()
     fi
 
     if [ "$BUILD_TARGET" == "linux_cocos_new_test" ]; then
-        export PATH=$PATH:$ADXE_ROOT/tools/cocos2d-console/bin
+        export PATH=$PATH:$ADXE_ROOT/tools/console/bin
         genernate_binding_codes
         pushd $ADXE_ROOT
         update_cocos_files
-        python -u tools/cocos2d-console/bin/cocos.py --agreement n new -l lua -p my.pack.qqqq cocos_new_test
+        python -u tools/console/bin/adxe.py --agreement n new -l lua -p my.pack.qqqq cocos_new_test
         popd
         echo "Building tests ..."
 
@@ -228,7 +228,7 @@ function run_pull_request()
     fi
 
     if [ "$BUILD_TARGET" == "ios_cocos_new_lua_test" ]; then
-        export PATH=$PATH:$ADXE_ROOT/tools/cocos2d-console/bin
+        export PATH=$PATH:$ADXE_ROOT/tools/console/bin
         #NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
         genernate_binding_codes
         pushd $ADXE_ROOT
@@ -246,7 +246,7 @@ function run_pull_request()
     fi
 
     if [ "$BUILD_TARGET" == "ios_cocos_new_cpp_test" ]; then
-        export PATH=$PATH:$ADXE_ROOT/tools/cocos2d-console/bin
+        export PATH=$PATH:$ADXE_ROOT/tools/console/bin
         #NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
         genernate_binding_codes
         pushd $ADXE_ROOT

@@ -27,8 +27,7 @@ THE SOFTWARE.
 
 '''
 This script will install environment variables needed to by adxe. It will set these envrironment variables:
-* ADXE_CONSOLE_ROOT: used to run cocos console tools, more information about cocos console tools please refer to
-https://github.com/cocos2d/cocos2d-console
+* ADXE_CONSOLE_ROOT: used to run cocos console tools
 * ANDROID_NDK: used to build android native codes
 * ANDROID_SDK: used to generate applicatoin on Android through commands
 * ADXE_ROOT: path where adxe is installed
@@ -189,7 +188,7 @@ class SetEnvVar(object):
             self.need_backup = False
 
         file = open(self.file_used_for_setup, 'a')
-        file.write('\n# Add environment variable %s for cocos2d-x\n' % key)
+        file.write('\n# Add environment variable %s for adxe\n' % key)
         file.write('export %s="%s"\n' % (key, value))
         file.write('export PATH=$%s:$PATH\n' % key)
         if key == ANDROID_SDK:
@@ -454,7 +453,7 @@ class SetEnvVar(object):
     def set_console_root(self):
         print("->Check environment variable %s" % ADXE_CONSOLE_ROOT)
         adxe_console_root = os.path.join(
-            self.current_absolute_path, 'tools', 'cocos2d-console', 'bin')
+            self.current_absolute_path, 'tools', 'console', 'bin')
         old_dir = self._find_environment_variable(ADXE_CONSOLE_ROOT)
         if old_dir is None:
             # add environment variable
@@ -639,7 +638,7 @@ class SetEnvVar(object):
 
     def set_environment_variables(self, ndk_root, android_sdk_root, quiet):
 
-        print('\nSetting up cocos2d-x...')
+        print('\nSetting up adxe...')
 
         self.file_used_for_setup = self._get_filepath_for_setup()
 

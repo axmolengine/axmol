@@ -1,6 +1,6 @@
 #!/bin/bash
-mycocos=tools/cocos2d-console/bin/cocos
-$mycocos new -l $1
+adxe_cmd=tools/console/bin/adxe
+$adxe_cmd new -l $1
 
 if [ $1 = "cpp" ];then
     schemename="MyCppGame-desktop"
@@ -16,8 +16,8 @@ elif [ $1 = "js" ];then
     cocos_project_path="MyJSGame"
 fi
 
-cocos compile -p mac -s $cocos_project_path | xcpretty
-cocos compile -p mac -s $cocos_project_path
+adxe compile -p mac -s $cocos_project_path | xcpretty
+adxe compile -p mac -s $cocos_project_path
 
 # xcodebuild -project $projectpath -target "${schemename}"  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" clean | xcpretty
 # xcodebuild -project $projectpath -target "${schemename}"  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" build | xcpretty
