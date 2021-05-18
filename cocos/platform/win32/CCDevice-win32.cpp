@@ -27,6 +27,9 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "platform/CCStdC.h"
 
+#define NTCVT_CP_DEFAULT CP_UTF8
+#include "win32-specific/ntcvt/ntcvt.hpp"
+
 NS_CC_BEGIN
 
 int Device::getDPI()
@@ -74,67 +77,20 @@ public:
         removeCustomFont();
     }
 
-    wchar_t * utf8ToUtf16(const std::string& str)
-    {
-        wchar_t * pwszBuffer = nullptr;
-        do
-        {
-            if (str.empty())
-            {
-                break;
-            }
-            // utf-8 to utf-16
-            int nLen = str.size();
-            int nBufLen = nLen + 1;
-            pwszBuffer = new wchar_t[nBufLen];
-            CC_BREAK_IF(!pwszBuffer);
-            memset(pwszBuffer, 0, nBufLen);
-            nLen = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), nLen, pwszBuffer, nBufLen);
-            pwszBuffer[nLen] = '\0';
-        } while (0);
-        return pwszBuffer;
-
-    }
-
-    bool setFont(const char * pFontName = nullptr, int nSize = 0, bool enableBold = false)
+    bool setFont(const char * pFontName, int nSize = 0, bool enableBold = false)
     {
         bool bRet = false;
         do
         {
-            std::string fontName = pFontName;
-            std::string fontPath;
+            std::wstring fontName = ntcvt::from_chars(pFontName);
             HFONT       hDefFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
-            LOGFONTA    tNewFont = { 0 };
-            LOGFONTA    tOldFont = { 0 };
-            GetObjectA(hDefFont, sizeof(tNewFont), &tNewFont);
+            LOGFONTW    tNewFont = { 0 };
+            LOGFONTW    tOldFont = { 0 };
+            GetObjectW(hDefFont, sizeof(tNewFont), &tNewFont);
             if (!fontName.empty())
             {
-                // create font from ttf file
-                if (FileUtils::getInstance()->getFileExtension(fontName) == ".ttf")
-                {
-                    fontPath = FileUtils::getInstance()->fullPathForFilename(fontName.c_str());
-                    int nFindPos = fontName.rfind("/");
-                    fontName = &fontName[nFindPos + 1];
-                    nFindPos = fontName.rfind(".");
-                    fontName = fontName.substr(0, nFindPos);
-                }
-                else
-                {
-                    auto nFindPos = fontName.rfind("/");
-                    if (nFindPos != fontName.npos)
-                    {
-                        if (fontName.length() == nFindPos + 1)
-                        {
-                            fontName = "";
-                        }
-                        else
-                        {
-                            fontName = &fontName[nFindPos + 1];
-                        }
-                    }
-                }
                 tNewFont.lfCharSet = DEFAULT_CHARSET;
-                strcpy_s(tNewFont.lfFaceName, LF_FACESIZE, fontName.c_str());
+                wcscpy_s(tNewFont.lfFaceName, LF_FACESIZE, fontName.c_str());
             }
 
             if (nSize)
@@ -151,11 +107,11 @@ public:
                 tNewFont.lfWeight = FW_NORMAL;
             }
 
-            GetObjectA(_font, sizeof(tOldFont), &tOldFont);
+            GetObjectW(_font, sizeof(tOldFont), &tOldFont);
 
             if (tOldFont.lfHeight == tNewFont.lfHeight
                 && tOldFont.lfWeight == tNewFont.lfWeight
-                && 0 == strcmp(tOldFont.lfFaceName, tNewFont.lfFaceName))
+                && 0 == wcscmp(tOldFont.lfFaceName, tNewFont.lfFaceName))
             {
                 bRet = true;
                 break;
@@ -164,28 +120,13 @@ public:
             // delete old font
             removeCustomFont();
 
-            if (!fontPath.empty())
-            {
-                _curFontPath = fontPath;
-                wchar_t * pwszBuffer = utf8ToUtf16(_curFontPath);
-                if (pwszBuffer)
-                {
-                    if (AddFontResource(pwszBuffer))
-                    {
-                        PostMessage(_wnd, WM_FONTCHANGE, 0, 0);
-                    }
-                    delete[] pwszBuffer;
-                    pwszBuffer = nullptr;
-                }
-            }
-
             _font = nullptr;
 
             // disable Cleartype
             tNewFont.lfQuality = ANTIALIASED_QUALITY;
 
             // create new font
-            _font = CreateFontIndirectA(&tNewFont);
+            _font = CreateFontIndirectW(&tNewFont);
             if (!_font)
             {
                 // create failed, use default font
@@ -450,7 +391,6 @@ private:
     friend class Image;
     HFONT   _font;
     HWND    _wnd;
-    std::string _curFontPath;
 
     void removeCustomFont()
     {
@@ -459,19 +399,6 @@ private:
         {
             DeleteObject(_font);
             _font = hDefFont;
-        }
-        // release temp font resource
-        if (!_curFontPath.empty())
-        {
-            wchar_t * pwszBuffer = utf8ToUtf16(_curFontPath);
-            if (pwszBuffer)
-            {
-                RemoveFontResource(pwszBuffer);
-                PostMessage(_wnd, WM_FONTCHANGE, 0, 0);
-                delete[] pwszBuffer;
-                pwszBuffer = nullptr;
-            }
-            _curFontPath.clear();
         }
     }
 };
