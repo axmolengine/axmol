@@ -117,13 +117,11 @@ public:
                 break;
             }
 
-            // delete old font
-            removeCustomFont();
-
-            _font = nullptr;
-
             // disable Cleartype
             tNewFont.lfQuality = ANTIALIASED_QUALITY;
+
+            // delete old font before create new
+            removeCustomFont();
 
             // create new font
             _font = CreateFontIndirectW(&tNewFont);
