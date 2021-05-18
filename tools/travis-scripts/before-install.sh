@@ -4,7 +4,7 @@
 set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-COCOS2DX_ROOT="$DIR"/../..
+ADXE_ROOT="$DIR"/../..
 HOST_NAME=""
 CURL="curl --retry 999 --retry-max-time 0"
 
@@ -26,16 +26,16 @@ function install_android_sdk()
     # full cmd: echo yes|cmdline-tools/bin/sdkmanager --verbose --sdk_root=sdk platform-tools "cmdline-tools;latest" "platforms;android-28" "build-tools;29.0.2" "ndk;19.2.5345600"
     if [ "$BUILD_TARGET" == "android" ]\
         || [ "$BUILD_TARGET" == "android_lua" ] ; then
-        python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py
+        python $ADXE_ROOT/tools/appveyor-scripts/setup_android.py
     else
-        python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py --ndk_only
+        python $ADXE_ROOT/tools/appveyor-scripts/setup_android.py --ndk_only
     fi
 }
 
 function install_linux_environment()
 {
     echo "Installing linux dependence packages ..."
-    echo -e "y" | bash $COCOS2DX_ROOT/install-deps-linux.sh
+    echo -e "y" | bash $ADXE_ROOT/install-deps-linux.sh
     echo "Installing linux dependence packages finished!"
 }
 
@@ -111,7 +111,7 @@ if [ "$BUILD_TARGET" == "android_cocos_new_test" ]; then
     sudo apt-get install ninja-build
     ninja --version
     sudo pip install retry
-    python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py
+    python $ADXE_ROOT/tools/appveyor-scripts/setup_android.py
     exit 0
 fi
 
@@ -119,7 +119,7 @@ if [ "$BUILD_TARGET" == "linux_cocos_new_test" ]; then
     install_linux_environment
     # linux new lua project, so need to install
     sudo pip install retry
-    python $COCOS2DX_ROOT/tools/appveyor-scripts/setup_android.py --ndk_only
+    python $ADXE_ROOT/tools/appveyor-scripts/setup_android.py --ndk_only
     exit 0
 fi
 

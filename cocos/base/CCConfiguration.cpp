@@ -66,25 +66,25 @@ Configuration::Configuration()
 
 bool Configuration::init()
 {
-	_valueDict["cocos2d.x.version"] = Value(cocos2dVersion());
+	_valueDict["adxe.version"] = Value(cocos2dVersion());
 
 
 #if CC_ENABLE_PROFILERS
-	_valueDict["cocos2d.x.compiled_with_profiler"] = Value(true);
+	_valueDict["adxe.compiled_with_profiler"] = Value(true);
 #else
-	_valueDict["cocos2d.x.compiled_with_profiler"] = Value(false);
+	_valueDict["adxe.compiled_with_profiler"] = Value(false);
 #endif
 
 #if CC_ENABLE_GL_STATE_CACHE == 0
-	_valueDict["cocos2d.x.compiled_with_gl_state_cache"] = Value(false);
+	_valueDict["adxe.compiled_with_gl_state_cache"] = Value(false);
 #else
-    _valueDict["cocos2d.x.compiled_with_gl_state_cache"] = Value(true);
+    _valueDict["adxe.compiled_with_gl_state_cache"] = Value(true);
 #endif
 
 #if COCOS2D_DEBUG
-	_valueDict["cocos2d.x.build_type"] = Value("DEBUG");
+	_valueDict["adxe.build_type"] = Value("DEBUG");
 #else
-    _valueDict["cocos2d.x.build_type"] = Value("RELEASE");
+    _valueDict["adxe.build_type"] = Value("RELEASE");
 #endif
 
 	return true;
@@ -383,25 +383,25 @@ void Configuration::loadConfigFile(const std::string& filename)
     }
     
     //light info
-    std::string name = "cocos2d.x.3d.max_dir_light_in_shader";
+    std::string name = "adxe.3d.max_dir_light_in_shader";
 	if (_valueDict.find(name) != _valueDict.end())
         _maxDirLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxDirLightInShader);
     
-    name = "cocos2d.x.3d.max_point_light_in_shader";
+    name = "adxe.3d.max_point_light_in_shader";
 	if (_valueDict.find(name) != _valueDict.end())
         _maxPointLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxPointLightInShader);
     
-    name = "cocos2d.x.3d.max_spot_light_in_shader";
+    name = "adxe.3d.max_spot_light_in_shader";
 	if (_valueDict.find(name) != _valueDict.end())
         _maxSpotLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxSpotLightInShader);
     
-    name = "cocos2d.x.3d.animate_quality";
+    name = "adxe.3d.animate_quality";
     if (_valueDict.find(name) != _valueDict.end())
         _animate3DQuality = (Animate3DQuality)_valueDict[name].asInt();
     else

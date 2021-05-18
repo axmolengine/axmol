@@ -203,14 +203,14 @@ void Director::setDefaultValues()
     Configuration *conf = Configuration::getInstance();
 
     // default FPS
-    float fps = conf->getValue("cocos2d.x.fps", Value(kDefaultFPS)).asFloat();
+    float fps = conf->getValue("adxe.fps", Value(kDefaultFPS)).asFloat();
     _oldAnimationInterval = _animationInterval = 1.0f / fps;
 
     // Display FPS
-    _displayStats = conf->getValue("cocos2d.x.display_fps", Value(false)).asBool();
+    _displayStats = conf->getValue("adxe.display_fps", Value(false)).asBool();
 
     // GL projection
-    std::string projection = conf->getValue("cocos2d.x.gl.projection", Value("3d")).asString();
+    std::string projection = conf->getValue("adxe.gl.projection", Value("3d")).asString();
     if (projection == "3d")
         _projection = Projection::_3D;
     else if (projection == "2d")
@@ -221,7 +221,7 @@ void Director::setDefaultValues()
         CCASSERT(false, "Invalid projection value");
 
     // Default pixel format for PNG images with alpha
-    std::string pixel_format = conf->getValue("cocos2d.x.texture.pixel_format_for_png", Value("rgba8888")).asString();
+    std::string pixel_format = conf->getValue("adxe.texture.pixel_format_for_png", Value("rgba8888")).asString();
     if (pixel_format == "rgba8888")
         Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     else if(pixel_format == "rgba4444")
@@ -230,7 +230,7 @@ void Director::setDefaultValues()
         Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGB5A1);
 
     // PVR v2 has alpha premultiplied ?
-    bool pvr_alpha_premultiplied = conf->getValue("cocos2d.x.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
+    bool pvr_alpha_premultiplied = conf->getValue("adxe.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::PVR, pvr_alpha_premultiplied);
 }
 

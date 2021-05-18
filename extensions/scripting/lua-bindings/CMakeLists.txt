@@ -1,4 +1,4 @@
-set(cocos_root ${COCOS2DX_ROOT_PATH})
+set(cocos_root ${ADXE_ROOT_PATH})
 
 set(lua_bindings_manual_headers
     manual/CCComponentLua.h
@@ -163,16 +163,16 @@ set(lua_bindings_files
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 
-set(ENGINEX_LUA_LIB luacocos2d CACHE INTERNAL "The EGNX lua bindings lib name" )
+set(ADXE_LUA_LIB adxelua CACHE INTERNAL "The ADXE lua bindings lib name" )
 
-add_library(${ENGINEX_LUA_LIB} STATIC ${lua_bindings_files})
-target_link_libraries(${ENGINEX_LUA_LIB} ${ENGINEX_CORE_LIB})
-add_dependencies(${ENGINEX_LUA_LIB} ${ENGINEX_CORE_LIB})
+add_library(${ADXE_LUA_LIB} STATIC ${lua_bindings_files})
+target_link_libraries(${ADXE_LUA_LIB} ${ADXE_CORE_LIB})
+add_dependencies(${ADXE_LUA_LIB} ${ADXE_CORE_LIB})
 
 get_target_property(lua_ext_depend external CC_LUA_DEPEND)
-target_link_libraries(${ENGINEX_LUA_LIB} ${lua_ext_depend})
+target_link_libraries(${ADXE_LUA_LIB} ${lua_ext_depend})
 
-target_include_directories(${ENGINEX_LUA_LIB}
+target_include_directories(${ADXE_LUA_LIB}
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
     PRIVATE ${cocos_root}/extensions/spine/runtime/include
@@ -182,10 +182,10 @@ target_include_directories(${ENGINEX_LUA_LIB}
 )
 
 if(WINDOWS)
-    target_compile_definitions(${ENGINEX_LUA_LIB} PUBLIC _USRLUASTATIC)
+    target_compile_definitions(${ADXE_LUA_LIB} PUBLIC _USRLUASTATIC)
 endif()
 
-set_target_properties(${ENGINEX_LUA_LIB}
+set_target_properties(${ADXE_LUA_LIB}
                       PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -193,6 +193,6 @@ set_target_properties(${ENGINEX_LUA_LIB}
                       )
 
 if(XCODE OR VS)
-    cocos_mark_code_files("${ENGINEX_LUA_LIB}")
+    cocos_mark_code_files("${ADXE_LUA_LIB}")
 endif()
 
