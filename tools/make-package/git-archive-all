@@ -220,8 +220,8 @@ class GitArchiver(object):
         import subprocess
         subprocess.call("python %s -d -f" % (path.join(self.main_repo_abspath, "download-deps.py")), shell=True, cwd=self.main_repo_abspath)
 
-        # Execute download-bin.py in cocos2d-console folder
-        console_path = path.join(self.main_repo_abspath, "tools", "cocos2d-console")
+        # Execute download-bin.py in console folder
+        console_path = path.join(self.main_repo_abspath, "tools", "console")
         subprocess.call("python %s -d -f" % (path.join(console_path, "download-bin.py")), shell=True, cwd=console_path)
 
         # Check config.json to insert a zip file content to the final generated zip file
