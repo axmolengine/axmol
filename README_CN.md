@@ -97,7 +97,7 @@
 
 ### QQ交流群
 
-  点击链接加入群聊【engine-x交流群】：https://jq.qq.com/?_wv=1027&k=nvNmzOIY
+  点击链接加入群聊【Adxe 交流群】：https://jq.qq.com/?_wv=1027&k=nvNmzOIY
   
 ### 参考链接
   * official v4: https://gitee.com/mirrors/cocos2d-x
