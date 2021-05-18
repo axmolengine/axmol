@@ -254,6 +254,8 @@ if(WINDOWS OR MACOSX OR LINUX)
     set(GLFW_INSTALL OFF CACHE BOOL "Build the GLFW documentation" FORCE)
     add_subdirectory(glfw)
     configure_target_outdir(glfw)
+    set_target_properties(glfw PROPERTIES
+                      OUTPUT_NAME glfw)
     target_link_libraries(external glfw)
     if(NOT WINDOWS)
         target_link_libraries(external pthread)
