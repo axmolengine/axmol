@@ -4,8 +4,8 @@
 set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-COCOS2DX_ROOT="$DIR"/../..
-COCOSFILE_PATH="$COCOS2DX_ROOT/templates/cocos2dx_files.json"
+ADXE_ROOT="$DIR"/../..
+COCOSFILE_PATH="$ADXE_ROOT/templates/cocos2dx_files.json"
 CPU_CORES=4
 
 function do_retry()
@@ -32,7 +32,7 @@ function build_linux()
 {
     echo "Building tests ..."
     # source ../environment.sh
-    cd $COCOS2DX_ROOT
+    cd $ADXE_ROOT
     set -x
     cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release
     cmake --build build --target cpp-tests -- -j `nproc`
@@ -43,17 +43,17 @@ function build_osx()
 {
     NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
 
-    # pushd $COCOS2DX_ROOT
-    # python -u tools/cocos2d-console/bin/cocos.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
+    # pushd $ADXE_ROOT
+    # python -u tools/console/bin/adxe.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
     # popd
-    # cd $COCOS2DX_ROOT/cocos_new_test
-    cd $COCOS2DX_ROOT
+    # cd $ADXE_ROOT/cocos_new_test
+    cd $ADXE_ROOT
     mkdir -p build
     cmake -S . -B build -GXcode -DBUILD_EXTENSION_IMGUIEXT=ON -DBUILD_EXT_ALSOFT=ON
     cmake --build build --config Release --target cpp-tests -- -quiet
-    #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES build  | xcpretty
+    #xcodebuild -project adxe.xcodeproj -alltargets -jobs $NUM_OF_CORES build  | xcpretty
     ##the following commands must not be removed
-    #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES build
+    #xcodebuild -project adxe.xcodeproj -alltargets -jobs $NUM_OF_CORES build
     exit 0
 }
 
@@ -61,20 +61,20 @@ function build_ios()
 {
     NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
 
-    # pushd $COCOS2DX_ROOT
-    # python -u tools/cocos2d-console/bin/cocos.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
+    # pushd $ADXE_ROOT
+    # python -u tools/console/bin/adxe.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
     # popd
-    # cd $COCOS2DX_ROOT/cocos_new_test
-    cd $COCOS2DX_ROOT
+    # cd $ADXE_ROOT/cocos_new_test
+    cd $ADXE_ROOT
     # mkdir -p build
 
     cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64 -DBUILD_EXT_ALSOFT=ON
     # cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS -DENABLE_ARC=0   # too much logs on console when "cmake --build ."
     cmake --build build --config Release --target cpp-tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" 
 
-    #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" build  | xcpretty
+    #xcodebuild -project adxe.xcodeproj -alltargets -jobs $NUM_OF_CORES  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" build  | xcpretty
     ##the following commands must not be removed
-    #xcodebuild -project Cocos2d-x.xcodeproj -alltargets -jobs $NUM_OF_CORES  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" build
+    #xcodebuild -project adxe.xcodeproj -alltargets -jobs $NUM_OF_CORES  -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" build
     exit 0
 }
 
@@ -85,7 +85,7 @@ function build_android()
     source ../environment.sh
 
     # build cpp-tests
-    pushd $COCOS2DX_ROOT/tests/cpp-tests/proj.android
+    pushd $ADXE_ROOT/tests/cpp-tests/proj.android
     
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
     popd
@@ -98,7 +98,7 @@ function build_android_lua()
     source ../environment.sh
 
     # build lua-tests
-    pushd $COCOS2DX_ROOT/tests/lua-tests/project/proj.android
+    pushd $ADXE_ROOT/tests/lua-tests/project/proj.android
     do_retry ./gradlew assembleDebug -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
     popd
 
@@ -111,7 +111,7 @@ function genernate_binding_codes()
         strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBC
         ls -l /usr/lib/x86_64-linux-gnu/libstdc++*
         dpkg-query -W libstdc++6
-        ldd $COCOS2DX_ROOT/tools/bindings-generator/libclang/libclang.so
+        ldd $ADXE_ROOT/tools/bindings-generator/libclang/libclang.so
     fi
 
     source ../environment.sh
@@ -119,7 +119,7 @@ function genernate_binding_codes()
     # Generate binding glue codes
 
     echo "Create auto-generated luabinding glue codes."
-    pushd "$COCOS2DX_ROOT/tools/tolua"
+    pushd "$ADXE_ROOT/tools/tolua"
     # python ./genbindings.py
     popd
 }
@@ -130,7 +130,7 @@ function update_cocos_files()
     # Don't exit on non-zero return value
     set +e
     echo "Updates cocos_files.json"
-    $COCOS2DX_ROOT/tools/travis-scripts/generate-template-files.py
+    $ADXE_ROOT/tools/travis-scripts/generate-template-files.py
     git diff FETCH_HEAD --stat --exit-code "$COCOSFILE_PATH"
     COCOSFILE_DIFF_RETVAL=$?
     echo $COCOSFILE_DIFF_RETVAL
@@ -141,14 +141,14 @@ function update_cocos_files()
 
 function generate_pull_request_for_binding_codes_and_cocosfiles()
 {
-    local COCOS_ROBOT_REMOTE="https://${GH_USER}:${GH_PASSWORD}@github.com/${GH_USER}/cocos2d-x.git"
-    local LUA_AUTO_GENERATE_SCRIPT_PATH="$COCOS2DX_ROOT/extensions/scripting/lua-bindings/auto"
+    local COCOS_ROBOT_REMOTE="https://${GH_USER}:${GH_PASSWORD}@github.com/${GH_USER}/adxe.git"
+    local LUA_AUTO_GENERATE_SCRIPT_PATH="$ADXE_ROOT/extensions/scripting/lua-bindings/auto"
     local ELAPSEDSECS=`date +%s`
     local COCOS_BRANCH="update_lua_bindings_$ELAPSEDSECS"
     local COMMITTAG="[ci skip][AUTO]: updating luabinding & cocos_file.json automatically"
     local PULL_REQUEST_REPO="https://api.github.com/repos/cocos2d/cocos2d-x/pulls"
 
-    pushd "$COCOS2DX_ROOT"
+    pushd "$ADXE_ROOT"
     #Set git user for cocos2d-lua repo
     # git config user.email ${GH_EMAIL}
     # git config user.name ${GH_USER}#Set remotes
@@ -199,27 +199,27 @@ function run_pull_request()
 
     if [ "$BUILD_TARGET" == "android_cocos_new_test" ]; then
         source ../environment.sh
-        pushd $COCOS2DX_ROOT
+        pushd $ADXE_ROOT
         update_cocos_files
-        python -u tools/cocos2d-console/bin/cocos.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
+        python -u tools/console/bin/adxe.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
         popd
-        pushd $COCOS2DX_ROOT/cocos_new_test/proj.android
+        pushd $ADXE_ROOT/cocos_new_test/proj.android
         do_retry ./gradlew build
         popd
         exit 0
     fi
 
     if [ "$BUILD_TARGET" == "linux_cocos_new_test" ]; then
-        export PATH=$PATH:$COCOS2DX_ROOT/tools/cocos2d-console/bin
+        export PATH=$PATH:$ADXE_ROOT/tools/console/bin
         genernate_binding_codes
-        pushd $COCOS2DX_ROOT
+        pushd $ADXE_ROOT
         update_cocos_files
-        python -u tools/cocos2d-console/bin/cocos.py --agreement n new -l lua -p my.pack.qqqq cocos_new_test
+        python -u tools/console/bin/adxe.py --agreement n new -l lua -p my.pack.qqqq cocos_new_test
         popd
         echo "Building tests ..."
 
         set -x
-        cd $COCOS2DX_ROOT/cocos_new_test
+        cd $ADXE_ROOT/cocos_new_test
         mkdir -p linux-build
         cd linux-build
         cmake .. -G"Unix Makefiles"
@@ -228,10 +228,10 @@ function run_pull_request()
     fi
 
     if [ "$BUILD_TARGET" == "ios_cocos_new_lua_test" ]; then
-        export PATH=$PATH:$COCOS2DX_ROOT/tools/cocos2d-console/bin
+        export PATH=$PATH:$ADXE_ROOT/tools/console/bin
         #NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
         genernate_binding_codes
-        pushd $COCOS2DX_ROOT
+        pushd $ADXE_ROOT
         echo "Creating tests ..."
 
         set -x
@@ -246,10 +246,10 @@ function run_pull_request()
     fi
 
     if [ "$BUILD_TARGET" == "ios_cocos_new_cpp_test" ]; then
-        export PATH=$PATH:$COCOS2DX_ROOT/tools/cocos2d-console/bin
+        export PATH=$PATH:$ADXE_ROOT/tools/console/bin
         #NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
         genernate_binding_codes
-        pushd $COCOS2DX_ROOT
+        pushd $ADXE_ROOT
         echo "Creating tests ..."
 
         set -x

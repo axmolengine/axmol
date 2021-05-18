@@ -1,9 +1,9 @@
 import java.nio.file.Paths
 import java.nio.file.Files
 
-def ENGINE_ROOT=Paths.get("${System.env.ENGINEX_ROOT}")
+def ENGINE_ROOT=Paths.get("${System.env.ADXE_ROOT}")
 if(Files.exists(ENGINE_ROOT)) {
-    println("Determine ENGINE_JAVA_LIBPATH with system env var ENGINEX_ROOT")
+    println("Determine ENGINE_JAVA_LIBPATH with system env var ADXE_ROOT")
     ENGINE_ROOT = ENGINE_ROOT.toAbsolutePath().toString()
 }
 else {

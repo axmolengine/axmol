@@ -88,8 +88,10 @@ def install_android_ndk():
 
 @retry(Exception, tries=5, delay=1, backoff=1)
 def install_android_cmdline_tools():
-    file_name = "commandlinetools-{system}-6858069_latest.zip".format(
-        system=platform.system().lower())
+    file_plat = platform.system().lower()
+    if file_plat == "darwin":
+        file_plat = "mac"
+    file_name = "commandlinetools-{system}-7302050_latest.zip".format(system=file_plat)
     url = "https://dl.google.com/android/repository/" + file_name
     zip_file = os.path.abspath(os.path.join(ROOT_DIR, file_name)) # folder is cmdline-tools
 

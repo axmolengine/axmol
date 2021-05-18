@@ -28,11 +28,11 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-project(engine-x)
+project(adxe)
 
-# cocos2dx root path
-set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
+# adxe root path
+set(ADXE_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
 
 # prevent in-source-build
 include(PreventInSourceBuilds)
@@ -44,25 +44,25 @@ option(BUILD_TESTS "Build cpp & lua tests" ON)
 
 set(BUILD_LUA_LIBS ON) 
 
-add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
+add_subdirectory(${ADXE_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
 # prevent tests project to build "cocos2d-x/cocos" again
 set(BUILD_ENGINE_DONE ON)
 
 if(BUILD_TESTS) 
     # add cpp tests default
-    add_subdirectory(${COCOS2DX_ROOT_PATH}/tests/cpp-empty-test ${ENGINE_BINARY_PATH}/tests/cpp-empty-test)
-    add_subdirectory(${COCOS2DX_ROOT_PATH}/tests/cpp-tests ${ENGINE_BINARY_PATH}/tests/cpp-tests)
+    add_subdirectory(${ADXE_ROOT_PATH}/tests/cpp-empty-test ${ENGINE_BINARY_PATH}/tests/cpp-empty-test)
+    add_subdirectory(${ADXE_ROOT_PATH}/tests/cpp-tests ${ENGINE_BINARY_PATH}/tests/cpp-tests)
 
     if(BUILD_EXTENSION_FAIRYGUI)
-      add_subdirectory(${COCOS2DX_ROOT_PATH}/tests/fairygui-tests ${ENGINE_BINARY_PATH}/tests/fairygui-tests)
+      add_subdirectory(${ADXE_ROOT_PATH}/tests/fairygui-tests ${ENGINE_BINARY_PATH}/tests/fairygui-tests)
     endif()
 
     if(BUILD_LUA_LIBS)
-      add_subdirectory(${COCOS2DX_ROOT_PATH}/tests/lua-empty-test/project ${ENGINE_BINARY_PATH}/tests/lua-empty-test)
-      add_subdirectory(${COCOS2DX_ROOT_PATH}/tests/lua-tests/project ${ENGINE_BINARY_PATH}/tests/lua-test)
+      add_subdirectory(${ADXE_ROOT_PATH}/tests/lua-empty-test/project ${ENGINE_BINARY_PATH}/tests/lua-empty-test)
+      add_subdirectory(${ADXE_ROOT_PATH}/tests/lua-tests/project ${ENGINE_BINARY_PATH}/tests/lua-test)
     endif(BUILD_LUA_LIBS)
 
     # add cpp-template-default into project(Cocos2d-x) for tmp test
-    add_subdirectory(${COCOS2DX_ROOT_PATH}/templates/cpp-template-default ${ENGINE_BINARY_PATH}/tests/HelloCpp)
+    add_subdirectory(${ADXE_ROOT_PATH}/templates/cpp-template-default ${ENGINE_BINARY_PATH}/tests/HelloCpp)
 endif()

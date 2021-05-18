@@ -4,25 +4,25 @@
 <dict>
 	<key>data</key>
 	<dict>
-		<key>cocos2d.x.fps</key>
+		<key>adxe.fps</key>
 		<integer>60</integer>
-		<key>cocos2d.x.display_fps</key>
+		<key>adxe.display_fps</key>
 		<true/>
-		<key>cocos2d.x.gl.projection</key>
+		<key>adxe.gl.projection</key>
 		<string>3d</string>
-		<key>cocos2d.x.texture.pixel_format_for_png</key>
+		<key>adxe.texture.pixel_format_for_png</key>
 		<string>rgba8888</string>
-		<key>cocos2d.x.texture.pvrv2_has_alpha_premultiplied</key>
+		<key>adxe.texture.pvrv2_has_alpha_premultiplied</key>
 		<false/>
-		<key>cocos2d.x.testcpp.autorun</key>
+		<key>adxe.testcpp.autorun</key>
 		<false/>
-		<key>cocos2d.x.3d.max_dir_light_in_shader</key>
+		<key>adxe.3d.max_dir_light_in_shader</key>
 		<integer>1</integer>
-		<key>cocos2d.x.3d.max_point_light_in_shader</key>
+		<key>adxe.3d.max_point_light_in_shader</key>
 		<integer>1</integer>
-		<key>cocos2d.x.3d.max_spot_light_in_shader</key>
+		<key>adxe.3d.max_spot_light_in_shader</key>
 		<integer>1</integer>
-		<key>cocos2d.x.3d.animate_quality</key>
+		<key>adxe.3d.animate_quality</key>
 		<integer>2</integer>
 	</dict>
 	<key>metadata</key>
