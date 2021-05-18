@@ -1,6 +1,6 @@
 #!/bin/bash 
-mycocos=tools/cocos2d-console/bin/cocos
-$mycocos new -l $1
+adxe_cmd=tools/console/bin/adxe
+$adxe_cmd new -l $1
 
 if [ $1 = "cpp" ]; then
     projectname="MyCppGame"
@@ -10,4 +10,4 @@ elif [ $1 = "js" ]; then
     projectname="MyJSGame"
 fi
 
-$mycocos compile -p linux -s $projectname -m release -j4 --compile-script 0
+$adxe_cmd compile -p linux -s $projectname -m release -j4 --compile-script 0

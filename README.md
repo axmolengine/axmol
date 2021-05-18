@@ -1,12 +1,12 @@
-# Engine-x
-[![dev](https://img.shields.io/badge/v1.0.0-alpha19-yellow.svg)](https://github.com/c4games/engine-x/releases)
-[![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/c4games/engine-x/blob/master/LICENSE)
+# Adxe
+[![dev](https://img.shields.io/badge/v1.0.0-alpha19-yellow.svg)](https://github.com/adxeproject/adxe/releases)
+[![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
   
-[![Android Build Status](https://github.com/c4games/engine-x/workflows/android/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Aandroid)
-[![iOS Build Status](https://github.com/c4games/engine-x/workflows/ios/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Aios)
-[![Windows Build Status](https://github.com/c4games/engine-x/workflows/win32/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Awin32)
-[![Linux Build Status](https://github.com/c4games/engine-x/workflows/linux/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Alinux)
-[![macOS Build Status](https://github.com/c4games/engine-x/workflows/osx/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Aosx)  
+[![Android Build Status](https://github.com/adxeproject/adxe/workflows/android/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aandroid)
+[![iOS Build Status](https://github.com/adxeproject/adxe/workflows/ios/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aios)
+[![Windows Build Status](https://github.com/adxeproject/adxe/workflows/win32/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Awin32)
+[![Linux Build Status](https://github.com/adxeproject/adxe/workflows/linux/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Alinux)
+[![macOS Build Status](https://github.com/adxeproject/adxe/workflows/osx/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aosx)  
 
 **This is another more radical fork of *Cocos2d-x-4.0*, use OpenAL for all platforms, single texture multi GPU texture handler, C++ 14/17 and some more (see 'Highlight Features' for more info).**  
   
@@ -19,7 +19,7 @@
 * Usefull PRs from **you** are welcome (review/merge ASAP)
   
 ### Highlight Features
-* **More clearly third-party libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on engine-x**
+* **More clearly third-party libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on adxe**
 * Refactor AudioEngine, OpenAL for all platforms
   * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
@@ -42,13 +42,13 @@
 ### [Roadmap](issues/1)
 
 ### Quick Start
-Open [Wiki](https://github.com/c4games/engine-x-wiki) for additional information too.
+Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information too.
 
 #### Common Requirement [Python](https://www.python.org/downloads/)
   * Python-2.7.17+, Python-3.7+ 
 
 #### Prerequisites
-  1. Enter ```engine-x``` root directory
+  1. Enter ```adxe``` root directory
   2. Run ```python setup.py```, restart console after finish
 
 #### Windows
@@ -56,14 +56,14 @@ Open [Wiki](https://github.com/c4games/engine-x-wiki) for additional information
   2. Install Visual Studio 2019 build (it's strong recommend you use this version)  
   3. Execute follow command at command line (Console, Window Terminal or Powershell)
   ```bat
-  cd engine-x\
+  cd adxe\
   cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
   ```
   
 #### Android
-  1. Install Android Studio 4.0+
+  1. Install Android Studio 4.2+
   2. When first start Android Studio, It will guide you to install sdk and other tools, just install them
-  3. Start Android and choose [Open an existing Android Studio Project] to open ```engine-x\tests\cpp-tests\proj.android```
+  3. Start Android and choose [Open an existing Android Studio Project] to open ```adxe\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose follow tools and click the button ```Apply``` to install them:  
      * Android SDK Platform 29 r5  
      * Android SDK Build-Tools 29.0.2  
@@ -87,11 +87,11 @@ Open [Wiki](https://github.com/c4games/engine-x-wiki) for additional information
   4. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
   5. Notes  
      - **The code sign required to run ios app on device, just change bundle identifier until the auto manage signing solved**  
-     - **engine-x only provide armv7, arm64, x86_64 prebuilt libraries for ios**
+     - **adxe only provide armv7, arm64, x86_64 prebuilt libraries for ios**
 
 ### Notes
   * ThreadLocalStorage (TLS) 
-    - ios x86 simulator ios>=10 and engine-x no longer provide x86 libraries
+    - ios x86 simulator ios>=10 and adxe no longer provide x86 libraries
     - ios x64 or devices (armv7, arm64) ios sdk>=9.0
     - the 'OpenAL Soft' maintained by kcat use TLS
 

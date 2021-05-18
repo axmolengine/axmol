@@ -1,13 +1,13 @@
-# Engine-x
+# Adxe
 
-[![dev](https://img.shields.io/badge/v1.0.0-alpha19-yellow.svg)](https://github.com/c4games/engine-x/releases)
-[![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/c4games/engine-x/blob/master/LICENSE)
+[![dev](https://img.shields.io/badge/v1.0.0-alpha19-yellow.svg)](https://github.com/adxeproject/adxe/releases)
+[![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
   
-[![Android Build Status](https://github.com/c4games/engine-x/workflows/android/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Aandroid)
-[![iOS Build Status](https://github.com/c4games/engine-x/workflows/ios/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Aios)
-[![Windows Build Status](https://github.com/c4games/engine-x/workflows/win32/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Awin32)
-[![Linux Build Status](https://github.com/c4games/engine-x/workflows/linux/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Alinux)
-[![macOS Build Status](https://github.com/c4games/engine-x/workflows/osx/badge.svg)](https://github.com/c4games/engine-x/actions?query=workflow%3Aosx)  
+[![Android Build Status](https://github.com/adxeproject/adxe/workflows/android/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aandroid)
+[![iOS Build Status](https://github.com/adxeproject/adxe/workflows/ios/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aios)
+[![Windows Build Status](https://github.com/adxeproject/adxe/workflows/win32/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Awin32)
+[![Linux Build Status](https://github.com/adxeproject/adxe/workflows/linux/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Alinux)
+[![macOS Build Status](https://github.com/adxeproject/adxe/workflows/osx/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aosx)  
 
 
 **这是另外一个基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++14/17...**
@@ -41,7 +41,7 @@
 * 新增硬件压缩纹理格式ETC2 RGB/RGBA支持，支持软解
 * **ImGui集成，非常方便写游戏内嵌小工具，用法详见[ImGuiEXT](extensions/ImGuiEXT/README.md)**
   
-### [Roadmap](https://github.com/c4games/engine-x/issues/1)
+### [Roadmap](https://github.com/adxeproject/adxe/issues/1)
   
 ### 快速开始
 
@@ -49,7 +49,7 @@
   * python-2.7.17+, python-3.7+都可以
 
 #### 准备步骤
-  1. 进入引擎```engine-x```根目录
+  1. 进入引擎```adxe```根目录
   3. 执行```python setup.py```后重启控制台
 
 #### Windows
@@ -57,13 +57,13 @@
   2. 确保 Visual Studio 2019 已正确安装
   3. 执行下面的命令
   ```bat
-  cd engine-x
+  cd adxe
   cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
   ``` 
-  4. 之后就可以用vs打开```engine-x/build/engine-x.sln```启动cpp-tests等测试工程了
+  4. 之后就可以用vs打开```adxe/build/adxe.sln```启动cpp-tests等测试工程了
 
 #### Android
-  1. 安装 Android Studio 4.0或更高版本
+  1. 安装 Android Studio 4.2或更高版本
   2. 第一次启动Android Studio, 会引导安装一些工具，默认安装即可，如果不需要模拟器可以把```Virutal Device```勾选去掉
   2. 启动 Android Studio并打开engine-x\tests\cpp-tests\proj.android
   3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下SDK Platforms和SDK Tools后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
@@ -73,7 +73,7 @@
      * CMake 3.10+  
 
   5. 等待Gradle sync完成后，Build APKs，安装运行  
-  6. 如果使用非sdk自动安装的CMake版本, 需要从https://github.com/ninja-build/ninja/releases下载 ```ninja```， 并且拷贝```ninja.exe```到CMake的bin目录
+  6. 如果使用非sdk自动安装的CMake版本, 需要下载[ninja](https://github.com/ninja-build/ninja/releases)， 并且拷贝```ninja.exe```到CMake的bin目录
 
 #### iOS
   1. 确保已安装xcode11+和[cmake3.14+](https://github.com/Kitware/CMake/releases), 安装CMake命令行支持: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
@@ -91,14 +91,14 @@
 
 ### 注意
   * ThreadLocalStorage线程本地存储
-    - ios x86 simulator ios>=10 and engine-x no longer provide x86 libraries
+    - ios x86 simulator ios>=10 and adxe no longer provide x86 libraries
     - ios x64 or devices(armv7,arm64) ios sdk>=9.0
     - the openal-soft maintained by kcat use TLS
 
 ### QQ交流群
 
-  点击链接加入群聊【engine-x交流群】：https://jq.qq.com/?_wv=1027&k=nvNmzOIY
+  点击链接加入群聊【Adxe 交流群】：https://jq.qq.com/?_wv=1027&k=nvNmzOIY
   
 ### 参考链接
   * official v4: https://gitee.com/mirrors/cocos2d-x
-  * Git快速手册: https://github.com/c4games/engine-x/wiki/Git-Guides
+  * Git快速手册: https://github.com/adxeproject/adxe/wiki/Git-Guides

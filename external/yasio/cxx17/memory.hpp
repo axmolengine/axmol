@@ -31,14 +31,14 @@ SOFTWARE.
 #include "yasio/compiler/feature_test.hpp"
 
 /// The make_unique workaround on c++11
-#if !YASIO__HAS_CXX17
-namespace cxx17
+#if !YASIO__HAS_CXX14
+namespace cxx14
 {
 template <typename _Ty, typename... _Args> std::unique_ptr<_Ty> make_unique(_Args&&... args)
 {
   return std::unique_ptr<_Ty>(new _Ty(std::forward<_Args>(args)...));
 }
-} // namespace cxx17
+} // namespace cxx14
 #endif
 
 #endif

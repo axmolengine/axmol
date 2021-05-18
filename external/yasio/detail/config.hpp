@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -47,6 +47,11 @@ SOFTWARE.
 **         you may need uncomment it.
 */
 // #define YASIO_USE_SPSC_QUEUE 1
+
+/*
+** Uncomment or add compiler flag -DYASIO_USE_SHARED_PACKET to use std::shared_ptr wrap network packet.
+*/
+// #define YASIO_USE_SHARED_PACKET 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_DISABLE_OBJECT_POOL to disable object_pool for allocating
@@ -108,6 +113,11 @@ SOFTWARE.
 // #define YASIO_HAVE_HALF_FLOAT 1
 
 /*
+** Uncomment or add compiler flag -DYASIO_ENABLE_PASSIVE_EVENT to enable server channel open/close event
+*/
+// #define YASIO_ENABLE_PASSIVE_EVENT 1
+
+/*
 ** Workaround for 'vs2013 without full c++11 support', in the future, drop vs2013 support and
 ** follow 3 lines code will be removed
 */
@@ -121,26 +131,57 @@ SOFTWARE.
 #  define YASIO__DECL
 #endif
 
+/*
+** The interop decl, it's useful for store managed c# function as c++ function pointer properly.
+*/
+#if !defined(_WIN32) || YASIO__64BITS
+#  define YASIO_INTEROP_DECL
+#else
+#  define YASIO_INTEROP_DECL __stdcall
+#endif
+
+#if !defined(YASIO_API)
+#  if defined(YASIO_BUILD_AS_SHARED) && !defined(YASIO_HEADER_ONLY)
+#    if defined(_WIN32)
+#      if defined(YASIO_LIB)
+#        define YASIO_API __declspec(dllexport)
+#      else
+#        define YASIO_API __declspec(dllimport)
+#      endif
+#    else
+#      define YASIO_API
+#    endif
+#  else
+#    define YASIO_API
+#  endif
+#endif
+
 #define YASIO_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
 
 #define YASIO_SSIZEOF(T) static_cast<int>(sizeof(T))
 
+// clang-format off
 /*
 ** YASIO_OBSOLETE_DEPRECATE
 */
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
 #  define YASIO_OBSOLETE_DEPRECATE(_Replacement) __attribute__((deprecated))
 #elif _MSC_VER >= 1400 // vs 2005 or higher
-#  define YASIO_OBSOLETE_DEPRECATE(_Replacement)                                                                                                               \
+#  define YASIO_OBSOLETE_DEPRECATE(_Replacement) \
     __declspec(deprecated("This function will be removed in the future. Consider using " #_Replacement " instead."))
 #else
 #  define YASIO_OBSOLETE_DEPRECATE(_Replacement)
 #endif
+// clang-format on
+
+#if defined(UE_BUILD_DEBUG) || defined(UE_BUILD_DEVELOPMENT) || defined(UE_BUILD_TEST) || defined(UE_BUILD_SHIPPING) || defined(UE_SERVER)
+#  define YASIO_INSIDE_UNREAL 1
+#endif // Unreal Engine 4 bullshit
 
 /*
 **  The yasio version macros
 */
-#define YASIO_VERSION_NUM 0x033700
+#define YASIO_VERSION_NUM 0x033702
 
 /*
 ** The macros used by io_service.

@@ -16,11 +16,11 @@ endif()
 
 find_program(PYTHON_COMMAND NAMES python3 python2 python)
 find_program(COCOS_COMMAND NAME cocos
-    PATHS ${COCOS2DX_ROOT_PATH}/tools/cocos2d-console/bin $ENV{COCOS_CONSOLE_ROOT})
+    PATHS ${ADXE_ROOT_PATH}/tools/cocos2d-console/bin $ENV{COCOS_CONSOLE_ROOT})
 
 message(STATUS "PROJECT_NAME:" ${PROJECT_NAME})
 message(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
-message(STATUS "COCOS2DX_ROOT_PATH:" ${COCOS2DX_ROOT_PATH})
+message(STATUS "ADXE_ROOT_PATH:" ${ADXE_ROOT_PATH})
 message(STATUS "CMAKE_MODULE_PATH:" ${CMAKE_MODULE_PATH})
 # delete binary dir if you hope a full clean re-build
 message(STATUS "PROJECT_BINARY_DIR:" ${PROJECT_BINARY_DIR})

@@ -1,7 +1,7 @@
 #!/usr/bin/python
-# create new project by cocos-console
+# create new project by adxe-console
 # compile, deploy project and run
-# perpose: for autotest cocos2d-console command.
+# perpose: for autotest adxe-console command.
 # now support: mac- mac/ios/android
 # will add: window-android,linux-android
 
@@ -69,9 +69,9 @@ PROJ_SUFFIX = 'Proj'
 phonePlats = ['mac','ios','android']
 
 # need use console's position, perhaps should be set an env-param
-cocos_console_dir = 'tools/cocos2d-console/bin/'
+cocos_console_dir = 'tools/console/bin/'
 
-# now cocos2d-console suport different run on Platforms, e.g: only run android on win
+# now adxe-console suport different run on Platforms, e.g: only run android on win
 runSupport = {
     'darwin' : {'mac':1,'ios':1,'android':1},
     'win' : {'mac':0,'ios':0,'android':1},

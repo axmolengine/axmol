@@ -81,7 +81,7 @@ If ($env:build_type -eq "android_cpp_tests") {
 
 } elseif ($env:build_type -eq "android_cocos_new_test") {
     Write-Host "Create new project cocos_new_test"
-    & $python -u tools\cocos2d-console\bin\cocos.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
+    & $python -u tools\console\bin\adxe.py --agreement n new -l cpp -p my.pack.qqqq cocos_new_test
     if ($lastexitcode -ne 0) {throw}
 
     Write-Host "Build cocos_new_test"
@@ -96,13 +96,13 @@ If ($env:build_type -eq "android_cpp_tests") {
 # TODO: uncomment when fixed
 # } elseif ($env:build_type -eq "android_gen_libs") {
 #     Write-Host "Build cocos gen-libs"
-#     & $python -u tools\cocos2d-console\bin\cocos.py gen-libs -p android -m release --ap android-15 --app-abi armeabi-v7a --agreement n
+#     & $python -u tools\console\bin\adxe.py gen-libs -p android -m release --ap android-15 --app-abi armeabi-v7a --agreement n
 #     if ($lastexitcode -ne 0) {throw}
 
 } elseif ($env:build_type -eq "windows32_cmake_test") {
     Write-Host "Build tests project by cmake"
 
-    $ENV:PATH="$env:APPVEYOR_BUILD_FOLDER\tools\cocos2d-console\bin;$ENV:PATH"
+    $ENV:PATH="$env:APPVEYOR_BUILD_FOLDER\tools\console\bin;$ENV:PATH"
 
     & mkdir $env:APPVEYOR_BUILD_FOLDER\win32-build
     # if ($lastexitcode -ne 0) {throw} # mkdir return no-zero

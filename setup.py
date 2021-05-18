@@ -2,6 +2,7 @@
 # coding=utf-8
 """****************************************************************************
 Copyright (c) 2014 cocos2d-x.org
+Copyright (c) 2021 Bytedance Inc.
 
 http://www.cocos2d-x.org
 
@@ -25,12 +26,11 @@ THE SOFTWARE.
 ****************************************************************************"""
 
 '''
-This script will install environment variables needed to by cocos2d-x. It will set these envrironment variables:
-* ENGINEX_CONSOLE_ROOT: used to run cocos console tools, more information about cocos console tools please refer to
-https://github.com/cocos2d/cocos2d-console
+This script will install environment variables needed to by adxe. It will set these envrironment variables:
+* ADXE_CONSOLE_ROOT: used to run cocos console tools
 * ANDROID_NDK: used to build android native codes
 * ANDROID_SDK: used to generate applicatoin on Android through commands
-* ENGINEX_ROOT: path where cocos2d-re is installed
+* ADXE_ROOT: path where adxe is installed
 
 On Max OS X, when start a shell, it will read these files and execute commands in sequence:
 
@@ -60,8 +60,8 @@ except Exception:
     pass
 from optparse import OptionParser
 
-ENGINEX_ROOT = 'ENGINEX_ROOT'
-ENGINEX_CONSOLE_ROOT = 'ENGINEX_CONSOLE_ROOT'
+ADXE_ROOT = 'ADXE_ROOT'
+ADXE_CONSOLE_ROOT = 'ADXE_CONSOLE_ROOT'
 
 ANDROID_NDK = 'ANDROID_NDK'
 ANDROID_SDK = 'ANDROID_SDK'
@@ -188,7 +188,7 @@ class SetEnvVar(object):
             self.need_backup = False
 
         file = open(self.file_used_for_setup, 'a')
-        file.write('\n# Add environment variable %s for cocos2d-x\n' % key)
+        file.write('\n# Add environment variable %s for adxe\n' % key)
         file.write('export %s="%s"\n' % (key, value))
         file.write('export PATH=$%s:$PATH\n' % key)
         if key == ANDROID_SDK:
@@ -451,41 +451,41 @@ class SetEnvVar(object):
             print("  ->Add directory \"%s\" into PATH failed!\n" % add_dir)
 
     def set_console_root(self):
-        print("->Check environment variable %s" % ENGINEX_CONSOLE_ROOT)
-        enginex_console_root = os.path.join(
-            self.current_absolute_path, 'tools', 'cocos2d-console', 'bin')
-        old_dir = self._find_environment_variable(ENGINEX_CONSOLE_ROOT)
+        print("->Check environment variable %s" % ADXE_CONSOLE_ROOT)
+        adxe_console_root = os.path.join(
+            self.current_absolute_path, 'tools', 'console', 'bin')
+        old_dir = self._find_environment_variable(ADXE_CONSOLE_ROOT)
         if old_dir is None:
             # add environment variable
             if self._isWindows():
-                self.set_windows_path(enginex_console_root)
+                self.set_windows_path(adxe_console_root)
 
             self._set_environment_variable(
-                ENGINEX_CONSOLE_ROOT, enginex_console_root)
+                ADXE_CONSOLE_ROOT, adxe_console_root)
         else:
-            if old_dir == enginex_console_root:
+            if old_dir == adxe_console_root:
                 # is same with before, nothing to do
                 return
 
             # update the environment variable
             if self._isWindows():
                 self.remove_dir_from_win_path(old_dir)
-                self.set_windows_path(enginex_console_root)
+                self.set_windows_path(adxe_console_root)
 
-            self._force_update_env(ENGINEX_CONSOLE_ROOT, enginex_console_root)
+            self._force_update_env(ADXE_CONSOLE_ROOT, adxe_console_root)
 
-    def set_enginex_root(self):
-        print("->Check environment variable %s" % ENGINEX_ROOT)
-        enginex_root = self.current_absolute_path
-        old_dir = self._find_environment_variable(ENGINEX_ROOT)
+    def set_adxe_root(self):
+        print("->Check environment variable %s" % ADXE_ROOT)
+        adxe_root = self.current_absolute_path
+        old_dir = self._find_environment_variable(ADXE_ROOT)
         if old_dir is None:
             # add environment variable
-            self._set_environment_variable(ENGINEX_ROOT, enginex_root)
+            self._set_environment_variable(ADXE_ROOT, adxe_root)
         else:
-            if old_dir == enginex_root:
+            if old_dir == adxe_root:
                 # is same with before, nothing to do
                 return
-            self._force_update_env(ENGINEX_ROOT, enginex_root)
+            self._force_update_env(ADXE_ROOT, adxe_root)
 
     def _force_update_unix_env(self, var_name, value):
         import re
@@ -638,11 +638,11 @@ class SetEnvVar(object):
 
     def set_environment_variables(self, ndk_root, android_sdk_root, quiet):
 
-        print('\nSetting up cocos2d-x...')
+        print('\nSetting up adxe...')
 
         self.file_used_for_setup = self._get_filepath_for_setup()
 
-        self.set_enginex_root()
+        self.set_adxe_root()
         self.set_console_root()
         
         if self._isWindows():

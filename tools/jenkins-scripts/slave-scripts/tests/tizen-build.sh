@@ -1,6 +1,6 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-COCOS2DX_ROOT="$DIR"/../../../..
-cd ${COCOS2DX_ROOT}
+ADXE_ROOT="$DIR"/../../../..
+cd ${ADXE_ROOT}
 cocos compile -p tizen --tizen-arch arm -s tests/cpp-tests
 if [ ! $? = 0 ]; then
     echo "compile cpp-tests error"

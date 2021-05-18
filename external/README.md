@@ -138,7 +138,7 @@
 
 ## OpenAL Soft
 - Upstream: https://github.com/kcat/openal-soft
-- Version: 1.21.1 with cmake modification: exclude target 'ex-common'
+- Version: git 1.21.1-4733c9f (7628)
 - License: LGPL-2.1
 
 ## OpenSSL

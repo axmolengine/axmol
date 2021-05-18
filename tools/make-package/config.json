@@ -7,9 +7,9 @@
             "extract_to_zip_path": "external"
         },
         {
-            "zip_config_path": "../cocos2d-console/config.json",
-            "zip_file_path": "../cocos2d-console",
-            "extract_to_zip_path": "tools/cocos2d-console"
+            "zip_config_path": "../console/config.json",
+            "zip_file_path": "../console",
+            "extract_to_zip_path": "tools/console"
         }
     ]
 }

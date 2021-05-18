@@ -5,23 +5,19 @@ set(APP_NAME lua-tests)
 project(${APP_NAME})
 
 if(NOT DEFINED BUILD_ENGINE_DONE)
-    set(ENGINEX_ROOT "$ENV{ENGINEX_ROOT}")
-    if(ENGINEX_ROOT STREQUAL "")
-        set(ENGINEX_ROOT "$ENV{COCOS2DX_ROOT}")
-    endif()
-
-    if(NOT (ENGINEX_ROOT STREQUAL ""))
-        set(COCOS2DX_ROOT_PATH "${ENGINEX_ROOT}")
-        file(TO_CMAKE_PATH ${COCOS2DX_ROOT_PATH} COCOS2DX_ROOT_PATH) # string(REPLACE "\\" "/" COCOS2DX_ROOT_PATH ${COCOS2DX_ROOT_PATH})        
-        message(STATUS "Using system env var ENGINEX_ROOT=${ENGINEX_ROOT}")
+    set(ADXE_ROOT "$ENV{ADXE_ROOT}")
+    if(NOT (ADXE_ROOT STREQUAL ""))
+        set(ADXE_ROOT_PATH "${ADXE_ROOT}")
+        file(TO_CMAKE_PATH ${ADXE_ROOT_PATH} ADXE_ROOT_PATH) # string(REPLACE "\\" "/" ADXE_ROOT_PATH ${ADXE_ROOT_PATH})        
+        message(STATUS "Using system env var ADXE_ROOT=${ADXE_ROOT}")
     else()
-        set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+        set(ADXE_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
     endif()
-    set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
+    set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
 
     include(CocosBuildSet)
     set(BUILD_LUA_LIBS ON)
-    add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
+    add_subdirectory(${ADXE_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 endif()
 
 set(GAME_HEADER
@@ -37,13 +33,13 @@ set(GAME_SOURCE
 
 set(res_res_folders
     "${CMAKE_CURRENT_SOURCE_DIR}/../res"
-    "${COCOS2DX_ROOT_PATH}/tests/cpp-tests/Resources"
+    "${ADXE_ROOT_PATH}/tests/cpp-tests/Resources"
     )
 set(res_src_folders
     "${CMAKE_CURRENT_SOURCE_DIR}/../src"
     )
 set(res_script_folders
-    "${COCOS2DX_ROOT_PATH}/extensions/scripting/lua-bindings/script"
+    "${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/script"
     )
 if(APPLE OR VS)
     cocos_mark_multi_resources(res_res RES_TO "Resources/res" FOLDERS ${res_res_folders})
@@ -106,9 +102,9 @@ if(NOT ANDROID)
     add_executable(${APP_NAME} ${APP_SRC})
 else()
     add_library(${APP_NAME} SHARED ${APP_SRC})
-    add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/cpp-android)
+    add_subdirectory(${ADXE_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/cpp-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
-    add_subdirectory(${COCOS2DX_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/cocos/lua-android)
+    add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/cocos/lua-android)
     if(${CMAKE_ANDROID_ARCH_ABI} STREQUAL "x86")
         #add `-Wl,--no-warn-shared-textrel` to fix warning "shared library text segment is not shareable clang"
         target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive -Wl,--no-warn-shared-textrel)

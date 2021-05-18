@@ -20,23 +20,23 @@
 
 #include "config.h"
 
-#include "backends/coreaudio.h"
+#include "coreaudio.h"
 
 #include <inttypes.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <cmath>
 
-#include "alcmain.h"
-#include "alu.h"
-#include "ringbuffer.h"
-#include "converter.h"
+#include "alnumeric.h"
+#include "core/converter.h"
+#include "core/device.h"
 #include "core/logging.h"
-#include "backends/base.h"
+#include "ringbuffer.h"
 
-#include <unistd.h>
 #include <AudioUnit/AudioUnit.h>
 #include <AudioToolbox/AudioToolbox.h>
 
@@ -47,7 +47,7 @@ static const char ca_device[] = "CoreAudio Default";
 
 
 struct CoreAudioPlayback final : public BackendBase {
-    CoreAudioPlayback(ALCdevice *device) noexcept : BackendBase{device} { }
+    CoreAudioPlayback(DeviceBase *device) noexcept : BackendBase{device} { }
     ~CoreAudioPlayback() override;
 
     OSStatus MixerProc(AudioUnitRenderActionFlags *ioActionFlags,
@@ -105,7 +105,7 @@ void CoreAudioPlayback::open(const char *name)
     /* open the default output unit */
     AudioComponentDescription desc{};
     desc.componentType = kAudioUnitType_Output;
-#if TARGET_OS_IOS
+#if TARGET_OS_IOS || TARGET_OS_TV
     desc.componentSubType = kAudioUnitSubType_RemoteIO;
 #else
     desc.componentSubType = kAudioUnitSubType_DefaultOutput;
@@ -118,16 +118,26 @@ void CoreAudioPlayback::open(const char *name)
     if(comp == nullptr)
         throw al::backend_exception{al::backend_error::NoDevice, "Could not find audio component"};
 
-    OSStatus err{AudioComponentInstanceNew(comp, &mAudioUnit)};
+    AudioUnit audioUnit{};
+    OSStatus err{AudioComponentInstanceNew(comp, &audioUnit)};
     if(err != noErr)
         throw al::backend_exception{al::backend_error::NoDevice,
             "Could not create component instance: %u", err};
 
-    /* init and start the default audio unit... */
-    err = AudioUnitInitialize(mAudioUnit);
+    err = AudioUnitInitialize(audioUnit);
     if(err != noErr)
         throw al::backend_exception{al::backend_error::DeviceError,
             "Could not initialize audio unit: %u", err};
+
+    /* WARNING: I don't know if "valid" audio unit values are guaranteed to be
+     * non-0. If not, this logic is broken.
+     */
+    if(mAudioUnit)
+    {
+        AudioUnitUninitialize(mAudioUnit);
+        AudioComponentInstanceDispose(mAudioUnit);
+    }
+    mAudioUnit = audioUnit;
 
     mDevice->DeviceName = name;
 }
@@ -294,7 +304,7 @@ void CoreAudioPlayback::stop()
 
 
 struct CoreAudioCapture final : public BackendBase {
-    CoreAudioCapture(ALCdevice *device) noexcept : BackendBase{device} { }
+    CoreAudioCapture(DeviceBase *device) noexcept : BackendBase{device} { }
     ~CoreAudioCapture() override;
 
     OSStatus RecordProc(AudioUnitRenderActionFlags *ioActionFlags,
@@ -400,7 +410,7 @@ void CoreAudioCapture::open(const char *name)
             name};
 
     desc.componentType = kAudioUnitType_Output;
-#if TARGET_OS_IOS
+#if TARGET_OS_IOS || TARGET_OS_TV
     desc.componentSubType = kAudioUnitSubType_RemoteIO;
 #else
     desc.componentSubType = kAudioUnitSubType_HALOutput;
@@ -436,7 +446,7 @@ void CoreAudioCapture::open(const char *name)
         throw al::backend_exception{al::backend_error::DeviceError,
             "Could not enable audio unit input property: %u", err};
 
-#if !TARGET_OS_IOS
+#if !TARGET_OS_IOS && !TARGET_OS_TV
     {
         // Get the default input device
         AudioDeviceID inputDevice = kAudioDeviceUnknown;
@@ -676,7 +686,7 @@ std::string CoreAudioBackendFactory::probe(BackendType type)
     return outnames;
 }
 
-BackendPtr CoreAudioBackendFactory::createBackend(ALCdevice *device, BackendType type)
+BackendPtr CoreAudioBackendFactory::createBackend(DeviceBase *device, BackendType type)
 {
     if(type == BackendType::Playback)
         return BackendPtr{new CoreAudioPlayback{device}};

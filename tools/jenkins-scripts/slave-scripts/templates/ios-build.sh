@@ -1,6 +1,6 @@
 #!/bin/bash
-mycocos=tools/cocos2d-console/bin/cocos
-$mycocos new -l $1
+adxe_cmd=tools/console/bin/adxe
+$adxe_cmd new -l $1
 
 if [ $1 = "cpp" ];then
     schemename="MyCppGame-mobile"
