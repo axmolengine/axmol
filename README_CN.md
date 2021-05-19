@@ -1,4 +1,4 @@
-# adxe
+# Adxe
 
 [![dev](https://img.shields.io/badge/v1.0.0-alpha19-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
