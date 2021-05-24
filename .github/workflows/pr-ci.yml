@@ -27,7 +27,7 @@ jobs:
 
   build-linux:
     name: build-linux
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env:
       TRAVIS_OS_NAME: linux
       BUILD_TARGET: linux
