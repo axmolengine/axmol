@@ -157,7 +157,8 @@ public:
     * @js NA
     * @lua NA
     */
-    bool initWithImageData(const uint8_t* data, ssize_t dataLen, bool ownData = false);
+    bool initWithImageData(const uint8_t* data, ssize_t dataLen);
+    bool initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData);
 
     // @warning kFmtRawData only support RGBA8888
     bool initWithRawData(const uint8_t* data, ssize_t dataLen, int width, int height, int bitsPerComponent, bool preMulti = false);

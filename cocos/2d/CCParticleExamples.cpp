@@ -48,7 +48,7 @@ static Texture2D* getDefaultTexture()
 
         image = new (std::nothrow) Image();
         CC_BREAK_IF(nullptr == image);
-        bool ret = image->initWithImageData(__firePngData, sizeof(__firePngData), false);
+        bool ret = image->initWithImageData(__firePngData, sizeof(__firePngData));
         CC_BREAK_IF(!ret);
 
         texture = Director::getInstance()->getTextureCache()->addImage(image, key);
