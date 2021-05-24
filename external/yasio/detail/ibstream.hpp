@@ -121,6 +121,11 @@ public:
   basic_ibstream_view() { this->reset("", 0); }
   basic_ibstream_view(const void* data, size_t size) { this->reset(data, size); }
   basic_ibstream_view(const basic_obstream<_Traits>* obs) { this->reset(obs->data(), obs->length()); }
+  basic_ibstream_view(const basic_obstream<_Traits>* obs, ptrdiff_t offset)
+  {
+    this->reset(obs->data(), obs->length());
+    this->advance(offset);
+  }
   basic_ibstream_view(const basic_ibstream_view&) = delete;
   basic_ibstream_view(basic_ibstream_view&&)      = delete;
 

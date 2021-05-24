@@ -95,9 +95,9 @@ def do_build_slaves():
                 slave_build_scripts = jenkins_script_path + "wp8-v3.bat "
 
         if daily_build_type == 'templates':
-            ret = os.system("python tools/cocos2d-console/bin/cocos.py new -l " + language)
+            ret = os.system("python tools/console/bin/adxe.py new -l " + language)
         elif daily_build_type == 'runtime':
-            ret = os.system("python tools/cocos2d-console/bin/cocos.py new -l " + language + " -t runtime")
+            ret = os.system("python tools/console/bin/adxe.py new -l " + language + " -t runtime")
         else:
             ret = 0
         slave_build_scripts += language

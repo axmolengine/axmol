@@ -1,6 +1,6 @@
 #!/bin/bash
-mycocos=tools/cocos2d-console/bin/cocos
-$mycocos new -l $1 -t runtime
+adxe_cmd=tools/console/bin/adxe
+$adxe_cmd new -l $1 -t runtime
 
 if [ $1 = "cpp" ];then
     schemename="MyCppGame-desktop"

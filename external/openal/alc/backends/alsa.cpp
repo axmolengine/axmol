@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "backends/alsa.h"
+#include "alsa.h"
 
 #include <algorithm>
 #include <atomic>
@@ -36,12 +36,12 @@
 #include <utility>
 
 #include "albyte.h"
-#include "alcmain.h"
-#include "alconfig.h"
+#include "alc/alconfig.h"
 #include "almalloc.h"
 #include "alnumeric.h"
 #include "aloptional.h"
-#include "alu.h"
+#include "core/device.h"
+#include "core/helpers.h"
 #include "core/logging.h"
 #include "dynload.h"
 #include "ringbuffer.h"
@@ -407,7 +407,7 @@ int verify_state(snd_pcm_t *handle)
 
 
 struct AlsaPlayback final : public BackendBase {
-    AlsaPlayback(ALCdevice *device) noexcept : BackendBase{device} { }
+    AlsaPlayback(DeviceBase *device) noexcept : BackendBase{device} { }
     ~AlsaPlayback() override;
 
     int mixerProc();
@@ -635,12 +635,16 @@ void AlsaPlayback::open(const char *name)
         name = alsaDevice;
         driver = GetConfigValue(nullptr, "alsa", "device", "default");
     }
-
     TRACE("Opening device \"%s\"\n", driver);
-    int err{snd_pcm_open(&mPcmHandle, driver, SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK)};
+
+    snd_pcm_t *pcmHandle{};
+    int err{snd_pcm_open(&pcmHandle, driver, SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK)};
     if(err < 0)
         throw al::backend_exception{al::backend_error::NoDevice,
             "Could not open ALSA device \"%s\"", driver};
+    if(mPcmHandle)
+        snd_pcm_close(mPcmHandle);
+    mPcmHandle = pcmHandle;
 
     /* Free alsa's global config tree. Otherwise valgrind reports a ton of leaks. */
     snd_config_update_free_global();
@@ -863,7 +867,7 @@ ClockLatency AlsaPlayback::getClockLatency()
 
 
 struct AlsaCapture final : public BackendBase {
-    AlsaCapture(ALCdevice *device) noexcept : BackendBase{device} { }
+    AlsaCapture(DeviceBase *device) noexcept : BackendBase{device} { }
     ~AlsaCapture() override;
 
     void open(const char *name) override;
@@ -1252,7 +1256,7 @@ std::string AlsaBackendFactory::probe(BackendType type)
     return outnames;
 }
 
-BackendPtr AlsaBackendFactory::createBackend(ALCdevice *device, BackendType type)
+BackendPtr AlsaBackendFactory::createBackend(DeviceBase *device, BackendType type)
 {
     if(type == BackendType::Playback)
         return BackendPtr{new AlsaPlayback{device}};

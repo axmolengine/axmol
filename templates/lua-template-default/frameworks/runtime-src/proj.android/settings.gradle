@@ -1,6 +1,6 @@
 import java.nio.file.Paths
 include ':libcocos2dx'
-project(':libcocos2dx').projectDir = new File(Paths.get("${System.env.ENGINEX_ROOT}/cocos/platform/android/libcocos2dx").toUri())
+project(':libcocos2dx').projectDir = new File(Paths.get("${System.env.ADXE_ROOT}/cocos/platform/android/libcocos2dx").toUri())
 include ':HelloLua'
 project(':HelloLua').projectDir = new File(settingsDir, 'app')
 rootProject.name = "HelloLua"

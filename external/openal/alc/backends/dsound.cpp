@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "backends/dsound.h"
+#include "dsound.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -44,9 +44,10 @@
 #include <algorithm>
 #include <functional>
 
-#include "alcmain.h"
-#include "alu.h"
-#include "compat.h"
+#include "alnumeric.h"
+#include "comptr.h"
+#include "core/device.h"
+#include "core/helpers.h"
 #include "core/logging.h"
 #include "dynload.h"
 #include "ringbuffer.h"
@@ -169,21 +170,21 @@ BOOL CALLBACK DSoundEnumDevices(GUID *guid, const WCHAR *desc, const WCHAR*, voi
 
 
 struct DSoundPlayback final : public BackendBase {
-    DSoundPlayback(ALCdevice *device) noexcept : BackendBase{device} { }
+    DSoundPlayback(DeviceBase *device) noexcept : BackendBase{device} { }
     ~DSoundPlayback() override;
 
     int mixerProc();
 
-    void open(const ALCchar *name) override;
+    void open(const char *name) override;
     bool reset() override;
     void start() override;
     void stop() override;
 
-    IDirectSound       *mDS{nullptr};
-    IDirectSoundBuffer *mPrimaryBuffer{nullptr};
-    IDirectSoundBuffer *mBuffer{nullptr};
-    IDirectSoundNotify *mNotifies{nullptr};
-    HANDLE             mNotifyEvent{nullptr};
+    ComPtr<IDirectSound>       mDS;
+    ComPtr<IDirectSoundBuffer> mPrimaryBuffer;
+    ComPtr<IDirectSoundBuffer> mBuffer;
+    ComPtr<IDirectSoundNotify> mNotifies;
+    HANDLE mNotifyEvent{nullptr};
 
     std::atomic<bool> mKillNow{true};
     std::thread mThread;
@@ -193,19 +194,11 @@ struct DSoundPlayback final : public BackendBase {
 
 DSoundPlayback::~DSoundPlayback()
 {
-    if(mNotifies)
-        mNotifies->Release();
     mNotifies = nullptr;
-    if(mBuffer)
-        mBuffer->Release();
     mBuffer = nullptr;
-    if(mPrimaryBuffer)
-        mPrimaryBuffer->Release();
     mPrimaryBuffer = nullptr;
-
-    if(mDS)
-        mDS->Release();
     mDS = nullptr;
+
     if(mNotifyEvent)
         CloseHandle(mNotifyEvent);
     mNotifyEvent = nullptr;
@@ -234,8 +227,8 @@ FORCE_ALIGN int DSoundPlayback::mixerProc()
     bool Playing{false};
     DWORD LastCursor{0u};
     mBuffer->GetCurrentPosition(&LastCursor, nullptr);
-    while(!mKillNow.load(std::memory_order_acquire) &&
-          mDevice->Connected.load(std::memory_order_acquire))
+    while(!mKillNow.load(std::memory_order_acquire)
+        && mDevice->Connected.load(std::memory_order_acquire))
     {
         // Get current play cursor
         DWORD PlayCursor;
@@ -344,31 +337,34 @@ void DSoundPlayback::open(const char *name)
     }
 
     hr = DS_OK;
-    mNotifyEvent = CreateEventW(nullptr, FALSE, FALSE, nullptr);
-    if(!mNotifyEvent) hr = E_FAIL;
+    if(!mNotifyEvent)
+    {
+        mNotifyEvent = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+        if(!mNotifyEvent) hr = E_FAIL;
+    }
 
     //DirectSound Init code
+    ComPtr<IDirectSound> ds;
     if(SUCCEEDED(hr))
-        hr = DirectSoundCreate(guid, &mDS, nullptr);
+        hr = DirectSoundCreate(guid, ds.getPtr(), nullptr);
     if(SUCCEEDED(hr))
-        hr = mDS->SetCooperativeLevel(GetForegroundWindow(), DSSCL_PRIORITY);
+        hr = ds->SetCooperativeLevel(GetForegroundWindow(), DSSCL_PRIORITY);
     if(FAILED(hr))
         throw al::backend_exception{al::backend_error::DeviceError, "Device init failed: 0x%08lx",
             hr};
+
+    mNotifies = nullptr;
+    mBuffer = nullptr;
+    mPrimaryBuffer = nullptr;
+    mDS = std::move(ds);
 
     mDevice->DeviceName = name;
 }
 
 bool DSoundPlayback::reset()
 {
-    if(mNotifies)
-        mNotifies->Release();
     mNotifies = nullptr;
-    if(mBuffer)
-        mBuffer->Release();
     mBuffer = nullptr;
-    if(mPrimaryBuffer)
-        mPrimaryBuffer->Release();
     mPrimaryBuffer = nullptr;
 
     switch(mDevice->FmtType)
@@ -465,7 +461,7 @@ retry_open:
             DSBUFFERDESC DSBDescription{};
             DSBDescription.dwSize = sizeof(DSBDescription);
             DSBDescription.dwFlags = DSBCAPS_PRIMARYBUFFER;
-            hr = mDS->CreateSoundBuffer(&DSBDescription, &mPrimaryBuffer, nullptr);
+            hr = mDS->CreateSoundBuffer(&DSBDescription, mPrimaryBuffer.getPtr(), nullptr);
         }
         if(SUCCEEDED(hr))
             hr = mPrimaryBuffer->SetFormat(&OutputType.Format);
@@ -485,7 +481,7 @@ retry_open:
         DSBDescription.dwBufferBytes = mDevice->BufferSize * OutputType.Format.nBlockAlign;
         DSBDescription.lpwfxFormat = &OutputType.Format;
 
-        hr = mDS->CreateSoundBuffer(&DSBDescription, &mBuffer, nullptr);
+        hr = mDS->CreateSoundBuffer(&DSBDescription, mBuffer.getPtr(), nullptr);
         if(FAILED(hr) && mDevice->FmtType == DevFmtFloat)
         {
             mDevice->FmtType = DevFmtShort;
@@ -499,7 +495,7 @@ retry_open:
         hr = mBuffer->QueryInterface(IID_IDirectSoundNotify, &ptr);
         if(SUCCEEDED(hr))
         {
-            mNotifies = static_cast<IDirectSoundNotify*>(ptr);
+            mNotifies = ComPtr<IDirectSoundNotify>{static_cast<IDirectSoundNotify*>(ptr)};
 
             uint num_updates{mDevice->BufferSize / mDevice->UpdateSize};
             assert(num_updates <= MAX_UPDATES);
@@ -517,14 +513,8 @@ retry_open:
 
     if(FAILED(hr))
     {
-        if(mNotifies)
-            mNotifies->Release();
         mNotifies = nullptr;
-        if(mBuffer)
-            mBuffer->Release();
         mBuffer = nullptr;
-        if(mPrimaryBuffer)
-            mPrimaryBuffer->Release();
         mPrimaryBuffer = nullptr;
         return false;
     }
@@ -558,7 +548,7 @@ void DSoundPlayback::stop()
 
 
 struct DSoundCapture final : public BackendBase {
-    DSoundCapture(ALCdevice *device) noexcept : BackendBase{device} { }
+    DSoundCapture(DeviceBase *device) noexcept : BackendBase{device} { }
     ~DSoundCapture() override;
 
     void open(const char *name) override;
@@ -567,8 +557,8 @@ struct DSoundCapture final : public BackendBase {
     void captureSamples(al::byte *buffer, uint samples) override;
     uint availableSamples() override;
 
-    IDirectSoundCapture *mDSC{nullptr};
-    IDirectSoundCaptureBuffer *mDSCbuffer{nullptr};
+    ComPtr<IDirectSoundCapture> mDSC;
+    ComPtr<IDirectSoundCaptureBuffer> mDSCbuffer;
     DWORD mBufferBytes{0u};
     DWORD mCursor{0u};
 
@@ -582,12 +572,8 @@ DSoundCapture::~DSoundCapture()
     if(mDSCbuffer)
     {
         mDSCbuffer->Stop();
-        mDSCbuffer->Release();
         mDSCbuffer = nullptr;
     }
-
-    if(mDSC)
-        mDSC->Release();
     mDSC = nullptr;
 }
 
@@ -693,20 +679,16 @@ void DSoundCapture::open(const char *name)
     DSCBDescription.lpwfxFormat = &InputType.Format;
 
     //DirectSoundCapture Init code
-    hr = DirectSoundCaptureCreate(guid, &mDSC, nullptr);
+    hr = DirectSoundCaptureCreate(guid, mDSC.getPtr(), nullptr);
     if(SUCCEEDED(hr))
-        mDSC->CreateCaptureBuffer(&DSCBDescription, &mDSCbuffer, nullptr);
+        mDSC->CreateCaptureBuffer(&DSCBDescription, mDSCbuffer.getPtr(), nullptr);
     if(SUCCEEDED(hr))
          mRing = RingBuffer::Create(mDevice->BufferSize, InputType.Format.nBlockAlign, false);
 
     if(FAILED(hr))
     {
         mRing = nullptr;
-        if(mDSCbuffer)
-            mDSCbuffer->Release();
         mDSCbuffer = nullptr;
-        if(mDSC)
-            mDSC->Release();
         mDSC = nullptr;
 
         throw al::backend_exception{al::backend_error::DeviceError, "Device init failed: 0x%08lx",
@@ -858,7 +840,7 @@ std::string DSoundBackendFactory::probe(BackendType type)
     return outnames;
 }
 
-BackendPtr DSoundBackendFactory::createBackend(ALCdevice *device, BackendType type)
+BackendPtr DSoundBackendFactory::createBackend(DeviceBase *device, BackendType type)
 {
     if(type == BackendType::Playback)
         return BackendPtr{new DSoundPlayback{device}};

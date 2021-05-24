@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -28,7 +28,7 @@ SOFTWARE.
 #include "yasio/ibstream.hpp"
 #include "yasio/obstream.hpp"
 #include "yasio/yasio.hpp"
-#include "yasio/bindings/lyasio.h"
+#include "yasio/bindings/lyasio.hpp"
 #include "yasio/bindings/yasio_sol.hpp"
 using namespace yasio;
 using namespace yasio::inet;
@@ -137,12 +137,15 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   auto yasio_lib = state_view.create_named_table("yasio");
 #  endif
   yasio_lib.new_usertype<io_event>(
-      "io_event", "kind", &io_event::kind, "status", &io_event::status, "packet",
+      "io_event", "kind", &io_event::kind, "status", &io_event::status, "passive", [](io_event* e) { return !!e->passive(); }, "packet",
       [](io_event* ev, sol::variadic_args args) {
         bool copy = false;
         if (args.size() >= 2)
           copy = args[1];
-        return std::unique_ptr<yasio::ibstream>(!copy ? new yasio::ibstream(std::move(ev->packet())) : new yasio::ibstream(ev->packet()));
+        auto& pkt = ev->packet();
+        return !is_packet_empty(pkt)
+                   ? std::unique_ptr<yasio::ibstream>(!copy ? new yasio::ibstream(forward_packet((packet_t &&) pkt)) : new yasio::ibstream(forward_packet(pkt)))
+                   : std::unique_ptr<yasio::ibstream>{};
       },
       "cindex", &io_event::cindex, "transport", &io_event::transport
 #  if !defined(YASIO_MINIFY_EVENT)
@@ -247,6 +250,20 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   yasio_lib["highp_clock"] = &highp_clock<steady_clock_t>;
   yasio_lib["highp_time"]  = &highp_clock<system_clock_t>;
 
+  yasio_lib["unwrap_ptr"] = [](lua_State* L) -> int {
+    auto& pkt  = *(packet_t*)lua_touserdata(L, 1);
+    int offset = lua_isinteger(L, 2) ? static_cast<int>(lua_tointeger(L, 2)) : 0;
+    lua_pushlightuserdata(L, packet_data(pkt) + offset);
+    return 1;
+  };
+
+  yasio_lib["unwrap_len"] = [](lua_State* L) -> int {
+    auto& pkt  = *(packet_t*)lua_touserdata(L, 1);
+    int offset = lua_isinteger(L, 2) ? static_cast<int>(lua_tointeger(L, 2)) : 0;
+    lua_pushinteger(L, packet_len(pkt) - offset);
+    return 1;
+  };
+
   // ##-- yasio enums
 #  define YASIO_EXPORT_ENUM(v) yasio_lib[#  v] = v
   YASIO_EXPORT_ENUM(YCK_TCP_CLIENT);
@@ -281,6 +298,9 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   YASIO_EXPORT_ENUM(YCF_REUSEADDR);
   YASIO_EXPORT_ENUM(YCF_EXCLUSIVEADDRUSE);
 
+  YASIO_EXPORT_ENUM(YEK_ON_OPEN);
+  YASIO_EXPORT_ENUM(YEK_ON_CLOSE);
+  YASIO_EXPORT_ENUM(YEK_ON_PACKET);
   YASIO_EXPORT_ENUM(YEK_CONNECT_RESPONSE);
   YASIO_EXPORT_ENUM(YEK_CONNECTION_LOST);
   YASIO_EXPORT_ENUM(YEK_PACKET);
@@ -489,17 +509,19 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
 #  if YASIO_LUA_ENABLE_GLOBAL
   state["yasio"] = yasio_lib;
 #  endif
-  // No any interface need export, only for holder
-  // yasio_lib["io_transport"].setClass(kaguya::UserdataMetatable<io_transport>());
 
   yasio_lib["io_event"].setClass(kaguya::UserdataMetatable<io_event>()
 
                                      .addFunction("kind", &io_event::kind)
                                      .addFunction("status", &io_event::status)
+                                     .addStaticFunction("passive", [](io_event* ev) { return !!ev->passive(); })
                                      .addStaticFunction("packet",
                                                         [](io_event* ev, bool /*raw*/, bool copy) {
-                                                          return std::unique_ptr<yasio::ibstream>(!copy ? new yasio::ibstream(std::move(ev->packet()))
-                                                                                                        : new yasio::ibstream(ev->packet()));
+                                                          auto& pkt = ev->packet();
+                                                          return !is_packet_empty(pkt) ? std::unique_ptr<yasio::ibstream>(
+                                                                                             !copy ? new yasio::ibstream(forward_packet((packet_t &&) pkt))
+                                                                                                   : new yasio::ibstream(forward_packet(pkt)))
+                                                                                       : std::unique_ptr<yasio::ibstream>{};
                                                         })
                                      .addFunction("cindex", &io_event::cindex)
                                      .addFunction("transport", &io_event::transport)
@@ -594,6 +616,20 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   yasio_lib.setField("highp_clock", &highp_clock<steady_clock_t>);
   yasio_lib.setField("highp_time", &highp_clock<system_clock_t>);
 
+  yasio_lib.setField("unwrap_ptr", [](lua_State* L) -> int {
+    auto& pkt  = *(packet_t*)lua_touserdata(L, 1);
+    int offset = lua_isinteger(L, 2) ? static_cast<int>(lua_tointeger(L, 2)) : 0;
+    lua_pushlightuserdata(L, packet_data(pkt) + offset);
+    return 1;
+  });
+
+  yasio_lib.setField("unwrap_len", [](lua_State* L) -> int {
+    auto& pkt  = *(packet_t*)lua_touserdata(L, 1);
+    int offset = lua_isinteger(L, 2) ? static_cast<int>(lua_tointeger(L, 2)) : 0;
+    lua_pushinteger(L, packet_len(pkt) - offset);
+    return 1;
+  });
+
   // ##-- yasio enums
 #  define YASIO_EXPORT_ENUM(v) yasio_lib[#  v] = v
   YASIO_EXPORT_ENUM(YCK_TCP_CLIENT);
@@ -628,6 +664,9 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   YASIO_EXPORT_ENUM(YCF_REUSEADDR);
   YASIO_EXPORT_ENUM(YCF_EXCLUSIVEADDRUSE);
 
+  YASIO_EXPORT_ENUM(YEK_ON_OPEN);
+  YASIO_EXPORT_ENUM(YEK_ON_CLOSE);
+  YASIO_EXPORT_ENUM(YEK_ON_PACKET);
   YASIO_EXPORT_ENUM(YEK_CONNECT_RESPONSE);
   YASIO_EXPORT_ENUM(YEK_CONNECTION_LOST);
   YASIO_EXPORT_ENUM(YEK_PACKET);

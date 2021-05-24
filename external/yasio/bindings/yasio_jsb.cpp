@@ -29,7 +29,7 @@ SOFTWARE.
 #define YASIO_HEADER_ONLY 1
 #define YASIO_HAVE_KCP 1
 
-#include "yasio/bindings/yasio_jsb.h"
+#include "yasio/bindings/yasio_jsb.hpp"
 #include "yasio/yasio.hpp"
 #include "yasio/ibstream.hpp"
 #include "yasio/obstream.hpp"

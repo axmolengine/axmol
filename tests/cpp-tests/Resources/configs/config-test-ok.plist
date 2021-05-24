@@ -14,15 +14,15 @@
 		<string>test2</string>
 		<key>test.3</key>
 		<string>test3</string>
-		<key>cocos2d.x.fps</key>
+		<key>adxe.fps</key>
 		<integer>60</integer>
-		<key>cocos2d.x.display_fps</key>
+		<key>adxe.display_fps</key>
 		<true/>
-		<key>cocos2d.x.gl.projection</key>
+		<key>adxe.gl.projection</key>
 		<string>3d</string>
-		<key>cocos2d.x.texture.pixel_format_for_png</key>
+		<key>adxe.texture.pixel_format_for_png</key>
 		<string>rgba8888</string>
-		<key>cocos2d.x.texture.pvrv2_has_alpha_premultiplied</key>
+		<key>adxe.texture.pvrv2_has_alpha_premultiplied</key>
 		<false/>
 	</dict>
 	<key>metadata</key>

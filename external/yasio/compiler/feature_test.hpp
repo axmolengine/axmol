@@ -162,6 +162,13 @@ SOFTWARE.
 
 #define YASIO__STD ::std::
 
+#if YASIO__HAS_CXX14
+namespace cxx14
+{
+using namespace std;
+};
+#endif
+
 #if YASIO__HAS_CXX17
 namespace cxx17
 {

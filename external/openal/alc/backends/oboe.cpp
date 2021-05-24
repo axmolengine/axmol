@@ -5,8 +5,10 @@
 
 #include <cassert>
 #include <cstring>
+#include <stdint.h>
 
-#include "alu.h"
+#include "alnumeric.h"
+#include "core/device.h"
 #include "core/logging.h"
 
 #include "oboe/Oboe.h"
@@ -18,7 +20,7 @@ constexpr char device_name[] = "Oboe Default";
 
 
 struct OboePlayback final : public BackendBase, public oboe::AudioStreamCallback {
-    OboePlayback(ALCdevice *device) : BackendBase{device} { }
+    OboePlayback(DeviceBase *device) : BackendBase{device} { }
 
     oboe::ManagedStream mStream;
 
@@ -64,9 +66,10 @@ void OboePlayback::open(const char *name)
             name};
 
     /* Open a basic output stream, just to ensure it can work. */
+    oboe::ManagedStream stream;
     oboe::Result result{oboe::AudioStreamBuilder{}.setDirection(oboe::Direction::Output)
         ->setPerformanceMode(oboe::PerformanceMode::LowLatency)
-        ->openManagedStream(mStream)};
+        ->openManagedStream(stream)};
     if(result != oboe::Result::OK)
         throw al::backend_exception{al::backend_error::DeviceError, "Failed to create stream: %s",
             oboe::convertToText(result)};
@@ -220,7 +223,7 @@ void OboePlayback::stop()
 
 
 struct OboeCapture final : public BackendBase {
-    OboeCapture(ALCdevice *device) : BackendBase{device} { }
+    OboeCapture(DeviceBase *device) : BackendBase{device} { }
 
     oboe::ManagedStream mStream;
 
@@ -367,7 +370,7 @@ std::string OboeBackendFactory::probe(BackendType type)
     return std::string{};
 }
 
-BackendPtr OboeBackendFactory::createBackend(ALCdevice *device, BackendType type)
+BackendPtr OboeBackendFactory::createBackend(DeviceBase *device, BackendType type)
 {
     if(type == BackendType::Playback)
         return BackendPtr{new OboePlayback{device}};
