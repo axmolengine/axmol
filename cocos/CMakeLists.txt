@@ -25,8 +25,8 @@
 # ****************************************************************************/
 
 # this CMakeLists is to generate Cocos2d-x Engine Library
-# build libcocos2d
-# build luacocos2d if BUILD_LUA_LIBS=ON
+# build adxe
+# build adxelua if BUILD_LUA_LIBS=ON
 
 # The version number
 set(ADXE_VERSION 1.0)

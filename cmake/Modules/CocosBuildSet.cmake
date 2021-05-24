@@ -15,8 +15,8 @@ if(CMAKE_TOOLCHAIN_FILE)
 endif()
 
 find_program(PYTHON_COMMAND NAMES python3 python2 python)
-find_program(COCOS_COMMAND NAME cocos
-    PATHS ${ADXE_ROOT_PATH}/tools/cocos2d-console/bin $ENV{COCOS_CONSOLE_ROOT})
+find_program(COCOS_COMMAND NAME adxe
+    PATHS ${ADXE_ROOT_PATH}/tools/cocos2d-console/bin $ENV{ADXE_CONSOLE_ROOT})
 
 message(STATUS "PROJECT_NAME:" ${PROJECT_NAME})
 message(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
