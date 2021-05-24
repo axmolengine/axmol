@@ -126,7 +126,7 @@ else()
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src/proj.android/app/src")
 endif()
 
-target_link_libraries(${APP_NAME} luacocos2d)
+target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
 target_include_directories(${APP_NAME} PRIVATE ${RUNTIME_SRC_ROOT}/Classes)
 
 # mark app resources, resource will be copy auto after mark
