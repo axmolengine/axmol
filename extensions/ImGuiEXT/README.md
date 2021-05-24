@@ -1,4 +1,4 @@
-# ImGuiEXT of Engine-x
+# ImGuiEXT of adxe
 Sync from https://github.com/Xrysnow/cocos2d-x-imgui and do a little changes
 
 ## Improvements
