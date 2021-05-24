@@ -656,7 +656,12 @@ bool Image::initWithImageFileThreadSafe(const std::string& fullpath)
     return ret;
 }
 
-bool Image::initWithImageData(const uint8_t* data, ssize_t dataLen, bool ownData)
+bool Image::initWithImageData(const uint8_t* data, ssize_t dataLen) 
+{
+    return initWithImageData(const_cast<uint8_t*>(data), dataLen, false);
+}
+
+bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
     bool ret = false;
     
