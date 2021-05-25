@@ -27,48 +27,6 @@
                 "from": "templates/lua-template-default/res",
                 "to": "res",
                 "exclude": []
-            },
-            {
-                "from": "external/angle/prebuilt/win32",
-                "to": "runtime/win32",
-                "include": [
-                    "*.dll"
-                ]
-            },
-            {
-                "from": "external/openal/prebuilt/win32",
-                "to": "runtime/win32",
-                "include": [
-                    "*.dll"
-                ]
-            },
-            {
-                "from": "external/win32-specific/iconv/prebuilt",
-                "to": "runtime/win32",
-                "include": [
-                    "*.dll"
-                ]
-            },
-            {
-                "from": "external/zlib/prebuilt/win32",
-                "to": "runtime/win32",
-                "include": [
-                    "*.dll"
-                ]
-            },
-            {
-                "from": "external/curl/prebuilt/win32",
-                "to": "runtime/win32",
-                "include": [
-                    "*.dll"
-                ]
-            },
-            {
-                "from": "external/lua/luajit/prebuilt/win32",
-                "to": "runtime/win32",
-                "include": [
-                    "*.dll"
-                ]
             }
         ]
     },
