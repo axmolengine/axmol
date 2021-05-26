@@ -102,3 +102,10 @@
 ### 参考链接
   * official v4: https://gitee.com/mirrors/cocos2d-x
   * Git快速手册: https://github.com/adxeproject/adxe/wiki/Git-Guides
+
+### adxe项目的活跃共享者
+
+- @halx99
+- @rh101
+- @aismann
+- @weiwest
