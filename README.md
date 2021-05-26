@@ -97,3 +97,10 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
 
 ### Reference links
   * Official Cocos2d-x: https://github.com/cocos2d/cocos2d-x
+
+### The adxe Active Contributors
+
+- @halx99
+- @rh101
+- @aismann
+- @weiwest
