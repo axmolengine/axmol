@@ -210,6 +210,21 @@ def get_newest_devenv(min_ver=None):
                 find_path = v_path
 
     if find_ver is None:
+        # try use vswhere to find visual studio 2017+
+        import vswhere
+        find_path = vswhere.find(legacy=True, prop='productPath')
+        if  isinstance(find_path, list) and len(find_path) > 0:
+            find_path = find_path[0]
+
+        find_ver = vswhere.find(legacy=True, prop='productDisplayVersion')
+        if  isinstance(find_ver, list) and len(find_ver) > 0:
+            find_ver = find_ver[0]
+        find_ver_nums = find_ver.split('.')
+        if(len(find_ver_nums) >= 3):
+            find_ver_nums = find_ver_nums[:len(find_ver_nums)-(len(find_ver_nums) - 2)]
+        find_ver = ".".join(find_ver_nums)
+    
+    if find_ver is None:
         return None
 
     if cmp(min_ver, ">", 0) and cmp(find_ver, ">", min_ver):
