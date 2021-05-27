@@ -1,4 +1,13 @@
-- engine-x version:
+---
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: ''
+assignees: ''
+
+---
+
+- adxe version:
 - devices test on:
 - developing environments
    - NDK version:
@@ -8,4 +17,4 @@
 Steps to Reproduce:
 
 1. 
-2. 
+2.
