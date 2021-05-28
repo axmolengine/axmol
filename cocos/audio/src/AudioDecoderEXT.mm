@@ -26,6 +26,7 @@
 
 #include "audio/include/AudioDecoderEXT.h"
 #include "audio/include/AudioMacros.h"
+#include "platform/CCFileUtils.h"
 
 #import <Foundation/Foundation.h>
 
@@ -33,15 +34,49 @@
 
 namespace cocos2d {
 
+    OSStatus AudioDecoderEXT_ReadProc(void *inClientData, SInt64 inPosition, UInt32 requestCount, void *buffer, UInt32 *actualCount)
+    {
+        if (!inClientData)
+        {
+            return kAudioFileNotOpenError;
+        }
+        
+        auto* fileStream = (cocos2d::FileStream*)inClientData;
+                
+        const auto seekResult = fileStream->seek(inPosition, SEEK_SET);
+        if (seekResult < 0)
+        {
+            return kAudioFilePositionError;
+        }
+        
+        const auto count = fileStream->read(buffer, requestCount);
+        
+        if (count < 0)
+        {
+            return kAudioFileEndOfFileError;
+        }
+        
+        *actualCount = count;
+        
+        return noErr;
+    }
+
+    SInt64 AudioDecoderEXT_GetSizeProc(void *inClientData)
+    {
+        auto* fileStream = (cocos2d::FileStream*)inClientData;
+        fileStream->seek(0, SEEK_END);
+        return fileStream->tell();
+    }
+
     AudioDecoderEXT::AudioDecoderEXT()
-    : _extRef(nullptr)
+    : _extRef(nullptr), _fileStream(nullptr)
     {
         memset(&_outputFormat, 0, sizeof(_outputFormat));
     }
 
     AudioDecoderEXT::~AudioDecoderEXT()
     {
-        close();
+        closeInternal();
     }
 
     bool AudioDecoderEXT::open(const std::string& fullPath)
@@ -52,12 +87,16 @@ namespace cocos2d {
         {
             BREAK_IF_ERR_LOG(fullPath.empty(), "Invalid path!");
 
-            NSString *fileFullPath = [[NSString alloc] initWithCString:fullPath.c_str() encoding:NSUTF8StringEncoding];
-            fileURL = (CFURLRef)[[NSURL alloc] initFileURLWithPath:fileFullPath];
-            [fileFullPath release];
-            BREAK_IF_ERR_LOG(fileURL == nil, "Converting path to CFURLRef failed!");
+            AudioFileID audioFileId;
+            _fileStream = cocos2d::FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
+            BREAK_IF_ERR_LOG(_fileStream == nullptr, "FileUtils::openFileStream FAILED for file: %s", fullPath.c_str());
+            
+            OSStatus status = AudioFileOpenWithCallbacks(_fileStream.get(), &AudioDecoderEXT_ReadProc, nullptr, &AudioDecoderEXT_GetSizeProc, nullptr, 0, &audioFileId);
+            BREAK_IF_ERR_LOG(status != noErr, "AudioFileOpenWithCallbacks FAILED, Error = %d", (int)status);
 
-            OSStatus status = ExtAudioFileOpenURL(fileURL, &_extRef);
+            status = ExtAudioFileWrapAudioFileID(audioFileId, false, &_extRef);
+            BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileWrapAudioFileID FAILED, Error = %d", (int)status);
+
             BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileOpenURL FAILED, Error = %d", (int)status);
 
             AudioStreamBasicDescription	fileFormat;
@@ -112,11 +151,7 @@ namespace cocos2d {
 
     void AudioDecoderEXT::close()
     {
-        if (_extRef != nullptr)
-        {
-            ExtAudioFileDispose(_extRef);
-            _extRef = nullptr;
-        }
+        closeInternal();
     }
 
     uint32_t AudioDecoderEXT::read(uint32_t framesToRead, char* pcmBuf)
@@ -157,5 +192,15 @@ namespace cocos2d {
             ret = true;
         } while(false);
         return ret;
+    }
+
+    void AudioDecoderEXT::closeInternal()
+    {
+        if (_extRef != nullptr)
+        {
+            ExtAudioFileDispose(_extRef);
+            _extRef = nullptr;
+            _fileStream = nullptr;
+        }
     }
 } // namespace cocos2d {

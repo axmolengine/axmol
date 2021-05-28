@@ -29,6 +29,7 @@
 #include <stdint.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
 #include "audio/include/AudioDecoder.h"
+#include "platform/CCFileStream.h"
 
 namespace cocos2d {
 
@@ -83,7 +84,10 @@ public:
     bool seek(uint32_t frameOffset) override;
 
 private:
+    void closeInternal();
+    
     ExtAudioFileRef _extRef;
+    std::unique_ptr<cocos2d::FileStream> _fileStream;
 
     AudioStreamBasicDescription _outputFormat;
 };
