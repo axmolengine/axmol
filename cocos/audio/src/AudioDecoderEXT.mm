@@ -201,10 +201,10 @@ namespace cocos2d {
     SInt64 AudioDecoderEXT::getSizeCallback(void *inClientData)
     {
         auto* fileStream = (cocos2d::FileStream*)inClientData;
-        //auto currentPos = fileStream->tell();
+
         fileStream->seek(0, SEEK_END);
         auto fileSize = (SInt64)fileStream->tell();
-        //fileStream->seek(currentPos, SEEK_SET); //go back to where we were
+
         return fileSize;
     }
 } // namespace cocos2d {
