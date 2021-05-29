@@ -35,7 +35,7 @@
 namespace cocos2d {
 
     AudioDecoderEXT::AudioDecoderEXT()
-    : _extRef(nullptr), _fileStream(nullptr)
+    : _extRef(nullptr), _fileStream(nullptr), _audioFileId(nullptr)
     {
         memset(&_outputFormat, 0, sizeof(_outputFormat));
     }
@@ -53,14 +53,13 @@ namespace cocos2d {
         {
             BREAK_IF_ERR_LOG(fullPath.empty(), "Invalid path!");
 
-            AudioFileID audioFileId;
             _fileStream = cocos2d::FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
             BREAK_IF_ERR_LOG(_fileStream == nullptr, "FileUtils::openFileStream FAILED for file: %s", fullPath.c_str());
             
-            OSStatus status = AudioFileOpenWithCallbacks(_fileStream.get(), &AudioDecoderEXT::readCallback, nullptr, &AudioDecoderEXT::getSizeCallback, nullptr, 0, &audioFileId);
+            OSStatus status = AudioFileOpenWithCallbacks(_fileStream.get(), &AudioDecoderEXT::readCallback, nullptr, &AudioDecoderEXT::getSizeCallback, nullptr, 0, &_audioFileId);
             BREAK_IF_ERR_LOG(status != noErr, "AudioFileOpenWithCallbacks FAILED, Error = %d", (int)status);
 
-            status = ExtAudioFileWrapAudioFileID(audioFileId, false, &_extRef);
+            status = ExtAudioFileWrapAudioFileID(_audioFileId, false, &_extRef);
             BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileWrapAudioFileID FAILED, Error = %d", (int)status);
 
             BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileOpenURL FAILED, Error = %d", (int)status);
@@ -165,7 +164,9 @@ namespace cocos2d {
         if (_extRef != nullptr)
         {
             ExtAudioFileDispose(_extRef);
+            AudioFileClose(_audioFileId);
             _extRef = nullptr;
+            _audioFileId = nullptr;
             _fileStream = nullptr;
         }
     }
@@ -200,7 +201,10 @@ namespace cocos2d {
     SInt64 AudioDecoderEXT::getSizeCallback(void *inClientData)
     {
         auto* fileStream = (cocos2d::FileStream*)inClientData;
+        //auto currentPos = fileStream->tell();
         fileStream->seek(0, SEEK_END);
-        return fileStream->tell();
+        auto fileSize = (SInt64)fileStream->tell();
+        //fileStream->seek(currentPos, SEEK_SET); //go back to where we were
+        return fileSize;
     }
 } // namespace cocos2d {

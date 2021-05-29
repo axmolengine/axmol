@@ -91,7 +91,8 @@ private:
     
     ExtAudioFileRef _extRef;
     std::unique_ptr<cocos2d::FileStream> _fileStream;
-
+    AudioFileID _audioFileId;
+    
     AudioStreamBasicDescription _outputFormat;
 };
 
