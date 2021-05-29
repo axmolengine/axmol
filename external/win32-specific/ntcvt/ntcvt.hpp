@@ -20,10 +20,10 @@ namespace buffer_traits
 {
 template <class _Elem, class _Traits = std::char_traits<_Elem>,
           class _Alloc = std::allocator<_Elem>>
-class string : public std::basic_string<_Elem, _Traits, _Alloc>
+class intrusive_string : public std::basic_string<_Elem, _Traits, _Alloc>
 {
 public:
-#if _MSC_VER > 1900 // VS2017 or later
+#if _MSC_VER >= 1920 // VS2019+
   using _Alty        = std::_Rebind_alloc_t<_Alloc, _Elem>;
   using _Alty_traits = std::allocator_traits<_Alty>;
 
@@ -40,10 +40,10 @@ public:
   // std::string: use memset (usually implemented with SIMD)
   // std::wstring: for loop (slow performance)
   // only works on msvc currently
-  _Elem* setnbuf(int len)
+  _Elem* resize_nofill(int len)
   {
     this->reserve(len);
-#if _MSC_VER > 1900 // VS2017 or later
+#if _MSC_VER >= 1920 // VS2019+
     std::_Compressed_pair<_Alty, _Scary_val>* _Myval =
         (std::_Compressed_pair<_Alty, _Scary_val>*)this;
     _Myval->_Myval2._Mysize = len;
@@ -57,13 +57,13 @@ public:
   }
 };
 
-template <typename _Elem> static _Elem* inplaced(std::basic_string<_Elem>& str, int size)
+template <typename _Elem> static _Elem* prepare(std::basic_string<_Elem>& str, int size)
 {
-  string<_Elem>& helper = (string<_Elem>&)str;
-  return helper.setnbuf(size);
+  intrusive_string<_Elem>& helper = (intrusive_string<_Elem>&)str;
+  return helper.resize_nofill(size);
 }
 #if defined(_AFX)
-template <typename _Elem> _Elem* inplaced(CStringT<_Elem, StrTraitMFC_DLL<_Elem>>& str, int size)
+template <typename _Elem> _Elem* prepare(CStringT<_Elem, StrTraitMFC_DLL<_Elem>>& str, int size)
 {
   return str.GetBufferSetLength(size);
 }
@@ -78,7 +78,7 @@ inline _StringContType wcbs2a(const wchar_t* wcb, int len, UINT cp = NTCVT_CP_DE
   _StringContType buffer;
   int cch;
   if (len > 0 && (cch = ::WideCharToMultiByte(cp, 0, wcb, len, NULL, 0, NULL, NULL)) > 0)
-    ::WideCharToMultiByte(cp, 0, wcb, len, buffer_traits::inplaced(buffer, cch), cch, NULL, NULL);
+    ::WideCharToMultiByte(cp, 0, wcb, len, buffer_traits::prepare(buffer, cch), cch, NULL, NULL);
   return buffer;
 }
 
@@ -90,7 +90,7 @@ inline _StringContType mcbs2w(const char* mcb, int len, UINT cp = NTCVT_CP_DEFAU
   _StringContType buffer;
   int cch;
   if (len > 0 && (cch = ::MultiByteToWideChar(cp, 0, mcb, len, NULL, 0)) > 0)
-    ::MultiByteToWideChar(cp, 0, mcb, len, buffer_traits::inplaced(buffer, cch), cch);
+    ::MultiByteToWideChar(cp, 0, mcb, len, buffer_traits::prepare(buffer, cch), cch);
 
   return buffer;
 }

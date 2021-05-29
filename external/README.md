@@ -81,7 +81,7 @@
 
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
-- Version: 2.1.0 with CMakeLists.txt modified for sutiable as a thirdparty of CMake build system
+- Version: 2.1.0-3932190 (2249) with CMakeLists.txt modified for sutiable as a thirdparty of CMake build system
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -228,5 +228,5 @@
 
 ## ntcvt
 - Upstream: https://github.com/simdsoft/ntcvt
-- Version: git b974bbb
+- Version: 0.0.1
 - License: Apache-2.0

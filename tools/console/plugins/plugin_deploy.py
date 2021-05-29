@@ -87,12 +87,15 @@ class CCPluginDeploy(adxe.CCPlugin):
         self.project_name = compile_dep.project_name
 
     def find_xap_deploy_tool(self):
-        import _winreg
+        if(sys.version_info.major >= 3):
+            import winreg 
+        else:
+            import _winreg as winreg
         import re
         if adxe.os_is_32bit_windows():
-            reg_flag_list = [ _winreg.KEY_WOW64_32KEY ]
+            reg_flag_list = [ winreg.KEY_WOW64_32KEY ]
         else:
-            reg_flag_list = [ _winreg.KEY_WOW64_64KEY, _winreg.KEY_WOW64_32KEY ]
+            reg_flag_list = [ winreg.KEY_WOW64_64KEY, winreg.KEY_WOW64_32KEY ]
 
         pattern = re.compile(r"v(\d+).(\d+)")
         find_ret = None
@@ -100,13 +103,13 @@ class CCPluginDeploy(adxe.CCPlugin):
         find_minor = -1
         for reg_flag in reg_flag_list:
             adxe.Logging.info(MultiLanguage.get_string('DEPLOY_INFO_FIND_XAP_FMT',
-                                                        ("32bit" if reg_flag == _winreg.KEY_WOW64_32KEY else "64bit")))
+                                                        ("32bit" if reg_flag == winreg.KEY_WOW64_32KEY else "64bit")))
             try:
-                wp = _winreg.OpenKey(
-                    _winreg.HKEY_LOCAL_MACHINE,
+                wp = winreg.OpenKey(
+                    winreg.HKEY_LOCAL_MACHINE,
                     r"SOFTWARE\Microsoft\Microsoft SDKs\WindowsPhone",
                     0,
-                    _winreg.KEY_READ | reg_flag
+                    winreg.KEY_READ | reg_flag
                 )
             except:
                 # windows phone not found, continue
@@ -115,7 +118,7 @@ class CCPluginDeploy(adxe.CCPlugin):
             i = 0
             while True:
                 try:
-                    version = _winreg.EnumKey(wp, i)
+                    version = winreg.EnumKey(wp, i)
                 except:
                     break
 
@@ -126,8 +129,8 @@ class CCPluginDeploy(adxe.CCPlugin):
                     minor = int(match.group(2))
                     if major > 7:
                         try:
-                            key = _winreg.OpenKey(wp, "%s\Install Path" % version)
-                            value, type = _winreg.QueryValueEx(key, "Install Path")
+                            key = winreg.OpenKey(wp, "%s\Install Path" % version)
+                            value, type = winreg.QueryValueEx(key, "Install Path")
                             tool_path = os.path.join(value, "Tools", "XAP Deployment", "XapDeployCmd.exe")
                             if os.path.isfile(tool_path):
                                 if (find_ret is None) or (major > find_major) or (major == find_major and minor > find_minor):
