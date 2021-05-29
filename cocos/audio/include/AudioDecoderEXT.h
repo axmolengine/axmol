@@ -86,6 +86,9 @@ public:
 private:
     void closeInternal();
     
+    static OSStatus readCallback(void *inClientData, SInt64 inPosition, UInt32 requestCount, void *buffer, UInt32 *actualCount);
+    static SInt64 getSizeCallback(void *inClientData);
+    
     ExtAudioFileRef _extRef;
     std::unique_ptr<cocos2d::FileStream> _fileStream;
 
