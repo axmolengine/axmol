@@ -112,6 +112,7 @@ public:
     int read(void* buf, unsigned int size) override;
     int write(const void* buf, unsigned int size) override;
     int tell() override;
+    long long size() override;
     bool isOpen() const override;
 
 private:
