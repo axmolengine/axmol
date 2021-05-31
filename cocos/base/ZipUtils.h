@@ -306,6 +306,7 @@ namespace cocos2d
         int zfread(ZipFileStream* zfs, void* buf, unsigned int size);
         long zfseek(ZipFileStream* zfs, long offset, int origin);
         void zfclose(ZipFileStream* zfs);
+        long long zfsize(ZipFileStream* zfs);
 
         /**
         *  Gets resource file data from a zip file.

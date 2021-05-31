@@ -64,6 +64,12 @@ public:
     virtual int tell() = 0;
 
     /**
+    *  Get the size of the file stream
+    *  @return stream size, -1 if error (Mode::WRITE and Mode::APPEND may return -1)
+    */
+    virtual long long size() = 0;
+
+    /**
     *  Get status of file stream
     *  @return true if open, false if closed
     */
