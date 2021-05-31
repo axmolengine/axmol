@@ -46,7 +46,7 @@
 
 ## edtaa3func
 - Upstream: https://github.com/zilongshanren/edtaa3func
-- Version: NA
+- Version: git d02e47d 
 - License: MIT
 
 ## fastlib
@@ -76,7 +76,7 @@
 
 ## glsl-optimizer
 - Upstream: https://github.com/aras-p/glsl-optimizer
-- Version: NA
+- Version: git d78c3d2
 - License: MIT
 
 ## jpeg (libjpeg-turbo)
