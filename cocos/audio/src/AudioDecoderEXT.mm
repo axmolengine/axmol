@@ -35,7 +35,7 @@
 namespace cocos2d {
 
     AudioDecoderEXT::AudioDecoderEXT()
-    : _extRef(nullptr), _fileStream(nullptr), _audioFileId(nullptr)
+    : _extRef(nullptr), _fileStream(nullptr), _streamSize(0), _audioFileId(nullptr)
     {
         memset(&_outputFormat, 0, sizeof(_outputFormat));
     }
@@ -55,8 +55,14 @@ namespace cocos2d {
 
             _fileStream = cocos2d::FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
             BREAK_IF_ERR_LOG(_fileStream == nullptr, "FileUtils::openFileStream FAILED for file: %s", fullPath.c_str());
+            if (_fileStream)
+            {
+                _fileStream->seek(0, SEEK_END);
+                _streamSize = (SInt64)_fileStream->tell(); // cache the stream size
+                _fileStream->seek(0, SEEK_SET);
+            }
             
-            OSStatus status = AudioFileOpenWithCallbacks(_fileStream.get(), &AudioDecoderEXT::readCallback, nullptr, &AudioDecoderEXT::getSizeCallback, nullptr, 0, &_audioFileId);
+            OSStatus status = AudioFileOpenWithCallbacks(this, &AudioDecoderEXT::readCallback, nullptr, &AudioDecoderEXT::getSizeCallback, nullptr, 0, &_audioFileId);
             BREAK_IF_ERR_LOG(status != noErr, "AudioFileOpenWithCallbacks FAILED, Error = %d", (int)status);
 
             status = ExtAudioFileWrapAudioFileID(_audioFileId, false, &_extRef);
@@ -178,12 +184,16 @@ namespace cocos2d {
             return kAudioFileNotOpenError;
         }
         
-        auto* fileStream = (cocos2d::FileStream*)inClientData;
-                
-        const auto seekResult = fileStream->seek(inPosition, SEEK_SET);
-        if (seekResult < 0)
+        auto* audioDecoder = (AudioDecoderEXT*)inClientData;
+        auto* fileStream = audioDecoder->_fileStream.get();
+        auto currPos = (SInt64)fileStream->tell();
+        auto posDiff = inPosition - currPos;
+        if (posDiff != 0)
         {
-            return kAudioFilePositionError;
+            if (fileStream->seek(posDiff, SEEK_CUR) < 0)
+            {
+                return kAudioFilePositionError;
+            }
         }
         
         const auto count = fileStream->read(buffer, requestCount);
@@ -200,11 +210,7 @@ namespace cocos2d {
 
     SInt64 AudioDecoderEXT::getSizeCallback(void *inClientData)
     {
-        auto* fileStream = (cocos2d::FileStream*)inClientData;
-
-        fileStream->seek(0, SEEK_END);
-        auto fileSize = (SInt64)fileStream->tell();
-
-        return fileSize;
+        auto* audioDecoder = (AudioDecoderEXT*)inClientData;
+        return audioDecoder->_streamSize;
     }
 } // namespace cocos2d {
