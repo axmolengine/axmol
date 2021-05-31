@@ -12,8 +12,8 @@ assignees: ''
 - developing environments
    - NDK version:
    - Xcode version:
-   - VS version:
-
+   - VS/msvctools version: Visual Studio 2019/14.28.29910
+   - cmake version: 
 Steps to Reproduce:
 
 1. 
