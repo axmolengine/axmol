@@ -57,9 +57,7 @@ namespace cocos2d {
             BREAK_IF_ERR_LOG(_fileStream == nullptr, "FileUtils::openFileStream FAILED for file: %s", fullPath.c_str());
             if (_fileStream)
             {
-                _fileStream->seek(0, SEEK_END);
-                _streamSize = (SInt64)_fileStream->tell(); // cache the stream size
-                _fileStream->seek(0, SEEK_SET);
+                _streamSize = _fileStream->size(); // cache the stream size
             }
             
             OSStatus status = AudioFileOpenWithCallbacks(this, &AudioDecoderEXT::readCallback, nullptr, &AudioDecoderEXT::getSizeCallback, nullptr, 0, &_audioFileId);

@@ -937,12 +937,22 @@ long ZipFile::zfseek(ZipFileStream* zfs, long offset, int origin)
 
     return result;
 }
+
 void ZipFile::zfclose(ZipFileStream* zfs)
 {
     if (zfs != nullptr && zfs->entry != nullptr) {
         zfs->entry = nullptr;
         zfs->offset = -1;
     }
+}
+
+long long ZipFile::zfsize(ZipFileStream* zfs)
+{
+    if (zfs != nullptr && zfs->entry != nullptr) {
+        return zfs->entry->uncompressed_size;
+    }
+
+    return -1;
 }
 
 unsigned char* ZipFile::getFileDataFromZip(const std::string& zipFilePath, const std::string& filename, ssize_t* size)
