@@ -1,19 +1,33 @@
+// SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-//  This confidential and proprietary software may be used only as authorised
-//  by a licensing agreement from Arm Limited.
-//      (C) COPYRIGHT 2011-2019 Arm Limited, ALL RIGHTS RESERVED
-//  The entire notice above must be reproduced on all authorised copies and
-//  copies may only be made to the extent permitted by a licensing agreement
-//  from Arm Limited.
+// Copyright 2011-2021 Arm Limited
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy
+// of the License at:
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
+// under the License.
 // ----------------------------------------------------------------------------
 
 /**
  * @brief Soft-float library for IEEE-754.
  */
+#if ASTCENC_F16C == 0
 
-#include "softfloat.h"
+#include "astcenc_mathlib.h"
 
-#define SOFTFLOAT_INLINE
+/*	sized soft-float types. These are mapped to the sized integer
+    types of C99, instead of C's floating-point types; this is because
+    the library needs to maintain exact, bit-level control on all
+    operations on these data types. */
+typedef uint16_t sf16;
+typedef uint32_t sf32;
 
 /******************************************
   helper functions and their lookup tables
@@ -48,11 +62,11 @@
 
 /*
    32-bit count-leading-zeros function: use the Assembly instruction whenever possible. */
-SOFTFLOAT_INLINE uint32_t clz32(uint32_t inp)
+static uint32_t clz32(uint32_t inp)
 {
 	#if defined(__GNUC__) && (defined(__i386) || defined(__amd64))
 		uint32_t bsr;
-	__asm__("bsrl %1, %0": "=r"(bsr):"r"(inp | 1));
+		__asm__("bsrl %1, %0": "=r"(bsr):"r"(inp | 1));
 		return 31 - bsr;
 	#else
 		#if defined(__arm__) && defined(__ARMCC_VERSION)
@@ -60,7 +74,7 @@ SOFTFLOAT_INLINE uint32_t clz32(uint32_t inp)
 		#else
 			#if defined(__arm__) && defined(__GNUC__)
 				uint32_t lz;
-			__asm__("clz %0, %1": "=r"(lz):"r"(inp));
+				__asm__("clz %0, %1": "=r"(lz):"r"(inp));
 				return lz;
 			#else
 				/* slow default version */
@@ -81,7 +95,18 @@ SOFTFLOAT_INLINE uint32_t clz32(uint32_t inp)
 	#endif
 }
 
-static SOFTFLOAT_INLINE uint32_t rtne_shift32(uint32_t inp, uint32_t shamt)
+/* the five rounding modes that IEEE-754r defines */
+typedef enum
+{
+	SF_UP = 0,				/* round towards positive infinity */
+	SF_DOWN = 1,			/* round towards negative infinity */
+	SF_TOZERO = 2,			/* round towards zero */
+	SF_NEARESTEVEN = 3,		/* round toward nearest value; if mid-between, round to even value */
+	SF_NEARESTAWAY = 4		/* round toward nearest value; if mid-between, round away from zero */
+} roundmode;
+
+
+static uint32_t rtne_shift32(uint32_t inp, uint32_t shamt)
 {
 	uint32_t vl1 = UINT32_C(1) << shamt;
 	uint32_t inp2 = inp + (vl1 >> 1);	/* added 0.5 ULP */
@@ -92,7 +117,7 @@ static SOFTFLOAT_INLINE uint32_t rtne_shift32(uint32_t inp, uint32_t shamt)
 	return inp2;
 }
 
-static SOFTFLOAT_INLINE uint32_t rtna_shift32(uint32_t inp, uint32_t shamt)
+static uint32_t rtna_shift32(uint32_t inp, uint32_t shamt)
 {
 	uint32_t vl1 = (UINT32_C(1) << shamt) >> 1;
 	inp += vl1;
@@ -100,7 +125,7 @@ static SOFTFLOAT_INLINE uint32_t rtna_shift32(uint32_t inp, uint32_t shamt)
 	return inp;
 }
 
-static SOFTFLOAT_INLINE uint32_t rtup_shift32(uint32_t inp, uint32_t shamt)
+static uint32_t rtup_shift32(uint32_t inp, uint32_t shamt)
 {
 	uint32_t vl1 = UINT32_C(1) << shamt;
 	inp += vl1;
@@ -110,7 +135,7 @@ static SOFTFLOAT_INLINE uint32_t rtup_shift32(uint32_t inp, uint32_t shamt)
 }
 
 /* convert from FP16 to FP32. */
-sf32 sf16_to_sf32(sf16 inp)
+static sf32 sf16_to_sf32(sf16 inp)
 {
 	uint32_t inpx = inp;
 
@@ -161,7 +186,7 @@ sf32 sf16_to_sf32(sf16 inp)
 }
 
 /* Conversion routine that converts from FP32 to FP16. It supports denormals and all rounding modes. If a NaN is given as input, it is quietened. */
-sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
+static sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 {
 	/* for each possible sign/exponent combination, store a case index. This gives a 512-byte table */
 	static const uint8_t tab[512] = {
@@ -220,7 +245,7 @@ sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 	switch (idx)
 	{
 		/*
-		  	Positive number which may be Infinity or NaN.
+			Positive number which may be Infinity or NaN.
 			We need to check whether it is NaN; if it is, quieten it by setting the top bit of the mantissa.
 			(If we don't do this quieting, then a NaN  that is distinguished only by having
 			its low-order bits set, would be turned into an INF. */
@@ -362,15 +387,8 @@ sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 	return 0;
 }
 
-typedef union if32_
-{
-	uint32_t u;
-	int32_t s;
-	float f;
-} if32;
-
 /* convert from soft-float to native-float */
-float sf16_to_float(sf16 p)
+float sf16_to_float(uint16_t p)
 {
 	if32 i;
 	i.u = sf16_to_sf32(p);
@@ -378,9 +396,11 @@ float sf16_to_float(sf16 p)
 }
 
 /* convert from native-float to soft-float */
-sf16 float_to_sf16(float p, roundmode rm)
+uint16_t float_to_sf16(float p)
 {
 	if32 i;
 	i.f = p;
-	return sf32_to_sf16(i.u, rm);
+	return sf32_to_sf16(i.u, SF_NEARESTEVEN);
 }
+
+#endif
