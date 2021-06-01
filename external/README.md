@@ -1,4 +1,4 @@
-# The engine-x thirdparty libraries
+# The adxe thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
 - Version: 2.1.0.4439 branch on chromium/4439
@@ -228,5 +228,5 @@
 
 ## ntcvt
 - Upstream: https://github.com/simdsoft/ntcvt
-- Version: 0.0.1
+- Version: git-8422188 (7)
 - License: Apache-2.0
