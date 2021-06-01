@@ -50,6 +50,7 @@
 #include <stdio.h>
 #endif
 #include <assert.h>
+#include <string.h>
 
 /*
  * This code extensively uses fall-through switches.
