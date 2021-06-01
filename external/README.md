@@ -36,7 +36,7 @@
 
 ## ConvertUTF
 - Upstream: https://github.com/llvm/llvm-project
-- Version: NA
+- Version: git 2946cd7 without LLVM-specific wrappers of the functions
 - License: Apache-2.0 WITH LLVM-exception
 
 ## curl
@@ -153,7 +153,7 @@
 
 ## poly2tri
 - Upstream: https://github.com/jhasse/poly2tri
-- Version: NA
+- Version: git 7f0487a
 - License: BSD-3-Clause
 
 ## pugixml
