@@ -44,11 +44,6 @@ add_library(${target_name} STATIC
 target_compile_definitions(${target_name}
             PRIVATE ASTCENC_DECOMPRESS_ONLY)
             
-# Enable LTO on release builds
-set_property(TARGET ${target_name}
-    PROPERTY
-        INTERPROCEDURAL_OPTIMIZATION_RELEASE True)
-        
 if (NOT DEFINED ISA_SIMD)
     set(ISA_SIMD "none")
 
