@@ -110,11 +110,6 @@
 - Version: git 1.9.3-bdc9d3b (2541)
 - License: BSD 2-Clause
 
-## md5
-- Upstream: NA
-- Version: NA
-- License: Aladdin Enterprises
-
 ## minimp3
 - Upstream: https://github.com/lieff/minimp3
 - Version: git 0757ad7(308)
