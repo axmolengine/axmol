@@ -2,10 +2,6 @@ name: win32
 
 on: [push]
 
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-
 jobs:
   build:
     if: "contains(github.event.commits[0].message, '[ci build]')"
@@ -30,11 +26,11 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake -S %GITHUB_WORKSPACE% -B %GITHUB_WORKSPACE%/build_x86 -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -A Win32 -DBUILD_EXTENSION_IMGUIEXT=ON -DLUA_ENGINE=luajit
+      run: cmake -S %GITHUB_WORKSPACE% -B %GITHUB_WORKSPACE%/build_x86 -A Win32 -DBUILD_EXTENSION_IMGUIEXT=ON -DLUA_ENGINE=luajit
 
     - name: Build
       shell: cmd
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: |
-        cmake --build %GITHUB_WORKSPACE%/build_x86 --config %BUILD_TYPE% --target cpp-tests
-        cmake --build %GITHUB_WORKSPACE%/build_x86 --config %BUILD_TYPE% --target lua-tests
+        cmake --build %GITHUB_WORKSPACE%/build_x86 --config Debug --target cpp-tests
+        cmake --build %GITHUB_WORKSPACE%/build_x86 --config Release --target lua-tests
