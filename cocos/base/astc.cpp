@@ -5,69 +5,59 @@
  ******************************************************************************/
 
 #include "base/astc.h"
-#include "astc/astc_codec_internals.h"
+#include "astc/astcenc.h"
+#include "astc/astcenc_internal.h"
 
- // Functions that are used in compilation units we depend on, but don't actually
- // use.
-//int astc_codec_unlink(const char* filename) { return 0; }
-//void astc_codec_internal_error(const char* filename, int linenum) {}
-astc_codec_image* load_ktx_uncompressed_image(const char* filename, int padding, int* result) { return 0; }
-astc_codec_image* load_dds_uncompressed_image(const char* filename, int padding, int* result) { return 0; }
-astc_codec_image* load_tga_image(const char* tga_filename, int padding, int* result) { return 0; }
-astc_codec_image* load_image_with_stb(const char* filename, int padding, int* result) { return 0; }
-int store_ktx_uncompressed_image(const astc_codec_image* img, const char* filename, int bitness) { return 0; }
-int store_dds_uncompressed_image(const astc_codec_image* img, const char* filename, int bitness) { return 0; }
-int store_tga_image(const astc_codec_image* img, const char* tga_filename, int bitness) { return 0; }
+uint8_t astc_decompress_image(
+    const uint8_t* in, uint32_t inlen, uint8_t* out, uint32_t dim_x, uint32_t dim_y, uint32_t block_x, uint32_t block_y) {
 
+    static std::once_flag once_flag;
+    std::call_once(once_flag, init_quant_mode_table);
 
-static int ASTC_INIT = 0;
+    const unsigned int dim_z   = 1;
+    const unsigned int block_z = 1;
 
-uint8_t float2byte(float f) {
+    unsigned int xblocks = (dim_x + block_x - 1) / block_x;
+    unsigned int yblocks = (dim_y + block_y - 1) / block_y;
+    unsigned int zblocks = (dim_z + block_z - 1) / block_z;
 
-    if (f > 1.0f) { return 255; }
-    if (f < 0.0f) { return 0; }
+    int row_blocks   = xblocks;
+    int plane_blocks = xblocks * yblocks;
 
-    return (uint8_t)(f * 255.0f + 0.5f);
-}
-
-uint8_t decompress_astc(const uint8_t* in, uint8_t* out, uint32_t width, uint32_t height, uint32_t xdim, uint32_t ydim, uint32_t datalen)
-{
-    //init astc mode table only once
-    if (ASTC_INIT <= 0)
-    {
-        ASTC_INIT = 1;
-        build_quantization_mode_table();
+    // Check we have enough output space (16 bytes per block)
+    size_t size_needed = xblocks * yblocks * zblocks * 16;
+    if (inlen < size_needed) {
+        return ASTCENC_ERR_OUT_OF_MEM;
     }
 
-    uint32_t  xblocks = (width + xdim - 1) / xdim;
-    uint32_t  yblocks = (height + ydim - 1) / ydim;
+    block_size_descriptor* bsd = new block_size_descriptor(); // 3.3MB
+    init_block_size_descriptor(block_x, block_y, 1, false, 0 /*unused for decompress*/, *bsd);
 
-    imageblock pb;
-    for (uint32_t by = 0; by < yblocks; by++) {
-        for (uint32_t bx = 0; bx < xblocks; bx++) {
+    image_block blk;
+    astcenc_image image_out{dim_x, dim_y, 1, ASTCENC_TYPE_U8, (void**) &out};
+    const int total_blocks = zblocks * yblocks * xblocks;
+    const astcenc_swizzle swz_decode{ASTCENC_SWZ_R, ASTCENC_SWZ_G, ASTCENC_SWZ_B, ASTCENC_SWZ_A};
+    for (unsigned int i = 0; i < total_blocks; ++i) {
+        // Decode i into x, y, z block indices
+        int z            = i / plane_blocks;
+        unsigned int rem = i - (z * plane_blocks);
+        int y            = rem / row_blocks;
+        int x            = rem - (y * row_blocks);
 
-            physical_compressed_block pcb = *(physical_compressed_block*)in;
-            symbolic_compressed_block scb;
-            physical_to_symbolic(xdim, ydim, 1, pcb, &scb);
-            decompress_symbolic_block(DECODE_LDR_SRGB, xdim, ydim, 1, bx * xdim, by * ydim, 0, &scb, &pb);
-            in += 16;
+        unsigned int offset           = (((z * yblocks + y) * xblocks) + x) * 16;
+        const uint8_t* bp             = in + offset;
+        physical_compressed_block pcb = *(const physical_compressed_block*) bp;
+        symbolic_compressed_block scb;
 
-            const float* data = pb.orig_data;
-            for (uint32_t dy = 0; dy < ydim; dy++) {
-                uint32_t y = by * ydim + dy;
-                for (uint32_t dx = 0; dx < xdim; dx++) {
-                    uint32_t x = bx * xdim + dx;
-                    if (x < width && y < height) {
-                        uint8_t* pxl = &out[(width * y + x) * 4];
-                        pxl[0] = float2byte(data[0]);
-                        pxl[1] = float2byte(data[1]);
-                        pxl[2] = float2byte(data[2]);
-                        pxl[3] = float2byte(data[3]);
-                    }
-                    data += 4;
-                }
-            }
-        }
+        physical_to_symbolic(*bsd, pcb, scb);
+
+        decompress_symbolic_block(ASTCENC_PRF_LDR_SRGB, *bsd, x * block_x, y * block_y, z * block_z, scb, blk);
+
+        write_image_block(image_out, blk, *bsd, x * block_x, y * block_y, z * block_z, swz_decode);
     }
-    return 0;
+
+    term_block_size_descriptor(*bsd);
+    delete bsd;
+
+    return ASTCENC_SUCCESS;
 }

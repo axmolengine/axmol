@@ -132,8 +132,6 @@ extern "C"
 #define CC_GL_ATC_RGBA_EXPLICIT_ALPHA_AMD                          0x8C93
 #define CC_GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD                      0x87EE
 
-#define ASTC_MAGIC_FILE_CONSTANT 0x5CA1AB13
-
 NS_CC_BEGIN
 
 //////////////////////////////////////////////////////////////////////////
@@ -437,24 +435,6 @@ namespace
         uint32_t numberOfFaces;
         uint32_t numberOfMipmapLevels;
         uint32_t bytesOfKeyValueData;
-    };
-}
-//atitc struct end
-
-//////////////////////////////////////////////////////////////////////////
-
-//struct and data for ASTC struct
-namespace
-{
-    struct ASTCTexHeader
-    {
-        uint8_t magic[4];
-        uint8_t blockdim_x;
-        uint8_t blockdim_y;
-        uint8_t blockdim_z;
-        uint8_t xsize[3];			// x-size = xsize[0] + xsize[1] + xsize[2]
-        uint8_t ysize[3];			// x-size, y-size and z-size are given in texels;
-        uint8_t zsize[3];			// block count is inferred
     };
 }
 //atitc struct end
@@ -822,11 +802,11 @@ bool Image::isATITC(const uint8_t *data, ssize_t /*dataLen*/)
 
 bool Image::isASTC(const uint8_t* data, ssize_t /*dataLen*/)
 {
-    ASTCTexHeader* hdr = (ASTCTexHeader*)data;
+    astc_header* hdr = (astc_header*)data;
 
-    uint32_t magicval = hdr->magic[0] + 256 * (uint32_t)(hdr->magic[1]) + 65536 * (uint32_t)(hdr->magic[2]) + 16777216 * (uint32_t)(hdr->magic[3]);
+    uint32_t magicval = astc_unpack_bytes(hdr->magic[0], hdr->magic[1], hdr->magic[2], hdr->magic[3]);
 
-    return (magicval == ASTC_MAGIC_FILE_CONSTANT);
+    return (magicval == ASTC_MAGIC_ID);
 }
 
 bool Image::isJpg(const uint8_t * data, ssize_t dataLen)
@@ -1811,19 +1791,25 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
 
 bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
-    ASTCTexHeader* header = (ASTCTexHeader*)data;
+    astc_header* hdr = (astc_header*)data;
 
     do {
-        _width = header->xsize[0] + 256 * header->xsize[1] + 65536 * header->xsize[2];
-        _height = header->ysize[0] + 256 * header->ysize[1] + 65536 * header->ysize[2];
+        // Ensure these are not zero to avoid div by zero
+        unsigned int block_x = (std::max)((unsigned int) hdr->block_x, 1u);
+        unsigned int block_y = (std::max)((unsigned int) hdr->block_y, 1u);
+        // unsigned int block_z = std::max((unsigned int) hdr->block_z, 1u);
 
-        if (0 == _width || 0 == _height)
+        unsigned int dim_x = astc_unpack_bytes(hdr->dim_x[0], hdr->dim_x[1], hdr->dim_x[2], 0);
+        unsigned int dim_y = astc_unpack_bytes(hdr->dim_y[0], hdr->dim_y[1], hdr->dim_y[2], 0);
+        // unsigned int dim_z = astc_unpack_bytes(hdr->dim_z[0], hdr->dim_z[1], hdr->dim_z[2], 0);
+
+        if (dim_x == 0 || dim_y == 0)
             break;
 
-        uint8_t xdim = header->blockdim_x;
-        uint8_t ydim = header->blockdim_y;
+        _width  = dim_x;
+        _height = dim_y;
 
-        if (xdim < 4 || ydim < 4)
+        if (block_x < 4 || block_y < 4)
         {
             CCLOG("cocos2d: The ASTC block with and height should be >= 4");
             break;
@@ -1831,29 +1817,23 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         if (Configuration::getInstance()->supportsASTC())
         {
-            if (xdim == 4 && ydim == 4) {
+            if (block_x == 4 && block_y == 4) {
                 _pixelFormat = backend::PixelFormat::ASTC4x4;
-            }
-            else if (xdim == 5 && ydim == 5) {
+            } else if (block_x == 5 && block_y == 5) {
                 _pixelFormat = backend::PixelFormat::ASTC5x5;
-            }
-            else if (xdim == 6 && ydim == 6) {
+            } else if (block_x == 6 && block_y == 6) {
                 _pixelFormat = backend::PixelFormat::ASTC6x6;
-            }
-            else if (xdim == 8 && ydim == 5) {
+            } else if (block_x == 8 && block_y == 5) {
                 _pixelFormat = backend::PixelFormat::ASTC8x5;
-            }
-            else if (xdim == 8 && ydim == 6) {
+            } else if (block_x == 8 && block_y == 6) {
                 _pixelFormat = backend::PixelFormat::ASTC8x6;
-            }
-            else if (xdim == 8 && ydim == 8)
+            } else if (block_x == 8 && block_y == 8)
             {
                 _pixelFormat = backend::PixelFormat::ASTC8x8;
-            }
-            else if (xdim == 10 && ydim == 5) {
+            } else if (block_x == 10 && block_y == 5) {
                 _pixelFormat = backend::PixelFormat::ASTC10x5;
             }
-
+        
             forwardPixels(data, dataLen, ASTC_HEAD_SIZE, ownData);
         }
         else
@@ -1861,8 +1841,11 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
             CCLOG("cocos2d: Hardware ASTC decoder not present. Using software decoder");
 
             _dataLen = _width * _height * 4;
-            _data = static_cast<uint8_t*>(malloc(_dataLen));
-            if (UTILS_UNLIKELY(decompress_astc(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE, _data, _width, _height, xdim, ydim, _dataLen) != 0)) {
+            _data    = static_cast<uint8_t*>(malloc(_dataLen));
+            if (UTILS_UNLIKELY(astc_decompress_image(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE,
+                                   dataLen - ASTC_HEAD_SIZE, _data, _width,
+                                   _height, block_x, block_y)
+                               != 0)) {
                 CC_SAFE_FREE(_data);
                 _dataLen = 0;
                 break;
