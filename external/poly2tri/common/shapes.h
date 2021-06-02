@@ -176,6 +176,7 @@ void MarkConstrainedEdge(Point* p, Point* q);
 int Index(const Point* p);
 int EdgeIndex(const Point* p1, const Point* p2);
 
+Triangle* NeighborAcross(const Point& point);
 Triangle* NeighborCW(const Point& point);
 Triangle* NeighborCCW(const Point& point);
 bool GetConstrainedEdgeCCW(const Point& p);
@@ -202,8 +203,6 @@ void ClearDelunayEdges();
 
 inline bool IsInterior();
 inline void IsInterior(bool b);
-
-Triangle& NeighborAcross(const Point& opoint);
 
 void DebugPrint();
 
@@ -260,7 +259,7 @@ inline bool operator ==(const Point& a, const Point& b)
 
 inline bool operator !=(const Point& a, const Point& b)
 {
-  return !(a.x == b.x) && !(a.y == b.y);
+  return !(a.x == b.x) || !(a.y == b.y);
 }
 
 /// Peform the dot product on two vectors.

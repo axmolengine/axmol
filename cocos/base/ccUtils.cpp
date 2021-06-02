@@ -36,7 +36,7 @@ THE SOFTWARE.
 #include <unistd.h>
 #endif
 
-#include "md5/md5.h"
+#include "openssl/md5.h"
 
 #include "base/CCDirector.h"
 #include "base/CCAsyncTaskPool.h"
@@ -378,22 +378,21 @@ std::string getFileMD5Hash(const std::string &filename)
     return getDataMD5Hash(data);
 }
 
-std::string getDataMD5Hash(const Data &data)
-{
-    static const unsigned int MD5_DIGEST_LENGTH = 16;
+std::string getDataMD5Hash(const Data& data) {
+    // static const unsigned int MD5_DIGEST_LENGTH = 16;
 
     if (data.isNull())
     {
         return std::string();
     }
 
-    md5_state_t state;
-    md5_byte_t digest[MD5_DIGEST_LENGTH];
+    MD5state_st state;
+    uint8_t digest[MD5_DIGEST_LENGTH];
     char hexOutput[(MD5_DIGEST_LENGTH << 1) + 1] = { 0 };
 
-    md5_init(&state);
-    md5_append(&state, (const md5_byte_t *)data.getBytes(), (int)data.getSize());
-    md5_finish(&state, digest);
+    MD5_Init(&state);
+    MD5_Update(&state, data.getBytes(), (int) data.getSize());
+    MD5_Final(digest, &state);
 
     for (int di = 0; di < 16; ++di)
         sprintf(hexOutput + di * 2, "%02x", digest[di]);

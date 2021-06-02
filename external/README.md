@@ -1,4 +1,4 @@
-# The engine-x thirdparty libraries
+# The adxe thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
 - Version: 2.1.0.4439 branch on chromium/4439
@@ -6,7 +6,7 @@
 
 ## astc
 - Upstream: https://github.com/ARM-software/astc-encoder
-- Version: NA
+- Version: 2.5-1a2d13d (975)
 - License: Apache-2.0
 
 ## Box2D
@@ -36,7 +36,7 @@
 
 ## ConvertUTF
 - Upstream: https://github.com/llvm/llvm-project
-- Version: NA
+- Version: git 2946cd7 without LLVM-specific wrappers of the functions
 - License: Apache-2.0 WITH LLVM-exception
 
 ## curl
@@ -46,7 +46,7 @@
 
 ## edtaa3func
 - Upstream: https://github.com/zilongshanren/edtaa3func
-- Version: NA
+- Version: git d02e47d 
 - License: MIT
 
 ## fastlib
@@ -76,7 +76,7 @@
 
 ## glsl-optimizer
 - Upstream: https://github.com/aras-p/glsl-optimizer
-- Version: NA
+- Version: git d78c3d2
 - License: MIT
 
 ## jpeg (libjpeg-turbo)
@@ -109,11 +109,6 @@
 - Upstream: https://github.com/lz4/lz4
 - Version: git 1.9.3-bdc9d3b (2541)
 - License: BSD 2-Clause
-
-## md5
-- Upstream: NA
-- Version: NA
-- License: Aladdin Enterprises
 
 ## minimp3
 - Upstream: https://github.com/lieff/minimp3
@@ -153,7 +148,7 @@
 
 ## poly2tri
 - Upstream: https://github.com/jhasse/poly2tri
-- Version: NA
+- Version: git 7f0487a
 - License: BSD-3-Clause
 
 ## pugixml
@@ -228,5 +223,5 @@
 
 ## ntcvt
 - Upstream: https://github.com/simdsoft/ntcvt
-- Version: 0.0.1
+- Version: git-8422188 (7)
 - License: Apache-2.0
