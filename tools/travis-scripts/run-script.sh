@@ -87,7 +87,7 @@ function build_android()
     # build cpp-tests
     pushd $ADXE_ROOT/tests/cpp-tests/proj.android
     
-    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
+    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
     popd
 }
 
