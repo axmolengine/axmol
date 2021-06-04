@@ -21,6 +21,15 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-18.04
 
+    strategy:
+      matrix:
+        arch:
+          - armeabi-v7a
+          - arm64-v8a
+          - x86
+    env:
+      BUILD_ARCH: ${{ matrix.arch }}
+
     steps:
     - uses: actions/checkout@v2
       with:
