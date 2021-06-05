@@ -47,11 +47,14 @@ if (NOT DEFINED ISA_SIMD)
     set(ASTC_SSE2_SWITCH "")
 
     set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-    if(NOT MSVC)
-        # Yes GCC, really don't accept command line options you don't support
+    if(MSVC)
+        set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} /WX")
+        check_c_compiler_flag("/arch:SSE2" ASTC_HAVE_MSSE2_SWITCH)  
+    else()
         set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Werror")
+        check_c_compiler_flag(-msse2 ASTC_HAVE_MSSE2_SWITCH)
     endif()
-    check_c_compiler_flag(-msse2 ASTC_HAVE_MSSE2_SWITCH)
+    
     set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
     unset(OLD_REQUIRED_FLAGS)
     ### end check -msse2 flag
@@ -92,7 +95,7 @@ if (NOT DEFINED ISA_SIMD)
         set(ISA_SIMD "none")
     endif()
 
-    message(AUTHOR_WARNING "ABORT ME:ISA_SIMD=${ISA_SIMD},ASTC_HAVE_MSSE2_SWITCH=${ASTC_HAVE_MSSE2_SWITCH},ASTC_HAVE_SSE4_INTRINSICS=${ASTC_HAVE_SSE4_INTRINSICS},ASTC_HAVE_NEON_INTRINSICS=${ASTC_HAVE_NEON_INTRINSICS}")
+    message(AUTHOR_WARNING "ISA_SIMD=${ISA_SIMD},ASTC_HAVE_MSSE2_SWITCH=${ASTC_HAVE_MSSE2_SWITCH},ASTC_HAVE_SSE4_INTRINSICS=${ASTC_HAVE_SSE4_INTRINSICS},ASTC_HAVE_NEON_INTRINSICS=${ASTC_HAVE_NEON_INTRINSICS}")
 endif()
 
 # Set up configuration for SIMD ISA builds
