@@ -54,14 +54,14 @@ if (NOT DEFINED ISA_SIMD)
         set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Werror")
         check_c_compiler_flag(-msse2 ASTC_HAVE_MSSE2_SWITCH)
     endif()
-    
-    set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-    unset(OLD_REQUIRED_FLAGS)
     ### end check -msse2 flag
 
     ### check SSE4.1
     check_include_file(smmintrin.h ASTC_HAVE_SMMINTRIN_H)
     if(ASTC_HAVE_SMMINTRIN_H)
+        if(APPLE)
+            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
+        endif()
         check_c_source_compiles("#include <immintrin.h>
                 int main()
                 {
@@ -69,6 +69,10 @@ if (NOT DEFINED ISA_SIMD)
                     return (int)_mm_popcnt_u64(v);
                 }" ASTC_HAVE_SSE4_INTRINSICS)
     endif()
+
+    ### restore CMAKE_REQUIRED_FLAGS
+    set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+    unset(OLD_REQUIRED_FLAGS)
 
     ### check neon
     check_include_file(arm_neon.h ASTC_HAVE_ARM_NEON_H)
