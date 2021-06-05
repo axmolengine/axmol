@@ -17,6 +17,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+          lfs: 'true'
       - name: Setup Python
         uses: actions/setup-python@v2
       - name: Build
@@ -35,6 +36,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+          lfs: 'true'
       - name: Build
         run: |
           tools/travis-scripts/before-install.sh
@@ -51,6 +53,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+          lfs: 'true'
       - name: Build
         run: |
           tools/travis-scripts/before-install.sh
@@ -66,6 +69,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+          lfs: 'true'
       - name: Build
         run: |
           tools/travis-scripts/before-install.sh
@@ -81,6 +85,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+          lfs: 'true'
       - name: Build
         run: |
           tools/travis-scripts/before-install.sh
