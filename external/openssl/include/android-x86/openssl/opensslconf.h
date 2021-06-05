@@ -24,9 +24,6 @@ extern "C" {
  * OpenSSL was configured with the following options:
  */
 
-#ifndef OPENSSL_SYS_MACOSX
-# define OPENSSL_SYS_MACOSX 1
-#endif
 #ifndef OPENSSL_NO_MD2
 # define OPENSSL_NO_MD2
 #endif
@@ -54,11 +51,17 @@ extern "C" {
 #ifndef OPENSSL_NO_DEVCRYPTOENG
 # define OPENSSL_NO_DEVCRYPTOENG
 #endif
+#ifndef OPENSSL_NO_DSO
+# define OPENSSL_NO_DSO
+#endif
 #ifndef OPENSSL_NO_EC_NISTP_64_GCC_128
 # define OPENSSL_NO_EC_NISTP_64_GCC_128
 #endif
 #ifndef OPENSSL_NO_EGD
 # define OPENSSL_NO_EGD
+#endif
+#ifndef OPENSSL_NO_ENGINE
+# define OPENSSL_NO_ENGINE
 #endif
 #ifndef OPENSSL_NO_EXTERNAL_TESTS
 # define OPENSSL_NO_EXTERNAL_TESTS
@@ -71,6 +74,9 @@ extern "C" {
 #endif
 #ifndef OPENSSL_NO_HEARTBEATS
 # define OPENSSL_NO_HEARTBEATS
+#endif
+#ifndef OPENSSL_NO_HW
+# define OPENSSL_NO_HW
 #endif
 #ifndef OPENSSL_NO_MSAN
 # define OPENSSL_NO_MSAN
@@ -189,11 +195,11 @@ extern "C" {
  * The following are cipher-specific, but are part of the public API.
  */
 #if !defined(OPENSSL_SYS_UEFI)
-# undef BN_LLONG
+# define BN_LLONG
 /* Only one for the following should be defined */
-# define SIXTY_FOUR_BIT_LONG
+# undef SIXTY_FOUR_BIT_LONG
 # undef SIXTY_FOUR_BIT
-# undef THIRTY_TWO_BIT
+# define THIRTY_TWO_BIT
 #endif
 
 #define RC4_INT unsigned int

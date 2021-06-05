@@ -5,7 +5,7 @@ project(${lib_name})
 
 include(../cmake/CocosExternalConfig.cmake)
 
-set(OPENSSL_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/${platform_name}" CACHE STRING "OpenSSL include dir" FORCE)
+set(OPENSSL_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE STRING "OpenSSL include dir" FORCE)
 
 # -----macro: set openssl sub target-----
 macro(set_openssl_sub_target sub_target_name sub_lib_name)
@@ -17,7 +17,7 @@ macro(set_openssl_sub_target sub_target_name sub_lib_name)
   endif()
 
   set_target_properties(${sub_target_name} PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/${platform_name}"
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
   )
 
   set(imp_lib_name "")
