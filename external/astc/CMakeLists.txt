@@ -5,9 +5,7 @@ set(target_name ${lib_name})
 project(${lib_name})
 
 include(CheckIncludeFile)
-include(CheckIncludeFiles)
 include(CheckCCompilerFlag)
-include(CheckCXXCompilerFlag)
 include(CheckCSourceCompiles)
 include(CheckCXXSourceCompiles)
 
@@ -45,47 +43,62 @@ target_compile_definitions(${target_name}
             PRIVATE ASTCENC_DECOMPRESS_ONLY)
             
 if (NOT DEFINED ISA_SIMD)
-    set(ISA_SIMD "none")
+    ### check -msse2 flag
+    set(ASTC_SSE2_SWITCH "")
 
-    include(CheckTypeSize)
-    CHECK_TYPE_SIZE (void* VOIDP_SIZE) #4 if 32bit, 8 if 64bit
+    set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+    if(NOT MSVC)
+        # Yes GCC, really don't accept command line options you don't support
+        set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Werror")
+    endif()
+    check_c_compiler_flag(-msse2 ASTC_HAVE_MSSE2_SWITCH)
+    set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+    unset(OLD_REQUIRED_FLAGS)
+    ### end check -msse2 flag
 
-    message(STATUS "VOIDP_SIZE=${VOIDP_SIZE}")
-
-    # sse4.1 x64
-    check_include_file(smmintrin.h HAVE_SMMINTRIN_H)
-
-    check_c_compiler_flag(-msse2 HAVE_MSSE2_SWITCH)
-    if(HAVE_MSSE2_SWITCH)
-        set(ISA_SIMD "sse2")
+    ### check SSE4.1
+    check_include_file(smmintrin.h ASTC_HAVE_SMMINTRIN_H)
+    if(ASTC_HAVE_SMMINTRIN_H)
+        check_c_source_compiles("#include <immintrin.h>
+                int main()
+                {
+                    uint64_t v = 0;
+                    return (int)_mm_popcnt_u64(v);
+                }" ASTC_HAVE_SSE4_INTRINSICS)
     endif()
 
-    if(HAVE_SMMINTRIN_H AND (VOIDP_SIZE EQUAL 8))
-        message(STATUS "Enabling x64 sse4.1 intrinsics...")
-        set(ISA_SIMD "sse4.1")
-    endif()
-
-    check_include_file(arm_neon.h HAVE_ARM_NEON_H)
-    if(HAVE_ARM_NEON_H)
-        check_c_source_compiles("#include <arm_neon.h>
+    ### check neon
+    check_include_file(arm_neon.h ASTC_HAVE_ARM_NEON_H)
+    if(ASTC_HAVE_ARM_NEON_H)
+        check_cxx_source_compiles("#include <arm_neon.h>
                 int main()
                 {
                     int32x4_t ret4 = vdupq_n_s32(0);
+                    uint32x4_t v{};
+                    float16x4_t f16 = vcvt_f16_f32(v);
                     return vgetq_lane_s32(ret4, 0);
-                }" HAVE_NEON_INTRINSICS)
-
-        
-        if(HAVE_NEON_INTRINSICS AND (VOIDP_SIZE EQUAL 8))
-            message(STATUS "Enabling arm64 neon intrinsics...")
-            set(ISA_SIMD "neon")
-        endif()
+                }" ASTC_HAVE_NEON_INTRINSICS)
     endif()
+
+    ### set ISA_SIMD
+    if(ASTC_HAVE_MSSE2_SWITCH)
+        set(ISA_SIMD "sse2")
+        if(ASTC_HAVE_SSE4_INTRINSICS)
+            set(ISA_SIMD "sse4.1")
+        endif()
+    elseif(ASTC_HAVE_NEON_INTRINSICS)
+        set(ISA_SIMD "neon")
+    else()
+        set(ISA_SIMD "none")
+    endif()
+
+    message(AUTHOR_WARNING "ABORT ME:ISA_SIMD=${ISA_SIMD},ASTC_HAVE_MSSE2_SWITCH=${ASTC_HAVE_MSSE2_SWITCH},ASTC_HAVE_SSE4_INTRINSICS=${ASTC_HAVE_SSE4_INTRINSICS},ASTC_HAVE_NEON_INTRINSICS=${ASTC_HAVE_NEON_INTRINSICS}")
 endif()
 
 # Set up configuration for SIMD ISA builds
 if(${ISA_SIMD} MATCHES "none")
     target_compile_definitions(${target_name}
-        PRIVATE
+        PUBLIC
             ASTCENC_NEON=0
             ASTCENC_SSE=0
             ASTCENC_AVX=0
@@ -94,7 +107,7 @@ if(${ISA_SIMD} MATCHES "none")
 
 elseif(${ISA_SIMD} MATCHES "neon")
     target_compile_definitions(${target_name}
-        PRIVATE
+        PUBLIC
             ASTCENC_NEON=1
             ASTCENC_SSE=0
             ASTCENC_AVX=0
@@ -103,7 +116,7 @@ elseif(${ISA_SIMD} MATCHES "neon")
 
 elseif(${ISA_SIMD} MATCHES "sse2")
     target_compile_definitions(${target_name}
-        PRIVATE
+        PUBLIC
             ASTCENC_NEON=0
             ASTCENC_SSE=20
             ASTCENC_AVX=0
@@ -112,7 +125,7 @@ elseif(${ISA_SIMD} MATCHES "sse2")
 
 elseif(${ISA_SIMD} MATCHES "sse4.1")
     target_compile_definitions(${target_name}
-        PRIVATE
+        PUBLIC
             ASTCENC_NEON=0
             ASTCENC_SSE=41
             ASTCENC_AVX=0
@@ -125,7 +138,7 @@ elseif(${ISA_SIMD} MATCHES "sse4.1")
 
 elseif(${ISA_SIMD} MATCHES "avx2")
     target_compile_definitions(${target_name}
-        PRIVATE
+        PUBLIC
             ASTCENC_NEON=0
             ASTCENC_SSE=41
             ASTCENC_AVX=2
