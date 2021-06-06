@@ -138,7 +138,7 @@
 
 ## OpenSSL
 - Upstream: https://github.com/openssl/openssl
-- Version: 1.1.1h
+- Version: 1.1.1k
 - License: Apache-2.0
 
 ## png
