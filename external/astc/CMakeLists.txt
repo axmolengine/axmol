@@ -63,6 +63,7 @@ if (NOT DEFINED ISA_SIMD)
             set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
         endif()
         check_c_source_compiles("#include <immintrin.h>
+                #include <stdint.h>
                 int main()
                 {
                     uint64_t v = 0;
