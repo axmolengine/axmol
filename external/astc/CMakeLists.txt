@@ -71,13 +71,10 @@ if (NOT DEFINED ISA_SIMD)
                 }" ASTC_HAVE_SSE4_INTRINSICS)
     endif()
 
-    ### restore CMAKE_REQUIRED_FLAGS
-    set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-    unset(OLD_REQUIRED_FLAGS)
-
     ### check neon
     check_include_file(arm_neon.h ASTC_HAVE_ARM_NEON_H)
     if(ASTC_HAVE_ARM_NEON_H)
+        set(CMAKE_REQUIRED_FLAGS "-std=c++11")
         check_cxx_source_compiles("#include <arm_neon.h>
                 int main()
                 {
@@ -87,6 +84,10 @@ if (NOT DEFINED ISA_SIMD)
                     return vgetq_lane_s32(ret4, 0);
                 }" ASTC_HAVE_NEON_INTRINSICS)
     endif()
+
+    ### restore CMAKE_REQUIRED_FLAGS
+    set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+    unset(OLD_REQUIRED_FLAGS)    
 
     ### set ISA_SIMD
     if(ASTC_HAVE_MSSE2_SWITCH)
