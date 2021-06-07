@@ -39,7 +39,7 @@
 * ETC2 RGB/RGBA support    (if hardware decoder not present, use software decoder)
 * **ImGui integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
 
-### [Roadmap](issues/1)
+### [Roadmap](https://github.com/adxeproject/adxe/issues/1)
 
 ### Quick Start
 Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information too.
