@@ -45,10 +45,17 @@ jobs:
   build-android:
     name: build-android
     runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        arch:
+          - armeabi-v7a
+          - arm64-v8a
+          - x86
     env:
       TRAVIS_OS_NAME: linux
       BUILD_TARGET: android
       PYENV_VERSION: 2.7.18
+      BUILD_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
         with:
