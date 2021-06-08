@@ -92,9 +92,9 @@ add_library(${ADXE_CORE_LIB} ${COCOS_SRC})
 #   set_source_files_properties("audio/src/AudioEngineImpl.mm" PROPERTIES LANGUAGE CXX)
 # endif()
 
-# use external libs
-add_subdirectory(${ADXE_ROOT_PATH}/external ${ENGINE_BINARY_PATH}/external)
-target_link_libraries(${ADXE_CORE_LIB} external)
+# use thirdparty libs
+add_subdirectory(${ADXE_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
+target_link_libraries(${ADXE_CORE_LIB} thirdparty)
 
 # add base macro define and compile options
 use_cocos2dx_compile_define(${ADXE_CORE_LIB})
@@ -105,12 +105,12 @@ use_cocos2dx_libs_depend(${ADXE_CORE_LIB})
 
 target_include_directories(${ADXE_CORE_LIB}
     PUBLIC ${ADXE_ROOT_PATH}
-    PUBLIC ${ADXE_ROOT_PATH}/external
+    PUBLIC ${ADXE_ROOT_PATH}/thirdparty
     PUBLIC ${ADXE_ROOT_PATH}/extensions
     PUBLIC ${ADXE_ROOT_PATH}/cocos
     PUBLIC ${ADXE_ROOT_PATH}/cocos/platform
 
-    INTERFACE ${ADXE_ROOT_PATH}/external
+    INTERFACE ${ADXE_ROOT_PATH}/thirdparty
     INTERFACE ${ADXE_ROOT_PATH}/extensions
     INTERFACE ${ADXE_ROOT_PATH}/cocos/base
     INTERFACE ${ADXE_ROOT_PATH}/cocos/audio/include
@@ -147,7 +147,7 @@ endif()
 # engine extensions
 add_subdirectory(${ADXE_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
-# copy all external libraries to ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
+# copy all thirdparty libraries to ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
 # if (WINDOWS)
 #     copy_thirdparty_dlls(libcocos2d ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 # endif()

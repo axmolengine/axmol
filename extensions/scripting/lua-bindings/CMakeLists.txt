@@ -158,8 +158,8 @@ set(lua_bindings_files
 
 set(lua_bindings_files
     ${lua_bindings_files}
-    "${cocos_root}/external/yasio/bindings/lyasio.cpp"
-    "${cocos_root}/external/yasio/bindings/yasio_cclua.cpp")
+    "${cocos_root}/thirdparty/yasio/bindings/lyasio.cpp"
+    "${cocos_root}/thirdparty/yasio/bindings/yasio_cclua.cpp")
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 
@@ -169,7 +169,7 @@ add_library(${ADXE_LUA_LIB} STATIC ${lua_bindings_files})
 target_link_libraries(${ADXE_LUA_LIB} ${ADXE_CORE_LIB})
 add_dependencies(${ADXE_LUA_LIB} ${ADXE_CORE_LIB})
 
-get_target_property(lua_ext_depend external CC_LUA_DEPEND)
+get_target_property(lua_ext_depend thirdparty CC_LUA_DEPEND)
 target_link_libraries(${ADXE_LUA_LIB} ${lua_ext_depend})
 
 target_include_directories(${ADXE_LUA_LIB}
