@@ -94,6 +94,11 @@
   - Upstream: http://www.lua.org/
   - Version: 5.3.6 with modified for bytecode 32/64bit compatible
   - License: MIT (http://www.lua.org/license.html)
+  
+- sol2
+  - Upstream: https://github.com/ThePhD/sol2
+  - Version: 2.20.6 with vs2019 compile fixes
+  - License: MIT
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
@@ -165,11 +170,6 @@
 - Upstream: https://github.com/recastnavigation/recastnavigation
 - Version: git 65b314a (747) with dtCrowd::getEditableAgentAnim
 - License: zlib
-
-## sol2
-- Upstream: https://github.com/ThePhD/sol2
-- Version: 2.20.6 with vs2019 compile fixes
-- License: MIT
 
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb

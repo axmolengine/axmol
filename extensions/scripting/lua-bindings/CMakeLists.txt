@@ -173,6 +173,7 @@ get_target_property(lua_ext_depend thirdparty CC_LUA_DEPEND)
 target_link_libraries(${ADXE_LUA_LIB} ${lua_ext_depend})
 
 target_include_directories(${ADXE_LUA_LIB}
+    PUBLIC ${cocos_root}/thirdparty/lua
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
     PRIVATE ${cocos_root}/extensions/spine/runtime/include
