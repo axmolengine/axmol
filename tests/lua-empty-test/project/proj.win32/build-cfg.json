@@ -13,7 +13,7 @@
             "to": "src/cocos"
         },
         {
-            "from": "../../../../external/lua/luasocket",
+            "from": "../../../../thirdparty/lua/luasocket",
             "to": "",
             "include": [
                 "*.lua"
