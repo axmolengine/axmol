@@ -1,9 +1,5 @@
-#ifndef OPENSSLCONF_REDIRECT_H
-#define OPENSSLCONF_REDIRECT_H
-
-#if defined(_M_X64) || defined(_WIN64) || defined(__LP64__) || defined(_LP64) || defined(__x86_64) || defined(__arm64__) || defined(__aarch64__)
-#  define OPENSSLCONF_REDIRECT_64BIT 1
-#endif
+#ifndef BUILDWARE_openssl_REDIRECT_H
+#define BUILDWARE_openssl_REDIRECT_H
 
 #if defined(_WIN32)
 #  include "win32/openssl/opensslconf.h"
