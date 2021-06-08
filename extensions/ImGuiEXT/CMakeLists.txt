@@ -1,7 +1,7 @@
 set(target_name ImGuiEXT)
 
 #~ if(WINDOWS)
-#~     include_directories(${ADXE_ROOT_PATH}/external/win32-specific/gles/include/OGLES)
+#~     include_directories(${ADXE_ROOT_PATH}/thirdparty/win32-specific/gles/include/OGLES)
 #~ endif()
 include_directories(imgui)
 
@@ -38,8 +38,8 @@ set(SOURCE
 #~ if(BUILD_LUA_LIBS)
 #~     include_directories(
 #~         lua-bindings
-#~         ${ADXE_ROOT_PATH}/external/lua/luajit/include
-#~         ${ADXE_ROOT_PATH}/external/lua/tolua
+#~         ${ADXE_ROOT_PATH}/thirdparty/lua/luajit/include
+#~         ${ADXE_ROOT_PATH}/thirdparty/lua/tolua
 #~     )
 #~     list(APPEND HEADER
 #~         lua-bindings/imgui_lua.hpp
@@ -65,6 +65,7 @@ set(SOURCE
 #~         lua-bindings/lua_implot_auto.cpp
 #~     )
 #~ endif()
+
 add_library(${target_name} STATIC 
         ${HEADER} 
         ${SOURCE})
