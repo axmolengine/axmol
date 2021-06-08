@@ -41,6 +41,8 @@ endif()
 
 project(cocos2d_libs)
 
+set(ADXE_THIRDPARTY_NAME "thirdparty" CACHE INTERNAL "" )
+
 include(2d/CMakeLists.txt)
 include(3d/CMakeLists.txt)
 include(platform/CMakeLists.txt)
