@@ -433,7 +433,7 @@ static ASTCENC_SIMD_INLINE vint4 unorm16_to_sf16(vint4 p)
 
 // Manually inline clz() on Visual Studio to avoid release build codegen bug
 #if !defined(__clang__) && defined(_MSC_VER)
-	vint a = (~lsr<8>(p)) & p;
+	vint4 a = (~lsr<8>(p)) & p;
 	a = float_as_int(int_to_float(a));
 	a = vint4(127 + 31) - lsr<23>(a);
 	vint4 lz = clamp(0, 32, a) - 16;
