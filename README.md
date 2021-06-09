@@ -9,6 +9,8 @@
 [![macOS Build Status](https://github.com/adxeproject/adxe/workflows/osx/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aosx)  
 
 **This is another more radical fork of *Cocos2d-x-4.0*, use OpenAL for all platforms, single texture multi GPU texture handler, C++ 14/17 and some more (see 'Highlight Features' for more info).**  
+
+### View with vscode online: https://github1s.com/adxeproject/adxe
   
 **[简体中文](README_CN.md)**
   
@@ -39,7 +41,7 @@
 * ETC2 RGB/RGBA support    (if hardware decoder not present, use software decoder)
 * **ImGui integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
 
-### [Roadmap](issues/1)
+### [Roadmap](https://github.com/adxeproject/adxe/issues/1)
 
 ### Quick Start
 Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information too.
@@ -81,8 +83,10 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake```
      - for arm64:  
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
+     - for armv7,arm64 combined:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
      - for simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64``` 
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64``` 
 
   4. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
   5. Notes  

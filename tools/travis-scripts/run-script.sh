@@ -68,7 +68,7 @@ function build_ios()
     cd $ADXE_ROOT
     # mkdir -p build
 
-    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64 -DBUILD_EXT_ALSOFT=ON
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -DBUILD_EXT_ALSOFT=ON
     # cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS -DENABLE_ARC=0   # too much logs on console when "cmake --build ."
     cmake --build build --config Release --target cpp-tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" 
 
@@ -87,7 +87,7 @@ function build_android()
     # build cpp-tests
     pushd $ADXE_ROOT/tests/cpp-tests/proj.android
     
-    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
+    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
     popd
 }
 
