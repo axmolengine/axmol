@@ -61,7 +61,7 @@ endif()
 if(NOT BUILD_EXT_KCP)
     add_library(thirdparty STATIC empty.cpp)
 else()
-    add_library(thirdparty STATIC kcp/kcp.c)
+    add_library(thirdparty STATIC kcp/ikcp.c)
 endif()
 
 if(MACOSX OR ANDROID OR WINDOWS)
