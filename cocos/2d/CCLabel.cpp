@@ -1444,6 +1444,7 @@ void Label::enableUnderline()
     if (!_underlineNode)
     {
         _underlineNode = DrawNode::create();
+        _underlineNode->setGlobalZOrder(getGlobalZOrder());
         addChild(_underlineNode, 100000);
         _contentDirty = true;
     }
@@ -2434,6 +2435,11 @@ void Label::setGlobalZOrder(float globalZOrder)
         {
             _shadowNode->setGlobalZOrder(globalZOrder);
         }
+    }
+
+    if (_underlineNode)
+    {
+        _underlineNode->setGlobalZOrder(globalZOrder);
     }
 }
 
