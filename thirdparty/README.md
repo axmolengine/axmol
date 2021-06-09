@@ -6,7 +6,7 @@
 
 ## astc
 - Upstream: https://github.com/ARM-software/astc-encoder
-- Version: 2.5-1a2d13d (975)
+- Version: git a3b8609 (1010)
 - License: Apache-2.0
 
 ## Box2D

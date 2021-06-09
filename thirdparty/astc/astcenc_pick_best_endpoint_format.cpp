@@ -514,13 +514,14 @@ static void compute_color_error_for_every_integer_count_and_quant_level(
 		// Pick among the available HDR endpoint modes
 		for (int i = 0; i < 8; i++)
 		{
-			best_error[i][3] = 1e30f;
+			best_error[i][3] = ERROR_CALC_DEFAULT;
+			best_error[i][2] = ERROR_CALC_DEFAULT;
+			best_error[i][1] = ERROR_CALC_DEFAULT;
+			best_error[i][0] = ERROR_CALC_DEFAULT;
+
 			format_of_choice[i][3] = encode_hdr_alpha ? FMT_HDR_RGBA : FMT_HDR_RGB_LDR_ALPHA;
-			best_error[i][2] = 1e30f;
 			format_of_choice[i][2] = FMT_HDR_RGB;
-			best_error[i][1] = 1e30f;
 			format_of_choice[i][1] = FMT_HDR_RGB_SCALE;
-			best_error[i][0] = 1e30f;
 			format_of_choice[i][0] = FMT_HDR_LUMINANCE_LARGE_RANGE;
 		}
 
@@ -561,10 +562,10 @@ static void compute_color_error_for_every_integer_count_and_quant_level(
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			best_error[i][3] = 1e30f;
-			best_error[i][2] = 1e30f;
-			best_error[i][1] = 1e30f;
-			best_error[i][0] = 1e30f;
+			best_error[i][3] = ERROR_CALC_DEFAULT;
+			best_error[i][2] = ERROR_CALC_DEFAULT;
+			best_error[i][1] = ERROR_CALC_DEFAULT;
+			best_error[i][0] = ERROR_CALC_DEFAULT;
 
 			format_of_choice[i][3] = FMT_RGBA;
 			format_of_choice[i][2] = FMT_RGB;
@@ -733,7 +734,7 @@ static void two_partitions_find_best_combination_for_every_quantization_and_inte
 	{
 		for (int j = 0; j < 7; j++)
 		{
-			best_combined_error[i][j] = 1e30f;
+			best_combined_error[i][j] = ERROR_CALC_DEFAULT;
 		}
 	}
 
@@ -845,7 +846,7 @@ static void three_partitions_find_best_combination_for_every_quantization_and_in
 	{
 		for (int j = 0; j < 10; j++)
 		{
-			best_combined_error[i][j] = 1e30f;
+			best_combined_error[i][j] = ERROR_CALC_DEFAULT;
 		}
 	}
 
@@ -968,7 +969,7 @@ static void four_partitions_find_best_combination_for_every_quantization_and_int
 	{
 		for (int j = 0; j < 13; j++)
 		{
-			best_combined_error[i][j] = 1e30f;
+			best_combined_error[i][j] = ERROR_CALC_DEFAULT;
 		}
 	}
 
@@ -1140,7 +1141,7 @@ unsigned int compute_ideal_endpoint_formats(
 	const int packed_mode_count_simd_up = round_up_to_simd_multiple_vla(packed_mode_count);
 	for (int i = packed_mode_count; i < packed_mode_count_simd_up; ++i)
 	{
-		errors_of_best_combination[i] = 1e30f;
+		errors_of_best_combination[i] = ERROR_CALC_DEFAULT;
 		best_quant_levels[i] = QUANT_2;
 		best_quant_levels_mod[i] = QUANT_2;
 	}
@@ -1151,9 +1152,9 @@ unsigned int compute_ideal_endpoint_formats(
 		float error_of_best_combination;
 		for (unsigned int i = 0; i < bsd.block_mode_count; ++i)
 		{
-			if (qwt_errors[i] >= 1e29f)
+			if (qwt_errors[i] >= ERROR_CALC_DEFAULT)
 			{
-				errors_of_best_combination[i] = 1e30f;
+				errors_of_best_combination[i] = ERROR_CALC_DEFAULT;
 				continue;
 			}
 
@@ -1178,9 +1179,9 @@ unsigned int compute_ideal_endpoint_formats(
 
 		for (unsigned int i = 0; i < bsd.block_mode_count; ++i)
 		{
-			if (qwt_errors[i] >= 1e29f)
+			if (qwt_errors[i] >= ERROR_CALC_DEFAULT)
 			{
-				errors_of_best_combination[i] = 1e30f;
+				errors_of_best_combination[i] = ERROR_CALC_DEFAULT;
 				continue;
 			}
 
@@ -1204,9 +1205,9 @@ unsigned int compute_ideal_endpoint_formats(
 
 		for (unsigned int i = 0; i < bsd.block_mode_count; ++i)
 		{
-			if (qwt_errors[i] >= 1e29f)
+			if (qwt_errors[i] >= ERROR_CALC_DEFAULT)
 			{
-				errors_of_best_combination[i] = 1e30f;
+				errors_of_best_combination[i] = ERROR_CALC_DEFAULT;
 				continue;
 			}
 
@@ -1230,9 +1231,9 @@ unsigned int compute_ideal_endpoint_formats(
 
 		for (unsigned int i = 0; i < bsd.block_mode_count; ++i)
 		{
-			if (qwt_errors[i] >= 1e29f)
+			if (qwt_errors[i] >= ERROR_CALC_DEFAULT)
 			{
-				errors_of_best_combination[i] = 1e30f;
+				errors_of_best_combination[i] = ERROR_CALC_DEFAULT;
 				continue;
 			}
 
@@ -1251,7 +1252,7 @@ unsigned int compute_ideal_endpoint_formats(
 	for (unsigned int i = 0; i < tune_candidate_limit; i++)
 	{
 		vint vbest_error_index(-1);
-		vfloat vbest_ep_error(1e30f);
+		vfloat vbest_ep_error(ERROR_CALC_DEFAULT);
 		vint lane_ids = vint::lane_id();
 		for (unsigned int j = 0; j < bsd.block_mode_count; j += ASTCENC_SIMD_WIDTH)
 		{
@@ -1275,7 +1276,7 @@ unsigned int compute_ideal_endpoint_formats(
 		// Max the error for this candidate so we don't pick it again
 		if (best_error_index >= 0)
 		{
-			errors_of_best_combination[best_error_index] = 1e30f;
+			errors_of_best_combination[best_error_index] = ERROR_CALC_DEFAULT;
 		}
 		// Early-out if no more candidates are valid
 		else

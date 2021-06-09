@@ -329,7 +329,7 @@ float compute_symbolic_block_difference(
 	// If we detected an error-block, blow up immediately.
 	if (scb.block_type == SYM_BTYPE_ERROR)
 	{
-		return 1e29f;
+		return ERROR_CALC_DEFAULT;
 	}
 
 	assert(scb.block_mode >= 0);
@@ -394,7 +394,7 @@ float compute_symbolic_block_difference(
 				// happen, especially at low bit rates ...
 				if (color.lane<3>() == 0.0f)
 				{
-					return -1e30f;
+					return -ERROR_CALC_DEFAULT;
 				}
 
 				// Compute error based on decoded RGBM color
@@ -418,7 +418,7 @@ float compute_symbolic_block_difference(
 			error = error * error;
 
 			float metric = dot_s(error, ewb.error_weights[tix]);
-			summa += astc::min(metric, 1e30f);
+			summa += astc::min(metric, ERROR_CALC_DEFAULT);
 		}
 	}
 

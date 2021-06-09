@@ -873,17 +873,19 @@ struct image_block
 	}
 
 	/**
-	 * @brief Test if this block is using alpha.
+	 * @brief Test if a single color channel is constant across the block.
 	 *
-	 * TODO: This looks suspect, but matches the original astcenc 1.7 code. This checks that the
-	 * alpha is not constant (no weight needed), NOT that it is 1.0 and not stored as an endpoint.
-	 * Review all uses of this function and check that it is sensible ...
+	 * Constant color channels are easier to compress as interpolating between two identical colors
+	 * always returns the same value, irrespective of the weight used. They therefore can be ignored
+	 * for the purposes of weight selection and use of a second weight plane.
 	 *
-	 * @return @c true if the alpha value is not constant across the block, @c false otherwise.
+	 * @return @c true if the channel is constant across the block, @c false otherwise.
 	 */
-	inline bool is_using_alpha() const
+	inline bool is_constant_channel(int channel) const
 	{
-		return this->data_min.lane<3>() != this->data_max.lane<3>();
+		vmask4 lane_mask = vint4::lane_id() == vint4(channel);
+		vmask4 color_mask = this->data_min == this->data_max;
+		return any(lane_mask & color_mask);
 	}
 
 	/**
@@ -942,8 +944,15 @@ struct image_block
  */
 struct error_weight_block
 {
+	/** @brief Block error weighted RGBA sum for whole block / 1 partition. */
+	vfloat4 block_error_weighted_rgba_sum;
+
+	/** @brief Block error sum for whole block / 1 partition. */
+	vfloat4 block_error_weight_sum;
+
 	/** @brief The full per texel per component error weights. */
 	vfloat4 error_weights[BLOCK_MAX_TEXELS];
+
 
 	/** @brief The full per texel per component error weights. */
 	float texel_weight[BLOCK_MAX_TEXELS];
@@ -1011,10 +1020,10 @@ struct endpoints_and_weights
 	/** @brief The color endpoints. */
 	endpoints ep;
 
-	/** @brief The undecimated and unquantized weight for each texel. */
+	/** @brief The ideal weight for each texel; may be undecimated or decimated. */
 	alignas(ASTCENC_VECALIGN) float weights[BLOCK_MAX_TEXELS];
 
-	/** @brief The undecimated and unquantized weight error scaling for each texel. */
+	/** @brief The ideal weight error scaling for each texel; may be undecimated or decimated. */
 	alignas(ASTCENC_VECALIGN) float weight_error_scale[BLOCK_MAX_TEXELS];
 };
 
@@ -1053,26 +1062,26 @@ struct alignas(ASTCENC_VECALIGN) compression_working_buffers
 	/** @brief Ideal endpoints and weights for plane 2. */
 	endpoints_and_weights ei2;
 
-	/** @brief Ideal endpoints and weights for plane 1. */
+	/** @brief Ideal decimated endpoints and weights for plane 1. */
 	endpoints_and_weights eix1[WEIGHTS_MAX_DECIMATION_MODES];
 
-	/** @brief Ideal endpoints and weights for plane 2. */
+	/** @brief Ideal decimated endpoints and weights for plane 2. */
 	endpoints_and_weights eix2[WEIGHTS_MAX_DECIMATION_MODES];
 
 	/** @brief The error weight block for the current thread. */
 	error_weight_block ewb;
 
-	/** @brief Decimated and weight values, rounded to quantization points but not stored packed. */
-	alignas(ASTCENC_VECALIGN) float decimated_quantized_weights[2 * WEIGHTS_MAX_DECIMATION_MODES * BLOCK_MAX_WEIGHTS];
+	/** @brief Decimated ideal weight values. */
+	alignas(ASTCENC_VECALIGN) float dec_weights_ideal_value[2 * WEIGHTS_MAX_DECIMATION_MODES * BLOCK_MAX_WEIGHTS];
 
-	/** @brief Decimated and unquantized weight values. */
-	alignas(ASTCENC_VECALIGN) float decimated_weights[2 * WEIGHTS_MAX_DECIMATION_MODES * BLOCK_MAX_WEIGHTS];
+	/** @brief Decimated ideal weight significance. */
+	alignas(ASTCENC_VECALIGN) float dec_weights_ideal_sig[2 * WEIGHTS_MAX_DECIMATION_MODES * BLOCK_MAX_WEIGHTS];
+
+	/** @brief Decimated and quantized weight values stored in the unpacked quantized weight range. */
+	alignas(ASTCENC_VECALIGN) float dec_weights_quant_uvalue[2 * WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
 
 	/** @brief Decimated and quantized weight values stored in the packed quantized weight range. */
-	alignas(ASTCENC_VECALIGN) float flt_quantized_decimated_quantized_weights[2 * WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
-
-	/** @brief Decimated and quantized weight values stored in the packed quantized weight range. */
-	alignas(ASTCENC_VECALIGN) uint8_t u8_quantized_decimated_quantized_weights[2 * WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
+	alignas(ASTCENC_VECALIGN) uint8_t dec_weights_quant_pvalue[2 * WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
 };
 
 /**
@@ -1168,6 +1177,7 @@ struct symbolic_compressed_block
 	union {
 		/** @brief The constant color; valid for @c CONST blocks. */
 		int constant_color[BLOCK_MAX_COMPONENTS];
+
 		/** @brief The quantized endpoint color pairs; valid for @c NONCONST blocks. */
 		uint8_t color_values[BLOCK_MAX_PARTITIONS][8];
 	};
@@ -1281,7 +1291,8 @@ struct avg_var_args
 };
 
 #if defined(ASTCENC_DIAGNOSTICS)
-class TraceLog; // See astcenc_diagnostic_trace for details.
+/* See astcenc_diagnostic_trace header for details. */
+class TraceLog;
 #endif
 
 /**
@@ -1783,7 +1794,6 @@ void compute_ideal_colors_and_weights_1plane(
  * @param      bsd                The block size information.
  * @param      blk                The image block color data to compress.
  * @param      ewb                The image block weighted error data.
- * @param      pi                 The partition info for the current trial.
  * @param      plane2_component   The component assigned to plane 2.
  * @param[out] ei1                The endpoint and weight values for plane 1.
  * @param[out] ei2                The endpoint and weight values for plane 2.
@@ -1792,7 +1802,6 @@ void compute_ideal_colors_and_weights_2planes(
 	const block_size_descriptor& bsd,
 	const image_block& blk,
 	const error_weight_block& ewb,
-	const partition_info& pi,
 	unsigned int plane2_component,
 	endpoints_and_weights& ei1,
 	endpoints_and_weights& ei2);
@@ -1808,18 +1817,18 @@ void compute_ideal_colors_and_weights_2planes(
  * Then, set step size to <some initial value> and attempt one step towards the original ideal
  * weight if it helps to reduce error.
  *
- * @param      eai_in       The non-decimated endpoints and weights.
- * @param      eai_out      A copy of eai_in we can modify later for refinement.
- * @param      di           The selected weight decimation.
- * @param[out] weight_set   The output decimated weight set.
- * @param[out] weights      The output decimated weights.
+ * @param      eai_in                   The non-decimated endpoints and weights.
+ * @param      eai_out                  A copy of eai_in we can modify later for refinement.
+ * @param      di                       The selected weight decimation.
+ * @param[out] dec_weight_ideal_value   The ideal values for the decimated weight set.
+ * @param[out] dec_weight_ideal_sig     The significance of each weight in the decimated weight_set.
  */
 void compute_ideal_weights_for_decimation(
 	const endpoints_and_weights& eai_in,
 	endpoints_and_weights& eai_out,
 	const decimation_info& di,
-	float* weight_set,
-	float* weights);
+	float* dec_weight_ideal_value,
+	float* dec_weight_ideal_sig);
 
 /**
  * @brief Compute the optimal quantized weights for a decimation table.
@@ -1827,25 +1836,31 @@ void compute_ideal_weights_for_decimation(
  * We test the two closest weight indices in the allowed quantization range and keep the weight that
  * is the closest match.
  *
- * @param      di                     The selected weight decimation.
- * @param      low_bound              The lowest weight allowed.
- * @param      high_bound             The highest weight allowed.
- * @param      weight_set_in          The ideal weight set.
- * @param[out] weight_set_out         The output quantized weight as a float.
- * @param[out] quantized_weight_set   The output quantized weight as encoded int.
- * @param      quant_level            The desired weight quant level.
+ * @param      di                        The selected weight decimation.
+ * @param      low_bound                 The lowest weight allowed.
+ * @param      high_bound                The highest weight allowed.
+ * @param      dec_weight_ideal_value    The ideal weight set.
+ * @param[out] dec_weight_quant_uvalue   The output quantized weight as a float.
+ * @param[out] dec_weight_quant_pvalue   The output quantized weight as encoded int.
+ * @param      quant_level               The desired weight quant level.
  */
 void compute_quantized_weights_for_decimation(
 	const decimation_info& di,
 	float low_bound,
 	float high_bound,
-	const float* weight_set_in,
-	float* weight_set_out,
-	uint8_t* quantized_weight_set,
+	const float* dec_weight_ideal_value,
+	float* dec_weight_quant_uvalue,
+	uint8_t* dec_weight_quant_pvalue,
 	quant_method quant_level);
 
 /**
  * @brief Compute the infilled weight for a texel index in a decimated grid.
+ *
+ * @param di        The weight grid decimation to use.
+ * @param weights   The decimated weight values to use.
+ * @param index     The texel index to interpolate.
+ *
+ * @return The interpolated weight for the given texel.
  */
 static inline float bilinear_infill(
 	const decimation_info& di,
@@ -1860,6 +1875,12 @@ static inline float bilinear_infill(
 
 /**
  * @brief Compute the infilled weight for N texel indices in a decimated grid.
+ *
+ * @param di        The weight grid decimation to use.
+ * @param weights   The decimated weight values to use.
+ * @param index     The first texel index to interpolate.
+ *
+ * @return The interpolated weight for the given set of SIMD_WIDTH texels.
  */
 static inline vfloat bilinear_infill_vla(
 	const decimation_info& di,
@@ -1896,16 +1917,16 @@ static inline vfloat bilinear_infill_vla(
  * error for decimated weight grids where weights are stored at a lower resolution. This function
  * computes the error of the reduced grid, compared to the full grid.
  *
- * @param eai       The ideal weights for the full grid.
- * @param di        The selected weight decimation.
- * @param weights   The ideal weights for the decimated grid.
+ * @param eai                       The ideal weights for the full grid.
+ * @param di                        The selected weight decimation.
+ * @param dec_weight_quant_uvalue   The quantized weights for the decimated grid.
  *
  * @return The accumulated error.
  */
 float compute_error_of_weight_set_1plane(
 	const endpoints_and_weights& eai,
 	const decimation_info& di,
-	const float *weights);
+	const float* dec_weight_quant_uvalue);
 
 /**
  * @brief Compute the error of a decimated weight set for 2 planes.
@@ -1914,11 +1935,11 @@ float compute_error_of_weight_set_1plane(
  * error for decimated weight grids where weights are stored at a lower resolution. This function
  * computes the error of the reduced grid, compared to the full grid.
  *
- * @param eai1       The ideal weights for the full grid and plane 1.
- * @param eai2       The ideal weights for the full grid and plane 2.
- * @param di         The selected weight decimation.
- * @param weights1   The ideal weights for the decimated grid plane 1.
- * @param weights2   The ideal weights for the decimated grid plane 2.
+ * @param eai1                             The ideal weights for the full grid and plane 1.
+ * @param eai2                             The ideal weights for the full grid and plane 2.
+ * @param di                               The selected weight decimation.
+ * @param dec_weight_quant_uvalue_plane1   The quantized weights for the decimated grid plane 1.
+ * @param dec_weight_quant_uvalue_plane2   The quantized weights for the decimated grid plane 2.
  *
  * @return The accumulated error.
  */
@@ -1926,8 +1947,8 @@ float compute_error_of_weight_set_2planes(
 	const endpoints_and_weights& eai1,
 	const endpoints_and_weights& eai2,
 	const decimation_info& di,
-	const float* weights1,
-	const float* weights2);
+	const float* dec_weight_quant_uvalue_plane1,
+	const float* dec_weight_quant_uvalue_plane2);
 
 /**
  * @brief Pack a single pair of color endpoints as effectively as possible.
@@ -2041,15 +2062,15 @@ unsigned int compute_ideal_endpoint_formats(
  * As we quantize and decimate weights the optimal endpoint colors may change slightly, so we must
  * recompute the ideal colors for a specific weight set.
  *
- * @param         blk                 The image block color data to compress.
- * @param         ewb                 The image block weighted error data.
- * @param         pi                  The partition info for the current trial.
- * @param         di                  The weight grid decimation table.
- * @param         weight_quant_mode   The weight grid quantization level.
- * @param         weight_set8         The quantized weight set.
- * @param[in,out] ep                  The color endpoints (modifed in place).
- * @param[out]    rgbs_vectors        The RGB+scale vectors for LDR blocks.
- * @param[out]    rgbo_vectors        The RGB+offset vectors for HDR blocks.
+ * @param         blk                        The image block color data to compress.
+ * @param         ewb                        The image block weighted error data.
+ * @param         pi                         The partition info for the current trial.
+ * @param         di                         The weight grid decimation table.
+ * @param         weight_quant_mode          The weight grid quantization level.
+ * @param         dec_weights_quant_pvalue   The quantized weight set.
+ * @param[in,out] ep                         The color endpoints (modifed in place).
+ * @param[out]    rgbs_vectors               The RGB+scale vectors for LDR blocks.
+ * @param[out]    rgbo_vectors               The RGB+offset vectors for HDR blocks.
  */
 void recompute_ideal_colors_1plane(
 	const image_block& blk,
@@ -2057,7 +2078,7 @@ void recompute_ideal_colors_1plane(
 	const partition_info& pi,
 	const decimation_info& di,
 	int weight_quant_mode,
-	const uint8_t* weight_set8,
+	const uint8_t* dec_weights_quant_pvalue,
 	endpoints& ep,
 	vfloat4 rgbs_vectors[BLOCK_MAX_PARTITIONS],
 	vfloat4 rgbo_vectors[BLOCK_MAX_PARTITIONS]);
@@ -2068,49 +2089,86 @@ void recompute_ideal_colors_1plane(
  * As we quantize and decimate weights the optimal endpoint colors may change slightly, so we must
  * recompute the ideal colors for a specific weight set.
  *
- * @param         blk                  The image block color data to compress.
- * @param         ewb                  The image block weighted error data.
- * @param         pi                   The partition info for the current trial.
- * @param         di                   The weight grid decimation table.
- * @param         weight_quant_mode    The weight grid quantization level.
- * @param         weight_set8_plane1   The quantized weight set for plane 1.
- * @param         weight_set8_plane2   The quantized weight set for plane 2.
- * @param[in,out] ep                   The color endpoints (modifed in place).
- * @param[out]    rgbs_vectors         The RGB+scale vectors for LDR blocks.
- * @param[out]    rgbo_vectors         The RGB+offset vectors for HDR blocks.
- * @param         plane2_component     The component assigned to plane 2.
+ * @param         blk                               The image block color data to compress.
+ * @param         ewb                               The image block weighted error data.
+ * @param         bsd                               The block_size descriptor.
+ * @param         di                                The weight grid decimation table.
+ * @param         weight_quant_mode                 The weight grid quantization level.
+ * @param         dec_weights_quant_pvalue_plane1   The quantized weight set for plane 1.
+ * @param         dec_weights_quant_pvalue_plane2   The quantized weight set for plane 2.
+ * @param[in,out] ep                                The color endpoints (modifed in place).
+ * @param[out]    rgbs_vector                       The RGB+scale color for LDR blocks.
+ * @param[out]    rgbo_vector                       The RGB+offset color for HDR blocks.
+ * @param         plane2_component                  The component assigned to plane 2.
  */
 void recompute_ideal_colors_2planes(
 	const image_block& blk,
 	const error_weight_block& ewb,
-	const partition_info& pi,
+	const block_size_descriptor& bsd,
 	const decimation_info& di,
 	int weight_quant_mode,
-	const uint8_t* weight_set8_plane1,
-	const uint8_t* weight_set8_plane2,
+	const uint8_t* dec_weights_quant_pvalue_plane1,
+	const uint8_t* dec_weights_quant_pvalue_plane2,
 	endpoints& ep,
-	vfloat4 rgbs_vectors[BLOCK_MAX_PARTITIONS],
-	vfloat4 rgbo_vectors[BLOCK_MAX_PARTITIONS],
+	vfloat4& rgbs_vector,
+	vfloat4& rgbo_vector,
 	int plane2_component);
 
+/**
+ * @brief Expand the deblock weights based on the config deblocking parameter.
+ *
+ * The approach to deblocking is a general purpose approach which elevates the error weight
+ * significance of texels closest to the block periphery. This function computes the deblock weights
+ * for each texel, which can be mixed on a block-by-block basis with the other error weighting
+ * parameters to compute a specific per-texel weight for a trial.
+ *
+ * @param[in,out] ctx   The context to expand.
+ */
 void expand_deblock_weights(
 	astcenc_context& ctx);
 
-// functions pertaining to weight alignment
+/**
+ * @brief Expand the angular tables needed for the alternative to PCA that we use.
+ */
 void prepare_angular_tables();
 
+/**
+ * @brief Compute the angular endpoints for one plane for each block mode.
+ *
+ * @param      tune_low_weight_limit     Weight count cutoff below which we use simpler searches.
+ * @param      only_always               Only consider block modes that are always enabled.
+ * @param      bsd                       The block size descriptor for the current trial.
+ * @param      dec_weight_quant_uvalue   The decimated and quantized weight values.
+ * @param      dec_weight_quant_sig      The significance of each weight.
+ * @param[out] low_value                 The lowest weight to consider for each block mode.
+ * @param[out] high_value                The highest weight to consider for each block mode.
+ */
 void compute_angular_endpoints_1plane(
+	unsigned int tune_low_weight_limit,
 	bool only_always,
 	const block_size_descriptor& bsd,
-	const float* decimated_quantized_weights,
-	const float* decimated_weights,
+	const float* dec_weight_quant_uvalue,
+	const float* dec_weight_quant_sig,
 	float low_value[WEIGHTS_MAX_BLOCK_MODES],
 	float high_value[WEIGHTS_MAX_BLOCK_MODES]);
 
+/**
+ * @brief Compute the angular endpoints for one plane for each block mode.
+ *
+ * @param      tune_low_weight_limit    Weight count cutoff below which we use simpler searches.
+ * @param     bsd                       The block size descriptor for the current trial.
+ * @param     dec_weight_quant_uvalue   The decimated and quantized weight values.
+ * @param     dec_weight_quant_sig      The significance of each weight.
+ * @param[out] low_value1               The lowest weight p1 to consider for each block mode.
+ * @param[out] high_value1              The highest weight p1 to consider for each block mode.
+ * @param[out] low_value2               The lowest weight p2 to consider for each block mode.
+ * @param[out] high_value2              The highest weight p2 to consider for each block mode.
+ */
 void compute_angular_endpoints_2planes(
+	unsigned int tune_low_weight_limit,
 	const block_size_descriptor& bsd,
-	const float* decimated_quantized_weights,
-	const float* decimated_weights,
+	const float* dec_weight_quant_uvalue,
+	const float* dec_weight_quant_sig,
 	float low_value1[WEIGHTS_MAX_BLOCK_MODES],
 	float high_value1[WEIGHTS_MAX_BLOCK_MODES],
 	float low_value2[WEIGHTS_MAX_BLOCK_MODES],
@@ -2176,11 +2234,31 @@ float compute_symbolic_block_difference(
 	const image_block& blk,
 	const error_weight_block& ewb) ;
 
+/**
+ * @brief Convert a symbolic representation into a binary physical encoding.
+ *
+ * It is assumed that the symbolic encoding is valid and encodable, or
+ * previously flagged as an error block if an error color it to be encoded.
+ *
+ * @param      bsd   The block size information.
+ * @param      scb   The symbolic representation.
+ * @param[out] pcb   The binary encoded data.
+ */
 void symbolic_to_physical(
 	const block_size_descriptor& bsd,
 	const symbolic_compressed_block& scb,
 	physical_compressed_block& pcb);
 
+/**
+ * @brief Convert a binary physical encoding into a symbolic representation.
+ *
+ * This function can cope with arbitrary input data; output blocks will be
+ * flagged as an error block if the encoding is invalid.
+ *
+ * @param      bsd   The block size information.
+ * @param      pcb   The binary encoded data.
+ * @param[out] scb   The output symbolic representation.
+ */
 void physical_to_symbolic(
 	const block_size_descriptor& bsd,
 	const physical_compressed_block& pcb,

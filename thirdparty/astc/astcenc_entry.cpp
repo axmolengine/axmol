@@ -49,8 +49,8 @@ struct astcenc_preset_config {
 	float tune_refinement_mse_overshoot;
 	float tune_2_partition_early_out_limit_factor;
 	float tune_3_partition_early_out_limit_factor;
-	float tune_2_plane_early_out_limit_factor;
 	float tune_2_plane_early_out_limit_correlation;
+	unsigned int tune_low_weight_count_limit;
 };
 
 
@@ -61,19 +61,19 @@ struct astcenc_preset_config {
 static const std::array<astcenc_preset_config, 5> preset_configs_high {{
 	{
 		ASTCENC_PRE_FASTEST,
-		3, 2, 30, 1, 1, 79.0f, 57.0f, 2.0f, 2.0f, 1.0f, 1.0f, 0.65f, 0.5f
+		3, 2, 30, 1, 1, 79.0f, 57.0f, 2.0f, 2.0f, 1.0f, 1.0f, 0.5f, 25
 	}, {
 		ASTCENC_PRE_FAST,
-		3, 12, 55, 3, 2, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.1f, 0.65f, 0.5f
+		3, 12, 55, 3, 2, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.1f, 0.5f, 20
 	}, {
 		ASTCENC_PRE_MEDIUM,
-		4, 26, 76, 2, 2, 95.0f, 70.0f, 2.5f, 2.5f, 1.2f, 1.25f, 0.65f, 0.75f
+		4, 26, 76, 2, 2, 95.0f, 70.0f, 2.5f, 2.5f, 1.2f, 1.25f, 0.75f, 16
 	}, {
 		ASTCENC_PRE_THOROUGH,
-		4, 76, 93, 4, 4, 105.0f, 77.0f, 10.0f, 10.0f, 2.5f, 1.25f, 0.75f, 0.95f
+		4, 76, 93, 4, 4, 105.0f, 77.0f, 10.0f, 10.0f, 2.5f, 1.25f, 0.95f, 12
 	}, {
 		ASTCENC_PRE_EXHAUSTIVE,
-		4, 1024, 100, 4, 4, 200.0f, 200.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 0.99f
+		4, 1024, 100, 4, 4, 200.0f, 200.0f, 10.0f, 10.0f, 10.0f, 10.0f, 0.99f, 0
 	}
 }};
 
@@ -85,19 +85,19 @@ static const std::array<astcenc_preset_config, 5> preset_configs_high {{
 static const std::array<astcenc_preset_config, 5> preset_configs_mid {{
 	{
 		ASTCENC_PRE_FASTEST,
-		3, 2, 30, 1, 1, 79.0f, 57.0f, 2.0f, 2.0f, 1.0f, 1.0f, 0.65f, 0.5f
+		3, 2, 30, 1, 1, 79.0f, 57.0f, 2.0f, 2.0f, 1.0f, 1.0f, 0.5f, 20
 	}, {
 		ASTCENC_PRE_FAST,
-		3, 12, 55, 3, 2, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.1f, 0.65f, 0.5f
+		3, 12, 55, 3, 2, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.1f, 0.5f, 16
 	}, {
 		ASTCENC_PRE_MEDIUM,
-		4, 26, 76, 2, 2, 95.0f, 70.0f, 3.0f, 3.0f, 1.2f, 1.25f, 0.65f, 0.75f
+		4, 26, 76, 2, 2, 95.0f, 70.0f, 3.0f, 3.0f, 1.2f, 1.25f, 0.75f, 14
 	}, {
 		ASTCENC_PRE_THOROUGH,
-		4, 76, 93, 4, 4, 105.0f, 77.0f, 10.0f, 10.0f, 2.5f, 1.25f, 0.75f, 0.95f
+		4, 76, 93, 4, 4, 105.0f, 77.0f, 10.0f, 10.0f, 2.5f, 1.25f, 0.95f, 10
 	}, {
 		ASTCENC_PRE_EXHAUSTIVE,
-		4, 1024, 100, 4, 4, 200.0f, 200.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 0.99f
+		4, 1024, 100, 4, 4, 200.0f, 200.0f, 10.0f, 10.0f, 10.0f, 10.0f, 0.99f, 0
 	}
 }};
 
@@ -109,19 +109,19 @@ static const std::array<astcenc_preset_config, 5> preset_configs_mid {{
 static const std::array<astcenc_preset_config, 5> preset_configs_low {{
 	{
 		ASTCENC_PRE_FASTEST,
-		3, 2, 30, 1, 1, 79.0f, 57.0f, 2.0f, 2.0f, 1.0f, 1.0f, 0.75f, 0.5f
+		3, 2, 30, 1, 1, 79.0f, 57.0f, 2.0f, 2.0f, 1.0f, 1.0f, 0.5f, 20
 	}, {
 		ASTCENC_PRE_FAST,
-		3, 10, 53, 3, 2, 85.0f, 63.0f, 3.5f, 3.5f, 1.0f, 1.1f, 0.75f, 0.5f
+		3, 10, 53, 3, 2, 85.0f, 63.0f, 3.5f, 3.5f, 1.0f, 1.1f, 0.5f, 16
 	}, {
 		ASTCENC_PRE_MEDIUM,
-		3, 26, 76, 3, 2, 95.0f, 70.0f, 3.5f, 3.5f, 1.2f, 1.25f, 0.75f, 0.75f
+		3, 26, 76, 3, 2, 95.0f, 70.0f, 3.5f, 3.5f, 1.2f, 1.25f, 0.75f, 12
 	}, {
 		ASTCENC_PRE_THOROUGH,
-		4, 75, 92, 4, 4, 105.0f, 77.0f, 10.0f, 10.0f, 2.5f, 1.25f, 1.05f, 0.95f
+		4, 75, 92, 4, 4, 105.0f, 77.0f, 10.0f, 10.0f, 2.5f, 1.25f, 0.95f, 10
 	}, {
 		ASTCENC_PRE_EXHAUSTIVE,
-		4, 1024, 100, 4, 4, 200.0f, 200.0f, 10.0f, 10.0f, 10.0f, 10.0f, 10.0f, 0.99f
+		4, 1024, 100, 4, 4, 200.0f, 200.0f, 10.0f, 10.0f, 10.0f, 10.0f, 0.99f, 0
 	}
 }};
 
@@ -434,7 +434,6 @@ static astcenc_error validate_config(
 	config.tune_refinement_mse_overshoot = astc::max(config.tune_refinement_mse_overshoot, 1.0f);
 	config.tune_2_partition_early_out_limit_factor = astc::max(config.tune_2_partition_early_out_limit_factor, 0.0f);
 	config.tune_3_partition_early_out_limit_factor = astc::max(config.tune_3_partition_early_out_limit_factor, 0.0f);
-	config.tune_2_plane_early_out_limit_factor = astc::max(config.tune_2_plane_early_out_limit_factor, 0.0f);
 	config.tune_2_plane_early_out_limit_correlation = astc::max(config.tune_2_plane_early_out_limit_correlation, 0.0f);
 
 	// Specifying a zero weight color component is not allowed; force to small value
@@ -542,8 +541,8 @@ astcenc_error astcenc_config_init(
 
 		config.tune_2_partition_early_out_limit_factor = (*preset_configs)[start].tune_2_partition_early_out_limit_factor;
 		config.tune_3_partition_early_out_limit_factor =(*preset_configs)[start].tune_3_partition_early_out_limit_factor;
-		config.tune_2_plane_early_out_limit_factor = (*preset_configs)[start].tune_2_plane_early_out_limit_factor;
 		config.tune_2_plane_early_out_limit_correlation = (*preset_configs)[start].tune_2_plane_early_out_limit_correlation;
+		config.tune_low_weight_count_limit = (*preset_configs)[start].tune_low_weight_count_limit;
 	}
 	// Start and end node are not the same - so interpolate between them
 	else
@@ -578,9 +577,8 @@ astcenc_error astcenc_config_init(
 
 		config.tune_2_partition_early_out_limit_factor = LERP(tune_2_partition_early_out_limit_factor);
 		config.tune_3_partition_early_out_limit_factor = LERP(tune_3_partition_early_out_limit_factor);
-		config.tune_2_plane_early_out_limit_factor = LERP(tune_2_plane_early_out_limit_factor);
 		config.tune_2_plane_early_out_limit_correlation = LERP(tune_2_plane_early_out_limit_correlation);
-
+		config.tune_low_weight_count_limit = LERPI(tune_low_weight_count_limit);
 		#undef LERP
 		#undef LERPI
 		#undef LERPUI
