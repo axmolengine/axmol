@@ -41,7 +41,7 @@ function(configure_target_outdir target)
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
         FOLDER "ThirdParty"
     )
-endfunction(configure_lib_outdir)
+endfunction()
 
 if(NOT DEFINED LUA_ENGINE)
     set(LUA_ENGINE "plainlua" CACHE INTERNAL "The lua core lib, luajit or plainlua")
