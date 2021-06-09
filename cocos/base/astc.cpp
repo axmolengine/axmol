@@ -34,8 +34,9 @@ uint8_t astc_decompress_image(
     init_block_size_descriptor(block_x, block_y, 1, false, 0 /*unused for decompress*/, *bsd);
 
     image_block blk;
-    astcenc_image image_out{dim_x, dim_y, 1, ASTCENC_TYPE_U8, (void**) &out};
-    const int total_blocks = zblocks * yblocks * xblocks;
+    void* data[1] = {out};
+    astcenc_image image_out{dim_x, dim_y, 1, ASTCENC_TYPE_U8, data};
+    const auto total_blocks = zblocks * yblocks * xblocks;
     const astcenc_swizzle swz_decode{ASTCENC_SWZ_R, ASTCENC_SWZ_G, ASTCENC_SWZ_B, ASTCENC_SWZ_A};
     for (unsigned int i = 0; i < total_blocks; ++i) {
         // Decode i into x, y, z block indices
