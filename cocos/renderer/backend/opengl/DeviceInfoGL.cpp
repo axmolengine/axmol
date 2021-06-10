@@ -80,8 +80,6 @@ static bool checkReallySupportsASTC() {
     glBindTexture(GL_TEXTURE_2D, 0); // ubind texture
     glDeleteTextures(1, &texID);
 
-    CHECK_GL_ERROR_DEBUG();
-
     return !error;
 }
 
