@@ -3,7 +3,7 @@ Copyright (c) 2010      Ricardo Quesada
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2020 c4games.com
+Copyright (c) 2020-2021 c4games.com
 
 http://www.cocos2d-x.org
 
@@ -141,7 +141,7 @@ void Configuration::gatherGPUInfo()
     _valueDict["supports_ATITC"] = Value(_supportsATITC);
 
     _supportsASTC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ASTC);
-    _valueDict["gl.supports_ASTC"] = Value(_supportsASTC);
+    _valueDict["supports_ASTC"] = Value(_supportsASTC);
     
     _supportsPVRTC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::PVRTC);
     _valueDict["supports_PVRTC"] = Value(_supportsPVRTC);
