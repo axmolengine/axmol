@@ -70,7 +70,20 @@ static bool checkReallySupportsASTC() {
     if (!error) {
         // read pixel RGB: should be: 255, 128, 0
         uint8_t pixels[TEXTURE_DIM * TEXTURE_DIM * 4] = {0};
+
+#if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+#else
+        GLuint fbo = 0;
+        glGenFramebuffers(1, &fbo);
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texID, 0);
+
+        glReadPixels(0, 0, TEXTURE_DIM, TEXTURE_DIM, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glDeleteFramebuffers(1, &fbo);
+#endif
         error = glGetError();
         if (error || pixels[0] != 255 || pixels[1] != 128) {
             error = GL_INVALID_VALUE;
