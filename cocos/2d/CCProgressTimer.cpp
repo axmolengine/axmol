@@ -3,6 +3,7 @@ Copyright (c) 2010      Lam Pham
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2017 Chukong Technologies Inc
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
 http://www.cocos2d-x.org
 
@@ -227,6 +228,14 @@ Vec2 ProgressTimer::vertexFromAlphaPoint(Vec2 alpha)
     ret.x = min.x * (1.f - alpha.x) + max.x * alpha.x;
     ret.y = min.y * (1.f - alpha.y) + max.y * alpha.y;
     return ret;
+}
+
+void ProgressTimer::updateDisplayedOpacity(uint8_t parentOpacity)
+{
+    Node::updateDisplayedOpacity(parentOpacity);
+
+    _sprite->updateDisplayedOpacity(_displayedOpacity);
+    updateProgress();
 }
 
 void ProgressTimer::updateColor()
