@@ -36,7 +36,6 @@
 USING_NS_CC;
 
 using namespace yasio;
-using namespace yasio::inet;
 
 class YNSM{
 public:

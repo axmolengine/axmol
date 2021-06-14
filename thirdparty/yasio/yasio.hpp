@@ -75,6 +75,7 @@ typedef struct ares_addrinfo ares_addrinfo;
 
 namespace yasio
 {
+YASIO__NS_INLINE
 namespace inet
 {
 // options
@@ -798,8 +799,8 @@ public:
     source_ud_ = source_->ud_.ptr;
 #endif
   }
-  io_event(int cidx, int kind, int status, io_transport* source /*not nullable*/, int passive = 0)
-      : kind_(kind), passive_(passive), writable_(1), status_(status), cindex_(cidx), source_id_(source->id_), source_(source)
+  io_event(int cidx, int kind, int status, io_transport* source /*not nullable*/)
+      : kind_(kind), passive_(0), writable_(1), status_(status), cindex_(cidx), source_id_(source->id_), source_(source)
   {
 #if !defined(YASIO_MINIFY_EVENT)
     source_ud_ = source_->ud_.ptr;
@@ -866,8 +867,6 @@ private:
   highp_time_t timestamp_ = highp_clock();
 #endif
 };
-
-static const int io_event_size = sizeof(io_event);
 
 class YASIO_API io_service // lgtm [cpp/class-many-fields]
 {
@@ -1183,6 +1182,9 @@ private:
 }; // io_service
 
 } // namespace inet
+#if !YASIO__HAS_NS_INLINE
+using namespace yasio::inet;
+#endif
 } /* namespace yasio */
 
 #define yasio_shared_service yasio::gc::singleton<yasio::inet::io_service>::instance

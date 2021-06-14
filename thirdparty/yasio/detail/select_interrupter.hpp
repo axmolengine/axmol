@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -17,6 +17,8 @@
 #ifndef YASIO__SELECT_INTERRUPTER_HPP
 #define YASIO__SELECT_INTERRUPTER_HPP
 
+#include "yasio/compiler/feature_test.hpp"
+
 #if defined(_WIN32)
 #  include "socket_select_interrupter.hpp"
 #elif defined(__linux__)
@@ -27,6 +29,7 @@
 
 namespace yasio
 {
+YASIO__NS_INLINE
 namespace inet
 {
 

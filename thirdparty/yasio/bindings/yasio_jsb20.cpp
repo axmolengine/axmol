@@ -28,7 +28,6 @@ SOFTWARE.
 #define YASIO_HEADER_ONLY 1
 #define YASIO_HAVE_KCP 1
 
-#include "yasio/bindings/yasio_jsb20.hpp"
 #include "yasio/yasio.hpp"
 #include "yasio/ibstream.hpp"
 #include "yasio/obstream.hpp"
@@ -43,20 +42,22 @@ SOFTWARE.
 #include "cocos/base/StringUtil.h"
 using namespace cc;
 #else
-#include "cocos2d.h"
+// A workaround to fix compile issue caused by `CCLog.h` doesn't handle `__has_attribute` it properly
+#  if !__has_attribute(format)
+#    undef __has_attribute
+#  endif
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
 #include "cocos/scripting/js-bindings/manual/jsb_conversions.hpp"
 #include "cocos/scripting/js-bindings/manual/jsb_global.h"
 #include "cocos/platform/CCApplication.h"
 #include "cocos/base/CCScheduler.h"
+#include "cocos2d.h"
 using namespace cocos2d;
-using StringUtil = StringUtils;
+#define StringUtil StringUtils
 #define CC_LOG_DEBUG CCLOG
 #endif
 
 using namespace yasio;
-using namespace yasio::inet;
-
 
 namespace yasio_jsb
 {

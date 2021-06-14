@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -18,6 +18,8 @@
 #ifndef YASIO__PIPE_SELECT_INTERRUPTER_HPP
 #define YASIO__PIPE_SELECT_INTERRUPTER_HPP
 
+#include "yasio/compiler/feature_test.hpp"
+
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -25,11 +27,10 @@
 
 namespace yasio
 {
+YASIO__NS_INLINE
 namespace inet
 {
-
-class pipe_select_interrupter
-{
+class pipe_select_interrupter {
 public:
   // Constructor.
   inline pipe_select_interrupter() { open_descriptors(); }

@@ -25,13 +25,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
 #include "yasio/bindings/yasio_cclua.hpp"
 #include "yasio/bindings/lyasio.hpp"
 #include "yasio/detail/object_pool.hpp"
 #include "yasio/detail/ref_ptr.hpp"
 #include "yasio/cxx17/string_view.hpp"
 
+// A workaround to fix compile issue caused by `CCPlatformMacros.h` doesn't handle `__has_attribute` it properly
+#  if !__has_attribute(format)
+#    undef __has_attribute
+#  endif
 #include "cocos2d.h"
 using namespace cocos2d;
 

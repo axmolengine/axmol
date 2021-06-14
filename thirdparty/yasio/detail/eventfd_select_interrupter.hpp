@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -18,6 +18,8 @@
 #ifndef YASIO__EVENTFD_SELECT_INTERRUPTER_HPP
 #define YASIO__EVENTFD_SELECT_INTERRUPTER_HPP
 
+#include "yasio/compiler/feature_test.hpp"
+
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -31,11 +33,11 @@
 
 namespace yasio
 {
+YASIO__NS_INLINE
 namespace inet
 {
 
-class eventfd_select_interrupter
-{
+class eventfd_select_interrupter {
 public:
   // Constructor.
   inline eventfd_select_interrupter() { open_descriptors(); }
