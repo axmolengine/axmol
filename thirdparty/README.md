@@ -89,6 +89,11 @@
 - Version: 1.7
 - License: MIT
 
+## llhttp
+- Upstream: https://github.com/nodejs/llhttp
+- Version: 6.0.3
+- License: MIT
+
 ## lua
 - plainlua
   - Upstream: http://www.lua.org/
