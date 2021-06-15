@@ -31,7 +31,6 @@ SOFTWARE.
 #include "yasio/bindings/lyasio.hpp"
 #include "yasio/bindings/yasio_sol.hpp"
 using namespace yasio;
-using namespace yasio::inet;
 
 namespace lyasio
 {

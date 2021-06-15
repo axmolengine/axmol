@@ -89,6 +89,11 @@
 - Version: 1.7
 - License: MIT
 
+## llhttp
+- Upstream: https://github.com/nodejs/llhttp
+- Version: 6.0.3
+- License: MIT
+
 ## lua
 - plainlua
   - Upstream: http://www.lua.org/
@@ -208,7 +213,7 @@
 
 ## yasio
 - Upstream: https://github.com/yasio/yasio
-- Version: 3.37.0
+- Version: 3.37.2
 - License: MIT WITH Anti-996
 
 ## zlib

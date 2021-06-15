@@ -1,6 +1,11 @@
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
+// client application.
+//
+//////////////////////////////////////////////////////////////////////////////////////////
+/*
 The MIT License (MIT)
 
-Copyright (c) 2014-2021 Omar Cornut
+Copyright (c) 2012-2021 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +24,22 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+#ifndef YASIO__FWD_HPP
+#define YASIO__FWD_HPP
+#include "yasio/compiler/feature_test.hpp"
+
+namespace yasio
+{
+YASIO__NS_INLINE
+namespace inet
+{
+class io_service;
+class io_event;
+} // namespace inet
+#if !YASIO__HAS_NS_INLINE
+using namespace yasio::inet;
+#endif
+} // namespace yasio
+
+#endif

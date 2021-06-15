@@ -22,13 +22,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "DeviceInfoGL.h"
 #include "platform/CCGL.h"
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
 #define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
-// #define GL_COMPRESSED_RGB8_ETC2 0x9274
+ // #define GL_COMPRESSED_RGB8_ETC2 0x9274
 #endif
 
 #if !defined(GL_COMPRESSED_RGBA_ASTC_4x4)
@@ -37,6 +37,53 @@
 #endif
 
 CC_BACKEND_BEGIN
+
+/// <summary>
+///  1px method to detect whether GPU support astc compressed texture really
+/// </summary>
+/// <returns>true: support, false: not support</returns>
+static bool checkReallySupportsASTC() {
+    const GLsizei TEXTURE_DIM = 1;
+    // 1px/2px astc 4x4 compressed texels srgb
+    uint8_t astctexels[] = {
+        0xfc, 0xfd, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x80, 0x80, 0x00, 0x00, 0xff, 0xff};
+
+    GLuint texID = 0;
+    glGenTextures(1, &texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glCompressedTexImage2D(GL_TEXTURE_2D,
+        0, // level
+        GL_COMPRESSED_RGBA_ASTC_4x4_KHR, // format
+        TEXTURE_DIM, TEXTURE_DIM,
+        0, // border
+        sizeof(astctexels), // dataLen,
+        astctexels);
+
+    auto error = glGetError();
+#if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
+    if (!error) {
+        // read pixel RGB: should be: 255, 128, 0
+        uint8_t pixels[TEXTURE_DIM * TEXTURE_DIM * 4] = {0};
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        error = glGetError();
+        if (error || pixels[0] != 255 || pixels[1] != 128) {
+            error = GL_INVALID_VALUE;
+        }
+    }
+#endif
+
+    glBindTexture(GL_TEXTURE_2D, 0); // unbind texture
+    glDeleteTextures(1, &texID);
+
+    return !error;
+}
 
 bool DeviceInfoGL::init()
 {
@@ -111,7 +158,7 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
         featureSupported = checkForGLExtension("GL_OES_depth24");
         break;
     case FeatureType::ASTC:
-        featureSupported = checkForGLExtension("GL_OES_texture_compression_astc") || checkSupportsCompressedFormat(GL_COMPRESSED_RGBA_ASTC_4x4);
+        featureSupported = checkReallySupportsASTC();
         break;
     default:
         break;

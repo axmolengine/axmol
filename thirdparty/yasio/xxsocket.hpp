@@ -229,6 +229,7 @@ inline bool IN6_IS_ADDR_GLOBAL(const in6_addr* a)
 
 namespace yasio
 {
+YASIO__NS_INLINE
 namespace inet
 {
 
@@ -1181,8 +1182,9 @@ private:
 }; // namespace inet
 
 } // namespace inet
-
-namespace net = inet;
+#if !YASIO__HAS_NS_INLINE
+using namespace yasio::inet;
+#endif
 } // namespace yasio
 
 namespace std

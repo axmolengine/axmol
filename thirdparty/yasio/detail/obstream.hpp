@@ -282,8 +282,8 @@ protected:
   std::stack<size_t> offset_stack_;
 }; // CLASS basic_obstream
 
-using obstream      = basic_obstream<::yasio::convert_traits<::yasio::network_convert_tag>>;
-using fast_obstream = basic_obstream<::yasio::convert_traits<::yasio::host_convert_tag>>;
+using obstream      = basic_obstream<convert_traits<network_convert_tag>>;
+using fast_obstream = basic_obstream<convert_traits<host_convert_tag>>;
 
 } // namespace yasio
 

@@ -27,7 +27,6 @@ SOFTWARE.
 #include "yasio/yasio.hpp"
 
 using namespace yasio;
-using namespace yasio::inet;
 
 DECLARE_LOG_CATEGORY_EXTERN(yasio_ue4, Log, All);
 DEFINE_LOG_CATEGORY(yasio_ue4);

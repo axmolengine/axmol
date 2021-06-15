@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -21,10 +21,10 @@
 
 namespace yasio
 {
+YASIO__NS_INLINE
 namespace inet
 {
-class socket_select_interrupter
-{
+class socket_select_interrupter {
 public:
   // Constructor.
   inline socket_select_interrupter() { open_descriptors(); }

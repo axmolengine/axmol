@@ -43,22 +43,47 @@ SOFTWARE.
 #endif
 #include "yasio/detail/fp16.hpp"
 
-namespace yasio
-{
+#ifdef _WIN32
+// Assuming windows is always little-endian.
+#  if !defined(YASIO_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
+#    define YASIO_LITTLE_ENDIAN 1
+#  endif
+#  if defined(_MSC_VER) && _MSC_VER >= 1300 && !defined(__INTEL_COMPILER)
+// If MSVC has "/RTCc" set, it will complain about truncating casts at
+// runtime.  This file contains some intentional truncating casts.
+#    pragma runtime_checks("c", off)
+#  endif
+#else
+#  ifdef __APPLE__
+#    include <machine/endian.h> // __BYTE_ORDER
+#  elif defined(__FreeBSD__)
+#    include <sys/endian.h> // __BYTE_ORDER
+#  else
+#    if !defined(__QNX__)
+#      include <endian.h> // __BYTE_ORDER
+#    endif
+#  endif
+#  if ((defined(__LITTLE_ENDIAN__) && !defined(__BIG_ENDIAN__)) || (defined(__BYTE_ORDER) && __BYTE_ORDER == __LITTLE_ENDIAN)) &&                              \
+      !defined(YASIO_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
+#    define YASIO_LITTLE_ENDIAN 1
+#  endif
+#endif
+
+#if YASIO_LITTLE_ENDIAN
 // clang-format off
-#  define YASIO__SWAP_SHORT(s) ((((s) >> 8) & 0x00ff) | (((s) << 8) & 0xff00))
+#  define YASIO__SWAP_SHORT(s) s = ((((s) >> 8) & 0x00ff) | (((s) << 8) & 0xff00))
 /*
  * Byte order conversion functions for 64-bit integers and 32 + 64 bit
  * floating-point numbers.  IEEE big-endian format is used for the
  * network floating point format.
  */
-#define YASIO__SWAP_LONG(l)                      \
+#  define YASIO__SWAP_LONG(l) l =                \
             ( ( ((l) >> 24) & 0x000000FFL ) |    \
               ( ((l) >>  8) & 0x0000FF00L ) |    \
               ( ((l) <<  8) & 0x00FF0000L ) |    \
               ( ((l) << 24) & 0xFF000000L ) )
 
-#define YASIO__SWAP_LONGLONG(l)                           \
+#  define YASIO__SWAP_LONGLONG(l) l =                     \
             ( ( ((l) >> 56) & 0x00000000000000FFLL ) |    \
               ( ((l) >> 40) & 0x000000000000FF00LL ) |    \
               ( ((l) >> 24) & 0x0000000000FF0000LL ) |    \
@@ -67,18 +92,24 @@ namespace yasio
               ( ((l) << 24) & 0x0000FF0000000000LL ) |    \
               ( ((l) << 40) & 0x00FF000000000000LL ) |    \
               ( ((l) << 56) & 0xFF00000000000000LL ) )
-
+#else
+#  define YASIO__SWAP_SHORT(s) (void)s
+#  define YASIO__SWAP_LONG(l) (void)l
+#  define YASIO__SWAP_LONGLONG(l) (void)l
+#endif
 // clang-format on
+
+namespace yasio
+{
+
 inline uint64_t(htonll)(uint64_t Value)
 {
-  const uint64_t Retval = YASIO__SWAP_LONGLONG(Value);
-  return Retval;
+  return YASIO__SWAP_LONGLONG(Value);
 }
 
 inline uint64_t(ntohll)(uint64_t Value)
 {
-  const uint64_t Retval = YASIO__SWAP_LONGLONG(Value);
-  return Retval;
+  return YASIO__SWAP_LONGLONG(Value);
 }
 
 YASIO__NS_INLINE
@@ -110,8 +141,8 @@ template <typename _Ty> struct byte_order_impl<_Ty, sizeof(int64_t)> {
 template <> struct byte_order_impl<fp16_t, sizeof(fp16_t)> {
   static inline fp16_t host_to_network(fp16_t value)
   {
-    uint16_t* p = (uint16_t*)&value;
-    *p          = YASIO__SWAP_SHORT(*p);
+    uint16_t& p = (uint16_t&)value;
+    YASIO__SWAP_SHORT(p);
     return value;
   }
   static inline fp16_t network_to_host(fp16_t value) { return host_to_network(value); }
@@ -121,8 +152,8 @@ template <> struct byte_order_impl<fp16_t, sizeof(fp16_t)> {
 template <> struct byte_order_impl<float, sizeof(float)> {
   static inline float host_to_network(float value)
   {
-    uint32_t* p = (uint32_t*)&value;
-    *p          = YASIO__SWAP_LONG(*p);
+    uint32_t& p = (uint32_t&)value;
+    YASIO__SWAP_LONG(p);
     return value;
   }
   static inline float network_to_host(float value) { return host_to_network(value); }
@@ -131,8 +162,8 @@ template <> struct byte_order_impl<float, sizeof(float)> {
 template <> struct byte_order_impl<double, sizeof(double)> {
   static inline double host_to_network(double value)
   {
-    uint64_t* p = (uint64_t*)&value;
-    *p          = YASIO__SWAP_LONGLONG(*p);
+    uint64_t& p = (uint64_t&)value;
+    YASIO__SWAP_LONGLONG(p);
     return value;
   }
   static inline double network_to_host(double value) { return host_to_network(value); }
