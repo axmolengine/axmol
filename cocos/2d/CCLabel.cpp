@@ -2441,6 +2441,10 @@ void Label::setGlobalZOrder(float globalZOrder)
     {
         _underlineNode->setGlobalZOrder(globalZOrder);
     }
+
+#if CC_LABEL_DEBUG_DRAW
+    _debugDrawNode->setGlobalZOrder(globalZOrder);
+#endif
 }
 
 float Label::getRenderingFontSize()const
