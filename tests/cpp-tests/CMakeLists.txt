@@ -392,8 +392,6 @@ if(WINDOWS)
 	list(APPEND GAME_SOURCE
 		Classes/ChipmunkTestBed/Demo/Bench.c
 		Classes/ChipmunkTestBed/Demo/Chains.c
-		Classes/ChipmunkTestBed/Demo/ContactGraph.c
-		Classes/ChipmunkTestBed/Demo/ContactPoints.c
 		Classes/ChipmunkTestBed/Demo/Convex.c
 		Classes/ChipmunkTestBed/Demo/Crane.c
 		Classes/ChipmunkTestBed/Demo/Joints.c
@@ -406,8 +404,7 @@ if(WINDOWS)
 		Classes/ChipmunkTestBed/Demo/PyramidStack.c
 		Classes/ChipmunkTestBed/Demo/PyramidTopple.c
 		Classes/ChipmunkTestBed/Demo/Shatter.c
-		Classes/ChipmunkTestBed/Demo/Slice.c
-		Classes/ChipmunkTestBed/Demo/Smooth.c
+		Classes/ChipmunkTestBed/Demo/Springies.c
 		Classes/ChipmunkTestBed/Demo/Sticky.c
 		Classes/ChipmunkTestBed/Demo/Tank.c
 		Classes/ChipmunkTestBed/Demo/TheoJansen.c
