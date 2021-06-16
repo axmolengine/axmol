@@ -30,7 +30,6 @@
 #include "base/CCEventListenerCustom.h"
 
 struct cpBody;
-class b2Body;
 
 NS_CC_EXT_BEGIN
 
@@ -97,13 +96,6 @@ public:
     cpBody* getCPBody() const;
     void setCPBody(cpBody *pBody);
 
-    //
-    // Box2d specific
-    //
-    /** Body accessor when using box2d */
-    b2Body* getB2Body() const;
-    void setB2Body(b2Body *pBody);
-
     float getPTMRatio() const;
     void setPTMRatio(float fPTMRatio);
     virtual void syncPhysicsTransform() const;
@@ -134,10 +126,6 @@ protected:
 
     // chipmunk specific
     cpBody  *_CPBody;
-
-    // box2d specific
-    b2Body  *_pB2Body;
-    float   _PTMRatio;
     
     // Event for update synchronise physic transform
     cocos2d::EventListenerCustom* _syncTransform;

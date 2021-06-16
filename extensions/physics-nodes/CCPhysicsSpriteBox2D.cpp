@@ -33,7 +33,6 @@ NS_CC_EXT_BEGIN
 
 PhysicsSpriteBox2D::PhysicsSpriteBox2D()
 : _ignoreBodyRotation(false)
-, _CPBody(nullptr)
 , _pB2Body(nullptr)
 , _PTMRatio(0.0f)
 , _syncTransform(nullptr)
@@ -194,24 +193,6 @@ Vec3 PhysicsSpriteBox2D::getPosition3D() const
     return Vec3(pos.x, pos.y, 0);
 }
 
-//
-// Chipmunk only
-//
-
-
-
-cpBody* PhysicsSpriteBox2D::getCPBody() const
-{
-
-    CCASSERT(false, "Can't call chipmunk methods when Chipmunk is disabled");
-    return nullptr;
-}
-
-void PhysicsSpriteBox2D::setCPBody(cpBody *pBody)
-{
-    _CPBody = pBody;
-}
-
 b2Body* PhysicsSpriteBox2D::getB2Body() const
 {
     return _pB2Body;
@@ -250,8 +231,6 @@ const Vec2& PhysicsSpriteBox2D::getPosFromPhysics() const
 
 void PhysicsSpriteBox2D::setPosition(float x, float y)
 {
-
-    
     float angle = _pB2Body->GetAngle();
     _pB2Body->SetTransform(b2Vec2(x / _PTMRatio, y / _PTMRatio), angle);
 

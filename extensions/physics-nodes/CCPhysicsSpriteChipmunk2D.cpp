@@ -34,8 +34,6 @@ NS_CC_EXT_BEGIN
 PhysicsSpriteChipmunk2D::PhysicsSpriteChipmunk2D()
 : _ignoreBodyRotation(false)
 , _CPBody(nullptr)
-, _pB2Body(nullptr)
-, _PTMRatio(0.0f)
 , _syncTransform(nullptr)
 {}
 
@@ -198,8 +196,6 @@ Vec3 PhysicsSpriteChipmunk2D::getPosition3D() const
 // Chipmunk only
 //
 
-
-
 cpBody* PhysicsSpriteChipmunk2D::getCPBody() const
 {
     return _CPBody;
@@ -208,30 +204,6 @@ cpBody* PhysicsSpriteChipmunk2D::getCPBody() const
 void PhysicsSpriteChipmunk2D::setCPBody(cpBody *pBody)
 {
     _CPBody = pBody;
-}
-
-b2Body* PhysicsSpriteChipmunk2D::getB2Body() const
-{
-    CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
-    return nullptr;
-}
-
-void PhysicsSpriteChipmunk2D::setB2Body(b2Body *pBody)
-{
-    CC_UNUSED_PARAM(pBody);
-    CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
-}
-
-float PhysicsSpriteChipmunk2D::getPTMRatio() const
-{
-    CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
-    return 0;
-}
-
-void PhysicsSpriteChipmunk2D::setPTMRatio(float fRatio)
-{
-    CC_UNUSED_PARAM(fRatio);
-    CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
 }
 
 //
