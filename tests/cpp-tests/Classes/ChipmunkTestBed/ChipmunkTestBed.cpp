@@ -189,7 +189,7 @@ static cpSpace* initLogoSmash(void) {
     shape = cpSpaceAddShape(space, cpCircleShapeNew(body, 8.0f, cpvzero));
     cpShapeSetElasticity(shape, 0.0);
     cpShapeSetFriction(shape, 0.0);
-    cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
+  //  cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
     bodyCount++;
 
     body = cpSpaceAddBody(space, cpBodyNew(1e9, INFINITY));
@@ -199,7 +199,7 @@ static cpSpace* initLogoSmash(void) {
     shape = cpSpaceAddShape(space, cpCircleShapeNew(body, 12.0f, cpvzero));
     cpShapeSetElasticity(shape, 0.0);
     cpShapeSetFriction(shape, 0.0);
-    cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
+  //  cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
     bodyCount++;
 
     return space;
