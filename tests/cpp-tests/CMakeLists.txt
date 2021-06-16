@@ -412,7 +412,6 @@ if(WINDOWS)
 		Classes/ChipmunkTestBed/Demo/Tank.c
 		Classes/ChipmunkTestBed/Demo/TheoJansen.c
 		Classes/ChipmunkTestBed/Demo/Tumble.c
-		Classes/ChipmunkTestBed/Demo/ChipmunkTestBed.cpp
 		Classes/ChipmunkTestBed/ChipmunkTestBed.cpp
 	)
 endif()
