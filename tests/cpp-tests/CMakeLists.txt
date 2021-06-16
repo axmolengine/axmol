@@ -376,7 +376,9 @@ list(APPEND GAME_SOURCE
 list(APPEND GAME_HEADER
      Classes/PhysicsTest/PhysicsTest.h
      Classes/ChipmunkTest/ChipmunkTest.h
+if(WINDOWS)
 	 Classes/ChipmunkTestBed/ChipmunkTestBed.h
+endif()
      )
 list(APPEND GAME_SOURCE
      Classes/PhysicsTest/PhysicsTest.cpp
