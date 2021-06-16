@@ -47,17 +47,45 @@ public:
 
     //void addNewSpriteAtPosition(cocos2d::Vec2 p);
     void update(float dt) override;
-    void toggleDebugCallback(cocos2d::Ref* sender);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    virtual void onAcceleration(cocos2d::Acceleration* acc, cocos2d::Event* event);
-
-private:
-    cocos2d::Texture2D* _spriteTexture; // weak ref  
-    cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
+    //void toggleDebugCallback(cocos2d::Ref* sender);
+    //void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    //virtual void onAcceleration(cocos2d::Acceleration* acc, cocos2d::Event* event);
 
     cpSpace* _space; // strong ref
-    cpShape* _walls[4];
+
+private: 
+    cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
 };
+
+class LogoSmash : public ChipmunkTestBed {
+public:
+    CREATE_FUNC(LogoSmash);
+    virtual std::string title() const override;
+    virtual void onEnter() override;
+};
+
+class Plink : public ChipmunkTestBed {
+public:
+    CREATE_FUNC(Plink);
+    virtual std::string title() const override;
+    virtual void onEnter() override;
+};
+
+
+class Tumble : public ChipmunkTestBed {
+public:
+    CREATE_FUNC(Tumble);
+    virtual std::string title() const override;
+    virtual void onEnter() override;
+};
+
+class AddExample : public ChipmunkTestBed {
+public:
+    CREATE_FUNC(AddExample);
+    virtual std::string title() const override;
+    virtual void onEnter() override;
+};
+
 
 DEFINE_TEST_SUITE(ChipmunkTestBedTests);
 
