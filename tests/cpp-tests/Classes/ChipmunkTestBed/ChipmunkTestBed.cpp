@@ -50,9 +50,9 @@ enum {
     Z_PHYSICS_DEBUG = 100,
 };
 
-#define GRABBABLE_MASK_BIT (1 << 31)
-cpShapeFilter GRAB_FILTER          = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
-cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
+//#define GRABBABLE_MASK_BIT (1 << 31)
+//cpShapeFilter GRAB_FILTER          = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
+//cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
 
 static inline cpFloat frand(void) {
     return (cpFloat) rand() / (cpFloat) RAND_MAX;
