@@ -30,7 +30,6 @@
 #include "base/CCEventListenerCustom.h"
 
 
-struct cpBody;
 class b2Body;
 
 NS_CC_EXT_BEGIN
@@ -92,13 +91,6 @@ public:
 	void setIgnoreBodyRotation(bool bIgnoreBodyRotation);
 
 	//
-	// Chipmunk specific
-	//
-	/** Body accessor when using regular Chipmunk */
-	cpBody* getCPBody() const;
-	void setCPBody(cpBody* pBody);
-
-	//
 	// Box2d specific
 	//
 	/** Body accessor when using box2d */
@@ -132,9 +124,6 @@ protected:
 
 protected:
 	bool    _ignoreBodyRotation;
-
-	// chipmunk specific
-	cpBody* _CPBody;
 
 	// box2d specific
 	b2Body* _pB2Body;
