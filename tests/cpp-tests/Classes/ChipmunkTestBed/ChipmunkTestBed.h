@@ -45,7 +45,7 @@ public:
     void createResetButton();
     void reset(cocos2d::Ref* sender);
 
-    void addNewSpriteAtPosition(cocos2d::Vec2 p);
+    //void addNewSpriteAtPosition(cocos2d::Vec2 p);
     void update(float dt) override;
     void toggleDebugCallback(cocos2d::Ref* sender);
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);

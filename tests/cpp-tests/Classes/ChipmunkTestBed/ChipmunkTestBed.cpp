@@ -99,7 +99,7 @@ static const int image_width      = 188;
 static const int image_height     = 35;
 static const int image_row_length = 24;
 
-static const unsigned char image_bitmap[] = {15, -16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, -64,
+static const int image_bitmap[] = {15, -16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, -64,
     15, 63, -32, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31, -64, 15, 127, -125, -1, -128, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, -64, 15, 127, 15, -1, -64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 1, -1, -64, 15, -2, 31, -1, -64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, -64, 0, -4, 63, -1, -32,
@@ -225,7 +225,7 @@ ChipmunkTestBed::ChipmunkTestBed() {
     _eventDispatcher->addEventListenerWithSceneGraphPriority(accListener, this);
     
     // title
-    auto label = Label::createWithTTF("Multi touch the screen", "fonts/Marker Felt.ttf", 36.0f);
+    auto label = Label::createWithTTF("Logo Smash", "fonts/Marker Felt.ttf", 20.0f);
     label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 30);
     this->addChild(label, -1);
 
@@ -302,44 +302,44 @@ void ChipmunkTestBed::reset(Ref* sender)
     getTestSuite()->restartCurrTest();
 }
 
-void ChipmunkTestBed::addNewSpriteAtPosition(cocos2d::Vec2 pos) 
-{
-    int posx, posy;
-
-    auto parent = getChildByTag(kTagParentNode);
-
-    posx = CCRANDOM_0_1() * 200.0f;
-    posy = CCRANDOM_0_1() * 200.0f;
-
-    posx = (posx % 4) * 85;
-    posy = (posy % 3) * 121;
-
-
-    int num = 4;
-    cpVect verts[] = {
-        cpv(-24,-54),
-        cpv(-24, 54),
-        cpv( 24, 54),
-        cpv( 24,-54),
-    };
-
-    cpBody *body = cpBodyNew(1.0f, cpMomentForPoly(1.0f, num, verts, cpvzero, 0.0f));
-
-    cpBodySetPosition(body, cpv(pos.x, pos.y));
-    cpSpaceAddBody(_space, body);
-
-    cpShape* shape = cpPolyShapeNew(body, num, verts, cpTransformIdentity, 0.0f);
-    cpShapeSetElasticity(shape, 0.5f);
-    cpShapeSetFriction(shape, 0.5f);
-    cpSpaceAddShape(_space, shape);
-
-    auto sprite = PhysicsSpriteChipmunk2D::createWithTexture(_spriteTexture, cocos2d::Rect(posx, posy, 85, 121));
-    parent->addChild(sprite);
-
-    sprite->setCPBody(body);
-    sprite->setPosition(pos);
-
-}
+//void ChipmunkTestBed::addNewSpriteAtPosition(cocos2d::Vec2 pos) 
+//{
+//    int posx, posy;
+//
+//    auto parent = getChildByTag(kTagParentNode);
+//
+//    posx = CCRANDOM_0_1() * 200.0f;
+//    posy = CCRANDOM_0_1() * 200.0f;
+//
+//    posx = (posx % 4) * 85;
+//    posy = (posy % 3) * 121;
+//
+//
+//    int num = 4;
+//    cpVect verts[] = {
+//        cpv(-24,-54),
+//        cpv(-24, 54),
+//        cpv( 24, 54),
+//        cpv( 24,-54),
+//    };
+//
+//    cpBody *body = cpBodyNew(1.0f, cpMomentForPoly(1.0f, num, verts, cpvzero, 0.0f));
+//
+//    cpBodySetPosition(body, cpv(pos.x, pos.y));
+//    cpSpaceAddBody(_space, body);
+//
+//    cpShape* shape = cpPolyShapeNew(body, num, verts, cpTransformIdentity, 0.0f);
+//    cpShapeSetElasticity(shape, 0.5f);
+//    cpShapeSetFriction(shape, 0.5f);
+//    cpSpaceAddShape(_space, shape);
+//
+//    auto sprite = PhysicsSpriteChipmunk2D::createWithTexture(_spriteTexture, cocos2d::Rect(posx, posy, 85, 121));
+//    parent->addChild(sprite);
+//
+//    sprite->setCPBody(body);
+//    sprite->setPosition(pos);
+//
+//}
 
 void ChipmunkTestBed::onEnter() 
 {
@@ -354,7 +354,7 @@ void ChipmunkTestBed::onTouchesEnded(const std::vector<Touch*>& touches, Event* 
     {
         auto location = touch->getLocation();
 
-        addNewSpriteAtPosition( location );
+        //addNewSpriteAtPosition( location );
     }
 }
 
