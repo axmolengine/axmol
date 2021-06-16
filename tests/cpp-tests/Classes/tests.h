@@ -29,7 +29,9 @@
 #include "Box2DTest/Box2dTest.h"
 //#include "Box2DTestBed/Box2dView.h"
 
+
 #include "ChipmunkTest/ChipmunkTest.h"
+#include "ChipmunkTestBed/ChipmunkTestBed.h"
 
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_MARMALADE)
 #include "ClippingNodeTest/ClippingNodeTest.h"
