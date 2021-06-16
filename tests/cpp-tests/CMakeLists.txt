@@ -381,7 +381,9 @@ list(APPEND GAME_HEADER
 list(APPEND GAME_SOURCE
      Classes/PhysicsTest/PhysicsTest.cpp
      Classes/ChipmunkTest/ChipmunkTest.cpp
+if(WINDOWS)
 	 Classes/ChipmunkTestBed/ChipmunkTestBed.cpp
+endif()
      )
 
 if(NOT LINUX)
