@@ -160,11 +160,10 @@ static void destroy(cpSpace* space) {
     cpSpaceFree(space);
 }
 
-// ChipmunkDemo LogoSmash = {
-//	"Logo Smash",
-//	1.0/60.0,
-//	init,
-//	update,
-//	draw,
-//	destroy,
-//};
+ ChipmunkDemo LogoSmash = {
+	"Logo Smash",
+	1.0/60.0,
+    initLogoSmash,
+	update,
+	destroy,
+};

@@ -108,7 +108,6 @@ static void destroy(cpSpace* space) {
 
 ChipmunkTestBed::ChipmunkTestBed() 
 {
-
     scheduleUpdate();
 }
 
@@ -117,7 +116,7 @@ ChipmunkTestBed::~ChipmunkTestBed()
     ChipmunkDemoFreeSpaceChildren(_space);
 }
 
-void ChipmunkTestBed::initPhysics()
+void ChipmunkTestBed::initPhysics() 
 {
     // Physics debug layer
     _debugLayer = PhysicsDebugNode::create(_space);
@@ -168,16 +167,32 @@ void LogoSmash::onEnter()
 {
     ChipmunkTestBed::onEnter();
 
-    _space = initLogoSmash();
     initPhysics();
+
 
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-std::string  LogoSmash::title() const 
+std::string LogoSmash::title() const 
 {
     return "Logo Smash";
 }
+
+
+void LogoSmash::initPhysics() 
+{
+    _space = initLogoSmash();
+    ChipmunkTestBed::initPhysics();
+
+    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+}
+
+void LogoSmash::update(float delta)
+{
+    ChipmunkTestBed::update(delta);
+}
+
+
 
 //------------------------------------------------------------------
 //
@@ -187,15 +202,30 @@ std::string  LogoSmash::title() const
 void Plink::onEnter() {
     ChipmunkTestBed::onEnter();
 
-    _space = initPlink();
     initPhysics();
+
 
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-std::string  Plink::title() const {
+std::string Plink::title() const {
     return "Plink";
 }
+
+
+void Plink::initPhysics() {
+    _space = initPlink();
+    ChipmunkTestBed::initPhysics();
+
+    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+}
+
+void Plink::update(float delta) {
+    ChipmunkTestBed::update(delta);
+}
+//std::string  Plink::title() const {
+//    return "Plink";
+//}
 
 //------------------------------------------------------------------
 //
@@ -205,14 +235,26 @@ std::string  Plink::title() const {
 void Tumble::onEnter() {
     ChipmunkTestBed::onEnter();
 
-    _space = initTumble();
     initPhysics();
+
 
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
 std::string Tumble::title() const {
     return "Tumble";
+}
+
+
+void Tumble::initPhysics() {
+    _space = initTumble();
+    ChipmunkTestBed::initPhysics();
+
+    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+}
+
+void Tumble::update(float delta) {
+    ChipmunkTestBed::update(delta);
 }
 
 //------------------------------------------------------------------
@@ -224,7 +266,7 @@ void AddExample::onEnter() {
     ChipmunkTestBed::onEnter();
 
     _space = cpSpaceNew();
-    initPhysics();
+    ChipmunkTestBed::initPhysics();
 
     log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
@@ -233,6 +275,16 @@ std::string AddExample::title() const {
     return "  Here is the place for your\n Chipmunk2D example";
 }
 
+void AddExample::initPhysics() {
+    _space = cpSpaceNew();
+    ChipmunkTestBed::initPhysics();
+
+    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
+}
+
+void AddExample::update(float delta) {
+    cpSpaceStep(_space, delta);
+}
 
 
 ChipmunkTestBedTests::ChipmunkTestBedTests() {

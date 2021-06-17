@@ -389,28 +389,31 @@ list(APPEND GAME_SOURCE
      Classes/ChipmunkTest/ChipmunkTest.cpp
 	 )
 if(WINDOWS)
-	list(APPEND GAME_SOURCE
-		Classes/ChipmunkTestBed/Demo/Bench.c
-		Classes/ChipmunkTestBed/Demo/Chains.c
-		Classes/ChipmunkTestBed/Demo/Convex.c
-		Classes/ChipmunkTestBed/Demo/Crane.c
-		Classes/ChipmunkTestBed/Demo/Joints.c
-		Classes/ChipmunkTestBed/Demo/LogoSmash.c
-		Classes/ChipmunkTestBed/Demo/OneWay.c
-		Classes/ChipmunkTestBed/Demo/Planet.c
-		Classes/ChipmunkTestBed/Demo/Player.c
-		Classes/ChipmunkTestBed/Demo/Plink.c
-		Classes/ChipmunkTestBed/Demo/Pump.c
-		Classes/ChipmunkTestBed/Demo/PyramidStack.c
-		Classes/ChipmunkTestBed/Demo/PyramidTopple.c
-		Classes/ChipmunkTestBed/Demo/Shatter.c
-		Classes/ChipmunkTestBed/Demo/Springies.c
-		Classes/ChipmunkTestBed/Demo/Sticky.c
-		Classes/ChipmunkTestBed/Demo/Tank.c
-		Classes/ChipmunkTestBed/Demo/TheoJansen.c
-		Classes/ChipmunkTestBed/Demo/Tumble.c
-		Classes/ChipmunkTestBed/ChipmunkTestBed.cpp
-	)
+   set (TESTBED_C_SORUCES
+        Classes/ChipmunkTestBed/Demo/Bench.c
+        Classes/ChipmunkTestBed/Demo/Chains.c
+        Classes/ChipmunkTestBed/Demo/Convex.c
+        Classes/ChipmunkTestBed/Demo/Crane.c
+        Classes/ChipmunkTestBed/Demo/Joints.c
+        Classes/ChipmunkTestBed/Demo/LogoSmash.c
+        Classes/ChipmunkTestBed/Demo/OneWay.c
+        Classes/ChipmunkTestBed/Demo/Planet.c
+        Classes/ChipmunkTestBed/Demo/Player.c
+        Classes/ChipmunkTestBed/Demo/Plink.c
+        Classes/ChipmunkTestBed/Demo/Pump.c
+        Classes/ChipmunkTestBed/Demo/PyramidStack.c
+        Classes/ChipmunkTestBed/Demo/PyramidTopple.c
+        Classes/ChipmunkTestBed/Demo/Shatter.c
+        Classes/ChipmunkTestBed/Demo/Springies.c
+        Classes/ChipmunkTestBed/Demo/Sticky.c
+        Classes/ChipmunkTestBed/Demo/Tank.c
+        Classes/ChipmunkTestBed/Demo/TheoJansen.c
+        Classes/ChipmunkTestBed/Demo/Tumble.c)
+        set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
+		list(APPEND GAME_SOURCE
+			${TESTBED_C_SORUCES}
+			Classes/ChipmunkTestBed/ChipmunkTestBed.cpp
+		)
 endif()
 
 

@@ -41,12 +41,12 @@ public:
     ChipmunkTestBed();
     ~ChipmunkTestBed();
     void onEnter() override;
-    void initPhysics();
     void createResetButton();
     void reset(cocos2d::Ref* sender);
 
     //void addNewSpriteAtPosition(cocos2d::Vec2 p);
     void update(float dt) override;
+    virtual void initPhysics();
     //void toggleDebugCallback(cocos2d::Ref* sender);
     //void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
     //virtual void onAcceleration(cocos2d::Acceleration* acc, cocos2d::Event* event);
@@ -60,8 +60,11 @@ private:
 class LogoSmash : public ChipmunkTestBed {
 public:
     CREATE_FUNC(LogoSmash);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+    std::string title() const override;
+    void onEnter() override;
+
+    void initPhysics() override;
+    virtual void update(float dt) override;
 };
 
 class Plink : public ChipmunkTestBed {
@@ -69,6 +72,8 @@ public:
     CREATE_FUNC(Plink);
     virtual std::string title() const override;
     virtual void onEnter() override;
+    void initPhysics() override;
+    virtual void update(float dt) override;
 };
 
 
@@ -77,6 +82,9 @@ public:
     CREATE_FUNC(Tumble);
     virtual std::string title() const override;
     virtual void onEnter() override;
+
+    void initPhysics() override;
+    virtual void update(float dt) override;
 };
 
 class AddExample : public ChipmunkTestBed {
@@ -84,6 +92,9 @@ public:
     CREATE_FUNC(AddExample);
     virtual std::string title() const override;
     virtual void onEnter() override;
+
+    void initPhysics() override;
+    virtual void update(float dt) override;
 };
 
 
