@@ -25,11 +25,15 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "2d/CCFontFreeType.h"
+
+#include <freetype/src/truetype/ttobjs.h>
+
 #include FT_BBOX_H
 #include "edtaa3func.h"
 #include "2d/CCFontAtlas.h"
 #include "base/CCDirector.h"
 #include "base/ccUTF8.h"
+#include "freetype/internal/tttypes.h"
 #include "platform/CCFileUtils.h"
 #include "platform/CCFileStream.h"
 
@@ -228,7 +232,8 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
     
     // store the face globally
     _fontRef = face;
-    _lineHeight = static_cast<int>((_fontRef->size->metrics.ascender - _fontRef->size->metrics.descender) >> 6);
+    auto* ttSize = (TT_Size)(_fontRef->size);
+    _lineHeight = static_cast<int>((ttSize->metrics->ascender - ttSize->metrics->descender) >> 6);
     
     // done and good
     return true;
@@ -329,7 +334,7 @@ int  FontFreeType::getHorizontalKerningForChars(uint64_t firstChar, uint64_t sec
 
 int FontFreeType::getFontAscender() const
 {
-    return (static_cast<int>(_fontRef->size->metrics.ascender >> 6));
+    return (static_cast<int>(((TT_Size)_fontRef->size)->metrics->ascender >> 6));
 }
 
 const char* FontFreeType::getFontFamily() const
