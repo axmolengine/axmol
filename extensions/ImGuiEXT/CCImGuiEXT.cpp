@@ -45,15 +45,10 @@ public:
         _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(mouseListener, _trackLayer);
         scene->addChild(_trackLayer, INT_MAX);
 #endif
-        // add an empty sprite to avoid render problem
-        // const auto sp = Sprite::create();
-        // sp->setGlobalZOrder(1);
-        // sp->setOpacity(0);
-        // addChild(sp, 1);
 
         /*
         * There a 3 choice for schedule frame for ImGui render loop
-        * a. at visit/draw to call beginFrame/endFrame, but at ImGui loop, we can't game object and add to Scene directly, will cause damage iterator
+        * a. at visit/draw to call beginFrame/endFrame, but at ImGui loop, we can't delete/add game object to Scene directly, will cause damage iterator
         * b. scheduleUpdate at onEnter to call beginFrame, at visit/draw to call endFrame, it's solve iterator damage problem, but when director is paused
         *    the director will stop call 'update' function of Scheduler
         *    And need modify engine code to call _scheduler->update(_deltaTime) even director is paused, pass 0 for update
@@ -157,15 +152,16 @@ void ImGuiEXT::init()
     ImGui::StyleColorsClassic();
 
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-    eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom*) { beginFrame(); });
-    eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [=](EventCustom*) { endFrame(); });
+    eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW, [=](EventCustom*) {
+        beginFrame();
+        endFrame();
+    });
 }
 
 void ImGuiEXT::cleanup()
 {
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-    eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
-    eventDispatcher->removeCustomEventListeners(Director::EVENT_BEFORE_DRAW);
+    eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_DRAW);
 
     ImGui_ImplCocos2dx_SetCustomFontLoader(nullptr, nullptr);
     ImGui_ImplCocos2dx_Shutdown();
