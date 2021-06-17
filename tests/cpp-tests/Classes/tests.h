@@ -31,7 +31,9 @@
 
 
 #include "ChipmunkTest/ChipmunkTest.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "ChipmunkTestBed/ChipmunkTestBed.h"
+#endif
 
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_MARMALADE)
 #include "ClippingNodeTest/ClippingNodeTest.h"
