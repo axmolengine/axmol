@@ -233,8 +233,12 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
     // store the face globally
     _fontRef = face;
     auto* ttSize = (TT_Size)(_fontRef->size);
+    // Notes: 
+    //  a. ttSize->metrics->height: (ttSize->metrics->ascender - ttSize->metrics->descender)
+    //  b. ftSize->metrics.height == ttSize->metrics->height
+    //  c. the TT spec always asks for ROUND, not FLOOR or CEIL, see also freetype: ttobjs.c 
     _lineHeight = static_cast<int>((ttSize->metrics->ascender - ttSize->metrics->descender) >> 6);
-    
+
     // done and good
     return true;
 }
