@@ -406,6 +406,9 @@ public:
     /** read pixels from RenderTarget or screen framebuffer */
     void readPixels(backend::RenderTarget* rt, std::function<void(const backend::PixelBufferDescriptor&)> callback);
     
+    void beginRenderPass(); /// Begin a render pass.
+    void endRenderPass();
+
 protected:
     friend class Director;
     friend class GroupCommand;
@@ -470,8 +473,7 @@ protected:
     void doVisitRenderQueue(const std::vector<RenderCommand*>&);
 
     void fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int vertexBufferOffset);
-    void beginRenderPass(); /// Begin a render pass.
-    
+  
     void pushStateBlock();
 
     void popStateBlock();

@@ -657,6 +657,7 @@ void Renderer::drawBatchedTriangles()
     
     /************** 2: Draw *************/
     beginRenderPass();
+
     _commandBuffer->setVertexBuffer(_vertexBuffer);
     _commandBuffer->setIndexBuffer(_indexBuffer);
     
@@ -676,7 +677,7 @@ void Renderer::drawBatchedTriangles()
         _drawnVertices += _triBatchesToDraw[i].indicesToDraw;
     }
 
-	_commandBuffer->endRenderPass();
+	endRenderPass();
 
 
     /************** 3: Cleanup *************/
@@ -719,7 +720,7 @@ void Renderer::drawCustomCommand(RenderCommand *command)
         _drawnVertices += cmd->getVertexDrawCount();
     }
     _drawnBatches++;
-    _commandBuffer->endRenderPass();
+    endRenderPass();
 
     if (cmd->getAfterCallback()) cmd->getAfterCallback()();
 }
@@ -804,7 +805,11 @@ void Renderer::beginRenderPass()
     _commandBuffer->setCullMode(_cullMode);
     _commandBuffer->setWinding(_winding);
     _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y, _scissorState.rect.width, _scissorState.rect.height);
-    
+}
+
+void Renderer::endRenderPass() 
+{
+    _commandBuffer->endRenderPass();
 }
 
 void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder)
