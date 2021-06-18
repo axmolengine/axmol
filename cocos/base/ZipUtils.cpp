@@ -32,6 +32,8 @@
 #include "unzip.h"
 #endif
 #include "ioapi_mem.h"
+#include <ioapi.h>
+
 #include <memory>
 
 #include <zlib.h>
@@ -508,9 +510,115 @@ struct ZipEntryInfo
     uLong uncompressed_size;
 };
 
-class ZipFilePrivate
+struct ZipFilePrivate
 {
-public:
+    ZipFilePrivate() {
+        functionOverrides.zopen_file      = ZipFile_open_file_func;
+        functionOverrides.zopendisk_file = ZipFile_opendisk_file_func;
+        functionOverrides.zread_file     = ZipFile_read_file_func;
+        functionOverrides.zwrite_file    = ZipFile_write_file_func;
+        functionOverrides.ztell_file     = ZipFile_tell_file_func;
+        functionOverrides.zseek_file     = ZipFile_seek_file_func;
+        functionOverrides.zclose_file    = ZipFile_close_file_func;
+        functionOverrides.zerror_file    = ZipFile_error_file_func;
+        functionOverrides.opaque         = this;
+    }
+
+    // unzip overrides to support FileStream
+    static long ZipFile_tell_file_func(voidpf opaque, voidpf stream) {
+        if (stream == nullptr)
+            return -1;
+
+        auto* fs = (FileStream*) stream;
+
+        return fs->tell();
+    }
+
+    static long ZipFile_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset, int origin) {
+        if (stream == nullptr)
+            return -1;
+
+        auto* fs = (FileStream*) stream;
+
+        return fs->seek((long) offset, origin); // must return 0 for success or -1 for error
+    }
+
+    static voidpf ZipFile_open_file_func(voidpf opaque, const char* filename, int mode) {
+        FileStream::Mode fsMode;
+        if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) == ZLIB_FILEFUNC_MODE_READ)
+            fsMode = FileStream::Mode::READ;
+        else if (mode & ZLIB_FILEFUNC_MODE_EXISTING)
+            fsMode = FileStream::Mode::APPEND;
+        else if (mode & ZLIB_FILEFUNC_MODE_CREATE)
+            fsMode = FileStream::Mode::WRITE;
+        else
+            return nullptr;
+
+        return FileUtils::getInstance()->openFileStream(filename, fsMode).release();
+    }
+
+    static voidpf ZipFile_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_disk, int mode) {
+        if (stream == nullptr)
+            return nullptr;
+
+        auto* zipFileInfo        = (ZipFilePrivate*) opaque;
+        std::string diskFilename = zipFileInfo->zipFileName;
+
+        const auto pos = diskFilename.rfind('.', std::string::npos);
+
+        if (pos != std::string::npos && pos != 0) {
+            const size_t bufferSize = 5;
+            char extensionBuffer[bufferSize];
+            snprintf(&extensionBuffer[0], bufferSize, ".z%02u", number_disk + 1);
+            diskFilename.replace(pos, std::min((size_t) 4, zipFileInfo->zipFileName.size() - pos), extensionBuffer);
+            return ZipFile_open_file_func(opaque, diskFilename.c_str(), mode);
+        }
+
+        return nullptr;
+    }
+
+    static uint32_t ZipFile_read_file_func(voidpf opaque, voidpf stream, void* buf, uint32_t size) {
+        if (stream == nullptr)
+            return (uint32_t) -1;
+
+        auto* fs = (FileStream*) stream;
+        return fs->read(buf, size);
+    }
+
+    static uint32_t ZipFile_write_file_func(voidpf opaque, voidpf stream, const void* buf, uint32_t size) {
+        if (stream == nullptr)
+            return (uint32_t) -1;
+
+        auto* fs = (FileStream*) stream;
+        return fs->write(buf, size);
+    }
+
+    static int ZipFile_close_file_func(voidpf opaque, voidpf stream) {
+        if (stream == nullptr)
+            return -1;
+
+        auto* fs          = (FileStream*) stream;
+        const auto result = fs->close(); // 0 for success, -1 for error
+        delete fs;
+        return result;
+    }
+
+    // THis isn't supported by FileStream, so just check if the stream is null and open
+    static int ZipFile_error_file_func(voidpf opaque, voidpf stream) {
+        if (stream == nullptr) {
+            return -1;
+        }
+
+        auto* fs = (FileStream*) stream;
+
+        if (fs->isOpen()) {
+            return 0;
+        }
+
+        return -1;
+    }
+    // End of Overrides
+
     std::string zipFileName;
     unzFile zipFile;
     std::mutex zipFileMtx;
@@ -519,113 +627,9 @@ public:
     // std::unordered_map is faster if available on the platform
     typedef std::unordered_map<std::string, struct ZipEntryInfo> FileListContainer;
     FileListContainer fileList;
+
+    zlib_filefunc_def functionOverrides{};
 };
-
-// unzip overrides to support FileStream
-long ZipFile_tell_file_func(voidpf opaque, voidpf stream)
-{
-    if (stream == nullptr)
-        return -1;
-
-    auto* fs = (FileStream*)stream;
-
-    return fs->tell();
-}
-
-long ZipFile_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset, int origin)
-{
-    if (stream == nullptr)
-        return -1;
-
-    auto* fs = (FileStream*)stream;
-
-    return fs->seek((long)offset, origin); // must return 0 for success or -1 for error
-}
-
-voidpf ZipFile_open_file_func(voidpf opaque, const char* filename, int mode)
-{
-    FileStream::Mode fsMode;
-    if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) == ZLIB_FILEFUNC_MODE_READ)
-        fsMode = FileStream::Mode::READ;
-    else if (mode & ZLIB_FILEFUNC_MODE_EXISTING)
-        fsMode = FileStream::Mode::APPEND;
-    else if (mode & ZLIB_FILEFUNC_MODE_CREATE)
-        fsMode = FileStream::Mode::WRITE;
-    else
-        return nullptr;
-
-    return FileUtils::getInstance()->openFileStream(filename, fsMode).release();
-}
-
-voidpf ZipFile_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_disk, int mode)
-{
-    if (stream == nullptr)
-        return nullptr;
-
-    auto* zipFileInfo = (ZipFilePrivate*)opaque;
-    std::string diskFilename = zipFileInfo->zipFileName;
-
-    const auto pos = diskFilename.rfind('.', std::string::npos);
-
-    if (pos != std::string::npos && pos != 0)
-    {
-        const size_t bufferSize = 5;
-        char extensionBuffer[bufferSize];
-        snprintf(&extensionBuffer[0], bufferSize, ".z%02u", number_disk + 1);
-        diskFilename.replace(pos, std::min((size_t)4, zipFileInfo->zipFileName.size() - pos), extensionBuffer);
-        return ZipFile_open_file_func(opaque, diskFilename.c_str(), mode);
-    }
-
-    return nullptr;
-}
-
-uint32_t ZipFile_read_file_func(voidpf opaque, voidpf stream, void* buf, uint32_t size)
-{
-    if (stream == nullptr)
-        return (uint32_t)-1;
-
-    auto* fs = (FileStream*)stream;
-    return fs->read(buf, size);
-}
-
-uint32_t ZipFile_write_file_func(voidpf opaque, voidpf stream, const void* buf, uint32_t size)
-{
-    if (stream == nullptr)
-        return (uint32_t)-1;
-
-    auto* fs = (FileStream*)stream;
-    return fs->write(buf, size);
-}
-
-int ZipFile_close_file_func(voidpf opaque, voidpf stream)
-{
-    if (stream == nullptr)
-        return -1;
-
-    auto* fs = (FileStream*)stream;
-    const auto result = fs->close(); // 0 for success, -1 for error
-    delete fs;
-    return result;
-}
-
-// THis isn't supported by FileStream, so just check if the stream is null and open
-int ZipFile_error_file_func(voidpf opaque, voidpf stream)
-{
-    if (stream == nullptr)
-    {
-        return -1;
-    }
-
-    auto* fs = (FileStream*)stream;
-
-    if (fs->isOpen())
-    {
-        return 0;
-    }
-
-    return -1;
-}
-// End of Overrides
 
 ZipFile *ZipFile::createWithBuffer(const void* buffer, uLong size)
 {
@@ -639,18 +643,16 @@ ZipFile *ZipFile::createWithBuffer(const void* buffer, uLong size)
 }
 
 ZipFile::ZipFile()
-: _data(new ZipFilePrivate)
+: _data(new ZipFilePrivate())
 {
-    fillFunctionOverrides();
     _data->zipFile = nullptr;
 }
 
 ZipFile::ZipFile(const std::string &zipFile, const std::string &filter)
-: _data(new ZipFilePrivate)
+: _data(new ZipFilePrivate())
 {
-    fillFunctionOverrides();
     _data->zipFileName = zipFile;
-    _data->zipFile = unzOpen2(zipFile.c_str(), &_functionOverrides);
+    _data->zipFile     = unzOpen2(zipFile.c_str(), &_data->functionOverrides);
     setFilter(filter);
 }
 
@@ -829,7 +831,7 @@ std::string ZipFile::getFirstFilename()
 {
     if (unzGoToFirstFile(_data->zipFile) != UNZ_OK) return emptyFilename;
     std::string path;
-    unz_file_info info;
+    unz_file_info_s info;
     getCurrentFileInfo(&path, &info);
     return path;
 }
@@ -838,13 +840,12 @@ std::string ZipFile::getNextFilename()
 {
     if (unzGoToNextFile(_data->zipFile) != UNZ_OK) return emptyFilename;
     std::string path;
-    unz_file_info info;
+    unz_file_info_s info;
     getCurrentFileInfo(&path, &info);
     return path;
 }
 
-int ZipFile::getCurrentFileInfo(std::string *filename, unz_file_info *info)
-{
+int ZipFile::getCurrentFileInfo(std::string* filename, unz_file_info_s* info) {
     char path[FILENAME_MAX + 1];
     int ret = unzGetCurrentFileInfo(_data->zipFile, info, path, sizeof(path), nullptr, 0, nullptr, 0);
     if (ret != UNZ_OK) {
@@ -974,7 +975,7 @@ unsigned char* ZipFile::getFileDataFromZip(const std::string& zipFilePath, const
         CC_BREAK_IF(UNZ_OK != ret);
 
         char filePathA[260];
-        unz_file_info fileInfo;
+        unz_file_info_s fileInfo;
         ret = unzGetCurrentFileInfo(file, &fileInfo, filePathA, sizeof(filePathA), nullptr, 0, nullptr, 0);
         CC_BREAK_IF(UNZ_OK != ret);
 
@@ -995,19 +996,6 @@ unsigned char* ZipFile::getFileDataFromZip(const std::string& zipFilePath, const
     }
 
     return buffer;
-}
-
-void ZipFile::fillFunctionOverrides()
-{
-    _functionOverrides.zopen_file = ZipFile_open_file_func;
-    _functionOverrides.zopendisk_file = ZipFile_opendisk_file_func;
-    _functionOverrides.zread_file = ZipFile_read_file_func;
-    _functionOverrides.zwrite_file = ZipFile_write_file_func;
-    _functionOverrides.ztell_file = ZipFile_tell_file_func;
-    _functionOverrides.zseek_file = ZipFile_seek_file_func;
-    _functionOverrides.zclose_file = ZipFile_close_file_func;
-    _functionOverrides.zerror_file = ZipFile_error_file_func;
-    _functionOverrides.opaque = _data;
 }
 
 NS_CC_END

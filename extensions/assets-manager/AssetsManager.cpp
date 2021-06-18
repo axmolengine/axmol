@@ -37,6 +37,7 @@
 #else // from our embedded sources
 #include "unzip.h"
 #endif
+#include <ioapi.h>
 
 NS_CC_EXT_BEGIN
 
@@ -372,7 +373,7 @@ bool AssetsManager::uncompress()
     // Open the zip file
     string outFileName = _storagePath + TEMP_PACKAGE_FILE_NAME;
 
-    zlib_filefunc_def zipFunctionOverrides;
+    zlib_filefunc_def_s zipFunctionOverrides;
     fillZipFunctionOverrides(zipFunctionOverrides);
 
     AssetManagerZipFileInfo zipFileInfo;
@@ -631,8 +632,7 @@ AssetsManager* AssetsManager::create(const char* packageUrl, const char* version
     return manager;
 }
 
-void AssetsManager::fillZipFunctionOverrides(zlib_filefunc_def& zipFunctionOverrides)
-{
+void AssetsManager::fillZipFunctionOverrides(zlib_filefunc_def_s& zipFunctionOverrides) {
     zipFunctionOverrides.zopen_file = AssetManager_open_file_func;
     zipFunctionOverrides.zopendisk_file = AssetManager_opendisk_file_func;
     zipFunctionOverrides.zread_file = AssetManager_read_file_func;

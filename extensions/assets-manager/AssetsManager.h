@@ -26,7 +26,6 @@
 #ifndef __AssetsManager__
 #define __AssetsManager__
 
-#include <ioapi.h>
 #include <string>
 
 #include <mutex>
@@ -35,6 +34,7 @@
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 
+struct zlib_filefunc_def_s;
 
 namespace cocos2d { namespace network {
     class Downloader;
@@ -170,7 +170,7 @@ protected:
     bool uncompress();
     void setSearchPath();
     void downloadAndUncompress();
-    void fillZipFunctionOverrides(zlib_filefunc_def& zipFunctionOverrides);
+    void fillZipFunctionOverrides(zlib_filefunc_def_s& zipFunctionOverrides);
 
 private:
     //! The path to store downloaded resources.
