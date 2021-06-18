@@ -29,8 +29,6 @@ THE SOFTWARE.
 #define __SUPPORT_ZIPUTILS_H__
 /// @cond DO_NOT_SHOW
 
-#include <ioapi.h>
-
 #include "platform/CCPlatformMacros.h"
 #include "platform/CCFileUtils.h"
 #include <string>
@@ -43,7 +41,7 @@ THE SOFTWARE.
 #endif
 
 #ifndef _unz64_H
-typedef struct unz_file_info_s unz_file_info;
+struct unz_file_info_s;
 #endif
 
 /**
@@ -212,9 +210,8 @@ namespace cocos2d
 
     // forward declaration
     struct ZipEntryInfo;
-    class ZipFilePrivate;
-    struct unz_file_info_s;
-
+    struct ZipFilePrivate;
+  
     struct ZipFileStream
     {
         ZipEntryInfo* entry;
@@ -319,16 +316,14 @@ namespace cocos2d
         CC_DEPRECATED() static unsigned char* getFileDataFromZip(const std::string& zipFilePath, const std::string& filename, ssize_t* size);
         
     private:
-        void fillFunctionOverrides();
         /* Only used internal for createWithBuffer() */
         ZipFile();
         
         bool initWithBuffer(const void *buffer, unsigned long size);
-        int getCurrentFileInfo(std::string *filename, unz_file_info *info);
+        int getCurrentFileInfo(std::string* filename, unz_file_info_s* info);
         
         /** Internal data like zip file pointer / file list array and so on */
         ZipFilePrivate *_data;
-        zlib_filefunc_def _functionOverrides{};
     };
 } // end of namespace cocos2d
 
