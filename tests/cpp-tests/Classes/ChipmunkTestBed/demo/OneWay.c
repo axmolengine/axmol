@@ -115,11 +115,11 @@ destroy(cpSpace *space)
 	cpSpaceFree(space);
 }
 
-//ChipmunkDemo OneWay = {
-//	"One Way Platforms",
-//	1.0/60.0,
-//	init,
-//	update,
-//	ChipmunkDemoDefaultDrawImpl,
-//	destroy,
-//};
+ChipmunkDemo OneWay = {
+	"One Way Platforms",
+	1.0/60.0,
+	init,
+	update,
+	ChipmunkDemoDefaultDrawImpl,
+	destroy,
+};

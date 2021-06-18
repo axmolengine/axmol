@@ -32,6 +32,40 @@
 #include "chipmunk/chipmunk.h"
 #include "../BaseTest.h"
 #include "extensions/cocos-ext.h"
+//#include "extensions/physics-nodes/Header.h";
+
+#include "demo/ChipmunkDemo.h"
+
+
+extern ChipmunkDemo LogoSmash;
+extern ChipmunkDemo PyramidStack;
+extern ChipmunkDemo Plink;
+extern ChipmunkDemo BouncyHexagons;
+extern ChipmunkDemo Tumble;
+extern ChipmunkDemo PyramidTopple;
+extern ChipmunkDemo Planet;
+extern ChipmunkDemo Springies;
+extern ChipmunkDemo Pump;
+extern ChipmunkDemo TheoJansen;
+extern ChipmunkDemo Query;
+extern ChipmunkDemo OneWay;
+//extern ChipmunkDemo PlayeR;
+extern ChipmunkDemo Joints;
+extern ChipmunkDemo Tank;
+extern ChipmunkDemo Chains;
+extern ChipmunkDemo Crane;
+extern ChipmunkDemo Buoyancy;
+extern ChipmunkDemo ContactGraph;
+extern ChipmunkDemo Slice;
+extern ChipmunkDemo Convex;
+extern ChipmunkDemo Unicycle;
+extern ChipmunkDemo Sticky;
+extern ChipmunkDemo Shatter;
+extern ChipmunkDemo GJK;
+
+extern ChipmunkDemo bench_list[];
+extern int bench_count;
+
 
 class ChipmunkTestBed : public TestCase
 {
@@ -57,9 +91,9 @@ private:
     cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
 };
 
-class LogoSmash : public ChipmunkTestBed {
+class LogoSmashDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(LogoSmash);
+    CREATE_FUNC(LogoSmashDemo);
     std::string title() const override;
     void onEnter() override;
 
@@ -67,9 +101,9 @@ public:
     virtual void update(float dt) override;
 };
 
-class Plink : public ChipmunkTestBed {
+class PlinkDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(Plink);
+    CREATE_FUNC(PlinkDemo);
     virtual std::string title() const override;
     virtual void onEnter() override;
     void initPhysics() override;
@@ -77,15 +111,57 @@ public:
 };
 
 
-class Tumble : public ChipmunkTestBed {
+class TumbleDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(Tumble);
+    CREATE_FUNC(TumbleDemo);
     virtual std::string title() const override;
     virtual void onEnter() override;
 
     void initPhysics() override;
     virtual void update(float dt) override;
 };
+
+class PyramidStackDemo : public ChipmunkTestBed {
+public:
+    CREATE_FUNC(PyramidStackDemo);
+    virtual std::string title() const override;
+    virtual void onEnter() override;
+
+    void initPhysics() override;
+    virtual void update(float dt) override;
+};
+
+class PyramidToppleDemo : public ChipmunkTestBed {
+public:
+    CREATE_FUNC(PyramidToppleDemo);
+    virtual std::string title() const override;
+    virtual void onEnter() override;
+
+    void initPhysics() override;
+    virtual void update(float dt) override;
+};
+
+class ChainsDemo : public ChipmunkTestBed {
+public:
+    CREATE_FUNC(ChainsDemo);
+    virtual std::string title() const override;
+    virtual void onEnter() override;
+
+    void initPhysics() override;
+    virtual void update(float dt) override;
+};
+
+class OneWayDemo : public ChipmunkTestBed {
+public:
+    CREATE_FUNC(OneWayDemo);
+    virtual std::string title() const override;
+    virtual void onEnter() override;
+
+    void initPhysics() override;
+    virtual void update(float dt) override;
+};
+
+
 
 class AddExample : public ChipmunkTestBed {
 public:
