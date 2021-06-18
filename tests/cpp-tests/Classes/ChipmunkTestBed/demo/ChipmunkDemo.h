@@ -24,7 +24,7 @@ typedef struct ChipmunkDemo ChipmunkDemo;
 
 typedef cpSpace *(*ChipmunkDemoInitFunc)(void);
 typedef void (*ChipmunkDemoUpdateFunc)(cpSpace *space, double dt);
-//typedef void (*ChipmunkDemoDrawFunc)(cpSpace *space);
+typedef void (*ChipmunkDemoDrawFunc)(cpSpace *space);
 typedef void (*ChipmunkDemoDestroyFunc)(cpSpace *space);
 
 struct ChipmunkDemo {
@@ -33,7 +33,7 @@ struct ChipmunkDemo {
  
 	ChipmunkDemoInitFunc initFunc;
 	ChipmunkDemoUpdateFunc updateFunc;
-	//ChipmunkDemoDrawFunc drawFunc;
+	ChipmunkDemoDrawFunc drawFunc;
 	
 	ChipmunkDemoDestroyFunc destroyFunc;
 };
@@ -58,10 +58,10 @@ extern cpBool ChipmunkDemoRightClick;
 extern cpBool ChipmunkDemoRightDown;
 
 extern char const *ChipmunkDemoMessageString;
-//void ChipmunkDemoPrintString(char const *fmt, ...);
+void ChipmunkDemoPrintString(char const* fmt, ...);
 
 extern cpShapeFilter GRAB_FILTER;
 extern cpShapeFilter NOT_GRABBABLE_FILTER;
 
-//void ChipmunkDemoDefaultDrawImpl(cpSpace *space);
+void ChipmunkDemoDefaultDrawImpl(cpSpace* space);
 void ChipmunkDemoFreeSpaceChildren(cpSpace *space);

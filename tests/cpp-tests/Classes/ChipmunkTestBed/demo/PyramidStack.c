@@ -88,11 +88,11 @@ destroy(cpSpace *space)
 	cpSpaceFree(space);
 }
 
-//ChipmunkDemo PyramidStack = {
-//	"Pyramid Stack",
-//	1.0/180.0,
-//	init,
-//	update,
-//	ChipmunkDemoDefaultDrawImpl,
-//	destroy,
-//};
+ChipmunkDemo PyramidStack = {
+	"Pyramid Stack",
+	1.0/180.0,
+	init,
+	update,
+	ChipmunkDemoDefaultDrawImpl,
+	destroy,
+};

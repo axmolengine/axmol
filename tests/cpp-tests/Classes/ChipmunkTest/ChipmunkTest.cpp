@@ -67,6 +67,8 @@ ChipmunkTest::ChipmunkTest()
     createResetButton();
 
     // init physics
+
+    physicsDebugNodeOffset = Vec2(0, 0);
     initPhysics();
 
 #if 1

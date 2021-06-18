@@ -22,8 +22,6 @@
 #include "chipmunk/chipmunk.h"
 #include "ChipmunkDemo.h"
 
-#include "VisibleRect.h"
-
 static cpConstraint *motor;
 
 #define numBalls 5
@@ -32,6 +30,8 @@ static cpBody *balls[numBalls];
 static void
 update(cpSpace *space, double dt)
 {
+    ChipmunkDemoKeyboard.y = 10;
+    ChipmunkDemoKeyboard.x = 10;
 	cpFloat coef = (2.0f + ChipmunkDemoKeyboard.y)/3.0f;
 	cpFloat rate = ChipmunkDemoKeyboard.x*30.0f*coef;
 	
@@ -64,8 +64,8 @@ add_ball(cpSpace *space, cpVect pos)
 	return body;
 }
 
- cpSpace *
-initPump(void)
+static cpSpace *
+init(void)
 {
 //	ChipmunkDemoMessageString = "Use the arrow keys to control the machine.";
 	
@@ -76,43 +76,37 @@ initPump(void)
 	cpShape *shape;
 	
 	// beveling all of the line segments slightly helps prevent things from getting stuck on cracks
-        shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-256 + VisibleRect::center().x, 16),
-                                           cpv(-256 + VisibleRect::center().y, 300), 2.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-256,16), cpv(-256,300), 2.0f));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 0.5f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-256 + VisibleRect::center().x, 16),
-                                           cpv(-192 + VisibleRect::center().y, 0), 2.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-256,16), cpv(-192,0), 2.0f));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 0.5f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(
-            space, cpSegmentShapeNew(staticBody, cpv(-192, 0), cpv(-192 + VisibleRect::center().x, -64), 2.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-192,0), cpv(-192, -64), 2.0f));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 0.5f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(
-            space, cpSegmentShapeNew(staticBody, cpv(-128, -64), cpv(-128 + VisibleRect::center().x, 144), 2.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-128,-64), cpv(-128,144), 2.0f));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 0.5f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(
-            space, cpSegmentShapeNew(staticBody, cpv(-192, 80), cpv(-192 + VisibleRect::center().x, 176), 2.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-192,80), cpv(-192,176), 2.0f));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 0.5f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-192, 176),
-                                           cpv(-128 + VisibleRect::center().x , 240), 2.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-192,176), cpv(-128,240), 2.0f));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 0.5f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-128, 144), cpv(192 + VisibleRect::center().x, 64), 2.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-128,144), cpv(192,64), 2.0f));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 0.5f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
@@ -189,11 +183,11 @@ destroy(cpSpace *space)
 	cpSpaceFree(space);
 }
 
-//ChipmunkDemo Pump = {
-//	"Pump",
-//	1.0/120.0,
-//	init,
-//	update,
-//	ChipmunkDemoDefaultDrawImpl,
-//	destroy,
-//};
+ChipmunkDemo Pump = {
+	"Pump",
+	1.0/120.0,
+	init,
+	update,
+	ChipmunkDemoDefaultDrawImpl,
+	destroy,
+};
