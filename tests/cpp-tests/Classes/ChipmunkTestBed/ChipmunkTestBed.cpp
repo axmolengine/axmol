@@ -29,13 +29,16 @@
 #include <limits.h>
 #include <stdarg.h>
 
+
 #include "chipmunk/chipmunk.h"
 
 #include "ChipmunkTestBed.h"
 
 
+
 USING_NS_CC;
 USING_NS_CC_EXT;
+
 
 enum {
     kTagParentNode = 1,
@@ -46,17 +49,18 @@ enum {
 };
 
 
-extern int image_bitmap[];
-extern cpSpace* initLogoSmash(void);
-extern cpSpace* initPlink(void);
-extern cpSpace* initPump(void);
-extern cpSpace* initTumble(void);
+void ChipmunkDemoDefaultDrawImpl(cpSpace* space){};
+void ChipmunkDebugDrawPointLineScale(){};
+void RGBAColor(){};
 
 #define GRABBABLE_MASK_BIT (1 << 31)
 cpShapeFilter GRAB_FILTER          = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
 cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
 
-
+cpVect ChipmunkDemoMouse;
+cpBool ChipmunkDemoRightClick;
+cpBool ChipmunkDemoRightDown;
+cpVect ChipmunkDemoKeyboard;
 
 static void ShapeFreeWrap(cpSpace* space, cpShape* shape, void* unused) {
     cpSpaceRemoveShape(space, shape);
@@ -125,18 +129,11 @@ void ChipmunkTestBed::initPhysics()
 
 void ChipmunkTestBed::update(float delta) 
 {
-    // Should use a fixed size step based on the animation interval.
-    int steps = 2;
-    float dt  = Director::getInstance()->getAnimationInterval() / (float) steps;
-
-    for (int i = 0; i < steps; i++) {
-
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-        cpSpaceStep(_space, dt);
+        cpSpaceStep(_space, delta);
 #else
-        cpHastySpaceStep(_space, dt);
+        cpHastySpaceStep(_space, delta);
 #endif
-    }
 }
 
 void ChipmunkTestBed::createResetButton() {
@@ -155,107 +152,176 @@ void ChipmunkTestBed::reset(Ref* sender) {
 
 void ChipmunkTestBed::onEnter() {
     TestCase::onEnter();
+    physicsDebugNodeOffset = VisibleRect::center();
 }
 
 
 //------------------------------------------------------------------
 //
-// LogoSmash
+// LogoSmashDemo
 //
 //------------------------------------------------------------------
-void LogoSmash::onEnter() 
-{
+void LogoSmashDemo::onEnter() {
+    ChipmunkTestBed::onEnter();
+    initPhysics();
+}
+
+std::string LogoSmashDemo::title() const {
+    return LogoSmash.name;
+}
+
+void LogoSmashDemo::initPhysics() {
+    _space = LogoSmash.initFunc();
+    ChipmunkTestBed::initPhysics();
+}
+
+void LogoSmashDemo::update(float delta) {
+    LogoSmash.updateFunc(_space, LogoSmash.timestep);
+}
+
+//------------------------------------------------------------------
+//
+// PlinkDemo
+//
+//------------------------------------------------------------------
+void PlinkDemo::onEnter() {
     ChipmunkTestBed::onEnter();
 
     initPhysics();
-
-
-    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-std::string LogoSmash::title() const 
-{
-    return "Logo Smash";
+std::string PlinkDemo::title() const {
+    return Plink.name;
 }
 
-
-void LogoSmash::initPhysics() 
-{
-    _space = initLogoSmash();
+void PlinkDemo::initPhysics() {
+    _space = Plink.initFunc();
     ChipmunkTestBed::initPhysics();
-
-    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-void LogoSmash::update(float delta)
-{
-    ChipmunkTestBed::update(delta);
+void PlinkDemo::update(float delta) {
+    Plink.updateFunc(_space, Plink.timestep);
 }
 
+//------------------------------------------------------------------
+//
+// TumbleDemo
+//
+//------------------------------------------------------------------
+void TumbleDemo::onEnter() {
+    ChipmunkTestBed::onEnter();
+    initPhysics();
+}
+
+std::string TumbleDemo::title() const {
+    return Tumble.name;
+}
+
+void TumbleDemo::initPhysics() {
+    _space = Tumble.initFunc();
+    ChipmunkTestBed::initPhysics();
+}
+
+void TumbleDemo::update(float delta) {
+    Tumble.updateFunc(_space, Tumble.timestep);
+}
+
+//------------------------------------------------------------------
+//
+// PyramidStackDemo
+//
+//------------------------------------------------------------------
+void PyramidStackDemo::onEnter() {
+    ChipmunkTestBed::onEnter();
+    initPhysics();
+}
+
+std::string PyramidStackDemo::title() const {
+    return PyramidStack.name;
+}
+
+void PyramidStackDemo::initPhysics() {
+    _space = PyramidStack.initFunc();
+    ChipmunkTestBed::initPhysics();
+}
+
+void PyramidStackDemo::update(float delta) {
+    PyramidStack.updateFunc(_space, PyramidStack.timestep);
+}
 
 
 //------------------------------------------------------------------
 //
-// Plink
+// PyramidToppleDemo
 //
 //------------------------------------------------------------------
-void Plink::onEnter() {
+void PyramidToppleDemo::onEnter() {
+    ChipmunkTestBed::onEnter();
+    initPhysics();
+}
+
+std::string PyramidToppleDemo::title() const {
+    return PyramidTopple.name;
+}
+
+void PyramidToppleDemo::initPhysics() {
+    _space = PyramidTopple.initFunc();
+    ChipmunkTestBed::initPhysics();
+}
+
+void PyramidToppleDemo::update(float delta) {
+    PyramidTopple.updateFunc(_space, PyramidTopple.timestep);
+}
+
+
+//------------------------------------------------------------------
+//
+// ChainDemo
+//
+//------------------------------------------------------------------
+void ChainsDemo::onEnter() {
     ChipmunkTestBed::onEnter();
 
     initPhysics();
-
-
-    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-std::string Plink::title() const {
-    return "Plink";
+std::string ChainsDemo::title() const {
+    return Chains.name;
 }
 
-
-void Plink::initPhysics() {
-    _space = initPlink();
+void ChainsDemo::initPhysics() {
+    _space = Chains.initFunc();
     ChipmunkTestBed::initPhysics();
-
-    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-void Plink::update(float delta) {
-    ChipmunkTestBed::update(delta);
+void ChainsDemo::update(float delta) {
+    Chains.updateFunc(_space, Chains.timestep);
 }
-//std::string  Plink::title() const {
-//    return "Plink";
-//}
 
 //------------------------------------------------------------------
 //
-// Tumble
+// OneWayDemo
 //
 //------------------------------------------------------------------
-void Tumble::onEnter() {
+void OneWayDemo::onEnter() {
     ChipmunkTestBed::onEnter();
 
     initPhysics();
-
-
-    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-std::string Tumble::title() const {
-    return "Tumble";
+std::string OneWayDemo::title() const {
+    return OneWay.name;
 }
 
-
-void Tumble::initPhysics() {
-    _space = initTumble();
+void OneWayDemo::initPhysics() {
+    _space = OneWay.initFunc();
     ChipmunkTestBed::initPhysics();
-
-    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-void Tumble::update(float delta) {
-    ChipmunkTestBed::update(delta);
+void OneWayDemo::update(float delta) {
+    OneWay.updateFunc(_space, OneWay.timestep);
 }
+
 
 //------------------------------------------------------------------
 //
@@ -288,9 +354,14 @@ void AddExample::update(float delta) {
 
 
 ChipmunkTestBedTests::ChipmunkTestBedTests() {
-    ADD_TEST_CASE(LogoSmash);
-    ADD_TEST_CASE(Plink);
-    ADD_TEST_CASE(Tumble);
+
+    ADD_TEST_CASE(LogoSmashDemo);
+    ADD_TEST_CASE(PlinkDemo);
+    ADD_TEST_CASE(TumbleDemo);
+    ADD_TEST_CASE(PyramidToppleDemo);
+    ADD_TEST_CASE(PyramidStackDemo);
+    ADD_TEST_CASE(ChainsDemo);
+    ADD_TEST_CASE(OneWayDemo);
 
     ADD_TEST_CASE(AddExample);
 }
