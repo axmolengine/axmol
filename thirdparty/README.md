@@ -56,7 +56,7 @@
 
 ## flatbuffers
 - Upstream: https://github.com/google/flatbuffers
-- Version: 1.12.0
+- Version: 2.0.0
 - License: Apache-2.0
 
 ## FreeType
