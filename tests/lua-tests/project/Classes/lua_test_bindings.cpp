@@ -653,9 +653,9 @@ int lua_register_cocos2dx_DrawNode3D(lua_State* L)
     tolua_function(L,"drawCube",lua_cocos2dx_DrawNode3D_drawCube);
     tolua_function(L,"create", lua_cocos2dx_DrawNode3D_create);
     tolua_endmodule(L);
-    std::string typeName = typeid(cocos2d::DrawNode3D).name();
-    g_luaType[typeName] = "cc.DrawNode3D";
-    g_typeCast["DrawNode3D"] = "cc.DrawNode3D";
+    auto typeName = typeid(cocos2d::DrawNode3D).name();
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.DrawNode3D";
+    g_typeCast[typeName]                             = "cc.DrawNode3D";
     return 1;
 }
 
@@ -701,9 +701,9 @@ int lua_register_cocos2dx_ValueTypeJudgeInTable(lua_State* L)
     tolua_beginmodule(L,"ValueTypeJudgeInTable");
         tolua_function(L,"create", lua_cocos2dx_ValueTypeJudgeInTable_create);
     tolua_endmodule(L);
-    std::string typeName = typeid(cocos2d::ValueTypeJudgeInTable).name();
-    g_luaType[typeName] = "cc.ValueTypeJudgeInTable";
-    g_typeCast["ValueTypeJudgeInTable"] = "cc.ValueTypeJudgeInTable";
+    auto typeName = typeid(cocos2d::ValueTypeJudgeInTable).name();
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.ValueTypeJudgeInTable";
+    g_typeCast[typeName] = "cc.ValueTypeJudgeInTable";
     return 1;
 }
 

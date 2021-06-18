@@ -980,9 +980,9 @@ int lua_register_cocos2dx_video_VideoPlayer(lua_State* tolua_S)
         tolua_function(tolua_S,"setUserInputEnabled",lua_cocos2dx_video_VideoPlayer_setUserInputEnabled);
         tolua_function(tolua_S,"create", lua_cocos2dx_video_VideoPlayer_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::VideoPlayer).name();
-    g_luaType[typeName] = "ccui.VideoPlayer";
-    g_typeCast["VideoPlayer"] = "ccui.VideoPlayer";
+    auto typeName = typeid(cocos2d::ui::VideoPlayer).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.VideoPlayer";
+    g_typeCast[typeName] = "ccui.VideoPlayer";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_video(lua_State* tolua_S)

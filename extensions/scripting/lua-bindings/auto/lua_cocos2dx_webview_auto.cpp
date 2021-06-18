@@ -955,9 +955,9 @@ int lua_register_cocos2dx_webview_WebView(lua_State* tolua_S)
         tolua_function(tolua_S,"setJavascriptInterfaceScheme",lua_cocos2dx_webview_WebView_setJavascriptInterfaceScheme);
         tolua_function(tolua_S,"create", lua_cocos2dx_webview_WebView_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::WebView).name();
-    g_luaType[typeName] = "ccui.WebView";
-    g_typeCast["WebView"] = "ccui.WebView";
+    auto typeName = typeid(cocos2d::ui::WebView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.WebView";
+    g_typeCast[typeName] = "ccui.WebView";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_webview(lua_State* tolua_S)

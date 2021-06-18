@@ -1177,9 +1177,9 @@ int lua_register_cocos2dx_3d_AABB(lua_State* L)
         tolua_function(L,"updateMinMax",lua_cocos2dx_3d_AABB_updateMinMax);
         tolua_function(L,"containPoint",lua_cocos2dx_3d_AABB_containPoint);
     tolua_endmodule(L);
-    std::string typeName = typeid(cocos2d::AABB).name();
-    g_luaType[typeName] = "cc.AABB";
-    g_typeCast["AABB"] = "cc.AABB";
+    auto typeName = typeid(cocos2d::AABB).name();
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.AABB";
+    g_typeCast[typeName]                             = "cc.AABB";
     return 1;
 }
 
@@ -1928,9 +1928,9 @@ int lua_register_cocos2dx_3d_OBB(lua_State* L)
         tolua_function(L,"intersects", lua_cocos2dx_3d_OBB_intersects);
         tolua_function(L,"getCorners", lua_cocos2dx_3d_OBB_getCorners);
     tolua_endmodule(L);
-    std::string typeName = typeid(cocos2d::OBB).name();
-    g_luaType[typeName] = "cc.OBB";
-    g_typeCast["OBB"] = "cc.OBB";
+    auto typeName = typeid(cocos2d::OBB).name();
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.OBB";
+    g_typeCast[typeName]                             = "cc.OBB";
     return 1;
 }
 
@@ -2272,9 +2272,9 @@ int lua_register_cocos2dx_3d_Ray(lua_State* L)
         tolua_function(L,"transform",lua_cocos2dx_3d_Ray_transform);
         tolua_function(L, "intersects", lua_cocos2dx_3d_Ray_intersects);
     tolua_endmodule(L);
-    std::string typeName = typeid(cocos2d::Ray).name();
-    g_luaType[typeName] = "cc.Ray";
-    g_typeCast["Ray"] = "cc.Ray";
+    auto typeName = typeid(cocos2d::Ray).name();
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Ray";
+    g_typeCast[typeName] = "cc.Ray";
     return 1;
 }
 

@@ -761,9 +761,9 @@ int lua_register_cocos2dx_extension_AssetsManager(lua_State* tolua_S)
         tolua_function(tolua_S,"deleteVersion",lua_cocos2dx_extension_AssetsManager_deleteVersion);
         tolua_function(tolua_S,"create", lua_cocos2dx_extension_AssetsManager_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::extension::AssetsManager).name();
-    g_luaType[typeName] = "cc.AssetsManager";
-    g_typeCast["AssetsManager"] = "cc.AssetsManager";
+    auto typeName = typeid(cocos2d::extension::AssetsManager).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.AssetsManager";
+    g_typeCast[typeName] = "cc.AssetsManager";
     return 1;
 }
 
@@ -1412,9 +1412,9 @@ int lua_register_cocos2dx_extension_EventAssetsManagerEx(lua_State* tolua_S)
         tolua_function(tolua_S,"getEventCode",lua_cocos2dx_extension_EventAssetsManagerEx_getEventCode);
         tolua_function(tolua_S,"getPercent",lua_cocos2dx_extension_EventAssetsManagerEx_getPercent);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::extension::EventAssetsManagerEx).name();
-    g_luaType[typeName] = "cc.EventAssetsManagerEx";
-    g_typeCast["EventAssetsManagerEx"] = "cc.EventAssetsManagerEx";
+    auto typeName = typeid(cocos2d::extension::EventAssetsManagerEx).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.EventAssetsManagerEx";
+    g_typeCast[typeName] = "cc.EventAssetsManagerEx";
     return 1;
 }
 
@@ -1767,9 +1767,9 @@ int lua_register_cocos2dx_extension_Manifest(lua_State* tolua_S)
         tolua_function(tolua_S,"getVersionFileUrl",lua_cocos2dx_extension_Manifest_getVersionFileUrl);
         tolua_function(tolua_S,"getSearchPaths",lua_cocos2dx_extension_Manifest_getSearchPaths);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::extension::Manifest).name();
-    g_luaType[typeName] = "cc.Manifest";
-    g_typeCast["Manifest"] = "cc.Manifest";
+    auto typeName = typeid(cocos2d::extension::Manifest).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Manifest";
+    g_typeCast[typeName] = "cc.Manifest";
     return 1;
 }
 
@@ -2414,9 +2414,9 @@ int lua_register_cocos2dx_extension_AssetsManagerEx(lua_State* tolua_S)
         tolua_function(tolua_S,"downloadFailedAssets",lua_cocos2dx_extension_AssetsManagerEx_downloadFailedAssets);
         tolua_function(tolua_S,"create", lua_cocos2dx_extension_AssetsManagerEx_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::extension::AssetsManagerEx).name();
-    g_luaType[typeName] = "cc.AssetsManagerEx";
-    g_typeCast["AssetsManagerEx"] = "cc.AssetsManagerEx";
+    auto typeName = typeid(cocos2d::extension::AssetsManagerEx).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.AssetsManagerEx";
+    g_typeCast[typeName] = "cc.AssetsManagerEx";
     return 1;
 }
 
@@ -2529,9 +2529,9 @@ int lua_register_cocos2dx_extension_EventListenerAssetsManagerEx(lua_State* tolu
         tolua_function(tolua_S,"new",lua_cocos2dx_extension_EventListenerAssetsManagerEx_constructor);
         tolua_function(tolua_S,"init",lua_cocos2dx_extension_EventListenerAssetsManagerEx_init);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::extension::EventListenerAssetsManagerEx).name();
-    g_luaType[typeName] = "cc.EventListenerAssetsManagerEx";
-    g_typeCast["EventListenerAssetsManagerEx"] = "cc.EventListenerAssetsManagerEx";
+    auto typeName = typeid(cocos2d::extension::EventListenerAssetsManagerEx).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.EventListenerAssetsManagerEx";
+    g_typeCast[typeName] = "cc.EventListenerAssetsManagerEx";
     return 1;
 }
 
@@ -3570,9 +3570,9 @@ int lua_register_cocos2dx_extension_ParticleSystem3D(lua_State* tolua_S)
         tolua_function(tolua_S,"stopParticleSystem",lua_cocos2dx_extension_ParticleSystem3D_stopParticleSystem);
         tolua_function(tolua_S,"setKeepLocal",lua_cocos2dx_extension_ParticleSystem3D_setKeepLocal);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ParticleSystem3D).name();
-    g_luaType[typeName] = "cc.ParticleSystem3D";
-    g_typeCast["ParticleSystem3D"] = "cc.ParticleSystem3D";
+    auto typeName = typeid(cocos2d::ParticleSystem3D).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.ParticleSystem3D";
+    g_typeCast[typeName] = "cc.ParticleSystem3D";
     return 1;
 }
 
@@ -5778,9 +5778,9 @@ int lua_register_cocos2dx_extension_PUParticleSystem3D(lua_State* tolua_S)
         tolua_function(tolua_S,"addObserver",lua_cocos2dx_extension_PUParticleSystem3D_addObserver);
         tolua_function(tolua_S,"create", lua_cocos2dx_extension_PUParticleSystem3D_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PUParticleSystem3D).name();
-    g_luaType[typeName] = "cc.PUParticleSystem3D";
-    g_typeCast["PUParticleSystem3D"] = "cc.PUParticleSystem3D";
+    auto typeName = typeid(cocos2d::PUParticleSystem3D).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PUParticleSystem3D";
+    g_typeCast[typeName] = "cc.PUParticleSystem3D";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_extension(lua_State* tolua_S)

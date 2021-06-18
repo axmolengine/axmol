@@ -739,9 +739,9 @@ int lua_register_cocos2dx_csloader_CSLoader(lua_State* tolua_S)
         tolua_function(tolua_S,"createNodeWithVisibleSize", lua_cocos2dx_csloader_CSLoader_createNodeWithVisibleSize);
         tolua_function(tolua_S,"getInstance", lua_cocos2dx_csloader_CSLoader_getInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::CSLoader).name();
-    g_luaType[typeName] = "cc.CSLoader";
-    g_typeCast["CSLoader"] = "cc.CSLoader";
+    auto typeName = typeid(cocos2d::CSLoader).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.CSLoader";
+    g_typeCast[typeName] = "cc.CSLoader";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_csloader(lua_State* tolua_S)

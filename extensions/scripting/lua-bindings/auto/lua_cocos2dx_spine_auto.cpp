@@ -1928,9 +1928,9 @@ int lua_register_cocos2dx_spine_SkeletonRenderer(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_spine_SkeletonRenderer_create);
         tolua_function(tolua_S,"createWithSkeleton", lua_cocos2dx_spine_SkeletonRenderer_createWithSkeleton);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(spine::SkeletonRenderer).name();
-    g_luaType[typeName] = "sp.SkeletonRenderer";
-    g_typeCast["SkeletonRenderer"] = "sp.SkeletonRenderer";
+    auto typeName = typeid(spine::SkeletonRenderer).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "sp.SkeletonRenderer";
+    g_typeCast[typeName] = "sp.SkeletonRenderer";
     return 1;
 }
 
@@ -3404,9 +3404,9 @@ int lua_register_cocos2dx_spine_SkeletonAnimation(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_spine_SkeletonAnimation_create);
         tolua_function(tolua_S,"createWithJsonFile", lua_cocos2dx_spine_SkeletonAnimation_createWithJsonFile);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(spine::SkeletonAnimation).name();
-    g_luaType[typeName] = "sp.SkeletonAnimation";
-    g_typeCast["SkeletonAnimation"] = "sp.SkeletonAnimation";
+    auto typeName = typeid(spine::SkeletonAnimation).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "sp.SkeletonAnimation";
+    g_typeCast[typeName] = "sp.SkeletonAnimation";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_spine(lua_State* tolua_S)
