@@ -32,6 +32,8 @@ extern "C" {
 #include "lua.h"
 #include "tolua++.h"
 }
+#include <stdint.h>
+
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 
 #include "scripting/lua-bindings/manual/Lua-BindingsExport.h"
@@ -51,8 +53,8 @@ extern "C" {
 
 using namespace cocos2d;
 
-extern std::unordered_map<std::string, std::string>  g_luaType;
-extern std::unordered_map<std::string, std::string>  g_typeCast;
+extern std::unordered_map<uintptr_t, const char*> g_luaType;
+extern std::unordered_map<cxx17::string_view, const char*>  g_typeCast;
 
 #if COCOS2D_DEBUG >=1
 void luaval_to_native_err(lua_State* L,const char* msg,tolua_Error* err, const char* funcName = "");
@@ -1021,14 +1023,13 @@ void ccvector_to_luaval(lua_State* L,const cocos2d::Vector<T>& inValue)
 
         if (nullptr != dynamic_cast<cocos2d::Ref *>(obj))
         {
-            std::string typeName = typeid(*obj).name();
-            auto iter = g_luaType.find(typeName);
-            if (g_luaType.end() != iter)
+            auto luaTypeName = getLuaTypeName(obj, nullptr);
+            if (luaTypeName)
             {
                 lua_pushnumber(L, (lua_Number)indexTable);
                 int ID = (obj) ? (int)obj->_ID : -1;
                 int* luaID = (obj) ? &obj->_luaID : NULL;
-                toluafix_pushusertype_ccobject(L, ID, luaID, (void*)obj,iter->second.c_str());
+                toluafix_pushusertype_ccobject(L, ID, luaID, (void*) obj, luaTypeName);
                 lua_rawset(L, -3);
                 ++indexTable;
             }
@@ -1058,14 +1059,16 @@ void ccmap_string_key_to_luaval(lua_State* L, const cocos2d::Map<std::string, T>
         T obj = iter->second;
         if (nullptr != dynamic_cast<cocos2d::Ref *>(obj))
         {
-            std::string name = typeid(*obj).name();
+            auto name = reinterpret_cast<uintptr_t>(typeid(*obj).name());
             auto typeIter = g_luaType.find(name);
-            if (g_luaType.end() != typeIter)
+
+            auto luaTypeName = getLuaTypeName(obj, nullptr);
+            if (luaTypeName)
             {
                 lua_pushstring(L, key.c_str());
                 int ID = (obj) ? (int)obj->_ID : -1;
                 int* luaID = (obj) ? &obj->_luaID : NULL;
-                toluafix_pushusertype_ccobject(L, ID, luaID, (void*)obj,typeIter->second.c_str());
+                toluafix_pushusertype_ccobject(L, ID, luaID, (void*) obj, luaTypeName);
                 lua_rawset(L, -3);
             }
         }
@@ -1126,19 +1129,25 @@ void ccvaluevector_to_luaval(lua_State* L, const cocos2d::ValueVector& inValue);
  * @return return the pointer points to the real typename, or nullptr.
  */
 template <class T>
-const char* getLuaTypeName(T* ret,const char* type)
+const char* getLuaTypeName(T* ret,const char* defaultTypeName)
 {
     if (nullptr != ret)
     {
-        std::string hashName = typeid(*ret).name();
-        auto iter =  g_luaType.find(hashName);
+        auto typeName = typeid(*ret).name();
+        auto iter     = g_luaType.find(reinterpret_cast<uintptr_t>(typeName));
         if(g_luaType.end() != iter)
         {
-            return iter->second.c_str();
+            return iter->second;
         }
         else
-        {
-            return type;
+        { // unlike logic, for windows dll only
+            cxx17::string_view strkey(typeName);
+            auto iter2 = g_typeCast.find(strkey);
+            if (iter2 != g_typeCast.end()) {
+                g_luaType.emplace(reinterpret_cast<uintptr_t>(typeName), iter2->second);
+                return iter2->second;
+            }
+            return defaultTypeName;
         }
     }
 

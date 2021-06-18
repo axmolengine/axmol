@@ -1554,9 +1554,9 @@ int lua_register_cocos2dx_navmesh_NavMeshAgent(lua_State* tolua_S)
         tolua_function(tolua_S,"getNavMeshAgentComponentName", lua_cocos2dx_navmesh_NavMeshAgent_getNavMeshAgentComponentName);
         tolua_function(tolua_S,"create", lua_cocos2dx_navmesh_NavMeshAgent_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::NavMeshAgent).name();
-    g_luaType[typeName] = "cc.NavMeshAgent";
-    g_typeCast["NavMeshAgent"] = "cc.NavMeshAgent";
+    auto typeName = typeid(cocos2d::NavMeshAgent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.NavMeshAgent";
+    g_typeCast[typeName] = "cc.NavMeshAgent";
     return 1;
 }
 
@@ -2030,9 +2030,9 @@ int lua_register_cocos2dx_navmesh_NavMeshObstacle(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_navmesh_NavMeshObstacle_create);
         tolua_function(tolua_S,"getNavMeshObstacleComponentName", lua_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::NavMeshObstacle).name();
-    g_luaType[typeName] = "cc.NavMeshObstacle";
-    g_typeCast["NavMeshObstacle"] = "cc.NavMeshObstacle";
+    auto typeName = typeid(cocos2d::NavMeshObstacle).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.NavMeshObstacle";
+    g_typeCast[typeName] = "cc.NavMeshObstacle";
     return 1;
 }
 
@@ -2531,9 +2531,9 @@ int lua_register_cocos2dx_navmesh_NavMesh(lua_State* tolua_S)
         tolua_function(tolua_S,"debugDraw",lua_cocos2dx_navmesh_NavMesh_debugDraw);
         tolua_function(tolua_S,"create", lua_cocos2dx_navmesh_NavMesh_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::NavMesh).name();
-    g_luaType[typeName] = "cc.NavMesh";
-    g_typeCast["NavMesh"] = "cc.NavMesh";
+    auto typeName = typeid(cocos2d::NavMesh).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.NavMesh";
+    g_typeCast[typeName] = "cc.NavMesh";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_navmesh(lua_State* tolua_S)

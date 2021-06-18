@@ -53,9 +53,9 @@ int lua_register_cocos2dx_audioengine_AudioProfile(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"AudioProfile");
         tolua_function(tolua_S,"new",lua_cocos2dx_audioengine_AudioProfile_constructor);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::AudioProfile).name();
-    g_luaType[typeName] = "cc.AudioProfile";
-    g_typeCast["AudioProfile"] = "cc.AudioProfile";
+    auto typeName = typeid(cocos2d::AudioProfile).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.AudioProfile";
+    g_typeCast[typeName] = "cc.AudioProfile";
     return 1;
 }
 
@@ -1139,9 +1139,9 @@ int lua_register_cocos2dx_audioengine_AudioEngine(lua_State* tolua_S)
         tolua_function(tolua_S,"getProfile", lua_cocos2dx_audioengine_AudioEngine_getProfile);
         tolua_function(tolua_S,"getPlayingAudioCount", lua_cocos2dx_audioengine_AudioEngine_getPlayingAudioCount);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::AudioEngine).name();
-    g_luaType[typeName] = "cc.AudioEngine";
-    g_typeCast["AudioEngine"] = "cc.AudioEngine";
+    auto typeName = typeid(cocos2d::AudioEngine).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.AudioEngine";
+    g_typeCast[typeName] = "cc.AudioEngine";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_audioengine(lua_State* tolua_S)

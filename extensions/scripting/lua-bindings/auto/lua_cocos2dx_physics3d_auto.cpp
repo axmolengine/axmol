@@ -552,9 +552,9 @@ int lua_register_cocos2dx_physics3d_Physics3DShape(lua_State* tolua_S)
         tolua_function(tolua_S,"createCapsule", lua_cocos2dx_physics3d_Physics3DShape_createCapsule);
         tolua_function(tolua_S,"createSphere", lua_cocos2dx_physics3d_Physics3DShape_createSphere);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3DShape).name();
-    g_luaType[typeName] = "cc.Physics3DShape";
-    g_typeCast["Physics3DShape"] = "cc.Physics3DShape";
+    auto typeName = typeid(cocos2d::Physics3DShape).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DShape";
+    g_typeCast[typeName] = "cc.Physics3DShape";
     return 1;
 }
 
@@ -1061,9 +1061,9 @@ int lua_register_cocos2dx_physics3d_Physics3DObject(lua_State* tolua_S)
         tolua_function(tolua_S,"getMask",lua_cocos2dx_physics3d_Physics3DObject_getMask);
         tolua_function(tolua_S,"needCollisionCallback",lua_cocos2dx_physics3d_Physics3DObject_needCollisionCallback);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3DObject).name();
-    g_luaType[typeName] = "cc.Physics3DObject";
-    g_typeCast["Physics3DObject"] = "cc.Physics3DObject";
+    auto typeName = typeid(cocos2d::Physics3DObject).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DObject";
+    g_typeCast[typeName] = "cc.Physics3DObject";
     return 1;
 }
 
@@ -3577,9 +3577,9 @@ int lua_register_cocos2dx_physics3d_Physics3DRigidBody(lua_State* tolua_S)
         tolua_function(tolua_S,"setHitFraction",lua_cocos2dx_physics3d_Physics3DRigidBody_setHitFraction);
         tolua_function(tolua_S,"getLinearDamping",lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearDamping);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3DRigidBody).name();
-    g_luaType[typeName] = "cc.Physics3DRigidBody";
-    g_typeCast["Physics3DRigidBody"] = "cc.Physics3DRigidBody";
+    auto typeName = typeid(cocos2d::Physics3DRigidBody).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DRigidBody";
+    g_typeCast[typeName] = "cc.Physics3DRigidBody";
     return 1;
 }
 
@@ -3966,9 +3966,9 @@ int lua_register_cocos2dx_physics3d_Physics3DComponent(lua_State* tolua_S)
         tolua_function(tolua_S,"setSyncFlag",lua_cocos2dx_physics3d_Physics3DComponent_setSyncFlag);
         tolua_function(tolua_S,"getPhysics3DComponentName", lua_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3DComponent).name();
-    g_luaType[typeName] = "cc.Physics3DComponent";
-    g_typeCast["Physics3DComponent"] = "cc.Physics3DComponent";
+    auto typeName = typeid(cocos2d::Physics3DComponent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DComponent";
+    g_typeCast[typeName] = "cc.Physics3DComponent";
     return 1;
 }
 
@@ -4218,9 +4218,9 @@ int lua_register_cocos2dx_physics3d_PhysicsSprite3D(lua_State* tolua_S)
         tolua_function(tolua_S,"getPhysicsObj",lua_cocos2dx_physics3d_PhysicsSprite3D_getPhysicsObj);
         tolua_function(tolua_S,"setSyncFlag",lua_cocos2dx_physics3d_PhysicsSprite3D_setSyncFlag);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsSprite3D).name();
-    g_luaType[typeName] = "cc.PhysicsSprite3D";
-    g_typeCast["PhysicsSprite3D"] = "cc.PhysicsSprite3D";
+    auto typeName = typeid(cocos2d::PhysicsSprite3D).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsSprite3D";
+    g_typeCast[typeName] = "cc.PhysicsSprite3D";
     return 1;
 }
 
@@ -5036,9 +5036,9 @@ int lua_register_cocos2dx_physics3d_Physics3DWorld(lua_State* tolua_S)
         tolua_function(tolua_S,"addPhysics3DConstraint",lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint);
         tolua_function(tolua_S,"debugDraw",lua_cocos2dx_physics3d_Physics3DWorld_debugDraw);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3DWorld).name();
-    g_luaType[typeName] = "cc.Physics3DWorld";
-    g_typeCast["Physics3DWorld"] = "cc.Physics3DWorld";
+    auto typeName = typeid(cocos2d::Physics3DWorld).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DWorld";
+    g_typeCast[typeName] = "cc.Physics3DWorld";
     return 1;
 }
 
@@ -5644,9 +5644,9 @@ int lua_register_cocos2dx_physics3d_Physics3DConstraint(lua_State* tolua_S)
         tolua_function(tolua_S,"setUserData",lua_cocos2dx_physics3d_Physics3DConstraint_setUserData);
         tolua_function(tolua_S,"getbtContraint",lua_cocos2dx_physics3d_Physics3DConstraint_getbtContraint);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3DConstraint).name();
-    g_luaType[typeName] = "cc.Physics3DConstraint";
-    g_typeCast["Physics3DConstraint"] = "cc.Physics3DConstraint";
+    auto typeName = typeid(cocos2d::Physics3DConstraint).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DConstraint";
+    g_typeCast[typeName] = "cc.Physics3DConstraint";
     return 1;
 }
 
@@ -6032,9 +6032,9 @@ int lua_register_cocos2dx_physics3d_Physics3DPointToPointConstraint(lua_State* t
         tolua_function(tolua_S,"setPivotPointInB",lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInB);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3DPointToPointConstraint).name();
-    g_luaType[typeName] = "cc.Physics3DPointToPointConstraint";
-    g_typeCast["Physics3DPointToPointConstraint"] = "cc.Physics3DPointToPointConstraint";
+    auto typeName = typeid(cocos2d::Physics3DPointToPointConstraint).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DPointToPointConstraint";
+    g_typeCast[typeName] = "cc.Physics3DPointToPointConstraint";
     return 1;
 }
 
@@ -7367,9 +7367,9 @@ int lua_register_cocos2dx_physics3d_Physics3DHingeConstraint(lua_State* tolua_S)
         tolua_function(tolua_S,"getAFrame",lua_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics3d_Physics3DHingeConstraint_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3DHingeConstraint).name();
-    g_luaType[typeName] = "cc.Physics3DHingeConstraint";
-    g_typeCast["Physics3DHingeConstraint"] = "cc.Physics3DHingeConstraint";
+    auto typeName = typeid(cocos2d::Physics3DHingeConstraint).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DHingeConstraint";
+    g_typeCast[typeName] = "cc.Physics3DHingeConstraint";
     return 1;
 }
 
@@ -10634,9 +10634,9 @@ int lua_register_cocos2dx_physics3d_Physics3DSliderConstraint(lua_State* tolua_S
         tolua_function(tolua_S,"getUseLinearReferenceFrameA",lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics3d_Physics3DSliderConstraint_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3DSliderConstraint).name();
-    g_luaType[typeName] = "cc.Physics3DSliderConstraint";
-    g_typeCast["Physics3DSliderConstraint"] = "cc.Physics3DSliderConstraint";
+    auto typeName = typeid(cocos2d::Physics3DSliderConstraint).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DSliderConstraint";
+    g_typeCast[typeName] = "cc.Physics3DSliderConstraint";
     return 1;
 }
 
@@ -11682,9 +11682,9 @@ int lua_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(lua_State* tolu
         tolua_function(tolua_S,"enableMotor",lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3DConeTwistConstraint).name();
-    g_luaType[typeName] = "cc.Physics3DConeTwistConstraint";
-    g_typeCast["Physics3DConeTwistConstraint"] = "cc.Physics3DConeTwistConstraint";
+    auto typeName = typeid(cocos2d::Physics3DConeTwistConstraint).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DConeTwistConstraint";
+    g_typeCast[typeName] = "cc.Physics3DConeTwistConstraint";
     return 1;
 }
 
@@ -12352,9 +12352,9 @@ int lua_register_cocos2dx_physics3d_Physics3D6DofConstraint(lua_State* tolua_S)
         tolua_function(tolua_S,"setAngularUpperLimit",lua_cocos2dx_physics3d_Physics3D6DofConstraint_setAngularUpperLimit);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics3d_Physics3D6DofConstraint_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Physics3D6DofConstraint).name();
-    g_luaType[typeName] = "cc.Physics3D6DofConstraint";
-    g_typeCast["Physics3D6DofConstraint"] = "cc.Physics3D6DofConstraint";
+    auto typeName = typeid(cocos2d::Physics3D6DofConstraint).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3D6DofConstraint";
+    g_typeCast[typeName] = "cc.Physics3D6DofConstraint";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_physics3d(lua_State* tolua_S)

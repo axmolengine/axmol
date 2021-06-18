@@ -130,19 +130,11 @@ int lua_cocos2dx_physics_PhysicsWorld_getScene(lua_State* tolua_S)
             return 0;
         cocos2d::Scene& ret = cobj->getScene();
         do {
-            
-            std::string hashName = typeid(ret).name();
-            auto iter = g_luaType.find(hashName);
-            std::string className = "";
-            if(iter != g_luaType.end()){
-                className = iter->second.c_str();
-            } else {
-                className = "cc.Scene";
-            }
-            
+            auto className = getLuaTypeName<Ref>(&ret, "cc.Scene");
+
             int ID =  (int)(ret._ID);
             int* luaID = &(ret._luaID);
-            toluafix_pushusertype_ccobject(tolua_S,ID, luaID, (void*)(&ret),className.c_str());
+            toluafix_pushusertype_ccobject(tolua_S,ID, luaID, (void*)(&ret),className);
             
         }while (0);
         return 1;

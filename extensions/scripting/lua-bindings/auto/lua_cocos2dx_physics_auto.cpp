@@ -1544,9 +1544,9 @@ int lua_register_cocos2dx_physics_PhysicsShape(lua_State* tolua_S)
         tolua_function(tolua_S,"setRestitution",lua_cocos2dx_physics_PhysicsShape_setRestitution);
         tolua_function(tolua_S,"getBody",lua_cocos2dx_physics_PhysicsShape_getBody);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsShape).name();
-    g_luaType[typeName] = "cc.PhysicsShape";
-    g_typeCast["PhysicsShape"] = "cc.PhysicsShape";
+    auto typeName = typeid(cocos2d::PhysicsShape).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsShape";
+    g_typeCast[typeName] = "cc.PhysicsShape";
     return 1;
 }
 
@@ -1773,9 +1773,9 @@ int lua_register_cocos2dx_physics_PhysicsShapeCircle(lua_State* tolua_S)
         tolua_function(tolua_S,"calculateArea", lua_cocos2dx_physics_PhysicsShapeCircle_calculateArea);
         tolua_function(tolua_S,"calculateMoment", lua_cocos2dx_physics_PhysicsShapeCircle_calculateMoment);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsShapeCircle).name();
-    g_luaType[typeName] = "cc.PhysicsShapeCircle";
-    g_typeCast["PhysicsShapeCircle"] = "cc.PhysicsShapeCircle";
+    auto typeName = typeid(cocos2d::PhysicsShapeCircle).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsShapeCircle";
+    g_typeCast[typeName] = "cc.PhysicsShapeCircle";
     return 1;
 }
 
@@ -1891,9 +1891,9 @@ int lua_register_cocos2dx_physics_PhysicsShapePolygon(lua_State* tolua_S)
         tolua_function(tolua_S,"getPointsCount",lua_cocos2dx_physics_PhysicsShapePolygon_getPointsCount);
         tolua_function(tolua_S,"getPoint",lua_cocos2dx_physics_PhysicsShapePolygon_getPoint);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsShapePolygon).name();
-    g_luaType[typeName] = "cc.PhysicsShapePolygon";
-    g_typeCast["PhysicsShapePolygon"] = "cc.PhysicsShapePolygon";
+    auto typeName = typeid(cocos2d::PhysicsShapePolygon).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsShapePolygon";
+    g_typeCast[typeName] = "cc.PhysicsShapePolygon";
     return 1;
 }
 
@@ -2046,9 +2046,9 @@ int lua_register_cocos2dx_physics_PhysicsShapeBox(lua_State* tolua_S)
         tolua_function(tolua_S,"getSize",lua_cocos2dx_physics_PhysicsShapeBox_getSize);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics_PhysicsShapeBox_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsShapeBox).name();
-    g_luaType[typeName] = "cc.PhysicsShapeBox";
-    g_typeCast["PhysicsShapeBox"] = "cc.PhysicsShapeBox";
+    auto typeName = typeid(cocos2d::PhysicsShapeBox).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsShapeBox";
+    g_typeCast[typeName] = "cc.PhysicsShapeBox";
     return 1;
 }
 
@@ -2236,9 +2236,9 @@ int lua_register_cocos2dx_physics_PhysicsShapeEdgeSegment(lua_State* tolua_S)
         tolua_function(tolua_S,"getPointA",lua_cocos2dx_physics_PhysicsShapeEdgeSegment_getPointA);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics_PhysicsShapeEdgeSegment_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsShapeEdgeSegment).name();
-    g_luaType[typeName] = "cc.PhysicsShapeEdgeSegment";
-    g_typeCast["PhysicsShapeEdgeSegment"] = "cc.PhysicsShapeEdgeSegment";
+    auto typeName = typeid(cocos2d::PhysicsShapeEdgeSegment).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsShapeEdgeSegment";
+    g_typeCast[typeName] = "cc.PhysicsShapeEdgeSegment";
     return 1;
 }
 
@@ -2303,9 +2303,9 @@ int lua_register_cocos2dx_physics_PhysicsShapeEdgePolygon(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"PhysicsShapeEdgePolygon");
         tolua_function(tolua_S,"getPointsCount",lua_cocos2dx_physics_PhysicsShapeEdgePolygon_getPointsCount);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsShapeEdgePolygon).name();
-    g_luaType[typeName] = "cc.PhysicsShapeEdgePolygon";
-    g_typeCast["PhysicsShapeEdgePolygon"] = "cc.PhysicsShapeEdgePolygon";
+    auto typeName = typeid(cocos2d::PhysicsShapeEdgePolygon).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsShapeEdgePolygon";
+    g_typeCast[typeName] = "cc.PhysicsShapeEdgePolygon";
     return 1;
 }
 
@@ -2410,9 +2410,9 @@ int lua_register_cocos2dx_physics_PhysicsShapeEdgeBox(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"PhysicsShapeEdgeBox");
         tolua_function(tolua_S,"create", lua_cocos2dx_physics_PhysicsShapeEdgeBox_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsShapeEdgeBox).name();
-    g_luaType[typeName] = "cc.PhysicsShapeEdgeBox";
-    g_typeCast["PhysicsShapeEdgeBox"] = "cc.PhysicsShapeEdgeBox";
+    auto typeName = typeid(cocos2d::PhysicsShapeEdgeBox).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsShapeEdgeBox";
+    g_typeCast[typeName] = "cc.PhysicsShapeEdgeBox";
     return 1;
 }
 
@@ -2477,9 +2477,9 @@ int lua_register_cocos2dx_physics_PhysicsShapeEdgeChain(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"PhysicsShapeEdgeChain");
         tolua_function(tolua_S,"getPointsCount",lua_cocos2dx_physics_PhysicsShapeEdgeChain_getPointsCount);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsShapeEdgeChain).name();
-    g_luaType[typeName] = "cc.PhysicsShapeEdgeChain";
-    g_typeCast["PhysicsShapeEdgeChain"] = "cc.PhysicsShapeEdgeChain";
+    auto typeName = typeid(cocos2d::PhysicsShapeEdgeChain).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsShapeEdgeChain";
+    g_typeCast[typeName] = "cc.PhysicsShapeEdgeChain";
     return 1;
 }
 
@@ -5934,9 +5934,9 @@ int lua_register_cocos2dx_physics_PhysicsBody(lua_State* tolua_S)
         tolua_function(tolua_S,"createEdgeBox", lua_cocos2dx_physics_PhysicsBody_createEdgeBox);
         tolua_function(tolua_S,"createCircle", lua_cocos2dx_physics_PhysicsBody_createCircle);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsBody).name();
-    g_luaType[typeName] = "cc.PhysicsBody";
-    g_typeCast["PhysicsBody"] = "cc.PhysicsBody";
+    auto typeName = typeid(cocos2d::PhysicsBody).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsBody";
+    g_typeCast[typeName] = "cc.PhysicsBody";
     return 1;
 }
 
@@ -6193,9 +6193,9 @@ int lua_register_cocos2dx_physics_PhysicsContact(lua_State* tolua_S)
         tolua_function(tolua_S,"getShapeA",lua_cocos2dx_physics_PhysicsContact_getShapeA);
         tolua_function(tolua_S,"getShapeB",lua_cocos2dx_physics_PhysicsContact_getShapeB);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsContact).name();
-    g_luaType[typeName] = "cc.PhysicsContact";
-    g_typeCast["PhysicsContact"] = "cc.PhysicsContact";
+    auto typeName = typeid(cocos2d::PhysicsContact).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsContact";
+    g_typeCast[typeName] = "cc.PhysicsContact";
     return 1;
 }
 
@@ -6557,9 +6557,9 @@ int lua_register_cocos2dx_physics_PhysicsContactPreSolve(lua_State* tolua_S)
         tolua_function(tolua_S,"setSurfaceVelocity",lua_cocos2dx_physics_PhysicsContactPreSolve_setSurfaceVelocity);
         tolua_function(tolua_S,"setRestitution",lua_cocos2dx_physics_PhysicsContactPreSolve_setRestitution);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsContactPreSolve).name();
-    g_luaType[typeName] = "cc.PhysicsContactPreSolve";
-    g_typeCast["PhysicsContactPreSolve"] = "cc.PhysicsContactPreSolve";
+    auto typeName = typeid(cocos2d::PhysicsContactPreSolve).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsContactPreSolve";
+    g_typeCast[typeName] = "cc.PhysicsContactPreSolve";
     return 1;
 }
 
@@ -6720,9 +6720,9 @@ int lua_register_cocos2dx_physics_PhysicsContactPostSolve(lua_State* tolua_S)
         tolua_function(tolua_S,"getSurfaceVelocity",lua_cocos2dx_physics_PhysicsContactPostSolve_getSurfaceVelocity);
         tolua_function(tolua_S,"getRestitution",lua_cocos2dx_physics_PhysicsContactPostSolve_getRestitution);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsContactPostSolve).name();
-    g_luaType[typeName] = "cc.PhysicsContactPostSolve";
-    g_typeCast["PhysicsContactPostSolve"] = "cc.PhysicsContactPostSolve";
+    auto typeName = typeid(cocos2d::PhysicsContactPostSolve).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsContactPostSolve";
+    g_typeCast[typeName] = "cc.PhysicsContactPostSolve";
     return 1;
 }
 
@@ -6774,9 +6774,9 @@ int lua_register_cocos2dx_physics_EventListenerPhysicsContact(lua_State* tolua_S
     tolua_beginmodule(tolua_S,"EventListenerPhysicsContact");
         tolua_function(tolua_S,"create", lua_cocos2dx_physics_EventListenerPhysicsContact_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::EventListenerPhysicsContact).name();
-    g_luaType[typeName] = "cc.EventListenerPhysicsContact";
-    g_typeCast["EventListenerPhysicsContact"] = "cc.EventListenerPhysicsContact";
+    auto typeName = typeid(cocos2d::EventListenerPhysicsContact).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.EventListenerPhysicsContact";
+    g_typeCast[typeName] = "cc.EventListenerPhysicsContact";
     return 1;
 }
 
@@ -6886,9 +6886,9 @@ int lua_register_cocos2dx_physics_EventListenerPhysicsContactWithBodies(lua_Stat
         tolua_function(tolua_S,"hitTest",lua_cocos2dx_physics_EventListenerPhysicsContactWithBodies_hitTest);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics_EventListenerPhysicsContactWithBodies_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::EventListenerPhysicsContactWithBodies).name();
-    g_luaType[typeName] = "cc.EventListenerPhysicsContactWithBodies";
-    g_typeCast["EventListenerPhysicsContactWithBodies"] = "cc.EventListenerPhysicsContactWithBodies";
+    auto typeName = typeid(cocos2d::EventListenerPhysicsContactWithBodies).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.EventListenerPhysicsContactWithBodies";
+    g_typeCast[typeName] = "cc.EventListenerPhysicsContactWithBodies";
     return 1;
 }
 
@@ -6998,9 +6998,9 @@ int lua_register_cocos2dx_physics_EventListenerPhysicsContactWithShapes(lua_Stat
         tolua_function(tolua_S,"hitTest",lua_cocos2dx_physics_EventListenerPhysicsContactWithShapes_hitTest);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics_EventListenerPhysicsContactWithShapes_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::EventListenerPhysicsContactWithShapes).name();
-    g_luaType[typeName] = "cc.EventListenerPhysicsContactWithShapes";
-    g_typeCast["EventListenerPhysicsContactWithShapes"] = "cc.EventListenerPhysicsContactWithShapes";
+    auto typeName = typeid(cocos2d::EventListenerPhysicsContactWithShapes).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.EventListenerPhysicsContactWithShapes";
+    g_typeCast[typeName] = "cc.EventListenerPhysicsContactWithShapes";
     return 1;
 }
 
@@ -7108,9 +7108,9 @@ int lua_register_cocos2dx_physics_EventListenerPhysicsContactWithGroup(lua_State
         tolua_function(tolua_S,"hitTest",lua_cocos2dx_physics_EventListenerPhysicsContactWithGroup_hitTest);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics_EventListenerPhysicsContactWithGroup_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::EventListenerPhysicsContactWithGroup).name();
-    g_luaType[typeName] = "cc.EventListenerPhysicsContactWithGroup";
-    g_typeCast["EventListenerPhysicsContactWithGroup"] = "cc.EventListenerPhysicsContactWithGroup";
+    auto typeName = typeid(cocos2d::EventListenerPhysicsContactWithGroup).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.EventListenerPhysicsContactWithGroup";
+    g_typeCast[typeName] = "cc.EventListenerPhysicsContactWithGroup";
     return 1;
 }
 
@@ -7715,9 +7715,9 @@ int lua_register_cocos2dx_physics_PhysicsJoint(lua_State* tolua_S)
         tolua_function(tolua_S,"isCollisionEnabled",lua_cocos2dx_physics_PhysicsJoint_isCollisionEnabled);
         tolua_function(tolua_S,"getTag",lua_cocos2dx_physics_PhysicsJoint_getTag);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJoint).name();
-    g_luaType[typeName] = "cc.PhysicsJoint";
-    g_typeCast["PhysicsJoint"] = "cc.PhysicsJoint";
+    auto typeName = typeid(cocos2d::PhysicsJoint).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJoint";
+    g_typeCast[typeName] = "cc.PhysicsJoint";
     return 1;
 }
 
@@ -7823,9 +7823,9 @@ int lua_register_cocos2dx_physics_PhysicsJointFixed(lua_State* tolua_S)
         tolua_function(tolua_S,"createConstraints",lua_cocos2dx_physics_PhysicsJointFixed_createConstraints);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointFixed_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointFixed).name();
-    g_luaType[typeName] = "cc.PhysicsJointFixed";
-    g_typeCast["PhysicsJointFixed"] = "cc.PhysicsJointFixed";
+    auto typeName = typeid(cocos2d::PhysicsJointFixed).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointFixed";
+    g_typeCast[typeName] = "cc.PhysicsJointFixed";
     return 1;
 }
 
@@ -8359,9 +8359,9 @@ int lua_register_cocos2dx_physics_PhysicsJointLimit(lua_State* tolua_S)
         tolua_function(tolua_S,"setMin",lua_cocos2dx_physics_PhysicsJointLimit_setMin);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointLimit_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointLimit).name();
-    g_luaType[typeName] = "cc.PhysicsJointLimit";
-    g_typeCast["PhysicsJointLimit"] = "cc.PhysicsJointLimit";
+    auto typeName = typeid(cocos2d::PhysicsJointLimit).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointLimit";
+    g_typeCast[typeName] = "cc.PhysicsJointLimit";
     return 1;
 }
 
@@ -8490,9 +8490,9 @@ int lua_register_cocos2dx_physics_PhysicsJointPin(lua_State* tolua_S)
         tolua_function(tolua_S,"createConstraints",lua_cocos2dx_physics_PhysicsJointPin_createConstraints);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointPin_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointPin).name();
-    g_luaType[typeName] = "cc.PhysicsJointPin";
-    g_typeCast["PhysicsJointPin"] = "cc.PhysicsJointPin";
+    auto typeName = typeid(cocos2d::PhysicsJointPin).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointPin";
+    g_typeCast[typeName] = "cc.PhysicsJointPin";
     return 1;
 }
 
@@ -8699,9 +8699,9 @@ int lua_register_cocos2dx_physics_PhysicsJointDistance(lua_State* tolua_S)
         tolua_function(tolua_S,"getDistance",lua_cocos2dx_physics_PhysicsJointDistance_getDistance);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointDistance_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointDistance).name();
-    g_luaType[typeName] = "cc.PhysicsJointDistance";
-    g_typeCast["PhysicsJointDistance"] = "cc.PhysicsJointDistance";
+    auto typeName = typeid(cocos2d::PhysicsJointDistance).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointDistance";
+    g_typeCast[typeName] = "cc.PhysicsJointDistance";
     return 1;
 }
 
@@ -9308,9 +9308,9 @@ int lua_register_cocos2dx_physics_PhysicsJointSpring(lua_State* tolua_S)
         tolua_function(tolua_S,"setDamping",lua_cocos2dx_physics_PhysicsJointSpring_setDamping);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointSpring_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointSpring).name();
-    g_luaType[typeName] = "cc.PhysicsJointSpring";
-    g_typeCast["PhysicsJointSpring"] = "cc.PhysicsJointSpring";
+    auto typeName = typeid(cocos2d::PhysicsJointSpring).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointSpring";
+    g_typeCast[typeName] = "cc.PhysicsJointSpring";
     return 1;
 }
 
@@ -9717,9 +9717,9 @@ int lua_register_cocos2dx_physics_PhysicsJointGroove(lua_State* tolua_S)
         tolua_function(tolua_S,"createConstraints",lua_cocos2dx_physics_PhysicsJointGroove_createConstraints);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointGroove_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointGroove).name();
-    g_luaType[typeName] = "cc.PhysicsJointGroove";
-    g_typeCast["PhysicsJointGroove"] = "cc.PhysicsJointGroove";
+    auto typeName = typeid(cocos2d::PhysicsJointGroove).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointGroove";
+    g_typeCast[typeName] = "cc.PhysicsJointGroove";
     return 1;
 }
 
@@ -10124,9 +10124,9 @@ int lua_register_cocos2dx_physics_PhysicsJointRotarySpring(lua_State* tolua_S)
         tolua_function(tolua_S,"getRestAngle",lua_cocos2dx_physics_PhysicsJointRotarySpring_getRestAngle);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointRotarySpring_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointRotarySpring).name();
-    g_luaType[typeName] = "cc.PhysicsJointRotarySpring";
-    g_typeCast["PhysicsJointRotarySpring"] = "cc.PhysicsJointRotarySpring";
+    auto typeName = typeid(cocos2d::PhysicsJointRotarySpring).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointRotarySpring";
+    g_typeCast[typeName] = "cc.PhysicsJointRotarySpring";
     return 1;
 }
 
@@ -10450,9 +10450,9 @@ int lua_register_cocos2dx_physics_PhysicsJointRotaryLimit(lua_State* tolua_S)
         tolua_function(tolua_S,"getMin",lua_cocos2dx_physics_PhysicsJointRotaryLimit_getMin);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointRotaryLimit_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointRotaryLimit).name();
-    g_luaType[typeName] = "cc.PhysicsJointRotaryLimit";
-    g_typeCast["PhysicsJointRotaryLimit"] = "cc.PhysicsJointRotaryLimit";
+    auto typeName = typeid(cocos2d::PhysicsJointRotaryLimit).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointRotaryLimit";
+    g_typeCast[typeName] = "cc.PhysicsJointRotaryLimit";
     return 1;
 }
 
@@ -10857,9 +10857,9 @@ int lua_register_cocos2dx_physics_PhysicsJointRatchet(lua_State* tolua_S)
         tolua_function(tolua_S,"getRatchet",lua_cocos2dx_physics_PhysicsJointRatchet_getRatchet);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointRatchet_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointRatchet).name();
-    g_luaType[typeName] = "cc.PhysicsJointRatchet";
-    g_typeCast["PhysicsJointRatchet"] = "cc.PhysicsJointRatchet";
+    auto typeName = typeid(cocos2d::PhysicsJointRatchet).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointRatchet";
+    g_typeCast[typeName] = "cc.PhysicsJointRatchet";
     return 1;
 }
 
@@ -11165,9 +11165,9 @@ int lua_register_cocos2dx_physics_PhysicsJointGear(lua_State* tolua_S)
         tolua_function(tolua_S,"getRatio",lua_cocos2dx_physics_PhysicsJointGear_getRatio);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointGear_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointGear).name();
-    g_luaType[typeName] = "cc.PhysicsJointGear";
-    g_typeCast["PhysicsJointGear"] = "cc.PhysicsJointGear";
+    auto typeName = typeid(cocos2d::PhysicsJointGear).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointGear";
+    g_typeCast[typeName] = "cc.PhysicsJointGear";
     return 1;
 }
 
@@ -11372,9 +11372,9 @@ int lua_register_cocos2dx_physics_PhysicsJointMotor(lua_State* tolua_S)
         tolua_function(tolua_S,"createConstraints",lua_cocos2dx_physics_PhysicsJointMotor_createConstraints);
         tolua_function(tolua_S,"construct", lua_cocos2dx_physics_PhysicsJointMotor_construct);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsJointMotor).name();
-    g_luaType[typeName] = "cc.PhysicsJointMotor";
-    g_typeCast["PhysicsJointMotor"] = "cc.PhysicsJointMotor";
+    auto typeName = typeid(cocos2d::PhysicsJointMotor).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsJointMotor";
+    g_typeCast[typeName] = "cc.PhysicsJointMotor";
     return 1;
 }
 
@@ -12731,9 +12731,9 @@ int lua_register_cocos2dx_physics_PhysicsWorld(lua_State* tolua_S)
         tolua_function(tolua_S,"getShape",lua_cocos2dx_physics_PhysicsWorld_getShape);
         tolua_function(tolua_S,"getBody",lua_cocos2dx_physics_PhysicsWorld_getBody);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsWorld).name();
-    g_luaType[typeName] = "cc.PhysicsWorld";
-    g_typeCast["PhysicsWorld"] = "cc.PhysicsWorld";
+    auto typeName = typeid(cocos2d::PhysicsWorld).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsWorld";
+    g_typeCast[typeName] = "cc.PhysicsWorld";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_physics(lua_State* tolua_S)
