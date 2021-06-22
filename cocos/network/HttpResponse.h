@@ -187,10 +187,10 @@ private:
         _context.data = this;
 
         /* Set user callbacks */
-        _contextSettings.on_header_field     = on_lhttp_header_field;
-        _contextSettings.on_header_value     = on_lhttp_header_value;
-        _contextSettings.on_body             = on_lhttp_body;
-        _contextSettings.on_message_complete = on_lhttp_complete;
+        _contextSettings.on_header_field     = on_header_field;
+        _contextSettings.on_header_value     = on_header_value;
+        _contextSettings.on_body             = on_body;
+        _contextSettings.on_message_complete = on_complete;
 
         return true;
     }
@@ -203,24 +203,24 @@ private:
         return ++_redirectCount;
     }
 
-    static int on_lhttp_header_field(llhttp_t* context, const char* at, size_t length) {
+    static int on_header_field(llhttp_t* context, const char* at, size_t length) {
 
         auto thiz = (HttpResponse*) context->data;
         thiz->_currentHeader.assign(at, length);
         std::transform(thiz->_currentHeader.begin(), thiz->_currentHeader.end(), thiz->_currentHeader.begin(), std::toupper);
         return 0;
     }
-    static int on_lhttp_header_value(llhttp_t* context, const char* at, size_t length) {
+    static int on_header_value(llhttp_t* context, const char* at, size_t length) {
         auto thiz = (HttpResponse*) context->data;
         thiz->_responseHeaders.emplace(std::move(thiz->_currentHeader), std::string{at, length});
         return 0;
     }
-    static int on_lhttp_body(llhttp_t* context, const char* at, size_t length) {
+    static int on_body(llhttp_t* context, const char* at, size_t length) {
         auto thiz = (HttpResponse*) context->data;
         thiz->_responseData.insert(thiz->_responseData.end(), at, at + length);
         return 0;
     }
-    static int on_lhttp_complete(llhttp_t* context) {
+    static int on_complete(llhttp_t* context) {
         auto thiz    = (HttpResponse*) context->data;
         thiz->_responseCode = context->status_code;
         thiz->_finished = true;
