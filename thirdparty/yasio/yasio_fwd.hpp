@@ -36,6 +36,7 @@ namespace inet
 {
 class io_service;
 class io_event;
+typedef class io_transport* transport_handle_t;
 } // namespace inet
 #if !YASIO__HAS_NS_INLINE
 using namespace yasio::inet;

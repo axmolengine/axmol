@@ -281,7 +281,7 @@ public:
     return false;
   }
 
-private:
+protected:
   std::vector<char> blob_;
 };
 
