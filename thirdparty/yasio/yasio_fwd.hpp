@@ -34,6 +34,7 @@ namespace yasio
 YASIO__NS_INLINE
 namespace inet
 {
+class highp_timer;
 class io_service;
 class io_event;
 typedef class io_transport* transport_handle_t;
