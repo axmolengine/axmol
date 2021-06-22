@@ -110,6 +110,10 @@ public:
         return &_responseData;
     }
 
+    bool isSucceed() const {
+        return _responseCode == 200;
+    }
+
     /**
      * Get the http response code to judge whether response is successful or not.
      * I know that you want to see the _responseCode is 200.

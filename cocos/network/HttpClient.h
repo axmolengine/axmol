@@ -208,9 +208,6 @@ private:
     Scheduler* _scheduler;
     std::recursive_mutex _schedulerMutex;
 
-    /*std::deque<HttpRequest*>  _requestQueue;
-    std::recursive_mutex _requestQueueMutex;*/
-
     ConcurrentDeque<HttpResponse*> _responseQueue;
 
     ConcurrentDeque<int> _availChannelQueue;
