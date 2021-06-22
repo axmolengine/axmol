@@ -133,11 +133,11 @@ HttpClient::HttpClient()
     CCLOG("In the constructor of HttpClient!");
     _scheduler = Director::getInstance()->getScheduler();
 
-    _service = new yasio::io_service(MAX_CHANNELS);
+    _service = new yasio::io_service(HttpClient::MAX_CHANNELS);
     _service->set_option(yasio::YOPT_S_DEFERRED_EVENT, 0);
     _service->start([=](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
 
-    for (int i = 0; i < MAX_CHUNKES; ++i) {
+    for (int i = 0; i < HttpClient::MAX_CHANNELS; ++i) {
         _availChannelQueue.push_back(i);
     }
 
@@ -163,10 +163,6 @@ bool HttpClient::lazyInitService() {
 bool HttpClient::send(HttpRequest* request)
 {
     if (!request)
-        return false;
- 
-    auto requestType = request->getRequestType(); 
-    if (requestType != HttpRequest::Type::POST && requestType != HttpRequest::Type::GET)
         return false;
 
     auto response = new HttpResponse(request);
@@ -238,6 +234,13 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                 obs.write_bytes("POST");
                 ispost = true;
                 break;
+            case HttpRequest::Type::DELETE:
+                obs.write_bytes("DELETE");
+                break;
+            case HttpRequest::Type::PUT:
+                obs.write_bytes("PUT");
+                ispost = true;
+                break;
             default: // other, TODO: PUT,DELETE
                 obs.write_bytes("GET");
                 break;
@@ -295,6 +298,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                 return true;
                 });
         } else {
+            response->setInternalCode(event->status());
             handleNetworkEOF(response, channelIndex);
         }
         break;
@@ -310,7 +314,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, int channelIndex) {
     case 301:
     case 307:
     case 302:
-        if (response->increaseRedirectCount() < MAX_REDIRECT_COUNT) {
+        if (response->increaseRedirectCount() < HttpClient::MAX_REDIRECT_COUNT) {
             auto iter = response->_responseHeaders.find("LOCATION");
             if (iter != response->_responseHeaders.end()) {
                 _availChannelQueue.push_back(channelIndex); 
