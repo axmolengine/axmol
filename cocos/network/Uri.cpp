@@ -2,6 +2,7 @@
  * Copyright 2017 Facebook, Inc.
  * Copyright (c) 2017 Chukong Technologies
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ * Copyright (c) 2021 Bytedance Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -198,16 +199,6 @@ bool Uri::doParse(const std::string& str)
         return false;
     }
 
-    if (hasScheme)
-    {
-        _scheme = submatch(match, 1);
-        toLower(_scheme);
-        if (_scheme == "https" || _scheme == "wss")
-        {
-            _isSecure = true;
-        }
-    }
-
     std::string authorityAndPath(match[2].first, match[2].second);
     std::smatch authorityAndPathMatch;
     if (!std::regex_match(authorityAndPath.cbegin(),
@@ -296,6 +287,25 @@ bool Uri::doParse(const std::string& str)
     } else {
         _hostName = _host;
     }
+
+    if (hasScheme) {
+        _scheme = submatch(match, 1);
+        toLower(_scheme);
+        if (_scheme == "https" || _scheme == "wss") {
+            _isSecure = true;
+            if (_port == 0)
+                _port = 443;
+        } else if (_scheme == "http" || _scheme == "ws") {
+            if (_port == 0)
+                _port = 80;
+        } else if (_scheme == "ftp") {
+            if (_port == 0)
+                _port = 21;
+        }
+    }
+
+    if (_path.empty())
+        _path.push_back('/');
 
     return true;
 }
