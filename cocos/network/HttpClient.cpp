@@ -308,6 +308,8 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
 }
 
 void HttpClient::handleNetworkEOF(HttpResponse* response, int channelIndex) {
+    _timerForRead->cancel(*_service);
+
     auto responseCode = response->getResponseCode();
     switch (responseCode) {
     case 301:
