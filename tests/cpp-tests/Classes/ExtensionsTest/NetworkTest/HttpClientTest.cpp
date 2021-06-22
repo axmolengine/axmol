@@ -41,6 +41,9 @@ HttpClientTest::HttpClientTest()
 {
     auto winSize = Director::getInstance()->getWinSize();
 
+    auto cafile = FileUtils::getInstance()->fullPathForFilename("cacert.pem");
+    HttpClient::getInstance()->setSSLVerification(cafile);
+
     const int MARGIN = 40;
     const int SPACE = 35;
 
