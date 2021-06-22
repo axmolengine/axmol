@@ -128,7 +128,7 @@ HttpClient::HttpClient()
 , _timeoutForConnect(30)
 , _timeoutForRead(10)
 , _cookie(nullptr)
-, _clearResponsePredicate(nullptr)
+, _clearPendingResponsePredicate(nullptr)
 {
     CCLOG("In the constructor of HttpClient!");
     _scheduler = Director::getInstance()->getScheduler();
@@ -183,9 +183,9 @@ int HttpClient::tryTakeAvailChannel() {
 // Process Response
 void HttpClient::processResponse(HttpResponse* response, const std::string& url) {
     auto channelIndex = tryTakeAvailChannel();
-    if (channelIndex != -1) {
-        response->retain();
+    response->retain();
 
+    if (channelIndex != -1) {
         if (response->prepareForProcess(url)) {
             auto& requestUri = response->getRequestUri();
             auto channelHandle = _service->channel_at(channelIndex);
@@ -199,8 +199,7 @@ void HttpClient::processResponse(HttpResponse* response, const std::string& url)
             finishResponse(response);
         }
     } else {
-        response->retain();
-        _responseQueue.push_back(response);
+        _pendingResponseQueue.push_back(response);
     }
 }
 
@@ -331,10 +330,10 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, int channelIndex) {
     _availChannelQueue.push_back(channelIndex); 
 
     // try process pending response
-    auto lck = _responseQueue.get_lock();
-    if (!_responseQueue.unsafe_empty()) {
-        auto pendingResponse = _responseQueue.unsafe_front();
-        _responseQueue.unsafe_pop_front();
+    auto lck = _pendingResponseQueue.get_lock();
+    if (!_pendingResponseQueue.unsafe_empty()) {
+        auto pendingResponse = _pendingResponseQueue.unsafe_front();
+        _pendingResponseQueue.unsafe_pop_front();
         lck.unlock();
 
         processResponse(pendingResponse, pendingResponse->getHttpRequest()->getUrl());
@@ -364,9 +363,9 @@ void HttpClient::finishResponse(HttpResponse* response) {
         _scheduler->performFunctionInCocosThread(cbNotify);
 }
     
-void HttpClient::clearResponseQueue() {
-    auto lck = _responseQueue.get_lock();
-    __clearQueueUnsafe(_responseQueue, ClearResponsePredicate{});
+void HttpClient::clearPendingResponseQueue() {
+    auto lck = _pendingResponseQueue.get_lock();
+    __clearQueueUnsafe(_pendingResponseQueue, ClearPendingResponsePredicate{});
 }
 
 void HttpClient::setTimeoutForConnect(int value)

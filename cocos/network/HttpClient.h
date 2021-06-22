@@ -148,14 +148,12 @@ public:
 
     std::recursive_mutex& getSSLCaFileMutex() {return _sslCaFileMutex;}
     
-    typedef std::function<bool(HttpResponse*)> ClearResponsePredicate;
+    typedef std::function<bool(HttpResponse*)> ClearPendingResponsePredicate;
 
     /**
-     * Clears the pending http responses and http requests
-     * If defined, the method uses the ClearRequestPredicate and ClearResponsePredicate
-     * to check for each request/response which to delete
+     * Clears the pending http response
      */
-    void clearResponseQueue(); 
+    void clearPendingResponseQueue(); 
 
     /**
      Sets a predicate function that is going to be called to determine if we proceed
@@ -163,7 +161,7 @@ public:
     *
     * @param cb predicate function that will be called 
     */
-    void setClearResponsePredicate(ClearResponsePredicate predicate) { _clearResponsePredicate = predicate; }
+    void setClearPendingResponsePredicate(ClearPendingResponsePredicate predicate) { _clearPendingResponsePredicate = predicate; }
 
     void setDispatchOnWorkThread(bool bVal) { _dispatchOnWorkThread = bVal; }
     bool isDispatchOnWorkThread() const { return _dispatchOnWorkThread; }
@@ -177,8 +175,6 @@ private:
      * @return bool
      */
     bool lazyInitService();
-    /** Poll function called from main thread to dispatch callbacks when http requests finished **/
-    void dispatchResponseCallbacks();
 
     void processResponse(HttpResponse* response, const std::string& url);
 
@@ -208,7 +204,7 @@ private:
     Scheduler* _scheduler;
     std::recursive_mutex _schedulerMutex;
 
-    ConcurrentDeque<HttpResponse*> _responseQueue;
+    ConcurrentDeque<HttpResponse*> _pendingResponseQueue;
 
     ConcurrentDeque<int> _availChannelQueue;
 
@@ -220,7 +216,7 @@ private:
 
     HttpCookie* _cookie;
 
-    ClearResponsePredicate _clearResponsePredicate;
+    ClearPendingResponsePredicate _clearPendingResponsePredicate;
 };
 
 } // namespace network
