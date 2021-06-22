@@ -186,7 +186,9 @@ private:
 
     void handleNetworkEvent(yasio::io_event* event);
 
-    void handleResponseDone(HttpResponse* response, int channelIndex);
+    void handleNetworkEOF(HttpResponse* response, int channelIndex);
+
+    void finishResponse(HttpResponse* response);
 
 private:
     bool _isInited;
@@ -200,6 +202,8 @@ private:
 
     int _timeoutForRead;
     std::recursive_mutex _timeoutForReadMutex;
+
+    std::shared_ptr<yasio::highp_timer> _timerForRead;
 
     Scheduler* _scheduler;
     std::recursive_mutex _schedulerMutex;

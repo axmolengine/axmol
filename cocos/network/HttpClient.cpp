@@ -119,56 +119,49 @@ void HttpClient::setSSLVerification(const std::string& caFile)
 {
     std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     _sslCaFilename = caFile;
+    _service->set_option(yasio::YOPT_S_SSL_CACERT, _sslCaFilename.c_str());
 }
 
 HttpClient::HttpClient()
 : _isInited(false)
 , _dispatchOnWorkThread(false)
 , _timeoutForConnect(30)
-, _timeoutForRead(60)
+, _timeoutForRead(10)
 , _cookie(nullptr)
 , _clearResponsePredicate(nullptr)
 {
     CCLOG("In the constructor of HttpClient!");
     _scheduler = Director::getInstance()->getScheduler();
+
+    _service = new yasio::io_service(MAX_CHANNELS);
+    _service->set_option(yasio::YOPT_S_DEFERRED_EVENT, 0);
+    _service->start([=](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
+
+    for (int i = 0; i < MAX_CHUNKES; ++i) {
+        _availChannelQueue.push_back(i);
+    }
+
+    _timerForRead = std::make_shared<highp_timer>();
+
+    _isInited = true;
 }
 
 HttpClient::~HttpClient()
 {
+    _timerForRead->cancel(*_service);
+    _timerForRead.reset();
     CC_SAFE_DELETE(_service);
     CCLOG("HttpClient destructor");
 }
 
 //Lazy create semaphore & mutex & thread
 bool HttpClient::lazyInitService() {
-    if (_isInited)
-    {
-        return true;
-    }
-    else
-    {
-        _service = new yasio::io_service(MAX_CHANNELS);
-        _service->set_option(yasio::YOPT_S_DEFERRED_EVENT, 0);
-        _service->start([=](yasio::event_ptr&& e) { 
-            handleNetworkEvent(e.get());
-        });
-
-        for (int i = 0; i < MAX_CHUNKES; ++i) {
-            _availChannelQueue.push_back(i);
-        }
-
-        _isInited = true;
-    }
-    
     return true;
 }
 
 //Add a get task to queue
 bool HttpClient::send(HttpRequest* request)
 {
-    if (!lazyInitService())
-        return false;
-    
     if (!request)
         return false;
  
@@ -195,16 +188,19 @@ int HttpClient::tryTakeAvailChannel() {
 void HttpClient::processResponse(HttpResponse* response, const std::string& url) {
     auto channelIndex = tryTakeAvailChannel();
     if (channelIndex != -1) {
+        response->retain();
+
         if (response->prepareForProcess(url)) {
             auto& requestUri = response->getRequestUri();
             auto channelHandle = _service->channel_at(channelIndex);
-            response->retain();
             channelHandle->ud_.ptr = response;
             _service->set_option(YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().c_str(), (int) requestUri.getPort());
             if (requestUri.isSecure())
                 _service->open(channelIndex, YCK_SSL_CLIENT);
             else
                 _service->open(channelIndex, YCK_TCP_CLIENT);
+        } else {
+            finishResponse(response);
         }
     } else {
         response->retain();
@@ -292,17 +288,23 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             }
 
             _service->write(event->transport(), std::move(obs.buffer()));
+            _timerForRead->cancel(*_service);
+            _timerForRead->expires_from_now(std::chrono::seconds(this->_timeoutForRead));
+            _timerForRead->async_wait(*_service, [=](io_service& s) {
+                s.close(channelIndex); // timeout
+                return true;
+                });
         } else {
-            handleResponseDone(response, channelIndex);
+            handleNetworkEOF(response, channelIndex);
         }
         break;
     case YEK_ON_CLOSE:
-        handleResponseDone(response, channelIndex);
+        handleNetworkEOF(response, channelIndex);
         break;
     }
 }
 
-void HttpClient::handleResponseDone(HttpResponse* response, int channelIndex) {
+void HttpClient::handleNetworkEOF(HttpResponse* response, int channelIndex) {
     auto responseCode = response->getResponseCode();
     switch (responseCode) {
     case 301:
@@ -319,25 +321,7 @@ void HttpClient::handleResponseDone(HttpResponse* response, int channelIndex) {
         }
     }
 
-    auto cbNotify = [=]() {
-        HttpRequest* request                  = response->getHttpRequest();
-        const ccHttpRequestCallback& callback = request->getCallback();
-        Ref* pTarget                          = request->getTarget();
-        SEL_HttpResponse pSelector            = request->getSelector();
-
-        if (callback != nullptr) {
-            callback(this, response);
-        } else if (pTarget && pSelector) {
-            (pTarget->*pSelector)(this, response);
-        }
-
-        response->release();
-    };
-
-    if (!_dispatchOnWorkThread)
-        _scheduler->performFunctionInCocosThread(cbNotify);
-    else
-        cbNotify();
+    finishResponse(response);
 
     // recycle channel
     _availChannelQueue.push_back(channelIndex); 
@@ -353,6 +337,28 @@ void HttpClient::handleResponseDone(HttpResponse* response, int channelIndex) {
         pendingResponse->release();
     }
 }
+
+void HttpClient::finishResponse(HttpResponse* response) {
+    auto cbNotify = [=]() {
+        HttpRequest* request                  = response->getHttpRequest();
+        const ccHttpRequestCallback& callback = request->getCallback();
+        Ref* pTarget                          = request->getTarget();
+        SEL_HttpResponse pSelector            = request->getSelector();
+
+        if (callback != nullptr) {
+            callback(this, response);
+        } else if (pTarget && pSelector) {
+            (pTarget->*pSelector)(this, response);
+        }
+
+        response->release();
+    };
+
+    if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId())
+        cbNotify();
+    else
+        _scheduler->performFunctionInCocosThread(cbNotify);
+}
     
 void HttpClient::clearResponseQueue() {
     auto lck = _responseQueue.get_lock();
@@ -363,6 +369,7 @@ void HttpClient::setTimeoutForConnect(int value)
 {
     std::lock_guard<std::recursive_mutex> lock(_timeoutForConnectMutex);
     _timeoutForConnect = value;
+    _service->set_option(YOPT_S_CONNECT_TIMEOUT, value);
 }
     
 int HttpClient::getTimeoutForConnect()

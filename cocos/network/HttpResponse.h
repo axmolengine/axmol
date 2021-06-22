@@ -157,19 +157,19 @@ private:
      */
     bool prepareForProcess(const std::string& url)
     {
-        Uri uri = Uri::parse(url);
-        if (!uri.isValid())
-            return false;
-        
         /* Resets response status */
-        _requestUri = std::move(uri);
         _finished    = false;
         _responseData.clear();
         _currentHeader.clear();
         _responseHeaders.clear();
         _responseCode = -1;
-        _internalCode = -1;
+        _internalCode = 0;
 
+        Uri uri = Uri::parse(url);
+        if (!uri.isValid())
+            return false;
+
+        _requestUri = std::move(uri);
         
         /* Initialize user callbacks and settings */
         llhttp_settings_init(&_contextSettings);
