@@ -27,6 +27,7 @@
 
 #ifndef __HTTP_RESPONSE__
 #define __HTTP_RESPONSE__
+#include <ctype.h>
 #include <unordered_map>
 #include "network/HttpRequest.h"
 #include "network/Uri.h"
@@ -213,7 +214,7 @@ private:
 
         auto thiz = (HttpResponse*) context->data;
         thiz->_currentHeader.assign(at, length);
-        std::transform(thiz->_currentHeader.begin(), thiz->_currentHeader.end(), thiz->_currentHeader.begin(), std::toupper);
+        std::transform(thiz->_currentHeader.begin(), thiz->_currentHeader.end(), thiz->_currentHeader.begin(), ::toupper);
         return 0;
     }
     static int on_header_value(llhttp_t* context, const char* at, size_t length) {

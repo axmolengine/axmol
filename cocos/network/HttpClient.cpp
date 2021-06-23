@@ -28,6 +28,7 @@
 
 #include "network/HttpClient.h"
 #include <errno.h>
+#include "base/ccUtils.h"
 #include "base/CCDirector.h"
 #include "platform/CCFileUtils.h"
 #include "yasio/yasio.hpp"
