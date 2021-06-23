@@ -159,6 +159,10 @@ if(BUILD_EXT_PUGIXML)
     configure_target_outdir(pugixml)
 endif(BUILD_EXT_PUGIXML)
 
+add_subdirectory(xxhash)
+target_link_libraries(thirdparty xxhash)
+configure_target_outdir(xxhash)
+
 add_subdirectory(lz4)
 target_link_libraries(thirdparty lz4)
 configure_target_outdir(lz4)
