@@ -152,11 +152,11 @@ destroy(cpSpace *space)
 	cpSpaceFree(space);
 }
 
-//ChipmunkDemo Springies = {
-//	"Springies",
-//	1.0/60.0,
-//	init,
-//	update,
-//	ChipmunkDemoDefaultDrawImpl,
-//	destroy,
-//};
+ChipmunkDemo Springies = {
+	"Springies",
+	1.0/60.0,
+	init,
+	update,
+	ChipmunkDemoDefaultDrawImpl,
+	destroy,
+};

@@ -54,7 +54,7 @@ update(cpSpace *space, double dt)
 static cpSpace *
 init(void)
 {
-//	ChipmunkDemoMessageString = "One way platforms are trivial in Chipmunk using a very simple collision callback.";
+	ChipmunkDemoMessageString = "One way platforms are trivial in Chipmunk using a very simple collision callback.";
 	
 	cpSpace *space = cpSpaceNew();
 	cpSpaceSetIterations(space, 10);

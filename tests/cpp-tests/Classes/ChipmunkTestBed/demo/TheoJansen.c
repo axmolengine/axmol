@@ -91,7 +91,7 @@ make_leg(cpSpace *space, cpFloat side, cpFloat offset, cpBody *chassis, cpBody *
 static cpSpace *
 init(void)
 {
-//	ChipmunkDemoMessageString = "Use the arrow keys to control the machine.";
+	ChipmunkDemoMessageString = "Use the arrow keys to control the machine.";
 	
 	cpSpace *space = cpSpaceNew();
 	cpSpaceSetIterations(space, 20);
@@ -157,11 +157,11 @@ destroy(cpSpace *space)
 	cpSpaceFree(space);
 }
 
-//ChipmunkDemo TheoJansen = {
-//	"Theo Jansen Machine",
-//	1.0/180.0,
-//	init,
-//	update,
-//	ChipmunkDemoDefaultDrawImpl,
-//	destroy,
-//};
+ChipmunkDemo TheoJansen = {
+	"Theo Jansen Machine",
+	1.0/180.0,
+	init,
+	update,
+	ChipmunkDemoDefaultDrawImpl,
+	destroy,
+};

@@ -130,7 +130,7 @@ update(cpSpace *space, double dt)
 static cpSpace *
 init(void)
 {
-	//ChipmunkDemoMessageString = "Sticky collisions using the cpArbiter data pointer.";
+	ChipmunkDemoMessageString = "Sticky collisions using the cpArbiter data pointer.";
 	
 	cpSpace *space = cpSpaceNew();
 	cpSpaceSetIterations(space, 10);
@@ -187,11 +187,11 @@ destroy(cpSpace *space)
 	cpSpaceFree(space);
 }
 
-//ChipmunkDemo Sticky = {
-//	"Sticky Surfaces",
-//	1.0/60.0,
-//	init,
-//	update,
-//	ChipmunkDemoDefaultDrawImpl,
-//	destroy,
-//};
+ChipmunkDemo Sticky = {
+	"Sticky Surfaces",
+	1.0/60.0,
+	init,
+	update,
+	ChipmunkDemoDefaultDrawImpl,
+	destroy,
+};
