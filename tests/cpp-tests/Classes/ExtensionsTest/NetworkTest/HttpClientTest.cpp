@@ -127,11 +127,13 @@ HttpClientTest::~HttpClientTest()
 
 void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender, bool isImmediate)
 {    
+    const std::string chromeUA = "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36";
     // test 1
     {
         HttpRequest* request = new (std::nothrow) HttpRequest();
         request->setUrl("https://just-make-this-request-failed.com");
         request->setRequestType(HttpRequest::Type::GET);
+        request->setHeaders(std::vector<std::string>{chromeUA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         if (isImmediate)
         {
@@ -151,6 +153,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender, bool isImmediate
         // required fields
         request->setUrl("https://httpbin.org/ip");
         request->setRequestType(HttpRequest::Type::GET);
+        request->setHeaders(std::vector<std::string>{chromeUA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         if (isImmediate)
         {
@@ -170,6 +173,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender, bool isImmediate
         HttpRequest* request = new (std::nothrow) HttpRequest();
         request->setUrl("https://httpbin.org/get");
         request->setRequestType(HttpRequest::Type::GET);
+        request->setHeaders(std::vector<std::string>{chromeUA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         if (isImmediate)
         {

@@ -223,23 +223,29 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
     case YEK_ON_OPEN:
         if (event->status() == 0) {
             obstream obs;
-            bool ispost  = false;
+            enum {
+                USE_URL_PARAMS = 1,
+                USE_POST_DATA = 1 << 1,
+            };
+            int flags    = 0;
             auto request = response->getHttpRequest();
             auto& uri = response->getRequestUri();
             switch (request->getRequestType()) { 
             case HttpRequest::Type::GET:
                 obs.write_bytes("GET");
+                flags |= USE_URL_PARAMS;
                 break;
             case HttpRequest::Type::POST:
                 obs.write_bytes("POST");
-                ispost = true;
+                flags |= USE_POST_DATA;
                 break;
             case HttpRequest::Type::DELETE:
                 obs.write_bytes("DELETE");
+                flags |= USE_URL_PARAMS;
                 break;
             case HttpRequest::Type::PUT:
                 obs.write_bytes("PUT");
-                ispost = true;
+                flags |= USE_POST_DATA;
                 break;
             default:
                 obs.write_bytes("GET");
@@ -247,25 +253,30 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             }
             obs.write_bytes(" ");
             obs.write_bytes(uri.getPath());
-            auto& query = uri.getQuery();
-            if (!query.empty()) {
-                auto encodedQuery = urlencodeQuery(query);
-                obs.write_byte('?');
-                obs.write_bytes(encodedQuery);
+            if (flags & USE_URL_PARAMS) {
+                auto& query = uri.getQuery();
+                if (!query.empty()) {
+                    auto encodedQuery = urlencodeQuery(query);
+                    obs.write_byte('?');
+                    obs.write_bytes(encodedQuery);
+                }
             }
             obs.write_bytes(" HTTP/1.1\r\n");
 
             std::string encodedRequestData;
-            if (ispost) {
+            if (flags & USE_POST_DATA) {
                 // obs.write_bytes("Origin: yasio\r\n");
                 obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
                 auto requestData = request->getRequestData();
                 auto requestDataSize = request->getRequestDataSize();
+
                 if (requestData && request->getRequestDataSize() > 0) {
                     encodedRequestData = urlencodeQuery(cxx17::string_view(requestData, requestDataSize));
-                    auto lenField      = yasio::strfmt(63, "Content-Length: %d\r\n", (int) encodedRequestData.size());
-                    obs.write_bytes(lenField);
                 }
+
+                char strContentLength[128] = {0};
+                sprintf(strContentLength, "Content-Length: %d\r\n", (int) encodedRequestData.size());
+                obs.write_bytes(strContentLength);
             }
             obs.write_bytes("Host: ");
             obs.write_bytes(uri.getHost());
@@ -288,7 +299,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             obs.write_bytes("Accept: */*;q=0.8\r\n");
             obs.write_bytes("Connection: Close\r\n\r\n");
 
-            if (ispost && !encodedRequestData.empty()) {
+            if (flags & USE_POST_DATA) {
                 obs.write_bytes(encodedRequestData);
             }
 
