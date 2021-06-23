@@ -71,6 +71,15 @@ extern cpShapeFilter NOT_GRABBABLE_FILTER;
 
 void ChipmunkDemoDefaultDrawImpl(cpSpace* space);
 void ChipmunkDemoFreeSpaceChildren(cpSpace* space);
+void ChipmunkDebugDrawCircle(
+    cpVect pos, cpFloat angle, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor);
+void ChipmunkDebugDrawSegment(cpVect a, cpVect b, cpSpaceDebugColor color);
+void ChipmunkDebugDrawFatSegment(
+    cpVect a, cpVect b, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor);
+void ChipmunkDebugDrawPolygon(
+    int count, const cpVect* verts, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor);
 void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor);
+void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor outlineColor);
+cpSpaceDebugColor LAColor(float l, float a);
 cpSpaceDebugColor RGBAColor(float r, float g, float b, float a);
 
