@@ -128,7 +128,7 @@ HttpClient::HttpClient()
 , _timeoutForConnect(30)
 , _timeoutForRead(10)
 , _cookie(nullptr)
-, _clearPendingResponsePredicate(nullptr)
+, _clearResponsePredicate(nullptr)
 {
     CCLOG("In the constructor of HttpClient!");
     _scheduler = Director::getInstance()->getScheduler();
@@ -168,6 +168,7 @@ bool HttpClient::send(HttpRequest* request)
     auto response = new HttpResponse(request);
     processResponse(response, request->getUrl());
     response->release();
+    return true;
 }
 
 int HttpClient::tryTakeAvailChannel() {
@@ -199,10 +200,10 @@ void HttpClient::processResponse(HttpResponse* response, const std::string& url)
             finishResponse(response);
         }
     } else {
-        _pendingResponseQueue.push_back(response);
+        _responseQueue.push_back(response);
     }
 }
-
+ 
 void HttpClient::handleNetworkEvent(yasio::io_event* event) {
     int channelIndex     = event->cindex();
     auto channel         = _service->channel_at(event->cindex());
@@ -240,7 +241,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                 obs.write_bytes("PUT");
                 ispost = true;
                 break;
-            default: // other, TODO: PUT,DELETE
+            default:
                 obs.write_bytes("GET");
                 break;
             }
@@ -269,9 +270,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             obs.write_bytes("Host: ");
             obs.write_bytes(uri.getHost());
             obs.write_bytes("\r\n");
-            obs.write_bytes("User-Agent: ");
-            obs.write_bytes("yasio-http");
-            obs.write_bytes("\r\n");
+
 
             // custom headers
             auto& headers = request->getHeaders();
@@ -280,6 +279,10 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                     obs.write_bytes(header);
                     obs.write_bytes("\r\n");
                 }
+            } else {
+                obs.write_bytes("User-Agent: ");
+                obs.write_bytes("yasio-http");
+                obs.write_bytes("\r\n");
             }
 
             obs.write_bytes("Accept: */*;q=0.8\r\n");
@@ -332,10 +335,10 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, int channelIndex) {
     _availChannelQueue.push_back(channelIndex); 
 
     // try process pending response
-    auto lck = _pendingResponseQueue.get_lock();
-    if (!_pendingResponseQueue.unsafe_empty()) {
-        auto pendingResponse = _pendingResponseQueue.unsafe_front();
-        _pendingResponseQueue.unsafe_pop_front();
+    auto lck = _responseQueue.get_lock();
+    if (!_responseQueue.unsafe_empty()) {
+        auto pendingResponse = _responseQueue.unsafe_front();
+        _responseQueue.unsafe_pop_front();
         lck.unlock();
 
         processResponse(pendingResponse, pendingResponse->getHttpRequest()->getUrl());
@@ -365,9 +368,9 @@ void HttpClient::finishResponse(HttpResponse* response) {
         _scheduler->performFunctionInCocosThread(cbNotify);
 }
     
-void HttpClient::clearPendingResponseQueue() {
-    auto lck = _pendingResponseQueue.get_lock();
-    __clearQueueUnsafe(_pendingResponseQueue, ClearPendingResponsePredicate{});
+void HttpClient::clearResponseQueue() {
+    auto lck = _responseQueue.get_lock();
+    __clearQueueUnsafe(_responseQueue, ClearResponsePredicate{});
 }
 
 void HttpClient::setTimeoutForConnect(int value)

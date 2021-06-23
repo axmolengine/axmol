@@ -472,8 +472,8 @@ void HttpClientClearRequestsTest::onMenuCancelAllClicked(cocos2d::Ref *sender)
     _totalProcessedRequests = 0;
     _totalExpectedRequests = 1;
     
-    HttpClient::getInstance()->setClearPendingResponsePredicate(nullptr);
-    HttpClient::getInstance()->clearPendingResponseQueue();
+    HttpClient::getInstance()->setClearResponsePredicate(nullptr);
+    HttpClient::getInstance()->clearResponseQueue();
     
     // waiting
     _labelStatusCode->setString("waiting...");
@@ -509,8 +509,8 @@ void HttpClientClearRequestsTest::onMenuCancelSomeClicked(cocos2d::Ref *sender)
                                                              auto r = !!strstr(req->getTag(), "DELETE_");
                                                              return r;
                                                          });*/
-    HttpClient::getInstance()->setClearPendingResponsePredicate(nullptr);
-    HttpClient::getInstance()->clearPendingResponseQueue();
+    HttpClient::getInstance()->setClearResponsePredicate(nullptr);
+    HttpClient::getInstance()->clearResponseQueue();
     
     
     // waiting

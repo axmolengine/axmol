@@ -148,12 +148,12 @@ public:
 
     std::recursive_mutex& getSSLCaFileMutex() {return _sslCaFileMutex;}
     
-    typedef std::function<bool(HttpResponse*)> ClearPendingResponsePredicate;
+    typedef std::function<bool(HttpResponse*)> ClearResponsePredicate;
 
     /**
      * Clears the pending http response
      */
-    void clearPendingResponseQueue(); 
+    void clearResponseQueue(); 
 
     /**
      Sets a predicate function that is going to be called to determine if we proceed
@@ -161,7 +161,7 @@ public:
     *
     * @param cb predicate function that will be called 
     */
-    void setClearPendingResponsePredicate(ClearPendingResponsePredicate predicate) { _clearPendingResponsePredicate = predicate; }
+    void setClearResponsePredicate(ClearResponsePredicate predicate) { _clearResponsePredicate = predicate; }
 
     void setDispatchOnWorkThread(bool bVal) { _dispatchOnWorkThread = bVal; }
     bool isDispatchOnWorkThread() const { return _dispatchOnWorkThread; }
@@ -204,7 +204,7 @@ private:
     Scheduler* _scheduler;
     std::recursive_mutex _schedulerMutex;
 
-    ConcurrentDeque<HttpResponse*> _pendingResponseQueue;
+    ConcurrentDeque<HttpResponse*> _responseQueue;
 
     ConcurrentDeque<int> _availChannelQueue;
 
@@ -216,7 +216,7 @@ private:
 
     HttpCookie* _cookie;
 
-    ClearPendingResponsePredicate _clearPendingResponsePredicate;
+    ClearResponsePredicate _clearResponsePredicate;
 };
 
 } // namespace network

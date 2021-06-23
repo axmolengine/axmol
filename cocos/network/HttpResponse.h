@@ -27,7 +27,7 @@
 
 #ifndef __HTTP_RESPONSE__
 #define __HTTP_RESPONSE__
-#include <map>
+#include <unordered_map>
 #include "network/HttpRequest.h"
 #include "network/Uri.h"
 #include "llhttp/llhttp.h"
@@ -52,6 +52,8 @@ class CC_DLL HttpResponse : public cocos2d::Ref
 {
     friend class HttpClient;
 public:
+    using ResponseHeaderMap = std::unordered_map<std::string, std::string>;
+
     /**
      * Constructor, it's used by HttpClient internal, users don't need to create HttpResponse manually.
      * @param request the corresponding HttpRequest which leads to this response.
@@ -137,6 +139,10 @@ public:
 
     int getRedirectCount() const {
         return _redirectCount;
+    }
+
+    const ResponseHeaderMap& getResponseHeaders() const {
+        return _responseHeaders;
     }
 
 private:
@@ -228,6 +234,7 @@ private:
     }
 
 protected:
+
     // properties
     HttpRequest*        _pHttpRequest;  /// the corresponding HttpRequest pointer who leads to this response
     int                 _redirectCount = 0;
@@ -236,7 +243,7 @@ protected:
     bool                _finished = false;       /// to indicate if the http request is successful simply
     std::vector<char>   _responseData;  /// the returned raw data. You can also dump it as a string
     std::string         _currentHeader;
-    std::map<std::string, std::string> _responseHeaders;  /// the returned raw header data. You can also dump it as a string
+    ResponseHeaderMap   _responseHeaders; /// the returned raw header data. You can also dump it as a string
     int                 _responseCode = -1;    /// the status code returned from libcurl, e.g. 200, 404
     int                 _internalCode = 0;   /// the ret code of perform
     llhttp_t            _context;
