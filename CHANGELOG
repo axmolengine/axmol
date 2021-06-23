@@ -1,4 +1,4 @@
-adxe-1.0
+adxe-1.0  ??
 
 [Feature] Improve Lua RTTI performance and less memory storage
 [Feature] Virtual File System support, thanks  to @rh101 
@@ -20,7 +20,8 @@ adxe-1.0
 [Refine] Update imgui to 1.84 WIP
 [Refine] Rename thirdparty folder `external` to `thirdparty`
 
-cocos2d-x-4.0  ??
+
+cocos2d-x-4.0  Dec.3 2019
 
 [HIGHLIGHT]     Support metal
 [HIGHLIGHT]     Use CMake for all platforms
@@ -38,6 +39,7 @@ cocos2d-x-4.0  ??
 [FIX]           UIWebView uses WKWebView instead
 [FIX]           VideoPlayer uses AVPlayerController instead
 [FX]            lua crashes on 64it devcices 
+
 
 cocos2d-x-3.17 May.21 2018
 
