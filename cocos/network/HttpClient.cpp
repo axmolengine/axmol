@@ -142,16 +142,12 @@ HttpClient::HttpClient()
         _availChannelQueue.push_back(i);
     }
 
-    _timerForRead = std::make_shared<highp_timer>();
-
     _isInited = true;
 }
 
 HttpClient::~HttpClient()
 {
-    _timerForRead->cancel(*_service);
-    _timerForRead.reset();
-    CC_SAFE_DELETE(_service);
+    delete _service;
     CCLOG("HttpClient destructor");
 }
 
@@ -305,25 +301,27 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             }
 
             _service->write(event->transport(), std::move(obs.buffer()));
-            _timerForRead->cancel(*_service);
-            _timerForRead->expires_from_now(std::chrono::seconds(this->_timeoutForRead));
-            _timerForRead->async_wait(*_service, [=](io_service& s) {
+
+            auto& timerForRead = channel->get_user_timer();
+            timerForRead.cancel(*_service);
+            timerForRead.expires_from_now(std::chrono::seconds(this->_timeoutForRead));
+            timerForRead.async_wait(*_service, [=](io_service& s) {
                 s.close(channelIndex); // timeout
                 return true;
                 });
         } else {
             response->setInternalCode(event->status());
-            handleNetworkEOF(response, channelIndex);
+            handleNetworkEOF(response, channel);
         }
         break;
     case YEK_ON_CLOSE:
-        handleNetworkEOF(response, channelIndex);
+        handleNetworkEOF(response, channel);
         break;
     }
 }
 
-void HttpClient::handleNetworkEOF(HttpResponse* response, int channelIndex) {
-    _timerForRead->cancel(*_service);
+void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* channel) {
+    channel->get_user_timer().cancel(*_service);
 
     auto responseCode = response->getResponseCode();
     switch (responseCode) {
@@ -333,7 +331,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, int channelIndex) {
         if (response->increaseRedirectCount() < HttpClient::MAX_REDIRECT_COUNT) {
             auto iter = response->_responseHeaders.find("LOCATION");
             if (iter != response->_responseHeaders.end()) {
-                _availChannelQueue.push_back(channelIndex); 
+                _availChannelQueue.push_back(channel->index()); 
                 processResponse(response, iter->second);
                 response->release();
                 return;
@@ -344,7 +342,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, int channelIndex) {
     finishResponse(response);
 
     // recycle channel
-    _availChannelQueue.push_back(channelIndex); 
+    _availChannelQueue.push_back(channel->index()); 
 
     // try process pending response
     auto lck = _responseQueue.get_lock();

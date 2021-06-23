@@ -346,6 +346,9 @@ struct io_hostent {
 
 class YASIO_API highp_timer {
 public:
+  highp_timer() = default;
+  highp_timer(const highp_timer&) = delete;
+  highp_timer(highp_timer&&) = delete;
   void expires_from_now(const std::chrono::microseconds& duration)
   {
     this->duration_    = duration;
@@ -486,6 +489,9 @@ public:
   long long bytes_transferred() const { return bytes_transferred_; }
   unsigned int connect_id() const { return connect_id_; }
 
+#if !defined(YASIO_NO_USER_TIMER)
+  highp_timer& get_user_timer() { return this->user_timer_; }
+#endif
 protected:
   YASIO__DECL void enable_multicast_group(const ip::endpoint& ep, int loopback);
   YASIO__DECL int join_multicast_group();
@@ -542,6 +548,10 @@ private:
   // The timer for check resolve & connect timeout
   highp_timer timer_;
 
+#if !defined(YASIO_NO_USER_TIMER)
+  // The timer for user
+  highp_timer user_timer_;
+#endif
   // The stream mode application protocol (based on tcp/udp/kcp) unpack params
   struct __unnamed01 {
     int max_frame_length       = YASIO_SZ(10, M); // 10MBytes
