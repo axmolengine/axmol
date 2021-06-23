@@ -63,13 +63,14 @@ SOFTWARE.
 #      include <endian.h> // __BYTE_ORDER
 #    endif
 #  endif
-#  if ((defined(__LITTLE_ENDIAN__) && !defined(__BIG_ENDIAN__)) || (defined(__BYTE_ORDER) && __BYTE_ORDER == __LITTLE_ENDIAN)) &&                              \
+#  if ((defined(__LITTLE_ENDIAN__) && !defined(__BIG_ENDIAN__)) || (defined(__BYTE_ORDER) && __BYTE_ORDER == __LITTLE_ENDIAN)) && \
       !defined(YASIO_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
 #    define YASIO_LITTLE_ENDIAN 1
 #  endif
 #endif
 
-#if YASIO_LITTLE_ENDIAN
+#if defined(YASIO_LITTLE_ENDIAN)
+#  pragma message("Building yasio on LITTLE ENDIAN machine")
 // clang-format off
 #  define YASIO__SWAP_SHORT(s) s = ((((s) >> 8) & 0x00ff) | (((s) << 8) & 0xff00))
 /*
@@ -93,6 +94,7 @@ SOFTWARE.
               ( ((l) << 40) & 0x00FF000000000000LL ) |    \
               ( ((l) << 56) & 0xFF00000000000000LL ) )
 #else
+#  pragma message("Building yasio on BIG ENDIAN machine")
 #  define YASIO__SWAP_SHORT(s) (void)s
 #  define YASIO__SWAP_LONG(l) (void)l
 #  define YASIO__SWAP_LONGLONG(l) (void)l

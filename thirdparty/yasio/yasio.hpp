@@ -793,21 +793,21 @@ inline io_packet::size_type packet_len(packet_t& pkt) { return pkt->size(); }
 class io_event final {
 public:
   io_event(int cidx, int kind, int status, io_channel* source /*not nullable*/, int passive = 0)
-      : kind_(kind), passive_(passive), writable_(0), status_(status), cindex_(cidx), source_id_(source->id_), source_(source)
+      : kind_(kind), writable_(0), passive_(passive), status_(status), cindex_(cidx), source_id_(source->id_), source_(source)
   {
 #if !defined(YASIO_MINIFY_EVENT)
     source_ud_ = source_->ud_.ptr;
 #endif
   }
   io_event(int cidx, int kind, int status, io_transport* source /*not nullable*/)
-      : kind_(kind), passive_(0), writable_(1), status_(status), cindex_(cidx), source_id_(source->id_), source_(source)
+      : kind_(kind), writable_(1), passive_(0), status_(status), cindex_(cidx), source_id_(source->id_), source_(source)
   {
 #if !defined(YASIO_MINIFY_EVENT)
     source_ud_ = source_->ud_.ptr;
 #endif
   }
   io_event(int cidx, io_packet&& pkt, io_transport* source /*not nullable*/)
-      : kind_(YEK_ON_PACKET), passive_(0), writable_(1), status_(0), cindex_(cidx), source_id_(source->id_), source_(source), packet_(wrap_packet(pkt))
+      : kind_(YEK_ON_PACKET), writable_(1), passive_(0), status_(0), cindex_(cidx), source_id_(source->id_), source_(source), packet_(wrap_packet(pkt))
   {
 #if !defined(YASIO_MINIFY_EVENT)
     source_ud_ = source_->ud_.ptr;
