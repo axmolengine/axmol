@@ -198,7 +198,7 @@ update(cpSpace *space, double dt)
 static cpSpace *
 init(void)
 {
-	//ChipmunkDemoMessageString = "Right click something to shatter it.";
+	ChipmunkDemoMessageString = "Right click something to shatter it.";
 	
 	cpSpace *space = cpSpaceNew();
 	cpSpaceSetIterations(space, 30);
@@ -235,11 +235,11 @@ destroy(cpSpace *space)
 	cpSpaceFree(space);
 }
 
-//ChipmunkDemo Shatter = {
-//	"Shatter.",
-//	1.0f/60.0f,
-//	init,
-//	update,
-//	ChipmunkDemoDefaultDrawImpl,
-//	destroy,
-//};
+ChipmunkDemo Shatter = {
+	"Shatter.",
+	1.0f/60.0f,
+	init,
+	update,
+	ChipmunkDemoDefaultDrawImpl,
+	destroy,
+};

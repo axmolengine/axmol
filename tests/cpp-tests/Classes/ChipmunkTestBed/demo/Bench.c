@@ -448,35 +448,35 @@ static void destroy(cpSpace *space){
 	BENCH_SPACE_FREE(space);
 }
 
-//// Make a second demo declaration for this demo to use in the regular demo set.
-//ChipmunkDemo BouncyHexagons = {
-//	"Bouncy Hexagons",
-//	1.0/60.0,
-//	init_BouncyTerrainHexagons_500,
-//	update,
-//	ChipmunkDemoDefaultDrawImpl,
-//	destroy,
-//};
+// Make a second demo declaration for this demo to use in the regular demo set.
+ChipmunkDemo BouncyHexagons = {
+	"Bouncy Hexagons",
+	1.0/60.0,
+	init_BouncyTerrainHexagons_500,
+	update,
+	ChipmunkDemoDefaultDrawImpl,
+	destroy,
+};
 
-//#define BENCH(n) {"benchmark - " #n, 1.0/60.0, init_##n, update, 	ChipmunkDemoDefaultDrawImpl, destroy}
-//ChipmunkDemo bench_list[] = {
-//	BENCH(SimpleTerrainCircles_1000),
-//	BENCH(SimpleTerrainCircles_500),
-//	BENCH(SimpleTerrainCircles_100),
-//	BENCH(SimpleTerrainBoxes_1000),
-//	BENCH(SimpleTerrainBoxes_500),
-//	BENCH(SimpleTerrainBoxes_100),
-//	BENCH(SimpleTerrainHexagons_1000),
-//	BENCH(SimpleTerrainHexagons_500),
-//	BENCH(SimpleTerrainHexagons_100),
-//	BENCH(SimpleTerrainVCircles_200),
-//	BENCH(SimpleTerrainVBoxes_200),
-//	BENCH(SimpleTerrainVHexagons_200),
-//	BENCH(ComplexTerrainCircles_1000),
-//	BENCH(ComplexTerrainHexagons_1000),
-//	BENCH(BouncyTerrainCircles_500),
-//	BENCH(BouncyTerrainHexagons_500),
-//	BENCH(NoCollide),
-//};
-//
-//int bench_count = sizeof(bench_list)/sizeof(ChipmunkDemo);
+#define BENCH(n) {"benchmark - " #n, 1.0/60.0, init_##n, update, 	ChipmunkDemoDefaultDrawImpl, destroy}
+ChipmunkDemo bench_list[] = {
+	BENCH(SimpleTerrainCircles_1000),
+	BENCH(SimpleTerrainCircles_500),
+	BENCH(SimpleTerrainCircles_100),
+	BENCH(SimpleTerrainBoxes_1000),
+	BENCH(SimpleTerrainBoxes_500),
+	BENCH(SimpleTerrainBoxes_100),
+	BENCH(SimpleTerrainHexagons_1000),
+	BENCH(SimpleTerrainHexagons_500),
+	BENCH(SimpleTerrainHexagons_100),
+	BENCH(SimpleTerrainVCircles_200),
+	BENCH(SimpleTerrainVBoxes_200),
+	BENCH(SimpleTerrainVHexagons_200),
+	BENCH(ComplexTerrainCircles_1000),
+	BENCH(ComplexTerrainHexagons_1000),
+	BENCH(BouncyTerrainCircles_500),
+	BENCH(BouncyTerrainHexagons_500),
+	BENCH(NoCollide),
+};
+
+int bench_count = sizeof(bench_list)/sizeof(ChipmunkDemo);
