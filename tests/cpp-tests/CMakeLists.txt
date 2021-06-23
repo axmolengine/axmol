@@ -408,6 +408,12 @@ if(WINDOWS)
         Classes/ChipmunkTestBed/Demo/Sticky.c
         Classes/ChipmunkTestBed/Demo/Tank.c
         Classes/ChipmunkTestBed/Demo/TheoJansen.c
+        Classes/ChipmunkTestBed/Demo/Buoyancy.c
+        Classes/ChipmunkTestBed/Demo/ContactGraph.c
+        Classes/ChipmunkTestBed/Demo/Example.c
+        Classes/ChipmunkTestBed/Demo/Query.c
+        Classes/ChipmunkTestBed/Demo/Slice.c
+        Classes/ChipmunkTestBed/Demo/Unicycle.c
         Classes/ChipmunkTestBed/Demo/Tumble.c)
         set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
 		list(APPEND GAME_SOURCE
