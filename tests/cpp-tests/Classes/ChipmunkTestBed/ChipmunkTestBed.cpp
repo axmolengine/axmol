@@ -224,8 +224,6 @@ ChipmunkTestBed::~ChipmunkTestBed() {
 
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
-    Size designSize(480, 320);
-    glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
 
     _eventDispatcher->removeEventListener(_mouseListener);
 }

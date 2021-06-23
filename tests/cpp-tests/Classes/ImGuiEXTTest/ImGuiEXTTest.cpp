@@ -38,10 +38,6 @@ void ImGuiEXTTest::onExit()
 
     ImGuiEXT::destroyInstance();
 
-    static Size resourceSize(960, 640);
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
-    view->setWindowed(resourceSize.width, resourceSize.height);
-
     TestCase::onExit();
 }
 
