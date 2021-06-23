@@ -70,7 +70,7 @@ update(cpSpace *space, double dt)
 static cpSpace *
 init(void)
 {
-//	ChipmunkDemoMessageString = "Right click and drag to change the blocks's shape.";
+	ChipmunkDemoMessageString = "Right click and drag to change the blocks's shape.";
 	
 	cpSpace *space = cpSpaceNew();
 	cpSpaceSetIterations(space, 30);
@@ -105,12 +105,12 @@ destroy(cpSpace *space)
 	ChipmunkDemoFreeSpaceChildren(space);
 	cpSpaceFree(space);
 }
-//
-//ChipmunkDemo Convex = {
-//	"Convex.",
-//	1.0/60.0,
-//	init,
-//	update,
-//	ChipmunkDemoDefaultDrawImpl,
-//	destroy,
-//};
+
+ChipmunkDemo Convex = {
+	"Convex.",
+	1.0/60.0,
+	init,
+	update,
+	ChipmunkDemoDefaultDrawImpl,
+	destroy,
+};

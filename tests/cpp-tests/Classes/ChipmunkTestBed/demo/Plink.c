@@ -39,19 +39,20 @@ eachBody(cpBody *body, void *unused)
 static void
 update(cpSpace *space, double dt)
 {
-	//if(ChipmunkDemoRightDown){
-	//	cpShape *nearest = cpSpacePointQueryNearest(space, ChipmunkDemoMouse, 0.0, GRAB_FILTER, NULL);
-	//	if(nearest){
-	//		cpBody *body = cpShapeGetBody(nearest);
-	//		if(cpBodyGetType(body) == CP_BODY_TYPE_STATIC){
-	//			cpBodySetType(body, CP_BODY_TYPE_DYNAMIC);
-	//			cpBodySetMass(body, pentagon_mass);
-	//			cpBodySetMoment(body, pentagon_moment);
-	//		} else if(cpBodyGetType(body) == CP_BODY_TYPE_DYNAMIC) {
-	//			cpBodySetType(body, CP_BODY_TYPE_STATIC);
-	//		}
-	//	}
-	//}
+	if(ChipmunkDemoRightDown){
+        ChipmunkDemoRightDown = cpFalse;
+		cpShape *nearest = cpSpacePointQueryNearest(space, ChipmunkDemoMouse, 0.0, GRAB_FILTER, NULL);
+		if(nearest){
+			cpBody *body = cpShapeGetBody(nearest);
+			if(cpBodyGetType(body) == CP_BODY_TYPE_STATIC){
+				cpBodySetType(body, CP_BODY_TYPE_DYNAMIC);
+				cpBodySetMass(body, pentagon_mass);
+				cpBodySetMoment(body, pentagon_moment);
+			} else if(cpBodyGetType(body) == CP_BODY_TYPE_DYNAMIC) {
+				cpBodySetType(body, CP_BODY_TYPE_STATIC);
+			}
+		}
+	}
 	
 	cpSpaceEachBody(space, &eachBody, NULL);
 	cpSpaceStep(space, dt);
@@ -62,7 +63,7 @@ update(cpSpace *space, double dt)
 static cpSpace *
 init(void)
 {
-//	ChipmunkDemoMessageString = "Right click to make pentagons static/dynamic.";
+	ChipmunkDemoMessageString = "Right click to make pentagons static/dynamic.";
 	
 	cpSpace *space = cpSpaceNew();
 	cpSpaceSetIterations(space, 5);

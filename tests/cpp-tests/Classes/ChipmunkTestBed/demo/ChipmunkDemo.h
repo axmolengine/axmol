@@ -20,6 +20,7 @@
  */
 
 
+
 typedef struct ChipmunkDemo ChipmunkDemo;
 
 typedef cpSpace *(*ChipmunkDemoInitFunc)(void);
@@ -50,6 +51,9 @@ frand_unit_circle(){
 	return (cpvlengthsq(v) < 1.0f ? v : frand_unit_circle());
 }
 
+
+
+
 extern int ChipmunkDemoTicks;
 extern double ChipmunkDemoTime;
 extern cpVect ChipmunkDemoKeyboard;
@@ -57,11 +61,16 @@ extern cpVect ChipmunkDemoMouse;
 extern cpBool ChipmunkDemoRightClick;
 extern cpBool ChipmunkDemoRightDown;
 
+extern float ChipmunkDebugDrawPointLineScale;
+
 extern char const *ChipmunkDemoMessageString;
-void ChipmunkDemoPrintString(char const* fmt, ...);
+void ChipmunkDemoPrintString(char const *fmt, ...);
 
 extern cpShapeFilter GRAB_FILTER;
 extern cpShapeFilter NOT_GRABBABLE_FILTER;
 
 void ChipmunkDemoDefaultDrawImpl(cpSpace* space);
-void ChipmunkDemoFreeSpaceChildren(cpSpace *space);
+void ChipmunkDemoFreeSpaceChildren(cpSpace* space);
+void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor);
+cpSpaceDebugColor RGBAColor(float r, float g, float b, float a);
+

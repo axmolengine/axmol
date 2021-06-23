@@ -30,8 +30,6 @@ static cpBody *balls[numBalls];
 static void
 update(cpSpace *space, double dt)
 {
-    ChipmunkDemoKeyboard.y = 10;
-    ChipmunkDemoKeyboard.x = 10;
 	cpFloat coef = (2.0f + ChipmunkDemoKeyboard.y)/3.0f;
 	cpFloat rate = ChipmunkDemoKeyboard.x*30.0f*coef;
 	
@@ -67,7 +65,7 @@ add_ball(cpSpace *space, cpVect pos)
 static cpSpace *
 init(void)
 {
-//	ChipmunkDemoMessageString = "Use the arrow keys to control the machine.";
+	ChipmunkDemoMessageString = "Use the arrow keys to control the machine.";
 	
 	cpSpace *space = cpSpaceNew();
 	cpSpaceSetGravity(space, cpv(0, -600));
