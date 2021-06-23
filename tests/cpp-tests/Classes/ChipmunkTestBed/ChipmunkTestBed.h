@@ -74,6 +74,7 @@ public:
 
     ChipmunkTestBed();
     ~ChipmunkTestBed();
+
     void onEnter() override;
     void createResetButton();
     void reset(cocos2d::Ref* sender);
