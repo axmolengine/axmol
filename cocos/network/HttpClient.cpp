@@ -151,11 +151,6 @@ HttpClient::~HttpClient()
     CCLOG("HttpClient destructor");
 }
 
-//Lazy create semaphore & mutex & thread
-bool HttpClient::lazyInitService() {
-    return true;
-}
-
 //Add a get task to queue
 bool HttpClient::send(HttpRequest* request)
 {

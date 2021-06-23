@@ -170,12 +170,6 @@ private:
     HttpClient();
     virtual ~HttpClient();
 
-    /**
-     * Init pthread mutex, semaphore, and create new thread for http requests
-     * @return bool
-     */
-    bool lazyInitService();
-
     void processResponse(HttpResponse* response, const std::string& url);
 
     int tryTakeAvailChannel();
