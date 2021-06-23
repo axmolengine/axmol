@@ -138,7 +138,6 @@ static Rect getRect(Node* node) {
 }
 
 ChipmunkTestBed::ChipmunkTestBed() {
-
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
     Size designSize(960 * 0.8, 640 * 0.8);
@@ -218,7 +217,6 @@ ChipmunkTestBed::ChipmunkTestBed() {
     scheduleUpdate();
 }
 
-
 ChipmunkTestBed::~ChipmunkTestBed() {
     ChipmunkDemoFreeSpaceChildren(_space);
 
@@ -259,10 +257,10 @@ void ChipmunkTestBed::reset(Ref* sender) {
 }
 
 void ChipmunkTestBed::onEnter() {
-    auto director = Director::getInstance();
+    /*auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
     Size designSize(960 * 0.8, 640 * 0.8);
-    glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
+    glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);*/
 
     TestCase::onEnter();
     physicsDebugNodeOffset    = VisibleRect::center();

@@ -128,6 +128,9 @@ CC_CONSTRUCTOR_ACCESS:
     
     void onProjectionChanged(EventCustom* event);
 
+private:
+    void initDefaultCamera();
+
 protected:
     friend class Node;
     friend class ProtectedNode;
@@ -139,7 +142,7 @@ protected:
     std::vector<Camera*> _cameras; //weak ref to Camera
     Camera*              _defaultCamera = nullptr; //weak ref, default camera created by scene, _cameras[0], Caution that the default camera can not be added to _cameras before onEnter is called
     bool                 _cameraOrderDirty = true; // order is dirty, need sort
-    EventListenerCustom*       _event = nullptr;
+    EventListenerCustom*       _event;
 
     std::vector<BaseLight *> _lights;
     
@@ -178,6 +181,8 @@ public:
     
 CC_CONSTRUCTOR_ACCESS:
     bool initWithPhysics();
+
+    bool initPhysicsWorld();
     
 protected:
     void addChildToPhysicsWorld(Node* child);
