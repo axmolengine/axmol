@@ -167,7 +167,7 @@ destroy(cpSpace *space)
 	cpSpaceFree(space);
 }
 
-ChipmunkDemo PlatformerPlayer = {
+ChipmunkDemo Player = {
 	"Platformer Player Controls",
 	1.0/180.0,
 	init,

@@ -69,21 +69,10 @@ cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBAB
 void ChipmunkDemoDefaultDrawImpl(cpSpace* space){};
 
 void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor){};
-void ChipmunkDebugDrawSegment(cpVect a, cpVect b, cpSpaceDebugColor color){};
-void ChipmunkDebugDrawFatSegment(
-    cpVect a, cpVect b, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor){};
-void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor outlineColor){};
-void ChipmunkDemoPrintString(char const* fmt, ...){};
-
 cpSpaceDebugColor RGBAColor(float r, float g, float b, float a) {
     cpSpaceDebugColor color = {r, g, b, a};
     return color;
 };
-
-cpSpaceDebugColor LAColor(float l, float a) {
-    cpSpaceDebugColor color = {l, l, l, a};
-    return color;
-}
 
 
 static void ShapeFreeWrap(cpSpace* space, cpShape* shape, void* unused) {
@@ -118,6 +107,7 @@ void ChipmunkDemoFreeSpaceChildren(cpSpace* space) {
     // Must remove these BEFORE freeing the body or you will access dangling pointers.
     cpSpaceEachShape(space, (cpSpaceShapeIteratorFunc) PostShapeFree, space);
     cpSpaceEachConstraint(space, (cpSpaceConstraintIteratorFunc) PostConstraintFree, space);
+
     cpSpaceEachBody(space, (cpSpaceBodyIteratorFunc) PostBodyFree, space);
 }
 
@@ -128,21 +118,8 @@ void updateMouseBody(void) {
     mouse_body->p    = new_point;
 }
 
-static Rect getRect(Node* node) {
-    Rect rc;
-    rc.origin = node->getPosition();
-    rc.size   = node->getContentSize();
-    rc.origin.x -= rc.size.width / 2;
-    rc.origin.y -= rc.size.height / 2;
-    return rc;
-}
 
 ChipmunkTestBed::ChipmunkTestBed() {
-
-    auto director = Director::getInstance();
-    auto glview   = director->getOpenGLView();
-    Size designSize(960 * 0.8, 640 * 0.8);
-    glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
 
     //// Resize (expand) window
     // static Size resourceSize(1280, 720);
@@ -152,56 +129,6 @@ ChipmunkTestBed::ChipmunkTestBed() {
     // orgSize = view->getDesignResolutionSize();
     // view->setDesignResolutionSize(480, 320, ResolutionPolicy::NO_BORDER);
 
-    // auto director = Director::getInstance();
-    // auto glview   = director->getOpenGLView();
-    // Size designSize(960, 640);
-    // glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
-
-    // creating a keyboard event listener
-    auto listener          = EventListenerKeyboard::create();
-    listener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
-        char buf[100] = {0};
-        sprintf(buf, "Key %d was pressed!", (int) keyCode);
-
-        switch ((int) keyCode) {
-        case 28:
-            ChipmunkDemoKeyboard.y++;
-            break;
-        case 29:
-            ChipmunkDemoKeyboard.y--;
-            break;
-        case 27:
-            ChipmunkDemoKeyboard.x++;
-            break;
-        case 26:
-            ChipmunkDemoKeyboard.x--;
-            break;
-        }
-
-        CCLOG("%s", buf);
-    };
-
-    listener->onKeyReleased = [](EventKeyboard::KeyCode keyCode, Event* event) {
-        char buf[100] = {0};
-        sprintf(buf, "Key %d was released!", (int) keyCode);
-
-        auto label = static_cast<Label*>(event->getCurrentTarget());
-        CCLOG("%s", buf);
-    };
-
-    //
-    //
-    //	Line 65 : cpVect ChipmunkDemoKeyboard;
-    // Line 444 : case SAPP_KEYCODE_UP : ChipmunkDemoKeyboard.y += (event->type == SAPP_EVENTTYPE_KEY_DOWN ? 1.0 :
-    // -1.0); break; Line 445 : case SAPP_KEYCODE_DOWN : ChipmunkDemoKeyboard.y += (event->type ==
-    // SAPP_EVENTTYPE_KEY_DOWN ? -1.0 : 1.0); break; Line 446 : case SAPP_KEYCODE_LEFT : ChipmunkDemoKeyboard.x +=
-    // (event->type == SAPP_EVENTTYPE_KEY_DOWN ? -1.0 : 1.0); break; Line 447 : case SAPP_KEYCODE_RIGHT :
-    // ChipmunkDemoKeyboard.x += (event->type == SAPP_EVENTTYPE_KEY_DOWN ? 1.0 : -1.0); break;
-
-
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-
-
     _mouseListener                = EventListenerMouse::create();
     _mouseListener->onMouseMove   = CC_CALLBACK_1(ChipmunkTestBed::onMouseMove, this);
     _mouseListener->onMouseUp     = CC_CALLBACK_1(ChipmunkTestBed::onMouseUp, this);
@@ -209,32 +136,25 @@ ChipmunkTestBed::ChipmunkTestBed() {
     _mouseListener->onMouseScroll = CC_CALLBACK_1(ChipmunkTestBed::onMouseScroll, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 
-    // ChipmunkDemoMessageString
-    label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 10.0f);
-    label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 8);
-    label->setColor(Color3B::GREEN);
-    this->addChild(label, -1);
-
     scheduleUpdate();
 }
-
 
 ChipmunkTestBed::~ChipmunkTestBed() {
     ChipmunkDemoFreeSpaceChildren(_space);
 
-    auto director = Director::getInstance();
-    auto glview   = director->getOpenGLView();
-    Size designSize(480, 320);
-    glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
+    // static Size resourceSize(960, 640);
+    // GLViewImpl* view = (GLViewImpl*) Director::getInstance()->getOpenGLView();
+    // view->setWindowed(resourceSize.width, resourceSize.height);
+
+
+    // auto director = Director::getInstance();
+    // auto glview   = director->getOpenGLView();
+    // view->setDesignResolutionSize(orgSize.width, orgSize.height, ResolutionPolicy::NO_BORDER);
 
     _eventDispatcher->removeEventListener(_mouseListener);
 }
 
-
 void ChipmunkTestBed::initPhysics() {
-    if (ChipmunkDemoMessageString) {
-        label->setString(ChipmunkDemoMessageString);
-    }
     // Physics debug layer
     _debugLayer = PhysicsDebugNode::create(_space);
     this->addChild(_debugLayer, Z_PHYSICS_DEBUG);
@@ -261,23 +181,16 @@ void ChipmunkTestBed::reset(Ref* sender) {
 }
 
 void ChipmunkTestBed::onEnter() {
-    auto director = Director::getInstance();
-    auto glview   = director->getOpenGLView();
-    Size designSize(960 * 0.8, 640 * 0.8);
-    glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
-
     TestCase::onEnter();
-    physicsDebugNodeOffset    = VisibleRect::center();
-    ChipmunkDemoMessageString = "";
+    physicsDebugNodeOffset = VisibleRect::center();
 }
 
 
 void ChipmunkTestBed::onMouseDown(Event* event) {
     EventMouse* e = (EventMouse*) event;
     if ((int) e->getMouseButton() == 0) {
-        ChipmunkDemoLeftDown   = cpTrue;
-        ChipmunkDemoRightDown  = cpFalse;
-        ChipmunkDemoRightClick = cpFalse;
+        ChipmunkDemoLeftDown  = cpTrue;
+        ChipmunkDemoRightDown = cpFalse;
 
         // give the mouse click a little radius to make it easier to click small shapes.
         cpFloat radius = 5.0;
@@ -303,9 +216,8 @@ void ChipmunkTestBed::onMouseDown(Event* event) {
             mouse_joint = NULL;
         }
 
-        ChipmunkDemoLeftDown   = cpFalse;
-        ChipmunkDemoRightDown  = cpTrue;
-        ChipmunkDemoRightClick = cpTrue;
+        ChipmunkDemoLeftDown  = cpFalse;
+        ChipmunkDemoRightDown = cpTrue;
     }
 }
 
@@ -313,8 +225,6 @@ void ChipmunkTestBed::onMouseUp(Event* event) {
     EventMouse* e = (EventMouse*) event;
 
     ChipmunkDemoLeftDown = cpFalse;
-    ChipmunkDemoRightDown = cpFalse;
-    ChipmunkDemoRightClick = cpFalse;
 
     if (mouse_joint) {
         cpSpaceRemoveConstraint(_space, mouse_joint);
@@ -595,24 +505,24 @@ void TankDemo::update(float delta) {
 // BouncyHexagonsDemo
 //
 //------------------------------------------------------------------
-void BouncyHexagonsDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string BouncyHexagonsDemo::title() const {
-    return BouncyHexagons.name;
-}
-
-void BouncyHexagonsDemo::initPhysics() {
-    _space = BouncyHexagons.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void BouncyHexagonsDemo::update(float delta) {
-    BouncyHexagons.updateFunc(_space, BouncyHexagons.timestep);
-}
+// void BouncyHexagonsDemo::onEnter() {
+//    ChipmunkTestBed::onEnter();
+//
+//    initPhysics();
+//}
+//
+// std::string BouncyHexagonsDemo::title() const {
+//    return BouncyHexagons.name;
+//}
+//
+// void BouncyHexagonsDemo::initPhysics() {
+//    _space = BouncyHexagons.initFunc();
+//    ChipmunkTestBed::initPhysics();
+//}
+//
+// void BouncyHexagonsDemo::update(float delta) {
+//    BouncyHexagons.updateFunc(_space, BouncyHexagons.timestep);
+//}
 
 
 //------------------------------------------------------------------
@@ -620,338 +530,53 @@ void BouncyHexagonsDemo::update(float delta) {
 // SpringiesDemo
 //
 //------------------------------------------------------------------
-void SpringiesDemo::onEnter() {
+// void SpringiesDemo::onEnter() {
+//    ChipmunkTestBed::onEnter();
+//
+//    initPhysics();
+//}
+//
+// std::string SpringiesDemo::title() const {
+//    return Springies.name;
+//}
+//
+// void SpringiesDemo::initPhysics() {
+//    _space = Springies.initFunc();
+//    ChipmunkTestBed::initPhysics();
+//}
+//
+// void SpringiesDemo::update(float delta) {
+//    Springies.updateFunc(_space, Springies.timestep);
+//}
+
+
+//------------------------------------------------------------------
+//
+// Add Example
+//
+//------------------------------------------------------------------
+void AddExample::onEnter() {
     ChipmunkTestBed::onEnter();
 
-    initPhysics();
-}
-
-std::string SpringiesDemo::title() const {
-    return Springies.name;
-}
-
-void SpringiesDemo::initPhysics() {
-    _space = Springies.initFunc();
+    _space = cpSpaceNew();
     ChipmunkTestBed::initPhysics();
+
+    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-void SpringiesDemo::update(float delta) {
-    Springies.updateFunc(_space, Springies.timestep);
+std::string AddExample::title() const {
+    return "  Here is the place for your\n Chipmunk2D example";
 }
 
-
-//------------------------------------------------------------------
-//
-// ShatterDemo
-//
-//------------------------------------------------------------------
-void ShatterDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string ShatterDemo::title() const {
-    return Shatter.name;
-}
-
-void ShatterDemo::initPhysics() {
-    _space = Shatter.initFunc();
+void AddExample::initPhysics() {
+    _space = cpSpaceNew();
     ChipmunkTestBed::initPhysics();
+
+    log("%s\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
 }
 
-void ShatterDemo::update(float delta) {
-    Shatter.updateFunc(_space, Shatter.timestep);
-}
-
-//------------------------------------------------------------------
-//
-// StickyDemo
-//
-//------------------------------------------------------------------
-void StickyDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string StickyDemo::title() const {
-    return Sticky.name;
-}
-
-void StickyDemo::initPhysics() {
-    _space = Sticky.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void StickyDemo::update(float delta) {
-    Sticky.updateFunc(_space, Sticky.timestep);
-}
-
-//------------------------------------------------------------------
-//
-// CraneDemo
-//
-//------------------------------------------------------------------
-void CraneDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string CraneDemo::title() const {
-    return Crane.name;
-}
-
-void CraneDemo::initPhysics() {
-    _space = Crane.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void CraneDemo::update(float delta) {
-    Crane.updateFunc(_space, Crane.timestep);
-}
-
-//------------------------------------------------------------------
-//
-// JointsDemo
-//
-//------------------------------------------------------------------
-void JointsDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string JointsDemo::title() const {
-    return Joints.name;
-}
-
-void JointsDemo::initPhysics() {
-    _space = Joints.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void JointsDemo::update(float delta) {
-    Joints.updateFunc(_space, Joints.timestep);
-}
-
-//------------------------------------------------------------------
-//
-// ConvexDemo
-//
-//------------------------------------------------------------------
-void ConvexDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string ConvexDemo::title() const {
-    return Convex.name;
-}
-
-void ConvexDemo::initPhysics() {
-    _space = Convex.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void ConvexDemo::update(float delta) {
-    Convex.updateFunc(_space, Convex.timestep);
-}
-
-//------------------------------------------------------------------
-//
-// PumpDemo
-//
-//------------------------------------------------------------------
-void PumpDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string PumpDemo::title() const {
-    return Pump.name;
-}
-
-void PumpDemo::initPhysics() {
-    _space = Pump.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void PumpDemo::update(float delta) {
-    Pump.updateFunc(_space, Pump.timestep);
-}
-
-//------------------------------------------------------------------
-//
-// PlatformerPlayerDemo
-//
-//------------------------------------------------------------------
-void PlatformerPlayerDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string PlatformerPlayerDemo::title() const {
-    return PlatformerPlayer.name;
-}
-
-void PlatformerPlayerDemo::initPhysics() {
-    _space = PlatformerPlayer.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void PlatformerPlayerDemo::update(float delta) {
-    PlatformerPlayer.updateFunc(_space, PlatformerPlayer.timestep);
-}
-
-
-//------------------------------------------------------------------
-//
-// QueryDemo
-//
-//------------------------------------------------------------------
-void QueryDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string QueryDemo::title() const {
-    return Query.name;
-}
-
-void QueryDemo::initPhysics() {
-    _space = Query.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void QueryDemo::update(float delta) {
-    Query.updateFunc(_space, Query.timestep);
-}
-
-//------------------------------------------------------------------
-//
-// ContactGraphDemo
-//
-//------------------------------------------------------------------
-void ContactGraphDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string ContactGraphDemo::title() const {
-    return ContactGraph.name;
-}
-
-void ContactGraphDemo::initPhysics() {
-    _space = ContactGraph.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void ContactGraphDemo::update(float delta) {
-    ContactGraph.updateFunc(_space, ContactGraph.timestep);
-}
-
-//------------------------------------------------------------------
-//
-// BuoyancyDemo
-//
-//------------------------------------------------------------------
-void BuoyancyDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string BuoyancyDemo::title() const {
-    return Buoyancy.name;
-}
-
-void BuoyancyDemo::initPhysics() {
-    _space = Buoyancy.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void BuoyancyDemo::update(float delta) {
-    Buoyancy.updateFunc(_space, Buoyancy.timestep);
-}
-
-//------------------------------------------------------------------
-//
-// SliceDemo
-//
-//------------------------------------------------------------------
-void SliceDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string SliceDemo::title() const {
-    return Slice.name;
-}
-
-void SliceDemo::initPhysics() {
-    _space = Slice.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void SliceDemo::update(float delta) {
-    Slice.updateFunc(_space, Slice.timestep);
-}
-
-//------------------------------------------------------------------
-//
-// UnicycleDemo
-//
-//------------------------------------------------------------------
-void UnicycleDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string UnicycleDemo::title() const {
-    return Unicycle.name;
-}
-
-void UnicycleDemo::initPhysics() {
-    _space = Unicycle.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void UnicycleDemo::update(float delta) {
-    Unicycle.updateFunc(_space, Unicycle.timestep);
-}
-
-
-//------------------------------------------------------------------
-//
-// ExampleDemo
-//
-//------------------------------------------------------------------
-void ExampleDemo::onEnter() {
-    ChipmunkTestBed::onEnter();
-
-    initPhysics();
-}
-
-std::string ExampleDemo::title() const {
-    return Example.name;
-}
-
-void ExampleDemo::initPhysics() {
-    _space = Example.initFunc();
-    ChipmunkTestBed::initPhysics();
-}
-
-void ExampleDemo::update(float delta) {
-    cpSpaceStep(_space, Example.timestep);
+void AddExample::update(float delta) {
+    cpSpaceStep(_space, delta);
 }
 
 
@@ -967,25 +592,8 @@ ChipmunkTestBedTests::ChipmunkTestBedTests() {
     ADD_TEST_CASE(PlanetDemo);
     ADD_TEST_CASE(TheoJansenDemo);
     ADD_TEST_CASE(TankDemo);
-    ADD_TEST_CASE(BouncyHexagonsDemo);
-    ADD_TEST_CASE(SpringiesDemo);
+    // ADD_TEST_CASE(BouncyHexagonsDemo);
+    // ADD_TEST_CASE(SpringiesDemo);
 
-    ADD_TEST_CASE(ShatterDemo);
-    ADD_TEST_CASE(StickyDemo);
-    ADD_TEST_CASE(CraneDemo);
-    ADD_TEST_CASE(JointsDemo);
-
-    ADD_TEST_CASE(ConvexDemo);
-
-    ADD_TEST_CASE(PumpDemo);
-    ADD_TEST_CASE(PlatformerPlayerDemo);
-
-    ADD_TEST_CASE(QueryDemo);
-    ADD_TEST_CASE(ContactGraphDemo);
-    ADD_TEST_CASE(BuoyancyDemo);
-    ADD_TEST_CASE(SliceDemo);
-    ADD_TEST_CASE(UnicycleDemo);
-
-
-    ADD_TEST_CASE(ExampleDemo); //  the template for your one examples/Demos
+    ADD_TEST_CASE(AddExample);
 }
