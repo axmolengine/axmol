@@ -49,11 +49,6 @@
 - Version: git d02e47d 
 - License: MIT
 
-## fastlib
-- Upstream: https://github.com/simdsoft/fastlib
-- Version: git f85644f
-- License: Apache-2.0
-
 ## flatbuffers
 - Upstream: https://github.com/google/flatbuffers
 - Version: 2.0.0
@@ -201,8 +196,8 @@
 - Version: git 1.1.0-17fd4ba (4098)
 - License: Google Inc
 
-## xsxml
-- Upstream: https://github.com/simdsoft/xsxml
+## xsbase
+- Upstream: https://github.com/simdsoft/xsbase
 - Version: 1.0
 - License: MIT
 
