@@ -159,9 +159,14 @@ void TestList::runThisTest()
     * Note: We should change frame and design size before your new scene create
     * otherwise, the layout will incorrect
     */
-    Size resourceSize(960, 640), designSize(480, 320);
+    
     GLViewImpl* glview = (GLViewImpl*) Director::getInstance()->getOpenGLView();
+ #if defined(CC_PLATFORM_PC)
+    Size resourceSize(960, 640);
     glview->setWindowed(resourceSize.width, resourceSize.height);
+ #endif
+ 
+    Size designSize(480, 320);
     glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
 
     auto director = Director::getInstance();
