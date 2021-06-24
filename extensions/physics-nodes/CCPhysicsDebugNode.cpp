@@ -1,6 +1,7 @@
 /* Copyright (c) 2012 Scott Lembcke and Howling Moon Software
  * Copyright (c) 2012 cocos2d-x.org
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,6 +49,25 @@ Vec2 physicsDebugNodeOffset;
  It is not recommended to write rendering code like this in your own games
  as the private API may change with little or no warning.
  */
+
+static const cpVect spring_verts[] = {
+    {0.00f, 0.0f},
+    {0.20f, 0.0f},
+    {0.25f, 3.0f},
+    {0.30f, -6.0f},
+    {0.35f, 6.0f},
+    {0.40f, -6.0f},
+    {0.45f, 6.0f},
+    {0.50f, -6.0f},
+    {0.55f, 6.0f},
+    {0.60f, -6.0f},
+    {0.65f, 6.0f},
+    {0.70f, -3.0f},
+    {0.75f, 6.0f},
+    {0.80f, 0.0f},
+    {1.00f, 0.0f},
+};
+static const int spring_count = sizeof(spring_verts) / sizeof(cpVect);
 
 static Color4F ColorForBody(cpBody *body)
 {
@@ -154,11 +174,35 @@ static void DrawConstraint(cpConstraint *constraint, DrawNode *renderer)
     }
     else if(cpConstraintIsDampedSpring(constraint))
     {
-        // TODO: uninplemented
+        cpDampedSpring* spring  = (cpDampedSpring*) constraint;
+
+        cpVect a = cpTransformPoint(body_a->transform, spring->anchorA);
+        cpVect b = cpTransformPoint(body_b->transform, spring->anchorB);
+
+        renderer->drawDot(cpVert2Point(a), 3.0, CONSTRAINT_COLOR);
+        renderer->drawDot(cpVert2Point(b), 3.0, CONSTRAINT_COLOR);
+
+        cpVect delta = cpvsub(b, a);
+        cpFloat cos  = delta.x;
+        cpFloat sin  = delta.y;
+        cpFloat s    = 1.0f / cpvlength(delta);
+
+        cpVect r1 = cpv(cos, -sin * s);
+        cpVect r2 = cpv(sin, cos * s);
+
+        cpVect* verts = (cpVect*) alloca(spring_count * sizeof(cpVect));
+        for (int i = 0; i < spring_count; i++) {
+            cpVect v = spring_verts[i];
+            verts[i] = cpv(cpvdot(v, r1) + a.x, cpvdot(v, r2) + a.y);
+        }
+
+        for (int i = 0; i < spring_count - 1; i++) {
+            renderer->drawSegment(cpVert2Point(verts[i]), cpVert2Point(verts[i+1]), 1.0, CONSTRAINT_COLOR);
+        }
     }
     else
     {
-        //        printf("Cannot draw constraint\n");
+        CCLOG("Cannot draw constraint");
     }
 }
 

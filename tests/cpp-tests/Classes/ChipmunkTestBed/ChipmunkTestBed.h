@@ -1,8 +1,6 @@
 /****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
+ * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
@@ -88,16 +86,12 @@ public:
     void onMouseDown(cocos2d::Event* event);
     void onMouseUp(cocos2d::Event* event);
     void onMouseMove(cocos2d::Event* event);
-    void onMouseScroll(cocos2d::Event* event);
 
     cpSpace* _space; // strong ref
-
-    cocos2d::Size orgSize; 
 
 private: 
     cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
     cocos2d::EventListenerMouse* _mouseListener;
-    cocos2d::Label* label;
     cocos2d::Node* _trackNode;
 };
 
@@ -291,12 +285,6 @@ public:
     virtual void update(float dt) override;
 };
 
-
-
-
-
-
-
 class QueryDemo : public ChipmunkTestBed {
 public:
     CREATE_FUNC(QueryDemo);
@@ -318,7 +306,6 @@ public:
     virtual void update(float dt) override;
 };
 
-
 class BuoyancyDemo : public ChipmunkTestBed {
 public:
     CREATE_FUNC(BuoyancyDemo);
@@ -328,7 +315,6 @@ public:
     void initPhysics() override;
     virtual void update(float dt) override;
 };
-
 
 class SliceDemo : public ChipmunkTestBed {
 public:
@@ -340,7 +326,6 @@ public:
     virtual void update(float dt) override;
 };
 
-
 class UnicycleDemo : public ChipmunkTestBed {
 public:
     CREATE_FUNC(UnicycleDemo);
@@ -351,10 +336,6 @@ public:
     virtual void update(float dt) override;
 };
 
-
-
-
-
 class ExampleDemo : public ChipmunkTestBed {
 public:
     CREATE_FUNC(ExampleDemo);
@@ -364,12 +345,6 @@ public:
     void initPhysics() override;
     virtual void update(float dt) override;
 };
-
-
-
-
-    
-
 DEFINE_TEST_SUITE(ChipmunkTestBedTests);
 
 #endif /* __CHIPMUNKTESTBED_H__ */
