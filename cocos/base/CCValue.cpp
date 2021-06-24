@@ -84,60 +84,53 @@ Value::Value(bool v)
 Value::Value(const char* v)
 : _type(Type::STRING)
 {
-    _field.strVal = new (std::nothrow) std::string();
-    if (v)
-    {
-        *_field.strVal = v;
-    }
+    _field.strVal = new (std::nothrow) std::string(v ? v : "");
 }
 
 Value::Value(const std::string& v)
 : _type(Type::STRING)
 {
-    _field.strVal = new (std::nothrow) std::string();
-    *_field.strVal = v;
+    _field.strVal = new (std::nothrow) std::string(v);
+}
+
+Value::Value(std::string&& v) {
+    _field.strVal = new (std::nothrow) std::string(std::move(v));
 }
 
 Value::Value(const ValueVector& v)
 : _type(Type::VECTOR)
 {
-    _field.vectorVal = new (std::nothrow) ValueVector();
-    *_field.vectorVal = v;
+    _field.vectorVal  = new (std::nothrow) ValueVector(v);
 }
 
 Value::Value(ValueVector&& v)
 : _type(Type::VECTOR)
 {
-    _field.vectorVal = new (std::nothrow) ValueVector();
-    *_field.vectorVal = std::move(v);
+    _field.vectorVal  = new (std::nothrow) ValueVector(std::move(v));
 }
 
 Value::Value(const ValueMap& v)
 : _type(Type::MAP)
 {
-    _field.mapVal = new (std::nothrow) ValueMap();
-    *_field.mapVal = v;
+    _field.mapVal = new (std::nothrow) ValueMap(v);
 }
 
 Value::Value(ValueMap&& v)
 : _type(Type::MAP)
 {
-    _field.mapVal = new (std::nothrow) ValueMap();
-    *_field.mapVal = std::move(v);
+    _field.mapVal  = new (std::nothrow) ValueMap(std::move(v));
 }
 
 Value::Value(const ValueMapIntKey& v)
 : _type(Type::INT_KEY_MAP)
 {
-    _field.intKeyMapVal = new (std::nothrow) ValueMapIntKey();
-    *_field.intKeyMapVal = v;
+    _field.intKeyMapVal  = new (std::nothrow) ValueMapIntKey(v);
 }
 
 Value::Value(ValueMapIntKey&& v)
 : _type(Type::INT_KEY_MAP)
 {
-    _field.intKeyMapVal = new (std::nothrow) ValueMapIntKey();
-    *_field.intKeyMapVal = std::move(v);
+    _field.intKeyMapVal  = new (std::nothrow) ValueMapIntKey(std::move(v));
 }
 
 Value::Value(const Value& other)
@@ -319,6 +312,12 @@ Value& Value::operator= (const std::string& v)
     reset(Type::STRING);
     *_field.strVal = v;
     return *this;
+}
+
+Value& Value::operator=(std::string&& v) {
+    reset(Type::STRING);
+    *_field.strVal = std::move(v);
+    return* this;
 }
 
 Value& Value::operator= (const ValueVector& v)
@@ -543,7 +542,7 @@ float Value::asFloat() const
         return static_cast<float>(_field.byteVal);
 
     case Type::STRING:
-        return utils::atof(_field.strVal->c_str());
+        return static_cast<float>(utils::atof(_field.strVal->c_str()));
 
     case Type::INTEGER:
         return static_cast<float>(_field.intVal);
