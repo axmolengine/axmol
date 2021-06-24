@@ -30,7 +30,7 @@ static void
 eachBody(cpBody *body, void *unused)
 {
 	cpVect pos = cpBodyGetPosition(body);
-	if(pos.y < -260 || cpfabs(pos.x) > 340){
+	if(pos.y < -260){
 		cpFloat x = rand()/(cpFloat)RAND_MAX*640 - 320;
 		cpBodySetPosition(body, cpv(x, 260));
 	}
@@ -80,10 +80,10 @@ init(void)
 	};
 
 	// Create the static triangles.
-	for(int i=0; i<9; i++){
+	for(int i=0; i<10; i++){
 		for(int j=0; j<6; j++){
 			cpFloat stagger = (j%2)*40;
-			cpVect offset = cpv(i*80 - 320 + stagger, j*70 - 240);
+			cpVect offset = cpv(i*80 - 360 + stagger, j*70 - 200);
 			shape = cpSpaceAddShape(space, cpPolyShapeNew(staticBody, 3, tris, cpTransformTranslate(offset), 0.0));
 			cpShapeSetElasticity(shape, 1.0f);
 			cpShapeSetFriction(shape, 1.0f);

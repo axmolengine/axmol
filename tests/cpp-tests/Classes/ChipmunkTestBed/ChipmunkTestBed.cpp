@@ -1,7 +1,5 @@
 /****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
- http://www.cocos2d-x.org
+ * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -52,12 +50,14 @@ cpBool ChipmunkDemoRightClick;
 cpBool ChipmunkDemoRightDown;
 cpBool ChipmunkDemoLeftDown = cpFalse;
 
+
 cpBody* mouse_body        = cpBodyNewKinematic();
 cpConstraint* mouse_joint = NULL;
 
 char const* ChipmunkDemoMessageString = NULL;
 
 float ChipmunkDebugDrawPointLineScale = 1.0f;
+static size_t VertexCount, IndexCount;
 
 #define GRABBABLE_MASK_BIT (1 << 31)
 cpShapeFilter GRAB_FILTER          = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
@@ -70,10 +70,50 @@ void ChipmunkDemoDefaultDrawImpl(cpSpace* space){};
 
 void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor){};
 void ChipmunkDebugDrawSegment(cpVect a, cpVect b, cpSpaceDebugColor color){};
-void ChipmunkDebugDrawFatSegment(
-    cpVect a, cpVect b, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor){};
+void ChipmunkDebugDrawFatSegment(cpVect a, cpVect b, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor){};
 void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor outlineColor){};
-void ChipmunkDemoPrintString(char const* fmt, ...){};
+static Vertex* push_vertexes(size_t vcount, const Index* index_src, size_t icount){};
+////    cpAssertHard(VertexCount + vcount <= VERTEX_MAX && IndexCount + icount <= INDEX_MAX, "Geometry buffer full.");
+//
+//    Vertex* vertex_dst = Vertexes + VertexCount;
+//    size_t base        = VertexCount;
+//    VertexCount += vcount;
+//
+//    Index* index_dst = Indexes + IndexCount;
+//    for (size_t i = 0; i < icount; i++)
+//        index_dst[i] = index_src[i] + (Index) base;
+//    IndexCount += icount;
+//
+//    return vertex_dst;
+//}
+
+static char PrintStringBuffer[1024 * 8];
+static char* PrintStringCursor;
+cocos2d::Label* label;
+
+void ChipmunkDemoPrintString(char const* fmt, ...) {
+    if (PrintStringCursor == NULL) {
+        return;
+    }
+
+    ChipmunkDemoMessageString = PrintStringBuffer;
+    if (ChipmunkDemoMessageString) {
+        label->setString(ChipmunkDemoMessageString);
+        ChipmunkDemoMessageString = "";
+    }
+
+    va_list args;
+    va_start(args, fmt);
+    int remaining   = sizeof(PrintStringBuffer) - (PrintStringCursor - PrintStringBuffer);
+    int would_write = vsnprintf(PrintStringCursor, remaining, fmt, args);
+    if (would_write > 0 && would_write < remaining) {
+        PrintStringCursor += would_write;
+    } else {
+        // encoding error or overflow, prevent further use until reinitialized
+        PrintStringCursor = NULL;
+    }
+    va_end(args);
+}
 
 cpSpaceDebugColor RGBAColor(float r, float g, float b, float a) {
     cpSpaceDebugColor color = {r, g, b, a};
@@ -144,74 +184,37 @@ ChipmunkTestBed::ChipmunkTestBed() {
     Size designSize(960 * 0.8, 640 * 0.8);
     glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
 
-    //// Resize (expand) window
-    // static Size resourceSize(1280, 720);
-    // auto director    = Director::getInstance();
-    // GLViewImpl* view = (GLViewImpl*) Director::getInstance()->getOpenGLView();
-    // view->setWindowed(resourceSize.width, resourceSize.height);
-    // orgSize = view->getDesignResolutionSize();
-    // view->setDesignResolutionSize(480, 320, ResolutionPolicy::NO_BORDER);
-
-    // auto director = Director::getInstance();
-    // auto glview   = director->getOpenGLView();
-    // Size designSize(960, 640);
-    // glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
-
     // creating a keyboard event listener
     auto listener          = EventListenerKeyboard::create();
     listener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
-        char buf[100] = {0};
-        sprintf(buf, "Key %d was pressed!", (int) keyCode);
-
         switch ((int) keyCode) {
-        case 28:
+        case 28: // Up
             ChipmunkDemoKeyboard.y++;
             break;
-        case 29:
+        case 29: // Down
             ChipmunkDemoKeyboard.y--;
             break;
-        case 27:
+        case 27: // Right
             ChipmunkDemoKeyboard.x++;
             break;
-        case 26:
+        case 26: // Left
             ChipmunkDemoKeyboard.x--;
             break;
         }
-
-        CCLOG("%s", buf);
     };
-
-    listener->onKeyReleased = [](EventKeyboard::KeyCode keyCode, Event* event) {
-        char buf[100] = {0};
-        sprintf(buf, "Key %d was released!", (int) keyCode);
-
-        auto label = static_cast<Label*>(event->getCurrentTarget());
-        CCLOG("%s", buf);
-    };
-
-    //
-    //
-    //	Line 65 : cpVect ChipmunkDemoKeyboard;
-    // Line 444 : case SAPP_KEYCODE_UP : ChipmunkDemoKeyboard.y += (event->type == SAPP_EVENTTYPE_KEY_DOWN ? 1.0 :
-    // -1.0); break; Line 445 : case SAPP_KEYCODE_DOWN : ChipmunkDemoKeyboard.y += (event->type ==
-    // SAPP_EVENTTYPE_KEY_DOWN ? -1.0 : 1.0); break; Line 446 : case SAPP_KEYCODE_LEFT : ChipmunkDemoKeyboard.x +=
-    // (event->type == SAPP_EVENTTYPE_KEY_DOWN ? -1.0 : 1.0); break; Line 447 : case SAPP_KEYCODE_RIGHT :
-    // ChipmunkDemoKeyboard.x += (event->type == SAPP_EVENTTYPE_KEY_DOWN ? 1.0 : -1.0); break;
-
-
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-
+    // creating a mouse event listener    
     _mouseListener                = EventListenerMouse::create();
     _mouseListener->onMouseMove   = CC_CALLBACK_1(ChipmunkTestBed::onMouseMove, this);
     _mouseListener->onMouseUp     = CC_CALLBACK_1(ChipmunkTestBed::onMouseUp, this);
     _mouseListener->onMouseDown   = CC_CALLBACK_1(ChipmunkTestBed::onMouseDown, this);
-    _mouseListener->onMouseScroll = CC_CALLBACK_1(ChipmunkTestBed::onMouseScroll, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 
     // ChipmunkDemoMessageString
-    label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 10.0f);
-    label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 8);
+    label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 16.0f);
+    label->setAnchorPoint(Vec2(0, 1));
+    label->setPosition(10, VisibleRect::top().y - 100);
     label->setColor(Color3B::GREEN);
     this->addChild(label, -1);
 
@@ -246,6 +249,8 @@ void ChipmunkTestBed::update(float delta) {
 #else
     cpHastySpaceStep(_space, delta);
 #endif
+
+
 }
 
 void ChipmunkTestBed::createResetButton() {
@@ -261,11 +266,14 @@ void ChipmunkTestBed::reset(Ref* sender) {
 }
 
 void ChipmunkTestBed::onEnter() {
+<<<<<<< Updated upstream
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
     Size designSize(960 * 0.8, 640 * 0.8);
     glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
 
+=======
+>>>>>>> Stashed changes
     TestCase::onEnter();
     physicsDebugNodeOffset    = VisibleRect::center();
     ChipmunkDemoMessageString = "";
@@ -296,13 +304,11 @@ void ChipmunkTestBed::onMouseDown(Event* event) {
             cpSpaceAddConstraint(_space, mouse_joint);
         }
     } else if ((int) e->getMouseButton() == 1) {
-
         if (mouse_joint) {
             cpSpaceRemoveConstraint(_space, mouse_joint);
             cpConstraintFree(mouse_joint);
             mouse_joint = NULL;
         }
-
         ChipmunkDemoLeftDown   = cpFalse;
         ChipmunkDemoRightDown  = cpTrue;
         ChipmunkDemoRightClick = cpTrue;
@@ -332,13 +338,6 @@ void ChipmunkTestBed::onMouseMove(Event* event) {
 
     cpBodySetPosition(mouse_body, ChipmunkDemoMouse);
 }
-
-void ChipmunkTestBed::onMouseScroll(Event* event) {
-    EventMouse* e = (EventMouse*) event;
-    CCLOG("Mouse Scroll detected, X: %i ", e->getScrollX());
-    CCLOG("Mouse Scroll detected, Y: %i ", e->getScrollY());
-}
-
 
 //------------------------------------------------------------------
 //
@@ -830,6 +829,8 @@ void QueryDemo::initPhysics() {
 }
 
 void QueryDemo::update(float delta) {
+    PrintStringBuffer[0] = 0;
+    PrintStringCursor    = PrintStringBuffer;
     Query.updateFunc(_space, Query.timestep);
 }
 
@@ -854,6 +855,8 @@ void ContactGraphDemo::initPhysics() {
 }
 
 void ContactGraphDemo::update(float delta) {
+   // PrintStringBuffer[0] = 0;
+    PrintStringCursor    = PrintStringBuffer;
     ContactGraph.updateFunc(_space, ContactGraph.timestep);
 }
 

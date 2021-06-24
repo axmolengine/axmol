@@ -38,7 +38,7 @@ update(cpSpace *space, double dt)
 	cpFloat radius = 10.0;
 	ChipmunkDebugDrawSegment(start, end, RGBAColor(0,1,0,1));
 	
-	ChipmunkDemoPrintString("Query: Dist(%f) Point(%5.2f, %5.2f), ", cpvdist(start, end), end.x, end.y);
+	ChipmunkDemoPrintString("Query: Dist(%f)   Point(%5.2f, %5.2f),\n", cpvdist(start, end), end.x, end.y);
 	
 	cpSegmentQueryInfo segInfo = {0};
 	if(cpSpaceSegmentQueryFirst(space, start, end, radius, CP_SHAPE_FILTER_ALL, &segInfo)){
@@ -55,9 +55,9 @@ update(cpSpace *space, double dt)
 		ChipmunkDebugDrawDot(3, point, RGBAColor(1,0,0,1));
 
 		
-		ChipmunkDemoPrintString("Segment Query: Dist(%f) Normal(%5.2f, %5.2f)", segInfo.alpha*cpvdist(start, end), n.x, n.y);
+		ChipmunkDemoPrintString("Segment Query: Dist(%f)   Normal(%5.2f, %5.2f)\n", segInfo.alpha*cpvdist(start, end), n.x, n.y);
 	} else {
-		ChipmunkDemoPrintString("Segment Query (None)");
+		ChipmunkDemoPrintString("Segment Query (None)\n");
 	}
 	
 	// Draw a fat green line over the unoccluded part of the query
