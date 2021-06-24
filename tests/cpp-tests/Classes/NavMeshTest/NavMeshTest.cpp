@@ -78,11 +78,11 @@ NavMeshBaseTestDemo::~NavMeshBaseTestDemo()
     }
 }
 
-bool NavMeshBaseTestDemo::init() 
+bool NavMeshBaseTestDemo::init()
 {
     if (!TestCase::init()) return false;
 
-    if (initPhysicsWorld()) {
+    if (initWithPhysics()){
 
         _angle = 0.0f;
 

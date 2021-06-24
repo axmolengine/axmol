@@ -1,7 +1,8 @@
 /* Copyright (c) 2012 Scott Lembcke and Howling Moon Software
  * Copyright (c) 2012 cocos2d-x.org
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- *
+ * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft 
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights

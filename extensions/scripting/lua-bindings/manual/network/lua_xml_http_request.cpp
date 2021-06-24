@@ -292,7 +292,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
         
         if (!response->isSucceed())
         {
-            CCLOG("Response failed, statusCode: %s", response->getResponseCode());
+            CCLOG("Response failed, error buffer: %s", response->getErrorBuffer());
             if(statusCode == 0)
             {
                 _errorFlag = true;
@@ -313,9 +313,15 @@ void LuaMinXmlHttpRequest::_sendRequest()
         }
         
         // set header
-        _httpHeader = response->getResponseHeaders();
+        std::vector<char> *headers = response->getResponseHeader();
         
-
+        std::string header(headers->begin(), headers->end());
+        std::istringstream stream(header);
+        std::string line;
+        while(std::getline(stream, line)) {
+            _gotHeader(line);
+        }
+        
         /** get the response data **/
         std::vector<char> *buffer = response->getResponseData();
         
@@ -343,7 +349,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
         }
         release();
     });
-    network::HttpClient::getInstance()->send(_httpRequest);
+    network::HttpClient::getInstance()->sendImmediate(_httpRequest);
     retain();
 }
 
