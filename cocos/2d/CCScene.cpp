@@ -49,18 +49,13 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-Scene::Scene()
-: _defaultCamera(Camera::create())
-, _event(_director->getEventDispatcher()->addCustomEventListener(Director::EVENT_PROJECTION_CHANGED, std::bind(&Scene::onProjectionChanged, this, std::placeholders::_1)))
+Scene::Scene() : _event(_director->getEventDispatcher()->addCustomEventListener(Director::EVENT_PROJECTION_CHANGED,
+                 std::bind(&Scene::onProjectionChanged, this, std::placeholders::_1)))
 {
+    _event->retain();
+
     _ignoreAnchorPointForPosition = true;
     setAnchorPoint(Vec2(0.5f, 0.5f));
-    
-    //create default camera
-
-    addChild(_defaultCamera);
-    
-    _event->retain();
     
     Camera::_visitingCamera = nullptr;
 }
@@ -110,8 +105,16 @@ bool Scene::init()
 
 bool Scene::initWithSize(const Size& size)
 {
+    initDefaultCamera();
     setContentSize(size);
     return true;
+}
+
+void Scene::initDefaultCamera() {
+    if (!_defaultCamera) {
+        _defaultCamera = Camera::create();
+        addChild(_defaultCamera);
+    }
 }
 
 Scene* Scene::create()
@@ -298,20 +301,23 @@ Scene* Scene::createWithPhysics()
     }
 }
 
-bool Scene::initWithPhysics()
-{
+bool Scene::initWithPhysics() {
+    initDefaultCamera();
+    return initPhysicsWorld();
+}
+
+bool Scene::initPhysicsWorld() {
 #if CC_USE_PHYSICS
     _physicsWorld = PhysicsWorld::construct(this);
 #endif
 
     bool ret = false;
-    do
-    {
+    do {
         this->setContentSize(_director->getWinSize());
 
 #if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
         Physics3DWorldDes info;
-        CC_BREAK_IF(! (_physics3DWorld = Physics3DWorld::create(&info)));
+        CC_BREAK_IF(!(_physics3DWorld = Physics3DWorld::create(&info)));
         _physics3DWorld->retain();
 #endif
 

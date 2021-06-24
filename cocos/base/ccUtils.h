@@ -36,7 +36,7 @@ THE SOFTWARE.
 #include "renderer/backend/Types.h"
 #include "math/Mat4.h"
 
-#define CC_HEX2CHAR(hex) (hex < 0xa ? (hex + '0') : (hex + 'a' - 10))
+#define CC_HEX2CHAR(hex) ((hex) < 0xa ? ((hex) + '0') : ((hex) + 'a' - 10))
 
 /** @file ccUtils.h
 Misc free functions

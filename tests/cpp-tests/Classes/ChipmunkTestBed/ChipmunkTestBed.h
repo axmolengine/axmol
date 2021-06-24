@@ -72,12 +72,16 @@ public:
 
     ChipmunkTestBed();
     ~ChipmunkTestBed();
+
     void onEnter() override;
     void createResetButton();
     void reset(cocos2d::Ref* sender);
 
     void update(float dt) override;
     virtual void initPhysics();
+
+    //void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
+    //void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
 
     void onMouseDown(cocos2d::Event* event);
     void onMouseUp(cocos2d::Event* event);

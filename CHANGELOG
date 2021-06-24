@@ -1,4 +1,27 @@
-cocos2d-x-4.0  ??
+adxe-1.0  ??
+
+[Feature] Improve Lua RTTI performance and less memory storage
+[Feature] Virtual File System support, thanks  to @rh101 
+[BugFix] Fix imgui draw frame cause afterimage when game scene nothing to draw
+[BugFix] Set global Z value of label debug layer to be the same as the parent label to fix display issue
+[BugFix] Use TTF scaled metrics to calculate line height, thanks to @rh101 
+[BugFix] Fix Memory leak in ShaderModuleGL::getErrorLog(), thanks to @Xrysnow
+[BugFix] Fix console output text encoding for win32
+[BugFix] Fix charset process for fontName on win32
+[BugFix] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
+[Refine] Improve cmake scripts
+[Refine] Replace deprecated repo `jcenter` with `mavenCentral`
+[Refine] Lua-5.4 compatible
+[Refine] Improve cmdline-tools
+[Refine] Ensure label underline node has the same global Z value as the label node to fix visibility issue when global Z is not 0
+[Refine] Improve android astc support check
+[Refine] Improve the "Physics part" (#379), thanks  to @aismann 
+[Refine] Rename command line to to `adxe`
+[Refine] Update imgui to 1.84 WIP
+[Refine] Rename thirdparty folder `external` to `thirdparty`
+
+
+cocos2d-x-4.0  Dec.3 2019
 
 [HIGHLIGHT]     Support metal
 [HIGHLIGHT]     Use CMake for all platforms
@@ -16,6 +39,7 @@ cocos2d-x-4.0  ??
 [FIX]           UIWebView uses WKWebView instead
 [FIX]           VideoPlayer uses AVPlayerController instead
 [FX]            lua crashes on 64it devcices 
+
 
 cocos2d-x-3.17 May.21 2018
 

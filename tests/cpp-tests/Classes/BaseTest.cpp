@@ -154,6 +154,21 @@ void TestList::addTest(const std::string& testName, std::function<TestBase*()> c
 void TestList::runThisTest()
 {
     _cellTouchEnabled = true;
+
+    /* Restore default window and design size
+    * Note: We should change frame and design size before your new scene create
+    * otherwise, the layout will incorrect
+    */
+    
+    GLViewImpl* glview = (GLViewImpl*) Director::getInstance()->getOpenGLView();
+ #if defined(CC_PLATFORM_PC)
+    Size resourceSize(960, 640);
+    glview->setWindowed(resourceSize.width, resourceSize.height);
+ #endif
+ 
+    Size designSize(480, 320);
+    glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
+
     auto director = Director::getInstance();
     auto scene = Scene::create();
 
