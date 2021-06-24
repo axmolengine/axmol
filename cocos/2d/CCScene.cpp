@@ -111,9 +111,10 @@ bool Scene::initWithSize(const Size& size)
 }
 
 void Scene::initDefaultCamera() {
-    // create default camera
-    _defaultCamera = Camera::create();
-    addChild(_defaultCamera);
+    if (!_defaultCamera) {
+        _defaultCamera = Camera::create();
+        addChild(_defaultCamera);
+    }
 }
 
 Scene* Scene::create()
