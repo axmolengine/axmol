@@ -176,7 +176,7 @@ private:
 
     void handleNetworkEvent(yasio::io_event* event);
 
-    void handleNetworkEOF(HttpResponse* response, yasio::io_channel* channel);
+    void handleNetworkEOF(HttpResponse* response, yasio::io_channel* channel, int internalErrorCode);
 
     void finishResponse(HttpResponse* response);
 

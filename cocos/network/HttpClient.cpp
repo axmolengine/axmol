@@ -188,8 +188,10 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
         if (!responseFinished)
             response->handleInput(event->packet());
 
-        if (response->isFinished())
+        if (response->isFinished()) {
+            response->updateInternalCode(yasio::errc::eof);
             _service->close(event->cindex());
+        }
         break;
     case YEK_ON_OPEN:
         if (event->status() == 0) {
@@ -270,23 +272,23 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             timerForRead.cancel(*_service);
             timerForRead.expires_from_now(std::chrono::seconds(this->_timeoutForRead));
             timerForRead.async_wait(*_service, [=](io_service& s) {
+                response->updateInternalCode(yasio::errc::read_timeout);
                 s.close(channelIndex); // timeout
                 return true;
                 });
         } else {
-            response->setInternalCode(event->status());
-            handleNetworkEOF(response, channel);
+            handleNetworkEOF(response, channel, event->status());
         }
         break;
     case YEK_ON_CLOSE:
-        handleNetworkEOF(response, channel);
+        handleNetworkEOF(response, channel, event->status());
         break;
     }
 }
 
-void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* channel) {
+void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* channel, int internalErrorCode) {
     channel->get_user_timer().cancel(*_service);
-
+    response->updateInternalCode(internalErrorCode);
     auto responseCode = response->getResponseCode();
     switch (responseCode) {
     case 301:

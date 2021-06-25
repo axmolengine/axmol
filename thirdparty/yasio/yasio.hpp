@@ -292,6 +292,23 @@ enum
   YLOG_E,
 };
 
+namespace errc
+{
+enum
+{
+  no_error              = 0,   // No error.
+  read_timeout          = -28, // The remote host did not respond after a period of time.
+  invalid_packet        = -27, // Invalid packet.
+  resolve_host_failed   = -26, // Resolve host failed.
+  no_available_address  = -25, // No available address to connect.
+  shutdown_by_localhost = -24, // Local shutdown the connection.
+  ssl_handshake_failed  = -23, // SSL handshake failed.
+  ssl_write_failed      = -22, // SSL write failed.
+  ssl_read_failed       = -21, // SSL read failed.
+  eof                   = -20, // end of file.
+};
+}
+
 // class fwds
 class highp_timer;
 class io_send_op;
@@ -346,9 +363,9 @@ struct io_hostent {
 
 class YASIO_API highp_timer {
 public:
-  highp_timer() = default;
+  highp_timer()                   = default;
   highp_timer(const highp_timer&) = delete;
-  highp_timer(highp_timer&&) = delete;
+  highp_timer(highp_timer&&)      = delete;
   void expires_from_now(const std::chrono::microseconds& duration)
   {
     this->duration_    = duration;

@@ -128,15 +128,11 @@ public:
         return _responseCode;
     }
 
+    /*
+    * The yasio error code, see yasio::errc
+    */
     int getInternalCode() const { return _internalCode; }
 
-    // setters, will be called by HttpClient
-    // users should avoid invoking these methods
-
-    void setInternalCode(int value) 
-    {
-        _internalCode = value;
-    }
 
     int getRedirectCount() const {
         return _redirectCount;
@@ -147,6 +143,11 @@ public:
     }
 
 private:
+    void updateInternalCode(int value) {
+        if (_internalCode == 0)
+            _internalCode = value;
+    }
+
     /**
      * To see if the http request is finished.
      */
