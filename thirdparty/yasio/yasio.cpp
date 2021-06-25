@@ -90,21 +90,6 @@ SOFTWARE.
 
 namespace yasio
 {
-namespace errc
-{
-enum
-{
-  no_error              = 0,   // No error.
-  invalid_packet        = -27, // Invalid packet.
-  resolve_host_failed   = -26, // Resolve host failed.
-  no_available_address  = -25, // No available address to connect.
-  shutdown_by_localhost = -24, // Local shutdown the connection.
-  ssl_handshake_failed  = -23, // SSL handshake failed.
-  ssl_write_failed      = -22, // SSL write failed.
-  ssl_read_failed       = -21, // SSL read failed.
-  eof                   = -20, // end of file.
-};
-}
 
 YASIO__NS_INLINE
 namespace inet
@@ -2188,6 +2173,8 @@ const char* io_service::strerror(int error)
       return "SSL write failed!";
     case yasio::errc::ssl_read_failed:
       return "SSL read failed!";
+    case yasio::errc::read_timeout:
+      return "The remote host did not respond after a period of time.";
     case yasio::errc::eof:
       return "End of file.";
     case -1:
