@@ -5,7 +5,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
  
- http://www.cocos2d-x.org
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -108,7 +108,7 @@ HttpClient::HttpClient()
 : _isInited(false)
 , _dispatchOnWorkThread(false)
 , _timeoutForConnect(30)
-, _timeoutForRead(10)
+, _timeoutForRead(60)
 , _cookie(nullptr)
 , _clearResponsePredicate(nullptr)
 {
@@ -132,7 +132,6 @@ HttpClient::~HttpClient()
     CCLOG("HttpClient destructor");
 }
 
-//Add a get task to queue
 bool HttpClient::send(HttpRequest* request)
 {
     if (!request)
@@ -154,7 +153,6 @@ int HttpClient::tryTakeAvailChannel() {
     return -1;
 }
 
-// Process Response
 void HttpClient::processResponse(HttpResponse* response, const std::string& url) {
     auto channelIndex = tryTakeAvailChannel();
     response->retain();
@@ -196,12 +194,11 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
     case YEK_ON_OPEN:
         if (event->status() == 0) {
             obstream obs;
-            bool usePostData;
+            bool usePostData = false;
             auto request = response->getHttpRequest();
             switch (request->getRequestType()) { 
             case HttpRequest::Type::GET:
                 obs.write_bytes("GET");
-                usePostData = false;
                 break;
             case HttpRequest::Type::POST:
                 obs.write_bytes("POST");
@@ -209,7 +206,6 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                 break;
             case HttpRequest::Type::DELETE:
                 obs.write_bytes("DELETE");
-                usePostData = false;
                 break;
             case HttpRequest::Type::PUT:
                 obs.write_bytes("PUT");
@@ -217,7 +213,6 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                 break;
             default:
                 obs.write_bytes("GET");
-                usePostData = false;
                 break;
             }
             obs.write_bytes(" ");
@@ -392,5 +387,4 @@ const std::string& HttpClient::getSSLVerification()
 }
 
 NS_CC_END
-
 
