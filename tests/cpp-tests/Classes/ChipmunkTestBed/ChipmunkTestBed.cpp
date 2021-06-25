@@ -57,39 +57,166 @@ cpConstraint* mouse_joint = NULL;
 char const* ChipmunkDemoMessageString = NULL;
 
 float ChipmunkDebugDrawPointLineScale = 1.0f;
+
+// Meh, just max out 16 bit index size.
+#define VERTEX_MAX (64 * 1024)
+#define INDEX_MAX  (4 * VERTEX_MAX)
+
+// static sg_buffer VertexBuffer, IndexBuffer;
 static size_t VertexCount, IndexCount;
+
+static Vertex Vertexes[VERTEX_MAX];
+static Index Indexes[INDEX_MAX];
 
 #define GRABBABLE_MASK_BIT (1 << 31)
 cpShapeFilter GRAB_FILTER          = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
 cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
 
-// cpVect view_translate = {0, 0};
-// cpFloat view_scale    = 1.0;
-
 void ChipmunkDemoDefaultDrawImpl(cpSpace* space){};
+static Vertex* push_vertexes(size_t vcount, const Index* index_src, size_t icount) {
+    //   cpAssertHard(VertexCount + vcount <= VERTEX_MAX && IndexCount + icount <= INDEX_MAX, "Geometry buffer full.");
 
-void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor){};
-void ChipmunkDebugDrawSegment(cpVect a, cpVect b, cpSpaceDebugColor color){};
-void ChipmunkDebugDrawFatSegment(cpVect a, cpVect b, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor){};
-void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor outlineColor){};
-static Vertex* push_vertexes(size_t vcount, const Index* index_src, size_t icount){};
-////    cpAssertHard(VertexCount + vcount <= VERTEX_MAX && IndexCount + icount <= INDEX_MAX, "Geometry buffer full.");
-//
-//    Vertex* vertex_dst = Vertexes + VertexCount;
-//    size_t base        = VertexCount;
-//    VertexCount += vcount;
-//
-//    Index* index_dst = Indexes + IndexCount;
-//    for (size_t i = 0; i < icount; i++)
-//        index_dst[i] = index_src[i] + (Index) base;
-//    IndexCount += icount;
-//
-//    return vertex_dst;
-//}
+    Vertex* vertex_dst = Vertexes + VertexCount;
+    size_t base        = VertexCount;
+    VertexCount += vcount;
+
+    Index* index_dst = Indexes + IndexCount;
+    for (size_t i = 0; i < icount; i++)
+        index_dst[i] = index_src[i] + (Index) base;
+    IndexCount += icount;
+
+    return vertex_dst;
+}
+
+
+cocos2d::DrawNode* drawCP = NULL;
+
+void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor) {
+    drawCP->drawPoint(
+        Vec2(pos.x, pos.y) + physicsDebugNodeOffset, 1, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
+}
+
+void ChipmunkDebugDrawCircle(
+    cpVect pos, cpFloat angle, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+    drawCP->drawCircle(Vec2(pos.x, pos.y) + physicsDebugNodeOffset, 100, CC_DEGREES_TO_RADIANS(90), 50, true, 1.0f,
+        2.0f, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
+}
+
+void ChipmunkDebugDrawSegment(cpVect a, cpVect b, cpSpaceDebugColor color) {
+    auto aa = Vec2(a.x, a.y) + physicsDebugNodeOffset;
+    auto bb = Vec2(b.x, b.y) + physicsDebugNodeOffset;
+
+    drawCP->drawLine(aa, bb, Color4F(color.r, color.g, color.b, color.a));
+}
+
+void ChipmunkDebugDrawFatSegment(
+    cpVect a, cpVect b, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+    auto aa = Vec2(a.x, a.y) + physicsDebugNodeOffset;
+    auto bb = Vec2(b.x, b.y) + physicsDebugNodeOffset;
+
+    drawCP->drawSegment(aa, bb, radius, Color4F(outlineColor.r, outlineColor.g, outlineColor.b, outlineColor.a));
+}
+
+#define MAX_POLY_VERTEXES 64
+// Fill needs (count - 2) triangles.
+// Outline needs 4*count triangles.
+#define MAX_POLY_INDEXES (3 * (5 * MAX_POLY_VERTEXES - 2))
+
+void ChipmunkDebugDrawPolygon(
+    int count, const cpVect* verts, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+    return;
+
+
+    //    auto s = Director::getInstance()->getWinSize();
+
+
+    // star poly (triggers buggs)
+
+
+    float inset = (float) -cpfmax(0, 2 * ChipmunkDebugDrawPointLineScale - radius);
+    // float outset = (float) radius + ChipmunkDebugDrawPointLineScale;
+    // float r      = outset - inset;
+
+    Index indexes[MAX_POLY_INDEXES];
+
+    Vertex* vertexes = push_vertexes(4 * count, indexes, 3 * (5 * count - 2));
+    for (int i = 0; i < count; i++) {
+        cpVect v0     = verts[i];
+        cpVect v_prev = verts[(i + (count - 1)) % count];
+        cpVect v_next = verts[(i + (count + 1)) % count];
+
+        cpVect n1 = cpvnormalize(cpvrperp(cpvsub(v0, v_prev)));
+        cpVect n2 = cpvnormalize(cpvrperp(cpvsub(v_next, v0)));
+        cpVect of = cpvmult(cpvadd(n1, n2), 1.0 / (cpvdot(n1, n2) + 1.0f));
+        cpVect v  = cpvadd(v0, cpvmult(of, inset));
+
+        // vertexes[4 * i + 0] = (Vertex){{(float) v.x, (float) v.y}, {0.0f, 0.0f}, 0.0f, fill, outline};
+        // vertexes[4 * i + 1] = (Vertex){{(float) v.x, (float) v.y}, {(float) n1.x, (float) n1.y}, r, fill, outline};
+        // vertexes[4 * i + 2] = (Vertex){{(float) v.x, (float) v.y}, {(float) of.x, (float) of.y}, r, fill, outline};
+        // vertexes[4 * i + 3] = (Vertex){{(float) v.x, (float) v.y}, {(float) n2.x, (float) n2.y}, r, fill, outline};
+    }
+
+
+    const float o = 80;
+    const float w = 20;
+    const float h = 50;
+    Vec2 star[]   = {
+        Vec2(o + w, o - h), Vec2(o + w * 2, o), // lower spike
+        Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2), // right spike
+        {o + w, o + w * 2 + h}, {o, o + w * 2}, // top spike
+        {o - h, o + w}, {o, o}, // left spike
+    };
+
+
+    drawCP->drawPolygon(
+        star, sizeof(star) / sizeof(star[0]), Color4F(1.0f, 0.0f, 0.0f, 0.5f), 1, Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+
+
+    // RGBA8 fill = cp_to_rgba(fillColor), outline = cp_to_rgba(outlineColor);
+
+
+    //// Polygon fill triangles.
+    // for (int i = 0; i < count - 2; i++) {
+    //    indexes[3 * i + 0] = 0;
+    //    indexes[3 * i + 1] = 4 * (i + 1);
+    //    indexes[3 * i + 2] = 4 * (i + 2);
+    //}
+
+    //// Polygon outline triangles.
+    // Index* cursor = indexes + 3 * (count - 2);
+    // for (int i0 = 0; i0 < count; i0++) {
+    //    int i1               = (i0 + 1) % count;
+    //    cursor[12 * i0 + 0]  = 4 * i0 + 0;
+    //    cursor[12 * i0 + 1]  = 4 * i0 + 1;
+    //    cursor[12 * i0 + 2]  = 4 * i0 + 2;
+    //    cursor[12 * i0 + 3]  = 4 * i0 + 0;
+    //    cursor[12 * i0 + 4]  = 4 * i0 + 2;
+    //    cursor[12 * i0 + 5]  = 4 * i0 + 3;
+    //    cursor[12 * i0 + 6]  = 4 * i0 + 0;
+    //    cursor[12 * i0 + 7]  = 4 * i0 + 3;
+    //    cursor[12 * i0 + 8]  = 4 * i1 + 0;
+    //    cursor[12 * i0 + 9]  = 4 * i0 + 3;
+    //    cursor[12 * i0 + 10] = 4 * i1 + 0;
+    //    cursor[12 * i0 + 11] = 4 * i1 + 1;
+    //}
+}
+
+void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor color) {
+    Vec2 verts[] = {
+        Vec2(bb.r, bb.b) + physicsDebugNodeOffset,
+        Vec2(bb.r, bb.t) + physicsDebugNodeOffset,
+        Vec2(bb.l, bb.t) + physicsDebugNodeOffset,
+        Vec2(bb.l, bb.b) + physicsDebugNodeOffset,
+    };
+    drawCP->drawPolygon(
+        verts, sizeof(verts) / sizeof(verts[0]), Color4F(1.0f, 0.0f, 0.0f, 0.0f), 1, Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+}
+
+
+cocos2d::Label* label;
 
 static char PrintStringBuffer[1024 * 8];
 static char* PrintStringCursor;
-cocos2d::Label* label;
 
 void ChipmunkDemoPrintString(char const* fmt, ...) {
     if (PrintStringCursor == NULL) {
@@ -97,10 +224,6 @@ void ChipmunkDemoPrintString(char const* fmt, ...) {
     }
 
     ChipmunkDemoMessageString = PrintStringBuffer;
-    if (ChipmunkDemoMessageString) {
-        label->setString(ChipmunkDemoMessageString);
-        ChipmunkDemoMessageString = "";
-    }
 
     va_list args;
     va_start(args, fmt);
@@ -113,6 +236,8 @@ void ChipmunkDemoPrintString(char const* fmt, ...) {
         PrintStringCursor = NULL;
     }
     va_end(args);
+
+    label->setString(ChipmunkDemoMessageString);
 }
 
 cpSpaceDebugColor RGBAColor(float r, float g, float b, float a) {
@@ -178,8 +303,8 @@ static Rect getRect(Node* node) {
 }
 
 ChipmunkTestBed::ChipmunkTestBed() {
-    // halx99: since adxe init scene default camera at 'initWithXXX' function, only change design sze at scene construct is ok
-    // see also: https://github.com/adxeproject/adxe/commit/581a7921554c09746616759d5a5ca6ce9d3eaa22
+    // halx99: since adxe init scene default camera at 'initWithXXX' function, only change design size at scene
+    // construct is ok see also: https://github.com/adxeproject/adxe/commit/581a7921554c09746616759d5a5ca6ce9d3eaa22
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
     Size designSize(960 * 0.8, 640 * 0.8);
@@ -205,19 +330,24 @@ ChipmunkTestBed::ChipmunkTestBed() {
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    // creating a mouse event listener    
-    _mouseListener                = EventListenerMouse::create();
-    _mouseListener->onMouseMove   = CC_CALLBACK_1(ChipmunkTestBed::onMouseMove, this);
-    _mouseListener->onMouseUp     = CC_CALLBACK_1(ChipmunkTestBed::onMouseUp, this);
-    _mouseListener->onMouseDown   = CC_CALLBACK_1(ChipmunkTestBed::onMouseDown, this);
+    // creating a mouse event listener
+    _mouseListener              = EventListenerMouse::create();
+    _mouseListener->onMouseMove = CC_CALLBACK_1(ChipmunkTestBed::onMouseMove, this);
+    _mouseListener->onMouseUp   = CC_CALLBACK_1(ChipmunkTestBed::onMouseUp, this);
+    _mouseListener->onMouseDown = CC_CALLBACK_1(ChipmunkTestBed::onMouseDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 
     // ChipmunkDemoMessageString
-    label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 16.0f);
-    label->setAnchorPoint(Vec2(0, 1));
-    label->setPosition(10, VisibleRect::top().y - 100);
-    label->setColor(Color3B::GREEN);
-    this->addChild(label, -1);
+    label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 20.0f);
+    //  label->setAnchorPoint(Vec2(0, 1));
+    label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 100);
+    label->setColor(Color3B::MAGENTA);
+    this->addChild(label, 1000);
+
+    draw = DrawNode::create();
+    addChild(draw, 10);
+
+    drawCP = draw;
 
     scheduleUpdate();
 }
@@ -225,14 +355,6 @@ ChipmunkTestBed::ChipmunkTestBed() {
 
 ChipmunkTestBed::~ChipmunkTestBed() {
     ChipmunkDemoFreeSpaceChildren(_space);
-
-    auto director = Director::getInstance();
-    auto glview   = director->getOpenGLView();
-
-    // halx99: since we restore design resolution at BasetTest, this is not necessary.
-    // Size designSize(480, 320);
-    // glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
-
     _eventDispatcher->removeEventListener(_mouseListener);
 }
 
@@ -240,7 +362,10 @@ ChipmunkTestBed::~ChipmunkTestBed() {
 void ChipmunkTestBed::initPhysics() {
     if (ChipmunkDemoMessageString) {
         label->setString(ChipmunkDemoMessageString);
+    } else {
+        label->setString("");
     }
+    drawCP->clear();
     // Physics debug layer
     _debugLayer = PhysicsDebugNode::create(_space);
     this->addChild(_debugLayer, Z_PHYSICS_DEBUG);
@@ -252,8 +377,6 @@ void ChipmunkTestBed::update(float delta) {
 #else
     cpHastySpaceStep(_space, delta);
 #endif
-
-
 }
 
 void ChipmunkTestBed::createResetButton() {
@@ -272,6 +395,7 @@ void ChipmunkTestBed::onEnter() {
     TestCase::onEnter();
     physicsDebugNodeOffset    = VisibleRect::center();
     ChipmunkDemoMessageString = "";
+    label->setString("");
 }
 
 
@@ -313,8 +437,8 @@ void ChipmunkTestBed::onMouseDown(Event* event) {
 void ChipmunkTestBed::onMouseUp(Event* event) {
     EventMouse* e = (EventMouse*) event;
 
-    ChipmunkDemoLeftDown = cpFalse;
-    ChipmunkDemoRightDown = cpFalse;
+    ChipmunkDemoLeftDown   = cpFalse;
+    ChipmunkDemoRightDown  = cpFalse;
     ChipmunkDemoRightClick = cpFalse;
 
     if (mouse_joint) {
@@ -329,7 +453,6 @@ void ChipmunkTestBed::onMouseMove(Event* event) {
 
     ChipmunkDemoMouse.x = e->getCursorX() - physicsDebugNodeOffset.x;
     ChipmunkDemoMouse.y = e->getCursorY() - physicsDebugNodeOffset.y;
-
 
     cpBodySetPosition(mouse_body, ChipmunkDemoMouse);
 }
@@ -824,6 +947,8 @@ void QueryDemo::initPhysics() {
 void QueryDemo::update(float delta) {
     PrintStringBuffer[0] = 0;
     PrintStringCursor    = PrintStringBuffer;
+    label->setString("");
+    drawCP->clear();
     Query.updateFunc(_space, Query.timestep);
 }
 
@@ -848,8 +973,9 @@ void ContactGraphDemo::initPhysics() {
 }
 
 void ContactGraphDemo::update(float delta) {
-   // PrintStringBuffer[0] = 0;
+    PrintStringBuffer[0] = 0;
     PrintStringCursor    = PrintStringBuffer;
+    label->setString("");
     ContactGraph.updateFunc(_space, ContactGraph.timestep);
 }
 
@@ -922,6 +1048,7 @@ void UnicycleDemo::initPhysics() {
 }
 
 void UnicycleDemo::update(float delta) {
+    drawCP->clear();
     Unicycle.updateFunc(_space, Unicycle.timestep);
 }
 
