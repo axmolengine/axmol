@@ -93,6 +93,7 @@ private:
     cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
     cocos2d::EventListenerMouse* _mouseListener;
     cocos2d::Node* _trackNode;
+    cocos2d::DrawNode* draw;
 };
 
 class LogoSmashDemo : public ChipmunkTestBed {

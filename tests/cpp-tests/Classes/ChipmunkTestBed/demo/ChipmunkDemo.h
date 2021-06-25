@@ -65,12 +65,12 @@ typedef struct {
 } Vertex;
 typedef uint16_t Index;
 
-// Meh, just max out 16 bit index size.
-#define VERTEX_MAX (64 * 1024)
-#define INDEX_MAX  (4 * VERTEX_MAX)
-
-static Vertex Vertexes[VERTEX_MAX];
-static Index Indexes[INDEX_MAX];
+//// Meh, just max out 16 bit index size.
+//#define VERTEX_MAX (64 * 1024)
+//#define INDEX_MAX  (4 * VERTEX_MAX)
+//
+//static Vertex Vertexes[VERTEX_MAX];
+//static Index Indexes[INDEX_MAX];
 
 
 extern int ChipmunkDemoTicks;
@@ -100,4 +100,3 @@ void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor)
 void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor outlineColor);
 cpSpaceDebugColor LAColor(float l, float a);
 cpSpaceDebugColor RGBAColor(float r, float g, float b, float a);
-
