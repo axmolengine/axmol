@@ -44,12 +44,51 @@ enum {
     Z_PHYSICS_DEBUG = 100,
 };
 
+
+extern ChipmunkDemo Example; // Use as template for new Chipmunk2D demos
+
+extern ChipmunkDemo LogoSmash;
+extern ChipmunkDemo PyramidStack;
+extern ChipmunkDemo Plink;
+extern ChipmunkDemo BouncyHexagons;
+extern ChipmunkDemo Tumble;
+extern ChipmunkDemo PyramidTopple;
+extern ChipmunkDemo Planet;
+extern ChipmunkDemo Springies;
+extern ChipmunkDemo Pump;
+extern ChipmunkDemo TheoJansen;
+extern ChipmunkDemo Query;
+extern ChipmunkDemo OneWay;
+extern ChipmunkDemo PlatformerPlayer;
+extern ChipmunkDemo Joints;
+extern ChipmunkDemo Tank;
+extern ChipmunkDemo Chains;
+extern ChipmunkDemo Crane;
+extern ChipmunkDemo Buoyancy;
+extern ChipmunkDemo ContactGraph;
+extern ChipmunkDemo Slice;
+extern ChipmunkDemo Convex;
+extern ChipmunkDemo Unicycle;
+extern ChipmunkDemo Sticky;
+extern ChipmunkDemo Shatter;
+extern ChipmunkDemo GJK;
+
+extern ChipmunkDemo bench_list[];
+extern int bench_count;
+
+
+ChipmunkDemo demos[] = {LogoSmash, PyramidStack, Plink, BouncyHexagons, Tumble, PyramidTopple, Planet, Springies, Pump,
+    TheoJansen, Query, OneWay, Joints, Tank, Chains, Crane, ContactGraph, Buoyancy, PlatformerPlayer, Slice, Convex,
+    Unicycle, Sticky, Shatter};
+
+int demo_count = sizeof(demos);
+
 cpVect ChipmunkDemoMouse;
 cpVect ChipmunkDemoKeyboard;
 cpBool ChipmunkDemoRightClick;
 cpBool ChipmunkDemoRightDown;
 cpBool ChipmunkDemoLeftDown = cpFalse;
-
+double ChipmunkDemoTime;
 
 cpBody* mouse_body        = cpBodyNewKinematic();
 cpConstraint* mouse_joint = NULL;
@@ -215,9 +254,50 @@ void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor color) {
 
 cocos2d::Label* label;
 
+
+static int max_arbiters    = 0;
+static int max_points      = 0;
+static int max_constraints = 0;
+
+void ChipmunkTestBed::DrawInfo() {
+    int arbiters = _space->arbiters->num;
+    int points   = 0;
+
+    for (int i = 0; i < arbiters; i++)
+        points += ((cpArbiter*) (_space->arbiters->arr[i]))->count;
+
+    int constraints = (_space->constraints->num + points) * _space->iterations;
+
+    max_arbiters    = arbiters > max_arbiters ? arbiters : max_arbiters;
+    max_points      = points > max_points ? points : max_points;
+    max_constraints = constraints > max_constraints ? constraints : max_constraints;
+
+    char buffer[1024];
+    const char* format = "Arbiters: %d (%d) - "
+                         "Contact Points: %d (%d)\n"
+                         "Other Constraints: %d, Iterations: %d\n"
+                         "Constraints x Iterations: %d (%d)\n"
+                         "Time:% 5.2fs, KE:% 5.2e";
+
+    cpArray* bodies = _space->dynamicBodies;
+    cpFloat ke      = 0.0f;
+    for (int i = 0; i < bodies->num; i++) {
+        cpBody* body = (cpBody*) bodies->arr[i];
+        if (body->m == INFINITY || body->i == INFINITY)
+            continue;
+
+        ke += body->m * cpvdot(body->v, body->v) + body->i * body->w * body->w;
+    }
+
+    sprintf(buffer, format, arbiters, max_arbiters, points, max_points, _space->constraints->num, _space->iterations,
+        constraints, max_constraints, ChipmunkDemoTime, (ke < 1e-10f ? 0.0f : ke));
+
+    drawInfo->setString(buffer);
+}
+
+
 static char PrintStringBuffer[1024 * 8];
 static char* PrintStringCursor;
-
 void ChipmunkDemoPrintString(char const* fmt, ...) {
     if (PrintStringCursor == NULL) {
         return;
@@ -339,10 +419,23 @@ ChipmunkTestBed::ChipmunkTestBed() {
 
     // ChipmunkDemoMessageString
     label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 20.0f);
-    //  label->setAnchorPoint(Vec2(0, 1));
     label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 100);
     label->setColor(Color3B::MAGENTA);
     this->addChild(label, 1000);
+
+    // Some info text
+    auto label1 = Label::createWithTTF("Use the mouse to grab objects.", "fonts/Marker Felt.ttf", 20.0f);
+    label1->setPosition(VisibleRect::center().x, VisibleRect::top().y - 60);
+    label1->setColor(Color3B::WHITE);
+    this->addChild(label1, 1000);
+
+
+    drawInfo = Label::createWithTTF("Use the mouse to grab objects.", "fonts/Marker Felt.ttf", 12.0f);
+    drawInfo->setAnchorPoint(Vec2(0, 0));
+    drawInfo->setPosition(VisibleRect::left().x + 10, VisibleRect::top().y - 60);
+    drawInfo->setColor(Color3B::WHITE);
+    this->addChild(drawInfo, 1000);
+
 
     draw = DrawNode::create();
     addChild(draw, 10);
@@ -457,6 +550,19 @@ void ChipmunkTestBed::onMouseMove(Event* event) {
     cpBodySetPosition(mouse_body, ChipmunkDemoMouse);
 }
 
+
+void ChipmunkTestBed::updateInit(ChipmunkDemo tt) {
+    PrintStringBuffer[0] = 0;
+    PrintStringCursor    = PrintStringBuffer;
+
+
+    drawCP->clear();
+    updateMouseBody();
+    ChipmunkDemoTime += tt.timestep;
+    ChipmunkTestBed::DrawInfo();
+    tt.updateFunc(_space, tt.timestep);
+}
+
 //------------------------------------------------------------------
 //
 // LogoSmashDemo
@@ -477,8 +583,7 @@ void LogoSmashDemo::initPhysics() {
 }
 
 void LogoSmashDemo::update(float delta) {
-    updateMouseBody();
-    LogoSmash.updateFunc(_space, LogoSmash.timestep);
+    ChipmunkTestBed::updateInit(LogoSmash);
 }
 
 //------------------------------------------------------------------
@@ -502,8 +607,7 @@ void PlinkDemo::initPhysics() {
 }
 
 void PlinkDemo::update(float delta) {
-    updateMouseBody();
-    Plink.updateFunc(_space, Plink.timestep);
+    ChipmunkTestBed::updateInit(Plink);
 }
 
 //------------------------------------------------------------------
@@ -526,8 +630,7 @@ void TumbleDemo::initPhysics() {
 }
 
 void TumbleDemo::update(float delta) {
-    updateMouseBody();
-    Tumble.updateFunc(_space, Tumble.timestep);
+    ChipmunkTestBed::updateInit(Tumble);
 }
 
 //------------------------------------------------------------------
@@ -550,8 +653,7 @@ void PyramidStackDemo::initPhysics() {
 }
 
 void PyramidStackDemo::update(float delta) {
-    updateMouseBody();
-    PyramidStack.updateFunc(_space, PyramidStack.timestep);
+    ChipmunkTestBed::updateInit(PyramidStack);
 }
 
 
@@ -575,8 +677,7 @@ void PyramidToppleDemo::initPhysics() {
 }
 
 void PyramidToppleDemo::update(float delta) {
-    updateMouseBody();
-    PyramidTopple.updateFunc(_space, PyramidTopple.timestep);
+    ChipmunkTestBed::updateInit(PyramidTopple);
 }
 
 
@@ -601,8 +702,7 @@ void ChainsDemo::initPhysics() {
 }
 
 void ChainsDemo::update(float delta) {
-    updateMouseBody();
-    Chains.updateFunc(_space, Chains.timestep);
+    ChipmunkTestBed::updateInit(Chains);
 }
 
 //------------------------------------------------------------------
@@ -626,8 +726,7 @@ void OneWayDemo::initPhysics() {
 }
 
 void OneWayDemo::update(float delta) {
-    updateMouseBody();
-    OneWay.updateFunc(_space, OneWay.timestep);
+    ChipmunkTestBed::updateInit(OneWay);
 }
 
 //------------------------------------------------------------------
@@ -651,8 +750,7 @@ void PlanetDemo::initPhysics() {
 }
 
 void PlanetDemo::update(float delta) {
-    updateMouseBody();
-    Planet.updateFunc(_space, Planet.timestep);
+    ChipmunkTestBed::updateInit(Planet);
 }
 
 //------------------------------------------------------------------
@@ -676,8 +774,7 @@ void TheoJansenDemo::initPhysics() {
 }
 
 void TheoJansenDemo::update(float delta) {
-    updateMouseBody();
-    TheoJansen.updateFunc(_space, TheoJansen.timestep);
+    ChipmunkTestBed::updateInit(TheoJansen);
 }
 
 
@@ -702,8 +799,7 @@ void TankDemo::initPhysics() {
 }
 
 void TankDemo::update(float delta) {
-    updateMouseBody();
-    Tank.updateFunc(_space, Tank.timestep);
+    ChipmunkTestBed::updateInit(Tank);
 }
 
 
@@ -728,7 +824,7 @@ void BouncyHexagonsDemo::initPhysics() {
 }
 
 void BouncyHexagonsDemo::update(float delta) {
-    BouncyHexagons.updateFunc(_space, BouncyHexagons.timestep);
+    ChipmunkTestBed::updateInit(BouncyHexagons);
 }
 
 
@@ -753,7 +849,7 @@ void SpringiesDemo::initPhysics() {
 }
 
 void SpringiesDemo::update(float delta) {
-    Springies.updateFunc(_space, Springies.timestep);
+    ChipmunkTestBed::updateInit(Springies);
 }
 
 
@@ -777,7 +873,7 @@ void ShatterDemo::initPhysics() {
 }
 
 void ShatterDemo::update(float delta) {
-    Shatter.updateFunc(_space, Shatter.timestep);
+    ChipmunkTestBed::updateInit(Shatter);
 }
 
 //------------------------------------------------------------------
@@ -801,7 +897,7 @@ void StickyDemo::initPhysics() {
 }
 
 void StickyDemo::update(float delta) {
-    Sticky.updateFunc(_space, Sticky.timestep);
+    ChipmunkTestBed::updateInit(Sticky);
 }
 
 //------------------------------------------------------------------
@@ -825,7 +921,7 @@ void CraneDemo::initPhysics() {
 }
 
 void CraneDemo::update(float delta) {
-    Crane.updateFunc(_space, Crane.timestep);
+    ChipmunkTestBed::updateInit(Crane);
 }
 
 //------------------------------------------------------------------
@@ -849,7 +945,7 @@ void JointsDemo::initPhysics() {
 }
 
 void JointsDemo::update(float delta) {
-    Joints.updateFunc(_space, Joints.timestep);
+    ChipmunkTestBed::updateInit(Joints);
 }
 
 //------------------------------------------------------------------
@@ -873,7 +969,7 @@ void ConvexDemo::initPhysics() {
 }
 
 void ConvexDemo::update(float delta) {
-    Convex.updateFunc(_space, Convex.timestep);
+    ChipmunkTestBed::updateInit(Convex);
 }
 
 //------------------------------------------------------------------
@@ -897,7 +993,7 @@ void PumpDemo::initPhysics() {
 }
 
 void PumpDemo::update(float delta) {
-    Pump.updateFunc(_space, Pump.timestep);
+    ChipmunkTestBed::updateInit(Pump);
 }
 
 //------------------------------------------------------------------
@@ -921,7 +1017,7 @@ void PlatformerPlayerDemo::initPhysics() {
 }
 
 void PlatformerPlayerDemo::update(float delta) {
-    PlatformerPlayer.updateFunc(_space, PlatformerPlayer.timestep);
+    ChipmunkTestBed::updateInit(PlatformerPlayer);
 }
 
 //------------------------------------------------------------------
@@ -945,11 +1041,7 @@ void QueryDemo::initPhysics() {
 }
 
 void QueryDemo::update(float delta) {
-    PrintStringBuffer[0] = 0;
-    PrintStringCursor    = PrintStringBuffer;
-    label->setString("");
-    drawCP->clear();
-    Query.updateFunc(_space, Query.timestep);
+    ChipmunkTestBed::updateInit(Query);
 }
 
 //------------------------------------------------------------------
@@ -973,10 +1065,7 @@ void ContactGraphDemo::initPhysics() {
 }
 
 void ContactGraphDemo::update(float delta) {
-    PrintStringBuffer[0] = 0;
-    PrintStringCursor    = PrintStringBuffer;
-    label->setString("");
-    ContactGraph.updateFunc(_space, ContactGraph.timestep);
+    ChipmunkTestBed::updateInit(ContactGraph);
 }
 
 //------------------------------------------------------------------
@@ -1000,7 +1089,7 @@ void BuoyancyDemo::initPhysics() {
 }
 
 void BuoyancyDemo::update(float delta) {
-    Buoyancy.updateFunc(_space, Buoyancy.timestep);
+    ChipmunkTestBed::updateInit(Buoyancy);
 }
 
 //------------------------------------------------------------------
@@ -1024,7 +1113,7 @@ void SliceDemo::initPhysics() {
 }
 
 void SliceDemo::update(float delta) {
-    Slice.updateFunc(_space, Slice.timestep);
+    ChipmunkTestBed::updateInit(Slice);
 }
 
 //------------------------------------------------------------------
@@ -1048,8 +1137,7 @@ void UnicycleDemo::initPhysics() {
 }
 
 void UnicycleDemo::update(float delta) {
-    drawCP->clear();
-    Unicycle.updateFunc(_space, Unicycle.timestep);
+    ChipmunkTestBed::updateInit(Unicycle);
 }
 
 
@@ -1074,7 +1162,7 @@ void ExampleDemo::initPhysics() {
 }
 
 void ExampleDemo::update(float delta) {
-    cpSpaceStep(_space, Example.timestep);
+    ChipmunkTestBed::updateInit(Example);
 }
 
 
