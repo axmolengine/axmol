@@ -156,7 +156,7 @@ destroy(cpSpace *space)
 }
 
 ChipmunkDemo Example = {
-	"Your Example from scratch (Logo Smash)",
+	"Template for your scratch",
 	1.0/60.0,
 	init,
 	update,

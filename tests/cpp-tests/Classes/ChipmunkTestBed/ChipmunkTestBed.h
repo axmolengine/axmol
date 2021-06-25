@@ -33,36 +33,6 @@
 
 #include "demo/ChipmunkDemo.h"
 
-extern ChipmunkDemo Example; // Use as template for new Chipmunk2D demos
-
-extern ChipmunkDemo LogoSmash;
-extern ChipmunkDemo PyramidStack;
-extern ChipmunkDemo Plink;
-extern ChipmunkDemo BouncyHexagons;
-extern ChipmunkDemo Tumble;
-extern ChipmunkDemo PyramidTopple;
-extern ChipmunkDemo Planet;
-extern ChipmunkDemo Springies;
-extern ChipmunkDemo Pump;
-extern ChipmunkDemo TheoJansen;
-extern ChipmunkDemo Query;
-extern ChipmunkDemo OneWay;
-extern ChipmunkDemo PlatformerPlayer;
-extern ChipmunkDemo Joints;
-extern ChipmunkDemo Tank;
-extern ChipmunkDemo Chains;
-extern ChipmunkDemo Crane;
-extern ChipmunkDemo Buoyancy;
-extern ChipmunkDemo ContactGraph;
-extern ChipmunkDemo Slice;
-extern ChipmunkDemo Convex;
-extern ChipmunkDemo Unicycle;
-extern ChipmunkDemo Sticky;
-extern ChipmunkDemo Shatter;
-extern ChipmunkDemo GJK;
-
-extern ChipmunkDemo bench_list[];
-extern int bench_count;
 
 class KeyboardNotificationLayer;
 
@@ -87,6 +57,9 @@ public:
     void onMouseUp(cocos2d::Event* event);
     void onMouseMove(cocos2d::Event* event);
 
+    void DrawInfo();
+    void updateInit(ChipmunkDemo tt);
+
     cpSpace* _space; // strong ref
 
 private: 
@@ -94,6 +67,7 @@ private:
     cocos2d::EventListenerMouse* _mouseListener;
     cocos2d::Node* _trackNode;
     cocos2d::DrawNode* draw;
+    cocos2d::Label* drawInfo;
 };
 
 class LogoSmashDemo : public ChipmunkTestBed {
