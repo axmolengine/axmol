@@ -22,6 +22,7 @@
 * Excellent PRs from any guys are welcome, we will review & merge ASAP
   
 ### 主要特性:
+* 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
 * 重构AudioEngine, 全平台OpenAL
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no and ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
@@ -105,7 +106,7 @@
   * official v4: https://gitee.com/mirrors/cocos2d-x
   * Git快速手册: https://github.com/adxeproject/adxe/wiki/Git-Guides
 
-### adxe项目的活跃共享者
+### adxe项目的活跃贡献者
 
 - @halx99
 - @rh101
