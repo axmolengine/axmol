@@ -50,7 +50,6 @@ extern ChipmunkDemo Example; // Use as template for new Chipmunk2D demos
 extern ChipmunkDemo LogoSmash;
 extern ChipmunkDemo PyramidStack;
 extern ChipmunkDemo Plink;
-extern ChipmunkDemo BouncyHexagons;
 extern ChipmunkDemo Tumble;
 extern ChipmunkDemo PyramidTopple;
 extern ChipmunkDemo Planet;
@@ -71,15 +70,19 @@ extern ChipmunkDemo Convex;
 extern ChipmunkDemo Unicycle;
 extern ChipmunkDemo Sticky;
 extern ChipmunkDemo Shatter;
-extern ChipmunkDemo GJK;
-
 extern ChipmunkDemo bench_list[];
 extern int bench_count;
+int bench = 16;
 
 
-ChipmunkDemo demos[] = {LogoSmash, PyramidStack, Plink, BouncyHexagons, Tumble, PyramidTopple, Planet, Springies, Pump,
-    TheoJansen, Query, OneWay, Joints, Tank, Chains, Crane, ContactGraph, Buoyancy, PlatformerPlayer, Slice, Convex,
-    Unicycle, Sticky, Shatter};
+
+static Vec2 cpVert2Point(const cpVect& vert) {
+    return Vec2(vert.x, vert.y) + physicsDebugNodeOffset;
+}
+
+ChipmunkDemo demos[] = {LogoSmash, PyramidStack, Plink, Tumble, PyramidTopple, Planet, Springies, Pump, TheoJansen,
+    Query, OneWay, Joints, Tank, Chains, Crane, ContactGraph, Buoyancy, PlatformerPlayer, Slice, Convex, Unicycle,
+    Sticky, Shatter};
 
 int demo_count = sizeof(demos);
 
@@ -113,7 +116,7 @@ cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBAB
 
 void ChipmunkDemoDefaultDrawImpl(cpSpace* space){};
 static Vertex* push_vertexes(size_t vcount, const Index* index_src, size_t icount) {
-    //   cpAssertHard(VertexCount + vcount <= VERTEX_MAX && IndexCount + icount <= INDEX_MAX, "Geometry buffer full.");
+    cpAssertHard(VertexCount + vcount <= VERTEX_MAX && IndexCount + icount <= INDEX_MAX, "Geometry buffer full.");
 
     Vertex* vertex_dst = Vertexes + VertexCount;
     size_t base        = VertexCount;
@@ -130,9 +133,11 @@ static Vertex* push_vertexes(size_t vcount, const Index* index_src, size_t icoun
 
 cocos2d::DrawNode* drawCP = NULL;
 
+// static Vec2 cpVert2Point(const cpVect& vert)
+
 void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor) {
     drawCP->drawPoint(
-        Vec2(pos.x, pos.y) + physicsDebugNodeOffset, 1, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
+        Vec2(pos.x, pos.y) + physicsDebugNodeOffset, size, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
 }
 
 void ChipmunkDebugDrawCircle(
@@ -142,102 +147,27 @@ void ChipmunkDebugDrawCircle(
 }
 
 void ChipmunkDebugDrawSegment(cpVect a, cpVect b, cpSpaceDebugColor color) {
-    auto aa = Vec2(a.x, a.y) + physicsDebugNodeOffset;
-    auto bb = Vec2(b.x, b.y) + physicsDebugNodeOffset;
-
-    drawCP->drawLine(aa, bb, Color4F(color.r, color.g, color.b, color.a));
+    drawCP->drawLine(Vec2(a.x, a.y) + physicsDebugNodeOffset, Vec2(b.x, b.y) + physicsDebugNodeOffset,
+        Color4F(color.r, color.g, color.b, color.a));
 }
 
 void ChipmunkDebugDrawFatSegment(
     cpVect a, cpVect b, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
-    auto aa = Vec2(a.x, a.y) + physicsDebugNodeOffset;
-    auto bb = Vec2(b.x, b.y) + physicsDebugNodeOffset;
-
-    drawCP->drawSegment(aa, bb, radius, Color4F(outlineColor.r, outlineColor.g, outlineColor.b, outlineColor.a));
+    drawCP->drawSegment(Vec2(a.x, a.y) + physicsDebugNodeOffset, Vec2(b.x, b.y) + physicsDebugNodeOffset, radius,
+        Color4F(outlineColor.r, outlineColor.g, outlineColor.b, outlineColor.a));
 }
-
-#define MAX_POLY_VERTEXES 64
-// Fill needs (count - 2) triangles.
-// Outline needs 4*count triangles.
-#define MAX_POLY_INDEXES (3 * (5 * MAX_POLY_VERTEXES - 2))
 
 void ChipmunkDebugDrawPolygon(
     int count, const cpVect* verts, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
-    return;
-
-
-    //    auto s = Director::getInstance()->getWinSize();
-
-
-    // star poly (triggers buggs)
-
-
-    float inset = (float) -cpfmax(0, 2 * ChipmunkDebugDrawPointLineScale - radius);
-    // float outset = (float) radius + ChipmunkDebugDrawPointLineScale;
-    // float r      = outset - inset;
-
-    Index indexes[MAX_POLY_INDEXES];
-
-    Vertex* vertexes = push_vertexes(4 * count, indexes, 3 * (5 * count - 2));
-    for (int i = 0; i < count; i++) {
-        cpVect v0     = verts[i];
-        cpVect v_prev = verts[(i + (count - 1)) % count];
-        cpVect v_next = verts[(i + (count + 1)) % count];
-
-        cpVect n1 = cpvnormalize(cpvrperp(cpvsub(v0, v_prev)));
-        cpVect n2 = cpvnormalize(cpvrperp(cpvsub(v_next, v0)));
-        cpVect of = cpvmult(cpvadd(n1, n2), 1.0 / (cpvdot(n1, n2) + 1.0f));
-        cpVect v  = cpvadd(v0, cpvmult(of, inset));
-
-        // vertexes[4 * i + 0] = (Vertex){{(float) v.x, (float) v.y}, {0.0f, 0.0f}, 0.0f, fill, outline};
-        // vertexes[4 * i + 1] = (Vertex){{(float) v.x, (float) v.y}, {(float) n1.x, (float) n1.y}, r, fill, outline};
-        // vertexes[4 * i + 2] = (Vertex){{(float) v.x, (float) v.y}, {(float) of.x, (float) of.y}, r, fill, outline};
-        // vertexes[4 * i + 3] = (Vertex){{(float) v.x, (float) v.y}, {(float) n2.x, (float) n2.y}, r, fill, outline};
+    Vec2* vec = new (std::nothrow) Vec2[count];
+    for (size_t i = 0; i < count; i++) {
+        vec[i] = cpVert2Point(verts[i]);
     }
 
 
-    const float o = 80;
-    const float w = 20;
-    const float h = 50;
-    Vec2 star[]   = {
-        Vec2(o + w, o - h), Vec2(o + w * 2, o), // lower spike
-        Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2), // right spike
-        {o + w, o + w * 2 + h}, {o, o + w * 2}, // top spike
-        {o - h, o + w}, {o, o}, // left spike
-    };
+    drawCP->drawPolygon(vec, count, Color4F(1.0f, 0.0f, 0.0f, 0.5f), radius, Color4F(0.0f, 0.0f, 1.0f, 1.0f));
 
-
-    drawCP->drawPolygon(
-        star, sizeof(star) / sizeof(star[0]), Color4F(1.0f, 0.0f, 0.0f, 0.5f), 1, Color4F(0.0f, 0.0f, 1.0f, 1.0f));
-
-
-    // RGBA8 fill = cp_to_rgba(fillColor), outline = cp_to_rgba(outlineColor);
-
-
-    //// Polygon fill triangles.
-    // for (int i = 0; i < count - 2; i++) {
-    //    indexes[3 * i + 0] = 0;
-    //    indexes[3 * i + 1] = 4 * (i + 1);
-    //    indexes[3 * i + 2] = 4 * (i + 2);
-    //}
-
-    //// Polygon outline triangles.
-    // Index* cursor = indexes + 3 * (count - 2);
-    // for (int i0 = 0; i0 < count; i0++) {
-    //    int i1               = (i0 + 1) % count;
-    //    cursor[12 * i0 + 0]  = 4 * i0 + 0;
-    //    cursor[12 * i0 + 1]  = 4 * i0 + 1;
-    //    cursor[12 * i0 + 2]  = 4 * i0 + 2;
-    //    cursor[12 * i0 + 3]  = 4 * i0 + 0;
-    //    cursor[12 * i0 + 4]  = 4 * i0 + 2;
-    //    cursor[12 * i0 + 5]  = 4 * i0 + 3;
-    //    cursor[12 * i0 + 6]  = 4 * i0 + 0;
-    //    cursor[12 * i0 + 7]  = 4 * i0 + 3;
-    //    cursor[12 * i0 + 8]  = 4 * i1 + 0;
-    //    cursor[12 * i0 + 9]  = 4 * i0 + 3;
-    //    cursor[12 * i0 + 10] = 4 * i1 + 0;
-    //    cursor[12 * i0 + 11] = 4 * i1 + 1;
-    //}
+    delete[] vec;
 }
 
 void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor color) {
@@ -371,15 +301,6 @@ void updateMouseBody(void) {
     cpVect new_point = cpvlerp(mouse_body->p, ChipmunkDemoMouse, 0.25f);
     mouse_body->v    = cpvmult(cpvsub(new_point, mouse_body->p), 60.0f);
     mouse_body->p    = new_point;
-}
-
-static Rect getRect(Node* node) {
-    Rect rc;
-    rc.origin = node->getPosition();
-    rc.size   = node->getContentSize();
-    rc.origin.x -= rc.size.width / 2;
-    rc.origin.y -= rc.size.height / 2;
-    return rc;
 }
 
 ChipmunkTestBed::ChipmunkTestBed() {
@@ -805,26 +726,52 @@ void TankDemo::update(float delta) {
 
 //------------------------------------------------------------------
 //
-// BouncyHexagonsDemo
+// BenchDemo
 //
 //------------------------------------------------------------------
-void BouncyHexagonsDemo::onEnter() {
+void BenchDemo::onEnter() {
     ChipmunkTestBed::onEnter();
+
+    auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Ref* sender) {
+        bench = (bench > 0) ? bench-1 : (bench_count-1);
+        reset(sender);
+    });
+
+    auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Ref* sender) {
+        bench = (bench < (bench_count - 1)) ? bench+1 : 0;
+        reset(sender);
+    });
+
+    auto s = Director::getInstance()->getWinSize();
+
+    auto menuPrev = Menu::create(itemPrev, nullptr);
+    menuPrev->alignItemsHorizontally();
+    menuPrev->setScale(0.4);
+    menuPrev->setAnchorPoint(Vec2(0.0f, 0.0f));
+    menuPrev->setPosition(Vec2(s.width / 2 - 45, 23.0f));
+    addChild(menuPrev);
+
+    auto menuNext = Menu::create(itemNext, nullptr);
+    menuNext->alignItemsHorizontally();
+    menuNext->setScale(0.4);
+    menuNext->setAnchorPoint(Vec2(0.0f, 0.0f));
+    menuNext->setPosition(Vec2(s.width / 2 + 45, 23.0f));
+    addChild(menuNext);
 
     initPhysics();
 }
 
-std::string BouncyHexagonsDemo::title() const {
-    return BouncyHexagons.name;
+std::string BenchDemo::title() const {
+    return bench_list[bench].name;
 }
 
-void BouncyHexagonsDemo::initPhysics() {
-    _space = BouncyHexagons.initFunc();
+void BenchDemo::initPhysics() {
+    _space = bench_list[bench].initFunc();
     ChipmunkTestBed::initPhysics();
 }
 
-void BouncyHexagonsDemo::update(float delta) {
-    ChipmunkTestBed::updateInit(BouncyHexagons);
+void BenchDemo::update(float delta) {
+    ChipmunkTestBed::updateInit(bench_list[bench]);
 }
 
 
@@ -1167,7 +1114,7 @@ void ExampleDemo::update(float delta) {
 
 
 ChipmunkTestBedTests::ChipmunkTestBedTests() {
-
+    ADD_TEST_CASE(BenchDemo);
     ADD_TEST_CASE(LogoSmashDemo);
     ADD_TEST_CASE(PlinkDemo);
     ADD_TEST_CASE(TumbleDemo);
@@ -1178,7 +1125,7 @@ ChipmunkTestBedTests::ChipmunkTestBedTests() {
     ADD_TEST_CASE(PlanetDemo);
     ADD_TEST_CASE(TheoJansenDemo);
     ADD_TEST_CASE(TankDemo);
-    ADD_TEST_CASE(BouncyHexagonsDemo);
+
     ADD_TEST_CASE(SpringiesDemo);
 
     ADD_TEST_CASE(ShatterDemo);

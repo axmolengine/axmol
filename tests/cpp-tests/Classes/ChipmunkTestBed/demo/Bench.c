@@ -378,9 +378,13 @@ static cpSpace *init_BouncyTerrainHexagons_500(void){
 
 // No collisions
 
+static cpFloat pentagon_mass   = 0.0f;
+static cpFloat pentagon_moment = 0.0f;
+
 static cpBool NoCollide_begin(cpArbiter *arb, cpSpace *space, void *data){
-	abort();
-	
+    
+	CCLOG("NoCollide_begin");
+
 	return cpTrue;
 }
 
@@ -402,7 +406,9 @@ static cpSpace *init_NoCollide(void){
 	
 	for(int x=-320; x<=320; x+=20){
 		for(int y=-240; y<=240; y+=20){
-			cpSpaceAddShape(space, cpCircleShapeNew(cpSpaceGetStaticBody(space), radius, cpv(x, y)));
+			cpShape* shape = cpSpaceAddShape(space, cpCircleShapeNew(cpSpaceGetStaticBody(space), radius, cpv(x, y)));
+			cpShapeSetElasticity(shape, 1.0);
+			cpShapeSetCollisionType(shape, 2);
 		}
 	}
 	
@@ -458,7 +464,7 @@ ChipmunkDemo BouncyHexagons = {
 	destroy,
 };
 
-#define BENCH(n) {"benchmark - " #n, 1.0/60.0, init_##n, update, 	ChipmunkDemoDefaultDrawImpl, destroy}
+#define BENCH(n) {#n, 1.0/60.0, init_##n, update, 	ChipmunkDemoDefaultDrawImpl, destroy}
 ChipmunkDemo bench_list[] = {
 	BENCH(SimpleTerrainCircles_1000),
 	BENCH(SimpleTerrainCircles_500),

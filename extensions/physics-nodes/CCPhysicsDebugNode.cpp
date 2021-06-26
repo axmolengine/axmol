@@ -87,7 +87,7 @@ static Color4F ColorForBody(cpBody *body)
 
 static Vec2 cpVert2Point(const cpVect &vert)
 {
-    return Vec2(vert.x + physicsDebugNodeOffset.x, vert.y + physicsDebugNodeOffset.y);
+    return (Vec2(vert.x, vert.y) + physicsDebugNodeOffset);
 }
 
 static void DrawShape(cpShape *shape, DrawNode *renderer)
@@ -109,19 +109,25 @@ static void DrawShape(cpShape *shape, DrawNode *renderer)
         case CP_SEGMENT_SHAPE:
         {
             cpSegmentShape *seg = (cpSegmentShape *)shape;
-            renderer->drawSegment(cpVert2Point(seg->ta), cpVert2Point(seg->tb), cpfmax(seg->r, 2.0), color);
+            renderer->drawSegment(cpVert2Point(seg->ta), cpVert2Point(seg->tb), cpfmax(seg->r, 1.0), color);
         }
             break;
         case CP_POLY_SHAPE:
         {
-            cpPolyShape* poly = (cpPolyShape*)shape;
+            cpPolyShape* poly = (cpPolyShape*)shape;     
             Color4F line = color;
             line.a = cpflerp(color.a, 1.0, 0.5);
             int num = poly->count;
             Vec2* pPoints = new (std::nothrow) Vec2[num];
             for(int i=0;i<num;++i)
                 pPoints[i] = cpVert2Point(poly->planes[i].v0);
-            renderer->drawPolygon(pPoints, num, color, 1.0, line);
+            if (cpfmax(poly->r, 1.0) > 1.0) {
+                renderer->drawPolygon(pPoints, num, Color4F(0.5f, 0.5f, 0.5f, 0.0f), poly->r, color);
+            } else {
+                renderer->drawPolygon(pPoints, num, color, 1.0, line);
+            }
+
+          
             CC_SAFE_DELETE_ARRAY(pPoints);
         }
             break;
