@@ -160,23 +160,23 @@ init(void)
 	cpShape *shape;
 	
 	// Create segments around the edge of the screen.
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(-320,240), 0.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-200), cpv(-320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(320,-240), cpv(320,240), 0.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(320,-200), cpv(320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(320,-240), 0.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-200), cpv(320,-200), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 	
 	scaleStaticBody = cpSpaceAddBody(space, cpBodyNewStatic());
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(scaleStaticBody, cpv(-240,-180), cpv(-140,-180), 4.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(scaleStaticBody, cpv(-240,-140), cpv(-140,-140), 4.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
 	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
@@ -184,7 +184,7 @@ init(void)
 	// add some boxes to stack on the scale
 	for(int i=0; i<5; i++){
 		body = cpSpaceAddBody(space, cpBodyNew(1.0f, cpMomentForBox(1.0f, 30.0f, 30.0f)));
-		cpBodySetPosition(body, cpv(0, i*32 - 220));
+		cpBodySetPosition(body, cpv(0, i*32 - 120));
 		
 		shape = cpSpaceAddShape(space, cpBoxShapeNew(body, 30.0f, 30.0f, 0.0));
 		cpShapeSetElasticity(shape, 0.0f);
@@ -194,7 +194,7 @@ init(void)
 	// Add a ball that we'll track which objects are beneath it.
 	cpFloat radius = 15.0f;
 	ballBody = cpSpaceAddBody(space, cpBodyNew(10.0f, cpMomentForCircle(10.0f, 0.0f, radius, cpvzero)));
-	cpBodySetPosition(ballBody, cpv(120, -240 + radius+5));
+	cpBodySetPosition(ballBody, cpv(120, -140 + radius+5));
 
 	shape = cpSpaceAddShape(space, cpCircleShapeNew(ballBody, radius, cpvzero));
 	cpShapeSetElasticity(shape, 0.0f);

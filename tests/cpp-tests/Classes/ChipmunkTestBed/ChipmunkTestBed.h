@@ -61,9 +61,10 @@ public:
     void updateInit(ChipmunkDemo tt);
 
     cpSpace* _space; // strong ref
+    cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
 
 private: 
-    cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
+
     cocos2d::EventListenerMouse* _mouseListener;
     cocos2d::Node* _trackNode;
     cocos2d::DrawNode* draw;
@@ -170,9 +171,9 @@ public:
     virtual void update(float dt) override;
 };
 
-class BouncyHexagonsDemo : public ChipmunkTestBed {
+class BenchDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(BouncyHexagonsDemo);
+    CREATE_FUNC(BenchDemo);
     virtual std::string title() const override;
     virtual void onEnter() override;
 
