@@ -458,9 +458,9 @@ static void extendCCSkeletonAnimation(lua_State* L)
     lua_pop(L, 1);
     
     /*Because sp.SkeletonAnimation:create creat a LuaSkeletonAnimation object,so we need use LuaSkeletonAnimation typename for g_luaType*/
-    std::string typeName = typeid(LuaSkeletonAnimation).name();
-    g_luaType[typeName] = "sp.SkeletonAnimation";
-    g_typeCast["SkeletonAnimation"] = "sp.SkeletonAnimation";
+    auto typeName = typeid(LuaSkeletonAnimation).name();
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "sp.SkeletonAnimation";
+    g_typeCast[typeName]                             = "sp.SkeletonAnimation";
 }
 
 int register_all_cocos2dx_spine_manual(lua_State* L)

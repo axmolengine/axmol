@@ -98,6 +98,15 @@ static std::vector<std::shared_ptr<CallbackCommand>> g_CallbackCommands;
 static std::vector<std::shared_ptr<CustomCommand>> g_CustomCommands;
 static Vector<ProgramState*> g_ProgramStates;
 
+struct SavedRenderState {
+    backend::CullMode cull;
+    Viewport vp;
+    ScissorRect scissorRect;
+    bool scissorTest;
+    bool depthTest;
+};
+static SavedRenderState g_SavedRenderState;
+
 static void AddRendererCommand(const std::function<void()>& f)
 {
 	const auto renderer = Director::getInstance()->getRenderer();
@@ -116,10 +125,18 @@ static GLFWwindow* ImGui_ImplCocos2dx_GetWindow()
 }
 #endif // CC_PLATFORM_PC
 
-static void ImGui_ImplCocos2dx_SetupRenderState(ImDrawData* draw_data, int fb_width, int fb_height)
-{
-	const auto renderer = Director::getInstance()->getRenderer();
-	// setup
+static void ImGui_ImplCocos2dx_SaveRenderState(cocos2d::Renderer* renderer) {
+    AddRendererCommand([renderer]() {
+        g_SavedRenderState.cull        = renderer->getCullMode();
+        g_SavedRenderState.vp          = renderer->getViewport();
+        g_SavedRenderState.scissorTest = renderer->getScissorTest();
+        g_SavedRenderState.scissorRect = renderer->getScissorRect();
+        g_SavedRenderState.depthTest   = renderer->getDepthTest();
+    });
+}
+
+static void ImGui_ImplCocos2dx_SetupRenderState(
+    cocos2d::Renderer* renderer, ImDrawData* draw_data, int fb_width, int fb_height) {
 	AddRendererCommand([=]()
 	{
 		renderer->setCullMode(backend::CullMode::NONE);
@@ -135,15 +152,21 @@ static void ImGui_ImplCocos2dx_SetupRenderState(ImDrawData* draw_data, int fb_wi
 	Mat4::createOrthographicOffCenter(L, R, B, T, -1.f, 1.f, &g_Projection);
 }
 
-struct SavedRenderState
-{
-	backend::CullMode cull;
-	Viewport vp;
-	ScissorRect scissorRect;
-	bool scissorTest;
-	bool depthTest;
-};
-static SavedRenderState g_SavedRenderState;
+static void ImGui_ImplCocos2dx_RestoreRenderState(cocos2d::Renderer* renderer) {
+    AddRendererCommand([renderer]() {
+        renderer->setCullMode(g_SavedRenderState.cull);
+        auto& vp = g_SavedRenderState.vp;
+        renderer->setViewPort(vp.x, vp.y, vp.w, vp.h);
+        renderer->setScissorTest(g_SavedRenderState.scissorTest);
+        auto& sc = g_SavedRenderState.scissorRect;
+        renderer->setScissorRect(sc.x, sc.y, sc.width, sc.height);
+        renderer->setDepthTest(g_SavedRenderState.depthTest);
+
+        // apply raster state
+        renderer->beginRenderPass();
+        renderer->endRenderPass();
+    });
+}
 
 void ImGui_ImplCocos2dx_RenderDrawData(ImDrawData* draw_data)
 {
@@ -155,17 +178,10 @@ void ImGui_ImplCocos2dx_RenderDrawData(ImDrawData* draw_data)
         return;
 
 	const auto renderer = Director::getInstance()->getRenderer();
-	// store
-	AddRendererCommand([renderer]()
-	{
-		g_SavedRenderState.cull = renderer->getCullMode();
-		g_SavedRenderState.vp = renderer->getViewport();
-		g_SavedRenderState.scissorTest = renderer->getScissorTest();
-		g_SavedRenderState.scissorRect = renderer->getScissorRect();
-		g_SavedRenderState.depthTest = renderer->getDepthTest();
-	});
 
-    ImGui_ImplCocos2dx_SetupRenderState(draw_data, fb_width, fb_height);
+    ImGui_ImplCocos2dx_SaveRenderState(renderer);
+
+    ImGui_ImplCocos2dx_SetupRenderState(renderer, draw_data, fb_width, fb_height);
 
     // Will project scissor/clipping rectangles into framebuffer space
     ImVec2 clip_off = draw_data->DisplayPos;         // (0,0) unless using multi-viewports
@@ -200,7 +216,7 @@ void ImGui_ImplCocos2dx_RenderDrawData(ImDrawData* draw_data)
                 // (ImDrawCallback_ResetRenderState is a special callback value used by the user
                 // to request the renderer to reset render state.)
                 if (pcmd->UserCallback == ImDrawCallback_ResetRenderState)
-                    ImGui_ImplCocos2dx_SetupRenderState(draw_data, fb_width, fb_height);
+                    ImGui_ImplCocos2dx_SetupRenderState(renderer, draw_data, fb_width, fb_height);
                 else
                 {
 					AddRendererCommand([=]()
@@ -271,17 +287,8 @@ void ImGui_ImplCocos2dx_RenderDrawData(ImDrawData* draw_data)
 			ibuffer_offset += pcmd->ElemCount;
         }
     }
-	// restore
-	AddRendererCommand([renderer]()
-	{
-		renderer->setCullMode(g_SavedRenderState.cull);
-		auto& vp = g_SavedRenderState.vp;
-		renderer->setViewPort(vp.x, vp.y, vp.w, vp.h);
-		renderer->setScissorTest(g_SavedRenderState.scissorTest);
-		auto& sc = g_SavedRenderState.scissorRect;
-		renderer->setScissorRect(sc.x, sc.y, sc.width, sc.height);
-		renderer->setDepthTest(g_SavedRenderState.depthTest);
-	});
+	
+	ImGui_ImplCocos2dx_RestoreRenderState(renderer);
 }
 
 void ImGui_ImplCocos2dx_RenderPlatform()

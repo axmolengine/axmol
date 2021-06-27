@@ -34,6 +34,7 @@
 #else // from our embedded sources
 #include "unzip.h"
 #endif
+#include <ioapi.h>
 #include "base/CCAsyncTaskPool.h"
 
 NS_CC_EXT_BEGIN
@@ -427,7 +428,7 @@ bool AssetsManagerEx::decompress(const std::string &zip)
     }
     const std::string rootPath = zip.substr(0, pos+1);
 
-    zlib_filefunc_def zipFunctionOverrides;
+    zlib_filefunc_def_s zipFunctionOverrides;
     fillZipFunctionOverrides(zipFunctionOverrides);
 
     AssetManagerExZipFileInfo zipFileInfo;
@@ -1296,8 +1297,7 @@ void AssetsManagerEx::onDownloadUnitsFinished()
     }
 }
 
-void AssetsManagerEx::fillZipFunctionOverrides(zlib_filefunc_def& zipFunctionOverrides)
-{
+void AssetsManagerEx::fillZipFunctionOverrides(zlib_filefunc_def_s& zipFunctionOverrides) {
     zipFunctionOverrides.zopen_file = AssetManagerEx_open_file_func;
     zipFunctionOverrides.zopendisk_file = AssetManagerEx_opendisk_file_func;
     zipFunctionOverrides.zread_file = AssetManagerEx_read_file_func;

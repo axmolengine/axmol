@@ -1,6 +1,6 @@
 # adxe
 
-[![dev](https://img.shields.io/badge/v1.0.0-alpha19-yellow.svg)](https://github.com/adxeproject/adxe/releases)
+[![dev](https://img.shields.io/badge/v1.0.0-beta1-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
   
 [![Android Build Status](https://github.com/adxeproject/adxe/workflows/android/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aandroid)
@@ -22,6 +22,7 @@
 * Excellent PRs from any guys are welcome, we will review & merge ASAP
   
 ### 主要特性:
+* 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
 * 重构AudioEngine, 全平台OpenAL
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no and ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
@@ -84,8 +85,10 @@
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake```
      - for arm64:  
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
+     - for armv7,arm64 combined:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
      - for simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64```
 
   4. 之后就可以用xcode打开, 选择cpp-tests编译运行
 
@@ -102,3 +105,10 @@
 ### 参考链接
   * official v4: https://gitee.com/mirrors/cocos2d-x
   * Git快速手册: https://github.com/adxeproject/adxe/wiki/Git-Guides
+
+### adxe项目的活跃贡献者
+
+- @halx99
+- @rh101
+- @aismann
+- @weiwest

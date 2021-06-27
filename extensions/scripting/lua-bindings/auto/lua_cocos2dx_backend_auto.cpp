@@ -16,9 +16,10 @@ int lua_register_cocos2dx_backend_BufferUsage(lua_State* tolua_S)
         tolua_constant(tolua_S, "STATIC", 0);
         tolua_constant(tolua_S, "DYNAMIC", 1);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::BufferUsage).name();
-    g_luaType[typeName] = "ccb.BufferUsage";
-    g_typeCast["BufferUsage"] = "ccb.BufferUsage";
+
+    auto typeName = typeid(cocos2d::backend::BufferUsage).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.BufferUsage";
+    g_typeCast[typeName] = "ccb.BufferUsage";
     return 1;
 }
 
@@ -30,9 +31,10 @@ int lua_register_cocos2dx_backend_BufferType(lua_State* tolua_S)
         tolua_constant(tolua_S, "VERTEX", 0);
         tolua_constant(tolua_S, "INDEX", 1);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::BufferType).name();
-    g_luaType[typeName] = "ccb.BufferType";
-    g_typeCast["BufferType"] = "ccb.BufferType";
+
+    auto typeName = typeid(cocos2d::backend::BufferType).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.BufferType";
+    g_typeCast[typeName] = "ccb.BufferType";
     return 1;
 }
 
@@ -45,9 +47,10 @@ int lua_register_cocos2dx_backend_ShaderStage(lua_State* tolua_S)
         tolua_constant(tolua_S, "FRAGMENT", 1);
         tolua_constant(tolua_S, "VERTEX_AND_FRAGMENT", 2);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::ShaderStage).name();
-    g_luaType[typeName] = "ccb.ShaderStage";
-    g_typeCast["ShaderStage"] = "ccb.ShaderStage";
+
+    auto typeName = typeid(cocos2d::backend::ShaderStage).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.ShaderStage";
+    g_typeCast[typeName] = "ccb.ShaderStage";
     return 1;
 }
 
@@ -68,9 +71,10 @@ int lua_register_cocos2dx_backend_VertexFormat(lua_State* tolua_S)
         tolua_constant(tolua_S, "USHORT2", 9);
         tolua_constant(tolua_S, "UBYTE4", 10);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::VertexFormat).name();
-    g_luaType[typeName] = "ccb.VertexFormat";
-    g_typeCast["VertexFormat"] = "ccb.VertexFormat";
+
+    auto typeName = typeid(cocos2d::backend::VertexFormat).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.VertexFormat";
+    g_typeCast[typeName] = "ccb.VertexFormat";
     return 1;
 }
 
@@ -112,9 +116,10 @@ int lua_register_cocos2dx_backend_PixelFormat(lua_State* tolua_S)
         tolua_constant(tolua_S, "COUNT", 30);
         tolua_constant(tolua_S, "NONE", 65535);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::PixelFormat).name();
-    g_luaType[typeName] = "ccb.PixelFormat";
-    g_typeCast["PixelFormat"] = "ccb.PixelFormat";
+
+    auto typeName = typeid(cocos2d::backend::PixelFormat).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.PixelFormat";
+    g_typeCast[typeName] = "ccb.PixelFormat";
     return 1;
 }
 
@@ -127,9 +132,10 @@ int lua_register_cocos2dx_backend_TextureUsage(lua_State* tolua_S)
         tolua_constant(tolua_S, "WRITE", 1);
         tolua_constant(tolua_S, "RENDER_TARGET", 2);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::TextureUsage).name();
-    g_luaType[typeName] = "ccb.TextureUsage";
-    g_typeCast["TextureUsage"] = "ccb.TextureUsage";
+
+    auto typeName = typeid(cocos2d::backend::TextureUsage).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.TextureUsage";
+    g_typeCast[typeName] = "ccb.TextureUsage";
     return 1;
 }
 
@@ -141,9 +147,10 @@ int lua_register_cocos2dx_backend_IndexFormat(lua_State* tolua_S)
         tolua_constant(tolua_S, "U_SHORT", 0);
         tolua_constant(tolua_S, "U_INT", 1);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::IndexFormat).name();
-    g_luaType[typeName] = "ccb.IndexFormat";
-    g_typeCast["IndexFormat"] = "ccb.IndexFormat";
+
+    auto typeName = typeid(cocos2d::backend::IndexFormat).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.IndexFormat";
+    g_typeCast[typeName] = "ccb.IndexFormat";
     return 1;
 }
 
@@ -155,9 +162,10 @@ int lua_register_cocos2dx_backend_VertexStepMode(lua_State* tolua_S)
         tolua_constant(tolua_S, "VERTEX", 0);
         tolua_constant(tolua_S, "INSTANCE", 1);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::VertexStepMode).name();
-    g_luaType[typeName] = "ccb.VertexStepMode";
-    g_typeCast["VertexStepMode"] = "ccb.VertexStepMode";
+
+    auto typeName = typeid(cocos2d::backend::VertexStepMode).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.VertexStepMode";
+    g_typeCast[typeName] = "ccb.VertexStepMode";
     return 1;
 }
 
@@ -172,9 +180,10 @@ int lua_register_cocos2dx_backend_PrimitiveType(lua_State* tolua_S)
         tolua_constant(tolua_S, "TRIANGLE", 3);
         tolua_constant(tolua_S, "TRIANGLE_STRIP", 4);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::PrimitiveType).name();
-    g_luaType[typeName] = "ccb.PrimitiveType";
-    g_typeCast["PrimitiveType"] = "ccb.PrimitiveType";
+
+    auto typeName = typeid(cocos2d::backend::PrimitiveType).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.PrimitiveType";
+    g_typeCast[typeName] = "ccb.PrimitiveType";
     return 1;
 }
 
@@ -186,9 +195,10 @@ int lua_register_cocos2dx_backend_TextureType(lua_State* tolua_S)
         tolua_constant(tolua_S, "TEXTURE_2D", 0);
         tolua_constant(tolua_S, "TEXTURE_CUBE", 1);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::TextureType).name();
-    g_luaType[typeName] = "ccb.TextureType";
-    g_typeCast["TextureType"] = "ccb.TextureType";
+
+    auto typeName = typeid(cocos2d::backend::TextureType).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.TextureType";
+    g_typeCast[typeName] = "ccb.TextureType";
     return 1;
 }
 
@@ -202,9 +212,10 @@ int lua_register_cocos2dx_backend_SamplerAddressMode(lua_State* tolua_S)
         tolua_constant(tolua_S, "CLAMP_TO_EDGE", 2);
         tolua_constant(tolua_S, "DONT_CARE", 3);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::SamplerAddressMode).name();
-    g_luaType[typeName] = "ccb.SamplerAddressMode";
-    g_typeCast["SamplerAddressMode"] = "ccb.SamplerAddressMode";
+
+    auto typeName = typeid(cocos2d::backend::SamplerAddressMode).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.SamplerAddressMode";
+    g_typeCast[typeName] = "ccb.SamplerAddressMode";
     return 1;
 }
 
@@ -221,9 +232,10 @@ int lua_register_cocos2dx_backend_SamplerFilter(lua_State* tolua_S)
         tolua_constant(tolua_S, "LINEAR_MIPMAP_NEAREST", 5);
         tolua_constant(tolua_S, "DONT_CARE", 6);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::SamplerFilter).name();
-    g_luaType[typeName] = "ccb.SamplerFilter";
-    g_typeCast["SamplerFilter"] = "ccb.SamplerFilter";
+
+    auto typeName = typeid(cocos2d::backend::SamplerFilter).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.SamplerFilter";
+    g_typeCast[typeName] = "ccb.SamplerFilter";
     return 1;
 }
 
@@ -239,9 +251,10 @@ int lua_register_cocos2dx_backend_StencilOperation(lua_State* tolua_S)
         tolua_constant(tolua_S, "INCREMENT_WRAP", 4);
         tolua_constant(tolua_S, "DECREMENT_WRAP", 5);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::StencilOperation).name();
-    g_luaType[typeName] = "ccb.StencilOperation";
-    g_typeCast["StencilOperation"] = "ccb.StencilOperation";
+
+    auto typeName = typeid(cocos2d::backend::StencilOperation).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.StencilOperation";
+    g_typeCast[typeName] = "ccb.StencilOperation";
     return 1;
 }
 
@@ -259,9 +272,10 @@ int lua_register_cocos2dx_backend_CompareFunction(lua_State* tolua_S)
         tolua_constant(tolua_S, "NOT_EQUAL", 6);
         tolua_constant(tolua_S, "ALWAYS", 7);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::CompareFunction).name();
-    g_luaType[typeName] = "ccb.CompareFunction";
-    g_typeCast["CompareFunction"] = "ccb.CompareFunction";
+
+    auto typeName = typeid(cocos2d::backend::CompareFunction).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.CompareFunction";
+    g_typeCast[typeName] = "ccb.CompareFunction";
     return 1;
 }
 
@@ -274,9 +288,10 @@ int lua_register_cocos2dx_backend_BlendOperation(lua_State* tolua_S)
         tolua_constant(tolua_S, "SUBTRACT", 1);
         tolua_constant(tolua_S, "RESERVE_SUBTRACT", 2);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::BlendOperation).name();
-    g_luaType[typeName] = "ccb.BlendOperation";
-    g_typeCast["BlendOperation"] = "ccb.BlendOperation";
+
+    auto typeName = typeid(cocos2d::backend::BlendOperation).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.BlendOperation";
+    g_typeCast[typeName] = "ccb.BlendOperation";
     return 1;
 }
 
@@ -300,9 +315,10 @@ int lua_register_cocos2dx_backend_BlendFactor(lua_State* tolua_S)
         tolua_constant(tolua_S, "ONE_MINUS_CONSTANT_ALPHA", 12);
         tolua_constant(tolua_S, "BLEND_CLOLOR", 13);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::BlendFactor).name();
-    g_luaType[typeName] = "ccb.BlendFactor";
-    g_typeCast["BlendFactor"] = "ccb.BlendFactor";
+
+    auto typeName = typeid(cocos2d::backend::BlendFactor).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.BlendFactor";
+    g_typeCast[typeName] = "ccb.BlendFactor";
     return 1;
 }
 
@@ -322,9 +338,10 @@ int lua_register_cocos2dx_backend_ColorWriteMask(lua_State* tolua_S)
         tolua_constant(tolua_S, "ALPHA", 8);
         tolua_constant(tolua_S, "ALL", 15);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::ColorWriteMask).name();
-    g_luaType[typeName] = "ccb.ColorWriteMask";
-    g_typeCast["ColorWriteMask"] = "ccb.ColorWriteMask";
+
+    auto typeName = typeid(cocos2d::backend::ColorWriteMask).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.ColorWriteMask";
+    g_typeCast[typeName] = "ccb.ColorWriteMask";
     return 1;
 }
 
@@ -337,9 +354,10 @@ int lua_register_cocos2dx_backend_CullMode(lua_State* tolua_S)
         tolua_constant(tolua_S, "BACK", 1);
         tolua_constant(tolua_S, "FRONT", 2);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::CullMode).name();
-    g_luaType[typeName] = "ccb.CullMode";
-    g_typeCast["CullMode"] = "ccb.CullMode";
+
+    auto typeName = typeid(cocos2d::backend::CullMode).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.CullMode";
+    g_typeCast[typeName] = "ccb.CullMode";
     return 1;
 }
 
@@ -351,9 +369,10 @@ int lua_register_cocos2dx_backend_Winding(lua_State* tolua_S)
         tolua_constant(tolua_S, "CLOCK_WISE", 0);
         tolua_constant(tolua_S, "COUNTER_CLOCK_WISE", 1);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::Winding).name();
-    g_luaType[typeName] = "ccb.Winding";
-    g_typeCast["Winding"] = "ccb.Winding";
+
+    auto typeName = typeid(cocos2d::backend::Winding).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.Winding";
+    g_typeCast[typeName] = "ccb.Winding";
     return 1;
 }
 
@@ -369,9 +388,10 @@ int lua_register_cocos2dx_backend_TextureCubeFace(lua_State* tolua_S)
         tolua_constant(tolua_S, "POSITIVE_Z", 4);
         tolua_constant(tolua_S, "NEGATIVE_Z", 5);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::TextureCubeFace).name();
-    g_luaType[typeName] = "ccb.TextureCubeFace";
-    g_typeCast["TextureCubeFace"] = "ccb.TextureCubeFace";
+
+    auto typeName = typeid(cocos2d::backend::TextureCubeFace).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.TextureCubeFace";
+    g_typeCast[typeName] = "ccb.TextureCubeFace";
     return 1;
 }
 
@@ -927,9 +947,9 @@ int lua_register_cocos2dx_backend_Program(lua_State* tolua_S)
         tolua_function(tolua_S,"getVertexShader",lua_cocos2dx_backend_Program_getVertexShader);
         tolua_function(tolua_S,"getBuiltinProgram", lua_cocos2dx_backend_Program_getBuiltinProgram);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::Program).name();
-    g_luaType[typeName] = "ccb.Program";
-    g_typeCast["Program"] = "ccb.Program";
+    auto typeName = typeid(cocos2d::backend::Program).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.Program";
+    g_typeCast[typeName] = "ccb.Program";
     return 1;
 }
 
@@ -1240,9 +1260,9 @@ int lua_register_cocos2dx_backend_VertexLayout(lua_State* tolua_S)
         tolua_function(tolua_S,"setAttribute",lua_cocos2dx_backend_VertexLayout_setAttribute);
         tolua_function(tolua_S,"getStride",lua_cocos2dx_backend_VertexLayout_getStride);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::VertexLayout).name();
-    g_luaType[typeName] = "ccb.VertexLayout";
-    g_typeCast["VertexLayout"] = "ccb.VertexLayout";
+    auto typeName = typeid(cocos2d::backend::VertexLayout).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.VertexLayout";
+    g_typeCast[typeName] = "ccb.VertexLayout";
     return 1;
 }
 
@@ -1704,9 +1724,9 @@ int lua_register_cocos2dx_backend_ProgramState(lua_State* tolua_S)
         tolua_function(tolua_S,"getUniformID",lua_cocos2dx_backend_ProgramState_getUniformID);
         tolua_function(tolua_S,"getAttributeLocation",lua_cocos2dx_backend_ProgramState_getAttributeLocation);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::ProgramState).name();
-    g_luaType[typeName] = "ccb.ProgramState";
-    g_typeCast["ProgramState"] = "ccb.ProgramState";
+    auto typeName = typeid(cocos2d::backend::ProgramState).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.ProgramState";
+    g_typeCast[typeName] = "ccb.ProgramState";
     return 1;
 }
 
@@ -2290,9 +2310,9 @@ int lua_register_cocos2dx_backend_TextureBackend(lua_State* tolua_S)
         tolua_function(tolua_S,"getHandler",lua_cocos2dx_backend_TextureBackend_getHandler);
         tolua_function(tolua_S,"getTextureType",lua_cocos2dx_backend_TextureBackend_getTextureType);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::TextureBackend).name();
-    g_luaType[typeName] = "ccb.TextureBackend";
-    g_typeCast["TextureBackend"] = "ccb.TextureBackend";
+    auto typeName = typeid(cocos2d::backend::TextureBackend).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.TextureBackend";
+    g_typeCast[typeName] = "ccb.TextureBackend";
     return 1;
 }
 
@@ -2793,9 +2813,9 @@ int lua_register_cocos2dx_backend_Texture2DBackend(lua_State* tolua_S)
         tolua_function(tolua_S,"updateSubData",lua_cocos2dx_backend_Texture2DBackend_updateSubData);
         tolua_function(tolua_S,"updateCompressedSubData",lua_cocos2dx_backend_Texture2DBackend_updateCompressedSubData);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::Texture2DBackend).name();
-    g_luaType[typeName] = "ccb.Texture2DBackend";
-    g_typeCast["Texture2DBackend"] = "ccb.Texture2DBackend";
+    auto typeName = typeid(cocos2d::backend::Texture2DBackend).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.Texture2DBackend";
+    g_typeCast[typeName] = "ccb.Texture2DBackend";
     return 1;
 }
 
@@ -2888,9 +2908,9 @@ int lua_register_cocos2dx_backend_TextureCubemapBackend(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"TextureCubemapBackend");
         tolua_function(tolua_S,"updateFaceData",lua_cocos2dx_backend_TextureCubemapBackend_updateFaceData);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::TextureCubemapBackend).name();
-    g_luaType[typeName] = "ccb.TextureCubemapBackend";
-    g_typeCast["TextureCubemapBackend"] = "ccb.TextureCubemapBackend";
+    auto typeName = typeid(cocos2d::backend::TextureCubemapBackend).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.TextureCubemapBackend";
+    g_typeCast[typeName] = "ccb.TextureCubemapBackend";
     return 1;
 }
 
@@ -3206,9 +3226,9 @@ int lua_register_cocos2dx_backend_Device(lua_State* tolua_S)
         tolua_function(tolua_S,"newDepthStencilState",lua_cocos2dx_backend_Device_newDepthStencilState);
         tolua_function(tolua_S,"getInstance", lua_cocos2dx_backend_Device_getInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::backend::Device).name();
-    g_luaType[typeName] = "ccb.Device";
-    g_typeCast["Device"] = "ccb.Device";
+    auto typeName = typeid(cocos2d::backend::Device).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccb.Device";
+    g_typeCast[typeName] = "ccb.Device";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_backend(lua_State* tolua_S)

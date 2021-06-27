@@ -30,9 +30,12 @@
 #include "ConvertUTF.h"
 #include <limits>
 
+using namespace llvm;
+
 NS_CC_BEGIN
 
 namespace StringUtils {
+
 std::string CC_DLL format(const char* format, ...)
 {
     va_list args;
@@ -393,6 +396,24 @@ long getCharacterCountInUTF8String(const std::string& utf8)
     return getUTF8StringLength((const UTF8*)utf8.c_str());
 }
 
+bool hasNonAsciiUTF8(const char* str, size_t len) {
+    for (size_t i = 0; i < len;)
+    {
+        int numByte = getNumBytesForUTF8(str[i]);
+        if (numByte > 1) 
+        { // byte=1, is ascii character
+            if (isLegalUTF8Sequence((const UTF8*) &str[i], (const UTF8*) &str[i] + numByte))
+                return true;
+        }
+        i += numByte;
+    }
+    return false;
+}
+
+
+bool isLegalUTF8String(const char* str, size_t len) {
+    return ::isLegalUTF8String((const UTF8**)&str, (const UTF8*)str + len);
+}
 
 StringUTF8::StringUTF8()
 {

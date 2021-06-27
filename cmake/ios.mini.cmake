@@ -41,6 +41,11 @@ if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
     set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${CMAKE_OSX_DEPLOYMENT_TARGET} CACHE STRING "Minimum iphoneos deployment version")
 endif()
 
+# Regard x86_64 as iphonesimulator
+if("${CMAKE_OSX_ARCHITECTURES}" MATCHES "x86_64")
+    set(CMAKE_OSX_SYSROOT "iphonesimulator" CACHE STRING "")
+endif() 
+
 # Sets CMAKE_SYSTEM_PROCESSOR for iphoneos and iphonesimulator
 if("${CMAKE_OSX_SYSROOT}" MATCHES "iphonesimulator")
     if("${CMAKE_OSX_ARCHITECTURES}" MATCHES "i386")

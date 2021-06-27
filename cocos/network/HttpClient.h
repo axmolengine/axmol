@@ -3,6 +3,7 @@
  Copyright (c) 2012      cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
  http://www.cocos2d-x.org
 
@@ -35,6 +36,9 @@
 #include "network/HttpRequest.h"
 #include "network/HttpResponse.h"
 #include "network/HttpCookie.h"
+#include "network/Uri.h"
+#include "yasio/yasio_fwd.hpp"
+#include "base/ConcurrentDeque.h"
 
 /**
  * @addtogroup network
@@ -57,9 +61,10 @@ class CC_DLL HttpClient
 {
 public:
     /**
-    * The buffer size of _responseMessage
+    * How many requests could be perform concurrency.
     */
-    static const int RESPONSE_BUFFER_SIZE = 256;
+    static const int MAX_CHANNELS = 21;
+    static const int MAX_REDIRECT_COUNT = 3;
 
     /**
      * Get instance of HttpClient.
@@ -107,15 +112,7 @@ public:
      * @param request a HttpRequest object, which includes url, response callback etc.
                       please make sure request->_requestData is clear before calling "send" here.
      */
-    void send(HttpRequest* request);
-
-    /**
-     * Immediate send a request
-     *
-     * @param request a HttpRequest object, which includes url, response callback etc.
-                      please make sure request->_requestData is clear before calling "sendImmediate" here.
-     */
-    void sendImmediate(HttpRequest* request);
+    bool send(HttpRequest* request);
 
     /**
      * Set the timeout value for connecting.
@@ -151,23 +148,12 @@ public:
 
     std::recursive_mutex& getSSLCaFileMutex() {return _sslCaFileMutex;}
     
-    typedef std::function<bool(HttpRequest*)> ClearRequestPredicate;
     typedef std::function<bool(HttpResponse*)> ClearResponsePredicate;
 
     /**
-     * Clears the pending http responses and http requests
-     * If defined, the method uses the ClearRequestPredicate and ClearResponsePredicate
-     * to check for each request/response which to delete
+     * Clears the pending http response
      */
-    void clearResponseAndRequestQueue(); 
-
-    /**
-    * Sets a predicate function that is going to be called to determine if we proceed
-    * each of the pending requests
-    *
-    * @param predicate function that will be called 
-    */
-    void setClearRequestPredicate(ClearRequestPredicate predicate) { _clearRequestPredicate = predicate; }
+    void clearResponseQueue(); 
 
     /**
      Sets a predicate function that is going to be called to determine if we proceed
@@ -183,24 +169,21 @@ public:
 private:
     HttpClient();
     virtual ~HttpClient();
-    bool init();
 
-    /**
-     * Init pthread mutex, semaphore, and create new thread for http requests
-     * @return bool
-     */
-    bool lazyInitThreadSemaphore();
-    void networkThread();
-    void networkThreadAlone(HttpRequest* request, HttpResponse* response);
-    /** Poll function called from main thread to dispatch callbacks when http requests finished **/
-    void dispatchResponseCallbacks();
+    void processResponse(HttpResponse* response, const std::string& url);
 
-    void processResponse(HttpResponse* response, char* responseMessage);
-    void increaseThreadCount();
-    void decreaseThreadCountAndMayDeleteThis();
+    int tryTakeAvailChannel();
+
+    void handleNetworkEvent(yasio::io_event* event);
+
+    void handleNetworkEOF(HttpResponse* response, yasio::io_channel* channel, int internalErrorCode);
+
+    void finishResponse(HttpResponse* response);
 
 private:
     bool _isInited;
+
+    yasio::io_service* _service;
     
     bool _dispatchOnWorkThread;
 
@@ -210,17 +193,12 @@ private:
     int _timeoutForRead;
     std::recursive_mutex _timeoutForReadMutex;
 
-    int  _threadCount;
-    std::recursive_mutex _threadCountMutex;
-
     Scheduler* _scheduler;
     std::recursive_mutex _schedulerMutex;
 
-    std::deque<HttpRequest*>  _requestQueue;
-    std::recursive_mutex _requestQueueMutex;
+    ConcurrentDeque<HttpResponse*> _responseQueue;
 
-    std::deque<HttpResponse*> _responseQueue;
-    std::recursive_mutex _responseQueueMutex;
+    ConcurrentDeque<int> _availChannelQueue;
 
     std::string _cookieFilename;
     std::recursive_mutex _cookieFileMutex;
@@ -230,13 +208,6 @@ private:
 
     HttpCookie* _cookie;
 
-    std::condition_variable_any _sleepCondition;
-
-    char _responseMessage[RESPONSE_BUFFER_SIZE];
-
-    HttpRequest* _requestSentinel;
-    
-    ClearRequestPredicate _clearRequestPredicate;
     ClearResponsePredicate _clearResponsePredicate;
 };
 

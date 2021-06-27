@@ -1,17 +1,18 @@
-import org.gradle.internal.os.OperatingSystem;
+import org.gradle.internal.os.OperatingSystem
 import java.nio.file.Paths
 import java.nio.file.Files
 
 apply plugin: 'com.android.application'
+apply from: project(':libcocos2dx').projectDir.toString() + "/adxetools.gradle"
 
 android {
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
 
     // setup ndk
-    ndkVersion = "19.2.5345600"
-    def ANDROID_NDK = Paths.get("${System.env.ANDROID_NDK}")
-    if(Files.exists(ANDROID_NDK)) {
-        ndkPath = ANDROID_NDK.toAbsolutePath().toString()
+    def ndkInfo = adxetools.findNDK("19.2.5345600+")
+    ndkVersion = ndkInfo[0]
+    if(ndkInfo[1]) {
+        ndkPath = ndkInfo[1]
     }
 
     defaultConfig {

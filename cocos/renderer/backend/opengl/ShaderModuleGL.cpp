@@ -27,6 +27,7 @@
 
 #include "platform/CCPlatformMacros.h"
 #include "base/ccMacros.h"
+#include "base/CCData.h"
 
 CC_BACKEND_BEGIN
 
@@ -56,19 +57,21 @@ void ShaderModuleGL::compileShader(ShaderStage stage, const std::string &source)
     glGetShaderiv(_shader, GL_COMPILE_STATUS, &status);
     if (!status)
     {
-        cocos2d::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", getErrorLog(_shader), source.c_str());
+        GLint logLength = 0;
+        glGetShaderiv(_shader, GL_INFO_LOG_LENGTH, &logLength);
+
+        if (logLength > 1) {
+            cocos2d::Data errorLog{};
+            glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*) errorLog.resize(logLength));
+            cocos2d::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.getBytes(), source.c_str());
+        }
+        else {
+            cocos2d::log("cocos2d: ERROR: Failed to compile shader without errors.");
+        }
+
         deleteShader();
         CCASSERT(false, "Shader compile failed!");
     }
-}
-
-char* ShaderModuleGL::getErrorLog(GLuint shader) const
-{
-    GLint logLength = 0;
-    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
-    char* log = (char*)malloc(sizeof(char) * logLength);
-    glGetShaderInfoLog(shader, logLength, nullptr, log);
-    return log;
 }
 
 void ShaderModuleGL::deleteShader()

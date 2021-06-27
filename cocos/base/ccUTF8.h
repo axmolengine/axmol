@@ -213,7 +213,15 @@ CC_DLL unsigned int getIndexOfLastNotChar16(const std::vector<char16_t>& str, ch
  */
 CC_DLL std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string& utf16);
 
+/**
+ *  @brief Whether has non-ascii utf-8 characters
+ */
+CC_DLL bool hasNonAsciiUTF8(const char* str, size_t len);
 
+/**
+ *  @brief isLegalUTF8String, contains ascii characters
+ */
+CC_DLL bool isLegalUTF8String(const char* str, size_t len);
 
 /**
 * Utf8 sequence

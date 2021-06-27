@@ -575,17 +575,7 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
     if (!fileStream)
         return Status::OpenFailed;
 
-    if (fileStream->seek(0, SEEK_END) != 0)
-    {
-        return Status::ObtainSizeFailed;
-    }
-
-    const auto size = fileStream->tell();
-    if (size == 0)
-    {
-        return Status::OK;
-    }
-
+    const auto size = fileStream->size();
     if (size < 0)
     {
         return Status::ObtainSizeFailed;
@@ -596,11 +586,11 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
         return Status::TooLarge;
     }
 
-    buffer->resize(size);
+    buffer->resize((size_t)size);
 
     fileStream->seek(0, SEEK_SET);
 
-    const auto sizeRead = fileStream->read(buffer->buffer(), size);
+    const auto sizeRead = fileStream->read(buffer->buffer(), (unsigned)size);
     if (sizeRead < size) {
         buffer->resize(sizeRead);
         return Status::ReadFailed;

@@ -37,7 +37,7 @@
 #include "platform/CCFileUtils.h"
 #include "network/CCDownloader.h"
 #include "platform/CCFileStream.h"
-#include "md5/md5.h"
+#include "openssl/md5.h"
 #include "yasio/xxsocket.hpp"
 
 // **NOTE**
@@ -155,11 +155,11 @@ public:
 
             _fsMd5 = FileUtils::getInstance()->openFileStream(_checksumFileName, FileStream::Mode::WRITE);
             _fsMd5->seek(0, SEEK_END);
-            if (_fsMd5->tell() != sizeof(md5_state_s)) {
-                md5_init(&_md5State);
+            if (_fsMd5->tell() != sizeof(_md5State)) {
+                MD5_Init(&_md5State);
             } else {
                 _fsMd5->seek(0, SEEK_SET);
-                _fsMd5->read(&_md5State, sizeof(md5_state_s));
+                _fsMd5->read(&_md5State, sizeof(_md5State));
             }
             ret = true;
         } while (0);
@@ -197,7 +197,7 @@ public:
         if (!requiredsum.empty()) {
             std::string digest(16, '\0');
             auto state = _md5State; // Excellent, make a copy, don't modify the origin state.
-            md5_finish(&state, (md5_byte_t*) &digest.front());
+            MD5_Final((uint8_t*)&digest.front(), &state);
             auto checksum = utils::bin2hex(digest);
             status        = requiredsum == checksum ? kCheckSumStateSucceed : kCheckSumStateFailed;
 
@@ -240,7 +240,7 @@ public:
             _bytesReceived += ret;
             _totalBytesReceived += ret;
 
-            ::md5_append(&_md5State, buffer, bytes_transferred);
+            ::MD5_Update(&_md5State, buffer, bytes_transferred);
             _fsMd5->seek(0, SEEK_SET);
             _fsMd5->write(&_md5State, sizeof(_md5State));
         }
@@ -288,7 +288,7 @@ private:
 
     // calculate md5 in downloading time support
     std::unique_ptr<FileStream> _fsMd5{}; // store md5 state realtime
-    md5_state_s _md5State;
+    MD5state_st _md5State;
 
 
     void _initInternal() {

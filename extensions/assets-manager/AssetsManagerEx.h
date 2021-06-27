@@ -26,7 +26,6 @@
 #ifndef __AssetsManagerEx__
 #define __AssetsManagerEx__
 
-#include <ioapi.h>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -41,6 +40,8 @@
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 #include "rapidjson/document-wrapper.h"
+
+struct zlib_filefunc_def_s;
 
 
 NS_CC_EXT_BEGIN
@@ -220,7 +221,7 @@ private:
 
     // Called when one DownloadUnits finished
     void onDownloadUnitsFinished();
-    void fillZipFunctionOverrides(zlib_filefunc_def &zipFunctionOverrides);
+    void fillZipFunctionOverrides(zlib_filefunc_def_s &zipFunctionOverrides);
 
     //! The event of the current AssetsManagerEx in event dispatcher
     std::string _eventName;

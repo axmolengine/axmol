@@ -25,6 +25,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #import "platform/CCImage.h"
 #import "platform/CCCommon.h"
+#import "platform/CCFileUtils.h"
 #import <string>
 
 #import <Foundation/Foundation.h>
@@ -111,7 +112,9 @@ bool cocos2d::Image::saveToFile(const std::string& filename, bool isToRGB)
         } else {
             data = UIImageJPEGRepresentation(image, 1.0f);
         }
-        [data writeToFile:[NSString stringWithUTF8String:filename.c_str()] atomically:YES];
+
+        auto outStream = FileUtils::getInstance()->openFileStream(filename, FileStream::Mode::WRITE);
+        outStream->write(data.bytes, data.length);
     }
 
     [image release];

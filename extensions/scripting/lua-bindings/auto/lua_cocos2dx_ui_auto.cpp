@@ -284,9 +284,9 @@ int lua_register_cocos2dx_ui_LayoutParameter(lua_State* tolua_S)
         tolua_function(tolua_S,"copyProperties",lua_cocos2dx_ui_LayoutParameter_copyProperties);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_LayoutParameter_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::LayoutParameter).name();
-    g_luaType[typeName] = "ccui.LayoutParameter";
-    g_typeCast["LayoutParameter"] = "ccui.LayoutParameter";
+    auto typeName = typeid(cocos2d::ui::LayoutParameter).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.LayoutParameter";
+    g_typeCast[typeName] = "ccui.LayoutParameter";
     return 1;
 }
 
@@ -475,9 +475,9 @@ int lua_register_cocos2dx_ui_LinearLayoutParameter(lua_State* tolua_S)
         tolua_function(tolua_S,"getGravity",lua_cocos2dx_ui_LinearLayoutParameter_getGravity);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_LinearLayoutParameter_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::LinearLayoutParameter).name();
-    g_luaType[typeName] = "ccui.LinearLayoutParameter";
-    g_typeCast["LinearLayoutParameter"] = "ccui.LinearLayoutParameter";
+    auto typeName = typeid(cocos2d::ui::LinearLayoutParameter).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.LinearLayoutParameter";
+    g_typeCast[typeName] = "ccui.LinearLayoutParameter";
     return 1;
 }
 
@@ -864,9 +864,9 @@ int lua_register_cocos2dx_ui_RelativeLayoutParameter(lua_State* tolua_S)
         tolua_function(tolua_S,"getAlign",lua_cocos2dx_ui_RelativeLayoutParameter_getAlign);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_RelativeLayoutParameter_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::RelativeLayoutParameter).name();
-    g_luaType[typeName] = "ccui.RelativeLayoutParameter";
-    g_typeCast["RelativeLayoutParameter"] = "ccui.RelativeLayoutParameter";
+    auto typeName = typeid(cocos2d::ui::RelativeLayoutParameter).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.RelativeLayoutParameter";
+    g_typeCast[typeName] = "ccui.RelativeLayoutParameter";
     return 1;
 }
 
@@ -4266,9 +4266,9 @@ int lua_register_cocos2dx_ui_Widget(lua_State* tolua_S)
         tolua_function(tolua_S,"getCurrentFocusedWidget", lua_cocos2dx_ui_Widget_getCurrentFocusedWidget);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_Widget_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::Widget).name();
-    g_luaType[typeName] = "ccui.Widget";
-    g_typeCast["Widget"] = "ccui.Widget";
+    auto typeName = typeid(cocos2d::ui::Widget).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.Widget";
+    g_typeCast[typeName] = "ccui.Widget";
     return 1;
 }
 
@@ -6093,9 +6093,9 @@ int lua_register_cocos2dx_ui_Layout(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_Layout_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_Layout_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::Layout).name();
-    g_luaType[typeName] = "ccui.Layout";
-    g_typeCast["Layout"] = "ccui.Layout";
+    auto typeName = typeid(cocos2d::ui::Layout).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.Layout";
+    g_typeCast[typeName] = "ccui.Layout";
     return 1;
 }
 
@@ -8380,9 +8380,9 @@ int lua_register_cocos2dx_ui_Button(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_Button_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_Button_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::Button).name();
-    g_luaType[typeName] = "ccui.Button";
-    g_typeCast["Button"] = "ccui.Button";
+    auto typeName = typeid(cocos2d::ui::Button).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.Button";
+    g_typeCast[typeName] = "ccui.Button";
     return 1;
 }
 
@@ -9601,9 +9601,9 @@ int lua_register_cocos2dx_ui_AbstractCheckButton(lua_State* tolua_S)
         tolua_function(tolua_S,"setZoomScale",lua_cocos2dx_ui_AbstractCheckButton_setZoomScale);
         tolua_function(tolua_S,"loadTextureFrontCrossDisabled",lua_cocos2dx_ui_AbstractCheckButton_loadTextureFrontCrossDisabled);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::AbstractCheckButton).name();
-    g_luaType[typeName] = "ccui.AbstractCheckButton";
-    g_typeCast["AbstractCheckButton"] = "ccui.AbstractCheckButton";
+    auto typeName = typeid(cocos2d::ui::AbstractCheckButton).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.AbstractCheckButton";
+    g_typeCast[typeName] = "ccui.AbstractCheckButton";
     return 1;
 }
 
@@ -9869,9 +9869,9 @@ int lua_register_cocos2dx_ui_CheckBox(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_CheckBox_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_CheckBox_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::CheckBox).name();
-    g_luaType[typeName] = "ccui.CheckBox";
-    g_typeCast["CheckBox"] = "ccui.CheckBox";
+    auto typeName = typeid(cocos2d::ui::CheckBox).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.CheckBox";
+    g_typeCast[typeName] = "ccui.CheckBox";
     return 1;
 }
 
@@ -10137,9 +10137,9 @@ int lua_register_cocos2dx_ui_RadioButton(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_RadioButton_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_RadioButton_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::RadioButton).name();
-    g_luaType[typeName] = "ccui.RadioButton";
-    g_typeCast["RadioButton"] = "ccui.RadioButton";
+    auto typeName = typeid(cocos2d::ui::RadioButton).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.RadioButton";
+    g_typeCast[typeName] = "ccui.RadioButton";
     return 1;
 }
 
@@ -10792,9 +10792,9 @@ int lua_register_cocos2dx_ui_RadioButtonGroup(lua_State* tolua_S)
         tolua_function(tolua_S,"setSelectedButton",lua_cocos2dx_ui_RadioButtonGroup_setSelectedButton);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_RadioButtonGroup_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::RadioButtonGroup).name();
-    g_luaType[typeName] = "ccui.RadioButtonGroup";
-    g_typeCast["RadioButtonGroup"] = "ccui.RadioButtonGroup";
+    auto typeName = typeid(cocos2d::ui::RadioButtonGroup).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.RadioButtonGroup";
+    g_typeCast[typeName] = "ccui.RadioButtonGroup";
     return 1;
 }
 
@@ -11478,9 +11478,9 @@ int lua_register_cocos2dx_ui_ImageView(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_ImageView_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_ImageView_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::ImageView).name();
-    g_luaType[typeName] = "ccui.ImageView";
-    g_typeCast["ImageView"] = "ccui.ImageView";
+    auto typeName = typeid(cocos2d::ui::ImageView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.ImageView";
+    g_typeCast[typeName] = "ccui.ImageView";
     return 1;
 }
 
@@ -13371,9 +13371,9 @@ int lua_register_cocos2dx_ui_Text(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_Text_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_Text_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::Text).name();
-    g_luaType[typeName] = "ccui.Text";
-    g_typeCast["Text"] = "ccui.Text";
+    auto typeName = typeid(cocos2d::ui::Text).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.Text";
+    g_typeCast[typeName] = "ccui.Text";
     return 1;
 }
 
@@ -13827,9 +13827,9 @@ int lua_register_cocos2dx_ui_TextAtlas(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_TextAtlas_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_TextAtlas_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::TextAtlas).name();
-    g_luaType[typeName] = "ccui.TextAtlas";
-    g_typeCast["TextAtlas"] = "ccui.TextAtlas";
+    auto typeName = typeid(cocos2d::ui::TextAtlas).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.TextAtlas";
+    g_typeCast[typeName] = "ccui.TextAtlas";
     return 1;
 }
 
@@ -14528,9 +14528,9 @@ int lua_register_cocos2dx_ui_LoadingBar(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_LoadingBar_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_LoadingBar_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::LoadingBar).name();
-    g_luaType[typeName] = "ccui.LoadingBar";
-    g_typeCast["LoadingBar"] = "ccui.LoadingBar";
+    auto typeName = typeid(cocos2d::ui::LoadingBar).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.LoadingBar";
+    g_typeCast[typeName] = "ccui.LoadingBar";
     return 1;
 }
 
@@ -17719,9 +17719,9 @@ int lua_register_cocos2dx_ui_ScrollView(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_ScrollView_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_ScrollView_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::ScrollView).name();
-    g_luaType[typeName] = "ccui.ScrollView";
-    g_typeCast["ScrollView"] = "ccui.ScrollView";
+    auto typeName = typeid(cocos2d::ui::ScrollView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.ScrollView";
+    g_typeCast[typeName] = "ccui.ScrollView";
     return 1;
 }
 
@@ -19984,9 +19984,9 @@ int lua_register_cocos2dx_ui_ListView(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_ListView_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_ListView_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::ListView).name();
-    g_luaType[typeName] = "ccui.ListView";
-    g_typeCast["ListView"] = "ccui.ListView";
+    auto typeName = typeid(cocos2d::ui::ListView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.ListView";
+    g_typeCast[typeName] = "ccui.ListView";
     return 1;
 }
 
@@ -21775,9 +21775,9 @@ int lua_register_cocos2dx_ui_Slider(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_Slider_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_Slider_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::Slider).name();
-    g_luaType[typeName] = "ccui.Slider";
-    g_typeCast["Slider"] = "ccui.Slider";
+    auto typeName = typeid(cocos2d::ui::Slider).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.Slider";
+    g_typeCast[typeName] = "ccui.Slider";
     return 1;
 }
 
@@ -24163,9 +24163,9 @@ int lua_register_cocos2dx_ui_TextField(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_TextField_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_TextField_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::TextField).name();
-    g_luaType[typeName] = "ccui.TextField";
-    g_typeCast["TextField"] = "ccui.TextField";
+    auto typeName = typeid(cocos2d::ui::TextField).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.TextField";
+    g_typeCast[typeName] = "ccui.TextField";
     return 1;
 }
 
@@ -24598,9 +24598,9 @@ int lua_register_cocos2dx_ui_TextBMFont(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_TextBMFont_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_TextBMFont_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::TextBMFont).name();
-    g_luaType[typeName] = "ccui.TextBMFont";
-    g_typeCast["TextBMFont"] = "ccui.TextBMFont";
+    auto typeName = typeid(cocos2d::ui::TextBMFont).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.TextBMFont";
+    g_typeCast[typeName] = "ccui.TextBMFont";
     return 1;
 }
 
@@ -26264,9 +26264,9 @@ int lua_register_cocos2dx_ui_PageView(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_PageView_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_PageView_createInstance);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::PageView).name();
-    g_luaType[typeName] = "ccui.PageView";
-    g_typeCast["PageView"] = "ccui.PageView";
+    auto typeName = typeid(cocos2d::ui::PageView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.PageView";
+    g_typeCast[typeName] = "ccui.PageView";
     return 1;
 }
 
@@ -26591,9 +26591,9 @@ int lua_register_cocos2dx_ui_Helper(lua_State* tolua_S)
         tolua_function(tolua_S,"restrictCapInsetRect", lua_cocos2dx_ui_Helper_restrictCapInsetRect);
         tolua_function(tolua_S,"doLayout", lua_cocos2dx_ui_Helper_doLayout);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::Helper).name();
-    g_luaType[typeName] = "ccui.Helper";
-    g_typeCast["Helper"] = "ccui.Helper";
+    auto typeName = typeid(cocos2d::ui::Helper).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.Helper";
+    g_typeCast[typeName] = "ccui.Helper";
     return 1;
 }
 
@@ -26807,9 +26807,9 @@ int lua_register_cocos2dx_ui_RichElement(lua_State* tolua_S)
         tolua_function(tolua_S,"init",lua_cocos2dx_ui_RichElement_init);
         tolua_function(tolua_S,"setColor",lua_cocos2dx_ui_RichElement_setColor);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::RichElement).name();
-    g_luaType[typeName] = "ccui.RichElement";
-    g_typeCast["RichElement"] = "ccui.RichElement";
+    auto typeName = typeid(cocos2d::ui::RichElement).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.RichElement";
+    g_typeCast[typeName] = "ccui.RichElement";
     return 1;
 }
 
@@ -27512,9 +27512,9 @@ int lua_register_cocos2dx_ui_RichElementText(lua_State* tolua_S)
         tolua_function(tolua_S,"init",lua_cocos2dx_ui_RichElementText_init);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_RichElementText_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::RichElementText).name();
-    g_luaType[typeName] = "ccui.RichElementText";
-    g_typeCast["RichElementText"] = "ccui.RichElementText";
+    auto typeName = typeid(cocos2d::ui::RichElementText).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.RichElementText";
+    g_typeCast[typeName] = "ccui.RichElementText";
     return 1;
 }
 
@@ -27924,9 +27924,9 @@ int lua_register_cocos2dx_ui_RichElementImage(lua_State* tolua_S)
         tolua_function(tolua_S,"setUrl",lua_cocos2dx_ui_RichElementImage_setUrl);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_RichElementImage_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::RichElementImage).name();
-    g_luaType[typeName] = "ccui.RichElementImage";
-    g_typeCast["RichElementImage"] = "ccui.RichElementImage";
+    auto typeName = typeid(cocos2d::ui::RichElementImage).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.RichElementImage";
+    g_typeCast[typeName] = "ccui.RichElementImage";
     return 1;
 }
 
@@ -28084,9 +28084,9 @@ int lua_register_cocos2dx_ui_RichElementCustomNode(lua_State* tolua_S)
         tolua_function(tolua_S,"init",lua_cocos2dx_ui_RichElementCustomNode_init);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_RichElementCustomNode_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::RichElementCustomNode).name();
-    g_luaType[typeName] = "ccui.RichElementCustomNode";
-    g_typeCast["RichElementCustomNode"] = "ccui.RichElementCustomNode";
+    auto typeName = typeid(cocos2d::ui::RichElementCustomNode).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.RichElementCustomNode";
+    g_typeCast[typeName] = "ccui.RichElementCustomNode";
     return 1;
 }
 
@@ -28182,9 +28182,9 @@ int lua_register_cocos2dx_ui_RichElementNewLine(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_cocos2dx_ui_RichElementNewLine_constructor);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_RichElementNewLine_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::RichElementNewLine).name();
-    g_luaType[typeName] = "ccui.RichElementNewLine";
-    g_typeCast["RichElementNewLine"] = "ccui.RichElementNewLine";
+    auto typeName = typeid(cocos2d::ui::RichElementNewLine).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.RichElementNewLine";
+    g_typeCast[typeName] = "ccui.RichElementNewLine";
     return 1;
 }
 
@@ -30760,9 +30760,9 @@ int lua_register_cocos2dx_ui_RichText(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_RichText_create);
         tolua_function(tolua_S,"createWithXML", lua_cocos2dx_ui_RichText_createWithXML);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::RichText).name();
-    g_luaType[typeName] = "ccui.RichText";
-    g_typeCast["RichText"] = "ccui.RichText";
+    auto typeName = typeid(cocos2d::ui::RichText).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.RichText";
+    g_typeCast[typeName] = "ccui.RichText";
     return 1;
 }
 
@@ -30914,9 +30914,9 @@ int lua_register_cocos2dx_ui_HBox(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_cocos2dx_ui_HBox_initWithSize);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_HBox_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::HBox).name();
-    g_luaType[typeName] = "ccui.HBox";
-    g_typeCast["HBox"] = "ccui.HBox";
+    auto typeName = typeid(cocos2d::ui::HBox).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.HBox";
+    g_typeCast[typeName] = "ccui.HBox";
     return 1;
 }
 
@@ -31068,9 +31068,9 @@ int lua_register_cocos2dx_ui_VBox(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_cocos2dx_ui_VBox_initWithSize);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_VBox_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::VBox).name();
-    g_luaType[typeName] = "ccui.VBox";
-    g_typeCast["VBox"] = "ccui.VBox";
+    auto typeName = typeid(cocos2d::ui::VBox).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.VBox";
+    g_typeCast[typeName] = "ccui.VBox";
     return 1;
 }
 
@@ -31222,9 +31222,9 @@ int lua_register_cocos2dx_ui_RelativeBox(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_cocos2dx_ui_RelativeBox_initWithSize);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_RelativeBox_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::RelativeBox).name();
-    g_luaType[typeName] = "ccui.RelativeBox";
-    g_typeCast["RelativeBox"] = "ccui.RelativeBox";
+    auto typeName = typeid(cocos2d::ui::RelativeBox).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.RelativeBox";
+    g_typeCast[typeName] = "ccui.RelativeBox";
     return 1;
 }
 
@@ -33043,9 +33043,9 @@ int lua_register_cocos2dx_ui_Scale9Sprite(lua_State* tolua_S)
         tolua_function(tolua_S,"createWithSpriteFrameName", lua_cocos2dx_ui_Scale9Sprite_createWithSpriteFrameName);
         tolua_function(tolua_S,"createWithSpriteFrame", lua_cocos2dx_ui_Scale9Sprite_createWithSpriteFrame);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::Scale9Sprite).name();
-    g_luaType[typeName] = "ccui.Scale9Sprite";
-    g_typeCast["Scale9Sprite"] = "ccui.Scale9Sprite";
+    auto typeName = typeid(cocos2d::ui::Scale9Sprite).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.Scale9Sprite";
+    g_typeCast[typeName] = "ccui.Scale9Sprite";
     return 1;
 }
 
@@ -35969,9 +35969,9 @@ int lua_register_cocos2dx_ui_EditBox(lua_State* tolua_S)
         tolua_function(tolua_S,"setTextHorizontalAlignment",lua_cocos2dx_ui_EditBox_setTextHorizontalAlignment);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_EditBox_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::EditBox).name();
-    g_luaType[typeName] = "ccui.EditBox";
-    g_typeCast["EditBox"] = "ccui.EditBox";
+    auto typeName = typeid(cocos2d::ui::EditBox).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.EditBox";
+    g_typeCast[typeName] = "ccui.EditBox";
     return 1;
 }
 
@@ -38525,9 +38525,9 @@ int lua_register_cocos2dx_ui_LayoutComponent(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_LayoutComponent_create);
         tolua_function(tolua_S,"bindLayoutComponent", lua_cocos2dx_ui_LayoutComponent_bindLayoutComponent);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::LayoutComponent).name();
-    g_luaType[typeName] = "ccui.LayoutComponent";
-    g_typeCast["LayoutComponent"] = "ccui.LayoutComponent";
+    auto typeName = typeid(cocos2d::ui::LayoutComponent).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.LayoutComponent";
+    g_typeCast[typeName] = "ccui.LayoutComponent";
     return 1;
 }
 
@@ -39169,9 +39169,9 @@ int lua_register_cocos2dx_ui_TabHeader(lua_State* tolua_S)
         tolua_function(tolua_S,"setTitleColor",lua_cocos2dx_ui_TabHeader_setTitleColor);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_TabHeader_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::TabHeader).name();
-    g_luaType[typeName] = "ccui.TabHeader";
-    g_typeCast["TabHeader"] = "ccui.TabHeader";
+    auto typeName = typeid(cocos2d::ui::TabHeader).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.TabHeader";
+    g_typeCast[typeName] = "ccui.TabHeader";
     return 1;
 }
 
@@ -40186,9 +40186,9 @@ int lua_register_cocos2dx_ui_TabControl(lua_State* tolua_S)
         tolua_function(tolua_S,"getHeaderHeight",lua_cocos2dx_ui_TabControl_getHeaderHeight);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_TabControl_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::ui::TabControl).name();
-    g_luaType[typeName] = "ccui.TabControl";
-    g_typeCast["TabControl"] = "ccui.TabControl";
+    auto typeName = typeid(cocos2d::ui::TabControl).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.TabControl";
+    g_typeCast[typeName] = "ccui.TabControl";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_ui(lua_State* tolua_S)

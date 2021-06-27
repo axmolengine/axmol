@@ -2,6 +2,7 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
  http://www.cocos2d-x.org
 
@@ -26,8 +27,11 @@
 
 #ifndef __HTTP_RESPONSE__
 #define __HTTP_RESPONSE__
-
+#include <ctype.h>
+#include <unordered_map>
 #include "network/HttpRequest.h"
+#include "network/Uri.h"
+#include "llhttp/llhttp.h"
 
 /**
  * @addtogroup network
@@ -38,6 +42,7 @@ NS_CC_BEGIN
 
 namespace network {
 
+class HttpClient;
 /**
  * @brief defines the object which users will receive at onHttpCompleted(sender, HttpResponse) callback.
  * Please refer to samples/TestCpp/Classes/ExtensionTest/NetworkTest/HttpClientTest.cpp as a sample.
@@ -46,15 +51,16 @@ namespace network {
  */
 class CC_DLL HttpResponse : public cocos2d::Ref
 {
+    friend class HttpClient;
 public:
+    using ResponseHeaderMap = std::unordered_map<std::string, std::string>;
+
     /**
      * Constructor, it's used by HttpClient internal, users don't need to create HttpResponse manually.
      * @param request the corresponding HttpRequest which leads to this response.
      */
     HttpResponse(HttpRequest* request)
         : _pHttpRequest(request)
-        , _succeed(false)
-        , _responseDataString("")
     {
         if (_pHttpRequest)
         {
@@ -99,17 +105,6 @@ public:
     }
 
     /**
-     * To see if the http request is returned successfully.
-     * Although users can judge if (http response code = 200), we want an easier way.
-     * If this getter returns false, you can call getResponseCode and getErrorBuffer to find more details.
-     * @return bool the flag that represent whether the http request return successfully or not.
-     */
-    bool isSucceed() const
-    {
-        return _succeed;
-    }
-
-    /**
      * Get the http response data.
      * @return std::vector<char>* the pointer that point to the _responseData.
      */
@@ -118,13 +113,8 @@ public:
         return &_responseData;
     }
 
-    /**
-     * Get the response headers.
-     * @return std::vector<char>* the pointer that point to the _responseHeader.
-     */
-    std::vector<char>* getResponseHeader()
-    {
-        return &_responseHeader;
+    bool isSucceed() const {
+        return _responseCode == 200;
     }
 
     /**
@@ -138,73 +128,38 @@ public:
         return _responseCode;
     }
 
+    /*
+    * The yasio error code, see yasio::errc
+    */
     int getInternalCode() const { return _internalCode; }
 
-    /**
-     * Get the error buffer which will tell you more about the reason why http request failed.
-     * @return const char* the pointer that point to _errorBuffer.
-     */
-    const char* getErrorBuffer() const
-    {
-        return _errorBuffer.c_str();
+
+    int getRedirectCount() const {
+        return _redirectCount;
     }
 
-    // setters, will be called by HttpClient
-    // users should avoid invoking these methods
+    const ResponseHeaderMap& getResponseHeaders() const {
+        return _responseHeaders;
+    }
 
-
-    /**
-     * Set whether the http request is returned successfully or not,
-     * This setter is mainly used in HttpClient, users mustn't set it directly
-     * @param value the flag represent whether the http request is successful or not.
-     */
-    void setSucceed(bool value)
-    {
-        _succeed = value;
+private:
+    void updateInternalCode(int value) {
+        if (_internalCode == 0)
+            _internalCode = value;
     }
 
     /**
-     * Set the http response data buffer, it is used by HttpClient.
-     * @param data the pointer point to the response data buffer.
+     * To see if the http request is finished.
      */
-    void setResponseData(std::vector<char>* data)
-    {
-        _responseData = *data;
+    bool isFinished() const {
+        return _finished;
     }
 
-    /**
-     * Set the http response headers buffer, it is used by HttpClient.
-     * @param data the pointer point to the response headers buffer.
-     */
-    void setResponseHeader(std::vector<char>* data)
-    {
-        _responseHeader = *data;
-    }
-
-
-    /**
-     * Set the http response code.
-     * @param value the http response code that represent whether the request is successful or not.
-     */
-    void setResponseCode(int value)
-    {
-        _responseCode = value;
-    }
-
-    void setInternalCode(int value) 
-    {
-        _internalCode = value;
-    }
-
-
-    /**
-     * Set the error buffer which will tell you more the reason why http request failed.
-     * @param value a string pointer that point to the reason.
-     */
-    void setErrorBuffer(const char* value)
-    {
-        _errorBuffer.clear();
-        _errorBuffer.assign(value);
+    void handleInput(const std::vector<char>& data) {
+        enum llhttp_errno err = llhttp_execute(&_context, data.data(), data.size());
+        if (err != HPE_OK) {
+            _finished = true;
+        }
     }
 
     /**
@@ -212,32 +167,89 @@ public:
      * @param value a string pointer that point to response data buffer.
      * @param n the defined size that the response data buffer would be copied.
      */
-    void setResponseDataString(const char* value, size_t n)
+    bool prepareForProcess(const std::string& url)
     {
-        _responseDataString.clear();
-        _responseDataString.assign(value, n);
+        /* Resets response status */
+        _finished    = false;
+        _responseData.clear();
+        _currentHeader.clear();
+        _responseHeaders.clear();
+        _responseCode = -1;
+        _internalCode = 0;
+
+        Uri uri = Uri::parse(url);
+        if (!uri.isValid())
+            return false;
+
+        _requestUri = std::move(uri);
+        
+        /* Initialize user callbacks and settings */
+        llhttp_settings_init(&_contextSettings);
+
+        /* Initialize the parser in HTTP_BOTH mode, meaning that it will select between
+         * HTTP_REQUEST and HTTP_RESPONSE parsing automatically while reading the first
+         * input.
+         */
+        llhttp_init(&_context, HTTP_RESPONSE, &_contextSettings);
+
+        _context.data = this;
+
+        /* Set user callbacks */
+        _contextSettings.on_header_field     = on_header_field;
+        _contextSettings.on_header_value     = on_header_value;
+        _contextSettings.on_body             = on_body;
+        _contextSettings.on_message_complete = on_complete;
+
+        return true;
     }
 
-    /**
-     * Get the string pointer that point to the response data.
-     * @return const char* the string pointer that point to the response data.
-     */
-    const char* getResponseDataString() const
-    {
-        return _responseDataString.c_str();
+    const Uri& getRequestUri() const {
+        return _requestUri;
+    }
+
+    int increaseRedirectCount() {
+        return ++_redirectCount;
+    }
+
+    static int on_header_field(llhttp_t* context, const char* at, size_t length) {
+
+        auto thiz = (HttpResponse*) context->data;
+        thiz->_currentHeader.assign(at, length);
+        std::transform(thiz->_currentHeader.begin(), thiz->_currentHeader.end(), thiz->_currentHeader.begin(), ::toupper);
+        return 0;
+    }
+    static int on_header_value(llhttp_t* context, const char* at, size_t length) {
+        auto thiz = (HttpResponse*) context->data;
+        thiz->_responseHeaders.emplace(std::move(thiz->_currentHeader), std::string{at, length});
+        return 0;
+    }
+    static int on_body(llhttp_t* context, const char* at, size_t length) {
+        auto thiz = (HttpResponse*) context->data;
+        thiz->_responseData.insert(thiz->_responseData.end(), at, at + length);
+        return 0;
+    }
+    static int on_complete(llhttp_t* context) {
+        auto thiz    = (HttpResponse*) context->data;
+        thiz->_responseCode = context->status_code;
+        thiz->_finished = true;
+        return 0;
     }
 
 protected:
+
     // properties
     HttpRequest*        _pHttpRequest;  /// the corresponding HttpRequest pointer who leads to this response
-    bool                _succeed;       /// to indicate if the http request is successful simply
-    std::vector<char>   _responseData;  /// the returned raw data. You can also dump it as a string
-    std::vector<char>   _responseHeader;  /// the returned raw header data. You can also dump it as a string
-    int                 _responseCode;    /// the status code returned from libcurl, e.g. 200, 404
-    int                 _internalCode;   /// the ret code of perform
-    std::string         _errorBuffer;   /// if _responseCode != 200, please read _errorBuffer to find the reason
-    std::string         _responseDataString; // the returned raw data. You can also dump it as a string
+    int                 _redirectCount = 0;
 
+    Uri                 _requestUri;
+    bool                _finished = false;       /// to indicate if the http request is successful simply
+    std::vector<char>   _responseData;  /// the returned raw data. You can also dump it as a string
+    std::string         _currentHeader;
+    ResponseHeaderMap   _responseHeaders; /// the returned raw header data. You can also dump it as a string
+    int                 _responseCode = -1;    /// the status code returned from libcurl, e.g. 200, 404
+    int                 _internalCode = 0;   /// the ret code of perform
+    llhttp_t            _context;
+    llhttp_settings_t   _contextSettings;
 };
 
 }

@@ -15,6 +15,7 @@ struct PXIoF {
     int(*read)(PXFileHandle& handle, void*, unsigned int);
     long(*seek)(PXFileHandle& handle, long, int);
     int(*close)(PXFileHandle& handle);
+    long long(*size)(PXFileHandle& handle);
 };
 
 static int pfs_posix_open(const std::string& path, FileStream::Mode mode, PXFileHandle& handle)
@@ -46,10 +47,25 @@ static int pfs_posix_close(PXFileHandle& handle) {
     }
     return 0;
 }
+static long long pfs_posix_size(PXFileHandle& handle)
+{
+#if defined(_WIN32)
+    return _filelengthi64(handle._fd);
+#else
+    struct stat st;
+
+    if (fstat(handle._fd, &st) == 0)
+        return st.st_size;
+
+    return -1;
+#endif
+}
+
 static PXIoF pfs_posix_iof = {
         pfs_posix_read,
         pfs_posix_seek,
-        pfs_posix_close
+        pfs_posix_close,
+        pfs_posix_size
 };
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -63,10 +79,15 @@ static int pfs_asset_close(PXFileHandle& handle) {
     }
     return 0;
 }
+static long long pfs_asset_size(PXFileHandle& handle)
+{
+    return AAsset_getLength64(handle._asset);
+}
 static PXIoF pfs_asset_iof = {
         pfs_asset_read,
         pfs_asset_seek,
-        pfs_asset_close
+        pfs_asset_close,
+        pfs_asset_size
 };
 
 // android obb
@@ -76,10 +97,15 @@ static int pfs_obb_close(PXFileHandle& handle) {
     FileUtilsAndroid::getObbFile()->zfclose(&handle._zfs);
     return 0;
 }
+static long long pfs_obb_size(PXFileHandle& handle)
+{
+    return FileUtilsAndroid::getObbFile()->zfsize(&handle._zfs);
+}
 static PXIoF pfs_obb_iof = {
         pfs_obb_read,
         pfs_obb_seek,
-        pfs_obb_close
+        pfs_obb_close,
+        pfs_obb_size
 };
 #endif
 
@@ -168,6 +194,11 @@ int PosixFileStream::write(const void* buf, unsigned int size)
 int PosixFileStream::tell()
 {
     return static_cast<int>(_iof->seek(_handle, 0, SEEK_CUR));
+}
+
+long long PosixFileStream::size()
+{
+    return _iof->size(_handle);
 }
 
 bool PosixFileStream::isOpen() const

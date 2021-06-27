@@ -1,6 +1,7 @@
 /* Copyright (c) 2012 Scott Lembcke and Howling Moon Software
  * Copyright (c) 2012 cocos2d-x.org
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +31,6 @@
 #include "base/CCEventListenerCustom.h"
 
 
-struct cpBody;
 class b2Body;
 
 NS_CC_EXT_BEGIN
@@ -92,13 +92,6 @@ public:
 	void setIgnoreBodyRotation(bool bIgnoreBodyRotation);
 
 	//
-	// Chipmunk specific
-	//
-	/** Body accessor when using regular Chipmunk */
-	cpBody* getCPBody() const;
-	void setCPBody(cpBody* pBody);
-
-	//
 	// Box2d specific
 	//
 	/** Body accessor when using box2d */
@@ -132,9 +125,6 @@ protected:
 
 protected:
 	bool    _ignoreBodyRotation;
-
-	// chipmunk specific
-	cpBody* _CPBody;
 
 	// box2d specific
 	b2Body* _pB2Body;

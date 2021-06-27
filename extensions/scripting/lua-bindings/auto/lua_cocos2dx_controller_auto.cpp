@@ -458,9 +458,9 @@ int lua_register_cocos2dx_controller_Controller(lua_State* tolua_S)
         tolua_function(tolua_S,"getControllerByDeviceId", lua_cocos2dx_controller_Controller_getControllerByDeviceId);
         tolua_function(tolua_S,"getControllerByTag", lua_cocos2dx_controller_Controller_getControllerByTag);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::Controller).name();
-    g_luaType[typeName] = "cc.Controller";
-    g_typeCast["Controller"] = "cc.Controller";
+    auto typeName = typeid(cocos2d::Controller).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Controller";
+    g_typeCast[typeName] = "cc.Controller";
     return 1;
 }
 
@@ -838,9 +838,9 @@ int lua_register_cocos2dx_controller_EventController(lua_State* tolua_S)
         tolua_function(tolua_S,"getController",lua_cocos2dx_controller_EventController_getController);
         tolua_function(tolua_S,"getKeyCode",lua_cocos2dx_controller_EventController_getKeyCode);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::EventController).name();
-    g_luaType[typeName] = "cc.EventController";
-    g_typeCast["EventController"] = "cc.EventController";
+    auto typeName = typeid(cocos2d::EventController).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.EventController";
+    g_typeCast[typeName] = "cc.EventController";
     return 1;
 }
 
@@ -892,9 +892,9 @@ int lua_register_cocos2dx_controller_EventListenerController(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"EventListenerController");
         tolua_function(tolua_S,"create", lua_cocos2dx_controller_EventListenerController_create);
     tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::EventListenerController).name();
-    g_luaType[typeName] = "cc.EventListenerController";
-    g_typeCast["EventListenerController"] = "cc.EventListenerController";
+    auto typeName = typeid(cocos2d::EventListenerController).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.EventListenerController";
+    g_typeCast[typeName] = "cc.EventListenerController";
     return 1;
 }
 TOLUA_API int register_all_cocos2dx_controller(lua_State* tolua_S)
