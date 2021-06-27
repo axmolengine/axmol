@@ -25,10 +25,10 @@ public:
     bool init();
     void clearPrograms();
 
-    void registerProgram(uint32_t programType, int textureFormatEXT, Program*);
+    void registerProgram(uint32_t programType, int textureSamplerFlags, Program*);
 
-    ProgramState* newProgramState(uint32_t programType, int textureFormatEXT);
-    uint32_t getProgramType(uint32_t programType, int textureFormatEXT);
+    ProgramState* newProgramState(uint32_t programType, int textureSamplerFlags);
+    uint32_t getProgramType(uint32_t programType, int textureSamplerFlags);
 
 protected:
 

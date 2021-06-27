@@ -1,5 +1,5 @@
 
-const char* hsv_etc1_frag = R"(#ifdef GL_ES
+const char* dualSampler_hsv_frag = R"(#ifdef GL_ES
 precision mediump float;
 #endif 
 

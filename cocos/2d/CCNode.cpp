@@ -2130,8 +2130,8 @@ int Node::getAttachedNodeCount()
 
 void Node::setProgramStateWithRegistry(uint32_t programType, Texture2D* texture)
 {
-    auto formatEXT = texture ? texture->getTextureFormatEXT() : 0;
-    auto programState = backend::ProgramStateRegistry::getInstance()->newProgramState(programType, formatEXT);
+    auto samplerFlags    = texture ? texture->getSamplerFlags() : 0;
+    auto programState = backend::ProgramStateRegistry::getInstance()->newProgramState(programType, samplerFlags);
     setProgramState(programState, false);
 }
 

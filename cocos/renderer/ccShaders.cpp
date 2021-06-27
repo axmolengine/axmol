@@ -49,8 +49,8 @@ NS_CC_BEGIN
 #include "renderer/shaders/layer_radialGradient.frag"
 #include "renderer/shaders/ui_Gray.frag"
 #include "renderer/shaders/positionUColor.vert"
-#include "renderer/shaders/etc1.frag"
-#include "renderer/shaders/etc1_Gray.frag"
+#include "renderer/shaders/dualSampler.frag"
+#include "renderer/shaders/dualSampler_gray.frag"
 #include "renderer/shaders/cameraClear.vert"
 #include "renderer/shaders/cameraClear.frag"
 
@@ -72,6 +72,6 @@ NS_CC_BEGIN
 #include "renderer/shaders/lineColor.vert"
 
 #include "renderer/shaders/hsv.frag"
-#include "renderer/shaders/hsv_etc1.frag"
+#include "renderer/shaders/dualSampler_hsv.frag"
 
 NS_CC_END

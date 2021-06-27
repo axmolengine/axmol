@@ -560,7 +560,7 @@ namespace
 // Implement Image
 //////////////////////////////////////////////////////////////////////////
 bool Image::PNG_PREMULTIPLIED_ALPHA_ENABLED = true;
-uint32_t Image::COMPRESSED_IMAGE_PMA_FLAGS = Image::CompressedImagePMAFlag::ETC1;
+uint32_t Image::COMPRESSED_IMAGE_PMA_FLAGS = Image::CompressedImagePMAFlag::DUAL_SAMPLER;
 
 void Image::setCompressedImagesHavePMA(uint32_t targets, bool havePMA)
 {
