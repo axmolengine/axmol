@@ -418,7 +418,9 @@ void Sprite::setTexture(Texture2D *texture)
         }
     }
 
-    bool needsUpdatePS = _texture == nullptr || _texture->getSamplerFlags() != texture->getSamplerFlags();
+    bool needsUpdatePS =
+        (!_programState || _programState->getProgram()->getProgramType() < backend::ProgramType::CUSTOM_PROGRAM) &&
+        (_texture == nullptr || _texture->getSamplerFlags() != texture->getSamplerFlags());
 
     if (_renderMode != RenderMode::QUAD_BATCHNODE)
     {
@@ -433,6 +435,8 @@ void Sprite::setTexture(Texture2D *texture)
 
     if (needsUpdatePS)
         setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+    else
+        updateProgramStateTexture(_texture);
 }
 
 Texture2D* Sprite::getTexture() const
