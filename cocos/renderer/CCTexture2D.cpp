@@ -70,7 +70,8 @@ Texture2D::Texture2D()
 , _pixelsHigh(0)
 , _maxS(0.0)
 , _maxT(0.0)
-, _flagsAndFormatEXT(TextureFlag::ANTIALIAS_ENABLED)
+, _flags(TextureFlag::ANTIALIAS_ENABLED)
+, _samplerFlags(TextureSamplerFlag::DEFAULT)
 , _ninePatchInfo(nullptr)
 , _valid(true)
 {
@@ -148,13 +149,13 @@ void Texture2D::setMaxT(float maxT)
 
 bool Texture2D::hasPremultipliedAlpha() const
 {
-    return _flagsAndFormatEXT & TextureFlag::PREMULTIPLIEDALPHA;
+    return _flags & TextureFlag::PREMULTIPLIEDALPHA;
 }
 
 void Texture2D::setPremultipliedAlpha(bool premultipliedAlpha)
 {
-    if (premultipliedAlpha) _flagsAndFormatEXT |= TextureFlag::PREMULTIPLIEDALPHA;
-    else _flagsAndFormatEXT &= ~TextureFlag::PREMULTIPLIEDALPHA;
+    if (premultipliedAlpha) _flags |= TextureFlag::PREMULTIPLIEDALPHA;
+    else _flags &= ~TextureFlag::PREMULTIPLIEDALPHA;
 }
 
 bool Texture2D::initWithData(const void *data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Size& /*contentSize*/, bool preMultipliedAlpha)
@@ -176,7 +177,7 @@ bool Texture2D::initWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::Pi
     return true;
 }
 
-bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int index, int formatEXT)
+bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int index)
 {
     if (image == nullptr)
     {
@@ -247,12 +248,11 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
         updateWithData(tempData, tempDataLen, imagePixelFormat, renderFormat, imageWidth, imageHeight, imageSize, image->hasPremultipliedAlpha(), index);
     }
 
-    _flagsAndFormatEXT |= formatEXT;
-
-    // pitfall: because we do merge etc1 alpha at shader, so must mark as _hasPremultipliedAlpha = true to makesure alpha blend works well.
-    if (formatEXT == TextureFormatEXT::ETC1_ALPHA)
-        setPremultipliedAlpha(Image::isCompressedImageHavePMA(Image::CompressedImagePMAFlag::ETC1));
-
+    // pitfall: we do merge RGB+A at at dual sampler shader, so must mark as _hasPremultipliedAlpha = true to makesure alpha blend works well.
+    if (index > 0) {
+        setPremultipliedAlpha(Image::isCompressedImageHavePMA(Image::CompressedImagePMAFlag::DUAL_SAMPLER));
+        _samplerFlags |= TextureSamplerFlag::DUAL_SAMPLER;
+    }
     return true;
 }
 
@@ -311,14 +311,18 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
     textureDescriptor.width = pixelsWide;
     textureDescriptor.height = pixelsHigh;
     
-    textureDescriptor.samplerDescriptor.magFilter = (_flagsAndFormatEXT & TextureFlag::ANTIALIAS_ENABLED) ? backend::SamplerFilter::LINEAR : backend::SamplerFilter::NEAREST;
+    textureDescriptor.samplerDescriptor.magFilter = (_flags & TextureFlag::ANTIALIAS_ENABLED) ? backend::SamplerFilter::LINEAR : backend::SamplerFilter::NEAREST;
     if (mipmapsNum == 1)
     {
-        textureDescriptor.samplerDescriptor.minFilter = (_flagsAndFormatEXT & TextureFlag::ANTIALIAS_ENABLED) ? backend::SamplerFilter::LINEAR : backend::SamplerFilter::NEAREST;
+        textureDescriptor.samplerDescriptor.minFilter = (_flags & TextureFlag::ANTIALIAS_ENABLED)
+                                                          ? backend::SamplerFilter::LINEAR
+                                                          : backend::SamplerFilter::NEAREST;
     }
     else
     {
-        textureDescriptor.samplerDescriptor.minFilter = (_flagsAndFormatEXT & TextureFlag::ANTIALIAS_ENABLED) ? backend::SamplerFilter::LINEAR_MIPMAP_NEAREST : backend::SamplerFilter::NEAREST_MIPMAP_NEAREST;
+        textureDescriptor.samplerDescriptor.minFilter = (_flags & TextureFlag::ANTIALIAS_ENABLED)
+                                                          ? backend::SamplerFilter::LINEAR_MIPMAP_NEAREST
+                                                          : backend::SamplerFilter::NEAREST_MIPMAP_NEAREST;
     }
 
     int width = pixelsWide;
@@ -527,8 +531,10 @@ bool Texture2D::updateTextureDescriptor(const backend::TextureDescriptor& descri
 
 void Texture2D::setRenderTarget(bool renderTarget)
 {
-    if (renderTarget) _flagsAndFormatEXT |= TextureFlag::RENDERTARGET;
-    else _flagsAndFormatEXT &= TextureFlag::RENDERTARGET;
+    if (renderTarget)
+        _flags |= TextureFlag::RENDERTARGET;
+    else
+        _flags &= TextureFlag::RENDERTARGET;
 }
 
 bool Texture2D::hasMipmaps() const
@@ -539,12 +545,12 @@ bool Texture2D::hasMipmaps() const
 void Texture2D::setAliasTexParameters()
 {
 
-    if ((_flagsAndFormatEXT & TextureFlag::ANTIALIAS_ENABLED) == 0)
+    if ((_flags & TextureFlag::ANTIALIAS_ENABLED) == 0)
     {
         return;
     }
 
-    _flagsAndFormatEXT &= ~TextureFlag::ANTIALIAS_ENABLED;
+    _flags &= ~TextureFlag::ANTIALIAS_ENABLED;
 
     backend::SamplerDescriptor descriptor(
         backend::SamplerFilter::NEAREST, //magFilter
@@ -558,15 +564,16 @@ void Texture2D::setAliasTexParameters()
 void Texture2D::setAntiAliasTexParameters()
 {
 
-    if (_flagsAndFormatEXT & TextureFlag::ANTIALIAS_ENABLED)
+    if (_flags & TextureFlag::ANTIALIAS_ENABLED)
     {
         return;
     }
-    _flagsAndFormatEXT |= TextureFlag::ANTIALIAS_ENABLED;
+    _flags |= TextureFlag::ANTIALIAS_ENABLED;
 
     backend::SamplerDescriptor descriptor(
         backend::SamplerFilter::LINEAR, //magFilter
-        (_texture->hasMipmaps()) ? backend::SamplerFilter::LINEAR_MIPMAP_NEAREST : backend::SamplerFilter::LINEAR, //minFilter
+        (_texture->hasMipmaps()) ? backend::SamplerFilter::LINEAR_MIPMAP_NEAREST : backend::SamplerFilter::
+        LINEAR, //minFilter
         backend::SamplerAddressMode::DONT_CARE, //sAddressMode
         backend::SamplerAddressMode::DONT_CARE //tAddressMode
     );

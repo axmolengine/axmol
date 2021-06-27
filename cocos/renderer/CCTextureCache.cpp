@@ -43,8 +43,6 @@ THE SOFTWARE.
 #include "base/ccUtils.h"
 #include "base/CCNinePatchImageParser.h"
 #include "renderer/backend/Device.h"
-//#include "renderer/backend/StringUtils.h"
-
 
 using namespace std;
 
@@ -349,7 +347,7 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
                 texture->autorelease();
                 // ETC1 ALPHA supports.
                 if (asyncStruct->imageAlpha.getFileType() == Image::Format::ETC1) {
-                    texture->updateWithImage(&asyncStruct->imageAlpha, Texture2D::getDefaultAlphaPixelFormat(), 1, TextureFormatEXT::ETC1_ALPHA);
+                    texture->updateWithImage(&asyncStruct->imageAlpha, Texture2D::getDefaultAlphaPixelFormat(), 1);
                 }
             }
             else {
@@ -421,7 +419,7 @@ Texture2D * TextureCache::addImage(const std::string &path)
                     Image imageAlpha;
                     if (imageAlpha.initWithImageFile(alphaFullPath))
                     {
-                        texture->updateWithImage(&imageAlpha, Texture2D::getDefaultAlphaPixelFormat(), 1, TextureFormatEXT::ETC1_ALPHA);
+                        texture->updateWithImage(&imageAlpha, Texture2D::getDefaultAlphaPixelFormat(), 1);
                     }
                 }
 
@@ -833,7 +831,7 @@ void VolatileTextureMgr::reloadAllTextures()
             Image image;
             if (image.initWithImageFile(vt->_fileName + TextureCache::getETC1AlphaFileSuffix()))
             {
-                vt->_texture->updateWithImage(&image, vt->_pixelFormat, 1, TextureFormatEXT::ETC1_ALPHA);
+                vt->_texture->updateWithImage(&image, vt->_pixelFormat, 1);
             }
         }
         break;

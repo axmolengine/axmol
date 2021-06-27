@@ -176,7 +176,7 @@ public:
     @param width Specifies the width of the texture subimage.
     @param height Specifies the height of the texture subimage.
     */
-    bool updateWithImage(Image* image, backend::PixelFormat format, int index = 0, int formatEXT = 0);
+    bool updateWithImage(Image* image, backend::PixelFormat format, int index = 0);
     bool updateWithData(const void* data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Size& /*contentSize*/, bool preMultipliedAlpha, int index = 0);
     bool updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, bool preMultipliedAlpha = false, int index = 0);
 
@@ -244,7 +244,7 @@ public:
     bool updateTextureDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha = false);
 
     void setRenderTarget(bool renderTarget);
-    inline bool isRenderTarget() const { return _flagsAndFormatEXT & TextureFlag::RENDERTARGET; }
+    inline bool isRenderTarget() const { return _flags & TextureFlag::RENDERTARGET; }
 
     void setTexParameters(const TexParams &params);
     
@@ -301,7 +301,10 @@ public:
 
     /** Gets the pixel format of the texture. */
     backend::PixelFormat getPixelFormat() const;
-    int getTextureFormatEXT() const { return _flagsAndFormatEXT & 0xff; }
+
+    int getSamplerFlags() const {
+        return _samplerFlags;
+    }
     
     /** Gets the width of the texture in pixels. */
     int getPixelsWide() const;
@@ -395,7 +398,8 @@ protected:
     /** content size */
     Size _contentSize;
 
-    int _flagsAndFormatEXT;
+    uint16_t _flags : 16;
+    uint16_t _samplerFlags : 16;
 
     NinePatchInfo* _ninePatchInfo;
     friend class SpriteFrameCache;

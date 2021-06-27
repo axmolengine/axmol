@@ -406,8 +406,10 @@ struct ProgramType {
 
         LAYER_RADIA_GRADIENT,                   //position_vert,                layer_radialGradient_frag
 
-        ETC1,                                   //positionTextureColor_vert,    etc1_frag
-        ETC1_GRAY,                              //positionTextureColor_vert,    etc1Gray_frag
+        DUAL_SAMPLER,
+        DUAL_SAMPLER_GRAY,
+        ETC1 = DUAL_SAMPLER,                    // positionTextureColor_vert,    etc1_frag
+        ETC1_GRAY = DUAL_SAMPLER_GRAY,          // positionTextureColor_vert,    etc1Gray_frag
         GRAY_SCALE,                             //positionTextureColor_vert,    grayScale_frag
         CAMERA_CLEAR,                           //cameraClear_vert,             cameraClear_frag
 
@@ -426,7 +428,8 @@ struct ProgramType {
         PARTICLE_COLOR_3D,                      //CC3D_particle_vert,                   CC3D_particleColor_frag
 
         HSV,
-        HSV_ETC1,
+        HSV_DUAL_SAMPLER,
+        HSV_ETC1 = HSV_DUAL_SAMPLER,
 
         BUILTIN_COUNT,
 
