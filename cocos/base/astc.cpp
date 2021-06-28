@@ -52,7 +52,7 @@ uint8_t astc_decompress_image(
 
         physical_to_symbolic(*bsd, pcb, scb);
 
-        decompress_symbolic_block(ASTCENC_PRF_LDR_SRGB, *bsd, x * block_x, y * block_y, z * block_z, scb, blk);
+        decompress_symbolic_block(ASTCENC_PRF_LDR, *bsd, x * block_x, y * block_y, z * block_z, scb, blk);
 
         write_image_block(image_out, blk, *bsd, x * block_x, y * block_y, z * block_z, swz_decode);
     }
