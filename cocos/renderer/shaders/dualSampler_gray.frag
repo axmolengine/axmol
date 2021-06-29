@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-const char* etc1Gray_frag = R"(
+const char* dualSampler_gray_frag = R"(
 #ifdef GL_ES
     precision mediump float;
 #endif

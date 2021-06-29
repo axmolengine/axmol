@@ -634,22 +634,21 @@ struct CC_DLL ScissorRect
     float height = 0;
 };
 
-// TODO: Move to renderer/backend/Types.h
-struct TextureFormatEXT
-{
-    enum {
-        NONE = 0,
-        ETC1_ALPHA = 1,
-    };
-};
 
 struct TextureFlag
 {
     enum {
         NONE = 0,
-        ANTIALIAS_ENABLED = 1 << 16,
-        PREMULTIPLIEDALPHA = 1 << 17,
-        RENDERTARGET = 1 << 18,
+        ANTIALIAS_ENABLED = 1 << 1,
+        PREMULTIPLIEDALPHA = 1 << 2,
+        RENDERTARGET = 1 << 3, 
+    };
+};
+
+struct TextureSamplerFlag {
+    enum {
+        DEFAULT = 0,
+        DUAL_SAMPLER = 1 << 1,
     };
 };
 

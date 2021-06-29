@@ -82,7 +82,7 @@ ProgramCache::~ProgramCache()
 bool ProgramCache::init()
 {
     registerProgramFactory(ProgramType::POSITION_TEXTURE_COLOR, positionTextureColor_vert, positionTextureColor_frag);
-    registerProgramFactory(ProgramType::ETC1, positionTextureColor_vert, etc1_frag);
+    registerProgramFactory(ProgramType::DUAL_SAMPLER, positionTextureColor_vert, dualSampler_frag);
     registerProgramFactory(ProgramType::LABEL_DISTANCE_NORMAL, positionTextureColor_vert, label_distanceNormal_frag);
     registerProgramFactory(ProgramType::LABEL_NORMAL, positionTextureColor_vert, label_normal_frag);
     registerProgramFactory(ProgramType::LABLE_OUTLINE, positionTextureColor_vert, labelOutline_frag);
@@ -94,7 +94,7 @@ bool ProgramCache::init()
     registerProgramFactory(ProgramType::POSITION_TEXTURE, positionTexture_vert, positionTexture_frag);
     registerProgramFactory(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vert, positionTextureColorAlphaTest_frag);
     registerProgramFactory(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionColor_frag);
-    registerProgramFactory(ProgramType::ETC1_GRAY, positionTextureColor_vert, etc1Gray_frag);
+    registerProgramFactory(ProgramType::DUAL_SAMPLER_GRAY, positionTextureColor_vert, dualSampler_gray_frag);
     registerProgramFactory(ProgramType::GRAY_SCALE, positionTextureColor_vert, grayScale_frag);
     registerProgramFactory(ProgramType::LINE_COLOR_3D, lineColor3D_vert, lineColor3D_frag);
     registerProgramFactory(ProgramType::CAMERA_CLEAR, cameraClear_vert, cameraClear_frag);
@@ -113,20 +113,17 @@ bool ProgramCache::init()
     registerProgramFactory(ProgramType::PARTICLE_TEXTURE_3D, CC3D_particle_vert, CC3D_particleTexture_frag);
     registerProgramFactory(ProgramType::PARTICLE_COLOR_3D, CC3D_particle_vert, CC3D_particleColor_frag);
     registerProgramFactory(ProgramType::HSV, positionTextureColor_vert, hsv_frag);
-    registerProgramFactory(ProgramType::HSV_ETC1, positionTextureColor_vert, hsv_etc1_frag);
+    registerProgramFactory(ProgramType::HSV_DUAL_SAMPLER, positionTextureColor_vert, dualSampler_hsv_frag);
 
-    /* FIXME: Naming style
-    ** ETC1: POSITION_TEXTURE_COLOR_ETC1
-    ** GRAY_SCALE maybe: POSITION_TEXTURE_COLOR_GRAY
-    ** ETC1_GRAY maybe: POSITION_TEXTURE_COLOR_GRAY_ETC1
-    */
-    ProgramStateRegistry::getInstance()->registerProgram(ProgramType::POSITION_TEXTURE_COLOR, TextureFormatEXT::ETC1_ALPHA,
-        getBuiltinProgram(ProgramType::ETC1));
-    ProgramStateRegistry::getInstance()->registerProgram(ProgramType::GRAY_SCALE, TextureFormatEXT::ETC1_ALPHA,
-        getBuiltinProgram(ProgramType::ETC1_GRAY));
+    // The builtin dual sampler shader registry
+    ProgramStateRegistry::getInstance()->registerProgram(ProgramType::POSITION_TEXTURE_COLOR,
+        TextureSamplerFlag::DUAL_SAMPLER, getBuiltinProgram(ProgramType::DUAL_SAMPLER));
 
-    ProgramStateRegistry::getInstance()->registerProgram(ProgramType::HSV, TextureFormatEXT::ETC1_ALPHA,
-        getBuiltinProgram(ProgramType::HSV_ETC1));
+    ProgramStateRegistry::getInstance()->registerProgram(
+        ProgramType::GRAY_SCALE, TextureSamplerFlag::DUAL_SAMPLER, getBuiltinProgram(ProgramType::DUAL_SAMPLER_GRAY));
+
+    ProgramStateRegistry::getInstance()->registerProgram(
+        ProgramType::HSV, TextureSamplerFlag::DUAL_SAMPLER, getBuiltinProgram(ProgramType::HSV_DUAL_SAMPLER));
     return true;
 }
 

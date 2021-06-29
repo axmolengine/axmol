@@ -105,11 +105,11 @@ public:
     
     struct CompressedImagePMAFlag {
         enum : uint32_t {
-            ASTC  = 1,
-            ETC1  = 1 << 1, // ETC1_RGB + ETC1_ALPHA only
-            ETC2  = 1 << 2,
-            PVR   = 1 << 3,
-            ALL   = 0xffff,
+            ASTC         = 1,
+            DUAL_SAMPLER = 1 << 1, // for dual sampler, such as ETC1_RGB + ETC1_Alpha
+            ETC2         = 1 << 2,
+            PVR          = 1 << 3,
+            ALL          = 0xffff,
         };
     };
 
