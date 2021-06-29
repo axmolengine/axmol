@@ -135,7 +135,7 @@ destroy(cpSpace *space)
 
 ChipmunkDemo Tumble = {
 	"Tumble",
-	1.0/180.0,
+	1.0/60.0,  // faster as the original (more action)
 	init,
 	update,
 	ChipmunkDemoDefaultDrawImpl,
