@@ -2737,29 +2737,6 @@ int lua_cocos2dx_Texture2D_updateWithImage(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 4) 
-    {
-        cocos2d::Image* arg0;
-        cocos2d::backend::PixelFormat arg1;
-        int arg2;
-        int arg3;
-
-        ok &= luaval_to_object<cocos2d::Image>(tolua_S, 2, "cc.Image",&arg0, "cc.Texture2D:updateWithImage");
-
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.Texture2D:updateWithImage");
-
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "cc.Texture2D:updateWithImage");
-
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "cc.Texture2D:updateWithImage");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Texture2D_updateWithImage'", nullptr);
-            return 0;
-        }
-        bool ret = cobj->updateWithImage(arg0, arg1, arg2, arg3);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Texture2D:updateWithImage",argc, 2);
     return 0;
 
@@ -2770,7 +2747,7 @@ int lua_cocos2dx_Texture2D_updateWithImage(lua_State* tolua_S)
 
     return 0;
 }
-int lua_cocos2dx_Texture2D_getTextureFormatEXT(lua_State* tolua_S)
+int lua_cocos2dx_Texture2D_getSamplerFlags(lua_State* tolua_S)
 {
     int argc = 0;
     cocos2d::Texture2D* cobj = nullptr;
@@ -2803,7 +2780,7 @@ int lua_cocos2dx_Texture2D_getTextureFormatEXT(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Texture2D_getTextureFormatEXT'", nullptr);
             return 0;
         }
-        int ret = cobj->getTextureFormatEXT();
+        int ret = cobj->getSamplerFlags();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3058,7 +3035,7 @@ int lua_register_cocos2dx_Texture2D(lua_State* tolua_S)
         tolua_function(tolua_S,"hasMipmaps",lua_cocos2dx_Texture2D_hasMipmaps);
         tolua_function(tolua_S,"setRenderTarget",lua_cocos2dx_Texture2D_setRenderTarget);
         tolua_function(tolua_S,"updateWithImage",lua_cocos2dx_Texture2D_updateWithImage);
-        tolua_function(tolua_S,"getTextureFormatEXT",lua_cocos2dx_Texture2D_getTextureFormatEXT);
+        tolua_function(tolua_S, "getSamplerFlags", lua_cocos2dx_Texture2D_getSamplerFlags);
         tolua_function(tolua_S,"updateWithSubData",lua_cocos2dx_Texture2D_updateWithSubData);
         tolua_function(tolua_S,"setDefaultAlphaPixelFormat", lua_cocos2dx_Texture2D_setDefaultAlphaPixelFormat);
         tolua_function(tolua_S,"getDefaultAlphaPixelFormat", lua_cocos2dx_Texture2D_getDefaultAlphaPixelFormat);

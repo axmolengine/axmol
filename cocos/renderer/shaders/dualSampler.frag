@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-const char* etc1_frag = R"(
+const char* dualSampler_frag = R"(
 #ifdef GL_ES
     precision mediump float;
 #endif

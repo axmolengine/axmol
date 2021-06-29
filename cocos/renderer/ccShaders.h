@@ -57,8 +57,8 @@ extern CC_DLL const char * position_vert;
 extern CC_DLL const char * layer_radialGradient_frag;
 extern CC_DLL const char * grayScale_frag;
 extern CC_DLL const char * positionUColor_vert;
-extern CC_DLL const char * etc1_frag;
-extern CC_DLL const char * etc1Gray_frag;
+extern CC_DLL const char * dualSampler_frag;
+extern CC_DLL const char * dualSampler_gray_frag;
 extern CC_DLL const char * cameraClear_vert;
 extern CC_DLL const char * cameraClear_frag;
 
@@ -79,7 +79,7 @@ extern CC_DLL const char * CC3D_terrain_frag;
 extern CC_DLL const char * CC3D_terrain_vert;
 
 extern CC_DLL const char* hsv_frag;
-extern CC_DLL const char* hsv_etc1_frag;
+extern CC_DLL const char* dualSampler_hsv_frag;
 NS_CC_END
 /**
  end of support group
