@@ -66,13 +66,10 @@ public:
     bool mousePresses = false;
 
 private: 
-
     cocos2d::EventListenerMouse* _mouseListener;
     cocos2d::Node* _trackNode;
     cocos2d::DrawNode* draw;
     cocos2d::Label* drawInfo;
-
-
 };
 
 class LogoSmashDemo : public ChipmunkTestBed {
