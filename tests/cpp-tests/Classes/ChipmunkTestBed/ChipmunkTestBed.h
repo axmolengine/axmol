@@ -62,6 +62,8 @@ public:
 
     cpSpace* _space; // strong ref
     cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
+    int keyPresses;
+    bool mousePresses = false;
 
 private: 
 
@@ -69,6 +71,8 @@ private:
     cocos2d::Node* _trackNode;
     cocos2d::DrawNode* draw;
     cocos2d::Label* drawInfo;
+
+
 };
 
 class LogoSmashDemo : public ChipmunkTestBed {
@@ -175,6 +179,7 @@ class BenchDemo : public ChipmunkTestBed {
 public:
     CREATE_FUNC(BenchDemo);
     virtual std::string title() const override;
+    virtual std::string subtitle() const override;
     virtual void onEnter() override;
 
     void initPhysics() override;

@@ -38,17 +38,17 @@ static cpSpace* init(void) {
     cpShape* shape;
 
     // Create segments around the edge of the screen.
-    shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320, -200), cpv(-320, 240), 0.0f));
+    shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320, -240), cpv(-320, 240), 0.0f));
     cpShapeSetElasticity(shape, 1.0f);
     cpShapeSetFriction(shape, 1.0f);
     cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-    shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(320, -200), cpv(320, 240), 0.0f));
+    shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(320, -240), cpv(320, 240), 0.0f));
     cpShapeSetElasticity(shape, 1.0f);
     cpShapeSetFriction(shape, 1.0f);
     cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-    shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320, -200), cpv(320, -200), 0.0f));
+    shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320, -240), cpv(320, -240), 0.0f));
     cpShapeSetElasticity(shape, 1.0f);
     cpShapeSetFriction(shape, 1.0f);
     cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
