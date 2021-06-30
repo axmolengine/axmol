@@ -50,7 +50,6 @@ public:
 	void onMouseDown(cocos2d::Event* event);
 	void onMouseUp(cocos2d::Event* event);
 	void onMouseMove(cocos2d::Event* event);
-
 	void DrawInfo();
 	void updateInit(ChipmunkDemo tt);
 
@@ -64,6 +63,7 @@ private:
 	cocos2d::Node* _trackNode;
 	cocos2d::DrawNode* draw;
 	cocos2d::Label* drawInfo;
+
 };
 
 class LogoSmashDemo : public ChipmunkTestBed {
