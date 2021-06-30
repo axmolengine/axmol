@@ -46,7 +46,6 @@ enum {
 
 
 extern ChipmunkDemo Example; // Use as template for new Chipmunk2D demos
-
 extern ChipmunkDemo LogoSmash;
 extern ChipmunkDemo PyramidStack;
 extern ChipmunkDemo Plink;
@@ -97,50 +96,22 @@ cpConstraint* mouse_joint = NULL;
 
 char const* ChipmunkDemoMessageString = NULL;
 
-float ChipmunkDebugDrawPointLineScale = 1.0f;
-
-// Meh, just max out 16 bit index size.
-#define VERTEX_MAX (64 * 1024)
-#define INDEX_MAX  (4 * VERTEX_MAX)
-
-// static sg_buffer VertexBuffer, IndexBuffer;
-static size_t VertexCount, IndexCount;
-
-static Vertex Vertexes[VERTEX_MAX];
-static Index Indexes[INDEX_MAX];
-
 #define GRABBABLE_MASK_BIT (1 << 31)
 cpShapeFilter GRAB_FILTER = { CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT };
 cpShapeFilter NOT_GRABBABLE_FILTER = { CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT };
 
-void ChipmunkDemoDefaultDrawImpl(cpSpace* space) {};
-static Vertex* push_vertexes(size_t vcount, const Index* index_src, size_t icount) {
-	cpAssertHard(VertexCount + vcount <= VERTEX_MAX && IndexCount + icount <= INDEX_MAX, "Geometry buffer full.");
-
-	Vertex* vertex_dst = Vertexes + VertexCount;
-	size_t base = VertexCount;
-	VertexCount += vcount;
-
-	Index* index_dst = Indexes + IndexCount;
-	for (size_t i = 0; i < icount; i++)
-		index_dst[i] = index_src[i] + (Index)base;
-	IndexCount += icount;
-
-	return vertex_dst;
-}
-
 
 cocos2d::DrawNode* drawCP = NULL;
 
-// static Vec2 cpVert2Point(const cpVect& vert)
+void ChipmunkDemoDefaultDrawImpl(cpSpace* space) {};
 
 void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor) {
-	drawCP->drawPoint(
-		Vec2(pos.x, pos.y) + physicsDebugNodeOffset, size, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
+
+drawCP->drawPoint(Vec2(pos.x, pos.y) + physicsDebugNodeOffset, size, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
 }
 
-void ChipmunkDebugDrawCircle(
-	cpVect pos, cpFloat angle, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+void ChipmunkDebugDrawCircle(cpVect pos, cpFloat angle, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+
 	drawCP->drawCircle(Vec2(pos.x, pos.y) + physicsDebugNodeOffset, 100, CC_DEGREES_TO_RADIANS(90), 50, true, 1.0f,
 		2.0f, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
 }
@@ -150,20 +121,19 @@ void ChipmunkDebugDrawSegment(cpVect a, cpVect b, cpSpaceDebugColor color) {
 		Color4F(color.r, color.g, color.b, color.a));
 }
 
-void ChipmunkDebugDrawFatSegment(
-	cpVect a, cpVect b, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+void ChipmunkDebugDrawFatSegment(cpVect a, cpVect b, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+
 	drawCP->drawSegment(Vec2(a.x, a.y) + physicsDebugNodeOffset, Vec2(b.x, b.y) + physicsDebugNodeOffset, radius,
 		Color4F(outlineColor.r, outlineColor.g, outlineColor.b, outlineColor.a));
 }
 
-void ChipmunkDebugDrawPolygon(
-	int count, const cpVect* verts, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+
+void ChipmunkDebugDrawPolygon(int count, const cpVect* verts, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+
 	Vec2* vec = new (std::nothrow) Vec2[count];
 	for (size_t i = 0; i < count; i++) {
 		vec[i] = cpVert2Point(verts[i]);
 	}
-
-
 	drawCP->drawPolygon(vec, count, Color4F(1.0f, 0.0f, 0.0f, 0.5f), radius, Color4F(0.0f, 0.0f, 1.0f, 1.0f));
 
 	delete[] vec;
@@ -176,8 +146,7 @@ void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor color) {
 		Vec2(bb.l, bb.t) + physicsDebugNodeOffset,
 		Vec2(bb.l, bb.b) + physicsDebugNodeOffset,
 	};
-	drawCP->drawPolygon(
-		verts, sizeof(verts) / sizeof(verts[0]), Color4F(1.0f, 0.0f, 0.0f, 0.0f), 1, Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+	drawCP->drawPolygon(verts, sizeof(verts) / sizeof(verts[0]), Color4F(1.0f, 0.0f, 0.0f, 0.0f), 1, Color4F(0.0f, 0.0f, 1.0f, 1.0f));
 }
 
 
@@ -313,38 +282,27 @@ ChipmunkTestBed::ChipmunkTestBed() {
 
 	// creating a keyboard event listener
 	auto listener = EventListenerKeyboard::create();
-	listener->onKeyPressed = [&](EventKeyboard::KeyCode keyCode, Event* event) {
-		static int oldkey = -1;
-		if (keyPresses == oldkey) {
-			return;
-		}
-		switch ((int)keyCode) {
-		case 28: // Up
-			ChipmunkDemoKeyboard.y++;
-			keyPresses = (int)keyCode;
-			oldkey = keyPresses;
-			break;
-		case 29: // Down
-			ChipmunkDemoKeyboard.y--;
-			keyPresses = (int)keyCode;
-			oldkey = keyPresses;
-			break;
-		case 27: // Right
-			ChipmunkDemoKeyboard.x++;
-			keyPresses = (int)keyCode;
-			oldkey = keyPresses;
-			break;
-		case 26: // Left
+	listener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
+		if ((int)keyCode == 26) // Left
+		{
 			ChipmunkDemoKeyboard.x--;
-			keyPresses = (int)keyCode;
-			oldkey = keyPresses;
-			break;
+		}
+		if ((int)keyCode == 27) // Right
+		{
+			ChipmunkDemoKeyboard.x++;
+		}
+		if ((int)keyCode == 28) // Up
+		{
+			ChipmunkDemoKeyboard.y++;
+		}
+		if ((int)keyCode == 29) // Down
+		{
+			ChipmunkDemoKeyboard.y--;
 		}
 	};
 
-	listener->onKeyReleased = [&](EventKeyboard::KeyCode keyCode, Event* event)
+	listener->onKeyReleased = [](EventKeyboard::KeyCode keyCode, Event* event)
 	{
-		keyPresses = false;
 		ChipmunkDemoKeyboard = { 0, 0 };
 	};
 
@@ -784,7 +742,8 @@ std::string BenchDemo::title() const {
 }
 
 std::string BenchDemo::subtitle() const {
-	return bench_list[bench].name;
+	std::string s = std::to_string(bench+1) + ". " + bench_list[bench].name;
+	return s.c_str();
 }
 
 void BenchDemo::initPhysics() {
@@ -1166,6 +1125,6 @@ ChipmunkTestBedTests::ChipmunkTestBedTests() {
 	ADD_TEST_CASE(SliceDemo);
 	ADD_TEST_CASE(UnicycleDemo);
 
-
 	ADD_TEST_CASE(ExampleDemo); //  the template for your one examples/Demos
 }
+
