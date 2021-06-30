@@ -106,10 +106,12 @@ cocos2d::DrawNode* drawCP = NULL;
 void ChipmunkDemoDefaultDrawImpl(cpSpace* space) {};
 
 void ChipmunkDebugDrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor fillColor) {
-	drawCP->drawPoint(Vec2(pos.x, pos.y) + physicsDebugNodeOffset, size, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
+
+drawCP->drawPoint(Vec2(pos.x, pos.y) + physicsDebugNodeOffset, size, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
 }
 
 void ChipmunkDebugDrawCircle(cpVect pos, cpFloat angle, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+
 	drawCP->drawCircle(Vec2(pos.x, pos.y) + physicsDebugNodeOffset, 100, CC_DEGREES_TO_RADIANS(90), 50, true, 1.0f,
 		2.0f, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
 }
@@ -120,16 +122,20 @@ void ChipmunkDebugDrawSegment(cpVect a, cpVect b, cpSpaceDebugColor color) {
 }
 
 void ChipmunkDebugDrawFatSegment(cpVect a, cpVect b, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+
 	drawCP->drawSegment(Vec2(a.x, a.y) + physicsDebugNodeOffset, Vec2(b.x, b.y) + physicsDebugNodeOffset, radius,
 		Color4F(outlineColor.r, outlineColor.g, outlineColor.b, outlineColor.a));
 }
 
+
 void ChipmunkDebugDrawPolygon(int count, const cpVect* verts, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
+
 	Vec2* vec = new (std::nothrow) Vec2[count];
 	for (size_t i = 0; i < count; i++) {
 		vec[i] = cpVert2Point(verts[i]);
 	}
 	drawCP->drawPolygon(vec, count, Color4F(1.0f, 0.0f, 0.0f, 0.5f), radius, Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+
 	delete[] vec;
 }
 
@@ -1121,3 +1127,4 @@ ChipmunkTestBedTests::ChipmunkTestBedTests() {
 
 	ADD_TEST_CASE(ExampleDemo); //  the template for your one examples/Demos
 }
+

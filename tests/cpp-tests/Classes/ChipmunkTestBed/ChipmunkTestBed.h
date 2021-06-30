@@ -67,6 +67,11 @@ private:
 	cocos2d::Label* drawInfo;
 
 
+    cocos2d::EventListenerMouse* _mouseListener;
+    cocos2d::Node* _trackNode;
+    cocos2d::DrawNode* draw;
+    cocos2d::Label* drawInfo;
+
 };
 
 class LogoSmashDemo : public ChipmunkTestBed {
@@ -175,6 +180,7 @@ public:
 	virtual std::string title() const override;
 	virtual std::string subtitle() const override;
 	virtual void onEnter() override;
+
 
 	void initPhysics() override;
 	virtual void update(float dt) override;
