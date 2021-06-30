@@ -25,6 +25,7 @@
 static const int image_width = 188;
 static const int image_height = 35;
 static const int image_row_length = 24;
+float ChipmunkDebugDrawPointLineScale = 1.0f;
 
 static const unsigned char image_bitmap[] = {
 	15,-16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,-64,15,63,-32,-2,0,0,0,0,0,0,0,
