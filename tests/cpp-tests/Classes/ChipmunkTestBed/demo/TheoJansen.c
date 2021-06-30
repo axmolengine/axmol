@@ -33,8 +33,9 @@ static cpConstraint *motor;
 static void
 update(cpSpace *space, double dt)
 {
-	cpFloat coef = (2.0f + ChipmunkDemoKeyboard.y)/3.0f;
-	cpFloat rate = ChipmunkDemoKeyboard.x*10.0f*coef;
+    cpFloat coef = (2.0f + ChipmunkDemoKeyboard.y) / 3.0f;
+    cpFloat rate = ChipmunkDemoKeyboard.x * 10.0f * coef;
+
 	cpSimpleMotorSetRate(motor, rate);
 	cpConstraintSetMaxForce(motor, (rate) ? 100000.0f : 0.0f);
 	
