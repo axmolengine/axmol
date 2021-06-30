@@ -66,7 +66,7 @@
 
 ## glfw
 - Upstream: https://github.com/glfw/glfw
-- Version: git 0e9ec77 (4239)
+- Version: git 6876cf8 (4261)
 - License: zlib
 
 ## glsl-optimizer
