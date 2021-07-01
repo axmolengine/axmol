@@ -1,7 +1,14 @@
 /******************************************************************************
 
- ASTC Texture Decompression.
+ Copyright (c) 2021 Bytedance Inc.
 
+ ASTC Texture Decompression.
+ 
+ astc compression tool: https://github.com/ARM-software/astc-encoder/releases
+ version required: v2.2+
+ command:
+   astcenc-sse4.2 -cl test1.png test1.astc 6x6 -medium -pp-premultiply
+   
  ******************************************************************************/
 
 #include "base/astc.h"
@@ -246,7 +253,7 @@ uint8_t astc_decompress_image(const uint8_t* in, uint32_t inlen, uint8_t* out, u
 
         physical_to_symbolic(*bsd, pcb, scb);
 
-        decompress_symbolic_block(ASTCENC_PRF_LDR_SRGB, *bsd, x * block_x, y * block_y, z * block_z, scb, blk);
+        decompress_symbolic_block(ASTCENC_PRF_LDR, *bsd, x * block_x, y * block_y, z * block_z, scb, blk);
 
         write_image_block(image_out, blk, *bsd, x * block_x, y * block_y, z * block_z, swz_decode);
     }
