@@ -333,7 +333,7 @@ ASTCENC_SIMD_INLINE float dot3_s(vfloat4 a, vfloat4 b)
 }
 
 /**
- * @brief Return the dot product for the full 4 lanes, returning vector.
+ * @brief Return the dot product for the bottom 3 lanes, returning vector.
  */
 ASTCENC_SIMD_INLINE vfloat4 dot3(vfloat4 a, vfloat4 b)
 {

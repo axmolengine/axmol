@@ -18,7 +18,7 @@
 /**
  * @brief Soft-float library for IEEE-754.
  */
-#if ASTCENC_F16C == 0
+#if (ASTCENC_F16C == 0) && (ASTCENC_NEON == 0)
 
 #include "astcenc_mathlib.h"
 
@@ -189,7 +189,7 @@ static sf32 sf16_to_sf32(sf16 inp)
 static sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 {
 	/* for each possible sign/exponent combination, store a case index. This gives a 512-byte table */
-	static const uint8_t tab[512] = {
+	static const uint8_t tab[512] {
 		0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
 		10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
 		10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
@@ -227,7 +227,7 @@ static sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 
 	/* many of the cases below use a case-dependent magic constant. So we look up a magic constant before actually performing the switch. This table allows us to group cases, thereby minimizing code
 	   size. */
-	static const uint32_t tabx[60] = {
+	static const uint32_t tabx[60] {
 		UINT32_C(0), UINT32_C(0), UINT32_C(0), UINT32_C(0), UINT32_C(0), UINT32_C(0x8000), UINT32_C(0x80000000), UINT32_C(0x8000), UINT32_C(0x8000), UINT32_C(0x8000),
 		UINT32_C(1), UINT32_C(0), UINT32_C(0), UINT32_C(0), UINT32_C(0), UINT32_C(0x8000), UINT32_C(0x8001), UINT32_C(0x8000), UINT32_C(0x8000), UINT32_C(0x8000),
 		UINT32_C(0), UINT32_C(0), UINT32_C(0), UINT32_C(0), UINT32_C(0), UINT32_C(0x8000), UINT32_C(0x8000), UINT32_C(0x8000), UINT32_C(0x8000), UINT32_C(0x8000),

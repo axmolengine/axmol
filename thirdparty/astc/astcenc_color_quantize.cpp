@@ -112,12 +112,12 @@ static void quantize_rgb(
 		iters++;
 	} while (ri0b + gi0b + bi0b > ri1b + gi1b + bi1b);
 
-	output[0] = ri0;
-	output[1] = ri1;
-	output[2] = gi0;
-	output[3] = gi1;
-	output[4] = bi0;
-	output[5] = bi1;
+	output[0] = static_cast<uint8_t>(ri0);
+	output[1] = static_cast<uint8_t>(ri1);
+	output[2] = static_cast<uint8_t>(gi0);
+	output[3] = static_cast<uint8_t>(gi1);
+	output[4] = static_cast<uint8_t>(bi0);
+	output[5] = static_cast<uint8_t>(bi1);
 }
 
 /**
@@ -144,11 +144,8 @@ static void quantize_rgba(
 	float a0 = astc::clamp255f(color0.lane<3>() * scale);
 	float a1 = astc::clamp255f(color1.lane<3>() * scale);
 
-	int ai0 = color_quant_tables[quant_level][astc::flt2int_rtn(a0)];
-	int ai1 = color_quant_tables[quant_level][astc::flt2int_rtn(a1)];
-
-	output[6] = ai0;
-	output[7] = ai1;
+	output[6] = color_quant_tables[quant_level][astc::flt2int_rtn(a0)];
+	output[7] = color_quant_tables[quant_level][astc::flt2int_rtn(a1)];
 
 	quantize_rgb(color0, color1, output, quant_level);
 }
@@ -218,12 +215,12 @@ static bool try_quantize_rgb_blue_contract(
 		return false;
 	}
 
-	output[0] = ri1;
-	output[1] = ri0;
-	output[2] = gi1;
-	output[3] = gi0;
-	output[4] = bi1;
-	output[5] = bi0;
+	output[0] = static_cast<uint8_t>(ri1);
+	output[1] = static_cast<uint8_t>(ri0);
+	output[2] = static_cast<uint8_t>(gi1);
+	output[3] = static_cast<uint8_t>(gi0);
+	output[4] = static_cast<uint8_t>(bi1);
+	output[5] = static_cast<uint8_t>(bi0);
 
 	return true;
 }
@@ -391,12 +388,12 @@ static bool try_quantize_rgb_delta(
 		return false;
 	}
 
-	output[0] = r0be;
-	output[1] = r1de;
-	output[2] = g0be;
-	output[3] = g1de;
-	output[4] = b0be;
-	output[5] = b1de;
+	output[0] = static_cast<uint8_t>(r0be);
+	output[1] = static_cast<uint8_t>(r1de);
+	output[2] = static_cast<uint8_t>(g0be);
+	output[3] = static_cast<uint8_t>(g1de);
+	output[4] = static_cast<uint8_t>(b0be);
+	output[5] = static_cast<uint8_t>(b1de);
 
 	return true;
 }
@@ -536,12 +533,12 @@ static bool try_quantize_rgb_delta_blue_contract(
 		return false;
 	}
 
-	output[0] = r0be;
-	output[1] = r1de;
-	output[2] = g0be;
-	output[3] = g1de;
-	output[4] = b0be;
-	output[5] = b1de;
+	output[0] = static_cast<uint8_t>(r0be);
+	output[1] = static_cast<uint8_t>(r1de);
+	output[2] = static_cast<uint8_t>(g0be);
+	output[3] = static_cast<uint8_t>(g1de);
+	output[4] = static_cast<uint8_t>(b0be);
+	output[5] = static_cast<uint8_t>(b1de);
 
 	return true;
 }
@@ -582,30 +579,37 @@ static bool try_quantize_alpha_delta(
 	int a1d = astc::flt2int_rtn(a1);
 	a1d <<= 1;
 	a1d -= a0b;
+
 	if (a1d > 63 || a1d < -64)
 	{
 		return false;
 	}
+
 	a1d &= 0x7F;
 	a1d |= (a0b & 0x100) >> 1;
+
 	int a1de = color_quant_tables[quant_level][a1d];
 	int a1du = color_unquant_tables[quant_level][a1de];
 	if ((a1d ^ a1du) & 0xC0)
 	{
 		return false;
 	}
+
 	a1du &= 0x7F;
 	if (a1du & 0x40)
 	{
 		a1du -= 0x80;
 	}
+
 	a1du += a0b;
 	if (a1du < 0 || a1du > 0x1FF)
 	{
 		return false;
 	}
-	output[6] = a0be;
-	output[7] = a1de;
+
+	output[6] = static_cast<uint8_t>(a0be);
+	output[7] = static_cast<uint8_t>(a1de);
+
 	return true;
 }
 
@@ -643,6 +647,7 @@ static bool try_quantize_luminance_alpha_delta(
 	int a0a = astc::flt2int_rtn(a0);
 	l0a <<= 1;
 	a0a <<= 1;
+
 	int l0b = l0a & 0xFF;
 	int a0b = a0a & 0xFF;
 	int l0be = color_quant_tables[quant_level][l0b];
@@ -651,20 +656,24 @@ static bool try_quantize_luminance_alpha_delta(
 	a0b = color_unquant_tables[quant_level][a0be];
 	l0b |= l0a & 0x100;
 	a0b |= a0a & 0x100;
+
 	int l1d = astc::flt2int_rtn(l1);
 	int a1d = astc::flt2int_rtn(a1);
 	l1d <<= 1;
 	a1d <<= 1;
 	l1d -= l0b;
 	a1d -= a0b;
+
 	if (l1d > 63 || l1d < -64)
 	{
 		return false;
 	}
+
 	if (a1d > 63 || a1d < -64)
 	{
 		return false;
 	}
+
 	l1d &= 0x7F;
 	a1d &= 0x7F;
 	l1d |= (l0b & 0x100) >> 1;
@@ -674,38 +683,47 @@ static bool try_quantize_luminance_alpha_delta(
 	int a1de = color_quant_tables[quant_level][a1d];
 	int l1du = color_unquant_tables[quant_level][l1de];
 	int a1du = color_unquant_tables[quant_level][a1de];
+
 	if ((l1d ^ l1du) & 0xC0)
 	{
 		return false;
 	}
+
 	if ((a1d ^ a1du) & 0xC0)
 	{
 		return false;
 	}
+
 	l1du &= 0x7F;
 	a1du &= 0x7F;
+
 	if (l1du & 0x40)
 	{
 		l1du -= 0x80;
 	}
+
 	if (a1du & 0x40)
 	{
 		a1du -= 0x80;
 	}
+
 	l1du += l0b;
 	a1du += a0b;
+
 	if (l1du < 0 || l1du > 0x1FF)
 	{
 		return false;
 	}
+
 	if (a1du < 0 || a1du > 0x1FF)
 	{
 		return false;
 	}
-	output[0] = l0be;
-	output[1] = l1de;
-	output[2] = a0be;
-	output[3] = a1de;
+
+	output[0] = static_cast<uint8_t>(l0be);
+	output[1] = static_cast<uint8_t>(l1de);
+	output[2] = static_cast<uint8_t>(a0be);
+	output[3] = static_cast<uint8_t>(a1de);
 
 	return true;
 }
@@ -797,9 +815,9 @@ static void quantize_rgbs(
 	int scale_idx = astc::flt2int_rtn(scalea * 256.0f);
 	scale_idx = astc::clamp(scale_idx, 0, 255);
 
-	output[0] = ri;
-	output[1] = gi;
-	output[2] = bi;
+	output[0] = static_cast<uint8_t>(ri);
+	output[1] = static_cast<uint8_t>(gi);
+	output[2] = static_cast<uint8_t>(bi);
 	output[3] = color_quant_tables[quant_level][scale_idx];
 }
 
@@ -822,11 +840,8 @@ static void quantize_rgbs_alpha(
 	float a0 = astc::clamp255f(color0.lane<3>() * scale);
 	float a1 = astc::clamp255f(color1.lane<3>() * scale);
 
-	int ai0 = color_quant_tables[quant_level][astc::flt2int_rtn(a0)];
-	int ai1 = color_quant_tables[quant_level][astc::flt2int_rtn(a1)];
-
-	output[4] = ai0;
-	output[5] = ai1;
+	output[4] = color_quant_tables[quant_level][astc::flt2int_rtn(a0)];
+	output[5] = color_quant_tables[quant_level][astc::flt2int_rtn(a1)];
 
 	quantize_rgbs(color, output, quant_level);
 }
@@ -904,6 +919,7 @@ static void quantize_luminance_alpha(
 				lum0 += 0.5f;
 				lum1 -= 0.5f;
 			}
+
 			lum0 = astc::clamp255f(lum0);
 			lum1 = astc::clamp255f(lum1);
 		}
@@ -920,6 +936,7 @@ static void quantize_luminance_alpha(
 				a0 += 0.5f;
 				a1 -= 0.5f;
 			}
+
 			a0 = astc::clamp255f(a0);
 			a1 = astc::clamp255f(a1);
 		}
@@ -1038,13 +1055,20 @@ static void quantize_hdr_rgbo(
 	color = clamp(0.0f, 65535.0f, color);
 
 	vfloat4 color_bak = color;
+
 	int majcomp;
 	if (color.lane<0>() > color.lane<1>() && color.lane<0>() > color.lane<2>())
+	{
 		majcomp = 0;			// red is largest component
+	}
 	else if (color.lane<1>() > color.lane<2>())
+	{
 		majcomp = 1;			// green is largest component
+	}
 	else
+	{
 		majcomp = 2;			// blue is largest component
+	}
 
 	// swap around the red component and the largest component.
 	switch (majcomp)
@@ -1059,7 +1083,7 @@ static void quantize_hdr_rgbo(
 		break;
 	}
 
-	static const int mode_bits[5][3] = {
+	static const int mode_bits[5][3] {
 		{11, 5, 7},
 		{11, 6, 5},
 		{10, 5, 8},
@@ -1067,7 +1091,7 @@ static void quantize_hdr_rgbo(
 		{8, 7, 6}
 	};
 
-	static const float mode_cutoffs[5][2] = {
+	static const float mode_cutoffs[5][2] {
 		{1024, 4096},
 		{2048, 1024},
 		{2048, 16384},
@@ -1075,7 +1099,7 @@ static void quantize_hdr_rgbo(
 		{32768, 16384}
 	};
 
-	static const float mode_rscales[5] = {
+	static const float mode_rscales[5] {
 		32.0f,
 		32.0f,
 		64.0f,
@@ -1083,7 +1107,7 @@ static void quantize_hdr_rgbo(
 		256.0f,
 	};
 
-	static const float mode_scales[5] = {
+	static const float mode_scales[5] {
 		1.0f / 32.0f,
 		1.0f / 32.0f,
 		1.0f / 64.0f,
@@ -1121,7 +1145,8 @@ static void quantize_hdr_rgbo(
 
 		uint8_t r_quantval;
 		uint8_t r_uquantval;
-		quantize_and_unquantize_retain_top_two_bits(quant_level, r_lowbits, r_quantval, r_uquantval);
+		quantize_and_unquantize_retain_top_two_bits(
+		    quant_level, static_cast<uint8_t>(r_lowbits), r_quantval, r_uquantval);
 
 		r_intval = (r_intval & ~0x3f) | (r_uquantval & 0x3f);
 		float r_fval = static_cast<float>(r_intval) * mode_rscale;
@@ -1222,8 +1247,10 @@ static void quantize_hdr_rgbo(
 		uint8_t g_uquantval;
 		uint8_t b_uquantval;
 
-		quantize_and_unquantize_retain_top_four_bits(quant_level, g_lowbits, g_quantval, g_uquantval);
-		quantize_and_unquantize_retain_top_four_bits(quant_level, b_lowbits, b_quantval, b_uquantval);
+		quantize_and_unquantize_retain_top_four_bits(
+		    quant_level, static_cast<uint8_t>(g_lowbits), g_quantval, g_uquantval);
+		quantize_and_unquantize_retain_top_four_bits(
+		    quant_level, static_cast<uint8_t>(b_lowbits), b_quantval, b_uquantval);
 
 		g_intval = (g_intval & ~0x1f) | (g_uquantval & 0x1f);
 		b_intval = (b_intval & ~0x1f) | (b_uquantval & 0x1f);
@@ -1292,7 +1319,9 @@ static void quantize_hdr_rgbo(
 		uint8_t s_quantval;
 		uint8_t s_uquantval;
 
-		quantize_and_unquantize_retain_top_four_bits(quant_level, s_lowbits, s_quantval, s_uquantval);
+		quantize_and_unquantize_retain_top_four_bits(
+		    quant_level, static_cast<uint8_t>(s_lowbits), s_quantval, s_uquantval);
+
 		output[0] = r_quantval;
 		output[1] = g_quantval;
 		output[2] = b_quantval;
@@ -1332,7 +1361,8 @@ static void quantize_hdr_rgbo(
 	for (uint8_t i = 0; i < 4; i++)
 	{
 		uint8_t dummy;
-		quantize_and_unquantize_retain_top_four_bits(quant_level, encvals[i], output[i], dummy);
+		quantize_and_unquantize_retain_top_four_bits(
+		    quant_level, static_cast<uint8_t>(encvals[i]), output[i], dummy);
 	}
 
 	return;
@@ -1398,7 +1428,7 @@ static void quantize_hdr_rgb(
 	float d1_base = a_base - b1_base - c_base - color0.lane<2>();
 
 	// Number of bits in the various fields in the various modes
-	static const int mode_bits[8][4] = {
+	static const int mode_bits[8][4] {
 		{9, 7, 6, 7},
 		{9, 8, 6, 6},
 		{10, 6, 7, 7},
@@ -1411,7 +1441,7 @@ static void quantize_hdr_rgb(
 
 	// Cutoffs to use for the computed values of a,b,c,d, assuming the
 	// range 0..65535 are LNS values corresponding to fp16.
-	static const float mode_cutoffs[8][4] = {
+	static const float mode_cutoffs[8][4] {
 		{16384, 8192, 8192, 8},	// mode 0: 9,7,6,7
 		{32768, 8192, 4096, 8},	// mode 1: 9,8,6,6
 		{4096, 8192, 4096, 4},	// mode 2: 10,6,7,7
@@ -1422,7 +1452,7 @@ static void quantize_hdr_rgb(
 		{1024, 2048, 512, 1},	// mode 7: 12,6,7,6
 	};
 
-	static const float mode_scales[8] = {
+	static const float mode_scales[8] {
 		1.0f / 128.0f,
 		1.0f / 128.0f,
 		1.0f / 64.0f,
@@ -1434,7 +1464,7 @@ static void quantize_hdr_rgb(
 	};
 
 	// Scaling factors when going from what was encoded in the mode to 16 bits.
-	static const float mode_rscales[8] = {
+	static const float mode_rscales[8] {
 		128.0f,
 		128.0f,
 		64.0f,
@@ -1494,7 +1524,10 @@ static void quantize_hdr_rgb(
 
 		uint8_t c_quantval;
 		uint8_t c_uquantval;
-		quantize_and_unquantize_retain_top_two_bits(quant_level, c_lowbits, c_quantval, c_uquantval);
+
+		quantize_and_unquantize_retain_top_two_bits(
+		    quant_level, static_cast<uint8_t>(c_lowbits), c_quantval, c_uquantval);
+
 		c_intval = (c_intval & ~0x3F) | (c_uquantval & 0x3F);
 		c_fval = static_cast<float>(c_intval) * mode_rscale;
 
@@ -1562,8 +1595,10 @@ static void quantize_hdr_rgb(
 		uint8_t b0_uquantval;
 		uint8_t b1_uquantval;
 
-		quantize_and_unquantize_retain_top_two_bits(quant_level, b0_lowbits, b0_quantval, b0_uquantval);
-		quantize_and_unquantize_retain_top_two_bits(quant_level, b1_lowbits, b1_quantval, b1_uquantval);
+		quantize_and_unquantize_retain_top_two_bits(
+		    quant_level, static_cast<uint8_t>(b0_lowbits), b0_quantval, b0_uquantval);
+		quantize_and_unquantize_retain_top_two_bits(
+		    quant_level, static_cast<uint8_t>(b1_lowbits), b1_quantval, b1_uquantval);
 
 		b0_intval = (b0_intval & ~0x3f) | (b0_uquantval & 0x3f);
 		b1_intval = (b1_intval & ~0x3f) | (b1_uquantval & 0x3f);
@@ -1657,10 +1692,12 @@ static void quantize_hdr_rgb(
 		uint8_t d0_uquantval;
 		uint8_t d1_uquantval;
 
-		quantize_and_unquantize_retain_top_four_bits(quant_level, d0_lowbits, d0_quantval, d0_uquantval);
-		quantize_and_unquantize_retain_top_four_bits(quant_level, d1_lowbits, d1_quantval, d1_uquantval);
+		quantize_and_unquantize_retain_top_four_bits(
+		    quant_level, static_cast<uint8_t>(d0_lowbits), d0_quantval, d0_uquantval);
+		quantize_and_unquantize_retain_top_four_bits(
+		    quant_level, static_cast<uint8_t>(d1_lowbits), d1_quantval, d1_uquantval);
 
-		output[0] = a_quantval;
+		output[0] = static_cast<uint8_t>(a_quantval);
 		output[1] = c_quantval;
 		output[2] = b0_quantval;
 		output[3] = b1_quantval;
@@ -1696,7 +1733,8 @@ static void quantize_hdr_rgb(
 	{
 		uint8_t dummy;
 		int idx = astc::flt2int_rtn(vals[i] * 1.0f / 512.0f) + 128;
-		quantize_and_unquantize_retain_top_two_bits(quant_level, idx, output[i], dummy);
+		quantize_and_unquantize_retain_top_two_bits(
+		    quant_level, static_cast<uint8_t>(idx), output[i], dummy);
 	}
 
 	return;
@@ -1721,11 +1759,8 @@ static void quantize_hdr_rgb_ldr_alpha(
 	float a0 = astc::clamp255f(color0.lane<3>() * scale);
 	float a1 = astc::clamp255f(color1.lane<3>() * scale);
 
-	int ai0 = color_quant_tables[quant_level][astc::flt2int_rtn(a0)];
-	int ai1 = color_quant_tables[quant_level][astc::flt2int_rtn(a1)];
-
-	output[6] = ai0;
-	output[7] = ai1;
+	output[6] = color_quant_tables[quant_level][astc::flt2int_rtn(a0)];
+	output[7] = color_quant_tables[quant_level][astc::flt2int_rtn(a1)];
 
 	quantize_hdr_rgb(color0, color1, output, quant_level);
 }
@@ -1864,8 +1899,8 @@ static bool try_quantize_hdr_luminance_small_range(
 			v1d = color_unquant_tables[quant_level][v1e];
 			if ((v1d & 0xF0) == (v1 & 0xF0))
 			{
-				output[0] = v0e;
-				output[1] = v1e;
+				output[0] = static_cast<uint8_t>(v0e);
+				output[1] = static_cast<uint8_t>(v1e);
 				return true;
 			}
 		}
@@ -1901,8 +1936,8 @@ static bool try_quantize_hdr_luminance_small_range(
 		return false;
 	}
 
-	output[0] = v0e;
-	output[1] = v1e;
+	output[0] = static_cast<uint8_t>(v0e);
+	output[1] = static_cast<uint8_t>(v1e);
 	return true;
 }
 
@@ -1967,8 +2002,8 @@ static void quantize_hdr_alpha(
 			continue;
 		}
 
-		output[0] = v6e;
-		output[1] = v7e;
+		output[0] = static_cast<uint8_t>(v6e);
+		output[1] = static_cast<uint8_t>(v7e);
 		return;
 	}
 
@@ -1978,10 +2013,8 @@ static void quantize_hdr_alpha(
 	v6 = val0 | 0x80;
 	v7 = val1 | 0x80;
 
-	v6e = color_quant_tables[quant_level][v6];
-	v7e = color_quant_tables[quant_level][v7];
-	output[0] = v6e;
-	output[1] = v7e;
+	output[0] = color_quant_tables[quant_level][v6];
+	output[1] = color_quant_tables[quant_level][v7];
 
 	return;
 }
@@ -2005,7 +2038,7 @@ static void quantize_hdr_rgb_alpha(
 }
 
 /* See header for documentation. */
-int pack_color_endpoints(
+uint8_t pack_color_endpoints(
 	vfloat4 color0,
 	vfloat4 color1,
 	vfloat4 rgbs_color,
@@ -2020,7 +2053,7 @@ int pack_color_endpoints(
 	color0 = max(color0, 0.0f);
 	color1 = max(color1, 0.0f);
 
-	int retval = 0;
+	uint8_t retval = 0;
 
 	switch (format)
 	{

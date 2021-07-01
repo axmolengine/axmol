@@ -84,6 +84,9 @@ static constexpr uint8_t BLOCK_MAX_KMEANS_TEXELS { 64 };
 /** @brief The maximum number of weights a block can support. */
 static constexpr unsigned int BLOCK_MAX_WEIGHTS { 64 };
 
+/** @brief The maximum number of weights a block can support per plane in 2 plane mode. */
+static constexpr unsigned int BLOCK_MAX_WEIGHTS_2PLANE { BLOCK_MAX_WEIGHTS / 2 };
+
 /** @brief The minimum number of weight bits a candidate encoding must encode. */
 static constexpr unsigned int BLOCK_MIN_WEIGHT_BITS { 24 };
 
@@ -97,7 +100,7 @@ static constexpr uint16_t BLOCK_BAD_BLOCK_MODE { 0xFFFFu };
 static constexpr unsigned int PARTITION_INDEX_BITS { 10 };
 
 /** @brief The offset of the plane 2 weights in shared weight arrays. */
-static constexpr unsigned int WEIGHTS_PLANE2_OFFSET { BLOCK_MAX_WEIGHTS / 2 };
+static constexpr unsigned int WEIGHTS_PLANE2_OFFSET { BLOCK_MAX_WEIGHTS_2PLANE };
 
 /** @brief The sum of quantized weights for one texel. */
 static constexpr float WEIGHTS_TEXEL_SUM { 16.0f };
@@ -112,11 +115,11 @@ static constexpr unsigned int WEIGHTS_MAX_DECIMATION_MODES { 87 };
 static constexpr float ERROR_CALC_DEFAULT { 1e30f };
 
 /**
- * @brief The max texel count in a block which can try the one partition fast path.
+ * @brief The minimum texel count for a block to use the one partition fast path.
  *
- * This is enabled for 4x4 and 5x4 block sizes.
+ * This setting skips 4x4 and 5x4 block sizes.
  */
-static constexpr unsigned int TUNE_MAX_TEXELS_MODE0_FASTPATH { 24 };
+static constexpr unsigned int TUNE_MIN_TEXELS_MODE0_FASTPATH { 24 };
 
 /**
  * @brief The maximum number of candidate encodings tested for each encoding mode..
@@ -454,10 +457,7 @@ static inline unsigned int get_quant_level(quant_method method)
  */
 struct partition_metrics
 {
- 	/** @brief The square of the color range (max - min) spanned by texels in this partition. */
-	vfloat4 range_sq;
-
-	 /** @brief The sum of the error weights for texels in this partition. */
+	/** @brief The sum of the error weights for texels in this partition. */
 	vfloat4 error_weight;
 
 	/** @brief The color scale factor used to weight color channels. */
@@ -610,9 +610,6 @@ struct block_mode
 	/** @brief Is this mode enabled in the current search preset? */
 	uint8_t percentile_hit : 1;
 
-	/** @brief Is this mode enabled for early fast-path searches in the current search preset? */
-	uint8_t percentile_always : 1;
-
 	/**
 	 * @brief Get the weight quantization used by this block mode.
 	 *
@@ -636,10 +633,7 @@ struct decimation_mode
 	int8_t maxprec_2planes;
 
 	/** @brief Is this mode enabled in the current search preset? */
-	uint8_t percentile_hit : 1;
-
-	/** @brief Is this mode enabled for early fast-path searches in the current search preset? */
-	uint8_t percentile_always : 1;
+	uint8_t percentile_hit;
 };
 
 /**
@@ -678,8 +672,22 @@ struct block_size_descriptor
 	/** @brief The number of stored decimation modes. */
 	unsigned int decimation_mode_count;
 
+	/**
+	 * @brief The number of stored decimation modes which are "always" modes.
+	 *
+	 * Always modes are stored at the start of the decimation_modes list.
+	 */
+	unsigned int always_decimation_mode_count;
+
 	/** @brief The number of stored block modes. */
 	unsigned int block_mode_count;
+
+	/**
+	 * @brief The number of stored block modes which are "always" modes.
+	 *
+	 * Always modes are stored at the start of the block_modes list.
+	 */
+	unsigned int always_block_mode_count;
 
 	/** @brief The active decimation modes, stored in low indices. */
 	decimation_mode decimation_modes[WEIGHTS_MAX_DECIMATION_MODES];
@@ -1071,17 +1079,33 @@ struct alignas(ASTCENC_VECALIGN) compression_working_buffers
 	/** @brief The error weight block for the current thread. */
 	error_weight_block ewb;
 
-	/** @brief Decimated ideal weight values. */
-	alignas(ASTCENC_VECALIGN) float dec_weights_ideal_value[2 * WEIGHTS_MAX_DECIMATION_MODES * BLOCK_MAX_WEIGHTS];
+	/**
+	 * @brief Decimated ideal weight values.
+	 *
+	 * For two plane encodings, second plane weights start at @c WEIGHTS_PLANE2_OFFSET offsets.
+	 */
+	alignas(ASTCENC_VECALIGN) float dec_weights_ideal_value[WEIGHTS_MAX_DECIMATION_MODES * BLOCK_MAX_WEIGHTS];
 
-	/** @brief Decimated ideal weight significance. */
-	alignas(ASTCENC_VECALIGN) float dec_weights_ideal_sig[2 * WEIGHTS_MAX_DECIMATION_MODES * BLOCK_MAX_WEIGHTS];
+	/**
+	 * @brief Decimated ideal weight significance.
+	 *
+	 * For two plane encodings, second plane weights start at @c WEIGHTS_PLANE2_OFFSET offsets.
+	 */
+	alignas(ASTCENC_VECALIGN) float dec_weights_ideal_sig[WEIGHTS_MAX_DECIMATION_MODES * BLOCK_MAX_WEIGHTS];
 
-	/** @brief Decimated and quantized weight values stored in the unpacked quantized weight range. */
-	alignas(ASTCENC_VECALIGN) float dec_weights_quant_uvalue[2 * WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
+	/**
+	 * @brief Decimated and quantized weight values stored in the unpacked quantized weight range.
+	 *
+	 * For two plane encodings, second plane weights start at @c WEIGHTS_PLANE2_OFFSET offsets.
+	 */
+	alignas(ASTCENC_VECALIGN) float dec_weights_quant_uvalue[WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
 
-	/** @brief Decimated and quantized weight values stored in the packed quantized weight range. */
-	alignas(ASTCENC_VECALIGN) uint8_t dec_weights_quant_pvalue[2 * WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
+	/**
+	 * @brief Decimated and quantized weight values stored in the packed quantized weight range.
+	 *
+	 * For two plane encodings, second plane weights start at @c WEIGHTS_PLANE2_OFFSET offsets.
+	 */
+	alignas(ASTCENC_VECALIGN) uint8_t dec_weights_quant_pvalue[WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
 };
 
 /**
@@ -1151,7 +1175,6 @@ struct symbolic_compressed_block
 	uint8_t partition_count;
 
 	/** @brief Non-zero if the color formats matched; valid for @c NONCONST blocks. */
-	// TODO: Do we need to store this?
 	uint8_t color_formats_matched;
 
 	/** @brief The plane 2 color component, or -1 if single plane; valid for @c NONCONST blocks. */
@@ -1333,7 +1356,6 @@ struct astcenc_context
 	avg_var_args avg_var_preprocess_args;
 
 	/** @brief The per-texel deblocking weights for the current block size. */
-	// TODO: Move to the BSD?
 	float deblock_weights[BLOCK_MAX_TEXELS];
 
 	/** @brief The parallel manager for averages and variances computation. */
@@ -1360,8 +1382,6 @@ struct astcenc_context
 /* ============================================================================
   Functionality for managing block sizes and partition tables.
 ============================================================================ */
-
-// TODO: Make C++ constructor/destructor?
 
 /**
  * @brief Populate the block size descriptor for the target block size.
@@ -1571,6 +1591,25 @@ void compute_avgs_and_dirs_3_comp(
 	partition_metrics pm[BLOCK_MAX_PARTITIONS]);
 
 /**
+ * @brief Compute averages and dominant directions for each partition in a 3 component texture.
+ *
+ * This is a specialization of @c compute_avgs_and_dirs_3_comp where the omitted component is
+ * always alpha, a common case during partition search.
+ *
+ * @param      pi                  The partition info for the current trial.
+ * @param      blk                 The image block color data to be compressed.
+ * @param      ewb                 The image block weighted error data.
+ * @param[out] pm                  The output partition metrics.
+ *                                 - Only pi.partition_count array entries actually get initialized.
+ *                                 - Direction vectors @c pm.dir are not normalized.
+ */
+void compute_avgs_and_dirs_3_comp_rgb(
+	const partition_info& pi,
+	const image_block& blk,
+	const error_weight_block& ewb,
+	partition_metrics pm[BLOCK_MAX_PARTITIONS]);
+
+/**
  * @brief Compute averages and dominant directions for each partition in a 4 component texture.
  *
  * @param      pi    The partition info for the current trial.
@@ -1646,10 +1685,7 @@ void compute_error_squared_rgba(
  * @brief Find the best set of partitions to trial for a given block.
  *
  * On return @c best_partition_uncor contains the best partition  assuming data has uncorrelated
- * chroma, @c best_partition_samec contains the best partition assuming data has corelated chroma,
- * and* @c best_partition_dualplane contains the best partition assuming the data has one
- * uncorrelated color component. The @c best_partition_dualplane is stored packed; bits [9:0]
- * contain the best partition, bits [11:10] contain the best color component.
+ * chroma, @c best_partition_samec contains the best partition assuming data has corelated chroma.
  *
  * @param      bsd                        The block size information.
  * @param      blk                        The image block color data to compress.
@@ -1658,7 +1694,6 @@ void compute_error_squared_rgba(
  * @param      partition_search_limit     The number of candidate partition encodings to trial.
  * @param[out] best_partition_uncor       The best partition for uncorrelated chroma.
  * @param[out] best_partition_samec       The best partition for correlated chroma.
- * @param[out] best_partition_dualplane   The best partition for dual plane, but may be @c nullptr.
  */
 void find_best_partition_candidates(
 	const block_size_descriptor& bsd,
@@ -1667,8 +1702,7 @@ void find_best_partition_candidates(
 	unsigned int partition_count,
 	unsigned int partition_search_limit,
 	unsigned int& best_partition_uncor,
-	unsigned int& best_partition_samec,
-	unsigned int* best_partition_dualplane);
+	unsigned int& best_partition_samec);
 
 /* ============================================================================
   Functionality for managing images and image related data.
@@ -1966,8 +2000,7 @@ float compute_error_of_weight_set_2planes(
  *
  * @return The actual endpoint mode used.
  */
-// TODO: Format as enum?
-int pack_color_endpoints(
+uint8_t pack_color_endpoints(
 	vfloat4 color0,
 	vfloat4 color1,
 	vfloat4 rgbs_color,
@@ -1989,7 +2022,6 @@ int pack_color_endpoints(
  * @param[out] output0       The output color for endpoint 0.
  * @param[out] output1       The output color for endpoint 1.
  */
-// TODO: Format as enum?
 void unpack_color_endpoints(
 	astcenc_profile decode_mode,
 	int format,

@@ -418,7 +418,7 @@ uint64_t rand(uint64_t state[2]);
 /* ============================================================================
   Softfloat library with fp32 and fp16 conversion functionality.
 ============================================================================ */
-#if ASTCENC_F16C == 0
+#if (ASTCENC_F16C == 0) && (ASTCENC_NEON == 0)
 	/* narrowing float->float conversions */
 	uint16_t float_to_sf16(float val);
 	float sf16_to_float(uint16_t val);

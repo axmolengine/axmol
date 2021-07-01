@@ -85,7 +85,7 @@ struct vfloat4
 	 */
 	ASTCENC_SIMD_INLINE explicit vfloat4(float a, float b, float c, float d)
 	{
-		float v[4] = { a, b, c, d };
+		float v[4] { a, b, c, d };
 		m = vld1q_f32(v);
 	}
 
@@ -230,7 +230,7 @@ struct vint4
 	 */
 	ASTCENC_SIMD_INLINE explicit vint4(int a, int b, int c, int d)
 	{
-		int v[4] = { a, b, c, d };
+		int v[4] { a, b, c, d };
 		m = vld1q_s32(v);
 	}
 
@@ -339,7 +339,7 @@ struct vmask4
 	 */
 	ASTCENC_SIMD_INLINE explicit vmask4(bool a, bool b, bool c, bool d)
 	{
-		int v[4] = {
+		int v[4] {
 			a == true ? -1 : 0,
 			b == true ? -1 : 0,
 			c == true ? -1 : 0,
@@ -399,7 +399,7 @@ ASTCENC_SIMD_INLINE vmask4 operator~(vmask4 a)
  */
 ASTCENC_SIMD_INLINE unsigned int mask(vmask4 a)
 {
-	static const int shifta[4] = { 0, 1, 2, 3 };
+	static const int shifta[4] { 0, 1, 2, 3 };
 	static const int32x4_t shift = vld1q_s32(shifta);
 
 	uint32x4_t tmp = vshrq_n_u32(a.m, 31);
@@ -609,7 +609,7 @@ ASTCENC_SIMD_INLINE vint4 gatheri(const int* base, vint4 indices)
  */
 ASTCENC_SIMD_INLINE vint4 pack_low_bytes(vint4 a)
 {
-	alignas(16) uint8_t shuf[16] = {
+	alignas(16) uint8_t shuf[16] {
 		0, 4, 8, 12,   0, 0, 0, 0,   0, 0, 0, 0,   0, 0, 0, 0
 	};
 	uint8x16_t idx = vld1q_u8(shuf);
