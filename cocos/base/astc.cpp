@@ -93,13 +93,14 @@ public:
         task->_context->manage_decompress.wait();
 
         _taskQueueMtx.lock();
-        if (!_taskQueue.empty()) {
-            auto t = _taskQueue.front();
-            assert(t == task);
-            _taskQueue.pop_front();
-            t->release();
-        }
+        assert(!_taskQueue.empty());
+
+        auto t = _taskQueue.front();
+        assert(t == task);
+        _taskQueue.pop_front();
         _taskQueueMtx.unlock();
+        
+        task->release();
     }
 
 public:
@@ -207,7 +208,7 @@ int astc_decompress_job_manager::s_thread_count = 1;
 uint8_t astc_decompress_image(const uint8_t* in, uint32_t inlen, uint8_t* out, uint32_t dim_x, uint32_t dim_y,
     uint32_t block_x, uint32_t block_y) {
 
-    auto start = yasio::highp_clock();
+    // auto start = yasio::highp_clock();
 
 #if defined(ASTC_ENABLE_PARALLEL_DECOMPRESS)
     astc_decompress_job_manager::get_instance()->decompress_parallel_sync(in, out, dim_x, dim_y, block_x, block_y);
