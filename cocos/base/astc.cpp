@@ -28,8 +28,6 @@
 typedef std::mutex astc_decompress_mutex_t;
 
 struct astc_decompress_task {
-    static std::shared_ptr<astc_decompress_task> allocate(const uint8_t* in, unsigned int inlen, uint8_t* out,
-        unsigned int dim_x, unsigned int dim_y, int block_x, int block_y);
     astc_decompress_task() {}
     ~astc_decompress_task() {
 #if ASTCDEC_NO_CONTEXT
