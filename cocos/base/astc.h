@@ -38,7 +38,7 @@ static unsigned int astc_unpack_bytes(uint8_t a, uint8_t b, uint8_t c, uint8_t d
 #ifdef __cplusplus
 extern "C" {
 #endif
-uint8_t astc_decompress_image(const uint8_t* in, uint32_t inlen, uint8_t* out, uint32_t xdim, uint32_t ydim, uint32_t xblock, uint32_t yblock);
+int astc_decompress_image(const uint8_t* in, uint32_t inlen, uint8_t* out, uint32_t xdim, uint32_t ydim, uint32_t xblock, uint32_t yblock);
 #ifdef __cplusplus
 }  // extern "C"
 #endif
