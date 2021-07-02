@@ -1,5 +1,6 @@
 adxe-1.0  ??
 
+[Feature] Decompress astc parallel support
 [Feature] Improve Lua RTTI performance and less memory storage
 [Feature] Virtual File System support, thanks  to @rh101 
 [BugFix] Fix imgui draw frame cause afterimage when game scene nothing to draw
