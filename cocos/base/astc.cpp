@@ -12,9 +12,11 @@
  ******************************************************************************/
 
 #include "base/astc.h"
+
+#include <thread>
+#include <mutex>
 #include "astc/astcenc.h"
 #include "astc/astcenc_internal.h"
-
 #include "yasio/detail/utils.hpp"
 
 #define ASTCDEC_NO_CONTEXT      1
@@ -28,7 +30,7 @@ struct astc_decompress_task {
 
     ~astc_decompress_task();
 
-    void addRef() {
+    void retain() {
         ++_nref;
     }
 
@@ -112,7 +114,7 @@ public:
         _taskQueueMtx.lock();
         _taskQueue.push_back(task);
         _taskQueueMtx.unlock();
-        _taskQueueCV.notify_all(); // notify all to work for the single decompress task
+        _taskQueueCV.notify_all(); // notify all thread to process the single decompress task parallel
 
 #if ASTCDEC_NO_CONTEXT
         task->_decompress_pm.wait();
