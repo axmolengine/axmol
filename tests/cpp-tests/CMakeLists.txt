@@ -93,7 +93,6 @@ list(APPEND GAME_HEADER
      Classes/ZwoptexTest/ZwoptexTest.h
      Classes/precheader.h
      Classes/CurlTest/CurlTest.h
-     Classes/YAsioTest/YAsioTest.h
      Classes/UnitTest/UnitTest.h
 #    Classes/UnitTest/RefPtrTest.h
      Classes/ConfigurationTest/ConfigurationTest.h
@@ -244,7 +243,6 @@ list(APPEND GAME_SOURCE
      Classes/ConfigurationTest/ConfigurationTest.cpp
      Classes/ConsoleTest/ConsoleTest.cpp
      Classes/CurlTest/CurlTest.cpp
-     Classes/YAsioTest/YAsioTest.cpp
      Classes/CurrentLanguageTest/CurrentLanguageTest.cpp
      Classes/DataVisitorTest/DataVisitorTest.cpp
      Classes/DownloaderTest/DownloaderTest.cpp

@@ -66,7 +66,6 @@ public:
         addTest("Configuration", []() { return new ConfigurationTests(); });
         addTest("Console", []() { return new ConsoleTests(); });
         addTest("Curl", []() { return new CurlTests(); });
-        addTest("yasio", []() { return new YAsioTests(); });
         addTest("Current Language", []() { return new CurrentLanguageTests(); });
         addTest("Downloader Test", []() { return new DownloaderTests(); });
         addTest("EventDispatcher", []() { return new EventDispatcherTests(); });
