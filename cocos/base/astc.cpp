@@ -23,7 +23,7 @@
 #include "yasio/detail/utils.hpp"
 
 #define ASTCDEC_NO_CONTEXT      1
-#define ASTCDEC_PRINT_BENCHMARK 1
+#define ASTCDEC_PRINT_BENCHMARK 0
 
 typedef std::mutex astc_decompress_mutex_t;
 
@@ -238,15 +238,17 @@ int astc_decompress_image(const uint8_t* in, uint32_t inlen, uint8_t* out, uint3
     uint32_t block_x, uint32_t block_y) {
 #if ASTCDEC_PRINT_BENCHMARK
     struct benchmark_printer {
-        benchmark_printer(const char* fmt, float den) : _fmt(fmt), _den(den), _start(yasio::highp_clock()) {}
+        benchmark_printer(const char* fmt, int w, int h, float den)
+            : _fmt(fmt), _w(w), _h(h), _den(den), _start(yasio::highp_clock()) {}
         ~benchmark_printer() {
-            cocos2d::log(_fmt, (yasio::highp_clock() - _start) / _den);
+            cocos2d::log(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den);
         }
         const char* _fmt;
+        int _w, _h;
         float _den;
         yasio::highp_time_t _start;
     };
-    benchmark_printer __printer("decompress astc image cost: %.3lf(ms)", (float) std::milli::den);
+    benchmark_printer __printer("decompress astc image (%dx%d) cost: %.3lf(ms)", dim_x, dim_y, (float) std::milli::den);
 #endif
     return astc_decompress_job_manager::get_instance()->decompress_parallel_sync(
         in, inlen, out, dim_x, dim_y, block_x, block_y);
