@@ -23,7 +23,7 @@
 #include "yasio/detail/utils.hpp"
 
 #define ASTCDEC_NO_CONTEXT      1
-#define ASTCDEC_PRINT_BENCHMARK 0
+#define ASTCDEC_PRINT_BENCHMARK 1
 
 typedef std::mutex astc_decompress_mutex_t;
 
@@ -32,7 +32,9 @@ struct astc_decompress_task {
         unsigned int dim_x, unsigned int dim_y, int block_x, int block_y);
     astc_decompress_task() {}
     ~astc_decompress_task() {
-#if !ASTCDEC_NO_CONTEXT
+#if ASTCDEC_NO_CONTEXT
+        term_block_size_descriptor(_bsd);
+#else
         if (_context)
             astcenc_context_free(this->_context);
 #endif
@@ -113,8 +115,8 @@ public:
     }
 
 private:
-    std::shared_ptr<astc_decompress_task> make_task(const uint8_t* in, unsigned int inlen,
-        uint8_t* out, unsigned int dim_x, unsigned int dim_y, int block_x, int block_y) {
+    std::shared_ptr<astc_decompress_task> make_task(const uint8_t* in, unsigned int inlen, uint8_t* out,
+        unsigned int dim_x, unsigned int dim_y, int block_x, int block_y) {
         unsigned int xblocks = (dim_x + block_x - 1) / block_x;
         unsigned int yblocks = (dim_y + block_y - 1) / block_y;
         unsigned int zblocks = 1; // (dim_z + block_z - 1) / block_z;
@@ -143,7 +145,7 @@ private:
 #else
         (void) astcenc_config_init(
             ASTCENC_PRF_LDR, block_x, block_y, 1, 0, ASTCENC_FLG_DECOMPRESS_ONLY, &task->_config);
-        (void) astcenc_context_alloc(&task->_config, (unsigned int)_threads.size(), &task->_context);
+        (void) astcenc_context_alloc(&task->_config, (unsigned int) _threads.size(), &task->_context);
         task->_context->manage_decompress.init(total_blocks);
 #endif
         return task;
