@@ -842,7 +842,7 @@ void DownloaderCURL::_lazyScheduleUpdate() {
         _schedulerKey = key;
 
         _scheduler->schedule(
-            bind(&DownloaderCURL::_onUpdate, this, std::placeholders::_1), this, 0.1f, true, _schedulerKey);
+            std::bind(&DownloaderCURL::_onUpdate, this, std::placeholders::_1), this, 0.1f, true, _schedulerKey);
     }
 }
 
