@@ -27,7 +27,6 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "platform/CCStdC.h"
 
-#define NTCVT_CP_DEFAULT CP_UTF8
 #include "win32-specific/ntcvt/ntcvt.hpp"
 
 NS_CC_BEGIN

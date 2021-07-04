@@ -26,13 +26,14 @@
 #endif
 
 #if defined(_WIN32)
+#include "win32-specific/ntcvt/ntcvt.hpp"
 #define O_READ_FLAGS O_BINARY | O_RDONLY, S_IREAD
 #define O_WRITE_FLAGS O_CREAT | O_RDWR | O_BINARY | O_TRUNC, S_IWRITE | S_IREAD
 #define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
 
 #define O_OVERLAP_FLAGS O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
-
-#define posix_open ::_open
+#define posix_open_cxx(path, ...)  ::_wopen(ntcvt::from_chars(path).c_str(), ##__VA_ARGS__)
+#define posix_open(path, ...) ::_wopen(ntcvt::from_chars(path).c_str(), ##__VA_ARGS__)
 #define posix_close ::_close
 #define posix_lseek ::_lseek
 #define posix_read ::_read
@@ -45,7 +46,7 @@
 #define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
 
 #define O_OVERLAP_FLAGS O_CREAT | O_RDWR, S_IRWXU
-
+#define posix_open_cxx(path, ...) ::open(path.c_str(), ##__VA_ARGS__)
 #define posix_open ::open
 #define posix_close ::close
 #define posix_lseek ::lseek

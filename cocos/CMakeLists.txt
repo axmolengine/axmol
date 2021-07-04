@@ -43,6 +43,15 @@ project(cocos2d_libs)
 
 set(ADXE_THIRDPARTY_NAME "thirdparty" CACHE INTERNAL "" )
 
+if (WIN32)
+    option(WIN32_PATH_USE_ACP "" OFF)
+    if(NOT WIN32_PATH_USE_ACP)
+        add_definitions(-DNTCVT_CP_DEFAULT=CP_UTF8)
+    else()
+        add_definitions(-DNTCVT_CP_DEFAULT=CP_ACP)
+    endif()
+endif()
+
 include(2d/CMakeLists.txt)
 include(3d/CMakeLists.txt)
 include(platform/CMakeLists.txt)
