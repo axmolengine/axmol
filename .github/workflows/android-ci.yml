@@ -1,6 +1,14 @@
 name: android
 
-on: [push]
+on: 
+  push:
+    paths:
+      - cmake
+      - cocos
+      - extensions
+      - tests
+      - thirdparty
+      - CMakeLists.txt
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
