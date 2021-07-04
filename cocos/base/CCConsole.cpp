@@ -66,7 +66,6 @@
 #include "base/ccUtils.h"
 #include "base/ccUTF8.h"
 #ifdef _WIN32
-#define NTCVT_CP_DEFAULT CP_UTF8
 #include "win32-specific/ntcvt/ntcvt.hpp"
 #endif
 

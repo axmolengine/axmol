@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include <sys/types.h>  
 #include <sys/stat.h>  
 
-#define NTCVT_CP_DEFAULT CP_UTF8
 #include "win32-specific/ntcvt/ntcvt.hpp"
 
 using namespace std;
