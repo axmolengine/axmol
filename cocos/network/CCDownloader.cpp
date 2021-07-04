@@ -113,7 +113,7 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadDataTask(
             task.reset();
             break;
         }
-        task->_coTask.reset(_impl->createCoTask(task));
+        _impl->createCoTask(task);
     } while (0);
 
     return task;
@@ -130,7 +130,7 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(const std::stri
             task.reset();
             break;
         }
-        task->_coTask.reset(_impl->createCoTask(task));
+        _impl->createCoTask(task);
     } while (0);
 
     return task;
