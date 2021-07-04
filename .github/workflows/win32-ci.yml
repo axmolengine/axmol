@@ -1,10 +1,17 @@
 name: win32
 
-on: [push]
+on: 
+  push:
+    paths:
+      - cmake
+      - cocos
+      - extensions
+      - tests
+      - thirdparty
+      - CMakeLists.txt
 
 jobs:
   build:
-    if: "contains(github.event.commits[0].message, '[ci build]')"
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.

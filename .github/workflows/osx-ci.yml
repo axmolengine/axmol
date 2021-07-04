@@ -1,6 +1,14 @@
 name: osx
 
-on: [push]
+on: 
+  push:
+    paths:
+      - cmake
+      - cocos
+      - extensions
+      - tests
+      - thirdparty
+      - CMakeLists.txt
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -13,7 +21,6 @@ env:
 
 jobs:
   build:
-    if: "contains(github.event.commits[0].message, '[ci build]')"
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
