@@ -38,6 +38,7 @@ namespace network {
 class IDownloadTask;
 class IDownloaderImpl;
 class Downloader;
+class DownloaderCURL;
 
 class CC_DLL DownloadTask final {
 public:
@@ -81,6 +82,7 @@ public:
 
 private:
     friend class Downloader;
+    friend class DownloaderCURL;
     std::unique_ptr<IDownloadTask> _coTask;
 };
 

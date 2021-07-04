@@ -37,13 +37,13 @@ namespace network {
 class DownloadTaskCURL;
 class DownloaderHints;
 class DownloaderCURL;
-typedef std::pair<std::shared_ptr<DownloadTask>, DownloadTaskCURL*> TaskWrapper;
+
 class DownloaderCURL : public IDownloaderImpl {
 public:
     DownloaderCURL(const DownloaderHints& hints);
     virtual ~DownloaderCURL();
 
-    virtual IDownloadTask* createCoTask(std::shared_ptr<DownloadTask>& task) override;
+    virtual void createCoTask(std::shared_ptr<DownloadTask>& task) override;
 
 protected:
     class Impl;
@@ -55,10 +55,10 @@ protected:
 
     void _lazyScheduleUpdate();
 
-    static void _updateTaskProgressInfo(const DownloadTaskCURL& coTask, DownloadTask& task, int64_t totalExpected = -1);
+    static void _updateTaskProgressInfo(DownloadTask& task, int64_t totalExpected = -1);
 
     // scheduler for update processing and finished task in main schedule
-    void _onDownloadFinished(TaskWrapper&& task, int checkState = 0);
+    void _onDownloadFinished(DownloadTask& task, int checkState = 0);
 
     // scheduler for update processing and finished task in main schedule
     void _onUpdate(float);

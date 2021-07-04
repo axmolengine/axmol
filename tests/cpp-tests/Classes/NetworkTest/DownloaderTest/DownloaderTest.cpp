@@ -282,7 +282,7 @@ struct DownloaderTest : public TestCase
                     CC_SAFE_RELEASE(texture);
                 } else {
                     // download big file success
-                    auto msg = StringUtils::format("Download big file [%s] success.", task.identifier.c_str());
+                    auto msg = StringUtils::format("Download [%s] success.", task.identifier.c_str());
                     auto status = (Label*) view->getChildByTag(TAG_STATUS);
                     status->setString(msg);
                 }

@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
  http://www.cocos2d-x.org
 
@@ -68,9 +69,10 @@ class DownloadTaskCURL : public IDownloadTask {
 
 public:
     int serialId;
+    DownloaderCURL& owner;
 
-    DownloadTaskCURL()
-        : serialId(_sSerialId++), _requestHeaders(nullptr)
+    DownloadTaskCURL(DownloaderCURL& o)
+        : serialId(_sSerialId++), owner(o), _requestHeaders(nullptr)
 
     {
         _initInternal();
@@ -331,10 +333,10 @@ public:
         int status = coTask->checkFileMd5(task->checksum);
 
         if (status & kCheckSumStateSucceed || DownloadTask::ERROR_NO_ERROR != coTask->_errCode) {
-            _owner->_onDownloadFinished(std::make_pair(task, coTask), status);
+            _owner->_onDownloadFinished(*task, status);
         } else {
             std::lock_guard<mutex> lock(_requestMutex);
-            _requestQueue.push_back(std::make_pair(task, coTask));
+            _requestQueue.push_back(task);
         }
     }
 
@@ -360,7 +362,7 @@ public:
         if (!_processSet.empty()) {
             std::lock_guard<std::mutex> lock(_processMutex);
             for (auto& task : _processSet)
-                task.first->cancel();
+                task->cancel();
             _processSet.clear();
         }
 
@@ -373,13 +375,17 @@ public:
         return false == _thread.joinable() ? true : false;
     }
 
-    void getProcessTasks(std::vector<TaskWrapper>& outList) {
+    // Gets non background task list
+    void getProcessTasks(std::vector<std::shared_ptr<DownloadTask>>& outList) {
         std::lock_guard<std::mutex> lock(_processMutex);
         outList.reserve(_processSet.size());
-        outList.insert(outList.end(), _processSet.begin(), _processSet.end());
+        for (auto& task : _processSet) {
+            if (!task->background)
+                outList.push_back(task);
+        }
     }
 
-    void getFinishedTasks(std::vector<TaskWrapper>& outList) {
+    void getFinishedTasks(std::vector<std::shared_ptr<DownloadTask>>& outList) {
         std::lock_guard<std::mutex> lock(_finishedMutex);
         outList.reserve(_finishedQueue.size());
         outList.insert(outList.end(), _finishedQueue.begin(), _finishedQueue.end());
@@ -405,9 +411,16 @@ private:
 
     static int _progressCallbackProc(
         void* ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded) {
-        // TODO: background
-        // auto coTask = (DownloadTaskCURL*) ptr;
-        // downloader->_onDownloadProgress();
+        auto task = (DownloadTask*) ptr;
+        if (!task || !task->background)
+            return 0;
+        auto& coTask = task->_coTask;
+        if (coTask) {
+            auto& downloaderImpl = static_cast<DownloadTaskCURL*>(coTask.get())->owner;
+            downloaderImpl._updateTaskProgressInfo(*task);
+            downloaderImpl.onTaskProgress(*task, downloaderImpl._transferDataToBuffer);
+        }
+
         return 0;
     }
 
@@ -418,12 +431,11 @@ private:
     // this function designed call in work thread
     // the curl handle destroyed in _threadProc
     // handle inited for get header
-    CURLcode _initCurlHandleProc(CURL* handle, TaskWrapper& wrapper, bool forContent = false) {
-        const DownloadTask& task = *wrapper.first;
-        DownloadTaskCURL* coTask = wrapper.second;
+    CURLcode _initCurlHandleProc(CURL* handle, std::shared_ptr<DownloadTask>& task, bool forContent = false) {
+        DownloadTaskCURL* coTask = static_cast<DownloadTaskCURL*>(task->_coTask.get());
 
         /* Resolve host domain to ip */
-        std::string internalURL = task.requestURL;
+        std::string internalURL = task->requestURL;
         // Curl_custom_setup(handle, internalURL, (void**)& coTask->_requestHeaders);
 
         // set url
@@ -437,9 +449,9 @@ private:
         }
         curl_easy_setopt(handle, CURLOPT_WRITEDATA, coTask);
 
-        if (task.background) {
+        if (task->background) {
             curl_easy_setopt(handle, CURLOPT_NOPROGRESS, false);
-            curl_easy_setopt(handle, CURLOPT_PROGRESSDATA, wrapper.second);
+            curl_easy_setopt(handle, CURLOPT_PROGRESSDATA, task.get());
             curl_easy_setopt(handle, CURLOPT_PROGRESSFUNCTION, _progressCallbackProc);
         } else {
             curl_easy_setopt(handle, CURLOPT_NOPROGRESS, true);
@@ -492,9 +504,9 @@ private:
     }
 
     // get header info, if success set handle to content download state
-    bool _getHeaderInfoProc(CURL* handle, TaskWrapper& wrapper) {
-        DownloadTaskCURL& coTask = *wrapper.second;
-        CURLcode rc              = CURLE_OK;
+    bool _getHeaderInfoProc(CURL* handle, DownloadTaskCURL* coTask) {
+        // DownloadTaskCURL& coTask = static_cast<DownloadTaskCURL&>(*task._coTask);
+        CURLcode rc = CURLE_OK;
         do {
             long httpResponseCode = 0;
             rc                    = curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &httpResponseCode);
@@ -525,24 +537,24 @@ private:
 
             // get current file size
             int64_t fileSize = 0;
-            if (acceptRanges && coTask._tempFileName.length()) {
-                fileSize = FileUtils::getInstance()->getFileSize(coTask._tempFileName);
+            if (acceptRanges && coTask->_tempFileName.length()) {
+                fileSize = FileUtils::getInstance()->getFileSize(coTask->_tempFileName);
             }
 
             // set header info to coTask
-            lock_guard<std::recursive_mutex> lock(coTask._mutex);
-            coTask._totalBytesExpected = (int64_t) contentLen;
-            coTask._acceptRanges       = acceptRanges;
+            lock_guard<std::recursive_mutex> lock(coTask->_mutex);
+            coTask->_totalBytesExpected = (int64_t) contentLen;
+            coTask->_acceptRanges       = acceptRanges;
             if (acceptRanges && fileSize > 0) {
-                coTask._totalBytesReceived = fileSize;
+                coTask->_totalBytesReceived = fileSize;
             }
-            coTask._headerAchieved = true;
+            coTask->_headerAchieved = true;
         } while (0);
 
         if (CURLE_OK != rc) {
-            coTask.setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, rc, curl_easy_strerror(rc));
+            coTask->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, rc, curl_easy_strerror(rc));
         }
-        return coTask._headerAchieved;
+        return coTask->_headerAchieved;
     }
 
     void _threadProc() {
@@ -553,7 +565,7 @@ private:
         uint32_t countOfMaxProcessingTasks = this->hints.countOfMaxProcessingTasks;
         // init curl content
         CURLM* curlmHandle = curl_multi_init();
-        unordered_map<CURL*, TaskWrapper> coTaskMap;
+        unordered_map<CURL*, std::shared_ptr<DownloadTask>> coTaskMap;
         int runningHandles = 0;
         CURLMcode mcode    = CURLM_OK;
         int rc             = 0; // select return code
@@ -628,26 +640,27 @@ private:
                         CURL* curlHandle = m->easy_handle;
                         CURLcode errCode = m->data.result;
 
-                        TaskWrapper wrapper = coTaskMap[curlHandle];
+                        auto task = coTaskMap[curlHandle];
 
                         // remove from multi-handle
                         curl_multi_remove_handle(curlmHandle, curlHandle);
                         bool reinited = false;
                         do {
+                            auto coTask = static_cast<DownloadTaskCURL*>(task->_coTask.get());
                             if (CURLE_OK != errCode) {
-                                wrapper.second->setErrorProc(
+                                coTask->setErrorProc(
                                     DownloadTask::ERROR_IMPL_INTERNAL, errCode, curl_easy_strerror(errCode));
                                 break;
                             }
 
                             // if the task is content download task, cleanup the handle
-                            if (wrapper.second->_headerAchieved) {
+                            if (coTask->_headerAchieved) {
                                 break;
                             }
 
                             // the task is get header task
                             // first, we get info from response
-                            if (!_getHeaderInfoProc(curlHandle, wrapper)) {
+                            if (!_getHeaderInfoProc(curlHandle, coTask)) {
                                 // the error info has been set in _getHeaderInfoProc
                                 break;
                             }
@@ -656,23 +669,23 @@ private:
                             // wrapper.second->_totalBytesReceived inited by local file size
                             // if the local file size equal with the content size from header, the file has
                             // downloaded finish
-                            if (wrapper.second->_totalBytesReceived
-                                && wrapper.second->_totalBytesReceived == wrapper.second->_totalBytesExpected) {
+                            if (coTask->_totalBytesReceived
+                                && coTask->_totalBytesReceived == coTask->_totalBytesExpected) {
                                 // the file has download complete
                                 // break to move this task to finish queue
                                 break;
                             }
                             // reinit curl handle for download content
                             curl_easy_reset(curlHandle);
-                            auto error = _initCurlHandleProc(curlHandle, wrapper, true);
+                            auto error = _initCurlHandleProc(curlHandle, task, true);
                             if (error != CURLE_OK) {
-                                wrapper.second->setErrorProc(
+                                coTask->setErrorProc(
                                     DownloadTask::ERROR_IMPL_INTERNAL, error, curl_easy_strerror(error));
                                 break;
                             }
                             mcode = curl_multi_add_handle(curlmHandle, curlHandle);
                             if (CURLM_OK != mcode) {
-                                wrapper.second->setErrorProc(
+                                coTask->setErrorProc(
                                     DownloadTask::ERROR_IMPL_INTERNAL, mcode, curl_multi_strerror(mcode));
                                 break;
                             }
@@ -691,16 +704,16 @@ private:
                         // remove from _processSet
                         {
                             std::lock_guard<mutex> lock(_processMutex);
-                            if (_processSet.end() != _processSet.find(wrapper)) {
-                                _processSet.erase(wrapper);
+                            if (_processSet.end() != _processSet.find(task)) {
+                                _processSet.erase(task);
                             }
                         }
 
-                        if (wrapper.first->background)
-                            _owner->_onDownloadFinished(std::move(wrapper));
+                        if (task->background)
+                            _owner->_onDownloadFinished(*task);
                         else {
                             std::lock_guard<mutex> lock(_finishedMutex);
-                            _finishedQueue.push_back(std::move(wrapper));
+                            _finishedQueue.push_back(task);
                         }
                     }
                 } while (m);
@@ -710,46 +723,47 @@ private:
             auto size = coTaskMap.size();
             while (0 == countOfMaxProcessingTasks || size < countOfMaxProcessingTasks) {
                 // get task wrapper from request queue
-                TaskWrapper wrapper;
+                std::shared_ptr<DownloadTask> task;
                 {
                     lock_guard<mutex> lock(_requestMutex);
                     if (!_requestQueue.empty()) {
-                        wrapper = _requestQueue.front();
+                        task = _requestQueue.front();
                         _requestQueue.pop_front();
                     }
                 }
 
                 // if request queue is empty, the wrapper.first is nullptr
-                if (!wrapper.first) {
+                if (!task) {
                     break;
                 }
 
-                wrapper.second->initProc();
+                auto coTask = static_cast<DownloadTaskCURL*>(task->_coTask.get());
+                coTask->initProc();
 
                 // create curl handle from task and add into curl multi handle
                 CURL* curlHandle = curl_easy_init();
 
                 if (nullptr == curlHandle) {
-                    wrapper.second->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, 0, "Alloc curl handle failed.");
-                    _owner->_onDownloadFinished(std::move(wrapper));
+                    coTask->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, 0, "Alloc curl handle failed.");
+                    _owner->_onDownloadFinished(*task);
                     continue;
                 }
 
                 // init curl handle for get header info
-                _initCurlHandleProc(curlHandle, wrapper);
+                _initCurlHandleProc(curlHandle, task);
 
                 // add curl handle to process list
                 mcode = curl_multi_add_handle(curlmHandle, curlHandle);
                 if (CURLM_OK != mcode) {
-                    wrapper.second->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, mcode, curl_multi_strerror(mcode));
-                    _owner->_onDownloadFinished(std::move(wrapper));
+                    coTask->setErrorProc(DownloadTask::ERROR_IMPL_INTERNAL, mcode, curl_multi_strerror(mcode));
+                    _owner->_onDownloadFinished(*task);
                     continue;
                 }
 
                 DLLOG("    _threadProc task create curl handle:%p", curlHandle);
-                coTaskMap[curlHandle] = wrapper;
+                coTaskMap[curlHandle] = task;
                 lock_guard<mutex> lock(_processMutex);
-                _processSet.insert(wrapper);
+                _processSet.insert(task);
             }
         } while (!coTaskMap.empty());
 
@@ -761,9 +775,9 @@ private:
 
     std::thread _thread;
     std::atomic_bool _tasksFinished{};
-    std::deque<TaskWrapper> _requestQueue;
-    std::set<TaskWrapper> _processSet;
-    std::deque<TaskWrapper> _finishedQueue;
+    std::deque<std::shared_ptr<DownloadTask>> _requestQueue;
+    std::set<std::shared_ptr<DownloadTask>> _processSet;
+    std::deque<std::shared_ptr<DownloadTask>> _finishedQueue;
 
     mutable std::mutex _threadMutex;
     std::mutex _requestMutex;
@@ -804,9 +818,10 @@ DownloaderCURL::~DownloaderCURL() {
     DLLOG("Destruct DownloaderCURL %p", this);
 }
 
-IDownloadTask* DownloaderCURL::createCoTask(std::shared_ptr<DownloadTask>& task) {
-    DownloadTaskCURL* coTask = new (std::nothrow) DownloadTaskCURL;
+void DownloaderCURL::createCoTask(std::shared_ptr<DownloadTask>& task) {
+    DownloadTaskCURL* coTask = new (std::nothrow) DownloadTaskCURL(*this);
     coTask->init(task->storagePath, _impl->hints.tempFileNameSuffix);
+    task->_coTask.reset(coTask); // coTask auto managed by task
 
     DLLOG("    DownloaderCURL: createTask: Id(%d)", coTask->serialId);
 
@@ -817,7 +832,6 @@ IDownloadTask* DownloaderCURL::createCoTask(std::shared_ptr<DownloadTask>& task)
         _lazyScheduleUpdate();
         _scheduler->resumeTarget(this);
     }
-    return coTask;
 }
 
 void DownloaderCURL::_lazyScheduleUpdate() {
@@ -834,21 +848,17 @@ void DownloaderCURL::_lazyScheduleUpdate() {
 }
 
 void DownloaderCURL::_onUpdate(float) {
-    vector<TaskWrapper> tasks;
+    std::vector<std::shared_ptr<DownloadTask>> tasks;
 
     // update processing tasks
     _impl->getProcessTasks(tasks);
-    for (auto& wrapper : tasks) {
-        DownloadTask& task       = *wrapper.first;
-        DownloadTaskCURL& coTask = *wrapper.second;
-        if (task.background)
-            continue;
-
+    for (auto& task : tasks) {
+        DownloadTaskCURL& coTask = static_cast<DownloadTaskCURL&>(*task->_coTask);
         std::lock_guard<std::recursive_mutex> lock(coTask._mutex);
         if (coTask._bytesReceived) {
             _currTask = &coTask;
-            _updateTaskProgressInfo(coTask, task);
-            onTaskProgress(task, _transferDataToBuffer);
+            _updateTaskProgressInfo(*task);
+            onTaskProgress(*task, _transferDataToBuffer);
             _currTask             = nullptr;
             coTask._bytesReceived = 0;
         }
@@ -862,27 +872,26 @@ void DownloaderCURL::_onUpdate(float) {
             _scheduler->pauseTarget(this);
     }
 
-    for (auto& wrapper : tasks) {
-        _onDownloadFinished(std::move(wrapper));
+    for (auto& task : tasks) {
+        _onDownloadFinished(*task);
     }
 }
 
-void DownloaderCURL::_updateTaskProgressInfo(
-    const DownloadTaskCURL& coTask, DownloadTask& task, int64_t totalExpected) {
+void DownloaderCURL::_updateTaskProgressInfo(DownloadTask& task, int64_t totalExpected) {
+    auto& coTask                           = static_cast<DownloadTaskCURL&>(*task._coTask);
     task.progressInfo.bytesReceived      = coTask._bytesReceived;
     task.progressInfo.totalBytesReceived = coTask._totalBytesReceived;
     task.progressInfo.totalBytesExpected = totalExpected < 0 ? coTask._totalBytesExpected : totalExpected;
     task.progressInfo.speedInBytes       = coTask._speed;
 }
 
-void DownloaderCURL::_onDownloadFinished(TaskWrapper&& wrapper, int checkState) {
-    DownloadTask& task       = *wrapper.first;
-    DownloadTaskCURL& coTask = *wrapper.second;
+void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState) {
+    auto& coTask = static_cast<DownloadTaskCURL&>(*task._coTask);
 
     // if there is bytesReceived, call progress update first
     if (coTask._bytesReceived) {
         _currTask = &coTask;
-        _updateTaskProgressInfo(coTask, task);
+        _updateTaskProgressInfo(task);
         onTaskProgress(task, _transferDataToBuffer);
         coTask._bytesReceived = 0;
         _currTask             = nullptr;
@@ -900,7 +909,7 @@ void DownloaderCURL::_onDownloadFinished(TaskWrapper&& wrapper, int checkState) 
                 auto fsOrigin = pFileUtils->openFileStream(coTask._fileName, FileStream::Mode::READ);
                 if (fsOrigin) {
                     fsOrigin->seek(0, SEEK_END);
-                    _updateTaskProgressInfo(coTask, task, fsOrigin->tell());
+                    _updateTaskProgressInfo(task, fsOrigin->tell());
                     coTask._errCode         = DownloadTask::ERROR_NO_ERROR;
                     coTask._errCodeInternal = 0;
                     coTask._errDescription  = "";
