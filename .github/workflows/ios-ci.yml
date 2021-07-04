@@ -9,6 +9,7 @@ on:
       - tests
       - thirdparty
       - CMakeLists.txt
+      - .github/workflows/ios-ci.yml
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
