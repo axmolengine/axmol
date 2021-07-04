@@ -22,13 +22,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ExtensionsTest.h"
-#include "../testResource.h"
-#include "AssetsManagerExTest/AssetsManagerExTest.h"
-#include "TableViewTest/TableViewTestScene.h"
+#ifndef __NETWORK_TEST_H__
+#define __NETWORK_TEST_H__
 
-ExtensionsTests::ExtensionsTests()
-{
-    addTest("AssetsManagerExTest", [](){ return new (std::nothrow) AssetsManagerExTests; });
-    addTest("TableViewTest", [](){ return new (std::nothrow) TableViewTests; });
-}
+#include "BaseTest.h"
+
+DEFINE_TEST_LIST(NetworkTests);
+
+#endif /* __EXTENSIONS_TEST_H__ */

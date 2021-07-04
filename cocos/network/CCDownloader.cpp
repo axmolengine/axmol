@@ -38,14 +38,16 @@ DownloadTask::DownloadTask() {
 DownloadTask::DownloadTask(const std::string& srcUrl, const std::string& identifier) {
     this->requestURL = srcUrl;
     this->identifier = identifier;
+    this->background = false;
 }
 
 DownloadTask::DownloadTask(const std::string& srcUrl, const std::string& storagePath, const std::string& checksum,
-    const std::string& identifier) {
+    const std::string& identifier, bool background) {
     this->requestURL  = srcUrl;
     this->storagePath = storagePath;
     this->checksum    = checksum;
     this->identifier  = identifier;
+    this->background  = background;
 }
 
 DownloadTask::~DownloadTask() {
@@ -118,8 +120,8 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadDataTask(
 }
 
 std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(const std::string& srcUrl,
-    const std::string& storagePath, const std::string& identifier, const std::string& md5checksum) {
-    auto task = std::make_shared<DownloadTask>(srcUrl, storagePath, md5checksum, identifier);
+    const std::string& storagePath, const std::string& identifier, const std::string& md5checksum, bool background) {
+    auto task = std::make_shared<DownloadTask>(srcUrl, storagePath, md5checksum, identifier, background);
     do {
         if (srcUrl.empty() || storagePath.empty()) {
             if (onTaskError) {

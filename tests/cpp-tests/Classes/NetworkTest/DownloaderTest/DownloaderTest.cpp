@@ -26,7 +26,7 @@
 
 #include "DownloaderTest.h"
 
-#include "../testResource.h"
+#include "../../testResource.h"
 
 #include "ui/UILoadingBar.h"
 #include "ui/UIButton.h"
@@ -39,7 +39,7 @@ static const char* sURLList[] =
     "https://www.cocos2d-x.org/attachments/802/cocos2dx_landscape.png",
     "https://cocos2d-x.org/images/logo.png",
     "https://www.cocos2d-x.org/attachments/1503/no_exist.txt",  // try to download no exist file
-    "https://github.com/openssl/openssl/archive/OpenSSL_1_1_1a.zip",
+    "https://cdn-fastly.obsproject.com/downloads/OBS-Studio-27.0.1-Full-Installer-x64.exe" // "https://github.com/openssl/openssl/archive/OpenSSL_1_1_1a.zip",
 };
 const static int sListSize = (sizeof(sURLList)/sizeof(sURLList[0]));
 static const char* sNameList[sListSize] =
@@ -205,7 +205,8 @@ struct DownloaderTest : public TestCase
             bar->setVisible(true);
             bar->setEnabled(true);
             auto path = FileUtils::getInstance()->getWritablePath() + "CppTests/DownloaderTest/" + sNameList[3];
-            this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3]);
+            auto task = this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3], "730cfe31b344ba77d87d0a896af710d4", false);
+            task->progressInfo.totalBytesExpected = 89945032;
         });
         bottomRightView->setName(sNameList[3]);
         bottomRightView->setAnchorPoint(Vec2(0, 1));
@@ -219,7 +220,7 @@ struct DownloaderTest : public TestCase
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
             float percent = float(task.progressInfo.totalBytesReceived * 100) / task.progressInfo.totalBytesExpected;
             bar->setPercent(percent);
-            char buf[32];
+            char buf[128];
             sprintf(buf, "%.1f%%[total %d KB]", percent, int(task.progressInfo.totalBytesExpected/1024));
             auto status = (Label*)view->getChildByTag(TAG_STATUS);
             status->setString(buf);
@@ -268,31 +269,29 @@ struct DownloaderTest : public TestCase
             do
             {
                 auto view = this->getChildByName(task.identifier);
-                if (std::string::npos == task.storagePath.find(".png"))
-                {
+                if (task.storagePath.find(".png") != std::string::npos) {
+                    // create sprite from file
+                    auto sprite   = Sprite::create(task.storagePath);
+                    auto viewSize = view->getContentSize();
+                    sprite->setPosition(viewSize.width / 2, viewSize.height / 2);
+                    auto spriteSize = sprite->getContentSize();
+                    float scale =
+                        MIN((viewSize.height - 20) / spriteSize.height, (viewSize.width - 20) / spriteSize.width);
+                    sprite->setScale(scale);
+                    view->addChild(sprite, 5, TAG_SPRITE);
+                    CC_SAFE_RELEASE(texture);
+                } else {
                     // download big file success
-                    char buf[32];
-                    sprintf(buf, "Download [%s] success.", task.identifier.c_str());
-                    auto status = (Label*)view->getChildByTag(TAG_STATUS);
-                    status->setString(buf);
-                    break;
+                    auto msg = StringUtils::format("Download big file [%s] success.", task.identifier.c_str());
+                    auto status = (Label*) view->getChildByTag(TAG_STATUS);
+                    status->setString(msg);
                 }
-                // create sprite from file
-                auto sprite = Sprite::create(task.storagePath);
-                auto viewSize = view->getContentSize();
-                sprite->setPosition(viewSize.width / 2, viewSize.height / 2);
-                auto spriteSize = sprite->getContentSize();
-                float scale = MIN((viewSize.height - 20) / spriteSize.height, (viewSize.width - 20) / spriteSize.width);
-                sprite->setScale(scale);
-                view->addChild(sprite, 5, TAG_SPRITE);
-                
                 auto btn = (ui::Button*)view->getChildByTag(TAG_BUTTON);
                 btn->setEnabled(true);
                 btn->setVisible(true);
                 auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
                 bar->setVisible(false);
             } while (0);
-            CC_SAFE_RELEASE(texture);
         };
         
         // define failed callback
