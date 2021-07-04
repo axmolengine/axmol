@@ -9,6 +9,7 @@ on:
       - tests
       - thirdparty
       - CMakeLists.txt
+      - .github/workflows/win32-ci.yml
 
 jobs:
   build:
