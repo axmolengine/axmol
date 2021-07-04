@@ -1,26 +1,27 @@
 adxe-1.0  ??
 
-[Feature] Decompress astc parallel support
-[Feature] Reimplement HttpClient based on yasio for concurrent http request support
-[Feature] Improve Lua RTTI performance and less memory storage
-[Feature] Virtual File System support, thanks  to @rh101 
-[BugFix] Fix imgui draw frame cause afterimage when game scene nothing to draw
-[BugFix] Set global Z value of label debug layer to be the same as the parent label to fix display issue
-[BugFix] Use TTF scaled metrics to calculate line height, thanks to @rh101 
-[BugFix] Fix Memory leak in ShaderModuleGL::getErrorLog(), thanks to @Xrysnow
-[BugFix] Fix console output text encoding for win32
-[BugFix] Fix charset process for fontName on win32
-[BugFix] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
-[Refine] Improve cmake scripts
-[Refine] Replace deprecated repo `jcenter` with `mavenCentral`
-[Refine] Lua-5.4 compatible
-[Refine] Improve cmdline-tools
-[Refine] Ensure label underline node has the same global Z value as the label node to fix visibility issue when global Z is not 0
-[Refine] Improve android astc support check
-[Refine] Improve the "Physics part" (#379), thanks  to @aismann 
-[Refine] Rename command line to to `adxe`
-[Refine] Update imgui to 1.84 WIP
-[Refine] Rename thirdparty folder `external` to `thirdparty`
+[HIGHLIGHT] Downloader realtime md5 checksum calculation support
+[HIGHLIGHT] Decompress astc parallel support
+[HIGHLIGHT] Reimplement HttpClient based on yasio for concurrent http request support
+[HIGHLIGHT] Improve Lua RTTI performance and less memory storage
+[HIGHLIGHT] Virtual File System support, thanks  to @rh101 
+[FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
+[FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issue
+[FIX] Use TTF scaled metrics to calculate line height, thanks to @rh101 
+[FIX] Fix Memory leak in ShaderModuleGL::getErrorLog(), thanks to @Xrysnow
+[FIX] Fix console output text encoding for win32
+[FIX] Fix charset process for fontName on win32
+[FIX] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
+[REFINE] Improve cmake scripts
+[REFINE] Replace deprecated repo `jcenter` with `mavenCentral`
+[REFINE] Lua-5.4 compatible
+[REFINE] Improve cmdline-tools
+[REFINE] Ensure label underline node has the same global Z value as the label node to fix visibility issue when global Z is not 0
+[REFINE] Improve android astc support check
+[REFINE] Improve the "Physics part" (#379), thanks  to @aismann 
+[REFINE] Rename command line to to `adxe`
+[REFINE] Update imgui to 1.84 WIP
+[REFINE] Rename thirdparty folder `external` to `thirdparty`
 
 
 cocos2d-x-4.0  Dec.3 2019
