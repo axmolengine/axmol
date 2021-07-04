@@ -149,7 +149,6 @@ list(APPEND GAME_HEADER
      Classes/ExtensionsTest/ExtensionsTest.h
      Classes/ExtensionsTest/TableViewTest/CustomTableViewCell.h
      Classes/ExtensionsTest/TableViewTest/TableViewTestScene.h
-     Classes/ExtensionsTest/NetworkTest/HttpClientTest.h
      Classes/Sprite3DTest/Sprite3DTest.h
      Classes/Sprite3DTest/DrawNode3D.h
      Classes/BaseTest.h
@@ -206,7 +205,9 @@ list(APPEND GAME_HEADER
      Classes/FontTest/FontTest.h
      Classes/LightTest/LightTest.h
      Classes/VisibleRect.h
-     Classes/DownloaderTest/DownloaderTest.h
+     Classes/NetworkTest/NetworkTest.h
+     Classes/NetworkTest/DownloaderTest/DownloaderTest.h
+     Classes/NetworkTest/HttpClientTest/HttpClientTest.h
      Classes/OpenURLTest/OpenURLTest.h
      Classes/ConsoleTest/ConsoleTest.h
      Classes/MenuTest/MenuTest.h
@@ -245,13 +246,14 @@ list(APPEND GAME_SOURCE
      Classes/CurlTest/CurlTest.cpp
      Classes/CurrentLanguageTest/CurrentLanguageTest.cpp
      Classes/DataVisitorTest/DataVisitorTest.cpp
-     Classes/DownloaderTest/DownloaderTest.cpp
+     Classes/NetworkTest/NetworkTest.cpp
+     Classes/NetworkTest/DownloaderTest/DownloaderTest.cpp
+     Classes/NetworkTest/HttpClientTest/HttpClientTest.cpp
      Classes/DrawPrimitivesTest/DrawPrimitivesTest.cpp
      Classes/EffectsAdvancedTest/EffectsAdvancedTest.cpp
      Classes/EffectsTest/EffectsTest.cpp
      Classes/ExtensionsTest/AssetsManagerExTest/AssetsManagerExTest.cpp
      Classes/ExtensionsTest/ExtensionsTest.cpp
-     Classes/ExtensionsTest/NetworkTest/HttpClientTest.cpp
      Classes/ExtensionsTest/TableViewTest/CustomTableViewCell.cpp
      Classes/ExtensionsTest/TableViewTest/TableViewTestScene.cpp
      Classes/FileUtilsTest/FileUtilsTest.cpp

@@ -25,5 +25,5 @@
 
 #pragma once
 
-#include "../BaseTest.h"
+#include "../../BaseTest.h"
 DEFINE_TEST_SUITE(DownloaderTests);

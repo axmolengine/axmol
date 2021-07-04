@@ -22,13 +22,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ExtensionsTest.h"
+#include "NetworkTest.h"
 #include "../testResource.h"
-#include "AssetsManagerExTest/AssetsManagerExTest.h"
-#include "TableViewTest/TableViewTestScene.h"
+#include "HttpClientTest/HttpClientTest.h"
+#include "DownloaderTest/DownloaderTest.h"
 
-ExtensionsTests::ExtensionsTests()
-{
-    addTest("AssetsManagerExTest", [](){ return new (std::nothrow) AssetsManagerExTests; });
-    addTest("TableViewTest", [](){ return new (std::nothrow) TableViewTests; });
+NetworkTests::NetworkTests() {
+    addTest("HttpClientTest", []() { return new (std::nothrow) HttpClientTests; });
+    addTest("DownloaderTest", []() { return new (std::nothrow) DownloaderTests; });
 }

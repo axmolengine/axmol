@@ -67,7 +67,7 @@ public:
         addTest("Console", []() { return new ConsoleTests(); });
         addTest("Curl", []() { return new CurlTests(); });
         addTest("Current Language", []() { return new CurrentLanguageTests(); });
-        addTest("Downloader Test", []() { return new DownloaderTests(); });
+        addTest("Network Test", []() { return new NetworkTests(); });
         addTest("EventDispatcher", []() { return new EventDispatcherTests(); });
         addTest("Effects - Advanced", []() { return new EffectAdvanceTests(); });
         addTest("Effects - Basic", [](){return new EffectTests(); });

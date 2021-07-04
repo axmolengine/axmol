@@ -30,6 +30,9 @@ static int pfs_posix_open(const std::string& path, FileStream::Mode mode, PXFile
     case FileStream::Mode::APPEND:
         handle._fd = posix_open(path.c_str(), O_APPEND_FLAGS);
         break;
+    case FileStream::Mode::OVERLAPPED:
+        handle._fd = posix_open(path.c_str(), O_OVERLAP_FLAGS);
+        break;
     default:
         handle._fd = -1;
     }

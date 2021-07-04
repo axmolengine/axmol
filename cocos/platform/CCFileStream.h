@@ -17,6 +17,7 @@ public:
         READ,
         WRITE,
         APPEND,
+        OVERLAPPED,
     };
 
     /**
