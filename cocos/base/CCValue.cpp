@@ -93,7 +93,7 @@ Value::Value(const std::string& v)
     _field.strVal = new (std::nothrow) std::string(v);
 }
 
-Value::Value(std::string&& v) {
+Value::Value(std::string&& v) : _type(Type::STRING) {
     _field.strVal = new (std::nothrow) std::string(std::move(v));
 }
 
