@@ -123,6 +123,13 @@ bool HttpClient::send(HttpRequest* request) {
     return true;
 }
 
+HttpResponse* HttpClient::sendSync(HttpRequest* request) {
+    request->setSync(true);
+    if (this->send(request))
+        return request->wait();
+    return nullptr;
+}
+
 int HttpClient::tryTakeAvailChannel() {
     auto lck = _availChannelQueue.get_lock();
     if (!_availChannelQueue.empty()) {
@@ -314,27 +321,33 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
 }
 
 void HttpClient::finishResponse(HttpResponse* response) {
-    auto cbNotify = [=]() {
-        HttpRequest* request                  = response->getHttpRequest();
-        const ccHttpRequestCallback& callback = request->getCallback();
-        Ref* pTarget                          = request->getTarget();
-        SEL_HttpResponse pSelector            = request->getSelector();
+    auto request   = response->getHttpRequest();
+    auto syncState = request->getSyncState();
+    if (!syncState) {
+        auto cbNotify = [=]() {
+            HttpRequest* request                  = response->getHttpRequest();
+            const ccHttpRequestCallback& callback = request->getCallback();
+            Ref* pTarget                          = request->getTarget();
+            SEL_HttpResponse pSelector            = request->getSelector();
 
-        if (callback != nullptr) {
-            callback(this, response);
-        } else if (pTarget && pSelector) {
-            (pTarget->*pSelector)(this, response);
-        }
+            if (callback != nullptr) {
+                callback(this, response);
+            } else if (pTarget && pSelector) {
+                (pTarget->*pSelector)(this, response);
+            }
 
-        response->release();
-    };
+            response->release();
+        };
 
-    if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId())
-        cbNotify();
-    else
-        _scheduler->performFunctionInCocosThread(cbNotify);
+        if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId())
+            cbNotify();
+        else
+            _scheduler->performFunctionInCocosThread(cbNotify);
+    } else {
+        syncState->set_value(response);
+    }
 }
-    
+
 void HttpClient::clearResponseQueue() {
     auto lck = _responseQueue.get_lock();
     __clearQueueUnsafe(_responseQueue, ClearResponsePredicate{});
