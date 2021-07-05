@@ -237,27 +237,30 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             // custom headers
             auto& headers = request->getHeaders();
 
-            bool haveContentTypeFromCustomHeaders = false;
+            bool userAgentSpecified   = false;
+            bool contentTypeSpecified = false;
             if(!headers.empty()) {
                 using namespace cxx17; // for string_view literal
                 for (auto& header : headers) {
                     obs.write_bytes(header);
                     obs.write_bytes("\r\n");
-                    if (usePostData && cxx20::ic::starts_with(cxx17::string_view{header}, "Content-Type:"_sv))
-                        haveContentTypeFromCustomHeaders = true;
+
+                    if (cxx20::ic::starts_with(cxx17::string_view{header}, "User-Agent:"_sv))
+                        userAgentSpecified = true;
+                    else if (cxx20::ic::starts_with(cxx17::string_view{header}, "Content-Type:"_sv))
+                        contentTypeSpecified = true;
                 }
-            } else {
-                obs.write_bytes("User-Agent: ");
-                obs.write_bytes("yasio-http");
-                obs.write_bytes("\r\n");
-            }
+            } 
+            
+            if (!userAgentSpecified)
+                obs.write_bytes("User-Agent: yasio-http\r\n");
 
             obs.write_bytes("Accept: */*;q=0.8\r\n");
             obs.write_bytes("Connection: Close\r\n");
 
             if (usePostData) {
                 // obs.write_bytes("Origin: yasio\r\n");
-                if (!haveContentTypeFromCustomHeaders)
+                if (!contentTypeSpecified)
                     obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
 
                 char strContentLength[128] = {0};
