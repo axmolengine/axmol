@@ -3,11 +3,11 @@ name: win32
 on: 
   push:
     paths:
-      - cmake
-      - cocos
-      - extensions
-      - tests
-      - thirdparty
+      - cmake/**/*
+      - cocos/**/*
+      - extensions/**/*
+      - tests/**/*
+      - thirdparty/**/*
       - CMakeLists.txt
       - .github/workflows/win32-ci.yml
 

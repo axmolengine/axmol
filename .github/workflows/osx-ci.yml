@@ -3,11 +3,11 @@ name: osx
 on: 
   push:
     paths:
-      - cmake
-      - cocos
-      - extensions
-      - tests
-      - thirdparty
+      - cmake/**/*
+      - cocos/**/*
+      - extensions/**/*
+      - tests/**/*
+      - thirdparty/**/*
       - CMakeLists.txt
       - .github/workflows/osx-ci.yml
 
