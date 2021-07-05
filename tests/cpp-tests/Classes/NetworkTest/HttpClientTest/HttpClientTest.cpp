@@ -28,6 +28,8 @@
 USING_NS_CC;
 using namespace cocos2d::network;
 
+#define CHROME_UA "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+
 HttpClientTests::HttpClientTests()
 {
     ADD_TEST_CASE(HttpClientTest);
@@ -95,13 +97,12 @@ HttpClientTest::~HttpClientTest()
 
 void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
 {    
-    const std::string chromeUA = "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
     // test 1
     {
         HttpRequest* request = new (std::nothrow) HttpRequest();
         request->setUrl("https://just-make-this-request-failed.com");
         request->setRequestType(HttpRequest::Type::GET);
-        request->setHeaders(std::vector<std::string>{chromeUA});
+        request->setHeaders(std::vector<std::string>{CHROME_UA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test1");
         HttpClient::getInstance()->send(request);
@@ -114,7 +115,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
         // required fields
         request->setUrl("https://httpbin.org/ip");
         request->setRequestType(HttpRequest::Type::GET);
-        request->setHeaders(std::vector<std::string>{chromeUA});
+        request->setHeaders(std::vector<std::string>{CHROME_UA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test2");
         HttpClient::getInstance()->send(request);
@@ -127,7 +128,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
         HttpRequest* request = new (std::nothrow) HttpRequest();
         request->setUrl("https://httpbin.org/get");
         request->setRequestType(HttpRequest::Type::GET);
-        request->setHeaders(std::vector<std::string>{chromeUA});
+        request->setHeaders(std::vector<std::string>{CHROME_UA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test3");
         HttpClient::getInstance()->send(request);
@@ -139,7 +140,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
         HttpRequest* request = new (std::nothrow) HttpRequest();
         request->setUrl("https://github.com/yasio/yasio");
         request->setRequestType(HttpRequest::Type::GET);
-        request->setHeaders(std::vector<std::string>{chromeUA});
+        request->setHeaders(std::vector<std::string>{CHROME_UA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test3");
         HttpClient::getInstance()->send(request);
@@ -158,6 +159,7 @@ void HttpClientTest::onMenuPostTestClicked(cocos2d::Ref *sender)
         HttpRequest* request = new (std::nothrow) HttpRequest();
         request->setUrl("https://httpbin.org/post");
         request->setRequestType(HttpRequest::Type::POST);
+        request->setHeaders(std::vector<std::string>{CHROME_UA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         
         // write the post data
@@ -173,9 +175,7 @@ void HttpClientTest::onMenuPostTestClicked(cocos2d::Ref *sender)
         HttpRequest* request = new (std::nothrow) HttpRequest();
         request->setUrl("https://httpbin.org/post");
         request->setRequestType(HttpRequest::Type::POST);
-        std::vector<std::string> headers;
-        headers.push_back("Content-Type: application/json; charset=utf-8");
-        request->setHeaders(headers);
+        request->setHeaders(std::vector<std::string>{CHROME_UA, "Content-Type: application/json; charset=utf-8"});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         
         // write the post data
