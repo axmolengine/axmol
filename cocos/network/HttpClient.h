@@ -5,7 +5,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -111,6 +111,13 @@ public:
      *
      * @param request a HttpRequest object, which includes url, response callback etc.
                       please make sure request->_requestData is clear before calling "send" here.
+     * @notes for post data
+     *   a. By default will fill Content-Type: application/x-www-form-urlencoded;charset=UTF-8
+     *   b. You can specific content-type at custom header, such as:
+     *      std::vector<std::string> headers = {"Content-Type: application/json;charset=UTF-8"};
+     *      request->setHeaders(headers);
+     *   c. other content type, please see: 
+     *      https://stackoverflow.com/questions/23714383/what-are-all-the-possible-values-for-http-content-type-header
      */
     bool send(HttpRequest* request);
 

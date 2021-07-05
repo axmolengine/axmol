@@ -236,10 +236,15 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
 
             // custom headers
             auto& headers = request->getHeaders();
+
+            bool haveContentTypeFromCustomHeaders = false;
             if(!headers.empty()) {
-                for(auto& header: headers) {
+                using namespace cxx17; // for string_view literal
+                for (auto& header : headers) {
                     obs.write_bytes(header);
                     obs.write_bytes("\r\n");
+                    if (usePostData && cxx20::ic::starts_with(cxx17::string_view{header}, "Content-Type:"_sv))
+                        haveContentTypeFromCustomHeaders = true;
                 }
             } else {
                 obs.write_bytes("User-Agent: ");
@@ -252,7 +257,8 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
 
             if (usePostData) {
                 // obs.write_bytes("Origin: yasio\r\n");
-                obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
+                if (!haveContentTypeFromCustomHeaders)
+                    obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
 
                 char strContentLength[128] = {0};
                 auto requestData           = request->getRequestData();
