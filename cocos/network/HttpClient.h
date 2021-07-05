@@ -107,7 +107,7 @@ public:
     const std::string& getSSLVerification();
 
     /**
-     * Add a get request to task queue
+     * Send http request concurrently, non-blocking
      *
      * @param request a HttpRequest object, which includes url, response callback etc.
                       please make sure request->_requestData is clear before calling "send" here.

@@ -173,7 +173,6 @@ private:
         _finished    = false;
         _responseData.clear();
         _currentHeader.clear();
-        _responseHeaders.clear();
         _responseCode = -1;
         _internalCode = 0;
 
