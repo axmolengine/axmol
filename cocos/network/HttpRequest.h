@@ -30,6 +30,8 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+#include <future>
 #include "base/CCRef.h"
 #include "base/ccMacros.h"
 
@@ -59,6 +61,7 @@ typedef void (cocos2d::Ref::*SEL_HttpResponse)(HttpClient* client, HttpResponse*
 
 class CC_DLL HttpRequest : public Ref
 {
+    friend class HttpClient;
 public:
     /**
      * The HttpRequest type enum used in the HttpRequest::setRequestType.
@@ -325,6 +328,23 @@ public:
     const std::vector<std::string>& getHosts() const { return _hosts; }
 
 private:
+    void setSync(bool sync) {
+        if (sync)
+            _syncState = std::make_shared<std::promise<HttpResponse*>>();
+        else
+            _syncState.reset();
+    }
+
+    std::shared_ptr<std::promise<HttpResponse*>> getSyncState() {
+        return _syncState;
+    }
+
+    HttpResponse* wait() {
+        if (_syncState)
+            return _syncState->get_future().get();
+        return nullptr;
+    }
+
     void doSetResponseCallback(Ref* pTarget, SEL_HttpResponse pSelector)
     {
         if (_pTarget)
@@ -352,6 +372,8 @@ protected:
     void*                       _pUserData;      /// You can add your customed data here
     std::vector<std::string>    _headers;        /// custom http headers
     std::vector<std::string>    _hosts;
+
+    std::shared_ptr<std::promise<HttpResponse*>> _syncState;
 };
 
 }
