@@ -122,6 +122,12 @@ public:
     bool send(HttpRequest* request);
 
     /**
+     * Send http request sync, will block caller thread until request finished.
+     * @remark  You need call release manually after you don't want use the returned response
+     */
+    HttpResponse* sendSync(HttpRequest* request);
+
+    /**
      * Set the timeout value for connecting.
      *
      * @param value the timeout value for connecting.
