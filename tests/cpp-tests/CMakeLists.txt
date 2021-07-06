@@ -361,7 +361,7 @@ list(APPEND GAME_HEADER
    Classes/Box2DTest/Box2dTest.h
    )
 
-if(WINDOWS)
+if(WINDOWS OR MACOSX OR LINUX)
     list(APPEND GAME_HEADER
         Classes/Box2DTestBed/Test.h
         Classes/Box2DTestBed/Box2DTestBed.h
