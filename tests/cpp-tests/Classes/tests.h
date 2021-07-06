@@ -26,7 +26,7 @@
 #define _TESTS_H_
 
 
-#include "Box2DTest/Box2DTest.h"
+#include "Box2DTest/Box2dTest.h"
 #include "Box2DTestBed/Box2DTestBed.h"
 
 
