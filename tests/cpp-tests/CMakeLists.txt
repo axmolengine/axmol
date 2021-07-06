@@ -358,13 +358,87 @@ if(WINDOWS OR MACOSX OR LINUX)
 endif()
 
 list(APPEND GAME_HEADER
-     Classes/Box2DTest/Box2dTest.h
+   Classes/Box2DTest/Box2dTest.h
+   )
+
+if(WINDOWS)
+    list(APPEND GAME_HEADER
+        Classes/Box2DTestBed/Test.h
+        Classes/Box2DTestBed/Box2DTestBed.h
+        Classes/Box2DTestBed/CCPhysicsDebugNodeBox2D.h
      )
+endif()
 
 list(APPEND GAME_SOURCE
-     Classes/Box2DTest/Box2dTest.cpp
-     )
+   Classes/Box2DTest/Box2dTest.cpp
+)
 
+if(WINDOWS)
+   list(APPEND GAME_HEADER
+     Classes/Box2DTestBed/Box2DTestBed.cpp
+     Classes/Box2DTestBed/CCPhysicsDebugNodeBox2D.cpp
+     Classes/Box2DTestBed/Test.cpp
+
+    Classes/Box2DTestBed/tests/add_pair.cpp
+    Classes/Box2DTestBed/tests/apply_force.cpp
+    Classes/Box2DTestBed/tests/body_types.cpp
+    Classes/Box2DTestBed/tests/box_stack.cpp
+    Classes/Box2DTestBed/tests/breakable.cpp
+    Classes/Box2DTestBed/tests/bridge.cpp
+    Classes/Box2DTestBed/tests/bullet_test.cpp
+    Classes/Box2DTestBed/tests/cantilever.cpp
+    Classes/Box2DTestBed/tests/car.cpp
+    Classes/Box2DTestBed/tests/chain.cpp
+    Classes/Box2DTestBed/tests/chain_problem.cpp
+    Classes/Box2DTestBed/tests/character_collision.cpp
+    Classes/Box2DTestBed/tests/circle_stack.cpp
+    Classes/Box2DTestBed/tests/collision_filtering.cpp
+    Classes/Box2DTestBed/tests/collision_processing.cpp
+    Classes/Box2DTestBed/tests/compound_shapes.cpp
+    Classes/Box2DTestBed/tests/confined.cpp
+    Classes/Box2DTestBed/tests/continuous_test.cpp
+    Classes/Box2DTestBed/tests/convex_hull.cpp
+    Classes/Box2DTestBed/tests/conveyor_belt.cpp
+    Classes/Box2DTestBed/tests/distance_joint.cpp
+    Classes/Box2DTestBed/tests/distance_test.cpp
+    Classes/Box2DTestBed/tests/dominos.cpp
+    Classes/Box2DTestBed/tests/dump_loader.cpp
+    Classes/Box2DTestBed/tests/dynamic_tree.cpp
+    Classes/Box2DTestBed/tests/edge_shapes.cpp
+    Classes/Box2DTestBed/tests/edge_test.cpp
+    Classes/Box2DTestBed/tests/friction.cpp
+    Classes/Box2DTestBed/tests/gear_joint.cpp
+    Classes/Box2DTestBed/tests/heavy1.cpp
+    Classes/Box2DTestBed/tests/heavy2.cpp
+    Classes/Box2DTestBed/tests/mobile_balanced.cpp
+    Classes/Box2DTestBed/tests/mobile_unbalanced.cpp
+    Classes/Box2DTestBed/tests/motor_joint.cpp
+    Classes/Box2DTestBed/tests/pinball.cpp
+    Classes/Box2DTestBed/tests/platformer.cpp
+    Classes/Box2DTestBed/tests/polygon_collision.cpp
+    Classes/Box2DTestBed/tests/polygon_shapes.cpp
+    Classes/Box2DTestBed/tests/prismatic_joint.cpp
+    Classes/Box2DTestBed/tests/pulley_joint.cpp
+    Classes/Box2DTestBed/tests/pyramid.cpp
+    Classes/Box2DTestBed/tests/ray_cast.cpp
+    Classes/Box2DTestBed/tests/restitution.cpp
+    Classes/Box2DTestBed/tests/revolute_joint.cpp
+    Classes/Box2DTestBed/tests/rope.cpp
+    Classes/Box2DTestBed/tests/sensor.cpp
+    Classes/Box2DTestBed/tests/shape_cast.cpp
+    Classes/Box2DTestBed/tests/shape_editing.cpp
+    Classes/Box2DTestBed/tests/skier.cpp
+    Classes/Box2DTestBed/tests/slider_crank_1.cpp
+    Classes/Box2DTestBed/tests/slider_crank_2.cpp
+    Classes/Box2DTestBed/tests/theo_jansen.cpp
+    Classes/Box2DTestBed/tests/tiles.cpp
+    Classes/Box2DTestBed/tests/time_of_impact.cpp
+    Classes/Box2DTestBed/tests/tumbler.cpp
+    Classes/Box2DTestBed/tests/web.cpp
+    Classes/Box2DTestBed/tests/wheel_joint.cpp
+    Classes/Box2DTestBed/tests/wrecking_ball.cpp
+     )
+endif()
 list(APPEND GAME_HEADER
      Classes/Physics3DTest/Physics3DTest.h
      Classes/NavMeshTest/NavMeshTest.h
