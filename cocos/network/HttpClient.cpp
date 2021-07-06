@@ -248,7 +248,6 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             obs.write_bytes("Connection: Close\r\n");
 
             if (usePostData) {
-                // obs.write_bytes("Origin: yasio\r\n");
                 if (!contentTypeSpecified)
                     obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
 
