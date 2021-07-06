@@ -10,7 +10,7 @@ on:
       - .github/workflows/docs-ci.yml
 
 jobs:
-  build-documentation:
+  build-docs:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,7 @@ jobs:
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1.3.1
       with:
-          doxyfile-path: ./docs/doxygen.config
+          doxyfile-path: ./doxygen.config
           working-directory: ./docs
     
     # Deploy the HTML documentation to GitHub Pages
