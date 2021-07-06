@@ -451,7 +451,7 @@ list(APPEND GAME_HEADER
      Classes/PhysicsTest/PhysicsTest.h
      Classes/ChipmunkTest/ChipmunkTest.h
 	 )
-if(WINDOWS)
+if(WINDOWS OR MACOSX OR LINUX)
 	list(APPEND GAME_HEADER
 	    Classes/ChipmunkTestBed/Demo/ChipmunkDemo.h
 		Classes/ChipmunkTestBed/ChipmunkTestBed.h
