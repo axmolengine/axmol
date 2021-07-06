@@ -361,19 +361,17 @@ list(APPEND GAME_HEADER
    Classes/Box2DTest/Box2dTest.h
    )
 
+list(APPEND GAME_SOURCE
+   Classes/Box2DTest/Box2dTest.cpp
+)
+
 if(WINDOWS OR MACOSX OR LINUX)
     list(APPEND GAME_HEADER
         Classes/Box2DTestBed/test.h
         Classes/Box2DTestBed/Box2DTestBed.h
         Classes/Box2DTestBed/CCPhysicsDebugNodeBox2D.h
      )
-endif()
 
-list(APPEND GAME_SOURCE
-   Classes/Box2DTest/Box2dTest.cpp
-)
-
-if(WINDOWS OR MACOSX OR LINUX)
    list(APPEND GAME_SOURCE
      Classes/Box2DTestBed/Box2DTestBed.cpp
      Classes/Box2DTestBed/CCPhysicsDebugNodeBox2D.cpp
@@ -439,6 +437,7 @@ if(WINDOWS OR MACOSX OR LINUX)
     Classes/Box2DTestBed/tests/wrecking_ball.cpp
      )
 endif()
+
 list(APPEND GAME_HEADER
      Classes/Physics3DTest/Physics3DTest.h
      Classes/NavMeshTest/NavMeshTest.h
@@ -451,18 +450,17 @@ list(APPEND GAME_HEADER
      Classes/PhysicsTest/PhysicsTest.h
      Classes/ChipmunkTest/ChipmunkTest.h
 	 )
-if(WINDOWS OR MACOSX OR LINUX)
-	list(APPEND GAME_HEADER
-	    Classes/ChipmunkTestBed/demo/ChipmunkDemo.h
-		Classes/ChipmunkTestBed/ChipmunkTestBed.h
-	)
-endif()
 
 list(APPEND GAME_SOURCE
      Classes/PhysicsTest/PhysicsTest.cpp
      Classes/ChipmunkTest/ChipmunkTest.cpp
 	 )
+
 if(WINDOWS OR MACOSX OR LINUX)
+	list(APPEND GAME_HEADER
+	    Classes/ChipmunkTestBed/demo/ChipmunkDemo.h
+		Classes/ChipmunkTestBed/ChipmunkTestBed.h
+	)
    set (TESTBED_C_SORUCES
         Classes/ChipmunkTestBed/demo/Bench.c
         Classes/ChipmunkTestBed/demo/Chains.c
