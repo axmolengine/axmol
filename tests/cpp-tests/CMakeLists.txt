@@ -388,7 +388,7 @@ list(APPEND GAME_SOURCE
      Classes/PhysicsTest/PhysicsTest.cpp
      Classes/ChipmunkTest/ChipmunkTest.cpp
 	 )
-if(WINDOWS)
+if(WINDOWS OR MACOSX OR LINUX)
    set (TESTBED_C_SORUCES
         Classes/ChipmunkTestBed/Demo/Bench.c
         Classes/ChipmunkTestBed/Demo/Chains.c
@@ -415,7 +415,11 @@ if(WINDOWS)
         Classes/ChipmunkTestBed/Demo/Slice.c
         Classes/ChipmunkTestBed/Demo/Unicycle.c
         Classes/ChipmunkTestBed/Demo/Tumble.c)
-        set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
+        if(WINDOWS)
+            set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
+        else()
+            set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES LANGUAGE CXX)
+        endif()
 		list(APPEND GAME_SOURCE
 			${TESTBED_C_SORUCES}
 			Classes/ChipmunkTestBed/ChipmunkTestBed.cpp
