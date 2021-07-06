@@ -370,7 +370,7 @@ if(WINDOWS)
 endif()
 
 list(APPEND GAME_SOURCE
-   Classes/Box2DTest/Box2DTest.cpp
+   Classes/Box2DTest/Box2dTest.cpp
 )
 
 if(WINDOWS)
