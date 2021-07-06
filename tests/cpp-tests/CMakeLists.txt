@@ -388,38 +388,34 @@ list(APPEND GAME_SOURCE
      Classes/PhysicsTest/PhysicsTest.cpp
      Classes/ChipmunkTest/ChipmunkTest.cpp
 	 )
-if(WINDOWS OR MACOSX OR LINUX)
+if(WINDOWS)
    set (TESTBED_C_SORUCES
-        Classes/ChipmunkTestBed/demo/Bench.c
-        Classes/ChipmunkTestBed/demo/Chains.c
-        Classes/ChipmunkTestBed/demo/Convex.c
-        Classes/ChipmunkTestBed/demo/Crane.c
-        Classes/ChipmunkTestBed/demo/Joints.c
-        Classes/ChipmunkTestBed/demo/LogoSmash.c
-        Classes/ChipmunkTestBed/demo/OneWay.c
-        Classes/ChipmunkTestBed/demo/Planet.c
-        Classes/ChipmunkTestBed/demo/Player.c
-        Classes/ChipmunkTestBed/demo/Plink.c
-        Classes/ChipmunkTestBed/demo/Pump.c
-        Classes/ChipmunkTestBed/demo/PyramidStack.c
-        Classes/ChipmunkTestBed/demo/PyramidTopple.c
-        Classes/ChipmunkTestBed/demo/Shatter.c
-        Classes/ChipmunkTestBed/demo/Springies.c
-        Classes/ChipmunkTestBed/demo/Sticky.c
-        Classes/ChipmunkTestBed/demo/Tank.c
-        Classes/ChipmunkTestBed/demo/TheoJansen.c
-        Classes/ChipmunkTestBed/demo/Buoyancy.c
-        Classes/ChipmunkTestBed/demo/ContactGraph.c
-        Classes/ChipmunkTestBed/demo/Example.c
-        Classes/ChipmunkTestBed/demo/Query.c
-        Classes/ChipmunkTestBed/demo/Slice.c
-        Classes/ChipmunkTestBed/demo/Unicycle.c
-        Classes/ChipmunkTestBed/demo/Tumble.c)
-        if(WINDOWS)
-            set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
-        else()
-            set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES LANGUAGE CXX)
-        endif()
+        Classes/ChipmunkTestBed/Demo/Bench.c
+        Classes/ChipmunkTestBed/Demo/Chains.c
+        Classes/ChipmunkTestBed/Demo/Convex.c
+        Classes/ChipmunkTestBed/Demo/Crane.c
+        Classes/ChipmunkTestBed/Demo/Joints.c
+        Classes/ChipmunkTestBed/Demo/LogoSmash.c
+        Classes/ChipmunkTestBed/Demo/OneWay.c
+        Classes/ChipmunkTestBed/Demo/Planet.c
+        Classes/ChipmunkTestBed/Demo/Player.c
+        Classes/ChipmunkTestBed/Demo/Plink.c
+        Classes/ChipmunkTestBed/Demo/Pump.c
+        Classes/ChipmunkTestBed/Demo/PyramidStack.c
+        Classes/ChipmunkTestBed/Demo/PyramidTopple.c
+        Classes/ChipmunkTestBed/Demo/Shatter.c
+        Classes/ChipmunkTestBed/Demo/Springies.c
+        Classes/ChipmunkTestBed/Demo/Sticky.c
+        Classes/ChipmunkTestBed/Demo/Tank.c
+        Classes/ChipmunkTestBed/Demo/TheoJansen.c
+        Classes/ChipmunkTestBed/Demo/Buoyancy.c
+        Classes/ChipmunkTestBed/Demo/ContactGraph.c
+        Classes/ChipmunkTestBed/Demo/Example.c
+        Classes/ChipmunkTestBed/Demo/Query.c
+        Classes/ChipmunkTestBed/Demo/Slice.c
+        Classes/ChipmunkTestBed/Demo/Unicycle.c
+        Classes/ChipmunkTestBed/Demo/Tumble.c)
+        set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
 		list(APPEND GAME_SOURCE
 			${TESTBED_C_SORUCES}
 			Classes/ChipmunkTestBed/ChipmunkTestBed.cpp

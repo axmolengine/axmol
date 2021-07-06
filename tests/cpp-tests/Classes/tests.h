@@ -31,7 +31,7 @@
 
 
 #include "ChipmunkTest/ChipmunkTest.h"
-#if defined(CC_PLATFORM_PC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "ChipmunkTestBed/ChipmunkTestBed.h"
 #endif
 
