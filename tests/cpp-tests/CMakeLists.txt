@@ -453,7 +453,7 @@ list(APPEND GAME_HEADER
 	 )
 if(WINDOWS OR MACOSX OR LINUX)
 	list(APPEND GAME_HEADER
-	    Classes/ChipmunkTestBed/Demo/ChipmunkDemo.h
+	    Classes/ChipmunkTestBed/demo/ChipmunkDemo.h
 		Classes/ChipmunkTestBed/ChipmunkTestBed.h
 	)
 endif()
