@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -816,7 +816,7 @@ DownloaderCURL::~DownloaderCURL() {
     DLLOG("Destruct DownloaderCURL %p", this);
 }
 
-void DownloaderCURL::createCoTask(std::shared_ptr<DownloadTask>& task) {
+void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task) {
     DownloadTaskCURL* coTask = new (std::nothrow) DownloadTaskCURL(*this);
     coTask->init(task->storagePath, _impl->hints.tempFileNameSuffix);
     task->_coTask.reset(coTask); // coTask auto managed by task
