@@ -373,7 +373,7 @@ list(APPEND GAME_SOURCE
    Classes/Box2DTest/Box2dTest.cpp
 )
 
-if(WINDOWS)
+if(WINDOWS OR MACOSX OR LINUX)
    list(APPEND GAME_HEADER
      Classes/Box2DTestBed/Box2DTestBed.cpp
      Classes/Box2DTestBed/CCPhysicsDebugNodeBox2D.cpp
