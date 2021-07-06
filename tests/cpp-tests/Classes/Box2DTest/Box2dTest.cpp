@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "Box2dTest.h"
+#include "Box2DTest.h"
 #include "../testResource.h"
 #include "extensions/cocos-ext.h"
 #include "renderer/CCRenderer.h"
