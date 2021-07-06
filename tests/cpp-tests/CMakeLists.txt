@@ -363,7 +363,7 @@ list(APPEND GAME_HEADER
 
 if(WINDOWS OR MACOSX OR LINUX)
     list(APPEND GAME_HEADER
-        Classes/Box2DTestBed/Test.h
+        Classes/Box2DTestBed/test.h
         Classes/Box2DTestBed/Box2DTestBed.h
         Classes/Box2DTestBed/CCPhysicsDebugNodeBox2D.h
      )
@@ -377,7 +377,7 @@ if(WINDOWS OR MACOSX OR LINUX)
    list(APPEND GAME_SOURCE
      Classes/Box2DTestBed/Box2DTestBed.cpp
      Classes/Box2DTestBed/CCPhysicsDebugNodeBox2D.cpp
-     Classes/Box2DTestBed/Test.cpp
+     Classes/Box2DTestBed/test.cpp
 
     Classes/Box2DTestBed/tests/add_pair.cpp
     Classes/Box2DTestBed/tests/apply_force.cpp
