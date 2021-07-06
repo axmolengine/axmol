@@ -374,7 +374,7 @@ list(APPEND GAME_SOURCE
 )
 
 if(WINDOWS OR MACOSX OR LINUX)
-   list(APPEND GAME_HEADER
+   list(APPEND GAME_SOURCE
      Classes/Box2DTestBed/Box2DTestBed.cpp
      Classes/Box2DTestBed/CCPhysicsDebugNodeBox2D.cpp
      Classes/Box2DTestBed/Test.cpp
