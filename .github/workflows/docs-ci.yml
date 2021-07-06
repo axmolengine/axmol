@@ -10,7 +10,7 @@ on:
       - .github/workflows/docs-ci.yml
 
 jobs:
-  build-documentation:
+  build-docs:
     runs-on: ubuntu-latest
 
     steps:
