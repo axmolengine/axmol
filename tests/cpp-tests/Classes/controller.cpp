@@ -56,11 +56,11 @@ public:
 
 
         addTest("Box2D - Basic", []() { return new (std::nothrow) Box2DTests(); });
-#if defined(CC_PLATFORM_PC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
         addTest("Box2D - TestBed", []() { return new (std::nothrow) Box2DTestBedTests(); });
 #endif
         addTest("Chipmunk2D - Basic", []() { return new ChipmunkTests(); });
-#if defined(CC_PLATFORM_PC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
         addTest("Chipmunk2D - TestBed", []() { return new ChipmunkTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });
