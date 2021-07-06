@@ -4,6 +4,8 @@ name: docs-ci
 # events but only for the master branch
 on: 
   push:
+    branches:
+      - dev
     paths:
       - cocos/**/*
       - docs/**/*
