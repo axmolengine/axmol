@@ -122,7 +122,7 @@ void GLESDebugDraw::DrawPoint(const b2Vec2& p, float size, const b2Color& color)
 {
     if (!drawBP) return;
 
-    drawBP->drawPoint(Vec2(p.x * mRatio, p.y * mRatio), size * mRatio, Color4F(color.r, color.g, color.b, color.a));
+    drawBP->drawPoint(Vec2(p.x * mRatio, p.y * mRatio) + physicsDebugNodeOffset, size, Color4F(color.r, color.g, color.b, color.a));
 }
 
 void GLESDebugDraw::DrawString(int x, int y, const char *string, ...)
