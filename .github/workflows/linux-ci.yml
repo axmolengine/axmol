@@ -2,6 +2,9 @@ name: linux
 
 on: 
   push:
+    branches:
+      - dev
+      - main
     paths:
       - cmake/**/*
       - cocos/**/*
