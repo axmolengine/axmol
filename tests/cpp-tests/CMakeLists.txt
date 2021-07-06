@@ -358,7 +358,7 @@ if(WINDOWS OR MACOSX OR LINUX)
 endif()
 
 list(APPEND GAME_HEADER
-   Classes/Box2DTest/Box2DTest.h
+   Classes/Box2DTest/Box2dTest.h
    )
 
 if(WINDOWS)
