@@ -120,7 +120,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
-        request->setTag("GET test1");
+        request->setTag("GET test2");
         HttpClient::getInstance()->send(request);
         request->release();
     }
@@ -133,7 +133,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
-        request->setTag("GET test2");
+        request->setTag("GET test3");
         HttpClient::getInstance()->send(request);
         // don't forget to release it, pair to new
         request->release();
@@ -146,7 +146,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
-        request->setTag("GET test3");
+        request->setTag("GET test4");
         HttpClient::getInstance()->send(request);
         request->release();
     }
@@ -158,7 +158,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
-        request->setTag("GET test3");
+        request->setTag("GET test5");
         HttpClient::getInstance()->send(request);
         request->release();
     }
