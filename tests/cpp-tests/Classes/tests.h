@@ -27,7 +27,7 @@
 
 
 #include "Box2DTest/Box2dTest.h"
-//#include "Box2DTestBed/Box2dView.h"
+#include "Box2DTestBed/Box2DTestBed.h"
 
 
 #include "ChipmunkTest/ChipmunkTest.h"
