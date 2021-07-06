@@ -56,7 +56,7 @@ public:
 
 
         addTest("Box2D - Basic", []() { return new (std::nothrow) Box2DTests(); });
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if defined(CC_PLATFORM_PC)
         addTest("Box2D - TestBed", []() { return new (std::nothrow) Box2DTestBedTests(); });
 #endif
         addTest("Chipmunk2D - Basic", []() { return new ChipmunkTests(); });
