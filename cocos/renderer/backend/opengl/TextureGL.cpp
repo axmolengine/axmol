@@ -23,12 +23,12 @@
  ****************************************************************************/
  
 #include "TextureGL.h"
-#include "base/ccMacros.h"
 #include "base/CCEventListenerCustom.h"
 #include "base/CCEventDispatcher.h"
 #include "base/CCEventType.h"
 #include "base/CCDirector.h"
 #include "platform/CCPlatformConfig.h"
+#include "renderer/backend/opengl/MacrosGL.h"
 #include "renderer/backend/opengl/UtilsGL.h"
 
 CC_BACKEND_BEGIN

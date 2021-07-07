@@ -94,19 +94,11 @@ default gl blend src function. Compatible with premultiplied alpha images.
 #define CC_BLEND_DST cocos2d::backend::BlendFactor::ONE_MINUS_SRC_ALPHA
 
 
-/** @def CC_NODE_DRAW_SETUP
+/** @def CC_NODE_DRAW_SETUP [DEPRECATED]
  Helpful macro that setups the GL server state, the correct GL program and sets the Model View Projection matrix
  @since v2.0
  */
-#define CC_NODE_DRAW_SETUP() \
-do { \
-    CCASSERT(getGLProgram(), "No shader program set for this node"); \
-    { \
-        getGLProgram()->use(); \
-        getGLProgram()->setUniformsForBuiltins(_modelViewTransform); \
-    } \
-} while(0)
-
+#define CC_NODE_DRAW_SETUP()
 
  /** @def CC_DIRECTOR_END
   Stops and removes the director from memory.
@@ -231,46 +223,6 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 #define CC_PROFILER_STOP_INSTANCE(__id__, __name__) do {} while(0)
 #define CC_PROFILER_RESET_INSTANCE(__id__, __name__) do {} while(0)
 
-#endif
-
-#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
-#define CHECK_GL_ERROR_DEBUG()
-#else
-#define CHECK_GL_ERROR_DEBUG() \
-    do { \
-        GLenum __error = glGetError(); \
-        if(__error) { \
-            cocos2d::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-        } \
-    } while (false)
-#define CHECK_GL_ERROR_ABORT() \
-    do { \
-        GLenum __error = glGetError(); \
-        if(__error) { \
-            cocos2d::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-            assert(false);\
-        } \
-    } while (false)
-#endif
-
-
-/**
- * GL assertion that can be used for any OpenGL function call.
- *
- * This macro will assert if an error is detected when executing
- * the specified GL code. This macro will do nothing in release
- * mode and is therefore safe to use for realtime/per-frame GL
- * function calls.
- */
-#if defined(NDEBUG) || (defined(__APPLE__) && !defined(DEBUG))
-#define CC_GL_ASSERT( gl_code ) gl_code
-#else
-#define CC_GL_ASSERT( gl_code ) do \
-{ \
-gl_code; \
-__gl_error_code = glGetError(); \
-CC_ASSERT(__gl_error_code == GL_NO_ERROR, "Error"); \
-} while(0)
 #endif
 
  /*********************************/

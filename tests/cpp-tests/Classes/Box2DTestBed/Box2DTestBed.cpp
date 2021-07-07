@@ -219,12 +219,9 @@ void Box2DView::onDraw(const Mat4& transform, uint32_t flags)
 	director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
 
-	// GL::enableVertexAttribs( cocos2d::GL::VERTEX_ATTRIB_FLAG_POSITION );
-
 	drawBox2D->clear();
 	m_test->Step(&settings);
 	m_test->m_world->DebugDraw();
-	CHECK_GL_ERROR_DEBUG();
 
 	director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }

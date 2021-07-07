@@ -26,7 +26,7 @@
 #include "ProgramGL.h"
 #include "ShaderModuleGL.h"
 #include "renderer/backend/Types.h"
-#include "base/ccMacros.h"
+#include "renderer/backend/opengl/MacrosGL.h"
 #include "base/CCDirector.h"
 #include "base/CCEventDispatcher.h"
 #include "base/CCEventType.h"
