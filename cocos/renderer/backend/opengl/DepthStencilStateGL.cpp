@@ -25,7 +25,7 @@
 #include "DepthStencilStateGL.h"
 #include "platform/CCGL.h"
 
-#include "base/ccMacros.h"
+#include "renderer/backend/opengl/MacrosGL.h"
 #include "renderer/backend/opengl/UtilsGL.h"
 
 CC_BACKEND_BEGIN

@@ -24,10 +24,10 @@
  
 #include "BufferGL.h"
 #include <cassert>
-#include "base/ccMacros.h"
 #include "base/CCDirector.h"
 #include "base/CCEventType.h"
 #include "base/CCEventDispatcher.h"
+#include "renderer/backend/opengl/MacrosGL.h"
 
 CC_BACKEND_BEGIN
 
