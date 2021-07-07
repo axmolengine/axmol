@@ -24,9 +24,6 @@ jobs:
       with:
           doxyfile-path: ./doxygen.config
           working-directory: ./docs
-          
-    - name: Add custom domain
-      run: sudo echo -n "docs.adxe.org">/github/workspace/docs/html/CNAME
     
     # Deploy the HTML documentation to GitHub Pages
     - name: GH Pages Deployment
@@ -38,3 +35,4 @@ jobs:
         allow_empty_commit: false
         force_orphan: true
         publish_branch: gh-pages
+        cname: docs.adxe.org
