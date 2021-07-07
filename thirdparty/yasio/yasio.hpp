@@ -1055,7 +1055,7 @@ private:
 #endif
 
 #if defined(YASIO_HAVE_CARES)
-  static void ares_getaddrinfo_cb(void* arg, int status, int timeouts, ares_addrinfo* answerlist);
+  YASIO__DECL static void ares_getaddrinfo_cb(void* arg, int status, int timeouts, ares_addrinfo* answerlist);
   void ares_work_started() { ++ares_outstanding_work_; }
   void ares_work_finished()
   {
