@@ -355,21 +355,24 @@ long getCharacterCountInUTF8String(const std::string& utf8) {
 }
 
 bool hasNonAsciiUTF8(const char* str, size_t len) {
-    return detectNonAsciiUTF8(str, len, nullptr);
+    return detectNonAsciiUTF8(str, len, true, nullptr);
 }
 
-bool detectNonAsciiUTF8(const char* str, size_t len, bool* pAllCharsAreAscii) {
+bool detectNonAsciiUTF8(const char* str, size_t len, bool restrictUTF8, bool* pAllCharsAreAscii) {
     bool allCharsAreAscii  = true;
     bool nonAsciiUTF8Found = false;
+    bool invalidUTF8Found  = false;
     for (size_t i = 0; i < len;) {
         auto& current = str[i];
         int numByte   = getNumBytesForUTF8(current);
         if (numByte > 1) {
+            allCharsAreAscii = false;
             if (isLegalUTF8Sequence((const UTF8*) &current, (const UTF8*) &current + numByte)) {
                 nonAsciiUTF8Found = true;
+            } else { // invalid utf-8 sequence found
+                invalidUTF8Found = true;
                 break;
             }
-            allCharsAreAscii = false;
         } else { // not a valid utf-8 chars
             if ((current & 0x80) != 0 || current == 0)
                 allCharsAreAscii = false;
@@ -380,7 +383,7 @@ bool detectNonAsciiUTF8(const char* str, size_t len, bool* pAllCharsAreAscii) {
     if (pAllCharsAreAscii)
         *pAllCharsAreAscii = allCharsAreAscii;
 
-    return nonAsciiUTF8Found;
+    return nonAsciiUTF8Found && (!invalidUTF8Found || !restrictUTF8);
 }
 
 bool isLegalUTF8String(const char* str, size_t len) {
