@@ -21,7 +21,7 @@
 * Usefull PRs from **you** are welcome (review/merge ASAP)
   
 ### Highlight Features
-* Reimplent HttpClient based on yasio for process http request concorrently.
+* Reimplement HttpClient based on yasio for process http request concorrently.
 * **More clearly third-party libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on adxe**
 * Refactor AudioEngine, OpenAL for all platforms
   * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
@@ -42,10 +42,11 @@
 * ETC2 RGB/RGBA support    (if hardware decoder not present, use software decoder)
 * **ImGui integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
 
+Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information too.
+
 ### [Roadmap](https://github.com/adxeproject/adxe/issues/1)
 
 ### Quick Start
-Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information too.
 
 #### Common Requirement [Python](https://www.python.org/downloads/)
   * Python-2.7.17+, Python-3.7+ 
