@@ -24,6 +24,9 @@ jobs:
       with:
           doxyfile-path: ./doxygen.config
           working-directory: ./docs
+          
+    - name: Add custom domain
+      run: echo -n "docs.adxe.org">CNAME
     
     # Deploy the HTML documentation to GitHub Pages
     - name: GH Pages Deployment
