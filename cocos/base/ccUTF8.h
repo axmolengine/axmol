@@ -221,7 +221,7 @@ CC_DLL bool hasNonAsciiUTF8(const char* str, size_t len);
 /**
  *  @brief Whether contains utf-8 or all characters are ascii
  */
-CC_DLL bool detectNonAsciiUTF8(const char* str, size_t len, bool* pAllCharsAreAscii);
+CC_DLL bool detectNonAsciiUTF8(const char* str, size_t len, bool restrictUTF8, bool* pAllCharsAreAscii);
 
 /**
  *  @brief isLegalUTF8String, contains ascii characters
