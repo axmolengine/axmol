@@ -27,7 +27,8 @@ jobs:
           
     - name: Add custom domain
       run: |
-        sudo echo -n "docs.adxe.org">./docs/html/CNAME
+        pwd
+        sudo echo -n "docs.adxe.org">docs/html/CNAME
     
     # Deploy the HTML documentation to GitHub Pages
     - name: GH Pages Deployment
