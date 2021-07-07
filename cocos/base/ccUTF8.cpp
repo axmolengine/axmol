@@ -362,15 +362,17 @@ bool detectNonAsciiUTF8(const char* str, size_t len, bool* pAllCharsAreAscii) {
     bool allCharsAreAscii  = true;
     bool nonAsciiUTF8Found = false;
     for (size_t i = 0; i < len;) {
-        int numByte = getNumBytesForUTF8(str[i]);
-        if (isLegalUTF8Sequence((const UTF8*) &str[i], (const UTF8*) &str[i] + numByte)) {
-            if (numByte > 1) {
+        auto& current = str[i];
+        int numByte   = getNumBytesForUTF8(current);
+        if (numByte > 1) {
+            if (isLegalUTF8Sequence((const UTF8*) &current, (const UTF8*) &current + numByte)) {
                 nonAsciiUTF8Found = true;
-                allCharsAreAscii = false;
                 break;
             }
-        } else { // not a valid utf-8 chars
             allCharsAreAscii = false;
+        } else { // not a valid utf-8 chars
+            if ((current & 0x80) != 0 || current == 0)
+                allCharsAreAscii = false;
         }
         i += numByte;
     }
