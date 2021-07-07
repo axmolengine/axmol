@@ -100,6 +100,7 @@ Node::Node()
 , _reorderChildDirty(false)
 , _isTransitionFinished(false)
 #if CC_ENABLE_SCRIPT_BINDING
+, _scriptHandler(0)
 , _updateScriptHandler(0)
 #endif
 , _componentContainer(nullptr)
