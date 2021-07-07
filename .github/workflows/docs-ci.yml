@@ -26,7 +26,8 @@ jobs:
           working-directory: ./docs
           
     - name: Add custom domain
-      run: echo -n "docs.adxe.org">CNAME
+      run: |
+        echo -n "docs.adxe.org">./docs/html/CNAME
     
     # Deploy the HTML documentation to GitHub Pages
     - name: GH Pages Deployment
