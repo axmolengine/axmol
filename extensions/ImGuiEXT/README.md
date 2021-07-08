@@ -44,7 +44,7 @@ More about use imgui widgets, please see: https://github.com/ocornut/imgui
 * macOS
 
 ## Known issues
-* Can't enable muti-viewports on macOS, so we disable it for macOS
+* Can't enable muti-viewports on macOS, so we disable this feature for macOS.
 
 ## Other resources of ImGui
 * https://github.com/ocornut/imgui/wiki/Bindings
