@@ -206,6 +206,11 @@
 - Version: 0.8.0
 - License: BSD-2-Clause
 
+## yaml-cpp
+- Upstream: https://github.com/jbeder/yaml-cpp
+- Version: git 9ee3928 (884)
+- License: MIT
+
 ## yasio
 - Upstream: https://github.com/yasio/yasio
 - Version: 3.37.3
