@@ -482,7 +482,7 @@ namespace
 }
 
 /*
-* Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and engine-x only support pvrtc and etc1
+* Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and adxe only support pvrtc and etc1
 * see: https://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
 */
 static backend::PixelFormat getDevicePVRPixelFormat(backend::PixelFormat format)

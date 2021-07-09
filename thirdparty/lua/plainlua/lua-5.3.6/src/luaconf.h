@@ -784,7 +784,7 @@
 /*
 ** Local configuration. You can use this space to add your redefinitions
 ** without modifying the main part of the file.
-** !!!The follow definiations is engine-x specific, don't overwrite with official lua
+** !!!The follow definiations is adxe specific, don't overwrite with official lua
 */
 /*
 @@ Whether lua bytecode compatible with x86/x64 apps
