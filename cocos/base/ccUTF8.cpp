@@ -2,8 +2,9 @@
  Copyright (c) 2014 cocos2d-x.org
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -369,9 +370,12 @@ bool detectNonAsciiUTF8(const char* str, size_t len, bool restrictUTF8, bool* pA
             allCharsAreAscii = false;
             if (isLegalUTF8Sequence((const UTF8*) &current, (const UTF8*) &current + numByte)) {
                 nonAsciiUTF8Found = true;
+                if(!restrictUTF8)
+                    break;
             } else { // invalid utf-8 sequence found
                 invalidUTF8Found = true;
-                break;
+                if(restrictUTF8)
+                    break;
             }
         } else { // not a valid utf-8 chars
             if ((current & 0x80) != 0 || current == 0)
