@@ -49,7 +49,7 @@ function build_osx()
     # cd $ADXE_ROOT/cocos_new_test
     cd $ADXE_ROOT
     mkdir -p build
-    cmake -S . -B build -GXcode -DBUILD_EXTENSION_IMGUIEXT=ON -DBUILD_EXT_ALSOFT=ON
+    cmake -S . -B build -GXcode -DBUILD_EXTENSION_IMGUIEXT=ON -DBUILD_DEP_ALSOFT=ON
     cmake --build build --config Release --target cpp-tests -- -quiet
     #xcodebuild -project adxe.xcodeproj -alltargets -jobs $NUM_OF_CORES build  | xcpretty
     ##the following commands must not be removed
@@ -68,7 +68,7 @@ function build_ios()
     cd $ADXE_ROOT
     # mkdir -p build
 
-    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -DBUILD_EXT_ALSOFT=ON
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -DBUILD_DEP_ALSOFT=ON
     # cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS -DENABLE_ARC=0   # too much logs on console when "cmake --build ."
     cmake --build build --config Release --target cpp-tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" 
 
@@ -193,9 +193,9 @@ function generate_pull_request_for_binding_codes_and_cocosfiles()
     popd
 }
 
-function run_pull_request()
+function run_build()
 {
-    echo "Building pull request ..."
+    echo "Building..."
 
     if [ "$BUILD_TARGET" == "android_cocos_new_test" ]; then
         source ../environment.sh
@@ -321,17 +321,19 @@ function run_after_merge()
     generate_pull_request_for_binding_codes_and_cocosfiles
 }
 
+run_build
+
 # build pull request
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-    run_pull_request
-fi
+# if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+#     run_pull_request
+# fi
 
 # run after merging
 # - make cocos robot to send PR to cocos2d-x for new binding codes
 # - generate cocos_files.json for template
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    # only one job need to send PR, linux virtual machine has better performance
-    if [ $TRAVIS_OS_NAME == "linux" ] && [ x$GEN_BINDING_AND_COCOSFILE == x"true" ]; then
-        run_after_merge
-    fi
-fi
+# if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+#     # only one job need to send PR, linux virtual machine has better performance
+#     if [ $TRAVIS_OS_NAME == "linux" ] && [ x$GEN_BINDING_AND_COCOSFILE == x"true" ]; then
+#         run_after_merge
+#     fi
+# fi
