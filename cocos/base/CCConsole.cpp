@@ -70,7 +70,7 @@
 #endif
 
 // !FIXME: the previous version of cocos2d::log not thread safe
-// since engine-x make it multi-threading safe by default
+// since adxe make it multi-threading safe by default
 #if !defined(CC_LOG_MULTITHREAD)
 #define CC_LOG_MULTITHREAD 1
 #endif

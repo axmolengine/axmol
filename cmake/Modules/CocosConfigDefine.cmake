@@ -98,7 +98,7 @@ endif()
 function(use_cocos2dx_compile_define target)
     target_compile_definitions(${target} PUBLIC $<$<CONFIG:Debug>:COCOS2D_DEBUG=1>)
     
-    # !important engine-x not use double precision
+    # !important adxe not use double precision
     # target_compile_definitions(${target} PUBLIC CP_USE_CGTYPES=0)
     # target_compile_definitions(${target} PUBLIC CP_USE_DOUBLES=0)
     
