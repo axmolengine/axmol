@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -38,51 +38,47 @@ namespace yasio
 {
 // yasio::format_traits: the vsnprintf/vswprintf wrapper
 // !!! if '_BufferCount' had been sufficiently large, not counting the terminating null character.
-template <typename _Elem> struct format_traits
-{};
-template <> struct format_traits<char>
-{
-  static int format(char* const _Buffer, size_t const _BufferCount, char const* const _Format,
-                    va_list _ArgList)
+template <typename _Elem> struct format_traits {};
+template <> struct format_traits<char> {
+  static int format(char* const _Buffer, size_t const _BufferCount, char const* const _Format, va_list _ArgList)
   {
     return vsnprintf(_Buffer, _BufferCount, _Format, _ArgList);
   }
   static const char* report_error() { return "yasio::_strfmt: an error is encountered!"; }
 };
-template <> struct format_traits<wchar_t>
-{
-  static int format(wchar_t* const _Buffer, size_t const _BufferCount, wchar_t const* const _Format,
-                    va_list _ArgList)
+template <> struct format_traits<wchar_t> {
+  static int format(wchar_t* const _Buffer, size_t const _BufferCount, wchar_t const* const _Format, va_list _ArgList)
   {
     return vswprintf(_Buffer, _BufferCount, _Format, _ArgList);
   }
   static const wchar_t* report_error() { return L"yasio::_strfmt: an error is encountered!"; }
 };
 
-template <class _Elem, class _Traits = std::char_traits<_Elem>,
-          class _Alloc = std::allocator<_Elem>>
-inline std::basic_string<_Elem, _Traits, _Alloc> _vstrfmt(size_t n, const _Elem* format,
-                                                          va_list initialized_args)
+template <class _Elem, class _Traits = std::char_traits<_Elem>, class _Alloc = std::allocator<_Elem>>
+inline bool _vstrfmt(std::basic_string<_Elem, _Traits, _Alloc>& buf, size_t initial_buf_size, const _Elem* format, va_list initialized_args)
 {
+  bool ok = true;
   va_list args;
-  std::basic_string<_Elem, _Traits, _Alloc> buf(n, 0);
+
+  auto offset = buf.size();
+  buf.resize(offset + initial_buf_size);
 
   va_copy(args, initialized_args);
-  int nret = format_traits<_Elem>::format(&buf.front(), buf.length() + 1, format, args);
+  int nret = format_traits<_Elem>::format(&buf.front() + offset, buf.length() - offset + 1, format, args);
   va_end(args);
 
   if (nret >= 0)
   {
-    if ((unsigned int)nret < buf.length())
+    if ((unsigned int)nret < (buf.length() - offset))
     {
-      buf.resize(nret);
+      buf.resize(offset + nret);
     }
-    else if ((unsigned int)nret > buf.length())
+    else if ((unsigned int)nret > (buf.length() - offset))
     { // handle return required length when buffer insufficient
-      buf.resize(nret);
+      buf.resize(offset + nret);
 
       va_copy(args, initialized_args);
-      nret = format_traits<_Elem>::format(&buf.front(), buf.length() + 1, format, args);
+      nret = format_traits<_Elem>::format(&buf.front() + offset, buf.length() - offset + 1, format, args);
       va_end(args);
     }
     // else equals, do nothing.
@@ -107,24 +103,36 @@ inline std::basic_string<_Elem, _Traits, _Alloc> _vstrfmt(size_t n, const _Elem*
     };
     do
     {
-      buf.resize(buf.length() << 1);
+      buf.resize(offset + ((buf.length() - offset) << 1));
 
       va_copy(args, initialized_args);
-      nret = format_traits<_Elem>::format(&buf.front(), buf.length() + 1, format, args);
+      nret = format_traits<_Elem>::format(&buf.front() + offset, buf.length() - offset + 1, format, args);
       va_end(args);
 
-    } while (nret < 0 && buf.size() <= enlarge_limits);
+    } while (nret < 0 && (buf.length() - offset) <= enlarge_limits);
     if (nret > 0)
-      buf.resize(nret);
+      buf.resize(offset + nret);
     else
-      buf = format_traits<_Elem>::report_error();
+      ok = false;
   }
 
+  return ok;
+}
+
+template <class _Elem, class _Traits = std::char_traits<_Elem>, class _Alloc = std::allocator<_Elem>>
+inline std::basic_string<_Elem, _Traits, _Alloc> _vstrfmt(size_t initial_buf_size, const _Elem* format, va_list initialized_args)
+{
+  std::basic_string<_Elem, _Traits, _Alloc> buf;
+  if (!_vstrfmt(buf, initial_buf_size, format, initialized_args))
+  {
+    buf.clear();
+    buf.shrink_to_fit();
+    buf = format_traits<_Elem>::report_error();
+  }
   return buf;
 }
 
-template <class _Elem, class _Traits = std::char_traits<_Elem>,
-          class _Alloc = std::allocator<_Elem>>
+template <class _Elem, class _Traits = std::char_traits<_Elem>, class _Alloc = std::allocator<_Elem>>
 inline std::basic_string<_Elem, _Traits, _Alloc> basic_strfmt(size_t n, const _Elem* format, ...)
 {
   va_list initialized_args;
