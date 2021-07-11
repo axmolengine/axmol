@@ -22,6 +22,7 @@
 #include "box2d/box2d.h"
 #include "cocos2d.h"
 
+
 struct b2AABB;
 
 extern cocos2d::DrawNode* drawBox2D;
