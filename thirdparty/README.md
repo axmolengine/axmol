@@ -173,7 +173,7 @@
 
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
-- Version: 2.26 with bmp load fixes
+- Version: 2.27
 - License: MIT
 
 ## tinydir
