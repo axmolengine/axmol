@@ -71,8 +71,8 @@ public:
 
 		float ke = 0.5f * massData.mass * b2Dot(v, v) + 0.5f * massData.I * omega * omega;
 
-		//g_debugDraw.DrawString(5, m_textLine, "kinetic energy = %.6f", ke);
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "kinetic energy = %.6f", ke);
+		m_textLine += m_textIncrement;
 
 		Test::Step(settings);
 	}

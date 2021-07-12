@@ -156,13 +156,13 @@ public:
 		
 		ratio = m_joint4->GetRatio();
 		value = m_joint1->GetJointAngle() + ratio * m_joint2->GetJointAngle();
-		//g_debugDraw.DrawString(5, m_textLine, "theta1 + %4.2f * theta2 = %4.2f", (float) ratio, (float) value);
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "theta1 + %4.2f * theta2 = %4.2f", (float) ratio, (float) value);
+		m_textLine += m_textIncrement;
 
 		ratio = m_joint5->GetRatio();
 		value = m_joint2->GetJointAngle() + ratio * m_joint3->GetJointTranslation();
-		//g_debugDraw.DrawString(5, m_textLine, "theta2 + %4.2f * delta = %4.2f", (float) ratio, (float) value);
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "theta2 + %4.2f * delta = %4.2f", (float) ratio, (float) value);
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

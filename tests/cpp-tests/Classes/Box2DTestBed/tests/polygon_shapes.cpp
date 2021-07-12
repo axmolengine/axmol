@@ -60,7 +60,7 @@ public:
 		{
 			b2Color color(0.95f, 0.95f, 0.6f);
 			b2Vec2 center = body->GetWorldCenter();
-		//	g_debugDraw->DrawPoint(center, 5.0f, color);
+			g_debugDraw->DrawPoint(center, 5.0f, color);
 			++m_count;
 		}
 
@@ -196,34 +196,34 @@ public:
 		}
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_1:
-	//	case GLFW_KEY_2:
-	//	case GLFW_KEY_3:
-	//	case GLFW_KEY_4:
-	//	case GLFW_KEY_5:
-	//		Create(key - GLFW_KEY_1);
-	//		break;
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_1:
+		case GLFW_KEY_2:
+		case GLFW_KEY_3:
+		case GLFW_KEY_4:
+		case GLFW_KEY_5:
+			Create(key - GLFW_KEY_1);
+			break;
 
-	//	case GLFW_KEY_A:
-	//		for (int32 i = 0; i < e_maxBodies; i += 2)
-	//		{
-	//			if (m_bodies[i])
-	//			{
-	//				bool enabled = m_bodies[i]->IsEnabled();
-	//				m_bodies[i]->SetEnabled(!enabled);
-	//			}
-	//		}
-	//		break;
+		case GLFW_KEY_A:
+			for (int32 i = 0; i < e_maxBodies; i += 2)
+			{
+				if (m_bodies[i])
+				{
+					bool enabled = m_bodies[i]->IsEnabled();
+					m_bodies[i]->SetEnabled(!enabled);
+				}
+			}
+			break;
 
-	//	case GLFW_KEY_D:
-	//		DestroyBody();
-	//		break;
-	//	}
-	//}
+		case GLFW_KEY_D:
+			DestroyBody();
+			break;
+		}
+	}
 
 	void Step(Settings* settings) override
 	{
@@ -233,7 +233,7 @@ public:
 		callback.m_circle.m_radius = 2.0f;
 		callback.m_circle.m_p.Set(0.0f, 1.1f);
 		callback.m_transform.SetIdentity();
-	//	callback.g_debugDraw = &g_debugDraw;
+		callback.g_debugDraw = &g_debugDraw;
 
 		b2AABB aabb;
 		callback.m_circle.ComputeAABB(&aabb, callback.m_transform, 0);
@@ -241,14 +241,14 @@ public:
 		m_world->QueryAABB(&callback, aabb);
 
 		b2Color color(0.4f, 0.7f, 0.8f);
-		//g_debugDraw.DrawCircle(callback.m_circle.m_p, callback.m_circle.m_radius, color);
+		g_debugDraw.DrawCircle(callback.m_circle.m_p, callback.m_circle.m_radius, color);
 
-		//g_debugDraw.DrawString(5, m_textLine, "Press 1-5 to drop stuff, maximum of %d overlaps detected", PolygonShapesCallback::e_maxCount);
-		//m_textLine += m_textIncrement;
-		//g_debugDraw.DrawString(5, m_textLine, "Press 'a' to enable/disable some bodies");
-		//m_textLine += m_textIncrement;
-		//g_debugDraw.DrawString(5, m_textLine, "Press 'd' to destroy a body");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press 1-5 to drop stuff, maximum of %d overlaps detected", PolygonShapesCallback::e_maxCount);
+		m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press 'a' to enable/disable some bodies");
+		m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press 'd' to destroy a body");
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

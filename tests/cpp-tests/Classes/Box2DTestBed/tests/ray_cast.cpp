@@ -345,24 +345,24 @@ public:
 	{
 		Test::Step(settings);
 
-		//g_debugDraw.DrawString(5, m_textLine, "Shape 1 is intentionally ignored by the ray");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Shape 1 is intentionally ignored by the ray");
+		m_textLine += m_textIncrement;
 		switch (m_mode)
 		{
 		case e_closest:
-		//	g_debugDraw.DrawString(5, m_textLine, "Ray-cast mode: closest - find closest fixture along the ray");
+			g_debugDraw.DrawString(5, m_textLine, "Ray-cast mode: closest - find closest fixture along the ray");
 			break;
 		
 		case e_any:
-	//		g_debugDraw.DrawString(5, m_textLine, "Ray-cast mode: any - check for obstruction");
+			g_debugDraw.DrawString(5, m_textLine, "Ray-cast mode: any - check for obstruction");
 			break;
 
 		case e_multiple:
-	//		g_debugDraw.DrawString(5, m_textLine, "Ray-cast mode: multiple - gather multiple fixtures");
+			g_debugDraw.DrawString(5, m_textLine, "Ray-cast mode: multiple - gather multiple fixtures");
 			break;
 		}
 
-//		m_textLine += m_textIncrement;
+		m_textLine += m_textIncrement;
 
 		float angle = b2_pi * m_degrees / 180.0f;
 		float L = 11.0f;
@@ -377,14 +377,14 @@ public:
 
 			if (callback.m_hit)
 			{
-			//	g_debugDraw.DrawPoint(callback.m_point, 5.0f, b2Color(0.4f, 0.9f, 0.4f));
-			//	g_debugDraw.DrawSegment(point1, callback.m_point, b2Color(0.8f, 0.8f, 0.8f));
+				g_debugDraw.DrawPoint(callback.m_point, 5.0f, b2Color(0.4f, 0.9f, 0.4f));
+				g_debugDraw.DrawSegment(point1, callback.m_point, b2Color(0.8f, 0.8f, 0.8f));
 				b2Vec2 head = callback.m_point + 0.5f * callback.m_normal;
-			//	g_debugDraw.DrawSegment(callback.m_point, head, b2Color(0.9f, 0.9f, 0.4f));
+				g_debugDraw.DrawSegment(callback.m_point, head, b2Color(0.9f, 0.9f, 0.4f));
 			}
 			else
 			{
-			//	g_debugDraw.DrawSegment(point1, point2, b2Color(0.8f, 0.8f, 0.8f));
+				g_debugDraw.DrawSegment(point1, point2, b2Color(0.8f, 0.8f, 0.8f));
 			}
 		}
 		else if (m_mode == e_any)
@@ -394,30 +394,30 @@ public:
 
 			if (callback.m_hit)
 			{
-			//	g_debugDraw.DrawPoint(callback.m_point, 5.0f, b2Color(0.4f, 0.9f, 0.4f));
-			//	g_debugDraw.DrawSegment(point1, callback.m_point, b2Color(0.8f, 0.8f, 0.8f));
+				g_debugDraw.DrawPoint(callback.m_point, 5.0f, b2Color(0.4f, 0.9f, 0.4f));
+				g_debugDraw.DrawSegment(point1, callback.m_point, b2Color(0.8f, 0.8f, 0.8f));
 				b2Vec2 head = callback.m_point + 0.5f * callback.m_normal;
-			//	g_debugDraw.DrawSegment(callback.m_point, head, b2Color(0.9f, 0.9f, 0.4f));
+				g_debugDraw.DrawSegment(callback.m_point, head, b2Color(0.9f, 0.9f, 0.4f));
 			}
 			else
 			{
-			//	g_debugDraw.DrawSegment(point1, point2, b2Color(0.8f, 0.8f, 0.8f));
+				g_debugDraw.DrawSegment(point1, point2, b2Color(0.8f, 0.8f, 0.8f));
 			}
 		}
 		else if (m_mode == e_multiple)
 		{
 			RayCastMultipleCallback callback;
 			m_world->RayCast(&callback, point1, point2);
-		//	g_debugDraw.DrawSegment(point1, point2, b2Color(0.8f, 0.8f, 0.8f));
+			g_debugDraw.DrawSegment(point1, point2, b2Color(0.8f, 0.8f, 0.8f));
 
 			for (int32 i = 0; i < callback.m_count; ++i)
 			{
 				b2Vec2 p = callback.m_points[i];
 				b2Vec2 n = callback.m_normals[i];
-		//		g_debugDraw.DrawPoint(p, 5.0f, b2Color(0.4f, 0.9f, 0.4f));
-		//		g_debugDraw.DrawSegment(point1, p, b2Color(0.8f, 0.8f, 0.8f));
+				g_debugDraw.DrawPoint(p, 5.0f, b2Color(0.4f, 0.9f, 0.4f));
+				g_debugDraw.DrawSegment(point1, p, b2Color(0.8f, 0.8f, 0.8f));
 				b2Vec2 head = p + 0.5f * n;
-		//		g_debugDraw.DrawSegment(p, head, b2Color(0.9f, 0.9f, 0.4f));
+				g_debugDraw.DrawSegment(p, head, b2Color(0.9f, 0.9f, 0.4f));
 			}
 		}
 

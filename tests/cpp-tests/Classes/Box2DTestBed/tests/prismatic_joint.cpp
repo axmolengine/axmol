@@ -99,9 +99,9 @@ public:
 	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
-//		float force = m_joint->GetMotorForce(settings.m_hertz);
-		//g_debugDraw.DrawString(5, m_textLine, "Motor Force = %4.0f", force);
-		//m_textLine += m_textIncrement;
+		float force = m_joint->GetMotorForce(settings->hz);
+		g_debugDraw.DrawString(5, m_textLine, "Motor Force = %4.0f", force);
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

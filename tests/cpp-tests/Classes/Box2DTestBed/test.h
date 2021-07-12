@@ -125,7 +125,6 @@ struct ContactPoint
 	float tangentImpulse;
 	float separation;
 };
-
 class Test : public b2ContactListener
 {
 public:
@@ -133,17 +132,18 @@ public:
 	Test();
 	virtual ~Test();
 
-    void DrawTitle(const char *string);
+	void DrawTitle(const char* string);
 	virtual void Step(Settings* settings);
-	virtual void Keyboard(unsigned char key) { B2_NOT_USED(key); }
-	virtual void KeyboardUp(unsigned char key) { B2_NOT_USED(key); }
+	virtual void UpdateUI() {}
+	virtual void Keyboard(int key) { B2_NOT_USED(key); }
+	virtual void KeyboardUp(int key) { B2_NOT_USED(key); }
 	void ShiftMouseDown(const b2Vec2& p);
-	virtual bool MouseDown(const b2Vec2& p);
+	virtual void MouseDown(const b2Vec2& p);
 	virtual void MouseUp(const b2Vec2& p);
-	void MouseMove(const b2Vec2& p);
+	virtual void MouseMove(const b2Vec2& p);
 	void LaunchBomb();
 	void LaunchBomb(const b2Vec2& position, const b2Vec2& velocity);
-	
+
 	void SpawnBomb(const b2Vec2& worldPt);
 	void CompleteBombSpawn(const b2Vec2& p);
 
@@ -151,10 +151,10 @@ public:
 	virtual void JointDestroyed(b2Joint* joint) { B2_NOT_USED(joint); }
 
 	// Callbacks for derived classes.
-	virtual void BeginContact(b2Contact* contact) { B2_NOT_USED(contact); }
-	virtual void EndContact(b2Contact* contact) { B2_NOT_USED(contact); }
-	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
-	virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
+	virtual void BeginContact(b2Contact* contact)  override { B2_NOT_USED(contact); }
+	virtual void EndContact(b2Contact* contact)  override { B2_NOT_USED(contact); }
+	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override;
+	virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) override
 	{
 		B2_NOT_USED(contact);
 		B2_NOT_USED(impulse);
@@ -162,27 +162,28 @@ public:
 
 	void ShiftOrigin(const b2Vec2& newOrigin);
 
+	DebugDraw g_debugDraw;
+	b2World* m_world;
+
 protected:
 	friend class DestructionListener;
 	friend class BoundaryListener;
 	friend class ContactListener;
-    friend class Box2DView;
 
 	b2Body* m_groundBody;
 	b2AABB m_worldAABB;
 	ContactPoint m_points[k_maxContactPoints];
 	int32 m_pointCount;
 	DestructionListener m_destructionListener;
-	GLESDebugDraw m_debugDraw;
 	int32 m_textLine;
-	b2World* m_world;
+
 	b2Body* m_bomb;
 	b2MouseJoint* m_mouseJoint;
 	b2Vec2 m_bombSpawnPoint;
 	bool m_bombSpawning;
 	b2Vec2 m_mouseWorld;
 	int32 m_stepCount;
-
+	int32 m_textIncrement;
 	b2Profile m_maxProfile;
 	b2Profile m_totalProfile;
 };

@@ -36,6 +36,8 @@ extern int g_testCount;
 
 Settings settings;
 
+extern cocos2d::Vec2 physicsDebugNodeOffset;
+cocos2d::Label* labelDebugDraw;
 
 enum
 {
@@ -102,18 +104,24 @@ bool Box2DTestBed::initWithEntryID(int entryId)
 	label->setPosition(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height - 50);
 
 	// Adds touch event listener
-	auto listener = EventListenerTouchOneByOne::create();
-	listener->setSwallowTouches(true);
+	_touchListener = EventListenerTouchOneByOne::create();
+	_touchListener->setSwallowTouches(true);
 
-	listener->onTouchBegan = CC_CALLBACK_2(Box2DTestBed::onTouchBegan, this);
-	listener->onTouchMoved = CC_CALLBACK_2(Box2DTestBed::onTouchMoved, this);
+	_touchListener->onTouchBegan = CC_CALLBACK_2(Box2DTestBed::onTouchBegan, this);
+	_touchListener->onTouchMoved = CC_CALLBACK_2(Box2DTestBed::onTouchMoved, this);
 
-	_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
+	_eventDispatcher->addEventListenerWithFixedPriority(_touchListener, 1);
 
-	_touchListener = listener;
+
 
 	addChild(drawBox2D, 100);
-	//this->createResetButton();
+
+	// Demo messageString
+	labelDebugDraw = Label::createWithTTF("TEST", "fonts/Marker Felt.ttf", 8.0f);
+	labelDebugDraw->setAnchorPoint(Vec2(0, 0));
+	labelDebugDraw->setPosition(VisibleRect::left().x, VisibleRect::top().y - 20);
+	labelDebugDraw->setColor(Color3B::WHITE);
+	addChild(labelDebugDraw, 100);
 
 	return true;
 }
@@ -131,24 +139,6 @@ void Box2DTestBed::onTouchMoved(Touch* touch, Event* event)
 	node->setPosition(currentPos + diff);
 }
 
-//void Box2DTestBed::createResetButton() {
-//	auto reset = MenuItemImage::create("Images/r1.png", "Images/r2.png", CC_CALLBACK_1(Box2DTestBed::reset, this));
-//	auto menu = Menu::create(reset, nullptr);
-//	menu->setPosition(VisibleRect::center().x, VisibleRect::bottom().y + 40);
-//	this->addChild(menu, -1);
-//}
-//
-//void Box2DTestBed::reset(Ref* sender) {
-//	getTestSuite()->restartCurrTest();
-//}
-//
-//void Box2DTestBed::onEnter() {
-//	TestCase::onEnter();
-//	// physicsDebugNodeOffset = VisibleRect::center();
-//	 //physicsDebugNodeOffset.y += 20;
-//	 //ChipmunkDemoMessageString = "";
-//	 //label->setString("");
-//}
 
 //------------------------------------------------------------------
 //
@@ -241,7 +231,9 @@ bool Box2DView::onTouchBegan(Touch* touch, Event* event)
 	auto nodePosition = convertToNodeSpace(touchLocation);
 	log("Box2DView::onTouchBegan, pos: %f,%f -> %f,%f", touchLocation.x, touchLocation.y, nodePosition.x, nodePosition.y);
 
-	return m_test->MouseDown(b2Vec2(nodePosition.x, nodePosition.y));
+	m_test->MouseDown(b2Vec2(nodePosition.x, nodePosition.y));
+
+	return false;
 }
 
 void Box2DView::onTouchMoved(Touch* touch, Event* event)
@@ -267,11 +259,13 @@ void Box2DView::onTouchEnded(Touch* touch, Event* event)
 void Box2DView::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
 {
 	log("Box2dView:onKeyPressed, keycode: %d", static_cast<int>(code));
-	m_test->Keyboard(static_cast<unsigned char>(code));
+//	m_test->Keyboard(static_cast<unsigned char>(code));
+	m_test->Keyboard((static_cast<int>(code) - 59));
 }
 
 void Box2DView::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
 {
 	log("onKeyReleased, keycode: %d", static_cast<int>(code));
-	m_test->KeyboardUp(static_cast<unsigned char>(code));
+//	m_test->KeyboardUp(static_cast<unsigned char>(code));
+	m_test->Keyboard((static_cast<int>(code) - 59));
 }
