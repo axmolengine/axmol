@@ -239,7 +239,7 @@ if(BUILD_DEP_ALSOFT)
     target_link_libraries(thirdparty
         OpenAL
     )
-    add_definitions(-DCC_USE_ALSOFT=1)
+    target_compile_definitions(thirdparty PUBLIC DCC_USE_ALSOFT=1)
 endif()
 
 # The ogg decoder
