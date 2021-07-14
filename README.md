@@ -22,7 +22,7 @@
   
 ### Highlight Features
 * Reimplement HttpClient based on yasio for process http request concorrently.
-* **More clearly third-party libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on adxe**
+* **More clearly third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easy to publish your commercial apps based on adxe**
 * Refactor AudioEngine, OpenAL for all platforms
   * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_DEP_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_DEP_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
