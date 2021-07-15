@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013-2017 Chukong Technologies
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -441,7 +442,7 @@ bool Value::operator== (const Value& v) const
 }
 
 /// Convert value to a specified type
-unsigned char Value::asByte() const
+unsigned char Value::asByte(unsigned char defaultValue) const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
 
@@ -467,10 +468,10 @@ unsigned char Value::asByte() const
         return _field.boolVal ? 1 : 0;
     }
 
-    return 0;
+    return defaultValue;
 }
 
-int Value::asInt() const
+int Value::asInt(int defaultValue) const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
     switch (_type) {
@@ -496,11 +497,11 @@ int Value::asInt() const
     case Type::BOOLEAN:
         return _field.boolVal ? 1 : 0;
     }
-    return 0;
+    return defaultValue;
 }
 
 
-unsigned int Value::asUnsignedInt() const
+unsigned int Value::asUnsignedInt(unsigned int defaultValue) const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
     switch (_type) {
@@ -528,10 +529,10 @@ unsigned int Value::asUnsignedInt() const
         return _field.boolVal ? 1u : 0u;
     }
 
-    return 0u;
+    return defaultValue;
 }
 
-float Value::asFloat() const
+float Value::asFloat(float defaultValue) const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
     switch (_type) {
@@ -556,10 +557,10 @@ float Value::asFloat() const
     case Type::BOOLEAN:
         return _field.boolVal ? 1.0f : 0.0f;
     }
-    return 0.0f;
+    return defaultValue;
 }
 
-double Value::asDouble() const
+double Value::asDouble(double defaultValue) const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
     switch (_type) {
@@ -584,10 +585,10 @@ double Value::asDouble() const
     case Type::BOOLEAN:
         return _field.boolVal ? 1.0 : 0.0;
     }
-    return 0.0;
+    return defaultValue;
 }
 
-bool Value::asBool() const
+bool Value::asBool(bool defaultValue) const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP, "Only base type (bool, string, float, double, int) could be converted");
     switch (_type) {
@@ -613,7 +614,7 @@ bool Value::asBool() const
         return _field.doubleVal == 0.0 ? false : true;
     }
 
-    return false;
+    return defaultValue;
 }
 
 std::string Value::asString() const
