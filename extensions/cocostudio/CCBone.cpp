@@ -24,7 +24,6 @@ THE SOFTWARE.
 
 #include "CCBone.h"
 #include "CCArmature.h"
-#include "CCUtilMath.h"
 #include "CCArmatureDataManager.h"
 #include "CCTransformHelp.h"
 #include "CCDisplayManager.h"

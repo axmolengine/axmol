@@ -563,6 +563,18 @@ public:
 
 
     /**
+     * Returns the untransformed size of the node.
+     *
+     * @param worldPoint   The coord in GL world space.
+     *
+     * @return Whether the worldPoint is inside this node
+     * 
+     * @remark since adxe-1.0
+     */
+    virtual bool hitTest(const Vec2& worldPoint) const;
+
+
+    /**
      * Sets whether the node is visible.
      *
      * The default value is true, a node is default to visible.
