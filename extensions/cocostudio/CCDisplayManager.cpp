@@ -25,7 +25,6 @@ THE SOFTWARE.
 #include "CCDisplayManager.h"
 #include "CCBone.h"
 #include "CCArmature.h"
-#include "CCUtilMath.h"
 #include "CCSkin.h"
 
 #include "2d/CCParticleSystemQuad.h"
@@ -379,16 +378,13 @@ bool DisplayManager::containPoint(Vec2 &point)
          *  the contour point. If this step is also false, then we can say the bone not contain this point.
          *
          */
-
-        Vec2 outPoint;
-
         Sprite *sprite = (Sprite *)_currentDecoDisplay->getDisplay();
         Sprite *child = (Sprite *)sprite->getChildByTag(0);
         if(nullptr != child)
             sprite = child;
 
         if (nullptr != sprite)
-            ret = CC_SPRITE_CONTAIN_POINT_WITH_RETURN(sprite, point, outPoint);
+            ret = sprite->hitTest(point);
     }
     break;
 

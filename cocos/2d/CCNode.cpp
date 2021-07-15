@@ -5,8 +5,9 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -633,6 +634,12 @@ void Node::setContentSize(const Size & size)
         _anchorPointInPoints.set(_contentSize.width * _anchorPoint.x, _contentSize.height * _anchorPoint.y);
         _transformUpdated = _transformDirty = _inverseDirty = _contentSizeDirty = true;
     }
+}
+
+bool Node::hitTest(const Vec2& worldPoint) const {
+    auto p = this->convertToNodeSpace(worldPoint);
+    auto& s = this->getContentSize();
+    return Rect{0.f, 0.f, s.width, s.height}.containsPoint(p);
 }
 
 // isRunning getter

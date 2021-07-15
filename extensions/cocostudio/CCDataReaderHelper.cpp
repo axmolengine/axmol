@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include "CCDataReaderHelper.h"
 #include "CCArmatureDataManager.h"
 #include "CCTransformHelp.h"
-#include "CCUtilMath.h"
 #include "CCArmatureDefine.h"
 #include "CCDatas.h"
 
