@@ -2,8 +2,9 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +31,7 @@ THE SOFTWARE.
 #include "base/ccTypes.h"
 #include "platform/android/jni/JniHelper.h"
 #include "platform/CCFileUtils.h"
+#include "yasio/cxx17/string_view.hpp"
 
 static const std::string helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
 
@@ -98,9 +100,10 @@ public:
                fullPathOrFontName = FileUtils::getInstance()->fullPathForFilename(textDefinition._fontName);
                // If the path name returned includes the 'assets' dir then that needs to be removed, because the android.content.Context
                // requires this portion of the path to be omitted for assets inside the app package.
-               if (fullPathOrFontName.find("assets/") == 0)
+               using namespace cxx17;
+               if (cxx20::starts_with(cxx17::string_view { fullPathOrFontName }, "assets/"_sv))
                {
-                   fullPathOrFontName = fullPathOrFontName.substr(strlen("assets/"));   // Chop out the 'assets/' portion of the path.
+                   fullPathOrFontName = fullPathOrFontName.substr(sizeof("assets/") - 1);   // Chop out the 'assets/' portion of the path.
                }
            }
 
