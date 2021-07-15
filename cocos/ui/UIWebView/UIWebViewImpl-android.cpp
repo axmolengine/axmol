@@ -145,15 +145,14 @@ std::string getUrlStringByFileName(const std::string& fileName) {
     // LOGD("error: %s,%d",__func__,__LINE__);
     const std::string basePath("file:///android_asset/");
 
-    using namespace cxx17;
-    const auto assetsPath = "assets/"_sv;
+    using namespace cxx17; // for cxx17::string_view literal
     std::string fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
     std::string urlString;
     if (fullPath.empty()) {
         return urlString;
     } else if (fullPath[0] == '/') {
         urlString.append("file://").append(fullPath);
-    } else if (cxx20::starts_with(cxx17::string_view{fullPath}, assetsPath)) {
+    } else if (cxx20::starts_with(cxx17::string_view{fullPath}, "assets/"_sv)) {
         urlString = fullPath;
     } else {
         urlString.append(basePath).append(fullPath);
