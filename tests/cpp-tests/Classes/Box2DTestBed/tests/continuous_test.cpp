@@ -144,7 +144,7 @@ public:
 
 		if (m_stepCount % 60 == 0)
 		{
-			//Launch();
+			Launch();
 		}
 	}
 

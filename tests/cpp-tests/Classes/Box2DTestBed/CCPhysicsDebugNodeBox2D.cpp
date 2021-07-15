@@ -71,7 +71,8 @@ void DebugDraw::DrawPolygon(const b2Vec2* verts, int vertexCount, const b2Color&
     for (size_t i = 0; i < vertexCount; i++) {
         vec[i] = Vec2(verts[i].x * mRatio, verts[i].y * mRatio) + physicsDebugNodeOffset;
     }
-    drawBP->drawPolygon(vec, vertexCount, Color4F(color.r, color.g, color.b, color.a), 1, Color4F(color.r, color.g, color.b, color.a));
+//    drawBP->drawPolygon(vec, vertexCount, Color4F(color.r, color.g, color.b, color.a), 1, Color4F(color.r, color.g, color.b, color.a));
+    drawBP->drawPolygon(vec, vertexCount, Color4F::BLACK, 0.5f, Color4F(color.r, color.g, color.b, color.a));
 }
 
 void DebugDraw::DrawSolidPolygon(const b2Vec2* verts, int vertexCount, const b2Color& color)
