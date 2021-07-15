@@ -635,6 +635,12 @@ void Node::setContentSize(const Size & size)
     }
 }
 
+bool Node::hitTest(const Vec2& worldPoint) const {
+    auto p = this->convertToNodeSpace(worldPoint);
+    auto& s = this->getContentSize();
+    return Rect{0.f, 0.f, s.width, s.height}.containsPoint(p);
+}
+
 // isRunning getter
 bool Node::isRunning() const
 {

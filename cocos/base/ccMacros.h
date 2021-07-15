@@ -64,6 +64,10 @@ THE SOFTWARE.
 
 #include "base/ccRandom.h"
 
+#define CC_HALF_PI (M_PI * 0.5f)
+
+#define CC_DOUBLE_PI (M_PI * 2)
+
 /** @def CCRANDOM_MINUS1_1
  returns a random float between -1 and 1
  */

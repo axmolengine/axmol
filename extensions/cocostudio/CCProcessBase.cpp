@@ -23,7 +23,6 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "CCProcessBase.h"
-#include "CCUtilMath.h"
 
 using namespace cocos2d;
 

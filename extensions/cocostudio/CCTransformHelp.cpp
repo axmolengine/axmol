@@ -23,7 +23,6 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "CCTransformHelp.h"
-#include "CCUtilMath.h"
 
 using namespace cocos2d;
 
