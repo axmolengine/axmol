@@ -1,4 +1,5 @@
 # adxe
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
 [![dev](https://img.shields.io/badge/v1.0.0-beta1-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
   
@@ -22,7 +23,7 @@
   
 ### Highlight Features
 * Reimplement HttpClient based on yasio for process http request concorrently.
-* **More clearly third-party libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on adxe**
+* **More clearly third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easy to publish your commercial apps based on adxe**
 * Refactor AudioEngine, OpenAL for all platforms
   * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_DEP_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_DEP_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.

@@ -2,9 +2,10 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
  
- http://www.cocos2d-x.org
- 
+ https://adxe.org
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
@@ -35,16 +36,12 @@ PUPlane::PUPlane ()
 	d = 0.0;
 }
 //-----------------------------------------------------------------------
-PUPlane::PUPlane (const PUPlane& rhs)
+PUPlane::PUPlane(const PUPlane& rhs) : normal(rhs.normal), d(rhs.d)
 {
-	normal = rhs.normal;
-	d = rhs.d;
 }
 //-----------------------------------------------------------------------
-PUPlane::PUPlane (const Vec3& rkNormal, float fConstant)
+PUPlane::PUPlane(const Vec3 &rkNormal, float fConstant) : normal(rkNormal), d(-fConstant)
 {
-	normal = rkNormal;
-	d = -fConstant;
 }
 //---------------------------------------------------------------------
 PUPlane::PUPlane (float a, float b, float c, float _d)

@@ -109,6 +109,11 @@
   - Upstream: https://github.com/LuaDist/toluapp
   - Version: 1.0.93
   - License: MIT
+  
+- lua-cjson
+  - Upstream: https://github.com/simdsoft/lua-cjson
+  - Version: 2.1.1
+  - License: MIT
 
 ## lz4
 - Upstream: https://github.com/lz4/lz4
@@ -173,7 +178,7 @@
 
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
-- Version: 2.26 with bmp load fixes
+- Version: 2.27
 - License: MIT
 
 ## tinydir

@@ -3,8 +3,9 @@
  Copyright (c) 2012 James Chen
  Copyright (c) 2013-2015 zilongshanren
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +39,7 @@
 #include "ui/UIHelper.h"
 #include "base/CCDirector.h"
 #include "platform/CCFileUtils.h"
+#include "yasio/cxx17/string_view.hpp"
 
 NS_CC_BEGIN
 
@@ -118,9 +120,10 @@ void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
     std::string realFontPath = pFontName;
     if(isFontFileExists) {
         realFontPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(pFontName);
-        if (realFontPath.find("assets/") == 0)
+        using namespace cxx17; // for cxx17::string_view literal
+        if (cxx20::starts_with(cxx17::string_view{realFontPath}, "assets/"_sv))
         {
-            realFontPath = realFontPath.substr(strlen("assets/"));   // Chop out the 'assets/' portion of the path.
+            realFontPath = realFontPath.substr(sizeof("assets/") - 1);   // Chop out the 'assets/' portion of the path.
         }
     }
     JniHelper::callStaticVoidMethod(editBoxClassName, "setFont",

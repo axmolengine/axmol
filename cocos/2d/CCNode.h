@@ -5,8 +5,9 @@
  Copyright (c) 2011      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -560,6 +561,17 @@ public:
      * @return The untransformed size of the node.
      */
     virtual const Size& getContentSize() const;
+
+
+    /**
+     * The basic node hit test, since adxe-1.0
+     *
+     * @param worldPoint   The coord in GL world space.
+     *
+     * @return Whether the worldPoint is inside this node
+     * 
+     */
+    virtual bool hitTest(const Vec2& worldPoint) const;
 
 
     /**

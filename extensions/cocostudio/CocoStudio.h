@@ -21,7 +21,6 @@
 #include "CCArmatureDefine.h"
 #include "CCDataReaderHelper.h"
 #include "CCTransformHelp.h"
-#include "CCUtilMath.h"
 #include "CCComBase.h"
 #include "CCComAttribute.h"
 #include "CCComAudio.h"

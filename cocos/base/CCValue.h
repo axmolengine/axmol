@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013-2017 Chukong Technologies
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -159,17 +160,17 @@ public:
     bool operator== (const Value& v) const;
 
     /** Gets as a byte value. Will convert to unsigned char if possible, or will trigger assert error. */
-    unsigned char asByte() const;
+    unsigned char asByte(unsigned char defaultValue = 0) const;
     /** Gets as an integer value. Will convert to integer if possible, or will trigger assert error. */
-    int asInt() const;
+    int asInt(int defaultValue = 0) const;
     /** Gets as an unsigned value. Will convert to unsigned if possible, or will trigger assert error. */
-    unsigned int asUnsignedInt() const;
+    unsigned int asUnsignedInt(unsigned defaultValue = 0) const;
     /** Gets as a float value. Will convert to float if possible, or will trigger assert error. */
-    float asFloat() const;
+    float asFloat(float defaultValue = 0.0f) const;
     /** Gets as a double value. Will convert to double if possible, or will trigger assert error. */
-    double asDouble() const;
+    double asDouble(double defaultValue = 0.0) const;
     /** Gets as a bool value. Will convert to bool if possible, or will trigger assert error. */
-    bool asBool() const;
+    bool asBool(bool defaultValue = false) const;
     /** to as a string value. Will convert to string if possible, or will trigger assert error. */
     std::string asString() const;
     

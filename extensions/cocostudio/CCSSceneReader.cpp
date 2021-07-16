@@ -1,7 +1,8 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -210,7 +211,7 @@ Node* SceneReader::nodeByTag(Node *parent, int tag)
     return _retNode;
 }
     
-cocos2d::Component* SceneReader::createComponent(const std::string classname)
+cocos2d::Component* SceneReader::createComponent(const std::string& classname)
 {
     std::string name = this->getComponentClassName(classname);
     Ref *object = ObjectFactory::getInstance()->createObject(name);
