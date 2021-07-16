@@ -1,7 +1,8 @@
 ﻿/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -72,7 +73,7 @@ CC_CONSTRUCTOR_ACCESS:
 private:
     std::string getComponentClassName(const std::string& name);
 
-    cocos2d::Component* createComponent(const std::string classname);
+    cocos2d::Component* createComponent(const std::string& classname);
 
     
     cocos2d::Node* createObject(const rapidjson::Value& dict, cocos2d::Node* parent, AttachComponentType attachComponent);
