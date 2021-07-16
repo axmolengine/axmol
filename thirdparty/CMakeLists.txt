@@ -195,8 +195,9 @@ endif(BUILD_DEP_ASTC)
 if(BUILD_LUA_LIBS)
     add_subdirectory(lua/${LUA_ENGINE})
     add_subdirectory(lua/tolua)
+    add_subdirectory(lua/lua-cjson)
     set_property(TARGET thirdparty APPEND PROPERTY 
-        CC_LUA_DEPEND ${LUA_ENGINE} tolua
+        CC_LUA_DEPEND ${LUA_ENGINE} tolua lua-cjson
     )
 endif()
 
