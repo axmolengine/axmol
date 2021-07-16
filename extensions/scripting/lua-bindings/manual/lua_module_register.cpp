@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 c4games.com.
- 
- http://www.cocos2d-x.org
+ Copyright (c) 2021 Bytedance Inc.
+
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +36,7 @@
 #include "scripting/lua-bindings/manual/audioengine/lua_cocos2dx_audioengine_manual.h"
 #include "scripting/lua-bindings/manual/physics3d/lua_cocos2dx_physics3d_manual.h"
 #include "scripting/lua-bindings/manual/navmesh/lua_cocos2dx_navmesh_manual.h"
-#include "scripting/lua-bindings/lua-cjson/lua_cjson.h"
+#include "lua_cjson.h"
 #include "yasio/bindings/yasio_cclua.hpp"
 
 static void lua_register_extensions(lua_State* L) {
