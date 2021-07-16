@@ -109,6 +109,11 @@
   - Upstream: https://github.com/LuaDist/toluapp
   - Version: 1.0.93
   - License: MIT
+  
+- lua-cjson
+  - Upstream: https://github.com/simdsoft/lua-cjson
+  - Version: 2.1.1
+  - License: MIT
 
 ## lz4
 - Upstream: https://github.com/lz4/lz4

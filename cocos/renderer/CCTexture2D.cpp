@@ -4,8 +4,9 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 c4games.com
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -442,10 +443,8 @@ bool Texture2D::initWithString(const char *text, const std::string& fontName, fl
 
 bool Texture2D::initWithString(const char *text, const FontDefinition& textDefinition)
 {
-    if(!text || 0 == strlen(text))
-    {
+    if(!text || !(*text))
         return false;
-    }
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // cache the texture data
