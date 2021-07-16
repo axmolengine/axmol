@@ -152,7 +152,7 @@ static uint32_t hash52(
  *
  * @return The assigned partition index for this texel.
  */
-static int select_partition(
+static uint8_t select_partition(
 	int seed,
 	int x,
 	int y,
@@ -254,7 +254,7 @@ static int select_partition(
 		b = 0;
 	}
 
-	int partition;
+	uint8_t partition;
 	if (a >= b && a >= c && a >= d)
 	{
 		partition = 0;
@@ -304,7 +304,7 @@ static void generate_one_partition_info_entry(
 			for (unsigned int x = 0; x <  bsd.xdim; x++)
 			{
 				uint8_t part = select_partition(partition_index, x, y, z, partition_count, small_block);
-				pi.texels_of_partition[part][counts[part]++] = texel_idx++;
+				pi.texels_of_partition[part][counts[part]++] = static_cast<uint8_t>(texel_idx++);
 				*partition_of_texel++ = part;
 			}
 		}
@@ -344,7 +344,7 @@ static void generate_one_partition_info_entry(
 
 	for (unsigned int i = 0; i < BLOCK_MAX_PARTITIONS; i++)
 	{
-		pi.partition_texel_count[i] = counts[i];
+		pi.partition_texel_count[i] = static_cast<uint8_t>(counts[i]);
 		pi.coverage_bitmaps[i] = 0ULL;
 	}
 

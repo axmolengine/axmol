@@ -27,7 +27,6 @@ THE SOFTWARE.
 #include "CCArmatureAnimation.h"
 #include "CCBone.h"
 #include "CCArmature.h"
-#include "CCUtilMath.h"
 #include "CCTransformHelp.h"
 
 

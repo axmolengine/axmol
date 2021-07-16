@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
+ Copyright (c) 2021 Bytedance Inc.
+
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +35,7 @@
 #include "base/CCDirector.h"
 #include "platform/CCFileUtils.h"
 #include "ui/UIHelper.h"
+#include "yasio/cxx17/string_view.hpp"
 
 static const std::string className = "org.cocos2dx.lib.Cocos2dxWebViewHelper";
 
@@ -54,7 +56,8 @@ static std::string getFixedBaseUrl(const std::string& baseUrl)
         fixedBaseUrl = baseUrl;
     }
     else if (baseUrl.c_str()[0] != '/') {
-        if(baseUrl.find("assets/") == 0) {
+        using namespace cxx17; // for cxx17::string_view literal
+        if(cxx20::starts_with(cxx17::string_view{baseUrl}, "assets/"_sv)) {
             fixedBaseUrl = s_defaultBaseUrl + baseUrl.c_str()[7];
         }
         else {
@@ -138,25 +141,23 @@ int createWebViewJNI() {
     return -1;
 }
 
-std::string getUrlStringByFileName(const std::string &fileName) {
+std::string getUrlStringByFileName(const std::string& fileName) {
     // LOGD("error: %s,%d",__func__,__LINE__);
     const std::string basePath("file:///android_asset/");
-    const std::string assetsPath("assets/");
+
+    using namespace cxx17; // for cxx17::string_view literal
     std::string fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
     std::string urlString;
     if (fullPath.empty()) {
         return urlString;
-    }
-    else if (fullPath[0] == '/') {
+    } else if (fullPath[0] == '/') {
         urlString.append("file://").append(fullPath);
-    }
-    else if (fullPath.find(assetsPath) == 0) {
-        urlString = fullPath.replace(fullPath.find_first_of(assetsPath), assetsPath.length(), assetsPath);
-    }
-    else {
+    } else if (cxx20::starts_with(cxx17::string_view{fullPath}, "assets/"_sv)) {
+        urlString = fullPath;
+    } else {
         urlString.append(basePath).append(fullPath);
     }
-    
+
     return urlString;
 }
 } // namespace

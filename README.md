@@ -1,4 +1,5 @@
 # adxe
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
 [![dev](https://img.shields.io/badge/v1.0.0-beta1-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
   
@@ -21,11 +22,11 @@
 * Usefull PRs from **you** are welcome (review/merge ASAP)
   
 ### Highlight Features
-* Reimplent HttpClient based on yasio for process http request concorrently.
-* **More clearly third-party libs ['Upstream-Version-License'](external/README.md) for easy to publish your commercial apps based on adxe**
+* Reimplement HttpClient based on yasio for process http request concorrently.
+* **More clearly third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easy to publish your commercial apps based on adxe**
 * Refactor AudioEngine, OpenAL for all platforms
-  * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
+  * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_DEP_ALSOFT=ON to cmake to force enable it
+  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_DEP_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
 * Modularize all optional extension, move from engine core to folder extensions
 * Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
@@ -42,10 +43,11 @@
 * ETC2 RGB/RGBA support    (if hardware decoder not present, use software decoder)
 * **ImGui integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
 
+Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information too.
+
 ### [Roadmap](https://github.com/adxeproject/adxe/issues/1)
 
 ### Quick Start
-Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information too.
 
 #### Common Requirement [Python](https://www.python.org/downloads/)
   * Python-2.7.17+, Python-3.7+ 

@@ -431,7 +431,8 @@ static ASTCENC_SIMD_INLINE vint4 unorm16_to_sf16(vint4 p)
 	vmask4 is_one = p == vint4(0xFFFF);
 	vmask4 is_small = p < vint4(4);
 
-// Manually inline clz() on Visual Studio to avoid release build codegen bug
+	// Manually inline clz() on Visual Studio to avoid release build codegen bug
+	// see https://github.com/ARM-software/astc-encoder/issues/259
 #if !defined(__clang__) && defined(_MSC_VER)
 	vint4 a = (~lsr<8>(p)) & p;
 	a = float_as_int(int_to_float(a));
@@ -441,7 +442,6 @@ static ASTCENC_SIMD_INLINE vint4 unorm16_to_sf16(vint4 p)
 	vint4 lz = clz(p) - 16;
 #endif
 
-	// TODO: Could use AVX2 _mm_sllv_epi32() instead of p * 2^<shift>
 	p = p * two_to_the_n(lz + 1);
 	p = p & vint4(0xFFFF);
 

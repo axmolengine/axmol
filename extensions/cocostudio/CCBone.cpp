@@ -1,7 +1,8 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +25,6 @@ THE SOFTWARE.
 
 #include "CCBone.h"
 #include "CCArmature.h"
-#include "CCUtilMath.h"
 #include "CCArmatureDataManager.h"
 #include "CCTransformHelp.h"
 #include "CCDisplayManager.h"
@@ -61,25 +61,22 @@ Bone *Bone::create(const std::string& name)
 }
 
 Bone::Bone()
-{
-    _tweenData = nullptr;
-    _parentBone = nullptr;
-    _armature = nullptr;
-    _childArmature = nullptr;
-    _boneData = nullptr;
-    _tween = nullptr;
-    _displayManager = nullptr;
-    _ignoreMovementBoneData = false;
-    _worldTransform = Mat4::IDENTITY;
-    _boneTransformDirty = true;
-    _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
-    _blendDirty = false;
-    _worldInfo = nullptr;
-
-    _armatureParentBone = nullptr;
-    _dataVersion = 0;
-}
-
+    : _tweenData(nullptr)
+    , _parentBone(nullptr)
+    , _armature(nullptr)
+    , _childArmature(nullptr)
+    , _boneData(nullptr)
+    , _tween(nullptr)
+    , _displayManager(nullptr)
+    , _ignoreMovementBoneData(false)
+    , _worldTransform(Mat4::IDENTITY)
+    , _boneTransformDirty(true)
+    , _blendFunc(BlendFunc::ALPHA_PREMULTIPLIED)
+    , _blendDirty(false)
+    , _worldInfo(nullptr)
+    , _armatureParentBone(nullptr)
+    , _dataVersion(0)
+{}
 
 Bone::~Bone(void)
 {

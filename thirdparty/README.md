@@ -6,7 +6,7 @@
 
 ## astc
 - Upstream: https://github.com/ARM-software/astc-encoder
-- Version: git a3b8609 (1010)
+- Version: git 3.0-2003150 (1076)
 - License: Apache-2.0
 
 ## Box2D
@@ -66,7 +66,7 @@
 
 ## glfw
 - Upstream: https://github.com/glfw/glfw
-- Version: git 0e9ec77 (4239)
+- Version: git 6876cf8 (4261)
 - License: zlib
 
 ## glsl-optimizer
@@ -108,6 +108,11 @@
 - tolua
   - Upstream: https://github.com/LuaDist/toluapp
   - Version: 1.0.93
+  - License: MIT
+  
+- lua-cjson
+  - Upstream: https://github.com/simdsoft/lua-cjson
+  - Version: 2.1.1
   - License: MIT
 
 ## lz4
@@ -173,7 +178,7 @@
 
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
-- Version: 2.26 with bmp load fixes
+- Version: 2.27
 - License: MIT
 
 ## tinydir
@@ -206,9 +211,14 @@
 - Version: 0.8.0
 - License: BSD-2-Clause
 
+## yaml-cpp
+- Upstream: https://github.com/jbeder/yaml-cpp
+- Version: git 9ee3928 (884)
+- License: MIT
+
 ## yasio
 - Upstream: https://github.com/yasio/yasio
-- Version: 3.37.2
+- Version: 3.37.3
 - License: MIT WITH Anti-996
 
 ## zlib

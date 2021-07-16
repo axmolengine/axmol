@@ -24,8 +24,8 @@
 ### 主要特性:
 * 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
 * 重构AudioEngine, 全平台OpenAL
-  * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_EXT_ALSOFT=ON to cmake to force enable it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no and ```BUILD_EXT_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
+  * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_DEP_ALSOFT=ON to cmake to force enable it
+  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no and ```BUILD_DEP_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
 * 重构UserDefault, 全平台基于内存映射文件 [mio](https://github.com/mandreyel/mio), 性能提升百倍
 * 模块化所有引擎扩展库, 所有扩展库放到extensions目录下，如cocostudio, spine
 * AudioEngine实现wav所有 ```openal-soft``` 支持的封装格式, 例如MS-ADPCM, ADPCM等
@@ -66,7 +66,7 @@
 #### Android
   1. 安装 Android Studio 4.2或更高版本
   2. 第一次启动Android Studio, 会引导安装一些工具，默认安装即可，如果不需要模拟器可以把```Virutal Device```勾选去掉
-  2. 启动 Android Studio并打开engine-x\tests\cpp-tests\proj.android
+  2. 启动 Android Studio并打开adxe\tests\cpp-tests\proj.android
   3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下SDK Platforms和SDK Tools后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
      * Android SDK Platform 29 r5  (在SDK Platforms页签)
      * Android SDK Build-Tools 29.0.2  
@@ -80,7 +80,7 @@
   1. 确保已安装xcode11+和[cmake3.14+](https://github.com/Kitware/CMake/releases), 安装CMake命令行支持: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. 执行如下命令确保cmake能成功生成xcode工程:  
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
-  3. 生成xcode工程, 进入engine-x根目录执行如下命令之一:  
+  3. 生成xcode工程, 进入adxe根目录执行如下命令之一:  
      - for any device:   
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake```
      - for arm64:  

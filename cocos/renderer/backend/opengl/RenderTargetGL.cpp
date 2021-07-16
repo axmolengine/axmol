@@ -1,6 +1,6 @@
 #include "RenderTargetGL.h"
 #include "DeviceGL.h"
-#include "base/ccMacros.h"
+#include "renderer/backend/opengl/MacrosGL.h"
 
 CC_BACKEND_BEGIN
 

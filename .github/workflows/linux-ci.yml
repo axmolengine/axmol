@@ -1,6 +1,18 @@
 name: linux
 
-on: [push]
+on: 
+  push:
+    branches:
+      - dev
+      - main
+    paths:
+      - cmake/**/*
+      - cocos/**/*
+      - extensions/**/*
+      - tests/**/*
+      - thirdparty/**/*
+      - CMakeLists.txt
+      - .github/workflows/linux-ci.yml
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -13,7 +25,7 @@ env:
 
 jobs:
   build:
-    if: "contains(github.event.commits[0].message, '[ci build]')"
+    if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.

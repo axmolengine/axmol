@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,39 +26,46 @@
 
 #pragma once
 
+#include <stdint.h>
 #include "network/CCIDownloaderImpl.h"
 
 namespace cocos2d {
-    class Scheduler;
+class Scheduler;
 }
 
-namespace cocos2d { namespace network
-{
-    class DownloadTaskCURL;
-    class DownloaderHints;
-	class DownloaderCURL;
-	typedef std::pair< std::shared_ptr<DownloadTask>, DownloadTaskCURL *> TaskWrapper;
-    class DownloaderCURL : public IDownloaderImpl
-    {
-    public:
-        DownloaderCURL(const DownloaderHints& hints);
-        virtual ~DownloaderCURL();
+namespace cocos2d {
+namespace network {
+class DownloadTaskCURL;
+class DownloaderHints;
+class DownloaderCURL;
 
-        virtual IDownloadTask *createCoTask(std::shared_ptr<DownloadTask>& task) override;
+class DownloaderCURL : public IDownloaderImpl {
+public:
+    DownloaderCURL(const DownloaderHints& hints);
+    virtual ~DownloaderCURL();
 
-    protected:
-        class Impl;
-        std::shared_ptr<Impl>   _impl;
+    virtual void startTask(std::shared_ptr<DownloadTask>& task) override;
 
-        // for transfer data on schedule
-        DownloadTaskCURL* _currTask;        // temp ref
-        std::function<int64_t(void*, int64_t)> _transferDataToBuffer;
+protected:
+    class Impl;
+    std::shared_ptr<Impl> _impl;
 
-        // scheduler for update processing and finished task in main schedule
-        void _onDownloadProgress();
+    // for transfer data on schedule
+    DownloadTaskCURL* _currTask; // temp ref
+    std::function<int64_t(void*, int64_t)> _transferDataToBuffer;
 
-		void _onDownloadFinished(TaskWrapper&& task, int checkState = 0);
-    };
+    void _lazyScheduleUpdate();
 
-}}  // namespace cocos2d::network
+    static void _updateTaskProgressInfo(DownloadTask& task, int64_t totalExpected = -1);
 
+    // scheduler for update processing and finished task in main schedule
+    void _onDownloadFinished(DownloadTask& task, int checkState = 0);
+
+    // scheduler for update processing and finished task in main schedule
+    void _onUpdate(float);
+    std::string _schedulerKey;
+    Scheduler* _scheduler = nullptr;
+};
+
+} // namespace network
+} // namespace cocos2d

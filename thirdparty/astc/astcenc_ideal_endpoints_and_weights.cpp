@@ -419,13 +419,12 @@ static void compute_ideal_colors_and_weights_3_comp(
 		vfloat4 ep0 = lines[i].a + lines[i].b * lowparam[i];
 		vfloat4 ep1 = lines[i].a + lines[i].b * highparam[i];
 
-		ep0 = ep0 / pms[i].color_scale;
-		ep1 = ep1 / pms[i].color_scale;
+		ep0 = ep0 * pms[i].icolor_scale;
+		ep1 = ep1 * pms[i].icolor_scale;
 
 		vfloat4 bmin = blk.data_min;
 		vfloat4 bmax = blk.data_max;
 
-		// TODO: Probably a programmatic vector permute we can do here ...
 		assert(omitted_component < BLOCK_MAX_COMPONENTS);
 		switch (omitted_component)
 		{
@@ -565,8 +564,8 @@ static void compute_ideal_colors_and_weights_4_comp(
 		vfloat4 ep0 = lines[i].a + lines[i].b * lowparam[i];
 		vfloat4 ep1 = lines[i].a + lines[i].b * highparam[i];
 
-		ei.ep.endpt0[i] = ep0 / pms[i].color_scale;
-		ei.ep.endpt1[i] = ep1 / pms[i].color_scale;
+		ei.ep.endpt0[i] = ep0 * pms[i].icolor_scale;
+		ei.ep.endpt1[i] = ep1 * pms[i].icolor_scale;
 	}
 
 	bool is_constant_wes = true;
@@ -612,7 +611,7 @@ void compute_ideal_colors_and_weights_1plane(
 	}
 	else
 	{
-		compute_ideal_colors_and_weights_3_comp(bsd,blk, ewb,  pi, ei, 3);
+		compute_ideal_colors_and_weights_3_comp(bsd, blk, ewb,  pi, ei, 3);
 	}
 }
 
@@ -833,7 +832,6 @@ void compute_ideal_weights_for_decimation(
 	unsigned int texel_count_simd = round_up_to_simd_multiple_vla(texel_count);
 	if (texel_count == weight_count)
 	{
-		// TODO: Use SIMD copies?
 		for (unsigned int i = 0; i < texel_count_simd; i++)
 		{
 			// Assert it's an identity map for valid texels, and last valid value for any overspill
@@ -906,19 +904,12 @@ void compute_ideal_weights_for_decimation(
 	}
 
 	// Populate the interpolated weight grid based on the initital average
-	// Process SIMD-width texel coordinates at at time while we can
-	unsigned int is = 0;
-	unsigned int clipped_texel_count = round_down_to_simd_multiple_vla(texel_count);
-	for (/* */; is < clipped_texel_count; is += ASTCENC_SIMD_WIDTH)
+	// Process SIMD-width texel coordinates at at time while we can. Safe to
+	// over-process full SIMD vectors - the tail is zeroed.
+	for (unsigned int i = 0; i < texel_count; i += ASTCENC_SIMD_WIDTH)
 	{
-		vfloat weight = bilinear_infill_vla(di, dec_weight_ideal_value, is);
-		storea(weight, infilled_weights + is);
-	}
-
-	// Loop tail
-	for (/* */; is < texel_count; is++)
-	{
-		infilled_weights[is] = bilinear_infill(di, dec_weight_ideal_value, is);
+		vfloat weight = bilinear_infill_vla(di, dec_weight_ideal_value, i);
+		storea(weight, infilled_weights + i);
 	}
 
 	// Perform a single iteration of refinement
@@ -995,7 +986,14 @@ void compute_quantized_weights_for_decimation(
 	float quant_level_m1 = quant_levels_m1[quant_level];
 
 	// Quantize the weight set using both the specified low/high bounds and standard 0..1 bounds
-	assert(high_bound > low_bound);
+
+	// TODO: Oddity to investigate; triggered by test in issue #265.
+	if (high_bound < low_bound)
+	{
+		low_bound = 0.0f;
+		high_bound = 1.0f;
+	}
+
 	float rscale = high_bound - low_bound;
 	float scale = 1.0f / rscale;
 
@@ -1167,7 +1165,6 @@ void recompute_ideal_colors_1plane(
 		vfloat4 weight_weight_sum = vfloat4(1e-17f);
 		float psum = 1e-17f;
 
-		// TODO: This loop has too many responsibilities, making it inefficient
 		for (int j = 0; j < texel_count; j++)
 		{
 			int tix = texel_indexes[j];
@@ -1218,7 +1215,6 @@ void recompute_ideal_colors_1plane(
 		}
 
 		// Calculations specific to mode #7, the HDR RGB-scale mode
-		// TODO: Can we skip this for LDR textures?
 		vfloat4 rgbq_sum = color_vec_x + color_vec_y;
 		rgbq_sum.set_lane<3>(hadd_rgb_s(color_vec_y));
 
@@ -1329,8 +1325,8 @@ void recompute_ideal_colors_2planes(
 
 	const quantization_and_transfer_table *qat = &(quant_and_xfer_tables[weight_quant_mode]);
 
-	float dec_weights_quant_uvalue_plane1[BLOCK_MAX_WEIGHTS];
-	float dec_weights_quant_uvalue_plane2[BLOCK_MAX_WEIGHTS];
+	float dec_weights_quant_uvalue_plane1[BLOCK_MAX_WEIGHTS_2PLANE];
+	float dec_weights_quant_uvalue_plane2[BLOCK_MAX_WEIGHTS_2PLANE];
 
 	for (int i = 0; i < weight_count; i++)
 	{
@@ -1369,7 +1365,6 @@ void recompute_ideal_colors_2planes(
 	vfloat4 weight_weight_sum = vfloat4(1e-17f);
 	float psum = 1e-17f;
 
-	// TODO: This loop has too many responsibilities, making it inefficient
 	for (int j = 0; j < texel_count; j++)
 	{
 		vfloat4 rgba = blk.texel(j);
@@ -1438,7 +1433,6 @@ void recompute_ideal_colors_2planes(
 	}
 
 	// Calculations specific to mode #7, the HDR RGB-scale mode
-	// TODO: Can we skip this for LDR textures?
 	vfloat4 rgbq_sum = color_vec_x + color_vec_y;
 	rgbq_sum.set_lane<3>(hadd_rgb_s(color_vec_y));
 

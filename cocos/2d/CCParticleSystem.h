@@ -4,8 +4,9 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -793,12 +794,12 @@ CC_CONSTRUCTOR_ACCESS:
     /** initializes a QuadParticleSystem from a Dictionary.
      @since v0.99.3
      */
-    bool initWithDictionary(ValueMap& dictionary);
+    bool initWithDictionary(const ValueMap& dictionary);
     
     /** initializes a particle system from a NSDictionary and the path from where to load the png
      @since v2.1
      */
-    bool initWithDictionary(ValueMap& dictionary, const std::string& dirname);
+    bool initWithDictionary(const ValueMap& dictionary, const std::string& dirname);
     
     //! Initializes a system with a fixed number of particles
     virtual bool initWithTotalParticles(int numberOfParticles);

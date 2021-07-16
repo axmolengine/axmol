@@ -24,7 +24,7 @@
 #include <array>
 
 /** @brief Unpacked quint triplets <low,middle,high> for each packed value */
-static const uint8_t quints_of_integer[128][3] = {
+static const uint8_t quints_of_integer[128][3] {
 	{0, 0, 0}, {1, 0, 0}, {2, 0, 0}, {3, 0, 0},
 	{4, 0, 0}, {0, 4, 0}, {4, 4, 0}, {4, 4, 4},
 	{0, 1, 0}, {1, 1, 0}, {2, 1, 0}, {3, 1, 0},
@@ -60,7 +60,7 @@ static const uint8_t quints_of_integer[128][3] = {
 };
 
 /** @brief Packed quint values for each unpacked value, indexed [hi][mid][lo]. */
-static const uint8_t integer_of_quints[5][5][5] = {
+static const uint8_t integer_of_quints[5][5][5] {
 	{
 		{0, 1, 2, 3, 4},
 		{8, 9, 10, 11, 12},
@@ -99,7 +99,7 @@ static const uint8_t integer_of_quints[5][5][5] = {
 };
 
 /** @brief Unpacked trit quintuplets <low,...,high> for each packed value */
-static const uint8_t trits_of_integer[256][5] = {
+static const uint8_t trits_of_integer[256][5] {
 	{0, 0, 0, 0, 0}, {1, 0, 0, 0, 0}, {2, 0, 0, 0, 0}, {0, 0, 2, 0, 0},
 	{0, 1, 0, 0, 0}, {1, 1, 0, 0, 0}, {2, 1, 0, 0, 0}, {1, 0, 2, 0, 0},
 	{0, 2, 0, 0, 0}, {1, 2, 0, 0, 0}, {2, 2, 0, 0, 0}, {2, 0, 2, 0, 0},
@@ -167,7 +167,7 @@ static const uint8_t trits_of_integer[256][5] = {
 };
 
 /** @brief Packed trit values for each unpacked value, indexed [hi][][][][lo]. */
-static const uint8_t integer_of_trits[3][3][3][3][3] = {
+static const uint8_t integer_of_trits[3][3][3][3][3] {
 	{
 		{
 			{
@@ -332,7 +332,8 @@ static const uint8_t integer_of_trits[3][3][3][3][3] = {
 /**
  * @brief The number of bits, trits, and quints needed for a quant level.
  */
-struct btq_count {
+struct btq_count
+{
 	/** @brief The quantization level. */
 	uint8_t quant;
 
@@ -349,7 +350,7 @@ struct btq_count {
 /**
  * @brief The table of bits, trits, and quints needed for a quant encode.
  */
-static const std::array<btq_count, 21> btq_counts = {{
+static const std::array<btq_count, 21> btq_counts {{
 	{   QUANT_2, 1, 0, 0 },
 	{   QUANT_3, 0, 1, 0 },
 	{   QUANT_4, 2, 0, 0 },
@@ -379,7 +380,8 @@ static const std::array<btq_count, 21> btq_counts = {{
  * The length of a quantized sequence in bits is:
  *     (scale * <sequence_len> + round) / divisor
  */
-struct ise_size {
+struct ise_size
+{
 	/** @brief The quantization level. */
 	uint8_t quant;
 
@@ -396,7 +398,7 @@ struct ise_size {
 /**
  * @brief The table of scale, round, and divisors needed for quant sizing.
  */
-static const std::array<ise_size, 21> ise_sizes = {{
+static const std::array<ise_size, 21> ise_sizes {{
 	{   QUANT_2,  1, 0, 1 },
 	{   QUANT_3,  8, 4, 5 },
 	{   QUANT_4,  2, 0, 1 },
@@ -678,7 +680,7 @@ void decode_ise(
 	// Collect bits for each element, as well as bits for any trit-blocks and quint-blocks.
 	for (unsigned int i = 0; i < character_count; i++)
 	{
-		results[i] = read_bits(bits, bit_offset, input_data);
+		results[i] = static_cast<uint8_t>(read_bits(bits, bit_offset, input_data));
 		bit_offset += bits;
 
 		if (trits)

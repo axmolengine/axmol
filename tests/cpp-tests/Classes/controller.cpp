@@ -56,9 +56,11 @@ public:
 
 
         addTest("Box2D - Basic", []() { return new (std::nothrow) Box2DTests(); });
-//      addTest("Box2D - TestBed", []() { return new (std::nothrow) Box2dTestBedSuite(); });
+#if defined(CC_PLATFORM_PC)
+        addTest("Box2D - TestBed", []() { return new (std::nothrow) Box2DTestBedTests(); });
+#endif
         addTest("Chipmunk2D - Basic", []() { return new ChipmunkTests(); });
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if defined(CC_PLATFORM_PC)
         addTest("Chipmunk2D - TestBed", []() { return new ChipmunkTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });
@@ -66,9 +68,8 @@ public:
         addTest("Configuration", []() { return new ConfigurationTests(); });
         addTest("Console", []() { return new ConsoleTests(); });
         addTest("Curl", []() { return new CurlTests(); });
-        addTest("yasio", []() { return new YAsioTests(); });
         addTest("Current Language", []() { return new CurrentLanguageTests(); });
-        addTest("Downloader Test", []() { return new DownloaderTests(); });
+        addTest("Network Test", []() { return new NetworkTests(); });
         addTest("EventDispatcher", []() { return new EventDispatcherTests(); });
         addTest("Effects - Advanced", []() { return new EffectAdvanceTests(); });
         addTest("Effects - Basic", [](){return new EffectTests(); });

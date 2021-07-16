@@ -1,4 +1,4 @@
-# The spine-runtime for engine-x
+# The spine-runtime for adxe
 * version: 3.8
 * based on spine-cpp
 

@@ -34,10 +34,7 @@ THE SOFTWARE.
 #include <sys/types.h>  
 #include <sys/stat.h>  
 
-#define NTCVT_CP_DEFAULT CP_UTF8
 #include "win32-specific/ntcvt/ntcvt.hpp"
-
-using namespace std;
 
 #define DECLARE_GUARD (void)0 // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
@@ -46,11 +43,11 @@ NS_CC_BEGIN
 #define CC_MAX_PATH  512
 
 // The root path of resources, the character encoding is UTF-8.
-// UTF-8 is the only encoding supported by cocos2d-x API.
+// UTF-8 is the only encoding supported by adxe API by default.
 static std::string s_resourcePath = "";
 
 // D:\aaa\bbb\ccc\ddd\abc.txt --> D:/aaa/bbb/ccc/ddd/abc.txt
-static inline std::string convertPathFormatToUnixStyle(const std::string& path)
+static std::string convertPathFormatToUnixStyle(const std::string& path)
 {
     std::string ret = path;
     int len = ret.length();
@@ -298,7 +295,7 @@ std::vector<std::string> FileUtilsWin32::listFiles(const std::string& dirPath) c
     return files;
 }
 
-string FileUtilsWin32::getWritablePath() const
+std::string FileUtilsWin32::getWritablePath() const
 {
     DECLARE_GUARD;
     return getNativeWritableAbsolutePath();
@@ -320,7 +317,7 @@ std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
 //#ifndef _DEBUG
     // Get filename of executable only, e.g. MyGame.exe
     WCHAR* base_name = wcsrchr(full_path, '\\');
-    wstring retPath;
+    std::wstring retPath;
     if (base_name)
     {
         WCHAR app_data_path[CC_MAX_PATH + 1];
@@ -328,7 +325,7 @@ std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
         // Get local app data directory, e.g. C:\Documents and Settings\username\Local Settings\Application Data
         if (SUCCEEDED(SHGetFolderPathW(nullptr, CSIDL_LOCAL_APPDATA, nullptr, SHGFP_TYPE_CURRENT, app_data_path)))
         {
-            wstring ret(app_data_path);
+            std::wstring ret(app_data_path);
 
             // Adding executable filename, e.g. C:\Documents and Settings\username\Local Settings\Application Data\MyGame.exe
             ret += base_name;

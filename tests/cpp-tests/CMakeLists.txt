@@ -93,7 +93,6 @@ list(APPEND GAME_HEADER
      Classes/ZwoptexTest/ZwoptexTest.h
      Classes/precheader.h
      Classes/CurlTest/CurlTest.h
-     Classes/YAsioTest/YAsioTest.h
      Classes/UnitTest/UnitTest.h
 #    Classes/UnitTest/RefPtrTest.h
      Classes/ConfigurationTest/ConfigurationTest.h
@@ -150,7 +149,6 @@ list(APPEND GAME_HEADER
      Classes/ExtensionsTest/ExtensionsTest.h
      Classes/ExtensionsTest/TableViewTest/CustomTableViewCell.h
      Classes/ExtensionsTest/TableViewTest/TableViewTestScene.h
-     Classes/ExtensionsTest/NetworkTest/HttpClientTest.h
      Classes/Sprite3DTest/Sprite3DTest.h
      Classes/Sprite3DTest/DrawNode3D.h
      Classes/BaseTest.h
@@ -207,7 +205,9 @@ list(APPEND GAME_HEADER
      Classes/FontTest/FontTest.h
      Classes/LightTest/LightTest.h
      Classes/VisibleRect.h
-     Classes/DownloaderTest/DownloaderTest.h
+     Classes/NetworkTest/NetworkTest.h
+     Classes/NetworkTest/DownloaderTest/DownloaderTest.h
+     Classes/NetworkTest/HttpClientTest/HttpClientTest.h
      Classes/OpenURLTest/OpenURLTest.h
      Classes/ConsoleTest/ConsoleTest.h
      Classes/MenuTest/MenuTest.h
@@ -244,16 +244,16 @@ list(APPEND GAME_SOURCE
      Classes/ConfigurationTest/ConfigurationTest.cpp
      Classes/ConsoleTest/ConsoleTest.cpp
      Classes/CurlTest/CurlTest.cpp
-     Classes/YAsioTest/YAsioTest.cpp
      Classes/CurrentLanguageTest/CurrentLanguageTest.cpp
      Classes/DataVisitorTest/DataVisitorTest.cpp
-     Classes/DownloaderTest/DownloaderTest.cpp
+     Classes/NetworkTest/NetworkTest.cpp
+     Classes/NetworkTest/DownloaderTest/DownloaderTest.cpp
+     Classes/NetworkTest/HttpClientTest/HttpClientTest.cpp
      Classes/DrawPrimitivesTest/DrawPrimitivesTest.cpp
      Classes/EffectsAdvancedTest/EffectsAdvancedTest.cpp
      Classes/EffectsTest/EffectsTest.cpp
      Classes/ExtensionsTest/AssetsManagerExTest/AssetsManagerExTest.cpp
      Classes/ExtensionsTest/ExtensionsTest.cpp
-     Classes/ExtensionsTest/NetworkTest/HttpClientTest.cpp
      Classes/ExtensionsTest/TableViewTest/CustomTableViewCell.cpp
      Classes/ExtensionsTest/TableViewTest/TableViewTestScene.cpp
      Classes/FileUtilsTest/FileUtilsTest.cpp
@@ -358,12 +358,85 @@ if(WINDOWS OR MACOSX OR LINUX)
 endif()
 
 list(APPEND GAME_HEADER
-     Classes/Box2DTest/Box2dTest.h
-     )
+   Classes/Box2DTest/Box2dTest.h
+   )
 
 list(APPEND GAME_SOURCE
-     Classes/Box2DTest/Box2dTest.cpp
+   Classes/Box2DTest/Box2dTest.cpp
+)
+
+if(WINDOWS OR MACOSX OR LINUX)
+    list(APPEND GAME_HEADER
+        Classes/Box2DTestBed/test.h
+        Classes/Box2DTestBed/Box2DTestBed.h
+        Classes/Box2DTestBed/CCPhysicsDebugNodeBox2D.h
      )
+
+   list(APPEND GAME_SOURCE
+     Classes/Box2DTestBed/Box2DTestBed.cpp
+     Classes/Box2DTestBed/CCPhysicsDebugNodeBox2D.cpp
+     Classes/Box2DTestBed/test.cpp
+
+    Classes/Box2DTestBed/tests/add_pair.cpp
+    Classes/Box2DTestBed/tests/apply_force.cpp
+    Classes/Box2DTestBed/tests/body_types.cpp
+    Classes/Box2DTestBed/tests/box_stack.cpp
+    Classes/Box2DTestBed/tests/breakable.cpp
+    Classes/Box2DTestBed/tests/bridge.cpp
+    Classes/Box2DTestBed/tests/bullet_test.cpp
+    Classes/Box2DTestBed/tests/cantilever.cpp
+    Classes/Box2DTestBed/tests/car.cpp
+    Classes/Box2DTestBed/tests/chain.cpp
+    Classes/Box2DTestBed/tests/chain_problem.cpp
+    Classes/Box2DTestBed/tests/character_collision.cpp
+    Classes/Box2DTestBed/tests/circle_stack.cpp
+    Classes/Box2DTestBed/tests/collision_filtering.cpp
+    Classes/Box2DTestBed/tests/collision_processing.cpp
+    Classes/Box2DTestBed/tests/compound_shapes.cpp
+    Classes/Box2DTestBed/tests/confined.cpp
+    Classes/Box2DTestBed/tests/continuous_test.cpp
+    Classes/Box2DTestBed/tests/convex_hull.cpp
+    Classes/Box2DTestBed/tests/conveyor_belt.cpp
+    Classes/Box2DTestBed/tests/distance_joint.cpp
+    Classes/Box2DTestBed/tests/distance_test.cpp
+    Classes/Box2DTestBed/tests/dominos.cpp
+    Classes/Box2DTestBed/tests/dump_loader.cpp
+    Classes/Box2DTestBed/tests/dynamic_tree.cpp
+    Classes/Box2DTestBed/tests/edge_shapes.cpp
+    Classes/Box2DTestBed/tests/edge_test.cpp
+    Classes/Box2DTestBed/tests/friction.cpp
+    Classes/Box2DTestBed/tests/gear_joint.cpp
+    Classes/Box2DTestBed/tests/heavy1.cpp
+    Classes/Box2DTestBed/tests/heavy2.cpp
+    Classes/Box2DTestBed/tests/mobile_balanced.cpp
+    Classes/Box2DTestBed/tests/mobile_unbalanced.cpp
+    Classes/Box2DTestBed/tests/motor_joint.cpp
+    Classes/Box2DTestBed/tests/pinball.cpp
+    Classes/Box2DTestBed/tests/platformer.cpp
+    Classes/Box2DTestBed/tests/polygon_collision.cpp
+    Classes/Box2DTestBed/tests/polygon_shapes.cpp
+    Classes/Box2DTestBed/tests/prismatic_joint.cpp
+    Classes/Box2DTestBed/tests/pulley_joint.cpp
+    Classes/Box2DTestBed/tests/pyramid.cpp
+    Classes/Box2DTestBed/tests/ray_cast.cpp
+    Classes/Box2DTestBed/tests/restitution.cpp
+    Classes/Box2DTestBed/tests/revolute_joint.cpp
+    Classes/Box2DTestBed/tests/rope.cpp
+    Classes/Box2DTestBed/tests/sensor.cpp
+    Classes/Box2DTestBed/tests/shape_cast.cpp
+    Classes/Box2DTestBed/tests/shape_editing.cpp
+    Classes/Box2DTestBed/tests/skier.cpp
+    Classes/Box2DTestBed/tests/slider_crank_1.cpp
+    Classes/Box2DTestBed/tests/slider_crank_2.cpp
+    Classes/Box2DTestBed/tests/theo_jansen.cpp
+    Classes/Box2DTestBed/tests/tiles.cpp
+    Classes/Box2DTestBed/tests/time_of_impact.cpp
+    Classes/Box2DTestBed/tests/tumbler.cpp
+    Classes/Box2DTestBed/tests/web.cpp
+    Classes/Box2DTestBed/tests/wheel_joint.cpp
+    Classes/Box2DTestBed/tests/wrecking_ball.cpp
+     )
+endif()
 
 list(APPEND GAME_HEADER
      Classes/Physics3DTest/Physics3DTest.h
@@ -377,45 +450,48 @@ list(APPEND GAME_HEADER
      Classes/PhysicsTest/PhysicsTest.h
      Classes/ChipmunkTest/ChipmunkTest.h
 	 )
-if(WINDOWS)
-	list(APPEND GAME_HEADER
-	    Classes/ChipmunkTestBed/Demo/ChipmunkDemo.h
-		Classes/ChipmunkTestBed/ChipmunkTestBed.h
-	)
-endif()
 
 list(APPEND GAME_SOURCE
      Classes/PhysicsTest/PhysicsTest.cpp
      Classes/ChipmunkTest/ChipmunkTest.cpp
 	 )
-if(WINDOWS)
+
+if(WINDOWS OR MACOSX OR LINUX)
+	list(APPEND GAME_HEADER
+	    Classes/ChipmunkTestBed/demo/ChipmunkDemo.h
+		Classes/ChipmunkTestBed/ChipmunkTestBed.h
+	)
    set (TESTBED_C_SORUCES
-        Classes/ChipmunkTestBed/Demo/Bench.c
-        Classes/ChipmunkTestBed/Demo/Chains.c
-        Classes/ChipmunkTestBed/Demo/Convex.c
-        Classes/ChipmunkTestBed/Demo/Crane.c
-        Classes/ChipmunkTestBed/Demo/Joints.c
-        Classes/ChipmunkTestBed/Demo/LogoSmash.c
-        Classes/ChipmunkTestBed/Demo/OneWay.c
-        Classes/ChipmunkTestBed/Demo/Planet.c
-        Classes/ChipmunkTestBed/Demo/Player.c
-        Classes/ChipmunkTestBed/Demo/Plink.c
-        Classes/ChipmunkTestBed/Demo/Pump.c
-        Classes/ChipmunkTestBed/Demo/PyramidStack.c
-        Classes/ChipmunkTestBed/Demo/PyramidTopple.c
-        Classes/ChipmunkTestBed/Demo/Shatter.c
-        Classes/ChipmunkTestBed/Demo/Springies.c
-        Classes/ChipmunkTestBed/Demo/Sticky.c
-        Classes/ChipmunkTestBed/Demo/Tank.c
-        Classes/ChipmunkTestBed/Demo/TheoJansen.c
-        Classes/ChipmunkTestBed/Demo/Buoyancy.c
-        Classes/ChipmunkTestBed/Demo/ContactGraph.c
-        Classes/ChipmunkTestBed/Demo/Example.c
-        Classes/ChipmunkTestBed/Demo/Query.c
-        Classes/ChipmunkTestBed/Demo/Slice.c
-        Classes/ChipmunkTestBed/Demo/Unicycle.c
-        Classes/ChipmunkTestBed/Demo/Tumble.c)
-        set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
+        Classes/ChipmunkTestBed/demo/Bench.c
+        Classes/ChipmunkTestBed/demo/Chains.c
+        Classes/ChipmunkTestBed/demo/Convex.c
+        Classes/ChipmunkTestBed/demo/Crane.c
+        Classes/ChipmunkTestBed/demo/Joints.c
+        Classes/ChipmunkTestBed/demo/LogoSmash.c
+        Classes/ChipmunkTestBed/demo/OneWay.c
+        Classes/ChipmunkTestBed/demo/Planet.c
+        Classes/ChipmunkTestBed/demo/Player.c
+        Classes/ChipmunkTestBed/demo/Plink.c
+        Classes/ChipmunkTestBed/demo/Pump.c
+        Classes/ChipmunkTestBed/demo/PyramidStack.c
+        Classes/ChipmunkTestBed/demo/PyramidTopple.c
+        Classes/ChipmunkTestBed/demo/Shatter.c
+        Classes/ChipmunkTestBed/demo/Springies.c
+        Classes/ChipmunkTestBed/demo/Sticky.c
+        Classes/ChipmunkTestBed/demo/Tank.c
+        Classes/ChipmunkTestBed/demo/TheoJansen.c
+        Classes/ChipmunkTestBed/demo/Buoyancy.c
+        Classes/ChipmunkTestBed/demo/ContactGraph.c
+        Classes/ChipmunkTestBed/demo/Example.c
+        Classes/ChipmunkTestBed/demo/Query.c
+        Classes/ChipmunkTestBed/demo/Slice.c
+        Classes/ChipmunkTestBed/demo/Unicycle.c
+        Classes/ChipmunkTestBed/demo/Tumble.c)
+        if(WINDOWS)
+            set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
+        else()
+            set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES LANGUAGE CXX)
+        endif()
 		list(APPEND GAME_SOURCE
 			${TESTBED_C_SORUCES}
 			Classes/ChipmunkTestBed/ChipmunkTestBed.cpp

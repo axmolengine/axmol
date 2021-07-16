@@ -27,7 +27,6 @@ THE SOFTWARE.
 
 #ifndef __CC_IMAGE_H__
 #define __CC_IMAGE_H__
-/// @cond DO_NOT_SHOW
 
 #include "base/CCRef.h"
 #include "renderer/CCTexture2D.h"
@@ -58,6 +57,7 @@ typedef struct _MipmapInfo
     _MipmapInfo():address(NULL),len(0){}
 }MipmapInfo;
 
+/** The Image class for loading all images supported by adxe . */
 class CC_DLL Image : public Ref
 {
 public:
@@ -105,11 +105,11 @@ public:
     
     struct CompressedImagePMAFlag {
         enum : uint32_t {
-            ASTC  = 1,
-            ETC1  = 1 << 1, // ETC1_RGB + ETC1_ALPHA only
-            ETC2  = 1 << 2,
-            PVR   = 1 << 3,
-            ALL   = 0xffff,
+            ASTC         = 1,
+            DUAL_SAMPLER = 1 << 1, // for dual sampler, such as ETC1_RGB + ETC1_Alpha
+            ETC2         = 1 << 2,
+            PVR          = 1 << 3,
+            ALL          = 0xffff,
         };
     };
 
@@ -274,5 +274,4 @@ protected:
 
 NS_CC_END
 
-/// @endcond
 #endif    // __CC_IMAGE_H__

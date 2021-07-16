@@ -2228,10 +2228,18 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
     case YOPT_S_CONNECT_TIMEOUT:
       options_.connect_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::micro::den;
       break;
+    case YOPT_S_CONNECT_TIMEOUTMS:
+      options_.connect_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::milli::den;
+      break;
     case YOPT_S_DNS_CACHE_TIMEOUT:
       options_.dns_cache_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::micro::den;
       break;
+    case YOPT_S_DNS_CACHE_TIMEOUTMS:
+      options_.dns_cache_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::milli::den;
+      break;
     case YOPT_S_DNS_QUERIES_TIMEOUT:
+      options_.dns_queries_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::micro::den;
+      break;
     case YOPT_S_DNS_QUERIES_TIMEOUTMS:
       options_.dns_queries_timeout_ = static_cast<highp_time_t>(va_arg(ap, int)) * std::milli::den;
       break;

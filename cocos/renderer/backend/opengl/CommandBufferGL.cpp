@@ -28,10 +28,10 @@
 #include "TextureGL.h"
 #include "DepthStencilStateGL.h"
 #include "ProgramGL.h"
-#include "base/ccMacros.h"
 #include "base/CCEventDispatcher.h"
 #include "base/CCEventType.h"
 #include "base/CCDirector.h"
+#include "renderer/backend/opengl/MacrosGL.h"
 #include "renderer/backend/opengl/UtilsGL.h"
 #include "RenderTargetGL.h"
 #include <algorithm>

@@ -25,12 +25,10 @@
 #include "ExtensionsTest.h"
 #include "../testResource.h"
 #include "AssetsManagerExTest/AssetsManagerExTest.h"
-#include "NetworkTest/HttpClientTest.h"
 #include "TableViewTest/TableViewTestScene.h"
 
 ExtensionsTests::ExtensionsTests()
 {
     addTest("AssetsManagerExTest", [](){ return new (std::nothrow) AssetsManagerExTests; });
-    addTest("HttpClientTest", [](){ return new (std::nothrow) HttpClientTests; });
     addTest("TableViewTest", [](){ return new (std::nothrow) TableViewTests; });
 }

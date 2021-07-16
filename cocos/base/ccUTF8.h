@@ -219,6 +219,11 @@ CC_DLL std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string
 CC_DLL bool hasNonAsciiUTF8(const char* str, size_t len);
 
 /**
+ *  @brief Whether contains utf-8 or all characters are ascii
+ */
+CC_DLL bool detectNonAsciiUTF8(const char* str, size_t len, bool restrictUTF8, bool* pAllCharsAreAscii);
+
+/**
  *  @brief isLegalUTF8String, contains ascii characters
  */
 CC_DLL bool isLegalUTF8String(const char* str, size_t len);

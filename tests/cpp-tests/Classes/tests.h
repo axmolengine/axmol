@@ -27,11 +27,11 @@
 
 
 #include "Box2DTest/Box2dTest.h"
-//#include "Box2DTestBed/Box2dView.h"
+#include "Box2DTestBed/Box2DTestBed.h"
 
 
 #include "ChipmunkTest/ChipmunkTest.h"
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if defined(CC_PLATFORM_PC)
 #include "ChipmunkTestBed/ChipmunkTestBed.h"
 #endif
 
@@ -54,8 +54,6 @@
 #include "WindowTest/WindowTest.h"
 #endif
 
-#include "YAsioTest/YAsioTest.h"
-
 // sort them alphabetically. thanks
 #include "ActionManagerTest/ActionManagerTest.h"
 #include "ActionsEaseTest/ActionsEaseTest.h"
@@ -69,7 +67,7 @@
 #include "ConsoleTest/ConsoleTest.h"
 #include "CurrentLanguageTest/CurrentLanguageTest.h"
 #include "DataVisitorTest/DataVisitorTest.h"
-#include "DownloaderTest/DownloaderTest.h"
+#include "NetworkTest/NetworkTest.h"
 #include "DrawPrimitivesTest/DrawPrimitivesTest.h"
 #include "EffectsAdvancedTest/EffectsAdvancedTest.h"
 #include "EffectsTest/EffectsTest.h"

@@ -148,14 +148,6 @@ set(lua_bindings_headers
     ${COCOS_DEPRECATED_HEADER}
     )
 
-# lua-cjson
-set(lua_bindings_files
-        ${lua_bindings_files}
-        lua-cjson/fpconv.c
-        lua-cjson/strbuf.c
-        lua-cjson/lua_cjson.c
-        )
-
 set(lua_bindings_files
     ${lua_bindings_files}
     "${cocos_root}/thirdparty/yasio/bindings/lyasio.cpp"

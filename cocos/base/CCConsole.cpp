@@ -66,12 +66,11 @@
 #include "base/ccUtils.h"
 #include "base/ccUTF8.h"
 #ifdef _WIN32
-#define NTCVT_CP_DEFAULT CP_UTF8
 #include "win32-specific/ntcvt/ntcvt.hpp"
 #endif
 
 // !FIXME: the previous version of cocos2d::log not thread safe
-// since engine-x make it multi-threading safe by default
+// since adxe make it multi-threading safe by default
 #if !defined(CC_LOG_MULTITHREAD)
 #define CC_LOG_MULTITHREAD 1
 #endif

@@ -4,19 +4,19 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
- 
+
  https://adxe.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -42,37 +42,29 @@ namespace network {
 
 static HttpClient* _httpClient = nullptr; // pointer to singleton
 
-template<typename _Cont, typename _Fty>
+template <typename _Cont, typename _Fty>
 static void __clearQueueUnsafe(_Cont& queue, _Fty pred) {
-    for (auto it = queue.unsafe_begin(); it != queue.unsafe_end();)
-    {
-        if (!pred || pred((*it)))
-        {
+    for (auto it = queue.unsafe_begin(); it != queue.unsafe_end();) {
+        if (!pred || pred((*it))) {
             (*it)->release();
             it = queue.unsafe_erase(it);
-        }
-        else
-        {
+        } else {
             ++it;
         }
     }
 }
 
 // HttpClient implementation
-HttpClient* HttpClient::getInstance()
-{
-    if (_httpClient == nullptr)
-    {
+HttpClient* HttpClient::getInstance() {
+    if (_httpClient == nullptr) {
         _httpClient = new (std::nothrow) HttpClient();
     }
-    
+
     return _httpClient;
 }
 
-void HttpClient::destroyInstance()
-{
-    if (nullptr == _httpClient)
-    {
+void HttpClient::destroyInstance() {
+    if (nullptr == _httpClient) {
         CCLOG("HttpClient singleton is nullptr");
         return;
     }
@@ -84,34 +76,24 @@ void HttpClient::destroyInstance()
     CCLOG("HttpClient::destroyInstance() finished!");
 }
 
-void HttpClient::enableCookies(const char* cookieFile)
-{
+void HttpClient::enableCookies(const char* cookieFile) {
     std::lock_guard<std::recursive_mutex> lock(_cookieFileMutex);
-    if (cookieFile)
-    {
+    if (cookieFile) {
         _cookieFilename = std::string(cookieFile);
-    }
-    else
-    {
+    } else {
         _cookieFilename = (FileUtils::getInstance()->getNativeWritableAbsolutePath() + "cookieFile.txt");
     }
 }
-    
-void HttpClient::setSSLVerification(const std::string& caFile)
-{
+
+void HttpClient::setSSLVerification(const std::string& caFile) {
     std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     _sslCaFilename = caFile;
     _service->set_option(yasio::YOPT_S_SSL_CACERT, _sslCaFilename.c_str());
 }
 
 HttpClient::HttpClient()
-: _isInited(false)
-, _dispatchOnWorkThread(false)
-, _timeoutForConnect(30)
-, _timeoutForRead(60)
-, _cookie(nullptr)
-, _clearResponsePredicate(nullptr)
-{
+    : _isInited(false), _dispatchOnWorkThread(false), _timeoutForConnect(30), _timeoutForRead(60), _cookie(nullptr),
+      _clearResponsePredicate(nullptr) {
     CCLOG("In the constructor of HttpClient!");
     _scheduler = Director::getInstance()->getScheduler();
 
@@ -126,14 +108,12 @@ HttpClient::HttpClient()
     _isInited = true;
 }
 
-HttpClient::~HttpClient()
-{
+HttpClient::~HttpClient() {
     delete _service;
     CCLOG("HttpClient destructor");
 }
 
-bool HttpClient::send(HttpRequest* request)
-{
+bool HttpClient::send(HttpRequest* request) {
     if (!request)
         return false;
 
@@ -141,6 +121,13 @@ bool HttpClient::send(HttpRequest* request)
     processResponse(response, request->getUrl());
     response->release();
     return true;
+}
+
+HttpResponse* HttpClient::sendSync(HttpRequest* request) {
+    request->setSync(true);
+    if (this->send(request))
+        return request->wait();
+    return nullptr;
 }
 
 int HttpClient::tryTakeAvailChannel() {
@@ -159,10 +146,12 @@ void HttpClient::processResponse(HttpResponse* response, const std::string& url)
 
     if (channelIndex != -1) {
         if (response->prepareForProcess(url)) {
-            auto& requestUri = response->getRequestUri();
-            auto channelHandle = _service->channel_at(channelIndex);
+            response->_responseHeaders.clear(); // redirect needs clear old response headers
+            auto& requestUri       = response->getRequestUri();
+            auto channelHandle     = _service->channel_at(channelIndex);
             channelHandle->ud_.ptr = response;
-            _service->set_option(YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().c_str(), (int) requestUri.getPort());
+            _service->set_option(
+                YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().c_str(), (int) requestUri.getPort());
             if (requestUri.isSecure())
                 _service->open(channelIndex, YCK_SSL_CLIENT);
             else
@@ -174,10 +163,10 @@ void HttpClient::processResponse(HttpResponse* response, const std::string& url)
         _responseQueue.push_back(response);
     }
 }
- 
+
 void HttpClient::handleNetworkEvent(yasio::io_event* event) {
-    int channelIndex     = event->cindex();
-    auto channel         = _service->channel_at(event->cindex());
+    int channelIndex       = event->cindex();
+    auto channel           = _service->channel_at(event->cindex());
     HttpResponse* response = (HttpResponse*) channel->ud_.ptr;
     if (!response)
         return;
@@ -197,8 +186,8 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
         if (event->status() == 0) {
             obstream obs;
             bool usePostData = false;
-            auto request = response->getHttpRequest();
-            switch (request->getRequestType()) { 
+            auto request     = response->getHttpRequest();
+            switch (request->getRequestType()) {
             case HttpRequest::Type::GET:
                 obs.write_bytes("GET");
                 break;
@@ -236,23 +225,31 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
 
             // custom headers
             auto& headers = request->getHeaders();
-            if(!headers.empty()) {
-                for(auto& header: headers) {
+
+            bool userAgentSpecified   = false;
+            bool contentTypeSpecified = false;
+            if (!headers.empty()) {
+                using namespace cxx17; // for string_view literal
+                for (auto& header : headers) {
                     obs.write_bytes(header);
                     obs.write_bytes("\r\n");
+
+                    if (cxx20::ic::starts_with(cxx17::string_view{header}, "User-Agent:"_sv))
+                        userAgentSpecified = true;
+                    else if (cxx20::ic::starts_with(cxx17::string_view{header}, "Content-Type:"_sv))
+                        contentTypeSpecified = true;
                 }
-            } else {
-                obs.write_bytes("User-Agent: ");
-                obs.write_bytes("yasio-http");
-                obs.write_bytes("\r\n");
             }
+
+            if (!userAgentSpecified)
+                obs.write_bytes("User-Agent: yasio-http\r\n");
 
             obs.write_bytes("Accept: */*;q=0.8\r\n");
             obs.write_bytes("Connection: Close\r\n");
 
             if (usePostData) {
-                // obs.write_bytes("Origin: yasio\r\n");
-                obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
+                if (!contentTypeSpecified)
+                    obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
 
                 char strContentLength[128] = {0};
                 auto requestData           = request->getRequestData();
@@ -275,7 +272,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                 response->updateInternalCode(yasio::errc::read_timeout);
                 s.close(channelIndex); // timeout
                 return true;
-                });
+            });
         } else {
             handleNetworkEOF(response, channel, event->status());
         }
@@ -297,7 +294,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
         if (response->increaseRedirectCount() < HttpClient::MAX_REDIRECT_COUNT) {
             auto iter = response->_responseHeaders.find("LOCATION");
             if (iter != response->_responseHeaders.end()) {
-                _availChannelQueue.push_back(channel->index()); 
+                _availChannelQueue.push_back(channel->index());
                 processResponse(response, iter->second);
                 response->release();
                 return;
@@ -308,7 +305,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
     finishResponse(response);
 
     // recycle channel
-    _availChannelQueue.push_back(channel->index()); 
+    _availChannelQueue.push_back(channel->index());
 
     // try process pending response
     auto lck = _responseQueue.get_lock();
@@ -323,70 +320,69 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
 }
 
 void HttpClient::finishResponse(HttpResponse* response) {
-    auto cbNotify = [=]() {
-        HttpRequest* request                  = response->getHttpRequest();
-        const ccHttpRequestCallback& callback = request->getCallback();
-        Ref* pTarget                          = request->getTarget();
-        SEL_HttpResponse pSelector            = request->getSelector();
+    auto request   = response->getHttpRequest();
+    auto syncState = request->getSyncState();
+    if (!syncState) {
+        auto cbNotify = [=]() {
+            HttpRequest* request                  = response->getHttpRequest();
+            const ccHttpRequestCallback& callback = request->getCallback();
+            Ref* pTarget                          = request->getTarget();
+            SEL_HttpResponse pSelector            = request->getSelector();
 
-        if (callback != nullptr) {
-            callback(this, response);
-        } else if (pTarget && pSelector) {
-            (pTarget->*pSelector)(this, response);
-        }
+            if (callback != nullptr) {
+                callback(this, response);
+            } else if (pTarget && pSelector) {
+                (pTarget->*pSelector)(this, response);
+            }
 
-        response->release();
-    };
+            response->release();
+        };
 
-    if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId())
-        cbNotify();
-    else
-        _scheduler->performFunctionInCocosThread(cbNotify);
+        if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId())
+            cbNotify();
+        else
+            _scheduler->performFunctionInCocosThread(cbNotify);
+    } else {
+        syncState->set_value(response);
+    }
 }
-    
+
 void HttpClient::clearResponseQueue() {
     auto lck = _responseQueue.get_lock();
     __clearQueueUnsafe(_responseQueue, ClearResponsePredicate{});
 }
 
-void HttpClient::setTimeoutForConnect(int value)
-{
+void HttpClient::setTimeoutForConnect(int value) {
     std::lock_guard<std::recursive_mutex> lock(_timeoutForConnectMutex);
     _timeoutForConnect = value;
     _service->set_option(YOPT_S_CONNECT_TIMEOUT, value);
 }
-    
-int HttpClient::getTimeoutForConnect()
-{
+
+int HttpClient::getTimeoutForConnect() {
     std::lock_guard<std::recursive_mutex> lock(_timeoutForConnectMutex);
     return _timeoutForConnect;
 }
-    
-void HttpClient::setTimeoutForRead(int value)
-{
+
+void HttpClient::setTimeoutForRead(int value) {
     std::lock_guard<std::recursive_mutex> lock(_timeoutForReadMutex);
     _timeoutForRead = value;
 }
-    
-int HttpClient::getTimeoutForRead()
-{
+
+int HttpClient::getTimeoutForRead() {
     std::lock_guard<std::recursive_mutex> lock(_timeoutForReadMutex);
     return _timeoutForRead;
 }
-    
-const std::string& HttpClient::getCookieFilename()
-{
+
+const std::string& HttpClient::getCookieFilename() {
     std::lock_guard<std::recursive_mutex> lock(_cookieFileMutex);
     return _cookieFilename;
 }
-    
-const std::string& HttpClient::getSSLVerification()
-{
+
+const std::string& HttpClient::getSSLVerification() {
     std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     return _sslCaFilename;
 }
 
-}
+} // namespace network
 
 NS_CC_END
-

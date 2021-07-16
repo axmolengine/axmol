@@ -2,8 +2,9 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -46,6 +47,8 @@
 #include "platform/CCFileUtils.h"
 #include <map>
 #include <mutex>
+
+#include "yasio/cxx17/string_view.hpp"
 
 // minizip 1.2.0 is same with other platforms
 #define unzGoToFirstFile64(A,B,C,D) unzGoToFirstFile2(A,B,C,D, NULL, 0, NULL, 0)
@@ -736,10 +739,10 @@ std::vector<std::string> ZipFile::listFiles(const std::string &pathname) const
     ZipFilePrivate::FileListContainer::const_iterator end = _data->fileList.end();
     //ensure pathname ends with `/` as a directory
     std::string dirname = pathname[pathname.length() -1] == '/' ? pathname : pathname + "/";
-    while(it != end)
+    for(auto& item : _data->fileList)
     {
-        const std::string &filename = it->first;
-        if(filename.substr(0, dirname.length()) == dirname)
+        const std::string &filename = item.first;
+        if (cxx20::starts_with(cxx17::string_view{filename}, cxx17::string_view{dirname}))
         {
             std::string suffix = filename.substr(dirname.length());
             auto pos = suffix.find('/');
@@ -752,10 +755,9 @@ std::vector<std::string> ZipFile::listFiles(const std::string &pathname) const
                 fileSet.insert(suffix.substr(0, pos + 1));
             }
         }
-        it++;
     }
 
-    return std::vector<std::string>(fileSet.begin(), fileSet.end());
+    return std::vector<std::string>{fileSet.begin(), fileSet.end()};
 }
 
 unsigned char *ZipFile::getFileData(const std::string &fileName, ssize_t *size)

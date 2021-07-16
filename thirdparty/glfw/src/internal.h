@@ -387,6 +387,7 @@ struct _GLFWwindow
     GLFWbool            mousePassthrough;
     GLFWbool            shouldClose;
     void*               userPointer;
+    GLFWbool            doublebuffer;
     GLFWvidmode         videoMode;
     _GLFWmonitor*       monitor;
     _GLFWcursor*        cursor;
@@ -435,7 +436,7 @@ struct _GLFWwindow
 //
 struct _GLFWmonitor
 {
-    char*           name;
+    char            name[128];
     void*           userPointer;
 
     // Physical dimensions in millimeters.
@@ -496,7 +497,7 @@ struct _GLFWjoystick
     int             buttonCount;
     unsigned char*  hats;
     int             hatCount;
-    char*           name;
+    char            name[128];
     void*           userPointer;
     char            guid[33];
     _GLFWmapping*   mapping;

@@ -383,7 +383,7 @@ static cpFloat pentagon_moment = 0.0f;
 
 static cpBool NoCollide_begin(cpArbiter *arb, cpSpace *space, void *data){
     
-	CCLOG("NoCollide_begin");
+	// CCLOG("NoCollide_begin");
 
 	return cpTrue;
 }

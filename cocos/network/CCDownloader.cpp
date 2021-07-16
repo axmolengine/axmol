@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2015-2016 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -38,14 +39,16 @@ DownloadTask::DownloadTask() {
 DownloadTask::DownloadTask(const std::string& srcUrl, const std::string& identifier) {
     this->requestURL = srcUrl;
     this->identifier = identifier;
+    this->background = false;
 }
 
 DownloadTask::DownloadTask(const std::string& srcUrl, const std::string& storagePath, const std::string& checksum,
-    const std::string& identifier) {
+    const std::string& identifier, bool background) {
     this->requestURL  = srcUrl;
     this->storagePath = storagePath;
     this->checksum    = checksum;
     this->identifier  = identifier;
+    this->background  = background;
 }
 
 DownloadTask::~DownloadTask() {
@@ -111,15 +114,15 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadDataTask(
             task.reset();
             break;
         }
-        task->_coTask.reset(_impl->createCoTask(task));
+        _impl->startTask(task);
     } while (0);
 
     return task;
 }
 
 std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(const std::string& srcUrl,
-    const std::string& storagePath, const std::string& identifier, const std::string& md5checksum) {
-    auto task = std::make_shared<DownloadTask>(srcUrl, storagePath, md5checksum, identifier);
+    const std::string& storagePath, const std::string& identifier, const std::string& md5checksum, bool background) {
+    auto task = std::make_shared<DownloadTask>(srcUrl, storagePath, md5checksum, identifier, background);
     do {
         if (srcUrl.empty() || storagePath.empty()) {
             if (onTaskError) {
@@ -128,7 +131,7 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(const std::stri
             task.reset();
             break;
         }
-        task->_coTask.reset(_impl->createCoTask(task));
+        _impl->startTask(task);
     } while (0);
 
     return task;

@@ -40,6 +40,8 @@ THE SOFTWARE.
 #include "base/ccUTF8.h"
 #include "2d/CCCamera.h"
 
+#include "renderer/backend/opengl/MacrosGL.h"
+
 #if defined(_WIN32)
 #include "glfw3ext.h"
 #endif

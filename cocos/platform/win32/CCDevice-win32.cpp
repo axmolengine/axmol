@@ -2,8 +2,9 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +28,6 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "platform/CCStdC.h"
 
-#define NTCVT_CP_DEFAULT CP_UTF8
 #include "win32-specific/ntcvt/ntcvt.hpp"
 
 NS_CC_BEGIN
@@ -59,9 +59,8 @@ public:
         : _DC(nullptr)
         , _bmp(nullptr)
         , _font((HFONT)GetStockObject(DEFAULT_GUI_FONT))
-        , _wnd(nullptr)
+        , _wnd(hWnd)
     {
-        _wnd = hWnd;
         HDC hdc = GetDC(hWnd);
         _DC = CreateCompatibleDC(hdc);
         ReleaseDC(hWnd, hdc);

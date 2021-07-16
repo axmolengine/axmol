@@ -23,7 +23,7 @@
 
 #define _ 0 // Using _ to indicate an entry that will not be used.
 
-const quantization_and_transfer_table quant_and_xfer_tables[12] = {
+const quantization_and_transfer_table quant_and_xfer_tables[12] {
 	// Quantization method 0, range 0..1
 	{
 		QUANT_2,

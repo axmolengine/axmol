@@ -26,7 +26,6 @@ THE SOFTWARE.
 #include "CCArmature.h"
 #include "CCBone.h"
 #include "CCArmatureDefine.h"
-#include "CCUtilMath.h"
 #include "CCDatas.h"
 
 using namespace cocos2d;

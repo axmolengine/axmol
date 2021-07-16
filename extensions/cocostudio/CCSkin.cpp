@@ -1,7 +1,8 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -81,9 +82,9 @@ Skin *Skin::create(const std::string& pszFileName)
 Skin::Skin()
     : _bone(nullptr)
     , _armature(nullptr)
-    , _displayName("")
+    , _displayName()
+    , _skinTransform(Mat4::IDENTITY)
 {
-    _skinTransform = Mat4::IDENTITY;
 }
 
 bool Skin::initWithSpriteFrameName(const std::string& spriteFrameName)

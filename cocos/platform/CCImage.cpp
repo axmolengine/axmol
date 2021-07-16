@@ -482,7 +482,7 @@ namespace
 }
 
 /*
-* Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and engine-x only support pvrtc and etc1
+* Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and adxe only support pvrtc and etc1
 * see: https://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
 */
 static backend::PixelFormat getDevicePVRPixelFormat(backend::PixelFormat format)
@@ -560,7 +560,7 @@ namespace
 // Implement Image
 //////////////////////////////////////////////////////////////////////////
 bool Image::PNG_PREMULTIPLIED_ALPHA_ENABLED = true;
-uint32_t Image::COMPRESSED_IMAGE_PMA_FLAGS = Image::CompressedImagePMAFlag::ETC1;
+uint32_t Image::COMPRESSED_IMAGE_PMA_FLAGS = Image::CompressedImagePMAFlag::DUAL_SAMPLER;
 
 void Image::setCompressedImagesHavePMA(uint32_t targets, bool havePMA)
 {

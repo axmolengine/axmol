@@ -86,8 +86,8 @@ waterPreSolve(cpArbiter *arb, cpSpace *space, void *ptr)
 	cpFloat displacedMass = clippedArea*FLUID_DENSITY;
 	cpVect centroid = cpCentroidForPoly(clippedCount, clipped);
 	
-	//ChipmunkDebugDrawPolygon(clippedCount, clipped, 5.0f, RGBAColor(0, 0, 1, 1), RGBAColor(0, 0, 1, 0.1f));
-	//ChipmunkDebugDrawDot(5, centroid, RGBAColor(0, 0, 1, 1));
+	ChipmunkDebugDrawPolygon(clippedCount, clipped, 5.0f, RGBAColor(0, 0, 1, 1), RGBAColor(0, 0, 1, 0.1f));
+	ChipmunkDebugDrawDot(5, centroid, RGBAColor(0, 0, 1, 1));
 	
 	cpFloat dt = cpSpaceGetCurrentTimeStep(space);
 	cpVect g = cpSpaceGetGravity(space);
@@ -100,7 +100,7 @@ waterPreSolve(cpArbiter *arb, cpSpace *space, void *ptr)
 	cpFloat k = k_scalar_body(body, centroid, cpvnormalize(v_centroid));
 	cpFloat damping = clippedArea*FLUID_DRAG*FLUID_DENSITY;
 	cpFloat v_coef = cpfexp(-damping*dt*k); // linear drag
-//	cpFloat v_coef = 1.0/(1.0 + damping*dt*cpvlength(v_centroid)*k); // quadratic drag
+	//cpFloat v_coef = 1.0/(1.0 + damping*dt*cpvlength(v_centroid)*k); // quadratic drag
 	cpBodyApplyImpulseAtWorldPoint(body, cpvmult(cpvsub(cpvmult(v_centroid, v_coef), v_centroid), 1.0/k), centroid);
 	
 	// Apply angular damping for the fluid drag.
