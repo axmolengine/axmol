@@ -1,4 +1,5 @@
 #include "UBBParser.h"
+#include "base/format.h"
 
 NS_FGUI_BEGIN
 USING_NS_CC;
@@ -149,13 +150,13 @@ void UBBParser::onTag_IMG(const std::string & tagName, bool end, const std::stri
 {
     if (!end)
     {
-        string src;
+        std::string src;
         getTagText(src, true);
+
         if (src.empty())
             return;
-
         if (defaultImgWidth != 0)
-            replacement = "<img src=\"" + src + "\" width=\"" + std::to_string(defaultImgWidth) + "\" height=\"" + std::to_string(defaultImgHeight) + "\"/>";
+            replacement = fmt::format(R"(<img src="{}" width="{}" height="{}"/>)", src, defaultImgWidth, defaultImgHeight);
         else
             replacement = "<img src=\"" + src + "\"/>";
     }

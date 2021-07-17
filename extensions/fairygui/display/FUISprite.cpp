@@ -100,7 +100,7 @@ void FUISprite::setScaleByTile(bool value)
 
 void FUISprite::setGrayed(bool value)
 {
-#if defined(ENGINEX_VERSION)
+#if defined(ADXE_VERSION)
     Sprite::setProgramState(value ? backend::ProgramType::GRAY_SCALE : backend::ProgramType::POSITION_TEXTURE_COLOR);
 #elif COCOS2D_VERSION >= 0x00040000
     auto isETC1 = getTexture() && getTexture()->getAlphaTextureName();
