@@ -37,8 +37,8 @@ BraceWrapping:
 # Indent case labels.
 IndentCaseLabels: true
 
-# Right-align pointers and references
-PointerAlignment: Right
+# Left-align pointers and references
+PointerAlignment: Left
 
 # ANGLE likes to align things as much as possible.
 AlignOperands: true
