@@ -26,7 +26,7 @@
 namespace fmt
 {
 template <typename... T>
-inline std::string &format_to(std::string &out, format_string<T...> fmt, T &&...args)
+inline std::string& format_to(std::string& out, format_string<T...> fmt, T&&... args)
 {
     out.clear();
     vformat_to(std::back_inserter(out), fmt, fmt::make_format_args(args...));
