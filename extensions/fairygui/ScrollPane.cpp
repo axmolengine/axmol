@@ -60,7 +60,8 @@ ScrollPane::ScrollPane(GComponent* owner)
       _floating(false),
       _dontClipMargin(false),
       _mouseWheelEnabled(true),
-      _hover(false)
+      _hover(false),
+      _dragged(false)
 {
     _owner = owner;
 

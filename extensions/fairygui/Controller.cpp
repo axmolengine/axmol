@@ -184,7 +184,7 @@ void GController::setup(ByteBuffer* buffer)
     {
         for (int i = 0; i < cnt; i++)
         {
-            int nextPos = buffer->readShort();
+            int nextPos = buffer->readUshort();
             nextPos += buffer->getPos();
 
             ControllerAction* action = ControllerAction::createAction(buffer->readByte());
