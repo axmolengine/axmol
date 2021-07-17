@@ -1357,7 +1357,7 @@ void Transition::setup(ByteBuffer* buffer)
     int cnt = buffer->readShort();
     for (int i = 0; i < cnt; i++)
     {
-        int dataLen = buffer->readShort();
+        int dataLen = buffer->readUshort();
         int curPos = buffer->getPos();
 
         buffer->seek(curPos, 0);

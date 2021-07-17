@@ -894,7 +894,7 @@ void GObject::setup_afterAdd(ByteBuffer* buffer, int beginPos)
     int cnt = buffer->readShort();
     for (int i = 0; i < cnt; i++)
     {
-        int nextPos = buffer->readShort();
+        int nextPos = buffer->readUshort();
         nextPos += buffer->getPos();
 
         GearBase* gear = getGear(buffer->readByte());

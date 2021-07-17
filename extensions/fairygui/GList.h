@@ -20,7 +20,7 @@ public:
     CREATE_FUNC(GList);
 
     const std::string& getDefaultItem() const { return _defaultItem; }
-    void setDefaultItem(const std::string& value) { _defaultItem = value; }
+    void setDefaultItem(const std::string& value);
 
     ListLayoutType getLayout() const { return _layout; }
     void setLayout(ListLayoutType value);
