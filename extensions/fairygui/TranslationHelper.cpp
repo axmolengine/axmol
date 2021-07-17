@@ -1,12 +1,14 @@
 #include "TranslationHelper.h"
 #include "PackageItem.h"
 #include "UIPackage.h"
-#if defined(ENGINEX_VERSION)
+#if defined(ADXE_VERSION)
 #include "pugixml/pugixml.hpp"
 #else
 #include "tinyxml2/tinyxml2.h"
 #endif
 #include "utils/ByteBuffer.h"
+
+#include "base/format.h"
 
 USING_NS_CC;
 NS_FGUI_BEGIN
@@ -17,9 +19,9 @@ std::unordered_map<std::string, std::unordered_map<std::string, std::string>> Tr
 
 void TranslationHelper::loadFromXML(const char* xmlString, size_t nBytes)
 {
-    strings.clear();
+    TranslationHelper::strings.clear();
 
-#if defined(ENGINEX_VERSION)
+#if defined(ADXE_VERSION)
     pugi::xml_document doc;
     if (doc.load_buffer(xmlString, nBytes)) {
         auto root = doc.document_element();
@@ -34,7 +36,7 @@ void TranslationHelper::loadFromXML(const char* xmlString, size_t nBytes)
 
             std::string key2 = key.substr(0, i);
             std::string key3 = key.substr(i + 1);
-            std::unordered_map<std::string, std::string>& col = strings[key2];
+            std::unordered_map<std::string, std::string> &col = TranslationHelper::strings[key2];
             col[key3] = text;
 
             ele = ele.next_sibling("string");
@@ -68,18 +70,20 @@ void TranslationHelper::loadFromXML(const char* xmlString, size_t nBytes)
 
 void TranslationHelper::translateComponent(PackageItem* item)
 {
-    if (strings.empty())
+    if (TranslationHelper::strings.empty())
         return;
 
-    auto col = strings.find(item->owner->getId() + item->id);
-    if (col == strings.end())
+    auto col = TranslationHelper::strings.find(item->owner->getId() + item->id);
+    if (col == TranslationHelper::strings.end())
         return;
 
-    std::unordered_map<std::string, std::string>& strings = col->second;
+    auto& sstrings = col->second;
 
     ByteBuffer* buffer = item->rawData;
 
     buffer->seek(0, 2);
+
+    std::string fmtbuf;
 
     int childCount = buffer->readShort();
     for (int i = 0; i < childCount; i++)
@@ -103,8 +107,8 @@ void TranslationHelper::translateComponent(PackageItem* item)
 
         buffer->seek(curPos, 1);
 
-        auto it = strings.find(elementId + "-tips");
-        if (it != strings.end())
+        auto it = sstrings.find(elementId + "-tips");
+        if (it != sstrings.end())
             buffer->writeS(it->second);
 
         buffer->seek(curPos, 2);
@@ -124,14 +128,14 @@ void TranslationHelper::translateComponent(PackageItem* item)
                     const string& page = buffer->readS();
                     if (!page.empty())
                     {
-                        if ((it = strings.find(elementId + "-texts_" + std::to_string(k))) != strings.end())
+                        if ((it = sstrings.find(fmt::format_to(fmtbuf, "{}-texts_{}", elementId, k))) != sstrings.end())
                             buffer->writeS(it->second);
                         else
                             buffer->skip(2);
                     }
                 }
 
-                if (buffer->readBool() && (it = strings.find(elementId + "-texts_def")) != strings.end())
+                if (buffer->readBool() && (it = sstrings.find(elementId + "-texts_def")) != sstrings.end())
                     buffer->writeS(it->second);
             }
 
@@ -151,7 +155,7 @@ void TranslationHelper::translateComponent(PackageItem* item)
             {
                 std::string target = buffer->readS();
                 int propertyId = buffer->readShort();
-                if (propertyId == 0 && (it = strings.find(elementId + "-cp-" + target)) != strings.end())
+                if (propertyId == 0 && (it = sstrings.find(elementId + "-cp-" + target)) != sstrings.end())
                     buffer->writeS(it->second);
                 else
                     buffer->skip(2);
@@ -164,12 +168,12 @@ void TranslationHelper::translateComponent(PackageItem* item)
         case ObjectType::RICHTEXT:
         case ObjectType::INPUTTEXT:
         {
-            if ((it = strings.find(elementId)) != strings.end())
+            if ((it = sstrings.find(elementId)) != sstrings.end())
             {
                 buffer->seek(curPos, 6);
                 buffer->writeS(it->second);
             }
-            if ((it = strings.find(elementId + "-prompt")) != strings.end())
+            if ((it = sstrings.find(elementId + "-prompt")) != sstrings.end())
             {
                 buffer->seek(curPos, 4);
                 buffer->writeS(it->second);
@@ -190,15 +194,14 @@ void TranslationHelper::translateComponent(PackageItem* item)
                 buffer->skip(2); //url
                 if (type == ObjectType::TREE)
                     buffer->skip(2);
-
                 //title
-                if ((it = strings.find(elementId + "-" + std::to_string(j))) != strings.end())
+                if ((it = sstrings.find(fmt::format_to(fmtbuf, "{}-{}", elementId, j))) != sstrings.end())
                     buffer->writeS(it->second);
                 else
                     buffer->skip(2);
 
                 //selected title
-                if ((it = strings.find(elementId + "-" + std::to_string(j) + "-0")) != strings.end())
+                if ((it = sstrings.find(fmt::format_to(fmtbuf, "{}-{}-0", elementId, j))) != sstrings.end())
                     buffer->writeS(it->second);
                 else
                     buffer->skip(2);
@@ -213,7 +216,8 @@ void TranslationHelper::translateComponent(PackageItem* item)
                     {
                         std::string target = buffer->readS();
                         int propertyId = buffer->readShort();
-                        if (propertyId == 0 && (it = strings.find(elementId + "-" + std::to_string(j) + "-" + target)) != strings.end())
+                        if (propertyId == 0 && (it = sstrings.find(fmt::format_to(fmtbuf, "{}-{}-{}", elementId, j,
+                                                                                  target))) != sstrings.end())
                             buffer->writeS(it->second);
                         else
                             buffer->skip(2);
@@ -229,7 +233,7 @@ void TranslationHelper::translateComponent(PackageItem* item)
         {
             if (buffer->seek(curPos, 6) && (ObjectType)buffer->readByte() == type)
             {
-                if ((it = strings.find(elementId)) != strings.end())
+                if ((it = sstrings.find(elementId)) != sstrings.end())
                     buffer->writeS(it->second);
                 else
                     buffer->skip(2);
@@ -238,7 +242,7 @@ void TranslationHelper::translateComponent(PackageItem* item)
                 if (buffer->readBool())
                     buffer->skip(4);
                 buffer->skip(4);
-                if (buffer->readBool() && (it = strings.find(elementId + "-prompt")) != strings.end())
+                if (buffer->readBool() && (it = sstrings.find(elementId + "-prompt")) != sstrings.end())
                     buffer->writeS(it->second);
             }
             break;
@@ -248,11 +252,11 @@ void TranslationHelper::translateComponent(PackageItem* item)
         {
             if (buffer->seek(curPos, 6) && (ObjectType)buffer->readByte() == type)
             {
-                if ((it = strings.find(elementId)) != strings.end())
+                if ((it = sstrings.find(elementId)) != sstrings.end())
                     buffer->writeS(it->second);
                 else
                     buffer->skip(2);
-                if ((it = strings.find(elementId + "-0")) != strings.end())
+                if ((it = sstrings.find(elementId + "-0")) != sstrings.end())
                     buffer->writeS(it->second);
             }
             break;
@@ -268,13 +272,13 @@ void TranslationHelper::translateComponent(PackageItem* item)
                     int nextPos = buffer->readUshort();
                     nextPos += buffer->getPos();
 
-                    if ((it = strings.find(elementId + "-" + std::to_string(j))) != strings.end())
+                    if ((it = sstrings.find(fmt::format_to(fmtbuf, "{}-{}", elementId, j))) != sstrings.end())
                         buffer->writeS(it->second);
 
                     buffer->setPos(nextPos);
                 }
 
-                if ((it = strings.find(elementId)) != strings.end())
+                if ((it = sstrings.find(elementId)) != sstrings.end())
                     buffer->writeS(it->second);
             }
 

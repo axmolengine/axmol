@@ -40,6 +40,7 @@ static inline float sp_EaseFunc(float t, float d)
     return t * t * t + 1; //cubicOut
 }
 
+// clang-format off
 ScrollPane::ScrollPane(GComponent* owner)
     : _vtScrollBar(nullptr),
       _hzScrollBar(nullptr),
@@ -61,17 +62,15 @@ ScrollPane::ScrollPane(GComponent* owner)
       _dontClipMargin(false),
       _mouseWheelEnabled(true),
       _hover(false),
-      _dragged(false)
+      _dragged(false),
+      _owner(owner),
+      _scrollStep(UIConfig::defaultScrollStep),
+      _mouseWheelStep(UIConfig::defaultScrollStep * 2),
+      _decelerationRate(UIConfig::defaultScrollDecelerationRate),
+      _touchEffect(UIConfig::defaultScrollTouchEffect),
+      _bouncebackEffect(UIConfig::defaultScrollBounceEffect),
+      _pageSize(Vec2::ONE)
 {
-    _owner = owner;
-
-    _scrollStep = UIConfig::defaultScrollStep;
-    _mouseWheelStep = _scrollStep * 2;
-    _decelerationRate = UIConfig::defaultScrollDecelerationRate;
-    _touchEffect = UIConfig::defaultScrollTouchEffect;
-    _bouncebackEffect = UIConfig::defaultScrollBounceEffect;
-    _pageSize = Vec2::ONE;
-
     _maskContainer = FUIContainer::create();
     _maskContainer->setCascadeOpacityEnabled(true);
     _owner->displayObject()->addChild(_maskContainer);
@@ -90,6 +89,7 @@ ScrollPane::ScrollPane(GComponent* owner)
             _draggingPane = nullptr;
     });
 }
+// clang-format on
 
 ScrollPane::~ScrollPane()
 {
