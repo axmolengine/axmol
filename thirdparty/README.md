@@ -54,7 +54,7 @@
 - Version: 2.0.0
 - License: Apache-2.0
 
-## fmtlib
+## {fmt}
 - Upstream: https://github.com/fmtlib/fmt
 - Version: 8.0.1-2038bf6
 - License: MIT
