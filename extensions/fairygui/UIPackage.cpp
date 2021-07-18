@@ -513,7 +513,7 @@ bool UIPackage::loadPackage(ByteBuffer* buffer)
     cnt = buffer->readShort();
     for (int i = 0; i < cnt; i++)
     {
-        int nextPos = buffer->readShort();
+        int nextPos = buffer->readUshort();
         nextPos += buffer->getPos();
 
         const string& itemId = buffer->readS();
@@ -727,7 +727,7 @@ void UIPackage::loadMovieClip(PackageItem* item)
 
     for (int i = 0; i < frameCount; i++)
     {
-        int nextPos = buffer->readShort();
+        int nextPos = buffer->readUshort();
         nextPos += buffer->getPos();
 
         Rect rect;
@@ -799,7 +799,7 @@ void UIPackage::loadFont(PackageItem* item)
     int cnt = buffer->readInt();
     for (int i = 0; i < cnt; i++)
     {
-        int nextPos = buffer->readShort();
+        int nextPos = buffer->readUshort();
         nextPos += buffer->getPos();
 
         memset(&def, 0, sizeof(def));

@@ -1193,7 +1193,7 @@ void GComponent::constructFromResource(std::vector<GObject*>* objectPool, int po
     int controllerCount = buffer->readShort();
     for (int i = 0; i < controllerCount; i++)
     {
-        int nextPos = buffer->readShort();
+        int nextPos = buffer->readUshort();
         nextPos += buffer->getPos();
 
         GController* controller = new GController();
@@ -1211,7 +1211,7 @@ void GComponent::constructFromResource(std::vector<GObject*>* objectPool, int po
     int childCount = buffer->readShort();
     for (int i = 0; i < childCount; i++)
     {
-        int dataLen = buffer->readShort();
+        int dataLen = buffer->readUshort();
         int curPos = buffer->getPos();
 
         if (objectPool != nullptr)
@@ -1261,7 +1261,7 @@ void GComponent::constructFromResource(std::vector<GObject*>* objectPool, int po
 
     for (int i = 0; i < childCount; i++)
     {
-        int nextPos = buffer->readShort();
+        int nextPos = buffer->readUshort();
         nextPos += buffer->getPos();
 
         buffer->seek(buffer->getPos(), 3);
@@ -1275,7 +1275,7 @@ void GComponent::constructFromResource(std::vector<GObject*>* objectPool, int po
 
     for (int i = 0; i < childCount; i++)
     {
-        int nextPos = buffer->readShort();
+        int nextPos = buffer->readUshort();
         nextPos += buffer->getPos();
 
         child = _children.at(i);
@@ -1315,7 +1315,7 @@ void GComponent::constructFromResource(std::vector<GObject*>* objectPool, int po
     int transitionCount = buffer->readShort();
     for (int i = 0; i < transitionCount; i++)
     {
-        int nextPos = buffer->readShort();
+        int nextPos = buffer->readUshort();
         nextPos += buffer->getPos();
 
         Transition* trans = new Transition(this);
