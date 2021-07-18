@@ -242,7 +242,7 @@ bool SpriteFrameCache::reloadTexture(const std::string& spriteSheetFileName)
 {
     CCASSERT(!spriteSheetFileName.empty(), "plist filename should not be nullptr");
 
-    auto spriteSheetItr = _spriteSheets.find(spriteSheetFileName);
+    const auto spriteSheetItr = _spriteSheets.find(spriteSheetFileName);
     if (spriteSheetItr == _spriteSheets.end())
     {
         return false; // Sprite sheet wasn't loaded, so don't reload it
@@ -252,8 +252,7 @@ bool SpriteFrameCache::reloadTexture(const std::string& spriteSheetFileName)
 
     if (isSpriteSheetInUse(spriteSheetFileName))
     {
-        removeSpriteSheet(spriteSheetFileName);
-        spriteSheetItr = _spriteSheets.end(); // we've removed the associated entry, so it's no longer valid
+        removeSpriteSheet(spriteSheetFileName); // we've removed the associated entry, so spriteSheetItr is no longer valid
     }
     else
     {
