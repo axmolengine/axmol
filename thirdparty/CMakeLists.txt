@@ -329,8 +329,9 @@ if(BUILD_DEP_KCP)
     target_compile_definitions(thirdparty PUBLIC YASIO_HAVE_KCP=1)
 endif()
 
-target_include_directories(thirdparty INTERFACE "fmtlib/include")
-target_compile_definitions(thirdparty INTERFACE FMT_HEADER_ONLY=1)
+add_subdirectory(fmt)
+target_link_libraries(thirdparty fmt-header-only)
+target_include_directories(thirdparty INTERFACE "fmt/include")
 
 # put "thirdparty" into thirdparty folder, too
 configure_target_outdir(thirdparty)
