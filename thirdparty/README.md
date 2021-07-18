@@ -54,6 +54,11 @@
 - Version: 2.0.0
 - License: Apache-2.0
 
+## {fmt}
+- Upstream: https://github.com/fmtlib/fmt
+- Version: 8.0.1-2038bf6
+- License: MIT
+
 ## FreeType
 - Upstream: https://www.freetype.org/
 - Version: 2.10.4 with modification: fix FindHarfBuzz.cmake min version doesn't work
