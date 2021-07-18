@@ -371,7 +371,7 @@ void GTree::readItems(ByteBuffer* buffer)
     int cnt = buffer->readShort();
     for (int i = 0; i < cnt; i++)
     {
-        nextPos = buffer->readShort();
+        nextPos = buffer->readUshort();
         nextPos += buffer->getPos();
 
         str = buffer->readS();

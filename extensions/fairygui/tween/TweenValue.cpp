@@ -1,4 +1,5 @@
 #include "TweenValue.h"
+#include "base/format.h"
 
 NS_FGUI_BEGIN
 USING_NS_CC;
@@ -69,7 +70,7 @@ float TweenValue::operator[](int index) const
     case 3:
         return w;
     default:
-        throw "Index out of bounds: " + std::to_string(index);
+        throw fmt::format("Index out of bounds: {}", index);
     }
 }
 
@@ -86,7 +87,7 @@ float & TweenValue::operator[](int index)
     case 3:
         return w;
     default:
-        throw "Index out of bounds: " + std::to_string(index);
+        throw fmt::format("Index out of bounds: {}", index);
     }
 }
 

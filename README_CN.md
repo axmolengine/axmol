@@ -1,5 +1,6 @@
 # adxe
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
 [![dev](https://img.shields.io/badge/v1.0.0-beta1-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
   
@@ -34,7 +35,7 @@
 * 设置默认C++标准为C++14
 * 设置ios下最低目标平台为ios9.0
 * 使用更快的xml解析库pugixml代替tinyxml2
-* HttpClient, Downloader全平台统一实现，均基于curl
+* Downloader全平台统一实现，均基于curl
 * 全平台统一使用XML SAX解析plist文件, 移除Apple平台的实现
 * Spine 3.8支持
 * 新增FairyGUI支持

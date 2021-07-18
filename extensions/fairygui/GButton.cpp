@@ -27,11 +27,11 @@ GButton::GButton() : _mode(ButtonMode::COMMON),
                      _down(false),
                      _downEffect(0),
                      _downScaled(false),
-                     _downEffectValue(0.8f),
-                     _changeStateOnClick(true)
+                     _downEffectValue(0.8f), 
+                     _changeStateOnClick(true), 
+                     _sound(UIConfig::buttonSound), 
+                     _soundVolumeScale(UIConfig::buttonSoundVolumeScale)
 {
-    _sound = UIConfig::buttonSound;
-    _soundVolumeScale = UIConfig::buttonSoundVolumeScale;
 }
 
 GButton::~GButton()
