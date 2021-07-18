@@ -72,7 +72,7 @@ void DebugDraw::DrawPolygon(const b2Vec2* verts, int vertexCount, const b2Color&
         vec[i] = Vec2(verts[i].x * mRatio, verts[i].y * mRatio) + physicsDebugNodeOffset;
     }
 //    drawBP->drawPolygon(vec, vertexCount, Color4F(color.r, color.g, color.b, color.a), 1, Color4F(color.r, color.g, color.b, color.a));
-    drawBP->drawPolygon(vec, vertexCount, Color4F::BLACK, 0.5f, Color4F(color.r, color.g, color.b, color.a));
+    drawBP->drawPolygon(vec, vertexCount, Color4F::BLACK, 0.4f, Color4F(color.r, color.g, color.b, color.a));
 }
 
 void DebugDraw::DrawSolidPolygon(const b2Vec2* verts, int vertexCount, const b2Color& color)
@@ -81,7 +81,7 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2* verts, int vertexCount, const b2C
     for (size_t i = 0; i < vertexCount; i++) {
         vec[i] = Vec2(verts[i].x * mRatio, verts[i].y * mRatio) + physicsDebugNodeOffset;
     }
-    drawBP->drawPolygon(vec, vertexCount, Color4F(color.r / 2, color.g / 2, color.b / 2, color.a), 0.2f, Color4F(color.r, color.g, color.b, color.a));
+    drawBP->drawPolygon(vec, vertexCount, Color4F(color.r / 2, color.g / 2, color.b / 2, color.a), 0.4f, Color4F(color.r, color.g, color.b, color.a));
     //drawBP->drawSolidPoly(vec, vertexCount, Color4F(color.r, color.g, color.b, color.a));
 }
 
@@ -130,7 +130,6 @@ void DebugDraw::DrawString(int x, int y, const char* string, ...)
 
 void DebugDraw::DrawString(const b2Vec2& pw, const char* string, ...)
 {
-
     // pw is unsupported
     std::string s = std::string(string);
     labelDebugDraw->setString(s.c_str());
@@ -151,7 +150,7 @@ void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& color)
     Vec2(p3.x * mRatio, p3.y * mRatio) + physicsDebugNodeOffset ,
     Vec2(p4.x * mRatio, p4.y * mRatio) + physicsDebugNodeOffset ,
     };
-    drawBP->drawSolidPoly(verts, sizeof(verts) / sizeof(verts[0]), Color4F(color.r, color.g, color.b, color.a));
+    drawBP->drawPolygon(verts, sizeof(verts) / sizeof(verts[0]), Color4F(color.r / 2, color.g / 2, color.b / 2, 0), 0.4f, Color4F(color.r, color.g, color.b, color.a));
 }
 
 void DebugDraw::Flush()
