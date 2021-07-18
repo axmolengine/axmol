@@ -79,7 +79,7 @@ void HttpClient::destroyInstance() {
 void HttpClient::enableCookies(const char* cookieFile) {
     std::lock_guard<std::recursive_mutex> lock(_cookieFileMutex);
     if (cookieFile) {
-        _cookieFilename = std::string(cookieFile);
+        _cookieFilename = cookieFile;
     } else {
         _cookieFilename = (FileUtils::getInstance()->getNativeWritableAbsolutePath() + "cookieFile.txt");
     }
@@ -92,8 +92,13 @@ void HttpClient::setSSLVerification(const std::string& caFile) {
 }
 
 HttpClient::HttpClient()
-    : _isInited(false), _dispatchOnWorkThread(false), _timeoutForConnect(30), _timeoutForRead(60), _cookie(nullptr),
-      _clearResponsePredicate(nullptr) {
+    : _isInited(false)
+    , _dispatchOnWorkThread(false)
+    , _timeoutForConnect(30)
+    , _timeoutForRead(60)
+    , _cookie(nullptr)
+    , _clearResponsePredicate(nullptr) 
+{
     CCLOG("In the constructor of HttpClient!");
     _scheduler = Director::getInstance()->getScheduler();
 
@@ -289,11 +294,14 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
     auto responseCode = response->getResponseCode();
     switch (responseCode) {
     case 301:
-    case 307:
     case 302:
+    case 307:
         if (response->increaseRedirectCount() < HttpClient::MAX_REDIRECT_COUNT) {
             auto iter = response->_responseHeaders.find("LOCATION");
             if (iter != response->_responseHeaders.end()) {
+                if (responseCode == 302)
+                    response->getHttpRequest()->setRequestType(HttpRequest::Type::GET);
+                CCLOG("Process url redirect (%d): %s", responseCode, iter->second.c_str());
                 _availChannelQueue.push_back(channel->index());
                 processResponse(response, iter->second);
                 response->release();
