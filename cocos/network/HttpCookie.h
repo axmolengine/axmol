@@ -28,6 +28,9 @@
 #define HTTP_COOKIE_H
 /// @cond DO_NOT_SHOW
 
+#include "platform/CCPlatformMacros.h"
+
+#include <string.h>
 #include <string>
 #include <vector>
 
