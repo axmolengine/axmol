@@ -87,50 +87,50 @@ public:
 		m_bullet = NULL;
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	//switch (key)
-	//	//{
-	//	//case GLFW_KEY_COMMA:
-	//	//	if (m_bullet != NULL)
-	//	//	{
-	//	//		m_world->DestroyBody(m_bullet);
-	//	//		m_bullet = NULL;
-	//	//	}
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_COMMA:
+			if (m_bullet != NULL)
+			{
+				m_world->DestroyBody(m_bullet);
+				m_bullet = NULL;
+			}
 
-	//	//	{
-	//	//		b2CircleShape shape;
-	//	//		shape.m_radius = 0.25f;
+			{
+				b2CircleShape shape;
+				shape.m_radius = 0.25f;
 
-	//	//		b2FixtureDef fd;
-	//	//		fd.shape = &shape;
-	//	//		fd.density = 20.0f;
-	//	//		fd.restitution = 0.05f;
+				b2FixtureDef fd;
+				fd.shape = &shape;
+				fd.density = 20.0f;
+				fd.restitution = 0.05f;
 
-	//	//		b2BodyDef bd;
-	//	//		bd.type = b2_dynamicBody;
-	//	//		bd.bullet = true;
-	//	//		bd.position.Set(-31.0f, 5.0f);
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.bullet = true;
+				bd.position.Set(-31.0f, 5.0f);
 
-	//	//		m_bullet = m_world->CreateBody(&bd);
-	//	//		m_bullet->CreateFixture(&fd);
+				m_bullet = m_world->CreateBody(&bd);
+				m_bullet->CreateFixture(&fd);
 
-	//	//		m_bullet->SetLinearVelocity(b2Vec2(400.0f, 0.0f));
-	//	//	}
-	//	//	break;
- // //              
- // //      case GLFW_KEY_B:
- // //          g_blockSolve = !g_blockSolve;
- // //          break;
-	//	//}
-	//}
+				m_bullet->SetLinearVelocity(b2Vec2(400.0f, 0.0f));
+			}
+			break;
+                
+        case GLFW_KEY_B:
+            g_blockSolve = !g_blockSolve;
+            break;
+		}
+	}
 
 	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
-		//g_debugDraw.DrawString(5, m_textLine, "Press: (,) to launch a bullet.");
-		//m_textLine += m_textIncrement;
-		//g_debugDraw.DrawString(5, m_textLine, "Blocksolve = %d", g_blockSolve);
+		g_debugDraw.DrawString(5, m_textLine, "Press: (,) to launch a bullet.");
+		m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Blocksolve = %d", g_blockSolve);
 		if (m_stepCount == 300)
 		{
 			if (m_bullet != NULL)

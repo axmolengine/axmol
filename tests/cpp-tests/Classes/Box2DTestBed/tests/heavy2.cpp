@@ -73,15 +73,15 @@ public:
         }
     }
     
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
- //       case GLFW_KEY_H:
- //           ToggleHeavy();
- //           break;
-	//	}
-	//}
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+        case GLFW_KEY_H:
+            ToggleHeavy();
+            break;
+		}
+	}
     
 	static Test* Create()
 	{

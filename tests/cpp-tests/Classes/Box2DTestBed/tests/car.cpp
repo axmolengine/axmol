@@ -240,30 +240,30 @@ public:
 		}
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_A:
-	//		m_spring1->SetMotorSpeed(m_speed);
-	//		break;
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_A:
+			m_spring1->SetMotorSpeed(m_speed);
+			break;
 
-	//	case GLFW_KEY_S:
-	//		m_spring1->SetMotorSpeed(0.0f);
-	//		break;
+		case GLFW_KEY_S:
+			m_spring1->SetMotorSpeed(0.0f);
+			break;
 
-	//	case GLFW_KEY_D:
-	//		m_spring1->SetMotorSpeed(-m_speed);
-	//		break;
-	//	}
-	//}
+		case GLFW_KEY_D:
+			m_spring1->SetMotorSpeed(-m_speed);
+			break;
+		}
+	}
 
 	void Step(Settings* settings) override
 	{
-		//g_debugDraw.DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, hz down = q, hz up = e");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, hz down = q, hz up = e");
+		m_textLine += m_textIncrement;
 
-		//g_camera.m_center.x = m_car->GetPosition().x;
+	//	g_camera.m_center.x = m_car->GetPosition().x;
 		Test::Step(settings);
 	}
 

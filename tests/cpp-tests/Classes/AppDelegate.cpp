@@ -23,6 +23,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+
+#include <string>
 #include "AppDelegate.h"
 
 #include "cocos2d.h"
@@ -67,8 +69,12 @@ bool AppDelegate::applicationDidFinishLaunching()
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
-    if(!glview) {
-        glview = GLViewImpl::createWithRect("Cpp Tests", Rect(0, 0, resourceSize.width, resourceSize.height));
+    if (!glview) {
+        std::string title = "Cpp Tests";
+#ifndef NDEBUG
+        title += " *Debug*",
+#endif
+        glview = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height));
         director->setOpenGLView(glview);
     }
     

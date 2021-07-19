@@ -237,12 +237,12 @@ public:
 		m_character->SetLinearVelocity(v);
 
 		Test::Step(settings);
-		//g_debugDraw.DrawString(5, m_textLine, "This tests various character collision shapes.");
-		//m_textLine += m_textIncrement;
-		//g_debugDraw.DrawString(5, m_textLine, "Limitation: square and hexagon can snag on aligned boxes.");
-		//m_textLine += m_textIncrement;
-		//g_debugDraw.DrawString(5, m_textLine, "Feature: edge chains have smooth collision inside and out.");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "This tests various character collision shapes.");
+		m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Limitation: square and hexagon can snag on aligned boxes.");
+		m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Feature: edge chains have smooth collision inside and out.");
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

@@ -72,15 +72,15 @@ public:
 		m_time = 0.0f;
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_S:
-	//		m_go = !m_go;
-	//		break;
-	//	}
-	//}
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_S:
+			m_go = !m_go;
+			break;
+		}
+	}
 
 	void Step(Settings* settings) override
 	{
@@ -98,11 +98,11 @@ public:
 		m_joint->SetLinearOffset(linearOffset);
 		m_joint->SetAngularOffset(angularOffset);
 
-		//g_debugDraw.DrawPoint(linearOffset, 4.0f, b2Color(0.9f, 0.9f, 0.9f));
+		g_debugDraw.DrawPoint(linearOffset, 4.0f, b2Color(0.9f, 0.9f, 0.9f));
 
-		//Test::Step(settings);
-		//g_debugDraw.DrawString(5, m_textLine, "Keys: (s) pause");
-		//m_textLine += 15;
+		Test::Step(settings);
+		g_debugDraw.DrawString(5, m_textLine, "Keys: (s) pause");
+		m_textLine += 15;
 	}
 
 	static Test* Create()

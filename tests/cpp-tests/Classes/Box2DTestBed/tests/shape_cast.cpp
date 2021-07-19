@@ -120,9 +120,9 @@ public:
 
 		b2Distance(&distanceOutput, &simplexCache, &distanceInput);
 
-		//g_debugDraw.DrawString(5, m_textLine, "hit = %s, iters = %d, lambda = %g, distance = %g",
-		//	hit ? "true" : "false", output.iterations, output.lambda, distanceOutput.distance);
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "hit = %s, iters = %d, lambda = %g, distance = %g",
+			hit ? "true" : "false", output.iterations, output.lambda, distanceOutput.distance);
+		m_textLine += m_textIncrement;
 
 		b2Vec2 vertices[b2_maxPolygonVertices];
 
@@ -133,11 +133,11 @@ public:
 
 		if (m_countA == 1)
 		{
-	//		g_debugDraw.DrawCircle(vertices[0], m_radiusA, b2Color(0.9f, 0.9f, 0.9f));
+			g_debugDraw.DrawCircle(vertices[0], m_radiusA, b2Color(0.9f, 0.9f, 0.9f));
 		}
 		else
 		{
-	//		g_debugDraw.DrawPolygon(vertices, m_countA, b2Color(0.9f, 0.9f, 0.9f));
+			g_debugDraw.DrawPolygon(vertices, m_countA, b2Color(0.9f, 0.9f, 0.9f));
 		}
 
 		for (int32 i = 0; i < m_countB; ++i)
@@ -147,11 +147,11 @@ public:
 
 		if (m_countB == 1)
 		{
-	//		g_debugDraw.DrawCircle(vertices[0], m_radiusB, b2Color(0.5f, 0.9f, 0.5f));
+			g_debugDraw.DrawCircle(vertices[0], m_radiusB, b2Color(0.5f, 0.9f, 0.5f));
 		}
 		else
 		{
-	//		g_debugDraw.DrawPolygon(vertices, m_countB, b2Color(0.5f, 0.9f, 0.5f));
+			g_debugDraw.DrawPolygon(vertices, m_countB, b2Color(0.5f, 0.9f, 0.5f));
 		}
 
 		for (int32 i = 0; i < m_countB; ++i)
@@ -161,19 +161,19 @@ public:
 
 		if (m_countB == 1)
 		{
-	//		g_debugDraw.DrawCircle(vertices[0], m_radiusB, b2Color(0.5f, 0.7f, 0.9f));
+			g_debugDraw.DrawCircle(vertices[0], m_radiusB, b2Color(0.5f, 0.7f, 0.9f));
 		}
 		else
 		{
-	//		g_debugDraw.DrawPolygon(vertices, m_countB, b2Color(0.5f, 0.7f, 0.9f));
+			g_debugDraw.DrawPolygon(vertices, m_countB, b2Color(0.5f, 0.7f, 0.9f));
 		}
 
 		if (hit)
 		{
 			b2Vec2 p1 = output.point;
-	//		g_debugDraw.DrawPoint(p1, 10.0f, b2Color(0.9f, 0.3f, 0.3f));
+			g_debugDraw.DrawPoint(p1, 10.0f, b2Color(0.9f, 0.3f, 0.3f));
 			b2Vec2 p2 = p1 + output.normal;
-	//		g_debugDraw.DrawSegment(p1, p2, b2Color(0.9f, 0.3f, 0.3f));
+			g_debugDraw.DrawSegment(p1, p2, b2Color(0.9f, 0.3f, 0.3f));
 		}
 	}
 

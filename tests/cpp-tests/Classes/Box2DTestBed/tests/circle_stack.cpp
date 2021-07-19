@@ -65,17 +65,17 @@ public:
 	{
 		Test::Step(settings);
 
-		//for (int32 i = 0; i < e_count; ++i)
-		//{
-		//	printf("%g ", m_bodies[i]->GetWorldCenter().y);
-		//}
+		for (int32 i = 0; i < e_count; ++i)
+		{
+			printf("%g ", m_bodies[i]->GetWorldCenter().y);
+		}
 
-		//for (int32 i = 0; i < e_count; ++i)
-		//{
-		//	printf("%g ", m_bodies[i]->GetLinearVelocity().y);
-		//}
+		for (int32 i = 0; i < e_count; ++i)
+		{
+			printf("%g ", m_bodies[i]->GetLinearVelocity().y);
+		}
 
-		//printf("\n");
+		printf("\n");
 	}
 
 	static Test* Create()

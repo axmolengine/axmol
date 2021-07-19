@@ -260,11 +260,11 @@ public:
 
 		Test::Step(settings);
 
-		//m_rope1.Draw(&g_debugDraw);
-		//m_rope2.Draw(&g_debugDraw);
+		m_rope1.Draw(&g_debugDraw);
+		m_rope2.Draw(&g_debugDraw);
 
-		//g_debugDraw.DrawString(5, m_textLine, "Press comma and period to move left and right");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press comma and period to move left and right");
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()
