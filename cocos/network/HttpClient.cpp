@@ -297,7 +297,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
     case 302:
     case 307:
         if (response->increaseRedirectCount() < HttpClient::MAX_REDIRECT_COUNT) {
-            auto iter = response->_responseHeaders.find("LOCATION");
+            auto iter = response->_responseHeaders.find("location");
             if (iter != response->_responseHeaders.end()) {
                 if (responseCode == 302)
                     response->getHttpRequest()->setRequestType(HttpRequest::Type::GET);
