@@ -91,7 +91,7 @@
 
 ## llhttp
 - Upstream: https://github.com/nodejs/llhttp
-- Version: 6.0.3
+- Version: 6.0.4
 - License: MIT
 
 ## lua

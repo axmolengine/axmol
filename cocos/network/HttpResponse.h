@@ -28,10 +28,11 @@
 #ifndef __HTTP_RESPONSE__
 #define __HTTP_RESPONSE__
 #include <ctype.h>
+#include <map>
 #include <unordered_map>
 #include "network/HttpRequest.h"
 #include "network/Uri.h"
-#include "llhttp/llhttp.h"
+#include "llhttp.h"
 
 /**
  * @addtogroup network
@@ -53,7 +54,7 @@ class CC_DLL HttpResponse : public cocos2d::Ref
 {
     friend class HttpClient;
 public:
-    using ResponseHeaderMap = std::unordered_map<std::string, std::string>;
+    using ResponseHeaderMap = std::multimap<std::string, std::string>;
 
     /**
      * Constructor, it's used by HttpClient internal, users don't need to create HttpResponse manually.
@@ -194,10 +195,12 @@ private:
         _context.data = this;
 
         /* Set user callbacks */
-        _contextSettings.on_header_field     = on_header_field;
-        _contextSettings.on_header_value     = on_header_value;
-        _contextSettings.on_body             = on_body;
-        _contextSettings.on_message_complete = on_complete;
+        _contextSettings.on_header_field          = on_header_field;
+        _contextSettings.on_header_field_complete = on_header_field_complete;
+        _contextSettings.on_header_value          = on_header_value;
+        _contextSettings.on_header_value_complete = on_header_value_complete;
+        _contextSettings.on_body                  = on_body;
+        _contextSettings.on_message_complete      = on_complete;
 
         return true;
     }
@@ -211,15 +214,23 @@ private:
     }
 
     static int on_header_field(llhttp_t* context, const char* at, size_t length) {
-
         auto thiz = (HttpResponse*) context->data;
-        thiz->_currentHeader.assign(at, length);
-        std::transform(thiz->_currentHeader.begin(), thiz->_currentHeader.end(), thiz->_currentHeader.begin(), ::toupper);
+        thiz->_currentHeader.insert(thiz->_currentHeader.end(), at, at + length);
+        return 0;
+    }
+    static int on_header_field_complete(llhttp_t* context) {
+        auto thiz = (HttpResponse*)context->data;
+        std::transform(thiz->_currentHeader.begin(), thiz->_currentHeader.end(), thiz->_currentHeader.begin(), ::tolower);
         return 0;
     }
     static int on_header_value(llhttp_t* context, const char* at, size_t length) {
         auto thiz = (HttpResponse*) context->data;
-        thiz->_responseHeaders.emplace(std::move(thiz->_currentHeader), std::string{at, length});
+        thiz->_currentHeaderValue.insert(thiz->_currentHeaderValue.end(), at, at + length);
+        return 0;
+    }
+    static int on_header_value_complete(llhttp_t* context) {
+        auto thiz = (HttpResponse*)context->data;
+        thiz->_responseHeaders.emplace(std::move(thiz->_currentHeader), std::move(thiz->_currentHeaderValue));
         return 0;
     }
     static int on_body(llhttp_t* context, const char* at, size_t length) {
@@ -244,6 +255,7 @@ protected:
     bool                _finished = false;       /// to indicate if the http request is successful simply
     std::vector<char>   _responseData;  /// the returned raw data. You can also dump it as a string
     std::string         _currentHeader;
+    std::string         _currentHeaderValue;
     ResponseHeaderMap   _responseHeaders; /// the returned raw header data. You can also dump it as a string
     int                 _responseCode = -1;    /// the status code returned from libcurl, e.g. 200, 404
     int                 _internalCode = 0;   /// the ret code of perform
