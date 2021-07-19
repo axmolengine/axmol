@@ -4,4 +4,4 @@ The embedded xml SAX parser, extract from rapidxml DOM parser: https://github.co
 The non-recursive revision is extract from pugixml DOM parser: https://github.com/zeux/pugixml
 
 ## SAX2 handler
-Please see: https://github.com/simdsoft/adxe/blob/master/cocos/platform/CCSAXParser.cpp
+Please see: https://github.com/adxeproject/adxe/blob/master/cocos/platform/CCSAXParser.cpp
