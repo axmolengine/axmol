@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) Bytedance Inc.
+ Copyright (c) 2021 Bytedance Inc.
 
  https://adxe.org
 
@@ -43,65 +43,64 @@ namespace network
 {
 void HttpCookie::readFile()
 {
+    enum
+    {
+        DOMAIN_INDEX = 0,
+        TAILMATCH_INDEX,
+        PATH_INDEX,
+        SECURE_INDEX,
+        EXPIRES_INDEX,
+        NAME_INDEX,
+        VALUE__INDEX,
+    };
     std::string inString = cocos2d::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
     if(!inString.empty())
     {
-        std::vector<std::string> cookiesVec;
-        cookiesVec.clear();
-
-        std::stringstream stream(inString);
-        std::string item;
-        while(std::getline(stream, item, '\n'))
-        {
-            cookiesVec.push_back(item);
-        }
-
-        if(cookiesVec.empty())
-            return;
-
-        _cookies.clear();
-
-        for(auto& cookie : cookiesVec)
-        {
-            if(cookie.empty())
-                continue;
-
-            if(cookie.find("#HttpOnly_") != std::string::npos)
-            {
-                cookie = cookie.substr(10);
-            }
-
-            if(cookie.at(0) == '#')
-                continue;
-
-            CookiesInfo co;
-            std::stringstream streamInfo(cookie);
-            std::vector<std::string> elems;
-            std::string elemsItem;
-
-            while (std::getline(streamInfo, elemsItem, '\t'))
-            {
-                elems.push_back(elemsItem);
-            }
-
-            co.domain = elems[0];
-            co.tailmatch = true; // strcmp("TRUE", elems[1].c_str()) == 0;
-            co.path   = elems[2];
-            co.secure = strcmp("TRUE", elems[3].c_str()) == 0;
-            co.expires = static_cast<time_t>(strtoll(elems[4].c_str(), nullptr, 10));
-            co.name = elems[5];
-            co.value = elems[6];
-            _cookies.push_back(co);
-        }
+        xsbase::fast_split(inString, '\n', [this](char* s, char* e) {
+            if (*s == '#') // skip comment
+                return;
+            int count = 0;
+            CookieInfo cookieInfo;
+            using namespace cxx17;
+            xsbase::fast_split(s, e - s, '\t', [&,this](char* ss, char* ee) {
+                auto ch = *ee; // store
+                *ee     = '\0';
+                switch (count)
+                {
+                    case DOMAIN_INDEX:
+                        cookieInfo.domain.assign(ss, ee - ss);
+                        break;
+                    case PATH_INDEX:
+                        cookieInfo.path.assign(ss, ee - ss);
+                        break;
+                    case SECURE_INDEX:
+                        cookieInfo.secure = cxx20::ic::iequals(cxx17::string_view { ss, (size_t)(ee - ss) }, "TRUE"_sv);
+                        break;
+                    case EXPIRES_INDEX:
+                        cookieInfo.expires = static_cast<time_t>(strtoll(ss, nullptr, 10));
+                        break;
+                    case NAME_INDEX:
+                        cookieInfo.name.assign(ss, ee - ss);
+                        break;
+                    case VALUE__INDEX:
+                        cookieInfo.value.assign(ss, ee - ss);
+                        break;
+                }
+                *ee = ch; // restore
+                ++count;
+            });
+            if (count >= 7)
+                _cookies.push_back(std::move(cookieInfo));
+        });
     }
 }
 
-const std::vector<CookiesInfo>* HttpCookie::getCookies() const
+const std::vector<CookieInfo>* HttpCookie::getCookies() const
 {
     return &_cookies;
 }
 
-const CookiesInfo* HttpCookie::getMatchCookie(const Uri& uri) const
+const CookieInfo* HttpCookie::getMatchCookie(const Uri& uri) const
 {
     for(auto& cookie : _cookies)
     {
@@ -112,7 +111,7 @@ const CookiesInfo* HttpCookie::getMatchCookie(const Uri& uri) const
     return nullptr;
 }
 
-void HttpCookie::updateOrAddCookie(CookiesInfo* cookie)
+void HttpCookie::updateOrAddCookie(CookieInfo* cookie)
 {
     for(auto& _cookie : _cookies)
     {
@@ -155,7 +154,7 @@ std::string HttpCookie::checkAndGetFormatedMatchCookies(const Uri& uri)
 bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
 {
     unsigned int count = 0;
-    CookiesInfo info;
+    CookieInfo info;
     xsbase::nzls::fast_split(cookie.c_str(), cookie.length(), ';', [&](const char* start, const char* end) {
         unsigned int count_ = 0;
         while (*start == ' ')
