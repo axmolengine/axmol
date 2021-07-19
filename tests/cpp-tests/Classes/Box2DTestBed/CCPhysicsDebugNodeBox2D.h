@@ -1,4 +1,5 @@
 /*
+* Copyright (c) 2019 Erin Catto
 * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
 *
 * This software is provided 'as-is', without any express or implied
@@ -19,47 +20,79 @@
 #ifndef __PHYSICSNODES_DEBUGNODE_BOX2D_H__
 #define __PHYSICSNODES_DEBUGNODE_BOX2D_H__
 
+
+#define GLFW_INCLUDE_NONE
+
+#include "GLFW/glfw3.h"
+
 #include "box2d/box2d.h"
 #include "cocos2d.h"
+
 
 struct b2AABB;
 
 extern cocos2d::DrawNode* drawBox2D;
 
+
+//struct Camera
+//{
+//    Camera()
+//    {
+//        m_center.Set(0.0f, 20.0f);
+//        m_zoom = 1.0f;
+//        m_width = 1280;
+//        m_height = 800;
+//    }
+//
+//    b2Vec2 ConvertScreenToWorld(const b2Vec2& screenPoint);
+//    b2Vec2 ConvertWorldToScreen(const b2Vec2& worldPoint);
+//    void BuildProjectionMatrix(float* m, float zBias);
+//
+//    b2Vec2 m_center;
+//    float m_zoom;
+//    int32 m_width;
+//    int32 m_height;
+//};
+
 // This class implements debug drawing callbacks that are invoked
 // inside b2World::Step.
-class GLESDebugDraw : public b2Draw
+class DebugDraw : public b2Draw
 {
     float mRatio;
  //   cocos2d::g* mShaderProgram;
-    GLint        mColorLocation;
+   // GLint        mColorLocation;
 
     cocos2d::DrawNode* drawBP = NULL;
 
     void initShader( void );
 public:
-    GLESDebugDraw();
+    DebugDraw();
+    ~DebugDraw();
 
-    GLESDebugDraw(float ratio );
+    void Create();
+    void Destroy();
 
-    virtual void DrawPolygon(const b2Vec2* vertices, int vertexCount, const b2Color& color);
+    void DrawPolygon(const b2Vec2* vertices, int vertexCount, const b2Color& color) override;
 
-    virtual void DrawSolidPolygon(const b2Vec2* vertices, int vertexCount, const b2Color& color);
+    void DrawSolidPolygon(const b2Vec2* vertices, int vertexCount, const b2Color& color) override;
 
-    virtual void DrawCircle(const b2Vec2& center, float radius, const b2Color& color);
+    void DrawCircle(const b2Vec2& center, float radius, const b2Color& color) override;
 
-    virtual void DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color);
+    void DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color) override;
 
-    virtual void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color);
+    void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
 
-    virtual void DrawTransform(const b2Transform& xf);
+    void DrawTransform(const b2Transform& xf) override;
 
-    virtual void DrawPoint(const b2Vec2& p, float size, const b2Color& color);
+    void DrawPoint(const b2Vec2& p, float size, const b2Color& color) override;
 
-    virtual void DrawString(int x, int y, const char* string, ...); 
+    void DrawString(int x, int y, const char* string, ...); 
 
-    virtual void DrawAABB(b2AABB* aabb, const b2Color& color);
+    void DrawString(const b2Vec2& p, const char* string, ...);
+
+    void DrawAABB(b2AABB* aabb, const b2Color& color);
+
+    void Flush();
 };
-
 
 #endif

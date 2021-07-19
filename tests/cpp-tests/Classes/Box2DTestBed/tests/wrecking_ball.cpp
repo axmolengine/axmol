@@ -141,15 +141,15 @@ public:
 	{
 		Test::Step(settings);
 
-		//if (m_distanceJoint)
-		//{
-		//	g_debugDraw.DrawString(5, m_textLine, "Distance Joint ON");
-		//}
-		//else
-		//{
-		//	g_debugDraw.DrawString(5, m_textLine, "Distance Joint OFF");
-		//}
-		//m_textLine += m_textIncrement;
+		if (m_distanceJoint)
+		{
+			g_debugDraw.DrawString(5, m_textLine, "Distance Joint ON");
+		}
+		else
+		{
+			g_debugDraw.DrawString(5, m_textLine, "Distance Joint OFF");
+		}
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

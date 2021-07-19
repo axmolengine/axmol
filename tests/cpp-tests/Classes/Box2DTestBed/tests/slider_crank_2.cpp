@@ -122,30 +122,30 @@ public:
 		}
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_F:
-	//		m_joint2->EnableMotor(!m_joint2->IsMotorEnabled());
-	//		m_joint2->GetBodyB()->SetAwake(true);
-	//		break;
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_F:
+			m_joint2->EnableMotor(!m_joint2->IsMotorEnabled());
+			m_joint2->GetBodyB()->SetAwake(true);
+			break;
 
-	//	case GLFW_KEY_M:
-	//		m_joint1->EnableMotor(!m_joint1->IsMotorEnabled());
-	//		m_joint1->GetBodyB()->SetAwake(true);
-	//		break;
-	//	}
-	//}
+		case GLFW_KEY_M:
+			m_joint1->EnableMotor(!m_joint1->IsMotorEnabled());
+			m_joint1->GetBodyB()->SetAwake(true);
+			break;
+		}
+	}
 
 	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
-		//g_debugDraw.DrawString(5, m_textLine, "Keys: (f) toggle friction, (m) toggle motor");
-		//m_textLine += m_textIncrement;
-		//float torque = m_joint1->GetMotorTorque(settings.m_hertz);
-		//g_debugDraw.DrawString(5, m_textLine, "Motor Torque = %5.0f", (float) torque);
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Keys: (f) toggle friction, (m) toggle motor");
+		m_textLine += m_textIncrement;
+		float torque = m_joint1->GetMotorTorque(settings->hz);
+		g_debugDraw.DrawString(5, m_textLine, "Motor Torque = %5.0f", (float) torque);
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

@@ -79,13 +79,13 @@ public:
 	{
 		Test::Step(settings);
 
-	//	float torque = m_joint->GetMotorTorque(settings.hz);
-		//g_debugDraw.DrawString(5, m_textLine, "Motor Torque = %4.0f", torque);
-		//m_textLine += m_textIncrement;
+		float torque = m_joint->GetMotorTorque(settings->hz);
+		g_debugDraw.DrawString(5, m_textLine, "Motor Torque = %4.0f", torque);
+		m_textLine += m_textIncrement;
 
-	//	b2Vec2 F = m_joint->GetReactionForce(settings.hz);
-		//g_debugDraw.DrawString(5, m_textLine, "Reaction Force = (%4.1f, %4.1f)", F.x, F.y);
-		//m_textLine += m_textIncrement;
+		b2Vec2 F = m_joint->GetReactionForce(settings->hz);
+		g_debugDraw.DrawString(5, m_textLine, "Reaction Force = (%4.1f, %4.1f)", F.x, F.y);
+		m_textLine += m_textIncrement;
 	}
 
 	/*void UpdateUI() override

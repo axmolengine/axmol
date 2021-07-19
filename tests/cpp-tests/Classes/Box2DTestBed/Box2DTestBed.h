@@ -28,6 +28,8 @@
 #include "../BaseTest.h"
 #include "renderer/CCCustomCommand.h"
 
+extern cocos2d::Vec2 physicsDebugNodeOffset;
+
 DEFINE_TEST_SUITE(Box2DTestBedTests);
 
 class Box2DTestBed : public TestCase

@@ -47,34 +47,34 @@ public:
 
 	void Step(Settings* settings) override
 	{
-		B2_NOT_USED(settings);
+	//	B2_NOT_USED(settings);
 
-		b2Manifold manifold;
-//		b2CollidePolygons(&manifold, &m_polygonA, m_transformA, &m_polygonB, m_transformB);
+		//b2Manifold manifold;
+		//b2CollidePolygons(&manifold, &m_polygonA, m_transformA, &m_polygonB, m_transformB);
 
-		b2WorldManifold worldManifold;
-//		worldManifold.Initialize(&manifold, m_transformA, m_polygonA.m_radius, m_transformB, m_polygonB.m_radius);
+		//b2WorldManifold worldManifold;
+		//worldManifold.Initialize(&manifold, m_transformA, m_polygonA.m_radius, m_transformB, m_polygonB.m_radius);
 
-		//g_debugDraw.DrawString(5, m_textLine, "point count = %d", manifold.pointCount);
-		//m_textLine += m_textIncrement;
+	//	g_debugDraw.DrawString(5, m_textLine, "point count = %d", manifold.pointCount);
+	//	m_textLine += m_textIncrement;
 
-		{
-			b2Color color(0.9f, 0.9f, 0.9f);
-			b2Vec2 v[b2_maxPolygonVertices];
-			//for (int32 i = 0; i < m_polygonA.m_count; ++i)
-			//{
-			//	v[i] = b2Mul(m_transformA, m_polygonA.m_vertices[i]);
-			//}
-	//		g_debugDraw.DrawPolygon(v, m_polygonA.m_count, color);
+		//{
+		//	b2Color color(0.9f, 0.9f, 0.9f);
+		//	b2Vec2 v[b2_maxPolygonVertices];
+		//	for (int32 i = 0; i < m_polygonA.m_count; ++i)
+		//	{
+		//		v[i] = b2Mul(m_transformA, m_polygonA.m_vertices[i]);
+		//	}
+		//	g_debugDraw.DrawPolygon(v, m_polygonA.m_count, color);
 
-			//for (int32 i = 0; i < m_polygonB.m_count; ++i)
-			//{
-			//	v[i] = b2Mul(m_transformB, m_polygonB.m_vertices[i]);
-			//}
+		//	for (int32 i = 0; i < m_polygonB.m_count; ++i)
+		//	{
+		//		v[i] = b2Mul(m_transformB, m_polygonB.m_vertices[i]);
+		//	}
 		//	g_debugDraw.DrawPolygon(v, m_polygonB.m_count, color);
-		}
+		//}
 
-		for (int32 i = 0; i < manifold.pointCount; ++i)
+	//	for (int32 i = 0; i < manifold.pointCount; ++i)
 		{
 	//		g_debugDraw.DrawPoint(worldManifold.points[i], 4.0f, b2Color(0.9f, 0.3f, 0.3f));
 		}
@@ -82,46 +82,46 @@ public:
 		Test::Step(settings);
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_A:
-	//		m_positionB.x -= 0.1f;
-	//		break;
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_A:
+			m_positionB.x -= 0.1f;
+			break;
 
-	//	case GLFW_KEY_D:
-	//		m_positionB.x += 0.1f;
-	//		break;
+		case GLFW_KEY_D:
+			m_positionB.x += 0.1f;
+			break;
 
-	//	case GLFW_KEY_S:
-	//		m_positionB.y -= 0.1f;
-	//		break;
+		case GLFW_KEY_S:
+			m_positionB.y -= 0.1f;
+			break;
 
-	//	case GLFW_KEY_W:
-	//		m_positionB.y += 0.1f;
-	//		break;
+		case GLFW_KEY_W:
+			m_positionB.y += 0.1f;
+			break;
 
-	//	case GLFW_KEY_Q:
-	//		m_angleB += 0.1f * b2_pi;
-	//		break;
+		case GLFW_KEY_Q:
+			m_angleB += 0.1f * b2_pi;
+			break;
 
-	//	case GLFW_KEY_E:
-	//		m_angleB -= 0.1f * b2_pi;
-	//		break;
-	//	}
+		case GLFW_KEY_E:
+			m_angleB -= 0.1f * b2_pi;
+			break;
+		}
 
-//		m_transformB.Set(m_positionB, m_angleB);
-	//}
+		m_transformB.Set(m_positionB, m_angleB);
+	}
 
-	//b2PolygonShape m_polygonA;
-	//b2PolygonShape m_polygonB;
+	b2PolygonShape m_polygonA;
+	b2PolygonShape m_polygonB;
 
-	//b2Transform m_transformA;
-	//b2Transform m_transformB;
+	b2Transform m_transformA;
+	b2Transform m_transformB;
 
-//	b2Vec2 m_positionB;
-//	float m_angleB;
+	b2Vec2 m_positionB;
+	float m_angleB;
 };
 
 static int testIndex = RegisterTest("Geometry", "Polygon Collision", PolygonCollision::Create);

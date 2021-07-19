@@ -131,30 +131,30 @@ public:
 
 		Test::Step(settings);
 
-		//g_debugDraw.DrawString(5, m_textLine, "Press 'a' to control the flippers");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press 'a' to control the flippers");
+		m_textLine += m_textIncrement;
 
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_A:
-	//		m_button = true;
-	//		break;
-	//	}
-	//}
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_A:
+			m_button = true;
+			break;
+		}
+	}
 
-	//void KeyboardUp(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_A:
-	//		m_button = false;
-	//		break;
-	//	}
-	//}
+	void KeyboardUp(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_A:
+			m_button = false;
+			break;
+		}
+	}
 
 	static Test* Create()
 	{

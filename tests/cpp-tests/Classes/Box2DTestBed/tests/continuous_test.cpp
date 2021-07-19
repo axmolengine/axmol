@@ -129,22 +129,22 @@ public:
 
 		if (b2_toiCalls > 0)
 		{
-			//g_debugDraw.DrawString(5, m_textLine, "toi calls = %d, ave [max] toi iters = %3.1f [%d]",
-			//					b2_toiCalls, b2_toiIters / float(b2_toiCalls), b2_toiMaxRootIters);
-			//m_textLine += m_textIncrement;
-			//
-			//g_debugDraw.DrawString(5, m_textLine, "ave [max] toi root iters = %3.1f [%d]",
-			//	b2_toiRootIters / float(b2_toiCalls), b2_toiMaxRootIters);
-			//m_textLine += m_textIncrement;
+			g_debugDraw.DrawString(5, m_textLine, "toi calls = %d, ave [max] toi iters = %3.1f [%d]",
+								b2_toiCalls, b2_toiIters / float(b2_toiCalls), b2_toiMaxRootIters);
+			m_textLine += m_textIncrement;
+			
+			g_debugDraw.DrawString(5, m_textLine, "ave [max] toi root iters = %3.1f [%d]",
+				b2_toiRootIters / float(b2_toiCalls), b2_toiMaxRootIters);
+			m_textLine += m_textIncrement;
 
-			//g_debugDraw.DrawString(5, m_textLine, "ave [max] toi time = %.1f [%.1f] (microseconds)",
-			//	1000.0f * b2_toiTime / float(b2_toiCalls), 1000.0f * b2_toiMaxTime);
-			//m_textLine += m_textIncrement;
+			g_debugDraw.DrawString(5, m_textLine, "ave [max] toi time = %.1f [%.1f] (microseconds)",
+				1000.0f * b2_toiTime / float(b2_toiCalls), 1000.0f * b2_toiMaxTime);
+			m_textLine += m_textIncrement;
 		}
 
 		if (m_stepCount % 60 == 0)
 		{
-			//Launch();
+			Launch();
 		}
 	}
 

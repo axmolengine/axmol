@@ -105,15 +105,15 @@ public:
 		body->CreateFixture(&fd);
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_C:
-	//		CreateCircle();
-	//		break;
-	//	}
-	//}
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_C:
+			CreateCircle();
+			break;
+		}
+	}
 
 	void Step(Settings* settings) override
 	{
@@ -157,8 +157,8 @@ public:
 			}
 		}
 
-		//g_debugDraw.DrawString(5, m_textLine, "Press 'c' to create a circle.");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press 'c' to create a circle.");
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()
