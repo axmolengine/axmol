@@ -331,7 +331,6 @@ endif()
 
 add_subdirectory(fmt)
 target_link_libraries(thirdparty fmt-header-only)
-target_include_directories(thirdparty INTERFACE "fmt/include")
 configure_target_outdir(fmt)
 
 # put "thirdparty" into thirdparty folder, too

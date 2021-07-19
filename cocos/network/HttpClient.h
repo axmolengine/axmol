@@ -81,7 +81,7 @@ public:
     /**
      * Enable cookie support.
      *
-     * @param cookieFile the filepath of cookie file.
+     * @param [nullable] cookieFile the filepath of cookie file.
      */
     void enableCookies(const char* cookieFile);
 
@@ -123,7 +123,7 @@ public:
 
     /**
      * Send http request sync, will block caller thread until request finished.
-     * @remark  You need call release manually after you don't want use the returned response
+     * @remark  Caller must call release manually when the response never been used.
      */
     HttpResponse* sendSync(HttpRequest* request);
 
@@ -164,9 +164,19 @@ public:
     typedef std::function<bool(HttpResponse*)> ClearResponsePredicate;
 
     /**
-     * Clears the pending http response
+     * Clears the pending & finished http response
      */
     void clearResponseQueue(); 
+
+    /**
+     * Clears the pending http response
+     */
+    void clearPendingResponseQueue(); 
+
+    /**
+     * Clears the finished http response
+     */
+    void clearFinishedResponseQueue(); 
 
     /**
      Sets a predicate function that is going to be called to determine if we proceed
@@ -176,7 +186,7 @@ public:
     */
     void setClearResponsePredicate(ClearResponsePredicate predicate) { _clearResponsePredicate = predicate; }
 
-    void setDispatchOnWorkThread(bool bVal) { _dispatchOnWorkThread = bVal; }
+    void setDispatchOnWorkThread(bool bVal);
     bool isDispatchOnWorkThread() const { return _dispatchOnWorkThread; }
         
 private:
@@ -191,7 +201,11 @@ private:
 
     void handleNetworkEOF(HttpResponse* response, yasio::io_channel* channel, int internalErrorCode);
 
+    void dispatchResponseCallbacks();
+
     void finishResponse(HttpResponse* response);
+
+    void invokeResposneCallbackAndRelease(HttpResponse* response);
 
 private:
     bool _isInited;
@@ -209,7 +223,8 @@ private:
     Scheduler* _scheduler;
     std::recursive_mutex _schedulerMutex;
 
-    ConcurrentDeque<HttpResponse*> _responseQueue;
+    ConcurrentDeque<HttpResponse*> _pendingResponseQueue;
+    ConcurrentDeque<HttpResponse*> _finishedResponseQueue;
 
     ConcurrentDeque<int> _availChannelQueue;
 
