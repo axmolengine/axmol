@@ -220,7 +220,7 @@ private:
     }
     static int on_header_field_complete(llhttp_t* context) {
         auto thiz = (HttpResponse*)context->data;
-        std::transform(thiz->_currentHeader.begin(), thiz->_currentHeader.end(), thiz->_currentHeader.begin(), ::toupper);
+        std::transform(thiz->_currentHeader.begin(), thiz->_currentHeader.end(), thiz->_currentHeader.begin(), ::tolower);
         return 0;
     }
     static int on_header_value(llhttp_t* context, const char* at, size_t length) {
