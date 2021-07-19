@@ -115,16 +115,30 @@ HttpClient::HttpClient()
         _availChannelQueue.push_back(i);
     }
 
+    _scheduler->schedule([=](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
+
     _isInited = true;
 }
 
 HttpClient::~HttpClient() {
+    _scheduler->unscheduleAllForTarget(this);
+
+    clearPendingResponseQueue();
+    clearFinishedResponseQueue();
     if (_cookie) {
         _cookie->writeFile();
         delete _cookie;
     }
     delete _service;
     CCLOG("HttpClient destructor");
+}
+
+void HttpClient::setDispatchOnWorkThread(bool bVal)
+{
+    _scheduler->unscheduleAllForTarget(this);
+    _dispatchOnWorkThread = bVal;
+    if(!bVal) 
+        _scheduler->schedule([=](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
 }
 
 bool HttpClient::send(HttpRequest* request) {
@@ -174,7 +188,7 @@ void HttpClient::processResponse(HttpResponse* response, const std::string& url)
             finishResponse(response);
         }
     } else {
-        _responseQueue.push_back(response);
+        _pendingResponseQueue.push_back(response);
     }
 }
 
@@ -335,14 +349,30 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
     _availChannelQueue.push_back(channel->index());
 
     // try process pending response
-    auto lck = _responseQueue.get_lock();
-    if (!_responseQueue.unsafe_empty()) {
-        auto pendingResponse = _responseQueue.unsafe_front();
-        _responseQueue.unsafe_pop_front();
+    auto lck = _pendingResponseQueue.get_lock();
+    if (!_pendingResponseQueue.unsafe_empty())
+    {
+        auto pendingResponse = _pendingResponseQueue.unsafe_front();
+        _pendingResponseQueue.unsafe_pop_front();
         lck.unlock();
 
         processResponse(pendingResponse, pendingResponse->getHttpRequest()->getUrl());
         pendingResponse->release();
+    }
+}
+
+// Poll and notify main thread if responses exists in queue
+void HttpClient::dispatchResponseCallbacks()
+{
+    if (_finishedResponseQueue.unsafe_empty())
+        return;
+
+    auto lck = _finishedResponseQueue.get_lock();
+    if (!_finishedResponseQueue.unsafe_empty())
+    {
+        HttpResponse* response = _finishedResponseQueue.front();
+        _finishedResponseQueue.pop_front();
+        invokeResposneCallbackAndRelease(response);
     }
 }
 
@@ -357,33 +387,44 @@ void HttpClient::finishResponse(HttpResponse* response) {
     }
 
     if (!syncState) {
-        auto cbNotify = [=]() {
-            HttpRequest* request                  = response->getHttpRequest();
-            const ccHttpRequestCallback& callback = request->getCallback();
-            Ref* pTarget                          = request->getTarget();
-            SEL_HttpResponse pSelector            = request->getSelector();
-
-            if (callback != nullptr) {
-                callback(this, response);
-            } else if (pTarget && pSelector) {
-                (pTarget->*pSelector)(this, response);
-            }
-
-            response->release();
-        };
-
         if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId())
-            cbNotify();
+            invokeResposneCallbackAndRelease(response);
         else
-            _scheduler->performFunctionInCocosThread(cbNotify);
+            _finishedResponseQueue.push_back(response);
     } else {
         syncState->set_value(response);
     }
 }
 
+void HttpClient::invokeResposneCallbackAndRelease(HttpResponse* response)
+{
+    HttpRequest* request                  = response->getHttpRequest();
+    const ccHttpRequestCallback& callback = request->getCallback();
+    Ref* pTarget                          = request->getTarget();
+    SEL_HttpResponse pSelector            = request->getSelector();
+
+    if (callback != nullptr)
+        callback(this, response);
+    else if (pTarget && pSelector)
+        (pTarget->*pSelector)(this, response);
+
+    response->release();
+}
+
 void HttpClient::clearResponseQueue() {
-    auto lck = _responseQueue.get_lock();
-    __clearQueueUnsafe(_responseQueue, ClearResponsePredicate{});
+    clearPendingResponseQueue();
+    clearFinishedResponseQueue();
+}
+
+void HttpClient::clearPendingResponseQueue()
+{
+    auto lck = _pendingResponseQueue.get_lock();
+    __clearQueueUnsafe(_pendingResponseQueue, ClearResponsePredicate{});
+}
+
+void HttpClient::clearFinishedResponseQueue() {
+    auto lck = _finishedResponseQueue.get_lock();
+    __clearQueueUnsafe(_finishedResponseQueue, ClearResponsePredicate{});
 }
 
 void HttpClient::setTimeoutForConnect(int value) {
