@@ -123,7 +123,7 @@ public:
 
     /**
      * Send http request sync, will block caller thread until request finished.
-     * @remark  You need call release manually after you don't want use the returned response
+     * @remark  Caller must call release manually when the response never been used.
      */
     HttpResponse* sendSync(HttpRequest* request);
 
