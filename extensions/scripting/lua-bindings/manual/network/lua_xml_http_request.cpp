@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) Bytedance Inc.
  
  https://adxe.org
  
@@ -91,7 +92,7 @@ public:
     void _sendRequest();
     void setRequestHeader(const char* field, const char* value);
 
-    const std::unordered_map<std::string, std::string>& getHttpHeader() const { return _httpHeader ;}
+    const HttpResponse::ResponseHeaderMap& getHttpHeader() const { return _httpHeader; }
     void clearHttpHeader() { _httpHeader.clear(); }
 
     void getByteData(unsigned char* byteData) const;
