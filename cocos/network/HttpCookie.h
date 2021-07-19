@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) Bytedance Inc.
+ Copyright (c) 2021 Bytedance Inc.
 
  https://adxe.org
 
@@ -40,11 +40,11 @@ namespace network
 {
 
 class Uri;
-struct CookiesInfo
+struct CookieInfo
 {
-    CookiesInfo() = default;
-    CookiesInfo(const CookiesInfo&) = default;
-    CookiesInfo(CookiesInfo&& rhs)
+    CookieInfo() = default;
+    CookieInfo(const CookieInfo&) = default;
+    CookieInfo(CookieInfo&& rhs)
         : domain(std::move(rhs.domain))
         , tailmatch(rhs.tailmatch)
         , path(std::move(rhs.path))
@@ -54,7 +54,7 @@ struct CookiesInfo
         , expires(rhs.expires)
     {}
 
-    CookiesInfo& operator=(CookiesInfo&& rhs)
+    CookieInfo& operator=(CookieInfo&& rhs)
     {
         domain    = std::move(rhs.domain);
         tailmatch = rhs.tailmatch;
@@ -66,9 +66,9 @@ struct CookiesInfo
         return *this;
     }
 
-    bool isSame(const CookiesInfo& rhs) { return name == rhs.name && domain == rhs.domain; }
+    bool isSame(const CookieInfo& rhs) { return name == rhs.name && domain == rhs.domain; }
 
-    void updateValue(const CookiesInfo& rhs)
+    void updateValue(const CookieInfo& rhs)
     {
         value   = rhs.value;
         expires = rhs.expires;
@@ -92,9 +92,9 @@ public:
     void writeFile();
     void setCookieFileName(const std::string& fileName);
 
-    const std::vector<CookiesInfo>* getCookies() const;
-    const CookiesInfo* getMatchCookie(const Uri& uri) const;
-    void updateOrAddCookie(CookiesInfo* cookie);
+    const std::vector<CookieInfo>* getCookies() const;
+    const CookieInfo* getMatchCookie(const Uri& uri) const;
+    void updateOrAddCookie(CookieInfo* cookie);
 
     // Check match cookies for http request
     std::string checkAndGetFormatedMatchCookies(const Uri& uri);
@@ -102,7 +102,7 @@ public:
 
 private:
     std::string _cookieFileName;
-    std::vector<CookiesInfo> _cookies;
+    std::vector<CookieInfo> _cookies;
 };
 }  // namespace network
 
