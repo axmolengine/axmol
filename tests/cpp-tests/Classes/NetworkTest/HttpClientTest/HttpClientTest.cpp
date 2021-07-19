@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
+ Copyright (c) Bytedance Inc.
+
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -41,8 +42,12 @@ HttpClientTest::HttpClientTest()
 {
     auto winSize = Director::getInstance()->getWinSize();
 
+    auto httpClient = HttpClient::getInstance();
+
     auto cafile = FileUtils::getInstance()->fullPathForFilename("cacert.pem");
-    HttpClient::getInstance()->setSSLVerification(cafile);
+    httpClient->setSSLVerification(cafile);
+    httpClient->enableCookies(nullptr);
+    CCLOG("The http cookie will store to: %s", httpClient->getCookieFilename().c_str());
 
     const int MARGIN = 40;
     const int SPACE = 35;

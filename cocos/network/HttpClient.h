@@ -81,7 +81,7 @@ public:
     /**
      * Enable cookie support.
      *
-     * @param cookieFile the filepath of cookie file.
+     * @param [nullable] cookieFile the filepath of cookie file.
      */
     void enableCookies(const char* cookieFile);
 

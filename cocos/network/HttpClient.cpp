@@ -83,6 +83,11 @@ void HttpClient::enableCookies(const char* cookieFile) {
     } else {
         _cookieFilename = (FileUtils::getInstance()->getNativeWritableAbsolutePath() + "cookieFile.txt");
     }
+
+    if (!_cookie)
+        _cookie = new HttpCookie();
+    _cookie->setCookieFileName(_cookieFilename);
+    _cookie->readFile();
 }
 
 void HttpClient::setSSLVerification(const std::string& caFile) {
@@ -114,6 +119,10 @@ HttpClient::HttpClient()
 }
 
 HttpClient::~HttpClient() {
+    if (_cookie) {
+        _cookie->writeFile();
+        delete _cookie;
+    }
     delete _service;
     CCLOG("HttpClient destructor");
 }
@@ -249,6 +258,16 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             if (!userAgentSpecified)
                 obs.write_bytes("User-Agent: yasio-http\r\n");
 
+            if (_cookie)
+            {
+                auto cookies = _cookie->checkAndGetFormatedMatchCookies(uri);
+                if (!cookies.empty())
+                {
+                    obs.write_bytes("Cookie: ");
+                    obs.write_bytes(cookies);
+                }
+            }
+
             obs.write_bytes("Accept: */*;q=0.8\r\n");
             obs.write_bytes("Connection: Close\r\n");
 
@@ -330,6 +349,13 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
 void HttpClient::finishResponse(HttpResponse* response) {
     auto request   = response->getHttpRequest();
     auto syncState = request->getSyncState();
+
+    if (_cookie) {
+        auto cookieRange = response->getResponseHeaders().equal_range("set-cookie");
+        for (auto cookieIt = cookieRange.first; cookieIt != cookieRange.second; ++cookieIt)
+            _cookie->updateOrAddCookie(cookieIt->second, response->_requestUri);
+    }
+
     if (!syncState) {
         auto cbNotify = [=]() {
             HttpRequest* request                  = response->getHttpRequest();
