@@ -75,7 +75,7 @@ void HttpCookie::readFile()
                         cookieInfo.path.assign(ss, ee - ss);
                         break;
                     case SECURE_INDEX:
-                        cookieInfo.secure = cxx20::ic::iequals(cxx17::string_view { ss, (size_t)(ee - ss) }, "TRUE"_sv);
+                        cookieInfo.secure = cxx17::string_view { ss, (size_t)(ee - ss) } == "TRUE"_sv;
                         break;
                     case EXPIRES_INDEX:
                         cookieInfo.expires = static_cast<time_t>(strtoll(ss, nullptr, 10));
