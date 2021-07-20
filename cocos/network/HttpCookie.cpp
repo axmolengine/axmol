@@ -30,6 +30,7 @@
 #include "yasio/detail/utils.hpp"
 #include "yasio/cxx17/string_view.hpp"
 #include "xsbase/fast_split.hpp"
+#include "yasio/detail/utils.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,6 +55,8 @@ void HttpCookie::readFile()
         VALUE__INDEX,
     };
     std::string inString = cocos2d::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
+
+    long long start = yasio::highp_clock();
     if(!inString.empty())
     {
         xsbase::fast_split(inString, '\n', [this](char* s, char* e) {
@@ -93,6 +96,60 @@ void HttpCookie::readFile()
                 _cookies.push_back(std::move(cookieInfo));
         });
     }
+    CCLOG("Performance with fast_split: %.3lf(ms) ", (yasio::highp_clock() - start) / 1000.0f);
+
+    start = yasio::highp_clock();
+    if (!inString.empty())
+    {
+        std::vector<std::string> cookiesVec;
+        cookiesVec.clear();
+
+        std::stringstream stream(inString);
+        std::string item;
+        while (std::getline(stream, item, '\n'))
+        {
+            cookiesVec.push_back(item);
+        }
+
+        if (cookiesVec.empty())
+            return;
+
+        _cookies.clear();
+
+        for (auto& cookie : cookiesVec)
+        {
+            if (cookie.empty())
+                continue;
+
+            if (cookie.find("#HttpOnly_") != std::string::npos)
+            {
+                cookie = cookie.substr(10);
+            }
+
+            if (cookie.at(0) == '#')
+                continue;
+
+            CookieInfo co;
+            std::stringstream streamInfo(cookie);
+            std::vector<std::string> elems;
+            std::string elemsItem;
+
+            while (std::getline(streamInfo, elemsItem, '\t'))
+            {
+                elems.push_back(elemsItem);
+            }
+
+            co.domain    = elems[0];
+            co.tailmatch = true;  // strcmp("TRUE", elems[1].c_str()) == 0;
+            co.path      = elems[2];
+            co.secure    = strcmp("TRUE", elems[3].c_str()) == 0;
+            co.expires   = static_cast<time_t>(strtoll(elems[4].c_str(), nullptr, 10));
+            co.name      = elems[5];
+            co.value     = elems[6];
+            _cookies.push_back(co);
+        }
+    }
+    CCLOG("Performance with std::getline: %.3lf(ms) ", (yasio::highp_clock() - start) / 1000.0f);
 }
 
 const std::vector<CookieInfo>* HttpCookie::getCookies() const
@@ -104,7 +161,7 @@ const CookieInfo* HttpCookie::getMatchCookie(const Uri& uri) const
 {
     for(auto& cookie : _cookies)
     {
-        if (cxx20::ends_with(cxx17::string_view{uri.getHost()}, cxx17::string_view{cookie.domain}) && cookie.path == uri.getPath())
+        if (cxx20::ends_with(uri.getHost(), cookie.domain) && cxx20::starts_with(uri.getPath(), cookie.path))
             return &cookie;
     }
 
@@ -130,8 +187,8 @@ std::string HttpCookie::checkAndGetFormatedMatchCookies(const Uri& uri)
     for (auto iter = _cookies.begin(); iter != _cookies.end();)
     {
         auto& cookie = *iter;
-        if (cxx20::ends_with(cxx17::string_view{uri.getHost()}, cxx17::string_view{cookie.domain}) &&
-            cookie.path == uri.getPath())
+        if (cxx20::ends_with(uri.getHost(), cookie.domain) &&
+            cxx20::starts_with(uri.getPath(), cookie.path))
         {
             if (yasio::time_now() >= cookie.expires)
             {
@@ -189,7 +246,7 @@ bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
             else if (cxx20::ic::iequals(key, "expires"_sv))
             {
                 std::string expires_ctime(!value.empty() ? value.data() : "", value.length());
-                if (cxx20::ends_with(cxx17::string_view{expires_ctime}, " GMT"_sv))
+                if (cxx20::ends_with(expires_ctime, " GMT"_sv))
                     expires_ctime.resize(expires_ctime.length() - sizeof(" GMT") + 1);
                 if (expires_ctime.empty())
                     return;
