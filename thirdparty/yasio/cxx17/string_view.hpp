@@ -1445,6 +1445,25 @@ inline std::basic_string<_CharT, _Traits, Allocator> svtos(const basic_string_vi
 
 namespace cxx20
 {
+template< class T >
+using decay_t = typename std::decay<T>::type;
+template< class T >
+using remove_const_t = typename std::remove_const<T>::type;
+namespace char_ranges
+{ // allow get char type from char*, wchar_t*, std::string, std::wstring
+template <typename _Ty> struct value_type {
+  using type = typename _Ty::value_type;
+};
+
+template <typename _Ty> struct value_type<_Ty&> {
+  using type = remove_const_t<_Ty>;
+};
+
+template <typename _Ty> struct value_type<_Ty*> {
+  using type = remove_const_t<_Ty>;
+};
+} // namespace char_ranges
+
 // starts_with(), since C++20:
 template <typename _CharT>
 inline bool starts_with(cxx17::basic_string_view<_CharT> lhs,
@@ -1453,16 +1472,24 @@ inline bool starts_with(cxx17::basic_string_view<_CharT> lhs,
   return lhs.size() >= v.size() && lhs.compare(0, v.size(), v) == 0;
 }
 
-template <typename _CharT>
-inline bool starts_with(cxx17::basic_string_view<_CharT> lhs, _CharT c) // (2)
+template <typename _T1, typename _T2> 
+inline bool starts_with(_T1&& lhs, _T2&& v) // (2)
+{
+  using char_type = typename char_ranges::value_type<decay_t<_T1>>::type;
+  return starts_with(cxx17::basic_string_view<char_type>{lhs}, cxx17::basic_string_view<char_type>{v});
+}
+
+template <typename _CharT> 
+inline bool starts_with(cxx17::basic_string_view<_CharT> lhs, int c) // (3)
 {
   return !lhs.empty() && lhs.front() == c;
 }
 
-template <typename _CharT>
-inline bool starts_with(cxx17::basic_string_view<_CharT> lhs, _CharT const* s) // (3)
+template <typename _Ty> 
+inline bool starts_with(_Ty&& lhs, int c) // (4)
 {
-  return starts_with(lhs, cxx17::basic_string_view<_CharT>(s));
+  using char_type = typename char_ranges::value_type<decay_t<_Ty>>::type;
+  return starts_with(cxx17::basic_string_view<char_type>{lhs}, c);
 }
 
 // ends_with(), since C++20:
@@ -1473,16 +1500,23 @@ inline bool ends_with(cxx17::basic_string_view<_CharT> lhs,
   return lhs.size() >= v.size() && lhs.compare(lhs.size() - v.size(), lhs.npos, v) == 0;
 }
 
+template <typename _T1, typename _T2> 
+inline bool ends_with(_T1&& lhs, _T2&& v) // (2)
+{
+  using char_type = typename char_ranges::value_type<decay_t<_T1>>::type;
+  return ends_with(cxx17::basic_string_view<char_type>{lhs}, cxx17::basic_string_view<char_type>{v});
+}
+
 template <typename _CharT>
-inline bool ends_with(cxx17::basic_string_view<_CharT> lhs, _CharT c) // (2)
+inline bool ends_with(cxx17::basic_string_view<_CharT> lhs, int c) // (3)
 {
   return !lhs.empty() && lhs.back() == c;
 }
 
-template <typename _CharT>
-inline bool ends_with(cxx17::basic_string_view<_CharT> lhs, _CharT const* s) // (3)
+template <typename _Ty> inline bool ends_with(_Ty&& lhs, int c) // (4)
 {
-  return ends_with(lhs, cxx17::basic_string_view<_CharT>(s));
+  using char_type = typename char_ranges::value_type<decay_t<_Ty>>::type;
+  return ends_with(cxx17::basic_string_view<char_type>{lhs}, c);
 }
 
 /// The case insensitive implementation of starts_with, ends_with
@@ -1515,6 +1549,11 @@ inline bool iequals<wchar_t>(cxx17::basic_string_view<wchar_t> lhs,
   return lhs.size() == v.size() && ::wcsncasecmp(lhs.data(), v.data(), v.size()) == 0;
 }
 #endif
+template <typename _T1, typename _T2> inline bool iequals(_T1&& lhs, _T2&& v)
+{
+  using char_type = typename char_ranges::value_type<decay_t<_T1>>::type;
+  return iequals(cxx17::basic_string_view<char_type>{lhs}, cxx17::basic_string_view<char_type>{v});
+}
 // starts_with(), since C++20:
 template <typename _CharT>
 inline bool starts_with(cxx17::basic_string_view<_CharT> lhs,
@@ -1523,16 +1562,22 @@ inline bool starts_with(cxx17::basic_string_view<_CharT> lhs,
   return lhs.size() >= v.size() && iequals(lhs.substr(0, v.size()), v);
 }
 
+template <typename _T1, typename _T2> inline bool starts_with(_T1&& lhs, _T2&& v) // (2)
+{
+  using char_type = typename char_ranges::value_type<decay_t<_T1>>::type;
+  return starts_with(cxx17::basic_string_view<char_type>{lhs}, cxx17::basic_string_view<char_type>{v});
+}
+
 template <typename _CharT>
-inline bool starts_with(cxx17::basic_string_view<_CharT> lhs, _CharT c) // (2)
+inline bool starts_with(cxx17::basic_string_view<_CharT> lhs, int c) // (3)
 {
   return !lhs.empty() && ::tolower(lhs.front()) == ::tolower(c);
 }
 
-template <typename _CharT>
-inline bool starts_with(cxx17::basic_string_view<_CharT> lhs, _CharT const* s) // (3)
+template <typename _Ty> inline bool starts_with(_Ty&& lhs, int c) // (4)
 {
-  return starts_with(lhs, cxx17::basic_string_view<_CharT>(s));
+  using char_type = typename char_ranges::value_type<decay_t<_Ty>>::type;
+  return starts_with(cxx17::basic_string_view<char_type>{lhs}, c);
 }
 
 // ends_with(), since C++20:
@@ -1543,16 +1588,22 @@ inline bool ends_with(cxx17::basic_string_view<_CharT> lhs,
   return lhs.size() >= v.size() && iequals(lhs.substr(lhs.size() - v.size(), lhs.npos), v);
 }
 
+template <typename _T1, typename _T2> inline bool ends_with(_T1&& lhs, _T2&& v) // (2)
+{
+  using char_type = typename char_ranges::value_type<decay_t<_T1>>::type;
+  return ends_with(cxx17::basic_string_view<char_type>{lhs}, cxx17::basic_string_view<char_type>{v});
+}
+
 template <typename _CharT>
-inline bool ends_with(cxx17::basic_string_view<_CharT> lhs, _CharT c) // (2)
+inline bool ends_with(cxx17::basic_string_view<_CharT> lhs, int c) // (3)
 {
   return !lhs.empty() && ::tolower(lhs.back()) == ::tolower(c);
 }
 
-template <typename _CharT>
-inline bool ends_with(cxx17::basic_string_view<_CharT> lhs, _CharT const* s) // (3)
+template <typename _Ty> inline bool ends_with(_Ty&& lhs, int c) // (4)
 {
-  return ends_with(lhs, cxx17::basic_string_view<_CharT>(s));
+  using char_type = typename char_ranges::value_type<decay_t<_Ty>>::type;
+  return ends_with(cxx17::basic_string_view<char_type>{lhs}, c);
 }
 } // namespace ic
 } // namespace cxx20
