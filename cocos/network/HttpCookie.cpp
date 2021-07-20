@@ -30,7 +30,6 @@
 #include "yasio/detail/utils.hpp"
 #include "yasio/cxx17/string_view.hpp"
 #include "xsbase/fast_split.hpp"
-#include "yasio/detail/utils.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,9 +53,8 @@ void HttpCookie::readFile()
         NAME_INDEX,
         VALUE__INDEX,
     };
+ 
     std::string inString = cocos2d::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
-
-    long long start = yasio::highp_clock();
     if(!inString.empty())
     {
         xsbase::fast_split(inString, '\n', [this](char* s, char* e) {
@@ -96,60 +94,6 @@ void HttpCookie::readFile()
                 _cookies.push_back(std::move(cookieInfo));
         });
     }
-    CCLOG("Performance with fast_split: %.3lf(ms) ", (yasio::highp_clock() - start) / 1000.0f);
-
-    start = yasio::highp_clock();
-    if (!inString.empty())
-    {
-        std::vector<std::string> cookiesVec;
-        cookiesVec.clear();
-
-        std::stringstream stream(inString);
-        std::string item;
-        while (std::getline(stream, item, '\n'))
-        {
-            cookiesVec.push_back(item);
-        }
-
-        if (cookiesVec.empty())
-            return;
-
-        _cookies.clear();
-
-        for (auto& cookie : cookiesVec)
-        {
-            if (cookie.empty())
-                continue;
-
-            if (cookie.find("#HttpOnly_") != std::string::npos)
-            {
-                cookie = cookie.substr(10);
-            }
-
-            if (cookie.at(0) == '#')
-                continue;
-
-            CookieInfo co;
-            std::stringstream streamInfo(cookie);
-            std::vector<std::string> elems;
-            std::string elemsItem;
-
-            while (std::getline(streamInfo, elemsItem, '\t'))
-            {
-                elems.push_back(elemsItem);
-            }
-
-            co.domain    = elems[0];
-            co.tailmatch = true;  // strcmp("TRUE", elems[1].c_str()) == 0;
-            co.path      = elems[2];
-            co.secure    = strcmp("TRUE", elems[3].c_str()) == 0;
-            co.expires   = static_cast<time_t>(strtoll(elems[4].c_str(), nullptr, 10));
-            co.name      = elems[5];
-            co.value     = elems[6];
-            _cookies.push_back(co);
-        }
-    }
-    CCLOG("Performance with std::getline: %.3lf(ms) ", (yasio::highp_clock() - start) / 1000.0f);
 }
 
 const std::vector<CookieInfo>* HttpCookie::getCookies() const
