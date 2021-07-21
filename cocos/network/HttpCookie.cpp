@@ -51,7 +51,7 @@ void HttpCookie::readFile()
         SECURE_INDEX,
         EXPIRES_INDEX,
         NAME_INDEX,
-        VALUE__INDEX,
+        VALUE_INDEX,
     };
  
     std::string inString = cocos2d::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
@@ -83,7 +83,7 @@ void HttpCookie::readFile()
                     case NAME_INDEX:
                         cookieInfo.name.assign(ss, ee - ss);
                         break;
-                    case VALUE__INDEX:
+                    case VALUE_INDEX:
                         cookieInfo.value.assign(ss, ee - ss);
                         break;
                 }
