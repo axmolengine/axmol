@@ -27,8 +27,6 @@
 #include "extensions/ExtensionMacros.h"
 #include "2d/CCDrawNode.h"
 #include "extensions/ExtensionExport.h"
-
-#include "GLFW/glfw3.h"
 #include "box2d/box2d.h"
 #include "cocos2d.h"
 
