@@ -29,7 +29,9 @@
 
 // Physics integration
 #include "physics-nodes/CCPhysicsDebugNode.h"
+#if defined(CC_PLATFORM_PC)
 #include "physics-nodes/CCPhysicsDebugNodeBox2D.h"
+#endif
 #include "physics-nodes/CCPhysicsDebugNodeChipmunk2D.h"
 #include "physics-nodes/CCPhysicsSprite.h"
 #include "physics-nodes/CCPhysicsSpriteBox2D.h"
