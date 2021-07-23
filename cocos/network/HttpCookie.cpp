@@ -204,7 +204,6 @@ bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
 
                 struct tm dt = {0};
                 std::stringstream ss(&expires_ctime[off]);
-                ss.imbue(std::locale("de_DE.utf-8"));
                 ss >> std::get_time(&dt, "%d %b %Y %H:%M:%S");
                 if (!ss.fail())
                     info.expires = mktime(&dt);
