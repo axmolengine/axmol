@@ -25,8 +25,12 @@
 #ifndef _BOX2D_VIEW_H_
 #define _BOX2D_VIEW_H_
 
+#include "cocos2d.h"
+#include "box2d/box2d.h"
 #include "../BaseTest.h"
 #include "renderer/CCCustomCommand.h"
+
+
 
 extern cocos2d::Vec2 physicsDebugNodeOffset;
 
@@ -40,7 +44,9 @@ public:
 	Box2DTestBed();
 	virtual ~Box2DTestBed();
 
-	//void onEnter() override;
+	void onEnter() override;
+	void onExit() override;
+	void onDrawImGui();
 	//void createResetButton();
 	//void reset(cocos2d::Ref* sender);
 
@@ -59,13 +65,17 @@ struct TestEntry;
 class Test;
 class Box2DView : public cocos2d::Layer
 {
+public:
 	cocos2d::EventListenerTouchOneByOne* _touchListener;
 	cocos2d::EventListenerKeyboard* _keyboardListener;
 	TestEntry* m_entry;
 	Test* m_test;
 	int m_entryID;
 
-public:
+
+	void onDrawImGui();
+
+
 	Box2DView(void);
 	virtual ~Box2DView(void);
 
@@ -90,6 +100,11 @@ protected:
 	void onDraw(const cocos2d::Mat4& transform, uint32_t flags);
 
 	cocos2d::CallbackCommand  _customCmd;
+
+	cocos2d::Mat4 _modelViewMV;
+	cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
+
+	b2World* world;
 };
 
 #endif

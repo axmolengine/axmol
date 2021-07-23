@@ -19,14 +19,13 @@
  */
 
 #include "CCPhysicsDebugNodeBox2D.h"
-//#include "cocos2d.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
 
 #include <stdbool.h>
 #include <limits.h>
-//#include "extensions/cocos-ext.h"
+
 
 USING_NS_CC;
 
