@@ -23,7 +23,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+#if defined(__GLIBC__) && (__GLIBC__ == 2 && __GLIBC_MINOR__ < 8)
 #  include <asm/unistd.h>
 #else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
 #  include <sys/eventfd.h>
@@ -108,7 +108,7 @@ private:
   // Open the descriptors. Throws on error.
   inline void open_descriptors()
   {
-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+#if defined(__GLIBC__) && (__GLIBC__ == 2 && __GLIBC_MINOR__ < 8)
     write_descriptor_ = read_descriptor_ = syscall(__NR_eventfd, 0);
     if (read_descriptor_ != -1)
     {
