@@ -28,15 +28,15 @@ SOFTWARE.
 
 using namespace yasio;
 
-DECLARE_LOG_CATEGORY_EXTERN(yasio_ue4, Log, All);
-DEFINE_LOG_CATEGORY(yasio_ue4);
+DECLARE_LOG_CATEGORY_EXTERN(yasio_ue, Log, All);
+DEFINE_LOG_CATEGORY(yasio_ue);
 
 YASIO_API void yasio_unreal_init()
 {
     print_fn2_t log_cb = [](int level, const char* msg) {
         FString text(msg);
         const TCHAR* tstr = *text;
-        UE_LOG(yasio_ue4, Log, TEXT("%s"), tstr);
+        UE_LOG(yasio_ue, Log, TEXT("%s"), tstr);
     };
     io_service::init_globals(log_cb);
 }
