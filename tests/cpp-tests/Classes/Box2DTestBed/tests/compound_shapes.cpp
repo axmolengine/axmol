@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "../test.h"
-//#include "imgui/imgui.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
 
 class CompoundShapes : public Test
 {
@@ -199,19 +199,19 @@ public:
 		}
 	}
 
-	//void UpdateUI() override
-	//{
-	//	ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
-	//	ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
-	//	ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	void UpdateUI() override
+	{
+		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
+		ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
+		ImGui::Begin("Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
-	//	if (ImGui::Button("Spawn"))
-	//	{
-	//		Spawn();
-	//	}
+		if (ImGui::Button("Spawn"))
+		{
+			Spawn();
+		}
 
-	//	ImGui::End();
-	//}
+		ImGui::End();
+	}
 
 	static Test* Create()
 	{

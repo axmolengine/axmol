@@ -164,7 +164,7 @@ void ChipmunkTest::initPhysics()
     }
 
     // Physics debug layer
-    _debugLayer = PhysicsDebugNode::create(_space);
+    _debugLayer = PhysicsDebugNodeChipmunk2D::create(_space);
     this->addChild(_debugLayer, Z_PHYSICS_DEBUG);
 
 }

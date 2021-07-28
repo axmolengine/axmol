@@ -158,8 +158,10 @@ struct yasio__global_state {
     // for single core CPU, we set minimal wait duration to 10us by default
     yasio__min_wait_duration = std::thread::hardware_concurrency() > 1 ? 0LL : YASIO_MIN_WAIT_DURATION;
 #if defined(YASIO_SSL_BACKEND) && YASIO_SSL_BACKEND == 1
+#if OPENSSL_VERSION_NUMBER >= 0x10100000 && !defined(LIBRESSL_VERSION_NUMBER)
     if (OPENSSL_init_ssl(0, NULL) == 1)
       yasio__setbits(this->init_flags_, INITF_SSL);
+#endif
 #endif
 #if defined(YASIO_HAVE_CARES)
     int ares_status = ::ares_library_init(ARES_LIB_INIT_ALL);
@@ -1400,25 +1402,25 @@ void io_service::do_ssl_handshake(io_channel* ctx)
     When using a non-blocking socket, nothing is to be done, but select() can be used to check for
     the required condition: https://www.openssl.org/docs/manmaster/man3/SSL_do_handshake.html
     */
-    if (status == SSL_ERROR_WANT_READ || status == SSL_ERROR_WANT_WRITE || status == SSL_ERROR_WANT_ASYNC)
-      ; // Nothing need to do
+    if (status == SSL_ERROR_WANT_READ || status == SSL_ERROR_WANT_WRITE)
+        return;
+#if defined(SSL_ERROR_WANT_ASYNC)
+    if (status == SSL_ERROR_WANT_ASYNC) return;
+#endif
+    int error = static_cast<int>(ERR_get_error());
+    if (error)
+    {
+      char errstring[256] = {0};
+      ERR_error_string_n(error, errstring, sizeof(errstring));
+      YASIO_KLOGE("[index: %d] SSL_do_handshake fail with ret=%d,error=%X, detail:%s", ctx->index_, ret, error, errstring);
+    }
     else
     {
-      int error = static_cast<int>(ERR_get_error());
-      if (error)
-      {
-        char errstring[256] = {0};
-        ERR_error_string_n(error, errstring, sizeof(errstring));
-        YASIO_KLOGE("[index: %d] SSL_do_handshake fail with ret=%d,error=%X, detail:%s", ctx->index_, ret, error, errstring);
-      }
-      else
-      {
-        error = xxsocket::get_last_errno();
-        YASIO_KLOGE("[index: %d] SSL_do_handshake fail with ret=%d,status=%d, error=%d, detail:%s", ctx->index_, ret, status, error, xxsocket::strerror(error));
-      }
-      ctx->ssl_.destroy();
-      handle_connect_failed(ctx, yasio::errc::ssl_handshake_failed);
+      error = xxsocket::get_last_errno();
+      YASIO_KLOGE("[index: %d] SSL_do_handshake fail with ret=%d,status=%d, error=%d, detail:%s", ctx->index_, ret, status, error, xxsocket::strerror(error));
     }
+    ctx->ssl_.destroy();
+    handle_connect_failed(ctx, yasio::errc::ssl_handshake_failed);
   }
   else
     handle_connect_succeed(ctx, ctx->socket_);

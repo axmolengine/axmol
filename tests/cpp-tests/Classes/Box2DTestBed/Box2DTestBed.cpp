@@ -22,12 +22,21 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#include "platform/CCPlatformConfig.h"
 #include "Box2DTestBed.h"
-#include "CCPhysicsDebugNodeBox2D.h"
+#include "extensions/cocos-ext.h"
 #include "test.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
+
  //#include "renderer/CCRenderer.h"
 
+
 USING_NS_CC;
+USING_NS_CC_EXT;
+
+static bool show_test_window = true;
+static bool show_another_window = true;
+static ImVec4 clear_color = ImColor(114, 144, 154);
 
 #define kAccelerometerFrequency 30
 #define FRAMES_BETWEEN_PRESSES_FOR_DOUBLE_CLICK 10
@@ -139,6 +148,49 @@ void Box2DTestBed::onTouchMoved(Touch* touch, Event* event)
 	node->setPosition(currentPos + diff);
 }
 
+void Box2DTestBed::onEnter() 
+{
+	Scene::onEnter();
+	ImGuiEXT::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
+	ImGuiEXT::getInstance()->addRenderLoop("#im01", CC_CALLBACK_0(Box2DTestBed::onDrawImGui, this), this);
+}
+void Box2DTestBed::onExit() 
+{
+	Scene::onExit();
+	ImGuiEXT::getInstance()->removeRenderLoop("#im01");
+}
+
+void Box2DTestBed::onDrawImGui()
+{
+	//// 1. Show a simple window
+	//// Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
+	//{
+	//	static float f = 0.0f;
+	//	ImGui::Text("Hello, world!");
+	//	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+	//	ImGui::ColorEdit3("clear color", (float*)&clear_color);
+	//	if (ImGui::Button("Test Window")) show_test_window ^= 1;
+	//	if (ImGui::Button("Another Window")) show_another_window ^= 1;
+	//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	//}
+
+	//// 2. Show another simple window, this time using an explicit Begin/End pair
+	//if (show_another_window)
+	//{
+	//	ImGui::SetNextWindowSize(ImVec2(170, 80), ImGuiCond_FirstUseEver);
+	//	ImGui::Begin("Another Window", &show_another_window);
+
+	//	ImGui::Text("Hello");
+	//	ImGui::End();
+	//}
+
+	//// 3. Show the ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
+	//if (show_test_window)
+	//{
+	//	ImGui::ShowDemoWindow();
+	//}
+}
+
 
 //------------------------------------------------------------------
 //
@@ -173,6 +225,8 @@ bool Box2DView::initWithEntryID(int entryId)
 	listener->onTouchMoved = CC_CALLBACK_2(Box2DView::onTouchMoved, this);
 	listener->onTouchEnded = CC_CALLBACK_2(Box2DView::onTouchEnded, this);
 
+
+
 	_eventDispatcher->addEventListenerWithFixedPriority(listener, -10);
 	_touchListener = listener;
 
@@ -204,16 +258,29 @@ void Box2DView::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void Box2DView::onDraw(const Mat4& transform, uint32_t flags)
 {
+	//Director* director = Director::getInstance();
+	//CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+	//director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+	//director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
+
+	//drawBox2D->clear();
+	//m_test->Step(&settings);
+	//m_test->m_world->DebugDraw();
+
+	//director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+
 	Director* director = Director::getInstance();
 	CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-	director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
+
+	auto oldMV = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewMV);
+//	world->DebugDraw();
 
 	drawBox2D->clear();
-	m_test->Step(&settings);
-	m_test->m_world->DebugDraw();
+m_test->Step(&settings);
+m_test->m_world->DebugDraw();
 
-	director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, oldMV);
 }
 
 Box2DView::~Box2DView()
@@ -268,4 +335,48 @@ void Box2DView::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
 	log("onKeyReleased, keycode: %d", static_cast<int>(code));
 //	m_test->KeyboardUp(static_cast<unsigned char>(code));
 	m_test->Keyboard((static_cast<int>(code) - 59));
+}
+
+//void Box2DView::onEnter()
+//{
+//	onEnter();
+//	ImGuiEXT::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
+//	ImGuiEXT::getInstance()->addRenderLoop("#im01", CC_CALLBACK_0(Box2DView::onDrawImGui, this), this->getScene());
+//
+//}
+//void Box2DView::onExit()
+//{
+//	ImGuiEXT::getInstance()->removeRenderLoop("#im01");
+//	onExit();
+//}
+
+void Box2DView::onDrawImGui()
+{
+	// 1. Show a simple window
+	// Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
+	{
+		static float f = 0.0f;
+		ImGui::Text("Hello, world!");
+		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+		ImGui::ColorEdit3("clear color", (float*)&clear_color);
+		if (ImGui::Button("Test Window")) show_test_window ^= 1;
+		if (ImGui::Button("Another Window")) show_another_window ^= 1;
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	}
+
+	// 2. Show another simple window, this time using an explicit Begin/End pair
+	if (show_another_window)
+	{
+		ImGui::SetNextWindowSize(ImVec2(170, 80), ImGuiCond_FirstUseEver);
+		ImGui::Begin("Another Window", &show_another_window);
+
+		ImGui::Text("Hello");
+		ImGui::End();
+	}
+
+	// 3. Show the ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
+	if (show_test_window)
+	{
+		ImGui::ShowDemoWindow();
+	}
 }

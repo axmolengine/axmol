@@ -51,8 +51,9 @@ void HttpCookie::readFile()
         SECURE_INDEX,
         EXPIRES_INDEX,
         NAME_INDEX,
-        VALUE__INDEX,
+        VALUE_INDEX,
     };
+ 
     std::string inString = cocos2d::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
     if(!inString.empty())
     {
@@ -74,7 +75,7 @@ void HttpCookie::readFile()
                         cookieInfo.path.assign(ss, ee - ss);
                         break;
                     case SECURE_INDEX:
-                        cookieInfo.secure = cxx20::ic::iequals(cxx17::string_view { ss, (size_t)(ee - ss) }, "TRUE"_sv);
+                        cookieInfo.secure = cxx17::string_view { ss, (size_t)(ee - ss) } == "TRUE"_sv;
                         break;
                     case EXPIRES_INDEX:
                         cookieInfo.expires = static_cast<time_t>(strtoll(ss, nullptr, 10));
@@ -82,7 +83,7 @@ void HttpCookie::readFile()
                     case NAME_INDEX:
                         cookieInfo.name.assign(ss, ee - ss);
                         break;
-                    case VALUE__INDEX:
+                    case VALUE_INDEX:
                         cookieInfo.value.assign(ss, ee - ss);
                         break;
                 }
@@ -104,7 +105,7 @@ const CookieInfo* HttpCookie::getMatchCookie(const Uri& uri) const
 {
     for(auto& cookie : _cookies)
     {
-        if (cxx20::ends_with(cxx17::string_view{uri.getHost()}, cxx17::string_view{cookie.domain}) && cookie.path == uri.getPath())
+        if (cxx20::ends_with(uri.getHost(), cookie.domain) && cxx20::starts_with(uri.getPath(), cookie.path))
             return &cookie;
     }
 
@@ -130,8 +131,8 @@ std::string HttpCookie::checkAndGetFormatedMatchCookies(const Uri& uri)
     for (auto iter = _cookies.begin(); iter != _cookies.end();)
     {
         auto& cookie = *iter;
-        if (cxx20::ends_with(cxx17::string_view{uri.getHost()}, cxx17::string_view{cookie.domain}) &&
-            cookie.path == uri.getPath())
+        if (cxx20::ends_with(uri.getHost(), cookie.domain) &&
+            cxx20::starts_with(uri.getPath(), cookie.path))
         {
             if (yasio::time_now() >= cookie.expires)
             {
@@ -189,7 +190,7 @@ bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
             else if (cxx20::ic::iequals(key, "expires"_sv))
             {
                 std::string expires_ctime(!value.empty() ? value.data() : "", value.length());
-                if (cxx20::ends_with(cxx17::string_view{expires_ctime}, " GMT"_sv))
+                if (cxx20::ends_with(expires_ctime, " GMT"_sv))
                     expires_ctime.resize(expires_ctime.length() - sizeof(" GMT") + 1);
                 if (expires_ctime.empty())
                     return;
@@ -203,7 +204,6 @@ bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
 
                 struct tm dt = {0};
                 std::stringstream ss(&expires_ctime[off]);
-                ss.imbue(std::locale("de_DE.utf-8"));
                 ss >> std::get_time(&dt, "%d %b %Y %H:%M:%S");
                 if (!ss.fail())
                     info.expires = mktime(&dt);

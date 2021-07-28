@@ -53,7 +53,7 @@ public:
 
 private:
     cocos2d::Texture2D* _spriteTexture; // weak ref  
-    cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
+    cocos2d::extension::PhysicsDebugNodeChipmunk2D* _debugLayer; // weak ref
 
     cpSpace* _space; // strong ref
     cpShape* _walls[4];
