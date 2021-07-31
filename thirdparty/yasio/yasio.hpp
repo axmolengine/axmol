@@ -48,6 +48,7 @@ SOFTWARE.
 #include "yasio/detail/select_interrupter.hpp"
 #include "yasio/detail/concurrent_queue.hpp"
 #include "yasio/detail/utils.hpp"
+#include "yasio/detail/errc.hpp"
 #include "yasio/cxx17/memory.hpp"
 #include "yasio/cxx17/string_view.hpp"
 #include "yasio/xxsocket.hpp"
@@ -154,8 +155,8 @@ enum
   // see also: YOPT_S_DNS_QUERIES_TIMEOUT
   YOPT_S_DNS_QUERIES_TIMEOUTMS,
 
-  // Set dns queries tries when timeout reached, default is: 5
-  // params: dns_queries_tries : int(5)
+  // Set dns queries tries when timeout reached, default is: 4
+  // params: dns_queries_tries : int(4)
   // remarks:
   //        a. this option must be set before 'io_service::start'
   //        b. relative option: YOPT_S_DNS_QUERIES_TIMEOUT
@@ -299,23 +300,6 @@ enum
   YLOG_I,
   YLOG_E,
 };
-
-namespace errc
-{
-enum
-{
-  no_error              = 0,   // No error.
-  read_timeout          = -28, // The remote host did not respond after a period of time.
-  invalid_packet        = -27, // Invalid packet.
-  resolve_host_failed   = -26, // Resolve host failed.
-  no_available_address  = -25, // No available address to connect.
-  shutdown_by_localhost = -24, // Local shutdown the connection.
-  ssl_handshake_failed  = -23, // SSL handshake failed.
-  ssl_write_failed      = -22, // SSL write failed.
-  ssl_read_failed       = -21, // SSL read failed.
-  eof                   = -20, // end of file.
-};
-}
 
 // class fwds
 class highp_timer;

@@ -109,6 +109,8 @@ HttpClient::HttpClient()
 
     _service = new yasio::io_service(HttpClient::MAX_CHANNELS);
     _service->set_option(yasio::YOPT_S_DEFERRED_EVENT, 0);
+    _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
+    _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
     _service->start([=](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
 
     for (int i = 0; i < HttpClient::MAX_CHANNELS; ++i) {
@@ -139,6 +141,11 @@ void HttpClient::setDispatchOnWorkThread(bool bVal)
     _dispatchOnWorkThread = bVal;
     if(!bVal) 
         _scheduler->schedule([=](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
+}
+
+void HttpClient::handleNetworkStatusChanged()
+{
+    _service->set_option(YOPT_S_DNS_DIRTY, 1);
 }
 
 bool HttpClient::send(HttpRequest* request) {
