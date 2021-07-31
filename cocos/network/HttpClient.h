@@ -188,6 +188,11 @@ public:
 
     void setDispatchOnWorkThread(bool bVal);
     bool isDispatchOnWorkThread() const { return _dispatchOnWorkThread; }
+
+    /*
+    * When the device network status chagned, you should invoke this function
+    */
+    void handleNetworkStatusChanged();
         
 private:
     HttpClient();
