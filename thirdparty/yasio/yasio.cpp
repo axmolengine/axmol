@@ -158,10 +158,10 @@ struct yasio__global_state {
     // for single core CPU, we set minimal wait duration to 10us by default
     yasio__min_wait_duration = std::thread::hardware_concurrency() > 1 ? 0LL : YASIO_MIN_WAIT_DURATION;
 #if defined(YASIO_SSL_BACKEND) && YASIO_SSL_BACKEND == 1
-#if OPENSSL_VERSION_NUMBER >= 0x10100000 && !defined(LIBRESSL_VERSION_NUMBER)
+#  if OPENSSL_VERSION_NUMBER >= 0x10100000 && !defined(LIBRESSL_VERSION_NUMBER)
     if (OPENSSL_init_ssl(0, NULL) == 1)
       yasio__setbits(this->init_flags_, INITF_SSL);
-#endif
+#  endif
 #endif
 #if defined(YASIO_HAVE_CARES)
     int ares_status = ::ares_library_init(ARES_LIB_INIT_ALL);
@@ -1403,10 +1403,11 @@ void io_service::do_ssl_handshake(io_channel* ctx)
     the required condition: https://www.openssl.org/docs/manmaster/man3/SSL_do_handshake.html
     */
     if (status == SSL_ERROR_WANT_READ || status == SSL_ERROR_WANT_WRITE)
-        return;
-#if defined(SSL_ERROR_WANT_ASYNC)
-    if (status == SSL_ERROR_WANT_ASYNC) return;
-#endif
+      return;
+#    if defined(SSL_ERROR_WANT_ASYNC)
+    if (status == SSL_ERROR_WANT_ASYNC)
+      return;
+#    endif
     int error = static_cast<int>(ERR_get_error());
     if (error)
     {
@@ -1512,7 +1513,6 @@ void io_service::process_ares_requests(fd_set* fds_array)
 }
 void io_service::recreate_ares_channel()
 {
-  this->options_.dns_dirty_ = false;
   if (ares_)
     destroy_ares_channel();
 
@@ -2056,6 +2056,7 @@ bool io_service::cleanup_io(io_base* obj, bool clear_state)
 }
 u_short io_service::query_ares_state(io_channel* ctx)
 {
+  update_dns_status();
   if (yasio__testbits(ctx->properties_, YCPF_NEEDS_QUERIES))
   {
     switch (static_cast<u_short>(ctx->dns_queries_state_))
@@ -2129,9 +2130,6 @@ void io_service::start_resolve(io_channel* ctx)
   });
   async_resolv_thread.detach();
 #else
-  if (this->options_.dns_dirty_)
-    recreate_ares_channel();
-
   ares_addrinfo_hints hint;
   memset(&hint, 0x0, sizeof(hint));
   hint.ai_family = local_address_family();
@@ -2145,6 +2143,18 @@ void io_service::start_resolve(io_channel* ctx)
   ares_work_started();
   ::ares_getaddrinfo(this->ares_, ctx->remote_host_.c_str(), service, &hint, io_service::ares_getaddrinfo_cb, ctx);
 #endif
+}
+void io_service::update_dns_status()
+{
+  if (this->options_.dns_dirty_)
+  {
+    this->options_.dns_dirty_ = false;
+#if defined(YASIO_HAVE_CARES)
+    recreate_ares_channel();
+#endif
+    for (auto channel : this->channels_)
+      channel->dns_queries_state_ = YDQS_DIRTY;
+  }
 }
 int io_service::resolve(std::vector<ip::endpoint>& endpoints, const char* hostname, unsigned short port)
 {

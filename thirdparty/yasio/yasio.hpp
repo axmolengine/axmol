@@ -164,9 +164,7 @@ enum
 
   // Set dns server dirty
   // params: reserved : int(1)
-  // remarks:
-  //        a. this option only works with c-ares enabled
-  //        b. you should set this option after your mobile network changed
+  // remarks: you should set this option after your device network changed
   YOPT_S_DNS_DIRTY,
 
   // Sets channel length field based frame decode function, native C++ ONLY
@@ -1110,6 +1108,8 @@ private:
 
   int local_address_family() const { return ((ipsv_ & ipsv_ipv4) || !ipsv_) ? AF_INET : AF_INET6; }
 
+  YASIO__DECL void update_dns_status();
+
   /* For log macro only */
   inline const print_fn2_t& __get_cprint() const { return options_.print_; }
 
@@ -1156,7 +1156,7 @@ private:
     highp_time_t dns_queries_timeout_ = 5LL * std::micro::den;
     int dns_queries_tries_            = 5;
 
-    bool dns_dirty_ = true; // only for c-ares
+    bool dns_dirty_ = false;
 
     bool deferred_event_ = true;
     defer_event_cb_t on_defer_event_;

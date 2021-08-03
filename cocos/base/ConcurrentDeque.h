@@ -53,6 +53,16 @@ public:
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
         queue_.pop_front();
     }
+    void push_front(_Ty&& value)
+    {
+        std::lock_guard<std::recursive_mutex> lck(this->mtx_);
+        queue_.push_front(std::forward<_Ty>(value));
+    }
+    void push_front(const _Ty& value)
+    {
+        std::lock_guard<std::recursive_mutex> lck(this->mtx_);
+        queue_.push_front(value);
+    }
     size_t size() const {
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
         return this->queue_.size();
@@ -89,6 +99,8 @@ public:
     void unsafe_pop_front() {
         queue_.pop_front();
     }
+    void unsafe_push_front(_Ty&& value) { queue_.push_font(std::forward<_Ty>(value)); }
+    void unsafe_push_front(const _Ty& value) { queue_.push_font(value); }
     bool unsafe_empty() const {
         return this->queue_.empty();
     }

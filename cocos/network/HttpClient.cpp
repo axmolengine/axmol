@@ -114,7 +114,7 @@ HttpClient::HttpClient()
     _service->start([=](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
 
     for (int i = 0; i < HttpClient::MAX_CHANNELS; ++i) {
-        _availChannelQueue.push_back(i);
+        _availChannelQueue.unsafe_push_back(i);
     }
 
     _scheduler->schedule([=](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
@@ -342,7 +342,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
                 if (responseCode == 302)
                     response->getHttpRequest()->setRequestType(HttpRequest::Type::GET);
                 CCLOG("Process url redirect (%d): %s", responseCode, iter->second.c_str());
-                _availChannelQueue.push_back(channel->index());
+                _availChannelQueue.push_front(channel->index());
                 processResponse(response, iter->second);
                 response->release();
                 return;
@@ -353,7 +353,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
     finishResponse(response);
 
     // recycle channel
-    _availChannelQueue.push_back(channel->index());
+    _availChannelQueue.push_front(channel->index());
 
     // try process pending response
     auto lck = _pendingResponseQueue.get_lock();
