@@ -258,11 +258,16 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             obs.write_bytes(uri.getHost());
             obs.write_bytes("\r\n");
 
-            // custom headers
+            // process custom headers
+            struct HeaderFlag {
+                enum {
+                    UESR_AGENT   = 1,
+                    CONTENT_TYPE = 1 << 1,
+                    ACCEPT       = 1 << 2,
+                };
+            };
+            int headerFlags = 0;
             auto& headers = request->getHeaders();
-
-            bool userAgentSpecified   = false;
-            bool contentTypeSpecified = false;
             if (!headers.empty()) {
                 using namespace cxx17; // for string_view literal
                 for (auto& header : headers) {
@@ -270,17 +275,15 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                     obs.write_bytes("\r\n");
 
                     if (cxx20::ic::starts_with(cxx17::string_view{header}, "User-Agent:"_sv))
-                        userAgentSpecified = true;
+                        headerFlags |= HeaderFlag::UESR_AGENT;
                     else if (cxx20::ic::starts_with(cxx17::string_view{header}, "Content-Type:"_sv))
-                        contentTypeSpecified = true;
+                        headerFlags |= HeaderFlag::CONTENT_TYPE;
+                    else if (cxx20::ic::starts_with(cxx17::string_view{header}, "Accept:"_sv))
+                        headerFlags |= HeaderFlag::ACCEPT;
                 }
             }
 
-            if (!userAgentSpecified)
-                obs.write_bytes("User-Agent: yasio-http\r\n");
-
-            if (_cookie)
-            {
+            if (_cookie) {
                 auto cookies = _cookie->checkAndGetFormatedMatchCookies(uri);
                 if (!cookies.empty())
                 {
@@ -289,11 +292,14 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                 }
             }
 
-            obs.write_bytes("Accept: */*;q=0.8\r\n");
-            obs.write_bytes("Connection: Close\r\n");
+            if (!(headerFlags & HeaderFlag::UESR_AGENT))
+                obs.write_bytes("User-Agent: yasio-http\r\n");
+
+            if (!(headerFlags & HeaderFlag::ACCEPT))
+                obs.write_bytes("Accept: */*;q=0.8\r\n");
 
             if (usePostData) {
-                if (!contentTypeSpecified)
+                if (!(headerFlags & HeaderFlag::CONTENT_TYPE))
                     obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
 
                 char strContentLength[128] = {0};
