@@ -17,7 +17,7 @@
 */
 
 #include "test.h"
-#include "CCPhysicsDebugNodeBox2D.h"
+#include "extensions/cocos-ext.h"
 
 #include <stdio.h>
 

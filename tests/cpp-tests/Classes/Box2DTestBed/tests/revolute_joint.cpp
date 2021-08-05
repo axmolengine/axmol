@@ -22,7 +22,7 @@
 
 //#include "settings.h"
 #include "../test.h"
-//#include "imgui/imgui.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
 
 class RevoluteJoint : public Test
 {
@@ -109,29 +109,29 @@ public:
 		}
 	}
 
-	//void UpdateUI() override
-	//{
-	//	ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
-	//	ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
-	//	ImGui::Begin("Joint Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	void UpdateUI() override
+	{
+		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
+		ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
+		ImGui::Begin("Joint Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
-	//	if (ImGui::Checkbox("Limit", &m_enableLimit))
-	//	{
-	//		m_joint1->EnableLimit(m_enableLimit);
-	//	}
+		if (ImGui::Checkbox("Limit", &m_enableLimit))
+		{
+			m_joint1->EnableLimit(m_enableLimit);
+		}
 
-	//	if (ImGui::Checkbox("Motor", &m_enableMotor))
-	//	{
-	//		m_joint1->EnableMotor(m_enableMotor);
-	//	}
+		if (ImGui::Checkbox("Motor", &m_enableMotor))
+		{
+			m_joint1->EnableMotor(m_enableMotor);
+		}
 
-	//	if (ImGui::SliderFloat("Speed", &m_motorSpeed, -20.0f, 20.0f, "%.0f"))
-	//	{
-	//		m_joint1->SetMotorSpeed(m_motorSpeed);
-	//	}
+		if (ImGui::SliderFloat("Speed", &m_motorSpeed, -20.0f, 20.0f, "%.0f"))
+		{
+			m_joint1->SetMotorSpeed(m_motorSpeed);
+		}
 
-	//	ImGui::End();
-	//}
+		ImGui::End();
+	}
 
 	void Step(Settings* settings) override
 	{

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "CCPhysicsDebugNode.h"
+#include "CCPhysicsDebugNodeChipmunk2D.h"
 
 #include "chipmunk/chipmunk_private.h"
 
@@ -39,6 +39,7 @@
 
 NS_CC_EXT_BEGIN
 
+Vec2 physicsDebugNodeOffset;
 
 /*
  IMPORTANT - READ ME!
@@ -86,7 +87,7 @@ static Color4F ColorForBody(cpBody *body)
 
 static Vec2 cpVert2Point(const cpVect &vert)
 {
-    return (Vec2(vert.x, vert.y) );
+    return (Vec2(vert.x, vert.y) + physicsDebugNodeOffset);
 }
 
 static void DrawShape(cpShape *shape, DrawNode *renderer)
@@ -214,7 +215,7 @@ static void DrawConstraint(cpConstraint *constraint, DrawNode *renderer)
 
 // implementation of PhysicsDebugNode
 
-void PhysicsDebugNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+void PhysicsDebugNodeChipmunk2D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
     if (! _spacePtr)
     {
@@ -229,13 +230,13 @@ void PhysicsDebugNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t 
     DrawNode::draw(renderer, transform, flags);
 }
 
-PhysicsDebugNode::PhysicsDebugNode()
+PhysicsDebugNodeChipmunk2D::PhysicsDebugNodeChipmunk2D()
 : _spacePtr(nullptr)
 {}
 
-PhysicsDebugNode* PhysicsDebugNode::create(cpSpace *space)
+PhysicsDebugNodeChipmunk2D* PhysicsDebugNodeChipmunk2D::create(cpSpace *space)
 {
-    PhysicsDebugNode*node = new (std::nothrow) PhysicsDebugNode();
+    PhysicsDebugNodeChipmunk2D*node = new (std::nothrow) PhysicsDebugNodeChipmunk2D();
     if (node)
     {
         node->init();
@@ -250,16 +251,16 @@ PhysicsDebugNode* PhysicsDebugNode::create(cpSpace *space)
     return node;
 }
 
-PhysicsDebugNode::~PhysicsDebugNode()
+PhysicsDebugNodeChipmunk2D::~PhysicsDebugNodeChipmunk2D()
 {
 }
 
-cpSpace* PhysicsDebugNode::getSpace() const
+cpSpace* PhysicsDebugNodeChipmunk2D::getSpace() const
 {
     return _spacePtr;
 }
 
-void PhysicsDebugNode::setSpace(cpSpace *space)
+void PhysicsDebugNodeChipmunk2D::setSpace(cpSpace *space)
 {
     _spacePtr = space;
 }

@@ -20,7 +20,7 @@
 #define TEST_H
 
 #include "box2d/box2d.h"
-#include "CCPhysicsDebugNodeBox2D.h"
+#include "extensions/cocos-ext.h"
 
 #include <cstdlib>
 

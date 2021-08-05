@@ -1,7 +1,5 @@
 /*
- * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
- * 
- * 
+* Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
@@ -19,20 +17,22 @@
  */
 
 #include "CCPhysicsDebugNodeBox2D.h"
-//#include "cocos2d.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
 
 #include <stdbool.h>
 #include <limits.h>
-//#include "extensions/cocos-ext.h"
+
 
 USING_NS_CC;
 
 // 'Interfaces' to adxe
 cocos2d::DrawNode* drawBox2D;
+
+#if defined(CC_PLATFORM_PC)
 extern cocos2d::Label* labelDebugDraw;
+#endif
 
 #define BUFFER_OFFSET(x)  ((const void*) (x))
 
@@ -45,7 +45,7 @@ extern cocos2d::Label* labelDebugDraw;
 //auto glview = director->getOpenGLView();
 //Size designSize(960 * 0.85, 640 * 0.85);
 //glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
-cocos2d::Vec2 physicsDebugNodeOffset = { 260, 70 };
+cocos2d::Vec2 debugNodeOffset = { 260, 70 };
 //float mRatio = 10.0f;
 
 DebugDraw::DebugDraw()
@@ -69,7 +69,7 @@ void DebugDraw::DrawPolygon(const b2Vec2* verts, int vertexCount, const b2Color&
 {
     Vec2* vec = new (std::nothrow) Vec2[vertexCount];
     for (size_t i = 0; i < vertexCount; i++) {
-        vec[i] = Vec2(verts[i].x * mRatio, verts[i].y * mRatio) + physicsDebugNodeOffset;
+        vec[i] = Vec2(verts[i].x * mRatio, verts[i].y * mRatio) + debugNodeOffset;
     }
 //    drawBP->drawPolygon(vec, vertexCount, Color4F(color.r, color.g, color.b, color.a), 1, Color4F(color.r, color.g, color.b, color.a));
     drawBP->drawPolygon(vec, vertexCount, Color4F::BLACK, 0.4f, Color4F(color.r, color.g, color.b, color.a));
@@ -79,7 +79,7 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2* verts, int vertexCount, const b2C
 {
     Vec2* vec = new (std::nothrow) Vec2[vertexCount];
     for (size_t i = 0; i < vertexCount; i++) {
-        vec[i] = Vec2(verts[i].x * mRatio, verts[i].y * mRatio) + physicsDebugNodeOffset;
+        vec[i] = Vec2(verts[i].x * mRatio, verts[i].y * mRatio) + debugNodeOffset;
     }
     drawBP->drawPolygon(vec, vertexCount, Color4F(color.r / 2, color.g / 2, color.b / 2, color.a), 0.4f, Color4F(color.r, color.g, color.b, color.a));
     //drawBP->drawSolidPoly(vec, vertexCount, Color4F(color.r, color.g, color.b, color.a));
@@ -87,19 +87,19 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2* verts, int vertexCount, const b2C
 
 void DebugDraw::DrawCircle(const b2Vec2& center, float radius, const b2Color& color)
 {
-    drawBP->drawCircle(Vec2(center.x * mRatio, center.y * mRatio) + physicsDebugNodeOffset, radius * mRatio, CC_DEGREES_TO_RADIANS(0), 30, true, 1.0f,
+    drawBP->drawCircle(Vec2(center.x * mRatio, center.y * mRatio) + debugNodeOffset, radius * mRatio, CC_DEGREES_TO_RADIANS(0), 30, true, 1.0f,
         1.0f, Color4F(color.r, color.g, color.b, color.a));
 }
 
 void DebugDraw::DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color)
 {
     // DrawSolidCircle Maybe have to fix later
-    drawBP->drawCircle(Vec2(center.x * mRatio, center.y * mRatio) + physicsDebugNodeOffset, radius * mRatio, CC_DEGREES_TO_RADIANS(0), 20, true, 1.0f, 1.0f, Color4F(color.r, color.g, color.b, color.a));
+    drawBP->drawCircle(Vec2(center.x * mRatio, center.y * mRatio) + debugNodeOffset, radius * mRatio, CC_DEGREES_TO_RADIANS(0), 20, true, 1.0f, 1.0f, Color4F(color.r, color.g, color.b, color.a));
 }
 
 void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
-    drawBP->drawLine(Vec2(p1.x * mRatio, p1.y * mRatio) + physicsDebugNodeOffset, Vec2(p2.x * mRatio, p2.y * mRatio) + physicsDebugNodeOffset, Color4F(color.r, color.g, color.b, color.a));
+    drawBP->drawLine(Vec2(p1.x * mRatio, p1.y * mRatio) + debugNodeOffset, Vec2(p2.x * mRatio, p2.y * mRatio) + debugNodeOffset, Color4F(color.r, color.g, color.b, color.a));
 }
 
 void DebugDraw::DrawTransform(const b2Transform& xf)
@@ -115,24 +115,28 @@ void DebugDraw::DrawTransform(const b2Transform& xf)
 
 void DebugDraw::DrawPoint(const b2Vec2& p, float size, const b2Color& color)
 {
-    drawBP->drawPoint(Vec2(p.x * mRatio, p.y * mRatio) + physicsDebugNodeOffset, size, Color4F(color.r, color.g, color.b, color.a));
+    drawBP->drawPoint(Vec2(p.x * mRatio, p.y * mRatio) + debugNodeOffset, size, Color4F(color.r, color.g, color.b, color.a));
 }
 static char PrintStringBuffer[1024 * 8];
 static char* PrintStringCursor;
 char const* MessageString = NULL;
 void DebugDraw::DrawString(int x, int y, const char* string, ...)
 {
+#if defined(CC_PLATFORM_PC)
     // x,y is unsupported
     std::string s = std::string(string);
     labelDebugDraw->setString(s.c_str());
+#endif
 }
 
 
 void DebugDraw::DrawString(const b2Vec2& pw, const char* string, ...)
 {
+#if defined(CC_PLATFORM_PC)
     // pw is unsupported
     std::string s = std::string(string);
     labelDebugDraw->setString(s.c_str());
+#endif
 }
 
 
@@ -145,10 +149,10 @@ void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& color)
     b2Vec2 p4 = b2Vec2(aabb->lowerBound.x, aabb->upperBound.y);
 
     Vec2 verts[] = {
-    Vec2(p1.x * mRatio, p1.y * mRatio) + physicsDebugNodeOffset ,
-    Vec2(p2.x * mRatio, p2.y * mRatio) + physicsDebugNodeOffset ,
-    Vec2(p3.x * mRatio, p3.y * mRatio) + physicsDebugNodeOffset ,
-    Vec2(p4.x * mRatio, p4.y * mRatio) + physicsDebugNodeOffset ,
+    Vec2(p1.x * mRatio, p1.y * mRatio) + debugNodeOffset ,
+    Vec2(p2.x * mRatio, p2.y * mRatio) + debugNodeOffset ,
+    Vec2(p3.x * mRatio, p3.y * mRatio) + debugNodeOffset ,
+    Vec2(p4.x * mRatio, p4.y * mRatio) + debugNodeOffset ,
     };
     drawBP->drawPolygon(verts, sizeof(verts) / sizeof(verts[0]), Color4F(color.r / 2, color.g / 2, color.b / 2, 0), 0.4f, Color4F(color.r, color.g, color.b, color.a));
 }

@@ -54,7 +54,7 @@ public:
 	void updateInit(ChipmunkDemo tt);
 
 	cpSpace* _space; // strong ref
-	cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
+	cocos2d::extension::PhysicsDebugNodeChipmunk2D* _debugLayer; // weak ref
 	int keyPresses;
 	bool mousePresses = false;
 

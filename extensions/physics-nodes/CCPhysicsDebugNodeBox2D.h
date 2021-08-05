@@ -23,8 +23,10 @@
 
 #define GLFW_INCLUDE_NONE
 
-#include "GLFW/glfw3.h"
 
+#include "extensions/ExtensionMacros.h"
+#include "2d/CCDrawNode.h"
+#include "extensions/ExtensionExport.h"
 #include "box2d/box2d.h"
 #include "cocos2d.h"
 
@@ -56,9 +58,11 @@ extern cocos2d::DrawNode* drawBox2D;
 
 // This class implements debug drawing callbacks that are invoked
 // inside b2World::Step.
-class DebugDraw : public b2Draw
+
+//PhysicsDebugNode : public DrawNode
+class CC_EX_DLL DebugDraw : public b2Draw
 {
-    float mRatio;
+
  //   cocos2d::g* mShaderProgram;
    // GLint        mColorLocation;
 
@@ -93,6 +97,8 @@ public:
     void DrawAABB(b2AABB* aabb, const b2Color& color);
 
     void Flush();
+
+    float mRatio;
 };
 
-#endif
+#endif //__PHYSICSNODES_DEBUGNODE_BOX2D_H__
