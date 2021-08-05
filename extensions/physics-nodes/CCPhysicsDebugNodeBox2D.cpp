@@ -1,7 +1,5 @@
 /*
- * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
- * 
- * 
+* Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
@@ -31,7 +29,10 @@ USING_NS_CC;
 
 // 'Interfaces' to adxe
 cocos2d::DrawNode* drawBox2D;
+
+#if defined(CC_PLATFORM_PC)
 extern cocos2d::Label* labelDebugDraw;
+#endif
 
 #define BUFFER_OFFSET(x)  ((const void*) (x))
 
@@ -121,17 +122,21 @@ static char* PrintStringCursor;
 char const* MessageString = NULL;
 void DebugDraw::DrawString(int x, int y, const char* string, ...)
 {
+#if defined(CC_PLATFORM_PC)
     // x,y is unsupported
     std::string s = std::string(string);
     labelDebugDraw->setString(s.c_str());
+#endif
 }
 
 
 void DebugDraw::DrawString(const b2Vec2& pw, const char* string, ...)
 {
+#if defined(CC_PLATFORM_PC)
     // pw is unsupported
     std::string s = std::string(string);
     labelDebugDraw->setString(s.c_str());
+#endif
 }
 
 

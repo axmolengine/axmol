@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
 
  http://www.cocos2d-x.org
 
@@ -41,7 +42,7 @@ enum {
     kTagParentNode = 1,
 };
 
-Settingss settings;
+Settingss settingss;
 
 extern cocos2d::DrawNode* drawBox2D;
 extern cocos2d::Vec2 debugNodeOffset;
@@ -210,7 +211,7 @@ void Box2DTest::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 void Box2DTest::onDraw(const Mat4& transform, uint32_t flags)
 {
     drawBox2D->clear();
-    Step(&settings);
+    Step(&settingss);
 }
 
 

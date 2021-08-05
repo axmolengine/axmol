@@ -45,6 +45,7 @@ extern int g_testCount;
 
 Settings settings;
 
+extern cocos2d::Vec2 debugNodeOffset;
 extern cocos2d::Vec2 physicsDebugNodeOffset;
 cocos2d::Label* labelDebugDraw;
 
@@ -74,7 +75,7 @@ Box2DTestBedTests::Box2DTestBedTests()
 
 Box2DTestBed::Box2DTestBed()
 {
-
+	debugNodeOffset = { 260, 70 };
 }
 
 Box2DTestBed::~Box2DTestBed()
