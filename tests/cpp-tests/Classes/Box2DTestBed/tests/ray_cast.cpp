@@ -22,7 +22,7 @@
 
 //#include "settings.h"
 #include "../test.h"
-//#include "imgui/imgui.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
 
 enum
 {
@@ -291,55 +291,55 @@ public:
 		}
 	}
 
-	//void UpdateUI() override
-	//{
-	//	ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
-	//	ImGui::SetNextWindowSize(ImVec2(210.0f, 285.0f));
-	//	ImGui::Begin("Ray-cast Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	void UpdateUI() override
+	{
+		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
+		ImGui::SetNextWindowSize(ImVec2(210.0f, 285.0f));
+		ImGui::Begin("Ray-cast Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
-	//	if (ImGui::Button("Shape 1"))
-	//	{
-	//		Create(0);
-	//	}
+		if (ImGui::Button("Shape 1"))
+		{
+			Create(0);
+		}
 
-	//	if (ImGui::Button("Shape 2"))
-	//	{
-	//		Create(1);
-	//	}
+		if (ImGui::Button("Shape 2"))
+		{
+			Create(1);
+		}
 
-	//	if (ImGui::Button("Shape 3"))
-	//	{
-	//		Create(2);
-	//	}
+		if (ImGui::Button("Shape 3"))
+		{
+			Create(2);
+		}
 
-	//	if (ImGui::Button("Shape 4"))
-	//	{
-	//		Create(3);
-	//	}
+		if (ImGui::Button("Shape 4"))
+		{
+			Create(3);
+		}
 
-	//	if (ImGui::Button("Shape 5"))
-	//	{
-	//		Create(4);
-	//	}
+		if (ImGui::Button("Shape 5"))
+		{
+			Create(4);
+		}
 
-	//	if (ImGui::Button("Shape 6"))
-	//	{
-	//		Create(5);
-	//	}
+		if (ImGui::Button("Shape 6"))
+		{
+			Create(5);
+		}
 
-	//	if (ImGui::Button("Destroy Shape"))
-	//	{
-	//		DestroyBody();
-	//	}
+		if (ImGui::Button("Destroy Shape"))
+		{
+			DestroyBody();
+		}
 
-	//	ImGui::RadioButton("Any", &m_mode, e_any);
-	//	ImGui::RadioButton("Closest", &m_mode, e_closest);
-	//	ImGui::RadioButton("Multiple", &m_mode, e_multiple);
+		ImGui::RadioButton("Any", &m_mode, e_any);
+		ImGui::RadioButton("Closest", &m_mode, e_closest);
+		ImGui::RadioButton("Multiple", &m_mode, e_multiple);
 
-	//	ImGui::SliderFloat("Angle", &m_degrees, 0.0f, 360.0f, "%.0f");
+		ImGui::SliderFloat("Angle", &m_degrees, 0.0f, 360.0f, "%.0f");
 
-	//	ImGui::End();
-	//}
+		ImGui::End();
+	}
 
 	void Step(Settings* settings) override
 	{

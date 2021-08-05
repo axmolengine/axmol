@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef __PHYSICSNODES_DEBUGNODE_H__
-#define __PHYSICSNODES_DEBUGNODE_H__
+#ifndef __PHYSICSNODES_DEBUGNODE_CHIPMUNK2D_H__
+#define __PHYSICSNODES_DEBUGNODE_CHIPMUNK2D_H__
 
 #include "extensions/ExtensionMacros.h"
 #include "2d/CCDrawNode.h"
@@ -32,6 +32,8 @@
 struct cpSpace;
 
 NS_CC_EXT_BEGIN
+
+extern Vec2 physicsDebugNodeOffset;
 
 /**
  * A BaseData that draws the components of a physics engine.
@@ -43,20 +45,20 @@ NS_CC_EXT_BEGIN
  * @lua NA
  */
 
-class CC_EX_DLL PhysicsDebugNode : public DrawNode
+class CC_EX_DLL PhysicsDebugNodeChipmunk2D : public DrawNode
 {
 
 public:
     /** Create a debug node for a regular Chipmunk space. */
-    static PhysicsDebugNode* create(cpSpace *space);
+    static PhysicsDebugNodeChipmunk2D* create(cpSpace *space);
     /**
      * @js ctor
      */
-    PhysicsDebugNode();
+    PhysicsDebugNodeChipmunk2D();
     /**
      * @js NA
      */
-    virtual ~PhysicsDebugNode();
+    virtual ~PhysicsDebugNodeChipmunk2D();
     
 
     cpSpace* getSpace() const;
@@ -71,4 +73,4 @@ protected:
 
 NS_CC_EXT_END
 
-#endif // __PHYSICSNODES_DEBUGNODE_H__
+#endif // __PHYSICSNODES_DEBUGNODE_CHIPMUNK2D_H__

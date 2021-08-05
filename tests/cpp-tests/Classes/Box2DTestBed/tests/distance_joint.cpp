@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "../test.h"
-//#include "imgui/imgui.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
 
 // This tests distance joints, body destruction, and joint destruction.
 class DistanceJoint : public Test
@@ -65,47 +65,47 @@ public:
 		}
 	}
 
-	//void UpdateUI() override
-	//{
-	//	ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
-	//	ImGui::SetNextWindowSize(ImVec2(260.0f, 150.0f));
-	//	ImGui::Begin("Joint Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	void UpdateUI() override
+	{
+		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
+		ImGui::SetNextWindowSize(ImVec2(260.0f, 150.0f));
+		ImGui::Begin("Joint Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
-	//	if (ImGui::SliderFloat("Length", &m_length, 0.0f, 20.0f, "%.0f"))
-	//	{
-	//		m_length = m_joint->SetLength(m_length);
-	//	}
+		if (ImGui::SliderFloat("Length", &m_length, 0.0f, 20.0f, "%.0f"))
+		{
+			m_length = m_joint->SetLength(m_length);
+		}
 
-	//	if (ImGui::SliderFloat("Min Length", &m_minLength, 0.0f, 20.0f, "%.0f"))
-	//	{
-	//		m_minLength = m_joint->SetMinLength(m_minLength);
-	//	}
+		if (ImGui::SliderFloat("Min Length", &m_minLength, 0.0f, 20.0f, "%.0f"))
+		{
+			m_minLength = m_joint->SetMinLength(m_minLength);
+		}
 
-	//	if (ImGui::SliderFloat("Max Length", &m_maxLength, 0.0f, 20.0f, "%.0f"))
-	//	{
-	//		m_maxLength = m_joint->SetMaxLength(m_maxLength);
-	//	}
+		if (ImGui::SliderFloat("Max Length", &m_maxLength, 0.0f, 20.0f, "%.0f"))
+		{
+			m_maxLength = m_joint->SetMaxLength(m_maxLength);
+		}
 
-	//	if (ImGui::SliderFloat("Hertz", &m_hertz, 0.0f, 10.0f, "%.1f"))
-	//	{
-	//		float stiffness;
-	//		float damping;
-	//		b2LinearStiffness(stiffness, damping, m_hertz, m_dampingRatio, m_joint->GetBodyA(), m_joint->GetBodyB());
-	//		m_joint->SetStiffness(stiffness);
-	//		m_joint->SetDamping(damping);
-	//	}
+		if (ImGui::SliderFloat("Hertz", &m_hertz, 0.0f, 10.0f, "%.1f"))
+		{
+			float stiffness;
+			float damping;
+			b2LinearStiffness(stiffness, damping, m_hertz, m_dampingRatio, m_joint->GetBodyA(), m_joint->GetBodyB());
+			m_joint->SetStiffness(stiffness);
+			m_joint->SetDamping(damping);
+		}
 
-	//	if (ImGui::SliderFloat("Damping Ratio", &m_dampingRatio, 0.0f, 2.0f, "%.1f"))
-	//	{
-	//		float stiffness;
-	//		float damping;
-	//		b2LinearStiffness(stiffness, damping, m_hertz, m_dampingRatio, m_joint->GetBodyA(), m_joint->GetBodyB());
-	//		m_joint->SetStiffness(stiffness);
-	//		m_joint->SetDamping(damping);
-	//	}
+		if (ImGui::SliderFloat("Damping Ratio", &m_dampingRatio, 0.0f, 2.0f, "%.1f"))
+		{
+			float stiffness;
+			float damping;
+			b2LinearStiffness(stiffness, damping, m_hertz, m_dampingRatio, m_joint->GetBodyA(), m_joint->GetBodyB());
+			m_joint->SetStiffness(stiffness);
+			m_joint->SetDamping(damping);
+		}
 
-	//	ImGui::End();
-	//}
+		ImGui::End();
+	}
 
 	static Test* Create()
 	{

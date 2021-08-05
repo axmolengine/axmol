@@ -22,7 +22,7 @@
 
 //#include "settings.h"
 #include "../test.h"
-//#include "imgui/imgui.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
 
 // Test the wheel joint with motor, spring, and limit options.
 class WheelJoint : public Test
@@ -88,7 +88,7 @@ public:
 		m_textLine += m_textIncrement;
 	}
 
-	/*void UpdateUI() override
+	void UpdateUI() override
 	{
 		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
 		ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
@@ -109,8 +109,8 @@ public:
 			m_joint->SetMotorSpeed(m_motorSpeed);
 		}
 
-		ImGui::End();*/
-	//}
+		ImGui::End();
+	}
 
 	static Test* Create()
 	{
