@@ -62,7 +62,7 @@ extern cocos2d::DrawNode* drawBox2D;
 //PhysicsDebugNode : public DrawNode
 class CC_EX_DLL DebugDraw : public b2Draw
 {
-    float mRatio;
+
  //   cocos2d::g* mShaderProgram;
    // GLint        mColorLocation;
 
@@ -97,6 +97,8 @@ public:
     void DrawAABB(b2AABB* aabb, const b2Color& color);
 
     void Flush();
+
+    float mRatio;
 };
 
 #endif //__PHYSICSNODES_DEBUGNODE_BOX2D_H__

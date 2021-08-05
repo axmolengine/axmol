@@ -253,7 +253,6 @@ void Box2DView::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	_customCmd.init(_globalZOrder, transform, flags);
 	_customCmd.func = CC_CALLBACK_0(Box2DView::onDraw, this, transform, flags);
 	renderer->addCommand(&_customCmd);
-	Director* director = Director::getInstance();
 }
 
 void Box2DView::onDraw(const Mat4& transform, uint32_t flags)
@@ -277,8 +276,8 @@ void Box2DView::onDraw(const Mat4& transform, uint32_t flags)
 //	world->DebugDraw();
 
 	drawBox2D->clear();
-m_test->Step(&settings);
-m_test->m_world->DebugDraw();
+	m_test->Step(&settings);
+	//m_test->m_world->DebugDraw();
 
 	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, oldMV);
 }

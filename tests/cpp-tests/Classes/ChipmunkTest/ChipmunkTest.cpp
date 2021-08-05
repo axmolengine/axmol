@@ -92,6 +92,7 @@ ChipmunkTest::ChipmunkTest()
     this->addChild(menu);
     menu->setPosition(VisibleRect::right().x-100, VisibleRect::top().y-60);
 
+
     scheduleUpdate();
     
 }

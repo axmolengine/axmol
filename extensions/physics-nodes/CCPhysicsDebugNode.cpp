@@ -39,7 +39,6 @@
 
 NS_CC_EXT_BEGIN
 
-Vec2 physicsDebugNodeOffset;
 
 /*
  IMPORTANT - READ ME!
@@ -87,7 +86,7 @@ static Color4F ColorForBody(cpBody *body)
 
 static Vec2 cpVert2Point(const cpVect &vert)
 {
-    return (Vec2(vert.x, vert.y) + physicsDebugNodeOffset);
+    return (Vec2(vert.x, vert.y) );
 }
 
 static void DrawShape(cpShape *shape, DrawNode *renderer)

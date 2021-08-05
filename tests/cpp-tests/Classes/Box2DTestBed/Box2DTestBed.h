@@ -22,8 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _BOX2D_VIEW_H_
-#define _BOX2D_VIEW_H_
+#ifndef _BOX2D_TESTBED_H_
+#define _BOX2D_TESTBED_H_
 
 #include "cocos2d.h"
 #include "box2d/box2d.h"
@@ -102,7 +102,7 @@ protected:
 	cocos2d::CallbackCommand  _customCmd;
 
 	cocos2d::Mat4 _modelViewMV;
-	cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
+	//cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
 
 	b2World* world;
 };
