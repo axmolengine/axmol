@@ -36,21 +36,26 @@ USING_NS_CC_EXT;
 
 #define PTM_RATIO 32
 
-#define DRAW_STRING_NEW_LINE 25
-
 enum {
     kTagParentNode = 1,
 };
 
-Settingss settingss;
 
+//DebugDraw stuff
 extern cocos2d::DrawNode* drawBox2D;
 extern cocos2d::Vec2 debugNodeOffset;
+
 
 Box2DTests::Box2DTests()
 {
     ADD_TEST_CASE(Box2DTest);
 }
+
+std::string Box2DTest::title() const
+{
+    return "Box2D - Basic";
+}
+
 
 bool Box2DTest::init()
 {
@@ -63,6 +68,7 @@ bool Box2DTest::init()
     auto touchListener = EventListenerTouchAllAtOnce::create();
     touchListener->onTouchesEnded = CC_CALLBACK_2(Box2DTest::onTouchesEnded, this);
     dispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+
 
     // init physics
     this->initPhysics();
@@ -84,10 +90,10 @@ bool Box2DTest::init()
 
     addNewSpriteAtPosition(VisibleRect::center());
 
-    auto label = Label::createWithTTF("Tap screen", "fonts/Marker Felt.ttf", 32.0f);
+    auto label = Label::createWithTTF("Tap screen add boxes.\nSome objects be only visible with debug on.", "fonts/Marker Felt.ttf", 12.0f);
     addChild(label, 0);
     label->setColor(Color3B(0, 0, 255));
-    label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 50);
+    label->setPosition(VisibleRect::center().x-50, VisibleRect::top().y - 60);
 
     // menu for debug layer
     MenuItemFont::setFontSize(18);
@@ -120,17 +126,8 @@ Box2DTest::~Box2DTest()
 
 void Box2DTest::toggleDebugCallback(Ref* sender)
 {
-    static bool show = true;
-    if (show)
-    {
-        world->SetDebugDraw(nullptr);
-        show = 0;
-    }
-    else
-    {
-        world->SetDebugDraw(&g_debugDraw);
-        show = true;
-    }
+    showDebugDraw = !showDebugDraw;
+    drawBox2D->clear(); 
 }
 
 
@@ -144,8 +141,6 @@ void Box2DTest::initPhysics()
     world->SetAllowSleeping(true);
 
     world->SetContinuousPhysics(true);
-
- 
 
     // Define the ground body.
     b2BodyDef groundBodyDef;
@@ -176,10 +171,90 @@ void Box2DTest::initPhysics()
     groundBody->CreateFixture(&groundBox, 0);
 
 
-    g_debugDraw.mRatio = 32;
+    // Small triangle
+    b2Vec2 vertices[3];
+    vertices[0].Set(-1.0f, 0.0f);
+    vertices[1].Set(1.0f, 0.0f);
+    vertices[2].Set(0.0f, 2.0f);
+
+    b2PolygonShape polygon;
+    polygon.Set(vertices, 3);
+
+    b2FixtureDef triangleShapeDef;
+    triangleShapeDef.shape = &polygon;
+    triangleShapeDef.density = 1.0f;
+
+    b2BodyDef triangleBodyDef;
+    triangleBodyDef.type = b2_dynamicBody;
+    triangleBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body1 = world->CreateBody(&triangleBodyDef);
+    body1->CreateFixture(&triangleShapeDef);
+
+    // Large triangle (recycle definitions)
+    vertices[0] *= 2.0f;
+    vertices[1] *= 2.0f;
+    vertices[2] *= 2.0f;
+    polygon.Set(vertices, 3);
+
+    triangleBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body2 = world->CreateBody(&triangleBodyDef);
+    body2->CreateFixture(&triangleShapeDef);
+
+    // Small box
+    polygon.SetAsBox(1.0f, 0.5f);
+
+    b2FixtureDef boxShapeDef;
+    boxShapeDef.shape = &polygon;
+    boxShapeDef.density = 1.0f;
+
+    b2BodyDef boxBodyDef;
+    boxBodyDef.type = b2_dynamicBody;
+    boxBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body3 = world->CreateBody(&boxBodyDef);
+    body3->CreateFixture(&boxShapeDef);
+
+    // Large box (recycle definitions)
+    polygon.SetAsBox(2.0f, 1.0f);
+    boxBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body4 = world->CreateBody(&boxBodyDef);
+    body4->CreateFixture(&boxShapeDef);
+
+    // Small circle
+    b2CircleShape circle;
+    circle.m_radius = 1.0f;
+
+    b2FixtureDef circleShapeDef;
+    circleShapeDef.shape = &circle;
+    circleShapeDef.density = 1.0f;
+
+    b2BodyDef circleBodyDef;
+    circleBodyDef.type = b2_dynamicBody;
+    circleBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body5 = world->CreateBody(&circleBodyDef);
+    body5->CreateFixture(&circleShapeDef);
+
+    // Large circle
+    circle.m_radius *= 2.0f;
+    circleBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body6 = world->CreateBody(&circleBodyDef);
+    body6->CreateFixture(&circleShapeDef);
+
+    uint32 flags = 0;
+    flags += 1 * b2Draw::e_shapeBit;
+    flags += 1 * b2Draw::e_jointBit;
+    flags += 0 * b2Draw::e_aabbBit;
+    flags += 0 * b2Draw::e_centerOfMassBit;
+    g_debugDraw.SetFlags(flags);
+    g_debugDraw.mRatio = PTM_RATIO;
+
     debugNodeOffset = { 0, 0 };
     world->SetDebugDraw(&g_debugDraw);
-
 }
 
 void Box2DTest::createResetButton()
@@ -193,27 +268,6 @@ void Box2DTest::createResetButton()
     menu->setPosition(VisibleRect::bottom().x, VisibleRect::bottom().y + 30);
     this->addChild(menu, -1);
 }
-
-void Box2DTest::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
-{
-    //
-    // IMPORTANT:
-    // This is only for debug purposes
-    // It is recommend to disable it
-    //
-    Scene::draw(renderer, transform, flags);
-
-    _customCmd.init(_globalZOrder, transform, flags);
-    _customCmd.func = CC_CALLBACK_0(Box2DTest::onDraw, this, transform, flags);
-    renderer->addCommand(&_customCmd);
-}
-
-void Box2DTest::onDraw(const Mat4& transform, uint32_t flags)
-{
-    drawBox2D->clear();
-    Step(&settingss);
-}
-
 
 void Box2DTest::addNewSpriteAtPosition(Vec2 p)
 {
@@ -264,7 +318,15 @@ void Box2DTest::update(float dt)
     // Instruct the world to perform a single step of simulation. It is
     // generally best to keep the time step and iterations fixed.
     world->Step(dt, velocityIterations, positionIterations);
-//    world->DebugDraw();
+
+
+    // Debug draw
+    if (showDebugDraw)
+    {
+        drawBox2D->clear();
+        world->DebugDraw();
+    }
+
 }
 
 void Box2DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
@@ -279,191 +341,5 @@ void Box2DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
         auto location = touch->getLocation();
 
         addNewSpriteAtPosition(location);
-    }
-}
-
-
-void Box2DTest::Step(Settingss* settings)
-{
-    float timeStep = settings->hz > 0.0f ? 1.0f / settings->hz : float(0.0f);
-
-    if (settings->pause)
-    {
-        if (settings->singleStep)
-        {
-            settings->singleStep = 0;
-        }
-        else
-        {
-            timeStep = 0.0f;
-        }
-
-        g_debugDraw.DrawString(5, m_textLine, "****PAUSED****");
-        m_textLine += DRAW_STRING_NEW_LINE;
-    }
-
-    uint32 flags = 0;
-    flags += settings->drawShapes * b2Draw::e_shapeBit;
-    flags += settings->drawJoints * b2Draw::e_jointBit;
-    flags += settings->drawAABBs * b2Draw::e_aabbBit;
-    flags += settings->drawCOMs * b2Draw::e_centerOfMassBit;
-    g_debugDraw.SetFlags(flags);
-
-    world->SetAllowSleeping(settings->enableSleep > 0);
-    world->SetWarmStarting(settings->enableWarmStarting > 0);
-    world->SetContinuousPhysics(settings->enableContinuous > 0);
-    world->SetSubStepping(settings->enableSubStepping > 0);
-
-    m_pointCount = 0;
-
-    world->Step(timeStep, settings->velocityIterations, settings->positionIterations);
-
-    world->DebugDraw();
-
-    if (timeStep > 0.0f)
-    {
-        ++m_stepCount;
-    }
-
-    if (settings->drawStats)
-    {
-        int32 bodyCount = world->GetBodyCount();
-        int32 contactCount = world->GetContactCount();
-        int32 jointCount = world->GetJointCount();
-        g_debugDraw.DrawString(5, m_textLine, "bodies/contacts/joints = %d/%d/%d", bodyCount, contactCount, jointCount);
-        m_textLine += DRAW_STRING_NEW_LINE;
-
-        int32 proxyCount = world->GetProxyCount();
-        int32 height = world->GetTreeHeight();
-        int32 balance = world->GetTreeBalance();
-        float quality = world->GetTreeQuality();
-        g_debugDraw.DrawString(5, m_textLine, "proxies/height/balance/quality = %d/%d/%d/%g", proxyCount, height, balance, quality);
-        m_textLine += DRAW_STRING_NEW_LINE;
-    }
-
-    // Track maximum profile times
-    {
-        const b2Profile& p = world->GetProfile();
-        m_maxProfile.step = b2Max(m_maxProfile.step, p.step);
-        m_maxProfile.collide = b2Max(m_maxProfile.collide, p.collide);
-        m_maxProfile.solve = b2Max(m_maxProfile.solve, p.solve);
-        m_maxProfile.solveInit = b2Max(m_maxProfile.solveInit, p.solveInit);
-        m_maxProfile.solveVelocity = b2Max(m_maxProfile.solveVelocity, p.solveVelocity);
-        m_maxProfile.solvePosition = b2Max(m_maxProfile.solvePosition, p.solvePosition);
-        m_maxProfile.solveTOI = b2Max(m_maxProfile.solveTOI, p.solveTOI);
-        m_maxProfile.broadphase = b2Max(m_maxProfile.broadphase, p.broadphase);
-
-        m_totalProfile.step += p.step;
-        m_totalProfile.collide += p.collide;
-        m_totalProfile.solve += p.solve;
-        m_totalProfile.solveInit += p.solveInit;
-        m_totalProfile.solveVelocity += p.solveVelocity;
-        m_totalProfile.solvePosition += p.solvePosition;
-        m_totalProfile.solveTOI += p.solveTOI;
-        m_totalProfile.broadphase += p.broadphase;
-    }
-
-    if (settings->drawProfile)
-    {
-        const b2Profile& p = world->GetProfile();
-
-        b2Profile aveProfile;
-        memset(&aveProfile, 0, sizeof(b2Profile));
-        if (m_stepCount > 0)
-        {
-            float scale = 1.0f / m_stepCount;
-            aveProfile.step = scale * m_totalProfile.step;
-            aveProfile.collide = scale * m_totalProfile.collide;
-            aveProfile.solve = scale * m_totalProfile.solve;
-            aveProfile.solveInit = scale * m_totalProfile.solveInit;
-            aveProfile.solveVelocity = scale * m_totalProfile.solveVelocity;
-            aveProfile.solvePosition = scale * m_totalProfile.solvePosition;
-            aveProfile.solveTOI = scale * m_totalProfile.solveTOI;
-            aveProfile.broadphase = scale * m_totalProfile.broadphase;
-        }
-
-        g_debugDraw.DrawString(5, m_textLine, "step [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.step, aveProfile.step, m_maxProfile.step);
-        m_textLine += DRAW_STRING_NEW_LINE;
-        g_debugDraw.DrawString(5, m_textLine, "collide [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.collide, aveProfile.collide, m_maxProfile.collide);
-        m_textLine += DRAW_STRING_NEW_LINE;
-        g_debugDraw.DrawString(5, m_textLine, "solve [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solve, aveProfile.solve, m_maxProfile.solve);
-        m_textLine += DRAW_STRING_NEW_LINE;
-        g_debugDraw.DrawString(5, m_textLine, "solve init [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solveInit, aveProfile.solveInit, m_maxProfile.solveInit);
-        m_textLine += DRAW_STRING_NEW_LINE;
-        g_debugDraw.DrawString(5, m_textLine, "solve velocity [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solveVelocity, aveProfile.solveVelocity, m_maxProfile.solveVelocity);
-        m_textLine += DRAW_STRING_NEW_LINE;
-        g_debugDraw.DrawString(5, m_textLine, "solve position [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solvePosition, aveProfile.solvePosition, m_maxProfile.solvePosition);
-        m_textLine += DRAW_STRING_NEW_LINE;
-        g_debugDraw.DrawString(5, m_textLine, "solveTOI [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solveTOI, aveProfile.solveTOI, m_maxProfile.solveTOI);
-        m_textLine += DRAW_STRING_NEW_LINE;
-        g_debugDraw.DrawString(5, m_textLine, "broad-phase [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.broadphase, aveProfile.broadphase, m_maxProfile.broadphase);
-        m_textLine += DRAW_STRING_NEW_LINE;
-    }
-
-    //if (m_mouseJoint)
-    //{
-    //    b2Vec2 p1 = m_mouseJoint->GetAnchorB();
-    //    b2Vec2 p2 = m_mouseJoint->GetTarget();
-
-    //    b2Color c;
-    //    c.Set(0.0f, 1.0f, 0.0f);
-    //    g_debugDraw.DrawPoint(p1, 4.0f, c);
-    //    g_debugDraw.DrawPoint(p2, 4.0f, c);
-
-    //    c.Set(0.8f, 0.8f, 0.8f);
-    //    g_debugDraw.DrawSegment(p1, p2, c);
-    //}
-
-    if (m_bombSpawning)
-    {
-        b2Color c;
-        c.Set(0.0f, 0.0f, 1.0f);
-        g_debugDraw.DrawPoint(m_bombSpawnPoint, 4.0f, c);
-
-        c.Set(0.8f, 0.8f, 0.8f);
-        g_debugDraw.DrawSegment(m_mouseWorld, m_bombSpawnPoint, c);
-    }
-
-    if (settings->drawContactPoints)
-    {
-        const float k_impulseScale = 0.1f;
-        const float k_axisScale = 0.3f;
-
-        for (int32 i = 0; i < m_pointCount; ++i)
-        {
-            ContactPoint* point = m_points + i;
-
-            if (point->state == b2_addState)
-            {
-                // Add
-                g_debugDraw.DrawPoint(point->position, 10.0f, b2Color(0.3f, 0.95f, 0.3f));
-            }
-            else if (point->state == b2_persistState)
-            {
-                // Persist
-                g_debugDraw.DrawPoint(point->position, 5.0f, b2Color(0.3f, 0.3f, 0.95f));
-            }
-
-            if (settings->drawContactNormals == 1)
-            {
-                b2Vec2 p1 = point->position;
-                b2Vec2 p2 = p1 + k_axisScale * point->normal;
-                g_debugDraw.DrawSegment(p1, p2, b2Color(0.9f, 0.9f, 0.9f));
-            }
-            else if (settings->drawContactImpulse == 1)
-            {
-                b2Vec2 p1 = point->position;
-                b2Vec2 p2 = p1 + k_impulseScale * point->normalImpulse * point->normal;
-                g_debugDraw.DrawSegment(p1, p2, b2Color(0.9f, 0.9f, 0.3f));
-            }
-
-            if (settings->drawFrictionImpulse == 1)
-            {
-                b2Vec2 tangent = b2Cross(point->normal, 1.0f);
-                b2Vec2 p1 = point->position;
-                b2Vec2 p2 = p1 + k_impulseScale * point->tangentImpulse * tangent;
-                g_debugDraw.DrawSegment(p1, p2, b2Color(0.9f, 0.9f, 0.3f));
-            }
-        }
     }
 }
