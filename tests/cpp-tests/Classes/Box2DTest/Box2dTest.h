@@ -43,6 +43,7 @@ public:
 
     Box2DTest();
     ~Box2DTest();
+    virtual std::string title() const override;
 
     void initPhysics();
     void createResetButton();
