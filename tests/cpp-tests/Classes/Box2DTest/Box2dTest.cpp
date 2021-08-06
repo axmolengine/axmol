@@ -51,6 +51,12 @@ Box2DTests::Box2DTests()
     ADD_TEST_CASE(Box2DTest);
 }
 
+std::string Box2DTest::title() const
+{
+    return "Box2D - Basic";
+}
+
+
 bool Box2DTest::init()
 {
     if (!TestCase::init())
@@ -62,6 +68,7 @@ bool Box2DTest::init()
     auto touchListener = EventListenerTouchAllAtOnce::create();
     touchListener->onTouchesEnded = CC_CALLBACK_2(Box2DTest::onTouchesEnded, this);
     dispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+
 
     // init physics
     this->initPhysics();
@@ -83,7 +90,7 @@ bool Box2DTest::init()
 
     addNewSpriteAtPosition(VisibleRect::center());
 
-    auto label = Label::createWithTTF("Tap screen add boxes\nSome objects be only visible with debug on.", "fonts/Marker Felt.ttf", 12.0f);
+    auto label = Label::createWithTTF("Tap screen add boxes.\nSome objects be only visible with debug on.", "fonts/Marker Felt.ttf", 12.0f);
     addChild(label, 0);
     label->setColor(Color3B(0, 0, 255));
     label->setPosition(VisibleRect::center().x-50, VisibleRect::top().y - 60);
