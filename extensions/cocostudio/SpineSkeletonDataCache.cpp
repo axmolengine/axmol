@@ -56,15 +56,10 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
         ** Cache, we just need SkeletonData & atlas.
         */
         if (fileExtension == ".skel") {
-            /*auto binary = new (__FILE__, __LINE__) spine::SkeletonBinary(loader);
-            if (nullptr == binary) {
-                delete (atlas);
-                break;
-            }*/
             spine::SkeletonBinary binary(loader);
 
             binary.setScale(scale);
-            skeletonData = binary.readSkeletonDataFile(dataFile); // spSkeletonBinary_readSkeletonDataFile(binary, dataFile);
+            skeletonData = binary.readSkeletonDataFile(dataFile);
             if ((!binary.getError().isEmpty())) {
                 ++failed;
                 _reportError("#parse spine .skel data file failed, error:%s", binary.getError().buffer());
@@ -80,11 +75,6 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
                 _reportError("#parse spine .json data file failed, error:%s", json.getError().buffer());
             }
         }
-
-		/*if ((loader->error1 != nullptr)) {
-			++failed;
-            _reportError("#parse spine attachment failed, error:%s%s", loader->error1, loader->error2);
-		}*/
 		
 		if (failed > 0) {
 			if (skeletonData != nullptr)
