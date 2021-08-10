@@ -31,6 +31,10 @@ cmake_minimum_required(VERSION 3.10)
 
 project(adxe)
 
+if(XCODE)
+    set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
+endif()
+
 # adxe root path
 set(ADXE_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
