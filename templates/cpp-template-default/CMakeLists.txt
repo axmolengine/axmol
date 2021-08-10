@@ -30,6 +30,10 @@ set(APP_NAME HelloCpp)
 project(${APP_NAME})
 
 if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
+    if(XCODE)
+        set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
+    endif()
+
     set(ADXE_ROOT "$ENV{ADXE_ROOT}")
 
     if(NOT (ADXE_ROOT STREQUAL ""))

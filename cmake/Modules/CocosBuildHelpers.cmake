@@ -322,6 +322,18 @@ function(setup_cocos_app_config app_name)
         target_compile_definitions(${app_name} PRIVATE SPINEPLUGIN_API=DLLIMPORT) # spine dll
     endif()
     target_link_libraries(${app_name} ${CC_EXTENSION_LIBS})
+
+    if(XCODE AND BUILD_DEP_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
+        # Embedded soft_oal embedded framework
+        # XCODE_LINK_BUILD_PHASE_MODE BUILT_ONLY
+        message(STATUS "Embedding framework soft_oal...")
+        set_target_properties(${app_name} PROPERTIES
+            XCODE_LINK_BUILD_PHASE_MODE KNOWN_LOCATION
+            XCODE_EMBED_FRAMEWORKS OpenAL
+            XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY ON
+            XCODE_EMBED_FRAMEWORKS_REMOVE_HEADERS_ON_COPY ON
+        )
+    endif()
 endfunction()
 
 # if cc_variable not set, then set it cc_value
