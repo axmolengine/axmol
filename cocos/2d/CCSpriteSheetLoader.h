@@ -64,11 +64,11 @@ class ISpriteSheetLoader
 {
 public:
     virtual ~ISpriteSheetLoader() = default;
-    virtual void Load(const std::string& filePath, SpriteFrameCache& cache) = 0;
-    virtual void Load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) = 0;
-    virtual void Load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) = 0;
-    virtual void Load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) = 0;
-    virtual void Reload(const std::string& filePath, SpriteFrameCache& cache) = 0;
+    virtual void load(const std::string& filePath, SpriteFrameCache& cache) = 0;
+    virtual void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) = 0;
+    virtual void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) = 0;
+    virtual void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) = 0;
+    virtual void reload(const std::string& filePath, SpriteFrameCache& cache) = 0;
 };
 
 class SpriteSheetLoader : public ISpriteSheetLoader
@@ -82,11 +82,11 @@ public:
         const std::vector<int>& triangleIndices,
         PolygonInfo& polygonInfo);
 
-    void Load(const std::string& filePath, SpriteFrameCache& cache) override = 0;
-    void Load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override = 0;
-    void Load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override = 0;
-    void Load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override = 0;
-    void Reload(const std::string& filePath, SpriteFrameCache& cache) override = 0;
+    void load(const std::string& filePath, SpriteFrameCache& cache) override = 0;
+    void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override = 0;
+    void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override = 0;
+    void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override = 0;
+    void reload(const std::string& filePath, SpriteFrameCache& cache) override = 0;
 };
 
 // end of _2d group

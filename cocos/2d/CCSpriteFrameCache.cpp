@@ -83,7 +83,7 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFil
     auto* loader = getSpriteSheetLoader(format);
     if (loader)
     {
-        loader->Load(spriteSheetFileName, texture, *this);
+        loader->load(spriteSheetFileName, texture, *this);
     }
 }
 
@@ -92,7 +92,7 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFil
     auto* loader = getSpriteSheetLoader(format);
     if (loader)
     {
-        loader->Load(spriteSheetFileName, *this);
+        loader->load(spriteSheetFileName, *this);
     }
 }
 
@@ -101,7 +101,7 @@ void SpriteFrameCache::addSpriteFramesWithFileContent(const Data& content, Textu
     auto* loader = getSpriteSheetLoader(format);
     if (loader)
     {
-        loader->Load(content, texture, *this);
+        loader->load(content, texture, *this);
     }
 }
 
@@ -253,8 +253,6 @@ bool SpriteFrameCache::reloadTexture(const std::string& spriteSheetFileName)
     if (isSpriteSheetInUse(spriteSheetFileName))
     {
         removeSpriteSheet(spriteSheetFileName); // we've removed the associated entry, so spriteSheetItr is no longer valid
-    }
-    else
     {
         //If one plist hasn't be loaded, we don't load it here.
         return false;

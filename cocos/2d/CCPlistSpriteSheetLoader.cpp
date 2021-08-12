@@ -18,7 +18,7 @@ using namespace std;
 
 NS_CC_BEGIN
 
-void PlistSpriteSheetLoader::Load(const std::string& filePath, SpriteFrameCache& cache)
+void PlistSpriteSheetLoader::load(const std::string& filePath, SpriteFrameCache& cache)
 {
     CCASSERT(!filePath.empty(), "plist filename should not be nullptr");
 
@@ -66,7 +66,7 @@ void PlistSpriteSheetLoader::Load(const std::string& filePath, SpriteFrameCache&
     addSpriteFramesWithDictionary(dict, texturePath, filePath, cache);
 }
 
-void PlistSpriteSheetLoader::Load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache)
+void PlistSpriteSheetLoader::load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache)
 {
     const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
     auto dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);
@@ -74,7 +74,7 @@ void PlistSpriteSheetLoader::Load(const std::string& filePath, Texture2D* textur
     addSpriteFramesWithDictionary(dict, texture, filePath, cache);
 }
 
-void PlistSpriteSheetLoader::Load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache)
+void PlistSpriteSheetLoader::load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache)
 {
     CCASSERT(!textureFileName.empty(), "texture name should not be null");
     const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
@@ -82,7 +82,7 @@ void PlistSpriteSheetLoader::Load(const std::string& filePath, const std::string
     addSpriteFramesWithDictionary(dict, textureFileName, filePath, cache);
 }
 
-void PlistSpriteSheetLoader::Load(const Data& content, Texture2D* texture, SpriteFrameCache& cache)
+void PlistSpriteSheetLoader::load(const Data& content, Texture2D* texture, SpriteFrameCache& cache)
 {
     if (content.isNull())
     {
@@ -96,7 +96,7 @@ void PlistSpriteSheetLoader::Load(const Data& content, Texture2D* texture, Sprit
     addSpriteFramesWithDictionary(dict, texture, "by#addSpriteFramesWithFileContent()", cache);
 }
 
-void PlistSpriteSheetLoader::Reload(const std::string& filePath, SpriteFrameCache& cache)
+void PlistSpriteSheetLoader::reload(const std::string& filePath, SpriteFrameCache& cache)
 {
     const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
     auto dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);

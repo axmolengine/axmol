@@ -11,11 +11,11 @@ NS_CC_BEGIN
 class PlistSpriteSheetLoader : public SpriteSheetLoader
 {
 public:
-    void Load(const std::string& filePath, SpriteFrameCache& cache) override;
-    void Load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override;
-    void Load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override;
-    void Load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override;
-    void Reload(const std::string& filePath, SpriteFrameCache& cache) override;
+    void load(const std::string& filePath, SpriteFrameCache& cache) override;
+    void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override;
+    void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override;
+    void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override;
+    void reload(const std::string& filePath, SpriteFrameCache& cache) override;
 
 protected:
     /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
