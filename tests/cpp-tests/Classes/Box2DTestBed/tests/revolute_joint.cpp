@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//#include "settings.h"
-#include "../test.h"
+#include "settings.h"
+#include "test.h"
 #include "ImGuiEXT/CCImGuiEXT.h"
 
 class RevoluteJoint : public Test
@@ -133,15 +133,15 @@ public:
 		ImGui::End();
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
 		
-		float torque1 = m_joint1->GetMotorTorque(settings->hz);
+		float torque1 = m_joint1->GetMotorTorque(settings.m_hertz);
 		g_debugDraw.DrawString(5, m_textLine, "Motor Torque 1= %4.0f", torque1);
 		m_textLine += m_textIncrement;
 
-		float torque2 = m_joint2->GetMotorTorque(1.0); //settings.hz);
+		float torque2 = m_joint2->GetMotorTorque(settings.m_hertz);
 		g_debugDraw.DrawString(5, m_textLine, "Motor Torque 2= %4.0f", torque2);
 		m_textLine += m_textIncrement;
 	}

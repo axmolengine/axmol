@@ -1,4 +1,4 @@
-	// MIT License
+// MIT License
 
 // Copyright (c) 2019 Erin Catto
 
@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 class Heavy1 : public Test
 {

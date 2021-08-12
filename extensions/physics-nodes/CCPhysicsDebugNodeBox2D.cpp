@@ -27,8 +27,6 @@
 
 USING_NS_CC;
 
-// 'Interfaces' to adxe
-cocos2d::DrawNode* drawBox2D;
 
 #if defined(CC_PLATFORM_PC)
 extern cocos2d::Label* labelDebugDraw;
@@ -37,22 +35,9 @@ extern cocos2d::Label* labelDebugDraw;
 #define BUFFER_OFFSET(x)  ((const void*) (x))
 
 
-
-//
-//// halx99: since adxe init scene default camera at 'initWithXXX' function, only change design size at scene
-//// construct is ok see also: https://github.com/adxeproject/adxe/commit/581a7921554c09746616759d5a5ca6ce9d3eaa22
-//auto director = Director::getInstance();
-//auto glview = director->getOpenGLView();
-//Size designSize(960 * 0.85, 640 * 0.85);
-//glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
-cocos2d::Vec2 debugNodeOffset = { 260, 70 };
-//float mRatio = 10.0f;
-
 DebugDraw::DebugDraw()
 {
-    mRatio = 10;
     drawBP = DrawNode::create();
-    drawBox2D = drawBP;
 }
 
 DebugDraw::~DebugDraw()
@@ -61,9 +46,20 @@ DebugDraw::~DebugDraw()
 
 void DebugDraw::initShader( void )
 {
-    //mShaderProgram = GLProgramCache::getInstance()->getGLProgram(GLProgram::SHADER_NAME_POSITION_U_COLOR);
-    //mColorLocation = glGetUniformLocation( mShaderProgram->getProgram(), "u_color");
+    // initShader is unsupported
 }
+
+cocos2d::DrawNode* DebugDraw::GetDrawNode()
+{
+    return drawBP;
+}
+
+void DebugDraw::SetDrawNode(cocos2d::DrawNode* drawNode)
+{
+    CCASSERT(!drawBP, "drawBP is not NULL");
+    drawBP = drawNode;
+}
+
 
 void DebugDraw::DrawPolygon(const b2Vec2* verts, int vertexCount, const b2Color& color)
 {
@@ -117,9 +113,7 @@ void DebugDraw::DrawPoint(const b2Vec2& p, float size, const b2Color& color)
 {
     drawBP->drawPoint(Vec2(p.x * mRatio, p.y * mRatio) + debugNodeOffset, size, Color4F(color.r, color.g, color.b, color.a));
 }
-static char PrintStringBuffer[1024 * 8];
-static char* PrintStringCursor;
-char const* MessageString = NULL;
+
 void DebugDraw::DrawString(int x, int y, const char* string, ...)
 {
 #if defined(CC_PLATFORM_PC)
@@ -128,7 +122,6 @@ void DebugDraw::DrawString(int x, int y, const char* string, ...)
     labelDebugDraw->setString(s.c_str());
 #endif
 }
-
 
 void DebugDraw::DrawString(const b2Vec2& pw, const char* string, ...)
 {
@@ -159,4 +152,5 @@ void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& color)
 
 void DebugDraw::Flush()
 {
+    // Flush is unsupported
 }

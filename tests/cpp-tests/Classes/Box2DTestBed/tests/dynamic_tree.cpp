@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 class DynamicTree : public Test
 {
@@ -65,7 +65,7 @@ public:
 		return new DynamicTree;
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		B2_NOT_USED(settings);
 
@@ -198,8 +198,8 @@ private:
 	void GetRandomAABB(b2AABB* aabb)
 	{
 		b2Vec2 w; w.Set(2.0f * m_proxyExtent, 2.0f * m_proxyExtent);
-		aabb->lowerBound.x = -m_proxyExtent;
-		aabb->lowerBound.y = -m_proxyExtent + m_worldExtent;
+		//aabb->lowerBound.x = -m_proxyExtent;
+		//aabb->lowerBound.y = -m_proxyExtent + m_worldExtent;
 		aabb->lowerBound.x = RandomFloat(-m_worldExtent, m_worldExtent);
 		aabb->lowerBound.y = RandomFloat(0.0f, 2.0f * m_worldExtent);
 		aabb->upperBound = aabb->lowerBound + w;
