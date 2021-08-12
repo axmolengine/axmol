@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) Bytedance Inc.
  
- http://www.cocos2d-x.org
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +37,7 @@
 #include <sstream>
 
 using namespace cocos2d;
+using namespace cocos2d::network;
 
 class LuaMinXmlHttpRequest : public cocos2d::Ref
 {
@@ -90,7 +92,7 @@ public:
     void _sendRequest();
     void setRequestHeader(const char* field, const char* value);
 
-    const std::unordered_map<std::string, std::string>& getHttpHeader() const { return _httpHeader ;}
+    const HttpResponse::ResponseHeaderMap& getHttpHeader() const { return _httpHeader; }
     void clearHttpHeader() { _httpHeader.clear(); }
 
     void getByteData(unsigned char* byteData) const;
@@ -106,7 +108,6 @@ public:
     inline bool isAborted() const { return _isAborted; }
 
 private:
-    void _gotHeader(const std::string& header);
 
     std::string                          _url;
     std::string                          _meth;
@@ -119,10 +120,10 @@ private:
     ResponseType                         _responseType;
     unsigned                             _timeout;
     bool                                 _isAsync;
-    cocos2d::network::HttpRequest*       _httpRequest;
+    HttpRequest*                         _httpRequest;
     bool                                 _isNetwork;
     bool                                 _withCredentialsValue;
-    std::unordered_map<std::string, std::string>   _httpHeader;
+    HttpResponse::ResponseHeaderMap      _httpHeader;
     std::unordered_map<std::string, std::string>   _requestHeader;
     bool                                 _errorFlag;
     bool                                 _isAborted;
@@ -147,7 +148,7 @@ _isAborted(false)
 {
     _httpHeader.clear();
     _requestHeader.clear();
-    _httpRequest = new (std::nothrow)cocos2d::network::HttpRequest();
+    _httpRequest = new (std::nothrow) HttpRequest();
 }
 
 LuaMinXmlHttpRequest::~LuaMinXmlHttpRequest()
@@ -155,77 +156,6 @@ LuaMinXmlHttpRequest::~LuaMinXmlHttpRequest()
     _httpHeader.clear();
     _requestHeader.clear();
     CC_SAFE_RELEASE_NULL(_httpRequest);
-}
-
-/**
- *  @brief Implementation for header retrieving.
- *  @param header
- */
-void LuaMinXmlHttpRequest::_gotHeader(const std::string& header)
-{
-	// Get Header and Set StatusText
-    // Split String into Tokens
-    char * cstr = new (std::nothrow) char [header.length()+1];
-    
-    // check for colon.
-    size_t found_header_field = header.find_first_of(':');
-    
-    if (found_header_field != std::string::npos)
-    {
-        // Found a header field.
-        std::string http_field;
-        std::string http_value;
-        
-        http_field = header.substr(0,found_header_field);
-        http_value = header.substr(found_header_field+1, header.length());
-        
-        // Get rid of all \n
-        if (!http_value.empty() && http_value[http_value.size() - 1] == '\n') {
-        	http_value.erase(http_value.size() - 1);
-        }
-        
-        _httpHeader[http_field] = http_value;
-        
-    }
-    else
-    {
-        // Seems like we have the response Code! Parse it and check for it.
-        char * pch;
-        strcpy(cstr, header.c_str());
-        
-        pch = strtok(cstr," ");
-        while (pch != nullptr)
-        {
-            std::stringstream ss;
-            std::string val;
-            
-            ss << pch;
-            val = ss.str();
-            size_t found_http = val.find("HTTP");
-            
-            // Check for HTTP Header to set statusText
-            if (found_http != std::string::npos) {
-                
-                std::stringstream mystream;
-                
-                // Get Response Status
-                pch = strtok (NULL, " ");
-                mystream << pch;
-                
-                pch = strtok (NULL, "\n");
-                //Send request to a url on Tomcat9. It just returned http response code '200' only,not '200 OK'
-                if(pch != nullptr)
-                    mystream << " " << pch;
-                
-                _statusText = mystream.str();
-                
-            }
-            
-            pch = strtok (NULL, " ");
-        }
-    }
-    
-    CC_SAFE_DELETE_ARRAY(cstr);
 }
 
 /**

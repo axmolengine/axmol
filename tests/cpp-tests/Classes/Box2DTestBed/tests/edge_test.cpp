@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
-//#include "imgui/imgui.h"
+#include "test.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
 
 class EdgeTest : public Test
 {
@@ -230,28 +230,28 @@ public:
 		}
 	}
 
-	//void UpdateUI() override
-	//{
-	//	ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
-	//	ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
-	//	ImGui::Begin("Custom Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	void UpdateUI() override
+	{
+		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
+		ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
+		ImGui::Begin("Custom Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
-	//	if (ImGui::RadioButton("Boxes", m_boxes == true))
-	//	{
-	//		CreateBoxes();
-	//		m_boxes = true;
-	//	}
+		if (ImGui::RadioButton("Boxes", m_boxes == true))
+		{
+			CreateBoxes();
+			m_boxes = true;
+		}
 
-	//	if (ImGui::RadioButton("Circles", m_boxes == false))
-	//	{
-	//		CreateCircles();
-	//		m_boxes = false;
-	//	}
+		if (ImGui::RadioButton("Circles", m_boxes == false))
+		{
+			CreateCircles();
+			m_boxes = false;
+		}
 
-	//	ImGui::End();
-	//}
+		ImGui::End();
+	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		//if (glfwGetKey(g_mainWindow, GLFW_KEY_A) == GLFW_PRESS)
 		//{

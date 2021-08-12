@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 class Heavy2 : public Test
 {
@@ -73,15 +73,15 @@ public:
         }
     }
     
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
- //       case GLFW_KEY_H:
- //           ToggleHeavy();
- //           break;
-	//	}
-	//}
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+        case GLFW_KEY_H:
+            ToggleHeavy();
+            break;
+		}
+	}
     
 	static Test* Create()
 	{

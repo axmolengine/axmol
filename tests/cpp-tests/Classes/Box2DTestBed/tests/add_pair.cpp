@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 class AddPair : public Test
 {
@@ -68,6 +68,4 @@ public:
 	}
 };
 
-
 static int testIndex = RegisterTest("Benchmark", "Add Pair", AddPair::Create);
-

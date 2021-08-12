@@ -30,6 +30,9 @@ option(BUILD_DEP_LLHTTP "Build with lhttp support" ON)
 option(BUILD_DEP_YAML_CPP "Build with yaml-cpp support" OFF)
 option(BUILD_DEP_KCP "Build with internal kcp support" OFF)
 
+# by default, enable ios,macOS openal-soft framework for legal license LGPL-2.1
+option(ALSOFT_OSX_FRAMEWORK "" ON)
+
 set(ANDROID_SHARED_LOADS "" CACHE INTERNAL "The android shared libraries load source code" )
 set(ANDROID_SHARED_LOAD_FILE_NAME "SharedLoader.java" CACHE INTERNAL "The android shared load java file name" )
 set(ANDROID_SHARED_LOAD_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${ANDROID_SHARED_LOAD_FILE_NAME}.in" CACHE INTERNAL "The android shared libraries load config code file" )
@@ -240,7 +243,11 @@ if(BUILD_DEP_ALSOFT)
     target_link_libraries(thirdparty
         OpenAL
     )
-    target_compile_definitions(thirdparty PUBLIC DCC_USE_ALSOFT=1)
+    target_compile_definitions(thirdparty PUBLIC CC_USE_ALSOFT=1)
+    
+    if(ANDROID)
+        set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
+    endif()
 endif()
 
 # The ogg decoder
@@ -329,8 +336,9 @@ if(BUILD_DEP_KCP)
     target_compile_definitions(thirdparty PUBLIC YASIO_HAVE_KCP=1)
 endif()
 
-target_include_directories(thirdparty INTERFACE "fmtlib/include")
-target_compile_definitions(thirdparty INTERFACE FMT_HEADER_ONLY=1)
+add_subdirectory(fmt)
+target_link_libraries(thirdparty fmt-header-only)
+configure_target_outdir(fmt)
 
 # put "thirdparty" into thirdparty folder, too
 configure_target_outdir(thirdparty)

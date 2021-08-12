@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//#include "settings.h"
-#include "../test.h"
-//#include "imgui/imgui.h"
+#include "settings.h"
+#include "test.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
 
 // Test the wheel joint with motor, spring, and limit options.
 class WheelJoint : public Test
@@ -75,20 +75,20 @@ public:
 		}
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
 
-	//	float torque = m_joint->GetMotorTorque(settings.hz);
-		//g_debugDraw.DrawString(5, m_textLine, "Motor Torque = %4.0f", torque);
-		//m_textLine += m_textIncrement;
+		float torque = m_joint->GetMotorTorque(settings.m_hertz);
+		g_debugDraw.DrawString(5, m_textLine, "Motor Torque = %4.0f", torque);
+		m_textLine += m_textIncrement;
 
-	//	b2Vec2 F = m_joint->GetReactionForce(settings.hz);
-		//g_debugDraw.DrawString(5, m_textLine, "Reaction Force = (%4.1f, %4.1f)", F.x, F.y);
-		//m_textLine += m_textIncrement;
+		b2Vec2 F = m_joint->GetReactionForce(settings.m_hertz);
+		g_debugDraw.DrawString(5, m_textLine, "Reaction Force = (%4.1f, %4.1f)", F.x, F.y);
+		m_textLine += m_textIncrement;
 	}
 
-	/*void UpdateUI() override
+	void UpdateUI() override
 	{
 		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
 		ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
@@ -109,8 +109,8 @@ public:
 			m_joint->SetMotorSpeed(m_motorSpeed);
 		}
 
-		ImGui::End();*/
-	//}
+		ImGui::End();
+	}
 
 	static Test* Create()
 	{

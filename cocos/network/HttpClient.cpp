@@ -79,10 +79,15 @@ void HttpClient::destroyInstance() {
 void HttpClient::enableCookies(const char* cookieFile) {
     std::lock_guard<std::recursive_mutex> lock(_cookieFileMutex);
     if (cookieFile) {
-        _cookieFilename = std::string(cookieFile);
+        _cookieFilename = cookieFile;
     } else {
         _cookieFilename = (FileUtils::getInstance()->getNativeWritableAbsolutePath() + "cookieFile.txt");
     }
+
+    if (!_cookie)
+        _cookie = new HttpCookie();
+    _cookie->setCookieFileName(_cookieFilename);
+    _cookie->readFile();
 }
 
 void HttpClient::setSSLVerification(const std::string& caFile) {
@@ -92,25 +97,55 @@ void HttpClient::setSSLVerification(const std::string& caFile) {
 }
 
 HttpClient::HttpClient()
-    : _isInited(false), _dispatchOnWorkThread(false), _timeoutForConnect(30), _timeoutForRead(60), _cookie(nullptr),
-      _clearResponsePredicate(nullptr) {
+    : _isInited(false)
+    , _dispatchOnWorkThread(false)
+    , _timeoutForConnect(30)
+    , _timeoutForRead(60)
+    , _cookie(nullptr)
+    , _clearResponsePredicate(nullptr) 
+{
     CCLOG("In the constructor of HttpClient!");
     _scheduler = Director::getInstance()->getScheduler();
 
     _service = new yasio::io_service(HttpClient::MAX_CHANNELS);
     _service->set_option(yasio::YOPT_S_DEFERRED_EVENT, 0);
+    _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
+    _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
     _service->start([=](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
 
     for (int i = 0; i < HttpClient::MAX_CHANNELS; ++i) {
-        _availChannelQueue.push_back(i);
+        _availChannelQueue.unsafe_push_back(i);
     }
+
+    _scheduler->schedule([=](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
 
     _isInited = true;
 }
 
 HttpClient::~HttpClient() {
+    _scheduler->unscheduleAllForTarget(this);
+
+    clearPendingResponseQueue();
+    clearFinishedResponseQueue();
+    if (_cookie) {
+        _cookie->writeFile();
+        delete _cookie;
+    }
     delete _service;
     CCLOG("HttpClient destructor");
+}
+
+void HttpClient::setDispatchOnWorkThread(bool bVal)
+{
+    _scheduler->unscheduleAllForTarget(this);
+    _dispatchOnWorkThread = bVal;
+    if(!bVal) 
+        _scheduler->schedule([=](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
+}
+
+void HttpClient::handleNetworkStatusChanged()
+{
+    _service->set_option(YOPT_S_DNS_DIRTY, 1);
 }
 
 bool HttpClient::send(HttpRequest* request) {
@@ -160,7 +195,7 @@ void HttpClient::processResponse(HttpResponse* response, const std::string& url)
             finishResponse(response);
         }
     } else {
-        _responseQueue.push_back(response);
+        _pendingResponseQueue.push_back(response);
     }
 }
 
@@ -223,11 +258,16 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             obs.write_bytes(uri.getHost());
             obs.write_bytes("\r\n");
 
-            // custom headers
+            // process custom headers
+            struct HeaderFlag {
+                enum {
+                    UESR_AGENT   = 1,
+                    CONTENT_TYPE = 1 << 1,
+                    ACCEPT       = 1 << 2,
+                };
+            };
+            int headerFlags = 0;
             auto& headers = request->getHeaders();
-
-            bool userAgentSpecified   = false;
-            bool contentTypeSpecified = false;
             if (!headers.empty()) {
                 using namespace cxx17; // for string_view literal
                 for (auto& header : headers) {
@@ -235,20 +275,31 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                     obs.write_bytes("\r\n");
 
                     if (cxx20::ic::starts_with(cxx17::string_view{header}, "User-Agent:"_sv))
-                        userAgentSpecified = true;
+                        headerFlags |= HeaderFlag::UESR_AGENT;
                     else if (cxx20::ic::starts_with(cxx17::string_view{header}, "Content-Type:"_sv))
-                        contentTypeSpecified = true;
+                        headerFlags |= HeaderFlag::CONTENT_TYPE;
+                    else if (cxx20::ic::starts_with(cxx17::string_view{header}, "Accept:"_sv))
+                        headerFlags |= HeaderFlag::ACCEPT;
                 }
             }
 
-            if (!userAgentSpecified)
+            if (_cookie) {
+                auto cookies = _cookie->checkAndGetFormatedMatchCookies(uri);
+                if (!cookies.empty())
+                {
+                    obs.write_bytes("Cookie: ");
+                    obs.write_bytes(cookies);
+                }
+            }
+
+            if (!(headerFlags & HeaderFlag::UESR_AGENT))
                 obs.write_bytes("User-Agent: yasio-http\r\n");
 
-            obs.write_bytes("Accept: */*;q=0.8\r\n");
-            obs.write_bytes("Connection: Close\r\n");
+            if (!(headerFlags & HeaderFlag::ACCEPT))
+                obs.write_bytes("Accept: */*;q=0.8\r\n");
 
             if (usePostData) {
-                if (!contentTypeSpecified)
+                if (!(headerFlags & HeaderFlag::CONTENT_TYPE))
                     obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
 
                 char strContentLength[128] = {0};
@@ -289,12 +340,15 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
     auto responseCode = response->getResponseCode();
     switch (responseCode) {
     case 301:
-    case 307:
     case 302:
+    case 307:
         if (response->increaseRedirectCount() < HttpClient::MAX_REDIRECT_COUNT) {
-            auto iter = response->_responseHeaders.find("LOCATION");
+            auto iter = response->_responseHeaders.find("location");
             if (iter != response->_responseHeaders.end()) {
-                _availChannelQueue.push_back(channel->index());
+                if (responseCode == 302)
+                    response->getHttpRequest()->setRequestType(HttpRequest::Type::GET);
+                CCLOG("Process url redirect (%d): %s", responseCode, iter->second.c_str());
+                _availChannelQueue.push_front(channel->index());
                 processResponse(response, iter->second);
                 response->release();
                 return;
@@ -305,13 +359,14 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
     finishResponse(response);
 
     // recycle channel
-    _availChannelQueue.push_back(channel->index());
+    _availChannelQueue.push_front(channel->index());
 
     // try process pending response
-    auto lck = _responseQueue.get_lock();
-    if (!_responseQueue.unsafe_empty()) {
-        auto pendingResponse = _responseQueue.unsafe_front();
-        _responseQueue.unsafe_pop_front();
+    auto lck = _pendingResponseQueue.get_lock();
+    if (!_pendingResponseQueue.unsafe_empty())
+    {
+        auto pendingResponse = _pendingResponseQueue.unsafe_front();
+        _pendingResponseQueue.unsafe_pop_front();
         lck.unlock();
 
         processResponse(pendingResponse, pendingResponse->getHttpRequest()->getUrl());
@@ -319,37 +374,70 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
     }
 }
 
+// Poll and notify main thread if responses exists in queue
+void HttpClient::dispatchResponseCallbacks()
+{
+    if (_finishedResponseQueue.unsafe_empty())
+        return;
+
+    auto CC_UNUSED lck = _finishedResponseQueue.get_lock();
+    if (!_finishedResponseQueue.unsafe_empty())
+    {
+        HttpResponse* response = _finishedResponseQueue.front();
+        _finishedResponseQueue.pop_front();
+        invokeResposneCallbackAndRelease(response);
+    }
+}
+
 void HttpClient::finishResponse(HttpResponse* response) {
     auto request   = response->getHttpRequest();
     auto syncState = request->getSyncState();
+
+    if (_cookie) {
+        auto cookieRange = response->getResponseHeaders().equal_range("set-cookie");
+        for (auto cookieIt = cookieRange.first; cookieIt != cookieRange.second; ++cookieIt)
+            _cookie->updateOrAddCookie(cookieIt->second, response->_requestUri);
+    }
+
     if (!syncState) {
-        auto cbNotify = [=]() {
-            HttpRequest* request                  = response->getHttpRequest();
-            const ccHttpRequestCallback& callback = request->getCallback();
-            Ref* pTarget                          = request->getTarget();
-            SEL_HttpResponse pSelector            = request->getSelector();
-
-            if (callback != nullptr) {
-                callback(this, response);
-            } else if (pTarget && pSelector) {
-                (pTarget->*pSelector)(this, response);
-            }
-
-            response->release();
-        };
-
         if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId())
-            cbNotify();
+            invokeResposneCallbackAndRelease(response);
         else
-            _scheduler->performFunctionInCocosThread(cbNotify);
+            _finishedResponseQueue.push_back(response);
     } else {
         syncState->set_value(response);
     }
 }
 
+void HttpClient::invokeResposneCallbackAndRelease(HttpResponse* response)
+{
+    HttpRequest* request                  = response->getHttpRequest();
+    const ccHttpRequestCallback& callback = request->getCallback();
+    Ref* pTarget                          = request->getTarget();
+    SEL_HttpResponse pSelector            = request->getSelector();
+
+    if (callback != nullptr)
+        callback(this, response);
+    else if (pTarget && pSelector)
+        (pTarget->*pSelector)(this, response);
+
+    response->release();
+}
+
 void HttpClient::clearResponseQueue() {
-    auto lck = _responseQueue.get_lock();
-    __clearQueueUnsafe(_responseQueue, ClearResponsePredicate{});
+    clearPendingResponseQueue();
+    clearFinishedResponseQueue();
+}
+
+void HttpClient::clearPendingResponseQueue()
+{
+    auto CC_UNUSED lck = _pendingResponseQueue.get_lock();
+    __clearQueueUnsafe(_pendingResponseQueue, ClearResponsePredicate{});
+}
+
+void HttpClient::clearFinishedResponseQueue() {
+    auto CC_UNUSED lck = _finishedResponseQueue.get_lock();
+    __clearQueueUnsafe(_finishedResponseQueue, ClearResponsePredicate{});
 }
 
 void HttpClient::setTimeoutForConnect(int value) {

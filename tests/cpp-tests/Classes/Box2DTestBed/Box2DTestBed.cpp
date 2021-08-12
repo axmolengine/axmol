@@ -22,28 +22,53 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#include "platform/CCPlatformConfig.h"
 #include "Box2DTestBed.h"
-#include "CCPhysicsDebugNodeBox2D.h"
-#include "test.h"
- //#include "renderer/CCRenderer.h"
+#include "extensions/cocos-ext.h"
+#include "tests/test.h"
+#include "tests/settings.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
+
+enum {
+	kTagParentNode = 1,
+};
+
+
 
 #define kAccelerometerFrequency 30
 #define FRAMES_BETWEEN_PRESSES_FOR_DOUBLE_CLICK 10
 
-extern int g_testCount;
+
+#define PTM_RATIO 32
 
 Settings settings;
 
+cocos2d::Label* labelDebugDraw;
 
 enum
 {
 	kTagBox2DNode,
 };
 
-extern cocos2d::DrawNode* drawBox2D;
 
+TestEntry g_testEntries[MAX_TESTS] = { {nullptr} };
+int g_testCount = 0;
+
+int RegisterTest(const char* category, const char* name, TestCreateFcn* fcn)
+{
+	int index = g_testCount;
+	if (index < MAX_TESTS)
+	{
+		g_testEntries[index] = { category, name, fcn };
+		++g_testCount;
+		return index;
+	}
+
+	return -1;
+}
 
 Box2DTestBedTests::Box2DTestBedTests()
 {
@@ -63,19 +88,18 @@ Box2DTestBedTests::Box2DTestBedTests()
 
 Box2DTestBed::Box2DTestBed()
 {
-
 }
 
 Box2DTestBed::~Box2DTestBed()
 {
-	_eventDispatcher->removeEventListener(_touchListener);
+	Layer::_eventDispatcher->removeEventListener(_touchListener);
 }
 
 Box2DTestBed* Box2DTestBed::createWithEntryID(int entryId)
 {
 	auto layer = new (std::nothrow) Box2DTestBed();
 	layer->initWithEntryID(entryId);
-	layer->autorelease();
+//	layer->autorelease();
 
 	return layer;
 }
@@ -92,186 +116,124 @@ bool Box2DTestBed::initWithEntryID(int entryId)
 
 	m_entryID = entryId;
 
-	Box2DView* view = Box2DView::viewWithEntryID(entryId);
-	addChild(view, 0, kTagBox2DNode);
-	view->setScale(15);
-	view->setAnchorPoint(Vec2(0, 0));
-	view->setPosition(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 3);
-	auto label = Label::createWithTTF(view->title().c_str(), "fonts/arial.ttf", 28);
-	addChild(label, 1);
+	m_entry = g_testEntries + entryId;
+	m_test = m_entry->createFcn();
+
+	debugDrawNode = g_debugDraw.GetDrawNode();
+	m_test->debugDrawNode = g_debugDraw.GetDrawNode();
+	m_test->g_debugDrawTestBed = g_debugDraw;
+
+	TestCase::addChild(debugDrawNode, 100);
+	//	drawBox2D->setOpacity(150);
+
+	// init physics
+	this->initPhysics();
+
+
+	auto label = Label::createWithTTF(m_entry->name, "fonts/arial.ttf", 28);
+	TestCase::addChild(label, 1);
 	label->setPosition(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height - 50);
 
 	// Adds touch event listener
-	auto listener = EventListenerTouchOneByOne::create();
-	listener->setSwallowTouches(true);
+	_touchListener = EventListenerTouchOneByOne::create();
+	_touchListener->setSwallowTouches(true);
+	_touchListener->onTouchBegan = CC_CALLBACK_2(Box2DTestBed::onTouchBegan, this);
+	_touchListener->onTouchMoved = CC_CALLBACK_2(Box2DTestBed::onTouchMoved, this);
+	_touchListener->onTouchEnded = CC_CALLBACK_2(Box2DTestBed::onTouchEnded, this);
+	TestCase::_eventDispatcher->addEventListenerWithFixedPriority(_touchListener, -10);
 
-	listener->onTouchBegan = CC_CALLBACK_2(Box2DTestBed::onTouchBegan, this);
-	listener->onTouchMoved = CC_CALLBACK_2(Box2DTestBed::onTouchMoved, this);
+	// Adds Keyboard event listener
+	_keyboardListener = EventListenerKeyboard::create();
+	_keyboardListener->onKeyPressed = CC_CALLBACK_2(Box2DTestBed::onKeyPressed, this);
+	_keyboardListener->onKeyReleased = CC_CALLBACK_2(Box2DTestBed::onKeyReleased, this);
+	TestCase::_eventDispatcher->addEventListenerWithFixedPriority(_keyboardListener, -11);
 
-	_eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
 
-	_touchListener = listener;
+	// Demo messageString
+	labelDebugDraw = Label::createWithTTF("TEST", "fonts/Marker Felt.ttf", 8.0f);
+	labelDebugDraw->setAnchorPoint(Vec2(0, 0));
+	labelDebugDraw->setPosition(VisibleRect::left().x, VisibleRect::top().y - 20);
+	labelDebugDraw->setColor(Color3B::WHITE);
+	TestCase::addChild(labelDebugDraw, 100);
 
-	addChild(drawBox2D, 100);
-	//this->createResetButton();
+	TestCase::scheduleUpdate();
 
 	return true;
 }
 
 bool Box2DTestBed::onTouchBegan(Touch* touch, Event* event)
 {
-	return true;
+	auto location = touch->getLocation() - g_debugDraw.debugNodeOffset;
+	b2Vec2 pos = { location.x / g_debugDraw.mRatio, location.y / g_debugDraw.mRatio };
+	return m_test->MouseDown(pos);
 }
 
 void Box2DTestBed::onTouchMoved(Touch* touch, Event* event)
 {
-	auto diff = touch->getDelta();
-	auto node = getChildByTag(kTagBox2DNode);
-	auto currentPos = node->getPosition();
-	node->setPosition(currentPos + diff);
+	auto location = touch->getLocation() - g_debugDraw.debugNodeOffset;
+	b2Vec2 pos = { location.x / g_debugDraw.mRatio, location.y / g_debugDraw.mRatio };
+
+	m_test->MouseMove(pos);
 }
 
-//void Box2DTestBed::createResetButton() {
-//	auto reset = MenuItemImage::create("Images/r1.png", "Images/r2.png", CC_CALLBACK_1(Box2DTestBed::reset, this));
-//	auto menu = Menu::create(reset, nullptr);
-//	menu->setPosition(VisibleRect::center().x, VisibleRect::bottom().y + 40);
-//	this->addChild(menu, -1);
-//}
-//
-//void Box2DTestBed::reset(Ref* sender) {
-//	getTestSuite()->restartCurrTest();
-//}
-//
-//void Box2DTestBed::onEnter() {
-//	TestCase::onEnter();
-//	// physicsDebugNodeOffset = VisibleRect::center();
-//	 //physicsDebugNodeOffset.y += 20;
-//	 //ChipmunkDemoMessageString = "";
-//	 //label->setString("");
-//}
-
-//------------------------------------------------------------------
-//
-// Box2DView
-//
-//------------------------------------------------------------------
-Box2DView::Box2DView(void)
+void Box2DTestBed::onTouchEnded(Touch* touch, Event* event)
 {
+	auto location = touch->getLocation() - g_debugDraw.debugNodeOffset;
+	b2Vec2 pos = { location.x / g_debugDraw.mRatio, location.y / g_debugDraw.mRatio };
+
+	m_test->MouseUp(pos);
 }
 
-Box2DView* Box2DView::viewWithEntryID(int entryId)
-{
-	Box2DView* pView = new (std::nothrow) Box2DView();
-
-	pView->initWithEntryID(entryId);
-	pView->autorelease();
-
-	return pView;
-}
-
-bool Box2DView::initWithEntryID(int entryId)
-{
-	m_entry = g_testEntries + entryId;
-	m_test = m_entry->createFcn();
-
-
-	// Adds Touch Event Listener
-	auto listener = EventListenerTouchOneByOne::create();
-	listener->setSwallowTouches(true);
-
-	listener->onTouchBegan = CC_CALLBACK_2(Box2DView::onTouchBegan, this);
-	listener->onTouchMoved = CC_CALLBACK_2(Box2DView::onTouchMoved, this);
-	listener->onTouchEnded = CC_CALLBACK_2(Box2DView::onTouchEnded, this);
-
-	_eventDispatcher->addEventListenerWithFixedPriority(listener, -10);
-	_touchListener = listener;
-
-	auto keyboardListener = EventListenerKeyboard::create();
-	keyboardListener->onKeyPressed = CC_CALLBACK_2(Box2DView::onKeyPressed, this);
-	keyboardListener->onKeyReleased = CC_CALLBACK_2(Box2DView::onKeyReleased, this);
-	_eventDispatcher->addEventListenerWithFixedPriority(keyboardListener, -11);
-	_keyboardListener = keyboardListener;
-
-	return true;
-}
-
-std::string Box2DView::title() const
-{
-	std::string title = std::string(m_entry->category) + std::string(":") + std::string(m_entry->name);
-	return title;
-}
-
-
-void Box2DView::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
-{
-	Layer::draw(renderer, transform, flags);
-
-	_customCmd.init(_globalZOrder, transform, flags);
-	_customCmd.func = CC_CALLBACK_0(Box2DView::onDraw, this, transform, flags);
-	renderer->addCommand(&_customCmd);
-	Director* director = Director::getInstance();
-}
-
-void Box2DView::onDraw(const Mat4& transform, uint32_t flags)
-{
-	Director* director = Director::getInstance();
-	CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-	director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
-
-	drawBox2D->clear();
-	m_test->Step(&settings);
-	m_test->m_world->DebugDraw();
-
-	director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-}
-
-Box2DView::~Box2DView()
-{
-	// Removes Touch Event Listener
-	_eventDispatcher->removeEventListener(_touchListener);
-	_eventDispatcher->removeEventListener(_keyboardListener);
-	delete m_test;
-}
-
-bool Box2DView::onTouchBegan(Touch* touch, Event* event)
-{
-	auto touchLocation = touch->getLocation();
-
-	auto nodePosition = convertToNodeSpace(touchLocation);
-	log("Box2DView::onTouchBegan, pos: %f,%f -> %f,%f", touchLocation.x, touchLocation.y, nodePosition.x, nodePosition.y);
-
-	return m_test->MouseDown(b2Vec2(nodePosition.x, nodePosition.y));
-}
-
-void Box2DView::onTouchMoved(Touch* touch, Event* event)
-{
-	auto touchLocation = touch->getLocation();
-	auto nodePosition = convertToNodeSpace(touchLocation);
-
-	log("Box2DView::onTouchMoved, pos: %f,%f -> %f,%f", touchLocation.x, touchLocation.y, nodePosition.x, nodePosition.y);
-
-	m_test->MouseMove(b2Vec2(nodePosition.x, nodePosition.y));
-}
-
-void Box2DView::onTouchEnded(Touch* touch, Event* event)
-{
-	auto touchLocation = touch->getLocation();
-	auto nodePosition = convertToNodeSpace(touchLocation);
-
-	log("Box2DView::onTouchEnded, pos: %f,%f -> %f,%f", touchLocation.x, touchLocation.y, nodePosition.x, nodePosition.y);
-
-	m_test->MouseUp(b2Vec2(nodePosition.x, nodePosition.y));
-}
-
-void Box2DView::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
+void Box2DTestBed::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
 {
 	log("Box2dView:onKeyPressed, keycode: %d", static_cast<int>(code));
-	m_test->Keyboard(static_cast<unsigned char>(code));
+	m_test->Keyboard((static_cast<int>(code) - 59));
+
 }
 
-void Box2DView::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
+void Box2DTestBed::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
 {
 	log("onKeyReleased, keycode: %d", static_cast<int>(code));
-	m_test->KeyboardUp(static_cast<unsigned char>(code));
+	m_test->Keyboard((static_cast<int>(code) - 59));
+
+}
+
+void Box2DTestBed::onEnter()
+{
+	Scene::onEnter();
+	ImGuiEXT::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
+	ImGuiEXT::getInstance()->addRenderLoop("#im01", CC_CALLBACK_0(Box2DTestBed::onDrawImGui, this), this);
+}
+void Box2DTestBed::onExit()
+{
+	Scene::onExit();
+	ImGuiEXT::getInstance()->removeRenderLoop("#im01");
+}
+
+void Box2DTestBed::update(float dt)
+{
+	// Debug draw
+	debugDrawNode->clear();
+	m_test->Step(settings);
+	m_test->m_world->DebugDraw();
+}
+
+void Box2DTestBed::initPhysics()
+{
+	uint32 flags = 0;
+	flags += 1 * b2Draw::e_shapeBit;
+	flags += 1 * b2Draw::e_jointBit;
+	flags += 0 * b2Draw::e_aabbBit;
+	flags += 0 * b2Draw::e_centerOfMassBit;
+	g_debugDraw.SetFlags(flags);
+	g_debugDraw.mRatio = PTM_RATIO / 4;
+	m_test->m_world->SetDebugDraw(&g_debugDraw);
+	m_test->g_debugDraw = g_debugDraw;
+	g_debugDraw.debugNodeOffset = { 250, 70 };
+	settings.m_hertz = 60;
+}
+
+void Box2DTestBed::onDrawImGui()
+{
+	m_test->UpdateUI();
 }

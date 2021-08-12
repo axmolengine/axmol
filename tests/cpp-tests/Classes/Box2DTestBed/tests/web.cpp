@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 // Test distance joints, body destruction, and joint destruction.
 class Web : public Test
@@ -157,41 +157,41 @@ public:
 		}
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_B:
-	//		for (int32 i = 0; i < 4; ++i)
-	//		{
-	//			if (m_bodies[i])
-	//			{
-	//				m_world->DestroyBody(m_bodies[i]);
-	//				m_bodies[i] = NULL;
-	//				break;
-	//			}
-	//		}
-	//		break;
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_B:
+			for (int32 i = 0; i < 4; ++i)
+			{
+				if (m_bodies[i])
+				{
+					m_world->DestroyBody(m_bodies[i]);
+					m_bodies[i] = NULL;
+					break;
+				}
+			}
+			break;
 
-	//	case GLFW_KEY_J:
-	//		for (int32 i = 0; i < 8; ++i)
-	//		{
-	//			if (m_joints[i])
-	//			{
-	//				m_world->DestroyJoint(m_joints[i]);
-	//				m_joints[i] = NULL;
-	//				break;
-	//			}
-	//		}
-	//		break;
-	//	}
-	//}
+		case GLFW_KEY_J:
+			for (int32 i = 0; i < 8; ++i)
+			{
+				if (m_joints[i])
+				{
+					m_world->DestroyJoint(m_joints[i]);
+					m_joints[i] = NULL;
+					break;
+				}
+			}
+			break;
+		}
+	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
-		//g_debugDraw.DrawString(5, m_textLine, "Press: (b) to delete a body, (j) to delete a joint");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press: (b) to delete a body, (j) to delete a joint");
+		m_textLine += m_textIncrement;
 	}
 
 	void JointDestroyed(b2Joint* joint) override

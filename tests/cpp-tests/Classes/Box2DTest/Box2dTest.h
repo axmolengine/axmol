@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
  
  http://www.cocos2d-x.org
  
@@ -32,6 +33,7 @@
 
 DEFINE_TEST_SUITE(Box2DTests);
 
+
 class Box2DTest : public TestCase
 {
 public:
@@ -41,24 +43,24 @@ public:
 
     Box2DTest();
     ~Box2DTest();
+    virtual std::string title() const override;
 
     void initPhysics();
     void createResetButton();
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
 
     void addNewSpriteAtPosition(cocos2d::Vec2 p);
     void update(float dt) override;
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 
+    void toggleDebugCallback(cocos2d::Ref* sender);
+
 private:
-    cocos2d::Mat4 _modelViewMV;
-    void onDraw();
-    cocos2d::CallbackCommand  _customCommand;
-    cocos2d::Texture2D* _spriteTexture;
-
-    cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
-
     b2World* world;
+
+    cocos2d::Texture2D* _spriteTexture;
+    cocos2d::DrawNode* drawBox2D;
+    DebugDraw g_debugDraw;
+    bool showDebugDraw = true;
 } ;
 
 #endif

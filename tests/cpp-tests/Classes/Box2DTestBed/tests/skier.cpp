@@ -2,7 +2,7 @@
 Test case for collision/jerking issue.
 */
 
-#include "../test.h"
+#include "test.h"
 
 #include <vector>
 #include <iostream>
@@ -107,31 +107,31 @@ public:
 
 		//g_camera.m_center = b2Vec2(m_platform_width / 2.0f, 0.0f);
 		//g_camera.m_zoom = 0.4f;
-		//m_fixed_camera = true;
+		m_fixed_camera = true;
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//		case GLFW_KEY_C:
-	//		m_fixed_camera = !m_fixed_camera;
-	//		if(m_fixed_camera)
-	//		{
-	//			g_camera.m_center = b2Vec2(m_platform_width / 2.0f, 0.0f);
-	//		}
-	//		break;
-	//	}
-	//}
-
-	void Step(Settings* settings) override
+	void Keyboard(int key) override
 	{
-		//g_debugDraw.DrawString(5, m_textLine, "Keys: c = Camera fixed/tracking");
-		//m_textLine += m_textIncrement;
+		switch (key)
+		{
+			case GLFW_KEY_C:
+			m_fixed_camera = !m_fixed_camera;
+			if(m_fixed_camera)
+			{
+		//		g_camera.m_center = b2Vec2(m_platform_width / 2.0f, 0.0f);
+			}
+			break;
+		}
+	}
+
+	void Step(Settings& settings) override
+	{
+		g_debugDraw.DrawString(5, m_textLine, "Keys: c = Camera fixed/tracking");
+		m_textLine += m_textIncrement;
 
 		if(!m_fixed_camera)
 		{
-//			g_camera.m_center = m_skier->GetPosition();
+			//g_camera.m_center = m_skier->GetPosition();
 		}
 
 		Test::Step(settings);

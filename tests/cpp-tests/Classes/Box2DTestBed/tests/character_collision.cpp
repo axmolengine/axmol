@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 /// This is a test of typical character collision scenarios. This does not
 /// show how you should implement a character in your application.
@@ -230,19 +230,19 @@ public:
 		}
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		b2Vec2 v = m_character->GetLinearVelocity();
 		v.x = -5.0f;
 		m_character->SetLinearVelocity(v);
 
 		Test::Step(settings);
-		//g_debugDraw.DrawString(5, m_textLine, "This tests various character collision shapes.");
-		//m_textLine += m_textIncrement;
-		//g_debugDraw.DrawString(5, m_textLine, "Limitation: square and hexagon can snag on aligned boxes.");
-		//m_textLine += m_textIncrement;
-		//g_debugDraw.DrawString(5, m_textLine, "Feature: edge chains have smooth collision inside and out.");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "This tests various character collision shapes.");
+		m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Limitation: square and hexagon can snag on aligned boxes.");
+		m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Feature: edge chains have smooth collision inside and out.");
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

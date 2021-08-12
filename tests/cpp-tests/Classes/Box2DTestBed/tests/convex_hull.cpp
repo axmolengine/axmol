@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 class ConvexHull : public Test
 {
@@ -56,36 +56,36 @@ public:
 		m_count = e_count;
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_A:
-	//		m_auto = !m_auto;
-	//		break;
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_A:
+			m_auto = !m_auto;
+			break;
 
-	//	case GLFW_KEY_G:
-	//		Generate();
-	//		break;
-	//	}
-	//}
+		case GLFW_KEY_G:
+			Generate();
+			break;
+		}
+	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
 
 		b2PolygonShape shape;
 		shape.Set(m_points, m_count);
 
-		//g_debugDraw.DrawString(5, m_textLine, "Press g to generate a new random convex hull");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press g to generate a new random convex hull");
+		m_textLine += m_textIncrement;
 
-	//	g_debugDraw.DrawPolygon(shape.m_vertices, shape.m_count, b2Color(0.9f, 0.9f, 0.9f));
+		g_debugDraw.DrawPolygon(shape.m_vertices, shape.m_count, b2Color(0.9f, 0.9f, 0.9f));
 
 		for (int32 i = 0; i < m_count; ++i)
 		{
-			//g_debugDraw.DrawPoint(m_points[i], 3.0f, b2Color(0.3f, 0.9f, 0.3f));
-			//g_debugDraw.DrawString(m_points[i] + b2Vec2(0.05f, 0.05f), "%d", i);
+			g_debugDraw.DrawPoint(m_points[i], 3.0f, b2Color(0.3f, 0.9f, 0.3f));
+			g_debugDraw.DrawString(m_points[i] + b2Vec2(0.05f, 0.05f), "%d", i);
 		}
 
 		if (shape.Validate() == false)

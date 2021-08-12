@@ -28,6 +28,10 @@ set(APP_NAME fairygui-tests)
 project(${APP_NAME})
 
 if(NOT DEFINED BUILD_ENGINE_DONE)
+    if(XCODE)
+        set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
+    endif()
+
     set(ADXE_ROOT "$ENV{ADXE_ROOT}")
     if(NOT (ADXE_ROOT STREQUAL ""))
         set(ADXE_ROOT_PATH "${ADXE_ROOT}")
@@ -118,7 +122,7 @@ else()
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
-target_link_libraries(${APP_NAME} ${ENGINEX_CORE_LIB})
+target_link_libraries(${APP_NAME} ${ADXE_CORE_LIB})
 
 target_include_directories(${APP_NAME} PRIVATE Classes)
 
@@ -126,6 +130,7 @@ setup_cocos_app_config(${APP_NAME})
 if(XCODE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
+    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.adxe.fairygui-tests")
 
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.mac/Info.plist")

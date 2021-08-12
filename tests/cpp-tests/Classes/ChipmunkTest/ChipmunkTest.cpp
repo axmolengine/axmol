@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
  
  http://www.cocos2d-x.org
  
@@ -92,6 +93,7 @@ ChipmunkTest::ChipmunkTest()
     this->addChild(menu);
     menu->setPosition(VisibleRect::right().x-100, VisibleRect::top().y-60);
 
+
     scheduleUpdate();
     
 }
@@ -164,7 +166,7 @@ void ChipmunkTest::initPhysics()
     }
 
     // Physics debug layer
-    _debugLayer = PhysicsDebugNode::create(_space);
+    _debugLayer = PhysicsDebugNodeChipmunk2D::create(_space);
     this->addChild(_debugLayer, Z_PHYSICS_DEBUG);
 
 }

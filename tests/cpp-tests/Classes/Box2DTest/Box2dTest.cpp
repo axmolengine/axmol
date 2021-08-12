@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
 
  http://www.cocos2d-x.org
 
@@ -39,10 +40,17 @@ enum {
     kTagParentNode = 1,
 };
 
+
 Box2DTests::Box2DTests()
 {
     ADD_TEST_CASE(Box2DTest);
 }
+
+std::string Box2DTest::title() const
+{
+    return "Box2D - Basic";
+}
+
 
 bool Box2DTest::init()
 {
@@ -55,6 +63,7 @@ bool Box2DTest::init()
     auto touchListener = EventListenerTouchAllAtOnce::create();
     touchListener->onTouchesEnded = CC_CALLBACK_2(Box2DTest::onTouchesEnded, this);
     dispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+
 
     // init physics
     this->initPhysics();
@@ -76,10 +85,22 @@ bool Box2DTest::init()
 
     addNewSpriteAtPosition(VisibleRect::center());
 
-    auto label = Label::createWithTTF("Tap screen", "fonts/Marker Felt.ttf", 32.0f);
+    auto label = Label::createWithTTF("Tap screen add boxes.\nSome objects be only visible with debug on.", "fonts/Marker Felt.ttf", 12.0f);
     addChild(label, 0);
     label->setColor(Color3B(0, 0, 255));
-    label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 50);
+    label->setPosition(VisibleRect::center().x-50, VisibleRect::top().y - 60);
+
+    // menu for debug layer
+    MenuItemFont::setFontSize(18);
+    auto item = MenuItemFont::create("Toggle debug", CC_CALLBACK_1(Box2DTest::toggleDebugCallback, this));
+
+    auto menu = Menu::create(item, nullptr);
+    this->addChild(menu);
+    menu->setPosition(VisibleRect::right().x - 100, VisibleRect::top().y - 60);
+
+    drawBox2D = g_debugDraw.GetDrawNode();
+    addChild(drawBox2D, 100);
+    drawBox2D->setOpacity(150);
 
     scheduleUpdate();
 
@@ -97,6 +118,14 @@ Box2DTest::~Box2DTest()
 {
     CC_SAFE_DELETE(world);
 }
+
+
+void Box2DTest::toggleDebugCallback(Ref* sender)
+{
+    showDebugDraw = !showDebugDraw;
+    drawBox2D->clear(); 
+}
+
 
 void Box2DTest::initPhysics()
 {
@@ -137,7 +166,91 @@ void Box2DTest::initPhysics()
     groundBox.SetTwoSided(b2Vec2(VisibleRect::rightBottom().x / PTM_RATIO, VisibleRect::rightBottom().y / PTM_RATIO), b2Vec2(VisibleRect::rightTop().x / PTM_RATIO, VisibleRect::rightTop().y / PTM_RATIO));
     groundBody->CreateFixture(&groundBox, 0);
 
-//    b2World::SetDebugDraw(&Box2DTest::draw);
+
+    // Small triangle
+    b2Vec2 vertices[3];
+    vertices[0].Set(-1.0f, 0.0f);
+    vertices[1].Set(1.0f, 0.0f);
+    vertices[2].Set(0.0f, 2.0f);
+
+    b2PolygonShape polygon;
+    polygon.Set(vertices, 3);
+
+    b2FixtureDef triangleShapeDef;
+    triangleShapeDef.shape = &polygon;
+    triangleShapeDef.density = 1.0f;
+
+    b2BodyDef triangleBodyDef;
+    triangleBodyDef.type = b2_dynamicBody;
+    triangleBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body1 = world->CreateBody(&triangleBodyDef);
+    body1->CreateFixture(&triangleShapeDef);
+
+    // Large triangle (recycle definitions)
+    vertices[0] *= 2.0f;
+    vertices[1] *= 2.0f;
+    vertices[2] *= 2.0f;
+    polygon.Set(vertices, 3);
+
+    triangleBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body2 = world->CreateBody(&triangleBodyDef);
+    body2->CreateFixture(&triangleShapeDef);
+
+    // Small box
+    polygon.SetAsBox(1.0f, 0.5f);
+
+    b2FixtureDef boxShapeDef;
+    boxShapeDef.shape = &polygon;
+    boxShapeDef.density = 1.0f;
+
+    b2BodyDef boxBodyDef;
+    boxBodyDef.type = b2_dynamicBody;
+    boxBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body3 = world->CreateBody(&boxBodyDef);
+    body3->CreateFixture(&boxShapeDef);
+
+    // Large box (recycle definitions)
+    polygon.SetAsBox(2.0f, 1.0f);
+    boxBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body4 = world->CreateBody(&boxBodyDef);
+    body4->CreateFixture(&boxShapeDef);
+
+    // Small circle
+    b2CircleShape circle;
+    circle.m_radius = 1.0f;
+
+    b2FixtureDef circleShapeDef;
+    circleShapeDef.shape = &circle;
+    circleShapeDef.density = 1.0f;
+
+    b2BodyDef circleBodyDef;
+    circleBodyDef.type = b2_dynamicBody;
+    circleBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body5 = world->CreateBody(&circleBodyDef);
+    body5->CreateFixture(&circleShapeDef);
+
+    // Large circle
+    circle.m_radius *= 2.0f;
+    circleBodyDef.position.Set(rand() % 13 + 3, 4);
+
+    b2Body* body6 = world->CreateBody(&circleBodyDef);
+    body6->CreateFixture(&circleShapeDef);
+
+    uint32 flags = 0;
+    flags += 1 * b2Draw::e_shapeBit;
+    flags += 1 * b2Draw::e_jointBit;
+    flags += 0 * b2Draw::e_aabbBit;
+    flags += 0 * b2Draw::e_centerOfMassBit;
+    g_debugDraw.SetFlags(flags);
+    g_debugDraw.mRatio = PTM_RATIO;
+
+    g_debugDraw.debugNodeOffset = { 0, 0 };
+    world->SetDebugDraw(&g_debugDraw);
 }
 
 void Box2DTest::createResetButton()
@@ -152,42 +265,6 @@ void Box2DTest::createResetButton()
     this->addChild(menu, -1);
 }
 
-void Box2DTest::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
-{
-    //
-    // IMPORTANT:
-    // This is only for debug purposes
-    // It is recommend to disable it
-    //
-    Scene::draw(renderer, transform, flags);
-
-  //  GL::enableVertexAttribs(cocos2d::GL::VERTEX_ATTRIB_FLAG_POSITION);
-    Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-
-    _modelViewMV = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-
-    _customCommand.init(_globalZOrder);
-    _customCommand.func = CC_CALLBACK_0(Box2DTest::onDraw, this);
-    renderer->addCommand(&_customCommand);
-
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-}
-
-void Box2DTest::onDraw()
-{
-    Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-
-    auto oldMV = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewMV);
-    world->DebugDraw();
-
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, oldMV);
-}
-
-
 void Box2DTest::addNewSpriteAtPosition(Vec2 p)
 {
     CCLOG("Add sprite %0.2f x %02.f", p.x, p.y);
@@ -197,6 +274,8 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(p.x / PTM_RATIO, p.y / PTM_RATIO);
+
+    CCLOG("Add PTM_RATIO sprite %0.2f x %0.2f", p.x / PTM_RATIO, p.y / PTM_RATIO);
 
     b2Body* body = world->CreateBody(&bodyDef);
 
@@ -237,7 +316,15 @@ void Box2DTest::update(float dt)
     // Instruct the world to perform a single step of simulation. It is
     // generally best to keep the time step and iterations fixed.
     world->Step(dt, velocityIterations, positionIterations);
-//    world->DebugDraw();
+
+
+    // Debug draw
+    if (showDebugDraw)
+    {
+        drawBox2D->clear();
+        world->DebugDraw();
+    }
+
 }
 
 void Box2DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)

@@ -185,13 +185,9 @@ enum class terminal_color : uint8_t {
 
 enum class emphasis : uint8_t {
   bold = 1,
-  faint = 1 << 1,
-  italic = 1 << 2,
-  underline = 1 << 3,
-  blink = 1 << 4,
-  reverse = 1 << 5,
-  conceal = 1 << 6,
-  strikethrough = 1 << 7,
+  italic = 1 << 1,
+  underline = 1 << 2,
+  strikethrough = 1 << 3
 };
 
 // rgb is a struct for red, green and blue colors.
@@ -413,18 +409,16 @@ template <typename Char> struct ansi_color_escape {
     buffer[19] = static_cast<Char>(0);
   }
   FMT_CONSTEXPR ansi_color_escape(emphasis em) FMT_NOEXCEPT {
-    uint8_t em_codes[num_emphases] = {};
-    if (has_emphasis(em, emphasis::bold)) em_codes[0] = 1;
-    if (has_emphasis(em, emphasis::faint)) em_codes[1] = 2;
-    if (has_emphasis(em, emphasis::italic)) em_codes[2] = 3;
-    if (has_emphasis(em, emphasis::underline)) em_codes[3] = 4;
-    if (has_emphasis(em, emphasis::blink)) em_codes[4] = 5;
-    if (has_emphasis(em, emphasis::reverse)) em_codes[5] = 7;
-    if (has_emphasis(em, emphasis::conceal)) em_codes[6] = 8;
-    if (has_emphasis(em, emphasis::strikethrough)) em_codes[7] = 9;
+    uint8_t em_codes[4] = {};
+    uint8_t em_bits = static_cast<uint8_t>(em);
+    if (em_bits & static_cast<uint8_t>(emphasis::bold)) em_codes[0] = 1;
+    if (em_bits & static_cast<uint8_t>(emphasis::italic)) em_codes[1] = 3;
+    if (em_bits & static_cast<uint8_t>(emphasis::underline)) em_codes[2] = 4;
+    if (em_bits & static_cast<uint8_t>(emphasis::strikethrough))
+      em_codes[3] = 9;
 
     size_t index = 0;
-    for (size_t i = 0; i < num_emphases; ++i) {
+    for (int i = 0; i < 4; ++i) {
       if (!em_codes[i]) continue;
       buffer[index++] = static_cast<Char>('\x1b');
       buffer[index++] = static_cast<Char>('[');
@@ -441,8 +435,7 @@ template <typename Char> struct ansi_color_escape {
   }
 
  private:
-  static constexpr size_t num_emphases = 8;
-  Char buffer[7u + 3u * num_emphases + 1u];
+  Char buffer[7u + 3u * 4u + 1u];
 
   static FMT_CONSTEXPR void to_esc(uint8_t c, Char* out,
                                    char delimiter) FMT_NOEXCEPT {
@@ -450,10 +443,6 @@ template <typename Char> struct ansi_color_escape {
     out[1] = static_cast<Char>('0' + c / 10 % 10);
     out[2] = static_cast<Char>('0' + c % 10);
     out[3] = static_cast<Char>(delimiter);
-  }
-  static FMT_CONSTEXPR bool has_emphasis(emphasis em,
-                                         emphasis mask) FMT_NOEXCEPT {
-    return static_cast<uint8_t>(em) & static_cast<uint8_t>(mask);
   }
 };
 

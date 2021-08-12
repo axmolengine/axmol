@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 class DynamicTree : public Test
 {
@@ -65,7 +65,7 @@ public:
 		return new DynamicTree;
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		B2_NOT_USED(settings);
 
@@ -109,56 +109,56 @@ public:
 				c.Set(0.6f, 0.6f, 0.9f);
 			}
 
-			//g_debugDraw.DrawAABB(&actor->aabb, c);
+			g_debugDraw.DrawAABB(&actor->aabb, c);
 		}
 
-		//b2Color c(0.7f, 0.7f, 0.7f);
-		//g_debugDraw.DrawAABB(&m_queryAABB, c);
+		b2Color c(0.7f, 0.7f, 0.7f);
+		g_debugDraw.DrawAABB(&m_queryAABB, c);
 
-		//g_debugDraw.DrawSegment(m_rayCastInput.p1, m_rayCastInput.p2, c);
+		g_debugDraw.DrawSegment(m_rayCastInput.p1, m_rayCastInput.p2, c);
 
-		//b2Color c1(0.2f, 0.9f, 0.2f);
-		//b2Color c2(0.9f, 0.2f, 0.2f);
-		//g_debugDraw.DrawPoint(m_rayCastInput.p1, 6.0f, c1);
-		//g_debugDraw.DrawPoint(m_rayCastInput.p2, 6.0f, c2);
+		b2Color c1(0.2f, 0.9f, 0.2f);
+		b2Color c2(0.9f, 0.2f, 0.2f);
+		g_debugDraw.DrawPoint(m_rayCastInput.p1, 6.0f, c1);
+		g_debugDraw.DrawPoint(m_rayCastInput.p2, 6.0f, c2);
 
 		if (m_rayActor)
 		{
-			//b2Color cr(0.2f, 0.2f, 0.9f);
-			//b2Vec2 p = m_rayCastInput.p1 + m_rayActor->fraction * (m_rayCastInput.p2 - m_rayCastInput.p1);
-			//g_debugDraw.DrawPoint(p, 6.0f, cr);
+			b2Color cr(0.2f, 0.2f, 0.9f);
+			b2Vec2 p = m_rayCastInput.p1 + m_rayActor->fraction * (m_rayCastInput.p2 - m_rayCastInput.p1);
+			g_debugDraw.DrawPoint(p, 6.0f, cr);
 		}
 
 		{
-			//int32 height = m_tree.GetHeight();
-			//g_debugDraw.DrawString(5, m_textLine, "dynamic tree height = %d", height);
-			//m_textLine += m_textIncrement;
+			int32 height = m_tree.GetHeight();
+			g_debugDraw.DrawString(5, m_textLine, "dynamic tree height = %d", height);
+			m_textLine += m_textIncrement;
 		}
 
 		++m_stepCount;
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_A:
-	//		m_automated = !m_automated;
-	//		break;
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_A:
+			m_automated = !m_automated;
+			break;
 
-	//	case GLFW_KEY_C:
-	//		CreateProxy();
-	//		break;
+		case GLFW_KEY_C:
+			CreateProxy();
+			break;
 
-	//	case GLFW_KEY_D:
-	//		DestroyProxy();
-	//		break;
+		case GLFW_KEY_D:
+			DestroyProxy();
+			break;
 
-	//	case GLFW_KEY_M:
-	//		MoveProxy();
-	//		break;
-	//	}
-	//}
+		case GLFW_KEY_M:
+			MoveProxy();
+			break;
+		}
+	}
 
 	bool QueryCallback(int32 proxyId)
 	{

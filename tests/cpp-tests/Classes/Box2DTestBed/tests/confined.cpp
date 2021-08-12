@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 class Confined : public Test
 {
@@ -105,17 +105,17 @@ public:
 		body->CreateFixture(&fd);
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_C:
-	//		CreateCircle();
-	//		break;
-	//	}
-	//}
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_C:
+			CreateCircle();
+			break;
+		}
+	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		bool sleeping = true;
 		for (b2Body* b = m_world->GetBodyList(); b; b = b->GetNext())
@@ -157,8 +157,8 @@ public:
 			}
 		}
 
-		//g_debugDraw.DrawString(5, m_textLine, "Press 'c' to create a circle.");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press 'c' to create a circle.");
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

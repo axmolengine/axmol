@@ -48,6 +48,7 @@ SOFTWARE.
 #include "yasio/detail/select_interrupter.hpp"
 #include "yasio/detail/concurrent_queue.hpp"
 #include "yasio/detail/utils.hpp"
+#include "yasio/detail/errc.hpp"
 #include "yasio/cxx17/memory.hpp"
 #include "yasio/cxx17/string_view.hpp"
 #include "yasio/xxsocket.hpp"
@@ -154,8 +155,8 @@ enum
   // see also: YOPT_S_DNS_QUERIES_TIMEOUT
   YOPT_S_DNS_QUERIES_TIMEOUTMS,
 
-  // Set dns queries tries when timeout reached, default is: 5
-  // params: dns_queries_tries : int(5)
+  // Set dns queries tries when timeout reached, default is: 4
+  // params: dns_queries_tries : int(4)
   // remarks:
   //        a. this option must be set before 'io_service::start'
   //        b. relative option: YOPT_S_DNS_QUERIES_TIMEOUT
@@ -163,9 +164,7 @@ enum
 
   // Set dns server dirty
   // params: reserved : int(1)
-  // remarks:
-  //        a. this option only works with c-ares enabled
-  //        b. you should set this option after your mobile network changed
+  // remarks: you should set this option after your device network changed
   YOPT_S_DNS_DIRTY,
 
   // Sets channel length field based frame decode function, native C++ ONLY
@@ -299,23 +298,6 @@ enum
   YLOG_I,
   YLOG_E,
 };
-
-namespace errc
-{
-enum
-{
-  no_error              = 0,   // No error.
-  read_timeout          = -28, // The remote host did not respond after a period of time.
-  invalid_packet        = -27, // Invalid packet.
-  resolve_host_failed   = -26, // Resolve host failed.
-  no_available_address  = -25, // No available address to connect.
-  shutdown_by_localhost = -24, // Local shutdown the connection.
-  ssl_handshake_failed  = -23, // SSL handshake failed.
-  ssl_write_failed      = -22, // SSL write failed.
-  ssl_read_failed       = -21, // SSL read failed.
-  eof                   = -20, // end of file.
-};
-}
 
 // class fwds
 class highp_timer;
@@ -1126,6 +1108,8 @@ private:
 
   int local_address_family() const { return ((ipsv_ & ipsv_ipv4) || !ipsv_) ? AF_INET : AF_INET6; }
 
+  YASIO__DECL void update_dns_status();
+
   /* For log macro only */
   inline const print_fn2_t& __get_cprint() const { return options_.print_; }
 
@@ -1172,7 +1156,7 @@ private:
     highp_time_t dns_queries_timeout_ = 5LL * std::micro::den;
     int dns_queries_tries_            = 5;
 
-    bool dns_dirty_ = true; // only for c-ares
+    bool dns_dirty_ = false;
 
     bool deferred_event_ = true;
     defer_event_cb_t on_defer_event_;

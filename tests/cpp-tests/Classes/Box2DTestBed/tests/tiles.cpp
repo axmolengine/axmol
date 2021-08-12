@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 /// This stress tests the dynamic tree broad-phase. This also shows that tile
 /// based collision is _not_ smooth due to Box2D not knowing about adjacency.
@@ -123,21 +123,21 @@ public:
 		m_createTime = timer.GetMilliseconds();
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		const b2ContactManager& cm = m_world->GetContactManager();
 		int32 height = cm.m_broadPhase.GetTreeHeight();
 		int32 leafCount = cm.m_broadPhase.GetProxyCount();
 		int32 minimumNodeCount = 2 * leafCount - 1;
 		float minimumHeight = ceilf(logf(float(minimumNodeCount)) / logf(2.0f));
-		//g_debugDraw.DrawString(5, m_textLine, "dynamic tree height = %d, min = %d", height, int32(minimumHeight));
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "dynamic tree height = %d, min = %d", height, int32(minimumHeight));
+		m_textLine += m_textIncrement;
 
 		Test::Step(settings);
 
-		//g_debugDraw.DrawString(5, m_textLine, "create time = %6.2f ms, fixture count = %d",
-		//	m_createTime, m_fixtureCount);
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "create time = %6.2f ms, fixture count = %d",
+			m_createTime, m_fixtureCount);
+		m_textLine += m_textIncrement;
 
 		//b2DynamicTree* tree = &m_world->m_contactManager.m_broadPhase.m_tree;
 

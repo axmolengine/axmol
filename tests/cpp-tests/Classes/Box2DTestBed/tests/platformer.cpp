@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 class Platformer : public Test
 {
@@ -110,13 +110,13 @@ public:
 #endif
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
 
 		b2Vec2 v = m_character->GetBody()->GetLinearVelocity();
-  //      g_debugDraw.DrawString(5, m_textLine, "Character Linear Velocity: %f", v.y);
-		//m_textLine += m_textIncrement;
+        g_debugDraw.DrawString(5, m_textLine, "Character Linear Velocity: %f", v.y);
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

@@ -1,7 +1,7 @@
 # The adxe thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 2.1.0.4439 branch on chromium/4439
+- Version: 2.1.0.4515 branch on chromium/4515 @Google Chrome 92.0.4515.131
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -54,7 +54,7 @@
 - Version: 2.0.0
 - License: Apache-2.0
 
-## fmtlib
+## {fmt}
 - Upstream: https://github.com/fmtlib/fmt
 - Version: 8.0.1-2038bf6
 - License: MIT
@@ -91,7 +91,7 @@
 
 ## llhttp
 - Upstream: https://github.com/nodejs/llhttp
-- Version: 6.0.3
+- Version: 6.0.4
 - License: MIT
 
 ## lua

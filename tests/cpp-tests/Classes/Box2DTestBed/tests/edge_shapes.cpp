@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//#include "settings.h"
-#include "../test.h"
+#include "settings.h"
+#include "test.h"
 
 class EdgeShapesCallback : public b2RayCastCallback
 {
@@ -182,31 +182,31 @@ public:
 		}
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_1:
-	//	case GLFW_KEY_2:
-	//	case GLFW_KEY_3:
-	//	case GLFW_KEY_4:
-	//	case GLFW_KEY_5:
-	//		Create(key - GLFW_KEY_1);
-	//		break;
-
-	//	case GLFW_KEY_D:
-	//		DestroyBody();
-	//		break;
-	//	}
-	//}
-
-	void Step(Settings* settings) override
+	void Keyboard(int key) override
 	{
-		bool advanceRay = 0.1;// settings.m_pause == 0 || settings.m_singleStep;
+		switch (key)
+		{
+		case GLFW_KEY_1:
+		case GLFW_KEY_2:
+		case GLFW_KEY_3:
+		case GLFW_KEY_4:
+		case GLFW_KEY_5:
+			Create(key - GLFW_KEY_1);
+			break;
+
+		case GLFW_KEY_D:
+			DestroyBody();
+			break;
+		}
+	}
+
+	void Step(Settings& settings) override
+	{
+		bool advanceRay = settings.m_pause == 0 || settings.m_singleStep;
 
 		Test::Step(settings);
-		//g_debugDraw.DrawString(5, m_textLine, "Press 1-5 to drop stuff");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press 1-5 to drop stuff");
+		m_textLine += m_textIncrement;
 
 		float L = 25.0f;
 		b2Vec2 point1(0.0f, 10.0f);
@@ -217,19 +217,19 @@ public:
 
 		m_world->RayCast(&callback, point1, point2);
 
-		//if (callback.m_fixture)
-		//{
-		//	g_debugDraw.DrawPoint(callback.m_point, 5.0f, b2Color(0.4f, 0.9f, 0.4f));
+		if (callback.m_fixture)
+		{
+			g_debugDraw.DrawPoint(callback.m_point, 5.0f, b2Color(0.4f, 0.9f, 0.4f));
 
-		//	g_debugDraw.DrawSegment(point1, callback.m_point, b2Color(0.8f, 0.8f, 0.8f));
+			g_debugDraw.DrawSegment(point1, callback.m_point, b2Color(0.8f, 0.8f, 0.8f));
 
-		//	b2Vec2 head = callback.m_point + 0.5f * callback.m_normal;
-		//	g_debugDraw.DrawSegment(callback.m_point, head, b2Color(0.9f, 0.9f, 0.4f));
-		//}
-		//else
-		//{
-		//	g_debugDraw.DrawSegment(point1, point2, b2Color(0.8f, 0.8f, 0.8f));
-		//}
+			b2Vec2 head = callback.m_point + 0.5f * callback.m_normal;
+			g_debugDraw.DrawSegment(callback.m_point, head, b2Color(0.9f, 0.9f, 0.4f));
+		}
+		else
+		{
+			g_debugDraw.DrawSegment(point1, point2, b2Color(0.8f, 0.8f, 0.8f));
+		}
 
 		if (advanceRay)
 		{

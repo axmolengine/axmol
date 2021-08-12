@@ -1336,11 +1336,12 @@ else()
             set(CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG "-Wl,-rpath,")
         endif()
 
+        set_xcode_property(${IMPL_TARGET} PRODUCT_BUNDLE_IDENTIFIER "org.openal-soft.openal")
         set_target_properties(${IMPL_TARGET} PROPERTIES
             FRAMEWORK TRUE
             FRAMEWORK_VERSION C
             MACOSX_FRAMEWORK_NAME "${IMPL_TARGET}"
-            MACOSX_FRAMEWORK_IDENTIFIER "org.openal-soft.openal"
+            MACOSX_FRAMEWORK_IDENTIFIER "\$(PRODUCT_BUNDLE_IDENTIFIER)"
             MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${LIB_VERSION}
             MACOSX_FRAMEWORK_BUNDLE_VERSION ${BUNDLE_VERSION}
             XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""

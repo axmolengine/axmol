@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 class PulleyJoint : public Test
 {
@@ -75,14 +75,14 @@ public:
 		}
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
 
 		float ratio = m_joint1->GetRatio();
 		float L = m_joint1->GetCurrentLengthA() + ratio * m_joint1->GetCurrentLengthB();
-		//g_debugDraw.DrawString(5, m_textLine, "L1 + %4.2f * L2 = %4.2f", (float) ratio, (float) L);
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "L1 + %4.2f * L2 = %4.2f", (float) ratio, (float) L);
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

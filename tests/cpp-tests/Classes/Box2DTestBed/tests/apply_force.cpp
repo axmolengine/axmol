@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 // This test shows how to apply forces and torques to a body.
 // It also shows how to use the friction joint that can be useful
@@ -167,10 +167,10 @@ public:
 		}
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
-		//g_debugDraw.DrawString(5, m_textLine, "Forward (W), Turn (A) and (D)");
-		//m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Forward (W), Turn (A) and (D)");
+		m_textLine += m_textIncrement;
 
 		//if (glfwGetKey(g_mainWindow, GLFW_KEY_W) == GLFW_PRESS)
 		//{

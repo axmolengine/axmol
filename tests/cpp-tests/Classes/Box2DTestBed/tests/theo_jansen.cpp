@@ -23,7 +23,7 @@
 // Inspired by a contribution from roman_m
 // Dimensions scooped from APE (http://www.cove.org/ape/index.htm)
 
-#include "../test.h"
+#include "test.h"
 
 class TheoJansen : public Test
 {
@@ -220,35 +220,35 @@ public:
 		CreateLeg(1.0f, wheelAnchor);
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
-	/*	g_debugDraw.DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, toggle motor = m");
-		m_textLine += m_textIncrement;*/
+		g_debugDraw.DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, toggle motor = m");
+		m_textLine += m_textIncrement;
 
 		Test::Step(settings);
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_A:
-	//		m_motorJoint->SetMotorSpeed(-m_motorSpeed);
-	//		break;
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_A:
+			m_motorJoint->SetMotorSpeed(-m_motorSpeed);
+			break;
 
-	//	case GLFW_KEY_S:
-	//		m_motorJoint->SetMotorSpeed(0.0f);
-	//		break;
+		case GLFW_KEY_S:
+			m_motorJoint->SetMotorSpeed(0.0f);
+			break;
 
-	//	case GLFW_KEY_D:
-	//		m_motorJoint->SetMotorSpeed(m_motorSpeed);
-	//		break;
+		case GLFW_KEY_D:
+			m_motorJoint->SetMotorSpeed(m_motorSpeed);
+			break;
 
-	//	case GLFW_KEY_M:
-	//		m_motorJoint->EnableMotor(!m_motorJoint->IsMotorEnabled());
-	//		break;
-	//	}
-	//}
+		case GLFW_KEY_M:
+			m_motorJoint->EnableMotor(!m_motorJoint->IsMotorEnabled());
+			break;
+		}
+	}
 
 	static Test* Create()
 	{

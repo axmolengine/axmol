@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
-//#include "imgui/imgui.h"
+#include "test.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
 
 /// This test shows how a distance joint can be used to stabilize a chain of
 /// bodies with a heavy payload. Notice that the distance joint just prevents
@@ -115,41 +115,41 @@ public:
 		}
 	}
 
-	//void UpdateUI() override
-	//{
-	//	ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
-	//	ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
-	//	ImGui::Begin("Wrecking Ball Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	void UpdateUI() override
+	{
+		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
+		ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
+		ImGui::Begin("Wrecking Ball Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
-	//	if (ImGui::Checkbox("Stabilize", &m_stabilize))
-	//	{
-	//		if (m_stabilize == true && m_distanceJoint == nullptr)
-	//		{
-	//			m_distanceJoint = m_world->CreateJoint(&m_distanceJointDef);
-	//		}
-	//		else if (m_stabilize == false && m_distanceJoint != nullptr)
-	//		{
-	//			m_world->DestroyJoint(m_distanceJoint);
-	//			m_distanceJoint = nullptr;
-	//		}
-	//	}
+		if (ImGui::Checkbox("Stabilize", &m_stabilize))
+		{
+			if (m_stabilize == true && m_distanceJoint == nullptr)
+			{
+				m_distanceJoint = m_world->CreateJoint(&m_distanceJointDef);
+			}
+			else if (m_stabilize == false && m_distanceJoint != nullptr)
+			{
+				m_world->DestroyJoint(m_distanceJoint);
+				m_distanceJoint = nullptr;
+			}
+		}
 
-	//	ImGui::End();
-	//}
+		ImGui::End();
+	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
 
-		//if (m_distanceJoint)
-		//{
-		//	g_debugDraw.DrawString(5, m_textLine, "Distance Joint ON");
-		//}
-		//else
-		//{
-		//	g_debugDraw.DrawString(5, m_textLine, "Distance Joint OFF");
-		//}
-		//m_textLine += m_textIncrement;
+		if (m_distanceJoint)
+		{
+			g_debugDraw.DrawString(5, m_textLine, "Distance Joint ON");
+		}
+		else
+		{
+			g_debugDraw.DrawString(5, m_textLine, "Distance Joint OFF");
+		}
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

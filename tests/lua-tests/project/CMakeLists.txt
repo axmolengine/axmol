@@ -5,6 +5,10 @@ set(APP_NAME lua-tests)
 project(${APP_NAME})
 
 if(NOT DEFINED BUILD_ENGINE_DONE)
+    if(XCODE)
+        set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
+    endif()
+
     set(ADXE_ROOT "$ENV{ADXE_ROOT}")
     if(NOT (ADXE_ROOT STREQUAL ""))
         set(ADXE_ROOT_PATH "${ADXE_ROOT}")
@@ -122,6 +126,7 @@ setup_cocos_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
+    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.adxe.lua-tests")
 
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist")

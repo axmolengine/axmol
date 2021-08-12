@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -27,18 +28,60 @@
 #define HTTP_COOKIE_H
 /// @cond DO_NOT_SHOW
 
-#include<string>
-#include<vector>
+#include "platform/CCPlatformMacros.h"
 
-struct CookiesInfo
+#include <string.h>
+#include <string>
+#include <vector>
+
+NS_CC_BEGIN
+
+namespace network
 {
+
+class Uri;
+struct CookieInfo
+{
+    CookieInfo() = default;
+    CookieInfo(const CookieInfo&) = default;
+    CookieInfo(CookieInfo&& rhs)
+        : domain(std::move(rhs.domain))
+        , tailmatch(rhs.tailmatch)
+        , path(std::move(rhs.path))
+        , secure(rhs.secure)
+        , name(std::move(rhs.name))
+        , value(std::move(rhs.value))
+        , expires(rhs.expires)
+    {}
+
+    CookieInfo& operator=(CookieInfo&& rhs)
+    {
+        domain    = std::move(rhs.domain);
+        tailmatch = rhs.tailmatch;
+        path      = std::move(rhs.path);
+        secure    = rhs.secure;
+        name      = std::move(rhs.name);
+        value     = std::move(rhs.value);
+        expires   = rhs.expires;
+        return *this;
+    }
+
+    bool isSame(const CookieInfo& rhs) { return name == rhs.name && domain == rhs.domain; }
+
+    void updateValue(const CookieInfo& rhs)
+    {
+        value   = rhs.value;
+        expires = rhs.expires;
+        path    = rhs.path;
+    }
+
     std::string domain;
-    bool tailmatch;
+    bool tailmatch = true;
     std::string path;
-    bool secure;
+    bool secure = false;
     std::string name;
     std::string value;
-    std::string expires;
+    time_t expires = 0;
 };
 
 class HttpCookie
@@ -49,15 +92,21 @@ public:
     void writeFile();
     void setCookieFileName(const std::string& fileName);
 
-    const std::vector<CookiesInfo>* getCookies()const;
-    const CookiesInfo* getMatchCookie(const std::string& url) const;
-    void updateOrAddCookie(CookiesInfo* cookie);
+    const std::vector<CookieInfo>* getCookies() const;
+    const CookieInfo* getMatchCookie(const Uri& uri) const;
+    void updateOrAddCookie(CookieInfo* cookie);
+
+    // Check match cookies for http request
+    std::string checkAndGetFormatedMatchCookies(const Uri& uri);
+    bool updateOrAddCookie(const std::string& cookie, const Uri& uri);
 
 private:
     std::string _cookieFileName;
-    std::vector<CookiesInfo> _cookies;
+    std::vector<CookieInfo> _cookies;
 };
+}  // namespace network
+
+NS_CC_END
 
 /// @endcond
 #endif /* HTTP_COOKIE_H */
-

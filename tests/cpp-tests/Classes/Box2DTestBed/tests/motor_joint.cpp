@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//#include "settings.h"
-#include "../test.h"
+#include "settings.h"
+#include "test.h"
 
 /// This test shows how to use a motor joint. A motor joint
 /// can be used to animate a dynamic body. With finite motor forces
@@ -72,22 +72,22 @@ public:
 		m_time = 0.0f;
 	}
 
-	//void Keyboard(int key) override
-	//{
-	//	switch (key)
-	//	{
-	//	case GLFW_KEY_S:
-	//		m_go = !m_go;
-	//		break;
-	//	}
-	//}
-
-	void Step(Settings* settings) override
+	void Keyboard(int key) override
 	{
-		//if (m_go && settings.m_hertz > 0.0f)
-		//{
-		//	m_time += 1.0f / settings.m_hertz;
-		//}
+		switch (key)
+		{
+		case GLFW_KEY_S:
+			m_go = !m_go;
+			break;
+		}
+	}
+
+	void Step(Settings& settings) override
+	{
+		if (m_go && settings.m_hertz > 0.0f)
+		{
+			m_time += 1.0f / settings.m_hertz;
+		}
 
 		b2Vec2 linearOffset;
 		linearOffset.x = 6.0f * sinf(2.0f * m_time);
@@ -98,11 +98,11 @@ public:
 		m_joint->SetLinearOffset(linearOffset);
 		m_joint->SetAngularOffset(angularOffset);
 
-		//g_debugDraw.DrawPoint(linearOffset, 4.0f, b2Color(0.9f, 0.9f, 0.9f));
+		g_debugDraw.DrawPoint(linearOffset, 4.0f, b2Color(0.9f, 0.9f, 0.9f));
 
-		//Test::Step(settings);
-		//g_debugDraw.DrawString(5, m_textLine, "Keys: (s) pause");
-		//m_textLine += 15;
+		Test::Step(settings);
+		g_debugDraw.DrawString(5, m_textLine, "Keys: (s) pause");
+		m_textLine += 15;
 	}
 
 	static Test* Create()

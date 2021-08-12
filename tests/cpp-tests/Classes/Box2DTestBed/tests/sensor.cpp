@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
-//#include "imgui/imgui.h"
+#include "test.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
 
 // This shows how to use sensor shapes. Sensors don't have collision, but report overlap events.
 class Sensors : public Test
@@ -137,18 +137,18 @@ public:
 		}
 	}
 
-	//void UpdateUI() override
-	//{
-	//	ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
-	//	ImGui::SetNextWindowSize(ImVec2(200.0f, 60.0f));
-	//	ImGui::Begin("Sensor Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	void UpdateUI() override
+	{
+		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
+		ImGui::SetNextWindowSize(ImVec2(200.0f, 60.0f));
+		ImGui::Begin("Sensor Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
-	//	ImGui::SliderFloat("Force", &m_force, 0.0f, 2000.0f, "%.0f");
+		ImGui::SliderFloat("Force", &m_force, 0.0f, 2000.0f, "%.0f");
 
-	//	ImGui::End();
-	//}
+		ImGui::End();
+	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
 

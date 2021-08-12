@@ -20,7 +20,7 @@
 #define TEST_H
 
 #include "box2d/box2d.h"
-#include "CCPhysicsDebugNodeBox2D.h"
+#include "extensions/cocos-ext.h"
 
 #include <cstdlib>
 
@@ -50,55 +50,6 @@ inline float RandomFloat(float lo, float hi)
 	return r;
 }
 
-/// Test settings. Some can be controlled in the GUI.
-struct Settings
-{
-	Settings()
-	{
-		viewCenter.Set(0.0f, 20.0f);
-		hz = 60.0f;
-		velocityIterations = 8;
-		positionIterations = 3;
-		drawShapes = 1;
-		drawJoints = 1;
-		drawAABBs = 0;
-		drawContactPoints = 0;
-		drawContactNormals = 0;
-		drawContactImpulse = 0;
-		drawFrictionImpulse = 0;
-		drawCOMs = 0;
-		drawStats = 0;
-		drawProfile = 0;
-		enableWarmStarting = 1;
-		enableContinuous = 1;
-		enableSubStepping = 0;
-		enableSleep = 1;
-		pause = 0;
-		singleStep = 0;
-	}
-
-	b2Vec2 viewCenter;
-	float hz;
-	int32 velocityIterations;
-	int32 positionIterations;
-	int32 drawShapes;
-	int32 drawJoints;
-	int32 drawAABBs;
-	int32 drawContactPoints;
-	int32 drawContactNormals;
-	int32 drawContactImpulse;
-	int32 drawFrictionImpulse;
-	int32 drawCOMs;
-	int32 drawStats;
-	int32 drawProfile;
-	int32 enableWarmStarting;
-	int32 enableContinuous;
-	int32 enableSubStepping;
-	int32 enableSleep;
-	int32 pause;
-	int32 singleStep;
-};
-
 
 // This is called when a joint in the world is implicitly destroyed
 // because an attached body is destroyed. This gives us a chance to
@@ -125,7 +76,6 @@ struct ContactPoint
 	float tangentImpulse;
 	float separation;
 };
-
 class Test : public b2ContactListener
 {
 public:
@@ -133,17 +83,18 @@ public:
 	Test();
 	virtual ~Test();
 
-    void DrawTitle(const char *string);
-	virtual void Step(Settings* settings);
-	virtual void Keyboard(unsigned char key) { B2_NOT_USED(key); }
-	virtual void KeyboardUp(unsigned char key) { B2_NOT_USED(key); }
+	void DrawTitle(const char* string);
+	virtual void Step(Settings& settings);
+	virtual void UpdateUI() {}
+	virtual void Keyboard(int key) { B2_NOT_USED(key); }
+	virtual void KeyboardUp(int key) { B2_NOT_USED(key); }
 	void ShiftMouseDown(const b2Vec2& p);
 	virtual bool MouseDown(const b2Vec2& p);
 	virtual void MouseUp(const b2Vec2& p);
-	void MouseMove(const b2Vec2& p);
+	virtual void MouseMove(const b2Vec2& p);
 	void LaunchBomb();
 	void LaunchBomb(const b2Vec2& position, const b2Vec2& velocity);
-	
+
 	void SpawnBomb(const b2Vec2& worldPt);
 	void CompleteBombSpawn(const b2Vec2& p);
 
@@ -151,10 +102,10 @@ public:
 	virtual void JointDestroyed(b2Joint* joint) { B2_NOT_USED(joint); }
 
 	// Callbacks for derived classes.
-	virtual void BeginContact(b2Contact* contact) { B2_NOT_USED(contact); }
-	virtual void EndContact(b2Contact* contact) { B2_NOT_USED(contact); }
-	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
-	virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
+	virtual void BeginContact(b2Contact* contact)  override { B2_NOT_USED(contact); }
+	virtual void EndContact(b2Contact* contact)  override { B2_NOT_USED(contact); }
+	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override;
+	virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) override
 	{
 		B2_NOT_USED(contact);
 		B2_NOT_USED(impulse);
@@ -162,45 +113,36 @@ public:
 
 	void ShiftOrigin(const b2Vec2& newOrigin);
 
+	DebugDraw g_debugDraw;
+	DebugDraw g_debugDrawTestBed;
+	cocos2d::DrawNode* debugDrawNode;
+
+	b2World* m_world;
+
 protected:
 	friend class DestructionListener;
 	friend class BoundaryListener;
 	friend class ContactListener;
-    friend class Box2DView;
 
 	b2Body* m_groundBody;
 	b2AABB m_worldAABB;
 	ContactPoint m_points[k_maxContactPoints];
 	int32 m_pointCount;
 	DestructionListener m_destructionListener;
-	GLESDebugDraw m_debugDraw;
 	int32 m_textLine;
-	b2World* m_world;
+
 	b2Body* m_bomb;
 	b2MouseJoint* m_mouseJoint;
 	b2Vec2 m_bombSpawnPoint;
 	bool m_bombSpawning;
 	b2Vec2 m_mouseWorld;
 	int32 m_stepCount;
-
+	int32 m_textIncrement;
 	b2Profile m_maxProfile;
 	b2Profile m_totalProfile;
 };
 
 typedef Test* TestCreateFcn();
-
 int RegisterTest(const char* category, const char* name, TestCreateFcn* fcn);
-
-//
-struct TestEntry
-{
-	const char* category;
-	const char* name;
-	TestCreateFcn* createFcn;
-};
-
-#define MAX_TESTS 256
-extern TestEntry g_testEntries[MAX_TESTS];
-extern int g_testCount;
 
 #endif
