@@ -253,6 +253,8 @@ bool SpriteFrameCache::reloadTexture(const std::string& spriteSheetFileName)
     if (isSpriteSheetInUse(spriteSheetFileName))
     {
         removeSpriteSheet(spriteSheetFileName); // we've removed the associated entry, so spriteSheetItr is no longer valid
+    }
+    else
     {
         //If one plist hasn't be loaded, we don't load it here.
         return false;
@@ -261,7 +263,7 @@ bool SpriteFrameCache::reloadTexture(const std::string& spriteSheetFileName)
     auto* loader = getSpriteSheetLoader(format);
     if (loader)
     {
-        loader->Reload(spriteSheetFileName, *this);
+        loader->reload(spriteSheetFileName, *this);
     }
     return true;
 }
