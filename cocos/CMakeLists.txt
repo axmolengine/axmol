@@ -39,7 +39,13 @@ if (NOT DEFINED CC_COMPAT_GL)
     set(CC_COMPAT_GL FALSE CACHE INTERNAL "Enabling CC_COMPAT_GL" )
 endif()
 
-project(cocos2d_libs)
+project(adxe_libs)
+
+if(XCODE)
+    # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
+    # set(CMAKE_INSTALL_RPATH "@executable_path/Frameworks")
+    set(CMAKE_XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/Frameworks" CACHE INTERNAL "")
+endif()
 
 set(ADXE_THIRDPARTY_NAME "thirdparty" CACHE INTERNAL "" )
 
