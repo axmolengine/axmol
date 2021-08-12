@@ -23,7 +23,7 @@
 // Inspired by a contribution from roman_m
 // Dimensions scooped from APE (http://www.cove.org/ape/index.htm)
 
-#include "../test.h"
+#include "test.h"
 
 class TheoJansen : public Test
 {
@@ -220,7 +220,7 @@ public:
 		CreateLeg(1.0f, wheelAnchor);
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		g_debugDraw.DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, toggle motor = m");
 		m_textLine += m_textIncrement;
@@ -230,8 +230,6 @@ public:
 
 	void Keyboard(int key) override
 	{
-
-		CCLOG("Keyboard(int key %i A:%i)", key, GLFW_KEY_A);
 		switch (key)
 		{
 		case GLFW_KEY_A:

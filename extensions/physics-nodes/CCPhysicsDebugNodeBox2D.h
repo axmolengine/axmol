@@ -31,90 +31,8 @@
 #include "cocos2d.h"
 
 
-struct b2AABB;
+//struct b2AABB;
 
-extern cocos2d::DrawNode* drawBox2D;
-
-/// Test settings. Some can be controlled in the GUI.
-struct Settings
-{
-    Settings()
-    {
-        viewCenter.Set(0.0f, 0.0f);
-        hz = 60.0f;
-        velocityIterations = 8;
-        positionIterations = 3;
-        drawShapes = 1;
-        drawJoints = 1;
-        drawAABBs = 0;
-        drawContactPoints = 0;
-        drawContactNormals = 0;
-        drawContactImpulse = 0;
-        drawFrictionImpulse = 0;
-        drawCOMs = 0;
-        drawStats = 0;
-        drawProfile = 0;
-        enableWarmStarting = 1;
-        enableContinuous = 1;
-        enableSubStepping = 0;
-        enableSleep = 1;
-        pause = 0;
-        singleStep = 0;
-    }
-
-    b2Vec2 viewCenter;
-    float hz;
-    int32 velocityIterations;
-    int32 positionIterations;
-    int32 drawShapes;
-    int32 drawJoints;
-    int32 drawAABBs;
-    int32 drawContactPoints;
-    int32 drawContactNormals;
-    int32 drawContactImpulse;
-    int32 drawFrictionImpulse;
-    int32 drawCOMs;
-    int32 drawStats;
-    int32 drawProfile;
-    int32 enableWarmStarting;
-    int32 enableContinuous;
-    int32 enableSubStepping;
-    int32 enableSleep;
-    int32 pause;
-    int32 singleStep;
-};
-
-struct ContactPoint
-{
-    b2Fixture* fixtureA;
-    b2Fixture* fixtureB;
-    b2Vec2 normal;
-    b2Vec2 position;
-    b2PointState state;
-    float normalImpulse;
-    float tangentImpulse;
-    float separation;
-};
-
-//struct Camera
-//{
-//    Camera()
-//    {
-//        m_center.Set(0.0f, 20.0f);
-//        m_zoom = 1.0f;
-//        m_width = 1280;
-//        m_height = 800;
-//    }
-//
-//    b2Vec2 ConvertScreenToWorld(const b2Vec2& screenPoint);
-//    b2Vec2 ConvertWorldToScreen(const b2Vec2& worldPoint);
-//    void BuildProjectionMatrix(float* m, float zBias);
-//
-//    b2Vec2 m_center;
-//    float m_zoom;
-//    int32 m_width;
-//    int32 m_height;
-//};
 
 // This class implements debug drawing callbacks that are invoked
 // inside b2World::Step.
@@ -122,14 +40,9 @@ struct ContactPoint
 //PhysicsDebugNode : public DrawNode
 class CC_EX_DLL DebugDraw : public b2Draw
 {
-
- //   cocos2d::g* mShaderProgram;
-   // GLint        mColorLocation;
-
-    cocos2d::DrawNode* drawBP = NULL;
-
-    void initShader( void );
 public:
+    void initShader( void );
+
     DebugDraw();
     ~DebugDraw();
 
@@ -158,7 +71,13 @@ public:
 
     void Flush();
 
+    cocos2d::DrawNode* GetDrawNode();
+    void SetDrawNode(cocos2d::DrawNode* drawNode);
+
     float mRatio;
+    cocos2d::DrawNode* drawBP = NULL;
+
+    cocos2d::Vec2 debugNodeOffset = { 250, 70 };
 };
 
 #endif //__PHYSICSNODES_DEBUGNODE_BOX2D_H__
