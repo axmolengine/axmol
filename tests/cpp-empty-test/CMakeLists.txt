@@ -141,7 +141,7 @@ setup_cocos_app_config(${APP_NAME})
 if(XCODE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
-
+    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.adxe.cpp-empty-test")
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.mac/Info.plist")
     elseif(IOS)
