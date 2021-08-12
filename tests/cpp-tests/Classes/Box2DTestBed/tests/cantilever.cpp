@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "../test.h"
+#include "test.h"
 
 // It is difficult to make a cantilever made of links completely rigid with weld joints.
 // You will have to use a high number of iterations to make them stiff.
