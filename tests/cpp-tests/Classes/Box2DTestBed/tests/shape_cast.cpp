@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 #include "box2d/b2_distance.h"
 
 class ShapeCast : public Test
@@ -90,7 +90,7 @@ public:
 		return new ShapeCast;
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
 

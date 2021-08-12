@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "settings.h"
-#include "test.h"
+//#include "settings.h"
+#include "../test.h"
 #include "box2d/b2_rope.h"
 #include "ImGuiEXT/CCImGuiEXT.h"
 
@@ -232,11 +232,11 @@ public:
 		ImGui::End();
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
-		float dt = settings.m_hertz > 0.0f ? 1.0f / settings.m_hertz : 0.0f;
+		float dt = 0.5; // settings.hz > 0.0f ? 1.0f / settings.hz : 0.0f;
 
-		if (settings.m_pause == 1 && settings.m_singleStep == 0)
+		if (settings->pause == 1 && settings->singleStep == 0)
 		{
 			dt = 0.0f;
 		}

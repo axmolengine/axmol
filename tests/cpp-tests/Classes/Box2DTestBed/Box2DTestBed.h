@@ -31,25 +31,12 @@
 #include "renderer/CCCustomCommand.h"
 
 
+
+extern cocos2d::Vec2 physicsDebugNodeOffset;
+
 DEFINE_TEST_SUITE(Box2DTestBedTests);
 
-
-class Test;
-typedef Test* TestCreateFcn();
-
-struct TestEntry
-{
-	const char* category;
-	const char* name;
-	TestCreateFcn* createFcn;
-};
-
-#define MAX_TESTS 256
-extern TestEntry g_testEntries[MAX_TESTS];
-
-int RegisterTest(const char* category, const char* name, TestCreateFcn* fcn);
-
-class Box2DTestBed : public TestCase, cocos2d::Layer
+class Box2DTestBed : public TestCase
 {
 public:
 	static Box2DTestBed* createWithEntryID(int entryId);
@@ -59,38 +46,65 @@ public:
 
 	void onEnter() override;
 	void onExit() override;
-
 	void onDrawImGui();
-
-	void initPhysics();
-	void update(float dt) override;
-
-	void createResetButton();
+	//void createResetButton();
+	//void reset(cocos2d::Ref* sender);
 
 	bool initWithEntryID(int entryId);
 
 	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
-	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 
-	void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) override;
-	void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) override;
+	cocos2d::DrawNode* draw = NULL;
+private:
+	int        m_entryID;
+	cocos2d::EventListenerTouchOneByOne* _touchListener;
+};
 
+struct TestEntry;
+class Test;
+class Box2DView : public cocos2d::Layer
+{
+public:
 	cocos2d::EventListenerTouchOneByOne* _touchListener;
 	cocos2d::EventListenerKeyboard* _keyboardListener;
-
 	TestEntry* m_entry;
 	Test* m_test;
 	int m_entryID;
 
-private:
+
+	void onDrawImGui();
+
+
+	Box2DView(void);
+	virtual ~Box2DView(void);
+
+	bool initWithEntryID(int entryId);
+	std::string title() const;
+	virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+
+	//    virtual void registerWithTouchDispatcher();
+	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)override;
+	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)override;
+	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)override;
+
+	void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event)override;
+	void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event)override;
+	//virtual void accelerometer(UIAccelerometer* accelerometer, cocos2d::Acceleration* acceleration);
+
+	static Box2DView* viewWithEntryID(int entryId);
+
+
+
+protected:
+	void onDraw(const cocos2d::Mat4& transform, uint32_t flags);
+
+	cocos2d::CallbackCommand  _customCmd;
+
+	cocos2d::Mat4 _modelViewMV;
+	//cocos2d::extension::PhysicsDebugNode* _debugLayer; // weak ref
 
 	b2World* world;
-	cocos2d::Texture2D* _spriteTexture;
-
-	// Debug stuff
-	cocos2d::DrawNode* debugDrawNode;
-	DebugDraw g_debugDraw;
 };
 
 #endif

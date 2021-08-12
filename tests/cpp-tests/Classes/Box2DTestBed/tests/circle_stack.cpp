@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 
 class CircleStack : public Test
 {
@@ -61,21 +61,21 @@ public:
 		}
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
 
-		//for (int32 i = 0; i < e_count; ++i)
-		//{
-		//	printf("%g ", m_bodies[i]->GetWorldCenter().y);
-		//}
+		for (int32 i = 0; i < e_count; ++i)
+		{
+			printf("%g ", m_bodies[i]->GetWorldCenter().y);
+		}
 
-		//for (int32 i = 0; i < e_count; ++i)
-		//{
-		//	printf("%g ", m_bodies[i]->GetLinearVelocity().y);
-		//}
+		for (int32 i = 0; i < e_count; ++i)
+		{
+			printf("%g ", m_bodies[i]->GetLinearVelocity().y);
+		}
 
-		//printf("\n");
+		printf("\n");
 	}
 
 	static Test* Create()

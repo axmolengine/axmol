@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 
 /// This tests stacking. It also shows how to use b2World::Query
 /// and b2TestOverlap.
@@ -225,7 +225,7 @@ public:
 		}
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
 

@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 
 /// This is a test of typical character collision scenarios. This does not
 /// show how you should implement a character in your application.
@@ -230,7 +230,7 @@ public:
 		}
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		b2Vec2 v = m_character->GetLinearVelocity();
 		v.x = -5.0f;

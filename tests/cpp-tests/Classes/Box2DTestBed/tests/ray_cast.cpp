@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "settings.h"
-#include "test.h"
+//#include "settings.h"
+#include "../test.h"
 #include "ImGuiEXT/CCImGuiEXT.h"
 
 enum
@@ -293,7 +293,7 @@ public:
 
 	void UpdateUI() override
 	{
-		ImGui::SetNextWindowPos(ImVec2(g_debugDrawTestBed.debugNodeOffset.x, g_debugDrawTestBed.debugNodeOffset.y));
+		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
 		ImGui::SetNextWindowSize(ImVec2(210.0f, 285.0f));
 		ImGui::Begin("Ray-cast Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
@@ -341,7 +341,7 @@ public:
 		ImGui::End();
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
 

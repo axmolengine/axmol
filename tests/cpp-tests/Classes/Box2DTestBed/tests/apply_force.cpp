@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 
 // This test shows how to apply forces and torques to a body.
 // It also shows how to use the friction joint that can be useful
@@ -167,7 +167,7 @@ public:
 		}
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		g_debugDraw.DrawString(5, m_textLine, "Forward (W), Turn (A) and (D)");
 		m_textLine += m_textIncrement;
@@ -190,6 +190,30 @@ public:
 		//}
 
 		Test::Step(settings);
+	}
+
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_W:
+		{
+			b2Vec2 f = m_body->GetWorldVector(b2Vec2(0.0f, -50.0f));
+			b2Vec2 p = m_body->GetWorldPoint(b2Vec2(0.0f, 3.0f));
+			m_body->ApplyForce(f, p, true);
+		}
+			break;
+
+		case GLFW_KEY_A:
+			m_body->ApplyTorque(10.0f, true);
+			break;
+
+		case GLFW_KEY_D:
+			m_body->ApplyTorque(-10.0f, true);
+			break;
+		}
+
+//		Test::Step(&settings);
 	}
 
 	static Test* Create()

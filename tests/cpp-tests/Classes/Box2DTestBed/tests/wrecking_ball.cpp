@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 #include "ImGuiEXT/CCImGuiEXT.h"
 
 /// This test shows how a distance joint can be used to stabilize a chain of
@@ -135,9 +135,10 @@ public:
 		}
 
 		ImGui::End();
+
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
 
@@ -150,6 +151,8 @@ public:
 			g_debugDraw.DrawString(5, m_textLine, "Distance Joint OFF");
 		}
 		m_textLine += m_textIncrement;
+
+		UpdateUI();
 	}
 
 	static Test* Create()

@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 #include "box2d/b2_time_of_impact.h"
 
 class TimeOfImpact : public Test
@@ -37,7 +37,7 @@ public:
 		return new TimeOfImpact;
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
 
@@ -55,8 +55,8 @@ public:
 		sweepB.a = 513.62781f; //  - 162.0f * b2_pi;
 		sweepB.localCenter.SetZero();
 
-		//sweepB.a0 -= 300.0f * b2_pi;
-		//sweepB.a -= 300.0f * b2_pi;
+		sweepB.a0 -= 300.0f * b2_pi;
+		sweepB.a -= 300.0f * b2_pi;
 
 		b2TOIInput input;
 		input.proxyA.Set(&m_shapeA, 0);
@@ -89,7 +89,7 @@ public:
 		b2Transform transformB;
 		sweepB.GetTransform(&transformB, 0.0f);
 		
-		//b2Vec2 localPoint(2.0f, -0.1f);
+		b2Vec2 localPoint(2.0f, -0.1f);
 
 		for (int32 i = 0; i < m_shapeB.m_count; ++i)
 		{
@@ -101,7 +101,7 @@ public:
 		for (int32 i = 0; i < m_shapeB.m_count; ++i)
 		{
 			vertices[i] = b2Mul(transformB, m_shapeB.m_vertices[i]);
-	}
+		}
 		g_debugDraw.DrawPolygon(vertices, m_shapeB.m_count, b2Color(0.5f, 0.7f, 0.9f));
 
 		sweepB.GetTransform(&transformB, 1.0f);

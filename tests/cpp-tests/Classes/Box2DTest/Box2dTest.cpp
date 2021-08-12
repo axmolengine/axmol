@@ -41,6 +41,11 @@ enum {
 };
 
 
+//DebugDraw stuff
+extern cocos2d::DrawNode* drawBox2D;
+extern cocos2d::Vec2 debugNodeOffset;
+
+
 Box2DTests::Box2DTests()
 {
     ADD_TEST_CASE(Box2DTest);
@@ -98,7 +103,6 @@ bool Box2DTest::init()
     this->addChild(menu);
     menu->setPosition(VisibleRect::right().x - 100, VisibleRect::top().y - 60);
 
-    drawBox2D = g_debugDraw.GetDrawNode();
     addChild(drawBox2D, 100);
     drawBox2D->setOpacity(150);
 
@@ -249,7 +253,7 @@ void Box2DTest::initPhysics()
     g_debugDraw.SetFlags(flags);
     g_debugDraw.mRatio = PTM_RATIO;
 
-    g_debugDraw.debugNodeOffset = { 0, 0 };
+    debugNodeOffset = { 0, 0 };
     world->SetDebugDraw(&g_debugDraw);
 }
 
@@ -274,8 +278,6 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(p.x / PTM_RATIO, p.y / PTM_RATIO);
-
-    CCLOG("Add PTM_RATIO sprite %0.2f x %0.2f", p.x / PTM_RATIO, p.y / PTM_RATIO);
 
     b2Body* body = world->CreateBody(&bodyDef);
 

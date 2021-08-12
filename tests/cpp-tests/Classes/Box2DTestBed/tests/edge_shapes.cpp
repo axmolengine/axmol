@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "settings.h"
-#include "test.h"
+//#include "settings.h"
+#include "../test.h"
 
 class EdgeShapesCallback : public b2RayCastCallback
 {
@@ -200,13 +200,13 @@ public:
 		}
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
-		bool advanceRay = settings.m_pause == 0 || settings.m_singleStep;
+		bool advanceRay = 0.1;// settings.m_pause == 0 || settings.m_singleStep;
 
 		Test::Step(settings);
 		g_debugDraw.DrawString(5, m_textLine, "Press 1-5 to drop stuff");
-		m_textLine += m_textIncrement;
+	//	m_textLine += m_textIncrement;
 
 		float L = 25.0f;
 		b2Vec2 point1(0.0f, 10.0f);

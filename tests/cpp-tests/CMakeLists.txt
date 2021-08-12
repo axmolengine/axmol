@@ -371,8 +371,7 @@ list(APPEND GAME_SOURCE
 
 if(WINDOWS OR MACOSX OR LINUX)
     list(APPEND GAME_HEADER
-        Classes/Box2DTestBed/tests/test.h
-        Classes/Box2DTestBed/tests/settings.h
+        Classes/Box2DTestBed/test.h
         Classes/Box2DTestBed/Box2DTestBed.h
      )
 

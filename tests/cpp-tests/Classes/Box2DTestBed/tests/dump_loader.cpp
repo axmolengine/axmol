@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 
 // This test holds worlds dumped using b2World::Dump.
 class DumpLoader : public Test
@@ -61,7 +61,7 @@ public:
 		m_ball->ApplyForceToCenter(b2Vec2(-1000, -400), true);
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		b2Vec2 v = m_ball->GetLinearVelocity();
 		float omega = m_ball->GetAngularVelocity();

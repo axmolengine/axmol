@@ -1,7 +1,6 @@
 // MIT License
 
 // Copyright (c) 2019 Erin Catto
-// Copyright(c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,8 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
-
+#include "../test.h"
 
 // This is a fun demo that shows off the wheel joint
 class Car : public Test
@@ -260,12 +258,12 @@ public:
 		}
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		g_debugDraw.DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, hz down = q, hz up = e");
 		m_textLine += m_textIncrement;
 
-		g_debugDrawTestBed.debugNodeOffset.x = 250 + m_car->GetPosition().x * -g_debugDrawTestBed.mRatio;
+	//	g_camera.m_center.x = m_car->GetPosition().x;
 		Test::Step(settings);
 	}
 

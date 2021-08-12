@@ -58,7 +58,7 @@ private:
     b2World* world;
 
     cocos2d::Texture2D* _spriteTexture;
-    cocos2d::DrawNode* drawBox2D;
+
     DebugDraw g_debugDraw;
     bool showDebugDraw = true;
 } ;

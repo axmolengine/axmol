@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 
 // Test distance joints, body destruction, and joint destruction.
 class Web : public Test
@@ -157,7 +157,7 @@ public:
 		}
 	}
 
-	void Keyboard(int key) override
+	void Keyboard(int key) 
 	{
 		switch (key)
 		{
@@ -187,7 +187,7 @@ public:
 		}
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
 		g_debugDraw.DrawString(5, m_textLine, "Press: (b) to delete a body, (j) to delete a joint");

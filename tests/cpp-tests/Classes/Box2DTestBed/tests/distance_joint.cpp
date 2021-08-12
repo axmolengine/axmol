@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 #include "ImGuiEXT/CCImGuiEXT.h"
 
 // This tests distance joints, body destruction, and joint destruction.

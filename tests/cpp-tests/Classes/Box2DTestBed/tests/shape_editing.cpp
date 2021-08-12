@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 
 class ShapeEditing : public Test
 {
@@ -51,41 +51,41 @@ public:
 		m_sensor = false;
 	}
 
-	void Keyboard(int key) override
-	{
-		switch (key)
-		{
-		case GLFW_KEY_C:
-			if (m_fixture2 == NULL)
-			{
-				b2CircleShape shape;
-				shape.m_radius = 3.0f;
-				shape.m_p.Set(0.5f, -4.0f);
-				m_fixture2 = m_body->CreateFixture(&shape, 10.0f);
-				m_body->SetAwake(true);
-			}
-			break;
+	//void Keyboard(int key) override
+	//{
+	//	switch (key)
+	//	{
+	//	case GLFW_KEY_C:
+	//		if (m_fixture2 == NULL)
+	//		{
+	//			b2CircleShape shape;
+	//			shape.m_radius = 3.0f;
+	//			shape.m_p.Set(0.5f, -4.0f);
+	//			m_fixture2 = m_body->CreateFixture(&shape, 10.0f);
+	//			m_body->SetAwake(true);
+	//		}
+	//		break;
 
-		case GLFW_KEY_D:
-			if (m_fixture2 != NULL)
-			{
-				m_body->DestroyFixture(m_fixture2);
-				m_fixture2 = NULL;
-				m_body->SetAwake(true);
-			}
-			break;
+	//	case GLFW_KEY_D:
+	//		if (m_fixture2 != NULL)
+	//		{
+	//			m_body->DestroyFixture(m_fixture2);
+	//			m_fixture2 = NULL;
+	//			m_body->SetAwake(true);
+	//		}
+	//		break;
 
-		case GLFW_KEY_S:
-			if (m_fixture2 != NULL)
-			{
-				m_sensor = !m_sensor;
-				m_fixture2->SetSensor(m_sensor);
-			}
-			break;
-		}
-	}
+	//	case GLFW_KEY_S:
+	//		if (m_fixture2 != NULL)
+	//		{
+	//			m_sensor = !m_sensor;
+	//			m_fixture2->SetSensor(m_sensor);
+	//		}
+	//		break;
+	//	}
+	//}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
 		g_debugDraw.DrawString(5, m_textLine, "Press: (c) create a shape, (d) destroy a shape.");

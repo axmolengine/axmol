@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 
 class Tumbler : public Test
 {
@@ -71,7 +71,7 @@ public:
 		m_count = 0;
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
 
@@ -99,4 +99,4 @@ public:
 	int32 m_count;
 };
 
-static int testIndex = RegisterTest("Benchmark", "Tumbler", Tumbler::Create);
+ static int testIndex = RegisterTest("Benchmark", "Tumbler", Tumbler::Create);

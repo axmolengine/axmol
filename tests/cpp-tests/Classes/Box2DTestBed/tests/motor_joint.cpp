@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "settings.h"
-#include "test.h"
+//#include "settings.h"
+#include "../test.h"
 
 /// This test shows how to use a motor joint. A motor joint
 /// can be used to animate a dynamic body. With finite motor forces
@@ -82,12 +82,12 @@ public:
 		}
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
-		if (m_go && settings.m_hertz > 0.0f)
-		{
-			m_time += 1.0f / settings.m_hertz;
-		}
+		//if (m_go && settings.m_hertz > 0.0f)
+		//{
+		//	m_time += 1.0f / settings.m_hertz;
+		//}
 
 		b2Vec2 linearOffset;
 		linearOffset.x = 6.0f * sinf(2.0f * m_time);

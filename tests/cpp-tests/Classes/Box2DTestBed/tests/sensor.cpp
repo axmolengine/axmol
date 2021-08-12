@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 #include "ImGuiEXT/CCImGuiEXT.h"
 
 // This shows how to use sensor shapes. Sensors don't have collision, but report overlap events.
@@ -148,7 +148,7 @@ public:
 		ImGui::End();
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
 

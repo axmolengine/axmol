@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 
 /// This stress tests the dynamic tree broad-phase. This also shows that tile
 /// based collision is _not_ smooth due to Box2D not knowing about adjacency.
@@ -123,7 +123,7 @@ public:
 		m_createTime = timer.GetMilliseconds();
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		const b2ContactManager& cm = m_world->GetContactManager();
 		int32 height = cm.m_broadPhase.GetTreeHeight();
@@ -139,12 +139,12 @@ public:
 			m_createTime, m_fixtureCount);
 		m_textLine += m_textIncrement;
 
-		//b2DynamicTree* tree = &m_world->m_contactManager.m_broadPhase.m_tree;
+	//	b2DynamicTree* tree = &m_world->m_contactManager.m_broadPhase.m_tree;
 
-		//if (m_stepCount == 400)
-		//{
-		//	tree->RebuildBottomUp();
-		//}
+		if (m_stepCount == 400)
+		{
+	//		tree->RebuildBottomUp();
+		}
 	}
 
 	static Test* Create()

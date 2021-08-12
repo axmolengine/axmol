@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "settings.h"
-#include "test.h"
+//#include "settings.h"
+#include "../test.h"
 #include "ImGuiEXT/CCImGuiEXT.h"
 
 // Test the prismatic joint with limits and motor options.
@@ -96,10 +96,10 @@ public:
 		ImGui::End();
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		Test::Step(settings);
-		float force = m_joint->GetMotorForce(settings.m_hertz);
+		float force = m_joint->GetMotorForce(settings->hz);
 		g_debugDraw.DrawString(5, m_textLine, "Motor Force = %4.0f", force);
 		m_textLine += m_textIncrement;
 	}

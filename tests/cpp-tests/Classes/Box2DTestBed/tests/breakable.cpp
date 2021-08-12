@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 
 // This is used to test sensor shapes.
 class Breakable : public Test
@@ -119,7 +119,7 @@ public:
 		body2->SetLinearVelocity(velocity2);
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		if (m_break)
 		{

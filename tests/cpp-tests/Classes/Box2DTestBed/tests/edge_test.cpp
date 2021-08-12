@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "test.h"
+#include "../test.h"
 #include "ImGuiEXT/CCImGuiEXT.h"
 
 class EdgeTest : public Test
@@ -251,7 +251,7 @@ public:
 		ImGui::End();
 	}
 
-	void Step(Settings& settings) override
+	void Step(Settings* settings) override
 	{
 		//if (glfwGetKey(g_mainWindow, GLFW_KEY_A) == GLFW_PRESS)
 		//{
