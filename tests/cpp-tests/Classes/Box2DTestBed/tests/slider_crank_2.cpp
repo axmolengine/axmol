@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//#include "settings.h"
-#include "../test.h"
+#include "settings.h"
+#include "test.h"
 
 // A motor driven slider crank with joint friction.
 
@@ -138,12 +138,12 @@ public:
 		}
 	}
 
-	void Step(Settings* settings) override
+	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
 		g_debugDraw.DrawString(5, m_textLine, "Keys: (f) toggle friction, (m) toggle motor");
 		m_textLine += m_textIncrement;
-		float torque = m_joint1->GetMotorTorque(settings->hz);
+		float torque = m_joint1->GetMotorTorque(settings.m_hertz);
 		g_debugDraw.DrawString(5, m_textLine, "Motor Torque = %5.0f", (float) torque);
 		m_textLine += m_textIncrement;
 	}
