@@ -41,9 +41,11 @@
 * Extension ```FairyGUI``` support
 * ASTC 4x4/6x6/8x8 support (if hardware decoder not present, use software decoder)
 * ETC2 RGB/RGBA support    (if hardware decoder not present, use software decoder)
-* Supports some 2D Physics Engines (at the same time and with 'DebugDraw' mode):
+* Supports some 2D physics engines:
   * Box2D
   * Chipmunk2D 
+* Supports 3D physics engine:
+  * Bullet Physics SDK
 * **ImGui integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
 
 Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information too.
