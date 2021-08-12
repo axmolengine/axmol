@@ -266,7 +266,7 @@ function(cocos_mark_code_files cocos_target)
         message(STATUS "target ${cocos_target} code group base is: ${root_dir}")
     endif()
 
-    message(STATUS "cocos_mark_code_files: ${cocos_target}")
+    # message(STATUS "cocos_mark_code_files: ${cocos_target}")
 
     get_property(file_list TARGET ${cocos_target} PROPERTY SOURCES)
 
@@ -326,7 +326,8 @@ function(setup_cocos_app_config app_name)
     if(XCODE AND BUILD_DEP_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
         # Embedded soft_oal embedded framework
         # XCODE_LINK_BUILD_PHASE_MODE BUILT_ONLY
-        message(STATUS "Embedding framework soft_oal...")
+        # ???CMake BUG: XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY works for first app
+        message(STATUS "Embedding framework soft_oal to ${app_name}...")
         set_target_properties(${app_name} PROPERTIES
             XCODE_LINK_BUILD_PHASE_MODE KNOWN_LOCATION
             XCODE_EMBED_FRAMEWORKS OpenAL

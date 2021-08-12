@@ -54,11 +54,11 @@ add_subdirectory(${ADXE_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 # prevent tests project to build "cocos2d-x/cocos" again
 set(BUILD_ENGINE_DONE ON)
 
-if(BUILD_TESTS) 
+if(BUILD_TESTS)
     # add cpp tests default
-    add_subdirectory(${ADXE_ROOT_PATH}/tests/cpp-empty-test ${ENGINE_BINARY_PATH}/tests/cpp-empty-test)
     add_subdirectory(${ADXE_ROOT_PATH}/tests/cpp-tests ${ENGINE_BINARY_PATH}/tests/cpp-tests)
-
+    add_subdirectory(${ADXE_ROOT_PATH}/tests/cpp-empty-test ${ENGINE_BINARY_PATH}/tests/cpp-empty-test)
+    
     if(BUILD_EXTENSION_FAIRYGUI)
       add_subdirectory(${ADXE_ROOT_PATH}/tests/fairygui-tests ${ENGINE_BINARY_PATH}/tests/fairygui-tests)
     endif()
