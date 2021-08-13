@@ -1882,8 +1882,8 @@ void SpriteFramesFromFileContent::onEnter()
 	SpriteTestDemo::onEnter();
 	auto s = Director::getInstance()->getWinSize();
 
-	std::string plist_content = FileUtils::getInstance()->getStringFromFile(sheetName() + ".plist");
-	Data image_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".png");
+    Data plist_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".plist");
+    Data image_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".png");
 
 	Image* image = new (std::nothrow) Image();
 	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize());
