@@ -69,7 +69,7 @@ bool SpriteFrameCache::init()
     _spriteFrames.reserve(20);
     clear();
 
-    registerSpriteSheetLoader("PLIST", std::make_unique<PlistSpriteSheetLoader>());
+    registerSpriteSheetLoader(std::make_unique<PlistSpriteSheetLoader>());
 
     return true;
 }
@@ -365,14 +365,15 @@ Map<std::string, SpriteFrame*>& SpriteFrameCache::getSpriteFrames()
     return _spriteFrames;
 }
 
-void SpriteFrameCache::registerSpriteSheetLoader(std::string formatId, std::unique_ptr<ISpriteSheetLoader> loader)
+void SpriteFrameCache::registerSpriteSheetLoader(std::unique_ptr<ISpriteSheetLoader> loader)
 {
-    if (_spriteSheetLoaders.find(formatId) != _spriteSheetLoaders.end())
+    if (_spriteSheetLoaders.find(loader->getId()) != _spriteSheetLoaders.end())
     {
         return;
     }
 
-    _spriteSheetLoaders.emplace(std::move(formatId), std::move(loader));
+    auto loaderId = loader->getId();
+    _spriteSheetLoaders.emplace(std::move(loaderId), std::move(loader));
 }
 
 void SpriteFrameCache::deregisterSpriteSheetLoader(const std::string& formatId)

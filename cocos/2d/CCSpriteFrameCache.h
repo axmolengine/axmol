@@ -235,7 +235,7 @@ public:
 
     void addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Rect& capInsets, Texture2D* texture);
 
-    void registerSpriteSheetLoader(std::string formatId, std::unique_ptr<ISpriteSheetLoader> loader);
+    void registerSpriteSheetLoader(std::unique_ptr<ISpriteSheetLoader> loader);
     void deregisterSpriteSheetLoader(const std::string& formatId);
 
     ISpriteSheetLoader* getSpriteSheetLoader(const std::string& format);

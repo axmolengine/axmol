@@ -64,6 +64,7 @@ class ISpriteSheetLoader
 {
 public:
     virtual ~ISpriteSheetLoader() = default;
+    virtual std::string getId() = 0;
     virtual void load(const std::string& filePath, SpriteFrameCache& cache) = 0;
     virtual void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) = 0;
     virtual void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) = 0;
@@ -82,6 +83,7 @@ public:
         const std::vector<int>& triangleIndices,
         PolygonInfo& polygonInfo);
 
+    std::string getId() override = 0;
     void load(const std::string& filePath, SpriteFrameCache& cache) override = 0;
     void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override = 0;
     void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override = 0;

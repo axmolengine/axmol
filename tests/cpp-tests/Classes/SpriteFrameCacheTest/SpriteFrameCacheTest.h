@@ -77,3 +77,21 @@ private:
     void loadSpriteFrames(const std::string &file, cocos2d::backend::PixelFormat expectedFormat);
 
 };
+
+
+class SpriteFrameCacheJsonAtlasTest : public TestCase
+{
+public:
+    CREATE_FUNC(SpriteFrameCacheJsonAtlasTest);
+
+    virtual std::string title() const override { return "Test Generic JSON Atlas"; }
+    virtual std::string subtitle() const override { return "It shouldn't crash"; }
+
+    SpriteFrameCacheJsonAtlasTest();
+    ~SpriteFrameCacheJsonAtlasTest() override;
+
+private:
+    void loadSpriteFrames(const std::string& file, cocos2d::backend::PixelFormat expectedFormat);
+
+    cocos2d::Label* infoLabel;
+};

@@ -1,0 +1,20 @@
+{"frames": [
+
+{
+	"filename": "grossini.png",
+	"frame": {"x":1,"y":1,"w":76,"h":111},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":6,"w":76,"h":111},
+	"sourceSize": {"w":85,"h":121}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "test_RGB8888_generic.png",
+	"format": "RGBA8888",
+	"size": {"w":78,"h":113},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:dd5636766c446a8af7ef3412176dd777:ef6b77cb31cb9547aa403602c0e428cd:22874113ba9d7c989064cbc8b1589155$"
+}
+}

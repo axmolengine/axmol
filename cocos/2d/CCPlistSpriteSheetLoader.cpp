@@ -18,6 +18,8 @@ using namespace std;
 
 NS_CC_BEGIN
 
+const std::string PlistSpriteSheetLoader::ID = "PLIST";
+
 void PlistSpriteSheetLoader::load(const std::string& filePath, SpriteFrameCache& cache)
 {
     CCASSERT(!filePath.empty(), "plist filename should not be nullptr");
@@ -164,7 +166,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
         return;
 
     auto spriteSheet = std::make_shared<SpriteSheet>();
-    spriteSheet->format = "PLIST";
+    spriteSheet->format = getId();
     spriteSheet->path = plist;
 
     auto& framesDict = dictionary["frames"].asValueMap();
@@ -392,7 +394,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict, Te
     CCASSERT(format >= 0 && format <= 3, "format is not supported for SpriteFrameCache addSpriteFramesWithDictionary:textureFilename:");
 
     auto spriteSheet = std::make_shared<SpriteSheet>();
-    spriteSheet->format = "PLIST";
+    spriteSheet->format = getId();
     spriteSheet->path = plist;
 
     for (auto& iter : framesDict)
