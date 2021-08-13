@@ -369,16 +369,12 @@ void DrawNode::drawCircle(const Vec2& center, float radius, float angle, unsigne
     
     for(unsigned int i = 0;i <= segments; i++) {
         float rads = i*coef;
-        float j = radius * cosf(rads + angle) * scaleX + center.x;
-        float k = radius * sinf(rads + angle) * scaleY + center.y;
-        
-        vertices[i].x = j;
-        vertices[i].y = k;
+        vertices[i].x = radius * cosf(rads + angle) * scaleX + center.x;
+        vertices[i].y = radius * sinf(rads + angle) * scaleY + center.y;
     }
     if(drawLineToCenter)
     {
-        vertices[segments+1].x = center.x;
-        vertices[segments+1].y = center.y;
+        vertices[segments + 1] = center;
         drawPoly(vertices, segments+2, true, color);
     }
     else

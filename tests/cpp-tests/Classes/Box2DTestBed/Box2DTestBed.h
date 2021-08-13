@@ -91,6 +91,7 @@ private:
 	// Debug stuff
 	cocos2d::DrawNode* debugDrawNode;
 	DebugDraw g_debugDraw;
+
 };
 
 #endif
