@@ -3,6 +3,552 @@
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 
+int lua_cocos2dx_extension_Controller_receiveExternalKeyEvent(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Controller* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Controller*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_extension_Controller_receiveExternalKeyEvent'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        int arg0;
+        bool arg1;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.Controller:receiveExternalKeyEvent");
+
+        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "cc.Controller:receiveExternalKeyEvent");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_receiveExternalKeyEvent'", nullptr);
+            return 0;
+        }
+        cobj->receiveExternalKeyEvent(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Controller:receiveExternalKeyEvent",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_receiveExternalKeyEvent'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_getDeviceName(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Controller* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Controller*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_extension_Controller_getDeviceName'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_getDeviceName'", nullptr);
+            return 0;
+        }
+        const std::string& ret = cobj->getDeviceName();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Controller:getDeviceName",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_getDeviceName'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_isConnected(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Controller* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Controller*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_extension_Controller_isConnected'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_isConnected'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isConnected();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Controller:isConnected",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_isConnected'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_getDeviceId(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Controller* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Controller*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_extension_Controller_getDeviceId'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_getDeviceId'", nullptr);
+            return 0;
+        }
+        int ret = cobj->getDeviceId();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Controller:getDeviceId",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_getDeviceId'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_getKeyStatus(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Controller* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Controller*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_extension_Controller_getKeyStatus'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        int arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.Controller:getKeyStatus");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_getKeyStatus'", nullptr);
+            return 0;
+        }
+        const cocos2d::Controller::_keyStatus& ret = cobj->getKeyStatus(arg0);
+        #pragma warning NO CONVERSION FROM NATIVE FOR _keyStatus;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Controller:getKeyStatus",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_getKeyStatus'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_setTag(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Controller* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Controller*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_extension_Controller_setTag'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        int arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.Controller:setTag");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_setTag'", nullptr);
+            return 0;
+        }
+        cobj->setTag(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Controller:setTag",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_setTag'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_getTag(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Controller* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Controller*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_extension_Controller_getTag'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_getTag'", nullptr);
+            return 0;
+        }
+        int ret = cobj->getTag();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Controller:getTag",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_getTag'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_getAllController(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_getAllController'", nullptr);
+            return 0;
+        }
+        const std::vector<cocos2d::Controller *>& ret = cocos2d::Controller::getAllController();
+        object_to_luaval<std::vector<cocos2d::Controller >&>(tolua_S, "std::vector<cocos2d::Controller *>",(std::vector<cocos2d::Controller *>&)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Controller:getAllController",argc, 0);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_getAllController'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_startDiscoveryController(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_startDiscoveryController'", nullptr);
+            return 0;
+        }
+        cocos2d::Controller::startDiscoveryController();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Controller:startDiscoveryController",argc, 0);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_startDiscoveryController'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_stopDiscoveryController(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_stopDiscoveryController'", nullptr);
+            return 0;
+        }
+        cocos2d::Controller::stopDiscoveryController();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Controller:stopDiscoveryController",argc, 0);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_stopDiscoveryController'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_getControllerByDeviceId(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        int arg0;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.Controller:getControllerByDeviceId");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_getControllerByDeviceId'", nullptr);
+            return 0;
+        }
+        cocos2d::Controller* ret = cocos2d::Controller::getControllerByDeviceId(arg0);
+        object_to_luaval<cocos2d::Controller>(tolua_S, "cc.Controller",(cocos2d::Controller*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Controller:getControllerByDeviceId",argc, 1);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_getControllerByDeviceId'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_extension_Controller_getControllerByTag(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.Controller",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        int arg0;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.Controller:getControllerByTag");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Controller_getControllerByTag'", nullptr);
+            return 0;
+        }
+        cocos2d::Controller* ret = cocos2d::Controller::getControllerByTag(arg0);
+        object_to_luaval<cocos2d::Controller>(tolua_S, "cc.Controller",(cocos2d::Controller*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Controller:getControllerByTag",argc, 1);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_Controller_getControllerByTag'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_cocos2dx_extension_Controller_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (Controller)");
+    return 0;
+}
+
+int lua_register_cocos2dx_extension_Controller(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"cc.Controller");
+    tolua_cclass(tolua_S,"Controller","cc.Controller","",nullptr);
+
+    tolua_beginmodule(tolua_S,"Controller");
+        tolua_function(tolua_S,"receiveExternalKeyEvent",lua_cocos2dx_extension_Controller_receiveExternalKeyEvent);
+        tolua_function(tolua_S,"getDeviceName",lua_cocos2dx_extension_Controller_getDeviceName);
+        tolua_function(tolua_S,"isConnected",lua_cocos2dx_extension_Controller_isConnected);
+        tolua_function(tolua_S,"getDeviceId",lua_cocos2dx_extension_Controller_getDeviceId);
+        tolua_function(tolua_S,"getKeyStatus",lua_cocos2dx_extension_Controller_getKeyStatus);
+        tolua_function(tolua_S,"setTag",lua_cocos2dx_extension_Controller_setTag);
+        tolua_function(tolua_S,"getTag",lua_cocos2dx_extension_Controller_getTag);
+        tolua_function(tolua_S,"getAllController", lua_cocos2dx_extension_Controller_getAllController);
+        tolua_function(tolua_S,"startDiscoveryController", lua_cocos2dx_extension_Controller_startDiscoveryController);
+        tolua_function(tolua_S,"stopDiscoveryController", lua_cocos2dx_extension_Controller_stopDiscoveryController);
+        tolua_function(tolua_S,"getControllerByDeviceId", lua_cocos2dx_extension_Controller_getControllerByDeviceId);
+        tolua_function(tolua_S,"getControllerByTag", lua_cocos2dx_extension_Controller_getControllerByTag);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(cocos2d::Controller).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Controller";
+    g_typeCast[typeName] = "cc.Controller";
+    return 1;
+}
+
 int lua_cocos2dx_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5794,6 +6340,7 @@ TOLUA_API int register_all_cocos2dx_extension(lua_State* tolua_S)
 	lua_register_cocos2dx_extension_EventListenerAssetsManagerEx(tolua_S);
 	lua_register_cocos2dx_extension_AssetsManager(tolua_S);
 	lua_register_cocos2dx_extension_Manifest(tolua_S);
+	lua_register_cocos2dx_extension_Controller(tolua_S);
 	lua_register_cocos2dx_extension_EventAssetsManagerEx(tolua_S);
 	lua_register_cocos2dx_extension_ParticleSystem3D(tolua_S);
 	lua_register_cocos2dx_extension_PUParticleSystem3D(tolua_S);
