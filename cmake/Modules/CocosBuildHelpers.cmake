@@ -300,6 +300,11 @@ function(setup_cocos_app_config app_name)
         if(IOS AND (NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
             set_xcode_property(${APP_NAME} CODE_SIGNING_REQUIRED "YES")
             set_xcode_property(${APP_NAME} CODE_SIGNING_ALLOWED "YES")
+        else()
+            # By default, explicit disable codesign for macOS PC
+            set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "")
+            set_xcode_property(${APP_NAME} CODE_SIGNING_ALLOWED "NO")
+            set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "NO")
         endif()
     elseif(MSVC)
         # visual studio default is Console app, but we need Windows app
