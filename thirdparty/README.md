@@ -14,6 +14,11 @@
 - Version: 2.4.1
 - License: MIT
 
+## Box2D-optimized
+- Upstream: https://github.com/mtsamis/box2d-optimized
+- Version: 7ef46c1
+- License: MIT
+
 ## Bullet
 - Upstream: https://github.com/bulletphysics/bullet3
 - Version: 3.09
