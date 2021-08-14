@@ -67,9 +67,9 @@ public:
 
 	void UpdateUI() override
 	{
-		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
+		//ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
 		ImGui::SetNextWindowSize(ImVec2(260.0f, 150.0f));
-		ImGui::Begin("Joint Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("Joint Controls", nullptr, ImGuiWindowFlags_NoResize);
 
 		if (ImGui::SliderFloat("Length", &m_length, 0.0f, 20.0f, "%.0f"))
 		{
