@@ -31,9 +31,6 @@
 #include "cocos2d.h"
 
 
-//struct b2AABB;
-
-
 // This class implements debug drawing callbacks that are invoked
 // inside b2World::Step.
 
@@ -63,9 +60,9 @@ public:
 
     void DrawPoint(const b2Vec2& p, float size, const b2Color& color) override;
 
-    void DrawString(int x, int y, const char* string, ...); 
+    void DrawString(int x, int y, const char* fmt, ...);
 
-    void DrawString(const b2Vec2& p, const char* string, ...);
+    void DrawString(const b2Vec2& p, const char* fmt, ...);
 
     void DrawAABB(b2AABB* aabb, const b2Color& color);
 
@@ -73,11 +70,18 @@ public:
 
     cocos2d::DrawNode* GetDrawNode();
     void SetDrawNode(cocos2d::DrawNode* drawNode);
+    cocos2d::Vec2& GetDebugNodeOffset();
 
     float mRatio;
     cocos2d::DrawNode* drawBP = NULL;
+    std::string debugString = "";
 
-    cocos2d::Vec2 debugNodeOffset = { 250, 70 };
+    cocos2d::Vec2 debugNodeOffset;
+private:
+
+
+
+
 };
 
 #endif //__PHYSICSNODES_DEBUGNODE_BOX2D_H__

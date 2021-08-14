@@ -22,7 +22,9 @@
 // SOFTWARE.
 
 #include "test.h"
+#include "extensions/cocos-ext.h"
 
+USING_NS_CC_EXT;
 
 // This is a fun demo that shows off the wheel joint
 class Car : public Test
@@ -265,7 +267,9 @@ public:
 		g_debugDraw.DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, hz down = q, hz up = e");
 		m_textLine += m_textIncrement;
 
-		g_debugDrawTestBed.debugNodeOffset.x = 250 + m_car->GetPosition().x * -g_debugDrawTestBed.mRatio;
+		//g_camera.m_center.x = m_car->GetPosition().x;
+		g_debugDraw.debugNodeOffset.x += m_car->GetPosition().x;
+
 		Test::Step(settings);
 	}
 

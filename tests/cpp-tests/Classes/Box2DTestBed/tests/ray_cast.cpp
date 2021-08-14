@@ -293,9 +293,9 @@ public:
 
 	void UpdateUI() override
 	{
-		ImGui::SetNextWindowPos(ImVec2(g_debugDrawTestBed.debugNodeOffset.x, g_debugDrawTestBed.debugNodeOffset.y));
+		//ImGui::SetNextWindowPos(ImVec2(g_debugDrawTestBed.debugNodeOffset.x, g_debugDrawTestBed.debugNodeOffset.y));
 		ImGui::SetNextWindowSize(ImVec2(210.0f, 285.0f));
-		ImGui::Begin("Ray-cast Controls", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("Ray-cast Controls", nullptr, ImGuiWindowFlags_NoResize);
 
 		if (ImGui::Button("Shape 1"))
 		{

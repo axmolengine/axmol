@@ -114,8 +114,8 @@ public:
 	void ShiftOrigin(const b2Vec2& newOrigin);
 
 	DebugDraw g_debugDraw;
-	DebugDraw g_debugDrawTestBed;
 	cocos2d::DrawNode* debugDrawNode;
+
 
 	b2World* m_world;
 

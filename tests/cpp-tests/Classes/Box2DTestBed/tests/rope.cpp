@@ -91,9 +91,9 @@ public:
 
 	void UpdateUI() override
 	{
-		ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
+		//ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
 		ImGui::SetNextWindowSize(ImVec2(200.0f, 700.0f));
-		ImGui::Begin("Tuning", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("Tuning", nullptr, ImGuiWindowFlags_NoResize);
 
 		ImGui::Separator();
 

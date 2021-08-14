@@ -248,7 +248,6 @@ void Box2DTest::initPhysics()
     flags += 0 * b2Draw::e_centerOfMassBit;
     g_debugDraw.SetFlags(flags);
     g_debugDraw.mRatio = PTM_RATIO;
-
     g_debugDraw.debugNodeOffset = { 0, 0 };
     world->SetDebugDraw(&g_debugDraw);
 }
