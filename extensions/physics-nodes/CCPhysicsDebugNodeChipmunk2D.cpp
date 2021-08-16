@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 #include "CCPhysicsDebugNodeChipmunk2D.h"
-
 #include "chipmunk/chipmunk_private.h"
-
 
 #include "base/ccTypes.h"
 #include "math/CCGeometry.h"
-
 
 #include <stdlib.h>
 #include <stdio.h>

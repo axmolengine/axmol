@@ -23,6 +23,13 @@
 #include <stdio.h>
 
 
+USING_NS_CC;
+USING_NS_CC_EXT;
+
+#if defined(CC_PLATFORM_PC)
+extern cocos2d::Label* labelDebugDraw;
+#endif
+
 void DestructionListener::SayGoodbye(b2Joint * joint)
 {
 	if (test->m_mouseJoint == joint)
@@ -104,7 +111,7 @@ void Test::PreSolve(b2Contact * contact, const b2Manifold * oldManifold)
 
 void Test::DrawTitle(const char* string)
 {
-	g_debugDraw.DrawString(5, 5, string);
+	DrawString(5, 5, string);
 	m_textLine = int32(26.0f);
 }
 
@@ -291,8 +298,8 @@ void Test::Step(Settings& settings)
 			timeStep = 0.0f;
 		}
 
-		g_debugDraw.DrawString(5, m_textLine, "****PAUSED****");
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "****PAUSED****");
+		
 	}
 
 	uint32 flags = 0;
@@ -323,15 +330,15 @@ void Test::Step(Settings& settings)
 		int32 bodyCount = m_world->GetBodyCount();
 		int32 contactCount = m_world->GetContactCount();
 		int32 jointCount = m_world->GetJointCount();
-		g_debugDraw.DrawString(5, m_textLine, "bodies/contacts/joints = %d/%d/%d", bodyCount, contactCount, jointCount);
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "bodies/contacts/joints = %d/%d/%d", bodyCount, contactCount, jointCount);
+		
 
 		int32 proxyCount = m_world->GetProxyCount();
 		int32 height = m_world->GetTreeHeight();
 		int32 balance = m_world->GetTreeBalance();
 		float quality = m_world->GetTreeQuality();
-		g_debugDraw.DrawString(5, m_textLine, "proxies/height/balance/quality = %d/%d/%d/%g", proxyCount, height, balance, quality);
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "proxies/height/balance/quality = %d/%d/%d/%g", proxyCount, height, balance, quality);
+		
 	}
 
 	// Track maximum profile times
@@ -375,22 +382,22 @@ void Test::Step(Settings& settings)
 			aveProfile.broadphase = scale * m_totalProfile.broadphase;
 		}
 
-		g_debugDraw.DrawString(5, m_textLine, "step [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.step, aveProfile.step, m_maxProfile.step);
-		m_textLine += m_textIncrement;
-		g_debugDraw.DrawString(5, m_textLine, "collide [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.collide, aveProfile.collide, m_maxProfile.collide);
-		m_textLine += m_textIncrement;
-		g_debugDraw.DrawString(5, m_textLine, "solve [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solve, aveProfile.solve, m_maxProfile.solve);
-		m_textLine += m_textIncrement;
-		g_debugDraw.DrawString(5, m_textLine, "solve init [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solveInit, aveProfile.solveInit, m_maxProfile.solveInit);
-		m_textLine += m_textIncrement;
-		g_debugDraw.DrawString(5, m_textLine, "solve velocity [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solveVelocity, aveProfile.solveVelocity, m_maxProfile.solveVelocity);
-		m_textLine += m_textIncrement;
-		g_debugDraw.DrawString(5, m_textLine, "solve position [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solvePosition, aveProfile.solvePosition, m_maxProfile.solvePosition);
-		m_textLine += m_textIncrement;
-		g_debugDraw.DrawString(5, m_textLine, "solveTOI [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solveTOI, aveProfile.solveTOI, m_maxProfile.solveTOI);
-		m_textLine += m_textIncrement;
-		g_debugDraw.DrawString(5, m_textLine, "broad-phase [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.broadphase, aveProfile.broadphase, m_maxProfile.broadphase);
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "step [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.step, aveProfile.step, m_maxProfile.step);
+		
+		DrawString(5, m_textLine, "collide [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.collide, aveProfile.collide, m_maxProfile.collide);
+		
+		DrawString(5, m_textLine, "solve [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solve, aveProfile.solve, m_maxProfile.solve);
+		
+		DrawString(5, m_textLine, "solve init [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solveInit, aveProfile.solveInit, m_maxProfile.solveInit);
+		
+		DrawString(5, m_textLine, "solve velocity [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solveVelocity, aveProfile.solveVelocity, m_maxProfile.solveVelocity);
+		
+		DrawString(5, m_textLine, "solve position [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solvePosition, aveProfile.solvePosition, m_maxProfile.solvePosition);
+		
+		DrawString(5, m_textLine, "solveTOI [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.solveTOI, aveProfile.solveTOI, m_maxProfile.solveTOI);
+		
+		DrawString(5, m_textLine, "broad-phase [ave] (max) = %5.2f [%6.2f] (%6.2f)", p.broadphase, aveProfile.broadphase, m_maxProfile.broadphase);
+		
 	}
 
 	if (m_bombSpawning)
@@ -450,4 +457,52 @@ void Test::Step(Settings& settings)
 void Test::ShiftOrigin(const b2Vec2 & newOrigin)
 {
 	m_world->ShiftOrigin(newOrigin);
+}
+
+void Test::initShader(void)
+{
+	// initShader is unsupported
+}
+
+void Test::DrawString(int x, int y, const char* fmt, ...)
+{
+#if defined(CC_PLATFORM_PC)
+	debugString.append(std::string(fmt));
+	debugString.append("\n");
+	labelDebugDraw->setString(debugString);
+//	labelDebugDraw->setPosition(x, y);
+#endif
+}
+
+void Test::DrawString(const b2Vec2& pw, const char* fmt, ...)
+{
+#if defined(CC_PLATFORM_PC)
+	debugString.append(std::string(fmt));
+	debugString.append("\n");
+	labelDebugDraw->setString(debugString);
+//	labelDebugDraw->setPosition(pw.x, pw.y);
+#endif
+}
+
+
+
+void Test::DrawAABB(b2AABB* aabb, const b2Color& color)
+{
+	b2Vec2 p1 = aabb->lowerBound;
+	b2Vec2 p2 = b2Vec2(aabb->upperBound.x, aabb->lowerBound.y);
+	b2Vec2 p3 = aabb->upperBound;
+	b2Vec2 p4 = b2Vec2(aabb->lowerBound.x, aabb->upperBound.y);
+
+	Vec2 verts[] = {
+	Vec2(p1.x * g_debugDraw.mRatio, p1.y * g_debugDraw.mRatio) + g_debugDraw.debugNodeOffset ,
+	Vec2(p2.x * g_debugDraw.mRatio, p2.y * g_debugDraw.mRatio) + g_debugDraw.debugNodeOffset ,
+	Vec2(p3.x * g_debugDraw.mRatio, p3.y * g_debugDraw.mRatio) + g_debugDraw.debugNodeOffset ,
+	Vec2(p4.x * g_debugDraw.mRatio, p4.y * g_debugDraw.mRatio) + g_debugDraw.debugNodeOffset ,
+	};
+	debugDrawNode->drawPolygon(verts, sizeof(verts) / sizeof(verts[0]), Color4F(color.r / 2, color.g / 2, color.b / 2, 0), 0.4f, Color4F(color.r, color.g, color.b, color.a));
+}
+
+void Test::Flush()
+{
+	// Flush is unsupported
 }

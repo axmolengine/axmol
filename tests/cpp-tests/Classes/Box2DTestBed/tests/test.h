@@ -113,8 +113,16 @@ public:
 
 	void ShiftOrigin(const b2Vec2& newOrigin);
 
+	void initShader(void);
+	void DrawString(int x, int y, const char* fmt, ...);
+	void DrawString(const b2Vec2& p, const char* fmt, ...);
+	void DrawAABB(b2AABB* aabb, const b2Color& color);
+	void Flush();
+
 	DebugDraw g_debugDraw;
 	cocos2d::DrawNode* debugDrawNode;
+	//only testBed 
+	 std::string debugString = "";
 
 
 	b2World* m_world;

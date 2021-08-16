@@ -33,6 +33,29 @@
 
 DEFINE_TEST_SUITE(Box2DTestBedTests);
 
+//GLFW_KEY_1
+//GLFW_KEY_2
+//GLFW_KEY_3
+//GLFW_KEY_4
+//GLFW_KEY_5
+//GLFW_KEY_A
+//GLFW_KEY_B
+//GLFW_KEY_C
+//GLFW_KEY_COMMA
+//GLFW_KEY_D
+//GLFW_KEY_E
+//GLFW_KEY_F
+//GLFW_KEY_G
+//GLFW_KEY_H
+//GLFW_KEY_J
+//GLFW_KEY_K
+//GLFW_KEY_M
+//GLFW_KEY_PERIOD
+//GLFW_KEY_Q
+//GLFW_KEY_S
+//GLFW_KEY_W
+
+
 
 class Test;
 typedef Test* TestCreateFcn();
@@ -73,6 +96,12 @@ public:
 	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 
+
+	void onMouseDown(cocos2d::Event* event);
+	void onMouseUp(cocos2d::Event* event);
+	void onMouseMove(cocos2d::Event* event);
+	void onMouseScroll(cocos2d::Event* event);
+
 	void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) override;
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) override;
 
@@ -87,11 +116,13 @@ private:
 
 	b2World* world;
 	cocos2d::Texture2D* _spriteTexture;
+	b2Vec2 pos;
+	b2Vec2 oldPos;
+	bool button[2];
 
-	// Debug stuff
+	// Debug stuff to TestBed
 	cocos2d::DrawNode* debugDrawNode;
 	DebugDraw g_debugDraw;
-
 };
 
 #endif
