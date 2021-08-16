@@ -78,7 +78,16 @@ SpriteFrameCache::~SpriteFrameCache()
 {
 }
 
-void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFileName, Texture2D* texture, const std::string& format)
+void SpriteFrameCache::addSpriteFramesWithFileAndTexture(const std::string& spriteSheetFileName, const std::string& textureFileName, const std::string& format)
+{
+    auto* loader = getSpriteSheetLoader(format);
+    if (loader)
+    {
+        loader->load(spriteSheetFileName, textureFileName, *this);
+    }
+}
+
+void SpriteFrameCache::addSpriteFramesWithFileAndTexture(const std::string& spriteSheetFileName, Texture2D* texture, const std::string& format)
 {
     auto* loader = getSpriteSheetLoader(format);
     if (loader)

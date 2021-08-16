@@ -759,7 +759,7 @@ SpriteBatchNodeReorderIssue767::SpriteBatchNodeReorderIssue767()
 {
     auto s = Director::getInstance()->getWinSize();        
 
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("animations/ghosts.plist", "animations/ghosts.png");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFileAndTexture("animations/ghosts.plist", "animations/ghosts.png");
     Node *aParent;
     Sprite *l1, *l2a, *l2b, *l3a1, *l3a2, *l3b1, *l3b2;
 
@@ -1670,8 +1670,8 @@ void SpriteFrameTest::onEnter()
     //     SpriteFrameCache::getInstance()->removeUnusedSpriteFrames);
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
-    cache->addSpriteFramesWithFile("animations/grossini_blue.plist", "animations/grossini_blue.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_blue.plist", "animations/grossini_blue.png");
 
     //
     // Animation using Sprite BatchNode
@@ -1816,7 +1816,7 @@ void SpriteFrameAliasNameTest::onEnter()
     // SpriteFrames each contain a texture id and a rect (frame).
 
     auto cache = SpriteFrameCache::getInstance();
-    cache->addSpriteFramesWithFile("animations/grossini-aliases.plist", "animations/grossini-aliases.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini-aliases.plist", "animations/grossini-aliases.png");
 
     //
     // Animation using Sprite batch
@@ -1969,7 +1969,7 @@ void SpriteOffsetAnchorRotation::onEnter()
     auto s = Director::getInstance()->getWinSize();        
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
 
     for(int i=0;i<3;i++) 
     {
@@ -2048,7 +2048,7 @@ SpriteBatchNodeOffsetAnchorRotation::SpriteBatchNodeOffsetAnchorRotation()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     auto spritebatch = SpriteBatchNode::create("animations/grossini.png");
     addChild(spritebatch);
@@ -2130,7 +2130,7 @@ SpriteOffsetAnchorScale::SpriteOffsetAnchorScale()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     for(int i=0;i<3;i++) 
     {
@@ -2210,7 +2210,7 @@ SpriteBatchNodeOffsetAnchorScale::SpriteBatchNodeOffsetAnchorScale()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     auto spritesheet = SpriteBatchNode::create("animations/grossini.png");
     addChild(spritesheet);
@@ -3275,7 +3275,7 @@ SpriteBatchNodeSkewNegativeScaleChildren::SpriteBatchNodeSkewNegativeScaleChildr
 
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
 
     auto spritebatch = SpriteBatchNode::create("animations/grossini.png");
     addChild(spritebatch);
@@ -3334,7 +3334,7 @@ SpriteSkewNegativeScaleChildren::SpriteSkewNegativeScaleChildren()
 
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
 
     auto parent = Node::create();
     addChild(parent);
@@ -3709,7 +3709,7 @@ SpriteOffsetAnchorSkew::SpriteOffsetAnchorSkew()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
 
     for (int i = 0; i < 3; i++)
     {
@@ -3789,7 +3789,7 @@ SpriteBatchNodeOffsetAnchorSkew::SpriteBatchNodeOffsetAnchorSkew()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     auto spritebatch = SpriteBatchNode::create("animations/grossini.png");
     addChild(spritebatch);
@@ -3872,7 +3872,7 @@ SpriteOffsetAnchorSkewScale::SpriteOffsetAnchorSkewScale()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
 
     for (int i = 0; i < 3; i++)
     {
@@ -3958,7 +3958,7 @@ SpriteBatchNodeOffsetAnchorSkewScale::SpriteBatchNodeOffsetAnchorSkewScale()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     auto spritebatch = SpriteBatchNode::create("animations/grossini.png");
     addChild(spritebatch);
@@ -4049,7 +4049,7 @@ SpriteOffsetAnchorFlip::SpriteOffsetAnchorFlip()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
 
     for (int i = 0; i < 3; i++)
     {
@@ -4128,7 +4128,7 @@ SpriteBatchNodeOffsetAnchorFlip::SpriteBatchNodeOffsetAnchorFlip()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     auto spritebatch = SpriteBatchNode::create("animations/grossini.png");
     addChild(spritebatch);
@@ -4413,7 +4413,7 @@ SpriteOffsetAnchorRotationalSkew::SpriteOffsetAnchorRotationalSkew()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     for(int i=0;i<3;i++)
     {
@@ -4493,7 +4493,7 @@ SpriteBatchNodeOffsetAnchorRotationalSkew::SpriteBatchNodeOffsetAnchorRotational
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     auto spritebatch = SpriteBatchNode::create("animations/grossini.png");
     addChild(spritebatch);
@@ -4576,7 +4576,7 @@ SpriteOffsetAnchorRotationalSkewScale::SpriteOffsetAnchorRotationalSkewScale()
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     for(int i=0;i<3;i++)
     {
@@ -4661,7 +4661,7 @@ SpriteBatchNodeOffsetAnchorRotationalSkewScale::SpriteBatchNodeOffsetAnchorRotat
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     auto spritebatch = SpriteBatchNode::create("animations/grossini.png");
     addChild(spritebatch);
@@ -4751,7 +4751,7 @@ SpriteRotationalSkewNegativeScaleChildren::SpriteRotationalSkewNegativeScaleChil
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     auto parent = Node::create();
     addChild(parent);
@@ -4818,7 +4818,7 @@ SpriteBatchNodeRotationalSkewNegativeScaleChildren::SpriteBatchNodeRotationalSke
     
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");
-    cache->addSpriteFramesWithFile("animations/grossini_gray.plist", "animations/grossini_gray.png");
+    cache->addSpriteFramesWithFileAndTexture("animations/grossini_gray.plist", "animations/grossini_gray.png");
     
     auto parent = SpriteBatchNode::create("animations/grossini.png");
     addChild(parent);
