@@ -215,7 +215,21 @@ public:
      * @js NA
      */
     void drawSolidPoly(const Vec2 *poli, unsigned int numberOfPoints, const Color4F &color);
-    
+
+     /** Draws a solid circle given the center, radius and number of segments.
+      * @param center The circle center point.
+      * @param radius The circle rotate of radius.
+      * @param angle  The circle angle.
+      * @param segments The number of segments.
+      * @param scaleX The scale value in x.
+      * @param scaleY The scale value in y.
+      * @param fillColor The color will fill in polygon.
+      * @param borderWidth The border of line width.
+      * @param borderColor The border of line color.
+      * @js NA
+      */
+    void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4F& fillColor, float borderWidth, const Color4F& borderColor);
+
     /** Draws a solid circle given the center, radius and number of segments.
      * @param center The circle center point.
      * @param radius The circle rotate of radius.
