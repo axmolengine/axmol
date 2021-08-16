@@ -228,7 +228,7 @@ public:
       * @param borderColor The border of line color.
       * @js NA
       */
-    void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4F& fillColor, float borderWidth, const Color4F& borderColor);
+    void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4F& fillColor, float borderWidth, const Color4F& borderColor);
 
     /** Draws a solid circle given the center, radius and number of segments.
      * @param center The circle center point.
