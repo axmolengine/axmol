@@ -22,7 +22,6 @@
 
 #include "2d/CCDrawNode.h"
 #include "box2d/box2d.h"
-
 // This class implements debug drawing callbacks that are invoked inside b2World::Step.
 class DebugDraw : public b2Draw
 {

@@ -123,6 +123,7 @@ private:
 	// Debug stuff to TestBed
 	cocos2d::DrawNode* debugDrawNode;
 	DebugDraw g_debugDraw;
+
 };
 
 #endif

@@ -17,6 +17,7 @@
  */
 
 #include "CCPhysicsDebugNodeBox2D.h"
+
 USING_NS_CC;
 
 DebugDraw::DebugDraw()
@@ -24,6 +25,7 @@ DebugDraw::DebugDraw()
 	drawBP = DrawNode::create();
 	debugNodeOffset = { 0, 0 };
 	mRatio = 0.0f;
+
 }
 
 DebugDraw::~DebugDraw()

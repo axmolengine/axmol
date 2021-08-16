@@ -269,7 +269,6 @@ public:
 
 		//g_camera.m_center.x = m_car->GetPosition().x;
 		g_debugDraw.debugNodeOffset.x += m_car->GetPosition().x;
-
 		Test::Step(settings);
 	}
 

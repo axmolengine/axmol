@@ -125,6 +125,7 @@ public:
 	 std::string debugString = "";
 
 
+
 	b2World* m_world;
 
 protected:
