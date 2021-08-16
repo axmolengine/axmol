@@ -126,6 +126,17 @@ public:
      */
     void addSpriteFramesWithFile(const std::string& spriteSheetFileName, const std::string& format = "PLIST");
 
+    /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames.
+     @since v0.99.5
+     * @js addSpriteFrames
+     * @lua addSpriteFrames
+     *
+     * @param plist Plist file name.
+     * @param textureFileName Texture file name.
+     * @param format
+     */
+    void addSpriteFramesWithFileAndTexture(const std::string& spriteSheetFileName, const std::string& textureFileName, const std::string& format = "PLIST");
+
     /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames. 
      * @js addSpriteFrames
      * @lua addSpriteFrames
@@ -134,7 +145,7 @@ public:
      * @param texture Texture pointer.
      * @param format
      */
-    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, Texture2D *texture, const std::string& format = "PLIST");
+    void addSpriteFramesWithFileAndTexture(const std::string& spriteSheetFileName, Texture2D *texture, const std::string& format = "PLIST");
 
     /** Adds multiple Sprite Frames from a plist file content. The texture will be associated with the created sprite frames.
      * @js NA

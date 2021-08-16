@@ -95,7 +95,7 @@ void SpriteFrameCacheHelper::removeSpriteFrameFromFile(const std::string &plistP
 
 void SpriteFrameCacheHelper::addSpriteFrameFromFile(const std::string& plistPath, const std::string& imagePath)
 {
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plistPath, imagePath);
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFileAndTexture(plistPath, imagePath);
     retainSpriteFrames(plistPath);
 }
 
