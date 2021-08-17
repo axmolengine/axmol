@@ -122,9 +122,20 @@ public:
      * @lua addSpriteFrames
      *
      * @param spriteSheetFileName file name.
-     * @param format
+     * @param spriteSheetFormat
      */
-    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, const std::string& format = "PLIST");
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
+
+    /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames.
+     @since v0.99.5
+     * @js addSpriteFrames
+     * @lua addSpriteFrames
+     *
+     * @param spriteSheetFileName Plist file name.
+     * @param textureFileName Texture file name.
+     * @param spriteSheetFormat
+     */
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, const std::string& textureFileName, uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
 
     /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames. 
      * @js addSpriteFrames
@@ -132,18 +143,19 @@ public:
      *
      * @param spriteSheetFileName file name.
      * @param texture Texture pointer.
-     * @param format
+     * @param spriteSheetFormat
      */
-    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, Texture2D *texture, const std::string& format = "PLIST");
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, Texture2D *texture, uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
 
     /** Adds multiple Sprite Frames from a plist file content. The texture will be associated with the created sprite frames.
      * @js NA
      * @lua addSpriteFrames
      *
-     * @param plist_content Plist file content string.
+     * @param content file content string.
      * @param texture Texture pointer.
+     * @param spriteSheetFormat
      */
-    void addSpriteFramesWithFileContent(const Data& content, Texture2D* texture, const std::string& format = "PLIST");
+    void addSpriteFramesWithFileContent(const Data& content, Texture2D* texture, uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
 
     /** Adds an sprite frame with a given name.
      If the name already exists, then the contents of the old name will be replaced with the new one.
@@ -236,9 +248,9 @@ public:
     void addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Rect& capInsets, Texture2D* texture);
 
     void registerSpriteSheetLoader(std::unique_ptr<ISpriteSheetLoader> loader);
-    void deregisterSpriteSheetLoader(const std::string& formatId);
+    void deregisterSpriteSheetLoader(uint32_t spriteSheetFormat);
 
-    ISpriteSheetLoader* getSpriteSheetLoader(const std::string& format);
+    ISpriteSheetLoader* getSpriteSheetLoader(uint32_t spriteSheetFormat);
 
 protected:
     // MARMALADE: Made this protected not private, as deriving from this class is pretty useful
@@ -276,7 +288,7 @@ private:
     std::unordered_map<std::string, std::shared_ptr<SpriteSheet>> _spriteSheets;
     std::unordered_map<std::string, std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
 
-    std::map<std::string, std::unique_ptr<ISpriteSheetLoader>> _spriteSheetLoaders;
+    std::map<uint32_t, std::unique_ptr<ISpriteSheetLoader>> _spriteSheetLoaders;
 };
 
 // end of _2d group

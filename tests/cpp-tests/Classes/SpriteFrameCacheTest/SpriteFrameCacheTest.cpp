@@ -148,9 +148,9 @@ void SpriteFrameCacheFullCheck::loadSpriteFrames(const std::string &file, cocos2
 class GenericJsonArraySpriteSheetLoader : public SpriteSheetLoader
 {
 public:
-    static const std::string ID;
+    static constexpr uint32_t FORMAT = SpriteSheetFormat::CUSTOM + 1;
 
-    std::string getId() override { return "GENERIC_JSON_ARRAY"; }
+    uint32_t getFormat() override { return FORMAT; }
 
     void load(const std::string& filePath, SpriteFrameCache& cache) override
     {
@@ -349,7 +349,7 @@ protected:
             return;
 
         const auto spriteSheet = std::make_shared<SpriteSheet>();
-        spriteSheet->format = getId();
+        spriteSheet->format = getFormat();
         spriteSheet->path = atlasPath;
 
         const auto textureFileName = Director::getInstance()->getTextureCache()->getTextureFilePath(texture);
@@ -420,7 +420,7 @@ protected:
             return;
 
         const auto spriteSheet = std::make_shared<SpriteSheet>();
-        spriteSheet->format = getId();
+        spriteSheet->format = getFormat();
         spriteSheet->path = atlasPath;
 
         for (auto&& frameItr : framesItr->value.GetArray())
@@ -466,8 +466,6 @@ protected:
     }
 };
 
-const std::string GenericJsonArraySpriteSheetLoader::ID = "GENERIC_JSON_ARRAY";
-
 SpriteFrameCacheJsonAtlasTest::SpriteFrameCacheJsonAtlasTest()
 {
     auto* cache = SpriteFrameCache::getInstance();
@@ -487,12 +485,12 @@ SpriteFrameCacheJsonAtlasTest::SpriteFrameCacheJsonAtlasTest()
 SpriteFrameCacheJsonAtlasTest::~SpriteFrameCacheJsonAtlasTest()
 {
     auto* cache = SpriteFrameCache::getInstance();
-    cache->deregisterSpriteSheetLoader(GenericJsonArraySpriteSheetLoader::ID);
+    cache->deregisterSpriteSheetLoader(GenericJsonArraySpriteSheetLoader::FORMAT);
 }
 
 void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(const std::string& file, cocos2d::backend::PixelFormat expectedFormat)
 {
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file, GenericJsonArraySpriteSheetLoader::ID);
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file, GenericJsonArraySpriteSheetLoader::FORMAT);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("grossini.png");
     Texture2D* texture = spriteFrame->getTexture();
     const ssize_t bitsPerKB = 8 * 1024;

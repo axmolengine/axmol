@@ -78,27 +78,36 @@ SpriteFrameCache::~SpriteFrameCache()
 {
 }
 
-void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFileName, Texture2D* texture, const std::string& format)
+void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFileName, const std::string& textureFileName, uint32_t spriteSheetFormat)
 {
-    auto* loader = getSpriteSheetLoader(format);
+    auto* loader = getSpriteSheetLoader(spriteSheetFormat);
+    if (loader)
+    {
+        loader->load(spriteSheetFileName, textureFileName, *this);
+    }
+}
+
+void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFileName, Texture2D* texture, uint32_t spriteSheetFormat)
+{
+    auto* loader = getSpriteSheetLoader(spriteSheetFormat);
     if (loader)
     {
         loader->load(spriteSheetFileName, texture, *this);
     }
 }
 
-void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFileName, const std::string& format)
+void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFileName, uint32_t spriteSheetFormat)
 {
-    auto* loader = getSpriteSheetLoader(format);
+    auto* loader = getSpriteSheetLoader(spriteSheetFormat);
     if (loader)
     {
         loader->load(spriteSheetFileName, *this);
     }
 }
 
-void SpriteFrameCache::addSpriteFramesWithFileContent(const Data& content, Texture2D* texture, const std::string& format)
+void SpriteFrameCache::addSpriteFramesWithFileContent(const Data& content, Texture2D* texture, uint32_t spriteSheetFormat)
 {
-    auto* loader = getSpriteSheetLoader(format);
+    auto* loader = getSpriteSheetLoader(spriteSheetFormat);
     if (loader)
     {
         loader->load(content, texture, *this);
@@ -367,27 +376,28 @@ Map<std::string, SpriteFrame*>& SpriteFrameCache::getSpriteFrames()
 
 void SpriteFrameCache::registerSpriteSheetLoader(std::unique_ptr<ISpriteSheetLoader> loader)
 {
-    if (_spriteSheetLoaders.find(loader->getId()) != _spriteSheetLoaders.end())
+    auto format = loader->getFormat();
+
+    if (_spriteSheetLoaders.find(format) != _spriteSheetLoaders.end())
     {
         return;
     }
 
-    auto loaderId = loader->getId();
-    _spriteSheetLoaders.emplace(std::move(loaderId), std::move(loader));
+    _spriteSheetLoaders.emplace(format, std::move(loader));
 }
 
-void SpriteFrameCache::deregisterSpriteSheetLoader(const std::string& formatId)
+void SpriteFrameCache::deregisterSpriteSheetLoader(uint32_t spriteSheetFormat)
 {
-    auto&& itr = _spriteSheetLoaders.find(formatId);
+    auto&& itr = _spriteSheetLoaders.find(spriteSheetFormat);
     if (itr != _spriteSheetLoaders.end())
     {
         _spriteSheetLoaders.erase(itr);
     }
 }
 
-ISpriteSheetLoader* SpriteFrameCache::getSpriteSheetLoader(const std::string& formatId)
+ISpriteSheetLoader* SpriteFrameCache::getSpriteSheetLoader(uint32_t spriteSheetFormat)
 {
-    auto&& itr = _spriteSheetLoaders.find(formatId);
+    auto&& itr = _spriteSheetLoaders.find(spriteSheetFormat);
     if (itr != _spriteSheetLoaders.end())
     {
         return itr->second.get();

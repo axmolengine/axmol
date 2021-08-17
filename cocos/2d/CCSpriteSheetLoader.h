@@ -51,11 +51,18 @@ class SpriteFrameCache;
  * @{
  */
 
+struct SpriteSheetFormat {
+    enum : uint32_t {
+        PLIST = 1,
+        CUSTOM = 1000
+    };
+};
+
 class SpriteSheet
 {
 public:
     std::string path;
-    std::string format;
+    uint32_t format;
     std::set<std::string> frames;
     bool full = false;
 };
@@ -64,7 +71,7 @@ class ISpriteSheetLoader
 {
 public:
     virtual ~ISpriteSheetLoader() = default;
-    virtual std::string getId() = 0;
+    virtual uint32_t getFormat() = 0;
     virtual void load(const std::string& filePath, SpriteFrameCache& cache) = 0;
     virtual void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) = 0;
     virtual void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) = 0;
@@ -83,7 +90,7 @@ public:
         const std::vector<int>& triangleIndices,
         PolygonInfo& polygonInfo);
 
-    std::string getId() override = 0;
+    uint32_t getFormat() override = 0;
     void load(const std::string& filePath, SpriteFrameCache& cache) override = 0;
     void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override = 0;
     void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override = 0;
