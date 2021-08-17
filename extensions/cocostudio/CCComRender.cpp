@@ -334,7 +334,7 @@ bool ComRender::serialize(void* r)
                     continue;
                 }
                 strPngFile.replace(pos, strPngFile.length(), ".png");
-                SpriteFrameCache::getInstance()->addSpriteFramesWithFileAndTexture(plistPath, strPngFile);
+                SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plistPath, strPngFile);
                 _render = Sprite::createWithSpriteFrameName(filePath);
                 _render->retain();
                 
