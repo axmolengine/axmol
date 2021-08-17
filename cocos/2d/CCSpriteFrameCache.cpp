@@ -151,7 +151,7 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
     for (auto& iter : frames)
     {
         auto* spriteFrame = iter.second;
-        if (spriteFrame->getReferenceCount() <= 2) // A frame has a ref count of 1 when created, and 2 when added to cocos2d::Map. It is unused if the ref count is 2.
+        if (spriteFrame->getReferenceCount() == 1)
         {
             toRemoveFrames.push_back(iter.first);
             spriteFrame->getTexture()->removeSpriteFrameCapInset(spriteFrame);
