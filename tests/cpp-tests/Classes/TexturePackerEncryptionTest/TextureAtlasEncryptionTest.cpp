@@ -44,7 +44,7 @@ void TextureAtlasEncryptionDemo::onEnter()
     auto s = Director::getInstance()->getWinSize();
 
     // Load the non-encrypted atlas
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFileAndTexture("Images/nonencryptedAtlas.plist", "Images/nonencryptedAtlas.pvr.ccz");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/nonencryptedAtlas.plist", "Images/nonencryptedAtlas.pvr.ccz");
     
     // Create a sprite from the non-encrypted atlas
     auto nonencryptedSprite = Sprite::createWithSpriteFrameName("Icon.png");
@@ -71,7 +71,7 @@ void TextureAtlasEncryptionDemo::onEnter()
     // ZipUtils::ccSetPvrEncryptionKey(0xaaaaaaaa, 0xbbbbbbbb, 0xcccccccc, 0xdddddddd);
 
     // 2) Load the encrypted atlas
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFileAndTexture("Images/encryptedAtlas.plist", "Images/encryptedAtlas.pvr.ccz");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/encryptedAtlas.plist", "Images/encryptedAtlas.pvr.ccz");
     
     // 3) Create a sprite from the encrypted atlas
     auto encryptedSprite = Sprite::createWithSpriteFrameName("powered.png");

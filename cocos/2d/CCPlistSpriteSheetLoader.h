@@ -11,9 +11,9 @@ NS_CC_BEGIN
 class PlistSpriteSheetLoader : public SpriteSheetLoader
 {
 public:
-    static const std::string ID;
+    static constexpr uint32_t FORMAT = SpriteSheetFormat::PLIST;
 
-    std::string getId() override { return ID; }
+    uint32_t getFormat() override { return FORMAT; }
     void load(const std::string& filePath, SpriteFrameCache& cache) override;
     void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override;
     void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override;
