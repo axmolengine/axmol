@@ -20,6 +20,8 @@
 #ifndef __PHYSICSNODES_DEBUGNODE_BOX2D_H__
 #define __PHYSICSNODES_DEBUGNODE_BOX2D_H__
 
+#define GLFW_INCLUDE_NONE
+
 #include "extensions/ExtensionExport.h"
 #include "2d/CCDrawNode.h"
 #include "box2d/box2d.h"
