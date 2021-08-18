@@ -117,7 +117,7 @@ public:
 	void DrawAABB(b2AABB* aabb, const b2Color& color);
 	void Flush();
 
-	cocos2d::extension::DebugDraw g_debugDraw;
+	cocos2d::extension::PhysicsDebugNodeBox2D g_debugDraw;
 	cocos2d::DrawNode* debugDrawNode;
 	std::string debugString = "";
 

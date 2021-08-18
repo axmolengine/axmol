@@ -97,7 +97,7 @@ private:
 
 	// Debug stuff
 	cocos2d::DrawNode* debugDrawNode;
-	cocos2d::extension::DebugDraw g_debugDraw;
+	cocos2d::extension::PhysicsDebugNodeBox2D g_debugDraw;
 
 };
 
