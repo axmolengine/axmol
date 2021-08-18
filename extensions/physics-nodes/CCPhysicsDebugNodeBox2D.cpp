@@ -27,6 +27,7 @@ PhysicsDebugNodeBox2D::PhysicsDebugNodeBox2D()
 {
 	drawBP = DrawNode::create();
 	debugNodeOffset = { 40, 0 };
+	mRatio = 1.0;
 }
 
 PhysicsDebugNodeBox2D::~PhysicsDebugNodeBox2D()
