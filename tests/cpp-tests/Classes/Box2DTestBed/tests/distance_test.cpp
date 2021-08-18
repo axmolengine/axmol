@@ -63,11 +63,11 @@ public:
 		b2DistanceOutput output;
 		b2Distance(&output, &cache, &input);
 
-		g_debugDraw.DrawString(5, m_textLine, "distance = %g", output.distance);
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "distance = %g", output.distance);
+		
 
-		g_debugDraw.DrawString(5, m_textLine, "iterations = %d", output.iterations);
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "iterations = %d", output.iterations);
+		
 
 		{
 			b2Color color(0.9f, 0.9f, 0.9f);

@@ -190,8 +190,8 @@ public:
 	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
-		g_debugDraw.DrawString(5, m_textLine, "Press: (b) to delete a body, (j) to delete a joint");
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "Press: (b) to delete a body, (j) to delete a joint");
+		
 	}
 
 	void JointDestroyed(b2Joint* joint) override

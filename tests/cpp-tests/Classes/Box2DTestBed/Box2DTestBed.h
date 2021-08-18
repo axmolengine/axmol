@@ -28,8 +28,6 @@
 #include "cocos2d.h"
 #include "box2d/box2d.h"
 #include "../BaseTest.h"
-#include "renderer/CCCustomCommand.h"
-
 
 DEFINE_TEST_SUITE(Box2DTestBedTests);
 
@@ -76,6 +74,11 @@ public:
 	void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) override;
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) override;
 
+	void onMouseDown(cocos2d::Event* event);
+	void onMouseUp(cocos2d::Event* event);
+	void onMouseMove(cocos2d::Event* event);
+	void onMouseScroll(cocos2d::Event* event);
+
 	cocos2d::EventListenerTouchOneByOne* _touchListener;
 	cocos2d::EventListenerKeyboard* _keyboardListener;
 
@@ -88,9 +91,13 @@ private:
 	b2World* world;
 	cocos2d::Texture2D* _spriteTexture;
 
+	b2Vec2 pos;
+	b2Vec2 oldPos;
+	bool button[2];
+
 	// Debug stuff
 	cocos2d::DrawNode* debugDrawNode;
-	DebugDraw g_debugDraw;
+	cocos2d::extension::DebugDraw g_debugDraw;
 
 };
 

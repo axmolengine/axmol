@@ -109,11 +109,11 @@ public:
 				c.Set(0.6f, 0.6f, 0.9f);
 			}
 
-			g_debugDraw.DrawAABB(&actor->aabb, c);
+			DrawAABB(&actor->aabb, c);
 		}
 
 		b2Color c(0.7f, 0.7f, 0.7f);
-		g_debugDraw.DrawAABB(&m_queryAABB, c);
+		DrawAABB(&m_queryAABB, c);
 
 		g_debugDraw.DrawSegment(m_rayCastInput.p1, m_rayCastInput.p2, c);
 
@@ -131,8 +131,8 @@ public:
 
 		{
 			int32 height = m_tree.GetHeight();
-			g_debugDraw.DrawString(5, m_textLine, "dynamic tree height = %d", height);
-			m_textLine += m_textIncrement;
+			DrawString(5, m_textLine, "dynamic tree height = %d", height);
+			
 		}
 
 		++m_stepCount;

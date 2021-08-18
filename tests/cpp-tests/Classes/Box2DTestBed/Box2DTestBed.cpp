@@ -23,11 +23,13 @@
  ****************************************************************************/
 
 #include "platform/CCPlatformConfig.h"
-#include "Box2DTestBed.h"
 #include "extensions/cocos-ext.h"
+#include "ImGuiEXT/CCImGuiEXT.h"
+#include "cocos2d.h"
+
+#include "Box2DTestBed.h"
 #include "tests/test.h"
 #include "tests/settings.h"
-#include "ImGuiEXT/CCImGuiEXT.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -36,16 +38,7 @@ enum {
 	kTagParentNode = 1,
 };
 
-
-
-#define kAccelerometerFrequency 30
-#define FRAMES_BETWEEN_PRESSES_FOR_DOUBLE_CLICK 10
-
-
-#define PTM_RATIO 32
-
 Settings settings;
-
 cocos2d::Label* labelDebugDraw;
 
 enum
@@ -123,14 +116,10 @@ bool Box2DTestBed::initWithEntryID(int entryId)
 	m_test->debugDrawNode = debugDrawNode;
 	m_test->g_debugDraw = g_debugDraw;
 
-
-
-
 	TestCase::addChild(debugDrawNode, 100);
 
 	// init physics
 	this->initPhysics();
-
 
 	auto label = Label::createWithTTF(m_entry->name, "fonts/arial.ttf", 28);
 	TestCase::addChild(label, 1);
@@ -142,14 +131,20 @@ bool Box2DTestBed::initWithEntryID(int entryId)
 	_touchListener->onTouchBegan = CC_CALLBACK_2(Box2DTestBed::onTouchBegan, this);
 	_touchListener->onTouchMoved = CC_CALLBACK_2(Box2DTestBed::onTouchMoved, this);
 	_touchListener->onTouchEnded = CC_CALLBACK_2(Box2DTestBed::onTouchEnded, this);
-	TestCase::_eventDispatcher->addEventListenerWithFixedPriority(_touchListener,1);
+	TestCase::_eventDispatcher->addEventListenerWithFixedPriority(_touchListener,10);
 
 	// Adds Keyboard event listener
 	_keyboardListener = EventListenerKeyboard::create();
 	_keyboardListener->onKeyPressed = CC_CALLBACK_2(Box2DTestBed::onKeyPressed, this);
 	_keyboardListener->onKeyReleased = CC_CALLBACK_2(Box2DTestBed::onKeyReleased, this);
-	TestCase::_eventDispatcher->addEventListenerWithFixedPriority(_keyboardListener,1);
+	TestCase::_eventDispatcher->addEventListenerWithFixedPriority(_keyboardListener,11);
 
+	auto _mouseListener = EventListenerMouse::create();
+	_mouseListener->onMouseMove = CC_CALLBACK_1(Box2DTestBed::onMouseMove, this);
+	_mouseListener->onMouseUp = CC_CALLBACK_1(Box2DTestBed::onMouseUp, this);
+	_mouseListener->onMouseDown = CC_CALLBACK_1(Box2DTestBed::onMouseDown, this);
+	_mouseListener->onMouseScroll = CC_CALLBACK_1(Box2DTestBed::onMouseScroll, this);
+	TestCase::_eventDispatcher->addEventListenerWithFixedPriority(_mouseListener, 12);
 
 	// Demo messageString
 	labelDebugDraw = Label::createWithTTF("TEST", "fonts/arial.ttf", 8.0f);
@@ -165,7 +160,6 @@ bool Box2DTestBed::initWithEntryID(int entryId)
 
 bool Box2DTestBed::onTouchBegan(Touch* touch, Event* event)
 {
-	CCLOG("onTouchBegan");
 	auto location = touch->getLocation() - g_debugDraw.debugNodeOffset;
 	b2Vec2 pos = { location.x / g_debugDraw.mRatio, location.y / g_debugDraw.mRatio };
 	return m_test->MouseDown(pos);
@@ -173,34 +167,75 @@ bool Box2DTestBed::onTouchBegan(Touch* touch, Event* event)
 
 void Box2DTestBed::onTouchMoved(Touch* touch, Event* event)
 {
-	CCLOG("onTouchMoved");
 	auto location = touch->getLocation() - g_debugDraw.debugNodeOffset;
 	b2Vec2 pos = { location.x / g_debugDraw.mRatio, location.y / g_debugDraw.mRatio };
-
 	m_test->MouseMove(pos);
 }
 
 void Box2DTestBed::onTouchEnded(Touch* touch, Event* event)
 {
-	CCLOG("onTouchEnded");
 	auto location = touch->getLocation() - g_debugDraw.debugNodeOffset;
 	b2Vec2 pos = { location.x / g_debugDraw.mRatio, location.y / g_debugDraw.mRatio };
-
 	m_test->MouseUp(pos);
 }
 
 void Box2DTestBed::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
 {
 	CCLOG("onKeyPressed, keycode: %d", static_cast<int>(code));
-	m_test->Keyboard((static_cast<int>(code) - 59));
-
+	m_test->Keyboard((static_cast<int>(code) - 59));  // its a bad hack!
 }
 
 void Box2DTestBed::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
 {
 	CCLOG("onKeyPressed, keycode: %d", static_cast<int>(code));
-	m_test->KeyboardUp((static_cast<int>(code) - 59));
+	m_test->KeyboardUp((static_cast<int>(code) - 59)); // its a bad hack!
 
+}
+
+void Box2DTestBed::onMouseDown(Event* event)
+{
+	EventMouse* e = (EventMouse*)event;
+	switch (e->getMouseButton())
+	{
+		button[(int)EventMouse::MouseButton::BUTTON_LEFT] = false;
+		button[(int)EventMouse::MouseButton::BUTTON_RIGHT] = false;
+		button[(int)EventMouse::MouseButton::BUTTON_MIDDLE] = false;
+	case EventMouse::MouseButton::BUTTON_LEFT:
+		button[(int)EventMouse::MouseButton::BUTTON_LEFT] = true;
+		break;
+	case EventMouse::MouseButton::BUTTON_RIGHT:
+		button[(int)EventMouse::MouseButton::BUTTON_RIGHT] = true;
+		break;
+	case EventMouse::MouseButton::BUTTON_MIDDLE:
+		button[(int)EventMouse::MouseButton::BUTTON_MIDDLE] = true;
+		break;
+	}
+}
+
+void Box2DTestBed::onMouseUp(Event* event)
+{
+	button[(int)EventMouse::MouseButton::BUTTON_LEFT] = false;
+	button[(int)EventMouse::MouseButton::BUTTON_RIGHT] = false;
+	button[(int)EventMouse::MouseButton::BUTTON_MIDDLE] = false;
+}
+
+void Box2DTestBed::onMouseMove(Event* event)
+{
+	EventMouse* e = (EventMouse*)event;
+	pos = { e->getCursorX() / g_debugDraw.mRatio , e->getCursorY() / g_debugDraw.mRatio };
+
+	if (button[(int)EventMouse::MouseButton::BUTTON_RIGHT])
+	{
+		(pos.x > oldPos.x) ? g_debugDraw.debugNodeOffset.x += 4 : g_debugDraw.debugNodeOffset.x -= 4;
+		(pos.y < oldPos.y) ? g_debugDraw.debugNodeOffset.y -= 2 : g_debugDraw.debugNodeOffset.y += 2;
+	}
+	oldPos = pos;
+}
+
+void Box2DTestBed::onMouseScroll(Event* event)
+{
+	EventMouse* e = (EventMouse*)event;
+	g_debugDraw.mRatio += e->getScrollY();
 }
 
 void Box2DTestBed::onEnter()
@@ -213,13 +248,12 @@ void Box2DTestBed::onExit()
 {
 	Scene::onExit();
 	ImGuiEXT::getInstance()->removeRenderLoop("#im01");
-
 }
 
 void Box2DTestBed::update(float dt)
 {
 	// Debug draw
-	m_test->g_debugDraw.debugString = "";
+	m_test->debugString = "";
 	labelDebugDraw->setString("");
 	debugDrawNode->clear();
 	m_test->Step(settings);
@@ -234,7 +268,7 @@ void Box2DTestBed::initPhysics()
 	flags += 0 * b2Draw::e_aabbBit;
 	flags += 0 * b2Draw::e_centerOfMassBit;
 	g_debugDraw.SetFlags(flags);
-	g_debugDraw.mRatio = PTM_RATIO / 4;
+	g_debugDraw.mRatio = 8;
 	m_test->m_world->SetDebugDraw(&g_debugDraw);
 	m_test->g_debugDraw = g_debugDraw;
 	g_debugDraw.debugNodeOffset = { 250, 70 };
