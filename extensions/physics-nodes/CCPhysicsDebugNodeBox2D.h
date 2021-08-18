@@ -20,24 +20,22 @@
 #ifndef __PHYSICSNODES_DEBUGNODE_BOX2D_H__
 #define __PHYSICSNODES_DEBUGNODE_BOX2D_H__
 
-#define GLFW_INCLUDE_NONE
-
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 #include "2d/CCDrawNode.h"
 #include "box2d/box2d.h"
-#include "cocos2d.h"
+
 
 NS_CC_EXT_BEGIN
 
 
 // This class implements debug drawing callbacks that are invoked inside b2World::Step.
-class CC_EX_DLL DebugDraw : public b2Draw
+class CC_EX_DLL PhysicsDebugNodeBox2D : public b2Draw
 {
 public:
 
-    DebugDraw();
-    ~DebugDraw();
+    PhysicsDebugNodeBox2D();
+    ~PhysicsDebugNodeBox2D();
 
     void Create();
     void Destroy();

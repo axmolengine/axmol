@@ -23,33 +23,33 @@ NS_CC_EXT_BEGIN
 #define BUFFER_OFFSET(x)  ((const void*) (x))
 
 
-DebugDraw::DebugDraw()
+PhysicsDebugNodeBox2D::PhysicsDebugNodeBox2D()
 {
 	drawBP = DrawNode::create();
 	debugNodeOffset = { 40, 0 };
 }
 
-DebugDraw::~DebugDraw()
+PhysicsDebugNodeBox2D::~PhysicsDebugNodeBox2D()
 {
 }
 
-cocos2d::DrawNode* DebugDraw::GetDrawNode()
+cocos2d::DrawNode* PhysicsDebugNodeBox2D::GetDrawNode()
 {
 	return drawBP;
 }
 
-void DebugDraw::SetDrawNode(cocos2d::DrawNode* drawNode)
+void PhysicsDebugNodeBox2D::SetDrawNode(cocos2d::DrawNode* drawNode)
 {
 	drawBP = drawNode;
 }
 
-cocos2d::Vec2& DebugDraw::GetDebugNodeOffset()
+cocos2d::Vec2& PhysicsDebugNodeBox2D::GetDebugNodeOffset()
 {
 	return debugNodeOffset;
 }
 
 
-void DebugDraw::DrawPolygon(const b2Vec2* verts, int vertexCount, const b2Color& color)
+void PhysicsDebugNodeBox2D::DrawPolygon(const b2Vec2* verts, int vertexCount, const b2Color& color)
 {
 	Vec2* vec = new (std::nothrow) Vec2[vertexCount];
 	for (size_t i = 0; i < vertexCount; i++) {
@@ -58,7 +58,7 @@ void DebugDraw::DrawPolygon(const b2Vec2* verts, int vertexCount, const b2Color&
 	drawBP->drawPolygon(vec, vertexCount, Color4F::BLACK, 0.4f, Color4F(color.r, color.g, color.b, color.a));
 }
 
-void DebugDraw::DrawSolidPolygon(const b2Vec2* verts, int vertexCount, const b2Color& color)
+void PhysicsDebugNodeBox2D::DrawSolidPolygon(const b2Vec2* verts, int vertexCount, const b2Color& color)
 {
 	Vec2* vec = new (std::nothrow) Vec2[vertexCount];
 	for (size_t i = 0; i < vertexCount; i++) {
@@ -67,13 +67,13 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2* verts, int vertexCount, const b2C
 	drawBP->drawPolygon(vec, vertexCount, Color4F(color.r / 2, color.g / 2, color.b / 2, color.a), 0.4f, Color4F(color.r, color.g, color.b, color.a));
 }
 
-void DebugDraw::DrawCircle(const b2Vec2& center, float radius, const b2Color& color)
+void PhysicsDebugNodeBox2D::DrawCircle(const b2Vec2& center, float radius, const b2Color& color)
 {
 	drawBP->drawCircle(Vec2(center.x * mRatio, center.y * mRatio) + debugNodeOffset, radius * mRatio, CC_DEGREES_TO_RADIANS(0), 30, true, 1.0f,
 		1.0f, Color4F(color.r, color.g, color.b, color.a));
 }
 
-void DebugDraw::DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color)
+void PhysicsDebugNodeBox2D::DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color)
 {
 	Vec2 c = { Vec2(center.x * mRatio, center.y * mRatio) + debugNodeOffset };
 	drawBP->drawSolidCircle(c, radius * mRatio, CC_DEGREES_TO_RADIANS(0), 20, 1.0f, 1.0f, Color4F(color.r / 2, color.g / 2, color.b / 2, color.a), 0.4f, Color4F(color.r, color.g, color.b, color.a));
@@ -84,12 +84,12 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2
 	drawBP->drawLine(c, cp, Color4F(color.r, color.g, color.b, color.a));
 }
 
-void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
+void PhysicsDebugNodeBox2D::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
 	drawBP->drawLine(Vec2(p1.x * mRatio, p1.y * mRatio) + debugNodeOffset, Vec2(p2.x * mRatio, p2.y * mRatio) + debugNodeOffset, Color4F(color.r, color.g, color.b, color.a));
 }
 
-void DebugDraw::DrawTransform(const b2Transform& xf)
+void PhysicsDebugNodeBox2D::DrawTransform(const b2Transform& xf)
 {
 	b2Vec2 p1 = xf.p, p2;
 	const float k_axisScale = 0.4f;
@@ -100,7 +100,7 @@ void DebugDraw::DrawTransform(const b2Transform& xf)
 	DrawSegment(p1, p2, b2Color(0, 1, 0));
 }
 
-void DebugDraw::DrawPoint(const b2Vec2& p, float size, const b2Color& color)
+void PhysicsDebugNodeBox2D::DrawPoint(const b2Vec2& p, float size, const b2Color& color)
 {
 	drawBP->drawPoint(Vec2(p.x * mRatio, p.y * mRatio) + debugNodeOffset, size, Color4F(color.r, color.g, color.b, color.a));
 }
