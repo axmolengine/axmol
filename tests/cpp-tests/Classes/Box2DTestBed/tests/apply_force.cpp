@@ -169,8 +169,8 @@ public:
 
 	void Step(Settings& settings) override
 	{
-		g_debugDraw.DrawString(5, m_textLine, "Forward (W), Turn (A) and (D)");
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "Forward (W), Turn (A) and (D)");
+		
 
 		//if (glfwGetKey(g_mainWindow, GLFW_KEY_W) == GLFW_PRESS)
 		//{

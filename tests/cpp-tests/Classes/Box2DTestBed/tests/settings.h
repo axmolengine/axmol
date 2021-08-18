@@ -20,7 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#pragma once
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
 struct Settings
 {
@@ -81,3 +82,5 @@ struct Settings
 	bool m_pause;
 	bool m_singleStep;
 };
+
+#endif
