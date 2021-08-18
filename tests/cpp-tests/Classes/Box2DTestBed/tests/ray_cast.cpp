@@ -345,24 +345,24 @@ public:
 	{
 		Test::Step(settings);
 
-		g_debugDraw.DrawString(5, m_textLine, "Shape 1 is intentionally ignored by the ray");
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "Shape 1 is intentionally ignored by the ray");
+		
 		switch (m_mode)
 		{
 		case e_closest:
-			g_debugDraw.DrawString(5, m_textLine, "Ray-cast mode: closest - find closest fixture along the ray");
+			DrawString(5, m_textLine, "Ray-cast mode: closest - find closest fixture along the ray");
 			break;
 		
 		case e_any:
-			g_debugDraw.DrawString(5, m_textLine, "Ray-cast mode: any - check for obstruction");
+			DrawString(5, m_textLine, "Ray-cast mode: any - check for obstruction");
 			break;
 
 		case e_multiple:
-			g_debugDraw.DrawString(5, m_textLine, "Ray-cast mode: multiple - gather multiple fixtures");
+			DrawString(5, m_textLine, "Ray-cast mode: multiple - gather multiple fixtures");
 			break;
 		}
 
-		m_textLine += m_textIncrement;
+		
 
 		float angle = b2_pi * m_degrees / 180.0f;
 		float L = 11.0f;

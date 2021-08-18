@@ -55,8 +55,8 @@ public:
 		b2WorldManifold worldManifold;
 		worldManifold.Initialize(&manifold, m_transformA, m_polygonA.m_radius, m_transformB, m_polygonB.m_radius);
 
-		g_debugDraw.DrawString(5, m_textLine, "point count = %d", manifold.pointCount);
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "point count = %d", manifold.pointCount);
+		
 
 		{
 			b2Color color(0.9f, 0.9f, 0.9f);

@@ -59,7 +59,7 @@ private:
 
     cocos2d::Texture2D* _spriteTexture;
     cocos2d::DrawNode* drawBox2D;
-    DebugDraw g_debugDraw;
+    cocos2d::extension::DebugDraw g_debugDraw;
     bool showDebugDraw = true;
 } ;
 
