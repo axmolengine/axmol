@@ -24,7 +24,7 @@
 #include "extensions/ExtensionExport.h"
 #include "2d/CCDrawNode.h"
 #include "box2d/box2d.h"
-
+#include "cocos2d.h"
 
 NS_CC_EXT_BEGIN
 

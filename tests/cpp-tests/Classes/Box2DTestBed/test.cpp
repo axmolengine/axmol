@@ -18,7 +18,9 @@
 
 #include "tests/test.h"
 #include "tests/settings.h"
+
 #include "extensions/cocos-ext.h"
+#include "cocos2d.h"
 
 #include <stdio.h>
 
