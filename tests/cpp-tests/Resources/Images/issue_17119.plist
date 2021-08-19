@@ -4,7 +4,7 @@
 <dict>
 	<key>frames</key>
 	<dict>
-		<key>firstPic.png</key>
+		<key>issue_17119/firstPic.png</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -25,7 +25,7 @@
 			<key>verticesUV</key>
 			<string>513 619 1 619 1 567 143 492 292 417 377 360 513 224</string>
 		</dict>
-		<key>secondPic.png</key>
+		<key>issue_17119/secondPic.png</key>
 		<dict>
 			<key>aliases</key>
 			<array/>

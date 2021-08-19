@@ -57,12 +57,11 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
     loadSpriteFrames("Images/sprite_frames_test/test_A8.plist", backend::PixelFormat::A8);
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
     loadSpriteFrames("Images/sprite_frames_test/test_AI88.plist", backend::PixelFormat::LA8);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
     loadSpriteFrames("Images/sprite_frames_test/test_RGB565.plist", backend::PixelFormat::RGB565);
     loadSpriteFrames("Images/sprite_frames_test/test_RGB888.plist", backend::PixelFormat::RGB8);
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA4444.plist", backend::PixelFormat::RGBA4);
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA5551.plist", backend::PixelFormat::RGB5A1);
-    
+
     if (Configuration::getInstance()->supportsPVRTC()) {
         loadSpriteFrames("Images/sprite_frames_test/test_PVRTC2.plist", backend::PixelFormat::PVRTC2A);
         loadSpriteFrames("Images/sprite_frames_test/test_PVRTC4.plist", backend::PixelFormat::PVRTC4A);
@@ -80,7 +79,7 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
 void SpriteFrameCachePixelFormatTest::loadSpriteFrames(const std::string &file, cocos2d::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
-    SpriteFrame *spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("grossini.png");
+    SpriteFrame *spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
     Texture2D *texture = spriteFrame->getTexture();
     const ssize_t bitsPerKB = 8 * 1024;
     const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width * texture->getContentSizeInPixels().height / bitsPerKB;
@@ -110,11 +109,11 @@ SpriteFrameCacheLoadMultipleTimes::SpriteFrameCacheLoadMultipleTimes()
 void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(const std::string &file, cocos2d::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
-    SpriteFrame *spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("grossini.png");
+    SpriteFrame *spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
     Texture2D *texture = spriteFrame->getTexture();
     CC_ASSERT(texture->getPixelFormat() == expectedFormat);
 
-    SpriteFrameCache::getInstance()->removeSpriteFrameByName("grossini.png");
+    SpriteFrameCache::getInstance()->removeSpriteFrameByName("sprite_frames_test/grossini.png");
     Director::getInstance()->getTextureCache()->removeTexture(texture);
 }
 
@@ -491,7 +490,7 @@ SpriteFrameCacheJsonAtlasTest::~SpriteFrameCacheJsonAtlasTest()
 void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(const std::string& file, cocos2d::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file, GenericJsonArraySpriteSheetLoader::FORMAT);
-    SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("grossini.png");
+    SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
     Texture2D* texture = spriteFrame->getTexture();
     const ssize_t bitsPerKB = 8 * 1024;
     const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width * texture->getContentSizeInPixels().height / bitsPerKB;

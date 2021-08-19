@@ -305,7 +305,7 @@ bool UIS9FrameNameSpriteSheet::init()
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
         
-        auto blocks = ui::Scale9Sprite::createWithSpriteFrameName("blocks9.png");
+        auto blocks = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9.png");
         blocks->setInsetLeft(0);
         blocks->setInsetRight(0);
         blocks->setInsetTop(0);
@@ -480,7 +480,7 @@ bool UIS9FrameNameSpriteSheetScaledNoInsets::init()
         float y = 0 + (winSize.height / 2);
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
         
-        auto blocks_scaled = ui::Scale9Sprite::createWithSpriteFrameName("blocks9.png");
+        auto blocks_scaled = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9.png");
         
         blocks_scaled->setPosition(Vec2(x, y));
         
@@ -551,7 +551,7 @@ bool UIS9FrameNameSpriteSheetInsets::init()
         float y = 0 + (winSize.height / 2);
         
         
-        auto blocks_with_insets = ui::Scale9Sprite::createWithSpriteFrameName("blocks9.png", Rect(32, 32, 32, 32));
+        auto blocks_with_insets = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9.png", Rect(32, 32, 32, 32));
         
         blocks_with_insets->setPosition(Vec2(x, y));
         
@@ -570,7 +570,7 @@ bool UIS9FrameNameSpriteSheetInsetsScaled::init()
         float x = winSize.width / 2;
         float y = 0 + (winSize.height / 2);
         
-        auto blocks_scaled_with_insets = ui::Scale9Sprite::createWithSpriteFrameName("blocks9.png", Rect(32, 32, 32, 32));
+        auto blocks_scaled_with_insets = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9.png", Rect(32, 32, 32, 32));
         
         blocks_scaled_with_insets->setContentSize(Size(96 * 4.5, 96 * 2.5));
         
@@ -642,7 +642,7 @@ bool UIS9FrameNameSpriteSheetRotatedInsetsScaled::init()
         float x = winSize.width / 2;
         float y = 0 + (winSize.height / 2);
         
-        auto blocks_scaled_with_insets = ui::Scale9Sprite::createWithSpriteFrameName("blocks9.png", Rect(32, 32, 32, 32));
+        auto blocks_scaled_with_insets = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9.png", Rect(32, 32, 32, 32));
 
         blocks_scaled_with_insets->setContentSize(Size(96 * 4.5, 96 * 2.5));
         
@@ -988,7 +988,7 @@ bool UIS9BatchTest::init()
         this->addChild(label);
         
         auto preferedSize = Size(150.0f,99.0f);
-        std::vector<std::string>  spriteFrameNameArray = {"blocks9.png", "blocks9r.png"};
+        std::vector<std::string>  spriteFrameNameArray = {"blocks9ss/blocks9.png", "blocks9ss/blocks9r.png"};
         auto addSpriteButton = ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         addSpriteButton->setPosition(Vec2(winSize.width/2 - 50,winSize.height - 100));
         addSpriteButton->setTitleText("Add Normal Sprite");

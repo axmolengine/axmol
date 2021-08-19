@@ -1,7 +1,7 @@
 {"frames": [
 
 {
-	"filename": "grossini.png",
+	"filename": "sprite_frames_test/grossini.png",
 	"frame": {"x":1,"y":1,"w":76,"h":111},
 	"rotated": false,
 	"trimmed": true,
