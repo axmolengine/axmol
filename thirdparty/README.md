@@ -21,12 +21,12 @@
 
 ## Bullet
 - Upstream: https://github.com/bulletphysics/bullet3
-- Version: 3.09
+- Version: 3.17
 - License: zlib
 
 ## c-ares
 - Upstream: https://github.com/c-ares/c-ares
-- Version: 1.17.1-809d5e8 (2055)
+- Version: 1.17.2
 - License: MIT
 
 ## Chipmunk2D
@@ -66,7 +66,7 @@
 
 ## FreeType
 - Upstream: https://www.freetype.org/
-- Version: 2.10.4 with modification: fix FindHarfBuzz.cmake min version doesn't work
+- Version: 2.11.0
 - License: BSD-style (The FreeType Project)
 
 ## Glad
@@ -86,7 +86,7 @@
 
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
-- Version: 2.1.0-3932190 (2249) with CMakeLists.txt modified for sutiable as a thirdparty of CMake build system
+- Version: 2.1.1
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -143,7 +143,7 @@
 ## ogg & vorbis
 - ogg
   - Upstream: https://github.com/xiph/ogg 
-  - Version: git 1.3.4-31bd3f2 (562)
+  - Version: git 1.3.5
   - License: BSD-3-Clause
 
 - vorbis
@@ -223,7 +223,7 @@
 
 ## yaml-cpp
 - Upstream: https://github.com/jbeder/yaml-cpp
-- Version: git 9ee3928 (884)
+- Version: 0.7.0
 - License: MIT
 
 ## yasio
