@@ -20,14 +20,11 @@
 
 NS_CC_EXT_BEGIN
 
-#define BUFFER_OFFSET(x)  ((const void*) (x))
-
-
 PhysicsDebugNodeBox2D::PhysicsDebugNodeBox2D()
 {
 	drawBP = DrawNode::create();
-	debugNodeOffset = { 40, 0 };
-	mRatio = 1.0;
+	debugNodeOffset = { 40.0f, 0.0f };
+	mRatio = 1.0f;
 }
 
 PhysicsDebugNodeBox2D::~PhysicsDebugNodeBox2D()
@@ -70,8 +67,7 @@ void PhysicsDebugNodeBox2D::DrawSolidPolygon(const b2Vec2* verts, int vertexCoun
 
 void PhysicsDebugNodeBox2D::DrawCircle(const b2Vec2& center, float radius, const b2Color& color)
 {
-	drawBP->drawCircle(Vec2(center.x * mRatio, center.y * mRatio) + debugNodeOffset, radius * mRatio, CC_DEGREES_TO_RADIANS(0), 30, true, 1.0f,
-		1.0f, Color4F(color.r, color.g, color.b, color.a));
+	drawBP->drawCircle(Vec2(center.x * mRatio, center.y * mRatio) + debugNodeOffset, radius * mRatio, CC_DEGREES_TO_RADIANS(0), 30, true, 1.0f, 1.0f, Color4F(color.r, color.g, color.b, color.a));
 }
 
 void PhysicsDebugNodeBox2D::DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color)
@@ -95,10 +91,10 @@ void PhysicsDebugNodeBox2D::DrawTransform(const b2Transform& xf)
 	b2Vec2 p1 = xf.p, p2;
 	const float k_axisScale = 0.4f;
 	p2 = p1 + k_axisScale * xf.q.GetXAxis();
-	DrawSegment(p1, p2, b2Color(1, 0, 0));
+	DrawSegment(p1, p2, b2Color(1.0f, 0.0f, 0.0f));
 
 	p2 = p1 + k_axisScale * xf.q.GetYAxis();
-	DrawSegment(p1, p2, b2Color(0, 1, 0));
+	DrawSegment(p1, p2, b2Color(0.0f, 1.0f, 0.0f));
 }
 
 void PhysicsDebugNodeBox2D::DrawPoint(const b2Vec2& p, float size, const b2Color& color)
