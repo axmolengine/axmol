@@ -178,9 +178,9 @@ int PosixFileStream::close()
     return internalClose();
 }
 
-int PosixFileStream::seek(long offset, int origin)
+long PosixFileStream::seek(int64_t offset, int origin)
 {
-    const auto result = _iof->seek(_handle, offset, origin); // this returns -1 for error, and resulting offset on success
+    const auto result = _iof->seek(_handle, static_cast<int32_t>(offset), origin); // this returns -1 for error, and resulting offset on success
     return result < 0 ? -1 : 0; // return 0 for success
 }
 
@@ -191,15 +191,15 @@ int PosixFileStream::read(void* buf, unsigned int size)
 
 int PosixFileStream::write(const void* buf, unsigned int size)
 {
-    return static_cast<int>(posix_write(_handle._fd, buf, size));
+    return posix_write(_handle._fd, buf, size);
 }
 
-int PosixFileStream::tell()
+int64_t PosixFileStream::tell()
 {
-    return static_cast<int>(_iof->seek(_handle, 0, SEEK_CUR));
+    return _iof->seek(_handle, 0, SEEK_CUR);
 }
 
-long long PosixFileStream::size()
+int64_t PosixFileStream::size()
 {
     return _iof->size(_handle);
 }
