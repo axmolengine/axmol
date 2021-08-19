@@ -40,7 +40,7 @@ public:
     *  @param origin SEEK_SET | SEEK_CUR | SEEK_END
     *  @return 0 if successful, -1 if not
     */
-    virtual long seek(int64_t offset, int origin) = 0;
+    virtual int seek(long offset, int origin) = 0;
 
     /**
     *  Read data from file stream
@@ -62,13 +62,13 @@ public:
     *  Get the current position in the file stream
     *  @return current position, -1 if error
     */
-    virtual int64_t tell() = 0;
+    virtual int tell() = 0;
 
     /**
     *  Get the size of the file stream
     *  @return stream size, -1 if error (Mode::WRITE and Mode::APPEND may return -1)
     */
-    virtual int64_t size() = 0;
+    virtual long long size() = 0;
 
     /**
     *  Get status of file stream
@@ -79,7 +79,7 @@ public:
     virtual operator bool() const { return isOpen(); }
 
 protected:
-    FileStream() {};
+    FileStream() = default;
 };
 
 NS_CC_END

@@ -109,11 +109,11 @@ public:
     bool open(const std::string& path, FileStream::Mode mode) override;
     int close() override;
 
-    long seek(int64_t offset, int origin) override;
+    int seek(long offset, int origin) override;
     int read(void* buf, unsigned int size) override;
     int write(const void* buf, unsigned int size) override;
-    int64_t tell() override;
-    int64_t size() override;
+    int tell() override;
+    long long size() override;
     bool isOpen() const override;
 
 private:
