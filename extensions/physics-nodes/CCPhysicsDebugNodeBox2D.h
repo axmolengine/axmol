@@ -28,7 +28,6 @@
 
 NS_CC_EXT_BEGIN
 
-
 // This class implements debug drawing callbacks that are invoked inside b2World::Step.
 class CC_EX_DLL PhysicsDebugNodeBox2D : public b2Draw
 {
