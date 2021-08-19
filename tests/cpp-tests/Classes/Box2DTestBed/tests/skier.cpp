@@ -126,8 +126,8 @@ public:
 
 	void Step(Settings& settings) override
 	{
-		g_debugDraw.DrawString(5, m_textLine, "Keys: c = Camera fixed/tracking");
-		m_textLine += m_textIncrement;
+		DrawString(5, m_textLine, "Keys: c = Camera fixed/tracking");
+		
 
 		if(!m_fixed_camera)
 		{

@@ -20,28 +20,21 @@
 #ifndef __PHYSICSNODES_DEBUGNODE_BOX2D_H__
 #define __PHYSICSNODES_DEBUGNODE_BOX2D_H__
 
-
-#define GLFW_INCLUDE_NONE
-
-
 #include "extensions/ExtensionMacros.h"
-#include "2d/CCDrawNode.h"
 #include "extensions/ExtensionExport.h"
+#include "2d/CCDrawNode.h"
 #include "box2d/box2d.h"
 #include "cocos2d.h"
 
+NS_CC_EXT_BEGIN
 
-// This class implements debug drawing callbacks that are invoked
-// inside b2World::Step.
-
-//PhysicsDebugNode : public DrawNode
-class CC_EX_DLL DebugDraw : public b2Draw
+// This class implements debug drawing callbacks that are invoked inside b2World::Step.
+class CC_EX_DLL PhysicsDebugNodeBox2D : public b2Draw
 {
 public:
-    void initShader( void );
 
-    DebugDraw();
-    ~DebugDraw();
+    PhysicsDebugNodeBox2D();
+    ~PhysicsDebugNodeBox2D();
 
     void Create();
     void Destroy();
@@ -60,28 +53,19 @@ public:
 
     void DrawPoint(const b2Vec2& p, float size, const b2Color& color) override;
 
-    void DrawString(int x, int y, const char* fmt, ...);
-
-    void DrawString(const b2Vec2& p, const char* fmt, ...);
-
-    void DrawAABB(b2AABB* aabb, const b2Color& color);
-
-    void Flush();
-
+    // adxe stuffs
     cocos2d::DrawNode* GetDrawNode();
     void SetDrawNode(cocos2d::DrawNode* drawNode);
     cocos2d::Vec2& GetDebugNodeOffset();
 
-    float mRatio;
-    cocos2d::DrawNode* drawBP = NULL;
-    std::string debugString = "";
-
+    cocos2d::DrawNode* drawBP = NULL;  // adxe "interface"!
     cocos2d::Vec2 debugNodeOffset;
+    float mRatio;
+
 private:
 
-
-
-
 };
+
+NS_CC_EXT_END
 
 #endif //__PHYSICSNODES_DEBUGNODE_BOX2D_H__

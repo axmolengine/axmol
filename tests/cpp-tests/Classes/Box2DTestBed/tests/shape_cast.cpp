@@ -120,9 +120,9 @@ public:
 
 		b2Distance(&distanceOutput, &simplexCache, &distanceInput);
 
-		g_debugDraw.DrawString(5, m_textLine, "hit = %s, iters = %d, lambda = %g, distance = %g",
+		DrawString(5, m_textLine, "hit = %s, iters = %d, lambda = %g, distance = %g",
 			hit ? "true" : "false", output.iterations, output.lambda, distanceOutput.distance);
-		m_textLine += m_textIncrement;
+		
 
 		b2Vec2 vertices[b2_maxPolygonVertices];
 
