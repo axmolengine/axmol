@@ -4,7 +4,7 @@
 <dict>
 	<key>frames</key>
 	<dict>
-		<key>buttons/back</key>
+		<key>issue_17116/buttons/back</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -27,7 +27,7 @@
 			<key>verticesUV</key>
 			<string>212 17 212 61 169 61 152 44 152 1 196 1</string>
 		</dict>
-		<key>buttons/icons/achievements</key>
+		<key>issue_17116/buttons/icons/achievements</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -50,7 +50,7 @@
 			<key>verticesUV</key>
 			<string>237 120 214 120 214 97 237 97</string>
 		</dict>
-		<key>buttons/icons/clear-level</key>
+		<key>issue_17116/buttons/icons/clear-level</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -73,7 +73,7 @@
 			<key>verticesUV</key>
 			<string>242 44 238 64 214 64 214 36 237 36</string>
 		</dict>
-		<key>buttons/icons/conditions</key>
+		<key>issue_17116/buttons/icons/conditions</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -96,7 +96,7 @@
 			<key>verticesUV</key>
 			<string>242 34 214 34 214 14 219 4 225 1 242 1</string>
 		</dict>
-		<key>buttons/icons/leaderboard</key>
+		<key>issue_17116/buttons/icons/leaderboard</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -119,7 +119,7 @@
 			<key>verticesUV</key>
 			<string>98 489 98 463 121 463 121 489</string>
 		</dict>
-		<key>buttons/icons/objectives</key>
+		<key>issue_17116/buttons/icons/objectives</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -142,7 +142,7 @@
 			<key>verticesUV</key>
 			<string>96 492 67 492 67 463 96 463</string>
 		</dict>
-		<key>buttons/icons/sound</key>
+		<key>issue_17116/buttons/icons/sound</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -165,7 +165,7 @@
 			<key>verticesUV</key>
 			<string>150 364 123 364 123 341 150 341</string>
 		</dict>
-		<key>buttons/icons/time</key>
+		<key>issue_17116/buttons/icons/time</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -188,7 +188,7 @@
 			<key>verticesUV</key>
 			<string>232 95 214 95 214 66 232 66</string>
 		</dict>
-		<key>buttons/icons/tutorial</key>
+		<key>issue_17116/buttons/icons/tutorial</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -211,7 +211,7 @@
 			<key>verticesUV</key>
 			<string>224 145 214 145 214 122 224 122</string>
 		</dict>
-		<key>buttons/info-small</key>
+		<key>issue_17116/buttons/info-small</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -234,7 +234,7 @@
 			<key>verticesUV</key>
 			<string>65 493 35 493 35 463 65 463</string>
 		</dict>
-		<key>buttons/menu/disabled</key>
+		<key>issue_17116/buttons/menu/disabled</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -257,7 +257,7 @@
 			<key>verticesUV</key>
 			<string>212 123 152 123 152 63 212 63</string>
 		</dict>
-		<key>buttons/menu/normal</key>
+		<key>issue_17116/buttons/menu/normal</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -280,7 +280,7 @@
 			<key>verticesUV</key>
 			<string>212 185 152 185 152 125 212 125</string>
 		</dict>
-		<key>buttons/menu/selected</key>
+		<key>issue_17116/buttons/menu/selected</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -303,7 +303,7 @@
 			<key>verticesUV</key>
 			<string>212 247 152 247 152 187 212 187</string>
 		</dict>
-		<key>buttons/music</key>
+		<key>issue_17116/buttons/music</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -326,7 +326,7 @@
 			<key>verticesUV</key>
 			<string>212 265 212 309 169 309 152 292 152 249 196 249</string>
 		</dict>
-		<key>buttons/play</key>
+		<key>issue_17116/buttons/play</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -349,7 +349,7 @@
 			<key>verticesUV</key>
 			<string>212 327 212 371 169 371 152 354 152 311 196 311</string>
 		</dict>
-		<key>buttons/play-big</key>
+		<key>issue_17116/buttons/play-big</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -372,7 +372,7 @@
 			<key>verticesUV</key>
 			<string>121 365 121 423 98 461 35 461 1 427 1 374 34 341 83 341</string>
 		</dict>
-		<key>buttons/rating</key>
+		<key>issue_17116/buttons/rating</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -395,7 +395,7 @@
 			<key>verticesUV</key>
 			<string>183 389 183 433 140 433 123 416 123 373 167 373</string>
 		</dict>
-		<key>buttons/ray</key>
+		<key>issue_17116/buttons/ray</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -418,7 +418,7 @@
 			<key>verticesUV</key>
 			<string>146 15 150 54 106 333 73 339 51 328 16 134 1 18 25 2 129 1</string>
 		</dict>
-		<key>buttons/sfx</key>
+		<key>issue_17116/buttons/sfx</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -441,7 +441,7 @@
 			<key>verticesUV</key>
 			<string>183 451 183 495 140 495 123 478 123 435 167 435</string>
 		</dict>
-		<key>buttons/star-off-big</key>
+		<key>issue_17116/buttons/star-off-big</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -464,7 +464,7 @@
 			<key>verticesUV</key>
 			<string>223 414 221 433 219 433 185 422 185 384 208 384 219 373 221 373 242 401 242 404</string>
 		</dict>
-		<key>buttons/star-off-small</key>
+		<key>issue_17116/buttons/star-off-small</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -487,7 +487,7 @@
 			<key>verticesUV</key>
 			<string>226 137 226 124 233 122 240 122 240 137</string>
 		</dict>
-		<key>buttons/star-on-big</key>
+		<key>issue_17116/buttons/star-on-big</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -510,7 +510,7 @@
 			<key>verticesUV</key>
 			<string>223 475 221 495 219 495 185 484 185 482 193 469 185 449 185 446 208 446 219 435 221 435 242 463 242 466</string>
 		</dict>
-		<key>buttons/star-on-small</key>
+		<key>issue_17116/buttons/star-on-small</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
@@ -533,7 +533,7 @@
 			<key>verticesUV</key>
 			<string>214 162 214 149 221 147 228 147 228 162</string>
 		</dict>
-		<key>buttons/top-pause</key>
+		<key>issue_17116/buttons/top-pause</key>
 		<dict>
 			<key>aliases</key>
 			<array/>

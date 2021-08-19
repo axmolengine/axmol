@@ -4,7 +4,7 @@
 <dict>
 	<key>frames</key>
 	<dict>
-		<key>grossini.png</key>
+		<key>sprite_frames_test/grossini.png</key>
 		<dict>
 			<key>aliases</key>
 			<array/>
