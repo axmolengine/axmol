@@ -146,8 +146,8 @@ public:
 
 		Test::Step(settings);
 
-		DrawString(5, m_textLine, "Keys: (d) dynamic, (s) static, (k) kinematic");
-		
+		g_debugDraw.DrawString(5, m_textLine, "Keys: (d) dynamic, (s) static, (k) kinematic");
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

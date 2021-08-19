@@ -123,7 +123,7 @@ void SpritePolygonTestCase::updateDrawNode()
                     //draw 3 lines
                     Vec3 from = verts[indices[i*3]].vertices;
                     Vec3 to = verts[indices[i*3+1]].vertices;
-                    drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x,to.y), Color4F::BLUE);
+                    drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x,to.y), Color4F::GREEN);
                     
                     from = verts[indices[i*3+1]].vertices;
                     to = verts[indices[i*3+2]].vertices;
@@ -131,7 +131,7 @@ void SpritePolygonTestCase::updateDrawNode()
                     
                     from = verts[indices[i*3+2]].vertices;
                     to = verts[indices[i*3]].vertices;
-                    drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x,to.y), Color4F::RED);
+                    drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x,to.y), Color4F::GREEN);
                 }
         }
     }
@@ -791,7 +791,7 @@ void SpritePolygonTestFrameAnim::initSprites()
         _drawNodes.pushBack(spDrawNode);
     }
 
-
+    updateDrawNode();
 
 
     Vector<SpriteFrame*> animFrames(5);
@@ -803,8 +803,6 @@ void SpritePolygonTestFrameAnim::initSprites()
     auto animation = Animation::createWithSpriteFrames(animFrames, 0.3f);
     sprite->runAction(RepeatForever::create(Animate::create(animation)));
     
-
-    updateDrawNode();
 }
 
 //

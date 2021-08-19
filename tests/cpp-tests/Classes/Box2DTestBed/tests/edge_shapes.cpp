@@ -205,8 +205,8 @@ public:
 		bool advanceRay = settings.m_pause == 0 || settings.m_singleStep;
 
 		Test::Step(settings);
-		DrawString(5, m_textLine, "Press 1-5 to drop stuff");
-		
+		g_debugDraw.DrawString(5, m_textLine, "Press 1-5 to drop stuff");
+		m_textLine += m_textIncrement;
 
 		float L = 25.0f;
 		b2Vec2 point1(0.0f, 10.0f);

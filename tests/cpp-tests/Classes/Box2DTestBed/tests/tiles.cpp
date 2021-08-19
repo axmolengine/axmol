@@ -130,14 +130,14 @@ public:
 		int32 leafCount = cm.m_broadPhase.GetProxyCount();
 		int32 minimumNodeCount = 2 * leafCount - 1;
 		float minimumHeight = ceilf(logf(float(minimumNodeCount)) / logf(2.0f));
-		DrawString(5, m_textLine, "dynamic tree height = %d, min = %d", height, int32(minimumHeight));
-		
+		g_debugDraw.DrawString(5, m_textLine, "dynamic tree height = %d, min = %d", height, int32(minimumHeight));
+		m_textLine += m_textIncrement;
 
 		Test::Step(settings);
 
-		DrawString(5, m_textLine, "create time = %6.2f ms, fixture count = %d",
+		g_debugDraw.DrawString(5, m_textLine, "create time = %6.2f ms, fixture count = %d",
 			m_createTime, m_fixtureCount);
-		
+		m_textLine += m_textIncrement;
 
 		//b2DynamicTree* tree = &m_world->m_contactManager.m_broadPhase.m_tree;
 

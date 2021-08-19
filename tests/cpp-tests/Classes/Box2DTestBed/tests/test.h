@@ -27,6 +27,8 @@
 class Test;
 struct Settings;
 
+
+
 #define	RAND_LIMIT	32767
 #define DRAW_STRING_NEW_LINE 25
 
@@ -111,15 +113,9 @@ public:
 
 	void ShiftOrigin(const b2Vec2& newOrigin);
 
-	void initShader(void);
-	void DrawString(int x, int y, const char* fmt, ...);
-	void DrawString(const b2Vec2& p, const char* fmt, ...);
-	void DrawAABB(b2AABB* aabb, const b2Color& color);
-	void Flush();
-
-	cocos2d::extension::PhysicsDebugNodeBox2D g_debugDraw;
+	DebugDraw g_debugDraw;
 	cocos2d::DrawNode* debugDrawNode;
-	std::string debugString = "";
+
 
 	b2World* m_world;
 

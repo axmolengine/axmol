@@ -115,8 +115,8 @@ public:
 		Test::Step(settings);
 
 		b2Vec2 v = m_character->GetBody()->GetLinearVelocity();
-        DrawString(5, m_textLine, "Character Linear Velocity: %f", v.y);
-		
+        g_debugDraw.DrawString(5, m_textLine, "Character Linear Velocity: %f", v.y);
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

@@ -100,8 +100,8 @@ public:
 	{
 		Test::Step(settings);
 		float force = m_joint->GetMotorForce(settings.m_hertz);
-		DrawString(5, m_textLine, "Motor Force = %4.0f", force);
-		
+		g_debugDraw.DrawString(5, m_textLine, "Motor Force = %4.0f", force);
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

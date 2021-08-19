@@ -118,9 +118,9 @@ public:
 
 		if (b2_gjkCalls > 0)
 		{
-			DrawString(5, m_textLine, "gjk calls = %d, ave gjk iters = %3.1f, max gjk iters = %d",
+			g_debugDraw.DrawString(5, m_textLine, "gjk calls = %d, ave gjk iters = %3.1f, max gjk iters = %d",
 				b2_gjkCalls, b2_gjkIters / float(b2_gjkCalls), b2_gjkMaxIters);
-			
+			m_textLine += m_textIncrement;
 		}
 
 		extern B2_API int32 b2_toiCalls, b2_toiIters;
@@ -129,17 +129,17 @@ public:
 
 		if (b2_toiCalls > 0)
 		{
-			DrawString(5, m_textLine, "toi calls = %d, ave [max] toi iters = %3.1f [%d]",
+			g_debugDraw.DrawString(5, m_textLine, "toi calls = %d, ave [max] toi iters = %3.1f [%d]",
 								b2_toiCalls, b2_toiIters / float(b2_toiCalls), b2_toiMaxRootIters);
+			m_textLine += m_textIncrement;
 			
-			
-			DrawString(5, m_textLine, "ave [max] toi root iters = %3.1f [%d]",
+			g_debugDraw.DrawString(5, m_textLine, "ave [max] toi root iters = %3.1f [%d]",
 				b2_toiRootIters / float(b2_toiCalls), b2_toiMaxRootIters);
-			
+			m_textLine += m_textIncrement;
 
-			DrawString(5, m_textLine, "ave [max] toi time = %.1f [%.1f] (microseconds)",
+			g_debugDraw.DrawString(5, m_textLine, "ave [max] toi time = %.1f [%.1f] (microseconds)",
 				1000.0f * b2_toiTime / float(b2_toiCalls), 1000.0f * b2_toiMaxTime);
-			
+			m_textLine += m_textIncrement;
 		}
 
 		if (m_stepCount % 60 == 0)

@@ -1230,7 +1230,7 @@ bool Issue17116::init()
 
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/issue_17116.plist");
         auto button = ui::Button::create();
-        button->loadTextureNormal("buttons/play-big", ui::Widget::TextureResType::PLIST);
+        button->loadTextureNormal("issue_17116/buttons/play-big", ui::Widget::TextureResType::PLIST);
         button->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2));
         button->setOpacity(100);
         addChild(button);

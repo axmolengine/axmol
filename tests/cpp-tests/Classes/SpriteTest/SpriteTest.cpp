@@ -5627,7 +5627,7 @@ SpriteSlice9Test10::SpriteSlice9Test10()
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/blocks9ss.plist");
 
 
-    auto s1 = Sprite::createWithSpriteFrameName("blocks9r.png");
+    auto s1 = Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
     addChild(s1);
     s1->setPosition(s.width/2-s.width/3, s.height/2);
     s1->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -5635,7 +5635,7 @@ SpriteSlice9Test10::SpriteSlice9Test10()
     s1->setContentSize(s1->getContentSize()*1.5);
     s1->setFlippedX(true);
 
-    auto s2 = Sprite::createWithSpriteFrameName("blocks9r.png");
+    auto s2 = Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
     addChild(s2);
     s2->setPosition(s.width*2/4, s.height/2);
     s2->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -5643,7 +5643,7 @@ SpriteSlice9Test10::SpriteSlice9Test10()
     s2->setContentSize(s2->getContentSize()*1.5);
 
     //Create reference sprite that's rotating based on there anchor point
-    auto s3 = Sprite::createWithSpriteFrameName("blocks9r.png");
+    auto s3 = Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
     addChild(s3);
     s3->setPosition(s.width/2+s.width/3, s.height/2);
     s3->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -5666,7 +5666,7 @@ Issue17119::Issue17119()
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/blocks9ss.plist");
 
 
-    auto s1 = Sprite::createWithSpriteFrameName("firstPic.png");
+    auto s1 = Sprite::createWithSpriteFrameName("issue_17119/firstPic.png");
     addChild(s1);
     s1->setPosition(s.width/2-s.width/3, s.height/2);
     s1->setScale(0.25f);
@@ -5675,7 +5675,7 @@ Issue17119::Issue17119()
     p1->setPosition(s1->getPosition());
     addChild(p1, 10);
 
-    auto s2 = Sprite::createWithSpriteFrameName("blocks9r.png");
+    auto s2 = Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
     addChild(s2);
     s2->setPosition(s.width/2, s.height/2);
     s2->setCenterRectNormalized(Rect(1/3.f, 1/3.f, 1/3.f, 1/3.f));

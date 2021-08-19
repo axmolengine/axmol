@@ -222,8 +222,8 @@ public:
 
 	void Step(Settings& settings) override
 	{
-		DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, toggle motor = m");
-		
+		g_debugDraw.DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, toggle motor = m");
+		m_textLine += m_textIncrement;
 
 		Test::Step(settings);
 	}

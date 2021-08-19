@@ -143,13 +143,13 @@ public:
 
 		if (m_distanceJoint)
 		{
-			DrawString(5, m_textLine, "Distance Joint ON");
+			g_debugDraw.DrawString(5, m_textLine, "Distance Joint ON");
 		}
 		else
 		{
-			DrawString(5, m_textLine, "Distance Joint OFF");
+			g_debugDraw.DrawString(5, m_textLine, "Distance Joint OFF");
 		}
-		
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

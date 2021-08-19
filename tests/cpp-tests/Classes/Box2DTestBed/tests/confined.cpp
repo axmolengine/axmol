@@ -157,8 +157,8 @@ public:
 			}
 		}
 
-		DrawString(5, m_textLine, "Press 'c' to create a circle.");
-		
+		g_debugDraw.DrawString(5, m_textLine, "Press 'c' to create a circle.");
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

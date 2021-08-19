@@ -141,11 +141,11 @@ public:
 	void Step(Settings& settings) override
 	{
 		Test::Step(settings);
-		DrawString(5, m_textLine, "Keys: (f) toggle friction, (m) toggle motor");
-		
+		g_debugDraw.DrawString(5, m_textLine, "Keys: (f) toggle friction, (m) toggle motor");
+		m_textLine += m_textIncrement;
 		float torque = m_joint1->GetMotorTorque(settings.m_hertz);
-		DrawString(5, m_textLine, "Motor Torque = %5.0f", (float) torque);
-		
+		g_debugDraw.DrawString(5, m_textLine, "Motor Torque = %5.0f", (float) torque);
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()

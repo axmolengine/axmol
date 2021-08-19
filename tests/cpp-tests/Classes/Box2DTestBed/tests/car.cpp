@@ -264,8 +264,8 @@ public:
 
 	void Step(Settings& settings) override
 	{
-		DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, hz down = q, hz up = e");
-		
+		g_debugDraw.DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, hz down = q, hz up = e");
+		m_textLine += m_textIncrement;
 
 		//g_camera.m_center.x = m_car->GetPosition().x;
 		g_debugDraw.debugNodeOffset.x += m_car->GetPosition().x;

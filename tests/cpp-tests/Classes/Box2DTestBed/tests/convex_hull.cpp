@@ -77,15 +77,15 @@ public:
 		b2PolygonShape shape;
 		shape.Set(m_points, m_count);
 
-		DrawString(5, m_textLine, "Press g to generate a new random convex hull");
-		
+		g_debugDraw.DrawString(5, m_textLine, "Press g to generate a new random convex hull");
+		m_textLine += m_textIncrement;
 
 		g_debugDraw.DrawPolygon(shape.m_vertices, shape.m_count, b2Color(0.9f, 0.9f, 0.9f));
 
 		for (int32 i = 0; i < m_count; ++i)
 		{
 			g_debugDraw.DrawPoint(m_points[i], 3.0f, b2Color(0.3f, 0.9f, 0.3f));
-			DrawString(m_points[i] + b2Vec2(0.05f, 0.05f), "%d", i);
+			g_debugDraw.DrawString(m_points[i] + b2Vec2(0.05f, 0.05f), "%d", i);
 		}
 
 		if (shape.Validate() == false)

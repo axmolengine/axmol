@@ -36,7 +36,7 @@ struct Settings
 		m_windowHeight = 900;
 		m_hertz = 60.0f;
 		m_velocityIterations = 8;
-		m_positionIterations = 3;
+		m_positionIterations = 1;
 		m_drawShapes = true;
 		m_drawJoints = true;
 		m_drawAABBs = false;

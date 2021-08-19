@@ -244,7 +244,7 @@ bool UIImageViewFlipTest::init()
         _uiLayer->addChild(alert);
         
         // Create the imageview
-        ImageView* imageView = ImageView::create("blocks9r.png", Widget::TextureResType::PLIST);
+        ImageView* imageView = ImageView::create("blocks9ss/blocks9r.png", Widget::TextureResType::PLIST);
         imageView->setScale9Enabled(true);
         imageView->setContentSize(Size(250, 115));
         imageView->setFlippedX(true);
@@ -296,7 +296,7 @@ bool UIImageViewIssue12249Test::init()
         _uiLayer->addChild(alert);
         
         // Create the imageview
-        ImageView* imageView = ImageView::create("blocks9r.png", Widget::TextureResType::PLIST);
+        ImageView* imageView = ImageView::create("blocks9ss/blocks9r.png", Widget::TextureResType::PLIST);
         imageView->setScale9Enabled(true);
         imageView->setContentSize(Size(250, imageView->getContentSize().height * 2));
         imageView->setFlippedX(true);

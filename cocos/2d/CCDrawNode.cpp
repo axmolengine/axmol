@@ -677,29 +677,6 @@ void DrawNode::drawSolidPoly(const Vec2 *poli, unsigned int numberOfPoints, cons
     drawPolygon(poli, numberOfPoints, color, 0.0, Color4F());
 }
 
-void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4F& fillColor, float borderWidth, const Color4F& borderColor)
-{
-    const float coef = 2.0f * (float)M_PI / segments;
-
-    Vec2* vertices = new (std::nothrow) Vec2[segments];
-    if (!vertices)
-        return;
-
-    for (unsigned int i = 0; i < segments; i++)
-    {
-        float rads = i * coef;
-        float j = radius * cosf(rads + angle) * scaleX + center.x;
-        float k = radius * sinf(rads + angle) * scaleY + center.y;
-
-        vertices[i].x = j;
-        vertices[i].y = k;
-    }
-
-    drawPolygon(vertices, segments, fillColor, borderWidth, borderColor);
-
-    CC_SAFE_DELETE_ARRAY(vertices);
-}
-
 void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4F &color)
 {
     const float coef = 2.0f * (float)M_PI/segments;
@@ -722,9 +699,6 @@ void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, un
     
     CC_SAFE_DELETE_ARRAY(vertices);
 }
-
-
-
 
 void DrawNode::drawSolidCircle( const Vec2& center, float radius, float angle, unsigned int segments, const Color4F& color)
 {

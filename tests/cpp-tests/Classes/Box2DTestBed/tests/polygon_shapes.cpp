@@ -243,12 +243,12 @@ public:
 		b2Color color(0.4f, 0.7f, 0.8f);
 		g_debugDraw.DrawCircle(callback.m_circle.m_p, callback.m_circle.m_radius, color);
 
-		DrawString(5, m_textLine, "Press 1-5 to drop stuff, maximum of %d overlaps detected", PolygonShapesCallback::e_maxCount);
-		
-		DrawString(5, m_textLine, "Press 'a' to enable/disable some bodies");
-		
-		DrawString(5, m_textLine, "Press 'd' to destroy a body");
-		
+		g_debugDraw.DrawString(5, m_textLine, "Press 1-5 to drop stuff, maximum of %d overlaps detected", PolygonShapesCallback::e_maxCount);
+		m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press 'a' to enable/disable some bodies");
+		m_textLine += m_textIncrement;
+		g_debugDraw.DrawString(5, m_textLine, "Press 'd' to destroy a body");
+		m_textLine += m_textIncrement;
 	}
 
 	static Test* Create()
