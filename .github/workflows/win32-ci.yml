@@ -45,5 +45,5 @@ jobs:
       shell: cmd
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: |
-        cmake --build %GITHUB_WORKSPACE%/build_x86 --config Debug --target cpp-tests
+        cmake --build %GITHUB_WORKSPACE%/build_x86 --config Release --target cpp-tests
         cmake --build %GITHUB_WORKSPACE%/build_x86 --config Release --target lua-tests
