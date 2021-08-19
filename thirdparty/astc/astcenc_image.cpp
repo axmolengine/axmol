@@ -255,7 +255,7 @@ void fetch_image_block(
 		data_enc_lns = float16_to_float(lns_to_sf16(float_to_int(data_enc)));
 	}
 
-	blk.origin_texel = select(data_enc_unorm, data_enc_lns, lns_mask);;
+	blk.origin_texel = select(data_enc_unorm, data_enc_lns, lns_mask);
 
 	// Store block metadata
 	blk.data_min = data_min;

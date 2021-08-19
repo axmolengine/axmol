@@ -229,7 +229,7 @@ static void kmeans_update(
 	for (unsigned int i = 0; i < texel_count; i++)
 	{
 		uint8_t partition = partition_of_texel[i];
-		color_sum[partition] += blk.texel(i);;
+		color_sum[partition] += blk.texel(i);
 		partition_texel_count[partition]++;
 	}
 

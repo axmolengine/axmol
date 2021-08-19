@@ -936,12 +936,10 @@ ASTCENC_SIMD_INLINE void storea(vfloat4 a, float* ptr)
  */
 ASTCENC_SIMD_INLINE vint4 float_to_int(vfloat4 a)
 {
-	// Casting to unsigned buys us an extra bit of precision in cases where
-	// we can use the integer as nasty bit hacks.
-	return vint4((unsigned int)a.m[0],
-	             (unsigned int)a.m[1],
-	             (unsigned int)a.m[2],
-	             (unsigned int)a.m[3]);
+	return vint4((int)a.m[0],
+	             (int)a.m[1],
+	             (int)a.m[2],
+	             (int)a.m[3]);
 }
 
 /**f
