@@ -247,7 +247,7 @@ public:
 
     void addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Rect& capInsets, Texture2D* texture);
 
-    void registerSpriteSheetLoader(std::unique_ptr<ISpriteSheetLoader> loader);
+    void registerSpriteSheetLoader(std::shared_ptr<ISpriteSheetLoader> loader);
     void deregisterSpriteSheetLoader(uint32_t spriteSheetFormat);
 
     ISpriteSheetLoader* getSpriteSheetLoader(uint32_t spriteSheetFormat);
@@ -288,7 +288,7 @@ private:
     std::unordered_map<std::string, std::shared_ptr<SpriteSheet>> _spriteSheets;
     std::unordered_map<std::string, std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
 
-    std::map<uint32_t, std::unique_ptr<ISpriteSheetLoader>> _spriteSheetLoaders;
+    std::map<uint32_t, std::shared_ptr<ISpriteSheetLoader>> _spriteSheetLoaders;
 };
 
 // end of _2d group

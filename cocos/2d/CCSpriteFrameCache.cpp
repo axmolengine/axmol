@@ -69,7 +69,7 @@ bool SpriteFrameCache::init()
     _spriteFrames.reserve(20);
     clear();
 
-    registerSpriteSheetLoader(std::make_unique<PlistSpriteSheetLoader>());
+    registerSpriteSheetLoader(std::make_shared<PlistSpriteSheetLoader>());
 
     return true;
 }
@@ -374,7 +374,7 @@ Map<std::string, SpriteFrame*>& SpriteFrameCache::getSpriteFrames()
     return _spriteFrames;
 }
 
-void SpriteFrameCache::registerSpriteSheetLoader(std::unique_ptr<ISpriteSheetLoader> loader)
+void SpriteFrameCache::registerSpriteSheetLoader(std::shared_ptr<ISpriteSheetLoader> loader)
 {
     auto format = loader->getFormat();
 
