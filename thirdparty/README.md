@@ -46,7 +46,7 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.76.1 with cmake modification: replace 'BUILD_SHARED_LIBS' with 'CURL_BUILD_SHARED_LIBS'
+- Version: 7.78.0
 - License: Curl (MIT/X)
 
 ## edtaa3func
