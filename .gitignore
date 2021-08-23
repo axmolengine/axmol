@@ -166,10 +166,6 @@ tests/lua-tests/project/proj.tizen/res/
 # Ignore vscode folder
 .vscode/
 
-# Ignore static libraries
-*.a
-!/external/**/*.a
-
 # Ignore the CMake build folder, such as ios-build/linux-build
 *-build/
 # Ignore the CLion build folder, such as cmake-build-debug
