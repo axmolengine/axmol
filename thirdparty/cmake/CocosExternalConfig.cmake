@@ -3,7 +3,7 @@
  if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
      set(WINDOWS TRUE)
      set(SYSTEM_STRING "Windows Desktop")
-     if("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win64")
+     if(NOT ("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
         set(WIN64 TRUE)
      else()
         set(WIN32 TRUE)
