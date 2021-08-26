@@ -29,7 +29,6 @@ jobs:
           - x86
           - x64
     env:
-      BUILD_TARGET: windows
       BUILD_ARCH: ${{ matrix.arch }}
 
     steps:
