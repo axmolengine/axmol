@@ -1,4 +1,4 @@
-name: win32
+name: windows
 
 on: 
   push:
@@ -12,7 +12,7 @@ on:
       - tests/**/*
       - thirdparty/**/*
       - CMakeLists.txt
-      - .github/workflows/win32-ci.yml
+      - .github/workflows/windows-ci.yml
 
 jobs:
   build:
