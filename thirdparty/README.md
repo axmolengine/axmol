@@ -112,7 +112,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1.0-beta3
+  - Version: git 2.1.0-8ff09d9 (2477)
   - License: MIT
 
 - tolua
@@ -158,7 +158,7 @@
 
 ## OpenSSL
 - Upstream: https://github.com/openssl/openssl
-- Version: 1.1.1k
+- Version: 1.1.1l
 - License: Apache-2.0
 
 ## png

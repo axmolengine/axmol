@@ -258,11 +258,6 @@ if(WINDOWS OR LINUX)
     configure_target_outdir(glad)
 endif()
 
-if(WINDOWS)
-    add_subdirectory(win32-specific/iconv)
-    target_link_libraries(thirdparty ext_iconv)
-endif()
-
 if(WINDOWS OR MACOSX OR LINUX)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation" FORCE)
     set(GLFW_INSTALL OFF CACHE BOOL "Build the GLFW documentation" FORCE)
