@@ -445,7 +445,8 @@ void GComponent::applyController(GController* c)
 {
     _applyingController = c;
 
-    for (ssize_t i = 0; i < _children.size(); i++)
+    ssize_t count = _children.size();
+    for (ssize_t i = 0; i < count; i++)
         _children.at(i)->handleControllerChanged(c);
 
     _applyingController = nullptr;

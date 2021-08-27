@@ -103,7 +103,7 @@ void GTree::createCell(GTreeNode* node)
 
     GObject* indentObj = node->_cell->getChild("indent");
     if (indentObj != nullptr)
-        indentObj->setWidth((node->_level - 1) * _indent);
+        indentObj->setWidth(static_cast<float>((node->_level - 1) * _indent));
 
     GController* cc;
 
@@ -270,7 +270,7 @@ int GTree::checkChildren(GTreeNode* folderNode, int index)
         if (node->_cell == nullptr)
             createCell(node);
 
-        if (node->_cell->getParent() == nullptr)
+        if (node->_cell && !(node->_cell->getParent()))
             addChildAt(node->_cell, index);
 
         if (node->isFolder() && node->isExpanded())

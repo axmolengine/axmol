@@ -16,8 +16,8 @@ public:
     ~InputEvent();
 
     GObject* getTarget() const { return _target; }
-    const int getX() const { return _pos.x; }
-    const int getY() const { return _pos.y; }
+    const int getX() const { return static_cast<int>(_pos.x); }
+    const int getY() const {return static_cast<int>(_pos.y); }
     const cocos2d::Vec2& getPosition() const { return _pos; }
     cocos2d::Touch* getTouch()const { return _touch; }
     int getTouchId()const { return _touchId; }

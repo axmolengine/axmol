@@ -11,7 +11,8 @@ GSlider::GSlider()
       _min(0),
       _max(100),
       _value(0),
-      _titleType(ProgressTitleType::PERCENT),
+      _titleType(ProgressTitleType::PERCENT), 
+      _reverse(false),
       _titleObject(nullptr),
       _barObjectH(nullptr),
       _barObjectV(nullptr),
@@ -78,8 +79,8 @@ void GSlider::setWholeNumbers(bool value)
 
 void GSlider::update()
 {
-    float percent = MIN(_value / _max, 1);
-    updateWithPercent(percent, false);
+    double percent = MIN(_value / _max, 1);
+    updateWithPercent(static_cast<float>(percent), false);
 }
 
 void GSlider::updateWithPercent(float percent, bool manual)
@@ -95,7 +96,7 @@ void GSlider::updateWithPercent(float percent, bool manual)
         if (_wholeNumbers)
         {
             newValue = round(newValue);
-            percent = clampf((newValue - _min) / (_max - _min), 0, 1);
+            percent = clampf(static_cast<float>((newValue - _min) / (_max - _min)), 0, 1);
         }
 
         if (newValue != _value)
@@ -238,7 +239,7 @@ void GSlider::onTouchBegin(EventContext* context)
         return;
 
     Vec2 pt = _gripObject->globalToLocal(evt->getPosition());
-    float percent = clampf((_value - _min) / (_max - _min), 0, 1);
+    float percent = clampf(static_cast<float>((_value - _min) / (_max - _min)), 0, 1);
     float delta = 0;
     if (_barObjectH != nullptr)
         delta = pt.x / _barMaxWidth;
@@ -261,7 +262,7 @@ void GSlider::onGripTouchBegin(EventContext* context)
     context->captureTouch();
 
     _clickPos = globalToLocal(context->getInput()->getPosition());
-    _clickPercent = clampf((_value - _min) / (_max - _min), 0, 1);
+    _clickPercent = clampf(static_cast<float>((_value - _min) / (_max - _min)), 0, 1);
 }
 
 void GSlider::onGripTouchMove(EventContext* context)
