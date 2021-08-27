@@ -4,9 +4,9 @@
 [![dev](https://img.shields.io/badge/v1.0.0-beta2-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
   
+[![Windows Build Status](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml)
 [![Android Build Status](https://github.com/adxeproject/adxe/workflows/android/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aandroid)
 [![iOS Build Status](https://github.com/adxeproject/adxe/workflows/ios/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aios)
-[![Windows Build Status](https://github.com/adxeproject/adxe/workflows/win32/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Awin32)
 [![Linux Build Status](https://github.com/adxeproject/adxe/workflows/linux/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Alinux)
 [![macOS Build Status](https://github.com/adxeproject/adxe/workflows/osx/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aosx)  
 
