@@ -161,6 +161,10 @@ add_library(${ADXE_LUA_LIB} STATIC ${lua_bindings_files})
 target_link_libraries(${ADXE_LUA_LIB} ${ADXE_CORE_LIB})
 add_dependencies(${ADXE_LUA_LIB} ${ADXE_CORE_LIB})
 
+if(MSVC)
+    target_compile_options(${ADXE_LUA_LIB} PRIVATE /bigobj)
+endif()
+
 get_target_property(lua_ext_depend thirdparty CC_LUA_DEPEND)
 target_link_libraries(${ADXE_LUA_LIB} ${lua_ext_depend})
 
