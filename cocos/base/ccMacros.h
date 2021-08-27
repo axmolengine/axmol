@@ -315,8 +315,8 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 /******************************************************************************************/
 #ifdef _WIN32
 // Assuming windows is always little-endian.
-#    if !defined(ADXE_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
-#        define ADXE_LITTLE_ENDIAN 1
+#    if !defined(CC_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
+#        define CC_LITTLE_ENDIAN 1
 #    endif
 #    if defined(_MSC_VER) && _MSC_VER >= 1300 && !defined(__INTEL_COMPILER)
 // If MSVC has "/RTCc" set, it will complain about truncating casts at
@@ -335,8 +335,8 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 #    endif
 #    if ((defined(__LITTLE_ENDIAN__) && !defined(__BIG_ENDIAN__)) ||    \
          (defined(__BYTE_ORDER) && __BYTE_ORDER == __LITTLE_ENDIAN)) && \
-        !defined(ADXE_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
-#        define ADXE_LITTLE_ENDIAN 1
+        !defined(CC_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
+#        define CC_LITTLE_ENDIAN 1
 #    endif
 #endif
 
