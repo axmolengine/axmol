@@ -36,7 +36,7 @@ void TranslationHelper::loadFromXML(const char* xmlString, size_t nBytes)
 
             std::string key2 = key.substr(0, i);
             std::string key3 = key.substr(i + 1);
-            auto& col = TranslationHelper::strings[key2];
+            std::unordered_map<std::string, std::string> &col = TranslationHelper::strings[key2];
             col[key3] = text;
 
             ele = ele.next_sibling("string");

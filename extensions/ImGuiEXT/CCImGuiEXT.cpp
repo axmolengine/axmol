@@ -201,7 +201,7 @@ void ImGuiEXT::loadCustomFonts(void* ud)
         auto fontData = FileUtils::getInstance()->getDataFromFile(fontInfo.first);
         CCASSERT(!fontData.isNull(), "Cannot load font for IMGUI");
 
-        ssize_t bufferSize = 0;
+        long bufferSize = 0;
         auto* buffer = fontData.takeBuffer(&bufferSize); // Buffer automatically freed by IMGUI
 
         imFonts->AddFontFromMemoryTTF(buffer, bufferSize, fontInfo.second.fontSize * contentZoomFactor, nullptr, imChars);

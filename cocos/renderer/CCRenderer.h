@@ -528,8 +528,8 @@ protected:
     unsigned int _filledVertex = 0;
 
     // stats
-    size_t _drawnBatches = 0;
-    size_t _drawnVertices = 0;
+    unsigned int _drawnBatches = 0;
+    unsigned int _drawnVertices = 0;
     //the flag for checking whether renderer is rendering
     bool _isRendering = false;
     bool _isDepthTestFor2D = false;

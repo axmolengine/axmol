@@ -8,23 +8,18 @@
 NS_FGUI_BEGIN
 USING_NS_CC;
 
-// clang-format off
 GComboBox::GComboBox()
-    : visibleItemCount(UIConfig::defaultComboBoxVisibleItemCount),
-      popupDirection(PopupDirection::AUTO),
-      _dropdown(nullptr),
+    : _dropdown(nullptr),
       _titleObject(nullptr),
       _iconObject(nullptr),
       _list(nullptr),
       _selectionController(nullptr),
-      _itemsUpdated(true), 
-      _selectedIndex(-1), 
-      _buttonController(nullptr),
-      _down(false),
-      _over(false)
+      _itemsUpdated(true),
+      _selectedIndex(-1),
+      popupDirection(PopupDirection::AUTO)
 {
+    visibleItemCount = UIConfig::defaultComboBoxVisibleItemCount;
 }
-// clang-format on
 
 GComboBox::~GComboBox()
 {
@@ -66,7 +61,7 @@ int GComboBox::getTitleFontSize() const
 {
     GTextField* tf = getTextField();
     if (tf)
-        return static_cast<int>(tf->getFontSize());
+        return tf->getFontSize();
     else
         return 0;
 }
@@ -75,7 +70,7 @@ void GComboBox::setTitleFontSize(int value)
 {
     GTextField* tf = getTextField();
     if (tf)
-        tf->setFontSize(static_cast<float>(value));
+        tf->setFontSize(value);
 }
 
 const std::string& GComboBox::getIcon() const

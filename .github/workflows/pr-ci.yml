@@ -19,16 +19,9 @@ env:
   GITHUB_CI: true
 
 jobs:
-  build-windows:
-    name: build-windows
+  build-win32:
+    name: build-win32
     runs-on: windows-latest
-    strategy:
-      matrix:
-        arch:
-          - x86
-          - x64
-    env:
-      BUILD_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -37,7 +30,10 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
       - name: Build
-        run: tools\windows-ci\build.ps1 $env:BUILD_ARCH
+        shell: cmd
+        run: |
+          cmake -S %GITHUB_WORKSPACE% -B %GITHUB_WORKSPACE%/build_x86 -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -A Win32 -DBUILD_EXTENSION_IMGUIEXT=ON
+          cmake --build %GITHUB_WORKSPACE%/build_x86 --config %BUILD_TYPE% --target cpp-tests
 
   build-linux:
     name: build-linux

@@ -1,6 +1,5 @@
 adxe-1.0  ??
 
-[HIGHLIGHT] Windows x64 build support
 [HIGHLIGHT] Support custom texture atlas formats, thanks to @rh101
 [HIGHLIGHT] Downloader realtime md5 checksum calculation support
 [HIGHLIGHT] Decompress astc parallel support

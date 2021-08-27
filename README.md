@@ -62,10 +62,17 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
   1. Enter ```adxe``` root directory
   2. Run ```python setup.py```, restart console after finish
 
-#### Windows
+#### Windows (64/32 bit)
   1. Install [CMake](https://cmake.org/) 3.14+  
   2. Install Visual Studio 2019 build (it's strong recommend you use this version)  
-  3. Execute follow command at command line (Console, Window Terminal or Powershell)
+  3. Execute follow command at command line (Console, Window Terminal or Powershell):
+ 
+  64bit:
+  ```bat
+  cd adxe\
+  cmake -S . -B build -G "Visual Studio 16 2019" -A x64
+  ```
+  32bit:
   ```bat
   cd adxe\
   cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
