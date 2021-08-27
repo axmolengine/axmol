@@ -22,7 +22,6 @@ jobs:
     # cross-platform coverage.
     # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
     runs-on: windows-latest
-
     strategy:
       matrix:
         arch:
@@ -41,8 +40,8 @@ jobs:
       uses: actions/setup-python@v2
 
     - uses: ilammy/msvc-dev-cmd@v1.9.0
-        with:
-          arch: ${{ env.BUILD_ARCH }}
+      with: 
+        arch: ${{ env.BUILD_ARCH }}
 
-      - name: Build
-        run: tools\windows-ci\build.ps1 $env:BUILD_ARCH
+    - name: Build
+      run: tools\windows-ci\build.ps1 $env:BUILD_ARCH
