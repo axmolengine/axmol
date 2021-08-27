@@ -119,6 +119,9 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
 ### Reference links
   * Official Cocos2d-x: https://github.com/cocos2d/cocos2d-x
 
+### Contributing guide
+https://github.com/adxeproject/adxe/discussions/411
+
 ### The adxe Active Contributors
 
 - @halx99
