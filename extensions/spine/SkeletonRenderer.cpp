@@ -188,7 +188,7 @@ void SkeletonRenderer::initWithJsonFile (const std::string& skeletonDataFile, At
 	SkeletonJson json(_attachmentLoader);
 	json.setScale(scale);
 	SkeletonData* skeletonData = json.readSkeletonDataFile(skeletonDataFile.c_str());
-	CCASSERT(skeletonData, !json.getError().isEmpty() ? json.getError().buffer() : "Error reading skeleton data.");
+	CCASSERT(skeletonData, (!json.getError().isEmpty() ? json.getError().buffer() : "Error reading skeleton data."));
 
 	_ownsSkeleton = true;
 	setSkeletonData(skeletonData, true);
@@ -205,7 +205,7 @@ void SkeletonRenderer::initWithJsonFile (const std::string& skeletonDataFile, co
 	SkeletonJson json(_attachmentLoader);
 	json.setScale(scale);
 	SkeletonData* skeletonData = json.readSkeletonDataFile(skeletonDataFile.c_str());
-	CCASSERT(skeletonData, !json.getError().isEmpty() ? json.getError().buffer() : "Error reading skeleton data.");
+    CCASSERT(skeletonData, (!json.getError().isEmpty() ? json.getError().buffer() : "Error reading skeleton data."));
 
 	_ownsSkeleton = true;
 	_ownsAtlas = true;
@@ -221,7 +221,7 @@ void SkeletonRenderer::initWithBinaryFile (const std::string& skeletonDataFile, 
 	SkeletonBinary binary(_attachmentLoader);
 	binary.setScale(scale);
 	SkeletonData* skeletonData = binary.readSkeletonDataFile(skeletonDataFile.c_str());
-	CCASSERT(skeletonData, !binary.getError().isEmpty() ? binary.getError().buffer() : "Error reading skeleton data.");
+	CCASSERT(skeletonData, (!binary.getError().isEmpty() ? binary.getError().buffer() : "Error reading skeleton data."));
 	_ownsSkeleton = true;
 	setSkeletonData(skeletonData, true);
 
@@ -237,7 +237,7 @@ void SkeletonRenderer::initWithBinaryFile (const std::string& skeletonDataFile, 
 	SkeletonBinary binary(_attachmentLoader);
 	binary.setScale(scale);
 	SkeletonData* skeletonData = binary.readSkeletonDataFile(skeletonDataFile.c_str());
-	CCASSERT(skeletonData, !binary.getError().isEmpty() ? binary.getError().buffer() : "Error reading skeleton data.");
+	CCASSERT(skeletonData, (!binary.getError().isEmpty() ? binary.getError().buffer() : "Error reading skeleton data."));
 	_ownsSkeleton = true;
 	_ownsAtlas = true;
 	setSkeletonData(skeletonData, true);
