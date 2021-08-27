@@ -24,7 +24,7 @@ macro(set_openssl_sub_target sub_target_name sub_lib_name)
   if(WINDOWS)
     set(impl_lib_suffix "")
     if(WIN64)
-        set(impl_lib_suffix "-{ARCH_ALIAS}")
+        set(impl_lib_suffix "-${ARCH_ALIAS}")
     endif()
     set(imp_lib_name "${platform_spec_path}/lib${sub_lib_name}.lib")
     set_target_properties(${sub_target_name} PROPERTIES
