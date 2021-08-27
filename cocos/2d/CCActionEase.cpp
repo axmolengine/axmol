@@ -78,7 +78,7 @@ void ActionEase::startWithTarget(Node *target)
     }
     else
     {
-        log("ActionEase::startWithTarget error: target or _inner is nullptr!");
+        cocos2d::log("ActionEase::startWithTarget error: target or _inner is nullptr!");
     }
 }
 

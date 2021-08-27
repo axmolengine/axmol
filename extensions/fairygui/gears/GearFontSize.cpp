@@ -5,8 +5,7 @@
 NS_FGUI_BEGIN
 USING_NS_CC;
 
-GearFontSize::GearFontSize(GObject* owner) : GearBase(owner)
-{
+GearFontSize::GearFontSize(GObject* owner) : GearBase(owner), _default(13) {
 }
 
 GearFontSize::~GearFontSize()
