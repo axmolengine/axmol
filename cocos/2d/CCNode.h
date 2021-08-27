@@ -1869,7 +1869,7 @@ protected:
     mutable Mat4 _inverse;          ///< inverse transform
     mutable Mat4* _additionalTransform; ///< two transforms needed by additional transforms
 
-#if CC_LITTLE_ENDIAN
+#if ADXE_LITTLE_ENDIAN
     union {
         struct {
             std::uint32_t _orderOfArrival;
