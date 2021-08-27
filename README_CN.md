@@ -1,7 +1,7 @@
 # adxe
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
-[![dev](https://img.shields.io/badge/v1.0.0-beta1-yellow.svg)](https://github.com/adxeproject/adxe/releases)
+[![dev](https://img.shields.io/badge/v1.0.0-beta2-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
   
 [![Android Build Status](https://github.com/adxeproject/adxe/workflows/android/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aandroid)
@@ -23,6 +23,7 @@
 * Excellent PRs from any guys are welcome, we will review & merge ASAP
   
 ### 主要特性:
+* Windows x64编译支持
 * 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
 * 重构AudioEngine, 全平台OpenAL
   * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_DEP_ALSOFT=ON to cmake to force enable it
