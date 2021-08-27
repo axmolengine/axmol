@@ -50,9 +50,7 @@
   * Bullet Physics SDK
 * **ImGui integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
 
-Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information too.
-
-### [Roadmap](https://github.com/adxeproject/adxe/issues/1)
+Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information and see [Milestones](https://github.com/adxeproject/adxe/milestones) for planed feature too.
 
 ### Quick Start
 
