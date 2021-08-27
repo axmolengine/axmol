@@ -22,6 +22,7 @@
 * Usefull PRs from **you** are welcome (review/merge ASAP)
   
 ### Highlight Features
+* Windows x64 build support
 * Reimplement HttpClient based on yasio for process http request concorrently.
 * **More clearly third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easy to publish your commercial apps based on adxe**
 * Refactor AudioEngine, OpenAL for all platforms
