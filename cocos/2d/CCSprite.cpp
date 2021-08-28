@@ -279,7 +279,15 @@ bool Sprite::initWithTexture(Texture2D *texture, const Rect& rect, bool rotated)
 
         // update texture (calls updateBlendFunc)
         setTexture(texture);
-        setTextureRect(rect, rotated, rect.size);
+        if (texture)
+        {
+            setTextureRect(rect, rotated, rect.size);
+        }
+        else
+        {
+            Rect defaultRect{0.f, 0.f, static_cast<float>(_texture->getPixelsWide()), static_cast<float>(_texture->getPixelsHigh())};
+            setTextureRect(defaultRect, false, defaultRect.size);
+        }
 
         // by default use "Self Render".
         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
