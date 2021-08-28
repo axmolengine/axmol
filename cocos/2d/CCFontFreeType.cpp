@@ -3,7 +3,7 @@ Copyright (c) 2013      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
- 
+
 https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -40,29 +40,38 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-
 FT_Library FontFreeType::_FTlibrary;
-bool       FontFreeType::_FTInitialized = false;
-bool       FontFreeType::_streamParsingEnabled = false;
-bool       FontFreeType::_doNativeBytecodeHinting = true;
-const int  FontFreeType::DistanceMapSpread = 3;
+bool FontFreeType::_FTInitialized           = false;
+bool FontFreeType::_streamParsingEnabled    = false;
+bool FontFreeType::_doNativeBytecodeHinting = true;
+const int FontFreeType::DistanceMapSpread   = 3;
 
-const char* FontFreeType::_glyphASCII = "\"!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ ";
-const char* FontFreeType::_glyphNEHE = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ";
+const char* FontFreeType::_glyphASCII =
+    "\"!#$%&'()*+,-./"
+    "0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+    "¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ ";
+const char* FontFreeType::_glyphNEHE =
+    "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ";
 
 typedef struct _DataRef
 {
     Data data;
     unsigned int referenceCount;
-}DataRef;
+} DataRef;
 
 static std::unordered_map<std::string, DataRef> s_cacheFontData;
 
 // ------ freetype2 stream parsing support ---
-static unsigned long ft_stream_read_callback(FT_Stream stream, unsigned long offset, unsigned char* buf, unsigned long size) {
+static unsigned long ft_stream_read_callback(FT_Stream stream,
+                                             unsigned long offset,
+                                             unsigned char* buf,
+                                             unsigned long size)
+{
     auto fd = (FileStream*)stream->descriptor.pointer;
-    if (!fd) return 1;
-    if (!size && offset >= stream->size) return 1;
+    if (!fd)
+        return 1;
+    if (!size && offset >= stream->size)
+        return 1;
 
     if (stream->pos != offset)
         fd->seek(offset, SEEK_SET);
@@ -73,22 +82,28 @@ static unsigned long ft_stream_read_callback(FT_Stream stream, unsigned long off
     return 0;
 }
 
-static void ft_stream_close_callback(FT_Stream stream) {
+static void ft_stream_close_callback(FT_Stream stream)
+{
     const auto* fd = (FileStream*)stream->descriptor.pointer;
     delete fd;
-    stream->size = 0;
+    stream->size               = 0;
     stream->descriptor.pointer = nullptr;
 }
 
-FontFreeType * FontFreeType::create(const std::string &fontName, float fontSize, GlyphCollection glyphs, const char *customGlyphs,bool distanceFieldEnabled /* = false */,float outline /* = 0 */)
+FontFreeType* FontFreeType::create(const std::string& fontName,
+                                   float fontSize,
+                                   GlyphCollection glyphs,
+                                   const char* customGlyphs,
+                                   bool distanceFieldEnabled /* = false */,
+                                   float outline /* = 0 */)
 {
-    FontFreeType *tempFont =  new (std::nothrow) FontFreeType(distanceFieldEnabled,outline);
+    FontFreeType* tempFont = new (std::nothrow) FontFreeType(distanceFieldEnabled, outline);
 
     if (!tempFont)
         return nullptr;
-    
+
     tempFont->setGlyphCollection(glyphs, customGlyphs);
-    
+
     if (!tempFont->createFontObject(fontName, fontSize))
     {
         delete tempFont;
@@ -103,13 +118,13 @@ bool FontFreeType::initFreeType()
     if (_FTInitialized == false)
     {
         // begin freetype
-        if (FT_Init_FreeType( &_FTlibrary ))
+        if (FT_Init_FreeType(&_FTlibrary))
             return false;
-        
+
         _FTInitialized = true;
     }
-    
-    return  _FTInitialized;
+
+    return _FTInitialized;
 }
 
 void FontFreeType::shutdownFreeType()
@@ -154,13 +169,14 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outlin
 }
 // clang-format on
 
-bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
+bool FontFreeType::createFontObject(const std::string& fontName, float fontSize)
 {
     FT_Face face;
     // save font name locally
     _fontName = fontName;
 
-    if (!_streamParsingEnabled) {
+    if (!_streamParsingEnabled)
+    {
         auto it = s_cacheFontData.find(fontName);
         if (it != s_cacheFontData.end())
         {
@@ -169,7 +185,7 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
         else
         {
             s_cacheFontData[fontName].referenceCount = 1;
-            s_cacheFontData[fontName].data = FileUtils::getInstance()->getDataFromFile(fontName);
+            s_cacheFontData[fontName].data           = FileUtils::getInstance()->getDataFromFile(fontName);
 
             if (s_cacheFontData[fontName].data.isNull())
             {
@@ -177,12 +193,15 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
             }
         }
 
-        if (FT_New_Memory_Face(getFTLibrary(), s_cacheFontData[fontName].data.getBytes(), s_cacheFontData[fontName].data.getSize(), 0, &face))
+        if (FT_New_Memory_Face(getFTLibrary(), s_cacheFontData[fontName].data.getBytes(),
+                               s_cacheFontData[fontName].data.getSize(), 0, &face))
             return false;
     }
-    else {
+    else
+    {
         auto fullPath = FileUtils::getInstance()->fullPathForFilename(fontName);
-        if (fullPath.empty()) return false;
+        if (fullPath.empty())
+            return false;
 
         auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ).release();
         if (!fs)
@@ -191,14 +210,14 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
         }
 
         std::unique_ptr<FT_StreamRec> fts(new FT_StreamRec());
-        fts->read = ft_stream_read_callback;
-        fts->close = ft_stream_close_callback;
-        fts->size = fs->size();
+        fts->read               = ft_stream_read_callback;
+        fts->close              = ft_stream_close_callback;
+        fts->size               = fs->size();
         fts->descriptor.pointer = fs;
 
-        FT_Open_Args args = { 0 };
-        args.flags = FT_OPEN_STREAM;
-        args.stream = fts.get();
+        FT_Open_Args args = {0};
+        args.flags        = FT_OPEN_STREAM;
+        args.stream       = fts.get();
 
         if (FT_Open_Face(getFTLibrary(), &args, 0, &face))
             return false;
@@ -231,18 +250,18 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
     }
 
     // set the requested font size
-    int dpi = 72;
+    int dpi            = 72;
     int fontSizePoints = (int)(64.f * fontSize * CC_CONTENT_SCALE_FACTOR());
     if (FT_Set_Char_Size(face, fontSizePoints, fontSizePoints, dpi, dpi))
         return false;
-    
+
     // store the face globally
     _fontRef = face;
 
     // Notes:
-    //  a. Since freetype 2.8.1 the tt matrics not sync to size_matrics, see the function 'tt_size_request' in truetype/ttdriver.c
-    //  b. The TT spec always asks for ROUND, not FLOOR or CEIL, see also the function 'tt_size_reset' in
-    //  truetype/ttobjs.c 
+    //  a. Since freetype 2.8.1 the TT matrics isn't sync to size_matrics, see the function 'tt_size_request' in
+    //  truetype/ttdriver.c b. The TT spec always asks for ROUND, not FLOOR or CEIL, see also the function
+    //  'tt_size_reset' in truetype/ttobjs.c
     // ** Please see description of FT_Size_Metrics_ in freetype.h about this solution
     auto& size_metrics = _fontRef->size->metrics;
     if (_doNativeBytecodeHinting && !strcmp(FT_Get_Font_Format(face), "TrueType"))
@@ -256,7 +275,7 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
         _descender = size_metrics.descender;
     }
 
-    _lineHeight      = (_ascender - _descender) >> 6;
+    _lineHeight = (_ascender - _descender) >> 6;
 
     // done and good
     return true;
@@ -287,7 +306,7 @@ FontFreeType::~FontFreeType()
     }
 }
 
-FontAtlas * FontFreeType::createFontAtlas()
+FontAtlas* FontFreeType::createFontAtlas()
 {
     if (_fontAtlas == nullptr)
     {
@@ -300,58 +319,58 @@ FontAtlas * FontFreeType::createFontAtlas()
                 _fontAtlas->prepareLetterDefinitions(utf32);
             }
         }
-//        this->autorelease();
+        //        this->autorelease();
     }
-    
+
     return _fontAtlas;
 }
 
-int * FontFreeType::getHorizontalKerningForTextUTF32(const std::u32string& text, int &outNumLetters) const
+int* FontFreeType::getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const
 {
     if (!_fontRef)
         return nullptr;
-    
+
     outNumLetters = static_cast<int>(text.length());
 
     if (!outNumLetters)
         return nullptr;
-    
-    int *sizes = new (std::nothrow) int[outNumLetters];
+
+    int* sizes = new (std::nothrow) int[outNumLetters];
     if (!sizes)
         return nullptr;
-    memset(sizes,0,outNumLetters * sizeof(int));
+    memset(sizes, 0, outNumLetters * sizeof(int));
 
-    bool hasKerning = FT_HAS_KERNING( _fontRef ) != 0;
+    bool hasKerning = FT_HAS_KERNING(_fontRef) != 0;
     if (hasKerning)
     {
         for (int c = 1; c < outNumLetters; ++c)
         {
-            sizes[c] = getHorizontalKerningForChars(text[c-1], text[c]);
+            sizes[c] = getHorizontalKerningForChars(text[c - 1], text[c]);
         }
     }
-    
+
     return sizes;
 }
 
-int  FontFreeType::getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const
+int FontFreeType::getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const
 {
     // get the ID to the char we need
     int glyphIndex1 = FT_Get_Char_Index(_fontRef, static_cast<FT_ULong>(firstChar));
-    
+
     if (!glyphIndex1)
         return 0;
-    
+
     // get the ID to the char we need
     int glyphIndex2 = FT_Get_Char_Index(_fontRef, static_cast<FT_ULong>(secondChar));
-    
+
     if (!glyphIndex2)
         return 0;
-    
+
     FT_Vector kerning;
-    
-    if (FT_Get_Kerning( _fontRef, glyphIndex1, glyphIndex2,  FT_KERNING_DEFAULT,  &kerning))
+
+    if (FT_Get_Kerning(_fontRef, glyphIndex1, glyphIndex2, FT_KERNING_DEFAULT, &kerning))
         return 0;
-    
+
     return (static_cast<int>(kerning.x >> 6));
 }
 
@@ -368,9 +387,13 @@ const char* FontFreeType::getFontFamily() const
     return _fontRef->family_name;
 }
 
-unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar, long &outWidth, long &outHeight, Rect &outRect,int &xAdvance)
+unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar,
+                                            long& outWidth,
+                                            long& outHeight,
+                                            Rect& outRect,
+                                            int& xAdvance)
 {
-    bool invalidChar = true;
+    bool invalidChar   = true;
     unsigned char* ret = nullptr;
 
     do
@@ -378,47 +401,50 @@ unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar, long &outWidth, lo
         if (_fontRef == nullptr)
             break;
 
-        // @remark: glyph_index=0 means 
+        // @remark: glyph_index=0 means
         auto glyph_index = FT_Get_Char_Index(_fontRef, static_cast<FT_ULong>(theChar));
-        if (FT_Load_Glyph(_fontRef, glyph_index, _distanceFieldEnabled ? 
-            (FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT) : 
-            (FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT)))
+        if (FT_Load_Glyph(_fontRef, glyph_index,
+                          _distanceFieldEnabled ? (FT_LOAD_RENDER | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT)
+                                                : (FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT)))
             break;
 
 #if defined(_DEBUG)
-        if (glyph_index == 0) {
+        if (glyph_index == 0)
+        {
             std::u32string charUTF32(1, theChar);
             std::string charUTF8;
             cocos2d::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);
 
-            if (charUTF8 == "\n") charUTF8 = "\\n";
-            cocos2d::log("The font face: %s doesn't contains char: <%s>", _fontRef->charmap->face->family_name, charUTF8.c_str());
+            if (charUTF8 == "\n")
+                charUTF8 = "\\n";
+            cocos2d::log("The font face: %s doesn't contains char: <%s>", _fontRef->charmap->face->family_name,
+                         charUTF8.c_str());
         }
 #endif
 
-        auto& metrics = _fontRef->glyph->metrics;
-        outRect.origin.x = static_cast<float>(metrics.horiBearingX >> 6);
-        outRect.origin.y = static_cast<float>(-(metrics.horiBearingY >> 6));
-        outRect.size.width = static_cast<float>((metrics.width >> 6));
+        auto& metrics       = _fontRef->glyph->metrics;
+        outRect.origin.x    = static_cast<float>(metrics.horiBearingX >> 6);
+        outRect.origin.y    = static_cast<float>(-(metrics.horiBearingY >> 6));
+        outRect.size.width  = static_cast<float>((metrics.width >> 6));
         outRect.size.height = static_cast<float>((metrics.height >> 6));
 
         xAdvance = (static_cast<int>(_fontRef->glyph->metrics.horiAdvance >> 6));
 
         outWidth  = _fontRef->glyph->bitmap.width;
         outHeight = _fontRef->glyph->bitmap.rows;
-        ret = _fontRef->glyph->bitmap.buffer;
+        ret       = _fontRef->glyph->bitmap.buffer;
 
         if (_outlineSize > 0 && outWidth > 0 && outHeight > 0)
         {
             auto copyBitmap = new (std::nothrow) unsigned char[outWidth * outHeight];
-            memcpy(copyBitmap,ret,outWidth * outHeight * sizeof(unsigned char));
+            memcpy(copyBitmap, ret, outWidth * outHeight * sizeof(unsigned char));
 
             FT_BBox bbox;
-            auto outlineBitmap = getGlyphBitmapWithOutline(theChar,bbox);
-            if(outlineBitmap == nullptr)
+            auto outlineBitmap = getGlyphBitmapWithOutline(theChar, bbox);
+            if (outlineBitmap == nullptr)
             {
                 ret = nullptr;
-                delete [] copyBitmap;
+                delete[] copyBitmap;
                 break;
             }
 
@@ -427,27 +453,27 @@ unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar, long &outWidth, lo
             int glyphMinY = (int)(-outHeight - outRect.origin.y);
             int glyphMaxY = (int)-outRect.origin.y;
 
-            auto outlineMinX = bbox.xMin >> 6;
-            auto outlineMaxX = bbox.xMax >> 6;
-            auto outlineMinY = bbox.yMin >> 6;
-            auto outlineMaxY = bbox.yMax >> 6;
-            auto outlineWidth = outlineMaxX - outlineMinX;
+            auto outlineMinX   = bbox.xMin >> 6;
+            auto outlineMaxX   = bbox.xMax >> 6;
+            auto outlineMinY   = bbox.yMin >> 6;
+            auto outlineMaxY   = bbox.yMax >> 6;
+            auto outlineWidth  = outlineMaxX - outlineMinX;
             auto outlineHeight = outlineMaxY - outlineMinY;
 
             auto blendImageMinX = MIN(outlineMinX, glyphMinX);
             auto blendImageMaxY = MAX(outlineMaxY, glyphMaxY);
-            auto blendWidth = MAX(outlineMaxX, glyphMaxX) - blendImageMinX;
-            auto blendHeight = blendImageMaxY - MIN(outlineMinY, glyphMinY);
+            auto blendWidth     = MAX(outlineMaxX, glyphMaxX) - blendImageMinX;
+            auto blendHeight    = blendImageMaxY - MIN(outlineMinY, glyphMinY);
 
             outRect.origin.x = (float)blendImageMinX;
             outRect.origin.y = -blendImageMaxY + _outlineSize;
 
-            unsigned char *blendImage = nullptr;
+            unsigned char* blendImage = nullptr;
             if (blendWidth > 0 && blendHeight > 0)
             {
                 FT_Pos index, index2;
                 auto imageSize = blendWidth * blendHeight * 2;
-                blendImage = new (std::nothrow) unsigned char[imageSize];
+                blendImage     = new (std::nothrow) unsigned char[imageSize];
                 memset(blendImage, 0, imageSize);
 
                 auto px = outlineMinX - blendImageMinX;
@@ -456,8 +482,8 @@ unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar, long &outWidth, lo
                 {
                     for (int y = 0; y < outlineHeight; ++y)
                     {
-                        index = px + x + ((py + y) * blendWidth);
-                        index2 = x + (y * outlineWidth);
+                        index                 = px + x + ((py + y) * blendWidth);
+                        index2                = x + (y * outlineWidth);
                         blendImage[2 * index] = outlineBitmap[index2];
                     }
                 }
@@ -468,8 +494,8 @@ unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar, long &outWidth, lo
                 {
                     for (int y = 0; y < outHeight; ++y)
                     {
-                        index = px + x + ((y + py) * blendWidth);
-                        index2 = x + (y * outWidth);
+                        index                     = px + x + ((y + py) * blendWidth);
+                        index2                    = x + (y * outWidth);
                         blendImage[2 * index + 1] = copyBitmap[index2];
                     }
                 }
@@ -477,11 +503,11 @@ unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar, long &outWidth, lo
 
             outRect.size.width  = (float)blendWidth;
             outRect.size.height = (float)blendHeight;
-            outWidth  = blendWidth;
-            outHeight = blendHeight;
+            outWidth            = blendWidth;
+            outHeight           = blendHeight;
 
-            delete [] outlineBitmap;
-            delete [] copyBitmap;
+            delete[] outlineBitmap;
+            delete[] copyBitmap;
             ret = blendImage;
         }
 
@@ -492,18 +518,18 @@ unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar, long &outWidth, lo
     {
         outRect.size.width  = 0;
         outRect.size.height = 0;
-        xAdvance = 0;
+        xAdvance            = 0;
 
         return nullptr;
     }
     else
     {
-       return ret;
+        return ret;
     }
 }
 
-unsigned char * FontFreeType::getGlyphBitmapWithOutline(uint64_t theChar, FT_BBox &bbox)
-{   
+unsigned char* FontFreeType::getGlyphBitmapWithOutline(uint64_t theChar, FT_BBox& bbox)
+{
     unsigned char* ret = nullptr;
     if (FT_Load_Char(_fontRef, static_cast<FT_ULong>(theChar), FT_LOAD_NO_BITMAP) == 0)
     {
@@ -515,26 +541,26 @@ unsigned char * FontFreeType::getGlyphBitmapWithOutline(uint64_t theChar, FT_BBo
                 FT_Glyph_StrokeBorder(&glyph, _stroker, 0, 1);
                 if (glyph->format == FT_GLYPH_FORMAT_OUTLINE)
                 {
-                    FT_Outline *outline = &reinterpret_cast<FT_OutlineGlyph>(glyph)->outline;
-                    FT_Glyph_Get_CBox(glyph,FT_GLYPH_BBOX_GRIDFIT,&bbox);
-                    long width = (bbox.xMax - bbox.xMin)>>6;
-                    long rows = (bbox.yMax - bbox.yMin)>>6;
+                    FT_Outline* outline = &reinterpret_cast<FT_OutlineGlyph>(glyph)->outline;
+                    FT_Glyph_Get_CBox(glyph, FT_GLYPH_BBOX_GRIDFIT, &bbox);
+                    long width = (bbox.xMax - bbox.xMin) >> 6;
+                    long rows  = (bbox.yMax - bbox.yMin) >> 6;
 
                     FT_Bitmap bmp;
                     bmp.buffer = new (std::nothrow) unsigned char[width * rows];
                     memset(bmp.buffer, 0, width * rows);
-                    bmp.width = (int)width;
-                    bmp.rows = (int)rows;
-                    bmp.pitch = (int)width;
+                    bmp.width      = (int)width;
+                    bmp.rows       = (int)rows;
+                    bmp.pitch      = (int)width;
                     bmp.pixel_mode = FT_PIXEL_MODE_GRAY;
-                    bmp.num_grays = 256;
+                    bmp.num_grays  = 256;
 
                     FT_Raster_Params params;
-                    memset(&params, 0, sizeof (params));
+                    memset(&params, 0, sizeof(params));
                     params.source = outline;
                     params.target = &bmp;
-                    params.flags = FT_RASTER_FLAG_AA;
-                    FT_Outline_Translate(outline,-bbox.xMin,-bbox.yMin);
+                    params.flags  = FT_RASTER_FLAG_AA;
+                    FT_Outline_Translate(outline, -bbox.xMin, -bbox.yMin);
                     FT_Outline_Render(_FTlibrary, outline, &params);
 
                     ret = bmp.buffer;
@@ -547,18 +573,18 @@ unsigned char * FontFreeType::getGlyphBitmapWithOutline(uint64_t theChar, FT_BBo
     return ret;
 }
 
-unsigned char * makeDistanceMap( unsigned char *img, long width, long height)
+unsigned char* makeDistanceMap(unsigned char* img, long width, long height)
 {
     long pixelAmount = (width + 2 * FontFreeType::DistanceMapSpread) * (height + 2 * FontFreeType::DistanceMapSpread);
 
-    short * xdist = (short *)  malloc( pixelAmount * sizeof(short) );
-    short * ydist = (short *)  malloc( pixelAmount * sizeof(short) );
-    double * gx   = (double *) calloc( pixelAmount, sizeof(double) );
-    double * gy      = (double *) calloc( pixelAmount, sizeof(double) );
-    double * data    = (double *) calloc( pixelAmount, sizeof(double) );
-    double * outside = (double *) calloc( pixelAmount, sizeof(double) );
-    double * inside  = (double *) calloc( pixelAmount, sizeof(double) );
-    long i,j;
+    short* xdist    = (short*)malloc(pixelAmount * sizeof(short));
+    short* ydist    = (short*)malloc(pixelAmount * sizeof(short));
+    double* gx      = (double*)calloc(pixelAmount, sizeof(double));
+    double* gy      = (double*)calloc(pixelAmount, sizeof(double));
+    double* data    = (double*)calloc(pixelAmount, sizeof(double));
+    double* outside = (double*)calloc(pixelAmount, sizeof(double));
+    double* inside  = (double*)calloc(pixelAmount, sizeof(double));
+    long i, j;
 
     // Convert img into double (data) rescale image levels between 0 and 1
     long outWidth = width + 2 * FontFreeType::DistanceMapSpread;
@@ -573,36 +599,38 @@ unsigned char * makeDistanceMap( unsigned char *img, long width, long height)
     width += 2 * FontFreeType::DistanceMapSpread;
     height += 2 * FontFreeType::DistanceMapSpread;
 
-    // Transform background (outside contour, in areas of 0's)   
-    computegradient( data, (int)width, (int)height, gx, gy);
+    // Transform background (outside contour, in areas of 0's)
+    computegradient(data, (int)width, (int)height, gx, gy);
     edtaa3(data, gx, gy, (int)width, (int)height, xdist, ydist, outside);
-    for( i=0; i< pixelAmount; i++)
-        if( outside[i] < 0.0 )
+    for (i = 0; i < pixelAmount; i++)
+        if (outside[i] < 0.0)
             outside[i] = 0.0;
 
-    // Transform foreground (inside contour, in areas of 1's)   
-    for( i=0; i< pixelAmount; i++)
+    // Transform foreground (inside contour, in areas of 1's)
+    for (i = 0; i < pixelAmount; i++)
         data[i] = 1 - data[i];
-    computegradient( data, (int)width, (int)height, gx, gy);
+    computegradient(data, (int)width, (int)height, gx, gy);
     edtaa3(data, gx, gy, (int)width, (int)height, xdist, ydist, inside);
-    for( i=0; i< pixelAmount; i++)
-        if( inside[i] < 0.0 )
+    for (i = 0; i < pixelAmount; i++)
+        if (inside[i] < 0.0)
             inside[i] = 0.0;
 
     // The bipolar distance field is now outside-inside
     double dist;
-    /* Single channel 8-bit output (bad precision and range, but simple) */    
-    unsigned char *out = (unsigned char *) malloc( pixelAmount * sizeof(unsigned char) );
-    for( i=0; i < pixelAmount; i++)
+    /* Single channel 8-bit output (bad precision and range, but simple) */
+    unsigned char* out = (unsigned char*)malloc(pixelAmount * sizeof(unsigned char));
+    for (i = 0; i < pixelAmount; i++)
     {
         dist = outside[i] - inside[i];
-        dist = 128.0 - dist*16;
-        if( dist < 0 ) dist = 0;
-        if( dist > 255 ) dist = 255;
-        out[i] = (unsigned char) dist;
+        dist = 128.0 - dist * 16;
+        if (dist < 0)
+            dist = 0;
+        if (dist > 255)
+            dist = 255;
+        out[i] = (unsigned char)dist;
     }
     /* Dual channel 16-bit output (more complicated, but good precision and range) */
-    /*unsigned char *out = (unsigned char *) malloc( pixelAmount * 3 * sizeof(unsigned char) ); 
+    /*unsigned char *out = (unsigned char *) malloc( pixelAmount * 3 * sizeof(unsigned char) );
     for( i=0; i< pixelAmount; i++)
     {
         dist = outside[i] - inside[i];
@@ -614,28 +642,33 @@ unsigned char * makeDistanceMap( unsigned char *img, long width, long height)
         // G channel is fraction
         out[3*i + 1] = (unsigned char) ( 256 - (dist - floor(dist)* 256.0 ));
         // B channel is truncated integer part
-        out[3*i + 2] = (unsigned char)dist; 
+        out[3*i + 2] = (unsigned char)dist;
     }*/
-    
-    free( xdist );
-    free( ydist );
-    free( gx );
-    free( gy );
-    free( data );
-    free( outside );
-    free( inside );
+
+    free(xdist);
+    free(ydist);
+    free(gx);
+    free(gy);
+    free(data);
+    free(outside);
+    free(inside);
 
     return out;
 }
 
-void FontFreeType::renderCharAt(unsigned char *dest,int posX, int posY, unsigned char* bitmap,long bitmapWidth,long bitmapHeight)
+void FontFreeType::renderCharAt(unsigned char* dest,
+                                int posX,
+                                int posY,
+                                unsigned char* bitmap,
+                                long bitmapWidth,
+                                long bitmapHeight)
 {
     int iX = posX;
     int iY = posY;
 
     if (_distanceFieldEnabled)
     {
-        auto distanceMap = makeDistanceMap(bitmap,bitmapWidth,bitmapHeight);
+        auto distanceMap = makeDistanceMap(bitmap, bitmapWidth, bitmapHeight);
 
         bitmapWidth += 2 * DistanceMapSpread;
         bitmapHeight += 2 * DistanceMapSpread;
@@ -645,26 +678,26 @@ void FontFreeType::renderCharAt(unsigned char *dest,int posX, int posY, unsigned
             long bitmap_y = y * bitmapWidth;
 
             for (long x = 0; x < bitmapWidth; ++x)
-            {    
+            {
                 /* Dual channel 16-bit output (more complicated, but good precision and range) */
-                /*int index = (iX + ( iY * destSize )) * 3;                
+                /*int index = (iX + ( iY * destSize )) * 3;
                 int index2 = (bitmap_y + x)*3;
                 dest[index] = out[index2];
                 dest[index + 1] = out[index2 + 1];
                 dest[index + 2] = out[index2 + 2];*/
 
-                //Single channel 8-bit output 
-                dest[iX + ( iY * FontAtlas::CacheTextureWidth )] = distanceMap[bitmap_y + x];
+                // Single channel 8-bit output
+                dest[iX + (iY * FontAtlas::CacheTextureWidth)] = distanceMap[bitmap_y + x];
 
                 iX += 1;
             }
 
-            iX  = posX;
+            iX = posX;
             iY += 1;
         }
         free(distanceMap);
     }
-    else if(_outlineSize > 0)
+    else if (_outlineSize > 0)
     {
         unsigned char tempChar;
         for (long y = 0; y < bitmapHeight; ++y)
@@ -673,18 +706,18 @@ void FontFreeType::renderCharAt(unsigned char *dest,int posX, int posY, unsigned
 
             for (int x = 0; x < bitmapWidth; ++x)
             {
-                tempChar = bitmap[(bitmap_y + x) * 2];
-                dest[(iX + ( iY * FontAtlas::CacheTextureWidth ) ) * 2] = tempChar;
-                tempChar = bitmap[(bitmap_y + x) * 2 + 1];
-                dest[(iX + ( iY * FontAtlas::CacheTextureWidth ) ) * 2 + 1] = tempChar;
+                tempChar                                                 = bitmap[(bitmap_y + x) * 2];
+                dest[(iX + (iY * FontAtlas::CacheTextureWidth)) * 2]     = tempChar;
+                tempChar                                                 = bitmap[(bitmap_y + x) * 2 + 1];
+                dest[(iX + (iY * FontAtlas::CacheTextureWidth)) * 2 + 1] = tempChar;
 
                 iX += 1;
             }
 
-            iX  = posX;
+            iX = posX;
             iY += 1;
         }
-        delete [] bitmap;
+        delete[] bitmap;
     }
     else
     {
@@ -697,15 +730,15 @@ void FontFreeType::renderCharAt(unsigned char *dest,int posX, int posY, unsigned
                 unsigned char cTemp = bitmap[bitmap_y + x];
 
                 // the final pixel
-                dest[(iX + ( iY * FontAtlas::CacheTextureWidth ) )] = cTemp;
+                dest[(iX + (iY * FontAtlas::CacheTextureWidth))] = cTemp;
 
                 iX += 1;
             }
 
-            iX  = posX;
+            iX = posX;
             iY += 1;
         }
-    } 
+    }
 }
 
 void FontFreeType::setGlyphCollection(GlyphCollection glyphs, const char* customGlyphs /* = nullptr */)
@@ -722,25 +755,25 @@ const char* FontFreeType::getGlyphCollection() const
     const char* glyphCollection = nullptr;
     switch (_usedGlyphs)
     {
-    case cocos2d::GlyphCollection::DYNAMIC:
-        break;
-    case cocos2d::GlyphCollection::NEHE:
-        glyphCollection = _glyphNEHE;
-        break;
-    case cocos2d::GlyphCollection::ASCII:
-        glyphCollection = _glyphASCII;
-        break;
-    case cocos2d::GlyphCollection::CUSTOM:
-        glyphCollection = _customGlyphs.c_str();
-        break;
-    default:
-        break;
+        case cocos2d::GlyphCollection::DYNAMIC:
+            break;
+        case cocos2d::GlyphCollection::NEHE:
+            glyphCollection = _glyphNEHE;
+            break;
+        case cocos2d::GlyphCollection::ASCII:
+            glyphCollection = _glyphASCII;
+            break;
+        case cocos2d::GlyphCollection::CUSTOM:
+            glyphCollection = _customGlyphs.c_str();
+            break;
+        default:
+            break;
     }
 
     return glyphCollection;
 }
 
-void FontFreeType::releaseFont(const std::string &fontName)
+void FontFreeType::releaseFont(const std::string& fontName)
 {
     auto item = s_cacheFontData.begin();
     while (s_cacheFontData.end() != item)
