@@ -2,8 +2,9 @@
 Copyright (c) 2013      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
  
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +27,7 @@ THE SOFTWARE.
 
 #include "2d/CCFontFreeType.h"
 
-#include <freetype/src/truetype/ttobjs.h>
+#include <freetype/ftfntfmt.h>
 
 #include FT_BBOX_H
 #include "edtaa3func.h"
@@ -43,6 +44,7 @@ NS_CC_BEGIN
 FT_Library FontFreeType::_FTlibrary;
 bool       FontFreeType::_FTInitialized = false;
 bool       FontFreeType::_streamParsingEnabled = false;
+bool       FontFreeType::_doNativeBytecodeHinting = true;
 const int  FontFreeType::DistanceMapSpread = 3;
 
 const char* FontFreeType::_glyphASCII = "\"!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ ";
@@ -126,12 +128,15 @@ FT_Library FontFreeType::getFTLibrary()
     return _FTlibrary;
 }
 
+// clang-format off
 FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outline /* = 0 */)
 : _fontRef(nullptr)
 , _stroker(nullptr)
 , _encoding(FT_ENCODING_UNICODE)
 , _distanceFieldEnabled(distanceFieldEnabled)
 , _outlineSize(0.0f)
+, _ascender(0)
+, _descender(0)
 , _lineHeight(0)
 , _fontAtlas(nullptr)
 , _usedGlyphs(GlyphCollection::ASCII)
@@ -147,6 +152,7 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outlin
             0);
     }
 }
+// clang-format on
 
 bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
 {
@@ -232,12 +238,25 @@ bool FontFreeType::createFontObject(const std::string &fontName, float fontSize)
     
     // store the face globally
     _fontRef = face;
-    auto* ttSize = (TT_Size)(_fontRef->size);
-    // Notes: 
-    //  a. ttSize->metrics->height: (ttSize->metrics->ascender - ttSize->metrics->descender)
-    //  b. ftSize->metrics.height == ttSize->metrics->height
-    //  c. the TT spec always asks for ROUND, not FLOOR or CEIL, see also freetype: ttobjs.c 
-    _lineHeight = static_cast<int>((ttSize->metrics->ascender - ttSize->metrics->descender) >> 6);
+
+    // Notes:
+    //  a. Since freetype 2.8.1 the tt matrics not sync to size_matrics, see the function 'tt_size_request' in truetype/ttdriver.c
+    //  b. The TT spec always asks for ROUND, not FLOOR or CEIL, see also the function 'tt_size_reset' in
+    //  truetype/ttobjs.c 
+    // ** Please see description of FT_Size_Metrics_ in freetype.h about this solution
+    auto& size_metrics = _fontRef->size->metrics;
+    if (_doNativeBytecodeHinting && !strcmp(FT_Get_Font_Format(face), "TrueType"))
+    {
+        _ascender  = FT_PIX_ROUND(FT_MulFix(face->ascender, size_metrics.y_scale));
+        _descender = FT_PIX_ROUND(FT_MulFix(face->descender, size_metrics.y_scale));
+    }
+    else
+    {
+        _ascender  = size_metrics.ascender;
+        _descender = size_metrics.descender;
+    }
+
+    _lineHeight      = (_ascender - _descender) >> 6;
 
     // done and good
     return true;
@@ -338,7 +357,7 @@ int  FontFreeType::getHorizontalKerningForChars(uint64_t firstChar, uint64_t sec
 
 int FontFreeType::getFontAscender() const
 {
-    return (static_cast<int>(((TT_Size)_fontRef->size)->metrics->ascender >> 6));
+    return _ascender >> 6;
 }
 
 const char* FontFreeType::getFontFamily() const
