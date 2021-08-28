@@ -13,6 +13,8 @@ IndentWidth: 4
 # Keep lines under 120 columns long.
 ColumnLimit: 120
 
+SortIncludes: false
+
 # Always break before braces
 BreakBeforeBraces: Custom
 BraceWrapping:

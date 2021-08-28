@@ -71,7 +71,7 @@ public:
     *   dimensions.  The application has to cater for this, especially if it
     *   wants to rely on a TTF's vertical data (for example, to properly align
     *   box characters vertically).
-    *   - since freetype-2.8.1 TureType acender,decender not sync to size_matrics
+    *   - Since freetype-2.8.1 TureType matrics isn't sync to size_matrics
     *   - By default it's enabled for compatible with cocos2d-x-4.0 or older with freetype-2.5.5
     *   - Please see freetype.h
     * */
