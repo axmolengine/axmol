@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
 http://www.cocos2d-x.org
 
@@ -279,15 +280,7 @@ bool Sprite::initWithTexture(Texture2D *texture, const Rect& rect, bool rotated)
 
         // update texture (calls updateBlendFunc)
         setTexture(texture);
-        if (texture)
-        {
-            setTextureRect(rect, rotated, rect.size);
-        }
-        else
-        {
-            Rect defaultRect{0.f, 0.f, static_cast<float>(_texture->getPixelsWide()), static_cast<float>(_texture->getPixelsHigh())};
-            setTextureRect(defaultRect, false, defaultRect.size);
-        }
+        setTextureRect(rect, rotated, rect.size);
 
         // by default use "Self Render".
         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
