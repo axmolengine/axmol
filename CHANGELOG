@@ -7,6 +7,7 @@ adxe-1.0  ??
 [HIGHLIGHT] Reimplement HttpClient based on yasio for concurrent http request support
 [HIGHLIGHT] Improve Lua RTTI performance and less memory storage
 [HIGHLIGHT] Virtual File System support, thanks  to @rh101 
+[FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
 [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
 [FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issue
 [FIX] Use TTF scaled metrics to calculate line height, thanks to @rh101 
