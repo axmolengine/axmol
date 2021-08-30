@@ -3,9 +3,9 @@ Copyright (c) 2008-2010 Ricardo Quesada
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) Bytedance Inc.
+Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://adxe.org
+http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,6 @@ THE SOFTWARE.
 #pragma once
 
 #include "2d/CCNode.h"
-#include "2d/CCSprite.h"
 #include "base/CCProtocols.h"
 #include "renderer/CCCustomCommand.h"
 
@@ -197,7 +196,7 @@ All features from Layer are valid, plus the following new features:
 - opacity
 - RGB colors
 */
-class CC_DLL LayerColor : public Sprite
+class CC_DLL LayerColor : public Layer, public BlendProtocol
 {
 public:
 
@@ -239,12 +238,46 @@ public:
     */
     void changeWidthAndHeight(float w, float h);
 
+    //
+    // Overrides
+    //
+    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+
+    virtual void setContentSize(const Size & var) override;
+    /** BlendFunction. Conforms to BlendProtocol protocol */
+    /**
+    * @lua NA
+    */
+    virtual const BlendFunc& getBlendFunc() const override;
+    /**
+    *@code
+    *When this function bound into js or lua,the parameter will be changed
+    *In js: var setBlendFunc(var src, var dst)
+    *In lua: local setBlendFunc(local src, local dst)
+    *@endcode
+    */
+    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    
 CC_CONSTRUCTOR_ACCESS:
     LayerColor();
+    virtual ~LayerColor();
+    
     bool init() override;
     bool initWithColor(const Color4B& color, float width, float height);
     bool initWithColor(const Color4B& color);
 
+protected:
+
+    virtual void updateColor() override;
+    void updateVertexBuffer();
+
+    BlendFunc _blendFunc;
+    Vec2 _squareVertices[4];
+    CustomCommand _customCommand;
+
+    V3F_C4F _vertexData[4];
+    
+    backend::UniformLocation _mvpMatrixLocation;
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(LayerColor);
 
