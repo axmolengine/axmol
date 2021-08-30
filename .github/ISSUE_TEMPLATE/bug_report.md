@@ -10,8 +10,8 @@ assignees: ''
 - adxe version:
 - devices test on:
 - developing environments
-   - NDK version:
-   - Xcode version:
+   - NDK version: r19c
+   - Xcode version: 12.4
    - VS/msvctools version: Visual Studio 2019(16.11)/14.29.30133
    - cmake version: 
 Steps to Reproduce:
