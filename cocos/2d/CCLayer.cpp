@@ -54,14 +54,6 @@ NS_CC_BEGIN
 
 // Layer
 Layer::Layer()
-    : _touchEnabled(false)
-    , _accelerometerEnabled(false)
-    , _keyboardEnabled(false)
-    , _touchListener(nullptr)
-    , _keyboardListener(nullptr)
-    , _accelerationListener(nullptr)
-    , _touchMode(Touch::DispatchMode::ALL_AT_ONCE)
-    , _swallowsTouches(true)
 {
     _ignoreAnchorPointForPosition = true;
     setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -71,6 +63,7 @@ Layer::~Layer() {}
 
 bool Layer::init()
 {
+    Sprite::init();
     setContentSize(_director->getWinSize());
     return true;
 }
@@ -88,144 +81,6 @@ Layer* Layer::create()
         CC_SAFE_DELETE(ret);
         return nullptr;
     }
-}
-
-int Layer::executeScriptTouchHandler(EventTouch::EventCode eventType, Touch* touch, Event* event)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    TouchScriptData data(eventType, this, touch, event);
-    ScriptEvent scriptEvent(kTouchEvent, &data);
-    return ScriptEngineManager::sendEventToLua(scriptEvent);
-#else
-    CC_UNUSED_PARAM(eventType);
-    CC_UNUSED_PARAM(touch);
-    CC_UNUSED_PARAM(event);
-    return 0;
-#endif
-}
-
-int Layer::executeScriptTouchesHandler(EventTouch::EventCode eventType,
-                                       const std::vector<Touch*>& touches,
-                                       Event* event)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    TouchesScriptData data(eventType, this, touches, event);
-    ScriptEvent scriptEvent(kTouchesEvent, &data);
-    return ScriptEngineManager::sendEventToLua(scriptEvent);
-#else
-    CC_UNUSED_PARAM(eventType);
-    CC_UNUSED_PARAM(touches);
-    CC_UNUSED_PARAM(event);
-    return 0;
-#endif
-}
-
-void Layer::onAcceleration(Acceleration* acc, Event* /*unused_event*/)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    BasicScriptData data(this, (void*)acc);
-    ScriptEvent event(kAccelerometerEvent, &data);
-    ScriptEngineManager::sendEventToLua(event);
-#else
-    CC_UNUSED_PARAM(acc);
-#endif
-}
-
-void Layer::onKeyPressed(EventKeyboard::KeyCode /*keyCode*/, Event* /*unused_event*/) {}
-
-void Layer::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* /*unused_event*/)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    KeypadScriptData data(keyCode, this);
-    ScriptEvent event(kKeypadEvent, &data);
-    ScriptEngineManager::sendEventToLua(event);
-#else
-    CC_UNUSED_PARAM(keyCode);
-#endif
-}
-
-/// Callbacks
-
-bool Layer::onTouchBegan(Touch* touch, Event* event)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    return executeScriptTouchHandler(EventTouch::EventCode::BEGAN, touch, event) == 0 ? false : true;
-#else
-    CC_UNUSED_PARAM(touch);
-    CC_UNUSED_PARAM(event);
-    CCASSERT(false, "Layer#ccTouchBegan override me");
-    return true;
-#endif
-}
-
-void Layer::onTouchMoved(Touch* touch, Event* event)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    executeScriptTouchHandler(EventTouch::EventCode::MOVED, touch, event);
-#else
-    CC_UNUSED_PARAM(touch);
-    CC_UNUSED_PARAM(event);
-#endif
-}
-
-void Layer::onTouchEnded(Touch* touch, Event* event)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    executeScriptTouchHandler(EventTouch::EventCode::ENDED, touch, event);
-#else
-    CC_UNUSED_PARAM(touch);
-    CC_UNUSED_PARAM(event);
-#endif
-}
-
-void Layer::onTouchCancelled(Touch* touch, Event* event)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    executeScriptTouchHandler(EventTouch::EventCode::CANCELLED, touch, event);
-#else
-    CC_UNUSED_PARAM(touch);
-    CC_UNUSED_PARAM(event);
-#endif
-}
-
-void Layer::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    executeScriptTouchesHandler(EventTouch::EventCode::BEGAN, touches, event);
-#else
-    CC_UNUSED_PARAM(touches);
-    CC_UNUSED_PARAM(event);
-#endif
-}
-
-void Layer::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    executeScriptTouchesHandler(EventTouch::EventCode::MOVED, touches, event);
-#else
-    CC_UNUSED_PARAM(touches);
-    CC_UNUSED_PARAM(event);
-#endif
-}
-
-void Layer::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    executeScriptTouchesHandler(EventTouch::EventCode::ENDED, touches, event);
-#else
-    CC_UNUSED_PARAM(touches);
-    CC_UNUSED_PARAM(event);
-#endif
-}
-
-void Layer::onTouchesCancelled(const std::vector<Touch*>& touches, Event* event)
-{
-#if CC_ENABLE_SCRIPT_BINDING
-    executeScriptTouchesHandler(EventTouch::EventCode::CANCELLED, touches, event);
-#else
-    CC_UNUSED_PARAM(touches);
-    CC_UNUSED_PARAM(event);
-#endif
 }
 
 std::string Layer::getDescription() const
@@ -731,16 +586,6 @@ Color4B LayerRadialGradient::getEndColor() const
 Color3B LayerRadialGradient::getEndColor3B() const
 {
     return Color3B(_endColor);
-}
-
-void LayerRadialGradient::setBlendFunc(const BlendFunc& blendFunc)
-{
-    _blendFunc = blendFunc;
-}
-
-BlendFunc LayerRadialGradient::getBlendFunc() const
-{
-    return _blendFunc;
 }
 
 void LayerRadialGradient::convertColor4B24F(Color4F& outColor, const Color4B& inColor)

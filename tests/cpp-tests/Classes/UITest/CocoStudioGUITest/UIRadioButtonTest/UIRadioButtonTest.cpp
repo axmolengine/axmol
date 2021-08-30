@@ -135,7 +135,7 @@ void UIRadioButtonTest::deleteRadioButton(Ref* sender)
     {
         RadioButton* radioButton = _radioButtonGroup->getRadioButtonByIndex((int)_radioButtonGroup->getNumberOfRadioButtons() - 1);
         _radioButtonGroup->removeRadioButton(radioButton);
-        _uiLayer->removeChild(radioButton);
+        _uiLayer->removeChild(radioButton, true);
     }
 }
 

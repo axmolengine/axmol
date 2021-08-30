@@ -71,8 +71,8 @@ public:
 	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 
-	void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) override;
-	void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) override;
+	void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);
+	void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);
 
 	void onMouseDown(cocos2d::Event* event);
 	void onMouseUp(cocos2d::Event* event);
