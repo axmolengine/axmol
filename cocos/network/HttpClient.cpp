@@ -359,6 +359,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
     finishResponse(response);
 
     // recycle channel
+    channel->ud_.ptr = nullptr;
     _availChannelQueue.push_front(channel->index());
 
     // try process pending response
