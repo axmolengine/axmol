@@ -50,3 +50,5 @@ KeepEmptyLinesAtTheStartOfBlocks: true
 
 # Indent nested PP directives.
 IndentPPDirectives: AfterHash
+
+AlwaysBreakTemplateDeclarations: Yes

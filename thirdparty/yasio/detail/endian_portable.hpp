@@ -38,6 +38,7 @@ SOFTWARE.
 #  endif
 #  include <WinSock2.h>
 #  include <Windows.h>
+#  pragma comment(lib, "ws2_32.lib")
 #else
 #  include <arpa/inet.h>
 #endif
@@ -103,16 +104,8 @@ SOFTWARE.
 
 namespace yasio
 {
-
-inline uint64_t(htonll)(uint64_t Value)
-{
-  return YASIO__SWAP_LONGLONG(Value);
-}
-
-inline uint64_t(ntohll)(uint64_t Value)
-{
-  return YASIO__SWAP_LONGLONG(Value);
-}
+inline uint64_t (htonll)(uint64_t Value) { return YASIO__SWAP_LONGLONG(Value); }
+inline uint64_t (ntohll)(uint64_t Value) { return YASIO__SWAP_LONGLONG(Value); }
 
 YASIO__NS_INLINE
 namespace endian
@@ -130,13 +123,13 @@ template <typename _Ty> struct byte_order_impl<_Ty, sizeof(int16_t)> {
 };
 
 template <typename _Ty> struct byte_order_impl<_Ty, sizeof(int32_t)> {
-  static inline _Ty host_to_network(_Ty value) { return static_cast<_Ty>(htonl(static_cast<uint32_t>(value))); }
-  static inline _Ty network_to_host(_Ty value) { return static_cast<_Ty>(ntohl(static_cast<uint32_t>(value))); }
+  static inline _Ty host_to_network(_Ty value) { return (_Ty)(htonl((uint32_t)(value))); }
+  static inline _Ty network_to_host(_Ty value) { return (_Ty)(ntohl((uint32_t)(value))); }
 };
 
 template <typename _Ty> struct byte_order_impl<_Ty, sizeof(int64_t)> {
-  static inline _Ty host_to_network(_Ty value) { return static_cast<_Ty>((::yasio::htonll)(static_cast<uint64_t>(value))); }
-  static inline _Ty network_to_host(_Ty value) { return static_cast<_Ty>((::yasio::ntohll)(static_cast<uint64_t>(value))); }
+  static inline _Ty host_to_network(_Ty value) { return (_Ty)((yasio::htonll)((uint64_t)(value))); }
+  static inline _Ty network_to_host(_Ty value) { return (_Ty)((yasio::ntohll)((uint64_t)(value))); }
 };
 
 #if defined(YASIO_HAVE_HALF_FLOAT)
