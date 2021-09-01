@@ -157,10 +157,10 @@ public:
      */
     virtual Vec2 getTouchLocation(Touch* touch);
 
-    virtual bool onTouchBegan(Touch* touch, Event* event) override;
-    virtual void onTouchMoved(Touch* touch, Event* event) override;
-    virtual void onTouchEnded(Touch* touch, Event* event) override;
-    virtual void onTouchCancelled(Touch* touch, Event* event) override;
+    virtual bool onTouchBegan(Touch* touch, Event* event);
+    virtual void onTouchMoved(Touch* touch, Event* event);
+    virtual void onTouchEnded(Touch* touch, Event* event);
+    virtual void onTouchCancelled(Touch* touch, Event* event);
     
     /**
      * Returns a boolean value that indicates whether a touch is inside the bounds
