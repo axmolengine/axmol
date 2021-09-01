@@ -363,7 +363,7 @@ public:
     virtual void setRotationSkewY(float rotationY) override;
     virtual void setSkewX(float sx) override;
     virtual void setSkewY(float sy) override;
-    virtual void removeChild(Node* child, bool cleanup) override;
+    virtual void removeChild(Node* child, bool cleanup = true) override;
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;
     virtual void reorderChild(Node *child, int zOrder) override;
     using Node::addChild;
