@@ -29,6 +29,8 @@ SOFTWARE.
 #define YASIO__OBSTREAM_HPP
 #include <stddef.h>
 #include <vector>
+#include <array>
+#include <limits>
 #include <stack>
 #include <fstream>
 #include "yasio/cxx17/string_view.hpp"
@@ -36,9 +38,15 @@ SOFTWARE.
 #include "yasio/detail/utils.hpp"
 namespace yasio
 {
+enum : size_t
+{
+  dynamic_extent = (size_t)-1
+};
+
 namespace detail
 {
-template <typename _Stream, typename _Intty> inline void write_ix_impl(_Stream* stream, _Intty value)
+template <typename _Stream, typename _Intty>
+inline void write_ix_impl(_Stream* stream, _Intty value)
 {
   // Write out an int 7 bits at a time.  The high bit of the byte,
   // when on, tells reader to continue reading more bytes.
@@ -50,36 +58,148 @@ template <typename _Stream, typename _Intty> inline void write_ix_impl(_Stream* 
   }
   stream->write_byte((uint8_t)v);
 }
-template <typename _Stream, typename _Intty> struct write_ix_helper {};
+template <typename _Stream, typename _Intty>
+struct write_ix_helper {};
 
-template <typename _Stream> struct write_ix_helper<_Stream, int32_t> {
+template <typename _Stream>
+struct write_ix_helper<_Stream, int32_t> {
   static void write_ix(_Stream* stream, int32_t value) { write_ix_impl<_Stream, int32_t>(stream, value); }
 };
 
-template <typename _Stream> struct write_ix_helper<_Stream, int64_t> {
+template <typename _Stream>
+struct write_ix_helper<_Stream, int64_t> {
   static void write_ix(_Stream* stream, int64_t value) { write_ix_impl<_Stream, int64_t>(stream, value); }
 };
 } // namespace detail
 
-template <typename _Traits> class basic_obstream {
+class fixed_buffer_view {
 public:
-  using convert_traits_type = _Traits;
-  using this_type           = basic_obstream<_Traits>;
+  using implementation_type = fixed_buffer_view;
+  implementation_type& get_implementation() { return *this; }
+  const implementation_type& get_implementation() const { return *this; }
 
-  basic_obstream(size_t capacity = 128) { buffer_.reserve(capacity); }
-  basic_obstream(const basic_obstream& rhs) : buffer_(rhs.buffer_) {}
-  basic_obstream(basic_obstream&& rhs) : buffer_(std::move(rhs.buffer_)) {}
-  ~basic_obstream() {}
+  template <size_t _Extent>
+  fixed_buffer_view(std::array<char, _Extent>& buf) : first_(buf.data()), last_(buf.data() + _Extent)
+  {}
+
+  template <size_t _Extent>
+  fixed_buffer_view(char (&buf)[_Extent]) : first_(buf), last_(buf + _Extent)
+  {}
+
+  fixed_buffer_view(char* buf, size_t n) : first_(buf), last_(buf + n) {}
+  fixed_buffer_view(char* first, char* last) : first_(first), last_(last) {}
+
+  void write_byte(uint8_t value)
+  {
+    if (pos_ < this->max_size())
+    {
+      this->first_[this->pos_] = value;
+      ++this->pos_;
+    }
+  }
+
+  void write_bytes(const void* d, int n)
+  {
+    if (n > 0)
+      write_bytes(this->pos_, d, n);
+  }
+  void write_bytes(size_t offset, const void* d, int n)
+  {
+    if ((offset + n) <= this->max_size())
+    {
+      ::memcpy(this->data() + offset, d, n);
+      this->pos_ += n;
+    }
+    else
+      YASIO__THROW_NOP(std::out_of_range("fixed_buffer_view: out of range"));
+  }
+
+  void resize(size_t newsize)
+  {
+    if (newsize < max_size())
+      this->pos_ = newsize;
+    else
+      YASIO__THROW_NOP(std::out_of_range("fixed_buffer_view: out of range"));
+  }
+
+  void reserve(size_t /*capacity*/){};
+  void shrink_to_fit(){};
+  void clear() { this->pos_ = 0; }
+  char* data() { return first_; }
+  size_t length() const { return this->pos_; }
+  bool empty() const { return first_ == last_; }
+  size_t max_size() const { return last_ - first_; }
+
+private:
+  char* first_;
+  char* last_;
+  size_t pos_ = 0;
+};
+
+template <size_t _Extent>
+class fixed_buffer : public fixed_buffer_view {
+public:
+  fixed_buffer() : fixed_buffer_view(impl_) {}
+
+private:
+  std::array<char, _Extent> impl_;
+};
+
+class dynamic_buffer {
+public:
+  using implementation_type = std::vector<char>;
+  implementation_type& get_implementation() { return this->impl_; }
+  const implementation_type& get_implementation() const { return this->impl_; }
+
+  void write_byte(uint8_t value) { impl_.push_back(value); }
+  void write_bytes(const void* d, int n)
+  {
+    if (n > 0)
+      impl_.insert(impl_.end(), static_cast<const char*>(d), static_cast<const char*>(d) + n);
+  }
+  size_t write_bytes(size_t offset, const void* d, int n)
+  {
+    if ((offset + n) > impl_.size())
+      impl_.resize(offset + n);
+
+    ::memcpy(impl_.data() + offset, d, n);
+    return n;
+  }
+
+  void resize(size_t newsize) { impl_.resize(newsize); }
+  void reserve(size_t capacity) { impl_.reserve(capacity); }
+  void shrink_to_fit(){};
+  void clear() { impl_.clear(); }
+  char* data() { return impl_.data(); }
+  size_t length() const { return impl_.size(); }
+  bool empty() const { return impl_.empty(); }
+
+private:
+  implementation_type impl_;
+};
+
+template <typename _ConvertTraits, typename _BufferType = fixed_buffer_view>
+class basic_obstream_view {
+public:
+  using convert_traits_type        = _ConvertTraits;
+  using buffer_type                = _BufferType;
+  using buffer_implementation_type = typename buffer_type::implementation_type;
+  using my_type                    = basic_obstream_view<convert_traits_type, buffer_type>;
+
+  static const size_t npos = -1;
+
+  basic_obstream_view(buffer_type* outs) : outs_(outs) {}
+  ~basic_obstream_view() {}
 
   void push8()
   {
-    offset_stack_.push(buffer_.size());
+    offset_stack_.push(outs_->length());
     this->write(static_cast<uint8_t>(0));
   }
   void pop8()
   {
     auto offset = offset_stack_.top();
-    this->pwrite(offset, static_cast<uint8_t>(buffer_.size() - offset - sizeof(uint8_t)));
+    this->pwrite(offset, static_cast<uint8_t>(outs_->length() - offset - sizeof(uint8_t)));
     offset_stack_.pop();
   }
   void pop8(uint8_t value)
@@ -91,13 +211,13 @@ public:
 
   void push16()
   {
-    offset_stack_.push(buffer_.size());
+    offset_stack_.push(outs_->length());
     this->write(static_cast<uint16_t>(0));
   }
   void pop16()
   {
     auto offset = offset_stack_.top();
-    this->pwrite(offset, static_cast<uint16_t>(buffer_.size() - offset - sizeof(uint16_t)));
+    this->pwrite(offset, static_cast<uint16_t>(outs_->length() - offset - sizeof(uint16_t)));
     offset_stack_.pop();
   }
   void pop16(uint16_t value)
@@ -109,13 +229,13 @@ public:
 
   void push32()
   {
-    offset_stack_.push(buffer_.size());
+    offset_stack_.push(outs_->length());
     this->write(static_cast<uint32_t>(0));
   }
   void pop32()
   {
     auto offset = offset_stack_.top();
-    this->pwrite(offset, static_cast<uint32_t>(buffer_.size() - offset - sizeof(uint32_t)));
+    this->pwrite(offset, static_cast<uint32_t>(outs_->length() - offset - sizeof(uint32_t)));
     offset_stack_.pop();
   }
   void pop32(uint32_t value)
@@ -129,9 +249,9 @@ public:
   {
     size = yasio::clamp(size, 1, YASIO_SSIZEOF(int));
 
-    auto bufsize = buffer_.size();
+    auto bufsize = outs_->length();
     offset_stack_.push(bufsize);
-    buffer_.resize(bufsize + size);
+    outs_->resize(bufsize + size);
   }
 
   void pop(int size)
@@ -139,9 +259,9 @@ public:
     size = yasio::clamp(size, 1, YASIO_SSIZEOF(int));
 
     auto offset = offset_stack_.top();
-    auto value  = static_cast<int>(buffer_.size() - offset - size);
+    auto value  = static_cast<int>(outs_->length() - offset - size);
     value       = convert_traits_type::toint(value, size);
-    ::memcpy(this->data() + offset, &value, size);
+    write_bytes(offset, &value, size);
     offset_stack_.pop();
   }
 
@@ -151,20 +271,10 @@ public:
 
     auto offset = offset_stack_.top();
     value       = convert_traits_type::toint(value, size);
-    ::memcpy(this->data() + offset, &value, size);
+    write_bytes(offset, &value, size);
     offset_stack_.pop();
   }
 
-  basic_obstream& operator=(const basic_obstream& rhs)
-  {
-    buffer_ = rhs.buffer_;
-    return *this;
-  }
-  basic_obstream& operator=(basic_obstream&& rhs)
-  {
-    buffer_ = std::move(rhs.buffer_);
-    return *this;
-  }
   /* write blob data with '7bit encoded int' length field */
   void write_v(cxx17::string_view value)
   {
@@ -180,43 +290,40 @@ public:
   /* 8 bits length field */
   void write_v8(cxx17::string_view value) { write_v_fx<uint8_t>(value); }
 
-  void write_byte(uint8_t value) { buffer_.push_back(value); }
+  void write_byte(uint8_t value) { outs_->write_byte(value); }
 
   void write_bytes(cxx17::string_view v) { return write_bytes(v.data(), static_cast<int>(v.size())); }
-  void write_bytes(const void* d, int n)
-  {
-    if (n > 0)
-      buffer_.insert(buffer_.end(), (const char*)d, (const char*)d + n);
-  }
-  void write_bytes(std::streamoff offset, const void* d, int n)
-  {
-    if ((offset + n) < static_cast<std::streamoff>(buffer_.size()))
-      ::memcpy(buffer_.data() + offset, d, n);
-  }
+  void write_bytes(const void* d, int n) { outs_->write_bytes(d, n); }
+  void write_bytes(size_t offset, const void* d, int n) { outs_->write_bytes(offset, d, n); }
 
-  bool empty() const { return buffer_.empty(); }
-  size_t length() const { return buffer_.size(); }
-  const char* data() const { return buffer_.data(); }
-  char* data() { return buffer_.data(); }
+  bool empty() const { return outs_->empty(); }
+  size_t length() const { return outs_->length(); }
+  const char* data() const { return outs_->data(); }
+  char* data() { return outs_->data(); }
 
-  const std::vector<char>& buffer() const { return buffer_; }
-  std::vector<char>& buffer() { return buffer_; }
+  const buffer_implementation_type& buffer() const { return outs_->get_implementation(); }
+  buffer_implementation_type& buffer() { return outs_->get_implementation(); }
 
   void clear()
   {
-    buffer_.clear();
+    outs_->clear();
     std::stack<size_t> tmp;
     tmp.swap(offset_stack_);
   }
-  void shrink_to_fit() { buffer_.shrink_to_fit(); }
+  void shrink_to_fit() { outs_->shrink_to_fit(); }
 
-  template <typename _Nty> inline void write(_Nty value)
+  template <typename _Nty>
+  inline void write(_Nty value)
   {
     auto nv = convert_traits_type::template to<_Nty>(value);
     write_bytes(&nv, sizeof(nv));
   }
 
-  template <typename _Intty> void write_ix(_Intty value) { detail::write_ix_helper<this_type, _Intty>::write_ix(this, value); }
+  template <typename _Intty>
+  void write_ix(_Intty value)
+  {
+    detail::write_ix_helper<my_type, _Intty>::write_ix(this, value);
+  }
 
   void write_varint(int value, int size)
   {
@@ -226,25 +333,16 @@ public:
     write_bytes(&value, size);
   }
 
-  template <typename _Nty> inline void pwrite(ptrdiff_t offset, const _Nty value) { swrite(this->data() + offset, value); }
-  template <typename _Nty> static void swrite(void* ptr, const _Nty value)
+  template <typename _Nty>
+  inline void pwrite(ptrdiff_t offset, const _Nty value)
+  {
+    swrite(this->data() + offset, value);
+  }
+  template <typename _Nty>
+  static void swrite(void* ptr, const _Nty value)
   {
     auto nv = convert_traits_type::template to<_Nty>(value);
     ::memcpy(ptr, &nv, sizeof(nv));
-  }
-
-  basic_obstream sub(size_t offset, size_t count = -1)
-  {
-    basic_obstream obs;
-    auto n = length();
-    if (offset < n)
-    {
-      if (count > (n - offset))
-        count = (n - offset);
-
-      obs.buffer_.assign(this->data() + offset, this->data() + offset + count);
-    }
-    return obs;
   }
 
   void save(const char* filename) const
@@ -256,7 +354,8 @@ public:
   }
 
 private:
-  template <typename _LenT> inline void write_v_fx(cxx17::string_view value)
+  template <typename _LenT>
+  inline void write_v_fx(cxx17::string_view value)
   {
     int size = static_cast<int>(value.size());
     this->write<_LenT>(static_cast<_LenT>(size));
@@ -264,7 +363,8 @@ private:
       write_bytes(value.data(), size);
   }
 
-  template <typename _Intty> inline void write_ix_impl(_Intty value)
+  template <typename _Intty>
+  inline void write_ix_impl(_Intty value)
   {
     // Write out an int 7 bits at a time.  The high bit of the byte,
     // when on, tells reader to continue reading more bytes.
@@ -278,12 +378,73 @@ private:
   }
 
 protected:
-  std::vector<char> buffer_;
+  buffer_type* outs_;
   std::stack<size_t> offset_stack_;
 }; // CLASS basic_obstream
 
-using obstream      = basic_obstream<convert_traits<network_convert_tag>>;
-using fast_obstream = basic_obstream<convert_traits<host_convert_tag>>;
+template <typename _ConvertTraits, size_t _Extent = dynamic_extent>
+class basic_obstream;
+
+template <typename _ConvertTraits, size_t _Extent>
+class basic_obstream : public basic_obstream_view<_ConvertTraits, fixed_buffer<_Extent>> {
+  using super_type = basic_obstream_view<_ConvertTraits, fixed_buffer<_Extent>>;
+
+public:
+  using buffer_type = typename super_type::buffer_type;
+  basic_obstream() : super_type(&buffer_) {}
+
+protected:
+  buffer_type buffer_;
+};
+
+template <typename _ConvertTraits>
+class basic_obstream<_ConvertTraits, dynamic_extent> : public basic_obstream_view<_ConvertTraits, dynamic_buffer> {
+  using super_type = basic_obstream_view<_ConvertTraits, dynamic_buffer>;
+  using my_type    = basic_obstream<_ConvertTraits, dynamic_extent>;
+
+public:
+  using buffer_type = typename super_type::buffer_type;
+  basic_obstream(size_t capacity = 128) : super_type(&buffer_) { buffer_.reserve(capacity); }
+  basic_obstream(const basic_obstream& rhs) : super_type(&buffer_), buffer_(rhs.buffer_) {}
+  basic_obstream(basic_obstream&& rhs) : super_type(&buffer_), buffer_(std::move(rhs.buffer_)) {}
+  basic_obstream& operator=(const basic_obstream& rhs)
+  {
+    buffer_ = rhs.buffer_;
+    return *this;
+  }
+  basic_obstream& operator=(basic_obstream&& rhs)
+  {
+    buffer_ = std::move(rhs.buffer_);
+    return *this;
+  }
+
+  basic_obstream sub(size_t offset, size_t count = super_type::npos)
+  {
+    basic_obstream obs;
+    auto n = my_type::length();
+    if (offset < n)
+    {
+      if (count > (n - offset))
+        count = (n - offset);
+
+      obs.write_bytes(this->data() + offset, count);
+    }
+    return obs;
+  }
+
+protected:
+  buffer_type buffer_;
+};
+
+using obstream_view = basic_obstream_view<convert_traits<network_convert_tag>>;
+template <size_t _Extent>
+using obstream_any = basic_obstream<convert_traits<network_convert_tag>, _Extent>;
+using obstream     = obstream_any<dynamic_extent>;
+
+using fast_obstream_view = basic_obstream_view<convert_traits<host_convert_tag>>;
+template <size_t _Extent>
+using fast_obstream_any = basic_obstream<convert_traits<host_convert_tag>, _Extent>;
+using fast_obstream     = fast_obstream_any<dynamic_extent>;
 
 } // namespace yasio
 

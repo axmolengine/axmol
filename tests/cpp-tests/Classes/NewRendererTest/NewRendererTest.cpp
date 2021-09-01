@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +28,15 @@
 #include <chrono>
 #include <sstream>
 #include "renderer/backend/Device.h"
+
+namespace
+{
+enum CustomProgramType : uint32_t
+{
+    BLUR = 1,
+    SEPIA = 2,
+};
+}
 
 USING_NS_CC;
 
@@ -65,6 +75,11 @@ private:
 
 NewRendererTests::NewRendererTests()
 {
+    auto programCache = backend::ProgramCache::getInstance();
+    programCache->registerCustomProgramFactory(CustomProgramType::BLUR, positionTextureColor_vert,
+                                               FileUtils::getInstance()->getStringFromFile("Shaders/example_Blur.fsh"));
+    programCache->registerCustomProgramFactory(CustomProgramType::SEPIA, positionTextureColor_vert,
+                                               FileUtils::getInstance()->getStringFromFile("Shaders/example_Sepia.fsh"));
 
     ADD_TEST_CASE(NewSpriteTest);
     ADD_TEST_CASE(GroupCommandTest);
@@ -855,15 +870,8 @@ RendererUniformBatch::RendererUniformBatch()
 
 cocos2d::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
 {
-    const std::string shaderName("Shaders/example_Blur.fsh");
-    // outline shader
-    auto fileUtiles = FileUtils::getInstance();
-    auto fragmentFullPath = fileUtiles->fullPathForFilename(shaderName);
-    auto fragSource = fileUtiles->getStringFromFile(fragmentFullPath);
-    auto program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.c_str());
-    auto programState = new backend::ProgramState(program);
+    auto programState = new backend::ProgramState(backend::ProgramCache::getInstance()->getCustomProgram(CustomProgramType::BLUR));
     programState->autorelease();
-    CC_SAFE_RELEASE(program);
 
     backend::UniformLocation loc = programState->getUniformLocation("resolution");
     auto resolution = Vec2(85, 121);
@@ -882,16 +890,11 @@ cocos2d::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
 
 cocos2d::backend::ProgramState* RendererUniformBatch::createSepiaProgramState()
 {
-    const std::string shaderName("Shaders/example_Sepia.fsh");
+    auto programState = new backend::ProgramState(backend::ProgramCache::getInstance()->getCustomProgram(CustomProgramType::SEPIA));
 
-    // outline shader
-    auto fileUtiles = FileUtils::getInstance();
-    auto fragmentFullPath = fileUtiles->fullPathForFilename(shaderName);
-    auto fragSource = fileUtiles->getStringFromFile(fragmentFullPath);
-    auto program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.c_str());
-    auto programState = new backend::ProgramState(program);
+    //programState->updateUniformID();
+
     programState->autorelease();
-    CC_SAFE_RELEASE(program);
     return programState;
 }
 
@@ -940,16 +943,7 @@ RendererUniformBatch2::RendererUniformBatch2()
 
 backend::ProgramState* RendererUniformBatch2::createBlurProgramState()
 {
-    const std::string shaderName("Shaders/example_Blur.fsh");
-
-    // outline shader
-    auto fileUtiles = FileUtils::getInstance();
-    auto fragmentFullPath = fileUtiles->fullPathForFilename(shaderName);
-    auto fragSource = fileUtiles->getStringFromFile(fragmentFullPath);
-    auto program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.c_str());
-    auto programState = new backend::ProgramState(program);
-    programState->autorelease();
-    CC_SAFE_RELEASE(program);
+    auto programState = new backend::ProgramState(backend::ProgramCache::getInstance()->getCustomProgram(CustomProgramType::BLUR));
 
     backend::UniformLocation loc = programState->getUniformLocation("resolution");
     auto resolution = Vec2(85, 121);
@@ -968,16 +962,8 @@ backend::ProgramState* RendererUniformBatch2::createBlurProgramState()
 
 backend::ProgramState*  RendererUniformBatch2::createSepiaProgramState()
 {
-    const std::string shaderName("Shaders/example_Sepia.fsh");
-
-    // outline shader
-    auto fileUtiles = FileUtils::getInstance();
-    auto fragmentFullPath = fileUtiles->fullPathForFilename(shaderName);
-    auto fragSource = fileUtiles->getStringFromFile(fragmentFullPath);
-    auto program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.c_str());
-    auto programState = new backend::ProgramState(program);
+    auto programState = new backend::ProgramState(backend::ProgramCache::getInstance()->getCustomProgram(CustomProgramType::SEPIA));
     programState->autorelease();
-    CC_SAFE_RELEASE(program);
     return programState;
 }
 
