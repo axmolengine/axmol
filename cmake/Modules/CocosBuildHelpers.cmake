@@ -217,16 +217,14 @@ function(cocos_copy_target_dll cocos_target)
         "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/OpenAL32.dll"
          $<TARGET_FILE_DIR:${cocos_target}>)
 
-    # Copy win32 angle binaries
-    if(NOT WIN64)
-        add_custom_command(TARGET ${cocos_target} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/x86/libGLESv2.dll
-            ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/x86/libEGL.dll
-            ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/x86/d3dcompiler_47.dll
-            $<TARGET_FILE_DIR:${cocos_target}>
-        )
-    endif()
+    # Copy windows angle binaries
+    add_custom_command(TARGET ${cocos_target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libGLESv2.dll
+        ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libEGL.dll
+        ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
+        $<TARGET_FILE_DIR:${cocos_target}>
+    )
 endfunction()
 
 # mark `FILES` as resources, files will be put into sub-dir tree depend on its absolute path
