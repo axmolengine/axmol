@@ -664,7 +664,7 @@ std::string TextureCache::getCachedTextureInfo() const
         buffer += buftmp;
     }
 
-    snprintf(buftmp, sizeof(buftmp) - 1, "TextureCache dumpDebugInfo: %ld textures, for %lu KB (%.2f MB)\n", (int32_t)count, (int32_t)totalBytes / 1024, totalBytes / (1024.0f*1024.0f));
+    snprintf(buftmp, sizeof(buftmp) - 1, "TextureCache dumpDebugInfo: %ld textures, for %lu KB (%.2f MB)\n", (long)count, (long)totalBytes / 1024, totalBytes / (1024.0f*1024.0f));
     buffer += buftmp;
 
     return buffer;
