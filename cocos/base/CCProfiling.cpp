@@ -115,7 +115,7 @@ std::string ProfilingTimer::getDescription() const
 {
     static char s_description[512] = {0};
 
-    sprintf(s_description, "%s ::\tavg1: %ldu,\tavg2: %ldu,\tmin: %ldu,\tmax: %ldu,\ttotal: %.2fs,\tnr calls: %ld", _nameStr.c_str(), _averageTime1, _averageTime2, minTime, maxTime, totalTime/1000000., numberOfCalls);
+    sprintf(s_description, "%s ::\tavg1: %u,\tavg2: %u,\tmin: %u,\tmax: %u,\ttotal: %.2fs,\tnr calls: %d", _nameStr.c_str(), _averageTime1, _averageTime2, minTime, maxTime, totalTime/1000000., numberOfCalls);
     return s_description;
 }
 
@@ -156,7 +156,7 @@ void ProfilingEndTimingBlock(const char *timerName)
     CCASSERT(timer, "CCProfilingTimer  not found");
 
 
-    long duration = static_cast<long>(chrono::duration_cast<chrono::microseconds>(now - timer->_startTime).count());
+    int32_t duration = static_cast<int32_t>(chrono::duration_cast<chrono::microseconds>(now - timer->_startTime).count());
 
     timer->totalTime += duration;
     timer->_averageTime1 = (timer->_averageTime1 + duration) / 2.0f;

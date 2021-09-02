@@ -58,7 +58,7 @@ void RenderState::bindPass(Pass* pass, MeshCommand* command)
     //pipelineDescriptor.blendDescriptor.blendEnabled = true;
 
     // Get the combined modified state bits for our RenderState hierarchy.
-    long overrideBits = _state._modifiedBits;
+    int32_t overrideBits = _state._modifiedBits;
     overrideBits |= technique->getStateBlock()._modifiedBits;
     overrideBits |= material->getStateBlock()._modifiedBits;
 
@@ -140,7 +140,7 @@ void RenderState::StateBlock::apply(PipelineDescriptor *pipelineDescriptor)
     }
 }
 
-void RenderState::StateBlock::restoreUnmodifiedStates(long overrideBits, PipelineDescriptor *programState)
+void RenderState::StateBlock::restoreUnmodifiedStates(int32_t overrideBits, PipelineDescriptor *programState)
 {
     auto renderer = Director::getInstance()->getRenderer();
     auto &blend = programState->blendDescriptor;

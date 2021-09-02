@@ -104,7 +104,7 @@ public:
      */
     virtual Platform getTargetPlatform() override;
 protected:
-    long       _animationInterval;  //micro second
+    int32_t     _animationInterval;  //micro second
     std::string _resourceRootPath;
     
     static Application * sm_pSharedApplication;

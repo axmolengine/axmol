@@ -28,6 +28,8 @@ THE SOFTWARE.
 #define __SUPPORT_DATA_SUPPORT_TGALIB_H__
 /// @cond DO_NOT_SHOW
 
+#include "stdint.h"
+
 namespace cocos2d {
 
 enum {
@@ -56,13 +58,13 @@ typedef struct sImageTGA {
 } tImageTGA;
 
 /// load the image header fields. We only keep those that matter!
-bool tgaLoadHeader(unsigned char *buffer, unsigned long bufSize, tImageTGA *info);
+bool tgaLoadHeader(unsigned char *buffer, uint32_t bufSize, tImageTGA *info);
 
 /// loads the image pixels. You shouldn't call this function directly
-bool tgaLoadImageData(unsigned char *buffer, unsigned long bufSize, tImageTGA *info);
+bool tgaLoadImageData(unsigned char *buffer, uint32_t bufSize, tImageTGA *info);
 
 /// this is the function to call when we want to load an image buffer.
-tImageTGA* tgaLoadBuffer(unsigned char* buffer, long size);
+tImageTGA* tgaLoadBuffer(unsigned char* buffer, int32_t size);
 
 /// this is the function to call when we want to load an image
 tImageTGA * tgaLoad(const char *filename);

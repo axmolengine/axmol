@@ -773,7 +773,7 @@ void ActionSequence2::callback2(Node* sender)
     addChild(label);
 }
 
-void ActionSequence2::callback3(Node* sender, long data)
+void ActionSequence2::callback3(Node* sender, int32_t data)
 {
     auto s = Director::getInstance()->getWinSize();
     auto label = Label::createWithTTF("callback 3 called", "fonts/Marker Felt.ttf", 16.0f);
@@ -950,14 +950,14 @@ void ActionCallFunction::callback2(Node* sender)
 	CCLOG("sender is: %p", sender);
 }
 
-void ActionCallFunction::callback3(Node* sender, long data)
+void ActionCallFunction::callback3(Node* sender, int32_t data)
 {
     auto s = Director::getInstance()->getWinSize();
     auto label = Label::createWithTTF("callback 3 called", "fonts/Marker Felt.ttf", 16.0f);
     label->setPosition(s.width/4*3,s.height/2);
     addChild(label);
 
-	CCLOG("target is: %p, data is: %ld", sender, data);
+	CCLOG("target is: %p, data is: %d", sender, data);
 }
 
 std::string ActionCallFunction::subtitle() const

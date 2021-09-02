@@ -99,7 +99,7 @@ public:
 protected:
     static Application * sm_pSharedApplication;
     
-    long _animationInterval;  //micro second
+    int32_t _animationInterval;  //micro second
     std::string _resourceRootPath;
     std::string _startupScriptFilename;
 };

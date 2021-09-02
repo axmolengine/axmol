@@ -36,9 +36,9 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-static long getCurrentMillSecond()
+static int32_t getCurrentMillSecond()
 {
-    long lLastTime = 0;
+    int32_t lLastTime = 0;
     struct timeval stCurrentTime;
     
     gettimeofday(&stCurrentTime,NULL);
@@ -69,8 +69,8 @@ int Application::run()
         return 1;
     }
     
-    long lastTime = 0L;
-    long curTime = 0L;
+    int32_t lastTime = 0L;
+    int32_t curTime = 0L;
     
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();

@@ -982,7 +982,7 @@ bool Image::initWithJpgData(uint8_t * data, ssize_t dataLen)
     struct MyErrorMgr jerr;
     /* libjpeg data structure for storing one row, that is, scanline of an image */
     JSAMPROW row_pointer[1] = {0};
-    unsigned long location = 0;
+    uint32_t location = 0;
 
     bool ret = false;
     do 
