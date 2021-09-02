@@ -129,7 +129,7 @@ void UIPageViewTest::pageViewEvent(Ref *pSender, PageView::EventType type)
         {
             PageView* pageView = dynamic_cast<PageView*>(pSender);
             
-            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
+            _displayValueLabel->setString(StringUtils::format("page = %d", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
         }
             break;
             
@@ -241,7 +241,7 @@ void UIPageViewButtonTest::pageViewEvent(Ref *pSender, PageView::EventType type)
         {
             PageView* pageView = dynamic_cast<PageView*>(pSender);
             
-            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
+            _displayValueLabel->setString(StringUtils::format("page = %d", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
         }
             break;
             
@@ -438,7 +438,7 @@ void UIPageViewTouchPropagationTest::pageViewEvent(Ref *pSender, PageView::Event
         {
             PageView* pageView = dynamic_cast<PageView*>(pSender);
             
-            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
+            _displayValueLabel->setString(StringUtils::format("page = %d", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
         }
             break;
             

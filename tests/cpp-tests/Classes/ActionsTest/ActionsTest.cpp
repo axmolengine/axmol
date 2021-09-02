@@ -957,7 +957,7 @@ void ActionCallFunction::callback3(Node* sender, int32_t data)
     label->setPosition(s.width/4*3,s.height/2);
     addChild(label);
 
-	CCLOG("target is: %p, data is: %ld", sender, data);
+	CCLOG("target is: %p, data is: %d", sender, data);
 }
 
 std::string ActionCallFunction::subtitle() const
