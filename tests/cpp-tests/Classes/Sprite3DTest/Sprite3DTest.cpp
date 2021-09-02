@@ -893,7 +893,7 @@ void AsyncLoadSprite3DTest::menuCallback_asyncLoadSprite(Ref* sender)
 
 void AsyncLoadSprite3DTest::asyncLoad_Callback(Sprite3D* sprite, void* param)
 {
-    auto index = static_cast<int>((uintptr_t)param));
+    auto index = static_cast<int>((uintptr_t)param);
     auto node = getChildByTag(101);
     auto s = Director::getInstance()->getWinSize();
     float width = s.width / _paths.size();
