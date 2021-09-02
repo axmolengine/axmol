@@ -41,7 +41,7 @@ static int pfs_posix_open(const std::string& path, FileStream::Mode mode, PXFile
 
 // posix standard wrappers
 static int pfs_posix_read(PXFileHandle& handle, void* buf, unsigned int size) { return static_cast<int>(posix_read(handle._fd, buf, size)); }
-static off_t pfs_posix_seek(PXFileHandle& handle, off_t offst, int origin) { return posix_lseek(handle._fd, offst, origin); }
+static off_t pfs_posix_seek(PXFileHandle& handle, off_t offst, int origin) { return posix_lseek64(handle._fd, offst, origin); }
 static int pfs_posix_close(PXFileHandle& handle) {
     int fd = handle._fd;
     if (fd != -1) {
