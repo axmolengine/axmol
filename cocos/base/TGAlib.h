@@ -28,7 +28,7 @@ THE SOFTWARE.
 #define __SUPPORT_DATA_SUPPORT_TGALIB_H__
 /// @cond DO_NOT_SHOW
 
-#include <cstdint>
+#include "stdint.h"
 
 namespace cocos2d {
 

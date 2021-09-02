@@ -895,25 +895,6 @@ float Properties::getFloat(const char* name) const
     return 0.0f;
 }
 
-int32_t Properties::getLong(const char* name) const
-{
-    const char* valueString = getString(name);
-    if (valueString)
-    {
-        int32_t value;
-        int scanned;
-        scanned = sscanf(valueString, "%d", &value);
-        if (scanned != 1)
-        {
-            CCLOGERROR("Error attempting to parse property '%s' as a long integer.", name);
-            return 0L;
-        }
-        return value;
-    }
-
-    return 0L;
-}
-
 bool Properties::getMat4(const char* name, Mat4* out) const
 {
     CCASSERT(out, "Invalid out");

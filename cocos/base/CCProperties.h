@@ -328,18 +328,6 @@ public:
     float getFloat(const char* name = NULL) const;
 
     /**
-     * Interpret the value of the given property as a long integer.
-     * If the property does not exist, zero will be returned.
-     * If the property exists but could not be scanned, an error will be logged and zero will be returned.
-     *
-     * @param name The name of the property to interpret, or NULL to return the current property's value.
-     * 
-     * @return The value of the given property interpreted as a long.
-     *   Zero if the property does not exist or could not be scanned.
-     */
-    int32_t getLong(const char* name = NULL) const;
-
-    /**
      * Interpret the value of the given property as a Matrix.
      * If the property does not exist, out will be set to the identity matrix.
      * If the property exists but could not be scanned, an error will be logged and out will be set
