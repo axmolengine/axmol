@@ -450,7 +450,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char *buffer, ssize_t bufferLen, u
         return -1;
     }
 
-    uint32_t destlen = len;
+    unsigned long destlen = len;
     size_t source = (size_t) buffer + sizeof(*header);
     int ret = uncompress(*out, &destlen, (Bytef*)source, bufferLen - sizeof(*header) );
 
