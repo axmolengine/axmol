@@ -374,7 +374,7 @@ void TestFileFuncs::onEnter()
 
         // getFileSize Test
         int32_t size = sharedFileUtils->getFileSize(filepath);
-        msg = StringUtils::format("getFileSize: Test file size equals %ld", size);
+        msg = StringUtils::format("getFileSize: Test file size equals %d", size);
         label = Label::createWithSystemFont(msg, "", 20);
         label->setPosition(x, y * 3);
         this->addChild(label);
@@ -1161,7 +1161,7 @@ void TestFileFuncsAsync::onEnter()
         this->addChild(label);
         
         sharedFileUtils->getFileSize(filepath, [=](int32_t size) {
-            auto msg = StringUtils::format("getFileSize: Test file size equals %ld", size);
+            auto msg = StringUtils::format("getFileSize: Test file size equals %d", size);
             auto label = Label::createWithSystemFont(msg, "", 20);
             label->setPosition(x, y * 3);
             this->addChild(label);

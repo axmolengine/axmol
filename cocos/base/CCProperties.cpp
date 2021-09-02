@@ -902,7 +902,7 @@ int32_t Properties::getLong(const char* name) const
     {
         int32_t value;
         int scanned;
-        scanned = sscanf(valueString, "%ld", &value);
+        scanned = sscanf(valueString, "%d", &value);
         if (scanned != 1)
         {
             CCLOGERROR("Error attempting to parse property '%s' as a long integer.", name);

@@ -71,7 +71,7 @@ bool TableViewTest::init()
 
 void TableViewTest::tableCellTouched(TableView* table, TableViewCell* cell)
 {
-    CCLOG("cell touched at index: %ld", static_cast<int32_t>(cell->getIdx()));
+    CCLOG("cell touched at index: %d", static_cast<int32_t>(cell->getIdx()));
 }
 
 Size TableViewTest::tableCellSizeForIndex(TableView *table, ssize_t idx)
@@ -84,7 +84,7 @@ Size TableViewTest::tableCellSizeForIndex(TableView *table, ssize_t idx)
 
 TableViewCell* TableViewTest::tableCellAtIndex(TableView *table, ssize_t idx)
 {
-    auto string = StringUtils::format("%ld", static_cast<int32_t>(idx));
+    auto string = StringUtils::format("%d", static_cast<int32_t>(idx));
     TableViewCell *cell = table->dequeueCell();
     if (!cell) {
         cell = new (std::nothrow) CustomTableViewCell();
