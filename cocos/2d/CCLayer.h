@@ -4,8 +4,9 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -68,95 +69,6 @@ public:
      */
     static Layer *create();
     
-    /* Callback function should not be deprecated, it will generate lots of warnings.
-       Since 'setTouchEnabled' was deprecated, it will make warnings if developer overrides onTouchXXX and invokes setTouchEnabled(true) instead of using EventDispatcher::addEventListenerWithXXX.
-    */
-    /** Callback function for touch began.
-     *
-     * @param touch Touch information.
-     * @param unused_event Event information.
-     * @return if return false, onTouchMoved, onTouchEnded, onTouchCancelled will never called.
-     * @js NA
-     */
-    virtual bool onTouchBegan(Touch *touch, Event *unused_event);
-    /** Callback function for touch moved.
-    *
-    * @param touch Touch information.
-    * @param unused_event Event information.
-    * @js NA
-    */
-    virtual void onTouchMoved(Touch *touch, Event *unused_event);
-    /** Callback function for touch ended.
-    *
-    * @param touch Touch information.
-    * @param unused_event Event information.
-    * @js NA
-    */
-    virtual void onTouchEnded(Touch *touch, Event *unused_event);
-    /** Callback function for touch cancelled.
-    *
-    * @param touch Touch information.
-    * @param unused_event Event information.
-    * @js NA
-    */
-    virtual void onTouchCancelled(Touch *touch, Event *unused_event);
-
-    /** Callback function for multiple touches began.
-    *
-    * @param touches Touches information.
-    * @param unused_event Event information.
-    * @js NA
-    */
-    virtual void onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event);
-    /** Callback function for multiple touches moved.
-    *
-    * @param touches Touches information.
-    * @param unused_event Event information.
-    * @js NA
-    */
-    virtual void onTouchesMoved(const std::vector<Touch*>& touches, Event *unused_event);
-    /** Callback function for multiple touches ended.
-    *
-    * @param touches Touches information.
-    * @param unused_event Event information.
-    * @js NA
-    */
-    virtual void onTouchesEnded(const std::vector<Touch*>& touches, Event *unused_event);
-    /** Callback function for multiple touches cancelled.
-    *
-    * @param touches Touches information.
-    * @param unused_event Event information.
-    * @js NA
-    */
-    virtual void onTouchesCancelled(const std::vector<Touch*>&touches, Event *unused_event);
-
-	/* Callback function should not be deprecated, it will generate lots of warnings.
-	Since 'setAccelerometerEnabled' was deprecated, it will make warnings if developer overrides onAcceleration and invokes setAccelerometerEnabled(true) instead of using EventDispatcher::addEventListenerWithXXX.
-    */
-    /** Callback function for acceleration.
-     * @param acc Acceleration information.
-     * @param unused_event Event information.
-     * @js NA
-     */
-    virtual void onAcceleration(Acceleration* acc, Event* unused_event);
-
-
-	/* Callback function should not be deprecated, it will generate lots of warnings.
-	Since 'setKeyboardEnabled' was deprecated, it will make warnings if developer overrides onKeyXXX and invokes setKeyboardEnabled(true) instead of using EventDispatcher::addEventListenerWithXXX.
-    */
-    /** Callback function for key pressed.
-     * @param keyCode KeyCode information.
-     * @param event Event information.
-     * @js NA
-     */
-    virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
-    /** Callback function for key released.
-    * @param keyCode KeyCode information.
-    * @param event Event information.
-    * @js NA
-    */
-    virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
-
     // Overrides
     virtual std::string getDescription() const override;
 
@@ -165,21 +77,6 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~Layer();
 
     virtual bool init() override;
-
-protected:
-    
-    int executeScriptTouchHandler(EventTouch::EventCode eventType, Touch* touch, Event* event);
-    int executeScriptTouchesHandler(EventTouch::EventCode eventType, const std::vector<Touch*>& touches, Event* event);
-
-    bool _touchEnabled;
-    bool _accelerometerEnabled;
-    bool _keyboardEnabled;
-    EventListener* _touchListener;
-    EventListenerKeyboard* _keyboardListener;
-    EventListenerAcceleration* _accelerationListener;
-
-    Touch::DispatchMode _touchMode;
-    bool _swallowsTouches;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Layer);
