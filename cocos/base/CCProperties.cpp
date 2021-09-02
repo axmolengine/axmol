@@ -895,12 +895,12 @@ float Properties::getFloat(const char* name) const
     return 0.0f;
 }
 
-long Properties::getLong(const char* name) const
+int32_t Properties::getLong(const char* name) const
 {
     const char* valueString = getString(name);
     if (valueString)
     {
-        long value;
+        int32_t value;
         int scanned;
         scanned = sscanf(valueString, "%ld", &value);
         if (scanned != 1)

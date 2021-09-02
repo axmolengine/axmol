@@ -33,11 +33,11 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-static bool tgaLoadRLEImageData(unsigned char* Buffer, unsigned long bufSize, tImageTGA *info);
+static bool tgaLoadRLEImageData(unsigned char* Buffer, uint32_t bufSize, tImageTGA *info);
 void tgaFlipImage( tImageTGA *info );
 
 // load the image header field from stream
-bool tgaLoadHeader(unsigned char* buffer, unsigned long bufSize, tImageTGA *info)
+bool tgaLoadHeader(unsigned char* buffer, uint32_t bufSize, tImageTGA *info)
 {
     bool ret = false;
 
@@ -71,7 +71,7 @@ bool tgaLoadHeader(unsigned char* buffer, unsigned long bufSize, tImageTGA *info
     return ret;
 }
 
-bool tgaLoadImageData(unsigned char *Buffer, unsigned long bufSize, tImageTGA *info)
+bool tgaLoadImageData(unsigned char *Buffer, uint32_t bufSize, tImageTGA *info)
 {
     bool ret = false;
 
@@ -108,7 +108,7 @@ bool tgaLoadImageData(unsigned char *Buffer, unsigned long bufSize, tImageTGA *i
     return ret;
 }
 
-static bool tgaLoadRLEImageData(unsigned char* buffer, unsigned long bufSize, tImageTGA *info)
+static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageTGA *info)
 {
     unsigned int mode,total,i, index = 0;
     unsigned char aux[4], runlength = 0;
@@ -195,7 +195,7 @@ void tgaFlipImage( tImageTGA *info )
     info->flipped = 0;
 }
     
-tImageTGA* tgaLoadBuffer(unsigned char* buffer, long size)
+tImageTGA* tgaLoadBuffer(unsigned char* buffer, int32_t size)
 {
     int mode,total;
     tImageTGA *info = nullptr;

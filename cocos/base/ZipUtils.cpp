@@ -450,7 +450,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char *buffer, ssize_t bufferLen, u
         return -1;
     }
 
-    unsigned long destlen = len;
+    uint32_t destlen = len;
     size_t source = (size_t) buffer + sizeof(*header);
     int ret = uncompress(*out, &destlen, (Bytef*)source, bufferLen - sizeof(*header) );
 
@@ -528,7 +528,7 @@ struct ZipFilePrivate
     }
 
     // unzip overrides to support FileStream
-    static long ZipFile_tell_file_func(voidpf opaque, voidpf stream) {
+    static int32_t ZipFile_tell_file_func(voidpf opaque, voidpf stream) {
         if (stream == nullptr)
             return -1;
 
@@ -537,13 +537,13 @@ struct ZipFilePrivate
         return fs->tell();
     }
 
-    static long ZipFile_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset, int origin) {
+    static int32_t ZipFile_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset, int origin) {
         if (stream == nullptr)
             return -1;
 
         auto* fs = (FileStream*) stream;
 
-        return fs->seek((long) offset, origin); // must return 0 for success or -1 for error
+        return fs->seek((int32_t) offset, origin); // must return 0 for success or -1 for error
     }
 
     static voidpf ZipFile_open_file_func(voidpf opaque, const char* filename, int mode) {
@@ -914,9 +914,9 @@ int ZipFile::zfread(ZipFileStream* zfs, void* buf, unsigned int size)
     return n;
 }
 
-long ZipFile::zfseek(ZipFileStream* zfs, long offset, int origin)
+int32_t ZipFile::zfseek(ZipFileStream* zfs, int32_t offset, int origin)
 {
-    long result = -1;
+    int32_t result = -1;
     if (zfs != nullptr) {
         switch (origin) {
         case SEEK_SET:
@@ -926,7 +926,7 @@ long ZipFile::zfseek(ZipFileStream* zfs, long offset, int origin)
             result = zfs->offset + offset;
             break;
         case SEEK_END:
-            result = (long)zfs->entry->uncompressed_size + offset;
+            result = (int32_t)zfs->entry->uncompressed_size + offset;
             break;
         default:;
         }

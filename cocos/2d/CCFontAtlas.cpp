@@ -376,8 +376,8 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 
     int adjustForDistanceMap = _letterPadding / 2;
     int adjustForExtend = _letterEdgeExtend / 2;
-    long bitmapWidth;
-    long bitmapHeight;
+    int32_t bitmapWidth;
+    int32_t bitmapHeight;
     int glyphHeight;
     Rect tempRect;
     FontLetterDefinition tempDef;

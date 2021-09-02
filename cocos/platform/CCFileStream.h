@@ -40,7 +40,7 @@ public:
     *  @param origin SEEK_SET | SEEK_CUR | SEEK_END
     *  @return 0 if successful, -1 if not
     */
-    virtual long seek(int64_t offset, int origin) = 0;
+    virtual int seek(int64_t offset, int origin) = 0;
 
     /**
     *  Read data from file stream

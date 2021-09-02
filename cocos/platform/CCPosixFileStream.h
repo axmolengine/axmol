@@ -109,7 +109,7 @@ public:
     bool open(const std::string& path, FileStream::Mode mode) override;
     int close() override;
 
-    long seek(int64_t offset, int origin) override;
+    int seek(int64_t offset, int origin) override;
     int read(void* buf, unsigned int size) override;
     int write(const void* buf, unsigned int size) override;
     int64_t tell() override;

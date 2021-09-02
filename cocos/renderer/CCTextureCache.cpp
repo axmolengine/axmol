@@ -654,17 +654,17 @@ std::string TextureCache::getCachedTextureInfo() const
         count++;
         snprintf(buftmp, sizeof(buftmp) - 1, "\"%s\" rc=%lu id=%p %lu x %lu @ %ld bpp => %lu KB\n",
             texture.first.c_str(),
-            (long)tex->getReferenceCount(),
+            (int32_t)tex->getReferenceCount(),
             tex->getBackendTexture(),
-            (long)tex->getPixelsWide(),
-            (long)tex->getPixelsHigh(),
-            (long)bpp,
-            (long)bytes / 1024);
+            (int32_t)tex->getPixelsWide(),
+            (int32_t)tex->getPixelsHigh(),
+            (int32_t)bpp,
+            (int32_t)bytes / 1024);
 
         buffer += buftmp;
     }
 
-    snprintf(buftmp, sizeof(buftmp) - 1, "TextureCache dumpDebugInfo: %ld textures, for %lu KB (%.2f MB)\n", (long)count, (long)totalBytes / 1024, totalBytes / (1024.0f*1024.0f));
+    snprintf(buftmp, sizeof(buftmp) - 1, "TextureCache dumpDebugInfo: %ld textures, for %lu KB (%.2f MB)\n", (int32_t)count, (int32_t)totalBytes / 1024, totalBytes / (1024.0f*1024.0f));
     buffer += buftmp;
 
     return buffer;
