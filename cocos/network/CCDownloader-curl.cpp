@@ -581,7 +581,7 @@ private:
 
             if (runningHandles) {
                 // get timeout setting from multi-handle
-                int32_t timeoutMS = -1;
+                long timeoutMS = -1;
                 curl_multi_timeout(curlmHandle, &timeoutMS);
 
                 if (timeoutMS < 0) {
