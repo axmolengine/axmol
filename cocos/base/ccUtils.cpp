@@ -636,7 +636,7 @@ std::vector<int> parseIntegerList(const std::string &intsString) {
     const char *cStr = intsString.c_str();
     char *endptr;
 
-    for (int32_t i = strtol(cStr, &endptr, 10); endptr != cStr; i = strtol(cStr, &endptr, 10)) {
+    for (long int i = strtol(cStr, &endptr, 10); endptr != cStr; i = strtol(cStr, &endptr, 10)) {
         if (errno == ERANGE) {
             errno = 0;
             CCLOGWARN("%s contains out of range integers", intsString.c_str());

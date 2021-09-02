@@ -141,7 +141,7 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(const std::stri
 //{
 //    // Find file name and file extension
 //    std::string filename;
-//    unsigned int32_t found = srcUrl.find_last_of("/\\");
+//    unsigned long found = srcUrl.find_last_of("/\\");
 //    if (found != std::string::npos)
 //        filename = srcUrl.substr(found+1);
 //    return filename;

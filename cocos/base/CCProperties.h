@@ -337,7 +337,7 @@ public:
      * @return The value of the given property interpreted as a long.
      *   Zero if the property does not exist or could not be scanned.
      */
-    int32_t getLong(const char* name = NULL) const;
+    long getLong(const char* name = NULL) const;
 
     /**
      * Interpret the value of the given property as a Matrix.

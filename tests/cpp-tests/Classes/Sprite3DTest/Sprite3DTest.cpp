@@ -885,7 +885,7 @@ void AsyncLoadSprite3DTest::menuCallback_asyncLoadSprite(Ref* sender)
 
     //remove cache data
     Sprite3DCache::getInstance()->removeAllSprite3DData();
-    int32_t index = 0;
+    long index = 0;
     for (const auto& path : _paths) {
         Sprite3D::createAsync(path, CC_CALLBACK_2(AsyncLoadSprite3DTest::asyncLoad_Callback, this), (void*)index++);
     }
@@ -893,7 +893,7 @@ void AsyncLoadSprite3DTest::menuCallback_asyncLoadSprite(Ref* sender)
 
 void AsyncLoadSprite3DTest::asyncLoad_Callback(Sprite3D* sprite, void* param)
 {
-    auto index = static_cast<int>((uintptr_t)param);
+    long index = (long)param;
     auto node = getChildByTag(101);
     auto s = Director::getInstance()->getWinSize();
     float width = s.width / _paths.size();
@@ -1324,7 +1324,7 @@ Sprite3DReskinTest::Sprite3DReskinTest()
 }
 void Sprite3DReskinTest::menuCallback_reSkin(Ref* sender)
 {
-    auto index = static_cast<int>((uintptr_t)(((MenuItemLabel*)sender)->getUserData()));
+    long index = (long)(((MenuItemLabel*)sender)->getUserData());
     if (index < (int)SkinType::MAX_TYPE)
     {
         _curSkin[index] = (_curSkin[index] + 1) % _skins[index].size();

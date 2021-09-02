@@ -284,7 +284,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
     auto& pfd = backend::PixelFormatUtils::getFormatDescriptor(pixelFormat);
     if (!pfd.bpp)
     {
-        CCLOG("cocos2d: WARNING: unsupported pixelformat: %lx", (uint32_t)pixelFormat);
+        CCLOG("cocos2d: WARNING: unsupported pixelformat: %lx", (unsigned long)pixelFormat);
 #ifdef CC_USE_METAL
         CCASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
 #endif

@@ -36,7 +36,7 @@
 
 #if !defined(_WIN32)
 typedef struct _GUID {
-    uint32_t       Data1;
+    unsigned long  Data1;
     unsigned short Data2;
     unsigned short Data3;
     unsigned char  Data4[8];

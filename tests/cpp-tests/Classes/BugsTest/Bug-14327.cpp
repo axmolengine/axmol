@@ -75,7 +75,7 @@ bool Bug14327Layer::init()
 
 void Bug14327Layer::update(float dt)
 {
-    int32_t delta = _removeTime - time(nullptr);
+    long delta = _removeTime - time(nullptr);
     if (delta > 0)
     {
         ldiv_t ret = ldiv(delta, 60L);

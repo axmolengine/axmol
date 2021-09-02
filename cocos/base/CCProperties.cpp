@@ -895,14 +895,14 @@ float Properties::getFloat(const char* name) const
     return 0.0f;
 }
 
-int32_t Properties::getLong(const char* name) const
+long Properties::getLong(const char* name) const
 {
     const char* valueString = getString(name);
     if (valueString)
     {
-        int32_t value;
+        long value;
         int scanned;
-        scanned = sscanf(valueString, "%d", &value);
+        scanned = sscanf(valueString, "%ld", &value);
         if (scanned != 1)
         {
             CCLOGERROR("Error attempting to parse property '%s' as a long integer.", name);

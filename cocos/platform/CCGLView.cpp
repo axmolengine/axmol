@@ -380,7 +380,7 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], 
         else
         {
             // It is error, should return.
-            CCLOG("Moving touches with id: %d error", static_cast<int32_t>(id));
+            CCLOG("Moving touches with id: %ld error", (long int)id);
             return;
         }
     }
@@ -433,7 +433,7 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode, int num
         } 
         else
         {
-            CCLOG("Ending touches with id: %d error", static_cast<int32_t>(id));
+            CCLOG("Ending touches with id: %ld error", static_cast<long>(id));
             return;
         } 
 
