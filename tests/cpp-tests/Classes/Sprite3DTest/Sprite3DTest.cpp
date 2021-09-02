@@ -893,7 +893,7 @@ void AsyncLoadSprite3DTest::menuCallback_asyncLoadSprite(Ref* sender)
 
 void AsyncLoadSprite3DTest::asyncLoad_Callback(Sprite3D* sprite, void* param)
 {
-    auto index = (long)param;
+    auto index = static_cast<int>((uintptr_t)param));
     auto node = getChildByTag(101);
     auto s = Director::getInstance()->getWinSize();
     float width = s.width / _paths.size();
@@ -1324,7 +1324,7 @@ Sprite3DReskinTest::Sprite3DReskinTest()
 }
 void Sprite3DReskinTest::menuCallback_reSkin(Ref* sender)
 {
-    auto index = (long)(((MenuItemLabel*)sender)->getUserData());
+    auto index = static_cast<int>((uintptr_t)(((MenuItemLabel*)sender)->getUserData()));
     if (index < (int)SkinType::MAX_TYPE)
     {
         _curSkin[index] = (_curSkin[index] + 1) % _skins[index].size();
