@@ -528,7 +528,7 @@ struct ZipFilePrivate
     }
 
     // unzip overrides to support FileStream
-    static int32_t ZipFile_tell_file_func(voidpf opaque, voidpf stream) {
+    static long ZipFile_tell_file_func(voidpf opaque, voidpf stream) {
         if (stream == nullptr)
             return -1;
 
@@ -537,7 +537,7 @@ struct ZipFilePrivate
         return fs->tell();
     }
 
-    static int32_t ZipFile_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset, int origin) {
+    static long ZipFile_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset, int origin) {
         if (stream == nullptr)
             return -1;
 
