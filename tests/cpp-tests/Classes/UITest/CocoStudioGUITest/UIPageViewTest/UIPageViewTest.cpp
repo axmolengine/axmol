@@ -129,7 +129,7 @@ void UIPageViewTest::pageViewEvent(Ref *pSender, PageView::EventType type)
         {
             PageView* pageView = dynamic_cast<PageView*>(pSender);
             
-            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<long>(pageView->getCurrentPageIndex() + 1)));
+            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
         }
             break;
             
@@ -241,7 +241,7 @@ void UIPageViewButtonTest::pageViewEvent(Ref *pSender, PageView::EventType type)
         {
             PageView* pageView = dynamic_cast<PageView*>(pSender);
             
-            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<long>(pageView->getCurrentPageIndex() + 1)));
+            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
         }
             break;
             
@@ -438,7 +438,7 @@ void UIPageViewTouchPropagationTest::pageViewEvent(Ref *pSender, PageView::Event
         {
             PageView* pageView = dynamic_cast<PageView*>(pSender);
             
-            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<long>(pageView->getCurrentPageIndex() + 1)));
+            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
         }
             break;
             
@@ -558,7 +558,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
             }
             
             pageView->pushBackCustomItem(outerBox);
-            _displayValueLabel->setString(StringUtils::format("page count = %ld", static_cast<long>(pageView->getItems().size())));
+            _displayValueLabel->setString(StringUtils::format("page count = %ld", static_cast<int32_t>(pageView->getItems().size())));
             CCLOG("current page index = %zd", pageView->getCurrentPageIndex());
         });
         _uiLayer->addChild(button);
@@ -579,7 +579,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
             {
                 CCLOG("There is no page to remove!");
             }
-            _displayValueLabel->setString(StringUtils::format("page count = %ld", static_cast<long>(pageView->getItems().size())));
+            _displayValueLabel->setString(StringUtils::format("page count = %ld", static_cast<int32_t>(pageView->getItems().size())));
             CCLOG("current page index = %zd", pageView->getCurrentPageIndex());
 
         });
@@ -594,7 +594,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button3->addClickEventListener([=](Ref* sender)
         {
             pageView->removeAllItems();
-            _displayValueLabel->setString(StringUtils::format("page count = %ld", static_cast<long>(pageView->getItems().size())));
+            _displayValueLabel->setString(StringUtils::format("page count = %ld", static_cast<int32_t>(pageView->getItems().size())));
             CCLOG("current page index = %zd", pageView->getCurrentPageIndex());
 
         });
@@ -623,7 +623,7 @@ void UIPageViewDynamicAddAndRemoveTest::pageViewEvent(Ref *pSender, PageView::Ev
         {
             PageView* pageView = dynamic_cast<PageView*>(pSender);
             
-            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<long>((pageView->getCurrentPageIndex() + 1))));
+            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<int32_t>((pageView->getCurrentPageIndex() + 1))));
         }
             break;
             
@@ -825,7 +825,7 @@ void UIPageViewVerticalTest::pageViewEvent(Ref *pSender, PageView::EventType typ
         {
             PageView* pageView = dynamic_cast<PageView*>(pSender);
             
-            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<long>(pageView->getCurrentPageIndex() + 1)));
+            _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
         }
             break;
             
@@ -984,7 +984,7 @@ void UIPageViewChildSizeTest::pageViewEvent(Ref *pSender, PageView::EventType ty
     {
         PageView* pageView = dynamic_cast<PageView*>(pSender);
 
-        _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<long>(pageView->getCurrentPageIndex() + 1)));
+        _displayValueLabel->setString(StringUtils::format("page = %ld", static_cast<int32_t>(pageView->getCurrentPageIndex() + 1)));
     }
     break;
 

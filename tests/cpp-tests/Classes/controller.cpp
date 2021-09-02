@@ -494,7 +494,7 @@ bool TestController::blockTouchBegan(Touch* touch, Event* event)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 #include <windows.h>
 
-static long __stdcall windowExceptionFilter(_EXCEPTION_POINTERS* excp)
+static int32_t __stdcall windowExceptionFilter(_EXCEPTION_POINTERS* excp)
 {
     if (s_testController)
     {
