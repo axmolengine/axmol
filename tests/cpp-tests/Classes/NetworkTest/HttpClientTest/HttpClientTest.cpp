@@ -311,7 +311,7 @@ void HttpClientTest::onHttpRequestCompleted(HttpClient *sender, HttpResponse *re
         log("%s completed", response->getHttpRequest()->getTag());
     }
     
-    long statusCode = response->getResponseCode();
+    int32_t statusCode = response->getResponseCode();
     char statusString[64] = {};
     sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
     _labelStatusCode->setString(statusString);
@@ -460,7 +460,7 @@ void HttpClientClearRequestsTest::onHttpRequestCompleted(HttpClient *sender, Htt
         log("%s completed", response->getHttpRequest()->getTag());
     }
     
-    long statusCode = response->getResponseCode();
+    int32_t statusCode = response->getResponseCode();
     char statusString[64] = {};
     sprintf(statusString, "HTTP Status Code: %ld, tag = %s", statusCode, response->getHttpRequest()->getTag());
     _labelStatusCode->setString(statusString);
