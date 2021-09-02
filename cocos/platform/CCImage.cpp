@@ -2319,7 +2319,7 @@ bool Image::saveImageToJPG(const std::string& filePath)
         CC_BREAK_IF(nullptr == outfile);
 
         unsigned char* outputBuffer = nullptr;
-        uint32_t outputSize = 0;
+        unsigned long outputSize = 0;
         jpeg_mem_dest(&cinfo, &outputBuffer, &outputSize);
 
         cinfo.image_width = _width;    /* image width and height, in pixels */
