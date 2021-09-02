@@ -13,7 +13,7 @@ NS_CC_BEGIN
 
 struct PXIoF {
     int(*read)(PXFileHandle& handle, void*, unsigned int);
-    off_t(*seek)(PXFileHandle& handle, off_t, int);
+    int64_t(*seek)(PXFileHandle& handle, int64_t, int);
     int(*close)(PXFileHandle& handle);
     long long(*size)(PXFileHandle& handle);
 };
@@ -41,7 +41,7 @@ static int pfs_posix_open(const std::string& path, FileStream::Mode mode, PXFile
 
 // posix standard wrappers
 static int pfs_posix_read(PXFileHandle& handle, void* buf, unsigned int size) { return static_cast<int>(posix_read(handle._fd, buf, size)); }
-static off_t pfs_posix_seek(PXFileHandle& handle, off_t offst, int origin) { return posix_lseek64(handle._fd, offst, origin); }
+static int64_t pfs_posix_seek(PXFileHandle& handle, int64_t offst, int origin) { return posix_lseek64(handle._fd, offst, origin); }
 static int pfs_posix_close(PXFileHandle& handle) {
     int fd = handle._fd;
     if (fd != -1) {
@@ -74,7 +74,7 @@ static PXIoF pfs_posix_iof = {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 // android AssetManager wrappers
 static int pfs_asset_read(PXFileHandle& handle, void* buf, unsigned int size) { return AAsset_read(handle._asset, buf, size); }
-static off_t pfs_asset_seek(PXFileHandle& handle, off_t offst, int origin) { return AAsset_seek(handle._asset, offst, origin); }
+static int64_t pfs_asset_seek(PXFileHandle& handle, int64_t offst, int origin) { return AAsset_seek(handle._asset, offst, origin); }
 static int pfs_asset_close(PXFileHandle& handle) {
     if (handle._asset != nullptr) {
         AAsset_close(handle._asset);
@@ -95,7 +95,7 @@ static PXIoF pfs_asset_iof = {
 
 // android obb
 static int pfs_obb_read(PXFileHandle& handle, void* buf, unsigned int size) { return FileUtilsAndroid::getObbFile()->zfread(&handle._zfs, buf, size); }
-static off_t pfs_obb_seek(PXFileHandle& handle, off_t offset, int origin) { return FileUtilsAndroid::getObbFile()->zfseek(&handle._zfs, offset, origin); }
+static int64_t pfs_obb_seek(PXFileHandle& handle, int64_t offset, int origin) { return FileUtilsAndroid::getObbFile()->zfseek(&handle._zfs, offset, origin); }
 static int pfs_obb_close(PXFileHandle& handle) {
     FileUtilsAndroid::getObbFile()->zfclose(&handle._zfs);
     return 0;
