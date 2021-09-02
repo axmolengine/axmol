@@ -123,7 +123,7 @@ public:
 
 protected:
     virtual std::set<unsigned int>* parseConfigFile(const std::string& controlFile);
-    virtual std::set<unsigned int>* parseBinaryConfigFile(unsigned char* pData, unsigned long size, const std::string& controlFile);
+    virtual std::set<unsigned int>* parseBinaryConfigFile(unsigned char* pData, uint32_t size, const std::string& controlFile);
 
 private:
     unsigned int parseCharacterDefinition(const char* line);
