@@ -62,10 +62,10 @@ typedef struct _DataRef
 static std::unordered_map<std::string, DataRef> s_cacheFontData;
 
 // ------ freetype2 stream parsing support ---
-static uint32_t ft_stream_read_callback(FT_Stream stream,
-                                        uint32_t offset,
+static unsigned long ft_stream_read_callback(FT_Stream stream,
+                                        unsigned long offset,
                                         unsigned char* buf,
-                                        uint32_t size)
+                                        unsigned long size)
 {
     auto fd = (FileStream*)stream->descriptor.pointer;
     if (!fd)
