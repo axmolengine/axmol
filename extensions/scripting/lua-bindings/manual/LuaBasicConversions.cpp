@@ -528,12 +528,7 @@ bool luaval_to_physics_material(lua_State* L,int lo,PhysicsMaterial* outValue, c
 }
 #endif //#if CC_USE_PHYSICS
 
-bool luaval_to_ssize(lua_State* L,int lo, ssize_t* outValue, const char* funcName)
-{
-    return luaval_to_long(L, lo, reinterpret_cast<long*>(outValue));
-}
-
-bool luaval_to_long(lua_State* L,int lo, long* outValue, const char* funcName)
+bool luaval_to_ssize_t(lua_State* L, int lo, ssize_t* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
         return false;
@@ -551,13 +546,13 @@ bool luaval_to_long(lua_State* L,int lo, long* outValue, const char* funcName)
 
     if (ok)
     {
-        *outValue = (long)tolua_tonumber(L, lo, 0);
+        *outValue = (ssize_t)tolua_tointeger(L, lo, 0);
     }
 
     return ok;
 }
 
-bool luaval_to_ulong(lua_State* L,int lo, unsigned long* outValue, const char* funcName)
+bool luaval_to_size_t(lua_State* L,int lo, size_t* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
         return false;
@@ -575,7 +570,7 @@ bool luaval_to_ulong(lua_State* L,int lo, unsigned long* outValue, const char* f
 
     if (ok)
     {
-        *outValue = (unsigned long)tolua_tonumber(L, lo, 0);
+        *outValue = (size_t)tolua_tointeger(L, lo, 0);
     }
 
     return ok;

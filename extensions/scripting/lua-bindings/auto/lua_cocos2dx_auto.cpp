@@ -50991,7 +50991,7 @@ int lua_cocos2dx_AtlasNode_setQuadsToDraw(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "cc.AtlasNode:setQuadsToDraw");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "cc.AtlasNode:setQuadsToDraw");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_AtlasNode_setQuadsToDraw'", nullptr);
@@ -89469,7 +89469,7 @@ int lua_cocos2dx_Technique_getPassByIndex(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "cc.Technique:getPassByIndex");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "cc.Technique:getPassByIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Technique_getPassByIndex'", nullptr);
@@ -89836,7 +89836,7 @@ int lua_cocos2dx_Material_getTechniqueByIndex(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "cc.Material:getTechniqueByIndex");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "cc.Material:getTechniqueByIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Material_getTechniqueByIndex'", nullptr);
@@ -92743,7 +92743,7 @@ int lua_cocos2dx_Renderer_addDrawnVertices(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "cc.Renderer:addDrawnVertices");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "cc.Renderer:addDrawnVertices");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_addDrawnVertices'", nullptr);
@@ -93425,7 +93425,7 @@ int lua_cocos2dx_Renderer_addDrawnBatches(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "cc.Renderer:addDrawnBatches");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "cc.Renderer:addDrawnBatches");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_addDrawnBatches'", nullptr);
@@ -96797,7 +96797,7 @@ int lua_cocos2dx_SpriteBatchNode_removeChildAtIndex(lua_State* tolua_S)
         ssize_t arg0;
         bool arg1;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "cc.SpriteBatchNode:removeChildAtIndex");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "cc.SpriteBatchNode:removeChildAtIndex");
 
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "cc.SpriteBatchNode:removeChildAtIndex");
         if(!ok)
@@ -97169,7 +97169,7 @@ int lua_cocos2dx_SpriteBatchNode_initWithTexture(lua_State* tolua_S)
 
         ok &= luaval_to_object<cocos2d::Texture2D>(tolua_S, 2, "cc.Texture2D",&arg0, "cc.SpriteBatchNode:initWithTexture");
 
-        ok &= luaval_to_ssize(tolua_S, 3, &arg1, "cc.SpriteBatchNode:initWithTexture");
+        ok &= luaval_to_ssize_t(tolua_S, 3, &arg1, "cc.SpriteBatchNode:initWithTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteBatchNode_initWithTexture'", nullptr);
@@ -97269,7 +97269,7 @@ int lua_cocos2dx_SpriteBatchNode_reserveCapacity(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "cc.SpriteBatchNode:reserveCapacity");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "cc.SpriteBatchNode:reserveCapacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteBatchNode_reserveCapacity'", nullptr);
@@ -97372,7 +97372,7 @@ int lua_cocos2dx_SpriteBatchNode_insertQuadFromSprite(lua_State* tolua_S)
 
         ok &= luaval_to_object<cocos2d::Sprite>(tolua_S, 2, "cc.Sprite",&arg0, "cc.SpriteBatchNode:insertQuadFromSprite");
 
-        ok &= luaval_to_ssize(tolua_S, 3, &arg1, "cc.SpriteBatchNode:insertQuadFromSprite");
+        ok &= luaval_to_ssize_t(tolua_S, 3, &arg1, "cc.SpriteBatchNode:insertQuadFromSprite");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteBatchNode_insertQuadFromSprite'", nullptr);
@@ -97439,7 +97439,7 @@ int lua_cocos2dx_SpriteBatchNode_initWithFile(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.SpriteBatchNode:initWithFile");
 
-        ok &= luaval_to_ssize(tolua_S, 3, &arg1, "cc.SpriteBatchNode:initWithFile");
+        ok &= luaval_to_ssize_t(tolua_S, 3, &arg1, "cc.SpriteBatchNode:initWithFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteBatchNode_initWithFile'", nullptr);
@@ -97542,7 +97542,7 @@ int lua_cocos2dx_SpriteBatchNode_rebuildIndexInOrder(lua_State* tolua_S)
 
         ok &= luaval_to_object<cocos2d::Sprite>(tolua_S, 2, "cc.Sprite",&arg0, "cc.SpriteBatchNode:rebuildIndexInOrder");
 
-        ok &= luaval_to_ssize(tolua_S, 3, &arg1, "cc.SpriteBatchNode:rebuildIndexInOrder");
+        ok &= luaval_to_ssize_t(tolua_S, 3, &arg1, "cc.SpriteBatchNode:rebuildIndexInOrder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteBatchNode_rebuildIndexInOrder'", nullptr);
@@ -97692,7 +97692,7 @@ int lua_cocos2dx_SpriteBatchNode_create(lua_State* tolua_S)
         std::string arg0;
         ssize_t arg1;
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.SpriteBatchNode:create");
-        ok &= luaval_to_ssize(tolua_S, 3, &arg1, "cc.SpriteBatchNode:create");
+        ok &= luaval_to_ssize_t(tolua_S, 3, &arg1, "cc.SpriteBatchNode:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteBatchNode_create'", nullptr);
@@ -97743,7 +97743,7 @@ int lua_cocos2dx_SpriteBatchNode_createWithTexture(lua_State* tolua_S)
         cocos2d::Texture2D* arg0;
         ssize_t arg1;
         ok &= luaval_to_object<cocos2d::Texture2D>(tolua_S, 2, "cc.Texture2D",&arg0, "cc.SpriteBatchNode:createWithTexture");
-        ok &= luaval_to_ssize(tolua_S, 3, &arg1, "cc.SpriteBatchNode:createWithTexture");
+        ok &= luaval_to_ssize_t(tolua_S, 3, &arg1, "cc.SpriteBatchNode:createWithTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteBatchNode_createWithTexture'", nullptr);
