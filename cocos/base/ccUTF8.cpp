@@ -351,7 +351,7 @@ std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string& utf16
     return std::vector<char16_t>(utf16.begin(), utf16.end());
 }
 
-long getCharacterCountInUTF8String(const std::string& utf8) {
+int32_t getCharacterCountInUTF8String(const std::string& utf8) {
     return getUTF8StringLength((const UTF8*) utf8.c_str());
 }
 

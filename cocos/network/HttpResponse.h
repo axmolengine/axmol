@@ -122,7 +122,7 @@ public:
      * Get the http response code to judge whether response is successful or not.
      * I know that you want to see the _responseCode is 200.
      * If _responseCode is not 200, you should check the meaning for _responseCode by the net.
-     * @return long the value of _responseCode
+     * @return int32_t the value of _responseCode
      */
     int getResponseCode() const
     {

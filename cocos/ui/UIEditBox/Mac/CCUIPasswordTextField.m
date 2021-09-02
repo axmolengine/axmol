@@ -66,8 +66,8 @@
                  inView:(NSView *)controlView
                  editor:(NSText *)textObj
                delegate:(id)anObject
-                  start:(long)selStart
-                 length:(long)selLength
+                  start:(int32_t)selStart
+                 length:(int32_t)selLength
 {
     aRect = [self drawingRectForBounds:aRect];
     mIsEditingOrSelecting = YES;
