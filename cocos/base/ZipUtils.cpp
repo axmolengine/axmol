@@ -634,7 +634,7 @@ struct ZipFilePrivate
     zlib_filefunc_def functionOverrides{};
 };
 
-ZipFile *ZipFile::createWithBuffer(const void* buffer, uLong size)
+ZipFile *ZipFile::createWithBuffer(const void* buffer, unsigned int size)
 {
     ZipFile *zip = new (std::nothrow) ZipFile();
     if (zip && zip->initWithBuffer(buffer, size)) {
@@ -858,7 +858,7 @@ int ZipFile::getCurrentFileInfo(std::string* filename, unz_file_info_s* info) {
     return ret;
 }
 
-bool ZipFile::initWithBuffer(const void *buffer, uLong size)
+bool ZipFile::initWithBuffer(const void *buffer, unsigned int size)
 {
     if (!buffer || size == 0) return false;
 

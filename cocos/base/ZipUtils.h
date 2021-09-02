@@ -293,7 +293,7 @@ namespace cocos2d
         std::string getFirstFilename();
         std::string getNextFilename();
 
-        static ZipFile *createWithBuffer(const void* buffer, unsigned long size);
+        static ZipFile *createWithBuffer(const void* buffer, unsigned int size);
 
         /**
         * zipFile Streaming support, !!!important, the file in zip must no compress level, otherwise
@@ -319,7 +319,7 @@ namespace cocos2d
         /* Only used internal for createWithBuffer() */
         ZipFile();
         
-        bool initWithBuffer(const void *buffer, unsigned long size);
+        bool initWithBuffer(const void *buffer, unsigned int size);
         int getCurrentFileInfo(std::string* filename, unz_file_info_s* info);
         
         /** Internal data like zip file pointer / file list array and so on */

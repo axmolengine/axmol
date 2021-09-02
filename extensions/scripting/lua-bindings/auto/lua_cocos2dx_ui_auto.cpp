@@ -18128,7 +18128,7 @@ int lua_cocos2dx_ui_ListView_scrollToItem(lua_State* tolua_S)
     do{
         if (argc == 4) {
             ssize_t arg0;
-            ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.ListView:scrollToItem");
+            ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.ListView:scrollToItem");
 
             if (!ok) { break; }
             cocos2d::Vec2 arg1;
@@ -18152,7 +18152,7 @@ int lua_cocos2dx_ui_ListView_scrollToItem(lua_State* tolua_S)
     do{
         if (argc == 3) {
             ssize_t arg0;
-            ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.ListView:scrollToItem");
+            ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.ListView:scrollToItem");
 
             if (!ok) { break; }
             cocos2d::Vec2 arg1;
@@ -18211,7 +18211,7 @@ int lua_cocos2dx_ui_ListView_jumpToItem(lua_State* tolua_S)
         cocos2d::Vec2 arg1;
         cocos2d::Vec2 arg2;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.ListView:jumpToItem");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.ListView:jumpToItem");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ccui.ListView:jumpToItem");
 
@@ -18465,7 +18465,7 @@ int lua_cocos2dx_ui_ListView_insertDefaultItem(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.ListView:insertDefaultItem");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.ListView:insertDefaultItem");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_ListView_insertDefaultItem'", nullptr);
@@ -19154,7 +19154,7 @@ int lua_cocos2dx_ui_ListView_getItem(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.ListView:getItem");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.ListView:getItem");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_ListView_getItem'", nullptr);
@@ -19204,7 +19204,7 @@ int lua_cocos2dx_ui_ListView_removeItem(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.ListView:removeItem");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.ListView:removeItem");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_ListView_removeItem'", nullptr);
@@ -19801,7 +19801,7 @@ int lua_cocos2dx_ui_ListView_insertCustomItem(lua_State* tolua_S)
 
         ok &= luaval_to_object<cocos2d::ui::Widget>(tolua_S, 2, "ccui.Widget",&arg0, "ccui.ListView:insertCustomItem");
 
-        ok &= luaval_to_ssize(tolua_S, 3, &arg1, "ccui.ListView:insertCustomItem");
+        ok &= luaval_to_ssize_t(tolua_S, 3, &arg1, "ccui.ListView:insertCustomItem");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_ListView_insertCustomItem'", nullptr);
@@ -25185,7 +25185,7 @@ int lua_cocos2dx_ui_PageView_setCurrentPageIndex(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.PageView:setCurrentPageIndex");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.PageView:setCurrentPageIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_PageView_setCurrentPageIndex'", nullptr);
@@ -25467,7 +25467,7 @@ int lua_cocos2dx_ui_PageView_scrollToPage(lua_State* tolua_S)
     do{
         if (argc == 2) {
             ssize_t arg0;
-            ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.PageView:scrollToPage");
+            ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.PageView:scrollToPage");
 
             if (!ok) { break; }
             double arg1;
@@ -25483,7 +25483,7 @@ int lua_cocos2dx_ui_PageView_scrollToPage(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ssize_t arg0;
-            ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.PageView:scrollToPage");
+            ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.PageView:scrollToPage");
 
             if (!ok) { break; }
             cobj->scrollToPage(arg0);
@@ -25576,7 +25576,7 @@ int lua_cocos2dx_ui_PageView_scrollToItem(lua_State* tolua_S)
     do{
         if (argc == 2) {
             ssize_t arg0;
-            ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.PageView:scrollToItem");
+            ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.PageView:scrollToItem");
 
             if (!ok) { break; }
             double arg1;
@@ -25592,7 +25592,7 @@ int lua_cocos2dx_ui_PageView_scrollToItem(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ssize_t arg0;
-            ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.PageView:scrollToItem");
+            ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.PageView:scrollToItem");
 
             if (!ok) { break; }
             cobj->scrollToItem(arg0);
@@ -25996,7 +25996,7 @@ int lua_cocos2dx_ui_PageView_removePageAtIndex(lua_State* tolua_S)
     {
         ssize_t arg0;
 
-        ok &= luaval_to_ssize(tolua_S, 2, &arg0, "ccui.PageView:removePageAtIndex");
+        ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ccui.PageView:removePageAtIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_PageView_removePageAtIndex'", nullptr);

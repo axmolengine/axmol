@@ -909,7 +909,7 @@ int lua_cocos2dx_3d_AABB_updateMinMax(lua_State* L)
 
         ok &= luaval_to_object<const cocos2d::Vec3>(L, 2, "cc.Vec3",&arg0, "cc.AABB:updateMinMax");
 
-        ok &= luaval_to_ssize(L, 3, &arg1, "cc.AABB:updateMinMax");
+        ok &= luaval_to_ssize_t(L, 3, &arg1, "cc.AABB:updateMinMax");
         if(!ok)
             return 0;
         cobj->updateMinMax(arg0, arg1);
