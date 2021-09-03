@@ -1,4 +1,4 @@
-//
+ï»¿//
 // Copyright (c) 2014-2020 Simdsoft Limited - All Rights Reserved
 //
 #include "ui/LayoutHelper.h"
@@ -12,7 +12,7 @@ void LayoutHelper::setDesignSizeFixedEdge(const Size& designSize)
 {
     LayoutHelper::s_designSize = designSize;
 
-    // Set the design resolution//·Ö±æÂÊµÄ´óĞ¡
+    // Set the design resolution//åˆ†è¾¨ç‡çš„å¤§å°
     GLView* pEGLView = Director::getInstance()->getOpenGLView();
     const Size& frameSize = pEGLView->getFrameSize();
 
@@ -37,7 +37,7 @@ void LayoutHelper::setDesignSizeNoBorder(const cocos2d::Size& designSize)
     // save smart size
     LayoutHelper::s_designSize = designSize;
 
-    // Set the design resolution//·Ö±æÂÊµÄ´óĞ¡
+    // Set the design resolution//åˆ†è¾¨ç‡çš„å¤§å°
     GLView* pEGLView = Director::getInstance()->getOpenGLView();
     const cocos2d::Size& frameSize = pEGLView->getFrameSize();
 
@@ -335,7 +335,7 @@ void LayoutHelper::moveNodeGroupVertically(const std::vector<Node*>& nodes, floa
 ** @remark:
 */
 /// <summary>
-/// Ë®Æ½¾ÓÖĞ
+/// æ°´å¹³å±…ä¸­
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::centerHorizontally(const std::vector<Node*>& nodes)
@@ -393,7 +393,7 @@ void LayoutHelper::centerHorizontally(const std::vector<Node*>& nodes)
 #endif
 }
 /// <summary>
-/// ´¹Ö±¾ÓÖĞ
+/// å‚ç›´å±…ä¸­
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::centerVertically(const std::vector<Node*>& nodes)
@@ -437,7 +437,7 @@ void LayoutHelper::centerVertically(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// ¾ÓÖĞ
+/// å±…ä¸­
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::centerToParent(const std::vector<Node*>& nodes)
@@ -492,7 +492,7 @@ void LayoutHelper::centerToParent(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// ×ó¶ÔÆë
+/// å·¦å¯¹é½
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::alignLefts(const std::vector<Node*>& nodes)
@@ -518,7 +518,7 @@ void LayoutHelper::alignLefts(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// ÓÒ¶ÔÆë
+/// å³å¯¹é½
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::alignRights(const std::vector<Node*>& nodes)
@@ -545,7 +545,7 @@ void LayoutHelper::alignRights(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// ¶¥¶Ë¶ÔÆë
+/// é¡¶ç«¯å¯¹é½
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::alignTops(const std::vector<Node*>& nodes)
@@ -571,7 +571,7 @@ void LayoutHelper::alignTops(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// µ×¶Ë¶ÔÆë
+/// åº•ç«¯å¯¹é½
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::alignBottoms(const std::vector<Node*>& nodes)
@@ -597,7 +597,7 @@ void LayoutHelper::alignBottoms(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// Ë®Æ½¶ÔÆë
+/// æ°´å¹³å¯¹é½
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::alignHorizontals(const std::vector<Node*>& nodes)
@@ -630,7 +630,7 @@ void LayoutHelper::alignHorizontals(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// ´¹Ö±¶ÔÆë
+/// å‚ç›´å¯¹é½
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::alignVerticals(const std::vector<Node*>& nodes)
@@ -663,7 +663,7 @@ void LayoutHelper::alignVerticals(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// ÖĞĞÄÔ­µã¶ÔÆë
+/// ä¸­å¿ƒåŸç‚¹å¯¹é½
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::alignCenters(const std::vector<Node*>& nodes)
@@ -676,7 +676,7 @@ void LayoutHelper::alignCenters(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// Ê¹¿í¶ÈÏàµÈ
+/// ä½¿å®½åº¦ç›¸ç­‰
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::makeSameWidth(const std::vector<Node*>& nodes)
@@ -702,7 +702,7 @@ void LayoutHelper::makeSameWidth(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// Ê¹¸ß¶ÈÏàµÈ
+/// ä½¿é«˜åº¦ç›¸ç­‰
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::makeSameHeight(const std::vector<Node*>& nodes)
@@ -728,7 +728,7 @@ void LayoutHelper::makeSameHeight(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// Ê¹µÃ´óĞ¡ÏàµÈ
+/// ä½¿å¾—å¤§å°ç›¸ç­‰
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::makeSameSize(const std::vector<Node*>& nodes)
@@ -741,7 +741,7 @@ void LayoutHelper::makeSameSize(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// Ê¹Ë®Æ½¼ä¾àÏàµÈ
+/// ä½¿æ°´å¹³é—´è·ç›¸ç­‰
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::makeHorizontalSpacingEqual(std::vector<Node*>& nodes)
@@ -775,7 +775,7 @@ void LayoutHelper::makeHorizontalSpacingEqual(std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// Ê¹Ë®Æ½¼ä¾àÏàµÈ
+/// ä½¿æ°´å¹³é—´è·ç›¸ç­‰
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::makeHorizontalSpacingEqual(const std::vector<Node*>& nodes, float theSpacing)
@@ -790,7 +790,7 @@ void LayoutHelper::makeHorizontalSpacingEqual(const std::vector<Node*>& nodes, f
 }
 
 /// <summary>
-/// Ê¹´¹Ö±¼ä¾àÏàµÈ
+/// ä½¿å‚ç›´é—´è·ç›¸ç­‰
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::makeVerticalSpacingEqual(std::vector<Node*>& nodes)
@@ -876,7 +876,7 @@ void LayoutHelper::removeVerticalSpacing(const std::vector<Node*>& nodes)
 }
 
 /// <summary>
-/// Ê¹´¹Ö±¼ä¾àÏàµÈ
+/// ä½¿å‚ç›´é—´è·ç›¸ç­‰
 /// </summary>
 /// <param name="nodes"></param>
 void LayoutHelper::makeVerticalSpacingEqual(const std::vector<Node*>& nodes, float theSpacing)
