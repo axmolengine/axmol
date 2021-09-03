@@ -431,6 +431,8 @@ void Scale9Sprite::copyTo(Scale9Sprite* copy) const
 
     copy->setRenderingType(_renderingType);
     copy->setScale9Enabled(isScale9Enabled());
+    // setStretchEnabled after setScale9Enabled, fix issue: https://github.com/adxeproject/adxe/issues/491
+    copy->setStretchEnabled(isStretchEnabled());
     copy->_isPatch9 = _isPatch9;
     copy->_brightState = _brightState;
 
