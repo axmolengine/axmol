@@ -41,15 +41,6 @@ NS_CC_BEGIN
  * @{
  */
 
-class __Set;
-class TouchScriptHandlerEntry;
-
-class EventListenerTouch;
-class EventListenerKeyboard;
-class EventListenerAcceleration;
-
-class Touch;
-
 //
 // Layer
 //
@@ -435,7 +426,7 @@ public:
      * @param arrayOfLayers An array of layers.
      * @return An autoreleased LayerMultiplex object.
      */
-    static LayerMultiplex* createWithArray(const Vector<Layer*>& arrayOfLayers);
+    static LayerMultiplex* createWithArray(const Vector<Node*>& arrayOfLayers);
 
     /** Creates a LayerMultiplex with one or more layers using a variable argument list.
      * @code
@@ -444,7 +435,7 @@ public:
      * In lua:local create(...)
      * @endcode
      */
-    static LayerMultiplex * create(Layer* layer, ... );
+    static LayerMultiplex* create(Node* layer, ...);
 
     /** Creates a LayerMultiplex with one layer.
      * Lua script can not init with undetermined number of variables
@@ -455,14 +446,14 @@ public:
      * @param layer A certain layer.
      * @return An autoreleased LayerMultiplex object.
      */
-    static LayerMultiplex * createWithLayer(Layer* layer);
+    static LayerMultiplex* createWithLayer(Node* layer);
 
 
     /** Add a certain layer to LayerMultiplex.
      *
      * @param layer A layer need to be added to the LayerMultiplex.
      */
-    void addLayer(Layer* layer);
+    void addLayer(Node* layer);
 
     /** Switches to a certain layer indexed by n.
      The current (old) layer will be removed from it's parent with 'cleanup=true'.
@@ -498,16 +489,16 @@ CC_CONSTRUCTOR_ACCESS:
      * @js NA
      * @lua NA
      */
-    bool initWithLayers(Layer* layer, va_list params);
+    bool initWithLayers(Node* layer, va_list params);
     
     /** initializes a MultiplexLayer with an array of layers
      @since v2.1
      */
-    bool initWithArray(const Vector<Layer*>& arrayOfLayers);
+    bool initWithArray(const Vector<Node*>& arrayOfLayers);
 
 protected:
     unsigned int _enabledLayer;
-    Vector<Layer*>    _layers;
+    Vector<Node*> _layers;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(LayerMultiplex);

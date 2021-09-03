@@ -725,7 +725,7 @@ LayerMultiplex::~LayerMultiplex()
     }
 }
 
-LayerMultiplex * LayerMultiplex::create(Layer * layer, ...)
+LayerMultiplex* LayerMultiplex::create(Node* layer, ...)
 {
     va_list args;
     va_start(args,layer);
@@ -742,7 +742,7 @@ LayerMultiplex * LayerMultiplex::create(Layer * layer, ...)
     return nullptr;
 }
 
-LayerMultiplex * LayerMultiplex::createWithLayer(Layer* layer)
+LayerMultiplex* LayerMultiplex::createWithLayer(Node* layer)
 {
     return LayerMultiplex::create(layer, nullptr);
 }
@@ -761,7 +761,7 @@ LayerMultiplex* LayerMultiplex::create()
     return ret;
 }
 
-LayerMultiplex* LayerMultiplex::createWithArray(const Vector<Layer*>& arrayOfLayers)
+LayerMultiplex* LayerMultiplex::createWithArray(const Vector<Node*>& arrayOfLayers)
 {
     LayerMultiplex* ret = new (std::nothrow) LayerMultiplex();
     if (ret && ret->initWithArray(arrayOfLayers))
@@ -775,7 +775,7 @@ LayerMultiplex* LayerMultiplex::createWithArray(const Vector<Layer*>& arrayOfLay
     return ret;
 }
 
-void LayerMultiplex::addLayer(Layer* layer)
+void LayerMultiplex::addLayer(Node* layer)
 {
 #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
@@ -797,7 +797,7 @@ bool LayerMultiplex::init()
     return false;
 }
 
-bool LayerMultiplex::initWithLayers(Layer *layer, va_list params)
+bool LayerMultiplex::initWithLayers(Node* layer, va_list params)
 {
     if (Layer::init())
     {
@@ -831,7 +831,7 @@ bool LayerMultiplex::initWithLayers(Layer *layer, va_list params)
     return false;
 }
 
-bool LayerMultiplex::initWithArray(const Vector<Layer*>& arrayOfLayers)
+bool LayerMultiplex::initWithArray(const Vector<Node*>& arrayOfLayers)
 {
     if (Layer::init())
     {

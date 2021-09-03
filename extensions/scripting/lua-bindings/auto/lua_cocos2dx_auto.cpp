@@ -59951,7 +59951,7 @@ int lua_cocos2dx_LayerMultiplex_initWithArray(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vector<cocos2d::Layer *> arg0;
+        cocos2d::Vector<cocos2d::Node *> arg0;
 
         ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "cc.LayerMultiplex:initWithArray");
         if(!ok)
@@ -60051,9 +60051,9 @@ int lua_cocos2dx_LayerMultiplex_addLayer(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Layer* arg0;
+        cocos2d::Node* arg0;
 
-        ok &= luaval_to_object<cocos2d::Layer>(tolua_S, 2, "cc.Layer",&arg0, "cc.LayerMultiplex:addLayer");
+        ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "cc.LayerMultiplex:addLayer");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerMultiplex_addLayer'", nullptr);
