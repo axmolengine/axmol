@@ -776,8 +776,9 @@ template <typename _CharT, typename _Traits>
 inline typename basic_string_view<_CharT, _Traits>::const_reference
 basic_string_view<_CharT, _Traits>::at(size_t pos) const
 {
-  return pos < m_size ? m_str[pos]
-                      : YASIO__THROWV(std::out_of_range("Input out of range in basic_string_view::at"), 0);
+  if (yasio__unlikely(pos >= m_size))
+    YASIO__THROW(std::out_of_range("Input out of range in basic_string_view::at"), 0);
+  return m_str[pos];
 }
 
 template <typename _CharT, typename _Traits>
@@ -846,7 +847,7 @@ template <typename _CharT, typename _Traits>
 inline typename basic_string_view<_CharT, _Traits>::size_type
 basic_string_view<_CharT, _Traits>::copy(char_type* dest, size_type count, size_type pos) const
 {
-  if (pos >= m_size)
+  if (yasio__unlikely(pos >= m_size))
     YASIO__THROW(std::out_of_range("Index out of range in basic_string_view::copy"), 0);
 
   const size_type rcount = (std::min)(m_size - pos, count + 1);
@@ -859,10 +860,9 @@ inline basic_string_view<_CharT, _Traits>
 basic_string_view<_CharT, _Traits>::substr(size_t pos, size_t len) const
 {
   const size_type max_length = pos > m_size ? 0 : m_size - pos;
-
-  return pos < m_size
-             ? basic_string_view<_CharT, _Traits>(m_str + pos, len > max_length ? max_length : len)
-             : YASIO__THROWV(std::out_of_range("Index out of range in basic_string_view::substr"), (basic_string_view<_CharT, _Traits>{}));
+  if (yasio__unlikely(pos >= m_size))
+    YASIO__THROW(std::out_of_range("Index out of range in basic_string_view::substr"), (basic_string_view<_CharT, _Traits>{}));
+  return basic_string_view<_CharT, _Traits>(m_str + pos, len > max_length ? max_length : len);
 }
 
 //--------------------------------------------------------------------------
@@ -1428,12 +1428,13 @@ inline cxx17::u32string_view operator"" _sv(const char32_t* _Str, size_t _Len)
 namespace cxx17
 {
 template <typename _CharT, typename _Traits, typename Allocator>
-inline void assign(std::basic_string<_CharT, _Traits, Allocator>& lhs, const basic_string_view<_CharT, _Traits>& rhs)
+inline std::basic_string<_CharT, _Traits, Allocator>& assign(std::basic_string<_CharT, _Traits, Allocator>& lhs, const basic_string_view<_CharT, _Traits>& rhs)
 {
   if (!rhs.empty())
     lhs.assign(rhs.data(), rhs.size());
   else
     lhs.clear();
+  return lhs;
 }
 template <typename _CharT, typename _Traits, typename Allocator = std::allocator<_CharT>>
 inline std::basic_string<_CharT, _Traits, Allocator> svtos(const basic_string_view<_CharT, _Traits>& value)

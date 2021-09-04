@@ -105,21 +105,17 @@ public:
   }
   void write_bytes(size_t offset, const void* d, int n)
   {
-    if ((offset + n) <= this->max_size())
-    {
-      ::memcpy(this->data() + offset, d, n);
-      this->pos_ += n;
-    }
-    else
-      YASIO__THROW_NOP(std::out_of_range("fixed_buffer_view: out of range"));
+    if (yasio__unlikely((offset + n) > this->max_size()))
+      YASIO__THROW0(std::out_of_range("fixed_buffer_view: out of range"));
+    ::memcpy(this->data() + offset, d, n);
+    this->pos_ += n;
   }
 
   void resize(size_t newsize)
   {
-    if (newsize < max_size())
-      this->pos_ = newsize;
-    else
-      YASIO__THROW_NOP(std::out_of_range("fixed_buffer_view: out of range"));
+    if (yasio__unlikely(newsize > max_size()))
+      YASIO__THROW0(std::out_of_range("fixed_buffer_view: out of range"));
+    this->pos_ = newsize;
   }
 
   void reserve(size_t /*capacity*/){};
