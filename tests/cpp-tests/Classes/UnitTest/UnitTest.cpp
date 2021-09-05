@@ -963,7 +963,7 @@ void ParseUriTest::onEnter()
         EXPECT_EQ("", u.getUserName());
         EXPECT_EQ("", u.getPassword());
         EXPECT_EQ("www.facebook.com", u.getHost());
-        EXPECT_EQ(0, u.getPort());
+        EXPECT_EQ(80, u.getPort());
         EXPECT_EQ("www.facebook.com", u.getAuthority());
         EXPECT_EQ("/hello/world", u.getPath());
         EXPECT_EQ("query", u.getQuery());
@@ -1041,7 +1041,7 @@ void ParseUriTest::onEnter()
         EXPECT_EQ("", u.getPassword());
         EXPECT_EQ("[2401:db00:20:7004:face:0:29:0]", u.getHost());
         EXPECT_EQ("2401:db00:20:7004:face:0:29:0", u.getHostName());
-        EXPECT_EQ(0, u.getPort());
+        EXPECT_EQ(80, u.getPort());
         EXPECT_EQ("[2401:db00:20:7004:face:0:29:0]", u.getAuthority());
         EXPECT_EQ("/hello/world", u.getPath());
         EXPECT_EQ("query", u.getQuery());
@@ -1056,7 +1056,7 @@ void ParseUriTest::onEnter()
         EXPECT_EQ("user", u.getUserName());
         EXPECT_EQ("pass", u.getPassword());
         EXPECT_EQ("host.com", u.getHost());
-        EXPECT_EQ(0, u.getPort());
+        EXPECT_EQ(80, u.getPort());
         EXPECT_EQ("user:pass@host.com", u.getAuthority());
         EXPECT_EQ("/", u.getPath());
         EXPECT_EQ("", u.getQuery());
@@ -1071,7 +1071,7 @@ void ParseUriTest::onEnter()
         EXPECT_EQ("user", u.getUserName());
         EXPECT_EQ("", u.getPassword());
         EXPECT_EQ("host.com", u.getHost());
-        EXPECT_EQ(0, u.getPort());
+        EXPECT_EQ(80, u.getPort());
         EXPECT_EQ("user@host.com", u.getAuthority());
         EXPECT_EQ("/", u.getPath());
         EXPECT_EQ("", u.getQuery());
@@ -1086,7 +1086,7 @@ void ParseUriTest::onEnter()
         EXPECT_EQ("user", u.getUserName());
         EXPECT_EQ("", u.getPassword());
         EXPECT_EQ("host.com", u.getHost());
-        EXPECT_EQ(0, u.getPort());
+        EXPECT_EQ(80, u.getPort());
         EXPECT_EQ("user@host.com", u.getAuthority());
         EXPECT_EQ("/", u.getPath());
         EXPECT_EQ("", u.getQuery());
@@ -1101,7 +1101,7 @@ void ParseUriTest::onEnter()
         EXPECT_EQ("", u.getUserName());
         EXPECT_EQ("pass", u.getPassword());
         EXPECT_EQ("host.com", u.getHost());
-        EXPECT_EQ(0, u.getPort());
+        EXPECT_EQ(80, u.getPort());
         EXPECT_EQ(":pass@host.com", u.getAuthority());
         EXPECT_EQ("/", u.getPath());
         EXPECT_EQ("", u.getQuery());
@@ -1116,7 +1116,7 @@ void ParseUriTest::onEnter()
         EXPECT_EQ("", u.getUserName());
         EXPECT_EQ("", u.getPassword());
         EXPECT_EQ("host.com", u.getHost());
-        EXPECT_EQ(0, u.getPort());
+        EXPECT_EQ(80, u.getPort());
         EXPECT_EQ("host.com", u.getAuthority());
         EXPECT_EQ("/", u.getPath());
         EXPECT_EQ("", u.getQuery());
@@ -1131,7 +1131,7 @@ void ParseUriTest::onEnter()
         EXPECT_EQ("", u.getUserName());
         EXPECT_EQ("", u.getPassword());
         EXPECT_EQ("host.com", u.getHost());
-        EXPECT_EQ(0, u.getPort());
+        EXPECT_EQ(80, u.getPort());
         EXPECT_EQ("host.com", u.getAuthority());
         EXPECT_EQ("/", u.getPath());
         EXPECT_EQ("", u.getQuery());
@@ -1361,7 +1361,7 @@ void ParseUriTest::onEnter()
         Uri ipv6query = Uri::parse("http://[2001::7334:a]:90/foo/bar?foo=bar");
 
         EXPECT_EQ(http.getScheme(), "http");
-        EXPECT_EQ(http.getPort(), 0);
+        EXPECT_EQ(http.getPort(), 80);
         EXPECT_EQ(http.getHost(), "google.com");
         EXPECT_EQ(https.getScheme(), "https");
         EXPECT_EQ(https.getPort(), 90);
@@ -1373,16 +1373,16 @@ void ParseUriTest::onEnter()
         EXPECT_EQ(localhost.getPort(), 8080);
         EXPECT_EQ(ipv6.getScheme(), "https");
         EXPECT_EQ(ipv6.getHostName(), "2001:0db8:85a3:0042:1000:8a2e:0370:7334");
-        EXPECT_EQ(ipv6.getPort(), 0);
+        EXPECT_EQ(ipv6.getPort(), 443);
         EXPECT_EQ(ipv6short.getScheme(), "http");
         EXPECT_EQ(ipv6short.getHostName(), "2001:db8:85a3:42:1000:8a2e:370:7334");
-        EXPECT_EQ(ipv6short.getPort(), 0);
+        EXPECT_EQ(ipv6short.getPort(), 80);
         EXPECT_EQ(ipv6port.getScheme(), "http");
         EXPECT_EQ(ipv6port.getHostName(), "2001:db8:85a3:42:1000:8a2e:370:7334");
         EXPECT_EQ(ipv6port.getPort(), 90);
         EXPECT_EQ(ipv6abbrev.getScheme(), "http");
         EXPECT_EQ(ipv6abbrev.getHostName(), "2001::7334:a:90");
-        EXPECT_EQ(ipv6abbrev.getPort(), 0);
+        EXPECT_EQ(ipv6abbrev.getPort(), 80);
         EXPECT_EQ(ipv6http.getScheme(), "http");
         EXPECT_EQ(ipv6http.getPort(), 90);
         EXPECT_EQ(ipv6http.getHostName(), "2001::7334:a");
@@ -1414,7 +1414,7 @@ void ParseUriTest::onEnter()
 
         EXPECT_EQ(u2.getScheme(), "ws");
         EXPECT_EQ(u2.getHost(), "localhost");
-        EXPECT_EQ(u2.getPort(), 0);
+        EXPECT_EQ(u2.getPort(), 80);
         EXPECT_EQ(u2.getPath(), "/foo");
 
         EXPECT_EQ(u3.getScheme(), "");

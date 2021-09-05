@@ -100,7 +100,7 @@ public:
     /**
      * Sets the position of the file pointer.
      */
-    bool seek(long int offset, int origin);
+    bool seek(int32_t offset, int origin);
 
     /**
      * Sets the file pointer at the start of the file.

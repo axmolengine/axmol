@@ -63,9 +63,9 @@ static std::unordered_map<std::string, DataRef> s_cacheFontData;
 
 // ------ freetype2 stream parsing support ---
 static unsigned long ft_stream_read_callback(FT_Stream stream,
-                                             unsigned long offset,
-                                             unsigned char* buf,
-                                             unsigned long size)
+                                        unsigned long offset,
+                                        unsigned char* buf,
+                                        unsigned long size)
 {
     auto fd = (FileStream*)stream->descriptor.pointer;
     if (!fd)
@@ -388,8 +388,8 @@ const char* FontFreeType::getFontFamily() const
 }
 
 unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar,
-                                            long& outWidth,
-                                            long& outHeight,
+                                            int32_t& outWidth,
+                                            int32_t& outHeight,
                                             Rect& outRect,
                                             int& xAdvance)
 {
@@ -543,8 +543,8 @@ unsigned char* FontFreeType::getGlyphBitmapWithOutline(uint64_t theChar, FT_BBox
                 {
                     FT_Outline* outline = &reinterpret_cast<FT_OutlineGlyph>(glyph)->outline;
                     FT_Glyph_Get_CBox(glyph, FT_GLYPH_BBOX_GRIDFIT, &bbox);
-                    long width = (bbox.xMax - bbox.xMin) >> 6;
-                    long rows  = (bbox.yMax - bbox.yMin) >> 6;
+                    int32_t width = (bbox.xMax - bbox.xMin) >> 6;
+                    int32_t rows  = (bbox.yMax - bbox.yMin) >> 6;
 
                     FT_Bitmap bmp;
                     bmp.buffer = new (std::nothrow) unsigned char[width * rows];
@@ -573,9 +573,9 @@ unsigned char* FontFreeType::getGlyphBitmapWithOutline(uint64_t theChar, FT_BBox
     return ret;
 }
 
-unsigned char* makeDistanceMap(unsigned char* img, long width, long height)
+unsigned char* makeDistanceMap(unsigned char* img, int32_t width, int32_t height)
 {
-    long pixelAmount = (width + 2 * FontFreeType::DistanceMapSpread) * (height + 2 * FontFreeType::DistanceMapSpread);
+    int32_t pixelAmount = (width + 2 * FontFreeType::DistanceMapSpread) * (height + 2 * FontFreeType::DistanceMapSpread);
 
     short* xdist    = (short*)malloc(pixelAmount * sizeof(short));
     short* ydist    = (short*)malloc(pixelAmount * sizeof(short));
@@ -584,10 +584,10 @@ unsigned char* makeDistanceMap(unsigned char* img, long width, long height)
     double* data    = (double*)calloc(pixelAmount, sizeof(double));
     double* outside = (double*)calloc(pixelAmount, sizeof(double));
     double* inside  = (double*)calloc(pixelAmount, sizeof(double));
-    long i, j;
+    int32_t i, j;
 
     // Convert img into double (data) rescale image levels between 0 and 1
-    long outWidth = width + 2 * FontFreeType::DistanceMapSpread;
+    int32_t outWidth = width + 2 * FontFreeType::DistanceMapSpread;
     for (i = 0; i < width; ++i)
     {
         for (j = 0; j < height; ++j)
@@ -660,8 +660,8 @@ void FontFreeType::renderCharAt(unsigned char* dest,
                                 int posX,
                                 int posY,
                                 unsigned char* bitmap,
-                                long bitmapWidth,
-                                long bitmapHeight)
+                                int32_t bitmapWidth,
+                                int32_t bitmapHeight)
 {
     int iX = posX;
     int iY = posY;
@@ -673,11 +673,11 @@ void FontFreeType::renderCharAt(unsigned char* dest,
         bitmapWidth += 2 * DistanceMapSpread;
         bitmapHeight += 2 * DistanceMapSpread;
 
-        for (long y = 0; y < bitmapHeight; ++y)
+        for (int32_t y = 0; y < bitmapHeight; ++y)
         {
-            long bitmap_y = y * bitmapWidth;
+            int32_t bitmap_y = y * bitmapWidth;
 
-            for (long x = 0; x < bitmapWidth; ++x)
+            for (int32_t x = 0; x < bitmapWidth; ++x)
             {
                 /* Dual channel 16-bit output (more complicated, but good precision and range) */
                 /*int index = (iX + ( iY * destSize )) * 3;
@@ -700,9 +700,9 @@ void FontFreeType::renderCharAt(unsigned char* dest,
     else if (_outlineSize > 0)
     {
         unsigned char tempChar;
-        for (long y = 0; y < bitmapHeight; ++y)
+        for (int32_t y = 0; y < bitmapHeight; ++y)
         {
-            long bitmap_y = y * bitmapWidth;
+            int32_t bitmap_y = y * bitmapWidth;
 
             for (int x = 0; x < bitmapWidth; ++x)
             {
@@ -721,9 +721,9 @@ void FontFreeType::renderCharAt(unsigned char* dest,
     }
     else
     {
-        for (long y = 0; y < bitmapHeight; ++y)
+        for (int32_t y = 0; y < bitmapHeight; ++y)
         {
-            long bitmap_y = y * bitmapWidth;
+            int32_t bitmap_y = y * bitmapWidth;
 
             for (int x = 0; x < bitmapWidth; ++x)
             {

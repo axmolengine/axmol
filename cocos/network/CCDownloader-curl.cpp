@@ -483,8 +483,8 @@ private:
             curl_easy_setopt(handle, CURLOPT_CONNECTTIMEOUT, hints.timeoutInSeconds);
         }
 
-        static const long LOW_SPEED_LIMIT = 1;
-        static const long LOW_SPEED_TIME  = 10;
+        static const int32_t LOW_SPEED_LIMIT = 1;
+        static const int32_t LOW_SPEED_TIME  = 10;
         curl_easy_setopt(handle, CURLOPT_LOW_SPEED_LIMIT, LOW_SPEED_LIMIT);
         curl_easy_setopt(handle, CURLOPT_LOW_SPEED_TIME, LOW_SPEED_TIME);
 
@@ -506,7 +506,7 @@ private:
     bool _getHeaderInfoProc(CURL* handle, DownloadTaskCURL* coTask) {
         CURLcode rc = CURLE_OK;
         do {
-            long httpResponseCode = 0;
+            int32_t httpResponseCode = 0;
             rc                    = curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &httpResponseCode);
             if (CURLE_OK != rc) {
                 break;

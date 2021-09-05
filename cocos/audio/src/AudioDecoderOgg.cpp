@@ -113,7 +113,7 @@ namespace cocos2d {
     {
         int currentSection = 0;
         int bytesToRead = framesToBytes(framesToRead);
-        long bytesRead = ov_read(&_vf, pcmBuf, bytesToRead, 0, 2, 1, &currentSection);
+        int32_t bytesRead = ov_read(&_vf, pcmBuf, bytesToRead, 0, 2, 1, &currentSection);
         return bytesToFrames(bytesRead);
     }
 

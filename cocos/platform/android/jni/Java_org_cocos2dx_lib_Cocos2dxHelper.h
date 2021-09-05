@@ -32,7 +32,7 @@ typedef void (*EditTextCallback)(const char* text, void* ctx);
 
 extern const char * getApkPath();
 extern std::string getPackageNameJNI();
-extern int getObbAssetFileDescriptorJNI(const char* path, long* startOffset, long* size);
+extern int getObbAssetFileDescriptorJNI(const char* path, int64_t* startOffset, int64_t* size);
 extern void conversionEncodingJNI(const char* src, int byteSize, const char* fromCharset, char* dst, const char* newCharset);
 
 extern int getDeviceSampleRate();
