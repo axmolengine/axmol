@@ -296,6 +296,7 @@ enum
   YLOG_V,
   YLOG_D,
   YLOG_I,
+  YLOG_W,
   YLOG_E,
 };
 

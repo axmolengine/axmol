@@ -67,6 +67,7 @@ SOFTWARE.
 
 #define YASIO_KLOGD(format, ...) YASIO_KLOG_CP(YLOG_D, format, ##__VA_ARGS__)
 #define YASIO_KLOGI(format, ...) YASIO_KLOG_CP(YLOG_I, format, ##__VA_ARGS__)
+#define YASIO_KLOGW(format, ...) YASIO_KLOG_CP(YLOG_W, format, ##__VA_ARGS__)
 #define YASIO_KLOGE(format, ...) YASIO_KLOG_CP(YLOG_E, format, ##__VA_ARGS__)
 
 #if !defined(YASIO_VERBOSE_LOG)
@@ -650,7 +651,7 @@ void io_transport_udp::set_primitives()
       {
         auto error = xxsocket::get_last_errno();
         if (!xxsocket::not_send_error(error))
-          YASIO_KLOGI("[index: %d] write udp socket failed, ec=%d, detail:%s", this->cindex(), error, io_service::strerror(error));
+          YASIO_KLOGW("[index: %d] write udp socket failed, ec=%d, detail:%s", this->cindex(), error, io_service::strerror(error));
       }
       return n;
     };
@@ -935,7 +936,7 @@ void io_service::run()
       if (retval < 0)
       {
         int ec = xxsocket::get_last_errno();
-        YASIO_KLOGD("[core] do_select failed, ec=%d, detail:%s\n", ec, io_service::strerror(ec));
+        YASIO_KLOGI("[core] do_select failed, ec=%d, detail:%s\n", ec, io_service::strerror(ec));
         if (ec != EBADF)
           continue; // Try again.
         goto _L_end;
@@ -1546,7 +1547,7 @@ void io_service::config_ares_name_servers()
     {
       status = ::ares_set_servers_csv(ares_, YASIO_CARES_FALLBACK_DNS);
       if (status == 0)
-        YASIO_KLOGD("[c-ares] set fallback dns: '%s' succeed", YASIO_CARES_FALLBACK_DNS);
+        YASIO_KLOGW("[c-ares] set fallback dns: '%s' succeed", YASIO_CARES_FALLBACK_DNS);
       else
         YASIO_KLOGE("[c-ares] set fallback dns: '%s' failed, detail: %s", YASIO_CARES_FALLBACK_DNS, ::ares_strerror(status));
     }
