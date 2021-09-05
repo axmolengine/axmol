@@ -205,7 +205,7 @@ public:
 
     void callback1();
     void callback2(Node* sender);
-    void callback3(Node* sender, long data);
+    void callback3(Node* sender, int32_t data);
 };
 
 class ActionSequence3 : public ActionsDemo
@@ -351,7 +351,7 @@ public:
 
     void callback1();
     void callback2(Node* pTarget);
-    void callback3(Node* pTarget, long data);
+    void callback3(Node* pTarget, int32_t data);
 };
 
 

@@ -126,7 +126,7 @@ void UICCTextField::insertText(const char*  text, size_t len)
     {
         if (_maxLengthEnabled)
         {
-            long text_count = StringUtils::getCharacterCountInUTF8String(getString());
+            int32_t text_count = StringUtils::getCharacterCountInUTF8String(getString());
             if (text_count >= _maxLength)
             {
                 // password
@@ -137,12 +137,12 @@ void UICCTextField::insertText(const char*  text, size_t len)
                 return;
             }
             
-            long input_count = StringUtils::getCharacterCountInUTF8String(text);
-            long total = text_count + input_count;
+            int32_t input_count = StringUtils::getCharacterCountInUTF8String(text);
+            int32_t total = text_count + input_count;
             
             if (total > _maxLength)
             {
-                long length = _maxLength - text_count;
+                int32_t length = _maxLength - text_count;
                 
                 input_text = Helper::getSubStringOfUTF8String(input_text, 0, length);
                 len  = input_text.length();
@@ -205,8 +205,8 @@ void UICCTextField::setPasswordStyleText(const std::string& styleText)
 void UICCTextField::setPasswordText(const std::string& text)
 {
     std::string tempStr = "";
-    long text_count = StringUtils::getCharacterCountInUTF8String(text);
-    long max = text_count;
+    int32_t text_count = StringUtils::getCharacterCountInUTF8String(text);
+    int32_t max = text_count;
     
     if (_maxLengthEnabled)
     {
@@ -373,7 +373,7 @@ void TextField::setString(const std::string& text)
     if (isMaxLengthEnabled())
     {
         int max = _textFieldRenderer->getMaxLength();
-        long text_count = StringUtils::getCharacterCountInUTF8String(text);
+        int32_t text_count = StringUtils::getCharacterCountInUTF8String(text);
         if (text_count > max)
         {
             strText = Helper::getSubStringOfUTF8String(strText, 0, max);

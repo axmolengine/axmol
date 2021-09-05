@@ -133,12 +133,12 @@ public:
 
     std::string _nameStr;
     std::chrono::high_resolution_clock::time_point _startTime;
-    long _averageTime1;
-    long _averageTime2;
-    long minTime;
-    long maxTime;
-    long totalTime;
-    long numberOfCalls;
+    int32_t _averageTime1;
+    int32_t _averageTime2;
+    int32_t minTime;
+    int32_t maxTime;
+    int32_t totalTime;
+    int32_t numberOfCalls;
 };
 
 extern void CC_DLL ProfilingBeginTimingBlock(const char *timerName);
