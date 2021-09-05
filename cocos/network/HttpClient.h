@@ -193,6 +193,8 @@ public:
     * When the device network status chagned, you should invoke this function
     */
     void handleNetworkStatusChanged();
+
+    yasio::io_service* getInternalService();
         
 private:
     HttpClient();

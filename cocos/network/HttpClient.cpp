@@ -148,6 +148,11 @@ void HttpClient::handleNetworkStatusChanged()
     _service->set_option(YOPT_S_DNS_DIRTY, 1);
 }
 
+yasio::io_service* HttpClient::getInternalService()
+{
+    return _service;
+}
+
 bool HttpClient::send(HttpRequest* request) {
     if (!request)
         return false;
