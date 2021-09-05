@@ -501,9 +501,9 @@ namespace cocostudio
         int opacity = widgetOptions->alpha();
         listView->setOpacity(opacity);
         
-        auto f_innerSize = options->innerSize();
-        Size innerSize(f_innerSize->width(), f_innerSize->height());
-        listView->setInnerContainerSize(innerSize);
+        //auto f_innerSize = options->innerSize();
+        //Size innerSize(f_innerSize->width(), f_innerSize->height());
+        //listView->setInnerContainerSize(innerSize);
         //         int direction = options->direction();
         //         listView->setDirection((ScrollView::Direction)direction);
         bool bounceEnabled = options->bounceEnabled() != 0;
