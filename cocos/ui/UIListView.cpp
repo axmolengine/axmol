@@ -197,7 +197,7 @@ void ListView::remedyHorizontalLayoutParameter(LinearLayoutParameter* layoutPara
     {
         layoutParameter->setMargin(Margin(_leftPadding, _topPadding, 0.f, _bottomPadding));
     }
-    else if (_items.size() == itemIndex)
+    else if (_items.size() - 1 == itemIndex)
     {
         layoutParameter->setMargin(Margin(_itemsMargin, _topPadding, _rightPadding, _bottomPadding));
     }

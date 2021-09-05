@@ -229,13 +229,13 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(const std::string& 
     return validCharsString;
 }
 
-std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char* pData, uint32_t size, const std::string& controlFile)
+std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char* pData, unsigned long size, const std::string& controlFile)
 {
     /* based on http://www.angelcode.com/products/bmfont/doc/file_format.html file format */
 
     std::set<unsigned int> *validCharsString = new (std::nothrow) std::set<unsigned int>();
 
-    uint32_t remains = size;
+    unsigned long remains = size;
 
     CCASSERT(pData[3] == 3, "Only version 3 is supported");
 
@@ -324,9 +324,9 @@ std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char
              chnl       1   uint    19+c*20
              */
 
-            uint32_t count = blockSize / 20;
+            unsigned long count = blockSize / 20;
 
-            for (uint32_t i = 0; i < count; i++)
+            for (unsigned long i = 0; i < count; i++)
             {
                 uint32_t charId = 0; memcpy(&charId, pData + (i * 20), 4);
                 
@@ -364,9 +364,9 @@ std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char
              amount 2   int     8+c*10
              */
 
-            uint32_t count = blockSize / 20;
+            unsigned long count = blockSize / 20;
 
-            for (uint32_t i = 0; i < count; i++)
+            for (unsigned long i = 0; i < count; i++)
             {
                 uint32_t first = 0; memcpy(&first, pData + (i * 10), 4);
                 uint32_t second = 0; memcpy(&second, pData + (i * 10) + 4, 4);

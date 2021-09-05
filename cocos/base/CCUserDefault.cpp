@@ -382,8 +382,8 @@ void UserDefault::lazyInit()
         return;
     }
 
-    int filesize = static_cast<int>(posix_lseek64(_fd, 0, SEEK_END));
-    posix_lseek64(_fd, 0, SEEK_SET);
+    int filesize = static_cast<int>(posix_lseek(_fd, 0, SEEK_END));
+    posix_lseek(_fd, 0, SEEK_SET);
 
     if (filesize < _curMapSize) { // construct a empty file mapping
         posix_fsetsize(_fd, _curMapSize);

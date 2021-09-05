@@ -187,13 +187,31 @@ void ScrollView::setInnerContainerSize(const Size &size)
 
     // Calculate and set the position of the inner container.
     Vec2 pos = _innerContainer->getPosition();
-    if (_innerContainer->getLeftBoundary() != 0.0f)
-    {
-        pos.x = _innerContainer->getAnchorPoint().x * _innerContainer->getContentSize().width;
+    const auto boundingBox = _innerContainer->getBoundingBox();
+    const auto rBoundary = boundingBox.origin.x + boundingBox.size.width;
+    const auto bBoundary = boundingBox.origin.y;
+    if (rBoundary < _contentSize.width) {
+        // When the right border does not fit to the width, 
+        // consider left-side fitting or right-side fitting.
+        const auto lBoundary = boundingBox.origin.x;
+        if (rBoundary - lBoundary > _contentSize.width) {
+            // The width of _innerContainer is greater than _contentSize.width,use right-side fitting.
+            pos.x = _contentSize.width - (1.f - _innerContainer->getAnchorPoint().x) * _innerContainer->getContentSize().width;
+        }
+        else {
+            // or use left-side fitting.
+            pos.x = _innerContainer->getAnchorPoint().x * _innerContainer->getContentSize().width;
+        }
     }
-    if (_innerContainer->getTopBoundary() != _contentSize.height)
-    {
-        pos.y = _contentSize.height - (1.0f - _innerContainer->getAnchorPoint().y) * _innerContainer->getContentSize().height;
+    if (bBoundary > 0.f) {
+        // Same as horizontal direction.
+        const auto tBoundary = boundingBox.origin.y + boundingBox.size.height;
+        if (tBoundary - bBoundary > _contentSize.height) {
+            pos.y = _innerContainer->getAnchorPoint().y * _innerContainer->getContentSize().height;
+        }
+        else {
+            pos.y = _contentSize.height - (1.0f - _innerContainer->getAnchorPoint().y) * _innerContainer->getContentSize().height;
+        }
     }
     setInnerContainerPosition(pos);
     

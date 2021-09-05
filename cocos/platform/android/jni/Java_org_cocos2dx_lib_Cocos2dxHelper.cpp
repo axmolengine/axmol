@@ -114,7 +114,7 @@ std::string getPackageNameJNI() {
     return JniHelper::callStaticStringMethod(className, "getCocos2dxPackageName");
 }
 
-int getObbAssetFileDescriptorJNI(const char* path, int64_t* startOffset, int64_t* size) {
+int getObbAssetFileDescriptorJNI(const char* path, long* startOffset, long* size) {
     JniMethodInfo methodInfo;
     int fd = 0;
     

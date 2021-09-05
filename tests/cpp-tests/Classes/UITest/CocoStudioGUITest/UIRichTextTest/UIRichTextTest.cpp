@@ -67,14 +67,14 @@ bool UIRichTextTest::init()
 
         std::string str1 = config->getValue("Chinese").asString();
         std::string str2 = config->getValue("Japanese").asString();
-        CCLOG("str1:%s ascii length = %d, utf8 length = %d, substr = %s",
+        CCLOG("str1:%s ascii length = %ld, utf8 length = %ld, substr = %s",
             str1.c_str(),
-            static_cast<int32_t>(str1.length()),
+            static_cast<long>(str1.length()),
             StringUtils::getCharacterCountInUTF8String(str1),
             Helper::getSubStringOfUTF8String(str1, 0, 5).c_str());
-        CCLOG("str2:%s ascii length = %d, utf8 length = %d, substr = %s",
+        CCLOG("str2:%s ascii length = %ld, utf8 length = %ld, substr = %s",
             str2.c_str(),
-            static_cast<int32_t>(str2.length()),
+            static_cast<long>(str2.length()),
             StringUtils::getCharacterCountInUTF8String(str2),
             Helper::getSubStringOfUTF8String(str2, 0, 2).c_str());
 

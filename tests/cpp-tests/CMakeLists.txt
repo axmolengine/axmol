@@ -529,10 +529,6 @@ target_include_directories(${APP_NAME}
         PRIVATE Classes
 )
 
-if(WIN64)
-    target_link_options(${APP_NAME} PRIVATE "/STACK:4194304")
-endif()
-
 # mark app resources
 setup_cocos_app_config(${APP_NAME})
 if(APPLE)

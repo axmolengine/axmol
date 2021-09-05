@@ -230,7 +230,7 @@ namespace cocos2d {
     uint32_t AudioDecoderWav::read(uint32_t framesToRead, char* pcmBuf)
     {
         auto bytesToRead = framesToBytes(framesToRead);
-        int32_t bytesRead = wav_read(&_wavf, pcmBuf, bytesToRead);
+        long bytesRead = wav_read(&_wavf, pcmBuf, bytesToRead);
         return bytesToFrames(bytesRead);
     }
 

@@ -86,14 +86,14 @@ public:
                       int posX,
                       int posY,
                       unsigned char* bitmap,
-                      int32_t bitmapWidth,
-                      int32_t bitmapHeight);
+                      long bitmapWidth,
+                      long bitmapHeight);
 
     FT_Encoding getEncoding() const { return _encoding; }
 
     int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
 
-    unsigned char* getGlyphBitmap(uint64_t theChar, int32_t& outWidth, int32_t& outHeight, Rect& outRect, int& xAdvance);
+    unsigned char* getGlyphBitmap(uint64_t theChar, long& outWidth, long& outHeight, Rect& outRect, int& xAdvance);
 
     int getFontAscender() const;
     const char* getFontFamily() const;

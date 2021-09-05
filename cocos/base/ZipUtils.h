@@ -215,7 +215,7 @@ namespace cocos2d
     struct ZipFileStream
     {
         ZipEntryInfo* entry;
-        int32_t offset;
+        long offset;
     };
     /**
     * Zip file - reader helper class.
@@ -301,7 +301,7 @@ namespace cocos2d
         */
         bool zfopen(const std::string& fileName, ZipFileStream* zfs);
         int zfread(ZipFileStream* zfs, void* buf, unsigned int size);
-        int32_t zfseek(ZipFileStream* zfs, int32_t offset, int origin);
+        long zfseek(ZipFileStream* zfs, long offset, int origin);
         void zfclose(ZipFileStream* zfs);
         long long zfsize(ZipFileStream* zfs);
 

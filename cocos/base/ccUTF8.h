@@ -198,7 +198,7 @@ CC_DLL bool isUnicodeNonBreaking(char32_t ch);
  *  @param utf8 An UTF-8 encoded string.
  *  @returns The length of the string in characters.
  */
-CC_DLL int32_t getCharacterCountInUTF8String(const std::string& utf8);
+CC_DLL long getCharacterCountInUTF8String(const std::string& utf8);
 
 /**
  *  @brief Gets the index of the last character that is not equal to the character given.

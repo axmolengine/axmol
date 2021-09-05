@@ -107,7 +107,7 @@ bool FileUtilsWin32::init()
 
 bool FileUtilsWin32::isDirectoryExistInternal(const std::string& dirPath) const
 {
-    uint32_t fAttrib = GetFileAttributesW(ntcvt::from_chars(dirPath).c_str());
+    unsigned long fAttrib = GetFileAttributesW(ntcvt::from_chars(dirPath).c_str());
     return (fAttrib != INVALID_FILE_ATTRIBUTES &&
         (fAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }

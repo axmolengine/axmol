@@ -169,7 +169,7 @@ namespace cocos2d {
 
         return false;
 #else
-        int32_t rate = 0;
+        long rate = 0;
         int error = MPG123_OK;
         int mp3Encoding = 0;
         int channel = 0;

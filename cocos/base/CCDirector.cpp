@@ -1169,8 +1169,8 @@ void Director::showStats()
         _isStatusLabelUpdated = false;
     }
 
-    static uint32_t prevCalls = 0;
-    static uint32_t prevVerts = 0;
+    static unsigned long prevCalls = 0;
+    static unsigned long prevVerts = 0;
 
     ++_frames;
     _accumDt += _deltaTime;
@@ -1190,8 +1190,8 @@ void Director::showStats()
             _frames = 0;
         }
 
-        auto currentCalls = (uint32_t)_renderer->getDrawnBatches();
-        auto currentVerts = (uint32_t)_renderer->getDrawnVertices();
+        auto currentCalls = (unsigned long)_renderer->getDrawnBatches();
+        auto currentVerts = (unsigned long)_renderer->getDrawnVertices();
         if( currentCalls != prevCalls ) {
             sprintf(buffer, "GL calls:%6lu", currentCalls);
             _drawnBatchesLabel->setString(buffer);

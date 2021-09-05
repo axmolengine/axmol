@@ -127,7 +127,7 @@ ssize_t BundleReader::tell()
     return _position;
 }
 
-bool BundleReader::seek(int32_t offset, int origin)
+bool BundleReader::seek(long int offset, int origin)
 {
     if (!_buffer)
         return false;

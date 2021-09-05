@@ -227,7 +227,7 @@ public:
         */
         void apply(PipelineDescriptor *pipelineDescriptor);
 
-        static void restoreUnmodifiedStates(int32_t flags, PipelineDescriptor *pipelineDescriptor);
+        static void restoreUnmodifiedStates(long flags, PipelineDescriptor *pipelineDescriptor);
 
 
         bool _cullFaceEnabled = false;
@@ -239,7 +239,7 @@ public:
         backend::BlendFactor _blendDst = backend::BlendFactor::ZERO;
         CullFaceSide _cullFaceSide = CullFaceSide::BACK;
         FrontFace _frontFace = FrontFace::COUNTER_CLOCK_WISE;
-        int32_t _modifiedBits = 0L;
+        long _modifiedBits = 0L;
 
         mutable uint32_t _hash;
         mutable bool _hashDirty;

@@ -37,8 +37,8 @@ NS_CC_BEGIN
 // sharedApplication pointer
 Application * Application::sm_pSharedApplication = nullptr;
 
-static int32_t getCurrentMillSecond() {
-    int32_t lLastTime;
+static long getCurrentMillSecond() {
+    long lLastTime;
     struct timeval stCurrentTime;
 
     gettimeofday(&stCurrentTime,NULL);
@@ -68,8 +68,8 @@ int Application::run()
         return 0;
     }
 
-    int32_t lastTime = 0L;
-    int32_t curTime = 0L;
+    long lastTime = 0L;
+    long curTime = 0L;
 
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
