@@ -55,19 +55,20 @@ add_subdirectory(${ADXE_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 set(BUILD_ENGINE_DONE ON)
 
 if(BUILD_TESTS)
-    # add cpp tests default
+    # add cpp-template-default into project(Cocos2d-x) for tmp test
+    add_subdirectory(${ADXE_ROOT_PATH}/templates/cpp-template-default ${ENGINE_BINARY_PATH}/tests/HelloCpp)
+	
+	# add cpp tests default
     add_subdirectory(${ADXE_ROOT_PATH}/tests/cpp-tests ${ENGINE_BINARY_PATH}/tests/cpp-tests)
-    add_subdirectory(${ADXE_ROOT_PATH}/tests/cpp-empty-test ${ENGINE_BINARY_PATH}/tests/cpp-empty-test)
     
+	# add fairygui tests when fairygui extension is enabled
     if(BUILD_EXTENSION_FAIRYGUI)
       add_subdirectory(${ADXE_ROOT_PATH}/tests/fairygui-tests ${ENGINE_BINARY_PATH}/tests/fairygui-tests)
     endif()
 
     if(BUILD_LUA_LIBS)
-      add_subdirectory(${ADXE_ROOT_PATH}/tests/lua-empty-test/project ${ENGINE_BINARY_PATH}/tests/lua-empty-test)
+      add_subdirectory(${ADXE_ROOT_PATH}/templates/lua-template-default ${ENGINE_BINARY_PATH}/tests/HelloLua)
       add_subdirectory(${ADXE_ROOT_PATH}/tests/lua-tests/project ${ENGINE_BINARY_PATH}/tests/lua-test)
     endif(BUILD_LUA_LIBS)
 
-    # add cpp-template-default into project(Cocos2d-x) for tmp test
-    add_subdirectory(${ADXE_ROOT_PATH}/templates/cpp-template-default ${ENGINE_BINARY_PATH}/tests/HelloCpp)
 endif()

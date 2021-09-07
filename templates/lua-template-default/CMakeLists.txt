@@ -1,7 +1,8 @@
 #/****************************************************************************
 # Copyright (c) 2013-2014 cocos2d-x.org
+# Copyright (c) 2021 Bytedance Inc.
 #
-# http://www.cocos2d-x.org
+# https://adxe.org
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,27 +28,29 @@ set(APP_NAME HelloLua)
 
 project(${APP_NAME})
 
-set(ADXE_ROOT "$ENV{ADXE_ROOT}")
+if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
+    if(XCODE)
+        set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
+    endif()
 
-if(XCODE)
-    set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
-endif()
+    set(ADXE_ROOT "$ENV{ADXE_ROOT}")
 
-if(NOT (ADXE_ROOT STREQUAL ""))
-    set(ADXE_ROOT_PATH "${ADXE_ROOT}")
-    file(TO_CMAKE_PATH ${ADXE_ROOT_PATH} ADXE_ROOT_PATH) # string(REPLACE "\\" "/" ADXE_ROOT_PATH ${ADXE_ROOT_PATH})
-    message(STATUS "Using system env var ADXE_ROOT=${ADXE_ROOT}")
-else()
-    message(FATAL_ERROR "Please run setup.py add system env var 'ADXE_ROOT' to specific the engine root")
+    if(NOT (ADXE_ROOT STREQUAL ""))
+        set(ADXE_ROOT_PATH "${ADXE_ROOT}")
+        file(TO_CMAKE_PATH ${ADXE_ROOT_PATH} ADXE_ROOT_PATH) # string(REPLACE "\\" "/" ADXE_ROOT_PATH ${ADXE_ROOT_PATH})
+        message(STATUS "Using system env var ADXE_ROOT=${ADXE_ROOT}")
+    else()
+        message(FATAL_ERROR "Please run setup.py add system env var 'ADXE_ROOT' to specific the engine root")
+    endif()
+
+    set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
+
+    include(CocosBuildSet)
+    set(BUILD_LUA_LIBS ON)
+    add_subdirectory(${ADXE_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 endif()
 
 set(RUNTIME_SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src)
-
-set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
-
-include(CocosBuildSet)
-set(BUILD_LUA_LIBS ON)
-add_subdirectory(${ADXE_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
 # script and source files info, not need to compile
 set(res_res_folders
@@ -56,9 +59,13 @@ set(res_res_folders
 set(res_src_folders
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     )
+set(res_script_folders
+    "${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/script"
+    )
 if(APPLE OR VS)
     cocos_mark_multi_resources(res_res RES_TO "Resources/res" FOLDERS ${res_res_folders})
     cocos_mark_multi_resources(res_src RES_TO "Resources/src" FOLDERS ${res_src_folders})
+    cocos_mark_multi_resources(res_script RES_TO "Resources/src/cocos" FOLDERS ${res_script_folders})
     set(cc_common_res ${res_res} ${res_src} ${res_script})
 endif()
 
@@ -160,4 +167,5 @@ if(LINUX OR WINDOWS)
     cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
     cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR}/res FOLDERS ${res_res_folders})
     cocos_copy_lua_scripts(${APP_NAME} ${res_src_folders} ${APP_RES_DIR}/src )
+    cocos_copy_lua_scripts(${APP_NAME} ${res_script_folders} ${APP_RES_DIR}/src/cocos)
 endif()

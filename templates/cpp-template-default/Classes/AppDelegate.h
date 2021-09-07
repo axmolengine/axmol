@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
+ Copyright (c) 2021 Bytedance Inc.
+
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -38,26 +39,26 @@ public:
     AppDelegate();
     virtual ~AppDelegate();
 
-    virtual void initGLContextAttrs();
+    void initGLContextAttrs() override;
 
     /**
     @brief    Implement Director and Scene init code here.
     @return true    Initialize success, app continue.
     @return false   Initialize failed, app terminate.
     */
-    virtual bool applicationDidFinishLaunching();
+    bool applicationDidFinishLaunching() override;
 
     /**
     @brief  Called when the application moves to the background
     @param  the pointer of the application
     */
-    virtual void applicationDidEnterBackground();
+    void applicationDidEnterBackground() override;
 
     /**
     @brief  Called when the application reenters the foreground
     @param  the pointer of the application
     */
-    virtual void applicationWillEnterForeground();
+    void applicationWillEnterForeground() override;
 };
 
 #endif // _APP_DELEGATE_H_
