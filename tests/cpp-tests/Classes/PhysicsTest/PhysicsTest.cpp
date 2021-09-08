@@ -1572,21 +1572,25 @@ void PhysicsPositionRotationTest::onEnter()
     anchorNode->addComponent(PhysicsBody::createBox(anchorNode->getContentSize()));
     anchorNode->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
     addChild(anchorNode);
+
+    anchorNode->getPhysicsBody()->setAngularVelocity(-5.0f);
     
     //parent test
     auto parent = Sprite::create("Images/YellowSquare.png");
-    parent->setPosition(200, 100);
-    parent->setScale(0.25);
+    parent->setPosition(300, 100);
+    parent->setScale(0.5);
     parent->addComponent(PhysicsBody::createBox(parent->getContentSize()));
     parent->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
     addChild(parent);
     
-    auto leftBall = Sprite::create("Images/ball.png");
-    leftBall->setPosition(-30, 0);
-    leftBall->Node::setScale(2);
-    leftBall->addComponent(PhysicsBody::createCircle(leftBall->getContentSize().width/2));
+    auto leftBall = Sprite::create("Images/YellowSquare.png");
+    leftBall->setPosition(-50, 0);
+    leftBall->Node::setScale(0.5);
+    leftBall->addComponent(PhysicsBody::createBox(leftBall->getContentSize()));
     leftBall->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
     parent->addChild(leftBall);
+
+    parent->getPhysicsBody()->setAngularVelocity(5.0f);
     
     // offset position rotation test
     auto offsetPosNode = Sprite::create("Images/YellowSquare.png");
@@ -1597,6 +1601,8 @@ void PhysicsPositionRotationTest::onEnter()
     body->setRotationOffset(45);
     body->setTag(DRAG_BODYS_TAG);
     addChild(offsetPosNode);
+
+    offsetPosNode->getPhysicsBody()->setAngularVelocity(5.0f);
     
     return;
 }
