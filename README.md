@@ -92,7 +92,7 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
   6. Remark: If you use non-sdk provided CMake edition, you need download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
 
 #### iOS
-  1. Ensure xcode11+ & [cmake3.14+](https://github.com/Kitware/CMake/releases) installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
+  1. Ensure xcode11+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. Execute follow command   
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project  
