@@ -2,14 +2,6 @@ name: pull_request
 
 on:
   pull_request:
-    paths:
-      - cmake/**/*
-      - cocos/**/*
-      - extensions/**/*
-      - tests/**/*
-      - thirdparty/**/*
-      - CMakeLists.txt
-      - .github/workflows/pr-ci.yml
     paths-ignore:
       - '**/README.md'
       
