@@ -24,7 +24,7 @@
 ### Highlight Features
 * Windows x64 build support
 * Reimplement HttpClient based on yasio for process http request concorrently.
-* **More clearly third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easy to publish your commercial apps based on adxe**
+* **More clearly third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easy to publish your commercial apps based on adxe. Also some links to third party libs which supporting adxe too.**
 * Refactor AudioEngine, OpenAL for all platforms
   * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_DEP_ALSOFT=ON to cmake to force enable it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_DEP_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
@@ -48,8 +48,6 @@
   * Chipmunk2D 
 * Supported 3D physics engines:
   * Bullet Physics SDK
-* Some third party libs which be not part of adxe but be useful for somebody to know where to found it:
-  * Live2D for cocos2d-x, with lua binding https://github.com/Xrysnow/cocos2d-x-live2d
 * **ImGui integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
 
 Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information and see [Milestones](https://github.com/adxeproject/adxe/milestones) for planed feature too.
@@ -78,6 +76,11 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
   cd adxe\
   cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
   ```
+  Build excecutable on command line (e.g. cpp-tests):
+  ```
+  msbuild .\build\adxe.sln -target:cpp-tests -maxCpuCount
+  ```
+
   
 #### Android
   1. Install Android Studio 4.2+
