@@ -245,3 +245,7 @@
 - Upstream: https://github.com/simdsoft/ntcvt
 - Version: git-8422188 (7)
 - License: Apache-2.0
+
+## Some third party libs supporting adxe too:
+   - Live2D for cocos2d-x, with lua binding:  https://github.com/Xrysnow/cocos2d-x-live2d
+
