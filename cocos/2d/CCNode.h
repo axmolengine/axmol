@@ -1793,6 +1793,11 @@ public:
 
     void updateProgramStateTexture(Texture2D* texture);
 
+    /*
+    * Reset child state with resources cleanup, internal use, please don't invoke this API.
+    */
+    void resetChild(Node* child, bool cleanup);
+
 CC_CONSTRUCTOR_ACCESS:
     // Nodes should be created using create();
     Node();
@@ -1808,7 +1813,7 @@ protected:
     void insertChild(Node* child, int z);
 
     /// Removes a child, call child->onExit(), do cleanup, remove it from children array.
-    void detachChild(Node *child, ssize_t index, bool doCleanup);
+    void detachChild(Node* child, ssize_t index, bool cleanup);
 
     /// Convert cocos2d coordinates to UI windows coordinate.
     Vec2 convertToWindowSpace(const Vec2& nodePoint) const;
