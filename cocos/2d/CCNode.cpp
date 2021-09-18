@@ -1052,36 +1052,14 @@ void Node::removeAllChildrenWithCleanup(bool cleanup)
     // not using detachChild improves speed here
     for (const auto& child : _children)
     {
-        // IMPORTANT:
-        //  -1st do onExit
-        //  -2nd cleanup
-        if(_running)
-        {
-            child->onExitTransitionDidStart();
-            child->onExit();
-        }
-
-        if (cleanup)
-        {
-            child->cleanup();
-        }
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-        auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
-        if (sEngine)
-        {
-            sEngine->releaseScriptObject(this, child);
-        }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-        // set parent nil at the end
-        child->setParent(nullptr);
+        resetChild(child, cleanup);
     }
     
     _children.clear();
 }
 
-void Node::detachChild(Node *child, ssize_t childIndex, bool doCleanup)
-{
-    // IMPORTANT:
+void Node::resetChild(Node* child, bool cleanup)
+{  // IMPORTANT:
     //  -1st do onExit
     //  -2nd cleanup
     if (_running)
@@ -1092,20 +1070,25 @@ void Node::detachChild(Node *child, ssize_t childIndex, bool doCleanup)
 
     // If you don't do cleanup, the child's actions will not get removed and the
     // its scheduledSelectors_ dict will not get released!
-    if (doCleanup)
+    if (cleanup)
     {
         child->cleanup();
     }
-    
+
 #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->releaseScriptObject(this, child);
     }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     // set parent nil at the end
     child->setParent(nullptr);
+}
+
+void Node::detachChild(Node* child, ssize_t childIndex, bool cleanup)
+{
+    resetChild(child, cleanup);
 
     _children.erase(childIndex);
 }

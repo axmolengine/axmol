@@ -626,28 +626,7 @@ void SpriteBatchNode::appendChild(Sprite* sprite)
         // Github issue #14730
         if (dynamic_cast<DrawNode*>(child))
         {
-            // IMPORTANT:
-            //  -1st do onExit
-            //  -2nd cleanup
-            if (sprite->isRunning())
-            {
-                child->onExitTransitionDidStart();
-                child->onExit();
-            }
-
-            // If you don't do cleanup, the child's actions will not get removed and the
-            // its scheduledSelectors_ dict will not get released!
-            child->cleanup();
-
-#    if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-            auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
-            if (sEngine)
-            {
-                sEngine->releaseScriptObject(sprite, child);
-            }
-#    endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-            // set parent nil at the end
-            child->setParent(nullptr);
+            sprite->resetChild(child, true);
             iter = children.erase(iter);
             continue;
         }
