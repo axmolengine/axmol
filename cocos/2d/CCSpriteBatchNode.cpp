@@ -5,8 +5,9 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -613,20 +614,48 @@ void SpriteBatchNode::appendChild(Sprite* sprite)
 
     // add children recursively
     auto& children = sprite->getChildren();
-    for(const auto &child: children) {
+
+
+    // adxe Github issue #502
+    for (auto iter = children.begin(); iter != children.end();)
+    {
+        auto child = *iter;
 #if CC_SPRITE_DEBUG_DRAW
         // when using CC_SPRITE_DEBUG_DRAW, a DrawNode is appended to sprites. remove it since only Sprites can be used
         // as children in SpriteBatchNode
         // Github issue #14730
-        if (dynamic_cast<DrawNode*>(child)) {
-            // to avoid calling Sprite::removeChild()
-            sprite->Node::removeChild(child, true);
+        if (dynamic_cast<DrawNode*>(child))
+        {
+            // IMPORTANT:
+            //  -1st do onExit
+            //  -2nd cleanup
+            if (sprite->isRunning())
+            {
+                child->onExitTransitionDidStart();
+                child->onExit();
+            }
+
+            // If you don't do cleanup, the child's actions will not get removed and the
+            // its scheduledSelectors_ dict will not get released!
+            child->cleanup();
+
+#    if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+            auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
+            if (sEngine)
+            {
+                sEngine->releaseScriptObject(sprite, child);
+            }
+#    endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+            // set parent nil at the end
+            child->setParent(nullptr);
+            iter = children.erase(iter);
+            continue;
         }
-        else
-#else
-        CCASSERT(dynamic_cast<Sprite*>(child) != nullptr, "You can only add Sprites (or subclass of Sprite) to SpriteBatchNode");
 #endif
+        CCASSERT(dynamic_cast<Sprite*>(child) != nullptr,
+                 "You can only add Sprites (or subclass of Sprite) to SpriteBatchNode");
         appendChild(static_cast<Sprite*>(child));
+        ++iter;
     }
 }
 
