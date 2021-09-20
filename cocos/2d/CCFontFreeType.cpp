@@ -45,8 +45,6 @@ bool FontFreeType::_streamParsingEnabled    = false;
 bool FontFreeType::_doNativeBytecodeHinting = true;
 const int FontFreeType::DistanceMapSpread   = 3;
 
-static FontFreeType* s_osFallbackFont = nullptr;
-
 const char* FontFreeType::_glyphASCII =
     "\"!#$%&'()*+,-./"
     "0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
@@ -134,8 +132,6 @@ bool FontFreeType::initFreeType()
 
 void FontFreeType::shutdownFreeType()
 {
-    CC_SAFE_RELEASE_NULL(s_osFallbackFont);
-
     if (_FTInitialized == true)
     {
         FT_Done_FreeType(_FTlibrary);
@@ -413,7 +409,7 @@ unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar,
         if (FT_Load_Glyph(_fontRef, glyph_index, FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))
             break;
 
-#if defined(_DEBUG)
+#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
         if (glyph_index == 0)
         {
             std::u32string charUTF32(1, theChar);
@@ -424,9 +420,6 @@ unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar,
                 charUTF8 = "\\n";
             cocos2d::log("The font face: %s doesn't contains char: <%s>", _fontRef->charmap->face->family_name,
                          charUTF8.c_str());
-
-            if (!_bOSFallbackFont && s_osFallbackFont)
-                return s_osFallbackFont->getGlyphBitmap(theChar, outWidth, outHeight, outRect, xAdvance);
         }
 #endif
         if (_distanceFieldEnabled) {
