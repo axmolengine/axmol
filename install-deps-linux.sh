@@ -37,3 +37,14 @@ DEPENDS+=' libasound2-dev'
 DEPENDS+=' libxxf86vm-dev'
 
 sudo apt-get install --allow-unauthenticated --yes $DEPENDS > /dev/null
+
+echo "Installing latest freetype for linux ..."
+mkdir buildsrc
+cd buildsrc
+git clone https://gitlab.freedesktop.org/freetype/freetype.git
+cd freetype
+sh autogen.sh
+./configure --prefix=/usr --enable-freetype-config --disable-static
+sudo make install
+cd ..
+cd ..
