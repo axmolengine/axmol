@@ -37,6 +37,17 @@ function install_linux_environment()
     echo "Installing linux dependence packages ..."
     echo -e "y" | bash $ADXE_ROOT/install-deps-linux.sh
     echo "Installing linux dependence packages finished!"
+    
+    echo "Installing latest freetype for linux ..."
+    mkdir buildsrc
+    cd buildsrc
+    git clone https://gitlab.freedesktop.org/freetype/freetype.git
+    cd freetype
+    ./configure --prefix=/usr --enable-freetype-config --disable-static
+    make
+    make install
+    cd ..
+    cd ..
 }
 
 function install_python_module_for_osx()
