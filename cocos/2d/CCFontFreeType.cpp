@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 #include "2d/CCFontFreeType.h"
 
-#include <freetype/ftfntfmt.h>
+#include "freetype/ftfntfmt.h"
 
 #include FT_BBOX_H
 #include "2d/CCFontAtlas.h"
