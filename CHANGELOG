@@ -15,6 +15,7 @@ adxe-1.0  ??
 [FIX] Fix console output text encoding for win32
 [FIX] Fix charset process for fontName on win32
 [FIX] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
+[FIX] Fix Crash on SpriteBatchNode::appendChild when CC_SPRITE_DEBUG_DRAW==1
 [REFINE] CCValue move construct and assign with std::string support
 [REFINE] Improve cmake scripts
 [REFINE] Replace deprecated repo `jcenter` with `mavenCentral`
