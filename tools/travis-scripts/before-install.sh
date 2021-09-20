@@ -43,6 +43,7 @@ function install_linux_environment()
     cd buildsrc
     git clone https://gitlab.freedesktop.org/freetype/freetype.git
     cd freetype
+    sh autogen.sh
     ./configure --prefix=/usr --enable-freetype-config --disable-static
     make
     make install
