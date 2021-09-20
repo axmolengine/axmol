@@ -1924,7 +1924,6 @@
       p->font = font;
 
       font->memory = p->memory;
-      p->memory    = 0;
 
       { /* setup */
         size_t           i;
@@ -2164,27 +2163,25 @@
 
   FT_LOCAL_DEF( FT_Error )
   bdf_load_font( FT_Stream       stream,
-                 FT_Memory       extmemory,
+                 FT_Memory       memory,
                  bdf_options_t*  opts,
                  bdf_font_t*    *font )
   {
     unsigned long  lineno = 0; /* make compiler happy */
     _bdf_parse_t   *p     = NULL;
 
-    FT_Memory  memory = extmemory; /* needed for FT_NEW */
     FT_Error   error  = FT_Err_Ok;
 
 
     if ( FT_NEW( p ) )
       goto Exit;
 
-    memory    = NULL;
     p->opts   = (bdf_options_t*)( ( opts != 0 ) ? opts : &_bdf_opts );
     p->minlb  = 32767;
     p->size   = stream->size;
-    p->memory = extmemory;  /* only during font creation */
+    p->memory = memory;  /* only during font creation */
 
-    _bdf_list_init( &p->list, extmemory );
+    _bdf_list_init( &p->list, memory );
 
     error = _bdf_readstream( stream, _bdf_parse_start,
                              (void *)p, &lineno );
@@ -2275,8 +2272,6 @@
     if ( p->font != 0 )
     {
       /* Make sure the comments are NULL terminated if they exist. */
-      memory = p->font->memory;
-
       if ( p->font->comments_len > 0 )
       {
         if ( FT_QRENEW_ARRAY( p->font->comments,
@@ -2297,8 +2292,6 @@
     {
       _bdf_list_done( &p->list );
 
-      memory = extmemory;
-
       FT_FREE( p->glyph_name );
       FT_FREE( p );
     }
@@ -2307,8 +2300,6 @@
 
   Fail:
     bdf_free_font( p->font );
-
-    memory = extmemory;
 
     FT_FREE( p->font );
 

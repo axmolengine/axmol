@@ -157,10 +157,14 @@
   cid_size_request( FT_Size          size,
                     FT_Size_Request  req )
   {
+    FT_Error  error;
+
     PSH_Globals_Funcs  funcs;
 
 
-    FT_Request_Metrics( size->face, req );
+    error = FT_Request_Metrics( size->face, req );
+    if ( error )
+      goto Exit;
 
     funcs = cid_size_get_globals_funcs( (CID_Size)size );
 
@@ -170,7 +174,8 @@
                         size->metrics.y_scale,
                         0, 0 );
 
-    return FT_Err_Ok;
+  Exit:
+    return error;
   }
 
 

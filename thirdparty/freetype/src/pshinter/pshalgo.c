@@ -305,17 +305,18 @@
     /* now, sort the hints; they are guaranteed to not overlap */
     /* so we can compare their "org_pos" field directly        */
     {
-      FT_Int     i1, i2;
+      FT_UInt    i1, i2;
       PSH_Hint   hint1, hint2;
       PSH_Hint*  sort = table->sort;
 
 
       /* a simple bubble sort will do, since in 99% of cases, the hints */
       /* will be already sorted -- and the sort will be linear          */
-      for ( i1 = 1; i1 < (FT_Int)count; i1++ )
+      for ( i1 = 1; i1 < count; i1++ )
       {
         hint1 = sort[i1];
-        for ( i2 = i1 - 1; i2 >= 0; i2-- )
+        /* this loop stops when i2 wraps around after reaching 0 */
+        for ( i2 = i1 - 1; i2 < i1; i2-- )
         {
           hint2 = sort[i2];
 
@@ -869,7 +870,7 @@
       return;
     }
 
-#endif /* DEBUG_HINTER*/
+#endif /* DEBUG_HINTER */
 
     hint  = table->hints;
     count = table->max_hints;

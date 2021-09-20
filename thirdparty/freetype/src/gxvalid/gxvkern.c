@@ -745,7 +745,7 @@
 #ifdef GXV_LOAD_TRACE_VARS
     FT_UShort  version = 0;    /* MS only: subtable version, unused */
 #endif
-    FT_ULong   length;         /* MS: 16bit, Apple: 32bit*/
+    FT_ULong   length;         /* MS: 16bit, Apple: 32bit */
     FT_UShort  coverage;
 #ifdef GXV_LOAD_TRACE_VARS
     FT_UShort  tupleIndex = 0; /* Apple only */

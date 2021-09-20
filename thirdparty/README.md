@@ -49,11 +49,6 @@
 - Version: 7.78.0
 - License: Curl (MIT/X)
 
-## edtaa3func
-- Upstream: https://github.com/zilongshanren/edtaa3func
-- Version: git d02e47d 
-- License: MIT
-
 ## flatbuffers
 - Upstream: https://github.com/google/flatbuffers
 - Version: 2.0.0
@@ -66,7 +61,7 @@
 
 ## FreeType
 - Upstream: https://www.freetype.org/
-- Version: 2.11.0
+- Version: git 52915898 (7255)
 - License: BSD-style (The FreeType Project)
 
 ## Glad

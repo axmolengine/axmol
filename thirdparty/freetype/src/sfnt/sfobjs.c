@@ -1209,7 +1209,7 @@
           /* of `FT_Face', we map `available_sizes' indices to strike    */
           /* indices                                                     */
           if ( FT_NEW_ARRAY( root->available_sizes, count ) ||
-               FT_NEW_ARRAY( sbit_strike_map, count ) )
+               FT_QNEW_ARRAY( sbit_strike_map, count ) )
             goto Exit;
 
           bsize_idx = 0;
@@ -1238,7 +1238,7 @@
           }
 
           /* reduce array size to the actually used elements */
-          (void)FT_QRENEW_ARRAY( sbit_strike_map, count, bsize_idx );
+          FT_MEM_QRENEW_ARRAY( sbit_strike_map, count, bsize_idx );
 
           /* from now on, all strike indices are mapped */
           /* using `sbit_strike_map'                    */

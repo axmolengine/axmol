@@ -1920,7 +1920,7 @@
 
       else
       {
-        if ( FT_NEW( node ) )
+        if ( FT_QNEW( node ) )
           goto Exit;
         node->data = FT_UINT_TO_POINTER( glyph_index );
         FT_List_Add( &loader->composites, node );

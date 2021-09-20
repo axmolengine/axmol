@@ -94,6 +94,8 @@
     FT_ULong  num_layers_v1;
     FT_Byte*  layers_v1;
 
+    FT_Byte*  clip_list;
+
     /*
      * Paint tables start at the minimum of the end of the LayerList and the
      * end of the BaseGlyphList.  Record this location in a field here for
@@ -134,7 +136,7 @@
 
     FT_ULong  base_glyph_offset, layer_offset;
     FT_ULong  base_glyphs_offset_v1, num_base_glyphs_v1;
-    FT_ULong  layer_offset_v1, num_layers_v1;
+    FT_ULong  layer_offset_v1, num_layers_v1, clip_list_offset;
     FT_ULong  table_size;
 
 
@@ -226,6 +228,16 @@
           colr->base_glyphs_v1 +
           colr->num_base_glyphs_v1 * BASE_GLYPH_PAINT_RECORD_SIZE;
       }
+
+      clip_list_offset = FT_NEXT_ULONG( p );
+
+      if ( clip_list_offset >= table_size )
+        goto InvalidTable;
+
+      if ( clip_list_offset )
+        colr->clip_list = (FT_Byte*)( table + clip_list_offset );
+      else
+        colr->clip_list = 0;
     }
 
     colr->base_glyphs = (FT_Byte*)( table + base_glyph_offset );
@@ -531,8 +543,8 @@
       apaint->u.sweep_gradient.center.x = FT_NEXT_SHORT( p );
       apaint->u.sweep_gradient.center.y = FT_NEXT_SHORT( p );
 
-      apaint->u.sweep_gradient.start_angle = FT_NEXT_LONG( p );
-      apaint->u.sweep_gradient.end_angle = FT_NEXT_LONG( p );
+      apaint->u.sweep_gradient.start_angle = FT_NEXT_SHORT( p ) << 2;
+      apaint->u.sweep_gradient.end_angle   = FT_NEXT_SHORT( p ) << 2;
 
       return 1;
     }
@@ -551,6 +563,11 @@
       apaint->u.transform.paint.p                     = child_table_p;
       apaint->u.transform.paint.insert_root_transform = 0;
 
+      if ( !get_child_table_pointer( colr, paint_base, &p, &child_table_p ) )
+         return 0;
+
+      p = child_table_p;
+
       apaint->u.transform.affine.xx = FT_NEXT_LONG( p );
       apaint->u.transform.affine.yx = FT_NEXT_LONG( p );
       apaint->u.transform.affine.xy = FT_NEXT_LONG( p );
@@ -566,8 +583,8 @@
       apaint->u.translate.paint.p                     = child_table_p;
       apaint->u.translate.paint.insert_root_transform = 0;
 
-      apaint->u.translate.dx = FT_NEXT_LONG( p );
-      apaint->u.translate.dy = FT_NEXT_LONG( p );
+      apaint->u.translate.dx = FT_NEXT_SHORT( p ) << 16;
+      apaint->u.translate.dy = FT_NEXT_SHORT( p ) << 16;
 
       return 1;
     }
@@ -585,14 +602,14 @@
       apaint->u.scale.paint.insert_root_transform = 0;
 
       /* All scale paints get at least one scale value. */
-      apaint->u.scale.scale_x = FT_NEXT_LONG( p );
+      apaint->u.scale.scale_x = FT_NEXT_SHORT( p ) << 2;
 
       /* Non-uniform ones read an extra y value. */
       if ( apaint->format ==
              FT_COLR_PAINTFORMAT_SCALE                 ||
            (FT_PaintFormat_Internal)apaint->format ==
              FT_COLR_PAINTFORMAT_INTERNAL_SCALE_CENTER )
-        apaint->u.scale.scale_y = FT_NEXT_LONG( p );
+        apaint->u.scale.scale_y = FT_NEXT_SHORT( p ) << 2;
       else
         apaint->u.scale.scale_y = apaint->u.scale.scale_x;
 
@@ -603,8 +620,8 @@
            (FT_PaintFormat_Internal)apaint->format ==
              FT_COLR_PAINTFORMAT_INTERNAL_SCALE_UNIFORM_CENTER )
       {
-        apaint->u.scale.center_x = FT_NEXT_LONG ( p );
-        apaint->u.scale.center_y = FT_NEXT_LONG ( p );
+        apaint->u.scale.center_x = FT_NEXT_SHORT ( p ) << 16;
+        apaint->u.scale.center_y = FT_NEXT_SHORT ( p ) << 16;
       }
       else
       {
@@ -619,29 +636,59 @@
       return 1;
     }
 
-    else if ( apaint->format == FT_COLR_PAINTFORMAT_ROTATE )
+    else if ( apaint->format == FT_COLR_PAINTFORMAT_ROTATE ||
+              (FT_PaintFormat_Internal)apaint->format ==
+                FT_COLR_PAINTFORMAT_INTERNAL_ROTATE_CENTER )
     {
       apaint->u.rotate.paint.p                     = child_table_p;
       apaint->u.rotate.paint.insert_root_transform = 0;
 
-      apaint->u.rotate.angle = FT_NEXT_LONG( p );
+      /* The angle is specified as F2DOT14 and our output type is an FT_Fixed,
+       * shift by 2 positions. */
+      apaint->u.rotate.angle = FT_NEXT_SHORT( p ) << 2;
 
-      apaint->u.rotate.center_x = FT_NEXT_LONG( p );
-      apaint->u.rotate.center_y = FT_NEXT_LONG( p );
+      if ( (FT_PaintFormat_Internal)apaint->format ==
+           FT_COLR_PAINTFORMAT_INTERNAL_ROTATE_CENTER )
+      {
+        /* The center is specified as Int16 in font units, shift by 16 bits to
+         * convert to our FT_Fixed output type. */
+        apaint->u.rotate.center_x = FT_NEXT_SHORT( p ) << 16;
+        apaint->u.rotate.center_y = FT_NEXT_SHORT( p ) << 16;
+      }
+      else
+      {
+        apaint->u.rotate.center_x = 0;
+        apaint->u.rotate.center_y = 0;
+      }
+
+      apaint->format = FT_COLR_PAINTFORMAT_ROTATE;
 
       return 1;
     }
 
-    else if ( apaint->format == FT_COLR_PAINTFORMAT_SKEW )
+    else if ( apaint->format == FT_COLR_PAINTFORMAT_SKEW ||
+              (FT_PaintFormat_Internal)apaint->format ==
+                FT_COLR_PAINTFORMAT_INTERNAL_SKEW_CENTER )
     {
       apaint->u.skew.paint.p                     = child_table_p;
       apaint->u.skew.paint.insert_root_transform = 0;
 
-      apaint->u.skew.x_skew_angle = FT_NEXT_LONG( p );
-      apaint->u.skew.y_skew_angle = FT_NEXT_LONG( p );
+      apaint->u.skew.x_skew_angle = FT_NEXT_SHORT( p ) << 2;
+      apaint->u.skew.y_skew_angle = FT_NEXT_SHORT( p ) << 2;
 
-      apaint->u.skew.center_x = FT_NEXT_LONG( p );
-      apaint->u.skew.center_y = FT_NEXT_LONG( p );
+      if ( (FT_PaintFormat_Internal)apaint->format ==
+           FT_COLR_PAINTFORMAT_INTERNAL_SKEW_CENTER )
+      {
+        apaint->u.skew.center_x = FT_NEXT_SHORT( p ) << 16;
+        apaint->u.skew.center_y = FT_NEXT_SHORT( p ) << 16;
+      }
+      else
+      {
+        apaint->u.skew.center_x = 0;
+        apaint->u.skew.center_y = 0;
+      }
+
+      apaint->format = FT_COLR_PAINTFORMAT_SKEW;
 
       return 1;
     }
@@ -758,6 +805,117 @@
       opaque_paint->insert_root_transform = 0;
 
     return 1;
+  }
+
+
+  FT_LOCAL_DEF( FT_Bool )
+  tt_face_get_color_glyph_clipbox( TT_Face      face,
+                                   FT_UInt      base_glyph,
+                                   FT_ClipBox*  clip_box )
+  {
+    Colr*  colr;
+
+    FT_Byte  *p, *p1, *clip_base;
+
+    FT_Byte    clip_list_format;
+    FT_ULong   num_clip_boxes, i;
+    FT_UShort  gid_start, gid_end;
+    FT_UInt32  clip_box_offset;
+    FT_Byte    format;
+
+    const FT_Byte  num_corners = 4;
+    FT_Vector      corners[4];
+    FT_Byte        j;
+    FT_BBox        font_clip_box;
+
+
+    colr = (Colr*)face->colr;
+    if ( !colr )
+      return 0;
+
+    if ( !colr->clip_list )
+      return 0;
+
+    p = colr->clip_list;
+
+    clip_base        = p;
+    clip_list_format = FT_NEXT_BYTE ( p );
+
+    /* Format byte used here to be able to upgrade ClipList for >16bit */
+    /* glyph ids; for now we can expect it to be 0. */
+    if ( !( clip_list_format == 1 ) )
+      return 0;
+
+    num_clip_boxes = FT_NEXT_ULONG( p );
+
+    for ( i = 0; i < num_clip_boxes; ++i )
+    {
+      gid_start       = FT_NEXT_USHORT( p );
+      gid_end         = FT_NEXT_USHORT( p );
+      clip_box_offset = FT_NEXT_UOFF3( p );
+
+      if ( base_glyph >= gid_start && base_glyph <= gid_end )
+      {
+        p1 = (FT_Byte*)( clip_base + clip_box_offset );
+
+        if ( p1 >= ( (FT_Byte*)colr->table + colr->table_size ) )
+          return 0;
+
+        format = FT_NEXT_BYTE( p1 );
+
+        if ( format > 1 )
+          return 0;
+
+        /* `face->root.size->metrics.x_scale` and `y_scale` are factors   */
+        /* that scale a font unit value in integers to a 26.6 fixed value */
+        /* according to the requested size, see for example               */
+        /* `ft_recompute_scaled_metrics`.                                 */
+        font_clip_box.xMin = FT_MulFix( FT_NEXT_SHORT( p1 ),
+                                        face->root.size->metrics.x_scale );
+        font_clip_box.yMin = FT_MulFix( FT_NEXT_SHORT( p1 ),
+                                        face->root.size->metrics.x_scale );
+        font_clip_box.xMax = FT_MulFix( FT_NEXT_SHORT( p1 ),
+                                        face->root.size->metrics.x_scale );
+        font_clip_box.yMax = FT_MulFix( FT_NEXT_SHORT( p1 ),
+                                        face->root.size->metrics.x_scale );
+
+        /* Make 4 corner points (xMin, yMin), (xMax, yMax) and transform */
+        /* them.  If we we would only transform two corner points and    */
+        /* span a rectangle based on those, the rectangle may become too */
+        /* small to cover the glyph.                                     */
+        corners[0].x = font_clip_box.xMin;
+        corners[1].x = font_clip_box.xMin;
+        corners[2].x = font_clip_box.xMax;
+        corners[3].x = font_clip_box.xMax;
+
+        corners[0].y = font_clip_box.yMin;
+        corners[1].y = font_clip_box.yMax;
+        corners[2].y = font_clip_box.yMax;
+        corners[3].y = font_clip_box.yMin;
+
+        for ( j = 0; j < num_corners; ++j )
+        {
+          if ( face->root.internal->transform_flags & 1 )
+            FT_Vector_Transform( &corners[j],
+                                 &face->root.internal->transform_matrix );
+
+          if ( face->root.internal->transform_flags & 2 )
+          {
+            corners[j].x += face->root.internal->transform_delta.x;
+            corners[j].y += face->root.internal->transform_delta.y;
+          }
+        }
+
+        clip_box->bottom_left  = corners[0];
+        clip_box->top_left     = corners[1];
+        clip_box->top_right    = corners[2];
+        clip_box->bottom_right = corners[3];
+
+        return 1;
+      }
+    }
+
+    return 0;
   }
 
 

@@ -993,9 +993,9 @@
 
       /* reduce array size to the actually used elements */
       count = (FT_UInt)( entry - table->names );
-      (void)FT_QRENEW_ARRAY( table->names,
-                             table->numNameRecords,
-                             count );
+      FT_MEM_QRENEW_ARRAY( table->names,
+                           table->numNameRecords,
+                           count );
       table->numNameRecords = count;
     }
 

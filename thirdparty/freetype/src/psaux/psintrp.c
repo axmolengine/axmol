@@ -469,7 +469,7 @@
    */
   FT_LOCAL_DEF( void )
   cf2_interpT2CharString( CF2_Font              font,
-                          CF2_Buffer            buf,
+                          const CF2_Buffer      buf,
                           CF2_OutlineCallbacks  callbacks,
                           const FT_Vector*      translation,
                           FT_Bool               doingSeac,

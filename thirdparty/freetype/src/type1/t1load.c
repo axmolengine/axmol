@@ -580,7 +580,7 @@
   {
     FT_Error  error;
     PS_Blend  blend = face->blend;
-    FT_UInt   n, p;
+    FT_UInt   n;
     FT_Fixed  final_blends[T1_MAX_MM_DESIGNS];
 
 
@@ -599,7 +599,7 @@
       PS_DesignMap  map     = blend->design_map + n;
       FT_Long*      designs = map->design_points;
       FT_Fixed*     blends  = map->blend_points;
-      FT_Int        before  = -1, after = -1;
+      FT_Int        p, before  = -1, after = -1;
 
 
       /* use a default value if we don't have a coordinate */
@@ -608,7 +608,7 @@
       else
         design = ( designs[map->num_points - 1] - designs[0] ) / 2;
 
-      for ( p = 0; p < (FT_UInt)map->num_points; p++ )
+      for ( p = 0; p < (FT_Int)map->num_points; p++ )
       {
         FT_Long  p_design = designs[p];
 
@@ -622,11 +622,11 @@
 
         if ( design < p_design )
         {
-          after = (FT_Int)p;
+          after = p;
           break;
         }
 
-        before = (FT_Int)p;
+        before = p;
       }
 
       /* now interpolate if necessary */

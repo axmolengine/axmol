@@ -3164,6 +3164,8 @@
   /*************************************************************************/
 
 
+#ifdef TT_CONFIG_GPTION_BYTECODE_INTERPRETER
+
   static FT_Error
   tt_cvt_ready_iterator( FT_ListNode  node,
                          void*        user )
@@ -3177,6 +3179,9 @@
 
     return FT_Err_Ok;
   }
+
+#endif /* TT_CONFIG_OPTION_BYTECODE_INTERPRETER */
+
 
 
   /**************************************************************************
@@ -3206,6 +3211,8 @@
   tt_face_vary_cvt( TT_Face    face,
                     FT_Stream  stream )
   {
+#ifdef TT_CONFIG_GPTION_BYTECODE_INTERPRETER
+
     FT_Error   error;
     FT_Memory  memory = stream->memory;
 
@@ -3526,6 +3533,16 @@
                      NULL );
 
     return error;
+
+#else /* !TT_CONFIG_OPTION_BYTECODE_INTERPRETER */
+
+    FT_UNUSED( face );
+    FT_UNUSED( stream );
+
+    return FT_Err_Ok;
+
+#endif /* !TT_CONFIG_OPTION_BYTECODE_INTERPRETER */
+
   }
 
 
