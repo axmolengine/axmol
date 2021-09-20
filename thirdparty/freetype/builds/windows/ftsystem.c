@@ -25,10 +25,9 @@
 #include <freetype/fttypes.h>
 #include <freetype/internal/ftstream.h>
 
-  /* memory-mapping includes and definitions */
+  /* memory mapping and allocation includes and definitions */
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-#include <stdlib.h>
 
 
   /**************************************************************************
@@ -69,9 +68,7 @@
   ft_alloc( FT_Memory  memory,
             long       size )
   {
-    FT_UNUSED( memory );
-
-    return malloc( size );
+    return HeapAlloc( memory->user, 0, size );
   }
 
 
@@ -105,10 +102,9 @@
               long       new_size,
               void*      block )
   {
-    FT_UNUSED( memory );
     FT_UNUSED( cur_size );
 
-    return realloc( block, new_size );
+    return HeapReAlloc( memory->user, 0, block, new_size );
   }
 
 
@@ -131,9 +127,7 @@
   ft_free( FT_Memory  memory,
            void*      block )
   {
-    FT_UNUSED( memory );
-
-    free( block );
+    HeapFree( memory->user, 0, block );
   }
 
 
@@ -176,7 +170,7 @@
 
     stream->descriptor.pointer = NULL;
     stream->size               = 0;
-    stream->base               = 0;
+    stream->base               = NULL;
   }
 
 
@@ -198,7 +192,7 @@
 
     stream->descriptor.pointer = NULL;
     stream->size               = 0;
-    stream->base               = 0;
+    stream->base               = NULL;
   }
 
 
@@ -217,16 +211,36 @@
       return FT_THROW( Invalid_Stream_Handle );
 
     /* open the file */
-    file = CreateFileA( filepathname, GENERIC_READ, FILE_SHARE_READ, NULL,
-                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
+    file = CreateFile( (LPCTSTR)filepathname, GENERIC_READ, FILE_SHARE_READ,
+                       NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
     if ( file == INVALID_HANDLE_VALUE )
     {
-      FT_ERROR(( "FT_Stream_Open:" ));
-      FT_ERROR(( " could not open `%s'\n", filepathname ));
-      return FT_THROW( Cannot_Open_Resource );
+      /* fall back on the alernative interface */
+#ifdef UNICODE
+      file = CreateFileA( (LPCSTR)filepathname, GENERIC_READ, FILE_SHARE_READ,
+                          NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
+#else
+      file = CreateFileW( (LPCWSTR)filepathname, GENERIC_READ, FILE_SHARE_READ,
+                          NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
+#endif
+
+      if ( file == INVALID_HANDLE_VALUE )
+      {
+        FT_ERROR(( "FT_Stream_Open:" ));
+        FT_ERROR(( " could not open `%s'\n", filepathname ));
+        return FT_THROW( Cannot_Open_Resource );
+      }
     }
 
+#if defined _WIN32_WCE || defined _WIN32_WINDOWS || \
+    (defined _WIN32_WINNT && _WIN32_WINNT <= 0x0400)
+    /* Use GetFileSize() for legacy Windows */
+    size.u.LowPart = GetFileSize( file, (DWORD *)&size.u.HighPart );
+    if ( size.u.LowPart == INVALID_FILE_SIZE && GetLastError() != NO_ERROR )
+#else
+    /* Use GetFileSizeEx() for modern Windows */
     if ( GetFileSizeEx( file, &size ) == FALSE )
+#endif
     {
       FT_ERROR(( "FT_Stream_Open:" ));
       FT_ERROR(( " could not retrieve size of file `%s'\n", filepathname ));
@@ -280,7 +294,7 @@
       {
         FT_ERROR(( "FT_Stream_Open:" ));
         FT_ERROR(( " could not `alloc' memory\n" ));
-        goto Fail_Map;
+        goto Fail_Open;
       }
 
       total_read_count = 0;
@@ -311,7 +325,7 @@
     stream->descriptor.pointer = stream->base;
     stream->pathname.pointer   = (char*)filepathname;
 
-    stream->read = 0;
+    stream->read = NULL;
 
     FT_TRACE1(( "FT_Stream_Open:" ));
     FT_TRACE1(( " opened `%s' (%ld bytes) successfully\n",
@@ -321,9 +335,6 @@
 
   Fail_Read:
     ft_free( NULL, stream->base );
-
-  Fail_Map:
-    CloseHandle( file );
 
   Fail_Open:
     CloseHandle( file );
@@ -352,13 +363,17 @@
   FT_BASE_DEF( FT_Memory )
   FT_New_Memory( void )
   {
+    HANDLE     heap;
     FT_Memory  memory;
 
 
-    memory = (FT_Memory)malloc( sizeof ( *memory ) );
+    heap   = GetProcessHeap();
+    memory = heap ? (FT_Memory)HeapAlloc( heap, 0, sizeof ( *memory ) )
+                  : NULL;
+
     if ( memory )
     {
-      memory->user    = 0;
+      memory->user    = heap;
       memory->alloc   = ft_alloc;
       memory->realloc = ft_realloc;
       memory->free    = ft_free;

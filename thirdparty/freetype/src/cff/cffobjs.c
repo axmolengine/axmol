@@ -283,6 +283,8 @@
   cff_size_request( FT_Size          size,
                     FT_Size_Request  req )
   {
+    FT_Error  error;
+
     CFF_Size           cffsize = (CFF_Size)size;
     PSH_Globals_Funcs  funcs;
 
@@ -304,7 +306,9 @@
 
 #endif /* TT_CONFIG_OPTION_EMBEDDED_BITMAPS */
 
-    FT_Request_Metrics( size->face, req );
+    error = FT_Request_Metrics( size->face, req );
+    if ( error )
+      goto Exit;
 
     funcs = cff_size_get_globals_funcs( cffsize );
 
@@ -345,7 +349,8 @@
       }
     }
 
-    return FT_Err_Ok;
+  Exit:
+    return error;
   }
 
 
@@ -1049,11 +1054,11 @@
       {
         FT_CharMapRec  cmaprec;
         FT_CharMap     cmap;
-        FT_UInt        nn;
+        FT_Int         nn;
         CFF_Encoding   encoding = &cff->encoding;
 
 
-        for ( nn = 0; nn < (FT_UInt)cffface->num_charmaps; nn++ )
+        for ( nn = 0; nn < cffface->num_charmaps; nn++ )
         {
           cmap = cffface->charmaps[nn];
 
@@ -1078,7 +1083,7 @@
         cmaprec.encoding_id = TT_MS_ID_UNICODE_CS;
         cmaprec.encoding    = FT_ENCODING_UNICODE;
 
-        nn = (FT_UInt)cffface->num_charmaps;
+        nn = cffface->num_charmaps;
 
         error = FT_CMap_New( &cff_cmap_unicode_class_rec, NULL,
                              &cmaprec, NULL );
@@ -1089,7 +1094,7 @@
         error = FT_Err_Ok;
 
         /* if no Unicode charmap was previously selected, select this one */
-        if ( !cffface->charmap && nn != (FT_UInt)cffface->num_charmaps )
+        if ( !cffface->charmap && nn != cffface->num_charmaps )
           cffface->charmap = cffface->charmaps[nn];
 
       Skip_Unicode:

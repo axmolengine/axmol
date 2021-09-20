@@ -237,7 +237,7 @@
                    FTC_MruNode  *anode )
   {
     FT_Error     error;
-    FTC_MruNode  node   = NULL;
+    FTC_MruNode  node;
     FT_Memory    memory = list->memory;
 
 
@@ -262,7 +262,7 @@
       if ( list->clazz.node_done )
         list->clazz.node_done( node, list->data );
     }
-    else if ( FT_ALLOC( node, list->clazz.node_size ) )
+    else if ( FT_QALLOC( node, list->clazz.node_size ) )
       goto Exit;
 
     error = list->clazz.node_init( node, key, list->data );

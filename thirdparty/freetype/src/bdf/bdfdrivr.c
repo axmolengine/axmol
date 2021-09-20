@@ -606,7 +606,7 @@ THE SOFTWARE.
         unsigned long  n;
 
 
-        if ( FT_NEW_ARRAY( face->en_table, font->glyphs_size ) )
+        if ( FT_QNEW_ARRAY( face->en_table, font->glyphs_size ) )
           goto Exit;
 
         face->default_glyph = 0;

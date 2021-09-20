@@ -487,7 +487,7 @@ FT_BEGIN_HEADER
 #define NEG_INT32( a )                                  \
           (FT_Int32)( (FT_UInt32)0 - (FT_UInt32)(a) )
 
-#ifdef FT_LONG64
+#ifdef FT_INT64
 
 #define ADD_INT64( a, b )                               \
           (FT_Int64)( (FT_UInt64)(a) + (FT_UInt64)(b) )
@@ -498,7 +498,7 @@ FT_BEGIN_HEADER
 #define NEG_INT64( a )                                  \
           (FT_Int64)( (FT_UInt64)0 - (FT_UInt64)(a) )
 
-#endif /* FT_LONG64 */
+#endif /* FT_INT64 */
 
 
 FT_END_HEADER

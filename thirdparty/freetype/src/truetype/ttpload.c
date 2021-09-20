@@ -98,28 +98,15 @@
       goto Exit;
     }
 
-    if ( face->header.Index_To_Loc_Format != 0 )
-    {
-      shift = 2;
+    shift = face->header.Index_To_Loc_Format != 0 ? 2 : 1;
 
-      if ( table_len >= 0x40000L )
-      {
-        FT_TRACE2(( "table too large\n" ));
-        table_len = 0x3FFFFL;
-      }
-      face->num_locations = table_len >> shift;
-    }
-    else
+    if ( table_len > 0x10000UL << shift )
     {
-      shift = 1;
-
-      if ( table_len >= 0x20000L )
-      {
-        FT_TRACE2(( "table too large\n" ));
-        table_len = 0x1FFFFL;
-      }
-      face->num_locations = table_len >> shift;
+      FT_TRACE2(( "table too large\n" ));
+      table_len = 0x10000UL << shift;
     }
+
+    face->num_locations = table_len >> shift;
 
     if ( face->num_locations != (FT_ULong)face->root.num_glyphs + 1 )
     {
@@ -127,7 +114,7 @@
                   face->num_locations - 1, face->root.num_glyphs ));
 
       /* we only handle the case where `maxp' gives a larger value */
-      if ( face->num_locations <= (FT_ULong)face->root.num_glyphs )
+      if ( face->num_locations < (FT_ULong)face->root.num_glyphs + 1 )
       {
         FT_ULong  new_loca_len =
                     ( (FT_ULong)face->root.num_glyphs + 1 ) << shift;
@@ -561,8 +548,8 @@
     record_size = FT_NEXT_ULONG( p );
 
     /* The maximum number of bytes in an hdmx device record is the */
-    /* maximum number of glyphs + 2; this is 0xFFFF + 2, thus      */
-    /* explaining why `record_size' is a long (which we read as    */
+    /* maximum number of glyphs + 2 + 32-bit padding, or 0x10004,  */
+    /* that is why `record_size' is a long (which we read as       */
     /* unsigned long for convenience).  In practice, two bytes are */
     /* sufficient to hold the size value.                          */
     /*                                                             */
@@ -575,16 +562,16 @@
       record_size &= 0xFFFFU;
 
     /* The limit for `num_records' is a heuristic value. */
-    if ( num_records > 255              ||
-         ( num_records > 0            &&
-           ( record_size > 0x10001L ||
-             record_size < 4        ) ) )
+    if ( num_records > 255               ||
+         ( num_records > 0             &&
+           ( record_size > 0x10004UL ||
+             record_size & 3         ) ) )
     {
       error = FT_THROW( Invalid_File_Format );
       goto Fail;
     }
 
-    if ( FT_NEW_ARRAY( face->hdmx_record_sizes, num_records ) )
+    if ( FT_QNEW_ARRAY( face->hdmx_record_sizes, num_records ) )
       goto Fail;
 
     for ( nn = 0; nn < num_records; nn++ )

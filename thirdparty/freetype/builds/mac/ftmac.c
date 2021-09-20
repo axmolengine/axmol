@@ -447,7 +447,7 @@ typedef short ResourceIndex;
 
     stream->descriptor.pointer = NULL;
     stream->size               = 0;
-    stream->base               = 0;
+    stream->base               = NULL;
   }
 
 

@@ -238,7 +238,7 @@ THE SOFTWARE.
       {
         for ( j = 0; j < sizeof ( tableNames ) / sizeof ( tableNames[0] );
               j++ )
-          if ( tables[i].type == (FT_UInt)( 1 << j ) )
+          if ( tables[i].type == 1UL << j )
             name = tableNames[j];
 
         FT_TRACE4(( "  %d: type=%s, format=0x%lX,"

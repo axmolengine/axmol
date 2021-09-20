@@ -305,8 +305,8 @@ FT_BEGIN_HEADER
 #else
 #define FT_GET_MACRO( func, type )        ( (type)func( stream ) )
 
-#define FT_GET_CHAR()       FT_GET_MACRO( FT_Stream_GetChar, FT_Char )
-#define FT_GET_BYTE()       FT_GET_MACRO( FT_Stream_GetChar, FT_Byte )
+#define FT_GET_CHAR()       FT_GET_MACRO( FT_Stream_GetByte, FT_Char )
+#define FT_GET_BYTE()       FT_GET_MACRO( FT_Stream_GetByte, FT_Byte )
 #define FT_GET_SHORT()      FT_GET_MACRO( FT_Stream_GetUShort, FT_Short )
 #define FT_GET_USHORT()     FT_GET_MACRO( FT_Stream_GetUShort, FT_UShort )
 #define FT_GET_OFF3()       FT_GET_MACRO( FT_Stream_GetUOffset, FT_Long )
@@ -333,8 +333,8 @@ FT_BEGIN_HEADER
    * `FT_STREAM_POS'.  They use the full machinery to check whether a read is
    * valid.
    */
-#define FT_READ_BYTE( var )       FT_READ_MACRO( FT_Stream_ReadChar, FT_Byte, var )
-#define FT_READ_CHAR( var )       FT_READ_MACRO( FT_Stream_ReadChar, FT_Char, var )
+#define FT_READ_BYTE( var )       FT_READ_MACRO( FT_Stream_ReadByte, FT_Byte, var )
+#define FT_READ_CHAR( var )       FT_READ_MACRO( FT_Stream_ReadByte, FT_Char, var )
 #define FT_READ_SHORT( var )      FT_READ_MACRO( FT_Stream_ReadUShort, FT_Short, var )
 #define FT_READ_USHORT( var )     FT_READ_MACRO( FT_Stream_ReadUShort, FT_UShort, var )
 #define FT_READ_OFF3( var )       FT_READ_MACRO( FT_Stream_ReadUOffset, FT_Long, var )
@@ -457,8 +457,8 @@ FT_BEGIN_HEADER
 
 
   /* read a byte from an entered frame */
-  FT_BASE( FT_Char )
-  FT_Stream_GetChar( FT_Stream  stream );
+  FT_BASE( FT_Byte )
+  FT_Stream_GetByte( FT_Stream  stream );
 
   /* read a 16-bit big-endian unsigned integer from an entered frame */
   FT_BASE( FT_UShort )
@@ -482,8 +482,8 @@ FT_BEGIN_HEADER
 
 
   /* read a byte from a stream */
-  FT_BASE( FT_Char )
-  FT_Stream_ReadChar( FT_Stream  stream,
+  FT_BASE( FT_Byte )
+  FT_Stream_ReadByte( FT_Stream  stream,
                       FT_Error*  error );
 
   /* read a 16-bit big-endian unsigned integer from a stream */

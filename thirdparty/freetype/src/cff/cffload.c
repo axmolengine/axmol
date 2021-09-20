@@ -622,7 +622,7 @@
     FT_Byte*    bytes;
     FT_ULong    byte_len;
     FT_Error    error;
-    FT_String*  name = 0;
+    FT_String*  name = NULL;
 
 
     if ( !idx->stream )  /* CFF2 does not include a name index */
@@ -771,8 +771,7 @@
 
     case 3:
       /* first, compare to the cache */
-      if ( (FT_UInt)( glyph_index - fdselect->cache_first ) <
-                        fdselect->cache_count )
+      if ( glyph_index - fdselect->cache_first < fdselect->cache_count )
       {
         fd = fdselect->cache_fd;
         break;
@@ -835,7 +834,6 @@
   {
     FT_Error   error   = FT_Err_Ok;
     FT_UInt    i;
-    FT_Long    j;
     FT_UShort  max_cid = 0;
 
 
@@ -853,9 +851,10 @@
 
     /* When multiple GIDs map to the same CID, we choose the lowest */
     /* GID.  This is not described in any spec, but it matches the  */
-    /* behaviour of recent Acroread versions.                       */
-    for ( j = (FT_Long)num_glyphs - 1; j >= 0; j-- )
-      charset->cids[charset->sids[j]] = (FT_UShort)j;
+    /* behaviour of recent Acroread versions.  The loop stops when  */
+    /* the unsigned index wraps around after reaching zero.         */
+    for ( i = num_glyphs - 1; i < num_glyphs; i-- )
+      charset->cids[charset->sids[i]] = (FT_UShort)i;
 
     charset->max_cid    = max_cid;
     charset->num_glyphs = num_glyphs;
@@ -1819,7 +1818,8 @@
         /* Construct code to GID mapping from code to SID mapping */
         /* and charset.                                           */
 
-        encoding->count = 0;
+        encoding->offset = offset; /* used in cff_face_init */
+        encoding->count  = 0;
 
         error = cff_charset_compute_cids( charset, num_glyphs,
                                           stream->memory );
