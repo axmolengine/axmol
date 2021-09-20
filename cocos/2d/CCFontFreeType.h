@@ -32,7 +32,7 @@
 
 #include "2d/CCFont.h"
 
-#include "ft2build.h"
+#include <ft2build.h>
 #include <string>
 
 #include FT_FREETYPE_H
