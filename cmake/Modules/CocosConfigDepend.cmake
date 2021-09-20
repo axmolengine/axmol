@@ -58,6 +58,7 @@ macro(cocos2dx_depend)
             find_library(ICONV_LIBRARY iconv)
             find_library(AUDIOUNIT_LIBRARY AudioUnit)
             find_library(COREAUDIO_LIBRARY CoreAudio)
+            find_library(SYSTEMCONFIGURATION_LIBRARY SystemConfiguration)
             list(APPEND PLATFORM_SPECIFIC_LIBS
                  ${COCOA_LIBRARY}
                  ${OPENGL_LIBRARY}
@@ -68,6 +69,7 @@ macro(cocos2dx_depend)
                  ${ICONV_LIBRARY}
                  ${AUDIOUNIT_LIBRARY}
                  ${COREAUDIO_LIBRARY}
+                 ${SYSTEMCONFIGURATION_LIBRARY}
                  )
         elseif(IOS)
             # Locate system libraries on iOS

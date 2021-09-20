@@ -974,6 +974,41 @@ CC_DEPRECATED_ATTRIBUTE static inline void points_to_luaval(lua_State* L,const c
     vec2_array_to_luaval(L, points, count);
 }
 
+
+/**
+ * Get the real typename for the specified typename.
+ * Because all override functions wouldn't be bound,so we must use `typeid` to get the real class name.
+ *
+ * @param ret the pointer points to a type T object.
+ * @param type the string pointer points to specified typename.
+ * @return return the pointer points to the real typename, or nullptr.
+ */
+template <class T>
+const char* getLuaTypeName(T* ret,const char* defaultTypeName)
+{
+    if (nullptr != ret)
+    {
+        auto typeName = typeid(*ret).name();
+        auto iter     = g_luaType.find(reinterpret_cast<uintptr_t>(typeName));
+        if(g_luaType.end() != iter)
+        {
+            return iter->second;
+        }
+        else
+        { // unlike logic, for windows dll only
+            cxx17::string_view strkey(typeName);
+            auto iter2 = g_typeCast.find(strkey);
+            if (iter2 != g_typeCast.end()) {
+                g_luaType.emplace(reinterpret_cast<uintptr_t>(typeName), iter2->second);
+                return iter2->second;
+            }
+            return defaultTypeName;
+        }
+    }
+
+    return nullptr;
+}
+
 /**
  * Push a table converted from a cocos2d::Vector object into the Lua stack.
  * The format of table as follows: {userdata1, userdata2, ..., userdataVectorSize}
@@ -1095,40 +1130,6 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const cocos2d::ValueMapIntKey& inV
 void ccvaluevector_to_luaval(lua_State* L, const cocos2d::ValueVector& inValue);
 
 /**@}**/
-
-/**
- * Get the real typename for the specified typename.
- * Because all override functions wouldn't be bound,so we must use `typeid` to get the real class name.
- *
- * @param ret the pointer points to a type T object.
- * @param type the string pointer points to specified typename.
- * @return return the pointer points to the real typename, or nullptr.
- */
-template <class T>
-const char* getLuaTypeName(T* ret,const char* defaultTypeName)
-{
-    if (nullptr != ret)
-    {
-        auto typeName = typeid(*ret).name();
-        auto iter     = g_luaType.find(reinterpret_cast<uintptr_t>(typeName));
-        if(g_luaType.end() != iter)
-        {
-            return iter->second;
-        }
-        else
-        { // unlike logic, for windows dll only
-            cxx17::string_view strkey(typeName);
-            auto iter2 = g_typeCast.find(strkey);
-            if (iter2 != g_typeCast.end()) {
-                g_luaType.emplace(reinterpret_cast<uintptr_t>(typeName), iter2->second);
-                return iter2->second;
-            }
-            return defaultTypeName;
-        }
-    }
-
-    return nullptr;
-}
 
 /**
  * Push the native object by userdata format into the Lua stack by typename.
