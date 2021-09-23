@@ -30,13 +30,13 @@ public:
         auto listener = EventListenerTouchOneByOne::create();
         listener->setSwallowTouches(true);
         listener->onTouchBegan = [this](Touch* touch, Event*) -> bool {
-            return ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
+            return ImGui::GetIO().WantCaptureMouse;
         };
         _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, _trackLayer);
 
         // add by halx99
         auto stopAnyMouse = [=](EventMouse* event) {
-            if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
+            if (ImGui::GetIO().WantCaptureMouse) {
                 event->stopPropagation();
             }
         };
@@ -92,13 +92,13 @@ public:
         _touchListener = utils::newInstance<EventListenerTouchOneByOne>();
         _touchListener->setSwallowTouches(true);
         _touchListener->onTouchBegan = [this](Touch* touch, Event*) -> bool {
-            return ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
+            return ImGui::GetIO().WantCaptureMouse;
         };
         eventDispatcher->addEventListenerWithFixedPriority(_touchListener, highestPriority);
 
         // add by halx99
         auto stopAnyMouse = [=](EventMouse* event) {
-            if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
+            if (ImGui::GetIO().WantCaptureMouse) {
                 event->stopPropagation();
             }
         };
