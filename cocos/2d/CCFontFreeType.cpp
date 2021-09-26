@@ -43,7 +43,7 @@ FT_Library FontFreeType::_FTlibrary;
 bool FontFreeType::_FTInitialized           = false;
 bool FontFreeType::_streamParsingEnabled    = false;
 bool FontFreeType::_doNativeBytecodeHinting = true;
-const int FontFreeType::DistanceMapSpread   = 3;
+const int FontFreeType::DistanceMapSpread   = 6;
 
 const char* FontFreeType::_glyphASCII =
     "\"!#$%&'()*+,-./"
