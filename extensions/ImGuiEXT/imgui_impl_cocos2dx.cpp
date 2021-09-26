@@ -1,3 +1,9 @@
+/*
+* The imgui adxe backend
+* refer to 
+* a. https://github.com/ocornut/imgui/blob/835a5344b01e79aca479e95fa9d36fb5fdef3d14/backends/imgui_impl_glfw.cpp
+* b. https://github.com/Xrysnow/cocos2d-x-imgui/blob/master/imgui_impl_cocos2dx.cpp
+*/ 
 #include "imgui_impl_cocos2dx.h"
 #include "cocos2d.h"
 #include "renderer/backend/Backend.h"
@@ -5,27 +11,32 @@
 
 #ifdef CC_PLATFORM_PC
 // GLFW
+#include "glfw3.h"
 #ifdef _WIN32
-	#include "glfw3.h"
 	#undef APIENTRY
 	#ifndef GLFW_EXPOSE_NATIVE_WIN32
 		#define GLFW_EXPOSE_NATIVE_WIN32
 	#endif
 	#include "glfw3native.h"
-#else
-	#include <glfw3.h>
 #endif // _WIN32
-
-static_assert(
-	GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300,
-	"glfw version should be 3.3+");
-
-// 3.3.1+ Fixed: Resizing window repositions it on MacOS #1553
-#define GLFW_HAS_OSX_WINDOW_POS_FIX (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 + GLFW_VERSION_REVISION * 10 >= 3310)
-#ifdef GLFW_RESIZE_NESW_CURSOR
-	#define GLFW_HAS_NEW_CURSORS (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3400)
+#define GLFW_HAS_WINDOW_TOPMOST       (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3200) // 3.2+ GLFW_FLOATING
+#define GLFW_HAS_WINDOW_HOVERED       (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300) // 3.3+ GLFW_HOVERED
+#define GLFW_HAS_WINDOW_ALPHA         (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300) // 3.3+ glfwSetWindowOpacity
+#define GLFW_HAS_PER_MONITOR_DPI      (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300) // 3.3+ glfwGetMonitorContentScale
+#define GLFW_HAS_VULKAN               (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3200) // 3.2+ glfwCreateWindowSurface
+#define GLFW_HAS_FOCUS_WINDOW         (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3200) // 3.2+ glfwFocusWindow
+#define GLFW_HAS_FOCUS_ON_SHOW        (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300) // 3.3+ GLFW_FOCUS_ON_SHOW
+#define GLFW_HAS_MONITOR_WORK_AREA    (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300) // 3.3+ glfwGetMonitorWorkarea
+#define GLFW_HAS_OSX_WINDOW_POS_FIX   (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 + GLFW_VERSION_REVISION * 10 >= 3310) // 3.3.1+ Fixed: Resizing window repositions it on MacOS #1553
+#ifdef GLFW_RESIZE_NESW_CURSOR        // Let's be nice to people who pulled GLFW between 2019-04-16 (3.4 define) and 2019-11-29 (cursors defines) // FIXME: Remove when GLFW 3.4 is released?
+#define GLFW_HAS_NEW_CURSORS          (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3400) // 3.4+ GLFW_RESIZE_ALL_CURSOR, GLFW_RESIZE_NESW_CURSOR, GLFW_RESIZE_NWSE_CURSOR, GLFW_NOT_ALLOWED_CURSOR
 #else
-	#define GLFW_HAS_NEW_CURSORS (0)
+#define GLFW_HAS_NEW_CURSORS          (0)
+#endif
+#ifdef GLFW_MOUSE_PASSTHROUGH         // Let's be nice to people who pulled GLFW between 2019-04-16 (3.4 define) and 2020-07-17 (passthrough)
+#define GLFW_HAS_MOUSE_PASSTHROUGH    (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3400) // 3.4+ GLFW_MOUSE_PASSTHROUGH
+#else
+#define GLFW_HAS_MOUSE_PASSTHROUGH    (0)
 #endif
 
 #endif // CC_PLATFORM_PC
@@ -264,6 +275,8 @@ void ImGui_ImplCocos2dx_RenderDrawData(ImDrawData* draw_data)
 						*desc.programState->getVertexLayout() = pinfo->layout;
 						desc.programState->setUniform(pinfo->projection, &g_Projection, sizeof(Mat4));
 						desc.programState->setTexture(pinfo->texture, 0, tex->getBackendTexture());
+                        // In order to composite our output buffer we need to preserve alpha
+                        desc.blendDescriptor.sourceAlphaBlendFactor = BlendFactor::ONE;
 						// set vertex/index buffer
 						cmd->setIndexBuffer(ibuffer, g_IndexFormat);
 						cmd->setVertexBuffer(vbuffer);
@@ -785,99 +798,108 @@ void ImGui_ImplCocos2dx_Shutdown()
 static void ImGui_ImplCocos2dx_UpdateMousePosAndButtons()
 {
 #ifdef CC_PLATFORM_PC
-	const auto g_Window = ImGui_ImplCocos2dx_GetWindow();
-    // Update buttons
+    const auto g_Window = ImGui_ImplCocos2dx_GetWindow();
     ImGuiIO& io = ImGui::GetIO();
+    ImGuiPlatformIO& platform_io = ImGui::GetPlatformIO();
+
+    const ImVec2 mouse_pos_prev = io.MousePos;
+    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+    io.MouseHoveredViewport = 0;
+
+    // Update mouse buttons
+    // (if a mouse press event came, always pass it as "mouse held this frame", so we don't miss click-release events that are shorter than 1 frame)
     for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
     {
-        // If a mouse press event came, always pass it as "mouse held this frame", so we don't miss click-release events that are shorter than 1 frame.
+        
         io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
         g_MouseJustPressed[i] = false;
     }
 
+    for (int n = 0; n < platform_io.Viewports.Size; n++)
+    {
+        ImGuiViewport* viewport = platform_io.Viewports[n];
+        GLFWwindow* window = (GLFWwindow*)viewport->PlatformHandle;
+
+#ifdef __EMSCRIPTEN__
+        const bool focused = true;
+#else
+        const bool focused = glfwGetWindowAttrib(window, GLFW_FOCUSED) != 0;
+#endif
+        GLFWwindow* mouse_window = window; // (bd->MouseWindow == window || focused) ? window : NULL;
+
+        // Update mouse buttons
+        if (focused)
+            for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+                io.MouseDown[i] |= glfwGetMouseButton(window, i) != 0;
+
+        // Set OS mouse position from Dear ImGui if requested (rarely used, only when ImGuiConfigFlags_NavEnableSetMousePos is enabled by user)
+        // (When multi-viewports are enabled, all Dear ImGui positions are same as OS positions)
+        if (io.WantSetMousePos && focused)
+            glfwSetCursorPos(window, (double)(mouse_pos_prev.x - viewport->Pos.x), (double)(mouse_pos_prev.y - viewport->Pos.y));
+
+        // Set Dear ImGui mouse position from OS position
+        if (mouse_window != NULL)
+        {
+            double mouse_x, mouse_y;
+            glfwGetCursorPos(mouse_window, &mouse_x, &mouse_y);
+            if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+            {
+                // Multi-viewport mode: mouse position in OS absolute coordinates (io.MousePos is (0,0) when the mouse is on the upper-left of the primary monitor)
+                int window_x, window_y;
+                glfwGetWindowPos(window, &window_x, &window_y);
+                io.MousePos = ImVec2((float)mouse_x + window_x, (float)mouse_y + window_y);
+            }
+            else
+            {
+                // Single viewport mode: mouse position in client window coordinates (io.MousePos is (0,0) when the mouse is on the upper-left corner of the app window)
+                io.MousePos = ImVec2((float)mouse_x, (float)mouse_y);
+            }
+        }
+
+        // (Optional) When using multiple viewports: set io.MouseHoveredViewport to the viewport the OS mouse cursor is hovering.
+        // Important: this information is not easy to provide and many high-level windowing library won't be able to provide it correctly, because
+        // - This is _ignoring_ viewports with the ImGuiViewportFlags_NoInputs flag (pass-through windows).
+        // - This is _regardless_ of whether another viewport is focused or being dragged from.
+        // If ImGuiBackendFlags_HasMouseHoveredViewport is not set by the backend, imgui will ignore this field and infer the information by relying on the
+        // rectangles and last focused time of every viewports it knows about. It will be unaware of other windows that may be sitting between or over your windows.
+        // [GLFW] FIXME: This is currently only correct on Win32. See what we do below with the WM_NCHITTEST, missing an equivalent for other systems.
+        // See https://github.com/glfw/glfw/issues/1236 if you want to help in making this a GLFW feature.
+#if GLFW_HAS_MOUSE_PASSTHROUGH || (GLFW_HAS_WINDOW_HOVERED && defined(_WIN32))
+        const bool window_no_input = (viewport->Flags & ImGuiViewportFlags_NoInputs) != 0;
+#if GLFW_HAS_MOUSE_PASSTHROUGH
+        glfwSetWindowAttrib(window, GLFW_MOUSE_PASSTHROUGH, window_no_input);
+#endif
+        if (glfwGetWindowAttrib(window, GLFW_HOVERED) && !window_no_input)
+            io.MouseHoveredViewport = viewport->ID;
+#endif
+    }
+#else
+    // Update buttons
+    ImGuiIO& io = ImGui::GetIO();
+    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+    {
+        // g_MouseJustPressed represents touch state on mobile platforms
+        io.MouseDown[i] = g_MouseJustPressed[i];
+    }
     // Update mouse position
     const ImVec2 mouse_pos_backup = io.MousePos;
-    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
-	io.MouseHoveredViewport = 0;
-	ImGuiPlatformIO& platform_io = ImGui::GetPlatformIO();
-	for (int n = 0; n < platform_io.Viewports.Size; n++)
-	{
-		ImGuiViewport* viewport = platform_io.Viewports[n];
-		GLFWwindow* window = (GLFWwindow*)viewport->PlatformHandle;
-		IM_ASSERT(window != NULL);
-#ifdef __EMSCRIPTEN__
-	    const bool focused = true;
-		IM_ASSERT(platform_io.Viewports.Size == 1);
-#else
-	    const bool focused = glfwGetWindowAttrib(window, GLFW_FOCUSED) != 0;
+    io.MousePos                   = ImVec2(-FLT_MAX, -FLT_MAX);
+    if (io.WantSetMousePos)
+    {
+        io.MousePos = mouse_pos_backup;
+    }
+    else
+    {
+        if (g_CursorPos.x != -FLT_MAX && g_CursorPos.y != -FLT_MAX)
+        {
+            // convert g_CursorPos
+            const auto glv  = cocos2d::Director::getInstance()->getOpenGLView();
+            const auto rect = glv->getViewPortRect();
+            io.MousePos.x   = g_CursorPos.x * glv->getScaleX() + rect.origin.x;
+            io.MousePos.y   = g_CursorPos.y * glv->getScaleY() + rect.origin.y;
+        }
+    }
 #endif
-	    if (focused)
-	    {
-	        if (io.WantSetMousePos)
-	        {
-	            glfwSetCursorPos(window, (double)mouse_pos_backup.x, (double)mouse_pos_backup.y);
-	        }
-	        else
-	        {
-	            double mouse_x, mouse_y;
-	            glfwGetCursorPos(window, &mouse_x, &mouse_y);
-				if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-				{
-					// Multi-viewport mode: mouse position in OS absolute coordinates (io.MousePos is (0,0) when the mouse is on the upper-left of the primary monitor)
-					int window_x, window_y;
-					glfwGetWindowPos(window, &window_x, &window_y);
-					io.MousePos = ImVec2((float)mouse_x + window_x, (float)mouse_y + window_y);
-				}
-				else
-				{
-					// Single viewport mode: mouse position in client window coordinates (io.MousePos is (0,0) when the mouse is on the upper-left corner of the app window)
-					io.MousePos = ImVec2((float)mouse_x, (float)mouse_y);
-				}
-	        }
-			for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-				io.MouseDown[i] |= glfwGetMouseButton(window, i) != 0;
-	    }
-
-		// (Optional) When using multiple viewports: set io.MouseHoveredViewport to the viewport the OS mouse cursor is hovering.
-		// Important: this information is not easy to provide and many high-level windowing library won't be able to provide it correctly, because
-		// - This is _ignoring_ viewports with the ImGuiViewportFlags_NoInputs flag (pass-through windows).
-		// - This is _regardless_ of whether another viewport is focused or being dragged from.
-		// If ImGuiBackendFlags_HasMouseHoveredViewport is not set by the back-end, imgui will ignore this field and infer the information by relying on the
-		// rectangles and last focused time of every viewports it knows about. It will be unaware of other windows that may be sitting between or over your windows.
-		// [GLFW] FIXME: This is currently only correct on Win32. See what we do below with the WM_NCHITTEST, missing an equivalent for other systems.
-		// See https://github.com/glfw/glfw/issues/1236 if you want to help in making this a GLFW feature.
-#if GLFW_HAS_GLFW_HOVERED && CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-		if (glfwGetWindowAttrib(window, GLFW_HOVERED) && !(viewport->Flags & ImGuiViewportFlags_NoInputs))
-			io.MouseHoveredViewport = viewport->ID;
-#endif
-	}
-#else
-	// Update buttons
-	ImGuiIO& io = ImGui::GetIO();
-	for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-	{
-		// g_MouseJustPressed represents touch state on mobile platforms
-		io.MouseDown[i] = g_MouseJustPressed[i];
-	}
-	// Update mouse position
-	const ImVec2 mouse_pos_backup = io.MousePos;
-	io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
-	if (io.WantSetMousePos)
-	{
-		io.MousePos = mouse_pos_backup;
-	}
-	else
-	{
-		if (g_CursorPos.x != -FLT_MAX && g_CursorPos.y != -FLT_MAX)
-		{
-			// convert g_CursorPos
-			const auto glv = cocos2d::Director::getInstance()->getOpenGLView();
-			const auto rect = glv->getViewPortRect();
-			io.MousePos.x = g_CursorPos.x * glv->getScaleX() + rect.origin.x;
-			io.MousePos.y = g_CursorPos.y * glv->getScaleY() + rect.origin.y;
-		}
-	}
-#endif // CC_PLATFORM_PC
 }
 
 static void ImGui_ImplCocos2dx_UpdateMouseCursor()
@@ -1173,7 +1195,7 @@ static void ImGui_ImplGlfw_DestroyWindow(ImGuiViewport* viewport)
 			AddRendererCommand([=]()
 			{
 #if GLFW_HAS_GLFW_HOVERED && CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-				HWND hwnd = PlatformHandleRaw;
+				HWND hwnd = (HWND)PlatformHandleRaw;
 				::RemovePropA(hwnd, "IMGUI_VIEWPORT");
 #endif
 				glfwDestroyWindow(window);
