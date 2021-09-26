@@ -1,6 +1,6 @@
 #include "CCImGuiEXT.h"
 #include <assert.h>
-#include "imgui_impl_cocos2dx.h"
+#include "imgui_impl_adxe.h"
 #include "imgui_internal.h"
 
 NS_CC_EXT_BEGIN
@@ -151,8 +151,8 @@ void ImGuiEXT::destroyInstance()
 
 void ImGuiEXT::init()
 {
-    ImGui_ImplCocos2dx_Init(true);
-    ImGui_ImplCocos2dx_SetCustomFontLoader(&ImGuiEXT::loadCustomFonts, this);
+    ImGui_ImplAdxe_Init(true);
+    ImGui_ImplAdxe_SetCustomFontLoader(&ImGuiEXT::loadCustomFonts, this);
 
     ImGui::StyleColorsClassic();
 
@@ -167,8 +167,8 @@ void ImGuiEXT::cleanup()
     eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
     eventDispatcher->removeCustomEventListeners(Director::EVENT_BEFORE_DRAW);
 
-    ImGui_ImplCocos2dx_SetCustomFontLoader(nullptr, nullptr);
-    ImGui_ImplCocos2dx_Shutdown();
+    ImGui_ImplAdxe_SetCustomFontLoader(nullptr, nullptr);
+    ImGui_ImplAdxe_Shutdown();
 
     CC_SAFE_RELEASE_NULL(_fontsTexture);
 }
@@ -227,7 +227,7 @@ float ImGuiEXT::scaleAllByDPI(float userScale)
         }
 
         // Destory font informations, let implcocos2dx recreate at newFrame
-        ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
+        ImGui_ImplAdxe_SetDeviceObjectsDirty();
 
         ImGui::GetStyle().ScaleAllSizes(zoomFactor);
 
@@ -241,7 +241,7 @@ void ImGuiEXT::addFont(const std::string& fontFile, float fontSize, CHS_GLYPH_RA
 {
     if (FileUtils::getInstance()->isFileExistInternal(fontFile)) {
         if(_fontsInfoMap.emplace(fontFile, FontInfo{ fontSize, glyphRange }).second)
-            ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
+            ImGui_ImplAdxe_SetDeviceObjectsDirty();
     }
 }
 
@@ -250,7 +250,7 @@ void ImGuiEXT::removeFont(const std::string& fontFile)
     auto count = _fontsInfoMap.size();
     _fontsInfoMap.erase(fontFile);
     if(count != _fontsInfoMap.size())
-        ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
+        ImGui_ImplAdxe_SetDeviceObjectsDirty();
 }
 
 void ImGuiEXT::clearFonts()
@@ -258,7 +258,7 @@ void ImGuiEXT::clearFonts()
     bool haveCustomFonts = !_fontsInfoMap.empty();
     _fontsInfoMap.clear();
     if(haveCustomFonts)
-        ImGui_ImplCocos2dx_SetDeviceObjectsDirty();
+        ImGui_ImplAdxe_SetDeviceObjectsDirty();
 
     // auto drawData = ImGui::GetDrawData();
     // if(drawData) drawData->Clear();
@@ -281,10 +281,10 @@ void ImGuiEXT::beginFrame()
     }
     if (!_renderPiplines.empty()) {
         // create frame
-        ImGui_ImplCocos2dx_NewFrame();
+        ImGui_ImplAdxe_NewFrame();
 
         // move to endFrame?
-        _fontsTexture = (Texture2D*)ImGui_ImplCocos2dx_GetFontsTexture();
+        _fontsTexture = (Texture2D*)ImGui_ImplAdxe_GetFontsTexture();
         assert(_fontsTexture != nullptr);
         _fontsTexture->retain();
 
@@ -305,9 +305,9 @@ void ImGuiEXT::endFrame() {
 
         auto drawData = ImGui::GetDrawData();
         if (drawData)
-            ImGui_ImplCocos2dx_RenderDrawData(drawData);
+            ImGui_ImplAdxe_RenderDrawData(drawData);
 
-        ImGui_ImplCocos2dx_RenderPlatform();
+        ImGui_ImplAdxe_RenderPlatform();
         --_beginFrames;
 
         CC_SAFE_RELEASE_NULL(_fontsTexture);

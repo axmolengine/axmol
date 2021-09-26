@@ -8,7 +8,7 @@ include_directories(imgui)
 set(HEADER
     CCImGuiEXT.h
     # CCImGuiColorTextEdit.h
-    imgui_impl_cocos2dx.h
+    imgui_impl_adxe.h
     imgui/imconfig.h
     imgui/imgui.h
     imgui/imgui_internal.h
@@ -24,7 +24,7 @@ set(HEADER
 set(SOURCE
     CCImGuiEXT.cpp
     # CCImGuiColorTextEdit.cpp
-    imgui_impl_cocos2dx.cpp
+    imgui_impl_adxe.cpp
     imgui/imgui.cpp
     imgui/imgui_demo.cpp
     imgui/imgui_draw.cpp
