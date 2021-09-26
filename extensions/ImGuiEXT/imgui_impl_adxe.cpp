@@ -133,7 +133,8 @@ struct ImGui_ImplAdxe_Data
 // FIXME: some shared resources (mouse cursor shape, gamepad) are mishandled when using multi-context.
 static ImGui_ImplAdxe_Data* ImGui_ImplAdxe_GetBackendData()
 {
-    return ImGui::GetCurrentContext() ? reinterpret_cast<ImGui_ImplAdxe_Data*>(ImGui::GetIO().BackendPlatformUserData) : nullptr;
+    return ImGui::GetCurrentContext() ? reinterpret_cast<ImGui_ImplAdxe_Data*>(ImGui::GetIO().BackendPlatformUserData)
+                                      : nullptr;
 }
 
 // Forward Declarations
@@ -1077,9 +1078,11 @@ static void ImGui_ImplGlfw_WindowSizeCallback(GLFWwindow* window, int, int)
 
 static void ImGui_ImplGlfw_CreateWindow(ImGuiViewport* viewport)
 {
-    ImGui_ImplAdxe_Data* bd    = ImGui_ImplAdxe_GetBackendData();
-    ImGui_ImplGlfw_ViewportData* vd  = IM_NEW(ImGui_ImplGlfw_ViewportData)();
-    viewport->PlatformUserData = vd;
+    ImGui_ImplAdxe_Data* bd         = ImGui_ImplAdxe_GetBackendData();
+    ImGui_ImplGlfw_ViewportData* vd = IM_NEW(ImGui_ImplGlfw_ViewportData)();
+    viewport->PlatformUserData      = vd;
+
+    const bool multi_viewport_enabled = !!(ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable);
 
     // GLFW 3.2 unfortunately always set focus on glfwCreateWindow() if GLFW_VISIBLE is set, regardless of GLFW_FOCUSED
     // With GLFW 3.3, the hint GLFW_FOCUS_ON_SHOW fixes this problem
@@ -1092,11 +1095,9 @@ static void ImGui_ImplGlfw_CreateWindow(ImGuiViewport* viewport)
 #if GLFW_HAS_WINDOW_TOPMOST
     glfwWindowHint(GLFW_FLOATING, (viewport->Flags & ImGuiViewportFlags_TopMost) ? true : false);
 #endif
-#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
-    GLFWwindow* share_window = bd->Window;
-#else
-    GLFWwindow* share_window = nullptr;
-#endif
+
+    GLFWwindow* share_window = multi_viewport_enabled ? bd->Window : nullptr;
+
     vd->Window = glfwCreateWindow((int)viewport->Size.x, (int)viewport->Size.y, "No Title Yet", nullptr, share_window);
     vd->WindowOwned          = true;
     viewport->PlatformHandle = (void*)vd->Window;
@@ -1115,13 +1116,13 @@ static void ImGui_ImplGlfw_CreateWindow(ImGuiViewport* viewport)
     glfwSetWindowCloseCallback(vd->Window, ImGui_ImplGlfw_WindowCloseCallback);
     glfwSetWindowPosCallback(vd->Window, ImGui_ImplGlfw_WindowPosCallback);
     glfwSetWindowSizeCallback(vd->Window, ImGui_ImplGlfw_WindowSizeCallback);
-#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
-    // TODO: metal
-    const auto window = vd->Window;
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(0);
-    AddRendererCommand([=]() { glfwMakeContextCurrent(window); });
-#endif
+    if (multi_viewport_enabled)
+    {
+        const auto window = vd->Window;
+        glfwMakeContextCurrent(window);
+        glfwSwapInterval(0);
+        AddRendererCommand([=]() { glfwMakeContextCurrent(window); });
+    }
 }
 
 static void ImGui_ImplGlfw_DestroyWindow(ImGuiViewport* viewport)
@@ -1292,24 +1293,26 @@ static void ImGui_ImplGlfw_SetWindowAlpha(ImGuiViewport* viewport, float alpha)
 
 static void ImGui_ImplGlfw_RenderWindow(ImGuiViewport* viewport, void*)
 {
-    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
-#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
-    const auto window = vd->Window;
-    AddRendererCommand([=]() { glfwMakeContextCurrent(window); });
-#endif
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
+        const auto window               = vd->Window;
+        AddRendererCommand([=]() { glfwMakeContextCurrent(window); });
+    }
 }
 
 static void ImGui_ImplGlfw_SwapBuffers(ImGuiViewport* viewport, void*)
 {
-    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
-#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
-    const auto window = vd->Window;
-    glfwMakeContextCurrent(window);
-    AddRendererCommand([=]() {
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
+        const auto window               = vd->Window;
         glfwMakeContextCurrent(window);
-        glfwSwapBuffers(window);
-    });
-#endif
+        AddRendererCommand([=]() {
+            glfwMakeContextCurrent(window);
+            glfwSwapBuffers(window);
+        });
+    }
 }
 
 // clang-format off
@@ -1370,7 +1373,7 @@ static void ImGui_ImplGlfw_InitPlatformInterface()
     // This is mostly for simplicity and consistency, so that our code (e.g. mouse handling etc.) can use same logic for
     // main and secondary viewports.
     ImGuiViewport* main_viewport    = ImGui::GetMainViewport();
-    ImGui_ImplGlfw_ViewportData* vd     = IM_NEW(ImGui_ImplGlfw_ViewportData)();
+    ImGui_ImplGlfw_ViewportData* vd = IM_NEW(ImGui_ImplGlfw_ViewportData)();
     vd->Window                      = bd->Window;
     vd->WindowOwned                 = false;
     main_viewport->PlatformUserData = vd;
