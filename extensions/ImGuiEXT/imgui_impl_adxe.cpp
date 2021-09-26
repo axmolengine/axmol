@@ -42,6 +42,8 @@
 using namespace cocos2d;
 using namespace backend;
 
+#define CC_PTR_CAST(v, pointer_type) reinterpret_cast<pointer_type>(v)
+
 // TODO: mac metal
 #if (defined(CC_USE_GL) || defined(CC_USE_GLES))
 #    define CC_IMGUI_ENABLE_MULTI_VIEWPORT 1
@@ -131,7 +133,7 @@ struct ImGui_ImplAdxe_Data
 // FIXME: some shared resources (mouse cursor shape, gamepad) are mishandled when using multi-context.
 static ImGui_ImplAdxe_Data* ImGui_ImplAdxe_GetBackendData()
 {
-    return ImGui::GetCurrentContext() ? (ImGui_ImplAdxe_Data*)ImGui::GetIO().BackendPlatformUserData : NULL;
+    return ImGui::GetCurrentContext() ? reinterpret_cast<ImGui_ImplAdxe_Data*>(ImGui::GetIO().BackendPlatformUserData) : nullptr;
 }
 
 // Forward Declarations
@@ -276,7 +278,7 @@ void ImGui_ImplAdxe_RenderDrawData(ImDrawData* draw_data)
 
                     if (typeid(*((Ref*)pcmd->TextureId)) == typeid(Texture2D))
                     {
-                        auto tex = (Texture2D*)pcmd->TextureId;
+                        auto tex = CC_PTR_CAST(pcmd->TextureId, Texture2D*);
                         auto cmd = std::make_shared<CustomCommand>();
                         bd->CustomCommands.push_back(cmd);
                         cmd->init(0.f, BlendFunc::ALPHA_NON_PREMULTIPLIED);
@@ -303,7 +305,7 @@ void ImGui_ImplAdxe_RenderDrawData(ImDrawData* draw_data)
                     }
                     else
                     {
-                        auto node     = (Node*)pcmd->TextureId;
+                        auto node     = CC_PTR_CAST(pcmd->TextureId, Node*);
                         const auto tr = node->getNodeToParentTransform();
                         node->setVisible(true);
                         node->setNodeToParentTransform(tr);
@@ -335,12 +337,12 @@ void ImGui_ImplAdxe_RenderPlatform()
 
 static const char* ImGui_ImplAdxe_GetClipboardText(void* user_data)
 {
-    return glfwGetClipboardString((GLFWwindow*)user_data);
+    return glfwGetClipboardString(CC_PTR_CAST(user_data, GLFWwindow*));
 }
 
 static void ImGui_ImplAdxe_SetClipboardText(void* user_data, const char* text)
 {
-    glfwSetClipboardString((GLFWwindow*)user_data, text);
+    glfwSetClipboardString(CC_PTR_CAST(user_data, GLFWwindow*), text);
 }
 
 void ImGui_ImplAdxe_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -469,7 +471,7 @@ void ImGui_ImplAdxe_DestroyDeviceObjects()
 
 static bool ImGui_ImplAdxe_createShaderPrograms()
 {
-    static auto vertex_shader =
+    auto vertex_shader =
         "uniform mat4 u_MVPMatrix;\n"
         "attribute vec2 a_position;\n"
         "attribute vec2 a_texCoord;\n"
@@ -482,7 +484,7 @@ static bool ImGui_ImplAdxe_createShaderPrograms()
         "    v_fragmentColor = a_color;\n"
         "    gl_Position = u_MVPMatrix * vec4(a_position.xy, 0.0, 1.0);\n"
         "}\n";
-    static auto fragment_shader =
+    auto fragment_shader =
         "#ifdef GL_ES\n"
         "    precision mediump float;\n"
         "#endif\n"
@@ -491,9 +493,9 @@ static bool ImGui_ImplAdxe_createShaderPrograms()
         "varying vec4 v_fragmentColor;\n"
         "void main()\n"
         "{\n"
-        "    gl_FragColor = v_fragmentColor * texture2D(u_texture, v_texCoord.st);\n"
+        "    gl_FragColor = v_fragmentColor * texture2D(u_texture, v_texCoord);\n"
         "}\n";
-    static auto fragment_shader_font =
+    auto fragment_shader_font =
         "#ifdef GL_ES\n"
         "    precision mediump float;\n"
         "#endif\n"
@@ -502,7 +504,7 @@ static bool ImGui_ImplAdxe_createShaderPrograms()
         "varying vec4 v_fragmentColor;\n"
         "void main()\n"
         "{\n"
-        "    float a = texture2D(u_texture, v_texCoord.st).a;\n"
+        "    float a = texture2D(u_texture, v_texCoord).a;\n"
         "    gl_FragColor = vec4(v_fragmentColor.rgb, v_fragmentColor.a * a);\n"
         "}\n";
 
@@ -772,7 +774,7 @@ static void ImGui_ImplAdxe_UpdateMousePosAndButtons()
     for (int n = 0; n < platform_io.Viewports.Size; n++)
     {
         ImGuiViewport* viewport = platform_io.Viewports[n];
-        GLFWwindow* window      = (GLFWwindow*)viewport->PlatformHandle;
+        GLFWwindow* window      = CC_PTR_CAST(viewport->PlatformHandle, GLFWwindow*);
 
 #ifdef __EMSCRIPTEN__
         const bool focused = true;
@@ -847,7 +849,7 @@ static void ImGui_ImplAdxe_UpdateMouseCursor()
     ImGuiPlatformIO& platform_io  = ImGui::GetPlatformIO();
     for (int n = 0; n < platform_io.Viewports.Size; n++)
     {
-        GLFWwindow* window = (GLFWwindow*)platform_io.Viewports[n]->PlatformHandle;
+        GLFWwindow* window = CC_PTR_CAST(platform_io.Viewports[n]->PlatformHandle, GLFWwindow*);
         if (imgui_cursor == ImGuiMouseCursor_None || io.MouseDrawCursor)
         {
             // Hide OS mouse cursor if imgui is drawing it or if it wants no cursor
@@ -1029,6 +1031,8 @@ struct ImGui_ImplGlfw_ViewportData
     ~ImGui_ImplGlfw_ViewportData() { IM_ASSERT(Window == NULL); }
 };
 
+#define IMGUI_GLFW_VD(vp) reinterpret_cast<ImGui_ImplGlfw_ViewportData*>(vp->PlatformUserData)
+
 static void ImGui_ImplGlfw_WindowCloseCallback(GLFWwindow* window)
 {
     if (ImGuiViewport* viewport = ImGui::FindViewportByPlatformHandle(window))
@@ -1045,9 +1049,9 @@ static void ImGui_ImplGlfw_WindowPosCallback(GLFWwindow* window, int, int)
 {
     if (ImGuiViewport* viewport = ImGui::FindViewportByPlatformHandle(window))
     {
-        if (ImGui_ImplGlfw_ViewportData* data = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData)
+        if (ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport))
         {
-            bool ignore_event = (ImGui::GetFrameCount() <= data->IgnoreWindowPosEventFrame + 1);
+            bool ignore_event = (ImGui::GetFrameCount() <= vd->IgnoreWindowPosEventFrame + 1);
             // data->IgnoreWindowPosEventFrame = -1;
             if (ignore_event)
                 return;
@@ -1060,7 +1064,7 @@ static void ImGui_ImplGlfw_WindowSizeCallback(GLFWwindow* window, int, int)
 {
     if (ImGuiViewport* viewport = ImGui::FindViewportByPlatformHandle(window))
     {
-        if (ImGui_ImplGlfw_ViewportData* data = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData)
+        if (ImGui_ImplGlfw_ViewportData* data = IMGUI_GLFW_VD(viewport))
         {
             bool ignore_event = (ImGui::GetFrameCount() <= data->IgnoreWindowSizeEventFrame + 1);
             // data->IgnoreWindowSizeEventFrame = -1;
@@ -1123,7 +1127,7 @@ static void ImGui_ImplGlfw_CreateWindow(ImGuiViewport* viewport)
 static void ImGui_ImplGlfw_DestroyWindow(ImGuiViewport* viewport)
 {
     auto bd = ImGui_ImplAdxe_GetBackendData();
-    if (ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData)
+    if (ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport))
     {
         if (vd->WindowOwned)
         {
@@ -1162,7 +1166,7 @@ static LRESULT CALLBACK WndProcNoInputs(HWND hWnd, UINT msg, WPARAM wParam, LPAR
         // the window behind the one we are dragging. If you cannot easily access those viewport flags from your
         // windowing/event code: you may manually synchronize its state e.g. in your main loop after calling
         // UpdatePlatformWindows(). Iterate all viewports/platform windows and pass the flag to your windowing system.
-        ImGuiViewport* viewport = (ImGuiViewport*)::GetPropA(hWnd, "IMGUI_VIEWPORT");
+        ImGuiViewport* viewport = CC_PTR_CAST(::GetPropA(hWnd, "IMGUI_VIEWPORT"), ImGuiViewport*);
         if (viewport->Flags & ImGuiViewportFlags_NoInputs)
             return HTTRANSPARENT;
     }
@@ -1172,7 +1176,7 @@ static LRESULT CALLBACK WndProcNoInputs(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 
 static void ImGui_ImplGlfw_ShowWindow(ImGuiViewport* viewport)
 {
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
 
 #if defined(_WIN32)
     // GLFW hack: Hide icon from task bar
@@ -1211,7 +1215,7 @@ static void ImGui_ImplGlfw_ShowWindow(ImGuiViewport* viewport)
 
 static ImVec2 ImGui_ImplGlfw_GetWindowPos(ImGuiViewport* viewport)
 {
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
     int x = 0, y = 0;
     glfwGetWindowPos(vd->Window, &x, &y);
     return ImVec2((float)x, (float)y);
@@ -1219,13 +1223,13 @@ static ImVec2 ImGui_ImplGlfw_GetWindowPos(ImGuiViewport* viewport)
 
 static void ImGui_ImplGlfw_SetWindowPos(ImGuiViewport* viewport, ImVec2 pos)
 {
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
     glfwSetWindowPos(vd->Window, (int)pos.x, (int)pos.y);
 }
 
 static ImVec2 ImGui_ImplGlfw_GetWindowSize(ImGuiViewport* viewport)
 {
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
     int w = 0, h = 0;
     glfwGetWindowSize(vd->Window, &w, &h);
     return ImVec2((float)w, (float)h);
@@ -1233,7 +1237,7 @@ static ImVec2 ImGui_ImplGlfw_GetWindowSize(ImGuiViewport* viewport)
 
 static void ImGui_ImplGlfw_SetWindowSize(ImGuiViewport* viewport, ImVec2 size)
 {
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_MAC && !GLFW_HAS_OSX_WINDOW_POS_FIX
     // Native OS windows are positioned from the bottom-left corner on macOS, whereas on other platforms they are
     // positioned from the upper-left corner. GLFW makes an effort to convert macOS style coordinates, however it
@@ -1250,14 +1254,14 @@ static void ImGui_ImplGlfw_SetWindowSize(ImGuiViewport* viewport, ImVec2 size)
 
 static void ImGui_ImplGlfw_SetWindowTitle(ImGuiViewport* viewport, const char* title)
 {
-    ImGui_ImplGlfw_ViewportData* data = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
-    glfwSetWindowTitle(data->Window, title);
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
+    glfwSetWindowTitle(vd->Window, title);
 }
 
 static void ImGui_ImplGlfw_SetWindowFocus(ImGuiViewport* viewport)
 {
 #if GLFW_HAS_FOCUS_WINDOW
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
     glfwFocusWindow(vd->Window);
 #else
     // FIXME: What are the effect of not having this function? At the moment imgui doesn't actually call SetWindowFocus
@@ -1268,27 +1272,27 @@ static void ImGui_ImplGlfw_SetWindowFocus(ImGuiViewport* viewport)
 
 static bool ImGui_ImplGlfw_GetWindowFocus(ImGuiViewport* viewport)
 {
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
     return glfwGetWindowAttrib(vd->Window, GLFW_FOCUSED) != 0;
 }
 
 static bool ImGui_ImplGlfw_GetWindowMinimized(ImGuiViewport* viewport)
 {
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
     return glfwGetWindowAttrib(vd->Window, GLFW_ICONIFIED) != 0;
 }
 
 #if GLFW_HAS_WINDOW_ALPHA
 static void ImGui_ImplGlfw_SetWindowAlpha(ImGuiViewport* viewport, float alpha)
 {
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
     glfwSetWindowOpacity(vd->Window, alpha);
 }
 #endif
 
 static void ImGui_ImplGlfw_RenderWindow(ImGuiViewport* viewport, void*)
 {
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
 #if CC_IMGUI_ENABLE_MULTI_VIEWPORT
     const auto window = vd->Window;
     AddRendererCommand([=]() { glfwMakeContextCurrent(window); });
@@ -1297,7 +1301,7 @@ static void ImGui_ImplGlfw_RenderWindow(ImGuiViewport* viewport, void*)
 
 static void ImGui_ImplGlfw_SwapBuffers(ImGuiViewport* viewport, void*)
 {
-    ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+    ImGui_ImplGlfw_ViewportData* vd = IMGUI_GLFW_VD(viewport);
 #if CC_IMGUI_ENABLE_MULTI_VIEWPORT
     const auto window = vd->Window;
     glfwMakeContextCurrent(window);
