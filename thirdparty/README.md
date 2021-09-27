@@ -46,7 +46,7 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.78.0
+- Version: 7.79.1
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -153,7 +153,7 @@
 
 ## OpenSSL
 - Upstream: https://github.com/openssl/openssl
-- Version: 1.1.1l
+- Version: 3.0.0
 - License: Apache-2.0
 
 ## png
