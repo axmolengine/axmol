@@ -400,7 +400,7 @@
 
   /* Allocate a table containing pointers to an index's elements. */
   /* The `pool' argument makes this function convert the index    */
-  /* entries to C-style strings (this is, NULL-terminated).       */
+  /* entries to C-style strings (this is, null-terminated).       */
   static FT_Error
   cff_index_get_pointers( CFF_Index   idx,
                           FT_Byte***  table,

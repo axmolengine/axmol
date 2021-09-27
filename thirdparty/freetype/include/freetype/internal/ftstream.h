@@ -196,9 +196,9 @@ FT_BEGIN_HEADER
                                        FT_BYTE_U32( p, 2,  8 ) | \
                                        FT_BYTE_U32( p, 3,  0 ) )
 
-#define FT_PEEK_OFF3( p )  FT_INT32( FT_BYTE_U32( p, 0, 16 ) | \
-                                     FT_BYTE_U32( p, 1,  8 ) | \
-                                     FT_BYTE_U32( p, 2,  0 ) )
+#define FT_PEEK_OFF3( p )  ( FT_INT32( FT_BYTE_U32( p, 0, 24 ) | \
+                                       FT_BYTE_U32( p, 1, 16 ) | \
+                                       FT_BYTE_U32( p, 2,  8 ) ) >> 8 )
 
 #define FT_PEEK_UOFF3( p )  FT_UINT32( FT_BYTE_U32( p, 0, 16 ) | \
                                        FT_BYTE_U32( p, 1,  8 ) | \
@@ -220,9 +220,9 @@ FT_BEGIN_HEADER
                                           FT_BYTE_U32( p, 1,  8 ) | \
                                           FT_BYTE_U32( p, 0,  0 ) )
 
-#define FT_PEEK_OFF3_LE( p )  FT_INT32( FT_BYTE_U32( p, 2, 16 ) | \
-                                        FT_BYTE_U32( p, 1,  8 ) | \
-                                        FT_BYTE_U32( p, 0,  0 ) )
+#define FT_PEEK_OFF3_LE( p )  ( FT_INT32( FT_BYTE_U32( p, 2, 24 ) | \
+                                          FT_BYTE_U32( p, 1, 16 ) | \
+                                          FT_BYTE_U32( p, 0,  8 ) ) >> 8 )
 
 #define FT_PEEK_UOFF3_LE( p )  FT_UINT32( FT_BYTE_U32( p, 2, 16 ) | \
                                           FT_BYTE_U32( p, 1,  8 ) | \
@@ -309,7 +309,6 @@ FT_BEGIN_HEADER
 #define FT_GET_BYTE()       FT_GET_MACRO( FT_Stream_GetByte, FT_Byte )
 #define FT_GET_SHORT()      FT_GET_MACRO( FT_Stream_GetUShort, FT_Short )
 #define FT_GET_USHORT()     FT_GET_MACRO( FT_Stream_GetUShort, FT_UShort )
-#define FT_GET_OFF3()       FT_GET_MACRO( FT_Stream_GetUOffset, FT_Long )
 #define FT_GET_UOFF3()      FT_GET_MACRO( FT_Stream_GetUOffset, FT_ULong )
 #define FT_GET_LONG()       FT_GET_MACRO( FT_Stream_GetULong, FT_Long )
 #define FT_GET_ULONG()      FT_GET_MACRO( FT_Stream_GetULong, FT_ULong )
@@ -337,7 +336,6 @@ FT_BEGIN_HEADER
 #define FT_READ_CHAR( var )       FT_READ_MACRO( FT_Stream_ReadByte, FT_Char, var )
 #define FT_READ_SHORT( var )      FT_READ_MACRO( FT_Stream_ReadUShort, FT_Short, var )
 #define FT_READ_USHORT( var )     FT_READ_MACRO( FT_Stream_ReadUShort, FT_UShort, var )
-#define FT_READ_OFF3( var )       FT_READ_MACRO( FT_Stream_ReadUOffset, FT_Long, var )
 #define FT_READ_UOFF3( var )      FT_READ_MACRO( FT_Stream_ReadUOffset, FT_ULong, var )
 #define FT_READ_LONG( var )       FT_READ_MACRO( FT_Stream_ReadULong, FT_Long, var )
 #define FT_READ_ULONG( var )      FT_READ_MACRO( FT_Stream_ReadULong, FT_ULong, var )

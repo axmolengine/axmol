@@ -28,7 +28,7 @@ macro(set_openssl_sub_target sub_target_name sub_lib_name)
     endif()
     set(imp_lib_name "${platform_spec_path}/lib${sub_lib_name}.lib")
     set_target_properties(${sub_target_name} PROPERTIES
-      IMPORTED_LOCATION "${platform_spec_path}/lib${sub_lib_name}-1_1${impl_lib_suffix}.dll"
+      IMPORTED_LOCATION "${platform_spec_path}/lib${sub_lib_name}-3${impl_lib_suffix}.dll"
       IMPORTED_IMPLIB "${platform_spec_path}/lib${sub_lib_name}.lib"
     )
   else()

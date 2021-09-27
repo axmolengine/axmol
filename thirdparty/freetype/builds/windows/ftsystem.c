@@ -188,12 +188,67 @@
   FT_CALLBACK_DEF( void )
   ft_close_stream_by_free( FT_Stream  stream )
   {
-    ft_free( NULL, stream->descriptor.pointer );
+    ft_free( stream->memory, stream->descriptor.pointer );
 
     stream->descriptor.pointer = NULL;
     stream->size               = 0;
     stream->base               = NULL;
   }
+
+
+#ifdef _WIN32_WCE
+
+  FT_LOCAL_DEF( HANDLE )
+  CreateFileA( LPCSTR                lpFileName,
+               DWORD                 dwDesiredAccess,
+               DWORD                 dwShareMode,
+               LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+               DWORD                 dwCreationDisposition,
+               DWORD                 dwFlagsAndAttributes,
+               HANDLE                hTemplateFile )
+  {
+    int            len;
+    LPWSTR         lpFileNameW;
+
+
+    /* allocate memory space for converted path name */
+    len = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS,
+                               lpFileName, -1, NULL, 0 );
+
+    lpFileNameW = (LPWSTR)_alloca( len * sizeof ( WCHAR ) );
+
+    if ( !len || !lpFileNameW )
+    {
+      FT_ERROR(( "FT_Stream_Open: cannot convert file name to LPWSTR\n" ));
+      return INVALID_HANDLE_VALUE;
+    }
+
+    /* now it is safe to do the translation */
+    MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS,
+                         lpFileName, -1, lpFileNameW, len );
+
+    /* open the file */
+    return CreateFileW( lpFileNameW, dwDesiredAccess, dwShareMode,
+                        lpSecurityAttributes, dwCreationDisposition,
+                        dwFlagsAndAttributes, hTemplateFile );
+  }
+
+
+  FT_LOCAL_DEF( BOOL )
+  GetFileSizeEx( HANDLE         hFile,
+                 PLARGE_INTEGER lpFileSize )
+  {
+    lpFileSize->u.LowPart = GetFileSize( hFile,
+                                         (DWORD *)&lpFileSize->u.HighPart );
+
+    if ( lpFileSize->u.LowPart == INVALID_FILE_SIZE &&
+         GetLastError() != NO_ERROR                 )
+      return FALSE;
+    else
+      return TRUE;
+  }
+
+#endif /* _WIN32_WCE */
 
 
   /* documentation is in ftobjs.h */
@@ -211,36 +266,16 @@
       return FT_THROW( Invalid_Stream_Handle );
 
     /* open the file */
-    file = CreateFile( (LPCTSTR)filepathname, GENERIC_READ, FILE_SHARE_READ,
-                       NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
+    file = CreateFileA( (LPCSTR)filepathname, GENERIC_READ, FILE_SHARE_READ,
+                        NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
     if ( file == INVALID_HANDLE_VALUE )
     {
-      /* fall back on the alernative interface */
-#ifdef UNICODE
-      file = CreateFileA( (LPCSTR)filepathname, GENERIC_READ, FILE_SHARE_READ,
-                          NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
-#else
-      file = CreateFileW( (LPCWSTR)filepathname, GENERIC_READ, FILE_SHARE_READ,
-                          NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
-#endif
-
-      if ( file == INVALID_HANDLE_VALUE )
-      {
-        FT_ERROR(( "FT_Stream_Open:" ));
-        FT_ERROR(( " could not open `%s'\n", filepathname ));
-        return FT_THROW( Cannot_Open_Resource );
-      }
+      FT_ERROR(( "FT_Stream_Open:" ));
+      FT_ERROR(( " could not open `%s'\n", filepathname ));
+      return FT_THROW( Cannot_Open_Resource );
     }
 
-#if defined _WIN32_WCE || defined _WIN32_WINDOWS || \
-    (defined _WIN32_WINNT && _WIN32_WINNT <= 0x0400)
-    /* Use GetFileSize() for legacy Windows */
-    size.u.LowPart = GetFileSize( file, (DWORD *)&size.u.HighPart );
-    if ( size.u.LowPart == INVALID_FILE_SIZE && GetLastError() != NO_ERROR )
-#else
-    /* Use GetFileSizeEx() for modern Windows */
     if ( GetFileSizeEx( file, &size ) == FALSE )
-#endif
     {
       FT_ERROR(( "FT_Stream_Open:" ));
       FT_ERROR(( " could not retrieve size of file `%s'\n", filepathname ));
@@ -288,7 +323,7 @@
       FT_ERROR(( "FT_Stream_Open:" ));
       FT_ERROR(( " could not `mmap' file `%s'\n", filepathname ));
 
-      stream->base = (unsigned char*)ft_alloc( NULL, stream->size );
+      stream->base = (unsigned char*)ft_alloc( stream->memory, stream->size );
 
       if ( !stream->base )
       {
@@ -334,7 +369,7 @@
     return FT_Err_Ok;
 
   Fail_Read:
-    ft_free( NULL, stream->base );
+    ft_free( stream->memory, stream->base );
 
   Fail_Open:
     CloseHandle( file );

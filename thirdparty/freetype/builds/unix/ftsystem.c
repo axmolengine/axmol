@@ -233,7 +233,7 @@
   FT_CALLBACK_DEF( void )
   ft_close_stream_by_free( FT_Stream  stream )
   {
-    ft_free( NULL, stream->descriptor.pointer );
+    ft_free( stream->memory, stream->descriptor.pointer );
 
     stream->descriptor.pointer = NULL;
     stream->size               = 0;
@@ -324,7 +324,7 @@
       FT_ERROR(( "FT_Stream_Open:" ));
       FT_ERROR(( " could not `mmap' file `%s'\n", filepathname ));
 
-      stream->base = (unsigned char*)ft_alloc( NULL, stream->size );
+      stream->base = (unsigned char*)ft_alloc( stream->memory, stream->size );
 
       if ( !stream->base )
       {
@@ -374,7 +374,7 @@
     return FT_Err_Ok;
 
   Fail_Read:
-    ft_free( NULL, stream->base );
+    ft_free( stream->memory, stream->base );
 
   Fail_Map:
     close( file );

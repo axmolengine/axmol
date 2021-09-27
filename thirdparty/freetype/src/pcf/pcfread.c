@@ -1612,7 +1612,7 @@ THE SOFTWARE.
         else
         {
           /* this is a heuristical value */
-          bsize->width = (FT_Short)FT_MulDiv( bsize->height, 2, 3 );
+          bsize->width = ( bsize->height * 2 + 1 ) / 3;
         }
 
         prop = pcf_find_property( face, "POINT_SIZE" );

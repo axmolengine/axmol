@@ -594,7 +594,7 @@
         goto Fail;
 
       if ( FT_STREAM_SEEK( cid->data_offset + offsets[0] ) ||
-           FT_STREAM_READ( subr->code[0], data_len )  )
+           FT_STREAM_READ( subr->code[0], data_len )       )
         goto Fail;
 
       /* set up pointers */

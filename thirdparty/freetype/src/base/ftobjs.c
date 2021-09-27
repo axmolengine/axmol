@@ -221,6 +221,7 @@
       FT_Stream_OpenMemory( stream,
                             (const FT_Byte*)args->memory_base,
                             (FT_ULong)args->memory_size );
+      stream->memory = memory;
     }
 
 #ifndef FT_CONFIG_OPTION_DISABLE_STREAM_SUPPORT
@@ -231,6 +232,7 @@
       if ( FT_NEW( stream ) )
         goto Exit;
 
+      stream->memory = memory;
       error = FT_Stream_Open( stream, args->pathname );
       if ( error )
         FT_FREE( stream );
@@ -241,8 +243,9 @@
 
       /* in this case, we do not need to allocate a new stream object */
       /* since the caller is responsible for closing it himself       */
-      stream = args->stream;
-      error  = FT_Err_Ok;
+      stream         = args->stream;
+      stream->memory = memory;
+      error          = FT_Err_Ok;
     }
 
 #endif
@@ -255,10 +258,7 @@
     }
 
     if ( !error )
-    {
-      stream->memory = memory;
       *astream       = stream;
-    }
 
   Exit:
     return error;
