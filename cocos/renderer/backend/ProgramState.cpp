@@ -1,8 +1,8 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2020 c4games.com
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -87,12 +87,14 @@ namespace {
 //static field
 std::vector<ProgramState::AutoBindingResolver*> ProgramState::_customAutoBindingResolvers;
 
-TextureInfo::TextureInfo(std::vector<uint16_t>&& _slots, std::vector<backend::TextureBackend*>&& _textures)
-: TextureInfo(std::move(_slots), std::vector<uint16_t>(_slots.size(), 0), std::move(_textures))
+TextureInfo::TextureInfo(std::vector<int>&& _slots, std::vector<backend::TextureBackend*>&& _textures)
+    : TextureInfo(std::move(_slots), std::vector<int>(_slots.size(), 0), std::move(_textures))
 {
 }
 
-TextureInfo::TextureInfo(std::vector<uint16_t>&& _slots, std::vector<uint16_t>&& _indexs, std::vector<backend::TextureBackend*>&& _textures)
+TextureInfo::TextureInfo(std::vector<int>&& _slots,
+                         std::vector<int>&& _indexs,
+                         std::vector<backend::TextureBackend*>&& _textures)
     : slots(std::move(_slots)),
     indexs(std::move(_indexs)),
     textures(std::move(_textures))
@@ -421,12 +423,17 @@ void ProgramState::setTexture(backend::TextureBackend* texture)
     }
 }
 
-void ProgramState::setTexture(const backend::UniformLocation& uniformLocation, uint16_t slot, backend::TextureBackend* texture)
+void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
+                              int slot,
+                              backend::TextureBackend* texture)
 {
     setTexture(uniformLocation, slot, 0, texture);
 }
 
-void ProgramState::setTexture(const backend::UniformLocation& uniformLocation, uint16_t slot, uint16_t index, backend::TextureBackend* texture)
+void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
+                              int slot,
+                              int index,
+                              backend::TextureBackend* texture)
 {
     switch (uniformLocation.shaderStage)
     {
@@ -445,7 +452,9 @@ void ProgramState::setTexture(const backend::UniformLocation& uniformLocation, u
     }
 }
 
-void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocation, std::vector<uint16_t> slots, std::vector<backend::TextureBackend*> textures)
+void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocation,
+                                   std::vector<int> slots,
+                                   std::vector<backend::TextureBackend*> textures)
 {
     switch (uniformLocation.shaderStage)
     {
@@ -464,7 +473,11 @@ void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocati
     }
 }
 
-void ProgramState::setTexture(int location, uint16_t slot, uint16_t index, backend::TextureBackend* texture, std::unordered_map<int, TextureInfo>& textureInfo)
+void ProgramState::setTexture(int location,
+                              int slot,
+                              int index,
+                              backend::TextureBackend* texture,
+                              std::unordered_map<int, TextureInfo>& textureInfo)
 {
     if(location < 0)
         return;
@@ -477,7 +490,10 @@ void ProgramState::setTexture(int location, uint16_t slot, uint16_t index, backe
 #endif
 }
 
-void ProgramState::setTextureArray(int location, std::vector<uint16_t> slots, std::vector<backend::TextureBackend*> textures, std::unordered_map<int, TextureInfo>& textureInfo)
+void ProgramState::setTextureArray(int location,
+                                   std::vector<int> slots,
+                                   std::vector<backend::TextureBackend*> textures,
+                                   std::unordered_map<int, TextureInfo>& textureInfo)
 {
     assert(slots.size() == textures.size());
 

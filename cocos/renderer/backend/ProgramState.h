@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -55,8 +56,10 @@ class VertexLayout;
   */
 struct CC_DLL TextureInfo
 {
-    TextureInfo(std::vector<uint16_t>&& _slots, std::vector<backend::TextureBackend*>&& _textures);
-    TextureInfo(std::vector<uint16_t>&& _slots, std::vector<uint16_t>&& _indexs, std::vector<backend::TextureBackend*>&& _textures);
+    TextureInfo(std::vector<int>&& _slots, std::vector<backend::TextureBackend*>&& _textures);
+    TextureInfo(std::vector<int>&& _slots,
+                std::vector<int>&& _indexs,
+                std::vector<backend::TextureBackend*>&& _textures);
     TextureInfo() = default;
     TextureInfo(const TextureInfo&);
     TextureInfo(TextureInfo&& rhs);
@@ -72,8 +75,8 @@ struct CC_DLL TextureInfo
     void retainTextures();
     void releaseTextures();
 
-    std::vector<uint16_t> slots;
-    std::vector<uint16_t> indexs;
+    std::vector<int> slots;
+    std::vector<int> indexs;
     std::vector<backend::TextureBackend*> textures;
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     int location = -1;
@@ -167,7 +170,7 @@ public:
      * @param slot Specifies texture slot selector.
      * @param texture Specifies a pointer to backend texture.
      */
-    void setTexture(const backend::UniformLocation& uniformLocation, uint16_t slot, backend::TextureBackend* texture);
+    void setTexture(const backend::UniformLocation& uniformLocation, int slot, backend::TextureBackend* texture);
 
     /**
      * Set texture.
@@ -176,7 +179,10 @@ public:
      * @param index Specifies texture index selector
      * @param texture Specifies a pointer to backend texture.
      */
-    void setTexture(const backend::UniformLocation& uniformLocation, uint16_t slot, uint16_t index, backend::TextureBackend* texture);
+    void setTexture(const backend::UniformLocation& uniformLocation,
+                    int slot,
+                    int index,
+                    backend::TextureBackend* texture);
 
     /**
      * Set textures in array.
@@ -184,7 +190,9 @@ public:
      * @param slots Specifies texture slot selector.
      * @param textures Specifies a vector of backend texture object.
      */
-    void setTextureArray(const backend::UniformLocation& uniformLocation, std::vector<uint16_t> slots, std::vector<backend::TextureBackend*> textures);
+    void setTextureArray(const backend::UniformLocation& uniformLocation,
+                         std::vector<int> slots,
+                         std::vector<backend::TextureBackend*> textures);
 
     /**
      * Get vertex texture informations
@@ -320,7 +328,11 @@ protected:
      * @param texture Specifies the texture to set in given location.
      * @param textureInfo Specifies the texture information to update.
      */
-    void setTexture(int location, uint16_t slot, uint16_t index, backend::TextureBackend* texture, std::unordered_map<int, TextureInfo>& textureInfo);
+    void setTexture(int location,
+                    int slot,
+                    int index,
+                    backend::TextureBackend* texture,
+                    std::unordered_map<int, TextureInfo>& textureInfo);
     
     /**
      * Set textures in array.
@@ -329,7 +341,10 @@ protected:
      * @param textures Specifies the texture to set in given location.
      * @param textureInfo Specifies the texture information to update.
      */
-    void setTextureArray(int location, std::vector<uint16_t> slots, std::vector<backend::TextureBackend*> textures, std::unordered_map<int, TextureInfo>& textureInfo);
+    void setTextureArray(int location,
+                         std::vector<int> slots,
+                         std::vector<backend::TextureBackend*> textures,
+                         std::unordered_map<int, TextureInfo>& textureInfo);
     
     /**
      * Reset uniform informations when EGL context lost
