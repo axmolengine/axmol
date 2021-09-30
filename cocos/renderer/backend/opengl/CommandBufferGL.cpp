@@ -337,7 +337,7 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
             if (arrayCount == 1) // Most of the time， not use sampler2DArray, should be 1
                 glUniform1i(location, slots[0]);
             else
-                glUniform1iv(location, (uint32_t)arrayCount, (GLint*)slots.data());
+                glUniform1iv(location, static_cast<GLsizei>(arrayCount), static_cast<const GLint*>(slots.data()));
         }
     }
 }
