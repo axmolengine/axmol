@@ -1,8 +1,8 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2020 c4games.com
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -466,10 +466,6 @@ void CommandBufferMTL::setUniformBuffer() const
 {
     if (_programState)
     {
-        auto &callbackUniforms = _programState->getCallbackUniforms();	
-        for(auto &cb : callbackUniforms)	
-            cb.second(_programState, cb.first);	
-
         // Uniform buffer is bound to index 1.
         std::size_t bufferSize = 0;
         char* vertexBuffer = nullptr;

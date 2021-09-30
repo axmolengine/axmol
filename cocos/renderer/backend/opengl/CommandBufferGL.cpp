@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -295,10 +296,6 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
         char* buffer = nullptr;
         _programState->getVertexUniformBuffer(&buffer, bufferSize);
 
-        auto& callbacks = _programState->getCallbackUniforms();
-        for (auto& cb : callbacks)
-            cb.second(_programState, cb.first);
-
         int i = 0;
         for(auto& iter : uniformInfos)
         {
@@ -335,7 +332,7 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
                 applyTexture(texture, slots[i], indexs[i]);
                 ++i;
             }
-            
+
             auto arrayCount = slots.size();
             if (arrayCount == 1) // Most of the time， not use sampler2DArray, should be 1
                 glUniform1i(location, slots[0]);
