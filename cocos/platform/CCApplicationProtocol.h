@@ -31,6 +31,10 @@ THE SOFTWARE.
 #include "base/CCAutoreleasePool.h"
 #include "base/ccTypes.h"
 
+#if defined(OS_WINDOWS)
+#    undef OS_WINDOWS
+#endif
+
 NS_CC_BEGIN
 
 /**
