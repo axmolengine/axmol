@@ -25,7 +25,7 @@
 #include "platform/CCPlatformConfig.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-asdasd
+
 #include "ui/UIWebView/UIWebViewImpl-android.h"
 #include "ui/UIWebView/UIWebView-inl.h"
 
