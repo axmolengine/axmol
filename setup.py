@@ -59,6 +59,9 @@ try:
 except Exception:
     pass
 from optparse import OptionParser
+from time import time
+from time import sleep
+from os.path import dirname
 
 ADXE_ROOT = 'ADXE_ROOT'
 ADXE_CONSOLE_ROOT = 'ADXE_CONSOLE_ROOT'
@@ -667,6 +670,93 @@ class SetEnvVar(object):
             print('\nPlease execute command: "source %s" to make added system variables take effect\n' %
                   self.file_used_for_setup)
 
+class FileDownloader(object):
+    def __init__(self):
+       self.current_absolute_path = os.path.dirname(os.path.realpath(__file__))
+        
+    def download_file(self, url, filename):
+        # remove file for retry
+        try:
+            os.remove(filename)
+        except OSError:
+            pass
+        print("==> Ready to download '%s' from '%s'" % (filename, url))
+        import urllib2
+        try:
+            u = urllib2.urlopen(url)
+        except urllib2.HTTPError as e:
+            if e.code == 404:
+                print("==> Error: Could not find the file from url: '%s'" % (url))
+            print("==> Http request failed, error code: " + str(e.code) + ", reason: " + e.read())
+            sys.exit(1)
+
+        f = open(filename, 'wb')
+        meta = u.info()
+        content_len = meta.getheaders("Content-Length")
+        file_size = 0
+        if content_len and len(content_len) > 0:
+            file_size = int(content_len[0])
+        else:
+            print("==> WARNING: Couldn't grab the file size from remote")
+            return
+            
+        print("==> Start to download, please wait ...")
+
+        file_size_dl = 0
+        block_sz = 8192
+        block_size_per_second = 0
+        old_time = time()
+
+        status = ""
+        while True:
+            buffer = u.read(block_sz)
+            if not buffer:
+                print("%s%s" % (" " * len(status), "\r")),
+                break
+
+            file_size_dl += len(buffer)
+            block_size_per_second += len(buffer)
+            f.write(buffer)
+            new_time = time()
+            if (new_time - old_time) > 1:
+                speed = block_size_per_second / (new_time - old_time) / 1000.0
+                if file_size != 0:
+                    percent = file_size_dl * 100. / file_size
+                    status = r"Downloaded: %6dK / Total: %dK, Percent: %3.2f%%, Speed: %6.2f KB/S " % (file_size_dl / 1000, file_size / 1000, percent, speed)
+                else:
+                    status = r"Downloaded: %6dK, Speed: %6.2f KB/S " % (file_size_dl / 1000, speed)
+                print(status),
+                sys.stdout.flush()
+                print("\r"),
+                block_size_per_second = 0
+                old_time = new_time
+
+        print("==> Downloading finished!")
+        f.close()
+
+    def ensure_directory(self, target):
+        if not os.path.exists(target):
+            os.mkdir(target)
+
+    def download_file_with_retry(self, url, filename, times, delay):
+        import urllib2
+        
+        output_path = dirname(filename)
+        downloader.ensure_directory(output_path)
+        
+        times_count = 0
+        while(times_count < times):
+            times_count += 1
+            try:
+                if(times_count > 1):
+                    print("==> Download file retry " + str(times_count))
+                self.download_file(url, filename)
+                return
+            except Exception as err:
+                if(times_count >= times):
+                    raise err
+                sleep(delay)
+                
 if __name__ == '__main__':
     if not _check_python_version():
         exit()
@@ -700,3 +790,11 @@ if __name__ == '__main__':
         SendMessageTimeoutW = ctypes.windll.user32.SendMessageTimeoutW
         SendMessageTimeoutW(HWND_BROADCAST, WM_SETTINGCHANGE, 0,
                             u'Environment', SMTO_ABORTIFHUNG, 5000, ctypes.byref(result))
+
+    downloader = FileDownloader()
+    if env._isWindows():
+        current_absolute_path = os.path.dirname(os.path.realpath(__file__))
+        file_path = os.path.join(current_absolute_path, 'tools', 'nuget', 'nuget.exe')
+        
+        if not os.path.isfile(file_path):
+            downloader.download_file_with_retry('https://dist.nuget.org/win-x86-commandline/latest/nuget.exe', file_path, 5, 3)

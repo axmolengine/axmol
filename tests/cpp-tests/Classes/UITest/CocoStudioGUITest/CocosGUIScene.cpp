@@ -51,11 +51,17 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "UIEditBoxTest.h"
 #endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) 
+#include "UIWebViewTest/UIWebViewTest.h"
+#endif
+
 
 GUIDynamicCreateTests::GUIDynamicCreateTests()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
     addTest("VideoPlayer Test", [](){ return new (std::nothrow) VideoPlayerTests; });
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     addTest("WebView Test", [](){ return new (std::nothrow) WebViewTests; });
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

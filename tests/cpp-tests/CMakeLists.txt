@@ -361,6 +361,15 @@ if(WINDOWS OR MACOSX OR LINUX)
          )
 endif()
 
+if(WINDOWS)
+    list(APPEND GAME_HEADER
+         Classes/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.h
+         )
+    list(APPEND GAME_SOURCE
+         Classes/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.cpp
+         )
+endif()
+
 list(APPEND GAME_HEADER
    Classes/Box2DTest/Box2dTest.h
    )
