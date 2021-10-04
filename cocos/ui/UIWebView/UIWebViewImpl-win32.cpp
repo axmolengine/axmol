@@ -755,7 +755,7 @@ private:
         HRESULT STDMETHODCALLTYPE Invoke(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args)
         {
             BOOL success;
-            if (args->get_IsSuccess(&success) == 0 && success)
+            if (SUCCEEDED(args->get_IsSuccess(&success)) && success)
             {
                 if (m_navCompleteCallback)
                 {
@@ -764,12 +764,11 @@ private:
             }
             else
             {
-                COREWEBVIEW2_WEB_ERROR_STATUS status;
-
-                if (args->get_WebErrorStatus(&status) == 0)
-                {
-                    // CCLOG("")
-                }
+                // example of how to get status error if required
+                //COREWEBVIEW2_WEB_ERROR_STATUS status;
+                //if (SUCCEEDED(args->get_WebErrorStatus(&status)))
+                //{
+                //}
 
                 if (m_navErrorCallback)
                 {
@@ -1131,7 +1130,6 @@ bool Win32WebControl::createWebView(
                                 hInstance, nullptr);
         SetWindowLongPtr(m_window, GWLP_USERDATA, (LONG_PTR)this);
 
-        //SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE);
         ShowWindow(m_window, SW_SHOW);
         UpdateWindow(m_window);
         SetFocus(m_window);
@@ -1241,13 +1239,13 @@ void Win32WebControl::reload() const
 bool Win32WebControl::canGoBack() const
 {
     BOOL result;
-    return m_webview->get_CanGoBack(&result) == 0 && result;
+    return SUCCEEDED(m_webview->get_CanGoBack(&result)) && result;
 }
 
 bool Win32WebControl::canGoForward() const
 {
     BOOL result;
-    return m_webview->get_CanGoForward(&result) == 0 && result;
+    return SUCCEEDED(m_webview->get_CanGoForward(&result)) && result;
 }
 
 void Win32WebControl::goBack() const
