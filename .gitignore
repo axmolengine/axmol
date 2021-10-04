@@ -191,3 +191,6 @@ temp/
 **/.cxx
 
 **/SharedLoader.java
+
+# ignore downloaded tools
+tools/external/

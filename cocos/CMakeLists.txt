@@ -161,7 +161,7 @@ if(WINDOWS)
     set_source_files_properties(${COCOS_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
     
     find_program(NUGET_EXE NAMES nuget 
-        PATHS ${ADXE_ROOT_PATH}/tools/nuget)
+        PATHS ${ADXE_ROOT_PATH}/tools/external/nuget)
         
     if(NOT NUGET_EXE)
         message("NUGET.EXE not found.")
