@@ -686,12 +686,14 @@ private:
         ULONG STDMETHODCALLTYPE Release() { return 1; }
         HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, LPVOID* ppv) { return S_OK; }
 
+        // ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler
         HRESULT STDMETHODCALLTYPE Invoke(HRESULT res, ICoreWebView2Environment* env)
         {
             env->CreateCoreWebView2Controller(m_window, this);
             return S_OK;
         }
 
+        // ICoreWebView2CreateCoreWebView2ControllerCompletedHandler
         HRESULT STDMETHODCALLTYPE Invoke(HRESULT res, ICoreWebView2Controller* controller)
         {
             controller->AddRef();
@@ -710,6 +712,7 @@ private:
             return S_OK;
         }
 
+        // ICoreWebView2WebMessageReceivedEventHandler
         HRESULT STDMETHODCALLTYPE Invoke(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args)
         {
             LPWSTR message;
@@ -723,6 +726,7 @@ private:
             return S_OK;
         }
 
+        // ICoreWebView2PermissionRequestedEventHandler
         HRESULT STDMETHODCALLTYPE Invoke(ICoreWebView2* sender, ICoreWebView2PermissionRequestedEventArgs* args)
         {
             COREWEBVIEW2_PERMISSION_KIND kind;
@@ -734,6 +738,7 @@ private:
             return S_OK;
         }
 
+        // ICoreWebView2NavigationStartingEventHandler
         HRESULT STDMETHODCALLTYPE Invoke(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args)
         {
             if (m_navStartingCallback)
@@ -748,6 +753,7 @@ private:
             return S_OK;
         }
 
+        // ICoreWebView2NavigationCompletedEventHandler
         HRESULT STDMETHODCALLTYPE Invoke(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args)
         {
             BOOL success;
@@ -775,17 +781,20 @@ private:
             return S_OK;
         }
 
+        // ICoreWebView2ContentLoadingEventHandler
         HRESULT STDMETHODCALLTYPE Invoke(ICoreWebView2* sender, ICoreWebView2ContentLoadingEventArgs* args)
         {
             return S_OK;
         }
 
+        // ICoreWebView2NewWindowRequestedEventHandler
         HRESULT STDMETHODCALLTYPE Invoke(ICoreWebView2* sender, ICoreWebView2NewWindowRequestedEventArgs* args)
         {
             args->put_Handled(true);
             return S_OK;
         }
 
+        // ICoreWebView2NewWindowRequestedEventHandler
         HRESULT STDMETHODCALLTYPE Invoke(ICoreWebView2* sender, ICoreWebView2NewWindowRequestedEventArgs2* args)
         {
             args->put_Handled(true);
@@ -799,11 +808,12 @@ private:
             return S_OK;
         }
 
+        // ICoreWebView2DOMContentLoadedEventHandler
         HRESULT STDMETHODCALLTYPE Invoke(ICoreWebView2* sender, ICoreWebView2DOMContentLoadedEventArgs* args)
         {
             return S_OK;
         }
-        
+
     private:
         HWND m_window;
         msg_cb_t m_msgCb;
@@ -884,7 +894,7 @@ namespace cocos2d {
                 if (string.empty())
                 {
                     _systemWebControl->loadHTMLString(
-                        "data:text/html," + url_encode("<html><body>Hello1</body></html>"), baseURL);
+                        "data:text/html," + url_encode("<html></html>"), baseURL);
                     return;
                 }
 
@@ -1095,10 +1105,6 @@ bool Win32WebControl::createWebView(
                     DestroyWindow(hwnd);
                     break;
 
-                case WM_DESTROY:
-                    //w->removeWebView();
-                    break;
-
                 case WM_GETMINMAXINFO:
                 {
                     auto lpmmi = (LPMINMAXINFO)lp;
@@ -1256,11 +1262,7 @@ void Win32WebControl::goForward() const
 
 void Win32WebControl::evaluateJS(const std::string &js)
 {
-    //std::string url("javascript:");
-    //url.append(js);
-
     eval(js);
-    //loadURL(url, false);
 }
 
 void Win32WebControl::setScalesPageToFit(const bool scalesPageToFit)
@@ -1300,7 +1302,7 @@ void Win32WebControl::setBackgroundTransparent()
     {
         COREWEBVIEW2_COLOR color;
         viewController2->get_DefaultBackgroundColor(&color);
-        color.A = 0;
+        color.A = 0; // Only supports 0 or 255. Other values not supported
         viewController2->put_DefaultBackgroundColor(color);
     }
 }
