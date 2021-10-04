@@ -791,10 +791,14 @@ if __name__ == '__main__':
         SendMessageTimeoutW(HWND_BROADCAST, WM_SETTINGCHANGE, 0,
                             u'Environment', SMTO_ABORTIFHUNG, 5000, ctypes.byref(result))
 
+    current_absolute_path = os.path.dirname(os.path.realpath(__file__))
+    external_tools_path = os.path.join(current_absolute_path, 'tools', 'external')
+    if not os.path.exists(external_tools_path):
+        os.mkdir(external_tools_path)
+            
     downloader = FileDownloader()
     if env._isWindows():
-        current_absolute_path = os.path.dirname(os.path.realpath(__file__))
-        file_path = os.path.join(current_absolute_path, 'tools', 'nuget', 'nuget.exe')
+        file_path = os.path.join(external_tools_path, 'nuget', 'nuget.exe')
         
         if not os.path.isfile(file_path):
             downloader.download_file_with_retry('https://dist.nuget.org/win-x86-commandline/latest/nuget.exe', file_path, 5, 3)
