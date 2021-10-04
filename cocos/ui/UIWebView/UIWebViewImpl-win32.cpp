@@ -1,8 +1,9 @@
 /****************************************************************************
- Copyright (c) 2014 cocos2d-x.org
- Author: Jeff Wang <wohaaitinciu@gmail.com>
+ MIT License
  
- http://www.cocos2d-x.org
+ Portions copyright (c) 2017 Serge Zaitsev
+ 
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
