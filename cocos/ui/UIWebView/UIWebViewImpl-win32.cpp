@@ -1130,12 +1130,11 @@ bool Win32WebControl::createWebView(
         m_window = CreateWindow(L"webview", L"", WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, hwnd, nullptr,
                                 hInstance, nullptr);
         SetWindowLongPtr(m_window, GWLP_USERDATA, (LONG_PTR)this);
-        SetWindowLongPtr(m_window, GWL_EXSTYLE, WS_EX_LAYERED);
 
         //SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE);
         ShowWindow(m_window, SW_SHOW);
         UpdateWindow(m_window);
-        //SetFocus(m_window);
+        SetFocus(m_window);
 
         auto cb = [this](const std::string msg) { on_message(msg); };
 
