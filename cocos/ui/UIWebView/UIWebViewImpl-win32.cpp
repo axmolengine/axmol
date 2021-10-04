@@ -509,15 +509,13 @@ private:
     POINT m_maxsz       = POINT{0, 0};
     DWORD m_main_thread = GetCurrentThreadId();
 
-    DWORD _cookie;
     std::string m_jsScheme;
+    bool _scalesPageToFit{};
 
     std::function<bool (const std::string &)> _shouldStartLoading;
     std::function<void (const std::string &)> _didFinishLoading;
     std::function<void (const std::string &)> _didFailLoading;
     std::function<void (const std::string &)> _onJsCallback;
-    std::string _htmlWillLoad;
-    bool _scalesPageToFit{};
 
     static bool s_isInitialized;
     static void lazyInit();
@@ -1208,6 +1206,10 @@ void Win32WebControl::loadHTMLString(const std::string &html, const std::string 
 
 void Win32WebControl::loadURL(const std::string &url, bool cleanCachedData)
 {
+    if (cleanCachedData)
+    {
+        m_webview->CallDevToolsProtocolMethod(L"Network.clearBrowserCache", L"{}", nullptr);
+    }
     navigate(url);
 }
 
