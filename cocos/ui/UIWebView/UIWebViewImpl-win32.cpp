@@ -1056,8 +1056,7 @@ void Win32WebControl::lazyInit()
 }
 
 Win32WebControl::Win32WebControl() :
-    _cookie(0)
-    , _shouldStartLoading(nullptr)
+    _shouldStartLoading(nullptr)
     , _didFinishLoading(nullptr)
     , _didFailLoading(nullptr)
 {
