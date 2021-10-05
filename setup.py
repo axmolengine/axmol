@@ -681,7 +681,10 @@ class FileDownloader(object):
         except OSError:
             pass
         print("==> Ready to download '%s' from '%s'" % (filename, url))
-        import urllib2
+        if(sys.version_info.major >= 3):
+            import urllib.request as urllib2
+        else:
+            import urllib2
         try:
             u = urllib2.urlopen(url)
         except urllib2.HTTPError as e:
@@ -691,11 +694,16 @@ class FileDownloader(object):
             sys.exit(1)
 
         f = open(filename, 'wb')
-        meta = u.info()
-        content_len = meta.getheaders("Content-Length")
+        content_len = 0
+        if(sys.version_info.major >= 3):
+            content_len = u.getheader("Content-Length")
+        else:
+            content_len = u.info().getheaders("Content-Length")
+            if content_len and len(content_len) > 0:
+                content_len = content_len[0]
         file_size = 0
-        if content_len and len(content_len) > 0:
-            file_size = int(content_len[0])
+        if content_len:
+            file_size = int(content_len)
         else:
             print("==> WARNING: Couldn't grab the file size from remote")
             return
@@ -739,7 +747,10 @@ class FileDownloader(object):
             os.mkdir(target)
 
     def download_file_with_retry(self, url, filename, times, delay):
-        import urllib2
+        if(sys.version_info.major >= 3):
+            import urllib.request as urllib2
+        else:
+            import urllib2
         
         output_path = dirname(filename)
         downloader.ensure_directory(output_path)
