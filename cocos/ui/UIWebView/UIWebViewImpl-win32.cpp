@@ -51,85 +51,15 @@
 
 #include "platform/CCPlatformConfig.h"
 
+USING_NS_CC;
+
 using msg_cb_t = std::function<void(const std::string)>;
-
-// Convert ASCII hex digit to a nibble (four bits, 0 - 15).
-//
-// Use unsigned to avoid signed overflow UB.
-static inline unsigned char hex2nibble(unsigned char c)
-{
-    if (c >= '0' && c <= '9')
-    {
-        return c - '0';
-    }
-    else if (c >= 'a' && c <= 'f')
-    {
-        return 10 + (c - 'a');
-    }
-    else if (c >= 'A' && c <= 'F')
-    {
-        return 10 + (c - 'A');
-    }
-    return 0;
-}
-
-// Convert ASCII hex string (two characters) to byte.
-//
-// E.g., "0B" => 0x0B, "af" => 0xAF.
-static inline char hex2char(const char* p)
-{
-    return hex2nibble(p[0]) * 16 + hex2nibble(p[1]);
-}
-
-inline std::string url_encode(const std::string s)
-{
-    std::string encoded;
-    for (unsigned int i = 0; i < s.length(); i++)
-    {
-        auto c = s[i];
-        if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~')
-        {
-            encoded = encoded + c;
-        }
-        else
-        {
-            char hex[4];
-            snprintf(hex, sizeof(hex), "%%%02x", c);
-            encoded = encoded + hex;
-        }
-    }
-    return encoded;
-}
-
-inline std::string url_decode(const std::string st)
-{
-    std::string decoded;
-    const char* s = st.c_str();
-    size_t length = strlen(s);
-    for (unsigned int i = 0; i < length; i++)
-    {
-        if (s[i] == '%')
-        {
-            decoded.push_back(hex2char(s + i + 1));
-            i = i + 2;
-        }
-        else if (s[i] == '+')
-        {
-            decoded.push_back(' ');
-        }
-        else
-        {
-            decoded.push_back(s[i]);
-        }
-    }
-    return decoded;
-}
 
 inline std::string html_from_uri(const std::string& s)
 {
     if (s.substr(0, 15) == "data:text/html,")
     {
-        return url_decode(s.substr(15));
+        return utils::urlDecode(s.substr(15));
     }
     return "";
 }
@@ -443,7 +373,7 @@ static std::string GetDataURI(const std::string& data, const std::string& mime_t
 {
     char* encodedData;
     cocos2d::base64Encode(reinterpret_cast<const unsigned char*>(data.data()), static_cast<unsigned>(data.size()), &encodedData);
-    return "data:" + mime_type + ";base64," + url_encode(encodedData);
+    return "data:" + mime_type + ";base64," + utils::urlEncode(encodedData);
 }
 
 static double GetDeviceScaleFactor()
@@ -891,14 +821,14 @@ namespace cocos2d {
                 if (string.empty())
                 {
                     _systemWebControl->loadHTMLString(
-                        "data:text/html," + url_encode("<html></html>"), baseURL);
+                        "data:text/html," + utils::urlEncode("<html></html>"), baseURL);
                     return;
                 }
 
                 const auto html = html_from_uri(string);
                 if (!html.empty())
                 {
-                    _systemWebControl->loadHTMLString("data:text/html," + url_encode(html), baseURL);
+                    _systemWebControl->loadHTMLString("data:text/html," + utils::urlEncode(html), baseURL);
                 }
                 else
                 {
