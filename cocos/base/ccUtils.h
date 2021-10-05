@@ -404,10 +404,13 @@ namespace utils
     inline std::string urlDecode(const std::string& st)
     {
         std::string decoded;
-        const char* s = st.c_str();
-        size_t length = strlen(s);
-        for (unsigned int i = 0; i < length; i++)
+        const char* s       = st.c_str();
+        const size_t length = st.length();
+        for (unsigned int i = 0; i < length; ++i)
         {
+            if (!s[i])
+                break;
+
             if (s[i] == '%')
             {
                 decoded.push_back(hex2char(s + i + 1));
