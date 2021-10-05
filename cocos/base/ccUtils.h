@@ -353,6 +353,80 @@ namespace utils
     {
         return ((number > 0) && (number & (number - 1)) == 0);
     }
+
+    // Convert ASCII hex digit to a nibble (four bits, 0 - 15).
+    //
+    // Use unsigned to avoid signed overflow UB.
+    inline unsigned char hex2nibble(unsigned char c)
+    {
+        if (c >= '0' && c <= '9')
+        {
+            return c - '0';
+        }
+        else if (c >= 'a' && c <= 'f')
+        {
+            return 10 + (c - 'a');
+        }
+        else if (c >= 'A' && c <= 'F')
+        {
+            return 10 + (c - 'A');
+        }
+        return 0;
+    }
+
+    // Convert ASCII hex string (two characters) to byte.
+    //
+    // E.g., "0B" => 0x0B, "af" => 0xAF.
+    inline char hex2char(const char* p)
+    {
+        return hex2nibble(p[0]) * 16 + hex2nibble(p[1]);
+    }
+
+    inline std::string urlEncode(const std::string& s)
+    {
+        std::string encoded;
+        for (const char c : s)
+        {
+            if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~')
+            {
+                encoded = encoded + c;
+            }
+            else
+            {
+                char hex[4];
+                snprintf(hex, sizeof(hex), "%%%02x", c);
+                encoded = encoded + hex;
+            }
+        }
+        return encoded;
+    }
+
+    inline std::string urlDecode(const std::string& st)
+    {
+        std::string decoded;
+        const char* s       = st.c_str();
+        const size_t length = st.length();
+        for (unsigned int i = 0; i < length; ++i)
+        {
+            if (!s[i])
+                break;
+
+            if (s[i] == '%')
+            {
+                decoded.push_back(hex2char(s + i + 1));
+                i = i + 2;
+            }
+            else if (s[i] == '+')
+            {
+                decoded.push_back(' ');
+            }
+            else
+            {
+                decoded.push_back(s[i]);
+            }
+        }
+        return decoded;
+    }
 }
 
 NS_CC_END

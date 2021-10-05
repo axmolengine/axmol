@@ -159,6 +159,18 @@ if(WINDOWS)
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
     # compile c as c++. needed for precompiled header
     set_source_files_properties(${COCOS_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
+    
+    find_program(NUGET_EXE NAMES nuget 
+        PATHS ${ADXE_ROOT_PATH}/tools/external/nuget)
+        
+    if(NOT NUGET_EXE)
+        message("NUGET.EXE not found.")
+        message(FATAL_ERROR "Please run setup.py again to download NUGET.EXE, and run CMake again.")
+    endif()
+ 
+    exec_program(${NUGET_EXE}
+        ARGS install "Microsoft.Web.WebView2" -Version 1.0.992.28 -ExcludeVersion -OutputDirectory ${CMAKE_BINARY_DIR}/packages)
+    target_link_libraries(${ADXE_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)    
 endif()
 
 # engine extensions
