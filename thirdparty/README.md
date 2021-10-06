@@ -127,7 +127,7 @@
 
 ## minimp3
 - Upstream: https://github.com/lieff/minimp3
-- Version: git 0757ad7(308)
+- Version: git ca7c706(316)
 - License: CC0-1.0
 
 ## mio
