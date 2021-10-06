@@ -1,5 +1,6 @@
 adxe-1.0  ??
 
+[HIGHLIGHT] Implement Windows WebView using WebView2 Edge Chromium, thanks to @rh101
 [HIGHLIGHT] Windows x64 build support
 [HIGHLIGHT] Support custom texture atlas formats, thanks to @rh101
 [HIGHLIGHT] Downloader realtime md5 checksum calculation support
