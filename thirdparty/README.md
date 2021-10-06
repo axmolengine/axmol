@@ -203,7 +203,7 @@
 
 ## webp
 - Upstream: https://github.com/webmproject/libwebp
-- Version: git 1.1.0-17fd4ba (4098)
+- Version: 1.2.1
 - License: Google Inc
 
 ## xsbase
