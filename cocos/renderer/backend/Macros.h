@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -30,29 +31,5 @@
 #define MAX_COLOR_ATTCHMENT 4
 
 #define MAX_INFLIGHT_BUFFER 3
-
-// compatibility with non-clang compilers...
-#ifndef __has_attribute
-#define __has_attribute(x) 0
-#endif
-#ifndef __has_builtin
-#define __has_builtin(x) 0
-#endif
-
- /*
-  * helps the compiler's optimizer predicting branches
-  */
-#if __has_builtin(__builtin_expect)
-#   ifdef __cplusplus
-#      define UTILS_LIKELY( exp )    (__builtin_expect( !!(exp), true ))
-#      define UTILS_UNLIKELY( exp )  (__builtin_expect( !!(exp), false ))
-#   else
-#      define UTILS_LIKELY( exp )    (__builtin_expect( !!(exp), 1 ))
-#      define UTILS_UNLIKELY( exp )  (__builtin_expect( !!(exp), 0 ))
-#   endif
-#else
-#   define UTILS_LIKELY( exp )    (!!(exp))
-#   define UTILS_UNLIKELY( exp )  (!!(exp))
-#endif
 
 #define CC_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
