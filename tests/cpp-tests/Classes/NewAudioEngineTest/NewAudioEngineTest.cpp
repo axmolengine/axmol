@@ -236,7 +236,7 @@ bool AudioControlTest::init()
     _playOverLabel->setPosition(Vec2(layerSize/2) + Vec2(0, 30));
     _playOverLabel->setVisible(false);
     addChild(_playOverLabel, 99999);
-    
+
     auto playItem = TextButton::create("play", [&](TextButton* button){
         if (_audioID == AudioEngine::INVALID_AUDIO_ID) {
             _audioID = AudioEngine::play2d("background.mp3", _loopEnabled, _volume);
@@ -903,23 +903,20 @@ std::string AudioPerformanceTest::subtitle() const
 
 /////////////////////////////////////////////////////////////////////////
 
-bool AudioSwitchStateTest::init()
+void AudioSwitchStateTest::onEnter()
 {
-    if (AudioEngineTestDemo::init())
-    {
-        schedule([](float dt){
-            
-            AudioEngine::uncacheAll();
-            AudioEngine::preload("audio/SoundEffectsFX009/FX081.mp3");
-            AudioEngine::play2d("audio/SoundEffectsFX009/FX082.mp3");
-            AudioEngine::play2d("audio/LuckyDay.mp3");
-            
-        }, 0.01f, "AudioSwitchStateTest");
-        
-        return true;
-    }
-    
-    return false;
+    AudioEngineTestDemo::onEnter();
+
+    //
+    // !!!Notes:
+    // a. No special reason, but we must play the tests audio at onEnter for this test suite only.
+    // b. The latst audio test scene will stop all audio players,
+    //   so if play any sound at init funciton, you can't herer
+    // c. Please refer to AudioEngineTestDemo::onExit
+    // 
+    AudioEngine::preload("audio/SoundEffectsFX009/FX081.mp3");
+    AudioEngine::play2d("audio/SoundEffectsFX009/FX082.mp3");
+    AudioEngine::play2d("audio/LuckyDay.mp3");
 }
 
 std::string AudioSwitchStateTest::title() const
@@ -934,15 +931,18 @@ std::string AudioSwitchStateTest::subtitle() const
 
 /////////////////////////////////////////////////////////////////////////
 
-bool AudioSmallFileTest::init()
+void AudioSmallFileTest::onEnter() 
 {
-    if (AudioEngineTestDemo::init())
-    {
-        AudioEngine::play2d("audio/SmallFile.mp3");
-        return true;
-    }
-    
-    return false;
+    AudioEngineTestDemo::onEnter();
+
+    //
+    // !!!Notes:
+    // a. No special reason, but we must play the tests audio at onEnter for this test suite only.
+    // b. The latst audio test scene will stop all audio players,
+    //   so if play any sound at init funciton, you can't hear it
+    // c. Please refer to AudioEngineTestDemo::onExit
+    // 
+    AudioEngine::play2d("audio/SmallFile.mp3");
 }
 
 std::string AudioSmallFileTest::title() const
@@ -960,9 +960,14 @@ void AudioSmallFile2Test::onEnter()
 {
     AudioEngineTestDemo::onEnter();
 
-    schedule([](float dt){
-        AudioEngine::play2d("audio/SmallFile2.mp3");
-    }, 0.08f, "smallfile2");
+    //
+    // !!!Notes:
+    // a. No special reason, but we must play the tests audio at onEnter for this test suite only.
+    // b. The latst audio test scene will stop all audio players,
+    //   so if play any sound at init funciton, you can't hear it
+    // c. Please refer to AudioEngineTestDemo::onExit
+    // 
+    AudioEngine::play2d("audio/SmallFile2.mp3");
 }
 
 std::string AudioSmallFile2Test::title() const
@@ -980,9 +985,14 @@ void AudioSmallFile3Test::onEnter()
 {
     AudioEngineTestDemo::onEnter();
 
-    schedule([](float dt){
-        AudioEngine::play2d("audio/SmallFile3.mp3");
-    }, 0.5f, "smallfile3");
+    //
+    // !!!Notes:
+    // a. No special reason, but we must play the tests audio at onEnter for this test suite only.
+    // b. The latst audio test scene will stop all audio players,
+    //   so if play any sound at init funciton, you can't hear it
+    // c. Please refer to AudioEngineTestDemo::onExit
+    // 
+    AudioEngine::play2d("audio/SmallFile3.mp3");
 }
 
 std::string AudioSmallFile3Test::title() const
