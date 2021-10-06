@@ -33,6 +33,9 @@
 #include "platform/CCGLView.h"
 #include "base/base64.h"
 #include "ui/UIHelper.h"
+#include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <Shlwapi.h>
@@ -52,10 +55,11 @@
 #include "platform/CCPlatformConfig.h"
 
 USING_NS_CC;
+using namespace rapidjson;
 
 using msg_cb_t = std::function<void(const std::string)>;
 
-inline std::string html_from_uri(const std::string& s)
+inline std::string htmlFromUri(const std::string& s)
 {
     if (s.substr(0, 15) == "data:text/html,")
     {
@@ -64,202 +68,7 @@ inline std::string html_from_uri(const std::string& s)
     return "";
 }
 
-inline int json_parse_c(const char* s, size_t sz, const char* key, size_t keysz, const char** value, size_t* valuesz)
-{
-    enum
-    {
-        JSON_STATE_VALUE,
-        JSON_STATE_LITERAL,
-        JSON_STATE_STRING,
-        JSON_STATE_ESCAPE,
-        JSON_STATE_UTF8
-    } state = JSON_STATE_VALUE;
-    const char* k  = NULL;
-    int index      = 1;
-    int depth      = 0;
-    int utf8_bytes = 0;
-
-    if (key == NULL)
-    {
-        index = keysz;
-        keysz = 0;
-    }
-
-    *value   = NULL;
-    *valuesz = 0;
-
-    for (; sz > 0; s++, sz--)
-    {
-        enum
-        {
-            JSON_ACTION_NONE,
-            JSON_ACTION_START,
-            JSON_ACTION_END,
-            JSON_ACTION_START_STRUCT,
-            JSON_ACTION_END_STRUCT
-        } action        = JSON_ACTION_NONE;
-        unsigned char c = *s;
-        switch (state)
-        {
-            case JSON_STATE_VALUE:
-                if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == ',' || c == ':')
-                {
-                    continue;
-                }
-                else if (c == '"')
-                {
-                    action = JSON_ACTION_START;
-                    state  = JSON_STATE_STRING;
-                }
-                else if (c == '{' || c == '[')
-                {
-                    action = JSON_ACTION_START_STRUCT;
-                }
-                else if (c == '}' || c == ']')
-                {
-                    action = JSON_ACTION_END_STRUCT;
-                }
-                else if (c == 't' || c == 'f' || c == 'n' || c == '-' || (c >= '0' && c <= '9'))
-                {
-                    action = JSON_ACTION_START;
-                    state  = JSON_STATE_LITERAL;
-                }
-                else
-                {
-                    return -1;
-                }
-                break;
-            case JSON_STATE_LITERAL:
-                if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == ',' || c == ']' || c == '}' || c == ':')
-                {
-                    state = JSON_STATE_VALUE;
-                    s--;
-                    sz++;
-                    action = JSON_ACTION_END;
-                }
-                else if (c < 32 || c > 126)
-                {
-                    return -1;
-                }  // fallthrough
-            case JSON_STATE_STRING:
-                if (c < 32 || (c > 126 && c < 192))
-                {
-                    return -1;
-                }
-                else if (c == '"')
-                {
-                    action = JSON_ACTION_END;
-                    state  = JSON_STATE_VALUE;
-                }
-                else if (c == '\\')
-                {
-                    state = JSON_STATE_ESCAPE;
-                }
-                else if (c >= 192 && c < 224)
-                {
-                    utf8_bytes = 1;
-                    state      = JSON_STATE_UTF8;
-                }
-                else if (c >= 224 && c < 240)
-                {
-                    utf8_bytes = 2;
-                    state      = JSON_STATE_UTF8;
-                }
-                else if (c >= 240 && c < 247)
-                {
-                    utf8_bytes = 3;
-                    state      = JSON_STATE_UTF8;
-                }
-                else if (c >= 128 && c < 192)
-                {
-                    return -1;
-                }
-                break;
-            case JSON_STATE_ESCAPE:
-                if (c == '"' || c == '\\' || c == '/' || c == 'b' || c == 'f' || c == 'n' || c == 'r' || c == 't' ||
-                    c == 'u')
-                {
-                    state = JSON_STATE_STRING;
-                }
-                else
-                {
-                    return -1;
-                }
-                break;
-            case JSON_STATE_UTF8:
-                if (c < 128 || c > 191)
-                {
-                    return -1;
-                }
-                utf8_bytes--;
-                if (utf8_bytes == 0)
-                {
-                    state = JSON_STATE_STRING;
-                }
-                break;
-            default:
-                return -1;
-        }
-
-        if (action == JSON_ACTION_END_STRUCT)
-        {
-            depth--;
-        }
-
-        if (depth == 1)
-        {
-            if (action == JSON_ACTION_START || action == JSON_ACTION_START_STRUCT)
-            {
-                if (index == 0)
-                {
-                    *value = s;
-                }
-                else if (keysz > 0 && index == 1)
-                {
-                    k = s;
-                }
-                else
-                {
-                    index--;
-                }
-            }
-            else if (action == JSON_ACTION_END || action == JSON_ACTION_END_STRUCT)
-            {
-                if (*value != NULL && index == 0)
-                {
-                    *valuesz = (size_t)(s + 1 - *value);
-                    return 0;
-                }
-                else if (keysz > 0 && k != NULL)
-                {
-                    if (keysz == (size_t)(s - k - 1) && memcmp(key, k + 1, keysz) == 0)
-                    {
-                        index = 0;
-                    }
-                    else
-                    {
-                        index = 2;
-                    }
-                    k = NULL;
-                }
-            }
-        }
-
-        if (action == JSON_ACTION_START_STRUCT)
-        {
-            depth++;
-        }
-    }
-    return -1;
-}
-
-inline std::string json_escape(std::string s)
-{
-    // TODO: implement
-    return '"' + s + '"';
-}
-
-inline int json_unescape(const char* s, size_t n, char* out)
+inline int jsonUnescape(const char* s, size_t n, char* out)
 {
     int r = 0;
     if (*s++ != '"')
@@ -322,32 +131,69 @@ inline int json_unescape(const char* s, size_t n, char* out)
     return r;
 }
 
-inline std::string json_parse(const std::string s, const std::string key, const int index)
+
+// These are the results that must be returned by this method
+// assert(jsonParse(R"({"foo":"bar"})", "foo", -1) == "bar");
+// assert(jsonParse(R"({"foo":""})", "foo", -1) == "");
+// assert(jsonParse(R"(["foo", "bar", "baz"])", "", 0) == "foo");
+// assert(jsonParse(R"(["foo", "bar", "baz"])", "", 2) == "baz");
+// The following is a special case, where the exact json string is not returned due
+// to how rapidjson re-creates the nested object, original: "{"bar": 1}", parsed result: "{"bar":1}"
+// assert(jsonParse(R"({"foo": {"bar": 1}})", "foo", -1) == R"({"bar":1})");
+inline std::string jsonParse(const std::string& s, const std::string& key, const int index)
 {
-    const char* value;
-    size_t value_sz;
-    if (key.empty())
+    const char* value = nullptr;
+    size_t value_sz{};
+    StringBuffer sb;
+    Writer<StringBuffer> writer(sb);
+    Document d;
+    d.Parse(s.c_str());
+    if (key.empty() && index > -1)
     {
-        json_parse_c(s.c_str(), s.length(), nullptr, index, &value, &value_sz);
+        if (d.IsArray())
+        {
+            auto&& jsonArray = d.GetArray();
+            if (SizeType(index) < jsonArray.Size())
+            {
+                auto&& arrayValue = jsonArray[SizeType(index)];
+                value             = arrayValue.GetString();
+                value_sz          = arrayValue.GetStringLength();
+            }
+        }
     }
     else
     {
-        json_parse_c(s.c_str(), s.length(), key.c_str(), key.length(), &value, &value_sz);
+        auto&& fieldItr = d.FindMember(key.c_str());
+        if (fieldItr != d.MemberEnd())
+        {
+            auto&& jsonValue = fieldItr->value;
+            if (jsonValue.IsString())
+            {
+                value    = jsonValue.GetString();
+                value_sz = jsonValue.GetStringLength();
+            }
+            else
+            {
+                jsonValue.Accept(writer);
+                value    = sb.GetString();
+                value_sz = sb.GetLength();
+            }
+        }
     }
+
     if (value != nullptr)
     {
         if (value[0] != '"')
         {
             return std::string(value, value_sz);
         }
-        int n = json_unescape(value, value_sz, nullptr);
+
+        const auto n = jsonUnescape(value, value_sz, nullptr);
         if (n > 0)
         {
-            char* decoded = new char[n + 1];
-            json_unescape(value, value_sz, decoded);
-            std::string result(decoded, n);
-            delete[] decoded;
-            return result;
+            const auto decoded = std::unique_ptr<char[]>(new char[n + 1]);
+            jsonUnescape(value, value_sz, decoded.get());
+            return std::string(decoded.get(), n);
         }
     }
     return "";
@@ -369,14 +215,14 @@ static std::string getUriStringFromArgs(ArgType* args)
     return {};
 }
 
-static std::string GetDataURI(const std::string& data, const std::string& mime_type)
+static std::string getDataURI(const std::string& data, const std::string& mime_type)
 {
     char* encodedData;
     cocos2d::base64Encode(reinterpret_cast<const unsigned char*>(data.data()), static_cast<unsigned>(data.size()), &encodedData);
     return "data:" + mime_type + ";base64," + utils::urlEncode(encodedData);
 }
 
-static double GetDeviceScaleFactor()
+static double getDeviceScaleFactor()
 {
     static double scale_factor = 1.0;
     static bool initialized    = false;
@@ -566,9 +412,9 @@ private:
     
     void on_message(const std::string msg)
     {
-        const auto seq  = json_parse(msg, "id", 0);
-        const auto name = json_parse(msg, "method", 0);
-        const auto args = json_parse(msg, "params", 0);
+        const auto seq  = jsonParse(msg, "id", 0);
+        const auto name = jsonParse(msg, "method", 0);
+        const auto args = jsonParse(msg, "params", 0);
         if (bindings.find(name) == bindings.end())
         {
             return;
@@ -809,7 +655,7 @@ namespace cocos2d {
             if (_createSucceeded)
             {
                 const std::string dataString(reinterpret_cast<char*>(data.getBytes()), static_cast<unsigned int>(data.getSize()));
-                const auto url = GetDataURI(dataString, MIMEType);
+                const auto url = getDataURI(dataString, MIMEType);
                 _systemWebControl->loadURL(url, false);
             }
         }
@@ -825,7 +671,7 @@ namespace cocos2d {
                     return;
                 }
 
-                const auto html = html_from_uri(string);
+                const auto html = htmlFromUri(string);
                 if (!html.empty())
                 {
                     _systemWebControl->loadHTMLString("data:text/html," + utils::urlEncode(html), baseURL);
@@ -1112,7 +958,7 @@ void Win32WebControl::setWebViewRect(const int left, const int top, const int wi
     AdjustWindowRect(&r, WS_CHILD | WS_VISIBLE, 0);
     SetWindowPos(m_window, nullptr, left, top, width, height, SWP_NOZORDER);
 
-    m_controller->put_ZoomFactor(_scalesPageToFit ? GetDeviceScaleFactor() : 1.0);
+    m_controller->put_ZoomFactor(_scalesPageToFit ? getDeviceScaleFactor() : 1.0);
 }
 
 void Win32WebControl::setJavascriptInterfaceScheme(const std::string &scheme)
@@ -1196,7 +1042,7 @@ void Win32WebControl::evaluateJS(const std::string &js)
 void Win32WebControl::setScalesPageToFit(const bool scalesPageToFit)
 {
     _scalesPageToFit = scalesPageToFit;
-    m_controller->put_ZoomFactor(_scalesPageToFit ? GetDeviceScaleFactor() : 1.0);
+    m_controller->put_ZoomFactor(_scalesPageToFit ? getDeviceScaleFactor() : 1.0);
 }
 
 void Win32WebControl::setWebViewVisible(const bool visible) const
