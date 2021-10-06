@@ -2,8 +2,9 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2018-2020 HALX99.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -239,7 +240,7 @@ ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notifi
 #endif
 
 AudioEngineImpl::AudioEngineImpl()
-: _lazyInitLoop(true)
+: _scheduled(false)
 , _currentAudioID(0)
 , _scheduler(nullptr)
 {
@@ -248,7 +249,7 @@ AudioEngineImpl::AudioEngineImpl()
 
 AudioEngineImpl::~AudioEngineImpl()
 {
-    if (_scheduler != nullptr)
+    if (_scheduled && _scheduler != nullptr)
     {
         _scheduler->unschedule(CC_SCHEDULE_SELECTOR(AudioEngineImpl::update), this);
     }
@@ -443,8 +444,9 @@ AUDIO_ID AudioEngineImpl::play2d(const std::string &filePath ,bool loop ,float v
 
     audioCache->addPlayCallback(std::bind(&AudioEngineImpl::_play2d,this,audioCache,_currentAudioID));
 
-    if (_lazyInitLoop) {
-        _lazyInitLoop = false;
+    if (!_scheduled)
+    {
+        _scheduled = true;
         _scheduler->schedule(CC_SCHEDULE_SELECTOR(AudioEngineImpl::update), this, 0.05f, false);
     }
 
@@ -597,11 +599,10 @@ void AudioEngineImpl::stop(AUDIO_ID audioID)
         return;
     
     auto player = iter->second;
-
     player->destroy();
 
-    // Call 'update' method to cleanup immediately since the schedule may be cancelled without any notification.
-    _updateLocked(0.0f);
+    // Call '_updatePlayersState' method to cleanup immediately since the schedule may be cancelled without any notification.
+    _updatePlayers(true);
 }
 
 void AudioEngineImpl::stopAll()
@@ -618,8 +619,8 @@ void AudioEngineImpl::stopAll()
 //        _alSourceUsed[_alSources[index]] = false;
 //    }
 
-    // Call 'update' method to cleanup immediately since the schedule may be cancelled without any notification.
-    _updateLocked(0.0f);
+    // Call '_updatePlayers' method to cleanup immediately since the schedule may be cancelled without any notification.
+    _updatePlayers(true);
 }
 
 float AudioEngineImpl::getDuration(AUDIO_ID audioID)
@@ -713,13 +714,13 @@ void AudioEngineImpl::setFinishCallback(AUDIO_ID audioID, const std::function<vo
     player->_finishCallbak = callback;
 }
 
-void AudioEngineImpl::update(float dt)
+void AudioEngineImpl::update(float /*dt*/)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
-    _updateLocked(dt);
+    _updatePlayers(false);
 }
 
-void AudioEngineImpl::_updateLocked(float dt)
+void AudioEngineImpl::_updatePlayers(bool forStop)
 {
     AUDIO_ID audioID;
     AudioPlayer* player;
@@ -755,7 +756,7 @@ void AudioEngineImpl::_updateLocked(float dt)
                 /// ###IMPORTANT: don't call immidiately, because at callback, user-end may play a new audio
                 /// cause _audioPlayers' iterator goan to invalid.
                 _finishCallbacks.push_back([finishCallback = std::move(player->_finishCallbak), audioID, filePath = std::move(filePath)](){
-                    finishCallback(audioID, filePath); // FIXME: callback will delay 50ms
+                    finishCallback(audioID, filePath);
                 });
             }
             // clear cache when audio player finsihed properly
@@ -768,14 +769,28 @@ void AudioEngineImpl::_updateLocked(float dt)
         }
     }
 
-    if(_audioPlayers.empty()) {
-        _lazyInitLoop = true;
-        _scheduler->unschedule(CC_SCHEDULE_SELECTOR(AudioEngineImpl::update), this);
+    // don't invoke finish callback when stop/stopAll to avoid stack overflow
+    if (UTILS_LIKELY(!forStop))
+    {
+        if (!_finishCallbacks.empty())
+        {
+            for (auto& finishCallback : _finishCallbacks)
+                finishCallback();
+            _finishCallbacks.clear();
+        }
+
+        if (_audioPlayers.empty())
+            _unscheduleUpdate();
     }
-    if (!_finishCallbacks.empty()) {
-        for (auto& finishCallback : _finishCallbacks)
-            finishCallback();
-        _finishCallbacks.clear();
+    else if (!_audioPlayers.empty() && !_finishCallbacks.empty())
+        _unscheduleUpdate();
+}
+
+void AudioEngineImpl::_unscheduleUpdate() {
+    if (_scheduled)
+    {
+        _scheduled = false;
+        _scheduler->unschedule(CC_SCHEDULE_SELECTOR(AudioEngineImpl::update), this);
     }
 }
 

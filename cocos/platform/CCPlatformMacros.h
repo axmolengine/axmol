@@ -2,8 +2,9 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2017 Chukong Technologies
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
+Copyright (c) 2021 Bytedance Inc.
+
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -326,6 +327,31 @@ private: varType varName; public: virtual inline varType get##funName() const { 
     #else
         #define CC_REQUIRES_NULL_TERMINATION
     #endif
+#endif
+
+
+// compatibility with non-clang compilers...
+#ifndef __has_attribute
+#    define __has_attribute(x) 0
+#endif
+#ifndef __has_builtin
+#    define __has_builtin(x) 0
+#endif
+
+/*
+ * helps the compiler's optimizer predicting branches
+ */
+#if __has_builtin(__builtin_expect)
+#    ifdef __cplusplus
+#        define UTILS_LIKELY(exp) (__builtin_expect(!!(exp), true))
+#        define UTILS_UNLIKELY(exp) (__builtin_expect(!!(exp), false))
+#    else
+#        define UTILS_LIKELY(exp) (__builtin_expect(!!(exp), 1))
+#        define UTILS_UNLIKELY(exp) (__builtin_expect(!!(exp), 0))
+#    endif
+#else
+#    define UTILS_LIKELY(exp) (!!(exp))
+#    define UTILS_UNLIKELY(exp) (!!(exp))
 #endif
 
 #endif // __CC_PLATFORM_MACROS_H__
