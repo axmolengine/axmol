@@ -11,7 +11,14 @@ include(../../cmake/CocosExternalConfig.cmake)
 aux_source_directory(${LUA_SRC_PATH} LUA_CORE)
 list(REMOVE_ITEM LUA_CORE ${LUA_SRC_PATH}/lua.c ${LUA_SRC_PATH}/luac.c)
 
-add_library(${target_name} ${LUA_CORE})
+set(LUA_BUILD_AS_DLL ${BUILD_SHARED_LIBS})
+
+if(WIN32)
+    set(LUA_BUILD_AS_DLL TRUE)
+    add_library(${target_name} SHARED ${LUA_CORE})
+else()
+    add_library(${target_name} ${LUA_CORE})
+endif()
 
 target_compile_definitions(${target_name} 
     PRIVATE _CRT_SECURE_NO_WARNINGS 
@@ -33,7 +40,7 @@ elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.2.0")
     )
 endif()
 
-if(BUILD_SHARED_LIBS)
+if(LUA_BUILD_AS_DLL)
     target_compile_definitions(${target_name} PUBLIC LUA_BUILD_AS_DLL=1)
 endif()
 
