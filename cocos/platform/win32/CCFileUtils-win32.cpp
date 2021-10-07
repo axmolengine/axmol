@@ -2,8 +2,9 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+ https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +45,8 @@ NS_CC_BEGIN
 
 // The root path of resources, the character encoding is UTF-8.
 // UTF-8 is the only encoding supported by adxe API by default.
-static std::string s_resourcePath = "";
+static std::string s_workingPath = "";
+static std::string s_exePath = "";
 
 // D:\aaa\bbb\ccc\ddd\abc.txt --> D:/aaa/bbb/ccc/ddd/abc.txt
 static std::string convertPathFormatToUnixStyle(const std::string& path)
@@ -61,20 +63,39 @@ static std::string convertPathFormatToUnixStyle(const std::string& path)
     return ret;
 }
 
-static void _checkPath()
+static void _checkWorkingPath()
 {
-    if (s_resourcePath.empty())
+    if (s_workingPath.empty())
     {
-        WCHAR utf16Path[CC_MAX_PATH] = { 0 };
+        WCHAR utf16Path[CC_MAX_PATH] = {0};
+        int nNum                     = GetCurrentDirectoryW(CC_MAX_PATH - 2, utf16Path);
+
+        char utf8WorkingDir[CC_MAX_PATH] = {0};
+        nNum =
+            WideCharToMultiByte(CP_UTF8, 0, utf16Path, nNum, utf8WorkingDir, sizeof(utf8WorkingDir), nullptr, nullptr);
+        if (nNum < (CC_MAX_PATH - 2))
+        {
+            utf8WorkingDir[nNum]     = '\\';
+            utf8WorkingDir[nNum + 1] = '\0';
+            s_workingPath            = convertPathFormatToUnixStyle(utf8WorkingDir);
+        }
+    }
+}
+
+static void _checkExePath()
+{
+    if (s_exePath.empty())
+    {
+        WCHAR utf16Path[CC_MAX_PATH] = {0};
         GetModuleFileNameW(NULL, utf16Path, CC_MAX_PATH - 1);
-        WCHAR *pUtf16ExePath = &(utf16Path[0]);
+        WCHAR* pUtf16ExePath = &(utf16Path[0]);
 
         // We need only directory part without exe
-        WCHAR *pUtf16DirEnd = wcsrchr(pUtf16ExePath, L'\\');
+        WCHAR* pUtf16DirEnd = wcsrchr(pUtf16ExePath, L'\\');
 
         auto utf8ExeDir = ntcvt::wcbs2a<std::string>(pUtf16ExePath, pUtf16DirEnd - pUtf16ExePath + 1);
 
-        s_resourcePath = convertPathFormatToUnixStyle(utf8ExeDir);
+        s_exePath = convertPathFormatToUnixStyle(utf8ExeDir);
     }
 }
 
@@ -100,9 +121,18 @@ FileUtilsWin32::FileUtilsWin32()
 bool FileUtilsWin32::init()
 {
     DECLARE_GUARD;
-    _checkPath();
-    _defaultResRootPath = s_resourcePath + "Resources/";
-    return FileUtils::init();
+
+    _checkWorkingPath();
+    _defaultResRootPath = s_workingPath;
+
+    bool bRet = FileUtils::init();
+
+    _checkExePath();
+
+    if (s_workingPath != s_exePath)
+        addSearchPath(s_exePath);
+
+    return bRet;
 }
 
 bool FileUtilsWin32::isDirectoryExistInternal(const std::string& dirPath) const

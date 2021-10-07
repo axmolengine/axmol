@@ -215,6 +215,7 @@ function(cocos_copy_target_dll cocos_target)
     add_custom_command(TARGET ${cocos_target} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/OpenAL32.dll"
+        "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/plainlua.dll"
          $<TARGET_FILE_DIR:${cocos_target}>)
 
     # Copy windows angle binaries
