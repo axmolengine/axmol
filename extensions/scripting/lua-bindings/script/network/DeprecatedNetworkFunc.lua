@@ -1,3 +1,5 @@
+local unpack = table.unpack
+
 if nil == cc.XMLHttpRequest then
     return
 end

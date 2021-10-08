@@ -23,6 +23,7 @@ THE SOFTWARE.
 ]]
 
 -- Cocos2d-Lua core functions
+local unpack = table.unpack
 cc.loaded_packages = {}
 local loaded_packages = cc.loaded_packages
 
