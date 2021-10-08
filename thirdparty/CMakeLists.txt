@@ -54,7 +54,7 @@ endif()
 
 if(LUA_ENGINE STREQUAL "plainlua")
     if(NOT DEFINED LUA_VERSION)
-        set(LUA_VERSION "5.3.6" CACHE INTERNAL "The plainlua version")
+        set(LUA_VERSION "5.4.3" CACHE INTERNAL "The plainlua version")
     endif()
     message(STATUS "Using plainlua: ${LUA_VERSION}")
 elseif(LUA_ENGINE STREQUAL "luajit")

@@ -22,6 +22,7 @@ THE SOFTWARE.
 
 ]]
 
+local unpack = table.unpack
 local transition = {}
 
 local ACTION_EASING = {}

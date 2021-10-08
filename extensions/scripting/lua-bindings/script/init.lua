@@ -22,11 +22,16 @@ THE SOFTWARE.
 
 ]]
 
--- lua-5.4
+-- >= lua-5.4
 if (math.pow == nil) then
     math.pow = function (x,y)
         return x ^ y
     end
+end
+
+-- < lua-5.4
+if (unpack) then
+    table.unpack = unpack
 end
 
 require "cocos.cocos2d.Cocos2d"

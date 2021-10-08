@@ -97,7 +97,7 @@
 ## lua
 - plainlua
   - Upstream: http://www.lua.org/
-  - Version: 5.3.6 with modified for bytecode 32/64bit compatible
+  - Version: 5.4.3
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
