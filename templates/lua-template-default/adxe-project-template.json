@@ -52,6 +52,7 @@
         "project_rename": {
             "src_project_name": "HelloLua",
             "files": [
+                "PROJECT_NAME.xsxproj"
             ]
         },
         "project_replace_project_name": {
