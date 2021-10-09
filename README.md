@@ -113,6 +113,10 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
      - **The code sign required to run ios app on device, just change bundle identifier until the auto manage signing solved**  
      - **adxe only provide armv7, arm64, x86_64 prebuilt libraries for ios**
 
+### New Project
+- Cpp: `adxe new -p hellocpp.adxe.org -d D:\dev\projects\ -l cpp --portrait HelloCpp`
+- Lua: `adxe new -p hellolua.adxe.org -d D:\dev\projects\ -l lua --portrait HelloLua`
+
 ### Notes
   * ThreadLocalStorage (TLS) 
     - ios x86 simulator ios>=10 and adxe no longer provide x86 libraries
