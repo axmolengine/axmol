@@ -66,15 +66,6 @@ THE SOFTWARE.
 #include "base/CCScriptSupport.h"
 #endif
 
-/**
- Position of the FPS
- 
- Default: 0,0 (bottom-left corner)
- */
-#ifndef CC_DIRECTOR_STATS_POSITION
-#define CC_DIRECTOR_STATS_POSITION Director::getInstance()->getVisibleOrigin()
-#endif // CC_DIRECTOR_STATS_POSITION
-
 using namespace std;
 
 NS_CC_BEGIN
@@ -1294,10 +1285,13 @@ void Director::createStatsLabel()
 
     Texture2D::setDefaultAlphaPixelFormat(currentFormat);
 
+    auto safeOrigin = getSafeAreaRect().origin;
     const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());
-    _drawnVerticesLabel->setPosition(Vec2(0, height_spacing*2.0f) + CC_DIRECTOR_STATS_POSITION);
-    _drawnBatchesLabel->setPosition(Vec2(0, height_spacing*1.0f) + CC_DIRECTOR_STATS_POSITION);
-    _FPSLabel->setPosition(Vec2(0, height_spacing*0.0f)+CC_DIRECTOR_STATS_POSITION);
+    _drawnVerticesLabel->setPosition(Vec2(0, height_spacing * 2.0f) +
+                                             safeOrigin);
+    _drawnBatchesLabel->setPosition(Vec2(0, height_spacing * 1.0f) +
+                                            safeOrigin);
+    _FPSLabel->setPosition(Vec2(0, height_spacing * 0.0f) + safeOrigin);
 }
 
 #endif // #if !CC_STRIP_FPS
