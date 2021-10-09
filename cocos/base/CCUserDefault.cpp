@@ -3,8 +3,9 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2017-2020 c4games.com.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+ https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -320,7 +321,7 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
 
             // append entity
             ::memcpy(_rwmmap->data() + sizeof(udflen_t) + _realSize, obs.data(), obs.length());
-            _realSize += obs.length();
+            _realSize += static_cast<int>(obs.length());
         }
         else {
             flush();

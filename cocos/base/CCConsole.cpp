@@ -2,8 +2,9 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 c4games.com.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -38,21 +39,12 @@
 #include <fcntl.h>
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
-#include <io.h>
-#include <WS2tcpip.h>
-#include <Winsock2.h>
+#include <io.h> 
 #if defined(__MINGW32__)
 #include "platform/win32/inet_pton_mingw.h"
 #endif
 #define bzero(a, b) memset(a, 0, b);
-#else
-#include <netdb.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <sys/ioctl.h>
+#include "win32-specific/ntcvt/ntcvt.hpp"
 #endif
 
 #include "base/CCDirector.h"
@@ -65,9 +57,6 @@
 #include "base/base64.h"
 #include "base/ccUtils.h"
 #include "base/ccUTF8.h"
-#ifdef _WIN32
-#include "win32-specific/ntcvt/ntcvt.hpp"
-#endif
 
 // !FIXME: the previous version of cocos2d::log not thread safe
 // since adxe make it multi-threading safe by default
@@ -498,7 +487,8 @@ Console::~Console()
 
 bool Console::listenOnTCP(int port)
 {
-    int listenfd = -1, n;
+    socket_native_type listenfd = -1;
+    int n;
     const int on = 1;
     struct addrinfo hints, *res, *ressave;
     char serv[30];
@@ -834,7 +824,7 @@ void Console::loop()
 // Helpers
 //
 
-ssize_t Console::readline(int fd, char* ptr, size_t maxlen)
+ssize_t Console::readline(socket_native_type fd, char* ptr, size_t maxlen)
 {
     size_t n, rc;
     char c;
@@ -858,7 +848,7 @@ ssize_t Console::readline(int fd, char* ptr, size_t maxlen)
     return n;
 }
 
-ssize_t Console::readBytes(int fd, char* buffer, size_t maxlen, bool* more)
+ssize_t Console::readBytes(socket_native_type fd, char* buffer, size_t maxlen, bool* more)
 {
     size_t n, rc;
     char c, *ptr = buffer;
@@ -881,7 +871,7 @@ ssize_t Console::readBytes(int fd, char* buffer, size_t maxlen, bool* more)
     return n;
 }
 
-bool Console::parseCommand(int fd)
+bool Console::parseCommand(socket_native_type fd)
 {
     char buf[512];
     bool more_data;
@@ -942,7 +932,8 @@ bool Console::parseCommand(int fd)
     return true;
 }
 
-void Console::performCommand(int fd, const std::string& command) {
+void Console::performCommand(socket_native_type fd, const std::string& command)
+{
     std::vector<std::string> args = Console::Utility::split(command, ' ');
     if(args.empty()) {
         throw std::runtime_error("Unknown command. Type 'help' for options\n");
@@ -976,13 +967,13 @@ void Console::addClient()
     socklen_t addrLen = _isIpv6Server ? sizeof(ipv6Addr) : sizeof(ipv4Addr);
     
     /* new client */
-    int fd = accept(_listenfd, addr, &addrLen);
+    socket_native_type fd = accept(_listenfd, addr, &addrLen);
     
     // add fd to list of FD
     if( fd != -1 ) {
         FD_SET(fd, &_read_set);
         _fds.push_back(fd);
-        _maxfd = std::max(_maxfd,fd);
+        _maxfd = (std::max)(_maxfd,fd);
         
         Console::Utility::sendPrompt(fd);
         
@@ -1116,7 +1107,7 @@ void Console::createCommandVersion()
 // commands
 //
 
-void Console::commandAllocator(int fd, const std::string& /*args*/)
+void Console::commandAllocator(socket_native_type fd, const std::string& /*args*/)
 {
 #if CC_ENABLE_ALLOCATOR_DIAGNOSTICS
     auto info = allocator::AllocatorDiagnostics::instance()->diagnostics();
@@ -1126,7 +1117,7 @@ void Console::commandAllocator(int fd, const std::string& /*args*/)
 #endif
 }
 
-void Console::commandConfig(int fd, const std::string& /*args*/)
+void Console::commandConfig(socket_native_type fd, const std::string& /*args*/)
 {
     Scheduler *sched = Director::getInstance()->getScheduler();
     sched->performFunctionInCocosThread( [=](){
@@ -1135,17 +1126,17 @@ void Console::commandConfig(int fd, const std::string& /*args*/)
     });
 }
 
-void Console::commandDebugMsg(int fd, const std::string& /*args*/)
+void Console::commandDebugMsg(socket_native_type fd, const std::string& /*args*/)
 {
     Console::Utility::mydprintf(fd, "Debug message is: %s\n", _sendDebugStrings ? "on" : "off");
 }
 
-void Console::commandDebugMsgSubCommandOnOff(int /*fd*/, const std::string& args)
+void Console::commandDebugMsgSubCommandOnOff(socket_native_type /*fd*/, const std::string& args)
 {
     _sendDebugStrings = (args.compare("on") == 0);
 }
 
-void Console::commandDirectorSubCommandPause(int /*fd*/, const std::string& /*args*/)
+void Console::commandDirectorSubCommandPause(socket_native_type /*fd*/, const std::string& /*args*/)
 {
     auto director = Director::getInstance();
     Scheduler *sched = director->getScheduler();
@@ -1154,13 +1145,13 @@ void Console::commandDirectorSubCommandPause(int /*fd*/, const std::string& /*ar
     });
 }
 
-void Console::commandDirectorSubCommandResume(int /*fd*/, const std::string& /*args*/)
+void Console::commandDirectorSubCommandResume(socket_native_type /*fd*/, const std::string& /*args*/)
 {
     auto director = Director::getInstance();
     director->resume();
 }
 
-void Console::commandDirectorSubCommandStop(int /*fd*/, const std::string& /*args*/)
+void Console::commandDirectorSubCommandStop(socket_native_type /*fd*/, const std::string& /*args*/)
 {
     auto director = Director::getInstance();
     Scheduler *sched = director->getScheduler();
@@ -1169,19 +1160,19 @@ void Console::commandDirectorSubCommandStop(int /*fd*/, const std::string& /*arg
     });
 }
 
-void Console::commandDirectorSubCommandStart(int /*fd*/, const std::string& /*args*/)
+void Console::commandDirectorSubCommandStart(socket_native_type /*fd*/, const std::string& /*args*/)
 {
     auto director = Director::getInstance();
     director->startAnimation();
 }
 
-void Console::commandDirectorSubCommandEnd(int /*fd*/, const std::string& /*args*/)
+void Console::commandDirectorSubCommandEnd(socket_native_type /*fd*/, const std::string& /*args*/)
 {
     auto director = Director::getInstance();
     director->end();
 }
 
-void Console::commandExit(int fd, const std::string& /*args*/)
+void Console::commandExit(socket_native_type fd, const std::string& /*args*/)
 {
     FD_CLR(fd, &_read_set);
     _fds.erase(std::remove(_fds.begin(), _fds.end(), fd), _fds.end());
@@ -1192,23 +1183,23 @@ void Console::commandExit(int fd, const std::string& /*args*/)
 #endif
 }
 
-void Console::commandFileUtils(int fd, const std::string& /*args*/)
+void Console::commandFileUtils(socket_native_type fd, const std::string& /*args*/)
 {
     Scheduler *sched = Director::getInstance()->getScheduler();
     sched->performFunctionInCocosThread( std::bind(&Console::printFileUtils, this, fd) );
 }
 
-void Console::commandFileUtilsSubCommandFlush(int /*fd*/, const std::string& /*args*/)
+void Console::commandFileUtilsSubCommandFlush(socket_native_type /*fd*/, const std::string& /*args*/)
 {
     FileUtils::getInstance()->purgeCachedEntries();
 }
 
-void Console::commandFps(int fd, const std::string& /*args*/)
+void Console::commandFps(socket_native_type fd, const std::string& /*args*/)
 {
     Console::Utility::mydprintf(fd, "FPS is: %s\n", Director::getInstance()->isDisplayStats() ? "on" : "off");
 }
 
-void Console::commandFpsSubCommandOnOff(int /*fd*/, const std::string& args)
+void Console::commandFpsSubCommandOnOff(socket_native_type /*fd*/, const std::string& args)
 {
     bool state = (args.compare("on") == 0);
     Director *dir = Director::getInstance();
@@ -1216,12 +1207,12 @@ void Console::commandFpsSubCommandOnOff(int /*fd*/, const std::string& args)
     sched->performFunctionInCocosThread( std::bind(&Director::setDisplayStats, dir, state));
 }
 
-void Console::commandHelp(int fd, const std::string& /*args*/)
+void Console::commandHelp(socket_native_type fd, const std::string& /*args*/)
 {
     sendHelp(fd, _commands, "\nAvailable commands:\n");
 }
 
-void Console::commandProjection(int fd, const std::string& /*args*/)
+void Console::commandProjection(socket_native_type fd, const std::string& /*args*/)
 {
     auto director = Director::getInstance();
     char buf[20];
@@ -1244,7 +1235,7 @@ void Console::commandProjection(int fd, const std::string& /*args*/)
     Console::Utility::mydprintf(fd, "Current projection: %s\n", buf);
 }
 
-void Console::commandProjectionSubCommand2d(int /*fd*/, const std::string& /*args*/)
+void Console::commandProjectionSubCommand2d(socket_native_type /*fd*/, const std::string& /*args*/)
 {
     auto director = Director::getInstance();
     Scheduler *sched = director->getScheduler();
@@ -1253,7 +1244,7 @@ void Console::commandProjectionSubCommand2d(int /*fd*/, const std::string& /*arg
     } );
 }
 
-void Console::commandProjectionSubCommand3d(int /*fd*/, const std::string& /*args*/)
+void Console::commandProjectionSubCommand3d(socket_native_type /*fd*/, const std::string& /*args*/)
 {
     auto director = Director::getInstance();
     Scheduler *sched = director->getScheduler();
@@ -1262,7 +1253,7 @@ void Console::commandProjectionSubCommand3d(int /*fd*/, const std::string& /*arg
     } );
 }
 
-void Console::commandResolution(int /*fd*/, const std::string& args)
+void Console::commandResolution(socket_native_type /*fd*/, const std::string& args)
 {
     int policy;
     float width, height;
@@ -1275,7 +1266,7 @@ void Console::commandResolution(int /*fd*/, const std::string& args)
     } );
 }
 
-void Console::commandResolutionSubCommandEmpty(int fd, const std::string& /*args*/)
+void Console::commandResolutionSubCommandEmpty(socket_native_type fd, const std::string& /*args*/)
 {
     auto director = Director::getInstance();
     Size points = director->getWinSize();
@@ -1302,13 +1293,13 @@ void Console::commandResolutionSubCommandEmpty(int fd, const std::string& /*args
               );
 }
 
-void Console::commandSceneGraph(int fd, const std::string& /*args*/)
+void Console::commandSceneGraph(socket_native_type fd, const std::string& /*args*/)
 {
     Scheduler *sched = Director::getInstance()->getScheduler();
     sched->performFunctionInCocosThread( std::bind(&Console::printSceneGraphBoot, this, fd) );
 }
 
-void Console::commandTextures(int fd, const std::string& /*args*/)
+void Console::commandTextures(socket_native_type fd, const std::string& /*args*/)
 {
     Scheduler *sched = Director::getInstance()->getScheduler();
     sched->performFunctionInCocosThread( [=](){
@@ -1317,7 +1308,7 @@ void Console::commandTextures(int fd, const std::string& /*args*/)
     });
 }
 
-void Console::commandTexturesSubCommandFlush(int /*fd*/, const std::string& /*args*/)
+void Console::commandTexturesSubCommandFlush(socket_native_type /*fd*/, const std::string& /*args*/)
 {
     Scheduler *sched = Director::getInstance()->getScheduler();
     sched->performFunctionInCocosThread( [](){
@@ -1325,7 +1316,7 @@ void Console::commandTexturesSubCommandFlush(int /*fd*/, const std::string& /*ar
     });
 }
 
-void Console::commandTouchSubCommandTap(int fd, const std::string& args)
+void Console::commandTouchSubCommandTap(socket_native_type fd, const std::string& args)
 {
     auto argv = Console::Utility::split(args,' ');
     
@@ -1350,7 +1341,7 @@ void Console::commandTouchSubCommandTap(int fd, const std::string& args)
     }
 }
 
-void Console::commandTouchSubCommandSwipe(int fd, const std::string& args)
+void Console::commandTouchSubCommandSwipe(socket_native_type fd, const std::string& args)
 {
     auto argv = Console::Utility::split(args,' ');
     
@@ -1449,7 +1440,7 @@ void Console::commandTouchSubCommandSwipe(int fd, const std::string& args)
 
 static char invalid_filename_char[] = {':', '/', '\\', '?', '%', '*', '<', '>', '"', '|', '\r', '\n', '\t'};
 
-void Console::commandUpload(int fd)
+void Console::commandUpload(socket_native_type fd)
 {
     ssize_t n, rc;
     char buf[512] = {0};
@@ -1525,14 +1516,14 @@ void Console::commandUpload(int fd)
     }
 }
 
-void Console::commandVersion(int fd, const std::string& /*args*/)
+void Console::commandVersion(socket_native_type fd, const std::string& /*args*/)
 {
     Console::Utility::mydprintf(fd, "%s\n", cocos2dVersion());
 }
 
 // helper free functions
 
-int Console::printSceneGraph(int fd, Node* node, int level)
+int Console::printSceneGraph(socket_native_type fd, Node* node, int level)
 {
     int total = 1;
     for(int i=0; i<level; ++i)
@@ -1546,7 +1537,7 @@ int Console::printSceneGraph(int fd, Node* node, int level)
     return total;
 }
 
-void Console::printSceneGraphBoot(int fd)
+void Console::printSceneGraphBoot(socket_native_type fd)
 {
     Console::Utility::sendToConsole(fd,"\n",1);
     auto scene = Director::getInstance()->getRunningScene();
@@ -1555,7 +1546,7 @@ void Console::printSceneGraphBoot(int fd)
     Console::Utility::sendPrompt(fd);
 }
 
-void Console::printFileUtils(int fd)
+void Console::printFileUtils(socket_native_type fd)
 {
     FileUtils* fu = FileUtils::getInstance();
     
@@ -1582,7 +1573,7 @@ void Console::printFileUtils(int fd)
     Console::Utility::sendPrompt(fd);
 }
 
-void Console::sendHelp(int fd, const std::unordered_map<std::string, Command*>& commands, const char* msg)
+void Console::sendHelp(socket_native_type fd, const std::unordered_map<std::string, Command*>& commands, const char* msg)
 {
     Console::Utility::sendToConsole(fd, msg, strlen(msg));
     for(auto& it : commands)

@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -28,16 +29,11 @@
 /// @cond DO_NOT_SHOW
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
-#include <BaseTsd.h>
-#include <WinSock2.h>
-
+#include <basetsd.h>
 #ifndef __SSIZE_T
 #define __SSIZE_T
 typedef SSIZE_T ssize_t;
 #endif // __SSIZE_T
-
-#else
-#include <sys/select.h>
 #endif
 
 #include <thread>
@@ -47,6 +43,7 @@ typedef SSIZE_T ssize_t;
 #include <string>
 #include <mutex>
 #include <stdarg.h>
+#include "yasio/detail/socket.hpp"
 
 #include "base/CCRef.h"
 #include "base/ccMacros.h"
@@ -218,10 +215,10 @@ protected:
     void loop();
     
     // Helpers
-    ssize_t readline(int fd, char *buf, size_t maxlen);
-    ssize_t readBytes(int fd, char* buffer, size_t maxlen, bool* more);
-    bool parseCommand(int fd);
-    void performCommand(int fd, const std::string& command);
+    ssize_t readline(socket_native_type fd, char *buf, size_t maxlen);
+    ssize_t readBytes(socket_native_type fd, char* buffer, size_t maxlen, bool* more);
+    bool parseCommand(socket_native_type fd);
+    void performCommand(socket_native_type fd, const std::string& command);
     
     void addClient();
     
@@ -243,37 +240,37 @@ protected:
     void createCommandVersion();
 
     // Add commands here
-    void commandAllocator(int fd, const std::string& args);
-    void commandConfig(int fd, const std::string& args);
-    void commandDebugMsg(int fd, const std::string& args);
-    void commandDebugMsgSubCommandOnOff(int fd, const std::string& args);
-    void commandDirectorSubCommandPause(int fd, const std::string& args);
-    void commandDirectorSubCommandResume(int fd, const std::string& args);
-    void commandDirectorSubCommandStop(int fd, const std::string& args);
-    void commandDirectorSubCommandStart(int fd, const std::string& args);
-    void commandDirectorSubCommandEnd(int fd, const std::string& args);
-    void commandExit(int fd, const std::string& args);
-    void commandFileUtils(int fd, const std::string& args);
-    void commandFileUtilsSubCommandFlush(int fd, const std::string& args);
-    void commandFps(int fd, const std::string& args);
-    void commandFpsSubCommandOnOff(int fd, const std::string& args);
-    void commandHelp(int fd, const std::string& args);
-    void commandProjection(int fd, const std::string& args);
-    void commandProjectionSubCommand2d(int fd, const std::string& args);
-    void commandProjectionSubCommand3d(int fd, const std::string& args);
-    void commandResolution(int fd, const std::string& args);
-    void commandResolutionSubCommandEmpty(int fd, const std::string& args);
-    void commandSceneGraph(int fd, const std::string& args);
-    void commandTextures(int fd, const std::string& args);
-    void commandTexturesSubCommandFlush(int fd, const std::string& args);
-    void commandTouchSubCommandTap(int fd, const std::string& args);
-    void commandTouchSubCommandSwipe(int fd, const std::string& args);
-    void commandUpload(int fd);
-    void commandVersion(int fd, const std::string& args);
+    void commandAllocator(socket_native_type fd, const std::string& args);
+    void commandConfig(socket_native_type fd, const std::string& args);
+    void commandDebugMsg(socket_native_type fd, const std::string& args);
+    void commandDebugMsgSubCommandOnOff(socket_native_type fd, const std::string& args);
+    void commandDirectorSubCommandPause(socket_native_type fd, const std::string& args);
+    void commandDirectorSubCommandResume(socket_native_type fd, const std::string& args);
+    void commandDirectorSubCommandStop(socket_native_type fd, const std::string& args);
+    void commandDirectorSubCommandStart(socket_native_type fd, const std::string& args);
+    void commandDirectorSubCommandEnd(socket_native_type fd, const std::string& args);
+    void commandExit(socket_native_type fd, const std::string& args);
+    void commandFileUtils(socket_native_type fd, const std::string& args);
+    void commandFileUtilsSubCommandFlush(socket_native_type fd, const std::string& args);
+    void commandFps(socket_native_type fd, const std::string& args);
+    void commandFpsSubCommandOnOff(socket_native_type fd, const std::string& args);
+    void commandHelp(socket_native_type fd, const std::string& args);
+    void commandProjection(socket_native_type fd, const std::string& args);
+    void commandProjectionSubCommand2d(socket_native_type fd, const std::string& args);
+    void commandProjectionSubCommand3d(socket_native_type fd, const std::string& args);
+    void commandResolution(socket_native_type fd, const std::string& args);
+    void commandResolutionSubCommandEmpty(socket_native_type fd, const std::string& args);
+    void commandSceneGraph(socket_native_type fd, const std::string& args);
+    void commandTextures(socket_native_type fd, const std::string& args);
+    void commandTexturesSubCommandFlush(socket_native_type fd, const std::string& args);
+    void commandTouchSubCommandTap(socket_native_type fd, const std::string& args);
+    void commandTouchSubCommandSwipe(socket_native_type fd, const std::string& args);
+    void commandUpload(socket_native_type fd);
+    void commandVersion(socket_native_type fd, const std::string& args);
     // file descriptor: socket, console, etc.
-    int _listenfd;
-    int _maxfd;
-    std::vector<int> _fds;
+    socket_native_type _listenfd;
+    socket_native_type _maxfd;
+    std::vector<socket_native_type> _fds;
     std::thread _thread;
 
     fd_set _read_set;
@@ -296,12 +293,14 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(Console);
     
     // helper functions
-    int printSceneGraph(int fd, Node* node, int level);
-    void printSceneGraphBoot(int fd);
-    void printFileUtils(int fd);
+    int printSceneGraph(socket_native_type fd, Node* node, int level);
+    void printSceneGraphBoot(socket_native_type fd);
+    void printFileUtils(socket_native_type fd);
     
     /** send help message to console */
-    static void sendHelp(int fd, const std::unordered_map<std::string, Command*>& commands, const char* msg);
+    static void sendHelp(socket_native_type fd,
+                         const std::unordered_map<std::string, Command*>& commands,
+                         const char* msg);
 };
 
 NS_CC_END
