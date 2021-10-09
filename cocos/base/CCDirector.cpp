@@ -4,8 +4,9 @@ Copyright (c) 2010-2013 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1193,13 +1194,13 @@ void Director::showStats()
         auto currentCalls = (uint32_t)_renderer->getDrawnBatches();
         auto currentVerts = (uint32_t)_renderer->getDrawnVertices();
         if( currentCalls != prevCalls ) {
-            sprintf(buffer, "GL calls:%6lu", currentCalls);
+            sprintf(buffer, "GL calls:%6u", currentCalls);
             _drawnBatchesLabel->setString(buffer);
             prevCalls = currentCalls;
         }
 
         if( currentVerts != prevVerts) {
-            sprintf(buffer, "GL verts:%6lu", currentVerts);
+            sprintf(buffer, "GL verts:%6u", currentVerts);
             _drawnVerticesLabel->setString(buffer);
             prevVerts = currentVerts;
         }

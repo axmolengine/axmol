@@ -45,7 +45,7 @@ YASIO_API void yasio_unreal_cleanup()
     io_service::cleanup_globals();
 }
 
-#if defined(YASIO_INSIDE_UNREAL) && (YASIO_BUILD_AS_SHARED)
+#if defined(YASIO_INSIDE_UNREAL) && (YASIO_BUILD_SHARED_LIBS)
 class yasio_unreal_module : public IModuleInterface
 {
 public:

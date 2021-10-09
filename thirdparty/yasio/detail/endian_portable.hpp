@@ -71,7 +71,7 @@ SOFTWARE.
 #endif
 
 #if defined(YASIO_LITTLE_ENDIAN)
-#  pragma message("Building yasio on LITTLE ENDIAN machine")
+// #  pragma message("Building yasio on LITTLE ENDIAN machine")
 // clang-format off
 #  define YASIO__SWAP_SHORT(s) s = ((((s) >> 8) & 0x00ff) | (((s) << 8) & 0xff00))
 /*

@@ -2,8 +2,9 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+ https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +30,7 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include <shellapi.h>
 #include <WinVer.h>
+#include <timeapi.h>
 /**
 @brief    This function change the PVRFrame show/hide setting in register.
 @param  bEnable If true show the PVRFrame window, otherwise hide.
@@ -289,7 +291,7 @@ std::string Application::getVersion()
 bool Application::openURL(const std::string &url)
 {
     WCHAR *temp = new WCHAR[url.size() + 1];
-    int wchars_num = MultiByteToWideChar(CP_UTF8, 0, url.c_str(), url.size() + 1, temp, url.size() + 1);
+    int wchars_num = MultiByteToWideChar(CP_UTF8, 0, url.c_str(), static_cast<int>(url.size() + 1), temp, static_cast<int>(url.size() + 1));
     HINSTANCE r = ShellExecuteW(NULL, L"open", temp, NULL, NULL, SW_SHOWNORMAL);
     delete[] temp;
     return (size_t)r>32;
@@ -346,13 +348,13 @@ static void PVRFrameEnableControlWindow(bool bEnable)
     const WCHAR* wszValue = L"hide_gui";
     const WCHAR* wszNewData = (bEnable) ? L"NO" : L"YES";
     WCHAR wszOldData[256] = {0};
-    DWORD   dwSize = sizeof(wszOldData);
+    DWORD dwSize            = static_cast<DWORD>(sizeof(wszOldData));
     LSTATUS status = RegQueryValueExW(hKey, wszValue, 0, nullptr, (LPBYTE)wszOldData, &dwSize);
     if (ERROR_FILE_NOT_FOUND == status              // the key not exist
         || (ERROR_SUCCESS == status                 // or the hide_gui value is exist
         && 0 != wcscmp(wszNewData, wszOldData)))    // but new data and old data not equal
     {
-        dwSize = sizeof(WCHAR) * (wcslen(wszNewData) + 1);
+        dwSize = static_cast<DWORD>(sizeof(WCHAR) * (wcslen(wszNewData) + 1));
         RegSetValueEx(hKey, wszValue, 0, REG_SZ, (const BYTE *)wszNewData, dwSize);
     }
 

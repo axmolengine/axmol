@@ -37,7 +37,7 @@ BraceWrapping:
   AfterExternBlock: false
 
 # Indent case labels.
-IndentCaseLabels: true
+IndentCaseLabels: false
 
 # Left-align pointers and references
 PointerAlignment: Left

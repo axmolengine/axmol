@@ -7,8 +7,9 @@
  * Copyright (c) 2013-2016 Chukong Technologies Inc.
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  * Copyright (c) 2020-2021 C4games.com.
- *
- * http://www.cocos2d-x.org
+ * Copyright (c) 2021 Bytedance Inc.
+ * 
+ * https://adxe.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -465,9 +466,9 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4 & transform, uint32_
 
 void ParticleBatchNode::increaseAtlasCapacityTo(ssize_t quantity)
 {
-    CCLOG("cocos2d: ParticleBatchNode: resizing TextureAtlas capacity from [%lu] to [%lu].",
-          (int32_t)_textureAtlas->getCapacity(),
-          (int32_t)quantity);
+    CCLOG("cocos2d: ParticleBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
+          (int)_textureAtlas->getCapacity(),
+          (int)quantity);
 
     if( ! _textureAtlas->resizeCapacity(quantity) ) {
         // serious problems
