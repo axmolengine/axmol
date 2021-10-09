@@ -48,6 +48,8 @@ bool HelloWorld::init()
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     auto origin      = Director::getInstance()->getVisibleOrigin();
+    auto safeArea = Director::getInstance()->getSafeAreaRect();
+    auto safeOrigin = safeArea.origin;
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -63,8 +65,8 @@ bool HelloWorld::init()
     }
     else
     {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
-        float y = origin.y + closeItem->getContentSize().height / 2;
+        float x = safeOrigin.x + safeArea.size.width - closeItem->getContentSize().width / 2;
+        float y = safeOrigin.y + closeItem->getContentSize().height / 2;
         closeItem->setPosition(Vec2(x, y));
     }
 
@@ -111,7 +113,6 @@ bool HelloWorld::init()
         drawNode->setPosition(Vec2(0, 0));
         addChild(drawNode);
 
-        auto safeArea = Director::getInstance()->getSafeAreaRect();
         drawNode->drawRect(safeArea.origin, safeArea.origin + safeArea.size, Color4F::BLUE);
     }
 
