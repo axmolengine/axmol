@@ -2,8 +2,9 @@
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -95,18 +96,18 @@ extern "C"
                 pos = filePath.find_first_of('?', pos + strPath.length() + 1);
             }
             filePath.append(BYTECODE_FILE_EXT.data(), BYTECODE_FILE_EXT.length());
-            if (utils->isFileExist(filePath))
+            chunk = utils->getDataFromFile(filePath);
+            if (!chunk.isNull())
             {
-                chunk = utils->getDataFromFile(filePath);
                 break;
             }
             else
             {
                 filePath.resize(filePath.length() - BYTECODE_FILE_EXT.length());
                 filePath.append(NOT_BYTECODE_FILE_EXT.data(), NOT_BYTECODE_FILE_EXT.length());
-                if (utils->isFileExist(filePath))
+                chunk = utils->getDataFromFile(filePath);
+                if (!chunk.isNull())
                 {
-                    chunk = utils->getDataFromFile(filePath);
                     break;
                 }
                 else
