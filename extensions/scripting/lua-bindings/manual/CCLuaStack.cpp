@@ -2,8 +2,9 @@
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -238,29 +239,25 @@ int LuaStack::executeString(const char *codes)
     return executeFunction(0);
 }
 
-static const std::string BYTECODE_FILE_EXT    = ".luac";
-static const std::string NOT_BYTECODE_FILE_EXT = ".lua";
-
 int LuaStack::executeScriptFile(const char* filename)
 {
     CCAssert(filename, "CCLuaStack::executeScriptFile() - invalid filename");
 
-    std::string chunkPath(filename);
+    using namespace cxx17;
+    const auto BYTECODE_FILE_EXT     = ".luac"_sv;
+    const auto NOT_BYTECODE_FILE_EXT = ".lua"_sv;
+
+    cxx17::string_view svFilePath(filename);
     //
     // remove .lua or .luac
     //
-    size_t pos = chunkPath.rfind(BYTECODE_FILE_EXT);
-    if (pos != std::string::npos)
+    if (cxx20::ends_with(svFilePath, BYTECODE_FILE_EXT))
     {
-        chunkPath = chunkPath.substr(0, pos);
+        svFilePath.remove_suffix(BYTECODE_FILE_EXT.length());
     }
-    else
+    else if (cxx20::ends_with(svFilePath, NOT_BYTECODE_FILE_EXT))
     {
-        pos = chunkPath.rfind(NOT_BYTECODE_FILE_EXT);
-        if (pos == chunkPath.length() - NOT_BYTECODE_FILE_EXT.length())
-        {
-            chunkPath = chunkPath.substr(0, pos);
-        }
+        svFilePath.remove_suffix(NOT_BYTECODE_FILE_EXT.length());
     }
 
     FileUtils *utils = FileUtils::getInstance();
@@ -269,27 +266,21 @@ int LuaStack::executeScriptFile(const char* filename)
     // 1. check .luac suffix
     // 2. check .lua suffix
     //
-    std::string tmpfilename = chunkPath + BYTECODE_FILE_EXT;
-    if (utils->isFileExist(tmpfilename))
+    std::string filePath{svFilePath};
+    filePath.append(BYTECODE_FILE_EXT.data(), BYTECODE_FILE_EXT.length());
+    Data data = utils->getDataFromFile(filePath);
+    if (data.isNull())
     {
-        chunkPath = tmpfilename;
-    }
-    else
-    {
-        tmpfilename = chunkPath + NOT_BYTECODE_FILE_EXT;
-        if (utils->isFileExist(tmpfilename))
-        {
-            chunkPath = tmpfilename;
-        }
+        filePath.resize(filePath.length() - BYTECODE_FILE_EXT.length());
+        filePath.append(NOT_BYTECODE_FILE_EXT.data(), NOT_BYTECODE_FILE_EXT.length());
+        data = utils->getDataFromFile(filePath);
     }
 
-    std::string fullPath = utils->fullPathForFilename(chunkPath);
-    Data data = utils->getDataFromFile(fullPath);
     int rn = 0;
     if (!data.isNull())
     {
-        chunkPath.insert(chunkPath.begin(), '@'); // lua standard, add file chunck mark '@'
-        if (luaLoadBuffer(_state, (const char*)data.getBytes(), (int)data.getSize(), chunkPath.c_str()) == 0)
+        filePath.insert(filePath.begin(), '@');  // lua standard, add file chunck mark '@'
+        if (luaLoadBuffer(_state, (const char*)data.getBytes(), (int)data.getSize(), filePath.c_str()) == 0)
         {
             rn = executeFunction(0);
         }
@@ -636,6 +627,10 @@ int LuaStack::luaLoadChunksFromZIP(lua_State *L)
         return 0;
     }
 
+    using namespace cxx17;
+    const auto BYTECODE_FILE_EXT     = ".luac"_sv;
+    const auto NOT_BYTECODE_FILE_EXT = ".lua"_sv;
+
     const char *zipFilename = lua_tostring(L, -1);
     lua_settop(L, 0);
     FileUtils *utils = FileUtils::getInstance();
@@ -670,7 +665,9 @@ int LuaStack::luaLoadChunksFromZIP(lua_State *L)
                     if (pos != std::string::npos)
                     {
                         std::string suffix = filename.substr(pos, filename.length());
-                        if (suffix == NOT_BYTECODE_FILE_EXT || suffix == BYTECODE_FILE_EXT) {
+                        if (cxx17::string_view{suffix} == NOT_BYTECODE_FILE_EXT ||
+                            cxx17::string_view{suffix} == BYTECODE_FILE_EXT)
+                        {
                             filename.erase(pos);
                         }
                     }
