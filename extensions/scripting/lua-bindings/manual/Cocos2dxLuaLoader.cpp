@@ -30,42 +30,46 @@ THE SOFTWARE.
 #include "scripting/lua-bindings/manual/CCLuaStack.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
 #include "platform/CCFileUtils.h"
+#include "yasio/cxx17/string_view.hpp"
 
 using namespace cocos2d;
+
+static cxx17::string_view adxelua_tosv(lua_State* L, int arg) {
+    size_t l    = 0;
+    const char* s = lua_tolstring(L, arg, &l);
+    return cxx17::string_view{s, l};
+}
 
 extern "C"
 {
     int cocos2dx_lua_loader(lua_State *L)
     {
-        static const std::string BYTECODE_FILE_EXT    = ".luac";
-        static const std::string NOT_BYTECODE_FILE_EXT = ".lua";
+        using namespace cxx17;
+        const auto BYTECODE_FILE_EXT    = ".luac"_sv;
+        const auto NOT_BYTECODE_FILE_EXT = ".lua"_sv;
 
-        std::string filename(luaL_checkstring(L, 1));
-        size_t pos = filename.rfind(BYTECODE_FILE_EXT);
-        if (pos != std::string::npos && pos == filename.length() - BYTECODE_FILE_EXT.length())
-            filename = filename.substr(0, pos);
-        else
-        {
-            pos = filename.rfind(NOT_BYTECODE_FILE_EXT);
-            if (pos != std::string::npos && pos == filename.length() - NOT_BYTECODE_FILE_EXT.length())
-                filename = filename.substr(0, pos);
-        }
+        auto path = adxelua_tosv(L, 1);
+        if (cxx20::ends_with(path, BYTECODE_FILE_EXT))
+            path.remove_suffix(BYTECODE_FILE_EXT.length());
+        else if (cxx20::ends_with(path, NOT_BYTECODE_FILE_EXT))
+            path.remove_suffix(NOT_BYTECODE_FILE_EXT.length());
 
-        pos = filename.find_first_of('.');
+        std::string strPath{path};
+        size_t pos = strPath.find_first_of('.');
         while (pos != std::string::npos)
         {
-            filename.replace(pos, 1, "/");
-            pos = filename.find_first_of('.');
+            strPath.replace(pos, 1, "/");
+            pos = strPath.find_first_of('.');
         }
 
         // search file in package.path
         Data chunk;
-        std::string chunkName;
+        std::string filePath;
         FileUtils* utils = FileUtils::getInstance();
 
         lua_getglobal(L, "package");
         lua_getfield(L, -1, "path");
-        std::string searchpath(lua_tostring(L, -1));
+        auto searchpath = adxelua_tosv(L, -1);
         lua_pop(L, 1);
         size_t begin = 0;
         size_t next = searchpath.find_first_of(';', 0);
@@ -74,47 +78,43 @@ extern "C"
         {
             if (next == std::string::npos)
                 next = searchpath.length();
-            std::string prefix = searchpath.substr(begin, next-begin);
+            auto prefix = searchpath.substr(begin, next - begin);
             if (prefix[0] == '.' && prefix[1] == '/')
                 prefix = prefix.substr(2);
 
-            pos = prefix.rfind(BYTECODE_FILE_EXT);
-            if (pos != std::string::npos && pos == prefix.length() - BYTECODE_FILE_EXT.length())
-            {
-                prefix = prefix.substr(0, pos);
-            }
-            else
-            {
-                pos = prefix.rfind(NOT_BYTECODE_FILE_EXT);
-                if (pos != std::string::npos && pos == prefix.length() - NOT_BYTECODE_FILE_EXT.length())
-                    prefix = prefix.substr(0, pos);
-            }
-            pos = prefix.find_first_of('?', 0);
+            if (cxx20::ends_with(prefix, BYTECODE_FILE_EXT))
+                prefix.remove_suffix(BYTECODE_FILE_EXT.length());
+            else if (cxx20::ends_with(prefix, NOT_BYTECODE_FILE_EXT))
+                prefix.remove_suffix(NOT_BYTECODE_FILE_EXT.length());
+
+            filePath.assign(prefix.data(), prefix.length());
+            pos = filePath.find_first_of('?', 0);
             while (pos != std::string::npos)
             {
-                prefix.replace(pos, 1, filename);
-                pos = prefix.find_first_of('?', pos + filename.length() + 1);
+                filePath.replace(pos, 1, strPath);
+                pos = filePath.find_first_of('?', pos + strPath.length() + 1);
             }
-            chunkName = prefix + BYTECODE_FILE_EXT;
-            if (utils->isFileExist(chunkName)) // && !utils->isDirectoryExist(chunkName))
+            filePath.append(BYTECODE_FILE_EXT.data(), BYTECODE_FILE_EXT.length());
+            if (utils->isFileExist(filePath))
             {
-                chunk = utils->getDataFromFile(chunkName);
+                chunk = utils->getDataFromFile(filePath);
                 break;
             }
             else
             {
-                chunkName = prefix + NOT_BYTECODE_FILE_EXT;
-                if (utils->isFileExist(chunkName) ) //&& !utils->isDirectoryExist(chunkName))
+                filePath.resize(filePath.length() - BYTECODE_FILE_EXT.length());
+                filePath.append(NOT_BYTECODE_FILE_EXT.data(), NOT_BYTECODE_FILE_EXT.length());
+                if (utils->isFileExist(filePath))
                 {
-                    chunk = utils->getDataFromFile(chunkName);
+                    chunk = utils->getDataFromFile(filePath);
                     break;
                 }
                 else
                 {
-                    chunkName = prefix;
-                    if (utils->isFileExist(chunkName)) // && !utils->isDirectoryExist(chunkName))
+                    filePath.resize(filePath.length() - NOT_BYTECODE_FILE_EXT.length());
+                    if (utils->isFileExist(filePath)) 
                     {
-                        chunk = utils->getDataFromFile(chunkName);
+                        chunk = utils->getDataFromFile(filePath);
                         break;
                     }
                 }
@@ -123,15 +123,17 @@ extern "C"
             begin = next + 1;
             next = searchpath.find_first_of(';', begin);
         } while (begin < searchpath.length());
+
         if (chunk.getSize() > 0)
         {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-            stack->luaLoadBuffer(L, reinterpret_cast<const char*>(chunk.getBytes()),
-                                 static_cast<int>(chunk.getSize()), chunkName.c_str());
+            filePath.insert(filePath.begin(), '@');  // lua standard, add file chunck mark '@'
+            stack->luaLoadBuffer(L, reinterpret_cast<const char*>(chunk.getBytes()), static_cast<int>(chunk.getSize()),
+                                 filePath.c_str());
         }
         else
         {
-            CCLOG("can not get file data of %s", chunkName.c_str());
+            CCLOG("can not get file data of %s", filePath.c_str());
             return 0;
         }
 

@@ -245,21 +245,21 @@ int LuaStack::executeScriptFile(const char* filename)
 {
     CCAssert(filename, "CCLuaStack::executeScriptFile() - invalid filename");
 
-    std::string buf(filename);
+    std::string chunkPath(filename);
     //
     // remove .lua or .luac
     //
-    size_t pos = buf.rfind(BYTECODE_FILE_EXT);
+    size_t pos = chunkPath.rfind(BYTECODE_FILE_EXT);
     if (pos != std::string::npos)
     {
-        buf = buf.substr(0, pos);
+        chunkPath = chunkPath.substr(0, pos);
     }
     else
     {
-        pos = buf.rfind(NOT_BYTECODE_FILE_EXT);
-        if (pos == buf.length() - NOT_BYTECODE_FILE_EXT.length())
+        pos = chunkPath.rfind(NOT_BYTECODE_FILE_EXT);
+        if (pos == chunkPath.length() - NOT_BYTECODE_FILE_EXT.length())
         {
-            buf = buf.substr(0, pos);
+            chunkPath = chunkPath.substr(0, pos);
         }
     }
 
@@ -269,26 +269,27 @@ int LuaStack::executeScriptFile(const char* filename)
     // 1. check .luac suffix
     // 2. check .lua suffix
     //
-    std::string tmpfilename = buf + BYTECODE_FILE_EXT;
+    std::string tmpfilename = chunkPath + BYTECODE_FILE_EXT;
     if (utils->isFileExist(tmpfilename))
     {
-        buf = tmpfilename;
+        chunkPath = tmpfilename;
     }
     else
     {
-        tmpfilename = buf + NOT_BYTECODE_FILE_EXT;
+        tmpfilename = chunkPath + NOT_BYTECODE_FILE_EXT;
         if (utils->isFileExist(tmpfilename))
         {
-            buf = tmpfilename;
+            chunkPath = tmpfilename;
         }
     }
 
-    std::string fullPath = utils->fullPathForFilename(buf);
+    std::string fullPath = utils->fullPathForFilename(chunkPath);
     Data data = utils->getDataFromFile(fullPath);
     int rn = 0;
     if (!data.isNull())
     {
-        if (luaLoadBuffer(_state, (const char*)data.getBytes(), (int)data.getSize(), fullPath.c_str()) == 0)
+        chunkPath.insert(chunkPath.begin(), '@'); // lua standard, add file chunck mark '@'
+        if (luaLoadBuffer(_state, (const char*)data.getBytes(), (int)data.getSize(), chunkPath.c_str()) == 0)
         {
             rn = executeFunction(0);
         }
