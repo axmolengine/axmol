@@ -867,8 +867,6 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue , c
     if (NULL == L || NULL == outValue)
         return false;
 
-    bool ok = true;
-
     tolua_Error tolua_err;
     bool ok = !!tolua_istable(L, lo, 0, &tolua_err);
     if (ok)
