@@ -49,9 +49,13 @@ extern "C"
         const auto BYTECODE_FILE_EXT    = ".luac"_sv;
         const auto NOT_BYTECODE_FILE_EXT = ".lua"_sv;
 
+        bool useBCExt = false;
         auto path = adxelua_tosv(L, 1);
         if (cxx20::ends_with(path, BYTECODE_FILE_EXT))
+        {
+            useBCExt = true;
             path.remove_suffix(BYTECODE_FILE_EXT.length());
+        }
         else if (cxx20::ends_with(path, NOT_BYTECODE_FILE_EXT))
             path.remove_suffix(NOT_BYTECODE_FILE_EXT.length());
 
@@ -62,6 +66,11 @@ extern "C"
             strPath.replace(pos, 1, "/");
             pos = strPath.find_first_of('.');
         }
+
+        if (!useBCExt)
+            strPath.append(NOT_BYTECODE_FILE_EXT.data(), NOT_BYTECODE_FILE_EXT.length());
+        else
+            strPath.append(BYTECODE_FILE_EXT.data(), BYTECODE_FILE_EXT.length());
 
         // search file in package.path
         Data chunk;
@@ -95,30 +104,11 @@ extern "C"
                 filePath.replace(pos, 1, strPath);
                 pos = filePath.find_first_of('?', pos + strPath.length() + 1);
             }
-            filePath.append(BYTECODE_FILE_EXT.data(), BYTECODE_FILE_EXT.length());
+
             chunk = utils->getDataFromFile(filePath);
             if (!chunk.isNull())
             {
                 break;
-            }
-            else
-            {
-                filePath.resize(filePath.length() - BYTECODE_FILE_EXT.length());
-                filePath.append(NOT_BYTECODE_FILE_EXT.data(), NOT_BYTECODE_FILE_EXT.length());
-                chunk = utils->getDataFromFile(filePath);
-                if (!chunk.isNull())
-                {
-                    break;
-                }
-                else
-                {
-                    filePath.resize(filePath.length() - NOT_BYTECODE_FILE_EXT.length());
-                    if (utils->isFileExist(filePath)) 
-                    {
-                        chunk = utils->getDataFromFile(filePath);
-                        break;
-                    }
-                }
             }
 
             begin = next + 1;

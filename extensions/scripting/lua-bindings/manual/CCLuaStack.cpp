@@ -243,40 +243,9 @@ int LuaStack::executeScriptFile(const char* filename)
 {
     CCAssert(filename, "CCLuaStack::executeScriptFile() - invalid filename");
 
-    using namespace cxx17;
-    const auto BYTECODE_FILE_EXT     = ".luac"_sv;
-    const auto NOT_BYTECODE_FILE_EXT = ".lua"_sv;
-
-    cxx17::string_view svFilePath(filename);
-    //
-    // remove .lua or .luac
-    //
-    if (cxx20::ends_with(svFilePath, BYTECODE_FILE_EXT))
-    {
-        svFilePath.remove_suffix(BYTECODE_FILE_EXT.length());
-    }
-    else if (cxx20::ends_with(svFilePath, NOT_BYTECODE_FILE_EXT))
-    {
-        svFilePath.remove_suffix(NOT_BYTECODE_FILE_EXT.length());
-    }
-
-    FileUtils *utils = FileUtils::getInstance();
-
-    //
-    // 1. check .luac suffix
-    // 2. check .lua suffix
-    //
-    std::string filePath{svFilePath};
-    filePath.append(BYTECODE_FILE_EXT.data(), BYTECODE_FILE_EXT.length());
-    Data data = utils->getDataFromFile(filePath);
-    if (data.isNull())
-    {
-        filePath.resize(filePath.length() - BYTECODE_FILE_EXT.length());
-        filePath.append(NOT_BYTECODE_FILE_EXT.data(), NOT_BYTECODE_FILE_EXT.length());
-        data = utils->getDataFromFile(filePath);
-    }
-
-    int rn = 0;
+    std::string filePath{filename};
+    Data data = FileUtils::getInstance()->getDataFromFile(filePath);
+    int rn    = 0;
     if (!data.isNull())
     {
         filePath.insert(filePath.begin(), '@');  // lua standard, add file chunck mark '@'
