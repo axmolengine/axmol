@@ -513,11 +513,10 @@ void ProgramState::setParameterAutoBinding(const std::string &uniform, const std
 
 void ProgramState::applyAutoBinding(const std::string &uniformName, const std::string &autoBinding)
 {
-    bool resolved = false;
     for (const auto resolver : _customAutoBindingResolvers)
     {
-        resolved = resolver->resolveAutoBinding(this, uniformName, autoBinding);
-        if (resolved) break;
+        if (resolver->resolveAutoBinding(this, uniformName, autoBinding))
+            break;
     }
 }
 

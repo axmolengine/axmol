@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
+ Copyright (c) 2021 Bytedance Inc.
+
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -158,7 +159,7 @@ bool NavMesh::loadNavMeshFile()
 
     // Read header.
     unsigned int offset = 0;
-    TileCacheSetHeader header = *((TileCacheSetHeader*)(data.getBytes() + offset));
+    TileCacheSetHeader header = *(reinterpret_cast<TileCacheSetHeader*>(data.getBytes() + offset));
     offset += sizeof(TileCacheSetHeader);
     if (header.magic != TILECACHESET_MAGIC)
     {

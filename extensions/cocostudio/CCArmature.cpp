@@ -1,7 +1,8 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -533,11 +534,9 @@ Rect Armature::getBoundingBox() const
 Bone *Armature::getBoneAtPoint(float x, float y) const 
 {
     long length = _children.size();
-    Bone *bs;
-
     for(long i = length - 1; i >= 0; i--)
     {
-        bs = static_cast<Bone*>( _children.at(i) );
+        Bone* bs = static_cast<Bone*>(_children.at(i));
         if(bs->getDisplayManager()->containPoint(x, y))
         {
             return bs;

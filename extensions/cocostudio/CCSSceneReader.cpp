@@ -506,11 +506,7 @@ void SceneReader::setPropertyFromJsonDict(const rapidjson::Value &root, cocos2d:
 void SceneReader::setPropertyFromJsonDict(CocoLoader *cocoLoader, stExpCocoNode *cocoNode, cocos2d::Node *node)
 {
     stExpCocoNode *stChildArray = cocoNode->GetChildArray(cocoLoader);
-    float x = 0.0f, y = 0.0f, fScaleX = 1.0f, fScaleY = 1.0f, fRotationZ = 1.0f;
-    bool bVisible = false;
-    const char *sName = "";
-    int nTag = 0, nZorder = -1;
-    
+
     for (int i = 0; i < cocoNode->GetChildNum(); ++i)
     {
         std::string key = stChildArray[i].GetName(cocoLoader);
@@ -518,48 +514,39 @@ void SceneReader::setPropertyFromJsonDict(CocoLoader *cocoLoader, stExpCocoNode 
         
         if (key == "x")
         {
-            x = utils::atof(value.c_str());
-            node->setPositionX(x);
+            node->setPositionX(utils::atof(value.c_str()));
         }
         else if (key == "y")
         {
-            y = utils::atof(value.c_str());
-            node->setPositionY(y);
+            node->setPositionY(utils::atof(value.c_str()));
         }
         else if (key == "visible")
         {
-            bVisible = atoi(value.c_str()) != 0;
-            node->setVisible(bVisible);
+            node->setVisible(atoi(value.c_str()) != 0);
         }
         else if (key == "objecttag")
         {
-            nTag = atoi(value.c_str());
-            node->setTag(nTag);
+            node->setTag(atoi(value.c_str()));
         }
         else if (key == "zorder")
         {
-            nZorder = atoi(value.c_str());
-            node->setLocalZOrder(nZorder);
+            node->setLocalZOrder(atoi(value.c_str()));
         }
         else if(key == "scalex")
         {
-            fScaleX = utils::atof(value.c_str());
-            node->setScaleX(fScaleX);
+            node->setScaleX(utils::atof(value.c_str()));
         }
         else if(key == "scaley")
         {
-            fScaleY = atof(value.c_str());
-            node->setScaleY(fScaleY);
+            node->setScaleY(atof(value.c_str()));
         }
         else if(key == "rotation")
         {
-            fRotationZ = utils::atof(value.c_str());
-            node->setRotation(fRotationZ);
+            node->setRotation(utils::atof(value.c_str()));
         }
         else if(key == "name")
         {
-            sName = value.c_str();
-            node->setName(sName);
+            node->setName(value);
         }
     }
 }

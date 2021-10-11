@@ -3,8 +3,9 @@ Copyright (c) 2009      On-Core
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
-http://www.cocos2d-x.org
+Copyright (c) 2021 Bytedance Inc.
+
+ https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -409,7 +410,6 @@ void Grid3D::calculateVertexPoints()
     float height = (float)_texture->getPixelsHigh();
     float imageH = _texture->getContentSizeInPixels().height;
 
-    int x = 0, y = 0, i = 0;
     CC_SAFE_FREE(_vertices);
     CC_SAFE_FREE(_originalVertices);
     CC_SAFE_FREE(_texCoordinates);
@@ -428,9 +428,9 @@ void Grid3D::calculateVertexPoints()
     float *texArray = (float*)_texCoordinates;
     unsigned short *idxArray = _indices;
 
-    for (x = 0; x < _gridSize.width; ++x)
+    for (int x = 0; x < _gridSize.width; ++x)
     {
-        for (y = 0; y < _gridSize.height; ++y)
+        for (int y = 0; y < _gridSize.height; ++y)
         {
             int idx = (int)(y * _gridSize.width) + x;
 
@@ -460,7 +460,7 @@ void Grid3D::calculateVertexPoints()
             int tex1[4] = {a*2, b*2, c*2, d*2};
             Vec2 Tex2F[4] = {Vec2(x1, y1), Vec2(x2, y1), Vec2(x2, y2), Vec2(x1, y2)};
 
-            for (i = 0; i < 4; ++i)
+            for (int i = 0; i < 4; ++i)
             {
                 vertArray[l1[i]] = l2[i].x;
                 vertArray[l1[i] + 1] = l2[i].y;

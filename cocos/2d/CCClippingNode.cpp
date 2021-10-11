@@ -3,8 +3,8 @@
  * Copyright (c) 2012      cocos2d-x.org
  * Copyright (c) 2013-2016 Chukong Technologies Inc.
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- *
- * cocos2d-x: http://www.cocos2d-x.org
+ * Copyright (c) 2021 Bytedance Inc.
+ * https://adxe.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -179,7 +179,6 @@ void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32
     _afterDrawStencilCmd.func = CC_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilStateManager);
     renderer->addCommand(&_afterDrawStencilCmd);
 
-    int i = 0;
     bool visibleByCamera = isVisitableByVisitingCamera();
     
 
@@ -194,7 +193,8 @@ void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32
     {
         sortAllChildren();
         // draw children zOrder < 0
-        for(auto size = _children.size(); i < size; ++i)
+        int i = 0;
+        for(int size = static_cast<int>(_children.size()); i < size; ++i)
         {
             auto node = _children.at(i);
             
