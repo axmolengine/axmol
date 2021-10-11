@@ -2,8 +2,9 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+ https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -73,13 +74,13 @@ namespace cocos2d {
     jobject JniHelper::_activity = nullptr;
 
     JavaVM* JniHelper::getJavaVM() {
-        pthread_t thisthread = pthread_self();
+        // pthread_t thisthread = pthread_self();
         //LOGD("JniHelper::getJavaVM(), pthread_self() = %ld", thisthread);
         return _psJavaVM;
     }
 
     void JniHelper::setJavaVM(JavaVM *javaVM) {
-        pthread_t thisthread = pthread_self();
+        // pthread_t thisthread = pthread_self();
         //LOGD("JniHelper::setJavaVM(%p), pthread_self() = %ld", javaVM, thisthread);
         _psJavaVM = javaVM;
 

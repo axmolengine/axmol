@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -869,14 +870,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue , c
     bool ok = true;
 
     tolua_Error tolua_err;
-    if (!tolua_istable(L, lo, 0, &tolua_err) )
-    {
-#if COCOS2D_DEBUG >=1
-        luaval_to_native_err(L,"#ferror:",&tolua_err,funcName);
-        ok = false;
-#endif
-    }
-
+    bool ok = !!tolua_istable(L, lo, 0, &tolua_err);
     if (ok)
     {
         // default values
@@ -997,6 +991,11 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue , c
         }
         lua_pop(L,1);
     }
+#if COCOS2D_DEBUG >= 1
+    else {
+        luaval_to_native_err(L,"#ferror:",&tolua_err,funcName);
+    }
+#endif
 
 
     return ok;

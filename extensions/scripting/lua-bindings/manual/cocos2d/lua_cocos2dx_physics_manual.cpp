@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
+ Copyright (c) 2021 Bytedance Inc.
+
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -103,8 +104,7 @@ int lua_cocos2dx_physics_PhysicsWorld_getScene(lua_State* tolua_S)
 {
     int argc = 0;
     cocos2d::PhysicsWorld* cobj = nullptr;
-    bool ok  = true;
-    
+
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -126,8 +126,6 @@ int lua_cocos2dx_physics_PhysicsWorld_getScene(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 0)
     {
-        if(!ok)
-            return 0;
         cocos2d::Scene& ret = cobj->getScene();
         do {
             auto className = getLuaTypeName<Ref>(&ret, "cc.Scene");

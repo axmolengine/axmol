@@ -918,9 +918,7 @@ static int lua_cocos2dx_XMLHttpRequest_setRequestHeader(lua_State* L)
 {
     int argc = 0;
     LuaMinXmlHttpRequest* self = nullptr;
-    const char* field = "";
-    const char* value = "";
-    
+
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L,1,"cc.XMLHttpRequest",0,&tolua_err)) goto tolua_lerror;
@@ -945,8 +943,8 @@ static int lua_cocos2dx_XMLHttpRequest_setRequestHeader(lua_State* L)
             goto tolua_lerror;
 #endif
         
-        field = tolua_tostring(L, 2, "");
-        value = tolua_tostring(L, 3, "");
+        const char* field = tolua_tostring(L, 2, "");
+        const char* value = tolua_tostring(L, 3, "");
         self->setRequestHeader(field, value);
         return 0;
     }
@@ -966,7 +964,7 @@ static int lua_cocos2dx_XMLHttpRequest_getAllResponseHeaders(lua_State* L)
     LuaMinXmlHttpRequest* self = nullptr;
     
     std::stringstream responseheaders;
-    std::string responseheader = "";
+    std::string responseheader;
     
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1012,7 +1010,7 @@ static int lua_cocos2dx_XMLHttpRequest_getResponseHeader(lua_State* L)
     int argc = 0;
     LuaMinXmlHttpRequest* self = nullptr;
     
-    std::string responseheader = "";
+    std::string responseheader;
     
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1065,7 +1063,7 @@ static int lua_cocos2dx_XMLHttpRequest_registerScriptHandler(lua_State* L)
     int argc = 0;
     LuaMinXmlHttpRequest* self = nullptr;
     
-    std::string responseheader = "";
+    std::string responseheader;
     
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1109,7 +1107,7 @@ static int lua_cocos2dx_XMLHttpRequest_unregisterScriptHandler(lua_State* L)
     int argc = 0;
     LuaMinXmlHttpRequest* self = nullptr;
     
-    std::string responseheader = "";
+    std::string responseheader;
     
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;

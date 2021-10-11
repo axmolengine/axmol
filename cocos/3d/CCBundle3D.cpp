@@ -1,8 +1,9 @@
 /****************************************************************************
 Copyright (c) 2014-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+ https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1865,9 +1866,8 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
             modelnodedata->subMeshId = _binaryReader.readString();
             modelnodedata->materialId = _binaryReader.readString();
 
-            if (modelnodedata->subMeshId == "" || modelnodedata->materialId == "")
+            if (modelnodedata->subMeshId.empty() || modelnodedata->materialId.empty())
             {
-                std::string err = "Node " + nodedata->id + " part is missing meshPartId or materialId";
                 CCLOG("Node %s part is missing meshPartId or materialId", nodedata->id.c_str());
                 CC_SAFE_DELETE(modelnodedata);
                 CC_SAFE_DELETE(nodedata);
