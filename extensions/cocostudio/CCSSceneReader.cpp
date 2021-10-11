@@ -355,13 +355,9 @@ Node* SceneReader::createObject(const rapidjson::Value &dict, cocos2d::Node* par
     
 cocos2d::Node* SceneReader::createObject(CocoLoader *cocoLoader, stExpCocoNode *cocoNode, cocos2d::Node* parent, AttachComponentType attachComponent)
 {
-    const char *className = nullptr;
     stExpCocoNode *pNodeArray = cocoNode->GetChildArray(cocoLoader);
     std::string Key = pNodeArray[1].GetName(cocoLoader);
-    if (Key == "classname")
-    {
-        className = pNodeArray[1].GetValue(cocoLoader);
-    }
+    const char *className = Key == "classname" ? pNodeArray[1].GetValue(cocoLoader) : "";
     if(strcmp(className, "CCNode") == 0)
     {
         Node* gb = nullptr;
