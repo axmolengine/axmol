@@ -2,8 +2,9 @@
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -238,57 +239,17 @@ int LuaStack::executeString(const char *codes)
     return executeFunction(0);
 }
 
-static const std::string BYTECODE_FILE_EXT    = ".luac";
-static const std::string NOT_BYTECODE_FILE_EXT = ".lua";
-
 int LuaStack::executeScriptFile(const char* filename)
 {
     CCAssert(filename, "CCLuaStack::executeScriptFile() - invalid filename");
 
-    std::string buf(filename);
-    //
-    // remove .lua or .luac
-    //
-    size_t pos = buf.rfind(BYTECODE_FILE_EXT);
-    if (pos != std::string::npos)
-    {
-        buf = buf.substr(0, pos);
-    }
-    else
-    {
-        pos = buf.rfind(NOT_BYTECODE_FILE_EXT);
-        if (pos == buf.length() - NOT_BYTECODE_FILE_EXT.length())
-        {
-            buf = buf.substr(0, pos);
-        }
-    }
-
-    FileUtils *utils = FileUtils::getInstance();
-
-    //
-    // 1. check .luac suffix
-    // 2. check .lua suffix
-    //
-    std::string tmpfilename = buf + BYTECODE_FILE_EXT;
-    if (utils->isFileExist(tmpfilename))
-    {
-        buf = tmpfilename;
-    }
-    else
-    {
-        tmpfilename = buf + NOT_BYTECODE_FILE_EXT;
-        if (utils->isFileExist(tmpfilename))
-        {
-            buf = tmpfilename;
-        }
-    }
-
-    std::string fullPath = utils->fullPathForFilename(buf);
-    Data data = utils->getDataFromFile(fullPath);
-    int rn = 0;
+    std::string filePath{filename};
+    Data data = FileUtils::getInstance()->getDataFromFile(filePath);
+    int rn    = 0;
     if (!data.isNull())
     {
-        if (luaLoadBuffer(_state, (const char*)data.getBytes(), (int)data.getSize(), fullPath.c_str()) == 0)
+        filePath.insert(filePath.begin(), '@');  // lua standard, add file chunck mark '@'
+        if (luaLoadBuffer(_state, (const char*)data.getBytes(), (int)data.getSize(), filePath.c_str()) == 0)
         {
             rn = executeFunction(0);
         }
@@ -635,6 +596,10 @@ int LuaStack::luaLoadChunksFromZIP(lua_State *L)
         return 0;
     }
 
+    using namespace cxx17;
+    const auto BYTECODE_FILE_EXT     = ".luac"_sv;
+    const auto NOT_BYTECODE_FILE_EXT = ".lua"_sv;
+
     const char *zipFilename = lua_tostring(L, -1);
     lua_settop(L, 0);
     FileUtils *utils = FileUtils::getInstance();
@@ -669,7 +634,9 @@ int LuaStack::luaLoadChunksFromZIP(lua_State *L)
                     if (pos != std::string::npos)
                     {
                         std::string suffix = filename.substr(pos, filename.length());
-                        if (suffix == NOT_BYTECODE_FILE_EXT || suffix == BYTECODE_FILE_EXT) {
+                        if (cxx17::string_view{suffix} == NOT_BYTECODE_FILE_EXT ||
+                            cxx17::string_view{suffix} == BYTECODE_FILE_EXT)
+                        {
                             filename.erase(pos);
                         }
                     }
