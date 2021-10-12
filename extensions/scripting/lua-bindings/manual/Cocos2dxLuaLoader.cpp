@@ -45,10 +45,6 @@ extern "C"
 {
     int cocos2dx_lua_loader(lua_State *L)
     {
-        using namespace cxx17;
-        const auto BYTECODE_FILE_EXT    = ".luac"_sv;
-        const auto NOT_BYTECODE_FILE_EXT = ".lua"_sv;
-
         auto path = adxelua_tosv(L, 1);
 
         std::string strPath{path};
