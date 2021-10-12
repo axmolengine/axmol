@@ -146,6 +146,7 @@ if(APPLE)
     #set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "GRLXXXX2K9")
 elseif(WINDOWS)
     cocos_copy_target_dll(${APP_NAME})
+    cocos_copy_lua_dlls(${APP_NAME})
 endif()
 
 if(WINDOWS)
