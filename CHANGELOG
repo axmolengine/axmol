@@ -9,6 +9,8 @@ adxe-1.0  ??
 [HIGHLIGHT] Improve Lua RTTI performance and less memory storage
 [HIGHLIGHT] Virtual File System support, thanks  to @rh101 
 [HIGHLIGHT] Refactor lua loader, speed up 30%+
+[HIGHLIGHT] Update plainlua version to 5.4.3
+[HIGHLIGHT] Use Openal-Soft for all platform
 [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
 [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
 [FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issue
@@ -19,6 +21,10 @@ adxe-1.0  ??
 [FIX] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
 [FIX] Fix Crash on SpriteBatchNode::appendChild when CC_SPRITE_DEBUG_DRAW==1
 [REFINE] CCValue move construct and assign with std::string support
+[REFINE] Improve windows dev workflow, use working directory instead copy resources to build binary directory
+[REFINE] Add lua debug project file to lua project template
+[REFINE] Remove lua 64bit spec search path, since we can compile compatible bytecode for both plainlua and luajit
+[REFINE] Put stats labels to safe origin to make sure we can see it integral at some mobile device
 [REFINE] Improve cmake scripts
 [REFINE] Replace deprecated repo `jcenter` with `mavenCentral`
 [REFINE] Lua-5.4 compatible
@@ -29,6 +35,12 @@ adxe-1.0  ??
 [REFINE] Rename command line to to `adxe`
 [REFINE] Update imgui to 1.84 WIP
 [REFINE] Rename thirdparty folder `external` to `thirdparty`
+[REFINE] Building plainlua as dll on windows always for debugger happy to debug app quickly
+[REFINE] Fix some audio test case can't hear sound
+[REFINE] Avoid OS_WINDOWS conflict with system macro
+[REFINE] Update OpenSSL to v3.0.0
+[REFINE] Update FreeType to latest
+[REFINE] Use Freetype SDF render when label distance field enabled
 
 
 cocos2d-x-4.0  Dec.3 2019
