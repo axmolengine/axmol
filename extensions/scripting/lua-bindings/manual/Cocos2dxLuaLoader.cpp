@@ -53,10 +53,9 @@ extern "C"
 {
     int cocos2dx_lua_loader(lua_State *L)
     {
-        auto path = adxelua_tosv(L, 1);
+        auto relativePath = adxelua_tostr(L, 1);
 
         //  convert any '.' to '/'
-        auto relativePath = adxelua_tostr(L, 1);
         size_t pos        = relativePath.find_first_of('.');
         while (pos != std::string::npos)
         {
