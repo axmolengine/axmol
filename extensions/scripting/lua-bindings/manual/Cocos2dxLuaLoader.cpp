@@ -49,15 +49,7 @@ extern "C"
         const auto BYTECODE_FILE_EXT    = ".luac"_sv;
         const auto NOT_BYTECODE_FILE_EXT = ".lua"_sv;
 
-        bool useBCExt = false;
         auto path = adxelua_tosv(L, 1);
-        if (cxx20::ends_with(path, BYTECODE_FILE_EXT))
-        {
-            useBCExt = true;
-            path.remove_suffix(BYTECODE_FILE_EXT.length());
-        }
-        else if (cxx20::ends_with(path, NOT_BYTECODE_FILE_EXT))
-            path.remove_suffix(NOT_BYTECODE_FILE_EXT.length());
 
         std::string strPath{path};
         size_t pos = strPath.find_first_of('.');
@@ -67,15 +59,10 @@ extern "C"
             pos = strPath.find_first_of('.');
         }
 
-        if (!useBCExt)
-            strPath.append(NOT_BYTECODE_FILE_EXT.data(), NOT_BYTECODE_FILE_EXT.length());
-        else
-            strPath.append(BYTECODE_FILE_EXT.data(), BYTECODE_FILE_EXT.length());
-
         // search file in package.path
         Data chunk;
         std::string filePath;
-        FileUtils* utils = FileUtils::getInstance();
+        auto fileUtils = FileUtils::getInstance();
 
         lua_getglobal(L, "package");
         lua_getfield(L, -1, "path");
@@ -92,11 +79,6 @@ extern "C"
             if (prefix[0] == '.' && prefix[1] == '/')
                 prefix = prefix.substr(2);
 
-            if (cxx20::ends_with(prefix, BYTECODE_FILE_EXT))
-                prefix.remove_suffix(BYTECODE_FILE_EXT.length());
-            else if (cxx20::ends_with(prefix, NOT_BYTECODE_FILE_EXT))
-                prefix.remove_suffix(NOT_BYTECODE_FILE_EXT.length());
-
             filePath.assign(prefix.data(), prefix.length());
             pos = filePath.find_first_of('?', 0);
             while (pos != std::string::npos)
@@ -105,9 +87,9 @@ extern "C"
                 pos = filePath.find_first_of('?', pos + strPath.length() + 1);
             }
 
-            chunk = utils->getDataFromFile(filePath);
-            if (!chunk.isNull())
+            if (fileUtils->isFileExist(filePath))
             {
+                chunk = fileUtils->getDataFromFile(filePath);
                 break;
             }
 
