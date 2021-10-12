@@ -161,6 +161,7 @@ if(APPLE)
     endif()
 elseif(WINDOWS)
     cocos_copy_target_dll(${APP_NAME})
+    cocos_copy_lua_dlls(${APP_NAME})
 endif()
 # copy resource on linux or WINDOWS
 if(WINDOWS)
