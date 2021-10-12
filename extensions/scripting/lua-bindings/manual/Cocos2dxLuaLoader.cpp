@@ -75,12 +75,15 @@ extern "C"
             if (prefix[0] == '.' && prefix[1] == '/')
                 prefix = prefix.substr(2);
 
+            // reserve enough for file path to avoid memory realloc when replace ? to strPath
+            filePath.reserve(prefix.length() + strPath.length());
+
             filePath.assign(prefix.data(), prefix.length());
-            pos = filePath.find_first_of('?', 0);
-            while (pos != std::string::npos)
+            pos = filePath.find_last_of('?');
+            assert(pos != std::string::npos); // package search path should have '?'
+            if (pos != std::string::npos)
             {
                 filePath.replace(pos, 1, strPath);
-                pos = filePath.find_first_of('?', pos + strPath.length() + 1);
             }
 
             if (fileUtils->isFileExist(filePath))
