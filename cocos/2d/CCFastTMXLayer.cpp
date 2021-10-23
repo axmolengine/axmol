@@ -100,7 +100,7 @@ bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo *tilesetInfo, TMXLayerInfo
     Vec2 offset = this->calculateLayerOffset(layerInfo->_offset);
     this->setPosition(CC_POINT_PIXELS_TO_POINTS(offset));
 
-    this->setContentSize(CC_SIZE_PIXELS_TO_POINTS(Size(_layerSize.width * _mapTileSize.width, _layerSize.height * _mapTileSize.height)));
+    this->setContentSize(CC_SIZE_PIXELS_TO_POINTS(Vec2(_layerSize.width * _mapTileSize.width, _layerSize.height * _mapTileSize.height)));
     
     this->tileToNodeTransform();
 
@@ -135,7 +135,7 @@ void FastTMXLayer::draw(Renderer *renderer, const Mat4& transform, uint32_t flag
     
     if( flags != 0 || _dirty || _quadsDirty)
     {
-        Size s = _director->getVisibleSize();
+        Vec2 s = _director->getVisibleSize();
         const Vec2 &anchor = getAnchorPoint();
         auto rect = Rect(Camera::getVisitingCamera()->getPositionX() - s.width * (anchor.x == 0.0f ? 0.5f : anchor.x),
                          Camera::getVisitingCamera()->getPositionY() - s.height * (anchor.y == 0.0f ? 0.5f : anchor.y),
@@ -169,8 +169,8 @@ void FastTMXLayer::draw(Renderer *renderer, const Mat4& transform, uint32_t flag
 void FastTMXLayer::updateTiles(const Rect& culledRect)
 {
     Rect visibleTiles = Rect(culledRect.origin, culledRect.size * _director->getContentScaleFactor());
-    Size mapTileSize = CC_SIZE_PIXELS_TO_POINTS(_mapTileSize);
-    Size tileSize = CC_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
+    Vec2 mapTileSize = CC_SIZE_PIXELS_TO_POINTS(_mapTileSize);
+    Vec2 tileSize = CC_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
     Mat4 nodeToTileTransform = _tileToNodeTransform.getInversed();
     //transform to tile
     visibleTiles = RectApplyTransform(visibleTiles, nodeToTileTransform);
@@ -510,8 +510,8 @@ void FastTMXLayer::updateTotalQuads()
 {
     if(_quadsDirty)
     {
-        Size tileSize = CC_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
-        Size texSize = _tileSet->_imageSize;
+        Vec2 tileSize = CC_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
+        Vec2 texSize = _tileSet->_imageSize;
         _tileToQuadIndex.clear();
         _totalQuads.resize(int(_layerSize.width * _layerSize.height));
         _indices.resize(6 * int(_layerSize.width * _layerSize.height));

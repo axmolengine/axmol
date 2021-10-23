@@ -35,10 +35,6 @@
 
 static const int CC_EDIT_BOX_PADDING = 5;
 
-static cocos2d::Size applyPadding(const cocos2d::Size& sizeToCorrect) {
-    return cocos2d::Size(sizeToCorrect.width - CC_EDIT_BOX_PADDING * 2, sizeToCorrect.height);
-}
-
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #define PASSWORD_CHAR "*"
 #else
@@ -46,6 +42,11 @@ static cocos2d::Size applyPadding(const cocos2d::Size& sizeToCorrect) {
 #endif
 
 NS_CC_BEGIN
+
+static Vec2 applyPadding(const Vec2& sizeToCorrect)
+{
+    return Vec2(sizeToCorrect.width - CC_EDIT_BOX_PADDING * 2, sizeToCorrect.height);
+}
 
 namespace ui {
 
@@ -71,7 +72,7 @@ EditBoxImplCommon::~EditBoxImplCommon()
 }
 
 
-bool EditBoxImplCommon::initWithSize(const Size& size)
+bool EditBoxImplCommon::initWithSize(const Vec2& size)
 {
     do 
     {
@@ -88,7 +89,7 @@ bool EditBoxImplCommon::initWithSize(const Size& size)
     return false;
 }
 
-void EditBoxImplCommon::initInactiveLabels(const Size& size)
+void EditBoxImplCommon::initInactiveLabels(const Vec2& size)
 {
     const char* pDefaultFontName = this->getNativeDefaultFontName();
 
@@ -110,7 +111,7 @@ void EditBoxImplCommon::initInactiveLabels(const Size& size)
     setPlaceholderFont(pDefaultFontName, size.height*2/3);
 }
 
-void EditBoxImplCommon::placeInactiveLabels(const Size& size)
+void EditBoxImplCommon::placeInactiveLabels(const Vec2& size)
 {
     _label->setDimensions(size.width, size.height);
 
@@ -151,7 +152,7 @@ void EditBoxImplCommon::setInactiveText(const char* pText)
     }
     // Clip the text width to fit to the text box
     const auto maxSize = applyPadding(_editBox->getContentSize());
-    Size labelSize = _label->getContentSize();
+    Vec2 labelSize = _label->getContentSize();
     if(labelSize.width > maxSize.width || labelSize.height > maxSize.height)
     {
         _label->setDimensions(maxSize.width, maxSize.height);
@@ -286,7 +287,7 @@ void EditBoxImplCommon::setVisible(bool visible)
     }
 }
 
-void EditBoxImplCommon::setContentSize(const Size& size)
+void EditBoxImplCommon::setContentSize(const Vec2& size)
 {
     _contentSize = applyPadding(size);
     CCLOG("[Edit text] content size = (%f, %f)", _contentSize.width, _contentSize.height);

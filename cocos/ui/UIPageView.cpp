@@ -206,7 +206,7 @@ void PageView::refreshIndicatorPosition()
 {
     if(_indicator != nullptr)
     {
-        const Size& contentSize = getContentSize();
+        const Vec2& contentSize = getContentSize();
         float posX = contentSize.width * _indicatorPositionAsAnchorPoint.x;
         float posY = contentSize.height * _indicatorPositionAsAnchorPoint.y;
         _indicator->setPosition(Vec2(posX, posY));
@@ -365,7 +365,7 @@ void PageView::setIndicatorPosition(const Vec2& position)
 {
     if(_indicator != nullptr)
     {
-        const Size& contentSize = getContentSize();
+        const Vec2& contentSize = getContentSize();
         _indicatorPositionAsAnchorPoint.x = position.x / contentSize.width;
         _indicatorPositionAsAnchorPoint.y = position.y / contentSize.height;
         _indicator->setPosition(position);

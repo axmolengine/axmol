@@ -39,7 +39,7 @@
 #include <vector>
 
 #include "2d/CCActionInterval.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 
 NS_CC_BEGIN;
 

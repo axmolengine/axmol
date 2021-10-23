@@ -31,7 +31,7 @@
 
 #include "chipmunk/chipmunk.h"
 #include "platform/CCPlatformMacros.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 
 NS_CC_BEGIN
 
@@ -45,7 +45,7 @@ NS_CC_BEGIN
 /**
  * A physics helper class.
  *
- * Support for conversion between the chipmunk types and cocos types, eg: cpVect to Vec2, cpVect to Size, cpFloat to float.
+ * Support for conversion between the chipmunk types and cocos types, eg: cpVect to Vec2, cpVect to Vec2, cpFloat to float.
  */
 class PhysicsHelper
 {
@@ -56,11 +56,11 @@ public:
     /** Make Vec2 type convert to cpVect type. */
     static cpVect point2cpv(const Vec2& point) { return cpv(point.x, point.y); }
     
-    /** Make cpVect type convert to Size type. */
-    static Size cpv2size(const cpVect& vec) { return Size(vec.x, vec.y); }
+    /** Make cpVect type convert to Vec2 type. */
+    static Vec2 cpv2size(const cpVect& vec) { return Vec2(vec.x, vec.y); }
     
-    /** Make Size type convert to cpVect type. */
-    static cpVect size2cpv(const Size& size) { return cpv(size.width, size.height); }
+    /** Make Vec2 type convert to cpVect type. */
+    static cpVect size2cpv(const Vec2& size) { return cpv(size.width, size.height); }
     
     /** Make cpFloat type convert to float type. */
     static float cpfloat2float(cpFloat f) { return f; }

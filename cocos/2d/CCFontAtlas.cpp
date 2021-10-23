@@ -154,7 +154,7 @@ void FontAtlas::initTextureWithZeros(Texture2D *texture)
     }
     zeros = new char[zeroBytes]();
     //std::fill(zeros, zeros + cnt, 0);
-    texture->initWithData(zeros, zeroBytes, pixelFormat, CacheTextureWidth, CacheTextureHeight, Size(CacheTextureWidth, CacheTextureHeight));
+    texture->initWithData(zeros, zeroBytes, pixelFormat, CacheTextureWidth, CacheTextureHeight, Vec2(CacheTextureWidth, CacheTextureHeight));
     delete[] zeros;
 }
 

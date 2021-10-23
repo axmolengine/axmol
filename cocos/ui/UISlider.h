@@ -243,7 +243,7 @@ public:
     virtual void onTouchCancelled(Touch *touch, Event *unusedEvent) override;
     
     //override "getVirtualRendererSize" method of widget.
-    virtual Size getVirtualRendererSize() const override;
+    virtual Vec2 getVirtualRendererSize() const override;
     
     //override "getVirtualRenderer" method of widget.
     virtual Node* getVirtualRenderer() override;
@@ -308,9 +308,9 @@ protected:
 protected:
     Scale9Sprite*  _barRenderer;
     Scale9Sprite* _progressBarRenderer;
-    Size _barTextureSize;
+    Vec2 _barTextureSize;
     Rect _originalBarRect;
-    Size _progressBarTextureSize;
+    Vec2 _progressBarTextureSize;
     Rect _originalProgressBarRect;
     
     Sprite* _slidBallNormalRenderer;

@@ -270,13 +270,13 @@ namespace ui {
          * Query owner's content size.
          *@return Owner's content size.
          */
-        const Size& getSize()const;
+        const Vec2& getSize()const;
 
         /**
          * Change the content size of owner.
-         *@param size Content size in @see `Size`.
+         *@param size Content size in @see `Vec2`.
          */
-        void setSize(const Size& size);
+        void setSize(const Vec2& size);
 
         /**
          * Query whether percent width is enabled or not.
@@ -328,13 +328,13 @@ namespace ui {
 
         /**
          * Query size height of owner.
-         *@return Size height in float.
+         *@return Vec2 height in float.
          */
         float getSizeHeight()const;
 
         /**
          * Change size height of owner.
-         *@param height Size height in float.
+         *@param height Vec2 height in float.
          */
         void setSizeHeight(float height);
 

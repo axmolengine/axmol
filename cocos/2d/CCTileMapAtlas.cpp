@@ -56,7 +56,7 @@ bool TileMapAtlas::initWithTileFile(const std::string& tile, const std::string& 
     if( AtlasNode::initWithTileFile(tile, tileWidth, tileHeight, _itemsToRender) )
     {
         this->updateAtlasValues();
-        this->setContentSize(Size((float)(_TGAInfo->width*_itemWidth),
+        this->setContentSize(Vec2((float)(_TGAInfo->width*_itemWidth),
                                         (float)(_TGAInfo->height*_itemHeight)));
         return true;
     }

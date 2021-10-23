@@ -76,13 +76,13 @@ public:
      */
     static Scene *create();
 
-    /** Creates a new Scene object with a predefined Size. 
+    /** Creates a new Scene object with a predefined Vec2. 
      *
      * @param size The predefined size of scene.
      * @return An autoreleased Scene object.
      * @js NA
      */
-    static Scene *createWithSize(const Size& size);
+    static Scene *createWithSize(const Vec2& size);
 
     using Node::addChild;
     virtual std::string getDescription() const override;
@@ -122,7 +122,7 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~Scene();
     
     bool init() override;
-    bool initWithSize(const Size& size);
+    bool initWithSize(const Vec2& size);
     
     void setCameraOrderDirty() { _cameraOrderDirty = true; }
     

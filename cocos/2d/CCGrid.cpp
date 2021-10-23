@@ -42,15 +42,15 @@ THE SOFTWARE.
 NS_CC_BEGIN
 // implementation of GridBase
 
-bool GridBase::initWithSize(const Size& gridSize)
+bool GridBase::initWithSize(const Vec2& gridSize)
 {
     return initWithSize(gridSize, Rect::ZERO);
 }
 
-bool GridBase::initWithSize(const cocos2d::Size &gridSize, const cocos2d::Rect &rect)
+bool GridBase::initWithSize(const Vec2 &gridSize, const cocos2d::Rect &rect)
 {
     Director *director = Director::getInstance();
-    Size s = director->getWinSizeInPixels();
+    Vec2 s = director->getWinSizeInPixels();
     
     auto POTWide = ccNextPOT((unsigned int)s.width);
     auto POTHigh = ccNextPOT((unsigned int)s.height);
@@ -76,12 +76,12 @@ bool GridBase::initWithSize(const cocos2d::Size &gridSize, const cocos2d::Rect &
     return true;
 }
 
-bool GridBase::initWithSize(const Size& gridSize, Texture2D *texture, bool flipped)
+bool GridBase::initWithSize(const Vec2& gridSize, Texture2D *texture, bool flipped)
 {
     return initWithSize(gridSize, texture, flipped, Rect::ZERO);
 }
 
-bool GridBase::initWithSize(const Size& gridSize, Texture2D *texture, bool flipped, const Rect& rect)
+bool GridBase::initWithSize(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect)
 {
     bool ret = true;
     
@@ -186,7 +186,7 @@ void GridBase::setTextureFlipped(bool flipped)
 void GridBase::set2DProjection()
 {
     Director *director = Director::getInstance();
-    Size    size = director->getWinSizeInPixels();
+    Vec2    size = director->getWinSizeInPixels();
 
     director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
 
@@ -215,7 +215,7 @@ void GridBase::beforeDraw()
     _beforeDrawCommand.func = [=]() -> void {
         _directorProjection = director->getProjection();
         set2DProjection();
-        Size    size = director->getWinSizeInPixels();
+        Vec2    size = director->getWinSizeInPixels();
         renderer->setViewPort(0, 0, (unsigned int)size.width, (unsigned int)size.height);
 
         _oldRenderTarget = renderer->getRenderTarget();
@@ -275,7 +275,7 @@ void GridBase::afterDraw(cocos2d::Node * /*target*/)
 
 // implementation of Grid3D
 
-Grid3D* Grid3D::create(const Size& gridSize)
+Grid3D* Grid3D::create(const Vec2& gridSize)
 {
     Grid3D *ret= new (std::nothrow) Grid3D();
 
@@ -295,7 +295,7 @@ Grid3D* Grid3D::create(const Size& gridSize)
     return ret;
 }
 
-Grid3D* Grid3D::create(const Size& gridSize, const Rect& rect)
+Grid3D* Grid3D::create(const Vec2& gridSize, const Rect& rect)
 {
     Grid3D *ret= new (std::nothrow) Grid3D();
     
@@ -315,7 +315,7 @@ Grid3D* Grid3D::create(const Size& gridSize, const Rect& rect)
     return ret;
 }
 
-Grid3D* Grid3D::create(const Size& gridSize, Texture2D *texture, bool flipped)
+Grid3D* Grid3D::create(const Vec2& gridSize, Texture2D *texture, bool flipped)
 {
     Grid3D *ret= new (std::nothrow) Grid3D();
     
@@ -335,7 +335,7 @@ Grid3D* Grid3D::create(const Size& gridSize, Texture2D *texture, bool flipped)
     return ret;
 }
 
-Grid3D* Grid3D::create(const Size& gridSize, Texture2D *texture, bool flipped, const Rect& rect)
+Grid3D* Grid3D::create(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect)
 {
     Grid3D *ret= new (std::nothrow) Grid3D();
     
@@ -570,7 +570,7 @@ TiledGrid3D::~TiledGrid3D()
     CC_SAFE_FREE(_indices);
 }
 
-TiledGrid3D* TiledGrid3D::create(const Size& gridSize)
+TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize)
 {
     TiledGrid3D *ret= new (std::nothrow) TiledGrid3D();
 
@@ -590,7 +590,7 @@ TiledGrid3D* TiledGrid3D::create(const Size& gridSize)
     return ret;
 }
 
-TiledGrid3D* TiledGrid3D::create(const Size& gridSize, const Rect& rect)
+TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize, const Rect& rect)
 {
     TiledGrid3D *ret= new (std::nothrow) TiledGrid3D();
     
@@ -610,7 +610,7 @@ TiledGrid3D* TiledGrid3D::create(const Size& gridSize, const Rect& rect)
     return ret;
 }
 
-TiledGrid3D* TiledGrid3D::create(const Size& gridSize, Texture2D *texture, bool flipped, const Rect& rect)
+TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect)
 {
     TiledGrid3D *ret= new (std::nothrow) TiledGrid3D();
     
@@ -630,7 +630,7 @@ TiledGrid3D* TiledGrid3D::create(const Size& gridSize, Texture2D *texture, bool 
     return ret;
 }
 
-TiledGrid3D* TiledGrid3D::create(const Size& gridSize, Texture2D *texture, bool flipped)
+TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize, Texture2D *texture, bool flipped)
 {
     TiledGrid3D *ret= new (std::nothrow) TiledGrid3D();
     

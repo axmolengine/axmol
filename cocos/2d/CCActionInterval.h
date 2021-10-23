@@ -736,19 +736,19 @@ private:
 };
 
 /** @class ResizeTo
-* @brief Resize a Node object to the final size by modifying it's Size attribute.
+* @brief Resize a Node object to the final size by modifying it's Vec2 attribute.
 */
 class  CC_DLL ResizeTo : public ActionInterval 
 {
 public:
     /**
     * Creates the action.
-    * @brief Resize a Node object to the final size by modifying it's Size attribute. Works on all nodes where setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
+    * @brief Resize a Node object to the final size by modifying it's Vec2 attribute. Works on all nodes where setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
     * @param duration Duration time, in seconds.
     * @param final_size The target size to reach
     * @return An autoreleased RotateTo object.
     */
-    static ResizeTo* create(float duration, const cocos2d::Size& final_size);
+    static ResizeTo* create(float duration, const Vec2& final_size);
 
     //
     // Overrides
@@ -764,14 +764,14 @@ CC_CONSTRUCTOR_ACCESS:
     /**
     * initializes the action
     * @param duration in seconds
-    * @param final_size in Size type
+    * @param final_size in Vec2 type
     */
-    bool initWithDuration(float duration, const cocos2d::Size& final_size);
+    bool initWithDuration(float duration, const Vec2& final_size);
 
 protected:
-    cocos2d::Size _initialSize;
-    cocos2d::Size _finalSize;
-    cocos2d::Size _sizeDelta;
+    Vec2 _initialSize;
+    Vec2 _finalSize;
+    Vec2 _sizeDelta;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ResizeTo);
@@ -779,7 +779,7 @@ private:
 
 
 /** @class ResizeBy
-* @brief Resize a Node object by a Size. Works on all nodes where setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
+* @brief Resize a Node object by a Vec2. Works on all nodes where setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
 */
 class CC_DLL ResizeBy : public ActionInterval 
 {
@@ -791,7 +791,7 @@ public:
     * @param deltaSize The delta size.
     * @return An autoreleased ResizeBy object.
     */
-    static ResizeBy* create(float duration, const cocos2d::Size& deltaSize);
+    static ResizeBy* create(float duration, const Vec2& deltaSize);
     
     //
     // Overrides
@@ -809,12 +809,12 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~ResizeBy() {}
     
     /** initializes the action */
-    bool initWithDuration(float duration, const cocos2d::Size& deltaSize);
+    bool initWithDuration(float duration, const Vec2& deltaSize);
 
 protected:
-    cocos2d::Size _sizeDelta;
-    cocos2d::Size _startSize;
-    cocos2d::Size _previousSize;
+    Vec2 _sizeDelta;
+    Vec2 _startSize;
+    Vec2 _previousSize;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ResizeBy);

@@ -55,7 +55,7 @@ _backGroundImageFileName(""),
 _backGroundImageCapInsets(Rect::ZERO),
 _colorType(BackGroundColorType::NONE),
 _bgImageTexType(TextureResType::LOCAL),
-_backGroundImageTextureSize(Size::ZERO),
+_backGroundImageTextureSize(Vec2::ZERO),
 _backGroundImageColor(Color3B::WHITE),
 _backGroundImageOpacity(255),
 _colorRender(nullptr),
@@ -137,7 +137,7 @@ bool Layout::init()
     if (Widget::init())
     {
         ignoreContentAdaptWithSize(false);
-        setContentSize(Size::ZERO);
+        setContentSize(Vec2::ZERO);
         setAnchorPoint(Vec2::ZERO);
         onPassFocusToChild = CC_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
         return true;
@@ -441,7 +441,7 @@ Layout::ClippingType Layout::getClippingType()const
     return _clippingType;
 }
     
-void Layout::setStencilClippingSize(const Size& /*size*/)
+void Layout::setStencilClippingSize(const Vec2& /*size*/)
 {
     if (_clippingEnabled && _clippingType == ClippingType::STENCIL)
     {
@@ -671,7 +671,7 @@ void Layout::removeBackGroundImage()
     removeProtectedChild(_backGroundImage);
     _backGroundImage = nullptr;
     _backGroundImageFileName = "";
-    _backGroundImageTextureSize = Size::ZERO;
+    _backGroundImageTextureSize = Vec2::ZERO;
 }
 
 void Layout::setBackGroundColorType(BackGroundColorType type)
@@ -864,7 +864,7 @@ void Layout::updateBackGroundImageRGBA()
     }
 }
 
-const Size& Layout::getBackGroundImageTextureSize() const
+const Vec2& Layout::getBackGroundImageTextureSize() const
 {
     return _backGroundImageTextureSize;
 }
@@ -902,7 +902,7 @@ void Layout::requestDoLayout()
     _doLayoutDirty = true;
 }
     
-Size Layout::getLayoutContentSize()const
+Vec2 Layout::getLayoutContentSize()const
 {
     return this->getContentSize();
 }
@@ -1014,10 +1014,10 @@ bool Layout::isPassFocusToChild()const
     return _passFocusToChild;
 }
 
-Size Layout::getLayoutAccumulatedSize()const
+Vec2 Layout::getLayoutAccumulatedSize()const
 {
     const auto& children = this->getChildren();
-    Size layoutSize = Size::ZERO;
+    Vec2 layoutSize = Vec2::ZERO;
     int widgetCount =0;
     for(const auto& widget : children)
     {
@@ -1033,7 +1033,7 @@ Size Layout::getLayoutAccumulatedSize()const
             {
                 widgetCount++;
                 Margin m = w->getLayoutParameter()->getMargin();
-                layoutSize = layoutSize + w->getContentSize() + Size(m.right + m.left,  m.top + m.bottom) * 0.5;
+                layoutSize = layoutSize + w->getContentSize() + Vec2(m.right + m.left,  m.top + m.bottom) * 0.5;
             }
         }
     }
@@ -1042,11 +1042,11 @@ Size Layout::getLayoutAccumulatedSize()const
     Type type = this->getLayoutType();
     if (type == Type::HORIZONTAL)
     {
-        layoutSize = layoutSize - Size(0, layoutSize.height/widgetCount * (widgetCount-1));
+        layoutSize = layoutSize - Vec2(0, layoutSize.height/widgetCount * (widgetCount-1));
     }
     if (type == Type::VERTICAL || type == Type::CENTER_VERTICAL)
     {
-        layoutSize = layoutSize - Size(layoutSize.width/widgetCount * (widgetCount-1), 0);
+        layoutSize = layoutSize - Vec2(layoutSize.width/widgetCount * (widgetCount-1), 0);
     }
     return layoutSize;
 }
@@ -1055,7 +1055,7 @@ Vec2 Layout::getWorldCenterPoint(Widget* widget)const
 {
     Layout *layout = dynamic_cast<Layout*>(widget);
     //FIXEDME: we don't need to calculate the content size of layout anymore
-    Size widgetSize = layout ? layout->getLayoutAccumulatedSize() :  widget->getContentSize();
+    Vec2 widgetSize = layout ? layout->getLayoutAccumulatedSize() :  widget->getContentSize();
 //    CCLOG("content size : width = %f, height = %f", widgetSize.width, widgetSize.height);
     return widget->convertToWorldSpace(Vec2(widgetSize.width/2, widgetSize.height/2));
 }

@@ -42,7 +42,7 @@ class SpriteBatchNode;
 class SpriteFrame;
 class Animation;
 class Rect;
-class Size;
+class Vec2;
 class Texture2D;
 struct transformValues_;
 
@@ -243,7 +243,7 @@ public:
     /**
      * Updates the texture rect of the Sprite in points.
      *
-     * It will call setTextureRect(const Rect& rect, bool rotated, const Size& untrimmedSize) with \p rotated = false, and \p utrimmedSize = rect.size.
+     * It will call setTextureRect(const Rect& rect, bool rotated, const Vec2& untrimmedSize) with \p rotated = false, and \p utrimmedSize = rect.size.
      */
     virtual void setTextureRect(const Rect& rect);
 
@@ -251,7 +251,7 @@ public:
      *
      * It will update the texture coordinates and the vertex rectangle.
      */
-    virtual void setTextureRect(const Rect& rect, bool rotated, const Size& untrimmedSize);
+    virtual void setTextureRect(const Rect& rect, bool rotated, const Vec2& untrimmedSize);
 
     /**
      * Sets the vertex rect.
@@ -373,7 +373,7 @@ public:
     virtual void setScale(float scale) override;
     virtual void setPositionZ(float positionZ) override;
     virtual void setAnchorPoint(const Vec2& anchor) override;
-    virtual void setContentSize(const Size& size) override;
+    virtual void setContentSize(const Vec2& size) override;
 
     virtual void setIgnoreAnchorPointForPosition(bool value) override;
 
@@ -671,7 +671,7 @@ protected:
     Rect _centerRectNormalized = {0,0,1,1}; /// Rectangle to implement "slice 9"
     RenderMode _renderMode = Sprite::RenderMode::QUAD;   /// render mode used by the Sprite: Quad, Slice9, Polygon or Quad_Batchnode
     Vec2 _stretchFactor = Vec2::ONE;                     /// stretch factor to match the contentSize. for 1- and 9- slice sprites
-    Size _originalContentSize = Size::ZERO;              /// original content size
+    Vec2 _originalContentSize = Vec2::ZERO;              /// original content size
 
 
     // Offset Position (used by Zwoptex)

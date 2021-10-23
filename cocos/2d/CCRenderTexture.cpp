@@ -77,7 +77,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
             CC_SAFE_RELEASE(_UITextureImage);
             _UITextureImage = uiTextureImage;
             CC_SAFE_RETAIN(_UITextureImage);
-            const Size& s = _texture2D->getContentSizeInPixels();
+            const Vec2& s = _texture2D->getContentSizeInPixels();
             VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4, backend::PixelFormat::RGBA8, s);
 
             if ( _texture2DCopy )
@@ -100,7 +100,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
 void RenderTexture::listenToForeground(EventCustom* /*event*/)
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    const Size& s = _texture2D->getContentSizeInPixels();
+    const Vec2& s = _texture2D->getContentSizeInPixels();
     //TODO new-renderer: field _depthAndStencilFormat removal
 //    if (_depthAndStencilFormat != 0)
 //    {
@@ -458,7 +458,7 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
         return ;
     }
 
-    const Size& s = _texture2D->getContentSizeInPixels();
+    const Vec2& s = _texture2D->getContentSizeInPixels();
 
     // to get the image size to save
     //        if the saving image domain exceeds the buffer texture domain,
@@ -511,10 +511,10 @@ void RenderTexture::onBegin()
     if(!_keepMatrix)
     {
         _director->setProjection(_director->getProjection());
-        const Size& texSize = _texture2D->getContentSizeInPixels();
+        const Vec2& texSize = _texture2D->getContentSizeInPixels();
 
         // Calculate the adjustment ratios based on the old and new projections
-        Size size = _director->getWinSizeInPixels();
+        Vec2 size = _director->getWinSizeInPixels();
         float widthRatio = size.width / texSize.width;
         float heightRatio = size.height / texSize.height;
 
@@ -563,10 +563,10 @@ void RenderTexture::begin()
     {
         _director->setProjection(_director->getProjection());
         
-        const Size& texSize = _texture2D->getContentSizeInPixels();
+        const Vec2& texSize = _texture2D->getContentSizeInPixels();
         
         // Calculate the adjustment ratios based on the old and new projections
-        Size size = _director->getWinSizeInPixels();
+        Vec2 size = _director->getWinSizeInPixels();
         
         float widthRatio = size.width / texSize.width;
         float heightRatio = size.height / texSize.height;

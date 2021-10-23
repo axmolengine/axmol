@@ -58,13 +58,13 @@ void EditBox::openKeyboard() const
     _editBoxImpl->openKeyboard();
 }
 
-EditBox* EditBox::create(const Size& size,
+EditBox* EditBox::create(const Vec2& size,
                          const std::string& normalImage,
                          TextureResType texType) {
     return EditBox::create(size, normalImage, "", "", texType);
 }
 
-EditBox* EditBox::create(const Size& size,
+EditBox* EditBox::create(const Vec2& size,
                          const std::string& normalImage,
                          const std::string& pressedImage /* = "" */,
                          const std::string& disabledImage /* = "" */,
@@ -84,7 +84,7 @@ EditBox* EditBox::create(const Size& size,
 }
 
 
-EditBox* EditBox::create(const cocos2d::Size &size, cocos2d::ui::Scale9Sprite *normalSprite, ui::Scale9Sprite* pressedSprite, Scale9Sprite* disabledSprite)
+EditBox* EditBox::create(const Vec2 &size, cocos2d::ui::Scale9Sprite *normalSprite, ui::Scale9Sprite* pressedSprite, Scale9Sprite* disabledSprite)
 {
     EditBox* pRet = new (std::nothrow) EditBox();
     if (pRet != nullptr && pRet->initWithSizeAndBackgroundSprite(size, normalSprite, pressedSprite, disabledSprite))
@@ -98,12 +98,12 @@ EditBox* EditBox::create(const cocos2d::Size &size, cocos2d::ui::Scale9Sprite *n
     return pRet;
 }
 
-bool EditBox::initWithSizeAndBackgroundSprite(const Size& size, Scale9Sprite* normal9SpriteBg)
+bool EditBox::initWithSizeAndBackgroundSprite(const Vec2& size, Scale9Sprite* normal9SpriteBg)
 {
     return initWithSizeAndBackgroundSprite(size, normal9SpriteBg, nullptr, nullptr);
 }
 
-bool EditBox::initWithSizeAndBackgroundSprite(const Size& size, Scale9Sprite* normalSprite, Scale9Sprite* pressedSprite, Scale9Sprite* disabledSprite)
+bool EditBox::initWithSizeAndBackgroundSprite(const Vec2& size, Scale9Sprite* normalSprite, Scale9Sprite* pressedSprite, Scale9Sprite* disabledSprite)
 {
     if (Widget::init())
     {
@@ -130,14 +130,14 @@ bool EditBox::initWithSizeAndBackgroundSprite(const Size& size, Scale9Sprite* no
     return false;
 }
 
-bool EditBox::initWithSizeAndBackgroundSprite(const Size& size,
+bool EditBox::initWithSizeAndBackgroundSprite(const Vec2& size,
                                               const std::string& pNormal9SpriteBg,
                                               TextureResType texType)
 {
     return initWithSizeAndTexture(size, pNormal9SpriteBg, "", "", texType);
 }
 
-bool EditBox::initWithSizeAndTexture(const Size& size,
+bool EditBox::initWithSizeAndTexture(const Vec2& size,
                                      const std::string& normalImage,
                                      const std::string& pressedImage /* = "" */,
                                      const std::string& disabledImage /* = "" */,
@@ -208,7 +208,7 @@ void EditBox::loadTextureNormal(const std::string& normal,TextureResType texType
         }
     }
     //FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
-    if (!_ignoreSize && _customSize.equals(Size::ZERO)) {
+    if (!_ignoreSize && _customSize.equals(Vec2::ZERO)) {
         _customSize = _normalRenderer->getContentSize();
     }
     this->setupNormalTexture(textureLoaded);
@@ -706,7 +706,7 @@ void EditBox::setVisible(bool visible)
     }
 }
 
-void EditBox::setContentSize(const Size& size)
+void EditBox::setContentSize(const Vec2& size)
 {
     Widget::setContentSize(size);
     if (_editBoxImpl != nullptr)
@@ -816,7 +816,7 @@ void EditBox::onExit()
 
 static Rect getRect(Node * pNode)
 {
-	Size contentSize = pNode->getContentSize();
+	Vec2 contentSize = pNode->getContentSize();
 	Rect rect = Rect(0, 0, contentSize.width, contentSize.height);
 	return RectApplyTransform(rect, pNode->getNodeToWorldTransform());
 }

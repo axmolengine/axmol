@@ -25,7 +25,7 @@ THE SOFTWARE.
 #ifndef __ActionFRAME_H__
 #define __ActionFRAME_H__
 
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 #include "2d/CCActionInterval.h"
 #include "CocosStudioExport.h"
 

@@ -337,7 +337,7 @@ void TextField::initRenderer()
     addProtectedChild(_textFieldRenderer, TEXTFIELD_RENDERER_Z, -1);
 }
 
-void TextField::setTouchSize(const Size &size)
+void TextField::setTouchSize(const Vec2 &size)
 {
     _touchWidth = size.width;
     _touchHeight = size.height;
@@ -361,9 +361,9 @@ bool TextField::hitTest(const Vec2 &pt, const Camera* camera, Vec3* /*p*/) const
     return isScreenPointInRect(pt, camera, getWorldToNodeTransform(), rect, nullptr);
 }
 
-Size TextField::getTouchSize()const
+Vec2 TextField::getTouchSize()const
 {
-    return Size(_touchWidth, _touchHeight);
+    return Vec2(_touchWidth, _touchHeight);
 }
 
 void TextField::setString(const std::string& text)
@@ -729,9 +729,9 @@ void TextField::textfieldRendererScaleChangedWithSize()
     _textFieldRenderer->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
 }
 
-Size TextField::getAutoRenderSize()
+Vec2 TextField::getAutoRenderSize()
 {
-    Size virtualSize = _textFieldRenderer->getContentSize();
+    Vec2 virtualSize = _textFieldRenderer->getContentSize();
     if (!_ignoreSize)
     {
         _textFieldRenderer->setDimensions(0, 0);
@@ -742,7 +742,7 @@ Size TextField::getAutoRenderSize()
     return virtualSize;
 }
 
-Size TextField::getVirtualRendererSize() const
+Vec2 TextField::getVirtualRendererSize() const
 {
     return _textFieldRenderer->getContentSize();
 }
@@ -790,7 +790,7 @@ void TextField::copySpecialProperties(Widget *widget)
     }
 }
     
-void TextField::setTextAreaSize(const Size &size)
+void TextField::setTextAreaSize(const Vec2 &size)
 {
     this->setContentSize(size);
 }

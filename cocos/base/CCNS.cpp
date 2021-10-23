@@ -165,9 +165,9 @@ Vec2 PointFromString(const std::string& str)
     return ret;
 }
 
-Size SizeFromString(const std::string& pszContent)
+Vec2 SizeFromString(const std::string& pszContent)
 {
-    Size ret = Size::ZERO;
+    Vec2 ret = Vec2::ZERO;
 
     do 
     {
@@ -177,7 +177,7 @@ Size SizeFromString(const std::string& pszContent)
         float width  = (float) utils::atof(strs[0].c_str());
         float height = (float) utils::atof(strs[1].c_str());
 
-        ret = Size(width, height);
+        ret = Vec2(width, height);
     } while (0);
 
     return ret;

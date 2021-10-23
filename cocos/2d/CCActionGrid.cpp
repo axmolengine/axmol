@@ -34,7 +34,7 @@ THE SOFTWARE.
 NS_CC_BEGIN
 // implementation of GridAction
 
-bool GridAction::initWithDuration(float duration, const Size& gridSize)
+bool GridAction::initWithDuration(float duration, const Vec2& gridSize)
 {
     if (ActionInterval::initWithDuration(duration))
     {
@@ -130,7 +130,7 @@ Rect Grid3DAction::getGridRect() const
 }
 
 // implementation of TiledGrid3DAction
-TiledGrid3DAction* TiledGrid3DAction::create(float duration, const Size &gridSize)
+TiledGrid3DAction* TiledGrid3DAction::create(float duration, const Vec2 &gridSize)
 {
     TiledGrid3DAction *ret = new (std::nothrow) TiledGrid3DAction();
     if (ret && ret->initWithDuration(duration, gridSize))

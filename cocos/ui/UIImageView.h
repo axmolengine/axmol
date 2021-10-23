@@ -140,7 +140,7 @@ public:
     //override methods.
     virtual void ignoreContentAdaptWithSize(bool ignore) override;
     virtual std::string getDescription() const override;
-    virtual Size getVirtualRendererSize() const override;
+    virtual Vec2 getVirtualRendererSize() const override;
     virtual Node* getVirtualRenderer() override;
 
     ResourceData getRenderFile();
@@ -167,7 +167,7 @@ protected:
     Rect _capInsets;
     Scale9Sprite* _imageRenderer;
     TextureResType _imageTexType;
-    Size _imageTextureSize;
+    Vec2 _imageTextureSize;
     bool _imageRendererAdaptDirty;
     std::string _textureFile;
 };

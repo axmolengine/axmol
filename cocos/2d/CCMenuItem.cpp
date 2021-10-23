@@ -789,7 +789,7 @@ void MenuItemToggle::setSelectedIndex(unsigned int index)
 
         _selectedItem = _subItems.at(_selectedIndex);
         this->addChild(_selectedItem);
-        Size s = _selectedItem->getContentSize();
+        Vec2 s = _selectedItem->getContentSize();
         this->setContentSize(s);
         _selectedItem->setPosition(s.width / 2, s.height / 2);
     }

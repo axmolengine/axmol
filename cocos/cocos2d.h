@@ -89,7 +89,7 @@ THE SOFTWARE.
 
 // math
 #include "math/CCAffineTransform.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 #include "math/CCVertex.h"
 #include "math/Mat4.h"
 #include "math/MathUtil.h"

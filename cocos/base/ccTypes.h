@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include <string>
 
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 #include "math/CCMath.h"
 #include "base/CCRef.h"
 #include "renderer/backend/Types.h"
@@ -504,7 +504,7 @@ struct CC_DLL T2F_Quad
 struct CC_DLL AnimationFrameData
 {
     T2F_Quad texCoords;
-    Size size;
+    Vec2 size;
     float delay = 0.f;
 };
 
@@ -518,7 +518,7 @@ struct CC_DLL AnimationFrameData
 struct CC_DLL FontShadow
 {
     /// shadow x and y offset
-    Size   _shadowOffset;
+    Vec2   _shadowOffset;
     /// shadow blurriness
     float  _shadowBlur = 0.f;
     /// shadow opacity
@@ -558,7 +558,7 @@ struct CC_DLL FontDefinition
     /// vertical alignment
     TextVAlignment _vertAlignment = TextVAlignment::TOP;
     /// rendering box
-    Size                  _dimensions = Size::ZERO;
+    Vec2                  _dimensions = Vec2::ZERO;
     /// font color
     Color3B               _fontFillColor = Color3B::WHITE;
     /// font alpha

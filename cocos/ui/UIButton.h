@@ -191,7 +191,7 @@ public:
 
     //override methods
     virtual void ignoreContentAdaptWithSize(bool ignore) override;
-    virtual Size getVirtualRendererSize() const override;
+    virtual Vec2 getVirtualRendererSize() const override;
     virtual Node* getVirtualRenderer() override;
     virtual std::string getDescription() const override;
 
@@ -321,7 +321,7 @@ CC_CONSTRUCTOR_ACCESS:
                       const std::string& disableImage = "",
                       TextureResType texType = TextureResType::LOCAL);
 
-    virtual Size getNormalTextureSize() const;
+    virtual Vec2 getNormalTextureSize() const;
 
 protected:
     virtual void initRenderer() override;
@@ -350,7 +350,7 @@ protected:
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
 
-    virtual Size getNormalSize() const;
+    virtual Vec2 getNormalSize() const;
 protected:
     Scale9Sprite* _buttonNormalRenderer;
     Scale9Sprite* _buttonClickedRenderer;
@@ -366,9 +366,9 @@ protected:
     Rect _capInsetsPressed;
     Rect _capInsetsDisabled;
 
-    Size _normalTextureSize;
-    Size _pressedTextureSize;
-    Size _disabledTextureSize;
+    Vec2 _normalTextureSize;
+    Vec2 _pressedTextureSize;
+    Vec2 _disabledTextureSize;
 
     bool _normalTextureLoaded;
     bool _pressedTextureLoaded;

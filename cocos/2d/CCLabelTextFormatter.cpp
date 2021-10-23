@@ -295,7 +295,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
     _textDesiredHeight = (_numberOfLines * _lineHeight * _bmfontScale) / contentScaleFactor;
     if (_numberOfLines > 1)
         _textDesiredHeight += (_numberOfLines - 1) * _lineSpacing;
-    Size contentSize(_labelWidth, _labelHeight);
+    Vec2 contentSize(_labelWidth, _labelHeight);
     if (_labelWidth <= 0.f)
         contentSize.width = longestLine;
     if (_labelHeight <= 0.f)

@@ -84,10 +84,10 @@ public:
      @param flipped whether or not the grab texture should be flip by Y or not.
      @param rect The effective grid rect.
     */
-    bool initWithSize(const Size& gridSize);
-    bool initWithSize(const Size& gridSize, const Rect& rect);
-    bool initWithSize(const Size& gridSize, Texture2D *texture, bool flipped);
-    bool initWithSize(const Size& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
+    bool initWithSize(const Vec2& gridSize);
+    bool initWithSize(const Vec2& gridSize, const Rect& rect);
+    bool initWithSize(const Vec2& gridSize, Texture2D *texture, bool flipped);
+    bool initWithSize(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
 
     /**@}*/
     /** @{
@@ -102,10 +102,10 @@ public:
     /** Set number of times that the grid will be reused. */
     void setReuseGrid(int reuseGrid) { _reuseGrid = reuseGrid; }
 
-    /** Size of the grid. */
-    const Size& getGridSize() const { return _gridSize; }
+    /** Vec2 of the grid. */
+    const Vec2& getGridSize() const { return _gridSize; }
     /**Set the size of the grid.*/
-    void setGridSize(const Size& gridSize) { _gridSize = gridSize; }
+    void setGridSize(const Vec2& gridSize) { _gridSize = gridSize; }
 
     /** Pixels between the grids. */
     const Vec2& getStep() const { return _step; }
@@ -143,7 +143,7 @@ protected:
     
     bool _active = false;
     int  _reuseGrid = 0;
-    Size _gridSize;
+    Vec2 _gridSize;
     Texture2D *_texture = nullptr;
     Vec2 _step;
     bool _isTextureFlipped = false;
@@ -177,13 +177,13 @@ class CC_DLL Grid3D : public GridBase
 {
 public:
     /** create one Grid. */
-    static Grid3D* create(const Size& gridSize);
+    static Grid3D* create(const Vec2& gridSize);
     /** create one Grid. */
-    static Grid3D* create(const Size& gridSize, const Rect& rect);
+    static Grid3D* create(const Vec2& gridSize, const Rect& rect);
     /** create one Grid. */
-    static Grid3D* create(const Size& gridSize, Texture2D *texture, bool flipped);
+    static Grid3D* create(const Vec2& gridSize, Texture2D *texture, bool flipped);
     /** create one Grid. */
-    static Grid3D* create(const Size& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
+    static Grid3D* create(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
     /**
      Constructor.
      * @js ctor
@@ -251,13 +251,13 @@ class CC_DLL TiledGrid3D : public GridBase
 {
 public:
     /** Create one Grid. */
-    static TiledGrid3D* create(const Size& gridSize);
+    static TiledGrid3D* create(const Vec2& gridSize);
     /** Create one Grid. */
-    static TiledGrid3D* create(const Size& gridSize, const Rect& rect);
+    static TiledGrid3D* create(const Vec2& gridSize, const Rect& rect);
     /** Create one Grid. */
-    static TiledGrid3D* create(const Size& gridSize, Texture2D *texture, bool flipped);
+    static TiledGrid3D* create(const Vec2& gridSize, Texture2D *texture, bool flipped);
     /** Create one Grid. */
-    static TiledGrid3D* create(const Size& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
+    static TiledGrid3D* create(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
 
     /**@{
      Implementations for interfaces in base class.

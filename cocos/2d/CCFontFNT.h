@@ -92,7 +92,7 @@ public://@public
     // Character Set defines the letters that actually exist in the font
     std::set<unsigned int>* _characterSet;
 
-    //! Font Size
+    //! Font Vec2
     int _fontSize;
 public:
     /**

@@ -118,7 +118,7 @@ public:
     void setSelected(bool selected);
     
     //override functions
-    virtual Size getVirtualRendererSize() const override;
+    virtual Vec2 getVirtualRendererSize() const override;
     virtual Node* getVirtualRenderer() override;
     
     /** When user pressed the CheckBox, the button will zoom to a scale.

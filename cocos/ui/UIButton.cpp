@@ -280,7 +280,7 @@ void Button::loadTextureNormal(const std::string& normal,TextureResType texType)
         }
     }
     //FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
-    if (!_ignoreSize && _customSize.equals(Size::ZERO)) {
+    if (!_ignoreSize && _customSize.equals(Vec2::ZERO)) {
         _customSize = _buttonNormalRenderer->getContentSize();
     }
     this->setupNormalTexture(textureLoaded);
@@ -594,7 +594,7 @@ void Button::updateContentSize()
         }
         else
         {
-            Size s = getNormalSize();
+            Vec2 s = getNormalSize();
             ProtectedNode::setContentSize(s);
         }
         onSizeChanged();
@@ -640,7 +640,7 @@ void Button::adaptRenderers()
     }
 }
 
-Size Button::getVirtualRendererSize() const
+Vec2 Button::getVirtualRendererSize() const
 {
     if (_unifySize)
     {
@@ -649,7 +649,7 @@ Size Button::getVirtualRendererSize() const
 
     if (nullptr != _titleRenderer)
     {
-        Size titleSize = _titleRenderer->getContentSize();
+        Vec2 titleSize = _titleRenderer->getContentSize();
         if (!_normalTextureLoaded && !_titleRenderer->getString().empty())
         {
             return titleSize;
@@ -892,14 +892,14 @@ void Button::copySpecialProperties(Widget *widget)
     }
 
 }
-Size Button::getNormalSize() const
+Vec2 Button::getNormalSize() const
 {
-    Size titleSize;
+    Vec2 titleSize;
     if (_titleRenderer != nullptr)
     {
         titleSize = _titleRenderer->getContentSize();
     }
-    Size imageSize;
+    Vec2 imageSize;
     if (_buttonNormalRenderer != nullptr)
     {
         imageSize = _buttonNormalRenderer->getContentSize();
@@ -907,10 +907,10 @@ Size Button::getNormalSize() const
     float width = titleSize.width > imageSize.width ? titleSize.width : imageSize.width;
     float height = titleSize.height > imageSize.height ? titleSize.height : imageSize.height;
 
-    return Size(width,height);
+    return Vec2(width,height);
 }
 
-Size Button::getNormalTextureSize() const
+Vec2 Button::getNormalTextureSize() const
 {
     return _normalTextureSize;
 }
@@ -920,7 +920,7 @@ void Button::resetNormalRender()
     _normalFileName = "";
     _normalTexType = TextureResType::LOCAL;
 
-    _normalTextureSize = Size(0, 0);
+    _normalTextureSize = Vec2(0, 0);
 
     _normalTextureLoaded = false;
     _normalTextureAdaptDirty = false;
@@ -932,7 +932,7 @@ void Button::resetPressedRender()
     _clickedFileName = "";
     _pressedTexType = TextureResType::LOCAL;
 
-    _pressedTextureSize = Size(0, 0);
+    _pressedTextureSize = Vec2(0, 0);
 
     _pressedTextureLoaded = false;
     _pressedTextureAdaptDirty = false;
@@ -945,7 +945,7 @@ void Button::resetDisabledRender()
     _disabledFileName = "";
     _disabledTexType = TextureResType::LOCAL;
 
-    _disabledTextureSize = Size(0, 0);
+    _disabledTextureSize = Vec2(0, 0);
 
     _disabledTextureLoaded = false;
     _disabledTextureAdaptDirty = false;

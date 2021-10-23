@@ -55,16 +55,27 @@ class CC_DLL Vec2
 {
 public:
 
-    /**
-     * The x coordinate.
-     */
-    float x = 0.f;
+    union
+    {
+        struct
+        {
 
-    /**
-     * The y coordinate.
-     */
-    float y = 0.f;
+            /**
+             * The x coordinate.
+             */
+            float x;
 
+            /**
+             * The y coordinate.
+             */
+            float y;
+        };
+
+        struct {
+            float width;
+            float height;
+        };
+    };
     /**
      * Constructs a new vector initialized to all zeros.
      */
@@ -272,6 +283,11 @@ public:
      * @param yy The new y coordinate.
      */
     inline void set(float xx, float yy);
+
+    /**
+    * [DEPRECATED] use Vec2::set instead
+    */
+    inline void setSize(float w, float h) { this->set(w, h); }
 
     /**
      * Sets the elements of this vector from the values in the specified array.
@@ -747,6 +763,9 @@ public:
 inline Vec2 operator*(float x, const Vec2& v);
 
 typedef Vec2 Point;
+
+// [DEPRECATED] compatible only
+typedef Vec2 Size;
 
 NS_CC_MATH_END
 

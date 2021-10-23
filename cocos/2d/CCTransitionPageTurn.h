@@ -89,7 +89,7 @@ public:
      * @param vector A given size.
      * @return The action that will be performed.
      */
-    ActionInterval* actionWithSize(const Size& vector);
+    ActionInterval* actionWithSize(const Vec2& vector);
 
     //
     // Overrides

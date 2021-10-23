@@ -125,7 +125,7 @@ void RichElement::setColor(const Color3B& color)
 RichElementText* RichElementText::create(int tag, const Color3B &color, uint8_t opacity, const std::string& text,
                                          const std::string& fontName, float fontSize, uint32_t flags, const std::string& url,
                                          const Color3B& outlineColor, int outlineSize ,
-                                         const Color3B& shadowColor, const cocos2d::Size& shadowOffset, int shadowBlurRadius,
+                                         const Color3B& shadowColor, const Vec2& shadowOffset, int shadowBlurRadius,
                                          const Color3B& glowColor)
 {
     RichElementText* element = new (std::nothrow) RichElementText();
@@ -142,7 +142,7 @@ RichElementText* RichElementText::create(int tag, const Color3B &color, uint8_t 
 bool RichElementText::init(int tag, const Color3B &color, uint8_t opacity, const std::string& text,
                            const std::string& fontName, float fontSize, uint32_t flags, const std::string& url,
                            const Color3B& outlineColor, int outlineSize ,
-                           const Color3B& shadowColor, const cocos2d::Size& shadowOffset, int shadowBlurRadius,
+                           const Color3B& shadowColor, const Vec2& shadowOffset, int shadowBlurRadius,
                            const Color3B& glowColor)
 {
     if (RichElement::init(tag, color, opacity))
@@ -273,7 +273,7 @@ public:
         Color3B outlineColor;                   /*!< the color of the outline */
         int outlineSize;                        /*!< the outline effect size value */
         Color3B shadowColor;                    /*!< the shadow effect color value */
-        cocos2d::Size shadowOffset;             /*!< shadow effect offset value */
+        Vec2 shadowOffset;             /*!< shadow effect offset value */
         int shadowBlurRadius;                   /*!< the shadow effect blur radius */
         Color3B glowColor;                      /*!< the glow effect color value */
         
@@ -328,7 +328,7 @@ public:
     
     std::tuple<bool, Color3B, int> getOutline() const;
     
-    std::tuple<bool, Color3B, cocos2d::Size, int> getShadow() const;
+    std::tuple<bool, Color3B, Vec2, int> getShadow() const;
     
     std::tuple<bool, Color3B> getGlow() const;
     
@@ -609,14 +609,14 @@ std::tuple<bool, Color3B, int> MyXMLVisitor::getOutline() const
     return std::make_tuple(false, Color3B::WHITE, -1);
 }
 
-std::tuple<bool, Color3B, cocos2d::Size, int> MyXMLVisitor::getShadow() const
+std::tuple<bool, Color3B, Vec2, int> MyXMLVisitor::getShadow() const
 {
     for (auto i = _fontElements.rbegin(), iRend = _fontElements.rend(); i != iRend; ++i)
     {
         if (i->effect == StyleEffect::SHADOW)
             return std::make_tuple(true, i->shadowColor, i->shadowOffset, i->shadowBlurRadius);
     }
-    return std::make_tuple(false, Color3B::BLACK, Size(2.0, -2.0), 0);
+    return std::make_tuple(false, Color3B::BLACK, Vec2(2.0, -2.0), 0);
 }
 
 std::tuple<bool, Color3B> MyXMLVisitor::getGlow() const
@@ -721,7 +721,7 @@ void MyXMLVisitor::startElement(void* /*ctx*/, const char *elementName, const ch
                         }
                         if ((attrValueMap.find(RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH) != attrValueMap.end())
                                 && (attrValueMap.find(RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT) != attrValueMap.end())) {
-                            attributes.shadowOffset = Size(attrValueMap.at(RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH).asFloat(),
+                            attributes.shadowOffset = Vec2(attrValueMap.at(RichText::KEY_TEXT_SHADOW_OFFSET_WIDTH).asFloat(),
                                                            attrValueMap.at(RichText::KEY_TEXT_SHADOW_OFFSET_HEIGHT).asFloat());
                         }
                         if (attrValueMap.find(RichText::KEY_TEXT_SHADOW_BLUR_RADIUS) != attrValueMap.end()) {
@@ -1148,7 +1148,7 @@ int RichText::getAnchorTextOutlineSize()
     return -1;
 }
 
-void RichText::setAnchorTextShadow(bool enable, const Color3B& shadowColor, const Size& offset, int blurRadius)
+void RichText::setAnchorTextShadow(bool enable, const Color3B& shadowColor, const Vec2& offset, int blurRadius)
 {
     if (enable)
         _defaults[KEY_ANCHOR_TEXT_STYLE] = VALUE_TEXT_STYLE_SHADOW;
@@ -1173,7 +1173,7 @@ Color3B RichText::getAnchorTextShadowColor3B()
     return Color3B();
 }
 
-Size RichText::getAnchorTextShadowOffset()
+Vec2 RichText::getAnchorTextShadowOffset()
 {
     float width = 2.0f;
     float height = -2.0f;
@@ -1183,7 +1183,7 @@ Size RichText::getAnchorTextShadowOffset()
     if (_defaults.find(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT) != _defaults.end()) {
         height = _defaults.at(KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT).asFloat();
     }
-    return Size(width, height);
+    return Vec2(width, height);
 }
 
 int RichText::getAnchorTextShadowBlurRadius()
@@ -1418,7 +1418,7 @@ void RichText::formatText()
                                 elementRenderer->setScaleX(elmtImage->_width / currentSize.width);
                             if (elmtImage->_height != -1)
                                 elementRenderer->setScaleY(elmtImage->_height / currentSize.height);
-                            elementRenderer->setContentSize(Size(currentSize.width * elementRenderer->getScaleX(),
+                            elementRenderer->setContentSize(Vec2(currentSize.width * elementRenderer->getScaleX(),
                                                                  currentSize.height * elementRenderer->getScaleY()));
                             elementRenderer->addComponent(ListenerComponent::create(elementRenderer,
                                                                                     elmtImage->_url,
@@ -1641,7 +1641,7 @@ namespace {
 void RichText::handleTextRenderer(const std::string& text, const std::string& fontName, float fontSize, const Color3B &color,
                                   uint8_t opacity, uint32_t flags, const std::string& url,
                                   const Color3B& outlineColor, int outlineSize ,
-                                  const Color3B& shadowColor, const Size& shadowOffset, int shadowBlurRadius,
+                                  const Color3B& shadowColor, const Vec2& shadowOffset, int shadowBlurRadius,
                                   const Color3B& glowColor)
 {
     bool fileExist = FileUtils::getInstance()->isFileExist(fontName);
@@ -1754,7 +1754,7 @@ void RichText::handleImageRenderer(const std::string& filePath, Widget::TextureR
             imageRenderer->setScaleX(width / currentSize.width);
         if (height != -1)
             imageRenderer->setScaleY(height / currentSize.height);
-        imageRenderer->setContentSize(Size(currentSize.width * imageRenderer->getScaleX(),
+        imageRenderer->setContentSize(Vec2(currentSize.width * imageRenderer->getScaleX(),
                                              currentSize.height * imageRenderer->getScaleY()));
         imageRenderer->setScale(1.f, 1.f);
         handleCustomRenderer(imageRenderer);
@@ -1766,7 +1766,7 @@ void RichText::handleImageRenderer(const std::string& filePath, Widget::TextureR
 
 void RichText::handleCustomRenderer(cocos2d::Node *renderer)
 {
-    Size imgSize = renderer->getContentSize();
+    Vec2 imgSize = renderer->getContentSize();
     _leftSpaceWidth -= imgSize.width;
     if (_leftSpaceWidth < 0.0f)
     {
@@ -1807,7 +1807,7 @@ void RichText::formatRenderers()
                 iter->setAnchorPoint(Vec2::ZERO);
                 iter->setPosition(nextPosX, nextPosY);
                 this->addProtectedChild(iter, 1);
-                Size iSize = iter->getContentSize();
+                Vec2 iSize = iter->getContentSize();
                 newContentSizeWidth += iSize.width;
                 nextPosX += iSize.width;
                 maxY = std::max(maxY, iSize.height);
@@ -1815,7 +1815,7 @@ void RichText::formatRenderers()
             nextPosY -= maxY;
             rowWidthPairs.emplace_back(&element, nextPosX);
         }
-        this->setContentSize(Size(newContentSizeWidth, -nextPosY));
+        this->setContentSize(Vec2(newContentSizeWidth, -nextPosY));
         for ( auto& row : rowWidthPairs )
             doHorizontalAlignment(*row.first, row.second);
     }
@@ -1870,7 +1870,7 @@ void RichText::formatRenderers()
     
     if (_ignoreSize)
     {
-        Size s = getVirtualRendererSize();
+        Vec2 s = getVirtualRendererSize();
         this->setContentSize(s);
     }
     else

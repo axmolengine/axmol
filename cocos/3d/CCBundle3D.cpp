@@ -1456,7 +1456,8 @@ bool Bundle3D::loadAnimationDataJson(const std::string& id, Animation3DData* ani
     int the_index = -1;
     const rapidjson::Value& animation_data_array = _jsonReader[anim.c_str()];
 
-    if (animation_data_array.Size()==0) return false;
+    if (animation_data_array.Size() == 0)
+        return false;
 
     if(!id.empty())
     {
@@ -1477,7 +1478,7 @@ bool Bundle3D::loadAnimationDataJson(const std::string& id, Animation3DData* ani
     animationdata->_totalTime = animation_data_array_val_0[LENGTH].GetFloat();
 
     const rapidjson::Value&  bones =  animation_data_array_val_0[BONES];
-    for (rapidjson::SizeType i = 0; i <  bones.Size(); ++i)
+    for (rapidjson::SizeType i = 0; i < bones.Size(); ++i)
     {
         const rapidjson::Value&  bone =  bones[i];
         std::string bone_name =  bone[BONEID].GetString();
@@ -1485,7 +1486,7 @@ bool Bundle3D::loadAnimationDataJson(const std::string& id, Animation3DData* ani
         if ( bone.HasMember(KEYFRAMES))
         {
             const rapidjson::Value& bone_keyframes =  bone[KEYFRAMES];
-            rapidjson::SizeType keyframe_size = bone_keyframes.Size();
+            rapidjson::SizeType keyframe_size      = bone_keyframes.Size();
             animationdata->_rotationKeys[bone_name].reserve(keyframe_size);
             animationdata->_scaleKeys[bone_name].reserve(keyframe_size);
             animationdata->_translationKeys[bone_name].reserve(keyframe_size);

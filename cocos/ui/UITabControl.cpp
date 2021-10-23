@@ -40,12 +40,12 @@ namespace ui
         , _headerWidth(50)
         , _headerDockPlace(Dock::TOP)
         , _containerPosition(Vec2::ZERO)
-        , _containerSize(Size::ZERO)
+        , _containerSize(Vec2::ZERO)
         , _currentHeaderZoom(0.1f)
         , _ignoreHeaderTextureSize(true)
     {
         this->_anchorPoint = Vec2(0.f, 0.f);
-        setContentSize(Size(200, 200));
+        setContentSize(Vec2(200, 200));
     }
 
     TabControl::~TabControl()
@@ -93,13 +93,13 @@ namespace ui
             deactiveTabItem(tabItem);
         }
 
-        headerCell->setContentSize(Size(_headerWidth, _headerHeight));
+        headerCell->setContentSize(Vec2(_headerWidth, _headerHeight));
         headerCell->setAnchorPoint(getHeaderAnchorWithDock());
         if (headerCell->isIgnoreContentAdaptWithSize() == _ignoreHeaderTextureSize)
         {
             headerCell->ignoreContentAdaptWithSize(!_ignoreHeaderTextureSize);
             if (_ignoreHeaderTextureSize)
-                headerCell->setContentSize(Size(_headerWidth, _headerHeight));
+                headerCell->setContentSize(Vec2(_headerWidth, _headerHeight));
             headerCell->backGroundDisabledTextureScaleChangedWithSize();
             headerCell->backGroundSelectedTextureScaleChangedWithSize();
             headerCell->backGroundDisabledTextureScaleChangedWithSize();
@@ -108,7 +108,7 @@ namespace ui
         }
 
         initTabHeadersPos(index);
-        if (_containerSize.equals(Size::ZERO))
+        if (_containerSize.equals(Vec2::ZERO))
             initContainers();
         else
         {
@@ -262,19 +262,19 @@ namespace ui
         {
         case Dock::TOP:
             _containerPosition = Vec2(0, 0);
-            _containerSize = Size(_contentSize.width, _contentSize.height - _headerHeight);
+            _containerSize = Vec2(_contentSize.width, _contentSize.height - _headerHeight);
             break;
         case Dock::LEFT:
             _containerPosition = Vec2(_headerWidth, 0);
-            _containerSize = Size(_contentSize.width - _headerWidth, _contentSize.height);
+            _containerSize = Vec2(_contentSize.width - _headerWidth, _contentSize.height);
             break;
         case Dock::BOTTOM:
             _containerPosition = Vec2(0, _headerHeight);
-            _containerSize = Size(_contentSize.width, _contentSize.height - _headerHeight);
+            _containerSize = Vec2(_contentSize.width, _contentSize.height - _headerHeight);
             break;
         case Dock::RIGHT:
             _containerPosition = Vec2(0, 0);
-            _containerSize = Size(_contentSize.width - _headerWidth, _contentSize.height);
+            _containerSize = Vec2(_contentSize.width - _headerWidth, _contentSize.height);
             break;
         default:
             break;
@@ -445,7 +445,7 @@ namespace ui
         {
             item->header->ignoreContentAdaptWithSize(!ignore);
             if (ignore)
-                item->header->setContentSize(Size(_headerWidth, _headerHeight));
+                item->header->setContentSize(Vec2(_headerWidth, _headerHeight));
             item->header->backGroundDisabledTextureScaleChangedWithSize();
             item->header->backGroundSelectedTextureScaleChangedWithSize();
             item->header->backGroundDisabledTextureScaleChangedWithSize();

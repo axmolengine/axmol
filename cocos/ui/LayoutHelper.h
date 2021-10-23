@@ -29,36 +29,38 @@
 
 #define center_coord(__SZ__,__sz__,__achor__) ( ( (__SZ__) - (__sz__) + 2 * (__sz__) * (__achor__) ) * 0.5f )
 
+USING_NS_CC;
 
-inline cocos2d::Size operator*(const cocos2d::Size& left, const cocos2d::Size& right)
+
+inline Vec2 operator*(const Vec2& left, const Vec2& right)
 {
-    return cocos2d::Size(left.width * right.width, left.height * right.height);
+    return Vec2(left.x * right.x, left.y * right.y);
 }
 
-inline cocos2d::Size operator*(const cocos2d::Size& left, const cocos2d::Vec2& right)
-{
-    return cocos2d::Size(left.width * right.x, left.height * right.y);
-}
+//inline Vec2 operator*(const Vec2& left, const cocos2d::Vec2& right)
+//{
+//    return Vec2(left.width * right.x, left.height * right.y);
+//}
 
 struct CC_DLL LayoutHelper {
 
-    static cocos2d::Size s_designSize;
+    static Vec2 s_designSize;
     static float s_adjustedScale;
 
     /// <summary>
     /// adatpe design size with fixed edge, normally, use this function for screen adatpe
     /// </summary>
     /// <param name="designSize"></param>
-    static void setDesignSizeFixedEdge(const cocos2d::Size& designSize);
+    static void setDesignSizeFixedEdge(const Vec2& designSize);
 
     /// <summary>
     /// adapte design size with no border
     /// </summary>
     /// <param name="designSize"></param>
-    static void setDesignSizeNoBorder(const cocos2d::Size& designSize);
+    static void setDesignSizeNoBorder(const Vec2& designSize);
 
     static cocos2d::Vec2 getVisibleOrigin(void);
-    static cocos2d::Size getVisibleSize(void);
+    static Vec2 getVisibleSize(void);
 
     /// align type defination
     enum AlignType {
@@ -199,11 +201,11 @@ struct CC_DLL LayoutHelper {
     }
 
     // @version 2
-    static void centerNodeX(cocos2d::Node* pNode, const cocos2d::Size& parentSize)
+    static void centerNodeX(cocos2d::Node* pNode, const Vec2& parentSize)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -214,11 +216,11 @@ struct CC_DLL LayoutHelper {
 
 
 
-    static void centerNodeY(cocos2d::Node* pNode, const cocos2d::Size& parentSize)
+    static void centerNodeY(cocos2d::Node* pNode, const Vec2& parentSize)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -227,11 +229,11 @@ struct CC_DLL LayoutHelper {
         pNode->setPositionY(center_coord(parentSize.height, size.height, achorY));
     }
 
-    static void centerNode(cocos2d::Node* pNode, const cocos2d::Size& parentSize)
+    static void centerNode(cocos2d::Node* pNode, const Vec2& parentSize)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         cocos2d::Point achor = cocos2d::Vec2::ZERO;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -354,11 +356,11 @@ struct CC_DLL LayoutHelper {
     }
 
     // @version 2 used as internal interfaces
-    static void setNodeLeft(cocos2d::Node* pNode, const cocos2d::Size& parentSize, float left, float anchor = 0.0f)
+    static void setNodeLeft(cocos2d::Node* pNode, const Vec2& parentSize, float left, float anchor = 0.0f)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -366,11 +368,11 @@ struct CC_DLL LayoutHelper {
         }
         pNode->setPositionX(adjust_coord(size.width, achorX, left) - size.width * anchor);
     }
-    static float getNodeLeft(cocos2d::Node* pNode, const cocos2d::Size& parentSize, float anchor = 0.0f)
+    static float getNodeLeft(cocos2d::Node* pNode, const Vec2& parentSize, float anchor = 0.0f)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -379,11 +381,11 @@ struct CC_DLL LayoutHelper {
         return adjust_coord_r(size.width, achorX, pNode->getPositionX()) + anchor * size.width;
     }
 
-    static void setNodeTop(cocos2d::Node* pNode, const cocos2d::Size& parentSize, float top, float anchor = 0.0f)
+    static void setNodeTop(cocos2d::Node* pNode, const Vec2& parentSize, float top, float anchor = 0.0f)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -391,11 +393,11 @@ struct CC_DLL LayoutHelper {
         }
         pNode->setPositionY(adjust_coord_neg(parentSize.height, size.height, achorY, top) - size.height * anchor);
     }
-    static float getNodeTop(cocos2d::Node* pNode, const cocos2d::Size& parentSize, float anchor = 0.0f)
+    static float getNodeTop(cocos2d::Node* pNode, const Vec2& parentSize, float anchor = 0.0f)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -404,11 +406,11 @@ struct CC_DLL LayoutHelper {
         return adjust_coord_neg_r(parentSize.height, size.height, achorY, pNode->getPositionY()) + size.height * anchor;
     }
 
-    static void setNodeRight(cocos2d::Node* pNode, const cocos2d::Size& parentSize, float right)
+    static void setNodeRight(cocos2d::Node* pNode, const Vec2& parentSize, float right)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -417,11 +419,11 @@ struct CC_DLL LayoutHelper {
         pNode->setPositionX(adjust_coord_neg(parentSize.width, size.width, achorX, right));
     }
 
-    static float getNodeRight(cocos2d::Node* pNode, const cocos2d::Size& parentSize, float anchor = 0.0f)
+    static float getNodeRight(cocos2d::Node* pNode, const Vec2& parentSize, float anchor = 0.0f)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -430,11 +432,11 @@ struct CC_DLL LayoutHelper {
         return adjust_coord_neg_r(parentSize.width, size.width, achorX, pNode->getPositionX()) + anchor * size.width;
     }
 
-    static void setNodeBottom(cocos2d::Node* pNode, const cocos2d::Size& parentSize, float bottom, float anchor = 0.0f)
+    static void setNodeBottom(cocos2d::Node* pNode, const Vec2& parentSize, float bottom, float anchor = 0.0f)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -443,11 +445,11 @@ struct CC_DLL LayoutHelper {
         pNode->setPositionY(adjust_coord(size.height, achorY, bottom) - anchor * size.height);
     }
 
-    static float getNodeBottom(cocos2d::Node* pNode, const cocos2d::Size& parentSize, float anchor = 0.f)
+    static float getNodeBottom(cocos2d::Node* pNode, const Vec2& parentSize, float anchor = 0.f)
     {
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -456,11 +458,11 @@ struct CC_DLL LayoutHelper {
         return adjust_coord_r(size.height, achorY, pNode->getPositionY()) + size.height * anchor;
     }
 
-    static void setNodeLB(cocos2d::Node* pNode, const cocos2d::Size& parentSize, const cocos2d::Point& p)
+    static void setNodeLB(cocos2d::Node* pNode, const Vec2& parentSize, const cocos2d::Point& p)
     { // left bottom
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         cocos2d::Point achorPoint = cocos2d::Vec2::ZERO;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -471,11 +473,11 @@ struct CC_DLL LayoutHelper {
             adjust_coord(size.height, achorPoint.y, p.y)));
     }
 
-    static void setNodeRB(cocos2d::Node* pNode, const cocos2d::Size& parentSize, const cocos2d::Point& p)
+    static void setNodeRB(cocos2d::Node* pNode, const Vec2& parentSize, const cocos2d::Point& p)
     { // right bottom
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         cocos2d::Point achorPoint = cocos2d::Vec2::ZERO;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -486,11 +488,11 @@ struct CC_DLL LayoutHelper {
             adjust_coord(size.height, achorPoint.y, p.y)));
     }
 
-    static void setNodeLT(cocos2d::Node* pNode, const cocos2d::Size& parentSize, const cocos2d::Point& p)
+    static void setNodeLT(cocos2d::Node* pNode, const Vec2& parentSize, const cocos2d::Point& p)
     { // left top
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         cocos2d::Point achorPoint = cocos2d::Vec2::ZERO;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -501,11 +503,11 @@ struct CC_DLL LayoutHelper {
             adjust_coord_neg(parentSize.height, size.height, achorPoint.y, p.y)));
     }
 
-    static void setNodeRT(cocos2d::Node* pNode, const cocos2d::Size& parentSize, const cocos2d::Point& p)
+    static void setNodeRT(cocos2d::Node* pNode, const Vec2& parentSize, const cocos2d::Point& p)
     { // right top
         CC_ASSERT(pNode);
 
-        cocos2d::Size size = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         cocos2d::Point achorPoint = cocos2d::Vec2::ZERO;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -544,20 +546,20 @@ struct CC_DLL LayoutHelper {
     }
 
     /* set node position as normalized: @version 2 */
-    static void setNodeNormalizedPositionX(cocos2d::Node* pNode, const cocos2d::Size& parentSize, float ratio)
+    static void setNodeNormalizedPositionX(cocos2d::Node* pNode, const Vec2& parentSize, float ratio)
     {
         CC_ASSERT(pNode);
 
         pNode->setPositionX(parentSize.width * ratio);
     }
 
-    static void setNodeNormalizedPositionY(cocos2d::Node* pNode, const cocos2d::Size& parentSize, float ratio)
+    static void setNodeNormalizedPositionY(cocos2d::Node* pNode, const Vec2& parentSize, float ratio)
     {
         CC_ASSERT(pNode);
 
         pNode->setPositionY(parentSize.height * ratio);
     }
-    static void setNodeNormalizedPosition(cocos2d::Node* pNode, const cocos2d::Size& parentSize, const cocos2d::Point& ratio)
+    static void setNodeNormalizedPosition(cocos2d::Node* pNode, const Vec2& parentSize, const cocos2d::Point& ratio)
     {
         CC_ASSERT(pNode);
 
@@ -565,12 +567,12 @@ struct CC_DLL LayoutHelper {
     }
 
     /// Get node group size
-    static cocos2d::Size getNodeGroupSize(const std::vector<cocos2d::Node*>& nodes);
+    static Vec2 getNodeGroupSize(const std::vector<cocos2d::Node*>& nodes);
 
-    static cocos2d::Size getNodeGroupScaledSize(const std::vector<cocos2d::Node*>& nodes);
+    static Vec2 getNodeGroupScaledSize(const std::vector<cocos2d::Node*>& nodes);
 
     /// Set nodes group size
-    static void   setNodeGroupSize(const std::vector<cocos2d::Node*>& nodes, const cocos2d::Size& newSize);
+    static void   setNodeGroupSize(const std::vector<cocos2d::Node*>& nodes, const Vec2& newSize);
 
     /// Get Node group left
     static float  getNodeGroupLeft(const std::vector<cocos2d::Node*>& nodes);
@@ -764,7 +766,7 @@ struct CC_DLL LayoutHelper {
         static void   refresh(void);
 
         static cocos2d::Rect getScreenVisibleRect();
-        static cocos2d::Size size();
+        static Vec2 size();
         static cocos2d::Point left();
         static cocos2d::Point right();
         static cocos2d::Point top();

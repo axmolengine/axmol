@@ -30,7 +30,7 @@
 #if CC_USE_PHYSICS
 
 #include "2d/CCComponent.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 #include "physics/CCPhysicsShape.h"
 #include "base/CCVector.h"
 
@@ -104,12 +104,12 @@ public:
     /**
      * Create a body contains a box shape.
      *
-     * @param   size Size contains this box's width and height.
+     * @param   size Vec2 contains this box's width and height.
      * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.
      * @return  An autoreleased PhysicsBody object pointer.
      */
-    static PhysicsBody* createBox(const Size& size, const PhysicsMaterial& material = PHYSICSBODY_MATERIAL_DEFAULT, const Vec2& offset = Vec2::ZERO);
+    static PhysicsBody* createBox(const Vec2& size, const PhysicsMaterial& material = PHYSICSBODY_MATERIAL_DEFAULT, const Vec2& offset = Vec2::ZERO);
 
     /**
      * @brief Create a body contains a polygon shape.
@@ -135,13 +135,13 @@ public:
 
     /**
      * Create a body contains a EdgeBox shape.
-     * @param   size Size contains this box's width and height.
+     * @param   size Vec2 contains this box's width and height.
      * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
      * @param   border It's a edge's border width.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.
      * @return  An autoreleased PhysicsBody object pointer.
      */
-    static PhysicsBody* createEdgeBox(const Size& size, const PhysicsMaterial& material = PHYSICSBODY_MATERIAL_DEFAULT, float border = 1, const Vec2& offset = Vec2::ZERO);
+    static PhysicsBody* createEdgeBox(const Vec2& size, const PhysicsMaterial& material = PHYSICSBODY_MATERIAL_DEFAULT, float border = 1, const Vec2& offset = Vec2::ZERO);
 
     /**
      * Create a body contains a EdgePolygon shape.

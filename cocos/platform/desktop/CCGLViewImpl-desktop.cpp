@@ -753,7 +753,7 @@ int GLViewImpl::getMonitorCount() const {
     return count;
 }
 
-Size GLViewImpl::getMonitorSize() const {
+Vec2 GLViewImpl::getMonitorSize() const {
     GLFWmonitor* monitor = _monitor;
     if (nullptr == monitor) {
         GLFWwindow* window = this->getWindow();
@@ -764,10 +764,10 @@ Size GLViewImpl::getMonitorSize() const {
     }
     if (nullptr != monitor) {
         const GLFWvidmode* videoMode = glfwGetVideoMode(monitor);
-        Size size = Size((float)videoMode->width, (float)videoMode->height);
+        Vec2 size = Vec2((float)videoMode->width, (float)videoMode->height);
         return size;
     }
-    return Size::ZERO;
+    return Vec2::ZERO;
 }
 
 void GLViewImpl::updateFrameSize()
