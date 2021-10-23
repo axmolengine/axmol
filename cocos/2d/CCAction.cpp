@@ -237,7 +237,7 @@ bool Follow::initWithTargetAndOffset(Node *followedNode, float xOffset,float yOf
     _boundarySet = !rect.equals(Rect::ZERO);
     _boundaryFullyCovered = false;
 
-    Size winSize = Director::getInstance()->getWinSize();
+    Vec2 winSize = Director::getInstance()->getWinSize();
     _fullScreenSize.set(winSize.width, winSize.height);
     _halfScreenSize = _fullScreenSize * 0.5f;
     _offsetX=xOffset;

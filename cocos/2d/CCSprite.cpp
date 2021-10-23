@@ -450,7 +450,7 @@ void Sprite::setTextureRect(const Rect& rect)
     setTextureRect(rect, false, rect.size);
 }
 
-void Sprite::setTextureRect(const Rect& rect, bool rotated, const Size& untrimmedSize)
+void Sprite::setTextureRect(const Rect& rect, bool rotated, const Vec2& untrimmedSize)
 {
     _rectRotated = rotated;
 
@@ -769,7 +769,7 @@ void Sprite::setCenterRect(const cocos2d::Rect &rectInPoints)
         return;
     }
 
-    if (!_originalContentSize.equals(Size::ZERO))
+    if (!_originalContentSize.equals(Vec2::ZERO))
     {
         Rect rect = rectInPoints;
 
@@ -1022,7 +1022,7 @@ void Sprite::updateTransform()
             // calculate the Quad based on the Affine Matrix
             //
 
-            Size &size = _rect.size;
+            Vec2 &size = _rect.size;
 
             float x1 = _offsetPosition.x;
             float y1 = _offsetPosition.y;
@@ -1363,7 +1363,7 @@ void Sprite::setVisible(bool bVisible)
     SET_DIRTY_RECURSIVELY();
 }
 
-void Sprite::setContentSize(const Size& size)
+void Sprite::setContentSize(const Vec2& size)
 {
     if (_renderMode == RenderMode::QUAD_BATCHNODE || _renderMode == RenderMode::POLYGON)
         CCLOGWARN("Sprite::setContentSize() doesn't stretch the sprite when using QUAD_BATCHNODE or POLYGON render modes");
@@ -1396,7 +1396,7 @@ bool Sprite::isStretchEnabled() const
 
 void Sprite::updateStretchFactor()
 {
-    const Size size = getContentSize();
+    const Vec2 size = getContentSize();
 
     if (_renderMode == RenderMode::QUAD)
     {

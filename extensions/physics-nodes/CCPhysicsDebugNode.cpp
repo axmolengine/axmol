@@ -27,7 +27,7 @@
 
 
 #include "base/ccTypes.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 
 
 #include <stdlib.h>

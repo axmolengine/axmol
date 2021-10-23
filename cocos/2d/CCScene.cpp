@@ -103,7 +103,7 @@ bool Scene::init()
     return initWithSize(size);
 }
 
-bool Scene::initWithSize(const Size& size)
+bool Scene::initWithSize(const Vec2& size)
 {
     initDefaultCamera();
     setContentSize(size);
@@ -132,7 +132,7 @@ Scene* Scene::create()
     }
 }
 
-Scene* Scene::createWithSize(const Size& size)
+Scene* Scene::createWithSize(const Vec2& size)
 {
     Scene *ret = new (std::nothrow) Scene();
     if (ret && ret->initWithSize(size))

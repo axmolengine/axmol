@@ -1589,7 +1589,7 @@ Terrain::QuadTree::~QuadTree()
     if (_br) delete _br;
 }
 
-Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::string& textureSrc, const Size & chunksize, float height, float scale)
+Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::string& textureSrc, const Vec2 & chunksize, float height, float scale)
 {
     this->_heightMapSrc = heightMapsrc;
     this->_detailMaps[0]._detailMapSrc = textureSrc;
@@ -1600,7 +1600,7 @@ Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::st
     _skirtHeightRatio = 1;
 }
 
-Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1, const DetailMap& detail2, const DetailMap& detail3, const DetailMap& detail4, const Size & chunksize, float height, float scale)
+Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1, const DetailMap& detail2, const DetailMap& detail3, const DetailMap& detail4, const Vec2 & chunksize, float height, float scale)
 {
     this->_heightMapSrc = heightMapsrc;
     this->_alphaMapSrc = alphamap;
@@ -1615,7 +1615,7 @@ Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::st
     _skirtHeightRatio = 1;
 }
 
-Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1, const DetailMap& detail2, const DetailMap& detail3, const Size & chunksize /*= Size(32,32)*/, float height /*= 2*/, float scale /*= 0.1*/)
+Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1, const DetailMap& detail2, const DetailMap& detail3, const Vec2 & chunksize /*= Vec2(32,32)*/, float height /*= 2*/, float scale /*= 0.1*/)
 {
     this->_heightMapSrc = heightMapsrc;
     this->_alphaMapSrc = alphamap;

@@ -53,7 +53,7 @@ SpriteFrame* SpriteFrame::createWithTexture(Texture2D *texture, const Rect& rect
     return spriteFrame;
 }
 
-SpriteFrame* SpriteFrame::createWithTexture(Texture2D* texture, const Rect& rect, bool rotated, const Vec2& offset, const Size& originalSize)
+SpriteFrame* SpriteFrame::createWithTexture(Texture2D* texture, const Rect& rect, bool rotated, const Vec2& offset, const Vec2& originalSize)
 {
     SpriteFrame *spriteFrame = new (std::nothrow) SpriteFrame();
     if (spriteFrame && spriteFrame->initWithTexture(texture, rect, rotated, offset, originalSize)) {
@@ -65,7 +65,7 @@ SpriteFrame* SpriteFrame::createWithTexture(Texture2D* texture, const Rect& rect
     return nullptr;
 }
 
-SpriteFrame* SpriteFrame::create(const std::string& filename, const Rect& rect, bool rotated, const Vec2& offset, const Size& originalSize)
+SpriteFrame* SpriteFrame::create(const std::string& filename, const Rect& rect, bool rotated, const Vec2& offset, const Vec2& originalSize)
 {
     SpriteFrame *spriteFrame = new (std::nothrow) SpriteFrame();
     if (spriteFrame && spriteFrame->initWithTextureFilename(filename, rect, rotated, offset, originalSize)) {
@@ -94,7 +94,7 @@ bool SpriteFrame::initWithTextureFilename(const std::string& filename, const Rec
     return initWithTextureFilename(filename, rectInPixels, false, Vec2::ZERO, rectInPixels.size);
 }
 
-bool SpriteFrame::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated, const Vec2& offset, const Size& originalSize)
+bool SpriteFrame::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated, const Vec2& offset, const Vec2& originalSize)
 {
     _texture = texture;
 
@@ -116,7 +116,7 @@ bool SpriteFrame::initWithTexture(Texture2D* texture, const Rect& rect, bool rot
     return true;
 }
 
-bool SpriteFrame::initWithTextureFilename(const std::string& filename, const Rect& rect, bool rotated, const Vec2& offset, const Size& originalSize)
+bool SpriteFrame::initWithTextureFilename(const std::string& filename, const Rect& rect, bool rotated, const Vec2& offset, const Vec2& originalSize)
 {
     if (FileUtils::getInstance()->isFileExist(filename)) {
         _texture = nullptr;

@@ -754,7 +754,7 @@ void Renderer::flushTriangles()
 }
 
 // helpers
-bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
+bool Renderer::checkVisibility(const Mat4 &transform, const Vec2 &size)
 {
     auto director = Director::getInstance();
     auto scene = director->getRunningScene();

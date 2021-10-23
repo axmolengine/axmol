@@ -1428,7 +1428,7 @@ SkewBy* SkewBy::reverse() const
     return SkewBy::create(_duration, -_skewX, -_skewY);
 }
 
-ResizeTo* ResizeTo::create(float duration, const cocos2d::Size& final_size)
+ResizeTo* ResizeTo::create(float duration, const Vec2& final_size)
 {
     ResizeTo *ret = new (std::nothrow) ResizeTo();
     
@@ -1474,7 +1474,7 @@ void ResizeTo::update(float time)
     }
 }
 
-bool ResizeTo::initWithDuration(float duration, const cocos2d::Size& final_size)
+bool ResizeTo::initWithDuration(float duration, const Vec2& final_size)
 {
     if (cocos2d::ActionInterval::initWithDuration(duration))
     {
@@ -1489,7 +1489,7 @@ bool ResizeTo::initWithDuration(float duration, const cocos2d::Size& final_size)
 // ResizeBy
 //
 
-ResizeBy* ResizeBy::create(float duration, const cocos2d::Size& deltaSize)
+ResizeBy* ResizeBy::create(float duration, const Vec2& deltaSize)
 {
     ResizeBy *ret = new (std::nothrow) ResizeBy();
     
@@ -1526,7 +1526,7 @@ void ResizeBy::startWithTarget(Node *target)
 
 ResizeBy* ResizeBy::reverse() const
 {
-    cocos2d::Size newSize(-_sizeDelta.width, -_sizeDelta.height);
+    Vec2 newSize(-_sizeDelta.width, -_sizeDelta.height);
     return ResizeBy::create(_duration, newSize);
 }
 
@@ -1538,7 +1538,7 @@ void ResizeBy::update(float t)
     }
 }
 
-bool ResizeBy::initWithDuration(float duration, const cocos2d::Size& deltaSize)
+bool ResizeBy::initWithDuration(float duration, const Vec2& deltaSize)
 {
     bool ret = false;
     

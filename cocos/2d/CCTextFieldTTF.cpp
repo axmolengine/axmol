@@ -108,7 +108,7 @@ TextFieldTTF::~TextFieldTTF()
 // static constructor
 //////////////////////////////////////////////////////////////////////////
 
-TextFieldTTF * TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeholder, const Size& dimensions, TextHAlignment alignment, const std::string& fontName, float fontSize)
+TextFieldTTF * TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeholder, const Vec2& dimensions, TextHAlignment alignment, const std::string& fontName, float fontSize)
 {
     TextFieldTTF *ret = new (std::nothrow) TextFieldTTF();
     if(ret && ret->initWithPlaceHolder("", dimensions, alignment, fontName, fontSize))
@@ -144,7 +144,7 @@ TextFieldTTF * TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeho
 // initialize
 //////////////////////////////////////////////////////////////////////////
 
-bool TextFieldTTF::initWithPlaceHolder(const std::string& placeholder, const Size& dimensions, TextHAlignment alignment, const std::string& fontName, float fontSize)
+bool TextFieldTTF::initWithPlaceHolder(const std::string& placeholder, const Vec2& dimensions, TextHAlignment alignment, const std::string& fontName, float fontSize)
 {
     setDimensions(dimensions.width, dimensions.height);
     setAlignment(alignment, TextVAlignment::CENTER);
@@ -387,7 +387,7 @@ void TextFieldTTF::setCursorFromPoint(const Vec2 &point, const Camera* camera)
                     auto sprite = getLetter(latterPosition);
                     if (sprite)
                     {
-                        rect.size = Size(sprite->getContentSize().width, _lineHeight);
+                        rect.size = Vec2(sprite->getContentSize().width, _lineHeight);
                         if (isScreenPointInRect(point, camera, sprite->getWorldToNodeTransform(), rect, nullptr))
                         {
                             setCursorPosition(latterPosition);

@@ -328,7 +328,7 @@ TransitionJumpZoom* TransitionJumpZoom::create(float t, Scene* scene)
 void TransitionJumpZoom::onEnter()
 {
     TransitionScene::onEnter();
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
 
     _inScene->setScale(0.5f);
     _inScene->setPosition(s.width, 0);
@@ -411,7 +411,7 @@ ActionInterval* TransitionMoveInL::easeActionWithAction(ActionInterval* action)
 
 void TransitionMoveInL::initScenes()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     _inScene->setPosition(-s.width,0);
 }
 
@@ -439,7 +439,7 @@ TransitionMoveInR* TransitionMoveInR::create(float t, Scene* scene)
 
 void TransitionMoveInR::initScenes()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     _inScene->setPosition(s.width,0);
 }
 
@@ -467,7 +467,7 @@ TransitionMoveInT* TransitionMoveInT::create(float t, Scene* scene)
 
 void TransitionMoveInT::initScenes()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     _inScene->setPosition(0,s.height);
 }
 
@@ -495,7 +495,7 @@ TransitionMoveInB* TransitionMoveInB::create(float t, Scene* scene)
 
 void TransitionMoveInB::initScenes()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     _inScene->setPosition(0,-s.height);
 }
 
@@ -543,13 +543,13 @@ void TransitionSlideInL::sceneOrder()
 
 void TransitionSlideInL:: initScenes()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     _inScene->setPosition(-(s.width-ADJUST_FACTOR),0.0f);
 }
 
 ActionInterval* TransitionSlideInL::action()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     return MoveBy::create(_duration, Vec2(s.width-ADJUST_FACTOR,0.0f));
 }
 
@@ -599,14 +599,14 @@ void TransitionSlideInR::sceneOrder()
 
 void TransitionSlideInR::initScenes()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     _inScene->setPosition(s.width-ADJUST_FACTOR,0);
 }
 
 
 ActionInterval* TransitionSlideInR:: action()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     return MoveBy::create(_duration, Vec2(-(s.width-ADJUST_FACTOR),0.0f));
 }
 
@@ -640,14 +640,14 @@ void TransitionSlideInT::sceneOrder()
 
 void TransitionSlideInT::initScenes()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     _inScene->setPosition(0,s.height-ADJUST_FACTOR);
 }
 
 
 ActionInterval* TransitionSlideInT::action()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     return MoveBy::create(_duration, Vec2(0.0f,-(s.height-ADJUST_FACTOR)));
 }
 
@@ -680,14 +680,14 @@ void TransitionSlideInB::sceneOrder()
 
 void TransitionSlideInB:: initScenes()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     _inScene->setPosition(0,-(s.height-ADJUST_FACTOR));
 }
 
 
 ActionInterval* TransitionSlideInB:: action()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     return MoveBy::create(_duration, Vec2(0.0f,s.height-ADJUST_FACTOR));
 }
 
@@ -1288,7 +1288,7 @@ void TransitionCrossFade::onEnter()
     // create a transparent color layer
     // in which we are going to add our rendertextures
     Color4B  color(0,0,0,0);
-    Size size = _director->getWinSize();
+    Vec2 size = _director->getWinSize();
     LayerColor* layer = LayerColor::create(color);
 
     // create the first render texture for inScene
@@ -1396,12 +1396,12 @@ void TransitionTurnOffTiles::onEnter()
     _outSceneProxy->setTarget(_outScene);
     _outSceneProxy->onEnter();
 
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     float aspect = s.width / s.height;
     int x = (int)(12 * aspect);
     int y = 12;
 
-    TurnOffTiles* toff = TurnOffTiles::create(_duration, Size(x,y));
+    TurnOffTiles* toff = TurnOffTiles::create(_duration, Vec2(x,y));
     ActionInterval* action = easeActionWithAction(toff);
     _outSceneProxy->runAction
     (
@@ -1592,12 +1592,12 @@ void TransitionFadeTR::onEnter()
     _outSceneProxy->setTarget(_outScene);
     _outSceneProxy->onEnter();
 
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     float aspect = s.width / s.height;
     int x = (int)(12 * aspect);
     int y = 12;
 
-    ActionInterval* action  = actionWithSize(Size(x,y));
+    ActionInterval* action  = actionWithSize(Vec2(x,y));
 
     _outSceneProxy->runAction
     (
@@ -1634,7 +1634,7 @@ void TransitionFadeTR::draw(Renderer *renderer, const Mat4 &transform, uint32_t 
     }
 }
 
-ActionInterval*  TransitionFadeTR::actionWithSize(const Size& size)
+ActionInterval*  TransitionFadeTR::actionWithSize(const Vec2& size)
 {
     return FadeOutTRTiles::create(_duration, size);
 }
@@ -1668,7 +1668,7 @@ TransitionFadeBL* TransitionFadeBL::create(float t, Scene* scene)
     return nullptr;
 }
 
-ActionInterval*  TransitionFadeBL::actionWithSize(const Size& size)
+ActionInterval*  TransitionFadeBL::actionWithSize(const Vec2& size)
 {
     return FadeOutBLTiles::create(_duration, size);
 }
@@ -1696,7 +1696,7 @@ TransitionFadeUp* TransitionFadeUp::create(float t, Scene* scene)
     return nullptr;
 }
 
-ActionInterval* TransitionFadeUp::actionWithSize(const Size& size)
+ActionInterval* TransitionFadeUp::actionWithSize(const Vec2& size)
 {
     return FadeOutUpTiles::create(_duration, size);
 }
@@ -1723,7 +1723,7 @@ TransitionFadeDown* TransitionFadeDown::create(float t, Scene* scene)
     return nullptr;
 }
 
-ActionInterval* TransitionFadeDown::actionWithSize(const Size& size)
+ActionInterval* TransitionFadeDown::actionWithSize(const Vec2& size)
 {
     return FadeOutDownTiles::create(_duration, size);
 }

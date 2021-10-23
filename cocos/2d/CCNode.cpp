@@ -76,7 +76,7 @@ Node::Node()
 , _skewX(0.0f)
 , _skewY(0.0f)
 , _anchorPoint(0, 0)
-, _contentSize(Size::ZERO)
+, _contentSize(Vec2::ZERO)
 , _contentSizeDirty(true)
 , _transformDirty(true)
 , _inverseDirty(true)
@@ -620,12 +620,12 @@ void Node::setAnchorPoint(const Vec2& point)
 }
 
 /// contentSize getter
-const Size& Node::getContentSize() const
+const Vec2& Node::getContentSize() const
 {
     return _contentSize;
 }
 
-void Node::setContentSize(const Size & size)
+void Node::setContentSize(const Vec2 & size)
 {
     if (! size.equals(_contentSize))
     {

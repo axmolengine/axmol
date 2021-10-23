@@ -230,16 +230,16 @@ public:
     // window size
 
     /** Returns the size of the OpenGL view in points. */
-    const Size& getWinSize() const;
+    const Vec2& getWinSize() const;
 
     /** Returns the size of the OpenGL view in pixels. */
-    Size getWinSizeInPixels() const;
+    Vec2 getWinSizeInPixels() const;
     
     /** 
      * Returns visible size of the OpenGL view in points.
      * The value is equal to `Director::getWinSize()` if don't invoke `GLView::setDesignResolutionSize()`.
      */
-    Size getVisibleSize() const;
+    Vec2 getVisibleSize() const;
     
     /** Returns visible origin coordinate of the OpenGL view in points. */
     Vec2 getVisibleOrigin() const;
@@ -620,7 +620,7 @@ protected:
     Projection _projection = Projection::DEFAULT;
 
     /* window size in points */
-    Size _winSizeInPoints = Size::ZERO;
+    Vec2 _winSizeInPoints = Vec2::ZERO;
     
     /* content scale factor */
     float _contentScaleFactor = 1.0f;

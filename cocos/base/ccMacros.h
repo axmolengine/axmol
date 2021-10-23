@@ -163,14 +163,14 @@ On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
  Converts a rect in pixels to points
  */
 #define CC_SIZE_PIXELS_TO_POINTS(__size_in_pixels__)                      \
-    cocos2d::Size((__size_in_pixels__).width / CC_CONTENT_SCALE_FACTOR(), \
+    Vec2((__size_in_pixels__).width / CC_CONTENT_SCALE_FACTOR(), \
                   (__size_in_pixels__).height / CC_CONTENT_SCALE_FACTOR())
 
 /** @def CC_POINT_POINTS_TO_PIXELS
  Converts a rect in points to pixels
  */
 #define CC_SIZE_POINTS_TO_PIXELS(__size_in_points__)                     \
-    cocos2d::Size((__size_in_points__).width* CC_CONTENT_SCALE_FACTOR(), \
+    Vec2((__size_in_points__).width* CC_CONTENT_SCALE_FACTOR(), \
                   (__size_in_points__).height* CC_CONTENT_SCALE_FACTOR())
 
 #ifndef FLT_EPSILON

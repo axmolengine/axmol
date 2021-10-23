@@ -138,25 +138,25 @@ public:
      *
      * @return The map's size property measured in tiles.
      */
-    const Size& getMapSize() const { return _mapSize; }
+    const Vec2& getMapSize() const { return _mapSize; }
     
     /** Set the map's size property measured in tiles.
      *
      * @param mapSize The map's size property measured in tiles.
      */
-    void setMapSize(const Size& mapSize) { _mapSize = mapSize; }
+    void setMapSize(const Vec2& mapSize) { _mapSize = mapSize; }
 
     /** The tiles's size property measured in pixels.
      *
      * @return The tiles's size property measured in pixels.
      */
-    const Size& getTileSize() const { return _tileSize; }
+    const Vec2& getTileSize() const { return _tileSize; }
     
     /** Set the tiles's size property measured in pixels. 
      *
      * @param tileSize The tiles's size property measured in pixels.
      */
-    void setTileSize(const Size& tileSize) { _tileSize = tileSize; }
+    void setTileSize(const Vec2& tileSize) { _tileSize = tileSize; }
 
     /** Get map orientation. 
      *
@@ -235,9 +235,9 @@ protected:
     void buildWithMapInfo(TMXMapInfo* mapInfo);
 
     /** the map's size property measured in tiles */
-    Size _mapSize;
+    Vec2 _mapSize;
     /** the tiles's size property measured in pixels */
-    Size _tileSize;
+    Vec2 _tileSize;
     /** map orientation */
     int _mapOrientation;
     /** object groups */

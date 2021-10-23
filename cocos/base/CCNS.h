@@ -27,7 +27,7 @@ THE SOFTWARE.
 #ifndef __PLATFORM_CCNS_H__
 #define __PLATFORM_CCNS_H__
 
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 
 NS_CC_BEGIN
 
@@ -68,9 +68,9 @@ Vec2 CC_DLL PointFromString(const std::string& str);
  *                  An example of a valid string is "{3.0,2.5}".
  *                  The string is not localized, so items are always separated with a comma.
  * @return A Core Graphics structure that represents a size.
- *      If the string is not well-formed, the function returns Size::ZERO.
+ *      If the string is not well-formed, the function returns Vec2::ZERO.
  */
-Size CC_DLL SizeFromString(const std::string& str);
+Vec2 CC_DLL SizeFromString(const std::string& str);
 
 // end of data_structure group
 /** @} */

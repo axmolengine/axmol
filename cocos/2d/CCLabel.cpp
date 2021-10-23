@@ -106,7 +106,7 @@ public:
         if (isDirty())
         {
             _transformToBatch = getNodeToParentTransform();
-            Size &size = _rect.size;
+            Vec2 &size = _rect.size;
 
             float x1 = _offsetPosition.x;
             float y1 = _offsetPosition.y;
@@ -250,7 +250,7 @@ Label* Label::create()
     return ret;
 }
 
-Label* Label::createWithSystemFont(const std::string& text, const std::string& font, float fontSize, const Size& dimensions /* = Size::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
+Label* Label::createWithSystemFont(const std::string& text, const std::string& font, float fontSize, const Vec2& dimensions /* = Vec2::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
     auto ret = new (std::nothrow) Label(hAlignment,vAlignment);
 
@@ -269,7 +269,7 @@ Label* Label::createWithSystemFont(const std::string& text, const std::string& f
     return nullptr;
 }
 
-Label* Label::createWithTTF(const std::string& text, const std::string& fontFile, float fontSize, const Size& dimensions /* = Size::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
+Label* Label::createWithTTF(const std::string& text, const std::string& fontFile, float fontSize, const Vec2& dimensions /* = Vec2::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
     auto ret = new (std::nothrow) Label(hAlignment,vAlignment);
 
@@ -414,7 +414,7 @@ bool Label::setCharMap(const std::string& plistFile)
 
 bool Label::initWithTTF(const std::string& text,
                         const std::string& fontFilePath, float fontSize,
-                        const Size& dimensions,
+                        const Vec2& dimensions,
                         TextHAlignment /*hAlignment*/, TextVAlignment /*vAlignment*/)
 {
     if (FileUtils::getInstance()->isFileExist(fontFilePath))
@@ -1067,7 +1067,7 @@ bool Label::alignText()
 {
     if (_fontAtlas == nullptr || _utf32Text.empty())
     {
-        setContentSize(Size::ZERO);
+        setContentSize(Vec2::ZERO);
         return true;
     }
 
@@ -1374,7 +1374,7 @@ void Label::enableOutline(const Color4B& outlineColor,int outlineSize /* = -1 */
 }
 
 void Label::enableShadow(const Color4B& shadowColor /* = Color4B::BLACK */,
-                         const Size &offset /* = Size(2 ,-2)*/,
+                         const Vec2 &offset /* = Vec2(2 ,-2)*/,
                          int /* blurRadius = 0 */)
 {
     _shadowEnabled = true;
@@ -1432,7 +1432,7 @@ void Label::enableBold()
     if (!_boldEnabled)
     {
         // bold is implemented with outline
-        enableShadow(Color4B::WHITE, Size(0.9f, 0), 0);
+        enableShadow(Color4B::WHITE, Vec2(0.9f, 0), 0);
         // add one to kerning
         setAdditionalKerning(_additionalKerning+1);
         _boldEnabled = true;
@@ -2331,7 +2331,7 @@ std::string Label::getDescription() const
     return ret;
 }
 
-const Size& Label::getContentSize() const
+const Vec2& Label::getContentSize() const
 {
     if (_systemFontDirty || _contentDirty)
     {

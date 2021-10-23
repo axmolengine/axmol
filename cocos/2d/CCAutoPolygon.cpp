@@ -247,7 +247,7 @@ unsigned int AutoPolygon::getSquareValue(unsigned int x, unsigned int y, const R
      */
     unsigned int sv = 0;
     //NOTE: due to the way we pick points from texture, rect needs to be smaller, otherwise it goes outside 1 pixel
-    auto fixedRect = Rect(rect.origin, rect.size-Size(2,2));
+    auto fixedRect = Rect(rect.origin, rect.size-Vec2(2,2));
     
     Vec2 tl = Vec2(x-1.0f, y-1.0f);
     sv += (fixedRect.containsPoint(tl) && getAlphaByPos(tl) > threshold)? 1 : 0;

@@ -482,7 +482,7 @@ void PhysicsShapeEdgeSegment::updateScale()
 }
 
 // PhysicsShapeBox
-PhysicsShapeBox* PhysicsShapeBox::create(const Size& size, const PhysicsMaterial& material/* = MaterialDefault*/, const Vec2& offset/* = Vec2(0, 0)*/, float radius/* = 0.0f*/)
+PhysicsShapeBox* PhysicsShapeBox::create(const Vec2& size, const PhysicsMaterial& material/* = MaterialDefault*/, const Vec2& offset/* = Vec2(0, 0)*/, float radius/* = 0.0f*/)
 {
     PhysicsShapeBox* shape = new (std::nothrow) PhysicsShapeBox();
     if (shape && shape->init(size, material, offset, radius))
@@ -495,7 +495,7 @@ PhysicsShapeBox* PhysicsShapeBox::create(const Size& size, const PhysicsMaterial
     return nullptr;
 }
 
-bool PhysicsShapeBox::init(const Size& size, const PhysicsMaterial& material/* = MaterialDefault*/, const Vec2& offset /*= Vec2(0, 0)*/, float radius/* = 0.0f*/)
+bool PhysicsShapeBox::init(const Vec2& size, const PhysicsMaterial& material/* = MaterialDefault*/, const Vec2& offset /*= Vec2(0, 0)*/, float radius/* = 0.0f*/)
 {
     do
     {
@@ -527,7 +527,7 @@ bool PhysicsShapeBox::init(const Size& size, const PhysicsMaterial& material/* =
     return false;
 }
 
-Size PhysicsShapeBox::getSize() const
+Vec2 PhysicsShapeBox::getSize() const
 {
     cpShape* shape = _cpShapes.front();
     return PhysicsHelper::cpv2size(cpv(cpvdist(cpPolyShapeGetVert(shape, 1), cpPolyShapeGetVert(shape, 2)),
@@ -699,7 +699,7 @@ void PhysicsShapePolygon::updateScale()
 }
 
 // PhysicsShapeEdgeBox
-PhysicsShapeEdgeBox* PhysicsShapeEdgeBox::create(const Size& size, const PhysicsMaterial& material/* = MaterialDefault*/, float border/* = 1*/, const Vec2& offset/* = Vec2(0, 0)*/)
+PhysicsShapeEdgeBox* PhysicsShapeEdgeBox::create(const Vec2& size, const PhysicsMaterial& material/* = MaterialDefault*/, float border/* = 1*/, const Vec2& offset/* = Vec2(0, 0)*/)
 {
     PhysicsShapeEdgeBox* shape = new (std::nothrow) PhysicsShapeEdgeBox();
     if (shape && shape->init(size, material, border, offset))
@@ -712,7 +712,7 @@ PhysicsShapeEdgeBox* PhysicsShapeEdgeBox::create(const Size& size, const Physics
     return nullptr;
 }
 
-bool PhysicsShapeEdgeBox::init(const Size& size, const PhysicsMaterial& material/* = MaterialDefault*/, float border/* = 1*/, const Vec2& offset/*= Vec2(0, 0)*/)
+bool PhysicsShapeEdgeBox::init(const Vec2& size, const PhysicsMaterial& material/* = MaterialDefault*/, float border/* = 1*/, const Vec2& offset/*= Vec2(0, 0)*/)
 {
     do
     {

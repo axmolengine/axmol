@@ -222,7 +222,7 @@ void ParticleSystemQuad::updateTexCoords()
 {
     if (_texture)
     {
-        const Size& s = _texture->getContentSize();
+        const Vec2& s = _texture->getContentSize();
         initTexCoordsWithRect(Rect(0, 0, s.width, s.height));
     }
 }
@@ -243,7 +243,7 @@ void ParticleSystemQuad::setTextureWithRect(Texture2D *texture, const Rect& rect
 
 void ParticleSystemQuad::setTexture(Texture2D* texture)
 {
-    const Size& s = texture->getContentSize();
+    const Vec2& s = texture->getContentSize();
     this->setTextureWithRect(texture, Rect(0, 0, s.width, s.height));
 }
 

@@ -6,8 +6,8 @@ using namespace std;
 
 NS_CC_BEGIN
 
-void SpriteSheetLoader::initializePolygonInfo(const Size& textureSize,
-    const Size& spriteSize,
+void SpriteSheetLoader::initializePolygonInfo(const Vec2& textureSize,
+    const Vec2& spriteSize,
     const std::vector<int>& vertices,
     const std::vector<int>& verticesUV,
     const std::vector<int>& triangleIndices,

@@ -123,7 +123,7 @@ void PageViewIndicator::rearrange()
     bool horizontal = (_direction == PageView::Direction::HORIZONTAL);
 
     // Calculate total size
-    Size indexNodeSize = _indexNodes.at(0)->getContentSize();
+    Vec2 indexNodeSize = _indexNodes.at(0)->getContentSize();
     float sizeValue = (horizontal ? indexNodeSize.width : indexNodeSize.height);
 
     ssize_t numberOfItems = _indexNodes.size();

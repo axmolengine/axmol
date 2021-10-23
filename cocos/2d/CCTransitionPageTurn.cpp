@@ -99,7 +99,7 @@ void TransitionPageTurn::onEnter()
     _inSceneProxy->onEnter();
     _outSceneProxy->onEnter();
     
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     int x,y;
     if (s.width > s.height)
     {
@@ -112,7 +112,7 @@ void TransitionPageTurn::onEnter()
         y=16;
     }
 
-    ActionInterval *action  = this->actionWithSize(Size(x,y));
+    ActionInterval *action  = this->actionWithSize(Vec2(x,y));
 
     if (! _back )
     {
@@ -154,7 +154,7 @@ void TransitionPageTurn::onExit()
     TransitionScene::onExit();
 }
 
-ActionInterval* TransitionPageTurn:: actionWithSize(const Size& vector)
+ActionInterval* TransitionPageTurn:: actionWithSize(const Vec2& vector)
 {
     if (_back)
     {

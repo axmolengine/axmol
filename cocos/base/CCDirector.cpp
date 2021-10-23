@@ -581,7 +581,7 @@ const Mat4& Director::getMatrix(MATRIX_STACK_TYPE type) const
 
 void Director::setProjection(Projection projection)
 {
-    Size size = _winSizeInPoints;
+    Vec2 size = _winSizeInPoints;
 
     if (size.width == 0 || size.height == 0)
     {
@@ -684,7 +684,7 @@ Vec2 Director::convertToGL(const Vec2& uiPoint)
     // Calculate z=0 using -> transform*[0, 0, 0, 1]/w
     float zClip = transform.m[14]/transform.m[15];
 
-    Size glSize = _openGLView->getDesignResolutionSize();
+    Vec2 glSize = _openGLView->getDesignResolutionSize();
     Vec4 clipCoord(2.0f*uiPoint.x/glSize.width - 1.0f, 1.0f - 2.0f*uiPoint.y/glSize.height, zClip, 1);
 
     Vec4 glCoord;
@@ -716,22 +716,22 @@ Vec2 Director::convertToUI(const Vec2& glPoint)
 	clipCoord.y = clipCoord.y / clipCoord.w;
 	clipCoord.z = clipCoord.z / clipCoord.w;
 
-    Size glSize = _openGLView->getDesignResolutionSize();
+    Vec2 glSize = _openGLView->getDesignResolutionSize();
     float factor = 1.0f / glCoord.w;
     return Vec2(glSize.width * (clipCoord.x * 0.5f + 0.5f) * factor, glSize.height * (-clipCoord.y * 0.5f + 0.5f) * factor);
 }
 
-const Size& Director::getWinSize() const
+const Vec2& Director::getWinSize() const
 {
     return _winSizeInPoints;
 }
 
-Size Director::getWinSizeInPixels() const
+Vec2 Director::getWinSizeInPixels() const
 {
-    return Size(_winSizeInPoints.width * _contentScaleFactor, _winSizeInPoints.height * _contentScaleFactor);
+    return Vec2(_winSizeInPoints.width * _contentScaleFactor, _winSizeInPoints.height * _contentScaleFactor);
 }
 
-Size Director::getVisibleSize() const
+Vec2 Director::getVisibleSize() const
 {
     if (_openGLView)
     {
@@ -739,7 +739,7 @@ Size Director::getVisibleSize() const
     }
     else
     {
-        return Size::ZERO;
+        return Vec2::ZERO;
     }
 }
 

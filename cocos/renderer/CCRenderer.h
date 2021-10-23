@@ -401,7 +401,7 @@ public:
     const ScissorRect& getScissorRect() const; ///< Get scissor rectangle.
 
     /** returns whether or not a rectangle is visible or not */
-    bool checkVisibility(const Mat4& transform, const Size& size);
+    bool checkVisibility(const Mat4& transform, const Vec2& size);
     
     /** read pixels from RenderTarget or screen framebuffer */
     void readPixels(backend::RenderTarget* rt, std::function<void(const backend::PixelBufferDescriptor&)> callback);

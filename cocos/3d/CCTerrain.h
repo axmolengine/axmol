@@ -135,15 +135,15 @@ public:
         /**empty constructor*/
         TerrainData();
         /**constructor, this constructor construct a simple terrain which only have 1 detailmap*/
-        TerrainData(const std::string& heightMapsrc, const std::string& textureSrc, const Size & chunksize = Size(32,32), float mapHeight = 2, float mapScale = 0.1);
+        TerrainData(const std::string& heightMapsrc, const std::string& textureSrc, const Vec2 & chunksize = Vec2(32,32), float mapHeight = 2, float mapScale = 0.1);
         /**constructor, this constructor construct a terrain which have 4 detailmaps, 1 alpha map*/
-        TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1,const DetailMap& detail2, const DetailMap& detail3, const DetailMap& detail4, const Size & chunksize = Size(32,32), float mapHeight = 2, float mapScale = 0.1);
+        TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1,const DetailMap& detail2, const DetailMap& detail3, const DetailMap& detail4, const Vec2 & chunksize = Vec2(32,32), float mapHeight = 2, float mapScale = 0.1);
         /**constructor, this constructor construct a terrain which have 3 detailmaps, 1 alpha map*/
-        TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1,const DetailMap& detail2, const DetailMap& detail3, const Size & chunksize = Size(32,32), float mapHeight = 2, float mapScale = 0.1);
+        TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1,const DetailMap& detail2, const DetailMap& detail3, const Vec2 & chunksize = Vec2(32,32), float mapHeight = 2, float mapScale = 0.1);
         /**
         *determine the chunk size,chunk is the minimal subdivision of the Terrain
         */
-        Size _chunkSize;
+        Vec2 _chunkSize;
         /**height Map source path*/
         std::string _heightMapSrc;
         /**the source path of the alpha map*/
@@ -263,7 +263,7 @@ private:
         /**parent terrain*/
         Terrain * _terrain;
         /**chunk size*/
-        Size _size;
+        Vec2 _size;
         /**chunk's estimated slope*/
         float _slope;
         std::vector<TerrainVertexData> _currentVertices;
@@ -435,7 +435,7 @@ public:
     /**
      * get the terrain's size
      */
-    Size getTerrainSize() const { return Size(static_cast<float>(_imageWidth), static_cast<float>(_imageHeight)); }
+    Vec2 getTerrainSize() const { return Vec2(static_cast<float>(_imageWidth), static_cast<float>(_imageHeight)); }
     
     /**
      * get the terrain's height data
@@ -508,7 +508,7 @@ protected:
     std::vector<unsigned int> _indices;
     int _imageWidth;
     int _imageHeight;
-    Size _chunkSize;
+    Vec2 _chunkSize;
     bool _isEnableFrustumCull;
     int _maxDetailMapValue;
     cocos2d::Image * _heightMapImage;

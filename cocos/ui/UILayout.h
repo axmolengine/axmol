@@ -77,9 +77,9 @@ public:
     /**
      * @brief Return the content size of layout.
      *
-     * @return A content size in Size.
+     * @return A content size in Vec2.
      */
-    virtual Size getLayoutContentSize()const = 0;
+    virtual Vec2 getLayoutContentSize()const = 0;
     
     /**
      * @brief Get all elements of the layout.
@@ -308,7 +308,7 @@ public:
      *
      * @return background image texture size.
      */
-    const Size& getBackGroundImageTextureSize() const;
+    const Vec2& getBackGroundImageTextureSize() const;
     
     /**
      * Toggle layout clipping.
@@ -480,12 +480,12 @@ protected:
     void stencilClippingVisit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags);
     void scissorClippingVisit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags);
     
-    void setStencilClippingSize(const Size& size);
+    void setStencilClippingSize(const Vec2& size);
     const Rect& getClippingRect();
     
     virtual void doLayout()override;
     virtual LayoutManager* createLayoutManager()override;
-    virtual Size getLayoutContentSize()const override;
+    virtual Vec2 getLayoutContentSize()const override;
     virtual const Vector<Node*>& getLayoutElements()const override;
     
     //clipping
@@ -499,7 +499,7 @@ protected:
     /**
      *get the content size of the layout, it will accumulate all its children's content size
      */
-    Size getLayoutAccumulatedSize() const;
+    Vec2 getLayoutAccumulatedSize() const;
     
     /**
      * When the layout get focused, it the layout pass the focus to its child, it will use this method to determine which child 
@@ -608,7 +608,7 @@ protected:
     Rect _backGroundImageCapInsets;
     BackGroundColorType _colorType;
     TextureResType _bgImageTexType;
-    Size _backGroundImageTextureSize;
+    Vec2 _backGroundImageTextureSize;
     Color3B _backGroundImageColor;
     uint8_t _backGroundImageOpacity;
 

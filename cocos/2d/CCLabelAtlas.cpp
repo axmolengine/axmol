@@ -220,7 +220,7 @@ void LabelAtlas::setString(const std::string &label)
     _string = label;
     this->updateAtlasValues();
 
-    Size s = Size(len * _itemWidth, _itemHeight);
+    Vec2 s = Vec2(len * _itemWidth, _itemHeight);
 
     this->setContentSize(s);
 

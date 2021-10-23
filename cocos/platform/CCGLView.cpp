@@ -179,29 +179,29 @@ void GLView::setDesignResolutionSize(float width, float height, ResolutionPolicy
         return;
     }
 
-    _designResolutionSize.setSize(width, height);
+    _designResolutionSize.set(width, height);
     _resolutionPolicy = resolutionPolicy;
     
     updateDesignResolutionSize();
  }
 
-const Size& GLView::getDesignResolutionSize() const 
+const Vec2& GLView::getDesignResolutionSize() const 
 {
     return _designResolutionSize;
 }
 
-Size GLView::getFrameSize() const
+Vec2 GLView::getFrameSize() const
 {
     return _screenSize;
 }
 
 void GLView::setFrameSize(float width, float height)
 {
-    _screenSize = Size(width, height);
+    _screenSize = Vec2(width, height);
 
     // Github issue #16003 and #16485
     // only update the designResolution if it wasn't previously set
-    if (_designResolutionSize.equals(Size::ZERO))
+    if (_designResolutionSize.equals(Vec2::ZERO))
         _designResolutionSize = _screenSize;
 }
 
@@ -218,11 +218,11 @@ Rect GLView::getSafeAreaRect() const
     return getVisibleRect();
 }
 
-Size GLView::getVisibleSize() const
+Vec2 GLView::getVisibleSize() const
 {
     if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
     {
-        return Size(_screenSize.width/_scaleX, _screenSize.height/_scaleY);
+        return Vec2(_screenSize.width/_scaleX, _screenSize.height/_scaleY);
     }
     else 
     {

@@ -158,7 +158,7 @@ public:
      * @return An automatically released Label object.
      */
     static Label* createWithSystemFont(const std::string& text, const std::string& font, float fontSize,
-        const Size& dimensions = Size::ZERO, TextHAlignment hAlignment = TextHAlignment::LEFT,
+        const Vec2& dimensions = Vec2::ZERO, TextHAlignment hAlignment = TextHAlignment::LEFT,
         TextVAlignment vAlignment = TextVAlignment::TOP);
 
     /**
@@ -174,7 +174,7 @@ public:
     * @return An automatically released Label object.
     */
     static Label * createWithTTF(const std::string& text, const std::string& fontFilePath, float fontSize,
-        const Size& dimensions = Size::ZERO, TextHAlignment hAlignment = TextHAlignment::LEFT,
+        const Vec2& dimensions = Vec2::ZERO, TextHAlignment hAlignment = TextHAlignment::LEFT,
         TextVAlignment vAlignment = TextVAlignment::TOP);
 
     /**
@@ -396,7 +396,7 @@ public:
      *
      * @todo Support blur for shadow effect.
      */
-    virtual void enableShadow(const Color4B& shadowColor = Color4B::BLACK,const Size &offset = Size(2,-2), int blurRadius = 0);
+    virtual void enableShadow(const Color4B& shadowColor = Color4B::BLACK,const Vec2 &offset = Vec2(2,-2), int blurRadius = 0);
 
     /**
      * Enable outline effect to Label.
@@ -452,7 +452,7 @@ public:
     /**
     * Return shadow effect offset value.
     */
-    Size getShadowOffset() const { return _shadowOffset; }
+    Vec2 getShadowOffset() const { return _shadowOffset; }
 
     /**
     * Return the shadow effect blur radius.
@@ -576,7 +576,7 @@ public:
 
     /** Sets the untransformed size of the Label in a more efficient way. */
     void setDimensions(float width, float height);
-    const Size& getDimensions() const{ return _labelDimensions;}
+    const Vec2& getDimensions() const{ return _labelDimensions;}
 
     /** Update content immediately.*/
     virtual void updateContent();
@@ -652,7 +652,7 @@ public:
 
     virtual std::string getDescription() const override;
 
-    virtual const Size& getContentSize() const override;
+    virtual const Vec2& getContentSize() const override;
     virtual Rect getBoundingBox() const override;
 
     virtual void visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
@@ -680,7 +680,7 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~Label();
 
     bool initWithTTF(const std::string& text, const std::string& fontFilePath, float fontSize,
-                     const Size& dimensions = Size::ZERO, TextHAlignment hAlignment = TextHAlignment::LEFT,
+                     const Vec2& dimensions = Vec2::ZERO, TextHAlignment hAlignment = TextHAlignment::LEFT,
                      TextVAlignment vAlignment = TextVAlignment::TOP);
 
     bool initWithTTF(const TTFConfig& ttfConfig, const std::string& text,
@@ -804,7 +804,7 @@ protected:
     int* _horizontalKernings;
     bool _lineBreakWithoutSpaces;
     float _maxLineWidth;
-    Size _labelDimensions;
+    Vec2 _labelDimensions;
     float _labelWidth;
     float _labelHeight;
     TextHAlignment _hAlignment;
@@ -835,7 +835,7 @@ protected:
 
     bool _shadowDirty;
     bool _shadowEnabled;
-    Size _shadowOffset;
+    Vec2 _shadowOffset;
     
     Color4F _shadowColor4F;
     Color3B _shadowColor3B;

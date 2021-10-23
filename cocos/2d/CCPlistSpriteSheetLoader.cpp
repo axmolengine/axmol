@@ -170,7 +170,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
     auto& framesDict = dictionary["frames"].asValueMap();
     int format = 0;
 
-    Size textureSize;
+    Vec2 textureSize;
 
     // get the format
     auto metaItr = dictionary.find("metadata");
@@ -225,7 +225,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
                 Rect(x, y, w, h),
                 false,
                 Vec2(ox, oy),
-                Size((float)ow, (float)oh)
+                Vec2((float)ow, (float)oh)
             );
         }
         else if (format == 1 || format == 2)
@@ -428,7 +428,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict, Te
                 Rect(x, y, w, h),
                 false,
                 Vec2(ox, oy),
-                Size((float)ow, (float)oh)
+                Vec2((float)ow, (float)oh)
             );
         }
         else if (format == 1 || format == 2)

@@ -256,7 +256,7 @@ protected:
 
     void *_textureData;
     int  _dataLen;
-    Size _textureSize;
+    Vec2 _textureSize;
     backend::PixelFormat _pixelFormat;
 
     std::string _fileName;
@@ -270,7 +270,7 @@ class CC_DLL VolatileTextureMgr
 public:
     static void addImageTexture(Texture2D *tt, const std::string& imageFileName);
     static void addStringTexture(Texture2D *tt, const char* text, const FontDefinition& fontDefinition);
-    static void addDataTexture(Texture2D *tt, void* data, int dataLen, backend::PixelFormat pixelFormat, const Size& contentSize);
+    static void addDataTexture(Texture2D *tt, void* data, int dataLen, backend::PixelFormat pixelFormat, const Vec2& contentSize);
     static void addImage(Texture2D *tt, Image *image);
     static void removeTexture(Texture2D *t);
     static void reloadAllTextures();

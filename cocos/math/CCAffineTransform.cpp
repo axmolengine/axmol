@@ -57,9 +57,9 @@ Vec2 PointApplyTransform(const Vec2& point, const Mat4& transform)
 }
 
 
-Size __CCSizeApplyAffineTransform(const Size& size, const AffineTransform& t)
+Vec2 __CCSizeApplyAffineTransform(const Vec2& size, const AffineTransform& t)
 {
-  Size s;
+  Vec2 s;
   s.width = (float)((double)t.a * size.width + (double)t.c * size.height);
   s.height = (float)((double)t.b * size.width + (double)t.d * size.height);
   return s;
