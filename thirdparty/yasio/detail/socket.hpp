@@ -29,13 +29,23 @@ SOFTWARE.
 #ifndef YASIO__SOCKET_HPP
 #define YASIO__SOCKET_HPP
 
+#include "yasio/detail/config.hpp"
+
 #ifdef _WIN32
 #  if !defined(WIN32_LEAN_AND_MEAN)
 #    define WIN32_LEAN_AND_MEAN
 #  endif
 #  include <WinSock2.h>
 #  include <Windows.h>
-#  if defined(_WIN32) && !defined(_WINSTORE)
+#  if defined(YASIO_INSIDE_UNREAL)
+#    if !defined(TRUE)
+#      define TRUE 1
+#    endif
+#    if !defined(FALSE)
+#      define FALSE 0
+#    endif
+#  endif
+#  if !defined(_WINSTORE)
 #    include <Mswsock.h>
 #    include <Mstcpip.h>
 #  endif
@@ -185,7 +195,17 @@ typedef int socket_native_type;
 
 #define IN_MAX_ADDRSTRLEN INET6_ADDRSTRLEN
 
-#if !defined(_WS2IPDEF_)
+// Workaround for older MinGW missing AI_XXX macros
+#if defined(__MINGW32__)
+#  if !defined(AI_ALL)
+#    define AI_ALL 0x00000100
+#  endif
+#  if !defined(AI_V4MAPPED)
+#    define AI_V4MAPPED 0x00000800
+#  endif
+#endif
+
+#if !defined(_WS2IPDEF_) || defined(__MINGW32__)
 inline bool IN4_IS_ADDR_LOOPBACK(const in_addr* a)
 {
   return ((a->s_addr & 0xff) == 0x7f); // 127/8

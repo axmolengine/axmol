@@ -36,7 +36,7 @@ See: https://github.com/bitwizeshift/string_view-standalone
 #include "yasio/compiler/feature_test.hpp"
 
 /// wcsncasecmp workaround for android API level < 23, copy from msvc ucrt 10.0.18362.0 'wcsnicmp'
-#if defined(__ANDROID_API__) && __ANDROID_API__ < 23
+#if (defined(__ANDROID_API__) && __ANDROID_API__ < 23) || defined(__MINGW32__)
 inline int wcsncasecmp(wchar_t const* const lhs, wchar_t const* const rhs, size_t const count)
 {
   if (count == 0)

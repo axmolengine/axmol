@@ -35,92 +35,126 @@ SOFTWARE.
 #  include <shared_mutex>
 #else
 #  include <system_error>
-#  if defined(_WIN32)
-#    if !defined(WIN32_LEAN_AND_MEAN)
-#      define WIN32_LEAN_AND_MEAN
-#    endif
-#    include <Windows.h>
-#    define yasio__smtx_t SRWLOCK
-#    define yasio__smtx_init(rwlock, attr) InitializeSRWLock(rwlock)
-#    define yasio__smtx_destroy(rwlock)
-#    define yasio__smtx_lock_shared(rwlock) AcquireSRWLockShared(rwlock)
-#    define yasio__smtx_trylock_shared(rwlock) !!TryAcquireSRWLockShared(rwlock)
-#    define yasio__smtx_lock_exclusive(rwlock) AcquireSRWLockExclusive(rwlock)
-#    define yasio__smtx_trylock_exclusive(rwlock) !!TryAcquireSRWLockExclusive(rwlock)
-#    define yasio__smtx_unlock_shared(rwlock) ReleaseSRWLockShared(rwlock)
-#    define yasio__smtx_unlock_exclusive(rwlock) ReleaseSRWLockExclusive(rwlock)
-#  else
-#    include <pthread.h>
-#    define yasio__smtx_t pthread_rwlock_t
-#    define yasio__smtx_init(rwlock, attr) pthread_rwlock_init(rwlock, attr)
-#    define yasio__smtx_destroy(rwlock) pthread_rwlock_destroy(rwlock)
-#    define yasio__smtx_lock_shared(rwlock) pthread_rwlock_rdlock(rwlock)
-#    define yasio__smtx_trylock_shared(rwlock) pthread_rwlock_tryrdlock(rwlock) != 0
-#    define yasio__smtx_lock_exclusive(rwlock) pthread_rwlock_wrlock(rwlock)
-#    define yasio__smtx_trylock_exclusive(rwlock) pthread_rwlock_trywrlock(rwlock) != 0
-#    define yasio__smtx_unlock_shared(rwlock) pthread_rwlock_unlock(rwlock)
-#    define yasio__smtx_unlock_exclusive(rwlock) pthread_rwlock_unlock(rwlock)
-#  endif
-#  define yaso__throw_error(e) YASIO__THROW0(std::system_error(std::make_error_code(e), ""))
 #  include <mutex>
-
-// CLASS TEMPLATE shared_lock
+#  include <condition_variable>
+#  define yaso__throw_error(e) YASIO__THROW0(std::system_error(std::make_error_code(e), ""))
 namespace cxx17
 {
+// CLASS TEMPLATE shared_mutex, copy from: https://github.com/boostorg/thread/blob/develop/include/boost/thread/v2/shared_mutex.hpp
 class shared_mutex {
-public:
-  typedef yasio__smtx_t* native_handle_type;
+  typedef std::mutex mutex_t;
+  typedef std::condition_variable cond_t;
+  typedef unsigned count_t;
 
-  shared_mutex() // strengthened
+  mutex_t mut_;
+  cond_t gate1_;
+  // the gate2_ condition variable is only used by functions that
+  // have taken write_entered_ but are waiting for no_readers()
+  cond_t gate2_;
+  count_t state_;
+
+  static const count_t write_entered_ = 1U << (sizeof(count_t) * CHAR_BIT - 1);
+  static const count_t n_readers_     = ~write_entered_;
+
+  bool no_writer() const { return (state_ & write_entered_) == 0; }
+
+  bool one_writer() const { return (state_ & write_entered_) != 0; }
+
+  bool no_writer_no_readers() const
   {
-    yasio__smtx_init(&this->_Myhandle, nullptr);
+    // return (state_ & write_entered_) == 0 &&
+    //       (state_ & n_readers_) == 0;
+    return state_ == 0;
   }
 
-  ~shared_mutex() { yasio__smtx_destroy(&this->_Myhandle); }
+  bool no_writer_no_max_readers() const { return (state_ & write_entered_) == 0 && (state_ & n_readers_) != n_readers_; }
 
-  void lock() /* strengthened */
-  {           // lock exclusive
-    yasio__smtx_lock_exclusive(&this->_Myhandle);
+  bool no_readers() const { return (state_ & n_readers_) == 0; }
+
+  bool one_or_more_readers() const { return (state_ & n_readers_) > 0; }
+
+  shared_mutex(shared_mutex const&) = delete;
+  shared_mutex& operator=(shared_mutex const&) = delete;
+
+public:
+  shared_mutex() : state_(0) {}
+  ~shared_mutex() { std::lock_guard<mutex_t> _(mut_); }
+
+  // Exclusive ownership
+
+  void lock()
+  {
+    std::unique_lock<mutex_t> lk(mut_);
+    gate1_.wait(lk, std::bind(&shared_mutex::no_writer, std::ref(*this)));
+    state_ |= write_entered_;
+    gate2_.wait(lk, std::bind(&shared_mutex::no_readers, std::ref(*this)));
+  }
+  bool try_lock()
+  {
+    std::unique_lock<mutex_t> lk(mut_);
+    if (!no_writer_no_readers())
+    {
+      return false;
+    }
+    state_ = write_entered_;
+    return true;
+  }
+  void unlock()
+  {
+    std::lock_guard<mutex_t> _(mut_);
+    assert(one_writer());
+    assert(no_readers());
+    state_ = 0;
+    // notify all since multiple *lock_shared*() calls may be able
+    // to proceed in response to this notification
+    gate1_.notify_all();
   }
 
-  bool try_lock() /* strengthened */
-  {               // try to lock exclusive
-    return yasio__smtx_trylock_exclusive(&this->_Myhandle);
+  // Shared ownership
+
+  void lock_shared()
+  {
+    std::unique_lock<mutex_t> lk(mut_);
+    gate1_.wait(lk, std::bind(&shared_mutex::no_writer_no_max_readers, std::ref(*this)));
+    count_t num_readers = (state_ & n_readers_) + 1;
+    state_ &= ~n_readers_;
+    state_ |= num_readers;
   }
-
-  void unlock() /* strengthened */
-  {             // unlock exclusive
-    yasio__smtx_unlock_exclusive(&this->_Myhandle);
+  bool try_lock_shared()
+  {
+    std::unique_lock<mutex_t> lk(mut_);
+    if (!no_writer_no_max_readers())
+    {
+      return false;
+    }
+    count_t num_readers = (state_ & n_readers_) + 1;
+    state_ &= ~n_readers_;
+    state_ |= num_readers;
+    return true;
   }
-
-  void lock_shared() /* strengthened */
-  {                  // lock non-exclusive
-    yasio__smtx_lock_shared(&this->_Myhandle);
+  void unlock_shared()
+  {
+    std::lock_guard<mutex_t> _(mut_);
+    assert(one_or_more_readers());
+    count_t num_readers = (state_ & n_readers_) - 1;
+    state_ &= ~n_readers_;
+    state_ |= num_readers;
+    if (no_writer())
+    {
+      if (num_readers == n_readers_ - 1)
+        gate1_.notify_one();
+    }
+    else
+    {
+      if (num_readers == 0)
+        gate2_.notify_one();
+    }
   }
-
-  bool try_lock_shared() /* strengthened */
-  {                      // try to lock non-exclusive
-    return yasio__smtx_trylock_shared(&this->_Myhandle);
-  }
-
-  void unlock_shared() /* strengthened */
-  {                    // unlock non-exclusive
-    yasio__smtx_unlock_shared(&this->_Myhandle);
-  }
-
-  native_handle_type native_handle() /* strengthened */
-  {                                  // get native handle
-    return &_Myhandle;
-  }
-
-  shared_mutex(const shared_mutex&) = delete;
-  shared_mutex& operator=(const shared_mutex&) = delete;
-
-private:
-  yasio__smtx_t _Myhandle; // the lock object
 };
+
 // CLASS TEMPLATE shared_lock
-template <class _Mutex> class shared_lock { // shareable lock
+template <class _Mutex>
+class shared_lock {
 public:
   using mutex_type = _Mutex;
 

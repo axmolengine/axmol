@@ -1334,13 +1334,14 @@ void io_service::init_ssl_context()
   else
     SSL_CTX_set_verify(ssl_ctx_, SSL_VERIFY_NONE, nullptr);
 #  elif YASIO_SSL_BACKEND == 2
-  const char* pers = "yasio_ssl_client";
   ssl_ctx_ = new SSL_CTX();
   ::mbedtls_ssl_config_init(&ssl_ctx_->conf);
   ::mbedtls_x509_crt_init(&ssl_ctx_->cacert);
   ::mbedtls_ctr_drbg_init(&ssl_ctx_->ctr_drbg);
   ::mbedtls_entropy_init(&ssl_ctx_->entropy);
-  int ret = ::mbedtls_ctr_drbg_seed(&ssl_ctx_->ctr_drbg, ::mbedtls_entropy_func, &ssl_ctx_->entropy, (const unsigned char*)pers, strlen(pers));
+  using namespace cxx17;
+  auto pers = "yasio_ssl_client"_sv;
+  int ret = ::mbedtls_ctr_drbg_seed(&ssl_ctx_->ctr_drbg, ::mbedtls_entropy_func, &ssl_ctx_->entropy, (const unsigned char*)pers.data(), pers.length());
   if (ret != 0)
     YASIO_KLOGE("mbedtls_ctr_drbg_seed fail with ret=%d", ret);
 
@@ -1535,21 +1536,27 @@ void io_service::config_ares_name_servers()
   std::string nscsv;
   // list all dns servers for resov problem diagnosis
   ares_addr_node* name_servers = nullptr;
-  int status                   = ::ares_get_servers(ares_, &name_servers);
+  const char* what              = "system";
+  if (!options_.name_servers_.empty())
+  {
+    ::ares_set_servers_csv(ares_, options_.name_servers_.c_str());
+    what = "custom";
+  }
+  int status = ::ares_get_servers(ares_, &name_servers);
   if (status == ARES_SUCCESS)
   {
     for (auto name_server = name_servers; name_server != nullptr; name_server = name_server->next)
       endpoint::inaddr_to_csv_nl(name_server->family, &name_server->addr, nscsv);
 
     if (!nscsv.empty()) // if no valid name server, use predefined fallback dns
-      YASIO_KLOGD("[c-ares] use system dns: %s", nscsv.c_str());
+      YASIO_KLOGI("[c-ares] use %s dns: %s", what, nscsv.c_str());
     else
     {
-      status = ::ares_set_servers_csv(ares_, YASIO_CARES_FALLBACK_DNS);
+      status = ::ares_set_servers_csv(ares_, YASIO_FALLBACK_NAME_SERVERS);
       if (status == 0)
-        YASIO_KLOGW("[c-ares] set fallback dns: '%s' succeed", YASIO_CARES_FALLBACK_DNS);
+        YASIO_KLOGW("[c-ares] set fallback dns: '%s' succeed", YASIO_FALLBACK_NAME_SERVERS);
       else
-        YASIO_KLOGE("[c-ares] set fallback dns: '%s' failed, detail: %s", YASIO_CARES_FALLBACK_DNS, ::ares_strerror(status));
+        YASIO_KLOGE("[c-ares] set fallback dns: '%s' failed, detail: %s", YASIO_FALLBACK_NAME_SERVERS, ::ares_strerror(status));
     }
     ::ares_free_data(name_servers);
   }
@@ -2267,6 +2274,12 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
     case YOPT_S_DNS_DIRTY:
       options_.dns_dirty_ = true;
       break;
+#if defined(YASIO_HAVE_CARES)
+    case YOPT_S_DNS_LIST:
+      options_.name_servers_ = va_arg(ap, const char*);
+      options_.dns_dirty_ = true;
+      break;
+#endif
     case YOPT_C_UNPACK_PARAMS: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)
