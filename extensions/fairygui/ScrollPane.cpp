@@ -18,7 +18,6 @@ static const float TWEEN_TIME_DEFAULT = 0.3f; //min tween time for inertial scro
 static const float PULL_RATIO = 0.5f;         //pull down/up ratio
 
 static inline float sp_getField(const Vec2& pt, int axis) { return axis == 0 ? pt.x : pt.y; }
-static inline float sp_getField(const cocos2d::Size& sz, int axis) { return axis == 0 ? sz.width : sz.height; }
 static void sp_setField(Vec2& pt, int axis, float value)
 {
     if (axis == 0)
