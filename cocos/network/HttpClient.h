@@ -194,6 +194,12 @@ public:
     */
     void handleNetworkStatusChanged();
 
+    /*
+    * Sets custom dns server list:
+    * format: "xxx.xxx.xxx.xxx[:port],xxx.xxx.xxx.xxx[:port]
+    */
+    void setNameServers(const std::string& servers);
+
     yasio::io_service* getInternalService();
         
 private:

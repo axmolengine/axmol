@@ -148,6 +148,11 @@ void HttpClient::handleNetworkStatusChanged()
     _service->set_option(YOPT_S_DNS_DIRTY, 1);
 }
 
+void HttpClient::setNameServers(const std::string& servers)
+{
+    _service->set_option(YOPT_S_DNS_LIST, servers.c_str());
+}
+
 yasio::io_service* HttpClient::getInternalService()
 {
     return _service;
