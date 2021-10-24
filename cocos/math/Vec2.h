@@ -57,23 +57,26 @@ public:
 
     union
     {
+        float comps[2];
+
+        // The coord alias
         struct
         {
-
-            /**
-             * The x coordinate.
-             */
             float x;
-
-            /**
-             * The y coordinate.
-             */
             float y;
         };
 
+        // The size alias
         struct {
             float width;
             float height;
+        };
+
+        // The tex coord alias
+        struct
+        {
+            float u;
+            float v;
         };
     };
     /**
