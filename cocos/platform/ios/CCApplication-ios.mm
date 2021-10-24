@@ -27,7 +27,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "math/CCGeometry.h"
+#import "math/CCMath.h"
 #import "platform/ios/CCDirectorCaller-ios.h"
 #import "base/ccUtils.h"
 
