@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #include "platform/CCApplication.h"
 #include "platform/CCFileUtils.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 #include "base/CCDirector.h"
 #include "base/ccUtils.h"
 #include "renderer/backend/metal/DeviceMTL.h"

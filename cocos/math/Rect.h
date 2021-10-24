@@ -145,4 +145,4 @@ NS_CC_END
 // end of base group
 /// @}
 
-#endif // __MATH_CCGEOMETRY_H__
+#endif // __MATH_RECT_H__

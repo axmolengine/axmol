@@ -26,7 +26,7 @@ THE SOFTWARE.
 #pragma once
 
 #include "base/CCRef.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 #include "platform/CCGLView.h"
 
 NS_CC_BEGIN
