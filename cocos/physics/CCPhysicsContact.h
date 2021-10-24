@@ -30,7 +30,7 @@
 #if CC_USE_PHYSICS
 
 #include "base/CCRef.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 #include "base/CCEventListenerCustom.h"
 #include "base/CCEvent.h"
 #include "base/CCEventCustom.h"

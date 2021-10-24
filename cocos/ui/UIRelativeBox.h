@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
  
- http://www.cocos2d-x.org
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -69,15 +70,15 @@ public:
     /**
      * @brief Create a RelativeBox with a fixed size.
      *
-     * @param size Size in `Size`.
+     * @param size The size in `Vec2`.
      * @return A RelativeBox instance.
      */
-    static RelativeBox* create(const Size& size);
+    static RelativeBox* create(const Vec2& size);
     
 CC_CONSTRUCTOR_ACCESS:
     //initializes state of widget.
     virtual bool init() override;
-    virtual bool initWithSize(const Size& size);
+    virtual bool initWithSize(const Vec2& size);
 };
     
 }

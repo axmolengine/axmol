@@ -47,7 +47,7 @@ _percent(100.0),
 _totalLength(0),
 _barRenderer(nullptr),
 _renderBarTexType(TextureResType::LOCAL),
-_barRendererTextureSize(Size::ZERO),
+_barRendererTextureSize(Vec2::ZERO),
 _originalRect(Rect::ZERO),
 _scale9Enabled(false),
 _prevIgnoreSize(true),
@@ -153,7 +153,7 @@ void LoadingBar::loadTexture(const std::string& texture,TextureResType texType)
     }
     
     //FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
-    if (!_ignoreSize && _customSize.equals(Size::ZERO)) {
+    if (!_ignoreSize && _customSize.equals(Vec2::ZERO)) {
         _customSize = _barRenderer->getContentSize();
     }
     this->setupTexture();
@@ -331,7 +331,7 @@ void LoadingBar::ignoreContentAdaptWithSize(bool ignore)
     }
 }
 
-Size LoadingBar::getVirtualRendererSize() const
+Vec2 LoadingBar::getVirtualRendererSize() const
 {
     return _barRendererTextureSize;
 }
@@ -368,7 +368,7 @@ void LoadingBar::barRendererScaleChangedWithSize()
         else
         {
             
-            Size textureSize = _barRendererTextureSize;
+            Vec2 textureSize = _barRendererTextureSize;
             if (textureSize.width <= 0.0f || textureSize.height <= 0.0f)
             {
                 _barRenderer->setScale(1.0f);
@@ -396,7 +396,7 @@ void LoadingBar::barRendererScaleChangedWithSize()
 void LoadingBar::setScale9Scale()
 {
     float width = (float)(_percent) / 100.0f * _totalLength;
-    _barRenderer->setPreferredSize(Size(width, _contentSize.height));
+    _barRenderer->setPreferredSize(Vec2(width, _contentSize.height));
 }
 
 std::string LoadingBar::getDescription() const

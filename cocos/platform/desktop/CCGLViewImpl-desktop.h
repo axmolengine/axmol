@@ -105,7 +105,7 @@ public:
     void setWindowed(int width, int height);
 
     int getMonitorCount() const;
-    Size getMonitorSize() const;
+    Vec2 getMonitorSize() const;
 
     /* override functions */
     virtual bool isOpenGLReady() override;

@@ -73,10 +73,10 @@ CC_CONSTRUCTOR_ACCESS:
      * @param gridSize The size of the GridAction should be.
      * @return Return true when the initialization success, otherwise return false.
      */
-    bool initWithDuration(float duration, const Size& gridSize);
+    bool initWithDuration(float duration, const Vec2& gridSize);
 
 protected:
-    Size _gridSize;
+    Vec2 _gridSize;
     
     NodeGrid* _gridNodeTarget;
     
@@ -150,7 +150,7 @@ public:
      * @return A pointer of TiledGrid3DAction. If creation failed, return nil.
      * @lua NA
      */
-    static TiledGrid3DAction* create(float duration, const Size& gridSize);
+    static TiledGrid3DAction* create(float duration, const Vec2& gridSize);
 
     /** 
      * @brief Get the tile that belongs to a certain position of the grid.

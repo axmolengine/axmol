@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include <unordered_map>
 
 #include "base/CCRef.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 #include "base/ccTypes.h"
 #include "renderer/CCCustomCommand.h"
 
@@ -140,7 +140,7 @@ public:
      * @js NA
      * @lua NA
      */
-    bool initWithData(const void *data, ssize_t dataLen, backend::PixelFormat pixelFormat, int pixelsWide, int pixelsHigh, const Size& contentSize, bool preMultipliedAlpha = false) { return initWithData(data, dataLen, pixelFormat, pixelFormat, pixelsWide, pixelsHigh, contentSize, preMultipliedAlpha);}
+    bool initWithData(const void *data, ssize_t dataLen, backend::PixelFormat pixelFormat, int pixelsWide, int pixelsHigh, const Vec2& contentSize, bool preMultipliedAlpha = false) { return initWithData(data, dataLen, pixelFormat, pixelFormat, pixelsWide, pixelsHigh, contentSize, preMultipliedAlpha);}
 
     /** Initializes with a texture2d with data.
      
@@ -155,7 +155,7 @@ public:
      * @js NA
      * @lua NA
      */
-    bool initWithData(const void *data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Size& contentSize, bool preMultipliedAlpha = false);
+    bool initWithData(const void *data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Vec2& contentSize, bool preMultipliedAlpha = false);
     
     /** Initializes with mipmaps. 
      
@@ -177,7 +177,7 @@ public:
     @param height Specifies the height of the texture subimage.
     */
     bool updateWithImage(Image* image, backend::PixelFormat format, int index = 0);
-    bool updateWithData(const void* data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Size& /*contentSize*/, bool preMultipliedAlpha, int index = 0);
+    bool updateWithData(const void* data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Vec2& /*contentSize*/, bool preMultipliedAlpha, int index = 0);
     bool updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, bool preMultipliedAlpha = false, int index = 0);
 
     /** Update with texture data.
@@ -231,7 +231,7 @@ public:
      @param enableWrap Whether enable text wrap or not.
      @param overflow Whether shrink font size when content larger than the dimensions.
      */
-    bool initWithString(const char *text,  const std::string &fontName, float fontSize, const Size& dimensions = Size(0, 0), TextHAlignment hAlignment = TextHAlignment::CENTER, TextVAlignment vAlignment = TextVAlignment::TOP, bool enableWrap = true, int overflow = 0);
+    bool initWithString(const char *text,  const std::string &fontName, float fontSize, const Vec2& dimensions = Vec2(0, 0), TextHAlignment hAlignment = TextHAlignment::CENTER, TextVAlignment vAlignment = TextVAlignment::TOP, bool enableWrap = true, int overflow = 0);
 
     /** Initializes a texture from a string using a text definition.
      
@@ -290,7 +290,7 @@ public:
     unsigned int getBitsPerPixelForFormat(backend::PixelFormat format) const;
 
     /** Get content size. */
-    const Size& getContentSizeInPixels();
+    const Vec2& getContentSizeInPixels();
 
     /** Whether or not the texture has their Alpha premultiplied. */
     bool hasPremultipliedAlpha() const;
@@ -325,7 +325,7 @@ public:
     void setMaxT(float maxT);
     
     /** Get the texture content size.*/
-    Size getContentSize() const;
+    Vec2 getContentSize() const;
 
     std::string getPath()const { return _filePath; }
     
@@ -396,7 +396,7 @@ protected:
     float _maxT;
 
     /** content size */
-    Size _contentSize;
+    Vec2 _contentSize;
 
     uint16_t _flags : 16;
     uint16_t _samplerFlags : 16;

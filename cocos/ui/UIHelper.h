@@ -111,7 +111,7 @@ public:
      *@param  textureSize  The size of a scale9enabled texture
      *@return a restricted capInset.
      */
-    static Rect restrictCapInsetRect(const Rect& capInsets, const Size& textureSize);
+    static Rect restrictCapInsetRect(const Rect& capInsets, const Vec2& textureSize);
 
     /**
      *@brief Convert a node's boundingBox rect into screen coordinates.

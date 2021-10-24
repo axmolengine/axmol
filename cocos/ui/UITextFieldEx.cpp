@@ -28,7 +28,7 @@ NS_CC_BEGIN
 #define nxbeep(t)
 #endif
 
-static Label* createLabel(const std::string& text, const std::string& font, float fontSize, const Size& dimensions  = Size::ZERO , TextHAlignment hAlignment  = TextHAlignment::LEFT , TextVAlignment vAlignment  = TextVAlignment::TOP )
+static Label* createLabel(const std::string& text, const std::string& font, float fontSize, const Vec2& dimensions  = Vec2::ZERO , TextHAlignment hAlignment  = TextHAlignment::LEFT , TextVAlignment vAlignment  = TextVAlignment::TOP )
 {
     if (FileUtils::getInstance()->isFileExist(font))
     {
@@ -55,7 +55,7 @@ static bool engine_inj_containsTouchPoint(cocos2d::Node* target, cocos2d::Touch*
 
     cocos2d::Point pt = target->convertTouchToNodeSpace(touch);
 
-    const cocos2d::Size& size = target->getContentSize();
+    const Vec2& size = target->getContentSize();
 
     cocos2d::Rect rc(0, 0, size.width, size.height);
 
@@ -69,7 +69,7 @@ static bool  engine_inj_containsPoint(cocos2d::Node* target, const cocos2d::Vec2
 {
     cocos2d::Point pt = target->convertToNodeSpace(worldPoint);
 
-    const cocos2d::Size& size = target->getContentSize();
+    const Vec2& size = target->getContentSize();
 
     cocos2d::Rect rc(0, 0, size.width, size.height);
 
@@ -103,7 +103,7 @@ static Sprite* engine_inj_create_lump(const Color4B& color, int height, int widt
     // create cursor by pixels
     Texture2D* texture = new Texture2D();
 
-    texture->initWithData(pixels, height * width * sizeof(unsigned int), backend::PixelFormat::RGBA8, width, height, Size(width, height));
+    texture->initWithData(pixels, height * width * sizeof(unsigned int), backend::PixelFormat::RGBA8, width, height, Vec2(width, height));
 
     auto cursor = Sprite::createWithTexture(texture);
 
@@ -293,7 +293,7 @@ namespace ui {
     {
         this->placeHolder = placeholder;
 
-        this->renderLabel = createLabel(placeholder, fontName, fontSize, Size::ZERO, TextHAlignment::CENTER, TextVAlignment::CENTER);
+        this->renderLabel = createLabel(placeholder, fontName, fontSize, Vec2::ZERO, TextHAlignment::CENTER, TextVAlignment::CENTER);
         this->renderLabel->setAnchorPoint(Point::ANCHOR_MIDDLE_LEFT);
         this->addChild(this->renderLabel);
 
@@ -853,7 +853,7 @@ namespace ui {
         return secureTextEntry;
     }
 
-    const Size& TextFieldEx::getContentSize() const
+    const Vec2& TextFieldEx::getContentSize() const
     {
         // const_cast<TextFieldEx*>(this)->setContentSize(renderLabel->getContentSize());
         return Node::getContentSize();

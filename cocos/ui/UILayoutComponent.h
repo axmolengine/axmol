@@ -1,8 +1,9 @@
 /****************************************************************************
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
-http://www.cocos2d-x.org
+Copyright (c) 2021 Bytedance Inc.
+ 
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -270,13 +271,13 @@ namespace ui {
          * Query owner's content size.
          *@return Owner's content size.
          */
-        const Size& getSize()const;
+        const Vec2& getSize()const;
 
         /**
          * Change the content size of owner.
-         *@param size Content size in @see `Size`.
+         *@param size Content size in @see `Vec2`.
          */
-        void setSize(const Size& size);
+        void setSize(const Vec2& size);
 
         /**
          * Query whether percent width is enabled or not.
@@ -328,13 +329,13 @@ namespace ui {
 
         /**
          * Query size height of owner.
-         *@return Size height in float.
+         *@return The size height in float.
          */
         float getSizeHeight()const;
 
         /**
          * Change size height of owner.
-         *@param height Size height in float.
+         *@param height The size height in float.
          */
         void setSizeHeight(float height);
 

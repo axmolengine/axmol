@@ -138,7 +138,7 @@ bool AtlasNode::setProgramState(backend::ProgramState* programState, bool needsR
 
 void AtlasNode::calculateMaxItems()
 {
-    Size s = _textureAtlas->getTexture()->getContentSize();
+    Vec2 s = _textureAtlas->getTexture()->getContentSize();
     
     if (_ignoreContentScaleFactor)
     {
@@ -229,7 +229,7 @@ void AtlasNode::setIgnoreContentScaleFactor(bool ignoreContentScaleFactor)
 
         auto label = dynamic_cast<LabelProtocol*>(this);
         if (label) {
-            Size s = Size(label->getString().size() * _itemWidth, _itemHeight);
+            Vec2 s = Vec2(label->getString().size() * _itemWidth, _itemHeight);
             this->setContentSize(s);
         }
     }

@@ -214,7 +214,7 @@ bool Scale9Sprite::init(Sprite* sprite, const Rect& rect, bool rotated, const Re
     return init(sprite, rect, rotated, Vec2::ZERO, rect.size, capInsets);
 }
 
-bool Scale9Sprite::init(Sprite* sprite, const Rect& origRect, bool rotated, const Vec2 &offset, const Size &originalSize, const Rect& capInsets)
+bool Scale9Sprite::init(Sprite* sprite, const Rect& origRect, bool rotated, const Vec2 &offset, const Vec2 &originalSize, const Rect& capInsets)
 {
     bool ret = false;
 
@@ -266,7 +266,7 @@ bool Scale9Sprite::updateWithSprite(Sprite* sprite,
                                     const Rect& textureRect,
                                     bool rotated,
                                     const Vec2 &offset,
-                                    const Size &originalSize,
+                                    const Vec2 &originalSize,
                                     const Rect& capInsets)
 {
     SpriteFrame *spriteframe = SpriteFrame::createWithTexture(sprite->getTexture(),
@@ -327,7 +327,7 @@ void Scale9Sprite::setSpriteFrame(SpriteFrame * spriteFrame, const Rect& capInse
     setCapInsets(capInsets);
 }
 
-void Scale9Sprite::setPreferredSize(const Size& preferredSize)
+void Scale9Sprite::setPreferredSize(const Vec2& preferredSize)
 {
     setContentSize(preferredSize);
 }
@@ -368,12 +368,12 @@ void Scale9Sprite::updateCapInset()
     }
 }
 
-Size Scale9Sprite::getOriginalSize() const
+Vec2 Scale9Sprite::getOriginalSize() const
 {
     return _originalContentSize;
 }
 
-Size Scale9Sprite::getPreferredSize() const
+Vec2 Scale9Sprite::getPreferredSize() const
 {
     return getContentSize();
 }

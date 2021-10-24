@@ -307,7 +307,7 @@ public:
      *
      * @param size Inner container size.
      */
-    void setInnerContainerSize(const Size &size);
+    void setInnerContainerSize(const Vec2 &size);
 
     /**
      * Get inner container size of scrollview.
@@ -316,7 +316,7 @@ public:
      *
      * @return The inner container size.
      */
-    const Size& getInnerContainerSize() const;
+    const Vec2& getInnerContainerSize() const;
     
     /**
      * Set inner container position

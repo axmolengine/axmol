@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
  
- http://www.cocos2d-x.org
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +32,7 @@
 
 #include "chipmunk/chipmunk.h"
 #include "platform/CCPlatformMacros.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 
 NS_CC_BEGIN
 
@@ -45,23 +46,17 @@ NS_CC_BEGIN
 /**
  * A physics helper class.
  *
- * Support for conversion between the chipmunk types and cocos types, eg: cpVect to Vec2, cpVect to Size, cpFloat to float.
+ * Support for conversion between the chipmunk types and cocos types, eg: cpVect to Vec2, Vec2 to cpVect, cpFloat to float.
  */
 class PhysicsHelper
 {
 public:
     /** Make cpVect type convert to Vec2 type. */
-    static Vec2 cpv2point(const cpVect& vec) { return Vec2(vec.x, vec.y); }
+    static Vec2 cpv2vec2(const cpVect& vec) { return Vec2(vec.x, vec.y); }
 
     /** Make Vec2 type convert to cpVect type. */
-    static cpVect point2cpv(const Vec2& point) { return cpv(point.x, point.y); }
-    
-    /** Make cpVect type convert to Size type. */
-    static Size cpv2size(const cpVect& vec) { return Size(vec.x, vec.y); }
-    
-    /** Make Size type convert to cpVect type. */
-    static cpVect size2cpv(const Size& size) { return cpv(size.width, size.height); }
-    
+    static cpVect vec22cpv(const Vec2& point) { return cpv(point.x, point.y); }
+
     /** Make cpFloat type convert to float type. */
     static float cpfloat2float(cpFloat f) { return f; }
     
@@ -83,7 +78,7 @@ public:
     {
         for (int i = 0; i < count; ++i)
         {
-            out[i] = cpv2point(cpvs[i]);
+            out[i] = cpv2vec2(cpvs[i]);
         }
         
         return out;
@@ -101,7 +96,7 @@ public:
     {
         for (int i = 0; i < count; ++i)
         {
-            out[i] = point2cpv(points[i]);
+            out[i] = vec22cpv(points[i]);
         }
         
         return out;

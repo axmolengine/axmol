@@ -391,9 +391,9 @@ public:
 
     /**
      * Changes the size that is widget's size
-     * @param contentSize A content size in `Size`.
+     * @param contentSize A content size in `Vec2`.
      */
-    virtual void setContentSize(const Size& contentSize) override;
+    virtual void setContentSize(const Vec2& contentSize) override;
 
     /**
      * Changes the percent that is widget's percent size
@@ -422,14 +422,14 @@ public:
      * Get the user defined widget size.
      *@return User defined size.
      */
-    const Size& getCustomSize() const;
+    const Vec2& getCustomSize() const;
     
     /**
      * Get the content size of widget.
      * @warning This API exists mainly for keeping back compatibility.
      * @return 
      */
-    virtual const Size& getLayoutSize() {return _contentSize;};
+    virtual const Vec2& getLayoutSize() {return _contentSize;};
 
     /**
      * Get size percent of widget.
@@ -531,7 +531,7 @@ public:
      *  Get the virtual renderer's size
      *@return Widget virtual renderer size.
      */
-    virtual Size getVirtualRendererSize() const;
+    virtual Vec2 getVirtualRendererSize() const;
     
 
     /**
@@ -557,14 +557,14 @@ public:
 
     /**
      * Update all children's contents size and position recursively.
-     * @see `updateSizeAndPosition(const Size&)`
+     * @see `updateSizeAndPosition(const Vec2&)`
      */
     void updateSizeAndPosition();
 
     /**
      * Update all children's contents size and position recursively.
      */
-    void updateSizeAndPosition(const Size& parentSize);
+    void updateSizeAndPosition(const Vec2& parentSize);
     
     /**
      * Set the tag of action.
@@ -677,7 +677,7 @@ public:
 
     /**
      * Query whether unify size enable state. 
-     *@return true represent the widget use Unify Size, false represent the widget couldn't use Unify Size
+     *@return true represent the widget use Unify size, false represent the widget couldn't use Unify size
      */
     bool isUnifySizeEnabled()const;
 
@@ -783,7 +783,7 @@ protected:
     virtual void copyClonedWidgetChildren(Widget* model);
     
     Widget* getWidgetParent();
-    void updateContentSizeWithTextureSize(const Size& size);
+    void updateContentSizeWithTextureSize(const Vec2& size);
     
     bool isAncestorsEnabled();
     Widget* getAncestorWidget(Node* node);
@@ -810,7 +810,7 @@ protected:
     //used for search widget by action tag in UIHelper class
     int _actionTag;
 
-    Size _customSize;
+    Vec2 _customSize;
 
     Vec2 _sizePercent;
     Vec2 _positionPercent;

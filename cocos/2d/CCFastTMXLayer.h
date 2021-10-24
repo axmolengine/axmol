@@ -4,8 +4,9 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -165,29 +166,29 @@ public:
      */
     void setLayerName(const std::string& layerName) { _layerName = layerName; }
 
-    /** Size of the layer in tiles.
+    /** Gets the size of the layer in tiles.
      *
-     * @return Size of the layer in tiles.
+     * @return The size of the layer in tiles.
      */
-    const Size& getLayerSize() const { return _layerSize; }
+    const Vec2& getLayerSize() const { return _layerSize; }
     
     /** Set the size of the layer in tiles. 
      *
      * @param size The new size of the layer in tiles.
      */
-    void setLayerSize(const Size& size) { _layerSize = size; }
+    void setLayerSize(const Vec2& size) { _layerSize = size; }
     
-    /** Size of the map's tile (could be different from the tile's size).
+    /** Gets the size of the map's tile (could be different from the tile's size).
      *
-     * @return Size of the map's tile (could be different from the tile's size).
+     * @return The size of the map's tile (could be different from the tile's size).
      */
-    const Size& getMapTileSize() const { return _mapTileSize; }
+    const Vec2& getMapTileSize() const { return _mapTileSize; }
     
     /** Set the size of the map's tile. 
      *
      * @param size The new size of the map's tile.
      */
-    void setMapTileSize(const Size& size) { _mapTileSize = size; }
+    void setMapTileSize(const Vec2& size) { _mapTileSize = size; }
     
     /** Pointer to the map of tiles.
      * @js NA
@@ -326,9 +327,9 @@ protected:
     std::string _layerName;
 
     /** size of the layer in tiles */
-    Size _layerSize;
+    Vec2 _layerSize;
     /** size of the map's tile (could be different from the tile's size) */
-    Size _mapTileSize;
+    Vec2 _mapTileSize;
     /** pointer to the map of tiles */
     uint32_t* _tiles = nullptr;
     /** Tileset information for the layer */
@@ -350,7 +351,7 @@ protected:
     /** container for sprite children. map<index, pair<sprite, gid> > */
     std::map<int, std::pair<Sprite*, int> > _spriteContainer;
 
-    Size _screenGridSize;
+    Vec2 _screenGridSize;
     Rect _screenGridRect;
     int _screenTileCount = 0;
     

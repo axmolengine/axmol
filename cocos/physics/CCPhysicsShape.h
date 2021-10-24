@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
  
- http://www.cocos2d-x.org
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +31,7 @@
 #if CC_USE_PHYSICS
 
 #include "base/CCRef.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 
 struct cpShape;
 
@@ -526,19 +527,19 @@ public:
     /**
      * Creates a PhysicsShapeBox with specified value.
      *
-     * @param   size Size contains this box's width and height.
+     * @param   size The size contains this box's width and height.
      * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.
      * @return  An autoreleased PhysicsShapeBox object pointer.
      */
-    static PhysicsShapeBox* create(const Size& size, const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT, const Vec2& offset = Vec2::ZERO, float radius = 0.0f);
+    static PhysicsShapeBox* create(const Vec2& size, const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT, const Vec2& offset = Vec2::ZERO, float radius = 0.0f);
     
     /**
      * Get this box's width and height.
      *
-     * @return An Size object.
+     * @return An Vec2 object.
      */
-    Size getSize() const;
+    Vec2 getSize() const;
     
     /**
      * Get this box's position offset.
@@ -548,7 +549,7 @@ public:
     virtual Vec2 getOffset() override { return getCenter(); }
     
 protected:
-    bool init(const Size& size, const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT, const Vec2& offset = Vec2::ZERO, float radius = 0.0f);
+    bool init(const Vec2& size, const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT, const Vec2& offset = Vec2::ZERO, float radius = 0.0f);
     
 protected:
     PhysicsShapeBox();
@@ -656,13 +657,13 @@ public:
     /**
      * Creates a PhysicsShapeEdgeBox with specified value.
      *
-     * @param   size Size contains this box's width and height.
+     * @param   size The size contains this box's width and height.
      * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
      * @param   border It's a edge's border width.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.
      * @return  An autoreleased PhysicsShapeEdgeBox object pointer.
      */
-    static PhysicsShapeEdgeBox* create(const Size& size, const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT, float border = 0, const Vec2& offset = Vec2::ZERO);
+    static PhysicsShapeEdgeBox* create(const Vec2& size, const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT, float border = 0, const Vec2& offset = Vec2::ZERO);
     
     /**
      * Get this box's position offset.
@@ -672,7 +673,7 @@ public:
     virtual Vec2 getOffset() override { return getCenter(); }
     
 protected:
-    bool init(const Size& size, const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT, float border = 1, const Vec2& offset = Vec2::ZERO);
+    bool init(const Vec2& size, const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT, float border = 1, const Vec2& offset = Vec2::ZERO);
     
 protected:
     PhysicsShapeEdgeBox();

@@ -768,7 +768,7 @@ VolatileTexture* VolatileTextureMgr::findVolotileTexture(Texture2D *tt)
     return vt;
 }
 
-void VolatileTextureMgr::addDataTexture(Texture2D *tt, void* data, int dataLen, backend::PixelFormat pixelFormat, const Size& contentSize)
+void VolatileTextureMgr::addDataTexture(Texture2D *tt, void* data, int dataLen, backend::PixelFormat pixelFormat, const Vec2& contentSize)
 {
     if (_isReloading)
     {

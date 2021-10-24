@@ -47,9 +47,9 @@ IMPLEMENT_CLASS_GUI_INFO(Slider)
 Slider::Slider():
 _barRenderer(nullptr),
 _progressBarRenderer(nullptr),
-_barTextureSize(Size::ZERO),
+_barTextureSize(Vec2::ZERO),
 _originalBarRect(Rect::ZERO),
-_progressBarTextureSize(Size::ZERO),
+_progressBarTextureSize(Vec2::ZERO),
 _originalProgressBarRect(Rect::ZERO),
 _slidBallNormalRenderer(nullptr),
 _slidBallPressedRenderer(nullptr),
@@ -179,7 +179,7 @@ void Slider::loadBarTexture(const std::string& fileName, TextureResType texType)
         }
     }
     //FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
-    if (!_ignoreSize && _customSize.equals(Size::ZERO)) {
+    if (!_ignoreSize && _customSize.equals(Vec2::ZERO)) {
         _customSize = _barRenderer->getContentSize();
     }
     this->setupBarTexture();
@@ -477,7 +477,7 @@ void Slider::updateVisualSlider()
     _slidBallRenderer->setPosition(dis, _contentSize.height / 2.0f);
     if (_scale9Enabled)
     {
-        _progressBarRenderer->setPreferredSize(Size(dis, _contentSize.height));
+        _progressBarRenderer->setPreferredSize(Vec2(dis, _contentSize.height));
     }
     else
     {
@@ -580,7 +580,7 @@ void Slider::adaptRenderers()
     }
 }
 
-Size Slider::getVirtualRendererSize() const
+Vec2 Slider::getVirtualRendererSize() const
 {
     return _barRenderer->getContentSize();
 }
@@ -613,7 +613,7 @@ void Slider::barRendererScaleChangedWithSize()
         }
         else
         {
-            Size btextureSize = _barTextureSize;
+            Vec2 btextureSize = _barTextureSize;
             if (btextureSize.width <= 0.0f || btextureSize.height <= 0.0f)
             {
                 _barRenderer->setScale(1.0f);
@@ -641,7 +641,7 @@ void Slider::progressBarRendererScaleChangedWithSize()
     {
         if (!_scale9Enabled)
         {
-            Size ptextureSize = _progressBarTextureSize;
+            Vec2 ptextureSize = _progressBarTextureSize;
             float pscaleX = _contentSize.width / ptextureSize.width;
             float pscaleY = _contentSize.height / ptextureSize.height;
             _progressBarRenderer->setScaleX(pscaleX);
@@ -657,7 +657,7 @@ void Slider::progressBarRendererScaleChangedWithSize()
         }
         else
         {
-            Size ptextureSize = _progressBarTextureSize;
+            Vec2 ptextureSize = _progressBarTextureSize;
             if (ptextureSize.width <= 0.0f || ptextureSize.height <= 0.0f)
             {
                 _progressBarRenderer->setScale(1.0f);

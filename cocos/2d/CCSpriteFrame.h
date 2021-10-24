@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "2d/CCNode.h"
 #include "2d/CCAutoPolygon.h"
 #include "base/CCRef.h"
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 
 NS_CC_BEGIN
 
@@ -79,7 +79,7 @@ public:
      * @param originalSize A specified original size.
      * @return An autoreleased SpriteFrame object.
      */
-    static SpriteFrame* create(const std::string& filename, const Rect& rect, bool rotated, const Vec2& offset, const Size& originalSize);
+    static SpriteFrame* create(const std::string& filename, const Rect& rect, bool rotated, const Vec2& offset, const Vec2& originalSize);
     
     /** Create a SpriteFrame with a texture, rect in points.
      It is assumed that the frame was not trimmed.
@@ -98,7 +98,7 @@ public:
      * @param originalSize A specified original size.
      * @return An autoreleased SpriteFrame object.
      */
-    static SpriteFrame* createWithTexture(Texture2D* pobTexture, const Rect& rect, bool rotated, const Vec2& offset, const Size& originalSize);
+    static SpriteFrame* createWithTexture(Texture2D* pobTexture, const Rect& rect, bool rotated, const Vec2& offset, const Vec2& originalSize);
 
     // attributes
     /** Get rect of the sprite frame.
@@ -176,23 +176,23 @@ public:
      *
      * @return The original size of the trimmed image, in pixels.
      */
-    const Size& getOriginalSizeInPixels() const { return _originalSizeInPixels; }
+    const Vec2& getOriginalSizeInPixels() const { return _originalSizeInPixels; }
     /** Set original size of the trimmed image.
      *
      * @param sizeInPixels The original size of the trimmed image, in pixels.
      */
-    void setOriginalSizeInPixels(const Size& sizeInPixels) { _originalSizeInPixels = sizeInPixels; }
+    void setOriginalSizeInPixels(const Vec2& sizeInPixels) { _originalSizeInPixels = sizeInPixels; }
 
     /** Get original size of the trimmed image.
      *
      * @return The original size of the trimmed image.
      */
-    const Size& getOriginalSize() const { return _originalSize; }
+    const Vec2& getOriginalSize() const { return _originalSize; }
     /** Set original size of the trimmed image.
      *
      * @param sizeInPixels The original size of the trimmed image.
      */
-    void setOriginalSize(const Size& sizeInPixels) { _originalSize = sizeInPixels; }
+    void setOriginalSize(const Vec2& sizeInPixels) { _originalSize = sizeInPixels; }
 
     /** Get texture of the frame.
      *
@@ -277,25 +277,25 @@ CC_CONSTRUCTOR_ACCESS:
     /** Initializes a SpriteFrame with a texture, rect, rotated, offset and originalSize in pixels.
      The originalSize is the size in points of the frame before being trimmed.
      */
-    bool initWithTexture(Texture2D* pobTexture, const Rect& rect, bool rotated, const Vec2& offset, const Size& originalSize);
+    bool initWithTexture(Texture2D* pobTexture, const Rect& rect, bool rotated, const Vec2& offset, const Vec2& originalSize);
     
     /** Initializes a SpriteFrame with a texture, rect, rotated, offset and originalSize in pixels.
      The originalSize is the size in pixels of the frame before being trimmed.
      
      @since v1.1
      */
-    bool initWithTextureFilename(const std::string& filename, const Rect& rect, bool rotated, const Vec2& offset, const Size& originalSize);
+    bool initWithTextureFilename(const std::string& filename, const Rect& rect, bool rotated, const Vec2& offset, const Vec2& originalSize);
 
 protected:
     Vec2 _offset;
     Vec2 _anchorPoint;
-    Size _originalSize;
+    Vec2 _originalSize;
     Rect _rectInPixels;
     bool   _rotated;
     Rect _rect;
     Rect _centerRect;
     Vec2 _offsetInPixels;
-    Size _originalSizeInPixels;
+    Vec2 _originalSizeInPixels;
     Texture2D *_texture;
     std::string  _textureFilename;
     PolygonInfo _polygonInfo;

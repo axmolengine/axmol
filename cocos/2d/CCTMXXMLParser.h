@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 /// @cond DO_NOT_SHOW
 
-#include "math/CCGeometry.h"
+#include "math/CCMath.h"
 #include "platform/CCSAXParser.h"
 #include "base/CCVector.h"
 #include "base/CCMap.h"
@@ -184,7 +184,7 @@ public:
 
     ValueMap            _properties;
     std::string         _name;
-    Size                _layerSize;
+    Vec2                _layerSize;
     uint32_t            *_tiles;
     bool                _visible;
     unsigned char       _opacity;
@@ -207,14 +207,14 @@ class CC_DLL TMXTilesetInfo : public Ref
 public:
     std::string     _name;
     int             _firstGid;
-    Size            _tileSize;
+    Vec2            _tileSize;
     int             _spacing;
     int             _margin;
     Vec2            _tileOffset;
     //! filename containing the tiles (should be spritesheet / texture atlas)
     std::string     _sourceImage;
     //! size in pixels of the image
-    Size            _imageSize;
+    Vec2            _imageSize;
     std::string     _originSourceImage;
     //! map from gid of animated tile to its animation info
     Map<uint32_t, TMXTileAnimInfo*> _animationInfo;
@@ -293,12 +293,12 @@ public:
     void setHexSideLength(int hexSideLength) { _hexSideLength = hexSideLength; }
 
     /// map width & height
-    const Size& getMapSize() const { return _mapSize; }
-    void setMapSize(const Size& mapSize) { _mapSize = mapSize; }
+    const Vec2& getMapSize() const { return _mapSize; }
+    void setMapSize(const Vec2& mapSize) { _mapSize = mapSize; }
 
     /// tiles width & height
-    const Size& getTileSize() const { return _tileSize; }
-    void setTileSize(const Size& tileSize) { _tileSize = tileSize; }
+    const Vec2& getTileSize() const { return _tileSize; }
+    void setTileSize(const Vec2& tileSize) { _tileSize = tileSize; }
     
     /// Layers
     const Vector<TMXLayerInfo*>& getLayers() const { return _layers; }
@@ -379,9 +379,9 @@ protected:
     ///map hexsidelength
     int    _hexSideLength;
     /// map width & height
-    Size _mapSize;
+    Vec2 _mapSize;
     /// tiles width & height
-    Size _tileSize;
+    Vec2 _tileSize;
     /// Layers
     Vector<TMXLayerInfo*> _layers;
     /// tilesets

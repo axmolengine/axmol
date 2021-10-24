@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 #include <string>
 
-#include "math/CCGeometry.h"
 #include "math/CCMath.h"
 #include "base/CCRef.h"
 #include "renderer/backend/Types.h"
@@ -181,51 +180,11 @@ Color4F operator/(Color4F lhs, const Color4F& rhs);
 Color4F& operator/=(Color4F& lhs, float rhs);
 Color4F operator/(Color4F lhs, float rhs);
 
-
-/** A vertex composed of 2 floats: x, y
- @since v3.0
- */
-// struct Vertex2F
-// {
-//     Vertex2F(float _x, float _y) :x(_x), y(_y) {}
-
-//     Vertex2F(): x(0.f), y(0.f) {}
-
-//     GLfloat x;
-//     GLfloat y;
-// };
-
-
-/** A vertex composed of 2 floats: x, y
- @since v3.0
- */
-// struct Vertex3F
-// {
-//     Vertex3F(float _x, float _y, float _z)
-//         : x(_x)
-//         , y(_y)
-//         , z(_z)
-//     {}
-
-//     Vertex3F(): x(0.f), y(0.f), z(0.f) {}
-
-//     GLfloat x;
-//     GLfloat y;
-//     GLfloat z;
-// };
-
 /** @struct Tex2F
- * A TEXCOORD composed of 2 floats: u, y
+ * A TEXCOORD composed of 2 floats: u, v
  * @since v3.0
  */
-struct CC_DLL Tex2F {
-    Tex2F(float _u, float _v): u(_u), v(_v) {}
-
-    Tex2F() {}
-
-    float u = 0.f;
-    float v = 0.f;
-};
+typedef Vec2 Tex2F;
 
 /** @struct PointSprite
  * Vec2 Sprite component.
@@ -504,7 +463,7 @@ struct CC_DLL T2F_Quad
 struct CC_DLL AnimationFrameData
 {
     T2F_Quad texCoords;
-    Size size;
+    Vec2 size;
     float delay = 0.f;
 };
 
@@ -518,7 +477,7 @@ struct CC_DLL AnimationFrameData
 struct CC_DLL FontShadow
 {
     /// shadow x and y offset
-    Size   _shadowOffset;
+    Vec2   _shadowOffset;
     /// shadow blurriness
     float  _shadowBlur = 0.f;
     /// shadow opacity
@@ -558,7 +517,7 @@ struct CC_DLL FontDefinition
     /// vertical alignment
     TextVAlignment _vertAlignment = TextVAlignment::TOP;
     /// rendering box
-    Size                  _dimensions = Size::ZERO;
+    Vec2                  _dimensions = Vec2::ZERO;
     /// font color
     Color3B               _fontFillColor = Color3B::WHITE;
     /// font alpha

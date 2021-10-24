@@ -171,7 +171,7 @@ public:
     
     //override methods.
     virtual void ignoreContentAdaptWithSize(bool ignore) override;
-    virtual Size getVirtualRendererSize() const override;
+    virtual Vec2 getVirtualRendererSize() const override;
     virtual Node* getVirtualRenderer() override;
     virtual std::string getDescription() const override;
 
@@ -199,7 +199,7 @@ protected:
     float _totalLength;
     Scale9Sprite* _barRenderer;
     TextureResType _renderBarTexType;
-    Size _barRendererTextureSize;
+    Vec2 _barRendererTextureSize;
     Rect _originalRect;
     bool _scale9Enabled;
     bool _prevIgnoreSize;

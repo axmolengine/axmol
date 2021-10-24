@@ -326,7 +326,7 @@ public:
      * Usually we use `Vec2(x,y)` to compose Vec2 object.
      * This code snippet sets the node in the center of screen.
      @code
-     Size size = Director::getInstance()->getWinSize();
+     Vec2 size = Director::getInstance()->getWinSize();
      node->setPosition(size.width/2, size.height/2);
      @endcode
      *
@@ -339,7 +339,7 @@ public:
      @code
      // pseudo code
      void setNormalizedPosition(Vec2 pos) {
-       Size s = getParent()->getContentSize();
+       Vec2 s = getParent()->getContentSize();
        _position = pos * s;
      }
      @endcode
@@ -552,15 +552,15 @@ public:
      *
      * @param contentSize   The untransformed size of the node.
      */
-    virtual void setContentSize(const Size& contentSize);
+    virtual void setContentSize(const Vec2& contentSize);
     /**
      * Returns the untransformed size of the node.
      *
-     * @see `setContentSize(const Size&)`
+     * @see `setContentSize(const Vec2&)`
      *
      * @return The untransformed size of the node.
      */
-    virtual const Size& getContentSize() const;
+    virtual const Vec2& getContentSize() const;
 
 
     /**
@@ -1866,7 +1866,7 @@ protected:
     Vec2 _anchorPointInPoints;      ///< anchor point in points
     Vec2 _anchorPoint;              ///< anchor point normalized (NOT in points)
 
-    Size _contentSize;              ///< untransformed size of the node
+    Vec2 _contentSize;              ///< untransformed size of the node
 
     Mat4 _modelViewTransform;       ///< ModelView transform of the Node.
     // "cache" variables are allowed to be mutable

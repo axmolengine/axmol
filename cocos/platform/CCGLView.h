@@ -170,7 +170,7 @@ public:
      *
      * @return The frame size of EGL view.
      */
-    virtual Size getFrameSize() const;
+    virtual Vec2 getFrameSize() const;
 
     /**
      * Set the frame size of EGL view.
@@ -228,7 +228,7 @@ public:
      *
      * @return The visible area size of opengl viewport.
      */
-    virtual Size getVisibleSize() const;
+    virtual Vec2 getVisibleSize() const;
 
     /**
      * Get the visible origin point of opengl viewport.
@@ -265,7 +265,7 @@ public:
      *
      * @return The design resolution size.
      */
-    virtual const Size&  getDesignResolutionSize() const;
+    virtual const Vec2&  getDesignResolutionSize() const;
 
     /**
      * Set opengl view port rectangle with points.
@@ -434,9 +434,9 @@ protected:
     void handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode, int num, intptr_t ids[], float xs[], float ys[]);
 
     // real screen size
-    Size _screenSize;
+    Vec2 _screenSize;
     // resolution size, it is the size appropriate for the app resources.
-    Size _designResolutionSize;
+    Vec2 _designResolutionSize;
     // the view port size
     Rect _viewPortRect;
     // the view name

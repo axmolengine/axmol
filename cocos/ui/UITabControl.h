@@ -375,7 +375,7 @@ namespace ui {
         int         _headerWidth;
         Dock        _headerDockPlace;
         Vec2        _containerPosition;
-        Size        _containerSize;
+        Vec2        _containerSize;
         float       _currentHeaderZoom;
         bool        _ignoreHeaderTextureSize;
 

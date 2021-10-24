@@ -189,7 +189,7 @@ PhysicsBody* PhysicsBody::createCircle(float radius, const PhysicsMaterial& mate
     return nullptr;
 }
 
-PhysicsBody* PhysicsBody::createBox(const Size& size, const PhysicsMaterial& material, const Vec2& offset)
+PhysicsBody* PhysicsBody::createBox(const Vec2& size, const PhysicsMaterial& material, const Vec2& offset)
 {
     PhysicsBody* body = new (std::nothrow) PhysicsBody();
     if (body && body->init())
@@ -232,7 +232,7 @@ PhysicsBody* PhysicsBody::createEdgeSegment(const Vec2& a, const Vec2& b, const 
     return nullptr;
 }
 
-PhysicsBody* PhysicsBody::createEdgeBox(const Size& size, const PhysicsMaterial& material, float border/* = 1*/, const Vec2& offset)
+PhysicsBody* PhysicsBody::createEdgeBox(const Vec2& size, const PhysicsMaterial& material, float border/* = 1*/, const Vec2& offset)
 {
     PhysicsBody* body = new (std::nothrow) PhysicsBody();
     if (body && body->init())
@@ -434,18 +434,18 @@ void PhysicsBody::applyForce(const Vec2& force, const Vec2& offset)
 {
     if (_dynamic && _mass != PHYSICS_INFINITY)
     {
-        cpBodyApplyForceAtLocalPoint(_cpBody, PhysicsHelper::point2cpv(force), PhysicsHelper::point2cpv(offset));
+        cpBodyApplyForceAtLocalPoint(_cpBody, PhysicsHelper::vec22cpv(force), PhysicsHelper::vec22cpv(offset));
     }
 }
 
 void PhysicsBody::resetForces()
 {
-    cpBodySetForce(_cpBody,  PhysicsHelper::point2cpv(Vec2(0,0)));
+    cpBodySetForce(_cpBody,  PhysicsHelper::vec22cpv(Vec2(0,0)));
 }
 
 void PhysicsBody::applyImpulse(const Vec2& impulse, const Vec2& offset)
 {
-    cpBodyApplyImpulseAtLocalPoint(_cpBody, PhysicsHelper::point2cpv(impulse), PhysicsHelper::point2cpv(offset));
+    cpBodyApplyImpulseAtLocalPoint(_cpBody, PhysicsHelper::vec22cpv(impulse), PhysicsHelper::vec22cpv(offset));
 }
 
 void PhysicsBody::applyTorque(float torque)
@@ -582,22 +582,22 @@ void PhysicsBody::setVelocity(const Vec2& velocity)
         return;
     }
 
-    cpBodySetVelocity(_cpBody, PhysicsHelper::point2cpv(velocity));
+    cpBodySetVelocity(_cpBody, PhysicsHelper::vec22cpv(velocity));
 }
 
 Vec2 PhysicsBody::getVelocity()
 {
-    return PhysicsHelper::cpv2point(cpBodyGetVelocity(_cpBody));
+    return PhysicsHelper::cpv2vec2(cpBodyGetVelocity(_cpBody));
 }
 
 Vec2 PhysicsBody::getVelocityAtLocalPoint(const Vec2& point)
 {
-    return PhysicsHelper::cpv2point(cpBodyGetVelocityAtLocalPoint(_cpBody, PhysicsHelper::point2cpv(point)));
+    return PhysicsHelper::cpv2vec2(cpBodyGetVelocityAtLocalPoint(_cpBody, PhysicsHelper::vec22cpv(point)));
 }
 
 Vec2 PhysicsBody::getVelocityAtWorldPoint(const Vec2& point)
 {
-    return PhysicsHelper::cpv2point(cpBodyGetVelocityAtWorldPoint(_cpBody, PhysicsHelper::point2cpv(point)));
+    return PhysicsHelper::cpv2vec2(cpBodyGetVelocityAtWorldPoint(_cpBody, PhysicsHelper::vec22cpv(point)));
 }
 
 void PhysicsBody::setAngularVelocity(float velocity)
@@ -872,12 +872,12 @@ void PhysicsBody::setRotationOffset(float rotation)
 
 Vec2 PhysicsBody::world2Local(const Vec2& point)
 {
-    return PhysicsHelper::cpv2point(cpBodyWorldToLocal(_cpBody, PhysicsHelper::point2cpv(point)));
+    return PhysicsHelper::cpv2vec2(cpBodyWorldToLocal(_cpBody, PhysicsHelper::vec22cpv(point)));
 }
 
 Vec2 PhysicsBody::local2World(const Vec2& point)
 {
-    return PhysicsHelper::cpv2point(cpBodyLocalToWorld(_cpBody, PhysicsHelper::point2cpv(point)));
+    return PhysicsHelper::cpv2vec2(cpBodyLocalToWorld(_cpBody, PhysicsHelper::vec22cpv(point)));
 }
 
 void PhysicsBody::beforeSimulation(const Mat4& parentToWorldTransform, const Mat4& nodeToWorldTransform, float scaleX, float scaleY, float rotation)

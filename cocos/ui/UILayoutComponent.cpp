@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
- http://www.cocos2d-x.org
+ Copyright (c) 2021 Bytedance Inc.
+ 
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -106,8 +107,8 @@ namespace ui {
 
         const Point& ownerPoint = _owner->getPosition();
         const Point& ownerAnchor = _owner->getAnchorPoint();
-        const Size& ownerSize = _owner->getContentSize();
-        const Size& parentSize = parent->getContentSize();
+        const Vec2& ownerSize = _owner->getContentSize();
+        const Vec2& parentSize = parent->getContentSize();
 
         _leftMargin = ownerPoint.x - ownerAnchor.x * ownerSize.width;
         _rightMargin = parentSize.width - (ownerPoint.x + (1 - ownerAnchor.x) * ownerSize.width);
@@ -120,8 +121,8 @@ namespace ui {
 
         const Point& ownerPoint = _owner->getPosition();
         const Point& ownerAnchor = _owner->getAnchorPoint();
-        const Size& ownerSize = _owner->getContentSize();
-        const Size& parentSize = parent->getContentSize();
+        const Vec2& ownerSize = _owner->getContentSize();
+        const Vec2& parentSize = parent->getContentSize();
 
         _bottomMargin = ownerPoint.y - ownerAnchor.y * ownerSize.height;
         _topMargin = parentSize.height - (ownerPoint.y + (1 - ownerAnchor.y) * ownerSize.height);
@@ -178,7 +179,7 @@ namespace ui {
         if (parent != nullptr)
         {
             Point ownerPoint = position;
-            const Size& parentSize = parent->getContentSize();
+            const Vec2& parentSize = parent->getContentSize();
 
             if (parentSize.width != 0)
                 _positionPercentX = ownerPoint.x / parentSize.width;
@@ -334,17 +335,17 @@ namespace ui {
     }
 
     //Size & Percent
-    const Size& LayoutComponent::getSize()const
+    const Vec2& LayoutComponent::getSize()const
     {
         return this->getOwner()->getContentSize();
     }
-    void LayoutComponent::setSize(const Size& size)
+    void LayoutComponent::setSize(const Vec2& size)
     {
         Node* parent = this->getOwnerParent();
         if (parent != nullptr)
         {
-            Size ownerSize = size;
-            const Size& parentSize = parent->getContentSize();
+            Vec2 ownerSize = size;
+            const Vec2& parentSize = parent->getContentSize();
 
             if (parentSize.width != 0)
                 _percentWidth = ownerSize.width / parentSize.width;
@@ -392,13 +393,13 @@ namespace ui {
     }
     void LayoutComponent::setSizeWidth(float width)
     {
-        Size ownerSize = _owner->getContentSize();
+        Vec2 ownerSize = _owner->getContentSize();
         ownerSize.width = width;
 
         Node* parent = this->getOwnerParent();
         if (parent != nullptr)
         {
-            const Size& parentSize = parent->getContentSize();
+            const Vec2& parentSize = parent->getContentSize();
             if (parentSize.width != 0)
                 _percentWidth = ownerSize.width / parentSize.width;
             else
@@ -427,7 +428,7 @@ namespace ui {
             Node* parent = this->getOwnerParent();
             if (parent != nullptr)
             {
-                Size ownerSize = _owner->getContentSize();
+                Vec2 ownerSize = _owner->getContentSize();
                 ownerSize.width = parent->getContentSize().width * _percentWidth;
                 _owner->setContentSize(ownerSize);
 
@@ -455,13 +456,13 @@ namespace ui {
     }
     void LayoutComponent::setSizeHeight(float height)
     {
-        Size ownerSize = _owner->getContentSize();
+        Vec2 ownerSize = _owner->getContentSize();
         ownerSize.height = height;
 
         Node* parent = this->getOwnerParent();
         if (parent != nullptr)
         {
-            const Size& parentSize = parent->getContentSize();
+            const Vec2& parentSize = parent->getContentSize();
             if (parentSize.height != 0)
                 _percentHeight = ownerSize.height / parentSize.height;
             else
@@ -490,7 +491,7 @@ namespace ui {
             Node* parent = this->getOwnerParent();
             if (parent != nullptr)
             {
-                Size ownerSize = _owner->getContentSize();
+                Vec2 ownerSize = _owner->getContentSize();
                 ownerSize.height = parent->getContentSize().height * _percentHeight;
                 _owner->setContentSize(ownerSize);
 
@@ -534,9 +535,9 @@ namespace ui {
         if (parent == nullptr)
             return;
 
-        const Size& parentSize = parent->getContentSize();
+        const Vec2& parentSize = parent->getContentSize();
         const Point& ownerAnchor = _owner->getAnchorPoint();
-        Size ownerSize = _owner->getContentSize();
+        Vec2 ownerSize = _owner->getContentSize();
         Point ownerPosition = _owner->getPosition();
 
         switch (this->_horizontalEdge)

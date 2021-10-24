@@ -121,7 +121,7 @@ void ListView::updateInnerContainerSize()
             }
             float finalWidth = _contentSize.width;
             float finalHeight = totalHeight;
-            setInnerContainerSize(Size(finalWidth, finalHeight));
+            setInnerContainerSize(Vec2(finalWidth, finalHeight));
             break;
         }
         case Direction::HORIZONTAL:
@@ -134,7 +134,7 @@ void ListView::updateInnerContainerSize()
             }
             float finalWidth = totalWidth;
             float finalHeight = _contentSize.height;
-            setInnerContainerSize(Size(finalWidth, finalHeight));
+            setInnerContainerSize(Vec2(finalWidth, finalHeight));
             break;
         }
         default:
@@ -642,7 +642,7 @@ void ListView::interceptTouchEvent(TouchEventType event, Widget *sender, Touch* 
 static Vec2 calculateItemPositionWithAnchor(Widget* item, const Vec2& itemAnchorPoint)
 {
     Vec2 origin(item->getLeftBoundary(), item->getBottomBoundary());
-    Size size = item->getContentSize();
+    Vec2 size = item->getContentSize();
     return origin + Vec2(size.width * itemAnchorPoint.x, size.height * itemAnchorPoint.y);
 }
     
@@ -703,7 +703,7 @@ Widget* ListView::getClosestItemToPosition(const Vec2& targetPosition, const Vec
 Widget* ListView::getClosestItemToPositionInCurrentView(const Vec2& positionRatioInView, const Vec2& itemAnchorPoint) const
 {
     // Calculate the target position
-    Size contentSize = getContentSize();
+    Vec2 contentSize = getContentSize();
     Vec2 targetPosition = -_innerContainer->getPosition();
     targetPosition.x += contentSize.width * positionRatioInView.x;
     targetPosition.y += contentSize.height * positionRatioInView.y;
@@ -819,7 +819,7 @@ void ListView::jumpToPercentBothDirection(const Vec2& percent)
 
 Vec2 ListView::calculateItemDestination(const Vec2& positionRatioInView, Widget* item, const Vec2& itemAnchorPoint)
 {
-    const Size& contentSize = getContentSize();
+    const Vec2& contentSize = getContentSize();
     Vec2 positionInView;
     positionInView.x += contentSize.width * positionRatioInView.x;
     positionInView.y += contentSize.height * positionRatioInView.y;
@@ -939,7 +939,7 @@ Vec2 ListView::getHowMuchOutOfBoundary(const Vec2& addition)
     float bottomBoundary = _bottomBoundary;
     {
         ssize_t lastItemIndex = _items.size() - 1;
-        Size contentSize = getContentSize();
+        Vec2 contentSize = getContentSize();
         Vec2 firstItemAdjustment, lastItemAdjustment;
         if(_magneticType == MagneticType::CENTER)
         {

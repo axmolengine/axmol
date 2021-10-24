@@ -6,17 +6,16 @@ set(COCOS_MATH_HEADER
     math/TransformUtils.h
     math/Vec4.h
     math/CCAffineTransform.h
-    math/CCGeometry.h
     math/CCVertex.h
     math/Vec3.h
     math/CCMathBase.h
     math/MathUtil.h
     math/CCMath.h
+    math/Rect.h
     )
 
 set(COCOS_MATH_SRC
     math/CCAffineTransform.cpp
-    math/CCGeometry.cpp
     math/CCVertex.cpp
     math/Mat3.cpp
     math/Mat4.cpp
@@ -26,4 +25,5 @@ set(COCOS_MATH_SRC
     math/Vec2.cpp
     math/Vec3.cpp
     math/Vec4.cpp
+    math/Rect.cpp
     )

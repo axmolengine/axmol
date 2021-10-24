@@ -140,7 +140,7 @@ void TextAtlas::adaptRenderers()
     }
 }
 
-Size TextAtlas::getVirtualRendererSize() const
+Vec2 TextAtlas::getVirtualRendererSize() const
 {
     return _labelAtlasRenderer->getContentSize();
 }
@@ -158,7 +158,7 @@ void TextAtlas::labelAtlasScaleChangedWithSize()
     }
     else
     {
-        Size textureSize = _labelAtlasRenderer->getContentSize();
+        Vec2 textureSize = _labelAtlasRenderer->getContentSize();
         if (textureSize.width <= 0.0f || textureSize.height <= 0.0f)
         {
             _labelAtlasRenderer->setScale(1.0f);

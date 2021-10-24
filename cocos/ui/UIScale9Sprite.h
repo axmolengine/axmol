@@ -340,7 +340,7 @@ namespace ui {
                           const Rect& rect,
                           bool rotated,
                           const Vec2 &offset,
-                          const Size &originalSize,
+                          const Vec2 &originalSize,
                           const Rect& capInsets);
 
         /**
@@ -386,7 +386,7 @@ namespace ui {
                                       const Rect& rect,
                                       bool rotated,
                                       const Vec2 &offset,
-                                      const Size &originalSize,
+                                      const Vec2 &originalSize,
                                       const Rect& capInsets);
 
         /**
@@ -417,21 +417,21 @@ namespace ui {
          *
          * @return Sprite size.
          */
-        Size getOriginalSize() const;
+        Vec2 getOriginalSize() const;
 
         /**
          * @brief Change the preferred size of Scale9Sprite.
          *
          * @param size A delimitation zone.
          */
-        void setPreferredSize(const Size& size);
+        void setPreferredSize(const Vec2& size);
 
         /**
          * @brief Query the Scale9Sprite's preferred size.
          *
          * @return Scale9Sprite's preferred size.
          */
-        Size getPreferredSize() const;
+        Vec2 getPreferredSize() const;
 
         /**
          * @brief Change the left sprite's cap inset.

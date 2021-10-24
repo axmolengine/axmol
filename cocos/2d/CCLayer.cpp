@@ -185,7 +185,7 @@ LayerColor * LayerColor::create(const Color4B& color)
 
 bool LayerColor::init()
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     return initWithColor(Color4B(0,0,0,0), s.width, s.height);
 }
 
@@ -209,7 +209,7 @@ bool LayerColor::initWithColor(const Color4B& color, float w, float h)
         }
 
         updateColor();
-        setContentSize(Size(w, h));
+        setContentSize(Vec2(w, h));
 
         return true;
     }
@@ -218,12 +218,12 @@ bool LayerColor::initWithColor(const Color4B& color, float w, float h)
 
 bool LayerColor::initWithColor(const Color4B& color)
 {
-    Size s = _director->getWinSize();
+    Vec2 s = _director->getWinSize();
     return initWithColor(color, s.width, s.height);
 }
 
 /// override contentSize
-void LayerColor::setContentSize(const Size & size)
+void LayerColor::setContentSize(const Vec2 & size)
 {
     _squareVertices[1].x = size.width;
     _squareVertices[2].y = size.height;
@@ -235,17 +235,17 @@ void LayerColor::setContentSize(const Size & size)
 
 void LayerColor::changeWidthAndHeight(float w ,float h)
 {
-    this->setContentSize(Size(w, h));
+    this->setContentSize(Vec2(w, h));
 }
 
 void LayerColor::changeWidth(float w)
 {
-    this->setContentSize(Size(w, _contentSize.height));
+    this->setContentSize(Vec2(w, _contentSize.height));
 }
 
 void LayerColor::changeHeight(float h)
 {
-    this->setContentSize(Size(_contentSize.width, h));
+    this->setContentSize(Vec2(_contentSize.width, h));
 }
 
 void LayerColor::updateColor()
@@ -587,7 +587,7 @@ void LayerRadialGradient::draw(Renderer *renderer, const Mat4 &transform, uint32
     programState->setUniform(_expandLocation, &_expand, sizeof(_expand));
 }
 
-void LayerRadialGradient::setContentSize(const Size& size)
+void LayerRadialGradient::setContentSize(const Vec2& size)
 {
     _vertices[1].x = size.width;
     _vertices[2].y = size.height;

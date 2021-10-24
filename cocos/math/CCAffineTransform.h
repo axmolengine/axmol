@@ -29,7 +29,6 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformMacros.h"
 
-#include "math/CCGeometry.h"
 #include "math/CCMath.h"
 
 /**
@@ -68,7 +67,7 @@ CC_DLL Vec2 __CCPointApplyAffineTransform(const Vec2& point, const AffineTransfo
 #define PointApplyAffineTransform __CCPointApplyAffineTransform
 
 /**Multiply size (width,height,0) by a  affine transform.*/
-CC_DLL Size __CCSizeApplyAffineTransform(const Size& size, const AffineTransform& t);
+CC_DLL Vec2 __CCSizeApplyAffineTransform(const Vec2& size, const AffineTransform& t);
 #define SizeApplyAffineTransform __CCSizeApplyAffineTransform
 /**Make identity affine transform.*/
 CC_DLL AffineTransform AffineTransformMakeIdentity();

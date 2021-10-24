@@ -114,16 +114,16 @@ backend::TextureBackend* Texture2D::getBackendTexture() const
     return _texture;
 }
 
-Size Texture2D::getContentSize() const
+Vec2 Texture2D::getContentSize() const
 {
-    Size ret;
+    Vec2 ret;
     ret.width = _contentSize.width / CC_CONTENT_SCALE_FACTOR();
     ret.height = _contentSize.height / CC_CONTENT_SCALE_FACTOR();
     
     return ret;
 }
 
-const Size& Texture2D::getContentSizeInPixels()
+const Vec2& Texture2D::getContentSizeInPixels()
 {
     return _contentSize;
 }
@@ -159,7 +159,7 @@ void Texture2D::setPremultipliedAlpha(bool premultipliedAlpha)
     else _flags &= ~TextureFlag::PREMULTIPLIEDALPHA;
 }
 
-bool Texture2D::initWithData(const void *data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Size& /*contentSize*/, bool preMultipliedAlpha)
+bool Texture2D::initWithData(const void *data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Vec2& /*contentSize*/, bool preMultipliedAlpha)
 {
     CCASSERT(dataLen>0 && pixelsWide>0 && pixelsHigh>0, "Invalid size");
 
@@ -201,7 +201,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     }
 
     unsigned char* tempData = image->getData();
-    Size             imageSize = Size((float)imageWidth, (float)imageHeight);
+    Vec2             imageSize = Vec2((float)imageWidth, (float)imageHeight);
     backend::PixelFormat      renderFormat = (PixelFormat::NONE == format) ? image->getPixelFormat() : format;
     backend::PixelFormat      imagePixelFormat = image->getPixelFormat();
     size_t           tempDataLen = image->getDataLen();
@@ -257,7 +257,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     return true;
 }
 
-bool Texture2D::updateWithData(const void* data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Size& /*contentSize*/, bool preMultipliedAlpha, int index)
+bool Texture2D::updateWithData(const void* data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Vec2& /*contentSize*/, bool preMultipliedAlpha, int index)
 {
     CCASSERT(dataLen > 0 && pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
 
@@ -377,7 +377,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::
     }
 
     if (index == 0) {
-        _contentSize = Size((float)pixelsWide, (float)pixelsHigh);
+        _contentSize = Vec2((float)pixelsWide, (float)pixelsHigh);
         _pixelsWide = pixelsWide;
         _pixelsHigh = pixelsHigh;
         _pixelFormat = pixelFormat;
@@ -421,7 +421,7 @@ bool Texture2D::initWithImage(Image *image, backend::PixelFormat format)
 }
 
 // implementation Texture2D (Text)
-bool Texture2D::initWithString(const char *text, const std::string& fontName, float fontSize, const Size& dimensions/* = Size(0, 0)*/, TextHAlignment hAlignment/* =  TextHAlignment::CENTER */, TextVAlignment vAlignment/* =  TextVAlignment::TOP */, bool enableWrap /* = false */, int overflow /* = 0 */)
+bool Texture2D::initWithString(const char *text, const std::string& fontName, float fontSize, const Vec2& dimensions/* = Vec2(0, 0)*/, TextHAlignment hAlignment/* =  TextHAlignment::CENTER */, TextVAlignment vAlignment/* =  TextVAlignment::TOP */, bool enableWrap /* = false */, int overflow /* = 0 */)
 {
     FontDefinition tempDef;
     
@@ -500,7 +500,7 @@ bool Texture2D::initWithString(const char *text, const FontDefinition& textDefin
         return false;
     }
 
-    Size  imageSize = Size((float)imageWidth, (float)imageHeight);
+    Vec2  imageSize = Vec2((float)imageWidth, (float)imageHeight);
     pixelFormat = backend::PixelFormatUtils::convertDataToFormat(outData.getBytes(), imageWidth*imageHeight*4, PixelFormat::RGBA8, pixelFormat, &outTempData, &outTempDataLen);
 
     ret = initWithData(outTempData, outTempDataLen, pixelFormat, imageWidth, imageHeight, imageSize);

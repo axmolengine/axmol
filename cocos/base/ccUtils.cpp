@@ -236,7 +236,7 @@ long long getTimeInMilliseconds()
 Rect getCascadeBoundingBox(Node *node)
 {
     Rect cbb;
-    Size contentSize = node->getContentSize();
+    Vec2 contentSize = node->getContentSize();
     
     // check all children bounding box, get maximize box
     Node* child = nullptr;

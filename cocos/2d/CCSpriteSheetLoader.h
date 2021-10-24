@@ -83,8 +83,8 @@ class SpriteSheetLoader : public ISpriteSheetLoader
 {
 public:
     /** Configures PolygonInfo class with the passed sizes + triangles */
-    void initializePolygonInfo(const Size& textureSize,
-        const Size& spriteSize,
+    void initializePolygonInfo(const Vec2& textureSize,
+        const Vec2& spriteSize,
         const std::vector<int>& vertices,
         const std::vector<int>& verticesUV,
         const std::vector<int>& triangleIndices,

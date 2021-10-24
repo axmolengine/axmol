@@ -144,12 +144,12 @@ void ScrollView::onSizeChanged()
     Layout::onSizeChanged();
     _topBoundary = _contentSize.height;
     _rightBoundary = _contentSize.width;
-    Size innerSize = _innerContainer->getContentSize();
+    Vec2 innerSize = _innerContainer->getContentSize();
     float orginInnerSizeWidth = innerSize.width;
     float orginInnerSizeHeight = innerSize.height;
     float innerSizeWidth = MAX(orginInnerSizeWidth, _contentSize.width);
     float innerSizeHeight = MAX(orginInnerSizeHeight, _contentSize.height);
-    _innerContainer->setContentSize(Size(innerSizeWidth, innerSizeHeight));
+    _innerContainer->setContentSize(Vec2(innerSizeWidth, innerSizeHeight));
     setInnerContainerPosition(Vec2(0.0f, _contentSize.height - _innerContainer->getContentSize().height));
 
     if (_verticalScrollBar != nullptr)
@@ -162,11 +162,11 @@ void ScrollView::onSizeChanged()
     }
 }
 
-void ScrollView::setInnerContainerSize(const Size &size)
+void ScrollView::setInnerContainerSize(const Vec2 &size)
 {
     float innerSizeWidth = _contentSize.width;
     float innerSizeHeight = _contentSize.height;
-    Size originalInnerSize = _innerContainer->getContentSize();
+    Vec2 originalInnerSize = _innerContainer->getContentSize();
     if (size.width < _contentSize.width)
     {
         CCLOG("Inner width <= scrollview width, it will be force sized!");
@@ -183,7 +183,7 @@ void ScrollView::setInnerContainerSize(const Size &size)
     {
         innerSizeHeight = size.height;
     }
-    _innerContainer->setContentSize(Size(innerSizeWidth, innerSizeHeight));
+    _innerContainer->setContentSize(Vec2(innerSizeWidth, innerSizeHeight));
 
     // Calculate and set the position of the inner container.
     Vec2 pos = _innerContainer->getPosition();
@@ -218,7 +218,7 @@ void ScrollView::setInnerContainerSize(const Size &size)
     updateScrollBar(Vec2::ZERO);
 }
 
-const Size& ScrollView::getInnerContainerSize() const
+const Vec2& ScrollView::getInnerContainerSize() const
 {
     return _innerContainer->getContentSize();
 }

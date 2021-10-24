@@ -137,7 +137,7 @@ void ImageView::loadTexture(const std::string& fileName, TextureResType texType)
             break;
     }
     //FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
-    if (!_ignoreSize && _customSize.equals(Size::ZERO)) {
+    if (!_ignoreSize && _customSize.equals(Vec2::ZERO)) {
         _customSize = _imageRenderer->getContentSize();
     }
     this->setupTexture();
@@ -252,7 +252,7 @@ void ImageView::adaptRenderers()
     }
 }
 
-Size ImageView::getVirtualRendererSize() const
+Vec2 ImageView::getVirtualRendererSize() const
 {
     return _imageTextureSize;
 }

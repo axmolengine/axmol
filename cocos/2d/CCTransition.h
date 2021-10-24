@@ -972,7 +972,7 @@ public:
      * @param size A given size.
      * @return The action that will be performed.
      */
-    virtual ActionInterval* actionWithSize(const Size& size);
+    virtual ActionInterval* actionWithSize(const Vec2& size);
 
     //
     // Overrides
@@ -1017,7 +1017,7 @@ public:
     //
     // Overrides
     //
-    virtual ActionInterval* actionWithSize(const Size& size) override;
+    virtual ActionInterval* actionWithSize(const Vec2& size) override;
 
 CC_CONSTRUCTOR_ACCESS:
     TransitionFadeBL();
@@ -1045,7 +1045,7 @@ public:
     //
     // Overrides
     //
-    virtual ActionInterval* actionWithSize(const Size& size) override;
+    virtual ActionInterval* actionWithSize(const Vec2& size) override;
 
 CC_CONSTRUCTOR_ACCESS:
     TransitionFadeUp();
@@ -1073,7 +1073,7 @@ public:
     //
     // Overrides
     //
-    virtual ActionInterval* actionWithSize(const Size& size) override;
+    virtual ActionInterval* actionWithSize(const Vec2& size) override;
 
 CC_CONSTRUCTOR_ACCESS:
     TransitionFadeDown();

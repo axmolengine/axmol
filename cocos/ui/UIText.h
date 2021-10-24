@@ -180,7 +180,7 @@ public:
     bool isTouchScaleChangeEnabled()const;
 
     //override "getVirtualRendererSize" method of widget.
-    virtual Size getVirtualRendererSize() const override;
+    virtual Vec2 getVirtualRendererSize() const override;
 
     //override "getVirtualRenderer" method of widget.
     virtual Node* getVirtualRenderer() override;
@@ -189,7 +189,7 @@ public:
      *
      * @return The size of render size in auto mode.
      */
-    virtual Size getAutoRenderSize();
+    virtual Vec2 getAutoRenderSize();
 
     /**
      * Returns the "class name" of widget.
@@ -204,13 +204,13 @@ public:
      * @param size The text rendering area size.
      *
      */
-    void setTextAreaSize(const Size &size);
+    void setTextAreaSize(const Vec2 &size);
 
     /** Return the text rendering area size.
      *
      * @return The text rendering area size.
      */
-    const Size& getTextAreaSize()const;
+    const Vec2& getTextAreaSize()const;
 
     /** Sets text horizontal alignment.
      *
@@ -258,7 +258,7 @@ public:
      * @param blurRadius The blur radius of shadow effect.
      */
     void enableShadow(const Color4B& shadowColor = Color4B::BLACK,
-                      const Size &offset = Size(2,-2),
+                      const Vec2 &offset = Vec2(2,-2),
                       int blurRadius = 0);
 
     /**
@@ -295,7 +295,7 @@ public:
     /**
     * Return shadow effect offset value.
     */
-    Size getShadowOffset() const;
+    Vec2 getShadowOffset() const;
     /**
     * Return the shadow effect blur radius.
     */

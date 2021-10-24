@@ -1269,14 +1269,14 @@ void Console::commandResolution(socket_native_type /*fd*/, const std::string& ar
 void Console::commandResolutionSubCommandEmpty(socket_native_type fd, const std::string& /*args*/)
 {
     auto director = Director::getInstance();
-    Size points = director->getWinSize();
-    Size pixels = director->getWinSizeInPixels();
+    Vec2 points = director->getWinSize();
+    Vec2 pixels = director->getWinSizeInPixels();
     auto glview = director->getOpenGLView();
-    Size design = glview->getDesignResolutionSize();
+    Vec2 design = glview->getDesignResolutionSize();
     ResolutionPolicy res = glview->getResolutionPolicy();
     Rect visibleRect = glview->getVisibleRect();
     
-    Console::Utility::mydprintf(fd, "Window Size:\n"
+    Console::Utility::mydprintf(fd, "Window size:\n"
               "\t%d x %d (points)\n"
               "\t%d x %d (pixels)\n"
               "\t%d x %d (design resolution)\n"
