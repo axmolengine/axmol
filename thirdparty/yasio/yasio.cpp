@@ -1915,15 +1915,14 @@ void io_service::schedule_timer(highp_timer* timer_ctl, timer_cb_t&& timer_cb)
   std::lock_guard<std::recursive_mutex> lck(this->timer_queue_mtx_);
   auto timer_it = this->find_timer(timer_ctl);
   if (timer_it == timer_queue_.end())
-  {
     this->timer_queue_.emplace_back(timer_ctl, std::move(timer_cb));
-    this->sort_timers();
-    // If the new timer is earliest, wakup
-    if (timer_ctl == this->timer_queue_.rbegin()->first)
-      this->interrupt();
-  }
   else // always replace timer_cb
     timer_it->second = std::move(timer_cb);
+  
+  this->sort_timers();
+  // If the timer is earliest, wakup
+  if (timer_ctl == this->timer_queue_.rbegin()->first)
+    this->interrupt();
 }
 void io_service::remove_timer(highp_timer* timer)
 {
