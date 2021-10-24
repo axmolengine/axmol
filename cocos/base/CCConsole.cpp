@@ -1276,7 +1276,7 @@ void Console::commandResolutionSubCommandEmpty(socket_native_type fd, const std:
     ResolutionPolicy res = glview->getResolutionPolicy();
     Rect visibleRect = glview->getVisibleRect();
     
-    Console::Utility::mydprintf(fd, "Window Vec2:\n"
+    Console::Utility::mydprintf(fd, "Window size:\n"
               "\t%d x %d (points)\n"
               "\t%d x %d (pixels)\n"
               "\t%d x %d (design resolution)\n"
