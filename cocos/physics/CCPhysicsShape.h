@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
  
- http://www.cocos2d-x.org
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -526,7 +527,7 @@ public:
     /**
      * Creates a PhysicsShapeBox with specified value.
      *
-     * @param   size Vec2 contains this box's width and height.
+     * @param   size The size contains this box's width and height.
      * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.
      * @return  An autoreleased PhysicsShapeBox object pointer.
@@ -656,7 +657,7 @@ public:
     /**
      * Creates a PhysicsShapeEdgeBox with specified value.
      *
-     * @param   size Vec2 contains this box's width and height.
+     * @param   size The size contains this box's width and height.
      * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
      * @param   border It's a edge's border width.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.

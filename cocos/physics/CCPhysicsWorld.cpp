@@ -144,8 +144,8 @@ void PhysicsWorldCallback::rayCastCallbackFunc(cpShape *shape, cpVect point, cpV
         physicsShape,
         info->p1,
         info->p2,
-        PhysicsHelper::cpv2point(point),
-        PhysicsHelper::cpv2point(normal),
+        PhysicsHelper::cpv2vec2(point),
+        PhysicsHelper::cpv2vec2(normal),
         static_cast<float>(alpha),
     };
     
@@ -195,7 +195,7 @@ static void DrawCircle(cpVect p, cpFloat /*a*/, cpFloat r, cpSpaceDebugColor out
     const Color4F outlineColor(outline.r, outline.g, outline.b, outline.a);
     DrawNode* drawNode = static_cast<DrawNode*>(data);
     float radius = PhysicsHelper::cpfloat2float(r);
-    Vec2 centre = PhysicsHelper::cpv2point(p);
+    Vec2 centre = PhysicsHelper::cpv2vec2(p);
     
     static const int CIRCLE_SEG_NUM = 12;
     Vec2 seg[CIRCLE_SEG_NUM] = {};
@@ -213,8 +213,8 @@ static void DrawFatSegment(cpVect a, cpVect b, cpFloat r, cpSpaceDebugColor outl
 {
     const Color4F outlineColor(outline.r, outline.g, outline.b, outline.a);
     DrawNode* drawNode = static_cast<DrawNode*>(data);
-    drawNode->drawSegment(PhysicsHelper::cpv2point(a),
-                          PhysicsHelper::cpv2point(b),
+    drawNode->drawSegment(PhysicsHelper::cpv2vec2(a),
+                          PhysicsHelper::cpv2vec2(b),
                           PhysicsHelper::cpfloat2float(r==0 ? 1 : r), outlineColor);
 }
 
@@ -231,7 +231,7 @@ static void DrawPolygon(int count, const cpVect *verts, cpFloat /*r*/, cpSpaceDe
     int num = count;
     Vec2* seg = new (std::nothrow) Vec2[num];
     for(int i=0;i<num;++i)
-        seg[i] = PhysicsHelper::cpv2point(verts[i]);
+        seg[i] = PhysicsHelper::cpv2vec2(verts[i]);
     
     drawNode->drawPolygon(seg, num, fillColor, 1.0f, outlineColor);
     
@@ -242,7 +242,7 @@ static void DrawDot(cpFloat /*size*/, cpVect pos, cpSpaceDebugColor color, cpDat
 {
     const Color4F dotColor(color.r, color.g, color.b, color.a);
     DrawNode* drawNode = static_cast<DrawNode*>(data);
-    drawNode->drawDot(PhysicsHelper::cpv2point(pos), 2, dotColor);
+    drawNode->drawDot(PhysicsHelper::cpv2vec2(pos), 2, dotColor);
 }
 
 static cpSpaceDebugColor ColorForShape(cpShape *shape, cpDataPointer /*data*/)
@@ -409,8 +409,8 @@ void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func, const Vec2& point1, 
         
         PhysicsWorldCallback::continues = true;
         cpSpaceSegmentQuery(_cpSpace,
-                            PhysicsHelper::point2cpv(point1),
-                            PhysicsHelper::point2cpv(point2),
+                            PhysicsHelper::vec22cpv(point1),
+                            PhysicsHelper::vec22cpv(point2),
                             0.0f,
                             CP_SHAPE_FILTER_ALL,
                             (cpSpaceSegmentQueryFunc)PhysicsWorldCallback::rayCastCallbackFunc,
@@ -453,7 +453,7 @@ void PhysicsWorld::queryPoint(PhysicsQueryPointCallbackFunc func, const Vec2& po
         
         PhysicsWorldCallback::continues = true;
         cpSpacePointQuery(_cpSpace,
-                                 PhysicsHelper::point2cpv(point),
+                                 PhysicsHelper::vec22cpv(point),
                                  0,
                                  CP_SHAPE_FILTER_ALL,
                                  (cpSpacePointQueryFunc)PhysicsWorldCallback::queryPointFunc,
@@ -465,7 +465,7 @@ Vector<PhysicsShape*> PhysicsWorld::getShapes(const Vec2& point) const
 {
     Vector<PhysicsShape*> arr;
     cpSpacePointQuery(_cpSpace,
-                             PhysicsHelper::point2cpv(point),
+                             PhysicsHelper::vec22cpv(point),
                              0,
                              CP_SHAPE_FILTER_ALL,
                              (cpSpacePointQueryFunc)PhysicsWorldCallback::getShapesAtPointFunc,
@@ -477,7 +477,7 @@ Vector<PhysicsShape*> PhysicsWorld::getShapes(const Vec2& point) const
 PhysicsShape* PhysicsWorld::getShape(const Vec2& point) const
 {
     cpShape* shape = cpSpacePointQueryNearest(_cpSpace,
-                                    PhysicsHelper::point2cpv(point),
+                                    PhysicsHelper::vec22cpv(point),
                                     0,
                                     CP_SHAPE_FILTER_ALL,
                                     nullptr);
@@ -496,7 +496,7 @@ bool PhysicsWorld::init()
 #endif
         CC_BREAK_IF(_cpSpace == nullptr);
         
-        cpSpaceSetGravity(_cpSpace, PhysicsHelper::point2cpv(_gravity));
+        cpSpaceSetGravity(_cpSpace, PhysicsHelper::vec22cpv(_gravity));
         
         cpCollisionHandler *handler = cpSpaceAddDefaultCollisionHandler(_cpSpace);
         handler->userData = this;
@@ -847,7 +847,7 @@ PhysicsBody* PhysicsWorld::getBody(int tag) const
 void PhysicsWorld::setGravity(const Vec2& gravity)
 {
     _gravity = gravity;
-    cpSpaceSetGravity(_cpSpace, PhysicsHelper::point2cpv(gravity));
+    cpSpaceSetGravity(_cpSpace, PhysicsHelper::vec22cpv(gravity));
 }
 
 void PhysicsWorld::setSubsteps(int steps)

@@ -206,7 +206,13 @@ inline bool Vec2::operator==(const Vec2& v) const
 
 inline bool Vec2::operator!=(const Vec2& v) const
 {
-    return x!=v.x || y!=v.y;
+    return x != v.x || y != v.y;
+}
+
+void Vec2::setPoint(float xx, float yy)
+{
+    this->x = xx;
+    this->y = yy;
 }
 
 inline Vec2 operator*(float x, const Vec2& v)
@@ -216,10 +222,9 @@ inline Vec2 operator*(float x, const Vec2& v)
     return result;
 }
 
-void Vec2::setPoint(float xx, float yy)
+inline Vec2 operator*(const Vec2& left, const Vec2& right)
 {
-    this->x = xx;
-    this->y = yy;
+    return Vec2(left.x * right.x, left.y * right.y);
 }
 
 NS_CC_MATH_END
