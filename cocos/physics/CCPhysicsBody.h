@@ -134,7 +134,7 @@ public:
 
     /**
      * Create a body contains a EdgeBox shape.
-     * @param   size Vec2 contains this box's width and height.
+     * @param   size The size contains this box's width and height.
      * @param   material A PhysicsMaterial object, the default value is PHYSICSSHAPE_MATERIAL_DEFAULT.
      * @param   border It's a edge's border width.
      * @param   offset A Vec2 object, it is the offset from the body's center of gravity in body local coordinates.
