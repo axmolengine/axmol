@@ -4,8 +4,9 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -736,14 +737,14 @@ private:
 };
 
 /** @class ResizeTo
-* @brief Resize a Node object to the final size by modifying it's Vec2 attribute.
+* @brief Resize a Node object to the final size by modifying it's 'size' attribute.
 */
 class  CC_DLL ResizeTo : public ActionInterval 
 {
 public:
     /**
     * Creates the action.
-    * @brief Resize a Node object to the final size by modifying it's Vec2 attribute. Works on all nodes where setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
+    * @brief Resize a Node object to the final size by modifying it's 'size' attribute. Works on all nodes where setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
     * @param duration Duration time, in seconds.
     * @param final_size The target size to reach
     * @return An autoreleased RotateTo object.
@@ -779,7 +780,7 @@ private:
 
 
 /** @class ResizeBy
-* @brief Resize a Node object by a Vec2. Works on all nodes where setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
+* @brief Resize a Node object by a size. Works on all nodes where setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
 */
 class CC_DLL ResizeBy : public ActionInterval 
 {

@@ -284,7 +284,7 @@ void Widget::setContentSize(const Vec2 &contentSize)
     _customSize = contentSize;
     if (_unifySize)
     {
-        //unify Vec2 logic
+        //unify size logic
     }
     else if (_ignoreSize)
     {
