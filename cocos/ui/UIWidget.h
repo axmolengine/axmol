@@ -677,7 +677,7 @@ public:
 
     /**
      * Query whether unify size enable state. 
-     *@return true represent the widget use Unify Vec2, false represent the widget couldn't use Unify Vec2
+     *@return true represent the widget use Unify size, false represent the widget couldn't use Unify size
      */
     bool isUnifySizeEnabled()const;
 

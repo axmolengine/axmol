@@ -1,8 +1,9 @@
 /****************************************************************************
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
-http://www.cocos2d-x.org
+Copyright (c) 2021 Bytedance Inc.
+ 
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -328,13 +329,13 @@ namespace ui {
 
         /**
          * Query size height of owner.
-         *@return Vec2 height in float.
+         *@return The size height in float.
          */
         float getSizeHeight()const;
 
         /**
          * Change size height of owner.
-         *@param height Vec2 height in float.
+         *@param height The size height in float.
          */
         void setSizeHeight(float height);
 

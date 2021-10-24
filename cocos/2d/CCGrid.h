@@ -3,8 +3,9 @@ Copyright (c) 2009      On-Core
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
  
-http://www.cocos2d-x.org
+ https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -102,7 +103,7 @@ public:
     /** Set number of times that the grid will be reused. */
     void setReuseGrid(int reuseGrid) { _reuseGrid = reuseGrid; }
 
-    /** Vec2 of the grid. */
+    /** The size of the grid. */
     const Vec2& getGridSize() const { return _gridSize; }
     /**Set the size of the grid.*/
     void setGridSize(const Vec2& gridSize) { _gridSize = gridSize; }

@@ -31,12 +31,6 @@
 
 USING_NS_CC;
 
-
-inline Vec2 operator*(const Vec2& left, const Vec2& right)
-{
-    return Vec2(left.x * right.x, left.y * right.y);
-}
-
 //inline Vec2 operator*(const Vec2& left, const cocos2d::Vec2& right)
 //{
 //    return Vec2(left.width * right.x, left.height * right.y);
