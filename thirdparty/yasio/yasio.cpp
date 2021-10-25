@@ -1535,19 +1535,20 @@ void io_service::config_ares_name_servers()
 {
   std::string nscsv;
   // list all dns servers for resov problem diagnosis
-  ares_addr_node* name_servers = nullptr;
-  const char* what              = "system";
+  ares_addr_port_node* name_servers = nullptr;
+  const char* what                  = "system";
   if (!options_.name_servers_.empty())
   {
-    ::ares_set_servers_csv(ares_, options_.name_servers_.c_str());
+    ::ares_set_servers_ports_csv(ares_, options_.name_servers_.c_str());
     what = "custom";
   }
-  int status = ::ares_get_servers(ares_, &name_servers);
+  int status = ::ares_get_servers_ports(ares_, &name_servers);
   if (status == ARES_SUCCESS)
   {
-    for (auto name_server = name_servers; name_server != nullptr; name_server = name_server->next)
-      endpoint::inaddr_to_csv_nl(name_server->family, &name_server->addr, nscsv);
-
+    int count = 0;
+    for (auto ns = name_servers; ns != nullptr; ns = ns->next)
+      if(endpoint{ns->family, &ns->addr, static_cast<u_short>(ns->udp_port)}.format_to(nscsv, endpoint::fmt_default | endpoint::fmt_no_local))
+        nscsv.push_back(',');
     if (!nscsv.empty()) // if no valid name server, use predefined fallback dns
       YASIO_KLOGI("[c-ares] use %s dns: %s", what, nscsv.c_str());
     else
@@ -1767,7 +1768,7 @@ void io_service::notify_connect_succeed(transport_handle_t t)
   auto& s  = t->socket_;
   this->transports_.push_back(t);
   YASIO_KLOGV("[index: %d] sndbuf=%d, rcvbuf=%d", ctx->index_, s->get_optval<int>(SOL_SOCKET, SO_SNDBUF), s->get_optval<int>(SOL_SOCKET, SO_RCVBUF));
-  YASIO_KLOGD("[index: %d] the connection #%u(%p) [%s] --> [%s] is established.", ctx->index_, t->id_, t, t->local_endpoint().to_string().c_str(),
+  YASIO_KLOGD("[index: %d] the connection #%u(%p) <%s> --> <%s> is established.", ctx->index_, t->id_, t, t->local_endpoint().to_string().c_str(),
               t->remote_endpoint().to_string().c_str());
   handle_event(cxx14::make_unique<io_event>(ctx->index_, YEK_ON_OPEN, 0, t));
 }
@@ -1918,7 +1919,7 @@ void io_service::schedule_timer(highp_timer* timer_ctl, timer_cb_t&& timer_cb)
     this->timer_queue_.emplace_back(timer_ctl, std::move(timer_cb));
   else // always replace timer_cb
     timer_it->second = std::move(timer_cb);
-  
+
   this->sort_timers();
   // If the timer is earliest, wakup
   if (timer_ctl == this->timer_queue_.rbegin()->first)
@@ -2276,7 +2277,7 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
 #if defined(YASIO_HAVE_CARES)
     case YOPT_S_DNS_LIST:
       options_.name_servers_ = va_arg(ap, const char*);
-      options_.dns_dirty_ = true;
+      options_.dns_dirty_    = true;
       break;
 #endif
     case YOPT_C_UNPACK_PARAMS: {

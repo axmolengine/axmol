@@ -168,7 +168,10 @@ enum
   YOPT_S_DNS_DIRTY,
 
   // Set custom dns servers
-  // params: servers: const char*("xxx.xxx.xxx[:port],xxx.xxx.xxx.xxx[:port]")
+  // params: servers: const char*
+  // remarks:
+  //  a. IPv4 address is 8.8.8.8 or 8.8.8.8:53, the port is optional
+  //  b. IPv6 addresses with ports require square brackets [fe80::1%lo0]:53
   YOPT_S_DNS_LIST,
 
   // Sets channel length field based frame decode function, native C++ ONLY

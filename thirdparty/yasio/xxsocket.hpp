@@ -198,6 +198,20 @@ inline bool is_global_in6_addr(const in6_addr* addr) { return !!IN6_IS_ADDR_GLOB
 
 struct endpoint {
 public:
+  enum
+  {
+    fmt_no_local   = 1,
+    fmt_no_port    = 2,
+    fmt_no_port_0  = 4,
+    fmt_no_un_path = 8,
+    fmt_default    = fmt_no_port_0 | fmt_no_un_path, // fmt_no_port_0 | fmt_no_un_path
+  };
+#if defined(YASIO_ENABLE_UDS) && YASIO__HAS_UDS
+  static const size_t max_fmt_len = (std::max)(sizeof("65535") + IN_MAX_ADDRSTRLEN + 2, sizeof(sockaddr_un::sun_path));
+#else
+  static const size_t max_fmt_len = IN_MAX_ADDRSTRLEN + sizeof("65535") + 2;
+#endif
+
   endpoint() { this->zeroset(); }
   endpoint(const endpoint& rhs) { this->as_is(rhs); }
   explicit endpoint(const addrinfo* info) { as_is(info); }
@@ -334,51 +348,21 @@ public:
     { // ipv4
       this->in4_.sin_family = AF_INET;
       compat::inet_pton(AF_INET, addr, &this->in4_.sin_addr);
+      this->len(sizeof(sockaddr_in));
     }
     else
     { // ipv6
       this->in6_.sin6_family = AF_INET6;
       compat::inet_pton(AF_INET6, addr, &this->in6_.sin6_addr);
+      this->len(sizeof(sockaddr_in6));
     }
   }
-  std::string ip() const
+  std::string ip() const { return this->to_string(fmt_default | fmt_no_port); }
+  std::string to_string(int flags = fmt_default) const
   {
-    std::string ipstring(IN_MAX_ADDRSTRLEN - 1, '\0');
-
-    auto str = inaddr_to_string(
-        &ipstring.front(), [](const in_addr*) { return true; }, [](const in6_addr*) { return true; });
-
-    ipstring.resize(str ? strlen(str) : 0);
-    return ipstring;
-  }
-  // to_string with port, can simply add prefix "http::" or "https://" for url
-  std::string to_string() const
-  {
-    std::string addr(IN_MAX_ADDRSTRLEN + sizeof("65535") + 2, '[');
-
-    size_t n = 0;
-
-    switch (sa_.sa_family)
-    {
-      case AF_INET:
-        n = strlen(compat::inet_ntop(AF_INET, &in4_.sin_addr, &addr.front(), static_cast<socklen_t>(addr.length())));
-        n += sprintf(&addr.front() + n, ":%u", this->port());
-        break;
-      case AF_INET6:
-        n = strlen(compat::inet_ntop(AF_INET6, &in6_.sin6_addr, &addr.front() + 1, static_cast<socklen_t>(addr.length() - 1)));
-        n += sprintf(&addr.front() + n, "]:%u", this->port());
-        break;
-#if defined(YASIO_ENABLE_UDS) && YASIO__HAS_UDS
-      case AF_UNIX:
-        n = this->len();
-        addr.assign(un_.sun_path, n);
-        break;
-#endif
-    }
-
-    addr.resize(n);
-
-    return addr;
+    std::string ret;
+    this->format_to(ret, flags);
+    return ret;
   }
 
   unsigned short port() const { return ntohs(in4_.sin_port); }
@@ -387,7 +371,102 @@ public:
   void addr_v4(uint32_t addr) { in4_.sin_addr.s_addr = htonl(addr); }
   uint32_t addr_v4() const { return ntohl(in4_.sin_addr.s_addr); }
 
-  /*
+  // check does endpoint is global address, not linklocal or loopback
+  bool is_global() const
+  {
+    switch (af())
+    {
+      case AF_INET:
+        return is_global_in4_addr(&in4_.sin_addr);
+      case AF_INET6:
+        return is_global_in6_addr(&in6_.sin6_addr);
+    }
+    return false;
+  }
+
+  void len(size_t n)
+  {
+#if !YASIO__HAS_SA_LEN
+    len_ = static_cast<uint8_t>(n);
+#else
+    sa_.sa_len = static_cast<uint8_t>(n);
+#endif
+  }
+  socklen_t len() const
+  {
+#if !YASIO__HAS_SA_LEN
+    return len_;
+#else
+    return sa_.sa_len;
+#endif
+  }
+
+  // format to buffer
+  size_t format_to(std::string& buf, int flags = 0) const
+  {
+    char str[endpoint::max_fmt_len + 1] = {0};
+    size_t n                            = this->format_to(str, endpoint::max_fmt_len, flags);
+    if (n > 0)
+    {
+      buf.append(str, n);
+      return n;
+    }
+    return 0;
+  }
+
+  /* format to
+   *
+   * @params:
+   *    buf: the buffer to output
+   *    buf_len: the buffer len, must be at least endpoint::max_fmt_len + 1
+   * @returns:
+   *    the number of character written to the buf without null-termianted charactor
+   *
+   * @remark:
+   *   The buffer result should be
+   *    ipv4: xxx.xxx.xxx.xxx<:port> 127.0.0.1:2021
+   *    ipv6: [xxx....xxx]<:port> [fe80::1]:53
+   */
+  size_t format_to(char* buf, size_t buf_len, int flags) const
+  {
+    if (!(fmt_no_local & flags) || is_global())
+    {
+      size_t n = 0;
+      switch (af())
+      {
+        case AF_INET:
+          n = strlen(compat::inet_ntop(AF_INET, &in4_.sin_addr, buf, buf_len));
+          break;
+        case AF_INET6:
+          buf[n++] = '[';
+          n += strlen(compat::inet_ntop(AF_INET6, &in6_.sin6_addr, buf + n, buf_len - n));
+          buf[n++] = ']';
+          break;
+#if defined(YASIO_ENABLE_UDS) && YASIO__HAS_UDS
+        case AF_UNIX:
+          if (!(flags & fmt_no_un_path))
+          {
+            n = (std::min)(static_cast<size_t>(this->len()), buf_len);
+            memcpy(buf, un_.sun_path, n);
+          }
+          return n;
+#endif
+      }
+      if (n > 0)
+      {
+        if (!(flags & fmt_no_port))
+        {
+          u_short p = this->port();
+          if (!(flags & fmt_no_port_0) || p != 0)
+            n += sprintf(buf + n, ":%u", (unsigned int)p);
+        }
+      }
+      return n;
+    }
+    return 0;
+  }
+
+  /* format ipv4 only
    %N: s_net   127
    %H: s_host  0
    %L: s_lh    0
@@ -418,60 +497,6 @@ public:
     }
 
     return s;
-  }
-
-  // in_addr(ip) to string with pred
-  template <typename _Pred4, typename _Pred6> const char* inaddr_to_string(char* str /*[IN_MAX_ADDRSTRLEN]*/, _Pred4&& pred4, _Pred6&& pred6) const
-  {
-    switch (af())
-    {
-      case AF_INET:
-        if (pred4(&in4_.sin_addr))
-          return compat::inet_ntop(AF_INET, &in4_.sin_addr, str, INET_ADDRSTRLEN);
-        break;
-      case AF_INET6:
-        if (pred6(&in6_.sin6_addr))
-          return compat::inet_ntop(AF_INET6, &in6_.sin6_addr, str, INET6_ADDRSTRLEN);
-        break;
-    }
-    return nullptr;
-  }
-
-  // in_addr(ip) to csv without loopback or linklocal address
-  void inaddr_to_csv_nl(std::string& csv)
-  {
-    char str[INET6_ADDRSTRLEN] = {0};
-    if (inaddr_to_string(str, is_global_in4_addr, is_global_in6_addr))
-    {
-      csv += str;
-      csv += ',';
-    }
-  }
-
-  // the in_addr(from sockaddr) to csv string helper function without loopback or linklocal
-  // address
-  static void inaddr_to_csv_nl(const sockaddr* addr, std::string& csv) { endpoint(addr).inaddr_to_csv_nl(csv); }
-
-  // the in_addr/in6_addr to csv string helper function without loopback or linklocal address
-  // the inaddr should be union of in_addr,in6_addr or ensure it's memory enough when
-  // family=AF_INET6
-  static void inaddr_to_csv_nl(int family, const void* inaddr, std::string& csv) { endpoint(family, inaddr).inaddr_to_csv_nl(csv); }
-
-  void len(size_t n)
-  {
-#if !YASIO__HAS_SA_LEN
-    len_ = static_cast<uint8_t>(n);
-#else
-    sa_.sa_len = static_cast<uint8_t>(n);
-#endif
-  }
-  socklen_t len() const
-  {
-#if !YASIO__HAS_SA_LEN
-    return len_;
-#else
-    return sa_.sa_len;
-#endif
   }
 
   union {
@@ -796,8 +821,13 @@ public:
   ** @returns: If no error occurs, set_optval returns zero. Otherwise, a value of SOCKET_ERROR is
   **       returned
   */
-  template <typename _Ty> inline int set_optval(int level, int optname, const _Ty& optval) { return set_optval(this->fd, level, optname, optval); }
-  template <typename _Ty> inline static int set_optval(socket_native_type sockfd, int level, int optname, const _Ty& optval)
+  template <typename _Ty>
+  inline int set_optval(int level, int optname, const _Ty& optval)
+  {
+    return set_optval(this->fd, level, optname, optval);
+  }
+  template <typename _Ty>
+  inline static int set_optval(socket_native_type sockfd, int level, int optname, const _Ty& optval)
   {
     return set_optval(sockfd, level, optname, &optval, static_cast<socklen_t>(sizeof(_Ty)));
   }
@@ -820,14 +850,20 @@ public:
   ** @returns: If no error occurs, get_optval returns zero. Otherwise, a value of SOCKET_ERROR is
   *returned
   */
-  template <typename _Ty> inline _Ty get_optval(int level, int optname) const
+  template <typename _Ty>
+  inline _Ty get_optval(int level, int optname) const
   {
     _Ty optval = {};
     get_optval(this->fd, level, optname, optval);
     return optval;
   }
-  template <typename _Ty> inline int get_optval(int level, int optname, _Ty& optval) const { return get_optval(this->fd, level, optname, optval); }
-  template <typename _Ty> inline static int get_optval(socket_native_type sockfd, int level, int optname, _Ty& optval)
+  template <typename _Ty>
+  inline int get_optval(int level, int optname, _Ty& optval) const
+  {
+    return get_optval(this->fd, level, optname, optval);
+  }
+  template <typename _Ty>
+  inline static int get_optval(socket_native_type sockfd, int level, int optname, _Ty& optval)
   {
     socklen_t optlen = static_cast<socklen_t>(sizeof(_Ty));
     return get_optval(sockfd, level, optname, &optval, &optlen);
@@ -846,8 +882,13 @@ public:
   **
   **
   */
-  template <typename _Ty> inline int ioctl(long cmd, const _Ty& value) const { return xxsocket::ioctl(this->fd, cmd, value); }
-  template <typename _Ty> inline static int ioctl(socket_native_type s, long cmd, const _Ty& value)
+  template <typename _Ty>
+  inline int ioctl(long cmd, const _Ty& value) const
+  {
+    return xxsocket::ioctl(this->fd, cmd, value);
+  }
+  template <typename _Ty>
+  inline static int ioctl(socket_native_type s, long cmd, const _Ty& value)
   {
     u_long argp = static_cast<u_long>(value);
     return ::ioctlsocket(s, cmd, &argp);
