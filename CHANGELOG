@@ -11,6 +11,20 @@ adxe-1.0  ??
 [HIGHLIGHT] Refactor lua loader, speed up 30%+
 [HIGHLIGHT] Update plainlua version to 5.4.3
 [HIGHLIGHT] Use Openal-Soft for all platform
+[HIGHLIGHT] Refactor UserDefault with mio, speed up 100x+
+[HIGHLIGHT] Implement all .wav formats supported by Openal-Soft, such as MS-ADPCM, ADPCM
+[HIGHLIGHT] Use modern GL loader Glad
+[HIGHLIGHT] Google angle renderer backend support
+[HIGHLIGHT] Update codebase to C++ 14 standard
+[HIGHLIGHT] Remove tinyxml2
+[HIGHLIGHT] Use fast pugixml
+[HIGHLIGHT] Spine-3.6~4.0 support
+[HIGHLIGHT] ASTC 4x4/6x6/8x8 support (if hardware decoder not present, use software decoder)
+[HIGHLIGHT] ETC2 RGB/RGBA support (if hardware decoder not present, use software decoder)
+[HIGHLIGHT] ImGui integrated for PC platforms
+[HIGHLIGHT] Extension FairyGUI support
+[HIGHLIGHT] Use curl for transferring data with URL syntax
+[HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
 [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
 [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
 [FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issue
