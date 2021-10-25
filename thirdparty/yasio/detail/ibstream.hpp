@@ -120,8 +120,12 @@ public:
   using this_type           = basic_ibstream_view<_Traits>;
   basic_ibstream_view() { this->reset("", 0); }
   basic_ibstream_view(const void* data, size_t size) { this->reset(data, size); }
-  basic_ibstream_view(const basic_obstream<_Traits>* obs) { this->reset(obs->data(), obs->length()); }
-  basic_ibstream_view(const basic_obstream<_Traits>* obs, ptrdiff_t offset)
+
+  template<typename _BufferType>
+  basic_ibstream_view(const basic_obstream_view<_Traits, _BufferType>* obs) { this->reset(obs->data(), obs->length()); }
+
+  template <typename _BufferType>
+  basic_ibstream_view(const basic_obstream_view<_Traits, _BufferType>* obs, ptrdiff_t offset)
   {
     this->reset(obs->data(), obs->length());
     this->advance(offset);
