@@ -75,7 +75,6 @@ NS_CC_BEGIN
 static Director *s_SharedDirector = nullptr;
 
 #define kDefaultFPS        60  // 60 frames per second
-extern const char* cocos2dVersion();
 
 const char *Director::EVENT_BEFORE_SET_NEXT_SCENE = "director_before_set_next_scene";
 const char *Director::EVENT_AFTER_SET_NEXT_SCENE = "director_after_set_next_scene";

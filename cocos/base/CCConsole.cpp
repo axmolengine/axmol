@@ -70,7 +70,7 @@
 
 NS_CC_BEGIN
 
-extern const char* cocos2dVersion(void);
+extern const char* adxeVersion(void);
 
 #define PROMPT  "> "
 #define DEFAULT_COMMAND_SEPARATOR '|'
@@ -1518,7 +1518,7 @@ void Console::commandUpload(socket_native_type fd)
 
 void Console::commandVersion(socket_native_type fd, const std::string& /*args*/)
 {
-    Console::Utility::mydprintf(fd, "%s\n", cocos2dVersion());
+    Console::Utility::mydprintf(fd, "%s\n", adxeVersion());
 }
 
 // helper free functions
