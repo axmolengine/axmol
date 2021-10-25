@@ -71,7 +71,7 @@ include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
-set(COCOS_HEADER cocos2d.h
+set(COCOS_HEADER adxe.h
     ${COCOS_2D_HEADER}
     ${COCOS_3D_HEADER}
     ${COCOS_PLATFORM_HEADER}
@@ -86,7 +86,7 @@ set(COCOS_HEADER cocos2d.h
     ${COCOS_NETWORK_HEADER}
     )
 
-set(COCOS_SRC cocos2d.cpp
+set(COCOS_SRC adxe.cpp
     ${COCOS_2D_SRC}
     ${COCOS_3D_SRC}
     ${COCOS_PLATFORM_SRC}
