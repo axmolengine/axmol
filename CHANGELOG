@@ -25,6 +25,7 @@ adxe-1.0  ??
 [HIGHLIGHT] Extension FairyGUI support
 [HIGHLIGHT] Use curl for transferring data with URL syntax
 [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
+[HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `adxeproject/buildware`
 [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
 [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
 [FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issue
