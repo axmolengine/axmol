@@ -31,10 +31,9 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-CC_DLL const char* cocos2dVersion()
+CC_DLL const char* adxeVersion()
 {
     return "adxe-1.0.0b3";
 }
 
 NS_CC_END
-
