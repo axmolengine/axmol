@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-extern const char* cocos2dVersion();
+extern const char* adxeVersion();
 
 Configuration* Configuration::s_sharedConfiguration = nullptr;
 
@@ -66,7 +66,7 @@ Configuration::Configuration()
 
 bool Configuration::init()
 {
-	_valueDict["adxe.version"] = Value(cocos2dVersion());
+	_valueDict["adxe.version"] = Value(adxeVersion());
 
 
 #if CC_ENABLE_PROFILERS

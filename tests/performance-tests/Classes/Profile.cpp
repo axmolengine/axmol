@@ -241,7 +241,7 @@ void Profile::flush()
     testData[KEY_FILE_VERSION] = Value(FILE_VERSION);
     testData[KEY_DEVICE] = Value(DEVICE_NAME);
     testData[KEY_OS_VERSION] = Value(OS_VERSION);
-    testData[KEY_ENGINE_VERSION] = Value(cocos2d::cocos2dVersion());
+    testData[KEY_ENGINE_VERSION] = Value(cocos2d::adxeVersion());
     time_t t = time(0);
     localtime(&t);
     testData[KEY_TIMESTAMP] = Value(genStr("%ld", t));
