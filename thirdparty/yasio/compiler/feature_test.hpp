@@ -98,6 +98,7 @@ SOFTWARE.
 #endif
 
 // Test whether sockaddr has member 'sa_len'
+// see also: https://github.com/freebsd/freebsd-src/blob/main/sys/sys/socket.h#L329
 #if defined(__linux__) || defined(_WIN32)
 #  define YASIO__HAS_SA_LEN 0
 #else

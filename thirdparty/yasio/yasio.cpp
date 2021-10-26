@@ -211,7 +211,7 @@ void highp_timer::cancel(io_service& service)
 int io_send_op::perform(io_transport* transport, const void* buf, int n) { return transport->write_cb_(buf, n, nullptr); }
 
 /// io_sendto_op
-int io_sendto_op::perform(io_transport* transport, const void* buf, int n) { return transport->write_cb_(buf, n, &destination_); }
+int io_sendto_op::perform(io_transport* transport, const void* buf, int n) { return transport->write_cb_(buf, n, std::addressof(destination_)); }
 
 #if defined(YASIO_SSL_BACKEND)
 void ssl_auto_handle::destroy()
@@ -680,7 +680,7 @@ io_transport_kcp::io_transport_kcp(io_channel* ctx, std::shared_ptr<xxsocket>& s
   ::ikcp_setoutput(this->kcp_, [](const char* buf, int len, ::ikcpcb* /*kcp*/, void* user) {
     auto t = (io_transport_kcp*)user;
     if (yasio__min_wait_duration == 0)
-      return t->write_cb_(buf, len, &t->ensure_destination());
+      return t->write_cb_(buf, len, std::addressof(t->ensure_destination()));
     // Enqueue to transport queue
     return t->io_transport_udp::write(std::vector<char>(buf, buf + len), nullptr);
   });

@@ -521,7 +521,7 @@ int xxsocket::test_nonblocking(socket_native_type s)
 }
 
 int xxsocket::bind(const char* addr, unsigned short port) const { return this->bind(endpoint(addr, port)); }
-int xxsocket::bind(const endpoint& ep) const { return ::bind(this->fd, &ep.sa_, ep.len()); }
+int xxsocket::bind(const endpoint& ep) const { return ::bind(this->fd, &ep, ep.len()); }
 int xxsocket::bind_any(bool ipv6) const { return this->bind(endpoint(!ipv6 ? "0.0.0.0" : "::", 0)); }
 
 int xxsocket::listen(int backlog) const { return ::listen(this->fd, backlog); }
@@ -562,7 +562,7 @@ int xxsocket::connect(socket_native_type s, const char* addr, u_short port)
 
   return xxsocket::connect(s, peer);
 }
-int xxsocket::connect(socket_native_type s, const endpoint& ep) { return ::connect(s, &ep.sa_, ep.len()); }
+int xxsocket::connect(socket_native_type s, const endpoint& ep) { return ::connect(s, &ep, ep.len()); }
 
 int xxsocket::connect_n(const char* addr, u_short port, const std::chrono::microseconds& wtimeout) { return connect_n(ip::endpoint(addr, port), wtimeout); }
 int xxsocket::connect_n(const endpoint& ep, const std::chrono::microseconds& wtimeout) { return this->connect_n(this->fd, ep, wtimeout); }
@@ -730,13 +730,13 @@ int xxsocket::recv(socket_native_type s, void* buf, int len, int flags) { return
 
 int xxsocket::sendto(const void* buf, int len, const endpoint& to, int flags) const
 {
-  return static_cast<int>(::sendto(this->fd, (const char*)buf, len, flags, &to.sa_, to.len()));
+  return static_cast<int>(::sendto(this->fd, (const char*)buf, len, flags, &to, to.len()));
 }
 
 int xxsocket::recvfrom(void* buf, int len, endpoint& from, int flags) const
 {
   socklen_t addrlen{sizeof(from)};
-  int n = static_cast<int>(::recvfrom(this->fd, (char*)buf, len, flags, &from.sa_, &addrlen));
+  int n = static_cast<int>(::recvfrom(this->fd, (char*)buf, len, flags, &from, &addrlen));
   from.len(addrlen);
   return n;
 }
@@ -800,7 +800,7 @@ endpoint xxsocket::local_endpoint(socket_native_type fd)
 {
   endpoint ep;
   socklen_t socklen = sizeof(ep);
-  getsockname(fd, &ep.sa_, &socklen);
+  getsockname(fd, &ep, &socklen);
   ep.len(socklen);
   return ep;
 }
@@ -810,7 +810,7 @@ endpoint xxsocket::peer_endpoint(socket_native_type fd)
 {
   endpoint ep;
   socklen_t socklen = sizeof(ep);
-  getpeername(fd, &ep.sa_, &socklen);
+  getpeername(fd, &ep, &socklen);
   ep.len(socklen);
   return ep;
 }
