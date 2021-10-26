@@ -71,7 +71,7 @@ static const char* inet_ntop6(const u_char* src, char* dst, socklen_t size);
  * inet_ntop(af, src, dst, size)
  *	convert a network format address to presentation format.
  * return:
- *	pointer to presentation format address (`dst'), or NULL (see errno).
+ *	pointer to presentation format address (`dst'), or nullptr (see errno).
  * author:
  *	Paul Vixie, 1996.
  */
@@ -85,7 +85,7 @@ const char* inet_ntop(int af, const void* src, char* dst, socklen_t size)
       return (inet_ntop6((const u_char*)src, dst, size));
     default:
       errno = EAFNOSUPPORT;
-      return (NULL);
+      return (nullptr);
   }
   /* NOTREACHED */
 }
@@ -109,7 +109,7 @@ static const char* inet_ntop4(const u_char* src, char* dst, socklen_t size)
   if (SPRINTF((tmp, fmt, src[0], src[1], src[2], src[3])) >= static_cast<int>(size))
   {
     errno = (ENOSPC);
-    return (NULL);
+    return (nullptr);
   }
   return strcpy(dst, tmp);
 }
@@ -198,7 +198,7 @@ static const char* inet_ntop6(const u_char* src, char* dst, socklen_t size)
     if (i == 6 && best.base == 0 && (best.len == 6 || (best.len == 5 && words[5] == 0xffff)))
     {
       if (!inet_ntop4(src + 12, tp, static_cast<socklen_t>(sizeof tmp - (tp - tmp))))
-        return (NULL);
+        return (nullptr);
       tp += strlen(tp);
       break;
     }
@@ -215,7 +215,7 @@ static const char* inet_ntop6(const u_char* src, char* dst, socklen_t size)
   if ((socklen_t)(tp - tmp) > size)
   {
     errno = (ENOSPC);
-    return (NULL);
+    return (nullptr);
   }
   return strcpy(dst, tmp);
 }
@@ -332,7 +332,7 @@ static int inet_pton6(const char* src, u_char* dst)
 
   tp     = (u_char*)memset(tmp, '\0', NS_IN6ADDRSZ);
   endp   = tp + NS_IN6ADDRSZ;
-  colonp = NULL;
+  colonp = nullptr;
   /* Leading :: requires some special handling. */
   if (*src == ':')
     if (*++src != ':')
@@ -345,7 +345,7 @@ static int inet_pton6(const char* src, u_char* dst)
     const char* pch;
 
     pch = strchr(xdigits, ch);
-    if (pch != NULL)
+    if (pch != nullptr)
     {
       val <<= 4;
       val |= (pch - xdigits);
@@ -391,7 +391,7 @@ static int inet_pton6(const char* src, u_char* dst)
     *tp++ = (u_char)(val >> 8) & 0xff;
     *tp++ = (u_char)val & 0xff;
   }
-  if (colonp != NULL)
+  if (colonp != nullptr)
   {
     /*
      * Since some memmove()'s erroneously fail to handle

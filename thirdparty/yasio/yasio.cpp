@@ -160,7 +160,7 @@ struct yasio__global_state {
     yasio__min_wait_duration = std::thread::hardware_concurrency() > 1 ? 0LL : YASIO_MIN_WAIT_DURATION;
 #if defined(YASIO_SSL_BACKEND) && YASIO_SSL_BACKEND == 1
 #  if OPENSSL_VERSION_NUMBER >= 0x10100000 && !defined(LIBRESSL_VERSION_NUMBER)
-    if (OPENSSL_init_ssl(0, NULL) == 1)
+    if (OPENSSL_init_ssl(0, nullptr) == 1)
       yasio__setbits(this->init_flags_, INITF_SSL);
 #  endif
 #endif

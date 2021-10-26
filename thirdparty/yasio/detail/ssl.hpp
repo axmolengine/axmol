@@ -60,7 +60,7 @@ inline ssl_st* mbedtls_ssl_new(ssl_ctx_st* ctx)
 inline void mbedtls_ssl_set_fd(ssl_st* ssl, int fd)
 {
   ssl->bio.fd = fd;
-  ::mbedtls_ssl_set_bio(ssl, &ssl->bio, ::mbedtls_net_send, ::mbedtls_net_recv, NULL /*  rev_timeout() */);
+  ::mbedtls_ssl_set_bio(ssl, &ssl->bio, ::mbedtls_net_send, ::mbedtls_net_recv, nullptr /*  rev_timeout() */);
 }
 #else
 #  error "yasio - Unsupported ssl backend provided!"

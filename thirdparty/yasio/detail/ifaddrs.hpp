@@ -344,7 +344,7 @@ static void get_ifaddrs_impl(int (**getifaddrs_impl)(struct ifaddrs** ifap),
 
 static void free_single_ifaddrs(struct ifaddrs** ifap)
 {
-  struct ifaddrs* ifa = ifap ? *ifap : NULL;
+  struct ifaddrs* ifa = ifap ? *ifap : nullptr;
   if (!ifa)
     return;
 
@@ -364,7 +364,7 @@ static void free_single_ifaddrs(struct ifaddrs** ifap)
     free(ifa->ifa_data);
 
   free(ifa);
-  *ifap = NULL;
+  *ifap = nullptr;
 }
 
 static int open_netlink_session(netlink_session* session)
@@ -461,14 +461,14 @@ static int append_ifaddr(struct ifaddrs* addr, struct ifaddrs** ifaddrs_head,
     *last_ifaddr = last;
   }
 
-  addr->ifa_next = NULL;
+  addr->ifa_next = nullptr;
   if (addr == *last_ifaddr)
     return 0;
 
   assert(addr != *last_ifaddr);
   (*last_ifaddr)->ifa_next = addr;
   *last_ifaddr             = addr;
-  assert((*last_ifaddr)->ifa_next == NULL);
+  assert((*last_ifaddr)->ifa_next == nullptr);
 
   return 0;
 }
@@ -481,7 +481,7 @@ static int parse_netlink_reply(netlink_session* session, struct ifaddrs** ifaddr
   struct nlmsghdr* current_message;
   struct ifaddrs* addr;
   int ret                 = -1;
-  unsigned char* response = NULL;
+  unsigned char* response = nullptr;
 
   assert(session);
   assert(ifaddrs_head);
@@ -647,7 +647,7 @@ static int fill_ll_address(struct sockaddr_ll_extended** sa, struct ifinfomsg* n
     YASIO_LOG("Address is too long to place in sockaddr_ll (%d > %d)",
               static_cast<int>(rta_payload_length), static_cast<int>(sizeof((*sa)->sll_addr)));
     free(*sa);
-    *sa = NULL;
+    *sa = nullptr;
     return -1;
   }
 
@@ -655,7 +655,7 @@ static int fill_ll_address(struct sockaddr_ll_extended** sa, struct ifinfomsg* n
   {
     YASIO_LOG("Payload length too big to fit in the address structure");
     free(*sa);
-    *sa = NULL;
+    *sa = nullptr;
     return -1;
   }
 
@@ -671,7 +671,7 @@ static struct ifaddrs* find_interface_by_index(int index, struct ifaddrs** ifadd
 {
   struct ifaddrs* cur;
   if (!ifaddrs_head || !*ifaddrs_head)
-    return NULL;
+    return nullptr;
 
   /* Normally expensive, but with the small amount of links in the chain we'll deal with it's not
    * worth the extra houskeeping and memory overhead
@@ -687,14 +687,14 @@ static struct ifaddrs* find_interface_by_index(int index, struct ifaddrs** ifadd
     cur = cur->ifa_next;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 static char* get_interface_name_by_index(int index, struct ifaddrs** ifaddrs_head)
 {
   struct ifaddrs* iface = find_interface_by_index(index, ifaddrs_head);
   if (!iface || !iface->ifa_name)
-    return NULL;
+    return nullptr;
 
   return iface->ifa_name;
 }
@@ -715,7 +715,7 @@ static int calculate_address_netmask(struct ifaddrs* ifa, struct ifaddrmsg* net_
   {
     uint32_t prefix_length      = 0;
     uint32_t data_length        = 0;
-    unsigned char* netmask_data = NULL;
+    unsigned char* netmask_data = nullptr;
 
     switch (ifa->ifa_addr->sa_family)
     {
@@ -782,7 +782,7 @@ static struct ifaddrs* get_link_address(const struct nlmsghdr* message,
   ssize_t length = 0;
   struct rtattr* attribute;
   struct ifaddrmsg* net_address;
-  struct ifaddrs* ifa = NULL;
+  struct ifaddrs* ifa = nullptr;
   struct sockaddr** sa;
   size_t payload_size;
 
@@ -811,7 +811,7 @@ static struct ifaddrs* get_link_address(const struct nlmsghdr* message,
   {
     payload_size = RTA_PAYLOAD(attribute);
     YASIO_LOGV("     attribute payload_size == %u", (unsigned int)payload_size);
-    sa = NULL;
+    sa = nullptr;
 
     switch (attribute->rta_type)
     {
@@ -860,7 +860,7 @@ static struct ifaddrs* get_link_address(const struct nlmsghdr* message,
         {
           /* IFA_LOCAL happened earlier, undo its effect here */
           free(ifa->ifa_dstaddr);
-          ifa->ifa_dstaddr = NULL;
+          ifa->ifa_dstaddr = nullptr;
         }
         sa = &ifa->ifa_broadaddr;
         break;
@@ -873,7 +873,7 @@ static struct ifaddrs* get_link_address(const struct nlmsghdr* message,
            * here. IFA_LOCAL carries the destination address, move it there
            */
           ifa->ifa_dstaddr = ifa->ifa_addr;
-          ifa->ifa_addr    = NULL;
+          ifa->ifa_addr    = nullptr;
         }
         sa = &ifa->ifa_addr;
         break;
@@ -916,7 +916,7 @@ static struct ifaddrs* get_link_address(const struct nlmsghdr* message,
     char* name =
         get_interface_name_by_index(static_cast<int>(net_address->ifa_index), ifaddrs_head);
     YASIO_LOGV("   address has no name/label, getting one from interface");
-    ifa->ifa_name = name ? strdup(name) : NULL;
+    ifa->ifa_name = name ? strdup(name) : nullptr;
   }
   YASIO_LOGV("   address label: %s", ifa->ifa_name);
 
@@ -936,7 +936,7 @@ error : {
   int errno_save = errno;
   free_single_ifaddrs(&ifa);
   errno = errno_save;
-  return NULL;
+  return nullptr;
 }
 }
 
@@ -945,8 +945,8 @@ static struct ifaddrs* get_link_info(const struct nlmsghdr* message)
   ssize_t length;
   struct rtattr* attribute;
   struct ifinfomsg* net_interface;
-  struct ifaddrs* ifa             = NULL;
-  struct sockaddr_ll_extended* sa = NULL;
+  struct ifaddrs* ifa             = nullptr;
+  struct sockaddr_ll_extended* sa = nullptr;
 
   assert(message);
   net_interface = reinterpret_cast<ifinfomsg*>(NLMSG_DATA(message));
@@ -1007,13 +1007,13 @@ error:
     free(sa);
   free_single_ifaddrs(&ifa);
 
-  return NULL;
+  return nullptr;
 }
 typedef int (*getifaddrs_impl_fptr)(struct ifaddrs**);
 typedef void (*freeifaddrs_impl_fptr)(struct ifaddrs* ifa);
 
-static getifaddrs_impl_fptr getifaddrs_impl   = NULL;
-static freeifaddrs_impl_fptr freeifaddrs_impl = NULL;
+static getifaddrs_impl_fptr getifaddrs_impl   = nullptr;
+static freeifaddrs_impl_fptr freeifaddrs_impl = nullptr;
 
 static void getifaddrs_init() { get_ifaddrs_impl(&getifaddrs_impl, &freeifaddrs_impl); }
 } // namespace internal
@@ -1066,7 +1066,7 @@ inline int getifaddrs(struct ifaddrs** ifap)
   if (!ifap)
     return ret;
 
-  *ifap                        = NULL;
+  *ifap                        = nullptr;
   struct ifaddrs* ifaddrs_head = 0;
   struct ifaddrs* last_ifaddr  = 0;
   internal::netlink_session session;

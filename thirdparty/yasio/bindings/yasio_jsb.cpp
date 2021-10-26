@@ -701,7 +701,7 @@ void js_register_yasio_ibstream(JSContext* ctx, JS::HandleObject global)
 
   jsb_ibstream_prototype =
       JS_InitClass(ctx, global, JS::NullPtr(), jsb_ibstream_class, nullptr, 0, properties, funcs,
-                   NULL, // no static properties
+                   nullptr, // no static properties
                    st_funcs);
 
   // add the proto and JSClass to the type->js info hash table
@@ -1198,7 +1198,7 @@ void js_register_yasio_obstream(JSContext* ctx, JS::HandleObject global)
   // JS::RootedObject parentProto(ctx, jsb_cocos2d_Ref_prototype);
   jsb_obstream_prototype = JS_InitClass(ctx, global, JS::NullPtr(), jsb_obstream_class,
                                         jsb_yasio_obstream__ctor, 0, properties, funcs,
-                                        NULL, // no static properties
+                                        nullptr, // no static properties
                                         st_funcs);
 
   // add the proto and JSClass to the type->js info hash table
@@ -1235,7 +1235,7 @@ void js_register_yasio_transport(JSContext* ctx, JS::HandleObject global)
 
   jsb_transport_prototype =
       JS_InitClass(ctx, global, JS::NullPtr(), jsb_transport_class, nullptr, 0, properties, funcs,
-                   NULL, // no static properties
+                   nullptr, // no static properties
                    st_funcs);
 
   // add the proto and JSClass to the type->js info hash table
@@ -1416,7 +1416,7 @@ void js_register_yasio_io_event(JSContext* ctx, JS::HandleObject global)
 
   jsb_io_event_prototype =
       JS_InitClass(ctx, global, JS::NullPtr(), jsb_io_event_class, nullptr, 0, properties, funcs,
-                   NULL, // no static properties
+                   nullptr, // no static properties
                    st_funcs);
 
   // add the proto and JSClass to the type->js info hash table
@@ -1877,7 +1877,7 @@ void js_register_yasio_io_service(JSContext* ctx, JS::HandleObject global)
 
   jsb_io_service_prototype = JS_InitClass(ctx, global, JS::NullPtr(), jsb_io_service_class,
                                           jsb_yasio_io_service__ctor, 0, properties, funcs,
-                                          NULL, // no static properties
+                                          nullptr, // no static properties
                                           st_funcs);
 
   // add the proto and JSClass to the type->js info hash table
