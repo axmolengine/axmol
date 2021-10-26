@@ -26,7 +26,7 @@
 
 ## c-ares
 - Upstream: https://github.com/c-ares/c-ares
-- Version: 1.17.2
+- Version: 1.18.0
 - License: MIT
 
 ## Chipmunk2D
