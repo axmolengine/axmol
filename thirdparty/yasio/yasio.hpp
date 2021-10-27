@@ -41,7 +41,6 @@ SOFTWARE.
 #endif
 #include "yasio/detail/sz.hpp"
 #include "yasio/detail/config.hpp"
-#include "yasio/detail/endian_portable.hpp"
 #include "yasio/detail/object_pool.hpp"
 #include "yasio/detail/singleton.hpp"
 #include "yasio/detail/select_interrupter.hpp"

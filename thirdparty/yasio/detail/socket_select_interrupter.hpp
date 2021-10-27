@@ -77,7 +77,7 @@ private:
     acceptor.set_optval(SOL_SOCKET, SO_REUSEADDR, 1);
 
     int error = 0;
-    ip::endpoint ep(INADDR_LOOPBACK);
+    ip::endpoint ep(INADDR_LOOPBACK, 0);
 
     error = acceptor.bind(ep);
     ep    = acceptor.local_endpoint();
