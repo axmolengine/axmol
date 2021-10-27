@@ -173,7 +173,7 @@ class CCPluginNew(adxe.CCPlugin):
             engine_type = None
 
             framework_ver_file = os.path.join(self._cocosroot, 'version')
-            x_ver_file = os.path.join(self._cocosroot, 'cocos/cocos2d.cpp')
+            x_ver_file = os.path.join(self._cocosroot, 'cocos/adxe.cpp')
             js_ver_file = os.path.join(self._cocosroot, 'frameworks/js-bindings/bindings/manual/ScriptingCore.h')
             if os.path.isfile(framework_ver_file):
                 # the engine is Cocos Framework

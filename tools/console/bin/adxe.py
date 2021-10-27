@@ -1085,7 +1085,7 @@ if __name__ == "__main__":
     engine_path = os.path.normpath(os.path.join(cur_path, '../../../'))
     COCOS_ENGINE_VERSION = utils.get_engine_version(engine_path)
     STAT_VERSION = COCOS_ENGINE_VERSION
-    ver_pattern = r"cocos2d-x-(.*)"
+    ver_pattern = r"adxe-(.*)"
     match = re.match(ver_pattern, COCOS_ENGINE_VERSION)
     if match:
         STAT_VERSION = match.group(1)
