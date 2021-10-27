@@ -43,7 +43,7 @@
 #if defined(__MINGW32__)
 #include "platform/win32/inet_pton_mingw.h"
 #endif
-#define bzero(a, b) memset(a, 0, b);
+#define bzero(a, b) memset(a, 0, b)
 #include "win32-specific/ntcvt/ntcvt.hpp"
 #endif
 
