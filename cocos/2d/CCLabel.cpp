@@ -540,11 +540,7 @@ Label::~Label()
         Node::removeAllChildrenWithCleanup(true);
         CC_SAFE_RELEASE_NULL(_reusedLetter);
         _batchNodes.clear();
-        if (!FontAtlasCache::releaseFontAtlas(_fontAtlas))
-        {
-            _fontAtlas->release();
-        }
-        _fontAtlas = nullptr;
+        FontAtlasCache::releaseFontAtlas(_fontAtlas);
     }
     _batchCommands.clear();
     _eventDispatcher->removeEventListener(_purgeTextureListener);
@@ -566,10 +562,7 @@ void Label::reset()
     _lettersInfo.clear();
     if (_fontAtlas)
     {
-        if (!FontAtlasCache::releaseFontAtlas(_fontAtlas))
-        {
-            _fontAtlas->release();
-        }
+        FontAtlasCache::releaseFontAtlas(_fontAtlas);
         _fontAtlas = nullptr;
     }
 
@@ -797,10 +790,7 @@ void Label::setFontAtlas(FontAtlas* atlas,bool distanceFieldEnabled /* = false *
     if (_fontAtlas)
     {
         _batchNodes.clear();
-        if (!FontAtlasCache::releaseFontAtlas(_fontAtlas))
-        {
-            _fontAtlas->release();
-        }
+        FontAtlasCache::releaseFontAtlas(_fontAtlas);
     }
     _fontAtlas = atlas;
     
@@ -1633,10 +1623,7 @@ void Label::updateContent()
             _batchNodes.clear();
             _batchCommands.clear();
             CC_SAFE_RELEASE_NULL(_reusedLetter);
-            if (!FontAtlasCache::releaseFontAtlas(_fontAtlas))
-            {
-                _fontAtlas->release();
-            }
+            FontAtlasCache::releaseFontAtlas(_fontAtlas);
             _fontAtlas = nullptr;
         }
 
