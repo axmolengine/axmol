@@ -239,9 +239,9 @@ bool FontAtlasCache::releaseFontAtlas(FontAtlas *atlas)
     {
         if (atlas->getReferenceCount() == 1)
         {
-            for( auto &item: _atlasMap )
+            for (auto& item: _atlasMap)
             {
-                if ( item.second == atlas )
+                if (item.second == atlas)
                 {
                     _atlasMap.erase(item.first);
                     break;
