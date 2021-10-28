@@ -237,20 +237,19 @@ bool FontAtlasCache::releaseFontAtlas(FontAtlas *atlas)
 {
     if (nullptr != atlas)
     {
-        for( auto &item: _atlasMap )
+        if (atlas->getReferenceCount() == 1)
         {
-            if ( item.second == atlas )
+            for( auto &item: _atlasMap )
             {
-                if (atlas->getReferenceCount() == 1)
+                if ( item.second == atlas )
                 {
-                  _atlasMap.erase(item.first);
+                    _atlasMap.erase(item.first);
+                    break;
                 }
-                
-                atlas->release();
-                
-                return true;
             }
-        }
+        }          
+        atlas->release();
+        return true;
     }
     
     return false;
