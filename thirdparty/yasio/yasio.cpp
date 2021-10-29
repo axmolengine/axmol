@@ -239,6 +239,7 @@ io_channel::io_channel(io_service& service, int index) : io_base(), service_(ser
   index_             = index;
   decode_len_        = [=](void* ptr, int len) { return this->__builtin_decode_len(ptr, len); };
 }
+const print_fn2_t& io_channel::__get_cprint() const { return get_service().options_.print_; }
 std::string io_channel::format_destination() const
 {
   if (yasio__testbits(properties_, YCPF_NEEDS_QUERIES))
@@ -246,29 +247,46 @@ std::string io_channel::format_destination() const
 
   return yasio::strfmt(127, "%s:%u", remote_host_.c_str(), remote_port_);
 }
-void io_channel::enable_multicast_group(const ip::endpoint& ep, int loopback)
+void io_channel::enable_multicast(const char* addr, int loopback)
 {
   yasio__setbits(properties_, YCPF_MCAST);
+
   if (loopback)
     yasio__setbits(properties_, YCPF_MCAST_LOOPBACK);
 
-  multiaddr_ = ep;
+  if (addr)
+    multiaddr_.as_in(addr, (u_short)0);
 }
-int io_channel::join_multicast_group()
+void io_channel::join_multicast_group()
 {
   if (socket_->is_open())
   {
+    // interface
+    switch (multiif_.af())
+    {
+      case AF_INET:
+        socket_->set_optval(IPPROTO_IP, IP_MULTICAST_IF, multiif_.in4_.sin_addr);
+        break;
+      case AF_INET6:
+        socket_->set_optval(IPPROTO_IPV6, IP_MULTICAST_IF, multiif_.in6_.sin6_scope_id);
+        break;
+      default:;
+    }
+
     int loopback = yasio__testbits(properties_, YCPF_MCAST_LOOPBACK) ? 1 : 0;
     socket_->set_optval(multiaddr_.af() == AF_INET ? IPPROTO_IP : IPPROTO_IPV6, multiaddr_.af() == AF_INET ? IP_MULTICAST_LOOP : IPV6_MULTICAST_LOOP, loopback);
     // ttl
     socket_->set_optval(multiaddr_.af() == AF_INET ? IPPROTO_IP : IPPROTO_IPV6, multiaddr_.af() == AF_INET ? IP_MULTICAST_TTL : IPV6_MULTICAST_HOPS,
                         YASIO_DEFAULT_MULTICAST_TTL);
-
-    return configure_multicast_group(true);
+    int ret = configure_multicast_group(true);
+    if (yasio__unlikely(ret != 0))
+    {
+      int ec = xxsocket::get_last_errno();
+      YASIO_KLOGE("[index: %d] join to multicast group %s failed, ec=%d, detail:%s", this->index_, multiaddr_.to_string().c_str(), ec, xxsocket::strerror(ec));
+    }
   }
-  return -1;
 }
-void io_channel::disable_multicast_group()
+void io_channel::disable_multicast()
 {
   yasio__clearbits(properties_, YCPF_MCAST);
   yasio__clearbits(properties_, YCPF_MCAST_LOOPBACK);
@@ -281,14 +299,14 @@ int io_channel::configure_multicast_group(bool onoff)
   if (multiaddr_.af() == AF_INET)
   { // ipv4
     struct ip_mreq mreq;
-    mreq.imr_interface.s_addr = 0;
+    mreq.imr_interface.s_addr = multiif_.in4_.sin_addr.s_addr;
     mreq.imr_multiaddr        = multiaddr_.in4_.sin_addr;
     return socket_->set_optval(IPPROTO_IP, onoff ? IP_ADD_MEMBERSHIP : IP_DROP_MEMBERSHIP, &mreq, (int)sizeof(mreq));
   }
   else
   { // ipv6
     struct ipv6_mreq mreq_v6;
-    mreq_v6.ipv6mr_interface = 0;
+    mreq_v6.ipv6mr_interface = multiif_.in6_.sin6_scope_id;
     mreq_v6.ipv6mr_multiaddr = multiaddr_.in6_.sin6_addr;
     return socket_->set_optval(IPPROTO_IPV6, onoff ? IPV6_JOIN_GROUP : IPV6_LEAVE_GROUP, &mreq_v6, (int)sizeof(mreq_v6));
   }
@@ -591,41 +609,45 @@ const ip::endpoint& io_transport_udp::ensure_destination() const
     return this->destination_;
   return (this->destination_ = this->peer_);
 }
-int io_transport_udp::confgure_remote(const ip::endpoint& peer)
+void io_transport_udp::confgure_remote(const ip::endpoint& peer)
 {
   if (connected_) // connected, update peer is pointless and useless
-    return -1;
+    return;
   this->peer_ = peer;
   if (!yasio__testbits(ctx_->properties_, YCPF_MCAST) || !yasio__testbits(ctx_->properties_, YCM_CLIENT))
     this->connect(); // multicast client, don't bind multicast address for we can recvfrom non-multicast address
-  return 0;
 }
-int io_transport_udp::connect()
+void io_transport_udp::connect()
 {
   if (connected_)
-    return 0;
+    return;
 
   if (this->peer_.af() == AF_UNSPEC)
   {
     if (ctx_->remote_eps_.empty())
-      return -1;
+      return;
     this->peer_ = ctx_->remote_eps_[0];
   }
 
   int retval = this->socket_->connect_n(this->peer_);
   connected_ = (retval == 0);
   set_primitives();
-  return retval;
 }
-int io_transport_udp::disconnect()
+void io_transport_udp::disconnect()
 {
-  const int retval = this->socket_->disconnect();
+#if defined(__linux__)
+  auto ifaddr = this->socket_->local_endpoint();
+#endif
+  int retval = this->socket_->disconnect();
   if (retval == 0)
   {
-    connected_ = false;
-    set_primitives();
+#if defined(__linux__) // Because some of linux will unbind when disconnect succeed, so try to rebind
+    ifaddr.ip(ctx_->local_host_.empty() ? YASIO_ADDR_ANY(ifaddr.af()) : ctx_->local_host_.c_str());
+    this->socket_->bind(ifaddr);
+#endif
   }
-  return retval;
+  connected_ = false;
+  set_primitives();
 }
 int io_transport_udp::write(std::vector<char>&& buffer, completion_cb_t&& handler)
 {
@@ -1547,7 +1569,7 @@ void io_service::config_ares_name_servers()
   {
     int count = 0;
     for (auto ns = name_servers; ns != nullptr; ns = ns->next)
-      if(endpoint{ns->family, &ns->addr, static_cast<u_short>(ns->udp_port)}.format_to(nscsv, endpoint::fmt_default | endpoint::fmt_no_local))
+      if (endpoint{ns->family, &ns->addr, static_cast<u_short>(ns->udp_port)}.format_to(nscsv, endpoint::fmt_default | endpoint::fmt_no_local))
         nscsv.push_back(',');
     if (!nscsv.empty()) // if no valid name server, use predefined fallback dns
       YASIO_KLOGI("[c-ares] use %s dns: %s", what, nscsv.c_str());
@@ -1697,17 +1719,23 @@ transport_handle_t io_service::do_dgram_accept(io_channel* ctx, const ip::endpoi
     https://blog.grijjy.com/2018/08/29/creating-high-performance-udp-servers-on-windows-and-linux
     https://cloud.tencent.com/developer/article/1004555
     So we emulate thus by ourself, don't care the performance, just a workaround implementation.
+
+    Notes:
+      a. for win32: we check exists udp clients by ourself, and only write operation can be
+         perform on transports, the read event still routed by channel.
+      b. for non-win32 multicast: same with win32, because the kernel can't route same udp peer as 1
+         transport when the peer always sendto multicast address.
   */
-  // for win32 or multicast, we check exists udp clients by ourself, and only write operation can be
-  // perform on transports, the read operation still dispatch by channel.
-#if defined(_WIN32) // route on user mode
-  auto it = yasio__find_if(this->transports_, [&peer](const io_transport* transport) {
-    using namespace std;
-    return yasio__testbits(transport->ctx_->properties_, YCM_UDP) && static_cast<const io_transport_udp*>(transport)->remote_endpoint() == peer;
-  });
-  if (it != this->transports_.end())
-    return *it;
-#endif
+  const bool user_route = !YASIO__UDP_KROUTE || yasio__testbits(ctx->properties_, YCPF_MCAST);
+  if (user_route)
+  {
+    auto it = yasio__find_if(this->transports_, [&peer](const io_transport* transport) {
+      using namespace std;
+      return yasio__testbits(transport->ctx_->properties_, YCM_UDP) && static_cast<const io_transport_udp*>(transport)->remote_endpoint() == peer;
+    });
+    if (it != this->transports_.end())
+      return *it;
+  }
 
   auto new_sock = std::make_shared<xxsocket>();
   if (new_sock->open(peer.af(), SOCK_DGRAM))
@@ -1722,11 +1750,10 @@ transport_handle_t io_service::do_dgram_accept(io_channel* ctx, const ip::endpoi
       auto transport = static_cast<io_transport_udp*>(allocate_transport(ctx, std::move(new_sock)));
       // We always establish 4 tuple with clients
       transport->confgure_remote(peer);
-#if defined(_WIN32)
-      notify_connect_succeed(transport);
-#else
-      handle_connect_succeed(transport);
-#endif
+      if (user_route)
+        notify_connect_succeed(transport);
+      else
+        handle_connect_succeed(transport);
       return transport;
     }
   }
@@ -2351,24 +2378,32 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
       }
       break;
     }
+    case YOPT_C_MCAST_IF: {
+      auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
+      if (channel)
+      {
+        const char* ifaddr = va_arg(ap, const char*);
+        if (ifaddr)
+          channel->multiif_.as_in(ifaddr, (unsigned short)0);
+      }
+      break;
+    }
     case YOPT_C_ENABLE_MCAST: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)
       {
         const char* addr = va_arg(ap, const char*);
         int loopback     = va_arg(ap, int);
-        channel->enable_multicast_group(ip::endpoint(addr, 0), loopback);
+        channel->enable_multicast(addr, loopback);
         if (channel->socket_->is_open())
-        { // client join directly
           channel->join_multicast_group();
-        }
       }
       break;
     }
     case YOPT_C_DISABLE_MCAST: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)
-        channel->disable_multicast_group();
+        channel->disable_multicast();
       break;
     }
     case YOPT_C_MOD_FLAGS: {

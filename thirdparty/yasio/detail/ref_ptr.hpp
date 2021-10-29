@@ -1,6 +1,30 @@
-//
-// Copyright (c) 2014-2020 HALX99 - All Rights Reserved
-//
+//////////////////////////////////////////////////////////////////////////////////////////
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
+// client application.
+//////////////////////////////////////////////////////////////////////////////////////////
+/*
+The MIT License (MIT)
+
+Copyright (c) 2012-2021 HALX99
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 #ifndef YASIO__REF_PTR_HPP
 #define YASIO__REF_PTR_HPP
 #include <iostream>
@@ -23,7 +47,7 @@ private:
 
 #define YASIO__SAFE_RELEASE(p)         \
   if (p)                               \
-  (p)->release()
+    (p)->release()
 
 #define YASIO__SAFE_RELEASE_NULL(p)    \
   do                                   \
@@ -37,7 +61,7 @@ private:
 
 #define YASIO__SAFE_RETAIN(p)          \
   if (p)                               \
-  (p)->retain()
+    (p)->retain()
 // clang-format on
 
 namespace yasio
@@ -45,84 +69,87 @@ namespace yasio
 namespace gc
 {
 
-// TEMPLATE CLASS ref_ptr, allow any time with functions 'retain' and 'release'
-template <typename _Ty> class ref_ptr;
+struct own_ref_t {};
 
-template <typename _Ty> class ref_ptr { // wrap an object pointer to ensure destruction
+// TEMPLATE CLASS ref_ptr, allow any time with functions 'retain' and 'release'
+template <typename _Ty>
+class ref_ptr;
+
+template <typename _Ty>
+class ref_ptr { // wrap an object pointer to ensure destruction
 public:
   typedef ref_ptr<_Ty> _Myt;
   typedef _Ty element_type;
 
-  explicit ref_ptr(_Ty* _Ptr = 0) throw() : ptr_(_Ptr)
+  explicit ref_ptr(_Ty* _Ptr = nullptr) throw() : ptr_(_Ptr)
   { // construct from object pointer
   }
 
-  ref_ptr(std::nullptr_t) throw() : ptr_(0) {}
+  ref_ptr(_Ty* _Ptr, own_ref_t) throw() : ptr_(_Ptr)
+  { // construct from object pointer
+    YASIO__SAFE_RETAIN(ptr_);
+  }
+
+  ref_ptr(std::nullptr_t) throw() : ptr_(nullptr) {}
 
   ref_ptr(const _Myt& _Right) throw()
   { // construct by assuming pointer from _Right ref_ptr
-    YASIO__SAFE_RETAIN(_Right.get());
-
     ptr_ = _Right.get();
+    YASIO__SAFE_RETAIN(ptr_);
   }
 
-  template <typename _Other> ref_ptr(const ref_ptr<_Other>& _Right) throw()
+  template <typename _Other>
+  ref_ptr(const ref_ptr<_Other>& _Right) throw()
   { // construct by assuming pointer from _Right
-    YASIO__SAFE_RETAIN(_Right.get());
-
     ptr_ = (_Ty*)_Right.get();
+    YASIO__SAFE_RETAIN(ptr_);
   }
 
-  ref_ptr(_Myt&& _Right) throw()
-  {
-    YASIO__SAFE_RETAIN(_Right.get());
+  ref_ptr(_Myt&& _Right) throw() : ptr_(_Right.release()) {}
 
-    ptr_ = (_Ty*)_Right.get();
-  }
-
-  template <typename _Other> ref_ptr(ref_ptr<_Other>&& _Right) throw()
-  { // construct by assuming pointer from _Right
-    YASIO__SAFE_RETAIN(_Right.get());
-
-    ptr_ = (_Ty*)_Right.get();
-  }
+  template <typename _Other>
+  ref_ptr(ref_ptr<_Other>&& _Right) throw() : ptr_((_Ty*)_Right.release())
+  {}
 
   _Myt& operator=(const _Myt& _Right) throw()
   { // assign compatible _Right (assume pointer)
     if (this == &_Right)
       return *this;
 
-    YASIO__SAFE_RETAIN(_Right.get());
-
     reset(_Right.get());
+    YASIO__SAFE_RETAIN(ptr_);
     return (*this);
   }
 
   _Myt& operator=(_Myt&& _Right) throw()
   { // assign compatible _Right (assume pointer)
-
-    YASIO__SAFE_RETAIN(_Right.get());
-
-    reset(_Right.get());
+    reset(_Right.release());
     return (*this);
   }
 
-  template <typename _Other> _Myt& operator=(const ref_ptr<_Other>& _Right) throw()
+  // release ownership
+  _Ty* release()
+  {
+    auto tmp = ptr_;
+    ptr_     = nullptr;
+    return tmp;
+  }
+
+  template <typename _Other>
+  _Myt& operator=(const ref_ptr<_Other>& _Right) throw()
   { // assign compatible _Right (assume pointer)
     if (this == &_Right)
       return *this;
 
-    YASIO__SAFE_RETAIN(_Right.get());
-
     reset((_Ty*)_Right.get());
+    YASIO__SAFE_RETAIN(ptr_);
     return (*this);
   }
 
-  template <typename _Other> _Myt& operator=(ref_ptr<_Other>&& _Right) throw()
+  template <typename _Other>
+  _Myt& operator=(ref_ptr<_Other>&& _Right) throw()
   { // assign compatible _Right (assume pointer)
-    YASIO__SAFE_RETAIN(_Right.get());
-
-    reset((_Ty*)_Right.get());
+    reset((_Ty*)_Right.release());
     return (*this);
   }
 
@@ -149,14 +176,13 @@ public:
     return (ptr_); // return (get());
   }
 
-  template <typename _Int> _Ty& operator[](_Int index) const throw() { return (ptr_[index]); }
-
-  _Ty* get() const throw()
-  { // return wrapped pointer
-    return (ptr_);
+  template <typename _Int>
+  _Ty& operator[](_Int index) const throw()
+  {
+    return (ptr_[index]);
   }
 
-  _Ty*& get_ref() throw()
+  _Ty* get() const throw()
   { // return wrapped pointer
     return (ptr_);
   }
@@ -169,7 +195,7 @@ public:
   /*
   ** if already have a valid pointer, will call release firstly
   */
-  void reset(_Ty* _Ptr = 0)
+  void reset(_Ty* _Ptr = nullptr)
   { // relese designated object and store new pointer
     if (ptr_ != _Ptr)
     {

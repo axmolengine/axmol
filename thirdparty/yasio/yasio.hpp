@@ -221,8 +221,17 @@ enum
   // params: index:int, flagsToAdd:int, flagsToRemove:int
   YOPT_C_MOD_FLAGS,
 
+  // Sets channel multicast interface, required on BSD-like system
+  // params: index:int, multi_ifaddr:const char*
+  // remarks:
+  //   a. On BSD-like(APPLE, etc...) system: ipv6 addr must be "::1%lo0" or "::%en0"
+  YOPT_C_MCAST_IF,
+
   // Enable channel multicast mode
-  // params: index:int, multi_addr:const char*, loopback:int
+  // params: index:int, multi_addr:const char*, loopback:int,
+  // remarks:
+  //   a. On BSD-like(APPLE, etc...) system: ipv6 addr must be: "ff02::1%lo0" or "ff02::1%en0"
+  // refer to: https://www.tldp.org/HOWTO/Multicast-HOWTO-2.html
   YOPT_C_ENABLE_MCAST,
 
   // Disable channel multicast mode
@@ -494,7 +503,7 @@ class YASIO_API io_channel : public io_base {
   friend class io_transport_kcp;
 
 public:
-  io_service& get_service() { return service_; }
+  io_service& get_service() const { return service_; }
   int index() const { return index_; }
   u_short remote_port() const { return remote_port_; }
   YASIO__DECL std::string format_destination() const;
@@ -506,10 +515,12 @@ public:
   highp_timer& get_user_timer() { return this->user_timer_; }
 #endif
 protected:
-  YASIO__DECL void enable_multicast_group(const ip::endpoint& ep, int loopback);
-  YASIO__DECL int join_multicast_group();
-  YASIO__DECL void disable_multicast_group();
+  YASIO__DECL void enable_multicast(const char* addr, int loopback);
+  YASIO__DECL void disable_multicast();
+  YASIO__DECL void join_multicast_group();
   YASIO__DECL int configure_multicast_group(bool onoff);
+  // For log macro only
+  YASIO__DECL const print_fn2_t& __get_cprint() const;
 
 private:
   YASIO__DECL io_channel(io_service& service, int index);
@@ -589,7 +600,7 @@ private:
   std::string remote_host_;
   std::vector<ip::endpoint> remote_eps_;
 
-  ip::endpoint multiaddr_;
+  ip::endpoint multiaddr_, multiif_;
 
   // Current it's only for UDP
   std::vector<char> buffer_;
@@ -745,8 +756,8 @@ public:
   YASIO__DECL ip::endpoint remote_endpoint() const override;
 
 protected:
-  YASIO__DECL int connect();
-  YASIO__DECL int disconnect();
+  YASIO__DECL void connect();
+  YASIO__DECL void disconnect();
 
   YASIO__DECL int write(std::vector<char>&&, completion_cb_t&&) override;
   YASIO__DECL int write_to(std::vector<char>&&, const ip::endpoint&, completion_cb_t&&) override;
@@ -757,7 +768,7 @@ protected:
   YASIO__DECL const ip::endpoint& ensure_destination() const;
 
   // configure remote with specific endpoint
-  YASIO__DECL int confgure_remote(const ip::endpoint& peer);
+  YASIO__DECL void confgure_remote(const ip::endpoint& peer);
 
   // process received data from low level
   YASIO__DECL virtual int handle_input(const char* buf, int bytes_transferred, int& error, highp_time_t& wait_duration);

@@ -1,7 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
-//
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
@@ -208,9 +207,9 @@ public:
     fmt_default    = fmt_no_port_0 | fmt_no_un_path,
   };
 #if defined(YASIO_ENABLE_UDS) && YASIO__HAS_UDS
-  static const size_t max_fmt_len = (std::max)(sizeof("65535") + IN_MAX_ADDRSTRLEN + 2, sizeof(sockaddr_un::sun_path));
+  static const size_t max_fmt_len = (std::max)(IN_MAX_ADDRSTRLEN + 2 /*[]*/ + sizeof("65535") /*:port*/, sizeof(sockaddr_un::sun_path));
 #else
-  static const size_t max_fmt_len = IN_MAX_ADDRSTRLEN + sizeof("65535") + 2;
+  static const size_t max_fmt_len = IN_MAX_ADDRSTRLEN + 2 /*[]*/ + sizeof("65535") /*:port*/;
 #endif
 
   endpoint() { this->zeroset(); }
@@ -259,15 +258,15 @@ public:
    */
   endpoint& as_is(const char* str_ep)
   {
-    char addr[AF_INET6 + 1] = {0};
+    char addr_part[IN_MAX_ADDRSTRLEN];
     if (str_ep[0] == '[')
     { // ipv6
-      ++str_ep;
-      auto rbracket = strchr(str_ep, ']');
+      const char* ip = str_ep + 1;
+      auto rbracket  = strchr(ip, ']');
       if (rbracket && rbracket[1] == ':')
       {
-        memcpy(addr, str_ep, rbracket - str_ep);
-        as_in6(addr, atoi(rbracket + 2));
+        auto zone_value = parse_in6_zone(ip, addr_part, sizeof(addr_part), rbracket);
+        as_in6(ip, atoi(rbracket + 2), zone_value);
       }
     }
     else
@@ -275,8 +274,10 @@ public:
       auto colon = strchr(str_ep, ':');
       if (colon)
       {
-        memcpy(addr, str_ep, colon - str_ep);
-        as_in4(addr, atoi(colon + 1));
+        auto n = colon - str_ep;
+        memcpy(addr_part, str_ep, n);
+        addr_part[n] = '\0';
+        as_in4(addr_part, atoi(colon + 1));
       }
     }
     return *this;
@@ -299,33 +300,36 @@ public:
     }
     return *this;
   }
-  endpoint& as_in(const char* addr, unsigned short port)
+  endpoint& as_in(const char* ip, unsigned short port)
   {
     this->zeroset();
 
-    if (strchr(addr, ':'))
+    if (strchr(ip, ':'))
     { // ipv6
-      as_in6(addr, port);
+      char addr_part[IN_MAX_ADDRSTRLEN];
+      auto zone_value = parse_in6_zone(ip, addr_part, sizeof(addr_part), nullptr);
+      as_in6(ip, port, zone_value);
     }
     else
     { // ipv4
-      as_in4(addr, port);
+      as_in4(ip, port);
     }
 
     return *this;
   }
-  void as_in6(const char* addr, unsigned short port)
+  void as_in6(const char* ip, unsigned short port, unsigned int scope_id)
   {
-    if (compat::inet_pton(AF_INET6, addr, &this->in6_.sin6_addr) == 1)
+    if (compat::inet_pton(AF_INET6, ip, &this->in6_.sin6_addr) == 1)
     {
-      this->in6_.sin6_family = AF_INET6;
-      this->in6_.sin6_port   = host_to_network(port);
+      this->in6_.sin6_family   = AF_INET6;
+      this->in6_.sin6_port     = host_to_network(port);
+      this->in6_.sin6_scope_id = scope_id;
       this->len(sizeof(sockaddr_in6));
     }
   }
-  void as_in4(const char* addr, unsigned short port)
+  void as_in4(const char* ip, unsigned short port)
   {
-    if (compat::inet_pton(AF_INET, addr, &this->in4_.sin_addr) == 1)
+    if (compat::inet_pton(AF_INET, ip, &this->in4_.sin_addr) == 1)
     {
       this->in4_.sin_family = AF_INET;
       this->in4_.sin_port   = host_to_network(port);
@@ -398,6 +402,14 @@ public:
   unsigned short port() const { return network_to_host(in4_.sin_port); }
   void port(unsigned short value) { in4_.sin_port = host_to_network(value); }
 
+  // for ipv6 only
+  unsigned int scope_id() const { return af() == AF_INET6 ? static_cast<unsigned int>(this->in6_.sin6_scope_id) : 0u; }
+  void scope_id(unsigned int v)
+  {
+    if (af() == AF_INET6)
+      this->in6_.sin6_scope_id = v;
+  }
+
   void addr_v4(uint32_t addr)
   {
     this->af(AF_INET);
@@ -439,8 +451,8 @@ public:
   // format to buffer
   size_t format_to(std::string& buf, int flags = 0) const
   {
-    char str[endpoint::max_fmt_len + 1] = {0};
-    size_t n                            = this->format_to(str, endpoint::max_fmt_len, flags);
+    char str[endpoint::max_fmt_len];
+    size_t n = this->format_to(str, endpoint::max_fmt_len, flags);
     if (n > 0)
     {
       buf.append(str, n);
@@ -453,7 +465,7 @@ public:
    *
    * @params:
    *    buf: the buffer to output
-   *    buf_len: the buffer len, must be at least endpoint::max_fmt_len + 1
+   *    buf_len: the buffer len, must be at least endpoint::max_fmt_len
    * @returns:
    *    the number of character written to the buf without null-termianted charactor
    *
@@ -548,6 +560,32 @@ public:
 #if !YASIO__HAS_SA_LEN
   uint8_t len_;
 #endif
+
+private:
+  unsigned int parse_in6_zone(const char*& ip, char* addr_part, size_t addr_part_maxn, const char* endptr)
+  {
+    unsigned int zone_value = 0;
+    auto zoneptr            = strchr(ip, '%');
+    if (zoneptr)
+    {
+
+#if defined(_WIN32)
+      zone_value = atoi(zoneptr + 1);
+#else
+      zone_value = ::if_nametoindex(zoneptr + 1);
+#endif
+      endptr = zoneptr;
+    }
+
+    if (endptr)
+    {
+      size_t n = (std::min)(static_cast<size_t>(endptr - ip), addr_part_maxn - 1);
+      memcpy(addr_part, ip, n);
+      addr_part[n] = '\0';
+      ip           = addr_part;
+    }
+    return zone_value;
+  }
 };
 
 // supported internet protocol flags
