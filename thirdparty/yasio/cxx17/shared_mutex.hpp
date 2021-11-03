@@ -11,12 +11,13 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 // see also: https://github.com/boostorg/thread/blob/develop/include/boost/thread/v2/shared_mutex.hpp
-// 
+//
 
 #ifndef YASIO__SHARED_MUTEX_HPP
 #define YASIO__SHARED_MUTEX_HPP
 
 #include "yasio/compiler/feature_test.hpp"
+#include <limits.h>
 
 /// The shared_mutex workaround on c++11
 #if YASIO__HAS_CXX17 && !defined(__APPLE__)
