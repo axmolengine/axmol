@@ -776,18 +776,19 @@ void io_transport_kcp::check_timeout(highp_time_t& wait_duration) const
 void io_service::init_globals(const yasio::inet::print_fn2_t& prt) { yasio__shared_globals(prt).cprint_ = prt; }
 void io_service::cleanup_globals() { yasio__shared_globals().cprint_ = nullptr; }
 unsigned int io_service::tcp_rtt(transport_handle_t transport) { return transport->is_open() ? transport->socket_->tcp_rtt() : 0; }
-io_service::io_service() { this->init(nullptr, 1); }
-io_service::io_service(int channel_count) { this->init(nullptr, channel_count); }
-io_service::io_service(const io_hostent& channel_ep) { this->init(&channel_ep, 1); }
+io_service::io_service() { this->initialize(nullptr, 1); }
+io_service::io_service(int channel_count) { this->initialize(nullptr, channel_count); }
+io_service::io_service(const io_hostent& channel_ep) { this->initialize(&channel_ep, 1); }
 io_service::io_service(const std::vector<io_hostent>& channel_eps)
 {
-  this->init(!channel_eps.empty() ? channel_eps.data() : nullptr, static_cast<int>(channel_eps.size()));
+  this->initialize(!channel_eps.empty() ? channel_eps.data() : nullptr, static_cast<int>(channel_eps.size()));
 }
-io_service::io_service(const io_hostent* channel_eps, int channel_count) { this->init(channel_eps, channel_count); }
+io_service::io_service(const io_hostent* channel_eps, int channel_count) { this->initialize(channel_eps, channel_count); }
 io_service::~io_service()
 {
-  this->stop();
-  this->cleanup();
+  if (this->is_stopping()) // still in stopping
+    this->handle_stop();
+  this->finalize();
 }
 void io_service::start(event_cb_t cb)
 {
@@ -819,31 +820,33 @@ void io_service::stop()
   if (this->state_ == io_service::state::RUNNING)
   {
     this->state_ = io_service::state::STOPPING;
+    for (auto c : channels_)
+      this->close(c->index());
     this->interrupt();
-    this->join();
+    this->handle_stop();
   }
   else if (this->state_ == io_service::state::STOPPING)
-    this->join();
-}
-void io_service::join()
-{
-  if (this->worker_.joinable())
-  {
-    if (std::this_thread::get_id() != this->worker_id_)
-    {
-      this->worker_.join();
-      handle_stop();
-    }
-    else
-      xxsocket::set_last_errno(EAGAIN);
-  }
+    this->handle_stop();
 }
 void io_service::handle_stop()
 {
+  if (this->worker_.joinable())
+  {
+    if (std::this_thread::get_id() == this->worker_id_)
+    {
+      xxsocket::set_last_errno(EAGAIN);
+      return;
+    }
+    this->worker_.join();
+  }
+
+  if (this->options_.deferred_event_ && !this->events_.empty())
+    this->dispatch((std::numeric_limits<int>::max)());
   clear_transports();
+  this->timer_queue_.clear();
   this->state_ = io_service::state::IDLE;
 }
-void io_service::init(const io_hostent* channel_eps, int channel_count)
+void io_service::initialize(const io_hostent* channel_eps, int channel_count)
 {
   // at least one channel
   if (channel_count < 1)
@@ -866,7 +869,7 @@ void io_service::init(const io_hostent* channel_eps, int channel_count)
 #endif
   this->state_ = io_service::state::IDLE;
 }
-void io_service::cleanup()
+void io_service::finalize()
 {
   if (this->state_ == io_service::state::IDLE)
   {
@@ -875,9 +878,7 @@ void io_service::cleanup()
     life_token_.reset();
 #endif
 
-    clear_channels();
-    this->events_.clear();
-    this->timer_queue_.clear();
+    destroy_channels();
 
     unregister_descriptor(interrupter_.read_descriptor(), YEM_POLLIN);
 
@@ -902,7 +903,7 @@ void io_service::create_channels(const io_hostent* channel_eps, int channel_coun
     channels_.push_back(channel);
   }
 }
-void io_service::clear_channels()
+void io_service::destroy_channels()
 {
   this->channel_ops_.clear();
   for (auto channel : channels_)
@@ -945,23 +946,20 @@ void io_service::run()
   // The core event loop
   fd_set fds_array[max_ops];
   this->wait_duration_ = YASIO_MAX_WAIT_DURATION;
-  for (; this->state_ == io_service::state::RUNNING;)
+  do
   {
     auto wait_duration   = get_timeout(this->wait_duration_); // Gets current wait duration
     this->wait_duration_ = YASIO_MAX_WAIT_DURATION;           // Reset next wait duration
     if (wait_duration > 0)
     {
       int retval = do_select(fds_array, wait_duration);
-      if (this->state_ != io_service::state::RUNNING)
-        break;
-
       if (retval < 0)
       {
         int ec = xxsocket::get_last_errno();
         YASIO_KLOGI("[core] do_select failed, ec=%d, detail:%s\n", ec, io_service::strerror(ec));
         if (ec != EBADF)
           continue; // Try again.
-        goto _L_end;
+        break;
       }
 
       if (retval == 0)
@@ -979,18 +977,16 @@ void io_service::run()
     process_ares_requests(fds_array);
 #endif
 
-    // process active transports
-    process_transports(fds_array);
-
     // process active channels
     process_channels(fds_array);
 
+    // process active transports
+    process_transports(fds_array);
+
     // process timeout timers
     process_timers();
-  }
+  } while (this->state_ == io_service::state::RUNNING || !this->transports_.empty());
 
-_L_end:
-  (void)0; // ONLY for xcode compiler happy.
 #if defined(YASIO_HAVE_CARES)
   destroy_ares_channel();
 #endif

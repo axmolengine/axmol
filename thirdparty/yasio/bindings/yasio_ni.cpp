@@ -46,7 +46,8 @@ using namespace yasio;
 
 namespace
 {
-template <typename _CStr, typename _Fn> inline void fast_split(_CStr s, size_t slen, typename std::remove_pointer<_CStr>::type delim, _Fn func)
+template <typename _CStr, typename _Fn>
+inline void fast_split(_CStr s, size_t slen, typename std::remove_pointer<_CStr>::type delim, _Fn func)
 {
   auto _Start = s; // the start of every string
   auto _Ptr   = s; // source string iterator
@@ -160,11 +161,15 @@ YASIO_NI_API void yasio_set_option(void* service_ptr, int opt, const char* pszAr
 
   switch (opt)
   {
+    case YOPT_S_DNS_LIST:
+      service->set_option(opt, svtoa(args[1]));
+      break;
+    case YOPT_C_MCAST_IF:
     case YOPT_C_REMOTE_HOST:
     case YOPT_C_LOCAL_HOST:
       service->set_option(opt, svtoi(args[0]), svtoa(args[1]));
       break;
-    case YOPT_C_LFBFD_IBTS:
+    case YOPT_C_UNPACK_STRIP:
     case YOPT_C_LOCAL_PORT:
     case YOPT_C_REMOTE_PORT:
     case YOPT_C_KCP_CONV:
@@ -181,7 +186,7 @@ YASIO_NI_API void yasio_set_option(void* service_ptr, int opt, const char* pszAr
     case YOPT_S_TCP_KEEPALIVE:
       service->set_option(opt, svtoi(args[0]), svtoi(args[1]), svtoi(args[2]), svtoi(args[3]));
       break;
-    case YOPT_C_LFBFD_PARAMS:
+    case YOPT_C_UNPACK_PARAMS:
       service->set_option(opt, svtoi(args[0]), svtoi(args[1]), svtoi(args[2]), svtoi(args[3]), svtoi(args[4]));
       break;
     default:

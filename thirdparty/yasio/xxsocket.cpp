@@ -446,7 +446,7 @@ bool xxsocket::accept_ex(SOCKET sockfd_listened, SOCKET sockfd_prepared, PVOID l
 bool xxsocket::connect_ex(SOCKET s, const struct sockaddr* name, int namelen, PVOID lpSendBuffer, DWORD dwSendDataLength, LPDWORD lpdwBytesSent,
                           LPOVERLAPPED lpOverlapped)
 {
-  return __connect_ex(s, name, namelen, lpSendBuffer, dwSendDataLength, lpdwBytesSent, lpOverlapped);
+  return !!__connect_ex(s, name, namelen, lpSendBuffer, dwSendDataLength, lpdwBytesSent, lpOverlapped);
 }
 
 void xxsocket::translate_sockaddrs(PVOID lpOutputBuffer, DWORD dwReceiveDataLength, DWORD dwLocalAddressLength, DWORD dwRemoteAddressLength,
