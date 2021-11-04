@@ -105,28 +105,23 @@ SOFTWARE.
 #endif
 
 // Tests whether current OS is BSD-like system
-#if YASIO__HAS_CXX17
-#  if defined(__unix__) || __has_include(<sys/param.h>)
-#    include <sys/param.h>
+#if !defined(_WIN32) && !defined(__linux__)
+#  include <sys/param.h>
+#  if defined(BSD) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__)
+#    define YASIO__OS_BSD 1
+#  else
+#    define YASIO__OS_BSD 0
 #  endif
-#endif
-
-#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__) || defined(BSD)
-#  define YASIO__OS_BSD 1
 #else
 #  define YASIO__OS_BSD 0
 #endif
 
 // Test whether sockaddr has member 'sa_len'
 // see also: https://github.com/freebsd/freebsd-src/blob/main/sys/sys/socket.h#L329
-#if defined(__linux__) || defined(_WIN32)
-#  define YASIO__HAS_SA_LEN 0
+#if YASIO__OS_BSD
+#  define YASIO__HAS_SA_LEN 1
 #else
-#  if defined(__unix__) || defined(__APPLE__)
-#    define YASIO__HAS_SA_LEN 1
-#  else
-#    define YASIO__HAS_SA_LEN 0
-#  endif
+#  define YASIO__HAS_SA_LEN 0
 #endif
 
 #if !defined(_WIN32) || defined(NTDDI_VISTA)
