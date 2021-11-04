@@ -611,12 +611,12 @@ int xxsocket::disconnect(socket_native_type s)
       continue;
 #  if YASIO__OS_BSD
     /*
-     * From kernel source code of FreeBSD,NetBSD,OpenBSD,
-     * udp will success disconnect by kernel function: `sodisconnect(upic_socket.c)`, then in the kernel, will continue try to
+     * From kernel source code of FreeBSD,NetBSD,OpenBSD,etc.
+     * The udp socket will be success disconnected by kernel function: `sodisconnect(upic_socket.c)`, then in the kernel, will continue try to
      * connect with new sockaddr, but will failed with follow errno:
      * a. EINVAL: addrlen mismatch
      * b. ENOSUPPORT: family mismatch
-     * We just simply ignore them for us disconnect behavior
+     * So, we just simply ignore them for the disconnect behavior.
      */
     return (error == EAFNOSUPPORT || error == EINVAL) ? 0 : -1;
 #  else
