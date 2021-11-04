@@ -167,19 +167,11 @@ void ScrollView::setInnerContainerSize(const Vec2 &size)
     float innerSizeWidth = _contentSize.width;
     float innerSizeHeight = _contentSize.height;
     Vec2 originalInnerSize = _innerContainer->getContentSize();
-    if (size.width < _contentSize.width)
-    {
-        CCLOG("Inner width <= scrollview width, it will be force sized!");
-    }
-    else
+    if (size.width >= innerSizeWidth)
     {
         innerSizeWidth = size.width;
     }
-    if (size.height < _contentSize.height)
-    {
-        CCLOG("Inner height <= scrollview height, it will be force sized!");
-    }
-    else
+    if (size.height >= innerSizeHeight)
     {
         innerSizeHeight = size.height;
     }
@@ -213,6 +205,14 @@ void ScrollView::setInnerContainerSize(const Vec2 &size)
             pos.y = _contentSize.height - (1.0f - _innerContainer->getAnchorPoint().y) * _innerContainer->getContentSize().height;
         }
     }
+    // In the vertical direction, if the _innerContainer initially contains content larger than _contentSize.height,
+    // this will result in bottom alignment.Obviously this is not what I want,
+    // so here is the rule : when the height of _innerContainer and _contentSize are equal,
+    // if the position of _innerContainer needs to be changed at this point,align _innerContainer to the top.
+    if (Direction::VERTICAL == _direction && originalInnerSize.height == _contentSize.height) {
+        pos.y = _contentSize.height - innerSizeHeight;
+    }
+
     setInnerContainerPosition(pos);
     
     updateScrollBar(Vec2::ZERO);
