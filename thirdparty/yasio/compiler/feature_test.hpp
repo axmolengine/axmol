@@ -104,6 +104,19 @@ SOFTWARE.
 #  define YASIO__UDP_KROUTE 1
 #endif
 
+// Tests whether current OS is BSD-like system
+#if YASIO__HAS_CXX17
+#  if defined(__unix__) || __has_include(<sys/param.h>)
+#    include <sys/param.h>
+#  endif
+#endif
+
+#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__) || defined(BSD)
+#  define YASIO__OS_BSD 1
+#else
+#  define YASIO__OS_BSD 0
+#endif
+
 // Test whether sockaddr has member 'sa_len'
 // see also: https://github.com/freebsd/freebsd-src/blob/main/sys/sys/socket.h#L329
 #if defined(__linux__) || defined(_WIN32)
@@ -165,6 +178,14 @@ SOFTWARE.
 #  define yasio__likely(exp) (!!(exp))
 #  define yasio__unlikely(exp) (!!(exp))
 #endif
+
+#ifdef __GNUC__
+#  define YASIO__UNUSED __attribute__((unused))
+#else
+#  define YASIO__UNUSED
+#endif
+
+#define YASIO__UNUSED_PARAM(param) (void)param
 
 #define YASIO__STD ::std::
 
