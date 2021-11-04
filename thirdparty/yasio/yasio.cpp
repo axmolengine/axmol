@@ -639,13 +639,15 @@ void io_transport_udp::disconnect()
   auto ifaddr = this->socket_->local_endpoint();
 #endif
   int retval = this->socket_->disconnect();
+#if defined(__linux__)
   if (retval == 0)
-  {
-#if defined(__linux__) // Because some of linux will unbind when disconnect succeed, so try to rebind
+  { // Because some of linux will unbind when disconnect succeed, so try to rebind
     ifaddr.ip(ctx_->local_host_.empty() ? YASIO_ADDR_ANY(ifaddr.af()) : ctx_->local_host_.c_str());
     this->socket_->bind(ifaddr);
-#endif
   }
+#else
+  YASIO__UNUSED_PARAM(retval);
+#endif
   connected_ = false;
   set_primitives();
 }
@@ -2168,9 +2170,9 @@ void io_service::start_resolve(io_channel* ctx)
 #else
   ares_addrinfo_hints hint;
   memset(&hint, 0x0, sizeof(hint));
-  hint.ai_family = local_address_family();
+  hint.ai_family             = local_address_family();
   char sport[sizeof "65535"] = {'\0'};
-  const char* service = nullptr;
+  const char* service        = nullptr;
   if (ctx->remote_port_ > 0)
   {
     sprintf(sport, "%u", ctx->remote_port_); // It's enough for unsigned short, so use sprintf ok.

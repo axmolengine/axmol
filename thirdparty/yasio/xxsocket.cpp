@@ -596,22 +596,32 @@ int xxsocket::connect_n(socket_native_type s, const endpoint& ep)
 int xxsocket::disconnect() const { return xxsocket::disconnect(this->fd); }
 int xxsocket::disconnect(socket_native_type s)
 {
-  ip::endpoint addr_unspec = xxsocket::local_endpoint(s);
-  auto addr_len            = addr_unspec.len();
-  addr_unspec.zeroset();
-  addr_unspec.af(AF_UNSPEC);
+  sockaddr addr_unspec{0};
+  addr_unspec.sa_family = AF_UNSPEC;
 #if defined(_WIN32)
-  return ::connect(s, &addr_unspec, addr_len);
+  return ::connect(s, &addr_unspec, sizeof(addr_unspec));
 #else
   int ret, error;
   for (;;)
   {
-    ret = ::connect(s, &addr_unspec, addr_len);
+    ret = ::connect(s, &addr_unspec, sizeof(addr_unspec));
     if (ret == 0)
       return 0;
     if ((error = xxsocket::get_last_errno()) == EINTR)
       continue;
-    return error == EAFNOSUPPORT ? 0 : -1;
+#  if YASIO__OS_BSD
+    /*
+     * From kernel source code of FreeBSD,NetBSD,OpenBSD,etc.
+     * The udp socket will be success disconnected by kernel function: `sodisconnect(upic_socket.c)`, then in the kernel, will continue try to
+     * connect with new sockaddr, but will failed with follow errno:
+     * a. EINVAL: addrlen mismatch
+     * b. ENOSUPPORT: family mismatch
+     * So, we just simply ignore them for the disconnect behavior.
+     */
+    return (error == EAFNOSUPPORT || error == EINVAL) ? 0 : -1;
+#  else
+    return ret;
+#  endif
   }
 #endif
 }
