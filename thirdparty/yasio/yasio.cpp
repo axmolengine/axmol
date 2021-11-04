@@ -1477,7 +1477,7 @@ void io_service::do_ssl_handshake(io_channel* ctx)
 }
 #endif
 #if defined(YASIO_HAVE_CARES)
-void io_service::ares_getaddrinfo_cb(void* arg, int status, int timeouts, ares_addrinfo* answerlist)
+void io_service::ares_getaddrinfo_cb(void* arg, int status, int /*timeouts*/, ares_addrinfo* answerlist)
 {
   auto ctx              = (io_channel*)arg;
   auto& current_service = ctx->get_service();
@@ -1565,7 +1565,6 @@ void io_service::config_ares_name_servers()
   int status = ::ares_get_servers_ports(ares_, &name_servers);
   if (status == ARES_SUCCESS)
   {
-    int count = 0;
     for (auto ns = name_servers; ns != nullptr; ns = ns->next)
       if (endpoint{ns->family, &ns->addr, static_cast<u_short>(ns->udp_port)}.format_to(nscsv, endpoint::fmt_default | endpoint::fmt_no_local))
         nscsv.push_back(',');
@@ -1792,6 +1791,7 @@ void io_service::notify_connect_succeed(transport_handle_t t)
   auto ctx = t->ctx_;
   auto& s  = t->socket_;
   this->transports_.push_back(t);
+  YASIO__UNUSED_PARAM(s);
   YASIO_KLOGV("[index: %d] sndbuf=%d, rcvbuf=%d", ctx->index_, s->get_optval<int>(SOL_SOCKET, SO_SNDBUF), s->get_optval<int>(SOL_SOCKET, SO_RCVBUF));
   YASIO_KLOGD("[index: %d] the connection #%u(%p) <%s> --> <%s> is established.", ctx->index_, t->id_, t, t->local_endpoint().to_string().c_str(),
               t->remote_endpoint().to_string().c_str());

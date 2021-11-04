@@ -286,8 +286,6 @@ int xxsocket::getipsv(void)
 
 void xxsocket::traverse_local_address(std::function<bool(const ip::endpoint&)> handler)
 {
-  int family = AF_UNSPEC;
-  bool done  = false;
   /* Only windows support use getaddrinfo to get local ip address(not loopback or linklocal),
     Because nullptr same as "localhost": always return loopback address and at unix/linux the
     gethostname always return "localhost"
@@ -596,11 +594,12 @@ int xxsocket::connect_n(socket_native_type s, const endpoint& ep)
 int xxsocket::disconnect() const { return xxsocket::disconnect(this->fd); }
 int xxsocket::disconnect(socket_native_type s)
 {
+#if defined(_WIN32)
+  sockaddr_storage addr_unspec{0};
+  return ::connect(s, (sockaddr*)&addr_unspec, sizeof(addr_unspec));
+#else
   sockaddr addr_unspec{0};
   addr_unspec.sa_family = AF_UNSPEC;
-#if defined(_WIN32)
-  return ::connect(s, &addr_unspec, sizeof(addr_unspec));
-#else
   int ret, error;
   for (;;)
   {
@@ -615,7 +614,7 @@ int xxsocket::disconnect(socket_native_type s)
      * The udp socket will be success disconnected by kernel function: `sodisconnect(upic_socket.c)`, then in the kernel, will continue try to
      * connect with new sockaddr, but will failed with follow errno:
      * a. EINVAL: addrlen mismatch
-     * b. ENOSUPPORT: family mismatch
+     * b. EAFNOSUPPORT: family mismatch
      * So, we just simply ignore them for the disconnect behavior.
      */
     return (error == EAFNOSUPPORT || error == EINVAL) ? 0 : -1;
