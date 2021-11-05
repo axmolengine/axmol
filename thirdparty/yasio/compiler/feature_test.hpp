@@ -104,21 +104,21 @@ SOFTWARE.
 #  define YASIO__UDP_KROUTE 1
 #endif
 
-// Tests whether current OS is BSD-like system
+// Tests whether current OS is BSD-like system for process common BSD socket behaviors
 #if !defined(_WIN32) && !defined(__linux__)
 #  include <sys/param.h>
 #  if defined(BSD) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__)
-#    define YASIO__OS_BSD 1
+#    define YASIO__OS_BSD_LIKE 1
 #  else
-#    define YASIO__OS_BSD 0
+#    define YASIO__OS_BSD_LIKE 0
 #  endif
 #else
-#  define YASIO__OS_BSD 0
+#  define YASIO__OS_BSD_LIKE 0
 #endif
 
 // Test whether sockaddr has member 'sa_len'
 // see also: https://github.com/freebsd/freebsd-src/blob/main/sys/sys/socket.h#L329
-#if YASIO__OS_BSD
+#if YASIO__OS_BSD_LIKE
 #  define YASIO__HAS_SA_LEN 1
 #else
 #  define YASIO__HAS_SA_LEN 0

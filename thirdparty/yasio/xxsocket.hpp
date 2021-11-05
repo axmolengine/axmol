@@ -1003,7 +1003,7 @@ public:
    ** @params:
    **        non
    **
-   ** @returns: [0] succeed, otherwise, a value of SOCKET_ERROR is returned.
+   ** @returns: > 0 succeed, 0 failed.
    */
   YASIO__DECL unsigned int tcp_rtt() const;
   YASIO__DECL static unsigned int tcp_rtt(socket_native_type s);

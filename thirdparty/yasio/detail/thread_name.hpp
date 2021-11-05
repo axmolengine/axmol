@@ -34,6 +34,9 @@ SOFTWARE.
 #  include <Windows.h>
 #else
 #  include <thread>
+#  if defined(__FreeBSD__) || defined(__OpenBSD__)
+#    include <pthread_np.h> // For pthread_getthreadid_np() / pthread_set_name_np()
+#  endif
 #endif
 
 #if defined(_WIN32)
@@ -62,12 +65,18 @@ static void yasio__set_thread_name(const char* threadName)
   {}
 #  endif
 }
+#elif defined(__linux__)
+#  if (defined(__GLIBC__) && defined(_GNU_SOURCE)) || defined(__ANDROID__)
+#    define yasio__set_thread_name(name) pthread_setname_np(pthread_self(), name)
+#  else
+#    define yasio__set_thread_name(name)
+#  endif
 #elif defined(__APPLE__)
 #  define yasio__set_thread_name(name) pthread_setname_np(name)
-#elif defined(__linux__) && (defined(__GLIBC__) && ((__GLIBC__ > 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 12))))
-// These functions first appeared in glibc in version 2.12.
-// see: http://man7.org/linux/man-pages/man3/pthread_setname_np.3.html
-#  define yasio__set_thread_name(name) pthread_setname_np(pthread_self(), name)
+#elif defined(__FreeBSD__) || defined(__OpenBSD__)
+#  define yasio__set_thread_name(name) pthread_set_name_np(pthread_self(), name)
+#elif defined(__NetBSD__)
+#  define yasio__set_thread_name(name) pthread_setname_np(pthread_self(), "%s", (void*)name);
 #else
 #  define yasio__set_thread_name(name)
 #endif

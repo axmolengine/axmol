@@ -325,7 +325,7 @@ void xxsocket::traverse_local_address(std::function<bool(const ip::endpoint&)> h
   {
     errmsg = xxsocket::gai_strerror(iret);
   }
-#else // __APPLE__ or linux with <ifaddrs.h>
+#else // unix like systems with <ifaddrs.h>
   struct ifaddrs *ifaddr, *ifa;
   /*
   The value of ifa->ifa_name:
@@ -608,7 +608,7 @@ int xxsocket::disconnect(socket_native_type s)
       return 0;
     if ((error = xxsocket::get_last_errno()) == EINTR)
       continue;
-#  if YASIO__OS_BSD
+#  if YASIO__OS_BSD_LIKE
     /*
      * From kernel source code of FreeBSD,NetBSD,OpenBSD,etc.
      * The udp socket will be success disconnected by kernel function: `sodisconnect(upic_socket.c)`, then in the kernel, will continue try to
@@ -894,14 +894,12 @@ unsigned int xxsocket::tcp_rtt(socket_native_type s)
   if (status == 0)
     return info.RttUs;
 #  endif
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__FreeBSD__) || defined(__NetBSD__)
   struct tcp_info info;
-  int length = sizeof(struct tcp_info);
   if (0 == xxsocket::get_optval(s, IPPROTO_TCP, TCP_INFO, info))
     return info.tcpi_rtt;
 #elif defined(__APPLE__)
   struct tcp_connection_info info;
-  int length = sizeof(struct tcp_connection_info);
   /*
   info.tcpi_srtt: average RTT in ms
   info.tcpi_rttcur: most recent RTT in ms
