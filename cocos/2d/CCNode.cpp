@@ -725,11 +725,14 @@ NodeIndexerMap_t* Node::getParentChildrenIndexer()
     if (!_director->isChildrenIndexerEnabled())
         return nullptr;
     auto parent = getParent();
-
-    NodeIndexerMap_t* indexer = nullptr;
-    if (parent && !parent->_childrenIndexer)
-        indexer = parent->_childrenIndexer = new NodeIndexerMap_t();
-    return indexer;
+    if (parent)
+    {
+        auto& indexer = parent->_childrenIndexer;
+        if (!indexer)
+            indexer = new NodeIndexerMap_t();
+        return indexer;
+    }
+    return nullptr;
 }
 
 /// userData setter
