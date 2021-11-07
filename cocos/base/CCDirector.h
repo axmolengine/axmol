@@ -4,8 +4,9 @@
  Copyright (c) 2011      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -502,6 +503,9 @@ public:
      */
     const std::thread::id& getCocos2dThreadId() const { return _cocos2d_thread_id; }
 
+    void setChildrenIndexerEnabled(bool enable) { _childrenIndexerEnabled = enable; }
+    bool isChildrenIndexerEnabled() const { return _childrenIndexerEnabled; }
+
     /**
      * returns whether or not the Director is in a valid state
      */
@@ -638,11 +642,13 @@ protected:
 
     bool _isStatusLabelUpdated = true;
 
-    /* cocos2d thread id */
-    std::thread::id _cocos2d_thread_id;
-
     /* whether or not the director is in a valid state */
     bool _invalid = false;
+
+    bool _childrenIndexerEnabled = false;
+
+    /* cocos2d thread id */
+    std::thread::id _cocos2d_thread_id;
 
     // GLView will recreate stats labels to fit visible rect
     friend class GLView;
