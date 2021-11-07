@@ -44,10 +44,8 @@ SOFTWARE.
 #      define FALSE 0
 #    endif
 #  endif
-#  if !defined(_WINSTORE)
-#    include <Mswsock.h>
-#    include <Mstcpip.h>
-#  endif
+#  include <Mswsock.h>
+#  include <Mstcpip.h>
 #  include <Ws2tcpip.h>
 #  if defined(YASIO_NT_COMPAT_GAI)
 #    include <Wspiapi.h>

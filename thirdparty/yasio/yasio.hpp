@@ -415,8 +415,9 @@ struct YASIO_API io_base {
   enum class state : uint8_t
   {
     CLOSED,
+    RESOLVING,
     OPENING,
-    OPEN,
+    OPENED,
   };
   enum class error_stage : uint8_t
   {
@@ -534,8 +535,7 @@ private:
   YASIO__DECL void set_host(cxx17::string_view host);
   YASIO__DECL void set_port(u_short port);
 
-  // configure address, check whether needs dns queries
-  YASIO__DECL void configure_address();
+  void clear_mutable_flags() { properties_ &= 0x00ffffff; }
 
   // -1 indicate failed, connection will be closed
   YASIO__DECL int __builtin_decode_len(void* d, int n);
@@ -546,7 +546,7 @@ private:
   ** bit[1-8] mask & kinds
   ** bit[9-16] flags
   ** bit[17-24] byte1 of private flags
-  ** bit[25~32] byte2 of private flags
+  ** bit[25~32] byte2 of private flags (mutable)
   */
   uint32_t properties_ = 0;
 
@@ -562,9 +562,8 @@ private:
   */
   u_short remote_port_ = 0;
 
-  std::atomic<u_short> dns_queries_state_;
-
-  highp_time_t dns_queries_timestamp_ = 0;
+  // The last domain name resolved time in microseconds for dns cache support
+  highp_time_t resolved_time_ = 0;
 
   int index_;
   int socktype_ = 0;
@@ -709,7 +708,7 @@ protected:
 
   YASIO__DECL io_transport(io_channel* ctx, std::shared_ptr<xxsocket>& s);
 
-  bool is_valid() const { return state_ == io_base::state::OPEN; }
+  bool is_valid() const { return state_ == io_base::state::OPENED; }
   void invalid() { state_ = io_base::state::CLOSED; }
 
   char buffer_[YASIO_INET_BUFFER_SIZE]; // recv buffer, 64K
@@ -922,7 +921,7 @@ public:
     UNINITIALIZED,
     IDLE,
     RUNNING,
-    STOPPING,
+    AT_EXITING,
   };
 
   /*
@@ -958,7 +957,7 @@ public:
   YASIO__DECL void stop();
 
   bool is_running() const { return this->state_ == io_service::state::RUNNING; }
-  bool is_stopping() const { return this->state_ == io_service::state::STOPPING; }
+  bool is_stopping() const { return !!this->stop_flag_; }
 
   // should call at the thread who care about async io
   // events(CONNECT_RESPONSE,CONNECTION_LOST,PACKET), such cocos2d-x opengl or
@@ -1056,8 +1055,9 @@ private:
 
   YASIO__DECL int do_select(fd_set* fds_array, highp_time_t wait_duration);
 
-  YASIO__DECL void do_nonblocking_connect(io_channel*);
-  YASIO__DECL void do_nonblocking_connect_completion(io_channel*, fd_set* fds_array);
+  YASIO__DECL int do_resolve(io_channel* ctx);
+  YASIO__DECL void do_connect(io_channel*);
+  YASIO__DECL void do_connect_completion(io_channel*, fd_set* fds_array);
 
 #if defined(YASIO_SSL_BACKEND)
   YASIO__DECL void init_ssl_context();
@@ -1097,9 +1097,8 @@ private:
   bool do_write(transport_handle_t transport) { return transport->do_write(this->wait_duration_); }
   YASIO__DECL void unpack(transport_handle_t, int bytes_expected, int bytes_transferred, int bytes_to_strip);
 
-  // The op mask will be cleared, the state will be set CLOSED when clear_state is 'true'
-  YASIO__DECL bool cleanup_channel(io_channel* channel, bool clear_state = true);
-  YASIO__DECL bool cleanup_io(io_base* obj, bool clear_state = true);
+  YASIO__DECL bool cleanup_channel(io_channel* channel, bool clear_mask = true);
+  YASIO__DECL bool cleanup_io(io_base* obj, bool clear_mask = true);
 
   YASIO__DECL void handle_close(transport_handle_t);
   YASIO__DECL void handle_event(event_ptr event);
@@ -1115,17 +1114,9 @@ private:
   // shutdown a tcp-connection if possible
   YASIO__DECL bool shutdown_internal(transport_handle_t);
 
-  /*
-  ** summay: Query async resolve state for new endpoint set
-  ** retval:
-  **   YDQS_READY, YDQS_INPRROGRESS, YDQS_FAILED
-  ** remark: will start a async resolv when the state is: YDQS_DIRTY
-  */
-  YASIO__DECL u_short query_ares_state(io_channel* ctx);
-
   // supporting server
-  YASIO__DECL void do_nonblocking_accept(io_channel*);
-  YASIO__DECL void do_nonblocking_accept_completion(io_channel*, fd_set* fds_array);
+  YASIO__DECL void do_accept(io_channel*);
+  YASIO__DECL void do_accept_completion(io_channel*, fd_set* fds_array);
 
   YASIO__DECL static const char* strerror(int error);
 
@@ -1218,6 +1209,8 @@ private:
 
   // The ip stack version supported by localhost
   u_short ipsv_ = 0;
+  // The stop flag to notify all transports needs close
+  uint8_t stop_flag_ = 0;
 #if defined(YASIO_SSL_BACKEND)
   SSL_CTX* ssl_ctx_ = nullptr;
 #endif
