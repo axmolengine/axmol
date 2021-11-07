@@ -1020,7 +1020,6 @@ void io_service::process_channels(fd_set* fds_array)
       }
       else if (yasio__testbits(ctx->properties_, YCM_SERVER))
       {
-        do_resolve(ctx);
         auto opmask = ctx->opmask_;
         if (yasio__testbits(opmask, YOPM_OPEN))
           do_accept(ctx);
