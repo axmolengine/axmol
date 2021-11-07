@@ -1907,7 +1907,7 @@ protected:
     int _tag;                       ///< a tag. Can be any number you assigned just to identify this node
     
     std::string _name;              ///<a string label, an user defined string to identify this node
-    size_t _hashOfName;             ///<hash value of _name, used for speed in getChildByName
+    uint64_t _hashOfName;             ///<hash value of _name, used for speed in getChildByName
 
     void *_userData;                ///< A user assigned void pointer, Can be point to any cpp object
     Ref *_userObject;               ///< A user assigned Object
