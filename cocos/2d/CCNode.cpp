@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include <string>
 #include <regex>
 
-#include "xxhash.h"
 #include "base/CCDirector.h"
 #include "base/CCScheduler.h"
 #include "base/CCEventDispatcher.h"
@@ -54,10 +53,6 @@ THE SOFTWARE.
 #define RENDER_IN_SUBPIXEL(__ARGS__) (ceil(__ARGS__))
 #endif
 
-/*
-* 4.5x faster than std::hash in release mode
-*/
-#define CC_HASH_NODE_NAME(name) (!name.empty() ? XXH3_64bits(name.c_str(), name.length()) : 0)
 
 NS_CC_BEGIN
 
@@ -89,14 +84,13 @@ Node::Node()
 , _additionalTransformDirty(false)
 , _transformUpdated(true)
 // children (lazy allocs)
-, _childrenIndexer(nullptr)
 // lazy alloc
 , _localZOrder$Arrival(0LL)
 , _globalZOrder(0)
 , _parent(nullptr)
 // "whole screen" objects. like Scenes and Layers, should set _ignoreAnchorPointForPosition to true
 , _tag(Node::INVALID_TAG)
-, _name()
+, _name("")
 , _hashOfName(0)
 // userData is always inited as nil
 , _userData(nullptr)
@@ -155,8 +149,6 @@ Node * Node::create()
 Node::~Node()
 {
     CCLOGINFO( "deallocing Node: %p - tag: %i", this, _tag );
-
-    CC_SAFE_DELETE(_childrenIndexer);
     
 #if CC_ENABLE_SCRIPT_BINDING
     if (_updateScriptHandler)
@@ -688,15 +680,7 @@ int Node::getTag() const
 /// tag setter
 void Node::setTag(int tag)
 {
-    auto parentChildrenIndexer = getParentChildrenIndexer();
-    if (parentChildrenIndexer)
-    {
-        if (_tag != tag)
-            parentChildrenIndexer->erase(_tag);
-        (*parentChildrenIndexer)[tag] = this;
-    }
-
-    _tag        = tag;
+    _tag = tag ;
 }
 
 const std::string& Node::getName() const
@@ -706,33 +690,9 @@ const std::string& Node::getName() const
 
 void Node::setName(const std::string& name)
 {
-    uint64_t newHash           = CC_HASH_NODE_NAME(name);
-    auto parentChildrenIndexer = getParentChildrenIndexer();
-    if (parentChildrenIndexer)
-    {
-        auto oldHash = CC_HASH_NODE_NAME(_name);
-        if (oldHash != newHash)
-            parentChildrenIndexer->erase(oldHash);
-        (*parentChildrenIndexer)[newHash] = this;
-    }
-
     _name = name;
-    _hashOfName = newHash;
-}
-
-NodeIndexerMap_t* Node::getParentChildrenIndexer()
-{
-    if (!_director->isChildrenIndexerEnabled())
-        return nullptr;
-    auto parent = getParent();
-    if (parent)
-    {
-        auto& indexer = parent->_childrenIndexer;
-        if (!indexer)
-            indexer = new NodeIndexerMap_t();
-        return indexer;
-    }
-    return nullptr;
+    std::hash<std::string> h;
+    _hashOfName = h(name);
 }
 
 /// userData setter
@@ -790,41 +750,26 @@ Node* Node::getChildByTag(int tag) const
 {
     CCASSERT(tag != Node::INVALID_TAG, "Invalid tag");
 
-    if (_childrenIndexer)
+    for (const auto child : _children)
     {
-        auto it = _childrenIndexer->find(tag);
-        if (it != _childrenIndexer->end())
-            return it->second;
-    }
-    else
-    {
-        for (const auto child : _children)
-        {
-            if (child && child->_tag == tag)
-                return child;
-        }
+        if(child && child->_tag == tag)
+            return child;
     }
     return nullptr;
 }
 
 Node* Node::getChildByName(const std::string& name) const
 {
-    // CCASSERT(!name.empty(), "Invalid name");
-    auto hash = CC_HASH_NODE_NAME(name);
-    if (_childrenIndexer)
+    CCASSERT(!name.empty(), "Invalid name");
+    
+    std::hash<std::string> h;
+    size_t hash = h(name);
+    
+    for (const auto& child : _children)
     {
-        auto it = _childrenIndexer->find(hash);
-        if (it != _childrenIndexer->end())
-            return it->second;
-    }
-    else
-    {
-        for (const auto& child : _children)
-        {
-            // Different strings may have the same hash code, but can use it to compare first for speed
-            if (child->_hashOfName == hash && child->_name.compare(name) == 0)
-                return child;
-        }
+        // Different strings may have the same hash code, but can use it to compare first for speed
+        if(child->_hashOfName == hash && child->_name.compare(name) == 0)
+            return child;
     }
     return nullptr;
 }
@@ -992,14 +937,14 @@ void Node::addChildHelper(Node* child, int localZOrder, int tag, const std::stri
     }
     
     this->insertChild(child, localZOrder);
-
-    child->setParent(this);
-
+    
     if (setTag)
         child->setTag(tag);
     else
         child->setName(name);
     
+    child->setParent(this);
+
     child->updateOrderOfArrival();
 
     if( _running )
@@ -1111,7 +1056,6 @@ void Node::removeAllChildrenWithCleanup(bool cleanup)
     }
     
     _children.clear();
-    CC_SAFE_DELETE(_childrenIndexer);
 }
 
 void Node::resetChild(Node* child, bool cleanup)
