@@ -415,8 +415,8 @@ struct YASIO_API io_base {
   enum class state : uint8_t
   {
     CLOSED,
-    RESOLVING,
-    OPENING,
+    RESOLVING, // for client only
+    CONNECTING, // for client only
     OPENED,
   };
   enum class error_stage : uint8_t
@@ -563,7 +563,7 @@ private:
   u_short remote_port_ = 0;
 
   // The last domain name resolved time in microseconds for dns cache support
-  highp_time_t resolved_time_ = 0;
+  highp_time_t last_resolved_time_ = 0;
 
   int index_;
   int socktype_ = 0;
@@ -969,7 +969,7 @@ public:
   YASIO__DECL void set_option_internal(int opt, va_list args);
 
   // open a channel, default: YCK_TCP_CLIENT
-  YASIO__DECL void open(size_t index, int kind = YCK_TCP_CLIENT);
+  YASIO__DECL bool open(size_t index, int kind = YCK_TCP_CLIENT);
 
   // check whether the channel is open
   YASIO__DECL bool is_open(int index) const;
@@ -1043,7 +1043,7 @@ private:
   // Try to dispose thread and other resources, service state will be IDLE when succeed
   YASIO__DECL void handle_stop();
 
-  YASIO__DECL void open_internal(io_channel*);
+  YASIO__DECL bool open_internal(io_channel*);
 
   YASIO__DECL void process_transports(fd_set* fds_array);
   YASIO__DECL void process_channels(fd_set* fds_array);
