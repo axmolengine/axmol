@@ -503,7 +503,15 @@ public:
      */
     const std::thread::id& getCocos2dThreadId() const { return _cocos2d_thread_id; }
 
+    /** Enable node tree children indexer map, the concept is like database INDEX
+     * Notes: 
+     * If enable is true: will cost more memory to speed up getChildByTag & getChildByName
+     */
     void setChildrenIndexerEnabled(bool enable) { _childrenIndexerEnabled = enable; }
+
+    /** 
+     * returns whether or not node tree children indexer map enabled
+     */
     bool isChildrenIndexerEnabled() const { return _childrenIndexerEnabled; }
 
     /**
