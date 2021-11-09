@@ -26,6 +26,7 @@ adxe-1.0  ??
 [HIGHLIGHT] Use curl for transferring data with URL syntax
 [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
 [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `adxeproject/buildware`
+[HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
 [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
 [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
 [FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issue
@@ -35,6 +36,7 @@ adxe-1.0  ??
 [FIX] Fix charset process for fontName on win32
 [FIX] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
 [FIX] Fix Crash on SpriteBatchNode::appendChild when CC_SPRITE_DEBUG_DRAW==1
+[FIX] Fix Lua can't get `unsigned char` values of `ValueMap`
 [REFINE] CCValue move construct and assign with std::string support
 [REFINE] Improve windows dev workflow, use working directory instead copy resources to build binary directory
 [REFINE] Add lua debug project file to lua project template
