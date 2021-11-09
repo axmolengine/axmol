@@ -72,6 +72,12 @@ public:
     /** Create a Value by an unsigned value. */
     explicit Value(unsigned int v);
 
+    /** Create a Value by an integer value. */
+    explicit Value(int64_t v);
+
+    /** Create a Value by an integer value. */
+    explicit Value(uint64_t v);
+
     /** Create a Value by a float value. */
     explicit Value(float v);
     
@@ -123,6 +129,10 @@ public:
     Value& operator= (int v);
     /** Assignment operator, assign from integer to Value. */
     Value& operator= (unsigned int v);
+    /** Assignment operator, assign from integer to Value. */
+    Value& operator=(int64_t v);
+    /** Assignment operator, assign from integer to Value. */
+    Value& operator=(uint64_t v);
     /** Assignment operator, assign from float to Value. */
     Value& operator= (float v);
     /** Assignment operator, assign from double to Value. */
@@ -164,7 +174,12 @@ public:
     /** Gets as an integer value. Will convert to integer if possible, or will trigger assert error. */
     int asInt(int defaultValue = 0) const;
     /** Gets as an unsigned value. Will convert to unsigned if possible, or will trigger assert error. */
-    unsigned int asUnsignedInt(unsigned defaultValue = 0) const;
+    unsigned int asUint(unsigned int defaultValue = 0) const;
+    unsigned int asUnsignedInt(unsigned int defaultValue = 0) const { return asUint(defaultValue); }
+    /** Gets as an integer value. Will convert to integer if possible, or will trigger assert error. */
+    int64_t asInt64(int64_t defaultValue = 0) const;
+    /** Gets as an unsigned value. Will convert to unsigned if possible, or will trigger assert error. */
+    uint64_t asUint64(uint64_t defaultValue = 0) const;
     /** Gets as a float value. Will convert to float if possible, or will trigger assert error. */
     float asFloat(float defaultValue = 0.0f) const;
     /** Gets as a double value. Will convert to double if possible, or will trigger assert error. */
@@ -199,14 +214,12 @@ public:
     bool isNull() const { return _type == Type::NONE; }
 
     /** Value type wrapped by Value. */
-    enum class Type
+    enum class Type : uint32_t
     {
         /// no value is wrapped, an empty Value
         NONE = 0,
         /// wrap integer
         INTEGER,
-        /// wrap unsigned
-        UNSIGNED,
         /// wrap float
         FLOAT,
         /// wrap double
@@ -220,11 +233,21 @@ public:
         /// wrap ValueMap
         MAP,
         /// wrap ValueMapIntKey
-        INT_KEY_MAP
+        INT_KEY_MAP,
+
+        MASK_UNSIGNED = 1 << 17,
+        MASK_64BIT    = 1 << 18,
+        INT_I32       = INTEGER,
+        INT_UI32      = INTEGER | MASK_UNSIGNED,
+        INT_I64       = INTEGER | MASK_64BIT,
+        INT_UI64      = INTEGER | MASK_64BIT | MASK_UNSIGNED,
     };
 
     /** Gets the value type. */
     Type getType() const { return _type; }
+
+    /** Gets the value type family. */
+    Type getTypeFamily() const { return (Type)((uint32_t)_type & 0xFFFFu); }
 
     /** Gets the description of the class. */
     std::string getDescription() const;
@@ -237,6 +260,8 @@ private:
     {
         int intVal;
         unsigned int uintVal;
+        int64_t int64Val;
+        uint64_t uint64Val;
         float floatVal;
         double doubleVal;
         bool boolVal;

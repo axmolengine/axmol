@@ -45,19 +45,31 @@ Value::Value() : _type(Type::NONE)
     memset(&_field, 0, sizeof(_field));
 }
 
-Value::Value(unsigned char v) : _type(Type::INTEGER)
+Value::Value(unsigned char v) : _type(Type::INT_UI32)
 {
     _field.uintVal = v;
 }
 
-Value::Value(int v) : _type(Type::INTEGER)
+Value::Value(int v) : _type(Type::INT_I32)
 {
     _field.intVal = v;
 }
 
-Value::Value(unsigned int v) : _type(Type::UNSIGNED)
+Value::Value(unsigned int v) : _type(Type::INT_UI32)
 {
     _field.uintVal = v;
+}
+
+/** Create a Value by an integer value. */
+Value::Value(int64_t v) : _type(Type::INT_I64)
+{
+    _field.int64Val = v;
+}
+
+/** Create a Value by an integer value. */
+Value::Value(uint64_t v) : _type(Type::INT_UI64)
+{
+    _field.uint64Val = v;
 }
 
 Value::Value(float v) : _type(Type::FLOAT)
@@ -141,13 +153,10 @@ Value& Value::operator=(const Value& other)
     {
         reset(other._type);
 
-        switch (other._type)
+        switch (other.getTypeFamily())
         {
         case Type::INTEGER:
-            _field.intVal = other._field.intVal;
-            break;
-        case Type::UNSIGNED:
-            _field.uintVal = other._field.uintVal;
+            _field.uint64Val = other._field.uint64Val;
             break;
         case Type::FLOAT:
             _field.floatVal = other._field.floatVal;
@@ -198,12 +207,9 @@ Value& Value::operator=(Value&& other)
     if (this != &other)
     {
         clear();
-        switch (other._type)
+        switch (other.getTypeFamily())
         {
         case Type::INTEGER:
-            _field.intVal = other._field.intVal;
-            break;
-        case Type::UNSIGNED:
             _field.uintVal = other._field.uintVal;
             break;
         case Type::FLOAT:
@@ -241,22 +247,36 @@ Value& Value::operator=(Value&& other)
 
 Value& Value::operator=(unsigned char v)
 {
-    reset(Type::UNSIGNED);
+    reset(Type::INT_UI32);
     _field.uintVal = v;
     return *this;
 }
 
 Value& Value::operator=(int v)
 {
-    reset(Type::INTEGER);
+    reset(Type::INT_I32);
     _field.intVal = v;
     return *this;
 }
 
 Value& Value::operator=(unsigned int v)
 {
-    reset(Type::UNSIGNED);
+    reset(Type::INT_UI32);
     _field.uintVal = v;
+    return *this;
+}
+
+Value& Value::operator=(int64_t v)
+{
+    reset(Type::INT_I64);
+    _field.int64Val = v;
+    return *this;
+}
+
+Value& Value::operator=(uint64_t v)
+{
+    reset(Type::INT_UI64);
+    _field.uint64Val = v;
     return *this;
 }
 
@@ -366,12 +386,16 @@ bool Value::operator==(const Value& v) const
         return false;
     if (this->isNull())
         return true;
-    switch (_type)
+    switch (getType())
     {
-    case Type::INTEGER:
+    case Type::INT_I32:
         return v._field.intVal == this->_field.intVal;
-    case Type::UNSIGNED:
+    case Type::INT_UI32:
         return v._field.uintVal == this->_field.uintVal;
+    case Type::INT_I64:
+        return v._field.int64Val == this->_field.int64Val;
+    case Type::INT_UI64:
+        return v._field.int64Val == this->_field.int64Val;
     case Type::BOOLEAN:
         return v._field.boolVal == this->_field.boolVal;
     case Type::STRING:
@@ -439,11 +463,14 @@ unsigned char Value::asByte(unsigned char defaultValue) const
 
     switch (_type)
     {
-    case Type::INTEGER:
-        return static_cast<unsigned char>(_field.intVal);
-
-    case Type::UNSIGNED:
+    case Type::INT_UI32:
         return static_cast<unsigned char>(_field.uintVal);
+    case Type::INT_I32:
+        return static_cast<unsigned char>(_field.intVal);
+    case Type::INT_I64:
+        return static_cast<unsigned char>(_field.int64Val);
+    case Type::INT_UI64:
+        return static_cast<unsigned char>(_field.uint64Val);
 
     case Type::STRING:
         return static_cast<unsigned char>(atoi(_field.strVal->c_str()));
@@ -468,12 +495,14 @@ int Value::asInt(int defaultValue) const
              "Only base type (bool, string, float, double, int) could be converted");
     switch (_type)
     {
-    case Type::INTEGER:
-        return _field.intVal;
-
-    case Type::UNSIGNED:
-        CCASSERT(_field.uintVal < INT_MAX, "Can only convert values < INT_MAX");
-        return (int)_field.uintVal;
+    case Type::INT_I32:
+        return (_field.intVal);
+    case Type::INT_UI32:
+        return static_cast<int>(_field.uintVal);
+    case Type::INT_I64:
+        return static_cast<int>(_field.int64Val);
+    case Type::INT_UI64:
+        return static_cast<int>(_field.uint64Val);
 
     case Type::STRING:
         return atoi(_field.strVal->c_str());
@@ -492,18 +521,20 @@ int Value::asInt(int defaultValue) const
     }
 }
 
-unsigned int Value::asUnsignedInt(unsigned int defaultValue) const
+unsigned int Value::asUint(unsigned int defaultValue) const
 {
     CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
              "Only base type (bool, string, float, double, int) could be converted");
     switch (_type)
     {
-    case Type::UNSIGNED:
-        return _field.uintVal;
-
-    case Type::INTEGER:
-        CCASSERT(_field.intVal >= 0, "Only values >= 0 can be converted to unsigned");
+    case Type::INT_UI32:
+        return (_field.uintVal);
+    case Type::INT_I32:
         return static_cast<unsigned int>(_field.intVal);
+    case Type::INT_I64:
+        return static_cast<unsigned int>(_field.int64Val);
+    case Type::INT_UI64:
+        return static_cast<unsigned int>(_field.uint64Val);
 
     case Type::STRING:
         // NOTE: strtoul is required (need to augment on unsupported platforms)
@@ -514,6 +545,72 @@ unsigned int Value::asUnsignedInt(unsigned int defaultValue) const
 
     case Type::DOUBLE:
         return static_cast<unsigned int>(_field.doubleVal);
+
+    case Type::BOOLEAN:
+        return _field.boolVal ? 1u : 0u;
+
+    default:
+        return defaultValue;
+    }
+}
+
+int64_t Value::asInt64(int64_t defaultValue) const
+{
+    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+             "Only base type (bool, string, float, double, int) could be converted");
+    switch (_type)
+    {
+    case Type::INT_I64:
+        return (_field.int64Val);
+    case Type::INT_I32:
+        return static_cast<int64_t>(_field.intVal);
+    case Type::INT_UI32:
+        return static_cast<int64_t>(_field.uintVal);
+    case Type::INT_UI64:
+        return static_cast<int64_t>(_field.uint64Val);
+
+    case Type::STRING:
+        // NOTE: strtoul is required (need to augment on unsupported platforms)
+        return static_cast<int64_t>(strtoul(_field.strVal->c_str(), nullptr, 10));
+
+    case Type::FLOAT:
+        return static_cast<int64_t>(_field.floatVal);
+
+    case Type::DOUBLE:
+        return static_cast<int64_t>(_field.doubleVal);
+
+    case Type::BOOLEAN:
+        return _field.boolVal ? 1u : 0u;
+
+    default:
+        return defaultValue;
+    }
+}
+
+uint64_t Value::asUint64(uint64_t defaultValue) const
+{
+    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+             "Only base type (bool, string, float, double, int) could be converted");
+    switch (_type)
+    {
+    case Type::INT_UI64:
+        return (_field.uint64Val);
+    case Type::INT_I32:
+        return static_cast<uint64_t>(_field.intVal);
+    case Type::INT_UI32:
+        return static_cast<uint64_t>(_field.uintVal);
+    case Type::INT_I64:
+        return static_cast<uint64_t>(_field.int64Val);
+    
+    case Type::STRING:
+        // NOTE: strtoul is required (need to augment on unsupported platforms)
+        return static_cast<uint64_t>(strtoull(_field.strVal->c_str(), nullptr, 10));
+
+    case Type::FLOAT:
+        return static_cast<uint64_t>(_field.floatVal);
+
+    case Type::DOUBLE:
+        return static_cast<uint64_t>(_field.doubleVal);
 
     case Type::BOOLEAN:
         return _field.boolVal ? 1u : 0u;
@@ -535,11 +632,14 @@ float Value::asFloat(float defaultValue) const
     case Type::STRING:
         return static_cast<float>(utils::atof(_field.strVal->c_str()));
 
-    case Type::INTEGER:
+    case Type::INT_I32:
         return static_cast<float>(_field.intVal);
-
-    case Type::UNSIGNED:
+    case Type::INT_UI32:
         return static_cast<float>(_field.uintVal);
+    case Type::INT_I64:
+        return static_cast<float>(_field.int64Val);
+    case Type::INT_UI64:
+        return static_cast<float>(_field.uint64Val);
 
     case Type::DOUBLE:
         return static_cast<float>(_field.doubleVal);
@@ -564,11 +664,14 @@ double Value::asDouble(double defaultValue) const
     case Type::STRING:
         return static_cast<double>(utils::atof(_field.strVal->c_str()));
 
-    case Type::INTEGER:
+    case Type::INT_I32:
         return static_cast<double>(_field.intVal);
-
-    case Type::UNSIGNED:
+    case Type::INT_UI32:
         return static_cast<double>(_field.uintVal);
+    case Type::INT_I64:
+        return static_cast<double>(_field.int64Val);
+    case Type::INT_UI64:
+        return static_cast<double>(_field.uint64Val);
 
     case Type::FLOAT:
         return static_cast<double>(_field.floatVal);
@@ -593,11 +696,14 @@ bool Value::asBool(bool defaultValue) const
     case Type::STRING:
         return (*_field.strVal == "0" || *_field.strVal == "false") ? false : true;
 
-    case Type::INTEGER:
-        return _field.intVal == 0 ? false : true;
-
-    case Type::UNSIGNED:
-        return _field.uintVal == 0 ? false : true;
+    case Type::INT_I32:
+        return !!_field.intVal;
+    case Type::INT_UI32:
+        return !!_field.uintVal;
+    case Type::INT_I64:
+        return !!_field.int64Val;
+    case Type::INT_UI64:
+        return !!_field.uint64Val;
 
     case Type::FLOAT:
         return _field.floatVal == 0.0f ? false : true;
@@ -629,11 +735,17 @@ std::string Value::asString() const
     size_t n = 0;
     switch (_type)
     {
-    case Type::INTEGER:
+    case Type::INT_I32:
         ret = std::to_string(_field.intVal);
         break;
-    case Type::UNSIGNED:
+    case Type::INT_UI32:
         ret = std::to_string(_field.uintVal);
+        break;
+    case Type::INT_I64:
+        ret = std::to_string(_field.int64Val);
+        break;
+    case Type::INT_UI64:
+        ret = std::to_string(_field.uint64Val);
         break;
     case Type::FLOAT:
         ret.resize(NUMBER_MAX_DIGITS);
@@ -760,11 +872,10 @@ static std::string visit(const Value& v, int depth)
 {
     std::stringstream ret;
 
-    switch (v.getType())
+    switch (v.getTypeFamily())
     {
     case Value::Type::NONE:
     case Value::Type::INTEGER:
-    case Value::Type::UNSIGNED:
     case Value::Type::FLOAT:
     case Value::Type::DOUBLE:
     case Value::Type::BOOLEAN:
@@ -798,13 +909,10 @@ std::string Value::getDescription() const
 void Value::clear()
 {
     // Free memory the old value allocated
-    switch (_type)
+    switch (getTypeFamily())
     {
     case Type::INTEGER:
-        _field.intVal = 0;
-        break;
-    case Type::UNSIGNED:
-        _field.uintVal = 0u;
+        _field.uint64Val = 0;
         break;
     case Type::FLOAT:
         _field.floatVal = 0.0f;

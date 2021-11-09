@@ -322,12 +322,12 @@ ValueTypeJudgeInTable* ValueTypeJudgeInTable::create(ValueMap valueMap)
     int index = 0;
     for (const auto& iter : valueMap)
     {
-        Value::Type type = iter.second.getType();
+        Value::Type type = iter.second.getTypeFamily();
         if (type == Value::Type::STRING) {
             CCLOG("The type of index %d is string", index);
         }
         
-        if (type == Value::Type::INTEGER || type == Value::Type::DOUBLE || type == Value::Type::FLOAT || type == Value::Type::BYTE) {
+        if (type == Value::Type::INTEGER || type == Value::Type::DOUBLE || type == Value::Type::FLOAT) {
             CCLOG("The type of index %d is number", index);
         }
         
