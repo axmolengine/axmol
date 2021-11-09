@@ -175,10 +175,13 @@ public:
     int asInt(int defaultValue = 0) const;
     /** Gets as an unsigned value. Will convert to unsigned if possible, or will trigger assert error. */
     unsigned int asUint(unsigned int defaultValue = 0) const;
+    /** Gets as an unsigned value. Will convert to unsigned if possible, or will trigger assert error. 
+    * !!!DEPRECATED, use asUint instead
+    */
     unsigned int asUnsignedInt(unsigned int defaultValue = 0) const { return asUint(defaultValue); }
-    /** Gets as an integer value. Will convert to integer if possible, or will trigger assert error. */
+    /** Gets as an int64_t value. Will convert to integer if possible, or will trigger assert error. */
     int64_t asInt64(int64_t defaultValue = 0) const;
-    /** Gets as an unsigned value. Will convert to unsigned if possible, or will trigger assert error. */
+    /** Gets as an uint64_t value. Will convert to unsigned if possible, or will trigger assert error. */
     uint64_t asUint64(uint64_t defaultValue = 0) const;
     /** Gets as a float value. Will convert to float if possible, or will trigger assert error. */
     float asFloat(float defaultValue = 0.0f) const;
