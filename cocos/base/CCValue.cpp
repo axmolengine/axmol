@@ -45,9 +45,9 @@ Value::Value() : _type(Type::NONE)
     memset(&_field, 0, sizeof(_field));
 }
 
-Value::Value(unsigned char v) : _type(Type::BYTE)
+Value::Value(unsigned char v) : _type(Type::INTEGER)
 {
-    _field.byteVal = v;
+    _field.uintVal = v;
 }
 
 Value::Value(int v) : _type(Type::INTEGER)
@@ -57,7 +57,7 @@ Value::Value(int v) : _type(Type::INTEGER)
 
 Value::Value(unsigned int v) : _type(Type::UNSIGNED)
 {
-    _field.unsignedVal = v;
+    _field.uintVal = v;
 }
 
 Value::Value(float v) : _type(Type::FLOAT)
@@ -143,14 +143,11 @@ Value& Value::operator=(const Value& other)
 
         switch (other._type)
         {
-        case Type::BYTE:
-            _field.byteVal = other._field.byteVal;
-            break;
         case Type::INTEGER:
             _field.intVal = other._field.intVal;
             break;
         case Type::UNSIGNED:
-            _field.unsignedVal = other._field.unsignedVal;
+            _field.uintVal = other._field.uintVal;
             break;
         case Type::FLOAT:
             _field.floatVal = other._field.floatVal;
@@ -203,14 +200,11 @@ Value& Value::operator=(Value&& other)
         clear();
         switch (other._type)
         {
-        case Type::BYTE:
-            _field.byteVal = other._field.byteVal;
-            break;
         case Type::INTEGER:
             _field.intVal = other._field.intVal;
             break;
         case Type::UNSIGNED:
-            _field.unsignedVal = other._field.unsignedVal;
+            _field.uintVal = other._field.uintVal;
             break;
         case Type::FLOAT:
             _field.floatVal = other._field.floatVal;
@@ -247,8 +241,8 @@ Value& Value::operator=(Value&& other)
 
 Value& Value::operator=(unsigned char v)
 {
-    reset(Type::BYTE);
-    _field.byteVal = v;
+    reset(Type::UNSIGNED);
+    _field.uintVal = v;
     return *this;
 }
 
@@ -262,7 +256,7 @@ Value& Value::operator=(int v)
 Value& Value::operator=(unsigned int v)
 {
     reset(Type::UNSIGNED);
-    _field.unsignedVal = v;
+    _field.uintVal = v;
     return *this;
 }
 
@@ -374,12 +368,10 @@ bool Value::operator==(const Value& v) const
         return true;
     switch (_type)
     {
-    case Type::BYTE:
-        return v._field.byteVal == this->_field.byteVal;
     case Type::INTEGER:
         return v._field.intVal == this->_field.intVal;
     case Type::UNSIGNED:
-        return v._field.unsignedVal == this->_field.unsignedVal;
+        return v._field.uintVal == this->_field.uintVal;
     case Type::BOOLEAN:
         return v._field.boolVal == this->_field.boolVal;
     case Type::STRING:
@@ -447,13 +439,11 @@ unsigned char Value::asByte(unsigned char defaultValue) const
 
     switch (_type)
     {
-    case Type::BYTE:
-        return _field.byteVal;
     case Type::INTEGER:
         return static_cast<unsigned char>(_field.intVal);
 
     case Type::UNSIGNED:
-        return static_cast<unsigned char>(_field.unsignedVal);
+        return static_cast<unsigned char>(_field.uintVal);
 
     case Type::STRING:
         return static_cast<unsigned char>(atoi(_field.strVal->c_str()));
@@ -482,11 +472,8 @@ int Value::asInt(int defaultValue) const
         return _field.intVal;
 
     case Type::UNSIGNED:
-        CCASSERT(_field.unsignedVal < INT_MAX, "Can only convert values < INT_MAX");
-        return (int)_field.unsignedVal;
-
-    case Type::BYTE:
-        return _field.byteVal;
+        CCASSERT(_field.uintVal < INT_MAX, "Can only convert values < INT_MAX");
+        return (int)_field.uintVal;
 
     case Type::STRING:
         return atoi(_field.strVal->c_str());
@@ -512,14 +499,11 @@ unsigned int Value::asUnsignedInt(unsigned int defaultValue) const
     switch (_type)
     {
     case Type::UNSIGNED:
-        return _field.unsignedVal;
+        return _field.uintVal;
 
     case Type::INTEGER:
         CCASSERT(_field.intVal >= 0, "Only values >= 0 can be converted to unsigned");
         return static_cast<unsigned int>(_field.intVal);
-
-    case Type::BYTE:
-        return static_cast<unsigned int>(_field.byteVal);
 
     case Type::STRING:
         // NOTE: strtoul is required (need to augment on unsupported platforms)
@@ -548,9 +532,6 @@ float Value::asFloat(float defaultValue) const
     case Type::FLOAT:
         return _field.floatVal;
 
-    case Type::BYTE:
-        return static_cast<float>(_field.byteVal);
-
     case Type::STRING:
         return static_cast<float>(utils::atof(_field.strVal->c_str()));
 
@@ -558,7 +539,7 @@ float Value::asFloat(float defaultValue) const
         return static_cast<float>(_field.intVal);
 
     case Type::UNSIGNED:
-        return static_cast<float>(_field.unsignedVal);
+        return static_cast<float>(_field.uintVal);
 
     case Type::DOUBLE:
         return static_cast<float>(_field.doubleVal);
@@ -580,9 +561,6 @@ double Value::asDouble(double defaultValue) const
     case Type::DOUBLE:
         return _field.doubleVal;
 
-    case Type::BYTE:
-        return static_cast<double>(_field.byteVal);
-
     case Type::STRING:
         return static_cast<double>(utils::atof(_field.strVal->c_str()));
 
@@ -590,7 +568,7 @@ double Value::asDouble(double defaultValue) const
         return static_cast<double>(_field.intVal);
 
     case Type::UNSIGNED:
-        return static_cast<double>(_field.unsignedVal);
+        return static_cast<double>(_field.uintVal);
 
     case Type::FLOAT:
         return static_cast<double>(_field.floatVal);
@@ -612,9 +590,6 @@ bool Value::asBool(bool defaultValue) const
     case Type::BOOLEAN:
         return _field.boolVal;
 
-    case Type::BYTE:
-        return _field.byteVal == 0 ? false : true;
-
     case Type::STRING:
         return (*_field.strVal == "0" || *_field.strVal == "false") ? false : true;
 
@@ -622,7 +597,7 @@ bool Value::asBool(bool defaultValue) const
         return _field.intVal == 0 ? false : true;
 
     case Type::UNSIGNED:
-        return _field.unsignedVal == 0 ? false : true;
+        return _field.uintVal == 0 ? false : true;
 
     case Type::FLOAT:
         return _field.floatVal == 0.0f ? false : true;
@@ -654,14 +629,11 @@ std::string Value::asString() const
     size_t n = 0;
     switch (_type)
     {
-    case Type::BYTE:
-        ret = std::to_string(_field.byteVal);
-        break;
     case Type::INTEGER:
         ret = std::to_string(_field.intVal);
         break;
     case Type::UNSIGNED:
-        ret = std::to_string(_field.unsignedVal);
+        ret = std::to_string(_field.uintVal);
         break;
     case Type::FLOAT:
         ret.resize(NUMBER_MAX_DIGITS);
@@ -791,7 +763,6 @@ static std::string visit(const Value& v, int depth)
     switch (v.getType())
     {
     case Value::Type::NONE:
-    case Value::Type::BYTE:
     case Value::Type::INTEGER:
     case Value::Type::UNSIGNED:
     case Value::Type::FLOAT:
@@ -829,14 +800,11 @@ void Value::clear()
     // Free memory the old value allocated
     switch (_type)
     {
-    case Type::BYTE:
-        _field.byteVal = 0;
-        break;
     case Type::INTEGER:
         _field.intVal = 0;
         break;
     case Type::UNSIGNED:
-        _field.unsignedVal = 0u;
+        _field.uintVal = 0u;
         break;
     case Type::FLOAT:
         _field.floatVal = 0.0f;
