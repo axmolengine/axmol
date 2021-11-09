@@ -386,11 +386,16 @@ bool Value::operator==(const Value& v) const
         return false;
     if (this->isNull())
         return true;
-    switch (getTypeFamily())
+    switch (getType())
     {
-    case Type::INTEGER:
-        return 0 ==
-               memcmp(&_field.int64Val, &v._field.int64Val, ((uint32_t)_type & (uint32_t)Type::MASK_64BIT) ? sizeof(int64_t) : sizeof(int));
+    case Type::INT_I32:
+        return v._field.intVal == this->_field.intVal;
+    case Type::INT_UI32:
+        return v._field.uintVal == this->_field.uintVal;
+    case Type::INT_I64:
+        return v._field.int64Val == this->_field.int64Val;
+    case Type::INT_UI64:
+        return v._field.int64Val == this->_field.int64Val;
     case Type::BOOLEAN:
         return v._field.boolVal == this->_field.boolVal;
     case Type::STRING:
