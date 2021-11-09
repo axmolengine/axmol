@@ -203,6 +203,8 @@ public:
     {
         /// no value is wrapped, an empty Value
         NONE = 0,
+        /// wrap byte
+        BYTE,
         /// wrap integer
         INTEGER,
         /// wrap unsigned
@@ -235,8 +237,9 @@ private:
 
     union
     {
+        unsigned char byteVal;
         int intVal;
-        unsigned int uintVal;
+        unsigned int unsignedVal;
         float floatVal;
         double doubleVal;
         bool boolVal;
