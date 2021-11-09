@@ -82,6 +82,8 @@ enum {
 
 class EventListener;
 
+typedef std::map<uint64_t, Node*> NodeIndexerMap_t;
+
 /** @class Node
 * @brief Node is the base element of the Scene Graph. Elements of the Scene Graph must be Node objects or subclasses of it.
  The most common Node objects are: Scene, Layer, Sprite, Menu, Label.
@@ -1841,6 +1843,8 @@ protected:
 private:
     void addChildHelper(Node* child, int localZOrder, int tag, const std::string &name, bool setTag);
     
+    NodeIndexerMap_t* getParentChildrenIndexer();
+
 protected:
 
     float _rotationX;               ///< rotation on the X-axis
@@ -1897,12 +1901,13 @@ protected:
     static std::uint32_t s_globalOrderOfArrival;
 
     Vector<Node*> _children;        ///< array of children nodes
+    NodeIndexerMap_t* _childrenIndexer;  ///< The children indexer for fast find child
     Node *_parent;                  ///< weak reference to parent node
     Director* _director;            //cached director pointer to improve rendering performance
     int _tag;                       ///< a tag. Can be any number you assigned just to identify this node
     
     std::string _name;              ///<a string label, an user defined string to identify this node
-    size_t _hashOfName;             ///<hash value of _name, used for speed in getChildByName
+    uint64_t _hashOfName;             ///<hash value of _name, used for speed in getChildByName
 
     void *_userData;                ///< A user assigned void pointer, Can be point to any cpp object
     Ref *_userObject;               ///< A user assigned Object
