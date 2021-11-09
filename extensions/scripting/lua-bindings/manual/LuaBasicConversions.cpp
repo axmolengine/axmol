@@ -2344,7 +2344,7 @@ void fontdefinition_to_luaval(lua_State* L,const FontDefinition& inValue)
 void ccvalue_to_luaval(lua_State* L,const cocos2d::Value& inValue)
 {
     const Value& obj = inValue;
-    switch (obj.getType())
+    switch (obj.getTypeFamily())
     {
         case Value::Type::BOOLEAN:
             lua_pushboolean(L, obj.asBool());
@@ -2354,7 +2354,7 @@ void ccvalue_to_luaval(lua_State* L,const cocos2d::Value& inValue)
             lua_pushnumber(L, obj.asDouble());
             break;
         case Value::Type::INTEGER:
-            lua_pushinteger(L, obj.asInt());
+            lua_pushinteger(L, obj.asInt64());
             break;
         case Value::Type::STRING:
             lua_pushstring(L, obj.asStringRef().c_str());
@@ -2383,7 +2383,7 @@ void ccvaluemap_to_luaval(lua_State* L,const cocos2d::ValueMap& inValue)
     {
         std::string key = iter->first;
         const Value& obj = iter->second;
-        switch (obj.getType())
+        switch (obj.getTypeFamily())
         {
             case Value::Type::BOOLEAN:
                 {
@@ -2403,7 +2403,7 @@ void ccvaluemap_to_luaval(lua_State* L,const cocos2d::ValueMap& inValue)
             case Value::Type::INTEGER:
                 {
                     lua_pushstring(L, key.c_str());
-                    lua_pushinteger(L, obj.asInt());
+                    lua_pushinteger(L, obj.asInt64());
                     lua_rawset(L, -3);
                 }
                 break;
@@ -2455,7 +2455,7 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const cocos2d::ValueMapIntKey& inV
 
         const Value& obj = iter->second;
 
-        switch (obj.getType())
+        switch (obj.getTypeFamily())
         {
             case Value::Type::BOOLEAN:
                 {
@@ -2475,7 +2475,7 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const cocos2d::ValueMapIntKey& inV
             case Value::Type::INTEGER:
                 {
                     lua_pushstring(L, key.c_str());
-                    lua_pushinteger(L, obj.asInt());
+                    lua_pushinteger(L, obj.asInt64());
                     lua_rawset(L, -3);
                 }
                 break;
@@ -2522,7 +2522,7 @@ void ccvaluevector_to_luaval(lua_State* L, const cocos2d::ValueVector& inValue)
     int index  = 1;
     for (const auto& obj : inValue)
     {
-        switch (obj.getType())
+        switch (obj.getTypeFamily())
         {
             case Value::Type::BOOLEAN:
                 {
@@ -2544,7 +2544,7 @@ void ccvaluevector_to_luaval(lua_State* L, const cocos2d::ValueVector& inValue)
             case Value::Type::INTEGER:
                 {
                     lua_pushnumber(L, (lua_Number)index);
-                    lua_pushnumber(L, obj.asInt());
+                    lua_pushnumber(L, obj.asInt64());
                     lua_rawset(L, -3);
                     ++index;
                 }
