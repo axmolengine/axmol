@@ -11,7 +11,10 @@
 
 **This is another more radical fork of *Cocos2d-x-4.0*, use OpenAL for all platforms, single texture multi GPU texture handler, C++ 14/17 and some more (see 'Highlight Features' for more info).**  
 
-### View with vscode online: https://github1s.com/adxeproject/adxe
+### View code with vscode online: 
+- [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/adxeproject/adxe)
+- [![github1s](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/adxeproject/adxe)
+  
   
 **[简体中文](README_CN.md)**
   
