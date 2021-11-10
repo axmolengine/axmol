@@ -27,6 +27,7 @@ adxe-1.0  ??
 [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
 [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `adxeproject/buildware`
 [HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
+[HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support, it's very useful for reduce memory cost when load large .ttf font file
 [NEW] Add int64_t/uint64_t support for `cocos2d::Value`
 [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
 [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
