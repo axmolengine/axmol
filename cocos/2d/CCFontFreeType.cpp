@@ -55,7 +55,7 @@ const char* FontFreeType::_glyphNEHE =
 typedef struct _DataRef
 {
     Data data;
-    unsigned int referenceCount;
+    unsigned int referenceCount = 0;
 } DataRef;
 
 static std::unordered_map<std::string, DataRef> s_cacheFontData;
@@ -193,7 +193,7 @@ bool FontFreeType::createFontObject(const std::string& fontName, float fontSize)
         std::unique_ptr<FT_StreamRec> fts(new FT_StreamRec());
         fts->read               = ft_stream_read_callback;
         fts->close              = ft_stream_close_callback;
-        fts->size               = fs->size();
+        fts->size               = static_cast<unsigned long>(fs->size());
         fts->descriptor.pointer = fs;
 
         FT_Open_Args args = {0};
@@ -207,24 +207,22 @@ bool FontFreeType::createFontObject(const std::string& fontName, float fontSize)
     }
     else
     {
+        DataRef* sharableData;
         auto it = s_cacheFontData.find(fontName);
         if (it != s_cacheFontData.end())
         {
-            (*it).second.referenceCount += 1;
+            sharableData = &it->second;
         }
         else
         {
-            s_cacheFontData[fontName].referenceCount = 1;
-            s_cacheFontData[fontName].data           = FileUtils::getInstance()->getDataFromFile(fontName);
-
-            if (s_cacheFontData[fontName].data.isNull())
-            {
-                return false;
-            }
+            sharableData            = &s_cacheFontData[fontName];
+            sharableData->data           = FileUtils::getInstance()->getDataFromFile(fontName);
         }
 
-        if (FT_New_Memory_Face(getFTLibrary(), s_cacheFontData[fontName].data.getBytes(),
-                               s_cacheFontData[fontName].data.getSize(), 0, &face))
+        ++sharableData->referenceCount;
+        auto& data = sharableData->data;
+        if (data.isNull() || FT_New_Memory_Face(getFTLibrary(), data.getBytes(),
+                                                data.getSize(), 0, &face))
             return false;
     }
 
@@ -390,7 +388,7 @@ const char* FontFreeType::getFontFamily() const
     return _fontFace->family_name;
 }
 
-unsigned char* FontFreeType::getGlyphBitmap(uint64_t theChar,
+unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
                                             int32_t& outWidth,
                                             int32_t& outHeight,
                                             Rect& outRect,
