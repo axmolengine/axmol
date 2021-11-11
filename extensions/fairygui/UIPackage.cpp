@@ -768,9 +768,12 @@ void UIPackage::loadMovieClip(PackageItem* item)
 void UIPackage::loadFont(PackageItem* item)
 {
     item->bitmapFont = BitmapFont::create();
-    FontAtlas* fontAtlas = new FontAtlas(*item->bitmapFont);
-    item->bitmapFont->_fontAtlas = fontAtlas;
-
+    auto bitmapFont  = item->bitmapFont;
+#if defined(ADXE_VERSION)
+    auto fontAtlas = bitmapFont->resetFontAtlas(bitmapFont->newFontAtlas());
+#else
+    auto fontAtlas = bitmapFont->resetFontAtlas(bitmapFont->createFontAtlas());
+#endif
     ByteBuffer* buffer = item->rawData;
 
     buffer->seek(0, 0);

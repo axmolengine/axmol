@@ -16,8 +16,22 @@ public:
     static BitmapFont* create();
 
     virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int &outNumLetters) const override;
-    virtual cocos2d::FontAtlas *createFontAtlas() override { return _fontAtlas; }
-    void releaseAtlas() { _fontAtlas->release(); }
+#    if defined(ADXE_VERSION)
+    virtual cocos2d::FontAtlas* newFontAtlas() override { return new cocos2d::FontAtlas(this); }
+#else
+    virtual cocos2d::FontAtlas* createFontAtlas() override { return new cocos2d::FontAtlas(*this); }
+#endif
+    cocos2d::FontAtlas* resetFontAtlas(cocos2d::FontAtlas* fontAtlas)
+    {
+        if (_fontAtlas != fontAtlas)
+        {
+            CC_SAFE_RELEASE(_fontAtlas);
+            _fontAtlas = fontAtlas;
+        }
+        return _fontAtlas;
+    }
+    cocos2d::FontAtlas* getFontAtlas() const { return _fontAtlas; }
+    void releaseAtlas() { resetFontAtlas(nullptr); }
     void setFontSize(float fontSize) {}
     int getOriginalFontSize()const { return _originalFontSize; }
     bool isResizable() { return _resizable; }

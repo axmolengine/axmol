@@ -143,7 +143,7 @@ bool FUILabel::setBMFontFilePath(const std::string& bmfontFilePath, const Vec2& 
     _bmFontCanTint = bmFont->canTint();
 
     _currentLabelType = LabelType::BMFONT;
-    setFontAtlas(bmFont->createFontAtlas());
+    setFontAtlas(bmFont->getFontAtlas());
 
     return true;
 }
