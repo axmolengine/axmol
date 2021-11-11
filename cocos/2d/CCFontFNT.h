@@ -152,7 +152,7 @@ public:
     */
     static void purgeCachedData();
     virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int &outNumLetters) const override;
-    virtual FontAtlas *createFontAtlas() override;
+    virtual FontAtlas* newFontAtlas() override;
 
     void setFontSize(float fontSize);
     float getFontSize() const { return _fontSize; }

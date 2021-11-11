@@ -99,7 +99,7 @@ public:
     const char* getFontFamily() const;
     std::string getFontName() const { return _fontName; }
 
-    virtual FontAtlas* createFontAtlas() override;
+    virtual FontAtlas* newFontAtlas() override;
     virtual int getFontMaxHeight() const override { return _lineHeight; }
 
     static void releaseFont(const std::string& fontName);
@@ -137,7 +137,6 @@ private:
     int _ascender;
     int _descender;
     int _lineHeight;
-    FontAtlas* _fontAtlas;
 
     GlyphCollection _usedGlyphs;
     std::string _customGlyphs;

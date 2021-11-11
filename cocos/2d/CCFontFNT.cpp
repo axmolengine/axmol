@@ -653,7 +653,7 @@ int FontFNT::getOriginalFontSize()const
     return _configuration->_fontSize;
 }
 
-FontAtlas * FontFNT::createFontAtlas()
+FontAtlas* FontFNT::newFontAtlas()
 {
     // check that everything is fine with the BMFontCofniguration
     if (_configuration->_fontDefDictionary.empty())
@@ -666,7 +666,7 @@ FontAtlas * FontFNT::createFontAtlas()
     if (_configuration->_commonHeight == 0)
         return nullptr;
     
-    FontAtlas *tempAtlas = new (std::nothrow) FontAtlas(*this);
+    FontAtlas *tempAtlas = new (std::nothrow) FontAtlas(this);
     if (tempAtlas == nullptr)
         return nullptr;
     

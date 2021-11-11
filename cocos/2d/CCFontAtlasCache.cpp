@@ -2,8 +2,9 @@
  Copyright (c) 2013      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
+ Copyright (c) 2021 Bytedance Inc.
+
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -74,7 +75,7 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
             config->customGlyphs, useDistanceField, (float)config->outlineSize);
         if (font)
         {
-            auto tempAtlas = font->createFontAtlas();
+            auto tempAtlas = font->newFontAtlas();
             if (tempAtlas)
             {
                 _atlasMap[atlasName] = tempAtlas;
@@ -105,7 +106,7 @@ FontAtlas* FontAtlasCache::getFontAtlasFNT(const std::string& fontFileName, cons
 
         if (font)
         {
-            const auto tempAtlas = font->createFontAtlas();
+            const auto tempAtlas = font->newFontAtlas();
             if (tempAtlas)
             {
                 _atlasMap[atlasName] = tempAtlas;
@@ -134,7 +135,7 @@ FontAtlas* FontAtlasCache::getFontAtlasFNT(const std::string& fontFileName, cons
 
         if(font)
         {
-            const auto tempAtlas = font->createFontAtlas();
+            const auto tempAtlas = font->newFontAtlas();
             if (tempAtlas)
             {
                 _atlasMap[atlasName] = tempAtlas;
@@ -164,7 +165,7 @@ FontAtlas* FontAtlasCache::getFontAtlasCharMap(const std::string& plistFile)
 
         if(font)
         {
-            auto tempAtlas = font->createFontAtlas();
+            auto tempAtlas = font->newFontAtlas();
             if (tempAtlas)
             {
                 _atlasMap[atlasName] = tempAtlas;
@@ -191,7 +192,7 @@ FontAtlas* FontAtlasCache::getFontAtlasCharMap(Texture2D* texture, int itemWidth
 
         if(font)
         {
-            auto tempAtlas = font->createFontAtlas();
+            auto tempAtlas = font->newFontAtlas();
             if (tempAtlas)
             {
                 _atlasMap[atlasName] = tempAtlas;
@@ -219,7 +220,7 @@ FontAtlas* FontAtlasCache::getFontAtlasCharMap(const std::string& charMapFile, i
 
         if(font)
         {
-            auto tempAtlas = font->createFontAtlas();
+            auto tempAtlas = font->newFontAtlas();
             if (tempAtlas)
             {
                 _atlasMap[atlasName] = tempAtlas;
@@ -272,7 +273,7 @@ void FontAtlasCache::reloadFontAtlasFNT(const std::string& fontFileName, const R
     auto font = FontFNT::create(fontFileName, imageRect, imageRotated);
     if (font)
     {
-        auto tempAtlas = font->createFontAtlas();
+        auto tempAtlas = font->newFontAtlas();
         if (tempAtlas)
         {
             _atlasMap[atlasName] = tempAtlas;

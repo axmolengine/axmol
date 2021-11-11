@@ -2,8 +2,9 @@
  Copyright (c) 2013      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
+ Copyright (c) 2021 Bytedance Inc.
+
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +41,7 @@ class FontAtlas;
 class CC_DLL Font : public Ref
 {
 public:
-    virtual FontAtlas* createFontAtlas() = 0;
+    virtual FontAtlas* newFontAtlas() = 0;
     virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int &outNumLetters) const = 0;
     virtual int getFontMaxHeight() const { return 0; }
 };

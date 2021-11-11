@@ -156,7 +156,6 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outlin
 , _ascender(0)
 , _descender(0)
 , _lineHeight(0)
-, _fontAtlas(nullptr)
 , _usedGlyphs(GlyphCollection::ASCII)
 {
     if (outline > 0.0f)
@@ -222,7 +221,7 @@ bool FontFreeType::createFontObject(const std::string& fontName, float fontSize)
         ++sharableData->referenceCount;
         auto& data = sharableData->data;
         if (data.isNull() || FT_New_Memory_Face(getFTLibrary(), data.getBytes(),
-                                                data.getSize(), 0, &face))
+                                                static_cast<FT_Long>(data.getSize()), 0, &face))
             return false;
     }
 
@@ -307,23 +306,18 @@ FontFreeType::~FontFreeType()
     }
 }
 
-FontAtlas* FontFreeType::createFontAtlas()
+FontAtlas* FontFreeType::newFontAtlas()
 {
-    if (_fontAtlas == nullptr)
+    auto fontAtlas = new (std::nothrow) FontAtlas(this);
+    if (fontAtlas && _usedGlyphs != GlyphCollection::DYNAMIC)
     {
-        _fontAtlas = new (std::nothrow) FontAtlas(*this);
-        if (_fontAtlas && _usedGlyphs != GlyphCollection::DYNAMIC)
+        std::u32string utf32;
+        if (StringUtils::UTF8ToUTF32(getGlyphCollection(), utf32))
         {
-            std::u32string utf32;
-            if (StringUtils::UTF8ToUTF32(getGlyphCollection(), utf32))
-            {
-                _fontAtlas->prepareLetterDefinitions(utf32);
-            }
+            fontAtlas->prepareLetterDefinitions(utf32);
         }
-        //        this->autorelease();
     }
-
-    return _fontAtlas;
+    return fontAtlas;
 }
 
 int* FontFreeType::getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const
