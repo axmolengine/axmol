@@ -57,7 +57,7 @@ struct vfloat4
 	/**
 	 * @brief Construct from zero-initialized value.
 	 */
-	ASTCENC_SIMD_INLINE vfloat4() {}
+	ASTCENC_SIMD_INLINE vfloat4() = default;
 
 	/**
 	 * @brief Construct from 4 values loaded from an unaligned address.
@@ -189,7 +189,7 @@ struct vint4
 	/**
 	 * @brief Construct from zero-initialized value.
 	 */
-	ASTCENC_SIMD_INLINE vint4() {}
+	ASTCENC_SIMD_INLINE vint4() = default;
 
 	/**
 	 * @brief Construct from 4 values loaded from an unaligned address.

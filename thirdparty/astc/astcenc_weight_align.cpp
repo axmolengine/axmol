@@ -333,7 +333,7 @@ static void compute_angular_endpoints_for_quant_levels(
 		if ((bsi < 0) && print_once)
 		{
 			print_once = false;
-			printf("INFO: Unable to find full encoding within search error limit\n\n");
+			printf("INFO: Unable to find full encoding within search error limit.\n\n");
 		}
 #endif
 
@@ -497,7 +497,7 @@ static void compute_angular_endpoints_for_quant_levels_lwc(
 		if ((bsi < 0) && print_once)
 		{
 			print_once = false;
-			printf("INFO: Unable to find low weight encoding within search error limit\n\n");
+			printf("INFO: Unable to find low weight encoding within search error limit.\n\n");
 		}
 #endif
 

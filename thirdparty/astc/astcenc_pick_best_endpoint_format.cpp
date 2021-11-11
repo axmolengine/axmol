@@ -1150,6 +1150,10 @@ unsigned int compute_ideal_endpoint_formats(
 		best_quant_levels_mod[i] = QUANT_2;
 	}
 
+	// Track a scalar best to avoid expensive search at least once ...
+	float error_of_best_combination = ERROR_CALC_DEFAULT;
+	int index_of_best_combination = -1;
+
 	// The block contains 1 partition
 	if (partition_count == 1)
 	{
@@ -1165,8 +1169,15 @@ unsigned int compute_ideal_endpoint_formats(
 			    best_error[0], format_of_choice[0], qwt_bitcounts[i],
 			    best_quant_levels[i], best_ep_formats[i][0]);
 
-			errors_of_best_combination[i] = error_of_best + qwt_errors[i];
+			float total_error = error_of_best + qwt_errors[i];
+			errors_of_best_combination[i] = total_error;
 			best_quant_levels_mod[i] = best_quant_levels[i];
+
+			if (total_error < error_of_best_combination)
+			{
+				error_of_best_combination = total_error;
+				index_of_best_combination = i;
+			}
 		}
 	}
 	// The block contains 2 partitions
@@ -1191,7 +1202,14 @@ unsigned int compute_ideal_endpoint_formats(
 			    best_quant_levels[i], best_quant_levels_mod[i],
 			    best_ep_formats[i]);
 
-			errors_of_best_combination[i] = error_of_best + qwt_errors[i];
+			float total_error = error_of_best + qwt_errors[i];
+			errors_of_best_combination[i] = total_error;
+
+			if (total_error < error_of_best_combination)
+			{
+				error_of_best_combination = total_error;
+				index_of_best_combination = i;
+			}
 		}
 	}
 	// The block contains 3 partitions
@@ -1216,7 +1234,14 @@ unsigned int compute_ideal_endpoint_formats(
 			    best_quant_levels[i], best_quant_levels_mod[i],
 			    best_ep_formats[i]);
 
-			errors_of_best_combination[i] = error_of_best + qwt_errors[i];
+			float total_error = error_of_best + qwt_errors[i];
+			errors_of_best_combination[i] = total_error;
+
+			if (total_error < error_of_best_combination)
+			{
+				error_of_best_combination = total_error;
+				index_of_best_combination = i;
+			}
 		}
 	}
 	// The block contains 4 partitions
@@ -1242,13 +1267,28 @@ unsigned int compute_ideal_endpoint_formats(
 			    best_quant_levels[i], best_quant_levels_mod[i],
 			    best_ep_formats[i]);
 
-			errors_of_best_combination[i] = error_of_best + qwt_errors[i];
+			float total_error = error_of_best + qwt_errors[i];
+			errors_of_best_combination[i] = total_error;
+
+			if (total_error < error_of_best_combination)
+			{
+				error_of_best_combination = total_error;
+				index_of_best_combination = i;
+			}
 		}
 	}
 
-	// Go through the results and pick the best candidate modes
 	int best_error_weights[TUNE_MAX_TRIAL_CANDIDATES];
-	for (unsigned int i = 0; i < tune_candidate_limit; i++)
+
+	// Fast path the first result and avoid the list search for trial 0
+	best_error_weights[0] = index_of_best_combination;
+	if (index_of_best_combination >= 0)
+	{
+		errors_of_best_combination[index_of_best_combination] = ERROR_CALC_DEFAULT;
+	}
+
+	// Search the remaining results and pick the best candidate modes for trial 1+
+	for (unsigned int i = 1; i < tune_candidate_limit; i++)
 	{
 		vint vbest_error_index(-1);
 		vfloat vbest_ep_error(ERROR_CALC_DEFAULT);

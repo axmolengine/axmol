@@ -322,7 +322,7 @@ static void compute_ideal_colors_and_weights_3_comp(
 	ei.ep.partition_count = partition_count;
 	promise(partition_count > 0);
 
-	unsigned int texel_count= bsd.texel_count;
+	unsigned int texel_count = bsd.texel_count;
 	promise(texel_count > 0);
 
 	partition_metrics pms[BLOCK_MAX_PARTITIONS];
@@ -499,8 +499,8 @@ static void compute_ideal_colors_and_weights_4_comp(
 	promise(texel_count > 0);
 	promise(partition_count > 0);
 
-	float lowparam[BLOCK_MAX_PARTITIONS] { 1e10, 1e10, 1e10, 1e10 };
-	float highparam[BLOCK_MAX_PARTITIONS] { -1e10, -1e10, -1e10, -1e10 };
+	float lowparam[BLOCK_MAX_PARTITIONS] { 1e10f, 1e10f, 1e10f, 1e10f };
+	float highparam[BLOCK_MAX_PARTITIONS] { -1e10f, -1e10f, -1e10f, -1e10f };
 
 	line4 lines[BLOCK_MAX_PARTITIONS];
 
@@ -1129,13 +1129,13 @@ void recompute_ideal_colors_1plane(
 		vfloat4 rgba_sum(1e-17f);
 		vfloat4 rgba_weight_sum(1e-17f);
 
-		int texel_count = pi.partition_texel_count[i];
+		unsigned int texel_count = pi.partition_texel_count[i];
 		const uint8_t *texel_indexes = pi.texels_of_partition[i];
 
 		promise(texel_count > 0);
-		for (int j = 0; j < texel_count; j++)
+		for (unsigned int j = 0; j < texel_count; j++)
 		{
-			int tix = texel_indexes[j];
+			unsigned int tix = texel_indexes[j];
 
 			vfloat4 rgba = blk.texel(tix);
 			vfloat4 error_weight = ewb.error_weights[tix];
@@ -1165,9 +1165,9 @@ void recompute_ideal_colors_1plane(
 		vfloat4 weight_weight_sum = vfloat4(1e-17f);
 		float psum = 1e-17f;
 
-		for (int j = 0; j < texel_count; j++)
+		for (unsigned int j = 0; j < texel_count; j++)
 		{
-			int tix = texel_indexes[j];
+			unsigned int tix = texel_indexes[j];
 
 			vfloat4 rgba = blk.texel(tix);
 			vfloat4 color_weight = ewb.error_weights[tix];
@@ -1175,8 +1175,13 @@ void recompute_ideal_colors_1plane(
 			// TODO: Move this calculation out to the color block?
 			float ls_weight = hadd_rgb_s(color_weight);
 
-			float idx0 = dec_weight_quant_uvalue[tix];
-			if (is_decimated)
+			float idx0;
+			if (!is_decimated)
+			{
+				assert(tix < BLOCK_MAX_WEIGHTS);
+ 				idx0 = dec_weight_quant_uvalue[tix];
+			}
+			else
 			{
 				idx0 = bilinear_infill(di, dec_weight_quant_uvalue, tix);
 			}
@@ -1318,7 +1323,7 @@ void recompute_ideal_colors_2planes(
 	vfloat4& rgbo_vector,
 	int plane2_component
 ) {
-	int weight_count = di.weight_count;
+	unsigned int weight_count = di.weight_count;
 	bool is_decimated = di.weight_count != di.texel_count;
 
 	promise(weight_count > 0);
@@ -1328,7 +1333,8 @@ void recompute_ideal_colors_2planes(
 	float dec_weights_quant_uvalue_plane1[BLOCK_MAX_WEIGHTS_2PLANE];
 	float dec_weights_quant_uvalue_plane2[BLOCK_MAX_WEIGHTS_2PLANE];
 
-	for (int i = 0; i < weight_count; i++)
+	assert(weight_count <= BLOCK_MAX_WEIGHTS_2PLANE);
+	for (unsigned int i = 0; i < weight_count; i++)
 	{
 		dec_weights_quant_uvalue_plane1[i] = qat->unquantized_value[dec_weights_quant_pvalue_plane1[i]] * (1.0f / 64.0f);
 		dec_weights_quant_uvalue_plane2[i] = qat->unquantized_value[dec_weights_quant_pvalue_plane2[i]] * (1.0f / 64.0f);
@@ -1337,7 +1343,7 @@ void recompute_ideal_colors_2planes(
 	vfloat4 rgba_sum = ewb.block_error_weighted_rgba_sum;
 	vfloat4 rgba_weight_sum = ewb.block_error_weight_sum;
 
-	int texel_count = bsd.texel_count;
+	unsigned int texel_count = bsd.texel_count;
 	vfloat4 scale_direction = normalize((rgba_sum * (1.0f / rgba_weight_sum)).swz<0, 1, 2>());
 
 	float scale_max = 0.0f;
@@ -1365,7 +1371,7 @@ void recompute_ideal_colors_2planes(
 	vfloat4 weight_weight_sum = vfloat4(1e-17f);
 	float psum = 1e-17f;
 
-	for (int j = 0; j < texel_count; j++)
+	for (unsigned int j = 0; j < texel_count; j++)
 	{
 		vfloat4 rgba = blk.texel(j);
 		vfloat4 color_weight = ewb.error_weights[j];
@@ -1373,8 +1379,13 @@ void recompute_ideal_colors_2planes(
 		// TODO: Move this calculation out to the color block?
 		float ls_weight = hadd_rgb_s(color_weight);
 
-		float idx0 = dec_weights_quant_uvalue_plane1[j];
-		if (is_decimated)
+		float idx0;
+		if (!is_decimated)
+		{
+			assert(j < BLOCK_MAX_WEIGHTS_2PLANE);
+		 	idx0 = dec_weights_quant_uvalue_plane1[j];
+		}
+		else
 		{
 			idx0 = bilinear_infill(di, dec_weights_quant_uvalue_plane1, j);
 		}
@@ -1400,8 +1411,13 @@ void recompute_ideal_colors_2planes(
 		right_sum  += right;
 		lmrs_sum   += lmrs;
 
-		float idx1 = dec_weights_quant_uvalue_plane2[j];
-		if (is_decimated)
+		float idx1;
+		if (!is_decimated)
+		{
+			assert(j < BLOCK_MAX_WEIGHTS_2PLANE);
+			idx1 = dec_weights_quant_uvalue_plane2[j];
+		}
+		else
 		{
 			idx1 = bilinear_infill(di, dec_weights_quant_uvalue_plane2, j);
 		}

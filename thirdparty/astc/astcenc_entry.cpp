@@ -62,7 +62,7 @@ struct astcenc_preset_config
 static const std::array<astcenc_preset_config, 5> preset_configs_high {{
 	{
 		ASTCENC_PRE_FASTEST,
-		3, 4, 30, 1, 2, 79.0f, 57.0f, 2.0f, 2.0f, 1.0f, 1.0f, 0.5f, 25
+		2, 8, 40, 2, 2, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.0f, 0.5f, 25
 	}, {
 		ASTCENC_PRE_FAST,
 		3, 12, 55, 3, 3, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.1f, 0.65f, 20
@@ -86,7 +86,7 @@ static const std::array<astcenc_preset_config, 5> preset_configs_high {{
 static const std::array<astcenc_preset_config, 5> preset_configs_mid {{
 	{
 		ASTCENC_PRE_FASTEST,
-		3, 4, 30, 1, 2, 79.0f, 57.0f, 2.0f, 2.0f, 1.0f, 1.0f, 0.5f, 20
+		2, 8, 40, 2, 2, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.0f, 0.5f, 20
 	}, {
 		ASTCENC_PRE_FAST,
 		3, 12, 55, 3, 3, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.1f, 0.5f, 16
@@ -110,7 +110,7 @@ static const std::array<astcenc_preset_config, 5> preset_configs_mid {{
 static const std::array<astcenc_preset_config, 5> preset_configs_low {{
 	{
 		ASTCENC_PRE_FASTEST,
-		3, 4, 30, 1, 2, 79.0f, 57.0f, 2.0f, 2.0f, 1.0f, 1.0f, 0.5f, 20
+		2, 6, 38, 2, 2, 85.0f, 63.0f, 3.5f, 3.5f, 1.0f, 1.0f, 0.5f, 20
 	}, {
 		ASTCENC_PRE_FAST,
 		3, 10, 53, 3, 3, 85.0f, 63.0f, 3.5f, 3.5f, 1.0f, 1.1f, 0.5f, 16
@@ -661,9 +661,13 @@ astcenc_error astcenc_config_init(
 		config.tune_3_partition_early_out_limit_factor *= 1.5f;
 		config.tune_2_plane_early_out_limit_correlation = 0.99f;
 
+		// Normals are prone to blocking artifacts on smooth curves
+		// so force compressor to try harder here ...
+		config.b_deblock_weight = 1.8f;
+		config.tune_db_limit *= 1.03f;
+
 		if (flags & ASTCENC_FLG_USE_PERCEPTUAL)
 		{
-			config.b_deblock_weight = 1.8f;
 			config.v_rgba_radius = 3;
 			config.v_rgba_mean_stdev_mix = 0.0f;
 			config.v_rgb_mean = 0.0f;
@@ -819,7 +823,6 @@ astcenc_error astcenc_context_alloc(
 #if !defined(ASTCENC_DECOMPRESS_ONLY)
 	prepare_angular_tables();
 #endif
-	init_quant_mode_table();
 
 	return ASTCENC_SUCCESS;
 }

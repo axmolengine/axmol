@@ -52,12 +52,14 @@
  * @brief Pick some initital kmeans cluster centers.
  *
  * @param      blk               The image block color data to compress.
+ * @param      ewb               The image error weight block.
  * @param      texel_count       The number of texels in the block.
  * @param      partition_count   The number of partitions in the block.
  * @param[out] cluster_centers   The initital partition cluster center colors.
  */
 static void kmeans_init(
 	const image_block& blk,
+	const error_weight_block& ewb,
 	unsigned int texel_count,
 	unsigned int partition_count,
 	vfloat4 cluster_centers[BLOCK_MAX_PARTITIONS]
@@ -80,6 +82,7 @@ static void kmeans_init(
 	{
 		vfloat4 color = blk.texel(i);
 		vfloat4 diff = color - center_color;
+		diff = diff * ewb.error_weights[i];
 		float distance = dot_s(diff, diff);
 		distance_sum += distance;
 		distances[i] = distance;
@@ -125,6 +128,7 @@ static void kmeans_init(
 		{
 			vfloat4 color = blk.texel(i);
 			vfloat4 diff = color - center_color;
+			diff = diff * ewb.error_weights[i];
 			float distance = dot_s(diff, diff);
 			distance = astc::min(distance, distances[i]);
 			distance_sum += distance;
@@ -137,6 +141,7 @@ static void kmeans_init(
  * @brief Assign texels to clusters, based on a set of chosen center points.
  *
  * @param      blk                  The image block color data to compress.
+ * @param      ewb                  The image error weight block.
  * @param      texel_count          The number of texels in the block.
  * @param      partition_count      The number of partitions in the block.
  * @param      cluster_centers      The partition cluster center colors.
@@ -144,6 +149,7 @@ static void kmeans_init(
  */
 static void kmeans_assign(
 	const image_block& blk,
+	const error_weight_block& ewb,
 	unsigned int texel_count,
 	unsigned int partition_count,
 	const vfloat4 cluster_centers[BLOCK_MAX_PARTITIONS],
@@ -164,6 +170,7 @@ static void kmeans_assign(
 		for (unsigned int j = 0; j < partition_count; j++)
 		{
 			vfloat4 diff = color - cluster_centers[j];
+			diff = diff * ewb.error_weights[i];
 			float distance = dot_s(diff, diff);
 			if (distance < best_distance)
 			{
@@ -424,12 +431,14 @@ static void get_partition_ordering_by_mismatch_bits(
  *
  * @param      bsd                  The block size information.
  * @param      blk                  The image block color data to compress.
+ * @param      ewb                  The image error weight block.
  * @param      partition_count      The desired number of partitions in the block.
  * @param[out] partition_ordering   The list of recommended partition indices, in priority order.
   */
 static void compute_kmeans_partition_ordering(
 	const block_size_descriptor& bsd,
 	const image_block& blk,
+	const error_weight_block& ewb,
 	unsigned int partition_count,
 	unsigned int partition_ordering[BLOCK_MAX_PARTITIONINGS]
 ) {
@@ -441,14 +450,14 @@ static void compute_kmeans_partition_ordering(
 	{
 		if (i == 0)
 		{
-			kmeans_init(blk, bsd.texel_count, partition_count, cluster_centers);
+			kmeans_init(blk, ewb, bsd.texel_count, partition_count, cluster_centers);
 		}
 		else
 		{
 			kmeans_update(blk, bsd.texel_count, partition_count, cluster_centers, texel_partitions);
 		}
 
-		kmeans_assign(blk, bsd.texel_count, partition_count, cluster_centers, texel_partitions);
+		kmeans_assign(blk, ewb, bsd.texel_count, partition_count, cluster_centers, texel_partitions);
 	}
 
 	// Construct the block bitmaps of texel assignments to each partition
@@ -502,7 +511,7 @@ void find_best_partition_candidates(
 	weight_imprecision_estim = weight_imprecision_estim * weight_imprecision_estim;
 
 	unsigned int partition_sequence[BLOCK_MAX_PARTITIONINGS];
-	compute_kmeans_partition_ordering(bsd, blk, partition_count, partition_sequence);
+	compute_kmeans_partition_ordering(bsd, blk, ewb, partition_count, partition_sequence);
 
 	bool uses_alpha = !blk.is_constant_channel(3);
 

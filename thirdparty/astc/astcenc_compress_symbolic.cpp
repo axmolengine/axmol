@@ -41,15 +41,13 @@ static void merge_endpoints(
 	endpoints& result
 ) {
 	unsigned int partition_count = ep_plane1.partition_count;
+	assert(partition_count == 1);
+
 	vmask4 sep_mask = vint4::lane_id() == vint4(component_plane2);
 
 	result.partition_count = partition_count;
-	promise(partition_count > 0);
-	for (unsigned int i = 0; i < partition_count; i++)
-	{
-		result.endpt0[i] = select(ep_plane1.endpt0[i], ep_plane2.endpt0[i], sep_mask);
-		result.endpt1[i] = select(ep_plane1.endpt1[i], ep_plane2.endpt1[i], sep_mask);
-	}
+	result.endpt0[0] = select(ep_plane1.endpt0[0], ep_plane2.endpt0[0], sep_mask);
+	result.endpt1[0] = select(ep_plane1.endpt1[0], ep_plane2.endpt1[0], sep_mask);
 }
 
 /**
@@ -1095,19 +1093,6 @@ static float prepare_error_weight_block(
 						error_weight = 1.0f / error_weight;
 					}
 
-					if (ctx.config.flags & ASTCENC_FLG_MAP_NORMAL)
-					{
-						// Convert from 0 to 1 to -1 to +1 range.
-						float xN = ((blk.data_r[idx] * (1.0f / 65535.0f)) - 0.5f) * 2.0f;
-						float yN = ((blk.data_a[idx] * (1.0f / 65535.0f)) - 0.5f) * 2.0f;
-
-						float denom = 1.0f - xN * xN - yN * yN;
-						denom = astc::max(denom, 0.1f);
-						denom = 1.0f / denom;
-						error_weight.set_lane<0>(error_weight.lane<0>() * (1.0f + xN * xN * denom));
-						error_weight.set_lane<3>(error_weight.lane<3>() * (1.0f + yN * yN * denom));
-					}
-
 					if (ctx.config.flags & ASTCENC_FLG_USE_ALPHA_WEIGHT)
 					{
 						float alpha_scale;
@@ -1552,6 +1537,27 @@ void compress_block(
 	trace_add_data("exit", "quality not hit");
 
 END_OF_TESTS:
+	// If we still have an error block then convert to something we can encode
+	// TODO: Do something more sensible here, such as average color block
+	if (scb.block_type == SYM_BTYPE_ERROR)
+	{
+#if !defined(NDEBUG)
+		static bool printed_once = false;
+		if (!printed_once)
+		{
+			printed_once = true;
+			printf("WARN: At least one block failed to find a valid encoding.\n"
+			       "      Try increasing compression quality settings.\n\n");
+		}
+#endif
+
+		scb.block_type = SYM_BTYPE_CONST_U16;
+		scb.block_mode = -2;
+		vfloat4 color_f32 = clamp(0.0f, 1.0f, blk.origin_texel) * 65535.0f;
+		vint4 color_u16 = float_to_int_rtn(color_f32);
+		store(color_u16, scb.constant_color);
+	}
+
 	// Compress to a physical block
 	symbolic_to_physical(*bsd, scb, pcb);
 }

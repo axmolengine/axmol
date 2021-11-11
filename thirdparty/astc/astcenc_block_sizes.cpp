@@ -950,10 +950,10 @@ static void construct_block_size_descriptor_2d(
 	bsd.always_block_mode_count = always_block_mode_count;
 	bsd.always_decimation_mode_count = always_decimation_mode_count;
 
+#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	assert(bsd.always_block_mode_count > 0);
 	assert(bsd.always_decimation_mode_count > 0);
 
-#if !defined(ASTCENC_DECOMPRESS_ONLY)
 	delete[] percentiles;
 #endif
 

@@ -101,6 +101,8 @@ void symbolic_to_physical(
 	const symbolic_compressed_block& scb,
 	physical_compressed_block& pcb
 ) {
+	assert(scb.block_type != SYM_BTYPE_ERROR);
+
 	// Constant color block using UNORM16 colors
 	if (scb.block_type == SYM_BTYPE_CONST_U16)
 	{
@@ -301,6 +303,7 @@ void physical_to_symbolic(
 			if (rsvbits != 3)
 			{
 				scb.block_type = SYM_BTYPE_ERROR;
+				return;
 			}
 
 			int vx_low_s = read_bits(8, 12, pcb.data) | (read_bits(5, 12 + 8, pcb.data) << 8);
@@ -313,6 +316,7 @@ void physical_to_symbolic(
 			if ((vx_low_s >= vx_high_s || vx_low_t >= vx_high_t) && !all_ones)
 			{
 				scb.block_type = SYM_BTYPE_ERROR;
+				return;
 			}
 		}
 		else
@@ -330,6 +334,7 @@ void physical_to_symbolic(
 			if ((vx_low_s >= vx_high_s || vx_low_t >= vx_high_t || vx_low_p >= vx_high_p) && !all_ones)
 			{
 				scb.block_type = SYM_BTYPE_ERROR;
+				return;
 			}
 		}
 
@@ -384,6 +389,7 @@ void physical_to_symbolic(
 	if (is_dual_plane && partition_count == 4)
 	{
 		scb.block_type = SYM_BTYPE_ERROR;
+		return;
 	}
 
 	scb.color_formats_matched = 0;
@@ -449,6 +455,7 @@ void physical_to_symbolic(
 	if (color_integer_count > 18)
 	{
 		scb.block_type = SYM_BTYPE_ERROR;
+		return;
 	}
 
 	// Determine the color endpoint format to use
@@ -465,13 +472,14 @@ void physical_to_symbolic(
 	}
 
 	int color_quant_level = quant_mode_table[color_integer_count >> 1][color_bits];
-	scb.quant_mode = (quant_method)color_quant_level;
 	if (color_quant_level < QUANT_6)
 	{
 		scb.block_type = SYM_BTYPE_ERROR;
+		return;
 	}
 
 	// Unpack the integer color values and assign to endpoints
+	scb.quant_mode = (quant_method)color_quant_level;
 	uint8_t values_to_decode[32];
 	decode_ise((quant_method)color_quant_level, color_integer_count, pcb.data, values_to_decode, (partition_count == 1 ? 17 : 19 + PARTITION_INDEX_BITS));
 

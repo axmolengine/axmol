@@ -52,7 +52,7 @@
  *     astcenc_config my_config;
  *     astcenc_config_init(..., &my_config);
  *
- *     // Power users can tune the tweak <my_config> settings here ...
+ *     // Power users can tweak <my_config> settings here ...
  *
  *     // Allocate working state given config and thread_count
  *     astcenc_context* my_context;

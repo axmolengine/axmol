@@ -701,7 +701,7 @@ struct block_size_descriptor
 	/** @brief The active block modes, stored in low indices. */
 	block_mode block_modes[WEIGHTS_MAX_BLOCK_MODES];
 
-	/** @brief The partion tables for all of the possible partitions. */
+	/** @brief The partition tables for all of the possible partitions. */
 	partition_info partitions[(3 * BLOCK_MAX_PARTITIONINGS) + 1];
 
 	/** @brief The active texels for k-means partition selection. */
@@ -1190,7 +1190,7 @@ struct symbolic_compressed_block
 	/** @brief The endpoint color formats for each partition; valid for @c NONCONST blocks. */
 	uint8_t color_formats[BLOCK_MAX_PARTITIONS];
 
-	/** @brief The endpoint color formats for each partition; valid for @c NONCONST blocks. */
+	/** @brief The endpoint color quant mode; valid for @c NONCONST blocks. */
 	quant_method quant_mode;
 
 	/** @brief The error of the current encoding; valid for @c NONCONST blocks. */
@@ -1485,15 +1485,7 @@ extern const uint8_t color_unquant_tables[21][256];
  * number of compressed storage bits. Returns -1 for cases where the requested integer count cannot
  * ever fit in the supplied storage size.
  */
-extern int8_t quant_mode_table[17][128];
-
-/**
- * @brief Initialize the quant mode table.
- *
- * This is stored in global memory so this only needs to be done once, but is typically done
- * whenever a new context is created.
- */
-void init_quant_mode_table();
+extern const int8_t quant_mode_table[17][128];
 
 /**
  * @brief Encode a packed string using BISE.
@@ -2185,7 +2177,7 @@ void compute_angular_endpoints_1plane(
 	float high_value[WEIGHTS_MAX_BLOCK_MODES]);
 
 /**
- * @brief Compute the angular endpoints for one plane for each block mode.
+ * @brief Compute the angular endpoints for two planes for each block mode.
  *
  * @param      tune_low_weight_limit    Weight count cutoff below which we use simpler searches.
  * @param     bsd                       The block size descriptor for the current trial.

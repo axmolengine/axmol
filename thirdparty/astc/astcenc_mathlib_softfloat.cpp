@@ -147,42 +147,47 @@ static sf32 sf16_to_sf32(sf16 inp)
 		with just 1 table lookup, 2 shifts and 1 add.
 	*/
 
-	#define WITH_MB(a) INT32_C((a) | (1 << 31))
-	static const int32_t tbl[64] =
+	#define WITH_MSB(a) (UINT32_C(a) | (1u << 31))
+	static const uint32_t tbl[64] =
 	{
-		WITH_MB(0x00000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000),
-		INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000),
-		INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000),
-		INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), INT32_C(0x1C000), WITH_MB(0x38000),
-		WITH_MB(0x38000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000),
-		INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000),
-		INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000),
-		INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), INT32_C(0x54000), WITH_MB(0x70000)
+		WITH_MSB(0x00000), 0x1C000, 0x1C000, 0x1C000, 0x1C000, 0x1C000, 0x1C000,          0x1C000,
+		         0x1C000,  0x1C000, 0x1C000, 0x1C000, 0x1C000, 0x1C000, 0x1C000,          0x1C000,
+		         0x1C000,  0x1C000, 0x1C000, 0x1C000, 0x1C000, 0x1C000, 0x1C000,          0x1C000,
+		         0x1C000,  0x1C000, 0x1C000, 0x1C000, 0x1C000, 0x1C000, 0x1C000, WITH_MSB(0x38000),
+		WITH_MSB(0x38000), 0x54000, 0x54000, 0x54000, 0x54000, 0x54000, 0x54000,          0x54000,
+		         0x54000,  0x54000, 0x54000, 0x54000, 0x54000, 0x54000, 0x54000,          0x54000,
+		         0x54000,  0x54000, 0x54000, 0x54000, 0x54000, 0x54000, 0x54000,          0x54000,
+		         0x54000,  0x54000, 0x54000, 0x54000, 0x54000, 0x54000, 0x54000, WITH_MSB(0x70000)
 	};
 
-	int32_t res = tbl[inpx >> 10];
+	uint32_t res = tbl[inpx >> 10];
 	res += inpx;
 
-	/* the normal cases: the MSB of 'res' is not set. */
-	if (res >= 0)				/* signed compare */
-		return res << 13;
-
-	/* Infinity and Zero: the bottom 10 bits of 'res' are clear. */
-	if ((res & UINT32_C(0x3FF)) == 0)
-		return res << 13;
-
-	/* NaN: the exponent field of 'inp' is not zero; NaNs must be quietened. */
-	if ((inpx & 0x7C00) != 0)
-		return (res << 13) | UINT32_C(0x400000);
-
-	/* the remaining cases are Denormals. */
+	/* Normal cases: MSB of 'res' not set. */
+	if ((res & WITH_MSB(0)) == 0)
 	{
-		uint32_t sign = (inpx & UINT32_C(0x8000)) << 16;
-		uint32_t mskval = inpx & UINT32_C(0x7FFF);
-		uint32_t leadingzeroes = clz32(mskval);
-		mskval <<= leadingzeroes;
-		return (mskval >> 8) + ((0x85 - leadingzeroes) << 23) + sign;
+		return res << 13;
 	}
+
+	/* Infinity and Zero: 10 LSB of 'res' not set. */
+	if ((res & 0x3FF) == 0)
+	{
+		return res << 13;
+	}
+
+	/* NaN: the exponent field of 'inp' is non-zero. */
+	if ((inpx & 0x7C00) != 0)
+	{
+		/* All NaNs are quietened. */
+		return (res << 13) | 0x400000;
+	}
+
+	/* Denormal cases */
+	uint32_t sign = (inpx & 0x8000) << 16;
+	uint32_t mskval = inpx & 0x7FFF;
+	uint32_t leadingzeroes = clz32(mskval);
+	mskval <<= leadingzeroes;
+	return (mskval >> 8) + ((0x85 - leadingzeroes) << 23) + sign;
 }
 
 /* Conversion routine that converts from FP32 to FP16. It supports denormals and all rounding modes. If a NaN is given as input, it is quietened. */
