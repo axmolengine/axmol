@@ -420,7 +420,8 @@ unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
                          charUTF8.c_str());
         }
 #endif
-        if (_distanceFieldEnabled) {
+        if (_distanceFieldEnabled && _fontFace->glyph->bitmap.buffer)
+        {
             // Require freetype version > 2.11.0, because freetype 2.11.0 sdf has memory access bug, see: https://gitlab.freedesktop.org/freetype/freetype/-/issues/1077
             FT_Render_Glyph(_fontFace->glyph, FT_Render_Mode::FT_RENDER_MODE_SDF);
         }
