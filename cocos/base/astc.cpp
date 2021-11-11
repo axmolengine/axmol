@@ -133,8 +133,9 @@ private:
         task->_xblocks = xblocks;
         task->_yblocks = yblocks;
 #if ASTCDEC_NO_CONTEXT
-        static std::once_flag once_flag;
-        std::call_once(once_flag, init_quant_mode_table);
+        //since astcenc-3.3, doesn't required
+        //static std::once_flag once_flag;
+        //std::call_once(once_flag, init_quant_mode_table);
 
         task->_block_x = block_x;
         task->_block_y = block_y;
