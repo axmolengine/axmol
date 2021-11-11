@@ -121,12 +121,12 @@ private:
     FT_Library getFTLibrary();
 
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
-    unsigned char* getGlyphBitmapWithOutline(uint64_t code, FT_BBox& bbox);
+    unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
 
     void setGlyphCollection(GlyphCollection glyphs, const char* customGlyphs = nullptr);
     const char* getGlyphCollection() const;
 
-    FT_Face _fontRef;
+    FT_Face _fontFace;
     std::unique_ptr<FT_StreamRec> _fontStream;
     FT_Stroker _stroker;
     FT_Encoding _encoding;
