@@ -594,7 +594,7 @@ void ValueTest::onEnter()
     
     unsigned char byte = 50;
     Value v5(byte);
-    CCASSERT(v5.getType() == Value::Type::BYTE, "v5's value type should be Value::Type::BTYE.");
+    CCASSERT(v5.getType() == Value::Type::INT_UI32, "v5's value type should be Value::Type::BTYE.");
     CCASSERT(!v5.isNull(), "v5 is not null.");
     
     Value v6(true);
