@@ -388,7 +388,6 @@ unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
                                             Rect& outRect,
                                             int& xAdvance)
 {
-    bool invalidChar   = true;
     unsigned char* ret = nullptr;
 
     do
@@ -509,21 +508,14 @@ unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
             ret = blendImage;
         }
 
-        invalidChar = false;
+        return ret;
     } while (0);
 
-    if (invalidChar)
-    {
-        outRect.size.width  = 0;
-        outRect.size.height = 0;
-        xAdvance            = 0;
+    outRect.size.width  = 0;
+    outRect.size.height = 0;
+    xAdvance            = 0;
 
-        return nullptr;
-    }
-    else
-    {
-        return ret;
-    }
+    return nullptr;
 }
 
 unsigned char* FontFreeType::getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox)
