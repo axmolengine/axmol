@@ -2043,7 +2043,44 @@ void vec2_array_to_luaval(lua_State* L,const cocos2d::Vec2* points, int count)
     }
 }
 
-void vec2_to_luaval(lua_State* L,const cocos2d::Vec2& vec2)
+
+static int vec2_index(lua_State* L) {
+    // top is table
+    const char* name = lua_tostring(L, 2);
+    if (strcmp(name, "width") == 0)
+    {
+        lua_pop(L, 1); // pop the old name
+        lua_pushstring(L, "x");
+    }
+    else if (strcmp(name, "height") == 0) {
+        lua_pop(L, 1);
+        lua_pushstring(L, "y");
+    }
+    lua_rawget(L, -2);
+    return 1;
+}
+static int vec2_newindex(lua_State* L) {
+    const char* name = lua_tostring(L, 2);
+    if (strcmp(name, "width") == 0)
+    {
+        lua_remove(L, 2);
+        lua_pushstring(L, "x");
+        lua_insert(L, 2);
+        
+    }
+    else if (strcmp(name, "height") == 0)
+    {
+        lua_remove(L, 2);
+        lua_pushstring(L, "y");
+        lua_insert(L, 2);
+    }
+
+    lua_rawset(L, -3);
+
+    return 0;
+}
+
+void vec2_to_luaval(lua_State* L, const cocos2d::Vec2& vec2)
 {
     if (NULL  == L)
         return;
@@ -2055,6 +2092,18 @@ void vec2_to_luaval(lua_State* L,const cocos2d::Vec2& vec2)
     lua_pushnumber(L, (lua_Number) vec2.y);               /* L: table key value*/
     lua_rawset(L, -3);
 
+    int top = lua_gettop(L);
+    luaL_getmetatable(L, "_vec2mt");
+    if (!lua_istable(L, -1))
+    {
+        lua_settop(L, top); // restore stack
+        luaL_newmetatable(L, "_vec2mt");
+        lua_pushcfunction(L, vec2_index);
+        lua_setfield(L, -2, "__index");
+        lua_pushcfunction(L, vec2_newindex);
+        lua_setfield(L, -2, "__newindex");
+    }
+    lua_setmetatable(L, -2);
 }
 
 void vec3_to_luaval(lua_State* L,const cocos2d::Vec3& vec3)
