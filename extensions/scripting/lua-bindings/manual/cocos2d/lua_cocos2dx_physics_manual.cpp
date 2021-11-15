@@ -181,11 +181,12 @@ int lua_cocos2dx_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
         cocos2d::Vec2 arg2;
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         do {
-            arg0 = [handler, tolua_S](cocos2d::PhysicsWorld &world, const cocos2d::PhysicsRayCastInfo &info, void * data) -> bool
-            {                
-                tolua_pushusertype(tolua_S, (void*)(&world), getLuaTypeName(&world, "cc.PhysicsWorld"));
-                physics_raycastinfo_to_luaval(tolua_S, info);
-                return LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
+            arg0 = [handler](cocos2d::PhysicsWorld &world, const cocos2d::PhysicsRayCastInfo &info, void * data) -> bool {
+                auto stack = LuaEngine::getInstance()->getLuaStack();
+                auto Ls = stack->getLuaState();
+                tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "cc.PhysicsWorld"));
+                physics_raycastinfo_to_luaval(Ls, info);
+                return stack->executeFunctionByHandler(handler, 2);
             };
         } while(0);
         
@@ -239,11 +240,13 @@ int lua_cocos2dx_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
         cocos2d::Rect arg1;
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         do {
-            arg0 = [handler, tolua_S](cocos2d::PhysicsWorld &world, cocos2d::PhysicsShape &shape, void * data) -> bool
+            arg0 = [handler](cocos2d::PhysicsWorld &world, cocos2d::PhysicsShape &shape, void * data) -> bool
             {
-                tolua_pushusertype(tolua_S, (void*)(&world), getLuaTypeName(&world, "cc.PhysicsWorld"));
-                toluafix_pushusertype_ccobject(tolua_S, shape._ID, &shape._luaID, (void*)(&shape), "cc.PhysicsShape");
-                return LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
+                auto stack = LuaEngine::getInstance()->getLuaStack();
+                auto Ls = stack->getLuaState();
+                tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "cc.PhysicsWorld"));
+                toluafix_pushusertype_ccobject(Ls, shape._ID, &shape._luaID, (void*)(&shape), "cc.PhysicsShape");
+                return stack->executeFunctionByHandler(handler, 2);
             };
         } while(0);
         
@@ -298,11 +301,13 @@ int lua_cocos2dx_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
         cocos2d::Vec2 arg1;
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         do {
-            arg0 = [handler, tolua_S](cocos2d::PhysicsWorld &world, cocos2d::PhysicsShape &shape, void * data) -> bool
-            {                
-                tolua_pushusertype(tolua_S, (void*)(&world), getLuaTypeName(&world, "cc.PhysicsWorld"));
-                toluafix_pushusertype_ccobject(tolua_S, shape._ID, &shape._luaID, (void*)(&shape), "cc.PhysicsShape");
-                return LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
+            arg0 = [handler](cocos2d::PhysicsWorld &world, cocos2d::PhysicsShape &shape, void * data) -> bool
+            {          
+                auto stack = LuaEngine::getInstance()->getLuaStack();
+                auto Ls = stack->getLuaState();
+                tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "cc.PhysicsWorld"));
+                toluafix_pushusertype_ccobject(Ls, shape._ID, &shape._luaID, (void*)(&shape), "cc.PhysicsShape");
+                return stack->executeFunctionByHandler(handler, 2);
             };
             assert(false);
         } while(0)

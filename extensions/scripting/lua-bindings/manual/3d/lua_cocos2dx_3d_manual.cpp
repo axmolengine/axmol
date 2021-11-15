@@ -105,11 +105,14 @@ int lua_cocos2dx_3d_Sprite3D_createAsync(lua_State* L)
 #endif
             LUA_FUNCTION handler = toluafix_ref_function(L,4,0);
 
-            cocos2d::Sprite3D::createAsync(modelPath, texturePath, [=](cocos2d::Sprite3D* sprite, void* callbackparam){
+            cocos2d::Sprite3D::createAsync(
+                modelPath, texturePath,
+                [=](cocos2d::Sprite3D* sprite, void* callbackparam) {
+                auto stack = LuaEngine::getInstance()->getLuaStack();
                 int id = (sprite) ? (int)sprite->_ID : -1;
                 int* luaID = (sprite) ? &sprite->_luaID : nullptr;
-                toluafix_pushusertype_ccobject(L, id, luaID, (void*)sprite,"cc.Sprite3D");
-                LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 1);
+                toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)sprite, "cc.Sprite3D");
+                stack->executeFunctionByHandler(handler, 1);
             }, nullptr);
 
             lua_settop(L, 1);
@@ -134,10 +137,11 @@ int lua_cocos2dx_3d_Sprite3D_createAsync(lua_State* L)
             LUA_FUNCTION handler = toluafix_ref_function(L, 3, 0);
 
             cocos2d::Sprite3D::createAsync(modelPath, [=](cocos2d::Sprite3D* sprite, void* callbackparam){
+                auto stack = LuaEngine::getInstance()->getLuaStack();
                 int id = (sprite) ? (int)sprite->_ID : -1;
                 int* luaID = (sprite) ? &sprite->_luaID : nullptr;
-                toluafix_pushusertype_ccobject(L, id, luaID, (void*)sprite,"cc.Sprite3D");
-                LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 1);
+                toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)sprite, "cc.Sprite3D");
+                stack->executeFunctionByHandler(handler, 1);
             }, nullptr);
 
             lua_settop(L, 1);

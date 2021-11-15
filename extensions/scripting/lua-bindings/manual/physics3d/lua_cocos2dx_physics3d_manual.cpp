@@ -730,46 +730,48 @@ int lua_cocos2dx_physics3d_Physics3DObject_setCollisionCallback(lua_State* L)
 #endif
         LUA_FUNCTION handler = toluafix_ref_function(L,2,0);
         cobj->setCollisionCallback([=](const cocos2d::Physics3DCollisionInfo& ci){
-            lua_newtable(L);
-            lua_pushstring(L, "objA");
+            auto stack = LuaEngine::getInstance()->getLuaStack();
+            auto Ls    = stack->getLuaState();
+            lua_newtable(Ls);
+            lua_pushstring(Ls, "objA");
             if (nullptr == ci.objA)
             {
-                lua_pushnil(L);
+                lua_pushnil(Ls);
             }
             else
             {
-                object_to_luaval(L, "cc.Physics3DObject", ci.objA);
+                object_to_luaval(Ls, "cc.Physics3DObject", ci.objA);
             }
-            lua_rawset(L, -3);
-            lua_pushstring(L, "objB");
+            lua_rawset(Ls, -3);
+            lua_pushstring(Ls, "objB");
             if (nullptr == ci.objB)
             {
-                lua_pushnil(L);
+                lua_pushnil(Ls);
             }
             else
             {
-                object_to_luaval(L, "cc.Physics3DObject", ci.objB);
+                object_to_luaval(Ls, "cc.Physics3DObject", ci.objB);
             }
-            lua_rawset(L, -3);
-            lua_pushstring(L, "collisionPointList");
+            lua_rawset(Ls, -3);
+            lua_pushstring(Ls, "collisionPointList");
             if (ci.collisionPointList.empty())
             {
-                lua_pushnil(L);
+                lua_pushnil(Ls);
             }
             else
             {
                 int vecIndex = 1;
-                lua_newtable(L);
+                lua_newtable(Ls);
                 for (const auto& value : ci.collisionPointList)
                 {
-                    lua_pushnumber(L, vecIndex);
-                    CollisionPoint_to_luaval(L, value);
-                    lua_rawset(L, -3);
+                    lua_pushnumber(Ls, vecIndex);
+                    CollisionPoint_to_luaval(Ls, value);
+                    lua_rawset(Ls, -3);
                     ++vecIndex;
                 }
             }
-            lua_rawset(L, -3);
-            LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 1);
+            lua_rawset(Ls, -3);
+            stack->executeFunctionByHandler(handler, 1);
         });
         
         ScriptHandlerMgr::getInstance()->addCustomHandler((void*)cobj, handler);
