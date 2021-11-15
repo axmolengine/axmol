@@ -95,11 +95,12 @@ int lua_cocos2dx_csloader_CSLoader_createNode(lua_State* tolua_S)
 #endif
             
             LUA_FUNCTION handler = (  toluafix_ref_function(tolua_S,3,0));
-            auto callback = [handler, tolua_S](cocos2d::Ref* ref){
+            auto callback = [handler](cocos2d::Ref* ref){
                 if (nullptr == ref)
                     return;
-                toluafix_pushusertype_ccobject(tolua_S, ref->_ID, &(ref->_luaID), (void*)ref,"cc.Ref");
-                LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 1);
+                auto stack = LuaEngine::getInstance()->getLuaStack();
+                toluafix_pushusertype_ccobject(stack->getLuaState(), ref->_ID, &(ref->_luaID), (void*)ref, "cc.Ref");
+                stack->executeFunctionByHandler(handler, 1);
             };
             
             cocos2d::Node* ret = cocos2d::CSLoader::createNode(filename, callback);

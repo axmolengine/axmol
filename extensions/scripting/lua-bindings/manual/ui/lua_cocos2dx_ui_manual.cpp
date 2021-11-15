@@ -1047,14 +1047,15 @@ static void cloneFocusHandler(const EventListenerFocus* src,EventListenerFocus* 
         
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, ScriptHandlerMgr::HandlerType::EVENT_FOCUS);
         dst->onFocusChanged = [=](ui::Widget* widgetLostFocus, ui::Widget* widgetGetFocus){
-            lua_State* L = LuaEngine::getInstance()->getLuaStack()->getLuaState();
+            auto stack = LuaEngine::getInstance()->getLuaStack();
+            lua_State* L = stack->getLuaState();
             int id = (widgetLostFocus) ? (int)widgetLostFocus->_ID : -1;
             int* luaID = (widgetLostFocus) ? &widgetLostFocus->_luaID : nullptr;
             toluafix_pushusertype_ccobject(L, id, luaID, (void*)widgetLostFocus,"ccui.Widget");
             id = (widgetGetFocus) ? (int)widgetGetFocus->_ID : -1;
             luaID = (widgetGetFocus) ? &widgetGetFocus->_luaID : nullptr;
             toluafix_pushusertype_ccobject(L, id, luaID, (void*)widgetGetFocus,"ccui.Widget");
-            LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
+            stack->executeFunctionByHandler(handler, 2);
         };
     }
 }
@@ -1141,13 +1142,15 @@ static int tolua_cocos2dx_EventListenerFocus_registerScriptHandler(lua_State* L)
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, ScriptHandlerMgr::HandlerType::EVENT_FOCUS);
         
         self->onFocusChanged = [=](ui::Widget* widgetLostFocus, ui::Widget* widgetGetFocus){
+            auto stack = LuaEngine::getInstance()->getLuaStack();
+            auto Ls    = stack->getLuaState();
             int id = (widgetLostFocus) ? (int)widgetLostFocus->_ID : -1;
             int* luaID = (widgetLostFocus) ? &widgetLostFocus->_luaID : nullptr;
-            toluafix_pushusertype_ccobject(L, id, luaID, (void*)widgetLostFocus,"ccui.Widget");
+            toluafix_pushusertype_ccobject(Ls, id, luaID, (void*)widgetLostFocus, "ccui.Widget");
             id = (widgetGetFocus) ? (int)widgetGetFocus->_ID : -1;
             luaID = (widgetGetFocus) ? &widgetGetFocus->_luaID : nullptr;
-            toluafix_pushusertype_ccobject(L, id, luaID, (void*)widgetGetFocus,"ccui.Widget");
-            LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
+            toluafix_pushusertype_ccobject(Ls, id, luaID, (void*)widgetGetFocus, "ccui.Widget");
+            stack->executeFunctionByHandler(handler, 2);
         };
         return 0;
     }
