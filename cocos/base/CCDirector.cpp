@@ -1059,6 +1059,8 @@ void Director::restartDirector()
     ScriptEvent scriptEvent(kRestartGame, nullptr);
     ScriptEngineManager::sendEventToLua(scriptEvent);
 #endif
+    
+    setGLDefaultValues();
 }
 
 void Director::setNextScene()
