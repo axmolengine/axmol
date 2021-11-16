@@ -104,6 +104,9 @@ public:
 
     static void releaseFont(const std::string& fontName);
 
+
+    static FT_Library getFTLibrary();
+
 private:
     static const char* _glyphASCII;
     static const char* _glyphNEHE;
@@ -117,8 +120,7 @@ private:
 
     bool createFontObject(const std::string& fontName, float fontSize);
 
-    bool initFreeType();
-    FT_Library getFTLibrary();
+    static bool initFreeType();
 
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
     unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
@@ -132,6 +134,7 @@ private:
     FT_Encoding _encoding;
 
     std::string _fontName;
+    float _fontSize;
     bool _distanceFieldEnabled;
     float _outlineSize;
     int _ascender;

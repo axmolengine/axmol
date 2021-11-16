@@ -41,7 +41,11 @@ NS_CC_BEGIN
 
 FT_Library FontFreeType::_FTlibrary;
 bool FontFreeType::_FTInitialized           = false;
+#if !defined(__ANDROID__)
+bool FontFreeType::_streamParsingEnabled    = true;
+#else
 bool FontFreeType::_streamParsingEnabled    = false;
+#endif
 bool FontFreeType::_doNativeBytecodeHinting = true;
 const int FontFreeType::DistanceMapSpread   = 6;
 
@@ -176,6 +180,7 @@ bool FontFreeType::createFontObject(const std::string& fontName, float fontSize)
     FT_Face face;
     // save font name locally
     _fontName = fontName;
+    _fontSize = fontSize;
 
     if (_streamParsingEnabled)
     {
@@ -183,7 +188,7 @@ bool FontFreeType::createFontObject(const std::string& fontName, float fontSize)
         if (fullPath.empty())
             return false;
 
-        auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ).release();
+        auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
         if (!fs)
         {
             return false;
@@ -193,7 +198,7 @@ bool FontFreeType::createFontObject(const std::string& fontName, float fontSize)
         fts->read               = ft_stream_read_callback;
         fts->close              = ft_stream_close_callback;
         fts->size               = static_cast<unsigned long>(fs->size());
-        fts->descriptor.pointer = fs;
+        fts->descriptor.pointer = fs.release(); // transfer ownership to FT_Open_Face
 
         FT_Open_Args args = {0};
         args.flags        = FT_OPEN_STREAM;
@@ -397,9 +402,6 @@ unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
 
         // @remark: glyphIndex=0 means charactor is mssing on current font face
         auto glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(theChar));
-        if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))
-            break;
-
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
         if (glyphIndex == 0)
         {
@@ -411,8 +413,11 @@ unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
                 charUTF8 = "\\n";
             cocos2d::log("The font face: %s doesn't contains char: <%s>", _fontFace->charmap->face->family_name,
                          charUTF8.c_str());
+            return nullptr;
         }
 #endif
+        if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))
+            break;
         if (_distanceFieldEnabled && _fontFace->glyph->bitmap.buffer)
         {
             // Require freetype version > 2.11.0, because freetype 2.11.0 sdf has memory access bug, see: https://gitlab.freedesktop.org/freetype/freetype/-/issues/1077
