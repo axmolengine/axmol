@@ -108,15 +108,13 @@ extern "C"
         {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
             resolvedPath.insert(resolvedPath.begin(), '@');  // lua standard, add file chunck mark '@'
-            stack->luaLoadBuffer(L, reinterpret_cast<const char*>(chunk.getBytes()), static_cast<int>(chunk.getSize()),
+            return stack->luaLoadBuffer(L, reinterpret_cast<const char*>(chunk.getBytes()), static_cast<int>(chunk.getSize()),
                                  resolvedPath.c_str());
         }
         else
         {
             CCLOG("can not get file data of %s", resolvedPath.c_str());
-            return 0;
+            return LUA_ERRFILE;
         }
-
-        return 1;
     }
 }
