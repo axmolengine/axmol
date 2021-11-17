@@ -107,18 +107,19 @@ FontFreeType* FontFreeType::create(const std::string& fontName,
 
     tempFont->setGlyphCollection(glyphs, customGlyphs);
 
-    if (!tempFont->createFontObject(fontName, fontSize))
+    if (tempFont->loadFontFace(fontName, fontSize))
     {
-        delete tempFont;
-        return nullptr;
+        tempFont->autorelease();
+        return tempFont;
     }
-    tempFont->autorelease();
-    return tempFont;
+    
+    delete tempFont;
+    return nullptr;
 }
 
 bool FontFreeType::initFreeType()
 {
-    if (_FTInitialized == false)
+    if (!_FTInitialized)
     {
         // begin freetype
         if (FT_Init_FreeType(&_FTlibrary))
@@ -136,7 +137,7 @@ bool FontFreeType::initFreeType()
 
 void FontFreeType::shutdownFreeType()
 {
-    if (_FTInitialized == true)
+    if (_FTInitialized)
     {
         FT_Done_FreeType(_FTlibrary);
         s_cacheFontData.clear();
@@ -175,7 +176,7 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outlin
 }
 // clang-format on
 
-bool FontFreeType::createFontObject(const std::string& fontName, float fontSize)
+bool FontFreeType::loadFontFace(const std::string& fontName, float fontSize)
 {
     FT_Face face;
     // save font name locally

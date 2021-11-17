@@ -118,7 +118,7 @@ private:
     FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
 
-    bool createFontObject(const std::string& fontName, float fontSize);
+    bool loadFontFace(const std::string& fontName, float fontSize);
 
     static bool initFreeType();
 
