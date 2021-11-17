@@ -104,17 +104,16 @@ extern "C"
             next = searchpath.find_first_of(';', begin);
         } while (begin < searchpath.length());
 
-        if (chunk.getSize() > 0)
+        int nret = chunk.getSize() > 0 ? 1 : 0;
+        if (nret)
         {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
             resolvedPath.insert(resolvedPath.begin(), '@');  // lua standard, add file chunck mark '@'
-            return stack->luaLoadBuffer(L, reinterpret_cast<const char*>(chunk.getBytes()), static_cast<int>(chunk.getSize()),
+            stack->luaLoadBuffer(L, reinterpret_cast<const char*>(chunk.getBytes()), static_cast<int>(chunk.getSize()),
                                  resolvedPath.c_str());
         }
         else
-        {
             CCLOG("can not get file data of %s", resolvedPath.c_str());
-            return LUA_ERRFILE;
-        }
+        return nret;
     }
 }
