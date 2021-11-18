@@ -1839,6 +1839,9 @@ protected:
     void updateRotationQuat();
     // update Rotation3D from quaternion
     void updateRotation3D();
+
+    void updateParentChildrenIndexer(int tag);
+    void updateParentChildrenIndexer(const std::string& name);
     
 private:
     void addChildHelper(Node* child, int localZOrder, int tag, const std::string &name, bool setTag);
