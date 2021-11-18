@@ -688,14 +688,7 @@ int Node::getTag() const
 /// tag setter
 void Node::setTag(int tag)
 {
-    auto parentChildrenIndexer = getParentChildrenIndexer();
-    if (parentChildrenIndexer)
-    {
-        if (_tag != tag)
-            parentChildrenIndexer->erase(_tag);
-        (*parentChildrenIndexer)[tag] = this;
-    }
-
+    updateParentChildrenIndexer(tag);
     _tag        = tag;
 }
 
@@ -705,6 +698,23 @@ const std::string& Node::getName() const
 }
 
 void Node::setName(const std::string& name)
+{
+    updateParentChildrenIndexer(name);
+    _name = name;
+}
+
+void Node::updateParentChildrenIndexer(int tag)
+{
+    auto parentChildrenIndexer = getParentChildrenIndexer();
+    if (parentChildrenIndexer)
+    {
+        if (_tag != tag)
+            parentChildrenIndexer->erase(_tag);
+        (*parentChildrenIndexer)[tag] = this;
+    }
+}
+
+void Node::updateParentChildrenIndexer(const std::string& name)
 {
     uint64_t newHash           = CC_HASH_NODE_NAME(name);
     auto parentChildrenIndexer = getParentChildrenIndexer();
@@ -716,7 +726,6 @@ void Node::setName(const std::string& name)
         (*parentChildrenIndexer)[newHash] = this;
     }
 
-    _name = name;
     _hashOfName = newHash;
 }
 
@@ -996,9 +1005,15 @@ void Node::addChildHelper(Node* child, int localZOrder, int tag, const std::stri
     child->setParent(this);
 
     if (setTag)
+    {
         child->setTag(tag);
+        child->updateParentChildrenIndexer(child->getName());
+    }
     else
+    {
         child->setName(name);
+        child->updateParentChildrenIndexer(child->getTag());
+    }
     
     child->updateOrderOfArrival();
 
