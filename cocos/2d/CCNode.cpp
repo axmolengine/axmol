@@ -805,13 +805,11 @@ Node* Node::getChildByTag(int tag) const
         if (it != _childrenIndexer->end())
             return it->second;
     }
-    else
+
+    for (const auto child : _children)
     {
-        for (const auto child : _children)
-        {
-            if (child && child->_tag == tag)
-                return child;
-        }
+        if (child && child->_tag == tag)
+            return child;
     }
     return nullptr;
 }
@@ -826,14 +824,12 @@ Node* Node::getChildByName(const std::string& name) const
         if (it != _childrenIndexer->end())
             return it->second;
     }
-    else
+
+    for (const auto& child : _children)
     {
-        for (const auto& child : _children)
-        {
-            // Different strings may have the same hash code, but can use it to compare first for speed
-            if (child->_hashOfName == hash && child->_name.compare(name) == 0)
-                return child;
-        }
+        // Different strings may have the same hash code, but can use it to compare first for speed
+        if (child->_hashOfName == hash && child->_name.compare(name) == 0)
+            return child;
     }
     return nullptr;
 }
