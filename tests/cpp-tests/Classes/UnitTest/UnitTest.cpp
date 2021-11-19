@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
  
- http://www.cocos2d-x.org
+ https://adxe.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -594,7 +595,7 @@ void ValueTest::onEnter()
     
     unsigned char byte = 50;
     Value v5(byte);
-    CCASSERT(v5.getType() == Value::Type::INT_UI32, "v5's value type should be Value::Type::BTYE.");
+    CCASSERT(v5.getType() == Value::Type::INT_UI32, "v5's value type should be Value::Type::INT_UI32.");
     CCASSERT(!v5.isNull(), "v5 is not null.");
     
     Value v6(true);
