@@ -331,6 +331,8 @@ class io_service;
 typedef io_transport* transport_handle_t;
 
 // typedefs
+typedef std::shared_ptr<xxsocket> xxsocket_ptr;
+
 typedef std::unique_ptr<io_send_op> send_op_ptr;
 typedef std::unique_ptr<io_event> event_ptr;
 typedef std::shared_ptr<highp_timer> highp_timer_ptr;
@@ -415,7 +417,7 @@ struct YASIO_API io_base {
   enum class state : uint8_t
   {
     CLOSED,
-    RESOLVING, // for client only
+    RESOLVING,  // for client only
     CONNECTING, // for client only
     OPENED,
   };
@@ -449,7 +451,7 @@ struct YASIO_API io_base {
   } ud_{};
 #endif
 
-  std::shared_ptr<xxsocket> socket_;
+  xxsocket_ptr socket_;
   int error_; // socket error(>= -1), application error(< -1)
   // 0: none, 1: read, 2: write
   error_stage error_stage_ = error_stage::NONE;
@@ -669,11 +671,15 @@ public:
 
   io_channel* get_context() const { return ctx_; }
 
-  virtual ~io_transport() { send_queue_.clear(); }
+  virtual ~io_transport()
+  {
+    ctx_ = nullptr;
+    send_queue_.clear();
+  }
 
 protected:
   io_service& get_service() const { return ctx_->get_service(); }
-  bool is_open() const { return is_valid() && socket_ && socket_->is_open(); }
+  bool is_open() const { return state_ == state::OPENED && socket_ && socket_->is_open(); }
   std::vector<char> fetch_packet()
   {
     expected_size_ = -1;
@@ -706,10 +712,9 @@ protected:
   // Sets the underlying layer socket io primitives.
   YASIO__DECL virtual void set_primitives();
 
-  YASIO__DECL io_transport(io_channel* ctx, std::shared_ptr<xxsocket>& s);
+  YASIO__DECL io_transport(io_channel* ctx, xxsocket_ptr&& s);
 
-  bool is_valid() const { return state_ == io_base::state::OPENED; }
-  void invalid() { state_ = io_base::state::CLOSED; }
+  bool is_valid() const { return ctx_ != nullptr; }
 
   char buffer_[YASIO_INET_BUFFER_SIZE]; // recv buffer, 64K
   int offset_ = 0;                      // recv buffer offset
@@ -729,12 +734,12 @@ class YASIO_API io_transport_tcp : public io_transport {
   friend class io_service;
 
 public:
-  io_transport_tcp(io_channel* ctx, std::shared_ptr<xxsocket>& s);
+  io_transport_tcp(io_channel* ctx, xxsocket_ptr&& s);
 };
 #if defined(YASIO_SSL_BACKEND)
 class io_transport_ssl : public io_transport_tcp {
 public:
-  YASIO__DECL io_transport_ssl(io_channel* ctx, std::shared_ptr<xxsocket>& s);
+  YASIO__DECL io_transport_ssl(io_channel* ctx, xxsocket_ptr&& s);
   YASIO__DECL void set_primitives() override;
 
 #  if defined(YASIO_SSL_BACKEND)
@@ -749,7 +754,7 @@ class YASIO_API io_transport_udp : public io_transport {
   friend class io_service;
 
 public:
-  YASIO__DECL io_transport_udp(io_channel* ctx, std::shared_ptr<xxsocket>& s);
+  YASIO__DECL io_transport_udp(io_channel* ctx, xxsocket_ptr&& s);
   YASIO__DECL ~io_transport_udp();
 
   YASIO__DECL ip::endpoint remote_endpoint() const override;
@@ -779,7 +784,7 @@ protected:
 #if defined(YASIO_HAVE_KCP)
 class io_transport_kcp : public io_transport_udp {
 public:
-  YASIO__DECL io_transport_kcp(io_channel* ctx, std::shared_ptr<xxsocket>& s);
+  YASIO__DECL io_transport_kcp(io_channel* ctx, xxsocket_ptr&& s);
   YASIO__DECL ~io_transport_kcp();
   ikcpcb* internal_object() { return kcp_; }
 
@@ -1079,12 +1084,12 @@ private:
   YASIO__DECL void destroy_ares_channel();
 #endif
 
-  void handle_connect_succeed(io_channel* ctx, std::shared_ptr<xxsocket> socket) { handle_connect_succeed(allocate_transport(ctx, std::move(socket))); }
+  void handle_connect_succeed(io_channel* ctx, xxsocket_ptr s) { handle_connect_succeed(allocate_transport(ctx, std::move(s))); }
   YASIO__DECL void handle_connect_succeed(transport_handle_t);
   YASIO__DECL void handle_connect_failed(io_channel*, int ec);
   YASIO__DECL void notify_connect_succeed(transport_handle_t);
 
-  YASIO__DECL transport_handle_t allocate_transport(io_channel*, std::shared_ptr<xxsocket>);
+  YASIO__DECL transport_handle_t allocate_transport(io_channel*, xxsocket_ptr&&);
   YASIO__DECL void deallocate_transport(transport_handle_t);
 
   YASIO__DECL void register_descriptor(const socket_native_type fd, int flags);
@@ -1112,7 +1117,7 @@ private:
   YASIO__DECL bool close_internal(io_channel*);
 
   // shutdown a tcp-connection if possible
-  YASIO__DECL bool shutdown_internal(transport_handle_t);
+  YASIO__DECL void shutdown_internal(transport_handle_t);
 
   // supporting server
   YASIO__DECL void do_accept(io_channel*);

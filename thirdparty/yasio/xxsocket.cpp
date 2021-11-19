@@ -591,8 +591,12 @@ int xxsocket::disconnect(socket_native_type s)
   sockaddr_storage addr_unspec{0};
   return ::connect(s, (sockaddr*)&addr_unspec, sizeof(addr_unspec));
 #else
+#  if defined(__MVS__)
+  sockaddr_storage addr_unspec{0};
+#  else
   sockaddr addr_unspec{0};
   addr_unspec.sa_family = AF_UNSPEC;
+#  endif
   int ret, error;
   for (;;)
   {
