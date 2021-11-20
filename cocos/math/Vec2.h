@@ -768,10 +768,10 @@ public:
  */
 inline Vec2 operator*(float x, const Vec2& v);
 
-typedef Vec2 Point;
+using Point = Vec2;
 
 // [DEPRECATED] compatible only
-typedef Vec2 Size;
+using Size = Vec2; // typedef Vec2 Size;
 
 NS_CC_MATH_END
 
