@@ -1,6 +1,6 @@
 {
     "en" : {
-        "COCOS_AGREEMENT" : "adxeproject. collects anonymous data when the command-line tools are used for development. This data is examined in the aggregate only and is used to continually innovate and improve Adxe products. This data is anonymous and includes, but is not limited to, a unique hardware identifier, version number our software and information on which tools and/or services in Adxe products are being used and how they are being used. We take your privacy seriously and we do not share or sell any of this data. You can opt-out from sharing this data with us, but by sharing you help contribute to growth of adxe.\n\nOur entire policy can be viewed at: http://www.adxe.org/licenses.\n\nFor questions please e-mail privacy@adxe.org.\n\nDo you agree to sent the data? [Y]es, [N]o\n",
+        "COCOS_AGREEMENT" : "adxe collects anonymous data when the command-line tools are used for development. This data is examined in the aggregate only and is used to continually innovate and improve Adxe products. This data is anonymous and includes, but is not limited to, a unique hardware identifier, version number our software and information on which tools and/or services in Adxe products are being used and how they are being used. We take your privacy seriously and we do not share or sell any of this data. You can opt-out from sharing this data with us, but by sharing you help contribute to growth of adxe.\n\nOur entire policy can be viewed at: https://github.com/adxeproject/adxe/blob/dev/LICENSE.\n\nFor questions please post on project discuss area: https://github.com/adxeproject/adxe/discussions.\n\nDo you agree to sent the data? [Y]es, [N]o\n",
         "COCOS_PARSE_PLUGIN_WARNING_FMT" : "Warning: plugin '%s' does not return a plugin name.",
         "COCOS_HELP_BRIEF_FMT" : "\n%s %s - adxe console: A command line tool for Adxe engine.",
         "COCOS_HELP_AVAILABLE_CMD" : "\nAvailable commands:",
@@ -353,7 +353,7 @@
         "NEW_INFO_STEP_REPLACE_SO_FMT" : "> Replace the project SO name from '%s' to '%s'"
     },
     "zh" : {
-        "COCOS_AGREEMENT" : "使用Cocos命令行工具开发时，厦门雅基软件有限公司会搜集开发环境下的使用数据。该数据仅用于汇总分析，并不断创新和改进Cocos产品。收集的数据是匿名的，只位于开发端，包括但不限于：唯一的设备标识，软件版本号，Cocos相关工具产品和具体功能的使用情况。我们将严格保密您的个人隐私，绝不会分享或出售这些数据。您可以选择拒绝分享这些数据，但通过分享这些数据可以帮助Cocos成长。\n\n我们的整个政策可以在以下网址查看：http://www.adxe.org/licenses.\n\n如有问题，请发送电子邮件至privacy@adxe.org。\n\n您是否同意发送数据？[Y]同意，[N]不同意\n",
+        "COCOS_AGREEMENT" : "使用adxe命令行工具开发时，厦门雅基软件有限公司会搜集开发环境下的使用数据。该数据仅用于汇总分析，并不断创新和改进adxe产品。收集的数据是匿名的，只位于开发端，包括但不限于：唯一的设备标识，软件版本号，adxe相关工具产品和具体功能的使用情况。我们将严格保密您的个人隐私，绝不会分享或出售这些数据。您可以选择拒绝分享这些数据，但通过分享这些数据可以帮助adxe成长。\n\n我们的整个政策可以在以下网址查看：https://github.com/adxeproject/adxe/blob/dev/LICENSE.\n\n如有问题，请在项目讨论区https://github.com/adxeproject/adxe/discussions提问。\n\n您是否同意发送数据？[Y]同意，[N]不同意\n",
         "COCOS_PARSE_PLUGIN_WARNING_FMT" : "警告：'%s' 不是可用的命令。",
         "COCOS_HELP_BRIEF_FMT" : "\n%s %s - adxe console: adxe 的命令行工具集。",
         "COCOS_HELP_AVAILABLE_CMD" : "\n可用的命令：",
@@ -706,7 +706,7 @@
         "NEW_INFO_STEP_REPLACE_SO_FMT" : "> 替换工程的SO名，'%s' 替换为 '%s'。"
     },
     "zh_tr" : {
-        "COCOS_AGREEMENT" : "使用Adxe命令行工具開發時，厦门雅基软件有限公司會搜集開發環境下的使用數據。該數據僅用於匯總分析，並不斷創新和改進Adxe產品。收集的數據是匿名的，只位於開發端，包括但不限於：唯一的設備標識，軟體版本號，Adxe相關工具產品和具體功能的使用情況。我們將嚴格保密您的個人隱私，絕不會分享或出售這些數據。您可以選擇拒絕分享這些數據，但通過分享這些數據可以幫助Cocos成長。\n\n我們的整個政策可以在以下網址查看：http：//www.adxe.org/licenses。\n\n如有問題，請發送電子郵件至privacy@adxe.org。\n\n您是否同意發送數據？[Y]同意，[N]不同意\n",
+        "COCOS_AGREEMENT" : "使用adxe命令行工具開發時，厦门雅基软件有限公司會搜集開發環境下的使用數據。該數據僅用於匯總分析，並不斷創新和改進Adxe產品。收集的數據是匿名的，只位於開發端，包括但不限於：唯一的設備標識，軟體版本號，adxe相關工具產品和具體功能的使用情況。我們將嚴格保密您的個人隱私，絕不會分享或出售這些數據。您可以選擇拒絕分享這些數據，但通過分享這些數據可以幫助adxe成長。\n\n我們的整個政策可以在以下網址查看：https://github.com/adxeproject/adxe/blob/dev/LICENSE。\n\n如有問題，請在項目討論區https://github.com/adxeproject/adxe/discussions提問。\n\n您是否同意發送數據？[Y]同意，[N]不同意\n",
         "COCOS_PARSE_PLUGIN_WARNING_FMT" : "警告：'%s' 不是可用的命令。",
         "COCOS_HELP_BRIEF_FMT" : "\n%s %s - adxe console: adxe 的命令行工具集。",
         "COCOS_HELP_AVAILABLE_CMD" : "\n可用的命令：",
