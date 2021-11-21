@@ -40,7 +40,7 @@ public:
   // std::string: use memset (usually implemented with SIMD)
   // std::wstring: for loop (slow performance)
   // only works on msvc currently
-  _Elem* resize_nofill(int len)
+  _Elem* resize_nofill(size_t len)
   {
     this->reserve(len);
 #if _MSC_VER >= 1920 // VS2019+
@@ -57,15 +57,15 @@ public:
   }
 };
 
-template <typename _Elem> static _Elem* prepare(std::basic_string<_Elem>& str, int size)
+template <typename _Elem> static _Elem* prepare(std::basic_string<_Elem>& str, size_t size)
 {
   intrusive_string<_Elem>& helper = (intrusive_string<_Elem>&)str;
   return helper.resize_nofill(size);
 }
 #if defined(_AFX)
-template <typename _Elem> _Elem* prepare(CStringT<_Elem, StrTraitMFC_DLL<_Elem>>& str, int size)
+template <typename _Elem> _Elem* prepare(CStringT<_Elem, StrTraitMFC_DLL<_Elem>>& str, size_t size)
 {
-  return str.GetBufferSetLength(size);
+  return str.GetBufferSetLength(static_cast<int>(size));
 }
 #endif
 } // namespace buffer_traits
