@@ -659,6 +659,8 @@ public:
      */
     virtual bool isAbsolutePath(const std::string& path) const;
 
+    static bool isAbsolutePathInternal(const std::string& path);
+
     /**
      *  Checks whether the path is a directory.
      *
