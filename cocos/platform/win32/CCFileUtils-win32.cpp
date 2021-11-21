@@ -160,14 +160,6 @@ bool FileUtilsWin32::isFileExistInternal(const std::string& strFilePath) const
     return (attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-bool FileUtilsWin32::isAbsolutePath(const std::string& strPath) const
-{
-    return ((strPath.length() > 2
-        && ((strPath[0] >= 'a' && strPath[0] <= 'z') || (strPath[0] >= 'A' && strPath[0] <= 'Z'))
-        && strPath[1] == ':') || (strPath[0] == '/' && strPath[1] == '/'));
-}
-
-
 FileUtils::Status FileUtilsWin32::getContents(const std::string& filename, ResizableBuffer* buffer) const
 {
     if (filename.empty())

@@ -1008,7 +1008,22 @@ void FileUtils::isFileExist(const std::string& filename, std::function<void(bool
 
 bool FileUtils::isAbsolutePath(const std::string& path) const
 {
+    return isAbsolutePathInternal(path);
+}
+
+bool FileUtils::isAbsolutePathInternal(const std::string& path)
+{
+#if defined(_WIN32)
+    // see also: https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file?redirectedfrom=MSDN
+    return ((path.length() > 2 && ((path[0] >= 'a' && path[0] <= 'z') || (path[0] >= 'A' && path[0] <= 'Z')) &&
+             path[1] == ':')                        // Normal absolute path
+            || cxx20::starts_with(path, R"(\\?\)")  // Win32 File Namespaces for Long Path
+            || cxx20::starts_with(path, R"(\\.\)")  // Win32 Device Namespaces for device
+            || (path[0] == '/' || path[0] == '\\')  // Current disk drive
+    );
+#else
     return (path[0] == '/');
+#endif
 }
 
 bool FileUtils::isDirectoryExist(const std::string& dirPath) const
