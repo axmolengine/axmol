@@ -188,7 +188,7 @@ namespace compat
 using ::inet_ntop;
 using ::inet_pton;
 #else
-YASIO__DECL const char* inet_ntop(int af, const void* src, char* dst, socklen_t);
+YASIO__DECL const char* inet_ntop(int af, const void* src, char* dst, size_t);
 YASIO__DECL int inet_pton(int af, const char* src, void* dst);
 #endif
 } // namespace compat

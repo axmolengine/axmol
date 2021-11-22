@@ -72,22 +72,22 @@ struct write_ix_helper<_Stream, int64_t> {
 };
 } // namespace detail
 
-class fixed_buffer_view {
+class fixed_buffer_span {
 public:
-  using implementation_type = fixed_buffer_view;
+  using implementation_type = fixed_buffer_span;
   implementation_type& get_implementation() { return *this; }
   const implementation_type& get_implementation() const { return *this; }
 
   template <size_t _Extent>
-  fixed_buffer_view(std::array<char, _Extent>& buf) : first_(buf.data()), last_(buf.data() + _Extent)
+  fixed_buffer_span(std::array<char, _Extent>& fb) : first_(fb.data()), last_(fb.data() + _Extent)
   {}
 
   template <size_t _Extent>
-  fixed_buffer_view(char (&buf)[_Extent]) : first_(buf), last_(buf + _Extent)
+  fixed_buffer_span(char (&fb)[_Extent]) : first_(fb), last_(fb + _Extent)
   {}
 
-  fixed_buffer_view(char* buf, size_t n) : first_(buf), last_(buf + n) {}
-  fixed_buffer_view(char* first, char* last) : first_(first), last_(last) {}
+  fixed_buffer_span(char* fb, size_t extent) : first_(fb), last_(fb + extent) {}
+  fixed_buffer_span(char* first, char* last) : first_(first), last_(last) {}
 
   void write_byte(uint8_t value)
   {
@@ -106,7 +106,7 @@ public:
   void write_bytes(size_t offset, const void* d, int n)
   {
     if (yasio__unlikely((offset + n) > this->max_size()))
-      YASIO__THROW0(std::out_of_range("fixed_buffer_view: out of range"));
+      YASIO__THROW0(std::out_of_range("fixed_buffer_span: out of range"));
     ::memcpy(this->data() + offset, d, n);
     this->pos_ += n;
   }
@@ -114,7 +114,7 @@ public:
   void resize(size_t newsize)
   {
     if (yasio__unlikely(newsize > max_size()))
-      YASIO__THROW0(std::out_of_range("fixed_buffer_view: out of range"));
+      YASIO__THROW0(std::out_of_range("fixed_buffer_span: out of range"));
     this->pos_ = newsize;
   }
 
@@ -131,61 +131,74 @@ private:
   char* last_;
   size_t pos_ = 0;
 };
+using fixed_buffer_view = fixed_buffer_span;
 
 template <size_t _Extent>
-class fixed_buffer : public fixed_buffer_view {
+class fixed_buffer : public fixed_buffer_span {
 public:
-  fixed_buffer() : fixed_buffer_view(impl_) {}
+  fixed_buffer() : fixed_buffer_span(impl_) {}
 
 private:
   std::array<char, _Extent> impl_;
 };
 
-class dynamic_buffer {
+template <typename _Cont = std::vector<char>>
+class dynamic_buffer_span {
 public:
-  using implementation_type = std::vector<char>;
-  implementation_type& get_implementation() { return this->impl_; }
-  const implementation_type& get_implementation() const { return this->impl_; }
+  using implementation_type = _Cont;
+  implementation_type& get_implementation() { return *this->outs_; }
+  const implementation_type& get_implementation() const { return *this->impl_; }
 
-  void write_byte(uint8_t value) { impl_.push_back(value); }
+  dynamic_buffer_span(_Cont* outs) : outs_(outs) {}
+
+  void write_byte(uint8_t value) { outs_->push_back(value); }
   void write_bytes(const void* d, int n)
   {
     if (n > 0)
-      impl_.insert(impl_.end(), static_cast<const char*>(d), static_cast<const char*>(d) + n);
+      outs_->insert(outs_->end(), static_cast<const char*>(d), static_cast<const char*>(d) + n);
   }
   size_t write_bytes(size_t offset, const void* d, int n)
   {
-    if ((offset + n) > impl_.size())
-      impl_.resize(offset + n);
+    if ((offset + n) > outs_->size())
+      outs_->resize(offset + n);
 
-    ::memcpy(impl_.data() + offset, d, n);
+    ::memcpy(outs_->data() + offset, d, n);
     return n;
   }
 
-  void resize(size_t newsize) { impl_.resize(newsize); }
-  void reserve(size_t capacity) { impl_.reserve(capacity); }
-  void shrink_to_fit(){};
-  void clear() { impl_.clear(); }
-  char* data() { return impl_.data(); }
-  size_t length() const { return impl_.size(); }
-  bool empty() const { return impl_.empty(); }
+  void resize(size_t newsize) { outs_->resize(newsize); }
+  void reserve(size_t capacity) { outs_->reserve(capacity); }
+  void shrink_to_fit() { outs_->shrink_to_fit(); };
+  void clear() { outs_->clear(); }
+  char* data() { return outs_->data(); }
+  size_t length() const { return outs_->size(); }
+  bool empty() const { return outs_->empty(); }
 
 private:
-  implementation_type impl_;
+  implementation_type* outs_;
 };
 
-template <typename _ConvertTraits, typename _BufferType = fixed_buffer_view>
-class basic_obstream_view {
+template <typename _Cont = std::vector<char>>
+class dynamic_buffer : public dynamic_buffer_span<_Cont> {
+public:
+  dynamic_buffer() : dynamic_buffer_span<_Cont>(&impl_) {}
+
+private:
+  _Cont impl_;
+};
+
+template <typename _ConvertTraits, typename _BufferType = fixed_buffer_span>
+class binary_writer_impl {
 public:
   using convert_traits_type        = _ConvertTraits;
   using buffer_type                = _BufferType;
   using buffer_implementation_type = typename buffer_type::implementation_type;
-  using my_type                    = basic_obstream_view<convert_traits_type, buffer_type>;
+  using my_type                    = binary_writer_impl<convert_traits_type, buffer_type>;
 
   static const size_t npos = -1;
 
-  basic_obstream_view(buffer_type* outs) : outs_(outs) {}
-  ~basic_obstream_view() {}
+  binary_writer_impl(buffer_type* outs) : outs_(outs) {}
+  ~binary_writer_impl() {}
 
   void push8()
   {
@@ -376,26 +389,21 @@ private:
 protected:
   buffer_type* outs_;
   std::stack<size_t> offset_stack_;
-}; // CLASS basic_obstream
+}; // CLASS binary_writer_impl
 
+using fixed_obstream_span      = binary_writer_impl<convert_traits<network_convert_tag>, fixed_buffer_span>;
+using fast_fixed_obstream_span = binary_writer_impl<convert_traits<host_convert_tag>, fixed_buffer_span>;
+
+using obstream_view      = fixed_obstream_span;
+using fast_obstream_view = fast_fixed_obstream_span;
+
+// -------- basic_obstream
 template <typename _ConvertTraits, size_t _Extent = dynamic_extent>
 class basic_obstream;
 
-template <typename _ConvertTraits, size_t _Extent>
-class basic_obstream : public basic_obstream_view<_ConvertTraits, fixed_buffer<_Extent>> {
-  using super_type = basic_obstream_view<_ConvertTraits, fixed_buffer<_Extent>>;
-
-public:
-  using buffer_type = typename super_type::buffer_type;
-  basic_obstream() : super_type(&buffer_) {}
-
-protected:
-  buffer_type buffer_;
-};
-
 template <typename _ConvertTraits>
-class basic_obstream<_ConvertTraits, dynamic_extent> : public basic_obstream_view<_ConvertTraits, dynamic_buffer> {
-  using super_type = basic_obstream_view<_ConvertTraits, dynamic_buffer>;
+class basic_obstream<_ConvertTraits, dynamic_extent> : public binary_writer_impl<_ConvertTraits, dynamic_buffer<>> {
+  using super_type = binary_writer_impl<_ConvertTraits, dynamic_buffer<>>;
   using my_type    = basic_obstream<_ConvertTraits, dynamic_extent>;
 
 public:
@@ -432,15 +440,69 @@ protected:
   buffer_type buffer_;
 };
 
-using obstream_view = basic_obstream_view<convert_traits<network_convert_tag>>;
+template <typename _ConvertTraits, size_t _Extent>
+class basic_obstream : public binary_writer_impl<_ConvertTraits, fixed_buffer<_Extent>> {
+  using super_type = binary_writer_impl<_ConvertTraits, fixed_buffer<_Extent>>;
+
+public:
+  using buffer_type = typename super_type::buffer_type;
+  basic_obstream() : super_type(&buffer_) {}
+
+protected:
+  buffer_type buffer_;
+};
+
 template <size_t _Extent>
 using obstream_any = basic_obstream<convert_traits<network_convert_tag>, _Extent>;
-using obstream     = obstream_any<dynamic_extent>;
-
-using fast_obstream_view = basic_obstream_view<convert_traits<host_convert_tag>>;
 template <size_t _Extent>
 using fast_obstream_any = basic_obstream<convert_traits<host_convert_tag>, _Extent>;
-using fast_obstream     = fast_obstream_any<dynamic_extent>;
+
+using obstream      = obstream_any<dynamic_extent>;
+using fast_obstream = fast_obstream_any<dynamic_extent>;
+
+//-------- basic_obstream_span
+template <typename _ConvertTraits, typename _Cont = std::vector<char>>
+class basic_obstream_span;
+
+template <typename _ConvertTraits, typename _Cont>
+class basic_obstream_span : public binary_writer_impl<_ConvertTraits, dynamic_buffer_span<_Cont>> {
+  using super_type = binary_writer_impl<_ConvertTraits, dynamic_buffer_span<_Cont>>;
+  using my_type    = basic_obstream_span<_ConvertTraits, _Cont>;
+
+public:
+  using buffer_type = typename super_type::buffer_type;
+  basic_obstream_span(_Cont& outs) : super_type(&span_), span_(&outs) {}
+
+protected:
+  buffer_type span_;
+};
+
+template <typename _ConvertTraits>
+class basic_obstream_span<_ConvertTraits, fixed_buffer_span> : public binary_writer_impl<_ConvertTraits, fixed_buffer_span> {
+  using super_type = binary_writer_impl<_ConvertTraits, fixed_buffer_span>;
+  using my_type    = basic_obstream_span<_ConvertTraits, fixed_buffer_span>;
+
+public:
+  using buffer_type = typename super_type::buffer_type;
+
+  template <size_t _Extent>
+  basic_obstream_span(std::array<char, _Extent>& fb) : super_type(&span_), span_(fb)
+  {}
+
+  template <size_t _Extent>
+  basic_obstream_span(char (&fb)[_Extent]) : super_type(&span_), span_(fb)
+  {}
+
+  basic_obstream_span(char* fb, size_t extent) : super_type(&span_), span_(fb, extent) {}
+
+protected:
+  buffer_type span_;
+};
+
+template <typename _Cont>
+using obstream_span = basic_obstream_span<convert_traits<network_convert_tag>, _Cont>;
+template <typename _Cont>
+using fast_obstream_span = basic_obstream_span<convert_traits<host_convert_tag>, _Cont>;
 
 } // namespace yasio
 

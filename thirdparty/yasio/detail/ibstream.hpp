@@ -32,9 +32,11 @@ namespace yasio
 {
 namespace detail
 {
-template <typename _Stream, typename _Intty> struct read_ix_helper {};
+template <typename _Stream, typename _Intty>
+struct read_ix_helper {};
 
-template <typename _Stream> struct read_ix_helper<_Stream, int32_t> {
+template <typename _Stream>
+struct read_ix_helper<_Stream, int32_t> {
   static int32_t read_ix(_Stream* stream)
   {
     // Unlike writing, we can't delegate to the 64-bit read on
@@ -75,7 +77,8 @@ template <typename _Stream> struct read_ix_helper<_Stream, int32_t> {
   }
 };
 
-template <typename _Stream> struct read_ix_helper<_Stream, int64_t> {
+template <typename _Stream>
+struct read_ix_helper<_Stream, int64_t> {
   static int64_t read_ix(_Stream* stream)
   {
     uint64_t result = 0;
@@ -114,40 +117,51 @@ template <typename _Stream> struct read_ix_helper<_Stream, int64_t> {
 };
 } // namespace detail
 
-template <typename _Traits> class basic_ibstream_view {
+template <typename _Traits>
+class binary_reader_impl {
 public:
   using convert_traits_type = _Traits;
-  using this_type           = basic_ibstream_view<_Traits>;
-  basic_ibstream_view() { this->reset("", 0); }
-  basic_ibstream_view(const void* data, size_t size) { this->reset(data, size); }
-
-  template<typename _BufferType>
-  basic_ibstream_view(const basic_obstream_view<_Traits, _BufferType>* obs) { this->reset(obs->data(), obs->length()); }
+  using this_type           = binary_reader_impl<_Traits>;
+  binary_reader_impl() { this->reset("", 0); }
+  binary_reader_impl(const std::vector<char>& d) { this->reset(d); }
+  binary_reader_impl(const cxx17::string_view& d) { this->reset(d); }
+  binary_reader_impl(const void* data, size_t size) { this->reset(data, size); }
+  template <typename _BufferType>
+  binary_reader_impl(const binary_writer_impl<_Traits, _BufferType>* obs)
+  {
+    this->reset(obs->data(), obs->length());
+  }
 
   template <typename _BufferType>
-  basic_ibstream_view(const basic_obstream_view<_Traits, _BufferType>* obs, ptrdiff_t offset)
+  binary_reader_impl(const binary_writer_impl<_Traits, _BufferType>* obs, ptrdiff_t offset)
   {
     this->reset(obs->data(), obs->length());
     this->advance(offset);
   }
-  basic_ibstream_view(const basic_ibstream_view&) = delete;
-  basic_ibstream_view(basic_ibstream_view&&)      = delete;
+  binary_reader_impl(const binary_reader_impl&) = delete;
+  binary_reader_impl(binary_reader_impl&&)      = delete;
 
-  ~basic_ibstream_view() {}
+  ~binary_reader_impl() {}
 
+  void reset(const std::vector<char>& d) { reset(d.data(), d.size()); }
+  void reset(const cxx17::string_view& d) { reset(d.data(), d.length()); }
   void reset(const void* data, size_t size)
   {
     first_ = ptr_ = static_cast<const char*>(data);
     last_         = first_ + size;
   }
 
-  basic_ibstream_view& operator=(const basic_ibstream_view&) = delete;
-  basic_ibstream_view& operator=(basic_ibstream_view&&) = delete;
+  binary_reader_impl& operator=(const binary_reader_impl&) = delete;
+  binary_reader_impl& operator=(binary_reader_impl&&) = delete;
 
   /* read 7bit encoded variant integer value
   ** @dotnet BinaryReader.Read7BitEncodedInt(64)
   */
-  template <typename _Intty> _Intty read_ix() { return detail::read_ix_helper<this_type, _Intty>::read_ix(this); }
+  template <typename _Intty>
+  _Intty read_ix()
+  {
+    return detail::read_ix_helper<this_type, _Intty>::read_ix(this);
+  }
 
   int read_varint(int size)
   {
@@ -197,6 +211,7 @@ public:
   const char* data() const { return first_; }
 
   void advance(ptrdiff_t offset) { ptr_ += offset; }
+  void advance_v() { advance(read_ix<int>()); }
   ptrdiff_t tell() const { return ptr_ - first_; }
   ptrdiff_t seek(ptrdiff_t offset, int whence)
   {
@@ -220,20 +235,33 @@ public:
     return ptr_ - first_;
   }
 
-  template <typename _Nty> inline _Nty read() { return sread<_Nty>(consume(sizeof(_Nty))); }
-  template <typename _Nty> static _Nty sread(const void* ptr)
+  template <typename _Nty>
+  inline _Nty read()
+  {
+    return sread<_Nty>(consume(sizeof(_Nty)));
+  }
+  template <typename _Nty>
+  static _Nty sread(const void* ptr)
   {
     _Nty value;
     ::memcpy(&value, ptr, sizeof(value));
     return convert_traits_type::template from<_Nty>(value);
   }
 
-  template <typename _LenT> inline cxx17::string_view read_v_fx()
+  template <typename _LenT>
+  inline cxx17::string_view read_v_fx()
   {
     _LenT n = this->read<_LenT>();
     if (n > 0)
       return read_bytes(n);
     return {};
+  }
+
+  cxx17::string_view range_view(size_t start, size_t end)
+  {
+    if (start <= end && (first_ + end) <= last_)
+      return cxx17::string_view{first_ + start, end - start};
+    return cxx17::string_view{};
   }
 
 protected:
@@ -256,11 +284,12 @@ protected:
 };
 
 /// --------------------- CLASS ibstream ---------------------
-template <typename _Traits> class basic_ibstream : public basic_ibstream_view<_Traits> {
+template <typename _Traits>
+class basic_ibstream : public binary_reader_impl<_Traits> {
 public:
   basic_ibstream() {}
-  basic_ibstream(std::vector<char> blob) : basic_ibstream_view<_Traits>(), blob_(std::move(blob)) { this->reset(blob_.data(), static_cast<int>(blob_.size())); }
-  basic_ibstream(const basic_obstream<_Traits>* obs) : basic_ibstream_view<_Traits>(), blob_(obs->buffer())
+  basic_ibstream(std::vector<char> blob) : binary_reader_impl<_Traits>(), blob_(std::move(blob)) { this->reset(blob_.data(), static_cast<int>(blob_.size())); }
+  basic_ibstream(const basic_obstream<_Traits>* obs) : binary_reader_impl<_Traits>(), blob_(obs->buffer())
   {
     this->reset(blob_.data(), static_cast<int>(blob_.size()));
   }
@@ -289,10 +318,10 @@ protected:
   std::vector<char> blob_;
 };
 
-using ibstream_view = basic_ibstream_view<convert_traits<network_convert_tag>>;
+using ibstream_view = binary_reader_impl<convert_traits<network_convert_tag>>;
 using ibstream      = basic_ibstream<convert_traits<network_convert_tag>>;
 
-using fast_ibstream_view = basic_ibstream_view<convert_traits<host_convert_tag>>;
+using fast_ibstream_view = binary_reader_impl<convert_traits<host_convert_tag>>;
 using fast_ibstream      = basic_ibstream<convert_traits<host_convert_tag>>;
 
 } // namespace yasio

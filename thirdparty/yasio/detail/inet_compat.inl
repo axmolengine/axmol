@@ -64,8 +64,8 @@ SOFTWARE.
  * sizeof(int) < 4.  sizeof(int) > 4 is fine; all the world's not a VAX.
  */
 
-static const char* inet_ntop4(const u_char* src, char* dst, socklen_t size);
-static const char* inet_ntop6(const u_char* src, char* dst, socklen_t size);
+static const char* inet_ntop4(const u_char* src, char* dst, size_t size);
+static const char* inet_ntop6(const u_char* src, char* dst, size_t size);
 
 /* char *
  * inet_ntop(af, src, dst, size)
@@ -75,7 +75,7 @@ static const char* inet_ntop6(const u_char* src, char* dst, socklen_t size);
  * author:
  *	Paul Vixie, 1996.
  */
-const char* inet_ntop(int af, const void* src, char* dst, socklen_t size)
+const char* inet_ntop(int af, const void* src, char* dst, size_t size)
 {
   switch (af)
   {
@@ -101,7 +101,7 @@ const char* inet_ntop(int af, const void* src, char* dst, socklen_t size)
  * author:
  *	Paul Vixie, 1996.
  */
-static const char* inet_ntop4(const u_char* src, char* dst, socklen_t size)
+static const char* inet_ntop4(const u_char* src, char* dst, size_t size)
 {
   char fmt[] = "%u.%u.%u.%u";
   char tmp[sizeof "255.255.255.255"];
@@ -120,7 +120,7 @@ static const char* inet_ntop4(const u_char* src, char* dst, socklen_t size)
  * author:
  *	Paul Vixie, 1996.
  */
-static const char* inet_ntop6(const u_char* src, char* dst, socklen_t size)
+static const char* inet_ntop6(const u_char* src, char* dst, size_t size)
 {
   /*
    * Note that int32_t and int16_t need only be "at least" large enough
@@ -197,7 +197,7 @@ static const char* inet_ntop6(const u_char* src, char* dst, socklen_t size)
     /* Is this address an encapsulated IPv4? */
     if (i == 6 && best.base == 0 && (best.len == 6 || (best.len == 5 && words[5] == 0xffff)))
     {
-      if (!inet_ntop4(src + 12, tp, static_cast<socklen_t>(sizeof tmp - (tp - tmp))))
+      if (!inet_ntop4(src + 12, tp, static_cast<size_t>(sizeof tmp - (tp - tmp))))
         return (nullptr);
       tp += strlen(tp);
       break;
@@ -212,7 +212,7 @@ static const char* inet_ntop6(const u_char* src, char* dst, socklen_t size)
   /*
    * Check for overflow, copy, and we're done.
    */
-  if ((socklen_t)(tp - tmp) > size)
+  if ((size_t)(tp - tmp) > size)
   {
     errno = (ENOSPC);
     return (nullptr);
