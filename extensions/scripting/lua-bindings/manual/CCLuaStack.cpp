@@ -679,7 +679,8 @@ namespace {
 void skipBOM(const char*& chunk, int& chunkSize)
 {
     // UTF-8 BOM? skip
-    if (static_cast<unsigned char>(chunk[0]) == 0xEF &&
+    if (chunkSize >= 3 && 
+        static_cast<unsigned char>(chunk[0]) == 0xEF &&
         static_cast<unsigned char>(chunk[1]) == 0xBB &&
         static_cast<unsigned char>(chunk[2]) == 0xBF)
     {
