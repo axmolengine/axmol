@@ -200,6 +200,7 @@ public:
   binary_writer_impl(buffer_type* outs) : outs_(outs) {}
   ~binary_writer_impl() {}
 
+#if defined(YASIO_OBS_BUILTIN_STACK)
   void push8()
   {
     offset_stack_.push(outs_->length());
@@ -283,6 +284,25 @@ public:
     write_bytes(offset, &value, size);
     offset_stack_.pop();
   }
+#else
+  template <typename _Intty>
+  size_t push()
+  {
+    auto where = outs_->length();
+    this->outs_->resize(where + sizeof(_Intty));
+    return where;
+  }
+  template <typename _Intty>
+  void pop(size_t offset)
+  {
+    this->pwrite(offset, static_cast<_Intty>(outs_->length() - offset - sizeof(_Intty)));
+  }
+  template <typename _Intty>
+  void pop(size_t offset, _Intty value)
+  {
+    this->pwrite(offset, value);
+  }
+#endif
 
   /* write blob data with '7bit encoded int' length field */
   void write_v(cxx17::string_view value)
@@ -316,8 +336,10 @@ public:
   void clear()
   {
     outs_->clear();
+#if defined(YASIO_OBS_BUILTIN_STACK)
     std::stack<size_t> tmp;
     tmp.swap(offset_stack_);
+#endif
   }
   void shrink_to_fit() { outs_->shrink_to_fit(); }
 
@@ -388,7 +410,9 @@ private:
 
 protected:
   buffer_type* outs_;
+#if defined(YASIO_OBS_BUILTIN_STACK)
   std::stack<size_t> offset_stack_;
+#endif
 }; // CLASS binary_writer_impl
 
 using fixed_obstream_span      = binary_writer_impl<convert_traits<network_convert_tag>, fixed_buffer_span>;
@@ -403,10 +427,10 @@ class basic_obstream;
 
 template <typename _ConvertTraits>
 class basic_obstream<_ConvertTraits, dynamic_extent> : public binary_writer_impl<_ConvertTraits, dynamic_buffer<>> {
+public:
   using super_type = binary_writer_impl<_ConvertTraits, dynamic_buffer<>>;
   using my_type    = basic_obstream<_ConvertTraits, dynamic_extent>;
 
-public:
   using buffer_type = typename super_type::buffer_type;
   basic_obstream(size_t capacity = 128) : super_type(&buffer_) { buffer_.reserve(capacity); }
   basic_obstream(const basic_obstream& rhs) : super_type(&buffer_), buffer_(rhs.buffer_) {}
@@ -442,9 +466,9 @@ protected:
 
 template <typename _ConvertTraits, size_t _Extent>
 class basic_obstream : public binary_writer_impl<_ConvertTraits, fixed_buffer<_Extent>> {
+public:
   using super_type = binary_writer_impl<_ConvertTraits, fixed_buffer<_Extent>>;
 
-public:
   using buffer_type = typename super_type::buffer_type;
   basic_obstream() : super_type(&buffer_) {}
 
@@ -466,10 +490,10 @@ class basic_obstream_span;
 
 template <typename _ConvertTraits, typename _Cont>
 class basic_obstream_span : public binary_writer_impl<_ConvertTraits, dynamic_buffer_span<_Cont>> {
+public:
   using super_type = binary_writer_impl<_ConvertTraits, dynamic_buffer_span<_Cont>>;
   using my_type    = basic_obstream_span<_ConvertTraits, _Cont>;
 
-public:
   using buffer_type = typename super_type::buffer_type;
   basic_obstream_span(_Cont& outs) : super_type(&span_), span_(&outs) {}
 
@@ -479,10 +503,10 @@ protected:
 
 template <typename _ConvertTraits>
 class basic_obstream_span<_ConvertTraits, fixed_buffer_span> : public binary_writer_impl<_ConvertTraits, fixed_buffer_span> {
+public:
   using super_type = binary_writer_impl<_ConvertTraits, fixed_buffer_span>;
   using my_type    = basic_obstream_span<_ConvertTraits, fixed_buffer_span>;
 
-public:
   using buffer_type = typename super_type::buffer_type;
 
   template <size_t _Extent>

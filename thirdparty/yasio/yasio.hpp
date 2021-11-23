@@ -299,9 +299,9 @@ enum
   YEK_ON_OPEN = 1,
   YEK_ON_CLOSE,
   YEK_ON_PACKET,
-  YEK_CONNECT_RESPONSE = YEK_ON_OPEN,
-  YEK_CONNECTION_LOST  = YEK_ON_CLOSE,
-  YEK_PACKET           = YEK_ON_PACKET,
+  YEK_CONNECT_RESPONSE = YEK_ON_OPEN,   // implicit deprecated alias
+  YEK_CONNECTION_LOST  = YEK_ON_CLOSE,  // implicit deprecated alias
+  YEK_PACKET           = YEK_ON_PACKET, // implicit deprecated alias
 };
 
 // the network core service log level
@@ -1026,6 +1026,7 @@ public:
   YASIO__DECL io_channel* channel_at(size_t index) const;
 
 private:
+  YASIO__DECL void do_stop(uint8_t flags);
   YASIO__DECL void schedule_timer(highp_timer*, timer_cb_t&&);
   YASIO__DECL void remove_timer(highp_timer*);
 

@@ -28,6 +28,7 @@ SOFTWARE.
 
 #define YASIO_HEADER_ONLY 1
 #define YASIO_HAVE_KCP 1
+#define YASIO_OBS_BUILTIN_STACK 1
 
 #include "yasio/bindings/yasio_jsb.hpp"
 #include "yasio/yasio.hpp"

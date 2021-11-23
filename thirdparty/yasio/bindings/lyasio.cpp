@@ -34,7 +34,8 @@ using namespace yasio;
 
 namespace lyasio
 {
-template <typename _Stream> static void obstream_write_v(_Stream* obs, cxx17::string_view val, int length_field_bits)
+template <typename _Stream>
+static void obstream_write_v(_Stream* obs, cxx17::string_view val, int length_field_bits)
 {
   // default: Use variant length of length field, just like .net BinaryWriter.Write(String),
   // see:
@@ -52,7 +53,8 @@ template <typename _Stream> static void obstream_write_v(_Stream* obs, cxx17::st
       return obs->write_v8(val);
   }
 };
-template <typename _Stream> static cxx17::string_view ibstream_read_v(_Stream* ibs, int length_field_bits)
+template <typename _Stream>
+static cxx17::string_view ibstream_read_v(_Stream* ibs, int length_field_bits)
 {
   // default: Use variant length of length field, just like .net BinaryReader.ReadString,
   // see:
@@ -76,13 +78,27 @@ template <typename _Stream> static cxx17::string_view ibstream_read_v(_Stream* i
 
 namespace lyasio
 {
-template <typename _Stream> static void register_obstream(sol::table& lib, const char* usertype)
+template <typename _Stream>
+static void register_obstream(sol::table& lib, const char* usertype)
 {
   lib.new_usertype<_Stream>(
-      usertype, "push32", &_Stream::push32, "pop32",
+      usertype,
+#  if defined(YASIO_OBS_BUILTIN_STACK)
+      "push32", &_Stream::push32, "pop32",
       sol::overload(static_cast<void (_Stream ::*)()>(&_Stream::pop32), static_cast<void (_Stream ::*)(uint32_t)>(&_Stream::pop32)), "push16", &_Stream::push16,
       "pop16", sol::overload(static_cast<void (_Stream ::*)()>(&_Stream::pop16), static_cast<void (_Stream ::*)(uint16_t)>(&_Stream::pop16)), "push8",
       &_Stream::push8, "pop8", sol::overload(static_cast<void (_Stream ::*)()>(&_Stream::pop8), static_cast<void (_Stream ::*)(uint8_t)>(&_Stream::pop8)),
+#  else
+      "push32", &_Stream::template push<uint32_t>, "pop32",
+      sol::overload(static_cast<void (_Stream ::*)(size_t)>(&_Stream::template pop<uint32_t>),
+                    static_cast<void (_Stream ::*)(size_t, uint32_t)>(&_Stream::template pop<uint32_t>)),
+      "push16", &_Stream::template push<uint16_t>, "pop16",
+      sol::overload(static_cast<void (_Stream ::*)(size_t)>(&_Stream::template pop<uint16_t>),
+                    static_cast<void (_Stream ::*)(size_t, uint16_t)>(&_Stream::template pop<uint16_t>)),
+      "push8", &_Stream::template push<uint8_t>, "pop8",
+      sol::overload(static_cast<void (_Stream ::*)(size_t)>(&_Stream::template pop<uint8_t>),
+                    static_cast<void (_Stream ::*)(size_t, uint8_t)>(&_Stream::template pop<uint8_t>)),
+#  endif
       "write_ix", &_Stream::template write_ix<int64_t>, "write_bool", &_Stream::template write<bool>, "write_i8", &_Stream::template write<int8_t>, "write_i16",
       &_Stream::template write<int16_t>, "write_i32", &_Stream::template write<int32_t>, "write_i64", &_Stream::template write<int64_t>, "write_u8",
       &_Stream::template write<uint8_t>, "write_u16", &_Stream::template write<uint16_t>, "write_u32", &_Stream::template write<uint32_t>, "write_u64",
@@ -101,7 +117,8 @@ template <typename _Stream> static void register_obstream(sol::table& lib, const
       [](_Stream* obs) { return cxx17::string_view(obs->data(), obs->length()); }, "save", &_Stream::save);
 }
 
-template <typename _Stream, typename _StreamView, typename _OStream> static void register_ibstream(sol::table& lib, const char* usertype)
+template <typename _Stream, typename _StreamView, typename _OStream>
+static void register_ibstream(sol::table& lib, const char* usertype)
 {
   lib.new_usertype<_Stream>(
       usertype, sol::constructors<_Stream(), _Stream(std::vector<char>), _Stream(const _OStream*)>(), "load", &_Stream::load, "read_ix",
@@ -320,7 +337,8 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
 namespace kaguya
 {
 // cxx17::string_view
-template <> struct lua_type_traits<cxx17::string_view> {
+template <>
+struct lua_type_traits<cxx17::string_view> {
   typedef cxx17::string_view get_type;
   typedef cxx17::string_view push_type;
 
@@ -339,7 +357,8 @@ template <> struct lua_type_traits<cxx17::string_view> {
   }
 };
 // std::vector<char>
-template <> struct lua_type_traits<std::vector<char>> {
+template <>
+struct lua_type_traits<std::vector<char>> {
   typedef std::vector<char> get_type;
   typedef const std::vector<char>& push_type;
 
@@ -358,7 +377,8 @@ template <> struct lua_type_traits<std::vector<char>> {
   }
 };
 // transport_handle_t
-template <> struct lua_type_traits<yasio::inet::transport_handle_t> {
+template <>
+struct lua_type_traits<yasio::inet::transport_handle_t> {
   typedef yasio::inet::transport_handle_t get_type;
   typedef yasio::inet::transport_handle_t push_type;
 
@@ -372,7 +392,8 @@ template <> struct lua_type_traits<yasio::inet::transport_handle_t> {
   }
 };
 
-template <> struct lua_type_traits<std::vector<yasio::inet::io_hostent>> {
+template <>
+struct lua_type_traits<std::vector<yasio::inet::io_hostent>> {
   typedef std::vector<yasio::inet::io_hostent> get_type;
   typedef std::vector<yasio::inet::io_hostent> push_type;
 
@@ -403,7 +424,8 @@ template <> struct lua_type_traits<std::vector<yasio::inet::io_hostent>> {
   }
 };
 #  if defined(YASIO_HAVE_HALF_FLOAT)
-template <> struct lua_type_traits<fp16_t> {
+template <>
+struct lua_type_traits<fp16_t> {
   typedef fp16_t get_type;
   typedef fp16_t push_type;
 
@@ -421,46 +443,66 @@ template <> struct lua_type_traits<fp16_t> {
 
 namespace lyasio
 {
-#  define kaguya_obstream_class(_Stream) kaguya::UserdataMetatable<_Stream>().setConstructors<_Stream(), _Stream(int)>()
+#  define kaguya_obstream_class(_Stream, _BaseStream) kaguya::UserdataMetatable<_Stream, _BaseStream>().setConstructors<_Stream(), _Stream(size_t)>()
+#  define kaguya_obstream_base_class(_BaseStream) kaguya::UserdataMetatable<_BaseStream>().setConstructors<_BaseStream(_BaseStream::buffer_type*)>()
 #  define kaguya_ibstream_view_class(_StreamView, _OStream)                                                                                                    \
-    kaguya::UserdataMetatable<_StreamView>().setConstructors<_StreamView(), _StreamView(const void*, int), _StreamView(const _OStream*)>()
+    kaguya::UserdataMetatable<_StreamView>().setConstructors<_StreamView(), _StreamView(const void*, size_t), _StreamView(const _OStream*)>()
 #  define kaguya_ibstream_class(_Stream, _StreamView, _OStream)                                                                                                \
     kaguya::UserdataMetatable<_Stream, _StreamView>().setConstructors<_Stream(std::vector<char>), _Stream(const _OStream*)>()
 
-template <typename _Stream> static void register_obstream(kaguya::LuaTable& lib, const char* usertype, kaguya::UserdataMetatable<_Stream>& userclass)
+template <typename _Stream, typename _BaseStream>
+static void register_obstream(kaguya::LuaTable& lib, const char* usertype, const char* basetype, kaguya::UserdataMetatable<_Stream, _BaseStream>& userclass,
+                              kaguya::UserdataMetatable<_BaseStream>& baseclass)
 {
-  lib[usertype].setClass(
-      userclass.addFunction("push32", &_Stream::push32)
-          .addOverloadedFunctions("pop32", static_cast<void (_Stream ::*)()>(&_Stream::pop32), static_cast<void (_Stream ::*)(uint32_t)>(&_Stream::pop32))
-          .addFunction("push16", &_Stream::push16)
-          .addOverloadedFunctions("pop16", static_cast<void (_Stream ::*)()>(&_Stream::pop16), static_cast<void (_Stream ::*)(uint16_t)>(&_Stream::pop16))
-          .addFunction("push8", &_Stream::push8)
-          .addOverloadedFunctions("pop8", static_cast<void (_Stream ::*)()>(&_Stream::pop8), static_cast<void (_Stream ::*)(uint8_t)>(&_Stream::pop8))
-          .addFunction("write_ix", &_Stream::template write_ix<int64_t>)
-          .addFunction("write_bool", &_Stream::template write<bool>)
-          .addFunction("write_i8", &_Stream::template write<int8_t>)
-          .addFunction("write_i16", &_Stream::template write<int16_t>)
-          .addFunction("write_i32", &_Stream::template write<int32_t>)
-          .addFunction("write_i64", &_Stream::template write<int64_t>)
-          .addFunction("write_u8", &_Stream::template write<uint8_t>)
-          .addFunction("write_u16", &_Stream::template write<uint16_t>)
-          .addFunction("write_u32", &_Stream::template write<uint32_t>)
-          .addFunction("write_u64", &_Stream::template write<uint64_t>)
-#  if defined(YASIO_HAVE_HALF_FLOAT)
-          .addFunction("write_f16", &_Stream::template write<fp16_t>)
+  lib[basetype].setClass(
+#  if defined(YASIO_OBS_BUILTIN_STACK)
+      userclass.addFunction("push32", &_BaseStream::push32)
+          .addOverloadedFunctions("pop32", static_cast<void (_BaseStream ::*)()>(&_BaseStream::pop32),
+                                  static_cast<void (_BaseStream ::*)(uint32_t)>(&_Stream::pop32))
+          .addFunction("push16", &_BaseStream::push16)
+          .addOverloadedFunctions("pop16", static_cast<void (_BaseStream ::*)()>(&_BaseStream::pop16),
+                                  static_cast<void (_BaseStream ::*)(uint16_t)>(&_BaseStream::pop16))
+          .addFunction("push8", &_BaseStream::push8)
+          .addOverloadedFunctions("pop8", static_cast<void (_BaseStream ::*)()>(&_BaseStream::pop8),
+                                  static_cast<void (_BaseStream ::*)(uint8_t)>(&_BaseStream::pop8))
+#  else
+      baseclass.addFunction("push32", &_BaseStream::template push<uint32_t>)
+          .addOverloadedFunctions("pop32", static_cast<void (_BaseStream ::*)(size_t)>(&_BaseStream::template pop<uint32_t>),
+                                  static_cast<void (_BaseStream ::*)(size_t, uint32_t)>(&_BaseStream::template pop<uint32_t>))
+          .addFunction("push16", &_BaseStream::template push<uint16_t>)
+          .addOverloadedFunctions("pop16", static_cast<void (_BaseStream ::*)(size_t)>(&_BaseStream::template pop<uint16_t>),
+                                  static_cast<void (_BaseStream ::*)(size_t, uint16_t)>(&_BaseStream::template pop<uint16_t>))
+          .addFunction("push8", &_BaseStream::template push<uint8_t>)
+          .addOverloadedFunctions("pop8", static_cast<void (_BaseStream ::*)(size_t)>(&_BaseStream::template pop<uint8_t>),
+                                  static_cast<void (_BaseStream ::*)(size_t, uint8_t)>(&_BaseStream::template pop<uint8_t>))
 #  endif
-          .addFunction("write_f", &_Stream::template write<float>)
-          .addFunction("write_lf", &_Stream::template write<double>)
+          .addFunction("write_ix", &_BaseStream::template write_ix<int64_t>)
+          .addFunction("write_bool", &_BaseStream::template write<bool>)
+          .addFunction("write_i8", &_BaseStream::template write<int8_t>)
+          .addFunction("write_i16", &_BaseStream::template write<int16_t>)
+          .addFunction("write_i32", &_BaseStream::template write<int32_t>)
+          .addFunction("write_i64", &_BaseStream::template write<int64_t>)
+          .addFunction("write_u8", &_BaseStream::template write<uint8_t>)
+          .addFunction("write_u16", &_BaseStream::template write<uint16_t>)
+          .addFunction("write_u32", &_BaseStream::template write<uint32_t>)
+          .addFunction("write_u64", &_BaseStream::template write<uint64_t>)
+#  if defined(YASIO_HAVE_HALF_FLOAT)
+          .addFunction("write_f16", &_BaseStream::template write<fp16_t>)
+#  endif
+          .addFunction("write_f", &_BaseStream::template write<float>)
+          .addFunction("write_lf", &_BaseStream::template write<double>)
           .addStaticFunction("write_v",
-                             [](_Stream* obs, cxx17::string_view sv, kaguya::VariadicArgType args) {
+                             [](_BaseStream* obs, cxx17::string_view sv, kaguya::VariadicArgType args) {
                                int lfl = -1;
                                if (args.size() > 0)
                                  lfl = static_cast<int>(args[0]);
                                return lyasio::obstream_write_v(obs, sv, lfl);
                              })
-          .addFunction("write_bytes", static_cast<void (_Stream::*)(cxx17::string_view)>(&_Stream::write_bytes))
-          .addFunction("length", &_Stream::length)
-          .addStaticFunction("to_string", [](_Stream* obs) { return cxx17::string_view(obs->data(), obs->length()); }));
+          .addFunction("write_bytes", static_cast<void (_BaseStream::*)(cxx17::string_view)>(&_BaseStream::write_bytes))
+          .addFunction("length", &_BaseStream::length)
+          .addStaticFunction("to_string", [](_BaseStream* obs) { return cxx17::string_view(obs->data(), obs->length()); }));
+  // ##-- obstream
+  lib[usertype].setClass(userclass);
 }
 template <typename _Stream, typename _StreamView, typename _OStream>
 static void register_ibstream(kaguya::LuaTable& lib, const char* usertype, const char* basetype, kaguya::UserdataMetatable<_Stream, _StreamView>& userclass,
@@ -602,8 +644,11 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
           .addStaticFunction("native_ptr", [](io_service* service) { return (void*)service; }));
 
   // ##-- obstream
-  lyasio::register_obstream<obstream>(yasio_lib, "obstream", kaguya_obstream_class(obstream));
-  lyasio::register_obstream<fast_obstream>(yasio_lib, "fast_obstream", kaguya_obstream_class(fast_obstream));
+  lyasio::register_obstream<obstream, obstream::super_type>(yasio_lib, "obstream", "obstream_base", kaguya_obstream_class(obstream, obstream::super_type),
+                                                            kaguya_obstream_base_class(obstream::super_type));
+  lyasio::register_obstream<fast_obstream, fast_obstream::super_type>(yasio_lib, "fast_obstream", "fast_obstream_base",
+                                                                      kaguya_obstream_class(fast_obstream, fast_obstream::super_type),
+                                                                      kaguya_obstream_base_class(fast_obstream::super_type));
 
   // ##-- yasio::ibstream
   lyasio::register_ibstream<ibstream, ibstream_view, obstream>(yasio_lib, "ibstream", "ibstream_view", kaguya_ibstream_class(ibstream, ibstream_view, obstream),
