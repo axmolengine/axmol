@@ -124,6 +124,7 @@ HttpClient::HttpClient()
 
 HttpClient::~HttpClient() {
     _scheduler->unscheduleAllForTarget(this);
+    delete _service;
 
     clearPendingResponseQueue();
     clearFinishedResponseQueue();
@@ -131,7 +132,7 @@ HttpClient::~HttpClient() {
         _cookie->writeFile();
         delete _cookie;
     }
-    delete _service;
+
     CCLOG("HttpClient destructor");
 }
 
