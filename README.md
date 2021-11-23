@@ -45,7 +45,7 @@
 * Extension ```FairyGUI``` support
 * ASTC 4x4/6x6/8x8 support (if hardware decoder not present, use software decoder)
 * ETC2 RGB/RGBA support    (if hardware decoder not present, use software decoder)
-* Supported 2D physics engines:
+* Supported 2D physics engines (see also [Wiki](https://github.com/adxeproject/adxe-wiki)):
   * Box2D
   * Box2D-optimized
   * Chipmunk2D 
@@ -64,27 +64,24 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
   1. Enter ```adxe``` root directory
   2. Run ```python setup.py```, restart console after finish
 
-#### Windows (64/32 bit)
+#### Windows (64/32 bit  Visual Studio 2019/2022)
   1. Install [CMake](https://cmake.org/) 3.14+  
-  2. Install Visual Studio 2019 build (it's strong recommend you use this version)  
-  3. Execute follow command at command line (Console, Window Terminal or Powershell):
- 
-  64bit:
-  ```bat
-  cd adxe\
-  cmake -S . -B build -G "Visual Studio 16 2019" -A x64
-  ```
-  32bit:
-  ```bat
-  cd adxe\
-  cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
-  ```
-  Build excecutable on command line (e.g. cpp-tests):
-  ```
-  msbuild .\build\adxe.sln -target:cpp-tests -maxCpuCount
-  ```
-
+  2. Install Visual Studio 2019/2022 (it's recommend you use only this versions)  
+  3. Execute follow command at command line (Console, Window Terminal or Powershell)
   
+     ```cd adxe ```
+     - for 32 bit Visual Studio 2019:
+     ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
+     - for 64 bit Visual Studio 2019:
+     ```cmake -S . -B build -G "Visual Studio 16 2019" -A x64```
+     - for 32 bit Visual Studio 2022:
+     ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
+     - for 64 bit Visual Studio 2022:
+     ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
+  
+  Build excecutable on command line (e.g. cpp-tests):
+    ```msbuild .\build\adxe.sln -target:cpp-tests -maxCpuCount```
+
 #### Android
   1. Install Android Studio 4.2+
   2. When first start Android Studio, It will guide you to install sdk and other tools, just install them
