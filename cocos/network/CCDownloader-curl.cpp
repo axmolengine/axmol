@@ -817,18 +817,25 @@ DownloaderCURL::~DownloaderCURL() {
 }
 
 void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task) {
-    DownloadTaskCURL* coTask = new (std::nothrow) DownloadTaskCURL(*this);
-    coTask->init(task->storagePath, _impl->hints.tempFileNameSuffix);
-    task->_coTask.reset(coTask); // coTask auto managed by task
+    DownloadTaskCURL* coTask = new DownloadTaskCURL(*this);
+    task->_coTask.reset(coTask);  // coTask auto managed by task
+    if (coTask->init(task->storagePath, _impl->hints.tempFileNameSuffix))
+    {
+        DLLOG("DownloaderCURL: createTask: Id(%d)", coTask->serialId);
 
-    DLLOG("    DownloaderCURL: createTask: Id(%d)", coTask->serialId);
+        _impl->addTask(task, coTask);
+        _impl->run();
 
-    _impl->addTask(task, coTask);
-    _impl->run();
-
-    if (!task->background) {
-        _lazyScheduleUpdate();
-        _scheduler->resumeTarget(this);
+        if (!task->background)
+        {
+            _lazyScheduleUpdate();
+            _scheduler->resumeTarget(this);
+        }
+    }
+    else {
+        task.reset();
+        cocos2d::log("DownloaderCURL createTask fail, error: %d, detail: %s",
+                     coTask->_errCode, coTask->_errDescription.c_str());
     }
 }
 
