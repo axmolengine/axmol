@@ -1155,8 +1155,13 @@ void Node::resetChild(Node* child, bool cleanup)
 
 void Node::detachChild(Node* child, ssize_t childIndex, bool cleanup)
 {
-    resetChild(child, cleanup);
+    if (_childrenIndexer)
+    {
+        _childrenIndexer->erase(child->_tag);
+        _childrenIndexer->erase(child->_hashOfName);
+    }
 
+    resetChild(child, cleanup);
     _children.erase(childIndex);
 }
 
