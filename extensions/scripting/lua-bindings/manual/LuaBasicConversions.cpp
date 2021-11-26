@@ -2688,14 +2688,7 @@ void ttfconfig_to_luaval(lua_State* L, const cocos2d::TTFConfig& config)
     lua_rawset(L, -3);
 
     lua_pushstring(L, "customGlyphs");
-    if (nullptr != config.customGlyphs && strlen(config.customGlyphs) > 0)
-    {
-        lua_pushstring(L, config.customGlyphs);
-    }
-    else
-    {
-        lua_pushstring(L, "");
-    }
+    lua_pushlstring(L, config.customGlyphs.c_str(), config.customGlyphs.length());
     lua_rawset(L, -3);
 
     lua_pushstring(L, "distanceFieldEnabled");
