@@ -125,7 +125,7 @@ private:
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
     unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
 
-    void setGlyphCollection(GlyphCollection glyphs, const char* customGlyphs = nullptr);
+    void setGlyphCollection(GlyphCollection glyphs, const char* customGlyphs);
     const char* getGlyphCollection() const;
 
     FT_Face _fontFace;
