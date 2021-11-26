@@ -623,12 +623,12 @@ void FontFreeType::renderCharAt(unsigned char* dest,
     }
 }
 
-void FontFreeType::setGlyphCollection(GlyphCollection glyphs, const char* customGlyphs /* = nullptr */)
+void FontFreeType::setGlyphCollection(GlyphCollection glyphs, const char* customGlyphs)
 {
     _usedGlyphs = glyphs;
     if (glyphs == GlyphCollection::CUSTOM)
     {
-        _customGlyphs = customGlyphs;
+        _customGlyphs = customGlyphs ? customGlyphs : "";
     }
 }
 

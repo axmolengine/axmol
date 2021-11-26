@@ -52,7 +52,7 @@ typedef struct _ttfConfig
     float fontSize;
 
     GlyphCollection glyphs;
-    const char *customGlyphs;
+    std::string customGlyphs;
 
     bool distanceFieldEnabled;
     int outlineSize;
@@ -68,7 +68,7 @@ typedef struct _ttfConfig
         : fontFilePath(filePath)
         , fontSize(size)
         , glyphs(glyphCollection)
-        , customGlyphs(customGlyphCollection)
+        , customGlyphs(customGlyphCollection ? customGlyphCollection : "")
         , distanceFieldEnabled(useDistanceField)
         , outlineSize(outline)
         , italics(useItalics)
