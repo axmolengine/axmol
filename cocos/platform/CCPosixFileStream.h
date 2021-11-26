@@ -26,7 +26,7 @@
 #endif
 
 #if defined(_WIN32)
-#include "win32-specific/ntcvt/ntcvt.hpp"
+#include "ntcvt/ntcvt.hpp"
 #define O_READ_FLAGS O_BINARY | O_RDONLY, S_IREAD
 #define O_WRITE_FLAGS O_CREAT | O_RDWR | O_BINARY | O_TRUNC, S_IWRITE | S_IREAD
 #define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD

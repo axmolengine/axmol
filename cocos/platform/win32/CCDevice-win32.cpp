@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "platform/CCStdC.h"
 
-#include "win32-specific/ntcvt/ntcvt.hpp"
+#include "ntcvt/ntcvt.hpp"
 
 NS_CC_BEGIN
 

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <timeapi.h>
 
 #include "yasio/cxx17/string_view.hpp"
-#include "win32-specific/ntcvt/ntcvt.hpp"
+#include "ntcvt/ntcvt.hpp"
 /**
 @brief    This function change the PVRFrame show/hide setting in register.
 @param  bEnable If true show the PVRFrame window, otherwise hide.
