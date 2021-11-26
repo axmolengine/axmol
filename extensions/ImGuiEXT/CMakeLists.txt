@@ -1,8 +1,5 @@
 set(target_name ImGuiEXT)
 
-#~ if(WINDOWS)
-#~     include_directories(${ADXE_ROOT_PATH}/thirdparty/win32-specific/gles/include/OGLES)
-#~ endif()
 include_directories(imgui)
 
 set(HEADER

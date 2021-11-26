@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include <sys/types.h>  
 #include <sys/stat.h>  
 
-#include "win32-specific/ntcvt/ntcvt.hpp"
+#include "ntcvt/ntcvt.hpp"
 
 #define DECLARE_GUARD (void)0 // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
