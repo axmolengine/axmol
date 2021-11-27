@@ -45,10 +45,10 @@ class CC_DLL FontFreeType : public Font
 public:
     static const int DistanceMapSpread;
 
-    static FontFreeType* create(const std::string& fontName,
+    static FontFreeType* create(std::string_view fontName,
                                 float fontSize,
                                 GlyphCollection glyphs,
-                                const char* customGlyphs,
+                                std::string_view customGlyphs,
                                 bool distanceFieldEnabled = false,
                                 float outline             = 0);
 
@@ -97,7 +97,7 @@ public:
 
     int getFontAscender() const;
     const char* getFontFamily() const;
-    std::string getFontName() const { return _fontName; }
+    const std::string& getFontName() const { return _fontName; }
 
     virtual FontAtlas* newFontAtlas() override;
     virtual int getFontMaxHeight() const override { return _lineHeight; }
@@ -108,8 +108,8 @@ public:
     static FT_Library getFTLibrary();
 
 private:
-    static const char* _glyphASCII;
-    static const char* _glyphNEHE;
+    static const std::string_view _glyphASCII;
+    static const std::string_view _glyphNEHE;
     static FT_Library _FTlibrary;
     static bool _FTInitialized;
     static bool _streamParsingEnabled;
@@ -118,15 +118,15 @@ private:
     FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
 
-    bool loadFontFace(const std::string& fontName, float fontSize);
+    bool loadFontFace(std::string_view fontName, float fontSize);
 
     static bool initFreeType();
 
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
     unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
 
-    void setGlyphCollection(GlyphCollection glyphs, const char* customGlyphs);
-    const char* getGlyphCollection() const;
+    void setGlyphCollection(GlyphCollection glyphs, std::string_view customGlyphs);
+    std::string_view getGlyphCollection() const;
 
     FT_Face _fontFace;
     std::unique_ptr<FT_StreamRec> _fontStream;

@@ -2,8 +2,9 @@
  Copyright (c) 2013      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -62,13 +63,20 @@ typedef struct _ttfConfig
     bool underline;
     bool strikethrough;
 
-    _ttfConfig(const std::string& filePath = "",float size = CC_DEFAULT_FONT_LABEL_SIZE, const GlyphCollection& glyphCollection = GlyphCollection::DYNAMIC,
-        const char *customGlyphCollection = nullptr, bool useDistanceField = false, int outline = 0,
-               bool useItalics = false, bool useBold = false, bool useUnderline = false, bool useStrikethrough = false)
+    _ttfConfig(std::string_view filePath            = {},
+               float size                             = CC_DEFAULT_FONT_LABEL_SIZE,
+               const GlyphCollection& glyphCollection = GlyphCollection::DYNAMIC,
+               std::string_view customGlyphCollection = {},
+               bool useDistanceField                  = false,
+               int outline                            = 0,
+               bool useItalics                        = false,
+               bool useBold                           = false,
+               bool useUnderline                      = false,
+               bool useStrikethrough                  = false)
         : fontFilePath(filePath)
         , fontSize(size)
         , glyphs(glyphCollection)
-        , customGlyphs(customGlyphCollection ? customGlyphCollection : "")
+        , customGlyphs(customGlyphCollection)
         , distanceFieldEnabled(useDistanceField)
         , outlineSize(outline)
         , italics(useItalics)

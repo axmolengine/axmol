@@ -2,8 +2,9 @@
  Copyright (c) 2014 cocos2d-x.org
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxe.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -86,42 +87,42 @@ std::string CC_DLL vformat(const char* format, va_list ap);
  *    }
  *  @endcode
  */
-CC_DLL bool UTF8ToUTF16(const std::string& inUtf8, std::u16string& outUtf16);
+CC_DLL bool UTF8ToUTF16(std::string_view inUtf8, std::u16string& outUtf16);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF8 to UTF32.
  *
  *  @see UTF8ToUTF16
  */
-CC_DLL bool UTF8ToUTF32(const std::string& inUtf8, std::u32string& outUtf32);
+CC_DLL bool UTF8ToUTF32(std::string_view inUtf8, std::u32string& outUtf32);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF16 to UTF8.
  *
  *  @see UTF8ToUTF16
  */
-CC_DLL bool UTF16ToUTF8(const std::u16string& inUtf16, std::string& outUtf8);
+CC_DLL bool UTF16ToUTF8(std::u16string_view inUtf16, std::string& outUtf8);
     
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF16 to UTF32.
  *
  *  @see UTF8ToUTF16
  */
-CC_DLL bool UTF16ToUTF32(const std::u16string& inUtf16, std::u32string& outUtf32);
+CC_DLL bool UTF16ToUTF32(std::u16string_view inUtf16, std::u32string& outUtf32);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF32 to UTF8.
  *
  *  @see UTF8ToUTF16
  */
-CC_DLL bool UTF32ToUTF8(const std::u32string& inUtf32, std::string& outUtf8);
+CC_DLL bool UTF32ToUTF8(std::u32string_view inUtf32, std::string& outUtf8);
     
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF32 to UTF16.
  *
  *  @see UTF8ToUTF16
  */
-CC_DLL bool UTF32ToUTF16(const std::u32string& inUtf32, std::u16string& outUtf16);
+CC_DLL bool UTF32ToUTF16(std::u32string_view inUtf32, std::u16string& outUtf16);
 
 
 

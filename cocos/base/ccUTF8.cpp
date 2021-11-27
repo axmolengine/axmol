@@ -247,7 +247,7 @@ struct ConvertTrait<char32_t> {
 };
 
 template <typename From, typename To, typename FromTrait = ConvertTrait<From>, typename ToTrait = ConvertTrait<To>>
-bool utfConvert(const std::basic_string<From>& from, std::basic_string<To>& to,
+bool utfConvert(const std::basic_string_view<From>& from, std::basic_string<To>& to,
     ConversionResult (*cvtfunc)(const typename FromTrait::ArgType**, const typename FromTrait::ArgType*,
         typename ToTrait::ArgType**, typename ToTrait::ArgType*, ConversionFlags)) {
     static_assert(sizeof(From) == sizeof(typename FromTrait::ArgType), "Error size mismatched");
@@ -283,27 +283,30 @@ bool utfConvert(const std::basic_string<From>& from, std::basic_string<To>& to,
 };
 
 
-bool UTF8ToUTF16(const std::string& utf8, std::u16string& outUtf16) {
+bool UTF8ToUTF16(std::string_view utf8, std::u16string& outUtf16) {
     return utfConvert(utf8, outUtf16, ConvertUTF8toUTF16);
 }
 
-bool UTF8ToUTF32(const std::string& utf8, std::u32string& outUtf32) {
+bool UTF8ToUTF32(std::string_view utf8, std::u32string& outUtf32) {
     return utfConvert(utf8, outUtf32, ConvertUTF8toUTF32);
 }
 
-bool UTF16ToUTF8(const std::u16string& utf16, std::string& outUtf8) {
+bool UTF16ToUTF8(std::u16string_view utf16, std::string& outUtf8) {
     return utfConvert(utf16, outUtf8, ConvertUTF16toUTF8);
 }
 
-bool UTF16ToUTF32(const std::u16string& utf16, std::u32string& outUtf32) {
+bool UTF16ToUTF32(std::u16string_view utf16, std::u32string& outUtf32)
+{
     return utfConvert(utf16, outUtf32, ConvertUTF16toUTF32);
 }
 
-bool UTF32ToUTF8(const std::u32string& utf32, std::string& outUtf8) {
+bool UTF32ToUTF8(std::u32string_view utf32, std::string& outUtf8)
+{
     return utfConvert(utf32, outUtf8, ConvertUTF32toUTF8);
 }
 
-bool UTF32ToUTF16(const std::u32string& utf32, std::u16string& outUtf16) {
+bool UTF32ToUTF16(std::u32string_view utf32, std::u16string& outUtf16)
+{
     return utfConvert(utf32, outUtf16, ConvertUTF32toUTF16);
 }
 
