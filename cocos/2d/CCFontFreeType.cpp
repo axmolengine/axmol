@@ -49,12 +49,13 @@ bool FontFreeType::_streamParsingEnabled    = false;
 bool FontFreeType::_doNativeBytecodeHinting = true;
 const int FontFreeType::DistanceMapSpread   = 6;
 
-const char* FontFreeType::_glyphASCII =
+using namespace std; // for string literal
+const std::string_view FontFreeType::_glyphASCII =
     "\"!#$%&'()*+,-./"
     "0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
-    "¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ ";
-const char* FontFreeType::_glyphNEHE =
-    "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ";
+    "¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ "sv;
+const std::string_view FontFreeType::_glyphNEHE =
+    "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ "sv;
 
 typedef struct _DataRef
 {
@@ -93,10 +94,10 @@ static void ft_stream_close_callback(FT_Stream stream)
     stream->descriptor.pointer = nullptr;
 }
 
-FontFreeType* FontFreeType::create(const std::string& fontName,
+FontFreeType* FontFreeType::create(std::string_view fontName,
                                    float fontSize,
                                    GlyphCollection glyphs,
-                                   const char* customGlyphs,
+                                   std::string_view customGlyphs,
                                    bool distanceFieldEnabled /* = false */,
                                    float outline /* = 0 */)
 {
@@ -176,7 +177,7 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outlin
 }
 // clang-format on
 
-bool FontFreeType::loadFontFace(const std::string& fontName, float fontSize)
+bool FontFreeType::loadFontFace(std::string_view fontName, float fontSize)
 {
     FT_Face face;
     // save font name locally
@@ -185,7 +186,7 @@ bool FontFreeType::loadFontFace(const std::string& fontName, float fontSize)
 
     if (_streamParsingEnabled)
     {
-        auto fullPath = FileUtils::getInstance()->fullPathForFilename(fontName);
+        auto fullPath = FileUtils::getInstance()->fullPathForFilename(_fontName);
         if (fullPath.empty())
             return false;
 
@@ -213,15 +214,15 @@ bool FontFreeType::loadFontFace(const std::string& fontName, float fontSize)
     else
     {
         DataRef* sharableData;
-        auto it = s_cacheFontData.find(fontName);
+        auto it = s_cacheFontData.find(_fontName);
         if (it != s_cacheFontData.end())
         {
             sharableData = &it->second;
         }
         else
         {
-            sharableData            = &s_cacheFontData[fontName];
-            sharableData->data           = FileUtils::getInstance()->getDataFromFile(fontName);
+            sharableData       = &s_cacheFontData[_fontName];
+            sharableData->data = FileUtils::getInstance()->getDataFromFile(_fontName);
         }
 
         ++sharableData->referenceCount;
@@ -406,7 +407,8 @@ unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
         if (glyphIndex == 0)
         {
-            std::u32string charUTF32(1, theChar);
+            char32_t ntcs[2] = {theChar, (char32_t)0};
+            std::u32string_view charUTF32(ntcs, 1);
             std::string charUTF8;
             cocos2d::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);
 
@@ -623,18 +625,18 @@ void FontFreeType::renderCharAt(unsigned char* dest,
     }
 }
 
-void FontFreeType::setGlyphCollection(GlyphCollection glyphs, const char* customGlyphs)
+void FontFreeType::setGlyphCollection(GlyphCollection glyphs, std::string_view customGlyphs)
 {
     _usedGlyphs = glyphs;
     if (glyphs == GlyphCollection::CUSTOM)
     {
-        _customGlyphs = customGlyphs ? customGlyphs : "";
+        _customGlyphs = customGlyphs;
     }
 }
 
-const char* FontFreeType::getGlyphCollection() const
+std::string_view FontFreeType::getGlyphCollection() const
 {
-    const char* glyphCollection = nullptr;
+    std::string_view glyphCollection;
     switch (_usedGlyphs)
     {
         case cocos2d::GlyphCollection::DYNAMIC:
@@ -646,7 +648,7 @@ const char* FontFreeType::getGlyphCollection() const
             glyphCollection = _glyphASCII;
             break;
         case cocos2d::GlyphCollection::CUSTOM:
-            glyphCollection = _customGlyphs.c_str();
+            glyphCollection = _customGlyphs;
             break;
         default:
             break;
