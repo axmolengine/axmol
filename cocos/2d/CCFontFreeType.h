@@ -108,8 +108,6 @@ public:
     static FT_Library getFTLibrary();
 
 private:
-    static const std::string_view _glyphASCII;
-    static const std::string_view _glyphNEHE;
     static FT_Library _FTlibrary;
     static bool _FTInitialized;
     static bool _streamParsingEnabled;

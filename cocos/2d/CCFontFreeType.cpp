@@ -49,12 +49,12 @@ bool FontFreeType::_streamParsingEnabled    = false;
 bool FontFreeType::_doNativeBytecodeHinting = true;
 const int FontFreeType::DistanceMapSpread   = 6;
 
-using namespace std; // for string literal
-const std::string_view FontFreeType::_glyphASCII =
+using namespace std::string_view_literals;
+constexpr std::string_view _glyphASCII =
     "\"!#$%&'()*+,-./"
     "0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
     "¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ "sv;
-const std::string_view FontFreeType::_glyphNEHE =
+constexpr std::string_view _glyphNEHE =
     "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ "sv;
 
 typedef struct _DataRef
