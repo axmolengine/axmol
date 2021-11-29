@@ -114,8 +114,8 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
      - **adxe only provide armv7, arm64, x86_64 prebuilt libraries for ios**
 
 ### New Project
-- Cpp: `adxe new -p hellocpp.adxe.org -d D:\dev\projects\ -l cpp --portrait HelloCpp`
-- Lua: `adxe new -p hellolua.adxe.org -d D:\dev\projects\ -l lua --portrait HelloLua`
+- Cpp: `adxe new -p org.adxe.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
+- Lua: `adxe new -p org.adxe.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
 
 ### Notes
   * ThreadLocalStorage (TLS) 
