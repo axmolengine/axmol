@@ -504,7 +504,7 @@ void TextFieldTTF::setColorSpaceHolder(const Color4B& color)
 //////////////////////////////////////////////////////////////////////////
 
 // input text property
-void TextFieldTTF::setString(const std::string &text)
+void TextFieldTTF::setString(std::string_view text)
 {
     std::string displayText;
 

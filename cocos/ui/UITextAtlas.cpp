@@ -102,7 +102,7 @@ void TextAtlas::setProperty(const std::string& stringValue, const std::string& c
 //    CCLOG("cs w %f, h %f", _contentSize.width, _contentSize.height);
 }
 
-void TextAtlas::setString(const std::string& value)
+void TextAtlas::setString(std::string_view value)
 {
     if (value == _labelAtlasRenderer->getString())
     {

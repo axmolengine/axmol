@@ -925,7 +925,7 @@ bool Label::setBMFontFilePath(const std::string& bmfontFilePath, const Vec2& ima
     return setBMFontFilePath(bmfontFilePath, Rect(imageOffset.x, imageOffset.y, 0, 0), false);
 }
 
-void Label::setString(const std::string& text)
+void Label::setString(std::string_view text)
 {
     if (text.compare(_utf8Text))
     {

@@ -106,7 +106,7 @@ public:
      *
      * @param value A given string needs to be displayed.
      */
-    void setString(const std::string& value);
+    void setString(std::string_view value);
     
     /**Get string value for labelatlas.
      *

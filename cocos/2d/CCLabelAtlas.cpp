@@ -209,7 +209,7 @@ void LabelAtlas::updateAtlasValues()
 }
 
 //CCLabelAtlas - LabelProtocol
-void LabelAtlas::setString(const std::string &label)
+void LabelAtlas::setString(std::string_view label)
 {
     ssize_t len = label.size();
     if (len > _textureAtlas->getTotalQuads())
