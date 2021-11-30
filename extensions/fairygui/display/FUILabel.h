@@ -15,8 +15,8 @@ public:
 
     CREATE_FUNC(FUILabel);
 
-    const std::string& getText() const { return getString(); }
-    void setText(const std::string& value);
+    std::string_view getText() const { return getString(); }
+    void setText(std::string_view value);
 
     TextFormat* getTextFormat() const { return _textFormat; }
     void applyTextFormat();

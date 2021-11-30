@@ -949,7 +949,7 @@ namespace ui {
             if (!secureTextEntry)
                 displayText = &this->getString();
             else if(!this->inputText.empty())
-                displayText = &renderLabel->getString();
+                displayText = (const std::string*) &renderLabel->getString();
 
             if (direction < 0)
             {

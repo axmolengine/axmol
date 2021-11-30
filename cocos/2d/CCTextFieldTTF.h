@@ -168,7 +168,7 @@ public:
      * Change input text of TextField.
      *@param text The input text of TextField.
      */
-    virtual void setString(const std::string& text) override;
+    virtual void setString(std::string_view text) override;
 
     /**
     * Append to input text of TextField.

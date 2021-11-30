@@ -25,7 +25,7 @@ FUILabel::~FUILabel()
     delete _textFormat;
 }
 
-void FUILabel::setText(const std::string& value)
+void FUILabel::setText(std::string_view value)
 {
     if (_fontSize < 0)
         applyTextFormat();
