@@ -182,7 +182,7 @@ namespace ui {
         return label->getContentSize().width;
     }
 
-    static std::string internalUTF8MoveLeft(const std::string& utf8Text, int length/* default utf8Text.length() */)
+    static std::string internalUTF8MoveLeft(std::string_view utf8Text, int length/* default utf8Text.length() */)
     {
         if (!utf8Text.empty() && length > 0) {
 
@@ -194,17 +194,14 @@ namespace ui {
                 ++deleteLen;
             }
 
-            std::string temp = utf8Text;
-            temp.resize(length - deleteLen);
-
-            return temp;
+            return std::string{utf8Text.data(), static_cast<size_t>(length - deleteLen)};
         }
         else {
             return utf8Text;
         }
     }
 
-    static std::string internalUTF8MoveRight(const std::string& utf8Text, int length/* default utf8Text.length() */)
+    static std::string internalUTF8MoveRight(std::string_view utf8Text, int length/* default utf8Text.length() */)
     {
         if (!utf8Text.empty() && length >= 0) {
 
@@ -216,10 +213,7 @@ namespace ui {
                 ++addLen;
             }
 
-            std::string temp = utf8Text;
-            temp.resize(length + addLen);
-
-            return temp;
+            return std::string{utf8Text.data(), static_cast<size_t>(length + addLen)};
         }
         else {
             return utf8Text;
@@ -945,17 +939,17 @@ namespace ui {
 
         if (newOffset > 0 && newOffset <= this->charCount) {
 
-            const std::string* displayText = nullptr;
+            std::string_view displayText;
             if (!secureTextEntry)
-                displayText = &this->getString();
+                displayText = this->getString();
             else if(!this->inputText.empty())
-                displayText = (const std::string*) &renderLabel->getString();
+                displayText = renderLabel->getString();
 
             if (direction < 0)
             {
                 this->insertPos = internalUTF8MoveLeft(this->inputText, this->insertPos).size();
 
-                auto s = internalUTF8MoveLeft(*displayText, this->cursorPos);
+                auto s = internalUTF8MoveLeft(displayText, this->cursorPos);
                 
                 auto width = internalCalcStringWidth(s, this->fontName, this->fontSize);
                 this->cursor->setPosition(Point(width, this->getContentSize().height / 2));
@@ -964,7 +958,7 @@ namespace ui {
             else {
                 this->insertPos = internalUTF8MoveRight(this->inputText, this->insertPos).size();
 
-                auto s = internalUTF8MoveRight(*displayText, this->cursorPos);
+                auto s = internalUTF8MoveRight(displayText, this->cursorPos);
                 auto width = internalCalcStringWidth(s, this->fontName, this->fontSize);
                 this->cursor->setPosition(Point(width, this->getContentSize().height / 2));
                 this->cursorPos = s.length();
