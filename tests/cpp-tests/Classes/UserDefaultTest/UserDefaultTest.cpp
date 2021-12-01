@@ -34,10 +34,6 @@ using namespace std;
 
 USING_NS_CC;
 
-// enable log
-#define COCOS2D_DEBUG 1
-
-
 UserDefaultTests::UserDefaultTests()
 {
     ADD_TEST_CASE(UserDefaultTest);

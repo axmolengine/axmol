@@ -24,9 +24,6 @@
 
 #include "TextureCacheTest.h"
 
-// enable log
-#define COCOS2D_DEBUG 1
-
 USING_NS_CC;
 
 TextureCacheTests::TextureCacheTests()

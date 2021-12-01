@@ -34,6 +34,13 @@
 
 USING_NS_CC;
 
+// Enable log on Debug version
+#ifndef NDEBUG
+#define COCOS2D_DEBUG 1
+#else
+#define COCOS2D_DEBUG 0
+#endif
+
 AppDelegate::AppDelegate()
 : _testController(nullptr)
 {
