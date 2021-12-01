@@ -104,7 +104,7 @@ public:
      *
      * @param text  String value.
      */
-    void setString(const std::string& text);
+    void setString(std::string_view text);
 
     /**
      * Gets the string value of label.

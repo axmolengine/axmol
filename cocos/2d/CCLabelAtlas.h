@@ -82,7 +82,7 @@ public:
     /** Initializes the LabelAtlas with a string, a texture, the width and height in points of each element and the starting char of the atlas */
     bool initWithString(const std::string& string, Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
     
-    virtual void setString(const std::string &label) override;
+    virtual void setString(std::string_view label) override;
     virtual const std::string& getString() const override;
 
     virtual void updateAtlasValues() override;

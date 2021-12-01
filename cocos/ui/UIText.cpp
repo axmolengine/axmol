@@ -110,7 +110,7 @@ void Text::initRenderer()
 }
 
 
-void Text::setString(const std::string &text)
+void Text::setString(std::string_view text)
 {
     if (text == _labelRenderer->getString())
     {
