@@ -176,9 +176,9 @@ namespace ui {
         }
     }
 
-    static float internalCalcStringWidth(const std::string& s, const std::string& fontName, float fontSize)
+    static float internalCalcStringWidth(std::string_view s, const std::string& fontName, float fontSize)
     {
-        auto label = createLabel(s, fontName, fontSize);
+        auto label = createLabel(std::string{s}, fontName, fontSize);
         return label->getContentSize().width;
     }
 
@@ -197,7 +197,7 @@ namespace ui {
             return std::string{utf8Text.data(), static_cast<size_t>(length - deleteLen)};
         }
         else {
-            return utf8Text;
+            return std::string{utf8Text};
         }
     }
 
@@ -216,7 +216,7 @@ namespace ui {
             return std::string{utf8Text.data(), static_cast<size_t>(length + addLen)};
         }
         else {
-            return utf8Text;
+            return std::string{utf8Text};
         }
     }
 
@@ -333,7 +333,8 @@ namespace ui {
         }
         this->fontName = fontName;
 
-        this->asteriskWidth = internalCalcStringWidth("*", this->fontName, this->fontSize);
+        using namespace std::string_view_literals;
+        this->asteriskWidth = internalCalcStringWidth("*"sv, this->fontName, this->fontSize);
     }
 
     void TextFieldEx::setTextFontSize(float size)
@@ -351,7 +352,8 @@ namespace ui {
 
         this->fontSize = size;
 
-        this->asteriskWidth = internalCalcStringWidth("*", this->fontName, this->fontSize);
+        using namespace std::string_view_literals;
+        this->asteriskWidth = internalCalcStringWidth("*"sv, this->fontName, this->fontSize);
     }
 
     float TextFieldEx::getTextFontSize() const
@@ -982,7 +984,7 @@ namespace ui {
         // normalized x
         float normalizedX = 0;
 
-        std::string displayText;
+        std::string_view displayText;
         if (!secureTextEntry)
         {
             displayText = this->inputText;
@@ -1018,7 +1020,7 @@ namespace ui {
             }
             
             --n;
-            displayText.resize(displayText.length() - backwardLen);
+            displayText.remove_suffix(backwardLen);
            
             length -= backwardLen;
         }
