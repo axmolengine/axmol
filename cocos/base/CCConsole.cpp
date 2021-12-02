@@ -126,6 +126,10 @@ namespace {
 
 void log(const char * format, ...)
 {
+#if COCOS2D_DEBUG == 0
+    return;
+#endif  // COCOS2D_DEBUG == 0
+
 #define CC_VSNPRINTF_BUFFER_LENGTH 512
     va_list args;
 
