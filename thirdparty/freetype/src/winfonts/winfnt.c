@@ -217,7 +217,11 @@
     /* first of all, read the FNT header */
     if ( FT_STREAM_SEEK( font->offset )                        ||
          FT_STREAM_READ_FIELDS( winfnt_header_fields, header ) )
+    {
+      FT_TRACE2(( "  not a Windows FNT file\n" ));
+      error = FT_THROW( Unknown_File_Format );
       goto Exit;
+    }
 
     /* check header */
     if ( header->version != 0x200 &&
@@ -284,7 +288,10 @@
     /* does it begin with an MZ header? */
     if ( FT_STREAM_SEEK( 0 )                                      ||
          FT_STREAM_READ_FIELDS( winmz_header_fields, &mz_header ) )
+    {
+      error = FT_ERR( Unknown_File_Format );
       goto Exit;
+    }
 
     error = FT_ERR( Unknown_File_Format );
     if ( mz_header.magic == WINFNT_MZ_MAGIC )
@@ -897,9 +904,10 @@
 
       font->family_name[family_size] = '\0';
 
-      if ( FT_REALLOC( font->family_name,
-                       family_size,
-                       ft_strlen( font->family_name ) + 1 ) )
+      /* shrink it to the actual length */
+      if ( FT_QREALLOC( font->family_name,
+                        family_size + 1,
+                        ft_strlen( font->family_name ) + 1 ) )
         goto Fail;
 
       root->family_name = font->family_name;

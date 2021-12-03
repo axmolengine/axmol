@@ -360,17 +360,27 @@
       FT_FRAME_END
     };
 
+#ifndef FT_CONFIG_OPTION_USE_BROTLI
+    FT_UNUSED( face_instance_index );
+    FT_UNUSED( woff2_num_faces );
+#endif
+
 
     face->ttc_header.tag     = 0;
     face->ttc_header.version = 0;
     face->ttc_header.count   = 0;
 
+#if defined( FT_CONFIG_OPTION_USE_ZLIB )   || \
+    defined( FT_CONFIG_OPTION_USE_BROTLI )
   retry:
+#endif
+
     offset = FT_STREAM_POS();
 
     if ( FT_READ_ULONG( tag ) )
       return error;
 
+#ifdef FT_CONFIG_OPTION_USE_ZLIB
     if ( tag == TTAG_wOFF )
     {
       FT_TRACE2(( "sfnt_open_font: file is a WOFF; synthesizing SFNT\n" ));
@@ -386,7 +396,9 @@
       stream = face->root.stream;
       goto retry;
     }
+#endif
 
+#ifdef FT_CONFIG_OPTION_USE_BROTLI
     if ( tag == TTAG_wOF2 )
     {
       FT_TRACE2(( "sfnt_open_font: file is a WOFF2; synthesizing SFNT\n" ));
@@ -405,6 +417,7 @@
       stream = face->root.stream;
       goto retry;
     }
+#endif
 
     if ( tag != 0x00010000UL &&
          tag != TTAG_ttcf    &&

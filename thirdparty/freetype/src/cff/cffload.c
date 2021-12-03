@@ -1138,6 +1138,8 @@
     {
       FT_UInt   vsOffset;
       FT_UInt   format;
+      FT_UInt   dataCount;
+      FT_UInt   regionCount;
       FT_ULong  regionListOffset;
 
 
@@ -1160,16 +1162,16 @@
       }
 
       /* read top level fields */
-      if ( FT_READ_ULONG( regionListOffset )   ||
-           FT_READ_USHORT( vstore->dataCount ) )
+      if ( FT_READ_ULONG( regionListOffset ) ||
+           FT_READ_USHORT( dataCount )       )
         goto Exit;
 
       /* make temporary copy of item variation data offsets; */
       /* we'll parse region list first, then come back       */
-      if ( FT_QNEW_ARRAY( dataOffsetArray, vstore->dataCount ) )
+      if ( FT_QNEW_ARRAY( dataOffsetArray, dataCount ) )
         goto Exit;
 
-      for ( i = 0; i < vstore->dataCount; i++ )
+      for ( i = 0; i < dataCount; i++ )
       {
         if ( FT_READ_ULONG( dataOffsetArray[i] ) )
           goto Exit;
@@ -1178,19 +1180,23 @@
       /* parse regionList and axisLists */
       if ( FT_STREAM_SEEK( vsOffset + regionListOffset ) ||
            FT_READ_USHORT( vstore->axisCount )           ||
-           FT_READ_USHORT( vstore->regionCount )         )
+           FT_READ_USHORT( regionCount )                 )
         goto Exit;
 
-      if ( FT_QNEW_ARRAY( vstore->varRegionList, vstore->regionCount ) )
+      vstore->regionCount = 0;
+      if ( FT_QNEW_ARRAY( vstore->varRegionList, regionCount ) )
         goto Exit;
 
-      for ( i = 0; i < vstore->regionCount; i++ )
+      for ( i = 0; i < regionCount; i++ )
       {
         CFF_VarRegion*  region = &vstore->varRegionList[i];
 
 
         if ( FT_QNEW_ARRAY( region->axisList, vstore->axisCount ) )
           goto Exit;
+
+        /* keep track of how many axisList to deallocate on error */
+        vstore->regionCount++;
 
         for ( j = 0; j < vstore->axisCount; j++ )
         {
@@ -1211,10 +1217,11 @@
       }
 
       /* use dataOffsetArray now to parse varData items */
-      if ( FT_QNEW_ARRAY( vstore->varData, vstore->dataCount ) )
+      vstore->dataCount = 0;
+      if ( FT_QNEW_ARRAY( vstore->varData, dataCount ) )
         goto Exit;
 
-      for ( i = 0; i < vstore->dataCount; i++ )
+      for ( i = 0; i < dataCount; i++ )
       {
         CFF_VarData*  data = &vstore->varData[i];
 
@@ -1235,6 +1242,9 @@
 
         if ( FT_QNEW_ARRAY( data->regionIndices, data->regionIdxCount ) )
           goto Exit;
+
+        /* keep track of how many regionIndices to deallocate on error */
+        vstore->dataCount++;
 
         for ( j = 0; j < data->regionIdxCount; j++ )
         {

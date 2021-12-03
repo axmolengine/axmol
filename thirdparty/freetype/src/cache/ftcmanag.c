@@ -357,7 +357,7 @@
   {
     FT_Error     error;
     FT_Memory    memory;
-    FTC_Manager  manager;
+    FTC_Manager  manager = NULL;
 
 
     if ( !library )

@@ -473,9 +473,9 @@
 
     if ( cff && !cff->font_info )
     {
-      CFF_FontRecDict  dict   = &cff->top_font.font_dict;
-      FT_Memory        memory = face->root.memory;
-      PS_FontInfoRec*  font_info;
+      CFF_FontRecDict  dict      = &cff->top_font.font_dict;
+      FT_Memory        memory    = face->root.memory;
+      PS_FontInfoRec*  font_info = NULL;
 
 
       if ( FT_QNEW( font_info ) )
@@ -517,9 +517,9 @@
 
     if ( cff && !cff->font_extra )
     {
-      CFF_FontRecDict   dict   = &cff->top_font.font_dict;
-      FT_Memory         memory = face->root.memory;
-      PS_FontExtraRec*  font_extra;
+      CFF_FontRecDict   dict       = &cff->top_font.font_dict;
+      FT_Memory         memory     = face->root.memory;
+      PS_FontExtraRec*  font_extra = NULL;
       FT_String*        embedded_postscript;
 
 

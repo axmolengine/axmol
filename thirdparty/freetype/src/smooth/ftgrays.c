@@ -152,6 +152,8 @@
 #define ADD_INT( a, b )                                  \
           (int)( (unsigned int)(a) + (unsigned int)(b) )
 
+#define FT_STATIC_BYTE_CAST( type, var )  (type)(unsigned char)(var)
+
 
 #define ft_memset   memset
 
@@ -237,8 +239,11 @@ typedef ptrdiff_t  FT_PtrDist;
 #define FT_ERROR( x )   do { } while ( 0 )     /* nothing */
 #define FT_THROW( e )   FT_ERR_CAT( Smooth_Err_, e )
 
-
 #endif /* !FT_DEBUG_LEVEL_TRACE */
+
+
+#define FT_Trace_Enable()   do { } while ( 0 )  /* nothing */
+#define FT_Trace_Disable()  do { } while ( 0 )  /* nothing */
 
 
 #define FT_DEFINE_OUTLINE_FUNCS( class_,               \
@@ -273,6 +278,8 @@ typedef ptrdiff_t  FT_PtrDist;
 #else /* !STANDALONE_ */
 
 
+#include <ft2build.h>
+#include FT_CONFIG_CONFIG_H
 #include "ftgrays.h"
 #include <freetype/internal/ftobjs.h>
 #include <freetype/internal/ftdebug.h>
@@ -353,7 +360,7 @@ typedef ptrdiff_t  FT_PtrDist;
     }                                                              \
   FT_END_STMNT
 
-#ifdef  __arm__
+#if defined( __GNUC__ ) && __GNUC__ < 7 && defined( __arm__ )
   /* Work around a bug specific to GCC which make the compiler fail to */
   /* optimize a division and modulo operation on the same parameters   */
   /* into a single call to `__aeabi_idivmod'.  See                     */
@@ -1986,8 +1993,8 @@ typedef ptrdiff_t  FT_PtrDist;
           ras.ycells[w] = ras.cell_null;
 
         /* memory management: skip ycells */
-        n = ( width * sizeof ( PCell ) + sizeof ( TCell ) - 1 ) /
-                      sizeof ( TCell );
+        n = ( (size_t)width * sizeof ( PCell ) + sizeof ( TCell ) - 1 ) /
+              sizeof ( TCell );
 
         ras.cell_free = buffer + n;
         ras.cell      = ras.cell_null;
@@ -2151,7 +2158,7 @@ typedef ptrdiff_t  FT_PtrDist;
                    gray_PRaster*  araster )
   {
     FT_Error      error;
-    gray_PRaster  raster;
+    gray_PRaster  raster = NULL;
 
 
     if ( !FT_NEW( raster ) )

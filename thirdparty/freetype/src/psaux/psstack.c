@@ -54,8 +54,8 @@
                   FT_Error*  e,
                   FT_UInt    stackSize )
   {
-    FT_Error   error;     /* for FT_QNEW */
-    CF2_Stack  stack;
+    FT_Error   error;        /* for FT_QNEW */
+    CF2_Stack  stack = NULL;
 
 
     if ( FT_QNEW( stack ) )

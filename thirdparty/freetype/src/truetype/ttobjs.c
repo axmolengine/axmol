@@ -140,14 +140,13 @@
 
     return error;
   }
-#endif /* TT_USE_BYTECODE_INTERPRETER */
 
 
-  /* The fonts embedded in PDF changes their family names
-   * by the randomization tag. PDF Reference 5.5.3 "Font
-   * Subsets" defines its format as 6 uppercase letters and
-   * '+' sign.  For safety, we do not skip the tag violating
-   * this rule.
+  /*
+   * Fonts embedded in PDFs are made unique by prepending randomization
+   * prefixes to their names: as defined in Section 5.5.3, 'Font Subsets',
+   * of the PDF Reference, they consist of 6 uppercase letters followed by
+   * the `+` sign.  For safety, we do not skip prefixes violating this rule.
    */
 
   static const FT_String*
@@ -166,6 +165,7 @@
     FT_TRACE7(( "name without randomization tag: %s\n", name + 7 ));
     return name + 7;
   }
+
 
   /* Compare the face with a list of well-known `tricky' fonts. */
   /* This list shall be expanded as we find more of them.       */
@@ -196,7 +196,7 @@
       "DFGothic-EB",        /* DynaLab Inc. 1992-1995 */
       "DFGyoSho-Lt",        /* DynaLab Inc. 1992-1995 */
       "DFHei",              /* DynaLab Inc. 1992-1995 [DFHei-Bd-WIN-HK-BF] */
-                            /* covers "DFHei-Md-HK-BF" maybe DynaLab Inc. */
+                            /* covers "DFHei-Md-HK-BF", maybe DynaLab Inc. */
 
       "DFHSGothic-W5",      /* DynaLab Inc. 1992-1995 */
       "DFHSMincho-W3",      /* DynaLab Inc. 1992-1995 */
@@ -553,8 +553,8 @@
     if ( face->family_name                               &&
          tt_check_trickyness_family( face->family_name ) )
     {
-      FT_TRACE3(( "found as a tricky font by "
-                  "its family name: %s\n", face->family_name ));
+      FT_TRACE3(( "found as a tricky font"
+                  " by its family name: %s\n", face->family_name ));
       return TRUE;
     }
 
@@ -563,13 +563,15 @@
     /* sfnt tables (`cvt', `fpgm', and `prep').                     */
     if ( tt_check_trickyness_sfnt_ids( (TT_Face)face ) )
     {
-      FT_TRACE3(( "found as a tricky font by "
-                  "its cvt/fpgm/prep table checksum\n" ));
+      FT_TRACE3(( "found as a tricky font"
+                  " by its cvt/fpgm/prep table checksum\n" ));
       return TRUE;
     }
 
     return FALSE;
   }
+
+#endif /* TT_USE_BYTECODE_INTERPRETER */
 
 
   /* Check whether `.notdef' is the only glyph in the `loca' table. */
@@ -716,8 +718,10 @@
     if ( error )
       goto Exit;
 
+#ifdef TT_USE_BYTECODE_INTERPRETER
     if ( tt_check_trickyness( ttface ) )
       ttface->face_flags |= FT_FACE_FLAG_TRICKY;
+#endif
 
     error = tt_face_load_hdmx( face, stream );
     if ( error )

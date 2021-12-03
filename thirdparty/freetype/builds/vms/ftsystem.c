@@ -246,7 +246,7 @@
                                           file,
                                           0 );
 
-    if ( (long)stream->base == -1 )
+    if ( stream->base == MAP_FAILED )
     {
       FT_ERROR(( "FT_Stream_Open:" ));
       FT_ERROR(( " could not `mmap' file `%s'\n", filepathname ));

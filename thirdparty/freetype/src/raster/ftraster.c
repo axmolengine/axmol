@@ -3171,7 +3171,7 @@
                 black_PRaster  *araster )
   {
     FT_Error       error;
-    black_PRaster  raster;
+    black_PRaster  raster = NULL;
 
 
     if ( !FT_NEW( raster ) )

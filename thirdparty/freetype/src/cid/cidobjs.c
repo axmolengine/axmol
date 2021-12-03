@@ -216,7 +216,7 @@
     /* release subrs */
     if ( face->subrs )
     {
-      FT_Int  n;
+      FT_UInt  n;
 
 
       for ( n = 0; n < cid->num_dicts; n++ )

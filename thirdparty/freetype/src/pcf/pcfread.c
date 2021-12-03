@@ -613,7 +613,8 @@ THE SOFTWARE.
 
     strings[string_size] = '\0';
 
-    if ( FT_QNEW_ARRAY( properties, nprops ) )
+    /* zero out in case of failure */
+    if ( FT_NEW_ARRAY( properties, nprops ) )
       goto Bail;
 
     face->properties = properties;

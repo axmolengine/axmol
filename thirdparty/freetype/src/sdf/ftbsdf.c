@@ -1177,7 +1177,7 @@
                    BSDF_PRaster*  araster )
   {
     FT_Error      error;
-    BSDF_PRaster  raster;
+    BSDF_PRaster  raster = NULL;
 
 
     if ( !FT_NEW( raster ) )

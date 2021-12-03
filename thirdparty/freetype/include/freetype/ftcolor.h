@@ -870,13 +870,16 @@ FT_BEGIN_HEADER
    *     color stops along the gradient.
    *
    *   p0 ::
-   *     The starting point of the gradient definition (in font units).
+   *     The starting point of the gradient definition in font units
+   *     represented as a 16.16 fixed-point `FT_Vector`.
    *
    *   p1 ::
-   *     The end point of the gradient definition (in font units).
+   *     The end point of the gradient definition in font units
+   *     represented as a 16.16 fixed-point `FT_Vector`.
    *
    *   p2 ::
-   *     Optional point~p2 to rotate the gradient (in font units).
+   *     Optional point~p2 to rotate the gradient in font units
+   *     represented as a 16.16 fixed-point `FT_Vector`.
    *     Otherwise equal to~p0.
    *
    * @since:
@@ -914,19 +917,20 @@ FT_BEGIN_HEADER
    *     color stops along the gradient.
    *
    *   c0 ::
-   *     The center of the starting point of the radial gradient (in font
-   *     units).
+   *     The center of the starting point of the radial gradient in font
+   *     units represented as a 16.16 fixed-point `FT_Vector`.
    *
    *   r0 ::
-   *     The radius of the starting circle of the radial gradient (in font
-   *     units).
+   *     The radius of the starting circle of the radial gradient in font
+   *     units represented as a 16.16 fixed-point value.
    *
    *   c1 ::
-   *     The center of the end point of the radial gradient (in font units).
+   *     The center of the end point of the radial gradient in font units
+   *     represented as a 16.16 fixed-point `FT_Vector`.
    *
    *   r1 ::
-   *     The radius of the end circle of the radial gradient (in font
-   *     units).
+   *     The radius of the end circle of the radial gradient in font
+   *     units represented as a 16.16 fixed-point value.
    *
    * @since:
    *   2.11 -- **currently experimental only!**  There might be changes
@@ -938,9 +942,9 @@ FT_BEGIN_HEADER
     FT_ColorLine  colorline;
 
     FT_Vector  c0;
-    FT_UShort  r0;
+    FT_Pos     r0;
     FT_Vector  c1;
-    FT_UShort  r1;
+    FT_Pos     r1;
 
   } FT_PaintRadialGradient;
 
@@ -963,16 +967,17 @@ FT_BEGIN_HEADER
    *     color stops along the gradient.
    *
    *   center ::
-   *     The center of the sweep gradient (in font units).
+   *     The center of the sweep gradient in font units represented as a
+   *     vector of 16.16 fixed-point values.
    *
    *   start_angle ::
-   *     The start angle of the sweep gradient, in 16.16 fixed point
+   *     The start angle of the sweep gradient in 16.16 fixed-point
    *     format specifying degrees divided by 180.0 (as in the
    *     spec).  Multiply by 180.0f to receive degrees value.  Values are
    *     given counter-clockwise, starting from the (positive) y~axis.
    *
    *   end_angle ::
-   *     The end angle of the sweep gradient, in 16.16 fixed point
+   *     The end angle of the sweep gradient in 16.16 fixed-point
    *     format specifying degrees divided by 180.0 (as in the
    *     spec).  Multiply by 180.0f to receive degrees value.  Values are
    *     given counter-clockwise, starting from the (positive) y~axis.
@@ -1061,7 +1066,8 @@ FT_BEGIN_HEADER
    *     An opaque paint that is subject to being transformed.
    *
    *   affine ::
-   *     A 2x3 transformation matrix in @FT_Affine23 format.
+   *     A 2x3 transformation matrix in @FT_Affine23 format containing
+   *     16.16 fixed-point values.
    *
    * @since:
    *   2.11 -- **currently experimental only!**  There might be changes
@@ -1091,10 +1097,12 @@ FT_BEGIN_HEADER
    *     rotated.
    *
    *   dx ::
-   *     Translation in x~direction (in font units).
+   *     Translation in x~direction in font units represented as a
+   *     16.16 fixed-point value.
    *
    *   dy ::
-   *     Translation in y~direction (in font units).
+   *     Translation in y~direction in font units represented as a
+   *     16.16 fixed-point value.
    *
    * @since:
    *   2.11 -- **currently experimental only!**  There might be changes
@@ -1132,16 +1140,20 @@ FT_BEGIN_HEADER
    *     scaled.
    *
    *   scale_x ::
-   *     Scale factor in x~direction.
+   *     Scale factor in x~direction represented as a
+   *     16.16 fixed-point value.
    *
    *   scale_y ::
-   *     Scale factor in y~direction.
+   *     Scale factor in y~direction represented as a
+   *     16.16 fixed-point value.
    *
    *   center_x ::
-   *     x~coordinate of center point to scale from.
+   *     x~coordinate of center point to scale from represented as a
+   *     16.16 fixed-point value.
    *
    *   center_y ::
-   *     y~coordinate of center point to scale from.
+   *     y~coordinate of center point to scale from represented as a
+   *     16.16 fixed-point value.
    *
    * @since:
    *   2.11 -- **currently experimental only!**  There might be changes
@@ -1177,16 +1189,16 @@ FT_BEGIN_HEADER
    *
    *   angle ::
    *     The rotation angle that is to be applied in degrees divided by
-   *     180.0 (as in the spec).  Multiply by 180.0f to receive degrees
-   *     value.
+   *     180.0 (as in the spec) represented as a 16.16 fixed-point
+   *     value.  Multiply by 180.0f to receive degrees value.
    *
    *   center_x ::
-   *     The x~coordinate of the pivot point of the rotation (in font
-   *     units).
+   *     The x~coordinate of the pivot point of the rotation in font
+   *     units) represented as a 16.16 fixed-point value.
    *
    *   center_y ::
-   *     The y~coordinate of the pivot point of the rotation (in font
-   *     units).
+   *     The y~coordinate of the pivot point of the rotation in font
+   *     units represented as a 16.16 fixed-point value.
    *
    * @since:
    *   2.11 -- **currently experimental only!**  There might be changes
@@ -1223,17 +1235,21 @@ FT_BEGIN_HEADER
    *
    *   x_skew_angle ::
    *     The skewing angle in x~direction in degrees divided by 180.0
-   *     (as in the spec).  Multiply by 180.0f to receive degrees.
+   *     (as in the spec) represented as a 16.16 fixed-point
+   *     value. Multiply by 180.0f to receive degrees.
    *
    *   y_skew_angle ::
    *     The skewing angle in y~direction in degrees divided by 180.0
-   *     (as in the spec).  Multiply by 180.0f to receive degrees.
+   *     (as in the spec) represented as a 16.16 fixed-point
+   *     value.  Multiply by 180.0f to receive degrees.
    *
    *   center_x ::
-   *     The x~coordinate of the pivot point of the skew (in font units).
+   *     The x~coordinate of the pivot point of the skew in font units
+   *     represented as a 16.16 fixed-point value.
    *
    *   center_y ::
-   *     The y~coordinate of the pivot point of the skew (in font units).
+   *     The y~coordinate of the pivot point of the skew in font units
+   *     represented as a 16.16 fixed-point value.
    *
    * @since:
    *   2.11 -- **currently experimental only!**  There might be changes

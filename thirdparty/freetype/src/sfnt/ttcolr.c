@@ -27,6 +27,7 @@
    */
 
 
+#include <freetype/internal/ftcalc.h>
 #include <freetype/internal/ftdebug.h>
 #include <freetype/internal/ftstream.h>
 #include <freetype/tttags.h>
@@ -505,12 +506,16 @@
                              &apaint->u.linear_gradient.colorline ) )
         return 0;
 
-      apaint->u.linear_gradient.p0.x = FT_NEXT_SHORT( p );
-      apaint->u.linear_gradient.p0.y = FT_NEXT_SHORT( p );
-      apaint->u.linear_gradient.p1.x = FT_NEXT_SHORT( p );
-      apaint->u.linear_gradient.p1.y = FT_NEXT_SHORT( p );
-      apaint->u.linear_gradient.p2.x = FT_NEXT_SHORT( p );
-      apaint->u.linear_gradient.p2.y = FT_NEXT_SHORT( p );
+      /*
+       * In order to support variations expose these as FT_Fixed 16.16 values so
+       * that we can support fractional values after interpolation.
+       */
+      apaint->u.linear_gradient.p0.x = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.linear_gradient.p0.y = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.linear_gradient.p1.x = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.linear_gradient.p1.y = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.linear_gradient.p2.x = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.linear_gradient.p2.y = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
 
       return 1;
     }
@@ -521,15 +526,15 @@
                              &apaint->u.radial_gradient.colorline ) )
         return 0;
 
-      apaint->u.radial_gradient.c0.x = FT_NEXT_SHORT( p );
-      apaint->u.radial_gradient.c0.y = FT_NEXT_SHORT( p );
+      apaint->u.radial_gradient.c0.x = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.radial_gradient.c0.y = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
 
-      apaint->u.radial_gradient.r0 = FT_NEXT_USHORT( p );
+      apaint->u.radial_gradient.r0 = FT_NEXT_USHORT( p ) << 16;
 
-      apaint->u.radial_gradient.c1.x = FT_NEXT_SHORT( p );
-      apaint->u.radial_gradient.c1.y = FT_NEXT_SHORT( p );
+      apaint->u.radial_gradient.c1.x = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.radial_gradient.c1.y = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
 
-      apaint->u.radial_gradient.r1 = FT_NEXT_USHORT( p );
+      apaint->u.radial_gradient.r1 = FT_NEXT_USHORT( p ) << 16;
 
       return 1;
     }
@@ -540,11 +545,15 @@
                              &apaint->u.sweep_gradient.colorline ) )
         return 0;
 
-      apaint->u.sweep_gradient.center.x = FT_NEXT_SHORT( p );
-      apaint->u.sweep_gradient.center.y = FT_NEXT_SHORT( p );
+      apaint->u.sweep_gradient.center.x =
+          INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.sweep_gradient.center.y =
+          INT_TO_FIXED( FT_NEXT_SHORT( p ) );
 
-      apaint->u.sweep_gradient.start_angle = FT_NEXT_SHORT( p ) << 2;
-      apaint->u.sweep_gradient.end_angle   = FT_NEXT_SHORT( p ) << 2;
+      apaint->u.sweep_gradient.start_angle =
+          F2DOT14_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.sweep_gradient.end_angle =
+          F2DOT14_TO_FIXED( FT_NEXT_SHORT( p ) );
 
       return 1;
     }
@@ -568,6 +577,10 @@
 
       p = child_table_p;
 
+      /*
+       * The following matrix coefficients are encoded as
+       * OpenType 16.16 fixed-point values.
+       */
       apaint->u.transform.affine.xx = FT_NEXT_LONG( p );
       apaint->u.transform.affine.yx = FT_NEXT_LONG( p );
       apaint->u.transform.affine.xy = FT_NEXT_LONG( p );
@@ -583,8 +596,8 @@
       apaint->u.translate.paint.p                     = child_table_p;
       apaint->u.translate.paint.insert_root_transform = 0;
 
-      apaint->u.translate.dx = FT_NEXT_SHORT( p ) << 16;
-      apaint->u.translate.dy = FT_NEXT_SHORT( p ) << 16;
+      apaint->u.translate.dx = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.translate.dy = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
 
       return 1;
     }
@@ -602,14 +615,14 @@
       apaint->u.scale.paint.insert_root_transform = 0;
 
       /* All scale paints get at least one scale value. */
-      apaint->u.scale.scale_x = FT_NEXT_SHORT( p ) << 2;
+      apaint->u.scale.scale_x = F2DOT14_TO_FIXED( FT_NEXT_SHORT( p ) );
 
       /* Non-uniform ones read an extra y value. */
       if ( apaint->format ==
              FT_COLR_PAINTFORMAT_SCALE                 ||
            (FT_PaintFormat_Internal)apaint->format ==
              FT_COLR_PAINTFORMAT_INTERNAL_SCALE_CENTER )
-        apaint->u.scale.scale_y = FT_NEXT_SHORT( p ) << 2;
+        apaint->u.scale.scale_y = F2DOT14_TO_FIXED( FT_NEXT_SHORT( p ) );
       else
         apaint->u.scale.scale_y = apaint->u.scale.scale_x;
 
@@ -620,8 +633,8 @@
            (FT_PaintFormat_Internal)apaint->format ==
              FT_COLR_PAINTFORMAT_INTERNAL_SCALE_UNIFORM_CENTER )
       {
-        apaint->u.scale.center_x = FT_NEXT_SHORT ( p ) << 16;
-        apaint->u.scale.center_y = FT_NEXT_SHORT ( p ) << 16;
+        apaint->u.scale.center_x = INT_TO_FIXED( FT_NEXT_SHORT ( p ) );
+        apaint->u.scale.center_y = INT_TO_FIXED( FT_NEXT_SHORT ( p ) );
       }
       else
       {
@@ -643,17 +656,13 @@
       apaint->u.rotate.paint.p                     = child_table_p;
       apaint->u.rotate.paint.insert_root_transform = 0;
 
-      /* The angle is specified as F2DOT14 and our output type is an FT_Fixed,
-       * shift by 2 positions. */
-      apaint->u.rotate.angle = FT_NEXT_SHORT( p ) << 2;
+      apaint->u.rotate.angle = F2DOT14_TO_FIXED( FT_NEXT_SHORT( p ) );
 
       if ( (FT_PaintFormat_Internal)apaint->format ==
            FT_COLR_PAINTFORMAT_INTERNAL_ROTATE_CENTER )
       {
-        /* The center is specified as Int16 in font units, shift by 16 bits to
-         * convert to our FT_Fixed output type. */
-        apaint->u.rotate.center_x = FT_NEXT_SHORT( p ) << 16;
-        apaint->u.rotate.center_y = FT_NEXT_SHORT( p ) << 16;
+        apaint->u.rotate.center_x = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+        apaint->u.rotate.center_y = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
       }
       else
       {
@@ -673,14 +682,14 @@
       apaint->u.skew.paint.p                     = child_table_p;
       apaint->u.skew.paint.insert_root_transform = 0;
 
-      apaint->u.skew.x_skew_angle = FT_NEXT_SHORT( p ) << 2;
-      apaint->u.skew.y_skew_angle = FT_NEXT_SHORT( p ) << 2;
+      apaint->u.skew.x_skew_angle = F2DOT14_TO_FIXED( FT_NEXT_SHORT( p ) );
+      apaint->u.skew.y_skew_angle = F2DOT14_TO_FIXED( FT_NEXT_SHORT( p ) );
 
       if ( (FT_PaintFormat_Internal)apaint->format ==
            FT_COLR_PAINTFORMAT_INTERNAL_SKEW_CENTER )
       {
-        apaint->u.skew.center_x = FT_NEXT_SHORT( p ) << 16;
-        apaint->u.skew.center_y = FT_NEXT_SHORT( p ) << 16;
+        apaint->u.skew.center_x = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
+        apaint->u.skew.center_y = INT_TO_FIXED( FT_NEXT_SHORT( p ) );
       }
       else
       {
@@ -1086,9 +1095,9 @@
       if ( face->root.internal->transform_flags & 2 )
       {
         paint->u.transform.affine.dx =
-          face->root.internal->transform_delta.x << 10;
+          face->root.internal->transform_delta.x * ( 1 << 10 );
         paint->u.transform.affine.dy =
-          face->root.internal->transform_delta.y << 10;
+          face->root.internal->transform_delta.y * ( 1 << 10 );
       }
       else
       {

@@ -3230,8 +3230,8 @@
 
       scaled_w = ( scaled_w + 32 ) >> 6;
       scaled_h = ( scaled_h + 32 ) >> 6;
-      if ( scaled_w > FT_USHORT_MAX ||
-           scaled_h > FT_USHORT_MAX )
+      if ( scaled_w > (FT_Long)FT_USHORT_MAX ||
+           scaled_h > (FT_Long)FT_USHORT_MAX )
       {
         FT_ERROR(( "FT_Request_Metrics: Resulting ppem size too large\n" ));
         error = FT_ERR( Invalid_Pixel_Size );
@@ -3744,7 +3744,7 @@
     FT_Error   error;
     FT_Face    face;
     FT_Memory  memory;
-    FT_CMap    cmap;
+    FT_CMap    cmap = NULL;
 
 
     if ( !clazz || !charmap || !charmap->face )
@@ -4459,7 +4459,7 @@
     FT_Library   library = module->library;
     FT_Memory    memory  = library->memory;
     FT_Error     error;
-    FT_ListNode  node;
+    FT_ListNode  node    = NULL;
 
 
     if ( FT_QNEW( node ) )
@@ -4720,7 +4720,7 @@
           renderer = FT_Lookup_Renderer( library, slot->format, &node );
         }
 
-        /* it is not an error if we cannot render a bitmat glyph */
+        /* it is not an error if we cannot render a bitmap glyph */
         if ( FT_ERR_EQ( error, Cannot_Render_Glyph ) &&
              slot->format == FT_GLYPH_FORMAT_BITMAP  )
           error = FT_Err_Ok;

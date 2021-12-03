@@ -61,7 +61,7 @@
 
 ## FreeType
 - Upstream: https://www.freetype.org/
-- Version: git 12ef831f (7267)
+- Version: 2.11.1
 - License: BSD-style (The FreeType Project)
 
 ## Glad

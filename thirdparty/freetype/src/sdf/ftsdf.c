@@ -3710,7 +3710,7 @@
                   SDF_PRaster*  araster )
   {
     FT_Error     error;
-    SDF_PRaster  raster;
+    SDF_PRaster  raster = NULL;
 
 
     if ( !FT_NEW( raster ) )

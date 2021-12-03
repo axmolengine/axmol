@@ -574,10 +574,10 @@ FT_BEGIN_HEADER
    *
    * @output:
    *   clip_box ::
-   *     The clip box for the requested base_glyph if one is found.  The clip
-   *     box is computed taking scale and transformations configured on the
-   *     @FT_Face into account.  @FT_ClipBox contains @FT_Vector values in
-   *     26.6 format.
+   *     The clip box for the requested `base_glyph` if one is found.  The
+   *     clip box is computed taking scale and transformations configured on
+   *     the @FT_Face into account.  @FT_ClipBox contains @FT_Vector values
+   *     in 26.6 format.
    *
    * @note:
    *     To retrieve the clip box in font units, reset scale to units-per-em

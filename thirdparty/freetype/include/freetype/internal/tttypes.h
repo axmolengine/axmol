@@ -1734,7 +1734,7 @@ FT_BEGIN_HEADER
     FT_UInt          glyph_index;
 
     FT_Stream        stream;
-    FT_Int           byte_len;
+    FT_UInt          byte_len;
 
     FT_Short         n_contours;
     FT_BBox          bbox;
