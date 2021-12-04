@@ -83,6 +83,10 @@ set(CMAKE_CXX_STANDARD ${CXX_STD})
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+if (MSVC)
+    add_compile_options(/GF)
+endif()
+
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
 
 # check visual studio version
