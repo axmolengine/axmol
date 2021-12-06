@@ -90,7 +90,7 @@ struct CC_DLL Color4B
 {
     Color4B();
     Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a);
-    Color4B(const Color3B& color, uint8_t _a = 255);
+    explicit Color4B(const Color3B& color, uint8_t _a = 255);
     Color4B(const Color4F& color);
     
     inline void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
