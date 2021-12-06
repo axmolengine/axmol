@@ -46,7 +46,7 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.79.1
+- Version: 7.80.0
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -81,7 +81,7 @@
 
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
-- Version: 2.1.1
+- Version: 2.1.2
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -107,7 +107,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-8ff09d9 (2477)
+  - Version: git 2.1.0-f3c8569 (2512)
   - License: MIT
 
 - tolua
