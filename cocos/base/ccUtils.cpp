@@ -3,8 +3,9 @@ Copyright (c) 2010      cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 c4games.com
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +34,7 @@ THE SOFTWARE.
 #include <signal.h>
 #if !defined(_WIN32)
 // for unix/linux kill
-#include <unistd.h>
+#    include <unistd.h>
 #endif
 
 #include "openssl/md5.h"
@@ -65,7 +66,7 @@ int ccNextPOT(int x)
     x = x | (x >> 2);
     x = x | (x >> 4);
     x = x | (x >> 8);
-    x = x | (x >>16);
+    x = x | (x >> 16);
     return x + 1;
 }
 
@@ -83,27 +84,32 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
         return;
     }
 
-    auto director = Director::getInstance();
-    auto renderer = director->getRenderer();
+    auto director        = Director::getInstance();
+    auto renderer        = director->getRenderer();
     auto eventDispatcher = director->getEventDispatcher();
 
     // !!!Metal: needs setFrameBufferOnly before draw
 #if defined(CC_USE_METAL)
-    s_captureScreenListener = eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom* /*event*/) {
+    s_captureScreenListener =
+        eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom* /*event*/) {
 #else
-    s_captureScreenListener = eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW, [=](EventCustom* /*event*/) {
+    s_captureScreenListener =
+        eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW, [=](EventCustom* /*event*/) {
 #endif
-        eventDispatcher->removeEventListener(s_captureScreenListener);
-        s_captureScreenListener = nullptr;
-        // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
-        renderer->readPixels(renderer->getDefaultRenderTarget(), [=](const backend::PixelBufferDescriptor& pbd) {
-            if (pbd) {
-                auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, false);
-                imageCallback(image);
-            }
-            else imageCallback(nullptr);
+            eventDispatcher->removeEventListener(s_captureScreenListener);
+            s_captureScreenListener = nullptr;
+            // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
+            renderer->readPixels(renderer->getDefaultRenderTarget(), [=](const backend::PixelBufferDescriptor& pbd) {
+                if (pbd)
+                {
+                    auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(),
+                                                            pbd._data.getSize(), pbd._width, pbd._height, 8, false);
+                    imageCallback(image);
+                }
+                else
+                    imageCallback(nullptr);
             });
-    });
+        });
 }
 
 static std::unordered_map<Node*, EventListenerCustom*> s_captureNodeListener;
@@ -116,21 +122,22 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
     }
 
     auto callback = [startNode, scale, imageCallback](EventCustom* /*event*/) {
-        auto director = Director::getInstance();
+        auto director            = Director::getInstance();
         auto captureNodeListener = s_captureNodeListener[startNode];
         director->getEventDispatcher()->removeEventListener((EventListener*)(captureNodeListener));
         s_captureNodeListener.erase(startNode);
         auto& size = startNode->getContentSize();
-        
+
         director->setNextDeltaTimeZero(true);
-        
+
         RenderTexture* finalRtx = nullptr;
-        
+
         auto rtx = RenderTexture::create(size.width, size.height, backend::PixelFormat::RGBA8, PixelFormat::D24S8);
         // rtx->setKeepMatrix(true);
         Point savedPos = startNode->getPosition();
         Point anchor;
-        if (!startNode->isIgnoreAnchorPointForPosition()) {
+        if (!startNode->isIgnoreAnchorPointForPosition())
+        {
             anchor = startNode->getAnchorPoint();
         }
         startNode->setPosition(Point(size.width * anchor.x, size.height * anchor.y));
@@ -138,30 +145,33 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
         startNode->visit();
         rtx->end();
         startNode->setPosition(savedPos);
-        
-        if (std::abs(scale - 1.0f) < 1e-6f/* no scale */)
+
+        if (std::abs(scale - 1.0f) < 1e-6f /* no scale */)
             finalRtx = rtx;
-        else {
+        else
+        {
             /* scale */
             auto finalRect = Rect(0, 0, size.width, size.height);
-            Sprite *sprite = Sprite::createWithTexture(rtx->getSprite()->getTexture(), finalRect);
+            Sprite* sprite = Sprite::createWithTexture(rtx->getSprite()->getTexture(), finalRect);
             sprite->setAnchorPoint(Point(0, 0));
             sprite->setFlippedY(true);
-            finalRtx = RenderTexture::create(size.width * scale, size.height * scale, backend::PixelFormat::RGBA8, PixelFormat::D24S8);
-            
-            sprite->setScale(scale); // or use finalRtx->setKeepMatrix(true);
+            finalRtx = RenderTexture::create(size.width * scale, size.height * scale, backend::PixelFormat::RGBA8,
+                                             PixelFormat::D24S8);
+
+            sprite->setScale(scale);  // or use finalRtx->setKeepMatrix(true);
             finalRtx->begin();
             sprite->visit();
             finalRtx->end();
         }
 
         director->getRenderer()->render();
-        
+
         finalRtx->newImage(imageCallback);
     };
-    
-    auto listener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_DRAW, callback);
-    
+
+    auto listener =
+        Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_BEFORE_DRAW, callback);
+
     s_captureNodeListener[startNode] = listener;
 }
 
@@ -175,20 +185,22 @@ void captureScreen(std::function<void(bool, const std::string&)> afterCap, const
         outfile = FileUtils::getInstance()->getWritablePath() + filename;
 
     captureScreen([_afterCap = std::move(afterCap), _outfile = std::move(outfile)](RefPtr<Image> image) mutable {
-        AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO, [_afterCap = std::move(_afterCap), image = std::move(image), _outfile = std::move(_outfile)]() mutable
-        {
-            bool ok = image->saveToFile(_outfile);
-            Director::getInstance()->getScheduler()->performFunctionInCocosThread([ok, _afterCap = std::move(_afterCap), _outfile = std::move(_outfile)]{
-                _afterCap(ok, _outfile);
-                });
-        });
+        AsyncTaskPool::getInstance()->enqueue(
+            AsyncTaskPool::TaskType::TASK_IO,
+            [_afterCap = std::move(_afterCap), image = std::move(image), _outfile = std::move(_outfile)]() mutable {
+                bool ok = image->saveToFile(_outfile);
+                Director::getInstance()->getScheduler()->performFunctionInCocosThread(
+                    [ok, _afterCap = std::move(_afterCap), _outfile = std::move(_outfile)] {
+                        _afterCap(ok, _outfile);
+                    });
+            });
     });
 }
 
-std::vector<Node*> findChildren(const Node &node, const std::string &name)
+std::vector<Node*> findChildren(const Node& node, const std::string& name)
 {
     std::vector<Node*> vec;
-    
+
     node.enumerateChildren(name, [&vec](Node* nodeFound) -> bool {
         vec.push_back(nodeFound);
         return false;
@@ -204,17 +216,17 @@ double atof(const char* str)
     {
         return 0.0;
     }
-    
+
     char buf[MAX_ITOA_BUFFER_SIZE];
     strncpy(buf, str, MAX_ITOA_BUFFER_SIZE);
-    
+
     // strip string, only remain 7 numbers after '.'
     char* dot = strchr(buf, '.');
-    if (dot != nullptr && dot - buf + 8 <  MAX_ITOA_BUFFER_SIZE)
+    if (dot != nullptr && dot - buf + 8 < MAX_ITOA_BUFFER_SIZE)
     {
         dot[8] = '\0';
     }
-    
+
     return ::atof(buf);
 }
 
@@ -223,35 +235,37 @@ double gettime()
     struct timeval tv;
     gettimeofday(&tv, nullptr);
 
-    return (double)tv.tv_sec + (double)tv.tv_usec/1000000;
+    return (double)tv.tv_sec + (double)tv.tv_usec / 1000000;
 }
 
 long long getTimeInMilliseconds()
 {
     struct timeval tv;
-    gettimeofday (&tv, nullptr);
+    gettimeofday(&tv, nullptr);
     return (long long)tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 
-Rect getCascadeBoundingBox(Node *node)
+Rect getCascadeBoundingBox(Node* node)
 {
     Rect cbb;
     Vec2 contentSize = node->getContentSize();
-    
+
     // check all children bounding box, get maximize box
     Node* child = nullptr;
-    bool merge = false;
-    for(auto object : node->getChildren())
+    bool merge  = false;
+    for (auto object : node->getChildren())
     {
         child = dynamic_cast<Node*>(object);
-        if (!child->isVisible()) continue;
-        
+        if (!child->isVisible())
+            continue;
+
         const Rect box = getCascadeBoundingBox(child);
-        if (box.size.width <= 0 || box.size.height <= 0) continue;
-        
+        if (box.size.width <= 0 || box.size.height <= 0)
+            continue;
+
         if (!merge)
         {
-            cbb = box;
+            cbb   = box;
             merge = true;
         }
         else
@@ -259,11 +273,12 @@ Rect getCascadeBoundingBox(Node *node)
             cbb.merge(box);
         }
     }
-    
+
     // merge content size
     if (contentSize.width > 0 && contentSize.height > 0)
     {
-        const Rect box = RectApplyAffineTransform(Rect(0, 0, contentSize.width, contentSize.height), node->getNodeToWorldAffineTransform());
+        const Rect box = RectApplyAffineTransform(Rect(0, 0, contentSize.width, contentSize.height),
+                                                  node->getNodeToWorldAffineTransform());
         if (!merge)
         {
             cbb = box;
@@ -273,7 +288,7 @@ Rect getCascadeBoundingBox(Node *node)
             cbb.merge(box);
         }
     }
-    
+
     return cbb;
 }
 
@@ -286,11 +301,12 @@ Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key)
         unsigned char* decoded;
         int length = base64Decode((const unsigned char*)base64String, (unsigned int)strlen(base64String), &decoded);
 
-        Image *image = new (std::nothrow) Image();
+        Image* image     = new (std::nothrow) Image();
         bool imageResult = image->initWithImageData(decoded, length, true);
         CCASSERT(imageResult, "Failed to create image from base64!");
 
-        if (!imageResult) {
+        if (!imageResult)
+        {
             CC_SAFE_RELEASE_NULL(image);
             return nullptr;
         }
@@ -300,7 +316,7 @@ Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key)
     }
 
     Sprite* sprite = Sprite::createWithTexture(texture);
-    
+
     return sprite;
 }
 
@@ -309,16 +325,17 @@ Sprite* createSpriteFromBase64(const char* base64String)
     unsigned char* decoded;
     int length = base64Decode((const unsigned char*)base64String, (unsigned int)strlen(base64String), &decoded);
 
-    Image *image = new (std::nothrow) Image();
+    Image* image     = new (std::nothrow) Image();
     bool imageResult = image->initWithImageData(decoded, length, decoded);
     CCASSERT(imageResult, "Failed to create image from base64!");
 
-    if (!imageResult) {
+    if (!imageResult)
+    {
         CC_SAFE_RELEASE_NULL(image);
         return nullptr;
     }
 
-    Texture2D *texture = new (std::nothrow) Texture2D();
+    Texture2D* texture = new (std::nothrow) Texture2D();
     texture->initWithImage(image);
     texture->setAliasTexParameters();
     image->release();
@@ -370,7 +387,7 @@ Node* findChild(Node* levelRoot, int tag)
     return nullptr;
 }
 
-std::string getFileMD5Hash(const std::string &filename)
+std::string getFileMD5Hash(const std::string& filename)
 {
     Data data;
     FileUtils::getInstance()->getContents(filename, &data);
@@ -378,7 +395,8 @@ std::string getFileMD5Hash(const std::string &filename)
     return getDataMD5Hash(data);
 }
 
-std::string getDataMD5Hash(const Data& data) {
+std::string getDataMD5Hash(const Data& data)
+{
     // static const unsigned int MD5_DIGEST_LENGTH = 16;
 
     if (data.isNull())
@@ -388,10 +406,10 @@ std::string getDataMD5Hash(const Data& data) {
 
     MD5state_st state;
     uint8_t digest[MD5_DIGEST_LENGTH];
-    char hexOutput[(MD5_DIGEST_LENGTH << 1) + 1] = { 0 };
+    char hexOutput[(MD5_DIGEST_LENGTH << 1) + 1] = {0};
 
     MD5_Init(&state);
-    MD5_Update(&state, data.getBytes(), (int) data.getSize());
+    MD5_Update(&state, data.getBytes(), (int)data.getSize());
     MD5_Final(digest, &state);
 
     for (int di = 0; di < 16; ++di)
@@ -484,41 +502,42 @@ LanguageType getLanguageTypeByISO2(const char* code)
     }
     return ret;
 }
-    
+
 backend::BlendFactor toBackendBlendFactor(int factor)
 {
-    switch (factor) {
-        case GLBlendConst::ONE:
-            return backend::BlendFactor::ONE;
-        case GLBlendConst::ZERO:
-            return backend::BlendFactor::ZERO;
-        case GLBlendConst::SRC_COLOR:
-            return backend::BlendFactor::SRC_COLOR;
-        case GLBlendConst::ONE_MINUS_SRC_COLOR:
-            return backend::BlendFactor::ONE_MINUS_SRC_COLOR;
-        case GLBlendConst::SRC_ALPHA:
-            return backend::BlendFactor::SRC_ALPHA;
-        case GLBlendConst::ONE_MINUS_SRC_ALPHA:
-            return backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
-        case GLBlendConst::DST_COLOR:
-            return backend::BlendFactor::DST_COLOR;
-        case GLBlendConst::ONE_MINUS_DST_COLOR:
-            return backend::BlendFactor::ONE_MINUS_DST_COLOR;
-        case GLBlendConst::DST_ALPHA:
-            return backend::BlendFactor::DST_ALPHA;
-        case GLBlendConst::ONE_MINUS_DST_ALPHA:
-            return backend::BlendFactor::ONE_MINUS_DST_ALPHA;
-        case GLBlendConst::SRC_ALPHA_SATURATE:
-            return backend::BlendFactor::SRC_ALPHA_SATURATE;
-        case GLBlendConst::BLEND_COLOR:
-            return backend::BlendFactor::BLEND_CLOLOR;
-        case GLBlendConst::CONSTANT_ALPHA:
-            return backend::BlendFactor::CONSTANT_ALPHA;
-        case GLBlendConst::ONE_MINUS_CONSTANT_ALPHA:
-            return backend::BlendFactor::ONE_MINUS_CONSTANT_ALPHA;
-        default:
-            assert(false);
-            break;
+    switch (factor)
+    {
+    case GLBlendConst::ONE:
+        return backend::BlendFactor::ONE;
+    case GLBlendConst::ZERO:
+        return backend::BlendFactor::ZERO;
+    case GLBlendConst::SRC_COLOR:
+        return backend::BlendFactor::SRC_COLOR;
+    case GLBlendConst::ONE_MINUS_SRC_COLOR:
+        return backend::BlendFactor::ONE_MINUS_SRC_COLOR;
+    case GLBlendConst::SRC_ALPHA:
+        return backend::BlendFactor::SRC_ALPHA;
+    case GLBlendConst::ONE_MINUS_SRC_ALPHA:
+        return backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+    case GLBlendConst::DST_COLOR:
+        return backend::BlendFactor::DST_COLOR;
+    case GLBlendConst::ONE_MINUS_DST_COLOR:
+        return backend::BlendFactor::ONE_MINUS_DST_COLOR;
+    case GLBlendConst::DST_ALPHA:
+        return backend::BlendFactor::DST_ALPHA;
+    case GLBlendConst::ONE_MINUS_DST_ALPHA:
+        return backend::BlendFactor::ONE_MINUS_DST_ALPHA;
+    case GLBlendConst::SRC_ALPHA_SATURATE:
+        return backend::BlendFactor::SRC_ALPHA_SATURATE;
+    case GLBlendConst::BLEND_COLOR:
+        return backend::BlendFactor::BLEND_CLOLOR;
+    case GLBlendConst::CONSTANT_ALPHA:
+        return backend::BlendFactor::CONSTANT_ALPHA;
+    case GLBlendConst::ONE_MINUS_CONSTANT_ALPHA:
+        return backend::BlendFactor::ONE_MINUS_CONSTANT_ALPHA;
+    default:
+        assert(false);
+        break;
     }
     return backend::BlendFactor::ONE;
 }
@@ -607,48 +626,55 @@ backend::SamplerAddressMode toBackendAddressMode(int mode)
 
 const Mat4& getAdjustMatrix()
 {
-    static cocos2d::Mat4 adjustMatrix = {
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 0.5, 0.5,
-        0, 0, 0, 1
-    };
+    static cocos2d::Mat4 adjustMatrix = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.5, 0.5, 0, 0, 0, 1};
 
     return adjustMatrix;
 }
 
-std::vector<float> getNormalMat3OfMat4(const Mat4 &mat)
+std::vector<float> getNormalMat3OfMat4(const Mat4& mat)
 {
     std::vector<float> normalMat(9);
-    Mat4 mvInverse = mat;
+    Mat4 mvInverse  = mat;
     mvInverse.m[12] = mvInverse.m[13] = mvInverse.m[14] = 0.0f;
     mvInverse.inverse();
     mvInverse.transpose();
-    normalMat[0] = mvInverse.m[0]; normalMat[1] = mvInverse.m[1]; normalMat[2] = mvInverse.m[2];
-    normalMat[3] = mvInverse.m[4]; normalMat[4] = mvInverse.m[5]; normalMat[5] = mvInverse.m[6];
-    normalMat[6] = mvInverse.m[8]; normalMat[7] = mvInverse.m[9]; normalMat[8] = mvInverse.m[10];
+    normalMat[0] = mvInverse.m[0];
+    normalMat[1] = mvInverse.m[1];
+    normalMat[2] = mvInverse.m[2];
+    normalMat[3] = mvInverse.m[4];
+    normalMat[4] = mvInverse.m[5];
+    normalMat[5] = mvInverse.m[6];
+    normalMat[6] = mvInverse.m[8];
+    normalMat[7] = mvInverse.m[9];
+    normalMat[8] = mvInverse.m[10];
     return normalMat;
 }
 
-std::vector<int> parseIntegerList(const std::string &intsString) {
+std::vector<int> parseIntegerList(std::string_view intsString)
+{
     std::vector<int> result;
 
-    const char *cStr = intsString.c_str();
-    char *endptr;
+    if (!intsString.empty())
+    {
+        const char* cStr = intsString.data();
+        char* endptr;
 
-    for (int32_t i = strtol(cStr, &endptr, 10); endptr != cStr; i = strtol(cStr, &endptr, 10)) {
-        if (errno == ERANGE) {
-            errno = 0;
-            CCLOGWARN("%s contains out of range integers", intsString.c_str());
+        for (int32_t i = strtol(cStr, &endptr, 10); endptr != cStr; i = strtol(cStr, &endptr, 10))
+        {
+            if (errno == ERANGE)
+            {
+                errno = 0;
+                CCLOGWARN("%s contains out of range integers", intsString.data());
+            }
+            result.push_back(static_cast<int>(i));
+            cStr = endptr;
         }
-        result.push_back(static_cast<int>(i));
-        cStr= endptr;
     }
 
     return result;
 }
 
-std::string bin2hex(const std::string& binary /*charstring also regard as binary in C/C++*/, int delim, bool prefix)
+std::string bin2hex(std::string_view binary /*charstring also regard as binary in C/C++*/, int delim, bool prefix)
 {
     char low;
     char high;
@@ -659,19 +685,19 @@ std::string bin2hex(const std::string& binary /*charstring also regard as binary
     std::string result;
     result.reserve((len << 1) + (delim_needed ? len : 0) + (prefix ? (len << 1) : 0));
 
-
     for (size_t i = 0; i < len; ++i)
     {
         auto ch = binary[i];
-        high = (ch >> 4) & 0x0f;
-        low = ch & 0x0f;
-        if (prefix) {
+        high    = (ch >> 4) & 0x0f;
+        low     = ch & 0x0f;
+        if (prefix)
+        {
             result.push_back('0');
             result.push_back('x');
         }
 
-        auto hic = CC_HEX2CHAR(high);
-        auto lic = CC_HEX2CHAR(low);
+        auto hic = nibble2hex(high);
+        auto lic = nibble2hex(low);
         result.push_back(hic);
         result.push_back(lic);
         if (delim_needed)
@@ -692,6 +718,74 @@ void killCurrentProcess()
 #endif
 }
 
+unsigned char nibble2hex(unsigned char c)
+{
+    return ((c) < 0xa ? ((c) + '0') : ((c) + 'a' - 10));
 }
+
+unsigned char hex2nibble(unsigned char c)
+{
+    if (c >= '0' && c <= '9')
+    {
+        return c - '0';
+    }
+    else if (c >= 'a' && c <= 'f')
+    {
+        return 10 + (c - 'a');
+    }
+    else if (c >= 'A' && c <= 'F')
+    {
+        return 10 + (c - 'A');
+    }
+    return 0;
+}
+
+std::string urlEncode(std::string_view s)
+{
+    std::string encoded;
+    for (const char c : s)
+    {
+        if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~')
+        {
+            encoded = encoded + c;
+        }
+        else
+        {
+            char hex[4];
+            snprintf(hex, sizeof(hex), "%%%02x", c);
+            encoded = encoded + hex;
+        }
+    }
+    return encoded;
+}
+
+std::string urlDecode(std::string_view st)
+{
+    std::string decoded;
+    const char* s       = st.data();
+    const size_t length = st.length();
+    for (unsigned int i = 0; i < length; ++i)
+    {
+        if (!s[i])
+            break;
+
+        if (s[i] == '%')
+        {
+            decoded.push_back(hex2char(s + i + 1));
+            i = i + 2;
+        }
+        else if (s[i] == '+')
+        {
+            decoded.push_back(' ');
+        }
+        else
+        {
+            decoded.push_back(s[i]);
+        }
+    }
+    return decoded;
+}
+
+}  // namespace utils
 
 NS_CC_END
