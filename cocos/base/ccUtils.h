@@ -356,20 +356,46 @@ inline bool isPOT(int number)
     return ((number > 0) && (number & (number - 1)) == 0);
 }
 
-// Convert a nibble ASCII hex digit
-CC_DLL unsigned char nibble2hex(unsigned char c);
-
 // Convert ASCII hex digit to a nibble (four bits, 0 - 15).
 //
 // Use unsigned to avoid signed overflow UB.
-CC_DLL unsigned char hex2nibble(unsigned char c);
+inline unsigned char hex2nibble(unsigned char c)
+{
+    if (c >= '0' && c <= '9')
+    {
+        return c - '0';
+    }
+    else if (c >= 'a' && c <= 'f')
+    {
+        return 10 + (c - 'a');
+    }
+    else if (c >= 'A' && c <= 'F')
+    {
+        return 10 + (c - 'A');
+    }
+    return 0;
+}
+
+// Convert a nibble ASCII hex digit
+inline unsigned char nibble2hex(unsigned char c, unsigned char a = 'a')
+{
+    return ((c) < 0xa ? ((c) + '0') : ((c) + a - 10));
+}
 
 // Convert ASCII hex string (two characters) to byte.
 //
 // E.g., "0B" => 0x0B, "af" => 0xAF.
 inline char hex2char(const char* p)
 {
-    return hex2nibble(p[0]) * 16 + hex2nibble(p[1]);
+    return hex2nibble((uint8_t)p[0]) << 4 | hex2nibble(p[1]);
+}
+
+// Convert byte to ASCII hex string (two characters).
+inline char* char2hex(char* p, unsigned char c, unsigned char a = 'a')
+{
+    p[0] = nibble2hex(c >> 4, a);
+    p[1] = nibble2hex(c & (uint8_t)0xf, a);
+    return p;
 }
 
 CC_DLL std::string urlEncode(std::string_view s);

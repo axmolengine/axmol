@@ -401,21 +401,21 @@ std::string getDataMD5Hash(const Data& data)
 
     if (data.isNull())
     {
-        return std::string();
+        return std::string{};
     }
 
     MD5state_st state;
     uint8_t digest[MD5_DIGEST_LENGTH];
-    char hexOutput[(MD5_DIGEST_LENGTH << 1) + 1] = {0};
+    char hexOutput[(MD5_DIGEST_LENGTH << 1)] = {0};
 
     MD5_Init(&state);
     MD5_Update(&state, data.getBytes(), (int)data.getSize());
     MD5_Final(digest, &state);
 
     for (int di = 0; di < 16; ++di)
-        sprintf(hexOutput + di * 2, "%02x", digest[di]);
+        char2hex(hexOutput + di * 2, digest[di]);
 
-    return hexOutput;
+    return std::string{hexOutput, (size_t)32};
 }
 
 LanguageType getLanguageTypeByISO2(const char* code)
@@ -718,42 +718,25 @@ void killCurrentProcess()
 #endif
 }
 
-unsigned char nibble2hex(unsigned char c)
-{
-    return ((c) < 0xa ? ((c) + '0') : ((c) + 'a' - 10));
-}
-
-unsigned char hex2nibble(unsigned char c)
-{
-    if (c >= '0' && c <= '9')
-    {
-        return c - '0';
-    }
-    else if (c >= 'a' && c <= 'f')
-    {
-        return 10 + (c - 'a');
-    }
-    else if (c >= 'A' && c <= 'F')
-    {
-        return 10 + (c - 'A');
-    }
-    return 0;
-}
-
 std::string urlEncode(std::string_view s)
 {
     std::string encoded;
-    for (const char c : s)
+    if (!s.empty())
     {
-        if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~')
+        encoded.reserve(s.length() * 3 / 2);
+        for (const char c : s)
         {
-            encoded = encoded + c;
-        }
-        else
-        {
-            char hex[4];
-            snprintf(hex, sizeof(hex), "%%%02x", c);
-            encoded = encoded + hex;
+            if (isalnum((uint8_t)c) || c == '-' || c == '_' || c == '.' || c == '~')
+            {
+                encoded.push_back(c);
+            }
+            else
+            {
+                encoded.push_back('%');
+
+                char hex[2];
+                encoded.append(char2hex(hex, c, 'A'), sizeof(hex));
+            }
         }
     }
     return encoded;
@@ -762,25 +745,29 @@ std::string urlEncode(std::string_view s)
 std::string urlDecode(std::string_view st)
 {
     std::string decoded;
-    const char* s       = st.data();
-    const size_t length = st.length();
-    for (unsigned int i = 0; i < length; ++i)
+    if (!st.empty())
     {
-        if (!s[i])
-            break;
+        const char* s       = st.data();
+        const size_t length = st.length();
+        decoded.reserve(length * 2 / 3);
+        for (unsigned int i = 0; i < length; ++i)
+        {
+            if (!s[i])
+                break;
 
-        if (s[i] == '%')
-        {
-            decoded.push_back(hex2char(s + i + 1));
-            i = i + 2;
-        }
-        else if (s[i] == '+')
-        {
-            decoded.push_back(' ');
-        }
-        else
-        {
-            decoded.push_back(s[i]);
+            if (s[i] == '%')
+            {
+                decoded.push_back(hex2char(s + i + 1));
+                i = i + 2;
+            }
+            else if (s[i] == '+')
+            {
+                decoded.push_back(' ');
+            }
+            else
+            {
+                decoded.push_back(s[i]);
+            }
         }
     }
     return decoded;
