@@ -38,7 +38,6 @@ SOFTWARE.
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <inttypes.h>
 #include "yasio/detail/thread_name.hpp"
 
 #if defined(YASIO_SSL_BACKEND)
@@ -1087,8 +1086,8 @@ void io_service::handle_close(transport_handle_t thandle)
   auto ctx = thandle->ctx_;
   auto ec  = thandle->error_;
   // @Because we can't retrive peer endpoint when connect reset by peer, so use id to trace.
-  YASIO_KLOGD("[index: %d] the connection #%u(0x%" PRIxPTR ") is lost, ec=%d, where=%d, detail:%s", ctx->index_, thandle->id_, (uintptr_t)thandle, ec,
-              (int)thandle->error_stage_, io_service::strerror(ec));
+  YASIO_KLOGD("[index: %d] the connection #%u is lost, ec=%d, where=%d, detail:%s", ctx->index_, thandle->id_, ec, (int)thandle->error_stage_,
+              io_service::strerror(ec));
   handle_event(cxx14::make_unique<io_event>(thandle->cindex(), YEK_ON_CLOSE, ec, thandle));
   cleanup_io(thandle);
   deallocate_transport(thandle);
@@ -1129,7 +1128,7 @@ int io_service::write(transport_handle_t transport, std::vector<char> buffer, co
     return !buffer.empty() ? transport->write(std::move(buffer), std::move(handler)) : 0;
   else
   {
-    YASIO_KLOGE("[transport: 0x%" PRIxPTR "] send failed, the connection not ok!", (uintptr_t)transport);
+    YASIO_KLOGE("write failed, the connection not ok!");
     return -1;
   }
 }
@@ -1139,7 +1138,7 @@ int io_service::write_to(transport_handle_t transport, std::vector<char> buffer,
     return !buffer.empty() ? transport->write_to(std::move(buffer), to, std::move(handler)) : 0;
   else
   {
-    YASIO_KLOGE("[transport: 0x%" PRIxPTR "] send failed, the connection not ok!", (uintptr_t)transport);
+    YASIO_KLOGE("write_to failed, the connection not ok!");
     return -1;
   }
 }
@@ -1735,8 +1734,8 @@ void io_service::notify_connect_succeed(transport_handle_t t)
   this->transports_.push_back(t);
   YASIO__UNUSED_PARAM(s);
   YASIO_KLOGV("[index: %d] sndbuf=%d, rcvbuf=%d", ctx->index_, s->get_optval<int>(SOL_SOCKET, SO_SNDBUF), s->get_optval<int>(SOL_SOCKET, SO_RCVBUF));
-  YASIO_KLOGD("[index: %d] the connection #%u(0x%" PRIxPTR ") <%s> --> <%s> is established.", ctx->index_, t->id_, (uintptr_t)t,
-              t->local_endpoint().to_string().c_str(), t->remote_endpoint().to_string().c_str());
+  YASIO_KLOGD("[index: %d] the connection #%u <%s> --> <%s> is established.", ctx->index_, t->id_, t->local_endpoint().to_string().c_str(),
+              t->remote_endpoint().to_string().c_str());
   handle_event(cxx14::make_unique<io_event>(ctx->index_, YEK_ON_OPEN, 0, t));
 }
 transport_handle_t io_service::allocate_transport(io_channel* ctx, xxsocket_ptr&& s)
