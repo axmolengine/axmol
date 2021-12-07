@@ -44,10 +44,10 @@ PUScaleAffector::PUScaleAffector() :
     _dynScaleXYZSet(false),
     _sinceStartSystem(false)
 {
-    _dynScaleX = new (std::nothrow) PUDynamicAttributeFixed();
-    _dynScaleY = new (std::nothrow) PUDynamicAttributeFixed();
-    _dynScaleZ = new (std::nothrow) PUDynamicAttributeFixed();
-    _dynScaleXYZ = new (std::nothrow) PUDynamicAttributeFixed();
+    _dynScaleX = new PUDynamicAttributeFixed();
+    _dynScaleY = new PUDynamicAttributeFixed();
+    _dynScaleZ = new PUDynamicAttributeFixed();
+    _dynScaleXYZ = new PUDynamicAttributeFixed();
     (static_cast<PUDynamicAttributeFixed*>(_dynScaleX))->setValue(DEFAULT_X_SCALE);
     (static_cast<PUDynamicAttributeFixed*>(_dynScaleY))->setValue(DEFAULT_Y_SCALE);
     (static_cast<PUDynamicAttributeFixed*>(_dynScaleZ))->setValue(DEFAULT_Z_SCALE);
@@ -89,7 +89,7 @@ void PUScaleAffector::setDynScaleX(PUDynamicAttribute* dynScaleX)
     if (resetToDefault)
     {
         CC_SAFE_DELETE(_dynScaleX);
-        _dynScaleX = new (std::nothrow) PUDynamicAttributeFixed();
+        _dynScaleX = new PUDynamicAttributeFixed();
         (static_cast<PUDynamicAttributeFixed*>(_dynScaleX))->setValue(DEFAULT_X_SCALE);
         _dynScaleXSet = false;
     }
@@ -114,7 +114,7 @@ void PUScaleAffector::resetDynScaleY(bool resetToDefault)
     {
 
         CC_SAFE_DELETE(_dynScaleY);
-        _dynScaleY = new (std::nothrow) PUDynamicAttributeFixed();
+        _dynScaleY = new PUDynamicAttributeFixed();
         (static_cast<PUDynamicAttributeFixed*>(_dynScaleY))->setValue(DEFAULT_X_SCALE);
         _dynScaleYSet = false;
     }
@@ -138,7 +138,7 @@ void PUScaleAffector::resetDynScaleZ(bool resetToDefault)
     if (resetToDefault)
     {
         CC_SAFE_DELETE(_dynScaleZ);
-        _dynScaleZ = new (std::nothrow) PUDynamicAttributeFixed();
+        _dynScaleZ = new PUDynamicAttributeFixed();
         (static_cast<PUDynamicAttributeFixed*>(_dynScaleZ))->setValue(DEFAULT_X_SCALE);
         _dynScaleYSet = false;
     }
@@ -162,7 +162,7 @@ void PUScaleAffector::resetDynScaleXYZ(bool resetToDefault)
     if (resetToDefault)
     {
         CC_SAFE_DELETE(_dynScaleXYZ);
-        _dynScaleXYZ = new (std::nothrow) PUDynamicAttributeFixed();
+        _dynScaleXYZ = new PUDynamicAttributeFixed();
         (static_cast<PUDynamicAttributeFixed*>(_dynScaleXYZ))->setValue(DEFAULT_XYZ_SCALE);
         _dynScaleXYZSet = false;
     }
@@ -261,7 +261,7 @@ void PUScaleAffector::updatePUAffector( PUParticle3D *particle, float deltaTime 
 
 PUScaleAffector* PUScaleAffector::create()
 {
-    auto psa = new (std::nothrow) PUScaleAffector();
+    auto psa = new PUScaleAffector();
     psa->autorelease();
     return psa;
 }

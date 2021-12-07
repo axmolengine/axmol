@@ -255,7 +255,7 @@ PUForceFieldCalculationFactory* PUForceField::createForceFieldCalculationFactory
     else
     {
         // Use realtime calculation
-        setForceFieldCalculationFactory(new (std::nothrow) PURealTimeForceFieldCalculationFactory());
+        setForceFieldCalculationFactory(new PURealTimeForceFieldCalculationFactory());
         return getForceFieldCalculationFactory();
     }
 }

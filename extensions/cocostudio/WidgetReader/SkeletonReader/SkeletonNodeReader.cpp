@@ -52,7 +52,7 @@ SkeletonNodeReader* SkeletonNodeReader::getInstance()
 {
     if (_instanceSkeletonNodeReader == nullptr)
     {
-        _instanceSkeletonNodeReader = new (std::nothrow) SkeletonNodeReader();
+        _instanceSkeletonNodeReader = new SkeletonNodeReader();
     }
     return _instanceSkeletonNodeReader;
 }

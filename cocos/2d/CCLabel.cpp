@@ -88,8 +88,8 @@ public:
 
     static LabelLetter* createWithTexture(Texture2D *texture, const Rect& rect, bool rotated = false)
     {
-        auto letter = new (std::nothrow) LabelLetter();
-        if (letter && letter->initWithTexture(texture, rect, rotated))
+        auto letter = new LabelLetter();
+        if (letter->initWithTexture(texture, rect, rotated))
         {
             letter->Sprite::setVisible(false);
             letter->autorelease();
@@ -240,40 +240,30 @@ std::array<CustomCommand*, 3> Label::BatchCommand::getCommandArray()
 
 Label* Label::create()
 {
-    auto ret = new (std::nothrow) Label;
-
-    if (ret)
-    {
-        ret->autorelease();
-    }
-
+    auto ret = new  Label;
+    ret->autorelease();
     return ret;
 }
 
 Label* Label::createWithSystemFont(const std::string& text, const std::string& font, float fontSize, const Vec2& dimensions /* = Vec2::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
-    auto ret = new (std::nothrow) Label(hAlignment,vAlignment);
+    auto ret = new Label(hAlignment,vAlignment);
 
-    if (ret)
-    {
-        ret->setSystemFontName(font);
-        ret->setSystemFontSize(fontSize);
-        ret->setDimensions(dimensions.width, dimensions.height);
-        ret->setString(text);
+    ret->setSystemFontName(font);
+    ret->setSystemFontSize(fontSize);
+    ret->setDimensions(dimensions.width, dimensions.height);
+    ret->setString(text);
 
-        ret->autorelease();
+    ret->autorelease();
 
-        return ret;
-    }
-
-    return nullptr;
+    return ret;
 }
 
 Label* Label::createWithTTF(const std::string& text, const std::string& fontFile, float fontSize, const Vec2& dimensions /* = Vec2::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
-    auto ret = new (std::nothrow) Label(hAlignment,vAlignment);
+    auto ret = new Label(hAlignment,vAlignment);
 
-    if (ret && ret->initWithTTF(text, fontFile, fontSize, dimensions, hAlignment, vAlignment))
+    if (ret->initWithTTF(text, fontFile, fontSize, dimensions, hAlignment, vAlignment))
     {
         ret->autorelease();
         return ret;
@@ -285,9 +275,9 @@ Label* Label::createWithTTF(const std::string& text, const std::string& fontFile
 
 Label* Label::createWithTTF(const TTFConfig& ttfConfig, const std::string& text, TextHAlignment hAlignment /* = TextHAlignment::CENTER */, int maxLineWidth /* = 0 */)
 {
-    auto ret = new (std::nothrow) Label(hAlignment);
+    auto ret = new Label(hAlignment);
 
-    if (ret && ret->initWithTTF(ttfConfig, text, hAlignment, maxLineWidth))
+    if (ret->initWithTTF(ttfConfig, text, hAlignment, maxLineWidth))
     {
         ret->autorelease();
         return ret;
@@ -299,9 +289,9 @@ Label* Label::createWithTTF(const TTFConfig& ttfConfig, const std::string& text,
 
 Label* Label::createWithBMFont(const std::string& bmfontPath, const std::string& text, const TextHAlignment& hAlignment, int maxLineWidth)
 {
-    auto ret = new (std::nothrow) Label(hAlignment);
+    auto ret = new Label(hAlignment);
 
-    if (ret && ret->setBMFontFilePath(bmfontPath))
+    if (ret->setBMFontFilePath(bmfontPath))
     {
         ret->setMaxLineWidth(maxLineWidth);
         ret->setString(text);
@@ -316,9 +306,9 @@ Label* Label::createWithBMFont(const std::string& bmfontPath, const std::string&
 
 Label* Label::createWithBMFont(const std::string& bmfontPath, const std::string& text, const TextHAlignment& hAlignment, int maxLineWidth, const Rect& imageRect, bool imageRotated)
 {
-    auto ret = new (std::nothrow) Label(hAlignment);
+    auto ret = new Label(hAlignment);
 
-    if (ret && ret->setBMFontFilePath(bmfontPath, imageRect, imageRotated))
+    if (ret->setBMFontFilePath(bmfontPath, imageRect, imageRotated))
     {
         ret->setMaxLineWidth(maxLineWidth);
         ret->setString(text);
@@ -333,9 +323,9 @@ Label* Label::createWithBMFont(const std::string& bmfontPath, const std::string&
 
 Label* Label::createWithBMFont(const std::string& bmfontPath, const std::string& text, const TextHAlignment& hAlignment, int maxLineWidth, const std::string& subTextureKey)
 {
-    auto ret = new (std::nothrow) Label(hAlignment);
+    auto ret = new Label(hAlignment);
 
-    if (ret && ret->setBMFontFilePath(bmfontPath, subTextureKey))
+    if (ret->setBMFontFilePath(bmfontPath, subTextureKey))
     {
         ret->setMaxLineWidth(maxLineWidth);
         ret->setString(text);
@@ -355,9 +345,9 @@ Label* Label::createWithBMFont(const std::string& bmfontPath, const std::string&
 
 Label* Label::createWithCharMap(const std::string& plistFile)
 {
-    auto ret = new (std::nothrow) Label();
+    auto ret = new Label();
 
-    if (ret && ret->setCharMap(plistFile))
+    if (ret->setCharMap(plistFile))
     {
         ret->autorelease();
         return ret;
@@ -369,9 +359,9 @@ Label* Label::createWithCharMap(const std::string& plistFile)
 
 Label* Label::createWithCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap)
 {
-    auto ret = new (std::nothrow) Label();
+    auto ret = new Label();
 
-    if (ret && ret->setCharMap(texture,itemWidth,itemHeight,startCharMap))
+    if (ret->setCharMap(texture,itemWidth,itemHeight,startCharMap))
     {
         ret->autorelease();
         return ret;
@@ -383,9 +373,9 @@ Label* Label::createWithCharMap(Texture2D* texture, int itemWidth, int itemHeigh
 
 Label* Label::createWithCharMap(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap)
 {
-    auto ret = new (std::nothrow) Label();
+    auto ret = new Label();
 
-    if (ret && ret->setCharMap(charMapFile,itemWidth,itemHeight,startCharMap))
+    if (ret->setCharMap(charMapFile,itemWidth,itemHeight,startCharMap))
     {
         ret->autorelease();
         return ret;
@@ -1539,7 +1529,7 @@ void Label::createSpriteForSystemFont(const FontDefinition& fontDef)
 {
     _currentLabelType = LabelType::STRING_TEXTURE;
 
-    auto texture = new (std::nothrow) Texture2D;
+    auto texture = new Texture2D;
     texture->initWithString(_utf8Text.c_str(), fontDef);
 
     _textSprite = Sprite::createWithTexture(texture);
@@ -1577,7 +1567,7 @@ void Label::createShadowSpriteForSystemFont(const FontDefinition& fontDef)
         shadowFontDefinition._stroke._strokeColor = shadowFontDefinition._fontFillColor;
         shadowFontDefinition._stroke._strokeAlpha = shadowFontDefinition._fontAlpha;
 
-        auto texture = new (std::nothrow) Texture2D;
+        auto texture = new Texture2D;
         texture->initWithString(_utf8Text.c_str(), shadowFontDefinition);
         _shadowNode = Sprite::createWithTexture(texture);
         texture->release();

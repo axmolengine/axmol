@@ -48,7 +48,7 @@ Skybox* Skybox::create(const std::string& positive_x, const std::string& negativ
                const std::string& positive_y, const std::string& negative_y,
                const std::string& positive_z, const std::string& negative_z)
 {
-    auto ret = new (std::nothrow) Skybox();
+    auto ret = new Skybox();
     ret->init(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
     
     ret->autorelease();

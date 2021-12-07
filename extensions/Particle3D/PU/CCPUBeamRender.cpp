@@ -51,7 +51,7 @@ const PUBillboardChain::TexCoordDirection PUBeamRender::DEFAULT_TEXTURE_DIRECTIO
 
 PUBeamRender* PUBeamRender::create( const std::string &texFile )
 {
-    auto br = new (std::nothrow) PUBeamRender();
+    auto br = new PUBeamRender();
     br->autorelease();
     br->_texFile = texFile;
     return br;
@@ -247,7 +247,7 @@ void PUBeamRender::prepare()
     std::stringstream ss; 
     ss << this;
     _billboardChainName = "Beam" + ss.str();
-    _billboardChain = new (std::nothrow) PUBillboardChain(_billboardChainName, _texFile);
+    _billboardChain = new PUBillboardChain(_billboardChainName, _texFile);
     _billboardChain->setDynamic(true);
     _billboardChain->setNumberOfChains(_quota);
     _billboardChain->setMaxChainElements(_maxChainElements);
@@ -267,7 +267,7 @@ void PUBeamRender::prepare()
             _billboardChain->addChainElement(i, element);
         }
 
-        PUParticle3DBeamVisualData* visualData = new (std::nothrow) PUParticle3DBeamVisualData(i, _billboardChain);
+        PUParticle3DBeamVisualData* visualData = new PUParticle3DBeamVisualData(i, _billboardChain);
         for (size_t numDev = 0; numDev < _numberOfSegments; ++numDev)
         {
             // Initialise the positions

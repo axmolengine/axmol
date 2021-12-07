@@ -99,14 +99,9 @@ const std::vector<float>& Frame::getEasingParams() const
 // VisibleFrame
 VisibleFrame* VisibleFrame::create()
 {
-    VisibleFrame* frame = new (std::nothrow) VisibleFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    VisibleFrame* frame = new VisibleFrame();
+    frame->autorelease();
+    return frame;
 }
 
 VisibleFrame::VisibleFrame()
@@ -138,14 +133,9 @@ Frame* VisibleFrame::clone()
 // TextureFrame
 TextureFrame* TextureFrame::create()
 {
-    TextureFrame* frame = new (std::nothrow) TextureFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    TextureFrame* frame = new TextureFrame();
+    frame->autorelease();
+    return frame;
 }
 
 TextureFrame::TextureFrame()
@@ -194,14 +184,9 @@ Frame* TextureFrame::clone()
 // RotationFrame
 RotationFrame* RotationFrame::create()
 {
-    RotationFrame* frame = new (std::nothrow) RotationFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    RotationFrame* frame = new RotationFrame();
+    frame->autorelease();
+    return frame;
 }
 
 RotationFrame::RotationFrame()
@@ -248,14 +233,9 @@ Frame* RotationFrame::clone()
 // SkewFrame
 SkewFrame* SkewFrame::create()
 {
-    SkewFrame* frame = new (std::nothrow) SkewFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    SkewFrame* frame = new SkewFrame();
+    frame->autorelease();
+    return frame;
 }
 
 SkewFrame::SkewFrame()
@@ -310,14 +290,9 @@ Frame* SkewFrame::clone()
 // RotationSkewFrame
 RotationSkewFrame* RotationSkewFrame::create()
 {
-    RotationSkewFrame* frame = new (std::nothrow) RotationSkewFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    RotationSkewFrame* frame = new RotationSkewFrame();
+    frame->autorelease();
+    return frame;
 }
 
 RotationSkewFrame::RotationSkewFrame()
@@ -368,14 +343,9 @@ Frame* RotationSkewFrame::clone()
 // PositionFrame
 PositionFrame* PositionFrame::create()
 {
-    PositionFrame* frame = new (std::nothrow) PositionFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    PositionFrame* frame = new PositionFrame();
+    frame->autorelease();
+    return frame;
 }
 
 PositionFrame::PositionFrame()
@@ -426,14 +396,9 @@ Frame* PositionFrame::clone()
 // ScaleFrame
 ScaleFrame* ScaleFrame::create()
 {
-    ScaleFrame* frame = new (std::nothrow) ScaleFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    ScaleFrame* frame = new ScaleFrame();
+    frame->autorelease();
+    return frame;
 }
 
 ScaleFrame::ScaleFrame()
@@ -486,14 +451,9 @@ Frame* ScaleFrame::clone()
 // AnchorPointFrame
 AnchorPointFrame* AnchorPointFrame::create()
 {
-    AnchorPointFrame* frame = new (std::nothrow) AnchorPointFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    AnchorPointFrame* frame = new AnchorPointFrame();
+    frame->autorelease();
+    return frame;
 }
 
 AnchorPointFrame::AnchorPointFrame()
@@ -541,14 +501,9 @@ const std::string InnerActionFrame::AnimationAllName = "-- ALL --";
 
 InnerActionFrame* InnerActionFrame::create()
 {
-    InnerActionFrame* frame = new (std::nothrow) InnerActionFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    InnerActionFrame* frame = new InnerActionFrame();
+    frame->autorelease();
+    return frame;
 }
 
 InnerActionFrame::InnerActionFrame()
@@ -676,14 +631,9 @@ Frame* InnerActionFrame::clone()
 // ColorFrame
 ColorFrame* ColorFrame::create()
 {
-    ColorFrame* frame = new (std::nothrow) ColorFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    ColorFrame* frame = new ColorFrame();
+    frame->autorelease();
+    return frame;
 }
 
 ColorFrame::ColorFrame()
@@ -734,14 +684,9 @@ Frame* ColorFrame::clone()
 // AlphaFrame
 AlphaFrame* AlphaFrame::create()
 {
-    AlphaFrame* frame = new (std::nothrow) AlphaFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    AlphaFrame* frame = new AlphaFrame();
+    frame->autorelease();
+    return frame;
 }
 
 AlphaFrame::AlphaFrame()
@@ -785,15 +730,10 @@ Frame* AlphaFrame::clone()
 // EventFrame
 EventFrame* EventFrame::create()
 {
-    EventFrame* frame = new (std::nothrow) EventFrame();
-    if (frame)
-    {
-        frame->init();
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    EventFrame* frame = new EventFrame();
+    frame->init();
+    frame->autorelease();
+    return frame;
 }
 
 void EventFrame::init()
@@ -837,14 +777,9 @@ Frame* EventFrame::clone()
 // ZOrderFrame
 ZOrderFrame* ZOrderFrame::create()
 {
-    ZOrderFrame* frame = new (std::nothrow) ZOrderFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    ZOrderFrame* frame = new ZOrderFrame();
+    frame->autorelease();
+    return frame;
 }
 
 ZOrderFrame::ZOrderFrame()
@@ -873,14 +808,9 @@ Frame* ZOrderFrame::clone()
 // BlendFuncFrame
 BlendFuncFrame* BlendFuncFrame::create()
 {
-    BlendFuncFrame* frame = new (std::nothrow) BlendFuncFrame();
-    if (frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    BlendFuncFrame* frame = new BlendFuncFrame();
+    frame->autorelease();
+    return frame;
 }
 
 BlendFuncFrame::BlendFuncFrame()
@@ -914,14 +844,9 @@ const std::string PlayableFrame::STOP_ACT = "stop";
 const std::string PlayableFrame::PLAYABLE_EXTENTION = "playable_extension";
 PlayableFrame* PlayableFrame::create()
 {
-    auto frame = new (std::nothrow) PlayableFrame();
-    if(frame)
-    {
-        frame->autorelease();
-        return frame;
-    }
-    CC_SAFE_DELETE(frame);
-    return nullptr;
+    auto frame = new PlayableFrame();
+    frame->autorelease();
+    return frame;
 }
 
 PlayableFrame::PlayableFrame()

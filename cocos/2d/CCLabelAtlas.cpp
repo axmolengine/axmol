@@ -44,8 +44,8 @@ NS_CC_BEGIN
 
 LabelAtlas* LabelAtlas::create(const std::string& string, const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap)
 {
-    LabelAtlas* ret = new (std::nothrow) LabelAtlas();
-    if(ret && ret->initWithString(string, charMapFile, itemWidth, itemHeight, startCharMap))
+    LabelAtlas* ret = new LabelAtlas();
+    if(ret->initWithString(string, charMapFile, itemWidth, itemHeight, startCharMap))
     {
         ret->autorelease();
         return ret;
@@ -73,17 +73,15 @@ bool LabelAtlas::initWithString(const std::string& string, Texture2D* texture, i
 
 LabelAtlas* LabelAtlas::create(const std::string& string, const std::string& fntFile)
 {    
-    LabelAtlas *ret = new (std::nothrow) LabelAtlas();
-    if (ret)
+    LabelAtlas *ret = new LabelAtlas();
+
+    if (ret->initWithString(string, fntFile))
     {
-        if (ret->initWithString(string, fntFile))
-        {
-            ret->autorelease();
-        }
-        else 
-        {
-            CC_SAFE_RELEASE_NULL(ret);
-        }
+        ret->autorelease();
+    }
+    else 
+    {
+        CC_SAFE_DELETE(ret);
     }
     
     return ret;
@@ -91,17 +89,15 @@ LabelAtlas* LabelAtlas::create(const std::string& string, const std::string& fnt
 
 LabelAtlas* LabelAtlas::create(const std::string& string, Texture2D* texture, int itemWidth, int itemHeight, int startCharMap)
 {
-    LabelAtlas* ret = new (std::nothrow) LabelAtlas();
-    if (ret)
+    LabelAtlas* ret = new LabelAtlas();
+
+    if (ret->initWithString(string, texture, itemWidth, itemHeight, startCharMap))
     {
-        if (ret->initWithString(string, texture, itemWidth, itemHeight, startCharMap))
-        {
-            ret->autorelease();
-        }
-        else
-        {
-            CC_SAFE_RELEASE_NULL(ret);
-        }
+        ret->autorelease();
+    }
+    else
+    {
+        CC_SAFE_DELETE(ret);
     }
 
     return ret;

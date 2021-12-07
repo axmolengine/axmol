@@ -5,8 +5,8 @@ DRAGONBONES_NAMESPACE_BEGIN
 
 CCArmatureDisplay* CCArmatureDisplay::create()
 {
-    CCArmatureDisplay* displayContainer = new (std::nothrow) CCArmatureDisplay();
-    if (displayContainer && displayContainer->init())
+    CCArmatureDisplay* displayContainer = new CCArmatureDisplay();
+    if (displayContainer->init())
     {
         displayContainer->autorelease();
     }
@@ -119,9 +119,9 @@ cocos2d::Rect CCArmatureDisplay::getBoundingBox() const
 
 DBCCSprite* DBCCSprite::create()
 {
-    DBCCSprite* sprite = new (std::nothrow) DBCCSprite();
+    DBCCSprite* sprite = new DBCCSprite();
 
-    if (sprite && sprite->init())
+    if (sprite->init())
     {
         sprite->autorelease();
     }

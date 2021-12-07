@@ -35,8 +35,8 @@ const std::string EventListenerController::LISTENER_ID = "__cc_controller";
 
 EventListenerController* EventListenerController::create()
 {
-    auto ret = new (std::nothrow) EventListenerController();
-    if (ret && ret->init())
+    auto ret = new EventListenerController();
+    if (ret->init())
     {
         ret->autorelease();
     }

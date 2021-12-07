@@ -51,7 +51,7 @@ TabControlReader* TabControlReader::getInstance()
 {
     if (_tabReaderInstance == nullptr)
     {
-        _tabReaderInstance = new  (std::nothrow) TabControlReader();
+        _tabReaderInstance = new  TabControlReader();
     }
     return _tabReaderInstance;
 }
@@ -229,7 +229,7 @@ TabHeaderReader* TabHeaderReader::getInstance()
 {
     if (_tabheaderReaderInstance == nullptr)
     {
-        _tabheaderReaderInstance = new (std::nothrow) TabHeaderReader();
+        _tabheaderReaderInstance = new TabHeaderReader();
     }
     return _tabheaderReaderInstance;
 }
@@ -932,7 +932,7 @@ TabItemReader* TabItemReader::getInstance()
 {
     if (_tabItemReaderInstance == nullptr)
     {
-        _tabItemReaderInstance = new (std::nothrow) TabItemReader();
+        _tabItemReaderInstance = new TabItemReader();
     }
     return _tabItemReaderInstance;
 }

@@ -63,7 +63,7 @@ TriggerMng* TriggerMng::getInstance()
 {
     if (nullptr == _sharedTriggerMng)
     {
-        _sharedTriggerMng = new (std::nothrow) TriggerMng();
+        _sharedTriggerMng = new TriggerMng();
     }
     return _sharedTriggerMng;
 }
@@ -414,7 +414,7 @@ void TriggerMng::addArmatureMovementCallBack(Armature *pAr, Ref *pTarget, SEL_Mo
 	ArmatureMovementDispatcher *amd = nullptr;
 	if (iter == _movementDispatches->end())
 	{
-		amd = new (std::nothrow) ArmatureMovementDispatcher();
+		amd = new ArmatureMovementDispatcher();
         pAr->getAnimation()->setMovementEventCallFunc(CC_CALLBACK_0(ArmatureMovementDispatcher::animationEvent, amd, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
         amd->addAnimationEventCallBack(pTarget, mecf);
 		_movementDispatches->emplace(pAr, amd);
@@ -494,7 +494,7 @@ void TriggerMng::addEventListenerWithFixedPriority(cocos2d::EventListener* liste
 ArmatureMovementDispatcher::ArmatureMovementDispatcher(void)
 : _mapEventAnimation(nullptr)
 {
-	_mapEventAnimation = new (std::nothrow) std::unordered_map<Ref*, SEL_MovementEventCallFunc> ;
+	_mapEventAnimation = new std::unordered_map<Ref*, SEL_MovementEventCallFunc> ;
 }
 
 ArmatureMovementDispatcher::~ArmatureMovementDispatcher(void)

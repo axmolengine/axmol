@@ -53,7 +53,7 @@ ControlHuePicker::~ControlHuePicker()
 
 ControlHuePicker* ControlHuePicker::create(Node* target, Vec2 pos)
 {
-    ControlHuePicker *pRet = new (std::nothrow) ControlHuePicker();
+    ControlHuePicker *pRet = new ControlHuePicker();
     pRet->initWithTargetAndPos(target, pos);
     pRet->autorelease();
     return pRet;

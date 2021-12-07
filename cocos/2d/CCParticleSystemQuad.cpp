@@ -51,7 +51,7 @@ ParticleSystemQuad::ParticleSystemQuad()
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
 
     //!!! support etc1 with alpha?
-    pipelinePS = (new (std::nothrow) backend::ProgramState(program));
+    pipelinePS = (new backend::ProgramState(program));
 
     _mvpMatrixLocaiton = pipelinePS->getUniformLocation("u_MVPMatrix");
     _textureLocation = pipelinePS->getUniformLocation("u_texture");
@@ -91,8 +91,8 @@ ParticleSystemQuad::~ParticleSystemQuad()
 
 ParticleSystemQuad * ParticleSystemQuad::create(const std::string& filename)
 {
-    ParticleSystemQuad *ret = new (std::nothrow) ParticleSystemQuad();
-    if (ret && ret->initWithFile(filename))
+    ParticleSystemQuad *ret = new ParticleSystemQuad();
+    if (ret->initWithFile(filename))
     {
         ret->autorelease();
         return ret;
@@ -102,8 +102,8 @@ ParticleSystemQuad * ParticleSystemQuad::create(const std::string& filename)
 }
 
 ParticleSystemQuad * ParticleSystemQuad::createWithTotalParticles(int numberOfParticles) {
-    ParticleSystemQuad *ret = new (std::nothrow) ParticleSystemQuad();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleSystemQuad *ret = new ParticleSystemQuad();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
         return ret;
@@ -114,8 +114,8 @@ ParticleSystemQuad * ParticleSystemQuad::createWithTotalParticles(int numberOfPa
 
 ParticleSystemQuad * ParticleSystemQuad::create(ValueMap &dictionary)
 {
-    ParticleSystemQuad *ret = new (std::nothrow) ParticleSystemQuad();
-    if (ret && ret->initWithDictionary(dictionary))
+    ParticleSystemQuad *ret = new ParticleSystemQuad();
+    if (ret->initWithDictionary(dictionary))
     {
         ret->autorelease();
         return ret;
@@ -604,8 +604,8 @@ void ParticleSystemQuad::setBatchNode(ParticleBatchNode * batchNode)
 }
 
 ParticleSystemQuad * ParticleSystemQuad::create() {
-    ParticleSystemQuad *particleSystemQuad = new (std::nothrow) ParticleSystemQuad();
-    if (particleSystemQuad && particleSystemQuad->init())
+    ParticleSystemQuad *particleSystemQuad = new ParticleSystemQuad();
+    if (particleSystemQuad->init())
     {
         particleSystemQuad->autorelease();
         return particleSystemQuad;

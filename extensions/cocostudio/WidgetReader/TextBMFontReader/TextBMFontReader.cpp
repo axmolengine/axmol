@@ -38,7 +38,7 @@ namespace cocostudio
     {
         if (!instanceTextBMFontReader)
         {
-            instanceTextBMFontReader = new (std::nothrow) TextBMFontReader();
+            instanceTextBMFontReader = new TextBMFontReader();
         }
         return instanceTextBMFontReader;
     }

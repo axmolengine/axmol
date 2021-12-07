@@ -108,7 +108,7 @@ void CCPUBoxEmitter::initParticlePosition(PUParticle3D* particle)
 
 CCPUBoxEmitter* CCPUBoxEmitter::create()
 {
-    auto pe = new (std::nothrow) CCPUBoxEmitter();
+    auto pe = new CCPUBoxEmitter();
     pe->autorelease();
     return pe;
 }

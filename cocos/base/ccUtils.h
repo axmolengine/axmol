@@ -256,7 +256,7 @@ CC_DLL void killCurrentProcess();
 template <typename T, typename F, typename... Ts>
 static RefPtr<T> makeInstance(F&& memf, Ts&&... args)
 {
-    RefPtr<T> pRet(ReferencedObject<T>{new (std::nothrow) T()});
+    RefPtr<T> pRet(ReferencedObject<T>{new T()});
     if (pRet && std::mem_fn(memf)(pRet.get(), std::forward<Ts>(args)...))
         return pRet;
 
@@ -287,18 +287,15 @@ inline static RefPtr<T> makeInstance()
 template <typename T, typename F, typename... Ts>
 inline T* createInstance(F&& finit, Ts&&... args)
 {
-    T* pRet = new (std::nothrow) T();
-    if (pRet && std::mem_fn(finit)(pRet, std::forward<Ts>(args)...))
-    {
+    T* pRet = new T();
+    if (std::mem_fn(finit)(pRet, std::forward<Ts>(args)...))
         pRet->autorelease();
-        return pRet;
-    }
     else
     {
         delete pRet;
         pRet = nullptr;
-        return nullptr;
     }
+    return pRet;
 }
 
 /**
@@ -324,11 +321,9 @@ inline T* createInstance()
 template <typename T, typename F, typename... Ts>
 static T* newInstance(F&& memf, Ts&&... args)
 {
-    T* pRet = new (std::nothrow) T();
-    if (pRet && std::mem_fn(memf)(pRet, std::forward<Ts>(args)...))
-    {
+    T* pRet = new T();
+    if (std::mem_fn(memf)(pRet, std::forward<Ts>(args)...))
         return pRet;
-    }
     else
     {
         delete pRet;

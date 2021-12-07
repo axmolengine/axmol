@@ -259,8 +259,8 @@ TransitionsTests::TransitionsTests()
 
 TestLayer1* TestLayer1::create(const std::string& transitionName)
 {
-    auto layer = new (std::nothrow) TestLayer1(transitionName);
-    if (layer && layer->init())
+    auto layer = new TestLayer1(transitionName);
+    if (layer->init())
     {
         layer->autorelease();
     }
@@ -335,8 +335,8 @@ void TestLayer1::onExit()
 
 TestLayer2* TestLayer2::create(const std::string& transitionName)
 {
-    auto layer = new (std::nothrow) TestLayer2(transitionName);
-    if (layer && layer->init())
+    auto layer = new TestLayer2(transitionName);
+    if (layer->init())
     {
         layer->autorelease();
     }

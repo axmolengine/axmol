@@ -41,8 +41,8 @@ namespace ui {
 
 PageViewIndicator* PageViewIndicator::create()
 {
-    PageViewIndicator* node = new (std::nothrow) PageViewIndicator();
-    if (node && node->init())
+    PageViewIndicator* node = new PageViewIndicator();
+    if (node->init())
     {
         node->autorelease();
         return node;

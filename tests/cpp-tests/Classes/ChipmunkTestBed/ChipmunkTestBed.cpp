@@ -130,7 +130,7 @@ void ChipmunkDebugDrawFatSegment(cpVect a, cpVect b, cpFloat radius, cpSpaceDebu
 
 void ChipmunkDebugDrawPolygon(int count, const cpVect* verts, cpFloat radius, cpSpaceDebugColor outlineColor, cpSpaceDebugColor fillColor) {
 
-	Vec2* vec = new (std::nothrow) Vec2[count];
+	Vec2* vec = new Vec2[count];
 	for (size_t i = 0; i < count; i++) {
 		vec[i] = cpVert2Point(verts[i]);
 	}

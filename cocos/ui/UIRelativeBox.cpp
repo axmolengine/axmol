@@ -39,8 +39,8 @@ RelativeBox::~RelativeBox()
 
 RelativeBox* RelativeBox::create()
 {
-    RelativeBox* widget = new (std::nothrow) RelativeBox();
-    if (widget && widget->init())
+    RelativeBox* widget = new RelativeBox();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -51,8 +51,8 @@ RelativeBox* RelativeBox::create()
 
 RelativeBox* RelativeBox::create(const Vec2 &size)
 {
-    RelativeBox* widget = new (std::nothrow) RelativeBox();
-    if (widget && widget->initWithSize(size))
+    RelativeBox* widget = new RelativeBox();
+    if (widget->initWithSize(size))
     {
         widget->autorelease();
         return widget;

@@ -577,7 +577,7 @@ void RawStencilBufferTest::initCommands()
     _disableStencilCallback.init(_globalZOrder);
 
     auto program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_UCOLOR);
-    _programState = new (std::nothrow) backend::ProgramState(program);
+    _programState = new backend::ProgramState(program);
     _locColor = _programState->getProgram()->getUniformLocation("u_color");
     _locMVPMatrix = _programState->getProgram()->getUniformLocation("u_MVPMatrix");
     const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);

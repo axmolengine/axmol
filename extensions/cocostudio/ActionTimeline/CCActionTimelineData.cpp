@@ -5,8 +5,8 @@ NS_TIMELINE_BEGIN
 // ActionTimelineData
 ActionTimelineData* ActionTimelineData::create(int actionTag)
 {
-    ActionTimelineData * ret = new (std::nothrow) ActionTimelineData();
-    if (ret && ret->init(actionTag))
+    ActionTimelineData * ret = new ActionTimelineData();
+    if (ret->init(actionTag))
     {
         ret->autorelease();
     }

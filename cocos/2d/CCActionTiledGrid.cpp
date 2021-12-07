@@ -43,9 +43,9 @@ struct Tile
 
 ShakyTiles3D* ShakyTiles3D::create(float duration, const Vec2& gridSize, int range, bool shakeZ)
 {
-    ShakyTiles3D *action = new (std::nothrow) ShakyTiles3D();
+    ShakyTiles3D *action = new ShakyTiles3D();
 
-    if (action && action->initWithDuration(duration, gridSize, range, shakeZ))
+    if (action->initWithDuration(duration, gridSize, range, shakeZ))
     {
         action->autorelease();
         return action;
@@ -114,9 +114,9 @@ void ShakyTiles3D::update(float /*time*/)
 
 ShatteredTiles3D* ShatteredTiles3D::create(float duration, const Vec2& gridSize, int range, bool shatterZ)
 {
-    ShatteredTiles3D *action = new (std::nothrow) ShatteredTiles3D();
+    ShatteredTiles3D *action = new ShatteredTiles3D();
 
-    if (action && action->initWithDuration(duration, gridSize, range, shatterZ))
+    if (action->initWithDuration(duration, gridSize, range, shatterZ))
     {
         action->autorelease();
         return action;
@@ -191,9 +191,9 @@ void ShatteredTiles3D::update(float /*time*/)
 
 ShuffleTiles* ShuffleTiles::create(float duration, const Vec2& gridSize, unsigned int seed)
 {
-    ShuffleTiles *action = new (std::nothrow) ShuffleTiles();
+    ShuffleTiles *action = new ShuffleTiles();
 
-    if (action && action->initWithDuration(duration, gridSize, seed))
+    if (action->initWithDuration(duration, gridSize, seed))
     {
         action->autorelease();
         return action;
@@ -327,9 +327,9 @@ void ShuffleTiles::update(float time)
 
 FadeOutTRTiles* FadeOutTRTiles::create(float duration, const Vec2& gridSize)
 {
-    FadeOutTRTiles *action = new (std::nothrow) FadeOutTRTiles();
+    FadeOutTRTiles *action = new FadeOutTRTiles();
 
-    if (action && action->initWithDuration(duration, gridSize))
+    if (action->initWithDuration(duration, gridSize))
     {
         action->autorelease();
         return action;
@@ -416,9 +416,9 @@ void FadeOutTRTiles::update(float time)
 
 FadeOutBLTiles* FadeOutBLTiles::create(float duration, const Vec2& gridSize)
 {
-    FadeOutBLTiles *action = new (std::nothrow) FadeOutBLTiles();
+    FadeOutBLTiles *action = new FadeOutBLTiles();
 
-    if (action && action->initWithDuration(duration, gridSize))
+    if (action->initWithDuration(duration, gridSize))
     {
         action->autorelease();
         return action;
@@ -449,9 +449,9 @@ float FadeOutBLTiles::testFunc(const Vec2& pos, float time)
 
 FadeOutUpTiles* FadeOutUpTiles::create(float duration, const Vec2& gridSize)
 {
-    FadeOutUpTiles *action = new (std::nothrow) FadeOutUpTiles();
+    FadeOutUpTiles *action = new FadeOutUpTiles();
 
-    if (action && action->initWithDuration(duration, gridSize))
+    if (action->initWithDuration(duration, gridSize))
     {
         action->autorelease();
         return action;
@@ -495,9 +495,9 @@ void FadeOutUpTiles::transformTile(const Vec2& pos, float distance)
 
 FadeOutDownTiles* FadeOutDownTiles::create(float duration, const Vec2& gridSize)
 {
-    FadeOutDownTiles *action = new (std::nothrow) FadeOutDownTiles();
+    FadeOutDownTiles *action = new FadeOutDownTiles();
 
-    if (action && action->initWithDuration(duration, gridSize))
+    if (action->initWithDuration(duration, gridSize))
     {
         action->autorelease();
         return action;
@@ -523,8 +523,8 @@ float FadeOutDownTiles::testFunc(const Vec2& pos, float time)
 
 TurnOffTiles* TurnOffTiles::create(float duration, const Vec2& gridSize)
 {
-    TurnOffTiles* action = new (std::nothrow) TurnOffTiles();
-    if (action && action->initWithDuration(duration, gridSize, 0))
+    TurnOffTiles* action = new TurnOffTiles();
+    if (action->initWithDuration(duration, gridSize, 0))
     {
         action->autorelease();
         return action;
@@ -536,9 +536,9 @@ TurnOffTiles* TurnOffTiles::create(float duration, const Vec2& gridSize)
 
 TurnOffTiles* TurnOffTiles::create(float duration, const Vec2& gridSize, unsigned int seed)
 {
-    TurnOffTiles *action = new (std::nothrow) TurnOffTiles();
+    TurnOffTiles *action = new TurnOffTiles();
 
-    if (action && action->initWithDuration(duration, gridSize, seed))
+    if (action->initWithDuration(duration, gridSize, seed))
     {
         action->autorelease();
         return action;
@@ -643,9 +643,9 @@ void TurnOffTiles::update(float time)
 
 WavesTiles3D* WavesTiles3D::create(float duration, const Vec2& gridSize, unsigned int waves, float amplitude)
 {
-    WavesTiles3D *action = new (std::nothrow) WavesTiles3D();
+    WavesTiles3D *action = new WavesTiles3D();
 
-    if (action && action->initWithDuration(duration, gridSize, waves, amplitude))
+    if (action->initWithDuration(duration, gridSize, waves, amplitude))
     {
         action->autorelease();
         return action;
@@ -699,9 +699,9 @@ void WavesTiles3D::update(float time)
 
 JumpTiles3D* JumpTiles3D::create(float duration, const Vec2& gridSize, unsigned int numberOfJumps, float amplitude)
 {
-    JumpTiles3D *action = new (std::nothrow) JumpTiles3D();
+    JumpTiles3D *action = new JumpTiles3D();
 
-    if (action && action->initWithDuration(duration, gridSize, numberOfJumps, amplitude))
+    if (action->initWithDuration(duration, gridSize, numberOfJumps, amplitude))
     {
         action->autorelease();
         return action;
@@ -767,9 +767,9 @@ void JumpTiles3D::update(float time)
 
 SplitRows* SplitRows::create(float duration, unsigned int nRows)
 {
-    SplitRows *action = new (std::nothrow) SplitRows();
+    SplitRows *action = new SplitRows();
 
-    if (action && action->initWithDuration(duration, nRows))
+    if (action->initWithDuration(duration, nRows))
     {
         action->autorelease();
         return action;
@@ -824,9 +824,9 @@ void SplitRows::update(float time)
 
 SplitCols* SplitCols::create(float duration, unsigned int cols)
 {
-    SplitCols *action = new (std::nothrow) SplitCols();
+    SplitCols *action = new SplitCols();
 
-    if (action && action->initWithDuration(duration, cols))
+    if (action->initWithDuration(duration, cols))
     {
         action->autorelease();
         return action;

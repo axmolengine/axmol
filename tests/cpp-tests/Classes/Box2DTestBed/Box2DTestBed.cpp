@@ -90,7 +90,7 @@ Box2DTestBed::~Box2DTestBed()
 
 Box2DTestBed* Box2DTestBed::createWithEntryID(int entryId)
 {
-	auto layer = new (std::nothrow) Box2DTestBed();
+	auto layer = new Box2DTestBed();
 	layer->initWithEntryID(entryId);
 //	layer->autorelease();
 

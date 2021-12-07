@@ -32,9 +32,9 @@ NS_CC_BEGIN
 
 PageTurn3D* PageTurn3D::create(float duration, const Vec2& gridSize)
 {
-    PageTurn3D *action = new (std::nothrow) PageTurn3D();
+    PageTurn3D *action = new PageTurn3D();
 
-    if (action && action->initWithDuration(duration, gridSize))
+    if (action->initWithDuration(duration, gridSize))
     {
         action->autorelease();
         return action;

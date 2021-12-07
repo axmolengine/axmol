@@ -43,8 +43,8 @@ Copyright (c) 2021 Bytedance Inc.
 #define CREATE_FUNC(__TYPE__) \
 static __TYPE__* create() \
 { \
-    __TYPE__ *pRet = new(std::nothrow) __TYPE__(); \
-    if (pRet && pRet->init()) \
+    __TYPE__ *pRet = new __TYPE__(); \
+    if (pRet->init()) \
     { \
         pRet->autorelease(); \
         return pRet; \
@@ -66,8 +66,8 @@ static __TYPE__* create() \
 #define NODE_FUNC(__TYPE__) \
 CC_DEPRECATED_ATTRIBUTE static __TYPE__* node() \
 { \
-    __TYPE__ *pRet = new(std::nothrow) __TYPE__(); \
-    if (pRet && pRet->init()) \
+    __TYPE__ *pRet = new __TYPE__(); \
+    if (pRet->init()) \
     { \
         pRet->autorelease(); \
         return pRet; \

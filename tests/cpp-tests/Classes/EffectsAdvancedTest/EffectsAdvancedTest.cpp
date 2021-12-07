@@ -173,7 +173,7 @@ public:
     
     static Lens3DTarget* create(Lens3D* pAction)
     {
-        Lens3DTarget* pRet = new (std::nothrow) Lens3DTarget();
+        Lens3DTarget* pRet = new Lens3DTarget();
         pRet->_lens3D = pAction;
         pRet->autorelease();
         return pRet;

@@ -202,7 +202,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynEmissionRate(dynamicAttributeFixed);
                     }
@@ -217,7 +217,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynTotalTimeToLive(dynamicAttributeFixed);
                     }
@@ -232,7 +232,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynParticleMass(dynamicAttributeFixed);
                     }
@@ -343,7 +343,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynVelocity(dynamicAttributeFixed);
                     }
@@ -358,7 +358,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynDuration(dynamicAttributeFixed);
                     }
@@ -373,7 +373,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynRepeatDelay(dynamicAttributeFixed);
                     }
@@ -425,7 +425,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynAngle(dynamicAttributeFixed);
                     }
@@ -440,7 +440,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynParticleAllDimensions(dynamicAttributeFixed);
                     }
@@ -455,7 +455,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynParticleWidth(dynamicAttributeFixed);
                     }
@@ -470,7 +470,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynParticleHeight(dynamicAttributeFixed);
                     }
@@ -485,7 +485,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                     float val = 0.0f;
                     if(getFloat(*prop->values.front(), &val))
                     {
-                        PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                        PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
                         _emitter->setDynParticleDepth(dynamicAttributeFixed);
                     }

@@ -40,8 +40,8 @@ EventListenerAssetsManagerEx::EventListenerAssetsManagerEx()
 
 EventListenerAssetsManagerEx* EventListenerAssetsManagerEx::create(cocos2d::extension::AssetsManagerEx *AssetsManagerEx, const std::function<void(EventAssetsManagerEx*)>& callback)
 {
-    EventListenerAssetsManagerEx* ret = new (std::nothrow) EventListenerAssetsManagerEx();
-    if (ret && ret->init(AssetsManagerEx, callback))
+    EventListenerAssetsManagerEx* ret = new EventListenerAssetsManagerEx();
+    if (ret->init(AssetsManagerEx, callback))
     {
         ret->autorelease();
     }
@@ -74,8 +74,8 @@ bool EventListenerAssetsManagerEx::init(const AssetsManagerEx *AssetsManagerEx, 
 
 EventListenerAssetsManagerEx* EventListenerAssetsManagerEx::clone()
 {
-    EventListenerAssetsManagerEx* ret = new (std::nothrow) EventListenerAssetsManagerEx();
-    if (ret && ret->init(_AssetsManagerEx, _onAssetsManagerExEvent))
+    EventListenerAssetsManagerEx* ret = new EventListenerAssetsManagerEx();
+    if (ret->init(_AssetsManagerEx, _onAssetsManagerExEvent))
     {
         ret->autorelease();
     }

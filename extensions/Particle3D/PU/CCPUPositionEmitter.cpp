@@ -122,7 +122,7 @@ void PUPositionEmitter::initParticlePosition(PUParticle3D* particle)
 
 PUPositionEmitter* PUPositionEmitter::create()
 {
-    auto pe = new (std::nothrow) PUPositionEmitter();
+    auto pe = new PUPositionEmitter();
     pe->autorelease();
     return pe;
 }

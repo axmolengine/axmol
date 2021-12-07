@@ -105,7 +105,7 @@ public:
             }
         }
 
-        const auto object = new (std::nothrow) T();
+        const auto object = new T();
 
         return object;
     }

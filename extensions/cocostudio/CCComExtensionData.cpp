@@ -45,8 +45,8 @@ namespace cocostudio
 
     ComExtensionData* ComExtensionData::create()
     {
-        ComExtensionData * ret = new (std::nothrow) ComExtensionData();
-        if (ret && ret->init())
+        ComExtensionData * ret = new ComExtensionData();
+        if (ret->init())
         {
             ret->autorelease();
         }

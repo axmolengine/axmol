@@ -61,7 +61,7 @@ namespace cocostudio
     {
         if (!instanceLayoutReader)
         {
-            instanceLayoutReader = new (std::nothrow) LayoutReader();
+            instanceLayoutReader = new LayoutReader();
         }
         return instanceLayoutReader;
     }

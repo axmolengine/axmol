@@ -1473,7 +1473,7 @@ void Issue1201::onEnter()
     removeChild(_background, true);
     _background = nullptr;
 
-    RainbowEffect *particle = new (std::nothrow) RainbowEffect();
+    RainbowEffect *particle = new RainbowEffect();
     particle->initWithTotalParticles(50);
 
     addChild(particle);

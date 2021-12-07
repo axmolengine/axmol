@@ -59,7 +59,7 @@ class TestCustomTableView : public TableView
 public:
     static TestCustomTableView* create(TableViewDataSource* dataSource, Size size)
     {
-        auto table = new (std::nothrow) TestCustomTableView();
+        auto table = new TestCustomTableView();
         table->initWithViewSize(size, nullptr);
         table->autorelease();
         table->setDataSource(dataSource);

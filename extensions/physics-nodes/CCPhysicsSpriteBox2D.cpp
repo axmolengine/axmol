@@ -41,8 +41,8 @@ PhysicsSpriteBox2D::PhysicsSpriteBox2D()
 
 PhysicsSpriteBox2D* PhysicsSpriteBox2D::create()
 {
-    PhysicsSpriteBox2D* pRet = new (std::nothrow) PhysicsSpriteBox2D();
-    if (pRet && pRet->init())
+    PhysicsSpriteBox2D* pRet = new PhysicsSpriteBox2D();
+    if (pRet->init())
     {
         pRet->autorelease();
     }
@@ -56,8 +56,8 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::create()
 
 PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithTexture(Texture2D *pTexture)
 {
-    PhysicsSpriteBox2D* pRet = new (std::nothrow) PhysicsSpriteBox2D();
-    if (pRet && pRet->initWithTexture(pTexture))
+    PhysicsSpriteBox2D* pRet = new PhysicsSpriteBox2D();
+    if (pRet->initWithTexture(pTexture))
     {
         pRet->autorelease();
     }
@@ -71,8 +71,8 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithTexture(Texture2D *pTexture)
 
 PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithTexture(Texture2D *pTexture, const Rect& rect)
 {
-    PhysicsSpriteBox2D* pRet = new (std::nothrow) PhysicsSpriteBox2D();
-    if (pRet && pRet->initWithTexture(pTexture, rect))
+    PhysicsSpriteBox2D* pRet = new PhysicsSpriteBox2D();
+    if (pRet->initWithTexture(pTexture, rect))
     {
         pRet->autorelease();
     }
@@ -86,8 +86,8 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithTexture(Texture2D *pTexture, c
 
 PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
 {
-    PhysicsSpriteBox2D* pRet = new (std::nothrow) PhysicsSpriteBox2D();
-    if (pRet && pRet->initWithSpriteFrame(pSpriteFrame))
+    PhysicsSpriteBox2D* pRet = new PhysicsSpriteBox2D();
+    if (pRet->initWithSpriteFrame(pSpriteFrame))
     {
         pRet->autorelease();
     }
@@ -101,8 +101,8 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithSpriteFrame(SpriteFrame *pSpri
 
 PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithSpriteFrameName(const char *pszSpriteFrameName)
 {
-    PhysicsSpriteBox2D* pRet = new (std::nothrow) PhysicsSpriteBox2D();
-    if (pRet && pRet->initWithSpriteFrameName(pszSpriteFrameName))
+    PhysicsSpriteBox2D* pRet = new PhysicsSpriteBox2D();
+    if (pRet->initWithSpriteFrameName(pszSpriteFrameName))
     {
         pRet->autorelease();
     }
@@ -116,8 +116,8 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithSpriteFrameName(const char *ps
 
 PhysicsSpriteBox2D* PhysicsSpriteBox2D::create(const char *pszFileName)
 {
-    PhysicsSpriteBox2D* pRet = new (std::nothrow) PhysicsSpriteBox2D();
-    if (pRet && pRet->initWithFile(pszFileName))
+    PhysicsSpriteBox2D* pRet = new PhysicsSpriteBox2D();
+    if (pRet->initWithFile(pszFileName))
     {
         pRet->autorelease();
     }
@@ -131,8 +131,8 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::create(const char *pszFileName)
 
 PhysicsSpriteBox2D* PhysicsSpriteBox2D::create(const char *pszFileName, const Rect& rect)
 {
-    PhysicsSpriteBox2D* pRet = new (std::nothrow) PhysicsSpriteBox2D();
-    if (pRet && pRet->initWithFile(pszFileName, rect))
+    PhysicsSpriteBox2D* pRet = new PhysicsSpriteBox2D();
+    if (pRet->initWithFile(pszFileName, rect))
     {
         pRet->autorelease();
     }

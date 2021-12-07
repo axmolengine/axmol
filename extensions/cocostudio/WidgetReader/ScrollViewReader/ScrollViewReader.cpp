@@ -40,7 +40,7 @@ namespace cocostudio
     {
         if (!instanceScrollViewReader)
         {
-            instanceScrollViewReader = new (std::nothrow) ScrollViewReader();
+            instanceScrollViewReader = new ScrollViewReader();
         }
         return instanceScrollViewReader;
     }

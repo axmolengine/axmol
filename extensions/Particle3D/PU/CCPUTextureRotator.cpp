@@ -40,9 +40,9 @@ PUTextureRotator::PUTextureRotator() :
     _scaledRotationSpeed(0.0f),
     _twoPiRad(float(2.0 * M_PI))
 {
-    _dynRotation = new (std::nothrow) PUDynamicAttributeFixed();
+    _dynRotation = new PUDynamicAttributeFixed();
     (static_cast<PUDynamicAttributeFixed*>(_dynRotation))->setValue(DEFAULT_ROTATION);
-    _dynRotationSpeed = new (std::nothrow) PUDynamicAttributeFixed();
+    _dynRotationSpeed = new PUDynamicAttributeFixed();
     (static_cast<PUDynamicAttributeFixed*>(_dynRotationSpeed))->setValue(DEFAULT_ROTATION_SPEED);
 }
 //-----------------------------------------------------------------------
@@ -158,7 +158,7 @@ void PUTextureRotator::updatePUAffector( PUParticle3D *particle, float deltaTime
 
 PUTextureRotator* PUTextureRotator::create()
 {
-    auto ptr = new (std::nothrow) PUTextureRotator();
+    auto ptr = new PUTextureRotator();
     ptr->autorelease();
     return ptr;
 }

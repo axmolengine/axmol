@@ -686,7 +686,7 @@ void UIPackage::loadImage(PackageItem* item)
         item->spriteFrame = createSpriteTexture(sprite);
     else
     {
-        item->spriteFrame = new (std::nothrow) SpriteFrame();
+        item->spriteFrame = new SpriteFrame();
         item->spriteFrame->initWithTexture(_emptyTexture, Rect());
     }
     if (item->scaleByTile)
@@ -747,7 +747,7 @@ void UIPackage::loadMovieClip(PackageItem* item)
         else
         {
             //dont use createWithTexture
-            spriteFrame = new (std::nothrow) SpriteFrame();
+            spriteFrame = new SpriteFrame();
             spriteFrame->initWithTexture(_emptyTexture, Rect());
         }
 

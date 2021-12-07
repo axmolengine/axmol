@@ -91,7 +91,7 @@ ObjectFactory* ObjectFactory::getInstance()
 {
     if ( nullptr == _sharedFactory)
     {
-        _sharedFactory = new (std::nothrow) ObjectFactory();
+        _sharedFactory = new ObjectFactory();
     }
     return _sharedFactory;
 }

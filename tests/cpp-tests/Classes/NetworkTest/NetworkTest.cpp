@@ -28,6 +28,6 @@
 #include "DownloaderTest/DownloaderTest.h"
 
 NetworkTests::NetworkTests() {
-    addTest("HttpClientTest", []() { return new (std::nothrow) HttpClientTests; });
-    addTest("DownloaderTest", []() { return new (std::nothrow) DownloaderTests; });
+    addTest("HttpClientTest", []() { return new HttpClientTests; });
+    addTest("DownloaderTest", []() { return new DownloaderTests; });
 }

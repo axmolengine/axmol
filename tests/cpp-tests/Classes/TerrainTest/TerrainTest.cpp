@@ -327,8 +327,8 @@ void Player::updateState()
 Player * Player::create(const char * file,Camera * cam,Terrain * terrain)
 {
     //
-    auto sprite = new (std::nothrow) Player();
-    if (sprite && sprite->initWithFile(file))
+    auto sprite = new Player();
+    if (sprite->initWithFile(file))
     {
         sprite->_headingAngle = 0;
         sprite->_playerState = PLAYER_STATE_IDLE;

@@ -17,8 +17,8 @@ int GRoot::contentScaleLevel = 0;
 
 GRoot* GRoot::create(Scene* scene, int zOrder)
 {
-    GRoot* pRet = new (std::nothrow) GRoot();
-    if (pRet && pRet->initWithScene(scene, zOrder))
+    GRoot* pRet = new GRoot();
+    if (pRet->initWithScene(scene, zOrder))
     {
         pRet->autorelease();
         return pRet;

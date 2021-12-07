@@ -46,8 +46,8 @@ NS_CC_BEGIN;
 
 PointArray* PointArray::create(ssize_t capacity)
 {
-    PointArray* pointArray = new (std::nothrow) PointArray();
-    if (pointArray && pointArray->initWithCapacity(capacity))
+    PointArray* pointArray = new PointArray();
+    if (pointArray->initWithCapacity(capacity))
     {
         pointArray->autorelease();
         return pointArray;
@@ -68,7 +68,7 @@ PointArray* PointArray::clone() const
 {
     vector<Vec2> newArray = _controlPoints;
     
-    PointArray *points = new (std::nothrow) PointArray();
+    PointArray *points = new PointArray();
     points->initWithCapacity(10);
     points->setControlPoints(std::move(newArray));
 
@@ -188,17 +188,14 @@ Vec2 ccCardinalSplineAt(const Vec2 &p0, const Vec2 &p1, const Vec2 &p2, const Ve
 
 CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray *points, float tension)
 {
-    CardinalSplineTo *ret = new (std::nothrow) CardinalSplineTo();
-    if (ret)
+    CardinalSplineTo *ret = new CardinalSplineTo();
+    if (ret->initWithDuration(duration, points, tension))
     {
-        if (ret->initWithDuration(duration, points, tension))
-        {
-            ret->autorelease();
-        }
-        else 
-        {
-            CC_SAFE_RELEASE_NULL(ret);
-        }
+        ret->autorelease();
+    }
+    else 
+    {
+        CC_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -247,7 +244,7 @@ void CardinalSplineTo::startWithTarget(Node *target)
 CardinalSplineTo* CardinalSplineTo::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CardinalSplineTo();
+    auto a = new CardinalSplineTo();
     a->initWithDuration(this->_duration, this->_points->clone(), this->_tension);
     a->autorelease();
     return a;
@@ -313,17 +310,14 @@ CardinalSplineTo* CardinalSplineTo::reverse() const
 
 CardinalSplineBy* CardinalSplineBy::create(float duration, PointArray *points, float tension)
 {
-    CardinalSplineBy *ret = new (std::nothrow) CardinalSplineBy();
-    if (ret)
+    CardinalSplineBy *ret = new CardinalSplineBy();
+    if (ret->initWithDuration(duration, points, tension))
     {
-        if (ret->initWithDuration(duration, points, tension))
-        {
-            ret->autorelease();
-        }
-        else 
-        {
-            CC_SAFE_RELEASE_NULL(ret);
-        }
+        ret->autorelease();
+    }
+    else 
+    {
+        CC_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -391,7 +385,7 @@ void CardinalSplineBy::startWithTarget(Node *target)
 CardinalSplineBy* CardinalSplineBy::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CardinalSplineBy();
+    auto a = new CardinalSplineBy();
     a->initWithDuration(this->_duration, this->_points->clone(), this->_tension);
     a->autorelease();
     return a;
@@ -402,17 +396,14 @@ CardinalSplineBy* CardinalSplineBy::clone() const
 
 CatmullRomTo* CatmullRomTo::create(float dt, PointArray *points)
 {
-    CatmullRomTo *ret = new (std::nothrow) CatmullRomTo();
-    if (ret)
+    CatmullRomTo *ret = new CatmullRomTo();
+    if (ret->initWithDuration(dt, points))
     {
-        if (ret->initWithDuration(dt, points))
-        {
-            ret->autorelease();
-        }
-        else 
-        {
-            CC_SAFE_RELEASE_NULL(ret);
-        }
+        ret->autorelease();
+    }
+    else 
+    {
+        CC_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -431,7 +422,7 @@ bool CatmullRomTo::initWithDuration(float dt, PointArray *points)
 CatmullRomTo* CatmullRomTo::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CatmullRomTo();
+    auto a = new CatmullRomTo();
     a->initWithDuration(this->_duration, this->_points->clone());
     a->autorelease();
     return a;
@@ -449,19 +440,15 @@ CatmullRomTo* CatmullRomTo::reverse() const
 
 CatmullRomBy* CatmullRomBy::create(float dt, PointArray *points)
 {
-    CatmullRomBy *ret = new (std::nothrow) CatmullRomBy();
-    if (ret)
+    CatmullRomBy *ret = new CatmullRomBy();
+    if (ret->initWithDuration(dt, points))
     {
-        if (ret->initWithDuration(dt, points))
-        {
-            ret->autorelease();
-        }
-        else 
-        {
-            CC_SAFE_RELEASE_NULL(ret);
-        }
+        ret->autorelease();
     }
-
+    else 
+    {
+        CC_SAFE_DELETE(ret);
+    }
     return ret;
 }
 
@@ -478,7 +465,7 @@ bool CatmullRomBy::initWithDuration(float dt, PointArray *points)
 CatmullRomBy* CatmullRomBy::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CatmullRomBy();
+    auto a = new CatmullRomBy();
     a->initWithDuration(this->_duration, this->_points->clone());
     a->autorelease();
     return a;

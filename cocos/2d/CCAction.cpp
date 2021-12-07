@@ -96,8 +96,8 @@ Speed::~Speed()
 
 Speed* Speed::create(ActionInterval* action, float speed)
 {
-    Speed *ret = new (std::nothrow) Speed();
-    if (ret && ret->initWithAction(action, speed))
+    Speed *ret = new  Speed();
+    if (ret->initWithAction(action, speed))
     {
         ret->autorelease();
         return ret;
@@ -193,14 +193,11 @@ Follow* Follow::create(Node *followedNode, const Rect& rect/* = Rect::ZERO*/)
 Follow* Follow::createWithOffset(Node* followedNode,float xOffset,float yOffset,const Rect& rect/*= Rect::ZERO*/){
     
     
-    Follow *follow = new (std::nothrow) Follow();
+    Follow *follow = new Follow();
     
-    bool valid;
-    
-    if(follow)
-        valid = follow->initWithTargetAndOffset(followedNode, xOffset, yOffset,rect);
+    bool valid = follow->initWithTargetAndOffset(followedNode, xOffset, yOffset,rect);
 
-    if (follow && valid)
+    if (valid)
     {
         follow->autorelease();
         return follow;

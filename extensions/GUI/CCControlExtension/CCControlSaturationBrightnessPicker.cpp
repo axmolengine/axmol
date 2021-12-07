@@ -81,7 +81,7 @@ bool ControlSaturationBrightnessPicker::initWithTargetAndPos(Node* target, Vec2 
 
 ControlSaturationBrightnessPicker* ControlSaturationBrightnessPicker::create(Node* target, Vec2 pos)
 {
-    ControlSaturationBrightnessPicker *pRet = new (std::nothrow) ControlSaturationBrightnessPicker();
+    ControlSaturationBrightnessPicker *pRet = new ControlSaturationBrightnessPicker();
     pRet->initWithTargetAndPos(target, pos);
     pRet->autorelease();
     return pRet;

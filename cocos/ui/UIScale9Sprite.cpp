@@ -43,8 +43,8 @@ using namespace cocos2d::ui;
 
 Scale9Sprite* Scale9Sprite::create()
 {
-    Scale9Sprite *ret = new (std::nothrow) Scale9Sprite();
-    if (ret && ret->init())
+    Scale9Sprite *ret = new Scale9Sprite();
+    if (ret->init())
     {
         ret->autorelease();
         return ret;
@@ -55,8 +55,8 @@ Scale9Sprite* Scale9Sprite::create()
 
 Scale9Sprite* Scale9Sprite::create(const std::string& filename, const Rect& rect, const Rect& capInsets)
 {
-    Scale9Sprite* ret = new (std::nothrow) Scale9Sprite();
-    if (ret && ret->initWithFile(filename, rect, capInsets))
+    Scale9Sprite* ret = new Scale9Sprite();
+    if (ret->initWithFile(filename, rect, capInsets))
     {
         ret->autorelease();
         return ret;
@@ -72,8 +72,8 @@ Scale9Sprite* Scale9Sprite::create(const std::string& filename, const Rect& rect
 
 Scale9Sprite* Scale9Sprite::create(const Rect& capInsets, const std::string& file)
 {
-    Scale9Sprite* ret = new (std::nothrow) Scale9Sprite();
-    if (ret && ret->initWithFile(capInsets, file))
+    Scale9Sprite* ret = new Scale9Sprite();
+    if (ret->initWithFile(capInsets, file))
     {
         ret->autorelease();
         return ret;
@@ -89,8 +89,8 @@ Scale9Sprite* Scale9Sprite::create(const std::string& fileaname)
 
 Scale9Sprite* Scale9Sprite::createWithSpriteFrame(SpriteFrame* spriteFrame, const Rect& capInsets)
 {
-    Scale9Sprite* ret = new (std::nothrow) Scale9Sprite();
-    if (ret && ret->initWithSpriteFrame(spriteFrame, capInsets))
+    Scale9Sprite* ret = new Scale9Sprite();
+    if (ret->initWithSpriteFrame(spriteFrame, capInsets))
     {
         ret->autorelease();
         return ret;
@@ -106,8 +106,8 @@ Scale9Sprite* Scale9Sprite::createWithSpriteFrame(SpriteFrame* spriteFrame)
 
 Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(const std::string& spriteFrameName, const Rect& capInsets)
 {
-    Scale9Sprite* ret = new (std::nothrow) Scale9Sprite();
-    if (ret && ret->initWithSpriteFrameName(spriteFrameName, capInsets))
+    Scale9Sprite* ret = new Scale9Sprite();
+    if (ret->initWithSpriteFrameName(spriteFrameName, capInsets))
     {
         ret->autorelease();
         return ret;
@@ -118,8 +118,8 @@ Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(const std::string& spriteF
 
 Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(const std::string& spriteFrameName)
 {
-    Scale9Sprite* ret = new (std::nothrow) Scale9Sprite();
-    if (ret && ret->initWithSpriteFrameName(spriteFrameName, Rect::ZERO))
+    Scale9Sprite* ret = new Scale9Sprite();
+    if (ret->initWithSpriteFrameName(spriteFrameName, Rect::ZERO))
     {
         ret->autorelease();
         return ret;
@@ -282,8 +282,8 @@ bool Scale9Sprite::updateWithSprite(Sprite* sprite,
 Scale9Sprite* Scale9Sprite::resizableSpriteWithCapInsets(const Rect& capInsets) const
 {
     // FIXME: there are no test cases for this method
-    Scale9Sprite* ret = new (std::nothrow) Scale9Sprite();
-    if (ret && ret->init(const_cast<Scale9Sprite*>(this),
+    Scale9Sprite* ret = new Scale9Sprite();
+    if (ret->init(const_cast<Scale9Sprite*>(this),
                          _rect,
                          _rectRotated,
                          Vec2::ZERO,

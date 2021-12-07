@@ -112,10 +112,7 @@ static int lua_cocos2dx_AssetsManager_setDelegate(lua_State* L)
         LuaAssetsManagerDelegateProtocol* delegate = dynamic_cast<LuaAssetsManagerDelegateProtocol*>( self->getDelegate());
         if (nullptr == delegate)
         {
-            delegate = new (std::nothrow) LuaAssetsManagerDelegateProtocol();
-            if (nullptr == delegate)
-                return 0;
-            
+            delegate = new LuaAssetsManagerDelegateProtocol();
             self->setUserObject(delegate);
             self->setDelegate(delegate);
             delegate->release();

@@ -39,8 +39,8 @@ HBox::~HBox()
     
 HBox* HBox::create()
 {
-    HBox* widget = new (std::nothrow) HBox();
-    if (widget && widget->init())
+    HBox* widget = new HBox();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -51,8 +51,8 @@ HBox* HBox::create()
     
 HBox* HBox::create(const Vec2 &size)
 {
-    HBox* widget = new (std::nothrow) HBox();
-    if (widget && widget->initWithSize(size))
+    HBox* widget = new HBox();
+    if (widget->initWithSize(size))
     {
         widget->autorelease();
         return widget;

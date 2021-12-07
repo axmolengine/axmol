@@ -39,8 +39,8 @@ bool Bug458Layer::init()
         // ask director the the window size
         auto size = Director::getInstance()->getWinSize();
 
-        auto question = new (std::nothrow) QuestionContainerSprite();
-        auto question2 = new (std::nothrow) QuestionContainerSprite();
+        auto question = new QuestionContainerSprite();
+        auto question2 = new QuestionContainerSprite();
         question->init();
         question2->init();
 

@@ -42,7 +42,7 @@ PUPointEmitter::~PUPointEmitter( void )
 
 PUPointEmitter* PUPointEmitter::create()
 {
-    auto pe = new (std::nothrow) PUPointEmitter();
+    auto pe = new PUPointEmitter();
     pe->autorelease();
     return pe;
 }

@@ -228,7 +228,7 @@ void PULineEmitter::initParticleDirection(PUParticle3D* particle)
 
 PULineEmitter* PULineEmitter::create()
 {
-    auto pe = new (std::nothrow) PULineEmitter();
+    auto pe = new PULineEmitter();
     pe->autorelease();
     return pe;
 }

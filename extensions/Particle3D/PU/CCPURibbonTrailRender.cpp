@@ -50,7 +50,7 @@ const Vec4 PURibbonTrailRender::DEFAULT_COLOUR_CHANGE(0.5, 0.5, 0.5, 0.5);
 
 PURibbonTrailRender* PURibbonTrailRender::create( const std::string &texFile )
 {
-    auto br = new (std::nothrow) PURibbonTrailRender();
+    auto br = new PURibbonTrailRender();
     br->autorelease();
     br->_texFile = texFile;
     return br;
@@ -238,7 +238,7 @@ void PURibbonTrailRender::prepare()
     {
         // Create RibbonTrail
         //Ogre::SceneManager* sceneManager = mParentTechnique->getParentSystem()->getSceneManager();
-        _trail = new (std::nothrow) PURibbonTrail(_ribbonTrailName, _texFile);
+        _trail = new PURibbonTrail(_ribbonTrailName, _texFile);
         _trail->setNumberOfChains(_quota);
         _trail->setMaxChainElements(_maxChainElements);
         if (_setLength)
@@ -263,7 +263,7 @@ void PURibbonTrailRender::prepare()
             //visualData->node->setInheritOrientation(false);
             auto node = Node::create();
             _childNode->addChild(node);
-            PURibbonTrailVisualData* visualData = new (std::nothrow) PURibbonTrailVisualData(node, _trail);
+            PURibbonTrailVisualData* visualData = new PURibbonTrailVisualData(node, _trail);
             visualData->index = i;
             _allVisualData.push_back(visualData); // Managed by this renderer
             _visualData.push_back(visualData); // Used to assign to a particle

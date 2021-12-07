@@ -98,7 +98,7 @@ void PUCollisionAvoidanceAffector::updatePUAffector( PUParticle3D* /*particle*/,
 
 PUCollisionAvoidanceAffector* PUCollisionAvoidanceAffector::create()
 {
-    auto pcaa = new (std::nothrow) PUCollisionAvoidanceAffector();
+    auto pcaa = new PUCollisionAvoidanceAffector();
     pcaa->autorelease();
     return pcaa;
 }

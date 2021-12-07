@@ -69,9 +69,9 @@ bool Component::serialize(void* /*ar*/)
 
 Component* Component::create()
 {
-    Component * ret = new (std::nothrow) Component();
+    Component * ret = new Component();
 
-    if (ret && ret->init())
+    if (ret->init())
     {
         ret->autorelease();
     }

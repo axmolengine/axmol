@@ -966,11 +966,11 @@ class MySprite : public Sprite
 public:
     static MySprite* create(const std::string &spritefilename)
     {
-        auto sprite = new (std::nothrow) MySprite;
+        auto sprite = new MySprite;
         sprite->initWithFile(spritefilename);
         sprite->autorelease();
         auto program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-        auto programState = new (std::nothrow) backend::ProgramState(program);
+        auto programState = new backend::ProgramState(program);
         sprite->setProgramState(programState, false);
         return sprite;
     }

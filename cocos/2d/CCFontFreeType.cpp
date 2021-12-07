@@ -101,10 +101,7 @@ FontFreeType* FontFreeType::create(std::string_view fontName,
                                    bool distanceFieldEnabled /* = false */,
                                    float outline /* = 0 */)
 {
-    FontFreeType* tempFont = new (std::nothrow) FontFreeType(distanceFieldEnabled, outline);
-
-    if (!tempFont)
-        return nullptr;
+    FontFreeType* tempFont = new FontFreeType(distanceFieldEnabled, outline);
 
     tempFont->setGlyphCollection(glyphs, customGlyphs);
 
@@ -315,8 +312,8 @@ FontFreeType::~FontFreeType()
 
 FontAtlas* FontFreeType::newFontAtlas()
 {
-    auto fontAtlas = new (std::nothrow) FontAtlas(this);
-    if (fontAtlas && _usedGlyphs != GlyphCollection::DYNAMIC)
+    auto fontAtlas = new FontAtlas(this);
+    if (_usedGlyphs != GlyphCollection::DYNAMIC)
     {
         std::u32string utf32;
         if (StringUtils::UTF8ToUTF32(getGlyphCollection(), utf32))
@@ -337,9 +334,7 @@ int* FontFreeType::getHorizontalKerningForTextUTF32(const std::u32string& text, 
     if (!outNumLetters)
         return nullptr;
 
-    int* sizes = new (std::nothrow) int[outNumLetters];
-    if (!sizes)
-        return nullptr;
+    int* sizes = new int[outNumLetters];
     memset(sizes, 0, outNumLetters * sizeof(int));
 
     bool hasKerning = FT_HAS_KERNING(_fontFace) != 0;
@@ -441,7 +436,7 @@ unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
 
         if (_outlineSize > 0 && outWidth > 0 && outHeight > 0)
         {
-            auto copyBitmap = new (std::nothrow) unsigned char[outWidth * outHeight];
+            auto copyBitmap = new unsigned char[outWidth * outHeight];
             memcpy(copyBitmap, ret, outWidth * outHeight * sizeof(unsigned char));
 
             FT_BBox bbox;
@@ -478,7 +473,7 @@ unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
             {
                 FT_Pos index, index2;
                 auto imageSize = blendWidth * blendHeight * 2;
-                blendImage     = new (std::nothrow) unsigned char[imageSize];
+                blendImage     = new unsigned char[imageSize];
                 memset(blendImage, 0, imageSize);
 
                 auto px = outlineMinX - blendImageMinX;
@@ -545,7 +540,7 @@ unsigned char* FontFreeType::getGlyphBitmapWithOutline(unsigned int glyphIndex, 
                     int32_t rows  = (bbox.yMax - bbox.yMin) >> 6;
 
                     FT_Bitmap bmp;
-                    bmp.buffer = new (std::nothrow) unsigned char[width * rows];
+                    bmp.buffer = new unsigned char[width * rows];
                     memset(bmp.buffer, 0, width * rows);
                     bmp.width      = (int)width;
                     bmp.rows       = (int)rows;

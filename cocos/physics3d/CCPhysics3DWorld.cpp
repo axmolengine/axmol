@@ -65,7 +65,7 @@ Physics3DWorld::~Physics3DWorld()
 
 Physics3DWorld* Physics3DWorld::create(Physics3DWorldDes* info)
 {
-    auto world = new (std::nothrow) Physics3DWorld();
+    auto world = new Physics3DWorld();
     world->init(info);
     world->autorelease();
     return world;
@@ -84,13 +84,13 @@ Vec3 Physics3DWorld::getGravity() const
 bool Physics3DWorld::init(Physics3DWorldDes* info)
 {
     ///collision configuration contains default setup for memory, collision setup
-    _collisionConfiguration = new (std::nothrow) btDefaultCollisionConfiguration();
+    _collisionConfiguration = new btDefaultCollisionConfiguration();
     //_collisionConfiguration->setConvexConvexMultipointIterations();
     
     ///use the default collision dispatcher. For parallel processing you can use a different dispatcher (see Extras/BulletMultiThreaded)
-    _dispatcher = new (std::nothrow) btCollisionDispatcher(_collisionConfiguration);
+    _dispatcher = new btCollisionDispatcher(_collisionConfiguration);
     
-    _broadphase = new (std::nothrow) btDbvtBroadphase();
+    _broadphase = new btDbvtBroadphase();
     
     ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
     btSequentialImpulseConstraintSolver* sol = new btSequentialImpulseConstraintSolver();
@@ -103,7 +103,7 @@ bool Physics3DWorld::init(Physics3DWorldDes* info)
     _btPhyiscsWorld->setGravity(convertVec3TobtVector3(info->gravity));
     if (info->isDebugDrawEnabled)
     {
-        _debugDrawer = new (std::nothrow) Physics3DDebugDrawer();
+        _debugDrawer = new Physics3DDebugDrawer();
         _btPhyiscsWorld->setDebugDrawer(_debugDrawer);
     }
     
@@ -114,7 +114,7 @@ void Physics3DWorld::setDebugDrawEnable(bool enableDebugDraw)
 {
     if (enableDebugDraw && _btPhyiscsWorld->getDebugDrawer() == nullptr)
     {
-        _debugDrawer = new (std::nothrow) Physics3DDebugDrawer();
+        _debugDrawer = new Physics3DDebugDrawer();
     }
     enableDebugDraw ? _btPhyiscsWorld->setDebugDrawer(_debugDrawer) : _btPhyiscsWorld->setDebugDrawer(nullptr);
 }

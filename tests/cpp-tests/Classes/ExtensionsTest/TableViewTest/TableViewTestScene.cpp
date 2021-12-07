@@ -87,7 +87,7 @@ TableViewCell* TableViewTest::tableCellAtIndex(TableView *table, ssize_t idx)
     auto string = StringUtils::format("%d", static_cast<int32_t>(idx));
     TableViewCell *cell = table->dequeueCell();
     if (!cell) {
-        cell = new (std::nothrow) CustomTableViewCell();
+        cell = new CustomTableViewCell();
         cell->autorelease();
         auto sprite = Sprite::create("Images/Icon.png");
         sprite->setAnchorPoint(Vec2::ZERO);

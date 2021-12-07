@@ -38,7 +38,7 @@ PUVortexAffector::PUVortexAffector() :
     PUAffector(),
     _rotationVector(DEFAULT_ROTATION_VECTOR)
 {
-    _dynRotationSpeed = new (std::nothrow) PUDynamicAttributeFixed();
+    _dynRotationSpeed = new PUDynamicAttributeFixed();
     (static_cast<PUDynamicAttributeFixed*>(_dynRotationSpeed))->setValue(DEFAULT_ROTATION_SPEED);
 }
 //-----------------------------------------------------------------------
@@ -119,7 +119,7 @@ void PUVortexAffector::preUpdateAffector( float deltaTime )
 
 PUVortexAffector* PUVortexAffector::create()
 {
-    auto pvf = new (std::nothrow) PUVortexAffector();
+    auto pvf = new PUVortexAffector();
     pvf->autorelease();
     return pvf;
 }

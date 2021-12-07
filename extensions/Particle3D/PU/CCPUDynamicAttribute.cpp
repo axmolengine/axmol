@@ -85,7 +85,7 @@ void PUDynamicAttributeFixed::copyAttributesTo( PUDynamicAttribute* dynamicAttri
 
 PUDynamicAttributeFixed* PUDynamicAttributeFixed::clone()
 {
-    auto af = new (std::nothrow) PUDynamicAttributeFixed();
+    auto af = new PUDynamicAttributeFixed();
     this->copyAttributesTo(af);
     return af;
 }
@@ -150,7 +150,7 @@ void PUDynamicAttributeRandom::copyAttributesTo( PUDynamicAttribute* dynamicAttr
 
 PUDynamicAttributeRandom* PUDynamicAttributeRandom::clone()
 {
-    auto ar = new (std::nothrow) PUDynamicAttributeRandom();
+    auto ar = new PUDynamicAttributeRandom();
     this->copyAttributesTo(ar);
     return ar;
 }
@@ -334,7 +334,7 @@ void PUDynamicAttributeCurved::copyAttributesTo( PUDynamicAttribute* dynamicAttr
 
 PUDynamicAttributeCurved* PUDynamicAttributeCurved::clone()
 {
-    auto ac = new (std::nothrow) PUDynamicAttributeCurved();
+    auto ac = new PUDynamicAttributeCurved();
     this->copyAttributesTo(ac);
     return ac;
 }
@@ -446,7 +446,7 @@ void PUDynamicAttributeOscillate::copyAttributesTo( PUDynamicAttribute* dynamicA
 
 PUDynamicAttributeOscillate* PUDynamicAttributeOscillate::clone()
 {
-    auto ao = new (std::nothrow) PUDynamicAttributeOscillate();
+    auto ao = new PUDynamicAttributeOscillate();
     this->copyAttributesTo(ao);
     return ao;
 }

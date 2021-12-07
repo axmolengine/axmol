@@ -112,18 +112,11 @@ static int tolua_Cocos2d_LuaNode_create00(lua_State* tolua_S)
     else
 #endif
     {
-        LuaNode* luaNode = new (std::nothrow) LuaNode();
-        if (NULL != luaNode)
-        {
-            luaNode->autorelease();
-            int nID = (int)luaNode->_ID;
-            int* pLuaID = &luaNode->_luaID;
-            toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)luaNode, "cc.LuaNode");
-        }
-        else
-        {
-            return 0;
-        }
+        LuaNode* luaNode = new LuaNode();
+        luaNode->autorelease();
+        int nID = (int)luaNode->_ID;
+        int* pLuaID = &luaNode->_luaID;
+        toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)luaNode, "cc.LuaNode");
     }
     return 1;
 #ifndef TOLUA_RELEASE
@@ -1767,7 +1760,7 @@ static int tolua_cocos2d_CallFunc_create(lua_State* tolua_S)
             ref = luaL_ref(tolua_S, LUA_REGISTRYINDEX);
             hasExtraData = true;
         }
-        LuaCallFunc* tolua_ret = new (std::nothrow) LuaCallFunc();
+        LuaCallFunc* tolua_ret = new LuaCallFunc();
         tolua_ret->initWithFunction([=](void* self,Node* target){
             int callbackHandler =  ScriptHandlerMgr::getInstance()->getObjectHandler((void*)tolua_ret, ScriptHandlerMgr::HandlerType::CALLFUNC);
 
@@ -2899,10 +2892,7 @@ static int tolua_cocos2dx_DrawNode_drawPolygon(lua_State* tolua_S)
         int size = lua_tointeger(tolua_S, 3);
         if ( size > 0 )
         {
-            cocos2d::Vec2* points = new (std::nothrow) cocos2d::Vec2[size];
-            if (NULL == points)
-                return 0;
-
+            cocos2d::Vec2* points = new cocos2d::Vec2[size];
             for (int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S,i + 1);
@@ -2985,10 +2975,7 @@ int tolua_cocos2dx_DrawNode_drawSolidPoly(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "cc.DrawNode:drawSolidPoly");
         if ( size > 0 )
         {
-            cocos2d::Vec2* points = new (std::nothrow) cocos2d::Vec2[size];
-            if (NULL == points)
-                return 0;
-
+            cocos2d::Vec2* points = new cocos2d::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S,i + 1);
@@ -3064,10 +3051,7 @@ int tolua_cocos2dx_DrawNode_drawPoly(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "cc.DrawNode:drawPoly");
         if ( size > 0 )
         {
-            cocos2d::Vec2* points = new (std::nothrow) cocos2d::Vec2[size];
-            if (NULL == points)
-                return 0;
-
+            cocos2d::Vec2* points = new cocos2d::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S,i + 1);
@@ -3272,10 +3256,7 @@ int tolua_cocos2dx_DrawNode_drawPoints(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "cc.DrawNode:drawPoints");
         if ( size > 0 )
         {
-            cocos2d::Vec2* points = new (std::nothrow) cocos2d::Vec2[size];
-            if (NULL == points)
-                return 0;
-
+            cocos2d::Vec2* points = new cocos2d::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S,i + 1);
@@ -3312,10 +3293,7 @@ int tolua_cocos2dx_DrawNode_drawPoints(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "cc.DrawNode:drawPoints");
         if ( size > 0 )
         {
-            cocos2d::Vec2* points = new (std::nothrow) cocos2d::Vec2[size];
-            if (nullptr == points)
-                return 0;
-
+            cocos2d::Vec2* points = new cocos2d::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S,i + 1);
@@ -4383,10 +4361,7 @@ static void extendSpriteBatchNode(lua_State* tolua_S)
 NS_CC_BEGIN
 EventListenerAcceleration* LuaEventListenerAcceleration::create()
 {
-    EventListenerAcceleration* eventAcceleration = new (std::nothrow) EventListenerAcceleration();
-    if (nullptr == eventAcceleration)
-        return nullptr;
-
+    EventListenerAcceleration* eventAcceleration = new EventListenerAcceleration();
     if ( eventAcceleration->init([=](Acceleration* acc, Event* event){
         LuaEventAccelerationData listenerData((void*)acc,event);
         BasicScriptData data(eventAcceleration,(void*)&listenerData);
@@ -4404,10 +4379,7 @@ EventListenerAcceleration* LuaEventListenerAcceleration::create()
 
 EventListenerCustom* LuaEventListenerCustom::create(const std::string& eventName)
 {
-    EventListenerCustom* eventCustom = new (std::nothrow) EventListenerCustom();
-    if (nullptr == eventCustom)
-        return nullptr;
-
+    EventListenerCustom* eventCustom = new EventListenerCustom();
     if ( eventCustom->init(eventName, [=](EventCustom* event){
         BasicScriptData data((void*)eventCustom,(void*)event);
         LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::EVENT_CUSTIOM, (void*)&data );
@@ -6110,14 +6082,7 @@ int lua_cocos2dx_TMXLayer_setTiles(lua_State* tolua_S)
             luaL_error(tolua_S, "Table's len equal 0");
             return 0;
         }
-        arg0 = new (std::nothrow) uint32_t[len];
-
-        if (nullptr == arg0)
-        {
-            luaL_error(tolua_S, "Allocate uint32_t array in the lua_cocos2dx_TMXLayer_setTiles failed!");
-            return 0;
-        }
-
+        arg0 = new uint32_t[len];
         for (size_t i = 1 ; i <= len; i++)
         {
             arg0[i - 1] = (uint32_t)tolua_tofieldnumber(tolua_S, 2, i, 0);
@@ -7032,7 +6997,7 @@ int lua_cocos2dx_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        cocos2d::PolygonInfo* ret = new (std::nothrow) cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0));
+        cocos2d::PolygonInfo* ret = new cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0));
         object_to_luaval<cocos2d::PolygonInfo>(tolua_S, "cc.PolygonInfo",(cocos2d::PolygonInfo*)ret);
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
@@ -7048,7 +7013,7 @@ int lua_cocos2dx_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        cocos2d::PolygonInfo* ret = new (std::nothrow) cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1));
+        cocos2d::PolygonInfo* ret = new cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1));
         object_to_luaval<cocos2d::PolygonInfo>(tolua_S, "cc.PolygonInfo",(cocos2d::PolygonInfo*)ret);
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
@@ -7066,7 +7031,7 @@ int lua_cocos2dx_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        cocos2d::PolygonInfo* ret = new (std::nothrow) cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2));
+        cocos2d::PolygonInfo* ret = new cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2));
         object_to_luaval<cocos2d::PolygonInfo>(tolua_S, "cc.PolygonInfo",(cocos2d::PolygonInfo*)ret);
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
@@ -7086,7 +7051,7 @@ int lua_cocos2dx_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        cocos2d::PolygonInfo* ret = new (std::nothrow) cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2, (float)arg3));
+        cocos2d::PolygonInfo* ret = new cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2, (float)arg3));
         object_to_luaval<cocos2d::PolygonInfo>(tolua_S, "cc.PolygonInfo",(cocos2d::PolygonInfo*)ret);
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;

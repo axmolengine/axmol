@@ -996,7 +996,7 @@ int lua_cocos2dx_3d_AABB_constructor(lua_State* L)
             ok &= luaval_to_vec3(L, 3, &arg1, "cc.AABB:AABB");
 
             if (!ok) { break; }
-            cobj = new (std::nothrow) cocos2d::AABB(arg0, arg1);
+            cobj = new cocos2d::AABB(arg0, arg1);
             tolua_pushusertype(L,(void*)cobj,"cc.AABB");
             tolua_register_gc(L,lua_gettop(L));
             return 1;
@@ -1005,7 +1005,7 @@ int lua_cocos2dx_3d_AABB_constructor(lua_State* L)
     ok  = true;
     do{
         if (argc == 0) {
-            cobj = new (std::nothrow) cocos2d::AABB();
+            cobj = new cocos2d::AABB();
             tolua_pushusertype(L,(void*)cobj,"cc.AABB");
             tolua_register_gc(L,lua_gettop(L));
             return 1;
@@ -1400,7 +1400,7 @@ int lua_cocos2dx_3d_OBB_constructor(lua_State* L)
             ok &= luaval_to_object<cocos2d::AABB>(L, 2, "cc.AABB",&arg0, "cc.OBB:OBB");
 
             if (!ok) { break; }
-            cobj = new (std::nothrow) cocos2d::OBB(*arg0);
+            cobj = new cocos2d::OBB(*arg0);
             tolua_pushusertype(L,(void*)cobj,"cc.OBB");
             tolua_register_gc(L,lua_gettop(L));
             return 1;
@@ -1409,7 +1409,7 @@ int lua_cocos2dx_3d_OBB_constructor(lua_State* L)
     ok  = true;
     do{
         if (argc == 0) {
-            cobj = new (std::nothrow) cocos2d::OBB();
+            cobj = new cocos2d::OBB();
             tolua_pushusertype(L,(void*)cobj,"cc.OBB");
             tolua_register_gc(L,lua_gettop(L));
             return 1;
@@ -1426,7 +1426,7 @@ int lua_cocos2dx_3d_OBB_constructor(lua_State* L)
             ok &= luaval_to_int32(L, 3,(int *)&arg1, "cc.OBB:OBB");
 
             if (!ok) { break; }
-            cobj = new (std::nothrow) cocos2d::OBB(arg0, arg1);
+            cobj = new cocos2d::OBB(arg0, arg1);
             tolua_pushusertype(L,(void*)cobj,"cc.OBB");
             tolua_register_gc(L,lua_gettop(L));
             return 1;
@@ -1858,14 +1858,7 @@ int lua_cocos2dx_3d_OBB_getCorners(lua_State* L)
             return 0;
         }
 
-        arg0 = new (std::nothrow) cocos2d::Vec3[len];
-
-        if (nullptr == arg0)
-        {
-            luaL_error(L, "Allocate cocos2d::Vec3 array in the lua_cocos2dx_3d_OBB_getCorners failed!");
-            return 0;
-        }
-
+        arg0 = new cocos2d::Vec3[len];
         for (int i = 1 ; i <= len; i++)
         {
             lua_pushnumber(L,i);
@@ -2096,7 +2089,7 @@ int lua_cocos2dx_3d_Ray_constructor(lua_State* L)
             ok &= luaval_to_vec3(L, 3, &arg1, "cc.Ray:Ray");
 
             if (!ok) { break; }
-            cobj = new (std::nothrow) cocos2d::Ray(arg0, arg1);
+            cobj = new cocos2d::Ray(arg0, arg1);
             tolua_pushusertype(L,(void*)cobj,"cc.Ray");
             tolua_register_gc(L,lua_gettop(L));
             return 1;
@@ -2105,7 +2098,7 @@ int lua_cocos2dx_3d_Ray_constructor(lua_State* L)
     ok  = true;
     do{
         if (argc == 0) {
-            cobj = new (std::nothrow) cocos2d::Ray();
+            cobj = new cocos2d::Ray();
             tolua_pushusertype(L,(void*)cobj,"cc.Ray");
             tolua_register_gc(L,lua_gettop(L));
             return 1;

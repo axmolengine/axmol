@@ -38,7 +38,7 @@ void PUDoStopSystemEventHandler::handle (PUParticleSystem3D* particleSystem, PUP
 
 PUDoStopSystemEventHandler* PUDoStopSystemEventHandler::create()
 {
-    auto peh = new (std::nothrow) PUDoStopSystemEventHandler();
+    auto peh = new PUDoStopSystemEventHandler();
     peh->autorelease();
     return peh;
 }

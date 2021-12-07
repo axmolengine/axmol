@@ -102,7 +102,7 @@ static Texture2D * getDummyTexture()
 #else
         unsigned char data[] ={255,0,0,255};//1*1 red picture
 #endif
-        Image * image =new (std::nothrow) Image();
+        Image * image =new Image();
         image->initWithRawData(data,sizeof(data),1,1,sizeof(unsigned char));
         texture=Director::getInstance()->getTextureCache()->addImage(image,"/dummyTexture");
         image->release();
@@ -228,7 +228,7 @@ Mesh* Mesh::create(const std::vector<float>& vertices, int /*perVertexSizeInFloa
 
 Mesh* Mesh::create(const std::string& name, MeshIndexData* indexData, MeshSkin* skin)
 {
-    auto state = new (std::nothrow) Mesh();
+    auto state = new Mesh();
     state->autorelease();
     state->bindMeshCommand();
     state->_name = name;

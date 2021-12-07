@@ -128,7 +128,7 @@ void PUColorAffector::updatePUAffector( PUParticle3D *particle, float /*deltaTim
 
 PUColorAffector* PUColorAffector::create()
 {
-    auto pca = new (std::nothrow) PUColorAffector();
+    auto pca = new PUColorAffector();
     pca->autorelease();
     return pca;
 }

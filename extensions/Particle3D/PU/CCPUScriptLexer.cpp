@@ -244,7 +244,7 @@ void PUScriptLexer::setToken(const std::string &lexeme, int line, const std::str
         const char openBracket = '{', closeBracket = '}', colon = ':', 
         quote = '\"', var = '$';
 
-        PUScriptToken* token  = new (std::nothrow) PUScriptToken;
+        PUScriptToken* token  = new PUScriptToken;
         
         token->lexeme = lexeme;
         token->line = line;

@@ -83,7 +83,7 @@ void PUAlignAffector::firstParticleUpdate( PUParticle3D *particle, float /*delta
 
 PUAlignAffector* PUAlignAffector::create()
 {
-    auto paa = new (std::nothrow) PUAlignAffector();
+    auto paa = new PUAlignAffector();
     paa->autorelease();
     return paa;
 }

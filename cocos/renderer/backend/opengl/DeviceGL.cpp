@@ -38,15 +38,15 @@ CC_BACKEND_BEGIN
 Device* Device::getInstance()
 {
     if (!_instance)
-        _instance = new (std::nothrow) DeviceGL();
+        _instance = new DeviceGL();
     
     return _instance;
 }
 
 DeviceGL::DeviceGL()
 {
-    _deviceInfo = new (std::nothrow) DeviceInfoGL();
-    if(!_deviceInfo || _deviceInfo->init() == false)
+    _deviceInfo = new DeviceInfoGL();
+    if(!_deviceInfo->init())
     {
         delete _deviceInfo;
         _deviceInfo = nullptr;
@@ -69,12 +69,12 @@ GLint DeviceGL::getDefaultFBO() const
 
 CommandBuffer* DeviceGL::newCommandBuffer()
 {
-    return new (std::nothrow) CommandBufferGL();
+    return new CommandBufferGL();
 }
 
 Buffer* DeviceGL::newBuffer(std::size_t size, BufferType type, BufferUsage usage)
 {
-    return new (std::nothrow) BufferGL(size, type, usage);
+    return new BufferGL(size, type, usage);
 }
 
 TextureBackend* DeviceGL::newTexture(const TextureDescriptor& descriptor)
@@ -82,9 +82,9 @@ TextureBackend* DeviceGL::newTexture(const TextureDescriptor& descriptor)
     switch (descriptor.textureType)
     {
     case TextureType::TEXTURE_2D:
-        return new (std::nothrow) Texture2DGL(descriptor);
+        return new Texture2DGL(descriptor);
     case TextureType::TEXTURE_CUBE:
-        return new (std::nothrow) TextureCubeGL(descriptor);
+        return new TextureCubeGL(descriptor);
     default:
         return nullptr;
     }
@@ -114,22 +114,22 @@ RenderTarget* DeviceGL::newRenderTarget(TargetBufferFlags rtf,
 
 ShaderModule* DeviceGL::newShaderModule(ShaderStage stage, const std::string& source)
 {
-    return new (std::nothrow) ShaderModuleGL(stage, source);
+    return new ShaderModuleGL(stage, source);
 }
 
 DepthStencilState* DeviceGL::newDepthStencilState()
 {
-    return new (std::nothrow) DepthStencilStateGL();
+    return new DepthStencilStateGL();
 }
 
 RenderPipeline* DeviceGL::newRenderPipeline()
 {
-    return new (std::nothrow) RenderPipelineGL();
+    return new RenderPipelineGL();
 }
 
 Program* DeviceGL::newProgram(const std::string& vertexShader, const std::string& fragmentShader)
 {
-    return new (std::nothrow) ProgramGL(vertexShader, fragmentShader);
+    return new ProgramGL(vertexShader, fragmentShader);
 }
 
 CC_BACKEND_END

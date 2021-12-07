@@ -360,8 +360,8 @@ namespace ui
 
     TabControl* TabControl::create()
     {
-        TabControl* tabview = new (std::nothrow) TabControl();
-        if (tabview != nullptr && tabview->init())
+        TabControl* tabview = new TabControl();
+        if (tabview->init())
         {
             tabview->autorelease();
             return tabview;
@@ -477,8 +477,8 @@ namespace ui
 
     TabHeader * TabHeader::create()
     {
-        TabHeader* tabcell = new (std::nothrow) TabHeader();
-        if (tabcell != nullptr && tabcell->init())
+        TabHeader* tabcell = new TabHeader();
+        if (tabcell->init())
         {
             tabcell->_frontCrossRenderer->setVisible(false); // _isSelected == false
             tabcell->_anchorPoint = Vec2(.5f, 0.0f);
@@ -493,8 +493,8 @@ namespace ui
         const std::string & backGround,
         const std::string & cross, TextureResType texType)
     {
-        TabHeader *tabcell = new (std::nothrow) TabHeader;
-        if (tabcell && tabcell->init(backGround,
+        TabHeader *tabcell = new TabHeader;
+        if (tabcell->init(backGround,
             "",
             cross,
             "",
@@ -519,8 +519,8 @@ namespace ui
         const std::string& frontCrossDisabled,
         TextureResType texType /*= TextureResType::LOCAL*/)
     {
-        TabHeader *tabcell = new (std::nothrow) TabHeader;
-        if (tabcell && tabcell->init(backGround,
+        TabHeader *tabcell = new TabHeader;
+        if (tabcell->init(backGround,
             backGroundSelected,
             cross,
             backGroundDisabled,

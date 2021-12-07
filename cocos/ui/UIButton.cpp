@@ -83,8 +83,8 @@ Button::~Button()
 
 Button* Button::create()
 {
-    Button* widget = new (std::nothrow) Button();
-    if (widget && widget->init())
+    Button* widget = new Button();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -98,8 +98,8 @@ Button* Button::create(const std::string &normalImage,
                        const std::string& disableImage,
                        TextureResType texType)
 {
-    Button *btn = new (std::nothrow) Button;
-    if (btn && btn->init(normalImage,selectedImage,disableImage,texType))
+    Button *btn = new Button;
+    if (btn->init(normalImage,selectedImage,disableImage,texType))
     {
         btn->autorelease();
         return btn;

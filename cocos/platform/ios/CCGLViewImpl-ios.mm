@@ -39,8 +39,8 @@ int GLViewImpl::_multisamplingCount = 0;
 
 GLViewImpl* GLViewImpl::createWithEAGLView(void *eaglview)
 {
-    auto ret = new (std::nothrow) GLViewImpl;
-    if(ret && ret->initWithEAGLView(eaglview)) {
+    auto ret = new GLViewImpl;
+    if(ret->initWithEAGLView(eaglview)) {
         ret->autorelease();
         return ret;
     }
@@ -50,8 +50,8 @@ GLViewImpl* GLViewImpl::createWithEAGLView(void *eaglview)
 
 GLViewImpl* GLViewImpl::create(const std::string& viewName)
 {
-    auto ret = new (std::nothrow) GLViewImpl;
-    if(ret && ret->initWithFullScreen(viewName)) {
+    auto ret = new GLViewImpl;
+    if(ret->initWithFullScreen(viewName)) {
         ret->autorelease();
         return ret;
     }
@@ -61,8 +61,8 @@ GLViewImpl* GLViewImpl::create(const std::string& viewName)
 
 GLViewImpl* GLViewImpl::createWithRect(const std::string& viewName, const Rect& rect, float frameZoomFactor)
 {
-    auto ret = new (std::nothrow) GLViewImpl;
-    if(ret && ret->initWithRect(viewName, rect, frameZoomFactor)) {
+    auto ret = new GLViewImpl;
+    if(ret->initWithRect(viewName, rect, frameZoomFactor)) {
         ret->autorelease();
         return ret;
     }
@@ -72,8 +72,8 @@ GLViewImpl* GLViewImpl::createWithRect(const std::string& viewName, const Rect& 
 
 GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName)
 {
-    auto ret = new (std::nothrow) GLViewImpl();
-    if(ret && ret->initWithFullScreen(viewName)) {
+    auto ret = new GLViewImpl();
+    if(ret->initWithFullScreen(viewName)) {
         ret->autorelease();
         return ret;
     }

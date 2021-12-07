@@ -41,7 +41,7 @@ void PUDoFreezeEventHandler::handle (PUParticleSystem3D* /*particleSystem*/, PUP
 
 PUDoFreezeEventHandler* PUDoFreezeEventHandler::create()
 {
-    auto peh = new (std::nothrow) PUDoFreezeEventHandler();
+    auto peh = new PUDoFreezeEventHandler();
     peh->autorelease();
     return peh;
 }

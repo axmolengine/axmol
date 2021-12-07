@@ -100,7 +100,7 @@ bool PUOnCountObserver::observe (PUParticle3D* particle, float /*timeElapsed*/)
 
 PUOnCountObserver* PUOnCountObserver::create()
 {
-    auto pco = new (std::nothrow) PUOnCountObserver();
+    auto pco = new PUOnCountObserver();
     pco->autorelease();
     return pco;
 }

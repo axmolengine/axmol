@@ -43,7 +43,7 @@ id<CAMetalDrawable> DeviceMTL::_currentDrawable = nil;
 Device* Device::getInstance()
 {
     if (! Device::_instance)
-        Device::_instance = new (std::nothrow) DeviceMTL();
+        Device::_instance = new DeviceMTL();
 
     return Device::_instance;
 }
@@ -70,8 +70,8 @@ DeviceMTL::DeviceMTL()
 {
     _mtlDevice = DeviceMTL::_metalLayer.device;
     _mtlCommandQueue = [_mtlDevice newCommandQueue];
-    _deviceInfo = new (std::nothrow) DeviceInfoMTL(_mtlDevice);
-    if(!_deviceInfo || _deviceInfo->init() == false)
+    _deviceInfo = new DeviceInfoMTL(_mtlDevice);
+    if(!_deviceInfo->init())
     {
         delete _deviceInfo;
         _deviceInfo = nullptr;
@@ -87,12 +87,12 @@ DeviceMTL::~DeviceMTL()
 
 CommandBuffer* DeviceMTL::newCommandBuffer()
 {
-    return new (std::nothrow) CommandBufferMTL(this);
+    return new CommandBufferMTL(this);
 }
 
 Buffer* DeviceMTL::newBuffer(std::size_t size, BufferType type, BufferUsage usage)
 {
-    return new (std::nothrow) BufferMTL(_mtlDevice, size, type, usage);
+    return new BufferMTL(_mtlDevice, size, type, usage);
 }
 
 TextureBackend* DeviceMTL::newTexture(const TextureDescriptor& descriptor)
@@ -100,9 +100,9 @@ TextureBackend* DeviceMTL::newTexture(const TextureDescriptor& descriptor)
     switch(descriptor.textureType)
     {
         case TextureType::TEXTURE_2D:
-            return new (std::nothrow) TextureMTL(_mtlDevice, descriptor);
+            return new TextureMTL(_mtlDevice, descriptor);
         case TextureType::TEXTURE_CUBE:
-            return new (std::nothrow) TextureCubeMTL(_mtlDevice, descriptor);
+            return new TextureCubeMTL(_mtlDevice, descriptor);
         default:
             CCASSERT(false, "invalidate texture type");
             return nullptr;
@@ -133,22 +133,22 @@ RenderTarget* DeviceMTL::newRenderTarget(TargetBufferFlags rtf,
 
 ShaderModule* DeviceMTL::newShaderModule(ShaderStage stage, const std::string& source)
 {
-    return new (std::nothrow) ShaderModuleMTL(_mtlDevice, stage, source);
+    return new ShaderModuleMTL(_mtlDevice, stage, source);
 }
 
 DepthStencilState* DeviceMTL::newDepthStencilState()
 {
-    return new (std::nothrow) DepthStencilStateMTL(_mtlDevice);
+    return new DepthStencilStateMTL(_mtlDevice);
 }
 
 RenderPipeline* DeviceMTL::newRenderPipeline()
 {
-    return new (std::nothrow) RenderPipelineMTL(_mtlDevice);
+    return new RenderPipelineMTL(_mtlDevice);
 }
 
 Program* DeviceMTL::newProgram(const std::string& vertexShader, const std::string& fragmentShader)
 {
-    return new (std::nothrow) ProgramMTL(vertexShader, fragmentShader);
+    return new ProgramMTL(vertexShader, fragmentShader);
 }
 
 void DeviceMTL::setFrameBufferOnly(bool frameBufferOnly)

@@ -46,8 +46,7 @@ static Texture2D* getDefaultTexture()
         texture = Director::getInstance()->getTextureCache()->getTextureForKey(key);
         CC_BREAK_IF(texture != nullptr);
 
-        image = new (std::nothrow) Image();
-        CC_BREAK_IF(nullptr == image);
+        image = new Image();
         bool ret = image->initWithImageData(__firePngData, sizeof(__firePngData));
         CC_BREAK_IF(!ret);
 
@@ -61,8 +60,8 @@ static Texture2D* getDefaultTexture()
 
 ParticleFire* ParticleFire::create()
 {
-    ParticleFire* ret = new (std::nothrow) ParticleFire();
-    if (ret && ret->init())
+    ParticleFire* ret = new ParticleFire();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -75,8 +74,8 @@ ParticleFire* ParticleFire::create()
 
 ParticleFire* ParticleFire::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleFire* ret = new (std::nothrow) ParticleFire();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleFire* ret = new ParticleFire();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }
@@ -166,8 +165,8 @@ bool ParticleFire::initWithTotalParticles(int numberOfParticles)
 
 ParticleFireworks* ParticleFireworks::create()
 {
-    ParticleFireworks* ret = new (std::nothrow) ParticleFireworks();
-    if (ret && ret->init())
+    ParticleFireworks* ret = new ParticleFireworks();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -180,8 +179,8 @@ ParticleFireworks* ParticleFireworks::create()
 
 ParticleFireworks* ParticleFireworks::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleFireworks* ret = new (std::nothrow) ParticleFireworks();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleFireworks* ret = new ParticleFireworks();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }
@@ -267,8 +266,8 @@ bool ParticleFireworks::initWithTotalParticles(int numberOfParticles)
 //
 ParticleSun* ParticleSun::create()
 {
-    ParticleSun* ret = new (std::nothrow) ParticleSun();
-    if (ret && ret->init())
+    ParticleSun* ret = new ParticleSun();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -281,8 +280,8 @@ ParticleSun* ParticleSun::create()
 
 ParticleSun* ParticleSun::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleSun* ret = new (std::nothrow) ParticleSun();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleSun* ret = new ParticleSun();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }
@@ -374,8 +373,8 @@ bool ParticleSun::initWithTotalParticles(int numberOfParticles)
 
 ParticleGalaxy* ParticleGalaxy::create()
 {
-    ParticleGalaxy* ret = new (std::nothrow) ParticleGalaxy();
-    if (ret && ret->init())
+    ParticleGalaxy* ret = new ParticleGalaxy();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -388,8 +387,8 @@ ParticleGalaxy* ParticleGalaxy::create()
 
 ParticleGalaxy* ParticleGalaxy::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleGalaxy* ret = new (std::nothrow) ParticleGalaxy();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleGalaxy* ret = new ParticleGalaxy();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }
@@ -483,8 +482,8 @@ bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
 
 ParticleFlower* ParticleFlower::create()
 {
-    ParticleFlower* ret = new (std::nothrow) ParticleFlower();
-    if (ret && ret->init())
+    ParticleFlower* ret = new ParticleFlower();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -497,8 +496,8 @@ ParticleFlower* ParticleFlower::create()
 
 ParticleFlower* ParticleFlower::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleFlower* ret = new (std::nothrow) ParticleFlower();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleFlower* ret = new ParticleFlower();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }
@@ -591,8 +590,8 @@ bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
 
 ParticleMeteor * ParticleMeteor::create()
 {
-    ParticleMeteor *ret = new (std::nothrow) ParticleMeteor();
-    if (ret && ret->init())
+    ParticleMeteor *ret = new ParticleMeteor();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -605,8 +604,8 @@ ParticleMeteor * ParticleMeteor::create()
 
 ParticleMeteor* ParticleMeteor::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleMeteor* ret = new (std::nothrow) ParticleMeteor();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleMeteor* ret = new ParticleMeteor();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }
@@ -700,8 +699,8 @@ bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
 
 ParticleSpiral* ParticleSpiral::create()
 {
-    ParticleSpiral* ret = new (std::nothrow) ParticleSpiral();
-    if (ret && ret->init())
+    ParticleSpiral* ret = new ParticleSpiral();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -714,8 +713,8 @@ ParticleSpiral* ParticleSpiral::create()
 
 ParticleSpiral* ParticleSpiral::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleSpiral* ret = new (std::nothrow) ParticleSpiral();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleSpiral* ret = new ParticleSpiral();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }
@@ -809,8 +808,8 @@ bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
 
 ParticleExplosion* ParticleExplosion::create()
 {
-    ParticleExplosion* ret = new (std::nothrow) ParticleExplosion();
-    if (ret && ret->init())
+    ParticleExplosion* ret = new ParticleExplosion();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -823,8 +822,8 @@ ParticleExplosion* ParticleExplosion::create()
 
 ParticleExplosion* ParticleExplosion::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleExplosion* ret = new (std::nothrow) ParticleExplosion();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleExplosion* ret = new ParticleExplosion();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }
@@ -917,8 +916,8 @@ bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
 
 ParticleSmoke* ParticleSmoke::create()
 {
-    ParticleSmoke* ret = new (std::nothrow) ParticleSmoke();
-    if (ret && ret->init())
+    ParticleSmoke* ret = new ParticleSmoke();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -931,8 +930,8 @@ ParticleSmoke* ParticleSmoke::create()
 
 ParticleSmoke* ParticleSmoke::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleSmoke* ret = new (std::nothrow) ParticleSmoke();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleSmoke* ret = new ParticleSmoke();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }
@@ -1022,8 +1021,8 @@ bool ParticleSmoke::initWithTotalParticles(int numberOfParticles)
 
 ParticleSnow* ParticleSnow::create()
 {
-    ParticleSnow* ret = new (std::nothrow) ParticleSnow();
-    if (ret && ret->init())
+    ParticleSnow* ret = new ParticleSnow();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -1036,8 +1035,8 @@ ParticleSnow* ParticleSnow::create()
 
 ParticleSnow* ParticleSnow::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleSnow* ret = new (std::nothrow) ParticleSnow();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleSnow* ret = new ParticleSnow();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }
@@ -1130,8 +1129,8 @@ bool ParticleSnow::initWithTotalParticles(int numberOfParticles)
 
 ParticleRain* ParticleRain::create()
 {
-    ParticleRain* ret = new (std::nothrow) ParticleRain();
-    if (ret && ret->init())
+    ParticleRain* ret = new ParticleRain();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -1144,8 +1143,8 @@ ParticleRain* ParticleRain::create()
 
 ParticleRain* ParticleRain::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleRain* ret = new (std::nothrow) ParticleRain();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleRain* ret = new ParticleRain();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
     }

@@ -42,8 +42,8 @@ CheckBox::~CheckBox()
 
 CheckBox* CheckBox::create()
 {
-    CheckBox* widget = new (std::nothrow) CheckBox();
-    if (widget && widget->init())
+    CheckBox* widget = new CheckBox();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -59,8 +59,8 @@ CheckBox* CheckBox::create(const std::string& backGround,
                            const std::string& frontCrossDisabled,
                            TextureResType texType)
 {
-    CheckBox *pWidget = new (std::nothrow) CheckBox;
-    if (pWidget && pWidget->init(backGround,
+    CheckBox *pWidget = new CheckBox;
+    if (pWidget->init(backGround,
                                  backGroundSelected,
                                  cross,
                                  backGroundDisabled,
@@ -78,8 +78,8 @@ CheckBox* CheckBox::create(const std::string& backGround,
                            const std::string& cross,
                            TextureResType texType)
 {
-    CheckBox *pWidget = new (std::nothrow) CheckBox;
-    if (pWidget && pWidget->init(backGround,
+    CheckBox *pWidget = new CheckBox;
+    if (pWidget->init(backGround,
                                  "",
                                  cross,
                                  "",

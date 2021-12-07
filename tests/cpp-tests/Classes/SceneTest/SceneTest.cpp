@@ -238,8 +238,8 @@ void SceneTestLayer3::item3Clicked(Ref* sender)
 
 SceneTestScene* SceneTestScene::create(int testIndex /* = 1 */)
 {
-    auto scene = new (std::nothrow) SceneTestScene;
-    if (scene && scene->init())
+    auto scene = new SceneTestScene;
+    if (scene->init())
     {
         scene->autorelease();
         switch (testIndex)

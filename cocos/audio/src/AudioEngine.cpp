@@ -161,17 +161,17 @@ bool AudioEngine::lazyInit()
 {
     if (_audioEngineImpl == nullptr)
     {
-        _audioEngineImpl = new (std::nothrow) AudioEngineImpl();
-        if(!_audioEngineImpl ||  !_audioEngineImpl->init() ){
+        _audioEngineImpl = new AudioEngineImpl();
+        if(!_audioEngineImpl->init() ){
             delete _audioEngineImpl;
             _audioEngineImpl = nullptr;
            return false;
         }
     }
 
-    if (_audioEngineImpl && s_threadPool == nullptr)
+    if (s_threadPool == nullptr)
     {
-        s_threadPool = new (std::nothrow) AudioEngineThreadPool();
+        s_threadPool = new AudioEngineThreadPool();
     }
 
     return true;
@@ -507,7 +507,7 @@ AudioProfile* AudioEngine::getDefaultProfile()
 {
     if (_defaultProfileHelper == nullptr)
     {
-        _defaultProfileHelper = new (std::nothrow) ProfileHelper();
+        _defaultProfileHelper = new ProfileHelper();
     }
     
     return &_defaultProfileHelper->profile;

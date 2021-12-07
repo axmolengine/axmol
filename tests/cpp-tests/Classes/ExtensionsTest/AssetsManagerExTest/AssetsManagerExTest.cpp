@@ -42,8 +42,8 @@ AssetsManagerExTests::AssetsManagerExTests()
 
 AssetsManagerExLoaderScene* AssetsManagerExLoaderScene::create(int testIndex)
 {
-    auto scene = new (std::nothrow) AssetsManagerExLoaderScene(testIndex);
-    if (scene && scene->init())
+    auto scene = new AssetsManagerExLoaderScene(testIndex);
+    if (scene->init())
     {
         scene->autorelease();
     }

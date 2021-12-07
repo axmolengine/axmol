@@ -33,8 +33,8 @@ using namespace cocos2d;
 namespace cocostudio {
 BatchNode *BatchNode::create()
 {
-    BatchNode *batchNode = new (std::nothrow) BatchNode();
-    if (batchNode && batchNode->init())
+    BatchNode *batchNode = new BatchNode();
+    if (batchNode->init())
     {
         batchNode->autorelease();
         return batchNode;
@@ -66,7 +66,7 @@ void BatchNode::addChild(Node *child, int zOrder, int tag)
         armature->setBatchNode(this);
         if (_groupCommand == nullptr)
         {
-            _groupCommand = new (std::nothrow) GroupCommand();
+            _groupCommand = new GroupCommand();
         }
     }
 }
@@ -80,7 +80,7 @@ void BatchNode::addChild(cocos2d::Node *child, int zOrder, const std::string &na
         armature->setBatchNode(this);
         if (_groupCommand == nullptr)
         {
-            _groupCommand = new (std::nothrow) GroupCommand();
+            _groupCommand = new GroupCommand();
         }
     }
 }

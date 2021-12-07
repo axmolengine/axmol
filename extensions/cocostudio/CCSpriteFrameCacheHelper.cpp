@@ -38,7 +38,7 @@ SpriteFrameCacheHelper *SpriteFrameCacheHelper::getInstance()
 {
     if(!_spriteFrameCacheHelper)
     {
-        _spriteFrameCacheHelper = new (std::nothrow) SpriteFrameCacheHelper();
+        _spriteFrameCacheHelper = new SpriteFrameCacheHelper();
     }
 
     return _spriteFrameCacheHelper;

@@ -390,7 +390,7 @@ void Issue14050Test::onEnter()
 {
     ActionManagerTest::onEnter();
 
-    auto sprite = new (std::nothrow) SpriteIssue14050;
+    auto sprite = new SpriteIssue14050;
     sprite->initWithFile("Images/grossini.png");
     sprite->autorelease();
 

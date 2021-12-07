@@ -33,7 +33,7 @@ ArmatureNodeReader* ArmatureNodeReader::getInstance()
 {
 	if (_instanceArmatureNodeReader == nullptr)
 	{
-		_instanceArmatureNodeReader = new (std::nothrow) ArmatureNodeReader();
+		_instanceArmatureNodeReader = new ArmatureNodeReader();
 	}
 	return _instanceArmatureNodeReader;
 }

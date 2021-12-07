@@ -39,8 +39,8 @@ VBox::~VBox()
 
 VBox* VBox::create()
 {
-    VBox* widget = new (std::nothrow) VBox();
-    if (widget && widget->init())
+    VBox* widget = new VBox();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -51,8 +51,8 @@ VBox* VBox::create()
 
 VBox* VBox::create(const Vec2 &size)
 {
-    VBox* widget = new (std::nothrow) VBox();
-    if (widget && widget->initWithSize(size))
+    VBox* widget = new VBox();
+    if (widget->initWithSize(size))
     {
         widget->autorelease();
         return widget;

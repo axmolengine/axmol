@@ -66,14 +66,9 @@ bool Margin::equals(const Margin &target) const
 
 LayoutParameter* LayoutParameter::create()
 {
-    LayoutParameter* parameter = new (std::nothrow) LayoutParameter();
-    if (parameter)
-    {
-        parameter->autorelease();
-        return parameter;
-    }
-    CC_SAFE_DELETE(parameter);
-    return nullptr;
+    LayoutParameter* parameter = new LayoutParameter();
+    parameter->autorelease();
+    return parameter;
 }
 
 void LayoutParameter::setMargin(const Margin &margin)
@@ -110,14 +105,9 @@ void LayoutParameter::copyProperties(LayoutParameter *model)
 
 LinearLayoutParameter* LinearLayoutParameter::create()
 {
-    LinearLayoutParameter* parameter = new (std::nothrow) LinearLayoutParameter();
-    if (parameter)
-    {
-        parameter->autorelease();
-        return parameter;
-    }
-    CC_SAFE_DELETE(parameter);
-    return nullptr;
+    LinearLayoutParameter* parameter = new LinearLayoutParameter();
+    parameter->autorelease();
+    return parameter;
 }
 
 void LinearLayoutParameter::setGravity(LinearGravity gravity)
@@ -147,14 +137,9 @@ void LinearLayoutParameter::copyProperties(LayoutParameter *model)
 
 RelativeLayoutParameter* RelativeLayoutParameter::create()
 {
-    RelativeLayoutParameter* parameter = new (std::nothrow) RelativeLayoutParameter();
-    if (parameter)
-    {
-        parameter->autorelease();
-        return parameter;
-    }
-    CC_SAFE_DELETE(parameter);
-    return nullptr;
+    RelativeLayoutParameter* parameter = new RelativeLayoutParameter();
+    parameter->autorelease();
+    return parameter;
 }
 
 void RelativeLayoutParameter::setAlign(RelativeAlign align)

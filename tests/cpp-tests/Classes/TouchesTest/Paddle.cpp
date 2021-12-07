@@ -42,7 +42,7 @@ Rect Paddle::getRect()
 
 Paddle* Paddle::createWithTexture(Texture2D* aTexture)
 {
-    Paddle* pPaddle = new (std::nothrow) Paddle();
+    Paddle* pPaddle = new Paddle();
     pPaddle->initWithTexture(aTexture);
     pPaddle->autorelease();
 

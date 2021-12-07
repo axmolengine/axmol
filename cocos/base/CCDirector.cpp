@@ -90,7 +90,7 @@ Director* Director::getInstance()
 {
     if (!s_SharedDirector)
     {
-        s_SharedDirector = new (std::nothrow) Director;
+        s_SharedDirector = new Director;
         CCASSERT(s_SharedDirector, "FATAL: Not enough memory");
         s_SharedDirector->init();
     }
@@ -111,38 +111,38 @@ bool Director::init()
     // FPS
     _lastUpdate = std::chrono::steady_clock::now();
     
-    _console = new (std::nothrow) Console;
+    _console = new Console;
 
     // scheduler
-    _scheduler = new (std::nothrow) Scheduler();
+    _scheduler = new Scheduler();
     // action manager
-    _actionManager = new (std::nothrow) ActionManager();
+    _actionManager = new ActionManager();
     _scheduler->scheduleUpdate(_actionManager, Scheduler::PRIORITY_SYSTEM, false);
 
-    _eventDispatcher = new (std::nothrow) EventDispatcher();
+    _eventDispatcher = new EventDispatcher();
     
-    _beforeSetNextScene = new (std::nothrow) EventCustom(EVENT_BEFORE_SET_NEXT_SCENE);
+    _beforeSetNextScene = new EventCustom(EVENT_BEFORE_SET_NEXT_SCENE);
     _beforeSetNextScene->setUserData(this);
-    _afterSetNextScene = new (std::nothrow) EventCustom(EVENT_AFTER_SET_NEXT_SCENE);
+    _afterSetNextScene = new EventCustom(EVENT_AFTER_SET_NEXT_SCENE);
     _afterSetNextScene->setUserData(this);
-    _eventAfterDraw = new (std::nothrow) EventCustom(EVENT_AFTER_DRAW);
+    _eventAfterDraw = new EventCustom(EVENT_AFTER_DRAW);
     _eventAfterDraw->setUserData(this);
-    _eventBeforeDraw = new (std::nothrow) EventCustom(EVENT_BEFORE_DRAW);
+    _eventBeforeDraw = new EventCustom(EVENT_BEFORE_DRAW);
     _eventBeforeDraw->setUserData(this);
-    _eventAfterVisit = new (std::nothrow) EventCustom(EVENT_AFTER_VISIT);
+    _eventAfterVisit = new EventCustom(EVENT_AFTER_VISIT);
     _eventAfterVisit->setUserData(this);
-    _eventBeforeUpdate = new (std::nothrow) EventCustom(EVENT_BEFORE_UPDATE);
+    _eventBeforeUpdate = new EventCustom(EVENT_BEFORE_UPDATE);
     _eventBeforeUpdate->setUserData(this);
-    _eventAfterUpdate = new (std::nothrow) EventCustom(EVENT_AFTER_UPDATE);
+    _eventAfterUpdate = new EventCustom(EVENT_AFTER_UPDATE);
     _eventAfterUpdate->setUserData(this);
-    _eventProjectionChanged = new (std::nothrow) EventCustom(EVENT_PROJECTION_CHANGED);
+    _eventProjectionChanged = new EventCustom(EVENT_PROJECTION_CHANGED);
     _eventProjectionChanged->setUserData(this);
-    _eventResetDirector = new (std::nothrow) EventCustom(EVENT_RESET);
+    _eventResetDirector = new EventCustom(EVENT_RESET);
     //init TextureCache
     initTextureCache();
     initMatrixStack();
 
-    _renderer = new (std::nothrow) Renderer;
+    _renderer = new Renderer;
 
     return true;
 }
@@ -400,7 +400,7 @@ TextureCache* Director::getTextureCache() const
 
 void Director::initTextureCache()
 {
-    _textureCache = new (std::nothrow) TextureCache();
+    _textureCache = new TextureCache();
 }
 
 void Director::destroyTextureCache()
@@ -1246,8 +1246,8 @@ void Director::createStatsLabel()
     ssize_t dataLength = 0;
     getFPSImageData(&data, &dataLength);
 
-    Image* image = new (std::nothrow) Image();
-    bool isOK = image ? image->initWithImageData(data, dataLength, false) : false;
+    Image* image = new Image();
+    bool isOK = image->initWithImageData(data, dataLength, false);
     if (! isOK) {
         if(image)
             delete image;

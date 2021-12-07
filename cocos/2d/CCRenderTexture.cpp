@@ -117,9 +117,9 @@ void RenderTexture::listenToForeground(EventCustom* /*event*/)
 
 RenderTexture * RenderTexture::create(int w, int h, backend::PixelFormat eFormat)
 {
-    RenderTexture *ret = new (std::nothrow) RenderTexture();
+    RenderTexture *ret = new RenderTexture();
 
-    if(ret && ret->initWithWidthAndHeight(w, h, eFormat))
+    if(ret->initWithWidthAndHeight(w, h, eFormat))
     {
         ret->autorelease();
         return ret;
@@ -130,9 +130,9 @@ RenderTexture * RenderTexture::create(int w, int h, backend::PixelFormat eFormat
 
 RenderTexture * RenderTexture::create(int w ,int h, backend::PixelFormat eFormat, PixelFormat uDepthStencilFormat)
 {
-    RenderTexture *ret = new (std::nothrow) RenderTexture();
+    RenderTexture *ret = new RenderTexture();
 
-    if(ret && ret->initWithWidthAndHeight(w, h, eFormat, uDepthStencilFormat))
+    if(ret->initWithWidthAndHeight(w, h, eFormat, uDepthStencilFormat))
     {
         ret->autorelease();
         return ret;
@@ -143,9 +143,9 @@ RenderTexture * RenderTexture::create(int w ,int h, backend::PixelFormat eFormat
 
 RenderTexture * RenderTexture::create(int w, int h)
 {
-    RenderTexture *ret = new (std::nothrow) RenderTexture();
+    RenderTexture *ret = new RenderTexture();
 
-    if(ret && ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8, PixelFormat::NONE))
+    if(ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8, PixelFormat::NONE))
     {
         ret->autorelease();
         return ret;
@@ -191,9 +191,7 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
         descriptor.height = powH;
         descriptor.textureUsage = TextureUsage::RENDER_TARGET;
         descriptor.textureFormat = PixelFormat::RGBA8;
-        _texture2D = new (std::nothrow) Texture2D();
-        CC_BREAK_IF(!_texture2D);
-
+        _texture2D = new Texture2D();
         _texture2D->updateTextureDescriptor(descriptor, !!CC_ENABLE_PREMULTIPLIED_ALPHA);
         _renderTargetFlags = RenderTargetFlag::COLOR;
 
@@ -202,11 +200,7 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
             _renderTargetFlags = RenderTargetFlag::ALL;
             descriptor.textureFormat = depthStencilFormat;
 
-            _depthStencilTexture = new (std::nothrow) Texture2D;
-            if (!_depthStencilTexture)
-            {
-                break;
-            }
+            _depthStencilTexture = new Texture2D();
             _depthStencilTexture->updateTextureDescriptor(descriptor);
         }
 

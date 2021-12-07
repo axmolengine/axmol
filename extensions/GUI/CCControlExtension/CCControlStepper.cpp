@@ -119,8 +119,8 @@ bool ControlStepper::initWithMinusSpriteAndPlusSprite(Sprite *minusSprite, Sprit
 
 ControlStepper* ControlStepper::create(Sprite *minusSprite, Sprite *plusSprite)
 {
-    ControlStepper* pRet = new (std::nothrow) ControlStepper();
-    if (pRet != nullptr && pRet->initWithMinusSpriteAndPlusSprite(minusSprite, plusSprite))
+    ControlStepper* pRet = new ControlStepper();
+    if (pRet->initWithMinusSpriteAndPlusSprite(minusSprite, plusSprite))
     {
         pRet->autorelease();
     }

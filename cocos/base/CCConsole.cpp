@@ -340,7 +340,7 @@ Console::Command& Console::Command::operator=(const Command& o)
         for (const auto& e : o._subCommands)
         {
             Command* subCommand = e.second;
-            auto newCommand = new (std::nothrow) Command(*subCommand);
+            auto newCommand = new Command(*subCommand);
             _subCommands[e.first] = newCommand;
         }
     }
@@ -381,7 +381,7 @@ void Console::Command::addSubCommand(const Command& subCmd)
         _subCommands.erase(iter);
     }
 
-    Command* cmd = new (std::nothrow) Command();
+    Command* cmd = new Command();
     *cmd = subCmd;
     _subCommands[subCmd._name] = cmd;
 }
@@ -605,7 +605,7 @@ void Console::stop()
 
 void Console::addCommand(const Command& cmd)
 {
-    Command* newCommand = new (std::nothrow) Command(cmd);
+    Command* newCommand = new Command(cmd);
     auto iter = _commands.find(cmd.getName());
     if (iter != _commands.end())
     {

@@ -301,7 +301,7 @@ Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key)
         unsigned char* decoded;
         int length = base64Decode((const unsigned char*)base64String, (unsigned int)strlen(base64String), &decoded);
 
-        Image* image     = new (std::nothrow) Image();
+        Image* image     = new Image();
         bool imageResult = image->initWithImageData(decoded, length, true);
         CCASSERT(imageResult, "Failed to create image from base64!");
 
@@ -325,7 +325,7 @@ Sprite* createSpriteFromBase64(const char* base64String)
     unsigned char* decoded;
     int length = base64Decode((const unsigned char*)base64String, (unsigned int)strlen(base64String), &decoded);
 
-    Image* image     = new (std::nothrow) Image();
+    Image* image     = new Image();
     bool imageResult = image->initWithImageData(decoded, length, decoded);
     CCASSERT(imageResult, "Failed to create image from base64!");
 
@@ -335,7 +335,7 @@ Sprite* createSpriteFromBase64(const char* base64String)
         return nullptr;
     }
 
-    Texture2D* texture = new (std::nothrow) Texture2D();
+    Texture2D* texture = new Texture2D();
     texture->initWithImage(image);
     texture->setAliasTexParameters();
     image->release();

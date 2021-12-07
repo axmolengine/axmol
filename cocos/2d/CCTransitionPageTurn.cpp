@@ -51,7 +51,7 @@ TransitionPageTurn::~TransitionPageTurn()
 /** creates a base transition with duration and incoming scene */
 TransitionPageTurn * TransitionPageTurn::create(float t, Scene *scene, bool backwards)
 {
-    TransitionPageTurn * transition = new (std::nothrow) TransitionPageTurn();
+    TransitionPageTurn * transition = new TransitionPageTurn();
     transition->initWithDuration(t,scene,backwards);
     transition->autorelease();
     return transition;

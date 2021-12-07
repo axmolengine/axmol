@@ -84,7 +84,7 @@ void PUGravityAffector::preUpdateAffector( float /*deltaTime*/ )
 
 PUGravityAffector* PUGravityAffector::create()
 {
-    auto pga = new (std::nothrow) PUGravityAffector();
+    auto pga = new PUGravityAffector();
     pga->autorelease();
     return pga;
 }

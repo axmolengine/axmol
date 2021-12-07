@@ -132,8 +132,8 @@ Rect Grid3DAction::getGridRect() const
 // implementation of TiledGrid3DAction
 TiledGrid3DAction* TiledGrid3DAction::create(float duration, const Vec2 &gridSize)
 {
-    TiledGrid3DAction *ret = new (std::nothrow) TiledGrid3DAction();
-    if (ret && ret->initWithDuration(duration, gridSize))
+    TiledGrid3DAction *ret = new TiledGrid3DAction();
+    if (ret->initWithDuration(duration, gridSize))
     {
         ret->autorelease();
         return ret;
@@ -170,8 +170,8 @@ void TiledGrid3DAction::setTile(const Vec2& pos, const Quad3& coords)
 
 AccelDeccelAmplitude* AccelDeccelAmplitude::create(Action *action, float duration)
 {
-    AccelDeccelAmplitude *ret = new (std::nothrow) AccelDeccelAmplitude();
-    if (ret && ret->initWithAction(action, duration))
+    AccelDeccelAmplitude *ret = new AccelDeccelAmplitude();
+    if (ret->initWithAction(action, duration))
     {
         ret->autorelease();
         return ret;
@@ -240,8 +240,8 @@ AccelDeccelAmplitude* AccelDeccelAmplitude::reverse() const
 
 AccelAmplitude* AccelAmplitude::create(Action *action, float duration)
 {
-    AccelAmplitude *ret = new (std::nothrow) AccelAmplitude();
-    if (ret && ret->initWithAction(action, duration))
+    AccelAmplitude *ret = new AccelAmplitude();
+    if (ret->initWithAction(action, duration))
     {
         ret->autorelease();
         return ret;
@@ -303,8 +303,8 @@ AccelAmplitude* AccelAmplitude::reverse() const
 
 DeccelAmplitude* DeccelAmplitude::create(Action *action, float duration)
 {
-    DeccelAmplitude *ret = new (std::nothrow) DeccelAmplitude();
-    if (ret && ret->initWithAction(action, duration))
+    DeccelAmplitude *ret = new DeccelAmplitude();
+    if (ret->initWithAction(action, duration))
     {
         ret->autorelease();
         return ret;
@@ -380,15 +380,9 @@ void StopGrid::cacheTargetAsGridNode()
 
 StopGrid* StopGrid::create()
 {
-    StopGrid* action = new (std::nothrow) StopGrid();
-    if (action)
-    {
-        action->autorelease();
-        return action;
-    }
-
-    delete action;
-    return nullptr;
+    StopGrid* action = new StopGrid();
+    action->autorelease();
+    return action;
 }
 
 StopGrid* StopGrid::clone() const
@@ -406,8 +400,8 @@ StopGrid* StopGrid::reverse() const
 
 ReuseGrid* ReuseGrid::create(int times)
 {
-    ReuseGrid *action = new (std::nothrow) ReuseGrid();
-    if (action && action->initWithTimes(times))
+    ReuseGrid *action = new ReuseGrid();
+    if (action->initWithTimes(times))
     {
         action->autorelease();
         return action;

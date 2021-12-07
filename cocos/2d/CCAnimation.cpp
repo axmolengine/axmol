@@ -34,8 +34,8 @@ NS_CC_BEGIN
 
 AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo)
 {
-    auto ret = new (std::nothrow) AnimationFrame();
-    if (ret && ret->initWithSpriteFrame(spriteFrame, delayUnits, userInfo))
+    auto ret = new AnimationFrame();
+    if (ret->initWithSpriteFrame(spriteFrame, delayUnits, userInfo))
     {
         ret->autorelease();
     }
@@ -72,7 +72,7 @@ AnimationFrame::~AnimationFrame()
 AnimationFrame* AnimationFrame::clone() const
 {
     // no copy constructor
-    auto frame = new (std::nothrow) AnimationFrame();
+    auto frame = new AnimationFrame();
     frame->initWithSpriteFrame(_spriteFrame->clone(),
                                _delayUnits,
                                _userInfo);
@@ -85,7 +85,7 @@ AnimationFrame* AnimationFrame::clone() const
 
 Animation* Animation::create()
 {
-    Animation *animation = new (std::nothrow) Animation();
+    Animation *animation = new Animation();
     animation->init();
     animation->autorelease();
 
@@ -94,7 +94,7 @@ Animation* Animation::create()
 
 Animation* Animation::createWithSpriteFrames(const Vector<SpriteFrame*>& frames, float delay/* = 0.0f*/, unsigned int loops/* = 1*/)
 {
-    Animation *animation = new (std::nothrow) Animation();
+    Animation *animation = new Animation();
     animation->initWithSpriteFrames(frames, delay, loops);
     animation->autorelease();
 
@@ -103,7 +103,7 @@ Animation* Animation::createWithSpriteFrames(const Vector<SpriteFrame*>& frames,
 
 Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
 {
-    Animation *animation = new (std::nothrow) Animation();
+    Animation *animation = new Animation();
     animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
     animation->autorelease();
     return animation;
@@ -193,7 +193,7 @@ float Animation::getDuration() const
 Animation* Animation::clone() const
 {
     // no copy constructor    
-    auto a = new (std::nothrow) Animation();
+    auto a = new Animation();
     a->initWithAnimationFrames(_frames, _delayPerUnit, _loops);
     a->setRestoreOriginalFrame(_restoreOriginalFrame);
     a->autorelease();

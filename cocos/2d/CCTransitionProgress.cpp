@@ -50,8 +50,8 @@ TransitionProgress::TransitionProgress()
 
 TransitionProgress* TransitionProgress::create(float t, Scene* scene)
 {
-    TransitionProgress* newScene = new (std::nothrow) TransitionProgress();
-    if(newScene && newScene->initWithDuration(t, scene))
+    TransitionProgress* newScene = new TransitionProgress();
+    if(newScene->initWithDuration(t, scene))
     {
         newScene->autorelease();
         return newScene;
@@ -153,8 +153,8 @@ ProgressTimer* TransitionProgressRadialCCW::progressTimerNodeWithRenderTexture(R
 
 TransitionProgressRadialCCW* TransitionProgressRadialCCW::create(float t, Scene* scene)
 {
-    TransitionProgressRadialCCW* newScene = new (std::nothrow) TransitionProgressRadialCCW();
-    if(newScene && newScene->initWithDuration(t, scene))
+    TransitionProgressRadialCCW* newScene = new TransitionProgressRadialCCW();
+    if(newScene->initWithDuration(t, scene))
     {
         newScene->autorelease();
         return newScene;
@@ -166,8 +166,8 @@ TransitionProgressRadialCCW* TransitionProgressRadialCCW::create(float t, Scene*
 // TransitionProgressRadialCW
 TransitionProgressRadialCW* TransitionProgressRadialCW::create(float t, Scene* scene)
 {
-    TransitionProgressRadialCW* newScene = new (std::nothrow) TransitionProgressRadialCW();
-    if(newScene && newScene->initWithDuration(t, scene))
+    TransitionProgressRadialCW* newScene = new TransitionProgressRadialCW();
+    if(newScene->initWithDuration(t, scene))
     {
         newScene->autorelease();
         return newScene;
@@ -198,8 +198,8 @@ ProgressTimer* TransitionProgressRadialCW::progressTimerNodeWithRenderTexture(Re
 // TransitionProgressHorizontal
 TransitionProgressHorizontal* TransitionProgressHorizontal::create(float t, Scene* scene)
 {
-    TransitionProgressHorizontal* newScene = new (std::nothrow) TransitionProgressHorizontal();
-    if(newScene && newScene->initWithDuration(t, scene))
+    TransitionProgressHorizontal* newScene = new TransitionProgressHorizontal();
+    if(newScene->initWithDuration(t, scene))
     {
         newScene->autorelease();
         return newScene;
@@ -231,8 +231,8 @@ ProgressTimer* TransitionProgressHorizontal::progressTimerNodeWithRenderTexture(
 // TransitionProgressVertical
 TransitionProgressVertical* TransitionProgressVertical::create(float t, Scene* scene)
 {
-    TransitionProgressVertical* newScene = new (std::nothrow) TransitionProgressVertical();
-    if(newScene && newScene->initWithDuration(t, scene))
+    TransitionProgressVertical* newScene = new TransitionProgressVertical();
+    if(newScene->initWithDuration(t, scene))
     {
         newScene->autorelease();
         return newScene;
@@ -265,8 +265,8 @@ ProgressTimer* TransitionProgressVertical::progressTimerNodeWithRenderTexture(Re
 // TransitionProgressInOut
 TransitionProgressInOut* TransitionProgressInOut::create(float t, Scene* scene)
 {
-    TransitionProgressInOut* newScene = new (std::nothrow) TransitionProgressInOut();
-    if(newScene && newScene->initWithDuration(t, scene))
+    TransitionProgressInOut* newScene = new TransitionProgressInOut();
+    if(newScene->initWithDuration(t, scene))
     {
         newScene->autorelease();
         return newScene;
@@ -311,8 +311,8 @@ ProgressTimer* TransitionProgressInOut::progressTimerNodeWithRenderTexture(Rende
 // TransitionProgressOutIn
 TransitionProgressOutIn* TransitionProgressOutIn::create(float t, Scene* scene)
 {
-    TransitionProgressOutIn* newScene = new (std::nothrow) TransitionProgressOutIn();
-    if(newScene && newScene->initWithDuration(t, scene))
+    TransitionProgressOutIn* newScene = new TransitionProgressOutIn();
+    if(newScene->initWithDuration(t, scene))
     {
         newScene->autorelease();
         return newScene;

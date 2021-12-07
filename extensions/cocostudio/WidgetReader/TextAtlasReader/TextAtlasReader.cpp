@@ -41,7 +41,7 @@ namespace cocostudio
     {
         if (!instanceTextAtlasReader)
         {
-            instanceTextAtlasReader = new (std::nothrow) TextAtlasReader();
+            instanceTextAtlasReader = new TextAtlasReader();
         }
         return instanceTextAtlasReader;
     }

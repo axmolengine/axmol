@@ -64,8 +64,8 @@ static const char          *s_ambientLightUniformColorName = "u_AmbientLightSour
 
 Pass* Pass::create(Technique* technique)
 {
-    auto pass = new (std::nothrow) Pass();
-    if (pass && pass->init(technique))
+    auto pass = new Pass();
+    if (pass->init(technique))
     {
         pass->autorelease();
         return pass;
@@ -76,8 +76,8 @@ Pass* Pass::create(Technique* technique)
 
 Pass* Pass::createWithProgramState(Technique* technique, backend::ProgramState* programState)
 {
-    auto pass = new (std::nothrow) Pass();
-    if (pass && pass->initWithProgramState(technique, programState))
+    auto pass = new Pass();
+    if (pass->initWithProgramState(technique, programState))
     {
         pass->autorelease();
         return pass;
@@ -112,20 +112,18 @@ Pass::~Pass()
 
 Pass* Pass::clone() const
 {
-    auto pass = new (std::nothrow) Pass();
-    if (pass)
-    {
-        pass->_renderState = _renderState;
+    auto pass = new Pass();
+    pass->_renderState = _renderState;
 
-        pass->setProgramState(_programState->clone());
+    pass->setProgramState(_programState->clone());
 
-        pass->_vertexAttribBinding = _vertexAttribBinding;
-        CC_SAFE_RETAIN(pass->_vertexAttribBinding);
+    pass->_vertexAttribBinding = _vertexAttribBinding;
+    CC_SAFE_RETAIN(pass->_vertexAttribBinding);
 
-        pass->setTechnique(_technique);
+    pass->setTechnique(_technique);
 
-        pass->autorelease();
-    }
+    pass->autorelease();
+
     return pass;
 }
 

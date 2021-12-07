@@ -54,7 +54,7 @@ BoneNodeReader* BoneNodeReader::getInstance()
 {
     if (_instanceBoneNodeReader == nullptr)
     {
-        _instanceBoneNodeReader = new (std::nothrow) BoneNodeReader();
+        _instanceBoneNodeReader = new BoneNodeReader();
     }
     return _instanceBoneNodeReader;
 }

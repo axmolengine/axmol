@@ -42,7 +42,7 @@ DictionaryHelper::~DictionaryHelper()
 DictionaryHelper* DictionaryHelper::getInstance()
 {
     if (!sharedHelper) {
-        sharedHelper = new (std::nothrow) DictionaryHelper();
+        sharedHelper = new DictionaryHelper();
     }
     return sharedHelper;
 }

@@ -48,7 +48,7 @@ void PUBehaviour::initParticleForExpiration(PUParticle3D* /*particle*/, float /*
 
 PUBehaviour* PUBehaviour::clone()
 {
-    auto pb = new (std::nothrow) PUBehaviour;
+    auto pb = new PUBehaviour;
     pb->autorelease();
     copyAttributesTo(pb);
     return pb;

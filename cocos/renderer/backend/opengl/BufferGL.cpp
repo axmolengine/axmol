@@ -96,7 +96,7 @@ void BufferGL::fillBuffer(void* data, std::size_t offset, std::size_t size)
 
     if(_data == nullptr)
     {
-        _data = new (std::nothrow) char[_bufferAllocated];
+        _data = new char[_bufferAllocated];
     }
 
     memcpy(_data + offset, data, size);
