@@ -104,7 +104,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
 {   
     // test 1(sync request test)
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         request->setUrl("https://tool.chinaz.com");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
@@ -120,7 +120,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
 
     // test 2
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         request->setUrl("https://just-make-this-request-failed.com");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
@@ -132,7 +132,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
     
     // test 3
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         // required fields
         request->setUrl("https://httpbin.org/ip");
         request->setRequestType(HttpRequest::Type::GET);
@@ -146,7 +146,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
     
     // test 4   
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/get");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
@@ -158,7 +158,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref *sender)
 
     // test 5
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         request->setUrl("https://github.com/yasio/yasio");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
@@ -177,7 +177,7 @@ void HttpClientTest::onMenuPostTestClicked(cocos2d::Ref *sender)
 {
     // test 1
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/post");
         request->setRequestType(HttpRequest::Type::POST);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
@@ -193,7 +193,7 @@ void HttpClientTest::onMenuPostTestClicked(cocos2d::Ref *sender)
     
     // test 2: set Content-Type
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/post");
         request->setRequestType(HttpRequest::Type::POST);
         request->setHeaders(std::vector<std::string>{CHROME_UA, "Content-Type: application/json; charset=utf-8"});
@@ -213,7 +213,7 @@ void HttpClientTest::onMenuPostTestClicked(cocos2d::Ref *sender)
 
 void HttpClientTest::onMenuPostBinaryTestClicked(cocos2d::Ref *sender)
 {
-    HttpRequest* request = new (std::nothrow) HttpRequest();
+    HttpRequest* request = new HttpRequest();
     request->setUrl("https://httpbin.org/post");
     request->setRequestType(HttpRequest::Type::POST);
     request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
@@ -235,7 +235,7 @@ void HttpClientTest::onMenuPutTestClicked(Ref *sender)
 {
     // test 1
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/put");
         request->setRequestType(HttpRequest::Type::PUT);
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
@@ -250,7 +250,7 @@ void HttpClientTest::onMenuPutTestClicked(Ref *sender)
 
     // test 2: set Content-Type
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/put");
         request->setRequestType(HttpRequest::Type::PUT);
         std::vector<std::string> headers;
@@ -274,7 +274,7 @@ void HttpClientTest::onMenuDeleteTestClicked(Ref *sender)
 {
     // test 1
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         request->setUrl("https://just-make-this-request-failed.com");
         request->setRequestType(HttpRequest::Type::DELETE);
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
@@ -285,7 +285,7 @@ void HttpClientTest::onMenuDeleteTestClicked(Ref *sender)
 
     // test 2
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/delete");
         request->setRequestType(HttpRequest::Type::DELETE);
         request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
@@ -384,7 +384,7 @@ void HttpClientClearRequestsTest::onMenuCancelAllClicked(cocos2d::Ref *sender)
 {
     for (int i=0; i < 10; i++)
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         std::stringstream url;
         url << "https://cocos2d-x.org/images/logo.png?id=" << std::to_string(i);
         request->setUrl(url.str());
@@ -413,7 +413,7 @@ void HttpClientClearRequestsTest::onMenuCancelSomeClicked(cocos2d::Ref *sender)
     // test 1
     for (int i=0; i < 10; i++)
     {
-        HttpRequest* request = new (std::nothrow) HttpRequest();
+        HttpRequest* request = new HttpRequest();
         std::stringstream url;
         url << "https://cocos2d-x.org/images/logo.png?id=" << std::to_string(i);
         request->setUrl(url.str());

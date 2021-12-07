@@ -12,7 +12,7 @@ ILocalizationManager* JsonLocalizationManager::getInstance()
 {
     if (!_sharedJsonLocalizationManager)
     {
-        _sharedJsonLocalizationManager = new (std::nothrow) JsonLocalizationManager();
+        _sharedJsonLocalizationManager = new JsonLocalizationManager();
     }
 
     return _sharedJsonLocalizationManager;
@@ -75,7 +75,7 @@ ILocalizationManager* BinLocalizationManager::getInstance()
 {
     if (!_sharedBinLocalizationManager)
     {
-        _sharedBinLocalizationManager = new (std::nothrow) BinLocalizationManager();
+        _sharedBinLocalizationManager = new BinLocalizationManager();
     }
 
     return _sharedBinLocalizationManager;

@@ -4,8 +4,8 @@ USING_NS_CC;
 
 JoystickModule * JoystickModule::create(GComponent * mainView)
 {
-    JoystickModule *pRet = new(std::nothrow) JoystickModule();
-    if (pRet && pRet->init(mainView))
+    JoystickModule *pRet = new JoystickModule();
+    if (pRet->init(mainView))
     {
         pRet->autorelease();
         return pRet;

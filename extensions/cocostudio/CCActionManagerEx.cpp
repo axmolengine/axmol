@@ -34,7 +34,7 @@ static ActionManagerEx* sharedActionManager = nullptr;
 ActionManagerEx* ActionManagerEx::getInstance()
 {
     if (!sharedActionManager) {
-        sharedActionManager = new (std::nothrow) ActionManagerEx();
+        sharedActionManager = new ActionManagerEx();
     }
     return sharedActionManager;
 }
@@ -67,7 +67,7 @@ void ActionManagerEx::initWithDictionary(const char* jsonName,const rapidjson::V
     cocos2d::Vector<ActionObject*> actionList;
     int actionCount = DICTOOL->getArrayCount_json(dic, "actionlist");
     for (int i=0; i<actionCount; i++) {
-        ActionObject* action = new (std::nothrow) ActionObject();
+        ActionObject* action = new ActionObject();
         action->autorelease();
         const rapidjson::Value &actionDic = DICTOOL->getDictionaryFromArray_json(dic, "actionlist", i);
         action->initWithDictionary(actionDic,root);
@@ -99,7 +99,7 @@ void ActionManagerEx::initWithDictionary(const char* jsonName,const rapidjson::V
         {
             int actionCount = actionNode->GetChildNum();
             for (int i = 0; i < actionCount; ++i) {
-                ActionObject* action = new (std::nothrow) ActionObject();
+                ActionObject* action = new ActionObject();
                 action->autorelease();
                 
                 action->initWithBinary(cocoLoader, &actionNode->GetChildArray(cocoLoader)[i], root);

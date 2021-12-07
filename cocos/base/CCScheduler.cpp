@@ -328,7 +328,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback, void *target, float in
         ccArrayEnsureExtraCapacity(element->timers, 1);
     }
 
-    TimerTargetCallback *timer = new (std::nothrow) TimerTargetCallback();
+    TimerTargetCallback *timer = new TimerTargetCallback();
     timer->initWithCallback(this, callback, target, key, interval, repeat, delay);
     ccArrayAppendObject(element->timers, timer);
     timer->release();
@@ -390,7 +390,7 @@ void Scheduler::unschedule(const std::string &key, void *target)
 
 void Scheduler::priorityIn(tListEntry **list, const ccSchedulerFunc& callback, void *target, int priority, bool paused)
 {
-    tListEntry *listElement = new (std::nothrow) tListEntry();
+    tListEntry *listElement = new tListEntry();
 
     listElement->callback = callback;
     listElement->target = target;
@@ -448,7 +448,7 @@ void Scheduler::priorityIn(tListEntry **list, const ccSchedulerFunc& callback, v
 
 void Scheduler::appendIn(_listEntry **list, const ccSchedulerFunc& callback, void *target, bool paused)
 {
-    tListEntry *listElement = new (std::nothrow) tListEntry();
+    tListEntry *listElement = new tListEntry();
 
     listElement->callback = callback;
     listElement->target = target;
@@ -995,7 +995,7 @@ void Scheduler::schedule(SEL_SCHEDULE selector, Ref *target, float interval, uns
         ccArrayEnsureExtraCapacity(element->timers, 1);
     }
     
-    TimerTargetSelector *timer = new (std::nothrow) TimerTargetSelector();
+    TimerTargetSelector *timer = new TimerTargetSelector();
     timer->initWithSelector(this, selector, target, interval, repeat, delay);
     ccArrayAppendObject(element->timers, timer);
     timer->release();

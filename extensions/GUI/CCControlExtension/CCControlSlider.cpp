@@ -91,7 +91,7 @@ ControlSlider* ControlSlider::create(const char* bgFile, const char* progressFil
 
 ControlSlider* ControlSlider::create(Sprite * backgroundSprite, Sprite* pogressSprite, Sprite* thumbSprite)
 {
-    ControlSlider *pRet = new (std::nothrow) ControlSlider();
+    ControlSlider *pRet = new ControlSlider();
     pRet->initWithSprites(backgroundSprite, pogressSprite, thumbSprite);
     pRet->autorelease();
     return pRet;
@@ -100,7 +100,7 @@ ControlSlider* ControlSlider::create(Sprite * backgroundSprite, Sprite* pogressS
 ControlSlider* ControlSlider::create(Sprite * backgroundSprite, Sprite* pogressSprite, Sprite* thumbSprite,
         Sprite* selectedThumbSprite)
 {
-    ControlSlider *pRet = new (std::nothrow) ControlSlider();
+    ControlSlider *pRet = new ControlSlider();
     pRet->initWithSprites(backgroundSprite, pogressSprite, thumbSprite, selectedThumbSprite);
     pRet->autorelease();
     return pRet;

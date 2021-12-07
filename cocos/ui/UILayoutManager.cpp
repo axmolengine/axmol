@@ -32,14 +32,9 @@ namespace ui {
 
 LinearHorizontalLayoutManager* LinearHorizontalLayoutManager::create()
 {
-    LinearHorizontalLayoutManager* exe = new (std::nothrow) LinearHorizontalLayoutManager();
-    if (exe)
-    {
-        exe->autorelease();
-        return exe;
-    }
-    CC_SAFE_DELETE(exe);
-    return nullptr;
+    LinearHorizontalLayoutManager* ret = new LinearHorizontalLayoutManager();
+    ret->autorelease();
+    return ret;
 }
     
     
@@ -88,14 +83,9 @@ void LinearHorizontalLayoutManager::doLayout(LayoutProtocol* layout)
 //LinearVerticalLayoutManager
 LinearVerticalLayoutManager* LinearVerticalLayoutManager::create()
 {
-    LinearVerticalLayoutManager* exe = new (std::nothrow) LinearVerticalLayoutManager();
-    if (exe)
-    {
-        exe->autorelease();
-        return exe;
-    }
-    CC_SAFE_DELETE(exe);
-    return nullptr;
+    LinearVerticalLayoutManager* ret = new LinearVerticalLayoutManager();
+    ret->autorelease();
+    return ret;
 }
     
 void LinearVerticalLayoutManager::doLayout(LayoutProtocol* layout)
@@ -146,14 +136,9 @@ void LinearVerticalLayoutManager::doLayout(LayoutProtocol* layout)
 //LinearCenterVerticalLayoutManager
 LinearCenterVerticalLayoutManager* LinearCenterVerticalLayoutManager::create()
 {
-    auto* exe = new (std::nothrow) LinearCenterVerticalLayoutManager();
-    if (exe)
-    {
-        exe->autorelease();
-        return exe;
-    }
-    CC_SAFE_DELETE(exe);
-    return nullptr;
+    auto* ret = new LinearCenterVerticalLayoutManager();
+    ret->autorelease();
+    return ret;
 }
 
 void LinearCenterVerticalLayoutManager::doLayout(LayoutProtocol* layout)
@@ -222,14 +207,9 @@ void LinearCenterVerticalLayoutManager::doLayout(LayoutProtocol* layout)
 
 RelativeLayoutManager* RelativeLayoutManager::create()
 {
-    RelativeLayoutManager* exe = new (std::nothrow) RelativeLayoutManager();
-    if (exe)
-    {
-        exe->autorelease();
-        return exe;
-    }
-    CC_SAFE_DELETE(exe);
-    return nullptr;
+    RelativeLayoutManager* ret = new RelativeLayoutManager();
+    ret->autorelease();
+    return ret;
 }
 
 

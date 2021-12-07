@@ -98,7 +98,7 @@ GUIReader* GUIReader::getInstance()
 {
     if (!sharedReader)
     {
-        sharedReader = new (std::nothrow) GUIReader();
+        sharedReader = new GUIReader();
     }
     return sharedReader;
 }
@@ -228,18 +228,18 @@ Widget* GUIReader::widgetFromJsonFile(const char *fileName)
         int versionInteger = this->getVersionInteger(fileVersion);
         if (versionInteger < 250)
         {
-            pReader = new (std::nothrow) WidgetPropertiesReader0250();
+            pReader = new WidgetPropertiesReader0250();
             widget = pReader->createWidget(jsonDict, this->m_strFilePath.c_str(), fileName);
         }
         else
         {
-            pReader = new (std::nothrow) WidgetPropertiesReader0300();
+            pReader = new WidgetPropertiesReader0300();
             widget = pReader->createWidget(jsonDict, this->m_strFilePath.c_str(), fileName);
         }
     }
     else
     {
-        pReader = new (std::nothrow) WidgetPropertiesReader0250();
+        pReader = new WidgetPropertiesReader0250();
         widget = pReader->createWidget(jsonDict, this->m_strFilePath.c_str(), fileName);
     }
     
@@ -406,18 +406,18 @@ Widget* GUIReader::widgetFromBinaryFile(const char *fileName)
                     if (versionInteger < 250)
                     {
                         CCASSERT(0, "You current studio doesn't support binary format, please upgrade to the latest version!");
-                        pReader = new (std::nothrow) WidgetPropertiesReader0250();
+                        pReader = new WidgetPropertiesReader0250();
                         widget = pReader->createWidgetFromBinary(&tCocoLoader, tpRootCocoNode, fileName);
                     }
                     else
                     {
-                        pReader = new (std::nothrow) WidgetPropertiesReader0300();
+                        pReader = new WidgetPropertiesReader0300();
                         widget = pReader->createWidgetFromBinary(&tCocoLoader, tpRootCocoNode, fileName);
                     }
                 }
                 else
                 {
-                    pReader = new (std::nothrow) WidgetPropertiesReader0250();
+                    pReader = new WidgetPropertiesReader0250();
                     widget = pReader->createWidgetFromBinary(&tCocoLoader, tpRootCocoNode, fileName);
                 }
                 

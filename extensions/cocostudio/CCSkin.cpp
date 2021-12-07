@@ -45,8 +45,8 @@ namespace cocostudio {
 
 Skin *Skin::create()
 {
-    Skin *skin = new (std::nothrow) Skin();
-    if(skin && skin->init())
+    Skin *skin = new Skin();
+    if(skin->init())
     {
         skin->autorelease();
         return skin;
@@ -57,8 +57,8 @@ Skin *Skin::create()
 
 Skin *Skin::createWithSpriteFrameName(const std::string& pszSpriteFrameName)
 {
-    Skin *skin = new (std::nothrow) Skin();
-    if(skin && skin->initWithSpriteFrameName(pszSpriteFrameName))
+    Skin *skin = new Skin();
+    if(skin->initWithSpriteFrameName(pszSpriteFrameName))
     {
         skin->autorelease();
         return skin;
@@ -69,8 +69,8 @@ Skin *Skin::createWithSpriteFrameName(const std::string& pszSpriteFrameName)
 
 Skin *Skin::create(const std::string& pszFileName)
 {
-    Skin *skin = new (std::nothrow) Skin();
-    if(skin && skin->initWithFile(pszFileName))
+    Skin *skin = new Skin();
+    if(skin->initWithFile(pszFileName))
     {
         skin->autorelease();
         return skin;

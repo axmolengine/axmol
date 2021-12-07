@@ -98,7 +98,7 @@ void PUSphereSurfaceEmitter::initParticleDirection(PUParticle3D* particle)
 
 PUSphereSurfaceEmitter* PUSphereSurfaceEmitter::create()
 {
-    auto pe = new (std::nothrow) PUSphereSurfaceEmitter();
+    auto pe = new PUSphereSurfaceEmitter();
     pe->autorelease();
     return pe;
 }

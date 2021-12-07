@@ -46,7 +46,7 @@ MeshSkin::~MeshSkin()
 
 MeshSkin* MeshSkin::create(Skeleton3D* skeleton, const std::vector<std::string>& boneNames, const std::vector<Mat4>& invBindPose)
 {
-    auto skin = new (std::nothrow) MeshSkin();
+    auto skin = new MeshSkin();
     skin->_skeleton = skeleton;
     skeleton->retain();
     

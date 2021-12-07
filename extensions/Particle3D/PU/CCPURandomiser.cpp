@@ -152,7 +152,7 @@ void PURandomiser::postUpdateAffector(float /*deltaTime*/)
 
 PURandomiser* PURandomiser::create()
 {
-    auto pr = new (std::nothrow) PURandomiser();
+    auto pr = new PURandomiser();
     pr->autorelease();
     return pr;
 }

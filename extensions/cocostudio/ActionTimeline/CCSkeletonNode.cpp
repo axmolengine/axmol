@@ -34,8 +34,8 @@ NS_TIMELINE_BEGIN
 
 SkeletonNode* SkeletonNode::create()
 {
-    SkeletonNode* skeletonNode = new (std::nothrow) SkeletonNode();
-    if (skeletonNode && skeletonNode->init())
+    SkeletonNode* skeletonNode = new SkeletonNode();
+    if (skeletonNode->init())
     {
         skeletonNode->autorelease();
         return skeletonNode;
@@ -53,7 +53,7 @@ bool SkeletonNode::init()
     // init _customCommand  
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program = cocos2d::backend::Program::getBuiltinProgram(cocos2d::backend::ProgramType::POSITION_COLOR); // TODO: noMVP?
-    setProgramState(new (std::nothrow) cocos2d::backend::ProgramState(program), false);
+    setProgramState(new cocos2d::backend::ProgramState(program), false);
     pipelineDescriptor.programState = _programState;
 
     _mvpLocation = _programState->getUniformLocation("u_MVPMatrix");

@@ -43,21 +43,21 @@ class RootTests : public TestList
 public:
     RootTests()
     {
-//        addTest("Node: Scene3D", [](){return new (std::nothrow) Scene3DTests(); });
+//        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
 #if defined(CC_PLATFORM_PC)
         addTest("ImGuiEXT", []() {return new ImGuiEXTTests(); });
 #endif
         addTest("Texture2D", []() {return new Texture2DTests(); });
-        addTest("ActionManager", [](){return new (std::nothrow) ActionManagerTests(); });
-        addTest("Actions - Basic", [](){ return new (std::nothrow) ActionsTests(); });
-        addTest("Actions - Ease", [](){return new (std::nothrow) ActionsEaseTests(); });
-        addTest("Actions - Progress", [](){return new (std::nothrow) ActionsProgressTests(); });
-        addTest("Audio - NewAudioEngine", []() { return new (std::nothrow) AudioEngineTests(); });
+        addTest("ActionManager", [](){return new ActionManagerTests(); });
+        addTest("Actions - Basic", [](){ return new ActionsTests(); });
+        addTest("Actions - Ease", [](){return new ActionsEaseTests(); });
+        addTest("Actions - Progress", [](){return new ActionsProgressTests(); });
+        addTest("Audio - NewAudioEngine", []() { return new AudioEngineTests(); });
 
 
-        addTest("Box2D - Basic", []() { return new (std::nothrow) Box2DTests(); });
+        addTest("Box2D - Basic", []() { return new Box2DTests(); });
 #if defined(CC_PLATFORM_PC)
-        addTest("Box2D - TestBed", []() { return new (std::nothrow) Box2DTestBedTests(); });
+        addTest("Box2D - TestBed", []() { return new Box2DTestBedTests(); });
 #endif
         addTest("Chipmunk2D - Basic", []() { return new ChipmunkTests(); });
 #if defined(CC_PLATFORM_PC)
@@ -104,7 +104,7 @@ public:
         addTest("Node: Spine", [](){return new SpineTests(); });
         addTest("Node: Sprite", [](){return new SpriteTests(); });
         addTest("Node: Sprite3D", [](){  return new Sprite3DTests(); });
-        addTest("Node: SpritePolygon", [](){return new (std::nothrow) SpritePolygonTest(); });
+        addTest("Node: SpritePolygon", [](){return new SpritePolygonTest(); });
         addTest("Node: Terrain", [](){  return new TerrainTests(); });
         addTest("Node: FastTileMap", [](){return new FastTileMapTests(); });
         addTest("Node: Text Input", [](){return new TextInputTests(); });
@@ -141,7 +141,7 @@ TestController::TestController()
 , _isRunInBackground(false)
 , _testSuite(nullptr)
 {
-    _rootTestList = new (std::nothrow) RootTests;
+    _rootTestList = new RootTests;
     _rootTestList->runThisTest();
     _director = Director::getInstance();
 
@@ -465,7 +465,7 @@ TestController* TestController::getInstance()
 {
     if (s_testController == nullptr)
     {
-        s_testController = new (std::nothrow) TestController;
+        s_testController = new TestController;
 
         initCrashCatch();
     }

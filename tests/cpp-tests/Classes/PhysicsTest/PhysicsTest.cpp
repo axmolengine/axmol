@@ -1199,7 +1199,7 @@ void PhysicsDemoSlice::clipPoly(PhysicsShapePolygon* shape, Vec2 normal, float d
     PhysicsBody* body = shape->getBody();
     int count = shape->getPointsCount();
     int pointsCount = 0;
-    Vec2* points = new (std::nothrow) Vec2[count + 1];
+    Vec2* points = new Vec2[count + 1];
     
     for (int i=0, j=count-1; i<count; j=i, ++i)
     {

@@ -109,7 +109,7 @@ void PUSineForceAffector::updatePUAffector( PUParticle3D *particle, float /*delt
 
 PUSineForceAffector* PUSineForceAffector::create()
 {
-    auto psfa = new (std::nothrow) PUSineForceAffector();
+    auto psfa = new PUSineForceAffector();
     psfa->autorelease();
     return psfa;
 }

@@ -68,8 +68,8 @@ VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, P
         }
     }
 
-    b = new (std::nothrow) VertexAttribBinding();
-    if (b && b->init(meshIndexData, pass, command))
+    b = new VertexAttribBinding();
+    if (b->init(meshIndexData, pass, command))
     {
         b->autorelease();
         __vertexAttribBindingCache.push_back(b);

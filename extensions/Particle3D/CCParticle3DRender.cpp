@@ -58,8 +58,8 @@ Particle3DQuadRender::~Particle3DQuadRender()
 
 Particle3DQuadRender* Particle3DQuadRender::create(const std::string& texFile)
 {
-    auto ret = new (std::nothrow)Particle3DQuadRender();
-    if (ret && ret->initQuadRender(texFile))
+    auto ret = new Particle3DQuadRender();
+    if (ret->initQuadRender(texFile))
     {
         ret->_texFile = texFile;
         ret->autorelease();
@@ -289,7 +289,7 @@ Particle3DModelRender::~Particle3DModelRender()
 
 Particle3DModelRender* Particle3DModelRender::create(const std::string& modelFile, const std::string &texFile)
 {
-    auto ret = new (std::nothrow) Particle3DModelRender();
+    auto ret = new Particle3DModelRender();
     ret->_modelFile = modelFile;
     ret->_texFile = texFile;
     return ret;

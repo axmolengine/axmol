@@ -140,8 +140,8 @@ Node::Node()
 
 Node * Node::create()
 {
-    Node * ret = new (std::nothrow) Node();
-    if (ret && ret->init())
+    Node * ret = new Node();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -1932,7 +1932,7 @@ bool Node::addComponent(Component *component)
 {
     // lazy alloc
     if (!_componentContainer)
-        _componentContainer = new (std::nothrow) ComponentContainer(this);
+        _componentContainer = new ComponentContainer(this);
     
     // should enable schedule update, then all components can receive this call back
     scheduleUpdate();

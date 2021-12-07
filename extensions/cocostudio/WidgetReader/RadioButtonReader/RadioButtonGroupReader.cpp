@@ -46,7 +46,7 @@ namespace cocostudio
     {
         if (!s_readerInstance)
         {
-            s_readerInstance = new (std::nothrow) RadioButtonGroupReader();
+            s_readerInstance = new RadioButtonGroupReader();
         }
         return s_readerInstance;
     }

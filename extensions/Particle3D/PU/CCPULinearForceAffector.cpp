@@ -58,7 +58,7 @@ void PULinearForceAffector::updatePUAffector( PUParticle3D *particle, float /*de
 
 PULinearForceAffector* PULinearForceAffector::create()
 {
-    auto plfa = new (std::nothrow) PULinearForceAffector();
+    auto plfa = new PULinearForceAffector();
     plfa->autorelease();
     return plfa;
 }

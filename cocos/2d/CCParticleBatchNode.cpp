@@ -53,7 +53,7 @@ ParticleBatchNode::ParticleBatchNode()
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
     //!!! ParticleBatchNode private programState don't want affect by Node::_programState, so store at _customCommand
     //!!! support etc1 with alpha?
-    pipelinePS = new (std::nothrow) backend::ProgramState(program);
+    pipelinePS = new backend::ProgramState(program);
     
     _mvpMatrixLocaiton = pipelinePS->getUniformLocation("u_MVPMatrix");
     _textureLocation = pipelinePS->getUniformLocation("u_texture");
@@ -92,8 +92,8 @@ ParticleBatchNode::~ParticleBatchNode()
 
 ParticleBatchNode* ParticleBatchNode::createWithTexture(Texture2D *tex, int capacity/* = kParticleDefaultCapacity*/)
 {
-    ParticleBatchNode * p = new (std::nothrow) ParticleBatchNode();
-    if( p && p->initWithTexture(tex, capacity))
+    ParticleBatchNode * p = new ParticleBatchNode();
+    if(p->initWithTexture(tex, capacity))
     {
         p->autorelease();
         return p;
@@ -108,8 +108,8 @@ ParticleBatchNode* ParticleBatchNode::createWithTexture(Texture2D *tex, int capa
 
 ParticleBatchNode* ParticleBatchNode::create(const std::string& imageFile, int capacity/* = kParticleDefaultCapacity*/)
 {
-    ParticleBatchNode * p = new (std::nothrow) ParticleBatchNode();
-    if( p && p->initWithFile(imageFile, capacity))
+    ParticleBatchNode * p = new ParticleBatchNode();
+    if(p->initWithFile(imageFile, capacity))
     {
         p->autorelease();
         return p;
@@ -123,7 +123,7 @@ ParticleBatchNode* ParticleBatchNode::create(const std::string& imageFile, int c
  */
 bool ParticleBatchNode::initWithTexture(Texture2D *tex, int capacity)
 {
-    _textureAtlas = new (std::nothrow) TextureAtlas();
+    _textureAtlas = new TextureAtlas();
     _textureAtlas->initWithTexture(tex, capacity);
     
     updateProgramStateTexture();

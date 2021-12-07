@@ -10,8 +10,8 @@ USING_NS_CC;
 
 PopupMenu* PopupMenu::create(const std::string & resourceURL)
 {
-    PopupMenu *pRet = new(std::nothrow) PopupMenu();
-    if (pRet && pRet->init(resourceURL))
+    PopupMenu *pRet = new PopupMenu();
+    if (pRet->init(resourceURL))
     {
         pRet->autorelease();
         return pRet;

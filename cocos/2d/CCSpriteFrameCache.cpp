@@ -52,7 +52,7 @@ SpriteFrameCache* SpriteFrameCache::getInstance()
 {
     if (!_sharedSpriteFrameCache)
     {
-        _sharedSpriteFrameCache = new (std::nothrow) SpriteFrameCache();
+        _sharedSpriteFrameCache = new SpriteFrameCache();
         _sharedSpriteFrameCache->init();
     }
 

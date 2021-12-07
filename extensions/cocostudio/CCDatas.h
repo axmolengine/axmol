@@ -39,21 +39,16 @@ THE SOFTWARE.
 #define CC_CREATE_NO_PARAM_NO_INIT(varType)\
 public: \
     static inline varType *create(void){ \
-    varType *var = new (std::nothrow) varType();\
-    if (var)\
-{\
+    varType *var = new varType();\
     var->autorelease();\
     return var;\
-}\
-    CC_SAFE_DELETE(var);\
-    return nullptr;\
 }
 
 #define CC_CREATE_NO_PARAM(varType)\
 public: \
     static inline varType *create(void){ \
-    varType *var = new (std::nothrow) varType();\
-    if (var && var->init())\
+    varType *var = new varType();\
+    if (var->init())\
 {\
     var->autorelease();\
     return var;\

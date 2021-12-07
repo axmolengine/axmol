@@ -130,7 +130,7 @@ namespace cocostudio
     {
         if (!instanceWidgetReader)
         {
-            instanceWidgetReader = new (std::nothrow) WidgetReader();
+            instanceWidgetReader = new WidgetReader();
         }
         return instanceWidgetReader;
     }

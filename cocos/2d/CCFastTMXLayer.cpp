@@ -59,7 +59,7 @@ const int FastTMXLayer::FAST_TMX_ORIENTATION_ISO = 2;
 // FastTMXLayer - init & alloc & dealloc
 FastTMXLayer * FastTMXLayer::create(TMXTilesetInfo *tilesetInfo, TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo)
 {
-    FastTMXLayer *ret = new (std::nothrow) FastTMXLayer();
+    FastTMXLayer *ret = new FastTMXLayer();
     if (ret->initWithTilesetInfo(tilesetInfo, layerInfo, mapInfo))
     {
         ret->autorelease();
@@ -455,7 +455,7 @@ void FastTMXLayer::updatePrimitives()
             {
                 CC_SAFE_RELEASE(pipelineDescriptor.programState);
                 auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-                auto programState = new (std::nothrow) backend::ProgramState(program);
+                auto programState = new backend::ProgramState(program);
                 pipelineDescriptor.programState = programState;
                 _alphaValueLocation = pipelineDescriptor.programState->getUniformLocation("u_alpha_value");
                 pipelineDescriptor.programState->setUniform(_alphaValueLocation, &_alphaFuncValue, sizeof(_alphaFuncValue));
@@ -464,7 +464,7 @@ void FastTMXLayer::updatePrimitives()
             {
                 CC_SAFE_RELEASE(pipelineDescriptor.programState);
                 auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-                auto programState = new (std::nothrow) backend::ProgramState(program);
+                auto programState = new backend::ProgramState(program);
                 pipelineDescriptor.programState = programState;
             }
             auto vertexLayout = pipelineDescriptor.programState->getVertexLayout();
@@ -977,14 +977,9 @@ TMXTileAnimManager::TMXTileAnimManager(FastTMXLayer* layer)
 
 TMXTileAnimManager* TMXTileAnimManager::create(FastTMXLayer* layer)
 {
-    TMXTileAnimManager* ret = new (std::nothrow) TMXTileAnimManager(layer);
-    if (ret)
-    {
-        ret->autorelease();
-        return ret;
-    }
-    CC_SAFE_DELETE(ret);
-    return nullptr;
+    TMXTileAnimManager* ret = new TMXTileAnimManager(layer);
+    ret->autorelease();
+    return ret;
 }
 
 void TMXTileAnimManager::startAll()
@@ -1046,14 +1041,9 @@ void TMXTileAnimTask::setCurrFrame()
 
 TMXTileAnimTask* TMXTileAnimTask::create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos)
 {
-    TMXTileAnimTask* ret = new (std::nothrow) TMXTileAnimTask(layer, animation, tilePos);
-    if (ret)
-    {
-        ret->autorelease();
-        return ret;
-    }
-    CC_SAFE_DELETE(ret);
-    return nullptr;
+    TMXTileAnimTask* ret = new TMXTileAnimTask(layer, animation, tilePos);
+    ret->autorelease();
+    return ret;
 }
 
 NS_CC_END

@@ -238,15 +238,15 @@ PUParticleSystem3D::~PUParticleSystem3D()
 
 PUParticleSystem3D* PUParticleSystem3D::create()
 {
-    auto pups = new (std::nothrow) PUParticleSystem3D();
+    auto pups = new PUParticleSystem3D();
     pups->autorelease();
     return pups;
 }
 
 PUParticleSystem3D* PUParticleSystem3D::create( const std::string &filePath, const std::string &materialPath )
 {
-    PUParticleSystem3D *ret = new (std::nothrow) PUParticleSystem3D();
-    if (ret && ret->initWithFilePathAndMaterialPath(filePath, materialPath))
+    PUParticleSystem3D *ret = new PUParticleSystem3D();
+    if (ret->initWithFilePathAndMaterialPath(filePath, materialPath))
     {
         ret->autorelease();
         return ret;
@@ -260,8 +260,8 @@ PUParticleSystem3D* PUParticleSystem3D::create( const std::string &filePath, con
 
 PUParticleSystem3D* PUParticleSystem3D::create( const std::string &filePath )
 {
-    PUParticleSystem3D *ret = new (std::nothrow) PUParticleSystem3D();
-    if (ret && ret->initWithFilePath(filePath))
+    PUParticleSystem3D *ret = new PUParticleSystem3D();
+    if (ret->initWithFilePath(filePath))
     {
         ret->autorelease();
         return ret;
@@ -509,7 +509,7 @@ void PUParticleSystem3D::prepared()
                 if (emitter->getEmitsType() == PUParticle3D::PT_EMITTER){
                     PUEmitter *emitted = static_cast<PUEmitter*>(emitter->getEmitsEntityPtr());
                     for (unsigned int i = 0; i < _emittedEmitterQuota; ++i){
-                        auto p = new (std::nothrow) PUParticle3D();
+                        auto p = new PUParticle3D();
                         p->particleType = PUParticle3D::PT_EMITTER;
                         p->particleEntityPtr = emitted->clone();
                         p->particleEntityPtr->retain();
@@ -521,7 +521,7 @@ void PUParticleSystem3D::prepared()
                     PUParticleSystem3D *emitted = static_cast<PUParticleSystem3D*>(emitter->getEmitsEntityPtr());
                     for (unsigned int i = 0; i < _emittedSystemQuota; ++i){
                         PUParticleSystem3D *clonePS = emitted->clone();
-                        auto p = new (std::nothrow) PUParticle3D();
+                        auto p = new PUParticle3D();
                         p->particleType = PUParticle3D::PT_TECHNIQUE;
                         p->particleEntityPtr = clonePS;
                         p->particleEntityPtr->retain();
@@ -535,7 +535,7 @@ void PUParticleSystem3D::prepared()
             }
 
             for (unsigned int i = 0; i < _particleQuota; ++i){
-                auto p = new (std::nothrow) PUParticle3D();
+                auto p = new PUParticle3D();
                 p->copyBehaviours(_behaviourTemplates);
                 _particlePool.addData(p);
             }

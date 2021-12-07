@@ -58,7 +58,7 @@ PUSlaveBehaviour* PUSlaveBehaviour::clone()
 
 PUSlaveBehaviour* PUSlaveBehaviour::create()
 {
-    auto pb = new (std::nothrow) PUSlaveBehaviour();
+    auto pb = new PUSlaveBehaviour();
     pb->autorelease();
     return pb;
 }

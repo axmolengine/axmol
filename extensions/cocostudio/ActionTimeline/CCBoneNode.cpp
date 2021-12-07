@@ -35,8 +35,8 @@ NS_TIMELINE_BEGIN
 
 BoneNode* BoneNode::create()
 {
-    BoneNode* ret = new (std::nothrow) BoneNode();
-    if (ret && ret->init())
+    BoneNode* ret = new BoneNode();
+    if (ret->init())
     {
         ret->autorelease();
         return ret;
@@ -48,8 +48,8 @@ BoneNode* BoneNode::create()
 
 BoneNode* BoneNode::create(int length)
 {
-    BoneNode* ret = new (std::nothrow) BoneNode();
-    if (ret && ret->init())
+    BoneNode* ret = new BoneNode();
+    if (ret->init())
     {
         ret->setDebugDrawLength(length);
         ret->autorelease();
@@ -74,7 +74,7 @@ bool BoneNode::init()
 
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program = cocos2d::backend::Program::getBuiltinProgram(cocos2d::backend::ProgramType::POSITION_COLOR); // TODO: noMVP?
-    setProgramState(new (std::nothrow) cocos2d::backend::ProgramState(program), false);
+    setProgramState(new cocos2d::backend::ProgramState(program), false);
     pipelineDescriptor.programState = _programState;
 
     _mvpLocation = _programState->getUniformLocation("u_MVPMatrix");

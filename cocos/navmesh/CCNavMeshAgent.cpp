@@ -51,8 +51,8 @@ NavMeshAgentParam::NavMeshAgentParam()
 
 NavMeshAgent* NavMeshAgent::create(const NavMeshAgentParam &param)
 {
-    auto ref = new (std::nothrow) NavMeshAgent();
-    if (ref && ref->initWith(param))
+    auto ref = new NavMeshAgent();
+    if (ref->initWith(param))
     {
         ref->autorelease();
         return ref;

@@ -40,8 +40,8 @@ PhysicsSpriteChipmunk2D::PhysicsSpriteChipmunk2D()
 
 PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create()
 {
-    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
-    if (pRet && pRet->init())
+    PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
+    if (pRet->init())
     {
         pRet->autorelease();
     }
@@ -55,8 +55,8 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create()
 
 PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D *pTexture)
 {
-    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
-    if (pRet && pRet->initWithTexture(pTexture))
+    PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
+    if (pRet->initWithTexture(pTexture))
     {
         pRet->autorelease();
     }
@@ -70,8 +70,8 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D *p
 
 PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D *pTexture, const Rect& rect)
 {
-    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
-    if (pRet && pRet->initWithTexture(pTexture, rect))
+    PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
+    if (pRet->initWithTexture(pTexture, rect))
     {
         pRet->autorelease();
     }
@@ -85,8 +85,8 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D *p
 
 PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
 {
-    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
-    if (pRet && pRet->initWithSpriteFrame(pSpriteFrame))
+    PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
+    if (pRet->initWithSpriteFrame(pSpriteFrame))
     {
         pRet->autorelease();
     }
@@ -100,8 +100,8 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrame(SpriteFr
 
 PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrameName(const char *pszSpriteFrameName)
 {
-    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
-    if (pRet && pRet->initWithSpriteFrameName(pszSpriteFrameName))
+    PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
+    if (pRet->initWithSpriteFrameName(pszSpriteFrameName))
     {
         pRet->autorelease();
     }
@@ -115,8 +115,8 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrameName(cons
 
 PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char *pszFileName)
 {
-    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
-    if (pRet && pRet->initWithFile(pszFileName))
+    PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
+    if (pRet->initWithFile(pszFileName))
     {
         pRet->autorelease();
     }
@@ -130,8 +130,8 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char *pszFileName
 
 PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char *pszFileName, const Rect& rect)
 {
-    PhysicsSpriteChipmunk2D* pRet = new (std::nothrow) PhysicsSpriteChipmunk2D();
-    if (pRet && pRet->initWithFile(pszFileName, rect))
+    PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
+    if (pRet->initWithFile(pszFileName, rect))
     {
         pRet->autorelease();
     }

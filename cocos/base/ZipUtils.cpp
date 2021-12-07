@@ -636,8 +636,8 @@ struct ZipFilePrivate
 
 ZipFile *ZipFile::createWithBuffer(const void* buffer, unsigned int size)
 {
-    ZipFile *zip = new (std::nothrow) ZipFile();
-    if (zip && zip->initWithBuffer(buffer, size)) {
+    ZipFile *zip = new ZipFile();
+    if (zip->initWithBuffer(buffer, size)) {
         return zip;
     } else {
         delete zip;
@@ -864,8 +864,7 @@ bool ZipFile::initWithBuffer(const void *buffer, unsigned int size)
 
     zlib_filefunc_def memory_file = { 0 };
     
-    std::unique_ptr<ourmemory_t> memfs(new(std::nothrow) ourmemory_t{ (char*)const_cast<void*>(buffer), static_cast<uint32_t>(size), 0, 0, 0 });
-    if (!memfs) return false;
+    std::unique_ptr<ourmemory_t> memfs(new ourmemory_t{ (char*)const_cast<void*>(buffer), static_cast<uint32_t>(size), 0, 0, 0 });
     fill_memory_filefunc(&memory_file, memfs.get());
     
     _data->zipFile = unzOpen2(nullptr, &memory_file);

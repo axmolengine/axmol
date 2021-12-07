@@ -108,8 +108,8 @@ EaseRateAction* EaseRateAction::create(ActionInterval* action, float rate)
 {
     CCASSERT(action != nullptr, "action cannot be nullptr!");
 
-    EaseRateAction *easeRateAction = new (std::nothrow) EaseRateAction();
-    if (easeRateAction && easeRateAction->initWithAction(action, rate))
+    EaseRateAction *easeRateAction = new EaseRateAction();
+    if (easeRateAction->initWithAction(action, rate))
     {
         easeRateAction->autorelease();
         return easeRateAction;
@@ -137,14 +137,11 @@ bool EaseRateAction::initWithAction(ActionInterval *action, float rate)
 #define EASE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME) \
 CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action) \
 { \
-    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
-    if (ease) \
-    { \
-        if (ease->initWithAction(action)) \
-            ease->autorelease(); \
-        else \
-            CC_SAFE_RELEASE_NULL(ease); \
-    } \
+    CLASSNAME *ease = new CLASSNAME(); \
+    if (ease->initWithAction(action)) \
+        ease->autorelease(); \
+    else \
+        CC_SAFE_DELETE(ease); \
     return ease; \
 } \
 CLASSNAME* CLASSNAME::clone() const \
@@ -194,14 +191,11 @@ EASE_TEMPLATE_IMPL(EaseCubicActionInOut, tweenfunc::cubicEaseInOut, EaseCubicAct
 #define EASERATE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC) \
 CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float rate) \
 { \
-    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
-    if (ease) \
-    { \
-        if (ease->initWithAction(action, rate)) \
-            ease->autorelease(); \
-        else \
-            CC_SAFE_RELEASE_NULL(ease); \
-    } \
+    CLASSNAME *ease = new CLASSNAME(); \
+    if (ease->initWithAction(action, rate)) \
+        ease->autorelease(); \
+    else \
+        CC_SAFE_DELETE(ease); \
     return ease; \
 } \
 CLASSNAME* CLASSNAME::clone() const \
@@ -243,14 +237,11 @@ bool EaseElastic::initWithAction(ActionInterval *action, float period /* = 0.3f*
 #define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME) \
 CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float period /* = 0.3f*/) \
 { \
-    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
-    if (ease) \
-    { \
-        if (ease->initWithAction(action, period)) \
-            ease->autorelease(); \
-        else \
-            CC_SAFE_RELEASE_NULL(ease); \
-    } \
+    CLASSNAME *ease = new CLASSNAME(); \
+    if (ease->initWithAction(action, period)) \
+        ease->autorelease(); \
+    else \
+        CC_SAFE_DELETE(ease); \
     return ease; \
 } \
 CLASSNAME* CLASSNAME::clone() const \
@@ -275,8 +266,8 @@ EASEELASTIC_TEMPLATE_IMPL(EaseElasticInOut, tweenfunc::elasticEaseInOut, EaseEla
 
 EaseBezierAction* EaseBezierAction::create(cocos2d::ActionInterval* action)
 {
-    EaseBezierAction *ret = new (std::nothrow) EaseBezierAction();
-    if (ret && ret->initWithAction(action))
+    EaseBezierAction *ret = new EaseBezierAction();
+    if (ret->initWithAction(action))
     {
         ret->autorelease();
         return ret;

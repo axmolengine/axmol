@@ -43,7 +43,7 @@ PUGeometryRotator::PUGeometryRotator() :
     _rotationAxis(DEFAULT_ROTATION_AXIS),
     _rotationAxisSet(false)
 {
-    _dynRotationSpeed = new (std::nothrow) PUDynamicAttributeFixed();
+    _dynRotationSpeed = new PUDynamicAttributeFixed();
     (static_cast<PUDynamicAttributeFixed*>(_dynRotationSpeed))->setValue(DEFAULT_ROTATION_SPEED);
 };
 //-----------------------------------------------------------------------
@@ -66,7 +66,7 @@ void PUGeometryRotator::setRotationAxis(const Vec3& rotationAxis)
 //-----------------------------------------------------------------------
 void PUGeometryRotator::resetRotationAxis()
 {
-    _dynRotationSpeed = new (std::nothrow) PUDynamicAttributeFixed();
+    _dynRotationSpeed = new PUDynamicAttributeFixed();
     (static_cast<PUDynamicAttributeFixed*>(_dynRotationSpeed))->setValue(DEFAULT_ROTATION_SPEED);
     _rotationAxisSet = false;
 }
@@ -166,7 +166,7 @@ void PUGeometryRotator::updatePUAffector( PUParticle3D *particle, float deltaTim
 
 PUGeometryRotator* PUGeometryRotator::create()
 {
-    auto pgr = new (std::nothrow) PUGeometryRotator();
+    auto pgr = new PUGeometryRotator();
     pgr->autorelease();
     return pgr;
 }

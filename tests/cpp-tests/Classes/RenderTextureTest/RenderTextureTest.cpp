@@ -679,8 +679,8 @@ SpriteRenderTextureBug::SimpleSprite::~SimpleSprite()
 
 SpriteRenderTextureBug::SimpleSprite* SpriteRenderTextureBug::SimpleSprite::create(const char* filename, const Rect &rect)
 {
-    auto sprite = new (std::nothrow) SimpleSprite();
-    if (sprite && sprite->initWithFile(filename, rect))
+    auto sprite = new SimpleSprite();
+    if (sprite->initWithFile(filename, rect))
     {
         sprite->autorelease();
     }

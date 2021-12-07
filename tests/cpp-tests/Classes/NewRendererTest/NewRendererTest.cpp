@@ -210,7 +210,7 @@ public:
 
 SpriteInGroupCommand* SpriteInGroupCommand::create(const std::string &filename)
 {
-    SpriteInGroupCommand* sprite = new (std::nothrow) SpriteInGroupCommand();
+    SpriteInGroupCommand* sprite = new SpriteInGroupCommand();
     sprite->initWithFile(filename);
     sprite->autorelease();
     return sprite;

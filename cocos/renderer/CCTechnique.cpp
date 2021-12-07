@@ -36,8 +36,8 @@ NS_CC_BEGIN
 
 Technique* Technique::createWithProgramState(Material* parent, backend::ProgramState* state)
 {
-    auto technique = new (std::nothrow) Technique();
-    if (technique && technique->init(parent))
+    auto technique = new Technique();
+    if (technique->init(parent))
     {
         auto pass = Pass::createWithProgramState(technique, state);
         technique->addPass(pass);
@@ -45,17 +45,19 @@ Technique* Technique::createWithProgramState(Material* parent, backend::ProgramS
         technique->autorelease();
         return technique;
     }
+    delete technique;
     return  nullptr;
 }
 
 Technique* Technique::create(Material* material)
 {
-    auto technique = new (std::nothrow) Technique();
-    if (technique && technique->init(material))
+    auto technique = new Technique();
+    if (technique->init(material))
     {
         technique->autorelease();
         return technique;
     }
+    delete technique;
     return nullptr;
 }
 
@@ -76,21 +78,18 @@ bool Technique::init(Material* parent)
 
 Technique* Technique::clone() const
 {
-    auto technique = new (std::nothrow) Technique();
+    auto technique = new Technique();
 
-    if (technique)
+    technique->_name = _name;
+    technique->_renderState = _renderState;
+    for (const auto pass: _passes)
     {
-        technique->_name = _name;
-        technique->_renderState = _renderState;
-        for (const auto pass: _passes)
-        {
-            auto p = pass->clone();
-            p->_technique = technique;
-            technique->_passes.pushBack(p);
-        }
-
-        technique->autorelease();
+        auto p = pass->clone();
+        p->_technique = technique;
+        technique->_passes.pushBack(p);
     }
+
+    technique->autorelease();
     return technique;
 }
 

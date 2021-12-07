@@ -44,8 +44,8 @@ bool EventListenerKeyboard::checkAvailable()
 
 EventListenerKeyboard* EventListenerKeyboard::create()
 {
-    auto ret = new (std::nothrow) EventListenerKeyboard();
-    if (ret && ret->init())
+    auto ret = new EventListenerKeyboard();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -58,8 +58,8 @@ EventListenerKeyboard* EventListenerKeyboard::create()
 
 EventListenerKeyboard* EventListenerKeyboard::clone()
 {
-    auto ret = new (std::nothrow) EventListenerKeyboard();
-    if (ret && ret->init())
+    auto ret = new EventListenerKeyboard();
+    if (ret->init())
     {
         ret->autorelease();
         ret->onKeyPressed = onKeyPressed;

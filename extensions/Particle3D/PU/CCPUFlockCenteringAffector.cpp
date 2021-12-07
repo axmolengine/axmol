@@ -67,7 +67,7 @@ void PUFlockCenteringAffector::preUpdateAffector( float /*deltaTime*/ )
 
 PUFlockCenteringAffector* PUFlockCenteringAffector::create()
 {
-    auto pfca = new (std::nothrow) PUFlockCenteringAffector();
+    auto pfca = new PUFlockCenteringAffector();
     pfca->autorelease();
     return pfca;
 }

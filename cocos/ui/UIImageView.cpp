@@ -56,8 +56,8 @@ ImageView::~ImageView()
     
 ImageView* ImageView::create(const std::string &imageFileName, TextureResType texType)
 {
-    ImageView *widget = new (std::nothrow) ImageView;
-    if (widget && widget->init(imageFileName, texType))
+    ImageView *widget = new ImageView();
+    if (widget->init(imageFileName, texType))
     {
         widget->autorelease();
         return widget;
@@ -68,8 +68,8 @@ ImageView* ImageView::create(const std::string &imageFileName, TextureResType te
 
 ImageView* ImageView::create()
 {
-    ImageView* widget = new (std::nothrow) ImageView();
-    if (widget && widget->init())
+    ImageView* widget = new ImageView();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;

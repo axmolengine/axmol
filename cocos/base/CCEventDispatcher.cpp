@@ -154,7 +154,7 @@ void EventDispatcher::EventListenerVector::push_back(EventListener* listener)
     {
         if (_sceneGraphListeners == nullptr)
         {
-            _sceneGraphListeners = new (std::nothrow) std::vector<EventListener*>();
+            _sceneGraphListeners = new std::vector<EventListener*>();
             _sceneGraphListeners->reserve(100);
         }
         
@@ -413,7 +413,7 @@ void EventDispatcher::associateNodeAndEventListener(Node* node, EventListener* l
     }
     else
     {
-        listeners = new (std::nothrow) std::vector<EventListener*>();
+        listeners = new std::vector<EventListener*>();
         _nodeListenersMap.emplace(node, listeners);
     }
     
@@ -469,7 +469,7 @@ void EventDispatcher::forceAddEventListener(EventListener* listener)
     if (itr == _listenerMap.end())
     {
         
-        listeners = new (std::nothrow) EventListenerVector();
+        listeners = new EventListenerVector();
         _listenerMap.emplace(listenerID, listeners);
     }
     else

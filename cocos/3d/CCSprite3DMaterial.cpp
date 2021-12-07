@@ -68,64 +68,64 @@ backend::ProgramState* Sprite3DMaterial::_bumpedDiffuseMaterialSkinProgState = n
 void Sprite3DMaterial::createBuiltInMaterial()
 {
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_TEXTURE_3D);
-    _unLitMaterialSkinProgState = new (std::nothrow) backend::ProgramState(program);
-    _unLitMaterialSkin = new (std::nothrow) Sprite3DMaterial();
+    _unLitMaterialSkinProgState = new backend::ProgramState(program);
+    _unLitMaterialSkin = new Sprite3DMaterial();
     if (_unLitMaterialSkin && _unLitMaterialSkin->initWithProgramState(_unLitMaterialSkinProgState))
     {
         _unLitMaterialSkin->_type = Sprite3DMaterial::MaterialType::UNLIT;
     }
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D);
-    _diffuseMaterialSkinProgState = new (std::nothrow) backend::ProgramState(program);
-    _diffuseMaterialSkin = new (std::nothrow) Sprite3DMaterial();
+    _diffuseMaterialSkinProgState = new backend::ProgramState(program);
+    _diffuseMaterialSkin = new Sprite3DMaterial();
     if (_diffuseMaterialSkin && _diffuseMaterialSkin->initWithProgramState(_diffuseMaterialSkinProgState))
     {
         _diffuseMaterialSkin->_type = Sprite3DMaterial::MaterialType::DIFFUSE;
     }
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_NORMAL_TEXTURE_3D);
-    _diffuseMaterialProgState = new (std::nothrow) backend::ProgramState(program);
-    _diffuseMaterial = new (std::nothrow) Sprite3DMaterial();
+    _diffuseMaterialProgState = new backend::ProgramState(program);
+    _diffuseMaterial = new Sprite3DMaterial();
     if (_diffuseMaterial && _diffuseMaterial->initWithProgramState(_diffuseMaterialProgState))
     {
         _diffuseMaterial->_type = Sprite3DMaterial::MaterialType::DIFFUSE;
     }
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_3D);
-    _unLitMaterialProgState = new (std::nothrow) backend::ProgramState(program);
-    _unLitMaterial = new (std::nothrow) Sprite3DMaterial();
+    _unLitMaterialProgState = new backend::ProgramState(program);
+    _unLitMaterial = new Sprite3DMaterial();
     if (_unLitMaterial && _unLitMaterial->initWithProgramState(_unLitMaterialProgState))
     {
         _unLitMaterial->_type = Sprite3DMaterial::MaterialType::UNLIT;
     }
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_3D);
-    _unLitNoTexMaterialProgState = new (std::nothrow) backend::ProgramState(program);
-    _unLitNoTexMaterial = new (std::nothrow) Sprite3DMaterial();
+    _unLitNoTexMaterialProgState = new backend::ProgramState(program);
+    _unLitNoTexMaterial = new Sprite3DMaterial();
     if (_unLitNoTexMaterial && _unLitNoTexMaterial->initWithProgramState(_unLitNoTexMaterialProgState))
     {
         _unLitNoTexMaterial->_type = Sprite3DMaterial::MaterialType::UNLIT_NOTEX;
     }
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_NORMAL_3D);
-    _diffuseNoTexMaterialProgState = new (std::nothrow) backend::ProgramState(program);
-    _diffuseNoTexMaterial = new (std::nothrow) Sprite3DMaterial();
+    _diffuseNoTexMaterialProgState = new backend::ProgramState(program);
+    _diffuseNoTexMaterial = new Sprite3DMaterial();
     if (_diffuseNoTexMaterial && _diffuseNoTexMaterial->initWithProgramState(_diffuseNoTexMaterialProgState))
     {
         _diffuseNoTexMaterial->_type = Sprite3DMaterial::MaterialType::DIFFUSE_NOTEX;
     }
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D);
-    _bumpedDiffuseMaterialProgState = new (std::nothrow) backend::ProgramState(program);
-    _bumpedDiffuseMaterial = new (std::nothrow) Sprite3DMaterial();
+    _bumpedDiffuseMaterialProgState = new backend::ProgramState(program);
+    _bumpedDiffuseMaterial = new Sprite3DMaterial();
     if (_bumpedDiffuseMaterial && _bumpedDiffuseMaterial->initWithProgramState(_bumpedDiffuseMaterialProgState))
     {
         _bumpedDiffuseMaterial->_type = Sprite3DMaterial::MaterialType::BUMPED_DIFFUSE;
     }
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D);
-    _bumpedDiffuseMaterialSkinProgState = new (std::nothrow) backend::ProgramState(program);
-    _bumpedDiffuseMaterialSkin = new (std::nothrow) Sprite3DMaterial();
+    _bumpedDiffuseMaterialSkinProgState = new backend::ProgramState(program);
+    _bumpedDiffuseMaterialSkin = new Sprite3DMaterial();
     if (_bumpedDiffuseMaterialSkin && _bumpedDiffuseMaterialSkin->initWithProgramState(_bumpedDiffuseMaterialSkinProgState))
     {
         _bumpedDiffuseMaterialSkin->_type = Sprite3DMaterial::MaterialType::BUMPED_DIFFUSE;
@@ -171,28 +171,27 @@ void Sprite3DMaterial::releaseCachedMaterial()
 
 Material* Sprite3DMaterial::clone() const
 {
-    auto material = new (std::nothrow) Sprite3DMaterial();
-    if (material)
+    auto material = new Sprite3DMaterial();
+
+    // RenderState::cloneInto(material);
+    material->_renderState = _renderState;
+    
+    for (const auto& technique: _techniques)
     {
-        // RenderState::cloneInto(material);
-        material->_renderState = _renderState;
-        
-        for (const auto& technique: _techniques)
-        {
-            auto t = technique->clone();
-            t->setMaterial(material);
-            for (ssize_t i = 0; i < t->getPassCount(); i++) {
-                t->getPassByIndex(i)->setTechnique(t);
-            }
-            material->_techniques.pushBack(t);
+        auto t = technique->clone();
+        t->setMaterial(material);
+        for (ssize_t i = 0; i < t->getPassCount(); i++) {
+            t->getPassByIndex(i)->setTechnique(t);
         }
-        
-        // current technique
-        auto name = _currentTechnique->getName();
-        material->_currentTechnique = material->getTechniqueByName(name);
-        material->_type = _type;
-        material->autorelease();
+        material->_techniques.pushBack(t);
     }
+    
+    // current technique
+    auto name = _currentTechnique->getName();
+    material->_currentTechnique = material->getTechniqueByName(name);
+    material->_type = _type;
+    material->autorelease();
+
     return material;
 }
 
@@ -245,7 +244,7 @@ Sprite3DMaterial* Sprite3DMaterial::createWithFilename(const std::string& path)
         if (it != _materials.end())
             return (Sprite3DMaterial*)it->second->clone();
         
-        auto material = new (std::nothrow) Sprite3DMaterial();
+        auto material = new Sprite3DMaterial();
         if (material->initWithFile(path))
         {
             material->_type = Sprite3DMaterial::MaterialType::CUSTOM;
@@ -262,8 +261,8 @@ Sprite3DMaterial* Sprite3DMaterial::createWithProgramState(backend::ProgramState
 {
     CCASSERT(programState, "Invalid GL Program State");
 
-    auto mat = new (std::nothrow) Sprite3DMaterial();
-    if (mat && mat->initWithProgramState(programState))
+    auto mat = new Sprite3DMaterial();
+    if (mat->initWithProgramState(programState))
     {
         mat->_type = Sprite3DMaterial::MaterialType::CUSTOM;
         mat->autorelease();
@@ -298,7 +297,7 @@ Sprite3DMaterialCache* Sprite3DMaterialCache::getInstance()
 {
     if (! _cacheInstance)
     {
-        _cacheInstance = new (std::nothrow) Sprite3DMaterialCache();
+        _cacheInstance = new Sprite3DMaterialCache();
     }
     
     return _cacheInstance;

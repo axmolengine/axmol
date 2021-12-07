@@ -63,7 +63,7 @@ BMFontConfiguration* FNTConfigLoadFile(const std::string& fntFile)
 
     if (s_configurations == nullptr)
     {
-        s_configurations = new (std::nothrow) Map<std::string, BMFontConfiguration*>();
+        s_configurations = new Map<std::string, BMFontConfiguration*>();
     }
 
     ret = s_configurations->at(fntFile);
@@ -85,7 +85,7 @@ BMFontConfiguration* FNTConfigLoadFile(const std::string& fntFile)
 
 BMFontConfiguration * BMFontConfiguration::create(const std::string& FNTfile)
 {
-    BMFontConfiguration * ret = new (std::nothrow) BMFontConfiguration();
+    BMFontConfiguration * ret = new BMFontConfiguration();
     if (ret->initWithFNTfile(FNTfile))
     {
         ret->autorelease();
@@ -169,7 +169,7 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(const std::string& 
     }
     auto contents = data.c_str();
     
-    std::set<unsigned int> *validCharsString = new (std::nothrow) std::set<unsigned int>();
+    std::set<unsigned int> *validCharsString = new std::set<unsigned int>();
     
     auto contentsLen = strlen(contents);
     char line[512] = {0};
@@ -233,7 +233,7 @@ std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char
 {
     /* based on http://www.angelcode.com/products/bmfont/doc/file_format.html file format */
 
-    std::set<unsigned int> *validCharsString = new (std::nothrow) std::set<unsigned int>();
+    std::set<unsigned int> *validCharsString = new std::set<unsigned int>();
 
     uint32_t remains = size;
 
@@ -613,10 +613,7 @@ int * FontFNT::getHorizontalKerningForTextUTF32(const std::u32string& text, int 
     if (!outNumLetters)
         return nullptr;
     
-    int *sizes = new (std::nothrow) int[outNumLetters];
-    if (!sizes)
-        return nullptr;
-    
+    int *sizes = new int[outNumLetters];
     for (int c = 0; c < outNumLetters; ++c)
     {
         if (c < (outNumLetters-1))
@@ -666,9 +663,7 @@ FontAtlas* FontFNT::newFontAtlas()
     if (_configuration->_commonHeight == 0)
         return nullptr;
     
-    FontAtlas *tempAtlas = new (std::nothrow) FontAtlas(this);
-    if (tempAtlas == nullptr)
-        return nullptr;
+    FontAtlas *tempAtlas = new FontAtlas(this);
     
     // common height
     int originalFontSize = _configuration->_fontSize;
@@ -751,7 +746,7 @@ void FontFNT::reloadBMFontResource(const std::string& fntFilePath)
 {
     if (s_configurations == nullptr)
     {
-        s_configurations = new (std::nothrow) Map<std::string, BMFontConfiguration*>();
+        s_configurations = new Map<std::string, BMFontConfiguration*>();
     }
 
     BMFontConfiguration *ret = s_configurations->at(fntFilePath);

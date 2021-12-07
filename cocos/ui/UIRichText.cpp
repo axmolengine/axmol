@@ -52,7 +52,7 @@ public:
 
     static ListenerComponent* create(Node* parent, const std::string& url, const RichText::OpenUrlHandler handleOpenUrl = nullptr)
     {
-        auto component = new (std::nothrow) ListenerComponent(parent, url, std::move(handleOpenUrl));
+        auto component = new ListenerComponent(parent, url, std::move(handleOpenUrl));
         component->autorelease();
         return component;
     }
@@ -128,8 +128,8 @@ RichElementText* RichElementText::create(int tag, const Color3B &color, uint8_t 
                                          const Color3B& shadowColor, const Vec2& shadowOffset, int shadowBlurRadius,
                                          const Color3B& glowColor)
 {
-    RichElementText* element = new (std::nothrow) RichElementText();
-    if (element && element->init(tag, color, opacity, text, fontName, fontSize, flags, url,
+    RichElementText* element = new RichElementText();
+    if (element->init(tag, color, opacity, text, fontName, fontSize, flags, url,
                                  outlineColor, outlineSize, shadowColor, shadowOffset, shadowBlurRadius, glowColor))
     {
         element->autorelease();
@@ -165,8 +165,8 @@ bool RichElementText::init(int tag, const Color3B &color, uint8_t opacity, const
 
 RichElementImage* RichElementImage::create(int tag, const Color3B &color, uint8_t opacity, const std::string& filePath, const std::string& url, Widget::TextureResType texType)
 {
-    RichElementImage* element = new (std::nothrow) RichElementImage();
-    if (element && element->init(tag, color, opacity, filePath, url, texType))
+    RichElementImage* element = new RichElementImage();
+    if (element->init(tag, color, opacity, filePath, url, texType))
     {
         element->autorelease();
         return element;
@@ -206,8 +206,8 @@ void RichElementImage::setUrl(const std::string& url)
 
 RichElementCustomNode* RichElementCustomNode::create(int tag, const Color3B &color, uint8_t opacity, cocos2d::Node *customNode)
 {
-    RichElementCustomNode* element = new (std::nothrow) RichElementCustomNode();
-    if (element && element->init(tag, color, opacity, customNode))
+    RichElementCustomNode* element = new RichElementCustomNode();
+    if (element->init(tag, color, opacity, customNode))
     {
         element->autorelease();
         return element;
@@ -229,8 +229,8 @@ bool RichElementCustomNode::init(int tag, const Color3B &color, uint8_t opacity,
     
 RichElementNewLine* RichElementNewLine::create(int tag, const Color3B& color, uint8_t opacity)
 {
-    RichElementNewLine* element = new (std::nothrow) RichElementNewLine();
-    if (element && element->init(tag, color, opacity))
+    RichElementNewLine* element = new RichElementNewLine();
+    if (element->init(tag, color, opacity))
     {
         element->autorelease();
         return element;
@@ -904,8 +904,8 @@ RichText::~RichText()
     
 RichText* RichText::create()
 {
-    RichText* widget = new (std::nothrow) RichText();
-    if (widget && widget->init())
+    RichText* widget = new RichText();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -916,8 +916,8 @@ RichText* RichText::create()
 
 RichText* RichText::createWithXML(const std::string& xml, const ValueMap& defaults, const OpenUrlHandler& handleOpenUrl)
 {
-    RichText* widget = new (std::nothrow) RichText();
-    if (widget && widget->initWithXML(xml, defaults, handleOpenUrl))
+    RichText* widget = new RichText();
+    if (widget->initWithXML(xml, defaults, handleOpenUrl))
     {
         widget->autorelease();
         return widget;

@@ -70,8 +70,8 @@ EditBox* EditBox::create(const Vec2& size,
                          const std::string& disabledImage /* = "" */,
                          TextureResType texType /* = TextureResType::LOCAL */)
 {
-    EditBox* pRet = new (std::nothrow) EditBox();
-    if (pRet != nullptr && pRet->initWithSizeAndTexture(size, normalImage, pressedImage, disabledImage, texType))
+    EditBox* pRet = new EditBox();
+    if (pRet->initWithSizeAndTexture(size, normalImage, pressedImage, disabledImage, texType))
     {
         pRet->autorelease();
     }
@@ -86,8 +86,8 @@ EditBox* EditBox::create(const Vec2& size,
 
 EditBox* EditBox::create(const Vec2 &size, cocos2d::ui::Scale9Sprite *normalSprite, ui::Scale9Sprite* pressedSprite, Scale9Sprite* disabledSprite)
 {
-    EditBox* pRet = new (std::nothrow) EditBox();
-    if (pRet != nullptr && pRet->initWithSizeAndBackgroundSprite(size, normalSprite, pressedSprite, disabledSprite))
+    EditBox* pRet = new EditBox();
+    if (pRet->initWithSizeAndBackgroundSprite(size, normalSprite, pressedSprite, disabledSprite))
     {
         pRet->autorelease();
     }

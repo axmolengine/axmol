@@ -303,7 +303,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
         if (flag)
         {
             if (image == nullptr) {
-                image = new (std::nothrow) Image();
+                image = new Image();
                 image->initWithImageFile(textureFileName);
             }
             parser.setSpriteFrameInfo(image, spriteFrame->getRectInPixels(), spriteFrame->isRotated());

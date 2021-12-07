@@ -73,8 +73,8 @@ Menu * Menu::create(MenuItem* item, ...)
 
 Menu* Menu::createWithArray(const Vector<MenuItem*>& arrayOfItems)
 {
-    auto ret = new (std::nothrow) Menu();
-    if (ret && ret->initWithArray(arrayOfItems))
+    auto ret = new Menu();
+    if (ret->initWithArray(arrayOfItems))
     {
         ret->autorelease();
     }

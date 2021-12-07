@@ -52,8 +52,8 @@ ClippingNode::~ClippingNode()
 
 ClippingNode* ClippingNode::create()
 {
-    ClippingNode *ret = new (std::nothrow) ClippingNode();
-    if (ret && ret->init())
+    ClippingNode *ret = new ClippingNode();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -67,8 +67,8 @@ ClippingNode* ClippingNode::create()
 
 ClippingNode* ClippingNode::create(Node *pStencil)
 {
-    ClippingNode *ret = new (std::nothrow) ClippingNode();
-    if (ret && ret->init(pStencil))
+    ClippingNode *ret = new ClippingNode();
+    if (ret->init(pStencil))
     {
         ret->autorelease();
     }
@@ -166,7 +166,7 @@ void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32
     if (alphaThreshold < 1)
     {
         auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-        auto programState = new (std::nothrow) backend::ProgramState(program);
+        auto programState = new backend::ProgramState(program);
         auto alphaLocation = programState->getUniformLocation("u_alpha_value");
         programState->setUniform(alphaLocation, &alphaThreshold, sizeof(alphaThreshold));
         setProgramStateRecursively(_stencil, programState);

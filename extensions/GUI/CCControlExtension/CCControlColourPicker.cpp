@@ -88,9 +88,9 @@ bool ControlColourPicker::init()
         float hueShift                = 8;
         float colourShift             = 28;
         
-        _huePicker = new (std::nothrow) ControlHuePicker();
+        _huePicker = new ControlHuePicker();
         _huePicker->initWithTargetAndPos(spriteSheet, Vec2(backgroundPointZero.x + hueShift, backgroundPointZero.y + hueShift));
-        _colourPicker = new (std::nothrow) ControlSaturationBrightnessPicker();
+        _colourPicker = new ControlSaturationBrightnessPicker();
         _colourPicker->initWithTargetAndPos(spriteSheet, Vec2(backgroundPointZero.x + colourShift, backgroundPointZero.y + colourShift));
         
         // Setup events
@@ -112,7 +112,7 @@ bool ControlColourPicker::init()
 
 ControlColourPicker* ControlColourPicker::create()
 {
-    ControlColourPicker *pRet = new (std::nothrow) ControlColourPicker();
+    ControlColourPicker *pRet = new ControlColourPicker();
     pRet->init();
     pRet->autorelease();
     return pRet;

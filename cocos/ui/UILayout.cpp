@@ -122,8 +122,8 @@ void Layout::setGlobalZOrder(float globalZOrder)
 
 Layout* Layout::create()
 {
-    Layout* layout = new (std::nothrow) Layout();
-    if (layout && layout->init())
+    Layout* layout = new Layout();
+    if (layout->init())
     {
         layout->autorelease();
         return layout;

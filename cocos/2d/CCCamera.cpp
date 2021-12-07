@@ -42,7 +42,7 @@ Viewport Camera::_defaultViewport;
 
 Camera* Camera::create()
 {
-    Camera* camera = new (std::nothrow) Camera();
+    Camera* camera = new Camera();
     camera->initDefault();
     camera->autorelease();
     camera->setDepth(0);
@@ -52,28 +52,18 @@ Camera* Camera::create()
 
 Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
 {
-    auto ret = new (std::nothrow) Camera();
-    if (ret)
-    {
-        ret->initPerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
-        ret->autorelease();
-        return ret;
-    }
-    CC_SAFE_DELETE(ret);
-    return nullptr;
+    auto ret = new Camera();
+    ret->initPerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
+    ret->autorelease();
+    return ret;
 }
 
 Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane)
 {
-    auto ret = new (std::nothrow) Camera();
-    if (ret)
-    {
-        ret->initOrthographic(zoomX, zoomY, nearPlane, farPlane);
-        ret->autorelease();
-        return ret;
-    }
-    CC_SAFE_DELETE(ret);
-    return nullptr;
+    auto ret = new Camera();
+    ret->initOrthographic(zoomX, zoomY, nearPlane, farPlane);
+    ret->autorelease();
+    return ret;
 }
 
 Camera* Camera::getDefaultCamera()

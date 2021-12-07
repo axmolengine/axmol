@@ -71,7 +71,7 @@ void PUPathFollower::updatePUAffector( PUParticle3D *particle, float deltaTime )
 
 PUPathFollower* PUPathFollower::create()
 {
-    auto ppf = new (std::nothrow) PUPathFollower();
+    auto ppf = new PUPathFollower();
     ppf->autorelease();
     return ppf;
 }

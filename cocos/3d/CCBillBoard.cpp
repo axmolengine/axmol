@@ -46,8 +46,8 @@ BillBoard::~BillBoard()
 
 BillBoard* BillBoard::createWithTexture(Texture2D *texture, Mode mode)
 {
-    BillBoard *billboard = new (std::nothrow) BillBoard();
-    if (billboard && billboard->initWithTexture(texture))
+    BillBoard *billboard = new BillBoard();
+    if (billboard->initWithTexture(texture))
     {
         billboard->_mode = mode;
         billboard->autorelease();
@@ -60,8 +60,8 @@ BillBoard* BillBoard::createWithTexture(Texture2D *texture, Mode mode)
 
 BillBoard* BillBoard::create(const std::string& filename, Mode mode)
 {
-    BillBoard *billboard = new (std::nothrow) BillBoard();
-    if (billboard && billboard->initWithFile(filename))
+    BillBoard *billboard = new BillBoard();
+    if (billboard->initWithFile(filename))
     {
         billboard->_mode = mode;
         billboard->autorelease();
@@ -73,8 +73,8 @@ BillBoard* BillBoard::create(const std::string& filename, Mode mode)
 
 BillBoard* BillBoard::create(const std::string& filename, const Rect& rect, Mode mode)
 {
-    BillBoard *billboard = new (std::nothrow) BillBoard();
-    if (billboard && billboard->initWithFile(filename, rect))
+    BillBoard *billboard = new BillBoard();
+    if (billboard->initWithFile(filename, rect))
     {
         billboard->_mode = mode;
         billboard->autorelease();
@@ -86,8 +86,8 @@ BillBoard* BillBoard::create(const std::string& filename, const Rect& rect, Mode
 
 BillBoard* BillBoard::create(Mode mode)
 {
-    BillBoard *billboard = new (std::nothrow) BillBoard();
-    if (billboard && billboard->init())
+    BillBoard *billboard = new BillBoard();
+    if (billboard->init())
     {
         billboard->_mode = mode;
         billboard->autorelease();

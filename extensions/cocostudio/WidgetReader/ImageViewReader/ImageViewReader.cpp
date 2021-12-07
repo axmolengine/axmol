@@ -46,7 +46,7 @@ namespace cocostudio
     {
         if (!instanceImageViewReader)
         {
-            instanceImageViewReader = new (std::nothrow) ImageViewReader();
+            instanceImageViewReader = new ImageViewReader();
         }
         return instanceImageViewReader;
     }

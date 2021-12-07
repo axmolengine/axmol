@@ -41,7 +41,7 @@ namespace cocostudio
     {
         if (!instanceCheckBoxReader)
         {
-            instanceCheckBoxReader = new (std::nothrow) RadioButtonReader();
+            instanceCheckBoxReader = new RadioButtonReader();
         }
         return instanceCheckBoxReader;
     }

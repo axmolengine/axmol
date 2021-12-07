@@ -45,8 +45,8 @@ RadioButton::~RadioButton()
 
 RadioButton* RadioButton::create()
 {
-    RadioButton* widget = new (std::nothrow) RadioButton();
-    if (widget && widget->init())
+    RadioButton* widget = new RadioButton();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -62,8 +62,8 @@ RadioButton* RadioButton::create(const std::string& backGround,
                            const std::string& frontCrossDisabled,
                            TextureResType texType)
 {
-    RadioButton *pWidget = new (std::nothrow) RadioButton;
-    if (pWidget && pWidget->init(backGround,
+    RadioButton *pWidget = new RadioButton();
+    if (pWidget->init(backGround,
                                  backGroundSelected,
                                  cross,
                                  backGroundDisabled,
@@ -81,8 +81,8 @@ RadioButton* RadioButton::create(const std::string& backGround,
                            const std::string& cross,
                            TextureResType texType)
 {
-    RadioButton *pWidget = new (std::nothrow) RadioButton;
-    if (pWidget && pWidget->init(backGround,
+    RadioButton *pWidget = new RadioButton();
+    if (pWidget->init(backGround,
                                  "",
                                  cross,
                                  "",
@@ -170,8 +170,8 @@ RadioButtonGroup::~RadioButtonGroup()
 
 RadioButtonGroup* RadioButtonGroup::create()
 {
-    RadioButtonGroup* widget = new (std::nothrow) RadioButtonGroup();
-    if (widget && widget->init())
+    RadioButtonGroup* widget = new RadioButtonGroup();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;

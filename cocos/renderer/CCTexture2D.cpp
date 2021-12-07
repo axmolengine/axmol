@@ -613,7 +613,7 @@ void Texture2D::addSpriteFrameCapInset(SpriteFrame* spritframe, const Rect& capI
 {
     if(nullptr == _ninePatchInfo)
     {
-        _ninePatchInfo = new (std::nothrow) NinePatchInfo;
+        _ninePatchInfo = new NinePatchInfo;
     }
     if(nullptr == spritframe)
     {
@@ -685,7 +685,7 @@ void Texture2D::initProgram()
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     //create program state
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE);
-    _programState = new (std::nothrow) cocos2d::backend::ProgramState(program);
+    _programState = new cocos2d::backend::ProgramState(program);
     _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
     _textureLocation = _programState->getUniformLocation("u_texture");
     

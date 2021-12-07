@@ -62,13 +62,8 @@ void ActionInstant::update(float /*time*/)
 
 Show* Show::create() 
 {
-    Show* ret = new (std::nothrow) Show();
-
-    if (ret)
-    {
-        ret->autorelease();
-    }
-
+    Show* ret = new Show();
+    ret->autorelease();
     return ret;
 }
 
@@ -94,12 +89,9 @@ Show* Show::clone() const
 //
 Hide * Hide::create() 
 {
-    Hide *ret = new (std::nothrow) Hide();
+    Hide *ret = new Hide();
 
-    if (ret)
-    {
-        ret->autorelease();
-    }
+    ret->autorelease();
 
     return ret;
 }
@@ -126,13 +118,8 @@ Hide* Hide::clone() const
 //
 ToggleVisibility * ToggleVisibility::create()
 {
-    ToggleVisibility *ret = new (std::nothrow) ToggleVisibility();
-
-    if (ret)
-    {
-        ret->autorelease();
-    }
-
+    ToggleVisibility *ret = new ToggleVisibility();
+    ret->autorelease();
     return ret;
 }
 
@@ -158,12 +145,12 @@ ToggleVisibility * ToggleVisibility::clone() const
 //
 RemoveSelf * RemoveSelf::create(bool isNeedCleanUp /*= true*/) 
 {
-    RemoveSelf *ret = new (std::nothrow) RemoveSelf();
+    RemoveSelf *ret = new RemoveSelf();
 
-    if (ret && ret->init(isNeedCleanUp))
-    {
+    if (ret->init(isNeedCleanUp))
         ret->autorelease();
-    }
+    else
+        CC_SAFE_DELETE(ret);
 
     return ret;
 }
@@ -197,9 +184,9 @@ RemoveSelf * RemoveSelf::clone() const
 
 FlipX *FlipX::create(bool x)
 {
-    FlipX *ret = new (std::nothrow) FlipX();
+    FlipX *ret = new FlipX();
 
-    if (ret && ret->initWithFlipX(x))
+    if (ret->initWithFlipX(x))
     {
         ret->autorelease();
         return ret;
@@ -237,9 +224,9 @@ FlipX * FlipX::clone() const
 
 FlipY * FlipY::create(bool y)
 {
-    FlipY *ret = new (std::nothrow) FlipY();
+    FlipY *ret = new FlipY();
 
-    if (ret && ret->initWithFlipY(y))
+    if (ret->initWithFlipY(y))
     {
         ret->autorelease();
         return ret;
@@ -278,9 +265,9 @@ FlipY * FlipY::clone() const
 
 Place* Place::create(const Vec2& pos)
 {
-    Place *ret = new (std::nothrow) Place();
+    Place *ret = new Place();
 
-    if (ret && ret->initWithPosition(pos))
+    if (ret->initWithPosition(pos))
     {
         ret->autorelease();
         return ret;
@@ -320,9 +307,9 @@ void Place::update(float time)
 
 CallFunc * CallFunc::create(const std::function<void()> &func)
 {
-    CallFunc *ret = new (std::nothrow) CallFunc();
+    CallFunc *ret = new CallFunc();
 
-    if (ret && ret->initWithFunction(func) )
+    if (ret->initWithFunction(func) )
     {
         ret->autorelease();
         return ret;
@@ -341,8 +328,8 @@ bool CallFunc::initWithFunction(const std::function<void()> &func)
 CallFunc * CallFunc::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CallFunc();
-    if( _function )
+    auto a = new CallFunc();
+    if( _function)
         a->initWithFunction(_function);
 
     a->autorelease();
@@ -375,9 +362,9 @@ void CallFunc::execute()
 
 CallFuncN * CallFuncN::create(const std::function<void(Node*)> &func)
 {
-    auto ret = new (std::nothrow) CallFuncN();
+    auto ret = new CallFuncN();
 
-    if (ret && ret->initWithFunction(func) )
+    if (ret->initWithFunction(func) )
     {
         ret->autorelease();
         return ret;
@@ -404,7 +391,7 @@ bool CallFuncN::initWithFunction(const std::function<void (Node *)> &func)
 CallFuncN * CallFuncN::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CallFuncN();
+    auto a = new CallFuncN();
     if( _functionN)
         a->initWithFunction(_functionN);
 

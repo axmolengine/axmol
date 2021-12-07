@@ -31,14 +31,9 @@ NS_TIMELINE_BEGIN
 
 Timeline* Timeline::create()
 {
-    Timeline* object = new (std::nothrow) Timeline();
-    if (object)
-    {
-        object->autorelease();
-        return object;
-    }
-    CC_SAFE_DELETE(object);
-    return nullptr;
+    Timeline* ret = new Timeline();
+    ret->autorelease();
+    return ret;
 }
 
 Timeline::Timeline()

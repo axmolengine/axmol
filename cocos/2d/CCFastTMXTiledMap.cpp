@@ -35,7 +35,7 @@ NS_CC_BEGIN
 
 FastTMXTiledMap * FastTMXTiledMap::create(const std::string& tmxFile)
 {
-    FastTMXTiledMap *ret = new (std::nothrow) FastTMXTiledMap();
+    FastTMXTiledMap *ret = new FastTMXTiledMap();
     if (ret->initWithTMXFile(tmxFile))
     {
         ret->autorelease();
@@ -47,7 +47,7 @@ FastTMXTiledMap * FastTMXTiledMap::create(const std::string& tmxFile)
 
 FastTMXTiledMap* FastTMXTiledMap::createWithXML(const std::string& tmxString, const std::string& resourcePath)
 {
-    FastTMXTiledMap *ret = new (std::nothrow) FastTMXTiledMap();
+    FastTMXTiledMap *ret = new FastTMXTiledMap();
     if (ret->initWithXML(tmxString, resourcePath))
     {
         ret->autorelease();

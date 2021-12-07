@@ -176,8 +176,8 @@ class TouchableSprite : public Sprite
 public:
     static TouchableSprite* create(int priority = 0)
     {
-        auto ret = new (std::nothrow) TouchableSprite(priority);
-        if (ret && ret->init())
+        auto ret = new TouchableSprite(priority);
+        if (ret->init())
         {
             ret->autorelease();
         }
@@ -1396,9 +1396,9 @@ public:
     
     static DanglingNodePointersTestSprite * create(const TappedCallback & tappedCallback)
     {
-        auto ret = new (std::nothrow) DanglingNodePointersTestSprite(tappedCallback);
+        auto ret = new DanglingNodePointersTestSprite(tappedCallback);
         
-        if (ret && ret->init())
+        if (ret->init())
         {
             ret->autorelease();
             return ret;

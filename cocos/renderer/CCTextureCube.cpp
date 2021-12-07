@@ -134,18 +134,12 @@ Image* createImage(const std::string& path)
     }
 
     // all images are handled by UIImage except PVR extension that is handled by our own handler
-    Image* image = nullptr;
-    do
-    {
-        image = new (std::nothrow) Image();
-        CC_BREAK_IF(nullptr == image);
-
-        bool bRet = image->initWithImageFile(fullpath);
-        CC_BREAK_IF(!bRet);
-    }
-    while (0);
-
-    return image;
+    Image* image = new Image();
+    if (image->initWithImageFile(fullpath))
+        return image;
+       
+    delete image;
+    return nullptr;
 }
 
 TextureCube::TextureCube()
@@ -162,8 +156,8 @@ TextureCube* TextureCube::create(const std::string& positive_x, const std::strin
                                  const std::string& positive_y, const std::string& negative_y,
                                  const std::string& positive_z, const std::string& negative_z)
 {
-    auto ret = new (std::nothrow) TextureCube();
-    if (ret && ret->init(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z))
+    auto ret = new TextureCube();
+    if (ret->init(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z))
     {
         ret->autorelease();
         return ret;

@@ -315,7 +315,7 @@ void PUForceFieldAffector::prepare()
 
 PUForceFieldAffector* PUForceFieldAffector::create()
 {
-    auto pffa = new (std::nothrow) PUForceFieldAffector();
+    auto pffa = new PUForceFieldAffector();
     pffa->autorelease();
     return pffa;
 }

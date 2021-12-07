@@ -18,7 +18,7 @@ void SpriteSheetLoader::initializePolygonInfo(const Vec2& textureSize,
 
     const auto scaleFactor = CC_CONTENT_SCALE_FACTOR();
 
-    auto* vertexData = new (std::nothrow) V3F_C4B_T2F[vertexCount];
+    auto* vertexData = new V3F_C4B_T2F[vertexCount];
     for (size_t i = 0; i < vertexCount / 2; i++)
     {
         vertexData[i].colors = Color4B::WHITE;

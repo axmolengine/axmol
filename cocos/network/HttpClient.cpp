@@ -57,7 +57,7 @@ static void __clearQueueUnsafe(_Cont& queue, _Fty pred) {
 // HttpClient implementation
 HttpClient* HttpClient::getInstance() {
     if (_httpClient == nullptr) {
-        _httpClient = new (std::nothrow) HttpClient();
+        _httpClient = new HttpClient();
     }
 
     return _httpClient;

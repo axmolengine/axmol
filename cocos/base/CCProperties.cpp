@@ -59,7 +59,7 @@ Properties::Properties(const Properties& copy)
 
     for (const auto space: copy._namespaces)
     {
-        _namespaces.push_back(new (std::nothrow) Properties(*space));
+        _namespaces.push_back(new Properties(*space));
     }
     rewind();
 }
@@ -105,7 +105,7 @@ Properties* Properties::createNonRefCounted(const std::string& url)
     // so we pass data as weak pointer
     auto data = FileUtils::getInstance()->getDataFromFile(fileString);
     ssize_t dataIdx = 0;
-    Properties* properties = new (std::nothrow) Properties(&data, &dataIdx);
+    Properties* properties = new Properties(&data, &dataIdx);
     properties->resolveInheritance();
 
     // Get the specified properties object.
@@ -308,7 +308,7 @@ void Properties::readProperties()
                     }
 
                     // New namespace without an ID.
-                    Properties* space = new (std::nothrow) Properties(_data, _dataIdx, name, NULL, parentID, this);
+                    Properties* space = new Properties(_data, _dataIdx, name, NULL, parentID, this);
                     _namespaces.push_back(space);
 
                     // If the namespace ends on this line, seek to right after the '}' character.
@@ -350,7 +350,7 @@ void Properties::readProperties()
                         }
 
                         // Create new namespace.
-                        Properties* space = new (std::nothrow) Properties(_data, _dataIdx, name, value, parentID, this);
+                        Properties* space = new Properties(_data, _dataIdx, name, value, parentID, this);
                         _namespaces.push_back(space);
 
                         // If the namespace ends on this line, seek to right after the '}' character.
@@ -371,7 +371,7 @@ void Properties::readProperties()
                         if (c == '{')
                         {
                             // Create new namespace.
-                            Properties* space = new (std::nothrow) Properties(_data, _dataIdx, name, value, parentID, this);
+                            Properties* space = new Properties(_data, _dataIdx, name, value, parentID, this);
                             _namespaces.push_back(space);
                         }
                         else
@@ -529,7 +529,7 @@ void Properties::resolveInheritance(const char* id)
                 resolveInheritance(parent->getId());
 
                 // Copy the child.
-                Properties* overrides = new (std::nothrow) Properties(*derived);
+                Properties* overrides = new Properties(*derived);
 
                 // Delete the child's data.
                 for (size_t i = 0, count = derived->_namespaces.size(); i < count; i++)
@@ -543,7 +543,7 @@ void Properties::resolveInheritance(const char* id)
                 std::vector<Properties*>::const_iterator itt;
                 for (const auto space: parent->_namespaces)
                 {
-                    derived->_namespaces.push_back(new (std::nothrow) Properties(*space));
+                    derived->_namespaces.push_back(new Properties(*space));
                 }
                 derived->rewind();
 
@@ -607,7 +607,7 @@ void Properties::mergeWith(Properties* overrides)
         if (!merged)
         {
             // Add this new namespace.
-            Properties* newNamespace = new (std::nothrow) Properties(*overridesNamespace);
+            Properties* newNamespace = new Properties(*overridesNamespace);
 
             this->_namespaces.push_back(newNamespace);
             this->_namespacesItr = this->_namespaces.end();
@@ -1042,14 +1042,14 @@ void Properties::setVariable(const char* name, const char* value)
     {
         // Add a new variable with this name
         if (!_variables)
-            _variables = new (std::nothrow) std::vector<Property>();
+            _variables = new std::vector<Property>();
         _variables->push_back(Property(name, value ? value : ""));
     }
 }
 
 Properties* Properties::clone()
 {
-    Properties* p = new (std::nothrow) Properties();
+    Properties* p = new Properties();
     
     p->_namespace = _namespace;
     p->_id = _id;
@@ -1086,7 +1086,7 @@ void Properties::setDirectoryPath(const std::string& path)
 {
     if (_dirPath == NULL)
     {
-        _dirPath = new (std::nothrow) std::string(path);
+        _dirPath = new std::string(path);
     }
     else
     {

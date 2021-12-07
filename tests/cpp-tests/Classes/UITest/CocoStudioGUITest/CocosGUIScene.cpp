@@ -59,36 +59,36 @@
 GUIDynamicCreateTests::GUIDynamicCreateTests()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
-    addTest("VideoPlayer Test", [](){ return new (std::nothrow) VideoPlayerTests; });
+    addTest("VideoPlayer Test", [](){ return new VideoPlayerTests; });
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-    addTest("WebView Test", [](){ return new (std::nothrow) WebViewTests; });
+    addTest("WebView Test", [](){ return new WebViewTests; });
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-    addTest("EditBox Test", [](){ return new (std::nothrow) UIEditBoxTests; });
+    addTest("EditBox Test", [](){ return new UIEditBoxTests; });
 #endif
-    addTest("Focus Test", [](){ return new (std::nothrow) UIFocusTests; });
-    addTest("Scale9Sprite Test", [](){ return new (std::nothrow) UIScale9SpriteTests; });
-    addTest("Button Test", [](){ return new (std::nothrow) UIButtonTests; });
-    addTest("CheckBox Test", [](){ return new (std::nothrow) UICheckBoxTests; });
-    addTest("RadioButton Test", [](){ return new (std::nothrow) UIRadioButtonTests; });
-    addTest("Slider Test", [](){ return new (std::nothrow) UISliderTests; });
+    addTest("Focus Test", [](){ return new UIFocusTests; });
+    addTest("Scale9Sprite Test", [](){ return new UIScale9SpriteTests; });
+    addTest("Button Test", [](){ return new UIButtonTests; });
+    addTest("CheckBox Test", [](){ return new UICheckBoxTests; });
+    addTest("RadioButton Test", [](){ return new UIRadioButtonTests; });
+    addTest("Slider Test", [](){ return new UISliderTests; });
    
-    addTest("ImageView Test", [](){ return new (std::nothrow) UIImageViewTests; });
-    addTest("LoadingBar Test", [](){ return new (std::nothrow) UILoadingBarTests; });
-    addTest("TextAtlas Test", [](){ return new (std::nothrow) UITextAtlasTests; });
+    addTest("ImageView Test", [](){ return new UIImageViewTests; });
+    addTest("LoadingBar Test", [](){ return new UILoadingBarTests; });
+    addTest("TextAtlas Test", [](){ return new UITextAtlasTests; });
     
-    addTest("Text Test", [](){ return new (std::nothrow) UITextTests; });
-    addTest("TextBMFont Test", [](){ return new (std::nothrow) UITextBMFontTests; });
-    addTest("TextField Test", [](){ return new (std::nothrow) UITextFieldTests; });
-    addTest("Layout Test", [](){ return new (std::nothrow) UILayoutTests; });
+    addTest("Text Test", [](){ return new UITextTests; });
+    addTest("TextBMFont Test", [](){ return new UITextBMFontTests; });
+    addTest("TextField Test", [](){ return new UITextFieldTests; });
+    addTest("Layout Test", [](){ return new UILayoutTests; });
     
-    addTest("ScrollView Test", [](){ return new (std::nothrow) UIScrollViewTests; });
-    addTest("PageView Test", [](){ return new (std::nothrow) UIPageViewTests; });
-    addTest("ListView Test", [](){ return new (std::nothrow) UIListViewTests; });
+    addTest("ScrollView Test", [](){ return new UIScrollViewTests; });
+    addTest("PageView Test", [](){ return new UIPageViewTests; });
+    addTest("ListView Test", [](){ return new UIListViewTests; });
 
-    addTest("WidgetAddNode Test", [](){ return new (std::nothrow) UIWidgetAddNodeTests; });
-    addTest("RichText Test", [](){ return new (std::nothrow) UIRichTextTests; });
+    addTest("WidgetAddNode Test", [](){ return new UIWidgetAddNodeTests; });
+    addTest("RichText Test", [](){ return new UIRichTextTests; });
 
-    addTest("TabControl Test", [](){return new (std::nothrow) UITabControlTests; });
+    addTest("TabControl Test", [](){return new UITabControlTests; });
 }

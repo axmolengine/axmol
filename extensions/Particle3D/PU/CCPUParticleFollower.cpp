@@ -99,7 +99,7 @@ void PUParticleFollower::firstParticleUpdate( PUParticle3D* /*particle*/, float 
 
 PUParticleFollower* PUParticleFollower::create()
 {
-    auto ppf = new (std::nothrow) PUParticleFollower();
+    auto ppf = new PUParticleFollower();
     ppf->autorelease();
     return ppf;
 }

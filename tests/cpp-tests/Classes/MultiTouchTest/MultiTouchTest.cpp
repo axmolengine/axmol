@@ -55,7 +55,7 @@ public:
 
     static TouchPoint* touchPointWithParent(Node* pParent, const Vec2 &touchPoint, const Color3B &touchColor)
     {
-        auto pRet = new (std::nothrow) TouchPoint(touchPoint, touchColor);
+        auto pRet = new TouchPoint(touchPoint, touchColor);
         pRet->setContentSize(pParent->getContentSize());
         pRet->setAnchorPoint(Vec2(0.0f, 0.0f));
         pRet->autorelease();

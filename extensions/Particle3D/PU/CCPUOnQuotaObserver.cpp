@@ -84,7 +84,7 @@ void PUOnQuotaObserver::postUpdateObserver(float /*deltaTime*/)
 
 PUOnQuotaObserver* PUOnQuotaObserver::create()
 {
-    auto pqo = new (std::nothrow) PUOnQuotaObserver();
+    auto pqo = new PUOnQuotaObserver();
     pqo->autorelease();
     return pqo;
 }

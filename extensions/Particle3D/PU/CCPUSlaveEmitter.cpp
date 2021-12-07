@@ -151,7 +151,7 @@ void PUSlaveEmitter::notifyStart ()
 
 PUSlaveEmitter* PUSlaveEmitter::create()
 {
-    auto pe = new (std::nothrow) PUSlaveEmitter();
+    auto pe = new PUSlaveEmitter();
     pe->autorelease();
     return pe;
 }

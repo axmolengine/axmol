@@ -214,7 +214,7 @@ private:
 };
 
 
-#define ADD_TEST(__className__) addTest( #__className__, [](){ return new (std::nothrow) __className__;} );
+#define ADD_TEST(__className__) addTest( #__className__, [](){ return new __className__;} );
 
 #define ADD_TEST_CASE(__className__) addTestCase( #__className__, [](){ return __className__::create();} );
 

@@ -73,7 +73,7 @@ const LuaValue LuaValue::dictValue(const LuaValueDict& dictValue)
 {
     LuaValue value;
     value._type = LuaValueTypeDict;
-    value._field.dictValue = new (std::nothrow) LuaValueDict(dictValue);
+    value._field.dictValue = new LuaValueDict(dictValue);
     return value;
 }
 
@@ -81,7 +81,7 @@ const LuaValue LuaValue::arrayValue(const LuaValueArray& arrayValue)
 {
     LuaValue value;
     value._type = LuaValueTypeArray;
-    value._field.arrayValue = new (std::nothrow) LuaValueArray(arrayValue);
+    value._field.arrayValue = new LuaValueArray(arrayValue);
     return value;
 }
 
@@ -142,11 +142,11 @@ void LuaValue::copy(const LuaValue& rhs)
     }
     else if (_type == LuaValueTypeDict)
     {
-        _field.dictValue = new (std::nothrow) LuaValueDict(*rhs._field.dictValue);
+        _field.dictValue = new LuaValueDict(*rhs._field.dictValue);
     }
     else if (_type == LuaValueTypeArray)
     {
-        _field.arrayValue = new (std::nothrow) LuaValueArray(*rhs._field.arrayValue);
+        _field.arrayValue = new LuaValueArray(*rhs._field.arrayValue);
     }
     else if (_type == LuaValueTypeObject)
     {

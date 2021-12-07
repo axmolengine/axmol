@@ -113,7 +113,7 @@ void PUVelocityMatchingAffector::updatePUAffector( PUParticle3D* /*particle*/, f
 
 PUVelocityMatchingAffector* PUVelocityMatchingAffector::create()
 {
-    auto pvma = new (std::nothrow) PUVelocityMatchingAffector();
+    auto pvma = new PUVelocityMatchingAffector();
     pvma->autorelease();
     return pvma;
 }

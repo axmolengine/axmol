@@ -117,7 +117,7 @@ void CCPUMaterialTranslator::translate(PUScriptCompiler* compiler, PUAbstractNod
     PUObjectAbstractNode* obj = reinterpret_cast<PUObjectAbstractNode*>(node);
     //PUObjectAbstractNode* parent = obj->parent ? reinterpret_cast<PUObjectAbstractNode*>(obj->parent) : 0;
 
-    _material = new (std::nothrow) PUMaterial();
+    _material = new PUMaterial();
     _material->fileName = obj->file;
     _material->name = obj->name;
     _material->autorelease();

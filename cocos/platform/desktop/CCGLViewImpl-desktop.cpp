@@ -338,8 +338,8 @@ GLViewImpl* GLViewImpl::create(const std::string& viewName)
 
 GLViewImpl* GLViewImpl::create(const std::string& viewName, bool resizable)
 {
-    auto ret = new (std::nothrow) GLViewImpl;
-    if(ret && ret->initWithRect(viewName, Rect(0, 0, 960, 640), 1.0f, resizable)) {
+    auto ret = new GLViewImpl;
+    if(ret->initWithRect(viewName, Rect(0, 0, 960, 640), 1.0f, resizable)) {
         ret->autorelease();
         return ret;
     }
@@ -349,8 +349,8 @@ GLViewImpl* GLViewImpl::create(const std::string& viewName, bool resizable)
 
 GLViewImpl* GLViewImpl::createWithRect(const std::string& viewName, Rect rect, float frameZoomFactor, bool resizable)
 {
-    auto ret = new (std::nothrow) GLViewImpl;
-    if(ret && ret->initWithRect(viewName, rect, frameZoomFactor, resizable)) {
+    auto ret = new GLViewImpl;
+    if(ret->initWithRect(viewName, rect, frameZoomFactor, resizable)) {
         ret->autorelease();
         return ret;
     }
@@ -360,8 +360,8 @@ GLViewImpl* GLViewImpl::createWithRect(const std::string& viewName, Rect rect, f
 
 GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName)
 {
-    auto ret = new (std::nothrow) GLViewImpl();
-    if(ret && ret->initWithFullScreen(viewName)) {
+    auto ret = new GLViewImpl();
+    if(ret->initWithFullScreen(viewName)) {
         ret->autorelease();
         return ret;
     }
@@ -371,8 +371,8 @@ GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName)
 
 GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName, const GLFWvidmode &videoMode, GLFWmonitor *monitor)
 {
-    auto ret = new (std::nothrow) GLViewImpl();
-    if(ret && ret->initWithFullscreen(viewName, videoMode, monitor)) {
+    auto ret = new GLViewImpl();
+    if(ret->initWithFullscreen(viewName, videoMode, monitor)) {
         ret->autorelease();
         return ret;
     }
@@ -602,8 +602,8 @@ void GLViewImpl::setIcon(const std::vector<std::string>& filelist) const {
     if (filelist.empty()) return;
     std::vector<Image*> icons;
     for (auto const& filename: filelist) {
-        Image* icon = new (std::nothrow) Image();
-        if (icon && icon->initWithImageFile(filename)) {
+        Image* icon = new Image();
+        if (icon->initWithImageFile(filename)) {
             icons.push_back(icon);
         } else {
             CC_SAFE_DELETE(icon);

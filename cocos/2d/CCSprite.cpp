@@ -50,8 +50,8 @@ NS_CC_BEGIN
 // MARK: create, init, dealloc
 Sprite* Sprite::createWithTexture(Texture2D *texture)
 {
-    Sprite *sprite = new (std::nothrow) Sprite();
-    if (sprite && sprite->initWithTexture(texture))
+    Sprite *sprite = new Sprite();
+    if (sprite->initWithTexture(texture))
     {
         sprite->autorelease();
         return sprite;
@@ -62,8 +62,8 @@ Sprite* Sprite::createWithTexture(Texture2D *texture)
 
 Sprite* Sprite::createWithTexture(Texture2D *texture, const Rect& rect, bool rotated)
 {
-    Sprite *sprite = new (std::nothrow) Sprite();
-    if (sprite && sprite->initWithTexture(texture, rect, rotated))
+    Sprite *sprite = new Sprite();
+    if (sprite->initWithTexture(texture, rect, rotated))
     {
         sprite->autorelease();
         return sprite;
@@ -74,8 +74,8 @@ Sprite* Sprite::createWithTexture(Texture2D *texture, const Rect& rect, bool rot
 
 Sprite* Sprite::create(const std::string& filename)
 {
-    Sprite *sprite = new (std::nothrow) Sprite();
-    if (sprite && sprite->initWithFile(filename))
+    Sprite *sprite = new Sprite();
+    if (sprite->initWithFile(filename))
     {
         sprite->autorelease();
         return sprite;
@@ -86,8 +86,8 @@ Sprite* Sprite::create(const std::string& filename)
 
 Sprite* Sprite::create(const PolygonInfo& info)
 {
-    Sprite *sprite = new (std::nothrow) Sprite();
-    if(sprite && sprite->initWithPolygon(info))
+    Sprite *sprite = new Sprite();
+    if(sprite->initWithPolygon(info))
     {
         sprite->autorelease();
         return sprite;
@@ -98,8 +98,8 @@ Sprite* Sprite::create(const PolygonInfo& info)
 
 Sprite* Sprite::create(const std::string& filename, const Rect& rect)
 {
-    Sprite *sprite = new (std::nothrow) Sprite();
-    if (sprite && sprite->initWithFile(filename, rect))
+    Sprite *sprite = new Sprite();
+    if (sprite->initWithFile(filename, rect))
     {
         sprite->autorelease();
         return sprite;
@@ -110,8 +110,8 @@ Sprite* Sprite::create(const std::string& filename, const Rect& rect)
 
 Sprite* Sprite::createWithSpriteFrame(SpriteFrame *spriteFrame)
 {
-    Sprite *sprite = new (std::nothrow) Sprite();
-    if (sprite && spriteFrame && sprite->initWithSpriteFrame(spriteFrame))
+    Sprite *sprite = new Sprite();
+    if (spriteFrame && sprite->initWithSpriteFrame(spriteFrame))
     {
         sprite->autorelease();
         return sprite;
@@ -135,8 +135,8 @@ Sprite* Sprite::createWithSpriteFrameName(const std::string& spriteFrameName)
 
 Sprite* Sprite::create()
 {
-    Sprite *sprite = new (std::nothrow) Sprite();
-    if (sprite && sprite->init())
+    Sprite *sprite = new Sprite();
+    if (sprite->init())
     {
         sprite->autorelease();
         return sprite;
@@ -319,7 +319,7 @@ Sprite::~Sprite()
  * It's used for creating a default texture when sprite's texture is set to nullptr.
  * Supposing codes as follows:
  *
- *   auto sp = new (std::nothrow) Sprite();
+ *   auto sp = new Sprite();
  *   sp->init();  // Texture was set to nullptr, in order to make opacity and color to work correctly, we need to create a 2x2 white texture.
  *
  * The test is in "TestCpp/SpriteTest/Sprite without texture".
@@ -410,7 +410,7 @@ void Sprite::setTexture(Texture2D *texture)
         // If texture wasn't in cache, create it from RAW data.
         if (texture == nullptr)
         {
-            Image* image = new (std::nothrow) Image();
+            Image* image = new Image();
             bool CC_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
             CCASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
 

@@ -117,7 +117,7 @@ static void DrawShape(cpShape *shape, DrawNode *renderer)
             Color4F line = color;
             line.a = cpflerp(color.a, 1.0, 0.5);
             int num = poly->count;
-            Vec2* pPoints = new (std::nothrow) Vec2[num];
+            Vec2* pPoints = new Vec2[num];
             for(int i=0;i<num;++i)
                 pPoints[i] = cpVert2Point(poly->planes[i].v0);
             if (cpfmax(poly->r, 1.0) > 1.0) {
@@ -235,18 +235,10 @@ PhysicsDebugNode::PhysicsDebugNode()
 
 PhysicsDebugNode* PhysicsDebugNode::create(cpSpace *space)
 {
-    PhysicsDebugNode*node = new (std::nothrow) PhysicsDebugNode();
-    if (node)
-    {
-        node->init();
-        node->_spacePtr = space;
-        node->autorelease();
-    }
-    else
-    {
-        CC_SAFE_DELETE(node);
-    }
-    
+    PhysicsDebugNode*node = new PhysicsDebugNode();
+    node->init();
+    node->_spacePtr = space;
+    node->autorelease();
     return node;
 }
 

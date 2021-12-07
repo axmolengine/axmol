@@ -1885,9 +1885,9 @@ void SpriteFramesFromFileContent::onEnter()
     Data plist_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".plist");
     Data image_content = FileUtils::getInstance()->getDataFromFile(sheetName() + ".png");
 
-	Image* image = new (std::nothrow) Image();
+	Image* image = new Image();
 	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize());
-	Texture2D* texture = new (std::nothrow) Texture2D();
+	Texture2D* texture = new Texture2D();
 	texture->initWithImage(image);
 	texture->autorelease();
     

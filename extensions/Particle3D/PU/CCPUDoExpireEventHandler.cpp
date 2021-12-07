@@ -41,7 +41,7 @@ void PUDoExpireEventHandler::handle (PUParticleSystem3D* /*particleSystem*/, PUP
 
 PUDoExpireEventHandler* PUDoExpireEventHandler::create()
 {
-    auto peh = new (std::nothrow) PUDoExpireEventHandler();
+    auto peh = new PUDoExpireEventHandler();
     peh->autorelease();
     return peh;
 }

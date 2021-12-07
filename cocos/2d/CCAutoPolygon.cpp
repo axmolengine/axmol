@@ -69,8 +69,8 @@ PolygonInfo::PolygonInfo(const PolygonInfo& other)
     _filename = other._filename;
     _isVertsOwner = true;
     _rect = other._rect;
-    triangles.verts = new (std::nothrow) V3F_C4B_T2F[other.triangles.vertCount];
-    triangles.indices = new (std::nothrow) unsigned short[other.triangles.indexCount];
+    triangles.verts = new V3F_C4B_T2F[other.triangles.vertCount];
+    triangles.indices = new unsigned short[other.triangles.indexCount];
     CCASSERT(triangles.verts && triangles.indices, "not enough memory");
     triangles.vertCount = other.triangles.vertCount;
     triangles.indexCount = other.triangles.indexCount;
@@ -86,8 +86,8 @@ PolygonInfo& PolygonInfo::operator= (const PolygonInfo& other)
         _filename = other._filename;
         _isVertsOwner = true;
         _rect = other._rect;
-        triangles.verts = new (std::nothrow) V3F_C4B_T2F[other.triangles.vertCount];
-        triangles.indices = new (std::nothrow) unsigned short[other.triangles.indexCount];
+        triangles.verts = new V3F_C4B_T2F[other.triangles.vertCount];
+        triangles.indices = new unsigned short[other.triangles.indexCount];
         CCASSERT(triangles.verts && triangles.indices, "not enough memory");
         triangles.vertCount = other.triangles.vertCount;
         triangles.indexCount = other.triangles.indexCount;
@@ -185,7 +185,7 @@ AutoPolygon::AutoPolygon(const std::string &filename)
 ,_scaleFactor(0)
 {
     _filename = filename;
-    _image = new (std::nothrow) Image();
+    _image = new Image();
     _image->initWithImageFile(filename);
     CCASSERT(_image->getPixelFormat()==backend::PixelFormat::RGBA8, "unsupported format, currently only supports rgba8888");
     _data = _image->getData();
@@ -581,7 +581,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
     std::vector<p2t::Point*> p2points;
     for(const auto& pt : points)
     {
-        p2t::Point * p = new (std::nothrow) p2t::Point(pt.x, pt.y);
+        p2t::Point * p = new p2t::Point(pt.x, pt.y);
         p2points.push_back(p);
     }
     p2t::CDT cdt(p2points);
@@ -637,10 +637,10 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
     };
 
     // now that we know the size of verts and indices we can create the buffers
-    V3F_C4B_T2F* vertsBuf = new (std::nothrow) V3F_C4B_T2F[verts.size()];
+    V3F_C4B_T2F* vertsBuf = new V3F_C4B_T2F[verts.size()];
     memcpy(vertsBuf, verts.data(), verts.size() * sizeof(V3F_C4B_T2F));
 
-    unsigned short* indicesBuf = new (std::nothrow) unsigned short[indices.size()];
+    unsigned short* indicesBuf = new unsigned short[indices.size()];
     memcpy(indicesBuf, indices.data(), indices.size() * sizeof(short));
 
     // Triangles should really use std::vector and not arrays for verts and indices. 

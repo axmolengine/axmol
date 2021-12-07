@@ -47,24 +47,24 @@ void PUDynamicAttributeTranslator::translate(PUScriptCompiler* compiler, PUAbstr
 
     if (type == token[TOKEN_DYN_RANDOM])
     {
-        _dynamicAttribute = new (std::nothrow) PUDynamicAttributeRandom();
+        _dynamicAttribute = new PUDynamicAttributeRandom();
     }
     else if (type == token[TOKEN_DYN_CURVED_LINEAR])
     {
-        _dynamicAttribute = new (std::nothrow) PUDynamicAttributeCurved();
+        _dynamicAttribute = new PUDynamicAttributeCurved();
     }
     else if (type == token[TOKEN_DYN_CURVED_SPLINE])
     {
-        _dynamicAttribute = new (std::nothrow) PUDynamicAttributeCurved();
+        _dynamicAttribute = new PUDynamicAttributeCurved();
     }
     else if (type == token[TOKEN_DYN_OSCILLATE])
     {
-        _dynamicAttribute = new (std::nothrow) PUDynamicAttributeOscillate();
+        _dynamicAttribute = new PUDynamicAttributeOscillate();
     }
     else
     {
         // Create a fixed one.
-        _dynamicAttribute = new (std::nothrow) PUDynamicAttributeFixed();
+        _dynamicAttribute = new PUDynamicAttributeFixed();
     }
 
     // Run through properties

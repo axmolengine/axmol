@@ -29,6 +29,6 @@
 
 ExtensionsTests::ExtensionsTests()
 {
-    addTest("AssetsManagerExTest", [](){ return new (std::nothrow) AssetsManagerExTests; });
-    addTest("TableViewTest", [](){ return new (std::nothrow) TableViewTests; });
+    addTest("AssetsManagerExTest", [](){ return new AssetsManagerExTests; });
+    addTest("TableViewTest", [](){ return new TableViewTests; });
 }

@@ -43,10 +43,10 @@ namespace {
         
         static TextButton *create(const std::string& text, const std::function<void(TextButton*)> &onTriggered)
         {
-            auto ret = new (std::nothrow) TextButton();
+            auto ret = new TextButton();
             
             TTFConfig ttfconfig("fonts/arial.ttf",25);
-            if (ret && ret->setTTFConfig(ttfconfig)) {
+            if (ret->setTTFConfig(ttfconfig)) {
                 ret->setString(text);
                 ret->_onTriggered = onTriggered;
                 
@@ -144,8 +144,8 @@ namespace {
         typedef std::function<void(SliderEx*,float,TouchEvent)> ccSliderExCallback;
         
         static SliderEx* create(){
-            auto ret = new (std::nothrow) SliderEx();
-            if (ret && ret->init())
+            auto ret = new SliderEx();
+            if (ret->init())
             {
                 ret->_callback = nullptr;
                 ret->loadBarTexture("ccs-res/cocosui/sliderTrack.png");

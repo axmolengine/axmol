@@ -98,7 +98,7 @@ cocos2d::Node* SceneReader::createNodeWithSceneFile(const std::string &fileName,
                         nCount = tpChildArray[15].GetChildNum();
                     }
                     stExpCocoNode *pComponents = tpChildArray[15].GetChildArray(&tCocoLoader);
-                    SerData *data = new (std::nothrow) SerData();
+                    SerData *data = new SerData();
                     for (int i = 0; i < nCount; i++)
                     {
                         stExpCocoNode *subDict = pComponents[i].GetChildArray(&tCocoLoader);
@@ -272,7 +272,7 @@ Node* SceneReader::createObject(const rapidjson::Value &dict, cocos2d::Node* par
             }
             const char *comName = DICTOOL->getStringValue_json(subDict, "classname");
             Component *com = this->createComponent(comName);
-            SerData *data = new (std::nothrow) SerData();
+            SerData *data = new SerData();
             if (com != nullptr)
             {
                 data->_rData = &subDict;
@@ -370,7 +370,7 @@ cocos2d::Node* SceneReader::createObject(CocoLoader *cocoLoader, stExpCocoNode *
             count = pNodeArray[13].GetChildNum();
         }
         stExpCocoNode *pComponents = pNodeArray[13].GetChildArray(cocoLoader);
-        SerData *data = new (std::nothrow) SerData();
+        SerData *data = new SerData();
         for (int i = 0; i < count; ++i)
         {
             stExpCocoNode *subDict = pComponents[i].GetChildArray(cocoLoader);
@@ -551,7 +551,7 @@ SceneReader* SceneReader::getInstance()
 {
     if (s_sharedReader == nullptr)
     {
-        s_sharedReader = new (std::nothrow) SceneReader();
+        s_sharedReader = new SceneReader();
     }
     return s_sharedReader;
 }

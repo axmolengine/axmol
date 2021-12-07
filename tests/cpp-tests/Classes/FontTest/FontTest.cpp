@@ -144,8 +144,8 @@ std::string FontTest::title() const
 
 FontNoReplacementTest* FontNoReplacementTest::create()
 {
-	auto ret = new (std::nothrow) FontNoReplacementTest;
-	if (ret && ret->init())
+	auto ret = new FontNoReplacementTest;
+	if (ret->init())
 	{
 		ret->autorelease();
 	}
@@ -256,8 +256,8 @@ std::string FontNoReplacementTest::title() const
 
 FontReplacementTest* FontReplacementTest::create()
 {
-	auto ret = new (std::nothrow) FontReplacementTest;
-	if (ret && ret->init())
+	auto ret = new FontReplacementTest;
+	if (ret->init())
 	{
 		ret->autorelease();
 	}

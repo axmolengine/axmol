@@ -190,7 +190,7 @@ CSLoader* CSLoader::getInstance()
 {
     if (!_sharedCSLoader)
     {
-        _sharedCSLoader = new (std::nothrow) CSLoader();
+        _sharedCSLoader = new CSLoader();
         _sharedCSLoader->init();
     }
 

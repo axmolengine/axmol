@@ -90,8 +90,8 @@ static const int MAX_AGENTS = 128;
 
 NavMesh* NavMesh::create(const std::string &navFilePath, const std::string &geomFilePath)
 {
-    auto ref = new (std::nothrow) NavMesh();
-    if (ref && ref->initWithFilePath(navFilePath, geomFilePath))
+    auto ref = new NavMesh();
+    if (ref->initWithFilePath(navFilePath, geomFilePath))
     {
         ref->autorelease();
         return ref;
@@ -187,9 +187,9 @@ bool NavMesh::loadNavMeshFile()
         return false;
     }
 
-    _allocator = new (std::nothrow) LinearAllocator(32000);
-    _compressor = new (std::nothrow) LZ4Compressor();
-    _meshProcess = new (std::nothrow) MeshProcess(_geomData);
+    _allocator = new LinearAllocator(32000);
+    _compressor = new LZ4Compressor();
+    _meshProcess = new MeshProcess(_geomData);
     status = _tileCache->init(&header.cacheParams, _allocator, _compressor, _meshProcess);
 
     if (dtStatusFailed(status))
@@ -237,7 +237,7 @@ bool NavMesh::loadGeomFile()
     auto data = FileUtils::getInstance()->getDataFromFile(_geomFilePath);
     if (data.isNull()) return false;
     buf = data.getBytes();
-    _geomData = new (std::nothrow) GeomData;
+    _geomData = new GeomData;
     _geomData->offMeshConCount = 0;
 
     unsigned char* src = buf;

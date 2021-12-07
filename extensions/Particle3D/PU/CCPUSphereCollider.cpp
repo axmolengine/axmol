@@ -194,7 +194,7 @@ void PUSphereCollider::preUpdateAffector( float /*deltaTime*/ )
 
 PUSphereCollider* PUSphereCollider::create()
 {
-    auto psc = new (std::nothrow) PUSphereCollider();
+    auto psc = new PUSphereCollider();
     psc->autorelease();
     return psc;
 }

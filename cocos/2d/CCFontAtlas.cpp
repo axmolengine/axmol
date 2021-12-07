@@ -88,7 +88,7 @@ void FontAtlas::reinit()
     
     CC_SAFE_DELETE_ARRAY(_currentPageDataRGBA);
     
-    auto texture = new (std::nothrow) Texture2D;
+    auto texture = new Texture2D;
     
     _currentPageDataSize = CacheTextureWidth * CacheTextureHeight;
     
@@ -98,11 +98,11 @@ void FontAtlas::reinit()
         _currentPageDataSize *= 2;
         
         _currentPageDataSizeRGBA = _currentPageDataSize * 2;
-        _currentPageDataRGBA = new (std::nothrow) unsigned char[_currentPageDataSizeRGBA];
+        _currentPageDataRGBA = new unsigned char[_currentPageDataSizeRGBA];
         memset(_currentPageDataRGBA, 0, _currentPageDataSizeRGBA);
     }
     
-    _currentPageData = new (std::nothrow) unsigned char[_currentPageDataSize];
+    _currentPageData = new unsigned char[_currentPageDataSize];
     memset(_currentPageData, 0, _currentPageDataSize);
     
     initTextureWithZeros(texture);
@@ -233,7 +233,7 @@ void FontAtlas::conversionU32TOGB2312(const std::u32string& u32Text, std::unorde
 {
     size_t strLen = u32Text.length();
     auto gb2312StrSize = strLen * 2;
-    auto gb2312Text = new (std::nothrow) char[gb2312StrSize];
+    auto gb2312Text = new char[gb2312StrSize];
     memset(gb2312Text, 0, gb2312StrSize);
 
     switch (_fontFreeType->getEncoding())
@@ -413,7 +413,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
                     _currentPageOrigY = 0;
                     memset(_currentPageData, 0, _currentPageDataSize);
                     _currentPage++;
-                    auto tex = new (std::nothrow) Texture2D;
+                    auto tex = new Texture2D;
                     
                     initTextureWithZeros(tex);
 

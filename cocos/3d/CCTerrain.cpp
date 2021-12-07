@@ -58,7 +58,7 @@ namespace {
 
 Terrain * Terrain::create(TerrainData &parameter, CrackFixedType fixedType)
 {
-    Terrain * terrain = new (std::nothrow)Terrain();
+    Terrain * terrain = new Terrain();
     if (terrain->initWithTerrainData(parameter, fixedType))
     {
         terrain->autorelease();
@@ -89,9 +89,9 @@ bool Terrain::initWithTerrainData(TerrainData &parameter, CrackFixedType fixedTy
 void cocos2d::Terrain::setLightMap(const std::string& fileName)
 {
     CC_SAFE_RELEASE(_lightMap);
-    auto image = new (std::nothrow)Image();
+    auto image = new Image();
     image->initWithImageFile(fileName);
-    _lightMap = new (std::nothrow)Texture2D();
+    _lightMap = new Texture2D();
     _lightMap->initWithImage(image);
 
     Texture2D::TexParams tRepeatParams;//set texture parameters
@@ -205,7 +205,7 @@ void Terrain::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, 
 
 bool Terrain::initHeightMap(const std::string& heightMap)
 {
-    _heightMapImage = new (std::nothrow) Image();
+    _heightMapImage = new Image();
     _heightMapImage->initWithImageFile(heightMap);
     _data = _heightMapImage->getData();
     _imageWidth = _heightMapImage->getWidth();
@@ -224,7 +224,7 @@ bool Terrain::initHeightMap(const std::string& heightMap)
         {
             for (int n = 0; n < chunk_amount_x; n++)
             {
-                _chunkesArray[m][n] = new (std::nothrow) Chunk(this);
+                _chunkesArray[m][n] = new Chunk(this);
                 _chunkesArray[m][n]->_size = _chunkSize;
                 _chunkesArray[m][n]->generate(_imageWidth, _imageHeight, m, n, _data);
             }
@@ -241,7 +241,7 @@ bool Terrain::initHeightMap(const std::string& heightMap)
                 if (m + 1 < chunk_amount_y) _chunkesArray[m][n]->_front = _chunkesArray[m + 1][n];
             }
         }
-        _quadRoot = new (std::nothrow) QuadTree(0, 0, _imageWidth, _imageHeight, this);
+        _quadRoot = new QuadTree(0, 0, _imageWidth, _imageHeight, this);
         setLODDistance(_chunkSize.width, 2 * _chunkSize.width, 3 * _chunkSize.width);
         return true;
     }
@@ -270,10 +270,10 @@ Terrain::Terrain()
     _director->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
 #ifdef CC_USE_METAL
-    auto image = new (std::nothrow)Image();
+    auto image = new Image();
     bool CC_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
     CCASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
-    _dummyTexture = new (std::nothrow)Texture2D();
+    _dummyTexture = new Texture2D();
     _dummyTexture->initWithImage(image);
     CC_SAFE_RELEASE(image);
 #endif
@@ -684,8 +684,8 @@ void Terrain::setDetailMap(unsigned int index, DetailMap detailMap)
 
         _detailMapTextures[index]->release();
     }
-    _detailMapTextures[index] = new (std::nothrow)Texture2D();
-    auto textImage = new (std::nothrow)Image();
+    _detailMapTextures[index] = new Texture2D();
+    auto textImage = new Image();
     textImage->initWithImageFile(detailMap._detailMapSrc);
     _detailMapTextures[index]->initWithImage(textImage);
     delete textImage;
@@ -850,9 +850,9 @@ bool Terrain::initTextures()
     texParam.tAddressMode = backend::SamplerAddressMode::REPEAT;
     if (_terrainData._alphaMapSrc.empty())
     {
-        auto textImage = new (std::nothrow)Image();
+        auto textImage = new Image();
         textImage->initWithImageFile(_terrainData._detailMaps[0]._detailMapSrc);
-        auto texture = new (std::nothrow)Texture2D();
+        auto texture = new Texture2D();
         texture->initWithImage(textImage);
         texture->generateMipmap();
         _detailMapTextures[0] = texture;
@@ -864,9 +864,9 @@ bool Terrain::initTextures()
     else
     {
         //alpha map
-        auto image = new (std::nothrow)Image();
+        auto image = new Image();
         image->initWithImageFile(_terrainData._alphaMapSrc);
-        _alphaMap = new (std::nothrow)Texture2D();
+        _alphaMap = new Texture2D();
         _alphaMap->initWithImage(image);
         texParam.sAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
         texParam.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
@@ -877,9 +877,9 @@ bool Terrain::initTextures()
 
         for (int i = 0; i < _terrainData._detailMapAmount; ++i)
         {
-            auto textImage = new (std::nothrow)Image();
+            auto textImage = new Image();
             textImage->initWithImageFile(_terrainData._detailMaps[i]._detailMapSrc);
-            auto texture = new (std::nothrow)Texture2D();
+            auto texture = new Texture2D();
             texture->initWithImage(textImage);
             delete textImage;
             texture->generateMipmap();
@@ -1495,13 +1495,13 @@ Terrain::QuadTree::QuadTree(int x, int y, int w, int h, Terrain * terrain)
     if (_width > terrain->_chunkSize.width &&_height > terrain->_chunkSize.height) //subdivision
     {
         _isTerminal = false;
-        this->_tl = new (std::nothrow) QuadTree(x, y, _width / 2, _height / 2, terrain);
+        this->_tl = new QuadTree(x, y, _width / 2, _height / 2, terrain);
         this->_tl->_parent = this;
-        this->_tr = new (std::nothrow) QuadTree(x + _width / 2, y, _width / 2, _height / 2, terrain);
+        this->_tr = new QuadTree(x + _width / 2, y, _width / 2, _height / 2, terrain);
         this->_tr->_parent = this;
-        this->_bl = new (std::nothrow) QuadTree(x, y + _height / 2, _width / 2, _height / 2, terrain);
+        this->_bl = new QuadTree(x, y + _height / 2, _width / 2, _height / 2, terrain);
         this->_bl->_parent = this;
-        this->_br = new (std::nothrow) QuadTree(x + _width / 2, y + _height / 2, _width / 2, _height / 2, terrain);
+        this->_br = new QuadTree(x + _width / 2, y + _height / 2, _width / 2, _height / 2, terrain);
         this->_br->_parent = this;
 
         _localAABB.merge(_tl->_localAABB);

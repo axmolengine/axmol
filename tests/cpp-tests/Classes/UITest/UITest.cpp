@@ -28,7 +28,7 @@
 
 UITests::UITests()
 {
-    addTest("GUI Dynamic Create Test", [](){ return new (std::nothrow) GUIDynamicCreateTests; });
+    addTest("GUI Dynamic Create Test", [](){ return new GUIDynamicCreateTests; });
 }
 
 UITests::~UITests()

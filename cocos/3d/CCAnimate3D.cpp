@@ -42,7 +42,7 @@ float      Animate3D::_transTime = 0.1f;
 //create Animate3D using Animation.
 Animate3D* Animate3D::create(Animation3D* animation)
 {
-    auto animate = new (std::nothrow) Animate3D();
+    auto animate = new Animate3D();
     animate->init(animation);
     animate->autorelease();
     
@@ -51,7 +51,7 @@ Animate3D* Animate3D::create(Animation3D* animation)
 
 Animate3D* Animate3D::create(Animation3D* animation, float fromTime, float duration)
 {
-    auto animate = new (std::nothrow) Animate3D();
+    auto animate = new Animate3D();
     animate->init(animation, fromTime, duration);
     animate->autorelease();
     
@@ -60,7 +60,7 @@ Animate3D* Animate3D::create(Animation3D* animation, float fromTime, float durat
 
 Animate3D* Animate3D::createWithFrames(Animation3D* animation, int startFrame, int endFrame, float frameRate)
 {
-    auto animate = new (std::nothrow) Animate3D();
+    auto animate = new Animate3D();
     animate->initWithFrames(animation, startFrame, endFrame, frameRate);
     animate->autorelease();
     
@@ -399,7 +399,7 @@ void Animate3D::update(float t)
                             {
                                 auto& frameEvent = _keyFrameEvent[keyFrame.first];
                                 if (frameEvent == nullptr)
-                                    frameEvent = new (std::nothrow) EventCustom(Animate3DDisplayedNotification);
+                                    frameEvent = new EventCustom(Animate3DDisplayedNotification);
                                 auto eventInfo = &_displayedEventInfo[keyFrame.first];
                                 eventInfo->target = _target;
                                 eventInfo->frame = keyFrame.first;

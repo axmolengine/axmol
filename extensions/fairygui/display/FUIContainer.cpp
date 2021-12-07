@@ -405,7 +405,7 @@ void FUIContainer::visit(cocos2d::Renderer * renderer, const cocos2d::Mat4 & par
         {
 #if COCOS2D_VERSION >= 0x00040000
             auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-            auto programState = new (std::nothrow) backend::ProgramState(program);
+            auto programState = new backend::ProgramState(program);
             auto alphaLocation = programState->getUniformLocation("u_alpha_value");
             programState->setUniform(alphaLocation, &alphaThreshold, sizeof(alphaThreshold));
             setProgramStateRecursively(_stencilClippingSupport->_stencil, programState);

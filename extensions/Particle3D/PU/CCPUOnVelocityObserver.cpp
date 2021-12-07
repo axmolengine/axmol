@@ -72,7 +72,7 @@ bool PUOnVelocityObserver::observe (PUParticle3D* particle, float /*timeElapsed*
 
 PUOnVelocityObserver* PUOnVelocityObserver::create()
 {
-    auto pvo = new (std::nothrow) PUOnVelocityObserver();
+    auto pvo = new PUOnVelocityObserver();
     pvo->autorelease();
     return pvo;
 }

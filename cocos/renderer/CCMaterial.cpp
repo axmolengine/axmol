@@ -75,12 +75,13 @@ Material* Material::createWithFilename(const std::string& filepath)
 {
     auto validfilename = FileUtils::getInstance()->fullPathForFilename(filepath);
     if (!validfilename.empty()) {
-        auto mat = new (std::nothrow) Material();
-        if (mat && mat->initWithFile(validfilename))
+        auto mat = new Material();
+        if (mat->initWithFile(validfilename))
         {
             mat->autorelease();
             return mat;
         }
+        delete mat;
     }
 
     return nullptr;
@@ -88,12 +89,13 @@ Material* Material::createWithFilename(const std::string& filepath)
 
 Material* Material::createWithProperties(Properties* materialProperties)
 {
-    auto mat = new (std::nothrow) Material();
-    if (mat && mat->initWithProperties(materialProperties))
+    auto mat = new Material();
+    if (mat->initWithProperties(materialProperties))
     {
         mat->autorelease();
         return mat;
     }
+    delete mat;
     return nullptr;
 }
 
@@ -101,13 +103,14 @@ Material* Material::createWithProgramState(backend::ProgramState* programState)
 {
     CCASSERT(programState, "Invalid Program State");
 
-    auto mat = new (std::nothrow) Material();
-    if (mat && mat->initWithProgramState(programState))
+    auto mat = new Material();
+    if (mat->initWithProgramState(programState))
     {
         mat->autorelease();
         return mat;
 
     }
+    delete mat;
     return nullptr;
 }
 
@@ -508,26 +511,23 @@ Material::~Material()
 
 Material* Material::clone() const
 {
-    auto material = new (std::nothrow) Material();
-    if (material)
+    auto material = new Material();
+    //RenderState::cloneInto(material);
+    material->_renderState = _renderState;
+
+    for (const auto& technique: _techniques)
     {
-        //RenderState::cloneInto(material);
-        material->_renderState = _renderState;
-
-        for (const auto& technique: _techniques)
-        {
-            auto t = technique->clone();
-            t->_material = material;
-            material->_techniques.pushBack(t);
-        }
-
-        // current technique
-        auto name = _currentTechnique->getName();
-        material->_currentTechnique = material->getTechniqueByName(name);
-        material->_textureSlots = material->_textureSlots;
-        material->_textureSlotIndex = material->_textureSlotIndex;
-        material->autorelease();
+        auto t = technique->clone();
+        t->_material = material;
+        material->_techniques.pushBack(t);
     }
+
+    // current technique
+    auto name = _currentTechnique->getName();
+    material->_currentTechnique = material->getTechniqueByName(name);
+    material->_textureSlots = material->_textureSlots;
+    material->_textureSlotIndex = material->_textureSlotIndex;
+    material->autorelease();
     return material;
 }
 
