@@ -47,7 +47,7 @@ template <typename _Ty, bool delay = false> class singleton_constructor
 public:
   template <typename... _Types> static _Ty* construct(_Types&&... args)
   {
-    return new (std::nothrow) _Ty(std::forward<_Types>(args)...);
+    return new _Ty(std::forward<_Types>(args)...);
   }
 };
 
@@ -56,9 +56,8 @@ template <typename _Ty> class singleton_constructor<_Ty, true>
 public:
   template <typename... _Types> static _Ty* construct(_Types&&... args)
   {
-    auto inst = new (std::nothrow) _Ty();
-    if (inst)
-      delay_init(inst, std::forward<_Types>(args)...);
+    auto inst = new _Ty();
+    delay_init(inst, std::forward<_Types>(args)...);
     return inst;
   }
 
