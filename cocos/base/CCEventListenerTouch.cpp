@@ -70,8 +70,8 @@ bool EventListenerTouchOneByOne::isSwallowTouches()
 
 EventListenerTouchOneByOne* EventListenerTouchOneByOne::create()
 {
-    auto ret = new (std::nothrow) EventListenerTouchOneByOne();
-    if (ret && ret->init())
+    auto ret = new EventListenerTouchOneByOne();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -97,8 +97,8 @@ bool EventListenerTouchOneByOne::checkAvailable()
 
 EventListenerTouchOneByOne* EventListenerTouchOneByOne::clone()
 {
-    auto ret = new (std::nothrow) EventListenerTouchOneByOne();
-    if (ret && ret->init())
+    auto ret = new EventListenerTouchOneByOne();
+    if (ret->init())
     {
         ret->autorelease();
         
@@ -146,8 +146,8 @@ bool EventListenerTouchAllAtOnce::init()
 
 EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::create()
 {
-    auto ret = new (std::nothrow) EventListenerTouchAllAtOnce();
-    if (ret && ret->init())
+    auto ret = new EventListenerTouchAllAtOnce();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -172,8 +172,8 @@ bool EventListenerTouchAllAtOnce::checkAvailable()
 
 EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::clone()
 {
-    auto ret = new (std::nothrow) EventListenerTouchAllAtOnce();
-    if (ret && ret->init())
+    auto ret = new EventListenerTouchAllAtOnce();
+    if (ret->init())
     {
         ret->autorelease();
         

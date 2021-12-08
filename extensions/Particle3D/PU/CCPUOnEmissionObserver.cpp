@@ -39,7 +39,7 @@ bool PUOnEmissionObserver::observe (PUParticle3D* particle, float /*timeElapsed*
 
 PUOnEmissionObserver* PUOnEmissionObserver::create()
 {
-    auto peo = new (std::nothrow) PUOnEmissionObserver();
+    auto peo = new PUOnEmissionObserver();
     peo->autorelease();
     return peo;
 }

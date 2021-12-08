@@ -148,7 +148,7 @@ _isAborted(false)
 {
     _httpHeader.clear();
     _requestHeader.clear();
-    _httpRequest = new (std::nothrow) HttpRequest();
+    _httpRequest = new HttpRequest();
 }
 
 LuaMinXmlHttpRequest::~LuaMinXmlHttpRequest()
@@ -307,10 +307,7 @@ static int lua_cocos2dx_XMLHttpRequest_constructor(lua_State* L)
     argc = lua_gettop(L)-1;
     if (argc == 0)
     {
-        self = new (std::nothrow) LuaMinXmlHttpRequest();
-#if COCOS2D_DEBUG >= 1
-        if (self == nullptr) goto tolua_lerror;
-#endif
+        self = new LuaMinXmlHttpRequest();
         tolua_pushusertype(L, (void*)self, "cc.XMLHttpRequest");
         tolua_register_gc(L, lua_gettop(L));
         return 1;
@@ -693,12 +690,7 @@ static int lua_get_XMLHttpRequest_response(lua_State* L)
         
         LuaValueArray array;
         
-        uint8_t* tmpData = new (std::nothrow) uint8_t[self->getDataSize()];
-        if (nullptr == tmpData)
-        {
-            return 0;
-        }
-        
+        uint8_t* tmpData = new uint8_t[self->getDataSize()];
         self->getByteData(tmpData);
         
         for (size_t i = 0 ; i < self->getDataSize(); i++)

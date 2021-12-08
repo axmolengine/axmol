@@ -160,7 +160,7 @@ void PULineAffector::firstParticleUpdate( PUParticle3D* /*particle*/, float /*de
 
 PULineAffector* PULineAffector::create()
 {
-    auto pla = new (std::nothrow) PULineAffector();
+    auto pla = new PULineAffector();
     pla->autorelease();
     return pla;
 }

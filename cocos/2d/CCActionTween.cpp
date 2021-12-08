@@ -31,8 +31,8 @@ NS_CC_BEGIN
 
 ActionTween* ActionTween::create(float duration, const std::string& key, float from, float to)
 {
-    ActionTween* ret = new (std::nothrow) ActionTween();
-    if (ret && ret->initWithDuration(duration, key, from, to))
+    ActionTween* ret = new ActionTween();
+    if (ret->initWithDuration(duration, key, from, to))
     {
         ret->autorelease();
         return ret;

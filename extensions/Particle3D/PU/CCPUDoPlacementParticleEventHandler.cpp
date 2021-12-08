@@ -251,7 +251,7 @@ void PUDoPlacementParticleEventHandler::removeAsListener()
 
 PUDoPlacementParticleEventHandler* PUDoPlacementParticleEventHandler::create()
 {
-    auto peh = new (std::nothrow) PUDoPlacementParticleEventHandler();
+    auto peh = new PUDoPlacementParticleEventHandler();
     peh->autorelease();
     return peh;
 }

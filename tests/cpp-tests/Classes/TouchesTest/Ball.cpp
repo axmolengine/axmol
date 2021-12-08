@@ -43,7 +43,7 @@ float Ball::radius()
 
 Ball* Ball::ballWithTexture(Texture2D* aTexture)
 {
-    Ball* pBall = new (std::nothrow) Ball();
+    Ball* pBall = new Ball();
     pBall->initWithTexture(aTexture);
     pBall->autorelease();
 

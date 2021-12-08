@@ -60,8 +60,8 @@ ListView::~ListView()
 
 ListView* ListView::create()
 {
-    ListView* widget = new (std::nothrow) ListView();
-    if (widget && widget->init())
+    ListView* widget = new ListView();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;

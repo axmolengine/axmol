@@ -107,10 +107,8 @@ int* FontCharMap::getHorizontalKerningForTextUTF32(const std::u32string& /*text*
 
 FontAtlas* FontCharMap::newFontAtlas()
 {
-    FontAtlas *tempAtlas = new (std::nothrow) FontAtlas(this);
-    if (!tempAtlas)
-        return nullptr;
-    
+    FontAtlas *tempAtlas = new FontAtlas(this);
+
     Vec2 s = _texture->getContentSizeInPixels();
     int itemsPerColumn = (int)(s.height / _itemHeight);
     int itemsPerRow = (int)(s.width / _itemWidth);

@@ -195,8 +195,8 @@ void Widget::cleanupWidget()
 
 Widget* Widget::create()
 {
-    Widget* widget = new (std::nothrow) Widget();
-    if (widget && widget->init())
+    Widget* widget = new Widget();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -1413,7 +1413,7 @@ void Widget::enableDpadNavigation(bool enable)
     {
         if (nullptr == _focusNavigationController)
         {
-            _focusNavigationController = new (std::nothrow) FocusNavigationController;
+            _focusNavigationController = new FocusNavigationController;
             if (_focusedWidget)
             {
                 _focusNavigationController->setFirstFocusedWidget(_focusedWidget);

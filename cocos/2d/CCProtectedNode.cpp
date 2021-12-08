@@ -46,8 +46,8 @@ ProtectedNode::~ProtectedNode()
 
 ProtectedNode * ProtectedNode::create()
 {
-	ProtectedNode * ret = new (std::nothrow) ProtectedNode();
-    if (ret && ret->init())
+	ProtectedNode * ret = new ProtectedNode();
+    if (ret->init())
     {
         ret->autorelease();
     }

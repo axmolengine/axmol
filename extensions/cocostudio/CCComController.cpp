@@ -75,8 +75,8 @@ void ComController::update(float /*delta*/)
 
 ComController* ComController::create()
 {
-    ComController * pRet = new (std::nothrow) ComController();
-    if (pRet && pRet->init())
+    ComController * pRet = new ComController();
+    if (pRet->init())
     {
         pRet->autorelease();
     }

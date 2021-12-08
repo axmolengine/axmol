@@ -123,8 +123,8 @@ DrawNode3D::~DrawNode3D()
 
 DrawNode3D* DrawNode3D::create()
 {
-    DrawNode3D* ret = new (std::nothrow) DrawNode3D();
-    if (ret && ret->init())
+    DrawNode3D* ret = new DrawNode3D();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -309,15 +309,8 @@ public:
 
 ValueTypeJudgeInTable* ValueTypeJudgeInTable::create(ValueMap valueMap)
 {
-    ValueTypeJudgeInTable* ret = new (std::nothrow) ValueTypeJudgeInTable();
-    if (ret)
-    {
-        ret->autorelease();
-    }
-    else
-    {
-        CC_SAFE_DELETE(ret);
-    }
+    ValueTypeJudgeInTable* ret = new ValueTypeJudgeInTable();
+    ret->autorelease();
     
     int index = 0;
     for (const auto& iter : valueMap)

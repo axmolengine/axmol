@@ -9,10 +9,10 @@ ProgramStateRegistry* ProgramStateRegistry::getInstance()
     if (_sharedStateRegistry)
         return _sharedStateRegistry;
 
-    _sharedStateRegistry = new (std::nothrow) ProgramStateRegistry();
+    _sharedStateRegistry = new ProgramStateRegistry();
     if (!_sharedStateRegistry->init())
     {
-        CC_SAFE_RELEASE_NULL(_sharedStateRegistry);
+        CC_SAFE_DELETE(_sharedStateRegistry);
     }
 
     return _sharedStateRegistry;
@@ -48,10 +48,10 @@ ProgramState* ProgramStateRegistry::newProgramState(uint32_t programType, int te
     if (it != this->_registry.end()) {
         auto fallback = it->second;
         if (fallback)
-            return new(std::nothrow) ProgramState(fallback);
+            return new ProgramState(fallback);
     }
 
-    return new(std::nothrow) ProgramState(Program::getBuiltinProgram(programType));
+    return new ProgramState(Program::getBuiltinProgram(programType));
 }
 
 uint32_t ProgramStateRegistry::getProgramType(uint32_t programType, int textureSamplerFlags) {

@@ -49,7 +49,7 @@ bool PUOnEventFlagObserver::observe (PUParticle3D* particle, float /*timeElapsed
 
 PUOnEventFlagObserver* PUOnEventFlagObserver::create()
 {
-    auto peo = new (std::nothrow) PUOnEventFlagObserver();
+    auto peo = new PUOnEventFlagObserver();
     peo->autorelease();
     return peo;
 }

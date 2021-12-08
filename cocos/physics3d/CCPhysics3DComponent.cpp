@@ -52,8 +52,8 @@ bool Physics3DComponent::init()
 
 Physics3DComponent* Physics3DComponent::create(Physics3DObject* physicsObj, const cocos2d::Vec3& translateInPhysics, const cocos2d::Quaternion& rotInPhsyics)
 {
-    auto ret = new (std::nothrow) Physics3DComponent();
-    if (ret && ret->init())
+    auto ret = new Physics3DComponent();
+    if (ret->init())
     {
         ret->setPhysics3DObject(physicsObj);
         ret->setTransformInPhysics(translateInPhysics, rotInPhsyics);

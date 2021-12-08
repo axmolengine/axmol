@@ -7,9 +7,9 @@ USING_NS_CC;
 
 GTreeNode* GTreeNode::create(bool isFolder, const std::string& resURL)
 {
-    GTreeNode* pRet = new (std::nothrow) GTreeNode();
+    GTreeNode* pRet = new GTreeNode();
 
-    if (pRet != nullptr && pRet->init(isFolder, resURL))
+    if (pRet->init(isFolder, resURL))
     {
         pRet->autorelease();
     }

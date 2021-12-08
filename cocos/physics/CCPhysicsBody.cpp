@@ -125,8 +125,8 @@ PhysicsBody::~PhysicsBody()
 
 PhysicsBody* PhysicsBody::create()
 {
-    PhysicsBody* body = new (std::nothrow) PhysicsBody();
-    if (body && body->init())
+    PhysicsBody* body = new PhysicsBody();
+    if (body->init())
     {
         body->autorelease();
         return body;
@@ -138,7 +138,7 @@ PhysicsBody* PhysicsBody::create()
 
 PhysicsBody* PhysicsBody::create(float mass)
 {
-    PhysicsBody* body = new (std::nothrow) PhysicsBody();
+    PhysicsBody* body = new PhysicsBody();
     if (body)
     {
         body->_mass = mass;
@@ -156,7 +156,7 @@ PhysicsBody* PhysicsBody::create(float mass)
 
 PhysicsBody* PhysicsBody::create(float mass, float moment)
 {
-    PhysicsBody* body = new (std::nothrow) PhysicsBody();
+    PhysicsBody* body = new PhysicsBody();
     if (body)
     {
         body->_mass = mass;
@@ -177,8 +177,8 @@ PhysicsBody* PhysicsBody::create(float mass, float moment)
 
 PhysicsBody* PhysicsBody::createCircle(float radius, const PhysicsMaterial& material, const Vec2& offset)
 {
-    PhysicsBody* body = new (std::nothrow) PhysicsBody();
-    if (body && body->init())
+    PhysicsBody* body = new PhysicsBody();
+    if (body->init())
     {
         body->addShape(PhysicsShapeCircle::create(radius, material, offset));
         body->autorelease();
@@ -191,8 +191,8 @@ PhysicsBody* PhysicsBody::createCircle(float radius, const PhysicsMaterial& mate
 
 PhysicsBody* PhysicsBody::createBox(const Vec2& size, const PhysicsMaterial& material, const Vec2& offset)
 {
-    PhysicsBody* body = new (std::nothrow) PhysicsBody();
-    if (body && body->init())
+    PhysicsBody* body = new PhysicsBody();
+    if (body->init())
     {
         body->addShape(PhysicsShapeBox::create(size, material, offset));
         body->autorelease();
@@ -205,8 +205,8 @@ PhysicsBody* PhysicsBody::createBox(const Vec2& size, const PhysicsMaterial& mat
 
 PhysicsBody* PhysicsBody::createPolygon(const Vec2* points, int count, const PhysicsMaterial& material, const Vec2& offset)
 {
-    PhysicsBody* body = new (std::nothrow) PhysicsBody();
-    if (body && body->init())
+    PhysicsBody* body = new PhysicsBody();
+    if (body->init())
     {
         body->addShape(PhysicsShapePolygon::create(points, count, material, offset));
         body->autorelease();
@@ -219,8 +219,8 @@ PhysicsBody* PhysicsBody::createPolygon(const Vec2* points, int count, const Phy
 
 PhysicsBody* PhysicsBody::createEdgeSegment(const Vec2& a, const Vec2& b, const PhysicsMaterial& material, float border/* = 1*/)
 {
-    PhysicsBody* body = new (std::nothrow) PhysicsBody();
-    if (body && body->init())
+    PhysicsBody* body = new PhysicsBody();
+    if (body->init())
     {
         body->addShape(PhysicsShapeEdgeSegment::create(a, b, material, border));
         body->setDynamic(false);
@@ -234,8 +234,8 @@ PhysicsBody* PhysicsBody::createEdgeSegment(const Vec2& a, const Vec2& b, const 
 
 PhysicsBody* PhysicsBody::createEdgeBox(const Vec2& size, const PhysicsMaterial& material, float border/* = 1*/, const Vec2& offset)
 {
-    PhysicsBody* body = new (std::nothrow) PhysicsBody();
-    if (body && body->init())
+    PhysicsBody* body = new PhysicsBody();
+    if (body->init())
     {
         body->addShape(PhysicsShapeEdgeBox::create(size, material, border, offset));
         body->setDynamic(false);
@@ -250,8 +250,8 @@ PhysicsBody* PhysicsBody::createEdgeBox(const Vec2& size, const PhysicsMaterial&
 
 PhysicsBody* PhysicsBody::createEdgePolygon(const Vec2* points, int count, const PhysicsMaterial& material, float border/* = 1*/)
 {
-    PhysicsBody* body = new (std::nothrow) PhysicsBody();
-    if (body && body->init())
+    PhysicsBody* body = new PhysicsBody();
+    if (body->init())
     {
         body->addShape(PhysicsShapeEdgePolygon::create(points, count, material, border));
         body->setDynamic(false);
@@ -266,8 +266,8 @@ PhysicsBody* PhysicsBody::createEdgePolygon(const Vec2* points, int count, const
 
 PhysicsBody* PhysicsBody::createEdgeChain(const Vec2* points, int count, const PhysicsMaterial& material, float border/* = 1*/)
 {
-    PhysicsBody* body = new (std::nothrow) PhysicsBody();
-    if (body && body->init())
+    PhysicsBody* body = new PhysicsBody();
+    if (body->init())
     {
         body->addShape(PhysicsShapeEdgeChain::create(points, count, material, border));
         body->setDynamic(false);

@@ -64,7 +64,7 @@ bool ReleasePoolTest::init()
     
     // reference count should be added when added into auto release pool
     
-    TestObject *obj = new (std::nothrow) TestObject("testobj");
+    TestObject *obj = new TestObject("testobj");
     obj->autorelease();
     assert(obj->getReferenceCount() == 1);
     
@@ -102,7 +102,7 @@ bool ReleasePoolTest::init()
         for (int i = 0; i < 100; ++i)
         {
             snprintf(name, 20, "object%d", i);
-            TestObject *tmpObj = new (std::nothrow) TestObject(name);
+            TestObject *tmpObj = new TestObject(name);
             tmpObj->autorelease();
         }
     }

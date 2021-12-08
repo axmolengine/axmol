@@ -47,8 +47,8 @@ PhysicsSprite::PhysicsSprite()
 
 PhysicsSprite* PhysicsSprite::create()
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
-    if (pRet && pRet->init())
+    PhysicsSprite* pRet = new PhysicsSprite();
+    if (pRet->init())
     {
         pRet->autorelease();
     }
@@ -62,8 +62,8 @@ PhysicsSprite* PhysicsSprite::create()
 
 PhysicsSprite* PhysicsSprite::createWithTexture(Texture2D *pTexture)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
-    if (pRet && pRet->initWithTexture(pTexture))
+    PhysicsSprite* pRet = new PhysicsSprite();
+    if (pRet->initWithTexture(pTexture))
     {
         pRet->autorelease();
     }
@@ -77,8 +77,8 @@ PhysicsSprite* PhysicsSprite::createWithTexture(Texture2D *pTexture)
 
 PhysicsSprite* PhysicsSprite::createWithTexture(Texture2D *pTexture, const Rect& rect)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
-    if (pRet && pRet->initWithTexture(pTexture, rect))
+    PhysicsSprite* pRet = new PhysicsSprite();
+    if (pRet->initWithTexture(pTexture, rect))
     {
         pRet->autorelease();
     }
@@ -92,8 +92,8 @@ PhysicsSprite* PhysicsSprite::createWithTexture(Texture2D *pTexture, const Rect&
 
 PhysicsSprite* PhysicsSprite::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
-    if (pRet && pRet->initWithSpriteFrame(pSpriteFrame))
+    PhysicsSprite* pRet = new PhysicsSprite();
+    if (pRet->initWithSpriteFrame(pSpriteFrame))
     {
         pRet->autorelease();
     }
@@ -107,8 +107,8 @@ PhysicsSprite* PhysicsSprite::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
 
 PhysicsSprite* PhysicsSprite::createWithSpriteFrameName(const char *pszSpriteFrameName)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
-    if (pRet && pRet->initWithSpriteFrameName(pszSpriteFrameName))
+    PhysicsSprite* pRet = new PhysicsSprite();
+    if (pRet->initWithSpriteFrameName(pszSpriteFrameName))
     {
         pRet->autorelease();
     }
@@ -122,8 +122,8 @@ PhysicsSprite* PhysicsSprite::createWithSpriteFrameName(const char *pszSpriteFra
 
 PhysicsSprite* PhysicsSprite::create(const char *pszFileName)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
-    if (pRet && pRet->initWithFile(pszFileName))
+    PhysicsSprite* pRet = new PhysicsSprite();
+    if (pRet->initWithFile(pszFileName))
     {
         pRet->autorelease();
     }
@@ -137,8 +137,8 @@ PhysicsSprite* PhysicsSprite::create(const char *pszFileName)
 
 PhysicsSprite* PhysicsSprite::create(const char *pszFileName, const Rect& rect)
 {
-    PhysicsSprite* pRet = new (std::nothrow) PhysicsSprite();
-    if (pRet && pRet->initWithFile(pszFileName, rect))
+    PhysicsSprite* pRet = new PhysicsSprite();
+    if (pRet->initWithFile(pszFileName, rect))
     {
         pRet->autorelease();
     }

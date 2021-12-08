@@ -77,8 +77,8 @@ class EffectSprite : public Sprite
 {
 public:
     static EffectSprite *create(const std::string& filename) {
-        auto ret = new (std::nothrow) EffectSprite;
-        if(ret && ret->initWithFile(filename)) {
+        auto ret = new EffectSprite;
+        if(ret->initWithFile(filename)) {
             ret->autorelease();
             return ret;
         }
@@ -394,8 +394,8 @@ public:
     CREATE_FUNC(EffectNormalMapped);
     static EffectNormalMapped* create(const std::string&normalMapFileName)
     {
-        EffectNormalMapped *normalMappedSprite = new (std::nothrow) EffectNormalMapped();
-        if (normalMappedSprite && normalMappedSprite->init() && normalMappedSprite->initNormalMap(normalMapFileName))
+        EffectNormalMapped *normalMappedSprite = new EffectNormalMapped();
+        if (normalMappedSprite->init() && normalMappedSprite->initNormalMap(normalMapFileName))
         {
             
             normalMappedSprite->autorelease();

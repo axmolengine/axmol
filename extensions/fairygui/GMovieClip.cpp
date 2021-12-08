@@ -197,16 +197,10 @@ ActionMovieClip::~ActionMovieClip()
 
 ActionMovieClip* ActionMovieClip::create(cocos2d::Animation* animation, float repeatDelay, bool swing)
 {
-    ActionMovieClip* action = new (std::nothrow) ActionMovieClip();
-    if (action)
-    {
-        action->setAnimation(animation, repeatDelay, swing);
-        action->autorelease();
-        return action;
-    }
-
-    delete action;
-    return nullptr;
+    ActionMovieClip* action = new ActionMovieClip();
+    action->setAnimation(animation, repeatDelay, swing);
+    action->autorelease();
+    return action;
 }
 
 bool ActionMovieClip::isDone() const

@@ -35,8 +35,8 @@ NS_CC_BEGIN
 
 NavMeshObstacle* NavMeshObstacle::create(float radius, float height)
 {
-    auto ref = new (std::nothrow) NavMeshObstacle();
-    if (ref && ref->initWith(radius, height))
+    auto ref = new NavMeshObstacle();
+    if (ref->initWith(radius, height))
     {
         ref->autorelease();
         return ref;

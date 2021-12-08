@@ -49,8 +49,8 @@ TextBMFont::~TextBMFont()
 
 TextBMFont* TextBMFont::create()
 {
-    TextBMFont* widget = new (std::nothrow) TextBMFont();
-    if (widget && widget->init())
+    TextBMFont* widget = new TextBMFont();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -61,8 +61,8 @@ TextBMFont* TextBMFont::create()
     
 TextBMFont* TextBMFont::create(const std::string &text, const std::string &filename)
 {
-    TextBMFont* widget = new (std::nothrow) TextBMFont();
-    if (widget && widget->init())
+    TextBMFont* widget = new TextBMFont();
+    if (widget->init())
     {
         widget->setFntFile(filename);
         widget->setString(text);

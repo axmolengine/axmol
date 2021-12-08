@@ -79,7 +79,7 @@ bool PUOnPositionObserver::observe (PUParticle3D* particle, float /*timeElapsed*
 
 PUOnPositionObserver* PUOnPositionObserver::create()
 {
-    auto ppo = new (std::nothrow) PUOnPositionObserver();
+    auto ppo = new PUOnPositionObserver();
     ppo->autorelease();
     return ppo;
 }

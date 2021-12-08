@@ -37,17 +37,9 @@ NS_CC_BEGIN
 
 ScheduleHandlerDelegate* ScheduleHandlerDelegate::create()
 {
-    ScheduleHandlerDelegate *ret = new (std::nothrow) ScheduleHandlerDelegate();
-    if (nullptr != ret )
-    {
-        ret->autorelease();
-        return ret;
-    }
-    else
-    {
-        CC_SAFE_DELETE(ret);
-        return nullptr;
-    }
+    ScheduleHandlerDelegate *ret = new ScheduleHandlerDelegate();
+    ret->autorelease();
+    return ret;
 }
 
 void ScheduleHandlerDelegate::scheduleFunc(float elapse)
@@ -63,9 +55,9 @@ void ScheduleHandlerDelegate::update(float elapse)
 
 LuaCallFunc * LuaCallFunc::create(const std::function<void(void* ,Node*)>& func)
 {
-    auto ret = new (std::nothrow) LuaCallFunc();
+    auto ret = new LuaCallFunc();
     
-    if (ret && ret->initWithFunction(func) ) {
+    if (ret->initWithFunction(func) ) {
         ret->autorelease();
         return ret;
     }
@@ -99,7 +91,7 @@ LuaCallFunc* LuaCallFunc::clone() const
     if (0 == handler)
         return nullptr;
     
-    auto ret = new (std::nothrow) LuaCallFunc();
+    auto ret = new LuaCallFunc();
     
     if( _functionLua )
         ret->initWithFunction(_functionLua);
@@ -128,7 +120,7 @@ ScriptHandlerMgr* ScriptHandlerMgr::getInstance()
 {
     if (nullptr == _scriptHandlerMgr)
     {
-        _scriptHandlerMgr = new (std::nothrow) ScriptHandlerMgr();
+        _scriptHandlerMgr = new ScriptHandlerMgr();
         _scriptHandlerMgr->init();
     }
     return _scriptHandlerMgr;

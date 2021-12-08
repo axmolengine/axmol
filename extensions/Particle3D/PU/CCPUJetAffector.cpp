@@ -37,7 +37,7 @@ PUJetAffector::PUJetAffector () :
     PUAffector(),
     _scaled(0.0f)
 {
-    _dynAcceleration = new (std::nothrow) PUDynamicAttributeFixed();
+    _dynAcceleration = new PUDynamicAttributeFixed();
     (static_cast<PUDynamicAttributeFixed*>(_dynAcceleration))->setValue(DEFAULT_ACCELERATION);
 }
 //-----------------------------------------------------------------------
@@ -78,7 +78,7 @@ void PUJetAffector::updatePUAffector( PUParticle3D *particle, float deltaTime )
 
 PUJetAffector* PUJetAffector::create()
 {
-    auto pja = new (std::nothrow) PUJetAffector();
+    auto pja = new PUJetAffector();
     pja->autorelease();
     return pja;
 }

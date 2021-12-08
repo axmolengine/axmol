@@ -81,7 +81,7 @@ void PUDoAffectorEventHandler::handle (PUParticleSystem3D* particleSystem, PUPar
 
 PUDoAffectorEventHandler* PUDoAffectorEventHandler::create()
 {
-    auto peh = new (std::nothrow) PUDoAffectorEventHandler();
+    auto peh = new PUDoAffectorEventHandler();
     peh->autorelease();
     return peh;
 }

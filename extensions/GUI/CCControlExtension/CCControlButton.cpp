@@ -124,7 +124,7 @@ bool ControlButton::initWithLabelAndBackgroundSprite(Node* node, ui::Scale9Sprit
 
 ControlButton* ControlButton::create(Node* label, cocos2d::ui::Scale9Sprite* backgroundSprite)
 {
-    ControlButton *pRet = new (std::nothrow) ControlButton();
+    ControlButton *pRet = new ControlButton();
     pRet->initWithLabelAndBackgroundSprite(label, backgroundSprite, true);
     pRet->autorelease();
     return pRet;
@@ -132,7 +132,7 @@ ControlButton* ControlButton::create(Node* label, cocos2d::ui::Scale9Sprite* bac
 
 ControlButton* ControlButton::create(Node* label, cocos2d::ui::Scale9Sprite* backgroundSprite, bool adjustBackGroundSize)
 {
-    ControlButton *pRet = new (std::nothrow) ControlButton();
+    ControlButton *pRet = new ControlButton();
     pRet->initWithLabelAndBackgroundSprite(label, backgroundSprite, adjustBackGroundSize);
     pRet->autorelease();
     return pRet;
@@ -145,7 +145,7 @@ bool ControlButton::initWithTitleAndFontNameAndFontSize(const std::string& title
 
 ControlButton* ControlButton::create(const std::string& title, const std::string& fontName, float fontSize)
 {
-    ControlButton *pRet = new (std::nothrow) ControlButton();
+    ControlButton *pRet = new ControlButton();
     pRet->initWithTitleAndFontNameAndFontSize(title, fontName, fontSize);
     pRet->autorelease();
     return pRet;
@@ -159,7 +159,7 @@ bool ControlButton::initWithBackgroundSprite(cocos2d::ui::Scale9Sprite* sprite)
 
 ControlButton* ControlButton::create(cocos2d::ui::Scale9Sprite* sprite)
 {
-    ControlButton *pRet = new (std::nothrow) ControlButton();
+    ControlButton *pRet = new ControlButton();
     pRet->initWithBackgroundSprite(sprite);
     pRet->autorelease();
     return pRet;
@@ -732,8 +732,8 @@ void ControlButton::onTouchCancelled(Touch* /*pTouch*/, Event* /*pEvent*/)
 
 ControlButton* ControlButton::create()
 {
-    ControlButton *pControlButton = new (std::nothrow) ControlButton();
-    if (pControlButton && pControlButton->init())
+    ControlButton *pControlButton = new ControlButton();
+    if (pControlButton->init())
     {
         pControlButton->autorelease();
         return pControlButton;

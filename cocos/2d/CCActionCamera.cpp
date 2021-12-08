@@ -47,15 +47,9 @@ void ActionCamera::startWithTarget(Node *target)
 
 ActionCamera* ActionCamera::clone() const
 {
-    auto action = new (std::nothrow) ActionCamera();
-    if (action)
-    {
-        action->autorelease();
-        return action;
-    }
-    
-    delete action;
-    return nullptr;
+    auto action = new ActionCamera();
+    action->autorelease();
+    return action;
 }
 
 ActionCamera * ActionCamera::reverse() const
@@ -154,8 +148,8 @@ OrbitCamera::~OrbitCamera()
 
 OrbitCamera * OrbitCamera::create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
 {
-    OrbitCamera * obitCamera = new (std::nothrow) OrbitCamera();
-    if(obitCamera && obitCamera->initWithDuration(t, radius, deltaRadius, angleZ, deltaAngleZ, angleX, deltaAngleX))
+    OrbitCamera * obitCamera = new OrbitCamera();
+    if(obitCamera->initWithDuration(t, radius, deltaRadius, angleZ, deltaAngleZ, angleX, deltaAngleX))
     {
         obitCamera->autorelease();
         return obitCamera;

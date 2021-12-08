@@ -34,7 +34,7 @@ AsyncTaskPool* AsyncTaskPool::getInstance()
 {
     if (s_asyncTaskPool == nullptr)
     {
-        s_asyncTaskPool = new (std::nothrow) AsyncTaskPool();
+        s_asyncTaskPool = new AsyncTaskPool();
     }
     return s_asyncTaskPool;
 }

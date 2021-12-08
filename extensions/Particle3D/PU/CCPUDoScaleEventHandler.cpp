@@ -80,7 +80,7 @@ void PUDoScaleEventHandler::handle (PUParticleSystem3D* /*particleSystem*/, PUPa
 
 PUDoScaleEventHandler* PUDoScaleEventHandler::create()
 {
-    auto peh = new (std::nothrow) PUDoScaleEventHandler();
+    auto peh = new PUDoScaleEventHandler();
     peh->autorelease();
     return peh;
 }

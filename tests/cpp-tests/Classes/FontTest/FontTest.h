@@ -35,8 +35,8 @@ class FontTest : public TestCase
 public:
     static FontTest* create(const std::string& fontFile)
     {
-        auto ret = new (std::nothrow) FontTest;
-        if (ret && ret->init())
+        auto ret = new FontTest;
+        if (ret->init())
         {
             ret->showFont(fontFile);
             ret->autorelease();

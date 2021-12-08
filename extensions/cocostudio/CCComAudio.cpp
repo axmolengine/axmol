@@ -150,8 +150,8 @@ bool ComAudio::serialize(void* r)
 
 ComAudio* ComAudio::create()
 {
-    ComAudio * pRet = new (std::nothrow) ComAudio();
-    if (pRet && pRet->init())
+    ComAudio * pRet = new ComAudio();
+    if (pRet->init())
     {
         pRet->autorelease();
     }

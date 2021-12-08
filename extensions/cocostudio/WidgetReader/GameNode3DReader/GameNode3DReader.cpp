@@ -58,7 +58,7 @@ namespace cocostudio
     {
         if (!_instanceNode3DReader)
         {
-            _instanceNode3DReader = new (std::nothrow) GameNode3DReader();
+            _instanceNode3DReader = new GameNode3DReader();
         }
         
         return _instanceNode3DReader;

@@ -2687,7 +2687,7 @@ void Sprite3DPropertyTest::refreshSpriteRender()
         if (cacheTex == nullptr)
         {
             unsigned char data[] = { 255, 0, 0, 255 };//1*1 red picture
-            Image * image = new (std::nothrow) Image();
+            Image * image = new Image();
             image->initWithRawData(data, sizeof(data), 1, 1, sizeof(unsigned char));
             cacheTex = Director::getInstance()->getTextureCache()->addImage(image, "/dummyTexture");
             image->release();

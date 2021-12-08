@@ -72,8 +72,8 @@ bool Layer::init()
 
 Layer *Layer::create()
 {
-    Layer *ret = new (std::nothrow) Layer();
-    if (ret && ret->init())
+    Layer *ret = new Layer();
+    if (ret->init())
     {
         ret->autorelease();
         return ret;
@@ -147,8 +147,8 @@ void LayerColor::setBlendFunc(const BlendFunc &var)
 
 LayerColor* LayerColor::create()
 {
-    LayerColor* ret = new (std::nothrow) LayerColor();
-    if (ret && ret->init())
+    LayerColor* ret = new LayerColor();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -161,25 +161,25 @@ LayerColor* LayerColor::create()
 
 LayerColor * LayerColor::create(const Color4B& color, float width, float height)
 {
-    LayerColor * layer = new (std::nothrow) LayerColor();
-    if( layer && layer->initWithColor(color,width,height))
+    LayerColor * ret = new LayerColor();
+    if(ret->initWithColor(color,width,height))
     {
-        layer->autorelease();
-        return layer;
+        ret->autorelease();
+        return ret;
     }
-    CC_SAFE_DELETE(layer);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
 LayerColor * LayerColor::create(const Color4B& color)
 {
-    LayerColor * layer = new (std::nothrow) LayerColor();
-    if(layer && layer->initWithColor(color))
+    LayerColor * ret = new LayerColor();
+    if(ret->initWithColor(color))
     {
-        layer->autorelease();
-        return layer;
+        ret->autorelease();
+        return ret;
     }
-    CC_SAFE_DELETE(layer);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -297,32 +297,32 @@ LayerGradient::~LayerGradient()
 
 LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end)
 {
-    LayerGradient * layer = new (std::nothrow) LayerGradient();
-    if( layer && layer->initWithColor(start, end))
+    LayerGradient * ret = new LayerGradient();
+    if(ret->initWithColor(start, end))
     {
-        layer->autorelease();
-        return layer;
+        ret->autorelease();
+        return ret;
     }
-    CC_SAFE_DELETE(layer);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
 LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end, const Vec2& v)
 {
-    LayerGradient * layer = new (std::nothrow) LayerGradient();
-    if( layer && layer->initWithColor(start, end, v))
+    LayerGradient * ret = new LayerGradient();
+    if(ret->initWithColor(start, end, v))
     {
-        layer->autorelease();
-        return layer;
+        ret->autorelease();
+        return ret;
     }
-    CC_SAFE_DELETE(layer);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
 LayerGradient* LayerGradient::create()
 {
-    LayerGradient* ret = new (std::nothrow) LayerGradient();
-    if (ret && ret->init())
+    LayerGradient* ret = new LayerGradient();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -730,15 +730,15 @@ LayerMultiplex* LayerMultiplex::create(Node* layer, ...)
     va_list args;
     va_start(args,layer);
 
-    LayerMultiplex * multiplexLayer = new (std::nothrow) LayerMultiplex();
-    if(multiplexLayer && multiplexLayer->initWithLayers(layer, args))
+    LayerMultiplex * ret = new LayerMultiplex();
+    if(ret->initWithLayers(layer, args))
     {
-        multiplexLayer->autorelease();
+        ret->autorelease();
         va_end(args);
-        return multiplexLayer;
+        return ret;
     }
     va_end(args);
-    CC_SAFE_DELETE(multiplexLayer);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -749,8 +749,8 @@ LayerMultiplex* LayerMultiplex::createWithLayer(Node* layer)
 
 LayerMultiplex* LayerMultiplex::create()
 {
-    LayerMultiplex* ret = new (std::nothrow) LayerMultiplex();
-    if (ret && ret->init())
+    LayerMultiplex* ret = new LayerMultiplex();
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -763,8 +763,8 @@ LayerMultiplex* LayerMultiplex::create()
 
 LayerMultiplex* LayerMultiplex::createWithArray(const Vector<Node*>& arrayOfLayers)
 {
-    LayerMultiplex* ret = new (std::nothrow) LayerMultiplex();
-    if (ret && ret->initWithArray(arrayOfLayers))
+    LayerMultiplex* ret = new LayerMultiplex();
+    if (ret->initWithArray(arrayOfLayers))
     {
         ret->autorelease();
     }

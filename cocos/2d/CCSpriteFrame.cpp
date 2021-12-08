@@ -37,7 +37,7 @@ NS_CC_BEGIN
 
 SpriteFrame* SpriteFrame::create(const std::string& filename, const Rect& rect)
 {
-    SpriteFrame *spriteFrame = new (std::nothrow) SpriteFrame();
+    SpriteFrame *spriteFrame = new SpriteFrame();
     spriteFrame->initWithTextureFilename(filename, rect);
     spriteFrame->autorelease();
 
@@ -46,7 +46,7 @@ SpriteFrame* SpriteFrame::create(const std::string& filename, const Rect& rect)
 
 SpriteFrame* SpriteFrame::createWithTexture(Texture2D *texture, const Rect& rect)
 {
-    SpriteFrame *spriteFrame = new (std::nothrow) SpriteFrame();
+    SpriteFrame *spriteFrame = new SpriteFrame();
     spriteFrame->initWithTexture(texture, rect);
     spriteFrame->autorelease();
     
@@ -55,8 +55,8 @@ SpriteFrame* SpriteFrame::createWithTexture(Texture2D *texture, const Rect& rect
 
 SpriteFrame* SpriteFrame::createWithTexture(Texture2D* texture, const Rect& rect, bool rotated, const Vec2& offset, const Vec2& originalSize)
 {
-    SpriteFrame *spriteFrame = new (std::nothrow) SpriteFrame();
-    if (spriteFrame && spriteFrame->initWithTexture(texture, rect, rotated, offset, originalSize)) {
+    SpriteFrame *spriteFrame = new SpriteFrame();
+    if (spriteFrame->initWithTexture(texture, rect, rotated, offset, originalSize)) {
         spriteFrame->autorelease();
         return spriteFrame;
     }
@@ -67,8 +67,8 @@ SpriteFrame* SpriteFrame::createWithTexture(Texture2D* texture, const Rect& rect
 
 SpriteFrame* SpriteFrame::create(const std::string& filename, const Rect& rect, bool rotated, const Vec2& offset, const Vec2& originalSize)
 {
-    SpriteFrame *spriteFrame = new (std::nothrow) SpriteFrame();
-    if (spriteFrame && spriteFrame->initWithTextureFilename(filename, rect, rotated, offset, originalSize)) {
+    SpriteFrame *spriteFrame = new SpriteFrame();
+    if (spriteFrame->initWithTextureFilename(filename, rect, rotated, offset, originalSize)) {
         spriteFrame->autorelease();
         return spriteFrame;
     }
@@ -144,7 +144,7 @@ SpriteFrame::~SpriteFrame()
 SpriteFrame* SpriteFrame::clone() const
 {
 	// no copy constructor	
-    SpriteFrame *copy = new (std::nothrow) SpriteFrame();
+    SpriteFrame *copy = new SpriteFrame();
     copy->initWithTexture(_texture, _rectInPixels, _rotated, _offsetInPixels, _originalSizeInPixels);
     copy->setPolygonInfo(_polygonInfo);
     copy->autorelease();

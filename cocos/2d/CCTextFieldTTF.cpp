@@ -110,8 +110,8 @@ TextFieldTTF::~TextFieldTTF()
 
 TextFieldTTF * TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeholder, const Vec2& dimensions, TextHAlignment alignment, const std::string& fontName, float fontSize)
 {
-    TextFieldTTF *ret = new (std::nothrow) TextFieldTTF();
-    if(ret && ret->initWithPlaceHolder("", dimensions, alignment, fontName, fontSize))
+    TextFieldTTF *ret = new TextFieldTTF();
+    if(ret->initWithPlaceHolder("", dimensions, alignment, fontName, fontSize))
     {
         ret->autorelease();
         if (placeholder.size()>0)
@@ -126,8 +126,8 @@ TextFieldTTF * TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeho
 
 TextFieldTTF * TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeholder, const std::string& fontName, float fontSize)
 {
-    TextFieldTTF *ret = new (std::nothrow) TextFieldTTF();
-    if(ret && ret->initWithPlaceHolder("", fontName, fontSize))
+    TextFieldTTF *ret = new TextFieldTTF();
+    if(ret->initWithPlaceHolder("", fontName, fontSize))
     {
         ret->autorelease();
         if (placeholder.size()>0)

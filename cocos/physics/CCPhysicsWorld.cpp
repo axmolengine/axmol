@@ -229,7 +229,7 @@ static void DrawPolygon(int count, const cpVect *verts, cpFloat /*r*/, cpSpaceDe
     const Color4F outlineColor(outline.r, outline.g, outline.b, outline.a);
     DrawNode* drawNode = static_cast<DrawNode*>(data);
     int num = count;
-    Vec2* seg = new (std::nothrow) Vec2[num];
+    Vec2* seg = new Vec2[num];
     for(int i=0;i<num;++i)
         seg[i] = PhysicsHelper::cpv2vec2(verts[i]);
     
@@ -963,8 +963,8 @@ void PhysicsWorld::update(float delta, bool userCall/* = false*/)
 
 PhysicsWorld* PhysicsWorld::construct(Scene* scene)
 {
-    PhysicsWorld * world = new (std::nothrow) PhysicsWorld();
-    if (world && world->init())
+    PhysicsWorld * world = new PhysicsWorld();
+    if (world->init())
     {
         world->_scene = scene;
         world->_eventDispatcher = scene->getEventDispatcher();

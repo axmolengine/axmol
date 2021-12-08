@@ -119,8 +119,8 @@ void Scene::initDefaultCamera() {
 
 Scene* Scene::create()
 {
-    Scene *ret = new (std::nothrow) Scene();
-    if (ret && ret->init())
+    Scene *ret = new Scene();
+    if (ret->init())
     {
         ret->autorelease();
         return ret;
@@ -134,8 +134,8 @@ Scene* Scene::create()
 
 Scene* Scene::createWithSize(const Vec2& size)
 {
-    Scene *ret = new (std::nothrow) Scene();
-    if (ret && ret->initWithSize(size))
+    Scene *ret = new Scene();
+    if (ret->initWithSize(size))
     {
         ret->autorelease();
         return ret;
@@ -288,8 +288,8 @@ void Scene::setNavMeshDebugCamera(Camera *camera)
 
 Scene* Scene::createWithPhysics()
 {
-    Scene *ret = new (std::nothrow) Scene();
-    if (ret && ret->initWithPhysics())
+    Scene *ret = new Scene();
+    if (ret->initWithPhysics())
     {
         ret->autorelease();
         return ret;

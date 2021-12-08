@@ -59,8 +59,8 @@ void PURender::copyAttributesTo( PURender *render )
 
 PUParticle3DQuadRender* PUParticle3DQuadRender::create(const std::string& texFile)
 {
-    auto ret = new (std::nothrow) PUParticle3DQuadRender();
-    if (ret && ret->initRender(texFile))
+    auto ret = new PUParticle3DQuadRender();
+    if (ret->initRender(texFile))
     {
         ret->_texFile = texFile;
         ret->autorelease();
@@ -465,7 +465,7 @@ PUParticle3DQuadRender* PUParticle3DQuadRender::clone()
 
 PUParticle3DModelRender* PUParticle3DModelRender::create( const std::string& modelFile, const std::string &texFile /*= ""*/ )
 {
-    auto ret = new (std::nothrow) PUParticle3DModelRender();
+    auto ret = new PUParticle3DModelRender();
     ret->_modelFile = modelFile;
     ret->_texFile = texFile;
     return ret;
@@ -664,8 +664,8 @@ PUParticle3DBoxRender::~PUParticle3DBoxRender()
 
 PUParticle3DBoxRender* PUParticle3DBoxRender::create( const std::string &texFile )
 {
-    auto ret = new (std::nothrow) PUParticle3DBoxRender();
-    if (ret && ret->initRender(texFile))
+    auto ret = new PUParticle3DBoxRender();
+    if (ret->initRender(texFile))
     {
         ret->autorelease();
     }
@@ -840,8 +840,8 @@ PUParticle3DBoxRender* PUParticle3DBoxRender::clone()
 
 PUSphereRender* PUSphereRender::create( const std::string &texFile)
 {
-    auto ret = new (std::nothrow) PUSphereRender();
-    if (ret && ret->initRender(texFile))
+    auto ret = new PUSphereRender();
+    if (ret->initRender(texFile))
     {
         ret->autorelease();
     }

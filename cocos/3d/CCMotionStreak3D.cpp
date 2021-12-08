@@ -60,7 +60,7 @@ MotionStreak3D::~MotionStreak3D()
 
 MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, const Color3B& color, const std::string& path)
 {
-    MotionStreak3D *ret = new (std::nothrow) MotionStreak3D();
+    MotionStreak3D *ret = new MotionStreak3D();
     if (ret && ret->initWithFade(fade, minSeg, stroke, color, path))
     {
         ret->autorelease();
@@ -73,7 +73,7 @@ MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, c
 
 MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture)
 {
-    MotionStreak3D *ret = new (std::nothrow) MotionStreak3D();
+    MotionStreak3D *ret = new MotionStreak3D();
     if (ret && ret->initWithFade(fade, minSeg, stroke, color, texture))
     {
         ret->autorelease();

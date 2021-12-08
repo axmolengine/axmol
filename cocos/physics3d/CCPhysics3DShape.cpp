@@ -59,7 +59,7 @@ Physics3DShape::~Physics3DShape()
 
 Physics3DShape* Physics3DShape::createBox(const cocos2d::Vec3& extent)
 {
-    auto shape = new (std::nothrow) Physics3DShape();
+    auto shape = new Physics3DShape();
     shape->initBox(extent);
     shape->autorelease();
     return shape;
@@ -67,7 +67,7 @@ Physics3DShape* Physics3DShape::createBox(const cocos2d::Vec3& extent)
 
 Physics3DShape* Physics3DShape::createSphere(float radius)
 {
-    auto shape = new (std::nothrow) Physics3DShape();
+    auto shape = new Physics3DShape();
     shape->initSphere(radius);
     shape->autorelease();
     return shape;
@@ -75,7 +75,7 @@ Physics3DShape* Physics3DShape::createSphere(float radius)
 
 Physics3DShape* Physics3DShape::createCylinder(float radius, float height)
 {
-    auto shape = new (std::nothrow) Physics3DShape();
+    auto shape = new Physics3DShape();
     shape->initCylinder(radius, height);
     shape->autorelease();
     return shape;
@@ -83,7 +83,7 @@ Physics3DShape* Physics3DShape::createCylinder(float radius, float height)
 
 Physics3DShape* Physics3DShape::createCapsule(float radius, float height)
 {
-    auto shape = new (std::nothrow) Physics3DShape();
+    auto shape = new Physics3DShape();
     shape->initCapsule(radius, height);
     shape->autorelease();
     return shape;
@@ -91,7 +91,7 @@ Physics3DShape* Physics3DShape::createCapsule(float radius, float height)
 
 Physics3DShape* Physics3DShape::createConvexHull( const cocos2d::Vec3 *points, int numPoints )
 {
-    auto shape = new (std::nothrow) Physics3DShape();
+    auto shape = new Physics3DShape();
     shape->initConvexHull(points, numPoints);
     shape->autorelease();
     return shape;
@@ -99,7 +99,7 @@ Physics3DShape* Physics3DShape::createConvexHull( const cocos2d::Vec3 *points, i
 
 Physics3DShape* Physics3DShape::createMesh( const cocos2d::Vec3 *triangles, int numTriangles )
 {
-    auto shape = new (std::nothrow) Physics3DShape();
+    auto shape = new Physics3DShape();
     shape->initMesh(triangles, numTriangles);
     shape->autorelease();
     return shape;
@@ -111,7 +111,7 @@ Physics3DShape* Physics3DShape::createHeightfield( int heightStickWidth,int heig
                                                   , bool useFloatDatam, bool flipQuadEdges
                                                   , bool useDiamondSubdivision)
 {
-    auto shape = new (std::nothrow) Physics3DShape();
+    auto shape = new Physics3DShape();
     shape->initHeightfield(heightStickWidth, heightStickLength, heightfieldData, heightScale, minHeight, maxHeight, useFloatDatam, flipQuadEdges, useDiamondSubdivision);
     shape->autorelease();
     return shape;	
@@ -119,7 +119,7 @@ Physics3DShape* Physics3DShape::createHeightfield( int heightStickWidth,int heig
 
 Physics3DShape* Physics3DShape::createCompoundShape( const std::vector<std::pair<Physics3DShape *, Mat4>> &shapes )
 {
-    auto shape = new (std::nothrow) Physics3DShape();
+    auto shape = new Physics3DShape();
     shape->initCompoundShape(shapes);
     shape->autorelease();
     return shape;

@@ -49,7 +49,7 @@ namespace
     {
         auto& pipelieDescriptor = command.getPipelineDescriptor();
         auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-        auto programState = new (std::nothrow) backend::ProgramState(program);
+        auto programState = new backend::ProgramState(program);
         CC_SAFE_RELEASE(pipelieDescriptor.programState);
         pipelieDescriptor.programState = programState;
         
@@ -95,8 +95,8 @@ namespace
 
 ProgressTimer* ProgressTimer::create(Sprite* sp)
 {
-    ProgressTimer *progressTimer = new (std::nothrow) ProgressTimer();
-    if (progressTimer && progressTimer->initWithSprite(sp))
+    ProgressTimer *progressTimer = new ProgressTimer();
+    if (progressTimer->initWithSprite(sp))
     {
         progressTimer->autorelease();
         return progressTimer;

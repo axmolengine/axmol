@@ -130,7 +130,7 @@ void Controller::startDiscoveryController()
     
     [[GCControllerConnectionEventHandler getInstance] observerConnection: ^(GCController* gcController) {
         
-        auto controller = new (std::nothrow) Controller();
+        auto controller = new Controller();
         controller->_impl->_gcController = gcController;
         controller->_deviceName = [gcController.vendorName UTF8String];
         

@@ -45,7 +45,7 @@ namespace cocostudio
     {
         if (!instanceTextReader)
         {
-            instanceTextReader = new (std::nothrow) TextReader();
+            instanceTextReader = new TextReader();
         }
         return instanceTextReader;
     }

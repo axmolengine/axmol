@@ -47,8 +47,8 @@ EventListenerFocus::~EventListenerFocus()
 
 EventListenerFocus* EventListenerFocus::create()
 {
-    EventListenerFocus* ret = new (std::nothrow) EventListenerFocus;
-    if (ret && ret->init()) {
+    EventListenerFocus* ret = new EventListenerFocus;
+    if (ret->init()) {
         ret->autorelease();
         return ret;
     }
@@ -58,8 +58,8 @@ EventListenerFocus* EventListenerFocus::create()
 
 EventListenerFocus* EventListenerFocus::clone()
 {
-    EventListenerFocus* ret = new (std::nothrow) EventListenerFocus;
-    if (ret && ret->init()) {
+    EventListenerFocus* ret = new EventListenerFocus;
+    if (ret->init()) {
         ret->autorelease();
         
         ret->onFocusChanged = onFocusChanged;

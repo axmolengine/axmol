@@ -31,8 +31,8 @@ namespace cocostudio {
 
 DecorativeDisplay *DecorativeDisplay::create()
 {
-    DecorativeDisplay *pDisplay = new (std::nothrow) DecorativeDisplay();
-    if (pDisplay && pDisplay->init())
+    DecorativeDisplay *pDisplay = new DecorativeDisplay();
+    if (pDisplay->init())
     {
         pDisplay->autorelease();
         return pDisplay;

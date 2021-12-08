@@ -160,7 +160,7 @@ static const int DEFAULT_RENDER_QUEUE = 0;
 //
 Renderer::Renderer()
 {
-    _groupCommandManager = new (std::nothrow) GroupCommandManager();
+    _groupCommandManager = new GroupCommandManager();
     
     _commandGroupStack.push(DEFAULT_RENDER_QUEUE);
     

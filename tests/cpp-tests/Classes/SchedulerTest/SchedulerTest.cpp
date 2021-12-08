@@ -578,32 +578,32 @@ void SchedulerUpdate::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    auto d = new (std::nothrow) TestNode();
+    auto d = new TestNode();
     d->initWithString("---", 50);
     addChild(d);
     d->release();
 
-    auto b = new (std::nothrow) TestNode();
+    auto b = new TestNode();
     b->initWithString("3rd", 0);
     addChild(b);
     b->release();
 
-    auto a = new (std::nothrow) TestNode();
+    auto a = new TestNode();
     a->initWithString("1st", -10);
     addChild(a);
     a->release();
 
-    auto c = new (std::nothrow) TestNode();
+    auto c = new TestNode();
     c->initWithString("4th", 10);
     addChild(c);
     c->release();
 
-    auto e = new (std::nothrow) TestNode();
+    auto e = new TestNode();
     e->initWithString("5th", 20);
     addChild(e);
     e->release();
 
-    auto f = new (std::nothrow) TestNode();
+    auto f = new TestNode();
     f->initWithString("2nd", -5);
     addChild(f);
     f->release();
@@ -927,12 +927,12 @@ void TwoSchedulers::onEnter()
     //
 
     // Create a new scheduler, and link it to the main scheduler
-    sched1 = new (std::nothrow) Scheduler();
+    sched1 = new Scheduler();
 
     defaultScheduler->scheduleUpdate(sched1, 0, false);
 
     // Create a new ActionManager, and link it to the new scheduler
-    actionManager1 = new (std::nothrow) ActionManager();
+    actionManager1 = new ActionManager();
     sched1->scheduleUpdate(actionManager1, 0, false);
 
     for( unsigned int i=0; i < 10; i++ ) 
@@ -954,11 +954,11 @@ void TwoSchedulers::onEnter()
     //
 
     // Create a new scheduler, and link it to the main scheduler
-    sched2 = new (std::nothrow) Scheduler();
+    sched2 = new Scheduler();
     defaultScheduler->scheduleUpdate(sched2, 0, false);
 
     // Create a new ActionManager, and link it to the new scheduler
-    actionManager2 = new (std::nothrow) ActionManager();
+    actionManager2 = new ActionManager();
     sched2->scheduleUpdate(actionManager2, 0, false);
 
     for( unsigned int i=0; i < 10; i++ ) {

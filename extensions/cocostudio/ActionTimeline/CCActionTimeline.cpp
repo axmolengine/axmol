@@ -34,8 +34,8 @@ NS_TIMELINE_BEGIN
 // ActionTimelineData
 ActionTimelineData* ActionTimelineData::create(int actionTag)
 {
-    ActionTimelineData * ret = new (std::nothrow) ActionTimelineData();
-    if (ret && ret->init(actionTag))
+    ActionTimelineData * ret = new ActionTimelineData();
+    if (ret->init(actionTag))
     {
         ret->autorelease();
     }
@@ -61,13 +61,13 @@ bool ActionTimelineData::init(int actionTag)
 // ActionTimeline
 ActionTimeline* ActionTimeline::create()
 {
-    ActionTimeline* object = new (std::nothrow) ActionTimeline();
-    if (object && object->init())
+    ActionTimeline* ret = new ActionTimeline();
+    if (ret->init())
     {
-        object->autorelease();
-        return object;
+        ret->autorelease();
+        return ret;
     }
-    CC_SAFE_DELETE(object);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 

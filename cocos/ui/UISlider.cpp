@@ -92,8 +92,8 @@ Slider::~Slider()
 
 Slider* Slider::create()
 {
-    Slider* widget = new (std::nothrow) Slider();
-    if (widget && widget->init())
+    Slider* widget = new Slider();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -106,8 +106,8 @@ Slider* Slider::create(const std::string& barTextureName,
                       const std::string& normalBallTextureName,
                       TextureResType resType)
 {
-    Slider* widget = new (std::nothrow) Slider();
-    if (widget && widget->init())
+    Slider* widget = new Slider();
+    if (widget->init())
     {
         widget->loadBarTexture(barTextureName, resType);
         widget->loadSlidBallTextureNormal(normalBallTextureName, resType);

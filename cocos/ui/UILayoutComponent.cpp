@@ -66,8 +66,8 @@ namespace ui {
         if (layout != nullptr)
             return layout;
 
-        layout = new (std::nothrow) LayoutComponent();
-        if (layout && layout->init())
+        layout = new LayoutComponent();
+        if (layout->init())
         {
             layout->autorelease();
             node->addComponent(layout);

@@ -30,13 +30,13 @@ NS_TIMELINE_BEGIN
 
 ActionTimelineNode* ActionTimelineNode::create(Node* root, ActionTimeline* action)
 {
-    ActionTimelineNode* object = new (std::nothrow) ActionTimelineNode();
-    if (object && object->init(root, action))
+    ActionTimelineNode* ret = new ActionTimelineNode();
+    if (ret->init(root, action))
     {
-        object->autorelease();
-        return object;
+        ret->autorelease();
+        return ret;
     }
-    CC_SAFE_DELETE(object);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 

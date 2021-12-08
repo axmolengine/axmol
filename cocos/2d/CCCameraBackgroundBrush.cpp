@@ -57,7 +57,7 @@ CameraBackgroundBrush::~CameraBackgroundBrush()
 
 CameraBackgroundBrush* CameraBackgroundBrush::createNoneBrush()
 {
-    auto ret = new (std::nothrow) CameraBackgroundBrush();
+    auto ret = new CameraBackgroundBrush();
     ret->init();
     
     ret->autorelease();
@@ -106,9 +106,9 @@ CameraBackgroundDepthBrush::~CameraBackgroundDepthBrush()
 
 CameraBackgroundDepthBrush* CameraBackgroundDepthBrush::create(float depth)
 {
-    auto ret = new (std::nothrow) CameraBackgroundDepthBrush();
+    auto ret = new CameraBackgroundDepthBrush();
     
-    if (nullptr != ret && ret->init())
+    if (ret->init())
     {
         ret->_depth = depth;
         ret->autorelease();
@@ -267,9 +267,9 @@ void CameraBackgroundColorBrush::setColor(const Color4F& color)
 
 CameraBackgroundColorBrush* CameraBackgroundColorBrush::create(const Color4F& color, float depth)
 {
-    auto ret = new (std::nothrow) CameraBackgroundColorBrush();
+    auto ret = new CameraBackgroundColorBrush();
 
-    if (nullptr != ret && ret->init())
+    if (ret->init())
     {
         ret->setColor(color);
         ret->setDepth(depth);
@@ -339,9 +339,9 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(
         tRepeatParams.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
         texture->setTexParameters(tRepeatParams);
 
-        ret = new (std::nothrow) CameraBackgroundSkyBoxBrush;
+        ret = new CameraBackgroundSkyBoxBrush;
 
-        if (nullptr != ret && ret->init())
+        if (ret->init())
         {
             ret->setTexture(texture);
             ret->autorelease();
@@ -358,9 +358,9 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(
 
 CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create()
 {
-    auto ret = new (std::nothrow) CameraBackgroundSkyBoxBrush();
+    auto ret = new CameraBackgroundSkyBoxBrush();
     
-    if (nullptr != ret && ret->init())
+    if (ret->init())
     {
         ret->autorelease();
     }

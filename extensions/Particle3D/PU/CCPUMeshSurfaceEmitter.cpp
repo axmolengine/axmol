@@ -301,9 +301,9 @@ const PUTriangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal (const 
 //	}
 //
 //	// Allocate space for the vertices and indices
-//	vertices = new (std::nothrow) Vec3[vertexCount];
-//	normals = new (std::nothrow) Vec3[vertexCount];
-//	indices = new (std::nothrow) unsigned long[indexCount];
+//	vertices = new Vec3[vertexCount];
+//	normals = new Vec3[vertexCount];
+//	indices = new unsigned long[indexCount];
 //	added_shared = false;
 //
 //	// Run through the submeshes again, adding the data into the arrays
@@ -568,12 +568,12 @@ void PUMeshSurfaceEmitter::build()
     }
 
     // Generate meshinfo.
-    _meshInfo = new (std::nothrow) MeshInfo(_meshName, _distribution, _orientation, _scale);
+    _meshInfo = new MeshInfo(_meshName, _distribution, _orientation, _scale);
 }
 
 PUMeshSurfaceEmitter* PUMeshSurfaceEmitter::create()
 {
-    auto pe = new (std::nothrow) PUMeshSurfaceEmitter();
+    auto pe = new PUMeshSurfaceEmitter();
     pe->autorelease();
     return pe;
 }

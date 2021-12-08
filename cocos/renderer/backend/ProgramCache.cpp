@@ -55,10 +55,10 @@ ProgramCache* ProgramCache::getInstance()
 {
     if(!_sharedProgramCache)
     {
-        _sharedProgramCache = new (std::nothrow) ProgramCache();
+        _sharedProgramCache = new ProgramCache();
         if(!_sharedProgramCache->init())
         {
-            CC_SAFE_RELEASE(_sharedProgramCache);
+            CC_SAFE_DELETE(_sharedProgramCache);
         }
     }
     return _sharedProgramCache;

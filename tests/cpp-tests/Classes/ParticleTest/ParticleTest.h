@@ -187,8 +187,8 @@ class DemoParticleFromFile : public ParticleDemo
 public:
     static DemoParticleFromFile* create(const std::string& file)
     {
-        auto ret = new (std::nothrow) DemoParticleFromFile;
-        if (ret && ret->init())
+        auto ret = new DemoParticleFromFile;
+        if (ret->init())
         {
             ret->_title = file;
             ret->autorelease();

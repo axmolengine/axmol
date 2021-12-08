@@ -84,7 +84,7 @@ ShaderNode::~ShaderNode()
 
 ShaderNode* ShaderNode::shaderNodeWithVertex(const std::string &vert, const std::string& frag)
 {
-    auto node = new (std::nothrow) ShaderNode();
+    auto node = new ShaderNode();
     node->initWithVertex(vert, frag);
     node->autorelease();
 
@@ -429,14 +429,11 @@ SpriteBlur::~SpriteBlur()
 
 SpriteBlur* SpriteBlur::create(const char *pszFileName)
 {
-    SpriteBlur* pRet = new (std::nothrow) SpriteBlur();
-    if (pRet)
-    {
-        bool result = pRet->initWithFile("");
-        log("Test call Sprite::initWithFile with bad file name result is : %s", result ? "true" : "false");
-    }
+    SpriteBlur* pRet = new SpriteBlur();
+    bool result = pRet->initWithFile("");
+    cocos2d::log("Test call Sprite::initWithFile with bad file name result is : %s", result ? "true" : "false");
 
-    if (pRet && pRet->initWithFile(pszFileName))
+    if (pRet->initWithFile(pszFileName))
     {
         pRet->autorelease();
     }

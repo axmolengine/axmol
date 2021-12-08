@@ -34,10 +34,10 @@ ShaderCache* ShaderCache::getInstance()
 {
     if(!_sharedShaderCache)
     {
-        _sharedShaderCache = new (std::nothrow) ShaderCache();
+        _sharedShaderCache = new ShaderCache();
         if(!_sharedShaderCache->init())
         {
-            CC_SAFE_RELEASE(_sharedShaderCache);
+            CC_SAFE_DELETE(_sharedShaderCache);
         }
     }
     return _sharedShaderCache;

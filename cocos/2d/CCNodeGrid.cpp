@@ -30,8 +30,8 @@ NS_CC_BEGIN
 
 NodeGrid* NodeGrid::create()
 {
-    NodeGrid * ret = new (std::nothrow) NodeGrid();
-    if (ret && ret->init())
+    NodeGrid * ret = new NodeGrid();
+    if (ret->init())
     {
         ret->autorelease();
     }

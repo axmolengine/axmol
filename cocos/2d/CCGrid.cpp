@@ -55,12 +55,7 @@ bool GridBase::initWithSize(const Vec2 &gridSize, const cocos2d::Rect &rect)
     auto POTWide = ccNextPOT((unsigned int)s.width);
     auto POTHigh = ccNextPOT((unsigned int)s.height);
     
-    Texture2D *texture = new (std::nothrow) Texture2D();
-    if (! texture)
-    {
-        CCLOG("cocos2d: Grid: error creating texture");
-        return false;
-    }
+    Texture2D *texture = new Texture2D();
 
     backend::TextureDescriptor descriptor;
     descriptor.width = POTWide;
@@ -110,7 +105,7 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D *texture, bool flipp
     auto& pipelineDescriptor = _drawCommand.getPipelineDescriptor();
     CC_SAFE_RELEASE(_programState);
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE);
-    _programState = new (std::nothrow) backend::ProgramState(program);
+    _programState = new backend::ProgramState(program);
     pipelineDescriptor.programState = _programState;
     _mvpMatrixLocation = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     _textureLocation = pipelineDescriptor.programState->getUniformLocation("u_texture");
@@ -277,39 +272,31 @@ void GridBase::afterDraw(cocos2d::Node * /*target*/)
 
 Grid3D* Grid3D::create(const Vec2& gridSize)
 {
-    Grid3D *ret= new (std::nothrow) Grid3D();
-
-    if (ret)
+    Grid3D *ret= new Grid3D();
+    if (ret->initWithSize(gridSize))
     {
-        if (ret->initWithSize(gridSize))
-        {
-            ret->autorelease();
-        }
-        else
-        {
-            delete ret;
-            ret = nullptr;
-        }
+        ret->autorelease();
     }
-
+    else
+    {
+        delete ret;
+        ret = nullptr;
+    }
     return ret;
 }
 
 Grid3D* Grid3D::create(const Vec2& gridSize, const Rect& rect)
 {
-    Grid3D *ret= new (std::nothrow) Grid3D();
-    
-    if (ret)
+    Grid3D *ret= new Grid3D();
+
+    if (ret->initWithSize(gridSize, rect))
     {
-        if (ret->initWithSize(gridSize, rect))
-        {
-            ret->autorelease();
-        }
-        else
-        {
-            delete ret;
-            ret = nullptr;
-        }
+        ret->autorelease();
+    }
+    else
+    {
+        delete ret;
+        ret = nullptr;
     }
     
     return ret;
@@ -317,19 +304,16 @@ Grid3D* Grid3D::create(const Vec2& gridSize, const Rect& rect)
 
 Grid3D* Grid3D::create(const Vec2& gridSize, Texture2D *texture, bool flipped)
 {
-    Grid3D *ret= new (std::nothrow) Grid3D();
+    Grid3D *ret= new Grid3D();
     
-    if (ret)
+    if (ret->initWithSize(gridSize, texture, flipped))
     {
-        if (ret->initWithSize(gridSize, texture, flipped))
-        {
-            ret->autorelease();
-        }
-        else
-        {
-            delete ret;
-            ret = nullptr;
-        }
+        ret->autorelease();
+    }
+    else
+    {
+        delete ret;
+        ret = nullptr;
     }
     
     return ret;
@@ -337,19 +321,16 @@ Grid3D* Grid3D::create(const Vec2& gridSize, Texture2D *texture, bool flipped)
 
 Grid3D* Grid3D::create(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect)
 {
-    Grid3D *ret= new (std::nothrow) Grid3D();
+    Grid3D *ret= new Grid3D();
     
-    if (ret)
+    if (ret->initWithSize(gridSize, texture, flipped, rect))
     {
-        if (ret->initWithSize(gridSize, texture, flipped, rect))
-        {
-            ret->autorelease();
-        }
-        else
-        {
-            delete ret;
-            ret = nullptr;
-        }
+        ret->autorelease();
+    }
+    else
+    {
+        delete ret;
+        ret = nullptr;
     }
     
     return ret;
@@ -572,19 +553,16 @@ TiledGrid3D::~TiledGrid3D()
 
 TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize)
 {
-    TiledGrid3D *ret= new (std::nothrow) TiledGrid3D();
+    TiledGrid3D *ret= new TiledGrid3D();
 
-    if (ret)
+    if (ret->initWithSize(gridSize))
     {
-        if (ret->initWithSize(gridSize))
-        {
-            ret->autorelease();
-        }
-        else
-        {
-            delete ret;
-            ret = nullptr;
-        }
+        ret->autorelease();
+    }
+    else
+    {
+        delete ret;
+        ret = nullptr;
     }
 
     return ret;
@@ -592,19 +570,16 @@ TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize)
 
 TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize, const Rect& rect)
 {
-    TiledGrid3D *ret= new (std::nothrow) TiledGrid3D();
+    TiledGrid3D *ret= new TiledGrid3D();
     
-    if (ret)
+    if (ret->initWithSize(gridSize, rect))
     {
-        if (ret->initWithSize(gridSize, rect))
-        {
-            ret->autorelease();
-        }
-        else
-        {
-            delete ret;
-            ret = nullptr;
-        }
+        ret->autorelease();
+    }
+    else
+    {
+        delete ret;
+        ret = nullptr;
     }
     
     return ret;
@@ -612,19 +587,16 @@ TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize, const Rect& rect)
 
 TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect)
 {
-    TiledGrid3D *ret= new (std::nothrow) TiledGrid3D();
+    TiledGrid3D *ret= new TiledGrid3D();
     
-    if (ret)
+    if (ret->initWithSize(gridSize, texture, flipped, rect))
     {
-        if (ret->initWithSize(gridSize, texture, flipped, rect))
-        {
-            ret->autorelease();
-        }
-        else
-        {
-            delete ret;
-            ret = nullptr;
-        }
+        ret->autorelease();
+    }
+    else
+    {
+        delete ret;
+        ret = nullptr;
     }
     
     return ret;
@@ -632,19 +604,16 @@ TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize, Texture2D *texture, bool 
 
 TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize, Texture2D *texture, bool flipped)
 {
-    TiledGrid3D *ret= new (std::nothrow) TiledGrid3D();
+    TiledGrid3D *ret= new TiledGrid3D();
     
-    if (ret)
+    if (ret->initWithSize(gridSize, texture, flipped))
     {
-        if (ret->initWithSize(gridSize, texture, flipped))
-        {
-            ret->autorelease();
-        }
-        else
-        {
-            delete ret;
-            ret = nullptr;
-        }
+        ret->autorelease();
+    }
+    else
+    {
+        delete ret;
+        ret = nullptr;
     }
     
     return ret;

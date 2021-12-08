@@ -61,7 +61,7 @@ namespace cocostudio
     {
         if (!_instanceSpriteReader)
         {
-            _instanceSpriteReader = new (std::nothrow) SpineSkeletonReader();
+            _instanceSpriteReader = new SpineSkeletonReader();
         }
 
         return _instanceSpriteReader;

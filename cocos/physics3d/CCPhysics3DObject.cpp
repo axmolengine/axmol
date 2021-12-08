@@ -60,7 +60,7 @@ Physics3DRigidBody::~Physics3DRigidBody()
 
 Physics3DRigidBody* Physics3DRigidBody::create(Physics3DRigidBodyDes* info)
 {
-    auto ret = new (std::nothrow) Physics3DRigidBody();
+    auto ret = new Physics3DRigidBody();
     if (ret->init(info))
     {
         ret->autorelease();
@@ -448,7 +448,7 @@ Physics3DCollider::~Physics3DCollider()
 
 Physics3DCollider* Physics3DCollider::create(Physics3DColliderDes *info)
 {
-    auto ret = new (std::nothrow) Physics3DCollider();
+    auto ret = new Physics3DCollider();
     if (ret->init(info))
     {
         ret->autorelease();

@@ -66,7 +66,7 @@ namespace ui {
 
     EditBoxImpl* __createSystemEditBox(EditBox* pEditBox)
     {
-        return new (std::nothrow) EditBoxImplWin(pEditBox);
+        return new EditBoxImplWin(pEditBox);
     }
 
     EditBoxImplWin::EditBoxImplWin(EditBox* pEditText)

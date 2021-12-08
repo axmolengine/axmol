@@ -251,8 +251,8 @@ ParticleSystem::ParticleSystem()
 
 ParticleSystem * ParticleSystem::create(const std::string& plistFile)
 {
-    ParticleSystem *ret = new (std::nothrow) ParticleSystem();
-    if (ret && ret->initWithFile(plistFile))
+    ParticleSystem *ret = new ParticleSystem();
+    if (ret->initWithFile(plistFile))
     {
         ret->autorelease();
         return ret;
@@ -263,8 +263,8 @@ ParticleSystem * ParticleSystem::create(const std::string& plistFile)
 
 ParticleSystem* ParticleSystem::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleSystem *ret = new (std::nothrow) ParticleSystem();
-    if (ret && ret->initWithTotalParticles(numberOfParticles))
+    ParticleSystem *ret = new ParticleSystem();
+    if (ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
         return ret;
@@ -523,7 +523,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, const std::s
                         CC_BREAK_IF(!deflated);
                         
                         // For android, we should retain it in VolatileTexture::addImage which invoked in Director::getInstance()->getTextureCache()->addUIImage()
-                        image = new (std::nothrow) Image();
+                        image = new Image();
                         bool isOK = image->initWithImageData(deflated, deflatedLen, true);
                         CCASSERT(isOK, "CCParticleSystem: error init image with Data");
                         CC_BREAK_IF(!isOK);

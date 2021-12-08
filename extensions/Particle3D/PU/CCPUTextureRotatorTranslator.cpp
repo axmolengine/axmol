@@ -75,7 +75,7 @@ bool PUTextureRotatorTranslator::translateChildProperty( PUScriptCompiler* compi
             float val = 0.0f;
             if(getFloat(*prop->values.front(), &val))
             {
-                PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                 dynamicAttributeFixed->setValue(val);
                 affector->setRotationSpeed(dynamicAttributeFixed);
                 return true;
@@ -90,7 +90,7 @@ bool PUTextureRotatorTranslator::translateChildProperty( PUScriptCompiler* compi
             float val = 0.0f;
             if(getFloat(*prop->values.front(), &val))
             {
-                PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                 dynamicAttributeFixed->setValue(val);
                 affector->setRotationSpeed(dynamicAttributeFixed);
                 return true;
@@ -105,7 +105,7 @@ bool PUTextureRotatorTranslator::translateChildProperty( PUScriptCompiler* compi
             float val = 0.0f;
             if(getFloat(*prop->values.front(), &val))
             {
-                PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                 dynamicAttributeFixed->setValue(val);
                 affector->setRotation(dynamicAttributeFixed);
                 return true;
@@ -120,7 +120,7 @@ bool PUTextureRotatorTranslator::translateChildProperty( PUScriptCompiler* compi
             float val = 0.0f;
             if(getFloat(*prop->values.front(), &val))
             {
-                PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                 dynamicAttributeFixed->setValue(val);
                 affector->setRotation(dynamicAttributeFixed);
                 return true;

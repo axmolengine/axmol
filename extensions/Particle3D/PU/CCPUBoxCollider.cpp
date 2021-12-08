@@ -281,7 +281,7 @@ void PUBoxCollider::preUpdateAffector( float deltaTime )
 
 PUBoxCollider* PUBoxCollider::create()
 {
-    auto pbc = new (std::nothrow) PUBoxCollider();
+    auto pbc = new PUBoxCollider();
     pbc->autorelease();
     return pbc;
 }

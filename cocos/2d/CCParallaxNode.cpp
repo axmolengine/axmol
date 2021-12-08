@@ -35,7 +35,7 @@ class PointObject : public Ref
 public:
     static PointObject * create(Vec2 ratio, Vec2 offset)
     {
-        PointObject *ret = new (std::nothrow) PointObject();
+        PointObject *ret = new PointObject();
         ret->initWithPoint(ratio, offset);
         ret->autorelease();
         return ret;
@@ -81,7 +81,7 @@ ParallaxNode::~ParallaxNode()
 
 ParallaxNode * ParallaxNode::create()
 {
-    ParallaxNode *ret = new (std::nothrow) ParallaxNode();
+    ParallaxNode *ret = new ParallaxNode();
     ret->autorelease();
     return ret;
 }

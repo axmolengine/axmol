@@ -72,7 +72,7 @@ void PUOnClearObserver::postUpdateObserver(float timeElapsed)
 
 PUOnClearObserver* PUOnClearObserver::create()
 {
-    auto pco = new (std::nothrow) PUOnClearObserver();
+    auto pco = new PUOnClearObserver();
     pco->autorelease();
     return pco;
 }

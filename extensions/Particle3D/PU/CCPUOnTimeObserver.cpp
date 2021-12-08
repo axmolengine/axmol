@@ -107,7 +107,7 @@ bool PUOnTimeObserver::observe (PUParticle3D* particle, float /*timeElapsed*/)
 
 PUOnTimeObserver* PUOnTimeObserver::create()
 {
-    auto pto = new (std::nothrow) PUOnTimeObserver();
+    auto pto = new PUOnTimeObserver();
     pto->autorelease();
     return pto;
 }

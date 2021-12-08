@@ -50,8 +50,8 @@ PageView::~PageView()
 
 PageView* PageView::create()
 {
-    PageView* widget = new (std::nothrow) PageView();
-    if (widget && widget->init())
+    PageView* widget = new PageView();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;

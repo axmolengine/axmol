@@ -60,7 +60,7 @@ bool PUOnRandomObserver::observe (PUParticle3D* /*particle*/, float /*timeElapse
 
 PUOnRandomObserver* PUOnRandomObserver::create()
 {
-    auto pro = new (std::nothrow) PUOnRandomObserver();
+    auto pro = new PUOnRandomObserver();
     pro->autorelease();
     return pro;
 }

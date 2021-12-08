@@ -317,7 +317,7 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
                 continue;
             }
 
-            Touch* touch = g_touches[unusedIndex] = new (std::nothrow) Touch();
+            Touch* touch = g_touches[unusedIndex] = new Touch();
             touch->setTouchInfo(unusedIndex, (x - _viewPortRect.origin.x) / _scaleX,
                                      (y - _viewPortRect.origin.y) / _scaleY);
             

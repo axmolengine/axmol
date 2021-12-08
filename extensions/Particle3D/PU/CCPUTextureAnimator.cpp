@@ -251,7 +251,7 @@ void PUTextureAnimator::updatePUAffector( PUParticle3D *particle, float deltaTim
 
 PUTextureAnimator* PUTextureAnimator::create()
 {
-    auto pta = new (std::nothrow) PUTextureAnimator();
+    auto pta = new PUTextureAnimator();
     pta->autorelease();
     return pta;
 }

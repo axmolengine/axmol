@@ -49,7 +49,7 @@ cocos2d::Vec2& PhysicsDebugNodeBox2D::GetDebugNodeOffset()
 
 void PhysicsDebugNodeBox2D::DrawPolygon(const b2Vec2* verts, int vertexCount, const b2Color& color)
 {
-	Vec2* vec = new (std::nothrow) Vec2[vertexCount];
+	Vec2* vec = new Vec2[vertexCount];
 	for (size_t i = 0; i < vertexCount; i++) {
 		vec[i] = Vec2(verts[i].x * mRatio, verts[i].y * mRatio) + debugNodeOffset;
 	}
@@ -58,7 +58,7 @@ void PhysicsDebugNodeBox2D::DrawPolygon(const b2Vec2* verts, int vertexCount, co
 
 void PhysicsDebugNodeBox2D::DrawSolidPolygon(const b2Vec2* verts, int vertexCount, const b2Color& color)
 {
-	Vec2* vec = new (std::nothrow) Vec2[vertexCount];
+	Vec2* vec = new Vec2[vertexCount];
 	for (size_t i = 0; i < vertexCount; i++) {
 		vec[i] = Vec2(verts[i].x * mRatio, verts[i].y * mRatio) + debugNodeOffset;
 	}

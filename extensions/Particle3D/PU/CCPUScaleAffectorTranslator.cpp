@@ -49,7 +49,7 @@ bool PUScaleAffectorTranslator::translateChildProperty( PUScriptCompiler* compil
             float val = 0.0f;
             if(getFloat(*prop->values.front(), &val))
             {
-                PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                 dynamicAttributeFixed->setValue(val);
                 affector->setDynScaleXYZ(dynamicAttributeFixed);
                 return true;
@@ -64,7 +64,7 @@ bool PUScaleAffectorTranslator::translateChildProperty( PUScriptCompiler* compil
             float val = 0.0f;
             if(getFloat(*prop->values.front(), &val))
             {
-                PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                 dynamicAttributeFixed->setValue(val);
                 affector->setDynScaleX(dynamicAttributeFixed);
                 return true;
@@ -79,7 +79,7 @@ bool PUScaleAffectorTranslator::translateChildProperty( PUScriptCompiler* compil
             float val = 0.0f;
             if(getFloat(*prop->values.front(), &val))
             {
-                PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                 dynamicAttributeFixed->setValue(val);
                 affector->setDynScaleY(dynamicAttributeFixed);
                 return true;
@@ -94,7 +94,7 @@ bool PUScaleAffectorTranslator::translateChildProperty( PUScriptCompiler* compil
             float val = 0.0f;
             if(getFloat(*prop->values.front(), &val))
             {
-                PUDynamicAttributeFixed* dynamicAttributeFixed = new (std::nothrow) PUDynamicAttributeFixed();
+                PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                 dynamicAttributeFixed->setValue(val);
                 affector->setDynScaleZ(dynamicAttributeFixed);
                 return true;

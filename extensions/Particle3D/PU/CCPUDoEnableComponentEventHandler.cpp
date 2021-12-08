@@ -155,7 +155,7 @@ void PUDoEnableComponentEventHandler::handle (PUParticleSystem3D* particleSystem
 
 PUDoEnableComponentEventHandler* PUDoEnableComponentEventHandler::create()
 {
-    auto peh = new (std::nothrow) PUDoEnableComponentEventHandler();
+    auto peh = new PUDoEnableComponentEventHandler();
     peh->autorelease();
     return peh;
 }

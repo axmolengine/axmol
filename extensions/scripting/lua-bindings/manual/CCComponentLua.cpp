@@ -69,7 +69,7 @@ ComponentLua* ComponentLua::create(const std::string& scriptFileName)
     initClass();
     
     adjustScriptFileName(const_cast<std::string&>(scriptFileName));
-    auto componentLua = new(std::nothrow) ComponentLua(scriptFileName);
+    auto componentLua = new ComponentLua(scriptFileName);
     if (componentLua)
     {
         componentLua->autorelease();

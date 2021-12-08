@@ -7,9 +7,9 @@ USING_NS_CC;
 
 FUIInput * FUIInput::create()
 {
-    FUIInput* pRet = new (std::nothrow) FUIInput();
+    FUIInput* pRet = new FUIInput();
 
-    if (pRet != nullptr && pRet->initWithSizeAndBackgroundSprite(Size(100, 100),
+    if (pRet->initWithSizeAndBackgroundSprite(Size(100, 100),
         (ui::Scale9Sprite*)ui::Scale9Sprite::createWithTexture(UIPackage::getEmptyTexture())))
     {
         pRet->autorelease();

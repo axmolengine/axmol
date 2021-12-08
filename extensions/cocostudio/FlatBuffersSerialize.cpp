@@ -122,7 +122,7 @@ FlatBuffersSerialize* FlatBuffersSerialize::getInstance()
 {
     if (!_instanceFlatBuffersSerialize)
     {
-        _instanceFlatBuffersSerialize = new (std::nothrow) FlatBuffersSerialize();
+        _instanceFlatBuffersSerialize = new FlatBuffersSerialize();
     }
 
     return _instanceFlatBuffersSerialize;
@@ -257,7 +257,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
 
     if (serializeEnabled)
     {
-        thiz->_builder = new (std::nothrow) FlatBufferBuilder();
+        thiz->_builder = new FlatBufferBuilder();
 
         Offset<NodeTree> nodeTree;
         Offset<NodeAction> action;
@@ -1365,7 +1365,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
 
     if (serializeEnabled)
     {
-        _builder = new (std::nothrow) FlatBufferBuilder();
+        _builder = new FlatBufferBuilder();
 
         Offset<NodeTree> nodeTree;
         Offset<NodeAction> action;
@@ -1614,7 +1614,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
     element = element.first_child();
 
     //Create FlatBuffers file using the language data in XML file.
-    _builder = new (std::nothrow) FlatBufferBuilder();
+    _builder = new FlatBufferBuilder();
     std::vector<Offset<LanguageItem>> langItemList;
     while (element)
     {

@@ -37,7 +37,7 @@ bool PUOnCollisionObserver::observe( PUParticle3D* particle, float /*timeElapsed
 
 PUOnCollisionObserver* PUOnCollisionObserver::create()
 {
-    auto pco = new (std::nothrow) PUOnCollisionObserver();
+    auto pco = new PUOnCollisionObserver();
     pco->autorelease();
     return pco;
 }

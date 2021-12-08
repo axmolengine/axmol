@@ -35,8 +35,8 @@ namespace cocostudio {
 
 DisplayManager *DisplayManager::create(Bone *bone)
 {
-    DisplayManager *pDisplayManager = new (std::nothrow) DisplayManager();
-    if (pDisplayManager && pDisplayManager->init(bone))
+    DisplayManager *pDisplayManager = new DisplayManager();
+    if (pDisplayManager->init(bone))
     {
         pDisplayManager->autorelease();
         return pDisplayManager;

@@ -69,8 +69,8 @@ ScrollViewBar::~ScrollViewBar()
 
 ScrollViewBar* ScrollViewBar::create(ScrollView* parent, ScrollView::Direction direction)
 {
-    ScrollViewBar* node = new (std::nothrow) ScrollViewBar(parent, direction);
-    if (node && node->init())
+    ScrollViewBar* node = new ScrollViewBar(parent, direction);
+    if (node->init())
     {
         node->autorelease();
         return node;

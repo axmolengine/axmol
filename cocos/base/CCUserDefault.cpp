@@ -353,7 +353,7 @@ UserDefault* UserDefault::getInstance()
 {
     if (_userDefault) return _userDefault;
 
-    return ( _userDefault = new (std::nothrow) UserDefault() );
+    return ( _userDefault = new UserDefault() );
 }
 
 void UserDefault::destroyInstance()

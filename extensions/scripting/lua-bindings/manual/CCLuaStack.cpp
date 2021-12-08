@@ -114,7 +114,7 @@ LuaStack::~LuaStack()
 
 LuaStack *LuaStack::create()
 {
-    LuaStack *stack = new (std::nothrow) LuaStack();
+    LuaStack *stack = new LuaStack();
     stack->init();
     stack->autorelease();
     return stack;
@@ -122,7 +122,7 @@ LuaStack *LuaStack::create()
 
 LuaStack *LuaStack::attach(lua_State *L)
 {
-    LuaStack *stack = new (std::nothrow) LuaStack();
+    LuaStack *stack = new LuaStack();
     stack->initWithLuaState(L);
     stack->autorelease();
     return stack;

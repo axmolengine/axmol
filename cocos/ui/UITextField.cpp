@@ -35,11 +35,8 @@ namespace ui {
 
 UICCTextField * UICCTextField::create()
 {
-    UICCTextField *ret = new (std::nothrow) UICCTextField();
-
-    if(ret)
-        ret->autorelease();
-
+    UICCTextField *ret = new UICCTextField();
+    ret->autorelease();
     return ret;
 }
     
@@ -59,9 +56,9 @@ UICCTextField::~UICCTextField()
 
 UICCTextField * UICCTextField::create(const std::string& placeholder, const std::string& fontName, float fontSize)
 {
-    UICCTextField *pRet = new (std::nothrow) UICCTextField();
+    UICCTextField *pRet = new UICCTextField();
     
-    if(pRet && pRet->initWithPlaceHolder("", fontName, fontSize))
+    if(pRet->initWithPlaceHolder("", fontName, fontSize))
     {
         pRet->autorelease();
         if (!placeholder.empty())
@@ -290,8 +287,8 @@ TextField::~TextField()
 
 TextField* TextField::create()
 {
-    TextField* widget = new (std::nothrow) TextField();
-    if (widget && widget->init())
+    TextField* widget = new TextField();
+    if (widget->init())
     {
         widget->autorelease();
         return widget;
@@ -302,8 +299,8 @@ TextField* TextField::create()
     
 TextField* TextField::create(const std::string &placeholder, const std::string &fontName, int fontSize)
 {
-    TextField* widget = new (std::nothrow) TextField();
-    if (widget && widget->init())
+    TextField* widget = new TextField();
+    if (widget->init())
     {
         widget->setFontName(fontName);
         widget->setFontSize(fontSize);

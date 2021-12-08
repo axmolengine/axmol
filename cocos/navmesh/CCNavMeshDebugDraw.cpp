@@ -121,7 +121,7 @@ void NavMeshDebugDraw::depthMask(bool state)
 void NavMeshDebugDraw::begin(duDebugDrawPrimitives prim, float size /*= 1.0f*/)
 {
     if (_currentPrimitive) return;
-    _currentPrimitive = new (std::nothrow) Primitive;
+    _currentPrimitive = new Primitive;
     _currentPrimitive->type = getPrimitiveType(prim);
     _currentPrimitive->depthMask = _currentDepthMask;
     _currentPrimitive->start = _vertices.size();

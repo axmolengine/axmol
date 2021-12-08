@@ -169,7 +169,7 @@ void PUPlaneCollider::updatePUAffector( PUParticle3D *particle, float deltaTime 
 
 PUPlaneCollider* PUPlaneCollider::create()
 {
-    auto ppc = new (std::nothrow) PUPlaneCollider();
+    auto ppc = new PUPlaneCollider();
     ppc->autorelease();
     return ppc;
 }

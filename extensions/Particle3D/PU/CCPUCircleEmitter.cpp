@@ -186,7 +186,7 @@ void PUCircleEmitter::initParticleDirection(PUParticle3D* particle)
 
 PUCircleEmitter* PUCircleEmitter::create()
 {
-    auto pe = new (std::nothrow) PUCircleEmitter();
+    auto pe = new PUCircleEmitter();
     pe->autorelease();
     return pe;
 }

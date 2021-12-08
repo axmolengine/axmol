@@ -77,8 +77,8 @@ DrawNode::~DrawNode()
 
 DrawNode* DrawNode::create(float defaultLineWidth)
 {
-    DrawNode* ret = new (std::nothrow) DrawNode(defaultLineWidth);
-    if (ret && ret->init())
+    DrawNode* ret = new DrawNode(defaultLineWidth);
+    if (ret->init())
     {
         ret->autorelease();
     }
@@ -168,7 +168,7 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd, uint32_t programType, Cu
     CC_SAFE_RELEASE(pipelinePS);
 
     auto program = backend::Program::getBuiltinProgram(programType);
-    pipelinePS = new (std::nothrow) backend::ProgramState(program);
+    pipelinePS = new backend::ProgramState(program);
     setVertexLayout(cmd);
     cmd.setPrimitiveType(primitiveType);
     cmd.setDrawType(drawType);
@@ -364,10 +364,8 @@ void DrawNode::drawCircle(const Vec2& center, float radius, float angle, unsigne
 {
     const float coef = 2.0f * (float)M_PI/segments;
     
-    Vec2 *vertices = new (std::nothrow) Vec2[segments+2];
-    if( ! vertices )
-        return;
-    
+    Vec2 *vertices = new Vec2[segments+2];
+ 
     for(unsigned int i = 0;i <= segments; i++) {
         float rads = i*coef;
         vertices[i].x = radius * cosf(rads + angle) * scaleX + center.x;
@@ -391,9 +389,7 @@ void DrawNode::drawCircle(const Vec2 &center, float radius, float angle, unsigne
 
 void DrawNode::drawQuadBezier(const Vec2 &origin, const Vec2 &control, const Vec2 &destination, unsigned int segments, const Color4B &color)
 {
-    Vec2* vertices = new (std::nothrow) Vec2[segments + 1];
-    if( ! vertices )
-        return;
+    Vec2* vertices = new Vec2[segments + 1];
     
     float t = 0.0f;
     for(unsigned int i = 0; i < segments; i++)
@@ -412,10 +408,8 @@ void DrawNode::drawQuadBezier(const Vec2 &origin, const Vec2 &control, const Vec
 
 void DrawNode::drawCubicBezier(const Vec2 &origin, const Vec2 &control1, const Vec2 &control2, const Vec2 &destination, unsigned int segments, const Color4B &color)
 {
-    Vec2* vertices = new (std::nothrow) Vec2[segments + 1];
-    if( ! vertices )
-        return;
-    
+    Vec2* vertices = new Vec2[segments + 1];
+
     float t = 0;
     for (unsigned int i = 0; i < segments; i++)
     {
@@ -433,9 +427,7 @@ void DrawNode::drawCubicBezier(const Vec2 &origin, const Vec2 &control1, const V
 
 void DrawNode::drawCardinalSpline(PointArray *config, float tension,  unsigned int segments, const Color4B &color)
 {
-    Vec2* vertices = new (std::nothrow) Vec2[segments + 1];
-    if( ! vertices )
-        return;
+    Vec2* vertices = new Vec2[segments + 1];
     
     ssize_t p;
     float lt;
@@ -682,9 +674,7 @@ void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, un
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
-    Vec2* vertices = new (std::nothrow) Vec2[segments];
-    if (!vertices)
-        return;
+    Vec2* vertices = new Vec2[segments];
 
     for (unsigned int i = 0; i < segments; i++)
     {
@@ -705,9 +695,7 @@ void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, un
 {
     const float coef = 2.0f * (float)M_PI/segments;
     
-    Vec2 *vertices = new (std::nothrow) Vec2[segments];
-    if( ! vertices )
-        return;
+    Vec2 *vertices = new Vec2[segments];
     
     for(unsigned int i = 0;i < segments; i++)
     {

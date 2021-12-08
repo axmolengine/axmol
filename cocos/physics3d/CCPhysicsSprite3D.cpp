@@ -33,8 +33,8 @@ NS_CC_BEGIN
 
 PhysicsSprite3D* PhysicsSprite3D::create(const std::string &modelPath, Physics3DRigidBodyDes* rigidDes, const cocos2d::Vec3& translateInPhysics, const cocos2d::Quaternion& rotInPhsyics)
 {
-    auto ret = new (std::nothrow) PhysicsSprite3D();
-    if (ret && ret->initWithFile(modelPath))
+    auto ret = new PhysicsSprite3D();
+    if (ret->initWithFile(modelPath))
     {
         auto obj = Physics3DRigidBody::create(rigidDes);
         ret->_physicsComponent = Physics3DComponent::create(obj, translateInPhysics, rotInPhsyics);
@@ -49,8 +49,8 @@ PhysicsSprite3D* PhysicsSprite3D::create(const std::string &modelPath, Physics3D
 
 PhysicsSprite3D* PhysicsSprite3D::createWithCollider(const std::string &modelPath, Physics3DColliderDes* colliderDes, const cocos2d::Vec3& translateInPhysics, const cocos2d::Quaternion& rotInPhsyics)
 {
-    auto ret = new (std::nothrow) PhysicsSprite3D();
-    if (ret && ret->initWithFile(modelPath))
+    auto ret = new PhysicsSprite3D();
+    if (ret->initWithFile(modelPath))
     {
         auto obj = Physics3DCollider::create(colliderDes);
         ret->_physicsComponent = Physics3DComponent::create(obj, translateInPhysics, rotInPhsyics);

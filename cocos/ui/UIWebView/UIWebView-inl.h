@@ -45,8 +45,8 @@ namespace ui{
 
     WebView *WebView::create()
     {
-        auto webView = new(std::nothrow) WebView();
-        if (webView && webView->init())
+        auto webView = new WebView();
+        if (webView->init())
         {
             webView->autorelease();
             return webView;
