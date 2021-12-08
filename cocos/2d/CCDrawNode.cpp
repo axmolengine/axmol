@@ -364,8 +364,8 @@ void DrawNode::drawCircle(const Vec2& center, float radius, float angle, unsigne
 {
     const float coef = 2.0f * (float)M_PI/segments;
     
-    Vec2 *vertices = new Vec2[segments+2];
- 
+    auto vertices = _abuf.get<Vec2>(segments + 2);
+
     for(unsigned int i = 0;i <= segments; i++) {
         float rads = i*coef;
         vertices[i].x = radius * cosf(rads + angle) * scaleX + center.x;
@@ -378,8 +378,6 @@ void DrawNode::drawCircle(const Vec2& center, float radius, float angle, unsigne
     }
     else
         drawPoly(vertices, segments+1, true, color);
-    
-    CC_SAFE_DELETE_ARRAY(vertices);
 }
 
 void DrawNode::drawCircle(const Vec2 &center, float radius, float angle, unsigned int segments, bool drawLineToCenter, const Color4B &color)
@@ -389,7 +387,7 @@ void DrawNode::drawCircle(const Vec2 &center, float radius, float angle, unsigne
 
 void DrawNode::drawQuadBezier(const Vec2 &origin, const Vec2 &control, const Vec2 &destination, unsigned int segments, const Color4B &color)
 {
-    Vec2* vertices = new Vec2[segments + 1];
+    Vec2* vertices = _abuf.get<Vec2>(segments + 1);
     
     float t = 0.0f;
     for(unsigned int i = 0; i < segments; i++)
@@ -402,13 +400,11 @@ void DrawNode::drawQuadBezier(const Vec2 &origin, const Vec2 &control, const Vec
     vertices[segments].y = destination.y;
     
     drawPoly(vertices, segments+1, false, color);
-
-    CC_SAFE_DELETE_ARRAY(vertices);
 }
 
 void DrawNode::drawCubicBezier(const Vec2 &origin, const Vec2 &control1, const Vec2 &control2, const Vec2 &destination, unsigned int segments, const Color4B &color)
 {
-    Vec2* vertices = new Vec2[segments + 1];
+    Vec2* vertices = _abuf.get<Vec2>(segments + 1);
 
     float t = 0;
     for (unsigned int i = 0; i < segments; i++)
@@ -421,13 +417,11 @@ void DrawNode::drawCubicBezier(const Vec2 &origin, const Vec2 &control1, const V
     vertices[segments].y = destination.y;
     
     drawPoly(vertices, segments+1, false, color);
-
-    CC_SAFE_DELETE_ARRAY(vertices);
 }
 
 void DrawNode::drawCardinalSpline(PointArray *config, float tension,  unsigned int segments, const Color4B &color)
 {
-    Vec2* vertices = new Vec2[segments + 1];
+    Vec2* vertices = _abuf.get<Vec2>(segments + 1);
     
     ssize_t p;
     float lt;
@@ -458,8 +452,6 @@ void DrawNode::drawCardinalSpline(PointArray *config, float tension,  unsigned i
     }
     
     drawPoly(vertices, segments+1, false, color);
-    
-    CC_SAFE_DELETE_ARRAY(vertices);
 }
 
 void DrawNode::drawCatmullRom(PointArray *points, unsigned int segments, const Color4B &color)
@@ -674,7 +666,7 @@ void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, un
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
-    Vec2* vertices = new Vec2[segments];
+    Vec2* vertices = _abuf.get<Vec2>(segments);
 
     for (unsigned int i = 0; i < segments; i++)
     {
@@ -687,15 +679,13 @@ void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, un
     }
 
     drawPolygon(vertices, segments, fillColor, borderWidth, borderColor);
-
-    CC_SAFE_DELETE_ARRAY(vertices);
 }
 
 void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, float scaleX, float scaleY, const Color4B &color)
 {
     const float coef = 2.0f * (float)M_PI/segments;
     
-    Vec2 *vertices = new Vec2[segments];
+    Vec2 *vertices = _abuf.get<Vec2>(segments);
     
     for(unsigned int i = 0;i < segments; i++)
     {
@@ -708,11 +698,7 @@ void DrawNode::drawSolidCircle(const Vec2& center, float radius, float angle, un
     }
     
     drawSolidPoly(vertices, segments, color);
-    
-    CC_SAFE_DELETE_ARRAY(vertices);
 }
-
-
 
 
 void DrawNode::drawSolidCircle( const Vec2& center, float radius, float angle, unsigned int segments, const Color4B& color)
