@@ -177,6 +177,10 @@ endif()
 # engine extensions
 add_subdirectory(${ADXE_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
+if(MSVC_IDE)
+    target_sources(${ADXE_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)
+endif()
+
 # copy all thirdparty libraries to ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
 # if (WINDOWS)
 #     copy_thirdparty_dlls(libcocos2d ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)

@@ -36,6 +36,8 @@
 #include <string>
 #include <sstream>
 
+#include "yasio/detail/byte_buffer.hpp"
+
 using namespace cocos2d;
 using namespace cocos2d::network;
 
@@ -97,8 +99,7 @@ public:
 
     void getByteData(unsigned char* byteData) const;
 
-    inline const std::string& getDataStr() const { return _data; }
-
+    inline const char* getData() { return !_data.empty() ? _data.data() : ""; }
     inline size_t getDataSize() const { return _dataSize; }
 
     inline void setErrorFlag(bool errorFlag) { _errorFlag = errorFlag; }
@@ -112,7 +113,7 @@ private:
     std::string                          _url;
     std::string                          _meth;
     std::string                          _type;
-    std::string                          _data;
+    yasio::sbyte_buffer                  _data;
     size_t                               _dataSize;
     int                                  _readyState;
     int                                  _status;
@@ -247,14 +248,14 @@ void LuaMinXmlHttpRequest::_sendRequest()
         
 
         /** get the response data **/
-        std::vector<char> *buffer = response->getResponseData();
+        auto buffer = response->getResponseData();
         
         if (statusCode == 200)
         {
             //Succeeded
             _status = 200;
             _readyState = DONE;
-            _data.assign(buffer->begin(), buffer->end());
+            _data = std::move(*buffer);
             _dataSize = buffer->size();
         }
         else
@@ -279,7 +280,8 @@ void LuaMinXmlHttpRequest::_sendRequest()
 
 void LuaMinXmlHttpRequest::getByteData(unsigned char* byteData) const
 {
-    memcpy((char*)byteData, _data.c_str(), _dataSize);
+    if (_dataSize > 0)
+        memcpy((char*)byteData, _data.data(), _dataSize);
 }
 
 /* function to regType */
@@ -637,7 +639,7 @@ static int lua_get_XMLHttpRequest_responseText(lua_State* L)
 		return 0;
     }
 #endif
-    lua_pushlstring(L, self->getDataStr().c_str(), self->getDataSize());
+    lua_pushlstring(L, self->getData(), self->getDataSize());
     return 1;
     
 #if COCOS2D_DEBUG >= 1
@@ -670,7 +672,7 @@ static int lua_get_XMLHttpRequest_response(lua_State* L)
         if (self->getReadyState() != LuaMinXmlHttpRequest::DONE || self->getErrorFlag())
             return 0;
         
-        lua_pushlstring(L, self->getDataStr().c_str(), self->getDataSize());
+        lua_pushlstring(L, self->getData(), self->getDataSize());
         return 1;
     }
     else if(self->getResponseType() == LuaMinXmlHttpRequest::ResponseType::ARRAY_BUFFER)
@@ -706,7 +708,7 @@ static int lua_get_XMLHttpRequest_response(lua_State* L)
     }
     else
     {
-        lua_pushlstring(L, self->getDataStr().c_str(), self->getDataSize());
+        lua_pushlstring(L, self->getData(), self->getDataSize());
         return 1;
     }
     

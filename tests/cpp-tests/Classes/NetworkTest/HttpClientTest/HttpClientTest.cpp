@@ -325,7 +325,7 @@ void HttpClientTest::onHttpRequestCompleted(HttpClient *sender, HttpResponse *re
     }
     
     // dump data
-    std::vector<char> *buffer = response->getResponseData();
+    auto buffer = response->getResponseData();
     buffer->push_back('\0'); // to c_str
     log("Http Test, dump data: %s", buffer->data());
     log("\n");
