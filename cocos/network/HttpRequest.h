@@ -50,8 +50,6 @@ class HttpClient;
 class HttpResponse;
 
 typedef std::function<void(HttpClient* client, HttpResponse* response)> ccHttpRequestCallback;
-typedef void (cocos2d::Ref::*SEL_HttpResponse)(HttpClient* client, HttpResponse* response);
-#define httpresponse_selector(_SELECTOR) (cocos2d::network::SEL_HttpResponse)(&_SELECTOR)
 
 /**
  * Defines the object which users must packed for HttpClient::send(HttpRequest*) method.
@@ -86,8 +84,6 @@ public:
      */
     HttpRequest()
         : _requestType(Type::UNKNOWN)
-        , _pTarget(nullptr)
-        , _pSelector(nullptr)
         , _pCallback(nullptr)
         , _pUserData(nullptr)
     {
@@ -96,10 +92,6 @@ public:
     /** Destructor. */
     virtual ~HttpRequest()
     {
-        if (_pTarget)
-        {
-            _pTarget->release();
-        }
     }
 
     /**
@@ -238,17 +230,6 @@ public:
     }
     
     /**
-     * Set the target and related callback selector of HttpRequest object.
-     * When response come back, we would call (pTarget->*pSelector) to process response data.
-     *
-     * @param pTarget the target object pointer.
-     * @param pSelector the SEL_HttpResponse function.
-     */
-    void setResponseCallback(Ref* pTarget, SEL_HttpResponse pSelector)
-    {
-        doSetResponseCallback(pTarget, pSelector);
-    }
-    /**
      * Set response callback function of HttpRequest object.
      * When response come back, we would call _pCallback to process response data.
      *
@@ -259,42 +240,6 @@ public:
         _pCallback = callback;
     }
     
-    /** 
-     * Get the target of callback selector function, mainly used by HttpClient.
-     *
-     * @return Ref* the target of callback selector function
-     */
-    Ref* getTarget() const
-    {
-        return _pTarget;
-    }
-
-    /**
-     * This sub class is just for migration SEL_CallFuncND to SEL_HttpResponse,someday this way will be removed.
-     *
-     * @lua NA
-     */
-    class _prxy
-    {
-    public:
-        /** Constructor. */
-        _prxy( SEL_HttpResponse cb ) :_cb(cb) {}
-        /** Destructor. */
-        ~_prxy(){};
-        operator SEL_HttpResponse() const { return _cb; }
-    protected:
-        SEL_HttpResponse _cb;
-    };
-
-    /**
-     * Get _prxy object by the _pSelector.
-     *
-     * @return _prxy the _prxy object
-     */
-    _prxy getSelector() const
-    {
-        return _prxy(_pSelector);
-    }
 
     /**
      * Get ccHttpRequestCallback callback function.
@@ -347,29 +292,12 @@ private:
         return nullptr;
     }
 
-    void doSetResponseCallback(Ref* pTarget, SEL_HttpResponse pSelector)
-    {
-        if (_pTarget)
-        {
-            _pTarget->release();
-        }
-        
-        _pTarget = pTarget;
-        _pSelector = pSelector;
-        if (_pTarget)
-        {
-            _pTarget->retain();
-        }
-    }
-
 protected:
     // properties
     Type                        _requestType;    /// kHttpRequestGet, kHttpRequestPost or other enums
     std::string                 _url;            /// target url that this request is sent to
     yasio::sbyte_buffer         _requestData;    /// used for POST
     std::string                 _tag;            /// user defined tag, to identify different requests in response callback
-    Ref*                        _pTarget;        /// callback target of pSelector function
-    SEL_HttpResponse            _pSelector;      /// callback function, e.g. MyLayer::onHttpResponse(HttpClient *sender, HttpResponse * response)
     ccHttpRequestCallback       _pCallback;      /// C++11 style callbacks
     void*                       _pUserData;      /// You can add your customed data here
     std::vector<std::string>    _headers;        /// custom http headers

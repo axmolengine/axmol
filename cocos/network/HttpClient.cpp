@@ -425,13 +425,9 @@ void HttpClient::invokeResposneCallbackAndRelease(HttpResponse* response)
 {
     HttpRequest* request                  = response->getHttpRequest();
     const ccHttpRequestCallback& callback = request->getCallback();
-    Ref* pTarget                          = request->getTarget();
-    SEL_HttpResponse pSelector            = request->getSelector();
 
     if (callback != nullptr)
         callback(this, response);
-    else if (pTarget && pSelector)
-        (pTarget->*pSelector)(this, response);
 
     response->release();
 }
