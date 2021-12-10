@@ -36,6 +36,7 @@ SOFTWARE.
 #include "yasio/cxx17/string_view.hpp"
 #include "yasio/detail/endian_portable.hpp"
 #include "yasio/detail/utils.hpp"
+#include "yasio/detail/byte_buffer.hpp"
 namespace yasio
 {
 enum : size_t
@@ -142,7 +143,7 @@ private:
   std::array<char, _Extent> impl_;
 };
 
-template <typename _Cont = std::vector<char>>
+template <typename _Cont = sbyte_buffer>
 class dynamic_buffer_span {
 public:
   using implementation_type = _Cont;
@@ -155,7 +156,7 @@ public:
   void write_bytes(const void* d, int n)
   {
     if (n > 0)
-      outs_->insert(outs_->end(), static_cast<const char*>(d), static_cast<const char*>(d) + n);
+      outs_->insert(outs_->end(), static_cast<const uint8_t*>(d), static_cast<const uint8_t*>(d) + n);
   }
   size_t write_bytes(size_t offset, const void* d, int n)
   {
@@ -178,7 +179,7 @@ private:
   implementation_type* outs_;
 };
 
-template <typename _Cont = std::vector<char>>
+template <typename _Cont = sbyte_buffer>
 class dynamic_buffer : public dynamic_buffer_span<_Cont> {
 public:
   dynamic_buffer() : dynamic_buffer_span<_Cont>(&impl_) {}
@@ -485,7 +486,7 @@ using obstream      = obstream_any<dynamic_extent>;
 using fast_obstream = fast_obstream_any<dynamic_extent>;
 
 //-------- basic_obstream_span
-template <typename _ConvertTraits, typename _Cont = std::vector<char>>
+template <typename _ConvertTraits, typename _Cont = sbyte_buffer>
 class basic_obstream_span;
 
 template <typename _ConvertTraits, typename _Cont>

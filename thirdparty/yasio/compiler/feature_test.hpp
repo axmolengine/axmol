@@ -33,6 +33,7 @@ SOFTWARE.
 // https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=vs-2019
 #if defined(_MSC_VER)
 #  if _MSC_VER < 1900
+#    define noexcept
 #    define YASIO__HAS_FULL_CXX11 0
 #  else
 #    define YASIO__HAS_FULL_CXX11 1

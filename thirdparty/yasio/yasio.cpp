@@ -352,7 +352,7 @@ io_transport::io_transport(io_channel* ctx, xxsocket_ptr&& s) : ctx_(ctx)
 #endif
 }
 const print_fn2_t& io_transport::__get_cprint() const { return ctx_->get_service().options_.print_; }
-int io_transport::write(std::vector<char>&& buffer, completion_cb_t&& handler)
+int io_transport::write(sbyte_buffer&& buffer, completion_cb_t&& handler)
 {
   int n = static_cast<int>(buffer.size());
   send_queue_.emplace(cxx14::make_unique<io_send_op>(std::move(buffer), std::move(handler)));
@@ -608,11 +608,11 @@ void io_transport_udp::disconnect()
   connected_ = false;
   set_primitives();
 }
-int io_transport_udp::write(std::vector<char>&& buffer, completion_cb_t&& handler)
+int io_transport_udp::write(sbyte_buffer&& buffer, completion_cb_t&& handler)
 {
   return connected_ ? io_transport::write(std::move(buffer), std::move(handler)) : write_to(std::move(buffer), ensure_destination(), std::move(handler));
 }
-int io_transport_udp::write_to(std::vector<char>&& buffer, const ip::endpoint& to, completion_cb_t&& handler)
+int io_transport_udp::write_to(sbyte_buffer&& buffer, const ip::endpoint& to, completion_cb_t&& handler)
 {
   int n = static_cast<int>(buffer.size());
   send_queue_.emplace(cxx14::make_unique<io_sendto_op>(std::move(buffer), std::move(handler), to));
@@ -645,9 +645,9 @@ void io_transport_udp::set_primitives()
     };
   }
 }
-int io_transport_udp::handle_input(const char* buf, int bytes_transferred, int& /*error*/, highp_time_t&)
+int io_transport_udp::handle_input(const char* data, int bytes_transferred, int& /*error*/, highp_time_t&)
 { // pure udp, dispatch to upper layer directly
-  get_service().handle_event(cxx14::make_unique<io_event>(this->cindex(), io_packet{buf, buf + bytes_transferred}, this));
+  get_service().handle_event(cxx14::make_unique<io_event>(this->cindex(), io_packet{data, data + bytes_transferred}, this));
   return bytes_transferred;
 }
 
@@ -663,12 +663,12 @@ io_transport_kcp::io_transport_kcp(io_channel* ctx, xxsocket_ptr&& s) : io_trans
     if (yasio__min_wait_duration == 0)
       return t->write_cb_(buf, len, std::addressof(t->ensure_destination()));
     // Enqueue to transport queue
-    return t->io_transport_udp::write(std::vector<char>(buf, buf + len), nullptr);
+    return t->io_transport_udp::write(sbyte_buffer{buf, buf + len}, nullptr);
   });
 }
 io_transport_kcp::~io_transport_kcp() { ::ikcp_release(this->kcp_); }
 
-int io_transport_kcp::write(std::vector<char>&& buffer, completion_cb_t&& /*handler*/)
+int io_transport_kcp::write(sbyte_buffer&& buffer, completion_cb_t&& /*handler*/)
 {
   std::lock_guard<std::recursive_mutex> lck(send_mtx_);
   int len    = static_cast<int>(buffer.size());
@@ -1122,7 +1122,7 @@ void io_service::unregister_descriptor(const socket_native_type fd, int flags)
   if (yasio__testbits(flags, YEM_POLLERR))
     FD_CLR(fd, &(fds_array_[except_op]));
 }
-int io_service::write(transport_handle_t transport, std::vector<char> buffer, completion_cb_t handler)
+int io_service::write(transport_handle_t transport, sbyte_buffer buffer, completion_cb_t handler)
 {
   if (transport && transport->is_open())
     return !buffer.empty() ? transport->write(std::move(buffer), std::move(handler)) : 0;
@@ -1132,7 +1132,7 @@ int io_service::write(transport_handle_t transport, std::vector<char> buffer, co
     return -1;
   }
 }
-int io_service::write_to(transport_handle_t transport, std::vector<char> buffer, const ip::endpoint& to, completion_cb_t handler)
+int io_service::write_to(transport_handle_t transport, sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t handler)
 {
   if (transport && transport->is_open())
     return !buffer.empty() ? transport->write_to(std::move(buffer), to, std::move(handler)) : 0;

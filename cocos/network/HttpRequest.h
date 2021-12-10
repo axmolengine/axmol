@@ -35,6 +35,8 @@
 #include "base/CCRef.h"
 #include "base/ccMacros.h"
 
+#include "yasio/detail/byte_buffer.hpp"
+
 /**
  * @addtogroup network
  * @{
@@ -364,7 +366,7 @@ protected:
     // properties
     Type                        _requestType;    /// kHttpRequestGet, kHttpRequestPost or other enums
     std::string                 _url;            /// target url that this request is sent to
-    std::vector<char>           _requestData;    /// used for POST
+    yasio::sbyte_buffer         _requestData;    /// used for POST
     std::string                 _tag;            /// user defined tag, to identify different requests in response callback
     Ref*                        _pTarget;        /// callback target of pSelector function
     SEL_HttpResponse            _pSelector;      /// callback function, e.g. MyLayer::onHttpResponse(HttpClient *sender, HttpResponse * response)

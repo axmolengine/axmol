@@ -293,18 +293,16 @@ void xxsocket::traverse_local_address(std::function<bool(const ip::endpoint&)> h
 #if defined(_WIN32)
   char hostname[256] = {0};
   ::gethostname(hostname, sizeof(hostname));
+#  if defined(_DEBUG)
+  YASIO_LOG("xxsocket::traverse_local_address: localhost=%s", hostname);
+#  endif
 
   // ipv4 & ipv6
   addrinfo hint, *ailist = nullptr;
   ::memset(&hint, 0x0, sizeof(hint));
 
   endpoint ep;
-#  if defined(_DEBUG)
-  YASIO_LOG("xxsocket::traverse_local_address: localhost=%s", hostname);
-#  endif
   int iret = getaddrinfo(hostname, nullptr, &hint, &ailist);
-
-  const char* errmsg = nullptr;
   if (ailist != nullptr)
   {
     for (auto aip = ailist; aip != nullptr; aip = aip->ai_next)
@@ -322,9 +320,7 @@ void xxsocket::traverse_local_address(std::function<bool(const ip::endpoint&)> h
     freeaddrinfo(ailist);
   }
   else
-  {
-    errmsg = xxsocket::gai_strerror(iret);
-  }
+    YASIO_LOGV("xxsocket::traverse_local_address fail with %s", xxsocket::gai_strerror(iret));
 #else // unix like systems with <ifaddrs.h>
   struct ifaddrs *ifaddr, *ifa;
   /*
