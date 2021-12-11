@@ -37,13 +37,17 @@ The byte_buffer concepts:
 #include <string.h>
 #include <memory>
 #include <vector>
-#include <exception>
 #include <type_traits>
+#include <exception>
+#include <stdexcept>
 #include "yasio/compiler/feature_test.hpp"
 
 namespace yasio
 {
-template <typename _Elem>
+struct default_allocator {
+  static void* reallocate(void* oldBlock, size_t /*oldSize*/, size_t newSize) { return ::realloc(oldBlock, newSize); }
+};
+template <typename _Elem, typename _Alloc = default_allocator>
 class basic_byte_buffer final {
   static_assert(sizeof(_Elem) == 1, "The basic_byte_buffer only accept type which is char or unsigned char!");
 
@@ -52,8 +56,10 @@ public:
   using const_pointer = const _Elem*;
   using size_type     = size_t;
   basic_byte_buffer() {}
-  explicit basic_byte_buffer(size_t capacity) { reserve(capacity); }
-  basic_byte_buffer(size_t size, _Elem val) { resize(size, val); }
+  explicit basic_byte_buffer(size_t count) { resize(count); }
+  basic_byte_buffer(size_t count, _Elem val) { resize(count, val); }
+  basic_byte_buffer(size_t count, std::true_type /*fit?*/) { resize_fit(count); }
+  basic_byte_buffer(size_t count, _Elem val, std::true_type /*fit?*/) { resize_fit(count, val); }
   basic_byte_buffer(const void* first, const void* last) { assign(first, last); }
   basic_byte_buffer(const basic_byte_buffer& rhs) { assign(rhs.begin(), rhs.end()); };
   basic_byte_buffer(basic_byte_buffer&& rhs) noexcept
@@ -141,6 +147,13 @@ public:
       _Reallocate_exactly(new_size * 3 / 2);
     _Mylast = _Myfirst + new_size;
   }
+  void resize_fit(size_t new_size, _Elem val)
+  {
+    auto old_size = this->size();
+    resize_fit(new_size);
+    if (old_size < new_size)
+      memset(_Myfirst + old_size, val, new_size - old_size);
+  }
   void resize_fit(size_t new_size)
   {
     if (this->capacity() < new_size)
@@ -161,6 +174,18 @@ public:
       _Reallocate_exactly(new_cap);
       _Mylast = _Myfirst + cur_size;
     }
+  }
+  const _Elem& operator[](size_t index) const
+  {
+    if (index < this->size())
+      return _Myfirst[index];
+    throw std::out_of_range("byte_buffer: out of range!");
+  }
+  _Elem& operator[](size_t index)
+  {
+    if (index < this->size())
+      return _Myfirst[index];
+    throw std::out_of_range("byte_buffer: out of range!");
   }
   void attach(void* ptr, size_t len) noexcept
   {
@@ -183,7 +208,7 @@ public:
 private:
   void _Reallocate_exactly(size_t new_cap)
   {
-    auto new_block = (_Elem*)realloc(_Myfirst, new_cap);
+    auto new_block = (_Elem*)_Alloc::reallocate(_Myfirst, _Myend - _Myfirst, new_cap);
     if (new_block || 0 == new_cap)
       _Myfirst = new_block;
     else
