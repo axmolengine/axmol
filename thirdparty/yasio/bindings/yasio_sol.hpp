@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -28,9 +28,9 @@ SOFTWARE.
 #if YASIO__HAS_CXX14
 
 #  if !YASIO__HAS_CXX20
-#    include "sol/sol.hpp"
+#    include "sol2/sol.hpp"
 #  else
-#    include "sol3/sol.hpp"
+#    include "sol/sol.hpp"
 #  endif
 
 #  if !YASIO__HAS_CXX17
@@ -38,14 +38,16 @@ namespace sol
 {
 namespace stack
 {
-template <> struct pusher<cxx17::string_view> {
+template <>
+struct pusher<cxx17::string_view> {
   static int push(lua_State* L, const cxx17::string_view& str)
   {
     lua_pushlstring(L, !str.empty() ? str.c_str() : "", str.length());
     return 1;
   }
 };
-template <> struct getter<cxx17::string_view> {
+template <>
+struct getter<cxx17::string_view> {
   static cxx17::string_view get(lua_State* L, int index, record& tracking)
   {
     tracking.use(1); // THIS IS THE ONLY BIT THAT CHANGES
@@ -55,7 +57,8 @@ template <> struct getter<cxx17::string_view> {
   }
 };
 } // namespace stack
-template <> struct lua_type_of<cxx17::string_view> : std::integral_constant<type, type::string> {};
+template <>
+struct lua_type_of<cxx17::string_view> : std::integral_constant<type, type::string> {};
 } // namespace sol
 #  endif
 
@@ -64,24 +67,46 @@ namespace sol
 namespace stack
 {
 #  if defined(YASIO_HAVE_HALF_FLOAT)
-template <> struct pusher<fp16_t> {
+#    if !YASIO__HAS_CXX20
+template <>
+struct pusher<fp16_t> {
   static int push(lua_State* L, const fp16_t& value)
   {
     lua_pushnumber(L, static_cast<float>(value));
     return 1;
   }
 };
-template <> struct getter<fp16_t> {
+template <>
+struct getter<fp16_t> {
   static fp16_t get(lua_State* L, int index, record& tracking)
   {
     tracking.use(1); // THIS IS THE ONLY BIT THAT CHANGES
     return fp16_t{static_cast<float>(lua_tonumber(L, index))};
   }
 };
+#    else
+template <>
+struct unqualified_pusher<fp16_t> {
+  static int push(lua_State* L, const fp16_t& value)
+  {
+    lua_pushnumber(L, static_cast<float>(value));
+    return 1;
+  }
+};
+template <>
+struct unqualified_getter<fp16_t> {
+  static fp16_t get(lua_State* L, int index, record& tracking)
+  {
+    tracking.use(1); // THIS IS THE ONLY BIT THAT CHANGES
+    return fp16_t{static_cast<float>(lua_tonumber(L, index))};
+  }
+};
+#    endif
 #  endif
 } // namespace stack
 #  if defined(YASIO_HAVE_HALF_FLOAT)
-template <> struct lua_type_of<fp16_t> : std::integral_constant<type, type::number> {};
+template <>
+struct lua_type_of<fp16_t> : std::integral_constant<type, type::number> {};
 #  endif
 } // namespace sol
 
