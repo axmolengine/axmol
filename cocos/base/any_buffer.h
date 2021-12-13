@@ -2,9 +2,9 @@
 /****************************************************************************
  Copyright (c) 2021 @denghe
  Copyright (c) 2021 Bytedance Inc.
- 
+
  https://adxe.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
@@ -22,9 +22,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
+#include <string.h>
 #include <utility>
-#include <cstring>
-#include <exception>
+#include <new>
+#include <type_traits>
 
 namespace adxe
 {
@@ -47,15 +48,21 @@ struct any_buffer
 
     ~any_buffer() { clear(); }
 
-    template <typename T>
+    template <typename T, std::enable_if_t<std::is_trivially_destructible_v<T>, int> = 0>
     T* get(size_t const& len)
     {
         auto newCap = sizeof(T) * len;
         if (newCap > cap)
         {
-            delete this->buf;
-            this->buf = new char[newCap];
-            this->cap = newCap;
+            clear();
+            auto newBlock = malloc(newCap);
+            if (newBlock)
+            {
+                this->buf = newBlock;
+                this->cap = newCap;
+            }
+            else
+                throw std::bad_alloc{};
         }
         return (T*)buf;
     }
@@ -64,14 +71,14 @@ struct any_buffer
     {
         if (cap)
         {
-            delete buf;
+            free(buf);
             buf = nullptr;
             cap = 0;
         }
     }
 
 private:
-    void* buf = nullptr;
+    void* buf  = nullptr;
     size_t cap = 0;
 };
 }  // namespace adxe
