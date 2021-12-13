@@ -1424,6 +1424,12 @@ void io_service::do_ssl_handshake(io_channel* ctx)
 }
 #endif
 #if defined(YASIO_HAVE_CARES)
+void io_service::ares_work_started() { ++ares_outstanding_work_; }
+void io_service::ares_work_finished()
+{
+  if (ares_outstanding_work_ > 0)
+    --ares_outstanding_work_;
+}
 void io_service::ares_getaddrinfo_cb(void* arg, int status, int /*timeouts*/, ares_addrinfo* answerlist)
 {
   auto ctx              = (io_channel*)arg;
@@ -1453,6 +1459,7 @@ void io_service::ares_getaddrinfo_cb(void* arg, int status, int /*timeouts*/, ar
     YASIO_KLOGE("[index: %d] ares_getaddrinfo_cb: resolve %s failed, status=%d, detail:%s", ctx->index_, ctx->remote_host_.c_str(), status,
                 ::ares_strerror(status));
   }
+  yasio__clearbits(ctx->properties_, YCPF_NAME_RESOLVING);
   current_service.interrupt();
 }
 void io_service::process_ares_requests(fd_set* fds_array)
@@ -2064,13 +2071,18 @@ int io_service::do_resolve(io_channel* ctx)
     if (!yasio__testbits(ctx->properties_, YCPF_NEEDS_RESOLVE))
       return 0;
     update_dns_status();
-    if ((highp_clock() - ctx->last_resolved_time_) < options_.dns_cache_timeout_)
+    if (ctx->last_resolved_reuse_ == 0 || (highp_clock() - ctx->last_resolved_time_) < options_.dns_cache_timeout_)
+    {
+      ++ctx->last_resolved_reuse_;
       return 0;
+    }
     ctx->remote_eps_.clear();
   }
 
   if (!ctx->remote_host_.empty())
   {
+    if (ctx->error_ == yasio::errc::resolve_host_failed)
+      return -1;
     if (!yasio__testbits(ctx->properties_, YCPF_NAME_RESOLVING))
       start_resolve(ctx);
   }
@@ -2080,6 +2092,7 @@ int io_service::do_resolve(io_channel* ctx)
 }
 void io_service::start_resolve(io_channel* ctx)
 {
+  ctx->last_resolved_reuse_ = 0;
   yasio__setbits(ctx->properties_, YCPF_NAME_RESOLVING);
   ctx->set_last_errno(EINPROGRESS);
   YASIO_KLOGD("[index: %d] resolving %s", ctx->index_, ctx->remote_host_.c_str());
@@ -2122,6 +2135,7 @@ void io_service::start_resolve(io_channel* ctx)
     }
     else
       YASIO_KLOGE("[index: %d] resolve %s failed, ec=%d, detail:%s", ctx->index_, ctx->remote_host_.c_str(), error, xxsocket::gai_strerror(error));
+    yasio__clearbits(ctx->properties_, YCPF_NAME_RESOLVING);
     this->interrupt();
   });
   async_resolv_thread.detach();
