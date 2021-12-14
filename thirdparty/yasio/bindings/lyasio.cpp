@@ -368,7 +368,7 @@ struct lua_type_traits<yasio::sbyte_buffer> {
   {
     size_t size        = 0;
     const char* buffer = lua_tolstring(l, index, &size);
-    return yasio::sbyte_buffer(buffer, buffer + size, std::true_type());
+    return yasio::sbyte_buffer(buffer, buffer + size, std::true_type{});
   }
   static int push(lua_State* l, push_type s)
   {
