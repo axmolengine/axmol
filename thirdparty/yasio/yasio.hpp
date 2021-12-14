@@ -565,11 +565,12 @@ private:
   */
   u_short remote_port_ = 0;
 
-  // The last resolved address time in microseconds for dns cache support
-  highp_time_t last_resolved_time_ = 0;
+  // The last query success time in microseconds for dns cache support
+  highp_time_t query_success_time_ = 0;
 
-  // The last resolved address reuse times
-  unsigned int last_resolved_reuse_ = 0;
+#if defined(YASIO_ENABLE_ARES_PROFILER)
+  highp_time_t query_start_time_;
+#endif
 
   int index_;
   int socktype_ = 0;
@@ -621,10 +622,6 @@ private:
 
 #if defined(YASIO_SSL_BACKEND)
   ssl_auto_handle ssl_;
-#endif
-
-#if defined(YASIO_ENABLE_ARES_PROFILER)
-  highp_time_t ares_start_time_;
 #endif
 };
 
@@ -1044,8 +1041,8 @@ private:
               [](const timer_impl_t& lhs, const timer_impl_t& rhs) { return lhs.first->wait_duration() > rhs.first->wait_duration(); });
   }
 
-  // Start a async resolve, It's only for internal use
-  YASIO__DECL void start_resolve(io_channel*);
+  // Start a async domain name query
+  YASIO__DECL void start_query(io_channel*);
 
   YASIO__DECL void initialize(const io_hostent* channel_eps /* could be nullptr */, int channel_count);
   YASIO__DECL void finalize();
@@ -1134,6 +1131,8 @@ private:
   int local_address_family() const { return ((ipsv_ & ipsv_ipv4) || !ipsv_) ? AF_INET : AF_INET6; }
 
   YASIO__DECL void update_dns_status();
+
+  bool address_expired(io_channel* ctx) const { return (highp_clock() - ctx->query_success_time_) > options_.dns_cache_timeout_; }
 
   /* For log macro only */
   inline const print_fn2_t& __get_cprint() const { return options_.print_; }

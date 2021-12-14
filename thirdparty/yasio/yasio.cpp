@@ -123,16 +123,13 @@ enum
   /* whether port dirty */
   YCPF_PORT_DIRTY = 1 << 20,
 
-  /* host is domain name, needs resolve */
-  YCPF_NEEDS_RESOLVE = 1 << 21,
+  /* host is domain name, needs query via internet */
+  YCPF_NEEDS_QUERY = 1 << 21,
 
-  /// below is byte2 of private flags (25~32) are mutable, and will be cleared automatically when connect flow done.
-
-  /* whether the name resolve in progress */
-  YCPF_NAME_RESOLVING = 1 << 25,
+  /// below is byte2 of private flags (25~32) are mutable, and will be cleared automatically when connect flow done, see clear_mutable_flags.
 
   /* whether ssl client in handshaking */
-  YCPF_SSL_HANDSHAKING = 1 << 26,
+  YCPF_SSL_HANDSHAKING = 1 << 25,
 };
 
 namespace
@@ -236,7 +233,7 @@ io_channel::io_channel(io_service& service, int index) : io_base(), service_(ser
 const print_fn2_t& io_channel::__get_cprint() const { return get_service().options_.print_; }
 std::string io_channel::format_destination() const
 {
-  if (yasio__testbits(properties_, YCPF_NEEDS_RESOLVE))
+  if (yasio__testbits(properties_, YCPF_NEEDS_QUERY))
     return yasio::strfmt(127, "%s(%s):%u", remote_host_.c_str(), !remote_eps_.empty() ? remote_eps_[0].ip().c_str() : "undefined", remote_port_);
 
   return yasio::strfmt(127, "%s:%u", remote_host_.c_str(), remote_port_);
@@ -467,10 +464,7 @@ void io_transport::set_primitives()
 inline io_transport_tcp::io_transport_tcp(io_channel* ctx, xxsocket_ptr&& s) : io_transport(ctx, std::forward<xxsocket_ptr>(s)) {}
 // ----------------------- io_transport_ssl ----------------
 #if defined(YASIO_SSL_BACKEND)
-io_transport_ssl::io_transport_ssl(io_channel* ctx, xxsocket_ptr&& s) : io_transport_tcp(ctx, std::forward<xxsocket_ptr>(s)), ssl_(std::move(ctx->ssl_))
-{
-  yasio__clearbits(ctx->properties_, YCPF_SSL_HANDSHAKING);
-}
+io_transport_ssl::io_transport_ssl(io_channel* ctx, xxsocket_ptr&& s) : io_transport_tcp(ctx, std::forward<xxsocket_ptr>(s)), ssl_(std::move(ctx->ssl_)) {}
 void io_transport_ssl::set_primitives()
 {
   this->read_cb_ = [=](void* data, int len) {
@@ -1447,19 +1441,18 @@ void io_service::ares_getaddrinfo_cb(void* arg, int status, int /*timeouts*/, ar
   auto __get_cprint = [&]() -> const print_fn2_t& { return current_service.options_.print_; };
   if (!ctx->remote_eps_.empty())
   {
-    ctx->last_resolved_time_ = highp_clock();
+    ctx->query_success_time_ = highp_clock();
 #  if defined(YASIO_ENABLE_ARES_PROFILER)
-    YASIO_KLOGD("[index: %d] ares_getaddrinfo_cb: resolve %s succeed, cost:%g(ms)", ctx->index_, ctx->remote_host_.c_str(),
-                (ctx->last_resolved_time_ - ctx->ares_start_time_) / 1000.0);
+    YASIO_KLOGD("[index: %d] ares_getaddrinfo_cb: query %s succeed, cost:%g(ms)", ctx->index_, ctx->remote_host_.c_str(),
+                (ctx->query_success_time_ - ctx->query_start_time_) / 1000.0);
 #  endif
   }
   else
   {
     ctx->set_last_errno(yasio::errc::resolve_host_failed);
-    YASIO_KLOGE("[index: %d] ares_getaddrinfo_cb: resolve %s failed, status=%d, detail:%s", ctx->index_, ctx->remote_host_.c_str(), status,
+    YASIO_KLOGE("[index: %d] ares_getaddrinfo_cb: query %s failed, status=%d, detail:%s", ctx->index_, ctx->remote_host_.c_str(), status,
                 ::ares_strerror(status));
   }
-  yasio__clearbits(ctx->properties_, YCPF_NAME_RESOLVING);
   current_service.interrupt();
 }
 void io_service::process_ares_requests(fd_set* fds_array)
@@ -1710,7 +1703,7 @@ void io_service::handle_connect_succeed(transport_handle_t transport)
 {
   auto ctx = transport->ctx_;
   ctx->clear_mutable_flags();
-  ctx->set_last_errno(0); // clear errno, value may be EINPROGRESS
+  ctx->error_      = 0; // clear errno, value may be EINPROGRESS
   auto& connection = transport->socket_;
   if (yasio__testbits(ctx->properties_, YCM_CLIENT))
   {
@@ -2041,7 +2034,7 @@ int io_service::do_resolve(io_channel* ctx)
 {
   if (yasio__testbits(ctx->properties_, YCPF_HOST_DIRTY))
   {
-    yasio__clearbits(ctx->properties_, YCPF_HOST_DIRTY);
+    yasio__clearbits(ctx->properties_, YCPF_HOST_DIRTY | YCPF_NEEDS_QUERY);
     ctx->remote_eps_.clear();
     ip::endpoint ep;
 #if defined(YASIO_ENABLE_UDS) && YASIO__HAS_UDS
@@ -2055,52 +2048,49 @@ int io_service::do_resolve(io_channel* ctx)
     if (ep.as_in(ctx->remote_host_.c_str(), ctx->remote_port_))
       ctx->remote_eps_.push_back(ep);
     else
-      yasio__setbits(ctx->properties_, YCPF_NEEDS_RESOLVE);
+      yasio__setbits(ctx->properties_, YCPF_NEEDS_QUERY);
   }
-
   if (yasio__testbits(ctx->properties_, YCPF_PORT_DIRTY))
   {
     yasio__clearbits(ctx->properties_, YCPF_PORT_DIRTY);
-    if (!ctx->remote_eps_.empty())
-      for (auto& ep : ctx->remote_eps_)
-        ep.port(ctx->remote_port_);
+    for (auto& ep : ctx->remote_eps_)
+      ep.port(ctx->remote_port_);
   }
 
   if (!ctx->remote_eps_.empty())
   {
-    if (!yasio__testbits(ctx->properties_, YCPF_NEEDS_RESOLVE))
-      return 0;
-    update_dns_status();
-    if (ctx->last_resolved_reuse_ == 0 || (highp_clock() - ctx->last_resolved_time_) < options_.dns_cache_timeout_)
-    {
-      ++ctx->last_resolved_reuse_;
-      return 0;
-    }
+    if (!yasio__testbits(ctx->properties_, YCPF_NEEDS_QUERY))
+      return 0; // remote host is IP address, no needs to query
+
+    update_dns_status(); // will reset our resolved address expire time
+
+    if (ctx->error_ == EINPROGRESS)
+      return 0; // queried address not consumed by this connect flow
+
+    if (!address_expired(ctx))
+      return 0; // queried address not exipred
+
     ctx->remote_eps_.clear();
   }
 
   if (!ctx->remote_host_.empty())
   {
-    if (ctx->error_ == yasio::errc::resolve_host_failed)
-      return -1;
-    if (!yasio__testbits(ctx->properties_, YCPF_NAME_RESOLVING))
-      start_resolve(ctx);
+    if (!ctx->error_)
+      start_query(ctx);
   }
   else
     ctx->error_ = yasio::errc::no_available_address;
   return -1;
 }
-void io_service::start_resolve(io_channel* ctx)
+void io_service::start_query(io_channel* ctx)
 {
-  ctx->last_resolved_reuse_ = 0;
-  yasio__setbits(ctx->properties_, YCPF_NAME_RESOLVING);
   ctx->set_last_errno(EINPROGRESS);
-  YASIO_KLOGD("[index: %d] resolving %s", ctx->index_, ctx->remote_host_.c_str());
+  YASIO_KLOGD("[index: %d] start query %s...", ctx->index_, ctx->remote_host_.c_str());
 #if defined(YASIO_ENABLE_ARES_PROFILER)
-  ctx->ares_start_time_ = highp_clock();
+  ctx->query_start_time_ = highp_clock();
 #endif
 #if !defined(YASIO_HAVE_CARES)
-  // init async resolve thread state
+  // init async name query thread state
   std::string resolving_host                    = ctx->remote_host_;
   u_short resolving_port                        = ctx->remote_port_;
   std::weak_ptr<cxx17::shared_mutex> weak_mutex = life_mutex_;
@@ -2127,15 +2117,14 @@ void io_service::start_resolve(io_channel* ctx)
     if (error == 0)
     {
       ctx->remote_eps_         = std::move(remote_eps);
-      ctx->last_resolved_time_ = highp_clock();
+      ctx->query_success_time_ = highp_clock();
 #  if defined(YASIO_ENABLE_ARES_PROFILER)
-      YASIO_KLOGD("[index: %d] resolve %s succeed, cost: %g(ms)", ctx->index_, ctx->remote_host_.c_str(),
-                  (ctx->resolved_time_ - ctx->ares_start_time_) / 1000.0);
+      YASIO_KLOGD("[index: %d] query %s succeed, cost: %g(ms)", ctx->index_, ctx->remote_host_.c_str(),
+                  (ctx->query_success_time_ - ctx->query_start_time_) / 1000.0);
 #  endif
     }
     else
-      YASIO_KLOGE("[index: %d] resolve %s failed, ec=%d, detail:%s", ctx->index_, ctx->remote_host_.c_str(), error, xxsocket::gai_strerror(error));
-    yasio__clearbits(ctx->properties_, YCPF_NAME_RESOLVING);
+      YASIO_KLOGE("[index: %d] query %s failed, ec=%d, detail:%s", ctx->index_, ctx->remote_host_.c_str(), error, xxsocket::gai_strerror(error));
     this->interrupt();
   });
   async_resolv_thread.detach();
@@ -2163,7 +2152,7 @@ void io_service::update_dns_status()
     recreate_ares_channel();
 #endif
     for (auto channel : this->channels_)
-      channel->last_resolved_time_ = 0;
+      channel->query_success_time_ = 0;
   }
 }
 int io_service::resolve(std::vector<ip::endpoint>& endpoints, const char* hostname, unsigned short port)
