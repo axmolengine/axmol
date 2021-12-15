@@ -61,6 +61,7 @@ THE SOFTWARE.
 #include "base/ObjectFactory.h"
 #include "platform/CCApplication.h"
 #include "renderer/backend/ProgramCache.h"
+#include "audio/include/AudioEngine.h"
 
 #if CC_ENABLE_SCRIPT_BINDING
 #include "base/CCScriptSupport.h"
@@ -955,6 +956,10 @@ void Director::reset()
 
     if (_eventDispatcher)
         _eventDispatcher->dispatchEvent(_eventResetDirector);
+
+    // Fix github issue: https://github.com/adxeproject/adxe/issues/550
+    // !!!The AudioEngine hold scheduler must end before Director destroyed, otherwise, just lead app crash
+    AudioEngine::end();
     
     // cleanup scheduler
     getScheduler()->unscheduleAll();
