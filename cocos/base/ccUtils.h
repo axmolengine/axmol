@@ -202,7 +202,7 @@ CC_DLL std::string getDataMD5Hash(const Data& data);
  *  @param algorithm The hash algorithm, support "md5", "sha1", "sha256", "sha512" and more
  *  @return The hash for the data
  */
-CC_DLL std::string computeDigest(cxx17::string_view data, cxx17::string_view algorithm);
+CC_DLL std::string computeDigest(std::string_view data, std::string_view algorithm);
 
 /**
 @brief Converts language iso 639-1 code to LanguageType enum.
