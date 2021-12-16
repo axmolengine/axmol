@@ -43,15 +43,6 @@ AppDelegate::AppDelegate()
 
 AppDelegate::~AppDelegate()
 {
-#if USE_AUDIO_ENGINE
-    AudioEngine::end();
-#endif
-
-#if (COCOS2D_DEBUG > 0) && (CC_CODE_IDE_DEBUG_SUPPORT > 0)
-    // NOTE:Please don't remove this call if you want to debug with Cocos Code IDE
-    RuntimeEngine::getInstance()->end();
-#endif
-
 }
 
 // if you want a different context, modify the value of glContextAttrs
