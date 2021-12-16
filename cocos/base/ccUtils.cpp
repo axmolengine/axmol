@@ -37,7 +37,7 @@ THE SOFTWARE.
 #    include <unistd.h>
 #endif
 
-#include "openssl/md5.h"
+#include "openssl/evp.h"
 
 #include "base/CCDirector.h"
 #include "base/CCAsyncTaskPool.h"
@@ -56,6 +56,8 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "2d/CCSprite.h"
 #include "2d/CCRenderTexture.h"
+
+using namespace std::string_view_literals;
 
 NS_CC_BEGIN
 
@@ -397,25 +399,30 @@ std::string getFileMD5Hash(const std::string& filename)
 
 std::string getDataMD5Hash(const Data& data)
 {
-    // static const unsigned int MD5_DIGEST_LENGTH = 16;
-
     if (data.isNull())
-    {
         return std::string{};
-    }
 
-    MD5state_st state;
-    uint8_t digest[MD5_DIGEST_LENGTH];
-    char hexOutput[(MD5_DIGEST_LENGTH << 1)] = {0};
+    return computeDigest(std::string_view{(const char*)data.getBytes(), (size_t)data.getSize()}, "md5"sv);
+}
 
-    MD5_Init(&state);
-    MD5_Update(&state, data.getBytes(), (int)data.getSize());
-    MD5_Final(digest, &state);
+CC_DLL std::string computeDigest(cxx17::string_view data, cxx17::string_view algorithm)
+{
+    const EVP_MD* md                       = nullptr;
+    unsigned char mdValue[EVP_MAX_MD_SIZE] = {0};
+    unsigned int mdLen                     = 0;
 
-    for (int di = 0; di < 16; ++di)
-        char2hex(hexOutput + di * 2, digest[di]);
+    OpenSSL_add_all_digests();
+    md = EVP_get_digestbyname(algorithm.data());
+    if (!md || data.empty())
+        return std::string{};
 
-    return std::string{hexOutput, (size_t)32};
+    EVP_MD_CTX* mdctx = EVP_MD_CTX_create();
+    EVP_DigestInit_ex(mdctx, md, nullptr);
+    EVP_DigestUpdate(mdctx, data.data(), data.size());
+    EVP_DigestFinal_ex(mdctx, mdValue, &mdLen);
+    EVP_MD_CTX_destroy(mdctx);
+
+    return bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen});
 }
 
 LanguageType getLanguageTypeByISO2(const char* code)
