@@ -39,6 +39,7 @@ adxe-1.0  ??
 [FIX] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
 [FIX] Fix Crash on SpriteBatchNode::appendChild when CC_SPRITE_DEBUG_DRAW==1
 [FIX] Fix Lua can't get `unsigned char` or `unsigned int` values of `ValueMap`
+[FIX] Fix crash on AudioEngine::end after the `Director` was destroyed
 [REFINE] CCValue move construct and assign with std::string support
 [REFINE] Improve windows dev workflow, use working directory instead copy resources to build binary directory
 [REFINE] Add lua debug project file to lua project template
