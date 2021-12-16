@@ -197,6 +197,14 @@ CC_DLL std::string getFileMD5Hash(const std::string& filename);
 CC_DLL std::string getDataMD5Hash(const Data& data);
 
 /**
+ *  Gets the hash for the given buffer with specific algorithm.
+ *  @param data The buffer to calculate md5 hash.
+ *  @param algorithm The hash algorithm, support "md5", "sha1", "sha256", "sha512" and more
+ *  @return The hash for the data
+ */
+CC_DLL std::string computeDigest(cxx17::string_view data, cxx17::string_view algorithm);
+
+/**
 @brief Converts language iso 639-1 code to LanguageType enum.
 @return LanguageType enum.
 * @js NA
