@@ -33,7 +33,7 @@ NS_CC_BEGIN
 
 CC_DLL const char* adxeVersion()
 {
-    return "adxe-1.0.0b3";
+    return "adxe-1.0.0b4";
 }
 
 NS_CC_END
