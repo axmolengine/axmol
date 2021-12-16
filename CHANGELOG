@@ -15,7 +15,7 @@ adxe-1.0  ??
 [HIGHLIGHT] Implement all .wav formats supported by Openal-Soft, such as MS-ADPCM, ADPCM
 [HIGHLIGHT] Use modern GL loader Glad
 [HIGHLIGHT] Google angle renderer backend support
-[HIGHLIGHT] Update codebase to C++ 14 standard
+[HIGHLIGHT] Update codebase to C++ 17 standard
 [HIGHLIGHT] Remove tinyxml2
 [HIGHLIGHT] Use fast pugixml
 [HIGHLIGHT] Spine-3.6~4.0 support
@@ -58,7 +58,7 @@ adxe-1.0  ??
 [REFINE] Building plainlua as dll on windows always for debugger happy to debug app quickly
 [REFINE] Fix some audio test case can't hear sound
 [REFINE] Avoid OS_WINDOWS conflict with system macro
-[REFINE] Update OpenSSL to v3.0.0
+[REFINE] Update OpenSSL to v3.0.1
 [REFINE] Update FreeType to latest
 [REFINE] Use Freetype SDF render when label distance field enabled
 
