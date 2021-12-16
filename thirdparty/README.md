@@ -153,7 +153,7 @@
 
 ## OpenSSL
 - Upstream: https://github.com/openssl/openssl
-- Version: 3.0.0
+- Version: 3.0.1
 - License: Apache-2.0
 
 ## png
