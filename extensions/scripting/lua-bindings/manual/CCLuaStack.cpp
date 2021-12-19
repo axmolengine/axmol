@@ -186,7 +186,7 @@ void LuaStack::addSearchPath(const char* path)
     lua_getglobal(_state, "package");                                  /* L: package */
     lua_getfield(_state, -1, "path");                /* get package.path, L: package path */
     const char* cur_path =  lua_tostring(_state, -1);
-    lua_pushfstring(_state, "%s;%s/?.lua", cur_path, path);            /* L: package path newpath */
+    lua_pushfstring(_state, "%s/?.lua;%s", path, cur_path);            /* L: package path newpath */
     lua_setfield(_state, -3, "path");          /* package.path = newpath, L: package path */
     lua_pop(_state, 2);                                                /* L: - */
 }
