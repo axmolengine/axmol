@@ -81,9 +81,9 @@ bool AppDelegate::applicationDidFinishLaunching()
     //LuaStack* stack = engine->getLuaStack();
     //register_custom_function(stack->getLuaState());
     
-    FileUtils::getInstance()->addSearchPath("src");
+    stack->addSearchPath("src"); 
     FileUtils::getInstance()->addSearchPath("res");
-    if (engine->executeScriptFile("main.lua"))
+    if (engine->executeString("require 'main'"))
     {
         return false;
     }
