@@ -31,7 +31,7 @@
 
 ## Chipmunk2D
 - Upstream: https://github.com/slembcke/Chipmunk2D
-- Version: git 7.0.3-1d01b2a (1452)
+- Version: git 7.0.3-0cb05e7 {until Dec 16, 2021}
 - License: MIT
 
 ## Clipper
