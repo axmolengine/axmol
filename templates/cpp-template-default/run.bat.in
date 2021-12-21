@@ -1,5 +1,5 @@
 @echo off
-rem Don't move this file to other than working directory
+rem !!!Don't move this file
 rem usage: run.bat <BUILD_CFG>
 rem    BUILD_CFG could be Debug,Release,MinSizeRel,RelWithDebInfo
 pushd %~dp0\Resources
