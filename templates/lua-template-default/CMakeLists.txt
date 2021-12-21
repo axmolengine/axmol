@@ -32,6 +32,11 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
     if(XCODE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
     endif()
+    
+    # config quick starter batch script run.bat for windows
+    if(WIN32)
+        configure_file("${CMAKE_CURRENT_SOURCE_DIR}/run.bat.in" "${CMAKE_CURRENT_SOURCE_DIR}/run.bat" @ONLY)
+    endif()
 
     set(ADXE_ROOT "$ENV{ADXE_ROOT}")
 
