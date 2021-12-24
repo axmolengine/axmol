@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -33,7 +33,7 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - ÊÂ¼ş¶ÔÏó£¬°üº¬ÓĞ¹ØÊÂ¼şµÄ»ù±¾ĞÅÏ¢£¬µ±·¢ÉúÊÂ¼şÊ±£¬¸ÃÊµÀı½«×÷Îª²ÎÊı»ò²ÎÊıµÄ²ÎÊı´«µİ¸øÊÂ¼şÕìÌıÆ÷¡£
+ * - äº‹ä»¶å¯¹è±¡ï¼ŒåŒ…å«æœ‰å…³äº‹ä»¶çš„åŸºæœ¬ä¿¡æ¯ï¼Œå½“å‘ç”Ÿäº‹ä»¶æ—¶ï¼Œè¯¥å®ä¾‹å°†ä½œä¸ºå‚æ•°æˆ–å‚æ•°çš„å‚æ•°ä¼ é€’ç»™äº‹ä»¶ä¾¦å¬å™¨ã€‚
  * @version DragonBones 4.5
  * @language zh_CN
  */
@@ -48,7 +48,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­¿ªÊ¼²¥·Å¡£
+     * - åŠ¨ç”»å¼€å§‹æ’­æ”¾ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -59,7 +59,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­Ñ­»·²¥·ÅÍê³ÉÒ»´Î¡£
+     * - åŠ¨ç”»å¾ªç¯æ’­æ”¾å®Œæˆä¸€æ¬¡ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -70,7 +70,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­²¥·ÅÍê³É¡£
+     * - åŠ¨ç”»æ’­æ”¾å®Œæˆã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -81,7 +81,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­µ­Èë¿ªÊ¼¡£
+     * - åŠ¨ç”»æ·¡å…¥å¼€å§‹ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -92,7 +92,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­µ­ÈëÍê³É¡£
+     * - åŠ¨ç”»æ·¡å…¥å®Œæˆã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -103,7 +103,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­µ­³ö¿ªÊ¼¡£
+     * - åŠ¨ç”»æ·¡å‡ºå¼€å§‹ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -114,7 +114,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­µ­³öÍê³É¡£
+     * - åŠ¨ç”»æ·¡å‡ºå®Œæˆã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -125,7 +125,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­Ö¡ÊÂ¼ş¡£
+     * - åŠ¨ç”»å¸§äº‹ä»¶ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -136,7 +136,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­Ö¡ÉùÒôÊÂ¼ş¡£
+     * - åŠ¨ç”»å¸§å£°éŸ³äº‹ä»¶ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -154,18 +154,18 @@ public:
      * @language en_US
      */
     /**
-     * - Èç¹ûÊÇÖ¡ÊÂ¼ş£¬´ËÖµÓÃÀ´ÃèÊö¸ÃÊÂ¼şÔÚ¶¯»­Ê±¼äÖáÖĞËù´¦µÄÊ±¼ä¡££¨ÒÔÃëÎªµ¥Î»£©
+     * - å¦‚æœæ˜¯å¸§äº‹ä»¶ï¼Œæ­¤å€¼ç”¨æ¥æè¿°è¯¥äº‹ä»¶åœ¨åŠ¨ç”»æ—¶é—´è½´ä¸­æ‰€å¤„çš„æ—¶é—´ã€‚ï¼ˆä»¥ç§’ä¸ºå•ä½ï¼‰
      * @version DragonBones 4.5
      * @language zh_CN
      */
     float time;
     /**
-     * - The event type¡£
+     * - The event typeã€‚
      * @version DragonBones 4.5
      * @language en_US
      */
     /**
-     * - ÊÂ¼şÀàĞÍ¡£
+     * - äº‹ä»¶ç±»å‹ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -176,7 +176,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÊÂ¼şÃû³Æ¡£ (Ö¡ÊÂ¼şµÄÃû³Æ»òÖ¡ÉùÒôµÄÃû³Æ)
+     * - äº‹ä»¶åç§°ã€‚ (å¸§äº‹ä»¶çš„åç§°æˆ–å¸§å£°éŸ³çš„åç§°)
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -188,7 +188,7 @@ public:
      * @language en_US
      */
     /**
-     * - ·¢³ö¸ÃÊÂ¼şµÄ¹Ç¼Ü¡£
+     * - å‘å‡ºè¯¥äº‹ä»¶çš„éª¨æ¶ã€‚
      * @see dragonBones.Armature
      * @version DragonBones 4.5
      * @language zh_CN
@@ -201,7 +201,7 @@ public:
      * @language en_US
      */
     /**
-     * - ·¢³ö¸ÃÊÂ¼şµÄ¹Ç÷À¡£
+     * - å‘å‡ºè¯¥äº‹ä»¶çš„éª¨éª¼ã€‚
      * @see dragonBones.Bone
      * @version DragonBones 4.5
      * @language zh_CN
@@ -214,7 +214,7 @@ public:
      * @language en_US
      */
     /**
-     * - ·¢³ö¸ÃÊÂ¼şµÄ²å²Û¡£
+     * - å‘å‡ºè¯¥äº‹ä»¶çš„æ’æ§½ã€‚
      * @see dragonBones.Slot
      * @version DragonBones 4.5
      * @language zh_CN
@@ -227,7 +227,7 @@ public:
      * @language en_US
      */
     /**
-     * - ·¢³ö¸ÃÊÂ¼şµÄ¶¯»­×´Ì¬¡£
+     * - å‘å‡ºè¯¥äº‹ä»¶çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @see dragonBones.AnimationState
      * @version DragonBones 4.5
      * @language zh_CN
@@ -245,7 +245,7 @@ public:
      * @language en_US
      */
     /**
-     * - ×Ô¶¨ÒåÊı¾İ¡£
+     * - è‡ªå®šä¹‰æ•°æ®ã€‚
      * @see dragonBones.CustomData
      * @private
      * @version DragonBones 5.0

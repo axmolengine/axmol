@@ -1,4 +1,4 @@
-#include "Animation.h"
+﻿#include "Animation.h"
 #include "../model/DisplayData.h"
 #include "../model/AnimationConfig.h"
 #include "../model/AnimationData.h"

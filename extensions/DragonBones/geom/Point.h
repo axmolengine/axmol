@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -32,7 +32,7 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - Point ¶ÔÏó±íÊ¾¶şÎ¬×ø±êÏµÍ³ÖĞµÄÄ³¸öÎ»ÖÃ¡£
+ * - Point å¯¹è±¡è¡¨ç¤ºäºŒç»´åæ ‡ç³»ç»Ÿä¸­çš„æŸä¸ªä½ç½®ã€‚
  * @version DragonBones 3.0
  * @language zh_CN
  */
@@ -52,7 +52,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¸ÃµãµÄË®Æ½×ø±ê¡£
+     * - è¯¥ç‚¹çš„æ°´å¹³åæ ‡ã€‚
      * @default 0.0
      * @version DragonBones 3.0
      * @language zh_CN
@@ -65,7 +65,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¸ÃµãµÄ´¹Ö±×ø±ê¡£
+     * - è¯¥ç‚¹çš„å‚ç›´åæ ‡ã€‚
      * @default 0.0
      * @version DragonBones 3.0
      * @language zh_CN
@@ -84,9 +84,9 @@ public:
      * @language en_US
      */
     /**
-     * - ´´½¨Ò»¸ö egret.Point ¶ÔÏó.Èô²»´«ÈëÈÎºÎ²ÎÊı£¬½«»á´´½¨Ò»¸öÎ»ÓÚ£¨0£¬0£©Î»ÖÃµÄµã¡£
-     * @param x - ¸Ã¶ÔÏóµÄxÊôĞÔÖµ£¬Ä¬ÈÏÎª 0.0¡£
-     * @param y - ¸Ã¶ÔÏóµÄyÊôĞÔÖµ£¬Ä¬ÈÏÎª 0.0¡£
+     * - åˆ›å»ºä¸€ä¸ª egret.Point å¯¹è±¡.è‹¥ä¸ä¼ å…¥ä»»ä½•å‚æ•°ï¼Œå°†ä¼šåˆ›å»ºä¸€ä¸ªä½äºï¼ˆ0ï¼Œ0ï¼‰ä½ç½®çš„ç‚¹ã€‚
+     * @param x - è¯¥å¯¹è±¡çš„xå±æ€§å€¼ï¼Œé»˜è®¤ä¸º 0.0ã€‚
+     * @param y - è¯¥å¯¹è±¡çš„yå±æ€§å€¼ï¼Œé»˜è®¤ä¸º 0.0ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */

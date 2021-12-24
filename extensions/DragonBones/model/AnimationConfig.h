@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -35,8 +35,8 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - ��������������������һ������״̬����Ҫ��ȫ����Ϣ��
- * �� API ����ʵ��׶Σ�ʹ��ʱ�������� bug ���ȶ��Ի���������⡣
+ * - 动画配置用来描述播放一个动画状态所需要的全部信息。
+ * 该 API 仍在实验阶段，使用时可能遭遇 bug 或稳定性或兼容性问题。
  * @see dragonBones.AnimationState
  * @beta
  * @version DragonBones 5.0
@@ -59,8 +59,8 @@ public:
      * @language en_US
      */
     /**
-     * - ���붯��״̬ʱ������������״̬��ģʽ��
-     * ������ͨ������ָ���������״̬���ʱ���໥�滻��ϵ��
+     * - 淡入动画状态时淡出其他动画状态的模式。
+     * 该属性通常用来指定多个动画状态混合时的相互替换关系。
      * @default dragonBones.AnimationFadeOutMode.All
      * @version DragonBones 5.0
      * @language zh_CN
@@ -91,9 +91,9 @@ public:
      * @language en_US
      */
     /**
-     * - ����״̬�Ƿ�Բ�۵���ʾ���������п���Ȩ��
-     * ��ʱ���һ������״̬����ϣ������Ʋ�۵���ʾ�������ԣ�
-     * ��������������״̬���ڿ�����Щ��۵���ʾ��������ʱ��
+     * - 动画状态是否对插槽的显示对象属性有控制权。
+     * 有时混合一个动画状态并不希望其控制插槽的显示对象属性，
+     * 尤其是其他动画状态正在控制这些插槽的显示对象属性时。
      * @default true
      * @version DragonBones 5.0
      * @language zh_CN
@@ -111,8 +111,8 @@ public:
      * @language en_US
      */
     /**
-     * - ��ʼ���Ŷ���״̬ʱ�Ƿ�û�ж����Ķ�������Ϊ�Ǽܳ�ʼֵ��
-     * ͨ���ڻ�϶������״̬ʱӦ�ý�����������Ϊ false��
+     * - 开始播放动画状态时是否将没有动画的对象重置为骨架初始值。
+     * 通常在混合多个动画状态时应该将该属性设置为 false。
      * @default true
      * @version DragonBones 5.1
      * @language zh_CN
@@ -128,7 +128,7 @@ public:
      * @language en_US
      */
     /**
-     * - ���Ŵ����� [0: ����ѭ������, [1~N]: ѭ������ N ��]
+     * - 播放次数。 [0: 无限循环播放, [1~N]: 循环播放 N 次]
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -142,9 +142,9 @@ public:
      * @language en_US
      */
     /**
-     * - ���ͼ�㡣
-     * ͼ��ߵĶ���״̬�����Ȼ�ȡ���Ȩ�ء�
-     * �����Ȩ�ط��䳬�� 1 ʱ��ʣ��Ķ���״̬�����ٻ��Ȩ�ط��䡣
+     * - 混合图层。
+     * 图层高的动画状态会优先获取混合权重。
+     * 当混合权重分配超过 1 时，剩余的动画状态将不再获得权重分配。
      * @readonly
      * @version DragonBones 5.0
      * @language zh_CN
@@ -157,7 +157,7 @@ public:
      * @language en_US
      */
     /**
-     * - ���ŵĿ�ʼʱ�䡣 ������Ϊ��λ��
+     * - 播放的开始时间。 （以秒为单位）
      * @default 0.0
      * @version DragonBones 5.0
      * @language zh_CN
@@ -171,8 +171,8 @@ public:
      * @language en_US
      */
     /**
-     * - ���ŵĳ���ʱ�䡣
-     * [-1: ʹ�ö�������Ĭ��ֵ, 0: ����ֹͣ, (0~N]: ����ʱ��] ������Ϊ��λ��
+     * - 播放的持续时间。
+     * [-1: 使用动画数据默认值, 0: 动画停止, (0~N]: 持续时间] （以秒为单位）
      * @default -1.0
      * @version DragonBones 5.0
      * @language zh_CN
@@ -187,9 +187,9 @@ public:
      * @language en_US
      */
     /**
-     * - �����ٶȡ�
-     * ��ֵ�� {@link dragonBones.Animation#timeScale} �ǵ��ӹ�ϵ��
-     * [(-N~0): ��ת����, 0: ֹͣ����, (0~1): ���ٲ���, 1: ��������, (1~N): ���ٲ���]
+     * - 播放速度。
+     * 该值与 {@link dragonBones.Animation#timeScale} 是叠加关系。
+     * [(-N~0): 倒转播放, 0: 停止播放, (0~1): 慢速播放, 1: 正常播放, (1~N): 快速播放]
      * @default 1.0
      * @version DragonBones 3.0
      * @language zh_CN
@@ -202,7 +202,7 @@ public:
      * @language en_US
      */
     /**
-     * - ���Ȩ�ء�
+     * - 混合权重。
      * @default 1.0
      * @version DragonBones 5.0
      * @language zh_CN
@@ -216,8 +216,8 @@ public:
      * @language en_US
      */
     /**
-     * - ����ʱ�䡣
-     * [-1: ʹ�ö�������Ĭ��ֵ, [0~N]: ����ʱ��] ������Ϊ��λ��
+     * - 淡入时间。
+     * [-1: 使用动画数据默认值, [0~N]: 淡入时间] （以秒为单位）
      * @default -1.0
      * @version DragonBones 5.0
      * @language zh_CN
@@ -231,8 +231,8 @@ public:
      * @language en_US
      */
     /**
-     * - ����״̬������ɺ���Զ�����ʱ�䡣
-     * [-1: ���Զ�����, [0~N]: ����ʱ��] ������Ϊ��λ��
+     * - 动画状态播放完成后的自动淡出时间。
+     * [-1: 不自动淡出, [0~N]: 淡出时间] （以秒为单位）
      * @default -1.0
      * @version DragonBones 5.0
      * @language zh_CN
@@ -244,7 +244,7 @@ public:
      * @language en_US
      */
     /**
-     * - ����״̬���ơ� �����Բ�ͬ�ڶ������ݣ�
+     * - 动画状态名称。 （可以不同于动画数据）
      * @version DragonBones 5.0
      * @language zh_CN
      */
@@ -255,7 +255,7 @@ public:
      * @language en_US
      */
     /**
-     * - �����������ơ�
+     * - 动画数据名称。
      * @version DragonBones 5.0
      * @language zh_CN
      */
@@ -268,8 +268,8 @@ public:
      * @language en_US
      */
     /**
-     * - ��������ơ�
-     * ������ͨ������ָ���������״̬���ʱ���໥�滻��ϵ��
+     * - 混合组名称。
+     * 该属性通常用来指定多个动画状态混合时的相互替换关系。
      * @readonly
      * @version DragonBones 5.0
      * @language zh_CN

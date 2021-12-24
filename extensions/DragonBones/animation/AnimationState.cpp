@@ -1,4 +1,4 @@
-#include "AnimationState.h"
+﻿#include "AnimationState.h"
 #include "WorldClock.h"
 #include "../model/DisplayData.h"
 #include "../model/AnimationConfig.h"

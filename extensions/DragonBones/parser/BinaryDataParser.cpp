@@ -1,4 +1,4 @@
-#include "BinaryDataParser.h"
+﻿#include "BinaryDataParser.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 
