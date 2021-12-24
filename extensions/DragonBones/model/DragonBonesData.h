@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -35,8 +35,8 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - Áú¹ÇÊı¾İ¡£
- * Ò»¸öÁú¹ÇÊı¾İ°üº¬¶à¸ö¹Ç¼ÜÊı¾İ¡£
+ * - é¾™éª¨æ•°æ®ã€‚
+ * ä¸€ä¸ªé¾™éª¨æ•°æ®åŒ…å«å¤šä¸ªéª¨æ¶æ•°æ®ã€‚
  * @see dragonBones.ArmatureData
  * @version DragonBones 3.0
  * @language zh_CN
@@ -56,7 +56,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­Ö¡Æµ¡£
+     * - åŠ¨ç”»å¸§é¢‘ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -67,7 +67,7 @@ public:
      * @language en_US
      */
     /**
-     * - Êı¾İ°æ±¾¡£
+     * - æ•°æ®ç‰ˆæœ¬ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -79,8 +79,8 @@ public:
      * @language en_US
      */
     /**
-     * - Áú¹ÇÊı¾İÃû³Æ¡£
-     * ¸ÃÃû³ÆÓëÁú¹ÇÏîÄ¿Ãû±£³ÖÒ»ÖÂ¡£
+     * - é¾™éª¨æ•°æ®åç§°ã€‚
+     * è¯¥åç§°ä¸é¾™éª¨é¡¹ç›®åä¿æŒä¸€è‡´ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -99,7 +99,7 @@ public:
      * @language en_US
      */
     /**
-     * - ËùÓĞµÄ¹Ç¼ÜÊı¾İÃû³Æ¡£
+     * - æ‰€æœ‰çš„éª¨æ¶æ•°æ®åç§°ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -161,8 +161,8 @@ public:
      * @language en_US
      */
     /**
-     * - »ñÈ¡ÌØ¶¨µÄ¹Ç¼ÜÊı¾İ¡£
-     * @param armatureName - ¹Ç¼ÜÊı¾İÃû³Æ¡£
+     * - è·å–ç‰¹å®šçš„éª¨æ¶æ•°æ®ã€‚
+     * @param armatureName - éª¨æ¶æ•°æ®åç§°ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */

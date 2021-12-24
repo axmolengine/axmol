@@ -1,4 +1,4 @@
-#include "AnimationConfig.h"
+﻿#include "AnimationConfig.h"
 #include "../armature/Armature.h"
 #include "../armature/Bone.h"
 

@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -153,7 +153,7 @@ enum class ArmatureType
  * @language en_US
  */
 /**
- * - Æ«ÒÆÄ£Ê½¡£
+ * - åç§»æ¨¡å¼ã€‚
  * @version DragonBones 5.5
  * @language zh_CN
  */
@@ -181,7 +181,7 @@ enum class DisplayType
  * @language en_US
  */
 /**
- * - ±ß½ç¿òÀàĞÍ¡£
+ * - è¾¹ç•Œæ¡†ç±»å‹ã€‚
  * @version DragonBones 5.0
  * @language zh_CN
  */
@@ -263,7 +263,7 @@ enum class TimelineType {
  * @language en_US
  */
 /**
- * - ¶¯»­µ­³öÄ£Ê½¡£
+ * - åŠ¨ç”»æ·¡å‡ºæ¨¡å¼ã€‚
  * @version DragonBones 4.5
  * @language zh_CN
  */
@@ -273,7 +273,7 @@ enum class AnimationFadeOutMode {
      * @language en_US
      */
     /**
-     * - ²»µ­³öÈÎºÎµÄ¶¯»­×´Ì¬¡£
+     * - ä¸æ·¡å‡ºä»»ä½•çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @language zh_CN
      */
     None,
@@ -282,7 +282,7 @@ enum class AnimationFadeOutMode {
      * @language en_US
      */
     /**
-     * - µ­³öÍ¬²ãµÄ¶¯»­×´Ì¬¡£
+     * - æ·¡å‡ºåŒå±‚çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @language zh_CN
      */
     SameLayer,
@@ -291,7 +291,7 @@ enum class AnimationFadeOutMode {
      * @language en_US
      */
     /**
-     * - µ­³öÍ¬×éµÄ¶¯»­×´Ì¬¡£
+     * - æ·¡å‡ºåŒç»„çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @language zh_CN
      */
     SameGroup,
@@ -300,7 +300,7 @@ enum class AnimationFadeOutMode {
      * @language en_US
      */
     /**
-     * - µ­³öÍ¬²ã²¢ÇÒÍ¬×éµÄ¶¯»­×´Ì¬¡£
+     * - æ·¡å‡ºåŒå±‚å¹¶ä¸”åŒç»„çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @language zh_CN
      */
     SameLayerAndGroup,
@@ -309,7 +309,7 @@ enum class AnimationFadeOutMode {
      * @language en_US
      */
     /**
-     * - µ­³öËùÓĞµÄ¶¯»­×´Ì¬¡£
+     * - æ·¡å‡ºæ‰€æœ‰çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @language zh_CN
      */
     All,
@@ -318,7 +318,7 @@ enum class AnimationFadeOutMode {
      * @language en_US
      */
     /**
-     * - ²»Ìæ»»Í¬ÃûµÄ¶¯»­×´Ì¬¡£
+     * - ä¸æ›¿æ¢åŒåçš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @language zh_CN
      */
     Single

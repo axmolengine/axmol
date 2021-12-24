@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -34,7 +34,7 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - ¹Ç¼Ü´úÀí½Ó¿Ú£¬¶Ô½ÓµÄÒıÇæĞèÒª¶ÔÆä½øĞĞ¾ßÌåÊµÏÖ¡£
+ * - éª¨æ¶ä»£ç†æ¥å£ï¼Œå¯¹æ¥çš„å¼•æ“éœ€è¦å¯¹å…¶è¿›è¡Œå…·ä½“å®ç°ã€‚
  * @see dragonBones.Armature
  * @version DragonBones 5.0
  * @language zh_CN
@@ -68,9 +68,9 @@ public:
      * @language en_US
      */
     /**
-     * - ÊÍ·Å¸ÃÊµÀıºÍ¹Ç¼Ü¡£ £¨¹Ç¼Ü»á»ØÊÕµ½¶ÔÏó³Ø£©
+     * - é‡Šæ”¾è¯¥å®ä¾‹å’Œéª¨æ¶ã€‚ ï¼ˆéª¨æ¶ä¼šå›æ”¶åˆ°å¯¹è±¡æ± ï¼‰
      * @example
-     * TypeScript ·ç¸ñ£¬½ö¹©²Î¿¼¡£
+     * TypeScript é£æ ¼ï¼Œä»…ä¾›å‚è€ƒã€‚
      * <pre>
      *     removeChild(armatureDisplay);
      *     armatureDisplay.dispose();
@@ -85,7 +85,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¹Ç¼Ü¡£
+     * - éª¨æ¶ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -96,7 +96,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­²¥·ÅÆ÷¡£
+     * - åŠ¨ç”»æ’­æ”¾å™¨ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */

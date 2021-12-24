@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -33,8 +33,8 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - ÊÂ¼şÅÉ·¢½Ó¿Ú¡£
- * DragonBones µÄÊÂ¼şÅÉ·¢Í¨³£ÒÀÀµÓÚ¶Ô½ÓµÄÒıÇæÀ´ÊµÏÖ£¬¸Ã½Ó¿Ú¶¨ÒåÁË¶Ô½ÓÒıÇæÊ±ĞèÒªÊµÏÖµÄÊÂ¼ş·½·¨¡£
+ * - äº‹ä»¶æ´¾å‘æ¥å£ã€‚
+ * DragonBones çš„äº‹ä»¶æ´¾å‘é€šå¸¸ä¾èµ–äºå¯¹æ¥çš„å¼•æ“æ¥å®ç°ï¼Œè¯¥æ¥å£å®šä¹‰äº†å¯¹æ¥å¼•æ“æ—¶éœ€è¦å®ç°çš„äº‹ä»¶æ–¹æ³•ã€‚
  * @version DragonBones 4.5
  * @language zh_CN
  */
@@ -44,14 +44,14 @@ class IEventDispatcher
 
 public:
     /**
-     * - Checks whether the object has any listeners registered for a specific type of event¡£
+     * - Checks whether the object has any listeners registered for a specific type of eventã€‚
      * @param type - Event type.
      * @version DragonBones 4.5
      * @language en_US
      */
     /**
-     * - ¼ì²éÊÇ·ñÎªÌØ¶¨µÄÊÂ¼şÀàĞÍ×¢²áÁËÈÎºÎÕìÌıÆ÷¡£
-     * @param type - ÊÂ¼şÀàĞÍ¡£
+     * - æ£€æŸ¥æ˜¯å¦ä¸ºç‰¹å®šçš„äº‹ä»¶ç±»å‹æ³¨å†Œäº†ä»»ä½•ä¾¦å¬å™¨ã€‚
+     * @param type - äº‹ä»¶ç±»å‹ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -65,9 +65,9 @@ public:
      * @language en_US
      */
     /**
-     * - ·ÖÅÉÌØ¶¨µÄÊÂ¼şµ½ÊÂ¼şÁ÷ÖĞ¡£
-     * @param type - ÊÂ¼şÀàĞÍ¡£
-     * @param eventObject - ÊÂ¼şÊı¾İ¡£
+     * - åˆ†æ´¾ç‰¹å®šçš„äº‹ä»¶åˆ°äº‹ä»¶æµä¸­ã€‚
+     * @param type - äº‹ä»¶ç±»å‹ã€‚
+     * @param eventObject - äº‹ä»¶æ•°æ®ã€‚
      * @see dragonBones.EventObject
      * @version DragonBones 4.5
      * @language zh_CN
@@ -82,10 +82,10 @@ public:
      * @language en_US
      */
     /**
-     * - Ìí¼ÓÌØ¶¨ÊÂ¼şÀàĞÍµÄÊÂ¼şÕìÌıÆ÷£¬ÒÔÊ¹ÕìÌıÆ÷ÄÜ¹»½ÓÊÕÊÂ¼şÍ¨Öª¡£
-     * @param type - ÊÂ¼şÀàĞÍ¡£
-     * @param listener - ÊÂ¼şÕìÌıÆ÷¡£
-     * @param thisObject - ÕìÌıº¯Êı°ó¶¨µÄ this ¶ÔÏó¡£
+     * - æ·»åŠ ç‰¹å®šäº‹ä»¶ç±»å‹çš„äº‹ä»¶ä¾¦å¬å™¨ï¼Œä»¥ä½¿ä¾¦å¬å™¨èƒ½å¤Ÿæ¥æ”¶äº‹ä»¶é€šçŸ¥ã€‚
+     * @param type - äº‹ä»¶ç±»å‹ã€‚
+     * @param listener - äº‹ä»¶ä¾¦å¬å™¨ã€‚
+     * @param thisObject - ä¾¦å¬å‡½æ•°ç»‘å®šçš„ this å¯¹è±¡ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -99,10 +99,10 @@ public:
      * @language en_US
      */
     /**
-     * - É¾³ıÌØ¶¨ÊÂ¼şÀàĞÍµÄÕìÌıÆ÷¡£
-     * @param type - ÊÂ¼şÀàĞÍ¡£
-     * @param listener - ÊÂ¼şÕìÌıÆ÷¡£
-     * @param thisObject - ÕìÌıº¯Êı°ó¶¨µÄ this ¶ÔÏó¡£
+     * - åˆ é™¤ç‰¹å®šäº‹ä»¶ç±»å‹çš„ä¾¦å¬å™¨ã€‚
+     * @param type - äº‹ä»¶ç±»å‹ã€‚
+     * @param listener - äº‹ä»¶ä¾¦å¬å™¨ã€‚
+     * @param thisObject - ä¾¦å¬å‡½æ•°ç»‘å®šçš„ this å¯¹è±¡ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */

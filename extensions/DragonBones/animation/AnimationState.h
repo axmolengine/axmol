@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -35,7 +35,7 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - ¶¯»­×´Ì¬ÓÉ²¥·Å¶¯»­Êı¾İÊ±²úÉú¡£
+ * - åŠ¨ç”»çŠ¶æ€ç”±æ’­æ”¾åŠ¨ç”»æ•°æ®æ—¶äº§ç”Ÿã€‚
  * @see dragonBones.Animation
  * @see dragonBones.AnimationData
  * @version DragonBones 3.0
@@ -70,9 +70,9 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­×´Ì¬ÊÇ·ñ¶Ô²å²ÛµÄÏÔÊ¾¶ÔÏóÊôĞÔÓĞ¿ØÖÆÈ¨¡£
-     * ÓĞÊ±»ìºÏÒ»¸ö¶¯»­×´Ì¬²¢²»Ï£ÍûÆä¿ØÖÆ²å²ÛµÄÏÔÊ¾¶ÔÏóÊôĞÔ£¬
-     * ÓÈÆäÊÇÆäËû¶¯»­×´Ì¬ÕıÔÚ¿ØÖÆÕâĞ©²å²ÛµÄÏÔÊ¾¶ÔÏóÊôĞÔÊ±¡£
+     * - åŠ¨ç”»çŠ¶æ€æ˜¯å¦å¯¹æ’æ§½çš„æ˜¾ç¤ºå¯¹è±¡å±æ€§æœ‰æ§åˆ¶æƒã€‚
+     * æœ‰æ—¶æ··åˆä¸€ä¸ªåŠ¨ç”»çŠ¶æ€å¹¶ä¸å¸Œæœ›å…¶æ§åˆ¶æ’æ§½çš„æ˜¾ç¤ºå¯¹è±¡å±æ€§ï¼Œ
+     * å°¤å…¶æ˜¯å…¶ä»–åŠ¨ç”»çŠ¶æ€æ­£åœ¨æ§åˆ¶è¿™äº›æ’æ§½çš„æ˜¾ç¤ºå¯¹è±¡å±æ€§æ—¶ã€‚
      * @default true
      * @version DragonBones 5.0
      * @language zh_CN
@@ -86,8 +86,8 @@ public:
      * @language en_US
      */
     /**
-     * - ¿ªÊ¼²¥·Å¶¯»­×´Ì¬Ê±ÊÇ·ñ½«Ã»ÓĞ¶¯»­µÄ¶ÔÏóÖØÖÃÎª¹Ç¼Ü³õÊ¼Öµ¡£
-     * Í¨³£ÔÚ»ìºÏ¶à¸ö¶¯»­×´Ì¬Ê±Ó¦¸Ã½«¸ÃÊôĞÔÉèÖÃÎª false¡£
+     * - å¼€å§‹æ’­æ”¾åŠ¨ç”»çŠ¶æ€æ—¶æ˜¯å¦å°†æ²¡æœ‰åŠ¨ç”»çš„å¯¹è±¡é‡ç½®ä¸ºéª¨æ¶åˆå§‹å€¼ã€‚
+     * é€šå¸¸åœ¨æ··åˆå¤šä¸ªåŠ¨ç”»çŠ¶æ€æ—¶åº”è¯¥å°†è¯¥å±æ€§è®¾ç½®ä¸º falseã€‚
      * @default true
      * @version DragonBones 5.1
      * @language zh_CN
@@ -99,7 +99,7 @@ public:
      * @language en_US
      */
     /**
-     * - ²¥·Å´ÎÊı¡£ [0: ÎŞÏŞÑ­»·²¥·Å, [1~N]: Ñ­»·²¥·Å N ´Î]
+     * - æ’­æ”¾æ¬¡æ•°ã€‚ [0: æ— é™å¾ªç¯æ’­æ”¾, [1~N]: å¾ªç¯æ’­æ”¾ N æ¬¡]
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -113,9 +113,9 @@ public:
      * @language en_US
      */
     /**
-     * - »ìºÏÍ¼²ã¡£
-     * Í¼²ã¸ßµÄ¶¯»­×´Ì¬»áÓÅÏÈ»ñÈ¡»ìºÏÈ¨ÖØ¡£
-     * µ±»ìºÏÈ¨ÖØ·ÖÅä³¬¹ı 1 Ê±£¬Ê£ÓàµÄ¶¯»­×´Ì¬½«²»ÔÙ»ñµÃÈ¨ÖØ·ÖÅä¡£
+     * - æ··åˆå›¾å±‚ã€‚
+     * å›¾å±‚é«˜çš„åŠ¨ç”»çŠ¶æ€ä¼šä¼˜å…ˆè·å–æ··åˆæƒé‡ã€‚
+     * å½“æ··åˆæƒé‡åˆ†é…è¶…è¿‡ 1 æ—¶ï¼Œå‰©ä½™çš„åŠ¨ç”»çŠ¶æ€å°†ä¸å†è·å¾—æƒé‡åˆ†é…ã€‚
      * @readonly
      * @version DragonBones 5.0
      * @language zh_CN
@@ -130,9 +130,9 @@ public:
      * @language en_US
      */
     /**
-     * - ²¥·ÅËÙ¶È¡£
-     * ¸ÃÖµÓë {@link dragonBones.Animation#timeScale} ÊÇµş¼Ó¹ØÏµ¡£
-     * [(-N~0): µ¹×ª²¥·Å, 0: Í£Ö¹²¥·Å, (0~1): ÂıËÙ²¥·Å, 1: Õı³£²¥·Å, (1~N): ¿ìËÙ²¥·Å]
+     * - æ’­æ”¾é€Ÿåº¦ã€‚
+     * è¯¥å€¼ä¸ {@link dragonBones.Animation#timeScale} æ˜¯å åŠ å…³ç³»ã€‚
+     * [(-N~0): å€’è½¬æ’­æ”¾, 0: åœæ­¢æ’­æ”¾, (0~1): æ…¢é€Ÿæ’­æ”¾, 1: æ­£å¸¸æ’­æ”¾, (1~N): å¿«é€Ÿæ’­æ”¾]
      * @default 1.0
      * @version DragonBones 3.0
      * @language zh_CN
@@ -145,7 +145,7 @@ public:
      * @language en_US
      */
     /**
-     * - »ìºÏÈ¨ÖØ¡£
+     * - æ··åˆæƒé‡ã€‚
      * @default 1.0
      * @version DragonBones 5.0
      * @language zh_CN
@@ -159,8 +159,8 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­×´Ì¬²¥·ÅÍê³ÉºóµÄ×Ô¶¯µ­³öÊ±¼ä¡£
-     * [-1: ²»×Ô¶¯µ­³ö, [0~N]: µ­³öÊ±¼ä] £¨ÒÔÃëÎªµ¥Î»£©
+     * - åŠ¨ç”»çŠ¶æ€æ’­æ”¾å®Œæˆåçš„è‡ªåŠ¨æ·¡å‡ºæ—¶é—´ã€‚
+     * [-1: ä¸è‡ªåŠ¨æ·¡å‡º, [0~N]: æ·¡å‡ºæ—¶é—´] ï¼ˆä»¥ç§’ä¸ºå•ä½ï¼‰
      * @default -1.0
      * @version DragonBones 5.0
      * @language zh_CN
@@ -177,7 +177,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­×´Ì¬Ãû³Æ¡£ £¨¿ÉÒÔ²»Í¬ÓÚ¶¯»­Êı¾İ£©
+     * - åŠ¨ç”»çŠ¶æ€åç§°ã€‚ ï¼ˆå¯ä»¥ä¸åŒäºåŠ¨ç”»æ•°æ®ï¼‰
      * @readonly
      * @version DragonBones 5.0
      * @language zh_CN
@@ -191,8 +191,8 @@ public:
      * @language en_US
      */
     /**
-     * - »ìºÏ×éÃû³Æ¡£
-     * ¸ÃÊôĞÔÍ¨³£ÓÃÀ´Ö¸¶¨¶à¸ö¶¯»­×´Ì¬»ìºÏÊ±µÄÏà»¥Ìæ»»¹ØÏµ¡£
+     * - æ··åˆç»„åç§°ã€‚
+     * è¯¥å±æ€§é€šå¸¸ç”¨æ¥æŒ‡å®šå¤šä¸ªåŠ¨ç”»çŠ¶æ€æ··åˆæ—¶çš„ç›¸äº’æ›¿æ¢å…³ç³»ã€‚
      * @readonly
      * @version DragonBones 5.0
      * @language zh_CN
@@ -288,7 +288,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¼ÌĞø²¥·Å¡£
+     * - ç»§ç»­æ’­æ”¾ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -299,7 +299,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÔİÍ£²¥·Å¡£
+     * - æš‚åœæ’­æ”¾ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -312,9 +312,9 @@ public:
      * @language en_US
      */
     /**
-     * - µ­³ö¶¯»­×´Ì¬¡£
-     * @param fadeOutTime - µ­³öÊ±¼ä¡£ £¨ÒÔÃëÎªµ¥Î»£©
-     * @param pausePlayhead - µ­³öÊ±ÊÇ·ñÔİÍ£²¥·Å¡£
+     * - æ·¡å‡ºåŠ¨ç”»çŠ¶æ€ã€‚
+     * @param fadeOutTime - æ·¡å‡ºæ—¶é—´ã€‚ ï¼ˆä»¥ç§’ä¸ºå•ä½ï¼‰
+     * @param pausePlayhead - æ·¡å‡ºæ—¶æ˜¯å¦æš‚åœæ’­æ”¾ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -326,8 +326,8 @@ public:
      * @language en_US
      */
     /**
-     * - ¼ì²éÊÇ·ñ°üº¬ÌØ¶¨¹Ç÷ÀÕÚÕÖ¡£
-     * @param boneName - ¹Ç÷ÀÃû³Æ¡£
+     * - æ£€æŸ¥æ˜¯å¦åŒ…å«ç‰¹å®šéª¨éª¼é®ç½©ã€‚
+     * @param boneName - éª¨éª¼åç§°ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -340,9 +340,9 @@ public:
      * @language en_US
      */
     /**
-     * - Ìí¼ÓÌØ¶¨µÄ¹Ç÷ÀÕÚÕÖ¡£
-     * @param boneName - ¹Ç÷ÀÃû³Æ¡£
-     * @param recursive - ÊÇ·ñÎª¸Ã¹Ç÷ÀµÄ×Ó¹Ç÷ÀÌí¼ÓÕÚÕÖ¡£
+     * - æ·»åŠ ç‰¹å®šçš„éª¨éª¼é®ç½©ã€‚
+     * @param boneName - éª¨éª¼åç§°ã€‚
+     * @param recursive - æ˜¯å¦ä¸ºè¯¥éª¨éª¼çš„å­éª¨éª¼æ·»åŠ é®ç½©ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -355,9 +355,9 @@ public:
      * @language en_US
      */
     /**
-     * - É¾³ıÌØ¶¨¹Ç÷ÀµÄÕÚÕÖ¡£
-     * @param boneName - ¹Ç÷ÀÃû³Æ¡£
-     * @param recursive - ÊÇ·ñÉ¾³ı¸Ã¹Ç÷ÀµÄ×Ó¹Ç÷ÀÕÚÕÖ¡£
+     * - åˆ é™¤ç‰¹å®šéª¨éª¼çš„é®ç½©ã€‚
+     * @param boneName - éª¨éª¼åç§°ã€‚
+     * @param recursive - æ˜¯å¦åˆ é™¤è¯¥éª¨éª¼çš„å­éª¨éª¼é®ç½©ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -368,7 +368,7 @@ public:
      * @language en_US
      */
     /**
-     * - É¾³ıËùÓĞ¹Ç÷ÀÕÚÕÖ¡£
+     * - åˆ é™¤æ‰€æœ‰éª¨éª¼é®ç½©ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -379,7 +379,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÊÇ·ñÕıÔÚµ­Èë¡£
+     * - æ˜¯å¦æ­£åœ¨æ·¡å…¥ã€‚
      * @version DragonBones 5.1
      * @language zh_CN
      */
@@ -393,7 +393,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÊÇ·ñÕıÔÚµ­³ö¡£
+     * - æ˜¯å¦æ­£åœ¨æ·¡å‡ºã€‚
      * @version DragonBones 5.1
      * @language zh_CN
      */
@@ -407,7 +407,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÊÇ·ñµ­Èë»òµ­³öÍê±Ï¡£
+     * - æ˜¯å¦æ·¡å…¥æˆ–æ·¡å‡ºå®Œæ¯•ã€‚
      * @version DragonBones 5.1
      * @language zh_CN
      */
@@ -421,7 +421,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÊÇ·ñÕıÔÚ²¥·Å¡£
+     * - æ˜¯å¦æ­£åœ¨æ’­æ”¾ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -432,7 +432,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÊÇ·ñ²¥·ÅÍê±Ï¡£
+     * - æ˜¯å¦æ’­æ”¾å®Œæ¯•ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -443,7 +443,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÒÑ¾­Ñ­»·²¥·ÅµÄ´ÎÊı¡£
+     * - å·²ç»å¾ªç¯æ’­æ”¾çš„æ¬¡æ•°ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -454,7 +454,7 @@ public:
      * @language en_US
      */
     /**
-     * - ×Ü²¥·ÅÊ±¼ä¡£ £¨ÒÔÃëÎªµ¥Î»£©
+     * - æ€»æ’­æ”¾æ—¶é—´ã€‚ ï¼ˆä»¥ç§’ä¸ºå•ä½ï¼‰
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -468,7 +468,7 @@ public:
      * @language en_US
      */
     /**
-     * - µ±Ç°²¥·ÅµÄÊ±¼ä¡£ £¨ÒÔÃëÎªµ¥Î»£©
+     * - å½“å‰æ’­æ”¾çš„æ—¶é—´ã€‚ ï¼ˆä»¥ç§’ä¸ºå•ä½ï¼‰
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -486,7 +486,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶¯»­Êı¾İ¡£
+     * - åŠ¨ç”»æ•°æ®ã€‚
      * @see dragonBones.AnimationData
      * @version DragonBones 3.0
      * @language zh_CN

@@ -1,4 +1,4 @@
-#include "Armature.h"
+﻿#include "Armature.h"
 #include "../model/TextureAtlasData.h"
 #include "../model/UserData.h"
 #include "../animation/WorldClock.h"
