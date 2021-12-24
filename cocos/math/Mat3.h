@@ -3,7 +3,6 @@
  * internally and is accessible via the get and set methods. Convenience methods
  * are used for matrix operations as well as generating a matrix from a given
  * set of values.
- * 3X3矩阵类
  * @autohr HALX99 2016
  * @author Mark Powell
  * @author Joshua Slack
@@ -332,7 +331,7 @@ public:
      * fromAngleAxis sets this matrix4f to the values specified by
      * an angle and an axis of rotation. This method creates an object, so use
      * fromAngleNormalAxis if your axis is already normalized.
-     * 绕轴axis（非单位向量）旋转angle（弧度）角的3D旋转矩阵
+     * 缁曡酱axis锛堥潪鍗曚綅鍚戦噺锛夋棆杞琣ngle锛堝姬搴︼級瑙掔殑3D鏃嬭浆鐭╅樀
      *
      * @param angle
      *            the angle to rotate (in radians).
