@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -39,14 +39,14 @@ NS_CC_BEGIN
 static Texture2D* getDefaultTexture()
 {
     Texture2D* texture = nullptr;
-    Image* image = nullptr;
-    do 
+    Image* image       = nullptr;
+    do
     {
         const std::string key = "/__firePngData";
-        texture = Director::getInstance()->getTextureCache()->getTextureForKey(key);
+        texture               = Director::getInstance()->getTextureCache()->getTextureForKey(key);
         CC_BREAK_IF(texture != nullptr);
 
-        image = new Image();
+        image    = new Image();
         bool ret = image->initWithImageData(__firePngData, sizeof(__firePngData));
         CC_BREAK_IF(!ret);
 
@@ -88,7 +88,7 @@ ParticleFire* ParticleFire::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleFire::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -100,59 +100,58 @@ bool ParticleFire::initWithTotalParticles(int numberOfParticles)
         this->modeA.gravity.setZero();
 
         // Gravity Mode: radial acceleration
-        this->modeA.radialAccel = 0;
+        this->modeA.radialAccel    = 0;
         this->modeA.radialAccelVar = 0;
 
         // Gravity Mode: speed of particles
-        this->modeA.speed = 60;
-        this->modeA.speedVar = 20;        
+        this->modeA.speed    = 60;
+        this->modeA.speedVar = 20;
 
         // starting angle
-        _angle = 90;
+        _angle    = 90;
         _angleVar = 10;
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2.0f, 60.0f);
+        this->setPosition(winSize.width / 2.0f, 60.0f);
         this->_posVar.set(40.0f, 20.0f);
 
         // life of particles
-        _life = 3;
+        _life    = 3;
         _lifeVar = 0.25f;
 
-
         // size, in pixels
-        _startSize = 54.0f;
+        _startSize    = 54.0f;
         _startSizeVar = 10.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per frame
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
-        _startColor.r = 0.76f;
-        _startColor.g = 0.25f;
-        _startColor.b = 0.12f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 0.76f;
+        _startColor.g    = 0.25f;
+        _startColor.b    = 0.12f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.0f;
         _startColorVar.g = 0.0f;
         _startColorVar.b = 0.0f;
         _startColorVar.a = 0.0f;
-        _endColor.r = 0.0f;
-        _endColor.g = 0.0f;
-        _endColor.b = 0.0f;
-        _endColor.a = 1.0f;
-        _endColorVar.r = 0.0f;
-        _endColorVar.g = 0.0f;
-        _endColorVar.b = 0.0f;
-        _endColorVar.a = 0.0f;
+        _endColor.r      = 0.0f;
+        _endColor.g      = 0.0f;
+        _endColor.b      = 0.0f;
+        _endColor.a      = 1.0f;
+        _endColorVar.r   = 0.0f;
+        _endColorVar.g   = 0.0f;
+        _endColorVar.b   = 0.0f;
+        _endColorVar.a   = 0.0f;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)
         {
             setTexture(texture);
         }
-        
+
         // additive
         this->setBlendAdditive(true);
         return true;
@@ -193,10 +192,10 @@ ParticleFireworks* ParticleFireworks::createWithTotalParticles(int numberOfParti
 
 bool ParticleFireworks::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
-        _duration= DURATION_INFINITY;
+        _duration = DURATION_INFINITY;
 
         // Gravity Mode
         this->_emitterMode = Mode::GRAVITY;
@@ -205,50 +204,50 @@ bool ParticleFireworks::initWithTotalParticles(int numberOfParticles)
         this->modeA.gravity.set(0.0f, -90.0f);
 
         // Gravity Mode:  radial
-        this->modeA.radialAccel = 0.0f;
+        this->modeA.radialAccel    = 0.0f;
         this->modeA.radialAccelVar = 0.0f;
 
         //  Gravity Mode: speed of particles
-        this->modeA.speed = 180.0f;
+        this->modeA.speed    = 180.0f;
         this->modeA.speedVar = 50.0f;
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
 
         // angle
-        this->_angle= 90.0f;
+        this->_angle    = 90.0f;
         this->_angleVar = 20.0f;
 
         // life of particles
-        this->_life = 3.5f;
+        this->_life    = 3.5f;
         this->_lifeVar = 1.0f;
 
         // emits per frame
-        this->_emissionRate = _totalParticles/_life;
+        this->_emissionRate = _totalParticles / _life;
 
         // color of particles
-        _startColor.r = 0.5f;
-        _startColor.g = 0.5f;
-        _startColor.b = 0.5f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 0.5f;
+        _startColor.g    = 0.5f;
+        _startColor.b    = 0.5f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.5f;
         _startColorVar.g = 0.5f;
         _startColorVar.b = 0.5f;
         _startColorVar.a = 0.1f;
-        _endColor.r = 0.1f;
-        _endColor.g = 0.1f;
-        _endColor.b = 0.1f;
-        _endColor.a = 0.2f;
-        _endColorVar.r = 0.1f;
-        _endColorVar.g = 0.1f;
-        _endColorVar.b = 0.1f;
-        _endColorVar.a = 0.2f;
+        _endColor.r      = 0.1f;
+        _endColor.g      = 0.1f;
+        _endColor.b      = 0.1f;
+        _endColor.a      = 0.2f;
+        _endColorVar.r   = 0.1f;
+        _endColorVar.g   = 0.1f;
+        _endColorVar.b   = 0.1f;
+        _endColorVar.a   = 0.2f;
 
         // size, in pixels
-        _startSize = 8.0f;
+        _startSize    = 8.0f;
         _startSizeVar = 2.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)
@@ -294,7 +293,7 @@ ParticleSun* ParticleSun::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleSun::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // additive
         this->setBlendAdditive(true);
@@ -306,7 +305,7 @@ bool ParticleSun::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity mode: radial acceleration
         setRadialAccel(0);
@@ -316,45 +315,44 @@ bool ParticleSun::initWithTotalParticles(int numberOfParticles)
         setSpeed(20);
         setSpeedVar(5);
 
-
         // angle
-        _angle = 90;
+        _angle    = 90;
         _angleVar = 360;
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
-        _life = 1;
+        _life    = 1;
         _lifeVar = 0.5f;
 
         // size, in pixels
-        _startSize = 30.0f;
+        _startSize    = 30.0f;
         _startSizeVar = 10.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per seconds
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
-        _startColor.r = 0.76f;
-        _startColor.g = 0.25f;
-        _startColor.b = 0.12f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 0.76f;
+        _startColor.g    = 0.25f;
+        _startColor.b    = 0.12f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.0f;
         _startColorVar.g = 0.0f;
         _startColorVar.b = 0.0f;
         _startColorVar.a = 0.0f;
-        _endColor.r = 0.0f;
-        _endColor.g = 0.0f;
-        _endColor.b = 0.0f;
-        _endColor.a = 1.0f;
-        _endColorVar.r = 0.0f;
-        _endColorVar.g = 0.0f;
-        _endColorVar.b = 0.0f;
-        _endColorVar.a = 0.0f;
+        _endColor.r      = 0.0f;
+        _endColor.g      = 0.0f;
+        _endColor.b      = 0.0f;
+        _endColor.a      = 1.0f;
+        _endColorVar.r   = 0.0f;
+        _endColorVar.g   = 0.0f;
+        _endColorVar.b   = 0.0f;
+        _endColorVar.a   = 0.0f;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)
@@ -401,7 +399,7 @@ ParticleGalaxy* ParticleGalaxy::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -410,7 +408,7 @@ bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity Mode: speed of particles
         setSpeed(60);
@@ -425,43 +423,43 @@ bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
         setTangentialAccelVar(0);
 
         // angle
-        _angle = 90;
+        _angle    = 90;
         _angleVar = 360;
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
-        _life = 4;
+        _life    = 4;
         _lifeVar = 1;
 
         // size, in pixels
-        _startSize = 37.0f;
+        _startSize    = 37.0f;
         _startSizeVar = 10.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
-        _startColor.r = 0.12f;
-        _startColor.g = 0.25f;
-        _startColor.b = 0.76f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 0.12f;
+        _startColor.g    = 0.25f;
+        _startColor.b    = 0.76f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.0f;
         _startColorVar.g = 0.0f;
         _startColorVar.b = 0.0f;
         _startColorVar.a = 0.0f;
-        _endColor.r = 0.0f;
-        _endColor.g = 0.0f;
-        _endColor.b = 0.0f;
-        _endColor.a = 1.0f;
-        _endColorVar.r = 0.0f;
-        _endColorVar.g = 0.0f;
-        _endColorVar.b = 0.0f;
-        _endColorVar.a = 0.0f;
+        _endColor.r      = 0.0f;
+        _endColor.g      = 0.0f;
+        _endColor.b      = 0.0f;
+        _endColor.a      = 1.0f;
+        _endColorVar.r   = 0.0f;
+        _endColorVar.g   = 0.0f;
+        _endColorVar.b   = 0.0f;
+        _endColorVar.a   = 0.0f;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)
@@ -510,7 +508,7 @@ ParticleFlower* ParticleFlower::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -519,7 +517,7 @@ bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity Mode: speed of particles
         setSpeed(80);
@@ -534,43 +532,43 @@ bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
         setTangentialAccelVar(0);
 
         // angle
-        _angle = 90;
+        _angle    = 90;
         _angleVar = 360;
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
-        _life = 4;
+        _life    = 4;
         _lifeVar = 1;
 
         // size, in pixels
-        _startSize = 30.0f;
+        _startSize    = 30.0f;
         _startSizeVar = 10.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
-        _startColor.r = 0.50f;
-        _startColor.g = 0.50f;
-        _startColor.b = 0.50f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 0.50f;
+        _startColor.g    = 0.50f;
+        _startColor.b    = 0.50f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.5f;
         _startColorVar.g = 0.5f;
         _startColorVar.b = 0.5f;
         _startColorVar.a = 0.5f;
-        _endColor.r = 0.0f;
-        _endColor.g = 0.0f;
-        _endColor.b = 0.0f;
-        _endColor.a = 1.0f;
-        _endColorVar.r = 0.0f;
-        _endColorVar.g = 0.0f;
-        _endColorVar.b = 0.0f;
-        _endColorVar.a = 0.0f;
+        _endColor.r      = 0.0f;
+        _endColor.g      = 0.0f;
+        _endColor.b      = 0.0f;
+        _endColor.a      = 1.0f;
+        _endColorVar.r   = 0.0f;
+        _endColorVar.g   = 0.0f;
+        _endColorVar.b   = 0.0f;
+        _endColorVar.a   = 0.0f;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)
@@ -588,9 +586,9 @@ bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
 // ParticleMeteor
 //
 
-ParticleMeteor * ParticleMeteor::create()
+ParticleMeteor* ParticleMeteor::create()
 {
-    ParticleMeteor *ret = new ParticleMeteor();
+    ParticleMeteor* ret = new ParticleMeteor();
     if (ret->init())
     {
         ret->autorelease();
@@ -618,7 +616,7 @@ ParticleMeteor* ParticleMeteor::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -627,7 +625,7 @@ bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(-200,200));
+        setGravity(Vec2(-200, 200));
 
         // Gravity Mode: speed of particles
         setSpeed(15);
@@ -642,43 +640,43 @@ bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
         setTangentialAccelVar(0);
 
         // angle
-        _angle = 90;
+        _angle    = 90;
         _angleVar = 360;
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
-        _life = 2;
+        _life    = 2;
         _lifeVar = 1;
 
         // size, in pixels
-        _startSize = 60.0f;
+        _startSize    = 60.0f;
         _startSizeVar = 10.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
-        _startColor.r = 0.2f;
-        _startColor.g = 0.4f;
-        _startColor.b = 0.7f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 0.2f;
+        _startColor.g    = 0.4f;
+        _startColor.b    = 0.7f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.0f;
         _startColorVar.g = 0.0f;
         _startColorVar.b = 0.2f;
         _startColorVar.a = 0.1f;
-        _endColor.r = 0.0f;
-        _endColor.g = 0.0f;
-        _endColor.b = 0.0f;
-        _endColor.a = 1.0f;
-        _endColorVar.r = 0.0f;
-        _endColorVar.g = 0.0f;
-        _endColorVar.b = 0.0f;
-        _endColorVar.a = 0.0f;
+        _endColor.r      = 0.0f;
+        _endColor.g      = 0.0f;
+        _endColor.b      = 0.0f;
+        _endColor.a      = 1.0f;
+        _endColorVar.r   = 0.0f;
+        _endColorVar.g   = 0.0f;
+        _endColorVar.b   = 0.0f;
+        _endColorVar.a   = 0.0f;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)
@@ -727,7 +725,7 @@ ParticleSpiral* ParticleSpiral::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) ) 
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -736,7 +734,7 @@ bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity Mode: speed of particles
         setSpeed(150);
@@ -751,43 +749,43 @@ bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
         setTangentialAccelVar(0);
 
         // angle
-        _angle = 90;
+        _angle    = 90;
         _angleVar = 0;
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
-        _life = 12;
+        _life    = 12;
         _lifeVar = 0;
 
         // size, in pixels
-        _startSize = 20.0f;
+        _startSize    = 20.0f;
         _startSizeVar = 0.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
-        _startColor.r = 0.5f;
-        _startColor.g = 0.5f;
-        _startColor.b = 0.5f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 0.5f;
+        _startColor.g    = 0.5f;
+        _startColor.b    = 0.5f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.5f;
         _startColorVar.g = 0.5f;
         _startColorVar.b = 0.5f;
         _startColorVar.a = 0.0f;
-        _endColor.r = 0.5f;
-        _endColor.g = 0.5f;
-        _endColor.b = 0.5f;
-        _endColor.a = 1.0f;
-        _endColorVar.r = 0.5f;
-        _endColorVar.g = 0.5f;
-        _endColorVar.b = 0.5f;
-        _endColorVar.a = 0.0f;
+        _endColor.r      = 0.5f;
+        _endColor.g      = 0.5f;
+        _endColor.b      = 0.5f;
+        _endColor.a      = 1.0f;
+        _endColorVar.r   = 0.5f;
+        _endColorVar.g   = 0.5f;
+        _endColorVar.b   = 0.5f;
+        _endColorVar.a   = 0.0f;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)
@@ -836,7 +834,7 @@ ParticleExplosion* ParticleExplosion::createWithTotalParticles(int numberOfParti
 
 bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) ) 
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = 0.1f;
@@ -844,7 +842,7 @@ bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity Mode: speed of particles
         setSpeed(70);
@@ -859,43 +857,43 @@ bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
         setTangentialAccelVar(0);
 
         // angle
-        _angle = 90;
+        _angle    = 90;
         _angleVar = 360;
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
-        _life = 5.0f;
+        _life    = 5.0f;
         _lifeVar = 2;
 
         // size, in pixels
-        _startSize = 15.0f;
+        _startSize    = 15.0f;
         _startSizeVar = 10.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
-        _emissionRate = _totalParticles/_duration;
+        _emissionRate = _totalParticles / _duration;
 
         // color of particles
-        _startColor.r = 0.7f;
-        _startColor.g = 0.1f;
-        _startColor.b = 0.2f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 0.7f;
+        _startColor.g    = 0.1f;
+        _startColor.b    = 0.2f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.5f;
         _startColorVar.g = 0.5f;
         _startColorVar.b = 0.5f;
         _startColorVar.a = 0.0f;
-        _endColor.r = 0.5f;
-        _endColor.g = 0.5f;
-        _endColor.b = 0.5f;
-        _endColor.a = 0.0f;
-        _endColorVar.r = 0.5f;
-        _endColorVar.g = 0.5f;
-        _endColorVar.b = 0.5f;
-        _endColorVar.a = 0.0f;
+        _endColor.r      = 0.5f;
+        _endColor.g      = 0.5f;
+        _endColor.b      = 0.5f;
+        _endColor.a      = 0.0f;
+        _endColorVar.r   = 0.5f;
+        _endColorVar.g   = 0.5f;
+        _endColorVar.b   = 0.5f;
+        _endColorVar.a   = 0.0f;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)
@@ -944,7 +942,7 @@ ParticleSmoke* ParticleSmoke::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleSmoke::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -953,7 +951,7 @@ bool ParticleSmoke::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity Mode: radial acceleration
         setRadialAccel(0);
@@ -964,43 +962,43 @@ bool ParticleSmoke::initWithTotalParticles(int numberOfParticles)
         setSpeedVar(10);
 
         // angle
-        _angle = 90;
+        _angle    = 90;
         _angleVar = 5;
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2, 0);
+        this->setPosition(winSize.width / 2, 0);
         setPosVar(Vec2(20, 0));
 
         // life of particles
-        _life = 4;
+        _life    = 4;
         _lifeVar = 1;
 
         // size, in pixels
-        _startSize = 60.0f;
+        _startSize    = 60.0f;
         _startSizeVar = 10.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per frame
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
-        _startColor.r = 0.8f;
-        _startColor.g = 0.8f;
-        _startColor.b = 0.8f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 0.8f;
+        _startColor.g    = 0.8f;
+        _startColor.b    = 0.8f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.02f;
         _startColorVar.g = 0.02f;
         _startColorVar.b = 0.02f;
         _startColorVar.a = 0.0f;
-        _endColor.r = 0.0f;
-        _endColor.g = 0.0f;
-        _endColor.b = 0.0f;
-        _endColor.a = 1.0f;
-        _endColorVar.r = 0.0f;
-        _endColorVar.g = 0.0f;
-        _endColorVar.b = 0.0f;
-        _endColorVar.a = 0.0f;
+        _endColor.r      = 0.0f;
+        _endColor.g      = 0.0f;
+        _endColor.b      = 0.0f;
+        _endColor.a      = 1.0f;
+        _endColorVar.r   = 0.0f;
+        _endColorVar.g   = 0.0f;
+        _endColorVar.b   = 0.0f;
+        _endColorVar.a   = 0.0f;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)
@@ -1049,7 +1047,7 @@ ParticleSnow* ParticleSnow::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleSnow::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) ) 
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -1058,7 +1056,7 @@ bool ParticleSnow::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,-1));
+        setGravity(Vec2(0, -1));
 
         // Gravity Mode: speed of particles
         setSpeed(5);
@@ -1074,42 +1072,42 @@ bool ParticleSnow::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height + 10);
-        setPosVar(Vec2(winSize.width/2, 0.0f));
+        this->setPosition(winSize.width / 2, winSize.height + 10);
+        setPosVar(Vec2(winSize.width / 2, 0.0f));
 
         // angle
-        _angle = -90;
+        _angle    = -90;
         _angleVar = 5;
 
         // life of particles
-        _life = 45;
+        _life    = 45;
         _lifeVar = 15;
 
         // size, in pixels
-        _startSize = 10.0f;
+        _startSize    = 10.0f;
         _startSizeVar = 5.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
         _emissionRate = 10;
 
         // color of particles
-        _startColor.r = 1.0f;
-        _startColor.g = 1.0f;
-        _startColor.b = 1.0f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 1.0f;
+        _startColor.g    = 1.0f;
+        _startColor.b    = 1.0f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.0f;
         _startColorVar.g = 0.0f;
         _startColorVar.b = 0.0f;
         _startColorVar.a = 0.0f;
-        _endColor.r = 1.0f;
-        _endColor.g = 1.0f;
-        _endColor.b = 1.0f;
-        _endColor.a = 0.0f;
-        _endColorVar.r = 0.0f;
-        _endColorVar.g = 0.0f;
-        _endColorVar.b = 0.0f;
-        _endColorVar.a = 0.0f;
+        _endColor.r      = 1.0f;
+        _endColor.g      = 1.0f;
+        _endColor.b      = 1.0f;
+        _endColor.a      = 0.0f;
+        _endColorVar.r   = 0.0f;
+        _endColorVar.g   = 0.0f;
+        _endColorVar.b   = 0.0f;
+        _endColorVar.a   = 0.0f;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)
@@ -1157,7 +1155,7 @@ ParticleRain* ParticleRain::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleRain::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -1165,7 +1163,7 @@ bool ParticleRain::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(10,-10));
+        setGravity(Vec2(10, -10));
 
         // Gravity Mode: radial
         setRadialAccel(0);
@@ -1180,44 +1178,43 @@ bool ParticleRain::initWithTotalParticles(int numberOfParticles)
         setSpeedVar(30);
 
         // angle
-        _angle = -90;
+        _angle    = -90;
         _angleVar = 5;
-
 
         // emitter position
         Vec2 winSize = _director->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height);
-        setPosVar(Vec2(winSize.width/2, 0.0f));
+        this->setPosition(winSize.width / 2, winSize.height);
+        setPosVar(Vec2(winSize.width / 2, 0.0f));
 
         // life of particles
-        _life = 4.5f;
+        _life    = 4.5f;
         _lifeVar = 0;
 
         // size, in pixels
-        _startSize = 4.0f;
+        _startSize    = 4.0f;
         _startSizeVar = 2.0f;
-        _endSize = START_SIZE_EQUAL_TO_END_SIZE;
+        _endSize      = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
         _emissionRate = 20;
 
         // color of particles
-        _startColor.r = 0.7f;
-        _startColor.g = 0.8f;
-        _startColor.b = 1.0f;
-        _startColor.a = 1.0f;
+        _startColor.r    = 0.7f;
+        _startColor.g    = 0.8f;
+        _startColor.b    = 1.0f;
+        _startColor.a    = 1.0f;
         _startColorVar.r = 0.0f;
         _startColorVar.g = 0.0f;
         _startColorVar.b = 0.0f;
         _startColorVar.a = 0.0f;
-        _endColor.r = 0.7f;
-        _endColor.g = 0.8f;
-        _endColor.b = 1.0f;
-        _endColor.a = 0.5f;
-        _endColorVar.r = 0.0f;
-        _endColorVar.g = 0.0f;
-        _endColorVar.b = 0.0f;
-        _endColorVar.a = 0.0f;
+        _endColor.r      = 0.7f;
+        _endColor.g      = 0.8f;
+        _endColor.b      = 1.0f;
+        _endColor.a      = 0.5f;
+        _endColorVar.r   = 0.0f;
+        _endColorVar.g   = 0.0f;
+        _endColorVar.b   = 0.0f;
+        _endColorVar.a   = 0.0f;
 
         Texture2D* texture = getDefaultTexture();
         if (texture != nullptr)

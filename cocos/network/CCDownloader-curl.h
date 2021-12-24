@@ -29,17 +29,21 @@
 #include <stdint.h>
 #include "network/CCIDownloaderImpl.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 class Scheduler;
 }
 
-namespace cocos2d {
-namespace network {
+namespace cocos2d
+{
+namespace network
+{
 class DownloadTaskCURL;
 class DownloaderHints;
 class DownloaderCURL;
 
-class DownloaderCURL : public IDownloaderImpl {
+class DownloaderCURL : public IDownloaderImpl
+{
 public:
     DownloaderCURL(const DownloaderHints& hints);
     virtual ~DownloaderCURL();
@@ -51,7 +55,7 @@ protected:
     std::shared_ptr<Impl> _impl;
 
     // for transfer data on schedule
-    DownloadTaskCURL* _currTask; // temp ref
+    DownloadTaskCURL* _currTask;  // temp ref
     std::function<int64_t(void*, int64_t)> _transferDataToBuffer;
 
     void _lazyScheduleUpdate();
@@ -67,5 +71,5 @@ protected:
     Scheduler* _scheduler = nullptr;
 };
 
-} // namespace network
-} // namespace cocos2d
+}  // namespace network
+}  // namespace cocos2d

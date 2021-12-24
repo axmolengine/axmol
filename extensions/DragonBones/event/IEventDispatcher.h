@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -28,7 +28,8 @@
 DRAGONBONES_NAMESPACE_BEGIN
 /**
  * - The event dispatcher interface.
- * Dragonbones event dispatch usually relies on docking engine to implement, which defines the event method to be implemented when docking the engine.
+ * Dragonbones event dispatch usually relies on docking engine to implement, which defines the event method to be
+ * implemented when docking the engine.
  * @version DragonBones 4.5
  * @language en_US
  */
@@ -89,7 +90,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual void addDBEventListener(const std::string& type, const std::function<void(EventObject*)> & listener) = 0;
+    virtual void addDBEventListener(const std::string& type, const std::function<void(EventObject*)>& listener) = 0;
     /**
      * - Removes a listener from the object.
      * @param type - Event type.
@@ -110,4 +111,4 @@ public:
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_IEVENT_DISPATCHER_H
+#endif  // DRAGONBONES_IEVENT_DISPATCHER_H

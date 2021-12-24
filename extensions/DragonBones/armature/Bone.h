@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -147,10 +147,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline void invalidUpdate()
-    {
-        _transformDirty = true;
-    }
+    inline void invalidUpdate() { _transformDirty = true; }
     /**
      * - Check whether the bone contains a specific bone.
      * @see dragonBones.Bone
@@ -174,10 +171,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    inline const BoneData* getBoneData() const
-    {
-        return _boneData;
-    }
+    inline const BoneData* getBoneData() const { return _boneData; }
     /**
      * - The visible of all slots in the bone.
      * @default true
@@ -192,10 +186,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline bool getVisible() const
-    {
-        return _visible;
-    }
+    inline bool getVisible() const { return _visible; }
     void setVisible(bool value);
     /**
      * - The bone name.
@@ -207,10 +198,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline const std::string& getName() const
-    {
-        return _boneData->name;
-    }
+    inline const std::string& getName() const { return _boneData->name; }
     /**
      * - The parent bone to which it belongs.
      * @version DragonBones 3.0
@@ -221,15 +209,12 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline Bone* getParent() const
-    {
-        return _parent;
-    }
+    inline Bone* getParent() const { return _parent; }
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     inline int getOffsetMode() const { return (int)offsetMode; }
     inline void setOffsetMode(int value) { offsetMode = (OffsetMode)value; }
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_BONE_H
+#endif  // DRAGONBONES_BONE_H

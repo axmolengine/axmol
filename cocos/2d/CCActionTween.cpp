@@ -3,7 +3,7 @@ Copyright (c) 2009      lhunath (Maarten Billemont)
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -37,7 +37,7 @@ ActionTween* ActionTween::create(float duration, const std::string& key, float f
         ret->autorelease();
         return ret;
     }
-    
+
     delete ret;
     return nullptr;
 }
@@ -46,21 +46,21 @@ bool ActionTween::initWithDuration(float duration, const std::string& key, float
 {
     if (ActionInterval::initWithDuration(duration))
     {
-        _key    = key;
-        _to       = to;
-        _from     = from;
+        _key  = key;
+        _to   = to;
+        _from = from;
         return true;
     }
 
     return false;
 }
 
-ActionTween *ActionTween::clone() const
+ActionTween* ActionTween::clone() const
 {
     return ActionTween::create(_duration, _key, _from, _to);
 }
 
-void ActionTween::startWithTarget(Node *target)
+void ActionTween::startWithTarget(Node* target)
 {
     CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), "target must implement ActionTweenDelegate");
     ActionInterval::startWithTarget(target);
@@ -69,13 +69,12 @@ void ActionTween::startWithTarget(Node *target)
 
 void ActionTween::update(float dt)
 {
-    dynamic_cast<ActionTweenDelegate*>(_target)->updateTweenAction(_to  - _delta * (1 - dt), _key);
+    dynamic_cast<ActionTweenDelegate*>(_target)->updateTweenAction(_to - _delta * (1 - dt), _key);
 }
 
 ActionTween* ActionTween::reverse() const
 {
     return ActionTween::create(_duration, _key, _to, _from);
 }
-
 
 NS_CC_END

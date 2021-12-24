@@ -35,16 +35,17 @@ THE SOFTWARE.
  */
 NS_CC_BEGIN
 
-namespace ui {
+namespace ui
+{
 
 /**
  *  Checkbox is a specific type of two-states button that can be either checked or unchecked.
  */
 class CC_GUI_DLL CheckBox : public AbstractCheckButton
 {
-    
+
     DECLARE_CLASS_GUI_INFO
-    
+
 public:
     /**
      * CheckBox event type, currently only "selected" and "unselected" event are cared.
@@ -54,23 +55,23 @@ public:
         SELECTED,
         UNSELECTED
     };
-    
+
     /**
      * A callback which will be called after certain CheckBox event issue.
      * @see `CheckBox::EventType`
      */
-    typedef std::function<void(Ref*,CheckBox::EventType)> ccCheckBoxCallback;
-    
+    typedef std::function<void(Ref*, CheckBox::EventType)> ccCheckBoxCallback;
+
     /**
      * Default constructor.
-     * 
+     *
      * @lua new
      */
     CheckBox();
 
     /**
      * Default destructor.
-     * 
+     *
      * @lua NA
      */
     virtual ~CheckBox();
@@ -79,7 +80,7 @@ public:
      * Create and return a empty CheckBox instance pointer.
      */
     static CheckBox* create();
-    
+
     /**
      * Create an checkbox with various images.
      *
@@ -98,7 +99,7 @@ public:
                             const std::string& backGroundDisabled,
                             const std::string& frontCrossDisabled,
                             TextureResType texType = TextureResType::LOCAL);
-    
+
     /**
      * Another factory method to create a CheckBox instance.
      * This method uses less resource to create a CheckBox.
@@ -117,27 +118,25 @@ public:
      */
     void addEventListener(const ccCheckBoxCallback& callback);
 
-
-    //override functions
+    // override functions
     virtual std::string getDescription() const override;
-    
-    virtual void onTouchEnded(Touch *touch, Event *unusedEvent) override;
+
+    virtual void onTouchEnded(Touch* touch, Event* unusedEvent) override;
+
 protected:
-    
     virtual void dispatchSelectChangedEvent(bool selected) override;
-    
+
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
-    
-protected:
-    //if you use the old event callback, it will retain the _checkBoxEventListener
-    Ref*       _checkBoxEventListener;
-    
-    ccCheckBoxCallback _checkBoxEventCallback;
 
+protected:
+    // if you use the old event callback, it will retain the _checkBoxEventListener
+    Ref* _checkBoxEventListener;
+
+    ccCheckBoxCallback _checkBoxEventCallback;
 };
 
-}
+}  // namespace ui
 
 NS_CC_END
 // end of ui group

@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2014 GamePlay3D team
- 
+
  http://www.cocos2d-x.org
 
 
@@ -45,8 +45,8 @@ class Texture2D;
 class Pass;
 class MeshCommand;
 
-using CullFaceSide = backend::CullMode;
-using FrontFace = backend::Winding;
+using CullFaceSide  = backend::CullMode;
+using FrontFace     = backend::Winding;
 using DepthFunction = backend::CompareFunction;
 
 /**
@@ -59,47 +59,45 @@ class CC_DLL RenderState : public Ref
     friend class Pass;
 
 public:
-
     std::string getName() const;
 
     /**
      * Binds the render state for this RenderState and any of its parents, top-down,
      * for the given pass.
      */
-    void bindPass(Pass* pass, MeshCommand *);
-
+    void bindPass(Pass* pass, MeshCommand*);
 
     /**
      * Defines a block of fixed-function render states that can be applied to a
      * RenderState object.
      */
-    class CC_DLL StateBlock // : public Ref
+    class CC_DLL StateBlock  // : public Ref
     {
         friend class RenderState;
         friend class Pass;
         friend class RenderQueue;
         friend class Renderer;
-        
+
     public:
         /**
          * Creates a new StateBlock with default render state settings.
          */
-        //static StateBlock* create();
+        // static StateBlock* create();
 
         /** The recommended way to create StateBlocks is by calling `create`.
          * Don't use `new` or `delete` on them.
-         * 
+         *
          */
-        StateBlock() = default;
-        ~StateBlock() = default;
-        StateBlock(const StateBlock &) = default;
+        StateBlock()                  = default;
+        ~StateBlock()                 = default;
+        StateBlock(const StateBlock&) = default;
         /**
          * Binds the state in this StateBlock to the renderer.
          *
          * This method handles both setting and restoring of render states to ensure that
          * only the state explicitly defined by this StateBlock is applied to the renderer.
          */
-        void bind(PipelineDescriptor *programState);
+        void bind(PipelineDescriptor* programState);
 
         /**
          * Explicitly sets the source and destination used in the blend function for this render state.
@@ -204,42 +202,40 @@ public:
         /** StateBlock bits to be used with invalidate */
         enum
         {
-            RS_BLEND = (1 << 0),
-            RS_BLEND_FUNC = (1 << 1),
-            RS_CULL_FACE = (1 << 2),
-            RS_DEPTH_TEST = (1 << 3),
-            RS_DEPTH_WRITE = (1 << 4),
-            RS_DEPTH_FUNC = (1 << 5),
+            RS_BLEND          = (1 << 0),
+            RS_BLEND_FUNC     = (1 << 1),
+            RS_CULL_FACE      = (1 << 2),
+            RS_DEPTH_TEST     = (1 << 3),
+            RS_DEPTH_WRITE    = (1 << 4),
+            RS_DEPTH_FUNC     = (1 << 5),
             RS_CULL_FACE_SIDE = (1 << 6),
-//            RS_STENCIL_TEST = (1 << 7),
-//            RS_STENCIL_WRITE = (1 << 8),
-//            RS_STENCIL_FUNC = (1 << 9),
-//            RS_STENCIL_OP = (1 << 10),
+            //            RS_STENCIL_TEST = (1 << 7),
+            //            RS_STENCIL_WRITE = (1 << 8),
+            //            RS_STENCIL_FUNC = (1 << 9),
+            //            RS_STENCIL_OP = (1 << 10),
             RS_FRONT_FACE = (1 << 11),
-            
+
             RS_ALL_ONES = 0xFFFFFFFF,
         };
 
     protected:
-        
         /**
-        * update internal states of ProgramState
-        */
-        void apply(PipelineDescriptor *pipelineDescriptor);
+         * update internal states of ProgramState
+         */
+        void apply(PipelineDescriptor* pipelineDescriptor);
 
-        static void restoreUnmodifiedStates(int32_t flags, PipelineDescriptor *pipelineDescriptor);
+        static void restoreUnmodifiedStates(int32_t flags, PipelineDescriptor* pipelineDescriptor);
 
-
-        bool _cullFaceEnabled = false;
-        bool _depthTestEnabled = true;
-        bool _depthWriteEnabled = false;
-        DepthFunction _depthFunction = DepthFunction::LESS;
-        bool _blendEnabled = true;
+        bool _cullFaceEnabled          = false;
+        bool _depthTestEnabled         = true;
+        bool _depthWriteEnabled        = false;
+        DepthFunction _depthFunction   = DepthFunction::LESS;
+        bool _blendEnabled             = true;
         backend::BlendFactor _blendSrc = backend::BlendFactor::ONE;
         backend::BlendFactor _blendDst = backend::BlendFactor::ZERO;
-        CullFaceSide _cullFaceSide = CullFaceSide::BACK;
-        FrontFace _frontFace = FrontFace::COUNTER_CLOCK_WISE;
-        int32_t _modifiedBits = 0L;
+        CullFaceSide _cullFaceSide     = CullFaceSide::BACK;
+        FrontFace _frontFace           = FrontFace::COUNTER_CLOCK_WISE;
+        int32_t _modifiedBits          = 0L;
 
         mutable uint32_t _hash;
         mutable bool _hashDirty;
@@ -249,8 +245,8 @@ public:
 
 protected:
     RenderState() = default;
-    
-    mutable uint32_t _hash = 0;
+
+    mutable uint32_t _hash  = 0;
     mutable bool _hashDirty = true;
 
     /**

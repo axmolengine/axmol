@@ -6,16 +6,13 @@
 
 DRAGONBONES_NAMESPACE_BEGIN
 
-class ActionFrame 
+class ActionFrame
 {
 public:
     unsigned frameStart;
     std::vector<unsigned> actions;
 
-    bool operator < (const ActionFrame& b) const
-    {
-        return frameStart < b.frameStart;
-    }
+    bool operator<(const ActionFrame& b) const { return frameStart < b.frameStart; }
 };
 
 class JSONDataParser : public DataParser
@@ -35,14 +32,8 @@ protected:
             else if (value.IsString())
             {
                 const std::string stringValue = value.GetString();
-                if (
-                    stringValue == "0" ||
-                    stringValue == "NaN" ||
-                    stringValue == "" ||
-                    stringValue == "false" ||
-                    stringValue == "null" ||
-                    stringValue == "undefined"
-                )
+                if (stringValue == "0" || stringValue == "NaN" || stringValue == "" || stringValue == "false" ||
+                    stringValue == "null" || stringValue == "undefined")
                 {
                     return false;
                 }
@@ -82,13 +73,15 @@ protected:
     {
         if (rawData.HasMember(key) && rawData[key].IsNumber())
         {
-            return rawData[key].GetDouble(); // cocos can not support GetFloat();
+            return rawData[key].GetDouble();  // cocos can not support GetFloat();
         }
 
         return defaultValue;
     }
 
-    inline static std::string _getString(const rapidjson::Value& rawData, const char* key, const std::string& defaultValue)
+    inline static std::string _getString(const rapidjson::Value& rawData,
+                                         const char* key,
+                                         const std::string& defaultValue)
     {
         if (rawData.HasMember(key))
         {
@@ -107,7 +100,7 @@ protected:
     {
         if (rawData.Size() > index)
         {
-            return rawData[(int) index].GetInt();
+            return rawData[(int)index].GetInt();
         }
 
         return defaultValue;
@@ -117,17 +110,19 @@ protected:
     {
         if (rawData.Size() > index)
         {
-            return rawData[(int) index].GetDouble();
+            return rawData[(int)index].GetDouble();
         }
 
         return defaultValue;
     }
 
-    inline static std::string _getParameter(const rapidjson::Value& rawData, std::size_t index, const std::string& defaultValue)
+    inline static std::string _getParameter(const rapidjson::Value& rawData,
+                                            std::size_t index,
+                                            const std::string& defaultValue)
     {
         if (rawData.Size() > index)
         {
-            return rawData[(int) index].GetString();
+            return rawData[(int)index].GetString();
         }
 
         return defaultValue;
@@ -171,56 +166,63 @@ private:
     std::map<std::string, std::vector<ActionData*>> _slotChildActions;
 
 public:
-    JSONDataParser() :
-        _rawTextureAtlasIndex(0),
-        _rawBones(),
-        _data(nullptr),
-        _armature(nullptr),
-        _bone(nullptr),
-        _slot(nullptr),
-        _skin(nullptr),
-        _mesh(nullptr),
-        _animation(nullptr),
-        _timeline(nullptr),
-        _rawTextureAtlases(nullptr),
+    JSONDataParser()
+        : _rawTextureAtlasIndex(0)
+        , _rawBones()
+        , _data(nullptr)
+        , _armature(nullptr)
+        , _bone(nullptr)
+        , _slot(nullptr)
+        , _skin(nullptr)
+        , _mesh(nullptr)
+        , _animation(nullptr)
+        , _timeline(nullptr)
+        , _rawTextureAtlases(nullptr)
+        ,
 
-        _defaultColorOffset(-1),
-        _prevClockwise(0),
-        _prevRotation(0.0f),
-        _helpMatrixA(),
-        _helpMatrixB(),
-        _helpTransform(),
-        _helpColorTransform(),
-        _helpPoint(),
-        _helpArray(),
-        _intArray(),
-        _floatArray(),
-        _frameIntArray(),
-        _frameFloatArray(),
-        _frameArray(),
-        _timelineArray(),
-        _cacheMeshes(),
-        _cacheRawMeshes(),
-        _actionFrames(),
-        _weightSlotPose(),
-        _weightBonePoses(),
-        _cacheBones(),
-        _slotChildActions()
-    {
-    }
-    virtual ~JSONDataParser()
-    {
-    }
+        _defaultColorOffset(-1)
+        , _prevClockwise(0)
+        , _prevRotation(0.0f)
+        , _helpMatrixA()
+        , _helpMatrixB()
+        , _helpTransform()
+        , _helpColorTransform()
+        , _helpPoint()
+        , _helpArray()
+        , _intArray()
+        , _floatArray()
+        , _frameIntArray()
+        , _frameFloatArray()
+        , _frameArray()
+        , _timelineArray()
+        , _cacheMeshes()
+        , _cacheRawMeshes()
+        , _actionFrames()
+        , _weightSlotPose()
+        , _weightBonePoses()
+        , _cacheBones()
+        , _slotChildActions()
+    {}
+    virtual ~JSONDataParser() {}
 
 private:
-    void _getCurvePoint(
-        float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, 
-        float t,
-        Point& result
-    );
+    void _getCurvePoint(float x1,
+                        float y1,
+                        float x2,
+                        float y2,
+                        float x3,
+                        float y3,
+                        float x4,
+                        float y4,
+                        float t,
+                        Point& result);
     void _samplingEasingCurve(const rapidjson::Value& curve, std::vector<float>& samples);
     void _parseActionDataInFrame(const rapidjson::Value& rawData, unsigned frameStart, BoneData* bone, SlotData* slot);
-    void _mergeActionFrame(const rapidjson::Value& rawData, unsigned frameStart, ActionType type, BoneData* bone, SlotData* slot);
+    void _mergeActionFrame(const rapidjson::Value& rawData,
+                           unsigned frameStart,
+                           ActionType type,
+                           BoneData* bone,
+                           SlotData* slot);
     unsigned _parseCacheActionFrame(ActionFrame& frame);
 
 protected:
@@ -236,10 +238,14 @@ protected:
     virtual PolygonBoundingBoxData* _parsePolygonBoundingBox(const rapidjson::Value& rawData);
     virtual AnimationData* _parseAnimation(const rapidjson::Value& rawData);
     virtual TimelineData* _parseTimeline(
-        const rapidjson::Value& rawData, const char* framesKey, TimelineType type,
-        bool addIntOffset, bool addFloatOffset, unsigned frameValueCount,
-        const std::function<unsigned(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount)>& frameParser
-    );
+        const rapidjson::Value& rawData,
+        const char* framesKey,
+        TimelineType type,
+        bool addIntOffset,
+        bool addFloatOffset,
+        unsigned frameValueCount,
+        const std::function<unsigned(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount)>&
+            frameParser);
     virtual void _parseBoneTimeline(const rapidjson::Value& rawData);
     virtual void _parseSlotTimeline(const rapidjson::Value& rawData);
     virtual unsigned _parseFrame(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount);
@@ -247,24 +253,33 @@ protected:
     virtual unsigned _parseActionFrame(const ActionFrame& rawData, unsigned frameStart, unsigned frameCount);
     virtual unsigned _parseZOrderFrame(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount);
     virtual unsigned _parseBoneAllFrame(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount);
-    virtual unsigned _parseBoneTranslateFrame(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount);
+    virtual unsigned _parseBoneTranslateFrame(const rapidjson::Value& rawData,
+                                              unsigned frameStart,
+                                              unsigned frameCount);
     virtual unsigned _parseBoneRotateFrame(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount);
     virtual unsigned _parseBoneScaleFrame(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount);
     virtual unsigned _parseSlotDisplayFrame(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount);
     virtual unsigned _parseSlotColorFrame(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount);
     virtual unsigned _parseSlotFFDFrame(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount);
     virtual unsigned _parseIKConstraintFrame(const rapidjson::Value& rawData, unsigned frameStart, unsigned frameCount);
-    virtual const std::vector<ActionData*>& _parseActionData(const rapidjson::Value& rawData, ActionType type, BoneData* bone, SlotData* slot);
+    virtual const std::vector<ActionData*>& _parseActionData(const rapidjson::Value& rawData,
+                                                             ActionType type,
+                                                             BoneData* bone,
+                                                             SlotData* slot);
     virtual void _parseTransform(const rapidjson::Value& rawData, Transform& transform, float scale);
     virtual void _parseColorTransform(const rapidjson::Value& rawData, ColorTransform& color);
     virtual void _parseArray(const rapidjson::Value& rawData);
     virtual DragonBonesData* _parseDragonBonesData(const rapidjson::Value& rawData, float scale = 1.0f);
-    virtual void _parseTextureAtlasData(const rapidjson::Value& rawData, TextureAtlasData& textureAtlasData, float scale = 1.0f);
+    virtual void _parseTextureAtlasData(const rapidjson::Value& rawData,
+                                        TextureAtlasData& textureAtlasData,
+                                        float scale = 1.0f);
 
 public:
     virtual DragonBonesData* parseDragonBonesData(const char* rawData, float scale = 1.0f) override;
-    virtual bool parseTextureAtlasData(const char* rawData, TextureAtlasData& textureAtlasData, float scale = 1.0f) override;
+    virtual bool parseTextureAtlasData(const char* rawData,
+                                       TextureAtlasData& textureAtlasData,
+                                       float scale = 1.0f) override;
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_JSON_DATA_PARSER_H
+#endif  // DRAGONBONES_JSON_DATA_PARSER_H

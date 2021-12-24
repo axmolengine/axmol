@@ -42,7 +42,7 @@ namespace network
 class Uri;
 struct CookieInfo
 {
-    CookieInfo() = default;
+    CookieInfo()                  = default;
     CookieInfo(const CookieInfo&) = default;
     CookieInfo(CookieInfo&& rhs)
         : domain(std::move(rhs.domain))

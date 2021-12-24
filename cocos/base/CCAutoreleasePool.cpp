@@ -29,19 +29,19 @@ THE SOFTWARE.
 NS_CC_BEGIN
 
 AutoreleasePool::AutoreleasePool()
-: _name("")
+    : _name("")
 #if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
-, _isClearing(false)
+    , _isClearing(false)
 #endif
 {
     _managedObjectArray.reserve(150);
     PoolManager::getInstance()->push(this);
 }
 
-AutoreleasePool::AutoreleasePool(const std::string &name)
-: _name(name)
+AutoreleasePool::AutoreleasePool(const std::string& name)
+    : _name(name)
 #if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
-, _isClearing(false)
+    , _isClearing(false)
 #endif
 {
     _managedObjectArray.reserve(150);
@@ -52,7 +52,7 @@ AutoreleasePool::~AutoreleasePool()
 {
     CCLOGINFO("deallocing AutoreleasePool: %p", this);
     clear();
-    
+
     PoolManager::getInstance()->pop();
 }
 
@@ -68,7 +68,7 @@ void AutoreleasePool::clear()
 #endif
     std::vector<Ref*> releasings;
     releasings.swap(_managedObjectArray);
-    for (const auto &obj : releasings)
+    for (const auto& obj : releasings)
     {
         obj->release();
     }
@@ -89,14 +89,14 @@ bool AutoreleasePool::contains(Ref* object) const
 
 void AutoreleasePool::dump()
 {
-    CCLOG("autorelease pool: %s, number of managed object %d\n", _name.c_str(), static_cast<int>(_managedObjectArray.size()));
+    CCLOG("autorelease pool: %s, number of managed object %d\n", _name.c_str(),
+          static_cast<int>(_managedObjectArray.size()));
     CCLOG("%20s%20s%20s", "Object pointer", "Object id", "reference count");
-    for (const auto &obj : _managedObjectArray)
+    for (const auto& obj : _managedObjectArray)
     {
         CCLOG("%20p%20u\n", obj, obj->getReferenceCount());
     }
 }
-
 
 //--------------------------------------------------------------------
 //
@@ -131,15 +131,14 @@ PoolManager::PoolManager()
 PoolManager::~PoolManager()
 {
     CCLOGINFO("deallocing PoolManager: %p", this);
-    
+
     while (!_releasePoolStack.empty())
     {
         AutoreleasePool* pool = _releasePoolStack.back();
-        
+
         delete pool;
     }
 }
-
 
 AutoreleasePool* PoolManager::getCurrentPool() const
 {
@@ -156,7 +155,7 @@ bool PoolManager::isObjectInPools(Ref* obj) const
     return false;
 }
 
-void PoolManager::push(AutoreleasePool *pool)
+void PoolManager::push(AutoreleasePool* pool)
 {
     _releasePoolStack.push_back(pool);
 }

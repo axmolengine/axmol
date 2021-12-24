@@ -14,7 +14,8 @@ CC_BACKEND_BEGIN
  * @{
  * #todo: Rename to ProgramStateRegistry
  */
-class ProgramStateRegistry : public Ref {
+class ProgramStateRegistry : public Ref
+{
 public:
     /** returns the shared instance */
     static ProgramStateRegistry* getInstance();
@@ -31,10 +32,9 @@ public:
     uint32_t getProgramType(uint32_t programType, int textureSamplerFlags);
 
 protected:
-
     std::unordered_map<uint32_t, Program*> _registry;
 };
 
-//end of _backend group
+// end of _backend group
 /// @}
 CC_BACKEND_END

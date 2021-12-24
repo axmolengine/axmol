@@ -8,11 +8,11 @@ DRAGONBONES_NAMESPACE_BEGIN
 
 void ConstraintData::_onClear()
 {
-    order = 0;
-    name = "";
+    order  = 0;
+    name   = "";
     target = nullptr;
-    root = nullptr;
-    bone = nullptr;
+    root   = nullptr;
+    bone   = nullptr;
 }
 
 void IKConstraintData::_onClear()
@@ -21,7 +21,7 @@ void IKConstraintData::_onClear()
 
     scaleEnabled = false;
     bendPositive = false;
-    weight = 1.0f;
+    weight       = 1.0f;
 }
 
 DRAGONBONES_NAMESPACE_END

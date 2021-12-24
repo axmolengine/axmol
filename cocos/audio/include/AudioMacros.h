@@ -40,20 +40,22 @@
 // log, CCLOG aren't threadsafe, since we uses sub threads for parsing pcm data, threadsafe log output
 // is needed. Define the following macros (ALOGV, ALOGD, ALOGI, ALOGW, ALOGE) for threadsafe log output.
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-#include "base/ccUTF8.h" // for StringUtils::format
-#define AUDIO_LOG(fmt, ...)  \
-  OutputDebugStringA(StringUtils::format( (fmt "\r\n"),  ##__VA_ARGS__ ).c_str())
+#    include "base/ccUTF8.h"  // for StringUtils::format
+#    define AUDIO_LOG(fmt, ...) OutputDebugStringA(StringUtils::format((fmt "\r\n"), ##__VA_ARGS__).c_str())
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-#include <android/log.h>
-#define AUDIO_LOG(fmt, ...) __android_log_print(ANDROID_LOG_DEBUG, "AudioEngine", fmt, ##__VA_ARGS__)
-#else // other platforms
-#define AUDIO_LOG(fmt,...) printf(fmt "\n", ##__VA_ARGS__)
+#    include <android/log.h>
+#    define AUDIO_LOG(fmt, ...) __android_log_print(ANDROID_LOG_DEBUG, "AudioEngine", fmt, ##__VA_ARGS__)
+#else  // other platforms
+#    define AUDIO_LOG(fmt, ...) printf(fmt "\n", ##__VA_ARGS__)
 #endif
 
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
-#define ALOGV(fmt, ...) AUDIO_LOG("V/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
+#    define ALOGV(fmt, ...) AUDIO_LOG("V/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 #else
-#define ALOGV(fmt, ...) do {} while(false)
+#    define ALOGV(fmt, ...) \
+        do                  \
+        {                   \
+        } while (false)
 #endif
 #define ALOGD(fmt, ...) AUDIO_LOG("D/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 #define ALOGI(fmt, ...) AUDIO_LOG("I/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
@@ -61,26 +63,30 @@
 #define ALOGE(fmt, ...) AUDIO_LOG("E/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
-#define CHECK_AL_ERROR_DEBUG() \
-do { \
-    ALenum __error = alGetError(); \
-    if (__error) { \
-        ALOGE("OpenAL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-    } \
-} while (false)
+#    define CHECK_AL_ERROR_DEBUG()                                                                     \
+        do                                                                                             \
+        {                                                                                              \
+            ALenum __error = alGetError();                                                             \
+            if (__error)                                                                               \
+            {                                                                                          \
+                ALOGE("OpenAL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
+            }                                                                                          \
+        } while (false)
 #else
-#define CHECK_AL_ERROR_DEBUG()
+#    define CHECK_AL_ERROR_DEBUG()
 #endif
 
 #define BREAK_IF(condition) \
-    if (!!(condition)) { \
-        break; \
+    if (!!(condition))      \
+    {                       \
+        break;              \
     }
 
-#define BREAK_IF_ERR_LOG(condition, fmt, ...) \
-    if (!!(condition)) { \
+#define BREAK_IF_ERR_LOG(condition, fmt, ...)                                   \
+    if (!!(condition))                                                          \
+    {                                                                           \
         ALOGE("(" QUOTEME(condition) ") failed, message: " fmt, ##__VA_ARGS__); \
-        break; \
+        break;                                                                  \
     }
 
 #define AUDIO_ID int

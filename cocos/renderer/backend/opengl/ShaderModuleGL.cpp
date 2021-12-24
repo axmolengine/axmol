@@ -22,7 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "ShaderModuleGL.h"
 
 #include "platform/CCPlatformMacros.h"
@@ -31,8 +31,7 @@
 
 CC_BACKEND_BEGIN
 
-ShaderModuleGL::ShaderModuleGL(ShaderStage stage, const std::string& source)
-: ShaderModule(stage)
+ShaderModuleGL::ShaderModuleGL(ShaderStage stage, const std::string& source) : ShaderModule(stage)
 {
     compileShader(stage, source);
 }
@@ -42,17 +41,17 @@ ShaderModuleGL::~ShaderModuleGL()
     deleteShader();
 }
 
-void ShaderModuleGL::compileShader(ShaderStage stage, const std::string &source)
+void ShaderModuleGL::compileShader(ShaderStage stage, const std::string& source)
 {
-    GLenum shaderType = stage == ShaderStage::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
+    GLenum shaderType       = stage == ShaderStage::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
     const GLchar* sourcePtr = reinterpret_cast<const GLchar*>(source.c_str());
-    _shader = glCreateShader(shaderType);
+    _shader                 = glCreateShader(shaderType);
     if (!_shader)
         return;
-    
+
     glShaderSource(_shader, 1, &sourcePtr, nullptr);
     glCompileShader(_shader);
-    
+
     GLint status = 0;
     glGetShaderiv(_shader, GL_COMPILE_STATUS, &status);
     if (!status)
@@ -60,12 +59,15 @@ void ShaderModuleGL::compileShader(ShaderStage stage, const std::string &source)
         GLint logLength = 0;
         glGetShaderiv(_shader, GL_INFO_LOG_LENGTH, &logLength);
 
-        if (logLength > 1) {
+        if (logLength > 1)
+        {
             cocos2d::Data errorLog{};
-            glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*) errorLog.resize(logLength));
-            cocos2d::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.getBytes(), source.c_str());
+            glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.resize(logLength));
+            cocos2d::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.getBytes(),
+                         source.c_str());
         }
-        else {
+        else
+        {
             cocos2d::log("cocos2d: ERROR: Failed to compile shader without errors.");
         }
 

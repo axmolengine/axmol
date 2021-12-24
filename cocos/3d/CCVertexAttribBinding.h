@@ -49,7 +49,7 @@ class VertexAttribValue;
  * between a Mesh and Effect to satisfy the OpenGL requirement of one VAO per VBO.
  *
  * Note that this class still does provide a binding between a VertexFormat
- * and an Effect, however this binding is actually a client-side binding and 
+ * and an Effect, however this binding is actually a client-side binding and
  * should only be used when writing custom code that use client-side vertex
  * arrays, since it is slower than the server-side VAOs used by OpenGL
  * (when creating a VertexAttribBinding between a Mesh and Effect).
@@ -57,7 +57,6 @@ class VertexAttribValue;
 class CC_DLL VertexAttribBinding : public Ref
 {
 public:
-
     /**
      * Creates a new VertexAttribBinding between the given MeshVertexData and GLProgramState.
      *
@@ -69,27 +68,27 @@ public:
      *
      * @param mesh The mesh.
      * @param effect The effect.
-     * 
+     *
      * @return A VertexAttribBinding for the requested parameters.
      */
-    static VertexAttribBinding* create(MeshIndexData* meshIndexData, Pass *pass, MeshCommand *);
+    static VertexAttribBinding* create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
 
     /**
      * Binds this vertex array object.
      */
-    //void bind(backend::VertexLayout &layout);
+    // void bind(backend::VertexLayout &layout);
 
     /**
      * Unbinds this vertex array object.
      */
-    //void unbind();
+    // void unbind();
 
     /**
      * Returns the vertex attrib flags
      */
     uint32_t getVertexAttribsFlags() const;
 
-    bool hasAttribute(const shaderinfos::VertexKey &key) const;
+    bool hasAttribute(const shaderinfos::VertexKey& key) const;
 
 private:
     /**
@@ -106,12 +105,16 @@ private:
      * Hidden copy assignment operator.
      */
     VertexAttribBinding& operator=(const VertexAttribBinding&);
-    
-    bool init(MeshIndexData* meshIndexData, Pass *pass, MeshCommand *);
-    void setVertexAttribPointer(const std::string& name, backend::VertexFormat type, bool normalized, int offset, int flag);
-    backend::AttributeBindInfo* getVertexAttribValue(const std::string &name);
+
+    bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
+    void setVertexAttribPointer(const std::string& name,
+                                backend::VertexFormat type,
+                                bool normalized,
+                                int offset,
+                                int flag);
+    backend::AttributeBindInfo* getVertexAttribValue(const std::string& name);
     void parseAttributes();
-    
+
     MeshIndexData* _meshIndexData;
     backend::ProgramState* _programState;
     std::shared_ptr<backend::VertexLayout> _vertexLayout = std::make_shared<backend::VertexLayout>();
@@ -119,6 +122,4 @@ private:
     uint32_t _vertexAttribsFlags;
 };
 
-
 NS_CC_END
-

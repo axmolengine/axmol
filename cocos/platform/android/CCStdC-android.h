@@ -38,9 +38,9 @@ THE SOFTWARE.
 #include <cassert>
 
 #ifndef MIN
-#define MIN(x,y) (((x) > (y)) ? (y) : (x))
+#    define MIN(x, y) (((x) > (y)) ? (y) : (x))
 #endif  // MIN
 
 #ifndef MAX
-#define MAX(x,y) (((x) < (y)) ? (y) : (x))
+#    define MAX(x, y) (((x) < (y)) ? (y) : (x))
 #endif  // MAX

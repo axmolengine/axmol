@@ -29,7 +29,7 @@
 #include "math/Vec4.h"
 
 #ifdef __SSE__
-#include <xmmintrin.h>
+#    include <xmmintrin.h>
 #endif
 
 /**
@@ -39,7 +39,7 @@
 
 NS_CC_MATH_BEGIN
 
-//class Plane;
+// class Plane;
 
 /**
  * Defines a 4 x 4 floating point matrix representing a 3D transformation.
@@ -82,7 +82,7 @@ public:
     //     kmMat4Fill(&result, m);
     //     return result;
     // }
-    
+
     // Mat4(const kmMat4& mat)
     // {
     //     set(mat.mat);
@@ -91,7 +91,8 @@ public:
      * Stores the columns of this 4x4 matrix.
      * */
 #ifdef __SSE__
-    union {
+    union
+    {
         __m128 col[4];
         float m[16];
     };
@@ -99,7 +100,7 @@ public:
     float m[16];
 #endif
 
-    /** 
+    /**
      * Default constructor.
      * Constructs a matrix initialized to the identity matrix:
      *
@@ -130,8 +131,22 @@ public:
      * @param m43 The third element of the fourth row.
      * @param m44 The fourth element of the fourth row.
      */
-    Mat4(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
-           float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44);
+    Mat4(float m11,
+         float m12,
+         float m13,
+         float m14,
+         float m21,
+         float m22,
+         float m23,
+         float m24,
+         float m31,
+         float m32,
+         float m33,
+         float m34,
+         float m41,
+         float m42,
+         float m43,
+         float m44);
 
     /**
      * Creates a matrix initialized to the specified column-major array.
@@ -183,9 +198,16 @@ public:
      * @param upZ The up vector z-coordinate value.
      * @param dst A matrix to store the result in.
      */
-    static void createLookAt(float eyePositionX, float eyePositionY, float eyePositionZ,
-                             float targetCenterX, float targetCenterY, float targetCenterZ,
-                             float upX, float upY, float upZ, Mat4* dst);
+    static void createLookAt(float eyePositionX,
+                             float eyePositionY,
+                             float eyePositionZ,
+                             float targetCenterX,
+                             float targetCenterY,
+                             float targetCenterZ,
+                             float upX,
+                             float upY,
+                             float upZ,
+                             Mat4* dst);
 
     /**
      * Builds a perspective projection matrix based on a field of view and returns by value.
@@ -242,8 +264,13 @@ public:
      * @param zFarPlane The maximum z-value of the view volume.
      * @param dst A matrix to store the result in.
      */
-    static void createOrthographicOffCenter(float left, float right, float bottom, float top,
-                                            float zNearPlane, float zFarPlane, Mat4* dst);
+    static void createOrthographicOffCenter(float left,
+                                            float right,
+                                            float bottom,
+                                            float top,
+                                            float zNearPlane,
+                                            float zFarPlane,
+                                            Mat4* dst);
 
     /**
      * Creates a spherical billboard that rotates around a specified object position.
@@ -259,8 +286,10 @@ public:
      * @param cameraUpVector The up vector of the camera.
      * @param dst A matrix to store the result in.
      */
-    static void createBillboard(const Vec3& objectPosition, const Vec3& cameraPosition,
-                                const Vec3& cameraUpVector, Mat4* dst);
+    static void createBillboard(const Vec3& objectPosition,
+                                const Vec3& cameraPosition,
+                                const Vec3& cameraUpVector,
+                                Mat4* dst);
 
     /**
      * Creates a spherical billboard that rotates around a specified object position with
@@ -278,14 +307,16 @@ public:
      * @param cameraForwardVector The forward vector of the camera, used if the positions are too close.
      * @param dst A matrix to store the result in.
      */
-    static void createBillboard(const Vec3& objectPosition, const Vec3& cameraPosition,
-                                const Vec3& cameraUpVector, const Vec3& cameraForwardVector,
+    static void createBillboard(const Vec3& objectPosition,
+                                const Vec3& cameraPosition,
+                                const Vec3& cameraUpVector,
+                                const Vec3& cameraForwardVector,
                                 Mat4* dst);
 
-    //Fills in an existing Mat4 so that it reflects the coordinate system about a specified Plane.
-    //plane The Plane about which to create a reflection.
-    //dst A matrix to store the result in.
-    //static void createReflection(const Plane& plane, Mat4* dst);
+    // Fills in an existing Mat4 so that it reflects the coordinate system about a specified Plane.
+    // plane The Plane about which to create a reflection.
+    // dst A matrix to store the result in.
+    // static void createReflection(const Plane& plane, Mat4* dst);
 
     /**
      * Creates a scale matrix.
@@ -427,7 +458,7 @@ public:
      * Gets the rotational component of this matrix in the specified quaternion.
      *
      * @param rotation A quaternion to receive the rotation.
-     * 
+     *
      * @return true if the rotation is successfully extracted, false otherwise.
      */
     bool getRotation(Quaternion* rotation) const;
@@ -712,8 +743,22 @@ public:
      * @param m43 The third element of the fourth row.
      * @param m44 The fourth element of the fourth row.
      */
-    void set(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
-             float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44);
+    void set(float m11,
+             float m12,
+             float m13,
+             float m14,
+             float m21,
+             float m22,
+             float m23,
+             float m24,
+             float m31,
+             float m32,
+             float m33,
+             float m34,
+             float m41,
+             float m42,
+             float m43,
+             float m44);
 
     /**
      * Sets the values of this matrix to those in the specified column-major array.
@@ -762,7 +807,11 @@ public:
      *
      * @param point The point to transform and also a vector to hold the result in.
      */
-    inline void transformPoint(Vec3* point) const { GP_ASSERT(point); transformVector(point->x, point->y, point->z, 1.0f, point); }
+    inline void transformPoint(Vec3* point) const
+    {
+        GP_ASSERT(point);
+        transformVector(point->x, point->y, point->z, 1.0f, point);
+    }
 
     /**
      * Transforms the specified point by this matrix, and stores
@@ -771,7 +820,11 @@ public:
      * @param point The point to transform.
      * @param dst A vector to store the transformed point in.
      */
-    inline void transformPoint(const Vec3& point, Vec3* dst) const { GP_ASSERT(dst); transformVector(point.x, point.y, point.z, 1.0f, dst); }
+    inline void transformPoint(const Vec3& point, Vec3* dst) const
+    {
+        GP_ASSERT(dst);
+        transformVector(point.x, point.y, point.z, 1.0f, dst);
+    }
 
     /**
      * Transforms the specified vector by this matrix by
@@ -871,17 +924,17 @@ public:
 
     /**
      * Calculates the sum of this matrix with the given matrix.
-     * 
+     *
      * Note: this does not modify this matrix.
-     * 
+     *
      * @param mat The matrix to add.
      * @return The matrix sum.
      */
     inline Mat4 operator+(const Mat4& mat) const;
-    
+
     /**
      * Adds the given matrix to this matrix.
-     * 
+     *
      * @param mat The matrix to add.
      * @return This matrix, after the addition occurs.
      */
@@ -889,9 +942,9 @@ public:
 
     /**
      * Calculates the difference of this matrix with the given matrix.
-     * 
+     *
      * Note: this does not modify this matrix.
-     * 
+     *
      * @param mat The matrix to subtract.
      * @return The matrix difference.
      */
@@ -899,7 +952,7 @@ public:
 
     /**
      * Subtracts the given matrix from this matrix.
-     * 
+     *
      * @param mat The matrix to subtract.
      * @return This matrix, after the subtraction occurs.
      */
@@ -907,18 +960,18 @@ public:
 
     /**
      * Calculates the negation of this matrix.
-     * 
+     *
      * Note: this does not modify this matrix.
-     * 
+     *
      * @return The negation of this matrix.
      */
     inline Mat4 operator-() const;
 
     /**
      * Calculates the matrix product of this matrix with the given matrix.
-     * 
+     *
      * Note: this does not modify this matrix.
-     * 
+     *
      * @param mat The matrix to multiply by.
      * @return The matrix product.
      */
@@ -926,7 +979,7 @@ public:
 
     /**
      * Right-multiplies this matrix by the given matrix.
-     * 
+     *
      * @param mat The matrix to multiply by.
      * @return This matrix, after the multiplication occurs.
      */
@@ -938,17 +991,18 @@ public:
     static const Mat4 IDENTITY;
 
 private:
-
-    static void createBillboardHelper(const Vec3& objectPosition, const Vec3& cameraPosition,
-                                      const Vec3& cameraUpVector, const Vec3* cameraForwardVector,
+    static void createBillboardHelper(const Vec3& objectPosition,
+                                      const Vec3& cameraPosition,
+                                      const Vec3& cameraUpVector,
+                                      const Vec3* cameraForwardVector,
                                       Mat4* dst);
 };
 
 /**
  * Transforms the given vector by the given matrix.
- * 
+ *
  * Note: this treats the given vector as a vector and not as a point.
- * 
+ *
  * @param v The vector to transform.
  * @param m The matrix to transform by.
  * @return This vector, after the transformation occurs.
@@ -957,9 +1011,9 @@ inline Vec3& operator*=(Vec3& v, const Mat4& m);
 
 /**
  * Transforms the given vector by the given matrix.
- * 
+ *
  * Note: this treats the given vector as a vector and not as a point.
- * 
+ *
  * @param m The matrix to transform by.
  * @param v The vector to transform.
  * @return The resulting transformed vector.
@@ -968,9 +1022,9 @@ inline Vec3 operator*(const Mat4& m, const Vec3& v);
 
 /**
  * Transforms the given vector by the given matrix.
- * 
+ *
  * Note: this treats the given vector as a vector and not as a point.
- * 
+ *
  * @param v The vector to transform.
  * @param m The matrix to transform by.
  * @return This vector, after the transformation occurs.
@@ -979,9 +1033,9 @@ inline Vec4& operator*=(Vec4& v, const Mat4& m);
 
 /**
  * Transforms the given vector by the given matrix.
- * 
+ *
  * Note: this treats the given vector as a vector and not as a point.
- * 
+ *
  * @param m The matrix to transform by.
  * @param v The vector to transform.
  * @return The resulting transformed vector.
@@ -995,4 +1049,4 @@ NS_CC_MATH_END
  */
 #include "math/Mat4.inl"
 
-#endif // MATH_MAT4_H
+#endif  // MATH_MAT4_H

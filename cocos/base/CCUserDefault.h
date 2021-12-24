@@ -40,12 +40,11 @@ THE SOFTWARE.
  */
 NS_CC_BEGIN
 
-
 /**
  * UserDefault acts as a tiny database. You can save and get base type values by it.
  * For example, setBoolForKey("played", true) will add a bool value true into the database.
  * Its key is "played". You can get the value of the key by getBoolForKey("played").
- * 
+ *
  * It supports the following base types:
  * bool, int, float, double, string
  *
@@ -64,8 +63,8 @@ public:
      * @return Bool value by `key`.
      * @js NA
      */
-    bool    getBoolForKey(const char* key);
-    
+    bool getBoolForKey(const char* key);
+
     /**
      * Get bool value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
@@ -73,7 +72,7 @@ public:
      * @js NA
      */
     virtual bool getBoolForKey(const char* key, bool defaultValue);
-    
+
     /**
      * Get integer value by key, if the key doesn't exist, will return 0.
      * You can set the default value, or it is 0.
@@ -81,8 +80,8 @@ public:
      * @return Integer value of the key.
      * @js NA
      */
-    int     getIntegerForKey(const char* key);
-    
+    int getIntegerForKey(const char* key);
+
     /**
      * Get integer value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
@@ -99,7 +98,7 @@ public:
      * @return Integer value of the key.
      * @js NA
      */
-    int64_t   getLargeIntForKey(const char* key);
+    int64_t getLargeIntForKey(const char* key);
 
     /**
      * Get large integer value by key, if the key doesn't exist, will return passed default value.
@@ -109,15 +108,15 @@ public:
      * @js NA
      */
     virtual int64_t getLargeIntForKey(const char* key, int64_t defaultValue);
-    
+
     /**
      * Get float value by key, if the key doesn't exist, will return 0.0.
      * @param key The key to get value.
      * @return Float value of the key.
      * @js NA
      */
-    float    getFloatForKey(const char* key);
-    
+    float getFloatForKey(const char* key);
+
     /**
      * Get float value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
@@ -126,15 +125,15 @@ public:
      * @js NA
      */
     virtual float getFloatForKey(const char* key, float defaultValue);
-    
+
     /**
      * Get double value by key, if the key doesn't exist, will return 0.0.
      * @param key The key to get value.
      * @return Double value of the key.
      * @js NA
      */
-    double  getDoubleForKey(const char* key);
-    
+    double getDoubleForKey(const char* key);
+
     /**
      * Get double value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
@@ -143,7 +142,7 @@ public:
      * @js NA
      */
     virtual double getDoubleForKey(const char* key, double defaultValue);
-    
+
     /**
      * Get string value by key, if the key doesn't exist, will return an empty string.
      * @param key The key to get value.
@@ -151,7 +150,7 @@ public:
      * @js NA
      */
     std::string getStringForKey(const char* key);
-    
+
     /**
      * Get string value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
@@ -159,8 +158,8 @@ public:
      * @return String value of the key.
      * @js NA
      */
-    virtual std::string getStringForKey(const char* key, const std::string & defaultValue);
-    
+    virtual std::string getStringForKey(const char* key, const std::string& defaultValue);
+
     // set value methods
 
     /**
@@ -204,7 +203,7 @@ public:
      * @param value A string value to set to the key.
      * @js NA
      */
-    virtual void setStringForKey(const char* key, const std::string & value);
+    virtual void setStringForKey(const char* key, const std::string& value);
 
     /**
      * Since we reimplement UserDefault with file mapping io,
@@ -214,12 +213,12 @@ public:
     virtual void flush();
 
     /**
-    * delete any value by key,
-    * @param key The key to delete value.
-    * @js NA
-    */
+     * delete any value by key,
+     * @param key The key to delete value.
+     * @js NA
+     */
     virtual void deleteValueForKey(const char* key);
-    
+
     /** Returns the singleton.
      * @js NA
      * @lua NA
@@ -231,16 +230,16 @@ public:
     static void destroyInstance();
 
     /**
-    * You can inherit from platform dependent implementation of UserDefault, such as UserDefaultAndroid,
-    * and use this function to set delegate, then UserDefault will invoke delegate's implementation.
-    * For example, your store native data base or other format store.
-    *
-    * If you don't want to system default implementation after setting delegate, you can just pass nullptr
-    * to this function.
-    *
-    * @warning It will delete previous delegate
-    */
-    static void setDelegate(UserDefault *delegate);
+     * You can inherit from platform dependent implementation of UserDefault, such as UserDefaultAndroid,
+     * and use this function to set delegate, then UserDefault will invoke delegate's implementation.
+     * For example, your store native data base or other format store.
+     *
+     * If you don't want to system default implementation after setting delegate, you can just pass nullptr
+     * to this function.
+     *
+     * @warning It will delete previous delegate
+     */
+    static void setDelegate(UserDefault* delegate);
 
     /*
     ** @params:
@@ -250,9 +249,9 @@ public:
     virtual void setEncryptEnabled(bool enabled, cxx17::string_view key, cxx17::string_view iv);
 
     /*
-    *  Mark encrypt function as virtual, default use AES cfb128 encrypt/decrypt
-    *  you can write your own delegate to replace encrypt/decrypt algorithm
-    */
+     *  Mark encrypt function as virtual, default use AES cfb128 encrypt/decrypt
+     *  you can write your own delegate to replace encrypt/decrypt algorithm
+     */
     virtual void encrypt(char* inout, size_t size, int enc);
 
     void encrypt(std::string& inout, int enc);
@@ -260,7 +259,7 @@ public:
 protected:
     UserDefault();
     virtual ~UserDefault();
-    
+
     void lazyInit();
 
     void closeFileMapping();
@@ -275,15 +274,14 @@ protected:
     void updateValueForKey(const std::string& key, const std::string& value);
 
 protected:
-
     std::unordered_map<std::string, std::string> _values;
-    
+
     static UserDefault* _userDefault;
     std::string _filePath;
-    int _fd = -1; // the file handle for data persistence
+    int _fd = -1;  // the file handle for data persistence
     std::shared_ptr<mio::mmap_sink> _rwmmap;
-    int _curMapSize = 4096; // init mapsize is 4K
-    int _realSize = 0; // real data size without key/value entities count field
+    int _curMapSize   = 4096;  // init mapsize is 4K
+    int _realSize     = 0;     // real data size without key/value entities count field
     bool _initialized = false;
 
     // encrpyt args
@@ -292,9 +290,8 @@ protected:
     std::string _iv;
 };
 
-
 NS_CC_END
 // end of base group
 /** @} */
 
-#endif // __SUPPORT_CCUSERDEFAULT_H__
+#endif  // __SUPPORT_CCUSERDEFAULT_H__

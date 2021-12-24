@@ -22,7 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "UtilsGL.h"
 #include "ProgramGL.h"
 #include "TextureGL.h"
@@ -30,19 +30,19 @@
 #include "renderer/backend/TextureUtils.h"
 #include "platform/CCGL.h"
 
- // In desktop OpenGL 4+ and OpenGL ES 3.0+, specific GL formats GL_x_INTEGER are used for integer textures.
- // For older desktop OpenGL contexts, GL names without _INTEGER suffix were used.
- // See http://docs.gl/gl4/glTexImage2D, http://docs.gl/gl3/glTexImage2D, http://docs.gl/es3/glTexImage2D
+// In desktop OpenGL 4+ and OpenGL ES 3.0+, specific GL formats GL_x_INTEGER are used for integer textures.
+// For older desktop OpenGL contexts, GL names without _INTEGER suffix were used.
+// See http://docs.gl/gl4/glTexImage2D, http://docs.gl/gl3/glTexImage2D, http://docs.gl/es3/glTexImage2D
 #if defined(GL_VERSION_4_0) || defined(CC_USE_GLES)
-#	define RED_INTEGER  GL_RED_INTEGER
-#	define RG_INTEGER   GL_RG_INTEGER
-#	define RGB_INTEGER  GL_RGB_INTEGER
-#	define RGBA_INTEGER GL_RGBA_INTEGER
+#    define RED_INTEGER GL_RED_INTEGER
+#    define RG_INTEGER GL_RG_INTEGER
+#    define RGB_INTEGER GL_RGB_INTEGER
+#    define RGBA_INTEGER GL_RGBA_INTEGER
 #else
-#	define RED_INTEGER  GL_RED
-#	define RG_INTEGER   GL_RG
-#	define RGB_INTEGER  GL_RGB
-#	define RGBA_INTEGER GL_RGBA
+#    define RED_INTEGER GL_RED
+#    define RG_INTEGER GL_RG
+#    define RGB_INTEGER GL_RGB
+#    define RGBA_INTEGER GL_RGBA
 #endif
 
 CC_BACKEND_BEGIN
@@ -56,67 +56,238 @@ struct GPUTextureFormatInfo
     GLenum type;
 };
 
-static GPUTextureFormatInfo s_textureFormats[] =
-{
+static GPUTextureFormatInfo s_textureFormats[] = {
     /* pvrtc v1 */
-    { GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,          GL_COMPRESSED_SRGB_PVRTC_4BPPV1_EXT,          GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,   GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,                 GL_ZERO, }, // PVRTC4
-    { GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,         GL_COMPRESSED_SRGB_ALPHA_PVRTC_4BPPV1_EXT,    GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,  GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,                GL_ZERO, }, // PVRTC4A
-    { GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,          GL_COMPRESSED_SRGB_PVRTC_2BPPV1_EXT,          GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,  GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,                  GL_ZERO, },  // PVRTC2
-    { GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,         GL_COMPRESSED_SRGB_ALPHA_PVRTC_2BPPV1_EXT,    GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,  GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,                GL_ZERO, }, // PVRTC2A
+    {
+        GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,
+        GL_COMPRESSED_SRGB_PVRTC_4BPPV1_EXT,
+        GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,
+        GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,
+        GL_ZERO,
+    },  // PVRTC4
+    {
+        GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,
+        GL_COMPRESSED_SRGB_ALPHA_PVRTC_4BPPV1_EXT,
+        GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,
+        GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,
+        GL_ZERO,
+    },  // PVRTC4A
+    {
+        GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,
+        GL_COMPRESSED_SRGB_PVRTC_2BPPV1_EXT,
+        GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,
+        GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,
+        GL_ZERO,
+    },  // PVRTC2
+    {
+        GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,
+        GL_COMPRESSED_SRGB_ALPHA_PVRTC_2BPPV1_EXT,
+        GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,
+        GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,
+        GL_ZERO,
+    },  // PVRTC2A
 
-    // { GL_COMPRESSED_RGBA_PVRTC_4BPPV2_IMG,         GL_ZERO,                                      GL_COMPRESSED_RGBA_PVRTC_4BPPV2_IMG,  GL_COMPRESSED_RGBA_PVRTC_4BPPV2_IMG,                GL_ZERO, }, // PVRTC4A v2
-    // { GL_COMPRESSED_RGBA_PVRTC_2BPPV2_IMG,         GL_ZERO,                                      GL_COMPRESSED_RGBA_PVRTC_2BPPV2_IMG,  GL_COMPRESSED_RGBA_PVRTC_2BPPV2_IMG,                GL_ZERO, }, // PVRTC2A v2
+    // { GL_COMPRESSED_RGBA_PVRTC_4BPPV2_IMG,         GL_ZERO, GL_COMPRESSED_RGBA_PVRTC_4BPPV2_IMG,
+    // GL_COMPRESSED_RGBA_PVRTC_4BPPV2_IMG,                GL_ZERO, }, // PVRTC4A v2 {
+    // GL_COMPRESSED_RGBA_PVRTC_2BPPV2_IMG,         GL_ZERO, GL_COMPRESSED_RGBA_PVRTC_2BPPV2_IMG,
+    // GL_COMPRESSED_RGBA_PVRTC_2BPPV2_IMG,                GL_ZERO, }, // PVRTC2A v2
 
     /* etc */
-    { GL_ETC1_RGB8_OES,                            GL_ZERO,                                      GL_ETC1_RGB8_OES,                            GL_ETC1_RGB8_OES,                            GL_ZERO, }, // ETC1
-    { GL_COMPRESSED_RGB8_ETC2,                     GL_COMPRESSED_SRGB8_ETC2,                     GL_COMPRESSED_RGB8_ETC2,                     GL_COMPRESSED_RGB8_ETC2,                     GL_ZERO, }, // ETC2
-    { GL_COMPRESSED_RGBA8_ETC2_EAC,                GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC,          GL_COMPRESSED_RGBA8_ETC2_EAC,                GL_COMPRESSED_RGBA8_ETC2_EAC,                GL_ZERO, }, // ETC2A
+    {
+        GL_ETC1_RGB8_OES,
+        GL_ZERO,
+        GL_ETC1_RGB8_OES,
+        GL_ETC1_RGB8_OES,
+        GL_ZERO,
+    },  // ETC1
+    {
+        GL_COMPRESSED_RGB8_ETC2,
+        GL_COMPRESSED_SRGB8_ETC2,
+        GL_COMPRESSED_RGB8_ETC2,
+        GL_COMPRESSED_RGB8_ETC2,
+        GL_ZERO,
+    },  // ETC2
+    {
+        GL_COMPRESSED_RGBA8_ETC2_EAC,
+        GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC,
+        GL_COMPRESSED_RGBA8_ETC2_EAC,
+        GL_COMPRESSED_RGBA8_ETC2_EAC,
+        GL_ZERO,
+    },  // ETC2A
 
     /* s3tc */
-    { GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,            GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT,       GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,            GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,            GL_ZERO, }, // S3TC_DXT1
-    { GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,            GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT,       GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,            GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,            GL_ZERO, }, // S3TC_DXT3
-    { GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,            GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT,       GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,            GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,            GL_ZERO, }, // S3TC_DXT5
+    {
+        GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
+        GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT,
+        GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
+        GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
+        GL_ZERO,
+    },  // S3TC_DXT1
+    {
+        GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,
+        GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT,
+        GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,
+        GL_COMPRESSED_RGBA_S3TC_DXT3_EXT,
+        GL_ZERO,
+    },  // S3TC_DXT3
+    {
+        GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,
+        GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT,
+        GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,
+        GL_COMPRESSED_RGBA_S3TC_DXT5_EXT,
+        GL_ZERO,
+    },  // S3TC_DXT5
 
     /* atc */
-    { GL_ATC_RGB_AMD,                              GL_ZERO,                                      GL_ATC_RGB_AMD,                              GL_ATC_RGB_AMD,                              GL_ZERO, }, // ATC
-    { GL_ATC_RGBA_EXPLICIT_ALPHA_AMD,              GL_ZERO,                                      GL_ATC_RGBA_EXPLICIT_ALPHA_AMD,              GL_ATC_RGBA_EXPLICIT_ALPHA_AMD,              GL_ZERO, }, // ATCE
-    { GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD,          GL_ZERO,                                      GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD,          GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD,          GL_ZERO, }, // ATCI
+    {
+        GL_ATC_RGB_AMD,
+        GL_ZERO,
+        GL_ATC_RGB_AMD,
+        GL_ATC_RGB_AMD,
+        GL_ZERO,
+    },  // ATC
+    {
+        GL_ATC_RGBA_EXPLICIT_ALPHA_AMD,
+        GL_ZERO,
+        GL_ATC_RGBA_EXPLICIT_ALPHA_AMD,
+        GL_ATC_RGBA_EXPLICIT_ALPHA_AMD,
+        GL_ZERO,
+    },  // ATCE
+    {
+        GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD,
+        GL_ZERO,
+        GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD,
+        GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD,
+        GL_ZERO,
+    },  // ATCI
 
     /* astc */
-    { GL_COMPRESSED_RGBA_ASTC_4x4_KHR,             GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR,      GL_COMPRESSED_RGBA_ASTC_4x4_KHR,             GL_COMPRESSED_RGBA_ASTC_4x4_KHR,             GL_ZERO, }, // ASTC4x4
-    { GL_COMPRESSED_RGBA_ASTC_5x5_KHR,             GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR,      GL_COMPRESSED_RGBA_ASTC_5x5_KHR,             GL_COMPRESSED_RGBA_ASTC_5x5_KHR,             GL_ZERO, }, // ASTC5x5
-    { GL_COMPRESSED_RGBA_ASTC_6x6_KHR,             GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR,      GL_COMPRESSED_RGBA_ASTC_6x6_KHR,             GL_COMPRESSED_RGBA_ASTC_6x6_KHR,             GL_ZERO, }, // ASTC6x6
-    { GL_COMPRESSED_RGBA_ASTC_8x5_KHR,             GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR,      GL_COMPRESSED_RGBA_ASTC_8x5_KHR,             GL_COMPRESSED_RGBA_ASTC_8x5_KHR,             GL_ZERO, }, // ASTC8x5
-    { GL_COMPRESSED_RGBA_ASTC_8x6_KHR,             GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR,      GL_COMPRESSED_RGBA_ASTC_8x6_KHR,             GL_COMPRESSED_RGBA_ASTC_8x6_KHR,             GL_ZERO, }, // ASTC8x6
-    { GL_COMPRESSED_RGBA_ASTC_8x8_KHR,             GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR,      GL_COMPRESSED_RGBA_ASTC_8x8_KHR,             GL_COMPRESSED_RGBA_ASTC_8x8_KHR,             GL_ZERO, }, // ASTC8x8
-    { GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR,     GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_ZERO, }, // ASTC10x5
+    {
+        GL_COMPRESSED_RGBA_ASTC_4x4_KHR,
+        GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR,
+        GL_COMPRESSED_RGBA_ASTC_4x4_KHR,
+        GL_COMPRESSED_RGBA_ASTC_4x4_KHR,
+        GL_ZERO,
+    },  // ASTC4x4
+    {
+        GL_COMPRESSED_RGBA_ASTC_5x5_KHR,
+        GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR,
+        GL_COMPRESSED_RGBA_ASTC_5x5_KHR,
+        GL_COMPRESSED_RGBA_ASTC_5x5_KHR,
+        GL_ZERO,
+    },  // ASTC5x5
+    {
+        GL_COMPRESSED_RGBA_ASTC_6x6_KHR,
+        GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR,
+        GL_COMPRESSED_RGBA_ASTC_6x6_KHR,
+        GL_COMPRESSED_RGBA_ASTC_6x6_KHR,
+        GL_ZERO,
+    },  // ASTC6x6
+    {
+        GL_COMPRESSED_RGBA_ASTC_8x5_KHR,
+        GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR,
+        GL_COMPRESSED_RGBA_ASTC_8x5_KHR,
+        GL_COMPRESSED_RGBA_ASTC_8x5_KHR,
+        GL_ZERO,
+    },  // ASTC8x5
+    {
+        GL_COMPRESSED_RGBA_ASTC_8x6_KHR,
+        GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR,
+        GL_COMPRESSED_RGBA_ASTC_8x6_KHR,
+        GL_COMPRESSED_RGBA_ASTC_8x6_KHR,
+        GL_ZERO,
+    },  // ASTC8x6
+    {
+        GL_COMPRESSED_RGBA_ASTC_8x8_KHR,
+        GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR,
+        GL_COMPRESSED_RGBA_ASTC_8x8_KHR,
+        GL_COMPRESSED_RGBA_ASTC_8x8_KHR,
+        GL_ZERO,
+    },  // ASTC8x8
+    {
+        GL_COMPRESSED_RGBA_ASTC_10x5_KHR,
+        GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR,
+        GL_COMPRESSED_RGBA_ASTC_10x5_KHR,
+        GL_COMPRESSED_RGBA_ASTC_10x5_KHR,
+        GL_ZERO,
+    },  // ASTC10x5
 
     /* nomral */
-    { GL_RGBA,                                     GL_SRGB8_ALPHA8_EXT,                          GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_BYTE, }, // RGBA8
-    { GL_RGBA,                                     GL_SRGB8_ALPHA8_EXT,                          GL_BGRA_EXT,                                 GL_BGRA_EXT,                                 GL_UNSIGNED_BYTE, }, // BGRA8
-    { GL_RGB,                                      GL_SRGB_EXT,                                  GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_BYTE, }, // RGB8
-    { GL_RGB,                                      GL_ZERO,                                      GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_SHORT_5_6_5}, // RGB565 === MTLPixelFormatB5G6R5Unorm
-    { GL_RGBA,                                     GL_ZERO,                                      GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_SHORT_4_4_4_4}, // RGBA4 === MTLPixelFormatABGR4Unorm
-    { GL_RGBA,                                     GL_ZERO,                                      GL_RGBA,                                     GL_RGBA/*GL_BGRA_EXT*/,                      GL_UNSIGNED_SHORT_5_5_5_1}, // RGB5A1 === MTLPixelFormatA1BGR5Unorm
-    { GL_ALPHA,                                    GL_ZERO,                                      GL_ALPHA,                                    GL_ALPHA,                                    GL_UNSIGNED_BYTE, }, // A8
-    { GL_LUMINANCE,                                GL_ZERO,                                      GL_LUMINANCE,                                GL_LUMINANCE,                                GL_UNSIGNED_BYTE, }, // L8
-    { GL_LUMINANCE_ALPHA,                          GL_ZERO,                                      GL_LUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_UNSIGNED_BYTE, }, // LA8
-    
-    /* depth stencil internalFormat | internalFormatSrgb | format | formatSrgb | type */
+    {
+        GL_RGBA,
+        GL_SRGB8_ALPHA8_EXT,
+        GL_RGBA,
+        GL_RGBA,
+        GL_UNSIGNED_BYTE,
+    },  // RGBA8
+    {
+        GL_RGBA,
+        GL_SRGB8_ALPHA8_EXT,
+        GL_BGRA_EXT,
+        GL_BGRA_EXT,
+        GL_UNSIGNED_BYTE,
+    },  // BGRA8
+    {
+        GL_RGB,
+        GL_SRGB_EXT,
+        GL_RGB,
+        GL_RGB,
+        GL_UNSIGNED_BYTE,
+    },                                                                // RGB8
+    {GL_RGB, GL_ZERO, GL_RGB, GL_RGB, GL_UNSIGNED_SHORT_5_6_5},       // RGB565 === MTLPixelFormatB5G6R5Unorm
+    {GL_RGBA, GL_ZERO, GL_RGBA, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4},  // RGBA4 === MTLPixelFormatABGR4Unorm
+    {GL_RGBA, GL_ZERO, GL_RGBA, GL_RGBA /*GL_BGRA_EXT*/,
+     GL_UNSIGNED_SHORT_5_5_5_1},  // RGB5A1 === MTLPixelFormatA1BGR5Unorm
+    {
+        GL_ALPHA,
+        GL_ZERO,
+        GL_ALPHA,
+        GL_ALPHA,
+        GL_UNSIGNED_BYTE,
+    },  // A8
+    {
+        GL_LUMINANCE,
+        GL_ZERO,
+        GL_LUMINANCE,
+        GL_LUMINANCE,
+        GL_UNSIGNED_BYTE,
+    },  // L8
+    {
+        GL_LUMINANCE_ALPHA,
+        GL_ZERO,
+        GL_LUMINANCE_ALPHA,
+        GL_LUMINANCE_ALPHA,
+        GL_UNSIGNED_BYTE,
+    },  // LA8
+
+/* depth stencil internalFormat | internalFormatSrgb | format | formatSrgb | type */
 #if defined(CC_USE_GLES)
-    { GL_DEPTH_STENCIL_OES,                        GL_ZERO,                                      GL_DEPTH_STENCIL_OES,                       GL_DEPTH_STENCIL_OES,                        GL_UNSIGNED_INT_24_8_OES, }, // D24S8
+    {
+        GL_DEPTH_STENCIL_OES,
+        GL_ZERO,
+        GL_DEPTH_STENCIL_OES,
+        GL_DEPTH_STENCIL_OES,
+        GL_UNSIGNED_INT_24_8_OES,
+    },  // D24S8
 #else
-    { GL_DEPTH24_STENCIL8,                         GL_ZERO,                                      GL_DEPTH_STENCIL,                            GL_DEPTH_STENCIL,                            GL_UNSIGNED_INT_24_8, }, // D24S8
+    {
+        GL_DEPTH24_STENCIL8,
+        GL_ZERO,
+        GL_DEPTH_STENCIL,
+        GL_DEPTH_STENCIL,
+        GL_UNSIGNED_INT_24_8,
+    },  // D24S8
 #endif
 };
-static_assert(CC_ARRAYSIZE(s_textureFormats) == (int)PixelFormat::COUNT, "The OpenGL GPU texture format info table incomplete!");
+static_assert(CC_ARRAYSIZE(s_textureFormats) == (int)PixelFormat::COUNT,
+              "The OpenGL GPU texture format info table incomplete!");
 
 /*
-* !!!Note:
-* PixelFormat::RGBA4: 
-*   GL_BGRA_EXT, GL_BGRA_EXT, GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT not match MTLPixelFormatABGR4Unorm
-*   Unexpected render result is FPS label is PAN-BLUE
-*/
+ * !!!Note:
+ * PixelFormat::RGBA4:
+ *   GL_BGRA_EXT, GL_BGRA_EXT, GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT not match MTLPixelFormatABGR4Unorm
+ *   Unexpected render result is FPS label is PAN-BLUE
+ */
 
 GLenum UtilsGL::toGLAttributeType(VertexFormat vertexFormat)
 {
@@ -221,7 +392,6 @@ GLsizei UtilsGL::getGLDataTypeSize(GLenum size)
     return ret;
 }
 
-
 GLint UtilsGL::toGLMagFilter(SamplerFilter magFilter)
 {
     GLint ret = GL_LINEAR;
@@ -243,7 +413,8 @@ GLint UtilsGL::toGLMinFilter(SamplerFilter minFilter, bool hasMipmaps, bool isPo
 {
     if (hasMipmaps && !isPow2)
     {
-        CCLOG("Change minification filter to either NEAREST or LINEAR since non-power-of-two texture occur in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
+        CCLOG("Change minification filter to either NEAREST or LINEAR since non-power-of-two texture occur in %s %s %d",
+              __FILE__, __FUNCTION__, __LINE__);
         if (SamplerFilter::LINEAR == minFilter)
             return GL_LINEAR;
         else
@@ -252,20 +423,20 @@ GLint UtilsGL::toGLMinFilter(SamplerFilter minFilter, bool hasMipmaps, bool isPo
 
     switch (minFilter)
     {
-        case SamplerFilter::LINEAR:
-            return GL_LINEAR;
-        case SamplerFilter::LINEAR_MIPMAP_LINEAR:
-            return GL_LINEAR_MIPMAP_LINEAR;
-        case SamplerFilter::LINEAR_MIPMAP_NEAREST:
-            return GL_LINEAR_MIPMAP_NEAREST;
-        case SamplerFilter::NEAREST:
-            return GL_NEAREST;
-        case SamplerFilter::NEAREST_MIPMAP_NEAREST:
-            return GL_NEAREST_MIPMAP_NEAREST;
-        case SamplerFilter::NEAREST_MIPMAP_LINEAR:
-            return GL_NEAREST_MIPMAP_LINEAR;
-        default:
-            break;
+    case SamplerFilter::LINEAR:
+        return GL_LINEAR;
+    case SamplerFilter::LINEAR_MIPMAP_LINEAR:
+        return GL_LINEAR_MIPMAP_LINEAR;
+    case SamplerFilter::LINEAR_MIPMAP_NEAREST:
+        return GL_LINEAR_MIPMAP_NEAREST;
+    case SamplerFilter::NEAREST:
+        return GL_NEAREST;
+    case SamplerFilter::NEAREST_MIPMAP_NEAREST:
+        return GL_NEAREST_MIPMAP_NEAREST;
+    case SamplerFilter::NEAREST_MIPMAP_LINEAR:
+        return GL_NEAREST_MIPMAP_LINEAR;
+    default:
+        break;
     }
 
     return GL_NEAREST;
@@ -276,7 +447,8 @@ GLint UtilsGL::toGLAddressMode(SamplerAddressMode addressMode, bool isPow2)
     GLint ret = GL_REPEAT;
     if (!isPow2 && (addressMode != SamplerAddressMode::CLAMP_TO_EDGE))
     {
-        CCLOG("Change texture wrap mode to CLAMP_TO_EDGE since non-power-of-two texture occur in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
+        CCLOG("Change texture wrap mode to CLAMP_TO_EDGE since non-power-of-two texture occur in %s %s %d", __FILE__,
+              __FUNCTION__, __LINE__);
         return GL_CLAMP_TO_EDGE;
     }
 
@@ -297,18 +469,21 @@ GLint UtilsGL::toGLAddressMode(SamplerAddressMode addressMode, bool isPow2)
     return ret;
 }
 
-
-void UtilsGL::toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint &format, GLenum &type, bool &isCompressed)
+void UtilsGL::toGLTypes(PixelFormat textureFormat,
+                        GLint& internalFormat,
+                        GLuint& format,
+                        GLenum& type,
+                        bool& isCompressed)
 {
-    if (UTILS_LIKELY(textureFormat < PixelFormat::COUNT)) {
-        auto& info = s_textureFormats[(int)textureFormat];
+    if (UTILS_LIKELY(textureFormat < PixelFormat::COUNT))
+    {
+        auto& info     = s_textureFormats[(int)textureFormat];
         internalFormat = info.internalFmt;
-        format = info.fmt;
-        type = info.type;
-        isCompressed = PixelFormatUtils::isCompressed(textureFormat);
+        format         = info.fmt;
+        type           = info.type;
+        isCompressed   = PixelFormatUtils::isCompressed(textureFormat);
     }
 }
-
 
 GLenum UtilsGL::toGLComareFunction(CompareFunction compareFunction)
 {

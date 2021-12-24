@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -58,7 +58,7 @@ public:
      * @language zh_CN
      */
     float timeScale;
-    
+
 private:
     bool _animationDirty;
     float _inheritTimeScale;
@@ -70,15 +70,8 @@ private:
     AnimationState* _lastAnimationState;
 
 public:
-    Animation() :
-        _animationConfig(nullptr)
-    { 
-        _onClear();
-    }
-    ~Animation()
-    {
-        _onClear();
-    }
+    Animation() : _animationConfig(nullptr) { _onClear(); }
+    ~Animation() { _onClear(); }
 
 private:
     void _fadeOut(AnimationConfig* animationConfig);
@@ -146,8 +139,10 @@ public:
     AnimationState* playConfig(AnimationConfig* animationConfig);
     /**
      * - Play a specific animation.
-     * @param animationName - The name of animation data. (If not set, The default animation will be played, or resume the animation playing from pause status, or replay the last playing animation)
-     * @param playTimes - Playing repeat times. [-1: Use default value of the animation data, 0: No end loop playing, [1~N]: Repeat N times] (default: -1)
+     * @param animationName - The name of animation data. (If not set, The default animation will be played, or resume
+     * the animation playing from pause status, or replay the last playing animation)
+     * @param playTimes - Playing repeat times. [-1: Use default value of the animation data, 0: No end loop playing,
+     * [1~N]: Repeat N times] (default: -1)
      * @returns The playing animation state.
      * @example
      * TypeScript style, for reference only.
@@ -159,7 +154,8 @@ public:
      */
     /**
      * - 播放指定动画。
-     * @param animationName - 动画数据名称。 （如果未设置，则播放默认动画，或将暂停状态切换为播放状态，或重新播放之前播放的动画）
+     * @param animationName - 动画数据名称。
+     * （如果未设置，则播放默认动画，或将暂停状态切换为播放状态，或重新播放之前播放的动画）
      * @param playTimes - 循环播放次数。 [-1: 使用动画数据默认值, 0: 无限循环播放, [1~N]: 循环播放 N 次] （默认: -1）
      * @returns 播放的动画状态。
      * @example
@@ -174,11 +170,17 @@ public:
     /**
      * - Fade in a specific animation.
      * @param animationName - The name of animation data.
-     * @param fadeInTime - The fade in time. [-1: Use the default value of animation data, [0~N]: The fade in time (In seconds)] (Default: -1)
-     * @param playTimes - playing repeat times. [-1: Use the default value of animation data, 0: No end loop playing, [1~N]: Repeat N times] (Default: -1)
-     * @param layer - The blending layer, the animation states in high level layer will get the blending weights with high priority, when the total blending weights are more than 1.0, there will be no more weights can be allocated to the other animation states. (Default: 0)
-     * @param group - The blending group name, it is typically used to specify the substitution of multiple animation states blending. (Default: null)
-     * @param fadeOutMode - The fade out mode, which is typically used to specify alternate mode of multiple animation states blending. (Default: AnimationFadeOutMode.SameLayerAndGroup)
+     * @param fadeInTime - The fade in time. [-1: Use the default value of animation data, [0~N]: The fade in time (In
+     * seconds)] (Default: -1)
+     * @param playTimes - playing repeat times. [-1: Use the default value of animation data, 0: No end loop playing,
+     * [1~N]: Repeat N times] (Default: -1)
+     * @param layer - The blending layer, the animation states in high level layer will get the blending weights with
+     * high priority, when the total blending weights are more than 1.0, there will be no more weights can be allocated
+     * to the other animation states. (Default: 0)
+     * @param group - The blending group name, it is typically used to specify the substitution of multiple animation
+     * states blending. (Default: null)
+     * @param fadeOutMode - The fade out mode, which is typically used to specify alternate mode of multiple animation
+     * states blending. (Default: AnimationFadeOutMode.SameLayerAndGroup)
      * @returns The playing animation state.
      * @example
      * TypeScript style, for reference only.
@@ -194,9 +196,11 @@ public:
      * @param animationName - 动画数据名称。
      * @param fadeInTime - 淡入时间。 [-1: 使用动画数据默认值, [0~N]: 淡入时间 (以秒为单位)] （默认: -1）
      * @param playTimes - 播放次数。 [-1: 使用动画数据默认值, 0: 无限循环播放, [1~N]: 循环播放 N 次] （默认: -1）
-     * @param layer - 混合图层，图层高的动画状态会优先获取混合权重，当混合权重分配总和超过 1.0 时，剩余的动画状态将不能再获得权重分配。 （默认: 0）
+     * @param layer - 混合图层，图层高的动画状态会优先获取混合权重，当混合权重分配总和超过 1.0
+     * 时，剩余的动画状态将不能再获得权重分配。 （默认: 0）
      * @param group - 混合组名称，该属性通常用来指定多个动画状态混合时的相互替换关系。 （默认: null）
-     * @param fadeOutMode - 淡出模式，该属性通常用来指定多个动画状态混合时的相互替换模式。 （默认: AnimationFadeOutMode.SameLayerAndGroup）
+     * @param fadeOutMode - 淡出模式，该属性通常用来指定多个动画状态混合时的相互替换模式。 （默认:
+     * AnimationFadeOutMode.SameLayerAndGroup）
      * @returns 播放的动画状态。
      * @example
      * TypeScript 风格，仅供参考。
@@ -207,15 +211,18 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    AnimationState* fadeIn(
-        const std::string& animationName, float fadeInTime = -1.f, int playTimes = -1,
-        int layer = 0, const std::string& group = "", AnimationFadeOutMode fadeOutMode = AnimationFadeOutMode::SameLayerAndGroup
-    );
+    AnimationState* fadeIn(const std::string& animationName,
+                           float fadeInTime                 = -1.f,
+                           int playTimes                    = -1,
+                           int layer                        = 0,
+                           const std::string& group         = "",
+                           AnimationFadeOutMode fadeOutMode = AnimationFadeOutMode::SameLayerAndGroup);
     /**
      * - Play a specific animation from the specific time.
      * @param animationName - The name of animation data.
      * @param time - The start time point of playing. (In seconds)
-     * @param playTimes - Playing repeat times. [-1: Use the default value of animation data, 0: No end loop playing, [1~N]: Repeat N times] (Default: -1)
+     * @param playTimes - Playing repeat times. [-1: Use the default value of animation data, 0: No end loop playing,
+     * [1~N]: Repeat N times] (Default: -1)
      * @returns The played animation state.
      * @version DragonBones 4.5
      * @language en_US
@@ -234,7 +241,8 @@ public:
      * - Play a specific animation from the specific frame.
      * @param animationName - The name of animation data.
      * @param frame - The start frame of playing.
-     * @param playTimes - Playing repeat times. [-1: Use the default value of animation data, 0: No end loop playing, [1~N]: Repeat N times] (Default: -1)
+     * @param playTimes - Playing repeat times. [-1: Use the default value of animation data, 0: No end loop playing,
+     * [1~N]: Repeat N times] (Default: -1)
      * @returns The played animation state.
      * @version DragonBones 4.5
      * @language en_US
@@ -253,7 +261,8 @@ public:
      * - Play a specific animation from the specific progress.
      * @param animationName - The name of animation data.
      * @param progress - The start progress value of playing.
-     * @param playTimes - Playing repeat times. [-1: Use the default value of animation data, 0: No end loop playing, [1~N]: Repeat N times] (Default: -1)
+     * @param playTimes - Playing repeat times. [-1: Use the default value of animation data, 0: No end loop playing,
+     * [1~N]: Repeat N times] (Default: -1)
      * @returns The played animation state.
      * @version DragonBones 4.5
      * @language en_US
@@ -371,10 +380,7 @@ public:
      * @version DragonBones 5.1
      * @language zh_CN
      */
-    inline const std::vector<AnimationState*>& getStates() const
-    {
-        return _animationStates;
-    }
+    inline const std::vector<AnimationState*>& getStates() const { return _animationStates; }
     /**
      * - Check whether there is an animation state is playing
      * @see dragonBones.AnimationState
@@ -424,10 +430,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    inline const std::vector<std::string>& getAnimationNames() const
-    {
-        return _animationNames;
-    }
+    inline const std::vector<std::string>& getAnimationNames() const { return _animationNames; }
     /**
      * - All animation data.
      * @version DragonBones 4.5
@@ -438,10 +441,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    inline const std::map<std::string, AnimationData*>& getAnimations() const
-    {
-        return _animations;
-    }
+    inline const std::map<std::string, AnimationData*>& getAnimations() const { return _animations; }
     void setAnimations(const std::map<std::string, AnimationData*>& value);
     /**
      * - An AnimationConfig instance that can be used quickly.
@@ -468,10 +468,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline AnimationState* getLastAnimationState() const
-    {
-        return _lastAnimationState;
-    }
+    inline AnimationState* getLastAnimationState() const { return _lastAnimationState; }
 };
 
 DRAGONBONES_NAMESPACE_END

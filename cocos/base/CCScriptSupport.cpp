@@ -2,19 +2,19 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,10 +28,10 @@
 
 #if CC_ENABLE_SCRIPT_BINDING
 
-#include "base/CCScheduler.h"
-#include "2d/CCNode.h"
+#    include "base/CCScheduler.h"
+#    include "2d/CCNode.h"
 
-bool CC_DLL cc_assert_script_compatible(const char *msg)
+bool CC_DLL cc_assert_script_compatible(const char* msg)
 {
     cocos2d::ScriptEngineProtocol* engine = cocos2d::ScriptEngineManager::getInstance()->getScriptEngine();
     if (engine && engine->handleAssert(msg))
@@ -43,7 +43,7 @@ bool CC_DLL cc_assert_script_compatible(const char *msg)
 
 NS_CC_BEGIN
 
-// 
+//
 // // ScriptHandlerEntry
 
 ScriptHandlerEntry* ScriptHandlerEntry::create(int handler)
@@ -55,7 +55,7 @@ ScriptHandlerEntry* ScriptHandlerEntry::create(int handler)
 
 ScriptHandlerEntry::~ScriptHandlerEntry()
 {
-    if (_handler != 0 )
+    if (_handler != 0)
     {
         ScriptEngineManager::getInstance()->getScriptEngine()->removeScriptHandler(_handler);
         LUALOG("[LUA] Remove event handler: %d", _handler);
@@ -63,7 +63,7 @@ ScriptHandlerEntry::~ScriptHandlerEntry()
     }
 }
 
-// 
+//
 // // SchedulerScriptHandlerEntry
 
 SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(int handler, float interval, bool paused)
@@ -89,14 +89,13 @@ SchedulerScriptHandlerEntry::~SchedulerScriptHandlerEntry()
     LUALOG("[LUA] DEL script schedule %d, entryID: %d", _handler, _entryId);
 }
 
-
-// 
+//
 // // TouchScriptHandlerEntry
 
 TouchScriptHandlerEntry* TouchScriptHandlerEntry::create(int handler,
-                                                             bool isMultiTouches,
-                                                             int priority,
-                                                             bool swallowsTouches)
+                                                         bool isMultiTouches,
+                                                         int priority,
+                                                         bool swallowsTouches)
 {
     TouchScriptHandlerEntry* entry = new TouchScriptHandlerEntry(handler);
     entry->init(isMultiTouches, priority, swallowsTouches);
@@ -104,37 +103,34 @@ TouchScriptHandlerEntry* TouchScriptHandlerEntry::create(int handler,
     return entry;
 }
 
-TouchScriptHandlerEntry::~TouchScriptHandlerEntry()
-{
-}
+TouchScriptHandlerEntry::~TouchScriptHandlerEntry() {}
 
 bool TouchScriptHandlerEntry::init(bool isMultiTouches, int priority, bool swallowsTouches)
 {
-    _isMultiTouches = isMultiTouches;
-    _priority = priority;
+    _isMultiTouches  = isMultiTouches;
+    _priority        = priority;
     _swallowsTouches = swallowsTouches;
-    
+
     return true;
 }
 
-// 
+//
 // // ScriptEngineManager
 
 static ScriptEngineManager* s_pSharedScriptEngineManager = nullptr;
-
 
 ScriptEngineManager::~ScriptEngineManager()
 {
     removeScriptEngine();
 }
 
-void ScriptEngineManager::setScriptEngine(ScriptEngineProtocol *scriptEngine)
+void ScriptEngineManager::setScriptEngine(ScriptEngineProtocol* scriptEngine)
 {
-	if (_scriptEngine != scriptEngine)
-	{
-		removeScriptEngine();
-		_scriptEngine = scriptEngine;
-	}
+    if (_scriptEngine != scriptEngine)
+    {
+        removeScriptEngine();
+        _scriptEngine = scriptEngine;
+    }
 }
 
 void ScriptEngineManager::removeScriptEngine()
@@ -167,7 +163,8 @@ void ScriptEngineManager::destroyInstance()
 void ScriptEngineManager::sendNodeEventToLua(Node* node, int action)
 {
     auto scriptEngine = getInstance()->getScriptEngine();
-    if (scriptEngine) {
+    if (scriptEngine)
+    {
 
         BasicScriptData data(node, (void*)&action);
         ScriptEvent scriptEvent(kNodeEvent, (void*)&data);
@@ -186,4 +183,4 @@ int ScriptEngineManager::sendEventToLua(const ScriptEvent& event)
 
 NS_CC_END
 
-#endif // #if CC_ENABLE_SCRIPT_BINDING
+#endif  // #if CC_ENABLE_SCRIPT_BINDING

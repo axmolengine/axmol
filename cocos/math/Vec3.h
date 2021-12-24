@@ -48,7 +48,6 @@ class Quaternion;
 class CC_DLL Vec3
 {
 public:
-
     /**
      * The x-coordinate.
      */
@@ -122,11 +121,10 @@ public:
      *
      * @param v1 The first vector.
      * @param v2 The second vector.
-     * 
+     *
      * @return The angle between the two vectors (in radians).
      */
     static float angle(const Vec3& v1, const Vec3& v2);
-
 
     /**
      * Adds the elements of the specified vector to this one.
@@ -135,14 +133,13 @@ public:
      */
     inline void add(const Vec3& v);
 
-
     /**
-    * Adds the elements of this vector to the specified values.
-    *
-    * @param xx The add x coordinate.
-    * @param yy The add y coordinate.
-    * @param zz The add z coordinate.
-    */
+     * Adds the elements of this vector to the specified values.
+     *
+     * @param xx The add x coordinate.
+     * @param yy The add y coordinate.
+     * @param zz The add z coordinate.
+     */
     inline void add(float xx, float yy, float zz);
 
     /**
@@ -192,9 +189,9 @@ public:
      * Returns the distance between this vector and v.
      *
      * @param v The other vector.
-     * 
+     *
      * @return The distance between this vector and v.
-     * 
+     *
      * @see distanceSquared
      */
     float distance(const Vec3& v) const;
@@ -208,9 +205,9 @@ public:
      * this method instead of distance.
      *
      * @param v The other vector.
-     * 
+     *
      * @return The squared distance between this vector and v.
-     * 
+     *
      * @see distance
      */
     float distanceSquared(const Vec3& v) const;
@@ -219,7 +216,7 @@ public:
      * Returns the dot product of this vector and the specified vector.
      *
      * @param v The vector to compute the dot product with.
-     * 
+     *
      * @return The dot product.
      */
     float dot(const Vec3& v) const;
@@ -229,7 +226,7 @@ public:
      *
      * @param v1 The first vector.
      * @param v2 The second vector.
-     * 
+     *
      * @return The dot product between the vectors.
      */
     static float dot(const Vec3& v1, const Vec3& v2);
@@ -238,7 +235,7 @@ public:
      * Computes the length of this vector.
      *
      * @return The length of the vector.
-     * 
+     *
      * @see lengthSquared
      */
     inline float length() const;
@@ -252,7 +249,7 @@ public:
      * instead of length.
      *
      * @return The squared length of the vector.
-     * 
+     *
      * @see length
      */
     inline float lengthSquared() const;
@@ -270,7 +267,7 @@ public:
      * after calling this method will be 1.0f). If the vector
      * already has unit length or if the length of the vector
      * is zero, this method does nothing.
-     * 
+     *
      * @return This vector, after the normalization occurs.
      */
     void normalize();
@@ -316,8 +313,8 @@ public:
     inline void set(const Vec3& p1, const Vec3& p2);
 
     /**
-    * Sets the elements of this vector to zero.
-    */
+     * Sets the elements of this vector to zero.
+     */
     inline void setZero();
 
     /**
@@ -359,9 +356,9 @@ public:
 
     /**
      * Calculates the sum of this vector with the given vector.
-     * 
+     *
      * Note: this does not modify this vector.
-     * 
+     *
      * @param v The vector to add.
      * @return The vector sum.
      */
@@ -369,7 +366,7 @@ public:
 
     /**
      * Adds the given vector to this vector.
-     * 
+     *
      * @param v The vector to add.
      * @return This vector, after the addition occurs.
      */
@@ -377,9 +374,9 @@ public:
 
     /**
      * Calculates the difference of this vector with the given vector.
-     * 
+     *
      * Note: this does not modify this vector.
-     * 
+     *
      * @param v The vector to subtract.
      * @return The vector difference.
      */
@@ -387,7 +384,7 @@ public:
 
     /**
      * Subtracts the given vector from this vector.
-     * 
+     *
      * @param v The vector to subtract.
      * @return This vector, after the subtraction occurs.
      */
@@ -395,18 +392,18 @@ public:
 
     /**
      * Calculates the negation of this vector.
-     * 
+     *
      * Note: this does not modify this vector.
-     * 
+     *
      * @return The negation of this vector.
      */
     inline Vec3 operator-() const;
 
     /**
      * Calculates the scalar product of this vector with the given value.
-     * 
+     *
      * Note: this does not modify this vector.
-     * 
+     *
      * @param s The value to scale by.
      * @return The scaled vector.
      */
@@ -414,12 +411,12 @@ public:
 
     /**
      * Scales this vector by the given value.
-     * 
+     *
      * @param s The value to scale by.
      * @return This vector, after the scale occurs.
      */
     inline Vec3& operator*=(float s);
-    
+
     /**
      * Returns the components of this vector divided by the given constant
      *
@@ -433,7 +430,7 @@ public:
     /** Returns true if the vector's scalar components are all greater
      that the ones of the vector it is compared against.
      */
-    inline bool operator < (const Vec3& rhs) const
+    inline bool operator<(const Vec3& rhs) const
     {
         if (x < rhs.x && y < rhs.y && z < rhs.z)
             return true;
@@ -443,7 +440,7 @@ public:
     /** Returns true if the vector's scalar components are all smaller
      that the ones of the vector it is compared against.
      */
-    inline bool operator >(const Vec3& rhs) const
+    inline bool operator>(const Vec3& rhs) const
     {
         if (x > rhs.x && y > rhs.y && z > rhs.z)
             return true;
@@ -452,22 +449,22 @@ public:
 
     /**
      * Determines if this vector is equal to the given vector.
-     * 
+     *
      * @param v The vector to compare against.
-     * 
+     *
      * @return True if this vector is equal to the given vector, false otherwise.
      */
     inline bool operator==(const Vec3& v) const;
 
     /**
      * Determines if this vector is not equal to the given vector.
-     * 
+     *
      * @param v The vector to compare against.
-     * 
+     *
      * @return True if this vector is not equal to the given vector, false otherwise.
      */
     inline bool operator!=(const Vec3& v) const;
-    
+
     /** equals to Vec3(0,0,0) */
     static const Vec3 ZERO;
     /** equals to Vec3(1,1,1) */
@@ -482,14 +479,14 @@ public:
 
 /**
  * Calculates the scalar product of the given vector with the given value.
- * 
+ *
  * @param x The value to scale by.
  * @param v The vector to scale.
  * @return The scaled vector.
  */
 inline Vec3 operator*(float x, const Vec3& v);
 
-//typedef Vec3 Point3;
+// typedef Vec3 Point3;
 
 NS_CC_MATH_END
 /**
@@ -498,4 +495,4 @@ NS_CC_MATH_END
  */
 #include "math/Vec3.inl"
 
-#endif // MATH_VEC3_H
+#endif  // MATH_VEC3_H

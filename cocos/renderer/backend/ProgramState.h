@@ -22,7 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include <vector>
@@ -51,9 +51,9 @@ class VertexLayout;
  * @{
  */
 
- /**
-  * Store texture information.
-  */
+/**
+ * Store texture information.
+ */
 struct CC_DLL TextureInfo
 {
     TextureInfo(std::vector<int>&& _slots, std::vector<backend::TextureBackend*>&& _textures);
@@ -90,26 +90,26 @@ struct CC_DLL TextureInfo
 class CC_DLL ProgramState : public Ref
 {
 public:
-    using UniformCallback = std::function<void(ProgramState*, const UniformLocation &)>;
+    using UniformCallback = std::function<void(ProgramState*, const UniformLocation&)>;
 
     /**
      * @param program Specifies the program.
      */
     ProgramState(Program* program);
-    
-    ///destructor
+
+    /// destructor
     virtual ~ProgramState();
-    
+
     /**
      * Deep clone ProgramState
      */
-    ProgramState *clone() const;
-    
+    ProgramState* clone() const;
+
     /**
      * Get the program object.
      */
     backend::Program* getProgram() const { return _program; }
-    
+
     /**
      * Specify the value of a uniform variable for the current program state object.
      * @param uniformLocation Specifies the uniform location.
@@ -155,7 +155,7 @@ public:
      * @param uniformLocation Specifies the uniform location.
      * @param unifromCallback Specifies a callback function to update the uniform.
      */
-    void setCallbackUniform(const backend::UniformLocation&, const UniformCallback &);
+    void setCallbackUniform(const backend::UniformLocation&, const UniformCallback&);
 
     /**
      * Get the uniform callback function.
@@ -228,83 +228,86 @@ public:
      * @param[out] size Specifies the size of the buffer in bytes.
      */
     void getFragmentUniformBuffer(char** buffer, std::size_t& size) const;
-    
+
     /**
-    * An abstract base class that can be extended to support custom material auto bindings.
-    *
-    * Implementing a custom auto binding resolver allows the set of built-in parameter auto
-    * bindings to be extended or overridden. Any parameter auto binding that is set on a
-    * material will be forwarded to any custom auto binding resolvers, in the order in which
-    * they are registered. If a registered resolver returns true (specifying that it handles
-    * the specified autoBinding), no further code will be executed for that autoBinding.
-    * This allows auto binding resolvers to not only implement new/custom binding strings,
-    * but it also lets them override existing/built-in ones. For this reason, you should
-    * ensure that you ONLY return true if you explicitly handle a custom auto binding; return
-    * false otherwise.
-    *
-    * Note that the custom resolver is called only once for a GLProgramState object when its
-    * node binding is initially set. This occurs when a material is initially bound to a
-    * Node. The resolver is NOT called each frame or each time the GLProgramState is bound.
-    *
-    * If no registered resolvers explicitly handle an auto binding, the binding will attempt
-    * to be resolved using the internal/built-in resolver, which is able to handle any
-    * auto bindings found in the GLProgramState::AutoBinding enumeration.
-    *
-    * When an instance of a class that extends AutoBindingResolver is created, it is automatically
-    * registered as a custom auto binding handler. Likewise, it is automatically unregistered
-    * on destruction.
-    *
-    * @script{ignore}
-    */
-    class CC_DLL AutoBindingResolver {
+     * An abstract base class that can be extended to support custom material auto bindings.
+     *
+     * Implementing a custom auto binding resolver allows the set of built-in parameter auto
+     * bindings to be extended or overridden. Any parameter auto binding that is set on a
+     * material will be forwarded to any custom auto binding resolvers, in the order in which
+     * they are registered. If a registered resolver returns true (specifying that it handles
+     * the specified autoBinding), no further code will be executed for that autoBinding.
+     * This allows auto binding resolvers to not only implement new/custom binding strings,
+     * but it also lets them override existing/built-in ones. For this reason, you should
+     * ensure that you ONLY return true if you explicitly handle a custom auto binding; return
+     * false otherwise.
+     *
+     * Note that the custom resolver is called only once for a GLProgramState object when its
+     * node binding is initially set. This occurs when a material is initially bound to a
+     * Node. The resolver is NOT called each frame or each time the GLProgramState is bound.
+     *
+     * If no registered resolvers explicitly handle an auto binding, the binding will attempt
+     * to be resolved using the internal/built-in resolver, which is able to handle any
+     * auto bindings found in the GLProgramState::AutoBinding enumeration.
+     *
+     * When an instance of a class that extends AutoBindingResolver is created, it is automatically
+     * registered as a custom auto binding handler. Likewise, it is automatically unregistered
+     * on destruction.
+     *
+     * @script{ignore}
+     */
+    class CC_DLL AutoBindingResolver
+    {
     public:
         AutoBindingResolver();
         virtual ~AutoBindingResolver();
         /**
-        * Called when an unrecognized uniform variable is encountered
-        * during material loading.
-        *
-        * Implementations of this method should do a string comparison on the passed
-        * in name parameter and decide whether or not they should handle the
-        * parameter. If the parameter is not handled, false should be returned so
-        * that other auto binding resolvers get a chance to handle the parameter.
-        * Otherwise, the parameter should be set or bound and true should be returned.
-        *
-        * @param programState The ProgramState
-        * @param uniformName Name of the uniform
-        * @param autoBinding Name of the auto binding to be resolved.
-        *
-        * @return True if the auto binding is handled and the associated parameter is
-        *      bound, false otherwise.
-        */
-        virtual bool resolveAutoBinding(ProgramState *, const std::string &uniformName, const std::string &autoBinding) = 0;
+         * Called when an unrecognized uniform variable is encountered
+         * during material loading.
+         *
+         * Implementations of this method should do a string comparison on the passed
+         * in name parameter and decide whether or not they should handle the
+         * parameter. If the parameter is not handled, false should be returned so
+         * that other auto binding resolvers get a chance to handle the parameter.
+         * Otherwise, the parameter should be set or bound and true should be returned.
+         *
+         * @param programState The ProgramState
+         * @param uniformName Name of the uniform
+         * @param autoBinding Name of the auto binding to be resolved.
+         *
+         * @return True if the auto binding is handled and the associated parameter is
+         *      bound, false otherwise.
+         */
+        virtual bool resolveAutoBinding(ProgramState*,
+                                        const std::string& uniformName,
+                                        const std::string& autoBinding) = 0;
     };
     /**
-    * Sets a uniform auto-binding.
-    *
-    * This method parses the passed in autoBinding string and attempts to convert it
-    * to an enumeration value. If it matches to one of the predefined strings, it will create a
-    * callback to get the correct value at runtime.
-    *
-    * @param uniformName The name of the material parameter to store an auto-binding for.
-    * @param autoBinding A string matching one of the built-in AutoBinding enum constants.
-    */
-    void setParameterAutoBinding(const std::string &uniformName, const std::string &autoBinding);
+     * Sets a uniform auto-binding.
+     *
+     * This method parses the passed in autoBinding string and attempts to convert it
+     * to an enumeration value. If it matches to one of the predefined strings, it will create a
+     * callback to get the correct value at runtime.
+     *
+     * @param uniformName The name of the material parameter to store an auto-binding for.
+     * @param autoBinding A string matching one of the built-in AutoBinding enum constants.
+     */
+    void setParameterAutoBinding(const std::string& uniformName, const std::string& autoBinding);
 
     inline std::shared_ptr<VertexLayout> getVertexLayout() const { return _vertexLayout; }
 
     /**
-    * Gets uniformID, it's part of materialID for batch draw
-    */
+     * Gets uniformID, it's part of materialID for batch draw
+     */
     uint32_t getUniformID() const { return _uniformID; }
 
     /**
-    * Updates uniformID, it's part of materialID for batch draw
-    * @param uniformID if not -1, will compute with uniform buffer by XXH32 algorithm and should call
-    *        this function after any unstable uniforms set
-    * @remark If your custom shader uniform not stable, you needs call this function to update uniformID for
-    * render to generate a different materialID
-    */
+     * Updates uniformID, it's part of materialID for batch draw
+     * @param uniformID if not -1, will compute with uniform buffer by XXH32 algorithm and should call
+     *        this function after any unstable uniforms set
+     * @remark If your custom shader uniform not stable, you needs call this function to update uniformID for
+     * render to generate a different materialID
+     */
     void updateUniformID(int uniformID = -1);
 
 protected:
@@ -336,7 +339,7 @@ protected:
                     int index,
                     backend::TextureBackend* texture,
                     std::unordered_map<int, TextureInfo>& textureInfo);
-    
+
     /**
      * Set textures in array.
      * @param location Specifies the location of texture.
@@ -348,15 +351,15 @@ protected:
                          std::vector<int> slots,
                          std::vector<backend::TextureBackend*> textures,
                          std::unordered_map<int, TextureInfo>& textureInfo);
-    
+
     /**
      * Reset uniform informations when EGL context lost
      */
     void resetUniforms();
 
-    ///Initialize.
+    /// Initialize.
     bool init(Program* program);
-    
+
 #ifdef CC_USE_METAL
     /**
      * float3 etc in Metal has both sizeof and alignment same as float4, convert it before fill into uniform buffer
@@ -365,29 +368,32 @@ protected:
      * @param srcSize Specifies the uniform data size.
      * @param uniformBuffer Specifies the uniform buffer to update.
      */
-    void convertAndCopyUniformData(const backend::UniformInfo& uniformInfo, const void* srcData, std::size_t srcSize, void* buffer);
+    void convertAndCopyUniformData(const backend::UniformInfo& uniformInfo,
+                                   const void* srcData,
+                                   std::size_t srcSize,
+                                   void* buffer);
 #endif
     /**
-    * Applies the specified custom auto-binding.
-    *
-    * @param uniformName Name of the shader uniform.
-    * @param autoBinding Name of the auto binding.
-    */
-    void applyAutoBinding(const std::string &, const std::string &);
+     * Applies the specified custom auto-binding.
+     *
+     * @param uniformName Name of the shader uniform.
+     * @param autoBinding Name of the auto binding.
+     */
+    void applyAutoBinding(const std::string&, const std::string&);
 
-    backend::Program*                                       _program = nullptr;
-    std::unordered_map<UniformLocation, UniformCallback, UniformLocation>   _callbackUniforms;
-    char* _vertexUniformBuffer = nullptr;
-    char* _fragmentUniformBuffer = nullptr;
-    std::size_t _vertexUniformBufferSize = 0;
+    backend::Program* _program = nullptr;
+    std::unordered_map<UniformLocation, UniformCallback, UniformLocation> _callbackUniforms;
+    char* _vertexUniformBuffer             = nullptr;
+    char* _fragmentUniformBuffer           = nullptr;
+    std::size_t _vertexUniformBufferSize   = 0;
     std::size_t _fragmentUniformBufferSize = 0;
 
-    std::unordered_map<int, TextureInfo>                    _vertexTextureInfos;
-    std::unordered_map<int, TextureInfo>                    _fragmentTextureInfos;
+    std::unordered_map<int, TextureInfo> _vertexTextureInfos;
+    std::unordered_map<int, TextureInfo> _fragmentTextureInfos;
 
-    std::unordered_map<std::string, std::string>            _autoBindings;
+    std::unordered_map<std::string, std::string> _autoBindings;
 
-    static std::vector<AutoBindingResolver*>                _customAutoBindingResolvers;
+    static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
     std::shared_ptr<VertexLayout> _vertexLayout = std::make_shared<VertexLayout>();
 
     uint32_t _uniformID = 0;
@@ -400,6 +406,6 @@ protected:
 #endif
 };
 
-//end of _backend group
+// end of _backend group
 /// @}
 CC_BACKEND_END

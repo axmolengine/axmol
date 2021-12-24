@@ -26,33 +26,26 @@ THE SOFTWARE.
 // #include "audio/include/SimpleAudioEngine.h"
 #include "platform/CCFileUtils.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 IMPLEMENT_CLASS_COMPONENT_INFO(ComAudio)
 
 const std::string ComAudio::COMPONENT_NAME = "CCComAudio";
 
-ComAudio::ComAudio()
-: _filePath("")
-, _loop(false)
-, _startedSoundId(0)
+ComAudio::ComAudio() : _filePath(""), _loop(false), _startedSoundId(0)
 {
     _name = COMPONENT_NAME;
 }
 
-ComAudio::~ComAudio()
-{
-    
-}
+ComAudio::~ComAudio() {}
 
 bool ComAudio::init()
 {
     return true;
 }
 
-void ComAudio::onEnter()
-{
-}
+void ComAudio::onEnter() {}
 
 void ComAudio::onExit()
 {
@@ -60,9 +53,7 @@ void ComAudio::onExit()
     stopAllEffects();
 }
 
-void ComAudio::onAdd()
-{
-}
+void ComAudio::onAdd() {}
 
 void ComAudio::onRemove()
 {
@@ -73,84 +64,84 @@ void ComAudio::onRemove()
 bool ComAudio::serialize(void* r)
 {
     bool ret = false;
-	do
-	{
-		CC_BREAK_IF(r == nullptr);
-		SerData *serData = (SerData *)(r);
-		const rapidjson::Value *v = serData->_rData;
-		stExpCocoNode *cocoNode = serData->_cocoNode;
-        CocoLoader *cocoLoader = serData->_cocoLoader;
-		const char *className = nullptr;
-		const char *comName = nullptr;
-		const char *file = nullptr;
-		std::string filePath;
-		int resType = 0;
-		bool loop = false;
-		if (v != nullptr)
-		{
-			className = DICTOOL->getStringValue_json(*v, "classname");
-			CC_BREAK_IF(className == nullptr);
-			comName = DICTOOL->getStringValue_json(*v, "name");
-			const rapidjson::Value &fileData = DICTOOL->getSubDictionary_json(*v, "fileData");
-			CC_BREAK_IF(!DICTOOL->checkObjectExist_json(fileData));
-			file = DICTOOL->getStringValue_json(fileData, "path");
-			CC_BREAK_IF(file == nullptr);
-			resType = DICTOOL->getIntValue_json(fileData, "resourceType", -1);
-			CC_BREAK_IF(resType != 0);
-			loop = DICTOOL->getIntValue_json(*v, "loop") != 0? true:false;
-		}
-		else if (cocoNode != nullptr)
-		{
-			className = cocoNode[1].GetValue(cocoLoader);
-			CC_BREAK_IF(className == nullptr);
-			comName = cocoNode[2].GetValue(cocoLoader);
-			stExpCocoNode *pfileData = cocoNode[4].GetChildArray(cocoLoader);
-			CC_BREAK_IF(!pfileData);
-			file = pfileData[0].GetValue(cocoLoader);
-			CC_BREAK_IF(file == nullptr);
-			resType = atoi(pfileData[2].GetValue(cocoLoader));
-			CC_BREAK_IF(resType != 0);
-			loop = atoi(cocoNode[5].GetValue(cocoLoader)) != 0? true:false;
-			ret = true;
-		}
-		if (comName != nullptr)
-		{
-			setName(comName);
-		}
-		else
-		{
-			setName(className);
-		}
-		if (file != nullptr)
-		{
+    do
+    {
+        CC_BREAK_IF(r == nullptr);
+        SerData* serData          = (SerData*)(r);
+        const rapidjson::Value* v = serData->_rData;
+        stExpCocoNode* cocoNode   = serData->_cocoNode;
+        CocoLoader* cocoLoader    = serData->_cocoLoader;
+        const char* className     = nullptr;
+        const char* comName       = nullptr;
+        const char* file          = nullptr;
+        std::string filePath;
+        int resType = 0;
+        bool loop   = false;
+        if (v != nullptr)
+        {
+            className = DICTOOL->getStringValue_json(*v, "classname");
+            CC_BREAK_IF(className == nullptr);
+            comName                          = DICTOOL->getStringValue_json(*v, "name");
+            const rapidjson::Value& fileData = DICTOOL->getSubDictionary_json(*v, "fileData");
+            CC_BREAK_IF(!DICTOOL->checkObjectExist_json(fileData));
+            file = DICTOOL->getStringValue_json(fileData, "path");
+            CC_BREAK_IF(file == nullptr);
+            resType = DICTOOL->getIntValue_json(fileData, "resourceType", -1);
+            CC_BREAK_IF(resType != 0);
+            loop = DICTOOL->getIntValue_json(*v, "loop") != 0 ? true : false;
+        }
+        else if (cocoNode != nullptr)
+        {
+            className = cocoNode[1].GetValue(cocoLoader);
+            CC_BREAK_IF(className == nullptr);
+            comName                  = cocoNode[2].GetValue(cocoLoader);
+            stExpCocoNode* pfileData = cocoNode[4].GetChildArray(cocoLoader);
+            CC_BREAK_IF(!pfileData);
+            file = pfileData[0].GetValue(cocoLoader);
+            CC_BREAK_IF(file == nullptr);
+            resType = atoi(pfileData[2].GetValue(cocoLoader));
+            CC_BREAK_IF(resType != 0);
+            loop = atoi(cocoNode[5].GetValue(cocoLoader)) != 0 ? true : false;
+            ret  = true;
+        }
+        if (comName != nullptr)
+        {
+            setName(comName);
+        }
+        else
+        {
+            setName(className);
+        }
+        if (file != nullptr)
+        {
             if (strcmp(file, "") == 0)
             {
                 continue;
             }
-			filePath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(file));
-		}
-		if (strcmp(className, "CCBackgroundAudio") == 0)
-		{
-			preloadBackgroundMusic(filePath.c_str());
-			setLoop(loop);
-			playBackgroundMusic(filePath.c_str(), loop);
-		}
-		else if(strcmp(className, COMPONENT_NAME.c_str()) == 0)
-		{
-			preloadEffect(filePath.c_str());
-		}
-		else
-		{
-			CC_BREAK_IF(true);
-		}
-		ret = true;
-	}while (0);
-	return ret;
+            filePath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(file));
+        }
+        if (strcmp(className, "CCBackgroundAudio") == 0)
+        {
+            preloadBackgroundMusic(filePath.c_str());
+            setLoop(loop);
+            playBackgroundMusic(filePath.c_str(), loop);
+        }
+        else if (strcmp(className, COMPONENT_NAME.c_str()) == 0)
+        {
+            preloadEffect(filePath.c_str());
+        }
+        else
+        {
+            CC_BREAK_IF(true);
+        }
+        ret = true;
+    } while (0);
+    return ret;
 }
 
 ComAudio* ComAudio::create()
 {
-    ComAudio * pRet = new ComAudio();
+    ComAudio* pRet = new ComAudio();
     if (pRet->init())
     {
         pRet->autorelease();
@@ -159,19 +150,17 @@ ComAudio* ComAudio::create()
     {
         CC_SAFE_DELETE(pRet);
     }
-	return pRet;
+    return pRet;
 }
 
-void ComAudio::end()
-{
-}
+void ComAudio::end() {}
 
 void ComAudio::preloadBackgroundMusic(const char* pszFilePath)
 {
     // TODO: use audio engine to play
     // CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic(pszFilePath);
     setFile(pszFilePath);
-	setLoop(false);
+    setLoop(false);
 }
 
 void ComAudio::playBackgroundMusic(const char* pszFilePath, bool loop)
@@ -216,17 +205,17 @@ void ComAudio::rewindBackgroundMusic()
 
 bool ComAudio::willPlayBackgroundMusic()
 {
-    return false; // CocosDenshion::SimpleAudioEngine::getInstance()->willPlayBackgroundMusic();
+    return false;  // CocosDenshion::SimpleAudioEngine::getInstance()->willPlayBackgroundMusic();
 }
 
 bool ComAudio::isBackgroundMusicPlaying()
 {
-    return false;// CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying();
+    return false;  // CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying();
 }
 
 float ComAudio::getBackgroundMusicVolume()
 {
-    return 0; // CocosDenshion::SimpleAudioEngine::getInstance()->getBackgroundMusicVolume();
+    return 0;  // CocosDenshion::SimpleAudioEngine::getInstance()->getBackgroundMusicVolume();
 }
 
 void ComAudio::setBackgroundMusicVolume(float volume)
@@ -236,7 +225,7 @@ void ComAudio::setBackgroundMusicVolume(float volume)
 
 float ComAudio::getEffectsVolume()
 {
-    return 0; // CocosDenshion::SimpleAudioEngine::getInstance()->getEffectsVolume();
+    return 0;  // CocosDenshion::SimpleAudioEngine::getInstance()->getEffectsVolume();
 }
 
 void ComAudio::setEffectsVolume(float volume)
@@ -246,17 +235,17 @@ void ComAudio::setEffectsVolume(float volume)
 
 unsigned int ComAudio::playEffect(const char* pszFilePath, bool loop)
 {
-    return 0; // CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(pszFilePath, loop);
+    return 0;  // CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(pszFilePath, loop);
 }
 
 unsigned int ComAudio::playEffect(const char* pszFilePath)
 {
-    return 0; // CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(pszFilePath);
+    return 0;  // CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(pszFilePath);
 }
 
 unsigned int ComAudio::playEffect()
 {
-    return 0; // CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(_filePath.c_str(), _loop);
+    return 0;  // CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(_filePath.c_str(), _loop);
 }
 
 void ComAudio::pauseEffect(unsigned int nSoundId)
@@ -296,29 +285,29 @@ void ComAudio::preloadEffect(const char* pszFilePath)
     setLoop(false);
 }
 
-void ComAudio::unloadEffect(const char *pszFilePath)
+void ComAudio::unloadEffect(const char* pszFilePath)
 {
     // CocosDenshion::SimpleAudioEngine::getInstance()->unloadEffect(pszFilePath);
 }
 
 void ComAudio::setFile(const char* pszFilePath)
 {
-	_filePath.assign(pszFilePath);
+    _filePath.assign(pszFilePath);
 }
 
 void ComAudio::setLoop(bool loop)
 {
-	_loop = loop;
+    _loop = loop;
 }
 
 const char* ComAudio::getFile()
 {
-	return _filePath.c_str();
+    return _filePath.c_str();
 }
 
 bool ComAudio::isLoop()
 {
-	return _loop;
+    return _loop;
 }
 
 void ComAudio::start()
@@ -330,4 +319,4 @@ void ComAudio::stop()
 {
     stopEffect(_startedSoundId);
 }
-}
+}  // namespace cocostudio

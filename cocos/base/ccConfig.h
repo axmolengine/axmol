@@ -36,13 +36,13 @@ THE SOFTWARE.
 
 /** @def CC_ENABLE_STACKABLE_ACTIONS
  * If enabled, actions that alter the position property (eg: MoveBy, JumpBy, BezierBy, etc..) will be stacked.
- * If you run 2 or more 'position' actions at the same time on a node, then end position will be the sum of all the positions.
- * If disabled, only the last run action will take effect.
- * Enabled by default. Disable to be compatible with v2.0 and older versions.
+ * If you run 2 or more 'position' actions at the same time on a node, then end position will be the sum of all the
+ * positions. If disabled, only the last run action will take effect. Enabled by default. Disable to be compatible with
+ * v2.0 and older versions.
  * @since v2.1
  */
 #ifndef CC_ENABLE_STACKABLE_ACTIONS
-#define CC_ENABLE_STACKABLE_ACTIONS 1
+#    define CC_ENABLE_STACKABLE_ACTIONS 1
 #endif
 
 /** @def CC_ENABLE_GL_STATE_CACHE
@@ -52,17 +52,19 @@ THE SOFTWARE.
  *  - GL::deleteProgram() instead of glDeleteProgram().
  *  - GL::blendFunc() instead of glBlendFunc().
 
- * If this functionality is disabled, then ccGLUseProgram(), GL::deleteProgram(), GL::blendFunc() will call the GL ones, without using the cache.
+ * If this functionality is disabled, then ccGLUseProgram(), GL::deleteProgram(), GL::blendFunc() will call the GL ones,
+ without using the cache.
 
  * It is recommended to enable whenever possible to improve speed.
- * If you are migrating your code from GL ES 1.1, then keep it disabled. Once all your code works as expected, turn it on.
+ * If you are migrating your code from GL ES 1.1, then keep it disabled. Once all your code works as expected, turn it
+ on.
 
  * Enabled by default.
 
  * @since v2.0.0
  */
 #ifndef CC_ENABLE_GL_STATE_CACHE
-#define CC_ENABLE_GL_STATE_CACHE 1
+#    define CC_ENABLE_GL_STATE_CACHE 1
 #endif
 
 /** @def CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
@@ -86,7 +88,7 @@ THE SOFTWARE.
  * @since v0.99.5
  */
 #ifndef CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
-#define CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL 0
+#    define CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL 0
 #endif
 
 /** @def CC_DIRECTOR_STATS_INTERVAL
@@ -97,7 +99,7 @@ THE SOFTWARE.
  * Default value: 0.5f
  */
 #ifndef CC_DIRECTOR_STATS_INTERVAL
-#define CC_DIRECTOR_STATS_INTERVAL (0.5f)
+#    define CC_DIRECTOR_STATS_INTERVAL (0.5f)
 #endif
 
 /** @def CC_DIRECTOR_FPS_POSITION
@@ -106,7 +108,7 @@ THE SOFTWARE.
  * Default: 0,0 (bottom-left corner).
  */
 #ifndef CC_DIRECTOR_FPS_POSITION
-#define CC_DIRECTOR_FPS_POSITION Vec2(0,0)
+#    define CC_DIRECTOR_FPS_POSITION Vec2(0, 0)
 #endif
 
 /** @def CC_DIRECTOR_DISPATCH_FAST_EVENTS
@@ -120,7 +122,7 @@ THE SOFTWARE.
  * @warning This feature is experimental.
  */
 #ifndef CC_DIRECTOR_DISPATCH_FAST_EVENTS
- #define CC_DIRECTOR_DISPATCH_FAST_EVENTS 0
+#    define CC_DIRECTOR_DISPATCH_FAST_EVENTS 0
 #endif
 
 /** @def CC_DIRECTOR_MAC_USE_DISPLAY_LINK_THREAD
@@ -131,7 +133,7 @@ THE SOFTWARE.
  * Only valid for cocos2d-mac. Not supported on cocos2d-ios.
  */
 #ifndef CC_DIRECTOR_MAC_USE_DISPLAY_LINK_THREAD
-#define CC_DIRECTOR_MAC_USE_DISPLAY_LINK_THREAD 1
+#    define CC_DIRECTOR_MAC_USE_DISPLAY_LINK_THREAD 1
 #endif
 
 /** @def CC_NODE_RENDER_SUBPIXEL
@@ -140,7 +142,7 @@ THE SOFTWARE.
  * To enable set it to 1. Enabled by default.
  */
 #ifndef CC_NODE_RENDER_SUBPIXEL
-#define CC_NODE_RENDER_SUBPIXEL 1
+#    define CC_NODE_RENDER_SUBPIXEL 1
 #endif
 
 /** @def CC_SPRITEBATCHNODE_RENDER_SUBPIXEL
@@ -149,7 +151,7 @@ THE SOFTWARE.
  * To enable set it to 1. Enabled by default.
  */
 #ifndef CC_SPRITEBATCHNODE_RENDER_SUBPIXEL
-#define CC_SPRITEBATCHNODE_RENDER_SUBPIXEL    1
+#    define CC_SPRITEBATCHNODE_RENDER_SUBPIXEL 1
 #endif
 
 /** @def CC_TEXTURE_ATLAS_USE_VAO
@@ -160,9 +162,8 @@ THE SOFTWARE.
  * If a device doesn't support VAO though it claims to support should add exceptions list here.
  */
 #ifndef CC_TEXTURE_ATLAS_USE_VAO
-#define CC_TEXTURE_ATLAS_USE_VAO 1
+#    define CC_TEXTURE_ATLAS_USE_VAO 1
 #endif
-
 
 /** @def CC_USE_LA88_LABELS
  * If enabled, it will use LA88 (Luminance Alpha 16-bit textures) for LabelTTF objects.
@@ -172,7 +173,7 @@ THE SOFTWARE.
  * @since v0.99.5
  */
 #ifndef CC_USE_LA88_LABELS
-#define CC_USE_LA88_LABELS 1
+#    define CC_USE_LA88_LABELS 1
 #endif
 
 /** @def CC_SPRITE_DEBUG_DRAW
@@ -184,7 +185,7 @@ THE SOFTWARE.
  * 2 -- draw texture box
  */
 #ifndef CC_SPRITE_DEBUG_DRAW
-#define CC_SPRITE_DEBUG_DRAW 0
+#    define CC_SPRITE_DEBUG_DRAW 0
 #endif
 
 /** @def CC_LABEL_DEBUG_DRAW
@@ -195,7 +196,7 @@ THE SOFTWARE.
  * 1 -- draw bounding box
  */
 #ifndef CC_LABEL_DEBUG_DRAW
-#define CC_LABEL_DEBUG_DRAW 0
+#    define CC_LABEL_DEBUG_DRAW 0
 #endif
 
 /** @def CC_SPRITEBATCHNODE_DEBUG_DRAW
@@ -204,7 +205,7 @@ THE SOFTWARE.
  * To enable set it to a value different than 0. Disabled by default.
  */
 #ifndef CC_SPRITEBATCHNODE_DEBUG_DRAW
-#define CC_SPRITEBATCHNODE_DEBUG_DRAW 0
+#    define CC_SPRITEBATCHNODE_DEBUG_DRAW 0
 #endif
 
 /** @def CC_LABELBMFONT_DEBUG_DRAW
@@ -213,7 +214,7 @@ THE SOFTWARE.
  * To enable set it to a value different than 0. Disabled by default.
  */
 #ifndef CC_LABELBMFONT_DEBUG_DRAW
-#define CC_LABELBMFONT_DEBUG_DRAW 0
+#    define CC_LABELBMFONT_DEBUG_DRAW 0
 #endif
 
 /** @def CC_LABELATLAS_DEBUG_DRAW
@@ -222,17 +223,17 @@ THE SOFTWARE.
  * To enable set it to a value different than 0. Disabled by default.
  */
 #ifndef CC_LABELATLAS_DEBUG_DRAW
-#define CC_LABELATLAS_DEBUG_DRAW 0
+#    define CC_LABELATLAS_DEBUG_DRAW 0
 #endif
 
 /** @def CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS
- * If enabled (in conjunction with assertion macros) will verify on Node destruction that the node being destroyed has no event
- * listeners still associated with it in the event dispatcher. This can be used to track down problems where the event dispatch
- * system has dangling pointers to destroyed nodes.
- * Note: event listener verification will always be disabled in builds where assertions are disabled regardless of this setting.
+ * If enabled (in conjunction with assertion macros) will verify on Node destruction that the node being destroyed has
+ * no event listeners still associated with it in the event dispatcher. This can be used to track down problems where
+ * the event dispatch system has dangling pointers to destroyed nodes. Note: event listener verification will always be
+ * disabled in builds where assertions are disabled regardless of this setting.
  */
 #ifndef CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS
-#define CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS 0
+#    define CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS 0
 #endif
 
 /** @def CC_ENABLE_PROFILERS
@@ -242,76 +243,81 @@ THE SOFTWARE.
  * To enable set it to a value different than 0. Disabled by default.
  */
 #ifndef CC_ENABLE_PROFILERS
-#define CC_ENABLE_PROFILERS 0
+#    define CC_ENABLE_PROFILERS 0
 #endif
 
 /** Enable Lua engine debug log. */
 #ifndef CC_LUA_ENGINE_DEBUG
-#define CC_LUA_ENGINE_DEBUG 0
+#    define CC_LUA_ENGINE_DEBUG 0
 #endif
 
 /** Use physics integration API. */
 //  It works with:
 // Chipmunk2D or Box2D
 #ifndef CC_USE_PHYSICS
-#define CC_USE_PHYSICS 1
+#    define CC_USE_PHYSICS 1
 #endif
 #if (CC_USE_PHYSICS)
 /** Use Chipmunk2D physics 2d engine on physics integration API. */
-#ifndef CC_ENABLE_CHIPMUNK_INTEGRATION
-#define CC_ENABLE_CHIPMUNK_INTEGRATION 0   
-#endif
+#    ifndef CC_ENABLE_CHIPMUNK_INTEGRATION
+#        define CC_ENABLE_CHIPMUNK_INTEGRATION 0
+#    endif
 /** or use Box2D physics 2d engine on physics integration API. */
-#ifndef CC_ENABLE_BOX2D_INTEGRATION
-#define CC_ENABLE_BOX2D_INTEGRATION 1
-#endif
-#endif // CC_USE_PHYSICS
+#    ifndef CC_ENABLE_BOX2D_INTEGRATION
+#        define CC_ENABLE_BOX2D_INTEGRATION 1
+#    endif
+#endif  // CC_USE_PHYSICS
 
 /** Use 3d physics integration API. */
 #ifndef CC_USE_3D_PHYSICS
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-#define CC_USE_3D_PHYSICS 1
-#endif
+#    if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC ||       \
+         CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || \
+         CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#        define CC_USE_3D_PHYSICS 1
+#    endif
 #endif
 
 #if (CC_USE_3D_PHYSICS)
 /** Use bullet physics engine. */
-#ifndef CC_ENABLE_BULLET_INTEGRATION
-#define CC_ENABLE_BULLET_INTEGRATION 1
-#endif
+#    ifndef CC_ENABLE_BULLET_INTEGRATION
+#        define CC_ENABLE_BULLET_INTEGRATION 1
+#    endif
 #endif
 
 /** Use 3D navigation API */
 #ifndef CC_USE_NAVMESH
-#define CC_USE_NAVMESH 1
+#    define CC_USE_NAVMESH 1
 #endif
 
 /** Use culling or not. */
 #ifndef CC_USE_CULLING
-#define CC_USE_CULLING 1
+#    define CC_USE_CULLING 1
 #endif
 
-/** Support PNG or not. If your application don't use png format picture, you can undefine this macro to save package size.
+/** Support PNG or not. If your application don't use png format picture, you can undefine this macro to save package
+ * size.
  */
 #ifndef CC_USE_PNG
-#define CC_USE_PNG  1
-#endif // CC_USE_PNG
+#    define CC_USE_PNG 1
+#endif  // CC_USE_PNG
 
-/** Support JPEG or not. If your application don't use jpeg format picture, you can undefine this macro to save package size.
+/** Support JPEG or not. If your application don't use jpeg format picture, you can undefine this macro to save package
+ * size.
  */
 #ifndef CC_USE_JPEG
-#define CC_USE_JPEG  1
-#endif // CC_USE_JPEG
+#    define CC_USE_JPEG 1
+#endif  // CC_USE_JPEG
 
-/** Support webp or not. If your application don't use webp format picture, you can undefine this macro to save package size.
+/** Support webp or not. If your application don't use webp format picture, you can undefine this macro to save package
+ * size.
  */
 #ifndef CC_USE_WEBP
-#define CC_USE_WEBP  1
-#endif // CC_USE_WEBP
+#    define CC_USE_WEBP 1
+#endif  // CC_USE_WEBP
 
 /** Enable Lua Script binding */
 #ifndef CC_ENABLE_SCRIPT_BINDING
-#define CC_ENABLE_SCRIPT_BINDING 1
+#    define CC_ENABLE_SCRIPT_BINDING 1
 #endif
 
 /** When CC_ENABLE_SCRIPT_BINDING and CC_ENABLE_GC_FOR_NATIVE_OBJECTS are both 1
@@ -321,9 +327,9 @@ THE SOFTWARE.
  * Disabled by default.
  */
 #ifdef CC_ENABLE_SCRIPT_BINDING
-  #ifndef CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-  #define CC_ENABLE_GC_FOR_NATIVE_OBJECTS 0
-  #endif
+#    ifndef CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#        define CC_ENABLE_GC_FOR_NATIVE_OBJECTS 0
+#    endif
 #endif
 
 /** @def CC_CONSTRUCTOR_ACCESS
@@ -332,15 +338,15 @@ THE SOFTWARE.
  * protected by default.
  */
 #ifndef CC_CONSTRUCTOR_ACCESS
-  #ifdef CC_ENABLE_SCRIPT_BINDING
-    #define CC_CONSTRUCTOR_ACCESS public
-  #else
-    #define CC_CONSTRUCTOR_ACCESS protected
-  #endif
+#    ifdef CC_ENABLE_SCRIPT_BINDING
+#        define CC_CONSTRUCTOR_ACCESS public
+#    else
+#        define CC_CONSTRUCTOR_ACCESS protected
+#    endif
 #endif
 
 #ifndef CC_FILEUTILS_APPLE_ENABLE_OBJC
-#define CC_FILEUTILS_APPLE_ENABLE_OBJC  1
+#    define CC_FILEUTILS_APPLE_ENABLE_OBJC 1
 #endif
 
 /** @def CC_ENABLE_PREMULTIPLIED_ALPHA
@@ -348,20 +354,20 @@ THE SOFTWARE.
  * by its alpha component.
  */
 #ifndef CC_ENABLE_PREMULTIPLIED_ALPHA
-# define CC_ENABLE_PREMULTIPLIED_ALPHA 1
+#    define CC_ENABLE_PREMULTIPLIED_ALPHA 1
 #endif
 
 /** @def CC_STRIP_FPS
  * Whether to strip FPS related data and functions, such as cc_fps_images_png
  */
 #ifndef CC_STRIP_FPS
-#define CC_STRIP_FPS 0
+#    define CC_STRIP_FPS 0
 #endif
 
 #ifndef CC_REDUCE_PAUSED_CPU_USAGE
-#define CC_REDUCE_PAUSED_CPU_USAGE 0
+#    define CC_REDUCE_PAUSED_CPU_USAGE 0
 #endif
 
 #ifndef CC_META_TEXTURES
-#define CC_META_TEXTURES 2
+#    define CC_META_TEXTURES 2
 #endif

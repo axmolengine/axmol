@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -125,7 +125,7 @@ public:
      */
     std::string getString(unsigned index) const;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     const std::vector<int>& getInts() const { return ints; }
     const std::vector<float>& getFloats() const { return floats; }
     const std::vector<std::string>& getStrings() const { return strings; }
@@ -144,20 +144,13 @@ public:
     const SlotData* slot;
     UserData* data;
 
-    ActionData() :
-        data(nullptr)
-    {
-        _onClear();
-    }
-    virtual ~ActionData()
-    {
-        _onClear();
-    }
+    ActionData() : data(nullptr) { _onClear(); }
+    virtual ~ActionData() { _onClear(); }
 
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     int getType() const { return (int)type; }
     void setType(int value) { type = (ActionType)value; }
 
@@ -172,4 +165,4 @@ public: // For WebAssembly.
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_USER_DATA_H
+#endif  // DRAGONBONES_USER_DATA_H

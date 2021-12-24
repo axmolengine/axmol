@@ -25,12 +25,14 @@
 
 #ifndef __cocos2d_libs__CCController__
 #define __cocos2d_libs__CCController__
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 )
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||   \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
-#include "platform/CCPlatformMacros.h"
-#include <string>
-#include <vector>
-#include <unordered_map>
+#    include "platform/CCPlatformMacros.h"
+#    include <string>
+#    include <vector>
+#    include <unordered_map>
 
 NS_CC_BEGIN
 
@@ -109,14 +111,14 @@ public:
          * If isAnalog is false, the key value would be contain one number: 0 or 1.
          */
         bool isAnalog;
-    }KeyStatus;
+    } KeyStatus;
 
     static const int TAG_UNSET = -1;
 
     /**
      * Gets all Controller objects.
      */
-    static const std::vector<Controller*>& getAllController(){ return s_allController;}
+    static const std::vector<Controller*>& getAllController() { return s_allController; }
 
     /**
      * Gets a Controller object with tag.
@@ -151,12 +153,12 @@ public:
     /**
      * Gets the name of this Controller object.
      */
-    const std::string& getDeviceName() const { return _deviceName;}
+    const std::string& getDeviceName() const { return _deviceName; }
 
     /**
      * Gets the Controller id.
      */
-    int getDeviceId() const { return _deviceId;}
+    int getDeviceId() const { return _deviceId; }
 
     /**
      * Indicates whether the Controller is connected.
@@ -177,20 +179,20 @@ public:
      * @param externalKeyCode   External key code.
      * @param receive   True if external key event on this controller should be receive, false otherwise.
      */
-    void receiveExternalKeyEvent(int externalKeyCode,bool receive);
+    void receiveExternalKeyEvent(int externalKeyCode, bool receive);
 
     /**
      * Changes the tag that is used to identify the controller easily.
      * @param tag   A integer that identifies the controller.
      */
-    void setTag(int tag) { _controllerTag = tag;}
+    void setTag(int tag) { _controllerTag = tag; }
 
     /**
      * Returns a tag that is used to identify the controller easily.
      *
      * @return An integer that identifies the controller.
      */
-    int getTag() const { return _controllerTag;}
+    int getTag() const { return _controllerTag; }
 
 private:
     static std::vector<Controller*> s_allController;
@@ -217,14 +219,14 @@ private:
     ControllerImpl* _impl;
 
     EventDispatcher* _eventDispatcher;
-    EventController *_connectEvent;
-    EventController *_keyEvent;
-    EventController *_axisEvent;
+    EventController* _connectEvent;
+    EventController* _keyEvent;
+    EventController* _axisEvent;
 
-    #if ( CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 )
-    //FIXME: Once GLFW 3.3 is bundled with cocos2d-x, remove these unordered
-    //maps. They won't be needed. We will only need to provide a mapping from
-    //the GLFW gamepad key codes to the Controller::Key.
+#    if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+    // FIXME: Once GLFW 3.3 is bundled with cocos2d-x, remove these unordered
+    // maps. They won't be needed. We will only need to provide a mapping from
+    // the GLFW gamepad key codes to the Controller::Key.
 
     // Attach the controller profiles from CCController-linux-win32.cpp to each
     // of the Controller variables in order to minimize profile lookup time.
@@ -235,9 +237,9 @@ private:
     // usage is negligible.  Peformance over memory optimization was
     // consciously chosen.
 
-    std::unordered_map<int,int> _buttonInputMap;
-    std::unordered_map<int,int> _axisInputMap;
-    #endif
+    std::unordered_map<int, int> _buttonInputMap;
+    std::unordered_map<int, int> _axisInputMap;
+#    endif
 
     friend class ControllerImpl;
     friend class EventListenerController;

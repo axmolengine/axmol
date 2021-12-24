@@ -3,7 +3,7 @@ Copyright (c) 2009      On-Core
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,16 +34,16 @@ NS_CC_BEGIN
 
 struct Tile
 {
-    Vec2    position;
-    Vec2    startPosition;
-    Vec2    delta;
+    Vec2 position;
+    Vec2 startPosition;
+    Vec2 delta;
 };
 
 // implementation of ShakyTiles3D
 
 ShakyTiles3D* ShakyTiles3D::create(float duration, const Vec2& gridSize, int range, bool shakeZ)
 {
-    ShakyTiles3D *action = new ShakyTiles3D();
+    ShakyTiles3D* action = new ShakyTiles3D();
 
     if (action->initWithDuration(duration, gridSize, range, shakeZ))
     {
@@ -60,7 +60,7 @@ bool ShakyTiles3D::initWithDuration(float duration, const Vec2& gridSize, int ra
     if (TiledGrid3DAction::initWithDuration(duration, gridSize))
     {
         _randrange = range;
-        _shakeZ = shakeZ;
+        _shakeZ    = shakeZ;
 
         return true;
     }
@@ -86,25 +86,25 @@ void ShakyTiles3D::update(float /*time*/)
             Quad3 coords = getOriginalTile(pos);
 
             // X
-            coords.bl.x += ( rand() % (_randrange*2) ) - _randrange;
-            coords.br.x += ( rand() % (_randrange*2) ) - _randrange;
-            coords.tl.x += ( rand() % (_randrange*2) ) - _randrange;
-            coords.tr.x += ( rand() % (_randrange*2) ) - _randrange;
+            coords.bl.x += (rand() % (_randrange * 2)) - _randrange;
+            coords.br.x += (rand() % (_randrange * 2)) - _randrange;
+            coords.tl.x += (rand() % (_randrange * 2)) - _randrange;
+            coords.tr.x += (rand() % (_randrange * 2)) - _randrange;
 
             // Y
-            coords.bl.y += ( rand() % (_randrange*2) ) - _randrange;
-            coords.br.y += ( rand() % (_randrange*2) ) - _randrange;
-            coords.tl.y += ( rand() % (_randrange*2) ) - _randrange;
-            coords.tr.y += ( rand() % (_randrange*2) ) - _randrange;
+            coords.bl.y += (rand() % (_randrange * 2)) - _randrange;
+            coords.br.y += (rand() % (_randrange * 2)) - _randrange;
+            coords.tl.y += (rand() % (_randrange * 2)) - _randrange;
+            coords.tr.y += (rand() % (_randrange * 2)) - _randrange;
 
             if (_shakeZ)
             {
-                coords.bl.z += ( rand() % (_randrange*2) ) - _randrange;
-                coords.br.z += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tl.z += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tr.z += ( rand() % (_randrange*2) ) - _randrange;
+                coords.bl.z += (rand() % (_randrange * 2)) - _randrange;
+                coords.br.z += (rand() % (_randrange * 2)) - _randrange;
+                coords.tl.z += (rand() % (_randrange * 2)) - _randrange;
+                coords.tr.z += (rand() % (_randrange * 2)) - _randrange;
             }
-                        
+
             setTile(pos, coords);
         }
     }
@@ -114,7 +114,7 @@ void ShakyTiles3D::update(float /*time*/)
 
 ShatteredTiles3D* ShatteredTiles3D::create(float duration, const Vec2& gridSize, int range, bool shatterZ)
 {
-    ShatteredTiles3D *action = new ShatteredTiles3D();
+    ShatteredTiles3D* action = new ShatteredTiles3D();
 
     if (action->initWithDuration(duration, gridSize, range, shatterZ))
     {
@@ -130,9 +130,9 @@ bool ShatteredTiles3D::initWithDuration(float duration, const Vec2& gridSize, in
 {
     if (TiledGrid3DAction::initWithDuration(duration, gridSize))
     {
-        _once = false;
+        _once      = false;
         _randrange = range;
-        _shatterZ = shatterZ;
+        _shatterZ  = shatterZ;
 
         return true;
     }
@@ -158,31 +158,31 @@ void ShatteredTiles3D::update(float /*time*/)
             {
                 Vec2 pos((float)i, (float)j);
                 Quad3 coords = getOriginalTile(pos);
-                
-                // X
-                coords.bl.x += ( rand() % (_randrange*2) ) - _randrange;
-                coords.br.x += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tl.x += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tr.x += ( rand() % (_randrange*2) ) - _randrange;
-                
-                // Y
-                coords.bl.y += ( rand() % (_randrange*2) ) - _randrange;
-                coords.br.y += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tl.y += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tr.y += ( rand() % (_randrange*2) ) - _randrange;
 
-                if (_shatterZ) 
+                // X
+                coords.bl.x += (rand() % (_randrange * 2)) - _randrange;
+                coords.br.x += (rand() % (_randrange * 2)) - _randrange;
+                coords.tl.x += (rand() % (_randrange * 2)) - _randrange;
+                coords.tr.x += (rand() % (_randrange * 2)) - _randrange;
+
+                // Y
+                coords.bl.y += (rand() % (_randrange * 2)) - _randrange;
+                coords.br.y += (rand() % (_randrange * 2)) - _randrange;
+                coords.tl.y += (rand() % (_randrange * 2)) - _randrange;
+                coords.tr.y += (rand() % (_randrange * 2)) - _randrange;
+
+                if (_shatterZ)
                 {
-                    coords.bl.z += ( rand() % (_randrange*2) ) - _randrange;
-                    coords.br.z += ( rand() % (_randrange*2) ) - _randrange;                
-                    coords.tl.z += ( rand() % (_randrange*2) ) - _randrange;
-                    coords.tr.z += ( rand() % (_randrange*2) ) - _randrange;
+                    coords.bl.z += (rand() % (_randrange * 2)) - _randrange;
+                    coords.br.z += (rand() % (_randrange * 2)) - _randrange;
+                    coords.tl.z += (rand() % (_randrange * 2)) - _randrange;
+                    coords.tr.z += (rand() % (_randrange * 2)) - _randrange;
                 }
-                
+
                 setTile(pos, coords);
             }
         }
-        
+
         _once = true;
     }
 }
@@ -191,7 +191,7 @@ void ShatteredTiles3D::update(float /*time*/)
 
 ShuffleTiles* ShuffleTiles::create(float duration, const Vec2& gridSize, unsigned int seed)
 {
-    ShuffleTiles *action = new ShuffleTiles();
+    ShuffleTiles* action = new ShuffleTiles();
 
     if (action->initWithDuration(duration, gridSize, seed))
     {
@@ -207,9 +207,9 @@ bool ShuffleTiles::initWithDuration(float duration, const Vec2& gridSize, unsign
 {
     if (TiledGrid3DAction::initWithDuration(duration, gridSize))
     {
-        _seed = seed;
+        _seed       = seed;
         _tilesOrder = nullptr;
-        _tiles = nullptr;
+        _tiles      = nullptr;
 
         return true;
     }
@@ -229,28 +229,28 @@ ShuffleTiles::~ShuffleTiles()
     CC_SAFE_DELETE_ARRAY(_tiles);
 }
 
-void ShuffleTiles::shuffle(unsigned int *array, unsigned int len)
+void ShuffleTiles::shuffle(unsigned int* array, unsigned int len)
 {
-    for (int i = len - 1; i >= 0; i-- )
+    for (int i = len - 1; i >= 0; i--)
     {
-        unsigned int j = rand() % (i+1);
+        unsigned int j = rand() % (i + 1);
         unsigned int v = array[i];
-        array[i] = array[j];
-        array[j] = v;
+        array[i]       = array[j];
+        array[j]       = v;
     }
 }
 
 Vec2 ShuffleTiles::getDelta(const Vec2& pos) const
 {
     unsigned int idx = static_cast<unsigned int>(pos.width * _gridSize.height + pos.height);
-    Vec2    pos2;
+    Vec2 pos2;
     pos2.x = (float)(_tilesOrder[idx] / (int)_gridSize.height);
     pos2.y = (float)(_tilesOrder[idx] % (int)_gridSize.height);
 
     return Vec2((int)(pos2.x - pos.width), (int)(pos2.y - pos.height));
 }
 
-void ShuffleTiles::placeTile(const Vec2& pos, Tile *t)
+void ShuffleTiles::placeTile(const Vec2& pos, Tile* t)
 {
     Quad3 coords = getOriginalTile(pos);
 
@@ -270,7 +270,7 @@ void ShuffleTiles::placeTile(const Vec2& pos, Tile *t)
     setTile(pos, coords);
 }
 
-void ShuffleTiles::startWithTarget(Node *target)
+void ShuffleTiles::startWithTarget(Node* target)
 {
     TiledGrid3DAction::startWithTarget(target);
 
@@ -293,12 +293,12 @@ void ShuffleTiles::startWithTarget(Node *target)
 
     shuffle(_tilesOrder, _tilesCount);
 
-    _tiles = (struct Tile *)new Tile[_tilesCount];
-    Tile *tileArray = (Tile*) _tiles;
+    _tiles          = (struct Tile*)new Tile[_tilesCount];
+    Tile* tileArray = (Tile*)_tiles;
 
     for (int i = 0; i < _gridSize.width; ++i)
     {
-        for ( int j = 0; j < _gridSize.height; ++j)
+        for (int j = 0; j < _gridSize.height; ++j)
         {
             tileArray->position.set((float)i, (float)j);
             tileArray->startPosition.set((float)i, (float)j);
@@ -310,7 +310,7 @@ void ShuffleTiles::startWithTarget(Node *target)
 
 void ShuffleTiles::update(float time)
 {
-    Tile *tileArray = (Tile*)_tiles;
+    Tile* tileArray = (Tile*)_tiles;
 
     for (int i = 0; i < _gridSize.width; ++i)
     {
@@ -327,7 +327,7 @@ void ShuffleTiles::update(float time)
 
 FadeOutTRTiles* FadeOutTRTiles::create(float duration, const Vec2& gridSize)
 {
-    FadeOutTRTiles *action = new FadeOutTRTiles();
+    FadeOutTRTiles* action = new FadeOutTRTiles();
 
     if (action->initWithDuration(duration, gridSize))
     {
@@ -371,7 +371,7 @@ void FadeOutTRTiles::turnOffTile(const Vec2& pos)
 void FadeOutTRTiles::transformTile(const Vec2& pos, float distance)
 {
     Quad3 coords = getOriginalTile(pos);
-    Vec2 step = _gridNodeTarget->getGrid()->getStep();
+    Vec2 step    = _gridNodeTarget->getGrid()->getStep();
 
     coords.bl.x += (step.x / 2) * (1.0f - distance);
     coords.bl.y += (step.y / 2) * (1.0f - distance);
@@ -396,11 +396,11 @@ void FadeOutTRTiles::update(float time)
         {
             Vec2 pos((float)i, (float)j);
             float distance = testFunc(Vec2((float)i, (float)j), time);
-            if ( distance == 0 )
+            if (distance == 0)
             {
                 turnOffTile(pos);
-            } else 
-            if (distance < 1)
+            }
+            else if (distance < 1)
             {
                 transformTile(pos, distance);
             }
@@ -416,7 +416,7 @@ void FadeOutTRTiles::update(float time)
 
 FadeOutBLTiles* FadeOutBLTiles::create(float duration, const Vec2& gridSize)
 {
-    FadeOutBLTiles *action = new FadeOutBLTiles();
+    FadeOutBLTiles* action = new FadeOutBLTiles();
 
     if (action->initWithDuration(duration, gridSize))
     {
@@ -449,7 +449,7 @@ float FadeOutBLTiles::testFunc(const Vec2& pos, float time)
 
 FadeOutUpTiles* FadeOutUpTiles::create(float duration, const Vec2& gridSize)
 {
-    FadeOutUpTiles *action = new FadeOutUpTiles();
+    FadeOutUpTiles* action = new FadeOutUpTiles();
 
     if (action->initWithDuration(duration, gridSize))
     {
@@ -481,7 +481,7 @@ float FadeOutUpTiles::testFunc(const Vec2& pos, float time)
 void FadeOutUpTiles::transformTile(const Vec2& pos, float distance)
 {
     Quad3 coords = getOriginalTile(pos);
-    Vec2 step = _gridNodeTarget->getGrid()->getStep();
+    Vec2 step    = _gridNodeTarget->getGrid()->getStep();
 
     coords.bl.y += (step.y / 2) * (1.0f - distance);
     coords.br.y += (step.y / 2) * (1.0f - distance);
@@ -495,7 +495,7 @@ void FadeOutUpTiles::transformTile(const Vec2& pos, float distance)
 
 FadeOutDownTiles* FadeOutDownTiles::create(float duration, const Vec2& gridSize)
 {
-    FadeOutDownTiles *action = new FadeOutDownTiles();
+    FadeOutDownTiles* action = new FadeOutDownTiles();
 
     if (action->initWithDuration(duration, gridSize))
     {
@@ -529,14 +529,14 @@ TurnOffTiles* TurnOffTiles::create(float duration, const Vec2& gridSize)
         action->autorelease();
         return action;
     }
-    
+
     delete action;
     return nullptr;
 }
 
 TurnOffTiles* TurnOffTiles::create(float duration, const Vec2& gridSize, unsigned int seed)
 {
-    TurnOffTiles *action = new TurnOffTiles();
+    TurnOffTiles* action = new TurnOffTiles();
 
     if (action->initWithDuration(duration, gridSize, seed))
     {
@@ -552,7 +552,7 @@ bool TurnOffTiles::initWithDuration(float duration, const Vec2& gridSize, unsign
 {
     if (TiledGrid3DAction::initWithDuration(duration, gridSize))
     {
-        _seed = seed;
+        _seed       = seed;
         _tilesOrder = nullptr;
 
         return true;
@@ -572,14 +572,14 @@ TurnOffTiles::~TurnOffTiles()
     CC_SAFE_DELETE_ARRAY(_tilesOrder);
 }
 
-void TurnOffTiles::shuffle(unsigned int *array, unsigned int len)
+void TurnOffTiles::shuffle(unsigned int* array, unsigned int len)
 {
     for (int i = len - 1; i >= 0; i--)
     {
-        unsigned int j = rand() % (i+1);
+        unsigned int j = rand() % (i + 1);
         unsigned int v = array[i];
-        array[i] = array[j];
-        array[j] = v;
+        array[i]       = array[j];
+        array[j]       = v;
     }
 }
 
@@ -596,7 +596,7 @@ void TurnOffTiles::turnOffTile(const Vec2& pos)
     setTile(pos, coords);
 }
 
-void TurnOffTiles::startWithTarget(Node *target)
+void TurnOffTiles::startWithTarget(Node* target)
 {
     TiledGrid3DAction::startWithTarget(target);
 
@@ -621,14 +621,14 @@ void TurnOffTiles::update(float time)
     unsigned int l = (unsigned int)(time * (float)_tilesCount);
 
     unsigned int t = 0;
-    for (unsigned int i = 0; i < _tilesCount; i++ )
+    for (unsigned int i = 0; i < _tilesCount; i++)
     {
         t = _tilesOrder[i];
-        //needs integer value
+        // needs integer value
         unsigned int x = (unsigned int)(t / _gridSize.height);
         Vec2 tilePos((float)x, (float)(t % (unsigned int)_gridSize.height));
 
-        if ( i < l )
+        if (i < l)
         {
             turnOffTile(tilePos);
         }
@@ -643,7 +643,7 @@ void TurnOffTiles::update(float time)
 
 WavesTiles3D* WavesTiles3D::create(float duration, const Vec2& gridSize, unsigned int waves, float amplitude)
 {
-    WavesTiles3D *action = new WavesTiles3D();
+    WavesTiles3D* action = new WavesTiles3D();
 
     if (action->initWithDuration(duration, gridSize, waves, amplitude))
     {
@@ -659,8 +659,8 @@ bool WavesTiles3D::initWithDuration(float duration, const Vec2& gridSize, unsign
 {
     if (TiledGrid3DAction::initWithDuration(duration, gridSize))
     {
-        _waves = waves;
-        _amplitude = amplitude;
+        _waves         = waves;
+        _amplitude     = amplitude;
         _amplitudeRate = 1.0f;
 
         return true;
@@ -677,16 +677,16 @@ WavesTiles3D* WavesTiles3D::clone() const
 
 void WavesTiles3D::update(float time)
 {
-    for (int i = 0; i < _gridSize.width; i++ )
+    for (int i = 0; i < _gridSize.width; i++)
     {
-        for (int j = 0; j < _gridSize.height; j++ )
+        for (int j = 0; j < _gridSize.height; j++)
         {
             Vec2 pos((float)i, (float)j);
             Quad3 coords = getOriginalTile(pos);
 
-            coords.bl.z = (sinf(time * (float)M_PI  *_waves * 2 + 
-                (coords.bl.y+coords.bl.x) * .01f) * _amplitude * _amplitudeRate );
-            coords.br.z    = coords.bl.z;
+            coords.bl.z = (sinf(time * (float)M_PI * _waves * 2 + (coords.bl.y + coords.bl.x) * .01f) * _amplitude *
+                           _amplitudeRate);
+            coords.br.z = coords.bl.z;
             coords.tl.z = coords.bl.z;
             coords.tr.z = coords.bl.z;
 
@@ -699,7 +699,7 @@ void WavesTiles3D::update(float time)
 
 JumpTiles3D* JumpTiles3D::create(float duration, const Vec2& gridSize, unsigned int numberOfJumps, float amplitude)
 {
-    JumpTiles3D *action = new JumpTiles3D();
+    JumpTiles3D* action = new JumpTiles3D();
 
     if (action->initWithDuration(duration, gridSize, numberOfJumps, amplitude))
     {
@@ -715,8 +715,8 @@ bool JumpTiles3D::initWithDuration(float duration, const Vec2& gridSize, unsigne
 {
     if (TiledGrid3DAction::initWithDuration(duration, gridSize))
     {
-        _jumps = numberOfJumps;
-        _amplitude = amplitude;
+        _jumps         = numberOfJumps;
+        _amplitude     = amplitude;
         _amplitudeRate = 1.0f;
 
         return true;
@@ -733,17 +733,17 @@ JumpTiles3D* JumpTiles3D::clone() const
 
 void JumpTiles3D::update(float time)
 {
-    float sinz =  (sinf((float)M_PI * time * _jumps * 2) * _amplitude * _amplitudeRate );
-    float sinz2 = (sinf((float)M_PI * (time * _jumps * 2 + 1)) * _amplitude * _amplitudeRate );
+    float sinz  = (sinf((float)M_PI * time * _jumps * 2) * _amplitude * _amplitudeRate);
+    float sinz2 = (sinf((float)M_PI * (time * _jumps * 2 + 1)) * _amplitude * _amplitudeRate);
 
-    for (int i = 0; i < _gridSize.width; i++ )
+    for (int i = 0; i < _gridSize.width; i++)
     {
-        for (int j = 0; j < _gridSize.height; j++ )
+        for (int j = 0; j < _gridSize.height; j++)
         {
             Vec2 pos((float)i, (float)j);
             Quad3 coords = getOriginalTile(pos);
 
-            if ( ((i+j) % 2) == 0 )
+            if (((i + j) % 2) == 0)
             {
                 coords.bl.z += sinz;
                 coords.br.z += sinz;
@@ -767,7 +767,7 @@ void JumpTiles3D::update(float time)
 
 SplitRows* SplitRows::create(float duration, unsigned int nRows)
 {
-    SplitRows *action = new SplitRows();
+    SplitRows* action = new SplitRows();
 
     if (action->initWithDuration(duration, nRows))
     {
@@ -792,7 +792,7 @@ SplitRows* SplitRows::clone() const
     return SplitRows::create(_duration, _rows);
 }
 
-void SplitRows::startWithTarget(Node *target)
+void SplitRows::startWithTarget(Node* target)
 {
     TiledGrid3DAction::startWithTarget(target);
     _winSize = Director::getInstance()->getWinSizeInPixels();
@@ -803,10 +803,10 @@ void SplitRows::update(float time)
     for (int j = 0; j < _gridSize.height; ++j)
     {
         Vec2 pos(0, (float)j);
-        Quad3 coords = getOriginalTile(pos);
-        float    direction = 1;
+        Quad3 coords    = getOriginalTile(pos);
+        float direction = 1;
 
-        if ( (j % 2 ) == 0 )
+        if ((j % 2) == 0)
         {
             direction = -1;
         }
@@ -824,7 +824,7 @@ void SplitRows::update(float time)
 
 SplitCols* SplitCols::create(float duration, unsigned int cols)
 {
-    SplitCols *action = new SplitCols();
+    SplitCols* action = new SplitCols();
 
     if (action->initWithDuration(duration, cols))
     {
@@ -848,7 +848,7 @@ SplitCols* SplitCols::clone() const
     return SplitCols::create(_duration, _cols);
 }
 
-void SplitCols::startWithTarget(Node *target)
+void SplitCols::startWithTarget(Node* target)
 {
     TiledGrid3DAction::startWithTarget(target);
     _winSize = Director::getInstance()->getWinSizeInPixels();
@@ -859,10 +859,10 @@ void SplitCols::update(float time)
     for (unsigned int i = 0; i < _gridSize.width; ++i)
     {
         Vec2 pos((float)i, 0);
-        Quad3 coords = getOriginalTile(pos);
-        float    direction = 1;
+        Quad3 coords    = getOriginalTile(pos);
+        float direction = 1;
 
-        if ( (i % 2 ) == 0 )
+        if ((i % 2) == 0)
         {
             direction = -1;
         }

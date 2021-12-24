@@ -3,19 +3,19 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
- 
+
  https://adxe.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,7 +40,8 @@ NS_CC_BEGIN
 @struct BMFontDef
 BMFont definition
 */
-typedef struct _BMFontDef {
+typedef struct _BMFontDef
+{
     //! ID of the character
     unsigned int charID;
     //! origin and size of the font
@@ -57,7 +58,8 @@ typedef struct _BMFontDef {
 BMFont padding
 @since v0.8.2
 */
-typedef struct _BMFontPadding {
+typedef struct _BMFontPadding
+{
     /// padding left
     int left;
     /// padding top
@@ -74,7 +76,7 @@ typedef struct _BMFontPadding {
 class CC_DLL BMFontConfiguration : public Ref
 {
     // FIXME: Creating a public interface so that the bitmapFontArray[] is accessible
-public://@public
+public:  //@public
     // BMFont definitions
     std::unordered_map<int /* key */, BMFontDef /* fontDef */> _fontDefDictionary;
 
@@ -82,7 +84,7 @@ public://@public
     int _commonHeight;
 
     //! Padding
-    BMFontPadding    _padding;
+    BMFontPadding _padding;
 
     //! atlas name
     std::string _atlasName;
@@ -95,6 +97,7 @@ public://@public
 
     //! Font size
     int _fontSize;
+
 public:
     /**
      * @js ctor
@@ -124,7 +127,9 @@ public:
 
 protected:
     virtual std::set<unsigned int>* parseConfigFile(const std::string& controlFile);
-    virtual std::set<unsigned int>* parseBinaryConfigFile(unsigned char* pData, uint32_t size, const std::string& controlFile);
+    virtual std::set<unsigned int>* parseBinaryConfigFile(unsigned char* pData,
+                                                          uint32_t size,
+                                                          const std::string& controlFile);
 
 private:
     unsigned int parseCharacterDefinition(const char* line);
@@ -138,31 +143,30 @@ private:
 
 class CC_DLL FontFNT : public Font
 {
-    
+
 public:
-    
     static FontFNT* create(const std::string& fntFilePath, const Rect& imageRect, bool imageRotated);
     static FontFNT* create(const std::string& fntFilePath, const std::string& subTextureKey);
     static FontFNT* create(const std::string& fntFilePath);
 
-    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(const std::string& fntFilePath, const Vec2& imageOffset = Vec2::ZERO);
+    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(const std::string& fntFilePath,
+                                                   const Vec2& imageOffset = Vec2::ZERO);
 
     /** Purges the cached data.
     Removes from memory the cached configurations and the atlas name dictionary.
     */
     static void purgeCachedData();
-    virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int &outNumLetters) const override;
+    virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
     virtual FontAtlas* newFontAtlas() override;
 
     void setFontSize(float fontSize);
     float getFontSize() const { return _fontSize; }
 
-    int getOriginalFontSize()const;
+    int getOriginalFontSize() const;
 
     static void reloadBMFontResource(const std::string& fntFilePath);
 
 protected:
-    
     FontFNT(BMFontConfiguration* theContfig, const Rect& imageRect, bool imageRotated);
     FontFNT(BMFontConfiguration* theContfig);
 
@@ -174,13 +178,13 @@ protected:
 
     BMFontConfiguration* _configuration;
 
-    int  getHorizontalKerningForChars(char32_t firstChar, char32_t secondChar) const;
+    int getHorizontalKerningForChars(char32_t firstChar, char32_t secondChar) const;
 
     Rect _imageRectInPoints;
     bool _imageRotated;
 
-    //User defined font size
-    float  _fontSize;
+    // User defined font size
+    float _fontSize;
 };
 
 /// @endcond

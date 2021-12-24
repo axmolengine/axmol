@@ -26,11 +26,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #if defined(_WIN32)
-#include <io.h>
-#include <direct.h>
+#    include <io.h>
+#    include <direct.h>
 #else
-#include <unistd.h>
-#include <errno.h>
+#    include <unistd.h>
+#    include <errno.h>
 #endif
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -58,9 +58,9 @@ THE SOFTWARE.
 #define USER_DEFAULT_PLAIN_MODE 0
 
 #if !USER_DEFAULT_PLAIN_MODE
-#define USER_DEFAULT_FILENAME "UserDefault.bin"
+#    define USER_DEFAULT_FILENAME "UserDefault.bin"
 #else
-#define USER_DEFAULT_FILENAME "UserDefault.xml"
+#    define USER_DEFAULT_FILENAME "UserDefault.xml"
 #endif
 
 typedef int32_t udflen_t;
@@ -73,30 +73,33 @@ NS_CC_BEGIN
 
 UserDefault* UserDefault::_userDefault = nullptr;
 
-static void ud_setkey(std::string& lhs, const cxx17::string_view& rhs) {
+static void ud_setkey(std::string& lhs, const cxx17::string_view& rhs)
+{
     static const size_t keyLen = 16;
-    if (!rhs.empty()) {
+    if (!rhs.empty())
+    {
         lhs.assign(rhs.data(), std::min(rhs.length(), keyLen));
         if (lhs.size() < keyLen)
-            lhs.insert(lhs.end(), keyLen - lhs.size(), '\0'); // fill 0, if key insufficient
+            lhs.insert(lhs.end(), keyLen - lhs.size(), '\0');  // fill 0, if key insufficient
     }
     else
         lhs.assign(keyLen, '\0');
 }
 
-static void ud_write_v_s(UserDefault* ud, yasio::obstream& obs, const cxx17::string_view value) 
+static void ud_write_v_s(UserDefault* ud, yasio::obstream& obs, const cxx17::string_view value)
 {
     size_t value_offset = obs.length();
     obs.write_v(value);
     value_offset += (obs.length() - value_offset - value.length());
-    if(!value.empty())
+    if (!value.empty())
         ud->encrypt(obs.data() + value_offset, value.length(), AES_ENCRYPT);
 }
 
 void UserDefault::setEncryptEnabled(bool enabled, cxx17::string_view key, cxx17::string_view iv)
 {
     _encryptEnabled = enabled;
-    if (_encryptEnabled) {
+    if (_encryptEnabled)
+    {
         ud_setkey(_key, key);
         ud_setkey(_iv, iv);
     }
@@ -110,11 +113,12 @@ void UserDefault::encrypt(std::string& inout, int enc)
 
 void UserDefault::encrypt(char* inout, size_t size, int enc)
 {
-    if (size > 0) {
+    if (size > 0)
+    {
         AES_KEY aeskey;
         AES_set_encrypt_key((const unsigned char*)_key.c_str(), 128, &aeskey);
 
-        unsigned char iv[16] = { 0 };
+        unsigned char iv[16] = {0};
         memcpy(iv, _iv.c_str(), std::min(sizeof(iv), _iv.size()));
 
         int ignored_num = 0;
@@ -127,15 +131,14 @@ UserDefault::~UserDefault()
     closeFileMapping();
 }
 
-UserDefault::UserDefault()
-{
-}
+UserDefault::UserDefault() {}
 
 void UserDefault::closeFileMapping()
 {
     _rwmmap.reset();
 #if !USER_DEFAULT_PLAIN_MODE
-    if (_fd != -1) {
+    if (_fd != -1)
+    {
         posix_close(_fd);
         _fd = -1;
     }
@@ -144,7 +147,7 @@ void UserDefault::closeFileMapping()
 
 bool UserDefault::getBoolForKey(const char* pKey)
 {
- return getBoolForKey(pKey, false);
+    return getBoolForKey(pKey, false);
 }
 
 bool UserDefault::getBoolForKey(const char* pKey, bool defaultValue)
@@ -194,7 +197,7 @@ float UserDefault::getFloatForKey(const char* pKey, float defaultValue)
     return static_cast<float>(getDoubleForKey(pKey, defaultValue));
 }
 
-double  UserDefault::getDoubleForKey(const char* pKey)
+double UserDefault::getDoubleForKey(const char* pKey)
 {
     return getDoubleForKey(pKey, 0.0);
 }
@@ -213,7 +216,7 @@ std::string UserDefault::getStringForKey(const char* pKey)
     return getStringForKey(pKey, "");
 }
 
-std::string UserDefault::getStringForKey(const char* pKey, const std::string & defaultValue)
+std::string UserDefault::getStringForKey(const char* pKey, const std::string& defaultValue)
 {
     auto pValue = getValueForKey(pKey);
     if (pValue)
@@ -242,7 +245,7 @@ void UserDefault::setBoolForKey(const char* pKey, bool value)
 void UserDefault::setIntegerForKey(const char* pKey, int value)
 {
     // check key
-    if (! pKey)
+    if (!pKey)
     {
         return;
     }
@@ -256,7 +259,7 @@ void UserDefault::setIntegerForKey(const char* pKey, int value)
 }
 
 void UserDefault::setLargeIntForKey(const char* pKey, int64_t value)
-{// check key
+{  // check key
     if (!pKey)
     {
         return;
@@ -278,7 +281,7 @@ void UserDefault::setFloatForKey(const char* pKey, float value)
 void UserDefault::setDoubleForKey(const char* pKey, double value)
 {
     // check key
-    if (! pKey)
+    if (!pKey)
     {
         return;
     }
@@ -291,10 +294,10 @@ void UserDefault::setDoubleForKey(const char* pKey, double value)
     setStringForKey(pKey, tmp);
 }
 
-void UserDefault::setStringForKey(const char* pKey, const std::string & value)
+void UserDefault::setStringForKey(const char* pKey, const std::string& value)
 {
     // ignore empty key
-    if (! pKey || !*pKey)
+    if (!pKey || !*pKey)
     {
         return;
     }
@@ -302,20 +305,22 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
     setValueForKey(pKey, value);
 
 #if !USER_DEFAULT_PLAIN_MODE
-    if (_rwmmap) {
+    if (_rwmmap)
+    {
         yasio::obstream obs;
         if (_encryptEnabled)
         {
             ud_write_v_s(this, obs, pKey);
             ud_write_v_s(this, obs, value);
         }
-        else {
+        else
+        {
             obs.write_v(pKey);
             obs.write_v(value);
         }
 
         if ((_realSize + obs.length() + sizeof(udflen_t)) < _curMapSize)
-        { // fast append entity without flush
+        {  // fast append entity without flush
             // increase entities count
             yasio::obstream::swrite(_rwmmap->data(), 1 + yasio::ibstream::sread<udflen_t>(_rwmmap->data()));
 
@@ -323,7 +328,8 @@ void UserDefault::setStringForKey(const char* pKey, const std::string & value)
             ::memcpy(_rwmmap->data() + sizeof(udflen_t) + _realSize, obs.data(), obs.length());
             _realSize += static_cast<int>(obs.length());
         }
-        else {
+        else
+        {
             flush();
         }
     }
@@ -351,9 +357,10 @@ void UserDefault::updateValueForKey(const std::string& key, const std::string& v
 
 UserDefault* UserDefault::getInstance()
 {
-    if (_userDefault) return _userDefault;
+    if (_userDefault)
+        return _userDefault;
 
-    return ( _userDefault = new UserDefault() );
+    return (_userDefault = new UserDefault());
 }
 
 void UserDefault::destroyInstance()
@@ -361,7 +368,7 @@ void UserDefault::destroyInstance()
     CC_SAFE_DELETE(_userDefault);
 }
 
-void UserDefault::setDelegate(UserDefault *delegate)
+void UserDefault::setDelegate(UserDefault* delegate)
 {
     if (_userDefault)
         delete _userDefault;
@@ -371,14 +378,16 @@ void UserDefault::setDelegate(UserDefault *delegate)
 
 void UserDefault::lazyInit()
 {
-    if (_initialized) return;
+    if (_initialized)
+        return;
 
 #if !USER_DEFAULT_PLAIN_MODE
     _filePath = FileUtils::getInstance()->getNativeWritableAbsolutePath() + USER_DEFAULT_FILENAME;
 
     // construct file mapping
     _fd = posix_open(_filePath.c_str(), O_OVERLAP_FLAGS);
-    if (_fd == -1) {
+    if (_fd == -1)
+    {
         log("[Warnning] UserDefault::init open storage file '%s' failed!", _filePath.c_str());
         return;
     }
@@ -386,19 +395,24 @@ void UserDefault::lazyInit()
     int filesize = static_cast<int>(posix_lseek64(_fd, 0, SEEK_END));
     posix_lseek64(_fd, 0, SEEK_SET);
 
-    if (filesize < _curMapSize) { // construct a empty file mapping
+    if (filesize < _curMapSize)
+    {  // construct a empty file mapping
         posix_fsetsize(_fd, _curMapSize);
         _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, _curMapSize);
     }
-    else { /// load to memory _values
+    else
+    {  /// load to memory _values
         _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, mio::map_entire_file);
-        if (_rwmmap->is_mapped()) { // no error
+        if (_rwmmap->is_mapped())
+        {  // no error
             yasio::ibstream_view ibs(_rwmmap->data(), _rwmmap->length());
 
-            if (ibs.length() > 0) {
+            if (ibs.length() > 0)
+            {
                 // read count of keyvals.
                 int count = ibs.read<int>();
-                for (auto i = 0; i < count; ++i) {
+                for (auto i = 0; i < count; ++i)
+                {
                     std::string key(ibs.read_v());
                     std::string value(ibs.read_v());
                     if (_encryptEnabled)
@@ -411,10 +425,13 @@ void UserDefault::lazyInit()
                 _realSize = static_cast<int>(ibs.seek(0, SEEK_CUR) - sizeof(udflen_t));
             }
         }
-        else {
+        else
+        {
             closeFileMapping();
             ::remove(_filePath.c_str());
-            log("[Warnning] UserDefault::init map file '%s' failed, we can't save data persisit this time, next time we will retry!", _filePath.c_str());
+            log("[Warnning] UserDefault::init map file '%s' failed, we can't save data persisit this time, next time "
+                "we will retry!",
+                _filePath.c_str());
         }
     }
 #else
@@ -424,13 +441,15 @@ void UserDefault::lazyInit()
 
     if (FileUtils::getInstance()->isFileExist(_filePath))
     {
-        auto data = FileUtils::getInstance()->getDataFromFile(_filePath);
+        auto data                  = FileUtils::getInstance()->getDataFromFile(_filePath);
         pugi::xml_parse_result ret = doc.load_buffer_inplace(data.getBytes(), data.getSize());
-        if (ret) {
+        if (ret)
+        {
             for (auto& elem : doc.document_element())
                 updateValueForKey(elem.name(), elem.text().as_string());
         }
-        else {
+        else
+        {
             log("UserDefault::init load xml file: %s failed, %s", _filePath.c_str(), ret.description());
         }
     }
@@ -443,35 +462,40 @@ void UserDefault::lazyInit()
 void UserDefault::flush()
 {
 #if !USER_DEFAULT_PLAIN_MODE
-    if (_rwmmap) {
+    if (_rwmmap)
+    {
         yasio::obstream obs;
         obs.write<int>(static_cast<int>(this->_values.size()));
-        for (auto& item : this->_values) {
+        for (auto& item : this->_values)
+        {
             if (_encryptEnabled)
             {
                 ud_write_v_s(this, obs, item.first);
                 ud_write_v_s(this, obs, item.second);
             }
-            else {
+            else
+            {
                 obs.write_v(item.first);
                 obs.write_v(item.second);
             }
         }
 
         std::error_code error;
-        if (obs.length() > _curMapSize) {
+        if (obs.length() > _curMapSize)
+        {
             _rwmmap->unmap();
-            _curMapSize <<= 1; // X2
+            _curMapSize <<= 1;  // X2
             posix_fsetsize(_fd, _curMapSize);
             _rwmmap->map(posix_fd2fh(_fd), 0, _curMapSize, error);
         }
 
         if (!error && _rwmmap->is_mapped())
-        { // mapping status is good
+        {  // mapping status is good
             ::memcpy(_rwmmap->data(), obs.data(), obs.length());
             _realSize = static_cast<int>(obs.length() - sizeof(udflen_t));
         }
-        else {
+        else
+        {
             // close file mapping and do a simple workaround fix to don't do persist later at this time
             closeFileMapping();
             ::remove(_filePath.c_str());
@@ -482,10 +506,8 @@ void UserDefault::flush()
     doc.load_string(R"(<?xml version="1.0" ?>
 <r />)");
     auto r = doc.document_element();
-    for(auto& kv : _values)
-        r.append_child(kv.first.c_str())
-        .append_child(pugi::xml_node_type::node_pcdata)
-        .set_value(kv.second.c_str());
+    for (auto& kv : _values)
+        r.append_child(kv.first.c_str()).append_child(pugi::xml_node_type::node_pcdata).set_value(kv.second.c_str());
 
     std::stringstream ss;
     doc.save(ss, "  ");
@@ -495,7 +517,7 @@ void UserDefault::flush()
 
 void UserDefault::deleteValueForKey(const char* key)
 {
-    if(this->_values.erase(key) > 0)
+    if (this->_values.erase(key) > 0)
         flush();
 }
 

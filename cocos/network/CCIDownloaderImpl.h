@@ -11,10 +11,10 @@
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,37 +34,45 @@
 
 // #define CC_DOWNLOADER_DEBUG
 #if defined(CC_DOWNLOADER_DEBUG) || defined(_DEBUG)
-#define DLLOG(format, ...)      cocos2d::log(format, ##__VA_ARGS__)
+#    define DLLOG(format, ...) cocos2d::log(format, ##__VA_ARGS__)
 #else
-#define DLLOG(...)       do {} while (0)
+#    define DLLOG(...) \
+        do             \
+        {              \
+        } while (0)
 #endif
 
-namespace cocos2d { namespace network
+namespace cocos2d
 {
-    class DownloadTask;
+namespace network
+{
+class DownloadTask;
 
-    class CC_DLL IDownloadTask
-    {
-    public:
-        virtual ~IDownloadTask(){}
-        virtual void cancel() {}
-    };
+class CC_DLL IDownloadTask
+{
+public:
+    virtual ~IDownloadTask() {}
+    virtual void cancel() {}
+};
 
-    class IDownloaderImpl
-    {
-    public:
-        virtual ~IDownloaderImpl(){}
+class IDownloaderImpl
+{
+public:
+    virtual ~IDownloaderImpl() {}
 
-        std::function<void(const DownloadTask& task, std::function<int64_t(void *buffer, int64_t len)>& transferDataToBuffer)> onTaskProgress;
+    std::function<void(const DownloadTask& task,
+                       std::function<int64_t(void* buffer, int64_t len)>& transferDataToBuffer)>
+        onTaskProgress;
 
-        std::function<void(const DownloadTask& task,
-                           int errorCode,
-                           int errorCodeInternal,
-                           const std::string& errorStr,
-                           std::vector<unsigned char>& data)> onTaskFinish;
+    std::function<void(const DownloadTask& task,
+                       int errorCode,
+                       int errorCodeInternal,
+                       const std::string& errorStr,
+                       std::vector<unsigned char>& data)>
+        onTaskFinish;
 
-        virtual void startTask(std::shared_ptr<DownloadTask>& task) = 0;
-    };
+    virtual void startTask(std::shared_ptr<DownloadTask>& task) = 0;
+};
 
-}}  // namespace cocos2d::network
-
+}  // namespace network
+}  // namespace cocos2d

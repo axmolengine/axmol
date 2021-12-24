@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "base/CCValue.h"
 #include "CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CCS_DLL ComAttribute : public cocos2d::Component
 {
@@ -45,14 +46,14 @@ public:
      * @lua NA
      */
     virtual ~ComAttribute(void);
-    
+
 public:
     const static std::string COMPONENT_NAME;
 
     static ComAttribute* create(void);
     virtual bool init() override;
     virtual bool serialize(void* r) override;
-    
+
     void setInt(const std::string& key, int value);
     void setFloat(const std::string& key, float value);
     void setBool(const std::string& key, bool value);
@@ -61,12 +62,13 @@ public:
     float getFloat(const std::string& key, float def = 0.0f) const;
     bool getBool(const std::string& key, bool def = false) const;
     std::string getString(const std::string& key, const std::string& def = "") const;
-    bool parse(const std::string &jsonFile);
+    bool parse(const std::string& jsonFile);
+
 private:
-   cocos2d::ValueMap _dict;
-   rapidjson::Document _doc;
+    cocos2d::ValueMap _dict;
+    rapidjson::Document _doc;
 };
 
-}
+}  // namespace cocostudio
 
 #endif  // __CC_EXTENTIONS_CCCOMATTRIBUTE_H__

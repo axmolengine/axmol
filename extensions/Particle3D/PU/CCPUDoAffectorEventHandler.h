@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -48,34 +48,33 @@ public:
     static PUDoAffectorEventHandler* create();
 
     /** Get the indication whether pre- and postprocessing must be done.
-    */
-    bool getPrePost() const {return _prePost;};
+     */
+    bool getPrePost() const { return _prePost; };
 
     /** Set the indication whether pre- and postprocessing must be done.
-    */
-    void setPrePost(const bool prePost){_prePost = prePost;};
+     */
+    void setPrePost(const bool prePost) { _prePost = prePost; };
 
     /** Get the name of the affector that must be enabled or disabled.
-    */
-    const std::string& getAffectorName() const {return _affectorName;};
+     */
+    const std::string& getAffectorName() const { return _affectorName; };
 
     /** Set the name of the affector.
-    */
-    void setAffectorName(const std::string& affectorName){_affectorName = affectorName;};
+     */
+    void setAffectorName(const std::string& affectorName) { _affectorName = affectorName; };
 
-    /** If the _handle() function of this class is invoked (by an Observer), it searches the 
-        ParticleAffector defined by the its name. 
-        The ParticleAffector is either part of the ParticleTechnique in which the 
-        DoAffectorEventHandler is defined, or if the Affector is not found, other 
+    /** If the _handle() function of this class is invoked (by an Observer), it searches the
+        ParticleAffector defined by the its name.
+        The ParticleAffector is either part of the ParticleTechnique in which the
+        DoAffectorEventHandler is defined, or if the Affector is not found, other
         ParticleTechniques are searched.
     */
-    virtual void handle (PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
+    virtual void handle(PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
 
-    virtual void copyAttributesTo (PUEventHandler* eventHandler) override;
+    virtual void copyAttributesTo(PUEventHandler* eventHandler) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    PUDoAffectorEventHandler();
-    virtual ~PUDoAffectorEventHandler() {};
+    CC_CONSTRUCTOR_ACCESS : PUDoAffectorEventHandler();
+    virtual ~PUDoAffectorEventHandler(){};
 
 protected:
     // Identifies the name of affector

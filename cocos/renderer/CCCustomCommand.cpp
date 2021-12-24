@@ -71,48 +71,50 @@ CustomCommand& CustomCommand::operator=(CustomCommand&& rhs)
 // which must be suppressed.
 // see also: https://github.com/google/benchmark/pull/629
 #if defined(__INTEL_COMPILER)
-#pragma warning push
-#pragma warning(disable:1875)
+#    pragma warning push
+#    pragma warning(disable : 1875)
 #elif defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winvalid-offsetof"
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Winvalid-offsetof"
 #endif
 void CustomCommand::assign(const CustomCommand& rhs)
 {
-    if (this != &rhs) {
+    if (this != &rhs)
+    {
         auto podOffset = offsetof(CustomCommand, _type);
-        auto podSize = offsetof(CustomCommand, _beforeCallback) - podOffset;
+        auto podSize   = offsetof(CustomCommand, _beforeCallback) - podOffset;
         memcpy((uint8_t*)this + podOffset, (const uint8_t*)&rhs + podOffset, podSize);
 
         CC_SAFE_RETAIN(_vertexBuffer);
         CC_SAFE_RETAIN(_indexBuffer);
 
         _beforeCallback = rhs._beforeCallback;
-        _afterCallback = rhs._afterCallback;
+        _afterCallback  = rhs._afterCallback;
     }
 }
 
 void CustomCommand::assign(CustomCommand&& rhs)
 {
-    if (this != &rhs) {
+    if (this != &rhs)
+    {
         auto podOffset = offsetof(CustomCommand, _type);
-        auto podSize = offsetof(CustomCommand, _beforeCallback) - podOffset;
+        auto podSize   = offsetof(CustomCommand, _beforeCallback) - podOffset;
         memcpy((uint8_t*)this + podOffset, (const uint8_t*)&rhs + podOffset, podSize);
 
         _beforeCallback = std::move(rhs._beforeCallback);
-        _afterCallback = std::move(rhs._afterCallback);
+        _afterCallback  = std::move(rhs._afterCallback);
 
         rhs._vertexBuffer = rhs._indexBuffer = nullptr;
         rhs._pipelineDescriptor.programState = nullptr;
     }
 }
 #if defined(__INTEL_COMPILER)
-#pragma warning pop
+#    pragma warning pop
 #elif defined(__GNUC__)
-#pragma GCC diagnostic pop
+#    pragma GCC diagnostic pop
 #endif
 
-void CustomCommand::init(float depth, const cocos2d::Mat4 &modelViewTransform, unsigned int flags)
+void CustomCommand::init(float depth, const cocos2d::Mat4& modelViewTransform, unsigned int flags)
 {
     RenderCommand::init(depth, modelViewTransform, flags);
 }
@@ -126,8 +128,8 @@ void CustomCommand::init(float globalZOrder, const BlendFunc& blendFunc)
 {
     _globalOrder = globalZOrder;
 
-    auto& blendDescriptor = _pipelineDescriptor.blendDescriptor;
-    blendDescriptor.blendEnabled = true;
+    auto& blendDescriptor                = _pipelineDescriptor.blendDescriptor;
+    blendDescriptor.blendEnabled         = true;
     blendDescriptor.sourceRGBBlendFactor = blendDescriptor.sourceAlphaBlendFactor = blendFunc.src;
     blendDescriptor.destinationRGBBlendFactor = blendDescriptor.destinationAlphaBlendFactor = blendFunc.dst;
 }
@@ -135,29 +137,29 @@ void CustomCommand::init(float globalZOrder, const BlendFunc& blendFunc)
 void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capacity, BufferUsage usage)
 {
     CC_SAFE_RELEASE(_vertexBuffer);
-    
-    _vertexCapacity = capacity;
+
+    _vertexCapacity  = capacity;
     _vertexDrawCount = capacity;
-    
-    auto device = backend::Device::getInstance();
+
+    auto device   = backend::Device::getInstance();
     _vertexBuffer = device->newBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
 }
 
 void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, BufferUsage usage)
 {
     CC_SAFE_RELEASE(_indexBuffer);
-    
-    _indexFormat = format;
-    _indexSize = computeIndexSize();
-    _indexCapacity = capacity;
+
+    _indexFormat    = format;
+    _indexSize      = computeIndexSize();
+    _indexCapacity  = capacity;
     _indexDrawCount = capacity;
-    
-    auto device = backend::Device::getInstance();
+
+    auto device  = backend::Device::getInstance();
     _indexBuffer = device->newBuffer(_indexSize * capacity, backend::BufferType::INDEX, usage);
 }
 
 void CustomCommand::updateVertexBuffer(void* data, std::size_t offset, std::size_t length)
-{   
+{
     assert(_vertexBuffer);
     _vertexBuffer->updateSubData(data, offset, length);
 }
@@ -168,7 +170,7 @@ void CustomCommand::updateIndexBuffer(void* data, std::size_t offset, std::size_
     _indexBuffer->updateSubData(data, offset, length);
 }
 
-void CustomCommand::setVertexBuffer(backend::Buffer *vertexBuffer)
+void CustomCommand::setVertexBuffer(backend::Buffer* vertexBuffer)
 {
     if (_vertexBuffer == vertexBuffer)
         return;
@@ -178,7 +180,7 @@ void CustomCommand::setVertexBuffer(backend::Buffer *vertexBuffer)
     CC_SAFE_RETAIN(_vertexBuffer);
 }
 
-void CustomCommand::setIndexBuffer(backend::Buffer *indexBuffer, IndexFormat format)
+void CustomCommand::setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat format)
 {
     if (_indexBuffer == indexBuffer && _indexFormat == format)
         return;
@@ -188,7 +190,7 @@ void CustomCommand::setIndexBuffer(backend::Buffer *indexBuffer, IndexFormat for
     CC_SAFE_RETAIN(_indexBuffer);
 
     _indexFormat = format;
-    _indexSize = computeIndexSize();
+    _indexSize   = computeIndexSize();
 }
 
 void CustomCommand::updateVertexBuffer(void* data, std::size_t length)

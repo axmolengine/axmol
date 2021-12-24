@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -164,19 +164,11 @@ public:
      * @private
      */
     DragonBonesData* parent;
-    ArmatureData() :
-        canvas(nullptr),
-        userData(nullptr)
-    {
-        _onClear();
-    }
-    ~ArmatureData()
-    {
-        _onClear();
-    }
+    ArmatureData() : canvas(nullptr), userData(nullptr) { _onClear(); }
+    ~ArmatureData() { _onClear(); }
 
 protected:
-virtual void _onClear() override;
+    virtual void _onClear() override;
 
 public:
     /**
@@ -231,10 +223,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline BoneData* getBone(const std::string& boneName) const
-    {
-        return mapFind<BoneData>(bones, boneName);
-    }
+    inline BoneData* getBone(const std::string& boneName) const { return mapFind<BoneData>(bones, boneName); }
     /**
      * - Get a specific slot data.
      * @param slotName - The slot name.
@@ -247,10 +236,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline SlotData* getSlot(const std::string& slotName) const
-    {
-        return mapFind<SlotData>(slots, slotName);
-    }
+    inline SlotData* getSlot(const std::string& slotName) const { return mapFind<SlotData>(slots, slotName); }
     /**
      * @private
      */
@@ -270,14 +256,13 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline SkinData* getSkin(const std::string& skinName) const
-    {
-        return mapFind(skins, skinName);
-    }
+    inline SkinData* getSkin(const std::string& skinName) const { return mapFind(skins, skinName); }
     /**
      * @private
      */
-    MeshDisplayData* getMesh(const std::string& skinName, const std::string& slotName, const std::string& meshName) const;
+    MeshDisplayData* getMesh(const std::string& skinName,
+                             const std::string& slotName,
+                             const std::string& meshName) const;
     /**
      * - Get a specific animation data.
      * @param animationName - The animation animationName.
@@ -295,7 +280,7 @@ public:
         return mapFind(animations, animationName);
     }
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     int getType() const { return (int)type; }
     void setType(int value) { type = (ArmatureType)value; }
 
@@ -328,7 +313,7 @@ public: // For WebAssembly.
  * @version DragonBones 3.0
  * @language zh_CN
  */
-class BoneData : public BaseObject 
+class BoneData : public BaseObject
 {
     BIND_CLASS_TYPE_B(BoneData);
 
@@ -390,20 +375,13 @@ public:
      * @language zh_CN
      */
     BoneData* parent;
-    BoneData() :
-        userData(nullptr)
-    {
-        _onClear();
-    }
-    ~BoneData()
-    {
-        _onClear();
-    }
+    BoneData() : userData(nullptr) { _onClear(); }
+    ~BoneData() { _onClear(); }
 
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     Transform* getTransfrom() { return &transform; }
 
     const UserData* getUserData() const { return userData; }
@@ -479,21 +457,13 @@ public:
      * @language zh_CN
      */
     BoneData* parent;
-    SlotData() :
-        color(nullptr),
-        userData(nullptr)
-    {
-        _onClear();
-    }
-    ~SlotData()
-    {
-        _onClear();
-    }
+    SlotData() : color(nullptr), userData(nullptr) { _onClear(); }
+    ~SlotData() { _onClear(); }
 
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     static ColorTransform* getDefaultColor() { return &DEFAULT_COLOR; }
 
     int getBlendMode() const { return (int)blendMode; }
@@ -510,4 +480,4 @@ public: // For WebAssembly.
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_ARMATURE_DATA_H
+#endif  // DRAGONBONES_ARMATURE_DATA_H

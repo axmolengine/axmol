@@ -58,7 +58,7 @@ class PolygonInfo;
  The SpriteFrameCache loads SpriteFrames from a .plist file.
  A SpriteFrame contains information about how to use a sprite
  located in a sprite sheet.
- 
+
  The .plist file contains the following elements:
 
  - `frames`:
@@ -74,17 +74,17 @@ class PolygonInfo;
     - `triangles`:        3 indices per triangle, pointing to vertices and verticesUV coordinates
     - `vertices`:         vertices in sprite coordinates, each vertex consists of a pair of x and y coordinates
     - `verticesUV`:       vertices in the sprite sheet, each vertex consists of a pair of x and y coordinates
- 
+
  - `metadata`:
    Dictionary containing additional information about the sprite sheet:
      - `format`:          plist file format, currently 3
      - `size`:            size of the texture (optional)
      - `textureFileName`: name of the texture's image file
- 
+
  Use one of the following tools to create the .plist file and sprite sheet:
  - [TexturePacker](https://www.codeandweb.com/texturepacker/cocos2d)
  - [Zwoptex](https://zwopple.com/zwoptex/)
- 
+
  @since v0.9
  @js cc.spriteFrameCache
  */
@@ -99,7 +99,7 @@ public:
     static SpriteFrameCache* getInstance();
 
     /** Destroys the cache. It releases all the Sprite Frames and the retained instance.
-	 * @js NA
+     * @js NA
      */
     static void destroyInstance();
 
@@ -108,7 +108,7 @@ public:
      * @lua NA
      */
     virtual ~SpriteFrameCache();
-    
+
     /** Initialize method.
      *
      * @return if success return true.
@@ -117,14 +117,16 @@ public:
 
     /** Adds multiple Sprite Frames from a plist file.
      * A texture will be loaded automatically. The texture name will composed by replacing the .plist suffix with .png.
-     * If you want to use another texture, you should use the addSpriteFramesWithFile(const std::string& plist, const std::string& textureFileName) method.
+     * If you want to use another texture, you should use the addSpriteFramesWithFile(const std::string& plist, const
+     * std::string& textureFileName) method.
      * @js addSpriteFrames
      * @lua addSpriteFrames
      *
      * @param spriteSheetFileName file name.
      * @param spriteSheetFormat
      */
-    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName,
+                                 uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
 
     /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames.
      @since v0.99.5
@@ -135,9 +137,11 @@ public:
      * @param textureFileName Texture file name.
      * @param spriteSheetFormat
      */
-    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, const std::string& textureFileName, uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName,
+                                 const std::string& textureFileName,
+                                 uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
 
-    /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames. 
+    /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames.
      * @js addSpriteFrames
      * @lua addSpriteFrames
      *
@@ -145,9 +149,12 @@ public:
      * @param texture Texture pointer.
      * @param spriteSheetFormat
      */
-    void addSpriteFramesWithFile(const std::string& spriteSheetFileName, Texture2D *texture, uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName,
+                                 Texture2D* texture,
+                                 uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
 
-    /** Adds multiple Sprite Frames from a plist file content. The texture will be associated with the created sprite frames.
+    /** Adds multiple Sprite Frames from a plist file content. The texture will be associated with the created sprite
+     * frames.
      * @js NA
      * @lua addSpriteFrames
      *
@@ -155,7 +162,9 @@ public:
      * @param texture Texture pointer.
      * @param spriteSheetFormat
      */
-    void addSpriteFramesWithFileContent(const Data& content, Texture2D* texture, uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
+    void addSpriteFramesWithFileContent(const Data& content,
+                                        Texture2D* texture,
+                                        uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
 
     /** Adds an sprite frame with a given name.
      If the name already exists, then the contents of the old name will be replaced with the new one.
@@ -163,15 +172,15 @@ public:
      * @param frame A certain sprite frame.
      * @param frameName The name of the sprite frame.
      */
-    void addSpriteFrame(SpriteFrame *frame, const std::string& frameName);
+    void addSpriteFrame(SpriteFrame* frame, const std::string& frameName);
 
     /** Check if multiple Sprite Frames from a plist file have been loaded.
-    * @js NA
-    * @lua NA
-    *
-    * @param plist Plist file name.
-    * @return True if the file is loaded.
-    */
+     * @js NA
+     * @lua NA
+     *
+     * @param plist Plist file name.
+     * @return True if the file is loaded.
+     */
     bool isSpriteFramesWithFileLoaded(const std::string& plist) const;
 
     /** Purges the dictionary of loaded sprite frames.
@@ -185,32 +194,32 @@ public:
     /** Removes unused sprite frames.
      * Sprite Frames that have a retain count of 1 will be deleted.
      * It is convenient to call this method after when starting a new Scene.
-	 * @js NA
+     * @js NA
      */
     void removeUnusedSpriteFrames();
 
-    /** Deletes an sprite frame from the sprite frame cache. 
+    /** Deletes an sprite frame from the sprite frame cache.
      *
      * @param name The name of the sprite frame that needs to removed.
      */
     void removeSpriteFrameByName(const std::string& name);
 
     /** Removes multiple Sprite Frames from a plist file.
-    * Sprite Frames stored in this file will be removed.
-    * It is convenient to call this method when a specific texture needs to be removed.
-    * @since v0.99.5
-    *
-    * @param plist The name of the plist that needs to removed.
-    */
+     * Sprite Frames stored in this file will be removed.
+     * It is convenient to call this method when a specific texture needs to be removed.
+     * @since v0.99.5
+     *
+     * @param plist The name of the plist that needs to removed.
+     */
     void removeSpriteFramesFromFile(const std::string& plist);
 
     /** Removes multiple Sprite Frames from a plist file content.
-    * Sprite Frames stored in this file will be removed.
-    * It is convenient to call this method when a specific texture needs to be removed.
-    *
-    * @param plist_content The string of the plist content that needs to removed.
-    * @js NA
-    */
+     * Sprite Frames stored in this file will be removed.
+     * It is convenient to call this method when a specific texture needs to be removed.
+     *
+     * @param plist_content The string of the plist content that needs to removed.
+     * @js NA
+     */
     void removeSpriteFramesFromFileContent(const std::string& plist_content);
 
     /** Removes all Sprite Frames associated with the specified textures.
@@ -237,12 +246,14 @@ public:
     SpriteFrame* findFrame(const std::string& frame);
 
     /**  Record SpriteFrame with plist and frame name, add frame name
-    *    and plist to index
-    */
-    void insertFrame(const std::shared_ptr<SpriteSheet>& spriteSheet, const std::string& frameName, SpriteFrame* frameObj);
+     *    and plist to index
+     */
+    void insertFrame(const std::shared_ptr<SpriteSheet>& spriteSheet,
+                     const std::string& frameName,
+                     SpriteFrame* frameObj);
 
     /** Delete frame from cache, rebuild index
-    */
+     */
     bool eraseFrame(const std::string& frameName);
 
     void addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Rect& capInsets, Texture2D* texture);
@@ -254,21 +265,21 @@ public:
 
 protected:
     // MARMALADE: Made this protected not private, as deriving from this class is pretty useful
-    SpriteFrameCache(){}
+    SpriteFrameCache() {}
 
     /** Removes multiple Sprite Frames from Dictionary.
-    * @since v0.99.5
-    */
+     * @since v0.99.5
+     */
     void removeSpriteFramesFromDictionary(ValueMap& dictionary);
 
     /** Delete a list of frames from cache, rebuild index
-    */
+     */
     bool eraseFrames(const std::vector<std::string>& frame);
     /** Delete frame from index and SpriteFrame is kept.
-    */
+     */
     bool removeSpriteSheet(const std::string& spriteSheetFileName);
     /** Clear index and all SpriteFrames.
-    */
+     */
     void clear();
 
     inline bool hasFrame(const std::string& frame) const;
@@ -276,7 +287,10 @@ protected:
 
     inline Map<std::string, SpriteFrame*>& getSpriteFrames();
 
-    void markPlistFull(const std::string& spriteSheetFileName, bool full) { _spriteSheets[spriteSheetFileName]->full = full; }
+    void markPlistFull(const std::string& spriteSheetFileName, bool full)
+    {
+        _spriteSheets[spriteSheetFileName]->full = full;
+    }
     bool isPlistFull(const std::string& spriteSheetFileName) const
     {
         auto&& it = _spriteSheets.find(spriteSheetFileName);
@@ -296,4 +310,4 @@ private:
 
 NS_CC_END
 
-#endif // __SPRITE_CCSPRITE_FRAME_CACHE_H__
+#endif  // __SPRITE_CCSPRITE_FRAME_CACHE_H__

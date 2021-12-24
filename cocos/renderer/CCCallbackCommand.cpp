@@ -36,17 +36,17 @@ void CallbackCommand::init(float globalOrder)
     _globalOrder = globalOrder;
 }
 
-void CallbackCommand::init(float globalOrder, const Mat4 &transform, unsigned int flags)
+void CallbackCommand::init(float globalOrder, const Mat4& transform, unsigned int flags)
 {
     RenderCommand::init(globalOrder, transform, flags);
 }
 
 void CallbackCommand::execute()
 {
-   if(func)
-   {
-       func();
-   }
+    if (func)
+    {
+        func();
+    }
 }
 
 NS_CC_END

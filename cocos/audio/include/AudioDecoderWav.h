@@ -30,15 +30,16 @@
 #include <memory>
 
 #if !defined(MAKE_FOURCC)
-#define MAKE_FOURCC(a,b,c,d) ((uint32_t)((a) | ((b) << 8) | ((c) << 16) | (((uint32_t)(d)) << 24)))
+#    define MAKE_FOURCC(a, b, c, d) ((uint32_t)((a) | ((b) << 8) | ((c) << 16) | (((uint32_t)(d)) << 24)))
 #endif
 
 #if !defined(_WIN32)
-typedef struct _GUID {
-    uint32_t       Data1;
+typedef struct _GUID
+{
+    uint32_t Data1;
     unsigned short Data2;
     unsigned short Data3;
-    unsigned char  Data4[8];
+    unsigned char Data4[8];
 } GUID;
 __inline int IsEqualGUID(const GUID& rguid1, const GUID& rguid2)
 {
@@ -46,35 +47,40 @@ __inline int IsEqualGUID(const GUID& rguid1, const GUID& rguid2)
 }
 #endif
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 // http://soundfile.sapp.org/doc/WaveFormat/
 enum class WAV_FORMAT : uint16_t
 {
-    UNKNOWN = 0x0,       // Unknown Wave Format
-    PCM = 0x1,           // PCM Format
-    ADPCM = 0x2,         // Microsoft ADPCM Format
-    IEEE = 0x3,          // IEEE float/double
-    ALAW = 0x6,          // 8-bit ITU-T G.711 A-law
-    MULAW = 0x7,         // 8-bit ITU-T G.711 MUL-law
-    IMA_ADPCM = 0x11,    // IMA ADPCM Format
-    EXT = 0xFFFE         // Set via subformat
+    UNKNOWN   = 0x0,    // Unknown Wave Format
+    PCM       = 0x1,    // PCM Format
+    ADPCM     = 0x2,    // Microsoft ADPCM Format
+    IEEE      = 0x3,    // IEEE float/double
+    ALAW      = 0x6,    // 8-bit ITU-T G.711 A-law
+    MULAW     = 0x7,    // 8-bit ITU-T G.711 MUL-law
+    IMA_ADPCM = 0x11,   // IMA ADPCM Format
+    EXT       = 0xFFFE  // Set via subformat
 };
 
-#pragma pack(push,1)
-struct WAV_CHUNK_HEADER {
+#pragma pack(push, 1)
+struct WAV_CHUNK_HEADER
+{
     uint32_t ChunkID;
     /*
-    ** The ChunkSize gives the size of the valid data in the chunk. It does not include the padding, the size of chunkID, or the size of chunkSize.
+    ** The ChunkSize gives the size of the valid data in the chunk. It does not include the padding, the size of
+    *chunkID, or the size of chunkSize.
     ** see: https://docs.microsoft.com/en-us/windows/win32/xaudio2/resource-interchange-file-format--riff-
     */
     uint32_t ChunkSize;
 };
-struct WAV_RIFF_CHUNK {
+struct WAV_RIFF_CHUNK
+{
     WAV_CHUNK_HEADER Header;
     uint32_t Format;
 };
-struct WAV_FMT_CHUNK {
+struct WAV_FMT_CHUNK
+{
     WAV_CHUNK_HEADER Header;
     WAV_FORMAT AudioFormat;
     uint16_t NumChannels;
@@ -82,19 +88,22 @@ struct WAV_FMT_CHUNK {
     uint32_t ByteRate;
     uint16_t BlockAlign;
     uint16_t BitsPerSample;
-    struct {
+    struct
+    {
         /* The follow fields is optional */
         uint16_t cbSize;
-        union {
+        union
+        {
             uint16_t ValidBitsPerSample;
             uint16_t SamplesPerBlock;
             uint16_t Reserved;
         } Samples;
-        uint32_t     ChannelMask;
-        GUID         SubFormat;
+        uint32_t ChannelMask;
+        GUID SubFormat;
     } ExtParams;
 };
-struct WAV_FILE_HEADER {
+struct WAV_FILE_HEADER
+{
     WAV_RIFF_CHUNK Riff;
     WAV_FMT_CHUNK Fmt;
     WAV_CHUNK_HEADER PcmData;
@@ -109,7 +118,6 @@ struct WAV_FILE
     std::unique_ptr<FileStream> Stream{};
 };
 
-
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
  */
@@ -123,13 +131,13 @@ public:
     bool open(const std::string& path) override;
 
     /**
-    * @brief The helper function for convert frames to bytes
-    */
+     * @brief The helper function for convert frames to bytes
+     */
     uint32_t framesToBytes(uint32_t frames) const override;
 
     /**
-    * @brief The helper function for convert bytes to frames
-    */
+     * @brief The helper function for convert bytes to frames
+     */
     uint32_t bytesToFrames(uint32_t bytes) const override;
 
     /**
@@ -141,8 +149,10 @@ public:
     /**
      * @brief Reads audio frames of PCM format.
      * @param framesToRead The number of frames excepted to be read.
-     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| / samplesPerBlock * _bytesPerBlock.
-     * @return The number of frames actually read, it's probably less than 'framesToRead'. Returns 0 means reach the end of file.
+     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| / samplesPerBlock *
+     * _bytesPerBlock.
+     * @return The number of frames actually read, it's probably less than 'framesToRead'. Returns 0 means reach the end
+     * of file.
      */
     uint32_t read(uint32_t framesToRead, char* pcmBuf) override;
 
@@ -154,7 +164,6 @@ public:
     bool seek(uint32_t frameOffset) override;
 
 protected:
-
     friend class AudioDecoderManager;
     AudioDecoderWav();
     ~AudioDecoderWav();
@@ -162,4 +171,4 @@ protected:
     mutable WAV_FILE _wavf;
 };
 
-} // namespace cocos2d {
+}  // namespace cocos2d

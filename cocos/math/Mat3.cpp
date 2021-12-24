@@ -7,7 +7,8 @@ Mat3::Mat3()
     loadIdentity();
 }
 
-Mat3::Mat3(float m[9]) {
+Mat3::Mat3(float m[9])
+{
 
     this->m[0] = m[0];
     this->m[1] = m[1];
@@ -20,10 +21,13 @@ Mat3::Mat3(float m[9]) {
     this->m[8] = m[8];
 }
 
-float Mat3::get(int i, int j) {
-    switch (i) {
+float Mat3::get(int i, int j)
+{
+    switch (i)
+    {
     case 0:
-        switch (j) {
+        switch (j)
+        {
         case 0:
             return m[0];
         case 1:
@@ -32,7 +36,8 @@ float Mat3::get(int i, int j) {
             return m[2];
         }
     case 1:
-        switch (j) {
+        switch (j)
+        {
         case 0:
             return m[3];
         case 1:
@@ -41,7 +46,8 @@ float Mat3::get(int i, int j) {
             return m[5];
         }
     case 2:
-        switch (j) {
+        switch (j)
+        {
         case 0:
             return m[6];
         case 1:
@@ -55,9 +61,11 @@ float Mat3::get(int i, int j) {
     // throw new JmeException("Invalid indices into matrix.");
 }
 
-cocos2d::Vec3 Mat3::getColumn(int i) {
+cocos2d::Vec3 Mat3::getColumn(int i)
+{
     cocos2d::Vec3 store;
-    switch (i) {
+    switch (i)
+    {
     case 0:
         store.x = m[0];
         store.y = m[3];
@@ -74,15 +82,17 @@ cocos2d::Vec3 Mat3::getColumn(int i) {
         store.z = m[8];
         break;
     default:;
-        //logger.warning("Invalid column index.");
-        //throw new JmeException("Invalid column index. " + i);
+        // logger.warning("Invalid column index.");
+        // throw new JmeException("Invalid column index. " + i);
     }
     return store;
 }
 
-cocos2d::Vec3 Mat3::getRow(int i) {
+cocos2d::Vec3 Mat3::getRow(int i)
+{
     cocos2d::Vec3 store;
-    switch (i) {
+    switch (i)
+    {
     case 0:
         store.x = m[0];
         store.y = m[1];
@@ -104,13 +114,16 @@ cocos2d::Vec3 Mat3::getRow(int i) {
     return store;
 }
 
-std::string Mat3::toString() {
+std::string Mat3::toString()
+{
     return "";
 }
 
-void Mat3::setColumn(int i, const cocos2d::Vec3& column) {
+void Mat3::setColumn(int i, const cocos2d::Vec3& column)
+{
 
-    switch (i) {
+    switch (i)
+    {
     case 0:
         m[0] = column.x;
         m[3] = column.y;
@@ -127,13 +140,15 @@ void Mat3::setColumn(int i, const cocos2d::Vec3& column) {
         m[8] = column.z;
         break;
     default:;
-        //logger.warning("Invalid column index.");
-        //throw new JmeException("Invalid column index. " + i);
+        // logger.warning("Invalid column index.");
+        // throw new JmeException("Invalid column index. " + i);
     }
 }
 
-void Mat3::setRow(int i, const cocos2d::Vec3& row) {
-    switch (i) {
+void Mat3::setRow(int i, const cocos2d::Vec3& row)
+{
+    switch (i)
+    {
     case 0:
         m[0] = row.x;
         m[1] = row.y;
@@ -155,10 +170,13 @@ void Mat3::setRow(int i, const cocos2d::Vec3& row) {
     }
 }
 
-void Mat3::set(int i, int j, float value) {
-    switch (i) {
+void Mat3::set(int i, int j, float value)
+{
+    switch (i)
+    {
     case 0:
-        switch (j) {
+        switch (j)
+        {
         case 0:
             m[0] = value;
             return;
@@ -170,7 +188,8 @@ void Mat3::set(int i, int j, float value) {
             return;
         }
     case 1:
-        switch (j) {
+        switch (j)
+        {
         case 0:
             m[3] = value;
             return;
@@ -182,7 +201,8 @@ void Mat3::set(int i, int j, float value) {
             return;
         }
     case 2:
-        switch (j) {
+        switch (j)
+        {
         case 0:
             m[6] = value;
             return;
@@ -195,14 +215,15 @@ void Mat3::set(int i, int j, float value) {
         }
     }
 
-    //logger.warning("Invalid matrix index.");
-    //throw new JmeException("Invalid indices into matrix.");
+    // logger.warning("Invalid matrix index.");
+    // throw new JmeException("Invalid indices into matrix.");
 }
 
-void Mat3::set(float matrix[3][3]) {
-    //if (matrix.length != 3 || matrix[0].length != 3) {
-    //    throw new JmeException("Array must be of size 9.");
-    //}
+void Mat3::set(float matrix[3][3])
+{
+    // if (matrix.length != 3 || matrix[0].length != 3) {
+    //     throw new JmeException("Array must be of size 9.");
+    // }
 
     m[0] = matrix[0][0];
     m[1] = matrix[0][1];
@@ -215,7 +236,8 @@ void Mat3::set(float matrix[3][3]) {
     m[8] = matrix[2][2];
 }
 
-void Mat3::set(const cocos2d::Vec3& uAxis, const cocos2d::Vec3& vAxis, const cocos2d::Vec3& wAxis) {
+void Mat3::set(const cocos2d::Vec3& uAxis, const cocos2d::Vec3& vAxis, const cocos2d::Vec3& wAxis)
+{
     m[0] = uAxis.x;
     m[3] = uAxis.y;
     m[6] = uAxis.z;
@@ -229,11 +251,13 @@ void Mat3::set(const cocos2d::Vec3& uAxis, const cocos2d::Vec3& vAxis, const coc
     m[8] = wAxis.z;
 }
 
-void Mat3::set(float matrix[9], bool rowMajor) {
-    //if (matrix.length != 9)
-    //    throw new JmeException("Array must be of size 9.");
+void Mat3::set(float matrix[9], bool rowMajor)
+{
+    // if (matrix.length != 9)
+    //     throw new JmeException("Array must be of size 9.");
 
-    if (rowMajor) {
+    if (rowMajor)
+    {
         m[0] = matrix[0];
         m[1] = matrix[1];
         m[2] = matrix[2];
@@ -244,7 +268,8 @@ void Mat3::set(float matrix[9], bool rowMajor) {
         m[7] = matrix[7];
         m[8] = matrix[8];
     }
-    else {
+    else
+    {
         m[0] = matrix[0];
         m[1] = matrix[3];
         m[2] = matrix[6];
@@ -257,15 +282,16 @@ void Mat3::set(float matrix[9], bool rowMajor) {
     }
 }
 
-void Mat3::loadIdentity() {
+void Mat3::loadIdentity()
+{
     m[1] = m[2] = m[3] = m[5] = m[6] = m[7] = 0;
     m[0] = m[4] = m[8] = 1;
 }
 
-bool Mat3::isIdentity() {
-    return (m[0] == 1 && m[1] == 0 && m[2] == 0)
-        && (m[3] == 0 && m[4] == 1 && m[5] == 0)
-        && (m[6] == 0 && m[7] == 0 && m[8] == 1);
+bool Mat3::isIdentity()
+{
+    return (m[0] == 1 && m[1] == 0 && m[2] == 0) && (m[3] == 0 && m[4] == 1 && m[5] == 0) &&
+           (m[6] == 0 && m[7] == 0 && m[8] == 1);
 }
 
 void Mat3::rotateX(float angle)
@@ -304,7 +330,8 @@ void Mat3::rotateZ(float s, float c)
     mult(temp);
 }
 
-void Mat3::createRotation(const cocos2d::Vec3& axis, float fSin, float fCos) {
+void Mat3::createRotation(const cocos2d::Vec3& axis, float fSin, float fCos)
+{
     float x = axis.x;
     float y = axis.y;
     float z = axis.z;
@@ -325,15 +352,15 @@ void Mat3::createRotation(const cocos2d::Vec3& axis, float fSin, float fCos) {
     }
 
     float fOneMinusCos = ((float)1.0) - fCos;
-    float fX2 = x * x;
-    float fY2 = y * y;
-    float fZ2 = z * z;
-    float fXYM = x * y * fOneMinusCos;
-    float fXZM = x * z * fOneMinusCos;
-    float fYZM = y * z * fOneMinusCos;
-    float fXSin = x * fSin;
-    float fYSin = y * fSin;
-    float fZSin = z * fSin;
+    float fX2          = x * x;
+    float fY2          = y * y;
+    float fZ2          = z * z;
+    float fXYM         = x * y * fOneMinusCos;
+    float fXZM         = x * z * fOneMinusCos;
+    float fYZM         = y * z * fOneMinusCos;
+    float fXSin        = x * fSin;
+    float fYSin        = y * fSin;
+    float fZSin        = z * fSin;
 
     m[0] = fX2 * fOneMinusCos + fCos;
     m[1] = fXYM - fZSin;
@@ -399,7 +426,8 @@ Mat3& Mat3::mult(const Mat3& mat, Mat3& product) const
     return product;
 }
 
-cocos2d::Vec3 Mat3::mult(const cocos2d::Vec3& vec) const {
+cocos2d::Vec3 Mat3::mult(const cocos2d::Vec3& vec) const
+{
 
     cocos2d::Vec3 product;
 
@@ -414,7 +442,8 @@ cocos2d::Vec3 Mat3::mult(const cocos2d::Vec3& vec) const {
     return product;
 }
 
-Mat3& Mat3::multLocal(float scale) {
+Mat3& Mat3::multLocal(float scale)
+{
     m[0] *= scale;
     m[1] *= scale;
     m[2] *= scale;
@@ -427,7 +456,8 @@ Mat3& Mat3::multLocal(float scale) {
     return *this;
 }
 
-Mat3& Mat3::addLocal(const Mat3& mat) {
+Mat3& Mat3::addLocal(const Mat3& mat)
+{
     m[0] += mat.m[0];
     m[1] += mat.m[1];
     m[2] += mat.m[2];
@@ -440,14 +470,16 @@ Mat3& Mat3::addLocal(const Mat3& mat) {
     return *this;
 }
 
-Mat3& Mat3::transposeLocal() {
+Mat3& Mat3::transposeLocal()
+{
     float tmp[9];
     get(tmp, false);
     set(tmp, true);
     return *this;
 }
 
-Mat3 Mat3::invertNew(void) {
+Mat3 Mat3::invertNew(void)
+{
     Mat3 store;
     float det = determinant();
     if (std::abs(det) <= 0)
@@ -467,7 +499,8 @@ Mat3 Mat3::invertNew(void) {
     return store;
 }
 
-Mat3& Mat3::invertLocal() {
+Mat3& Mat3::invertLocal()
+{
     float det = determinant();
     if (std::abs(det) <= FLT_EPSILON)
         return zero();
@@ -496,7 +529,8 @@ Mat3& Mat3::invertLocal() {
     return *this;
 }
 
-Mat3 Mat3::adjoint() {
+Mat3 Mat3::adjoint()
+{
     Mat3 store;
 
     store.m[0] = m[4] * m[8] - m[5] * m[7];
@@ -512,29 +546,34 @@ Mat3 Mat3::adjoint() {
     return store;
 }
 
-float Mat3::determinant() {
+float Mat3::determinant()
+{
     float fCo00 = m[4] * m[8] - m[5] * m[7];
     float fCo10 = m[5] * m[6] - m[3] * m[8];
     float fCo20 = m[3] * m[7] - m[4] * m[6];
-    float fDet = m[0] * fCo00 + m[1] * fCo10 + m[2] * fCo20;
+    float fDet  = m[0] * fCo00 + m[1] * fCo10 + m[2] * fCo20;
     return fDet;
 }
 
-Mat3& Mat3::zero() {
+Mat3& Mat3::zero()
+{
     m[0] = m[1] = m[2] = m[3] = m[4] = m[5] = m[6] = m[7] = m[8] = 0.0f;
     return *this;
 }
 
-Mat3 Mat3::transposeNew() {
-    float temp[9] = { m[0], m[3], m[6], m[1], m[4], m[7], m[2], m[5], m[8] };
+Mat3 Mat3::transposeNew()
+{
+    float temp[9] = {m[0], m[3], m[6], m[1], m[4], m[7], m[2], m[5], m[8]};
     return Mat3(temp);
 }
 
-bool Mat3::equals(const Mat3& o) const {
+bool Mat3::equals(const Mat3& o) const
+{
     return memcmp(&o, this, sizeof(o)) == 0;
 }
 
-void Mat3::fromStartEndVectors(cocos2d::Vec3 start, cocos2d::Vec3 end) {
+void Mat3::fromStartEndVectors(cocos2d::Vec3 start, cocos2d::Vec3 end)
+{
     cocos2d::Vec3 v;
     float e, h, f;
 
@@ -543,7 +582,8 @@ void Mat3::fromStartEndVectors(cocos2d::Vec3 start, cocos2d::Vec3 end) {
     f = (e < 0) ? -e : e;
 
     // if "from" and "to" vectors are nearly parallel
-    if (f > 1.0f - FLT_EPSILON) {
+    if (f > 1.0f - FLT_EPSILON)
+    {
         cocos2d::Vec3 u;
         cocos2d::Vec3 x;
         float c1, c2, c3; /* coefficients for later use */
@@ -553,22 +593,28 @@ void Mat3::fromStartEndVectors(cocos2d::Vec3 start, cocos2d::Vec3 end) {
         x.y = (start.y > 0.0) ? start.y : -start.y;
         x.z = (start.z > 0.0) ? start.z : -start.z;
 
-        if (x.x < x.y) {
-            if (x.x < x.z) {
+        if (x.x < x.y)
+        {
+            if (x.x < x.z)
+            {
                 x.x = 1.0f;
                 x.y = x.z = 0.0f;
             }
-            else {
+            else
+            {
                 x.z = 1.0f;
                 x.x = x.y = 0.0f;
             }
         }
-        else {
-            if (x.y < x.z) {
+        else
+        {
+            if (x.y < x.z)
+            {
                 x.y = 1.0f;
                 x.x = x.z = 0.0f;
             }
-            else {
+            else
+            {
                 x.z = 1.0f;
                 x.x = x.y = 0.0f;
             }
@@ -585,22 +631,24 @@ void Mat3::fromStartEndVectors(cocos2d::Vec3 start, cocos2d::Vec3 end) {
         c2 = 2.0f / v.dot(v);
         c3 = c1 * c2 * u.dot(v);
 
-        for (i = 0; i < 3; i++) {
-            for (j = 0; j < 3; j++) {
-                float val = -c1 * (&u.x)[i] * (&u.x)[j] - c2 * (&v.x)[i]
-                    * (&v.x)[j] + c3 * (&v.x)[i] * (&u.x)[j];
+        for (i = 0; i < 3; i++)
+        {
+            for (j = 0; j < 3; j++)
+            {
+                float val = -c1 * (&u.x)[i] * (&u.x)[j] - c2 * (&v.x)[i] * (&v.x)[j] + c3 * (&v.x)[i] * (&u.x)[j];
                 set(i, j, val);
             }
             float val = get(i, i);
             set(i, i, val + 1.0f);
         }
     }
-    else {
+    else
+    {
         // the most common case, unless "start"="end", or "start"=-"end"
         float hvx, hvz, hvxy, hvxz, hvyz;
-        h = 1.0f / (1.0f + e);
-        hvx = h * v.x;
-        hvz = h * v.z;
+        h    = 1.0f / (1.0f + e);
+        hvx  = h * v.x;
+        hvz  = h * v.z;
         hvxy = hvx * v.y;
         hvxz = hvx * v.z;
         hvyz = hvz * v.y;
@@ -618,7 +666,8 @@ void Mat3::fromStartEndVectors(cocos2d::Vec3 start, cocos2d::Vec3 end) {
     }
 }
 
-void Mat3::scale(const cocos2d::Vec3& scale) {
+void Mat3::scale(const cocos2d::Vec3& scale)
+{
     m[0] *= scale.x;
     m[3] *= scale.x;
     m[6] *= scale.x;
@@ -630,7 +679,8 @@ void Mat3::scale(const cocos2d::Vec3& scale) {
     m[8] *= scale.z;
 }
 
-bool Mat3::equalIdentity(const Mat3& mat) {
+bool Mat3::equalIdentity(const Mat3& mat)
+{
     if (std::abs(mat.m[0] - 1) > 1e-4)
         return false;
     if (std::abs(mat.m[4] - 1) > 1e-4)
@@ -655,6 +705,5 @@ bool Mat3::equalIdentity(const Mat3& mat) {
 
     return true;
 }
-
 
 NS_CC_MATH_END

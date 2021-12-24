@@ -11,14 +11,14 @@
  * Shall not disclose such Confidential Information and shall use
  * it only in accordance with the terms of the license agreement
  * you entered into with Samsung
-****************************************************************************/
+ ****************************************************************************/
 #include "platform/android/jni/JniHelper.h"
 #include "platform/android/CCEnhanceAPI-android.h"
 #include <android/log.h>
 #include <jni.h>
 
-#define  LOG_TAG    "CCEnhanceAPI_android Debug"
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define LOG_TAG "CCEnhanceAPI_android Debug"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 #define CLASS_NAME "org.cocos2dx.lib.Cocos2dxHelper"
 
@@ -26,26 +26,22 @@
 // Here is the workaround method to fix the problem.
 // Fixed, at least, in NDK 12b
 //#ifdef __aarch64__
-//extern "C" size_t __ctype_get_mb_cur_max(void) {
+// extern "C" size_t __ctype_get_mb_cur_max(void) {
 //    return (size_t) sizeof(wchar_t);
 //}
 //#endif
 
 NS_CC_BEGIN
 
-EnhanceAPI::EnhanceAPI()
-{
-}
+EnhanceAPI::EnhanceAPI() {}
 
-EnhanceAPI::~EnhanceAPI()
-{
-}
+EnhanceAPI::~EnhanceAPI() {}
 
 int EnhanceAPI::setResolutionPercent(int n)
 {
     JniMethodInfo t;
     int ret = -1;
-    if(JniHelper::getStaticMethodInfo(t, CLASS_NAME, "setResolutionPercent", "(I)I"))
+    if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "setResolutionPercent", "(I)I"))
     {
         ret = t.env->CallStaticIntMethod(t.classID, t.methodID, n);
         t.env->DeleteLocalRef(t.classID);
@@ -57,7 +53,7 @@ int EnhanceAPI::setFPS(int fps)
 {
     JniMethodInfo t;
     int ret = -1;
-    if(JniHelper::getStaticMethodInfo(t, CLASS_NAME, "setFPS", "(I)I"))
+    if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "setFPS", "(I)I"))
     {
         ret = t.env->CallStaticIntMethod(t.classID, t.methodID, fps);
         t.env->DeleteLocalRef(t.classID);
@@ -69,7 +65,7 @@ int EnhanceAPI::fastLoading(int sec)
 {
     JniMethodInfo t;
     int ret = -1;
-    if(JniHelper::getStaticMethodInfo(t, CLASS_NAME, "fastLoading", "(I)I"))
+    if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "fastLoading", "(I)I"))
     {
         ret = t.env->CallStaticIntMethod(t.classID, t.methodID, sec);
         t.env->DeleteLocalRef(t.classID);
@@ -81,7 +77,7 @@ int EnhanceAPI::getTemperature()
 {
     JniMethodInfo t;
     int ret = -1;
-    if(JniHelper::getStaticMethodInfo(t, CLASS_NAME, "getTemperature", "()I"))
+    if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "getTemperature", "()I"))
     {
         ret = t.env->CallStaticIntMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
@@ -93,7 +89,7 @@ int EnhanceAPI::setLowPowerMode(bool enable)
 {
     JniMethodInfo t;
     int ret = -1;
-    if(JniHelper::getStaticMethodInfo(t, CLASS_NAME, "setLowPowerMode", "(Z)I"))
+    if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "setLowPowerMode", "(Z)I"))
     {
         ret = t.env->CallStaticIntMethod(t.classID, t.methodID, enable);
         t.env->DeleteLocalRef(t.classID);

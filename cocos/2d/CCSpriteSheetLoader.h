@@ -51,9 +51,11 @@ class SpriteFrameCache;
  * @{
  */
 
-struct SpriteSheetFormat {
-    enum : uint32_t {
-        PLIST = 1,
+struct SpriteSheetFormat
+{
+    enum : uint32_t
+    {
+        PLIST  = 1,
         CUSTOM = 1000
     };
 };
@@ -70,13 +72,13 @@ public:
 class ISpriteSheetLoader
 {
 public:
-    virtual ~ISpriteSheetLoader() = default;
-    virtual uint32_t getFormat() = 0;
-    virtual void load(const std::string& filePath, SpriteFrameCache& cache) = 0;
+    virtual ~ISpriteSheetLoader()                                                               = default;
+    virtual uint32_t getFormat()                                                                = 0;
+    virtual void load(const std::string& filePath, SpriteFrameCache& cache)                     = 0;
     virtual void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) = 0;
     virtual void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) = 0;
-    virtual void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) = 0;
-    virtual void reload(const std::string& filePath, SpriteFrameCache& cache) = 0;
+    virtual void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache)                         = 0;
+    virtual void reload(const std::string& filePath, SpriteFrameCache& cache)                                   = 0;
 };
 
 class SpriteSheetLoader : public ISpriteSheetLoader
@@ -84,22 +86,21 @@ class SpriteSheetLoader : public ISpriteSheetLoader
 public:
     /** Configures PolygonInfo class with the passed sizes + triangles */
     void initializePolygonInfo(const Vec2& textureSize,
-        const Vec2& spriteSize,
-        const std::vector<int>& vertices,
-        const std::vector<int>& verticesUV,
-        const std::vector<int>& triangleIndices,
-        PolygonInfo& polygonInfo);
+                               const Vec2& spriteSize,
+                               const std::vector<int>& vertices,
+                               const std::vector<int>& verticesUV,
+                               const std::vector<int>& triangleIndices,
+                               PolygonInfo& polygonInfo);
 
-    uint32_t getFormat() override = 0;
-    void load(const std::string& filePath, SpriteFrameCache& cache) override = 0;
-    void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override = 0;
+    uint32_t getFormat() override                                                                                = 0;
+    void load(const std::string& filePath, SpriteFrameCache& cache) override                                     = 0;
+    void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override                 = 0;
     void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override = 0;
-    void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override = 0;
-    void reload(const std::string& filePath, SpriteFrameCache& cache) override = 0;
+    void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override                         = 0;
+    void reload(const std::string& filePath, SpriteFrameCache& cache) override                                   = 0;
 };
 
 // end of _2d group
 /// @}
 
 NS_CC_END
-

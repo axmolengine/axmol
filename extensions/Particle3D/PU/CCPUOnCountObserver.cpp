@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,18 +30,15 @@
 NS_CC_BEGIN
 
 // Constants
-const unsigned int PUOnCountObserver::DEFAULT_THRESHOLD = 0;
+const unsigned int PUOnCountObserver::DEFAULT_THRESHOLD        = 0;
 const PUComparisionOperator PUOnCountObserver::DEFAULT_COMPARE = CO_LESS_THAN;
 
 //-----------------------------------------------------------------------
-PUOnCountObserver::PUOnCountObserver() : PUObserver(),
-    _count(1),
-    _threshold(DEFAULT_THRESHOLD),
-    _compare(DEFAULT_COMPARE)
-{
-}
+PUOnCountObserver::PUOnCountObserver()
+    : PUObserver(), _count(1), _threshold(DEFAULT_THRESHOLD), _compare(DEFAULT_COMPARE)
+{}
 //-----------------------------------------------------------------------
-void PUOnCountObserver::notifyStart ()
+void PUOnCountObserver::notifyStart()
 {
     PUObserver::notifyStart();
 
@@ -49,7 +46,7 @@ void PUOnCountObserver::notifyStart ()
     _count = 1;
 }
 //-----------------------------------------------------------------------
-bool PUOnCountObserver::observe (PUParticle3D* particle, float /*timeElapsed*/)
+bool PUOnCountObserver::observe(PUParticle3D* particle, float /*timeElapsed*/)
 {
     if (!particle)
         return false;
@@ -105,14 +102,14 @@ PUOnCountObserver* PUOnCountObserver::create()
     return pco;
 }
 
-void PUOnCountObserver::copyAttributesTo( PUObserver* observer )
+void PUOnCountObserver::copyAttributesTo(PUObserver* observer)
 {
     PUObserver::copyAttributesTo(observer);
 
     PUOnCountObserver* onCountObserver = static_cast<PUOnCountObserver*>(observer);
-    onCountObserver->_count = _count;
-    onCountObserver->_threshold = _threshold;
-    onCountObserver->_compare = _compare;
+    onCountObserver->_count            = _count;
+    onCountObserver->_threshold        = _threshold;
+    onCountObserver->_compare          = _compare;
 }
 
 NS_CC_END

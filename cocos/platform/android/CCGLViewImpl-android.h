@@ -34,9 +34,8 @@ NS_CC_BEGIN
 class CC_DLL GLViewImpl : public GLView
 {
 public:
-
     // static function
-    static GLViewImpl* create(const std::string &viewname);
+    static GLViewImpl* create(const std::string& viewname);
     static GLViewImpl* createWithRect(const std::string& viewName, Rect rect, float frameZoomFactor = 1.0f);
     static GLViewImpl* createWithFullScreen(const std::string& viewName);
 

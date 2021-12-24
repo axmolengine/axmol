@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../Macros.h"
@@ -44,11 +44,11 @@ class ShaderModuleGL;
  */
 struct AttributeInfo
 {
-    unsigned int location = 0;
-    unsigned int size = 0;
-    GLenum type = GL_BYTE;
-    GLsizei stride = 0;
-    unsigned int offset = 0;
+    unsigned int location         = 0;
+    unsigned int size             = 0;
+    GLenum type                   = GL_BYTE;
+    GLsizei stride                = 0;
+    unsigned int offset           = 0;
     GLboolean needToBeNormallized = GL_FALSE;
     std::string name;
 };
@@ -71,7 +71,7 @@ public:
     ProgramGL(const std::string& vertexShader, const std::string& fragmentShader);
 
     ~ProgramGL();
-    
+
     /**
      * Get attribute informations.
      * @return Attribute informations.
@@ -129,14 +129,14 @@ public:
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
     virtual const std::unordered_map<std::string, AttributeBindInfo> getActiveAttributes() const override;
-    
+
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.
      * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
      * @return The uniform buffer size in bytes.
      */
     virtual std::size_t getUniformBufferSize(ShaderStage stage) const override;
-    
+
     /**
      * Get a uniformInfo in given location from the specific shader stage.
      * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
@@ -149,7 +149,8 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const std::unordered_map<std::string, UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override ;
+    virtual const std::unordered_map<std::string, UniformInfo>& getAllActiveUniformInfo(
+        ShaderStage stage) const override;
 
 private:
     void compileProgram();
@@ -160,28 +161,32 @@ private:
     virtual void reloadProgram();
     virtual int getMappedLocation(int location) const override;
     virtual int getOriginalLocation(int location) const override;
-    virtual const std::unordered_map<std::string, int> getAllUniformsLocation() const override { return _originalUniformLocations; }
+    virtual const std::unordered_map<std::string, int> getAllUniformsLocation() const override
+    {
+        return _originalUniformLocations;
+    }
 #endif
-    
-    GLuint _program = 0;
-    ShaderModuleGL* _vertexShaderModule = nullptr;
+
+    GLuint _program                       = 0;
+    ShaderModuleGL* _vertexShaderModule   = nullptr;
     ShaderModuleGL* _fragmentShaderModule = nullptr;
-    
+
     std::vector<AttributeInfo> _attributeInfos;
     std::unordered_map<std::string, UniformInfo> _activeUniformInfos;
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    std::unordered_map<std::string, int> _originalUniformLocations; ///< record the uniform location when shader was first created.
-    std::unordered_map<int, int> _mapToCurrentActiveLocation; ///< 
-    std::unordered_map<int, int> _mapToOriginalLocation; ///< 
+    std::unordered_map<std::string, int>
+        _originalUniformLocations;  ///< record the uniform location when shader was first created.
+    std::unordered_map<int, int> _mapToCurrentActiveLocation;  ///<
+    std::unordered_map<int, int> _mapToOriginalLocation;       ///<
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 
     std::size_t _totalBufferSize = 0;
-    int _maxLocation = -1;
+    int _maxLocation             = -1;
     UniformLocation _builtinUniformLocation[UNIFORM_MAX];
     int _builtinAttributeLocation[Attribute::ATTRIBUTE_MAX];
     std::unordered_map<int, int> _bufferOffset;
 };
-//end of _opengl group
+// end of _opengl group
 /// @}
 CC_BACKEND_END

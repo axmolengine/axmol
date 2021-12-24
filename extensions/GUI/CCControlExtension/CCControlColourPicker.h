@@ -7,19 +7,19 @@
  *
  * Modified by Yannick Loriot.
  * http://yannickloriot.com
- * 
+ *
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,7 +33,6 @@
 
 #ifndef __CCCONTROL_COLOUR_PICKER_H__
 #define __CCCONTROL_COLOUR_PICKER_H__
-
 
 #include "CCControl.h"
 #include "CCControlUtils.h"
@@ -50,7 +49,7 @@ NS_CC_EXT_BEGIN
  * @{
  */
 
-class CC_EX_DLL ControlColourPicker: public Control
+class CC_EX_DLL ControlColourPicker : public Control
 {
 public:
     static ControlColourPicker* create();
@@ -70,9 +69,9 @@ public:
     virtual void setColor(const Color3B& colorValue) override;
     virtual void setEnabled(bool bEnabled) override;
 
-    //virtual ~ControlColourPicker();
-    void hueSliderValueChanged(Ref * sender, Control::EventType controlEvent);
-    void colourSliderValueChanged(Ref * sender, Control::EventType controlEvent);
+    // virtual ~ControlColourPicker();
+    void hueSliderValueChanged(Ref* sender, Control::EventType controlEvent);
+    void colourSliderValueChanged(Ref* sender, Control::EventType controlEvent);
 
 protected:
     void updateControlPicker();

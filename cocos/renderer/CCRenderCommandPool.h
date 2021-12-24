@@ -37,15 +37,13 @@ template <class T>
 class RenderCommandPool
 {
 public:
-    RenderCommandPool()
-    {
-    }
+    RenderCommandPool() {}
     ~RenderCommandPool()
     {
-//        if( 0 != _usedPool.size())
-//        {
-//            CCLOG("All RenderCommand should not be used when Pool is released!");
-//        }
+        //        if( 0 != _usedPool.size())
+        //        {
+        //            CCLOG("All RenderCommand should not be used when Pool is released!");
+        //        }
         _freePool.clear();
         for (auto& allocatedPoolBlock : _allocatedPoolBlocks)
         {
@@ -58,7 +56,7 @@ public:
     T* generateCommand()
     {
         T* result = nullptr;
-        if(_freePool.empty())
+        if (_freePool.empty())
         {
             AllocateCommands();
         }
@@ -67,34 +65,34 @@ public:
         //_usedPool.insert(result);
         return result;
     }
-    
+
     void pushBackCommand(T* ptr)
     {
-//        if(_usedPool.find(ptr) == _usedPool.end())
-//        {
-//            CCLOG("push Back Wrong command!");
-//            return;
-//        }
-        
+        //        if(_usedPool.find(ptr) == _usedPool.end())
+        //        {
+        //            CCLOG("push Back Wrong command!");
+        //            return;
+        //        }
+
         _freePool.push_back(ptr);
         //_usedPool.erase(ptr);
-        
     }
+
 private:
     void AllocateCommands()
     {
         static const int COMMANDS_ALLOCATE_BLOCK_SIZE = 32;
-        T* commands = new T[COMMANDS_ALLOCATE_BLOCK_SIZE];
+        T* commands                                   = new T[COMMANDS_ALLOCATE_BLOCK_SIZE];
         _allocatedPoolBlocks.push_back(commands);
-        for(int index = 0; index < COMMANDS_ALLOCATE_BLOCK_SIZE; ++index)
+        for (int index = 0; index < COMMANDS_ALLOCATE_BLOCK_SIZE; ++index)
         {
-            _freePool.push_back(commands+index);
+            _freePool.push_back(commands + index);
         }
     }
 
     std::list<T*> _allocatedPoolBlocks;
     std::list<T*> _freePool;
-    //std::set<T*> _usedPool;
+    // std::set<T*> _usedPool;
 };
 
 NS_CC_END

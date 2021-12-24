@@ -26,7 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-
 #ifndef __CC_TM_XML_PARSER__
 #define __CC_TM_XML_PARSER__
 
@@ -37,7 +36,7 @@ THE SOFTWARE.
 #include "base/CCVector.h"
 #include "base/CCMap.h"
 #include "base/CCValue.h"
-#include "2d/CCTMXObjectGroup.h" // needed for Vector<TMXObjectGroup*> for binding
+#include "2d/CCTMXObjectGroup.h"  // needed for Vector<TMXObjectGroup*> for binding
 
 #include <string>
 
@@ -47,27 +46,29 @@ class TMXLayerInfo;
 class TMXTilesetInfo;
 
 /** @file
-* Internal TMX parser
-*
-* IMPORTANT: These classed should not be documented using doxygen strings
-* since the user should not use them.
-*
-*/
+ * Internal TMX parser
+ *
+ * IMPORTANT: These classed should not be documented using doxygen strings
+ * since the user should not use them.
+ *
+ */
 
 /**
  * @addtogroup tilemap_parallax_nodes
  * @{
  */
 
-enum {
-    TMXLayerAttribNone = 1 << 0,
+enum
+{
+    TMXLayerAttribNone   = 1 << 0,
     TMXLayerAttribBase64 = 1 << 1,
-    TMXLayerAttribGzip = 1 << 2,
-    TMXLayerAttribZlib = 1 << 3,
-    TMXLayerAttribCSV = 1 << 4,
+    TMXLayerAttribGzip   = 1 << 2,
+    TMXLayerAttribZlib   = 1 << 3,
+    TMXLayerAttribCSV    = 1 << 4,
 };
 
-enum {
+enum
+{
     TMXPropertyNone,
     TMXPropertyMap,
     TMXPropertyLayer,
@@ -77,21 +78,21 @@ enum {
     TMXPropertyAnimation
 };
 
-typedef enum TMXTileFlags_ {
-    kTMXTileHorizontalFlag  = 0x80000000,
-    kTMXTileVerticalFlag    = 0x40000000,
-    kTMXTileDiagonalFlag    = 0x20000000,
-    kTMXFlipedAll           = (kTMXTileHorizontalFlag|kTMXTileVerticalFlag|kTMXTileDiagonalFlag),
-    kTMXFlippedMask         = ~(kTMXFlipedAll)
+typedef enum TMXTileFlags_
+{
+    kTMXTileHorizontalFlag = 0x80000000,
+    kTMXTileVerticalFlag   = 0x40000000,
+    kTMXTileDiagonalFlag   = 0x20000000,
+    kTMXFlipedAll          = (kTMXTileHorizontalFlag | kTMXTileVerticalFlag | kTMXTileDiagonalFlag),
+    kTMXFlippedMask        = ~(kTMXFlipedAll)
 } TMXTileFlags;
-
 
 /**
  * @addtogroup _2d
  * @{
  */
 
- /** Possible orientations of the TMX map. */
+/** Possible orientations of the TMX map. */
 enum
 {
     /** Orthogonal orientation. */
@@ -150,8 +151,8 @@ This information is obtained from the TMX file.
 */
 struct CC_DLL TMXTileAnimInfo : public Ref
 {
-    static TMXTileAnimInfo* create(uint32_t  tileID);
-    explicit TMXTileAnimInfo(uint32_t  tileID);
+    static TMXTileAnimInfo* create(uint32_t tileID);
+    explicit TMXTileAnimInfo(uint32_t tileID);
     uint32_t _tileID = 0;
     std::vector<TMXTileAnimFrame> _frames;
 };
@@ -182,14 +183,14 @@ public:
     void setProperties(ValueMap properties);
     ValueMap& getProperties();
 
-    ValueMap            _properties;
-    std::string         _name;
-    Vec2                _layerSize;
-    uint32_t            *_tiles;
-    bool                _visible;
-    unsigned char       _opacity;
-    bool                _ownTiles;
-    Vec2               _offset;
+    ValueMap _properties;
+    std::string _name;
+    Vec2 _layerSize;
+    uint32_t* _tiles;
+    bool _visible;
+    unsigned char _opacity;
+    bool _ownTiles;
+    Vec2 _offset;
 };
 
 /** @brief TMXTilesetInfo contains the information about the tilesets like:
@@ -200,24 +201,25 @@ public:
 - Image used for the tiles
 - Image size
 
-This information is obtained from the TMX file. 
+This information is obtained from the TMX file.
 */
 class CC_DLL TMXTilesetInfo : public Ref
 {
 public:
-    std::string     _name;
-    int             _firstGid;
-    Vec2            _tileSize;
-    int             _spacing;
-    int             _margin;
-    Vec2            _tileOffset;
+    std::string _name;
+    int _firstGid;
+    Vec2 _tileSize;
+    int _spacing;
+    int _margin;
+    Vec2 _tileOffset;
     //! filename containing the tiles (should be spritesheet / texture atlas)
-    std::string     _sourceImage;
+    std::string _sourceImage;
     //! size in pixels of the image
-    Vec2            _imageSize;
-    std::string     _originSourceImage;
+    Vec2 _imageSize;
+    std::string _originSourceImage;
     //! map from gid of animated tile to its animation info
     Map<uint32_t, TMXTileAnimInfo*> _animationInfo;
+
 public:
     /**
      * @js ctor
@@ -245,13 +247,13 @@ This information is obtained from the TMX file.
 
 */
 class CC_DLL TMXMapInfo : public Ref, public SAXDelegator
-{    
-public:    
+{
+public:
     /** creates a TMX Format with a tmx file */
-    static TMXMapInfo * create(const std::string& tmxFile);
+    static TMXMapInfo* create(const std::string& tmxFile);
     /** creates a TMX Format with an XML string and a TMX resource path */
-    static TMXMapInfo * createWithXML(const std::string& tmxString, const std::string& resourcePath);
-    
+    static TMXMapInfo* createWithXML(const std::string& tmxString, const std::string& resourcePath);
+
     /**
      * @js ctor
      */
@@ -261,7 +263,7 @@ public:
      * @lua NA
      */
     virtual ~TMXMapInfo();
-    
+
     /** initializes a TMX format with a  tmx file */
     bool initWithTMXFile(const std::string& tmxFile);
     /** initializes a TMX format with an XML string and a TMX resource path */
@@ -272,14 +274,12 @@ public:
     bool parseXMLString(const std::string& xmlString);
 
     ValueMapIntKey& getTileProperties() { return _tileProperties; };
-    void setTileProperties(const ValueMapIntKey& tileProperties) {
-        _tileProperties = tileProperties;
-    }
+    void setTileProperties(const ValueMapIntKey& tileProperties) { _tileProperties = tileProperties; }
 
     /// map orientation
     int getOrientation() const { return _orientation; }
     void setOrientation(int orientation) { _orientation = orientation; }
-    
+
     /// map staggeraxis
     int getStaggerAxis() const { return _staggerAxis; }
     void setStaggerAxis(int staggerAxis) { _staggerAxis = staggerAxis; }
@@ -299,27 +299,21 @@ public:
     /// tiles width & height
     const Vec2& getTileSize() const { return _tileSize; }
     void setTileSize(const Vec2& tileSize) { _tileSize = tileSize; }
-    
+
     /// Layers
     const Vector<TMXLayerInfo*>& getLayers() const { return _layers; }
     Vector<TMXLayerInfo*>& getLayers() { return _layers; }
-    void setLayers(const Vector<TMXLayerInfo*>& layers) {
-        _layers = layers;
-    }
+    void setLayers(const Vector<TMXLayerInfo*>& layers) { _layers = layers; }
 
     /// tilesets
     const Vector<TMXTilesetInfo*>& getTilesets() const { return _tilesets; }
     Vector<TMXTilesetInfo*>& getTilesets() { return _tilesets; }
-    void setTilesets(const Vector<TMXTilesetInfo*>& tilesets) {
-        _tilesets = tilesets;
-    }
+    void setTilesets(const Vector<TMXTilesetInfo*>& tilesets) { _tilesets = tilesets; }
 
     /// ObjectGroups
     const Vector<TMXObjectGroup*>& getObjectGroups() const { return _objectGroups; }
     Vector<TMXObjectGroup*>& getObjectGroups() { return _objectGroups; }
-    void setObjectGroups(const Vector<TMXObjectGroup*>& groups) {
-        _objectGroups = groups;
-    }
+    void setObjectGroups(const Vector<TMXObjectGroup*>& groups) { _objectGroups = groups; }
 
     /// parent element
     int getParentElement() const { return _parentElement; }
@@ -340,44 +334,42 @@ public:
     /// properties
     const ValueMap& getProperties() const { return _properties; }
     ValueMap& getProperties() { return _properties; }
-    void setProperties(const ValueMap& properties) {
-        _properties = properties;
-    }
-    
+    void setProperties(const ValueMap& properties) { _properties = properties; }
+
     // implement pure virtual methods of SAXDelegator
     /**
      * @js NA
      * @lua NA
      */
-    void startElement(void *ctx, const char *name, const char **atts) override;
+    void startElement(void* ctx, const char* name, const char** atts) override;
     /**
      * @js NA
      * @lua NA
      */
-    void endElement(void *ctx, const char *name) override;
+    void endElement(void* ctx, const char* name) override;
     /**
      * @js NA
      * @lua NA
      */
-    void textHandler(void *ctx, const char *ch, size_t len) override;
-    
+    void textHandler(void* ctx, const char* ch, size_t len) override;
+
     const std::string& getCurrentString() const { return _currentString; }
-    void setCurrentString(const std::string& currentString){ _currentString = currentString; }
+    void setCurrentString(const std::string& currentString) { _currentString = currentString; }
     const std::string& getTMXFileName() const { return _TMXFileName; }
-    void setTMXFileName(const std::string& fileName){ _TMXFileName = fileName; }
+    void setTMXFileName(const std::string& fileName) { _TMXFileName = fileName; }
     const std::string& getExternalTilesetFileName() const { return _externalTilesetFilename; }
 
 protected:
     void internalInit(const std::string& tmxFileName, const std::string& resourcePath);
 
     /// map orientation
-    int    _orientation;
-    ///map staggerAxis
-    int    _staggerAxis;
-    ///map staggerIndex
-    int    _staggerIndex;
-    ///map hexsidelength
-    int    _hexSideLength;
+    int _orientation;
+    /// map staggerAxis
+    int _staggerAxis;
+    /// map staggerIndex
+    int _staggerIndex;
+    /// map hexsidelength
+    int _hexSideLength;
     /// map width & height
     Vec2 _mapSize;
     /// tiles width & height
@@ -400,7 +392,7 @@ protected:
     ValueMap _properties;
     //! xml format tile index
     int _xmlTileIndex;
-    
+
     //! tmx filename
     std::string _TMXFileName;
     // tmx resource path

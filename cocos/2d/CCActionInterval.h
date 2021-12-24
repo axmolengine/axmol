@@ -82,7 +82,7 @@ public:
      * @param amp   The amplitude rate.
      */
     void setAmplitudeRate(float amp);
-    
+
     /** Gets the amplitude rate, extension in GridAction
      *
      * @return  The amplitude rate.
@@ -97,30 +97,31 @@ public:
      * @param dt in seconds
      */
     virtual void step(float dt) override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual ActionInterval* reverse() const override
     {
         CC_ASSERT(0);
         return nullptr;
     }
 
-    virtual ActionInterval *clone() const override
+    virtual ActionInterval* clone() const override
     {
         CC_ASSERT(0);
         return nullptr;
     }
 
-CC_CONSTRUCTOR_ACCESS:
-    /** initializes the action */
-    bool initWithDuration(float d);
+    CC_CONSTRUCTOR_ACCESS :
+        /** initializes the action */
+        bool
+        initWithDuration(float d);
 
 protected:
     float _elapsed;
     bool _firstTick;
     bool _done;
-    
+
 protected:
-    bool sendUpdateEventToScript(float dt, Action *actionObject);
+    bool sendUpdateEventToScript(float dt, Action* actionObject);
 };
 
 /** @class Sequence
@@ -133,7 +134,7 @@ public:
      *
      * @return An autoreleased Sequence object.
      */
-    static Sequence* create(FiniteTimeAction *action1, ...) CC_REQUIRES_NULL_TERMINATION;
+    static Sequence* create(FiniteTimeAction* action1, ...) CC_REQUIRES_NULL_TERMINATION;
 
     /** Helper constructor to create an array of sequenceable actions given an array.
      * @code
@@ -153,38 +154,37 @@ public:
      * @return An autoreleased Sequence object.
      * @js NA
      */
-    static Sequence* createWithVariableList(FiniteTimeAction *action1, va_list args);
+    static Sequence* createWithVariableList(FiniteTimeAction* action1, va_list args);
     /** Creates the action.
      * @param actionOne The first sequenceable action.
      * @param actionTwo The second sequenceable action.
      * @return An autoreleased Sequence object.
      * @js NA
      */
-    static Sequence* createWithTwoActions(FiniteTimeAction *actionOne, FiniteTimeAction *actionTwo);
+    static Sequence* createWithTwoActions(FiniteTimeAction* actionOne, FiniteTimeAction* actionTwo);
 
     //
     // Overrides
     //
     virtual Sequence* clone() const override;
     virtual Sequence* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual void stop() override;
     virtual bool isDone() const override;
     /**
      * @param t In seconds.
      */
     virtual void update(float t) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Sequence();
+
+    CC_CONSTRUCTOR_ACCESS : Sequence();
     virtual ~Sequence();
 
     /** initializes the action */
-    bool initWithTwoActions(FiniteTimeAction *pActionOne, FiniteTimeAction *pActionTwo);
+    bool initWithTwoActions(FiniteTimeAction* pActionOne, FiniteTimeAction* pActionTwo);
     bool init(const Vector<FiniteTimeAction*>& arrayOfActions);
 
 protected:
-    FiniteTimeAction *_actions[2];
+    FiniteTimeAction* _actions[2];
     float _split;
     int _last;
 
@@ -205,13 +205,13 @@ public:
      * @param times The repeat times.
      * @return An autoreleased Repeat object.
      */
-    static Repeat* create(FiniteTimeAction *action, unsigned int times);
+    static Repeat* create(FiniteTimeAction* action, unsigned int times);
 
     /** Sets the inner action.
      *
      * @param action The inner action.
      */
-    void setInnerAction(FiniteTimeAction *action)
+    void setInnerAction(FiniteTimeAction* action)
     {
         if (_innerAction != action)
         {
@@ -225,30 +225,26 @@ public:
      *
      * @return The inner action.
      */
-    FiniteTimeAction* getInnerAction()
-    {
-        return _innerAction;
-    }
+    FiniteTimeAction* getInnerAction() { return _innerAction; }
 
     //
     // Overrides
     //
     virtual Repeat* clone() const override;
     virtual Repeat* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual void stop() override;
     /**
      * @param dt In seconds.
      */
     virtual void update(float dt) override;
     virtual bool isDone() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Repeat() {}
+
+    CC_CONSTRUCTOR_ACCESS : Repeat() {}
     virtual ~Repeat();
 
     /** initializes a Repeat action. Times is an unsigned integer between 1 and pow(2,30) */
-    bool initWithAction(FiniteTimeAction *pAction, unsigned int times);
+    bool initWithAction(FiniteTimeAction* pAction, unsigned int times);
 
 protected:
     unsigned int _times;
@@ -256,7 +252,7 @@ protected:
     float _nextDt;
     bool _actionInstant;
     /** Inner action */
-    FiniteTimeAction *_innerAction;
+    FiniteTimeAction* _innerAction;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Repeat);
@@ -275,13 +271,13 @@ public:
      * @param action The action need to repeat forever.
      * @return An autoreleased RepeatForever object.
      */
-    static RepeatForever* create(ActionInterval *action);
+    static RepeatForever* create(ActionInterval* action);
 
     /** Sets the inner action.
      *
      * @param action The inner action.
      */
-    void setInnerAction(ActionInterval *action)
+    void setInnerAction(ActionInterval* action)
     {
         if (_innerAction != action)
         {
@@ -295,10 +291,7 @@ public:
      *
      * @return The inner action.
      */
-    ActionInterval* getInnerAction()
-    {
-        return _innerAction;
-    }
+    ActionInterval* getInnerAction() { return _innerAction; }
 
     //
     // Overrides
@@ -311,19 +304,16 @@ public:
      */
     virtual void step(float dt) override;
     virtual bool isDone() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    RepeatForever()
-    : _innerAction(nullptr)
-    {}
+
+    CC_CONSTRUCTOR_ACCESS : RepeatForever() : _innerAction(nullptr) {}
     virtual ~RepeatForever();
 
     /** initializes the action */
-    bool initWithAction(ActionInterval *action);
+    bool initWithAction(ActionInterval* action);
 
 protected:
     /** Inner action */
-    ActionInterval *_innerAction;
+    ActionInterval* _innerAction;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(RepeatForever);
@@ -344,16 +334,16 @@ public:
      *
      * @return An autoreleased Spawn object.
      */
-    static Spawn* create(FiniteTimeAction *action1, ...) CC_REQUIRES_NULL_TERMINATION;
+    static Spawn* create(FiniteTimeAction* action1, ...) CC_REQUIRES_NULL_TERMINATION;
 
-    /** Helper constructor to create an array of spawned actions. 
+    /** Helper constructor to create an array of spawned actions.
      *
      * @param action1   The first sequenceable action.
      * @param args  The va_list variable.
      * @return  An autoreleased Spawn object.
      * @js NA
      */
-    static Spawn* createWithVariableList(FiniteTimeAction *action1, va_list args);
+    static Spawn* createWithVariableList(FiniteTimeAction* action1, va_list args);
 
     /** Helper constructor to create an array of spawned actions given an array.
      *
@@ -369,31 +359,30 @@ public:
      * @return An autoreleased Spawn object.
      * @js NA
      */
-    static Spawn* createWithTwoActions(FiniteTimeAction *action1, FiniteTimeAction *action2);
+    static Spawn* createWithTwoActions(FiniteTimeAction* action1, FiniteTimeAction* action2);
 
     //
     // Overrides
     //
     virtual Spawn* clone() const override;
     virtual Spawn* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual void stop() override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Spawn();
+
+    CC_CONSTRUCTOR_ACCESS : Spawn();
     virtual ~Spawn();
 
     /** initializes the Spawn action with the 2 actions to spawn */
-    bool initWithTwoActions(FiniteTimeAction *action1, FiniteTimeAction *action2);
+    bool initWithTwoActions(FiniteTimeAction* action1, FiniteTimeAction* action2);
     bool init(const Vector<FiniteTimeAction*>& arrayOfActions);
 
 protected:
-    FiniteTimeAction *_one;
-    FiniteTimeAction *_two;
+    FiniteTimeAction* _one;
+    FiniteTimeAction* _two;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Spawn);
@@ -402,11 +391,11 @@ private:
 /** @class RotateTo
  * @brief Rotates a Node object to a certain angle by modifying it's rotation attribute.
  The direction will be decided by the shortest angle.
-*/ 
+*/
 class CC_DLL RotateTo : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates the action with separate rotation angles.
      *
      * @param duration Duration time, in seconds.
@@ -416,7 +405,7 @@ public:
      */
     static RotateTo* create(float duration, float dstAngleX, float dstAngleY);
 
-    /** 
+    /**
      * Creates the action.
      *
      * @param duration Duration time, in seconds.
@@ -425,7 +414,7 @@ public:
      */
     static RotateTo* create(float duration, float dstAngle);
 
-    /** 
+    /**
      * Creates the action with 3D rotation angles.
      * @param duration Duration time, in seconds.
      * @param dstAngle3D A Vec3 angle.
@@ -438,17 +427,16 @@ public:
     //
     virtual RotateTo* clone() const override;
     virtual RotateTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    RotateTo();
+
+    CC_CONSTRUCTOR_ACCESS : RotateTo();
     virtual ~RotateTo() {}
 
-    /** 
+    /**
      * initializes the action
      * @param duration in seconds
      * @param dstAngleX in degreesCW
@@ -461,12 +449,12 @@ CC_CONSTRUCTOR_ACCESS:
      */
     bool initWithDuration(float duration, const Vec3& dstAngle3D);
 
-    /** 
+    /**
      * calculates the start and diff angles
      * @param dstAngle in degreesCW
      */
-    void calculateAngles(float &startAngle, float &diffAngle, float dstAngle);
-    
+    void calculateAngles(float& startAngle, float& diffAngle, float dstAngle);
+
 protected:
     bool _is3D;
     Vec3 _dstAngle;
@@ -479,11 +467,11 @@ private:
 
 /** @class RotateBy
  * @brief Rotates a Node object clockwise a number of degrees by modifying it's rotation attribute.
-*/
+ */
 class CC_DLL RotateBy : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates the action.
      *
      * @param duration Duration time, in seconds.
@@ -514,26 +502,25 @@ public:
     //
     virtual RotateBy* clone() const override;
     virtual RotateBy* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    RotateBy();
+
+    CC_CONSTRUCTOR_ACCESS : RotateBy();
     virtual ~RotateBy() {}
 
     /** initializes the action */
     bool initWithDuration(float duration, float deltaAngle);
-    /** 
+    /**
      * @warning The physics body contained in Node doesn't support rotate with different x and y angle.
      * @param deltaAngleZ_X in degreesCW
      * @param deltaAngleZ_Y in degreesCW
      */
     bool initWithDuration(float duration, float deltaAngleZ_X, float deltaAngleZ_Y);
     bool initWithDuration(float duration, const Vec3& deltaAngle3D);
-    
+
 protected:
     bool _is3D;
     Vec3 _deltaAngle;
@@ -553,7 +540,7 @@ private:
 class CC_DLL MoveBy : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates the action.
      *
      * @param duration Duration time, in seconds.
@@ -574,15 +561,14 @@ public:
     // Overrides
     //
     virtual MoveBy* clone() const override;
-    virtual MoveBy* reverse() const  override;
-    virtual void startWithTarget(Node *target) override;
+    virtual MoveBy* reverse() const override;
+    virtual void startWithTarget(Node* target) override;
     /**
      * @param time in seconds
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    MoveBy():_is3D(false) {}
+
+    CC_CONSTRUCTOR_ACCESS : MoveBy() : _is3D(false) {}
     virtual ~MoveBy() {}
 
     /** initializes the action */
@@ -600,15 +586,15 @@ private:
 };
 
 /** @class MoveTo
- * @brief Moves a Node object to the position x,y. x and y are absolute coordinates by modifying it's position attribute.
- Several MoveTo actions can be concurrently called, and the resulting
- movement will be the sum of individual movements.
+ * @brief Moves a Node object to the position x,y. x and y are absolute coordinates by modifying it's position
+ attribute. Several MoveTo actions can be concurrently called, and the resulting movement will be the sum of individual
+ movements.
  @since v2.1beta2-custom
  */
 class CC_DLL MoveTo : public MoveBy
 {
 public:
-    /** 
+    /**
      * Creates the action.
      * @param duration Duration time, in seconds.
      * @param position The destination position in 2d.
@@ -627,14 +613,13 @@ public:
     // Overrides
     //
     virtual MoveTo* clone() const override;
-    virtual MoveTo* reverse() const  override;
-    virtual void startWithTarget(Node *target) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    MoveTo() {}
+    virtual MoveTo* reverse() const override;
+    virtual void startWithTarget(Node* target) override;
+
+    CC_CONSTRUCTOR_ACCESS : MoveTo() {}
     virtual ~MoveTo() {}
 
-    /** 
+    /**
      * initializes the action
      * @param duration in seconds
      */
@@ -659,7 +644,7 @@ private:
 class CC_DLL SkewTo : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates the action.
      * @param t Duration time, in seconds.
      * @param sx Skew x angle.
@@ -673,14 +658,13 @@ public:
     //
     virtual SkewTo* clone() const override;
     virtual SkewTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    SkewTo();
+
+    CC_CONSTRUCTOR_ACCESS : SkewTo();
     virtual ~SkewTo() {}
     /**
      * @param t In seconds.
@@ -708,7 +692,7 @@ private:
 class CC_DLL SkewBy : public SkewTo
 {
 public:
-    /** 
+    /**
      * Creates the action.
      * @param t Duration time, in seconds.
      * @param deltaSkewX Skew x delta angle.
@@ -720,12 +704,11 @@ public:
     //
     // Overrides
     //
-    virtual void startWithTarget(Node *target) override;
-    virtual SkewBy* clone() const  override;
+    virtual void startWithTarget(Node* target) override;
+    virtual SkewBy* clone() const override;
     virtual SkewBy* reverse() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    SkewBy() {}
+
+    CC_CONSTRUCTOR_ACCESS : SkewBy() {}
     virtual ~SkewBy() {}
     /**
      * @param t In seconds.
@@ -737,18 +720,19 @@ private:
 };
 
 /** @class ResizeTo
-* @brief Resize a Node object to the final size by modifying it's 'size' attribute.
-*/
-class  CC_DLL ResizeTo : public ActionInterval 
+ * @brief Resize a Node object to the final size by modifying it's 'size' attribute.
+ */
+class CC_DLL ResizeTo : public ActionInterval
 {
 public:
     /**
-    * Creates the action.
-    * @brief Resize a Node object to the final size by modifying it's 'size' attribute. Works on all nodes where setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
-    * @param duration Duration time, in seconds.
-    * @param final_size The target size to reach
-    * @return An autoreleased RotateTo object.
-    */
+     * Creates the action.
+     * @brief Resize a Node object to the final size by modifying it's 'size' attribute. Works on all nodes where
+     * setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
+     * @param duration Duration time, in seconds.
+     * @param final_size The target size to reach
+     * @return An autoreleased RotateTo object.
+     */
     static ResizeTo* create(float duration, const Vec2& final_size);
 
     //
@@ -758,15 +742,14 @@ public:
     void startWithTarget(cocos2d::Node* target) override;
     void update(float time) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    ResizeTo() {}
+    CC_CONSTRUCTOR_ACCESS : ResizeTo() {}
     virtual ~ResizeTo() {}
-    
+
     /**
-    * initializes the action
-    * @param duration in seconds
-    * @param final_size in Vec2 type
-    */
+     * initializes the action
+     * @param duration in seconds
+     * @param final_size in Vec2 type
+     */
     bool initWithDuration(float duration, const Vec2& final_size);
 
 protected:
@@ -778,37 +761,36 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(ResizeTo);
 };
 
-
 /** @class ResizeBy
-* @brief Resize a Node object by a size. Works on all nodes where setContentSize is effective. But it's mostly useful for nodes where 9-slice is enabled
-*/
-class CC_DLL ResizeBy : public ActionInterval 
+ * @brief Resize a Node object by a size. Works on all nodes where setContentSize is effective. But it's mostly useful
+ * for nodes where 9-slice is enabled
+ */
+class CC_DLL ResizeBy : public ActionInterval
 {
 public:
     /**
-    * Creates the action.
-    *
-    * @param duration Duration time, in seconds.
-    * @param deltaSize The delta size.
-    * @return An autoreleased ResizeBy object.
-    */
+     * Creates the action.
+     *
+     * @param duration Duration time, in seconds.
+     * @param deltaSize The delta size.
+     * @return An autoreleased ResizeBy object.
+     */
     static ResizeBy* create(float duration, const Vec2& deltaSize);
-    
+
     //
     // Overrides
     //
     virtual ResizeBy* clone() const override;
-    virtual ResizeBy* reverse() const  override;
-    virtual void startWithTarget(Node *target) override;
+    virtual ResizeBy* reverse() const override;
+    virtual void startWithTarget(Node* target) override;
     /**
-    * @param time in seconds
-    */
+     * @param time in seconds
+     */
     virtual void update(float time) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    ResizeBy() {}
+    CC_CONSTRUCTOR_ACCESS : ResizeBy() {}
     virtual ~ResizeBy() {}
-    
+
     /** initializes the action */
     bool initWithDuration(float duration, const Vec2& deltaSize);
 
@@ -821,14 +803,13 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(ResizeBy);
 };
 
-
 /** @class JumpBy
  * @brief Moves a Node object simulating a parabolic jump movement by modifying it's position attribute.
-*/
+ */
 class CC_DLL JumpBy : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates the action.
      * @param duration Duration time, in seconds.
      * @param position The jumping distance.
@@ -843,28 +824,27 @@ public:
     //
     virtual JumpBy* clone() const override;
     virtual JumpBy* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    JumpBy() {}
+
+    CC_CONSTRUCTOR_ACCESS : JumpBy() {}
     virtual ~JumpBy() {}
 
-    /** 
+    /**
      * initializes the action
      * @param duration in seconds
      */
     bool initWithDuration(float duration, const Vec2& position, float height, int jumps);
 
 protected:
-    Vec2           _startPosition;
-    Vec2           _delta;
-    float           _height;
-    int             _jumps;
-    Vec2           _previousPos;
+    Vec2 _startPosition;
+    Vec2 _delta;
+    float _height;
+    int _jumps;
+    Vec2 _previousPos;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(JumpBy);
@@ -872,11 +852,11 @@ private:
 
 /** @class JumpTo
  * @brief Moves a Node object to a parabolic position simulating a jump movement by modifying it's position attribute.
-*/ 
+ */
 class CC_DLL JumpTo : public JumpBy
 {
 public:
-    /** 
+    /**
      * Creates the action.
      * @param duration Duration time, in seconds.
      * @param position The jumping destination position.
@@ -889,15 +869,14 @@ public:
     //
     // Override
     //
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual JumpTo* clone() const override;
     virtual JumpTo* reverse() const override;
 
-CC_CONSTRUCTOR_ACCESS:
-    JumpTo() {}
+    CC_CONSTRUCTOR_ACCESS : JumpTo() {}
     virtual ~JumpTo() {}
 
-    /** 
+    /**
      * initializes the action
      * @param duration In seconds.
      */
@@ -912,7 +891,8 @@ private:
 
 /** @struct Bezier configuration structure
  */
-typedef struct _ccBezierConfig {
+typedef struct _ccBezierConfig
+{
     //! end position of the bezier
     Vec2 endPosition;
     //! Bezier control point 1
@@ -944,17 +924,16 @@ public:
     //
     virtual BezierBy* clone() const override;
     virtual BezierBy* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    BezierBy() {}
+
+    CC_CONSTRUCTOR_ACCESS : BezierBy() {}
     virtual ~BezierBy() {}
 
-    /** 
+    /**
      * initializes the action with a duration and a bezier configuration
      * @param t in seconds
      */
@@ -991,17 +970,16 @@ public:
     //
     // Overrides
     //
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual BezierTo* clone() const override;
     virtual BezierTo* reverse() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    BezierTo() {}
+
+    CC_CONSTRUCTOR_ACCESS : BezierTo() {}
     virtual ~BezierTo() {}
     /**
      * @param t In seconds.
      */
-    bool initWithDuration(float t, const ccBezierConfig &c);
+    bool initWithDuration(float t, const ccBezierConfig& c);
 
 protected:
     ccBezierConfig _toConfig;
@@ -1018,7 +996,7 @@ private:
 class CC_DLL ScaleTo : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates the action with the same scale factor for X and Y.
      * @param duration Duration time, in seconds.
      * @param s Scale factor of x and y.
@@ -1026,7 +1004,7 @@ public:
      */
     static ScaleTo* create(float duration, float s);
 
-    /** 
+    /**
      * Creates the action with and X factor and a Y factor.
      * @param duration Duration time, in seconds.
      * @param sx Scale factor of x.
@@ -1035,7 +1013,7 @@ public:
      */
     static ScaleTo* create(float duration, float sx, float sy);
 
-    /** 
+    /**
      * Creates the action with X Y Z factor.
      * @param duration Duration time, in seconds.
      * @param sx Scale factor of x.
@@ -1050,28 +1028,27 @@ public:
     //
     virtual ScaleTo* clone() const override;
     virtual ScaleTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    ScaleTo() {}
+
+    CC_CONSTRUCTOR_ACCESS : ScaleTo() {}
     virtual ~ScaleTo() {}
 
-    /** 
+    /**
      * initializes the action with the same scale factor for X and Y
      * @param duration in seconds
      */
     bool initWithDuration(float duration, float s);
-    /** 
-     * initializes the action with and X factor and a Y factor 
+    /**
+     * initializes the action with and X factor and a Y factor
      * @param duration in seconds
      */
     bool initWithDuration(float duration, float sx, float sy);
-    /** 
-     * initializes the action with X Y Z factor 
+    /**
+     * initializes the action with X Y Z factor
      * @param duration in seconds
      */
     bool initWithDuration(float duration, float sx, float sy, float sz);
@@ -1101,7 +1078,7 @@ private:
 class CC_DLL ScaleBy : public ScaleTo
 {
 public:
-    /** 
+    /**
      * Creates the action with the same scale factor for X and Y.
      * @param duration Duration time, in seconds.
      * @param s Scale factor of x and y.
@@ -1109,7 +1086,7 @@ public:
      */
     static ScaleBy* create(float duration, float s);
 
-    /** 
+    /**
      * Creates the action with and X factor and a Y factor.
      * @param duration Duration time, in seconds.
      * @param sx Scale factor of x.
@@ -1118,7 +1095,7 @@ public:
      */
     static ScaleBy* create(float duration, float sx, float sy);
 
-    /** 
+    /**
      * Creates the action with X Y Z factor.
      * @param duration Duration time, in seconds.
      * @param sx Scale factor of x.
@@ -1131,12 +1108,11 @@ public:
     //
     // Overrides
     //
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual ScaleBy* clone() const override;
     virtual ScaleBy* reverse() const override;
 
-CC_CONSTRUCTOR_ACCESS:
-    ScaleBy() {}
+    CC_CONSTRUCTOR_ACCESS : ScaleBy() {}
     virtual ~ScaleBy() {}
 
 private:
@@ -1145,11 +1121,11 @@ private:
 
 /** @class Blink
  * @brief Blinks a Node object by modifying it's visible attribute.
-*/
+ */
 class CC_DLL Blink : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates the action.
      * @param duration Duration time, in seconds.
      * @param blinks Blink times.
@@ -1166,19 +1142,18 @@ public:
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual void stop() override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Blink() {}
+
+    CC_CONSTRUCTOR_ACCESS : Blink() {}
     virtual ~Blink() {}
 
-    /** 
-     * initializes the action 
+    /**
+     * initializes the action
      * @param duration in seconds
      */
     bool initWithDuration(float duration, int blinks);
-    
+
 protected:
     int _times;
     bool _originalState;
@@ -1187,15 +1162,15 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(Blink);
 };
 
-
 /** @class FadeTo
- * @brief Fades an object that implements the RGBAProtocol protocol. It modifies the opacity from the current value to a custom one.
+ * @brief Fades an object that implements the RGBAProtocol protocol. It modifies the opacity from the current value to a
+ custom one.
  @warning This action doesn't support "reverse"
  */
 class CC_DLL FadeTo : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates an action with duration and opacity.
      * @param duration Duration time, in seconds.
      * @param opacity A certain opacity, the range is from 0 to 255.
@@ -1208,18 +1183,17 @@ public:
     //
     virtual FadeTo* clone() const override;
     virtual FadeTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    FadeTo() {}
+
+    CC_CONSTRUCTOR_ACCESS : FadeTo() {}
     virtual ~FadeTo() {}
 
-    /** 
-     * initializes the action with duration and opacity 
+    /**
+     * initializes the action with duration and opacity
      * @param duration in seconds
      */
     bool initWithDuration(float duration, uint8_t opacity);
@@ -1229,6 +1203,7 @@ protected:
     uint8_t _fromOpacity;
     friend class FadeOut;
     friend class FadeIn;
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(FadeTo);
 };
@@ -1240,7 +1215,7 @@ private:
 class CC_DLL FadeIn : public FadeTo
 {
 public:
-    /** 
+    /**
      * Creates the action.
      * @param d Duration time, in seconds.
      * @return An autoreleased FadeIn object.
@@ -1250,7 +1225,7 @@ public:
     //
     // Overrides
     //
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual FadeIn* clone() const override;
     virtual FadeTo* reverse() const override;
 
@@ -1259,8 +1234,7 @@ public:
      */
     void setReverseAction(FadeTo* ac);
 
-CC_CONSTRUCTOR_ACCESS:
-    FadeIn():_reverseAction(nullptr) {}
+    CC_CONSTRUCTOR_ACCESS : FadeIn() : _reverseAction(nullptr) {}
     virtual ~FadeIn() {}
 
 private:
@@ -1275,7 +1249,7 @@ private:
 class CC_DLL FadeOut : public FadeTo
 {
 public:
-    /** 
+    /**
      * Creates the action.
      * @param d Duration time, in seconds.
      */
@@ -1284,8 +1258,8 @@ public:
     //
     // Overrides
     //
-    virtual void startWithTarget(Node *target) override;
-    virtual FadeOut* clone() const  override;
+    virtual void startWithTarget(Node* target) override;
+    virtual FadeOut* clone() const override;
     virtual FadeTo* reverse() const override;
 
     /**
@@ -1293,9 +1267,9 @@ public:
      */
     void setReverseAction(FadeTo* ac);
 
-CC_CONSTRUCTOR_ACCESS:
-    FadeOut():_reverseAction(nullptr) {}
+    CC_CONSTRUCTOR_ACCESS : FadeOut() : _reverseAction(nullptr) {}
     virtual ~FadeOut() {}
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(FadeOut);
     FadeTo* _reverseAction;
@@ -1309,7 +1283,7 @@ private:
 class CC_DLL TintTo : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates an action with duration and color.
      * @param duration Duration time, in seconds.
      * @param red Red Color, from 0 to 255.
@@ -1331,14 +1305,13 @@ public:
     //
     virtual TintTo* clone() const override;
     virtual TintTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    TintTo() {}
+
+    CC_CONSTRUCTOR_ACCESS : TintTo() {}
     virtual ~TintTo() {}
 
     /** initializes the action with duration and color */
@@ -1359,7 +1332,7 @@ private:
 class CC_DLL TintBy : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates an action with duration and color.
      * @param duration Duration time, in seconds.
      * @param deltaRed Delta red color.
@@ -1374,14 +1347,13 @@ public:
     //
     virtual TintBy* clone() const override;
     virtual TintBy* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    TintBy() {}
+
+    CC_CONSTRUCTOR_ACCESS : TintBy() {}
     virtual ~TintBy() {}
 
     /** initializes the action with duration and color */
@@ -1402,11 +1374,11 @@ private:
 
 /** @class DelayTime
  * @brief Delays the action a certain amount of seconds.
-*/
+ */
 class CC_DLL DelayTime : public ActionInterval
 {
 public:
-    /** 
+    /**
      * Creates the action.
      * @param d Duration time, in seconds.
      * @return An autoreleased DelayTime object.
@@ -1423,8 +1395,7 @@ public:
     virtual DelayTime* reverse() const override;
     virtual DelayTime* clone() const override;
 
-CC_CONSTRUCTOR_ACCESS:
-    DelayTime() {}
+    CC_CONSTRUCTOR_ACCESS : DelayTime() {}
     virtual ~DelayTime() {}
 
 private:
@@ -1433,7 +1404,7 @@ private:
 
 /** @class ReverseTime
  * @brief Executes an action in reverse order, from time=duration to time=0
- 
+
  @warning Use this action carefully. This action is not
  sequenceable. Use it as the default "reversed" method
  of your own actions, but using it outside the "reversed"
@@ -1447,29 +1418,28 @@ public:
      * @param action a certain action.
      * @return An autoreleased ReverseTime object.
      */
-    static ReverseTime* create(FiniteTimeAction *action);
+    static ReverseTime* create(FiniteTimeAction* action);
 
     //
     // Overrides
     //
     virtual ReverseTime* reverse() const override;
     virtual ReverseTime* clone() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual void stop() override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    ReverseTime();
+
+    CC_CONSTRUCTOR_ACCESS : ReverseTime();
     virtual ~ReverseTime();
 
     /** initializes the action */
-    bool initWithAction(FiniteTimeAction *action);
+    bool initWithAction(FiniteTimeAction* action);
 
 protected:
-    FiniteTimeAction *_other;
+    FiniteTimeAction* _other;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ReverseTime);
@@ -1487,14 +1457,14 @@ public:
      * @param animation A certain animation.
      * @return An autoreleased Animate object.
      */
-    static Animate* create(Animation *animation);
+    static Animate* create(Animation* animation);
 
-    /** Sets the Animation object to be animated 
-     * 
+    /** Sets the Animation object to be animated
+     *
      * @param animation certain animation.
      */
-    void setAnimation( Animation* animation );
-    /** returns the Animation object that is being animated 
+    void setAnimation(Animation* animation);
+    /** returns the Animation object that is being animated
      *
      * @return Gets the animation object that is being animated.
      */
@@ -1511,30 +1481,30 @@ public:
     //
     virtual Animate* clone() const override;
     virtual Animate* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual void stop() override;
     /**
      * @param t In seconds.
      */
     virtual void update(float t) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Animate();
+
+    CC_CONSTRUCTOR_ACCESS : Animate();
     virtual ~Animate();
 
     /** initializes the action with an Animation and will restore the original frame when the animation is over */
-    bool initWithAnimation(Animation *animation);
+    bool initWithAnimation(Animation* animation);
 
 protected:
     std::vector<float>* _splitTimes = new std::vector<float>;
-    int             _nextFrame = 0;
-    SpriteFrame*    _origFrame = nullptr;
-    int _currFrameIndex = 0;
-    unsigned int    _executedLoops = 0;
-    Animation*      _animation = nullptr;
+    int _nextFrame                  = 0;
+    SpriteFrame* _origFrame         = nullptr;
+    int _currFrameIndex             = 0;
+    unsigned int _executedLoops     = 0;
+    Animation* _animation           = nullptr;
 
-    EventCustom*    _frameDisplayedEvent = nullptr;
+    EventCustom* _frameDisplayedEvent = nullptr;
     AnimationFrame::DisplayedEventInfo _frameDisplayedEventInfo;
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Animate);
 };
@@ -1547,7 +1517,7 @@ class CC_DLL TargetedAction : public ActionInterval
 {
 public:
     /** Create an action with the specified action and forced target.
-     * 
+     *
      * @param target The target needs to override.
      * @param action The action needs to override.
      * @return An autoreleased TargetedAction object.
@@ -1559,7 +1529,7 @@ public:
      * @param forcedTarget The target that the action will be forced to run with.
      */
     void setForcedTarget(Node* forcedTarget);
-    /** returns the target that the action is forced to run with. 
+    /** returns the target that the action is forced to run with.
      *
      * @return The target that the action is forced to run with.
      */
@@ -1570,16 +1540,15 @@ public:
     // Overrides
     //
     virtual TargetedAction* clone() const override;
-    virtual TargetedAction* reverse() const  override;
-    virtual void startWithTarget(Node *target) override;
+    virtual TargetedAction* reverse() const override;
+    virtual void startWithTarget(Node* target) override;
     virtual void stop() override;
     /**
      * @param time In seconds.
      */
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    TargetedAction();
+
+    CC_CONSTRUCTOR_ACCESS : TargetedAction();
     virtual ~TargetedAction();
 
     /** Init an action with the specified action and forced target */
@@ -1625,9 +1594,8 @@ public:
     ActionFloat* reverse() const override;
     ActionFloat* clone() const override;
 
-CC_CONSTRUCTOR_ACCESS:
-    ActionFloat() {};
-    virtual ~ActionFloat() {};
+    CC_CONSTRUCTOR_ACCESS : ActionFloat(){};
+    virtual ~ActionFloat(){};
 
     bool initWithDuration(float duration, float from, float to, ActionFloatCallback callback);
 
@@ -1641,6 +1609,7 @@ protected:
 
     /* Callback to report back results */
     ActionFloatCallback _callback;
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ActionFloat);
 };
@@ -1650,4 +1619,4 @@ private:
 
 NS_CC_END
 
-#endif //__ACTION_CCINTERVAL_ACTION_H__
+#endif  //__ACTION_CCINTERVAL_ACTION_H__

@@ -30,43 +30,42 @@
 
 namespace cocostudio
 {
-    void destroyCocosStudio()
-    {        
-        NodeReader::destroyInstance();
-        SingleNodeReader::destroyInstance();
-        SpriteReader::destroyInstance();
-        ParticleReader::destroyInstance();
-        GameMapReader::destroyInstance();
-        ProjectNodeReader::destroyInstance();
-        ComAudioReader::destroyInstance();
-        
-        WidgetReader::destroyInstance();
-        ButtonReader::destroyInstance();
-        CheckBoxReader::destroyInstance();
-        ImageViewReader::destroyInstance();
-        TextBMFontReader::destroyInstance();
-        TextReader::destroyInstance();
-        TextFieldReader::destroyInstance();
-        TextAtlasReader::destroyInstance();
-        LoadingBarReader::destroyInstance();
-        SliderReader::destroyInstance();
-        LayoutReader::destroyInstance();
-        ScrollViewReader::destroyInstance();
-        PageViewReader::destroyInstance();
-        ListViewReader::destroyInstance();
-        
-        ArmatureNodeReader::destroyInstance();
-        Node3DReader::destroyInstance();
-        Sprite3DReader::destroyInstance();
-        UserCameraReader::destroyInstance();
-        Particle3DReader::destroyInstance();
-        
-        cocos2d::CSLoader::destroyInstance();
-        
-        
-        ArmatureDataManager::destroyInstance();
-        SceneReader::destroyInstance();
-        ActionManagerEx::destroyInstance();
-        GUIReader::destroyInstance();
-    }
+void destroyCocosStudio()
+{
+    NodeReader::destroyInstance();
+    SingleNodeReader::destroyInstance();
+    SpriteReader::destroyInstance();
+    ParticleReader::destroyInstance();
+    GameMapReader::destroyInstance();
+    ProjectNodeReader::destroyInstance();
+    ComAudioReader::destroyInstance();
+
+    WidgetReader::destroyInstance();
+    ButtonReader::destroyInstance();
+    CheckBoxReader::destroyInstance();
+    ImageViewReader::destroyInstance();
+    TextBMFontReader::destroyInstance();
+    TextReader::destroyInstance();
+    TextFieldReader::destroyInstance();
+    TextAtlasReader::destroyInstance();
+    LoadingBarReader::destroyInstance();
+    SliderReader::destroyInstance();
+    LayoutReader::destroyInstance();
+    ScrollViewReader::destroyInstance();
+    PageViewReader::destroyInstance();
+    ListViewReader::destroyInstance();
+
+    ArmatureNodeReader::destroyInstance();
+    Node3DReader::destroyInstance();
+    Sprite3DReader::destroyInstance();
+    UserCameraReader::destroyInstance();
+    Particle3DReader::destroyInstance();
+
+    cocos2d::CSLoader::destroyInstance();
+
+    ArmatureDataManager::destroyInstance();
+    SceneReader::destroyInstance();
+    ActionManagerEx::destroyInstance();
+    GUIReader::destroyInstance();
 }
+}  // namespace cocostudio

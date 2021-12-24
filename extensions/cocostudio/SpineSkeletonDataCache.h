@@ -10,77 +10,76 @@
 class CCS_DLL SpineSkeletonDataCache
 {
 public:
-	class SkeletonData : public cocos2d::Ref
-	{
-	public:
-		SkeletonData(spine::SkeletonData* d, spine::AttachmentLoader* loader) : data(d), attachmentLoader(loader) {}
-		~SkeletonData()
-		{
-			if (data != nullptr)
-				delete (data);
-			if (attachmentLoader != nullptr)
-				delete (attachmentLoader);
-		}
-		spine::AttachmentLoader* attachmentLoader;
+    class SkeletonData : public cocos2d::Ref
+    {
+    public:
+        SkeletonData(spine::SkeletonData* d, spine::AttachmentLoader* loader) : data(d), attachmentLoader(loader) {}
+        ~SkeletonData()
+        {
+            if (data != nullptr)
+                delete (data);
+            if (attachmentLoader != nullptr)
+                delete (attachmentLoader);
+        }
+        spine::AttachmentLoader* attachmentLoader;
         spine::SkeletonData* data;
-	};
+    };
 
-	static SpineSkeletonDataCache* getInstance();
+    static SpineSkeletonDataCache* getInstance();
 
     SpineSkeletonDataCache();
 
-    void setErrorReportFunc(void(*errorfunc)(const char* pszFormat, ...));
+    void setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...));
 
-	SkeletonData* addData(const char* dataFile, const char* atlasFile, float scale);
+    SkeletonData* addData(const char* dataFile, const char* atlasFile, float scale);
 
-	void removeData(const char* dataFile);
+    void removeData(const char* dataFile);
 
-	void removeAllData(void);
-	void removeAllUnusedData(void);
+    void removeAllData(void);
+    void removeAllUnusedData(void);
 
 public:
-	std::map<std::string, SkeletonData*> _cacheTable;
-    void(*_reportError)(const char* pszFormat, ...);
+    std::map<std::string, SkeletonData*> _cacheTable;
+    void (*_reportError)(const char* pszFormat, ...);
 };
 
 #else
 class SpineSkeletonDataCache
 {
 public:
-	class SkeletonData : public cocos2d::Ref
-	{
-	public:
-		SkeletonData(spSkeletonData* d, spAttachmentLoader* loader) : data(d), attachmentLoader(loader) {}
-		~SkeletonData()
-		{
-			if (data != nullptr)
-				spSkeletonData_dispose(data);
-			if (attachmentLoader != nullptr)
-				spAttachmentLoader_dispose(attachmentLoader);
-		}
-		spAttachmentLoader* attachmentLoader;
-		spSkeletonData* data;
-	};
+    class SkeletonData : public cocos2d::Ref
+    {
+    public:
+        SkeletonData(spSkeletonData* d, spAttachmentLoader* loader) : data(d), attachmentLoader(loader) {}
+        ~SkeletonData()
+        {
+            if (data != nullptr)
+                spSkeletonData_dispose(data);
+            if (attachmentLoader != nullptr)
+                spAttachmentLoader_dispose(attachmentLoader);
+        }
+        spAttachmentLoader* attachmentLoader;
+        spSkeletonData* data;
+    };
 
-	SpineSkeletonDataCache();
+    SpineSkeletonDataCache();
 
-	void setErrorReportFunc(void(*errorfunc)(const char* pszFormat, ...));
+    void setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...));
 
-	static SpineSkeletonDataCache* getInstance();
+    static SpineSkeletonDataCache* getInstance();
 
-	SkeletonData* addData(const char* dataFile, const char* atlasFile, float scale);
+    SkeletonData* addData(const char* dataFile, const char* atlasFile, float scale);
 
-	void removeData(const char* dataFile);
+    void removeData(const char* dataFile);
 
-	void removeAllData(void);
-	void removeAllUnusedData(void);
+    void removeAllData(void);
+    void removeAllUnusedData(void);
 
 public:
-	std::map<std::string, SkeletonData*> _cacheTable;
-	void(*_reportError)(const char* pszFormat, ...);
+    std::map<std::string, SkeletonData*> _cacheTable;
+    void (*_reportError)(const char* pszFormat, ...);
 };
 
 #endif
 
 #endif
-

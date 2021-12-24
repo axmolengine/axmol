@@ -37,14 +37,15 @@ NS_CC_BEGIN
 class Sprite;
 struct CC_DLL ResourceData;
 
-namespace ui {
-    
+namespace ui
+{
+
 /**
  *  AbstractCheckButton is a specific type of two-states button that can be either checked or unchecked.
  */
 class CC_GUI_DLL AbstractCheckButton : public Widget
 {
-    
+
 public:
     /**
      * Load all textures for initializing a check button.
@@ -62,31 +63,32 @@ public:
                       const std::string& backgroundDisabled,
                       const std::string& frontCrossDisabled,
                       TextureResType texType = TextureResType::LOCAL);
-    
+
     /**
      * Load background texture for check button.
      *
      * @param backGround   The background image name.
      * @param type    @see `Widget::TextureResType`
      */
-    void loadTextureBackGround(const std::string& backGround,TextureResType type = TextureResType::LOCAL);
-    
+    void loadTextureBackGround(const std::string& backGround, TextureResType type = TextureResType::LOCAL);
+
     /**
      * Load background selected state texture for check button.
      *
      * @param backGroundSelected    The background selected state image name.
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTextureBackGroundSelected(const std::string& backGroundSelected,TextureResType texType = TextureResType::LOCAL);
-    
+    void loadTextureBackGroundSelected(const std::string& backGroundSelected,
+                                       TextureResType texType = TextureResType::LOCAL);
+
     /**
      * Load cross texture for check button.
      *
      * @param crossTextureName    The cross texture name.
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTextureFrontCross(const std::string& crossTextureName,TextureResType texType = TextureResType::LOCAL);
-    
+    void loadTextureFrontCross(const std::string& crossTextureName, TextureResType texType = TextureResType::LOCAL);
+
     /**
      * Load background disabled state texture for checkbox.
      *
@@ -94,33 +96,35 @@ public:
      *
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTextureBackGroundDisabled(const std::string& backGroundDisabled,TextureResType texType = TextureResType::LOCAL);
-    
+    void loadTextureBackGroundDisabled(const std::string& backGroundDisabled,
+                                       TextureResType texType = TextureResType::LOCAL);
+
     /**
      * Load frontcross disabled texture for checkbox.
      *
      * @param frontCrossDisabled    The front cross disabled state texture name.
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTextureFrontCrossDisabled(const std::string& frontCrossDisabled,TextureResType texType = TextureResType::LOCAL);
-    
+    void loadTextureFrontCrossDisabled(const std::string& frontCrossDisabled,
+                                       TextureResType texType = TextureResType::LOCAL);
+
     /**
      * Query whether CheckBox is selected or not.
      *@return true means "selected", false otherwise.
      */
-    bool isSelected()const;
-    
+    bool isSelected() const;
+
     /**
      * Change CheckBox state.
      * Set to true will cause the CheckBox's state to "selected", false otherwise.
      *@param selected Set to true will change CheckBox to selected state, false otherwise.
      */
     void setSelected(bool selected);
-    
-    //override functions
+
+    // override functions
     virtual Vec2 getVirtualRendererSize() const override;
     virtual Node* getVirtualRenderer() override;
-    
+
     /** When user pressed the CheckBox, the button will zoom to a scale.
      * The final scale of the CheckBox  equals (CheckBox original scale + _zoomScale)
      * @since v3.3
@@ -131,32 +135,32 @@ public:
      * @return A zoom scale of Checkbox.
      * @since v3.3
      */
-    float getZoomScale()const;
-    
+    float getZoomScale() const;
+
     /**
      * @brief Return the sprite instance of background
      * @return the sprite instance of background.
      */
     Sprite* getRendererBackground() const { return _backGroundBoxRenderer; }
-    
+
     /**
      * @brief Return the sprite instance of background when selected
      * @return the sprite instance of background when selected
      */
     Sprite* getRendererBackgroundSelected() const { return _backGroundSelectedBoxRenderer; }
-    
+
     /**
      * @brief Return the sprite instance of front cross
      * @return the sprite instance of front cross
      */
     Sprite* getRendererFrontCross() const { return _frontCrossRenderer; }
-    
+
     /**
      * @brief Return the sprite instance of background when disabled
      * @return the sprite instance of background when disabled
      */
     Sprite* getRendererBackgroundDisabled() const { return _backGroundBoxDisabledRenderer; }
-    
+
     /**
      * @brief Return the sprite instance of front cross when disabled
      * @return the sprite instance of front cross when disabled
@@ -169,33 +173,32 @@ public:
     ResourceData getCrossNormalFile();
     ResourceData getCrossDisabledFile();
 
-CC_CONSTRUCTOR_ACCESS:
-    virtual bool init() override;
+    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
     virtual bool init(const std::string& backGround,
                       const std::string& backGroundSelected,
                       const std::string& cross,
                       const std::string& backGroundDisabled,
                       const std::string& frontCrossDisabled,
                       TextureResType texType = TextureResType::LOCAL);
-    
+
 protected:
     /**
      * Default constructor.
      */
     AbstractCheckButton();
-    
+
     /**
      * Default destructor.
      *
      * @lua NA
      */
     virtual ~AbstractCheckButton();
-    
+
     virtual void initRenderer() override;
     virtual void onPressStateChangedToNormal() override;
     virtual void onPressStateChangedToPressed() override;
     virtual void onPressStateChangedToDisabled() override;
-    
+
     void setupBackgroundTexture();
     void loadTextureBackGround(SpriteFrame* spriteFrame);
     void setupBackgroundSelectedTexture();
@@ -206,19 +209,20 @@ protected:
     void loadTextureBackGroundDisabled(SpriteFrame* spriteframe);
     void setupFrontCrossDisableTexture();
     void loadTextureFrontCrossDisabled(SpriteFrame* spriteframe);
-    
+
     virtual void dispatchSelectChangedEvent(bool selected) = 0;
-    
+
     virtual void onSizeChanged() override;
-    
+
     void backGroundTextureScaleChangedWithSize();
     void backGroundSelectedTextureScaleChangedWithSize();
     void frontCrossTextureScaleChangedWithSize();
     void backGroundDisabledTextureScaleChangedWithSize();
     void frontCrossDisabledTextureScaleChangedWithSize();
-    
+
     virtual void copySpecialProperties(Widget* model) override;
     virtual void adaptRenderers() override;
+
 protected:
     Sprite* _backGroundBoxRenderer;
     Sprite* _backGroundSelectedBoxRenderer;
@@ -226,7 +230,7 @@ protected:
     Sprite* _backGroundBoxDisabledRenderer;
     Sprite* _frontCrossDisabledRenderer;
     bool _isSelected;
-    
+
     bool _isBackgroundSelectedTextureLoaded;
     bool _isBackgroundDisabledTextureLoaded;
     bool _isFrontCrossDisabledTextureLoaded;
@@ -235,11 +239,11 @@ protected:
     TextureResType _frontCrossTexType;
     TextureResType _backGroundDisabledTexType;
     TextureResType _frontCrossDisabledTexType;
-    
+
     float _zoomScale;
     float _backgroundTextureScaleX;
     float _backgroundTextureScaleY;
-    
+
     bool _backGroundBoxRendererAdaptDirty;
     bool _backGroundSelectedBoxRendererAdaptDirty;
     bool _frontCrossRendererAdaptDirty;
@@ -252,8 +256,8 @@ protected:
     std::string _backGroundDisabledFileName;
     std::string _frontCrossDisabledFileName;
 };
-    
-}
+
+}  // namespace ui
 
 NS_CC_END
 // end of ui group

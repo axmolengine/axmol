@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,43 +31,39 @@ NS_CC_BEGIN
 //-----------------------------------------------------------------------
 // Constants
 const PUForceField::ForceFieldType PUForceFieldAffector::DEFAULT_FORCEFIELD_TYPE = PUForceField::FF_REALTIME_CALC;
-const float PUForceFieldAffector::DEFAULT_DELTA = 1.0f;
-const float PUForceFieldAffector::DEFAULT_FORCE = 400.0f;
-const unsigned short PUForceFieldAffector::DEFAULT_OCTAVES = 2;
-const double PUForceFieldAffector::DEFAULT_FREQUENCY = 1.0f;
-const double PUForceFieldAffector::DEFAULT_AMPLITUDE = 1.0f;
-const double PUForceFieldAffector::DEFAULT_PERSISTENCE = 3.0f;
-const unsigned int PUForceFieldAffector::DEFAULT_FORCEFIELDSIZE = 64;
+const float PUForceFieldAffector::DEFAULT_DELTA                                  = 1.0f;
+const float PUForceFieldAffector::DEFAULT_FORCE                                  = 400.0f;
+const unsigned short PUForceFieldAffector::DEFAULT_OCTAVES                       = 2;
+const double PUForceFieldAffector::DEFAULT_FREQUENCY                             = 1.0f;
+const double PUForceFieldAffector::DEFAULT_AMPLITUDE                             = 1.0f;
+const double PUForceFieldAffector::DEFAULT_PERSISTENCE                           = 3.0f;
+const unsigned int PUForceFieldAffector::DEFAULT_FORCEFIELDSIZE                  = 64;
 const Vec3 PUForceFieldAffector::DEFAULT_WORLDSIZE(500.0f, 500.0f, 500.0f);
 const Vec3 PUForceFieldAffector::DEFAULT_MOVEMENT(500.0f, 0.0f, 0.0f);
 const float PUForceFieldAffector::DEFAULT_MOVEMENT_FREQUENCY = 5.0f;
 
 //-----------------------------------------------------------------------
-PUForceFieldAffector::PUForceFieldAffector() :
-    _forceFieldType(PUForceField::FF_REALTIME_CALC),
-    _delta(DEFAULT_DELTA),
-    _scaleForce(DEFAULT_FORCE),
-    _octaves(DEFAULT_OCTAVES),
-    _frequency(DEFAULT_FREQUENCY),
-    _amplitude(DEFAULT_AMPLITUDE),
-    _persistence(DEFAULT_PERSISTENCE),
-    _forceFieldSize(DEFAULT_FORCEFIELDSIZE),
-    _worldSize(DEFAULT_WORLDSIZE),
-    _prepared(true),
-    _ignoreNegativeX(false),
-    _ignoreNegativeY(false),
-    _ignoreNegativeZ(false),
-    _movement(DEFAULT_MOVEMENT),
-    _movementSet(false),
-    _movementFrequency(DEFAULT_MOVEMENT_FREQUENCY),
-    _movementFrequencyCount(0.0f),
-    _suppressGeneration(false)
-{
-};
+PUForceFieldAffector::PUForceFieldAffector()
+    : _forceFieldType(PUForceField::FF_REALTIME_CALC)
+    , _delta(DEFAULT_DELTA)
+    , _scaleForce(DEFAULT_FORCE)
+    , _octaves(DEFAULT_OCTAVES)
+    , _frequency(DEFAULT_FREQUENCY)
+    , _amplitude(DEFAULT_AMPLITUDE)
+    , _persistence(DEFAULT_PERSISTENCE)
+    , _forceFieldSize(DEFAULT_FORCEFIELDSIZE)
+    , _worldSize(DEFAULT_WORLDSIZE)
+    , _prepared(true)
+    , _ignoreNegativeX(false)
+    , _ignoreNegativeY(false)
+    , _ignoreNegativeZ(false)
+    , _movement(DEFAULT_MOVEMENT)
+    , _movementSet(false)
+    , _movementFrequency(DEFAULT_MOVEMENT_FREQUENCY)
+    , _movementFrequencyCount(0.0f)
+    , _suppressGeneration(false){};
 //-----------------------------------------------------------------------
-PUForceFieldAffector::~PUForceFieldAffector()
-{
-};
+PUForceFieldAffector::~PUForceFieldAffector(){};
 //-----------------------------------------------------------------------
 PUForceField::ForceFieldType PUForceFieldAffector::getForceFieldType() const
 {
@@ -225,7 +221,7 @@ float PUForceFieldAffector::getMovementFrequency() const
 void PUForceFieldAffector::setMovementFrequency(float movementFrequency)
 {
     _movementFrequency = movementFrequency;
-    _movementSet = (movementFrequency > 0.0f);
+    _movementSet       = (movementFrequency > 0.0f);
 }
 //-----------------------------------------------------------------------
 const Vec3& PUForceFieldAffector::getMovement() const
@@ -235,7 +231,7 @@ const Vec3& PUForceFieldAffector::getMovement() const
 //-----------------------------------------------------------------------
 void PUForceFieldAffector::setMovement(const Vec3& movement)
 {
-    _movement = movement;
+    _movement    = movement;
     _movementSet = (movement != Vec3::ZERO);
 }
 //-----------------------------------------------------------------------
@@ -244,11 +240,11 @@ void PUForceFieldAffector::suppressGeneration(bool suppress)
     _suppressGeneration = suppress;
 }
 
-void PUForceFieldAffector::updatePUAffector( PUParticle3D *particle, float deltaTime )
+void PUForceFieldAffector::updatePUAffector(PUParticle3D* particle, float deltaTime)
 {
-    //for (auto iter : _particleSystem->getParticles())
+    // for (auto iter : _particleSystem->getParticles())
     {
-        //PUParticle3D *particle = iter;
+        // PUParticle3D *particle = iter;
         _forceField.determineForce(particle->position, _force, _delta);
         // If negative values are ignored, set the force to 0.
         if (_ignoreNegativeX)
@@ -272,7 +268,7 @@ void PUForceFieldAffector::notifyStart()
     _movementFrequencyCount = 0.0f;
 }
 
-void PUForceFieldAffector::preUpdateAffector( float deltaTime )
+void PUForceFieldAffector::preUpdateAffector(float deltaTime)
 {
     if (_movementSet)
     {
@@ -288,28 +284,23 @@ void PUForceFieldAffector::preUpdateAffector( float deltaTime )
             _movementFrequencyCount -= _movementFrequency;
         }
 
-        _displacement = sin(2.0f * M_PI * _movementFrequencyCount/_movementFrequency) * _movement;
+        _displacement = sin(2.0f * M_PI * _movementFrequencyCount / _movementFrequency) * _movement;
         _forceField.setForceFieldPositionBase(_basePosition + _displacement);
     }
 }
 
 void PUForceFieldAffector::prepare()
 {
-    //if (particleTechnique->getParentSystem())
+    // if (particleTechnique->getParentSystem())
     {
         // Forcefield position is same position as particle system position
         _forceField.initialise(_forceFieldType,
-            // _particleSystem->getDerivedPosition()
-            getDerivedPosition(),
-            _forceFieldSize,
-            _octaves,
-            _frequency,
-            _amplitude,
-            _persistence,
-            _worldSize);
-    
+                               // _particleSystem->getDerivedPosition()
+                               getDerivedPosition(), _forceFieldSize, _octaves, _frequency, _amplitude, _persistence,
+                               _worldSize);
+
         _basePosition = _forceField.getForceFieldPositionBase();
-        _prepared = true;
+        _prepared     = true;
     }
 }
 
@@ -320,26 +311,26 @@ PUForceFieldAffector* PUForceFieldAffector::create()
     return pffa;
 }
 
-void PUForceFieldAffector::copyAttributesTo( PUAffector* affector )
+void PUForceFieldAffector::copyAttributesTo(PUAffector* affector)
 {
     PUAffector::copyAttributesTo(affector);
 
     PUForceFieldAffector* forceFieldAffector = static_cast<PUForceFieldAffector*>(affector);
-    forceFieldAffector->_forceFieldType = _forceFieldType;
-    forceFieldAffector->_delta = _delta;
-    forceFieldAffector->_scaleForce = _scaleForce;
-    forceFieldAffector->_octaves = _octaves;
-    forceFieldAffector->_frequency = _frequency;
-    forceFieldAffector->_amplitude = _amplitude;
-    forceFieldAffector->_persistence = _persistence;
-    forceFieldAffector->_forceFieldSize = _forceFieldSize;
-    forceFieldAffector->_worldSize = _worldSize;
-    forceFieldAffector->_ignoreNegativeX = _ignoreNegativeX;
-    forceFieldAffector->_ignoreNegativeY = _ignoreNegativeY;
-    forceFieldAffector->_ignoreNegativeZ = _ignoreNegativeZ;
-    forceFieldAffector->_movementSet = _movementSet;
-    forceFieldAffector->_movementFrequency = _movementFrequency;
-    forceFieldAffector->_movement = _movement;
+    forceFieldAffector->_forceFieldType      = _forceFieldType;
+    forceFieldAffector->_delta               = _delta;
+    forceFieldAffector->_scaleForce          = _scaleForce;
+    forceFieldAffector->_octaves             = _octaves;
+    forceFieldAffector->_frequency           = _frequency;
+    forceFieldAffector->_amplitude           = _amplitude;
+    forceFieldAffector->_persistence         = _persistence;
+    forceFieldAffector->_forceFieldSize      = _forceFieldSize;
+    forceFieldAffector->_worldSize           = _worldSize;
+    forceFieldAffector->_ignoreNegativeX     = _ignoreNegativeX;
+    forceFieldAffector->_ignoreNegativeY     = _ignoreNegativeY;
+    forceFieldAffector->_ignoreNegativeZ     = _ignoreNegativeZ;
+    forceFieldAffector->_movementSet         = _movementSet;
+    forceFieldAffector->_movementFrequency   = _movementFrequency;
+    forceFieldAffector->_movement            = _movement;
 }
 
 NS_CC_END

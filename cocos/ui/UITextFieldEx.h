@@ -10,186 +10,197 @@
 
 NS_CC_BEGIN
 
-namespace ui {
+namespace ui
+{
+
+/**
+@brief  A extension implementation of ui::TextField
+*/
+class CC_DLL TextFieldEx : public cocos2d::Node, public IMEDelegate
+{
+public:
+    /**
+     * @js ctor
+     */
+    TextFieldEx();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~TextFieldEx();
+
+    static TextFieldEx* create(const std::string& placeholder,
+                               const std::string& fontName,
+                               float fontSize,
+                               float cursorWidth    = 2,
+                               const Color4B& color = Color4B::WHITE);
+
+    bool initWithPlaceHolder(const std::string& placeholder,
+                             const std::string& fontName,
+                             float fontSize,
+                             float cursorWidth    = 2,
+                             const Color4B& color = Color4B::WHITE);
+
+    void enableIME(Node* control);
+    void disableIME(void);
+
+    Label* getRenderLabel();
+
+    inline int getCharCount() const { return charCount; };
+
+    virtual void setPlaceholderColor(const Color4B& color);
+    virtual const Color4B& getPlaceholderColor() const;
+
+    virtual void setTextColor(const Color4B& textColor);
+    virtual const Color4B& getTextColor(void) const;
+
+    void setCursorColor(const Color3B& color);
+    const Color3B& getCursorColor(void) const;
+
+    // input text property
+    virtual void setString(const std::string& text);
+    virtual const std::string& getString() const;
+
+    // Continuous touch event trigger support.
+    void setContinuousTouchDelayTime(float delay) { _continuousTouchDelayTime = delay; }
+    float getContinuousTouchDelayTime() const { return _continuousTouchDelayTime; }
+    void setContinuousTouchCallback(std::function<void(const Point& worldPoint)> callback)
+    {
+        _continuousTouchCallback = std::move(callback);
+    }
+
+    // place holder text property
+    // place holder text displayed when there is no text in the text field.
+    virtual void setPlaceholderText(const std::string& text);
+    virtual const std::string& getPlaceholderText(void) const;
+
+    virtual void setPasswordEnabled(bool value);
+    virtual bool isPasswordEnabled() const;
+
+    /*virtual void         visit(Renderer *renderer, const kmMat4 &parentTransform, bool parentTransformUpdated)
+     * override;*/
+
+    bool empty(void) const { return this->charCount == 0 || this->inputText.empty(); }
+
+    virtual const Size& getContentSize() const override;
+
+    virtual void setEnabled(bool bEnabled);
+    virtual bool isEnabled(void) const;
+
+    void setEditable(bool bEditable) { editable = bEditable; }
+    bool isEditable(void) const { return editable; }
+
+    void setMaxLength(int maxLength) { setCharLimit(maxLength); }
+
+    int getFontType() const;
+
+    /// fonts
+    void setTextFontSize(float size);
+    float getTextFontSize() const;
+    void setTextFontName(const std::string& fontName);
+    const std::string& getTextFontName() const;
+
+    CC_SYNTHESIZE(size_t, charLimit, CharLimit);
+
+    bool isSystemFont(void) const { return systemFontUsed; }
+
+public:
+    std::function<void(void)> onTextModify;
+    std::function<void(void)> onOpenIME;
+    std::function<void(void)> onCloseIME;
+    // IMEDelegate interface
+    //////////////////////////////////////////////////////////////////////////
+    void openIME(void);
+    void closeIME(void);
+
+    virtual void insertText(const char* text, size_t len) override;
+
+protected:
+    //////////////////////////////////////////////////////////////////////////
+
+    virtual bool canAttachWithIME() override;
+    virtual bool canDetachWithIME() override;
+
+    virtual void deleteBackward() override;
+    virtual const std::string& getContentText() override;
+
+    void handleDeleteKeyEvent();
 
     /**
-    @brief  A extension implementation of ui::TextField
+    @brief    Open keyboard and receive input text.
     */
-    class CC_DLL TextFieldEx : public cocos2d::Node, public IMEDelegate
-    {
-    public:
-        /**
-         * @js ctor
-         */
-        TextFieldEx();
-        /**
-         * @js NA
-         * @lua NA
-         */
-        virtual ~TextFieldEx();
+    virtual bool attachWithIME() override;
 
-        static TextFieldEx* create(const std::string& placeholder, const std::string& fontName, float fontSize, float cursorWidth = 2, const Color4B& color = Color4B::WHITE);
+    /**
+    @brief    End text input and close keyboard.
+    */
+    virtual bool detachWithIME() override;
 
-        bool initWithPlaceHolder(const std::string& placeholder, const std::string& fontName, float fontSize, float cursorWidth = 2, const Color4B& color = Color4B::WHITE);
+    void keyboardDidShow(IMEKeyboardNotificationInfo& /*info*/) override;
+    void keyboardDidHide(IMEKeyboardNotificationInfo& /*info*/) override;
 
-        void enableIME(Node* control);
-        void disableIME(void);
+    void updateContentSize(void);
 
-        Label* getRenderLabel();
+    void __initCursor(int height, int width = 6, const Color4B& color = Color4B::WHITE);
+    void __showCursor(void);
+    void __hideCursor(void);
+    void __updateCursorPosition(void);
 
-        inline int                getCharCount() const { return charCount; };
+    void __moveCursor(int direction);
 
-        virtual void              setPlaceholderColor(const Color4B& color);
-        virtual const Color4B& getPlaceholderColor() const;
+    void __moveCursorTo(float x);
 
-        virtual void              setTextColor(const Color4B& textColor);
-        virtual const Color4B& getTextColor(void) const;
+protected:
+    bool systemFontUsed;
+    std::string fontName;
+    float fontSize;
 
-        void                      setCursorColor(const Color3B& color);
-        const Color3B& getCursorColor(void) const;
+    bool editable;
 
-        // input text property
-        virtual void               setString(const std::string& text);
-        virtual const std::string& getString() const;
+    Label* renderLabel;
 
-        // Continuous touch event trigger support.
-        void setContinuousTouchDelayTime(float delay) { _continuousTouchDelayTime = delay; }
-        float getContinuousTouchDelayTime() const { return _continuousTouchDelayTime; }
-        void setContinuousTouchCallback(std::function<void(const Point& worldPoint)> callback) { _continuousTouchCallback = std::move(callback); }
+    size_t charCount;
+    std::string inputText;
 
-        // place holder text property
-        // place holder text displayed when there is no text in the text field.
-        virtual void               setPlaceholderText(const std::string& text);
-        virtual const std::string& getPlaceholderText(void) const;
+    std::string placeHolder;
+    Color4B colorSpaceHolder;
+    Color4B colorText;
 
-        virtual void         setPasswordEnabled(bool value);
-        virtual bool         isPasswordEnabled() const;
+    bool secureTextEntry;
 
-        /*virtual void         visit(Renderer *renderer, const kmMat4 &parentTransform, bool parentTransformUpdated) override;*/
+    Sprite* cursor;
+    bool cursorVisible;
 
-        bool                 empty(void) const { return this->charCount == 0 || this->inputText.empty(); }
+    int insertPosUtf8;
+    int insertPos;  // The actual input content insertPos, step: bytes
+    int cursorPos;  // The cursor normalzed pos,
 
-        virtual const Size& getContentSize() const override;
+    bool enabled;
 
-        virtual void         setEnabled(bool bEnabled);
-        virtual bool         isEnabled(void) const;
+    EventListenerTouchOneByOne* touchListener;
+    EventListenerKeyboard* kbdListener;
 
-        void                 setEditable(bool bEditable) { editable = bEditable; }
-        bool                 isEditable(void) const { return editable; }
+    bool touchCursorControlEnabled;
+    float asteriskWidth;
 
-        void                 setMaxLength(int maxLength) { setCharLimit(maxLength); }
+    int _fontType;
 
-        int getFontType() const;
+    cocos2d::stimer::TIMER_ID _continuousTouchDelayTimerID;
+    float _continuousTouchDelayTime;
+    std::function<void(const Point& worldPoint)> _continuousTouchCallback;
 
-        /// fonts
-        void setTextFontSize(float size);
-        float getTextFontSize() const;
-        void setTextFontName(const std::string& fontName);
-        const std::string& getTextFontName() const;
-
-        CC_SYNTHESIZE(size_t, charLimit, CharLimit);
-
-        bool isSystemFont(void) const { return systemFontUsed; }
-
-    public:
-        std::function<void(void)>   onTextModify;
-        std::function<void(void)>   onOpenIME;
-        std::function<void(void)>   onCloseIME;
-        // IMEDelegate interface
-        //////////////////////////////////////////////////////////////////////////
-        void openIME(void);
-        void closeIME(void);
-
-        virtual void insertText(const char* text, size_t len) override;
-    protected:
-        //////////////////////////////////////////////////////////////////////////
-
-
-        virtual bool canAttachWithIME() override;
-        virtual bool canDetachWithIME() override;
-
-        virtual void deleteBackward() override;
-        virtual const std::string& getContentText() override;
-
-        void handleDeleteKeyEvent();
-
-        /**
-        @brief    Open keyboard and receive input text.
-        */
-        virtual bool attachWithIME() override;
-
-        /**
-        @brief    End text input and close keyboard.
-        */
-        virtual bool detachWithIME() override;
-
-        void keyboardDidShow(IMEKeyboardNotificationInfo& /*info*/) override;
-        void keyboardDidHide(IMEKeyboardNotificationInfo& /*info*/) override;
-
-        void         updateContentSize(void);
-
-        void         __initCursor(int height, int width = 6, const Color4B& color = Color4B::WHITE);
-        void         __showCursor(void);
-        void         __hideCursor(void);
-        void         __updateCursorPosition(void);
-
-        void         __moveCursor(int direction);
-
-        void         __moveCursorTo(float x);
-
-
-    protected:
-
-        bool                        systemFontUsed;
-        std::string                 fontName;
-        float                       fontSize;
-
-        bool                        editable;
-
-        Label* renderLabel;
-
-        size_t                      charCount;
-        std::string                 inputText;
-
-        std::string                 placeHolder;
-        Color4B                     colorSpaceHolder;
-        Color4B                     colorText;
-
-        bool                        secureTextEntry;
-
-        Sprite* cursor;
-        bool                        cursorVisible;
-
-        int                         insertPosUtf8;
-        int                         insertPos; // The actual input content insertPos, step: bytes
-        int                         cursorPos; // The cursor normalzed pos, 
-
-        bool                        enabled;
-
-        EventListenerTouchOneByOne* touchListener;
-        EventListenerKeyboard* kbdListener;
-
-        bool                        touchCursorControlEnabled;
-        float                       asteriskWidth;
-
-        int                         _fontType;
-
-        cocos2d::stimer::TIMER_ID   _continuousTouchDelayTimerID;
-        float                       _continuousTouchDelayTime;
-        std::function<void(const Point& worldPoint)>   _continuousTouchCallback;
-
-        static bool                  s_keyboardVisible;
-    };
-
-    // end of input group
-    /// @}
-
+    static bool s_keyboardVisible;
 };
+
+// end of input group
+/// @}
+
+};  // namespace ui
 
 NS_CC_END
 
 #ifdef _UITEXTFIELDEX_INLINE_
-#include "UITextFieldEx.cpp"
+#    include "UITextFieldEx.cpp"
 #endif
 
 #endif

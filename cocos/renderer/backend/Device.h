@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -59,14 +59,14 @@ class CC_DLL Device : public cocos2d::Ref
 public:
     friend class ProgramCache;
     friend class ShaderCache;
-    
-    /** 
-     * Returns a shared instance of the device. 
+
+    /**
+     * Returns a shared instance of the device.
      */
     static Device* getInstance();
-    
+
     virtual ~Device() = default;
-    
+
     /**
      * New a CommandBuffer object, not auto released.
      * @return A CommandBuffer object.
@@ -76,8 +76,10 @@ public:
     /**
      * New a Buffer object, not auto released.
      * @param size Specifies the size in bytes of the buffer object's new data store.
-     * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or BufferType::INDEX.
-     * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be BufferUsage::STATIC, BufferUsage::DYNAMIC.
+     * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or
+     * BufferType::INDEX.
+     * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
+     * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
     virtual Buffer* newBuffer(size_t size, BufferType type, BufferUsage usage) = 0;
@@ -92,9 +94,9 @@ public:
     virtual RenderTarget* newDefaultRenderTarget(TargetBufferFlags rtf) = 0;
 
     virtual RenderTarget* newRenderTarget(TargetBufferFlags rtf,
-        TextureBackend* colorAttachment = nullptr,
-        TextureBackend* depthAttachment = nullptr,
-        TextureBackend* stencilAttachhment = nullptr) = 0;
+                                          TextureBackend* colorAttachment    = nullptr,
+                                          TextureBackend* depthAttachment    = nullptr,
+                                          TextureBackend* stencilAttachhment = nullptr) = 0;
 
     virtual DepthStencilState* newDepthStencilState() = 0;
 
@@ -110,7 +112,9 @@ public:
      * metal textures may only be used for framebuffer attachments (YES) or
      * whether they may also be used for texture sampling and pixel
      * read/write operations (NO).
-     * @param frameBufferOnly A value of YES allows CAMetalLayer to allocate the MTLTexture objects in ways that are optimized for display purposes that makes them unsuitable for sampling. The recommended value for most applications is YES.
+     * @param frameBufferOnly A value of YES allows CAMetalLayer to allocate the MTLTexture objects in ways that are
+     * optimized for display purposes that makes them unsuitable for sampling. The recommended value for most
+     * applications is YES.
      * @note This interface is specificaly designed for metal.
      */
     virtual void setFrameBufferOnly(bool frameBufferOnly) = 0;
@@ -137,13 +141,13 @@ protected:
      * @return A ShaderModule object.
      */
     virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string& source) = 0;
-        
-    DeviceInfo* _deviceInfo = nullptr; ///< Device information.
+
+    DeviceInfo* _deviceInfo = nullptr;  ///< Device information.
 
 private:
     static Device* _instance;
 };
 
-//end of _backend group
+// end of _backend group
 /// @}
 CC_BACKEND_END

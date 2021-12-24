@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,15 +32,8 @@ NS_CC_BEGIN
 const float PUCollisionAvoidanceAffector::DEFAULT_RADIUS = 100.0f;
 
 //-----------------------------------------------------------------------
-PUCollisionAvoidanceAffector::PUCollisionAvoidanceAffector() : 
-    PUAffector(),
-    _radius(DEFAULT_RADIUS)
-{
-}
-PUCollisionAvoidanceAffector::~PUCollisionAvoidanceAffector()
-{
-
-}
+PUCollisionAvoidanceAffector::PUCollisionAvoidanceAffector() : PUAffector(), _radius(DEFAULT_RADIUS) {}
+PUCollisionAvoidanceAffector::~PUCollisionAvoidanceAffector() {}
 //-----------------------------------------------------------------------
 float PUCollisionAvoidanceAffector::getRadius() const
 {
@@ -52,10 +45,10 @@ void PUCollisionAvoidanceAffector::setRadius(float radius)
     _radius = radius;
 }
 //-----------------------------------------------------------------------
-void PUCollisionAvoidanceAffector::updatePUAffector( PUParticle3D* /*particle*/, float /*deltaTime*/ )
+void PUCollisionAvoidanceAffector::updatePUAffector(PUParticle3D* /*particle*/, float /*deltaTime*/)
 {
     CCASSERT(0, "nonsupport yet");
-    //for (auto iter : _particleSystem->getParticles())
+    // for (auto iter : _particleSystem->getParticles())
     //{
     //	PUParticle3D *particle = iter;
     //	// Activate spatial hashing
@@ -93,7 +86,6 @@ void PUCollisionAvoidanceAffector::updatePUAffector( PUParticle3D* /*particle*/,
     //	// Deactivate spatial hashing
     //	particleTechnique->setSpatialHashingUsed(false);
     //}
-
 }
 
 PUCollisionAvoidanceAffector* PUCollisionAvoidanceAffector::create()
@@ -103,11 +95,11 @@ PUCollisionAvoidanceAffector* PUCollisionAvoidanceAffector::create()
     return pcaa;
 }
 
-void PUCollisionAvoidanceAffector::copyAttributesTo( PUAffector* affector )
+void PUCollisionAvoidanceAffector::copyAttributesTo(PUAffector* affector)
 {
     PUAffector::copyAttributesTo(affector);
     PUCollisionAvoidanceAffector* collisionAvoidanceAffector = static_cast<PUCollisionAvoidanceAffector*>(affector);
-    collisionAvoidanceAffector->_radius = _radius;
+    collisionAvoidanceAffector->_radius                      = _radius;
 }
 
 NS_CC_END

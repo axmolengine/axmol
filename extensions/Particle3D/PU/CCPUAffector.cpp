@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,31 +30,25 @@
 
 NS_CC_BEGIN
 
-PUAffector::PUAffector()
-: _affectorScale(Vec3::ONE)
-, _affectSpecialisation(AFSP_DEFAULT)
-, _mass(1.0f)
-{
-    
-}
+PUAffector::PUAffector() : _affectorScale(Vec3::ONE), _affectSpecialisation(AFSP_DEFAULT), _mass(1.0f) {}
 
 PUAffector::~PUAffector()
 {
     _particleSystem = nullptr;
 }
 
-void PUAffector::updatePUAffector(PUParticle3D* /*particle*/, float /*delta*/)
-{
-    
-}
+void PUAffector::updatePUAffector(PUParticle3D* /*particle*/, float /*delta*/) {}
 
 const Vec3& PUAffector::getDerivedPosition()
 {
-    PUParticleSystem3D *ps = static_cast<PUParticleSystem3D *>(_particleSystem);
-    if (ps){
+    PUParticleSystem3D* ps = static_cast<PUParticleSystem3D*>(_particleSystem);
+    if (ps)
+    {
         Mat4 rotMat;
         Mat4::createRotation(ps->getDerivedOrientation(), &rotMat);
-        _derivedPosition = ps->getDerivedPosition() + rotMat * Vec3(_position.x * _affectorScale.x, _position.y * _affectorScale.y, _position.z * _affectorScale.z);
+        _derivedPosition =
+            ps->getDerivedPosition() + rotMat * Vec3(_position.x * _affectorScale.x, _position.y * _affectorScale.y,
+                                                     _position.z * _affectorScale.z);
         //_particleSystem->getNodeToWorldTransform().transformPoint(_position, &_derivedPosition);
     }
     else
@@ -62,22 +56,22 @@ const Vec3& PUAffector::getDerivedPosition()
 
     return _derivedPosition;
 
-    //if (mMarkedForEmission)
+    // if (mMarkedForEmission)
     //{
     //	// Use the affector position, because it is emitted
     //	// If a particle is emitted, position and derived position are the same
     //	_derivedPosition = position;
-    //}
-    //else
+    // }
+    // else
     //{
     //	// Add the techniques' derived position
-    //	_derivedPosition = mParentTechnique->getDerivedPosition() + 
+    //	_derivedPosition = mParentTechnique->getDerivedPosition() +
     //		mParentTechnique->getParentSystem()->getDerivedOrientation() * (_mAffectorScale * position);
-    //}
-    //return _derivedPosition;
+    // }
+    // return _derivedPosition;
 }
 
-float PUAffector::calculateAffectSpecialisationFactor( const PUParticle3D* particle )
+float PUAffector::calculateAffectSpecialisationFactor(const PUParticle3D* particle)
 {
     // Assume that particle->totalTimeToLive != 0, which is reasonable
     switch (_affectSpecialisation)
@@ -88,31 +82,31 @@ float PUAffector::calculateAffectSpecialisationFactor( const PUParticle3D* parti
 
         // This means that older particles will be affected MORE than just emitted particles
     case AFSP_TTL_INCREASE:
+    {
+        if (particle)
         {
-            if (particle)
-            {
-                return particle->timeFraction;
-            }
-            else
-            {
-                return 1.0f;
-            }
+            return particle->timeFraction;
         }
-        break;
+        else
+        {
+            return 1.0f;
+        }
+    }
+    break;
 
         // This means that older particles will be affected LESS than just emitted particles
     case AFSP_TTL_DECREASE:
+    {
+        if (particle)
         {
-            if (particle)
-            {
-                return 1.0f - particle->timeFraction;
-            }
-            else
-            {
-                return 1.0f;
-            }
+            return 1.0f - particle->timeFraction;
         }
-        break;
+        else
+        {
+            return 1.0f;
+        }
+    }
+    break;
 
     default:
         return 1.0f;
@@ -120,64 +114,34 @@ float PUAffector::calculateAffectSpecialisationFactor( const PUParticle3D* parti
     }
 }
 
-void PUAffector::notifyStart()
-{
+void PUAffector::notifyStart() {}
 
-}
+void PUAffector::notifyStop() {}
 
-void PUAffector::notifyStop()
-{
+void PUAffector::notifyPause() {}
 
-}
+void PUAffector::notifyResume() {}
 
-void PUAffector::notifyPause()
-{
+void PUAffector::preUpdateAffector(float /*deltaTime*/) {}
 
-}
+void PUAffector::postUpdateAffector(float /*deltaTime*/) {}
 
-void PUAffector::notifyResume()
-{
+void PUAffector::prepare() {}
 
-}
+void PUAffector::unPrepare() {}
 
-void PUAffector::preUpdateAffector( float /*deltaTime*/ )
-{
-
-}
-
-void PUAffector::postUpdateAffector( float /*deltaTime*/ )
-{
-
-}
-
-void PUAffector::prepare()
-{
-
-}
-
-void PUAffector::unPrepare()
-{
-
-}
-
-void PUAffector::initParticleForEmission( PUParticle3D* /*particle*/ )
-{
-
-}
+void PUAffector::initParticleForEmission(PUParticle3D* /*particle*/) {}
 
 void PUAffector::notifyRescaled(const Vec3& scale)
 {
     _affectorScale = scale;
 }
 
-void PUAffector::firstParticleUpdate( PUParticle3D* /*particle*/, float /*deltaTime*/ )
-{
+void PUAffector::firstParticleUpdate(PUParticle3D* /*particle*/, float /*deltaTime*/) {}
 
-}
-
-void PUAffector::setMass( float mass )
+void PUAffector::setMass(float mass)
 {
-    _mass =  mass;
+    _mass = mass;
 }
 
 float PUAffector::getMass() const
@@ -185,44 +149,48 @@ float PUAffector::getMass() const
     return _mass;
 }
 
-void PUAffector::copyAttributesTo( PUAffector* affector )
+void PUAffector::copyAttributesTo(PUAffector* affector)
 {
     affector->setName(_name);
     affector->setAffectorType(_affectorType);
-    affector->_position = _position;
-    affector->_isEnabled = _isEnabled;
-    affector->_particleSystem = _particleSystem;
-    affector->_affectorScale = _affectorScale;
+    affector->_position             = _position;
+    affector->_isEnabled            = _isEnabled;
+    affector->_particleSystem       = _particleSystem;
+    affector->_affectorScale        = _affectorScale;
     affector->_affectSpecialisation = _affectSpecialisation;
-    affector->_excludedEmitters = _excludedEmitters;
+    affector->_excludedEmitters     = _excludedEmitters;
 }
 
-void PUAffector::addEmitterToExclude( const std::string& emitterName )
+void PUAffector::addEmitterToExclude(const std::string& emitterName)
 {
-    auto iter  = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
-    if (iter == _excludedEmitters.end()){
+    auto iter = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
+    if (iter == _excludedEmitters.end())
+    {
         _excludedEmitters.push_back(emitterName);
     }
 }
 
-void PUAffector::removeEmitterToExclude( const std::string& emitterName )
+void PUAffector::removeEmitterToExclude(const std::string& emitterName)
 {
-    auto iter  = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
-    if (iter != _excludedEmitters.end()){
+    auto iter = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
+    if (iter != _excludedEmitters.end())
+    {
         _excludedEmitters.erase(iter);
     }
 }
 
-void PUAffector::process( PUParticle3D* particle, float delta, bool firstParticle )
+void PUAffector::process(PUParticle3D* particle, float delta, bool firstParticle)
 {
-    if (firstParticle){
+    if (firstParticle)
+    {
         firstParticleUpdate(particle, delta);
     }
 
-    if (!_excludedEmitters.empty() && particle->parentEmitter){
+    if (!_excludedEmitters.empty() && particle->parentEmitter)
+    {
         // Return if the emitter which emits this particle is part of the vector
         std::string emitterName = particle->parentEmitter->getName();
-        auto iter = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
+        auto iter               = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
         if (iter != _excludedEmitters.end())
         {
             return;

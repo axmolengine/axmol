@@ -30,56 +30,55 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-namespace ui {
+namespace ui
+{
 
-static const int BACKGROUNDBOX_RENDERER_Z = (-1);
+static const int BACKGROUNDBOX_RENDERER_Z         = (-1);
 static const int BACKGROUNDSELECTEDBOX_RENDERER_Z = (-1);
-static const int FRONTCROSS_RENDERER_Z = (-1);
+static const int FRONTCROSS_RENDERER_Z            = (-1);
 static const int BACKGROUNDBOXDISABLED_RENDERER_Z = (-1);
-static const int FRONTCROSSDISABLED_RENDERER_Z = (-1);
+static const int FRONTCROSSDISABLED_RENDERER_Z    = (-1);
 
-AbstractCheckButton::AbstractCheckButton():
-_backGroundBoxRenderer(nullptr),
-_backGroundSelectedBoxRenderer(nullptr),
-_frontCrossRenderer(nullptr),
-_backGroundBoxDisabledRenderer(nullptr),
-_frontCrossDisabledRenderer(nullptr),
-_isSelected(true),
-_isBackgroundSelectedTextureLoaded(false),
-_isBackgroundDisabledTextureLoaded(false),
-_isFrontCrossDisabledTextureLoaded(false),
-_backGroundTexType(TextureResType::LOCAL),
-_backGroundSelectedTexType(TextureResType::LOCAL),
-_frontCrossTexType(TextureResType::LOCAL),
-_backGroundDisabledTexType(TextureResType::LOCAL),
-_frontCrossDisabledTexType(TextureResType::LOCAL),
-_zoomScale(0.1f),
-_backgroundTextureScaleX(1.0),
-_backgroundTextureScaleY(1.0),
-_backGroundBoxRendererAdaptDirty(true),
-_backGroundSelectedBoxRendererAdaptDirty(true),
-_frontCrossRendererAdaptDirty(true),
-_backGroundBoxDisabledRendererAdaptDirty(true),
-_frontCrossDisabledRendererAdaptDirty(true),
-_backGroundFileName(""),
-_backGroundSelectedFileName(""),
-_frontCrossFileName(""),
-_backGroundDisabledFileName(""),
-_frontCrossDisabledFileName("")
+AbstractCheckButton::AbstractCheckButton()
+    : _backGroundBoxRenderer(nullptr)
+    , _backGroundSelectedBoxRenderer(nullptr)
+    , _frontCrossRenderer(nullptr)
+    , _backGroundBoxDisabledRenderer(nullptr)
+    , _frontCrossDisabledRenderer(nullptr)
+    , _isSelected(true)
+    , _isBackgroundSelectedTextureLoaded(false)
+    , _isBackgroundDisabledTextureLoaded(false)
+    , _isFrontCrossDisabledTextureLoaded(false)
+    , _backGroundTexType(TextureResType::LOCAL)
+    , _backGroundSelectedTexType(TextureResType::LOCAL)
+    , _frontCrossTexType(TextureResType::LOCAL)
+    , _backGroundDisabledTexType(TextureResType::LOCAL)
+    , _frontCrossDisabledTexType(TextureResType::LOCAL)
+    , _zoomScale(0.1f)
+    , _backgroundTextureScaleX(1.0)
+    , _backgroundTextureScaleY(1.0)
+    , _backGroundBoxRendererAdaptDirty(true)
+    , _backGroundSelectedBoxRendererAdaptDirty(true)
+    , _frontCrossRendererAdaptDirty(true)
+    , _backGroundBoxDisabledRendererAdaptDirty(true)
+    , _frontCrossDisabledRendererAdaptDirty(true)
+    , _backGroundFileName("")
+    , _backGroundSelectedFileName("")
+    , _frontCrossFileName("")
+    , _backGroundDisabledFileName("")
+    , _frontCrossDisabledFileName("")
 {
     setTouchEnabled(true);
 }
 
-AbstractCheckButton::~AbstractCheckButton()
-{
-}
+AbstractCheckButton::~AbstractCheckButton() {}
 
 bool AbstractCheckButton::init(const std::string& backGround,
-                    const std::string& backGroundSelected,
-                    const std::string& cross,
-                    const std::string& backGroundDisabled,
-                    const std::string& frontCrossDisabled,
-                    TextureResType texType)
+                               const std::string& backGroundSelected,
+                               const std::string& cross,
+                               const std::string& backGroundDisabled,
+                               const std::string& frontCrossDisabled,
+                               TextureResType texType)
 {
     bool ret = true;
     do
@@ -89,7 +88,7 @@ bool AbstractCheckButton::init(const std::string& backGround,
             ret = false;
             break;
         }
-        
+
         setSelected(false);
         loadTextures(backGround, backGroundSelected, cross, backGroundDisabled, frontCrossDisabled, texType);
     } while (0);
@@ -108,12 +107,12 @@ bool AbstractCheckButton::init()
 
 void AbstractCheckButton::initRenderer()
 {
-    _backGroundBoxRenderer = Sprite::create();
+    _backGroundBoxRenderer         = Sprite::create();
     _backGroundSelectedBoxRenderer = Sprite::create();
-    _frontCrossRenderer = Sprite::create();
+    _frontCrossRenderer            = Sprite::create();
     _backGroundBoxDisabledRenderer = Sprite::create();
-    _frontCrossDisabledRenderer = Sprite::create();
-    
+    _frontCrossDisabledRenderer    = Sprite::create();
+
     addProtectedChild(_backGroundBoxRenderer, BACKGROUNDBOX_RENDERER_Z, -1);
     addProtectedChild(_backGroundSelectedBoxRenderer, BACKGROUNDSELECTEDBOX_RENDERER_Z, -1);
     addProtectedChild(_frontCrossRenderer, FRONTCROSS_RENDERER_Z, -1);
@@ -122,44 +121,44 @@ void AbstractCheckButton::initRenderer()
 }
 
 void AbstractCheckButton::loadTextures(const std::string& backGround,
-                            const std::string& backGroundSelected,
-                            const std::string& cross,
-                            const std::string& backGroundDisabled,
-                            const std::string& frontCrossDisabled,
-                            TextureResType texType)
+                                       const std::string& backGroundSelected,
+                                       const std::string& cross,
+                                       const std::string& backGroundDisabled,
+                                       const std::string& frontCrossDisabled,
+                                       TextureResType texType)
 {
-    loadTextureBackGround(backGround,texType);
-    loadTextureBackGroundSelected(backGroundSelected,texType);
-    loadTextureFrontCross(cross,texType);
-    loadTextureBackGroundDisabled(backGroundDisabled,texType);
-    loadTextureFrontCrossDisabled(frontCrossDisabled,texType);
+    loadTextureBackGround(backGround, texType);
+    loadTextureBackGroundSelected(backGroundSelected, texType);
+    loadTextureFrontCross(cross, texType);
+    loadTextureBackGroundDisabled(backGroundDisabled, texType);
+    loadTextureFrontCrossDisabled(frontCrossDisabled, texType);
 }
 
-void AbstractCheckButton::loadTextureBackGround(const std::string& backGround,TextureResType texType)
+void AbstractCheckButton::loadTextureBackGround(const std::string& backGround, TextureResType texType)
 {
     _backGroundFileName = backGround;
 
     _backGroundTexType = texType;
     switch (_backGroundTexType)
     {
-        case TextureResType::LOCAL:
-            _backGroundBoxRenderer->setTexture(backGround);
-            break;
-        case TextureResType::PLIST:
-            _backGroundBoxRenderer->setSpriteFrame(backGround);
-            break;
-        default:
-            break;
+    case TextureResType::LOCAL:
+        _backGroundBoxRenderer->setTexture(backGround);
+        break;
+    case TextureResType::PLIST:
+        _backGroundBoxRenderer->setSpriteFrame(backGround);
+        break;
+    default:
+        break;
     }
-    
+
     this->setupBackgroundTexture();
 }
 
 void AbstractCheckButton::setupBackgroundTexture()
 {
-    
+
     this->updateChildrenDisplayedRGBA();
-    
+
     updateContentSizeWithTextureSize(_backGroundBoxRenderer->getContentSize());
     _backGroundBoxRendererAdaptDirty = true;
 }
@@ -170,23 +169,24 @@ void AbstractCheckButton::loadTextureBackGround(SpriteFrame* spriteFrame)
     this->setupBackgroundTexture();
 }
 
-void AbstractCheckButton::loadTextureBackGroundSelected(const std::string& backGroundSelected,TextureResType texType)
+void AbstractCheckButton::loadTextureBackGroundSelected(const std::string& backGroundSelected, TextureResType texType)
 {
-    _backGroundSelectedFileName = backGroundSelected;
+    _backGroundSelectedFileName        = backGroundSelected;
     _isBackgroundSelectedTextureLoaded = !backGroundSelected.empty();
-    if (!_isBackgroundSelectedTextureLoaded) return;
-    
+    if (!_isBackgroundSelectedTextureLoaded)
+        return;
+
     _backGroundSelectedTexType = texType;
     switch (_backGroundSelectedTexType)
     {
-        case TextureResType::LOCAL:
-            _backGroundSelectedBoxRenderer->setTexture(backGroundSelected);
-            break;
-        case TextureResType::PLIST:
-            _backGroundSelectedBoxRenderer->setSpriteFrame(backGroundSelected);
-            break;
-        default:
-            break;
+    case TextureResType::LOCAL:
+        _backGroundSelectedBoxRenderer->setTexture(backGroundSelected);
+        break;
+    case TextureResType::PLIST:
+        _backGroundSelectedBoxRenderer->setSpriteFrame(backGroundSelected);
+        break;
+    default:
+        break;
     }
     this->setupBackgroundSelectedTexture();
 }
@@ -203,21 +203,21 @@ void AbstractCheckButton::setupBackgroundSelectedTexture()
     _backGroundSelectedBoxRendererAdaptDirty = true;
 }
 
-void AbstractCheckButton::loadTextureFrontCross(const std::string& cross,TextureResType texType)
+void AbstractCheckButton::loadTextureFrontCross(const std::string& cross, TextureResType texType)
 {
     _frontCrossFileName = cross;
 
     _frontCrossTexType = texType;
     switch (_frontCrossTexType)
     {
-        case TextureResType::LOCAL:
-            _frontCrossRenderer->setTexture(cross);
-            break;
-        case TextureResType::PLIST:
-            _frontCrossRenderer->setSpriteFrame(cross);
-            break;
-        default:
-            break;
+    case TextureResType::LOCAL:
+        _frontCrossRenderer->setTexture(cross);
+        break;
+    case TextureResType::PLIST:
+        _frontCrossRenderer->setSpriteFrame(cross);
+        break;
+    default:
+        break;
     }
     this->setupFrontCrossTexture();
 }
@@ -234,23 +234,24 @@ void AbstractCheckButton::setupFrontCrossTexture()
     _frontCrossRendererAdaptDirty = true;
 }
 
-void AbstractCheckButton::loadTextureBackGroundDisabled(const std::string& backGroundDisabled,TextureResType texType)
+void AbstractCheckButton::loadTextureBackGroundDisabled(const std::string& backGroundDisabled, TextureResType texType)
 {
-    _backGroundDisabledFileName = backGroundDisabled;
+    _backGroundDisabledFileName        = backGroundDisabled;
     _isBackgroundDisabledTextureLoaded = !backGroundDisabled.empty();
-    if (!_isBackgroundDisabledTextureLoaded) return;
+    if (!_isBackgroundDisabledTextureLoaded)
+        return;
 
     _backGroundDisabledTexType = texType;
     switch (_backGroundDisabledTexType)
     {
-        case TextureResType::LOCAL:
-            _backGroundBoxDisabledRenderer->setTexture(backGroundDisabled);
-            break;
-        case TextureResType::PLIST:
-            _backGroundBoxDisabledRenderer->setSpriteFrame(backGroundDisabled);
-            break;
-        default:
-            break;
+    case TextureResType::LOCAL:
+        _backGroundBoxDisabledRenderer->setTexture(backGroundDisabled);
+        break;
+    case TextureResType::PLIST:
+        _backGroundBoxDisabledRenderer->setSpriteFrame(backGroundDisabled);
+        break;
+    default:
+        break;
     }
     this->setupBackgroundDisable();
 }
@@ -264,30 +265,30 @@ void AbstractCheckButton::loadTextureBackGroundDisabled(SpriteFrame* spriteframe
 void AbstractCheckButton::setupBackgroundDisable()
 {
     this->updateChildrenDisplayedRGBA();
-    
+
     _backGroundBoxDisabledRendererAdaptDirty = true;
 }
 
-void AbstractCheckButton::loadTextureFrontCrossDisabled(const std::string& frontCrossDisabled,TextureResType texType)
+void AbstractCheckButton::loadTextureFrontCrossDisabled(const std::string& frontCrossDisabled, TextureResType texType)
 {
-    _frontCrossDisabledFileName = frontCrossDisabled;
+    _frontCrossDisabledFileName        = frontCrossDisabled;
     _isFrontCrossDisabledTextureLoaded = !frontCrossDisabled.empty();
-    if (!_isFrontCrossDisabledTextureLoaded) return;
+    if (!_isFrontCrossDisabledTextureLoaded)
+        return;
 
     _frontCrossDisabledTexType = texType;
     switch (_frontCrossDisabledTexType)
     {
-        case TextureResType::LOCAL:
-            _frontCrossDisabledRenderer->setTexture(frontCrossDisabled);
-            break;
-        case TextureResType::PLIST:
-            _frontCrossDisabledRenderer->setSpriteFrame(frontCrossDisabled);
-            break;
-        default:
-            break;
+    case TextureResType::LOCAL:
+        _frontCrossDisabledRenderer->setTexture(frontCrossDisabled);
+        break;
+    case TextureResType::PLIST:
+        _frontCrossDisabledRenderer->setSpriteFrame(frontCrossDisabled);
+        break;
+    default:
+        break;
     }
     this->setupFrontCrossDisableTexture();
-
 }
 
 void AbstractCheckButton::loadTextureFrontCrossDisabled(SpriteFrame* spriteframe)
@@ -308,14 +309,13 @@ void AbstractCheckButton::onPressStateChangedToNormal()
     _backGroundSelectedBoxRenderer->setVisible(false);
     _backGroundBoxDisabledRenderer->setVisible(false);
     _frontCrossDisabledRenderer->setVisible(false);
-    
+
     _backGroundBoxRenderer->setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
     _frontCrossRenderer->setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    
+
     _backGroundBoxRenderer->setScale(_backgroundTextureScaleX, _backgroundTextureScaleY);
     _frontCrossRenderer->setScale(_backgroundTextureScaleX, _backgroundTextureScaleY);
-    
-    
+
     if (_isSelected)
     {
         _frontCrossRenderer->setVisible(true);
@@ -327,13 +327,11 @@ void AbstractCheckButton::onPressStateChangedToPressed()
 {
     _backGroundBoxRenderer->setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
     _frontCrossRenderer->setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    
+
     if (!_isBackgroundSelectedTextureLoaded)
     {
-        _backGroundBoxRenderer->setScale(_backgroundTextureScaleX + _zoomScale,
-                                         _backgroundTextureScaleY + _zoomScale);
-        _frontCrossRenderer->setScale(_backgroundTextureScaleX + _zoomScale,
-                                      _backgroundTextureScaleY + _zoomScale);
+        _backGroundBoxRenderer->setScale(_backgroundTextureScaleX + _zoomScale, _backgroundTextureScaleY + _zoomScale);
+        _frontCrossRenderer->setScale(_backgroundTextureScaleX + _zoomScale, _backgroundTextureScaleY + _zoomScale);
     }
     else
     {
@@ -346,11 +344,10 @@ void AbstractCheckButton::onPressStateChangedToPressed()
 
 void AbstractCheckButton::onPressStateChangedToDisabled()
 {
-    if (!_isBackgroundDisabledTextureLoaded
-        || !_isFrontCrossDisabledTextureLoaded)
+    if (!_isBackgroundDisabledTextureLoaded || !_isFrontCrossDisabledTextureLoaded)
     {
         _backGroundBoxRenderer->setProgramState(backend::ProgramType::GRAY_SCALE);
-        
+
         _frontCrossRenderer->setProgramState(backend::ProgramType::GRAY_SCALE);
     }
     else
@@ -358,12 +355,12 @@ void AbstractCheckButton::onPressStateChangedToDisabled()
         _backGroundBoxRenderer->setVisible(false);
         _backGroundBoxDisabledRenderer->setVisible(true);
     }
-    
+
     _backGroundSelectedBoxRenderer->setVisible(false);
     _frontCrossRenderer->setVisible(false);
     _backGroundBoxRenderer->setScale(_backgroundTextureScaleX, _backgroundTextureScaleY);
     _frontCrossRenderer->setScale(_backgroundTextureScaleX, _backgroundTextureScaleY);
-    
+
     if (_isSelected)
     {
         _frontCrossDisabledRenderer->setVisible(true);
@@ -376,7 +373,7 @@ void AbstractCheckButton::setZoomScale(float scale)
     _zoomScale = scale;
 }
 
-float AbstractCheckButton::getZoomScale()const
+float AbstractCheckButton::getZoomScale() const
 {
     return _zoomScale;
 }
@@ -391,7 +388,7 @@ void AbstractCheckButton::setSelected(bool selected)
     _frontCrossRenderer->setVisible(_isSelected);
 }
 
-bool AbstractCheckButton::isSelected()const
+bool AbstractCheckButton::isSelected() const
 {
     return _isSelected;
 }
@@ -399,11 +396,11 @@ bool AbstractCheckButton::isSelected()const
 void AbstractCheckButton::onSizeChanged()
 {
     Widget::onSizeChanged();
-    _backGroundBoxRendererAdaptDirty = true;
+    _backGroundBoxRendererAdaptDirty         = true;
     _backGroundSelectedBoxRendererAdaptDirty = true;
-    _frontCrossRendererAdaptDirty = true;
+    _frontCrossRendererAdaptDirty            = true;
     _backGroundBoxDisabledRendererAdaptDirty = true;
-    _frontCrossDisabledRendererAdaptDirty = true;
+    _frontCrossDisabledRendererAdaptDirty    = true;
 }
 
 void AbstractCheckButton::adaptRenderers()
@@ -461,8 +458,8 @@ void AbstractCheckButton::backGroundTextureScaleChangedWithSize()
             _backgroundTextureScaleX = _backgroundTextureScaleY = 1.0f;
             return;
         }
-        float scaleX = _contentSize.width / textureSize.width;
-        float scaleY = _contentSize.height / textureSize.height;
+        float scaleX             = _contentSize.width / textureSize.width;
+        float scaleY             = _contentSize.height / textureSize.height;
         _backgroundTextureScaleX = scaleX;
         _backgroundTextureScaleY = scaleY;
         _backGroundBoxRenderer->setScaleX(scaleX);
@@ -559,7 +556,7 @@ void AbstractCheckButton::frontCrossDisabledTextureScaleChangedWithSize()
     _frontCrossDisabledRenderer->setPosition(_contentSize.width / 2, _contentSize.height / 2);
 }
 
-void AbstractCheckButton::copySpecialProperties(Widget *widget)
+void AbstractCheckButton::copySpecialProperties(Widget* widget)
 {
     AbstractCheckButton* abstractCheckButton = dynamic_cast<AbstractCheckButton*>(widget);
     if (abstractCheckButton)
@@ -570,15 +567,14 @@ void AbstractCheckButton::copySpecialProperties(Widget *widget)
         loadTextureBackGroundDisabled(abstractCheckButton->_backGroundBoxDisabledRenderer->getSpriteFrame());
         loadTextureFrontCrossDisabled(abstractCheckButton->_frontCrossDisabledRenderer->getSpriteFrame());
         setSelected(abstractCheckButton->_isSelected);
-        _zoomScale = abstractCheckButton->_zoomScale;
-        _backgroundTextureScaleX = abstractCheckButton->_backgroundTextureScaleX;
-        _backgroundTextureScaleY = abstractCheckButton->_backgroundTextureScaleY;
+        _zoomScale                         = abstractCheckButton->_zoomScale;
+        _backgroundTextureScaleX           = abstractCheckButton->_backgroundTextureScaleX;
+        _backgroundTextureScaleY           = abstractCheckButton->_backgroundTextureScaleY;
         _isBackgroundSelectedTextureLoaded = abstractCheckButton->_isBackgroundSelectedTextureLoaded;
         _isBackgroundDisabledTextureLoaded = abstractCheckButton->_isBackgroundDisabledTextureLoaded;
         _isFrontCrossDisabledTextureLoaded = abstractCheckButton->_isFrontCrossDisabledTextureLoaded;
     }
 }
-
 
 ResourceData AbstractCheckButton::getBackNormalFile()
 {
@@ -620,6 +616,6 @@ ResourceData AbstractCheckButton::getCrossDisabledFile()
     return rData;
 }
 
-}
+}  // namespace ui
 
 NS_CC_END

@@ -14,75 +14,76 @@ DRAGONBONES_NAMESPACE_BEGIN
 
 void TimelineState::_onClear()
 {
-    playState = -1;
+    playState        = -1;
     currentPlayTimes = -1;
-    currentTime = -1.0f;
+    currentTime      = -1.0f;
 
-    _tweenState = TweenState::None;
-    _frameRate = 0;
+    _tweenState       = TweenState::None;
+    _frameRate        = 0;
     _frameValueOffset = 0;
-    _frameCount = 0;
-    _frameOffset = 0;
-    _frameIndex = -1;
-    _frameRateR = 0.0f;
-    _position = 0.0f;
-    _duration = 0.0f;
-    _timeScale = 1.0f;
-    _timeOffset = 0.0f;
-    _dragonBonesData = nullptr;
-    _animationData = nullptr;
-    _timelineData = nullptr;
-    _armature = nullptr;
-    _animationState = nullptr;
-    _actionTimeline = nullptr;
-    _frameArray = nullptr;
-    _frameIntArray = nullptr;
-    _frameFloatArray = nullptr;
-    _timelineArray = nullptr;
-    _frameIndices = nullptr;
+    _frameCount       = 0;
+    _frameOffset      = 0;
+    _frameIndex       = -1;
+    _frameRateR       = 0.0f;
+    _position         = 0.0f;
+    _duration         = 0.0f;
+    _timeScale        = 1.0f;
+    _timeOffset       = 0.0f;
+    _dragonBonesData  = nullptr;
+    _animationData    = nullptr;
+    _timelineData     = nullptr;
+    _armature         = nullptr;
+    _animationState   = nullptr;
+    _actionTimeline   = nullptr;
+    _frameArray       = nullptr;
+    _frameIntArray    = nullptr;
+    _frameFloatArray  = nullptr;
+    _timelineArray    = nullptr;
+    _frameIndices     = nullptr;
 }
 
 bool TimelineState::_setCurrentTime(float passedTime)
 {
-    const auto prevState = playState;
+    const auto prevState     = playState;
     const auto prevPlayTimes = currentPlayTimes;
-    const auto prevTime = currentTime;
+    const auto prevTime      = currentTime;
 
-    if (_actionTimeline != nullptr && _frameCount <= 1) // No frame or only one frame.
+    if (_actionTimeline != nullptr && _frameCount <= 1)  // No frame or only one frame.
     {
-        playState = _actionTimeline->playState >= 0 ? 1 : -1;
+        playState        = _actionTimeline->playState >= 0 ? 1 : -1;
         currentPlayTimes = 1;
-        currentTime = _actionTimeline->currentTime;
+        currentTime      = _actionTimeline->currentTime;
     }
-    else if (_actionTimeline == nullptr || _timeScale != 1.0f || _timeOffset != 0.0f) // Action timeline or has scale and offset.
+    else if (_actionTimeline == nullptr || _timeScale != 1.0f ||
+             _timeOffset != 0.0f)  // Action timeline or has scale and offset.
     {
         const auto playTimes = _animationState->playTimes;
         const auto totalTime = playTimes * _duration;
 
         passedTime *= _timeScale;
-        if (_timeOffset != 0.0f) 
+        if (_timeOffset != 0.0f)
         {
             passedTime += _timeOffset * _animationData->duration;
         }
 
-        if (playTimes > 0 && (passedTime >= totalTime || passedTime <= -totalTime)) 
+        if (playTimes > 0 && (passedTime >= totalTime || passedTime <= -totalTime))
         {
-            if (playState <= 0 && _animationState->_playheadState == 3) 
+            if (playState <= 0 && _animationState->_playheadState == 3)
             {
                 playState = 1;
             }
 
             currentPlayTimes = playTimes;
-            if (passedTime < 0.0f) 
+            if (passedTime < 0.0f)
             {
                 currentTime = 0.0f;
             }
-            else 
+            else
             {
-                currentTime = _duration + 0.000001f; // Precision problem
+                currentTime = _duration + 0.000001f;  // Precision problem
             }
         }
-        else 
+        else
         {
             if (playState != 0 && _animationState->_playheadState == 3)
             {
@@ -91,36 +92,33 @@ bool TimelineState::_setCurrentTime(float passedTime)
 
             if (passedTime < 0.0f)
             {
-                passedTime = -passedTime;
+                passedTime       = -passedTime;
                 currentPlayTimes = (int)(passedTime / _duration);
-                currentTime = _duration - fmod(passedTime, _duration);
+                currentTime      = _duration - fmod(passedTime, _duration);
             }
-            else 
+            else
             {
                 currentPlayTimes = (int)(passedTime / _duration);
-                currentTime = fmod(passedTime, _duration);
+                currentTime      = fmod(passedTime, _duration);
             }
         }
 
         currentTime += _position;
     }
-    else // Multi frames.
+    else  // Multi frames.
     {
-        playState = _actionTimeline->playState;
+        playState        = _actionTimeline->playState;
         currentPlayTimes = _actionTimeline->currentPlayTimes;
-        currentTime = _actionTimeline->currentTime;
+        currentTime      = _actionTimeline->currentTime;
     }
 
-    if (currentPlayTimes == prevPlayTimes && currentTime == prevTime) 
+    if (currentPlayTimes == prevPlayTimes && currentTime == prevTime)
     {
         return false;
     }
 
     // Clear frame flag when timeline start or loopComplete.
-    if (
-        (prevState < 0 && playState != prevState) ||
-        (playState <= 0 && currentPlayTimes != prevPlayTimes)
-    ) 
+    if ((prevState < 0 && playState != prevState) || (playState <= 0 && currentPlayTimes != prevPlayTimes))
     {
         _frameIndex = -1;
     }
@@ -130,36 +128,36 @@ bool TimelineState::_setCurrentTime(float passedTime)
 
 void TimelineState::init(Armature* armature, AnimationState* animationState, TimelineData* timelineData)
 {
-    _armature = armature;
+    _armature       = armature;
     _animationState = animationState;
-    _timelineData = timelineData;
+    _timelineData   = timelineData;
     _actionTimeline = _animationState->_actionTimeline;
 
-    if (this == _actionTimeline) 
+    if (this == _actionTimeline)
     {
-        _actionTimeline = nullptr; //
+        _actionTimeline = nullptr;  //
     }
 
     _animationData = _animationState->_animationData;
 
-    _frameRate = _animationData->parent->frameRate;
-    _frameRateR = 1.0f / _frameRate;
-    _position = _animationState->_position;
-    _duration = _animationState->_duration;
+    _frameRate       = _animationData->parent->frameRate;
+    _frameRateR      = 1.0f / _frameRate;
+    _position        = _animationState->_position;
+    _duration        = _animationState->_duration;
     _dragonBonesData = _animationData->parent->parent;
 
-    if (_timelineData != nullptr) 
+    if (_timelineData != nullptr)
     {
-        _frameIntArray = _dragonBonesData->frameIntArray;
+        _frameIntArray   = _dragonBonesData->frameIntArray;
         _frameFloatArray = _dragonBonesData->frameFloatArray;
-        _frameArray = _dragonBonesData->frameArray;
-        _timelineArray = _dragonBonesData->timelineArray;
-        _frameIndices = &(_dragonBonesData->frameIndices);
+        _frameArray      = _dragonBonesData->frameArray;
+        _timelineArray   = _dragonBonesData->timelineArray;
+        _frameIndices    = &(_dragonBonesData->frameIndices);
 
-        _frameCount = _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineKeyFrameCount];
+        _frameCount       = _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineKeyFrameCount];
         _frameValueOffset = _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineFrameValueOffset];
-        _timeScale = 100.0f / _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineScale];
-        _timeOffset = _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineOffset] * 0.01f;
+        _timeScale        = 100.0f / _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineScale];
+        _timeOffset       = _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineOffset] * 0.01f;
     }
 }
 
@@ -167,24 +165,27 @@ void TimelineState::update(float passedTime)
 {
     if (_setCurrentTime(passedTime))
     {
-        if (_frameCount > 1) 
+        if (_frameCount > 1)
         {
             const auto timelineFrameIndex = (unsigned)(currentTime * _frameRate);
-            const auto frameIndex = (*_frameIndices)[_timelineData->frameIndicesOffset + timelineFrameIndex];
+            const auto frameIndex         = (*_frameIndices)[_timelineData->frameIndicesOffset + timelineFrameIndex];
             if ((unsigned)_frameIndex != frameIndex)
             {
                 _frameIndex = frameIndex;
-                _frameOffset = _animationData->frameOffset + _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineFrameOffset + _frameIndex];
+                _frameOffset =
+                    _animationData->frameOffset +
+                    _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineFrameOffset + _frameIndex];
 
                 _onArriveAtFrame();
             }
         }
-        else if (_frameIndex < 0) 
+        else if (_frameIndex < 0)
         {
             _frameIndex = 0;
-            if (_timelineData != nullptr) // May be pose timeline.
-            { 
-                _frameOffset = _animationData->frameOffset + _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineFrameOffset];
+            if (_timelineData != nullptr)  // May be pose timeline.
+            {
+                _frameOffset = _animationData->frameOffset +
+                               _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineFrameOffset];
             }
 
             _onArriveAtFrame();
@@ -201,35 +202,31 @@ void TweenTimelineState::_onClear()
 {
     TimelineState::_onClear();
 
-    _tweenType = TweenType::None;
-    _curveCount = 0;
-    _framePosition = 0.0f;
+    _tweenType      = TweenType::None;
+    _curveCount     = 0;
+    _framePosition  = 0.0f;
     _frameDurationR = 0.0f;
-    _tweenProgress = 0.0f;
-    _tweenEasing = 0.0f;
+    _tweenProgress  = 0.0f;
+    _tweenEasing    = 0.0f;
 }
 
 void TweenTimelineState::_onArriveAtFrame()
 {
-    if (
-        _frameCount > 1 &&
-        (
-            (unsigned)_frameIndex != _frameCount - 1 ||
-            _animationState->playTimes == 0 ||
-            _animationState->getCurrentPlayTimes() < _animationState->playTimes - 1
-        )
-    ) 
+    if (_frameCount > 1 && ((unsigned)_frameIndex != _frameCount - 1 || _animationState->playTimes == 0 ||
+                            _animationState->getCurrentPlayTimes() < _animationState->playTimes - 1))
     {
-        _tweenType = (TweenType)_frameArray[_frameOffset + (unsigned)BinaryOffset::FrameTweenType]; // TODO recode ture tween type.
+        _tweenType = (TweenType)
+            _frameArray[_frameOffset + (unsigned)BinaryOffset::FrameTweenType];  // TODO recode ture tween type.
         _tweenState = _tweenType == TweenType::None ? TweenState::Once : TweenState::Always;
 
-        if (_tweenType == TweenType::Curve) 
+        if (_tweenType == TweenType::Curve)
         {
             _curveCount = _frameArray[_frameOffset + (unsigned)BinaryOffset::FrameTweenEasingOrCurveSampleCount];
         }
-        else if (_tweenType != TweenType::None && _tweenType != TweenType::Line) 
+        else if (_tweenType != TweenType::None && _tweenType != TweenType::Line)
         {
-            _tweenEasing = _frameArray[_frameOffset + (unsigned)BinaryOffset::FrameTweenEasingOrCurveSampleCount] * 0.01;
+            _tweenEasing =
+                _frameArray[_frameOffset + (unsigned)BinaryOffset::FrameTweenEasingOrCurveSampleCount] * 0.01;
         }
 
         _framePosition = _frameArray[_frameOffset] * _frameRateR;
@@ -238,22 +235,24 @@ void TweenTimelineState::_onArriveAtFrame()
         {
             _frameDurationR = 1.0f / (_animationData->duration - _framePosition);
         }
-        else 
+        else
         {
-            const auto nextFrameOffset = _animationData->frameOffset + _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineFrameOffset + _frameIndex + 1];
+            const auto nextFrameOffset =
+                _animationData->frameOffset +
+                _timelineArray[_timelineData->offset + (unsigned)BinaryOffset::TimelineFrameOffset + _frameIndex + 1];
             const auto frameDuration = _frameArray[nextFrameOffset] * _frameRateR - _framePosition;
 
-            if (frameDuration > 0.0f) // Fixed animation data bug.
+            if (frameDuration > 0.0f)  // Fixed animation data bug.
             {
                 _frameDurationR = 1.0f / frameDuration;
             }
-            else 
+            else
             {
                 _frameDurationR = 0.0f;
             }
         }
     }
-    else 
+    else
     {
         _tweenState = TweenState::Once;
     }
@@ -261,20 +260,21 @@ void TweenTimelineState::_onArriveAtFrame()
 
 void TweenTimelineState::_onUpdateFrame()
 {
-    if (_tweenState == TweenState::Always) 
+    if (_tweenState == TweenState::Always)
     {
         _tweenProgress = (currentTime - _framePosition) * _frameDurationR;
 
         if (_tweenType == TweenType::Curve)
         {
-            _tweenProgress = TweenTimelineState::_getEasingCurveValue(_tweenProgress, _frameArray, _curveCount, _frameOffset + (unsigned)BinaryOffset::FrameCurveSamples);
+            _tweenProgress = TweenTimelineState::_getEasingCurveValue(
+                _tweenProgress, _frameArray, _curveCount, _frameOffset + (unsigned)BinaryOffset::FrameCurveSamples);
         }
         else if (_tweenType != TweenType::Line)
         {
             _tweenProgress = TweenTimelineState::_getEasingValue(_tweenType, _tweenProgress, _tweenEasing);
         }
     }
-    else 
+    else
     {
         _tweenProgress = 0.0f;
     }
@@ -284,17 +284,17 @@ void BoneTimelineState::_onClear()
 {
     TweenTimelineState::_onClear();
 
-    bone = nullptr;
+    bone     = nullptr;
     bonePose = nullptr;
 }
 
 void BoneTimelineState::blend(int state)
 {
     const auto blendWeight = bone->_blendState.blendWeight;
-    auto& animationPose = bone->animationPose;
-    const auto& result = bonePose->result;
+    auto& animationPose    = bone->animationPose;
+    const auto& result     = bonePose->result;
 
-    if (state == 2) 
+    if (state == 2)
     {
         animationPose.x += result.x * blendWeight;
         animationPose.y += result.y * blendWeight;
@@ -303,23 +303,23 @@ void BoneTimelineState::blend(int state)
         animationPose.scaleX += (result.scaleX - 1.0f) * blendWeight;
         animationPose.scaleY += (result.scaleY - 1.0f) * blendWeight;
     }
-    else if (blendWeight != 1.0f) 
+    else if (blendWeight != 1.0f)
     {
-        animationPose.x = result.x * blendWeight;
-        animationPose.y = result.y * blendWeight;
+        animationPose.x        = result.x * blendWeight;
+        animationPose.y        = result.y * blendWeight;
         animationPose.rotation = result.rotation * blendWeight;
-        animationPose.skew = result.skew * blendWeight;
-        animationPose.scaleX = (result.scaleX - 1.0f) * blendWeight + 1.0f;
-        animationPose.scaleY = (result.scaleY - 1.0f) * blendWeight + 1.0f;
+        animationPose.skew     = result.skew * blendWeight;
+        animationPose.scaleX   = (result.scaleX - 1.0f) * blendWeight + 1.0f;
+        animationPose.scaleY   = (result.scaleY - 1.0f) * blendWeight + 1.0f;
     }
-    else 
+    else
     {
-        animationPose.x = result.x;
-        animationPose.y = result.y;
+        animationPose.x        = result.x;
+        animationPose.y        = result.y;
         animationPose.rotation = result.rotation;
-        animationPose.skew = result.skew;
-        animationPose.scaleX = result.scaleX;
-        animationPose.scaleY = result.scaleY;
+        animationPose.skew     = result.skew;
+        animationPose.scaleX   = result.scaleX;
+        animationPose.scaleY   = result.scaleY;
     }
 
     if (_animationState->_fadeState != 0 || _animationState->_subFadeState != 0)
@@ -328,7 +328,7 @@ void BoneTimelineState::blend(int state)
     }
 }
 
-void SlotTimelineState::_onClear() 
+void SlotTimelineState::_onClear()
 {
     TweenTimelineState::_onClear();
 

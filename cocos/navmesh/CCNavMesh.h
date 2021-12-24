@@ -29,20 +29,19 @@
 #include "base/ccConfig.h"
 #if CC_USE_NAVMESH
 
-#include "base/CCRef.h"
-#include "math/Vec3.h"
-#include "recast/DetourNavMesh.h"
-#include "recast/DetourNavMeshQuery.h"
-#include "recast/DetourCrowd.h"
-#include "recast/DetourTileCache.h"
-#include <string>
-#include <vector>
+#    include "base/CCRef.h"
+#    include "math/Vec3.h"
+#    include "recast/DetourNavMesh.h"
+#    include "recast/DetourNavMeshQuery.h"
+#    include "recast/DetourCrowd.h"
+#    include "recast/DetourTileCache.h"
+#    include <string>
+#    include <vector>
 
-#include "navmesh/CCNavMeshAgent.h"
-#include "navmesh/CCNavMeshDebugDraw.h"
-#include "navmesh/CCNavMeshObstacle.h"
-#include "navmesh/CCNavMeshUtils.h"
-
+#    include "navmesh/CCNavMeshAgent.h"
+#    include "navmesh/CCNavMeshDebugDraw.h"
+#    include "navmesh/CCNavMeshObstacle.h"
+#    include "navmesh/CCNavMeshUtils.h"
 
 NS_CC_BEGIN
 
@@ -52,7 +51,8 @@ NS_CC_BEGIN
  */
 class Renderer;
 /** @brief NavMesh: The NavMesh information container, include mesh, tileCache, and so on. */
-class CC_DLL NavMesh : public Ref {
+class CC_DLL NavMesh : public Ref
+{
 public:
     /**
     Create navmesh
@@ -130,6 +130,6 @@ protected:
 
 NS_CC_END
 
-#endif // CC_USE_NAVMESH
+#endif  // CC_USE_NAVMESH
 
-#endif // __CCNAV_MESH_H__
+#endif  // __CCNAV_MESH_H__

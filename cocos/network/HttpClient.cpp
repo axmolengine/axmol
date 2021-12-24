@@ -38,33 +38,43 @@ using namespace yasio;
 
 NS_CC_BEGIN
 
-namespace network {
+namespace network
+{
 
-static HttpClient* _httpClient = nullptr; // pointer to singleton
+static HttpClient* _httpClient = nullptr;  // pointer to singleton
 
 template <typename _Cont, typename _Fty>
-static void __clearQueueUnsafe(_Cont& queue, _Fty pred) {
-    for (auto it = queue.unsafe_begin(); it != queue.unsafe_end();) {
-        if (!pred || pred((*it))) {
+static void __clearQueueUnsafe(_Cont& queue, _Fty pred)
+{
+    for (auto it = queue.unsafe_begin(); it != queue.unsafe_end();)
+    {
+        if (!pred || pred((*it)))
+        {
             (*it)->release();
             it = queue.unsafe_erase(it);
-        } else {
+        }
+        else
+        {
             ++it;
         }
     }
 }
 
 // HttpClient implementation
-HttpClient* HttpClient::getInstance() {
-    if (_httpClient == nullptr) {
+HttpClient* HttpClient::getInstance()
+{
+    if (_httpClient == nullptr)
+    {
         _httpClient = new HttpClient();
     }
 
     return _httpClient;
 }
 
-void HttpClient::destroyInstance() {
-    if (nullptr == _httpClient) {
+void HttpClient::destroyInstance()
+{
+    if (nullptr == _httpClient)
+    {
         CCLOG("HttpClient singleton is nullptr");
         return;
     }
@@ -76,11 +86,15 @@ void HttpClient::destroyInstance() {
     CCLOG("HttpClient::destroyInstance() finished!");
 }
 
-void HttpClient::enableCookies(const char* cookieFile) {
+void HttpClient::enableCookies(const char* cookieFile)
+{
     std::lock_guard<std::recursive_mutex> lock(_cookieFileMutex);
-    if (cookieFile) {
+    if (cookieFile)
+    {
         _cookieFilename = cookieFile;
-    } else {
+    }
+    else
+    {
         _cookieFilename = (FileUtils::getInstance()->getNativeWritableAbsolutePath() + "cookieFile.txt");
     }
 
@@ -90,7 +104,8 @@ void HttpClient::enableCookies(const char* cookieFile) {
     _cookie->readFile();
 }
 
-void HttpClient::setSSLVerification(const std::string& caFile) {
+void HttpClient::setSSLVerification(const std::string& caFile)
+{
     std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     _sslCaFilename = caFile;
     _service->set_option(yasio::YOPT_S_SSL_CACERT, _sslCaFilename.c_str());
@@ -102,7 +117,7 @@ HttpClient::HttpClient()
     , _timeoutForConnect(30)
     , _timeoutForRead(60)
     , _cookie(nullptr)
-    , _clearResponsePredicate(nullptr) 
+    , _clearResponsePredicate(nullptr)
 {
     CCLOG("In the constructor of HttpClient!");
     _scheduler = Director::getInstance()->getScheduler();
@@ -113,7 +128,8 @@ HttpClient::HttpClient()
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
     _service->start([=](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
 
-    for (int i = 0; i < HttpClient::MAX_CHANNELS; ++i) {
+    for (int i = 0; i < HttpClient::MAX_CHANNELS; ++i)
+    {
         _availChannelQueue.unsafe_push_back(i);
     }
 
@@ -122,13 +138,15 @@ HttpClient::HttpClient()
     _isInited = true;
 }
 
-HttpClient::~HttpClient() {
+HttpClient::~HttpClient()
+{
     _scheduler->unscheduleAllForTarget(this);
     delete _service;
 
     clearPendingResponseQueue();
     clearFinishedResponseQueue();
-    if (_cookie) {
+    if (_cookie)
+    {
         _cookie->writeFile();
         delete _cookie;
     }
@@ -140,7 +158,7 @@ void HttpClient::setDispatchOnWorkThread(bool bVal)
 {
     _scheduler->unscheduleAllForTarget(this);
     _dispatchOnWorkThread = bVal;
-    if(!bVal) 
+    if (!bVal)
         _scheduler->schedule([=](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
 }
 
@@ -159,7 +177,8 @@ yasio::io_service* HttpClient::getInternalService()
     return _service;
 }
 
-bool HttpClient::send(HttpRequest* request) {
+bool HttpClient::send(HttpRequest* request)
+{
     if (!request)
         return false;
 
@@ -169,16 +188,19 @@ bool HttpClient::send(HttpRequest* request) {
     return true;
 }
 
-HttpResponse* HttpClient::sendSync(HttpRequest* request) {
+HttpResponse* HttpClient::sendSync(HttpRequest* request)
+{
     request->setSync(true);
     if (this->send(request))
         return request->wait();
     return nullptr;
 }
 
-int HttpClient::tryTakeAvailChannel() {
+int HttpClient::tryTakeAvailChannel()
+{
     auto lck = _availChannelQueue.get_lock();
-    if (!_availChannelQueue.empty()) {
+    if (!_availChannelQueue.empty())
+    {
         int channel = _availChannelQueue.front();
         _availChannelQueue.pop_front();
         return channel;
@@ -186,54 +208,66 @@ int HttpClient::tryTakeAvailChannel() {
     return -1;
 }
 
-void HttpClient::processResponse(HttpResponse* response, const std::string& url) {
+void HttpClient::processResponse(HttpResponse* response, const std::string& url)
+{
     auto channelIndex = tryTakeAvailChannel();
     response->retain();
 
-    if (channelIndex != -1) {
-        if (response->prepareForProcess(url)) {
-            response->_responseHeaders.clear(); // redirect needs clear old response headers
+    if (channelIndex != -1)
+    {
+        if (response->prepareForProcess(url))
+        {
+            response->_responseHeaders.clear();  // redirect needs clear old response headers
             auto& requestUri       = response->getRequestUri();
             auto channelHandle     = _service->channel_at(channelIndex);
             channelHandle->ud_.ptr = response;
-            _service->set_option(
-                YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().c_str(), (int) requestUri.getPort());
+            _service->set_option(YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().c_str(),
+                                 (int)requestUri.getPort());
             if (requestUri.isSecure())
                 _service->open(channelIndex, YCK_SSL_CLIENT);
             else
                 _service->open(channelIndex, YCK_TCP_CLIENT);
-        } else {
+        }
+        else
+        {
             finishResponse(response);
         }
-    } else {
+    }
+    else
+    {
         _pendingResponseQueue.push_back(response);
     }
 }
 
-void HttpClient::handleNetworkEvent(yasio::io_event* event) {
+void HttpClient::handleNetworkEvent(yasio::io_event* event)
+{
     int channelIndex       = event->cindex();
     auto channel           = _service->channel_at(event->cindex());
-    HttpResponse* response = (HttpResponse*) channel->ud_.ptr;
+    HttpResponse* response = (HttpResponse*)channel->ud_.ptr;
     if (!response)
         return;
 
     bool responseFinished = response->isFinished();
-    switch (event->kind()) {
+    switch (event->kind())
+    {
     case YEK_ON_PACKET:
         if (!responseFinished)
             response->handleInput(event->packet());
 
-        if (response->isFinished()) {
+        if (response->isFinished())
+        {
             response->updateInternalCode(yasio::errc::eof);
             _service->close(event->cindex());
         }
         break;
     case YEK_ON_OPEN:
-        if (event->status() == 0) {
+        if (event->status() == 0)
+        {
             obstream obs;
             bool usePostData = false;
             auto request     = response->getHttpRequest();
-            switch (request->getRequestType()) {
+            switch (request->getRequestType())
+            {
             case HttpRequest::Type::GET:
                 obs.write_bytes("GET");
                 break;
@@ -256,9 +290,11 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
 
             auto& uri = response->getRequestUri();
             obs.write_bytes(uri.getPath());
-            if (!usePostData) {
+            if (!usePostData)
+            {
                 auto& query = uri.getQuery();
-                if (!query.empty()) {
+                if (!query.empty())
+                {
                     obs.write_byte('?');
                     obs.write_bytes(query);
                 }
@@ -270,18 +306,22 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             obs.write_bytes("\r\n");
 
             // process custom headers
-            struct HeaderFlag {
-                enum {
+            struct HeaderFlag
+            {
+                enum
+                {
                     UESR_AGENT   = 1,
                     CONTENT_TYPE = 1 << 1,
                     ACCEPT       = 1 << 2,
                 };
             };
             int headerFlags = 0;
-            auto& headers = request->getHeaders();
-            if (!headers.empty()) {
-                using namespace cxx17; // for string_view literal
-                for (auto& header : headers) {
+            auto& headers   = request->getHeaders();
+            if (!headers.empty())
+            {
+                using namespace cxx17;  // for string_view literal
+                for (auto& header : headers)
+                {
                     obs.write_bytes(header);
                     obs.write_bytes("\r\n");
 
@@ -294,7 +334,8 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
                 }
             }
 
-            if (_cookie) {
+            if (_cookie)
+            {
                 auto cookies = _cookie->checkAndGetFormatedMatchCookies(uri);
                 if (!cookies.empty())
                 {
@@ -309,7 +350,8 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             if (!(headerFlags & HeaderFlag::ACCEPT))
                 obs.write_bytes("Accept: */*;q=0.8\r\n");
 
-            if (usePostData) {
+            if (usePostData)
+            {
                 if (!(headerFlags & HeaderFlag::CONTENT_TYPE))
                     obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
 
@@ -321,7 +363,9 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
 
                 if (requestData && requestDataSize > 0)
                     obs.write_bytes(cxx17::string_view{requestData, static_cast<size_t>(requestDataSize)});
-            } else {
+            }
+            else
+            {
                 obs.write_bytes("\r\n");
             }
 
@@ -332,10 +376,12 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
             timerForRead.expires_from_now(std::chrono::seconds(this->_timeoutForRead));
             timerForRead.async_wait(*_service, [=](io_service& s) {
                 response->updateInternalCode(yasio::errc::read_timeout);
-                s.close(channelIndex); // timeout
+                s.close(channelIndex);  // timeout
                 return true;
             });
-        } else {
+        }
+        else
+        {
             handleNetworkEOF(response, channel, event->status());
         }
         break;
@@ -345,17 +391,21 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event) {
     }
 }
 
-void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* channel, int internalErrorCode) {
+void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* channel, int internalErrorCode)
+{
     channel->get_user_timer().cancel(*_service);
     response->updateInternalCode(internalErrorCode);
     auto responseCode = response->getResponseCode();
-    switch (responseCode) {
+    switch (responseCode)
+    {
     case 301:
     case 302:
     case 307:
-        if (response->increaseRedirectCount() < HttpClient::MAX_REDIRECT_COUNT) {
+        if (response->increaseRedirectCount() < HttpClient::MAX_REDIRECT_COUNT)
+        {
             auto iter = response->_responseHeaders.find("location");
-            if (iter != response->_responseHeaders.end()) {
+            if (iter != response->_responseHeaders.end())
+            {
                 if (responseCode == 302)
                     response->getHttpRequest()->setRequestType(HttpRequest::Type::GET);
                 CCLOG("Process url redirect (%d): %s", responseCode, iter->second.c_str());
@@ -401,22 +451,27 @@ void HttpClient::dispatchResponseCallbacks()
     }
 }
 
-void HttpClient::finishResponse(HttpResponse* response) {
+void HttpClient::finishResponse(HttpResponse* response)
+{
     auto request   = response->getHttpRequest();
     auto syncState = request->getSyncState();
 
-    if (_cookie) {
+    if (_cookie)
+    {
         auto cookieRange = response->getResponseHeaders().equal_range("set-cookie");
         for (auto cookieIt = cookieRange.first; cookieIt != cookieRange.second; ++cookieIt)
             _cookie->updateOrAddCookie(cookieIt->second, response->_requestUri);
     }
 
-    if (!syncState) {
+    if (!syncState)
+    {
         if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId())
             invokeResposneCallbackAndRelease(response);
         else
             _finishedResponseQueue.push_back(response);
-    } else {
+    }
+    else
+    {
         syncState->set_value(response);
     }
 }
@@ -432,7 +487,8 @@ void HttpClient::invokeResposneCallbackAndRelease(HttpResponse* response)
     response->release();
 }
 
-void HttpClient::clearResponseQueue() {
+void HttpClient::clearResponseQueue()
+{
     clearPendingResponseQueue();
     clearFinishedResponseQueue();
 }
@@ -443,42 +499,49 @@ void HttpClient::clearPendingResponseQueue()
     __clearQueueUnsafe(_pendingResponseQueue, ClearResponsePredicate{});
 }
 
-void HttpClient::clearFinishedResponseQueue() {
+void HttpClient::clearFinishedResponseQueue()
+{
     auto CC_UNUSED lck = _finishedResponseQueue.get_lock();
     __clearQueueUnsafe(_finishedResponseQueue, ClearResponsePredicate{});
 }
 
-void HttpClient::setTimeoutForConnect(int value) {
+void HttpClient::setTimeoutForConnect(int value)
+{
     std::lock_guard<std::recursive_mutex> lock(_timeoutForConnectMutex);
     _timeoutForConnect = value;
     _service->set_option(YOPT_S_CONNECT_TIMEOUT, value);
 }
 
-int HttpClient::getTimeoutForConnect() {
+int HttpClient::getTimeoutForConnect()
+{
     std::lock_guard<std::recursive_mutex> lock(_timeoutForConnectMutex);
     return _timeoutForConnect;
 }
 
-void HttpClient::setTimeoutForRead(int value) {
+void HttpClient::setTimeoutForRead(int value)
+{
     std::lock_guard<std::recursive_mutex> lock(_timeoutForReadMutex);
     _timeoutForRead = value;
 }
 
-int HttpClient::getTimeoutForRead() {
+int HttpClient::getTimeoutForRead()
+{
     std::lock_guard<std::recursive_mutex> lock(_timeoutForReadMutex);
     return _timeoutForRead;
 }
 
-const std::string& HttpClient::getCookieFilename() {
+const std::string& HttpClient::getCookieFilename()
+{
     std::lock_guard<std::recursive_mutex> lock(_cookieFileMutex);
     return _cookieFilename;
 }
 
-const std::string& HttpClient::getSSLVerification() {
+const std::string& HttpClient::getSSLVerification()
+{
     std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     return _sslCaFilename;
 }
 
-} // namespace network
+}  // namespace network
 
 NS_CC_END

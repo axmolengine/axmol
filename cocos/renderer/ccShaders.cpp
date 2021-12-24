@@ -30,7 +30,7 @@ THE SOFTWARE.
 NS_CC_BEGIN
 //
 
-//backend shader file
+// backend shader file
 #include "renderer/shaders/positionColor.vert"
 #include "renderer/shaders/positionColor.frag"
 #include "renderer/shaders/positionTexture.vert"
@@ -53,7 +53,6 @@ NS_CC_BEGIN
 #include "renderer/shaders/dualSampler_gray.frag"
 #include "renderer/shaders/cameraClear.vert"
 #include "renderer/shaders/cameraClear.frag"
-
 
 #include "renderer/shaders/3D_color.frag"
 #include "renderer/shaders/3D_colorNormal.frag"

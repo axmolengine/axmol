@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,14 +31,12 @@
 
 NS_CC_BEGIN
 
-PUForceFieldAffectorTranslator::PUForceFieldAffectorTranslator()
-{
-}
+PUForceFieldAffectorTranslator::PUForceFieldAffectorTranslator() {}
 //-------------------------------------------------------------------------
-bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* compiler, PUAbstractNode *node )
+bool PUForceFieldAffectorTranslator::translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node)
 {
-    PUPropertyAbstractNode* prop = reinterpret_cast<PUPropertyAbstractNode*>(node);
-    PUAffector* af = static_cast<PUAffector*>(prop->parent->context);
+    PUPropertyAbstractNode* prop   = reinterpret_cast<PUPropertyAbstractNode*>(node);
+    PUAffector* af                 = static_cast<PUAffector*>(prop->parent->context);
     PUForceFieldAffector* affector = static_cast<PUForceFieldAffector*>(af);
 
     if (prop->name == token[TOKEN_FORCEFIELD_TYPE])
@@ -47,7 +45,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_FORCEFIELD_TYPE], VAL_STRING))
         {
             std::string val;
-            if(getString(*prop->values.front(), &val))
+            if (getString(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 if (val == token[TOKEN_REALTIME])
@@ -70,7 +68,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_DELTA], VAL_REAL))
         {
             float val = 0.0f;
-            if(getFloat(*prop->values.front(), &val))
+            if (getFloat(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setDelta(val);
@@ -85,7 +83,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_FORCE], VAL_REAL))
         {
             float val = 0.0f;
-            if(getFloat(*prop->values.front(), &val))
+            if (getFloat(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setScaleForce(val);
@@ -100,7 +98,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_OCTAVES], VAL_UINT))
         {
             unsigned int val = 0;
-            if(getUInt(*prop->values.front(), &val))
+            if (getUInt(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setOctaves(val);
@@ -115,7 +113,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_FREQUENCY], VAL_REAL))
         {
             float val = 0.0f;
-            if(getFloat(*prop->values.front(), &val))
+            if (getFloat(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setFrequency(val);
@@ -130,7 +128,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_AMPLITUDE], VAL_REAL))
         {
             float val = 0.0f;
-            if(getFloat(*prop->values.front(), &val))
+            if (getFloat(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setAmplitude(val);
@@ -145,7 +143,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_PERSISTENCE], VAL_REAL))
         {
             float val = 0.0f;
-            if(getFloat(*prop->values.front(), &val))
+            if (getFloat(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setPersistence(val);
@@ -160,7 +158,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_FORCEFIELDSIZE], VAL_UINT))
         {
             unsigned int val = 0;
-            if(getUInt(*prop->values.front(), &val))
+            if (getUInt(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setForceFieldSize(val);
@@ -175,7 +173,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_WORLDSIZE], VAL_VECTOR3))
         {
             Vec3 val;
-            if(getVector3(prop->values.begin(), prop->values.end(), &val))
+            if (getVector3(prop->values.begin(), prop->values.end(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setWorldSize(val);
@@ -190,7 +188,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_IGNORE_NEGATIVE_X], VAL_BOOL))
         {
             bool val;
-            if(getBoolean(*prop->values.front(), &val))
+            if (getBoolean(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setIgnoreNegativeX(val);
@@ -205,7 +203,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_IGNORE_NEGATIVE_Y], VAL_BOOL))
         {
             bool val;
-            if(getBoolean(*prop->values.front(), &val))
+            if (getBoolean(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setIgnoreNegativeY(val);
@@ -220,7 +218,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_IGNORE_NEGATIVE_Z], VAL_BOOL))
         {
             bool val;
-            if(getBoolean(*prop->values.front(), &val))
+            if (getBoolean(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setIgnoreNegativeZ(val);
@@ -235,7 +233,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_MOVEMENT], VAL_VECTOR3))
         {
             Vec3 val;
-            if(getVector3(prop->values.begin(), prop->values.end(), &val))
+            if (getVector3(prop->values.begin(), prop->values.end(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setMovement(val);
@@ -250,7 +248,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
         if (passValidateProperty(compiler, prop, token[TOKEN_MOVEMENT_FREQUENCY], VAL_REAL))
         {
             float val = 0.0f;
-            if(getFloat(*prop->values.front(), &val))
+            if (getFloat(*prop->values.front(), &val))
             {
                 affector->suppressGeneration(true);
                 affector->setMovementFrequency(val);
@@ -263,7 +261,7 @@ bool PUForceFieldAffectorTranslator::translateChildProperty( PUScriptCompiler* c
     return false;
 }
 
-bool PUForceFieldAffectorTranslator::translateChildObject( PUScriptCompiler* /*compiler*/, PUAbstractNode* /*node*/ )
+bool PUForceFieldAffectorTranslator::translateChildObject(PUScriptCompiler* /*compiler*/, PUAbstractNode* /*node*/)
 {
     // No objects
     return false;

@@ -53,39 +53,38 @@ NS_CC_EXT_BEGIN
 class CC_EX_DLL PhysicsSprite : public Sprite
 {
 public:
-
     static PhysicsSprite* create();
     /** Creates an sprite with a texture.
      The rect used will be the size of the texture.
      The offset will be (0,0).
      */
-    static PhysicsSprite* createWithTexture(Texture2D *pTexture);
+    static PhysicsSprite* createWithTexture(Texture2D* pTexture);
 
     /** Creates an sprite with a texture and a rect.
      The offset will be (0,0).
      */
-    static PhysicsSprite* createWithTexture(Texture2D *pTexture, const Rect& rect);
+    static PhysicsSprite* createWithTexture(Texture2D* pTexture, const Rect& rect);
 
     /** Creates an sprite with an sprite frame. */
-    static PhysicsSprite* createWithSpriteFrame(SpriteFrame *pSpriteFrame);
+    static PhysicsSprite* createWithSpriteFrame(SpriteFrame* pSpriteFrame);
 
     /** Creates an sprite with an sprite frame name.
      An SpriteFrame will be fetched from the SpriteFrameCache by name.
      If the SpriteFrame doesn't exist it will raise an exception.
      @since v0.9
      */
-    static PhysicsSprite* createWithSpriteFrameName(const char *pszSpriteFrameName);
+    static PhysicsSprite* createWithSpriteFrameName(const char* pszSpriteFrameName);
 
     /** Creates an sprite with an image filename.
      The rect used will be the size of the image.
      The offset will be (0,0).
      */
-    static PhysicsSprite* create(const char *pszFileName);
+    static PhysicsSprite* create(const char* pszFileName);
 
     /** Creates an sprite with an image filename and a rect.
      The offset will be (0,0).
      */
-    static PhysicsSprite* create(const char *pszFileName, const Rect& rect);
+    static PhysicsSprite* create(const char* pszFileName, const Rect& rect);
 
     PhysicsSprite();
 
@@ -100,14 +99,14 @@ public:
     //
     /** Body accessor when using regular Chipmunk */
     cpBody* getCPBody() const;
-    void setCPBody(cpBody *pBody);
+    void setCPBody(cpBody* pBody);
 
     //
     // Box2d specific
     //
     /** Body accessor when using box2d */
     b2Body* getB2Body() const;
-    void setB2Body(b2Body *pBody);
+    void setB2Body(b2Body* pBody);
 
     float getPTMRatio() const;
     void setPTMRatio(float fPTMRatio);
@@ -119,37 +118,37 @@ public:
     virtual float getPositionX() const override;
     virtual float getPositionY() const override;
     virtual Vec3 getPosition3D() const override;
-    virtual void setPosition(const Vec2 &position) override;
+    virtual void setPosition(const Vec2& position) override;
     virtual void setPosition(float x, float y) override;
     virtual void setPositionX(float x) override;
     virtual void setPositionY(float y) override;
     virtual void setPosition3D(const Vec3& position) override;
     virtual float getRotation() const override;
     virtual void setRotation(float fRotation) override;
-    
+
     virtual void onEnter() override;
     virtual void onExit() override;
 
 protected:
     const Vec2& getPosFromPhysics() const;
-    void afterUpdate(EventCustom *event);
+    void afterUpdate(EventCustom* event);
 
 protected:
-    bool    _ignoreBodyRotation;
+    bool _ignoreBodyRotation;
 
     // chipmunk specific
-    cpBody  *_CPBody;
+    cpBody* _CPBody;
 
     // box2d specific
-    b2Body  *_pB2Body;
-    float   _PTMRatio;
-    
+    b2Body* _pB2Body;
+    float _PTMRatio;
+
     // Event for update synchronise physic transform
     cocos2d::EventListenerCustom* _syncTransform;
 };
 
 NS_CC_EXT_END
 
-#endif // CC_ENABLE_CHIPMUNK_INTEGRATION || CC_ENABLE_BOX2D_INTEGRATION
+#endif  // CC_ENABLE_CHIPMUNK_INTEGRATION || CC_ENABLE_BOX2D_INTEGRATION
 
-#endif // __PHYSICSNODES_CCPHYSICSSPRITE_H__
+#endif  // __PHYSICSNODES_CCPHYSICSSPRITE_H__

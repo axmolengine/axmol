@@ -30,7 +30,7 @@ NS_CC_BEGIN
 
 NodeGrid* NodeGrid::create()
 {
-    NodeGrid * ret = new NodeGrid();
+    NodeGrid* ret = new NodeGrid();
     if (ret->init())
     {
         ret->autorelease();
@@ -42,18 +42,17 @@ NodeGrid* NodeGrid::create()
     return ret;
 }
 
-NodeGrid* NodeGrid::create(const cocos2d::Rect &rect)
+NodeGrid* NodeGrid::create(const cocos2d::Rect& rect)
 {
     NodeGrid* ret = NodeGrid::create();
-    if (ret) {
+    if (ret)
+    {
         ret->setGridRect(rect);
     }
     return ret;
 }
 
-NodeGrid::NodeGrid()
-{
-}
+NodeGrid::NodeGrid() {}
 
 void NodeGrid::setTarget(Node* target)
 {
@@ -66,7 +65,7 @@ void NodeGrid::setTarget(Node* target)
         if (target)
             sEngine->retainScriptObject(this, target);
     }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     CC_SAFE_RELEASE(_gridTarget);
     CC_SAFE_RETAIN(target);
     _gridTarget = target;
@@ -88,13 +87,13 @@ void NodeGrid::onGridBeginDraw()
 
 void NodeGrid::onGridEndDraw()
 {
-    if(_nodeGrid && _nodeGrid->isActive())
+    if (_nodeGrid && _nodeGrid->isActive())
     {
         _nodeGrid->afterDraw(this);
     }
 }
 
-void NodeGrid::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)
+void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -103,7 +102,7 @@ void NodeGrid::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t p
     }
 
     bool dirty = (parentFlags & FLAGS_TRANSFORM_DIRTY) || _transformUpdated;
-    if(dirty)
+    if (dirty)
         _modelViewTransform = this->transform(parentTransform);
     _transformUpdated = false;
 
@@ -114,7 +113,7 @@ void NodeGrid::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t p
     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 
     Director::Projection beforeProjectionType = Director::Projection::DEFAULT;
-    if(_nodeGrid && _nodeGrid->isActive())
+    if (_nodeGrid && _nodeGrid->isActive())
     {
         beforeProjectionType = _director->getProjection();
         _nodeGrid->set2DProjection();
@@ -122,23 +121,23 @@ void NodeGrid::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t p
 
     onGridBeginDraw();
 
-    if(_gridTarget)
+    if (_gridTarget)
     {
         _gridTarget->visit(renderer, _modelViewTransform, dirty);
     }
-    
-    int i = 0;
+
+    int i                = 0;
     bool visibleByCamera = isVisitableByVisitingCamera();
 
-    if(!_children.empty())
+    if (!_children.empty())
     {
         sortAllChildren();
         // draw children zOrder < 0
-        for(auto size = _children.size(); i < size; ++i)
+        for (auto size = _children.size(); i < size; ++i)
         {
             auto node = _children.at(i);
 
-            if ( node && node->getLocalZOrder() < 0 )
+            if (node && node->getLocalZOrder() < 0)
                 node->visit(renderer, _modelViewTransform, dirty);
             else
                 break;
@@ -147,7 +146,8 @@ void NodeGrid::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t p
         if (visibleByCamera)
             this->draw(renderer, _modelViewTransform, dirty);
 
-        for(auto it=_children.cbegin()+i, itCend = _children.cend(); it != itCend; ++it) {
+        for (auto it = _children.cbegin() + i, itCend = _children.cend(); it != itCend; ++it)
+        {
             (*it)->visit(renderer, _modelViewTransform, dirty);
         }
     }
@@ -155,12 +155,12 @@ void NodeGrid::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t p
     {
         this->draw(renderer, _modelViewTransform, dirty);
     }
-    
+
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
     // setOrderOfArrival(0);
-    
-    if(_nodeGrid && _nodeGrid->isActive())
+
+    if (_nodeGrid && _nodeGrid->isActive())
     {
         // restore projection
         _director->setProjection(beforeProjectionType);
@@ -171,7 +171,7 @@ void NodeGrid::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t p
     _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
-void NodeGrid::setGrid(GridBase *grid)
+void NodeGrid::setGrid(GridBase* grid)
 {
     CC_SAFE_RELEASE(_nodeGrid);
     CC_SAFE_RETAIN(grid);

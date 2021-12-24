@@ -53,13 +53,13 @@ You SHOULD not use this class.
 Instead, use the newer TMX file format: TMXTiledMap
 @js NA
 */
-class CC_DLL TileMapAtlas : public AtlasNode 
+class CC_DLL TileMapAtlas : public AtlasNode
 {
 public:
     /** creates a TileMap with a tile file (atlas) with a map file and the width and height of each tile in points.
      The tile file will be loaded using the TextureMgr.
      */
-    static TileMapAtlas * create(const std::string& tile, const std::string& mapFile, int tileWidth, int tileHeight);
+    static TileMapAtlas* create(const std::string& tile, const std::string& mapFile, int tileWidth, int tileHeight);
     /**
      * @js ctor
      */
@@ -69,7 +69,7 @@ public:
      * @lua NA
      */
     virtual ~TileMapAtlas();
-    
+
     /** initializes a TileMap with a tile file (atlas) with a map file and the width and height of each tile in points.
     The file will be loaded using the TextureMgr.
     */
@@ -86,7 +86,7 @@ public:
     void setTile(const Color3B& tile, const Vec2& position);
     /** dealloc the map from memory */
     void releaseMap();
-    
+
     /**
      * Query TGA image info.
      *@return The TGA image info.
@@ -105,7 +105,6 @@ protected:
     void updateAtlasValueAt(const Vec2& pos, const Color3B& value, int index);
     void updateAtlasValues();
 
-
     //! x,y to atlas dictionary
     ValueMap _posToAtlasIndex;
     //! numbers of tiles to render
@@ -118,5 +117,4 @@ protected:
 
 NS_CC_END
 
-#endif //__CCTILE_MAP_ATLAS__
-
+#endif  //__CCTILE_MAP_ATLAS__

@@ -29,29 +29,26 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-namespace ui {
+namespace ui
+{
 
 static const int LABEL_RENDERER_Z = (-1);
 
 IMPLEMENT_CLASS_GUI_INFO(Text)
 
-Text::Text():
-_touchScaleChangeEnabled(false),
-_normalScaleValueX(1.0f),
-_normalScaleValueY(1.0f),
-_fontName("Thonburi"),
-_fontSize(10.f),
-_onSelectedScaleOffset(0.5),
-_labelRenderer(nullptr),
-_labelRendererAdaptDirty(true),
-_type(Type::SYSTEM)
-{
-}
+Text::Text()
+    : _touchScaleChangeEnabled(false)
+    , _normalScaleValueX(1.0f)
+    , _normalScaleValueY(1.0f)
+    , _fontName("Thonburi")
+    , _fontSize(10.f)
+    , _onSelectedScaleOffset(0.5)
+    , _labelRenderer(nullptr)
+    , _labelRendererAdaptDirty(true)
+    , _type(Type::SYSTEM)
+{}
 
-Text::~Text()
-{
-
-}
+Text::~Text() {}
 
 Text* Text::create()
 {
@@ -74,9 +71,9 @@ bool Text::init()
     return false;
 }
 
-Text* Text::create(const std::string &textContent, const std::string &fontName, float fontSize)
+Text* Text::create(const std::string& textContent, const std::string& fontName, float fontSize)
 {
-    Text *text = new Text();
+    Text* text = new Text();
     if (text->init(textContent, fontName, fontSize))
     {
         text->autorelease();
@@ -86,7 +83,7 @@ Text* Text::create(const std::string &textContent, const std::string &fontName, 
     return nullptr;
 }
 
-bool Text::init(const std::string &textContent, const std::string &fontName, float fontSize)
+bool Text::init(const std::string& textContent, const std::string& fontName, float fontSize)
 {
     bool ret = true;
     do
@@ -109,7 +106,6 @@ void Text::initRenderer()
     addProtectedChild(_labelRenderer, LABEL_RENDERER_Z, -1);
 }
 
-
 void Text::setString(std::string_view text)
 {
     if (text == _labelRenderer->getString())
@@ -126,7 +122,7 @@ const std::string& Text::getString() const
     return _labelRenderer->getString();
 }
 
-ssize_t Text::getStringLength()const
+ssize_t Text::getStringLength() const
 {
     return _labelRenderer->getStringLength();
 }
@@ -140,7 +136,7 @@ void Text::setFontSize(float size)
     else
     {
         TTFConfig config = _labelRenderer->getTTFConfig();
-        config.fontSize = size;
+        config.fontSize  = size;
         _labelRenderer->setTTFConfig(config);
     }
     _fontSize = size;
@@ -148,18 +144,18 @@ void Text::setFontSize(float size)
     _labelRendererAdaptDirty = true;
 }
 
-float Text::getFontSize()const
+float Text::getFontSize() const
 {
     return _fontSize;
 }
 
 void Text::setFontName(const std::string& name)
 {
-    if(FileUtils::getInstance()->isFileExist(name))
+    if (FileUtils::getInstance()->isFileExist(name))
     {
-        TTFConfig config = _labelRenderer->getTTFConfig();
+        TTFConfig config    = _labelRenderer->getTTFConfig();
         config.fontFilePath = name;
-        config.fontSize = _fontSize;
+        config.fontSize     = _fontSize;
         _labelRenderer->setTTFConfig(config);
         _type = Type::TTF;
     }
@@ -177,7 +173,7 @@ void Text::setFontName(const std::string& name)
     _labelRendererAdaptDirty = true;
 }
 
-const std::string& Text::getFontName()const
+const std::string& Text::getFontName() const
 {
     return _fontName;
 }
@@ -187,18 +183,18 @@ Text::Type Text::getType() const
     return _type;
 }
 
-void Text::setTextAreaSize(const Vec2 &size)
+void Text::setTextAreaSize(const Vec2& size)
 {
-    _labelRenderer->setDimensions(size.width,size.height);
+    _labelRenderer->setDimensions(size.width, size.height);
     if (!_ignoreSize)
     {
-        _customSize=size;
+        _customSize = size;
     }
     updateContentSizeWithTextureSize(_labelRenderer->getContentSize());
     _labelRendererAdaptDirty = true;
 }
 
-const Vec2& Text::getTextAreaSize()const
+const Vec2& Text::getTextAreaSize() const
 {
     return _labelRenderer->getDimensions();
 }
@@ -208,7 +204,7 @@ void Text::setTextHorizontalAlignment(TextHAlignment alignment)
     _labelRenderer->setHorizontalAlignment(alignment);
 }
 
-TextHAlignment Text::getTextHorizontalAlignment()const
+TextHAlignment Text::getTextHorizontalAlignment() const
 {
     return _labelRenderer->getHorizontalAlignment();
 }
@@ -218,7 +214,7 @@ void Text::setTextVerticalAlignment(TextVAlignment alignment)
     _labelRenderer->setVerticalAlignment(alignment);
 }
 
-TextVAlignment Text::getTextVerticalAlignment()const
+TextVAlignment Text::getTextVerticalAlignment() const
 {
     return _labelRenderer->getVerticalAlignment();
 }
@@ -238,7 +234,7 @@ void Text::setTouchScaleChangeEnabled(bool enable)
     _touchScaleChangeEnabled = enable;
 }
 
-bool Text::isTouchScaleChangeEnabled()const
+bool Text::isTouchScaleChangeEnabled() const
 {
     return _touchScaleChangeEnabled;
 }
@@ -263,10 +259,7 @@ void Text::onPressStateChangedToPressed()
     _labelRenderer->setScaleY(_normalScaleValueY + _onSelectedScaleOffset);
 }
 
-void Text::onPressStateChangedToDisabled()
-{
-
-}
+void Text::onPressStateChangedToDisabled() {}
 
 void Text::onSizeChanged()
 {
@@ -315,7 +308,7 @@ void Text::labelScaleChangedWithSize()
     }
     else
     {
-        _labelRenderer->setDimensions(_contentSize.width,_contentSize.height);
+        _labelRenderer->setDimensions(_contentSize.width, _contentSize.height);
         Vec2 textureSize = _labelRenderer->getContentSize();
         if (textureSize.width <= 0.0f || textureSize.height <= 0.0f)
         {
@@ -337,12 +330,12 @@ std::string Text::getDescription() const
     return "Label";
 }
 
-void Text::enableShadow(const Color4B& shadowColor,const Vec2 &offset, int blurRadius)
+void Text::enableShadow(const Color4B& shadowColor, const Vec2& offset, int blurRadius)
 {
     _labelRenderer->enableShadow(shadowColor, offset, blurRadius);
 }
 
-void Text::enableOutline(const Color4B& outlineColor,int outlineSize)
+void Text::enableOutline(const Color4B& outlineColor, int outlineSize)
 {
     _labelRenderer->enableOutline(outlineColor, outlineSize);
     updateContentSizeWithTextureSize(_labelRenderer->getContentSize());
@@ -365,8 +358,8 @@ void Text::disableEffect()
 void Text::disableEffect(LabelEffect effect)
 {
     _labelRenderer->disableEffect(effect);
-    //only outline effect will affect the content size of label
-    if(LabelEffect::OUTLINE == effect)
+    // only outline effect will affect the content size of label
+    if (LabelEffect::OUTLINE == effect)
     {
         updateContentSizeWithTextureSize(_labelRenderer->getContentSize());
         _labelRendererAdaptDirty = true;
@@ -405,12 +398,12 @@ Color4B Text::getEffectColor() const
     return Color4B(effect.r * 255, effect.g * 255, effect.b * 255, effect.a * 255);
 }
 
-Sprite * Text::getLetter(int lettetIndex)
+Sprite* Text::getLetter(int lettetIndex)
 {
     return _labelRenderer->getLetter(lettetIndex);
 }
 
-void Text::setBlendFunc(const BlendFunc &blendFunc)
+void Text::setBlendFunc(const BlendFunc& blendFunc)
 {
     _labelRenderer->setBlendFunc(blendFunc);
 }
@@ -419,13 +412,13 @@ const BlendFunc& Text::getBlendFunc() const
 {
     return _labelRenderer->getBlendFunc();
 }
-    
+
 Widget* Text::createCloneInstance()
 {
     return Text::create();
 }
 
-void Text::copySpecialProperties(Widget *widget)
+void Text::copySpecialProperties(Widget* widget)
 {
     Text* label = dynamic_cast<Text*>(widget);
     if (label)
@@ -447,15 +440,15 @@ void Text::copySpecialProperties(Widget *widget)
         }
         else if (effectType == LabelEffect::OUTLINE)
         {
-            enableOutline(label->getEffectColor(),label->getOutlineSize());
+            enableOutline(label->getEffectColor(), label->getOutlineSize());
         }
         if (label->isShadowEnabled())
         {
-            enableShadow(label->getShadowColor(),label->getShadowOffset(),label->getShadowBlurRadius());
+            enableShadow(label->getShadowColor(), label->getShadowOffset(), label->getShadowBlurRadius());
         }
     }
 }
 
-}
+}  // namespace ui
 
 NS_CC_END

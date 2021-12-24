@@ -29,12 +29,12 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-void ccMessageBox(const char * msg, const char * title)
+void ccMessageBox(const char* msg, const char* title)
 {
     log("%s: %s", title, msg);
 }
 
-void LuaLog(const char * format)
+void LuaLog(const char* format)
 {
     puts(format);
 }

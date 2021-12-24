@@ -1,20 +1,20 @@
 /****************************************************************************
  MIT License
- 
+
  Portions copyright (c) 2017 Serge Zaitsev
- 
+
  https://adxe.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,33 +26,33 @@
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 
-#include "UIWebViewImpl-win32.h"
-#include "UIWebView.h"
-#include "base/CCDirector.h"
-#include "platform/CCFileUtils.h"
-#include "platform/CCGLView.h"
-#include "base/base64.h"
-#include "ui/UIHelper.h"
-#include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
+#    include "UIWebViewImpl-win32.h"
+#    include "UIWebView.h"
+#    include "base/CCDirector.h"
+#    include "platform/CCFileUtils.h"
+#    include "platform/CCGLView.h"
+#    include "base/base64.h"
+#    include "ui/UIHelper.h"
+#    include "rapidjson/document.h"
+#    include "rapidjson/stringbuffer.h"
+#    include "rapidjson/writer.h"
 
-#define WIN32_LEAN_AND_MEAN
-#include <Shlwapi.h>
-#include <codecvt>
-#include <utility>
-#include <stdlib.h>
-#include <Windows.h>
+#    define WIN32_LEAN_AND_MEAN
+#    include <Shlwapi.h>
+#    include <codecvt>
+#    include <utility>
+#    include <stdlib.h>
+#    include <Windows.h>
 
-#pragma comment(lib, "user32.lib")
-#pragma comment(lib, "Shlwapi.lib")
+#    pragma comment(lib, "user32.lib")
+#    pragma comment(lib, "Shlwapi.lib")
 
 // Edge/Chromium headers and libs
-#include "WebView2.h"
-#pragma comment(lib, "ole32.lib")
-#pragma comment(lib, "oleaut32.lib")
+#    include "WebView2.h"
+#    pragma comment(lib, "ole32.lib")
+#    pragma comment(lib, "oleaut32.lib")
 
-#include "platform/CCPlatformConfig.h"
+#    include "platform/CCPlatformConfig.h"
 
 USING_NS_CC;
 using namespace rapidjson;
@@ -84,32 +84,32 @@ inline int jsonUnescape(const char* s, size_t n, char* out)
             n--;
             switch (*s)
             {
-                case 'b':
-                    c = '\b';
-                    break;
-                case 'f':
-                    c = '\f';
-                    break;
-                case 'n':
-                    c = '\n';
-                    break;
-                case 'r':
-                    c = '\r';
-                    break;
-                case 't':
-                    c = '\t';
-                    break;
-                case '\\':
-                    c = '\\';
-                    break;
-                case '/':
-                    c = '/';
-                    break;
-                case '\"':
-                    c = '\"';
-                    break;
-                default:  // TODO: support unicode decoding
-                    return -1;
+            case 'b':
+                c = '\b';
+                break;
+            case 'f':
+                c = '\f';
+                break;
+            case 'n':
+                c = '\n';
+                break;
+            case 'r':
+                c = '\r';
+                break;
+            case 't':
+                c = '\t';
+                break;
+            case '\\':
+                c = '\\';
+                break;
+            case '/':
+                c = '/';
+                break;
+            case '\"':
+                c = '\"';
+                break;
+            default:  // TODO: support unicode decoding
+                return -1;
             }
         }
         if (out != NULL)
@@ -130,7 +130,6 @@ inline int jsonUnescape(const char* s, size_t n, char* out)
     }
     return r;
 }
-
 
 // These are the results that must be returned by this method
 // assert(jsonParse(R"({"foo":"bar"})", "foo", -1) == "bar");
@@ -218,7 +217,8 @@ static std::string getUriStringFromArgs(ArgType* args)
 static std::string getDataURI(const std::string& data, const std::string& mime_type)
 {
     char* encodedData;
-    cocos2d::base64Encode(reinterpret_cast<const unsigned char*>(data.data()), static_cast<unsigned>(data.size()), &encodedData);
+    cocos2d::base64Encode(reinterpret_cast<const unsigned char*>(data.data()), static_cast<unsigned>(data.size()),
+                          &encodedData);
     return "data:" + mime_type + ";base64," + utils::urlEncode(encodedData);
 }
 
@@ -244,32 +244,30 @@ static double getDeviceScaleFactor()
     return scale_factor;
 }
 
-
 // declarate
 class Win32WebControl
 {
 public:
     Win32WebControl();
 
-    bool createWebView(
-        const std::function<bool (const std::string &)> &shouldStartLoading,
-        const std::function<void (const std::string &)> &didFinishLoading,
-        const std::function<void (const std::string &)> &didFailLoading,
-        const std::function<void (const std::string &)> &onJsCallback);
+    bool createWebView(const std::function<bool(const std::string&)>& shouldStartLoading,
+                       const std::function<void(const std::string&)>& didFinishLoading,
+                       const std::function<void(const std::string&)>& didFailLoading,
+                       const std::function<void(const std::string&)>& onJsCallback);
     void removeWebView();
 
     void setWebViewRect(const int left, const int top, const int width, const int height);
-    void setJavascriptInterfaceScheme(const std::string &scheme);
-    void loadHTMLString(const std::string &html, const std::string &baseURL);
-    void loadURL(const std::string &url, bool cleanCachedData);
-    void loadFile(const std::string &filePath);
+    void setJavascriptInterfaceScheme(const std::string& scheme);
+    void loadHTMLString(const std::string& html, const std::string& baseURL);
+    void loadURL(const std::string& url, bool cleanCachedData);
+    void loadFile(const std::string& filePath);
     void stopLoading();
     void reload() const;
     bool canGoBack() const;
     bool canGoForward() const;
     void goBack() const;
     void goForward() const;
-    void evaluateJS(const std::string &js);
+    void evaluateJS(const std::string& js);
     void setScalesPageToFit(const bool scalesPageToFit);
     void setWebViewVisible(const bool visible) const;
     void setBounces(bool bounces);
@@ -288,10 +286,10 @@ private:
     std::string m_jsScheme;
     bool _scalesPageToFit{};
 
-    std::function<bool (const std::string &)> _shouldStartLoading;
-    std::function<void (const std::string &)> _didFinishLoading;
-    std::function<void (const std::string &)> _didFailLoading;
-    std::function<void (const std::string &)> _onJsCallback;
+    std::function<bool(const std::string&)> _shouldStartLoading;
+    std::function<void(const std::string&)> _didFinishLoading;
+    std::function<void(const std::string&)> _didFailLoading;
+    std::function<void(const std::string&)> _onJsCallback;
 
     static bool s_isInitialized;
     static void lazyInit();
@@ -299,7 +297,7 @@ private:
     static LPWSTR to_lpwstr(const std::string s)
     {
         const int n = MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, NULL, 0);
-        auto* ws = new wchar_t[n];
+        auto* ws    = new wchar_t[n];
         MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, ws, n);
         return ws;
     }
@@ -319,49 +317,48 @@ private:
 
         HRESULT res = CreateCoreWebView2EnvironmentWithOptions(
             nullptr, (userDataFolder + L"/" + currentExeNameW).c_str(), nullptr,
-            new webview2_com_handler(wnd, cb, 
-                    [&](ICoreWebView2Controller* controller) {
-                        m_controller = controller;
-                        m_controller->get_CoreWebView2(&m_webview);
-                        m_webview->AddRef();
-                        flag.clear();
-                    },
-                  [this](const std::string& url) -> bool {
-                        const auto scheme = url.substr(0, url.find_first_of(':'));
-                        if (scheme == m_jsScheme)
+            new webview2_com_handler(
+                wnd, cb,
+                [&](ICoreWebView2Controller* controller) {
+                    m_controller = controller;
+                    m_controller->get_CoreWebView2(&m_webview);
+                    m_webview->AddRef();
+                    flag.clear();
+                },
+                [this](const std::string& url) -> bool {
+                    const auto scheme = url.substr(0, url.find_first_of(':'));
+                    if (scheme == m_jsScheme)
+                    {
+                        if (_onJsCallback)
                         {
-                            if (_onJsCallback)
-                            {
-                                _onJsCallback(url);
-                            }
-                            return true;
-                        }
-
-                        if (_shouldStartLoading && !url.empty())
-                        {
-                            return _shouldStartLoading(url);
+                            _onJsCallback(url);
                         }
                         return true;
-                    },
-                    [this]() {
-                        LPWSTR uri;
-                        this->m_webview->get_Source(&uri);
-                        std::wstring ws(uri);
-                        const auto result = std::string(ws.begin(), ws.end());
-                        if (_didFinishLoading)
-                            _didFinishLoading(result);
-                    },
-                    [this]() {
-                        LPWSTR uri;
-                        this->m_webview->get_Source(&uri);
-                        std::wstring ws(uri);
-                        const auto result = std::string(ws.begin(), ws.end());
-                        if (_didFailLoading)
-                            _didFailLoading(result);
-                    },
-                    [this](const std::string& url) { loadURL(url, false); }
-                )
-        );
+                    }
+
+                    if (_shouldStartLoading && !url.empty())
+                    {
+                        return _shouldStartLoading(url);
+                    }
+                    return true;
+                },
+                [this]() {
+                    LPWSTR uri;
+                    this->m_webview->get_Source(&uri);
+                    std::wstring ws(uri);
+                    const auto result = std::string(ws.begin(), ws.end());
+                    if (_didFinishLoading)
+                        _didFinishLoading(result);
+                },
+                [this]() {
+                    LPWSTR uri;
+                    this->m_webview->get_Source(&uri);
+                    std::wstring ws(uri);
+                    const auto result = std::string(ws.begin(), ws.end());
+                    if (_didFailLoading)
+                        _didFailLoading(result);
+                },
+                [this](const std::string& url) { loadURL(url, false); }));
 
         if (res != S_OK)
         {
@@ -409,7 +406,7 @@ private:
         m_webview->ExecuteScript(wjs, nullptr);
         delete[] wjs;
     }
-    
+
     void on_message(const std::string msg)
     {
         const auto seq  = jsonParse(msg, "id", 0);
@@ -423,7 +420,7 @@ private:
         (*fn->first)(seq, args, fn->second);
     }
 
-    using binding_t = std::function<void(std::string, std::string, void *)>;
+    using binding_t     = std::function<void(std::string, std::string, void*)>;
     using binding_ctx_t = std::pair<binding_t*, void*>;
     std::map<std::string, binding_ctx_t*> bindings;
 
@@ -440,14 +437,13 @@ private:
         using webview2_com_handler_cb_t = std::function<void(ICoreWebView2Controller*)>;
 
     public:
-        webview2_com_handler(HWND hwnd, 
-                             msg_cb_t msgCb, 
+        webview2_com_handler(HWND hwnd,
+                             msg_cb_t msgCb,
                              webview2_com_handler_cb_t cb,
                              std::function<bool(const std::string&)> navStartingCallback,
                              std::function<void()> navCompleteCallback,
                              std::function<void()> navErrorCallback,
-                             std::function<void(const std::string& url)> loadUrlCallback
-            )
+                             std::function<void(const std::string& url)> loadUrlCallback)
             : m_window(hwnd)
             , m_msgCb(std::move(msgCb))
             , m_cb(std::move(cb))
@@ -541,8 +537,8 @@ private:
             else
             {
                 // example of how to get status error if required
-                //COREWEBVIEW2_WEB_ERROR_STATUS status;
-                //if (SUCCEEDED(args->get_WebErrorStatus(&status)))
+                // COREWEBVIEW2_WEB_ERROR_STATUS status;
+                // if (SUCCEEDED(args->get_WebErrorStatus(&status)))
                 //{
                 //}
 
@@ -598,222 +594,226 @@ private:
     };
 };
 
-namespace cocos2d {
-    namespace ui {
-        WebViewImpl::WebViewImpl(WebView *webView) : _createSucceeded(false), _systemWebControl(nullptr), _webView(webView)
-        {
-            _systemWebControl = new Win32WebControl();
-            if (_systemWebControl == nullptr)
+namespace cocos2d
+{
+namespace ui
+{
+WebViewImpl::WebViewImpl(WebView* webView) : _createSucceeded(false), _systemWebControl(nullptr), _webView(webView)
+{
+    _systemWebControl = new Win32WebControl();
+    if (_systemWebControl == nullptr)
+    {
+        return;
+    }
+
+    _createSucceeded = _systemWebControl->createWebView(
+        [this](const std::string& url) -> bool {
+            const auto shouldStartLoading = _webView->getOnShouldStartLoading();
+            if (shouldStartLoading != nullptr)
             {
-                return;
+                return shouldStartLoading(_webView, url);
             }
-
-            _createSucceeded = _systemWebControl->createWebView(
-                [this](const std::string &url)->bool {
-                    const auto shouldStartLoading = _webView->getOnShouldStartLoading();
-                    if (shouldStartLoading != nullptr)
-                    {
-                        return shouldStartLoading(_webView, url);
-                    }
-                    return true;
-                },
-                [this](const std::string &url) {
-                    WebView::ccWebViewCallback didFinishLoading = _webView->getOnDidFinishLoading();
-                    if (didFinishLoading != nullptr)
-                    {
-                        didFinishLoading(_webView, url);
-                    }
-                },
-                [this](const std::string &url) {
-                    WebView::ccWebViewCallback didFailLoading = _webView->getOnDidFailLoading();
-                    if (didFailLoading != nullptr)
-                    {
-                        didFailLoading(_webView, url);
-                    }
-                },
-                [this](const std::string &url) {
-                    WebView::ccWebViewCallback onJsCallback = _webView->getOnJSCallback();
-                    if (onJsCallback != nullptr)
-                    {
-                        onJsCallback(_webView, url);
-                    }
-                });
-        }
-
-        WebViewImpl::~WebViewImpl()
-        {
-            if (_systemWebControl != nullptr)
+            return true;
+        },
+        [this](const std::string& url) {
+            WebView::ccWebViewCallback didFinishLoading = _webView->getOnDidFinishLoading();
+            if (didFinishLoading != nullptr)
             {
-                _systemWebControl->removeWebView();
-                delete _systemWebControl;
-                _systemWebControl = nullptr;
+                didFinishLoading(_webView, url);
             }
-        }
-
-        void WebViewImpl::loadData(const Data &data, const std::string &MIMEType, const std::string &encoding, const std::string &baseURL)
-        {
-            if (_createSucceeded)
+        },
+        [this](const std::string& url) {
+            WebView::ccWebViewCallback didFailLoading = _webView->getOnDidFailLoading();
+            if (didFailLoading != nullptr)
             {
-                const std::string dataString(reinterpret_cast<char*>(data.getBytes()), static_cast<unsigned int>(data.getSize()));
-                const auto url = getDataURI(dataString, MIMEType);
-                _systemWebControl->loadURL(url, false);
+                didFailLoading(_webView, url);
             }
-        }
-
-        void WebViewImpl::loadHTMLString(const std::string &string, const std::string &baseURL)
-        {
-            if (_createSucceeded)
+        },
+        [this](const std::string& url) {
+            WebView::ccWebViewCallback onJsCallback = _webView->getOnJSCallback();
+            if (onJsCallback != nullptr)
             {
-                if (string.empty())
-                {
-                    _systemWebControl->loadHTMLString(
-                        "data:text/html," + utils::urlEncode("<html></html>"), baseURL);
-                    return;
-                }
-
-                const auto html = htmlFromUri(string);
-                if (!html.empty())
-                {
-                    _systemWebControl->loadHTMLString("data:text/html," + utils::urlEncode(html), baseURL);
-                }
-                else
-                {
-                    _systemWebControl->loadHTMLString(string, baseURL);
-                }
+                onJsCallback(_webView, url);
             }
+        });
+}
+
+WebViewImpl::~WebViewImpl()
+{
+    if (_systemWebControl != nullptr)
+    {
+        _systemWebControl->removeWebView();
+        delete _systemWebControl;
+        _systemWebControl = nullptr;
+    }
+}
+
+void WebViewImpl::loadData(const Data& data,
+                           const std::string& MIMEType,
+                           const std::string& encoding,
+                           const std::string& baseURL)
+{
+    if (_createSucceeded)
+    {
+        const std::string dataString(reinterpret_cast<char*>(data.getBytes()),
+                                     static_cast<unsigned int>(data.getSize()));
+        const auto url = getDataURI(dataString, MIMEType);
+        _systemWebControl->loadURL(url, false);
+    }
+}
+
+void WebViewImpl::loadHTMLString(const std::string& string, const std::string& baseURL)
+{
+    if (_createSucceeded)
+    {
+        if (string.empty())
+        {
+            _systemWebControl->loadHTMLString("data:text/html," + utils::urlEncode("<html></html>"), baseURL);
+            return;
         }
 
-        void WebViewImpl::loadURL(const std::string &url, bool cleanCachedData)
+        const auto html = htmlFromUri(string);
+        if (!html.empty())
         {
-            if (_createSucceeded)
-            {
-                _systemWebControl->loadURL(url, cleanCachedData);
-            }
+            _systemWebControl->loadHTMLString("data:text/html," + utils::urlEncode(html), baseURL);
         }
+        else
+        {
+            _systemWebControl->loadHTMLString(string, baseURL);
+        }
+    }
+}
 
-        void WebViewImpl::loadFile(const std::string &fileName)
-        {
-            if (_createSucceeded)
-            {
-                const auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
-                _systemWebControl->loadFile(fullPath);
-            }
-        }
+void WebViewImpl::loadURL(const std::string& url, bool cleanCachedData)
+{
+    if (_createSucceeded)
+    {
+        _systemWebControl->loadURL(url, cleanCachedData);
+    }
+}
 
-        void WebViewImpl::stopLoading()
-        {
-            if (_createSucceeded)
-            {
-                _systemWebControl->stopLoading();
-            }
-        }
+void WebViewImpl::loadFile(const std::string& fileName)
+{
+    if (_createSucceeded)
+    {
+        const auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
+        _systemWebControl->loadFile(fullPath);
+    }
+}
 
-        void WebViewImpl::reload()
-        {
-            if (_createSucceeded)
-            {
-                _systemWebControl->reload();
-            }
-        }
+void WebViewImpl::stopLoading()
+{
+    if (_createSucceeded)
+    {
+        _systemWebControl->stopLoading();
+    }
+}
 
-        bool WebViewImpl::canGoBack()
-        {
-            if (_createSucceeded)
-            {
-                return _systemWebControl->canGoBack();
-            }
-            return false;
-        }
+void WebViewImpl::reload()
+{
+    if (_createSucceeded)
+    {
+        _systemWebControl->reload();
+    }
+}
 
-        bool WebViewImpl::canGoForward()
-        {
-            if (_createSucceeded)
-            {
-                return _systemWebControl->canGoForward();
-            }
-            return false;
-        }
+bool WebViewImpl::canGoBack()
+{
+    if (_createSucceeded)
+    {
+        return _systemWebControl->canGoBack();
+    }
+    return false;
+}
 
-        void WebViewImpl::goBack()
-        {
-            if (_createSucceeded)
-            {
-                _systemWebControl->goBack();
-            }
-        }
+bool WebViewImpl::canGoForward()
+{
+    if (_createSucceeded)
+    {
+        return _systemWebControl->canGoForward();
+    }
+    return false;
+}
 
-        void WebViewImpl::goForward()
-        {
-            if (_createSucceeded)
-            {
-                _systemWebControl->goForward();
-            }
-        }
+void WebViewImpl::goBack()
+{
+    if (_createSucceeded)
+    {
+        _systemWebControl->goBack();
+    }
+}
 
-        void WebViewImpl::setJavascriptInterfaceScheme(const std::string &scheme)
-        {
-            if (_createSucceeded)
-            {
-                _systemWebControl->setJavascriptInterfaceScheme(scheme);
-            }
-        }
+void WebViewImpl::goForward()
+{
+    if (_createSucceeded)
+    {
+        _systemWebControl->goForward();
+    }
+}
 
-        void WebViewImpl::evaluateJS(const std::string &js)
-        {
-            if (_createSucceeded)
-            {
-                _systemWebControl->evaluateJS(js);
-            }
-        }
+void WebViewImpl::setJavascriptInterfaceScheme(const std::string& scheme)
+{
+    if (_createSucceeded)
+    {
+        _systemWebControl->setJavascriptInterfaceScheme(scheme);
+    }
+}
 
-        void WebViewImpl::setScalesPageToFit(const bool scalesPageToFit)
-        {
-            if (_createSucceeded)
-            {
-                _systemWebControl->setScalesPageToFit(scalesPageToFit);
-            }
-        }
+void WebViewImpl::evaluateJS(const std::string& js)
+{
+    if (_createSucceeded)
+    {
+        _systemWebControl->evaluateJS(js);
+    }
+}
 
-        void WebViewImpl::draw(Renderer *renderer, Mat4 const &transform, uint32_t flags)
-        {
-            if (_createSucceeded && (flags & Node::FLAGS_TRANSFORM_DIRTY))
-            {
-                const auto uiRect = cocos2d::ui::Helper::convertBoundingBoxToScreen(_webView);
-                _systemWebControl->setWebViewRect(static_cast<int>(uiRect.origin.x), static_cast<int>(uiRect.origin.y),
-                                                  static_cast<int>(uiRect.size.width),
-                                                  static_cast<int>(uiRect.size.height));
-            }
-        }
+void WebViewImpl::setScalesPageToFit(const bool scalesPageToFit)
+{
+    if (_createSucceeded)
+    {
+        _systemWebControl->setScalesPageToFit(scalesPageToFit);
+    }
+}
 
-        void WebViewImpl::setVisible(bool visible)
-        {
-            if (_createSucceeded)
-            {
-                _systemWebControl->setWebViewVisible(visible);
-            }
-        }
+void WebViewImpl::draw(Renderer* renderer, Mat4 const& transform, uint32_t flags)
+{
+    if (_createSucceeded && (flags & Node::FLAGS_TRANSFORM_DIRTY))
+    {
+        const auto uiRect = cocos2d::ui::Helper::convertBoundingBoxToScreen(_webView);
+        _systemWebControl->setWebViewRect(static_cast<int>(uiRect.origin.x), static_cast<int>(uiRect.origin.y),
+                                          static_cast<int>(uiRect.size.width), static_cast<int>(uiRect.size.height));
+    }
+}
 
-        void WebViewImpl::setBounces(bool bounces)
-        {
-            _systemWebControl->setBounces(bounces);
-        }
+void WebViewImpl::setVisible(bool visible)
+{
+    if (_createSucceeded)
+    {
+        _systemWebControl->setWebViewVisible(visible);
+    }
+}
 
-        void WebViewImpl::setOpacityWebView(float opacity)
-        {
-            _systemWebControl->setOpacityWebView(opacity);
-        }
+void WebViewImpl::setBounces(bool bounces)
+{
+    _systemWebControl->setBounces(bounces);
+}
 
-        float WebViewImpl::getOpacityWebView() const
-        {
-            return _systemWebControl->getOpacityWebView();
-        }
+void WebViewImpl::setOpacityWebView(float opacity)
+{
+    _systemWebControl->setOpacityWebView(opacity);
+}
 
-        void WebViewImpl::setBackgroundTransparent()
-        {
-            _systemWebControl->setBackgroundTransparent();
-        }
-    } // namespace ui
-} //namespace cocos2d
+float WebViewImpl::getOpacityWebView() const
+{
+    return _systemWebControl->getOpacityWebView();
+}
+
+void WebViewImpl::setBackgroundTransparent()
+{
+    _systemWebControl->setBackgroundTransparent();
+}
+}  // namespace ui
+}  // namespace cocos2d
 
 //
 // Implement Win32WebControl
@@ -823,17 +823,14 @@ bool Win32WebControl::s_isInitialized = false;
 void Win32WebControl::lazyInit()
 {
     // reset the main windows style so that its drawing does not cover the webview sub window
-    auto hwnd  = cocos2d::Director::getInstance()->getOpenGLView()->getWin32Window();
+    auto hwnd        = cocos2d::Director::getInstance()->getOpenGLView()->getWin32Window();
     const auto style = GetWindowLong(hwnd, GWL_STYLE);
     SetWindowLong(hwnd, GWL_STYLE, style | WS_CLIPCHILDREN);
 
     CoInitialize(NULL);
 }
 
-Win32WebControl::Win32WebControl() :
-    _shouldStartLoading(nullptr)
-    , _didFinishLoading(nullptr)
-    , _didFailLoading(nullptr)
+Win32WebControl::Win32WebControl() : _shouldStartLoading(nullptr), _didFinishLoading(nullptr), _didFailLoading(nullptr)
 {
     if (!s_isInitialized)
     {
@@ -841,16 +838,15 @@ Win32WebControl::Win32WebControl() :
     }
 }
 
-bool Win32WebControl::createWebView(
-    const std::function<bool (const std::string &)> &shouldStartLoading,
-    const std::function<void (const std::string &)> &didFinishLoading,
-    const std::function<void (const std::string &)> &didFailLoading,
-    const std::function<void (const std::string &)> &onJsCallback)
+bool Win32WebControl::createWebView(const std::function<bool(const std::string&)>& shouldStartLoading,
+                                    const std::function<void(const std::string&)>& didFinishLoading,
+                                    const std::function<void(const std::string&)>& didFailLoading,
+                                    const std::function<void(const std::string&)>& onJsCallback)
 {
     bool ret = false;
     do
     {
-        HWND hwnd = cocos2d::Director::getInstance()->getOpenGLView()->getWin32Window();
+        HWND hwnd           = cocos2d::Director::getInstance()->getOpenGLView()->getWin32Window();
         HINSTANCE hInstance = GetModuleHandle(nullptr);
         WNDCLASSEX wc;
         ZeroMemory(&wc, sizeof(WNDCLASSEX));
@@ -859,8 +855,8 @@ bool Win32WebControl::createWebView(
         wc.lpszClassName = L"webview";
         wc.hIcon         = nullptr;
         wc.hIconSm       = nullptr;
-        //wc.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
-        wc.lpfnWndProc   = (WNDPROC)(+[](HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) -> int {
+        // wc.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
+        wc.lpfnWndProc = (WNDPROC)(+[](HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) -> int {
             auto w = (Win32WebControl*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
             if (!w)
             {
@@ -869,41 +865,40 @@ bool Win32WebControl::createWebView(
 
             switch (msg)
             {
-                case WM_SIZE:
-                    w->resize(hwnd);
-                    break;
-
-                case WM_CLOSE:
-                    DestroyWindow(hwnd);
-                    break;
-
-                case WM_GETMINMAXINFO:
-                {
-                    auto lpmmi = (LPMINMAXINFO)lp;
-                    if (w == nullptr)
-                    {
-                        return 0;
-                    }
-                    if (w->m_maxsz.x > 0 && w->m_maxsz.y > 0)
-                    {
-                        lpmmi->ptMaxSize      = w->m_maxsz;
-                        lpmmi->ptMaxTrackSize = w->m_maxsz;
-                    }
-                    if (w->m_minsz.x > 0 && w->m_minsz.y > 0)
-                    {
-                        lpmmi->ptMinTrackSize = w->m_minsz;
-                    }
-                }
+            case WM_SIZE:
+                w->resize(hwnd);
                 break;
 
-                default:
-                    return DefWindowProc(hwnd, msg, wp, lp);
+            case WM_CLOSE:
+                DestroyWindow(hwnd);
+                break;
+
+            case WM_GETMINMAXINFO:
+            {
+                auto lpmmi = (LPMINMAXINFO)lp;
+                if (w == nullptr)
+                {
+                    return 0;
+                }
+                if (w->m_maxsz.x > 0 && w->m_maxsz.y > 0)
+                {
+                    lpmmi->ptMaxSize      = w->m_maxsz;
+                    lpmmi->ptMaxTrackSize = w->m_maxsz;
+                }
+                if (w->m_minsz.x > 0 && w->m_minsz.y > 0)
+                {
+                    lpmmi->ptMinTrackSize = w->m_minsz;
+                }
+            }
+            break;
+
+            default:
+                return DefWindowProc(hwnd, msg, wp, lp);
             }
             return 0;
         });
         RegisterClassEx(&wc);
-        m_window = CreateWindow(L"webview", L"", WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, hwnd, nullptr,
-                                hInstance, nullptr);
+        m_window = CreateWindow(L"webview", L"", WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, hwnd, nullptr, hInstance, nullptr);
         SetWindowLongPtr(m_window, GWLP_USERDATA, (LONG_PTR)this);
 
         ShowWindow(m_window, SW_SHOW);
@@ -929,9 +924,9 @@ bool Win32WebControl::createWebView(
     }
 
     _shouldStartLoading = shouldStartLoading;
-    _didFinishLoading = didFinishLoading;
-    _didFailLoading = didFailLoading;
-    _onJsCallback = onJsCallback;
+    _didFinishLoading   = didFinishLoading;
+    _didFailLoading     = didFailLoading;
+    _onJsCallback       = onJsCallback;
     return ret;
 }
 
@@ -939,8 +934,8 @@ void Win32WebControl::removeWebView()
 {
     m_controller->Close();
 
-    m_controller  = nullptr;
-    m_webview     = nullptr;
+    m_controller = nullptr;
+    m_webview    = nullptr;
 }
 
 void Win32WebControl::setWebViewRect(const int left, const int top, const int width, const int height)
@@ -961,12 +956,12 @@ void Win32WebControl::setWebViewRect(const int left, const int top, const int wi
     m_controller->put_ZoomFactor(_scalesPageToFit ? getDeviceScaleFactor() : 1.0);
 }
 
-void Win32WebControl::setJavascriptInterfaceScheme(const std::string &scheme)
+void Win32WebControl::setJavascriptInterfaceScheme(const std::string& scheme)
 {
     m_jsScheme = scheme;
 }
 
-void Win32WebControl::loadHTMLString(const std::string &html, const std::string &baseURL)
+void Win32WebControl::loadHTMLString(const std::string& html, const std::string& baseURL)
 {
     if (!html.empty())
     {
@@ -976,7 +971,7 @@ void Win32WebControl::loadHTMLString(const std::string &html, const std::string 
     }
 }
 
-void Win32WebControl::loadURL(const std::string &url, bool cleanCachedData)
+void Win32WebControl::loadURL(const std::string& url, bool cleanCachedData)
 {
     if (cleanCachedData)
     {
@@ -985,7 +980,7 @@ void Win32WebControl::loadURL(const std::string &url, bool cleanCachedData)
     navigate(url);
 }
 
-void Win32WebControl::loadFile(const std::string &filePath)
+void Win32WebControl::loadFile(const std::string& filePath)
 {
     auto fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(filePath);
     if (fullPath.find("file:///") != 0)
@@ -1034,7 +1029,7 @@ void Win32WebControl::goForward() const
     m_webview->GoForward();
 }
 
-void Win32WebControl::evaluateJS(const std::string &js)
+void Win32WebControl::evaluateJS(const std::string& js)
 {
     eval(js);
 }
@@ -1056,13 +1051,9 @@ void Win32WebControl::setWebViewVisible(const bool visible) const
     }
 }
 
-void Win32WebControl::setBounces(bool bounces)
-{
-}
+void Win32WebControl::setBounces(bool bounces) {}
 
-void Win32WebControl::setOpacityWebView(float opacity)
-{
-}
+void Win32WebControl::setOpacityWebView(float opacity) {}
 
 float Win32WebControl::getOpacityWebView() const
 {
@@ -1072,13 +1063,14 @@ float Win32WebControl::getOpacityWebView() const
 void Win32WebControl::setBackgroundTransparent()
 {
     ICoreWebView2Controller2* viewController2;
-    if (SUCCEEDED(m_controller->QueryInterface(__uuidof(ICoreWebView2Controller2), reinterpret_cast<void**>(&viewController2))))
+    if (SUCCEEDED(m_controller->QueryInterface(__uuidof(ICoreWebView2Controller2),
+                                               reinterpret_cast<void**>(&viewController2))))
     {
         COREWEBVIEW2_COLOR color;
         viewController2->get_DefaultBackgroundColor(&color);
-        color.A = 0; // Only supports 0 or 255. Other values not supported
+        color.A = 0;  // Only supports 0 or 255. Other values not supported
         viewController2->put_DefaultBackgroundColor(color);
     }
 }
 
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#endif  // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32

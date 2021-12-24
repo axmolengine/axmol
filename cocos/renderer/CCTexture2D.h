@@ -45,46 +45,46 @@ typedef struct _MipmapInfo MipmapInfo;
 
 namespace ui
 {
-    class Scale9Sprite;
+class Scale9Sprite;
 }
 
-namespace backend {
-    class Texture2DBackend;
-    class TextureBackend;
-    class ProgramState;
-}
+namespace backend
+{
+class Texture2DBackend;
+class TextureBackend;
+class ProgramState;
+}  // namespace backend
 
 /**
  * @addtogroup _2d
  * @{
  */
 
-//CONSTANTS:
+// CONSTANTS:
 
-//CLASS INTERFACES:
+// CLASS INTERFACES:
 
-/** 
-* @brief Texture2D class. This class allows to easily create OpenGL 2D textures from images, text or raw data.
-* The created Texture2D object will always have power-of-two dimensions.
-* Depending on how you create the Texture2D object, the actual image area of the texture might be smaller than the texture dimensions i.e. "contentSize" != (pixelsWide, pixelsHigh) and (maxS, maxT) != (1.0, 1.0).
-* Be aware that the content of the generated textures will be upside-down!
-*/
+/**
+ * @brief Texture2D class. This class allows to easily create OpenGL 2D textures from images, text or raw data.
+ * The created Texture2D object will always have power-of-two dimensions.
+ * Depending on how you create the Texture2D object, the actual image area of the texture might be smaller than the
+ * texture dimensions i.e. "contentSize" != (pixelsWide, pixelsHigh) and (maxS, maxT) != (1.0, 1.0). Be aware that the
+ * content of the generated textures will be upside-down!
+ */
 class CC_DLL Texture2D : public Ref
 {
 public:
-    struct PixelFormatInfo {
+    struct PixelFormatInfo
+    {
 
-        PixelFormatInfo(int aBpp, bool aCompressed, bool anAlpha)
-            : bpp(aBpp)
-            , compressed(aCompressed)
-            , alpha(anAlpha)
+        PixelFormatInfo(int aBpp, bool aCompressed, bool anAlpha) : bpp(aBpp), compressed(aCompressed), alpha(anAlpha)
         {}
-        
+
         int bpp;
         bool compressed;
         bool alpha;
     };
-    
+
     /**
      * Extension to set the Min / Mag filter
      */
@@ -92,7 +92,7 @@ public:
 
 public:
     /** sets the default pixel format for UIImagescontains alpha channel.
-     
+
      @param format
      If the UIImage contains alpha channel, then the options are:
      - generate 32-bit textures: backend::PixelFormat::RGBA8 (default one)
@@ -103,8 +103,10 @@ public:
      - generate 8-bit textures: backend::PixelFormat::A8 (only use it if you use just 1 color)
 
      How does it work ?
-     - If the image is an RGBA (with Alpha) then the default pixel format will be used (it can be a 8-bit, 16-bit or 32-bit texture)
-     - If the image is an RGB (without Alpha) then: If the default pixel format is RGBA8888 then a RGBA8888 (32-bit) will be used. Otherwise a RGB565 (16-bit texture) will be used.
+     - If the image is an RGBA (with Alpha) then the default pixel format will be used (it can be a 8-bit, 16-bit or
+     32-bit texture)
+     - If the image is an RGB (without Alpha) then: If the default pixel format is RGBA8888 then a RGBA8888 (32-bit)
+     will be used. Otherwise a RGB565 (16-bit texture) will be used.
 
      This parameter is not valid for PVR / PVR.CCZ images.
 
@@ -116,7 +118,7 @@ public:
      @since v0.8
      */
     static backend::PixelFormat getDefaultAlphaPixelFormat();
-    
+
 public:
     /**
      * @js ctor
@@ -129,7 +131,7 @@ public:
     virtual ~Texture2D();
 
     /** Initializes with a texture2d with data.
-     
+
      @param data Specifies a pointer to the image data in memory.
      @param dataLen The image data length.
      @param pixelFormat The image pixelFormat.
@@ -140,10 +142,20 @@ public:
      * @js NA
      * @lua NA
      */
-    bool initWithData(const void *data, ssize_t dataLen, backend::PixelFormat pixelFormat, int pixelsWide, int pixelsHigh, const Vec2& contentSize, bool preMultipliedAlpha = false) { return initWithData(data, dataLen, pixelFormat, pixelFormat, pixelsWide, pixelsHigh, contentSize, preMultipliedAlpha);}
+    bool initWithData(const void* data,
+                      ssize_t dataLen,
+                      backend::PixelFormat pixelFormat,
+                      int pixelsWide,
+                      int pixelsHigh,
+                      const Vec2& contentSize,
+                      bool preMultipliedAlpha = false)
+    {
+        return initWithData(data, dataLen, pixelFormat, pixelFormat, pixelsWide, pixelsHigh, contentSize,
+                            preMultipliedAlpha);
+    }
 
     /** Initializes with a texture2d with data.
-     
+
      @param data Specifies a pointer to the image data in memory.
      @param dataLen The image data length.
      @param pixelFormat The image pixelFormat.
@@ -155,10 +167,17 @@ public:
      * @js NA
      * @lua NA
      */
-    bool initWithData(const void *data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Vec2& contentSize, bool preMultipliedAlpha = false);
-    
-    /** Initializes with mipmaps. 
-     
+    bool initWithData(const void* data,
+                      ssize_t dataLen,
+                      backend::PixelFormat pixelFormat,
+                      backend::PixelFormat renderFormat,
+                      int pixelsWide,
+                      int pixelsHigh,
+                      const Vec2& contentSize,
+                      bool preMultipliedAlpha = false);
+
+    /** Initializes with mipmaps.
+
      @param mipmaps Specifies a pointer to the image data in memory.
      @param mipmapsNum The mipmaps number.
      @param pixelFormat The image pixelFormat.
@@ -166,8 +185,14 @@ public:
      @param pixelsHigh The image height.
      @param preMultipliedAlpha The texture has premultiplied alpha
      */
-    bool initWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, bool preMultipliedAlpha = false);
-    
+    bool initWithMipmaps(MipmapInfo* mipmaps,
+                         int mipmapsNum,
+                         backend::PixelFormat pixelFormat,
+                         backend::PixelFormat renderFormat,
+                         int pixelsWide,
+                         int pixelsHigh,
+                         bool preMultipliedAlpha = false);
+
     /** Update with image.
 
     @param data Specifies a pointer to the image data in memory.
@@ -177,21 +202,37 @@ public:
     @param height Specifies the height of the texture subimage.
     */
     bool updateWithImage(Image* image, backend::PixelFormat format, int index = 0);
-    bool updateWithData(const void* data, ssize_t dataLen, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, const Vec2& /*contentSize*/, bool preMultipliedAlpha, int index = 0);
-    bool updateWithMipmaps(MipmapInfo* mipmaps, int mipmapsNum, backend::PixelFormat pixelFormat, backend::PixelFormat renderFormat, int pixelsWide, int pixelsHigh, bool preMultipliedAlpha = false, int index = 0);
+    bool updateWithData(const void* data,
+                        ssize_t dataLen,
+                        backend::PixelFormat pixelFormat,
+                        backend::PixelFormat renderFormat,
+                        int pixelsWide,
+                        int pixelsHigh,
+                        const Vec2& /*contentSize*/,
+                        bool preMultipliedAlpha,
+                        int index = 0);
+    bool updateWithMipmaps(MipmapInfo* mipmaps,
+                           int mipmapsNum,
+                           backend::PixelFormat pixelFormat,
+                           backend::PixelFormat renderFormat,
+                           int pixelsWide,
+                           int pixelsHigh,
+                           bool preMultipliedAlpha = false,
+                           int index               = 0);
 
     /** Update with texture data.
-     
+
      @param data Specifies a pointer to the image data in memory.
      @param offsetX Specifies a texel offset in the x direction within the texture array.
      @param offsetY Specifies a texel offset in the y direction within the texture array.
      @param width Specifies the width of the texture subimage.
      @param height Specifies the height of the texture subimage.
      */
-    bool updateWithSubData(void *data,int offsetX,int offsetY,int width,int height, int index = 0);
+    bool updateWithSubData(void* data, int offsetX, int offsetY, int width, int height, int index = 0);
     /**
     Drawing extensions to make it easy to draw basic quads using a Texture2D object.
-    These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY client states to be enabled.
+    These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY client states to be
+    enabled.
     */
     /** Draws a texture at a given point. */
     void drawAtPoint(const Vec2& point, float globalZOrder);
@@ -201,16 +242,16 @@ public:
     /**
     Extensions to make it easy to create a Texture2D object from an image file.
     */
-    /** 
+    /**
     Initializes a texture from a UIImage object.
 
     We will use the format you specified with setDefaultAlphaPixelFormat to convert the image for texture.
     NOTE: It will not convert the pvr image file.
     @param image An UIImage object.
     */
-    bool initWithImage(Image * image);
-    
-    /** 
+    bool initWithImage(Image* image);
+
+    /**
     Initializes a texture from a UIImage object.
 
     We will use the format you passed to the function to convert the image format to the texture format.
@@ -218,10 +259,10 @@ public:
     @param image An UIImage object.
     @param format Texture pixel formats.
     **/
-    bool initWithImage(Image * image, backend::PixelFormat format);
+    bool initWithImage(Image* image, backend::PixelFormat format);
 
-    /** Initializes a texture from a string with dimensions, alignment, font name and font size. 
-     
+    /** Initializes a texture from a string with dimensions, alignment, font name and font size.
+
      @param text A null terminated string.
      @param fontName The font name.
      @param fontSize The font size.
@@ -231,35 +272,42 @@ public:
      @param enableWrap Whether enable text wrap or not.
      @param overflow Whether shrink font size when content larger than the dimensions.
      */
-    bool initWithString(const char *text,  const std::string &fontName, float fontSize, const Vec2& dimensions = Vec2(0, 0), TextHAlignment hAlignment = TextHAlignment::CENTER, TextVAlignment vAlignment = TextVAlignment::TOP, bool enableWrap = true, int overflow = 0);
+    bool initWithString(const char* text,
+                        const std::string& fontName,
+                        float fontSize,
+                        const Vec2& dimensions    = Vec2(0, 0),
+                        TextHAlignment hAlignment = TextHAlignment::CENTER,
+                        TextVAlignment vAlignment = TextVAlignment::TOP,
+                        bool enableWrap           = true,
+                        int overflow              = 0);
 
     /** Initializes a texture from a string using a text definition.
-     
+
      @param text A null terminated string.
      @param textDefinition A FontDefinition object contains font attributes.
      */
-    bool initWithString(const char *text, const FontDefinition& textDefinition);
-    
+    bool initWithString(const char* text, const FontDefinition& textDefinition);
+
     //!!Used for render buffer, such depth stencil attachment
     bool updateTextureDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha = false);
 
     void setRenderTarget(bool renderTarget);
     inline bool isRenderTarget() const { return _flags & TextureFlag::RENDERTARGET; }
 
-    void setTexParameters(const TexParams &params);
-    
+    void setTexParameters(const TexParams& params);
+
     /** Generates mipmap images for the texture.
      It only works if the texture size is POT (power of 2).
      @since v0.99.0
      */
     void generateMipmap();
-    
+
     /** Sets antialias texture parameters:
      - GL_TEXTURE_MIN_FILTER = GL_LINEAR
      - GL_TEXTURE_MAG_FILTER = GL_LINEAR
-     
+
      @warning Calling this method could allocate additional texture memory.
-     
+
      @since v0.8
      */
     void setAntiAliasTexParameters();
@@ -302,37 +350,35 @@ public:
     /** Gets the pixel format of the texture. */
     backend::PixelFormat getPixelFormat() const;
 
-    int getSamplerFlags() const {
-        return _samplerFlags;
-    }
-    
+    int getSamplerFlags() const { return _samplerFlags; }
+
     /** Gets the width of the texture in pixels. */
     int getPixelsWide() const;
-    
+
     /** Gets the height of the texture in pixels. */
     int getPixelsHigh() const;
-    
+
     backend::TextureBackend* getBackendTexture() const;
-    
+
     /** Gets max S. */
     float getMaxS() const;
     /** Sets max S. */
     void setMaxS(float maxS);
-    
+
     /** Gets max T. */
     float getMaxT() const;
     /** Sets max T. */
     void setMaxT(float maxT);
-    
+
     /** Get the texture content size.*/
     Vec2 getContentSize() const;
 
-    std::string getPath()const { return _filePath; }
-    
+    std::string getPath() const { return _filePath; }
+
 private:
     /**
-    * A struct for storing 9-patch image capInsets.
-    */
+     * A struct for storing 9-patch image capInsets.
+     */
 
     class NinePatchInfo
     {
@@ -346,7 +392,7 @@ private:
      *
      * @return True is Texture contains a 9-patch info, false otherwise.
      */
-    bool isContain9PatchInfo()const;
+    bool isContain9PatchInfo() const;
 
     /**
      * Get spriteFrame capInset, If spriteFrame can't be found in 9-patch info map,
@@ -357,7 +403,7 @@ private:
      *
      * @return The capInset of the SpriteFrame object.
      */
-    const Rect& getSpriteFrameCapInset(SpriteFrame* spriteFrame)const;
+    const Rect& getSpriteFrameCapInset(SpriteFrame* spriteFrame) const;
     /**
      * Remove the spriteFrame capInset info when the spriteFrame is removed.
      *
@@ -372,7 +418,7 @@ private:
      * @param capInsets The parsed capInset from a .9 patch image.
      */
     void addSpriteFrameCapInset(SpriteFrame* spritframe, const Rect& capInsets);
-    
+
     void initProgram();
 
 protected:
@@ -387,11 +433,10 @@ protected:
 
     /** texture name */
     backend::Texture2DBackend* _texture;
-    
 
     /** texture max S */
     float _maxS;
-    
+
     /** texture max T */
     float _maxT;
 
@@ -414,7 +459,6 @@ protected:
     backend::UniformLocation _textureLocation;
     CustomCommand _customCommand;
 };
-
 
 // end of textures group
 /// @}

@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,17 +25,13 @@
 #include "navmesh/CCNavMeshUtils.h"
 #if CC_USE_NAVMESH
 
-#include "recast/DetourCommon.h"
-#include "recast/DetourNavMeshBuilder.h"
-#include "lz4/lz4.h"
+#    include "recast/DetourCommon.h"
+#    include "recast/DetourNavMeshBuilder.h"
+#    include "lz4/lz4.h"
 
 NS_CC_BEGIN
 
-LinearAllocator::LinearAllocator(const int cap)
-: buffer(nullptr)
-, capacity(0)
-, top(0)
-, high(0)
+LinearAllocator::LinearAllocator(const int cap) : buffer(nullptr), capacity(0), top(0), high(0)
 {
     resize(cap);
 }
@@ -45,10 +41,7 @@ LinearAllocator::~LinearAllocator()
     dtFree(buffer);
 }
 
-void LinearAllocator::free(void* /*ptr*/)
-{
-
-}
+void LinearAllocator::free(void* /*ptr*/) {}
 
 void* LinearAllocator::alloc(const int size)
 {
@@ -64,13 +57,14 @@ void* LinearAllocator::alloc(const int size)
 void LinearAllocator::reset()
 {
     high = dtMax(high, top);
-    top = 0;
+    top  = 0;
 }
 
 void LinearAllocator::resize(const int cap)
 {
-    if (buffer) dtFree(buffer);
-    buffer = (unsigned char*)dtAlloc(cap, DT_ALLOC_PERM);
+    if (buffer)
+        dtFree(buffer);
+    buffer   = (unsigned char*)dtAlloc(cap, DT_ALLOC_PERM);
     capacity = cap;
 }
 
@@ -79,32 +73,31 @@ int LZ4Compressor::maxCompressedSize(const int bufferSize)
     return LZ4_compressBound(bufferSize);
 }
 
-dtStatus cocos2d::LZ4Compressor::decompress(const unsigned char* compressed, const int compressedSize
-                                             , unsigned char* buffer, const int maxBufferSize, int* bufferSize)
+dtStatus cocos2d::LZ4Compressor::decompress(const unsigned char* compressed,
+                                            const int compressedSize,
+                                            unsigned char* buffer,
+                                            const int maxBufferSize,
+                                            int* bufferSize)
 {
-    *bufferSize = LZ4_decompress_safe((const char*) compressed, (char*) buffer, compressedSize, maxBufferSize);
+    *bufferSize = LZ4_decompress_safe((const char*)compressed, (char*)buffer, compressedSize, maxBufferSize);
     return *bufferSize < 0 ? DT_FAILURE : DT_SUCCESS;
 }
 
-dtStatus cocos2d::LZ4Compressor::compress(const unsigned char* buffer, const int bufferSize
-    , unsigned char* compressed, const int maxCompressedSize, int* compressedSize)
+dtStatus cocos2d::LZ4Compressor::compress(const unsigned char* buffer,
+                                          const int bufferSize,
+                                          unsigned char* compressed,
+                                          const int maxCompressedSize,
+                                          int* compressedSize)
 {
-    *compressedSize = LZ4_compress_default((const char*) buffer, (char*) compressed, bufferSize, maxCompressedSize);
+    *compressedSize = LZ4_compress_default((const char*)buffer, (char*)compressed, bufferSize, maxCompressedSize);
     return DT_SUCCESS;
 }
 
-MeshProcess::MeshProcess(const GeomData *geom)
-    : data(geom)
-{
-}
+MeshProcess::MeshProcess(const GeomData* geom) : data(geom) {}
 
-MeshProcess::~MeshProcess()
-{
+MeshProcess::~MeshProcess() {}
 
-}
-
-void MeshProcess::process(struct dtNavMeshCreateParams* params
-    , unsigned char* polyAreas, unsigned short* polyFlags)
+void MeshProcess::process(struct dtNavMeshCreateParams* params, unsigned char* polyAreas, unsigned short* polyFlags)
 {
     // Update poly flags from areas.
     for (int i = 0; i < params->polyCount; ++i)
@@ -115,33 +108,43 @@ void MeshProcess::process(struct dtNavMeshCreateParams* params
         if (polyAreas[i] == 0)
             polyFlags[i] = 1;
 
-        //if (polyAreas[i] == SAMPLE_POLYAREA_GROUND ||
+        // if (polyAreas[i] == SAMPLE_POLYAREA_GROUND ||
         //	polyAreas[i] == SAMPLE_POLYAREA_GRASS ||
         //	polyAreas[i] == SAMPLE_POLYAREA_ROAD)
         //{
         //	polyFlags[i] = SAMPLE_POLYFLAGS_WALK;
-        //}
-        //else if (polyAreas[i] == SAMPLE_POLYAREA_WATER)
+        // }
+        // else if (polyAreas[i] == SAMPLE_POLYAREA_WATER)
         //{
         //	polyFlags[i] = SAMPLE_POLYFLAGS_SWIM;
-        //}
-        //else if (polyAreas[i] == SAMPLE_POLYAREA_DOOR)
+        // }
+        // else if (polyAreas[i] == SAMPLE_POLYAREA_DOOR)
         //{
         //	polyFlags[i] = SAMPLE_POLYFLAGS_WALK | SAMPLE_POLYFLAGS_DOOR;
-        //}
+        // }
     }
 
     // Pass in off-mesh connections.
-    params->offMeshConVerts = data->offMeshConVerts;
-    params->offMeshConRad = data->offMeshConRads;
-    params->offMeshConDir = data->offMeshConDirs;
-    params->offMeshConAreas = data->offMeshConAreas;
-    params->offMeshConFlags = data->offMeshConFlags;
+    params->offMeshConVerts  = data->offMeshConVerts;
+    params->offMeshConRad    = data->offMeshConRads;
+    params->offMeshConDir    = data->offMeshConDirs;
+    params->offMeshConAreas  = data->offMeshConAreas;
+    params->offMeshConFlags  = data->offMeshConFlags;
     params->offMeshConUserID = data->offMeshConId;
-    params->offMeshConCount = data->offMeshConCount;
+    params->offMeshConCount  = data->offMeshConCount;
 }
 
-bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, const float* endPos, const float minTargetDist, const dtPolyRef* path, const int pathSize, float* steerPos, unsigned char& steerPosFlag, dtPolyRef& steerPosRef, float* outPoints /*= 0*/, int* outPointCount /*= 0*/)
+bool getSteerTarget(dtNavMeshQuery* navQuery,
+                    const float* startPos,
+                    const float* endPos,
+                    const float minTargetDist,
+                    const dtPolyRef* path,
+                    const int pathSize,
+                    float* steerPos,
+                    unsigned char& steerPosFlag,
+                    dtPolyRef& steerPosRef,
+                    float* outPoints /*= 0*/,
+                    int* outPointCount /*= 0*/)
 {
     // Find steer target.
     static const int MAX_STEER_POINTS = 3;
@@ -149,8 +152,8 @@ bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, const float
     unsigned char steerPathFlags[MAX_STEER_POINTS];
     dtPolyRef steerPathPolys[MAX_STEER_POINTS];
     int nsteerPath = 0;
-    navQuery->findStraightPath(startPos, endPos, path, pathSize,
-        steerPath, steerPathFlags, steerPathPolys, &nsteerPath, MAX_STEER_POINTS);
+    navQuery->findStraightPath(startPos, endPos, path, pathSize, steerPath, steerPathFlags, steerPathPolys, &nsteerPath,
+                               MAX_STEER_POINTS);
     if (!nsteerPath)
         return false;
 
@@ -160,7 +163,6 @@ bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, const float
         for (int i = 0; i < nsteerPath; ++i)
             dtVcopy(&outPoints[i * 3], &steerPath[i * 3]);
     }
-
 
     // Find vertex far enough to steer to.
     int ns = 0;
@@ -177,9 +179,9 @@ bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, const float
         return false;
 
     dtVcopy(steerPos, &steerPath[ns * 3]);
-    steerPos[1] = startPos[1];
+    steerPos[1]  = startPos[1];
     steerPosFlag = steerPathFlags[ns];
-    steerPosRef = steerPathPolys[ns];
+    steerPosRef  = steerPathPolys[ns];
 
     return true;
 }
@@ -195,7 +197,7 @@ int fixupShortcuts(dtPolyRef* path, int npath, dtNavMeshQuery* navQuery)
     int nneis = 0;
 
     const dtMeshTile* tile = nullptr;
-    const dtPoly* poly = nullptr;
+    const dtPoly* poly     = nullptr;
     if (dtStatusFailed(navQuery->getAttachedNavMesh()->getTileAndPolyByRef(path[0], &tile, &poly)))
         return npath;
 
@@ -212,11 +214,13 @@ int fixupShortcuts(dtPolyRef* path, int npath, dtNavMeshQuery* navQuery)
     // If any of the neighbour polygons is within the next few polygons
     // in the path, short cut to that polygon directly.
     static const int maxLookAhead = 6;
-    int cut = 0;
-    for (int i = dtMin(maxLookAhead, npath) - 1; i > 1 && cut == 0; i--) {
+    int cut                       = 0;
+    for (int i = dtMin(maxLookAhead, npath) - 1; i > 1 && cut == 0; i--)
+    {
         for (int j = 0; j < nneis; j++)
         {
-            if (path[i] == neis[j]) {
+            if (path[i] == neis[j])
+            {
                 cut = i;
                 break;
             }
@@ -235,7 +239,7 @@ int fixupShortcuts(dtPolyRef* path, int npath, dtNavMeshQuery* navQuery)
 
 int fixupCorridor(dtPolyRef* path, const int npath, const int maxPath, const dtPolyRef* visited, const int nvisited)
 {
-    int furthestPath = -1;
+    int furthestPath    = -1;
     int furthestVisited = -1;
 
     // Find furthest common polygon.
@@ -246,29 +250,29 @@ int fixupCorridor(dtPolyRef* path, const int npath, const int maxPath, const dtP
         {
             if (path[i] == visited[j])
             {
-                furthestPath = i;
+                furthestPath    = i;
                 furthestVisited = j;
-                found = true;
+                found           = true;
             }
         }
         if (found)
             break;
     }
 
-    // If no intersection found just return current path. 
+    // If no intersection found just return current path.
     if (furthestPath == -1 || furthestVisited == -1)
         return npath;
 
-    // Concatenate paths.	
+    // Concatenate paths.
 
     // Adjust beginning of the buffer to include the visited.
-    const int req = nvisited - furthestVisited;
+    const int req  = nvisited - furthestVisited;
     const int orig = dtMin(furthestPath + 1, npath);
-    int size = dtMax(0, npath - orig);
+    int size       = dtMax(0, npath - orig);
     if (req + size > maxPath)
         size = maxPath - req;
     if (size)
-        memmove(path + req, path + orig, size*sizeof(dtPolyRef));
+        memmove(path + req, path + orig, size * sizeof(dtPolyRef));
 
     // Store visited
     for (int i = 0; i < req; ++i)
@@ -282,9 +286,9 @@ bool inRange(const float* v1, const float* v2, const float r, const float h)
     const float dx = v2[0] - v1[0];
     const float dy = v2[1] - v1[1];
     const float dz = v2[2] - v1[2];
-    return (dx*dx + dz*dz) < r*r && fabsf(dy) < h;
+    return (dx * dx + dz * dz) < r * r && fabsf(dy) < h;
 }
 
 NS_CC_END
 
-#endif //CC_USE_NAVMESH
+#endif  // CC_USE_NAVMESH

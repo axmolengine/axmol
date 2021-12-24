@@ -29,19 +29,19 @@ THE SOFTWARE.
 #include "CCDatas.h"
 #include "CocosStudioExport.h"
 
-namespace cocostudio {
-
+namespace cocostudio
+{
 
 enum AnimationType
 {
-    SINGLE_FRAME = -4,          //! the animation just have one frame
-    ANIMATION_NO_LOOP,          //! the animation isn't loop
+    SINGLE_FRAME = -4,  //! the animation just have one frame
+    ANIMATION_NO_LOOP,  //! the animation isn't loop
 
-    ANIMATION_TO_LOOP_FRONT,    //! the animation loop from front
-    ANIMATION_TO_LOOP_BACK,     //! the animation loop from back
+    ANIMATION_TO_LOOP_FRONT,  //! the animation loop from front
+    ANIMATION_TO_LOOP_BACK,   //! the animation loop from back
 
-    ANIMATION_LOOP_FRONT,       //! the animation loop from front
-    ANIMATION_LOOP_BACK,        //! the animation loop from back
+    ANIMATION_LOOP_FRONT,  //! the animation loop from front
+    ANIMATION_LOOP_BACK,   //! the animation loop from back
 
     ANIMATION_MAX,
 
@@ -51,7 +51,7 @@ enum AnimationType
  *  @js NA
  *  @lua NA
  */
-class  CCS_DLL ProcessBase : public cocos2d::Ref
+class CCS_DLL ProcessBase : public cocos2d::Ref
 {
 public:
     ProcessBase(void);
@@ -84,7 +84,7 @@ public:
      *         2  : fade in and out
      *
      */
-    virtual void play(int durationTo, int durationTween,  int loop, int tweenEasing);
+    virtual void play(int durationTo, int durationTween, int loop, int tweenEasing);
 
     /**
      * Pause the Process
@@ -98,7 +98,6 @@ public:
      * Stop the Process
      */
     virtual void stop();
-
 
     /**
      * You should never call this function, unless you know what you do
@@ -126,13 +125,12 @@ public:
     virtual int getRawDuration() const { return _rawDuration; }
 
 protected:
-
     virtual void gotoFrame(int frameIndex);
 
     /**
      * Update(float dt) will call this handler, you can handle your logic here
      */
-    virtual void updateHandler() {};
+    virtual void updateHandler(){};
 
 protected:
     //! Scale the process speed
@@ -162,7 +160,6 @@ protected:
     //! The animation update speed
     float _animationInternal;
 
-
 protected:
     //! The duration frame count will run
     int _durationTween;
@@ -175,10 +172,9 @@ protected:
     //! Next frame this process need run to
     int _nextFrameIndex;
 
-
     bool _isLoopBack;
 };
 
-}
+}  // namespace cocostudio
 
 #endif /*__CCPROCESSBASE_H__*/

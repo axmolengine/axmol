@@ -43,5 +43,5 @@
 
 namespace cocostudio
 {
-    void CCS_DLL destroyCocosStudio();
+void CCS_DLL destroyCocosStudio();
 }

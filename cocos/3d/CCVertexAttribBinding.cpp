@@ -29,18 +29,15 @@
 
 NS_CC_BEGIN
 
-
 static std::vector<VertexAttribBinding*> __vertexAttribBindingCache;
 
-VertexAttribBinding::VertexAttribBinding() :
-    _meshIndexData(nullptr), _programState(nullptr), _attributes()
-{
-}
+VertexAttribBinding::VertexAttribBinding() : _meshIndexData(nullptr), _programState(nullptr), _attributes() {}
 
 VertexAttribBinding::~VertexAttribBinding()
 {
     // Delete from the vertex attribute binding cache.
-    std::vector<VertexAttribBinding*>::iterator itr = std::find(__vertexAttribBindingCache.begin(), __vertexAttribBindingCache.end(), this);
+    std::vector<VertexAttribBinding*>::iterator itr =
+        std::find(__vertexAttribBindingCache.begin(), __vertexAttribBindingCache.end(), this);
     if (itr != __vertexAttribBindingCache.end())
     {
         __vertexAttribBindingCache.erase(itr);
@@ -51,7 +48,7 @@ VertexAttribBinding::~VertexAttribBinding()
     _attributes.clear();
 }
 
-VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand *command)
+VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
 {
     CCASSERT(meshIndexData && pass && pass->getProgramState(), "Invalid MeshIndexData and/or programState");
 
@@ -78,7 +75,7 @@ VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, P
     return b;
 }
 
-bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand *command)
+bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
 {
 
     CCASSERT(meshIndexData && pass && pass->getProgramState(), "Invalid arguments");
@@ -95,20 +92,14 @@ bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCom
     auto meshVertexData = meshIndexData->getMeshVertexData();
     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
 
-
     // Parse and set attributes
     parseAttributes();
     int offset = 0;
     for (auto k = 0; k < attributeCount; k++)
     {
         auto meshattribute = meshVertexData->getMeshVertexAttrib(k);
-        setVertexAttribPointer(
-                               shaderinfos::getAttributeName(meshattribute.vertexAttrib),
-                               meshattribute.type,
-                               false,
-                               offset, 
-                               1 << k 
-            );
+        setVertexAttribPointer(shaderinfos::getAttributeName(meshattribute.vertexAttrib), meshattribute.type, false,
+                               offset, 1 << k);
         offset += meshattribute.getAttribSizeBytes();
     }
 
@@ -131,29 +122,34 @@ void VertexAttribBinding::parseAttributes()
     _attributes.clear();
     _vertexAttribsFlags = 0;
 
-    auto program = _programState->getProgram();
+    auto program     = _programState->getProgram();
     auto& attributes = program->getActiveAttributes();
-    _attributes =  attributes;
+    _attributes      = attributes;
 }
 
-bool VertexAttribBinding::hasAttribute(const shaderinfos::VertexKey &key) const
+bool VertexAttribBinding::hasAttribute(const shaderinfos::VertexKey& key) const
 {
-    auto &name = shaderinfos::getAttributeName(key);
+    auto& name = shaderinfos::getAttributeName(key);
     return _attributes.find(name) != _attributes.end();
 }
 
 backend::AttributeBindInfo* VertexAttribBinding::getVertexAttribValue(const std::string& name)
 {
     const auto itr = _attributes.find(name);
-    if( itr != _attributes.end())
+    if (itr != _attributes.end())
         return &itr->second;
     return nullptr;
 }
 
-void VertexAttribBinding::setVertexAttribPointer(const std::string &name, backend::VertexFormat type, bool normalized, int offset, int flag)
+void VertexAttribBinding::setVertexAttribPointer(const std::string& name,
+                                                 backend::VertexFormat type,
+                                                 bool normalized,
+                                                 int offset,
+                                                 int flag)
 {
     auto v = getVertexAttribValue(name);
-    if(v) {
+    if (v)
+    {
         // CCLOG("cocos2d: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
         _vertexLayout->setAttribute(name, v->location, type, offset, normalized);
         _vertexAttribsFlags |= flag;

@@ -38,31 +38,26 @@ int Device::getDPI()
     if (dpi == -1)
     {
         HDC hScreenDC = GetDC(nullptr);
-        int PixelsX = GetDeviceCaps(hScreenDC, HORZRES);
-        int MMX = GetDeviceCaps(hScreenDC, HORZSIZE);
+        int PixelsX   = GetDeviceCaps(hScreenDC, HORZRES);
+        int MMX       = GetDeviceCaps(hScreenDC, HORZSIZE);
         ReleaseDC(nullptr, hScreenDC);
-        dpi = (int)(254.0f*PixelsX / MMX / 10);
+        dpi = (int)(254.0f * PixelsX / MMX / 10);
     }
     return dpi;
 }
 
-void Device::setAccelerometerEnabled(bool isEnabled)
-{}
+void Device::setAccelerometerEnabled(bool isEnabled) {}
 
-void Device::setAccelerometerInterval(float interval)
-{}
+void Device::setAccelerometerInterval(float interval) {}
 
 class BitmapDC
 {
 public:
     BitmapDC(HWND hWnd = nullptr)
-        : _DC(nullptr)
-        , _bmp(nullptr)
-        , _font((HFONT)GetStockObject(DEFAULT_GUI_FONT))
-        , _wnd(hWnd)
+        : _DC(nullptr), _bmp(nullptr), _font((HFONT)GetStockObject(DEFAULT_GUI_FONT)), _wnd(hWnd)
     {
         HDC hdc = GetDC(hWnd);
-        _DC = CreateCompatibleDC(hdc);
+        _DC     = CreateCompatibleDC(hdc);
         ReleaseDC(hWnd, hdc);
     }
 
@@ -76,15 +71,15 @@ public:
         removeCustomFont();
     }
 
-    bool setFont(const char * pFontName, int nSize = 0, bool enableBold = false)
+    bool setFont(const char* pFontName, int nSize = 0, bool enableBold = false)
     {
         bool bRet = false;
         do
         {
             std::wstring fontName = ntcvt::from_chars(pFontName);
-            HFONT       hDefFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
-            LOGFONTW    tNewFont = { 0 };
-            LOGFONTW    tOldFont = { 0 };
+            HFONT hDefFont        = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
+            LOGFONTW tNewFont     = {0};
+            LOGFONTW tOldFont     = {0};
             GetObjectW(hDefFont, sizeof(tNewFont), &tNewFont);
             if (!fontName.empty())
             {
@@ -108,9 +103,8 @@ public:
 
             GetObjectW(_font, sizeof(tOldFont), &tOldFont);
 
-            if (tOldFont.lfHeight == tNewFont.lfHeight
-                && tOldFont.lfWeight == tNewFont.lfWeight
-                && 0 == wcscmp(tOldFont.lfFaceName, tNewFont.lfFaceName))
+            if (tOldFont.lfHeight == tNewFont.lfHeight && tOldFont.lfWeight == tNewFont.lfWeight &&
+                0 == wcscmp(tOldFont.lfFaceName, tNewFont.lfFaceName))
             {
                 bRet = true;
                 break;
@@ -136,22 +130,22 @@ public:
         return bRet;
     }
 
-    SIZE sizeWithText(const wchar_t * pszText,
-        int nLen,
-        DWORD dwFmt,
-        const char* fontName,
-        int textSize,
-        LONG nWidthLimit,
-        LONG nHeightLimit,
-        bool enableWrap,
-        int overflow)
+    SIZE sizeWithText(const wchar_t* pszText,
+                      int nLen,
+                      DWORD dwFmt,
+                      const char* fontName,
+                      int textSize,
+                      LONG nWidthLimit,
+                      LONG nHeightLimit,
+                      bool enableWrap,
+                      int overflow)
     {
-        SIZE tRet = { 0 };
+        SIZE tRet = {0};
         do
         {
             CC_BREAK_IF(!pszText || nLen <= 0);
 
-            RECT rc = { 0, 0, 0, 0 };
+            RECT rc         = {0, 0, 0, 0};
             DWORD dwCalcFmt = DT_CALCRECT;
             if (!enableWrap)
             {
@@ -161,15 +155,13 @@ public:
             if (nWidthLimit > 0)
             {
                 rc.right = nWidthLimit;
-                dwCalcFmt |= DT_WORDBREAK
-                    | (dwFmt & DT_CENTER)
-                    | (dwFmt & DT_RIGHT);
+                dwCalcFmt |= DT_WORDBREAK | (dwFmt & DT_CENTER) | (dwFmt & DT_RIGHT);
             }
             if (overflow == 2)
             {
-                LONG actualWidth = nWidthLimit + 1;
+                LONG actualWidth  = nWidthLimit + 1;
                 LONG actualHeight = nHeightLimit + 1;
-                int newFontSize = textSize + 1;
+                int newFontSize   = textSize + 1;
 
                 while (actualWidth > nWidthLimit || actualHeight > nHeightLimit)
                 {
@@ -180,14 +172,14 @@ public:
                     this->setFont(fontName, newFontSize);
                     // use current font to measure text extent
                     HGDIOBJ hOld = SelectObject(_DC, _font);
-                    rc.right = nWidthLimit;
+                    rc.right     = nWidthLimit;
                     // measure text size
                     DrawTextW(_DC, pszText, nLen, &rc, dwCalcFmt);
                     SelectObject(_DC, hOld);
 
-                    actualWidth = rc.right;
+                    actualWidth  = rc.right;
                     actualHeight = rc.bottom;
-                    newFontSize = newFontSize - 1;
+                    newFontSize  = newFontSize - 1;
                 }
             }
             else
@@ -227,18 +219,24 @@ public:
         return true;
     }
 
-    int drawText(const char * pszText, SIZE& tSize, Device::TextAlign eAlign, const char * fontName, int textSize,
-        bool enableWrap, int overflow)
+    int drawText(const char* pszText,
+                 SIZE& tSize,
+                 Device::TextAlign eAlign,
+                 const char* fontName,
+                 int textSize,
+                 bool enableWrap,
+                 int overflow)
     {
-        int nRet = 0;
-        wchar_t * pwszBuffer = nullptr;
-        wchar_t* fixedText = nullptr;
+        int nRet            = 0;
+        wchar_t* pwszBuffer = nullptr;
+        wchar_t* fixedText  = nullptr;
         do
         {
             CC_BREAK_IF(!pszText);
 
             DWORD dwFmt = DT_WORDBREAK;
-            if (!enableWrap) {
+            if (!enableWrap)
+            {
                 dwFmt |= DT_SINGLELINE;
             }
             DWORD dwHoriFlag = (int)eAlign & 0x0f;
@@ -246,13 +244,13 @@ public:
 
             switch (dwHoriFlag)
             {
-            case 1: // left
+            case 1:  // left
                 dwFmt |= DT_LEFT;
                 break;
-            case 2: // right
+            case 2:  // right
                 dwFmt |= DT_RIGHT;
                 break;
-            case 3: // center
+            case 3:  // center
                 dwFmt |= DT_CENTER;
                 break;
             }
@@ -260,21 +258,21 @@ public:
             int nLen = strlen(pszText);
             // utf-8 to utf-16
             int nBufLen = nLen + 1;
-            pwszBuffer = new wchar_t[nBufLen];
+            pwszBuffer  = new wchar_t[nBufLen];
             CC_BREAK_IF(!pwszBuffer);
 
-            memset(pwszBuffer, 0, sizeof(wchar_t)*nBufLen);
+            memset(pwszBuffer, 0, sizeof(wchar_t) * nBufLen);
             nLen = MultiByteToWideChar(CP_UTF8, 0, pszText, nLen, pwszBuffer, nBufLen);
 
             if (strchr(pszText, '&'))
             {
-                fixedText = new wchar_t[nLen * 2 + 1];
+                fixedText      = new wchar_t[nLen * 2 + 1];
                 int fixedIndex = 0;
                 for (int index = 0; index < nLen; ++index)
                 {
                     if (pwszBuffer[index] == '&')
                     {
-                        fixedText[fixedIndex] = '&';
+                        fixedText[fixedIndex]     = '&';
                         fixedText[fixedIndex + 1] = '&';
                         fixedIndex += 2;
                     }
@@ -285,25 +283,27 @@ public:
                     }
                 }
                 fixedText[fixedIndex] = '\0';
-                nLen = fixedIndex;
+                nLen                  = fixedIndex;
             }
 
             SIZE newSize;
             if (fixedText)
             {
-                newSize = sizeWithText(fixedText, nLen, dwFmt, fontName, textSize, tSize.cx, tSize.cy, enableWrap, overflow);
+                newSize =
+                    sizeWithText(fixedText, nLen, dwFmt, fontName, textSize, tSize.cx, tSize.cy, enableWrap, overflow);
             }
             else
             {
-                newSize = sizeWithText(pwszBuffer, nLen, dwFmt, fontName, textSize, tSize.cx, tSize.cy, enableWrap, overflow);
+                newSize =
+                    sizeWithText(pwszBuffer, nLen, dwFmt, fontName, textSize, tSize.cx, tSize.cy, enableWrap, overflow);
             }
 
-            RECT rcText = { 0 };
+            RECT rcText = {0};
             // if content width is 0, use text size as content size
             if (tSize.cx <= 0)
             {
-                tSize = newSize;
-                rcText.right = newSize.cx;
+                tSize         = newSize;
+                rcText.right  = newSize.cx;
                 rcText.bottom = newSize.cy;
             }
             else
@@ -311,14 +311,14 @@ public:
 
                 LONG offsetX = 0;
                 LONG offsetY = 0;
-                rcText.right = newSize.cx; // store the text width to rectangle
+                rcText.right = newSize.cx;  // store the text width to rectangle
 
-                                           // calculate text horizontal offset
-                if (1 != dwHoriFlag          // and text isn't align to left
-                    && newSize.cx < tSize.cx)   // and text's width less then content width,
-                {                               // then need adjust offset of X.
-                    offsetX = (2 == dwHoriFlag) ? tSize.cx - newSize.cx     // align to right
-                        : (tSize.cx - newSize.cx) / 2;                      // align to center
+                // calculate text horizontal offset
+                if (1 != dwHoriFlag                                      // and text isn't align to left
+                    && newSize.cx < tSize.cx)                            // and text's width less then content width,
+                {                                                        // then need adjust offset of X.
+                    offsetX = (2 == dwHoriFlag) ? tSize.cx - newSize.cx  // align to right
+                                                : (tSize.cx - newSize.cx) / 2;  // align to center
                 }
 
                 // if content height is 0, use text height as content height
@@ -327,7 +327,7 @@ public:
                 {
                     tSize.cy = newSize.cy;
                     dwFmt |= DT_NOCLIP;
-                    rcText.bottom = newSize.cy; // store the text height to rectangle
+                    rcText.bottom = newSize.cy;  // store the text height to rectangle
                 }
                 else if (tSize.cy < newSize.cy)
                 {
@@ -336,15 +336,15 @@ public:
                 }
                 else
                 {
-                    rcText.bottom = newSize.cy; // store the text height to rectangle
+                    rcText.bottom = newSize.cy;  // store the text height to rectangle
 
-                                                // content larger than text, need adjust vertical position
+                    // content larger than text, need adjust vertical position
                     dwFmt |= DT_NOCLIP;
 
                     // calculate text vertical offset
-                    offsetY = (2 == dwVertFlag) ? tSize.cy - newSize.cy     // align to bottom
-                        : (3 == dwVertFlag) ? (tSize.cy - newSize.cy) / 2   // align to middle
-                        : 0;                                                // align to top
+                    offsetY = (2 == dwVertFlag)   ? tSize.cy - newSize.cy        // align to bottom
+                              : (3 == dwVertFlag) ? (tSize.cy - newSize.cy) / 2  // align to middle
+                                                  : 0;                           // align to top
                 }
 
                 if (offsetX || offsetY)
@@ -357,12 +357,12 @@ public:
 
             // draw text
             HGDIOBJ hOldFont = SelectObject(_DC, _font);
-            HGDIOBJ hOldBmp = SelectObject(_DC, _bmp);
+            HGDIOBJ hOldBmp  = SelectObject(_DC, _bmp);
 
             SetBkMode(_DC, TRANSPARENT);
-            SetTextColor(_DC, RGB(255, 255, 255)); // white color
+            SetTextColor(_DC, RGB(255, 255, 255));  // white color
 
-                                                   // draw text
+            // draw text
             if (fixedText)
             {
                 nRet = DrawTextW(_DC, fixedText, nLen, &rcText, dwFmt);
@@ -383,11 +383,11 @@ public:
 
     CC_SYNTHESIZE_READONLY(HDC, _DC, DC);
     CC_SYNTHESIZE_READONLY(HBITMAP, _bmp, Bitmap);
-private:
 
+private:
     friend class Image;
-    HFONT   _font;
-    HWND    _wnd;
+    HFONT _font;
+    HWND _wnd;
 
     void removeCustomFont()
     {
@@ -406,24 +406,30 @@ static BitmapDC& sharedBitmapDC()
     return s_BmpDC;
 }
 
-Data Device::getTextureDataForText(const char * text, const FontDefinition& textDefinition, TextAlign align, int &width, int &height, bool& hasPremultipliedAlpha)
+Data Device::getTextureDataForText(const char* text,
+                                   const FontDefinition& textDefinition,
+                                   TextAlign align,
+                                   int& width,
+                                   int& height,
+                                   bool& hasPremultipliedAlpha)
 {
     Data ret;
     do
     {
         BitmapDC& dc = sharedBitmapDC();
 
-        if (!dc.setFont(textDefinition._fontName.c_str(), (int)textDefinition._fontSize,false))
+        if (!dc.setFont(textDefinition._fontName.c_str(), (int)textDefinition._fontSize, false))
         {
             log("Can't found font(%s), use system default", textDefinition._fontName.c_str());
         }
 
         // draw text
         // does changing to SIZE here affects the font size by rounding from float?
-        SIZE size = { (LONG)textDefinition._dimensions.width,(LONG)textDefinition._dimensions.height };
-        CC_BREAK_IF(!dc.drawText(text, size, align, textDefinition._fontName.c_str(), (int)textDefinition._fontSize, textDefinition._enableWrap, textDefinition._overflow));
+        SIZE size = {(LONG)textDefinition._dimensions.width, (LONG)textDefinition._dimensions.height};
+        CC_BREAK_IF(!dc.drawText(text, size, align, textDefinition._fontName.c_str(), (int)textDefinition._fontSize,
+                                 textDefinition._enableWrap, textDefinition._overflow));
 
-        int dataLen = size.cx * size.cy * 4;
+        int dataLen            = size.cx * size.cy * 4;
         unsigned char* dataBuf = (unsigned char*)malloc(sizeof(unsigned char) * dataLen);
         CC_BREAK_IF(!dataBuf);
 
@@ -431,30 +437,29 @@ Data Device::getTextureDataForText(const char * text, const FontDefinition& text
         {
             BITMAPINFOHEADER bmiHeader;
             int mask[4];
-        } bi = { 0 };
+        } bi                = {0};
         bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
-        CC_BREAK_IF(!GetDIBits(dc.getDC(), dc.getBitmap(), 0, 0,
-            nullptr, (LPBITMAPINFO)&bi, DIB_RGB_COLORS));
+        CC_BREAK_IF(!GetDIBits(dc.getDC(), dc.getBitmap(), 0, 0, nullptr, (LPBITMAPINFO)&bi, DIB_RGB_COLORS));
 
-        width = (short)size.cx;
+        width  = (short)size.cx;
         height = (short)size.cy;
 
         // copy pixel data
-        bi.bmiHeader.biHeight = (bi.bmiHeader.biHeight > 0)
-            ? -bi.bmiHeader.biHeight : bi.bmiHeader.biHeight;
-        GetDIBits(dc.getDC(), dc.getBitmap(), 0, height, dataBuf,
-            (LPBITMAPINFO)&bi, DIB_RGB_COLORS);
+        bi.bmiHeader.biHeight = (bi.bmiHeader.biHeight > 0) ? -bi.bmiHeader.biHeight : bi.bmiHeader.biHeight;
+        GetDIBits(dc.getDC(), dc.getBitmap(), 0, height, dataBuf, (LPBITMAPINFO)&bi, DIB_RGB_COLORS);
 
-        COLORREF textColor = (textDefinition._fontFillColor.b << 16 | textDefinition._fontFillColor.g << 8 | textDefinition._fontFillColor.r) & 0x00ffffff;
-        float alpha = textDefinition._fontAlpha / 255.0f;
-        COLORREF * pPixel = nullptr;
+        COLORREF textColor = (textDefinition._fontFillColor.b << 16 | textDefinition._fontFillColor.g << 8 |
+                              textDefinition._fontFillColor.r) &
+                             0x00ffffff;
+        float alpha      = textDefinition._fontAlpha / 255.0f;
+        COLORREF* pPixel = nullptr;
         for (int y = 0; y < height; ++y)
         {
-            pPixel = (COLORREF *)dataBuf + y * width;
+            pPixel = (COLORREF*)dataBuf + y * width;
             for (int x = 0; x < width; ++x)
             {
                 COLORREF& clr = *pPixel;
-                clr = ((BYTE)(GetRValue(clr) * alpha) << 24) | textColor;
+                clr           = ((BYTE)(GetRValue(clr) * alpha) << 24) | textColor;
                 ++pPixel;
             }
         }

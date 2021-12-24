@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -43,7 +43,7 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @version DragonBones 5.0
  * @language zh_CN
  */
-class BoundingBoxData : public BaseObject 
+class BoundingBoxData : public BaseObject
 {
     ABSTRACT_CLASS(BoundingBoxData);
 
@@ -97,14 +97,15 @@ public:
      * @version DragonBones 5.0
      * @language zh_CN
      */
-    virtual int intersectsSegment(
-        float xA, float yA, float xB, float yB,
-        Point* intersectionPointA = nullptr,
-        Point* intersectionPointB = nullptr,
-        Point* normalRadians = nullptr
-    ) = 0;
+    virtual int intersectsSegment(float xA,
+                                  float yA,
+                                  float xB,
+                                  float yB,
+                                  Point* intersectionPointA = nullptr,
+                                  Point* intersectionPointB = nullptr,
+                                  Point* normalRadians      = nullptr) = 0;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     int getType() const { return (int)type; }
     void setType(int value) { type = (BoundingBoxType)value; }
 };
@@ -123,12 +124,13 @@ class RectangleBoundingBoxData : public BoundingBoxData
     BIND_CLASS_TYPE_A(RectangleBoundingBoxData);
 
 private:
-    enum OutCode {
-        InSide = 0, // 0000
-        Left = 1,   // 0001
-        Right = 2,  // 0010
-        Top = 4,    // 0100
-        Bottom = 8  // 1000
+    enum OutCode
+    {
+        InSide = 0,  // 0000
+        Left   = 1,  // 0001
+        Right  = 2,  // 0010
+        Top    = 4,  // 0100
+        Bottom = 8   // 1000
     };
     /**
      * - Compute the bit code for a point (x, y) using the clip rectangle
@@ -139,13 +141,17 @@ public:
     /**
      * @private
      */
-    static int rectangleIntersectsSegment(
-        float xA, float yA, float xB, float yB,
-        float xMin, float yMin, float xMax, float yMax,
-        Point* intersectionPointA = nullptr,
-        Point* intersectionPointB = nullptr,
-        Point* normalRadians = nullptr
-    );
+    static int rectangleIntersectsSegment(float xA,
+                                          float yA,
+                                          float xB,
+                                          float yB,
+                                          float xMin,
+                                          float yMin,
+                                          float xMax,
+                                          float yMax,
+                                          Point* intersectionPointA = nullptr,
+                                          Point* intersectionPointB = nullptr,
+                                          Point* normalRadians      = nullptr);
     /**
      * @inheritDoc
      */
@@ -153,12 +159,13 @@ public:
     /**
      * @inheritDoc
      */
-    virtual int intersectsSegment(
-        float xA, float yA, float xB, float yB,
-        Point* intersectionPointA = nullptr,
-        Point* intersectionPointB = nullptr,
-        Point* normalRadians = nullptr
-    ) override;
+    virtual int intersectsSegment(float xA,
+                                  float yA,
+                                  float xB,
+                                  float yB,
+                                  Point* intersectionPointA = nullptr,
+                                  Point* intersectionPointB = nullptr,
+                                  Point* normalRadians      = nullptr) override;
 
 protected:
     virtual void _onClear() override;
@@ -181,13 +188,17 @@ public:
     /**
      * @private
      */
-    static int ellipseIntersectsSegment(
-        float xA, float yA, float xB, float yB,
-        float xC, float yC, float widthH, float heightH,
-        Point* intersectionPointA = nullptr,
-        Point* intersectionPointB = nullptr,
-        Point* normalRadians = nullptr
-    );
+    static int ellipseIntersectsSegment(float xA,
+                                        float yA,
+                                        float xB,
+                                        float yB,
+                                        float xC,
+                                        float yC,
+                                        float widthH,
+                                        float heightH,
+                                        Point* intersectionPointA = nullptr,
+                                        Point* intersectionPointB = nullptr,
+                                        Point* normalRadians      = nullptr);
     /**
      * @inheritDoc
      */
@@ -195,12 +206,13 @@ public:
     /**
      * @inheritDoc
      */
-    virtual int intersectsSegment(
-        float xA, float yA, float xB, float yB,
-        Point* intersectionPointA = nullptr,
-        Point* intersectionPointB = nullptr,
-        Point* normalRadians = nullptr
-    ) override;
+    virtual int intersectsSegment(float xA,
+                                  float yA,
+                                  float xB,
+                                  float yB,
+                                  Point* intersectionPointA = nullptr,
+                                  Point* intersectionPointB = nullptr,
+                                  Point* normalRadians      = nullptr) override;
 
 protected:
     virtual void _onClear() override;
@@ -223,13 +235,14 @@ public:
     /**
      * @private
      */
-    static int polygonIntersectsSegment(
-        float xA, float yA, float xB, float yB,
-        const std::vector<float>& vertices,
-        Point* intersectionPointA = nullptr,
-        Point* intersectionPointB = nullptr,
-        Point* normalRadians = nullptr
-    );
+    static int polygonIntersectsSegment(float xA,
+                                        float yA,
+                                        float xB,
+                                        float yB,
+                                        const std::vector<float>& vertices,
+                                        Point* intersectionPointA = nullptr,
+                                        Point* intersectionPointB = nullptr,
+                                        Point* normalRadians      = nullptr);
     /**
      * @private
      */
@@ -257,27 +270,21 @@ public:
     /**
      * @inheritDoc
      */
-    virtual int intersectsSegment(
-        float xA, float yA, float xB, float yB,
-        Point* intersectionPointA = nullptr,
-        Point* intersectionPointB = nullptr,
-        Point* normalRadians = nullptr
-    ) override;
+    virtual int intersectsSegment(float xA,
+                                  float yA,
+                                  float xB,
+                                  float yB,
+                                  Point* intersectionPointA = nullptr,
+                                  Point* intersectionPointB = nullptr,
+                                  Point* normalRadians      = nullptr) override;
 
-    PolygonBoundingBoxData() :
-        weight(nullptr)
-    {
-        _onClear();
-    }
-    ~PolygonBoundingBoxData()
-    {
-        _onClear();
-    }
+    PolygonBoundingBoxData() : weight(nullptr) { _onClear(); }
+    ~PolygonBoundingBoxData() { _onClear(); }
 
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     std::vector<float>* getVertices() { return &vertices; }
 
     /*WeightData* getWeight() const { return weight; }
@@ -286,4 +293,4 @@ public: // For WebAssembly.
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif //DRAGONBONESCPP_BOUNDINGBOXDATA_H
+#endif  // DRAGONBONESCPP_BOUNDINGBOXDATA_H

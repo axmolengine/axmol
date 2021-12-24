@@ -29,16 +29,16 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-#define MAX_LEN         (cocos2d::kMaxLogLen + 1)
+#define MAX_LEN (cocos2d::kMaxLogLen + 1)
 
-void ccMessageBox(const char * pszMsg, const char * pszTitle)
+void ccMessageBox(const char* pszMsg, const char* pszTitle)
 {
-    std::wstring wsMsg = ntcvt::from_chars(pszMsg);
+    std::wstring wsMsg   = ntcvt::from_chars(pszMsg);
     std::wstring wsTitle = ntcvt::from_chars(pszTitle);
     MessageBoxW(nullptr, wsMsg.c_str(), wsTitle.c_str(), MB_OK);
 }
 
-void LuaLog(const char *pszMsg)
+void LuaLog(const char* pszMsg)
 {
     auto wsMsg = ntcvt::from_chars(pszMsg);
     OutputDebugStringW(wsMsg.c_str());

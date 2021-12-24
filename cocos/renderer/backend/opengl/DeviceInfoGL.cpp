@@ -27,12 +27,12 @@
 #include "platform/CCGL.h"
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
-#define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
- // #define GL_COMPRESSED_RGB8_ETC2 0x9274
+#    define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
+// #define GL_COMPRESSED_RGB8_ETC2 0x9274
 #endif
 
 #if !defined(GL_COMPRESSED_RGBA_ASTC_4x4)
-#define GL_COMPRESSED_RGBA_ASTC_4x4 0x93B0
+#    define GL_COMPRESSED_RGBA_ASTC_4x4 0x93B0
 // #define GL_COMPRESSED_RGBA_ASTC_8x8 0x93B7
 #endif
 
@@ -42,11 +42,12 @@ CC_BACKEND_BEGIN
 ///  1px method to detect whether GPU support astc compressed texture really
 /// </summary>
 /// <returns>true: support, false: not support</returns>
-static bool checkReallySupportsASTC() {
+static bool checkReallySupportsASTC()
+{
     const GLsizei TEXTURE_DIM = 1;
     // 1px/2px astc 4x4 compressed texels srgb
-    uint8_t astctexels[] = {
-        0xfc, 0xfd, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x80, 0x80, 0x00, 0x00, 0xff, 0xff};
+    uint8_t astctexels[] = {0xfc, 0xfd, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+                            0xff, 0xff, 0x80, 0x80, 0x00, 0x00, 0xff, 0xff};
 
     GLuint texID = 0;
     glGenTextures(1, &texID);
@@ -59,27 +60,29 @@ static bool checkReallySupportsASTC() {
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glCompressedTexImage2D(GL_TEXTURE_2D,
-        0, // level
-        GL_COMPRESSED_RGBA_ASTC_4x4_KHR, // format
-        TEXTURE_DIM, TEXTURE_DIM,
-        0, // border
-        sizeof(astctexels), // dataLen,
-        astctexels);
+                           0,                                // level
+                           GL_COMPRESSED_RGBA_ASTC_4x4_KHR,  // format
+                           TEXTURE_DIM, TEXTURE_DIM,
+                           0,                   // border
+                           sizeof(astctexels),  // dataLen,
+                           astctexels);
 
     auto error = glGetError();
 #if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
-    if (!error) {
+    if (!error)
+    {
         // read pixel RGB: should be: 255, 128, 0
         uint8_t pixels[TEXTURE_DIM * TEXTURE_DIM * 4] = {0};
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
         error = glGetError();
-        if (error || pixels[0] != 255 || pixels[1] != 128) {
+        if (error || pixels[0] != 255 || pixels[1] != 128)
+        {
             error = GL_INVALID_VALUE;
         }
     }
 #endif
 
-    glBindTexture(GL_TEXTURE_2D, 0); // unbind texture
+    glBindTexture(GL_TEXTURE_2D, 0);  // unbind texture
     glDeleteTextures(1, &texID);
 
     return !error;
@@ -166,7 +169,7 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
     return featureSupported;
 }
 
-bool DeviceInfoGL::checkForGLExtension(const std::string &searchName) const
+bool DeviceInfoGL::checkForGLExtension(const std::string& searchName) const
 {
     return _glExtensions.find(searchName) != std::string::npos;
 }
@@ -174,12 +177,12 @@ bool DeviceInfoGL::checkForGLExtension(const std::string &searchName) const
 bool DeviceInfoGL::checkSupportsCompressedFormat(int compressedFormat)
 {
     const int MAX_ALLOCA_SIZE = 512;
-    
+
     GLint numFormats = 0;
     glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &numFormats);
     GLint* formats = nullptr;
     int buffersize = numFormats * sizeof(GLint);
-    if(buffersize <= MAX_ALLOCA_SIZE)
+    if (buffersize <= MAX_ALLOCA_SIZE)
         formats = (GLint*)alloca(buffersize);
     else
         formats = (GLint*)malloc(buffersize);
@@ -188,7 +191,8 @@ bool DeviceInfoGL::checkSupportsCompressedFormat(int compressedFormat)
     bool supported = false;
     for (GLint i = 0; i < numFormats; ++i)
     {
-        if (formats[i] == compressedFormat) {
+        if (formats[i] == compressedFormat)
+        {
             supported = true;
             break;
         }

@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,40 +28,34 @@
 
 NS_CC_BEGIN
 
-PUParticleSystem3DTranslator::PUParticleSystem3DTranslator()
-{
-    
-}
-PUParticleSystem3DTranslator::~PUParticleSystem3DTranslator()
-{
-    
-}
+PUParticleSystem3DTranslator::PUParticleSystem3DTranslator() {}
+PUParticleSystem3DTranslator::~PUParticleSystem3DTranslator() {}
 
-void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *node)
+void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* node)
 {
     if (typeid(*node) != typeid(PUObjectAbstractNode))
         return;
 
-        PUObjectAbstractNode* obj = reinterpret_cast<PUObjectAbstractNode*>(node);
-        if(obj->name.empty())
+    PUObjectAbstractNode* obj = reinterpret_cast<PUObjectAbstractNode*>(node);
+    if (obj->name.empty())
+    {
+        return;
+    }
+
+    //// Create a particle system with the given name
+    //_system = PUParticleSystem3D::create();
+    // PUParticleSystem3DBuilder::Instance()->PUParticleSystem3DList.push_back(_system);
+    // if (!mSystem)
+    //{
+    //	return;
+    //}
+    obj->context = _system;
+    _system->setName(obj->name);
+    for (PUAbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
+    {
+        if ((*i)->type == ANT_PROPERTY)
         {
-            return;
-        }
-        
-        //// Create a particle system with the given name
-        //_system = PUParticleSystem3D::create();
-        //PUParticleSystem3DBuilder::Instance()->PUParticleSystem3DList.push_back(_system);
-        //if (!mSystem)
-        //{
-        //	return;
-        //}
-        obj->context = _system;
-        _system->setName(obj->name);
-        for(PUAbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
-        {
-            if((*i)->type == ANT_PROPERTY)
-            {
-                PUPropertyAbstractNode* prop = reinterpret_cast<PUPropertyAbstractNode*>((*i));
+            PUPropertyAbstractNode* prop = reinterpret_cast<PUPropertyAbstractNode*>((*i));
             //	if (prop->name == token[TOKEN_PS_ITERATION_INTERVAL])
             //	{
             //		// Property: iteration_interval
@@ -112,8 +106,10 @@ void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstr
             //				}
             //				else
             //				{
-            //					compiler->addError(PUScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line,
-   //                                                "PU Compiler: lod_distances expects only numbers as arguments");
+            //					compiler->addError(PUScriptCompiler::CE_NUMBEREXPECTED, prop->file,
+            //prop->line,
+            //                                                "PU Compiler: lod_distances expects only numbers as
+            //                                                arguments");
             //				}
             //			}
             //		}
@@ -154,32 +150,32 @@ void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstr
             //			}
             //		}
             //	}
-                if (prop->name == token[TOKEN_PS_SCALE])
+            if (prop->name == token[TOKEN_PS_SCALE])
+            {
+                // Property: scale
+                if (passValidateProperty(compiler, prop, token[TOKEN_PS_SCALE], VAL_VECTOR3))
                 {
-                    // Property: scale
-                    if (passValidateProperty(compiler, prop, token[TOKEN_PS_SCALE], VAL_VECTOR3))
+                    Vec3 val;
+                    if (getVector3(prop->values.begin(), prop->values.end(), &val))
                     {
-                        Vec3 val;
-                        if(getVector3(prop->values.begin(), prop->values.end(), &val))
-                        {
-                            _system->setScaleX(val.x);
-                            _system->setScaleY(val.y);
-                            _system->setScaleZ(val.z);
-                        }
+                        _system->setScaleX(val.x);
+                        _system->setScaleY(val.y);
+                        _system->setScaleZ(val.z);
                     }
                 }
-                else if (prop->name == token[TOKEN_PS_SCALE_VELOCITY])
+            }
+            else if (prop->name == token[TOKEN_PS_SCALE_VELOCITY])
+            {
+                // Property: scale_velocity
+                if (passValidateProperty(compiler, prop, token[TOKEN_PS_ITERATION_INTERVAL], VAL_REAL))
                 {
-                    // Property: scale_velocity
-                    if (passValidateProperty(compiler, prop, token[TOKEN_PS_ITERATION_INTERVAL], VAL_REAL))
+                    float val = 0.0f;
+                    if (getFloat(*prop->values.front(), &val))
                     {
-                        float val = 0.0f;
-                        if(getFloat(*prop->values.front(), &val))
-                        {
-                            _system->setParticleSystemScaleVelocity(val);
-                        }
+                        _system->setParticleSystemScaleVelocity(val);
                     }
                 }
+            }
             //	else if (prop->name == token[TOKEN_PS_SCALE_TIME])
             //	{
             //		// Property: scale_time
@@ -192,18 +188,18 @@ void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstr
             //			}
             //		}
             //	}
-                else if (prop->name == token[TOKEN_KEEP_LOCAL])
+            else if (prop->name == token[TOKEN_KEEP_LOCAL])
+            {
+                // Property: keep_local
+                if (passValidateProperty(compiler, prop, token[TOKEN_KEEP_LOCAL], VAL_BOOL))
                 {
-                    // Property: keep_local
-                    if (passValidateProperty(compiler, prop, token[TOKEN_KEEP_LOCAL], VAL_BOOL))
+                    bool val;
+                    if (getBoolean(*prop->values.front(), &val))
                     {
-                        bool val;
-                        if(getBoolean(*prop->values.front(), &val))
-                        {
-                            _system->setKeepLocal(val);
-                        }
+                        _system->setKeepLocal(val);
                     }
                 }
+            }
             //	else if (prop->name == token[TOKEN_PS_TIGHT_BOUNDING_BOX])
             //	{
             //		// Property: tight_bounding_box
@@ -241,8 +237,8 @@ void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstr
             //				if (alias->getAliasType() == IAlias::AT_TECHNIQUE)
             //				{
             //					ParticleTechnique* technique = static_cast<ParticleTechnique*>(alias);
-            //					ParticleTechnique* newTechnique = ParticleSystemManager::getSingletonPtr()->cloneTechnique(technique);
-            //					mSystem->addTechnique(newTechnique);
+            //					ParticleTechnique* newTechnique =
+            //ParticleSystemManager::getSingletonPtr()->cloneTechnique(technique); 					mSystem->addTechnique(newTechnique);
             //				}
             //			}
             //		}
@@ -251,18 +247,16 @@ void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstr
             //	{
             //		errorUnexpectedProperty(compiler, prop);
             //	}
-            }
-            else if((*i)->type == ANT_OBJECT)
-            {
-                processNode(compiler, *i);
-            }
-            else
-            {
-                errorUnexpectedToken(compiler, *i);
-            }
         }
+        else if ((*i)->type == ANT_OBJECT)
+        {
+            processNode(compiler, *i);
+        }
+        else
+        {
+            errorUnexpectedToken(compiler, *i);
+        }
+    }
 }
-
-
 
 NS_CC_END

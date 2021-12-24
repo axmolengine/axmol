@@ -3,7 +3,7 @@
 #include "platform/CCPosixFileStream.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-#include "base/ZipUtils.h"
+#    include "base/ZipUtils.h"
 #endif
 
 #include <sys/stat.h>
@@ -11,16 +11,18 @@
 
 NS_CC_BEGIN
 
-struct PXIoF {
-    int(*read)(PXFileHandle& handle, void*, unsigned int);
-    int64_t(*seek)(PXFileHandle& handle, int64_t, int);
-    int(*close)(PXFileHandle& handle);
-    long long(*size)(PXFileHandle& handle);
+struct PXIoF
+{
+    int (*read)(PXFileHandle& handle, void*, unsigned int);
+    int64_t (*seek)(PXFileHandle& handle, int64_t, int);
+    int (*close)(PXFileHandle& handle);
+    long long (*size)(PXFileHandle& handle);
 };
 
 static int pfs_posix_open(const std::string& path, FileStream::Mode mode, PXFileHandle& handle)
 {
-    switch (mode) {
+    switch (mode)
+    {
     case FileStream::Mode::READ:
         handle._fd = posix_open_cxx(path, O_READ_FLAGS);
         break;
@@ -40,11 +42,19 @@ static int pfs_posix_open(const std::string& path, FileStream::Mode mode, PXFile
 }
 
 // posix standard wrappers
-static int pfs_posix_read(PXFileHandle& handle, void* buf, unsigned int size) { return static_cast<int>(posix_read(handle._fd, buf, size)); }
-static int64_t pfs_posix_seek(PXFileHandle& handle, int64_t offst, int origin) { return posix_lseek64(handle._fd, offst, origin); }
-static int pfs_posix_close(PXFileHandle& handle) {
+static int pfs_posix_read(PXFileHandle& handle, void* buf, unsigned int size)
+{
+    return static_cast<int>(posix_read(handle._fd, buf, size));
+}
+static int64_t pfs_posix_seek(PXFileHandle& handle, int64_t offst, int origin)
+{
+    return posix_lseek64(handle._fd, offst, origin);
+}
+static int pfs_posix_close(PXFileHandle& handle)
+{
     int fd = handle._fd;
-    if (fd != -1) {
+    if (fd != -1)
+    {
         handle._fd = -1;
         return posix_close(fd);
     }
@@ -64,19 +74,22 @@ static long long pfs_posix_size(PXFileHandle& handle)
 #endif
 }
 
-static PXIoF pfs_posix_iof = {
-        pfs_posix_read,
-        pfs_posix_seek,
-        pfs_posix_close,
-        pfs_posix_size
-};
+static PXIoF pfs_posix_iof = {pfs_posix_read, pfs_posix_seek, pfs_posix_close, pfs_posix_size};
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 // android AssetManager wrappers
-static int pfs_asset_read(PXFileHandle& handle, void* buf, unsigned int size) { return AAsset_read(handle._asset, buf, size); }
-static int64_t pfs_asset_seek(PXFileHandle& handle, int64_t offst, int origin) { return AAsset_seek(handle._asset, offst, origin); }
-static int pfs_asset_close(PXFileHandle& handle) {
-    if (handle._asset != nullptr) {
+static int pfs_asset_read(PXFileHandle& handle, void* buf, unsigned int size)
+{
+    return AAsset_read(handle._asset, buf, size);
+}
+static int64_t pfs_asset_seek(PXFileHandle& handle, int64_t offst, int origin)
+{
+    return AAsset_seek(handle._asset, offst, origin);
+}
+static int pfs_asset_close(PXFileHandle& handle)
+{
+    if (handle._asset != nullptr)
+    {
         AAsset_close(handle._asset);
         handle._asset = nullptr;
     }
@@ -86,17 +99,19 @@ static long long pfs_asset_size(PXFileHandle& handle)
 {
     return AAsset_getLength64(handle._asset);
 }
-static PXIoF pfs_asset_iof = {
-        pfs_asset_read,
-        pfs_asset_seek,
-        pfs_asset_close,
-        pfs_asset_size
-};
+static PXIoF pfs_asset_iof = {pfs_asset_read, pfs_asset_seek, pfs_asset_close, pfs_asset_size};
 
 // android obb
-static int pfs_obb_read(PXFileHandle& handle, void* buf, unsigned int size) { return FileUtilsAndroid::getObbFile()->zfread(&handle._zfs, buf, size); }
-static int64_t pfs_obb_seek(PXFileHandle& handle, int64_t offset, int origin) { return FileUtilsAndroid::getObbFile()->zfseek(&handle._zfs, offset, origin); }
-static int pfs_obb_close(PXFileHandle& handle) {
+static int pfs_obb_read(PXFileHandle& handle, void* buf, unsigned int size)
+{
+    return FileUtilsAndroid::getObbFile()->zfread(&handle._zfs, buf, size);
+}
+static int64_t pfs_obb_seek(PXFileHandle& handle, int64_t offset, int origin)
+{
+    return FileUtilsAndroid::getObbFile()->zfseek(&handle._zfs, offset, origin);
+}
+static int pfs_obb_close(PXFileHandle& handle)
+{
     FileUtilsAndroid::getObbFile()->zfclose(&handle._zfs);
     return 0;
 }
@@ -104,12 +119,7 @@ static long long pfs_obb_size(PXFileHandle& handle)
 {
     return FileUtilsAndroid::getObbFile()->zfsize(&handle._zfs);
 }
-static PXIoF pfs_obb_iof = {
-        pfs_obb_read,
-        pfs_obb_seek,
-        pfs_obb_close,
-        pfs_obb_size
-};
+static PXIoF pfs_obb_iof = {pfs_obb_read, pfs_obb_seek, pfs_obb_close, pfs_obb_size};
 #endif
 
 PosixFileStream::~PosixFileStream()
@@ -122,8 +132,9 @@ bool PosixFileStream::open(const std::string& path, FileStream::Mode mode)
     bool ok = false;
 #if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
     ok = pfs_posix_open(path, mode, _handle) != -1;
-#else // Android
-    if (path[0] != '/') { // from package, always readonly
+#else  // Android
+    if (path[0] != '/')
+    {  // from package, always readonly
         std::string relativePath;
         size_t position = path.find("assets/");
         if (0 == position)
@@ -137,22 +148,26 @@ bool PosixFileStream::open(const std::string& path, FileStream::Mode mode)
         }
 
         auto obb = FileUtilsAndroid::getObbFile();
-        ok = obb != nullptr && obb->zfopen(relativePath, &_handle._zfs);
-        if (ok) {
+        ok       = obb != nullptr && obb->zfopen(relativePath, &_handle._zfs);
+        if (ok)
+        {
             this->_iof = &pfs_obb_iof;
         }
-        else {
+        else
+        {
             AAssetManager* asMgr = FileUtilsAndroid::getAssetManager();
-            AAsset* asset = AAssetManager_open(asMgr, relativePath.c_str(), AASSET_MODE_UNKNOWN);
-            ok = !!asset;
-            if (ok) {
+            AAsset* asset        = AAssetManager_open(asMgr, relativePath.c_str(), AASSET_MODE_UNKNOWN);
+            ok                   = !!asset;
+            if (ok)
+            {
                 _handle._asset = asset;
                 // setup file read/seek/close at here
                 this->_iof = &pfs_asset_iof;
             }
         }
     }
-    else { // otherwise, as a absolutely path
+    else
+    {  // otherwise, as a absolutely path
         ok = pfs_posix_open(path, mode, _handle) != -1;
     }
 #endif
@@ -165,7 +180,8 @@ bool PosixFileStream::open(const std::string& path, FileStream::Mode mode)
 
 int PosixFileStream::internalClose()
 {
-    if (_iof) {
+    if (_iof)
+    {
         int ret = _iof->close(_handle);
         reset();
         return ret;
@@ -180,8 +196,9 @@ int PosixFileStream::close()
 
 int PosixFileStream::seek(int64_t offset, int origin)
 {
-    const auto result = _iof->seek(_handle, static_cast<int32_t>(offset), origin); // this returns -1 for error, and resulting offset on success
-    return result < 0 ? -1 : 0; // return 0 for success
+    const auto result = _iof->seek(_handle, static_cast<int32_t>(offset),
+                                   origin);  // this returns -1 for error, and resulting offset on success
+    return result < 0 ? -1 : 0;              // return 0 for success
 }
 
 int PosixFileStream::read(void* buf, unsigned int size)
@@ -217,7 +234,7 @@ void PosixFileStream::reset()
 {
     memset(&_handle, 0, sizeof(_handle));
     _handle._fd = -1;
-    _iof = nullptr;
+    _iof        = nullptr;
 }
 
 NS_CC_END

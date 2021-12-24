@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
- 
+
  https://adxe.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -52,7 +52,7 @@ class RenderTarget;
  */
 
 /** Base class for Other grid.
-*/
+ */
 class CC_DLL GridBase : public Ref
 {
 public:
@@ -87,8 +87,8 @@ public:
     */
     bool initWithSize(const Vec2& gridSize);
     bool initWithSize(const Vec2& gridSize, const Rect& rect);
-    bool initWithSize(const Vec2& gridSize, Texture2D *texture, bool flipped);
-    bool initWithSize(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
+    bool initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipped);
+    bool initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipped, const Rect& rect);
 
     /**@}*/
     /** @{
@@ -117,17 +117,17 @@ public:
     bool isTextureFlipped() const { return _isTextureFlipped; }
     /**Set the texture flipped or not.*/
     void setTextureFlipped(bool flipped);
-    
+
     /**@{
      Init and reset the status when render effects by using the grid.
      */
     void beforeDraw();
-    void afterDraw(Node *target);
+    void afterDraw(Node* target);
     /**@}*/
-    
+
     /**Change projection to 2D for grabbing.*/
     void set2DProjection();
-    
+
     /**
      * @brief Set the effect grid rect.
      * @param rect The effect grid rect.
@@ -141,13 +141,13 @@ public:
 
 protected:
     void updateBlendState();
-    
-    bool _active = false;
-    int  _reuseGrid = 0;
+
+    bool _active   = false;
+    int _reuseGrid = 0;
     Vec2 _gridSize;
-    Texture2D *_texture = nullptr;
+    Texture2D* _texture = nullptr;
     Vec2 _step;
-    bool _isTextureFlipped = false;
+    bool _isTextureFlipped                   = false;
     Director::Projection _directorProjection = Director::Projection::_2D;
     Rect _gridRect;
 
@@ -162,13 +162,13 @@ protected:
 
     // New
     backend::RenderTarget* _oldRenderTarget = nullptr;
-    backend::RenderTarget* _renderTarget = nullptr;
-    
+    backend::RenderTarget* _renderTarget    = nullptr;
+
     backend::UniformLocation _mvpMatrixLocation;
     backend::UniformLocation _textureLocation;
     backend::ProgramState* _programState = nullptr;
-    
-    BlendFunc  _blendFunc;
+
+    BlendFunc _blendFunc;
 };
 
 /**
@@ -182,9 +182,9 @@ public:
     /** create one Grid. */
     static Grid3D* create(const Vec2& gridSize, const Rect& rect);
     /** create one Grid. */
-    static Grid3D* create(const Vec2& gridSize, Texture2D *texture, bool flipped);
+    static Grid3D* create(const Vec2& gridSize, Texture2D* texture, bool flipped);
     /** create one Grid. */
-    static Grid3D* create(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
+    static Grid3D* create(const Vec2& gridSize, Texture2D* texture, bool flipped, const Rect& rect);
     /**
      Constructor.
      * @js ctor
@@ -222,7 +222,7 @@ public:
     virtual void reuse() override;
     virtual void calculateVertexPoints() override;
     /**@}*/
-    
+
     /**@{
      Getter and Setter for depth test state when blit.
      @js NA
@@ -234,14 +234,14 @@ protected:
     void updateVertexBuffer();
     void updateVertexAndTexCoordinate();
 
-    void* _vertexBuffer = nullptr;
-    void* _texCoordinates = nullptr;
-    void* _vertices = nullptr;
-    void* _originalVertices = nullptr;
-    unsigned short *_indices = nullptr;
+    void* _vertexBuffer        = nullptr;
+    void* _texCoordinates      = nullptr;
+    void* _vertices            = nullptr;
+    void* _originalVertices    = nullptr;
+    unsigned short* _indices   = nullptr;
     bool _needDepthTestForBlit = false;
-    bool _oldDepthTest = false;
-    bool _oldDepthWrite = false;
+    bool _oldDepthTest         = false;
+    bool _oldDepthWrite        = false;
 };
 
 /**
@@ -256,9 +256,9 @@ public:
     /** Create one Grid. */
     static TiledGrid3D* create(const Vec2& gridSize, const Rect& rect);
     /** Create one Grid. */
-    static TiledGrid3D* create(const Vec2& gridSize, Texture2D *texture, bool flipped);
+    static TiledGrid3D* create(const Vec2& gridSize, Texture2D* texture, bool flipped);
     /** Create one Grid. */
-    static TiledGrid3D* create(const Vec2& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
+    static TiledGrid3D* create(const Vec2& gridSize, Texture2D* texture, bool flipped, const Rect& rect);
 
     /**@{
      Implementations for interfaces in base class.
@@ -300,11 +300,11 @@ protected:
     void updateVertexBuffer();
     void updateVertexAndTexCoordinate();
 
-    void* _texCoordinates = nullptr;
-    void* _vertices = nullptr;
-    void* _originalVertices = nullptr;
+    void* _texCoordinates    = nullptr;
+    void* _vertices          = nullptr;
+    void* _originalVertices  = nullptr;
     unsigned short* _indices = nullptr;
-    void* _vertexBuffer = nullptr;
+    void* _vertexBuffer      = nullptr;
 };
 
 // end of effects group

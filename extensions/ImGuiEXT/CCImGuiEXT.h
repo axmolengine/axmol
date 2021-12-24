@@ -18,16 +18,18 @@ class ImGuiEXT
     friend class ImGuiEXTRenderer;
     void init();
     void cleanup();
-public:
 
-    enum class CHS_GLYPH_RANGE {
+public:
+    enum class CHS_GLYPH_RANGE
+    {
         NONE,
         GENERAL,
         FULL
     };
 
-    enum {
-        DEFAULT_FONT_SIZE = 13 // see imgui.cpp
+    enum
+    {
+        DEFAULT_FONT_SIZE = 13  // see imgui.cpp
     };
 
     static ImGuiEXT* getInstance();
@@ -48,7 +50,9 @@ public:
     /// </summary>
     /// <param name="fontFile"></param>
     /// <param name="glyphRange"></param>
-    void addFont(const std::string& fontFile, float fontSize = DEFAULT_FONT_SIZE, CHS_GLYPH_RANGE glyphRange = CHS_GLYPH_RANGE::NONE);
+    void addFont(const std::string& fontFile,
+                 float fontSize             = DEFAULT_FONT_SIZE,
+                 CHS_GLYPH_RANGE glyphRange = CHS_GLYPH_RANGE::NONE);
     void removeFont(const std::string& fontFile);
     void clearFonts();
 
@@ -65,46 +69,38 @@ public:
     /// </summary>
     /// <param name="id">FOURCC starts with '#', such as "#abcd"</id>
     void removeRenderLoop(const std::string& id);
-    
+
     void end();
 
     // imgui helper
-    void image(
-        Texture2D* tex,
-        const ImVec2& size,
-        const ImVec2& uv0 = ImVec2(0, 0),
-        const ImVec2& uv1 = ImVec2(1, 1),
-        const ImVec4& tint_col = ImVec4(1, 1, 1, 1),
-        const ImVec4& border_col = ImVec4(0, 0, 0, 0));
-    void image(
-        Sprite* sprite,
-        const ImVec2& size,
-        const ImVec4& tint_col = ImVec4(1, 1, 1, 1),
-        const ImVec4& border_col = ImVec4(0, 0, 0, 0));
-    bool imageButton(
-        Texture2D* tex,
-        const ImVec2& size,
-        const ImVec2& uv0 = ImVec2(0, 0),
-        const ImVec2& uv1 = ImVec2(1, 1),
-        int frame_padding = -1,
-        const ImVec4& bg_col = ImVec4(0, 0, 0, 0),
-        const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
-    bool imageButton(
-        Sprite* sprite,
-        const ImVec2& size,
-        int frame_padding = -1,
-        const ImVec4& bg_col = ImVec4(0, 0, 0, 0),
-        const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+    void image(Texture2D* tex,
+               const ImVec2& size,
+               const ImVec2& uv0        = ImVec2(0, 0),
+               const ImVec2& uv1        = ImVec2(1, 1),
+               const ImVec4& tint_col   = ImVec4(1, 1, 1, 1),
+               const ImVec4& border_col = ImVec4(0, 0, 0, 0));
+    void image(Sprite* sprite,
+               const ImVec2& size,
+               const ImVec4& tint_col   = ImVec4(1, 1, 1, 1),
+               const ImVec4& border_col = ImVec4(0, 0, 0, 0));
+    bool imageButton(Texture2D* tex,
+                     const ImVec2& size,
+                     const ImVec2& uv0      = ImVec2(0, 0),
+                     const ImVec2& uv1      = ImVec2(1, 1),
+                     int frame_padding      = -1,
+                     const ImVec4& bg_col   = ImVec4(0, 0, 0, 0),
+                     const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+    bool imageButton(Sprite* sprite,
+                     const ImVec2& size,
+                     int frame_padding      = -1,
+                     const ImVec4& bg_col   = ImVec4(0, 0, 0, 0),
+                     const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 
-    void node(
-        Node* node,
-        const ImVec4& tint_col = ImVec4(1, 1, 1, 1),
-        const ImVec4& border_col = ImVec4(0, 0, 0, 0));
-    bool nodeButton(
-        Node* node,
-        int frame_padding = -1,
-        const ImVec4& bg_col = ImVec4(0, 0, 0, 0),
-        const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
+    void node(Node* node, const ImVec4& tint_col = ImVec4(1, 1, 1, 1), const ImVec4& border_col = ImVec4(0, 0, 0, 0));
+    bool nodeButton(Node* node,
+                    int frame_padding      = -1,
+                    const ImVec4& bg_col   = ImVec4(0, 0, 0, 0),
+                    const ImVec4& tint_col = ImVec4(1, 1, 1, 1));
 
     std::tuple<ImTextureID, int> useTexture(Texture2D* texture);
     std::tuple<ImTextureID, ImVec2, ImVec2, int> useSprite(Sprite* sprite);
@@ -124,7 +120,8 @@ public:
     // markdown
 
     using MdLinkCallback = std::function<void(const std::string&, const std::string&, bool)>;
-    using MdImageCallback = std::function<std::tuple<Sprite*, ImVec2, ImVec4, ImVec4>(const std::string&, const std::string&)>;
+    using MdImageCallback =
+        std::function<std::tuple<Sprite*, ImVec2, ImVec4, ImVec4>(const std::string&, const std::string&)>;
 
     void setMarkdownLinkCallback(const MdLinkCallback& f);
     void setMarkdownImageCallback(const MdImageCallback& f);
@@ -146,7 +143,8 @@ private:
 private:
     static std::function<void(ImGuiEXT*)> _onInit;
 
-    struct RenderPipline {
+    struct RenderPipline
+    {
         ImGuiEXTEventTracker* tracker;
         std::function<void()> frame;
     };
@@ -164,13 +162,14 @@ private:
 
     Texture2D* _fontsTexture = nullptr;
 
-    struct FontInfo {
+    struct FontInfo
+    {
         float fontSize;
         CHS_GLYPH_RANGE glyphRange;
     };
 
     std::unordered_map<std::string, FontInfo> _fontsInfoMap;
-    
+
     bool _purgeNextLoop = false;
 };
 

@@ -36,15 +36,9 @@ using namespace flatbuffers;
 
 IMPLEMENT_CLASS_NODE_READER_INFO(SkeletonNodeReader)
 
-SkeletonNodeReader::SkeletonNodeReader()
-{
+SkeletonNodeReader::SkeletonNodeReader() {}
 
-}
-
-SkeletonNodeReader::~SkeletonNodeReader()
-{
-
-}
+SkeletonNodeReader::~SkeletonNodeReader() {}
 
 static SkeletonNodeReader* _instanceSkeletonNodeReader = nullptr;
 
@@ -62,7 +56,7 @@ void SkeletonNodeReader::destroyInstance()
     CC_SAFE_DELETE(_instanceSkeletonNodeReader);
 }
 
-cocos2d::Node*  SkeletonNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table *nodeOptions)
+cocos2d::Node* SkeletonNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
     auto bone = SkeletonNode::create();
 

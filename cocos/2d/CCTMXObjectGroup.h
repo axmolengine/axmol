@@ -55,76 +55,72 @@ public:
      * @lua NA
      */
     virtual ~TMXObjectGroup();
-    
-    /** Get the group name. 
+
+    /** Get the group name.
      *
      * @return The group name.
      */
     const std::string& getGroupName() const { return _groupName; }
-    
-    /** Set the group name. 
+
+    /** Set the group name.
      *
      * @param groupName A string,it is used to set the group name.
      */
     void setGroupName(const std::string& groupName) { _groupName = groupName; }
 
-    /** Return the value for the specific property name. 
+    /** Return the value for the specific property name.
      *
      * @param propertyName The specific property name.
      * @return Return the value for the specific property name.
      * @js NA
      */
     Value getProperty(const std::string& propertyName) const;
-    
+
     /** Return the dictionary for the specific object name.
      * It will return the 1st object found on the array for the given name.
      *
      * @return Return the dictionary for the specific object name.
      */
     ValueMap getObject(const std::string& objectName) const;
-        
-    /** Gets the offset position of child objects. 
+
+    /** Gets the offset position of child objects.
      *
      * @return The offset position of child objects.
      */
     const Vec2& getPositionOffset() const { return _positionOffset; }
-    
-    /** Sets the offset position of child objects. 
+
+    /** Sets the offset position of child objects.
      *
      * @param offset The offset position of child objects.
      */
     void setPositionOffset(const Vec2& offset) { _positionOffset = offset; }
-    
-    /** Gets the list of properties stored in a dictionary. 
+
+    /** Gets the list of properties stored in a dictionary.
      *
      * @return The list of properties stored in a dictionary.
      */
     const ValueMap& getProperties() const { return _properties; }
     ValueMap& getProperties() { return _properties; }
-    
+
     /** Sets the list of properties.
      *
      * @param properties The list of properties.
      */
-    void setProperties(const ValueMap& properties) {
-        _properties = properties;
-    }
-    
-    /** Gets the array of the objects. 
+    void setProperties(const ValueMap& properties) { _properties = properties; }
+
+    /** Gets the array of the objects.
      *
      * @return The array of the objects.
      */
     const ValueVector& getObjects() const { return _objects; }
     ValueVector& getObjects() { return _objects; }
-    
+
     /** Sets the array of the objects.
      *
      * @param objects The array of the objects.
      */
-    void setObjects(const ValueVector& objects) {
-        _objects = objects;
-    }
-    
+    void setObjects(const ValueVector& objects) { _objects = objects; }
+
 protected:
     /** name of the group */
     std::string _groupName;
@@ -141,4 +137,4 @@ protected:
 
 NS_CC_END
 
-#endif //__CCTMX_OBJECT_GROUP_H__
+#endif  //__CCTMX_OBJECT_GROUP_H__

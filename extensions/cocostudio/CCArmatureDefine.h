@@ -25,34 +25,37 @@ THE SOFTWARE.
 #ifndef __CCARMATUREDEFINE_H__
 #define __CCARMATUREDEFINE_H__
 
-
 #define VERSION_COMBINED 0.30f
 #define VERSION_CHANGE_ROTATION_RANGE 1.0f
 #define VERSION_COLOR_READING 1.1f
 
 #ifndef AUTO_ADD_SPRITE_FRAME_NAME_PREFIX
-#define AUTO_ADD_SPRITE_FRAME_NAME_PREFIX 0
-#endif // !AUTO_ADD_SPRITE_FRAME_NAME_PREFIX
-
+#    define AUTO_ADD_SPRITE_FRAME_NAME_PREFIX 0
+#endif  // !AUTO_ADD_SPRITE_FRAME_NAME_PREFIX
 
 #ifndef ENABLE_PHYSICS_BOX2D_DETECT
-#define ENABLE_PHYSICS_BOX2D_DETECT 0
+#    define ENABLE_PHYSICS_BOX2D_DETECT 0
 #endif
 
 #ifndef ENABLE_PHYSICS_CHIPMUNK_DETECT
-#define ENABLE_PHYSICS_CHIPMUNK_DETECT 0
+#    define ENABLE_PHYSICS_CHIPMUNK_DETECT 0
 #endif
 
-#ifndef ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX 
-#define ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX 1
+#ifndef ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+#    define ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX 1
 #endif
 
-#define CS_RETURN_IF(cond) if (cond) return
-#define CS_RETURN_NULL_IF(cond) if (cond) return nullptr;
+#define CS_RETURN_IF(cond) \
+    if (cond)              \
+    return
+#define CS_RETURN_NULL_IF(cond) \
+    if (cond)                   \
+        return nullptr;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
-const char *armatureVersion();
+const char* armatureVersion();
 
 }
 

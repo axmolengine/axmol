@@ -68,18 +68,18 @@ public:
     @return Current language config
     */
     virtual LanguageType getCurrentLanguage() override;
-    
+
     /**
     @brief Get current language iso 639-1 code
     @return Current language iso 639-1 code
     */
-    virtual const char * getCurrentLanguageCode() override;
-    
+    virtual const char* getCurrentLanguageCode() override;
+
     /**
      @brief Get target platform
      */
     virtual Platform getTargetPlatform() override;
-    
+
     /**
      @brief Get application version.
      */
@@ -90,7 +90,7 @@ public:
      @param String with url to open.
      @return true if the resource located by the URL was successfully opened; otherwise false.
      */
-    virtual bool openURL(const std::string &url) override;
+    virtual bool openURL(const std::string& url) override;
 
     /**
     @brief  This function will be called when the application screen size is changed.
@@ -100,7 +100,7 @@ public:
     virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
 
 protected:
-    static Application * sm_pSharedApplication;
+    static Application* sm_pSharedApplication;
 };
 
 NS_CC_END

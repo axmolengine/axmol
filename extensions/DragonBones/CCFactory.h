@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -59,7 +59,7 @@ public:
      */
     static CCFactory* getFactory()
     {
-        if (CCFactory::_factory == nullptr) 
+        if (CCFactory::_factory == nullptr)
         {
             CCFactory::_factory = new CCFactory();
         }
@@ -74,44 +74,42 @@ public:
     /**
      * @inheritDoc
      */
-    CCFactory() :
-        _prevPath()
+    CCFactory() : _prevPath()
     {
         if (_dragonBonesInstance == nullptr)
         {
             const auto eventManager = CCArmatureDisplay::create();
             eventManager->retain();
 
-            _dragonBonesInstance = new DragonBones(eventManager);
+            _dragonBonesInstance        = new DragonBones(eventManager);
             _dragonBonesInstance->yDown = false;
 
             cocos2d::Director::getInstance()->getScheduler()->schedule(
-                [&](float passedTime)
-                {
-                    _dragonBonesInstance->advanceTime(passedTime);
-                },
-                this, 0.0f, false, "dragonBonesClock"
-            );
+                [&](float passedTime) { _dragonBonesInstance->advanceTime(passedTime); }, this, 0.0f, false,
+                "dragonBonesClock");
         }
 
         _dragonBones = _dragonBonesInstance;
     }
-    virtual ~CCFactory() 
-    {
-        clear();
-    }
+    virtual ~CCFactory() { clear(); }
 
 protected:
-    virtual TextureAtlasData* _buildTextureAtlasData(TextureAtlasData* textureAtlasData, void* textureAtlas) const override;
+    virtual TextureAtlasData* _buildTextureAtlasData(TextureAtlasData* textureAtlasData,
+                                                     void* textureAtlas) const override;
     virtual Armature* _buildArmature(const BuildArmaturePackage& dataPackage) const override;
-    virtual Slot* _buildSlot(const BuildArmaturePackage& dataPackage, const SlotData* slotData, Armature* armature) const override;
+    virtual Slot* _buildSlot(const BuildArmaturePackage& dataPackage,
+                             const SlotData* slotData,
+                             Armature* armature) const override;
 
 public:
-    virtual DragonBonesData* loadDragonBonesData(const std::string& filePath, const std::string& name = "", float scale = 1.0f);
+    virtual DragonBonesData* loadDragonBonesData(const std::string& filePath,
+                                                 const std::string& name = "",
+                                                 float scale             = 1.0f);
     /**
      * - Load and parse a texture atlas data and texture from the local and cache them to the factory.
      * @param  filePath - The file path of texture atlas data.
-     * @param name - Specify a cache name for the instance so that the instance can be obtained through this name. (If not set, use the instance name instead)
+     * @param name - Specify a cache name for the instance so that the instance can be obtained through this name. (If
+     * not set, use the instance name instead)
      * @param scale - Specify a scaling value for the map set. (Not scaled by default)
      * @returns The TextureAtlasData instance.
      * @version DragonBones 4.5
@@ -134,13 +132,19 @@ public:
      * </pre>
      * @language zh_CN
      */
-    virtual TextureAtlasData* loadTextureAtlasData(const std::string& filePath, const std::string& name = "", float scale = 1.0f);
+    virtual TextureAtlasData* loadTextureAtlasData(const std::string& filePath,
+                                                   const std::string& name = "",
+                                                   float scale             = 1.0f);
     /**
-     * - Create a armature from cached DragonBonesData instances and TextureAtlasData instances, then use the {@link #clock} to update it.
-     * The difference is that the armature created by {@link #buildArmature} is not WorldClock instance update.
+     * - Create a armature from cached DragonBonesData instances and TextureAtlasData instances, then use the {@link
+     * #clock} to update it. The difference is that the armature created by {@link #buildArmature} is not WorldClock
+     * instance update.
      * @param armatureName - The armature data name.
-     * @param dragonBonesName - The cached name of the DragonBonesData instance. (If not set, all DragonBonesData instances are retrieved, and when multiple DragonBonesData instances contain a the same name armature data, it may not be possible to accurately create a specific armature)
-     * @param skinName - The skin name, you can set a different ArmatureData name to share it's skin data. (If not set, use the default skin data)
+     * @param dragonBonesName - The cached name of the DragonBonesData instance. (If not set, all DragonBonesData
+     * instances are retrieved, and when multiple DragonBonesData instances contain a the same name armature data, it
+     * may not be possible to accurately create a specific armature)
+     * @param skinName - The skin name, you can set a different ArmatureData name to share it's skin data. (If not set,
+     * use the default skin data)
      * @returns The armature display container.
      * @version DragonBones 4.5
      * @example
@@ -153,7 +157,8 @@ public:
      * - 通过缓存的 DragonBonesData 实例和 TextureAtlasData 实例创建一个骨架，并用 {@link #clock} 更新该骨架。
      * 区别在于由 {@link #buildArmature} 创建的骨架没有 WorldClock 实例驱动。
      * @param armatureName - 骨架数据名称。
-     * @param dragonBonesName - DragonBonesData 实例的缓存名称。 （如果未设置，将检索所有的 DragonBonesData 实例，当多个 DragonBonesData 实例中包含同名的骨架数据时，可能无法准确的创建出特定的骨架）
+     * @param dragonBonesName - DragonBonesData 实例的缓存名称。 （如果未设置，将检索所有的 DragonBonesData 实例，当多个
+     * DragonBonesData 实例中包含同名的骨架数据时，可能无法准确的创建出特定的骨架）
      * @param skinName - 皮肤名称，可以设置一个其他骨架数据名称来共享其皮肤数据。 （如果未设置，则使用默认的皮肤数据）
      * @returns 骨架的显示容器。
      * @version DragonBones 4.5
@@ -163,7 +168,10 @@ public:
      * </pre>
      * @language zh_CN
      */
-    virtual CCArmatureDisplay* buildArmatureDisplay(const std::string& armatureName, const std::string& dragonBonesName = "", const std::string& skinName = "", const std::string& textureAtlasName = "") const;
+    virtual CCArmatureDisplay* buildArmatureDisplay(const std::string& armatureName,
+                                                    const std::string& dragonBonesName  = "",
+                                                    const std::string& skinName         = "",
+                                                    const std::string& textureAtlasName = "") const;
     /**
      * - Create the display object with the specified texture.
      * @param textureName - The texture data name.
@@ -178,7 +186,8 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    virtual cocos2d::Sprite* getTextureDisplay(const std::string& textureName, const std::string& dragonBonesName = "") const;
+    virtual cocos2d::Sprite* getTextureDisplay(const std::string& textureName,
+                                               const std::string& dragonBonesName = "") const;
     /**
      * - A global sound event manager.
      * Sound events can be listened to uniformly from the manager.
@@ -206,11 +215,8 @@ public:
      * @deprecated
      * @language zh_CN
      */
-    static WorldClock* getClock()
-    {
-        return _dragonBonesInstance->getClock();
-    }
+    static WorldClock* getClock() { return _dragonBonesInstance->getClock(); }
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_CC_FACTORY_H
+#endif  // DRAGONBONES_CC_FACTORY_H

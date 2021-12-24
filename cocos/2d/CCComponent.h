@@ -35,7 +35,8 @@ NS_CC_BEGIN
 
 class Node;
 
-enum {
+enum
+{
     kComponentOnEnter,
     kComponentOnExit,
     kComponentOnAdd,
@@ -58,12 +59,12 @@ public:
 
     bool isEnabled() const { return _enabled; }
     virtual void setEnabled(bool enabled);
-    
+
     const std::string& getName() const { return _name; }
     virtual void setName(const std::string& name) { _name = name; }
-    
+
     Node* getOwner() const { return _owner; }
-    virtual void setOwner(Node *owner);
+    virtual void setOwner(Node* owner);
 
     virtual void update(float delta);
     virtual bool serialize(void* r);
@@ -73,11 +74,11 @@ public:
     virtual void onAdd();
     virtual void onRemove();
 
-CC_CONSTRUCTOR_ACCESS:
-    /**
-    * @js ctor
-    */
-    Component();
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        Component();
 
 protected:
     Node* _owner;

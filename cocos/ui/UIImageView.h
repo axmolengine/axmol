@@ -37,16 +37,17 @@ NS_CC_BEGIN
 
 struct CC_DLL ResourceData;
 
-namespace ui {
-    class Scale9Sprite;
+namespace ui
+{
+class Scale9Sprite;
 /**
  * @brief A widget to display images.
  */
-class CC_GUI_DLL ImageView : public Widget , public cocos2d::BlendProtocol
+class CC_GUI_DLL ImageView : public Widget, public cocos2d::BlendProtocol
 {
-    
+
     DECLARE_CLASS_GUI_INFO
-    
+
 public:
     /**
      * Default constructor
@@ -66,7 +67,7 @@ public:
      * Create a empty ImageView.
      */
     static ImageView* create();
-    
+
     /**
      * Create a  imageview  with a image name.
      *
@@ -75,7 +76,6 @@ public:
      * @return A ImageView instance.
      */
     static ImageView* create(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
-    
 
     /**
      * Load texture for imageview.
@@ -83,7 +83,7 @@ public:
      * @param fileName   file name of texture.
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTexture(const std::string& fileName,TextureResType texType = TextureResType::LOCAL);
+    void loadTexture(const std::string& fileName, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Updates the texture rect of the ImageView in points.
@@ -102,7 +102,7 @@ public:
      * Query whether button is using scale9 renderer or not.
      *@return whether button use scale9 renderer or not.
      */
-    bool isScale9Enabled()const;
+    bool isScale9Enabled() const;
 
     /**
      * Sets capInsets for imageview.
@@ -110,24 +110,25 @@ public:
      *
      * @param capInsets    capinsets for imageview
      */
-    void setCapInsets(const Rect &capInsets);
+    void setCapInsets(const Rect& capInsets);
 
     /**
      * Get ImageView's capInsets size.
      * @return Query capInsets size in Rect
      * @see `setCapInsets(const Rect&)`
      */
-    const Rect& getCapInsets()const;
-    
+    const Rect& getCapInsets() const;
+
     /**
      * Sets the source blending function.
      *
-     * @param blendFunc A structure with source and destination factor to specify pixel arithmetic. e.g. {BlendFactor::ONE, BlendFactor::ONE}, {BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA}.
+     * @param blendFunc A structure with source and destination factor to specify pixel arithmetic. e.g.
+     * {BlendFactor::ONE, BlendFactor::ONE}, {BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA}.
      * @js NA
      * @lua NA
      */
-    virtual void setBlendFunc(const BlendFunc &blendFunc) override;
-    
+    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+
     /**
      * Returns the blending function that is currently being used.
      *
@@ -135,9 +136,9 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual const BlendFunc &getBlendFunc() const override;
+    virtual const BlendFunc& getBlendFunc() const override;
 
-    //override methods.
+    // override methods.
     virtual void ignoreContentAdaptWithSize(bool ignore) override;
     virtual std::string getDescription() const override;
     virtual Vec2 getVirtualRendererSize() const override;
@@ -145,22 +146,24 @@ public:
 
     ResourceData getRenderFile();
 
-CC_CONSTRUCTOR_ACCESS:
-    //initializes state of widget.
-    virtual bool init() override;
+    CC_CONSTRUCTOR_ACCESS :
+        // initializes state of widget.
+        virtual bool
+        init() override;
     virtual bool init(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
 
 protected:
     virtual void initRenderer() override;
     virtual void onSizeChanged() override;
-    
+
     virtual void adaptRenderers() override;
     void loadTexture(SpriteFrame* spriteframe);
     void setupTexture();
-    
+
     void imageTextureScaleChangedWithSize();
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
+
 protected:
     bool _scale9Enabled;
     bool _prevIgnoreSize;
@@ -172,7 +175,7 @@ protected:
     std::string _textureFile;
 };
 
-}
+}  // namespace ui
 
 NS_CC_END
 // end of ui group

@@ -21,12 +21,14 @@ void DeformVertices::init(const VerticesData* verticesDataValue, Armature* armat
     if (verticesData != nullptr)
     {
         unsigned vertexCount = 0;
-        if (verticesData->weight != nullptr) 
+        if (verticesData->weight != nullptr)
         {
             vertexCount = verticesData->weight->count * 2;
         }
-        else {
-            vertexCount = verticesData->data->intArray[verticesData->offset + (unsigned)BinaryOffset::MeshVertexCount] * 2;
+        else
+        {
+            vertexCount =
+                verticesData->data->intArray[verticesData->offset + (unsigned)BinaryOffset::MeshVertexCount] * 2;
         }
 
         verticesDirty = true;
@@ -50,7 +52,7 @@ void DeformVertices::init(const VerticesData* verticesDataValue, Armature* armat
             }
         }
     }
-    else 
+    else
     {
         verticesDirty = false;
         vertices.clear();
@@ -61,9 +63,9 @@ void DeformVertices::init(const VerticesData* verticesDataValue, Armature* armat
 
 bool DeformVertices::isBonesUpdate() const
 {
-    for (const auto bone : bones) 
+    for (const auto bone : bones)
     {
-        if (bone != nullptr && bone->_childrenTransformDirty) 
+        if (bone != nullptr && bone->_childrenTransformDirty)
         {
             return true;
         }

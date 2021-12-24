@@ -23,33 +23,26 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-
 #include "renderer/CCGroupCommand.h"
 #include "renderer/CCRenderer.h"
 #include "base/CCDirector.h"
 
 NS_CC_BEGIN
 
-GroupCommandManager::GroupCommandManager()
-{
+GroupCommandManager::GroupCommandManager() {}
 
-}
-
-GroupCommandManager::~GroupCommandManager()
-{
-    
-}
+GroupCommandManager::~GroupCommandManager() {}
 
 bool GroupCommandManager::init()
 {
-    //0 is the default render group
+    // 0 is the default render group
     _groupMapping[0] = true;
     return true;
 }
 
 int GroupCommandManager::getGroupID()
 {
-    //Reuse old id
+    // Reuse old id
     if (!_unusedIDs.empty())
     {
         int groupID = *_unusedIDs.rbegin();
@@ -58,9 +51,9 @@ int GroupCommandManager::getGroupID()
         return groupID;
     }
 
-    //Create new ID
-//    int newID = _groupMapping.size();
-    int newID = Director::getInstance()->getRenderer()->createRenderQueue();
+    // Create new ID
+    //    int newID = _groupMapping.size();
+    int newID            = Director::getInstance()->getRenderer()->createRenderQueue();
     _groupMapping[newID] = true;
 
     return newID;
@@ -74,7 +67,7 @@ void GroupCommandManager::releaseGroupID(int groupID)
 
 GroupCommand::GroupCommand()
 {
-    _type = RenderCommand::Type::GROUP_COMMAND;
+    _type          = RenderCommand::Type::GROUP_COMMAND;
     _renderQueueID = Director::getInstance()->getRenderer()->getGroupCommandManager()->getGroupID();
 }
 

@@ -35,11 +35,12 @@ static const std::string className = "org.cocos2dx.lib.Cocos2dxBitmap";
 
 using namespace cocos2d;
 
-int getFontSizeAccordingHeightJni(int height) {
+int getFontSizeAccordingHeightJni(int height)
+{
     return JniHelper::callStaticIntMethod(className, "getFontSizeAccordingHeight", height);
 }
 
-std::string getStringWithEllipsisJni(const char* text, float width, float fontSize) {
+std::string getStringWithEllipsisJni(const char* text, float width, float fontSize)
+{
     return JniHelper::callStaticStringMethod(className, "getStringWithEllipsis", text, width, fontSize);
 }
-
