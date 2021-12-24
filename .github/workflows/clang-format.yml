@@ -1,0 +1,37 @@
+name: clang-format
+
+on: 
+  workflow_dispatch:
+    inputs:
+      commit_changes:
+        # actions run ID
+        description: 'Commit clang-format changes?'
+        # Default value if no value is explicitly provided
+        default: false
+        # Input has to be provided for the workflow to run
+        required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Run clang-format lint
+      uses: DoozyX/clang-format-lint-action@v0.13
+      with:
+        source: './cocos ./extensions'
+        exclude: './thidrparty ./extensions/fairygui ./extensions/scripting ./extensions/spine'
+        extensions: 'h,cpp,c'
+        clangFormatVersion: 13
+        inplace: True
+    - name: Commit clang-format changes
+      if: ${{ github.event.inputs.commit_changes == 'true' }}
+      uses: EndBug/add-and-commit@v7.5.0
+      with:
+        author_name: Clang Robot
+        author_email: robot@github.com
+        message: 'Committing clang-format changes'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
