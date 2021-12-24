@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -39,8 +39,8 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - ¹Ç÷ÀÔÚ¹Ç÷À¶¯»­ÌåÏµÖĞÊÇ×îÖØÒªµÄÂß¼­µ¥ÔªÖ®Ò»£¬¸ºÔğ¶¯»­ÖĞµÄÆ½ÒÆ¡¢Ğı×ª¡¢Ëõ·ÅµÄÊµÏÖ¡£
- * Ò»¸ö¹Ç¼ÜÖĞ¿ÉÒÔ°üº¬¶à¸ö¹Ç÷À¡£
+ * - éª¨éª¼åœ¨éª¨éª¼åŠ¨ç”»ä½“ç³»ä¸­æ˜¯æœ€é‡è¦çš„é€»è¾‘å•å…ƒä¹‹ä¸€ï¼Œè´Ÿè´£åŠ¨ç”»ä¸­çš„å¹³ç§»ã€æ—‹è½¬ã€ç¼©æ”¾çš„å®ç°ã€‚
+ * ä¸€ä¸ªéª¨æ¶ä¸­å¯ä»¥åŒ…å«å¤šä¸ªéª¨éª¼ã€‚
  * @see dragonBones.BoneData
  * @see dragonBones.Armature
  * @see dragonBones.Slot
@@ -59,7 +59,7 @@ public:
      * @language en_US
      */
     /**
-     * - Æ«ÒÆÄ£Ê½¡£
+     * - åç§»æ¨¡å¼ã€‚
      * @see #offset
      * @version DragonBones 5.5
      * @language zh_CN
@@ -135,10 +135,10 @@ public:
      * @language en_US
      */
     /**
-     * - Ç¿ÖÆ¹Ç÷ÀÔÚÏÂÒ»Ö¡¸üĞÂ±ä»»¡£
-     * µ±¸Ã¹Ç÷ÀÃ»ÓĞ¶¯»­×´Ì¬»òÆä¶¯»­×´Ì¬²¥·ÅÍê³ÉÊ±£¬¹Ç÷À½«²»ÔÚ¼ÌĞø¸üĞÂ£¬¶ø´ËÊ±ÓÉÓÚÄ³Ğ©Ô­Òò±ØĞë¸üĞÂ¹Ç÷ÀÊ±£¬ÔòĞèÒªÏÔÊ½µ÷ÓÃ¸Ã·½·¨¡£
+     * - å¼ºåˆ¶éª¨éª¼åœ¨ä¸‹ä¸€å¸§æ›´æ–°å˜æ¢ã€‚
+     * å½“è¯¥éª¨éª¼æ²¡æœ‰åŠ¨ç”»çŠ¶æ€æˆ–å…¶åŠ¨ç”»çŠ¶æ€æ’­æ”¾å®Œæˆæ—¶ï¼Œéª¨éª¼å°†ä¸åœ¨ç»§ç»­æ›´æ–°ï¼Œè€Œæ­¤æ—¶ç”±äºæŸäº›åŸå› å¿…é¡»æ›´æ–°éª¨éª¼æ—¶ï¼Œåˆ™éœ€è¦æ˜¾å¼è°ƒç”¨è¯¥æ–¹æ³•ã€‚
      * @example
-     * TypeScript ·ç¸ñ£¬½ö¹©²Î¿¼¡£
+     * TypeScript é£æ ¼ï¼Œä»…ä¾›å‚è€ƒã€‚
      * <pre>
      *     let bone = armature.getBone("arm");
      *     bone.offset.scaleX = 2.0;
@@ -158,7 +158,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¼ì²é¸Ã¹Ç÷ÀÊÇ·ñ°üº¬ÌØ¶¨µÄ¹Ç÷À¡£
+     * - æ£€æŸ¥è¯¥éª¨éª¼æ˜¯å¦åŒ…å«ç‰¹å®šçš„éª¨éª¼ã€‚
      * @see dragonBones.Bone
      * @version DragonBones 3.0
      * @language zh_CN
@@ -170,7 +170,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¹Ç÷ÀÊı¾İ¡£
+     * - éª¨éª¼æ•°æ®ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -186,7 +186,7 @@ public:
      * @language en_US
      */
     /**
-     * - ´Ë¹Ç÷ÀËùÓĞ²å²ÛµÄ¿É¼û¡£
+     * - æ­¤éª¨éª¼æ‰€æœ‰æ’æ§½çš„å¯è§ã€‚
      * @default true
      * @see dragonBones.Slot#visible
      * @version DragonBones 3.0
@@ -203,7 +203,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¹Ç÷ÀÃû³Æ¡£
+     * - éª¨éª¼åç§°ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -217,7 +217,7 @@ public:
      * @language en_US
      */
     /**
-     * - ËùÊôµÄ¸¸¹Ç÷À¡£
+     * - æ‰€å±çš„çˆ¶éª¨éª¼ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */

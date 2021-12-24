@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -36,7 +36,7 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - ±ß½ç¿òÊı¾İ»ùÀà¡£
+ * - è¾¹ç•Œæ¡†æ•°æ®åŸºç±»ã€‚
  * @see dragonBones.RectangleData
  * @see dragonBones.EllipseData
  * @see dragonBones.PolygonData
@@ -54,7 +54,7 @@ public:
      * @language en_US
      */
     /**
-     * - ±ß½ç¿òÀàĞÍ¡£
+     * - è¾¹ç•Œæ¡†ç±»å‹ã€‚
      * @version DragonBones 5.0
      * @language zh_CN
      */
@@ -82,7 +82,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¼ì²é±ß½ç¿òÊÇ·ñ°üº¬ÌØ¶¨µã¡££¨±¾µØ×ø±êÏµ£©
+     * - æ£€æŸ¥è¾¹ç•Œæ¡†æ˜¯å¦åŒ…å«ç‰¹å®šç‚¹ã€‚ï¼ˆæœ¬åœ°åæ ‡ç³»ï¼‰
      * @version DragonBones 5.0
      * @language zh_CN
      */
@@ -93,7 +93,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¼ì²é±ß½ç¿òÊÇ·ñÓëÌØ¶¨Ïß¶ÎÏà½»¡££¨±¾µØ×ø±êÏµ£©
+     * - æ£€æŸ¥è¾¹ç•Œæ¡†æ˜¯å¦ä¸ç‰¹å®šçº¿æ®µç›¸äº¤ã€‚ï¼ˆæœ¬åœ°åæ ‡ç³»ï¼‰
      * @version DragonBones 5.0
      * @language zh_CN
      */
@@ -114,7 +114,7 @@ public: // For WebAssembly.
  * @language en_US
  */
 /**
- * - ¾ØĞÎ±ß½ç¿òÊı¾İ¡£
+ * - çŸ©å½¢è¾¹ç•Œæ¡†æ•°æ®ã€‚
  * @version DragonBones 5.1
  * @language zh_CN
  */
@@ -169,7 +169,7 @@ protected:
  * @language en_US
  */
 /**
- * - ÍÖÔ²±ß½ç¿òÊı¾İ¡£
+ * - æ¤­åœ†è¾¹ç•Œæ¡†æ•°æ®ã€‚
  * @version DragonBones 5.1
  * @language zh_CN
  */
@@ -211,7 +211,7 @@ protected:
  * @language en_US
  */
 /**
- * - ¶à±ßĞÎ±ß½ç¿òÊı¾İ¡£
+ * - å¤šè¾¹å½¢è¾¹ç•Œæ¡†æ•°æ®ã€‚
  * @version DragonBones 5.1
  * @language zh_CN
  */
@@ -244,7 +244,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¶à±ßĞÎ¶¥µã¡£
+     * - å¤šè¾¹å½¢é¡¶ç‚¹ã€‚
      * @version DragonBones 5.1
      * @language zh_CN
      */

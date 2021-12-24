@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -44,9 +44,9 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - ´´½¨¹Ç¼ÜµÄ¹¤³§»ùÀà¡£ £¨Í¨³£Ö»ĞèÒªÒ»¸öÈ«¾Ö¹¤³§ÊµÀı£©
- * ¹¤³§Í¨¹ı½âÎö²¢Ìí¼ÓµÄ DragonBonesData ÊµÀıºÍ TextureAtlasData ÊµÀıÀ´´´½¨¹Ç¼Ü¡£
- * µ±Êı¾İ±»½âÎö¹ıÖ®ºó£¬ÒÑ¾­Ìí¼Óµ½¹¤³§ÖĞ£¬ÔÚÃ»ÓĞ±»¹¤³§ÇåÀíÖ®Ç°£¬²»ĞèÒªÔÙ´Î½âÎö¡£
+ * - åˆ›å»ºéª¨æ¶çš„å·¥å‚åŸºç±»ã€‚ ï¼ˆé€šå¸¸åªéœ€è¦ä¸€ä¸ªå…¨å±€å·¥å‚å®ä¾‹ï¼‰
+ * å·¥å‚é€šè¿‡è§£æå¹¶æ·»åŠ çš„ DragonBonesData å®ä¾‹å’Œ TextureAtlasData å®ä¾‹æ¥åˆ›å»ºéª¨æ¶ã€‚
+ * å½“æ•°æ®è¢«è§£æè¿‡ä¹‹åï¼Œå·²ç»æ·»åŠ åˆ°å·¥å‚ä¸­ï¼Œåœ¨æ²¡æœ‰è¢«å·¥å‚æ¸…ç†ä¹‹å‰ï¼Œä¸éœ€è¦å†æ¬¡è§£æã€‚
  * @see dragonBones.DragonBonesData
  * @see dragonBones.TextureAtlasData
  * @see dragonBones.ArmatureData
@@ -79,7 +79,7 @@ public:
      * @language en_US
      */
     /**
-     * - ´´½¨Ò»¸ö¹¤³§ÊµÀı¡£ £¨Í¨³£Ö»ĞèÒªÒ»¸öÈ«¾Ö¹¤³§ÊµÀı£©
+     * - åˆ›å»ºä¸€ä¸ªå·¥å‚å®ä¾‹ã€‚ ï¼ˆé€šå¸¸åªéœ€è¦ä¸€ä¸ªå…¨å±€å·¥å‚å®ä¾‹ï¼‰
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -136,11 +136,11 @@ public:
      * @language en_US
      */
     /**
-     * - ½«Ô­Ê¼Êı¾İ½âÎöÎª DragonBonesData ÊµÀı£¬²¢»º´æµ½¹¤³§ÖĞ¡£
-     * @param rawData - Ô­Ê¼Êı¾İ¡£
-     * @param name - Îª¸ÃÊµÀıÖ¸¶¨Ò»¸ö»º´æÃû³Æ£¬ÒÔ±ã¿ÉÒÔÍ¨¹ı´ËÃû³Æ»ñÈ¡¸ÃÊµÀı¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬ÔòÊ¹ÓÃ¸ÃÊµÀıÖĞµÄÃû³Æ£©
-     * @param scale - ÎªËùÓĞµÄ¹Ç¼ÜÖ¸¶¨Ò»¸öËõ·ÅÖµ¡£ £¨Ä¬ÈÏ: 1.0£©
-     * @returns DragonBonesData ÊµÀı
+     * - å°†åŸå§‹æ•°æ®è§£æä¸º DragonBonesData å®ä¾‹ï¼Œå¹¶ç¼“å­˜åˆ°å·¥å‚ä¸­ã€‚
+     * @param rawData - åŸå§‹æ•°æ®ã€‚
+     * @param name - ä¸ºè¯¥å®ä¾‹æŒ‡å®šä¸€ä¸ªç¼“å­˜åç§°ï¼Œä»¥ä¾¿å¯ä»¥é€šè¿‡æ­¤åç§°è·å–è¯¥å®ä¾‹ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œåˆ™ä½¿ç”¨è¯¥å®ä¾‹ä¸­çš„åç§°ï¼‰
+     * @param scale - ä¸ºæ‰€æœ‰çš„éª¨æ¶æŒ‡å®šä¸€ä¸ªç¼©æ”¾å€¼ã€‚ ï¼ˆé»˜è®¤: 1.0ï¼‰
+     * @returns DragonBonesData å®ä¾‹
      * @see #getDragonBonesData()
      * @see #addDragonBonesData()
      * @see #removeDragonBonesData()
@@ -164,12 +164,12 @@ public:
      * @language en_US
      */
     /**
-     * - ½«Ô­Ê¼ÌùÍ¼¼¯Êı¾İºÍÌùÍ¼¼¯¶ÔÏó½âÎöÎª TextureAtlasData ÊµÀı£¬²¢»º´æµ½¹¤³§ÖĞ¡£
-     * @param rawData - Ô­Ê¼ÌùÍ¼¼¯Êı¾İ¡£
-     * @param textureAtlas - ÌùÍ¼¼¯¶ÔÏó¡£
-     * @param name - Îª¸ÃÊµÀıÖ¸¶¨Ò»¸ö»º´æÃû³Æ£¬ÒÔ±ã¿ÉÒÔÍ¨¹ı´ËÃû³Æ»ñÈ¡¸ÃÊµÀı¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬ÔòÊ¹ÓÃ¸ÃÊµÀıÖĞµÄÃû³Æ£©
-     * @param scale - ÎªÌùÍ¼¼¯Ö¸¶¨Ò»¸öËõ·ÅÖµ¡£ £¨Ä¬ÈÏ: 1.0£©
-     * @returns TextureAtlasData ÊµÀı
+     * - å°†åŸå§‹è´´å›¾é›†æ•°æ®å’Œè´´å›¾é›†å¯¹è±¡è§£æä¸º TextureAtlasData å®ä¾‹ï¼Œå¹¶ç¼“å­˜åˆ°å·¥å‚ä¸­ã€‚
+     * @param rawData - åŸå§‹è´´å›¾é›†æ•°æ®ã€‚
+     * @param textureAtlas - è´´å›¾é›†å¯¹è±¡ã€‚
+     * @param name - ä¸ºè¯¥å®ä¾‹æŒ‡å®šä¸€ä¸ªç¼“å­˜åç§°ï¼Œä»¥ä¾¿å¯ä»¥é€šè¿‡æ­¤åç§°è·å–è¯¥å®ä¾‹ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œåˆ™ä½¿ç”¨è¯¥å®ä¾‹ä¸­çš„åç§°ï¼‰
+     * @param scale - ä¸ºè´´å›¾é›†æŒ‡å®šä¸€ä¸ªç¼©æ”¾å€¼ã€‚ ï¼ˆé»˜è®¤: 1.0ï¼‰
+     * @returns TextureAtlasData å®ä¾‹
      * @see #getTextureAtlasData()
      * @see #addTextureAtlasData()
      * @see #removeTextureAtlasData()
@@ -190,9 +190,9 @@ public:
      * @language en_US
      */
     /**
-     * - »ñÈ¡ÌØ¶¨µÄ DragonBonesData ÊµÀı¡£
-     * @param name - DragonBonesData ÊµÀıµÄ»º´æÃû³Æ¡£
-     * @returns DragonBonesData ÊµÀı
+     * - è·å–ç‰¹å®šçš„ DragonBonesData å®ä¾‹ã€‚
+     * @param name - DragonBonesData å®ä¾‹çš„ç¼“å­˜åç§°ã€‚
+     * @returns DragonBonesData å®ä¾‹
      * @see #parseDragonBonesData()
      * @see #addDragonBonesData()
      * @see #removeDragonBonesData()
@@ -216,9 +216,9 @@ public:
      * @language en_US
      */
     /**
-     * - ½« DragonBonesData ÊµÀı»º´æµ½¹¤³§ÖĞ¡£
-     * @param data - DragonBonesData ÊµÀı¡£
-     * @param name - Îª¸ÃÊµÀıÖ¸¶¨Ò»¸ö»º´æÃû³Æ£¬ÒÔ±ã¿ÉÒÔÍ¨¹ı´ËÃû³Æ»ñÈ¡¸ÃÊµÀı¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬ÔòÊ¹ÓÃ¸ÃÊµÀıÖĞµÄÃû³Æ£©
+     * - å°† DragonBonesData å®ä¾‹ç¼“å­˜åˆ°å·¥å‚ä¸­ã€‚
+     * @param data - DragonBonesData å®ä¾‹ã€‚
+     * @param name - ä¸ºè¯¥å®ä¾‹æŒ‡å®šä¸€ä¸ªç¼“å­˜åç§°ï¼Œä»¥ä¾¿å¯ä»¥é€šè¿‡æ­¤åç§°è·å–è¯¥å®ä¾‹ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œåˆ™ä½¿ç”¨è¯¥å®ä¾‹ä¸­çš„åç§°ï¼‰
      * @see #parseDragonBonesData()
      * @see #getDragonBonesData()
      * @see #removeDragonBonesData()
@@ -239,9 +239,9 @@ public:
      * @language en_US
      */
     /**
-     * - ÒÆ³ı DragonBonesData ÊµÀı¡£
-     * @param name - DragonBonesData ÊµÀı»º´æÃû³Æ¡£
-     * @param disposeData - ÊÇ·ñÊÍ·ÅÊı¾İ¡£ £¨Ä¬ÈÏ: true£©
+     * - ç§»é™¤ DragonBonesData å®ä¾‹ã€‚
+     * @param name - DragonBonesData å®ä¾‹ç¼“å­˜åç§°ã€‚
+     * @param disposeData - æ˜¯å¦é‡Šæ”¾æ•°æ®ã€‚ ï¼ˆé»˜è®¤: trueï¼‰
      * @see #parseDragonBonesData()
      * @see #getDragonBonesData()
      * @see #addDragonBonesData()
@@ -261,8 +261,8 @@ public:
      * @language en_US
      */
     /**
-     * - »ñÈ¡ÌØ¶¨µÄ TextureAtlasData ÊµÀıÁĞ±í¡£
-     * @param name - TextureAtlasData ÊµÀı»º´æÃû³Æ¡£
+     * - è·å–ç‰¹å®šçš„ TextureAtlasData å®ä¾‹åˆ—è¡¨ã€‚
+     * @param name - TextureAtlasData å®ä¾‹ç¼“å­˜åç§°ã€‚
      * @see #parseTextureAtlasData()
      * @see #addTextureAtlasData()
      * @see #removeTextureAtlasData()
@@ -286,9 +286,9 @@ public:
      * @language en_US
      */
     /**
-     * - ½« TextureAtlasData ÊµÀı»º´æµ½¹¤³§ÖĞ¡£
-     * @param data - TextureAtlasData ÊµÀı¡£
-     * @param name - Îª¸ÃÊµÀıÖ¸¶¨Ò»¸ö»º´æÃû³Æ£¬ÒÔ±ã¿ÉÒÔÍ¨¹ı´ËÃû³Æ»ñÈ¡¸ÃÊµÀı¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬ÔòÊ¹ÓÃ¸ÃÊµÀıÖĞµÄÃû³Æ£©
+     * - å°† TextureAtlasData å®ä¾‹ç¼“å­˜åˆ°å·¥å‚ä¸­ã€‚
+     * @param data - TextureAtlasData å®ä¾‹ã€‚
+     * @param name - ä¸ºè¯¥å®ä¾‹æŒ‡å®šä¸€ä¸ªç¼“å­˜åç§°ï¼Œä»¥ä¾¿å¯ä»¥é€šè¿‡æ­¤åç§°è·å–è¯¥å®ä¾‹ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œåˆ™ä½¿ç”¨è¯¥å®ä¾‹ä¸­çš„åç§°ï¼‰
      * @see #parseTextureAtlasData()
      * @see #getTextureAtlasData()
      * @see #removeTextureAtlasData()
@@ -309,9 +309,9 @@ public:
      * @language en_US
      */
     /**
-     * - ÒÆ³ı TextureAtlasData ÊµÀı¡£
-     * @param name - TextureAtlasData ÊµÀıµÄ»º´æÃû³Æ¡£
-     * @param disposeData - ÊÇ·ñÊÍ·ÅÊı¾İ¡£
+     * - ç§»é™¤ TextureAtlasData å®ä¾‹ã€‚
+     * @param name - TextureAtlasData å®ä¾‹çš„ç¼“å­˜åç§°ã€‚
+     * @param disposeData - æ˜¯å¦é‡Šæ”¾æ•°æ®ã€‚
      * @see #parseTextureAtlasData()
      * @see #getTextureAtlasData()
      * @see #addTextureAtlasData()
@@ -329,9 +329,9 @@ public:
      * @language en_US
      */
     /**
-     * - »ñÈ¡ÌØ¶¨µÄ¹Ç¼ÜÊı¾İ¡£
-     * @param name - ¹Ç¼ÜÊı¾İÃû³Æ¡£
-     * @param dragonBonesName - DragonBonesData ÊµÀıµÄ»º´æÃû³Æ¡£
+     * - è·å–ç‰¹å®šçš„éª¨æ¶æ•°æ®ã€‚
+     * @param name - éª¨æ¶æ•°æ®åç§°ã€‚
+     * @param dragonBonesName - DragonBonesData å®ä¾‹çš„ç¼“å­˜åç§°ã€‚
      * @see dragonBones.ArmatureData
      * @version DragonBones 5.1
      * @language zh_CN
@@ -344,8 +344,8 @@ public:
      * @language en_US
      */
     /**
-     * - Çå³ı»º´æµÄËùÓĞ DragonBonesData ÊµÀıºÍ TextureAtlasData ÊµÀı¡£
-     * @param disposeData - ÊÇ·ñÊÍ·ÅÊı¾İ¡£
+     * - æ¸…é™¤ç¼“å­˜çš„æ‰€æœ‰ DragonBonesData å®ä¾‹å’Œ TextureAtlasData å®ä¾‹ã€‚
+     * @param disposeData - æ˜¯å¦é‡Šæ”¾æ•°æ®ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -369,14 +369,14 @@ public:
      * @language en_US
      */
     /**
-     * - Í¨¹ı»º´æµÄ DragonBonesData ÊµÀıºÍ TextureAtlasData ÊµÀı´´½¨Ò»¸ö¹Ç¼Ü¡£
-     * ×¢Òâ£¬´´½¨µÄ¹Ç¼Ü²»ÔÙÊ¹ÓÃÊ±£¬ĞèÒªÏÔÊ½ÊÍ·Å {@link #dragonBones.Armature#dispose()}¡£
-     * @param armatureName - ¹Ç¼ÜÊı¾İÃû³Æ¡£
-     * @param dragonBonesName - DragonBonesData ÊµÀıµÄ»º´æÃû³Æ¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬½«¼ìË÷ËùÓĞµÄ DragonBonesData ÊµÀı£¬µ±¶à¸ö DragonBonesData ÊµÀıÖĞ°üº¬Í¬ÃûµÄ¹Ç¼ÜÊı¾İÊ±£¬¿ÉÄÜÎŞ·¨×¼È·µÄ´´½¨³öÌØ¶¨µÄ¹Ç¼Ü£©
-     * @param skinName - Æ¤·ôÃû³Æ£¬¿ÉÒÔÉèÖÃÒ»¸öÆäËû¹Ç¼ÜÊı¾İÃû³ÆÀ´¹²ÏíÆäÆ¤·ôÊı¾İ¡££¨Èç¹ûÎ´ÉèÖÃ£¬ÔòÊ¹ÓÃÄ¬ÈÏµÄÆ¤·ôÊı¾İ£©
-     * @returns ¹Ç¼Ü¡£
+     * - é€šè¿‡ç¼“å­˜çš„ DragonBonesData å®ä¾‹å’Œ TextureAtlasData å®ä¾‹åˆ›å»ºä¸€ä¸ªéª¨æ¶ã€‚
+     * æ³¨æ„ï¼Œåˆ›å»ºçš„éª¨æ¶ä¸å†ä½¿ç”¨æ—¶ï¼Œéœ€è¦æ˜¾å¼é‡Šæ”¾ {@link #dragonBones.Armature#dispose()}ã€‚
+     * @param armatureName - éª¨æ¶æ•°æ®åç§°ã€‚
+     * @param dragonBonesName - DragonBonesData å®ä¾‹çš„ç¼“å­˜åç§°ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œå°†æ£€ç´¢æ‰€æœ‰çš„ DragonBonesData å®ä¾‹ï¼Œå½“å¤šä¸ª DragonBonesData å®ä¾‹ä¸­åŒ…å«åŒåçš„éª¨æ¶æ•°æ®æ—¶ï¼Œå¯èƒ½æ— æ³•å‡†ç¡®çš„åˆ›å»ºå‡ºç‰¹å®šçš„éª¨æ¶ï¼‰
+     * @param skinName - çš®è‚¤åç§°ï¼Œå¯ä»¥è®¾ç½®ä¸€ä¸ªå…¶ä»–éª¨æ¶æ•°æ®åç§°æ¥å…±äº«å…¶çš®è‚¤æ•°æ®ã€‚ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œåˆ™ä½¿ç”¨é»˜è®¤çš„çš®è‚¤æ•°æ®ï¼‰
+     * @returns éª¨æ¶ã€‚
      * @example
-     * TypeScript ·ç¸ñ£¬½ö¹©²Î¿¼¡£
+     * TypeScript é£æ ¼ï¼Œä»…ä¾›å‚è€ƒã€‚
      * <pre>
      *     let armature = factory.buildArmature("armatureName", "dragonBonesName");
      *     armature.clock = factory.clock;
@@ -410,16 +410,16 @@ public:
      * @language en_US
      */
     /**
-     * - ÓÃÌØ¶¨µÄÏÔÊ¾¶ÔÏóÊı¾İÌæ»»ÌØ¶¨²å²Ûµ±Ç°µÄÏÔÊ¾¶ÔÏóÊı¾İ¡£
-     * ÓÃ "dragonBonesName/armatureName/slotName/displayName" Ö¸¶¨ÏÔÊ¾¶ÔÏóÊı¾İ¡£
-     * @param dragonBonesName - DragonBonesData ÊµÀıµÄ»º´æÃû³Æ¡£
-     * @param armatureName - ¹Ç¼ÜÊı¾İÃû³Æ¡£
-     * @param slotName - ²å²ÛÊı¾İÃû³Æ¡£
-     * @param displayName - ÏÔÊ¾¶ÔÏóÊı¾İÃû³Æ¡£
-     * @param slot - ²å²Û¡£
-     * @param displayIndex - ±»Ìæ»»µÄÏÔÊ¾¶ÔÏóÊı¾İµÄË÷Òı¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬ÔòÌæ»»µ±Ç°µÄÏÔÊ¾¶ÔÏóÊı¾İ£©
+     * - ç”¨ç‰¹å®šçš„æ˜¾ç¤ºå¯¹è±¡æ•°æ®æ›¿æ¢ç‰¹å®šæ’æ§½å½“å‰çš„æ˜¾ç¤ºå¯¹è±¡æ•°æ®ã€‚
+     * ç”¨ "dragonBonesName/armatureName/slotName/displayName" æŒ‡å®šæ˜¾ç¤ºå¯¹è±¡æ•°æ®ã€‚
+     * @param dragonBonesName - DragonBonesData å®ä¾‹çš„ç¼“å­˜åç§°ã€‚
+     * @param armatureName - éª¨æ¶æ•°æ®åç§°ã€‚
+     * @param slotName - æ’æ§½æ•°æ®åç§°ã€‚
+     * @param displayName - æ˜¾ç¤ºå¯¹è±¡æ•°æ®åç§°ã€‚
+     * @param slot - æ’æ§½ã€‚
+     * @param displayIndex - è¢«æ›¿æ¢çš„æ˜¾ç¤ºå¯¹è±¡æ•°æ®çš„ç´¢å¼•ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œåˆ™æ›¿æ¢å½“å‰çš„æ˜¾ç¤ºå¯¹è±¡æ•°æ®ï¼‰
      * @example
-     * TypeScript ·ç¸ñ£¬½ö¹©²Î¿¼¡£
+     * TypeScript é£æ ¼ï¼Œä»…ä¾›å‚è€ƒã€‚
      * <pre>
      *     let slot = armature.getSlot("weapon");
      *     factory.replaceSlotDisplay("dragonBonesName", "armatureName", "slotName", "displayName", slot);
@@ -459,13 +459,13 @@ public:
      * @language en_US
      */
     /**
-     * - ½«ÌØ¶¨µÄÆ¤·ôÊı¾İ¹²Ïí¸øÌØ¶¨µÄ¹Ç¼ÜÊ¹ÓÃ¡£
-     * @param armature - ¹Ç¼Ü¡£
-     * @param skin - Æ¤·ôÊı¾İ¡£
-     * @param isOverride - ÊÇ·ñÍêÈ«¸²¸ÇÔ­À´µÄÆ¤·ô¡£ £¨Ä¬ÈÏ: false£©
-     * @param exclude - ²»ĞèÒª±»Ìæ»»µÄ²å²ÛÃû³ÆÁĞ±í¡£
+     * - å°†ç‰¹å®šçš„çš®è‚¤æ•°æ®å…±äº«ç»™ç‰¹å®šçš„éª¨æ¶ä½¿ç”¨ã€‚
+     * @param armature - éª¨æ¶ã€‚
+     * @param skin - çš®è‚¤æ•°æ®ã€‚
+     * @param isOverride - æ˜¯å¦å®Œå…¨è¦†ç›–åŸæ¥çš„çš®è‚¤ã€‚ ï¼ˆé»˜è®¤: falseï¼‰
+     * @param exclude - ä¸éœ€è¦è¢«æ›¿æ¢çš„æ’æ§½åç§°åˆ—è¡¨ã€‚
      * @example
-     * TypeScript ·ç¸ñ£¬½ö¹©²Î¿¼¡£
+     * TypeScript é£æ ¼ï¼Œä»…ä¾›å‚è€ƒã€‚
      * <pre>
      *     let armatureA = factory.buildArmature("armatureA", "dragonBonesA");
      *     let armatureDataB = factory.getArmatureData("armatureB", "dragonBonesB");
@@ -500,13 +500,13 @@ public:
      * @language en_US
      */
     /**
-     * - ÓÃÌØ¶¨¹Ç¼ÜÊı¾İµÄ¶¯»­Êı¾İÌæ»»ÌØ¶¨¹Ç¼ÜÏÖÓĞµÄ¶¯»­Êı¾İ¡£
-     * ÕâÑù¾ÍÄÜÊµÏÖÖÆ×÷Ò»¸ö¹Ç¼Ü¶¯»­Ä£°å£¬ÈÃÆäËûÃ»ÓĞÖÆ×÷¶¯»­µÄ¹Ç¼Ü¹²Ïí¸Ã¶¯»­¡£
-     * @param armature - ¹Ç¼Ü¡£
-     * @param armatureData - ¹Ç¼ÜÊı¾İ¡£
-     * @param isOverride - ÊÇ·ñÍêÈ«¸²¸ÇÔ­À´µÄ¶¯»­¡££¨Ä¬ÈÏ: false£©
+     * - ç”¨ç‰¹å®šéª¨æ¶æ•°æ®çš„åŠ¨ç”»æ•°æ®æ›¿æ¢ç‰¹å®šéª¨æ¶ç°æœ‰çš„åŠ¨ç”»æ•°æ®ã€‚
+     * è¿™æ ·å°±èƒ½å®ç°åˆ¶ä½œä¸€ä¸ªéª¨æ¶åŠ¨ç”»æ¨¡æ¿ï¼Œè®©å…¶ä»–æ²¡æœ‰åˆ¶ä½œåŠ¨ç”»çš„éª¨æ¶å…±äº«è¯¥åŠ¨ç”»ã€‚
+     * @param armature - éª¨æ¶ã€‚
+     * @param armatureData - éª¨æ¶æ•°æ®ã€‚
+     * @param isOverride - æ˜¯å¦å®Œå…¨è¦†ç›–åŸæ¥çš„åŠ¨ç”»ã€‚ï¼ˆé»˜è®¤: falseï¼‰
      * @example
-     * TypeScript ·ç¸ñ£¬½ö¹©²Î¿¼¡£
+     * TypeScript é£æ ¼ï¼Œä»…ä¾›å‚è€ƒã€‚
      * <pre>
      *     let armatureA = factory.buildArmature("armatureA", "dragonBonesA");
      *     let armatureDataB = factory.getArmatureData("armatureB", "dragonBonesB");
@@ -540,7 +540,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÓÉÒıÇæÇı¶¯µÄ WorldClock ÊµÀı¡£
+     * - ç”±å¼•æ“é©±åŠ¨çš„ WorldClock å®ä¾‹ã€‚
      * @version DragonBones 5.7
      * @language zh_CN
      */
@@ -555,7 +555,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÒÑ·ÏÆú£¬Çë²Î¿¼ {@link #replaceSkin}¡£
+     * - å·²åºŸå¼ƒï¼Œè¯·å‚è€ƒ {@link #replaceSkin}ã€‚
      * @deprecated
      * @language zh_CN
      */

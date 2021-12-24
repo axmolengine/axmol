@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -35,7 +35,7 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - ±ä»»¶ÔÏóµÄ»ùÀà¡£
+ * - å˜æ¢å¯¹è±¡çš„åŸºç±»ã€‚
  * @see dragonBones.Transform
  * @version DragonBones 4.5
  * @language zh_CN
@@ -56,7 +56,7 @@ public:
      * @language en_US
      */
     /**
-     * - Ïà¶ÔÓÚ¹Ç¼Ü×ø±êÏµµÄ¾ØÕó¡£
+     * - ç›¸å¯¹äºéª¨æ¶åæ ‡ç³»çš„çŸ©é˜µã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */
@@ -68,7 +68,7 @@ public:
      * @language en_US
      */
     /**
-     * - Ïà¶ÔÓÚ¹Ç¼Ü×ø±êÏµµÄ±ä»»¡£
+     * - ç›¸å¯¹äºéª¨æ¶åæ ‡ç³»çš„å˜æ¢ã€‚
      * @see #updateGlobalTransform()
      * @version DragonBones 3.0
      * @language zh_CN
@@ -81,7 +81,7 @@ public:
      * @language en_US
      */
     /**
-     * - Ïà¶ÔÓÚ¹Ç¼Ü»ò¸¸¹Ç÷À×ø±êÏµµÄÆ«ÒÆ±ä»»¡£
+     * - ç›¸å¯¹äºéª¨æ¶æˆ–çˆ¶éª¨éª¼åæ ‡ç³»çš„åç§»å˜æ¢ã€‚
      * @see #dragonBones.Bone#invalidUpdate()
      * @version DragonBones 3.0
      * @language zh_CN
@@ -123,10 +123,10 @@ public:
      * @language en_US
      */
     /**
-     * - ³öÓÚĞÔÄÜµÄ¿¼ÂÇ£¬¹Ç÷À»ò²å²ÛµÄ {@link #global} ÊôĞÔÖĞµÄĞı×ª»òËõ·Å²¢²»×ÜÊÇÕıÈ·¿É·ÃÎÊµÄ£¬ÓĞĞ©ÒıÇæ²¢²»ÒÀÀµÕâĞ©ÊôĞÔ¸üĞÂäÖÈ¾£¬±ÈÈç Egret¡£
-     * Ê¹ÓÃ´Ë·½·¨¿ÉÒÔ±£Ö¤·ÃÎÊµ½ {@link #global} ÊôĞÔÖĞÕıÈ·µÄĞı×ª»òËõ·Å¡£
+     * - å‡ºäºæ€§èƒ½çš„è€ƒè™‘ï¼Œéª¨éª¼æˆ–æ’æ§½çš„ {@link #global} å±æ€§ä¸­çš„æ—‹è½¬æˆ–ç¼©æ”¾å¹¶ä¸æ€»æ˜¯æ­£ç¡®å¯è®¿é—®çš„ï¼Œæœ‰äº›å¼•æ“å¹¶ä¸ä¾èµ–è¿™äº›å±æ€§æ›´æ–°æ¸²æŸ“ï¼Œæ¯”å¦‚ Egretã€‚
+     * ä½¿ç”¨æ­¤æ–¹æ³•å¯ä»¥ä¿è¯è®¿é—®åˆ° {@link #global} å±æ€§ä¸­æ­£ç¡®çš„æ—‹è½¬æˆ–ç¼©æ”¾ã€‚
      * @example
-     * TypeScript ·ç¸ñ£¬½ö¹©²Î¿¼¡£
+     * TypeScript é£æ ¼ï¼Œä»…ä¾›å‚è€ƒã€‚
      * <pre>
      *     bone.updateGlobalTransform();
      *     let rotation = bone.global.rotation;
@@ -141,7 +141,7 @@ public:
      * @language en_US
      */
     /**
-     * - ËùÊôµÄ¹Ç¼Ü¡£
+     * - æ‰€å±çš„éª¨æ¶ã€‚
      * @version DragonBones 3.0
      * @language zh_CN
      */

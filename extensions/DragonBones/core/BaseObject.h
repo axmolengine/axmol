@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -33,8 +33,8 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - »ù´¡¶ÔÏó£¬Í¨³£ DragonBones µÄ¶ÔÏó¶¼¼Ì³Ğ×Ô¸ÃÀà¡£
- * ËùÓĞ»ù´¡¶ÔÏóµÄÊµÀı¶¼»á»º´æµ½¶ÔÏó³Ø£¬ÒÔ¼õÉÙÆµ·±ÉêÇëÄÚ´æ»òÄÚ´æ»ØÊÕµÄĞÔÄÜÏûºÄ¡£
+ * - åŸºç¡€å¯¹è±¡ï¼Œé€šå¸¸ DragonBones çš„å¯¹è±¡éƒ½ç»§æ‰¿è‡ªè¯¥ç±»ã€‚
+ * æ‰€æœ‰åŸºç¡€å¯¹è±¡çš„å®ä¾‹éƒ½ä¼šç¼“å­˜åˆ°å¯¹è±¡æ± ï¼Œä»¥å‡å°‘é¢‘ç¹ç”³è¯·å†…å­˜æˆ–å†…å­˜å›æ”¶çš„æ€§èƒ½æ¶ˆè€—ã€‚
  * @version DragonBones 4.5
  * @language zh_CN
  */
@@ -56,9 +56,9 @@ public:
      * @language en_US
      */
     /**
-     * - ÉèÖÃÌØ¶¨¶ÔÏó³ØµÄ×î´ó»º´æÊıÁ¿¡£
-     * @param objectConstructor - ÌØ¶¨µÄÀà¡£ (²»ÉèÖÃÔòÉèÖÃËùÓĞ¶ÔÏó³ØµÄ×î´ó»º´æÊıÁ¿)
-     * @param maxCount - ×î´ó»º´æÊıÁ¿¡£
+     * - è®¾ç½®ç‰¹å®šå¯¹è±¡æ± çš„æœ€å¤§ç¼“å­˜æ•°é‡ã€‚
+     * @param objectConstructor - ç‰¹å®šçš„ç±»ã€‚ (ä¸è®¾ç½®åˆ™è®¾ç½®æ‰€æœ‰å¯¹è±¡æ± çš„æœ€å¤§ç¼“å­˜æ•°é‡)
+     * @param maxCount - æœ€å¤§ç¼“å­˜æ•°é‡ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -70,8 +70,8 @@ public:
      * @language en_US
      */
     /**
-     * - Çå³ıÌØ¶¨¶ÔÏó³ØµÄ»º´æÊµÀı¡£
-     * @param objectConstructor - ÌØ¶¨µÄÀà¡£ (²»ÉèÖÃÔòÇå³ıËùÓĞ»º´æµÄÊµÀı)
+     * - æ¸…é™¤ç‰¹å®šå¯¹è±¡æ± çš„ç¼“å­˜å®ä¾‹ã€‚
+     * @param objectConstructor - ç‰¹å®šçš„ç±»ã€‚ (ä¸è®¾ç½®åˆ™æ¸…é™¤æ‰€æœ‰ç¼“å­˜çš„å®ä¾‹)
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -84,8 +84,8 @@ public:
      * @language en_US
      */
     /**
-     * - ´Ó¶ÔÏó³ØÖĞ»ñÈ¡ÌØ¶¨ÀàµÄÊµÀı¡£
-     * @param objectConstructor - ÌØ¶¨µÄÀà¡£
+     * - ä»å¯¹è±¡æ± ä¸­è·å–ç‰¹å®šç±»çš„å®ä¾‹ã€‚
+     * @param objectConstructor - ç‰¹å®šçš„ç±»ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -117,7 +117,7 @@ public:
      * @language en_US
      */
     /**
-     * - ·ÖÅä¸ø´ËÊµÀıµÄÎ¨Ò»±êÊ¶ºÅ¡£
+     * - åˆ†é…ç»™æ­¤å®ä¾‹çš„å”¯ä¸€æ ‡è¯†å·ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -140,12 +140,12 @@ protected:
 public:
     virtual std::size_t getClassTypeIndex() const = 0;
     /**
-     * - Clear the object and return it back to object pool¡£
+     * - Clear the object and return it back to object poolã€‚
      * @version DragonBones 4.5
      * @language en_US
      */
     /**
-     * - Çå³ı¸ÃÊµÀıµÄËùÓĞÊı¾İ²¢½«Æä·µ»¹¶ÔÏó³Ø¡£
+     * - æ¸…é™¤è¯¥å®ä¾‹çš„æ‰€æœ‰æ•°æ®å¹¶å°†å…¶è¿”è¿˜å¯¹è±¡æ± ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */

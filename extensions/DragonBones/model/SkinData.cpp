@@ -1,4 +1,4 @@
-#include "SkinData.h"
+﻿#include "SkinData.h"
 #include "DisplayData.h"
 
 DRAGONBONES_NAMESPACE_BEGIN

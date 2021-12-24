@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -34,7 +34,7 @@ DRAGONBONES_NAMESPACE_BEGIN
  * @language en_US
  */
 /**
- * - ¶¯»­²¥·ÅÆ÷ÓÃÀ´²¥·Å¶¯»­Êı¾İºÍ¹ÜÀí¶¯»­×´Ì¬¡£
+ * - åŠ¨ç”»æ’­æ”¾å™¨ç”¨æ¥æ’­æ”¾åŠ¨ç”»æ•°æ®å’Œç®¡ç†åŠ¨ç”»çŠ¶æ€ã€‚
  * @see dragonBones.AnimationData
  * @see dragonBones.AnimationState
  * @version DragonBones 3.0
@@ -52,7 +52,7 @@ public:
      * @language en_US
      */
     /**
-     * - ËùÓĞ¶¯»­µÄ²¥·ÅËÙ¶È¡£ [0: Í£Ö¹²¥·Å, (0~1): ÂıËÙ²¥·Å, 1: Õı³£²¥·Å, (1~N): ¿ìËÙ²¥·Å]
+     * - æ‰€æœ‰åŠ¨ç”»çš„æ’­æ”¾é€Ÿåº¦ã€‚ [0: åœæ­¢æ’­æ”¾, (0~1): æ…¢é€Ÿæ’­æ”¾, 1: æ­£å¸¸æ’­æ”¾, (1~N): å¿«é€Ÿæ’­æ”¾]
      * @default 1.0
      * @version DragonBones 3.0
      * @language zh_CN
@@ -102,7 +102,7 @@ public:
      * @language en_US
      */
     /**
-     * - Çå³ıËùÓĞµÄ¶¯»­×´Ì¬¡£
+     * - æ¸…é™¤æ‰€æœ‰çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @see dragonBones.AnimationState
      * @version DragonBones 4.5
      * @language zh_CN
@@ -116,8 +116,8 @@ public:
      * @language en_US
      */
     /**
-     * - ÔİÍ£Ö¸¶¨¶¯»­×´Ì¬µÄ²¥·Å¡£
-     * @param animationName - ¶¯»­×´Ì¬Ãû³Æ¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬ÔòÔİÍ£ËùÓĞ¶¯»­£©
+     * - æš‚åœæŒ‡å®šåŠ¨ç”»çŠ¶æ€çš„æ’­æ”¾ã€‚
+     * @param animationName - åŠ¨ç”»çŠ¶æ€åç§°ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œåˆ™æš‚åœæ‰€æœ‰åŠ¨ç”»ï¼‰
      * @see dragonBones.AnimationState
      * @version DragonBones 3.0
      * @language zh_CN
@@ -134,10 +134,10 @@ public:
      * @language en_US
      */
     /**
-     * - Í¨¹ıÖ¸¶¨µÄ¶¯»­ÅäÖÃÀ´²¥·Å¶¯»­¡£
-     * ¸Ã API ÈÔÔÚÊµÑé½×¶Î£¬Ê¹ÓÃÊ±¿ÉÄÜÔâÓö bug »òÎÈ¶¨ĞÔ»ò¼æÈİĞÔÎÊÌâ¡£
-     * @param animationConfig - ¶¯»­ÅäÖÃ¡£
-     * @returns ²¥·ÅµÄ¶¯»­×´Ì¬¡£
+     * - é€šè¿‡æŒ‡å®šçš„åŠ¨ç”»é…ç½®æ¥æ’­æ”¾åŠ¨ç”»ã€‚
+     * è¯¥ API ä»åœ¨å®éªŒé˜¶æ®µï¼Œä½¿ç”¨æ—¶å¯èƒ½é­é‡ bug æˆ–ç¨³å®šæ€§æˆ–å…¼å®¹æ€§é—®é¢˜ã€‚
+     * @param animationConfig - åŠ¨ç”»é…ç½®ã€‚
+     * @returns æ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @see dragonBones.AnimationConfig
      * @beta
      * @version DragonBones 5.0
@@ -158,12 +158,12 @@ public:
      * @language en_US
      */
     /**
-     * - ²¥·ÅÖ¸¶¨¶¯»­¡£
-     * @param animationName - ¶¯»­Êı¾İÃû³Æ¡£ £¨Èç¹ûÎ´ÉèÖÃ£¬Ôò²¥·ÅÄ¬ÈÏ¶¯»­£¬»ò½«ÔİÍ£×´Ì¬ÇĞ»»Îª²¥·Å×´Ì¬£¬»òÖØĞÂ²¥·ÅÖ®Ç°²¥·ÅµÄ¶¯»­£©
-     * @param playTimes - Ñ­»·²¥·Å´ÎÊı¡£ [-1: Ê¹ÓÃ¶¯»­Êı¾İÄ¬ÈÏÖµ, 0: ÎŞÏŞÑ­»·²¥·Å, [1~N]: Ñ­»·²¥·Å N ´Î] £¨Ä¬ÈÏ: -1£©
-     * @returns ²¥·ÅµÄ¶¯»­×´Ì¬¡£
+     * - æ’­æ”¾æŒ‡å®šåŠ¨ç”»ã€‚
+     * @param animationName - åŠ¨ç”»æ•°æ®åç§°ã€‚ ï¼ˆå¦‚æœæœªè®¾ç½®ï¼Œåˆ™æ’­æ”¾é»˜è®¤åŠ¨ç”»ï¼Œæˆ–å°†æš‚åœçŠ¶æ€åˆ‡æ¢ä¸ºæ’­æ”¾çŠ¶æ€ï¼Œæˆ–é‡æ–°æ’­æ”¾ä¹‹å‰æ’­æ”¾çš„åŠ¨ç”»ï¼‰
+     * @param playTimes - å¾ªç¯æ’­æ”¾æ¬¡æ•°ã€‚ [-1: ä½¿ç”¨åŠ¨ç”»æ•°æ®é»˜è®¤å€¼, 0: æ— é™å¾ªç¯æ’­æ”¾, [1~N]: å¾ªç¯æ’­æ”¾ N æ¬¡] ï¼ˆé»˜è®¤: -1ï¼‰
+     * @returns æ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @example
-     * TypeScript ·ç¸ñ£¬½ö¹©²Î¿¼¡£
+     * TypeScript é£æ ¼ï¼Œä»…ä¾›å‚è€ƒã€‚
      * <pre>
      *     armature.animation.play("walk");
      * </pre>
@@ -190,16 +190,16 @@ public:
      * @language en_US
      */
     /**
-     * - µ­Èë²¥·ÅÖ¸¶¨µÄ¶¯»­¡£
-     * @param animationName - ¶¯»­Êı¾İÃû³Æ¡£
-     * @param fadeInTime - µ­ÈëÊ±¼ä¡£ [-1: Ê¹ÓÃ¶¯»­Êı¾İÄ¬ÈÏÖµ, [0~N]: µ­ÈëÊ±¼ä (ÒÔÃëÎªµ¥Î»)] £¨Ä¬ÈÏ: -1£©
-     * @param playTimes - ²¥·Å´ÎÊı¡£ [-1: Ê¹ÓÃ¶¯»­Êı¾İÄ¬ÈÏÖµ, 0: ÎŞÏŞÑ­»·²¥·Å, [1~N]: Ñ­»·²¥·Å N ´Î] £¨Ä¬ÈÏ: -1£©
-     * @param layer - »ìºÏÍ¼²ã£¬Í¼²ã¸ßµÄ¶¯»­×´Ì¬»áÓÅÏÈ»ñÈ¡»ìºÏÈ¨ÖØ£¬µ±»ìºÏÈ¨ÖØ·ÖÅä×ÜºÍ³¬¹ı 1.0 Ê±£¬Ê£ÓàµÄ¶¯»­×´Ì¬½«²»ÄÜÔÙ»ñµÃÈ¨ÖØ·ÖÅä¡£ £¨Ä¬ÈÏ: 0£©
-     * @param group - »ìºÏ×éÃû³Æ£¬¸ÃÊôĞÔÍ¨³£ÓÃÀ´Ö¸¶¨¶à¸ö¶¯»­×´Ì¬»ìºÏÊ±µÄÏà»¥Ìæ»»¹ØÏµ¡£ £¨Ä¬ÈÏ: null£©
-     * @param fadeOutMode - µ­³öÄ£Ê½£¬¸ÃÊôĞÔÍ¨³£ÓÃÀ´Ö¸¶¨¶à¸ö¶¯»­×´Ì¬»ìºÏÊ±µÄÏà»¥Ìæ»»Ä£Ê½¡£ £¨Ä¬ÈÏ: AnimationFadeOutMode.SameLayerAndGroup£©
-     * @returns ²¥·ÅµÄ¶¯»­×´Ì¬¡£
+     * - æ·¡å…¥æ’­æ”¾æŒ‡å®šçš„åŠ¨ç”»ã€‚
+     * @param animationName - åŠ¨ç”»æ•°æ®åç§°ã€‚
+     * @param fadeInTime - æ·¡å…¥æ—¶é—´ã€‚ [-1: ä½¿ç”¨åŠ¨ç”»æ•°æ®é»˜è®¤å€¼, [0~N]: æ·¡å…¥æ—¶é—´ (ä»¥ç§’ä¸ºå•ä½)] ï¼ˆé»˜è®¤: -1ï¼‰
+     * @param playTimes - æ’­æ”¾æ¬¡æ•°ã€‚ [-1: ä½¿ç”¨åŠ¨ç”»æ•°æ®é»˜è®¤å€¼, 0: æ— é™å¾ªç¯æ’­æ”¾, [1~N]: å¾ªç¯æ’­æ”¾ N æ¬¡] ï¼ˆé»˜è®¤: -1ï¼‰
+     * @param layer - æ··åˆå›¾å±‚ï¼Œå›¾å±‚é«˜çš„åŠ¨ç”»çŠ¶æ€ä¼šä¼˜å…ˆè·å–æ··åˆæƒé‡ï¼Œå½“æ··åˆæƒé‡åˆ†é…æ€»å’Œè¶…è¿‡ 1.0 æ—¶ï¼Œå‰©ä½™çš„åŠ¨ç”»çŠ¶æ€å°†ä¸èƒ½å†è·å¾—æƒé‡åˆ†é…ã€‚ ï¼ˆé»˜è®¤: 0ï¼‰
+     * @param group - æ··åˆç»„åç§°ï¼Œè¯¥å±æ€§é€šå¸¸ç”¨æ¥æŒ‡å®šå¤šä¸ªåŠ¨ç”»çŠ¶æ€æ··åˆæ—¶çš„ç›¸äº’æ›¿æ¢å…³ç³»ã€‚ ï¼ˆé»˜è®¤: nullï¼‰
+     * @param fadeOutMode - æ·¡å‡ºæ¨¡å¼ï¼Œè¯¥å±æ€§é€šå¸¸ç”¨æ¥æŒ‡å®šå¤šä¸ªåŠ¨ç”»çŠ¶æ€æ··åˆæ—¶çš„ç›¸äº’æ›¿æ¢æ¨¡å¼ã€‚ ï¼ˆé»˜è®¤: AnimationFadeOutMode.SameLayerAndGroupï¼‰
+     * @returns æ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @example
-     * TypeScript ·ç¸ñ£¬½ö¹©²Î¿¼¡£
+     * TypeScript é£æ ¼ï¼Œä»…ä¾›å‚è€ƒã€‚
      * <pre>
      *     armature.animation.fadeIn("walk", 0.3, 0, 0, "normalGroup").resetToPose = false;
      *     armature.animation.fadeIn("attack", 0.3, 1, 0, "attackGroup").resetToPose = false;
@@ -221,11 +221,11 @@ public:
      * @language en_US
      */
     /**
-     * - ´ÓÖ¸¶¨Ê±¼ä¿ªÊ¼²¥·ÅÖ¸¶¨µÄ¶¯»­¡£
-     * @param animationName - ¶¯»­Êı¾İÃû³Æ¡£
-     * @param time - ²¥·Å¿ªÊ¼µÄÊ±¼ä¡£ (ÒÔÃëÎªµ¥Î»)
-     * @param playTimes - Ñ­»·²¥·Å´ÎÊı¡£ [-1: Ê¹ÓÃ¶¯»­Êı¾İÄ¬ÈÏÖµ, 0: ÎŞÏŞÑ­»·²¥·Å, [1~N]: Ñ­»·²¥·Å N ´Î] £¨Ä¬ÈÏ: -1£©
-     * @returns ²¥·ÅµÄ¶¯»­×´Ì¬¡£
+     * - ä»æŒ‡å®šæ—¶é—´å¼€å§‹æ’­æ”¾æŒ‡å®šçš„åŠ¨ç”»ã€‚
+     * @param animationName - åŠ¨ç”»æ•°æ®åç§°ã€‚
+     * @param time - æ’­æ”¾å¼€å§‹çš„æ—¶é—´ã€‚ (ä»¥ç§’ä¸ºå•ä½)
+     * @param playTimes - å¾ªç¯æ’­æ”¾æ¬¡æ•°ã€‚ [-1: ä½¿ç”¨åŠ¨ç”»æ•°æ®é»˜è®¤å€¼, 0: æ— é™å¾ªç¯æ’­æ”¾, [1~N]: å¾ªç¯æ’­æ”¾ N æ¬¡] ï¼ˆé»˜è®¤: -1ï¼‰
+     * @returns æ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -240,11 +240,11 @@ public:
      * @language en_US
      */
     /**
-     * - ´ÓÖ¸¶¨Ö¡¿ªÊ¼²¥·ÅÖ¸¶¨µÄ¶¯»­¡£
-     * @param animationName - ¶¯»­Êı¾İÃû³Æ¡£
-     * @param frame - ²¥·Å¿ªÊ¼µÄÖ¡Êı¡£
-     * @param playTimes - ²¥·Å´ÎÊı¡£ [-1: Ê¹ÓÃ¶¯»­Êı¾İÄ¬ÈÏÖµ, 0: ÎŞÏŞÑ­»·²¥·Å, [1~N]: Ñ­»·²¥·Å N ´Î] £¨Ä¬ÈÏ: -1£©
-     * @returns ²¥·ÅµÄ¶¯»­×´Ì¬¡£
+     * - ä»æŒ‡å®šå¸§å¼€å§‹æ’­æ”¾æŒ‡å®šçš„åŠ¨ç”»ã€‚
+     * @param animationName - åŠ¨ç”»æ•°æ®åç§°ã€‚
+     * @param frame - æ’­æ”¾å¼€å§‹çš„å¸§æ•°ã€‚
+     * @param playTimes - æ’­æ”¾æ¬¡æ•°ã€‚ [-1: ä½¿ç”¨åŠ¨ç”»æ•°æ®é»˜è®¤å€¼, 0: æ— é™å¾ªç¯æ’­æ”¾, [1~N]: å¾ªç¯æ’­æ”¾ N æ¬¡] ï¼ˆé»˜è®¤: -1ï¼‰
+     * @returns æ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -259,11 +259,11 @@ public:
      * @language en_US
      */
     /**
-     * - ´ÓÖ¸¶¨½ø¶È¿ªÊ¼²¥·ÅÖ¸¶¨µÄ¶¯»­¡£
-     * @param animationName - ¶¯»­Êı¾İÃû³Æ¡£
-     * @param progress - ¿ªÊ¼²¥·ÅµÄ½ø¶È¡£
-     * @param playTimes - ²¥·Å´ÎÊı¡£ [-1: Ê¹ÓÃ¶¯»­Êı¾İÄ¬ÈÏÖµ, 0: ÎŞÏŞÑ­»·²¥·Å, [1~N]: Ñ­»·²¥·Å N ´Î] £¨Ä¬ÈÏ: -1£©
-     * @returns ²¥·ÅµÄ¶¯»­×´Ì¬¡£
+     * - ä»æŒ‡å®šè¿›åº¦å¼€å§‹æ’­æ”¾æŒ‡å®šçš„åŠ¨ç”»ã€‚
+     * @param animationName - åŠ¨ç”»æ•°æ®åç§°ã€‚
+     * @param progress - å¼€å§‹æ’­æ”¾çš„è¿›åº¦ã€‚
+     * @param playTimes - æ’­æ”¾æ¬¡æ•°ã€‚ [-1: ä½¿ç”¨åŠ¨ç”»æ•°æ®é»˜è®¤å€¼, 0: æ— é™å¾ªç¯æ’­æ”¾, [1~N]: å¾ªç¯æ’­æ”¾ N æ¬¡] ï¼ˆé»˜è®¤: -1ï¼‰
+     * @returns æ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -277,10 +277,10 @@ public:
      * @language en_US
      */
     /**
-     * - ÔÚÖ¸¶¨Ê±¼äÍ£Ö¹Ö¸¶¨¶¯»­²¥·Å
-     * @param animationName - ¶¯»­Êı¾İÃû³Æ¡£
-     * @param time - Í£Ö¹µÄÊ±¼ä¡£ (ÒÔÃëÎªµ¥Î»)
-     * @returns ²¥·ÅµÄ¶¯»­×´Ì¬¡£
+     * - åœ¨æŒ‡å®šæ—¶é—´åœæ­¢æŒ‡å®šåŠ¨ç”»æ’­æ”¾
+     * @param animationName - åŠ¨ç”»æ•°æ®åç§°ã€‚
+     * @param time - åœæ­¢çš„æ—¶é—´ã€‚ (ä»¥ç§’ä¸ºå•ä½)
+     * @returns æ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -294,10 +294,10 @@ public:
      * @language en_US
      */
     /**
-     * - ÔÚÖ¸¶¨Ö¡Í£Ö¹Ö¸¶¨¶¯»­µÄ²¥·Å
-     * @param animationName - ¶¯»­Êı¾İÃû³Æ¡£
-     * @param frame - Í£Ö¹µÄÖ¡Êı¡£
-     * @returns ²¥·ÅµÄ¶¯»­×´Ì¬¡£
+     * - åœ¨æŒ‡å®šå¸§åœæ­¢æŒ‡å®šåŠ¨ç”»çš„æ’­æ”¾
+     * @param animationName - åŠ¨ç”»æ•°æ®åç§°ã€‚
+     * @param frame - åœæ­¢çš„å¸§æ•°ã€‚
+     * @returns æ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -311,10 +311,10 @@ public:
      * @language en_US
      */
     /**
-     * - ÔÚÖ¸¶¨µÄ½ø¶ÈÍ£Ö¹Ö¸¶¨µÄ¶¯»­²¥·Å¡£
-     * @param animationName - ¶¯»­Êı¾İÃû³Æ¡£
-     * @param progress - Í£Ö¹½ø¶È¡£
-     * @returns ²¥·ÅµÄ¶¯»­×´Ì¬¡£
+     * - åœ¨æŒ‡å®šçš„è¿›åº¦åœæ­¢æŒ‡å®šçš„åŠ¨ç”»æ’­æ”¾ã€‚
+     * @param animationName - åŠ¨ç”»æ•°æ®åç§°ã€‚
+     * @param progress - åœæ­¢è¿›åº¦ã€‚
+     * @returns æ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -333,10 +333,10 @@ public:
      * @language en_US
      */
     /**
-     * - »ñÈ¡Ö¸¶¨µÄ¶¯»­×´Ì¬
-     * @param animationName - ¶¯»­×´Ì¬Ãû³Æ¡£
+     * - è·å–æŒ‡å®šçš„åŠ¨ç”»çŠ¶æ€
+     * @param animationName - åŠ¨ç”»çŠ¶æ€åç§°ã€‚
      * @example
-     * TypeScript ·ç¸ñ£¬½ö¹©²Î¿¼¡£
+     * TypeScript é£æ ¼ï¼Œä»…ä¾›å‚è€ƒã€‚
      * <pre>
      *     armature.animation.play("walk");
      *     let walkState = armature.animation.getState("walk");
@@ -354,8 +354,8 @@ public:
      * @language en_US
      */
     /**
-     * - ¼ì²éÊÇ·ñ°üº¬Ö¸¶¨µÄ¶¯»­Êı¾İ
-     * @param animationName - ¶¯»­Êı¾İÃû³Æ¡£
+     * - æ£€æŸ¥æ˜¯å¦åŒ…å«æŒ‡å®šçš„åŠ¨ç”»æ•°æ®
+     * @param animationName - åŠ¨ç”»æ•°æ®åç§°ã€‚
      * @see dragonBones.AnimationData
      * @version DragonBones 3.0
      * @language zh_CN
@@ -367,7 +367,7 @@ public:
      * @language en_US
      */
     /**
-     * - »ñÈ¡ËùÓĞµÄ¶¯»­×´Ì¬
+     * - è·å–æ‰€æœ‰çš„åŠ¨ç”»çŠ¶æ€
      * @version DragonBones 5.1
      * @language zh_CN
      */
@@ -382,7 +382,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¼ì²éÊÇ·ñÓĞ¶¯»­×´Ì¬ÕıÔÚ²¥·Å
+     * - æ£€æŸ¥æ˜¯å¦æœ‰åŠ¨ç”»çŠ¶æ€æ­£åœ¨æ’­æ”¾
      * @see dragonBones.AnimationState
      * @version DragonBones 3.0
      * @language zh_CN
@@ -395,7 +395,7 @@ public:
      * @language en_US
      */
     /**
-     * - ¼ì²éÊÇ·ñËùÓĞµÄ¶¯»­×´Ì¬¾ùÒÑ²¥·ÅÍê±Ï¡£
+     * - æ£€æŸ¥æ˜¯å¦æ‰€æœ‰çš„åŠ¨ç”»çŠ¶æ€å‡å·²æ’­æ”¾å®Œæ¯•ã€‚
      * @see dragonBones.AnimationState
      * @version DragonBones 3.0
      * @language zh_CN
@@ -408,7 +408,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÉÏÒ»¸ö²¥·ÅµÄ¶¯»­×´Ì¬Ãû³Æ
+     * - ä¸Šä¸€ä¸ªæ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€åç§°
      * @see #lastAnimationState
      * @version DragonBones 3.0
      * @language zh_CN
@@ -420,7 +420,7 @@ public:
      * @language en_US
      */
     /**
-     * - ËùÓĞ¶¯»­Êı¾İµÄÃû³Æ
+     * - æ‰€æœ‰åŠ¨ç”»æ•°æ®çš„åç§°
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -434,7 +434,7 @@ public:
      * @language en_US
      */
     /**
-     * - ËùÓĞµÄ¶¯»­Êı¾İ¡£
+     * - æ‰€æœ‰çš„åŠ¨ç”»æ•°æ®ã€‚
      * @version DragonBones 4.5
      * @language zh_CN
      */
@@ -450,7 +450,7 @@ public:
      * @language en_US
      */
     /**
-     * - Ò»¸ö¿ÉÒÔ¿ìËÙÊ¹ÓÃµÄ¶¯»­ÅäÖÃÊµÀı¡£
+     * - ä¸€ä¸ªå¯ä»¥å¿«é€Ÿä½¿ç”¨çš„åŠ¨ç”»é…ç½®å®ä¾‹ã€‚
      * @see dragonBones.AnimationConfig
      * @version DragonBones 5.0
      * @language zh_CN
@@ -463,7 +463,7 @@ public:
      * @language en_US
      */
     /**
-     * - ÉÏÒ»¸ö²¥·ÅµÄ¶¯»­×´Ì¬
+     * - ä¸Šä¸€ä¸ªæ’­æ”¾çš„åŠ¨ç”»çŠ¶æ€
      * @see dragonBones.AnimationState
      * @version DragonBones 3.0
      * @language zh_CN
