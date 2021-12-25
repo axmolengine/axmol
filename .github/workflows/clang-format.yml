@@ -30,8 +30,8 @@ jobs:
       if: ${{ github.event.inputs.commit_changes == 'true' }}
       uses: EndBug/add-and-commit@v7.5.0
       with:
-        author_name: GitHub Actions
-        author_email: actions@github.com
+        committer_name: GitHub Actions
+        committer_email: 41898282+github-actions[bot]@users.noreply.github.com
         message: 'Committing clang-format changes'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
