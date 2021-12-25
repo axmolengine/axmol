@@ -35,7 +35,8 @@ NS_CC_BEGIN
  * @{
  */
 
-namespace ui {
+namespace ui
+{
 
 class PageViewIndicator : public ProtectedNode
 {
@@ -66,15 +67,16 @@ public:
     uint8_t getSelectedIndexOpacity() const { return _currentIndexNode->getOpacity(); }
     void setIndexNodesOpacity(uint8_t opacity);
     uint8_t getIndexNodesOpacity() const { return _indexNodesOpacity; }
-    
+
     /**
      * Sets texture for index nodes.
      *
      * @param fileName   File name of texture.
      * @param resType    @see TextureResType .
      */
-    void setIndexNodesTexture(const std::string& texName,Widget::TextureResType texType = Widget::TextureResType::LOCAL);
-    
+    void setIndexNodesTexture(const std::string& texName,
+                              Widget::TextureResType texType = Widget::TextureResType::LOCAL);
+
 protected:
     bool init() override;
     void increaseNumberOfPages();
@@ -89,13 +91,13 @@ protected:
     float _indexNodesScale;
     Color3B _indexNodesColor;
     uint8_t _indexNodesOpacity;
-    
+
     bool _useDefaultTexture;
     std::string _indexNodesTextureFile;
     Widget::TextureResType _indexNodesTexType;
 };
 
-}
+}  // namespace ui
 // end of ui group
 /// @}
 NS_CC_END

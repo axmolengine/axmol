@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,30 +26,29 @@
 #include "navmesh/CCNavMeshAgent.h"
 #if CC_USE_NAVMESH
 
-#include "navmesh/CCNavMesh.h"
-#include "recast/DetourCrowd.h"
-#include "2d/CCNode.h"
-#include "2d/CCScene.h"
-#include <algorithm>
+#    include "navmesh/CCNavMesh.h"
+#    include "recast/DetourCrowd.h"
+#    include "2d/CCNode.h"
+#    include "2d/CCScene.h"
+#    include <algorithm>
 
 NS_CC_BEGIN
 
 NavMeshAgentParam::NavMeshAgentParam()
-: radius(0.6f)
-, height(2.0f)
-, maxAcceleration(8.0f)
-, maxSpeed(3.5f)
-, collisionQueryRange(radius * 12.0f)
-, pathOptimizationRange(radius * 30.0f)
-, separationWeight(2.0f)
-, updateFlags(DT_CROWD_ANTICIPATE_TURNS | DT_CROWD_OPTIMIZE_VIS | DT_CROWD_OPTIMIZE_TOPO | DT_CROWD_OBSTACLE_AVOIDANCE)
-, obstacleAvoidanceType(3)
-, queryFilterType(0)
-{
+    : radius(0.6f)
+    , height(2.0f)
+    , maxAcceleration(8.0f)
+    , maxSpeed(3.5f)
+    , collisionQueryRange(radius * 12.0f)
+    , pathOptimizationRange(radius * 30.0f)
+    , separationWeight(2.0f)
+    , updateFlags(DT_CROWD_ANTICIPATE_TURNS | DT_CROWD_OPTIMIZE_VIS | DT_CROWD_OPTIMIZE_TOPO |
+                  DT_CROWD_OBSTACLE_AVOIDANCE)
+    , obstacleAvoidanceType(3)
+    , queryFilterType(0)
+{}
 
-}
-
-NavMeshAgent* NavMeshAgent::create(const NavMeshAgentParam &param)
+NavMeshAgent* NavMeshAgent::create(const NavMeshAgentParam& param)
 {
     auto ref = new NavMeshAgent();
     if (ref->initWith(param))
@@ -79,34 +78,30 @@ cocos2d::NavMeshAgent::NavMeshAgent()
     , _userData(nullptr)
     , _crowd(nullptr)
     , _navMeshQuery(nullptr)
-{
+{}
 
-}
+cocos2d::NavMeshAgent::~NavMeshAgent() {}
 
-cocos2d::NavMeshAgent::~NavMeshAgent()
-{
-}
-
-bool NavMeshAgent::initWith(const NavMeshAgentParam &param)
+bool NavMeshAgent::initWith(const NavMeshAgentParam& param)
 {
     _param = param;
     setName(getNavMeshAgentComponentName());
     return true;
 }
 
-void cocos2d::NavMeshAgent::setNavMeshQuery(dtNavMeshQuery *query)
+void cocos2d::NavMeshAgent::setNavMeshQuery(dtNavMeshQuery* query)
 {
     _navMeshQuery = query;
 }
 
-void cocos2d::NavMeshAgent::removeFrom(dtCrowd *crowed)
+void cocos2d::NavMeshAgent::removeFrom(dtCrowd* crowed)
 {
     crowed->removeAgent(_agentID);
-    _crowd = nullptr;
+    _crowd   = nullptr;
     _agentID = -1;
 }
 
-void cocos2d::NavMeshAgent::addTo(dtCrowd *crowed)
+void cocos2d::NavMeshAgent::addTo(dtCrowd* crowed)
 {
     _crowd = crowed;
     dtCrowdAgentParams ap;
@@ -115,38 +110,42 @@ void cocos2d::NavMeshAgent::addTo(dtCrowd *crowed)
     _agentID = _crowd->addAgent(&mat.m[12], &ap);
 }
 
-void cocos2d::NavMeshAgent::convertTodtAgentParam(const NavMeshAgentParam &inParam, dtCrowdAgentParams &outParam)
+void cocos2d::NavMeshAgent::convertTodtAgentParam(const NavMeshAgentParam& inParam, dtCrowdAgentParams& outParam)
 {
     memset(&outParam, 0, sizeof(outParam));
-    outParam.collisionQueryRange = inParam.collisionQueryRange;
-    outParam.height = inParam.height;
-    outParam.maxAcceleration = inParam.maxAcceleration;
-    outParam.maxSpeed = inParam.maxSpeed;
+    outParam.collisionQueryRange   = inParam.collisionQueryRange;
+    outParam.height                = inParam.height;
+    outParam.maxAcceleration       = inParam.maxAcceleration;
+    outParam.maxSpeed              = inParam.maxSpeed;
     outParam.obstacleAvoidanceType = inParam.obstacleAvoidanceType;
     outParam.pathOptimizationRange = inParam.pathOptimizationRange;
-    outParam.queryFilterType = inParam.queryFilterType;
-    outParam.radius = inParam.radius;
-    outParam.separationWeight = inParam.separationWeight;
-    outParam.updateFlags = inParam.updateFlags;
+    outParam.queryFilterType       = inParam.queryFilterType;
+    outParam.radius                = inParam.radius;
+    outParam.separationWeight      = inParam.separationWeight;
+    outParam.updateFlags           = inParam.updateFlags;
 }
 
 void cocos2d::NavMeshAgent::onExit()
 {
-    if (_agentID == -1) return;
+    if (_agentID == -1)
+        return;
     Component::onExit();
 
     auto scene = _owner->getScene();
-    if (scene && scene->getNavMesh()){
+    if (scene && scene->getNavMesh())
+    {
         scene->getNavMesh()->removeNavMeshAgent(this);
     }
 }
 
 void cocos2d::NavMeshAgent::onEnter()
 {
-    if (_agentID != -1) return;
+    if (_agentID != -1)
+        return;
     Component::onEnter();
     auto scene = _owner->getScene();
-    if (scene && scene->getNavMesh()){
+    if (scene && scene->getNavMesh())
+    {
         scene->getNavMesh()->addNavMeshAgent(this);
     }
 }
@@ -159,7 +158,7 @@ float NavMeshAgent::getMaxSpeed() const
 void NavMeshAgent::setSeparationWeight(float weight)
 {
     _param.separationWeight = weight;
-    _needUpdateAgent = true;
+    _needUpdateAgent        = true;
 }
 
 float NavMeshAgent::getSeparationWeight() const
@@ -170,7 +169,7 @@ float NavMeshAgent::getSeparationWeight() const
 void cocos2d::NavMeshAgent::setObstacleAvoidanceType(unsigned char type)
 {
     _param.obstacleAvoidanceType = type;
-    _needUpdateAgent = true;
+    _needUpdateAgent             = true;
 }
 
 unsigned char NavMeshAgent::getObstacleAvoidanceType() const
@@ -180,9 +179,11 @@ unsigned char NavMeshAgent::getObstacleAvoidanceType() const
 
 Vec3 NavMeshAgent::getCurrentVelocity() const
 {
-    if (_crowd){
+    if (_crowd)
+    {
         auto agent = _crowd->getAgent(_agentID);
-        if (agent){
+        if (agent)
+        {
             return Vec3(agent->vel[0], agent->vel[1], agent->vel[2]);
         }
     }
@@ -191,7 +192,7 @@ Vec3 NavMeshAgent::getCurrentVelocity() const
 
 void NavMeshAgent::setMaxSpeed(float maxSpeed)
 {
-    _param.maxSpeed = maxSpeed;
+    _param.maxSpeed  = maxSpeed;
     _needUpdateAgent = true;
 }
 
@@ -203,7 +204,7 @@ float NavMeshAgent::getMaxAcceleration() const
 void NavMeshAgent::setMaxAcceleration(float maxAcceleration)
 {
     _param.maxAcceleration = maxAcceleration;
-    _needUpdateAgent = true;
+    _needUpdateAgent       = true;
 }
 
 float NavMeshAgent::getHeight() const
@@ -213,7 +214,7 @@ float NavMeshAgent::getHeight() const
 
 void NavMeshAgent::setHeight(float height)
 {
-    _param.height = height;
+    _param.height    = height;
     _needUpdateAgent = true;
 }
 
@@ -224,24 +225,26 @@ float NavMeshAgent::getRadius() const
 
 void NavMeshAgent::setRadius(float radius)
 {
-    _param.radius = radius;
+    _param.radius    = radius;
     _needUpdateAgent = true;
 }
 
-void NavMeshAgent::move(const Vec3 &destination, const MoveCallback &callback)
+void NavMeshAgent::move(const Vec3& destination, const MoveCallback& callback)
 {
-    _destination = destination;
-    _moveCallback = callback;
-    _needMove = true;
+    _destination     = destination;
+    _moveCallback    = callback;
+    _needMove        = true;
     _needUpdateAgent = true;
 }
 
 OffMeshLinkData NavMeshAgent::getCurrentOffMeshLinkData()
 {
     OffMeshLinkData data;
-    if (_crowd && isOnOffMeshLink()){
+    if (_crowd && isOnOffMeshLink())
+    {
         auto agentAnim = _crowd->getEditableAgentAnim(_agentID);
-        if (agentAnim){
+        if (agentAnim)
+        {
             Mat4 mat;
             if (_owner && _owner->getParent())
                 mat = _owner->getParent()->getWorldToNodeTransform();
@@ -259,17 +262,20 @@ bool NavMeshAgent::isOnOffMeshLink()
 
 void cocos2d::NavMeshAgent::completeOffMeshLink()
 {
-    if (_crowd && isOnOffMeshLink()){
-        _state = DT_CROWDAGENT_STATE_WALKING;
+    if (_crowd && isOnOffMeshLink())
+    {
+        _state           = DT_CROWDAGENT_STATE_WALKING;
         _needUpdateAgent = true;
     }
 }
 
 void NavMeshAgent::setAutoTraverseOffMeshLink(bool isAuto)
 {
-    if (_crowd && isOnOffMeshLink()){
+    if (_crowd && isOnOffMeshLink())
+    {
         auto agentAnim = _crowd->getEditableAgentAnim(_agentID);
-        if (agentAnim){
+        if (agentAnim)
+        {
             agentAnim->active = isAuto;
         }
     }
@@ -277,12 +283,13 @@ void NavMeshAgent::setAutoTraverseOffMeshLink(bool isAuto)
 
 void NavMeshAgent::stop()
 {
-    if (_state != DT_CROWDAGENT_STATE_INVALID) return;
-    _state = DT_CROWDAGENT_STATE_INVALID;
+    if (_state != DT_CROWDAGENT_STATE_INVALID)
+        return;
+    _state           = DT_CROWDAGENT_STATE_INVALID;
     _needUpdateAgent = true;
 }
 
-void NavMeshAgent::setOrientationRefAxes(const Vec3 &rotRefAxes)
+void NavMeshAgent::setOrientationRefAxes(const Vec3& rotRefAxes)
 {
     _rotRefAxes = rotRefAxes;
 }
@@ -294,15 +301,17 @@ void cocos2d::NavMeshAgent::setAutoOrientation(bool isAuto)
 
 void NavMeshAgent::resume()
 {
-    if (_state != DT_CROWDAGENT_STATE_INVALID) return;
-    _state = DT_CROWDAGENT_STATE_WALKING;
+    if (_state != DT_CROWDAGENT_STATE_INVALID)
+        return;
+    _state           = DT_CROWDAGENT_STATE_WALKING;
     _needUpdateAgent = true;
 }
 
 void NavMeshAgent::pause()
 {
-    if (_state == DT_CROWDAGENT_STATE_INVALID) return;
-    _state = DT_CROWDAGENT_STATE_INVALID;
+    if (_state == DT_CROWDAGENT_STATE_INVALID)
+        return;
+    _state           = DT_CROWDAGENT_STATE_INVALID;
     _needUpdateAgent = true;
 }
 
@@ -316,13 +325,16 @@ void NavMeshAgent::preUpdate(float delta)
     if ((_syncFlag & NODE_TO_AGENT) != 0)
         syncToAgent();
 
-    if (_needMove && _crowd && _navMeshQuery){
-        if (_state == DT_CROWDAGENT_STATE_OFFMESH) return;
-        _state = DT_CROWDAGENT_STATE_WALKING;
+    if (_needMove && _crowd && _navMeshQuery)
+    {
+        if (_state == DT_CROWDAGENT_STATE_OFFMESH)
+            return;
+        _state              = DT_CROWDAGENT_STATE_WALKING;
         _totalTimeAfterMove = 0.0f;
-        dtPolyRef pRef = 0;
+        dtPolyRef pRef      = 0;
         float nearestPos[3];
-        _navMeshQuery->findNearestPoly(&_destination.x, _crowd->getQueryExtents(), _crowd->getFilter(0), &pRef, nearestPos);
+        _navMeshQuery->findNearestPoly(&_destination.x, _crowd->getQueryExtents(), _crowd->getFilter(0), &pRef,
+                                       nearestPos);
         _crowd->requestMoveTarget(_agentID, pRef, nearestPos);
         _needMove = false;
     }
@@ -336,12 +348,14 @@ void NavMeshAgent::postUpdate(float /*delta*/)
 
 void NavMeshAgent::syncToNode()
 {
-    const dtCrowdAgent *agent = nullptr;
-    if (_crowd){
+    const dtCrowdAgent* agent = nullptr;
+    if (_crowd)
+    {
         agent = _crowd->getAgent(_agentID);
     }
 
-    if (agent){
+    if (agent)
+    {
         Mat4 wtop;
         Vec3 pos;
         if (_owner->getParent())
@@ -349,7 +363,8 @@ void NavMeshAgent::syncToNode()
         wtop.transformPoint(Vec3(agent->npos[0], agent->npos[1], agent->npos[2]), &pos);
         _owner->setPosition3D(pos);
         _state = agent->state;
-        if (_needAutoOrientation){
+        if (_needAutoOrientation)
+        {
             if (std::abs(agent->vel[0]) > 0.3f || std::abs(agent->vel[1]) > 0.3f || std::abs(agent->vel[2]) > 0.3f)
             {
                 Vec3 axes(_rotRefAxes);
@@ -369,23 +384,25 @@ void NavMeshAgent::syncToNode()
 
 void NavMeshAgent::syncToAgent()
 {
-    if (_crowd){
-        auto agent = _crowd->getEditableAgent(_agentID);
-        Mat4 mat = _owner->getNodeToWorldTransform();
+    if (_crowd)
+    {
+        auto agent     = _crowd->getEditableAgent(_agentID);
+        Mat4 mat       = _owner->getNodeToWorldTransform();
         agent->npos[0] = mat.m[12];
         agent->npos[1] = mat.m[13];
         agent->npos[2] = mat.m[14];
-        //if (_needAutoOrientation){
+        // if (_needAutoOrientation){
         //	Vec3 vel = mat * _rotRefAxes;
         //	agent->vel[0] = vel.x;
         //	agent->vel[1] = vel.y;
         //	agent->vel[2] = vel.z;
-        //}
-        if (_needUpdateAgent){
+        // }
+        if (_needUpdateAgent)
+        {
             dtCrowdAgentParams ap;
             convertTodtAgentParam(_param, ap);
-            agent->params = ap;
-            agent->state = _state;
+            agent->params    = ap;
+            agent->state     = _state;
             _needUpdateAgent = false;
         }
     }
@@ -393,8 +410,9 @@ void NavMeshAgent::syncToAgent()
 
 Vec3 NavMeshAgent::getVelocity() const
 {
-    const dtCrowdAgent *agent = nullptr;
-    if (_crowd){
+    const dtCrowdAgent* agent = nullptr;
+    if (_crowd)
+    {
         agent = _crowd->getAgent(_agentID);
     }
     if (agent)
@@ -406,4 +424,4 @@ Vec3 NavMeshAgent::getVelocity() const
 
 NS_CC_END
 
-#endif //CC_USE_NAVMESH
+#endif  // CC_USE_NAVMESH

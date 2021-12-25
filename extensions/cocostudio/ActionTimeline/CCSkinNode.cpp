@@ -1,6 +1,6 @@
 /****************************************************************************
 Copyright (c) 2015-2017 Chukong Technologies Inc.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,7 +24,6 @@ THE SOFTWARE.
 
 #include "ActionTimeline/CCSkinNode.h"
 using namespace cocos2d;
-
 
 NS_TIMELINE_BEGIN
 

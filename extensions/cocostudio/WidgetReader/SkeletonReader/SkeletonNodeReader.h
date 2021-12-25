@@ -1,6 +1,6 @@
 /****************************************************************************
 Copyright (c) 2015-2017 Chukong Technologies Inc.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,12 +27,11 @@ THE SOFTWARE.
 
 #include "WidgetReader/SkeletonReader/BoneNodeReader.h"
 
-class SkeletonNodeReader : public  BoneNodeReader
+class SkeletonNodeReader : public BoneNodeReader
 {
     DECLARE_CLASS_NODE_READER_INFO
 
 public:
-
     SkeletonNodeReader();
     ~SkeletonNodeReader();
 
@@ -43,4 +42,4 @@ public:
 
     cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
 };
-#endif //_SKELETONNODEREADER_H_
+#endif  //_SKELETONNODEREADER_H_

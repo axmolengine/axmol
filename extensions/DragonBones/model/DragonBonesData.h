@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -140,16 +140,8 @@ public:
      * @private
      */
     UserData* userData;
-    DragonBonesData() :
-        binary(nullptr),
-        userData(nullptr)
-    {
-        _onClear();
-    }
-    ~DragonBonesData()
-    {
-        _onClear();
-    }
+    DragonBonesData() : binary(nullptr), userData(nullptr) { _onClear(); }
+    ~DragonBonesData() { _onClear(); }
     /**
      * @internal
      */
@@ -174,20 +166,17 @@ public:
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     std::vector<unsigned>* getFrameIndices() { return &frameIndices; }
     const std::vector<std::string>& getArmatureNames() const { return armatureNames; }
 
 #if EGRET_WASM
-    unsigned getBinary() const
-    {
-        return (unsigned)binary;
-    }
-#endif // EGRET_WASM
+    unsigned getBinary() const { return (unsigned)binary; }
+#endif  // EGRET_WASM
 
     const UserData* getUserData() const { return userData; }
     void setUserData(UserData* value) { userData = value; }
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_DRAGONBONES_DATA_H
+#endif  // DRAGONBONES_DRAGONBONES_DATA_H

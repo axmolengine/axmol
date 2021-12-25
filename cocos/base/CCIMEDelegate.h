@@ -42,15 +42,14 @@ NS_CC_BEGIN
  */
 extern const std::string CC_DLL STD_STRING_EMPTY;
 
-
 /**
  * Keyboard notification event type.
  */
 typedef struct
 {
-    Rect  begin;              // the soft keyboard rectangle when animation begins
-    Rect  end;                // the soft keyboard rectangle when animation ends
-    float     duration;           // the soft keyboard animation duration
+    Rect begin;      // the soft keyboard rectangle when animation begins
+    Rect end;        // the soft keyboard rectangle when animation ends
+    float duration;  // the soft keyboard animation duration
 } IMEKeyboardNotificationInfo;
 
 /**
@@ -65,14 +64,14 @@ public:
      * @lua NA
      */
     virtual ~IMEDelegate();
-    
+
     /**
      * Default destructor.
      * @js NA
      * @lua NA
      */
     virtual bool attachWithIME();
-    
+
     /**
      * Determine whether the IME is detached or not.
      * @js NA
@@ -147,22 +146,22 @@ protected:
      * @js NA
      * @lua NA
      */
-    virtual void keyboardWillShow(IMEKeyboardNotificationInfo& /*info*/)   {}
+    virtual void keyboardWillShow(IMEKeyboardNotificationInfo& /*info*/) {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual void keyboardDidShow(IMEKeyboardNotificationInfo& /*info*/)    {}
+    virtual void keyboardDidShow(IMEKeyboardNotificationInfo& /*info*/) {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual void keyboardWillHide(IMEKeyboardNotificationInfo& /*info*/)   {}
+    virtual void keyboardWillHide(IMEKeyboardNotificationInfo& /*info*/) {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual void keyboardDidHide(IMEKeyboardNotificationInfo& /*info*/)    {}
+    virtual void keyboardDidHide(IMEKeyboardNotificationInfo& /*info*/) {}
 
 protected:
     /**
@@ -172,9 +171,8 @@ protected:
     IMEDelegate();
 };
 
-
 NS_CC_END
 // end of base group
 /// @}
 
-#endif    // __CC_IME_DELEGATE_H__
+#endif  // __CC_IME_DELEGATE_H__

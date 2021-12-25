@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,29 +29,26 @@
 
 NS_CC_BEGIN
 // Constants
-const float PUTextureAnimator::DEFAULT_TIME_STEP = 0.0f;
-const unsigned short PUTextureAnimator::DEFAULT_TEXCOORDS_START = 0;
-const unsigned short PUTextureAnimator::DEFAULT_TEXCOORDS_END = 0;
+const float PUTextureAnimator::DEFAULT_TIME_STEP                                        = 0.0f;
+const unsigned short PUTextureAnimator::DEFAULT_TEXCOORDS_START                         = 0;
+const unsigned short PUTextureAnimator::DEFAULT_TEXCOORDS_END                           = 0;
 const PUTextureAnimator::TextureAnimationType PUTextureAnimator::DEFAULT_ANIMATION_TYPE = PUTextureAnimator::TAT_LOOP;
-const bool PUTextureAnimator::DEFAULT_START_RANDOM = true;
+const bool PUTextureAnimator::DEFAULT_START_RANDOM                                      = true;
 
 //-----------------------------------------------------------------------
-PUTextureAnimator::PUTextureAnimator() : 
-    PUAffector(),
-    _animationTimeStep(DEFAULT_TIME_STEP),
-    _animationTimeStepCount(0.0f),
-    _startRandom(DEFAULT_START_RANDOM),
-    _animationTimeStepSet(false),
-    _nextIndex(false),
-    _textureAnimationType(DEFAULT_ANIMATION_TYPE),
-    _textureCoordsStart(DEFAULT_TEXCOORDS_START),
-    _textureCoordsEnd(DEFAULT_TEXCOORDS_END)
-{
-}
+PUTextureAnimator::PUTextureAnimator()
+    : PUAffector()
+    , _animationTimeStep(DEFAULT_TIME_STEP)
+    , _animationTimeStepCount(0.0f)
+    , _startRandom(DEFAULT_START_RANDOM)
+    , _animationTimeStepSet(false)
+    , _nextIndex(false)
+    , _textureAnimationType(DEFAULT_ANIMATION_TYPE)
+    , _textureCoordsStart(DEFAULT_TEXCOORDS_START)
+    , _textureCoordsEnd(DEFAULT_TEXCOORDS_END)
+{}
 //-----------------------------------------------------------------------
-PUTextureAnimator::~PUTextureAnimator()
-{
-}
+PUTextureAnimator::~PUTextureAnimator() {}
 //-----------------------------------------------------------------------
 float PUTextureAnimator::getAnimationTimeStep() const
 {
@@ -60,7 +57,7 @@ float PUTextureAnimator::getAnimationTimeStep() const
 //-----------------------------------------------------------------------
 void PUTextureAnimator::setAnimationTimeStep(float animationTimeStep)
 {
-    _animationTimeStep = animationTimeStep;
+    _animationTimeStep    = animationTimeStep;
     _animationTimeStepSet = true;
 }
 //-----------------------------------------------------------------------
@@ -107,13 +104,14 @@ void PUTextureAnimator::setStartRandom(bool startRandom)
 void PUTextureAnimator::initParticleForEmission(PUParticle3D* particle)
 {
     //// Only continue if the particle is a visual particle
-    //if (particle->particleType != Particle::PT_VISUAL)
+    // if (particle->particleType != Particle::PT_VISUAL)
     //	return;
 
     // Set first image
     if (_startRandom)
     {
-        particle->textureCoordsCurrent = (unsigned short)cocos2d::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
+        particle->textureCoordsCurrent =
+            (unsigned short)cocos2d::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
     }
     else
     {
@@ -124,25 +122,26 @@ void PUTextureAnimator::initParticleForEmission(PUParticle3D* particle)
     if (!_animationTimeStepSet)
     {
         // Set the animation time step for each particle
-        switch(_textureAnimationType)
+        switch (_textureAnimationType)
         {
         case TAT_LOOP:
-            {
-                particle->textureAnimationTimeStep = particle->timeToLive / (_textureCoordsEnd - _textureCoordsStart + 1);
-            }
-            break;
+        {
+            particle->textureAnimationTimeStep = particle->timeToLive / (_textureCoordsEnd - _textureCoordsStart + 1);
+        }
+        break;
 
         case TAT_UP_DOWN:
-            {
-                particle->textureAnimationTimeStep = particle->timeToLive / (2 * (_textureCoordsEnd - _textureCoordsStart) + 1);
-            }
-            break;
+        {
+            particle->textureAnimationTimeStep =
+                particle->timeToLive / (2 * (_textureCoordsEnd - _textureCoordsStart) + 1);
+        }
+        break;
 
         case TAT_RANDOM:
-            {
-                particle->textureAnimationTimeStep = particle->timeToLive;
-            }
-            break;
+        {
+            particle->textureAnimationTimeStep = particle->timeToLive;
+        }
+        break;
         }
     }
 }
@@ -164,71 +163,72 @@ void PUTextureAnimator::preUpdateAffector(float deltaTime)
 //-----------------------------------------------------------------------
 void PUTextureAnimator::determineNextTextureCoords(PUParticle3D* visualParticle)
 {
-    switch(_textureAnimationType)
+    switch (_textureAnimationType)
     {
     case TAT_LOOP:
+    {
+        if (visualParticle->textureCoordsCurrent >= _textureCoordsEnd)
         {
+            visualParticle->textureCoordsCurrent = _textureCoordsStart;
+        }
+        else
+        {
+            (visualParticle->textureCoordsCurrent)++;
+        }
+    }
+    break;
+
+    case TAT_UP_DOWN:
+    {
+        if (visualParticle->textureAnimationDirectionUp == true)
+        {
+            // Going up
             if (visualParticle->textureCoordsCurrent >= _textureCoordsEnd)
             {
-                visualParticle->textureCoordsCurrent = _textureCoordsStart;
+                (visualParticle->textureCoordsCurrent)--;
+                visualParticle->textureAnimationDirectionUp = false;
             }
             else
             {
                 (visualParticle->textureCoordsCurrent)++;
             }
         }
-        break;
-
-    case TAT_UP_DOWN:
+        else
         {
-            if (visualParticle->textureAnimationDirectionUp == true)
+            // Going down
+            if (visualParticle->textureCoordsCurrent <= _textureCoordsStart)
             {
-                // Going up
-                if (visualParticle->textureCoordsCurrent >= _textureCoordsEnd)
-                {
-                    (visualParticle->textureCoordsCurrent)--;
-                    visualParticle->textureAnimationDirectionUp = false;
-                }
-                else
-                {
-                    (visualParticle->textureCoordsCurrent)++;
-                }
+                (visualParticle->textureCoordsCurrent)++;
+                visualParticle->textureAnimationDirectionUp = true;
             }
             else
             {
-                // Going down
-                if (visualParticle->textureCoordsCurrent <= _textureCoordsStart)
-                {
-                    (visualParticle->textureCoordsCurrent)++;
-                    visualParticle->textureAnimationDirectionUp = true;
-                }
-                else
-                {
-                    (visualParticle->textureCoordsCurrent)--;
-                }
+                (visualParticle->textureCoordsCurrent)--;
             }
         }
-        break;
+    }
+    break;
 
     case TAT_RANDOM:
-        {
-            // Generate a random texcoord index
-            visualParticle->textureCoordsCurrent = (unsigned short)cocos2d::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
-        }
-        break;
+    {
+        // Generate a random texcoord index
+        visualParticle->textureCoordsCurrent =
+            (unsigned short)cocos2d::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
+    }
+    break;
     }
 }
 
-void PUTextureAnimator::updatePUAffector( PUParticle3D *particle, float deltaTime )
+void PUTextureAnimator::updatePUAffector(PUParticle3D* particle, float deltaTime)
 {
     //// Only continue if the particle is a visual particle
-    //if (particle->particleType != Particle::PT_VISUAL)
+    // if (particle->particleType != Particle::PT_VISUAL)
     //	return;
 
-    //for (auto iter : _particleSystem->getParticles())
+    // for (auto iter : _particleSystem->getParticles())
     {
-        //PUParticle3D *particle = iter;
-        // Determine the next texture coords index
+        // PUParticle3D *particle = iter;
+        //  Determine the next texture coords index
         if (_animationTimeStepSet)
         {
             if (_nextIndex)
@@ -256,16 +256,16 @@ PUTextureAnimator* PUTextureAnimator::create()
     return pta;
 }
 
-void PUTextureAnimator::copyAttributesTo( PUAffector* affector )
+void PUTextureAnimator::copyAttributesTo(PUAffector* affector)
 {
     PUAffector::copyAttributesTo(affector);
-    PUTextureAnimator* textureAnimator = static_cast<PUTextureAnimator*>(affector);
-    textureAnimator->_animationTimeStep = _animationTimeStep;
+    PUTextureAnimator* textureAnimator     = static_cast<PUTextureAnimator*>(affector);
+    textureAnimator->_animationTimeStep    = _animationTimeStep;
     textureAnimator->_animationTimeStepSet = _animationTimeStepSet;
     textureAnimator->_textureAnimationType = _textureAnimationType;
-    textureAnimator->_textureCoordsStart = _textureCoordsStart;
-    textureAnimator->_textureCoordsEnd = _textureCoordsEnd;
-    textureAnimator->_startRandom = _startRandom;
+    textureAnimator->_textureCoordsStart   = _textureCoordsStart;
+    textureAnimator->_textureCoordsEnd     = _textureCoordsEnd;
+    textureAnimator->_startRandom          = _startRandom;
 }
 
 NS_CC_END

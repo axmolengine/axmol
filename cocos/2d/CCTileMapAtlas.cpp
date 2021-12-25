@@ -36,9 +36,9 @@ NS_CC_BEGIN
 
 // implementation TileMapAtlas
 
-TileMapAtlas * TileMapAtlas::create(const std::string& tile, const std::string& mapFile, int tileWidth, int tileHeight)
+TileMapAtlas* TileMapAtlas::create(const std::string& tile, const std::string& mapFile, int tileWidth, int tileHeight)
 {
-    TileMapAtlas *ret = new TileMapAtlas();
+    TileMapAtlas* ret = new TileMapAtlas();
     if (ret->initWithTileFile(tile, mapFile, tileWidth, tileHeight))
     {
         ret->autorelease();
@@ -53,21 +53,16 @@ bool TileMapAtlas::initWithTileFile(const std::string& tile, const std::string& 
     this->loadTGAfile(mapFile);
     this->calculateItemsToRender();
 
-    if( AtlasNode::initWithTileFile(tile, tileWidth, tileHeight, _itemsToRender) )
+    if (AtlasNode::initWithTileFile(tile, tileWidth, tileHeight, _itemsToRender))
     {
         this->updateAtlasValues();
-        this->setContentSize(Vec2((float)(_TGAInfo->width*_itemWidth),
-                                        (float)(_TGAInfo->height*_itemHeight)));
+        this->setContentSize(Vec2((float)(_TGAInfo->width * _itemWidth), (float)(_TGAInfo->height * _itemHeight)));
         return true;
     }
     return false;
 }
 
-TileMapAtlas::TileMapAtlas()
- : _itemsToRender(0)
- , _TGAInfo(nullptr)
-{
-}
+TileMapAtlas::TileMapAtlas() : _itemsToRender(0), _TGAInfo(nullptr) {}
 
 TileMapAtlas::~TileMapAtlas()
 {
@@ -88,16 +83,16 @@ void TileMapAtlas::releaseMap()
 
 void TileMapAtlas::calculateItemsToRender()
 {
-    CCASSERT( _TGAInfo != nullptr, "tgaInfo must be non-nil");
+    CCASSERT(_TGAInfo != nullptr, "tgaInfo must be non-nil");
 
     _itemsToRender = 0;
-    for(int x=0;x < _TGAInfo->width; x++ ) 
+    for (int x = 0; x < _TGAInfo->width; x++)
     {
-        for( int y=0; y < _TGAInfo->height; y++ ) 
+        for (int y = 0; y < _TGAInfo->height; y++)
         {
-            Color3B *ptr = (Color3B*) _TGAInfo->imageData;
+            Color3B* ptr  = (Color3B*)_TGAInfo->imageData;
             Color3B value = ptr[x + y * _TGAInfo->width];
-            if( value.r )
+            if (value.r)
             {
                 ++_itemsToRender;
             }
@@ -114,9 +109,9 @@ void TileMapAtlas::loadTGAfile(const std::string& file)
     //    String *resourcePath = [mainBndl resourcePath];
     //    String * path = [resourcePath stringByAppendingPathComponent:file];
 
-    _TGAInfo = tgaLoad( fullPath.c_str() );
+    _TGAInfo = tgaLoad(fullPath.c_str());
 #if 1
-    if( _TGAInfo->status != TGA_OK ) 
+    if (_TGAInfo->status != TGA_OK)
     {
         CCASSERT(0, "TileMapAtlasLoadTGA : TileMapAtlas cannot load TGA file");
     }
@@ -131,12 +126,12 @@ void TileMapAtlas::setTile(const Color3B& tile, const Vec2& position)
     CCASSERT(position.y < _TGAInfo->height, "Invalid position.x");
     CCASSERT(tile.r != 0, "R component must be non 0");
 
-    Color3B *ptr = (Color3B*)_TGAInfo->imageData;
+    Color3B* ptr  = (Color3B*)_TGAInfo->imageData;
     Color3B value = ptr[(unsigned int)(position.x + position.y * _TGAInfo->width)];
-    if( value.r == 0 )
+    if (value.r == 0)
     {
         CCLOG("cocos2d: Value.r must be non 0.");
-    } 
+    }
     else
     {
         ptr[(unsigned int)(position.x + position.y * _TGAInfo->width)] = tile;
@@ -144,51 +139,51 @@ void TileMapAtlas::setTile(const Color3B& tile, const Vec2& position)
         // FIXME:: this method consumes a lot of memory
         // FIXME:: a tree of something like that shall be implemented
         std::string key = StringUtils::toString(position.x) + "," + StringUtils::toString(position.y);
-        int num = _posToAtlasIndex[key].asInt();
+        int num         = _posToAtlasIndex[key].asInt();
 
         this->updateAtlasValueAt(position, tile, num);
-    }    
+    }
 }
 
 Color3B TileMapAtlas::getTileAt(const Vec2& position) const
 {
-    CCASSERT( _TGAInfo != nullptr, "tgaInfo must not be nil");
-    CCASSERT( position.x < _TGAInfo->width, "Invalid position.x");
-    CCASSERT( position.y < _TGAInfo->height, "Invalid position.y");
+    CCASSERT(_TGAInfo != nullptr, "tgaInfo must not be nil");
+    CCASSERT(position.x < _TGAInfo->width, "Invalid position.x");
+    CCASSERT(position.y < _TGAInfo->height, "Invalid position.y");
 
-    Color3B *ptr = (Color3B*)_TGAInfo->imageData;
+    Color3B* ptr  = (Color3B*)_TGAInfo->imageData;
     Color3B value = ptr[(unsigned int)(position.x + position.y * _TGAInfo->width)];
 
-    return value;    
+    return value;
 }
 
 void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int index)
 {
-    CCASSERT( index >= 0 && index < _textureAtlas->getCapacity(), "updateAtlasValueAt: Invalid index");
+    CCASSERT(index >= 0 && index < _textureAtlas->getCapacity(), "updateAtlasValueAt: Invalid index");
 
     V3F_C4B_T2F_Quad* quad = &((_textureAtlas->getQuads())[index]);
 
-    int x = pos.x;
-    int y = pos.y;
-    float row = (float) (value.r % _itemsPerRow);
-    float col = (float) (value.r / _itemsPerRow);
+    int x     = pos.x;
+    int y     = pos.y;
+    float row = (float)(value.r % _itemsPerRow);
+    float col = (float)(value.r / _itemsPerRow);
 
-    float textureWide = (float) (_textureAtlas->getTexture()->getPixelsWide());
-    float textureHigh = (float) (_textureAtlas->getTexture()->getPixelsHigh());
+    float textureWide = (float)(_textureAtlas->getTexture()->getPixelsWide());
+    float textureHigh = (float)(_textureAtlas->getTexture()->getPixelsHigh());
 
-    float itemWidthInPixels = _itemWidth * CC_CONTENT_SCALE_FACTOR();
+    float itemWidthInPixels  = _itemWidth * CC_CONTENT_SCALE_FACTOR();
     float itemHeightInPixels = _itemHeight * CC_CONTENT_SCALE_FACTOR();
 
 #if CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
-    float left        = (2 * row * itemWidthInPixels + 1) / (2 * textureWide);
-    float right       = left + (itemWidthInPixels * 2 - 2) / (2 * textureWide);
-    float top         = (2 * col * itemHeightInPixels + 1) / (2 * textureHigh);
-    float bottom      = top + (itemHeightInPixels * 2 - 2) / (2 * textureHigh);
+    float left   = (2 * row * itemWidthInPixels + 1) / (2 * textureWide);
+    float right  = left + (itemWidthInPixels * 2 - 2) / (2 * textureWide);
+    float top    = (2 * col * itemHeightInPixels + 1) / (2 * textureHigh);
+    float bottom = top + (itemHeightInPixels * 2 - 2) / (2 * textureHigh);
 #else
-    float left        = (row * itemWidthInPixels) / textureWide;
-    float right       = left + itemWidthInPixels / textureWide;
-    float top         = (col * itemHeightInPixels) / textureHigh;
-    float bottom      = top + itemHeightInPixels / textureHigh;
+    float left   = (row * itemWidthInPixels) / textureWide;
+    float right  = left + itemWidthInPixels / textureWide;
+    float top    = (col * itemHeightInPixels) / textureHigh;
+    float bottom = top + itemHeightInPixels / textureHigh;
 #endif
 
     quad->tl.texCoords.u = left;
@@ -200,8 +195,8 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
     quad->br.texCoords.u = right;
     quad->br.texCoords.v = bottom;
 
-    quad->bl.vertices.x = (float) (x * _itemWidth);
-    quad->bl.vertices.y = (float) (y * _itemHeight);
+    quad->bl.vertices.x = (float)(x * _itemWidth);
+    quad->bl.vertices.y = (float)(y * _itemHeight);
     quad->bl.vertices.z = 0.0f;
     quad->br.vertices.x = (float)(x * _itemWidth + _itemWidth);
     quad->br.vertices.y = (float)(y * _itemHeight);
@@ -221,31 +216,32 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
 
     _textureAtlas->setDirty(true);
     ssize_t totalQuads = _textureAtlas->getTotalQuads();
-    if (index + 1 > totalQuads) {
+    if (index + 1 > totalQuads)
+    {
         _textureAtlas->increaseTotalQuadsWith(index + 1 - totalQuads);
     }
 }
 
 void TileMapAtlas::updateAtlasValues()
 {
-    CCASSERT( _TGAInfo != nullptr, "tgaInfo must be non-nil");
+    CCASSERT(_TGAInfo != nullptr, "tgaInfo must be non-nil");
 
     int total = 0;
 
-    for(int x=0;x < _TGAInfo->width; x++ ) 
+    for (int x = 0; x < _TGAInfo->width; x++)
     {
-        for( int y=0; y < _TGAInfo->height; y++ ) 
+        for (int y = 0; y < _TGAInfo->height; y++)
         {
-            if( total < _itemsToRender ) 
+            if (total < _itemsToRender)
             {
-                Color3B *ptr = (Color3B*) _TGAInfo->imageData;
+                Color3B* ptr  = (Color3B*)_TGAInfo->imageData;
                 Color3B value = ptr[x + y * _TGAInfo->width];
 
-                if( value.r != 0 )
+                if (value.r != 0)
                 {
-                    this->updateAtlasValueAt(Vec2(x,y), value, total);
+                    this->updateAtlasValueAt(Vec2(x, y), value, total);
 
-                    std::string key = StringUtils::toString(x) + "," + StringUtils::toString(y);
+                    std::string key       = StringUtils::toString(x) + "," + StringUtils::toString(y);
                     _posToAtlasIndex[key] = total;
 
                     total++;
@@ -254,6 +250,5 @@ void TileMapAtlas::updateAtlasValues()
         }
     }
 }
-
 
 NS_CC_END

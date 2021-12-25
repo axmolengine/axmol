@@ -44,7 +44,7 @@ class Sprite;
 
 namespace backend
 {
-    class Buffer;
+class Buffer;
 }
 
 /**
@@ -62,18 +62,21 @@ namespace backend
  * If the layer contains a property named "cc_vertexz" with an integer (in can be positive or negative),
  * then all the tiles belonging to the layer will use that value as their OpenGL vertex Z for depth.
 
- * On the other hand, if the "cc_vertexz" property has the "automatic" value, then the tiles will use an automatic vertex Z value.
- * Also before drawing the tiles, GL_ALPHA_TEST will be enabled, and disabled after drawing them. The used alpha func will be:
+ * On the other hand, if the "cc_vertexz" property has the "automatic" value, then the tiles will use an automatic
+ vertex Z value.
+ * Also before drawing the tiles, GL_ALPHA_TEST will be enabled, and disabled after drawing them. The used alpha func
+ will be:
 
  * glAlphaFunc( GL_GREATER, value ).
 
  * "value" by default is 0, but you can change it from Tiled by adding the "cc_alpha_func" property to the layer.
- * The value 0 should work for most cases, but if you have tiles that are semi-transparent, then you might want to use a different
+ * The value 0 should work for most cases, but if you have tiles that are semi-transparent, then you might want to use a
+ different
  * value, like 0.5.
- 
+
  * For further information, please see the programming guide:
  * http://www.cocos2d-iphone.org/wiki/doku.php/prog_guide:tiled_maps
- 
+
  * @since v3.2
  * @js NA
  */
@@ -93,7 +96,7 @@ public:
      * @param mapInfo A map info.
      * @return Return an autorelease object.
      */
-    static FastTMXLayer * create(TMXTilesetInfo *tilesetInfo, TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo);
+    static FastTMXLayer* create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     /**
      * @js ctor
      */
@@ -105,7 +108,7 @@ public:
     virtual ~FastTMXLayer();
 
     /** Returns the tile gid at a given tile coordinate. It also returns the tile flags.
-     * 
+     *
      * @param tileCoordinate The tile coordinate.
      * @param flags A TMXTileFlags.
      * @return The tile gid at a given tile coordinate. It also returns the tile flags.
@@ -153,13 +156,13 @@ public:
 
     /** Creates the tiles. */
     void setupTiles();
-    
+
     /** Get the tile layer name.
      *
      * @return The tile layer name.
      */
     const std::string& getLayerName() { return _layerName; }
-    
+
     /** Set the tile layer name.
      *
      * @param layerName The new layer name.
@@ -171,86 +174,88 @@ public:
      * @return The size of the layer in tiles.
      */
     const Vec2& getLayerSize() const { return _layerSize; }
-    
-    /** Set the size of the layer in tiles. 
+
+    /** Set the size of the layer in tiles.
      *
      * @param size The new size of the layer in tiles.
      */
     void setLayerSize(const Vec2& size) { _layerSize = size; }
-    
+
     /** Gets the size of the map's tile (could be different from the tile's size).
      *
      * @return The size of the map's tile (could be different from the tile's size).
      */
     const Vec2& getMapTileSize() const { return _mapTileSize; }
-    
-    /** Set the size of the map's tile. 
+
+    /** Set the size of the map's tile.
      *
      * @param size The new size of the map's tile.
      */
     void setMapTileSize(const Vec2& size) { _mapTileSize = size; }
-    
+
     /** Pointer to the map of tiles.
      * @js NA
      * @lua NA
      * @return The pointer to the map of tiles.
      */
     const uint32_t* getTiles() const { return _tiles; };
-    
+
     /** Set the pointer to the map of tiles.
      *
      * @param tiles The pointer to the map of tiles.
      */
-    void setTiles(uint32_t* tiles) { _tiles = tiles; _quadsDirty = true;};
-    
+    void setTiles(uint32_t* tiles)
+    {
+        _tiles      = tiles;
+        _quadsDirty = true;
+    };
+
     /** Tileset information for the layer.
      *
      * @return Tileset information for the layer.
      */
     TMXTilesetInfo* getTileSet() const { return _tileSet; }
-    
-    /** Set the tileset information for the layer. 
+
+    /** Set the tileset information for the layer.
      *
      * @param info The new tileset information for the layer.
      */
-    void setTileSet(TMXTilesetInfo* info) {
+    void setTileSet(TMXTilesetInfo* info)
+    {
         CC_SAFE_RETAIN(info);
         CC_SAFE_RELEASE(_tileSet);
         _tileSet = info;
     }
-    
+
     /** Layer orientation, which is the same as the map orientation.
      *
      * @return Layer orientation, which is the same as the map orientation.
      */
     int getLayerOrientation() const { return _layerOrientation; }
-    
-    /** Set Layer orientation, which is the same as the map orientation. 
+
+    /** Set Layer orientation, which is the same as the map orientation.
      *
      * @param orientation Layer orientation, which is the same as the map orientation.
      */
     void setLayerOrientation(int orientation) { _layerOrientation = orientation; }
-    
-    /** Properties from the layer. They can be added using Tiled. 
+
+    /** Properties from the layer. They can be added using Tiled.
      *
      * @return Properties from the layer. They can be added using Tiled.
      */
     const ValueMap& getProperties() const { return _properties; }
-    
+
     /** Properties from the layer. They can be added using Tiled.
      *
      * @return Properties from the layer. They can be added using Tiled.
      */
     ValueMap& getProperties() { return _properties; }
-    
+
     /** Set the properties to the layer.
      *
      * @param properties The properties to the layer.
      */
-    void setProperties(const ValueMap& properties)
-    {
-        _properties = properties;
-    }
+    void setProperties(const ValueMap& properties) { _properties = properties; }
 
     /** Returns the tile (Sprite) at a given a tile coordinate.
      * The returned Sprite will be already added to the TMXLayer. Don't add it again.
@@ -261,7 +266,7 @@ public:
      * @return Returns the tile (Sprite) at a given a tile coordinate.
      */
     Sprite* getTileAt(const Vec2& tileCoordinate);
-    
+
     /** Set an sprite to the tile,with the tile coordinate and gid.
      *
      * @param sprite A Sprite.
@@ -274,51 +279,45 @@ public:
     // Override
     //
     virtual std::string getDescription() const override;
-    virtual void draw(Renderer *renderer, const Mat4& transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     void removeChild(Node* child, bool cleanup = true) override;
 
     /** Map from gid of animated tile to its instance.
      *
      * @return Map from gid of animated tile to its instance.
      */
-    const std::unordered_map<uint32_t, std::vector<Vec2>>* getAnimTileCoord() {
-        return &_animTileCoord;
-    }
+    const std::unordered_map<uint32_t, std::vector<Vec2>>* getAnimTileCoord() { return &_animTileCoord; }
 
-    bool hasTileAnimation() const {
-        return !_animTileCoord.empty();
-    }
+    bool hasTileAnimation() const { return !_animTileCoord.empty(); }
 
-    TMXTileAnimManager* getTileAnimManager() const {
-        return _tileAnimManager;
-    }
+    TMXTileAnimManager* getTileAnimManager() const { return _tileAnimManager; }
 
-CC_CONSTRUCTOR_ACCESS:
-    bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    CC_CONSTRUCTOR_ACCESS : bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo,
+                                                     TMXLayerInfo* layerInfo,
+                                                     TMXMapInfo* mapInfo);
 
 protected:
     virtual void setOpacity(uint8_t opacity) override;
-
 
     void updateTiles(const Rect& culledRect);
     Vec2 calculateLayerOffset(const Vec2& offset);
 
     /* The layer recognizes some special properties, like cc_vertexz */
     void parseInternalProperties();
-    
+
     Mat4 tileToNodeTransform();
-    Rect tileBoundsForClipTransform(const Mat4 &tileToClip);
-    
+    Rect tileBoundsForClipTransform(const Mat4& tileToClip);
+
     int getVertexZForPos(const Vec2& pos);
-    
-    //Flip flags is packed into gid
+
+    // Flip flags is packed into gid
     void setFlaggedTileGIDByIndex(int index, uint32_t gid);
-    
+
     //
     void updateTotalQuads();
-    
-    int getTileIndexByPos(int x, int y) const { return x + y * (int) _layerSize.width; }
-    
+
+    int getTileIndexByPos(int x, int y) const { return x + y * (int)_layerSize.width; }
+
     void updateVertexBuffer();
     void updateIndexBuffer();
     void updatePrimitives();
@@ -336,8 +335,8 @@ protected:
     TMXTilesetInfo* _tileSet = nullptr;
     /** Layer orientation, which is the same as the map orientation */
     int _layerOrientation = FAST_TMX_ORIENTATION_ORTHO;
-    int _staggerAxis = TMXStaggerAxis_Y;
-    int _staggerIndex = TMXStaggerIndex_Even;
+    int _staggerAxis      = TMXStaggerAxis_Y;
+    int _staggerIndex     = TMXStaggerIndex_Even;
     /** properties from the layer. They can be added using Tiled */
     ValueMap _properties;
 
@@ -346,18 +345,18 @@ protected:
     /** pointer to the tile animation manager of this layer */
     TMXTileAnimManager* _tileAnimManager = nullptr;
 
-    Texture2D *_texture = nullptr;
-    
+    Texture2D* _texture = nullptr;
+
     /** container for sprite children. map<index, pair<sprite, gid> > */
-    std::map<int, std::pair<Sprite*, int> > _spriteContainer;
+    std::map<int, std::pair<Sprite*, int>> _spriteContainer;
 
     Vec2 _screenGridSize;
     Rect _screenGridRect;
     int _screenTileCount = 0;
-    
-    int _vertexZvalue = 0;
+
+    int _vertexZvalue         = 0;
     bool _useAutomaticVertexZ = false;
-    
+
     /** tile coordinate to node coordinate transform */
     Mat4 _tileToNodeTransform;
     /** data for rendering */
@@ -369,16 +368,16 @@ protected:
 #else
     std::vector<unsigned short> _indices;
 #endif
-    std::map<int/*vertexZ*/, int/*offset to _indices by quads*/> _indicesVertexZOffsets;
-    std::unordered_map<int/*vertexZ*/, int/*number to quads*/> _indicesVertexZNumber;
+    std::map<int /*vertexZ*/, int /*offset to _indices by quads*/> _indicesVertexZOffsets;
+    std::unordered_map<int /*vertexZ*/, int /*number to quads*/> _indicesVertexZNumber;
     bool _dirty = true;
-    
+
     backend::Buffer* _vertexBuffer = nullptr;
-    backend::Buffer* _indexBuffer = nullptr;
+    backend::Buffer* _indexBuffer  = nullptr;
 
     float _alphaFuncValue = 0.f;
     std::unordered_map<int, CustomCommand*> _customCommands;
-    
+
     backend::UniformLocation _mvpMatrixLocaiton;
     backend::UniformLocation _textureLocation;
     backend::UniformLocation _alphaValueLocation;
@@ -396,9 +395,7 @@ public:
     void start();
     /** stop the animation task */
     void stop();
-    bool isRunning() const {
-        return _isRunning;
-    }
+    bool isRunning() const { return _isRunning; }
 
 protected:
     /** set texture of tile to current frame */
@@ -416,7 +413,7 @@ protected:
     TMXTileAnimInfo* _animation = nullptr;
     /** Index of the frame that should be drawn currently */
     uint32_t _currentFrame = 0;
-    uint32_t _frameCount = 0;
+    uint32_t _frameCount   = 0;
 };
 
 /** @brief TMXTileAnimManager controls all tile animation of a layer.
@@ -433,9 +430,7 @@ public:
     void stopAll();
 
     /** get vector of tasks */
-    const Vector<TMXTileAnimTask*>& getTasks() const {
-        return _tasks;
-    }
+    const Vector<TMXTileAnimTask*>& getTasks() const { return _tasks; }
 
 protected:
     bool _started = false;

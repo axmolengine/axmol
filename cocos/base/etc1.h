@@ -20,7 +20,7 @@
 #define ETC1_DECODED_BLOCK_SIZE 48
 
 #ifndef ETC1_RGB8_OES
-#define ETC1_RGB8_OES 0x8D64
+#    define ETC1_RGB8_OES 0x8D64
 #endif
 
 typedef unsigned char etc1_byte;

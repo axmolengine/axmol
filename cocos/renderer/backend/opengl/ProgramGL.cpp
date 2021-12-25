@@ -22,7 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "ProgramGL.h"
 #include "ShaderModuleGL.h"
 #include "renderer/backend/Types.h"
@@ -34,19 +34,22 @@
 
 CC_BACKEND_BEGIN
 
-namespace {
-    static const std::string SHADER_PREDEFINE = "#version 100\n precision highp float;\n precision highp int;\n";
+namespace
+{
+static const std::string SHADER_PREDEFINE = "#version 100\n precision highp float;\n precision highp int;\n";
 }
 
 ProgramGL::ProgramGL(const std::string& vertexShader, const std::string& fragmentShader)
-: Program(vertexShader, fragmentShader)
+    : Program(vertexShader, fragmentShader)
 {
 #if defined(CC_USE_GLES)
     // some device required manually specify the precision qualifiers for vertex shader.
-    _vertexShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(SHADER_PREDEFINE + _vertexShader));
-    _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(SHADER_PREDEFINE + _fragmentShader));
+    _vertexShaderModule =
+        static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(SHADER_PREDEFINE + _vertexShader));
+    _fragmentShaderModule =
+        static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(SHADER_PREDEFINE + _fragmentShader));
 #else
-    _vertexShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(_vertexShader));
+    _vertexShaderModule   = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(_vertexShader));
     _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(_fragmentShader));
 #endif
 
@@ -56,17 +59,16 @@ ProgramGL::ProgramGL(const std::string& vertexShader, const std::string& fragmen
     computeUniformInfos();
     computeLocations();
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    for(const auto& uniform: _activeUniformInfos)
+    for (const auto& uniform : _activeUniformInfos)
     {
-        auto location = uniform.second.location;
+        auto location                            = uniform.second.location;
         _originalUniformLocations[uniform.first] = location;
-        _mapToCurrentActiveLocation[location] = location;
-        _mapToOriginalLocation[location] = location;
+        _mapToCurrentActiveLocation[location]    = location;
+        _mapToOriginalLocation[location]         = location;
     }
 
-    _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*){
-        this->reloadProgram();
-    });
+    _backToForegroundListener =
+        EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadProgram(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 }
@@ -89,15 +91,17 @@ void ProgramGL::reloadProgram()
     _activeUniformInfos.clear();
     _mapToCurrentActiveLocation.clear();
     _mapToOriginalLocation.clear();
-    static_cast<ShaderModuleGL*>(_vertexShaderModule)->compileShader(backend::ShaderStage::VERTEX, SHADER_PREDEFINE + _vertexShader);
-    static_cast<ShaderModuleGL*>(_fragmentShaderModule)->compileShader(backend::ShaderStage::FRAGMENT, SHADER_PREDEFINE + _fragmentShader);
+    static_cast<ShaderModuleGL*>(_vertexShaderModule)
+        ->compileShader(backend::ShaderStage::VERTEX, SHADER_PREDEFINE + _vertexShader);
+    static_cast<ShaderModuleGL*>(_fragmentShaderModule)
+        ->compileShader(backend::ShaderStage::FRAGMENT, SHADER_PREDEFINE + _fragmentShader);
     compileProgram();
     computeUniformInfos();
 
-    for(const auto& uniform : _activeUniformInfos)
+    for (const auto& uniform : _activeUniformInfos)
     {
-        auto location = _originalUniformLocations[uniform.first];
-        _mapToCurrentActiveLocation[location] = uniform.second.location;
+        auto location                                   = _originalUniformLocations[uniform.first];
+        _mapToCurrentActiveLocation[location]           = uniform.second.location;
         _mapToOriginalLocation[uniform.second.location] = location;
     }
 }
@@ -107,18 +111,18 @@ void ProgramGL::compileProgram()
 {
     if (_vertexShaderModule == nullptr || _fragmentShaderModule == nullptr)
         return;
-    
+
     auto vertShader = _vertexShaderModule->getShader();
     auto fragShader = _fragmentShaderModule->getShader();
-    
-    assert (vertShader != 0 && fragShader != 0);
+
+    assert(vertShader != 0 && fragShader != 0);
     if (vertShader == 0 || fragShader == 0)
         return;
-    
+
     _program = glCreateProgram();
     if (!_program)
         return;
-    
+
     glAttachShader(_program, vertShader);
     glAttachShader(_program, fragShader);
 
@@ -130,7 +134,8 @@ void ProgramGL::compileProgram()
     {
         GLint errorInfoLen = 0;
         glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &errorInfoLen);
-        if (errorInfoLen) {
+        if (errorInfoLen)
+        {
             std::string errorInfo(errorInfoLen, '\0');
             glGetProgramInfoLog(_program, errorInfoLen, NULL, &errorInfo.front());
             log("cocos2d: ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.c_str());
@@ -145,46 +150,50 @@ void ProgramGL::compileProgram()
 void ProgramGL::computeLocations()
 {
     std::fill(_builtinAttributeLocation, _builtinAttributeLocation + ATTRIBUTE_MAX, -1);
-//    std::fill(_builtinUniformLocation, _builtinUniformLocation + UNIFORM_MAX, -1);
+    //    std::fill(_builtinUniformLocation, _builtinUniformLocation + UNIFORM_MAX, -1);
 
-    ///a_position
-    auto location = glGetAttribLocation(_program, ATTRIBUTE_NAME_POSITION);
+    /// a_position
+    auto location                                  = glGetAttribLocation(_program, ATTRIBUTE_NAME_POSITION);
     _builtinAttributeLocation[Attribute::POSITION] = location;
 
-    ///a_color
-    location = glGetAttribLocation(_program, ATTRIBUTE_NAME_COLOR);
+    /// a_color
+    location                                    = glGetAttribLocation(_program, ATTRIBUTE_NAME_COLOR);
     _builtinAttributeLocation[Attribute::COLOR] = location;
 
-    ///a_texCoord
-    location = glGetAttribLocation(_program, ATTRIBUTE_NAME_TEXCOORD);
+    /// a_texCoord
+    location                                       = glGetAttribLocation(_program, ATTRIBUTE_NAME_TEXCOORD);
     _builtinAttributeLocation[Attribute::TEXCOORD] = location;
 
-    ///u_MVPMatrix
-    location = glGetUniformLocation(_program, UNIFORM_NAME_MVP_MATRIX);
+    /// u_MVPMatrix
+    location                                                 = glGetUniformLocation(_program, UNIFORM_NAME_MVP_MATRIX);
     _builtinUniformLocation[Uniform::MVP_MATRIX].location[0] = location;
-    _builtinUniformLocation[Uniform::MVP_MATRIX].location[1] = _activeUniformInfos[UNIFORM_NAME_MVP_MATRIX].bufferOffset;
+    _builtinUniformLocation[Uniform::MVP_MATRIX].location[1] =
+        _activeUniformInfos[UNIFORM_NAME_MVP_MATRIX].bufferOffset;
 
-    ///u_textColor
-    location = glGetUniformLocation(_program, UNIFORM_NAME_TEXT_COLOR);
+    /// u_textColor
+    location                                                 = glGetUniformLocation(_program, UNIFORM_NAME_TEXT_COLOR);
     _builtinUniformLocation[Uniform::TEXT_COLOR].location[0] = location;
-    _builtinUniformLocation[Uniform::TEXT_COLOR].location[1] = _activeUniformInfos[UNIFORM_NAME_TEXT_COLOR].bufferOffset;
+    _builtinUniformLocation[Uniform::TEXT_COLOR].location[1] =
+        _activeUniformInfos[UNIFORM_NAME_TEXT_COLOR].bufferOffset;
 
-    ///u_effectColor
+    /// u_effectColor
     location = glGetUniformLocation(_program, UNIFORM_NAME_EFFECT_COLOR);
     _builtinUniformLocation[Uniform::EFFECT_COLOR].location[0] = location;
-    _builtinUniformLocation[Uniform::EFFECT_COLOR].location[1] = _activeUniformInfos[UNIFORM_NAME_EFFECT_COLOR].bufferOffset;
+    _builtinUniformLocation[Uniform::EFFECT_COLOR].location[1] =
+        _activeUniformInfos[UNIFORM_NAME_EFFECT_COLOR].bufferOffset;
 
-    ///u_effectType
+    /// u_effectType
     location = glGetUniformLocation(_program, UNIFORM_NAME_EFFECT_TYPE);
     _builtinUniformLocation[Uniform::EFFECT_TYPE].location[0] = location;
-    _builtinUniformLocation[Uniform::EFFECT_TYPE].location[1] = _activeUniformInfos[UNIFORM_NAME_EFFECT_TYPE].bufferOffset;
+    _builtinUniformLocation[Uniform::EFFECT_TYPE].location[1] =
+        _activeUniformInfos[UNIFORM_NAME_EFFECT_TYPE].bufferOffset;
 
-    ///u_texture
-    location = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE);
+    /// u_texture
+    location                                              = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE);
     _builtinUniformLocation[Uniform::TEXTURE].location[0] = location;
 
-    ///u_texture1
-    location = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE1);
+    /// u_texture1
+    location                                               = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE1);
     _builtinUniformLocation[Uniform::TEXTURE1].location[0] = location;
 }
 
@@ -196,7 +205,7 @@ bool ProgramGL::getAttributeLocation(const std::string& attributeName, unsigned 
         CCLOG("Cocos2d: %s: can not find vertex attribute of %s", __FUNCTION__, attributeName.c_str());
         return false;
     }
-    
+
     location = GLuint(loc);
     return true;
 }
@@ -205,11 +214,11 @@ const std::unordered_map<std::string, AttributeBindInfo> ProgramGL::getActiveAtt
 {
     std::unordered_map<std::string, AttributeBindInfo> attributes;
 
-    if (!_program) return attributes;
+    if (!_program)
+        return attributes;
 
     GLint numOfActiveAttributes = 0;
     glGetProgramiv(_program, GL_ACTIVE_ATTRIBUTES, &numOfActiveAttributes);
-
 
     if (numOfActiveAttributes <= 0)
         return attributes;
@@ -229,51 +238,50 @@ const std::unordered_map<std::string, AttributeBindInfo> ProgramGL::getActiveAtt
         glGetActiveAttrib(_program, i, MAX_ATTRIBUTE_NAME_LENGTH, &attrNameLen, &attrSize, &attrType, attrName.data());
         CHECK_GL_ERROR_DEBUG();
         info.attributeName = std::string(attrName.data(), attrName.data() + attrNameLen);
-        info.location = glGetAttribLocation(_program, info.attributeName.c_str());
-        info.type = attrType;
-        info.size = UtilsGL::getGLDataTypeSize(attrType) * attrSize;
+        info.location      = glGetAttribLocation(_program, info.attributeName.c_str());
+        info.type          = attrType;
+        info.size          = UtilsGL::getGLDataTypeSize(attrType) * attrSize;
         CHECK_GL_ERROR_DEBUG();
         attributes[info.attributeName] = info;
     }
 
     return attributes;
-
 }
 
 void ProgramGL::computeUniformInfos()
 {
     if (!_program)
         return;
-    
+
     GLint numOfUniforms = 0;
     glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &numOfUniforms);
     if (!numOfUniforms)
         return;
-    
+
 #define MAX_UNIFORM_NAME_LENGTH 256
     UniformInfo uniform;
-    GLint length = 0;
+    GLint length     = 0;
     _totalBufferSize = 0;
-    _maxLocation = -1;
+    _maxLocation     = -1;
     _activeUniformInfos.clear();
     GLchar uniformName[MAX_UNIFORM_NAME_LENGTH + 1];
     for (int i = 0; i < numOfUniforms; ++i)
     {
         glGetActiveUniform(_program, i, MAX_UNIFORM_NAME_LENGTH, &length, &uniform.count, &uniform.type, uniformName);
         uniformName[length] = '\0';
-        
+
         if (length > 3)
         {
             char* c = strrchr(uniformName, '[');
             if (c)
             {
-                *c = '\0';
+                *c              = '\0';
                 uniform.isArray = true;
             }
         }
-        uniform.location = glGetUniformLocation(_program, uniformName);
-        uniform.size = UtilsGL::getGLDataTypeSize(uniform.type);
-        uniform.bufferOffset = (uniform.size == 0) ? 0 : _totalBufferSize;
+        uniform.location                 = glGetUniformLocation(_program, uniformName);
+        uniform.size                     = UtilsGL::getGLDataTypeSize(uniform.type);
+        uniform.bufferOffset             = (uniform.size == 0) ? 0 : _totalBufferSize;
         _activeUniformInfos[uniformName] = uniform;
         _totalBufferSize += uniform.size * uniform.count;
         _maxLocation = _maxLocation <= uniform.location ? (uniform.location + 1) : _maxLocation;
@@ -292,7 +300,7 @@ int ProgramGL::getAttributeLocation(const std::string& name) const
 
 UniformLocation ProgramGL::getUniformLocation(backend::Uniform name) const
 {
-   return _builtinUniformLocation[name];
+    return _builtinUniformLocation[name];
 }
 
 UniformLocation ProgramGL::getUniformLocation(const std::string& uniform) const
@@ -300,7 +308,7 @@ UniformLocation ProgramGL::getUniformLocation(const std::string& uniform) const
     UniformLocation uniformLocation;
     if (_activeUniformInfos.find(uniform) != _activeUniformInfos.end())
     {
-        const auto &uniformInfo = _activeUniformInfos.at(uniform);
+        const auto& uniformInfo = _activeUniformInfos.at(uniform);
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         uniformLocation.location[0] = _mapToOriginalLocation.at(uniformInfo.location);
 #else
@@ -323,7 +331,7 @@ int ProgramGL::getMaxFragmentLocation() const
 #if CC_ENABLE_CACHE_TEXTURE_DATA
 int ProgramGL::getMappedLocation(int location) const
 {
-    if(_mapToCurrentActiveLocation.find(location) != _mapToCurrentActiveLocation.end())
+    if (_mapToCurrentActiveLocation.find(location) != _mapToCurrentActiveLocation.end())
         return _mapToCurrentActiveLocation.at(location);
     else
         return -1;

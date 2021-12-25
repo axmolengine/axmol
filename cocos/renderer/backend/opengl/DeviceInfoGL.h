@@ -22,7 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../DeviceInfo.h"
@@ -36,10 +36,10 @@ CC_BACKEND_BEGIN
 /**
  * Used to query features and implementation limits
  */
-class DeviceInfoGL: public DeviceInfo
+class DeviceInfoGL : public DeviceInfo
 {
 public:
-    DeviceInfoGL() = default;
+    DeviceInfoGL()          = default;
     virtual ~DeviceInfoGL() = default;
 
     /**
@@ -77,15 +77,15 @@ public:
      * @return true if the feature is supported, false otherwise.
      */
     virtual bool checkForFeatureSupported(FeatureType feature) override;
-    
+
 private:
-    bool checkForGLExtension(const std::string &searchName) const;
+    bool checkForGLExtension(const std::string& searchName) const;
 
     static bool checkSupportsCompressedFormat(int compressedFormat);
 
     std::string _glExtensions;
 };
 
-//end of _opengl group
+// end of _opengl group
 /// @}
 CC_BACKEND_END

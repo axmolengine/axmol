@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -40,13 +40,8 @@ public:
     DragonBonesData* data;
     WeightData* weight;
 
-    VerticesData() :
-        weight(nullptr)
-    {
-    }
-    ~VerticesData()
-    {
-    }
+    VerticesData() : weight(nullptr) {}
+    ~VerticesData() {}
 
     void clear();
     void shareFrom(const VerticesData& value);
@@ -68,7 +63,7 @@ public:
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     int getType() const { return (int)type; }
     void setType(int value) { type = (DisplayType)value; }
 
@@ -91,7 +86,7 @@ public:
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     Point* getPivot() { return &pivot; }
 
     TextureData* getTexture() const { return texture; }
@@ -118,7 +113,7 @@ public:
      */
     void addAction(ActionData* value);
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     const std::vector<ActionData*>& getActions() const { return actions; }
 
     ArmatureData* getArmature() const { return armature; }
@@ -148,20 +143,13 @@ class BoundingBoxDisplayData : public DisplayData
 public:
     BoundingBoxData* boundingBox;
 
-    BoundingBoxDisplayData() : 
-        boundingBox(nullptr)
-    {
-        _onClear(); 
-    }
-    ~BoundingBoxDisplayData()
-    {
-        _onClear();
-    }
+    BoundingBoxDisplayData() : boundingBox(nullptr) { _onClear(); }
+    ~BoundingBoxDisplayData() { _onClear(); }
 
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     const BoundingBoxData* getBoundingBox() const { return boundingBox; }
     void setBoundingBox(BoundingBoxData* value) { boundingBox = value; }
 };
@@ -183,10 +171,10 @@ protected:
 public:
     void addBone(BoneData* value);
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     const std::vector<BoneData*>& getBones() const { return bones; }
 };
 
 DRAGONBONES_NAMESPACE_END
 
-#endif //DRAGONBONESCPP_DISPLAYDATA_H
+#endif  // DRAGONBONESCPP_DISPLAYDATA_H

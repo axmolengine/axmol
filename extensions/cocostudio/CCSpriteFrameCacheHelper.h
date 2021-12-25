@@ -31,11 +31,13 @@ THE SOFTWARE.
 #include <map>
 #include <vector>
 
-namespace cocos2d {
-    class SpriteFrame;
+namespace cocos2d
+{
+class SpriteFrame;
 }
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 /**
  *  @js NA
@@ -45,13 +47,16 @@ class CCS_DLL SpriteFrameCacheHelper
 {
 public:
     /** @deprecated Use getInstance() instead */
-    CC_DEPRECATED_ATTRIBUTE static SpriteFrameCacheHelper *sharedSpriteFrameCacheHelper(){ return SpriteFrameCacheHelper::getInstance(); }
+    CC_DEPRECATED_ATTRIBUTE static SpriteFrameCacheHelper* sharedSpriteFrameCacheHelper()
+    {
+        return SpriteFrameCacheHelper::getInstance();
+    }
 
-    static SpriteFrameCacheHelper *getInstance();
+    static SpriteFrameCacheHelper* getInstance();
 
     static void purge();
-public:
 
+public:
     /**
      *    @brief    Add sprite frame to CCSpriteFrameCache, it will save display name and it's relative image name
      */
@@ -65,10 +70,10 @@ private:
     SpriteFrameCacheHelper();
     ~SpriteFrameCacheHelper();
 
-    std::map<std::string, std::vector<cocos2d::SpriteFrame*> > _usingSpriteFrames;
-    static SpriteFrameCacheHelper *_spriteFrameCacheHelper;
+    std::map<std::string, std::vector<cocos2d::SpriteFrame*>> _usingSpriteFrames;
+    static SpriteFrameCacheHelper* _spriteFrameCacheHelper;
 };
 
-}
+}  // namespace cocostudio
 
 #endif /*__CCSPRITEFRAMECACHEHELPER_H__*/

@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -57,7 +57,8 @@ class Slot : public TransformObject
 {
 public:
     /**
-     * - Displays the animated state or mixed group name controlled by the object, set to null to be controlled by all animation states.
+     * - Displays the animated state or mixed group name controlled by the object, set to null to be controlled by all
+     * animation states.
      * @default null
      * @see dragonBones.AnimationState#displayControl
      * @see dragonBones.AnimationState#name
@@ -142,27 +143,23 @@ protected:
     Bone* _parent;
 
 public:
-    Slot() :
-        _deformVertices(nullptr),
-        _rawDisplay(nullptr),
-        _meshDisplay(nullptr)
-    {}
-    virtual ~Slot() {};
+    Slot() : _deformVertices(nullptr), _rawDisplay(nullptr), _meshDisplay(nullptr) {}
+    virtual ~Slot(){};
 
 protected:
     virtual void _onClear() override;
 
-    virtual void _initDisplay(void* value, bool isRetain) = 0;
-    virtual void _disposeDisplay(void* value, bool isRelease) = 0;
-    virtual void _onUpdateDisplay() = 0;
-    virtual void _addDisplay() = 0;
+    virtual void _initDisplay(void* value, bool isRetain)             = 0;
+    virtual void _disposeDisplay(void* value, bool isRelease)         = 0;
+    virtual void _onUpdateDisplay()                                   = 0;
+    virtual void _addDisplay()                                        = 0;
     virtual void _replaceDisplay(void* value, bool isArmatureDisplay) = 0;
-    virtual void _removeDisplay() = 0;
-    virtual void _updateZOrder() = 0;
-    virtual void _updateFrame() = 0;
-    virtual void _updateMesh() = 0;
-    virtual void _updateTransform() = 0;
-    virtual void _identityTransform() = 0;
+    virtual void _removeDisplay()                                     = 0;
+    virtual void _updateZOrder()                                      = 0;
+    virtual void _updateFrame()                                       = 0;
+    virtual void _updateMesh()                                        = 0;
+    virtual void _updateTransform()                                   = 0;
+    virtual void _identityTransform()                                 = 0;
     /**
      * - Support default skin data.
      */
@@ -175,9 +172,9 @@ public:
     /**
      * @internal
      */
-    virtual void _updateVisible() = 0;
+    virtual void _updateVisible()   = 0;
     virtual void _updateBlendMode() = 0;
-    virtual void _updateColor() = 0;
+    virtual void _updateColor()     = 0;
 
 public:
     /**
@@ -241,10 +238,16 @@ public:
      * @param yA - The vertical coordinate of the beginning of the segment.
      * @param xB - The horizontal coordinate of the end point of the segment.
      * @param yB - The vertical coordinate of the end point of the segment.
-     * @param intersectionPointA - The first intersection at which a line segment intersects the bounding box from the beginning to the end. (If not set, the intersection point will not calculated)
-     * @param intersectionPointB - The first intersection at which a line segment intersects the bounding box from the end to the beginning. (If not set, the intersection point will not calculated)
-     * @param normalRadians - The normal radians of the tangent of the intersection boundary box. [x: Normal radian of the first intersection tangent, y: Normal radian of the second intersection tangent] (If not set, the normal will not calculated)
-     * @returns Intersection situation. [1: Disjoint and segments within the bounding box, 0: Disjoint, 1: Intersecting and having a nodal point and ending in the bounding box, 2: Intersecting and having a nodal point and starting at the bounding box, 3: Intersecting and having two intersections, N: Intersecting and having N intersections]
+     * @param intersectionPointA - The first intersection at which a line segment intersects the bounding box from the
+     * beginning to the end. (If not set, the intersection point will not calculated)
+     * @param intersectionPointB - The first intersection at which a line segment intersects the bounding box from the
+     * end to the beginning. (If not set, the intersection point will not calculated)
+     * @param normalRadians - The normal radians of the tangent of the intersection boundary box. [x: Normal radian of
+     * the first intersection tangent, y: Normal radian of the second intersection tangent] (If not set, the normal will
+     * not calculated)
+     * @returns Intersection situation. [1: Disjoint and segments within the bounding box, 0: Disjoint, 1: Intersecting
+     * and having a nodal point and ending in the bounding box, 2: Intersecting and having a nodal point and starting at
+     * the bounding box, 3: Intersecting and having two intersections, N: Intersecting and having N intersections]
      * @version DragonBones 5.0
      * @language en_US
      */
@@ -258,17 +261,20 @@ public:
      * @param yB - 线段终点的垂直坐标。
      * @param intersectionPointA - 线段从起点到终点与边界框相交的第一个交点。 （如果未设置，则不计算交点）
      * @param intersectionPointB - 线段从终点到起点与边界框相交的第一个交点。 （如果未设置，则不计算交点）
-     * @param normalRadians - 交点边界框切线的法线弧度。 [x: 第一个交点切线的法线弧度, y: 第二个交点切线的法线弧度] （如果未设置，则不计算法线）
-     * @returns 相交的情况。 [-1: 不相交且线段在包围盒内, 0: 不相交, 1: 相交且有一个交点且终点在包围盒内, 2: 相交且有一个交点且起点在包围盒内, 3: 相交且有两个交点, N: 相交且有 N 个交点]
+     * @param normalRadians - 交点边界框切线的法线弧度。 [x: 第一个交点切线的法线弧度, y: 第二个交点切线的法线弧度]
+     * （如果未设置，则不计算法线）
+     * @returns 相交的情况。 [-1: 不相交且线段在包围盒内, 0: 不相交, 1: 相交且有一个交点且终点在包围盒内, 2:
+     * 相交且有一个交点且起点在包围盒内, 3: 相交且有两个交点, N: 相交且有 N 个交点]
      * @version DragonBones 5.0
      * @language zh_CN
      */
-    int intersectsSegment(
-        float xA, float yA, float xB, float yB,
-        Point* intersectionPointA = nullptr,
-        Point* intersectionPointB = nullptr,
-        Point* normalRadians = nullptr
-    );
+    int intersectsSegment(float xA,
+                          float yA,
+                          float xB,
+                          float yB,
+                          Point* intersectionPointA = nullptr,
+                          Point* intersectionPointB = nullptr,
+                          Point* normalRadians      = nullptr);
     /**
      * - Forces the slot to update the state of the display object in the next frame.
      * @version DragonBones 4.5
@@ -281,7 +287,7 @@ public:
      */
     inline void invalidUpdate()
     {
-        _displayDirty = true;
+        _displayDirty   = true;
         _transformDirty = true;
     }
     /**
@@ -296,10 +302,7 @@ public:
      * @version DragonBones 5.6
      * @language zh_CN
      */
-    inline bool getVisible() const
-    {
-        return _visible;
-    }
+    inline bool getVisible() const { return _visible; }
     void setVisible(bool value);
     /**
      * - The index of the display object displayed in the display list.
@@ -325,10 +328,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    inline int getDisplayIndex() const
-    {
-        return _displayIndex;
-    }
+    inline int getDisplayIndex() const { return _displayIndex; }
     void setDisplayIndex(int value);
 
     /**
@@ -343,10 +343,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline const std::string& getName() const
-    {
-        return _slotData->name;
-    }
+    inline const std::string& getName() const { return _slotData->name; }
     /**
      * - Contains a display list of display objects or child armatures.
      * @version DragonBones 3.0
@@ -357,18 +354,12 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline std::vector<std::pair<void*, DisplayType>> getDisplayList() const
-    {
-        return _displayList;
-    }
+    inline std::vector<std::pair<void*, DisplayType>> getDisplayList() const { return _displayList; }
     void setDisplayList(const std::vector<std::pair<void*, DisplayType>>& value);
     /**
      * @private
      */
-    inline const std::vector<DisplayData*>* getRawDisplayDatas() const 
-    {
-        return _rawDisplayDatas;
-    }
+    inline const std::vector<DisplayData*>* getRawDisplayDatas() const { return _rawDisplayDatas; }
     void setRawDisplayDatas(const std::vector<DisplayData*>* value);
     /**
      * - The slot data.
@@ -382,10 +373,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    const SlotData* getSlotData() const
-    {
-        return _slotData;
-    }
+    const SlotData* getSlotData() const { return _slotData; }
     /**
      * - The custom bounding box data for the slot at current time.
      * @version DragonBones 5.0
@@ -396,24 +384,15 @@ public:
      * @version DragonBones 5.0
      * @language zh_CN
      */
-    inline BoundingBoxData* getBoundingBoxData() const
-    {
-        return _boundingBoxData;
-    }
+    inline BoundingBoxData* getBoundingBoxData() const { return _boundingBoxData; }
     /**
      * @private
      */
-    inline void* getRawDisplay() const
-    {
-        return _rawDisplay;
-    }
+    inline void* getRawDisplay() const { return _rawDisplay; }
     /**
      * @private
      */
-    inline void* getMeshDisplay() const
-    {
-        return _meshDisplay;
-    }
+    inline void* getMeshDisplay() const { return _meshDisplay; }
     /**
      * - The display object that the slot displays at this time.
      * @example
@@ -436,10 +415,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline void* getDisplay() const
-    {
-        return _display;
-    }
+    inline void* getDisplay() const { return _display; }
     /**
      * - Deprecated, please refer to {@link #display}.
      * @deprecated
@@ -482,10 +458,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline Armature* getChildArmature() const
-    {
-        return _childArmature;
-    }
+    inline Armature* getChildArmature() const { return _childArmature; }
     void setChildArmature(Armature* value);
     /**
      * - The parent bone to which it belongs.
@@ -497,11 +470,8 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline Bone* getParent() const
-    {
-        return _parent;
-    }
+    inline Bone* getParent() const { return _parent; }
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_SLOT_H
+#endif  // DRAGONBONES_SLOT_H

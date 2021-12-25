@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -46,7 +46,8 @@ class AnimationState : public BaseObject
     BIND_CLASS_TYPE_B(AnimationState);
 
 private:
-    enum class BaseTimelineType {
+    enum class BaseTimelineType
+    {
         Bone,
         Slot,
         Constraint
@@ -107,7 +108,8 @@ public:
     /**
      * - The blend layer.
      * High layer animation state will get the blend weight first.
-     * When the blend weight is assigned more than 1, the remaining animation states will no longer get the weight assigned.
+     * When the blend weight is assigned more than 1, the remaining animation states will no longer get the weight
+     * assigned.
      * @readonly
      * @version DragonBones 5.0
      * @language en_US
@@ -254,16 +256,8 @@ private:
     ZOrderTimelineState* _zOrderTimeline;
 
 public:
-    AnimationState() :
-        _actionTimeline(nullptr),
-        _zOrderTimeline(nullptr)
-    {
-        _onClear();
-    }
-    virtual ~AnimationState()
-    {
-        _onClear();
-    }
+    AnimationState() : _actionTimeline(nullptr), _zOrderTimeline(nullptr) { _onClear(); }
+    virtual ~AnimationState() { _onClear(); }
 
 protected:
     virtual void _onClear() override;
@@ -383,10 +377,7 @@ public:
      * @version DragonBones 5.1
      * @language zh_CN
      */
-    inline bool isFadeIn() const 
-    {
-        return _fadeState < 0;
-    }
+    inline bool isFadeIn() const { return _fadeState < 0; }
     /**
      * - Whether the animation state is fading out.
      * @version DragonBones 5.1
@@ -397,10 +388,7 @@ public:
      * @version DragonBones 5.1
      * @language zh_CN
      */
-    inline bool isFadeOut() const
-    {
-        return _fadeState > 0;
-    }
+    inline bool isFadeOut() const { return _fadeState > 0; }
     /**
      * - Whether the animation state is fade completed.
      * @version DragonBones 5.1
@@ -411,10 +399,7 @@ public:
      * @version DragonBones 5.1
      * @language zh_CN
      */
-    inline bool isFadeComplete() const
-    {
-        return _fadeState == 0;
-    }
+    inline bool isFadeComplete() const { return _fadeState == 0; }
     /**
      * - Whether the animation state is playing.
      * @version DragonBones 3.0
@@ -458,10 +443,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline float getTotalTime() const
-    {
-        return _duration;
-    }
+    inline float getTotalTime() const { return _duration; }
     /**
      * - The time is currently playing. (In seconds)
      * @version DragonBones 3.0
@@ -474,10 +456,7 @@ public:
      */
     float getCurrentTime() const;
     void setCurrentTime(float value);
-    inline const std::string& getName() const
-    {
-        return name;
-    }
+    inline const std::string& getName() const { return name; }
 
     /**
      * - The animation data.
@@ -491,10 +470,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline const AnimationData* getAnimationData() const
-    { 
-        return _animationData; 
-    }
+    inline const AnimationData* getAnimationData() const { return _animationData; }
 };
 /**
  * @internal

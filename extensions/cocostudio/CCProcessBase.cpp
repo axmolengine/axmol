@@ -26,7 +26,8 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 ProcessBase::ProcessBase(void)
     : _processScale(1)
@@ -37,44 +38,38 @@ ProcessBase::ProcessBase(void)
     , _rawDuration(0)
     , _loopType(ANIMATION_LOOP_BACK)
     , _tweenEasing(cocos2d::tweenfunc::Linear)
-    , _animationInternal(1/60.0f)
+    , _animationInternal(1 / 60.0f)
     , _durationTween(0)
     , _currentFrame(0)
     , _curFrameIndex(0)
     , _isLoopBack(false)
-{
-}
+{}
 
-
-ProcessBase::~ProcessBase(void)
-{
-}
-
+ProcessBase::~ProcessBase(void) {}
 
 void ProcessBase::pause()
 {
-    _isPause = true;
+    _isPause   = true;
     _isPlaying = false;
 }
 
-
 void ProcessBase::resume()
 {
-    _isPause = false;
+    _isPause   = false;
     _isPlaying = true;
 }
 
 void ProcessBase::stop()
 {
     _isComplete = true;
-    _isPlaying = false;
+    _isPlaying  = false;
 }
 
-void ProcessBase::play(int durationTo, int /*durationTween*/,  int /*loop*/, int tweenEasing)
+void ProcessBase::play(int durationTo, int /*durationTween*/, int /*loop*/, int tweenEasing)
 {
-    _isComplete = false;
-    _isPause = false;
-    _isPlaying = true;
+    _isComplete   = false;
+    _isPause      = false;
+    _isPlaying    = true;
     _currentFrame = 0;
 
     /*
@@ -82,8 +77,7 @@ void ProcessBase::play(int durationTo, int /*durationTween*/,  int /*loop*/, int
      *  When changing end, m_iTotalFrames will be set to _durationTween
      */
     _nextFrameIndex = durationTo;
-    _tweenEasing = (cocos2d::tweenfunc::TweenType)tweenEasing;
-
+    _tweenEasing    = (cocos2d::tweenfunc::TweenType)tweenEasing;
 }
 
 void ProcessBase::update(float dt)
@@ -98,7 +92,7 @@ void ProcessBase::update(float dt)
      *  Filter the m_iDuration <=0 and dt >1
      *  If dt>1, generally speaking  the reason is the device is stuck.
      */
-    if(_rawDuration <= 0 || dt > 1)
+    if (_rawDuration <= 0 || dt > 1)
     {
         return;
     }
@@ -106,31 +100,28 @@ void ProcessBase::update(float dt)
     if (_nextFrameIndex <= 0)
     {
         _currentPercent = 1;
-        _currentFrame = 0;
+        _currentFrame   = 0;
     }
     else
     {
         /*
-        *  update _currentFrame, every update add the frame passed.
-        *  dt/_animationInternal determine it is not a frame animation. If frame speed changed, it will not make our
-        *  animation speed slower or quicker.
-        */
+         *  update _currentFrame, every update add the frame passed.
+         *  dt/_animationInternal determine it is not a frame animation. If frame speed changed, it will not make our
+         *  animation speed slower or quicker.
+         */
         _currentFrame += _processScale * (dt / _animationInternal);
-
 
         _currentPercent = _currentFrame / _nextFrameIndex;
 
         /*
-        *	if _currentFrame is bigger or equal than m_iTotalFrames, then reduce it until _currentFrame is
-        *  smaller than m_iTotalFrames
-        */
+         *	if _currentFrame is bigger or equal than m_iTotalFrames, then reduce it until _currentFrame is
+         *  smaller than m_iTotalFrames
+         */
         _currentFrame = fmodf(_currentFrame, _nextFrameIndex);
     }
 
     updateHandler();
 }
-
-
 
 void ProcessBase::gotoFrame(int frameIndex)
 {
@@ -144,14 +135,14 @@ void ProcessBase::gotoFrame(int frameIndex)
     }
 
     _curFrameIndex = frameIndex;
-    
+
     _nextFrameIndex = _durationTween;
 }
 
 int ProcessBase::getCurrentFrameIndex()
 {
-    _curFrameIndex = (_rawDuration-1) * _currentPercent;
+    _curFrameIndex = (_rawDuration - 1) * _currentPercent;
     return _curFrameIndex;
 }
 
-}
+}  // namespace cocostudio

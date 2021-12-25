@@ -27,13 +27,14 @@
 #include <stdint.h>
 
 /**
-  * @addtogroup network
-  * @{
-  */
+ * @addtogroup network
+ * @{
+ */
 
 NS_CC_BEGIN
 
-namespace network {
+namespace network
+{
 
 /**
  * Class representing a URI.
@@ -133,25 +134,25 @@ public:
     std::string toString() const;
 
     /**
-    * Get query parameters as key-value pairs.
-    * e.g. for URI containing query string:  key1=foo&key2=&key3&=bar&=bar=
-    * In returned list, there are 3 entries:
-    *     "key1" => "foo"
-    *     "key2" => ""
-    *     "key3" => ""
-    * Parts "=bar" and "=bar=" are ignored, as they are not valid query
-    * parameters. "=bar" is missing parameter name, while "=bar=" has more than
-    * one equal signs, we don't know which one is the delimiter for key and
-    * value.
-    *
-    * Note, this method is not thread safe, it might update internal state, but
-    * only the first call to this method update the state. After the first call
-    * is finished, subsequent calls to this method are thread safe.
-    *
-    * @return  query parameter key-value pairs in a vector, each element is a
-    *          pair of which the first element is parameter name and the second
-    *          one is parameter value
-    */
+     * Get query parameters as key-value pairs.
+     * e.g. for URI containing query string:  key1=foo&key2=&key3&=bar&=bar=
+     * In returned list, there are 3 entries:
+     *     "key1" => "foo"
+     *     "key2" => ""
+     *     "key3" => ""
+     * Parts "=bar" and "=bar=" are ignored, as they are not valid query
+     * parameters. "=bar" is missing parameter name, while "=bar=" has more than
+     * one equal signs, we don't know which one is the delimiter for key and
+     * value.
+     *
+     * Note, this method is not thread safe, it might update internal state, but
+     * only the first call to this method update the state. After the first call
+     * is finished, subsequent calls to this method are thread safe.
+     *
+     * @return  query parameter key-value pairs in a vector, each element is a
+     *          pair of which the first element is parameter name and the second
+     *          one is parameter value
+     */
     const std::vector<std::pair<std::string, std::string>>& getQueryParams();
 
     /** Clears all parts of the URI. */
@@ -177,7 +178,7 @@ private:
     std::vector<std::pair<std::string, std::string>> _queryParams;
 };
 
-} // namespace network {
+}  // namespace network
 
 NS_CC_END
 

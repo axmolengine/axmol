@@ -27,40 +27,24 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-Component::Component()
-: _owner(nullptr)
-, _enabled(true)
-{
-}
+Component::Component() : _owner(nullptr), _enabled(true) {}
 
-Component::~Component()
-{
-}
+Component::~Component() {}
 
 bool Component::init()
 {
     return true;
 }
 
-void Component::onEnter()
-{
-}
+void Component::onEnter() {}
 
-void Component::onExit()
-{
-}
+void Component::onExit() {}
 
-void Component::onAdd()
-{
-}
+void Component::onAdd() {}
 
-void Component::onRemove()
-{
-}
+void Component::onRemove() {}
 
-void Component::update(float /*delta*/)
-{
-}
+void Component::update(float /*delta*/) {}
 
 bool Component::serialize(void* /*ar*/)
 {
@@ -69,7 +53,7 @@ bool Component::serialize(void* /*ar*/)
 
 Component* Component::create()
 {
-    Component * ret = new Component();
+    Component* ret = new Component();
 
     if (ret->init())
     {
@@ -83,7 +67,7 @@ Component* Component::create()
     return ret;
 }
 
-void Component::setOwner(Node *owner)
+void Component::setOwner(Node* owner)
 {
     _owner = owner;
 }

@@ -6,14 +6,14 @@
 
 CC_BACKEND_BEGIN
 
-class RenderTarget : public cocos2d::Ref {
+class RenderTarget : public cocos2d::Ref
+{
 public:
-    struct RenderBuffer {
+    struct RenderBuffer
+    {
         TextureBackend* texture = nullptr;
-        uint8_t level = 0; // level when attached to a texture
-        explicit operator bool() const {
-            return texture != nullptr;
-        }
+        uint8_t level           = 0;  // level when attached to a texture
+        explicit operator bool() const { return texture != nullptr; }
     };
     typedef RenderBuffer ColorAttachment[MAX_COLOR_ATTCHMENT];
 
@@ -34,7 +34,8 @@ public:
     virtual void bindFrameBuffer() const {};
     virtual void unbindFrameBuffer() const {};
 
-    virtual void setColorAttachment(ColorAttachment attachment) {
+    virtual void setColorAttachment(ColorAttachment attachment)
+    {
         for (auto colorItem : _color)
             CC_SAFE_RELEASE(colorItem.texture);
         memcpy(_color, attachment, sizeof(ColorAttachment));
@@ -45,26 +46,27 @@ public:
     {
         CC_SAFE_RELEASE(_depth.texture);
         _depth.texture = attachment;
-        _depth.level = level;
+        _depth.level   = level;
         CC_SAFE_RETAIN(_depth.texture);
     };
-    virtual void setStencilAttachment(TextureBackend* attachment, int level = 0) {
+    virtual void setStencilAttachment(TextureBackend* attachment, int level = 0)
+    {
         CC_SAFE_RELEASE(_stencil.texture);
         _stencil.texture = attachment;
-        _stencil.level = level;
+        _stencil.level   = level;
         CC_SAFE_RETAIN(_stencil.texture);
     };
-    
+
     bool isDefaultRenderTarget() const { return _defaultRenderTarget; }
 
     ColorAttachment _color{};
     RenderBuffer _depth{};
     RenderBuffer _stencil{};
     TargetBufferFlags _flags{};
+
 protected:
     bool _defaultRenderTarget = false;
     // uint8_t samples = 1;
-    
 };
 
 CC_BACKEND_END

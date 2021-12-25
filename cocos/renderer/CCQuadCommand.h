@@ -37,7 +37,7 @@
 
 NS_CC_BEGIN
 
-/** 
+/**
  Command used to render one or more Quads, similar to TrianglesCommand.
  Every QuadCommand will have generate material ID by give textureID, glProgramState, Blend function
  if the material id is the same, these QuadCommands could be batched to save draw call.
@@ -49,7 +49,7 @@ public:
     QuadCommand();
     /**Destructor.*/
     ~QuadCommand();
-    
+
     /** Initializes the command.
      @param globalOrder GlobalZOrder of the command.
      @param texture The texture used in the command.
@@ -59,8 +59,14 @@ public:
      @param mv ModelView matrix for the command.
      @param flags to indicate that the command is using 3D rendering or not.
      */
-    void init(float globalOrder, Texture2D* texture, const BlendFunc& blendType, V3F_C4B_T2F_Quad* quads, ssize_t quadCount, const Mat4& mv, uint32_t flags);
-    
+    void init(float globalOrder,
+              Texture2D* texture,
+              const BlendFunc& blendType,
+              V3F_C4B_T2F_Quad* quads,
+              ssize_t quadCount,
+              const Mat4& mv,
+              uint32_t flags);
+
 protected:
     void reIndex(int indices);
 
@@ -78,4 +84,4 @@ NS_CC_END
  end of support group
  @}
  */
-#endif //_CC_QUADCOMMAND_H_
+#endif  //_CC_QUADCOMMAND_H_

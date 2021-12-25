@@ -36,8 +36,8 @@
 #include <unordered_map>
 
 #ifdef ERROR
-#undef ERROR
-#endif // ERROR
+#    undef ERROR
+#endif  // ERROR
 
 /**
  * @addtogroup audio
@@ -55,25 +55,20 @@ NS_CC_BEGIN
 class CC_DLL AudioProfile
 {
 public:
-    //Profile name can't be empty.
+    // Profile name can't be empty.
     std::string name;
-    //The maximum number of simultaneous audio instance.
+    // The maximum number of simultaneous audio instance.
     unsigned int maxInstances;
-    
+
     /* Minimum delay in between sounds */
     double minDelay;
-    
+
     /**
      * Default constructor
      *
      * @lua new
      */
-    AudioProfile()
-    : maxInstances(0)
-    , minDelay(0.0)
-    {
-        
-    }
+    AudioProfile() : maxInstances(0), minDelay(0.0) {}
 };
 
 class AudioEngineImpl;
@@ -93,12 +88,12 @@ public:
     /** AudioState enum,all possible states of an audio instance.*/
     enum class AudioState
     {
-        ERROR  = -1,
+        ERROR = -1,
         INITIALIZING,
         PLAYING,
         PAUSED
     };
-    
+
     static const int INVALID_AUDIO_ID;
 
     static const float TIME_UNKNOWN;
@@ -112,15 +107,15 @@ public:
      * @lua endToLua
      */
     static void end();
-    
-    /**  
+
+    /**
      * Gets the default profile of audio instances.
      *
      * @return The default profile of audio instances.
      */
     static AudioProfile* getDefaultProfile();
-    
-    /** 
+
+    /**
      * Play 2d sound.
      *
      * @param filePath The path of an audio file.
@@ -131,9 +126,12 @@ public:
      *
      * @see `AudioProfile`
      */
-    static AUDIO_ID play2d(const std::string& filePath, bool loop = false, float volume = 1.0f, const AudioProfile *profile = nullptr);
-    
-    /** 
+    static AUDIO_ID play2d(const std::string& filePath,
+                           bool loop                   = false,
+                           float volume                = 1.0f,
+                           const AudioProfile* profile = nullptr);
+
+    /**
      * Sets whether an audio instance loop or not.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -141,7 +139,7 @@ public:
      */
     static void setLoop(AUDIO_ID audioID, bool loop);
 
-    /** 
+    /**
      * Checks whether an audio instance is loop.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -149,7 +147,7 @@ public:
      */
     static bool isLoop(AUDIO_ID audioID);
 
-    /** 
+    /**
      * Sets volume for an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -157,7 +155,7 @@ public:
      */
     static void setVolume(AUDIO_ID audioID, float volume);
 
-    /** 
+    /**
      * Gets the volume value of an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -165,7 +163,7 @@ public:
      */
     static float getVolume(AUDIO_ID audioID);
 
-    /** 
+    /**
      * Pause an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -175,7 +173,7 @@ public:
     /** Pause all playing audio instances. */
     static void pauseAll();
 
-    /** 
+    /**
      * Resume an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -185,7 +183,7 @@ public:
     /** Resume all suspended audio instances. */
     static void resumeAll();
 
-    /** 
+    /**
      * Stop an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -200,11 +198,11 @@ public:
      *
      * @param audioID   An audioID returned by the play2d function.
      * @param sec       The offset in seconds from the start to seek to.
-     * @return 
+     * @return
      */
     static bool setCurrentTime(AUDIO_ID audioID, float sec);
 
-    /** 
+    /**
      * Gets the current playback position of an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -212,7 +210,7 @@ public:
      */
     static float getCurrentTime(AUDIO_ID audioID);
 
-    /** 
+    /**
      * Gets the duration of an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -220,7 +218,7 @@ public:
      */
     static float getDuration(AUDIO_ID audioID);
 
-    /** 
+    /**
      * Returns the state of an audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -228,27 +226,27 @@ public:
      */
     static AudioState getState(AUDIO_ID audioID);
 
-    /** 
+    /**
      * Register a callback to be invoked when an audio instance has completed playing.
      *
      * @param audioID An audioID returned by the play2d function.
      * @param callback
      */
-    static void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID,const std::string&)>& callback);
-    
+    static void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, const std::string&)>& callback);
+
     /**
      * Gets the maximum number of simultaneous audio instance of AudioEngine.
      */
-    static int getMaxAudioInstance() {return _maxInstances;}
-    
+    static int getMaxAudioInstance() { return _maxInstances; }
+
     /**
      * Sets the maximum number of simultaneous audio instance for AudioEngine.
      *
      * @param maxInstances The maximum number of simultaneous audio instance.
      */
     static bool setMaxAudioInstance(int maxInstances);
-    
-    /** 
+
+    /**
      * Uncache the audio data from internal buffer.
      * AudioEngine cache audio data on ios,mac, and win32 platform.
      *
@@ -256,15 +254,15 @@ public:
      * @param filePath Audio file path.
      */
     static void uncache(const std::string& filePath);
-    
-    /** 
+
+    /**
      * Uncache all audio data from internal buffer.
      *
      * @warning All audio will be stopped first.
      */
     static void uncacheAll();
-    
-    /**  
+
+    /**
      * Gets the audio profile by id of audio instance.
      *
      * @param audioID An audioID returned by the play2d function.
@@ -272,13 +270,13 @@ public:
      */
     static AudioProfile* getProfile(AUDIO_ID audioID);
 
-    /**  
+    /**
      * Gets an audio profile by name.
      *
      * @param profileName A name of audio profile.
      * @return The audio profile.
      */
-    static AudioProfile* getProfile(const std::string &profileName);
+    static AudioProfile* getProfile(const std::string& profileName);
 
     /**
      * Preload audio file.
@@ -297,21 +295,22 @@ public:
      * Gets playing audio count.
      */
     static int getPlayingAudioCount();
-    
+
     /**
      * Whether to enable playing audios
-     * @note If it's disabled, current playing audios will be stopped and the later 'preload', 'play2d' methods will take no effects.
+     * @note If it's disabled, current playing audios will be stopped and the later 'preload', 'play2d' methods will
+     * take no effects.
      */
     static void setEnabled(bool isEnabled);
     /**
      * Check whether AudioEngine is enabled.
      */
     static bool isEnabled();
-    
+
 protected:
     static void addTask(const std::function<void()>& task);
     static void remove(AUDIO_ID audioID);
-    
+
     struct ProfileHelper
     {
         AudioProfile profile;
@@ -320,18 +319,14 @@ protected:
 
         double lastPlayTime;
 
-        ProfileHelper()
-            : lastPlayTime(0.0)
-        {
-
-        }
+        ProfileHelper() : lastPlayTime(0.0) {}
     };
-    
+
     struct AudioInfo
     {
         std::string filePath;
         ProfileHelper* profileHelper;
-        
+
         float volume;
         bool loop;
         float duration;
@@ -339,6 +334,7 @@ protected:
 
         AudioInfo();
         ~AudioInfo();
+
     private:
         AudioInfo(const AudioInfo& info);
         AudioInfo(AudioInfo&& info);
@@ -346,26 +342,26 @@ protected:
         AudioInfo& operator=(AudioInfo&& info);
     };
 
-    //audioID,audioAttribute
+    // audioID,audioAttribute
     static std::unordered_map<AUDIO_ID, AudioInfo> _audioIDInfoMap;
-    
-    //audio file path,audio IDs
-    static std::unordered_map<std::string,std::list<AUDIO_ID>> _audioPathIDMap;
-    
-    //profileName,ProfileHelper
+
+    // audio file path,audio IDs
+    static std::unordered_map<std::string, std::list<AUDIO_ID>> _audioPathIDMap;
+
+    // profileName,ProfileHelper
     static std::unordered_map<std::string, ProfileHelper> _audioPathProfileHelperMap;
-    
+
     static unsigned int _maxInstances;
-    
+
     static ProfileHelper* _defaultProfileHelper;
-    
+
     static AudioEngineImpl* _audioEngineImpl;
 
     class AudioEngineThreadPool;
     static AudioEngineThreadPool* s_threadPool;
-    
+
     static bool _isEnabled;
-    
+
     friend class AudioEngineImpl;
 };
 

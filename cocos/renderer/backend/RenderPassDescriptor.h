@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include <array>
@@ -38,7 +38,8 @@ class TextureBackend;
  * @{
  */
 
-struct RenderPassFlags {
+struct RenderPassFlags
+{
     /**
      * bitmask indicating which buffers to clear at the beginning of a render pass.
      * This implies discard.
@@ -58,7 +59,6 @@ struct RenderPassFlags {
     TargetBufferFlags discardEnd;
 };
 
-
 /**
  * Store values about color, depth and stencil attachment.
  */
@@ -67,13 +67,13 @@ struct RenderPassDescriptor
     RenderPassDescriptor& operator=(const RenderPassDescriptor& descriptor) = default;
     bool operator==(const RenderPassDescriptor& descriptor) const;
 
-    float clearDepthValue = 0.f;
+    float clearDepthValue   = 0.f;
     float clearStencilValue = 0.f;
-    std::array<float, 4> clearColorValue {{0.f, 0.f, 0.f, 0.f}}; // double-braces required in C++11
-    
+    std::array<float, 4> clearColorValue{{0.f, 0.f, 0.f, 0.f}};  // double-braces required in C++11
+
     // Now, only clear flag used
     RenderPassFlags flags{};
 };
-//end of _backend group
+// end of _backend group
 /// @}
 CC_BACKEND_END

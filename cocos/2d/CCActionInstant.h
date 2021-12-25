@@ -40,8 +40,8 @@ NS_CC_BEGIN
  */
 
 /** @class ActionInstant
-* @brief Instant actions are immediate actions. They don't have a duration like the IntervalAction actions.
-**/
+ * @brief Instant actions are immediate actions. They don't have a duration like the IntervalAction actions.
+ **/
 class CC_DLL ActionInstant : public FiniteTimeAction
 {
 public:
@@ -53,15 +53,15 @@ public:
         CC_ASSERT(0);
         return nullptr;
     }
-    
-    virtual ActionInstant * reverse() const override
+
+    virtual ActionInstant* reverse() const override
     {
         CC_ASSERT(0);
         return nullptr;
     }
 
-    virtual void startWithTarget(Node *target) override;
-    
+    virtual void startWithTarget(Node* target) override;
+
     virtual bool isDone() const override;
     /**
      * @param dt In seconds.
@@ -77,8 +77,8 @@ private:
 };
 
 /** @class Show
-* @brief Show the node.
-**/
+ * @brief Show the node.
+ **/
 class CC_DLL Show : public ActionInstant
 {
 public:
@@ -86,7 +86,7 @@ public:
      *
      * @return  An autoreleased Show object.
      */
-    static Show * create();
+    static Show* create();
 
     //
     // Overrides
@@ -98,17 +98,16 @@ public:
     virtual ActionInstant* reverse() const override;
     virtual Show* clone() const override;
 
-CC_CONSTRUCTOR_ACCESS:
-    Show(){}
-    virtual ~Show(){}
+    CC_CONSTRUCTOR_ACCESS : Show() {}
+    virtual ~Show() {}
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Show);
 };
 
 /** @class Hide
-* @brief Hide the node.
-*/
+ * @brief Hide the node.
+ */
 class CC_DLL Hide : public ActionInstant
 {
 public:
@@ -116,7 +115,7 @@ public:
      *
      * @return An autoreleased Hide object.
      */
-    static Hide * create();
+    static Hide* create();
 
     //
     // Overrides
@@ -128,17 +127,16 @@ public:
     virtual ActionInstant* reverse() const override;
     virtual Hide* clone() const override;
 
-CC_CONSTRUCTOR_ACCESS:
-    Hide(){}
-    virtual ~Hide(){}
+    CC_CONSTRUCTOR_ACCESS : Hide() {}
+    virtual ~Hide() {}
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Hide);
 };
 
 /** @class ToggleVisibility
-* @brief Toggles the visibility of a node.
-*/
+ * @brief Toggles the visibility of a node.
+ */
 class CC_DLL ToggleVisibility : public ActionInstant
 {
 public:
@@ -146,7 +144,7 @@ public:
      *
      * @return An autoreleased ToggleVisibility object.
      */
-    static ToggleVisibility * create();
+    static ToggleVisibility* create();
 
     //
     // Overrides
@@ -158,17 +156,16 @@ public:
     virtual ToggleVisibility* reverse() const override;
     virtual ToggleVisibility* clone() const override;
 
-CC_CONSTRUCTOR_ACCESS:
-    ToggleVisibility(){}
-    virtual ~ToggleVisibility(){}
+    CC_CONSTRUCTOR_ACCESS : ToggleVisibility() {}
+    virtual ~ToggleVisibility() {}
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ToggleVisibility);
 };
 
 /** @class RemoveSelf
-* @brief Remove the node.
-*/
+ * @brief Remove the node.
+ */
 class CC_DLL RemoveSelf : public ActionInstant
 {
 public:
@@ -177,7 +174,7 @@ public:
      * @param isNeedCleanUp Is need to clean up, the default value is true.
      * @return An autoreleased RemoveSelf object.
      */
-    static RemoveSelf * create(bool isNeedCleanUp = true);
+    static RemoveSelf* create(bool isNeedCleanUp = true);
 
     //
     // Override
@@ -188,10 +185,9 @@ public:
     virtual void update(float time) override;
     virtual RemoveSelf* clone() const override;
     virtual RemoveSelf* reverse() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    RemoveSelf() : _isNeedCleanUp(true){}
-    virtual ~RemoveSelf(){}
+
+    CC_CONSTRUCTOR_ACCESS : RemoveSelf() : _isNeedCleanUp(true) {}
+    virtual ~RemoveSelf() {}
 
     /** init the action */
     bool init(bool isNeedCleanUp);
@@ -204,9 +200,9 @@ private:
 };
 
 /** @class FlipX
-* @brief Flips the sprite horizontally.
-* @since v0.99.0
-*/
+ * @brief Flips the sprite horizontally.
+ * @since v0.99.0
+ */
 class CC_DLL FlipX : public ActionInstant
 {
 public:
@@ -215,7 +211,7 @@ public:
      * @param x Flips the sprite horizontally if true.
      * @return  An autoreleased FlipX object.
      */
-    static FlipX * create(bool x);
+    static FlipX* create(bool x);
 
     //
     // Overrides
@@ -226,25 +222,24 @@ public:
     virtual void update(float time) override;
     virtual FlipX* reverse() const override;
     virtual FlipX* clone() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    FlipX() :_flipX(false) {}
+
+    CC_CONSTRUCTOR_ACCESS : FlipX() : _flipX(false) {}
     virtual ~FlipX() {}
 
     /** init the action */
     bool initWithFlipX(bool x);
 
 protected:
-    bool    _flipX;
+    bool _flipX;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(FlipX);
 };
 
 /** @class FlipY
-* @brief Flips the sprite vertically.
-* @since v0.99.0
-*/
+ * @brief Flips the sprite vertically.
+ * @since v0.99.0
+ */
 class CC_DLL FlipY : public ActionInstant
 {
 public:
@@ -253,7 +248,7 @@ public:
      * @param y Flips the sprite vertically if true.
      * @return An autoreleased FlipY object.
      */
-    static FlipY * create(bool y);
+    static FlipY* create(bool y);
 
     //
     // Overrides
@@ -264,34 +259,32 @@ public:
     virtual void update(float time) override;
     virtual FlipY* reverse() const override;
     virtual FlipY* clone() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    FlipY() :_flipY(false) {}
+
+    CC_CONSTRUCTOR_ACCESS : FlipY() : _flipY(false) {}
     virtual ~FlipY() {}
 
     /** init the action */
     bool initWithFlipY(bool y);
 
 protected:
-    bool    _flipY;
+    bool _flipY;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(FlipY);
 };
 
 /** @class Place
-* @brief Places the node in a certain position.
-*/
+ * @brief Places the node in a certain position.
+ */
 class CC_DLL Place : public ActionInstant
 {
 public:
-
     /** Creates a Place action with a position.
      *
      * @param pos  A certain position.
      * @return  An autoreleased Place object.
      */
-    static Place * create(const Vec2& pos);
+    static Place* create(const Vec2& pos);
 
     //
     // Overrides
@@ -302,10 +295,9 @@ public:
     virtual void update(float time) override;
     virtual Place* reverse() const override;
     virtual Place* clone() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Place(){}
-    virtual ~Place(){}
+
+    CC_CONSTRUCTOR_ACCESS : Place() {}
+    virtual ~Place() {}
 
     /** Initializes a Place action with a position */
     bool initWithPosition(const Vec2& pos);
@@ -317,10 +309,9 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(Place);
 };
 
-
 /** @class CallFunc
-* @brief Calls a 'callback'.
-*/
+ * @brief Calls a 'callback'.
+ */
 class CC_DLL CallFunc : public ActionInstant
 {
 public:
@@ -333,7 +324,7 @@ public:
      * @param func  A callback function need to be executed.
      * @return  An autoreleased CallFunc object.
      */
-    static CallFunc * create(const std::function<void()>& func);
+    static CallFunc* create(const std::function<void()>& func);
 
 public:
     /** Executes the callback.
@@ -349,18 +340,16 @@ public:
     virtual void update(float time) override;
     virtual CallFunc* reverse() const override;
     virtual CallFunc* clone() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    CallFunc() = default;
-    virtual ~CallFunc() = default;
-    
+
+    CC_CONSTRUCTOR_ACCESS : CallFunc() = default;
+    virtual ~CallFunc()                = default;
+
     /** initializes the action with the std::function<void()>
      * @lua NA
      */
     bool initWithFunction(const std::function<void()>& func);
 
 protected:
-    
     /** function that will be called */
     std::function<void()> _function;
 
@@ -369,9 +358,9 @@ private:
 };
 
 /** @class CallFuncN
-* @brief Calls a 'callback' with the node as the first argument. N means Node.
-* @js NA
-*/
+ * @brief Calls a 'callback' with the node as the first argument. N means Node.
+ * @js NA
+ */
 class CC_DLL CallFuncN : public CallFunc
 {
 public:
@@ -381,17 +370,16 @@ public:
      * @param func  A callback function need to be executed.
      * @return  An autoreleased CallFuncN object.
      */
-    static CallFuncN * create(const std::function<void(Node*)>& func);
+    static CallFuncN* create(const std::function<void(Node*)>& func);
 
     //
     // Overrides
     //
     virtual CallFuncN* clone() const override;
     virtual void execute() override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    CallFuncN():_functionN(nullptr){}
-    virtual ~CallFuncN(){}
+
+    CC_CONSTRUCTOR_ACCESS : CallFuncN() : _functionN(nullptr) {}
+    virtual ~CallFuncN() {}
 
     /** initializes the action with the std::function<void(Node*)> */
     bool initWithFunction(const std::function<void(Node*)>& func);
@@ -409,4 +397,4 @@ private:
 
 NS_CC_END
 
-#endif //__CCINSTANT_ACTION_H__
+#endif  //__CCINSTANT_ACTION_H__

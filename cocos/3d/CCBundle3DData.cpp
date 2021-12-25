@@ -2,7 +2,6 @@
 
 NS_CC_BEGIN
 
-
 int MeshVertexAttrib::getAttribSizeBytes() const
 {
     int ret = 0;

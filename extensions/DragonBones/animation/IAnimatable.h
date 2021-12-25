@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -28,7 +28,8 @@
 DRAGONBONES_NAMESPACE_BEGIN
 /**
  * - Play animation interface. (Both Armature and Wordclock implement the interface)
- * Any instance that implements the interface can be added to the Worldclock instance and advance time by Worldclock instance uniformly.
+ * Any instance that implements the interface can be added to the Worldclock instance and advance time by Worldclock
+ * instance uniformly.
  * @see dragonBones.WorldClock
  * @see dragonBones.Armature
  * @version DragonBones 3.0
@@ -82,9 +83,9 @@ public:
      * @version DragonBones 5.0
      * @language zh_CN
      */
-    virtual WorldClock* getClock() const = 0;
+    virtual WorldClock* getClock() const     = 0;
     virtual void setClock(WorldClock* value) = 0;
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_ANIMATEBLE_H
+#endif  // DRAGONBONES_ANIMATEBLE_H

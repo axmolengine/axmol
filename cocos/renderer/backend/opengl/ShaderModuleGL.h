@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../ShaderModule.h"
@@ -52,14 +52,14 @@ public:
      * @return Shader object.
      */
     inline GLuint getShader() const { return _shader; }
-    
+
 private:
     void compileShader(ShaderStage stage, const std::string& source);
     void deleteShader();
-    
+
     GLuint _shader = 0;
     friend class ProgramGL;
 };
-//end of _opengl group
+// end of _opengl group
 /// @}
 CC_BACKEND_END

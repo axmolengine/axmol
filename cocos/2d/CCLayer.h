@@ -53,25 +53,23 @@ All features from Node are valid, plus the following new features:
 */
 class CC_DLL Layer : public Node
 {
-public:    
+public:
     /** Creates a fullscreen black layer.
      *
      * @return An autoreleased Layer object.
      */
-    static Layer *create();
-    
+    static Layer* create();
+
     // Overrides
     virtual std::string getDescription() const override;
 
-CC_CONSTRUCTOR_ACCESS:
-    Layer();
+    CC_CONSTRUCTOR_ACCESS : Layer();
     virtual ~Layer();
 
     virtual bool init() override;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Layer);
-
 };
 
 //
@@ -87,7 +85,6 @@ All features from Layer are valid, plus the following new features:
 class CC_DLL LayerColor : public Layer, public BlendProtocol
 {
 public:
-
     /** Creates a fullscreen black layer.
      *
      * @return An autoreleased LayerColor object.
@@ -100,16 +97,16 @@ public:
      * @param height The height of layer.
      * @return An autoreleased LayerColor object.
      */
-    static LayerColor * create(const Color4B& color, float width, float height);
+    static LayerColor* create(const Color4B& color, float width, float height);
     /** Creates a Layer with color. Width and height are the window size.
      *
      * @param color The color of layer.
      * @return An autoreleased LayerColor object.
      */
-    static LayerColor * create(const Color4B& color);
+    static LayerColor* create(const Color4B& color);
 
     /** Change width in Points.
-     * 
+     *
      * @param w The width of layer.
      */
     void changeWidth(float w);
@@ -119,7 +116,7 @@ public:
      */
     void changeHeight(float h);
     /** Change width and height in Points.
-     * 
+     *
      * @param w The width of layer.
      * @param h The Height of layer.
     @since v0.8
@@ -129,33 +126,31 @@ public:
     //
     // Overrides
     //
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-    virtual void setContentSize(const Vec2 & var) override;
+    virtual void setContentSize(const Vec2& var) override;
     /** BlendFunction. Conforms to BlendProtocol protocol */
     /**
-    * @lua NA
-    */
+     * @lua NA
+     */
     virtual const BlendFunc& getBlendFunc() const override;
     /**
-    *@code
-    *When this function bound into js or lua,the parameter will be changed
-    *In js: var setBlendFunc(var src, var dst)
-    *In lua: local setBlendFunc(local src, local dst)
-    *@endcode
-    */
+     *@code
+     *When this function bound into js or lua,the parameter will be changed
+     *In js: var setBlendFunc(var src, var dst)
+     *In lua: local setBlendFunc(local src, local dst)
+     *@endcode
+     */
     virtual void setBlendFunc(const BlendFunc& blendFunc) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    LayerColor();
+
+    CC_CONSTRUCTOR_ACCESS : LayerColor();
     virtual ~LayerColor();
-    
+
     bool init() override;
     bool initWithColor(const Color4B& color, float width, float height);
     bool initWithColor(const Color4B& color);
 
 protected:
-
     virtual void updateColor() override;
     void updateVertexBuffer();
 
@@ -164,11 +159,11 @@ protected:
     CustomCommand _customCommand;
 
     V3F_C4F _vertexData[4];
-    
+
     backend::UniformLocation _mvpMatrixLocation;
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(LayerColor);
-
 };
 
 //
@@ -219,9 +214,9 @@ public:
      * @return An autoreleased LayerGradient object.
      */
     static LayerGradient* create(const Color4B& start, const Color4B& end, const Vec2& v);
-    
-    /** Whether or not the interpolation will be compressed in order to display all the colors of the gradient both in canonical and non canonical vectors.
-     Default: true.
+
+    /** Whether or not the interpolation will be compressed in order to display all the colors of the gradient both in
+     canonical and non canonical vectors. Default: true.
      *
      * @param compressedInterpolation The interpolation will be compressed if true.
      */
@@ -233,10 +228,10 @@ public:
     bool isCompressedInterpolation() const;
 
     /** Sets the start color of the gradient.
-     * 
+     *
      * @param startColor The start color.
      */
-    void setStartColor( const Color3B& startColor );
+    void setStartColor(const Color3B& startColor);
     /** Returns the start color of the gradient.
      *
      * @return The start color.
@@ -247,7 +242,7 @@ public:
      *
      * @param endColor The end color.
      */
-    void setEndColor( const Color3B& endColor );
+    void setEndColor(const Color3B& endColor);
     /** Returns the end color of the gradient.
      *
      * @return The end color.
@@ -258,7 +253,7 @@ public:
      *
      * @param startOpacity The start opacity, from 0 to 255.
      */
-    void setStartOpacity(uint8_t startOpacity );
+    void setStartOpacity(uint8_t startOpacity);
     /** Returns the start opacity of the gradient.
      *
      * @return The start opacity.
@@ -269,7 +264,7 @@ public:
      *
      * @param endOpacity The end opacity, from 0 to 255.
      */
-    void setEndOpacity(uint8_t endOpacity );
+    void setEndOpacity(uint8_t endOpacity);
     /** Returns the end opacity of the gradient.
      *
      * @return The end opacity.
@@ -277,7 +272,7 @@ public:
     uint8_t getEndOpacity() const;
 
     /** Sets the directional vector that will be used for the gradient.
-    The default value is vertical direction (0,-1). 
+    The default value is vertical direction (0,-1).
      *
      * @param alongVector The direction of gradient.
      */
@@ -289,18 +284,17 @@ public:
     const Vec2& getVector() const;
 
     virtual std::string getDescription() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    LayerGradient();
+
+    CC_CONSTRUCTOR_ACCESS : LayerGradient();
     virtual ~LayerGradient();
-    
+
     virtual bool init() override;
     /** Initializes the Layer with a gradient between start and end.
      * @js init
      * @lua init
      */
     bool initWithColor(const Color4B& start, const Color4B& end);
-    
+
     /** Initializes the Layer with a gradient between start and end in the direction of v.
      * @js init
      * @lua init
@@ -310,14 +304,13 @@ CC_CONSTRUCTOR_ACCESS:
 protected:
     virtual void updateColor() override;
 
-    Color3B _startColor = Color3B::BLACK;
-    Color3B _endColor = Color3B::BLACK;
-    uint8_t _startOpacity = 255;
-    uint8_t _endOpacity = 255;
-    Vec2   _alongVector = {0.0f, -1.0f};
-    bool    _compressedInterpolation = true;
+    Color3B _startColor           = Color3B::BLACK;
+    Color3B _endColor             = Color3B::BLACK;
+    uint8_t _startOpacity         = 255;
+    uint8_t _endOpacity           = 255;
+    Vec2 _alongVector             = {0.0f, -1.0f};
+    bool _compressedInterpolation = true;
 };
-
 
 /** @class LayerRadialGradient
  * @brief LayerRadialGradient is a subclass of Layer that draws radial gradients across the background.
@@ -334,66 +327,73 @@ public:
      * @param expand an alpha value(0.f-1.f) that specifies how much of that radius in only inner color(the gradient
                      starts outside of that amount)
      */
-    static LayerRadialGradient* create(const Color4B& startColor, const Color4B& endColor, float radius, const Vec2& center, float expand);
+    static LayerRadialGradient* create(const Color4B& startColor,
+                                       const Color4B& endColor,
+                                       float radius,
+                                       const Vec2& center,
+                                       float expand);
     static LayerRadialGradient* create();
-    
+
     //
     // overrides
     //
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     virtual void setContentSize(const Vec2& size) override;
-    
+
     void setStartOpacity(uint8_t opacity);
     uint8_t getStartOpacity() const;
-    
+
     void setEndOpacity(uint8_t opacity);
     uint8_t getEndOpacity() const;
-    
+
     void setRadius(float radius);
     float getRadius() const;
-    
+
     void setCenter(const Vec2& center);
     Vec2 getCenter() const;
-    
+
     void setExpand(float expand);
     float getExpand() const;
-    
+
     void setStartColor(const Color3B& color);
     void setStartColor(const Color4B& color);
     Color4B getStartColor() const;
     Color3B getStartColor3B() const;
-    
+
     void setEndColor(const Color3B& color);
     void setEndColor(const Color4B& color);
     Color4B getEndColor() const;
     Color3B getEndColor3B() const;
-    
+
     void setBlendFunc(const BlendFunc& blendFunc);
     BlendFunc getBlendFunc() const;
-    
-CC_CONSTRUCTOR_ACCESS:
-    LayerRadialGradient();
+
+    CC_CONSTRUCTOR_ACCESS : LayerRadialGradient();
     virtual ~LayerRadialGradient();
-    
-    bool initWithColor(const Color4B& startColor, const Color4B& endColor, float radius, const Vec2& center, float expand);
-    
+
+    bool initWithColor(const Color4B& startColor,
+                       const Color4B& endColor,
+                       float radius,
+                       const Vec2& center,
+                       float expand);
+
 private:
     void convertColor4B24F(Color4F& outColor, const Color4B& inColor);
-    
-    Color4B _startColor = Color4B::BLACK;
-    Color4F _startColorRend = Color4F::BLACK; // start color used in shader
-    
-    Color4B _endColor = Color4B::BLACK;
-    Color4F _endColorRend = Color4F::BLACK; // end color used in shader
+
+    Color4B _startColor     = Color4B::BLACK;
+    Color4F _startColorRend = Color4F::BLACK;  // start color used in shader
+
+    Color4B _endColor     = Color4B::BLACK;
+    Color4F _endColorRend = Color4F::BLACK;  // end color used in shader
 
     Vec2 _vertices[4];
     Vec2 _center;
     float _radius = 0.f;
     float _expand = 0.f;
     CustomCommand _customCommand;
-    
+
     BlendFunc _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
-    
+
     backend::UniformLocation _mvpMatrixLocation;
     backend::UniformLocation _startColorLocation;
     backend::UniformLocation _endColorLocation;
@@ -401,7 +401,6 @@ private:
     backend::UniformLocation _radiusLocation;
     backend::UniformLocation _expandLocation;
 };
-
 
 /** @class LayerMultiplex
  * @brief MultipleLayer is a Layer with the ability to multiplex it's children.
@@ -414,7 +413,7 @@ class CC_DLL LayerMultiplex : public Layer
 public:
     /** Creates and initializes a LayerMultiplex object.
      * @lua NA
-     * 
+     *
      * @return An autoreleased LayerMultiplex object.
      */
     static LayerMultiplex* create();
@@ -448,7 +447,6 @@ public:
      */
     static LayerMultiplex* createWithLayer(Node* layer);
 
-
     /** Add a certain layer to LayerMultiplex.
      *
      * @param layer A layer need to be added to the LayerMultiplex.
@@ -472,25 +470,25 @@ public:
     void switchToAndReleaseMe(int n);
 
     virtual std::string getDescription() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    LayerMultiplex();
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        LayerMultiplex();
     /**
      * @js NA
      * @lua NA
      */
     virtual ~LayerMultiplex();
-    
+
     virtual bool init() override;
     /** initializes a MultiplexLayer with one or more layers using a variable argument list.
      * @js NA
      * @lua NA
      */
     bool initWithLayers(Node* layer, va_list params);
-    
+
     /** initializes a MultiplexLayer with an array of layers
      @since v2.1
      */
@@ -503,7 +501,6 @@ protected:
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(LayerMultiplex);
 };
-
 
 // end of _2d group
 /// @}

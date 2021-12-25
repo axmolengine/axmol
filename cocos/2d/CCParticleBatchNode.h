@@ -54,7 +54,8 @@ class ParticleSystem;
  * A ParticleBatchNode can reference one and only one texture (one image file, one texture atlas).
  * Only the ParticleSystems that are contained in that texture can be added to the SpriteBatchNode.
  * All ParticleSystems added to a SpriteBatchNode are drawn in one OpenGL ES draw call.
- * If the ParticleSystems are not added to a ParticleBatchNode then an OpenGL ES draw call will be needed for each one, which is less efficient.
+ * If the ParticleSystems are not added to a ParticleBatchNode then an OpenGL ES draw call will be needed for each one,
+ * which is less efficient.
  *
  *
  * Limitations:
@@ -77,9 +78,10 @@ public:
      * @return An autoreleased ParticleBatchNode object.
      * @js NA
      */
-    static ParticleBatchNode* createWithTexture(Texture2D *tex, int capacity = kParticleDefaultCapacity);
+    static ParticleBatchNode* createWithTexture(Texture2D* tex, int capacity = kParticleDefaultCapacity);
 
-    /** Create the particle system with the name of a file on disk (for a list of supported formats look at the Texture2D class), a capacity of particles.
+    /** Create the particle system with the name of a file on disk (for a list of supported formats look at the
+     * Texture2D class), a capacity of particles.
      *
      * @param fileImage A given file name.
      * @param capacity A capacity of particles.
@@ -113,74 +115,75 @@ public:
      * @return The texture atlas used for drawing the quads.
      */
     TextureAtlas* getTextureAtlas() const { return _textureAtlas; }
-    
+
     /** Sets the texture atlas used for drawing the quads.
      *
      * @param atlas The texture atlas used for drawing the quads.
      */
     void setTextureAtlas(TextureAtlas* atlas) { _textureAtlas = atlas; }
-    
+
     // Overrides
-    virtual void visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
+    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     using Node::addChild;
-    virtual void addChild(Node * child, int zOrder, int tag) override;
-    virtual void addChild(Node * child, int zOrder, const std::string &name) override;
+    virtual void addChild(Node* child, int zOrder, int tag) override;
+    virtual void addChild(Node* child, int zOrder, const std::string& name) override;
     virtual void removeChild(Node* child, bool cleanup) override;
-    virtual void reorderChild(Node * child, int zOrder) override;
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void reorderChild(Node* child, int zOrder) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     virtual Texture2D* getTexture() const override;
-    virtual void setTexture(Texture2D *texture) override;
+    virtual void setTexture(Texture2D* texture) override;
     /**
-    * @code
-    * When this function bound into js or lua,the parameter will be changed
-    * In js: var setBlendFunc(var src, var dst)
-    * @endcode
-    * @lua NA
-    */
-    virtual void setBlendFunc(const BlendFunc &blendFunc) override;
-    /**
-    * @js NA
-    * @lua NA
-    */
-    virtual const BlendFunc& getBlendFunc() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
+     * @code
+     * When this function bound into js or lua,the parameter will be changed
+     * In js: var setBlendFunc(var src, var dst)
+     * @endcode
+     * @lua NA
      */
-    ParticleBatchNode();
+    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual const BlendFunc& getBlendFunc() const override;
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleBatchNode();
     /**
      * @js NA
      * @lua NA
      */
     virtual ~ParticleBatchNode();
-    
+
     /** initializes the particle system with Texture2D, a capacity of particles */
-    bool initWithTexture(Texture2D *tex, int capacity);
-    
-    /** initializes the particle system with the name of a file on disk (for a list of supported formats look at the Texture2D class), a capacity of particles */
+    bool initWithTexture(Texture2D* tex, int capacity);
+
+    /** initializes the particle system with the name of a file on disk (for a list of supported formats look at the
+     * Texture2D class), a capacity of particles */
     bool initWithFile(const std::string& fileImage, int capacity);
-    
+
 private:
     void updateAllAtlasIndexes();
     void increaseAtlasCapacityTo(ssize_t quantity);
     int searchNewPositionInChildrenForZ(int z);
     void getCurrentIndex(int* oldIndex, int* newIndex, Node* child, int z);
-    int addChildHelper(ParticleSystem* child, int z, int aTag, const std::string &name, bool setTag);
-    void addChildByTagOrName(ParticleSystem* child, int z, int tag, const std::string &name, bool setTag);
+    int addChildHelper(ParticleSystem* child, int z, int aTag, const std::string& name, bool setTag);
+    void addChildByTagOrName(ParticleSystem* child, int z, int tag, const std::string& name, bool setTag);
     void updateBlendFunc();
-    
+
     void updateProgramStateTexture();
-    
+
     /** the texture atlas used for drawing the quads */
     TextureAtlas* _textureAtlas = nullptr;
 
     /** the blend function used for drawing the quads */
     BlendFunc _blendFunc;
-    
+
     CustomCommand _customCommand;
-    
+
     backend::UniformLocation _mvpMatrixLocaiton;
     backend::UniformLocation _textureLocation;
 };

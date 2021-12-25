@@ -43,13 +43,14 @@ NS_CC_BEGIN
  a   b    0
  c   d    0
  tx  ty   1
- 
+
  Identity
  1   0    0
  0   1    0
  0   0    1
  */
-struct CC_DLL AffineTransform {
+struct CC_DLL AffineTransform
+{
     float a, b, c, d;
     float tx, ty;
 
@@ -116,4 +117,4 @@ NS_CC_END
 // end of base transform
 /// @}
 
-#endif // __MATH_CCAFFINETRANSFORM_H__
+#endif  // __MATH_CCAFFINETRANSFORM_H__

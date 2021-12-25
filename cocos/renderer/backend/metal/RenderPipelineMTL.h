@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../RenderPipeline.h"
@@ -50,28 +50,31 @@ public:
     RenderPipelineMTL(id<MTLDevice> mtlDevice);
     ~RenderPipelineMTL();
     virtual void update(const RenderTarget* renderTarget, const PipelineDescriptor&) override;
-    
+
     /**
      * Get a MTLRenderPipelineState object.
      * @return A MTLRenderPipelineState object.
      */
     inline id<MTLRenderPipelineState> getMTLRenderPipelineState() const { return _mtlRenderPipelineState; }
-   
+
 private:
     void setVertexLayout(MTLRenderPipelineDescriptor*, const PipelineDescriptor&);
     void setBlendState(MTLRenderPipelineColorAttachmentDescriptor*, const BlendDescriptor&);
     void setShaderModules(const PipelineDescriptor&);
     void setBlendStateAndFormat(const BlendDescriptor&);
-    void chooseAttachmentFormat(const RenderTarget* renderTarget, PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT], PixelFormat&, PixelFormat&);
-    
+    void chooseAttachmentFormat(const RenderTarget* renderTarget,
+                                PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
+                                PixelFormat&,
+                                PixelFormat&);
+
     id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
-    id<MTLDevice> _mtlDevice = nil;
-   
+    id<MTLDevice> _mtlDevice                           = nil;
+
     MTLRenderPipelineDescriptor* _mtlRenderPipelineDescriptor = nil;
-    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = { PixelFormat::NONE };
-    PixelFormat _depthAttachmentFormat = PixelFormat::NONE;
-    PixelFormat _stencilAttachmentFormat = PixelFormat::NONE;
-    
+    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT]  = {PixelFormat::NONE};
+    PixelFormat _depthAttachmentFormat                        = PixelFormat::NONE;
+    PixelFormat _stencilAttachmentFormat                      = PixelFormat::NONE;
+
     tsl::robin_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
 };
 

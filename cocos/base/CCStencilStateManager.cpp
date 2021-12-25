@@ -2,19 +2,19 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,30 +35,24 @@ int StencilStateManager::s_layer = -1;
 
 StencilStateManager::StencilStateManager()
 {
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_UCOLOR);
-    _programState = new backend::ProgramState(program);
+    auto& pipelineDescriptor        = _customCommand.getPipelineDescriptor();
+    auto* program                   = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_UCOLOR);
+    _programState                   = new backend::ProgramState(program);
     pipelineDescriptor.programState = _programState;
-    
-    auto vertexLayout = _programState->getVertexLayout();
+
+    auto vertexLayout         = _programState->getVertexLayout();
     const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter = attributeInfo.find("a_position");
-    if(iter != attributeInfo.end())
+    auto iter                 = attributeInfo.find("a_position");
+    if (iter != attributeInfo.end())
     {
         vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
     }
     vertexLayout->setLayout(2 * sizeof(float));
 
-    _mvpMatrixLocaiton = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
+    _mvpMatrixLocaiton    = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     _colorUniformLocation = pipelineDescriptor.programState->getUniformLocation("u_color");
-    
-   
-    Vec2 vertices[4] = {
-        Vec2(-1.0f, -1.0f),
-        Vec2(1.0f, -1.0f),
-        Vec2(1.0f, 1.0f),
-        Vec2(-1.0f, 1.0f)
-    };
+
+    Vec2 vertices[4] = {Vec2(-1.0f, -1.0f), Vec2(1.0f, -1.0f), Vec2(1.0f, 1.0f), Vec2(-1.0f, 1.0f)};
     _customCommand.createVertexBuffer(sizeof(Vec2), 4, CustomCommand::BufferUsage::STATIC);
     _customCommand.updateVertexBuffer(vertices, sizeof(vertices));
 
@@ -82,13 +76,12 @@ void StencilStateManager::drawFullScreenQuadClearStencil(float globalZOrder)
     _programState->setUniform(_mvpMatrixLocaiton, Mat4::IDENTITY.m, sizeof(Mat4::IDENTITY.m));
 }
 
-
 void StencilStateManager::setAlphaThreshold(float alphaThreshold)
 {
     _alphaThreshold = alphaThreshold;
 }
 
-float StencilStateManager::getAlphaThreshold()const
+float StencilStateManager::getAlphaThreshold() const
 {
     return _alphaThreshold;
 }
@@ -98,7 +91,7 @@ void StencilStateManager::setInverted(bool inverted)
     _inverted = inverted;
 }
 
-bool StencilStateManager::isInverted()const
+bool StencilStateManager::isInverted() const
 {
     return _inverted;
 }
@@ -123,7 +116,6 @@ void StencilStateManager::onBeforeVisit(float globalZOrder)
 
     // draw a fullscreen solid rectangle to clear the stencil buffer
     drawFullScreenQuadClearStencil(globalZOrder);
-
 }
 
 void StencilStateManager::onBeforeDrawQuadCmd()
@@ -131,12 +123,12 @@ void StencilStateManager::onBeforeDrawQuadCmd()
     auto renderer = Director::getInstance()->getRenderer();
     updateLayerMask();
     // manually save the stencil state
-    _currentStencilEnabled = renderer->getStencilTest();
-    _currentStencilWriteMask = renderer->getStencilWriteMask();
-    _currentStencilFunc = renderer->getStencilCompareFunction();
-    _currentStencilRef = renderer->getStencilReferenceValue();
-    _currentStencilReadMask = renderer->getStencilReadMask();
-    _currentStencilFail = renderer->getStencilFailureOperation();
+    _currentStencilEnabled       = renderer->getStencilTest();
+    _currentStencilWriteMask     = renderer->getStencilWriteMask();
+    _currentStencilFunc          = renderer->getStencilCompareFunction();
+    _currentStencilRef           = renderer->getStencilReferenceValue();
+    _currentStencilReadMask      = renderer->getStencilReadMask();
+    _currentStencilFail          = renderer->getStencilFailureOperation();
     _currentStencilPassDepthFail = renderer->getStencilPassDepthFailureOperation();
     _currentStencilPassDepthPass = renderer->getStencilDepthPassOperation();
 
@@ -168,8 +160,7 @@ void StencilStateManager::onBeforeDrawQuadCmd()
     //     if in inverted mode: set the current layer value to 1 in the stencil buffer
     renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, _currentLayerMask, _currentLayerMask);
     renderer->setStencilOperation(!_inverted ? backend::StencilOperation::ZERO : backend::StencilOperation::REPLACE,
-        backend::StencilOperation::KEEP,
-        backend::StencilOperation::KEEP);
+                                  backend::StencilOperation::KEEP, backend::StencilOperation::KEEP);
 }
 
 void StencilStateManager::onAfterDrawQuadCmd()
@@ -178,23 +169,22 @@ void StencilStateManager::onAfterDrawQuadCmd()
     renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, _currentLayerMask, _currentLayerMask);
 
     renderer->setStencilOperation(!_inverted ? backend::StencilOperation::REPLACE : backend::StencilOperation::ZERO,
-        backend::StencilOperation::KEEP,
-        backend::StencilOperation::KEEP);
+                                  backend::StencilOperation::KEEP, backend::StencilOperation::KEEP);
 }
 
 void StencilStateManager::onAfterDrawStencil()
 {
     // restore the depth test state
-//    glDepthMask(_currentDepthWriteMask);
+    //    glDepthMask(_currentDepthWriteMask);
     auto renderer = Director::getInstance()->getRenderer();
     renderer->setDepthWrite(_currentDepthWriteMask);
-    //if (currentDepthTestEnabled) {
-    //    glEnable(GL_DEPTH_TEST);
-    //}
-    
+    // if (currentDepthTestEnabled) {
+    //     glEnable(GL_DEPTH_TEST);
+    // }
+
     ///////////////////////////////////
     // DRAW CONTENT
-    
+
     // setup the stencil test function like this:
     // for each pixel of this node and its children
     //     if all layers less than or equals to the current are set to 1 in the stencil buffer
@@ -203,17 +193,17 @@ void StencilStateManager::onAfterDrawStencil()
     //         do not draw the pixel but keep the current layer in the stencil buffer
     renderer->setStencilCompareFunction(backend::CompareFunction::EQUAL, _mask_layer_le, _mask_layer_le);
 
-    renderer->setStencilOperation(backend::StencilOperation::KEEP, backend::StencilOperation::KEEP, backend::StencilOperation::KEEP);
+    renderer->setStencilOperation(backend::StencilOperation::KEEP, backend::StencilOperation::KEEP,
+                                  backend::StencilOperation::KEEP);
 
     // draw (according to the stencil test function) this node and its children
-
 }
 
 void StencilStateManager::onAfterVisit()
 {
     ///////////////////////////////////
     // CLEANUP
-    
+
     // manually restore the stencil state
     auto renderer = Director::getInstance()->getRenderer();
     renderer->setStencilCompareFunction(_currentStencilFunc, _currentStencilRef, _currentStencilReadMask);
@@ -225,10 +215,9 @@ void StencilStateManager::onAfterVisit()
     {
         renderer->setStencilTest(false);
     }
-    
+
     // we are done using this layer, decrement
     s_layer--;
 }
-
 
 NS_CC_END

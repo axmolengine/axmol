@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -43,11 +43,11 @@ class RenderTarget;
 class RenderPipeline : public cocos2d::Ref
 {
 public:
-    virtual void update(const RenderTarget*, const PipelineDescriptor & pipelineDescirptor) = 0;
-    
+    virtual void update(const RenderTarget*, const PipelineDescriptor& pipelineDescirptor) = 0;
+
 protected:
     virtual ~RenderPipeline() = default;
 };
-//end of _backend group
+// end of _backend group
 /// @}
 CC_BACKEND_END

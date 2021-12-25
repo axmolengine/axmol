@@ -2,19 +2,19 @@
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,13 +26,12 @@
 
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
 
-
 NS_CC_BEGIN
 
 const LuaValue LuaValue::intValue(const int intValue)
 {
     LuaValue value;
-    value._type = LuaValueTypeInt;
+    value._type           = LuaValueTypeInt;
     value._field.intValue = intValue;
     return value;
 }
@@ -40,7 +39,7 @@ const LuaValue LuaValue::intValue(const int intValue)
 const LuaValue LuaValue::floatValue(const float floatValue)
 {
     LuaValue value;
-    value._type = LuaValueTypeFloat;
+    value._type             = LuaValueTypeFloat;
     value._field.floatValue = floatValue;
     return value;
 }
@@ -48,7 +47,7 @@ const LuaValue LuaValue::floatValue(const float floatValue)
 const LuaValue LuaValue::booleanValue(const bool booleanValue)
 {
     LuaValue value;
-    value._type = LuaValueTypeBoolean;
+    value._type               = LuaValueTypeBoolean;
     value._field.booleanValue = booleanValue;
     return value;
 }
@@ -56,7 +55,7 @@ const LuaValue LuaValue::booleanValue(const bool booleanValue)
 const LuaValue LuaValue::stringValue(const char* stringValue)
 {
     LuaValue value;
-    value._type = LuaValueTypeString;
+    value._type              = LuaValueTypeString;
     value._field.stringValue = new std::string(stringValue ? stringValue : "");
     return value;
 }
@@ -64,7 +63,7 @@ const LuaValue LuaValue::stringValue(const char* stringValue)
 const LuaValue LuaValue::stringValue(const std::string& stringValue)
 {
     LuaValue value;
-    value._type = LuaValueTypeString;
+    value._type              = LuaValueTypeString;
     value._field.stringValue = new std::string(stringValue);
     return value;
 }
@@ -72,7 +71,7 @@ const LuaValue LuaValue::stringValue(const std::string& stringValue)
 const LuaValue LuaValue::dictValue(const LuaValueDict& dictValue)
 {
     LuaValue value;
-    value._type = LuaValueTypeDict;
+    value._type            = LuaValueTypeDict;
     value._field.dictValue = new LuaValueDict(dictValue);
     return value;
 }
@@ -80,7 +79,7 @@ const LuaValue LuaValue::dictValue(const LuaValueDict& dictValue)
 const LuaValue LuaValue::arrayValue(const LuaValueArray& arrayValue)
 {
     LuaValue value;
-    value._type = LuaValueTypeArray;
+    value._type             = LuaValueTypeArray;
     value._field.arrayValue = new LuaValueArray(arrayValue);
     return value;
 }
@@ -88,7 +87,7 @@ const LuaValue LuaValue::arrayValue(const LuaValueArray& arrayValue)
 const LuaValue LuaValue::ccobjectValue(Ref* ccobjectValue, const char* objectTypename)
 {
     LuaValue value;
-    value._type = LuaValueTypeObject;
+    value._type                = LuaValueTypeObject;
     value._field.ccobjectValue = ccobjectValue;
     ccobjectValue->retain();
     value._ccobjectType = new std::string(objectTypename);
@@ -107,7 +106,8 @@ LuaValue::LuaValue(const LuaValue& rhs)
 
 LuaValue& LuaValue::operator=(const LuaValue& rhs)
 {
-    if (this != &rhs) copy(rhs);
+    if (this != &rhs)
+        copy(rhs);
     return *this;
 }
 

@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,12 +29,12 @@
 
 NS_CC_BEGIN
 //// Constants
-//const unsigned short Particle3DVertexEmitter::DEFAULT_STEP = 1;
-//const unsigned short Particle3DVertexEmitter::DEFAULT_SEGMENTS = 1;
-//const unsigned short Particle3DVertexEmitter::DEFAULT_ITERATIONS = 1;
+// const unsigned short Particle3DVertexEmitter::DEFAULT_STEP = 1;
+// const unsigned short Particle3DVertexEmitter::DEFAULT_SEGMENTS = 1;
+// const unsigned short Particle3DVertexEmitter::DEFAULT_ITERATIONS = 1;
 //
 ////-----------------------------------------------------------------------
-//Particle3DVertexEmitter::Particle3DVertexEmitter() : ParticleEmitter(),
+// Particle3DVertexEmitter::Particle3DVertexEmitter() : ParticleEmitter(),
 //	mPositionElement(0),
 //	mVertexData(0),
 //	mVertexBuffer(0),
@@ -52,56 +52,56 @@ NS_CC_BEGIN
 //	mMeshName(StringUtil::BLANK)
 //{
 //	mBuffer.setNull();
-//}
+// }
 ////-----------------------------------------------------------------------
-//unsigned short Particle3DVertexEmitter::getIterations() const
+// unsigned short Particle3DVertexEmitter::getIterations() const
 //{
 //	return mIterations;
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::setIterations(unsigned short iterations)
+// void Particle3DVertexEmitter::setIterations(unsigned short iterations)
 //{
 //	mIterations = iterations;
-//}
+// }
 ////-----------------------------------------------------------------------
-//unsigned short Particle3DVertexEmitter::getSegments() const
+// unsigned short Particle3DVertexEmitter::getSegments() const
 //{
 //	return mSegments;
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::setSegments(unsigned short segments)
+// void Particle3DVertexEmitter::setSegments(unsigned short segments)
 //{
 //	mSegments = segments;
-//}
+// }
 ////-----------------------------------------------------------------------
-//unsigned short Particle3DVertexEmitter::getStep() const
+// unsigned short Particle3DVertexEmitter::getStep() const
 //{
 //	return mStep;
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::setStep(unsigned short step)
+// void Particle3DVertexEmitter::setStep(unsigned short step)
 //{
 //	mStep = step;
-//}
+// }
 ////-----------------------------------------------------------------------
-//const std::string& Particle3DVertexEmitter::getMeshName() const
+// const std::string& Particle3DVertexEmitter::getMeshName() const
 //{
 //	return mMeshName;
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::setMeshName(const std::string& meshName)
+// void Particle3DVertexEmitter::setMeshName(const std::string& meshName)
 //{
 //	_setDefaults(); // Triggers loading the new mesh
 //	mMeshName = meshName;
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_notifyStart ()
+// void Particle3DVertexEmitter::_notifyStart ()
 //{
 //	ParticleEmitter::_notifyStart();
 //	_setDefaults();
-//}
+// }
 ////-----------------------------------------------------------------------
-//unsigned short Particle3DVertexEmitter::_calculateRequestedParticles(float timeElapsed)
+// unsigned short Particle3DVertexEmitter::_calculateRequestedParticles(float timeElapsed)
 //{
 //	// Only return the requested number if the emitter can actually emit them
 //	unsigned short requested = ParticleEmitter::_calculateRequestedParticles(timeElapsed);
@@ -111,9 +111,9 @@ NS_CC_BEGIN
 //	}
 //
 //	return 0;
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_initParticlePosition(Particle* particle)
+// void Particle3DVertexEmitter::_initParticlePosition(Particle* particle)
 //{
 //	// Get the first one from the list.
 //	// The _calculateRequestedParticles() ensures that there are particles in the list.
@@ -122,19 +122,19 @@ NS_CC_BEGIN
 //	if (sys)
 //	{
 //		particle->position = getDerivedPosition() +
-//			sys->getDerivedOrientation() * 
+//			sys->getDerivedOrientation() *
 //			(_mEmitterScale * *mSpawnPositionList.begin());
 //	}
 //	else
 //	{
 //		particle->position = getDerivedPosition() + _mEmitterScale * *mSpawnPositionList.begin();
 //	}
-//			
+//
 //	mSpawnPositionList.pop_front();
 //	particle->originalPosition = particle->position;
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_preProcessParticles(ParticleTechnique* technique, float timeElapsed)
+// void Particle3DVertexEmitter::_preProcessParticles(ParticleTechnique* technique, float timeElapsed)
 //{
 //	if (mAllVerticesProcessed)
 //	{
@@ -153,11 +153,11 @@ NS_CC_BEGIN
 //
 //	// Calculate the emitters position
 //	getDerivedPosition();
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_setDefaults()
+// void Particle3DVertexEmitter::_setDefaults()
 //{
-//	// Set the default values except the name of the mesh, which may only be changed by the 
+//	// Set the default values except the name of the mesh, which may only be changed by the
 //	// setMeshName() function
 //	mSpawnPositionList.clear();
 //	mPositionElement = 0;
@@ -179,14 +179,13 @@ NS_CC_BEGIN
 //		}
 //		mBuffer.setNull();
 //	}
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_loadMesh ()
+// void Particle3DVertexEmitter::_loadMesh ()
 //{
-//	Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().load(mMeshName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-//	mMesh = mesh.getPointer();
-//	mMeshProcessed = false;
-//			
+//	Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().load(mMeshName,
+//Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME); 	mMesh = mesh.getPointer(); 	mMeshProcessed = false;
+//
 //	if (mMesh->getNumSubMeshes() > 0)
 //	{
 //		mSubMesh = mMesh->getSubMesh(0);
@@ -195,9 +194,9 @@ NS_CC_BEGIN
 //	{
 //		mSubMesh = 0;
 //	}
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_generatePoints ()
+// void Particle3DVertexEmitter::_generatePoints ()
 //{
 //	if (mAllVerticesProcessed)
 //	{
@@ -242,9 +241,9 @@ NS_CC_BEGIN
 //			mSubMesh = mMesh->getSubMesh(mSubMeshNumber);
 //		}
 //	}
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_generatePointsFromMesh ()
+// void Particle3DVertexEmitter::_generatePointsFromMesh ()
 //{
 //	if (mMaxVertexCount == 0 && mMesh)
 //	{
@@ -262,9 +261,9 @@ NS_CC_BEGIN
 //	{
 //		mMeshProcessed = true;
 //	}
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_generatePointsFromSubMesh ()
+// void Particle3DVertexEmitter::_generatePointsFromSubMesh ()
 //{
 //	if (mMaxVertexCount == 0 && mSubMesh)
 //	{
@@ -277,9 +276,9 @@ NS_CC_BEGIN
 //	}
 //
 //	_generatePointsFromVertexBuffer();
-//}	
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_fillVertexBuffer()
+// void Particle3DVertexEmitter::_fillVertexBuffer()
 //{
 //	mVertexCount = 0;
 //	mMaxVertexCount = mVertexData->vertexCount - mStep;
@@ -287,9 +286,9 @@ NS_CC_BEGIN
 //	mBuffer = mVertexData->vertexBufferBinding->getBuffer(mPositionElement->getSource());
 //	mVertexSize = mBuffer->getVertexSize();
 //	mVertexBuffer = static_cast<unsigned char*>(mBuffer->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_generatePointsFromVertexBuffer()
+// void Particle3DVertexEmitter::_generatePointsFromVertexBuffer()
 //{
 //	if (mMaxVertexCount > 1)
 //	{
@@ -302,9 +301,9 @@ NS_CC_BEGIN
 //		_generatePoints (v1, v2);
 //		mVertexCount += mStep;
 //	}
-//}
+// }
 ////-----------------------------------------------------------------------
-//void Particle3DVertexEmitter::_generatePoints (const Vec3& startVector,
+// void Particle3DVertexEmitter::_generatePoints (const Vec3& startVector,
 //	const Vec3& endVector,
 //	float lengthIncrement)
 //{
@@ -330,8 +329,8 @@ NS_CC_BEGIN
 //		// Determine number of dividers, based on the length increment
 //		mSegments = (unsigned short)(((endVector - startVector).length()) / lengthIncrement - 1);
 //	}
-//    Vec3 increment = (endVector - startVector) / mSegments;
-//		
+//     Vec3 increment = (endVector - startVector) / mSegments;
+//
 //	for (unsigned short i = 0; i <= mSegments; i++)
 //	{
 //		mSpawnPositionList.insert (iterator, start);
@@ -340,5 +339,5 @@ NS_CC_BEGIN
 //		if (iterator != mSpawnPositionList.begin())
 //			iterator--;
 //	}
-//}
+// }
 NS_CC_END

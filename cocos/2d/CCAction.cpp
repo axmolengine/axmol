@@ -37,13 +37,7 @@ NS_CC_BEGIN
 // Action Base Class
 //
 
-Action::Action()
-:_originalTarget(nullptr)
-,_target(nullptr)
-,_tag(Action::INVALID_TAG)
-,_flags(0)
-{
-}
+Action::Action() : _originalTarget(nullptr), _target(nullptr), _tag(Action::INVALID_TAG), _flags(0) {}
 
 Action::~Action()
 {
@@ -55,7 +49,7 @@ std::string Action::description() const
     return StringUtils::format("<Action | Tag = %d", _tag);
 }
 
-void Action::startWithTarget(Node *aTarget)
+void Action::startWithTarget(Node* aTarget)
 {
     _originalTarget = _target = aTarget;
 }
@@ -83,11 +77,7 @@ void Action::update(float /*time*/)
 //
 // Speed
 //
-Speed::Speed()
-: _speed(0.0)
-, _innerAction(nullptr)
-{
-}
+Speed::Speed() : _speed(0.0), _innerAction(nullptr) {}
 
 Speed::~Speed()
 {
@@ -96,7 +86,7 @@ Speed::~Speed()
 
 Speed* Speed::create(ActionInterval* action, float speed)
 {
-    Speed *ret = new  Speed();
+    Speed* ret = new Speed();
     if (ret->initWithAction(action, speed))
     {
         ret->autorelease();
@@ -106,7 +96,7 @@ Speed* Speed::create(ActionInterval* action, float speed)
     return nullptr;
 }
 
-bool Speed::initWithAction(ActionInterval *action, float speed)
+bool Speed::initWithAction(ActionInterval* action, float speed)
 {
     CCASSERT(action != nullptr, "action must not be NULL");
     if (action == nullptr)
@@ -114,19 +104,19 @@ bool Speed::initWithAction(ActionInterval *action, float speed)
         log("Speed::initWithAction error: action is nullptr!");
         return false;
     }
-    
+
     action->retain();
     _innerAction = action;
-    _speed = speed;
+    _speed       = speed;
     return true;
 }
 
-Speed *Speed::clone() const
+Speed* Speed::clone() const
 {
     // no copy constructor
     if (_innerAction)
         return Speed::create(_innerAction->clone(), _speed);
-    
+
     return nullptr;
 }
 
@@ -145,7 +135,7 @@ void Speed::stop()
 {
     if (_innerAction)
         _innerAction->stop();
-    
+
     Action::stop();
 }
 
@@ -159,15 +149,15 @@ bool Speed::isDone() const
     return _innerAction->isDone();
 }
 
-Speed *Speed::reverse() const
+Speed* Speed::reverse() const
 {
     if (_innerAction)
         return Speed::create(_innerAction->reverse(), _speed);
-    
+
     return nullptr;
 }
 
-void Speed::setInnerAction(ActionInterval *action)
+void Speed::setInnerAction(ActionInterval* action)
 {
     if (_innerAction != action)
     {
@@ -185,33 +175,31 @@ Follow::~Follow()
     CC_SAFE_RELEASE(_followedNode);
 }
 
-Follow* Follow::create(Node *followedNode, const Rect& rect/* = Rect::ZERO*/)
+Follow* Follow::create(Node* followedNode, const Rect& rect /* = Rect::ZERO*/)
 {
-    return createWithOffset(followedNode, 0.0, 0.0,rect);
+    return createWithOffset(followedNode, 0.0, 0.0, rect);
 }
 
-Follow* Follow::createWithOffset(Node* followedNode,float xOffset,float yOffset,const Rect& rect/*= Rect::ZERO*/){
-    
-    
-    Follow *follow = new Follow();
-    
-    bool valid = follow->initWithTargetAndOffset(followedNode, xOffset, yOffset,rect);
+Follow* Follow::createWithOffset(Node* followedNode, float xOffset, float yOffset, const Rect& rect /*= Rect::ZERO*/)
+{
+
+    Follow* follow = new Follow();
+
+    bool valid = follow->initWithTargetAndOffset(followedNode, xOffset, yOffset, rect);
 
     if (valid)
     {
         follow->autorelease();
         return follow;
     }
-    
+
     delete follow;
     return nullptr;
-    
 }
 Follow* Follow::clone() const
 {
     // no copy constructor
-    return Follow::createWithOffset(_followedNode, _offsetX,_offsetY,_worldRect);
-    
+    return Follow::createWithOffset(_followedNode, _offsetX, _offsetY, _worldRect);
 }
 
 Follow* Follow::reverse() const
@@ -219,69 +207,69 @@ Follow* Follow::reverse() const
     return clone();
 }
 
-bool Follow::initWithTargetAndOffset(Node *followedNode, float xOffset,float yOffset,const Rect& rect)
+bool Follow::initWithTargetAndOffset(Node* followedNode, float xOffset, float yOffset, const Rect& rect)
 {
     CCASSERT(followedNode != nullptr, "FollowedNode can't be NULL");
-    if(followedNode == nullptr)
+    if (followedNode == nullptr)
     {
         log("Follow::initWithTarget error: followedNode is nullptr!");
         return false;
     }
- 
+
     followedNode->retain();
-    _followedNode = followedNode;
-    _worldRect = rect;
-    _boundarySet = !rect.equals(Rect::ZERO);
+    _followedNode         = followedNode;
+    _worldRect            = rect;
+    _boundarySet          = !rect.equals(Rect::ZERO);
     _boundaryFullyCovered = false;
 
     Vec2 winSize = Director::getInstance()->getWinSize();
     _fullScreenSize.set(winSize.width, winSize.height);
     _halfScreenSize = _fullScreenSize * 0.5f;
-    _offsetX=xOffset;
-    _offsetY=yOffset;
+    _offsetX        = xOffset;
+    _offsetY        = yOffset;
     _halfScreenSize.x += _offsetX;
     _halfScreenSize.y += _offsetY;
-    
+
     if (_boundarySet)
     {
-        _leftBoundary = -((rect.origin.x+rect.size.width) - _fullScreenSize.x);
-        _rightBoundary = -rect.origin.x ;
-        _topBoundary = -rect.origin.y;
-        _bottomBoundary = -((rect.origin.y+rect.size.height) - _fullScreenSize.y);
+        _leftBoundary   = -((rect.origin.x + rect.size.width) - _fullScreenSize.x);
+        _rightBoundary  = -rect.origin.x;
+        _topBoundary    = -rect.origin.y;
+        _bottomBoundary = -((rect.origin.y + rect.size.height) - _fullScreenSize.y);
 
-        if(_rightBoundary < _leftBoundary)
+        if (_rightBoundary < _leftBoundary)
         {
             // screen width is larger than world's boundary width
-            //set both in the middle of the world
+            // set both in the middle of the world
             _rightBoundary = _leftBoundary = (_leftBoundary + _rightBoundary) / 2;
         }
-        if(_topBoundary < _bottomBoundary)
+        if (_topBoundary < _bottomBoundary)
         {
             // screen width is larger than world's boundary width
-            //set both in the middle of the world
+            // set both in the middle of the world
             _topBoundary = _bottomBoundary = (_topBoundary + _bottomBoundary) / 2;
         }
 
-        if( (_topBoundary == _bottomBoundary) && (_leftBoundary == _rightBoundary) )
+        if ((_topBoundary == _bottomBoundary) && (_leftBoundary == _rightBoundary))
         {
             _boundaryFullyCovered = true;
         }
     }
-    
+
     return true;
 }
 
-bool Follow::initWithTarget(Node *followedNode, const Rect& rect /*= Rect::ZERO*/){
-    
-    return initWithTargetAndOffset(followedNode, 0.0, 0.0,rect);
-    
+bool Follow::initWithTarget(Node* followedNode, const Rect& rect /*= Rect::ZERO*/)
+{
+
+    return initWithTargetAndOffset(followedNode, 0.0, 0.0, rect);
 }
 void Follow::step(float /*dt*/)
 {
-    if(_boundarySet)
+    if (_boundarySet)
     {
         // whole map fits inside a single screen, no need to modify the position - unless map boundaries are increased
-        if(_boundaryFullyCovered)
+        if (_boundaryFullyCovered)
         {
             return;
         }
@@ -289,7 +277,7 @@ void Follow::step(float /*dt*/)
         Vec2 tempPos = _halfScreenSize - _followedNode->getPosition();
 
         _target->setPosition(clampf(tempPos.x, _leftBoundary, _rightBoundary),
-                                   clampf(tempPos.y, _bottomBoundary, _topBoundary));
+                             clampf(tempPos.y, _bottomBoundary, _topBoundary));
     }
     else
     {
@@ -299,7 +287,7 @@ void Follow::step(float /*dt*/)
 
 bool Follow::isDone() const
 {
-    return ( !_followedNode->isRunning() );
+    return (!_followedNode->isRunning());
 }
 
 void Follow::stop()
@@ -309,5 +297,3 @@ void Follow::stop()
 }
 
 NS_CC_END
-
-

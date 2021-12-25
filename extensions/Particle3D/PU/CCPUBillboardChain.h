@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,7 +34,6 @@
 #include "base/CCRef.h"
 #include "math/CCMath.h"
 
-
 NS_CC_BEGIN
 
 class MeshCommand;
@@ -49,21 +48,15 @@ class PUBillboardChain
 {
 
 public:
-
     /** Contains the data of an element of the BillboardChain.
-    */
+     */
     class Element
     {
 
     public:
-
         Element();
 
-        Element(const Vec3& position,
-            float width,
-            float texCoord,
-            const Vec4& colour,
-            const Quaternion& orientation);
+        Element(const Vec3& position, float width, float texCoord, const Vec4& colour, const Quaternion& orientation);
 
         Vec3 position;
         float width;
@@ -71,7 +64,7 @@ public:
         float texCoord;
         Vec4 color;
 
-        //Only used when mFaceCamera == false
+        // Only used when mFaceCamera == false
         Quaternion orientation;
     };
     typedef std::vector<Element> ElementList;
@@ -84,23 +77,28 @@ public:
     @param useVertexColours If true, use vertex colours from the chain elements
     @param dynamic If true, buffers are created with the intention of being updated
     */
-    PUBillboardChain(const std::string& name, const std::string& texFile = "", size_t maxElements = 20, size_t numberOfChains = 1,
-        bool useTextureCoords = true, bool useColours = true, bool dynamic = true);
+    PUBillboardChain(const std::string& name,
+                     const std::string& texFile = "",
+                     size_t maxElements         = 20,
+                     size_t numberOfChains      = 1,
+                     bool useTextureCoords      = true,
+                     bool useColours            = true,
+                     bool dynamic               = true);
     /// destructor
     virtual ~PUBillboardChain();
 
-    /** Set the maximum number of chain elements per chain 
-    */
+    /** Set the maximum number of chain elements per chain
+     */
     virtual void setMaxChainElements(size_t maxElements);
-    /** Get the maximum number of chain elements per chain 
-    */
+    /** Get the maximum number of chain elements per chain
+     */
     virtual size_t getMaxChainElements() const { return _maxElementsPerChain; }
     /** Set the number of chain segments (this class can render multiple chains
-        at once using the same material). 
+        at once using the same material).
     */
     virtual void setNumberOfChains(size_t numChains);
     /** Get the number of chain segments (this class can render multiple chains
-    at once using the same material). 
+    at once using the same material).
     */
     virtual size_t getNumberOfChains() const { return _chainCount; }
 
@@ -168,7 +166,7 @@ public:
         for dynamic alteration.
     */
     virtual bool getDynamic() const { return _dynamic; }
-        
+
     /** Add an element to the 'head' of a chain.
     @remarks
         If this causes the number of elements to exceed the maximum elements
@@ -177,20 +175,18 @@ public:
     @param chainIndex The index of the chain
     @param billboardChainElement The details to add
     */
-    virtual void addChainElement(size_t chainIndex, 
-        const Element& billboardChainElement);
+    virtual void addChainElement(size_t chainIndex, const Element& billboardChainElement);
     /** Remove an element from the 'tail' of a chain.
     @param chainIndex The index of the chain
     */
     virtual void removeChainElement(size_t chainIndex);
     /** Update the details of an existing chain element.
     @param chainIndex The index of the chain
-    @param elementIndex The element index within the chain, measured from 
+    @param elementIndex The element index within the chain, measured from
         the 'head' of the chain
     @param billboardChainElement The details to set
     */
-    virtual void updateChainElement(size_t chainIndex, size_t elementIndex, 
-        const Element& billboardChainElement);
+    virtual void updateChainElement(size_t chainIndex, size_t elementIndex, const Element& billboardChainElement);
     /** Get the detail of a chain element.
     @param chainIndex The index of the chain
     @param elementIndex The element index within the chain, measured from
@@ -222,7 +218,7 @@ public:
     matrix, the segment corresponding to that point will be facing towards UNIT_Z
     This vector is internally normalized.
     */
-    void setFaceCamera( bool faceCamera, const Vec3& normalVector=Vec3::UNIT_X );
+    void setFaceCamera(bool faceCamera, const Vec3& normalVector = Vec3::UNIT_X);
 
     void setDepthTest(bool isDepthTest);
     void setDepthWrite(bool isDepthWrite);
@@ -231,14 +227,13 @@ public:
     void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem);
 
     // Overridden members follow
-    //void _updateRenderQueue(RenderQueue*);
-    //void getRenderOperation(RenderOperation&);
-    //virtual bool preRender(SceneManager* sm, RenderSystem* rsys);
-    //void getWorldTransforms(Matrix4*) const;
+    // void _updateRenderQueue(RenderQueue*);
+    // void getRenderOperation(RenderOperation&);
+    // virtual bool preRender(SceneManager* sm, RenderSystem* rsys);
+    // void getWorldTransforms(Matrix4*) const;
     /// @copydoc MovableObject::visitRenderables
 
 protected:
-
     /// Setup the STL collections
     virtual void setupChainContainers();
     /// Setup vertex declaration
@@ -253,13 +248,11 @@ protected:
     void init(const std::string& texFile);
 
 private:
-
     void onBeforeDraw();
 
     void onAfterDraw();
 
 protected:
-
     /// Maximum length of each chain
     size_t _maxElementsPerChain;
     /// Number of chains
@@ -291,7 +284,6 @@ protected:
     /// vector
     Vec3 _normalBase;
 
-
     /// The list holding the chain elements
     ElementList _chainElementList;
 
@@ -317,35 +309,34 @@ protected:
     /// Chain segment has no elements
     static const size_t SEGMENT_EMPTY;
 
-
     struct VertexInfo
     {
         Vec3 position;
         Vec2 uv;
         Vec4 color;
     };
-    MeshCommand             _meshCommand;
+    MeshCommand _meshCommand;
     RenderState::StateBlock _stateBlock;
-    Texture2D*              _texture        = nullptr;
-    backend::ProgramState*  _programState   = nullptr;
-    backend::Buffer*        _indexBuffer    = nullptr; //index buffer
-    backend::Buffer*        _vertexBuffer   = nullptr; //vertex buffer
+    Texture2D* _texture                  = nullptr;
+    backend::ProgramState* _programState = nullptr;
+    backend::Buffer* _indexBuffer        = nullptr;  // index buffer
+    backend::Buffer* _vertexBuffer       = nullptr;  // vertex buffer
 
     std::vector<VertexInfo> _vertices;
-    std::vector<uint16_t>   _indices;
+    std::vector<uint16_t> _indices;
 
-    std::string             _texFile;
+    std::string _texFile;
 
-    backend::UniformLocation    _locColor;
-    backend::UniformLocation    _locTexture;
-    backend::UniformLocation    _locPMatrix;
+    backend::UniformLocation _locColor;
+    backend::UniformLocation _locTexture;
+    backend::UniformLocation _locPMatrix;
 
-    //renderer state cache variables
-    bool                        _rendererDepthTestEnabled   = true;
-    backend::CompareFunction    _rendererDepthCmpFunc       = backend::CompareFunction::LESS;
-    backend::CullMode           _rendererCullMode           = backend::CullMode::BACK;
-    backend::Winding            _rendererWinding            = backend::Winding::COUNTER_CLOCK_WISE;
-    bool                        _rendererDepthWrite         = false;
+    // renderer state cache variables
+    bool _rendererDepthTestEnabled                 = true;
+    backend::CompareFunction _rendererDepthCmpFunc = backend::CompareFunction::LESS;
+    backend::CullMode _rendererCullMode            = backend::CullMode::BACK;
+    backend::Winding _rendererWinding              = backend::Winding::COUNTER_CLOCK_WISE;
+    bool _rendererDepthWrite                       = false;
 };
 
 NS_CC_END

@@ -23,21 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-
 #include "2d/CCComponentContainer.h"
 #include "2d/CCComponent.h"
 #include "2d/CCNode.h"
 
 NS_CC_BEGIN
 
-ComponentContainer::ComponentContainer(Node* node)
-: _owner(node)
-{
-}
+ComponentContainer::ComponentContainer(Node* node) : _owner(node) {}
 
-ComponentContainer::~ComponentContainer()
-{  
-}
+ComponentContainer::~ComponentContainer() {}
 
 Component* ComponentContainer::get(const std::string& name) const
 {
@@ -52,7 +46,7 @@ Component* ComponentContainer::get(const std::string& name) const
     return ret;
 }
 
-bool ComponentContainer::add(Component *com)
+bool ComponentContainer::add(Component* com)
 {
     bool ret = false;
     CCASSERT(com != nullptr, "Component must be non-nil");
@@ -72,15 +66,15 @@ bool ComponentContainer::add(Component *com)
         com->onAdd();
 
         ret = true;
-    } while(0);
+    } while (0);
     return ret;
 }
 
 bool ComponentContainer::remove(const std::string& componentName)
 {
     bool ret = false;
-    do 
-    {        
+    do
+    {
         auto iter = _componentMap.find(componentName);
         CC_BREAK_IF(iter == _componentMap.end());
 
@@ -92,12 +86,12 @@ bool ComponentContainer::remove(const std::string& componentName)
         component->release();
 
         ret = true;
-    } while(0);
+    } while (0);
 
     return ret;
- }
+}
 
-bool ComponentContainer::remove(Component *com)
+bool ComponentContainer::remove(Component* com)
 {
     return remove(com->getName());
 }
@@ -112,7 +106,7 @@ void ComponentContainer::removeAll()
             iter.second->setOwner(nullptr);
             iter.second->release();
         }
-        
+
         _componentMap.clear();
         _owner->unscheduleUpdate();
     }

@@ -29,14 +29,14 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-
-namespace cocostudio {
-
-SpriteFrameCacheHelper *SpriteFrameCacheHelper::_spriteFrameCacheHelper = nullptr;
-
-SpriteFrameCacheHelper *SpriteFrameCacheHelper::getInstance()
+namespace cocostudio
 {
-    if(!_spriteFrameCacheHelper)
+
+SpriteFrameCacheHelper* SpriteFrameCacheHelper::_spriteFrameCacheHelper = nullptr;
+
+SpriteFrameCacheHelper* SpriteFrameCacheHelper::getInstance()
+{
+    if (!_spriteFrameCacheHelper)
     {
         _spriteFrameCacheHelper = new SpriteFrameCacheHelper();
     }
@@ -50,20 +50,21 @@ void SpriteFrameCacheHelper::purge()
     _spriteFrameCacheHelper = nullptr;
 }
 
-void SpriteFrameCacheHelper::retainSpriteFrames(const std::string &plistPath)
+void SpriteFrameCacheHelper::retainSpriteFrames(const std::string& plistPath)
 {
     auto it = _usingSpriteFrames.find(plistPath);
-    if(it != _usingSpriteFrames.end()) return;
+    if (it != _usingSpriteFrames.end())
+        return;
 
-    std::string fullPath = FileUtils::getInstance()->fullPathForFilename(plistPath);
-    ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);
+    std::string fullPath   = FileUtils::getInstance()->fullPathForFilename(plistPath);
+    ValueMap dict          = FileUtils::getInstance()->getValueMapFromFile(fullPath);
     auto spriteFramesCache = SpriteFrameCache::getInstance();
-    ValueMap& framesDict = dict["frames"].asValueMap();
+    ValueMap& framesDict   = dict["frames"].asValueMap();
 
     std::vector<SpriteFrame*> vec;
     for (auto iter = framesDict.begin(); iter != framesDict.end(); ++iter)
     {
-        auto& spriteFrameName = iter->first;
+        auto& spriteFrameName    = iter->first;
         SpriteFrame* spriteFrame = spriteFramesCache->getSpriteFrameByName(spriteFrameName);
         vec.push_back(spriteFrame);
         CC_SAFE_RETAIN(spriteFrame);
@@ -71,12 +72,13 @@ void SpriteFrameCacheHelper::retainSpriteFrames(const std::string &plistPath)
     _usingSpriteFrames[plistPath] = vec;
 }
 
-void SpriteFrameCacheHelper::releaseSpriteFrames(const std::string &plistPath)
+void SpriteFrameCacheHelper::releaseSpriteFrames(const std::string& plistPath)
 {
     auto it = _usingSpriteFrames.find(plistPath);
-    if(it == _usingSpriteFrames.end()) return;
+    if (it == _usingSpriteFrames.end())
+        return;
 
-    auto& vec = it->second;
+    auto& vec    = it->second;
     auto itFrame = vec.begin();
     while (itFrame != vec.end())
     {
@@ -87,7 +89,7 @@ void SpriteFrameCacheHelper::releaseSpriteFrames(const std::string &plistPath)
     _usingSpriteFrames.erase(it);
 }
 
-void SpriteFrameCacheHelper::removeSpriteFrameFromFile(const std::string &plistPath)
+void SpriteFrameCacheHelper::removeSpriteFrameFromFile(const std::string& plistPath)
 {
     SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(plistPath);
     releaseSpriteFrames(plistPath);
@@ -99,9 +101,7 @@ void SpriteFrameCacheHelper::addSpriteFrameFromFile(const std::string& plistPath
     retainSpriteFrames(plistPath);
 }
 
-SpriteFrameCacheHelper::SpriteFrameCacheHelper()
-{
-}
+SpriteFrameCacheHelper::SpriteFrameCacheHelper() {}
 
 SpriteFrameCacheHelper::~SpriteFrameCacheHelper()
 {
@@ -113,4 +113,4 @@ SpriteFrameCacheHelper::~SpriteFrameCacheHelper()
     }
 }
 
-}
+}  // namespace cocostudio

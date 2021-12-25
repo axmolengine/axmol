@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,7 +23,6 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
 
 #ifndef __CC_PU_PARTICLE_3D_SCALE_AFFECTOR_H__
 #define __CC_PU_PARTICLE_3D_SCALE_AFFECTOR_H__
@@ -34,7 +33,7 @@
 
 NS_CC_BEGIN
 
-class  CC_EX_DLL PUScaleAffector : public PUAffector
+class CC_EX_DLL PUScaleAffector : public PUAffector
 {
 public:
     // Constants
@@ -45,51 +44,48 @@ public:
 
     static PUScaleAffector* create();
 
-    virtual void updatePUAffector(PUParticle3D *particle, float deltaTime) override;
+    virtual void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
 
-    /** 
-    */
-    PUDynamicAttribute* getDynScaleX() const {return _dynScaleX;};
+    /**
+     */
+    PUDynamicAttribute* getDynScaleX() const { return _dynScaleX; };
     void setDynScaleX(PUDynamicAttribute* dynScaleX);
     void resetDynScaleX(bool resetToDefault = true);
 
-    /** 
-    */
-    PUDynamicAttribute* getDynScaleY() const {return _dynScaleY;};
+    /**
+     */
+    PUDynamicAttribute* getDynScaleY() const { return _dynScaleY; };
     void setDynScaleY(PUDynamicAttribute* dynScaleY);
     void resetDynScaleY(bool resetToDefault = true);
 
-    /** 
-    */
-    PUDynamicAttribute* getDynScaleZ() const {return _dynScaleZ;};
+    /**
+     */
+    PUDynamicAttribute* getDynScaleZ() const { return _dynScaleZ; };
     void setDynScaleZ(PUDynamicAttribute* dynScaleZ);
     void resetDynScaleZ(bool resetToDefault = true);
 
-    /** 
-    */
-    PUDynamicAttribute* getDynScaleXYZ() const {return _dynScaleXYZ;};
+    /**
+     */
+    PUDynamicAttribute* getDynScaleXYZ() const { return _dynScaleXYZ; };
     void setDynScaleXYZ(PUDynamicAttribute* dynScaleXYZ);
     void resetDynScaleXYZ(bool resetToDefault = true);
 
-    /** 
-    */
-    bool isSinceStartSystem() const {return _sinceStartSystem;};
-    void setSinceStartSystem(bool sinceStartSystem){_sinceStartSystem = sinceStartSystem;};
+    /**
+     */
+    bool isSinceStartSystem() const { return _sinceStartSystem; };
+    void setSinceStartSystem(bool sinceStartSystem) { _sinceStartSystem = sinceStartSystem; };
 
-    virtual void copyAttributesTo (PUAffector* affector) override;
+    virtual void copyAttributesTo(PUAffector* affector) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    PUScaleAffector();
+    CC_CONSTRUCTOR_ACCESS : PUScaleAffector();
     virtual ~PUScaleAffector();
 
 protected:
-
     /** Returns the scale value for the dynamic Scale.
-    */
+     */
     float calculateScale(PUDynamicAttribute* dynScale, PUParticle3D* particle);
 
 protected:
-
     PUDynamicAttribute* _dynScaleX;
     PUDynamicAttribute* _dynScaleY;
     PUDynamicAttribute* _dynScaleZ;

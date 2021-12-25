@@ -40,7 +40,7 @@ class FastTMXLayer;
  * @addtogroup _2d
  * @{
  */
-    
+
 /** @brief FastTMXTiledMap knows how to parse and render a TMX map.
 
  * It adds support for the TMX tiled map format used by http://www.mapeditor.org.
@@ -70,7 +70,8 @@ class FastTMXLayer;
  * - It only supports the XML format (the JSON format is not supported).
 
  * Technical description:
- * Each layer is created using an FastTMXLayer (subclass of SpriteBatchNode). If you have 5 layers, then 5 FastTMXLayer will be created,
+ * Each layer is created using an FastTMXLayer (subclass of SpriteBatchNode). If you have 5 layers, then 5 FastTMXLayer
+ will be created,
  * unless the layer visibility is off. In that case, the layer won't be created at all.
  * You can obtain the layers (FastTMXLayer objects) at runtime by:
  * - map->getChildByTag(tag_number);  // 0=1st layer, 1=2nd layer, 2=3rd layer, etc...
@@ -102,7 +103,7 @@ public:
      */
     static FastTMXTiledMap* create(const std::string& tmxFile);
 
-    /** Initializes a TMX Tiled Map with a TMX formatted XML string and a path to TMX resources. 
+    /** Initializes a TMX Tiled Map with a TMX formatted XML string and a path to TMX resources.
      *
      * @param tmxString A TMX formatted XML string.
      * @param resourcePath A path to TMX resources.
@@ -110,14 +111,14 @@ public:
      */
     static FastTMXTiledMap* createWithXML(const std::string& tmxString, const std::string& resourcePath);
 
-    /** Return the FastTMXLayer for the specific layer. 
-     * 
+    /** Return the FastTMXLayer for the specific layer.
+     *
      * @return Return the FastTMXLayer for the specific layer.
      */
     FastTMXLayer* getLayer(const std::string& layerName) const;
 
-    /** Return the TMXObjectGroup for the specific group. 
-     * 
+    /** Return the TMXObjectGroup for the specific group.
+     *
      * @return Return the TMXObjectGroup for the specific group.
      */
     TMXObjectGroup* getObjectGroup(const std::string& groupName) const;
@@ -134,12 +135,12 @@ public:
      */
     Value getPropertiesForGID(int GID) const;
 
-    /** The map's size property measured in tiles. 
+    /** The map's size property measured in tiles.
      *
      * @return The map's size property measured in tiles.
      */
     const Vec2& getMapSize() const { return _mapSize; }
-    
+
     /** Set the map's size property measured in tiles.
      *
      * @param mapSize The map's size property measured in tiles.
@@ -151,53 +152,49 @@ public:
      * @return The tiles's size property measured in pixels.
      */
     const Vec2& getTileSize() const { return _tileSize; }
-    
-    /** Set the tiles's size property measured in pixels. 
+
+    /** Set the tiles's size property measured in pixels.
      *
      * @param tileSize The tiles's size property measured in pixels.
      */
     void setTileSize(const Vec2& tileSize) { _tileSize = tileSize; }
 
-    /** Get map orientation. 
+    /** Get map orientation.
      *
      * @return The map orientation.
      */
     int getMapOrientation() const { return _mapOrientation; }
-    
-    /** Set map orientation. 
+
+    /** Set map orientation.
      *
      * @param mapOrientation The map orientation.
      */
     void setMapOrientation(int mapOrientation) { _mapOrientation = mapOrientation; }
 
-    /** Get object groups. 
+    /** Get object groups.
      *
      * @return Object groups.
      */
     const Vector<TMXObjectGroup*>& getObjectGroups() const { return _objectGroups; }
     Vector<TMXObjectGroup*>& getObjectGroups() { return _objectGroups; }
-    
-    /** Set object groups. 
+
+    /** Set object groups.
      *
      * @param groups An object groups.
      */
-    void setObjectGroups(const Vector<TMXObjectGroup*>& groups) {
-        _objectGroups = groups;
-    }
-    
+    void setObjectGroups(const Vector<TMXObjectGroup*>& groups) { _objectGroups = groups; }
+
     /** Get properties.
      *
      * @return Properties.
      */
     const ValueMap& getProperties() const { return _properties; }
-    
-    /** Set properties. 
+
+    /** Set properties.
      *
      * @param properties An ValueMap Properties.
      */
-    void setProperties(const ValueMap& properties) {
-        _properties = properties;
-    }
+    void setProperties(const ValueMap& properties) { _properties = properties; }
 
     virtual std::string getDescription() const override;
 
@@ -212,11 +209,11 @@ public:
 
     const std::string& getResourceFile() const { return _tmxFile; }
 
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    FastTMXTiledMap();
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        FastTMXTiledMap();
     /**
      * @js NA
      * @lua NA
@@ -228,10 +225,10 @@ CC_CONSTRUCTOR_ACCESS:
 
     /** initializes a TMX Tiled Map with a TMX formatted XML string and a path to TMX resources */
     bool initWithXML(const std::string& tmxString, const std::string& resourcePath);
-    
+
 protected:
-    FastTMXLayer * parseLayer(TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo);
-    TMXTilesetInfo * tilesetForLayer(TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo);
+    FastTMXLayer* parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    TMXTilesetInfo* tilesetForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     void buildWithMapInfo(TMXMapInfo* mapInfo);
 
     /** the map's size property measured in tiles */
@@ -244,16 +241,16 @@ protected:
     Vector<TMXObjectGroup*> _objectGroups;
     /** properties */
     ValueMap _properties;
-    
+
     //! tile properties
     ValueMapIntKey _tileProperties;
 
     int _layerCount = 0;
 
     std::string _tmxFile;
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(FastTMXTiledMap);
-
 };
 
 // end of tilemap_parallax_nodes group

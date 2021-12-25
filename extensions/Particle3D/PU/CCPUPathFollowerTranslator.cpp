@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,15 +31,13 @@
 
 NS_CC_BEGIN
 
-PUPathFollowerTranslator::PUPathFollowerTranslator()
-{
-}
+PUPathFollowerTranslator::PUPathFollowerTranslator() {}
 //-------------------------------------------------------------------------
-bool PUPathFollowerTranslator::translateChildProperty( PUScriptCompiler* compiler, PUAbstractNode *node )
+bool PUPathFollowerTranslator::translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node)
 {
     PUPropertyAbstractNode* prop = reinterpret_cast<PUPropertyAbstractNode*>(node);
-    PUAffector* af = static_cast<PUAffector*>(prop->parent->context);
-    PUPathFollower* affector = static_cast<PUPathFollower*>(af);
+    PUAffector* af               = static_cast<PUAffector*>(prop->parent->context);
+    PUPathFollower* affector     = static_cast<PUPathFollower*>(af);
 
     if (prop->name == token[TOKEN_PATH_POINT])
     {
@@ -47,7 +45,7 @@ bool PUPathFollowerTranslator::translateChildProperty( PUScriptCompiler* compile
         if (passValidateProperty(compiler, prop, token[TOKEN_PATH_POINT], VAL_VECTOR3))
         {
             Vec3 val;
-            if(getVector3(prop->values.begin(), prop->values.end(), &val))
+            if (getVector3(prop->values.begin(), prop->values.end(), &val))
             {
                 affector->addPoint(val);
                 return true;
@@ -58,7 +56,7 @@ bool PUPathFollowerTranslator::translateChildProperty( PUScriptCompiler* compile
     return false;
 }
 
-bool PUPathFollowerTranslator::translateChildObject( PUScriptCompiler* /*compiler*/, PUAbstractNode* /*node*/ )
+bool PUPathFollowerTranslator::translateChildObject(PUScriptCompiler* /*compiler*/, PUAbstractNode* /*node*/)
 {
     // No objects
     return false;

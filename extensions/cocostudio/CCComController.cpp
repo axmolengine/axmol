@@ -25,7 +25,8 @@ THE SOFTWARE.
 #include "CCComController.h"
 #include "2d/CCNode.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 IMPLEMENT_CLASS_COMPONENT_INFO(ComController)
 
@@ -36,9 +37,7 @@ ComController::ComController()
     _name = COMPONENT_NAME;
 }
 
-ComController::~ComController()
-{
-}
+ComController::~ComController() {}
 
 bool ComController::init()
 {
@@ -53,29 +52,23 @@ void ComController::onEnter()
     }
 }
 
-void ComController::onExit()
-{
-}
+void ComController::onExit() {}
 
 void ComController::onAdd()
 {
     if (_owner != nullptr)
     {
-       _owner->scheduleUpdate();
+        _owner->scheduleUpdate();
     }
 }
 
-void ComController::onRemove()
-{
-}
+void ComController::onRemove() {}
 
-void ComController::update(float /*delta*/)
-{
-}
+void ComController::update(float /*delta*/) {}
 
 ComController* ComController::create()
 {
-    ComController * pRet = new ComController();
+    ComController* pRet = new ComController();
     if (pRet->init())
     {
         pRet->autorelease();
@@ -84,7 +77,7 @@ ComController* ComController::create()
     {
         CC_SAFE_DELETE(pRet);
     }
-	return pRet;
+    return pRet;
 }
 
-}
+}  // namespace cocostudio

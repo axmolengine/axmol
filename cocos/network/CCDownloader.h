@@ -33,15 +33,18 @@
 
 #include "platform/CCPlatformMacros.h"
 
-namespace cocos2d {
-namespace network {
+namespace cocos2d
+{
+namespace network
+{
 
 class IDownloadTask;
 class IDownloaderImpl;
 class Downloader;
 class DownloaderCURL;
 
-class CC_DLL DownloadTask final {
+class CC_DLL DownloadTask final
+{
 public:
     const static int ERROR_NO_ERROR            = 0;
     const static int ERROR_INVALID_PARAMS      = -1;
@@ -58,7 +61,8 @@ public:
     std::string requestURL;
     std::string storagePath;
 
-    struct {
+    struct
+    {
         // progress
         int64_t totalBytesExpected = 0;
         int64_t bytesReceived      = 0;
@@ -69,17 +73,19 @@ public:
 
     DownloadTask();
     DownloadTask(const std::string& srcUrl, const std::string& identifier);
-    DownloadTask(const std::string& srcUrl, const std::string& storagePath,
-        const std::string& checksum, // currently is MD5
-        const std::string& identifier, bool background);
+    DownloadTask(const std::string& srcUrl,
+                 const std::string& storagePath,
+                 const std::string& checksum,  // currently is MD5
+                 const std::string& identifier,
+                 bool background);
 
     virtual ~DownloadTask();
 
     // Cancel the download, it's useful for ios platform switch wifi to 4g
     void cancel();
 
-    std::string checksum; // The MD5 checksum for check only when download finished.
-    bool background; // Does the task is background (all callback will invoke on downloader thread)
+    std::string checksum;  // The MD5 checksum for check only when download finished.
+    bool background;       // Does the task is background (all callback will invoke on downloader thread)
 
 private:
     friend class Downloader;
@@ -87,14 +93,16 @@ private:
     std::unique_ptr<IDownloadTask> _coTask;
 };
 
-class CC_DLL DownloaderHints {
+class CC_DLL DownloaderHints
+{
 public:
     uint32_t countOfMaxProcessingTasks;
     uint32_t timeoutInSeconds;
     std::string tempFileNameSuffix;
 };
 
-class CC_DLL Downloader final {
+class CC_DLL Downloader final
+{
 public:
     Downloader();
     Downloader(const DownloaderHints& hints);
@@ -109,27 +117,35 @@ public:
     std::function<void(const DownloadTask& task, int errorCode, int errorCodeInternal, const std::string& errorStr)>
         onTaskError;
 
-    void setOnFileTaskSuccess(const std::function<void(const DownloadTask& task)>& callback) {
+    void setOnFileTaskSuccess(const std::function<void(const DownloadTask& task)>& callback)
+    {
         onFileTaskSuccess = callback;
     };
 
-    void setOnTaskProgress(const std::function<void(const DownloadTask& task)>& callback) {
+    void setOnTaskProgress(const std::function<void(const DownloadTask& task)>& callback)
+    {
         onTaskProgress = callback;
     };
 
-    void setOnTaskError(const std::function<void(
-            const DownloadTask& task, int errorCode, int errorCodeInternal, const std::string& errorStr)>& callback) {
+    void setOnTaskError(
+        const std::function<
+            void(const DownloadTask& task, int errorCode, int errorCodeInternal, const std::string& errorStr)>&
+            callback)
+    {
         onTaskError = callback;
     };
 
     std::shared_ptr<DownloadTask> createDownloadDataTask(const std::string& srcUrl, const std::string& identifier = "");
 
-    std::shared_ptr<DownloadTask> createDownloadFileTask(const std::string& srcUrl, const std::string& storagePath,
-        const std::string& identifier = "", const std::string& checksum = "", bool background = false);
+    std::shared_ptr<DownloadTask> createDownloadFileTask(const std::string& srcUrl,
+                                                         const std::string& storagePath,
+                                                         const std::string& identifier = "",
+                                                         const std::string& checksum   = "",
+                                                         bool background               = false);
 
 private:
     std::unique_ptr<IDownloaderImpl> _impl;
 };
 
-} // namespace network
-} // namespace cocos2d
+}  // namespace network
+}  // namespace cocos2d

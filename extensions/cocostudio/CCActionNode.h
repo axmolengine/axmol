@@ -29,149 +29,150 @@ THE SOFTWARE.
 #include "DictionaryHelper.h"
 #include "CocosStudioExport.h"
 
-namespace cocostudio {
-    
+namespace cocostudio
+{
+
 class CocoLoader;
 struct stExpCocoNode;
 /**
-*  @js NA
-*  @lua NA
-*/
+ *  @js NA
+ *  @lua NA
+ */
 class CCS_DLL ActionNode : public cocos2d::Ref
 {
 public:
-
     /**
-    * Default constructor
-    */
+     * Default constructor
+     */
     ActionNode();
 
     /**
-    * Default destructor
-    */
+     * Default destructor
+     */
     virtual ~ActionNode();
     /**
-    * Sets the time interval of frame.
-    *
-    * @param fTime   the time interval of frame
-    */
+     * Sets the time interval of frame.
+     *
+     * @param fTime   the time interval of frame
+     */
     void setUnitTime(float fTime);
 
     /**
-    * Gets the time interval of frame.
-    *
-    * @return fTime   the time interval of frame
-    */
+     * Gets the time interval of frame.
+     *
+     * @return fTime   the time interval of frame
+     */
     float getUnitTime();
     /**
-    * Sets tag for ActionNode
-    *
-    * @param tag    tag of ActionNode
-    */
+     * Sets tag for ActionNode
+     *
+     * @param tag    tag of ActionNode
+     */
     void setActionTag(int tag);
 
     /**
-    * Gets tag for ActionNode
-    *
-    * @return tag    tag of ActionNode
-    */
+     * Gets tag for ActionNode
+     *
+     * @return tag    tag of ActionNode
+     */
     int getActionTag();
 
     /**
-    * Sets node which will run a action.
-    *
-    * @param  node which will run a action
-    */
+     * Sets node which will run a action.
+     *
+     * @param  node which will run a action
+     */
     void setObject(cocos2d::Ref* node);
 
     /**
-    * Gets node which will run a action.
-    *
-    * @return  node which will run a action
-    */
+     * Gets node which will run a action.
+     *
+     * @return  node which will run a action
+     */
     cocos2d::Ref* getObject();
 
     /**
-    * Insets a ActionFrame to ActionNode.
-    *
-    * @param index  the index of ActionFrame
-    *
-    * @param frame  the ActionFrame which will be inserted
-    */
+     * Insets a ActionFrame to ActionNode.
+     *
+     * @param index  the index of ActionFrame
+     *
+     * @param frame  the ActionFrame which will be inserted
+     */
     void insertFrame(int index, ActionFrame* frame);
 
     /**
-    * Pushes back a ActionFrame to ActionNode.
-    *
-    * @param frame  the ActionFrame which will be added
-    */
+     * Pushes back a ActionFrame to ActionNode.
+     *
+     * @param frame  the ActionFrame which will be added
+     */
     void addFrame(ActionFrame* frame);
 
     /**
-    * Remove a ActionFrame from ActionNode.
-    *
-    * @param frame  the ActionFrame which will be removed
-    */
-    void deleteFrame(ActionFrame* frame );
+     * Remove a ActionFrame from ActionNode.
+     *
+     * @param frame  the ActionFrame which will be removed
+     */
+    void deleteFrame(ActionFrame* frame);
 
     /**
-    * Remove all ActionFrames from ActionNode.
-    */
+     * Remove all ActionFrames from ActionNode.
+     */
     void clearAllFrame();
 
     /**
-    * Gets index of first ActionFrame.
-    *
-    * @return  index of first ActionFrame
-    */
+     * Gets index of first ActionFrame.
+     *
+     * @return  index of first ActionFrame
+     */
     int getFirstFrameIndex();
 
     /**
-    * Gets index of last ActionFrame.
-    *
-    * @return  index of last ActionFrame
-    */
+     * Gets index of last ActionFrame.
+     *
+     * @return  index of last ActionFrame
+     */
     int getLastFrameIndex();
 
     /**
-    * Updates action states to some time.
-    *
-    * @param fTime   the time when need to update
-    */
+     * Updates action states to some time.
+     *
+     * @param fTime   the time when need to update
+     */
     virtual bool updateActionToTimeLine(float fTime);
 
     /**
-    * Play the action.
-    */
+     * Play the action.
+     */
     virtual void playAction();
 
     /**
-    * Stop the action.
-    */
+     * Stop the action.
+     */
     virtual void stopAction();
 
     /*init properties with a json dictionary*/
     virtual void initWithDictionary(const rapidjson::Value& dic, cocos2d::Ref* root);
-    virtual void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode*    pCocoNode, Ref* root);
+    virtual void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, Ref* root);
 
     /**
-    * Gets if the action is done once time.
-    *
-    * @return   that if the action is done once time
-    */
+     * Gets if the action is done once time.
+     *
+     * @return   that if the action is done once time
+     */
     virtual bool isActionDoneOnce();
+
 protected:
     int valueToInt(const std::string& value);
     bool valueToBool(const std::string& value);
     float valueToFloat(const std::string& value);
-    
+
     int _currentFrameIndex;
     int _destFrameIndex;
 
     float _fUnitTime;
 
     int _actionTag;
-    cocos2d::Spawn * _actionSpawn;
+    cocos2d::Spawn* _actionSpawn;
     cocos2d::Action* _action;
     cocos2d::Ref* _object;
 
@@ -180,12 +181,12 @@ protected:
 
 protected:
     virtual cocos2d::Node* getActionNode();
-    virtual cocos2d::Spawn * refreshActionProperty();
+    virtual cocos2d::Spawn* refreshActionProperty();
     virtual void runAction();
     virtual void initActionNodeFromRoot(cocos2d::Ref* root);
-    virtual void easingToFrame(float duration,float delayTime,ActionFrame* srcFrame,ActionFrame* destFrame);
+    virtual void easingToFrame(float duration, float delayTime, ActionFrame* srcFrame, ActionFrame* destFrame);
 };
 
-}
+}  // namespace cocostudio
 
 #endif

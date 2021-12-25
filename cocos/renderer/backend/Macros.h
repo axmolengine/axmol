@@ -22,11 +22,17 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
-#define CC_BACKEND_BEGIN  namespace cocos2d{ namespace backend{
-#define CC_BACKEND_END    }}
+#define CC_BACKEND_BEGIN \
+    namespace cocos2d    \
+    {                    \
+    namespace backend    \
+    {
+#define CC_BACKEND_END \
+    }                  \
+    }
 
 #define MAX_COLOR_ATTCHMENT 4
 

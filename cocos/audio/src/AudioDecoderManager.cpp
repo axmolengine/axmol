@@ -22,7 +22,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. 
+THE SOFTWARE.
 ****************************************************************************/
 
 #define LOG_TAG "AudioDecoderManager"
@@ -34,15 +34,16 @@ THE SOFTWARE.
 #include "base/CCConsole.h"
 
 #if !defined(__APPLE__)
-#include "audio/include/AudioDecoderMp3.h"
-#include "audio/include/AudioDecoderWav.h"
+#    include "audio/include/AudioDecoderMp3.h"
+#    include "audio/include/AudioDecoderWav.h"
 #else
-#include "audio/include/AudioDecoderEXT.h"
+#    include "audio/include/AudioDecoderEXT.h"
 #endif
 
 #include "yasio/cxx17/string_view.hpp"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 bool AudioDecoderManager::init()
 {
@@ -68,14 +69,16 @@ AudioDecoder* AudioDecoderManager::createDecoder(const std::string& path)
     }
 #if !defined(__APPLE__)
     else if (cxx20::ic::ends_with(svPath, ".mp3"))
-    { 
+    {
         return new AudioDecoderMp3();
     }
-    else if (cxx20::ic::ends_with(svPath, ".wav")) {
+    else if (cxx20::ic::ends_with(svPath, ".wav"))
+    {
         return new AudioDecoderWav();
     }
 #else
-    else {
+    else
+    {
         return new AudioDecoderEXT();
     }
 #endif
@@ -85,9 +88,9 @@ AudioDecoder* AudioDecoderManager::createDecoder(const std::string& path)
 
 void AudioDecoderManager::destroyDecoder(AudioDecoder* decoder)
 {
-    if (decoder) decoder->close();
+    if (decoder)
+        decoder->close();
     delete decoder;
 }
 
-} // namespace cocos2d {
-
+}  // namespace cocos2d

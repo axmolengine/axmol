@@ -35,11 +35,10 @@ THE SOFTWARE.
 
 // premultiply alpha, or the effect will be wrong when using other pixel formats in Texture2D,
 // such as RGB888, RGB5A1
-#define CC_RGB_PREMULTIPLY_ALPHA(vr, vg, vb, va) \
-    (unsigned)(((unsigned)((uint8_t)(vr) * ((uint8_t)(va) + 1)) >> 8) | \
-    ((unsigned)((uint8_t)(vg) * ((uint8_t)(va) + 1) >> 8) << 8) | \
-    ((unsigned)((uint8_t)(vb) * ((uint8_t)(va) + 1) >> 8) << 16) | \
-    ((unsigned)(uint8_t)(va) << 24))
+#define CC_RGB_PREMULTIPLY_ALPHA(vr, vg, vb, va)                             \
+    (unsigned)(((unsigned)((uint8_t)(vr) * ((uint8_t)(va) + 1)) >> 8) |      \
+               ((unsigned)((uint8_t)(vg) * ((uint8_t)(va) + 1) >> 8) << 8) | \
+               ((unsigned)((uint8_t)(vb) * ((uint8_t)(va) + 1) >> 8) << 16) | ((unsigned)(uint8_t)(va) << 24))
 
 NS_CC_BEGIN
 
@@ -55,8 +54,8 @@ typedef struct _MipmapInfo
 {
     uint8_t* address;
     int len;
-    _MipmapInfo():address(NULL),len(0){}
-}MipmapInfo;
+    _MipmapInfo() : address(NULL), len(0) {}
+} MipmapInfo;
 
 /** The Image class for loading all images supported by adxe . */
 class CC_DLL Image : public Ref
@@ -103,11 +102,13 @@ public:
         //! Unknown format
         UNKNOWN
     };
-    
-    struct CompressedImagePMAFlag {
-        enum : uint32_t {
+
+    struct CompressedImagePMAFlag
+    {
+        enum : uint32_t
+        {
             ASTC         = 1,
-            DUAL_SAMPLER = 1 << 1, // for dual sampler, such as ETC1_RGB + ETC1_Alpha
+            DUAL_SAMPLER = 1 << 1,  // for dual sampler, such as ETC1_RGB + ETC1_Alpha
             ETC2         = 1 << 2,
             PVR          = 1 << 3,
             ALL          = 0xffff,
@@ -120,25 +121,25 @@ public:
      *  @param enabled (default: true)
      */
     static void setPNGPremultipliedAlphaEnabled(bool enabled) { PNG_PREMULTIPLIED_ALPHA_ENABLED = enabled; }
-    
+
     /** treats (or not) PVR files as if they have alpha premultiplied.
      Since it is impossible to know at runtime if the PVR images have the alpha channel premultiplied, it is
      possible load them as if they have (or not) the alpha channel premultiplied.
-     
+
      By default it is disabled.
      !!!DEPRECATED, use setCompressedImagesHavePMA(CompressedImagePMAFlag::PVR, true) instead
      */
     CC_DEPRECATED_ATTRIBUTE static void setPVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied);
-    
+
     /** The new APIs to treats (or not) compressed image files as if they have alpha premultiplied.
-    *
-    * By default, ETC1 + ETC1_ALPHA is enabled, because we do PMA at shader etc1.frag
-    * !!!IMPORTANT:
-    *   The spine-runtimes official always regard texture has PMA, so you needs
-    *   do compressed images PMA at texture convert tools or GPU fragment shader, such as
-    *   positionTexture.frag, positionTextureColor.frag and others which have texture sampler,
-    *   otherwise, the spine animations can't be render properly
-    */
+     *
+     * By default, ETC1 + ETC1_ALPHA is enabled, because we do PMA at shader etc1.frag
+     * !!!IMPORTANT:
+     *   The spine-runtimes official always regard texture has PMA, so you needs
+     *   do compressed images PMA at texture convert tools or GPU fragment shader, such as
+     *   positionTexture.frag, positionTextureColor.frag and others which have texture sampler,
+     *   otherwise, the spine animations can't be render properly
+     */
     static void setCompressedImagesHavePMA(uint32_t targets, bool havePMA);
     static bool isCompressedImageHavePMA(uint32_t target);
 
@@ -162,33 +163,37 @@ public:
     bool initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData);
 
     // @warning kFmtRawData only support RGBA8888
-    bool initWithRawData(const uint8_t* data, ssize_t dataLen, int width, int height, int bitsPerComponent, bool preMulti = false);
+    bool initWithRawData(const uint8_t* data,
+                         ssize_t dataLen,
+                         int width,
+                         int height,
+                         int bitsPerComponent,
+                         bool preMulti = false);
 
     // Getters
-    uint8_t *   getData()               { return _data + _offset; }
-    ssize_t           getDataLen()            { return _dataLen - _offset; }
-    Format            getFileType()           { return _fileType; }
-    backend::PixelFormat getPixelFormat()  { return _pixelFormat; }
-    int               getWidth()              { return _width; }
-    int               getHeight()             { return _height; }
-    int               getNumberOfMipmaps()    { return _numberOfMipmaps; }
-    MipmapInfo*       getMipmaps()            { return _mipmaps; }
-    bool              hasPremultipliedAlpha() { return _hasPremultipliedAlpha; }
+    uint8_t* getData() { return _data + _offset; }
+    ssize_t getDataLen() { return _dataLen - _offset; }
+    Format getFileType() { return _fileType; }
+    backend::PixelFormat getPixelFormat() { return _pixelFormat; }
+    int getWidth() { return _width; }
+    int getHeight() { return _height; }
+    int getNumberOfMipmaps() { return _numberOfMipmaps; }
+    MipmapInfo* getMipmaps() { return _mipmaps; }
+    bool hasPremultipliedAlpha() { return _hasPremultipliedAlpha; }
     std::string getFilePath() const { return _filePath; }
 
-    int                      getBitPerPixel();
-    bool                     hasAlpha();
-    bool                     isCompressed();
-
+    int getBitPerPixel();
+    bool hasAlpha();
+    bool isCompressed();
 
     /**
      @brief    Save Image data to the specified file, with specified format.
      @param    filePath        the file's absolute path, including file suffix.
      @param    isToRGB        whether the image is saved as RGB format.
      */
-    bool saveToFile(const std::string &filename, bool isToRGB = true);
+    bool saveToFile(const std::string& filename, bool isToRGB = true);
     void premultiplyAlpha();
-    void reversePremultipliedAlpha();   
+    void reversePremultipliedAlpha();
 
 protected:
     typedef struct sImageTGA tImageTGA;
@@ -198,7 +203,7 @@ protected:
     bool initWithBmpData(uint8_t* data, ssize_t dataLen);
     bool initWithWebpData(uint8_t* data, ssize_t dataLen);
     bool initWithTGAData(tImageTGA* tgaData);
-    
+
     // All internal init function have chance to own the data for fast forward data to hardware decoder
     // see: initWithImageData
     bool initWithPVRData(uint8_t* data, ssize_t dataLen, bool ownData);
@@ -209,7 +214,7 @@ protected:
     bool initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData);
     bool initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData);
     bool initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData);
-    
+
     // fast forward pixels to GPU if ownData
     void forwardPixels(uint8_t* data, ssize_t dataLen, int offset, bool ownData);
 
@@ -228,26 +233,25 @@ protected:
     static bool PNG_PREMULTIPLIED_ALPHA_ENABLED;
     static uint32_t COMPRESSED_IMAGE_PMA_FLAGS;
 
-    uint8_t *_data;
+    uint8_t* _data;
     ssize_t _dataLen;
-    ssize_t _offset; // useful for hardware decoder present to hold data without copy
+    ssize_t _offset;  // useful for hardware decoder present to hold data without copy
     int _width;
     int _height;
     bool _unpack;
     Format _fileType;
     backend::PixelFormat _pixelFormat;
-    MipmapInfo _mipmaps[MIPMAP_MAX];   // pointer to mipmap images
+    MipmapInfo _mipmaps[MIPMAP_MAX];  // pointer to mipmap images
     int _numberOfMipmaps;
     // false if we can't auto detect the image is premultiplied or not.
     bool _hasPremultipliedAlpha;
     std::string _filePath;
 
-
 protected:
     // noncopyable
     Image(const Image& rImg);
     Image& operator=(const Image&);
-    
+
     /*
      @brief The same result as with initWithImageFile, but thread safe. It is caused by
      loadImage() in TextureCache.cpp.
@@ -256,7 +260,7 @@ protected:
      @return  true if loaded correctly.
      */
     bool initWithImageFileThreadSafe(const std::string& fullpath);
-    
+
     Format detectFormat(const uint8_t* data, ssize_t dataLen);
     bool isPng(const uint8_t* data, ssize_t dataLen);
     bool isJpg(const uint8_t* data, ssize_t dataLen);
@@ -275,4 +279,4 @@ protected:
 
 NS_CC_END
 
-#endif    // __CC_IMAGE_H__
+#endif  // __CC_IMAGE_H__

@@ -13,7 +13,7 @@ void WorldClock::advanceTime(float passedTime)
 
     const auto currentTime = 0.0f;
 
-    if (passedTime < 0.0f) 
+    if (passedTime < 0.0f)
     {
         passedTime = currentTime - _systemTime;
     }
@@ -48,7 +48,7 @@ void WorldClock::advanceTime(float passedTime)
             if (r > 0)
             {
                 _animatebles[i - r] = animatable;
-                _animatebles[i] = nullptr;
+                _animatebles[i]     = nullptr;
             }
 
             animatable->advanceTime(passedTime);
@@ -81,12 +81,13 @@ void WorldClock::advanceTime(float passedTime)
 
 bool WorldClock::contains(const IAnimatable* value) const
 {
-    if (value == this) {
+    if (value == this)
+    {
         return false;
     }
 
     auto ancestor = value;
-    while (ancestor != this && ancestor != nullptr) 
+    while (ancestor != this && ancestor != nullptr)
     {
         ancestor = ancestor->getClock();
     }

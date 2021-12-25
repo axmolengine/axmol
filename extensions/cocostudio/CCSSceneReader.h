@@ -29,28 +29,27 @@ THE SOFTWARE.
 #include "DictionaryHelper.h"
 #include "CocosStudioExport.h"
 
-namespace cocostudio {
-
+namespace cocostudio
+{
 
 class CCS_DLL SceneReader
 {
 public:
-
     enum class AttachComponentType
     {
-        ///parent: Empty Node
-        ///            ComRender(Sprite, Armature, TMXTiledMap, ParticleSystemQuad, GUIComponent)
-        ///            ComAttribute
-        ///            ComAudio
-        ///            ....
+        /// parent: Empty Node
+        ///             ComRender(Sprite, Armature, TMXTiledMap, ParticleSystemQuad, GUIComponent)
+        ///             ComAttribute
+        ///             ComAudio
+        ///             ....
         EMPTY_NODE,
-        
-        ///parent:   ComRender(Sprite, Armature, TMXTiledMap, ParticleSystemQuad, GUIComponent)
-        ///          ComAttribute
-        ///          ComAudio
-        ///          .....
+
+        /// parent:   ComRender(Sprite, Armature, TMXTiledMap, ParticleSystemQuad, GUIComponent)
+        ///           ComAttribute
+        ///           ComAudio
+        ///           .....
         RENDER_NODE,
-        
+
         /// Default AttachComponentType is _EmptyNode
         DEFAULT = EMPTY_NODE,
     };
@@ -62,36 +61,40 @@ public:
      */
     static void destroyInstance();
     static const char* sceneReaderVersion();
-    cocos2d::Node* createNodeWithSceneFile(const std::string &fileName, AttachComponentType attachComponent = AttachComponentType::EMPTY_NODE);
+    cocos2d::Node* createNodeWithSceneFile(const std::string& fileName,
+                                           AttachComponentType attachComponent = AttachComponentType::EMPTY_NODE);
     void setTarget(const std::function<void(cocos2d::Ref* obj, void* doc)>& selector);
     cocos2d::Node* getNodeByTag(int nTag);
-    inline AttachComponentType getAttachComponentType(){return _attachComponent;}
-CC_CONSTRUCTOR_ACCESS:
-    SceneReader();
+    inline AttachComponentType getAttachComponentType() { return _attachComponent; }
+    CC_CONSTRUCTOR_ACCESS : SceneReader();
     virtual ~SceneReader();
-    
+
 private:
     std::string getComponentClassName(const std::string& name);
 
     cocos2d::Component* createComponent(const std::string& classname);
 
-    
-    cocos2d::Node* createObject(const rapidjson::Value& dict, cocos2d::Node* parent, AttachComponentType attachComponent);
-    void setPropertyFromJsonDict(const rapidjson::Value& dict, cocos2d::Node *node);
-    bool readJson(const std::string &fileName, rapidjson::Document& doc);
+    cocos2d::Node* createObject(const rapidjson::Value& dict,
+                                cocos2d::Node* parent,
+                                AttachComponentType attachComponent);
+    void setPropertyFromJsonDict(const rapidjson::Value& dict, cocos2d::Node* node);
+    bool readJson(const std::string& fileName, rapidjson::Document& doc);
 
-    cocos2d::Node* createObject(CocoLoader *cocoLoader, stExpCocoNode *cocoNode, cocos2d::Node* parent, AttachComponentType attachComponent);
-	void setPropertyFromJsonDict(CocoLoader *cocoLoader, stExpCocoNode *cocoNode, cocos2d::Node *node);
-    
-    cocos2d::Node* nodeByTag(cocos2d::Node *parent, int tag);
+    cocos2d::Node* createObject(CocoLoader* cocoLoader,
+                                stExpCocoNode* cocoNode,
+                                cocos2d::Node* parent,
+                                AttachComponentType attachComponent);
+    void setPropertyFromJsonDict(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, cocos2d::Node* node);
+
+    cocos2d::Node* nodeByTag(cocos2d::Node* parent, int tag);
+
 private:
     static SceneReader* s_sharedReader;
     std::function<void(cocos2d::Ref* obj, void* doc)> _fnSelector;
-    cocos2d::Node*      _node;
+    cocos2d::Node* _node;
     AttachComponentType _attachComponent;
 };
 
-
-}
+}  // namespace cocostudio
 
 #endif

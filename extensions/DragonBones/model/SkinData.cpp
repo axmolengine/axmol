@@ -28,7 +28,7 @@ void SkinData::addDisplay(const std::string& slotName, DisplayData* value)
         value->parent = this;
     }
 
-    displays[slotName].push_back(value); // TODO clear prev
+    displays[slotName].push_back(value);  // TODO clear prev
 }
 
 DisplayData* SkinData::getDisplay(const std::string& slotName, const std::string& displayName)

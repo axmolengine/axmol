@@ -601,7 +601,7 @@ uint64_t Value::asUint64(uint64_t defaultValue) const
         return static_cast<uint64_t>(_field.uintVal);
     case Type::INT_I64:
         return static_cast<uint64_t>(_field.int64Val);
-    
+
     case Type::STRING:
         // NOTE: strtoul is required (need to augment on unsupported platforms)
         return static_cast<uint64_t>(strtoull(_field.strVal->c_str(), nullptr, 10));

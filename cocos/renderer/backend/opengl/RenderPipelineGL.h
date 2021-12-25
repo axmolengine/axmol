@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../RenderPipeline.h"
@@ -50,7 +50,7 @@ public:
     RenderPipelineGL() = default;
     ~RenderPipelineGL();
 
-    virtual void update(const RenderTarget*, const PipelineDescriptor & pipelineDescirptor) override;
+    virtual void update(const RenderTarget*, const PipelineDescriptor& pipelineDescirptor) override;
     /**
      * Get program instance.
      * @return Program instance.

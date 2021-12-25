@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -42,14 +42,14 @@ class RenderTarget;
  */
 struct StencilDescriptor
 {
-    bool operator ==(const StencilDescriptor& rhs) const;
-    
-    StencilOperation stencilFailureOperation = StencilOperation::KEEP;
-    StencilOperation depthFailureOperation = StencilOperation::KEEP;
+    bool operator==(const StencilDescriptor& rhs) const;
+
+    StencilOperation stencilFailureOperation   = StencilOperation::KEEP;
+    StencilOperation depthFailureOperation     = StencilOperation::KEEP;
     StencilOperation depthStencilPassOperation = StencilOperation::KEEP;
-    CompareFunction stencilCompareFunction = CompareFunction::ALWAYS;
-    unsigned int readMask = 0;
-    unsigned int writeMask = 0;
+    CompareFunction stencilCompareFunction     = CompareFunction::ALWAYS;
+    unsigned int readMask                      = 0;
+    unsigned int writeMask                     = 0;
 };
 
 /**
@@ -73,17 +73,18 @@ class DepthStencilState : public cocos2d::Ref
 {
 public:
     virtual void update(const DepthStencilDescriptor& desc);
-    const DepthStencilDescriptor& getDepthStencilInfo()const { return _depthStencilInfo; }
+    const DepthStencilDescriptor& getDepthStencilInfo() const { return _depthStencilInfo; }
     bool isEnabled() const { return bitmask::any(_depthStencilInfo.flags, DepthStencilFlags::DEPTH_STENCIL_TEST); }
+
 protected:
     /**
      * @param descriptor Specifies depth and stencil descriptor.
      */
     DepthStencilState() = default;
     virtual ~DepthStencilState();
-    
-    DepthStencilDescriptor _depthStencilInfo{}; ///< depth and stencil descriptor.
-    bool _isBackFrontStencilEqual = false; ///< Does front stencil status equals to back stencil's.
+
+    DepthStencilDescriptor _depthStencilInfo{};  ///< depth and stencil descriptor.
+    bool _isBackFrontStencilEqual = false;       ///< Does front stencil status equals to back stencil's.
 };
 
 // end of _backend group

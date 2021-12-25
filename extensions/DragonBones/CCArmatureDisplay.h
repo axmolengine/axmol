@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -39,6 +39,7 @@ public:
      * @internal
      */
     static CCArmatureDisplay* create();
+
 public:
     bool debugDraw;
 
@@ -48,12 +49,13 @@ protected:
     cocos2d::EventDispatcher* _dispatcher;
 
 public:
-    CCArmatureDisplay() :
-        debugDraw(false),
+    CCArmatureDisplay()
+        : debugDraw(false)
+        ,
 
-        _debugDraw(false),
-        _armature(nullptr),
-        _dispatcher(nullptr)
+        _debugDraw(false)
+        , _armature(nullptr)
+        , _dispatcher(nullptr)
     {
         _dispatcher = new cocos2d::EventDispatcher();
         setEventDispatcher(_dispatcher);
@@ -81,10 +83,7 @@ public:
     /**
      * @inheritDoc
      */
-    inline virtual bool hasDBEventListener(const std::string& type) const override
-    {
-        return _dispatcher->isEnabled();
-    }
+    inline virtual bool hasDBEventListener(const std::string& type) const override { return _dispatcher->isEnabled(); }
     /**
      * @inheritDoc
      */
@@ -92,28 +91,24 @@ public:
     /**
      * @inheritDoc
      */
-    virtual void addDBEventListener(const std::string& type, const std::function<void(EventObject*)>& listener) override;
+    virtual void addDBEventListener(const std::string& type,
+                                    const std::function<void(EventObject*)>& listener) override;
     /**
      * @inheritDoc
      */
-    virtual void removeDBEventListener(const std::string& type, const std::function<void(EventObject*)>& listener) override;
+    virtual void removeDBEventListener(const std::string& type,
+                                       const std::function<void(EventObject*)>& listener) override;
     /**
      * @inheritDoc
      */
-    inline virtual Armature* getArmature() const override
-    {
-        return _armature;
-    }
+    inline virtual Armature* getArmature() const override { return _armature; }
     /**
      * @inheritDoc
      */
-    inline virtual Animation* getAnimation() const override
-    {
-        return _armature->getAnimation();
-    }
+    inline virtual Animation* getAnimation() const override { return _armature->getAnimation(); }
     /**
-    * @inheritDoc
-    */
+     * @inheritDoc
+     */
     virtual cocos2d::Rect getBoundingBox() const override;
 };
 /**
@@ -146,4 +141,4 @@ public:
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_CC_ARMATURE_DISPLAY_CONTAINER_H
+#endif  // DRAGONBONES_CC_ARMATURE_DISPLAY_CONTAINER_H

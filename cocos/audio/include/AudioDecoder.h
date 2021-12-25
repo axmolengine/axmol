@@ -30,10 +30,11 @@
 #include <string>
 #include "platform/CCFileStream.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 enum class AUDIO_SOURCE_FORMAT : uint16_t
 {
-    PCM_UNK, // Unknown
+    PCM_UNK,  // Unknown
     PCM_U8,
     PCM_16,
     PCM_24,
@@ -42,9 +43,9 @@ enum class AUDIO_SOURCE_FORMAT : uint16_t
     PCM_FLT32,
     PCM_FLT64,
     MULAW,
-    ALAW, 
-    ADPCM, // Microsoft ADPCM
-    IMA_ADPCM, // IMA ADPCM
+    ALAW,
+    ADPCM,      // Microsoft ADPCM
+    IMA_ADPCM,  // IMA ADPCM
 };
 
 /**
@@ -76,20 +77,24 @@ public:
     /**
      * @brief Reads audio frames of PCM format.
      * @param framesToRead The number of frames excepted to be read.
-     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| / samplesPerBlock * _bytesPerBlock.
-     * @return The number of frames actually read, it's probably less than 'framesToRead'. Returns 0 means reach the end of file.
+     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| / samplesPerBlock *
+     * _bytesPerBlock.
+     * @return The number of frames actually read, it's probably less than 'framesToRead'. Returns 0 means reach the end
+     * of file.
      */
     virtual uint32_t read(uint32_t framesToRead, char* pcmBuf) = 0;
 
     /**
      * @brief Reads fixed audio frames of PCM format.
      * @param framesToRead The number of frames excepted to be read.
-     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| / samplesPerBlock * _bytesPerBlock.
-     * @return The number of frames actually read, it's probably less than |framesToRead|. Returns 0 means reach the end of file.
-     * @note The different between |read| and |readFixedFrames| is |readFixedFrames| will do multiple reading operations if |framesToRead| frames
-     *       isn't filled entirely, while |read| just does reading operation once whatever |framesToRead| is or isn't filled entirely.
-     *       If current position reaches the end of frames, the return value may smaller than |framesToRead| and the remaining
-     *       buffer in |pcmBuf| will be set with silence data (0x00).
+     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| / samplesPerBlock *
+     * _bytesPerBlock.
+     * @return The number of frames actually read, it's probably less than |framesToRead|. Returns 0 means reach the end
+     * of file.
+     * @note The different between |read| and |readFixedFrames| is |readFixedFrames| will do multiple reading operations
+     * if |framesToRead| frames isn't filled entirely, while |read| just does reading operation once whatever
+     * |framesToRead| is or isn't filled entirely. If current position reaches the end of frames, the return value may
+     * smaller than |framesToRead| and the remaining buffer in |pcmBuf| will be set with silence data (0x00).
      */
     virtual uint32_t readFixedFrames(uint32_t framesToRead, char* pcmBuf);
 
@@ -104,13 +109,13 @@ public:
     virtual uint32_t getTotalFrames() const;
 
     /**
-    * @brief The helper function for convert frames to bytes
-    */
+     * @brief The helper function for convert frames to bytes
+     */
     virtual uint32_t framesToBytes(uint32_t frames) const;
 
     /**
-    * @brief The helper function for convert bytes to frames
-    */
+     * @brief The helper function for convert bytes to frames
+     */
     virtual uint32_t bytesToFrames(uint32_t bytes) const;
 
     /** Gets sample rate of current audio.*/
@@ -122,8 +127,8 @@ public:
     virtual uint32_t getChannelCount() const;
 
     /*
-    * @brief Gets samples per block, usually is 1 for .mp3 or .ogg, .wav may > 1
-    */
+     * @brief Gets samples per block, usually is 1 for .mp3 or .ogg, .wav may > 1
+     */
     uint32_t getSamplesPerBlock() const;
 
     virtual AUDIO_SOURCE_FORMAT getSourceFormat() const;
@@ -134,7 +139,7 @@ protected:
 
     bool _isOpened;
     uint32_t _totalFrames;
-    uint32_t _bytesPerBlock; // Same as bytesPerFrame when _samplesPerBlock is 1
+    uint32_t _bytesPerBlock;  // Same as bytesPerFrame when _samplesPerBlock is 1
     uint32_t _samplesPerBlock;
     uint32_t _sampleRate;
     uint32_t _channelCount;
@@ -143,4 +148,4 @@ protected:
     friend class AudioDecoderManager;
 };
 
-} // namespace cocos2d {
+}  // namespace cocos2d

@@ -2,19 +2,19 @@
  Copyright (c) 2012 cocos2d-x.org
  Copyright (c) 2010 Sangwoo Im
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,7 +39,6 @@
  */
 NS_CC_EXT_BEGIN
 
-
 class ScrollView;
 
 class CC_EX_DLL ScrollViewDelegate
@@ -54,25 +53,24 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void scrollViewDidScroll(ScrollView* view) {};
+    virtual void scrollViewDidScroll(ScrollView* view){};
     /**
      * @js NA
      * @lua NA
      */
-    virtual void scrollViewDidZoom(ScrollView* view) {};
+    virtual void scrollViewDidZoom(ScrollView* view){};
 };
-
 
 /**
  * ScrollView support for cocos2d-x.
  * It provides scroll view functionalities to cocos2d projects natively.
  */
-class CC_EX_DLL  ScrollView : public Layer, public ActionTweenDelegate
+class CC_EX_DLL ScrollView : public Layer, public ActionTweenDelegate
 {
 public:
     enum class Direction
     {
-        NONE = -1,
+        NONE       = -1,
         HORIZONTAL = 0,
         VERTICAL,
         BOTH
@@ -128,7 +126,7 @@ public:
      * @param offset    The new offset.
      * @param dt        The animation duration.
      */
-    void setContentOffsetInDuration(Vec2 offset, float dt); 
+    void setContentOffsetInDuration(Vec2 offset, float dt);
     /**
      * Halts the movement animation of the inner content started with setContentOffset() or setContentOffsetInDuration()
      */
@@ -158,17 +156,13 @@ public:
      *
      * @param minScale min scale
      */
-    void setMinScale(float minScale) {
-        _minScale = minScale;
-    }
+    void setMinScale(float minScale) { _minScale = minScale; }
     /**
      * Set max scale
      *
      * @param maxScale max scale
      */
-    void setMaxScale(float maxScale) {
-        _maxScale = maxScale;
-    }
+    void setMaxScale(float maxScale) { _maxScale = maxScale; }
 
     /**
      * Returns the current container's minimum offset. You may want this while you animate scrolling by yourself
@@ -177,13 +171,13 @@ public:
     /**
      * Returns the current container's maximum offset. You may want this while you animate scrolling by yourself
      */
-    Vec2 maxContainerOffset(); 
+    Vec2 maxContainerOffset();
     /**
      * Determines if a given node's bounding box is in visible bounds
      *
      * @returns true if it is in visible bounds
      */
-    bool isNodeVisible(Node * node);
+    bool isNodeVisible(Node* node);
     /**
      * Provided to make scroll view compatible with SWLayer's pause method
      */
@@ -192,13 +186,13 @@ public:
     /**
      * Provided to make scroll view compatible with SWLayer's resume method
      */
-    using Layer::resume; // fix warning
+    using Layer::resume;  // fix warning
     void resume(Ref* sender);
 
     void setTouchEnabled(bool enabled);
-	bool isTouchEnabled() const;
+    bool isTouchEnabled() const;
     void setSwallowTouches(bool needSwallow);
-    bool isDragging() const {return _dragging;}
+    bool isDragging() const { return _dragging; }
     bool isTouchMoved() const { return _touchMoved; }
     bool isBounceable() const { return _bounceable; }
     void setBounceable(bool bBounceable) { _bounceable = bBounceable; }
@@ -211,8 +205,8 @@ public:
     Size getViewSize() const { return _viewSize; }
     void setViewSize(Size size);
 
-    Node * getContainer();
-    void setContainer(Node * pContainer);
+    Node* getContainer();
+    void setContainer(Node* pContainer);
 
     /**
      * direction allowed to scroll. ScrollViewDirectionBoth by default.
@@ -233,7 +227,7 @@ public:
      */
     void setDelegate(ScrollViewDelegate* pDelegate) { _delegate = pDelegate; }
 
-	void updateInset();
+    void updateInset();
 
     /**
      * Determines whether it clips its children or not.
@@ -241,23 +235,23 @@ public:
     bool isClippingToBounds() { return _clippingToBounds; }
     void setClippingToBounds(bool bClippingToBounds) { _clippingToBounds = bClippingToBounds; }
 
-    virtual bool onTouchBegan(Touch *touch, Event *event);
-    virtual void onTouchMoved(Touch *touch, Event *event);
-    virtual void onTouchEnded(Touch *touch, Event *event);
-    virtual void onTouchCancelled(Touch *touch, Event *event);
-    
+    virtual bool onTouchBegan(Touch* touch, Event* event);
+    virtual void onTouchMoved(Touch* touch, Event* event);
+    virtual void onTouchEnded(Touch* touch, Event* event);
+    virtual void onTouchCancelled(Touch* touch, Event* event);
+
     // Overrides
-    virtual void setContentSize(const Size & size) override;
+    virtual void setContentSize(const Size& size) override;
     virtual const Size& getContentSize() const override;
     /**
      * @js NA
      * @lua NA
      */
-    virtual void visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
-    
+    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+
     using Node::addChild;
-    virtual void addChild(Node * child, int zOrder, int tag) override;
-    virtual void addChild(Node * child, int zOrder, const std::string &name) override;
+    virtual void addChild(Node* child, int zOrder, int tag) override;
+    virtual void addChild(Node* child, int zOrder, const std::string& name) override;
 
     virtual void removeAllChildren() override;
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;
@@ -268,6 +262,7 @@ public:
     void updateTweenAction(float value, const std::string& key) override;
 
     bool hasVisibleParents() const;
+
 protected:
     /**
      * Relocates the container at the proper offset, in bounds of max/min offsets.
@@ -378,10 +373,10 @@ protected:
      */
     Rect _parentScissorRect;
     bool _scissorRestored;
-    
+
     /** Touch listener */
     EventListenerTouchOneByOne* _touchListener;
-    
+
     CustomCommand _beforeDrawCommand;
     CustomCommand _afterDrawCommand;
 
@@ -390,7 +385,6 @@ protected:
      */
     Action* _animatedScrollAction;
 };
-
 
 NS_CC_EXT_END
 // end of ui group

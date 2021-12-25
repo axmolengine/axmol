@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,44 +30,42 @@
 
 NS_CC_BEGIN
 
-PUBehaviourTranslator::PUBehaviourTranslator()
-:_behaviour(nullptr)
-{
-}
+PUBehaviourTranslator::PUBehaviourTranslator() : _behaviour(nullptr) {}
 //-------------------------------------------------------------------------
-void PUBehaviourTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *node)
+void PUBehaviourTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* node)
 {
-    PUObjectAbstractNode* obj = reinterpret_cast<PUObjectAbstractNode*>(node);
+    PUObjectAbstractNode* obj    = reinterpret_cast<PUObjectAbstractNode*>(node);
     PUObjectAbstractNode* parent = obj->parent ? reinterpret_cast<PUObjectAbstractNode*>(obj->parent) : 0;
 
     // The name of the obj is the type of the Behaviour
     std::string type;
-    if(!obj->name.empty())
+    if (!obj->name.empty())
     {
         type = obj->name;
     }
     else
     {
-        //compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+        // compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
         return;
     }
 
     //// Get the factory
-    //ParticleBehaviourFactory* behaviourFactory = ParticleSystemManager::getSingletonPtr()->getBehaviourFactory(type);
-    //if (!behaviourFactory)
+    // ParticleBehaviourFactory* behaviourFactory = ParticleSystemManager::getSingletonPtr()->getBehaviourFactory(type);
+    // if (!behaviourFactory)
     //{
     //	//compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
     //	return;
-    //}
+    // }
 
-    PUScriptTranslator *particleBehaviourTranlator = PUBehaviourManager::Instance()->getTranslator(type);
-    if (!particleBehaviourTranlator) return;
+    PUScriptTranslator* particleBehaviourTranlator = PUBehaviourManager::Instance()->getTranslator(type);
+    if (!particleBehaviourTranlator)
+        return;
 
     // Create the Behaviour
     _behaviour = PUBehaviourManager::Instance()->createBehaviour(type);
     if (!_behaviour)
     {
-        //compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
+        // compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
         return;
     }
 
@@ -81,17 +79,17 @@ void PUBehaviourTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode
     {
         //// It is an alias
         //_behaviour->setAliasName(parent->name);
-        //ParticleSystemManager::getSingletonPtr()->addAlias(mBehaviour);
+        // ParticleSystemManager::getSingletonPtr()->addAlias(mBehaviour);
     }
 
     // Set it in the context
     obj->context = _behaviour;
 
     // Run through properties
-    for(PUAbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
+    for (PUAbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
     {
         // No properties of its own
-        if((*i)->type == ANT_PROPERTY)
+        if ((*i)->type == ANT_PROPERTY)
         {
             PUPropertyAbstractNode* prop = reinterpret_cast<PUPropertyAbstractNode*>((*i));
             if (particleBehaviourTranlator->translateChildProperty(compiler, *i))
@@ -103,7 +101,7 @@ void PUBehaviourTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode
                 errorUnexpectedProperty(compiler, prop);
             }
         }
-        else if((*i)->type == ANT_OBJECT)
+        else if ((*i)->type == ANT_OBJECT)
         {
             if (particleBehaviourTranlator->translateChildObject(compiler, *i))
             {

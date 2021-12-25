@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -54,31 +54,26 @@ public:
     std::string file;
     unsigned int line;
     PUAbstractNodeType type;
-    PUAbstractNode *parent;
-    Ref *context;
-    
-    //contextd//
-//    Any context; // A holder for translation context data
+    PUAbstractNode* parent;
+    Ref* context;
+
+    // contextd//
+    //    Any context; // A holder for translation context data
 public:
-    PUAbstractNode(PUAbstractNode *ptr):line(0), type(ANT_UNKNOWN), parent(ptr), context(nullptr)
-    {
-
-
-    }
-    virtual ~PUAbstractNode(){}
+    PUAbstractNode(PUAbstractNode* ptr) : line(0), type(ANT_UNKNOWN), parent(ptr), context(nullptr) {}
+    virtual ~PUAbstractNode() {}
     /// Returns a new AbstractNode which is a replica of this one.
-    virtual PUAbstractNode *clone() const = 0;
+    virtual PUAbstractNode* clone() const = 0;
     /// Returns a string value depending on the type of the AbstractNode.
     virtual std::string getValue() const = 0;
 };
-
-
 
 /** This specific abstract node represents a script object */
 class CC_EX_DLL PUObjectAbstractNode : public PUAbstractNode
 {
 private:
-    std::unordered_map<std::string,std::string> _env;
+    std::unordered_map<std::string, std::string> _env;
+
 public:
     std::string name, cls;
     std::vector<std::string> bases;
@@ -86,18 +81,17 @@ public:
     bool abstract;
     PUAbstractNodeList children;
     PUAbstractNodeList values;
-    PUAbstractNodeList overrides; // For use when processing object inheritance and overriding
+    PUAbstractNodeList overrides;  // For use when processing object inheritance and overriding
 public:
-    PUObjectAbstractNode(PUAbstractNode *ptr);
+    PUObjectAbstractNode(PUAbstractNode* ptr);
     virtual ~PUObjectAbstractNode();
-    PUAbstractNode *clone() const;
+    PUAbstractNode* clone() const;
     std::string getValue() const;
-    
-    
-    void addVariable(const std::string &name);
-    void setVariable(const std::string &name, const std::string &value);
-    std::pair<bool,std::string> getVariable(const std::string &name) const;
-    const std::unordered_map<std::string,std::string> &getVariables() const;
+
+    void addVariable(const std::string& name);
+    void setVariable(const std::string& name, const std::string& value);
+    std::pair<bool, std::string> getVariable(const std::string& name) const;
+    const std::unordered_map<std::string, std::string>& getVariables() const;
 };
 
 /** This abstract node represents a script property */
@@ -107,10 +101,11 @@ public:
     std::string name;
     unsigned int id;
     PUAbstractNodeList values;
+
 public:
-    PUPropertyAbstractNode(PUAbstractNode *ptr);
+    PUPropertyAbstractNode(PUAbstractNode* ptr);
     virtual ~PUPropertyAbstractNode();
-    PUAbstractNode *clone() const;
+    PUAbstractNode* clone() const;
     std::string getValue() const;
 };
 
@@ -120,10 +115,12 @@ class CC_EX_DLL PUAtomAbstractNode : public PUAbstractNode
 public:
     std::string value;
     unsigned int id;
+
 public:
-    PUAtomAbstractNode(PUAbstractNode *ptr);
-    PUAbstractNode *clone() const;
+    PUAtomAbstractNode(PUAbstractNode* ptr);
+    PUAbstractNode* clone() const;
     std::string getValue() const;
+
 private:
     void parseNumber() const;
 };
@@ -133,37 +130,36 @@ class CC_EX_DLL PUScriptCompiler
 {
 
 private:
-    bool compile(const PUConcreteNodeList &nodes, const std::string &file);
-    //is it excluded?//
-    bool isNameExcluded(const std::string &cls, PUAbstractNode *parent);
-    
+    bool compile(const PUConcreteNodeList& nodes, const std::string& file);
+    // is it excluded?//
+    bool isNameExcluded(const std::string& cls, PUAbstractNode* parent);
+
 public:
-    typedef std::unordered_map<std::string,unsigned int> IdMap;
-    
+    typedef std::unordered_map<std::string, unsigned int> IdMap;
+
     static PUScriptCompiler* Instance();
 
-    void setParticleSystem3D(PUParticleSystem3D *pu);
+    void setParticleSystem3D(PUParticleSystem3D* pu);
 
-    const PUAbstractNodeList* compile(const std::string &file, bool &isFirstCompile);
-    
-    void convertToAST(const PUConcreteNodeList &nodes,PUAbstractNodeList &aNodes);
-    
-    std::unordered_map<std::string,std::string> env;
-    
+    const PUAbstractNodeList* compile(const std::string& file, bool& isFirstCompile);
+
+    void convertToAST(const PUConcreteNodeList& nodes, PUAbstractNodeList& aNodes);
+
+    std::unordered_map<std::string, std::string> env;
+
 private:
     PUScriptCompiler();
     virtual ~PUScriptCompiler();
 
-    void visitList(const PUConcreteNodeList &nodes);
-    void visit(PUConcreteNode *node);
-private:
-    
-    std::unordered_map<std::string, PUAbstractNodeList> _compiledScripts;
-    PUAbstractNode *_current;
-    PUAbstractNodeList *_nodes;
-    PUParticleSystem3D *_PUParticleSystem3D;
-};
+    void visitList(const PUConcreteNodeList& nodes);
+    void visit(PUConcreteNode* node);
 
+private:
+    std::unordered_map<std::string, PUAbstractNodeList> _compiledScripts;
+    PUAbstractNode* _current;
+    PUAbstractNodeList* _nodes;
+    PUParticleSystem3D* _PUParticleSystem3D;
+};
 
 NS_CC_END
 

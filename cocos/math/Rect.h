@@ -72,7 +72,7 @@ public:
      * @js NA
      * @lua NA
      */
-    Rect& operator= (const Rect& other);
+    Rect& operator=(const Rect& other);
     /**
     Set the x, y, width and height of Rect.
      * @js NA
@@ -83,32 +83,32 @@ public:
     Get the left of the rect.
      * @js NA
      */
-    float getMinX() const; /// return the leftmost x-value of current rect
+    float getMinX() const;  /// return the leftmost x-value of current rect
     /**
     Get the X coordinate of center point.
      * @js NA
      */
-    float getMidX() const; /// return the midpoint x-value of current rect
+    float getMidX() const;  /// return the midpoint x-value of current rect
     /**
     Get the right of rect.
      * @js NA
      */
-    float getMaxX() const; /// return the rightmost x-value of current rect
+    float getMaxX() const;  /// return the rightmost x-value of current rect
     /**
     Get the bottom of rect.
      * @js NA
      */
-    float getMinY() const; /// return the bottommost y-value of current rect
+    float getMinY() const;  /// return the bottommost y-value of current rect
     /**
     Get the Y coordinate of center point.
      * @js NA
      */
-    float getMidY() const; /// return the midpoint y-value of current rect
+    float getMidY() const;  /// return the midpoint y-value of current rect
     /**
     Get top of rect.
      * @js NA
      */
-    float getMaxY() const; /// return the topmost y-value of current rect
+    float getMaxY() const;  /// return the topmost y-value of current rect
     /**
     Compare two rects.
      * @js NA
@@ -134,7 +134,7 @@ public:
      * @js NA
      * @lua NA
      */
-    Rect unionWithRect(const Rect & rect) const;
+    Rect unionWithRect(const Rect& rect) const;
     /**Compute the min rect which can contain this and rect, assign it to this.*/
     void merge(const Rect& rect);
     /**An empty Rect.*/
@@ -146,4 +146,4 @@ NS_CC_END
 // end of base group
 /// @}
 
-#endif // __MATH_RECT_H__
+#endif  // __MATH_RECT_H__

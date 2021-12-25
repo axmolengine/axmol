@@ -27,14 +27,13 @@
 
 #if CC_USE_NAVMESH
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 extern "C" {
-#endif
-#include "tolua++.h"
-#ifdef __cplusplus
+#    endif
+#    include "tolua++.h"
+#    ifdef __cplusplus
 }
-#endif
-
+#    endif
 
 /**
  * @addtogroup lua
@@ -49,10 +48,10 @@ extern "C" {
  * The current mechanism,this function is called in the lua_module_register.h
  */
 
-TOLUA_API int  register_navmesh_module(lua_State* L);
+TOLUA_API int register_navmesh_module(lua_State* L);
 
 // end group
 /// @}
 
-#endif // #if CC_USE_NAVMESH
-#endif // #ifndef COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_PHYSICS3D_LUA_COCOS2DX_NAVMESH_MANUAL_H__
+#endif  // #if CC_USE_NAVMESH
+#endif  // #ifndef COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_PHYSICS3D_LUA_COCOS2DX_NAVMESH_MANUAL_H__

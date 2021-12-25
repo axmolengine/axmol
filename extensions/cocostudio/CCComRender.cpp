@@ -32,19 +32,19 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 IMPLEMENT_CLASS_COMPONENT_INFO(ComRender)
 
 const std::string ComRender::COMPONENT_NAME = "CCComRender";
 
-ComRender::ComRender()
-: _render(nullptr)
+ComRender::ComRender() : _render(nullptr)
 {
     _name = COMPONENT_NAME;
 }
 
-ComRender::ComRender(cocos2d::Node *node, const char *comName)
+ComRender::ComRender(cocos2d::Node* node, const char* comName)
 {
     if (node != nullptr)
     {
@@ -63,7 +63,7 @@ void ComRender::onEnter()
 {
     if (_owner != nullptr && _render->getParent() == nullptr)
     {
-       _owner->addChild(_render);
+        _owner->addChild(_render);
     }
 }
 
@@ -71,7 +71,7 @@ void ComRender::onExit()
 {
     if (_owner != nullptr && _render->getParent() == nullptr)
     {
-       _owner->removeChild(_render, true);
+        _owner->removeChild(_render, true);
     }
 }
 
@@ -96,7 +96,7 @@ cocos2d::Node* ComRender::getNode()
     return _render;
 }
 
-void ComRender::setNode(cocos2d::Node *node)
+void ComRender::setNode(cocos2d::Node* node)
 {
     if (_render != nullptr)
     {
@@ -104,12 +104,11 @@ void ComRender::setNode(cocos2d::Node *node)
         _render = nullptr;
     }
     if (node != nullptr)
-    {		
+    {
         _render = node;
         _render->retain();
     }
 }
-
 
 // TODO: This method is soooo big!! We should refactor it!
 bool ComRender::serialize(void* r)
@@ -118,14 +117,14 @@ bool ComRender::serialize(void* r)
     do
     {
         CC_BREAK_IF(r == nullptr);
-        SerData *serData = (SerData *)(r);
-        const rapidjson::Value *v = serData->_rData;
-        stExpCocoNode *cocoNode = serData->_cocoNode;
-        CocoLoader *cocoLoader = serData->_cocoLoader;
-        const char *className = nullptr;
-        const char *comName = nullptr;
-        const char *file = nullptr;
-        const char *plist = nullptr;
+        SerData* serData          = (SerData*)(r);
+        const rapidjson::Value* v = serData->_rData;
+        stExpCocoNode* cocoNode   = serData->_cocoNode;
+        CocoLoader* cocoLoader    = serData->_cocoLoader;
+        const char* className     = nullptr;
+        const char* comName       = nullptr;
+        const char* file          = nullptr;
+        const char* plist         = nullptr;
         std::string filePath;
         std::string plistPath;
         int resType = 0;
@@ -133,22 +132,22 @@ bool ComRender::serialize(void* r)
         {
             className = DICTOOL->getStringValue_json(*v, "classname");
             CC_BREAK_IF(className == nullptr);
-            comName = DICTOOL->getStringValue_json(*v, "name");
-            const rapidjson::Value &fileData = DICTOOL->getSubDictionary_json(*v, "fileData");
+            comName                          = DICTOOL->getStringValue_json(*v, "name");
+            const rapidjson::Value& fileData = DICTOOL->getSubDictionary_json(*v, "fileData");
             CC_BREAK_IF(!DICTOOL->checkObjectExist_json(fileData));
-            file = DICTOOL->getStringValue_json(fileData, "path");
+            file  = DICTOOL->getStringValue_json(fileData, "path");
             plist = DICTOOL->getStringValue_json(fileData, "plistFile");
             CC_BREAK_IF(file == nullptr && plist == nullptr);
             resType = DICTOOL->getIntValue_json(fileData, "resourceType", -1);
         }
-        else if(cocoNode != nullptr)
+        else if (cocoNode != nullptr)
         {
             className = cocoNode[1].GetValue(cocoLoader);
             CC_BREAK_IF(className == nullptr);
-            comName = cocoNode[2].GetValue(cocoLoader);
-            stExpCocoNode *pfileData = cocoNode[4].GetChildArray(cocoLoader);
+            comName                  = cocoNode[2].GetValue(cocoLoader);
+            stExpCocoNode* pfileData = cocoNode[4].GetChildArray(cocoLoader);
             CC_BREAK_IF(!pfileData);
-            file = pfileData[0].GetValue(cocoLoader);
+            file  = pfileData[0].GetValue(cocoLoader);
             plist = pfileData[1].GetValue(cocoLoader);
             CC_BREAK_IF(file == nullptr && plist == nullptr);
             resType = atoi(pfileData[2].GetValue(cocoLoader));
@@ -161,7 +160,7 @@ bool ComRender::serialize(void* r)
         {
             setName(className);
         }
-        
+
         if (file != nullptr)
         {
             filePath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(file));
@@ -172,49 +171,51 @@ bool ComRender::serialize(void* r)
         }
         if (resType == 0)
         {
-            if (strcmp(className, "CCSprite") == 0 && (filePath.find(".png") != filePath.npos || filePath.find(".pvr.ccz") != filePath.npos))
+            if (strcmp(className, "CCSprite") == 0 &&
+                (filePath.find(".png") != filePath.npos || filePath.find(".pvr.ccz") != filePath.npos))
             {
                 _render = Sprite::create(filePath);
                 _render->retain();
-                
+
                 ret = true;
             }
-            else if(strcmp(className, "CCTMXTiledMap") == 0 && filePath.find(".tmx") != filePath.npos)
+            else if (strcmp(className, "CCTMXTiledMap") == 0 && filePath.find(".tmx") != filePath.npos)
             {
                 _render = TMXTiledMap::create(filePath);
                 _render->retain();
-                
+
                 ret = true;
             }
-            else if(strcmp(className, "CCParticleSystemQuad") == 0 && filePath.find(".plist") != filePath.npos)
+            else if (strcmp(className, "CCParticleSystemQuad") == 0 && filePath.find(".plist") != filePath.npos)
             {
                 _render = ParticleSystemQuad::create(filePath);
                 _render->setPosition(0.0f, 0.0f);
                 _render->retain();
-                
+
                 ret = true;
             }
-            else if(strcmp(className, "CCArmature") == 0)
+            else if (strcmp(className, "CCArmature") == 0)
             {
                 std::string fileExtension = FileUtils::getInstance()->getFileExtension(filePath);
                 if (fileExtension == ".json" || fileExtension == ".exportjson")
                 {
                     rapidjson::Document doc;
-                    if(!readJson(filePath, doc))
+                    if (!readJson(filePath, doc))
                     {
                         log("read json file[%s] error!\n", filePath.c_str());
                         continue;
                     }
-                    const rapidjson::Value &subData = DICTOOL->getDictionaryFromArray_json(doc, "armature_data", 0);
-                    const char *name = DICTOOL->getStringValue_json(subData, "name");
+                    const rapidjson::Value& subData = DICTOOL->getDictionaryFromArray_json(doc, "armature_data", 0);
+                    const char* name                = DICTOOL->getStringValue_json(subData, "name");
                     ArmatureDataManager::getInstance()->addArmatureFileInfo(filePath);
-                    Armature *pAr = Armature::create(name);
-                    _render = pAr;
+                    Armature* pAr = Armature::create(name);
+                    _render       = pAr;
                     _render->retain();
-                    const char *actionName = nullptr;
+                    const char* actionName = nullptr;
                     if (cocoNode != nullptr)
                     {
-                        actionName = cocoNode[6].GetValue(cocoLoader);//DICTOOL->getStringValue_json(*v, "selectedactionname");
+                        actionName = cocoNode[6].GetValue(
+                            cocoLoader);  // DICTOOL->getStringValue_json(*v, "selectedactionname");
                     }
                     else
                     {
@@ -229,45 +230,45 @@ bool ComRender::serialize(void* r)
                 else if (fileExtension == ".csb")
                 {
                     std::string binaryFilePath = FileUtils::getInstance()->fullPathForFilename(filePath);
-                    auto fileData = FileUtils::getInstance()->getDataFromFile(binaryFilePath);
-                    auto fileDataBytes = fileData.getBytes();
+                    auto fileData              = FileUtils::getInstance()->getDataFromFile(binaryFilePath);
+                    auto fileDataBytes         = fileData.getBytes();
                     CC_BREAK_IF(fileData.isNull());
                     CocoLoader tCocoLoader;
                     if (tCocoLoader.ReadCocoBinBuff((char*)fileDataBytes))
                     {
-                        stExpCocoNode *tpRootCocoNode = tCocoLoader.GetRootCocoNode();
-                        rapidjson::Type tType = tpRootCocoNode->GetType(&tCocoLoader);
-                        if (rapidjson::kObjectType  == tType)
+                        stExpCocoNode* tpRootCocoNode = tCocoLoader.GetRootCocoNode();
+                        rapidjson::Type tType         = tpRootCocoNode->GetType(&tCocoLoader);
+                        if (rapidjson::kObjectType == tType)
                         {
-                            int count = tpRootCocoNode->GetChildNum();
-                            stExpCocoNode *tpChildArray = tpRootCocoNode->GetChildArray(&tCocoLoader);
+                            int count                   = tpRootCocoNode->GetChildNum();
+                            stExpCocoNode* tpChildArray = tpRootCocoNode->GetChildArray(&tCocoLoader);
                             for (int i = 0; i < count; ++i)
                             {
                                 std::string key = tpChildArray[i].GetName(&tCocoLoader);
                                 if (key.compare("armature_data") == 0)
                                 {
-                                    int length = tpChildArray[i].GetChildNum();
-                                    stExpCocoNode *armature_dataArray = tpChildArray[i].GetChildArray(&tCocoLoader);
+                                    int length                        = tpChildArray[i].GetChildNum();
+                                    stExpCocoNode* armature_dataArray = tpChildArray[i].GetChildArray(&tCocoLoader);
                                     if (length < 1)
                                     {
                                         continue;
                                     }
-                                    
-                                    length = armature_dataArray[0].GetChildNum();
-                                    stExpCocoNode *armature_data = armature_dataArray[0].GetChildArray(&tCocoLoader);
+
+                                    length                       = armature_dataArray[0].GetChildNum();
+                                    stExpCocoNode* armature_data = armature_dataArray[0].GetChildArray(&tCocoLoader);
                                     for (int j = 0; j < length; ++j)
                                     {
                                         std::string key1 = armature_data[j].GetName(&tCocoLoader);
-                                        const char *str1 = armature_data[j].GetValue(&tCocoLoader);
+                                        const char* str1 = armature_data[j].GetValue(&tCocoLoader);
                                         if (key.compare("name") == 0)
                                         {
                                             if (str1 != nullptr)
                                             {
                                                 ArmatureDataManager::getInstance()->addArmatureFileInfo(filePath);
-                                                Armature *pAr = Armature::create(str1);
-                                                _render = pAr;
+                                                Armature* pAr = Armature::create(str1);
+                                                _render       = pAr;
                                                 _render->retain();
-                                                const char *actionName = nullptr;
+                                                const char* actionName = nullptr;
                                                 if (cocoNode != nullptr)
                                                 {
                                                     actionName = cocoNode[6].GetValue(&tCocoLoader);
@@ -298,23 +299,23 @@ bool ComRender::serialize(void* r)
                     continue;
                 }
             }
-            else if(strcmp(className, "GUIComponent") == 0)
+            else if (strcmp(className, "GUIComponent") == 0)
             {
                 std::string fileExtension = FileUtils::getInstance()->getFileExtension(filePath);
                 if (fileExtension == ".json" || fileExtension == ".exportjson")
                 {
                     cocos2d::ui::Widget* widget = GUIReader::getInstance()->widgetFromJsonFile(filePath.c_str());
-                    _render = widget;
+                    _render                     = widget;
                     _render->retain();
-                    
+
                     ret = true;
                 }
                 else if (fileExtension == ".csb")
                 {
                     cocos2d::ui::Widget* widget = GUIReader::getInstance()->widgetFromBinaryFile(filePath.c_str());
-                    _render = widget;
+                    _render                     = widget;
                     _render->retain();
-                    
+
                     ret = true;
                 }
             }
@@ -327,9 +328,9 @@ bool ComRender::serialize(void* r)
         {
             if (strcmp(className, "CCSprite") == 0)
             {
-                std::string strPngFile = plistPath;
+                std::string strPngFile     = plistPath;
                 std::string::size_type pos = strPngFile.find(".plist");
-                if (pos  == strPngFile.npos)
+                if (pos == strPngFile.npos)
                 {
                     continue;
                 }
@@ -337,7 +338,7 @@ bool ComRender::serialize(void* r)
                 SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plistPath, strPngFile);
                 _render = Sprite::createWithSpriteFrameName(filePath);
                 _render->retain();
-                
+
                 ret = true;
             }
             else
@@ -350,13 +351,13 @@ bool ComRender::serialize(void* r)
             CC_BREAK_IF(true);
         }
     } while (0);
-    
+
     return ret;
 }
 
 ComRender* ComRender::create()
 {
-    ComRender * ret = new ComRender();
+    ComRender* ret = new ComRender();
     if (ret->init())
     {
         ret->autorelease();
@@ -365,12 +366,12 @@ ComRender* ComRender::create()
     {
         CC_SAFE_DELETE(ret);
     }
-	return ret;
+    return ret;
 }
 
-ComRender* ComRender::create(cocos2d::Node *node, const char *comName)
+ComRender* ComRender::create(cocos2d::Node* node, const char* comName)
 {
-    ComRender * ret = new ComRender(node, comName);
+    ComRender* ret = new ComRender(node, comName);
     if (ret->init())
     {
         ret->autorelease();
@@ -379,13 +380,14 @@ ComRender* ComRender::create(cocos2d::Node *node, const char *comName)
     {
         CC_SAFE_DELETE(ret);
     }
-        return ret;
+    return ret;
 }
 
-bool ComRender::readJson(const std::string &fileName, rapidjson::Document &doc)
+bool ComRender::readJson(const std::string& fileName, rapidjson::Document& doc)
 {
     bool ret = false;
-    do {
+    do
+    {
         std::string contentStr = FileUtils::getInstance()->getStringFromFile(fileName);
         doc.Parse<0>(contentStr.c_str());
         CC_BREAK_IF(doc.HasParseError());
@@ -394,4 +396,4 @@ bool ComRender::readJson(const std::string &fileName, rapidjson::Document &doc)
     return ret;
 }
 
-}
+}  // namespace cocostudio

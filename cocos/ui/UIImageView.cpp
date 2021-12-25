@@ -30,33 +30,29 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-namespace ui {
-    
+namespace ui
+{
+
 static const int IMAGE_RENDERER_Z = (-1);
-    
+
 IMPLEMENT_CLASS_GUI_INFO(ImageView)
 
-ImageView::ImageView():
-_scale9Enabled(false),
-_prevIgnoreSize(true),
-_capInsets(Rect::ZERO),
-_imageRenderer(nullptr),
-_imageTexType(TextureResType::LOCAL),
-_imageTextureSize(_contentSize),
-_imageRendererAdaptDirty(true),
-_textureFile("")
-{
+ImageView::ImageView()
+    : _scale9Enabled(false)
+    , _prevIgnoreSize(true)
+    , _capInsets(Rect::ZERO)
+    , _imageRenderer(nullptr)
+    , _imageTexType(TextureResType::LOCAL)
+    , _imageTextureSize(_contentSize)
+    , _imageRendererAdaptDirty(true)
+    , _textureFile("")
+{}
 
-}
+ImageView::~ImageView() {}
 
-ImageView::~ImageView()
+ImageView* ImageView::create(const std::string& imageFileName, TextureResType texType)
 {
-    
-}
-    
-ImageView* ImageView::create(const std::string &imageFileName, TextureResType texType)
-{
-    ImageView *widget = new ImageView();
+    ImageView* widget = new ImageView();
     if (widget->init(imageFileName, texType))
     {
         widget->autorelease();
@@ -77,7 +73,7 @@ ImageView* ImageView::create()
     CC_SAFE_DELETE(widget);
     return nullptr;
 }
-    
+
 bool ImageView::init()
 {
     bool ret = true;
@@ -92,8 +88,8 @@ bool ImageView::init()
     } while (0);
     return ret;
 }
-    
-bool ImageView::init(const std::string &imageFileName, TextureResType texType)
+
+bool ImageView::init(const std::string& imageFileName, TextureResType texType)
 {
     bool bRet = true;
     do
@@ -103,7 +99,7 @@ bool ImageView::init(const std::string &imageFileName, TextureResType texType)
             bRet = false;
             break;
         }
-        
+
         this->loadTexture(imageFileName, texType);
     } while (0);
     return bRet;
@@ -113,7 +109,7 @@ void ImageView::initRenderer()
 {
     _imageRenderer = Scale9Sprite::create();
     _imageRenderer->setRenderingType(Scale9Sprite::RenderingType::SIMPLE);
-    
+
     addProtectedChild(_imageRenderer, IMAGE_RENDERER_Z, -1);
 }
 
@@ -123,21 +119,22 @@ void ImageView::loadTexture(const std::string& fileName, TextureResType texType)
     {
         return;
     }
-    _textureFile = fileName;
+    _textureFile  = fileName;
     _imageTexType = texType;
     switch (_imageTexType)
     {
-        case TextureResType::LOCAL:
-            _imageRenderer->initWithFile(fileName);
-            break;
-        case TextureResType::PLIST:
-            _imageRenderer->initWithSpriteFrameName(fileName);
-            break;
-        default:
-            break;
+    case TextureResType::LOCAL:
+        _imageRenderer->initWithFile(fileName);
+        break;
+    case TextureResType::PLIST:
+        _imageRenderer->initWithSpriteFrameName(fileName);
+        break;
+    default:
+        break;
     }
-    //FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
-    if (!_ignoreSize && _customSize.equals(Vec2::ZERO)) {
+    // FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
+    if (!_ignoreSize && _customSize.equals(Vec2::ZERO))
+    {
         _customSize = _imageRenderer->getContentSize();
     }
     this->setupTexture();
@@ -159,12 +156,11 @@ void ImageView::setupTexture()
     _imageRendererAdaptDirty = true;
 }
 
-void ImageView::setTextureRect(const Rect &rect)
+void ImageView::setTextureRect(const Rect& rect)
 {
-    //This API should be refactor
+    // This API should be refactor
     if (_scale9Enabled)
-    {
-    }
+    {}
     else
     {
         auto sprite = _imageRenderer->getSprite();
@@ -178,22 +174,24 @@ void ImageView::setTextureRect(const Rect &rect)
         }
     }
 }
-    
+
 void ImageView::setScale9Enabled(bool able)
 {
     if (_scale9Enabled == able)
     {
         return;
     }
-    
-    
+
     _scale9Enabled = able;
-    if (_scale9Enabled) {
+    if (_scale9Enabled)
+    {
         _imageRenderer->setRenderingType(Scale9Sprite::RenderingType::SLICE);
-    }else{
+    }
+    else
+    {
         _imageRenderer->setRenderingType(Scale9Sprite::RenderingType::SIMPLE);
     }
-    
+
     if (_scale9Enabled)
     {
         bool ignoreBefore = _ignoreSize;
@@ -207,8 +205,8 @@ void ImageView::setScale9Enabled(bool able)
     setCapInsets(_capInsets);
     _imageRendererAdaptDirty = true;
 }
-    
-bool ImageView::isScale9Enabled()const
+
+bool ImageView::isScale9Enabled() const
 {
     return _scale9Enabled;
 }
@@ -222,7 +220,7 @@ void ImageView::ignoreContentAdaptWithSize(bool ignore)
     }
 }
 
-void ImageView::setCapInsets(const Rect &capInsets)
+void ImageView::setCapInsets(const Rect& capInsets)
 {
     _capInsets = ui::Helper::restrictCapInsetRect(capInsets, _imageTextureSize);
     if (!_scale9Enabled)
@@ -232,7 +230,7 @@ void ImageView::setCapInsets(const Rect &capInsets)
     _imageRenderer->setCapInsets(_capInsets);
 }
 
-const Rect& ImageView::getCapInsets()const
+const Rect& ImageView::getCapInsets() const
 {
     return _capInsets;
 }
@@ -242,7 +240,7 @@ void ImageView::onSizeChanged()
     Widget::onSizeChanged();
     _imageRendererAdaptDirty = true;
 }
-    
+
 void ImageView::adaptRenderers()
 {
     if (_imageRendererAdaptDirty)
@@ -265,7 +263,7 @@ Node* ImageView::getVirtualRenderer()
 void ImageView::imageTextureScaleChangedWithSize()
 {
     _imageRenderer->setPreferredSize(_contentSize);
-    
+
     _imageRenderer->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
 }
 
@@ -279,7 +277,7 @@ Widget* ImageView::createCloneInstance()
     return ImageView::create();
 }
 
-void ImageView::copySpecialProperties(Widget *widget)
+void ImageView::copySpecialProperties(Widget* widget)
 {
     ImageView* imageView = dynamic_cast<ImageView*>(widget);
     if (imageView)
@@ -287,7 +285,7 @@ void ImageView::copySpecialProperties(Widget *widget)
         _prevIgnoreSize = imageView->_prevIgnoreSize;
         setScale9Enabled(imageView->_scale9Enabled);
         auto imageSprite = imageView->_imageRenderer->getSprite();
-        if(nullptr != imageSprite)
+        if (nullptr != imageSprite)
         {
             loadTexture(imageSprite->getSpriteFrame());
         }
@@ -303,16 +301,16 @@ ResourceData ImageView::getRenderFile()
     return rData;
 }
 
-void ImageView::setBlendFunc(const BlendFunc &blendFunc)
+void ImageView::setBlendFunc(const BlendFunc& blendFunc)
 {
     _imageRenderer->setBlendFunc(blendFunc);
 }
-    
+
 const BlendFunc& ImageView::getBlendFunc() const
 {
     return _imageRenderer->getBlendFunc();
 }
 
-}
+}  // namespace ui
 
 NS_CC_END

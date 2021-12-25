@@ -30,7 +30,6 @@ NS_CC_BEGIN
 class Image;
 class SpriteFrame;
 
-
 /**
  * A class for paring Android .9 patch image.
  * For more about Android .9 patch image format, please refer to
@@ -98,18 +97,19 @@ public:
      * Parsing the image data and extract the capInsets info.
      * @return The capInsets Rect.
      */
-    Rect parseCapInset()const;
+    Rect parseCapInset() const;
+
 private:
     enum class Direction
     {
         HORIZONTAL,
         VERTICAL
     };
-    int getPixelOriginOffset(Direction direction)const;
-    Vec2 parseHorizontalMargin()const;
-    Vec2 parseVerticalMargin()const;
-    int getFrameWidth()const;
-    int getFrameHeight()const;
+    int getPixelOriginOffset(Direction direction) const;
+    Vec2 parseHorizontalMargin() const;
+    Vec2 parseVerticalMargin() const;
+    int getFrameWidth() const;
+    int getFrameHeight() const;
 
     Image* _image;
     Rect _imageFrame;

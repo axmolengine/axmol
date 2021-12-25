@@ -41,7 +41,8 @@
 
 NS_CC_BEGIN
 
-namespace network {
+namespace network
+{
 
 class HttpClient;
 /**
@@ -53,6 +54,7 @@ class HttpClient;
 class CC_DLL HttpResponse : public cocos2d::Ref
 {
     friend class HttpClient;
+
 public:
     using ResponseHeaderMap = std::multimap<std::string, std::string>;
 
@@ -60,8 +62,7 @@ public:
      * Constructor, it's used by HttpClient internal, users don't need to create HttpResponse manually.
      * @param request the corresponding HttpRequest which leads to this response.
      */
-    HttpResponse(HttpRequest* request)
-        : _pHttpRequest(request)
+    HttpResponse(HttpRequest* request) : _pHttpRequest(request)
     {
         if (_pHttpRequest)
         {
@@ -88,7 +89,8 @@ public:
      */
     cocos2d::Ref* autorelease()
     {
-        CCASSERT(false, "HttpResponse is used between network thread and ui thread \
+        CCASSERT(false,
+                 "HttpResponse is used between network thread and ui thread \
                         therefore, autorelease is forbidden here");
         return nullptr;
     }
@@ -100,23 +102,15 @@ public:
      * There's no paired setter for it, because it's already set in class constructor
      * @return HttpRequest* the corresponding HttpRequest object which leads to this response.
      */
-    HttpRequest* getHttpRequest() const
-    {
-        return _pHttpRequest;
-    }
+    HttpRequest* getHttpRequest() const { return _pHttpRequest; }
 
     /**
      * Get the http response data.
      * @return yasio::sbyte_buffer* the pointer that point to the _responseData.
      */
-    yasio::sbyte_buffer* getResponseData()
-    {
-        return &_responseData;
-    }
+    yasio::sbyte_buffer* getResponseData() { return &_responseData; }
 
-    bool isSucceed() const {
-        return _responseCode == 200;
-    }
+    bool isSucceed() const { return _responseCode == 200; }
 
     /**
      * Get the http response code to judge whether response is successful or not.
@@ -124,27 +118,20 @@ public:
      * If _responseCode is not 200, you should check the meaning for _responseCode by the net.
      * @return int32_t the value of _responseCode
      */
-    int getResponseCode() const
-    {
-        return _responseCode;
-    }
+    int getResponseCode() const { return _responseCode; }
 
     /*
-    * The yasio error code, see yasio::errc
-    */
+     * The yasio error code, see yasio::errc
+     */
     int getInternalCode() const { return _internalCode; }
 
+    int getRedirectCount() const { return _redirectCount; }
 
-    int getRedirectCount() const {
-        return _redirectCount;
-    }
-
-    const ResponseHeaderMap& getResponseHeaders() const {
-        return _responseHeaders;
-    }
+    const ResponseHeaderMap& getResponseHeaders() const { return _responseHeaders; }
 
 private:
-    void updateInternalCode(int value) {
+    void updateInternalCode(int value)
+    {
         if (_internalCode == 0)
             _internalCode = value;
     }
@@ -152,13 +139,13 @@ private:
     /**
      * To see if the http request is finished.
      */
-    bool isFinished() const {
-        return _finished;
-    }
+    bool isFinished() const { return _finished; }
 
-    void handleInput(const yasio::sbyte_buffer& data) {
+    void handleInput(const yasio::sbyte_buffer& data)
+    {
         enum llhttp_errno err = llhttp_execute(&_context, data.data(), data.size());
-        if (err != HPE_OK) {
+        if (err != HPE_OK)
+        {
             _finished = true;
         }
     }
@@ -171,7 +158,7 @@ private:
     bool prepareForProcess(const std::string& url)
     {
         /* Resets response status */
-        _finished    = false;
+        _finished = false;
         _responseData.clear();
         _currentHeader.clear();
         _responseCode = -1;
@@ -182,7 +169,7 @@ private:
             return false;
 
         _requestUri = std::move(uri);
-        
+
         /* Initialize user callbacks and settings */
         llhttp_settings_init(&_contextSettings);
 
@@ -205,70 +192,71 @@ private:
         return true;
     }
 
-    const Uri& getRequestUri() const {
-        return _requestUri;
-    }
+    const Uri& getRequestUri() const { return _requestUri; }
 
-    int increaseRedirectCount() {
-        return ++_redirectCount;
-    }
+    int increaseRedirectCount() { return ++_redirectCount; }
 
-    static int on_header_field(llhttp_t* context, const char* at, size_t length) {
-        auto thiz = (HttpResponse*) context->data;
+    static int on_header_field(llhttp_t* context, const char* at, size_t length)
+    {
+        auto thiz = (HttpResponse*)context->data;
         thiz->_currentHeader.insert(thiz->_currentHeader.end(), at, at + length);
         return 0;
     }
-    static int on_header_field_complete(llhttp_t* context) {
+    static int on_header_field_complete(llhttp_t* context)
+    {
         auto thiz = (HttpResponse*)context->data;
-        std::transform(thiz->_currentHeader.begin(), thiz->_currentHeader.end(), thiz->_currentHeader.begin(), ::tolower);
+        std::transform(thiz->_currentHeader.begin(), thiz->_currentHeader.end(), thiz->_currentHeader.begin(),
+                       ::tolower);
         return 0;
     }
-    static int on_header_value(llhttp_t* context, const char* at, size_t length) {
-        auto thiz = (HttpResponse*) context->data;
+    static int on_header_value(llhttp_t* context, const char* at, size_t length)
+    {
+        auto thiz = (HttpResponse*)context->data;
         thiz->_currentHeaderValue.insert(thiz->_currentHeaderValue.end(), at, at + length);
         return 0;
     }
-    static int on_header_value_complete(llhttp_t* context) {
+    static int on_header_value_complete(llhttp_t* context)
+    {
         auto thiz = (HttpResponse*)context->data;
         thiz->_responseHeaders.emplace(std::move(thiz->_currentHeader), std::move(thiz->_currentHeaderValue));
         return 0;
     }
-    static int on_body(llhttp_t* context, const char* at, size_t length) {
-        auto thiz = (HttpResponse*) context->data;
+    static int on_body(llhttp_t* context, const char* at, size_t length)
+    {
+        auto thiz = (HttpResponse*)context->data;
         thiz->_responseData.insert(thiz->_responseData.end(), at, at + length);
         return 0;
     }
-    static int on_complete(llhttp_t* context) {
-        auto thiz    = (HttpResponse*) context->data;
+    static int on_complete(llhttp_t* context)
+    {
+        auto thiz           = (HttpResponse*)context->data;
         thiz->_responseCode = context->status_code;
-        thiz->_finished = true;
+        thiz->_finished     = true;
         return 0;
     }
 
 protected:
-
     // properties
-    HttpRequest*        _pHttpRequest;  /// the corresponding HttpRequest pointer who leads to this response
-    int                 _redirectCount = 0;
+    HttpRequest* _pHttpRequest;  /// the corresponding HttpRequest pointer who leads to this response
+    int _redirectCount = 0;
 
-    Uri                 _requestUri;
-    bool                _finished = false;       /// to indicate if the http request is successful simply
+    Uri _requestUri;
+    bool _finished = false;             /// to indicate if the http request is successful simply
     yasio::sbyte_buffer _responseData;  /// the returned raw data. You can also dump it as a string
-    std::string         _currentHeader;
-    std::string         _currentHeaderValue;
-    ResponseHeaderMap   _responseHeaders; /// the returned raw header data. You can also dump it as a string
-    int                 _responseCode = -1;    /// the status code returned from libcurl, e.g. 200, 404
-    int                 _internalCode = 0;   /// the ret code of perform
-    llhttp_t            _context;
-    llhttp_settings_t   _contextSettings;
+    std::string _currentHeader;
+    std::string _currentHeaderValue;
+    ResponseHeaderMap _responseHeaders;  /// the returned raw header data. You can also dump it as a string
+    int _responseCode = -1;              /// the status code returned from libcurl, e.g. 200, 404
+    int _internalCode = 0;               /// the ret code of perform
+    llhttp_t _context;
+    llhttp_settings_t _contextSettings;
 };
 
-}
+}  // namespace network
 
 NS_CC_END
 
 // end group
 /// @}
 
-#endif //__HTTP_RESPONSE_H__
-
+#endif  //__HTTP_RESPONSE_H__

@@ -21,19 +21,23 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "VertexLayout.h"
 #include "base/ccMacros.h"
 #include <cassert>
 
 CC_BACKEND_BEGIN
 
-void VertexLayout::setAttribute(const std::string &name, std::size_t index, VertexFormat format, std::size_t offset, bool needToBeNormallized)
+void VertexLayout::setAttribute(const std::string& name,
+                                std::size_t index,
+                                VertexFormat format,
+                                std::size_t offset,
+                                bool needToBeNormallized)
 {
-    if(index == -1)
+    if (index == -1)
         return;
-    
-    _attributes[name] = { name, index, format, offset, needToBeNormallized };
+
+    _attributes[name] = {name, index, format, offset, needToBeNormallized};
 }
 
 void VertexLayout::setLayout(std::size_t stride)

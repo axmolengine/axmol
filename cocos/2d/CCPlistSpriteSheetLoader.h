@@ -23,13 +23,22 @@ public:
 protected:
     /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
      */
-    void addSpriteFramesWithDictionary(ValueMap& dictionary, Texture2D* texture, const std::string& plist, SpriteFrameCache& cache);
+    void addSpriteFramesWithDictionary(ValueMap& dictionary,
+                                       Texture2D* texture,
+                                       const std::string& plist,
+                                       SpriteFrameCache& cache);
 
     /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
      */
-    void addSpriteFramesWithDictionary(ValueMap& dict, const std::string& texturePath, const std::string& plist, SpriteFrameCache& cache);
+    void addSpriteFramesWithDictionary(ValueMap& dict,
+                                       const std::string& texturePath,
+                                       const std::string& plist,
+                                       SpriteFrameCache& cache);
 
-    void reloadSpriteFramesWithDictionary(ValueMap& dict, Texture2D* texture, const std::string& plist, SpriteFrameCache& cache);
+    void reloadSpriteFramesWithDictionary(ValueMap& dict,
+                                          Texture2D* texture,
+                                          const std::string& plist,
+                                          SpriteFrameCache& cache);
 };
 
 NS_CC_END

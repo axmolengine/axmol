@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -72,10 +72,7 @@ public:
      */
     float y;
 
-    Point():
-        x(0.0f),
-        y(0.0f)
-    {}
+    Point() : x(0.0f), y(0.0f) {}
     /**
      * - Creates a new point. If you pass no parameters to this method, a point is created at (0,0).
      * @param x - The horizontal coordinate.
@@ -90,10 +87,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    Point(const Point& value)
-    {
-        operator=(value);
-    }
+    Point(const Point& value) { operator=(value); }
     ~Point() {}
 
     inline void operator=(const Point& value)
@@ -105,12 +99,9 @@ public:
     /**
      * @private
      */
-    inline void clear()
-    {
-        x = y = 0.0f;
-    }
+    inline void clear() { x = y = 0.0f; }
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     static Point* getHelpPointA() { return &helpPointA; }
     static Point* getHelpPointB() { return &helpPointB; }
     static Point* getHelpPointC() { return &helpPointC; }
@@ -118,4 +109,4 @@ public: // For WebAssembly.
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_POINT_H
+#endif  // DRAGONBONES_POINT_H

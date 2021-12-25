@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "2d/CCAtlasNode.h"
-#include <stddef.h> // offsetof
+#include <stddef.h>  // offsetof
 #include "base/ccTypes.h"
 #include "renderer/CCTextureAtlas.h"
 #include "base/CCDirector.h"
@@ -47,9 +47,9 @@ AtlasNode::~AtlasNode()
     CC_SAFE_RELEASE(_textureAtlas);
 }
 
-AtlasNode * AtlasNode::create(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
+AtlasNode* AtlasNode::create(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
 {
-    AtlasNode * ret = new AtlasNode();
+    AtlasNode* ret = new AtlasNode();
     if (ret->initWithTileFile(tile, tileWidth, tileHeight, itemsToRender))
     {
         ret->autorelease();
@@ -62,7 +62,7 @@ AtlasNode * AtlasNode::create(const std::string& tile, int tileWidth, int tileHe
 bool AtlasNode::initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
 {
     CCASSERT(!tile.empty(), "file size should not be empty");
-    Texture2D *texture = _director->getTextureCache()->addImage(tile);
+    Texture2D* texture = _director->getTextureCache()->addImage(tile);
     return initWithTexture(texture, tileWidth, tileHeight, itemsToRender);
 }
 
@@ -71,7 +71,7 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
     _itemWidth  = tileWidth;
     _itemHeight = tileHeight;
 
-    _colorUnmodified = Color3B::WHITE;
+    _colorUnmodified    = Color3B::WHITE;
     _isOpacityModifyRGB = true;
 
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
@@ -96,29 +96,25 @@ bool AtlasNode::setProgramState(backend::ProgramState* programState, bool needsR
 {
     if (Node::setProgramState(programState, needsRetain))
     {
-        auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
+        auto& pipelineDescriptor        = _quadCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = _programState;
-        _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
+        _mvpMatrixLocation              = _programState->getUniformLocation("u_MVPMatrix");
 
         auto vertexLayout = _programState->getVertexLayout();
-        //a_position
+        // a_position
         vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION,
-            _programState->getAttributeLocation(backend::Attribute::POSITION),
-            backend::VertexFormat::FLOAT3,
-            0,
-            false);
+                                   _programState->getAttributeLocation(backend::Attribute::POSITION),
+                                   backend::VertexFormat::FLOAT3, 0, false);
 
-        //a_texCoord
+        // a_texCoord
         vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_TEXCOORD,
-            _programState->getAttributeLocation(backend::Attribute::TEXCOORD),
-            backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords),
-            false);
+                                   _programState->getAttributeLocation(backend::Attribute::TEXCOORD),
+                                   backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords), false);
 
-        //a_color
+        // a_color
         vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR,
-            _programState->getAttributeLocation(backend::Attribute::COLOR),
-            backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors),
-            true);
+                                   _programState->getAttributeLocation(backend::Attribute::COLOR),
+                                   backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors), true);
 
         vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
 
@@ -133,14 +129,14 @@ bool AtlasNode::setProgramState(backend::ProgramState* programState, bool needsR
 void AtlasNode::calculateMaxItems()
 {
     Vec2 s = _textureAtlas->getTexture()->getContentSize();
-    
+
     if (_ignoreContentScaleFactor)
     {
         s = _textureAtlas->getTexture()->getContentSizeInPixels();
     }
-    
+
     _itemsPerColumn = (int)(s.height / _itemHeight);
-    _itemsPerRow = (int)(s.width / _itemWidth);
+    _itemsPerRow    = (int)(s.width / _itemWidth);
 }
 
 void AtlasNode::updateAtlasValues()
@@ -149,17 +145,18 @@ void AtlasNode::updateAtlasValues()
 }
 
 // AtlasNode - draw
-void AtlasNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
-{    
-    if( _textureAtlas->getTotalQuads() == 0 )
+void AtlasNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+{
+    if (_textureAtlas->getTotalQuads() == 0)
         return;
-    
+
     auto programState = _quadCommand.getPipelineDescriptor().programState;
 
     const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
-    
-    _quadCommand.init(_globalZOrder, _textureAtlas->getTexture(), _blendFunc, _textureAtlas->getQuads(), _quadsToDraw, transform, flags);
+
+    _quadCommand.init(_globalZOrder, _textureAtlas->getTexture(), _blendFunc, _textureAtlas->getQuads(), _quadsToDraw,
+                      transform, flags);
     renderer->addCommand(&_quadCommand);
 }
 
@@ -167,7 +164,7 @@ void AtlasNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 
 const Color3B& AtlasNode::getColor() const
 {
-    if(_isOpacityModifyRGB)
+    if (_isOpacityModifyRGB)
     {
         return _colorUnmodified;
     }
@@ -176,14 +173,14 @@ const Color3B& AtlasNode::getColor() const
 
 void AtlasNode::setColor(const Color3B& color3)
 {
-    Color3B tmp = color3;
+    Color3B tmp      = color3;
     _colorUnmodified = color3;
 
-    if( _isOpacityModifyRGB )
+    if (_isOpacityModifyRGB)
     {
-        tmp.r = tmp.r * _displayedOpacity/255;
-        tmp.g = tmp.g * _displayedOpacity/255;
-        tmp.b = tmp.b * _displayedOpacity/255;
+        tmp.r = tmp.r * _displayedOpacity / 255;
+        tmp.g = tmp.g * _displayedOpacity / 255;
+        tmp.b = tmp.b * _displayedOpacity / 255;
     }
     Node::setColor(tmp);
 }
@@ -193,13 +190,13 @@ void AtlasNode::setOpacity(uint8_t opacity)
     Node::setOpacity(opacity);
 
     // special opacity for premultiplied textures
-    if( _isOpacityModifyRGB )
+    if (_isOpacityModifyRGB)
         this->setColor(_colorUnmodified);
 }
 
 void AtlasNode::setOpacityModifyRGB(bool value)
 {
-    Color3B oldColor = this->getColor();
+    Color3B oldColor    = this->getColor();
     _isOpacityModifyRGB = value;
     this->setColor(oldColor);
 }
@@ -216,13 +213,15 @@ void AtlasNode::updateOpacityModifyRGB()
 
 void AtlasNode::setIgnoreContentScaleFactor(bool ignoreContentScaleFactor)
 {
-    if (_ignoreContentScaleFactor != ignoreContentScaleFactor) {
+    if (_ignoreContentScaleFactor != ignoreContentScaleFactor)
+    {
         _ignoreContentScaleFactor = ignoreContentScaleFactor;
         this->calculateMaxItems();
         this->updateAtlasValues();
 
         auto label = dynamic_cast<LabelProtocol*>(this);
-        if (label) {
+        if (label)
+        {
             Vec2 s = Vec2(label->getString().size() * _itemWidth, _itemHeight);
             this->setContentSize(s);
         }
@@ -236,14 +235,14 @@ const BlendFunc& AtlasNode::getBlendFunc() const
     return _blendFunc;
 }
 
-void AtlasNode::setBlendFunc(const BlendFunc &blendFunc)
+void AtlasNode::setBlendFunc(const BlendFunc& blendFunc)
 {
     _blendFunc = blendFunc;
 }
 
 void AtlasNode::updateBlendFunc()
 {
-    if( ! _textureAtlas->getTexture()->hasPremultipliedAlpha() )
+    if (!_textureAtlas->getTexture()->hasPremultipliedAlpha())
     {
         _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
         setOpacityModifyRGB(false);
@@ -255,7 +254,7 @@ void AtlasNode::updateBlendFunc()
     }
 }
 
-void AtlasNode::setTexture(Texture2D *texture)
+void AtlasNode::setTexture(Texture2D* texture)
 {
     _textureAtlas->setTexture(texture);
     updateProgramStateTexture(texture);
@@ -264,7 +263,7 @@ void AtlasNode::setTexture(Texture2D *texture)
     this->updateOpacityModifyRGB();
 }
 
-Texture2D * AtlasNode::getTexture() const
+Texture2D* AtlasNode::getTexture() const
 {
     return _textureAtlas->getTexture();
 }
@@ -276,7 +275,7 @@ void AtlasNode::setTextureAtlas(TextureAtlas* textureAtlas)
     _textureAtlas = textureAtlas;
 }
 
-TextureAtlas * AtlasNode::getTextureAtlas() const
+TextureAtlas* AtlasNode::getTextureAtlas() const
 {
     return _textureAtlas;
 }

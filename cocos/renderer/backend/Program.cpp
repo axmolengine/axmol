@@ -21,17 +21,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "Program.h"
 #include "ProgramCache.h"
 
 CC_BACKEND_BEGIN
 
-Program::Program(const std::string& vs, const std::string& fs)
-: _vertexShader(vs)
-, _fragmentShader(fs)
-{
-}
+Program::Program(const std::string& vs, const std::string& fs) : _vertexShader(vs), _fragmentShader(fs) {}
 
 void Program::setProgramType(uint32_t type)
 {

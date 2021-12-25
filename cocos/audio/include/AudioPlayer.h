@@ -46,15 +46,16 @@ class AudioEngineImpl;
 class CC_DLL AudioPlayer
 {
     friend class AudioEngineImpl;
+
 public:
     AudioPlayer();
     ~AudioPlayer();
 
     void destroy();
 
-    //queue buffer related stuff
+    // queue buffer related stuff
     bool setTime(float time);
-    float getTime() { return _currTime;}
+    float getTime() { return _currTime; }
     bool setLoop(bool loop);
 
     bool isFinished() const;
@@ -71,14 +72,14 @@ protected:
 
     float _volume;
     bool _loop;
-    std::function<void (AUDIO_ID, const std::string &)> _finishCallbak;
+    std::function<void(AUDIO_ID, const std::string&)> _finishCallbak;
 
     bool _isDestroyed;
     bool _removeByAudioEngine;
     bool _ready;
     ALuint _alSource;
 
-    //play by circular buffer
+    // play by circular buffer
     float _currTime;
     bool _streamingSource;
     ALuint _bufferIds[QUEUEBUFFER_NUM];

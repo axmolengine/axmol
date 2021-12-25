@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,14 +29,14 @@
 #include "base/ccConfig.h"
 #if CC_USE_NAVMESH
 
-#include "platform/CCPlatformMacros.h"
-#include "math/CCMath.h"
+#    include "platform/CCPlatformMacros.h"
+#    include "math/CCMath.h"
 
-#include "recast/DetourCommon.h"
-#include "recast/DetourNavMesh.h"
-#include "recast/DetourNavMeshQuery.h"
-#include "recast/DetourTileCache.h"
-#include "recast/DetourTileCacheBuilder.h"
+#    include "recast/DetourCommon.h"
+#    include "recast/DetourNavMesh.h"
+#    include "recast/DetourNavMeshQuery.h"
+#    include "recast/DetourTileCache.h"
+#    include "recast/DetourTileCacheBuilder.h"
 
 NS_CC_BEGIN
 
@@ -69,11 +69,17 @@ struct LZ4Compressor : public dtTileCacheCompressor
 {
     virtual int maxCompressedSize(const int bufferSize);
 
-    virtual dtStatus compress(const unsigned char* buffer, const int bufferSize,
-        unsigned char* compressed, const int /*maxCompressedSize*/, int* compressedSize);
+    virtual dtStatus compress(const unsigned char* buffer,
+                              const int bufferSize,
+                              unsigned char* compressed,
+                              const int /*maxCompressedSize*/,
+                              int* compressedSize);
 
-    virtual dtStatus decompress(const unsigned char* compressed, const int compressedSize,
-        unsigned char* buffer, const int maxBufferSize, int* bufferSize);
+    virtual dtStatus decompress(const unsigned char* compressed,
+                                const int compressedSize,
+                                unsigned char* buffer,
+                                const int maxBufferSize,
+                                int* bufferSize);
 };
 
 struct GeomData
@@ -90,31 +96,31 @@ struct GeomData
 
 struct MeshProcess : public dtTileCacheMeshProcess
 {
-    const GeomData *data;
+    const GeomData* data;
 
-    MeshProcess(const GeomData *geom);
+    MeshProcess(const GeomData* geom);
     virtual ~MeshProcess();
 
-    //void init(InputGeom* geom)
+    // void init(InputGeom* geom)
     //{
     //	m_geom = geom;
-    //}
+    // }
 
     virtual void process(struct dtNavMeshCreateParams* params,
-        unsigned char* polyAreas, unsigned short* polyFlags) override;
+                         unsigned char* polyAreas,
+                         unsigned short* polyFlags) override;
 };
 
 bool inRange(const float* v1, const float* v2, const float r, const float h);
 
-int fixupCorridor(dtPolyRef* path, const int npath, const int maxPath,
-    const dtPolyRef* visited, const int nvisited);
+int fixupCorridor(dtPolyRef* path, const int npath, const int maxPath, const dtPolyRef* visited, const int nvisited);
 
 // This function checks if the path has a small U-turn, that is,
 // a polygon further in the path is adjacent to the first polygon
 // in the path. If that happens, a shortcut is taken.
 // This can happen if the target (T) location is at tile boundary,
 // and we're (S) approaching it parallel to the tile edge.
-// The choice at the vertex can be arbitrary, 
+// The choice at the vertex can be arbitrary,
 //  +---+---+
 //  |:::|:::|
 //  +-S-+-T-+
@@ -122,15 +128,21 @@ int fixupCorridor(dtPolyRef* path, const int npath, const int maxPath,
 //  +---+---+
 int fixupShortcuts(dtPolyRef* path, int npath, dtNavMeshQuery* navQuery);
 
-bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, const float* endPos,
-    const float minTargetDist,
-    const dtPolyRef* path, const int pathSize,
-    float* steerPos, unsigned char& steerPosFlag, dtPolyRef& steerPosRef,
-    float* outPoints = nullptr, int* outPointCount = nullptr);
+bool getSteerTarget(dtNavMeshQuery* navQuery,
+                    const float* startPos,
+                    const float* endPos,
+                    const float minTargetDist,
+                    const dtPolyRef* path,
+                    const int pathSize,
+                    float* steerPos,
+                    unsigned char& steerPosFlag,
+                    dtPolyRef& steerPosRef,
+                    float* outPoints   = nullptr,
+                    int* outPointCount = nullptr);
 /** @} */
 
 NS_CC_END
 
-#endif //CC_USE_NAVMESH
+#endif  // CC_USE_NAVMESH
 
-#endif // __CCNAV_MESH_H__
+#endif  // __CCNAV_MESH_H__

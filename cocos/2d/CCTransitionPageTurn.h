@@ -61,16 +61,17 @@ public:
      *
      * @param t Duration time, in seconds.
      * @param scene A given scene.
-     * @param backwards If back is true then the effect is reversed to appear as if the incoming scene is being turned from left over the outgoing scene.
+     * @param backwards If back is true then the effect is reversed to appear as if the incoming scene is being turned
+     * from left over the outgoing scene.
      * @return An autoreleased TransitionPageTurn object.
      */
-    static TransitionPageTurn* create(float t,Scene* scene,bool backwards);
-    
+    static TransitionPageTurn* create(float t, Scene* scene, bool backwards);
+
     //
     // Overrides
     // @js NA
     //
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     /**
      * Creates a base transition with duration and incoming scene.
@@ -79,10 +80,11 @@ public:
      *
      * @param t Duration time, in seconds.
      * @param scene A given scene.
-     * @param backwards If back is true then the effect is reversed to appear as if the incoming scene is being turned from left over the outgoing scene.
+     * @param backwards If back is true then the effect is reversed to appear as if the incoming scene is being turned
+     * from left over the outgoing scene.
      * @return True if initialize success.
      */
-    bool initWithDuration(float t,Scene* scene,bool backwards);
+    bool initWithDuration(float t, Scene* scene, bool backwards);
 
     /** Returns the action that will be performed with size.
      *
@@ -97,11 +99,11 @@ public:
     virtual void onEnter() override;
     virtual void onExit() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    TransitionPageTurn();
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        TransitionPageTurn();
     /**
      * @js NA
      * @lua NA
@@ -114,7 +116,7 @@ protected:
 protected:
     NodeGrid* _inSceneProxy;
     NodeGrid* _outSceneProxy;
-    bool    _back;
+    bool _back;
 };
 
 // end of _2d group
@@ -122,5 +124,4 @@ protected:
 
 NS_CC_END
 
-#endif // __CCPAGE_TURN_TRANSITION_H__
-
+#endif  // __CCPAGE_TURN_TRANSITION_H__

@@ -36,7 +36,7 @@ NS_CC_BEGIN
  * @{
  */
 
-/** 
+/**
 @brief Waves3D action.
 @details This action is used for take effect on the target node as 3D waves.
         You can control the effect by these parameters:
@@ -80,12 +80,11 @@ public:
     // Overrides
     virtual Waves3D* clone() const override;
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Waves3D() {}
+
+    CC_CONSTRUCTOR_ACCESS : Waves3D() {}
     virtual ~Waves3D() {}
 
-    /** 
+    /**
     @brief Initializes an action with duration, grid size, waves and amplitude.
     @param duration Specify the duration of the Waves3D action. It's a value in seconds.
     @param gridSize Specify the size of the grid.
@@ -121,19 +120,18 @@ public:
     // Override
     virtual FlipX3D* clone() const override;
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    FlipX3D() {}
+
+    CC_CONSTRUCTOR_ACCESS : FlipX3D() {}
     virtual ~FlipX3D() {}
 
-    /** 
+    /**
     @brief Initializes an action with duration.
     @param duration Specify the duration of the FlipX3D action. It's a value in seconds.
     @return If the initialization success, return true; otherwise, return false.
     */
     bool initWithDuration(float duration);
 
-    /** 
+    /**
     @brief Initializes an action with duration and grid size.
     @param gridSize Specify the grid size of the FlipX3D action.
     @param duration Specify the duration of the FlipX3D action. It's a value in seconds.
@@ -163,9 +161,9 @@ public:
     virtual void update(float time) override;
     virtual FlipY3D* clone() const override;
 
-CC_CONSTRUCTOR_ACCESS:
-    FlipY3D() {}
+    CC_CONSTRUCTOR_ACCESS : FlipY3D() {}
     virtual ~FlipY3D() {}
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(FlipY3D);
 };
@@ -223,9 +221,8 @@ public:
     // Overrides
     virtual Lens3D* clone() const override;
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Lens3D() {}
+
+    CC_CONSTRUCTOR_ACCESS : Lens3D() {}
     virtual ~Lens3D() {}
 
     /**
@@ -273,7 +270,12 @@ public:
     @param amplitude Specify the amplitude of the ripple effect.
     @return If the creation success, return a pointer of Ripple3D action; otherwise, return nil.
     */
-    static Ripple3D* create(float duration, const Vec2& gridSize, const Vec2& position, float radius, unsigned int waves, float amplitude);
+    static Ripple3D* create(float duration,
+                            const Vec2& gridSize,
+                            const Vec2& position,
+                            float radius,
+                            unsigned int waves,
+                            float amplitude);
 
     /**
     @brief Get the center position of ripple effect.
@@ -312,8 +314,7 @@ public:
     virtual Ripple3D* clone() const override;
     virtual void update(float time) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    Ripple3D() {}
+    CC_CONSTRUCTOR_ACCESS : Ripple3D() {}
     virtual ~Ripple3D() {}
 
     /**
@@ -326,7 +327,12 @@ CC_CONSTRUCTOR_ACCESS:
     @param amplitude Specify the amplitude of the ripple effect.
     @return If the initialization success, return true; otherwise, return false.
      */
-    bool initWithDuration(float duration, const Vec2& gridSize, const Vec2& position, float radius, unsigned int waves, float amplitude);
+    bool initWithDuration(float duration,
+                          const Vec2& gridSize,
+                          const Vec2& position,
+                          float radius,
+                          unsigned int waves,
+                          float amplitude);
 
 protected:
     /* center position */
@@ -349,7 +355,7 @@ private:
 class CC_DLL Shaky3D : public Grid3DAction
 {
 public:
-    /** 
+    /**
     @brief Create the action with a range, shake Z vertices, a grid and duration.
     @param initWithDuration Specify the duration of the Shaky3D action. It's a value in seconds.
     @param gridSize Specify the size of the grid.
@@ -362,12 +368,11 @@ public:
     // Overrides
     virtual Shaky3D* clone() const override;
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Shaky3D() {}
+
+    CC_CONSTRUCTOR_ACCESS : Shaky3D() {}
     virtual ~Shaky3D() {}
-    
-    /** 
+
+    /**
     @brief Initializes the action with a range, shake Z vertices, grid size and duration.
     @param duration Specify the duration of the Shaky3D action. It's a value in seconds.
     @param gridSize Specify the size of the grid.
@@ -429,11 +434,10 @@ public:
     // Overrides
     virtual Liquid* clone() const override;
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Liquid() {}
+
+    CC_CONSTRUCTOR_ACCESS : Liquid() {}
     virtual ~Liquid() {}
-    
+
     /**
     @brief Initializes the action with amplitude, grid size, waves count and duration.
     @param duration Specify the duration of the Liquid action. It's a value in seconds.
@@ -473,7 +477,12 @@ public:
     @param vertical Specify whether waves on vertical.
     @return If the creation success, return a pointer of Waves action; otherwise, return nil.
     */
-    static Waves* create(float duration, const Vec2& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical);
+    static Waves* create(float duration,
+                         const Vec2& gridSize,
+                         unsigned int waves,
+                         float amplitude,
+                         bool horizontal,
+                         bool vertical);
 
     /**
     @brief Get the amplitude of the effect.
@@ -500,11 +509,10 @@ public:
     // Overrides
     virtual Waves* clone() const override;
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Waves() {}
+
+    CC_CONSTRUCTOR_ACCESS : Waves() {}
     virtual ~Waves() {}
-    
+
     /**
     @brief Initializes the action with amplitude, horizontal sin, vertical sin, grid size, waves count and duration.
     @param duration Specify the duration of the Waves action. It's a value in seconds.
@@ -515,7 +523,12 @@ CC_CONSTRUCTOR_ACCESS:
     @param vertical Specify whether waves on vertical.
     @return If the initialization success, return true; otherwise, return false.
     */
-    bool initWithDuration(float duration, const Vec2& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical);
+    bool initWithDuration(float duration,
+                          const Vec2& gridSize,
+                          unsigned int waves,
+                          float amplitude,
+                          bool horizontal,
+                          bool vertical);
 
 protected:
     unsigned int _waves;
@@ -546,7 +559,11 @@ public:
     @param amplitude Specify the amplitude of the Twirl action.
     @return If the creation success, return a pointer of Twirl action; otherwise, return nil.
     */
-    static Twirl* create(float duration, const Vec2& gridSize, const Vec2& position, unsigned int twirls, float amplitude);
+    static Twirl* create(float duration,
+                         const Vec2& gridSize,
+                         const Vec2& position,
+                         unsigned int twirls,
+                         float amplitude);
 
     /**
     @brief Get the center position of twirl action.
@@ -581,13 +598,11 @@ public:
     */
     void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
 
-
     // Overrides
     virtual Twirl* clone() const override;
     virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Twirl() {}
+
+    CC_CONSTRUCTOR_ACCESS : Twirl() {}
     virtual ~Twirl() {}
 
     /**
@@ -599,7 +614,11 @@ CC_CONSTRUCTOR_ACCESS:
     @param amplitude Specify the amplitude of the Twirl action.
     @return If the initialization success, return true; otherwise, return false.
     */
-    bool initWithDuration(float duration, const Vec2& gridSize, const Vec2& position, unsigned int twirls, float amplitude);
+    bool initWithDuration(float duration,
+                          const Vec2& gridSize,
+                          const Vec2& position,
+                          unsigned int twirls,
+                          float amplitude);
 
 protected:
     /* twirl center */
@@ -617,4 +636,4 @@ private:
 
 NS_CC_END
 
-#endif // __ACTION_CCGRID3D_ACTION_H__
+#endif  // __ACTION_CCGRID3D_ACTION_H__

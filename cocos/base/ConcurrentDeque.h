@@ -28,28 +28,34 @@
 #include <deque>
 #include <mutex>
 
-namespace cocos2d {
+namespace cocos2d
+{
 template <typename _Ty>
-class ConcurrentDeque {
+class ConcurrentDeque
+{
 public:
     /** Iterator, can be used to loop the Vector. */
     using iterator = typename std::deque<_Ty>::iterator;
     /** Const iterator, can be used to loop the Vector. */
     using const_iterator = typename std::deque<_Ty>::const_iterator;
 
-    void push_back(_Ty&& value) {
+    void push_back(_Ty&& value)
+    {
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
         queue_.push_back(std::forward<_Ty>(value));
     }
-    void push_back(const _Ty& value) {
+    void push_back(const _Ty& value)
+    {
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
         queue_.push_back(value);
     }
-    _Ty& front() {
+    _Ty& front()
+    {
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
         return queue_.front();
     }
-    void pop_front() {
+    void pop_front()
+    {
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
         queue_.pop_front();
     }
@@ -63,75 +69,48 @@ public:
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
         queue_.push_front(value);
     }
-    size_t size() const {
+    size_t size() const
+    {
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
         return this->queue_.size();
     }
-    bool empty() const {
+    bool empty() const
+    {
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
         return this->queue_.empty();
     }
-    void clear() {
+    void clear()
+    {
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
         this->queue_.clear();
     }
 
-    std::unique_lock<std::recursive_mutex> get_lock() {
-        return std::unique_lock<std::recursive_mutex>{this->mtx_};
-    }
+    std::unique_lock<std::recursive_mutex> get_lock() { return std::unique_lock<std::recursive_mutex>{this->mtx_}; }
 
-    void lock() {
-        this->mtx_.lock();
-    }
-    void unlock() {
-        this->mtx_.unlock();
-    }
+    void lock() { this->mtx_.lock(); }
+    void unlock() { this->mtx_.unlock(); }
 
-    void unsafe_push_back(_Ty&& value) {
-        queue_.push_back(std::forward<_Ty>(value));
-    }
-    void unsafe_push_back(const _Ty& value) {
-        queue_.push_back(value);
-    }
-    _Ty& unsafe_front() {
-        return queue_.front();
-    }
-    void unsafe_pop_front() {
-        queue_.pop_front();
-    }
+    void unsafe_push_back(_Ty&& value) { queue_.push_back(std::forward<_Ty>(value)); }
+    void unsafe_push_back(const _Ty& value) { queue_.push_back(value); }
+    _Ty& unsafe_front() { return queue_.front(); }
+    void unsafe_pop_front() { queue_.pop_front(); }
     void unsafe_push_front(_Ty&& value) { queue_.push_font(std::forward<_Ty>(value)); }
     void unsafe_push_front(const _Ty& value) { queue_.push_font(value); }
-    bool unsafe_empty() const {
-        return this->queue_.empty();
-    }
-    size_t unsafe_size() const {
-        return this->queue_.size();
-    }
-    void unsafe_clear() {
-        this->queue_.clear();
-    }
+    bool unsafe_empty() const { return this->queue_.empty(); }
+    size_t unsafe_size() const { return this->queue_.size(); }
+    void unsafe_clear() { this->queue_.clear(); }
 
-    iterator unsafe_begin() {
-        return this->queue_.begin();
-    }
-    iterator unsafe_end() {
-        return this->queue_.end();
-    }
+    iterator unsafe_begin() { return this->queue_.begin(); }
+    iterator unsafe_end() { return this->queue_.end(); }
 
-    const_iterator unsafe_begin() const {
-        return this->queue_.begin();
-    }
+    const_iterator unsafe_begin() const { return this->queue_.begin(); }
 
-    const_iterator unsafe_end() const {
-        return this->queue_.end();
-    }
+    const_iterator unsafe_end() const { return this->queue_.end(); }
 
-    iterator unsafe_erase(iterator iter) {
-        return this->queue_.erase(iter);
-    }
+    iterator unsafe_erase(iterator iter) { return this->queue_.erase(iter); }
 
 private:
     std::deque<_Ty> queue_;
     mutable std::recursive_mutex mtx_;
 };
-} // namespace cocos2d
+}  // namespace cocos2d

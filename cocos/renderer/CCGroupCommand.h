@@ -23,7 +23,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-
 #ifndef _CC_GROUPCOMMAND_H_
 #define _CC_GROUPCOMMAND_H_
 
@@ -40,7 +39,7 @@
 
 NS_CC_BEGIN
 
-//Used for internal
+// Used for internal
 class GroupCommandManager : public Ref
 {
 public:
@@ -69,13 +68,13 @@ public:
     GroupCommand();
     ~GroupCommand();
     /**@}*/
-    
+
     /**Init function for group command*/
     void init(float globalOrder);
-    
+
     /**called by renderer, get the group ID.*/
     int getRenderQueueID() const { return _renderQueueID; }
-    
+
 protected:
     int _renderQueueID;
 };
@@ -86,4 +85,4 @@ NS_CC_END
  end of support group
  @}
  */
-#endif //_CC_GROUPCOMMAND_H_
+#endif  //_CC_GROUPCOMMAND_H_

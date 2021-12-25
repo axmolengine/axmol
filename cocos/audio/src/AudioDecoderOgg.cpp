@@ -23,7 +23,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #define LOG_TAG "AudioDecoderOgg"
 
 #include "audio/include/AudioDecoderOgg.h"
@@ -31,95 +31,89 @@
 #include "platform/CCFileUtils.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-#include <unistd.h>
-#include <errno.h>
+#    include <unistd.h>
+#    include <errno.h>
 #endif
 
+namespace cocos2d
+{
 
-namespace cocos2d {
+static size_t ov_fread_r(void* buffer, size_t element_size, size_t element_count, void* handle)
+{
+    auto* fs = static_cast<FileStream*>(handle);
+    return fs->read(buffer, static_cast<uint32_t>(element_size * element_count));
+}
 
-    static size_t ov_fread_r(void* buffer, size_t element_size, size_t element_count, void* handle)
+static int ov_fseek_r(void* handle, ogg_int64_t offset, int whence)
+{
+    auto* fs = static_cast<FileStream*>(handle);
+    return fs->seek(offset, whence) < 0 ? -1 : 0;
+}
+
+static long ov_ftell_r(void* handle)
+{
+    auto* fs = static_cast<FileStream*>(handle);
+    return fs->tell();
+}
+
+static int ov_fclose_r(void* handle)
+{
+    auto* fs = static_cast<FileStream*>(handle);
+    delete fs;
+    return 0;
+}
+
+AudioDecoderOgg::AudioDecoderOgg() {}
+
+AudioDecoderOgg::~AudioDecoderOgg()
+{
+    close();
+}
+
+bool AudioDecoderOgg::open(const std::string& fullPath)
+{
+    auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ).release();
+    if (!fs)
     {
-        auto* fs = static_cast<FileStream*>(handle);
-        return fs->read(buffer, static_cast<uint32_t>(element_size * element_count));
-    }
-
-    static int ov_fseek_r(void * handle, ogg_int64_t offset, int whence)
-    {
-        auto* fs = static_cast<FileStream*>(handle);
-        return fs->seek(offset, whence) < 0 ? -1 : 0;
-    }
-    
-    static long ov_ftell_r(void * handle)
-    {
-        auto* fs = static_cast<FileStream*>(handle);
-        return fs->tell();
-    }
-
-    static int ov_fclose_r(void* handle) {
-        auto* fs = static_cast<FileStream*>(handle);
-        delete fs;
-        return 0;
-    }
-    
-    AudioDecoderOgg::AudioDecoderOgg()
-    {
-    }
-
-    AudioDecoderOgg::~AudioDecoderOgg()
-    {
-        close();
-    }
-
-    bool AudioDecoderOgg::open(const std::string& fullPath)
-    {
-        auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ).release();
-        if (!fs)
-        {
-            ALOGE("Trouble with ogg(1): %s\n", strerror(errno));
-            return false;
-        }
-
-        static ov_callbacks OV_CALLBACKS_POSIX = {
-               ov_fread_r,
-               ov_fseek_r,
-               ov_fclose_r,
-               ov_ftell_r
-        };
-
-        if (0 == ov_open_callbacks(fs, &_vf, nullptr, 0, OV_CALLBACKS_POSIX))
-        {
-            // header
-            vorbis_info* vi = ov_info(&_vf, -1);
-            _sampleRate = static_cast<uint32_t>(vi->rate);
-            _channelCount = vi->channels;
-            _bytesPerBlock = vi->channels * sizeof(short);
-            _totalFrames = static_cast<uint32_t>(ov_pcm_total(&_vf, -1));
-            _isOpened = true;
-            return true;
-        }
+        ALOGE("Trouble with ogg(1): %s\n", strerror(errno));
         return false;
     }
 
-    void AudioDecoderOgg::close()
-    {
-        if (isOpened())
-        {
-            ov_clear(&_vf);
-            _isOpened = false;
-        }
-    }
+    static ov_callbacks OV_CALLBACKS_POSIX = {ov_fread_r, ov_fseek_r, ov_fclose_r, ov_ftell_r};
 
-    uint32_t AudioDecoderOgg::read(uint32_t framesToRead, char* pcmBuf)
+    if (0 == ov_open_callbacks(fs, &_vf, nullptr, 0, OV_CALLBACKS_POSIX))
     {
-        int currentSection = 0;
-        int bytesToRead = framesToBytes(framesToRead);
-        int32_t bytesRead = ov_read(&_vf, pcmBuf, bytesToRead, 0, 2, 1, &currentSection);
-        return bytesToFrames(bytesRead);
+        // header
+        vorbis_info* vi = ov_info(&_vf, -1);
+        _sampleRate     = static_cast<uint32_t>(vi->rate);
+        _channelCount   = vi->channels;
+        _bytesPerBlock  = vi->channels * sizeof(short);
+        _totalFrames    = static_cast<uint32_t>(ov_pcm_total(&_vf, -1));
+        _isOpened       = true;
+        return true;
     }
+    return false;
+}
 
-    bool AudioDecoderOgg::seek(uint32_t frameOffset)
+void AudioDecoderOgg::close()
+{
+    if (isOpened())
     {
-        return 0 == ov_pcm_seek(&_vf, frameOffset);
+        ov_clear(&_vf);
+        _isOpened = false;
     }
-} // namespace cocos2d {
+}
+
+uint32_t AudioDecoderOgg::read(uint32_t framesToRead, char* pcmBuf)
+{
+    int currentSection = 0;
+    int bytesToRead    = framesToBytes(framesToRead);
+    int32_t bytesRead  = ov_read(&_vf, pcmBuf, bytesToRead, 0, 2, 1, &currentSection);
+    return bytesToFrames(bytesRead);
+}
+
+bool AudioDecoderOgg::seek(uint32_t frameOffset)
+{
+    return 0 == ov_pcm_seek(&_vf, frameOffset);
+}
+}  // namespace cocos2d

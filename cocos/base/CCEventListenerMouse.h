@@ -47,7 +47,7 @@ class CC_DLL EventListenerMouse : public EventListener
 {
 public:
     static const std::string LISTENER_ID;
-    
+
     /** Create a mouse event listener.
      *
      * @return An autoreleased EventListenerMouse object.
@@ -63,8 +63,7 @@ public:
     std::function<void(EventMouse* event)> onMouseMove;
     std::function<void(EventMouse* event)> onMouseScroll;
 
-CC_CONSTRUCTOR_ACCESS:
-    EventListenerMouse();
+    CC_CONSTRUCTOR_ACCESS : EventListenerMouse();
     bool init();
 };
 

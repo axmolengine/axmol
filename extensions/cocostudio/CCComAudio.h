@@ -30,9 +30,10 @@ THE SOFTWARE.
 #include "2d/CCComponent.h"
 #include "CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
-    class CCS_DLL ComAudio : public cocos2d::Component, public cocos2d::PlayableProtocol
+class CCS_DLL ComAudio : public cocos2d::Component, public cocos2d::PlayableProtocol
 {
     DECLARE_CLASS_COMPONENT_INFO
 public:
@@ -47,7 +48,7 @@ public:
      * @lua NA
      */
     virtual ~ComAudio();
-    
+
 public:
     static ComAudio* create();
 
@@ -63,21 +64,22 @@ public:
      */
     virtual void onExit() override;
     /**
-    * @js NA
-    * @lua NA
-    */
+     * @js NA
+     * @lua NA
+     */
     virtual void onAdd() override;
     /**
-    * @js NA
-    * @lua NA
-    */
+     * @js NA
+     * @lua NA
+     */
     virtual void onRemove() override;
 
     virtual bool serialize(void* r) override;
+
 public:
     /**
-    * @lua endToLua
-    */
+     * @lua endToLua
+     */
     void end();
     void preloadBackgroundMusic(const char* pszFilePath);
     void playBackgroundMusic(const char* pszFilePath, bool bLoop);
@@ -109,7 +111,7 @@ public:
     const char* getFile();
     void setLoop(bool bLoop);
     bool isLoop();
-    
+
     /// @{
     /// @name implement Playable Protocol
     // play the effect sound path in _filePath
@@ -122,9 +124,9 @@ private:
     std::string _filePath;
     bool _loop;
 
-    unsigned int _startedSoundId; // !playing sound id from start(), not playEffect
+    unsigned int _startedSoundId;  // !playing sound id from start(), not playEffect
 };
 
-}
+}  // namespace cocostudio
 
 #endif  // __CC_EXTENTIONS_CCCOMAUDIO_H__

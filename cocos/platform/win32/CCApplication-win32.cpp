@@ -43,15 +43,13 @@ static void PVRFrameEnableControlWindow(bool bEnable);
 NS_CC_BEGIN
 
 // sharedApplication pointer
-Application * Application::sm_pSharedApplication = nullptr;
+Application* Application::sm_pSharedApplication = nullptr;
 
-Application::Application()
-: _instance(nullptr)
-, _accelTable(nullptr)
+Application::Application() : _instance(nullptr), _accelTable(nullptr)
 {
-    _instance    = GetModuleHandle(nullptr);
+    _instance                   = GetModuleHandle(nullptr);
     _animationInterval.QuadPart = 0;
-    CC_ASSERT(! sm_pSharedApplication);
+    CC_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
 }
 
@@ -68,7 +66,7 @@ int Application::run()
     ///////////////////////////////////////////////////////////////////////////
     /////////////// changing timer resolution
     ///////////////////////////////////////////////////////////////////////////
-    UINT TARGET_RESOLUTION = 1; // 1 millisecond target resolution
+    UINT TARGET_RESOLUTION = 1;  // 1 millisecond target resolution
     TIMECAPS tc;
     UINT wTimerRes = 0;
     if (TIMERR_NOERROR == timeGetDevCaps(&tc, sizeof(TIMECAPS)))
@@ -92,18 +90,18 @@ int Application::run()
     }
 
     auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
+    auto glview   = director->getOpenGLView();
 
     // Retain glview to avoid glview being released in the while loop
     glview->retain();
 
     LONGLONG interval = 0LL;
-    LONG waitMS = 0L;
+    LONG waitMS       = 0L;
 
     LARGE_INTEGER freq;
     QueryPerformanceFrequency(&freq);
 
-    while(!glview->windowShouldClose())
+    while (!glview->windowShouldClose())
     {
         QueryPerformanceCounter(&nNow);
         interval = nNow.QuadPart - nLast.QuadPart;
@@ -164,82 +162,82 @@ Application* Application::getInstance()
 LanguageType Application::getCurrentLanguage()
 {
     LanguageType ret = LanguageType::ENGLISH;
-    
-    LCID localeID = GetUserDefaultLCID();
+
+    LCID localeID                    = GetUserDefaultLCID();
     unsigned short primaryLanguageID = localeID & 0xFF;
-    
+
     switch (primaryLanguageID)
     {
-        case LANG_CHINESE:
-            ret = LanguageType::CHINESE;
-            break;
-        case LANG_ENGLISH:
-            ret = LanguageType::ENGLISH;
-            break;
-        case LANG_FRENCH:
-            ret = LanguageType::FRENCH;
-            break;
-        case LANG_ITALIAN:
-            ret = LanguageType::ITALIAN;
-            break;
-        case LANG_GERMAN:
-            ret = LanguageType::GERMAN;
-            break;
-        case LANG_SPANISH:
-            ret = LanguageType::SPANISH;
-            break;
-        case LANG_DUTCH:
-            ret = LanguageType::DUTCH;
-            break;
-        case LANG_RUSSIAN:
-            ret = LanguageType::RUSSIAN;
-            break;
-        case LANG_KOREAN:
-            ret = LanguageType::KOREAN;
-            break;
-        case LANG_JAPANESE:
-            ret = LanguageType::JAPANESE;
-            break;
-        case LANG_HUNGARIAN:
-            ret = LanguageType::HUNGARIAN;
-            break;
-        case LANG_PORTUGUESE:
-            ret = LanguageType::PORTUGUESE;
-            break;
-        case LANG_ARABIC:
-            ret = LanguageType::ARABIC;
-            break;
-        case LANG_NORWEGIAN:
-            ret = LanguageType::NORWEGIAN;
-            break;
-        case LANG_POLISH:
-            ret = LanguageType::POLISH;
-            break;
-        case LANG_TURKISH:
-            ret = LanguageType::TURKISH;
-            break;
-        case LANG_UKRAINIAN:
-            ret = LanguageType::UKRAINIAN;
-            break;
-        case LANG_ROMANIAN:
-            ret = LanguageType::ROMANIAN;
-            break;
-        case LANG_BULGARIAN:
-            ret = LanguageType::BULGARIAN;
-            break;
-        case LANG_BELARUSIAN:
-            ret = LanguageType::BELARUSIAN;
-            break;
+    case LANG_CHINESE:
+        ret = LanguageType::CHINESE;
+        break;
+    case LANG_ENGLISH:
+        ret = LanguageType::ENGLISH;
+        break;
+    case LANG_FRENCH:
+        ret = LanguageType::FRENCH;
+        break;
+    case LANG_ITALIAN:
+        ret = LanguageType::ITALIAN;
+        break;
+    case LANG_GERMAN:
+        ret = LanguageType::GERMAN;
+        break;
+    case LANG_SPANISH:
+        ret = LanguageType::SPANISH;
+        break;
+    case LANG_DUTCH:
+        ret = LanguageType::DUTCH;
+        break;
+    case LANG_RUSSIAN:
+        ret = LanguageType::RUSSIAN;
+        break;
+    case LANG_KOREAN:
+        ret = LanguageType::KOREAN;
+        break;
+    case LANG_JAPANESE:
+        ret = LanguageType::JAPANESE;
+        break;
+    case LANG_HUNGARIAN:
+        ret = LanguageType::HUNGARIAN;
+        break;
+    case LANG_PORTUGUESE:
+        ret = LanguageType::PORTUGUESE;
+        break;
+    case LANG_ARABIC:
+        ret = LanguageType::ARABIC;
+        break;
+    case LANG_NORWEGIAN:
+        ret = LanguageType::NORWEGIAN;
+        break;
+    case LANG_POLISH:
+        ret = LanguageType::POLISH;
+        break;
+    case LANG_TURKISH:
+        ret = LanguageType::TURKISH;
+        break;
+    case LANG_UKRAINIAN:
+        ret = LanguageType::UKRAINIAN;
+        break;
+    case LANG_ROMANIAN:
+        ret = LanguageType::ROMANIAN;
+        break;
+    case LANG_BULGARIAN:
+        ret = LanguageType::BULGARIAN;
+        break;
+    case LANG_BELARUSIAN:
+        ret = LanguageType::BELARUSIAN;
+        break;
     }
-    
+
     return ret;
 }
 
-const char * Application::getCurrentLanguageCode()
+const char* Application::getCurrentLanguageCode()
 {
-    LANGID lid = GetUserDefaultUILanguage();
+    LANGID lid           = GetUserDefaultUILanguage();
     const LCID locale_id = MAKELCID(lid, SORT_DEFAULT);
-    static char code[3] = { 0 };
+    static char code[3]  = {0};
     GetLocaleInfoA(locale_id, LOCALE_SISO639LANGNAME, code, sizeof(code));
     code[2] = '\0';
     return code;
@@ -252,36 +250,34 @@ Application::Platform Application::getTargetPlatform()
 
 std::string Application::getVersion()
 {
-    char verString[256] = { 0 };
+    char verString[256] = {0};
     TCHAR szVersionFile[MAX_PATH];
     GetModuleFileName(NULL, szVersionFile, MAX_PATH);
-    DWORD  verHandle = NULL;
-    UINT   size = 0;
+    DWORD verHandle = NULL;
+    UINT size       = 0;
     LPBYTE lpBuffer = NULL;
-    DWORD  verSize = GetFileVersionInfoSize(szVersionFile, &verHandle);
-    
+    DWORD verSize   = GetFileVersionInfoSize(szVersionFile, &verHandle);
+
     if (verSize != NULL)
     {
         LPSTR verData = new char[verSize];
-        
+
         if (GetFileVersionInfo(szVersionFile, verHandle, verSize, verData))
         {
-            if (VerQueryValue(verData, L"\\", (VOID FAR* FAR*)&lpBuffer, &size))
+            if (VerQueryValue(verData, L"\\", (VOID FAR * FAR*)&lpBuffer, &size))
             {
                 if (size)
                 {
-                    VS_FIXEDFILEINFO *verInfo = (VS_FIXEDFILEINFO *)lpBuffer;
+                    VS_FIXEDFILEINFO* verInfo = (VS_FIXEDFILEINFO*)lpBuffer;
                     if (verInfo->dwSignature == 0xfeef04bd)
                     {
-                        
+
                         // Doesn't matter if you are on 32 bit or 64 bit,
                         // DWORD is always 32 bits, so first two revision numbers
                         // come from dwFileVersionMS, last two come from dwFileVersionLS
                         sprintf(verString, "%d.%d.%d.%d", (verInfo->dwFileVersionMS >> 16) & 0xffff,
-                                (verInfo->dwFileVersionMS >> 0) & 0xffff,
-                                (verInfo->dwFileVersionLS >> 16) & 0xffff,
-                                (verInfo->dwFileVersionLS >> 0) & 0xffff
-                                );
+                                (verInfo->dwFileVersionMS >> 0) & 0xffff, (verInfo->dwFileVersionLS >> 16) & 0xffff,
+                                (verInfo->dwFileVersionLS >> 0) & 0xffff);
                     }
                 }
             }
@@ -291,11 +287,11 @@ std::string Application::getVersion()
     return verString;
 }
 
-bool Application::openURL(const std::string &url)
+bool Application::openURL(const std::string& url)
 {
     std::wstring wURL = ntcvt::from_chars(url, CP_UTF8);
     HINSTANCE r       = ShellExecuteW(NULL, L"open", wURL.c_str(), NULL, NULL, SW_SHOWNORMAL);
-    return (size_t)r>32;
+    return (size_t)r > 32;
 }
 
 void Application::setResourceRootPath(const std::string& rootResDir)
@@ -306,7 +302,7 @@ void Application::setResourceRootPath(const std::string& rootResDir)
     {
         _resourceRootPath += '/';
     }
-    FileUtils* pFileUtils = FileUtils::getInstance();
+    FileUtils* pFileUtils                = FileUtils::getInstance();
     std::vector<std::string> searchPaths = pFileUtils->getSearchPaths();
     searchPaths.insert(searchPaths.begin(), _resourceRootPath);
     pFileUtils->setSearchPaths(searchPaths);
@@ -333,15 +329,8 @@ static void PVRFrameEnableControlWindow(bool bEnable)
     HKEY hKey = 0;
 
     // Open PVRFrame control key, if not exist create it.
-    if(ERROR_SUCCESS != RegCreateKeyExW(HKEY_CURRENT_USER,
-        L"Software\\Imagination Technologies\\PVRVFRame\\STARTUP\\",
-        0,
-        0,
-        REG_OPTION_NON_VOLATILE,
-        KEY_ALL_ACCESS,
-        0,
-        &hKey,
-        nullptr))
+    if (ERROR_SUCCESS != RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\Imagination Technologies\\PVRVFRame\\STARTUP\\",
+                                         0, 0, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 0, &hKey, nullptr))
     {
         return;
     }
@@ -349,12 +338,12 @@ static void PVRFrameEnableControlWindow(bool bEnable)
     using namespace cxx17;
 
     const WCHAR* wszValue = L"hide_gui";
-    const auto svNewData = (bEnable) ? L"NO"_sv : L"YES"_sv;
+    const auto svNewData  = (bEnable) ? L"NO"_sv : L"YES"_sv;
     WCHAR wszOldData[256] = {0};
-    DWORD dwSize            = static_cast<DWORD>(sizeof(wszOldData));
-    LSTATUS status = RegQueryValueExW(hKey, wszValue, 0, nullptr, (LPBYTE)wszOldData, &dwSize);
-    if (ERROR_FILE_NOT_FOUND == status              // the key not exist
-        || (ERROR_SUCCESS == status                 // or the hide_gui value is exist
+    DWORD dwSize          = static_cast<DWORD>(sizeof(wszOldData));
+    LSTATUS status        = RegQueryValueExW(hKey, wszValue, 0, nullptr, (LPBYTE)wszOldData, &dwSize);
+    if (ERROR_FILE_NOT_FOUND == status    // the key not exist
+        || (ERROR_SUCCESS == status       // or the hide_gui value is exist
             && svNewData != wszOldData))  // but new data and old data not equal
     {
         dwSize = static_cast<DWORD>(sizeof(WCHAR) * (svNewData.length() + 1));
