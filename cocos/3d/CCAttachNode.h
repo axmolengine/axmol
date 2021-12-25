@@ -36,7 +36,7 @@ NS_CC_BEGIN
  */
 class Bone3D;
 
-/** 
+/**
  * @brief attach a node to a bone
  * usage: auto sprite = Sprite3D::create("girl.c3b");
  *        auto weapon = Sprite3D::create("weapon.c3b");
@@ -46,31 +46,31 @@ class Bone3D;
 class CC_DLL AttachNode : public Node
 {
 public:
-    /** 
+    /**
      * creates an AttachNode
-     * @param attachBone The bone to which the AttachNode is going to attach, the attacheBone must be a bone of the AttachNode's parent
+     * @param attachBone The bone to which the AttachNode is going to attach, the attacheBone must be a bone of the
+     * AttachNode's parent
      */
     static AttachNode* create(Bone3D* attachBone);
-    
-    //override
+
+    // override
     virtual Mat4 getWorldToNodeTransform() const override;
     virtual Mat4 getNodeToWorldTransform() const override;
     virtual const Mat4& getNodeToParentTransform() const override;
-    virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    
-    AttachNode();
+    CC_CONSTRUCTOR_ACCESS :
+
+        AttachNode();
     virtual ~AttachNode();
-    
 
 protected:
     Bone3D* _attachBone;
-    mutable Mat4    _transformToParent;
+    mutable Mat4 _transformToParent;
 };
 
 // end of 3d group
 /// @}
 
 NS_CC_END
-#endif // __CCATTACHNODE_H__
+#endif  // __CCATTACHNODE_H__

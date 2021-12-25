@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,11 +33,7 @@ NS_CC_BEGIN
 const float PUSphereSurfaceEmitter::DEFAULT_RADIUS = 10.0f;
 
 //-----------------------------------------------------------------------
-PUSphereSurfaceEmitter::PUSphereSurfaceEmitter() : 
-    PUEmitter(),
-    _radius(DEFAULT_RADIUS)
-{
-}
+PUSphereSurfaceEmitter::PUSphereSurfaceEmitter() : PUEmitter(), _radius(DEFAULT_RADIUS) {}
 //-----------------------------------------------------------------------
 float PUSphereSurfaceEmitter::getRadius() const
 {
@@ -55,17 +51,20 @@ void PUSphereSurfaceEmitter::initParticlePosition(PUParticle3D* particle)
     // also used as direction vector if mAutoDirection has been set.
     _randomVector.set(CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1());
     _randomVector.normalize();
-    //ParticleSystem* sys = mParentTechnique->getParentSystem();
-    //if (sys)
+    // ParticleSystem* sys = mParentTechnique->getParentSystem();
+    // if (sys)
     {
         Mat4 rotMat;
-        Mat4::createRotation(static_cast<PUParticleSystem3D *>(_particleSystem)->getDerivedOrientation(), &rotMat);
-        particle->position = getDerivedPosition() + rotMat * (Vec3(_emitterScale.x * _randomVector.x, _emitterScale.y * _randomVector.y, _emitterScale.z * _randomVector.z) * _radius);
+        Mat4::createRotation(static_cast<PUParticleSystem3D*>(_particleSystem)->getDerivedOrientation(), &rotMat);
+        particle->position =
+            getDerivedPosition() + rotMat * (Vec3(_emitterScale.x * _randomVector.x, _emitterScale.y * _randomVector.y,
+                                                  _emitterScale.z * _randomVector.z) *
+                                             _radius);
     }
-    //else
+    // else
     //{
     //	particle->position = getDerivedPosition() + (_mEmitterScale * _randomVector * _radius);
-    //}
+    // }
     particle->originalPosition = particle->position;
 }
 //-----------------------------------------------------------------------
@@ -79,13 +78,13 @@ void PUSphereSurfaceEmitter::initParticleDirection(PUParticle3D* particle)
         generateAngle(angle);
         if (angle != 0.0f)
         {
-            //particle->direction = _randomVector.randomDeviant(angle, mUpVector);
-            particle->direction = PUUtil::randomDeviant(_randomVector, angle, _upVector);
+            // particle->direction = _randomVector.randomDeviant(angle, mUpVector);
+            particle->direction         = PUUtil::randomDeviant(_randomVector, angle, _upVector);
             particle->originalDirection = particle->direction;
         }
         else
         {
-            particle->direction = _randomVector;
+            particle->direction         = _randomVector;
             particle->originalDirection = particle->direction;
         }
     }
@@ -103,12 +102,12 @@ PUSphereSurfaceEmitter* PUSphereSurfaceEmitter::create()
     return pe;
 }
 
-void PUSphereSurfaceEmitter::copyAttributesTo( PUEmitter* emitter )
+void PUSphereSurfaceEmitter::copyAttributesTo(PUEmitter* emitter)
 {
     PUEmitter::copyAttributesTo(emitter);
 
     PUSphereSurfaceEmitter* sphereSurfaceEmitter = static_cast<PUSphereSurfaceEmitter*>(emitter);
-    sphereSurfaceEmitter->_radius = _radius;
+    sphereSurfaceEmitter->_radius                = _radius;
 }
 
 PUSphereSurfaceEmitter* PUSphereSurfaceEmitter::clone()

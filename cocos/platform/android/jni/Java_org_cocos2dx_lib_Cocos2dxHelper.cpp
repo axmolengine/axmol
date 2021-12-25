@@ -34,15 +34,15 @@ THE SOFTWARE.
 
 #include "base/ccUTF8.h"
 
-#define  LOG_TAG    "Java_org_cocos2dx_lib_Cocos2dxHelper.cpp"
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define LOG_TAG "Java_org_cocos2dx_lib_Cocos2dxHelper.cpp"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 static const std::string className = "org.cocos2dx.lib.Cocos2dxHelper";
 
 static EditTextCallback s_editTextCallback = nullptr;
-static void* s_ctx = nullptr;
+static void* s_ctx                         = nullptr;
 
-static int __deviceSampleRate = 44100;
+static int __deviceSampleRate              = 44100;
 static int __deviceAudioBufferSizeInFrames = 192;
 
 static std::string g_apkPath;
@@ -52,56 +52,78 @@ using namespace std;
 
 extern "C" {
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetContext(JNIEnv*  env, jclass, jobject context, jobject assetManager) {
-        JniHelper::setClassLoaderFrom(context);
-        FileUtilsAndroid::setassetmanager(AAssetManager_fromJava(env, assetManager));
-    }
+JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetContext(JNIEnv* env,
+                                                                             jclass,
+                                                                             jobject context,
+                                                                             jobject assetManager)
+{
+    JniHelper::setClassLoaderFrom(context);
+    FileUtilsAndroid::setassetmanager(AAssetManager_fromJava(env, assetManager));
+}
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetAudioDeviceInfo(JNIEnv* , jclass, jboolean isSupportLowLatency, jint deviceSampleRate, jint deviceAudioBufferSizeInFrames) {
-        __deviceSampleRate = deviceSampleRate;
-        __deviceAudioBufferSizeInFrames = deviceAudioBufferSizeInFrames;
-        LOGD("nativeSetAudioDeviceInfo: sampleRate: %d, bufferSizeInFrames: %d", __deviceSampleRate, __deviceAudioBufferSizeInFrames);
-    }
+JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetAudioDeviceInfo(JNIEnv*,
+                                                                                     jclass,
+                                                                                     jboolean isSupportLowLatency,
+                                                                                     jint deviceSampleRate,
+                                                                                     jint deviceAudioBufferSizeInFrames)
+{
+    __deviceSampleRate              = deviceSampleRate;
+    __deviceAudioBufferSizeInFrames = deviceAudioBufferSizeInFrames;
+    LOGD("nativeSetAudioDeviceInfo: sampleRate: %d, bufferSizeInFrames: %d", __deviceSampleRate,
+         __deviceAudioBufferSizeInFrames);
+}
 
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetEditTextDialogResult(JNIEnv* env, jclass, jbyteArray text) {
-        jsize  size = env->GetArrayLength(text);
+JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetEditTextDialogResult(JNIEnv* env,
+                                                                                          jclass,
+                                                                                          jbyteArray text)
+{
+    jsize size = env->GetArrayLength(text);
 
-        if (size > 0) {
-            jbyte * data = (jbyte*)env->GetByteArrayElements(text, 0);
-            char* buffer = (char*)malloc(size+1);
-            if (buffer != nullptr) {
-                memcpy(buffer, data, size);
-                buffer[size] = '\0';
-                // pass data to edittext's delegate
-                if (s_editTextCallback) s_editTextCallback(buffer, s_ctx);
-                free(buffer);
-            }
-            env->ReleaseByteArrayElements(text, data, 0);
-        } else {
-            if (s_editTextCallback) s_editTextCallback("", s_ctx);
+    if (size > 0)
+    {
+        jbyte* data  = (jbyte*)env->GetByteArrayElements(text, 0);
+        char* buffer = (char*)malloc(size + 1);
+        if (buffer != nullptr)
+        {
+            memcpy(buffer, data, size);
+            buffer[size] = '\0';
+            // pass data to edittext's delegate
+            if (s_editTextCallback)
+                s_editTextCallback(buffer, s_ctx);
+            free(buffer);
         }
+        env->ReleaseByteArrayElements(text, data, 0);
     }
-
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeRunOnGLThread(JNIEnv* env, jclass, jobject runnable) {
-        using jobject_type = std::remove_pointer_t<jobject>;
-        struct jobject_delete {
-            void operator()(jobject_type* __ptr) const _NOEXCEPT {
-                JniHelper::getEnv()->DeleteGlobalRef(__ptr);
-            }
-        };
-
-        cocos2d::Director::getInstance()->getScheduler()->performFunctionInCocosThread([wrap = std::make_shared<std::unique_ptr<jobject_type, jobject_delete>>(env->NewGlobalRef(runnable))]{
-            auto curEnv = JniHelper::getEnv();
-
-            JniMethodInfo mi;
-            if(JniHelper::getMethodInfo(mi, "java/lang/Runnable", "run", "()V")){
-                curEnv->CallVoidMethod(wrap.get()->get(), mi.methodID);
-            }
-        });
+    else
+    {
+        if (s_editTextCallback)
+            s_editTextCallback("", s_ctx);
     }
 }
 
-const char * getApkPath() {
+JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeRunOnGLThread(JNIEnv* env, jclass, jobject runnable)
+{
+    using jobject_type = std::remove_pointer_t<jobject>;
+    struct jobject_delete
+    {
+        void operator()(jobject_type* __ptr) const _NOEXCEPT { JniHelper::getEnv()->DeleteGlobalRef(__ptr); }
+    };
+
+    cocos2d::Director::getInstance()->getScheduler()->performFunctionInCocosThread(
+        [wrap = std::make_shared<std::unique_ptr<jobject_type, jobject_delete>>(env->NewGlobalRef(runnable))] {
+            auto curEnv = JniHelper::getEnv();
+
+            JniMethodInfo mi;
+            if (JniHelper::getMethodInfo(mi, "java/lang/Runnable", "run", "()V"))
+            {
+                curEnv->CallVoidMethod(wrap.get()->get(), mi.methodID);
+            }
+        });
+}
+}
+
+const char* getApkPath()
+{
     if (g_apkPath.empty())
     {
         g_apkPath = JniHelper::callStaticStringMethod(className, "getAssetsPath");
@@ -110,32 +132,38 @@ const char * getApkPath() {
     return g_apkPath.c_str();
 }
 
-std::string getPackageNameJNI() {
+std::string getPackageNameJNI()
+{
     return JniHelper::callStaticStringMethod(className, "getCocos2dxPackageName");
 }
 
-int getObbAssetFileDescriptorJNI(const char* path, int64_t* startOffset, int64_t* size) {
+int getObbAssetFileDescriptorJNI(const char* path, int64_t* startOffset, int64_t* size)
+{
     JniMethodInfo methodInfo;
     int fd = 0;
-    
-    if (JniHelper::getStaticMethodInfo(methodInfo, className.c_str(), "getObbAssetFileDescriptor", "(Ljava/lang/String;)[J")) {
+
+    if (JniHelper::getStaticMethodInfo(methodInfo, className.c_str(), "getObbAssetFileDescriptor",
+                                       "(Ljava/lang/String;)[J"))
+    {
         jstring stringArg = methodInfo.env->NewStringUTF(path);
-        jlongArray newArray = (jlongArray)methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID, stringArg);
+        jlongArray newArray =
+            (jlongArray)methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID, stringArg);
         jsize theArrayLen = methodInfo.env->GetArrayLength(newArray);
-        
-        if (theArrayLen == 3) {
+
+        if (theArrayLen == 3)
+        {
             jboolean copy = JNI_FALSE;
-            jlong *array = methodInfo.env->GetLongArrayElements(newArray, &copy);
-            fd = static_cast<int>(array[0]);
-            *startOffset = array[1];
-            *size = array[2];
+            jlong* array  = methodInfo.env->GetLongArrayElements(newArray, &copy);
+            fd            = static_cast<int>(array[0]);
+            *startOffset  = array[1];
+            *size         = array[2];
             methodInfo.env->ReleaseLongArrayElements(newArray, array, 0);
         }
-        
+
         methodInfo.env->DeleteLocalRef(methodInfo.classID);
         methodInfo.env->DeleteLocalRef(stringArg);
     }
-    
+
     return fd;
 }
 
@@ -153,14 +181,17 @@ void conversionEncodingJNI(const char* src, int byteSize, const char* fromCharse
 {
     JniMethodInfo methodInfo;
 
-    if (JniHelper::getStaticMethodInfo(methodInfo, className.c_str(), "conversionEncoding", "([BLjava/lang/String;Ljava/lang/String;)[B")) {
+    if (JniHelper::getStaticMethodInfo(methodInfo, className.c_str(), "conversionEncoding",
+                                       "([BLjava/lang/String;Ljava/lang/String;)[B"))
+    {
         jbyteArray strArray = methodInfo.env->NewByteArray(byteSize);
         methodInfo.env->SetByteArrayRegion(strArray, 0, byteSize, reinterpret_cast<const jbyte*>(src));
 
         jstring stringArg1 = methodInfo.env->NewStringUTF(fromCharset);
         jstring stringArg2 = methodInfo.env->NewStringUTF(newCharset);
 
-        jbyteArray newArray = (jbyteArray)methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID, strArray, stringArg1, stringArg2);
+        jbyteArray newArray = (jbyteArray)methodInfo.env->CallStaticObjectMethod(
+            methodInfo.classID, methodInfo.methodID, strArray, stringArg1, stringArg2);
         jsize theArrayLen = methodInfo.env->GetArrayLength(newArray);
         methodInfo.env->GetByteArrayRegion(newArray, 0, theArrayLen, (jbyte*)dst);
 

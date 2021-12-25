@@ -40,11 +40,11 @@ class EventListenerCustom;
 class EventCustom;
 class Material;
 
-//it is a common mesh
+// it is a common mesh
 class CC_DLL MeshCommand : public CustomCommand
 {
 public:
-    //using PrimitiveType = backend::PrimitiveType;
+    // using PrimitiveType = backend::PrimitiveType;
     /**
     Buffer usage of vertex/index buffer. If the contents is not updated every frame,
     then use STATIC, other use DYNAMIC.
@@ -60,7 +60,7 @@ public:
     virtual ~MeshCommand();
 
     MeshCommand(const MeshCommand&) = default;
-    MeshCommand(MeshCommand&&) = default;
+    MeshCommand(MeshCommand&&)      = default;
 
     MeshCommand& operator=(MeshCommand&&) = default;
     MeshCommand& operator=(const MeshCommand&) = default;
@@ -71,7 +71,7 @@ public:
     */
     void init(float globalZOrder);
 
-    void init(float globalZOrder, const Mat4 &transform);
+    void init(float globalZOrder, const Mat4& transform);
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     void listenRendererRecreated(EventCustom* event);
@@ -84,4 +84,3 @@ protected:
 };
 
 NS_CC_END
-

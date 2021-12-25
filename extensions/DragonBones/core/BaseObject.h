@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -28,7 +28,8 @@
 DRAGONBONES_NAMESPACE_BEGIN
 /**
  * - The BaseObject is the base class for all objects in the DragonBones framework.
- * All BaseObject instances are cached to the object pool to reduce the performance consumption of frequent requests for memory or memory recovery.
+ * All BaseObject instances are cached to the object pool to reduce the performance consumption of frequent requests for
+ * memory or memory recovery.
  * @version DragonBones 4.5
  * @language en_US
  */
@@ -45,7 +46,7 @@ private:
     static unsigned _defaultMaxCount;
     static std::map<std::size_t, unsigned> _maxCountMap;
     static std::map<std::size_t, std::vector<BaseObject*>> _poolsMap;
-    static void _returnObject(BaseObject *object);
+    static void _returnObject(BaseObject* object);
 
 public:
     /**
@@ -76,7 +77,7 @@ public:
      * @language zh_CN
      */
     static void clearPool(std::size_t classTypeIndex = 0);
-    template<typename T>
+    template <typename T>
     /**
      * - Get an instance of the specify class from object pool.
      * @param objectConstructor - The specify class.
@@ -89,10 +90,10 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    static T* borrowObject() 
+    static T* borrowObject()
     {
         const auto classTypeIndex = T::getTypeIndex();
-        const auto iterator = _poolsMap.find(classTypeIndex);
+        const auto iterator       = _poolsMap.find(classTypeIndex);
         if (iterator != _poolsMap.end())
         {
             auto& pool = iterator->second;
@@ -130,10 +131,7 @@ public:
     virtual ~BaseObject() {}
 
 protected:
-    BaseObject() :
-        hashCode(BaseObject::_hashCode++),
-        _isInPool(false)
-    {}
+    BaseObject() : hashCode(BaseObject::_hashCode++), _isInPool(false) {}
 
     virtual void _onClear() = 0;
 
@@ -153,4 +151,4 @@ public:
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_BASE_OBJECT_H
+#endif  // DRAGONBONES_BASE_OBJECT_H

@@ -30,33 +30,32 @@
 NS_CC_BEGIN
 
 // ObjectAbstractNode
-PUObjectAbstractNode::PUObjectAbstractNode(PUAbstractNode *ptr)
-:PUAbstractNode(ptr), id(0), abstract(false)
+PUObjectAbstractNode::PUObjectAbstractNode(PUAbstractNode* ptr) : PUAbstractNode(ptr), id(0), abstract(false)
 {
     type = ANT_OBJECT;
 }
 
-PUAbstractNode *PUObjectAbstractNode::clone() const
+PUAbstractNode* PUObjectAbstractNode::clone() const
 {
-    PUObjectAbstractNode *node = new PUObjectAbstractNode(parent);
-    node->file = file;
-    node->line = line;
-    node->type = type;
-    node->name = name;
-    node->cls = cls;
-    node->id = id;
-    node->abstract = abstract;
-    node->context = context;
-    for(PUAbstractNodeList::const_iterator i = children.begin(); i != children.end(); ++i)
+    PUObjectAbstractNode* node = new PUObjectAbstractNode(parent);
+    node->file                 = file;
+    node->line                 = line;
+    node->type                 = type;
+    node->name                 = name;
+    node->cls                  = cls;
+    node->id                   = id;
+    node->abstract             = abstract;
+    node->context              = context;
+    for (PUAbstractNodeList::const_iterator i = children.begin(); i != children.end(); ++i)
     {
         PUAbstractNode* newNode = (PUAbstractNode*)((*i)->clone());
-        newNode->parent = (PUAbstractNode*)node;
+        newNode->parent         = (PUAbstractNode*)node;
         node->children.push_back(newNode);
     }
-    for(PUAbstractNodeList::const_iterator i = values.begin(); i != values.end(); ++i)
+    for (PUAbstractNodeList::const_iterator i = values.begin(); i != values.end(); ++i)
     {
         PUAbstractNode* newNode = (PUAbstractNode*)((*i)->clone());
-        newNode->parent = (PUAbstractNode*)node;
+        newNode->parent         = (PUAbstractNode*)node;
         node->values.push_back(newNode);
     }
     node->_env = _env;
@@ -68,75 +67,74 @@ std::string PUObjectAbstractNode::getValue() const
     return cls;
 }
 
-void PUObjectAbstractNode::addVariable(const std::string &inName)
+void PUObjectAbstractNode::addVariable(const std::string& inName)
 {
     _env.emplace(inName, "");
 }
 
-void PUObjectAbstractNode::setVariable(const std::string &inName, const std::string &value)
+void PUObjectAbstractNode::setVariable(const std::string& inName, const std::string& value)
 {
     _env[inName] = value;
 }
 
-
-std::pair<bool,std::string> PUObjectAbstractNode::getVariable(const std::string &inName) const
+std::pair<bool, std::string> PUObjectAbstractNode::getVariable(const std::string& inName) const
 {
-    std::unordered_map<std::string,std::string>::const_iterator i = _env.find(inName);
-    if(i != _env.end())
+    std::unordered_map<std::string, std::string>::const_iterator i = _env.find(inName);
+    if (i != _env.end())
         return std::make_pair(true, i->second);
 
-    PUObjectAbstractNode *parentNode = (PUObjectAbstractNode*)this->parent;
-    while(parentNode)
+    PUObjectAbstractNode* parentNode = (PUObjectAbstractNode*)this->parent;
+    while (parentNode)
     {
         i = parentNode->_env.find(inName);
-        if(i != parentNode->_env.end())
+        if (i != parentNode->_env.end())
             return std::make_pair(true, i->second);
         parentNode = (PUObjectAbstractNode*)parentNode->parent;
     }
     return std::make_pair(false, "");
 }
 
-const std::unordered_map<std::string,std::string> &PUObjectAbstractNode::getVariables() const
+const std::unordered_map<std::string, std::string>& PUObjectAbstractNode::getVariables() const
 {
     return _env;
 }
 
 PUObjectAbstractNode::~PUObjectAbstractNode()
 {
-    for (auto iter : children){
+    for (auto iter : children)
+    {
         delete iter;
     }
 
-    for (auto iter : values){
+    for (auto iter : values)
+    {
         delete iter;
     }
 
-    for (auto iter : overrides){
+    for (auto iter : overrides)
+    {
         delete iter;
     }
 }
 
-
-
 // PropertyAbstractNode//
-PUPropertyAbstractNode::PUPropertyAbstractNode(PUAbstractNode *ptr)
-:PUAbstractNode(ptr), id(0)
+PUPropertyAbstractNode::PUPropertyAbstractNode(PUAbstractNode* ptr) : PUAbstractNode(ptr), id(0)
 {
     type = ANT_PROPERTY;
 }
 
-PUAbstractNode *PUPropertyAbstractNode::clone() const
+PUAbstractNode* PUPropertyAbstractNode::clone() const
 {
-    PUPropertyAbstractNode *node = new PUPropertyAbstractNode(parent);
-    node->file = file;
-    node->line = line;
-    node->type = type;
-    node->name = name;
-    node->id = id;
-    for(PUAbstractNodeList::const_iterator i = values.begin(); i != values.end(); ++i)
+    PUPropertyAbstractNode* node = new PUPropertyAbstractNode(parent);
+    node->file                   = file;
+    node->line                   = line;
+    node->type                   = type;
+    node->name                   = name;
+    node->id                     = id;
+    for (PUAbstractNodeList::const_iterator i = values.begin(); i != values.end(); ++i)
     {
         PUAbstractNode* newNode = (PUAbstractNode*)((*i)->clone());
-        newNode->parent = (PUAbstractNode*)node;
+        newNode->parent         = (PUAbstractNode*)node;
         node->values.push_back(newNode);
     }
     return (PUAbstractNode*)node;
@@ -149,26 +147,25 @@ std::string PUPropertyAbstractNode::getValue() const
 
 PUPropertyAbstractNode::~PUPropertyAbstractNode()
 {
-    for (auto iter : values){
+    for (auto iter : values)
+    {
         delete iter;
     }
 }
 
-
-PUAtomAbstractNode::PUAtomAbstractNode(PUAbstractNode *ptr)
-:PUAbstractNode(ptr), id(0)
+PUAtomAbstractNode::PUAtomAbstractNode(PUAbstractNode* ptr) : PUAbstractNode(ptr), id(0)
 {
     type = ANT_ATOM;
 }
 
-PUAbstractNode *PUAtomAbstractNode::clone() const
+PUAbstractNode* PUAtomAbstractNode::clone() const
 {
-    PUAtomAbstractNode *node = new PUAtomAbstractNode(parent);
-    node->file = file;
-    node->line = line;
-    node->id = id;
-    node->type = type;
-    node->value = value;
+    PUAtomAbstractNode* node = new PUAtomAbstractNode(parent);
+    node->file               = file;
+    node->line               = line;
+    node->id                 = id;
+    node->type               = type;
+    node->value              = value;
     return node;
 }
 
@@ -177,53 +174,52 @@ std::string PUAtomAbstractNode::getValue() const
     return value;
 }
 
-
-
-
-PUScriptCompiler::PUScriptCompiler():_current(nullptr),_nodes(nullptr), _PUParticleSystem3D(nullptr)
-{
-}
+PUScriptCompiler::PUScriptCompiler() : _current(nullptr), _nodes(nullptr), _PUParticleSystem3D(nullptr) {}
 PUScriptCompiler::~PUScriptCompiler()
 {
-    for (const auto& iter : _compiledScripts){
-        for (auto miter : iter.second){
+    for (const auto& iter : _compiledScripts)
+    {
+        for (auto miter : iter.second)
+        {
             delete miter;
         }
     }
     _compiledScripts.clear();
 }
 
-bool PUScriptCompiler::compile(const PUConcreteNodeList &nodes, const std::string &file)
+bool PUScriptCompiler::compile(const PUConcreteNodeList& nodes, const std::string& file)
 {
-    if (nodes.empty()) return false;
+    if (nodes.empty())
+        return false;
 
     PUAbstractNodeList aNodes;
-    convertToAST(nodes,aNodes);
+    convertToAST(nodes, aNodes);
 
     _compiledScripts[file] = aNodes;
-    //for(PUAbstractNodeList::iterator i = aNodes.begin(); i != aNodes.end(); ++i)
+    // for(PUAbstractNodeList::iterator i = aNodes.begin(); i != aNodes.end(); ++i)
     //{
-    //    PUScriptTranslator *translator = PUTranslateManager::Instance()->getTranslator(*i);
-    //    if(translator){
-    //        if (translator->isParticleSystemTranslator())
-    //        {
-    //            PUParticleSystem3DTranslator *ps = static_cast<PUParticleSystem3DTranslator *>(translator);
-    //            if (ps) ps->setParticleSystem3D(_PUParticleSystem3D);
-    //        }
-    //        translator->translate(this, *i);
-    //    }
-    //}
+    //     PUScriptTranslator *translator = PUTranslateManager::Instance()->getTranslator(*i);
+    //     if(translator){
+    //         if (translator->isParticleSystemTranslator())
+    //         {
+    //             PUParticleSystem3DTranslator *ps = static_cast<PUParticleSystem3DTranslator *>(translator);
+    //             if (ps) ps->setParticleSystem3D(_PUParticleSystem3D);
+    //         }
+    //         translator->translate(this, *i);
+    //     }
+    // }
 
-    //for (auto iter : aNodes){
-    //    delete iter;
-    //}
+    // for (auto iter : aNodes){
+    //     delete iter;
+    // }
     return true;
 }
 
-const PUAbstractNodeList* PUScriptCompiler::compile(const std::string &file, bool &isFirstCompile)
+const PUAbstractNodeList* PUScriptCompiler::compile(const std::string& file, bool& isFirstCompile)
 {
     auto iter = _compiledScripts.find(file);
-    if (iter != _compiledScripts.end()){
+    if (iter != _compiledScripts.end())
+    {
         isFirstCompile = false;
         return &iter->second;
     }
@@ -237,28 +233,29 @@ const PUAbstractNodeList* PUScriptCompiler::compile(const std::string &file, boo
     parser.parse(creteNodeList, tokenList);
     bool state = compile(creteNodeList, file);
 
-    for (auto iter1 : creteNodeList){
+    for (auto iter1 : creteNodeList)
+    {
         delete iter1;
     }
 
-    for (auto iter2 : tokenList){
+    for (auto iter2 : tokenList)
+    {
         delete iter2;
     }
 
     isFirstCompile = true;
-    if (state){
+    if (state)
+    {
         return &_compiledScripts[file];
     }
     return nullptr;
 }
 
-
-
-void PUScriptCompiler::convertToAST(const PUConcreteNodeList &nodes,PUAbstractNodeList &aNodes)
+void PUScriptCompiler::convertToAST(const PUConcreteNodeList& nodes, PUAbstractNodeList& aNodes)
 {
 
     _current = NULL;
-    _nodes = &aNodes;
+    _nodes   = &aNodes;
     visitList(nodes);
 }
 
@@ -271,93 +268,91 @@ void PUScriptCompiler::convertToAST(const PUConcreteNodeList &nodes,PUAbstractNo
 //    CNT_RBRACE,need handle
 //    CNT_COLON
 
-void PUScriptCompiler::visitList(const PUConcreteNodeList &nodes)
+void PUScriptCompiler::visitList(const PUConcreteNodeList& nodes)
 {
-    for(const auto& node : nodes)
+    for (const auto& node : nodes)
     {
         this->visit(node);
     }
 }
 
-
-void PUScriptCompiler::visit(PUConcreteNode *node)
+void PUScriptCompiler::visit(PUConcreteNode* node)
 {
     PUAbstractNode* asn = NULL;
 
     // Handle properties and objects here
-    if(!node->children.empty())
+    if (!node->children.empty())
     {
         // Grab the last two nodes
-        PUConcreteNode* temp1 = NULL;
-        PUConcreteNode* temp2 = NULL;
+        PUConcreteNode* temp1                     = NULL;
+        PUConcreteNode* temp2                     = NULL;
         PUConcreteNodeList::reverse_iterator iter = node->children.rbegin();
-        if(iter != node->children.rend())
+        if (iter != node->children.rend())
         {
             temp1 = *iter;
             ++iter;
         }
-        if(iter != node->children.rend())
+        if (iter != node->children.rend())
             temp2 = *iter;
 
-
-        //brance inner
-        if(temp1 && temp1->type == CNT_RBRACE && temp2 && temp2->type == CNT_LBRACE)
+        // brance inner
+        if (temp1 && temp1->type == CNT_RBRACE && temp2 && temp2->type == CNT_LBRACE)
         {
 
-            if(node->children.size() < 2)
+            if (node->children.size() < 2)
             {
                 return;
             }
 
-            PUObjectAbstractNode *impl = new  PUObjectAbstractNode(_current);
-            impl->line = node->line;
-            impl->file = node->file;
-            impl->abstract = false;
+            PUObjectAbstractNode* impl = new PUObjectAbstractNode(_current);
+            impl->line                 = node->line;
+            impl->file                 = node->file;
+            impl->abstract             = false;
 
             std::list<PUConcreteNode*> temp;
             temp.push_back(node);
-            for(const auto& child : node->children)
+            for (const auto& child : node->children)
             {
                 temp.push_back(child);
             }
 
-            //add brance type//
+            // add brance type//
             PUConcreteNodeList::const_iterator iter1 = temp.begin();
-            impl->cls = (*iter1)->token;
+            impl->cls                                = (*iter1)->token;
             ++iter1;
 
-            //add brance name//
-            if(iter1 != temp.end() && ((*iter1)->type == CNT_WORD))
+            // add brance name//
+            if (iter1 != temp.end() && ((*iter1)->type == CNT_WORD))
             {
                 impl->name = (*iter1)->token;
                 ++iter1;
             }
 
-            while(iter1 != temp.end() && (*iter1)->type != CNT_LBRACE)
+            while (iter1 != temp.end() && (*iter1)->type != CNT_LBRACE)
             {
-                PUAtomAbstractNode *atom = new PUAtomAbstractNode(impl);
-                atom->file = (*iter1)->file;
-                atom->line = (*iter1)->line;
-                atom->type = ANT_ATOM;
-                atom->value = (*iter1)->token;
+                PUAtomAbstractNode* atom = new PUAtomAbstractNode(impl);
+                atom->file               = (*iter1)->file;
+                atom->line               = (*iter1)->line;
+                atom->type               = ANT_ATOM;
+                atom->value              = (*iter1)->token;
                 impl->values.push_back(atom);
                 ++iter1;
             }
 
-            asn = impl;
+            asn      = impl;
             _current = impl;
             visitList(temp2->children);
             _current = impl->parent;
         }
-        //no brance//
+        // no brance//
         else
         {
-            PUPropertyAbstractNode *impl = new PUPropertyAbstractNode(_current);
-            impl->line = node->line;
-            impl->file = node->file;
-            impl->name = node->token;
+            PUPropertyAbstractNode* impl = new PUPropertyAbstractNode(_current);
+            impl->line                   = node->line;
+            impl->file                   = node->file;
+            impl->name                   = node->token;
 
-            asn = impl;
+            asn      = impl;
             _current = impl;
 
             // Visit the children of the {
@@ -369,26 +364,26 @@ void PUScriptCompiler::visit(PUConcreteNode *node)
     }
     else
     {
-        PUAtomAbstractNode *impl = new PUAtomAbstractNode(_current);
-        impl->line = node->line;
-        impl->file = node->file;
-        impl->value = node->token;
-        asn = impl;
+        PUAtomAbstractNode* impl = new PUAtomAbstractNode(_current);
+        impl->line               = node->line;
+        impl->file               = node->file;
+        impl->value              = node->token;
+        asn                      = impl;
     }
 
-    if(asn)
+    if (asn)
     {
-        if(_current)
+        if (_current)
         {
-            if(_current->type == ANT_PROPERTY)
+            if (_current->type == ANT_PROPERTY)
             {
-                PUPropertyAbstractNode *impl = reinterpret_cast<PUPropertyAbstractNode*>(_current);
-                //PUAtomAbstractNode* assd = dynamic_cast<PUAtomAbstractNode*>(asn);
+                PUPropertyAbstractNode* impl = reinterpret_cast<PUPropertyAbstractNode*>(_current);
+                // PUAtomAbstractNode* assd = dynamic_cast<PUAtomAbstractNode*>(asn);
                 impl->values.push_back(asn);
             }
             else
             {
-                PUObjectAbstractNode *impl = reinterpret_cast<PUObjectAbstractNode*>(_current);
+                PUObjectAbstractNode* impl = reinterpret_cast<PUObjectAbstractNode*>(_current);
                 impl->children.push_back(asn);
             }
         }
@@ -399,7 +394,7 @@ void PUScriptCompiler::visit(PUConcreteNode *node)
     }
 }
 
-void PUScriptCompiler::setParticleSystem3D( PUParticleSystem3D *pu )
+void PUScriptCompiler::setParticleSystem3D(PUParticleSystem3D* pu)
 {
     _PUParticleSystem3D = pu;
 }

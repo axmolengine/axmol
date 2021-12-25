@@ -26,15 +26,12 @@ THE SOFTWARE.
 #ifndef __COCOS2DX_LUA_LOADER_H__
 #define __COCOS2DX_LUA_LOADER_H__
 
-
-
-extern "C"
-{
+extern "C" {
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
 
-extern int cocos2dx_lua_loader(lua_State *L);
+extern int cocos2dx_lua_loader(lua_State* L);
 }
 
-#endif // __COCOS2DX_LUA_LOADER_H__
+#endif  // __COCOS2DX_LUA_LOADER_H__

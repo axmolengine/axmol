@@ -32,7 +32,6 @@ THE SOFTWARE.
 
 #include <vector>
 
-
 #include "2d/CCSprite.h"
 #include "2d/CCAutoPolygon.h"
 #include "2d/CCPlistSpriteSheetLoader.h"
@@ -74,11 +73,11 @@ bool SpriteFrameCache::init()
     return true;
 }
 
-SpriteFrameCache::~SpriteFrameCache()
-{
-}
+SpriteFrameCache::~SpriteFrameCache() {}
 
-void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFileName, const std::string& textureFileName, uint32_t spriteSheetFormat)
+void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFileName,
+                                               const std::string& textureFileName,
+                                               uint32_t spriteSheetFormat)
 {
     auto* loader = getSpriteSheetLoader(spriteSheetFormat);
     if (loader)
@@ -87,7 +86,9 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFil
     }
 }
 
-void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFileName, Texture2D* texture, uint32_t spriteSheetFormat)
+void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFileName,
+                                               Texture2D* texture,
+                                               uint32_t spriteSheetFormat)
 {
     auto* loader = getSpriteSheetLoader(spriteSheetFormat);
     if (loader)
@@ -105,7 +106,9 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& spriteSheetFil
     }
 }
 
-void SpriteFrameCache::addSpriteFramesWithFileContent(const Data& content, Texture2D* texture, uint32_t spriteSheetFormat)
+void SpriteFrameCache::addSpriteFramesWithFileContent(const Data& content,
+                                                      Texture2D* texture,
+                                                      uint32_t spriteSheetFormat)
 {
     auto* loader = getSpriteSheetLoader(spriteSheetFormat);
     if (loader)
@@ -124,14 +127,14 @@ void SpriteFrameCache::addSpriteFrame(SpriteFrame* frame, const std::string& fra
     CCASSERT(frame, "frame should not be nil");
 
     const std::string name = "by#addSpriteFrame()";
-    auto&& itr = _spriteSheets.find(name);
+    auto&& itr             = _spriteSheets.find(name);
     if (itr != _spriteSheets.end())
     {
         insertFrame(itr->second, frameName, frame);
     }
     else
     {
-        auto spriteSheet = std::make_shared<SpriteSheet>();
+        auto spriteSheet  = std::make_shared<SpriteSheet>();
         spriteSheet->path = name;
         insertFrame(spriteSheet, frameName, frame);
     }
@@ -177,14 +180,14 @@ void SpriteFrameCache::removeSpriteFrameByName(const std::string& name)
 
 void SpriteFrameCache::removeSpriteFramesFromFile(const std::string& atlasPath)
 {
-    //const auto fullPath = FileUtils::getInstance()->fullPathForFilename(plist);
-    //auto dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);
-    //if (dict.empty())
+    // const auto fullPath = FileUtils::getInstance()->fullPathForFilename(plist);
+    // auto dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);
+    // if (dict.empty())
     //{
-    //    CCLOG("cocos2d:SpriteFrameCache:removeSpriteFramesFromFile: create dict by %s fail.",plist.c_str());
-    //    return;
-    //}
-    //removeSpriteFramesFromDictionary(dict);
+    //     CCLOG("cocos2d:SpriteFrameCache:removeSpriteFramesFromFile: create dict by %s fail.",plist.c_str());
+    //     return;
+    // }
+    // removeSpriteFramesFromDictionary(dict);
 
     // remove it from the cache
     removeSpriteSheet(atlasPath);
@@ -192,7 +195,8 @@ void SpriteFrameCache::removeSpriteFramesFromFile(const std::string& atlasPath)
 
 void SpriteFrameCache::removeSpriteFramesFromFileContent(const std::string& plist_content)
 {
-    auto dict = FileUtils::getInstance()->getValueMapFromData(plist_content.data(), static_cast<int>(plist_content.size()));
+    auto dict =
+        FileUtils::getInstance()->getValueMapFromData(plist_content.data(), static_cast<int>(plist_content.size()));
     if (dict.empty())
     {
         CCLOG("cocos2d:SpriteFrameCache:removeSpriteFramesFromFileContent: create dict by fail.");
@@ -226,7 +230,7 @@ void SpriteFrameCache::removeSpriteFramesFromTexture(Texture2D* texture)
 
     for (auto& iter : getSpriteFrames())
     {
-        auto key = iter.first;
+        auto key    = iter.first;
         auto* frame = findFrame(key);
         if (frame && (frame->getTexture() == texture))
         {
@@ -254,18 +258,19 @@ bool SpriteFrameCache::reloadTexture(const std::string& spriteSheetFileName)
     const auto spriteSheetItr = _spriteSheets.find(spriteSheetFileName);
     if (spriteSheetItr == _spriteSheets.end())
     {
-        return false; // Sprite sheet wasn't loaded, so don't reload it
+        return false;  // Sprite sheet wasn't loaded, so don't reload it
     }
 
     const auto format = spriteSheetItr->second->format;
 
     if (isSpriteSheetInUse(spriteSheetFileName))
     {
-        removeSpriteSheet(spriteSheetFileName); // we've removed the associated entry, so spriteSheetItr is no longer valid
+        removeSpriteSheet(
+            spriteSheetFileName);  // we've removed the associated entry, so spriteSheetItr is no longer valid
     }
     else
     {
-        //If one plist hasn't be loaded, we don't load it here.
+        // If one plist hasn't be loaded, we don't load it here.
         return false;
     }
 
@@ -277,17 +282,19 @@ bool SpriteFrameCache::reloadTexture(const std::string& spriteSheetFileName)
     return true;
 }
 
-void SpriteFrameCache::insertFrame(const std::shared_ptr<SpriteSheet>& spriteSheet, const std::string& frameName, SpriteFrame* spriteFrame)
+void SpriteFrameCache::insertFrame(const std::shared_ptr<SpriteSheet>& spriteSheet,
+                                   const std::string& frameName,
+                                   SpriteFrame* spriteFrame)
 {
     spriteSheet->frames.insert(frameName);
-    _spriteFrames.insert(frameName, spriteFrame);   //add SpriteFrame
-    _spriteSheets[spriteSheet->path] = spriteSheet;
-    _spriteFrameToSpriteSheetMap[frameName] = spriteSheet; //insert index frameName->plist
+    _spriteFrames.insert(frameName, spriteFrame);  // add SpriteFrame
+    _spriteSheets[spriteSheet->path]        = spriteSheet;
+    _spriteFrameToSpriteSheetMap[frameName] = spriteSheet;  // insert index frameName->plist
 }
 
 bool SpriteFrameCache::eraseFrame(const std::string& frameName)
 {
-    _spriteFrames.erase(frameName); //drop SpriteFrame
+    _spriteFrames.erase(frameName);  // drop SpriteFrame
     const auto itFrame = _spriteFrameToSpriteSheetMap.find(frameName);
     if (itFrame != _spriteFrameToSpriteSheetMap.end())
     {
@@ -300,10 +307,10 @@ bool SpriteFrameCache::eraseFrame(const std::string& frameName)
             _spriteSheets.erase(spriteSheet->path);
         }
 
-        _spriteFrameToSpriteSheetMap.erase(itFrame);    //update index frame->plist
+        _spriteFrameToSpriteSheetMap.erase(itFrame);  // update index frame->plist
 
         // erase all sprite sheets if all frames are erased
-        //if (_spriteFrameToSpriteSheetMap.empty())
+        // if (_spriteFrameToSpriteSheetMap.empty())
         //{
         //    _spriteSheets.clear();
         //}
@@ -326,7 +333,8 @@ bool SpriteFrameCache::eraseFrames(const std::vector<std::string>& frames)
 bool SpriteFrameCache::removeSpriteSheet(const std::string& spriteSheetFileName)
 {
     auto it = _spriteSheets.find(spriteSheetFileName);
-    if (it == _spriteSheets.end()) return false;
+    if (it == _spriteSheets.end())
+        return false;
 
     auto& frames = it->second->frames;
     for (const auto& f : frames)
@@ -334,9 +342,9 @@ bool SpriteFrameCache::removeSpriteSheet(const std::string& spriteSheetFileName)
         // !!do not!! call `_spriteFrames.erase(f);` to erase SpriteFrame
         // only erase index here
         _spriteFrames.erase(f);
-        _spriteFrameToSpriteSheetMap.erase(f);                             //erase plist frame frameName->plist
+        _spriteFrameToSpriteSheetMap.erase(f);  // erase plist frame frameName->plist
     }
-    _spriteSheets.erase(spriteSheetFileName);                            //update index plist->[frameNames]
+    _spriteSheets.erase(spriteSheetFileName);  // update index plist->[frameNames]
 
     return true;
 }

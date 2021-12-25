@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "CCDatas.h"
 #include "CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class Skin;
 class Bone;
@@ -42,25 +43,23 @@ class DisplayData;
 class CCS_DLL DisplayFactory
 {
 public:
-    static void addDisplay(Bone *bone, DecorativeDisplay *decoDisplay, DisplayData *displayData);
-    static void createDisplay(Bone *bone, DecorativeDisplay *decoDisplay);
-    static void updateDisplay(Bone *bone, float dt, bool dirty);
+    static void addDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData);
+    static void createDisplay(Bone* bone, DecorativeDisplay* decoDisplay);
+    static void updateDisplay(Bone* bone, float dt, bool dirty);
 
-    static void addSpriteDisplay(Bone *bone, DecorativeDisplay *decoDisplay, DisplayData *displayData);
-    static void createSpriteDisplay(Bone *bone, DecorativeDisplay *decoDisplay);
-    static void initSpriteDisplay(Bone *bone, DecorativeDisplay *decoDisplay, const char *displayName, Skin *skin);
+    static void addSpriteDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData);
+    static void createSpriteDisplay(Bone* bone, DecorativeDisplay* decoDisplay);
+    static void initSpriteDisplay(Bone* bone, DecorativeDisplay* decoDisplay, const char* displayName, Skin* skin);
 
+    static void addArmatureDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData);
+    static void createArmatureDisplay(Bone* bone, DecorativeDisplay* decoDisplay);
+    static void updateArmatureDisplay(Bone* bone, cocos2d::Node* display, float dt);
 
-    static void addArmatureDisplay(Bone *bone, DecorativeDisplay *decoDisplay, DisplayData *displayData);
-    static void createArmatureDisplay(Bone *bone, DecorativeDisplay *decoDisplay);
-    static void updateArmatureDisplay(Bone *bone, cocos2d::Node *display, float dt);
-
-    static void addParticleDisplay(Bone *bone, DecorativeDisplay *decoDisplay, DisplayData *displayData);
-    static void createParticleDisplay(Bone *bone, DecorativeDisplay *decoDisplay);
-    static void updateParticleDisplay(Bone *bone, cocos2d::Node *display, float dt);
+    static void addParticleDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData);
+    static void createParticleDisplay(Bone* bone, DecorativeDisplay* decoDisplay);
+    static void updateParticleDisplay(Bone* bone, cocos2d::Node* display, float dt);
 };
 
-
-}
+}  // namespace cocostudio
 
 #endif /*__CCDISPLAYFACTORY_H__*/

@@ -31,10 +31,11 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
-static ArmatureDataManager *s_sharedArmatureDataManager = nullptr;
+namespace cocostudio
+{
+static ArmatureDataManager* s_sharedArmatureDataManager = nullptr;
 
-ArmatureDataManager *ArmatureDataManager::getInstance()
+ArmatureDataManager* ArmatureDataManager::getInstance()
 {
     if (s_sharedArmatureDataManager == nullptr)
     {
@@ -62,7 +63,6 @@ ArmatureDataManager::ArmatureDataManager(void)
     _autoLoadSpriteFile = false;
 }
 
-
 ArmatureDataManager::~ArmatureDataManager(void)
 {
     _animationDatas.clear();
@@ -71,8 +71,6 @@ ArmatureDataManager::~ArmatureDataManager(void)
 
     _relativeDatas.clear();
 }
-
-
 
 bool ArmatureDataManager::init()
 {
@@ -84,15 +82,14 @@ bool ArmatureDataManager::init()
         _textureDatas.clear();
 
         bRet = true;
-    }
-    while (0);
+    } while (0);
 
     return bRet;
 }
 
 void ArmatureDataManager::removeArmatureFileInfo(const std::string& configFilePath)
 {
-    if (RelativeData *data = getRelativeData(configFilePath))
+    if (RelativeData* data = getRelativeData(configFilePath))
     {
         for (std::string str : data->armatures)
         {
@@ -119,10 +116,11 @@ void ArmatureDataManager::removeArmatureFileInfo(const std::string& configFilePa
     }
 }
 
-
-void ArmatureDataManager::addArmatureData(const std::string& id, ArmatureData *armatureData, const std::string& configFilePath)
+void ArmatureDataManager::addArmatureData(const std::string& id,
+                                          ArmatureData* armatureData,
+                                          const std::string& configFilePath)
 {
-    if (RelativeData *data = getRelativeData(configFilePath))
+    if (RelativeData* data = getRelativeData(configFilePath))
     {
         data->armatures.push_back(id);
     }
@@ -130,7 +128,7 @@ void ArmatureDataManager::addArmatureData(const std::string& id, ArmatureData *a
     _armarureDatas.insert(id, armatureData);
 }
 
-ArmatureData *ArmatureDataManager::getArmatureData(const std::string& id)
+ArmatureData* ArmatureDataManager::getArmatureData(const std::string& id)
 {
     return dynamic_cast<ArmatureData*>(_armarureDatas.at(id));
 }
@@ -140,9 +138,11 @@ void ArmatureDataManager::removeArmatureData(const std::string& id)
     _armarureDatas.erase(id);
 }
 
-void ArmatureDataManager::addAnimationData(const std::string& id, AnimationData *animationData, const std::string& configFilePath)
+void ArmatureDataManager::addAnimationData(const std::string& id,
+                                           AnimationData* animationData,
+                                           const std::string& configFilePath)
 {
-    if (RelativeData *data = getRelativeData(configFilePath))
+    if (RelativeData* data = getRelativeData(configFilePath))
     {
         data->animations.push_back(id);
     }
@@ -150,7 +150,7 @@ void ArmatureDataManager::addAnimationData(const std::string& id, AnimationData 
     _animationDatas.insert(id, animationData);
 }
 
-AnimationData *ArmatureDataManager::getAnimationData(const std::string& id)
+AnimationData* ArmatureDataManager::getAnimationData(const std::string& id)
 {
     return dynamic_cast<AnimationData*>(_animationDatas.at(id));
 }
@@ -160,9 +160,11 @@ void ArmatureDataManager::removeAnimationData(const std::string& id)
     _animationDatas.erase(id);
 }
 
-void ArmatureDataManager::addTextureData(const std::string& id, TextureData *textureData, const std::string& configFilePath)
+void ArmatureDataManager::addTextureData(const std::string& id,
+                                         TextureData* textureData,
+                                         const std::string& configFilePath)
 {
-    if (RelativeData *data = getRelativeData(configFilePath))
+    if (RelativeData* data = getRelativeData(configFilePath))
     {
         data->textures.push_back(id);
     }
@@ -170,13 +172,10 @@ void ArmatureDataManager::addTextureData(const std::string& id, TextureData *tex
     _textureDatas.insert(id, textureData);
 }
 
-
-TextureData *ArmatureDataManager::getTextureData(const std::string& id)
+TextureData* ArmatureDataManager::getTextureData(const std::string& id)
 {
     return dynamic_cast<TextureData*>(_textureDatas.at(id));
 }
-
-
 
 void ArmatureDataManager::removeTextureData(const std::string& id)
 {
@@ -191,7 +190,9 @@ void ArmatureDataManager::addArmatureFileInfo(const std::string& configFilePath)
     DataReaderHelper::getInstance()->addDataFromFile(configFilePath);
 }
 
-void ArmatureDataManager::addArmatureFileInfoAsync(const std::string& configFilePath, Ref *target, SEL_SCHEDULE selector)
+void ArmatureDataManager::addArmatureFileInfoAsync(const std::string& configFilePath,
+                                                   Ref* target,
+                                                   SEL_SCHEDULE selector)
 {
     addRelativeData(configFilePath);
 
@@ -199,7 +200,9 @@ void ArmatureDataManager::addArmatureFileInfoAsync(const std::string& configFile
     DataReaderHelper::getInstance()->addDataFromFileAsync("", "", configFilePath, target, selector);
 }
 
-void ArmatureDataManager::addArmatureFileInfo(const std::string& imagePath, const std::string& plistPath, const std::string& configFilePath)
+void ArmatureDataManager::addArmatureFileInfo(const std::string& imagePath,
+                                              const std::string& plistPath,
+                                              const std::string& configFilePath)
 {
     addRelativeData(configFilePath);
 
@@ -208,7 +211,11 @@ void ArmatureDataManager::addArmatureFileInfo(const std::string& imagePath, cons
     addSpriteFrameFromFile(plistPath, imagePath, configFilePath);
 }
 
-void ArmatureDataManager::addArmatureFileInfoAsync(const std::string& imagePath, const std::string& plistPath, const std::string& configFilePath, Ref *target, SEL_SCHEDULE selector)
+void ArmatureDataManager::addArmatureFileInfoAsync(const std::string& imagePath,
+                                                   const std::string& plistPath,
+                                                   const std::string& configFilePath,
+                                                   Ref* target,
+                                                   SEL_SCHEDULE selector)
 {
     addRelativeData(configFilePath);
 
@@ -217,15 +224,16 @@ void ArmatureDataManager::addArmatureFileInfoAsync(const std::string& imagePath,
     addSpriteFrameFromFile(plistPath, imagePath, configFilePath);
 }
 
-void ArmatureDataManager::addSpriteFrameFromFile(const std::string& plistPath, const std::string& imagePath, const std::string& configFilePath)
+void ArmatureDataManager::addSpriteFrameFromFile(const std::string& plistPath,
+                                                 const std::string& imagePath,
+                                                 const std::string& configFilePath)
 {
-    if (RelativeData *data = getRelativeData(configFilePath))
+    if (RelativeData* data = getRelativeData(configFilePath))
     {
         data->plistFiles.push_back(plistPath);
     }
     SpriteFrameCacheHelper::getInstance()->addSpriteFrameFromFile(plistPath, imagePath);
 }
-
 
 bool ArmatureDataManager::isAutoLoadSpriteFile()
 {
@@ -253,9 +261,9 @@ void ArmatureDataManager::addRelativeData(const std::string& configFilePath)
     }
 }
 
-RelativeData *ArmatureDataManager::getRelativeData(const std::string& configFilePath)
+RelativeData* ArmatureDataManager::getRelativeData(const std::string& configFilePath)
 {
     return &_relativeDatas[configFilePath];
 }
 
-}
+}  // namespace cocostudio

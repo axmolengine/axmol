@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "BufferGL.h"
 #include <cassert>
 #include "base/CCDirector.h"
@@ -31,30 +31,29 @@
 
 CC_BACKEND_BEGIN
 
-namespace {
-    GLenum toGLUsage(const BufferUsage& usage)
+namespace
+{
+GLenum toGLUsage(const BufferUsage& usage)
+{
+    switch (usage)
     {
-        switch (usage)
-        {
-            case BufferUsage::STATIC:
-                return GL_STATIC_DRAW;
-            case BufferUsage::DYNAMIC:
-                return GL_DYNAMIC_DRAW;
-            default:
-                return GL_DYNAMIC_DRAW;
-        }
+    case BufferUsage::STATIC:
+        return GL_STATIC_DRAW;
+    case BufferUsage::DYNAMIC:
+        return GL_DYNAMIC_DRAW;
+    default:
+        return GL_DYNAMIC_DRAW;
     }
 }
+}  // namespace
 
-BufferGL::BufferGL(std::size_t size, BufferType type, BufferUsage usage)
-: Buffer(size, type, usage)
+BufferGL::BufferGL(std::size_t size, BufferType type, BufferUsage usage) : Buffer(size, type, usage)
 {
     glGenBuffers(1, &_buffer);
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*){
-        this->reloadBuffer();
-    });
+    _backToForegroundListener =
+        EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadBuffer(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 }
@@ -82,7 +81,7 @@ void BufferGL::reloadBuffer()
 {
     glGenBuffers(1, &_buffer);
 
-    if(!_needDefaultStoredData)
+    if (!_needDefaultStoredData)
         return;
 
     _bufferAlreadyFilled = true;
@@ -91,23 +90,22 @@ void BufferGL::reloadBuffer()
 
 void BufferGL::fillBuffer(void* data, std::size_t offset, std::size_t size)
 {
-    if(_bufferAlreadyFilled || !_needDefaultStoredData || BufferUsage::STATIC != _usage)
+    if (_bufferAlreadyFilled || !_needDefaultStoredData || BufferUsage::STATIC != _usage)
         return;
 
-    if(_data == nullptr)
+    if (_data == nullptr)
     {
         _data = new char[_bufferAllocated];
     }
 
     memcpy(_data + offset, data, size);
-
 }
 #endif
 
 void BufferGL::updateData(void* data, std::size_t size)
 {
     assert(size && size <= _size);
-    
+
     if (_buffer)
     {
         if (BufferType::VERTEX == _type)
@@ -134,7 +132,7 @@ void BufferGL::updateSubData(void* data, std::size_t offset, std::size_t size)
 
     CCASSERT(_bufferAllocated != 0, "updateData should be invoke before updateSubData");
     CCASSERT(offset + size <= _bufferAllocated, "buffer size overflow");
- 
+
     if (_buffer)
     {
         CHECK_GL_ERROR_DEBUG();

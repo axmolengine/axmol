@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,15 +38,9 @@
 #include "extensions/Particle3D/PU/CCPUOnVelocityObserver.h"
 
 NS_CC_BEGIN
-PUObserverManager::PUObserverManager()
-{
-    
-}
+PUObserverManager::PUObserverManager() {}
 
-PUObserverManager::~PUObserverManager()
-{
-    
-}
+PUObserverManager::~PUObserverManager() {}
 
 PUObserverManager* PUObserverManager::Instance()
 {
@@ -54,57 +48,99 @@ PUObserverManager* PUObserverManager::Instance()
     return &pem;
 }
 
-PUScriptTranslator* PUObserverManager::getTranslator( const std::string &type )
+PUScriptTranslator* PUObserverManager::getTranslator(const std::string& type)
 {
-    if (type == "OnClear"){
+    if (type == "OnClear")
+    {
         return &_onClearObserverTranslator;
-    }else if (type == "OnCollision"){
+    }
+    else if (type == "OnCollision")
+    {
         return &_onCollisionObserverTranslator;
-    }else if (type == "OnCount"){
+    }
+    else if (type == "OnCount")
+    {
         return &_onCountObserverTranslator;
-    }else if (type == "OnEmission"){
+    }
+    else if (type == "OnEmission")
+    {
         return &_onEmissionObserverTranslator;
-    }else if (type == "OnEventFlag"){
+    }
+    else if (type == "OnEventFlag")
+    {
         return &_onEventFlagObserverTranslator;
-    }else if (type == "OnExpire"){
+    }
+    else if (type == "OnExpire")
+    {
         return &_onExpireObserverTranslator;
-    }else if (type == "OnPosition"){
+    }
+    else if (type == "OnPosition")
+    {
         return &_onPositionObserverTranslator;
-    }else if (type == "OnQuota"){
+    }
+    else if (type == "OnQuota")
+    {
         return &_onQuotaObserverTranslator;
-    }else if (type == "OnRandom"){
+    }
+    else if (type == "OnRandom")
+    {
         return &_onRandomObserverTranslator;
-    }else if (type == "OnTime"){
+    }
+    else if (type == "OnTime")
+    {
         return &_onTimeObserverTranslator;
-    }else if (type == "OnVelocity"){
+    }
+    else if (type == "OnVelocity")
+    {
         return &_onVelocityObserverTranslator;
     }
     return nullptr;
 }
 
-PUObserver* PUObserverManager::createObserver( const std::string &type )
+PUObserver* PUObserverManager::createObserver(const std::string& type)
 {
-    if (type == "OnClear"){
+    if (type == "OnClear")
+    {
         return PUOnClearObserver::create();
-    }else if (type == "OnCollision"){
+    }
+    else if (type == "OnCollision")
+    {
         return PUOnCollisionObserver::create();
-    }else if (type == "OnCount"){
+    }
+    else if (type == "OnCount")
+    {
         return PUOnCountObserver::create();
-    }else if (type == "OnEmission"){
+    }
+    else if (type == "OnEmission")
+    {
         return PUOnEmissionObserver::create();
-    }else if (type == "OnEventFlag"){
+    }
+    else if (type == "OnEventFlag")
+    {
         return PUOnEventFlagObserver::create();
-    }else if (type == "OnExpire"){
+    }
+    else if (type == "OnExpire")
+    {
         return PUOnExpireObserver::create();
-    }else if (type == "OnPosition"){
+    }
+    else if (type == "OnPosition")
+    {
         return PUOnPositionObserver::create();
-    }else if (type == "OnQuota"){
+    }
+    else if (type == "OnQuota")
+    {
         return PUOnQuotaObserver::create();
-    }else if (type == "OnRandom"){
+    }
+    else if (type == "OnRandom")
+    {
         return PUOnRandomObserver::create();
-    }else if (type == "OnTime"){
+    }
+    else if (type == "OnTime")
+    {
         return PUOnTimeObserver::create();
-    }else if (type == "OnVelocity"){
+    }
+    else if (type == "OnVelocity")
+    {
         return PUOnVelocityObserver::create();
     }
     return nullptr;

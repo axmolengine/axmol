@@ -27,15 +27,9 @@
 
 NS_CC_MATH_BEGIN
 
-Vec4::Vec4()
-    : x(0.0f), y(0.0f), z(0.0f), w(0.0f)
-{
-}
+Vec4::Vec4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
 
-Vec4::Vec4(float xx, float yy, float zz, float ww)
-    : x(xx), y(yy), z(zz), w(ww)
-{
-}
+Vec4::Vec4(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
 
 Vec4::Vec4(const float* src)
 {
@@ -58,7 +52,7 @@ Vec4 Vec4::fromColor(unsigned int color)
     int componentIndex = 0;
     for (int i = 3; i >= 0; --i)
     {
-        int component = (color >> i*8) & 0x000000ff;
+        int component = (color >> i * 8) & 0x000000ff;
 
         components[componentIndex++] = static_cast<float>(component) / 255.0f;
     }
@@ -67,9 +61,7 @@ Vec4 Vec4::fromColor(unsigned int color)
     return value;
 }
 
-Vec4::~Vec4()
-{
-}
+Vec4::~Vec4() {}
 
 bool Vec4::isZero() const
 {
@@ -206,7 +198,6 @@ float Vec4::length() const
     return std::sqrt(x * x + y * y + z * z + w * w);
 }
 
-
 float Vec4::lengthSquared() const
 {
     return (x * x + y * y + z * z + w * w);
@@ -226,12 +217,12 @@ void Vec4::normalize()
     // Already normalized.
     if (n == 1.0f)
         return;
-    
+
     n = std::sqrt(n);
     // Too close to zero.
     if (n < MATH_TOLERANCE)
         return;
-    
+
     n = 1.0f / n;
     x *= n;
     y *= n;
@@ -306,8 +297,8 @@ void Vec4::subtract(const Vec4& v1, const Vec4& v2, Vec4* dst)
     dst->w = v1.w - v2.w;
 }
 
-const Vec4 Vec4::ZERO = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
-const Vec4 Vec4::ONE = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
+const Vec4 Vec4::ZERO   = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
+const Vec4 Vec4::ONE    = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
 const Vec4 Vec4::UNIT_X = Vec4(1.0f, 0.0f, 0.0f, 0.0f);
 const Vec4 Vec4::UNIT_Y = Vec4(0.0f, 1.0f, 0.0f, 0.0f);
 const Vec4 Vec4::UNIT_Z = Vec4(0.0f, 0.0f, 1.0f, 0.0f);

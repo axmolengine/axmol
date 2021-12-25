@@ -4,17 +4,17 @@
  Copyright (c) 2021 Bytedance Inc.
 
  https://adxe.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,18 +39,16 @@
 #include "lua_cjson.h"
 #include "yasio/bindings/yasio_cclua.hpp"
 
-static void lua_register_extensions(lua_State* L) {
+static void lua_register_extensions(lua_State* L)
+{
 
-    static luaL_Reg lua_exts[] = {
-        {"yasio", luaopen_yasio_cclua},
-        {"cjson", luaopen_cjson},
-        {NULL, NULL}
-    };
+    static luaL_Reg lua_exts[] = {{"yasio", luaopen_yasio_cclua}, {"cjson", luaopen_cjson}, {NULL, NULL}};
 
     lua_getglobal(L, "package");
     lua_getfield(L, -1, "preload");
     auto lib = lua_exts;
-    for (; lib->func; ++lib) {
+    for (; lib->func; ++lib)
+    {
         lua_pushcfunction(L, lib->func);
         lua_setfield(L, -2, lib->name);
     }
@@ -64,7 +62,7 @@ int lua_module_register(lua_State* L)
     register_cocostudio_module(L);
     register_ui_module(L);
     register_extension_module(L);
-//TODO arnold
+    // TODO arnold
     register_spine_module(L);
     register_cocos3d_module(L);
     register_audioengine_module(L);
@@ -79,4 +77,3 @@ int lua_module_register(lua_State* L)
     lua_register_extensions(L);
     return 1;
 }
-

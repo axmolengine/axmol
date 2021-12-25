@@ -38,15 +38,9 @@ using namespace flatbuffers;
 
 IMPLEMENT_CLASS_NODE_READER_INFO(BoneNodeReader)
 
-BoneNodeReader::BoneNodeReader()
-{
+BoneNodeReader::BoneNodeReader() {}
 
-}
-
-BoneNodeReader::~BoneNodeReader()
-{
-
-}
+BoneNodeReader::~BoneNodeReader() {}
 
 static BoneNodeReader* _instanceBoneNodeReader = nullptr;
 
@@ -65,19 +59,19 @@ void BoneNodeReader::destroyInstance()
 }
 
 Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
-    flatbuffers::FlatBufferBuilder *builder)
+                                                           flatbuffers::FlatBufferBuilder* builder)
 {
 
-    auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
+    auto temp        = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
     auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
 
-    float length = 0;
+    float length                 = 0;
     cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name  = attribute.name();
         std::string value = attribute.value();
 
         if (name == "Length")
@@ -97,7 +91,7 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
 
             while (battribute)
             {
-                name = battribute.name();
+                name              = battribute.name();
                 std::string value = battribute.value();
 
                 if (name == "Src")
@@ -117,19 +111,15 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
     }
     flatbuffers::BlendFunc f_blendFunc(utils::toGLBlendFactor(blendFunc.src), utils::toGLBlendFactor(blendFunc.dst));
 
-    auto options = CreateBoneOptions(*builder,
-        nodeOptions,
-        length,
-        &f_blendFunc);
+    auto options = CreateBoneOptions(*builder, nodeOptions, length, &f_blendFunc);
 
     return *(Offset<Table>*)(&options);
 }
 
-void BoneNodeReader::setPropsWithFlatBuffers(cocos2d::Node *node,
-    const flatbuffers::Table *nodeOptions)
+void BoneNodeReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions)
 {
 
-    auto* bone = static_cast<BoneNode*>(node);
+    auto* bone   = static_cast<BoneNode*>(node);
     auto options = (flatbuffers::BoneOptions*)nodeOptions;
 
     float length = options->length();
@@ -139,13 +129,13 @@ void BoneNodeReader::setPropsWithFlatBuffers(cocos2d::Node *node,
     if (f_blendFunc)
     {
         cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
-        blendFunc.src = utils::toBackendBlendFactor(f_blendFunc->src());
-        blendFunc.dst = utils::toBackendBlendFactor(f_blendFunc->dst());
+        blendFunc.src                = utils::toBackendBlendFactor(f_blendFunc->src());
+        blendFunc.dst                = utils::toBackendBlendFactor(f_blendFunc->dst());
         bone->setBlendFunc(blendFunc);
     }
 }
 
-cocos2d::Node*  BoneNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table *nodeOptions)
+cocos2d::Node* BoneNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
     auto bone = BoneNode::create();
 

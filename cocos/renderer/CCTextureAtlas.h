@@ -54,12 +54,12 @@ Supported features:
 * The TextureAtlas capacity can be increased or decreased in runtime
 * OpenGL component: V3F, C4B, T2F.
 The quads are rendered using an OpenGL ES VBO.
-To render the quads using an interleaved vertex array list, you should modify the ccConfig.h file 
+To render the quads using an interleaved vertex array list, you should modify the ccConfig.h file
 
 @warning If you want to use TextureAtlas, you'd better setup GL status before it's rendered.
          Otherwise, the effect of TextureAtlas will be affected by the GL status of other nodes.
 */
-class CC_DLL TextureAtlas : public Ref 
+class CC_DLL TextureAtlas : public Ref
 {
 public:
     /** Creates a TextureAtlas with an filename and with an initial capacity for Quads.
@@ -68,7 +68,7 @@ public:
      @param file The file path.
      @param capacity Capacity for Quads.
     */
-    static TextureAtlas* create(const std::string& file , ssize_t capacity);
+    static TextureAtlas* create(const std::string& file, ssize_t capacity);
 
     /** Creates a TextureAtlas with a previously initialized Texture2D object, and
      * with an initial capacity for n Quads.
@@ -77,7 +77,7 @@ public:
      @param texture A texture2D object pointer.
      @param capacity Capacity for Quads.
      */
-    static TextureAtlas* createWithTexture(Texture2D *texture, ssize_t capacity);
+    static TextureAtlas* createWithTexture(Texture2D* texture, ssize_t capacity);
     /**
      * @js ctor
      */
@@ -98,13 +98,13 @@ public:
     bool initWithFile(const std::string& file, ssize_t capacity);
 
     /** Initializes a TextureAtlas with a previously initialized Texture2D object, and
-    * with an initial capacity for Quads. 
+    * with an initial capacity for Quads.
     * The TextureAtlas capacity can be increased in runtime.
      @attention: Do not reinitialize the TextureAtlas because it will leak memory (issue #706).
      @param texture A texture2D object pointer.
      @param capacity Capacity for Quads.
     */
-    bool initWithTexture(Texture2D *texture, ssize_t capacity);
+    bool initWithTexture(Texture2D* texture, ssize_t capacity);
 
     /** Updates a Quad (texture, vertex and color) at a certain index.
     @param quad Quad that are going to be rendered.
@@ -156,7 +156,7 @@ public:
     * The new capacity can be lower or higher than the current one.
     * It returns true if the resize was successful.
     * If it fails to resize the capacity it will return false with a new capacity of 0.
-     
+
      @param capacity Capacity for Quads.
     */
     bool resizeCapacity(ssize_t capacity);
@@ -201,24 +201,24 @@ public:
 
     /** Gets the quantity of quads that are going to be drawn. */
     size_t getTotalQuads() const;
-    
+
     /** Gets the quantity of quads that can be stored with the current texture atlas size. */
     size_t getCapacity() const;
-    
+
     /** Gets the texture of the texture atlas. */
     Texture2D* getTexture() const;
-    
+
     /** Sets the texture for the texture atlas. */
     void setTexture(Texture2D* texture);
-    
+
     /** Gets the quads that are going to be rendered. */
     V3F_C4B_T2F_Quad* getQuads();
-    
+
     /** Sets the quads that are going to be rendered. */
     void setQuads(V3F_C4B_T2F_Quad* quads);
-    
+
     inline unsigned short* getIndices() { return _indices; }
-    
+
 private:
     friend class ParticleBatchNode;
     friend class AtlasNode;
@@ -229,7 +229,7 @@ private:
 
 protected:
     unsigned short* _indices = nullptr;
-    bool _dirty = false; //indicates whether or not the array buffer of the VBO needs to be updated
+    bool _dirty              = false;  // indicates whether or not the array buffer of the VBO needs to be updated
     /** quantity of quads that are going to be drawn */
     size_t _totalQuads = 0;
     /** quantity of quads that can be stored with the current texture atlas size */
@@ -238,7 +238,7 @@ protected:
     Texture2D* _texture = nullptr;
     /** Quads that are going to be rendered */
     V3F_C4B_T2F_Quad* _quads = nullptr;
-    
+
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _rendererRecreatedListener = nullptr;
 #endif

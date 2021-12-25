@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -48,13 +48,13 @@ class ProgramCache : public Ref
 public:
     /** returns the shared instance */
     static ProgramCache* getInstance();
-    
+
     /** purges the cache. It releases the retained instance. */
     static void destroyInstance();
-    
+
     /// get built-in program
     backend::Program* getBuiltinProgram(uint32_t type) const;
-    
+
     // get custom program, should call registerCustomProgramFactory first
     backend::Program* getCustomProgram(uint32_t type) const;
 
@@ -76,11 +76,11 @@ public:
      * Remove all program objects from cache.
      */
     void removeAllPrograms();
-    
+
 protected:
     ProgramCache() = default;
     virtual ~ProgramCache();
-    
+
     /**
      * Pre-load programs into cache.
      */
@@ -89,13 +89,13 @@ protected:
     void registerProgramFactory(uint32_t internalType, std::string&& vertShaderSource, std::string&& fragShaderSource);
     Program* addProgram(uint32_t internalType) const;
 
-    std::function<Program* ()> _builtinFactories[(int)ProgramType::BUILTIN_COUNT];
-    std::unordered_map<uint32_t, std::function<Program* ()>> _customFactories;
+    std::function<Program*()> _builtinFactories[(int)ProgramType::BUILTIN_COUNT];
+    std::unordered_map<uint32_t, std::function<Program*()>> _customFactories;
 
-    mutable std::unordered_map<uint32_t, backend::Program*> _cachedPrograms; ///< The cached program object.
-    static ProgramCache *_sharedProgramCache; ///< A shared instance of the program cache.
+    mutable std::unordered_map<uint32_t, backend::Program*> _cachedPrograms;  ///< The cached program object.
+    static ProgramCache* _sharedProgramCache;  ///< A shared instance of the program cache.
 };
 
-//end of _backend group
+// end of _backend group
 /// @}
 CC_BACKEND_END

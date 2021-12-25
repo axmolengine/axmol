@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,45 +32,44 @@
 
 NS_CC_BEGIN
 
-PUEmitterTranslator::PUEmitterTranslator()
-:_emitter(nullptr)
-{
-}
+PUEmitterTranslator::PUEmitterTranslator() : _emitter(nullptr) {}
 //-------------------------------------------------------------------------
-void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *node)
+void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* node)
 {
-    PUObjectAbstractNode* obj = reinterpret_cast<PUObjectAbstractNode*>(node);
+    PUObjectAbstractNode* obj    = reinterpret_cast<PUObjectAbstractNode*>(node);
     PUObjectAbstractNode* parent = obj->parent ? reinterpret_cast<PUObjectAbstractNode*>(obj->parent) : 0;
 
     // The name of the obj is the type of the emitter
-    // Remark: This can be solved by using a listener, so that obj->values is filled with type + name. Something for later
+    // Remark: This can be solved by using a listener, so that obj->values is filled with type + name. Something for
+    // later
     std::string type;
-    if(!obj->name.empty())
+    if (!obj->name.empty())
     {
         type = obj->name;
     }
-    
 
     //// Get the factory
-    //ParticleEmitterFactory* particleEmitterFactory = ParticleSystemManager::getSingletonPtr()->getEmitterFactory(type);
-    //if (!particleEmitterFactory)
+    // ParticleEmitterFactory* particleEmitterFactory =
+    // ParticleSystemManager::getSingletonPtr()->getEmitterFactory(type); if (!particleEmitterFactory)
     //{
     //	compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
     //	return;
-    //}
-    PUScriptTranslator *particleEmitterTranlator = PUEmitterManager::Instance()->getTranslator(type);
-    if (!particleEmitterTranlator) return;
+    // }
+    PUScriptTranslator* particleEmitterTranlator = PUEmitterManager::Instance()->getTranslator(type);
+    if (!particleEmitterTranlator)
+        return;
 
     //// Create the emitter
-    //mEmitter = ParticleSystemManager::getSingletonPtr()->createEmitter(type);
-    //if (!mEmitter)
+    // mEmitter = ParticleSystemManager::getSingletonPtr()->createEmitter(type);
+    // if (!mEmitter)
     //{
     //	compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line);
     //	return;
-    //}
+    // }
     _emitter = PUEmitterManager::Instance()->createEmitter(type);
-    if (!_emitter) return;
-	_emitter->setEmitterType(type);
+    if (!_emitter)
+        return;
+    _emitter->setEmitterType(type);
 
     if (parent && parent->context)
     {
@@ -80,7 +79,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
 
     // The first value is the (optional) name
     std::string name;
-    if(!obj->values.empty())
+    if (!obj->values.empty())
     {
         getString(*obj->values.front(), &name);
         _emitter->setName(name);
@@ -90,9 +89,9 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
     obj->context = _emitter;
 
     // Run through properties
-    for(PUAbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
+    for (PUAbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
     {
-        if((*i)->type == ANT_PROPERTY)
+        if ((*i)->type == ANT_PROPERTY)
         {
             PUPropertyAbstractNode* prop = reinterpret_cast<PUPropertyAbstractNode*>((*i));
             if (prop->name == token[TOKEN_ENABLED])
@@ -101,7 +100,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_ENABLED], VAL_BOOL))
                 {
                     bool val;
-                    if(getBoolean(*prop->values.front(), &val))
+                    if (getBoolean(*prop->values.front(), &val))
                     {
                         _emitter->setEnabled(val);
                     }
@@ -113,10 +112,10 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_POSITION], VAL_VECTOR3))
                 {
                     Vec3 val;
-                    if(getVector3(prop->values.begin(), prop->values.end(), &val))
+                    if (getVector3(prop->values.begin(), prop->values.end(), &val))
                     {
-                        //mEmitter->position = val;
-                        //mEmitter->originalPosition = val;
+                        // mEmitter->position = val;
+                        // mEmitter->originalPosition = val;
                         _emitter->setLocalPosition(val);
                     }
                 }
@@ -127,7 +126,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_DIRECTION], VAL_VECTOR3))
                 {
                     Vec3 val;
-                    if(getVector3(prop->values.begin(), prop->values.end(), &val))
+                    if (getVector3(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleDirection(val);
                     }
@@ -139,7 +138,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_ORIENTATION], VAL_QUATERNION))
                 {
                     Quaternion val;
-                    if(getQuaternion(prop->values.begin(), prop->values.end(), &val))
+                    if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleOrientation(val);
                     }
@@ -151,7 +150,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_START_ORIENTATION_RANGE], VAL_QUATERNION))
                 {
                     Quaternion val;
-                    if(getQuaternion(prop->values.begin(), prop->values.end(), &val))
+                    if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleOrientationRangeStart(val);
                     }
@@ -163,7 +162,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_ORIENTATION_RANGE_START], VAL_QUATERNION))
                 {
                     Quaternion val;
-                    if(getQuaternion(prop->values.begin(), prop->values.end(), &val))
+                    if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleOrientationRangeStart(val);
                     }
@@ -175,7 +174,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_END_ORIENTATION_RANGE], VAL_QUATERNION))
                 {
                     Quaternion val;
-                    if(getQuaternion(prop->values.begin(), prop->values.end(), &val))
+                    if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleOrientationRangeEnd(val);
                     }
@@ -187,7 +186,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_ORIENTATION_RANGE_END], VAL_QUATERNION))
                 {
                     Quaternion val;
-                    if(getQuaternion(prop->values.begin(), prop->values.end(), &val))
+                    if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleOrientationRangeEnd(val);
                     }
@@ -200,7 +199,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_EMISSION_RATE], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -215,7 +214,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_TIME_TO_LIVE], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -230,7 +229,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_MASS], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -244,7 +243,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_START_TEXCOORDS_RANGE], VAL_UINT))
                 {
                     unsigned int val = 0;
-                    if(getUInt(*prop->values.front(), &val))
+                    if (getUInt(*prop->values.front(), &val))
                     {
                         _emitter->setParticleTextureCoordsRangeStart(val);
                     }
@@ -256,7 +255,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_START_TEXCOORDS], VAL_UINT))
                 {
                     unsigned int val = 0;
-                    if(getUInt(*prop->values.front(), &val))
+                    if (getUInt(*prop->values.front(), &val))
                     {
                         _emitter->setParticleTextureCoordsRangeStart(val);
                     }
@@ -268,7 +267,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_END_TEXCOORDS_RANGE], VAL_UINT))
                 {
                     unsigned int val = 0;
-                    if(getUInt(*prop->values.front(), &val))
+                    if (getUInt(*prop->values.front(), &val))
                     {
                         _emitter->setParticleTextureCoordsRangeEnd(val);
                     }
@@ -280,7 +279,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_END_TEXCOORDS], VAL_UINT))
                 {
                     unsigned int val = 0;
-                    if(getUInt(*prop->values.front(), &val))
+                    if (getUInt(*prop->values.front(), &val))
                     {
                         _emitter->setParticleTextureCoordsRangeEnd(val);
                     }
@@ -292,7 +291,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_TEXCOORDS], VAL_UINT))
                 {
                     unsigned int val = 0;
-                    if(getUInt(*prop->values.front(), &val))
+                    if (getUInt(*prop->values.front(), &val))
                     {
                         _emitter->setParticleTextureCoords(val);
                     }
@@ -304,7 +303,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_START_COLOUR_RANGE], VAL_COLOURVALUE))
                 {
                     Vec4 val;
-                    if(getVector4(prop->values.begin(), prop->values.end(), &val))
+                    if (getVector4(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleColorRangeStart(val);
                     }
@@ -316,7 +315,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_END_COLOUR_RANGE], VAL_COLOURVALUE))
                 {
                     Vec4 val;
-                    if(getVector4(prop->values.begin(), prop->values.end(), &val))
+                    if (getVector4(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleColorRangeEnd(val);
                     }
@@ -328,7 +327,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_COLOUR], VAL_COLOURVALUE))
                 {
                     Vec4 val;
-                    if(getVector4(prop->values.begin(), prop->values.end(), &val))
+                    if (getVector4(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleColor(val);
                     }
@@ -341,7 +340,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_VELOCITY], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -356,7 +355,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_DURATION], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -371,7 +370,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_REPEAT_DELAY], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -423,7 +422,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_ANGLE], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -438,7 +437,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_ALL_PARTICLE_DIM], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -453,7 +452,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_PARTICLE_WIDTH], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -468,7 +467,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_PARTICLE_HEIGHT], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -483,7 +482,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_PARTICLE_DEPTH], VAL_REAL))
                 {
                     float val = 0.0f;
-                    if(getFloat(*prop->values.front(), &val))
+                    if (getFloat(*prop->values.front(), &val))
                     {
                         PUDynamicAttributeFixed* dynamicAttributeFixed = new PUDynamicAttributeFixed();
                         dynamicAttributeFixed->setValue(val);
@@ -497,7 +496,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_AUTO_DIRECTION], VAL_BOOL))
                 {
                     bool val;
-                    if(getBoolean(*prop->values.front(), &val))
+                    if (getBoolean(*prop->values.front(), &val))
                     {
                         _emitter->setAutoDirection(val);
                     }
@@ -509,7 +508,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_KEEP_LOCAL], VAL_BOOL))
                 {
                     bool val;
-                    if(getBoolean(*prop->values.front(), &val))
+                    if (getBoolean(*prop->values.front(), &val))
                     {
                         _emitter->setKeepLocal(val);
                     }
@@ -521,7 +520,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_FORCE_EMISSION], VAL_BOOL))
                 {
                     bool val;
-                    if(getBoolean(*prop->values.front(), &val))
+                    if (getBoolean(*prop->values.front(), &val))
                     {
                         _emitter->setForceEmission(val);
                     }
@@ -536,7 +535,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
                 errorUnexpectedProperty(compiler, prop);
             }
         }
-        else if((*i)->type == ANT_OBJECT)
+        else if ((*i)->type == ANT_OBJECT)
         {
             PUObjectAbstractNode* child = reinterpret_cast<PUObjectAbstractNode*>((*i));
             PUDynamicAttributeTranslator dynamicAttributeTranslator;
@@ -620,15 +619,15 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode *
             else if (child->cls == token[TOKEN_CAMERA_DEPENDENCY])
             {
                 //// Property: it can only be a camera_dependency for emission rate
-                //CameraDependency* cameraDependency = PU_NEW_T(CameraDependency, MEMCATEGORY_SCRIPTING)();
-                //child->context = Any(cameraDependency);
-                //CameraDependencyTranslator cameraDependencyTranslator;
-                //cameraDependencyTranslator.translate(compiler, *i);
-                //Real threshold = cameraDependency->getThreshold();
-                //mEmitter->setEmissionRateCameraDependency(threshold * threshold, cameraDependency->isIncrease());
+                // CameraDependency* cameraDependency = PU_NEW_T(CameraDependency, MEMCATEGORY_SCRIPTING)();
+                // child->context = Any(cameraDependency);
+                // CameraDependencyTranslator cameraDependencyTranslator;
+                // cameraDependencyTranslator.translate(compiler, *i);
+                // Real threshold = cameraDependency->getThreshold();
+                // mEmitter->setEmissionRateCameraDependency(threshold * threshold, cameraDependency->isIncrease());
 
                 //// Delete the camera dependency
-                //PU_DELETE_T(cameraDependency, CameraDependency, MEMCATEGORY_SCRIPTING);
+                // PU_DELETE_T(cameraDependency, CameraDependency, MEMCATEGORY_SCRIPTING);
             }
             else if (particleEmitterTranlator->translateChildObject(compiler, *i))
             {

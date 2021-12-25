@@ -2,7 +2,7 @@
  Copyright (c) 2013 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-2020 simdsoft.com, @HALX99.
- 
+
  http://www.cocos2d-x.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -68,27 +68,25 @@ using namespace cocostudio;
 using namespace cocostudio::timeline;
 using namespace flatbuffers;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 static const char* Property_VisibleForFrame = "VisibleForFrame";
-static const char* Property_Position = "Position";
-static const char* Property_Scale = "Scale";
-static const char* Property_RotationSkew = "RotationSkew";
-static const char* Property_CColor = "CColor";
-static const char* Property_FileData = "FileData";
-static const char* Property_FrameEvent = "FrameEvent";
-static const char* Property_Alpha = "Alpha";
-static const char* Property_AnchorPoint = "AnchorPoint";
-static const char* Property_ZOrder = "ZOrder";
-static const char* Property_ActionValue = "ActionValue";
-static const char* Property_BlendValue = "BlendFunc";
+static const char* Property_Position        = "Position";
+static const char* Property_Scale           = "Scale";
+static const char* Property_RotationSkew    = "RotationSkew";
+static const char* Property_CColor          = "CColor";
+static const char* Property_FileData        = "FileData";
+static const char* Property_FrameEvent      = "FrameEvent";
+static const char* Property_Alpha           = "Alpha";
+static const char* Property_AnchorPoint     = "AnchorPoint";
+static const char* Property_ZOrder          = "ZOrder";
+static const char* Property_ActionValue     = "ActionValue";
+static const char* Property_BlendValue      = "BlendFunc";
 
 static FlatBuffersSerialize* _instanceFlatBuffersSerialize = nullptr;
 
-FlatBuffersSerialize::FlatBuffersSerialize()
-    : _isSimulator(false)
-    , _builder(nullptr)
-    , _csparsebinary(nullptr)
+FlatBuffersSerialize::FlatBuffersSerialize() : _isSimulator(false), _builder(nullptr), _csparsebinary(nullptr)
 {
     CREATE_CLASS_NODE_READER_INFO(NodeReader);
     CREATE_CLASS_NODE_READER_INFO(SingleNodeReader);
@@ -110,13 +108,9 @@ FlatBuffersSerialize::FlatBuffersSerialize()
     CREATE_CLASS_NODE_READER_INFO(PageViewReader);
     CREATE_CLASS_NODE_READER_INFO(ListViewReader);
     CREATE_CLASS_NODE_READER_INFO(TextFieldExReader);
-
 }
 
-FlatBuffersSerialize::~FlatBuffersSerialize()
-{
-
-}
+FlatBuffersSerialize::~FlatBuffersSerialize() {}
 
 FlatBuffersSerialize* FlatBuffersSerialize::getInstance()
 {
@@ -131,13 +125,11 @@ FlatBuffersSerialize* FlatBuffersSerialize::getInstance()
 void FlatBuffersSerialize::purge()
 {
     CC_SAFE_DELETE(_instanceFlatBuffersSerialize);
-
 }
 
 void FlatBuffersSerialize::destroyInstance()
 {
     CC_SAFE_DELETE(_instanceFlatBuffersSerialize);
-
 }
 
 void FlatBuffersSerialize::deleteFlatBufferBuilder()
@@ -149,7 +141,8 @@ void FlatBuffersSerialize::deleteFlatBufferBuilder()
     }
 }
 
-std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(const std::string& xmlFileName, const std::string& flatbuffersFileName)
+std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(const std::string& xmlFileName,
+                                                                  const std::string& flatbuffersFileName)
 {
     std::string inFullpath = FileUtils::getInstance()->fullPathForFilename(xmlFileName).c_str();
 
@@ -164,7 +157,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(const std::str
 }
 
 std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLBuffer(std::string& xmlBuffer,
-    const std::string& flatbuffersFileName)
+                                                                    const std::string& flatbuffersFileName)
 {
     // xml parse
     pugi::xml_document document;
@@ -175,16 +168,15 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLBuffer(std::string&
     return "";
 }
 
-std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
-    const std::string& flatbuffersFileName)
+std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, const std::string& flatbuffersFileName)
 {
     auto thiz = FlatBuffersSerialize::getInstance();
 
     // xml parse
     pugi::xml_document& document = *reinterpret_cast<pugi::xml_document*>(opaque);
-    
-    pugi::xml_node rootElement = document.document_element();// Root
-//    CCLOG("rootElement name = %s", rootelement.name());
+
+    pugi::xml_node rootElement = document.document_element();  // Root
+                                                               //    CCLOG("rootElement name = %s", rootelement.name());
 
     pugi::xml_node element = rootElement.first_child();
 
@@ -196,7 +188,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
         //        CCLOG("entity name = %s", element.name());
         if (strcmp("PropertyGroup", element.name()) == 0)
         {
-            auto attribute =  element.first_attribute();
+            auto attribute = element.first_attribute();
             while (attribute && strcmp("Version", attribute.name()) != 0)
                 attribute = attribute.next_attribute();
             if (attribute)
@@ -207,13 +199,13 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
 
         if (strcmp("Content", element.name()) == 0)
         {
-            auto attribute =  element.first_attribute();
+            auto attribute = element.first_attribute();
 
             //
             if (!attribute)
             {
                 serializeEnabled = true;
-                rootType = "NodeObjectData";
+                rootType         = "NodeObjectData";
             }
             //
 
@@ -269,12 +261,12 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
         {
             std::string name = child.name();
 
-            if (name == "Animation") // action
+            if (name == "Animation")  // action
             {
                 pugi::xml_node animation = child;
-                action = thiz->createNodeAction(animation);
+                action                   = thiz->createNodeAction(animation);
             }
-            else if (name == "ObjectData") // nodeTree
+            else if (name == "ObjectData")  // nodeTree
             {
                 pugi::xml_node objectData = child;
 
@@ -294,7 +286,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
 
                 nodeTree = thiz->createNodeTree(objectData, rootType);
             }
-            else if (name == "AnimationList") // animation list
+            else if (name == "AnimationList")  // animation list
             {
                 pugi::xml_node animationinfoElement = child.first_child();
                 while (animationinfoElement)
@@ -307,26 +299,20 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
             child = child.next_sibling();
         }
 
-
-        auto csparsebinary = CreateCSParseBinary(*thiz->_builder,
-            thiz->_builder->CreateString(thiz->_csdVersion),
-            thiz->_builder->CreateVector(thiz->_textures),
-            thiz->_builder->CreateVector(thiz->_texturePngs),
-            nodeTree,
-            action,
-            thiz->_builder->CreateVector(animationInfos));
+        auto csparsebinary = CreateCSParseBinary(*thiz->_builder, thiz->_builder->CreateString(thiz->_csdVersion),
+                                                 thiz->_builder->CreateVector(thiz->_textures),
+                                                 thiz->_builder->CreateVector(thiz->_texturePngs), nodeTree, action,
+                                                 thiz->_builder->CreateVector(animationInfos));
         thiz->_builder->Finish(csparsebinary);
 
         thiz->_textures.clear();
         thiz->_texturePngs.clear();
 
-
         std::string outFullPath = FileUtils::getInstance()->fullPathForFilename(flatbuffersFileName);
-        size_t pos = outFullPath.find_last_of('.');
-        std::string convert = outFullPath.substr(0, pos).append(".csb");
-        auto save = FileUtils::writeBinaryToFile(thiz->_builder->GetBufferPointer(),
-            thiz->_builder->GetSize(),
-            convert);
+        size_t pos              = outFullPath.find_last_of('.');
+        std::string convert     = outFullPath.substr(0, pos).append(".csb");
+        auto save =
+            FileUtils::writeBinaryToFile(thiz->_builder->GetBufferPointer(), thiz->_builder->GetSize(), convert);
         if (!save)
         {
             return "couldn't save files!";
@@ -339,8 +325,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque,
 }
 
 // NodeTree
-Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
-    std::string classType)
+Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData, std::string classType)
 {
     std::string classname = classType.substr(0, classType.find("ObjectData"));
     //    CCLOG("classname = %s", classname.c_str());
@@ -352,34 +337,34 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
 
     if (classname == "ProjectNode")
     {
-        auto reader = ProjectNodeReader::getInstance();
+        auto reader      = ProjectNodeReader::getInstance();
         auto tempOptions = reader->createOptionsWithFlatBuffers(objectData, _builder);
-        
+
         options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
     }
     else if (classname == "SimpleAudio")
     {
-        auto reader = ComAudioReader::getInstance();
+        auto reader      = ComAudioReader::getInstance();
         auto tempOptions = reader->createOptionsWithFlatBuffers(objectData, _builder);
-        options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
+        options          = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
     }
     else
     {
         std::string readername = getGUIClassName(classname);
         readername.append("Reader");
 
-        NodeReaderProtocol* reader = dynamic_cast<NodeReaderProtocol*>(ObjectFactory::getInstance()->createObject(readername));
+        NodeReaderProtocol* reader =
+            dynamic_cast<NodeReaderProtocol*>(ObjectFactory::getInstance()->createObject(readername));
         if (reader != nullptr)
         {
             auto tempOptions = reader->createOptionsWithFlatBuffers(objectData, _builder);
-            options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
+            options          = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
         }
     }
 
-
     // children
     bool containChildrenElement = false;
-    auto child = objectData.first_child();
+    auto child                  = objectData.first_child();
 
     while (child)
     {
@@ -401,12 +386,12 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
 
         while (child)
         {
-            auto attribute =  child.first_attribute();
-            bool bHasType = false;
+            auto attribute = child.first_attribute();
+            bool bHasType  = false;
             while (attribute)
             {
                 std::string attriname = attribute.name();
-                std::string value = attribute.value();
+                std::string value     = attribute.value();
 
                 if (attriname == "ctype")
                 {
@@ -430,11 +415,11 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
     //
 
     std::string customClassName;
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
         std::string attriname = attribute.name();
-        std::string value = attribute.value();
+        std::string value     = attribute.value();
 
         if (attriname == "CustomClassName")
         {
@@ -445,19 +430,15 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
         attribute = attribute.next_attribute();
     }
 
-    return CreateNodeTree(*_builder,
-        _builder->CreateString(classname),
-        _builder->CreateVector(children),
-        options,
-        _builder->CreateString(customClassName));
-
+    return CreateNodeTree(*_builder, _builder->CreateString(classname), _builder->CreateVector(children), options,
+                          _builder->CreateString(customClassName));
 }
 
 int FlatBuffersSerialize::getResourceType(std::string key)
 {
     if (key == "Normal" || key == "Default")
     {
-        return 	0;
+        return 0;
     }
 
     if (_isSimulator)
@@ -470,7 +451,7 @@ int FlatBuffersSerialize::getResourceType(std::string key)
     return 1;
 }
 
-std::string FlatBuffersSerialize::getGUIClassName(const std::string &name)
+std::string FlatBuffersSerialize::getGUIClassName(const std::string& name)
 {
     std::string convertedClassName = name;
     if (name == "Panel")
@@ -497,7 +478,6 @@ std::string FlatBuffersSerialize::getGUIClassName(const std::string &name)
     {
         convertedClassName = "TextBMFont";
     }
-
 
     return convertedClassName;
 }
@@ -572,18 +552,18 @@ std::string FlatBuffersSerialize::getWidgetReaderClassName(Widget* widget)
 Offset<NodeAction> FlatBuffersSerialize::createNodeAction(pugi::xml_node objectData)
 {
     int duration = 0;
-    float speed = 0.0f;
+    float speed  = 0.0f;
     std::string currentAnimationName;
 
     //    CCLOG("animation name = %s", objectData->Name());
 
-        // ActionTimeline
-    auto attribute =  objectData.first_attribute();
+    // ActionTimeline
+    auto attribute = objectData.first_attribute();
 
     // attributes
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name  = attribute.name();
         std::string value = attribute.value();
 
         if (name == "Duration")
@@ -613,23 +593,20 @@ Offset<NodeAction> FlatBuffersSerialize::createNodeAction(pugi::xml_node objectD
         timelineElement = timelineElement.next_sibling();
     }
 
-    return CreateNodeAction(*_builder,
-        duration,
-        speed,
-        _builder->CreateVector(timelines),
-        _builder->CreateString(currentAnimationName));
+    return CreateNodeAction(*_builder, duration, speed, _builder->CreateVector(timelines),
+                            _builder->CreateString(currentAnimationName));
 }
 
 Offset<flatbuffers::AnimationInfo> FlatBuffersSerialize::createAnimationInfo(pugi::xml_node objectData)
 {
     std::string infoName;
     int startIndex = 0;
-    int endIndex = 0;
+    int endIndex   = 0;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute.name();
+        std::string attriname  = attribute.name();
         std::string attrivalue = attribute.value();
         if (attriname == "Name")
         {
@@ -654,10 +631,10 @@ Offset<TimeLine> FlatBuffersSerialize::createTimeLine(pugi::xml_node objectData)
     std::string property;
 
     // TimelineData attributes
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name  = attribute.name();
         std::string value = attribute.value();
 
         if (name == "ActionTag")
@@ -683,117 +660,116 @@ Offset<TimeLine> FlatBuffersSerialize::createTimeLine(pugi::xml_node objectData)
         if (property == Property_VisibleForFrame)
         {
             auto boolFrame = createBoolFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                0, // ScaleFrame
-                0, // ColorFrame
-                0, // TextureFrame
-                0, // EventFrame
-                0, // IntFrame
-                boolFrame);
+            frame          = CreateFrame(*_builder,
+                                         0,  // PointFrame
+                                         0,  // ScaleFrame
+                                         0,  // ColorFrame
+                                         0,  // TextureFrame
+                                         0,  // EventFrame
+                                         0,  // IntFrame
+                                         boolFrame);
         }
         else if (property == Property_Position)
         {
             auto pointFrame = createPointFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                pointFrame);
+            frame           = CreateFrame(*_builder, pointFrame);
         }
         else if (property == Property_Scale)
         {
             auto scaleFrame = createScaleFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                scaleFrame);
+            frame           = CreateFrame(*_builder,
+                                          0,  // PointFrame
+                                          scaleFrame);
         }
         else if (property == Property_RotationSkew)
         {
             auto scaleFrame = createScaleFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                scaleFrame);
+            frame           = CreateFrame(*_builder,
+                                          0,  // PointFrame
+                                          scaleFrame);
         }
         else if (property == Property_CColor)
         {
             auto colorFrame = createColorFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                0, // ScaleFrame
-                colorFrame);
+            frame           = CreateFrame(*_builder,
+                                          0,  // PointFrame
+                                          0,  // ScaleFrame
+                                          colorFrame);
         }
         else if (property == Property_FileData)
         {
             auto textureFrame = createTextureFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                0, // ScaleFrame
-                0, // ColorFrame
-                textureFrame);
+            frame             = CreateFrame(*_builder,
+                                            0,  // PointFrame
+                                            0,  // ScaleFrame
+                                            0,  // ColorFrame
+                                            textureFrame);
         }
         else if (property == Property_FrameEvent)
         {
             auto eventFrame = createEventFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                0, // ScaleFrame
-                0, // ColorFrame
-                0, // TextureFrame
-                eventFrame);
+            frame           = CreateFrame(*_builder,
+                                          0,  // PointFrame
+                                          0,  // ScaleFrame
+                                          0,  // ColorFrame
+                                          0,  // TextureFrame
+                                          eventFrame);
         }
         else if (property == Property_Alpha)
         {
             auto intFrame = createIntFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                0, // ScaleFrame
-                0, // ColorFrame
-                0, // TextureFrame
-                0, // EventFrame
-                intFrame);
+            frame         = CreateFrame(*_builder,
+                                        0,  // PointFrame
+                                        0,  // ScaleFrame
+                                        0,  // ColorFrame
+                                        0,  // TextureFrame
+                                        0,  // EventFrame
+                                        intFrame);
         }
         else if (property == Property_AnchorPoint)
         {
             auto scaleFrame = createScaleFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                scaleFrame);
+            frame           = CreateFrame(*_builder,
+                                          0,  // PointFrame
+                                          scaleFrame);
         }
         else if (property == Property_ZOrder)
         {
             auto intFrame = createIntFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                0, // ScaleFrame
-                0, // ColorFrame
-                0, // TextureFrame
-                0, // EventFrame
-                intFrame);
+            frame         = CreateFrame(*_builder,
+                                        0,  // PointFrame
+                                        0,  // ScaleFrame
+                                        0,  // ColorFrame
+                                        0,  // TextureFrame
+                                        0,  // EventFrame
+                                        intFrame);
         }
         else if (property == Property_ActionValue)
         {
             auto innerActionFrame = createInnerActionFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                0, // ScaleFrame
-                0, // ColorFrame
-                0, // TextureFrame
-                0, // EventFrame
-                0, // IntFrame
-                0, // BoolFrame
-                innerActionFrame);
+            frame                 = CreateFrame(*_builder,
+                                                0,  // PointFrame
+                                                0,  // ScaleFrame
+                                                0,  // ColorFrame
+                                                0,  // TextureFrame
+                                                0,  // EventFrame
+                                                0,  // IntFrame
+                                                0,  // BoolFrame
+                                                innerActionFrame);
         }
         else if (property == Property_BlendValue)
         {
             auto blendFrame = createBlendFrame(frameElement);
-            frame = CreateFrame(*_builder,
-                0, // PointFrame
-                0, // ScaleFrame
-                0, // ColorFrame
-                0, // TextureFrame
-                0, // EventFrame
-                0, // IntFrame
-                0, // BoolFrame
-                0, //InnerActionFrame
-                blendFrame);
+            frame           = CreateFrame(*_builder,
+                                          0,  // PointFrame
+                                          0,  // ScaleFrame
+                                          0,  // ColorFrame
+                                          0,  // TextureFrame
+                                          0,  // EventFrame
+                                          0,  // IntFrame
+                                          0,  // BoolFrame
+                                          0,  // InnerActionFrame
+                                          blendFrame);
         }
 
         frames.push_back(frame);
@@ -801,22 +777,19 @@ Offset<TimeLine> FlatBuffersSerialize::createTimeLine(pugi::xml_node objectData)
         frameElement = frameElement.next_sibling();
     }
 
-    return CreateTimeLine(*_builder,
-        _builder->CreateString(property),
-        actionTag,
-        _builder->CreateVector(frames));
+    return CreateTimeLine(*_builder, _builder->CreateString(property), actionTag, _builder->CreateVector(frames));
 }
 
 Offset<flatbuffers::PointFrame> FlatBuffersSerialize::createPointFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
-    bool tween = true;
+    bool tween     = true;
     Vec2 position;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name  = attribute.name();
         std::string value = attribute.value();
 
         if (name == "X")
@@ -839,27 +812,21 @@ Offset<flatbuffers::PointFrame> FlatBuffersSerialize::createPointFrame(pugi::xml
         attribute = attribute.next_attribute();
     }
 
-
-
     FVec2 f_position(position.x, position.y);
 
-    return CreatePointFrame(*_builder,
-        frameIndex,
-        tween,
-        &f_position,
-        createEasingData(objectData.first_child()));
+    return CreatePointFrame(*_builder, frameIndex, tween, &f_position, createEasingData(objectData.first_child()));
 }
 
 Offset<flatbuffers::ScaleFrame> FlatBuffersSerialize::createScaleFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
-    bool tween = true;
+    bool tween     = true;
     Vec2 scale;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name  = attribute.name();
         std::string value = attribute.value();
 
         if (name == "X")
@@ -884,23 +851,19 @@ Offset<flatbuffers::ScaleFrame> FlatBuffersSerialize::createScaleFrame(pugi::xml
 
     Scale f_scale(scale.x, scale.y);
 
-    return CreateScaleFrame(*_builder,
-        frameIndex,
-        tween,
-        &f_scale,
-        createEasingData(objectData.first_child()));
+    return CreateScaleFrame(*_builder, frameIndex, tween, &f_scale, createEasingData(objectData.first_child()));
 }
 
 Offset<flatbuffers::ColorFrame> FlatBuffersSerialize::createColorFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
-    bool tween = true;
+    bool tween     = true;
     Color3B color;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name  = attribute.name();
         std::string value = attribute.value();
 
         if (name == "FrameIndex")
@@ -922,7 +885,7 @@ Offset<flatbuffers::ColorFrame> FlatBuffersSerialize::createColorFrame(pugi::xml
         attribute = child.first_attribute();
         while (attribute)
         {
-            std::string name = attribute.name();
+            std::string name  = attribute.name();
             std::string value = attribute.value();
 
             if (name == "R")
@@ -946,17 +909,13 @@ Offset<flatbuffers::ColorFrame> FlatBuffersSerialize::createColorFrame(pugi::xml
 
     Color f_color(255, color.r, color.g, color.b);
 
-    return CreateColorFrame(*_builder,
-        frameIndex,
-        tween,
-        &f_color,
-        createEasingData(objectData.first_child()));
+    return CreateColorFrame(*_builder, frameIndex, tween, &f_color, createEasingData(objectData.first_child()));
 }
 
 Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
-    bool tween = true;
+    bool tween     = true;
 
     std::string path;
     std::string plistFile;
@@ -965,11 +924,11 @@ Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(pugi:
     std::string texture;
     std::string texturePng;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
         std::string attriname = attribute.name();
-        std::string value = attribute.value();
+        std::string value     = attribute.value();
 
         if (attriname == "FrameIndex")
         {
@@ -990,7 +949,7 @@ Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(pugi:
         while (attribute)
         {
             std::string attriname = attribute.name();
-            std::string value = attribute.value();
+            std::string value     = attribute.value();
 
             if (attriname == "Path")
             {
@@ -1003,7 +962,7 @@ Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(pugi:
             else if (attriname == "Plist")
             {
                 plistFile = value;
-                texture = value;
+                texture   = value;
             }
 
             attribute = attribute.next_attribute();
@@ -1017,29 +976,25 @@ Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(pugi:
         child = child.next_sibling();
     }
 
-    return CreateTextureFrame(*_builder,
-        frameIndex,
-        tween,
-        CreateResourceData(*_builder,
-            _builder->CreateString(path),
-            _builder->CreateString(plistFile),
-            resourceType),
+    return CreateTextureFrame(
+        *_builder, frameIndex, tween,
+        CreateResourceData(*_builder, _builder->CreateString(path), _builder->CreateString(plistFile), resourceType),
         createEasingData(objectData.first_child()));
 }
 
 Offset<flatbuffers::EventFrame> FlatBuffersSerialize::createEventFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
-    bool tween = true;
+    bool tween     = true;
     std::string value;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name       = attribute.name();
         std::string attrivalue = attribute.value();
 
-        if (name == "Value") // to be gonna modify
+        if (name == "Value")  // to be gonna modify
         {
             value = attrivalue;
         }
@@ -1055,26 +1010,23 @@ Offset<flatbuffers::EventFrame> FlatBuffersSerialize::createEventFrame(pugi::xml
         attribute = attribute.next_attribute();
     }
 
-    return CreateEventFrame(*_builder,
-        frameIndex,
-        tween,
-        _builder->CreateString(value),
-        createEasingData(objectData.first_child()));
+    return CreateEventFrame(*_builder, frameIndex, tween, _builder->CreateString(value),
+                            createEasingData(objectData.first_child()));
 }
 
 Offset<flatbuffers::IntFrame> FlatBuffersSerialize::createIntFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
-    bool tween = true;
-    int value = 0;
+    bool tween     = true;
+    int value      = 0;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name       = attribute.name();
         std::string attrivalue = attribute.value();
 
-        if (name == "Value") // to be gonna modify
+        if (name == "Value")  // to be gonna modify
         {
             value = atoi(attrivalue.c_str());
         }
@@ -1090,23 +1042,19 @@ Offset<flatbuffers::IntFrame> FlatBuffersSerialize::createIntFrame(pugi::xml_nod
         attribute = attribute.next_attribute();
     }
 
-    return CreateIntFrame(*_builder,
-        frameIndex,
-        tween,
-        value,
-        createEasingData(objectData.first_child()));
+    return CreateIntFrame(*_builder, frameIndex, tween, value, createEasingData(objectData.first_child()));
 }
 
 Offset<flatbuffers::BoolFrame> FlatBuffersSerialize::createBoolFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
-    bool tween = true;
-    bool value = true;
+    bool tween     = true;
+    bool value     = true;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name       = attribute.name();
         std::string attrivalue = attribute.value();
 
         if (name == "Value")
@@ -1125,25 +1073,21 @@ Offset<flatbuffers::BoolFrame> FlatBuffersSerialize::createBoolFrame(pugi::xml_n
         attribute = attribute.next_attribute();
     }
 
-    return CreateBoolFrame(*_builder,
-        frameIndex,
-        tween,
-        value,
-        createEasingData(objectData.first_child()));
+    return CreateBoolFrame(*_builder, frameIndex, tween, value, createEasingData(objectData.first_child()));
 }
 
 Offset<flatbuffers::InnerActionFrame> FlatBuffersSerialize::createInnerActionFrame(pugi::xml_node objectData)
 {
-    int frameIndex = 0;
-    bool tween = true;
+    int frameIndex      = 0;
+    bool tween          = true;
     int innerActionType = 0;
     std::string currentAniamtionName;
     int singleFrameIndex = 0;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name       = attribute.name();
         std::string attrivalue = attribute.value();
 
         if (name == "InnerActionType")
@@ -1181,27 +1125,23 @@ Offset<flatbuffers::InnerActionFrame> FlatBuffersSerialize::createInnerActionFra
         attribute = attribute.next_attribute();
     }
 
-    return CreateInnerActionFrame(*_builder,
-        frameIndex,
-        tween,
-        innerActionType,
-        _builder->CreateString(currentAniamtionName),
-        singleFrameIndex,
-        createEasingData(objectData.first_child()));
+    return CreateInnerActionFrame(*_builder, frameIndex, tween, innerActionType,
+                                  _builder->CreateString(currentAniamtionName), singleFrameIndex,
+                                  createEasingData(objectData.first_child()));
 }
 
 flatbuffers::Offset<flatbuffers::BlendFrame> FlatBuffersSerialize::createBlendFrame(pugi::xml_node objectData)
 {
     int frameIndex = 0;
-    bool tween = true;
+    bool tween     = true;
     int32_t src = GLBlendConst::ONE, dst = GLBlendConst::ONE_MINUS_SRC_ALPHA;
     std::string name;
     std::string value;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        name = attribute.name();
+        name  = attribute.name();
         value = attribute.value();
 
         if (name == "FrameIndex")
@@ -1226,11 +1166,7 @@ flatbuffers::Offset<flatbuffers::BlendFrame> FlatBuffersSerialize::createBlendFr
 
     flatbuffers::Offset<flatbuffers::EasingData> easingData;
     flatbuffers::BlendFunc blendFunc(src, dst);
-    return CreateBlendFrame(*_builder,
-        frameIndex,
-        tween,
-        &blendFunc,
-        easingData);
+    return CreateBlendFrame(*_builder, frameIndex, tween, &blendFunc, easingData);
 }
 
 flatbuffers::Offset<flatbuffers::EasingData> FlatBuffersSerialize::createEasingData(pugi::xml_node objectData)
@@ -1243,11 +1179,11 @@ flatbuffers::Offset<flatbuffers::EasingData> FlatBuffersSerialize::createEasingD
     int type = -1;
     std::vector<flatbuffers::FVec2> points;
 
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
 
     while (attribute)
     {
-        std::string name = attribute.name();
+        std::string name  = attribute.name();
         std::string value = attribute.value();
 
         if (name == "Type")
@@ -1271,7 +1207,7 @@ flatbuffers::Offset<flatbuffers::EasingData> FlatBuffersSerialize::createEasingD
 
             while (attribute)
             {
-                std::string name = attribute.name();
+                std::string name  = attribute.name();
                 std::string value = attribute.value();
 
                 if (name == "X")
@@ -1291,14 +1227,11 @@ flatbuffers::Offset<flatbuffers::EasingData> FlatBuffersSerialize::createEasingD
         }
     }
 
-    return CreateEasingData(*_builder,
-        type,
-        _builder->CreateVectorOfStructs(points));
+    return CreateEasingData(*_builder, type, _builder->CreateVectorOfStructs(points));
 }
 
-
 /* create flat buffers with XML */
-FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulator(const std::string &xmlFileName)
+FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulator(const std::string& xmlFileName)
 {
     std::string inFullpath = FileUtils::getInstance()->fullPathForFilename(xmlFileName);
 
@@ -1312,11 +1245,11 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
 
     // xml parse
     pugi::xml_document document;
-    if(!content.empty())
+    if (!content.empty())
         document.load_buffer_inplace(&content.front(), content.length());
 
-    pugi::xml_node rootElement = document.document_element();// Root
-//    CCLOG("rootElement name = %s", rootelement.name());
+    pugi::xml_node rootElement = document.document_element();  // Root
+                                                               //    CCLOG("rootElement name = %s", rootelement.name());
 
     pugi::xml_node element = rootElement.first_child();
 
@@ -1328,7 +1261,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
         //        CCLOG("entity name = %s", element.name());
         if (strcmp("PropertyGroup", element.name()) == 0)
         {
-            auto attribute =  element.first_attribute();
+            auto attribute = element.first_attribute();
             while (attribute && strcmp("Version", attribute.name()) != 0)
                 attribute = attribute.next_attribute();
             if (attribute)
@@ -1337,13 +1270,13 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
 
         if (strcmp("Content", element.name()) == 0)
         {
-            auto attribute =  element.first_attribute();
+            auto attribute = element.first_attribute();
 
             //
             if (!attribute)
             {
                 serializeEnabled = true;
-                rootType = "NodeObjectData";
+                rootType         = "NodeObjectData";
             }
         }
 
@@ -1369,7 +1302,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
 
         Offset<NodeTree> nodeTree;
         Offset<NodeAction> action;
-        std::vector<Offset<flatbuffers::AnimationInfo> > animationInfos;
+        std::vector<Offset<flatbuffers::AnimationInfo>> animationInfos;
 
         auto child = element.first_child();
 
@@ -1377,15 +1310,15 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
         {
             std::string name = child.name();
 
-            if (name == "Animation") // action
+            if (name == "Animation")  // action
             {
                 pugi::xml_node animation = child;
-                action = createNodeAction(animation);
+                action                   = createNodeAction(animation);
             }
-            else if (name == "ObjectData") // nodeTree
+            else if (name == "ObjectData")  // nodeTree
             {
                 pugi::xml_node objectData = child;
-                auto nameElem = objectData.first_attribute();
+                auto nameElem             = objectData.first_attribute();
                 while (nameElem)
                 {
                     if (0 == strcmp("ctype", nameElem.name()))
@@ -1400,7 +1333,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
                     rootType = "NodeObjectData";
                 nodeTree = createNodeTreeForSimulator(objectData, rootType);
             }
-            else if (name == "AnimationList") // animation list
+            else if (name == "AnimationList")  // animation list
             {
                 pugi::xml_node animationinfoElement = child.first_child();
                 while (animationinfoElement)
@@ -1413,14 +1346,10 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
 
             child = child.next_sibling();
         }
-        
-		auto csparsebinary = CreateCSParseBinary(*_builder,
-                                                 _builder->CreateString(_csdVersion),
-                                                 _builder->CreateVector(_textures),
-                                                 _builder->CreateVector(_texturePngs),
-                                                 nodeTree,
-                                                 action,
-                                                 _builder->CreateVector(animationInfos));
+
+        auto csparsebinary = CreateCSParseBinary(
+            *_builder, _builder->CreateString(_csdVersion), _builder->CreateVector(_textures),
+            _builder->CreateVector(_texturePngs), nodeTree, action, _builder->CreateVector(animationInfos));
         _builder->Finish(csparsebinary);
 
         _textures.clear();
@@ -1429,8 +1358,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
     return _builder;
 }
 
-Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node objectData,
-    std::string classType)
+Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node objectData, std::string classType)
 {
     std::string classname = classType.substr(0, classType.find("ObjectData"));
     //    CCLOG("classname = %s", classname.c_str());
@@ -1443,13 +1371,13 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
     if (classname == "ProjectNode")
     {
         auto projectNodeOptions = createProjectNodeOptionsForSimulator(objectData);
-        options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&projectNodeOptions));
+        options                 = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&projectNodeOptions));
     }
     else if (classname == "SimpleAudio")
     {
-        auto reader = ComAudioReader::getInstance();
+        auto reader      = ComAudioReader::getInstance();
         auto tempOptions = reader->createOptionsWithFlatBuffers(objectData, _builder);
-        
+
         options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
     }
     else
@@ -1457,19 +1385,19 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
         std::string readername = getGUIClassName(classname);
         readername.append("Reader");
 
-        NodeReaderProtocol* reader = dynamic_cast<NodeReaderProtocol*>(ObjectFactory::getInstance()->createObject(readername));
+        NodeReaderProtocol* reader =
+            dynamic_cast<NodeReaderProtocol*>(ObjectFactory::getInstance()->createObject(readername));
         if (reader != nullptr)
         {
             auto tempOptions = reader->createOptionsWithFlatBuffers(objectData, _builder);
-            
+
             options = CreateOptions(*_builder, *(Offset<WidgetOptions>*)(&tempOptions));
         }
     }
 
-
     // children
     bool containChildrenElement = false;
-    auto child = objectData.first_child();
+    auto child                  = objectData.first_child();
 
     while (child)
     {
@@ -1491,12 +1419,12 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
 
         while (child)
         {
-            auto attribute =  child.first_attribute();
-            bool bHasType = false;
+            auto attribute = child.first_attribute();
+            bool bHasType  = false;
             while (attribute)
             {
                 std::string attriname = attribute.name();
-                std::string value = attribute.value();
+                std::string value     = attribute.value();
 
                 if (attriname == "ctype")
                 {
@@ -1519,13 +1447,12 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
     }
     //
 
-
     std::string customClassName;
-    auto attribute =  objectData.first_attribute();
+    auto attribute = objectData.first_attribute();
     while (attribute)
     {
         std::string attriname = attribute.name();
-        std::string value = attribute.value();
+        std::string value     = attribute.value();
 
         if (attriname == "CustomClassName")
         {
@@ -1536,16 +1463,13 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
         attribute = attribute.next_attribute();
     }
 
-    return CreateNodeTree(*_builder,
-        _builder->CreateString(classname),
-        _builder->CreateVector(children),
-        options,
-        _builder->CreateString(customClassName));
+    return CreateNodeTree(*_builder, _builder->CreateString(classname), _builder->CreateVector(children), options,
+                          _builder->CreateString(customClassName));
 }
 
 Offset<ProjectNodeOptions> FlatBuffersSerialize::createProjectNodeOptionsForSimulator(pugi::xml_node objectData)
 {
-    auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, _builder);
+    auto temp        = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, _builder);
     auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
 
     std::string filename;
@@ -1555,7 +1479,7 @@ Offset<ProjectNodeOptions> FlatBuffersSerialize::createProjectNodeOptionsForSimu
     // inneraction speed
     while (objattri)
     {
-        std::string name = objattri.name();
+        std::string name  = objattri.name();
         std::string value = objattri.value();
         if (name == "InnerActionSpeed")
         {
@@ -1573,11 +1497,11 @@ Offset<ProjectNodeOptions> FlatBuffersSerialize::createProjectNodeOptionsForSimu
 
         if (name == "FileData")
         {
-            auto attribute =  child.first_attribute();
+            auto attribute = child.first_attribute();
 
             while (attribute)
             {
-                name = attribute.name();
+                name              = attribute.name();
                 std::string value = attribute.value();
 
                 if (name == "Path")
@@ -1592,18 +1516,15 @@ Offset<ProjectNodeOptions> FlatBuffersSerialize::createProjectNodeOptionsForSimu
         child = child.next_sibling();
     }
 
-    return CreateProjectNodeOptions(*_builder,
-        nodeOptions,
-        _builder->CreateString(filename),
-        innerspeed);
+    return CreateProjectNodeOptions(*_builder, nodeOptions, _builder->CreateString(filename), innerspeed);
 }
 
 /* Serialize language XML file to Flat Buffers file. */
 std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData(const std::string& xmlFilePath,
-    const std::string& flatBuffersFilePath,
-    const std::string& languageName)
+                                                                                 const std::string& flatBuffersFilePath,
+                                                                                 const std::string& languageName)
 {
-    //Read and parse XML data file.
+    // Read and parse XML data file.
     if (!FileUtils::getInstance()->isFileExist(xmlFilePath))
         return "Language XML file does not exist.";
     std::string content = FileUtils::getInstance()->getStringFromFile(xmlFilePath);
@@ -1611,9 +1532,9 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
     if (!content.empty())
         document.load_buffer_inplace(&content.front(), content.length());
     pugi::xml_node element = document.document_element();
-    element = element.first_child();
+    element                = element.first_child();
 
-    //Create FlatBuffers file using the language data in XML file.
+    // Create FlatBuffers file using the language data in XML file.
     _builder = new FlatBufferBuilder();
     std::vector<Offset<LanguageItem>> langItemList;
     while (element)
@@ -1624,21 +1545,21 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
             continue;
         }
 
-        //Read all of the Key-Values in the XML file.
+        // Read all of the Key-Values in the XML file.
         std::string key;
         std::string text;
-        bool hasKeyReaded = false;
-        bool hasTextReaded = false;
+        bool hasKeyReaded           = false;
+        bool hasTextReaded          = false;
         pugi::xml_node childElement = element.first_child();
         while (childElement)
         {
-            //Record language key.
+            // Record language key.
             if (strcmp("key", childElement.name()) == 0)
             {
-                key = childElement.text().as_string();
+                key          = childElement.text().as_string();
                 hasKeyReaded = true;
             }
-            //Record corresponding text.
+            // Record corresponding text.
             else if (strcmp(languageName.c_str(), childElement.name()) == 0)
             {
                 const char* langText = childElement.text().as_string();
@@ -1655,7 +1576,8 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
             childElement = childElement.next_sibling();
         }
 
-        Offset<flatbuffers::LanguageItem> langItem = CreateLanguageItem(*_builder, _builder->CreateString(key), _builder->CreateString(text));
+        Offset<flatbuffers::LanguageItem> langItem =
+            CreateLanguageItem(*_builder, _builder->CreateString(key), _builder->CreateString(text));
         langItemList.push_back(langItem);
 
         element = element.next_sibling();
@@ -1663,13 +1585,13 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
 
     auto langSet = CreateLanguageSet(*_builder, _builder->CreateVector(langItemList));
     _builder->Finish(langSet);
-    bool isSuccess = FileUtils::writeBinaryToFile(_builder->GetBufferPointer(),
-        _builder->GetSize(), flatBuffersFilePath);
+    bool isSuccess =
+        FileUtils::writeBinaryToFile(_builder->GetBufferPointer(), _builder->GetSize(), flatBuffersFilePath);
 
     if (isSuccess)
         return "";
     else
         return "Failed to save language .csb file.";
 }
-}
+}  // namespace cocostudio
 /**/

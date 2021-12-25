@@ -45,7 +45,7 @@ class LabelAtlas;
 class Sprite;
 class SpriteFrame;
 #define kItemSize 32
-    
+
 /**
  * @addtogroup _2d
  * @{
@@ -79,41 +79,39 @@ public:
     virtual bool isSelected() const;
 
     /** Set the callback to the menu item.
-    * @code
-    * In js,can contain two params,the second param is jsptr.
-    * @endcode
-    * @lua NA
-    */
+     * @code
+     * In js,can contain two params,the second param is jsptr.
+     * @endcode
+     * @lua NA
+     */
     void setCallback(const ccMenuCallback& callback);
 
     /**
      * @js NA
      */
     virtual std::string getDescription() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    MenuItem()
-    : _selected(false)
-    , _enabled(false)
-	, _callback(nullptr)
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        MenuItem()
+        : _selected(false), _enabled(false), _callback(nullptr)
     {}
     /**
      * @js NA
      * @lua NA
      */
     virtual ~MenuItem();
-    
+
     /** Initializes a MenuItem with a target/selector.
      * @lua NA
      */
     bool initWithCallback(const ccMenuCallback& callback);
 
 protected:
-    bool            _selected;
-    bool            _enabled;
+    bool _selected;
+    bool _enabled;
     // callback
     ccMenuCallback _callback;
 
@@ -133,10 +131,10 @@ class CC_DLL MenuItemLabel : public MenuItem
 {
 public:
     /** Creates a MenuItemLabel with a Label and a callback. */
-    static MenuItemLabel * create(Node*label, const ccMenuCallback& callback);
+    static MenuItemLabel* create(Node* label, const ccMenuCallback& callback);
 
     /** Creates a MenuItemLabel with a Label. Target and selector will be nil. */
-    static MenuItemLabel* create(Node *label);
+    static MenuItemLabel* create(Node* label);
 
     /** Sets a new string to the inner label. */
     void setString(const std::string& label);
@@ -149,39 +147,38 @@ public:
 
     /** Sets the color that will be used when the item is disabled. */
     void setDisabledColor(const Color3B& color) { _disabledColor = color; }
-    
+
     /** Gets the label that is rendered. */
     Node* getLabel() const { return _label; }
-    
+
     /** Sets the label that is rendered. */
     void setLabel(Node* node);
-    
+
     // Overrides
     virtual void activate() override;
     virtual void selected() override;
     virtual void unselected() override;
     virtual void setEnabled(bool enabled) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    MenuItemLabel()
-    : _originalScale(0.0)
-    , _label(nullptr)
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        MenuItemLabel()
+        : _originalScale(0.0), _label(nullptr)
     {}
     /**
      * @js NA
      * @lua NA
      */
     virtual ~MenuItemLabel();
-    
+
     /** Initializes a MenuItemLabel with a Label, target and selector. */
     bool initWithLabel(Node* label, const ccMenuCallback& callback);
-    
+
 protected:
-    Color3B    _colorBackup;
-    float      _originalScale;
+    Color3B _colorBackup;
+    float _originalScale;
 
     /** The color that will be used to disable the item. */
     Color3B _disabledColor;
@@ -192,7 +189,6 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(MenuItemLabel);
 };
 
-
 /** @brief A MenuItemAtlasFont.
  Helper class that creates a MenuItemLabel class with a LabelAtlas.
  */
@@ -200,28 +196,42 @@ class CC_DLL MenuItemAtlasFont : public MenuItemLabel
 {
 public:
     /** Creates a menu item from a string and atlas with a target/selector. */
-    static MenuItemAtlasFont* create(const std::string& value, const std::string& charMapFile, int itemWidth, int itemHeight, char startCharMap);
+    static MenuItemAtlasFont* create(const std::string& value,
+                                     const std::string& charMapFile,
+                                     int itemWidth,
+                                     int itemHeight,
+                                     char startCharMap);
     /** Creates a menu item from a string and atlas. Use it with MenuItemToggle. */
-    static MenuItemAtlasFont* create(const std::string& value, const std::string& charMapFile, int itemWidth, int itemHeight, char startCharMap, const ccMenuCallback& callback);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    MenuItemAtlasFont(){}
+    static MenuItemAtlasFont* create(const std::string& value,
+                                     const std::string& charMapFile,
+                                     int itemWidth,
+                                     int itemHeight,
+                                     char startCharMap,
+                                     const ccMenuCallback& callback);
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        MenuItemAtlasFont()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~MenuItemAtlasFont(){}
-    
+    virtual ~MenuItemAtlasFont() {}
+
     /** Initializes a menu item from a string and atlas with a target/selector. */
-    bool initWithString(const std::string& value, const std::string& charMapFile, int itemWidth, int itemHeight, char startCharMap, const ccMenuCallback& callback);
+    bool initWithString(const std::string& value,
+                        const std::string& charMapFile,
+                        int itemWidth,
+                        int itemHeight,
+                        char startCharMap,
+                        const ccMenuCallback& callback);
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(MenuItemAtlasFont);
 };
-
 
 /** @brief A MenuItemFont.
  Helper class that creates a MenuItemLabel class with a Label.
@@ -230,9 +240,9 @@ class CC_DLL MenuItemFont : public MenuItemLabel
 {
 public:
     /** Creates a menu item from a string without target/selector. To be used with MenuItemToggle. */
-    static MenuItemFont * create(const std::string& value = "");
+    static MenuItemFont* create(const std::string& value = "");
     /** Creates a menu item from a string with a target/selector. */
-    static MenuItemFont * create(const std::string& value, const ccMenuCallback& callback);
+    static MenuItemFont* create(const std::string& value, const ccMenuCallback& callback);
 
     /** Set default font size. */
     static void setFontSize(int size);
@@ -242,7 +252,7 @@ public:
     static void setFontName(const std::string& name);
     /** Get the default font name. */
     static const std::string& getFontName();
-    
+
     /** Set font size.
      * c++ can not overload static and non-static member functions with the same parameter types.
      * so change the name to setFontSizeObj.
@@ -250,13 +260,13 @@ public:
      * @js NA
      */
     void setFontSizeObj(int size);
-    
+
     /** get font size .
      * @js getFontSize
      * @js NA
      */
     int getFontSizeObj() const;
-    
+
     /**
      * Set the font name .
      * c++ can not overload static and non-static member functions with the same parameter types.
@@ -271,21 +281,21 @@ public:
      * @js NA
      */
     const std::string& getFontNameObj() const;
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    MenuItemFont();
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        MenuItemFont();
     /**
      * @js NA
      * @lua NA
      */
     virtual ~MenuItemFont();
-    
+
     /** Initializes a menu item from a string with a target/selector. */
     bool initWithString(const std::string& value, const ccMenuCallback& callback);
-    
+
 protected:
     int _fontSize;
     std::string _fontName;
@@ -294,43 +304,45 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(MenuItemFont);
 };
 
-
 /** @brief MenuItemSprite accepts Node<RGBAProtocol> objects as items.
  The images has 3 different states:
  - unselected image
  - selected image
  - disabled image
- 
+
  @since v0.8.0
  */
 class CC_DLL MenuItemSprite : public MenuItem
 {
 public:
     /** Creates a menu item with a normal, selected and disabled image.*/
-    static MenuItemSprite * create(Node* normalSprite, Node* selectedSprite, Node* disabledSprite = nullptr);
+    static MenuItemSprite* create(Node* normalSprite, Node* selectedSprite, Node* disabledSprite = nullptr);
     /** Creates a menu item with a normal and selected image with a callable object. */
-    static MenuItemSprite * create(Node* normalSprite, Node* selectedSprite, const ccMenuCallback& callback);
+    static MenuItemSprite* create(Node* normalSprite, Node* selectedSprite, const ccMenuCallback& callback);
     /** Creates a menu item with a normal,selected  and disabled image with target/selector. */
-    static MenuItemSprite * create(Node* normalSprite, Node* selectedSprite, Node* disabledSprite, const ccMenuCallback& callback);
+    static MenuItemSprite* create(Node* normalSprite,
+                                  Node* selectedSprite,
+                                  Node* disabledSprite,
+                                  const ccMenuCallback& callback);
 
     /** Gets the image used when the item is not selected. */
     Node* getNormalImage() const { return _normalImage; }
-    
+
     /** Sets the image used when the item is not selected. */
     void setNormalImage(Node* image);
-    
+
     /** Gets the image used when the item is selected. */
     Node* getSelectedImage() const { return _selectedImage; }
-    
+
     /** Sets the image used when the item is selected. */
     void setSelectedImage(Node* image);
-    
+
     /** Gets the image used when the item is disabled. */
     Node* getDisabledImage() const { return _disabledImage; }
-    
+
     /** Sets the image used when the item is disabled. */
     void setDisabledImage(Node* image);
-    
+
     /**
      * The item was selected (not activated), similar to "mouse-over".
      @since v0.99.5
@@ -342,17 +354,16 @@ public:
 
     /** Enables or disables the item. */
     virtual void setEnabled(bool bEnabled);
-    
-CC_CONSTRUCTOR_ACCESS:
-    MenuItemSprite()
-    :_normalImage(nullptr)
-    ,_selectedImage(nullptr)
-    ,_disabledImage(nullptr)
+
+    CC_CONSTRUCTOR_ACCESS : MenuItemSprite() : _normalImage(nullptr), _selectedImage(nullptr), _disabledImage(nullptr)
     {}
 
     /** Initializes a menu item with a normal, selected and disabled image with a callable object. */
-    bool initWithNormalSprite(Node* normalSprite, Node* selectedSprite, Node* disabledSprite, const ccMenuCallback& callback);
-    
+    bool initWithNormalSprite(Node* normalSprite,
+                              Node* selectedSprite,
+                              Node* disabledSprite,
+                              const ccMenuCallback& callback);
+
 protected:
     virtual void updateImagesVisibility();
 
@@ -367,13 +378,12 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(MenuItemSprite);
 };
 
-
 /** @brief MenuItemImage accepts images as items.
  The images has 3 different states:
  - unselected image
  - selected image
  - disabled image
- 
+
  For best results try that all images are of the same size.
  */
 class CC_DLL MenuItemImage : public MenuItemSprite
@@ -384,11 +394,18 @@ public:
     /** Creates a menu item with a normal and selected image.*/
     static MenuItemImage* create(const std::string& normalImage, const std::string& selectedImage);
     /** Creates a menu item with a normal,selected  and disabled image.*/
-    static MenuItemImage* create(const std::string& normalImage, const std::string& selectedImage, const std::string& disabledImage);
+    static MenuItemImage* create(const std::string& normalImage,
+                                 const std::string& selectedImage,
+                                 const std::string& disabledImage);
     /** Creates a menu item with a normal and selected image with a callable object. */
-    static MenuItemImage* create(const std::string&normalImage, const std::string&selectedImage, const ccMenuCallback& callback);
+    static MenuItemImage* create(const std::string& normalImage,
+                                 const std::string& selectedImage,
+                                 const ccMenuCallback& callback);
     /** Creates a menu item with a normal,selected and disabled image with a callable object. */
-    static MenuItemImage* create(const std::string&normalImage, const std::string&selectedImage, const std::string&disabledImage, const ccMenuCallback& callback);
+    static MenuItemImage* create(const std::string& normalImage,
+                                 const std::string& selectedImage,
+                                 const std::string& disabledImage,
+                                 const ccMenuCallback& callback);
 
     /** Sets the sprite frame for the normal image. */
     void setNormalSpriteFrame(SpriteFrame* frame);
@@ -396,27 +413,30 @@ public:
     void setSelectedSpriteFrame(SpriteFrame* frame);
     /** Sets the sprite frame for the disabled image. */
     void setDisabledSpriteFrame(SpriteFrame* frame);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    MenuItemImage(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        MenuItemImage()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~MenuItemImage(){}
-    
+    virtual ~MenuItemImage() {}
+
     bool init();
-    
+
     /** Initializes a menu item with a normal, selected and disabled image with a callable object. */
-    bool initWithNormalImage(const std::string& normalImage, const std::string& selectedImage, const std::string& disabledImage, const ccMenuCallback& callback);
+    bool initWithNormalImage(const std::string& normalImage,
+                             const std::string& selectedImage,
+                             const std::string& disabledImage,
+                             const ccMenuCallback& callback);
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(MenuItemImage);
 };
-
 
 /** @brief A MenuItemToggle.
  A simple container class that "toggles" it's inner items.
@@ -428,27 +448,29 @@ public:
     /**
      *@brief Creates a menu item from a Array with a callable object.
      */
-    static MenuItemToggle * createWithCallback(const ccMenuCallback& callback, const Vector<MenuItem*>& menuItems);
+    static MenuItemToggle* createWithCallback(const ccMenuCallback& callback, const Vector<MenuItem*>& menuItems);
     /** Creates a menu item from a list of items with a callable object. */
-    static MenuItemToggle* createWithCallback(const ccMenuCallback& callback, MenuItem* item, ...) CC_REQUIRES_NULL_TERMINATION;
+    static MenuItemToggle* createWithCallback(const ccMenuCallback& callback,
+                                              MenuItem* item,
+                                              ...) CC_REQUIRES_NULL_TERMINATION;
     /** Creates a menu item with no target/selector and no items. */
     static MenuItemToggle* create();
-    
+
     /** Creates a menu item with a item. */
-    static MenuItemToggle* create(MenuItem *item);
-    
+    static MenuItemToggle* create(MenuItem* item);
+
     /** Add more menu item. */
-    void addSubItem(MenuItem *item);
-    
+    void addSubItem(MenuItem* item);
+
     /** Return the selected item. */
     MenuItem* getSelectedItem();
 
     /** Gets the index of the selected item. */
     unsigned int getSelectedIndex() const { return _selectedIndex; }
-    
+
     /** Sets the index of the selected item. */
     void setSelectedIndex(unsigned int index);
-    
+
     /** Gets the array that contains the subitems.
      *You can add/remove items in runtime, and you can replace the array with a new one.
      * @since v0.7.2
@@ -459,51 +481,47 @@ public:
     Vector<MenuItem*>& getSubItems() { return _subItems; }
 
     /** Sets the array that contains the subitems. */
-    void setSubItems(const Vector<MenuItem*>& items) {
-        _subItems = items;
-    }
-    
+    void setSubItems(const Vector<MenuItem*>& items) { _subItems = items; }
+
     // Overrides
     virtual void activate() override;
     virtual void selected() override;
     virtual void unselected() override;
     virtual void setEnabled(bool var) override;
     virtual void cleanup() override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    MenuItemToggle()
-    : _selectedIndex(0)
-    , _selectedItem(nullptr)
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        MenuItemToggle()
+        : _selectedIndex(0), _selectedItem(nullptr)
     {}
-    
+
     /** Initializes a menu item from a list of items with a callable object. */
     bool initWithCallback(const ccMenuCallback& callback, MenuItem* item, va_list args);
-    
+
     /** Initializes a menu item with a item. */
-    bool initWithItem(MenuItem *item);
+    bool initWithItem(MenuItem* item);
 
 protected:
     /** Returns the selected item. */
     unsigned int _selectedIndex;
     MenuItem* _selectedItem;
 
-    /** Array that contains the subitems. You can add/remove items in runtime, and you can replace the array with a new one.
+    /** Array that contains the subitems. You can add/remove items in runtime, and you can replace the array with a new
+     one.
      @since v0.7.2
      */
     Vector<MenuItem*> _subItems;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(MenuItemToggle);
-
 };
-
 
 // end of 2d group
 /// @}
 
 NS_CC_END
 
-#endif //__CCMENU_ITEM_H__
+#endif  //__CCMENU_ITEM_H__

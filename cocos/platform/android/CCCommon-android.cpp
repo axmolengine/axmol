@@ -31,14 +31,14 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-#define MAX_LEN         (cocos2d::kMaxLogLen + 1)
+#define MAX_LEN (cocos2d::kMaxLogLen + 1)
 
-void ccMessageBox(const char * pszMsg, const char * pszTitle)
+void ccMessageBox(const char* pszMsg, const char* pszTitle)
 {
     JniHelper::callStaticVoidMethod("org.cocos2dx.lib.Cocos2dxHelper", "showDialog", pszTitle, pszMsg);
 }
 
-void LuaLog(const char * pszFormat)
+void LuaLog(const char* pszFormat)
 {
     __android_log_write(ANDROID_LOG_DEBUG, "cocos2d-x debug info", pszFormat);
 }

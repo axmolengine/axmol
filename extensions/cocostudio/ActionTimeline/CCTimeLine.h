@@ -51,7 +51,7 @@ public:
     virtual void removeFrame(Frame* frame);
 
     virtual void setActionTag(int tag) { _actionTag = tag; }
-    virtual int  getActionTag() const { return _actionTag; }
+    virtual int getActionTag() const { return _actionTag; }
 
     virtual void setNode(cocos2d::Node* node);
     virtual cocos2d::Node* getNode() const;
@@ -64,23 +64,22 @@ public:
 protected:
     virtual void apply(unsigned int frameIndex);
 
-    virtual void binarySearchKeyFrame (unsigned int frameIndex);
+    virtual void binarySearchKeyFrame(unsigned int frameIndex);
     virtual void updateCurrentKeyFrame(unsigned int frameIndex);
 
     cocos2d::Vector<Frame*> _frames;
     Frame* _currentKeyFrame;
     unsigned int _currentKeyFrameIndex;
 
-	unsigned int _fromIndex;
-	unsigned int _toIndex;
-	unsigned int _betweenDuration;
-	unsigned int _actionTag;
+    unsigned int _fromIndex;
+    unsigned int _toIndex;
+    unsigned int _betweenDuration;
+    unsigned int _actionTag;
 
-    ActionTimeline*  _ActionTimeline;
+    ActionTimeline* _ActionTimeline;
     cocos2d::Node* _node;
 };
 
 NS_TIMELINE_END
-
 
 #endif /*__CCTIMELINE_H__*/

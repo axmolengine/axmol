@@ -27,10 +27,10 @@ THE SOFTWARE.
 
 NS_CC_EXT_BEGIN
 
-Sprite* ControlUtils::addSpriteToTargetWithPosAndAnchor(const char* spriteName, Node * target, Vec2 pos, Vec2 anchor)
+Sprite* ControlUtils::addSpriteToTargetWithPosAndAnchor(const char* spriteName, Node* target, Vec2 pos, Vec2 anchor)
 {
-    Sprite *sprite =Sprite::createWithSpriteFrameName(spriteName);
-    
+    Sprite* sprite = Sprite::createWithSpriteFrameName(spriteName);
+
     if (!sprite)
         return nullptr;
 
@@ -41,131 +41,133 @@ Sprite* ControlUtils::addSpriteToTargetWithPosAndAnchor(const char* spriteName, 
     return sprite;
 }
 
-
 HSV ControlUtils::HSVfromRGB(RGBA value)
 {
-    HSV         out;
-    double      min, max, delta;
-    
+    HSV out;
+    double min, max, delta;
+
     min = value.r < value.g ? value.r : value.g;
-    min = min  < value.b ? min  : value.b;
-    
+    min = min < value.b ? min : value.b;
+
     max = value.r > value.g ? value.r : value.g;
-    max = max  > value.b ? max  : value.b;
-    
-    out.v = max;                                // v
+    max = max > value.b ? max : value.b;
+
+    out.v = max;  // v
     delta = max - min;
-    if( max > 0.0 )
+    if (max > 0.0)
     {
-        out.s = (delta / max);                  // s
-    } else
+        out.s = (delta / max);  // s
+    }
+    else
     {
         // r = g = b = 0                        // s = 0, v is undefined
         out.s = 0.0;
-        out.h = -1;                            // its now undefined (don't know if setting to NAN is a good idea)
+        out.h = -1;  // its now undefined (don't know if setting to NAN is a good idea)
         return out;
     }
-    if( value.r >= max )                        // > is bogus, just keeps compilor happy
+    if (value.r >= max)  // > is bogus, just keeps compilor happy
     {
-        out.h = ( value.g - value.b ) / delta;        // between yellow & magenta
-    } else
-    {
-        if( value.g >= max )
-            out.h = 2.0 + ( value.b - value.r ) / delta;  // between cyan & yellow
-        else
-            out.h = 4.0 + ( value.r - value.g ) / delta;  // between magenta & cyan
+        out.h = (value.g - value.b) / delta;  // between yellow & magenta
     }
-    
-    out.h *= 60.0;                              // degrees
-    
-    if( out.h < 0.0 )
+    else
+    {
+        if (value.g >= max)
+            out.h = 2.0 + (value.b - value.r) / delta;  // between cyan & yellow
+        else
+            out.h = 4.0 + (value.r - value.g) / delta;  // between magenta & cyan
+    }
+
+    out.h *= 60.0;  // degrees
+
+    if (out.h < 0.0)
         out.h += 360.0;
-    
+
     return out;
 }
 
 RGBA ControlUtils::RGBfromHSV(HSV value)
 {
-    double      hh, p, q, t, ff;
-    long        i;
-    RGBA        out;
-    out.a        = 1;
-    
-    if (value.s <= 0.0) // < is bogus, just shuts up warnings
-    {       
-        if (std::isnan(value.h)) // value.h == NAN
-        {   
+    double hh, p, q, t, ff;
+    long i;
+    RGBA out;
+    out.a = 1;
+
+    if (value.s <= 0.0)  // < is bogus, just shuts up warnings
+    {
+        if (std::isnan(value.h))  // value.h == NAN
+        {
             out.r = value.v;
             out.g = value.v;
             out.b = value.v;
             return out;
         }
-        
+
         // error - should never happen
         out.r = 0.0;
         out.g = 0.0;
         out.b = 0.0;
         return out;
     }
-    
+
     hh = value.h;
-    if(hh >= 360.0) hh = 0.0;
+    if (hh >= 360.0)
+        hh = 0.0;
     hh /= 60.0;
-    i = (long)hh;
+    i  = (long)hh;
     ff = hh - i;
-    p = value.v * (1.0 - value.s);
-    q = value.v * (1.0 - (value.s * ff));
-    t = value.v * (1.0 - (value.s * (1.0 - ff)));
-    
-    switch(i)
+    p  = value.v * (1.0 - value.s);
+    q  = value.v * (1.0 - (value.s * ff));
+    t  = value.v * (1.0 - (value.s * (1.0 - ff)));
+
+    switch (i)
     {
-        case 0:
-            out.r = value.v;
-            out.g = t;
-            out.b = p;
-            break;
-        case 1:
-            out.r = q;
-            out.g = value.v;
-            out.b = p;
-            break;
-        case 2:
-            out.r = p;
-            out.g = value.v;
-            out.b = t;
-            break;
-            
-        case 3:
-            out.r = p;
-            out.g = q;
-            out.b = value.v;
-            break;
-        case 4:
-            out.r = t;
-            out.g = p;
-            out.b = value.v;
-            break;
-        case 5:
-        default:
-            out.r = value.v;
-            out.g = p;
-            out.b = q;
-            break;
+    case 0:
+        out.r = value.v;
+        out.g = t;
+        out.b = p;
+        break;
+    case 1:
+        out.r = q;
+        out.g = value.v;
+        out.b = p;
+        break;
+    case 2:
+        out.r = p;
+        out.g = value.v;
+        out.b = t;
+        break;
+
+    case 3:
+        out.r = p;
+        out.g = q;
+        out.b = value.v;
+        break;
+    case 4:
+        out.r = t;
+        out.g = p;
+        out.b = value.v;
+        break;
+    case 5:
+    default:
+        out.r = value.v;
+        out.g = p;
+        out.b = q;
+        break;
     }
-    return out;     
+    return out;
 }
 
-Rect ControlUtils::RectUnion(const Rect& src1, const Rect& src2) 
+Rect ControlUtils::RectUnion(const Rect& src1, const Rect& src2)
 {
     Rect result;
-    
+
     float x1 = MIN(src1.getMinX(), src2.getMinX());
     float y1 = MIN(src1.getMinY(), src2.getMinY());
     float x2 = MAX(src1.getMaxX(), src2.getMaxX());
     float y2 = MAX(src1.getMaxY(), src2.getMaxY());
-    
-    result.origin=Vec2(x1,y1);
-    result.size=Size(x2-x1, y2-y1);
+
+    result.origin = Vec2(x1, y1);
+    result.size   = Size(x2 - x1, y2 - y1);
     return result;
 }
 

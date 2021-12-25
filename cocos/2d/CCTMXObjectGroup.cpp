@@ -31,12 +31,9 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-//implementation TMXObjectGroup
+// implementation TMXObjectGroup
 
-TMXObjectGroup::TMXObjectGroup()
-    : _groupName("")
-{
-}
+TMXObjectGroup::TMXObjectGroup() : _groupName("") {}
 
 TMXObjectGroup::~TMXObjectGroup()
 {
@@ -57,7 +54,7 @@ ValueMap TMXObjectGroup::getObject(const std::string& objectName) const
             }
         }
     }
-    
+
     // object not found
     return ValueMap();
 }

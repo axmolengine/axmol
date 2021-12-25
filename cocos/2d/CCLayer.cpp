@@ -47,7 +47,7 @@ THE SOFTWARE.
 #include "renderer/backend/ProgramState.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-#include "platform/desktop/CCGLViewImpl-desktop.h"
+#    include "platform/desktop/CCGLViewImpl-desktop.h"
 #endif
 
 NS_CC_BEGIN
@@ -59,10 +59,7 @@ Layer::Layer()
     setAnchorPoint(Vec2(0.5f, 0.5f));
 }
 
-Layer::~Layer()
-{
-
-}
+Layer::~Layer() {}
 
 bool Layer::init()
 {
@@ -70,9 +67,9 @@ bool Layer::init()
     return true;
 }
 
-Layer *Layer::create()
+Layer* Layer::create()
 {
-    Layer *ret = new Layer();
+    Layer* ret = new Layer();
     if (ret->init())
     {
         ret->autorelease();
@@ -96,51 +93,52 @@ LayerColor::LayerColor()
 {
     // default blend function
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
-    
+
     auto& pipelinePS = _customCommand.getPipelineDescriptor().programState;
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR);
+    auto* program    = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR);
 
     //!!! LayerColor private programState don't want affect by Node::_programState, so store at _customCommand
     pipelinePS = new backend::ProgramState(program);
-    
-    auto vertexLayout = pipelinePS->getVertexLayout();
+
+    auto vertexLayout         = pipelinePS->getVertexLayout();
     const auto& attributeInfo = pipelinePS->getProgram()->getActiveAttributes();
-    auto iter = attributeInfo.find("a_position");
-    if(iter != attributeInfo.end())
+    auto iter                 = attributeInfo.find("a_position");
+    if (iter != attributeInfo.end())
     {
         vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
     }
     iter = attributeInfo.find("a_color");
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::FLOAT4, sizeof(_vertexData[0].vertices), false);
+        vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::FLOAT4,
+                                   sizeof(_vertexData[0].vertices), false);
     }
     vertexLayout->setLayout(sizeof(_vertexData[0]));
-    
+
     _mvpMatrixLocation = pipelinePS->getUniformLocation("u_MVPMatrix");
-    
+
     _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, 6, CustomCommand::BufferUsage::STATIC);
     unsigned short indices[] = {0, 1, 2, 2, 1, 3};
     _customCommand.updateIndexBuffer(indices, sizeof(indices));
-    
+
     _customCommand.createVertexBuffer(sizeof(_vertexData[0]), 4, CustomCommand::BufferUsage::DYNAMIC);
-    
+
     _customCommand.setDrawType(CustomCommand::DrawType::ELEMENT);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
 }
-    
+
 LayerColor::~LayerColor()
 {
     CC_SAFE_RELEASE_NULL(_customCommand.getPipelineDescriptor().programState);
 }
 
 /// blendFunc getter
-const BlendFunc &LayerColor::getBlendFunc() const
+const BlendFunc& LayerColor::getBlendFunc() const
 {
     return _blendFunc;
 }
 /// blendFunc setter
-void LayerColor::setBlendFunc(const BlendFunc &var)
+void LayerColor::setBlendFunc(const BlendFunc& var)
 {
     _blendFunc = var;
 }
@@ -159,10 +157,10 @@ LayerColor* LayerColor::create()
     return ret;
 }
 
-LayerColor * LayerColor::create(const Color4B& color, float width, float height)
+LayerColor* LayerColor::create(const Color4B& color, float width, float height)
 {
-    LayerColor * ret = new LayerColor();
-    if(ret->initWithColor(color,width,height))
+    LayerColor* ret = new LayerColor();
+    if (ret->initWithColor(color, width, height))
     {
         ret->autorelease();
         return ret;
@@ -171,10 +169,10 @@ LayerColor * LayerColor::create(const Color4B& color, float width, float height)
     return nullptr;
 }
 
-LayerColor * LayerColor::create(const Color4B& color)
+LayerColor* LayerColor::create(const Color4B& color)
 {
-    LayerColor * ret = new LayerColor();
-    if(ret->initWithColor(color))
+    LayerColor* ret = new LayerColor();
+    if (ret->initWithColor(color))
     {
         ret->autorelease();
         return ret;
@@ -186,7 +184,7 @@ LayerColor * LayerColor::create(const Color4B& color)
 bool LayerColor::init()
 {
     Vec2 s = _director->getWinSize();
-    return initWithColor(Color4B(0,0,0,0), s.width, s.height);
+    return initWithColor(Color4B(0, 0, 0, 0), s.width, s.height);
 }
 
 bool LayerColor::initWithColor(const Color4B& color, float w, float h)
@@ -202,7 +200,7 @@ bool LayerColor::initWithColor(const Color4B& color, float w, float h)
         _displayedColor.b = _realColor.b = color.b;
         _displayedOpacity = _realOpacity = color.a;
 
-        for (size_t i = 0; i<sizeof(_squareVertices) / sizeof( _squareVertices[0]); i++ )
+        for (size_t i = 0; i < sizeof(_squareVertices) / sizeof(_squareVertices[0]); i++)
         {
             _squareVertices[i].x = 0.0f;
             _squareVertices[i].y = 0.0f;
@@ -223,7 +221,7 @@ bool LayerColor::initWithColor(const Color4B& color)
 }
 
 /// override contentSize
-void LayerColor::setContentSize(const Vec2 & size)
+void LayerColor::setContentSize(const Vec2& size)
 {
     _squareVertices[1].x = size.width;
     _squareVertices[2].y = size.height;
@@ -233,7 +231,7 @@ void LayerColor::setContentSize(const Vec2 & size)
     Layer::setContentSize(size);
 }
 
-void LayerColor::changeWidthAndHeight(float w ,float h)
+void LayerColor::changeWidthAndHeight(float w, float h)
 {
     this->setContentSize(Vec2(w, h));
 }
@@ -250,7 +248,7 @@ void LayerColor::changeHeight(float h)
 
 void LayerColor::updateColor()
 {
-    for (int i = 0; i < 4; i++ )
+    for (int i = 0; i < 4; i++)
     {
         _vertexData[i].colors.r = _displayedColor.r / 255.0f;
         _vertexData[i].colors.g = _displayedColor.g / 255.0f;
@@ -259,22 +257,24 @@ void LayerColor::updateColor()
     }
 }
 
-void LayerColor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
-{    
+void LayerColor::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+{
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
-    
+
     cocos2d::Mat4 projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
+    auto& pipelineDescriptor    = _customCommand.getPipelineDescriptor();
     pipelineDescriptor.programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
-    
-    for(int i = 0; i < 4; ++i)
+
+    for (int i = 0; i < 4; ++i)
     {
         Vec4 pos;
-        pos.x = _squareVertices[i].x; pos.y = _squareVertices[i].y; pos.z = _positionZ;
+        pos.x = _squareVertices[i].x;
+        pos.y = _squareVertices[i].y;
+        pos.z = _positionZ;
         pos.w = 1;
         _modelViewTransform.transformVector(&pos);
-        _vertexData[i].vertices = Vec3(pos.x,pos.y,pos.z)/pos.w;
+        _vertexData[i].vertices = Vec3(pos.x, pos.y, pos.z) / pos.w;
     }
     updateVertexBuffer();
 }
@@ -287,18 +287,14 @@ void LayerColor::updateVertexBuffer()
 //
 // LayerGradient
 //
-LayerGradient::LayerGradient()
-{
-}
+LayerGradient::LayerGradient() {}
 
-LayerGradient::~LayerGradient()
-{
-}
+LayerGradient::~LayerGradient() {}
 
 LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end)
 {
-    LayerGradient * ret = new LayerGradient();
-    if(ret->initWithColor(start, end))
+    LayerGradient* ret = new LayerGradient();
+    if (ret->initWithColor(start, end))
     {
         ret->autorelease();
         return ret;
@@ -309,8 +305,8 @@ LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end)
 
 LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end, const Vec2& v)
 {
-    LayerGradient * ret = new LayerGradient();
-    if(ret->initWithColor(start, end, v))
+    LayerGradient* ret = new LayerGradient();
+    if (ret->initWithColor(start, end, v))
     {
         ret->autorelease();
         return ret;
@@ -345,13 +341,13 @@ bool LayerGradient::initWithColor(const Color4B& start, const Color4B& end)
 
 bool LayerGradient::initWithColor(const Color4B& start, const Color4B& end, const Vec2& v)
 {
-    _endColor.r  = end.r;
-    _endColor.g  = end.g;
-    _endColor.b  = end.b;
+    _endColor.r = end.r;
+    _endColor.g = end.g;
+    _endColor.b = end.b;
 
-    _endOpacity     = end.a;
-    _startOpacity   = start.a;
-    _alongVector    = v;
+    _endOpacity   = end.a;
+    _startOpacity = start.a;
+    _alongVector  = v;
 
     _compressedInterpolation = true;
 
@@ -372,46 +368,37 @@ void LayerGradient::updateColor()
     // Compressed Interpolation mode
     if (_compressedInterpolation)
     {
-        float h2 = 1 / ( fabsf(u.x) + fabsf(u.y) );
-        u = u * (h2 * (float)c);
+        float h2 = 1 / (fabsf(u.x) + fabsf(u.y));
+        u        = u * (h2 * (float)c);
     }
 
     float opacityf = (float)_displayedOpacity / 255.0f;
 
-    Color4F S(
-        _displayedColor.r / 255.0f,
-        _displayedColor.g / 255.0f,
-        _displayedColor.b / 255.0f,
-        _startOpacity * opacityf / 255.0f
-    );
+    Color4F S(_displayedColor.r / 255.0f, _displayedColor.g / 255.0f, _displayedColor.b / 255.0f,
+              _startOpacity * opacityf / 255.0f);
 
-    Color4F E(
-        _endColor.r / 255.0f,
-        _endColor.g / 255.0f,
-        _endColor.b / 255.0f,
-        _endOpacity * opacityf / 255.0f
-    );
+    Color4F E(_endColor.r / 255.0f, _endColor.g / 255.0f, _endColor.b / 255.0f, _endOpacity * opacityf / 255.0f);
 
     // (-1, -1)
-   _vertexData[0].colors.r = E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c));
-   _vertexData[0].colors.g = E.g + (S.g - E.g) * ((c + u.x + u.y) / (2.0f * c));
-   _vertexData[0].colors.b = E.b + (S.b - E.b) * ((c + u.x + u.y) / (2.0f * c));
-   _vertexData[0].colors.a = E.a + (S.a - E.a) * ((c + u.x + u.y) / (2.0f * c));
-   // (1, -1)
-   _vertexData[1].colors.r = E.r + (S.r - E.r) * ((c - u.x + u.y) / (2.0f * c));
-   _vertexData[1].colors.g = E.g + (S.g - E.g) * ((c - u.x + u.y) / (2.0f * c));
-   _vertexData[1].colors.b = E.b + (S.b - E.b) * ((c - u.x + u.y) / (2.0f * c));
-   _vertexData[1].colors.a = E.a + (S.a - E.a) * ((c - u.x + u.y) / (2.0f * c));
-   // (-1, 1)
-   _vertexData[2].colors.r = E.r + (S.r - E.r) * ((c + u.x - u.y) / (2.0f * c));
-   _vertexData[2].colors.g = E.g + (S.g - E.g) * ((c + u.x - u.y) / (2.0f * c));
-   _vertexData[2].colors.b = E.b + (S.b - E.b) * ((c + u.x - u.y) / (2.0f * c));
-   _vertexData[2].colors.a = E.a + (S.a - E.a) * ((c + u.x - u.y) / (2.0f * c));
-   // (1, 1)
-   _vertexData[3].colors.r = E.r + (S.r - E.r) * ((c - u.x - u.y) / (2.0f * c));
-   _vertexData[3].colors.g = E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c));
-   _vertexData[3].colors.b = E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c));
-   _vertexData[3].colors.a = E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c));
+    _vertexData[0].colors.r = E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c));
+    _vertexData[0].colors.g = E.g + (S.g - E.g) * ((c + u.x + u.y) / (2.0f * c));
+    _vertexData[0].colors.b = E.b + (S.b - E.b) * ((c + u.x + u.y) / (2.0f * c));
+    _vertexData[0].colors.a = E.a + (S.a - E.a) * ((c + u.x + u.y) / (2.0f * c));
+    // (1, -1)
+    _vertexData[1].colors.r = E.r + (S.r - E.r) * ((c - u.x + u.y) / (2.0f * c));
+    _vertexData[1].colors.g = E.g + (S.g - E.g) * ((c - u.x + u.y) / (2.0f * c));
+    _vertexData[1].colors.b = E.b + (S.b - E.b) * ((c - u.x + u.y) / (2.0f * c));
+    _vertexData[1].colors.a = E.a + (S.a - E.a) * ((c - u.x + u.y) / (2.0f * c));
+    // (-1, 1)
+    _vertexData[2].colors.r = E.r + (S.r - E.r) * ((c + u.x - u.y) / (2.0f * c));
+    _vertexData[2].colors.g = E.g + (S.g - E.g) * ((c + u.x - u.y) / (2.0f * c));
+    _vertexData[2].colors.b = E.b + (S.b - E.b) * ((c + u.x - u.y) / (2.0f * c));
+    _vertexData[2].colors.a = E.a + (S.a - E.a) * ((c + u.x - u.y) / (2.0f * c));
+    // (1, 1)
+    _vertexData[3].colors.r = E.r + (S.r - E.r) * ((c - u.x - u.y) / (2.0f * c));
+    _vertexData[3].colors.g = E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c));
+    _vertexData[3].colors.b = E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c));
+    _vertexData[3].colors.a = E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c));
 }
 
 const Color3B& LayerGradient::getStartColor() const
@@ -487,7 +474,11 @@ std::string LayerGradient::getDescription() const
 /**
  * LayerRadialGradient
  */
-LayerRadialGradient* LayerRadialGradient::create(const Color4B& startColor, const Color4B& endColor, float radius, const Vec2& center, float expand)
+LayerRadialGradient* LayerRadialGradient::create(const Color4B& startColor,
+                                                 const Color4B& endColor,
+                                                 float radius,
+                                                 const Vec2& center,
+                                                 float expand)
 {
     auto layerGradient = new LayerRadialGradient();
     if (layerGradient && layerGradient->initWithColor(startColor, endColor, radius, center, expand))
@@ -495,7 +486,7 @@ LayerRadialGradient* LayerRadialGradient::create(const Color4B& startColor, cons
         layerGradient->autorelease();
         return layerGradient;
     }
-    
+
     delete layerGradient;
     return nullptr;
 }
@@ -503,12 +494,12 @@ LayerRadialGradient* LayerRadialGradient::create(const Color4B& startColor, cons
 LayerRadialGradient* LayerRadialGradient::create()
 {
     auto layerGradient = new LayerRadialGradient();
-    if (layerGradient && layerGradient->initWithColor(Color4B::BLACK, Color4B::BLACK, 0, Vec2(0,0), 0))
+    if (layerGradient && layerGradient->initWithColor(Color4B::BLACK, Color4B::BLACK, 0, Vec2(0, 0), 0))
     {
         layerGradient->autorelease();
         return layerGradient;
     }
-    
+
     delete layerGradient;
     return nullptr;
 }
@@ -516,26 +507,27 @@ LayerRadialGradient* LayerRadialGradient::create()
 LayerRadialGradient::LayerRadialGradient()
 {
     auto& pipelinePS = _customCommand.getPipelineDescriptor().programState;
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::LAYER_RADIA_GRADIENT);
+    auto* program    = backend::Program::getBuiltinProgram(backend::ProgramType::LAYER_RADIA_GRADIENT);
     //!!! LayerRadialGradient private programState don't want affect by Node::_programState, so store at _customCommand
-    pipelinePS = new backend::ProgramState(program);
-    _mvpMatrixLocation = pipelinePS->getUniformLocation("u_MVPMatrix");
+    pipelinePS          = new backend::ProgramState(program);
+    _mvpMatrixLocation  = pipelinePS->getUniformLocation("u_MVPMatrix");
     _startColorLocation = pipelinePS->getUniformLocation("u_startColor");
-    _endColorLocation = pipelinePS->getUniformLocation("u_endColor");
-    _centerLocation = pipelinePS->getUniformLocation("u_center");
-    _radiusLocation = pipelinePS->getUniformLocation("u_radius");
-    _expandLocation = pipelinePS->getUniformLocation("u_expand");
+    _endColorLocation   = pipelinePS->getUniformLocation("u_endColor");
+    _centerLocation     = pipelinePS->getUniformLocation("u_center");
+    _radiusLocation     = pipelinePS->getUniformLocation("u_radius");
+    _expandLocation     = pipelinePS->getUniformLocation("u_expand");
 
-    auto vertexLayout = pipelinePS->getVertexLayout();
+    auto vertexLayout         = pipelinePS->getVertexLayout();
     const auto& attributeInfo = pipelinePS->getProgram()->getActiveAttributes();
-    auto iter = attributeInfo.find("a_position");
-    if(iter != attributeInfo.end())
+    auto iter                 = attributeInfo.find("a_position");
+    if (iter != attributeInfo.end())
     {
         vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
     }
     vertexLayout->setLayout(sizeof(_vertices[0]));
 
-    _customCommand.createVertexBuffer(sizeof(_vertices[0]), sizeof(_vertices) / sizeof(_vertices[0]), CustomCommand::BufferUsage::STATIC);
+    _customCommand.createVertexBuffer(sizeof(_vertices[0]), sizeof(_vertices) / sizeof(_vertices[0]),
+                                      CustomCommand::BufferUsage::STATIC);
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
 }
@@ -545,39 +537,43 @@ LayerRadialGradient::~LayerRadialGradient()
     CC_SAFE_RELEASE_NULL(_customCommand.getPipelineDescriptor().programState);
 }
 
-bool LayerRadialGradient::initWithColor(const cocos2d::Color4B &startColor, const cocos2d::Color4B &endColor, float radius, const Vec2& center, float expand)
+bool LayerRadialGradient::initWithColor(const cocos2d::Color4B& startColor,
+                                        const cocos2d::Color4B& endColor,
+                                        float radius,
+                                        const Vec2& center,
+                                        float expand)
 {
     // should do it before Layer::init()
     for (int i = 0; i < 4; ++i)
         _vertices[i] = {0.0f, 0.0f};
-    
+
     if (Layer::init())
     {
         convertColor4B24F(_startColorRend, startColor);
         _startColor = startColor;
-        
+
         convertColor4B24F(_endColorRend, endColor);
         _endColor = endColor;
-        
+
         _expand = expand;
-        
+
         setRadius(radius);
         setCenter(center);
-        
+
         return true;
     }
-    
+
     return false;
 }
 
-void LayerRadialGradient::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+void LayerRadialGradient::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
 
     const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto programState = _customCommand.getPipelineDescriptor().programState;
-    Mat4 finalMat = projectionMat * transform;
+    auto programState         = _customCommand.getPipelineDescriptor().programState;
+    Mat4 finalMat             = projectionMat * transform;
     programState->setUniform(_mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));
 
     programState->setUniform(_startColorLocation, &_startColorRend, sizeof(_startColorRend));
@@ -601,7 +597,7 @@ void LayerRadialGradient::setContentSize(const Vec2& size)
 void LayerRadialGradient::setStartOpacity(uint8_t opacity)
 {
     _startColorRend.a = opacity / 255.0f;
-    _startColor.a = opacity;
+    _startColor.a     = opacity;
 }
 
 uint8_t LayerRadialGradient::getStartOpacity() const
@@ -612,7 +608,7 @@ uint8_t LayerRadialGradient::getStartOpacity() const
 void LayerRadialGradient::setEndOpacity(uint8_t opacity)
 {
     _endColorRend.a = opacity / 255.0f;
-    _endColor.a = opacity;
+    _endColor.a     = opacity;
 }
 
 uint8_t LayerRadialGradient::getEndOpacity() const
@@ -655,7 +651,7 @@ void LayerRadialGradient::setStartColor(const Color3B& color)
     setStartColor(Color4B(color));
 }
 
-void LayerRadialGradient::setStartColor(const cocos2d::Color4B &color)
+void LayerRadialGradient::setStartColor(const cocos2d::Color4B& color)
 {
     _startColor = color;
     convertColor4B24F(_startColorRend, _startColor);
@@ -676,7 +672,7 @@ void LayerRadialGradient::setEndColor(const Color3B& color)
     setEndColor(Color4B(color));
 }
 
-void LayerRadialGradient::setEndColor(const cocos2d::Color4B &color)
+void LayerRadialGradient::setEndColor(const cocos2d::Color4B& color)
 {
     _endColor = color;
     convertColor4B24F(_endColorRend, _endColor);
@@ -710,17 +706,14 @@ void LayerRadialGradient::convertColor4B24F(Color4F& outColor, const Color4B& in
     outColor.a = inColor.a / 255.0f;
 }
 
-
 /// MultiplexLayer
 
-LayerMultiplex::LayerMultiplex()
-: _enabledLayer(0)
-{
-}
+LayerMultiplex::LayerMultiplex() : _enabledLayer(0) {}
 
 LayerMultiplex::~LayerMultiplex()
 {
-    for(const auto &layer : _layers) {
+    for (const auto& layer : _layers)
+    {
         layer->cleanup();
     }
 }
@@ -728,10 +721,10 @@ LayerMultiplex::~LayerMultiplex()
 LayerMultiplex* LayerMultiplex::create(Node* layer, ...)
 {
     va_list args;
-    va_start(args,layer);
+    va_start(args, layer);
 
-    LayerMultiplex * ret = new LayerMultiplex();
-    if(ret->initWithLayers(layer, args))
+    LayerMultiplex* ret = new LayerMultiplex();
+    if (ret->initWithLayers(layer, args))
     {
         ret->autorelease();
         va_end(args);
@@ -783,7 +776,7 @@ void LayerMultiplex::addLayer(Node* layer)
     {
         sEngine->retainScriptObject(this, layer);
     }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     _layers.pushBack(layer);
 }
 
@@ -808,19 +801,20 @@ bool LayerMultiplex::initWithLayers(Node* layer, va_list params)
         {
             sEngine->retainScriptObject(this, layer);
         }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         _layers.pushBack(layer);
 
-        Layer *l = va_arg(params,Layer*);
-        while( l ) {
+        Layer* l = va_arg(params, Layer*);
+        while (l)
+        {
 #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
             if (sEngine)
             {
                 sEngine->retainScriptObject(this, l);
             }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
             _layers.pushBack(l);
-            l = va_arg(params,Layer*);
+            l = va_arg(params, Layer*);
         }
 
         _enabledLayer = 0;
@@ -839,7 +833,7 @@ bool LayerMultiplex::initWithArray(const Vector<Node*>& arrayOfLayers)
         auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
         if (sEngine)
         {
-            for (const auto &layer : arrayOfLayers)
+            for (const auto& layer : arrayOfLayers)
             {
                 if (layer)
                 {
@@ -847,7 +841,7 @@ bool LayerMultiplex::initWithArray(const Vector<Node*>& arrayOfLayers)
                 }
             }
         }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         _layers.reserve(arrayOfLayers.size());
         _layers.pushBack(arrayOfLayers);
 
@@ -860,24 +854,24 @@ bool LayerMultiplex::initWithArray(const Vector<Node*>& arrayOfLayers)
 
 void LayerMultiplex::switchTo(int n)
 {
-    
+
     switchTo(n, true);
 }
 
 void LayerMultiplex::switchTo(int n, bool cleanup)
 {
-    CCASSERT( n < _layers.size(), "Invalid index in MultiplexLayer switchTo message" );
-    
+    CCASSERT(n < _layers.size(), "Invalid index in MultiplexLayer switchTo message");
+
     this->removeChild(_layers.at(_enabledLayer), cleanup);
-    
+
     _enabledLayer = n;
-    
+
     this->addChild(_layers.at(n));
 }
 
 void LayerMultiplex::switchToAndReleaseMe(int n)
 {
-    CCASSERT( n < _layers.size(), "Invalid index in MultiplexLayer switchTo message" );
+    CCASSERT(n < _layers.size(), "Invalid index in MultiplexLayer switchTo message");
 
     this->removeChild(_layers.at(_enabledLayer), true);
 #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
@@ -886,8 +880,8 @@ void LayerMultiplex::switchToAndReleaseMe(int n)
     {
         sEngine->releaseScriptObject(this, _layers.at(_enabledLayer));
     }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-    
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+
     _layers.replace(_enabledLayer, nullptr);
 
     _enabledLayer = n;

@@ -38,9 +38,9 @@ NS_CC_BEGIN
  * @{
  */
 
-//static creation function macro
-//c/c++ don't support object creation of using class name
-//so, all classes need creation method.
+// static creation function macro
+// c/c++ don't support object creation of using class name
+// so, all classes need creation method.
 
 class ActionInterval;
 class Node;
@@ -51,7 +51,7 @@ class NodeGrid;
 @since v0.8.2
 @js NA
 */
-class CC_DLL TransitionEaseScene// : public Ref
+class CC_DLL TransitionEaseScene  // : public Ref
 {
 public:
     /** Constructor.
@@ -64,12 +64,12 @@ public:
      * @param action A given interval action.
      * @return The Ease action that will be performed on a linear action.
      */
-    virtual ActionInterval * easeActionWithAction(ActionInterval * action) = 0;
+    virtual ActionInterval* easeActionWithAction(ActionInterval* action) = 0;
 };
 
 /** @class TransitionScene
  * @brief Base class for Transition scenes.
-*/
+ */
 class CC_DLL TransitionScene : public Scene
 {
 public:
@@ -86,14 +86,14 @@ public:
         /// A vertical orientation where the Bottom is nearer
         DOWN_OVER = 1,
     };
-    
+
     /** Creates a base transition with duration and incoming scene.
      *
      * @param t Duration time, in seconds.
      * @param scene A given scene.
      * @return A autoreleased TransitionScene object.
      */
-    static TransitionScene * create(float t, Scene *scene);
+    static TransitionScene* create(float t, Scene* scene);
 
     /** Called after the transition finishes.
      */
@@ -103,29 +103,28 @@ public:
      */
     void hideOutShowIn();
 
-    Scene* getInScene() const{ return _inScene; }
+    Scene* getInScene() const { return _inScene; }
     float getDuration() const { return _duration; }
     //
     // Overrides
     //
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     virtual void onEnter() override;
     virtual void onExit() override;
     virtual void cleanup() override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    TransitionScene();
+
+    CC_CONSTRUCTOR_ACCESS : TransitionScene();
     virtual ~TransitionScene();
 
     /** initializes a transition with duration and incoming scene */
-    bool initWithDuration(float t,Scene* scene);
-    
+    bool initWithDuration(float t, Scene* scene);
+
 protected:
     virtual void sceneOrder();
     void setNewScene(float dt);
 
-    Scene *_inScene;
-    Scene *_outScene;
+    Scene* _inScene;
+    Scene* _outScene;
     float _duration;
     bool _isInSceneOnTop;
     bool _isSendCleanupToScene;
@@ -142,20 +141,19 @@ class CC_DLL TransitionSceneOriented : public TransitionScene
 {
 public:
     /** Creates a transition with duration, incoming scene and orientation.
-     * 
+     *
      * @param t Duration time, in seconds.
      * @param scene A given scene.
      * @param orientation A given orientation: LeftOver, RightOver, UpOver, DownOver.
      * @return A autoreleased TransitionSceneOriented object.
      */
-    static TransitionSceneOriented * create(float t,Scene* scene, Orientation orientation);
-    
-CC_CONSTRUCTOR_ACCESS:
-    TransitionSceneOriented();
+    static TransitionSceneOriented* create(float t, Scene* scene, Orientation orientation);
+
+    CC_CONSTRUCTOR_ACCESS : TransitionSceneOriented();
     virtual ~TransitionSceneOriented();
 
     /** initializes a transition with duration and incoming scene */
-    bool initWithDuration(float t,Scene* scene,Orientation orientation);
+    bool initWithDuration(float t, Scene* scene, Orientation orientation);
 
 protected:
     Orientation _orientation;
@@ -166,7 +164,7 @@ private:
 
 /** @class TransitionRotoZoom
  * @brief TransitionRotoZoom:
-Rotate and zoom out the outgoing scene, and then rotate and zoom in the incoming 
+Rotate and zoom out the outgoing scene, and then rotate and zoom in the incoming
 */
 class CC_DLL TransitionRotoZoom : public TransitionScene
 {
@@ -184,18 +182,16 @@ public:
     //
     virtual void onEnter() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionRotoZoom();
+    CC_CONSTRUCTOR_ACCESS : TransitionRotoZoom();
     virtual ~TransitionRotoZoom();
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(TransitionRotoZoom);
-
 };
 
 /** @class TransitionJumpZoom
  * @brief TransitionJumpZoom:
-Zoom out and jump the outgoing scene, and then jump and zoom in the incoming 
+Zoom out and jump the outgoing scene, and then jump and zoom in the incoming
 */
 class CC_DLL TransitionJumpZoom : public TransitionScene
 {
@@ -213,8 +209,7 @@ public:
     //
     virtual void onEnter() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionJumpZoom();
+    CC_CONSTRUCTOR_ACCESS : TransitionJumpZoom();
     virtual ~TransitionJumpZoom();
 
 private:
@@ -236,21 +231,20 @@ public:
      */
     static TransitionMoveInL* create(float t, Scene* scene);
 
-    /** Returns the action that will be performed. 
-     * 
+    /** Returns the action that will be performed.
+     *
      * @return The action that will be performed.
      */
     virtual ActionInterval* action();
 
-    virtual ActionInterval* easeActionWithAction(ActionInterval * action) override;
+    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
 
     //
     // Overrides
     //
     virtual void onEnter() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionMoveInL();
+    CC_CONSTRUCTOR_ACCESS : TransitionMoveInL();
     virtual ~TransitionMoveInL();
 
 protected:
@@ -276,8 +270,7 @@ public:
      */
     static TransitionMoveInR* create(float t, Scene* scene);
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionMoveInR();
+    CC_CONSTRUCTOR_ACCESS : TransitionMoveInR();
     virtual ~TransitionMoveInR();
 
 protected:
@@ -291,7 +284,7 @@ private:
  * @brief TransitionMoveInT:
 Move in from to the top the incoming scene.
 */
-class CC_DLL TransitionMoveInT : public TransitionMoveInL 
+class CC_DLL TransitionMoveInT : public TransitionMoveInL
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -302,8 +295,7 @@ public:
      */
     static TransitionMoveInT* create(float t, Scene* scene);
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionMoveInT();
+    CC_CONSTRUCTOR_ACCESS : TransitionMoveInT();
     virtual ~TransitionMoveInT();
 
 protected:
@@ -328,8 +320,7 @@ public:
      */
     static TransitionMoveInB* create(float t, Scene* scene);
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionMoveInB();
+    CC_CONSTRUCTOR_ACCESS : TransitionMoveInB();
     virtual ~TransitionMoveInB();
 
 protected:
@@ -354,7 +345,7 @@ public:
      */
     static TransitionSlideInL* create(float t, Scene* scene);
 
-    virtual ActionInterval* easeActionWithAction(ActionInterval * action) override;
+    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
 
     /** Returns the action that will be performed by the incoming and outgoing scene.
      *
@@ -367,8 +358,7 @@ public:
     //
     virtual void onEnter() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionSlideInL();
+    CC_CONSTRUCTOR_ACCESS : TransitionSlideInL();
     virtual ~TransitionSlideInL();
 
 protected:
@@ -385,7 +375,7 @@ private:
  *@brief TransitionSlideInR:
 Slide in the incoming scene from the right border.
 */
-class CC_DLL TransitionSlideInR : public TransitionSlideInL 
+class CC_DLL TransitionSlideInR : public TransitionSlideInL
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -399,8 +389,7 @@ public:
     /** Returns the action that will be performed by the incoming and outgoing scene. */
     virtual ActionInterval* action() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionSlideInR();
+    CC_CONSTRUCTOR_ACCESS : TransitionSlideInR();
     virtual ~TransitionSlideInR();
 
 protected:
@@ -431,8 +420,7 @@ public:
     /** returns the action that will be performed by the incoming and outgoing scene */
     virtual ActionInterval* action() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionSlideInB();
+    CC_CONSTRUCTOR_ACCESS : TransitionSlideInB();
     virtual ~TransitionSlideInB();
 
 protected:
@@ -463,8 +451,7 @@ public:
     /** returns the action that will be performed by the incoming and outgoing scene */
     virtual ActionInterval* action() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionSlideInT();
+    CC_CONSTRUCTOR_ACCESS : TransitionSlideInT();
     virtual ~TransitionSlideInT();
 
 protected:
@@ -478,9 +465,9 @@ private:
 };
 
 /** @class TransitionShrinkGrow
-* @brief Shrink the outgoing scene while grow the incoming scene
-*/
-class CC_DLL TransitionShrinkGrow : public TransitionScene , public TransitionEaseScene
+ * @brief Shrink the outgoing scene while grow the incoming scene
+ */
+class CC_DLL TransitionShrinkGrow : public TransitionScene, public TransitionEaseScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -498,10 +485,9 @@ public:
      * @lua NA
      */
     virtual void onEnter() override;
-    virtual ActionInterval* easeActionWithAction(ActionInterval * action) override;
+    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionShrinkGrow();
+    CC_CONSTRUCTOR_ACCESS : TransitionShrinkGrow();
     virtual ~TransitionShrinkGrow();
 
 private:
@@ -540,8 +526,7 @@ public:
      */
     virtual void onEnter() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionFlipX();
+    CC_CONSTRUCTOR_ACCESS : TransitionFlipX();
     virtual ~TransitionFlipX();
 
 private:
@@ -580,8 +565,7 @@ public:
      */
     virtual void onEnter() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionFlipY();
+    CC_CONSTRUCTOR_ACCESS : TransitionFlipY();
     virtual ~TransitionFlipY();
 
 private:
@@ -620,8 +604,7 @@ public:
      */
     virtual void onEnter() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionFlipAngular();
+    CC_CONSTRUCTOR_ACCESS : TransitionFlipAngular();
     virtual ~TransitionFlipAngular();
 
 private:
@@ -660,8 +643,7 @@ public:
      */
     virtual void onEnter() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionZoomFlipX();
+    CC_CONSTRUCTOR_ACCESS : TransitionZoomFlipX();
     virtual ~TransitionZoomFlipX();
 
 private:
@@ -700,8 +682,7 @@ public:
      */
     virtual void onEnter() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionZoomFlipY();
+    CC_CONSTRUCTOR_ACCESS : TransitionZoomFlipY();
     virtual ~TransitionZoomFlipY();
 
 private:
@@ -740,8 +721,7 @@ public:
      */
     virtual void onEnter() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionZoomFlipAngular();
+    CC_CONSTRUCTOR_ACCESS : TransitionZoomFlipAngular();
     virtual ~TransitionZoomFlipAngular();
 
 private:
@@ -780,13 +760,12 @@ public:
      * @lua NA
      */
     virtual void onExit() override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    TransitionFade();
+
+    CC_CONSTRUCTOR_ACCESS : TransitionFade();
     virtual ~TransitionFade();
 
     /** initializes the transition with a duration and with an RGB color */
-    bool initWithDuration(float t, Scene*scene, const Color3B& color);
+    bool initWithDuration(float t, Scene* scene, const Color3B& color);
     bool initWithDuration(float t, Scene* scene);
 
 protected:
@@ -794,7 +773,6 @@ protected:
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(TransitionFade);
-
 };
 
 class RenderTexture;
@@ -804,7 +782,7 @@ Cross fades two scenes using the RenderTexture object.
 */
 class CC_DLL TransitionCrossFade : public TransitionScene
 {
-public :
+public:
     /** Creates a transition with duration and incoming scene.
      *
      * @param t Duration time, in seconds.
@@ -819,7 +797,7 @@ public :
     /**
      * @lua NA
      */
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     /**
      * @lua NA
      */
@@ -829,8 +807,7 @@ public :
      */
     virtual void onExit() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionCrossFade();
+    CC_CONSTRUCTOR_ACCESS : TransitionCrossFade();
     virtual ~TransitionCrossFade();
 
 private:
@@ -841,9 +818,9 @@ private:
  * @brief TransitionTurnOffTiles:
 Turn off the tiles of the outgoing scene in random order
 */
-class CC_DLL TransitionTurnOffTiles : public TransitionScene ,public TransitionEaseScene
+class CC_DLL TransitionTurnOffTiles : public TransitionScene, public TransitionEaseScene
 {
-public :
+public:
     /** Creates a transition with duration and incoming scene.
      *
      * @param t Duration time, in seconds.
@@ -863,14 +840,13 @@ public :
      * @js NA
      */
     virtual void onExit() override;
-	virtual ActionInterval * easeActionWithAction(ActionInterval * action) override;
-	/**
-	* @js NA
-	*/
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
+    /**
+     * @js NA
+     */
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionTurnOffTiles();
+    CC_CONSTRUCTOR_ACCESS : TransitionTurnOffTiles();
     virtual ~TransitionTurnOffTiles();
 
 protected:
@@ -885,7 +861,7 @@ private:
  * @brief TransitionSplitCols:
 The odd columns goes upwards while the even columns goes downwards.
 */
-class CC_DLL TransitionSplitCols : public TransitionScene , public TransitionEaseScene
+class CC_DLL TransitionSplitCols : public TransitionScene, public TransitionEaseScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -909,17 +885,17 @@ public:
      * @lua NA
      */
     virtual void onEnter() override;
-    virtual ActionInterval * easeActionWithAction(ActionInterval * action) override;
+    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
     virtual void onExit() override;
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionSplitCols();
+    CC_CONSTRUCTOR_ACCESS : TransitionSplitCols();
     virtual ~TransitionSplitCols();
 
 protected:
     void switchTargetToInscene();
     NodeGrid* _gridProxy;
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(TransitionSplitCols);
 };
@@ -944,8 +920,7 @@ public:
     //
     virtual ActionInterval* action() override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionSplitRows();
+    CC_CONSTRUCTOR_ACCESS : TransitionSplitRows();
     virtual ~TransitionSplitRows();
 
 private:
@@ -956,7 +931,7 @@ private:
  * @brief TransitionFadeTR:
 Fade the tiles of the outgoing scene from the left-bottom corner the to top-right corner.
 */
-class CC_DLL TransitionFadeTR : public TransitionScene , public TransitionEaseScene
+class CC_DLL TransitionFadeTR : public TransitionScene, public TransitionEaseScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -982,12 +957,11 @@ public:
      * @lua NA
      */
     virtual void onEnter() override;
-    virtual ActionInterval* easeActionWithAction(ActionInterval * action) override;
+    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
     virtual void onExit() override;
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionFadeTR();
+    CC_CONSTRUCTOR_ACCESS : TransitionFadeTR();
     virtual ~TransitionFadeTR();
 
 protected:
@@ -1019,8 +993,7 @@ public:
     //
     virtual ActionInterval* actionWithSize(const Vec2& size) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionFadeBL();
+    CC_CONSTRUCTOR_ACCESS : TransitionFadeBL();
     virtual ~TransitionFadeBL();
 
 private:
@@ -1029,8 +1002,8 @@ private:
 
 /** @class TransitionFadeUp
  * @brief TransitionFadeUp:
-* Fade the tiles of the outgoing scene from the bottom to the top.
-*/
+ * Fade the tiles of the outgoing scene from the bottom to the top.
+ */
 class CC_DLL TransitionFadeUp : public TransitionFadeTR
 {
 public:
@@ -1047,8 +1020,7 @@ public:
     //
     virtual ActionInterval* actionWithSize(const Vec2& size) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionFadeUp();
+    CC_CONSTRUCTOR_ACCESS : TransitionFadeUp();
     virtual ~TransitionFadeUp();
 
 private:
@@ -1057,8 +1029,8 @@ private:
 
 /** @class TransitionFadeDown
  * @brief TransitionFadeDown:
-* Fade the tiles of the outgoing scene from the top to the bottom.
-*/
+ * Fade the tiles of the outgoing scene from the top to the bottom.
+ */
 class CC_DLL TransitionFadeDown : public TransitionFadeTR
 {
 public:
@@ -1075,13 +1047,11 @@ public:
     //
     virtual ActionInterval* actionWithSize(const Vec2& size) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    TransitionFadeDown();
+    CC_CONSTRUCTOR_ACCESS : TransitionFadeDown();
     virtual ~TransitionFadeDown();
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(TransitionFadeDown);
-
 };
 
 // end of _2d group
@@ -1089,5 +1059,4 @@ private:
 
 NS_CC_END
 
-#endif // __CCTRANSITION_H__
-
+#endif  // __CCTRANSITION_H__

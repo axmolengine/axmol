@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,15 +31,13 @@
 
 NS_CC_BEGIN
 
-PUColorAffectorTranslator::PUColorAffectorTranslator()
-{
-}
+PUColorAffectorTranslator::PUColorAffectorTranslator() {}
 //-------------------------------------------------------------------------
-bool PUColorAffectorTranslator::translateChildProperty( PUScriptCompiler* compiler, PUAbstractNode *node )
+bool PUColorAffectorTranslator::translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node)
 {
     PUPropertyAbstractNode* prop = reinterpret_cast<PUPropertyAbstractNode*>(node);
-    PUAffector* af = static_cast<PUAffector*>(prop->parent->context);
-    PUColorAffector* affector = static_cast<PUColorAffector*>(af);
+    PUAffector* af               = static_cast<PUAffector*>(prop->parent->context);
+    PUColorAffector* affector    = static_cast<PUColorAffector*>(af);
 
     if (prop->name == token[TOKEN_TIME_COLOUR] || prop->name == token[TOKEN_COLOUR_TIME_COLOUR])
     {
@@ -48,14 +46,14 @@ bool PUColorAffectorTranslator::translateChildProperty( PUScriptCompiler* compil
             int n = 0;
             float time;
             Vec4 colour;
-            PUAbstractNodeList::const_iterator i = prop->values.begin();
+            PUAbstractNodeList::const_iterator i   = prop->values.begin();
             PUAbstractNodeList::const_iterator end = prop->values.end();
-            while(i != end)
+            while (i != end)
             {
                 float v = 0;
-                if(getFloat(**i, &v))
+                if (getFloat(**i, &v))
                 {
-                    switch(n)
+                    switch (n)
                     {
                     case 0:
                         time = v;
@@ -86,7 +84,7 @@ bool PUColorAffectorTranslator::translateChildProperty( PUScriptCompiler* compil
         if (passValidateProperty(compiler, prop, token[TOKEN_COLOUR_OPERATION], VAL_STRING))
         {
             std::string val;
-            if(getString(*prop->values.front(), &val))
+            if (getString(*prop->values.front(), &val))
             {
                 if (val == token[TOKEN_COLOUR_SET])
                 {
@@ -105,7 +103,7 @@ bool PUColorAffectorTranslator::translateChildProperty( PUScriptCompiler* compil
     return false;
 }
 
-bool PUColorAffectorTranslator::translateChildObject( PUScriptCompiler* /*compiler*/, PUAbstractNode* /*node*/ )
+bool PUColorAffectorTranslator::translateChildObject(PUScriptCompiler* /*compiler*/, PUAbstractNode* /*node*/)
 {
     // No objects
     return false;

@@ -30,7 +30,8 @@
 
 #define LOG_TAG "AudioDecoder"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 AudioDecoder::AudioDecoder()
     : _isOpened(false)
@@ -40,70 +41,65 @@ AudioDecoder::AudioDecoder()
     , _sampleRate(0)
     , _channelCount(0)
     , _sourceFormat(AUDIO_SOURCE_FORMAT::PCM_16)
-    {
+{}
 
-    }
+AudioDecoder::~AudioDecoder() {}
 
-    AudioDecoder::~AudioDecoder()
-    {
-    }
-
-
-    bool AudioDecoder::isOpened() const
-    {
-        return _isOpened;
-    }
-
-    uint32_t AudioDecoder::readFixedFrames(uint32_t framesToRead, char* pcmBuf)
-    {
-        uint32_t framesRead = 0;
-        uint32_t framesReadOnce = 0;
-        do
-        {
-            framesReadOnce = read(framesToRead - framesRead, pcmBuf + framesToBytes((framesRead)));
-            framesRead += framesReadOnce;
-        } while (framesReadOnce != 0 && framesRead < framesToRead);
-
-        if (framesRead < framesToRead)
-        {
-            memset(pcmBuf + framesToBytes(framesRead), 0x0, framesToBytes(framesToRead - framesRead));
-        }
-
-        return framesRead;
-    }
-
-    uint32_t AudioDecoder::getTotalFrames() const
-    {
-        return _totalFrames;
-    }
-
-    uint32_t AudioDecoder::framesToBytes(uint32_t frames) const
-    {
-        return _bytesPerBlock * frames;
-    }
-
-    uint32_t AudioDecoder::bytesToFrames(uint32_t bytes) const
-    {
-        return bytes / _bytesPerBlock;
-    }
-
-    uint32_t AudioDecoder::getSampleRate() const
-    {
-        return _sampleRate;
-    }
-
-    uint32_t AudioDecoder::getChannelCount() const
-    {
-        return _channelCount;
-    }
-
-    uint32_t AudioDecoder::getSamplesPerBlock() const
-    {
-        return _samplesPerBlock;
-    }
-
-    AUDIO_SOURCE_FORMAT AudioDecoder::getSourceFormat() const
-    {
-        return _sourceFormat;
-    }
+bool AudioDecoder::isOpened() const
+{
+    return _isOpened;
 }
+
+uint32_t AudioDecoder::readFixedFrames(uint32_t framesToRead, char* pcmBuf)
+{
+    uint32_t framesRead     = 0;
+    uint32_t framesReadOnce = 0;
+    do
+    {
+        framesReadOnce = read(framesToRead - framesRead, pcmBuf + framesToBytes((framesRead)));
+        framesRead += framesReadOnce;
+    } while (framesReadOnce != 0 && framesRead < framesToRead);
+
+    if (framesRead < framesToRead)
+    {
+        memset(pcmBuf + framesToBytes(framesRead), 0x0, framesToBytes(framesToRead - framesRead));
+    }
+
+    return framesRead;
+}
+
+uint32_t AudioDecoder::getTotalFrames() const
+{
+    return _totalFrames;
+}
+
+uint32_t AudioDecoder::framesToBytes(uint32_t frames) const
+{
+    return _bytesPerBlock * frames;
+}
+
+uint32_t AudioDecoder::bytesToFrames(uint32_t bytes) const
+{
+    return bytes / _bytesPerBlock;
+}
+
+uint32_t AudioDecoder::getSampleRate() const
+{
+    return _sampleRate;
+}
+
+uint32_t AudioDecoder::getChannelCount() const
+{
+    return _channelCount;
+}
+
+uint32_t AudioDecoder::getSamplesPerBlock() const
+{
+    return _samplesPerBlock;
+}
+
+AUDIO_SOURCE_FORMAT AudioDecoder::getSourceFormat() const
+{
+    return _sourceFormat;
+}
+}  // namespace cocos2d

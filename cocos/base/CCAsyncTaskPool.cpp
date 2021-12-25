@@ -45,12 +45,8 @@ void AsyncTaskPool::destroyInstance()
     s_asyncTaskPool = nullptr;
 }
 
-AsyncTaskPool::AsyncTaskPool()
-{
-}
+AsyncTaskPool::AsyncTaskPool() {}
 
-AsyncTaskPool::~AsyncTaskPool()
-{
-}
+AsyncTaskPool::~AsyncTaskPool() {}
 
 NS_CC_END

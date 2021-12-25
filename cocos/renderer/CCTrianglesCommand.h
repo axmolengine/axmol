@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,15 +33,16 @@
  */
 
 NS_CC_BEGIN
-/** 
+/**
  Command used to render one or more Triangles, which is similar to QuadCommand.
  Every TrianglesCommand will have generate material ID by give textureID, glProgramState, Blend function
  if the material id is the same, these TrianglesCommands could be batched to save draw call.
 */
-namespace backend {
-    class TextureBackend;
-    class Program;
-}
+namespace backend
+{
+class TextureBackend;
+class Program;
+}  // namespace backend
 
 class Texture2D;
 
@@ -52,10 +53,7 @@ public:
     struct Triangles
     {
         Triangles(V3F_C4B_T2F* _verts, unsigned short* _indices, unsigned int _vertCount, unsigned int _indexCount)
-        : verts(_verts)
-        , indices(_indices)
-        , vertCount(_vertCount)
-        , indexCount(_indexCount)
+            : verts(_verts), indices(_indices), vertCount(_vertCount), indexCount(_indexCount)
         {}
 
         Triangles() {}
@@ -74,7 +72,7 @@ public:
     TrianglesCommand();
     /**Destructor.*/
     ~TrianglesCommand();
-    
+
     /** Initializes the command.
      @param globalOrder GlobalZOrder of the command.
      @param texture The texture used in renderring.
@@ -83,7 +81,12 @@ public:
      @param mv ModelView matrix for the command.
      @param flags to indicate that the command is using 3D rendering or not.
      */
-    void init(float globalOrder, cocos2d::Texture2D* texture, const BlendFunc& blendType,  const Triangles& triangles, const Mat4& mv, uint32_t flags);
+    void init(float globalOrder,
+              cocos2d::Texture2D* texture,
+              const BlendFunc& blendType,
+              const Triangles& triangles,
+              const Mat4& mv,
+              uint32_t flags);
     /**Get the material id of command.*/
     uint32_t getMaterialID() const { return _materialID; }
     /**Get a const reference of triangles.*/
@@ -98,14 +101,14 @@ public:
     const unsigned short* getIndices() const { return _triangles.indices; }
     /**Get the model view matrix.*/
     const Mat4& getModelView() const { return _mv; }
-    
+
     /** update material ID */
     void updateMaterialID();
-  
+
 protected:
     /**Generate the material ID by textureID, glProgramState, and blend function.*/
     void generateMaterialID();
-    
+
     /**Generated material id.*/
     uint32_t _materialID = 0;
 
@@ -113,9 +116,9 @@ protected:
     Triangles _triangles;
 
     // Cached value to determine to generate material id or not.
-    BlendFunc _blendType = BlendFunc::DISABLE;
-    uint32_t _programType = backend::ProgramType::CUSTOM_PROGRAM;
-    uint32_t _uniformID = 0;
+    BlendFunc _blendType              = BlendFunc::DISABLE;
+    uint32_t _programType             = backend::ProgramType::CUSTOM_PROGRAM;
+    uint32_t _uniformID               = 0;
     backend::TextureBackend* _texture = nullptr;
 };
 

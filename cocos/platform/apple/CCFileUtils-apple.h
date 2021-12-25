@@ -51,14 +51,17 @@ public:
     /* override functions */
     virtual std::string getWritablePath() const override;
     virtual std::string getNativeWritableAbsolutePath() const override;
-    virtual std::string getFullPathForFilenameWithinDirectory(const std::string& directory, const std::string& filename) const override;
+    virtual std::string getFullPathForFilenameWithinDirectory(const std::string& directory,
+                                                              const std::string& filename) const override;
 
 #if CC_FILEUTILS_APPLE_ENABLE_OBJC
     void setBundle(NSBundle* bundle);
 #endif
-    
+
     virtual bool createDirectory(const std::string& path) const override;
-    virtual std::string getPathForDirectory(const std::string &dir, const std::string &resolutionDiretory, const std::string &searchPath) const override;
+    virtual std::string getPathForDirectory(const std::string& dir,
+                                            const std::string& resolutionDiretory,
+                                            const std::string& searchPath) const override;
 
 private:
     virtual bool isFileExistInternal(const std::string& filePath) const override;
@@ -73,4 +76,4 @@ private:
 
 NS_CC_END
 
-#endif    // __CC_FILEUTILS_APPLE_H__
+#endif  // __CC_FILEUTILS_APPLE_H__

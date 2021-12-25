@@ -37,7 +37,7 @@ extern Vec2 physicsDebugNodeOffset;
 
 /**
  * A BaseData that draws the components of a physics engine.
- 
+
  * Supported physics engines:
  * - Chipmunk
  * - Objective-Chipmunk
@@ -50,7 +50,7 @@ class CC_EX_DLL PhysicsDebugNodeChipmunk2D : public DrawNode
 
 public:
     /** Create a debug node for a regular Chipmunk space. */
-    static PhysicsDebugNodeChipmunk2D* create(cpSpace *space);
+    static PhysicsDebugNodeChipmunk2D* create(cpSpace* space);
     /**
      * @js ctor
      */
@@ -59,18 +59,17 @@ public:
      * @js NA
      */
     virtual ~PhysicsDebugNodeChipmunk2D();
-    
 
     cpSpace* getSpace() const;
-    void setSpace(cpSpace *space);
-    
+    void setSpace(cpSpace* space);
+
     // Overrides
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
 protected:
-    cpSpace *_spacePtr;
+    cpSpace* _spacePtr;
 };
 
 NS_CC_EXT_END
 
-#endif // __PHYSICSNODES_DEBUGNODE_CHIPMUNK2D_H__
+#endif  // __PHYSICSNODES_DEBUGNODE_CHIPMUNK2D_H__

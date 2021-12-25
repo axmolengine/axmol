@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../DepthStencilState.h"
@@ -36,7 +36,6 @@ CC_BACKEND_BEGIN
  * @{
  */
 
-
 /**
  * A class represent a depth/stencil test status.
  */
@@ -49,22 +48,22 @@ public:
      */
     DepthStencilStateMTL(id<MTLDevice> mtlDevice);
     ~DepthStencilStateMTL();
-    
+
     void update(const DepthStencilDescriptor& dsDesc) override;
-    
+
     /// @name Setters & Getters
     /**
      * get a MTLDepthStencilState object
      */
     inline id<MTLDepthStencilState> getMTLDepthStencilState() const { return _mtlDepthStencilState; }
-    
+
 private:
     id<MTLDevice> _mtlDevice = nil;
-    
+
     // the current depth stencil state
     id<MTLDepthStencilState> _mtlDepthStencilState = nil;
-    
-    tsl::robin_map<uint32_t,id<MTLDepthStencilState>> _mtlStateCache;
+
+    tsl::robin_map<uint32_t, id<MTLDepthStencilState>> _mtlStateCache;
 };
 
 // end of _metal group

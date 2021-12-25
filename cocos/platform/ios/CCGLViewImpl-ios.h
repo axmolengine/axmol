@@ -31,7 +31,6 @@
 
 NS_CC_BEGIN
 
-
 /** Class that represent the OpenGL View
  */
 class CC_DLL GLViewImpl : public GLView
@@ -48,7 +47,7 @@ public:
 
     /** creates a GLViewImpl with a name in fullscreen mode */
     static GLViewImpl* createWithFullScreen(const std::string& viewName);
-    
+
     static void convertAttrs();
     static void* _pixelFormat;
     static int _depthFormat;
@@ -83,7 +82,7 @@ protected:
     bool initWithFullScreen(const std::string& viewName);
 
     // the objective-c CCEAGLView instance
-    void *_eaglview;
+    void* _eaglview;
 };
 
 NS_CC_END

@@ -26,28 +26,30 @@ THE SOFTWARE.
 
 #include "CocoStudio.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 class EventDispatcher;
 class EventListener;
-}
+}  // namespace cocos2d
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class TriggerObj;
 
 class CCS_DLL ArmatureMovementDispatcher : public cocos2d::Ref
 {
 public:
-	ArmatureMovementDispatcher(void);
-	~ArmatureMovementDispatcher(void);
-public:
-	void addAnimationEventCallBack(cocos2d::Ref*pTarget, SEL_MovementEventCallFunc mecf);
-	void removeAnnimationEventCallBack(cocos2d::Ref*pTarget, SEL_MovementEventCallFunc mecf);
-	void animationEvent(Armature *armature, MovementEventType movementType, const std::string& movementID);
-    
-private:
-	std::unordered_map<cocos2d::Ref*, SEL_MovementEventCallFunc> *_mapEventAnimation;
+    ArmatureMovementDispatcher(void);
+    ~ArmatureMovementDispatcher(void);
 
+public:
+    void addAnimationEventCallBack(cocos2d::Ref* pTarget, SEL_MovementEventCallFunc mecf);
+    void removeAnnimationEventCallBack(cocos2d::Ref* pTarget, SEL_MovementEventCallFunc mecf);
+    void animationEvent(Armature* armature, MovementEventType movementType, const std::string& movementID);
+
+private:
+    std::unordered_map<cocos2d::Ref*, SEL_MovementEventCallFunc>* _mapEventAnimation;
 };
 
 class CCS_DLL TriggerMng
@@ -60,34 +62,37 @@ public:
     static TriggerMng* getInstance();
     static void destroyInstance();
     static const char* triggerMngVersion();
-    
+
 public:
-    void parse(const rapidjson::Value &root);
-    void parse(cocostudio::CocoLoader *pCocoLoader, cocostudio::stExpCocoNode *pCocoNode);
+    void parse(const rapidjson::Value& root);
+    void parse(cocostudio::CocoLoader* pCocoLoader, cocostudio::stExpCocoNode* pCocoNode);
     void removeAll(void);
     cocos2d::Vector<TriggerObj*>* get(unsigned int event) const;
     TriggerObj* getTriggerObj(unsigned int id) const;
-    bool removeTriggerObj(TriggerObj *Obj);
+    bool removeTriggerObj(TriggerObj* Obj);
     bool removeTriggerObj(unsigned int id);
     bool isEmpty(void) const;
 
-    void addArmatureMovementCallBack(Armature *pAr, cocos2d::Ref *pTarget, SEL_MovementEventCallFunc mecf);
-    void removeArmatureMovementCallBack(Armature *pAr, cocos2d::Ref *pTarget, SEL_MovementEventCallFunc mecf);
-    void removeArmatureAllMovementCallBack(Armature *pAr);
+    void addArmatureMovementCallBack(Armature* pAr, cocos2d::Ref* pTarget, SEL_MovementEventCallFunc mecf);
+    void removeArmatureMovementCallBack(Armature* pAr, cocos2d::Ref* pTarget, SEL_MovementEventCallFunc mecf);
+    void removeArmatureAllMovementCallBack(Armature* pAr);
     void removeAllArmatureMovementCallBack();
     void dispatchEvent(cocos2d::EventCustom* tEvent);
     void removeEventListener(cocos2d::EventListener* listener);
     void addEventListenerWithFixedPriority(cocos2d::EventListener* listener, int fixedPriority);
-private:
-    void buildJson(rapidjson::Document &document, cocostudio::CocoLoader *pCocoLoader, cocostudio::stExpCocoNode *pCocoNode);
 
 private:
-    static TriggerMng *_sharedTriggerMng;
+    void buildJson(rapidjson::Document& document,
+                   cocostudio::CocoLoader* pCocoLoader,
+                   cocostudio::stExpCocoNode* pCocoNode);
+
+private:
+    static TriggerMng* _sharedTriggerMng;
     std::unordered_map<unsigned int, TriggerObj*> _triggerObjs;
-    std::unordered_map<Armature*, ArmatureMovementDispatcher*> *_movementDispatches;
+    std::unordered_map<Armature*, ArmatureMovementDispatcher*>* _movementDispatches;
     cocos2d::EventDispatcher* _eventDispatcher;  ///< event dispatcher used to dispatch all kinds of events
 };
 
-}
+}  // namespace cocostudio
 
 #endif

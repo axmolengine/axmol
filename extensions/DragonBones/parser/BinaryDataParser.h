@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -53,15 +53,15 @@ protected:
     virtual void _parseArray(const rapidjson::Value& rawData) override;
 
 public:
-    BinaryDataParser() :
-        _binaryOffset(0),
-        _binary(nullptr),
-        _intArray(nullptr),
-        _floatArray(nullptr),
-        _frameIntArray(nullptr),
-        _frameFloatArray(nullptr),
-        _frameArray(nullptr),
-        _timelineArray(nullptr)
+    BinaryDataParser()
+        : _binaryOffset(0)
+        , _binary(nullptr)
+        , _intArray(nullptr)
+        , _floatArray(nullptr)
+        , _frameIntArray(nullptr)
+        , _frameFloatArray(nullptr)
+        , _frameArray(nullptr)
+        , _timelineArray(nullptr)
     {}
     virtual ~BinaryDataParser() {}
 
@@ -69,4 +69,4 @@ public:
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_BINARY_DATA_PARSER_H
+#endif  // DRAGONBONES_BINARY_DATA_PARSER_H

@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "../Device.h"
 #include "platform/CCGL.h"
 
@@ -51,8 +51,10 @@ public:
     /**
      * New a Buffer object, not auto released.
      * @param size Specifies the size in bytes of the buffer object's new data store.
-     * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or BufferType::INDEX.
-     * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be BufferUsage::STATIC, BufferUsage::DYNAMIC.
+     * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or
+     * BufferType::INDEX.
+     * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
+     * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
     virtual Buffer* newBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
@@ -66,10 +68,9 @@ public:
 
     RenderTarget* newDefaultRenderTarget(TargetBufferFlags rtf) override;
     RenderTarget* newRenderTarget(TargetBufferFlags rtf,
-        TextureBackend* colorAttachment,
-        TextureBackend* depthAttachment, 
-        TextureBackend* stencilAttachhment) override;
-
+                                  TextureBackend* colorAttachment,
+                                  TextureBackend* depthAttachment,
+                                  TextureBackend* stencilAttachhment) override;
 
     virtual DepthStencilState* newDepthStencilState() override;
 
@@ -102,8 +103,8 @@ protected:
      */
     virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string& source) override;
 
-    GLint _defaultFBO = 0;// The value gets from glGetIntegerv, so need to use GLint
+    GLint _defaultFBO = 0;  // The value gets from glGetIntegerv, so need to use GLint
 };
-//end of _opengl group
+// end of _opengl group
 /// @}
 CC_BACKEND_END

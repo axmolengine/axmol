@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -41,7 +41,7 @@ NS_CC_BEGIN
  */
 
 /**
- TextureCube is a collection of six separate square textures that are put 
+ TextureCube is a collection of six separate square textures that are put
  onto the faces of an imaginary cube.
 */
 class CC_DLL TextureCube : public Ref
@@ -56,9 +56,12 @@ public:
        @param negative_z texture for the rear side of the texture cube face.
        @return  A new texture cube inited with given parameters.
     */
-    static TextureCube* create(const std::string& positive_x, const std::string& negative_x,
-                               const std::string& positive_y, const std::string& negative_y,
-                               const std::string& positive_z, const std::string& negative_z);
+    static TextureCube* create(const std::string& positive_x,
+                               const std::string& negative_x,
+                               const std::string& positive_y,
+                               const std::string& negative_y,
+                               const std::string& positive_z,
+                               const std::string& negative_z);
 
     /** Sets the min filter, mag filter, wrap s and wrap t texture parameters.
     If the texture size is NPOT (non power of 2), then in can only use GL_CLAMP_TO_EDGE in GL_TEXTURE_WRAP_{S,T}.
@@ -71,24 +74,28 @@ public:
 
     /** reload texture cube after GLESContext reconstructed.*/
     bool reloadTexture();
-CC_CONSTRUCTOR_ACCESS:
-    /**
-    * Constructor.
-    */
-    TextureCube();
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * Constructor.
+         */
+        TextureCube();
 
     /**
-    * Destructor.
-    */
+     * Destructor.
+     */
     virtual ~TextureCube();
-protected:
 
-    bool init(const std::string& positive_x, const std::string& negative_x,
-              const std::string& positive_y, const std::string& negative_y,
-              const std::string& positive_z, const std::string& negative_z);
+protected:
+    bool init(const std::string& positive_x,
+              const std::string& negative_x,
+              const std::string& positive_y,
+              const std::string& negative_y,
+              const std::string& positive_z,
+              const std::string& negative_z);
+
 private:
     std::vector<std::string> _imgPath;
-    backend::TextureCubemapBackend *_texture = nullptr;
+    backend::TextureCubemapBackend* _texture = nullptr;
 };
 
 // end of 3d group
@@ -96,4 +103,4 @@ private:
 
 NS_CC_END
 
-#endif // __CCTEXTURECUBE_H__
+#endif  // __CCTEXTURECUBE_H__

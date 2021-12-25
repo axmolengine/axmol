@@ -44,7 +44,7 @@ NS_CC_BEGIN
 @js NA
 */
 class CC_DLL ClippingRectangleNode : public Node
-{    
+{
 public:
     /**
     @brief Create node with specified clipping region.
@@ -57,50 +57,44 @@ public:
     @return If the creation success, return a pointer of ClippingRectangleNode; otherwise return nil.
     */
     static ClippingRectangleNode* create();
-    
+
     /**
     @brief Get the clipping rectangle.
     @return The clipping rectangle.
     */
-    const Rect& getClippingRegion() const {
-        return _clippingRegion;
-    }
+    const Rect& getClippingRegion() const { return _clippingRegion; }
     /**
     @brief Set the clipping rectangle.
     @param clippingRegion Specify the clipping rectangle.
     */
     void setClippingRegion(const Rect& clippingRegion);
-    
+
     /**
     @brief Get whether the clipping is enabled or not.
     @return Whether the clipping is enabled or not. Default is true.
     */
-    bool isClippingEnabled() const {
-        return _clippingEnabled;
-    }
+    bool isClippingEnabled() const { return _clippingEnabled; }
 
     /**
     @brief Enable/Disable the clipping.
     @param enabled Pass true to enable clipping. Pass false to disable clipping.
     */
-    void setClippingEnabled(bool enabled) {
-        _clippingEnabled = enabled;
-    }
+    void setClippingEnabled(bool enabled) { _clippingEnabled = enabled; }
 
-    //virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
-    virtual void visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
+    // virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
 protected:
     ClippingRectangleNode() = default;
-    
+
     void onBeforeVisitScissor();
     void onAfterVisitScissor();
-    
+
     Rect _clippingRegion;
     bool _clippingEnabled = true;
 
     bool _oldScissorTest = false;
-    
+
     CallbackCommand _beforeVisitCmdScissor;
     CallbackCommand _afterVisitCmdScissor;
 };

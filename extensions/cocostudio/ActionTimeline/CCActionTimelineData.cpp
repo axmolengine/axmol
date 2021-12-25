@@ -5,7 +5,7 @@ NS_TIMELINE_BEGIN
 // ActionTimelineData
 ActionTimelineData* ActionTimelineData::create(int actionTag)
 {
-    ActionTimelineData * ret = new ActionTimelineData();
+    ActionTimelineData* ret = new ActionTimelineData();
     if (ret->init(actionTag))
     {
         ret->autorelease();
@@ -17,10 +17,7 @@ ActionTimelineData* ActionTimelineData::create(int actionTag)
     return ret;
 }
 
-ActionTimelineData::ActionTimelineData()
-    : _actionTag(0)
-{
-}
+ActionTimelineData::ActionTimelineData() : _actionTag(0) {}
 
 bool ActionTimelineData::init(int actionTag)
 {

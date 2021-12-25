@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -100,15 +100,12 @@ public:
     /**
      * @private
      */
-    inline TextureData* getTexture(const std::string& textureName) const
-    {
-        return mapFind(textures, textureName);
-    }
+    inline TextureData* getTexture(const std::string& textureName) const { return mapFind(textures, textureName); }
 
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     const std::map<std::string, TextureData*>& getTextures() const { return textures; }
 };
 /**
@@ -126,9 +123,7 @@ public:
     Rectangle* frame;
     TextureAtlasData* parent;
 
-    TextureData() :
-        frame(nullptr)
-    {}
+    TextureData() : frame(nullptr) {}
     virtual ~TextureData() = 0;
 
     void copyFrom(const TextureData& value);
@@ -136,7 +131,7 @@ public:
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     Rectangle* getRegion() { return &region; }
     const Rectangle* getFrame() const { return frame; }
     void setFrame(Rectangle* value) { frame = value; }
@@ -145,4 +140,4 @@ public: // For WebAssembly.
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_TEXTUREATLAS_DATA_H
+#endif  // DRAGONBONES_TEXTUREATLAS_DATA_H

@@ -42,9 +42,10 @@ class EventCustom;
 
 enum class Animate3DQuality
 {
-    QUALITY_NONE = 0,          // it'll be ignore the curve-evaluating(the animation looks like stop), just accumulate transition time.
-    QUALITY_LOW,               // low animation quality, it'll be more efficient.
-    QUALITY_HIGH,              // high animation quality.
+    QUALITY_NONE =
+        0,  // it'll be ignore the curve-evaluating(the animation looks like stop), just accumulate transition time.
+    QUALITY_LOW,   // low animation quality, it'll be more efficient.
+    QUALITY_HIGH,  // high animation quality.
 };
 
 /**
@@ -55,13 +56,12 @@ enum class Animate3DQuality
 /**
  * @brief Animate3D, Animates a Sprite3D given with an Animation3D
  */
-class CC_DLL Animate3D: public ActionInterval
+class CC_DLL Animate3D : public ActionInterval
 {
 public:
-    
     /**create Animate3D using Animation.*/
     static Animate3D* create(Animation3D* animation);
-    
+
     /**
      * create Animate3D
      * @param animation used to generate animate3D
@@ -70,7 +70,7 @@ public:
      * @return Animate3D created using animate
      */
     static Animate3D* create(Animation3D* animation, float fromTime, float duration);
-    
+
     /**
      * create Animate3D by frame section, [startFrame, endFrame)
      * @param animation used to generate animate3D
@@ -80,42 +80,45 @@ public:
      * @return Animate3D created using animate
      */
     static Animate3D* createWithFrames(Animation3D* animation, int startFrame, int endFrame, float frameRate = 30.f);
-    
+
     //
     // Overrides
     //
     virtual void stop() override;
     virtual void step(float dt) override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual Animate3D* reverse() const override;
-    virtual Animate3D *clone() const override;
-    
+    virtual Animate3D* clone() const override;
+
     virtual void update(float t) override;
-    
+
     /**get & set speed, negative speed means playing reverse */
     float getSpeed() const;
     void setSpeed(float speed);
-    
+
     /**get & set blend weight, weight must positive*/
     float getWeight() const { return _weight; }
     void setWeight(float weight);
-    
+
     /**get & set origin interval*/
     void setOriginInterval(float interval);
-    float getOriginInterval() const {return _originInterval; }
-    
+    float getOriginInterval() const { return _originInterval; }
+
     /** get animate transition time between 3d animations */
     static float getTransitionTime() { return _transTime; }
-    
+
     /** set animate transition time between 3d animations */
-    static void setTransitionTime(float transTime) { if (transTime >= 0.f) _transTime = transTime; }
-    
+    static void setTransitionTime(float transTime)
+    {
+        if (transTime >= 0.f)
+            _transTime = transTime;
+    }
+
     /**set animate quality*/
     void setQuality(Animate3DQuality quality);
-    
+
     /**get animate quality*/
     Animate3DQuality getQuality() const;
-
 
     struct Animate3DDisplayedEventInfo
     {
@@ -123,60 +126,57 @@ public:
         Node* target;
         const ValueMap* userInfo;
     };
-    void setKeyFrameUserInfo(int keyFrame, const ValueMap &userInfo);
+    void setKeyFrameUserInfo(int keyFrame, const ValueMap& userInfo);
     const ValueMap* getKeyFrameUserInfo(int keyFrame) const;
     ValueMap* getKeyFrameUserInfo(int keyFrame);
-    
 
-    
-CC_CONSTRUCTOR_ACCESS:
-    
-    Animate3D();
+    CC_CONSTRUCTOR_ACCESS :
+
+        Animate3D();
     virtual ~Animate3D();
-    
+
     void removeFromMap();
-    
+
     /** init method */
     bool init(Animation3D* animation);
     bool init(Animation3D* animation, float fromTime, float duration);
     bool initWithFrames(Animation3D* animation, int startFrame, int endFrame, float frameRate);
-    
+
 protected:
-    
     enum class Animate3DState
     {
         FadeIn,
         FadeOut,
         Running,
     };
-    Animate3DState _state; //animation state
-    Animation3D* _animation; //animation data
+    Animate3DState _state;    // animation state
+    Animation3D* _animation;  // animation data
 
-    float      _absSpeed; //playing speed
-    float      _weight; //blend weight
-    float      _start; //start time 0 - 1, used to generate sub Animate3D
-    float      _last; //last time 0 - 1, used to generate sub Animate3D
-    bool       _playReverse; // is playing reverse
-    static float      _transTime; //transition time from one animate3d to another
-    float      _accTransTime; // accumulate transition time
-    float      _lastTime;     // last t (0 - 1)
-    float      _originInterval;// save origin interval time
-    float      _frameRate;
-    
+    float _absSpeed;          // playing speed
+    float _weight;            // blend weight
+    float _start;             // start time 0 - 1, used to generate sub Animate3D
+    float _last;              // last time 0 - 1, used to generate sub Animate3D
+    bool _playReverse;        // is playing reverse
+    static float _transTime;  // transition time from one animate3d to another
+    float _accTransTime;      // accumulate transition time
+    float _lastTime;          // last t (0 - 1)
+    float _originInterval;    // save origin interval time
+    float _frameRate;
+
     // animation quality
     EvaluateType _translateEvaluate;
     EvaluateType _roteEvaluate;
     EvaluateType _scaleEvaluate;
     Animate3DQuality _quality;
-    
-    std::unordered_map<Bone3D*, Animation3D::Curve*> _boneCurves; //weak ref
+
+    std::unordered_map<Bone3D*, Animation3D::Curve*> _boneCurves;  // weak ref
     std::unordered_map<Node*, Animation3D::Curve*> _nodeCurves;
-    
+
     std::unordered_map<int, ValueMap> _keyFrameUserInfos;
     std::unordered_map<int, EventCustom*> _keyFrameEvent;
     std::unordered_map<int, Animate3DDisplayedEventInfo> _displayedEventInfo;
 
-    //sprite animates
+    // sprite animates
     static std::unordered_map<Node*, Animate3D*> s_fadeInAnimates;
     static std::unordered_map<Node*, Animate3D*> s_fadeOutAnimates;
     static std::unordered_map<Node*, Animate3D*> s_runningAnimates;
@@ -187,4 +187,4 @@ protected:
 
 NS_CC_END
 
-#endif // __CCANIMATE3D_H__
+#endif  // __CCANIMATE3D_H__

@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "base/ccMacros.h"
@@ -69,7 +69,8 @@ struct UtilsGL
 
     /**
      * Convert minifying filter to GLint. i.e. convert SamplerFilter::LINEAR to GL_LINEAR.
-     * If mipmaps is enabled and texture width and height are not power of two, then if minFilter is SamplerFilter::LINEAR, GL_LINEAR is returned, otherwise return GL_NEAREST.
+     * If mipmaps is enabled and texture width and height are not power of two, then if minFilter is
+     * SamplerFilter::LINEAR, GL_LINEAR is returned, otherwise return GL_NEAREST.
      * @param minFilter Specifies minifying filter.
      * @param hasMipmaps Specifies whether mipmap is enabled.
      * @param isPow2 Specifies if texture width and height are power of two.
@@ -89,12 +90,16 @@ struct UtilsGL
     /**
      * Get textrue parameters from texture pixle format.
      * @param in textureFormat Specifies texture pixel format.
-     * @param out internalFormat Specifies the internal format of the texture. 
+     * @param out internalFormat Specifies the internal format of the texture.
      * @param out format Specifies the format of the texel data.
-     * @param out type Specifies the data type of the texel data. 
+     * @param out type Specifies the data type of the texel data.
      * @param out isCompressed Specifies if the texel data is compressed.
      */
-    static void toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint &format, GLenum &type, bool &isCompressed);
+    static void toGLTypes(PixelFormat textureFormat,
+                          GLint& internalFormat,
+                          GLuint& format,
+                          GLenum& type,
+                          bool& isCompressed);
 
     /**
      * Convert compare function to GLenum. i.e. convert CompareFunction::NEVER to GL_NEVER.
@@ -152,6 +157,6 @@ struct UtilsGL
      */
     static GLenum toGLCullMode(CullMode mode);
 };
-//end of _opengl group
+// end of _opengl group
 /// @}
 CC_BACKEND_END

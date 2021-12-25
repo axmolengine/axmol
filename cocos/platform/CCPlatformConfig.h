@@ -40,15 +40,15 @@ THE SOFTWARE.
 //////////////////////////////////////////////////////////////////////////
 
 // define supported target platform macro which CC uses.
-#define CC_PLATFORM_UNKNOWN            0
-#define CC_PLATFORM_IOS                1
-#define CC_PLATFORM_ANDROID            2
-#define CC_PLATFORM_WIN32              3
+#define CC_PLATFORM_UNKNOWN 0
+#define CC_PLATFORM_IOS 1
+#define CC_PLATFORM_ANDROID 2
+#define CC_PLATFORM_WIN32 3
 // #define CC_PLATFORM_MARMALADE          4
-#define CC_PLATFORM_LINUX              5
+#define CC_PLATFORM_LINUX 5
 // #define CC_PLATFORM_BADA               6
 // #define CC_PLATFORM_BLACKBERRY         7
-#define CC_PLATFORM_MAC                8
+#define CC_PLATFORM_MAC 8
 // #define CC_PLATFORM_NACL               9
 // #define CC_PLATFORM_EMSCRIPTEN        10
 // #define CC_PLATFORM_TIZEN             11
@@ -56,92 +56,92 @@ THE SOFTWARE.
 // #define CC_PLATFORM_WINRT             13
 
 // Determine target platform by compile environment macro.
-#define CC_TARGET_PLATFORM             CC_PLATFORM_UNKNOWN
+#define CC_TARGET_PLATFORM CC_PLATFORM_UNKNOWN
 
 // Apple: Mac and iOS
-#if defined(__APPLE__) && !defined(__ANDROID__) // exclude android for binding generator.
-    #include <TargetConditionals.h>
-    #if TARGET_OS_IPHONE // TARGET_OS_IPHONE includes TARGET_OS_IOS TARGET_OS_TV and TARGET_OS_WATCH. see TargetConditionals.h
-        #undef  CC_TARGET_PLATFORM
-        #define CC_TARGET_PLATFORM         CC_PLATFORM_IOS
-    #elif TARGET_OS_MAC
-        #undef  CC_TARGET_PLATFORM
-        #define CC_TARGET_PLATFORM         CC_PLATFORM_MAC
-    #endif
+#if defined(__APPLE__) && !defined(__ANDROID__)  // exclude android for binding generator.
+#    include <TargetConditionals.h>
+#    if TARGET_OS_IPHONE  // TARGET_OS_IPHONE includes TARGET_OS_IOS TARGET_OS_TV and TARGET_OS_WATCH. see
+                          // TargetConditionals.h
+#        undef CC_TARGET_PLATFORM
+#        define CC_TARGET_PLATFORM CC_PLATFORM_IOS
+#    elif TARGET_OS_MAC
+#        undef CC_TARGET_PLATFORM
+#        define CC_TARGET_PLATFORM CC_PLATFORM_MAC
+#    endif
 #endif
 
 // android
 #if defined(__ANDROID__)
-    #undef  CC_TARGET_PLATFORM
-    #define CC_TARGET_PLATFORM         CC_PLATFORM_ANDROID
+#    undef CC_TARGET_PLATFORM
+#    define CC_TARGET_PLATFORM CC_PLATFORM_ANDROID
 #endif
 
 // win32
 #if defined(_WIN32) && defined(_WINDOWS)
-    #undef  CC_TARGET_PLATFORM
-    #define CC_TARGET_PLATFORM         CC_PLATFORM_WIN32
+#    undef CC_TARGET_PLATFORM
+#    define CC_TARGET_PLATFORM CC_PLATFORM_WIN32
 #endif
 
 // linux
 #if defined(LINUX) && !defined(__APPLE__)
-    #undef  CC_TARGET_PLATFORM
-    #define CC_TARGET_PLATFORM         CC_PLATFORM_LINUX
+#    undef CC_TARGET_PLATFORM
+#    define CC_TARGET_PLATFORM CC_PLATFORM_LINUX
 #endif
-
 
 //////////////////////////////////////////////////////////////////////////
 // post configure
 //////////////////////////////////////////////////////////////////////////
 
 // check user set platform
-#if ! CC_TARGET_PLATFORM
-    #error  "Cannot recognize the target platform; are you targeting an unsupported platform?"
+#if !CC_TARGET_PLATFORM
+#    error "Cannot recognize the target platform; are you targeting an unsupported platform?"
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#ifndef __MINGW32__
-#pragma warning (disable:4127)
-#endif
+#    ifndef __MINGW32__
+#        pragma warning(disable : 4127)
+#    endif
 #endif  // CC_PLATFORM_WIN32
 
-/* 
-windows: https://github.com/google/angle 
+/*
+windows: https://github.com/google/angle
 mac: GL
 iOS: GLES
 other: GL
 */
 #ifndef CC_COMPAT_GL
-#define CC_COMPAT_GL 0
+#    define CC_COMPAT_GL 0
 #endif
 
 #if ((CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS))
-    #define CC_PLATFORM_MOBILE
+#    define CC_PLATFORM_MOBILE
 #else
-    #define CC_PLATFORM_PC
+#    define CC_PLATFORM_PC
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) 
-    #if !CC_COMPAT_GL
-        #define CC_USE_METAL
-    #else
-        #define CC_USE_GL
-    #endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#    if !CC_COMPAT_GL
+#        define CC_USE_METAL
+#    else
+#        define CC_USE_GL
+#    endif
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    #if !CC_COMPAT_GL
-        #define CC_USE_METAL
-    #else
-        #define CC_USE_GLES
-    #endif
+#    if !CC_COMPAT_GL
+#        define CC_USE_METAL
+#    else
+#        define CC_USE_GLES
+#    endif
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    #define CC_USE_GLES
+#    define CC_USE_GLES
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-    #if !CC_COMPAT_GL
-        #define CC_USE_GL
-    #else
-        #define CC_USE_GLES
-    #endif
+#    if !CC_COMPAT_GL
+#        define CC_USE_GL
+#    else
+#        define CC_USE_GLES
+#    endif
 #else
-    #define CC_USE_GL
+#    define CC_USE_GL
 #endif
 
 /// @endcond

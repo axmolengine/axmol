@@ -3,7 +3,7 @@ Copyright (C) 2010      Lam Pham
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,13 +35,13 @@ NS_CC_BEGIN
 
 ProgressTo* ProgressTo::create(float duration, float percent)
 {
-    ProgressTo *progressTo = new ProgressTo();
+    ProgressTo* progressTo = new ProgressTo();
     if (progressTo->initWithDuration(duration, percent))
     {
         progressTo->autorelease();
         return progressTo;
     }
-    
+
     delete progressTo;
     return nullptr;
 }
@@ -70,7 +70,7 @@ ProgressTo* ProgressTo::reverse() const
     return nullptr;
 }
 
-void ProgressTo::startWithTarget(Node *target)
+void ProgressTo::startWithTarget(Node* target)
 {
     ActionInterval::startWithTarget(target);
     _from = ((kProgressTimerCast)(target))->getPercentage();
@@ -85,12 +85,13 @@ void ProgressTo::update(float time)
 
 ProgressFromTo* ProgressFromTo::create(float duration, float fromPercentage, float toPercentage)
 {
-    ProgressFromTo *progressFromTo = new ProgressFromTo();
-    if (progressFromTo->initWithDuration(duration, fromPercentage, toPercentage)) {
+    ProgressFromTo* progressFromTo = new ProgressFromTo();
+    if (progressFromTo->initWithDuration(duration, fromPercentage, toPercentage))
+    {
         progressFromTo->autorelease();
         return progressFromTo;
     }
-    
+
     delete progressFromTo;
     return nullptr;
 }
@@ -99,7 +100,7 @@ bool ProgressFromTo::initWithDuration(float duration, float fromPercentage, floa
 {
     if (ActionInterval::initWithDuration(duration))
     {
-        _to = toPercentage;
+        _to   = toPercentage;
         _from = fromPercentage;
 
         return true;
@@ -114,13 +115,12 @@ ProgressFromTo* ProgressFromTo::clone() const
     return ProgressFromTo::create(_duration, _from, _to);
 }
 
-
 ProgressFromTo* ProgressFromTo::reverse() const
 {
     return ProgressFromTo::create(_duration, _to, _from);
 }
 
-void ProgressFromTo::startWithTarget(Node *target)
+void ProgressFromTo::startWithTarget(Node* target)
 {
     ActionInterval::startWithTarget(target);
 }

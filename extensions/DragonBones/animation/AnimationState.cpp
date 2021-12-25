@@ -35,93 +35,95 @@ void AnimationState::_onClear()
         pair.second->returnToPool();
     }
 
-    if (_actionTimeline !=  nullptr) {
+    if (_actionTimeline != nullptr)
+    {
         _actionTimeline->returnToPool();
     }
 
-    if (_zOrderTimeline != nullptr) {
+    if (_zOrderTimeline != nullptr)
+    {
         _zOrderTimeline->returnToPool();
     }
 
-    actionEnabled = false;
+    actionEnabled    = false;
     additiveBlending = false;
-    displayControl = false;
-    resetToPose = false;
-    playTimes = 1;
-    layer = 0;
-    timeScale = 1.0f;
-    weight = 1.0f;
-    autoFadeOutTime = 0.0f;
-    fadeTotalTime = 0.0f;
-    name = "";
-    group = "";
+    displayControl   = false;
+    resetToPose      = false;
+    playTimes        = 1;
+    layer            = 0;
+    timeScale        = 1.0f;
+    weight           = 1.0f;
+    autoFadeOutTime  = 0.0f;
+    fadeTotalTime    = 0.0f;
+    name             = "";
+    group            = "";
 
     _timelineDirty = 2;
     _playheadState = 0;
-    _fadeState = -1;
-    _subFadeState = -1;
-    _position = 0.0f;
-    _duration = 0.0f;
-    _fadeTime = 0.0f;
-    _time = 0.0f;
-    _fadeProgress = 0.0f;
-    _weightResult = 0.0f;
+    _fadeState     = -1;
+    _subFadeState  = -1;
+    _position      = 0.0f;
+    _duration      = 0.0f;
+    _fadeTime      = 0.0f;
+    _time          = 0.0f;
+    _fadeProgress  = 0.0f;
+    _weightResult  = 0.0f;
     _boneMask.clear();
     _boneTimelines.clear();
     _slotTimelines.clear();
     _constraintTimelines.clear();
     _poseTimelines.clear();
     _bonePoses.clear();
-    _animationData = nullptr;
-    _armature = nullptr;
+    _animationData  = nullptr;
+    _armature       = nullptr;
     _actionTimeline = nullptr;
     _zOrderTimeline = nullptr;
 }
 
 void AnimationState::_updateTimelines()
 {
-    { // Update constraint timelines.
+    {  // Update constraint timelines.
         std::map<std::string, std::vector<ConstraintTimelineState*>> constraintTimelines;
-        for (const auto timeline : _constraintTimelines) // Create constraint timelines map.
+        for (const auto timeline : _constraintTimelines)  // Create constraint timelines map.
         {
             constraintTimelines[timeline->constraint->getName()].push_back(timeline);
         }
 
-        for (const auto constraint : _armature->_constraints) 
+        for (const auto constraint : _armature->_constraints)
         {
             const auto& timelineName = constraint->getName();
             const auto timelineDatas = _animationData->getConstraintTimelines(timelineName);
-            const auto iterator = constraintTimelines.find(timelineName);
+            const auto iterator      = constraintTimelines.find(timelineName);
 
-            if (iterator != constraintTimelines.end()) // Remove constraint timeline from map.
+            if (iterator != constraintTimelines.end())  // Remove constraint timeline from map.
             {
                 constraintTimelines.erase(iterator);
             }
             else  // Create new constraint timeline.
             {
-                if (timelineDatas != nullptr) 
+                if (timelineDatas != nullptr)
                 {
-                    for (const auto timelineData : *timelineDatas) 
+                    for (const auto timelineData : *timelineDatas)
                     {
-                        switch (timelineData->type) 
+                        switch (timelineData->type)
                         {
-                            case TimelineType::IKConstraint:
-                            {
-                                const auto timeline = BaseObject::borrowObject<IKConstraintTimelineState>();
-                                timeline->constraint = constraint;
-                                timeline->init(_armature, this, timelineData);
-                                _constraintTimelines.push_back(timeline);
-                                break;
-                            }
+                        case TimelineType::IKConstraint:
+                        {
+                            const auto timeline  = BaseObject::borrowObject<IKConstraintTimelineState>();
+                            timeline->constraint = constraint;
+                            timeline->init(_armature, this, timelineData);
+                            _constraintTimelines.push_back(timeline);
+                            break;
+                        }
 
-                            default:
-                                break;
+                        default:
+                            break;
                         }
                     }
                 }
-                else if (resetToPose) // Pose timeline.
+                else if (resetToPose)  // Pose timeline.
                 {
-                    const auto timeline = BaseObject::borrowObject<IKConstraintTimelineState>();
+                    const auto timeline  = BaseObject::borrowObject<IKConstraintTimelineState>();
                     timeline->constraint = constraint;
                     timeline->init(_armature, this, nullptr);
                     _constraintTimelines.push_back(timeline);
@@ -134,9 +136,9 @@ void AnimationState::_updateTimelines()
 
 void AnimationState::_updateBoneAndSlotTimelines()
 {
-    { // Update bone timelines.
+    {  // Update bone timelines.
         std::map<std::string, std::vector<BoneTimelineState*>> boneTimelines;
-        for (const auto timeline : _boneTimelines) // Create bone timelines map.
+        for (const auto timeline : _boneTimelines)  // Create bone timelines map.
         {
             boneTimelines[timeline->bone->getName()].push_back(timeline);
         }
@@ -150,15 +152,17 @@ void AnimationState::_updateBoneAndSlotTimelines()
             }
 
             const auto timelineDatas = _animationData->getBoneTimelines(timelineName);
-            const auto iterator = boneTimelines.find(timelineName);
+            const auto iterator      = boneTimelines.find(timelineName);
 
-            if (iterator != boneTimelines.end()) // Remove bone timeline from map.
+            if (iterator != boneTimelines.end())  // Remove bone timeline from map.
             {
                 boneTimelines.erase(iterator);
             }
-            else // Create new bone timeline.
+            else  // Create new bone timeline.
             {
-                const auto bonePose = _bonePoses.find(timelineName) != _bonePoses.end() ? _bonePoses[timelineName] : (_bonePoses[timelineName] = BaseObject::borrowObject<BonePose>());
+                const auto bonePose = _bonePoses.find(timelineName) != _bonePoses.end()
+                                          ? _bonePoses[timelineName]
+                                          : (_bonePoses[timelineName] = BaseObject::borrowObject<BonePose>());
 
                 if (timelineDatas != nullptr)
                 {
@@ -166,56 +170,56 @@ void AnimationState::_updateBoneAndSlotTimelines()
                     {
                         switch (timelineData->type)
                         {
-                            case TimelineType::BoneAll:
-                            {
-                                const auto timeline = BaseObject::borrowObject<BoneAllTimelineState>();
-                                timeline->bone = bone;
-                                timeline->bonePose = bonePose;
-                                timeline->init(_armature, this, timelineData);
-                                _boneTimelines.push_back(timeline);
-                                break;
-                            }
+                        case TimelineType::BoneAll:
+                        {
+                            const auto timeline = BaseObject::borrowObject<BoneAllTimelineState>();
+                            timeline->bone      = bone;
+                            timeline->bonePose  = bonePose;
+                            timeline->init(_armature, this, timelineData);
+                            _boneTimelines.push_back(timeline);
+                            break;
+                        }
 
-                            case TimelineType::BoneTranslate:
-                            {
-                                const auto timeline = BaseObject::borrowObject<BoneTranslateTimelineState>();
-                                timeline->bone = bone;
-                                timeline->bonePose = bonePose;
-                                timeline->init(_armature, this, timelineData);
-                                _boneTimelines.push_back(timeline);
-                                break;
-                            }
+                        case TimelineType::BoneTranslate:
+                        {
+                            const auto timeline = BaseObject::borrowObject<BoneTranslateTimelineState>();
+                            timeline->bone      = bone;
+                            timeline->bonePose  = bonePose;
+                            timeline->init(_armature, this, timelineData);
+                            _boneTimelines.push_back(timeline);
+                            break;
+                        }
 
-                            case TimelineType::BoneRotate:
-                            {
-                                const auto timeline = BaseObject::borrowObject<BoneRotateTimelineState>();
-                                timeline->bone = bone;
-                                timeline->bonePose = bonePose;
-                                timeline->init(_armature, this, timelineData);
-                                _boneTimelines.push_back(timeline);
-                                break;
-                            }
+                        case TimelineType::BoneRotate:
+                        {
+                            const auto timeline = BaseObject::borrowObject<BoneRotateTimelineState>();
+                            timeline->bone      = bone;
+                            timeline->bonePose  = bonePose;
+                            timeline->init(_armature, this, timelineData);
+                            _boneTimelines.push_back(timeline);
+                            break;
+                        }
 
-                            case TimelineType::BoneScale:
-                            {
-                                const auto timeline = BaseObject::borrowObject<BoneScaleTimelineState>();
-                                timeline->bone = bone;
-                                timeline->bonePose = bonePose;
-                                timeline->init(_armature, this, timelineData);
-                                _boneTimelines.push_back(timeline);
-                                break;
-                            }
+                        case TimelineType::BoneScale:
+                        {
+                            const auto timeline = BaseObject::borrowObject<BoneScaleTimelineState>();
+                            timeline->bone      = bone;
+                            timeline->bonePose  = bonePose;
+                            timeline->init(_armature, this, timelineData);
+                            _boneTimelines.push_back(timeline);
+                            break;
+                        }
 
-                            default:
-                                break;
-                            }
+                        default:
+                            break;
+                        }
                     }
                 }
-                else if (resetToPose) // Pose timeline.
+                else if (resetToPose)  // Pose timeline.
                 {
                     const auto timeline = BaseObject::borrowObject<BoneAllTimelineState>();
-                    timeline->bone = bone;
-                    timeline->bonePose = bonePose;
+                    timeline->bone      = bone;
+                    timeline->bonePose  = bonePose;
                     timeline->init(_armature, this, nullptr);
                     _boneTimelines.push_back(timeline);
                     _poseTimelines.push_back(std::make_pair(timeline, BaseTimelineType::Bone));
@@ -223,7 +227,7 @@ void AnimationState::_updateBoneAndSlotTimelines()
             }
         }
 
-        for (const auto& pair : boneTimelines) // Remove bone timelines.
+        for (const auto& pair : boneTimelines)  // Remove bone timelines.
         {
             for (const auto timeline : pair.second)
             {
@@ -233,10 +237,10 @@ void AnimationState::_updateBoneAndSlotTimelines()
         }
     }
 
-    { // Update slot timelines.
+    {  // Update slot timelines.
         std::map<std::string, std::vector<SlotTimelineState*>> slotTimelines;
         std::vector<unsigned> ffdFlags;
-        for (const auto timeline : _slotTimelines) // Create slot timelines map.
+        for (const auto timeline : _slotTimelines)  // Create slot timelines map.
         {
             slotTimelines[timeline->slot->getName()].push_back(timeline);
         }
@@ -251,16 +255,16 @@ void AnimationState::_updateBoneAndSlotTimelines()
 
             const auto& timelineName = slot->getName();
             const auto timelineDatas = _animationData->getSlotTimelines(timelineName);
-            const auto iterator = slotTimelines.find(timelineName);
+            const auto iterator      = slotTimelines.find(timelineName);
 
-            if (iterator != slotTimelines.end()) // Remove slot timeline from map.
+            if (iterator != slotTimelines.end())  // Remove slot timeline from map.
             {
                 slotTimelines.erase(iterator);
             }
-            else // Create new slot timeline.
+            else  // Create new slot timeline.
             {
                 auto displayIndexFlag = false;
-                auto colorFlag = false;
+                auto colorFlag        = false;
                 ffdFlags.clear();
 
                 if (timelineDatas != nullptr)
@@ -269,48 +273,48 @@ void AnimationState::_updateBoneAndSlotTimelines()
                     {
                         switch (timelineData->type)
                         {
-                            case TimelineType::SlotDisplay:
-                            {
-                                const auto timeline = BaseObject::borrowObject<SlotDislayTimelineState>();
-                                timeline->slot = slot;
-                                timeline->init(_armature, this, timelineData);
-                                _slotTimelines.push_back(timeline);
-                                displayIndexFlag = true;
-                                break;
-                            }
+                        case TimelineType::SlotDisplay:
+                        {
+                            const auto timeline = BaseObject::borrowObject<SlotDislayTimelineState>();
+                            timeline->slot      = slot;
+                            timeline->init(_armature, this, timelineData);
+                            _slotTimelines.push_back(timeline);
+                            displayIndexFlag = true;
+                            break;
+                        }
 
-                            case TimelineType::SlotColor:
-                            {
-                                const auto timeline = BaseObject::borrowObject<SlotColorTimelineState>();
-                                timeline->slot = slot;
-                                timeline->init(_armature, this, timelineData);
-                                _slotTimelines.push_back(timeline);
-                                colorFlag = true;
-                                break;
-                            }
+                        case TimelineType::SlotColor:
+                        {
+                            const auto timeline = BaseObject::borrowObject<SlotColorTimelineState>();
+                            timeline->slot      = slot;
+                            timeline->init(_armature, this, timelineData);
+                            _slotTimelines.push_back(timeline);
+                            colorFlag = true;
+                            break;
+                        }
 
-                            case TimelineType::SlotDeform:
-                            {
-                                const auto timeline = BaseObject::borrowObject<DeformTimelineState>();
-                                timeline->slot = slot;
-                                timeline->init(_armature, this, timelineData);
-                                _slotTimelines.push_back(timeline);
-                                ffdFlags.push_back(timeline->vertexOffset);
-                                break;
-                            }
+                        case TimelineType::SlotDeform:
+                        {
+                            const auto timeline = BaseObject::borrowObject<DeformTimelineState>();
+                            timeline->slot      = slot;
+                            timeline->init(_armature, this, timelineData);
+                            _slotTimelines.push_back(timeline);
+                            ffdFlags.push_back(timeline->vertexOffset);
+                            break;
+                        }
 
-                            default:
-                                break;
-                            }
+                        default:
+                            break;
+                        }
                     }
                 }
 
-                if (resetToPose) // Pose timeline.
+                if (resetToPose)  // Pose timeline.
                 {
                     if (!displayIndexFlag)
                     {
                         const auto timeline = BaseObject::borrowObject<SlotDislayTimelineState>();
-                        timeline->slot = slot;
+                        timeline->slot      = slot;
                         timeline->init(_armature, this, nullptr);
                         _slotTimelines.push_back(timeline);
                         _poseTimelines.push_back(std::make_pair(timeline, BaseTimelineType::Slot));
@@ -319,7 +323,7 @@ void AnimationState::_updateBoneAndSlotTimelines()
                     if (!colorFlag)
                     {
                         const auto timeline = BaseObject::borrowObject<SlotColorTimelineState>();
-                        timeline->slot = slot;
+                        timeline->slot      = slot;
                         timeline->init(_armature, this, nullptr);
                         _slotTimelines.push_back(timeline);
                         _poseTimelines.push_back(std::make_pair(timeline, BaseTimelineType::Slot));
@@ -334,9 +338,9 @@ void AnimationState::_updateBoneAndSlotTimelines()
                                 const auto meshOffset = static_cast<MeshDisplayData*>(displayData)->vertices.offset;
                                 if (std::find(ffdFlags.cbegin(), ffdFlags.cend(), meshOffset) == ffdFlags.cend())
                                 {
-                                    const auto timeline = BaseObject::borrowObject<DeformTimelineState>();
+                                    const auto timeline    = BaseObject::borrowObject<DeformTimelineState>();
                                     timeline->vertexOffset = meshOffset;
-                                    timeline->slot = slot;
+                                    timeline->slot         = slot;
                                     timeline->init(_armature, this, nullptr);
                                     _slotTimelines.push_back(timeline);
                                     _poseTimelines.push_back(std::make_pair(timeline, BaseTimelineType::Slot));
@@ -348,7 +352,7 @@ void AnimationState::_updateBoneAndSlotTimelines()
             }
         }
 
-        for (const auto& pair : slotTimelines) // Remove slot timelines.
+        for (const auto& pair : slotTimelines)  // Remove slot timelines.
         {
             for (const auto timeline : pair.second)
             {
@@ -370,9 +374,9 @@ void AnimationState::_advanceFadeTime(float passedTime)
         const auto eventType = isFadeOut ? EventObject::FADE_OUT : EventObject::FADE_IN;
         if (_armature->getProxy()->hasDBEventListener(eventType))
         {
-            const auto eventObject = BaseObject::borrowObject<EventObject>();
-            eventObject->type = eventType;
-            eventObject->armature = _armature;
+            const auto eventObject      = BaseObject::borrowObject<EventObject>();
+            eventObject->type           = eventType;
+            eventObject->armature       = _armature;
             eventObject->animationState = this;
             _armature->_dragonBones->bufferEvent(eventObject);
         }
@@ -403,16 +407,16 @@ void AnimationState::_advanceFadeTime(float passedTime)
     {
         if (!isFadeOut)
         {
-            _playheadState |= 1; // x1
+            _playheadState |= 1;  // x1
             _fadeState = 0;
         }
 
         const auto eventType = isFadeOut ? EventObject::FADE_OUT_COMPLETE : EventObject::FADE_IN_COMPLETE;
         if (_armature->getProxy()->hasDBEventListener(eventType))
         {
-            const auto eventObject = BaseObject::borrowObject<EventObject>();
-            eventObject->type = eventType;
-            eventObject->armature = _armature;
+            const auto eventObject      = BaseObject::borrowObject<EventObject>();
+            eventObject->type           = eventType;
+            eventObject->armature       = _armature;
             eventObject->animationState = this;
             _armature->_dragonBones->bufferEvent(eventObject);
         }
@@ -421,66 +425,67 @@ void AnimationState::_advanceFadeTime(float passedTime)
 
 void AnimationState::init(Armature* parmature, AnimationData* panimationData, AnimationConfig* animationConfig)
 {
-    if (_armature != nullptr) {
+    if (_armature != nullptr)
+    {
         return;
     }
 
-    _armature = parmature;
+    _armature      = parmature;
     _animationData = panimationData;
     //
-    resetToPose = animationConfig->resetToPose;
+    resetToPose      = animationConfig->resetToPose;
     additiveBlending = animationConfig->additiveBlending;
-    displayControl = animationConfig->displayControl;
-    actionEnabled = animationConfig->actionEnabled;
-    layer = animationConfig->layer;
-    playTimes = animationConfig->playTimes;
-    timeScale = animationConfig->timeScale;
-    fadeTotalTime = animationConfig->fadeInTime;
-    autoFadeOutTime = animationConfig->autoFadeOutTime;
-    weight = animationConfig->weight;
-    name = !animationConfig->name.empty() ? animationConfig->name : animationConfig->animation;
-    group = animationConfig->group;
+    displayControl   = animationConfig->displayControl;
+    actionEnabled    = animationConfig->actionEnabled;
+    layer            = animationConfig->layer;
+    playTimes        = animationConfig->playTimes;
+    timeScale        = animationConfig->timeScale;
+    fadeTotalTime    = animationConfig->fadeInTime;
+    autoFadeOutTime  = animationConfig->autoFadeOutTime;
+    weight           = animationConfig->weight;
+    name             = !animationConfig->name.empty() ? animationConfig->name : animationConfig->animation;
+    group            = animationConfig->group;
 
-    if (animationConfig->pauseFadeIn) 
+    if (animationConfig->pauseFadeIn)
     {
-        _playheadState = 2; // 10
+        _playheadState = 2;  // 10
     }
-    else 
+    else
     {
-        _playheadState = 3; // 11
+        _playheadState = 3;  // 11
     }
 
-    if (animationConfig->duration < 0.0f) 
+    if (animationConfig->duration < 0.0f)
     {
         _position = 0.0f;
         _duration = _animationData->duration;
 
-        if (animationConfig->position != 0.0f) 
+        if (animationConfig->position != 0.0f)
         {
-            if (timeScale >= 0.0f) 
+            if (timeScale >= 0.0f)
             {
                 _time = animationConfig->position;
             }
-            else 
+            else
             {
                 _time = animationConfig->position - _duration;
             }
         }
-        else 
+        else
         {
             _time = 0.0f;
         }
     }
-    else 
+    else
     {
         _position = animationConfig->position;
         _duration = animationConfig->duration;
-        _time = 0.0f;
+        _time     = 0.0f;
     }
 
-    if (timeScale < 0.0f && _time == 0.0f) 
+    if (timeScale < 0.0f && _time == 0.0f)
     {
-        _time = -0.000001f; // Can not cross last frame event.
+        _time = -0.000001f;  // Can not cross last frame event.
     }
 
     if (fadeTotalTime <= 0.0f)
@@ -491,13 +496,14 @@ void AnimationState::init(Armature* parmature, AnimationData* panimationData, An
     if (!animationConfig->boneMask.empty())
     {
         _boneMask.resize(animationConfig->boneMask.size());
-        for (std::size_t i = 0, l = _boneMask.size(); i < l; ++i) {
+        for (std::size_t i = 0, l = _boneMask.size(); i < l; ++i)
+        {
             _boneMask[i] = animationConfig->boneMask[i];
         }
     }
 
     _actionTimeline = BaseObject::borrowObject<ActionTimelineState>();
-    _actionTimeline->init(_armature, this, _animationData->actionTimeline); //
+    _actionTimeline->init(_armature, this, _animationData->actionTimeline);  //
     _actionTimeline->currentTime = _time;
     if (_actionTimeline->currentTime < 0.0f)
     {
@@ -514,15 +520,15 @@ void AnimationState::init(Armature* parmature, AnimationData* panimationData, An
 void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
 {
     // Update fade time.
-    if (_fadeState != 0 || _subFadeState != 0) 
+    if (_fadeState != 0 || _subFadeState != 0)
     {
         _advanceFadeTime(passedTime);
     }
 
     // Update time.
-    if (_playheadState == 3) // 11
+    if (_playheadState == 3)  // 11
     {
-        if (timeScale != 1.0f) 
+        if (timeScale != 1.0f)
         {
             passedTime *= timeScale;
         }
@@ -530,9 +536,9 @@ void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
         _time += passedTime;
     }
 
-    if (_timelineDirty != 0) 
+    if (_timelineDirty != 0)
     {
-        if (_timelineDirty == 2) 
+        if (_timelineDirty == 2)
         {
             _updateTimelines();
         }
@@ -541,72 +547,72 @@ void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
         _updateBoneAndSlotTimelines();
     }
 
-    if (weight == 0.0f) 
+    if (weight == 0.0f)
     {
         return;
     }
 
     const auto isCacheEnabled = _fadeState == 0 && cacheFrameRate > 0.0f;
-    auto isUpdateTimeline = true;
+    auto isUpdateTimeline     = true;
     auto isUpdateBoneTimeline = true;
-    auto time = _time;
-    _weightResult = weight * _fadeProgress;
+    auto time                 = _time;
+    _weightResult             = weight * _fadeProgress;
 
     if (_actionTimeline->playState <= 0)
     {
-        _actionTimeline->update(time); // Update main timeline.
+        _actionTimeline->update(time);  // Update main timeline.
     }
 
-    if (isCacheEnabled) // Cache time internval.
+    if (isCacheEnabled)  // Cache time internval.
     {
-        const auto internval = cacheFrameRate * 2.0f;
+        const auto internval         = cacheFrameRate * 2.0f;
         _actionTimeline->currentTime = (unsigned)(_actionTimeline->currentTime * internval) / internval;
     }
 
-    if (_zOrderTimeline != nullptr && _zOrderTimeline->playState <= 0) // Update zOrder timeline.
+    if (_zOrderTimeline != nullptr && _zOrderTimeline->playState <= 0)  // Update zOrder timeline.
     {
         _zOrderTimeline->update(time);
     }
 
-    if (isCacheEnabled) // Update cache.
+    if (isCacheEnabled)  // Update cache.
     {
-        const auto cacheFrameIndex = (unsigned)(_actionTimeline->currentTime * cacheFrameRate); // uint
-        if ((unsigned)_armature->_cacheFrameIndex == cacheFrameIndex) // Same cache.
-        { 
-            isUpdateTimeline = false;
+        const auto cacheFrameIndex = (unsigned)(_actionTimeline->currentTime * cacheFrameRate);  // uint
+        if ((unsigned)_armature->_cacheFrameIndex == cacheFrameIndex)                            // Same cache.
+        {
+            isUpdateTimeline     = false;
             isUpdateBoneTimeline = false;
         }
-        else 
+        else
         {
             _armature->_cacheFrameIndex = cacheFrameIndex;
-            if (_animationData->cachedFrames[cacheFrameIndex]) // Cached.
-            { 
+            if (_animationData->cachedFrames[cacheFrameIndex])  // Cached.
+            {
                 isUpdateBoneTimeline = false;
             }
-            else // Cache.
-            { 
+            else  // Cache.
+            {
                 _animationData->cachedFrames[cacheFrameIndex] = true;
             }
         }
     }
 
-    if (isUpdateTimeline) 
+    if (isUpdateTimeline)
     {
-        if (isUpdateBoneTimeline) // Update bone timelines.
+        if (isUpdateBoneTimeline)  // Update bone timelines.
         {
-            for (std::size_t i = 0, l = _boneTimelines.size(); i < l; ++i) 
+            for (std::size_t i = 0, l = _boneTimelines.size(); i < l; ++i)
             {
                 const auto timeline = _boneTimelines[i];
 
-                if (timeline->playState <= 0) 
+                if (timeline->playState <= 0)
                 {
                     timeline->update(time);
                 }
 
-                if (i == l - 1 || timeline->bone != _boneTimelines[i + 1]->bone) 
+                if (i == l - 1 || timeline->bone != _boneTimelines[i + 1]->bone)
                 {
                     const auto state = timeline->bone->_blendState.update(_weightResult, layer);
-                    if (state != 0) 
+                    if (state != 0)
                     {
                         timeline->blend(state);
                     }
@@ -614,18 +620,14 @@ void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
             }
         }
 
-        if (displayControl) 
+        if (displayControl)
         {
             for (std::size_t i = 0, l = _slotTimelines.size(); i < l; ++i)
             {
-                const auto timeline = _slotTimelines[i];
+                const auto timeline           = _slotTimelines[i];
                 const auto& displayController = timeline->slot->displayController;
 
-                if (
-                    displayController.empty() ||
-                    displayController == name ||
-                    displayController == group
-                )
+                if (displayController.empty() || displayController == name || displayController == group)
                 {
                     if (timeline->playState <= 0)
                     {
@@ -638,26 +640,26 @@ void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
         for (std::size_t i = 0, l = _constraintTimelines.size(); i < l; ++i)
         {
             const auto timeline = _constraintTimelines[i];
-            if (timeline->playState <= 0) 
+            if (timeline->playState <= 0)
             {
                 timeline->update(time);
             }
         }
     }
 
-    if (_fadeState == 0) 
+    if (_fadeState == 0)
     {
-        if (_subFadeState > 0) 
+        if (_subFadeState > 0)
         {
             _subFadeState = 0;
 
-            if (!_poseTimelines.empty()) 
+            if (!_poseTimelines.empty())
             {
-                for (const auto& pair : _poseTimelines) 
+                for (const auto& pair : _poseTimelines)
                 {
                     const auto timeline = pair.first;
                     if (pair.second == BaseTimelineType::Bone)
-                    { 
+                    {
                         _boneTimelines.erase(std::find(_boneTimelines.begin(), _boneTimelines.end(), timeline));
                     }
                     else if (pair.second == BaseTimelineType::Slot)
@@ -666,7 +668,8 @@ void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
                     }
                     else if (pair.second == BaseTimelineType::Constraint)
                     {
-                        _constraintTimelines.erase(std::find(_constraintTimelines.begin(), _constraintTimelines.end(), timeline));
+                        _constraintTimelines.erase(
+                            std::find(_constraintTimelines.begin(), _constraintTimelines.end(), timeline));
                     }
 
                     timeline->returnToPool();
@@ -678,7 +681,7 @@ void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
 
         if (_actionTimeline->playState > 0)
         {
-            if (autoFadeOutTime >= 0.0f) // Auto fade out.
+            if (autoFadeOutTime >= 0.0f)  // Auto fade out.
             {
                 fadeOut(autoFadeOutTime);
             }
@@ -688,12 +691,12 @@ void AnimationState::advanceTime(float passedTime, float cacheFrameRate)
 
 void AnimationState::play()
 {
-    _playheadState = 3; // 11
+    _playheadState = 3;  // 11
 }
 
 void AnimationState::stop()
 {
-    _playheadState &= 1; // 0x
+    _playheadState &= 1;  // 0x
 }
 
 void AnimationState::fadeOut(float fadeOutTime, bool pausePlayhead)
@@ -703,26 +706,27 @@ void AnimationState::fadeOut(float fadeOutTime, bool pausePlayhead)
         fadeOutTime = 0.0f;
     }
 
-    if (pausePlayhead) 
+    if (pausePlayhead)
     {
-        _playheadState &= 2; // x0
+        _playheadState &= 2;  // x0
     }
 
     if (_fadeState > 0)
     {
-        if (fadeOutTime > fadeTotalTime - _fadeTime) // If the animation is already in fade out, the new fade out will be ignored.
+        if (fadeOutTime >
+            fadeTotalTime - _fadeTime)  // If the animation is already in fade out, the new fade out will be ignored.
         {
             return;
         }
     }
     else
     {
-        _fadeState = 1;
+        _fadeState    = 1;
         _subFadeState = -1;
 
         if (fadeOutTime <= 0.0f || _fadeProgress <= 0.0f)
         {
-            _fadeProgress = 0.000001f; // Modify fade progress to different value.
+            _fadeProgress = 0.000001f;  // Modify fade progress to different value.
         }
 
         for (const auto timeline : _boneTimelines)
@@ -736,9 +740,9 @@ void AnimationState::fadeOut(float fadeOutTime, bool pausePlayhead)
         }
     }
 
-    displayControl = false; //
-    fadeTotalTime = _fadeProgress > 0.000001f ? fadeOutTime / _fadeProgress : 0.0f;
-    _fadeTime = fadeTotalTime * (1.0f - _fadeProgress);
+    displayControl = false;  //
+    fadeTotalTime  = _fadeProgress > 0.000001f ? fadeOutTime / _fadeProgress : 0.0f;
+    _fadeTime      = fadeTotalTime * (1.0f - _fadeProgress);
 }
 
 bool AnimationState::containsBoneMask(const std::string& boneName) const
@@ -759,11 +763,12 @@ void AnimationState::addBoneMask(const std::string& boneName, bool recursive)
         _boneMask.push_back(boneName);
     }
 
-    if (recursive) // Add recursive mixing.
+    if (recursive)  // Add recursive mixing.
     {
         for (const auto bone : _armature->getBones())
         {
-            if (std::find(_boneMask.cbegin(), _boneMask.cend(), bone->getName()) == _boneMask.cend() && currentBone->contains(bone))
+            if (std::find(_boneMask.cbegin(), _boneMask.cend(), bone->getName()) == _boneMask.cend() &&
+                currentBone->contains(bone))
             {
                 _boneMask.push_back(bone->getName());
             }
@@ -777,7 +782,7 @@ void AnimationState::removeBoneMask(const std::string& boneName, bool recursive)
 {
     {
         auto iterator = std::find(_boneMask.begin(), _boneMask.end(), boneName);
-        if (iterator != _boneMask.cend()) // Remove mixing.
+        if (iterator != _boneMask.cend())  // Remove mixing.
         {
             _boneMask.erase(iterator);
         }
@@ -789,7 +794,7 @@ void AnimationState::removeBoneMask(const std::string& boneName, bool recursive)
         if (currentBone != nullptr)
         {
             const auto& bones = _armature->getBones();
-            if (!_boneMask.empty()) // Remove recursive mixing.
+            if (!_boneMask.empty())  // Remove recursive mixing.
             {
                 for (const auto bone : bones)
                 {
@@ -800,16 +805,16 @@ void AnimationState::removeBoneMask(const std::string& boneName, bool recursive)
                     }
                 }
             }
-            else // Add unrecursive mixing.
+            else  // Add unrecursive mixing.
             {
                 for (const auto bone : bones)
                 {
-                    if (bone == currentBone) 
+                    if (bone == currentBone)
                     {
                         continue;
                     }
 
-                    if (!currentBone->contains(bone)) 
+                    if (!currentBone->contains(bone))
                     {
                         _boneMask.push_back(bone->getName());
                     }
@@ -850,21 +855,21 @@ float AnimationState::getCurrentTime() const
 void AnimationState::setCurrentTime(float value)
 {
     const auto currentPlayTimes = _actionTimeline->currentPlayTimes - (_actionTimeline->playState > 0 ? 1 : 0);
-    if (value < 0.0f || _duration < value) 
+    if (value < 0.0f || _duration < value)
     {
         value = fmod(value, _duration) + currentPlayTimes * _duration;
-        if (value < 0.0f) 
+        if (value < 0.0f)
         {
             value += _duration;
         }
     }
 
-    if (playTimes > 0 && (unsigned)currentPlayTimes == playTimes - 1 && value == _duration) 
+    if (playTimes > 0 && (unsigned)currentPlayTimes == playTimes - 1 && value == _duration)
     {
         value = _duration - 0.000001f;
     }
 
-    if (_time == value) 
+    if (_time == value)
     {
         return;
     }
@@ -872,7 +877,7 @@ void AnimationState::setCurrentTime(float value)
     _time = value;
     _actionTimeline->setCurrentTime(_time);
 
-    if (_zOrderTimeline != nullptr) 
+    if (_zOrderTimeline != nullptr)
     {
         _zOrderTimeline->playState = -1;
     }
@@ -901,15 +906,15 @@ int BlendState::update(float weight, int p_layer)
     {
         if (leftWeight > 0.0f)
         {
-            if (layer != p_layer) 
+            if (layer != p_layer)
             {
-                if (layerWeight >= leftWeight) 
+                if (layerWeight >= leftWeight)
                 {
                     leftWeight = 0.0f;
 
                     return 0;
                 }
-                else 
+                else
                 {
                     layer = p_layer;
                     leftWeight -= layerWeight;
@@ -917,7 +922,7 @@ int BlendState::update(float weight, int p_layer)
                 }
             }
         }
-        else 
+        else
         {
             return 0;
         }
@@ -929,10 +934,10 @@ int BlendState::update(float weight, int p_layer)
         return 2;
     }
 
-    dirty = true;
-    layer = p_layer;
+    dirty       = true;
+    layer       = p_layer;
     layerWeight = weight;
-    leftWeight = 1.0f;
+    leftWeight  = 1.0f;
     blendWeight = weight;
 
     return 1;
@@ -940,13 +945,11 @@ int BlendState::update(float weight, int p_layer)
 
 void BlendState::clear()
 {
-    dirty = false;
-    layer = 0;
-    leftWeight = 0.0f;
+    dirty       = false;
+    layer       = 0;
+    leftWeight  = 0.0f;
     layerWeight = 0.0f;
     blendWeight = 0.0f;
 }
 
-
 DRAGONBONES_NAMESPACE_END
-

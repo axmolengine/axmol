@@ -31,12 +31,13 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
-
-Bone *Bone::create()
+namespace cocostudio
 {
 
-    Bone *pBone = new Bone();
+Bone* Bone::create()
+{
+
+    Bone* pBone = new Bone();
     if (pBone->init())
     {
         pBone->autorelease();
@@ -44,13 +45,12 @@ Bone *Bone::create()
     }
     CC_SAFE_DELETE(pBone);
     return nullptr;
-
 }
 
-Bone *Bone::create(const std::string& name)
+Bone* Bone::create(const std::string& name)
 {
 
-    Bone *pBone = new Bone();
+    Bone* pBone = new Bone();
     if (pBone->init(name))
     {
         pBone->autorelease();
@@ -95,7 +95,6 @@ bool Bone::init()
     return Bone::init(nullptr);
 }
 
-
 bool Bone::init(const std::string& name)
 {
     bool bRet = false;
@@ -119,16 +118,15 @@ bool Bone::init(const std::string& name)
         _worldInfo = new BaseData();
 
         CC_SAFE_DELETE(_boneData);
-        _boneData  = new BoneData();
+        _boneData = new BoneData();
 
         bRet = true;
-    }
-    while (0);
+    } while (0);
 
     return bRet;
 }
 
-void Bone::setBoneData(BoneData *boneData)
+void Bone::setBoneData(BoneData* boneData)
 {
     CCASSERT(nullptr != boneData, "_boneData must not be nullptr");
 
@@ -145,18 +143,18 @@ void Bone::setBoneData(BoneData *boneData)
     _displayManager->initDisplayList(boneData);
 }
 
-BoneData *Bone::getBoneData() const
+BoneData* Bone::getBoneData() const
 {
     return _boneData;
 }
 
-void Bone::setArmature(Armature *armature)
+void Bone::setArmature(Armature* armature)
 {
     _armature = armature;
     if (_armature)
     {
         _tween->setAnimation(_armature->getAnimation());
-        _dataVersion = _armature->getArmatureData()->dataVersion;
+        _dataVersion        = _armature->getArmatureData()->dataVersion;
         _armatureParentBone = _armature->getParentBone();
     }
     else
@@ -165,8 +163,7 @@ void Bone::setArmature(Armature *armature)
     }
 }
 
-
-Armature *Bone::getArmature() const
+Armature* Bone::getArmature() const
 {
     return _armature;
 }
@@ -191,14 +188,14 @@ void Bone::update(float delta)
             _worldInfo->scaleY -= 1;
         }
 
-        _worldInfo->x = _worldInfo->x + _position.x;
-        _worldInfo->y = _worldInfo->y + _position.y;
+        _worldInfo->x      = _worldInfo->x + _position.x;
+        _worldInfo->y      = _worldInfo->y + _position.y;
         _worldInfo->scaleX = _worldInfo->scaleX * _scaleX;
         _worldInfo->scaleY = _worldInfo->scaleY * _scaleY;
-        _worldInfo->skewX = _worldInfo->skewX + _skewX + CC_DEGREES_TO_RADIANS(_rotationZ_X);
-        _worldInfo->skewY = _worldInfo->skewY + _skewY - CC_DEGREES_TO_RADIANS(_rotationZ_Y);
+        _worldInfo->skewX  = _worldInfo->skewX + _skewX + CC_DEGREES_TO_RADIANS(_rotationZ_X);
+        _worldInfo->skewY  = _worldInfo->skewY + _skewY - CC_DEGREES_TO_RADIANS(_rotationZ_Y);
 
-        if(_parentBone)
+        if (_parentBone)
         {
             applyParentTransform(_parentBone);
         }
@@ -220,41 +217,41 @@ void Bone::update(float delta)
 
     DisplayFactory::updateDisplay(this, delta, _boneTransformDirty || _armature->getArmatureTransformDirty());
 
-    for(const auto &obj: _children) {
-        Bone *childBone = static_cast<Bone*>(obj);
+    for (const auto& obj : _children)
+    {
+        Bone* childBone = static_cast<Bone*>(obj);
         childBone->update(delta);
     }
 
     _boneTransformDirty = false;
 }
 
-void Bone::applyParentTransform(Bone *parent) 
+void Bone::applyParentTransform(Bone* parent)
 {
-    float x = _worldInfo->x;
-    float y = _worldInfo->y;
-    _worldInfo->x = x * parent->_worldTransform.m[0] + y * parent->_worldTransform.m[4] + parent->_worldInfo->x;
-    _worldInfo->y = x * parent->_worldTransform.m[1] + y * parent->_worldTransform.m[5] + parent->_worldInfo->y;
+    float x            = _worldInfo->x;
+    float y            = _worldInfo->y;
+    _worldInfo->x      = x * parent->_worldTransform.m[0] + y * parent->_worldTransform.m[4] + parent->_worldInfo->x;
+    _worldInfo->y      = x * parent->_worldTransform.m[1] + y * parent->_worldTransform.m[5] + parent->_worldInfo->y;
     _worldInfo->scaleX = _worldInfo->scaleX * parent->_worldInfo->scaleX;
     _worldInfo->scaleY = _worldInfo->scaleY * parent->_worldInfo->scaleY;
-    _worldInfo->skewX = _worldInfo->skewX + parent->_worldInfo->skewX;
-    _worldInfo->skewY = _worldInfo->skewY + parent->_worldInfo->skewY;
+    _worldInfo->skewX  = _worldInfo->skewX + parent->_worldInfo->skewX;
+    _worldInfo->skewY  = _worldInfo->skewY + parent->_worldInfo->skewY;
 }
-
 
 void Bone::setBlendFunc(const BlendFunc& blendFunc)
 {
     if (_blendFunc.src != blendFunc.src || _blendFunc.dst != blendFunc.dst)
     {
-        _blendFunc = blendFunc;
+        _blendFunc  = blendFunc;
         _blendDirty = true;
     }
 }
 
-void Bone::updateDisplayedColor(const Color3B &parentColor)
+void Bone::updateDisplayedColor(const Color3B& parentColor)
 {
 #ifdef CC_STUDIO_ENABLED_VIEW
     _realColor = Color3B(255, 255, 255);
-#endif // CC_STUDIO_ENABLED_VIEW
+#endif  // CC_STUDIO_ENABLED_VIEW
     Node::updateDisplayedColor(parentColor);
 }
 
@@ -262,16 +259,17 @@ void Bone::updateDisplayedOpacity(uint8_t parentOpacity)
 {
 #ifdef CC_STUDIO_ENABLED_VIEW
     _realOpacity = 255;
-#endif // CC_STUDIO_ENABLED_VIEW
+#endif  // CC_STUDIO_ENABLED_VIEW
     Node::updateDisplayedOpacity(parentOpacity);
 }
 
 void Bone::updateColor()
 {
-    Node *display = _displayManager->getDisplayRenderNode();
-    if(display != nullptr)
+    Node* display = _displayManager->getDisplayRenderNode();
+    if (display != nullptr)
     {
-        display->setColor(Color3B(_displayedColor.r * _tweenData->r / 255, _displayedColor.g * _tweenData->g / 255, _displayedColor.b * _tweenData->b / 255));
+        display->setColor(Color3B(_displayedColor.r * _tweenData->r / 255, _displayedColor.g * _tweenData->g / 255,
+                                  _displayedColor.b * _tweenData->b / 255));
         display->setOpacity(_displayedOpacity * _tweenData->a / 255);
     }
 }
@@ -289,12 +287,12 @@ void Bone::updateZOrder()
     }
 }
 
-void Bone::addChildBone(Bone *child)
+void Bone::addChildBone(Bone* child)
 {
-    CCASSERT( nullptr != child, "Argument must be non-nil");
-    CCASSERT( nullptr == child->_parentBone, "child already added. It can't be added again");
+    CCASSERT(nullptr != child, "Argument must be non-nil");
+    CCASSERT(nullptr == child->_parentBone, "child already added. It can't be added again");
 
-    if(_children.empty())
+    if (_children.empty())
     {
         _children.reserve(4);
     }
@@ -306,17 +304,17 @@ void Bone::addChildBone(Bone *child)
     }
 }
 
-void Bone::removeChildBone(Bone *bone, bool recursion)
+void Bone::removeChildBone(Bone* bone, bool recursion)
 {
-    if (!_children.empty() && _children.getIndex(bone) != CC_INVALID_INDEX )
+    if (!_children.empty() && _children.getIndex(bone) != CC_INVALID_INDEX)
     {
-        if(recursion)
+        if (recursion)
         {
             auto ccbones = bone->_children;
-            
-            for(auto& object : ccbones)
+
+            for (auto& object : ccbones)
             {
-                Bone *ccBone = static_cast<Bone*>(object);
+                Bone* ccBone = static_cast<Bone*>(object);
                 bone->removeChildBone(ccBone, recursion);
             }
         }
@@ -337,17 +335,17 @@ void Bone::removeFromParent(bool recursion)
     }
 }
 
-void Bone::setParentBone(Bone *parent)
+void Bone::setParentBone(Bone* parent)
 {
     _parentBone = parent;
 }
 
-Bone *Bone::getParentBone()
+Bone* Bone::getParentBone()
 {
     return _parentBone;
 }
 
-void Bone::setChildArmature(Armature *armature)
+void Bone::setChildArmature(Armature* armature)
 {
     if (_childArmature != armature)
     {
@@ -362,12 +360,12 @@ void Bone::setChildArmature(Armature *armature)
     }
 }
 
-Armature *Bone::getChildArmature() const
+Armature* Bone::getChildArmature() const
 {
     return _childArmature;
 }
 
-Tween *Bone::getTween()
+Tween* Bone::getTween()
 {
     return _tween;
 }
@@ -388,7 +386,7 @@ Mat4 Bone::getNodeToWorldTransform() const
     return TransformConcat(_worldTransform, _armature->getNodeToWorldTransform());
 }
 
-Node *Bone::getDisplayRenderNode()
+Node* Bone::getDisplayRenderNode()
 {
     return _displayManager->getDisplayRenderNode();
 }
@@ -398,13 +396,12 @@ DisplayType Bone::getDisplayRenderNodeType()
     return _displayManager->getDisplayRenderNodeType();
 }
 
-
-void Bone::addDisplay(DisplayData *displayData, int index)
+void Bone::addDisplay(DisplayData* displayData, int index)
 {
     _displayManager->addDisplay(displayData, index);
 }
 
-void Bone::addDisplay(Node *display, int index)
+void Bone::addDisplay(Node* display, int index)
 {
     _displayManager->addDisplay(display, index);
 }
@@ -419,7 +416,7 @@ void Bone::changeDisplayByIndex(int index, bool force)
     changeDisplayWithIndex(index, force);
 }
 
-void Bone::changeDisplayByName(const std::string &name, bool force)
+void Bone::changeDisplayByName(const std::string& name, bool force)
 {
     changeDisplayWithName(name, force);
 }
@@ -436,9 +433,9 @@ void Bone::changeDisplayWithName(const std::string& name, bool force)
 
 ColliderDetector* Bone::getColliderDetector() const
 {
-    if (DecorativeDisplay *decoDisplay = _displayManager->getCurrentDecorativeDisplay())
+    if (DecorativeDisplay* decoDisplay = _displayManager->getCurrentDecorativeDisplay())
     {
-        if (ColliderDetector *detector = decoDisplay->getColliderDetector())
+        if (ColliderDetector* detector = decoDisplay->getColliderDetector())
         {
             return detector;
         }
@@ -446,26 +443,25 @@ ColliderDetector* Bone::getColliderDetector() const
     return nullptr;
 }
 
-
 #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
-void Bone::setColliderFilter(ColliderFilter *filter)
+void Bone::setColliderFilter(ColliderFilter* filter)
 {
     auto array = _displayManager->getDecorativeDisplayList();
 
-    for(auto& object : array)
+    for (auto& object : array)
     {
-        DecorativeDisplay *decoDisplay = static_cast<DecorativeDisplay *>(object);
-        if (ColliderDetector *detector = decoDisplay->getColliderDetector())
+        DecorativeDisplay* decoDisplay = static_cast<DecorativeDisplay*>(object);
+        if (ColliderDetector* detector = decoDisplay->getColliderDetector())
         {
             detector->setColliderFilter(filter);
         }
     }
 }
-ColliderFilter *Bone::getColliderFilter()
+ColliderFilter* Bone::getColliderFilter()
 {
-    if (DecorativeDisplay *decoDisplay = _displayManager->getCurrentDecorativeDisplay())
+    if (DecorativeDisplay* decoDisplay = _displayManager->getCurrentDecorativeDisplay())
     {
-        if (ColliderDetector *detector = decoDisplay->getColliderDetector())
+        if (ColliderDetector* detector = decoDisplay->getColliderDetector())
         {
             return detector->getColliderFilter();
         }
@@ -474,4 +470,4 @@ ColliderFilter *Bone::getColliderFilter()
 }
 #endif
 
-}
+}  // namespace cocostudio

@@ -31,14 +31,15 @@ THE SOFTWARE.
 #include <jni.h>
 #include <cstring>
 
-#define  LOG_TAG    "CCApplication_android Debug"
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#define LOG_TAG "CCApplication_android Debug"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 // FIXME: using ndk-r10c will cause the next function could not be found. It may be a bug of ndk-r10c.
 // Here is the workaround method to fix the problem.
 #ifdef __aarch64__
-extern "C" size_t __ctype_get_mb_cur_max(void) {
-    return (size_t) sizeof(wchar_t);
+extern "C" size_t __ctype_get_mb_cur_max(void)
+{
+    return (size_t)sizeof(wchar_t);
 }
 #endif
 
@@ -47,11 +48,11 @@ static const std::string helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
 NS_CC_BEGIN
 
 // sharedApplication pointer
-Application * Application::sm_pSharedApplication = nullptr;
+Application* Application::sm_pSharedApplication = nullptr;
 
 Application::Application()
 {
-    CCAssert(! sm_pSharedApplication, "");
+    CCAssert(!sm_pSharedApplication, "");
     sm_pSharedApplication = this;
 }
 
@@ -64,7 +65,7 @@ Application::~Application()
 int Application::run()
 {
     // Initialize instance and cocos2d.
-    if (! applicationDidFinishLaunching())
+    if (!applicationDidFinishLaunching())
     {
         return 0;
     }
@@ -92,12 +93,12 @@ Application* Application::sharedApplication()
     return Application::getInstance();
 }
 
-const char * Application::getCurrentLanguageCode()
+const char* Application::getCurrentLanguageCode()
 {
-    static char code[3]={0};
+    static char code[3]  = {0};
     std::string language = JniHelper::callStaticStringMethod(helperClassName, "getCurrentLanguage");
     strncpy(code, language.c_str(), 2);
-    code[2]='\0';
+    code[2] = '\0';
     return code;
 }
 
@@ -118,13 +119,11 @@ std::string Application::getVersion()
     return JniHelper::callStaticStringMethod(helperClassName, "getVersion");
 }
 
-bool Application::openURL(const std::string &url)
+bool Application::openURL(const std::string& url)
 {
     return JniHelper::callStaticBooleanMethod(helperClassName, "openURL", url);
 }
 
-void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {
-
-}
+void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
 
 NS_CC_END

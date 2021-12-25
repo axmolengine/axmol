@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../Buffer.h"
@@ -44,12 +44,14 @@ class BufferGL : public Buffer
 public:
     /**
      * @param size Specifies the size in bytes of the buffer object's new data store.
-     * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or BufferType::INDEX.
-     * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be BufferUsage::STATIC, BufferUsage::DYNAMIC.
+     * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or
+     * BufferType::INDEX.
+     * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
+     * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      */
     BufferGL(std::size_t size, BufferType type, BufferUsage usage);
     ~BufferGL();
-    
+
     /**
      * @brief Update buffer data
      * @param data Specifies a pointer to data that will be copied into the data store for initialization.
@@ -61,7 +63,8 @@ public:
     /**
      * @brief Update buffer sub-region data
      * @param data Specifies a pointer to the new data that will be copied into the data store.
-     * @param offset Specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.
+     * @param offset Specifies the offset into the buffer object's data store where data replacement will begin,
+     * measured in bytes.
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateData(void* data, unsigned int size)`
      */
@@ -69,10 +72,11 @@ public:
 
     /**
      * Static buffer data will automatically stored when it comes to foreground.
-     * This interface is used to indicate whether external data needs to be used to update the buffer(false) instead of using the default stored data(true).
+     * This interface is used to indicate whether external data needs to be used to update the buffer(false) instead of
+     * using the default stored data(true).
      * @param needDefaultStoredData Specifies whether to use the default stored data.
      */
-    virtual void usingDefaultStoredData(bool needDefaultStoredData) override ;
+    virtual void usingDefaultStoredData(bool needDefaultStoredData) override;
 
     /**
      * Get buffer object.
@@ -85,15 +89,15 @@ private:
     void reloadBuffer();
     void fillBuffer(void* data, std::size_t offset, std::size_t size);
 
-    bool _bufferAlreadyFilled = false;
+    bool _bufferAlreadyFilled                      = false;
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 
-    GLuint _buffer = 0;
+    GLuint _buffer               = 0;
     std::size_t _bufferAllocated = 0;
-    char* _data = nullptr;
-    bool _needDefaultStoredData = true;
+    char* _data                  = nullptr;
+    bool _needDefaultStoredData  = true;
 };
-//end of _opengl group
+// end of _opengl group
 ///> @}
 CC_BACKEND_END

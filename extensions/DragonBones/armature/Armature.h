@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -57,7 +57,8 @@ private:
 public:
     /**
      * - Whether to inherit the animation control of the parent armature.
-     * True to try to have the child armature play an animation with the same name when the parent armature play the animation.
+     * True to try to have the child armature play an animation with the same name when the parent armature play the
+     * animation.
      * @default true
      * @version DragonBones 4.5
      * @language en_US
@@ -118,18 +119,11 @@ protected:
     void* _replacedTexture;
 
 public:
-    Armature() :
-        _animation(nullptr),
-        _proxy(nullptr),
-        _clock(nullptr),
-        _replaceTextureAtlasData(nullptr)
+    Armature() : _animation(nullptr), _proxy(nullptr), _clock(nullptr), _replaceTextureAtlasData(nullptr)
     {
         _onClear();
     }
-    virtual ~Armature()
-    {
-        _onClear();
-    }
+    virtual ~Armature() { _onClear(); }
 
 protected:
     virtual void _onClear() override;
@@ -184,7 +178,7 @@ public:
     /**
      * @internal
      */
-    void init(ArmatureData *armatureData, IArmatureProxy* proxy, void* display, DragonBones* dragonBones);
+    void init(ArmatureData* armatureData, IArmatureProxy* proxy, void* display, DragonBones* dragonBones);
     /**
      * @inheritDoc
      */
@@ -235,10 +229,15 @@ public:
      * @param yA - The vertical coordinate of the beginning of the segment.
      * @param xB - The horizontal coordinate of the end point of the segment.
      * @param yB - The vertical coordinate of the end point of the segment.
-     * @param intersectionPointA - The first intersection at which a line segment intersects the bounding box from the beginning to the end. (If not set, the intersection point will not calculated)
-     * @param intersectionPointB - The first intersection at which a line segment intersects the bounding box from the end to the beginning. (If not set, the intersection point will not calculated)
-     * @param normalRadians - The normal radians of the tangent of the intersection boundary box. [x: Normal radian of the first intersection tangent, y: Normal radian of the second intersection tangent] (If not set, the normal will not calculated)
-     * @returns The slot of the first custom bounding box where the segment intersects from the start point to the end point.
+     * @param intersectionPointA - The first intersection at which a line segment intersects the bounding box from the
+     * beginning to the end. (If not set, the intersection point will not calculated)
+     * @param intersectionPointB - The first intersection at which a line segment intersects the bounding box from the
+     * end to the beginning. (If not set, the intersection point will not calculated)
+     * @param normalRadians - The normal radians of the tangent of the intersection boundary box. [x: Normal radian of
+     * the first intersection tangent, y: Normal radian of the second intersection tangent] (If not set, the normal will
+     * not calculated)
+     * @returns The slot of the first custom bounding box where the segment intersects from the start point to the end
+     * point.
      * @version DragonBones 5.0
      * @language en_US
      */
@@ -252,17 +251,19 @@ public:
      * @param yB - 线段终点的垂直坐标。
      * @param intersectionPointA - 线段从起点到终点与边界框相交的第一个交点。 （如果未设置，则不计算交点）
      * @param intersectionPointB - 线段从终点到起点与边界框相交的第一个交点。 （如果未设置，则不计算交点）
-     * @param normalRadians - 交点边界框切线的法线弧度。 [x: 第一个交点切线的法线弧度, y: 第二个交点切线的法线弧度] （如果未设置，则不计算法线）
+     * @param normalRadians - 交点边界框切线的法线弧度。 [x: 第一个交点切线的法线弧度, y: 第二个交点切线的法线弧度]
+     * （如果未设置，则不计算法线）
      * @returns 线段从起点到终点相交的第一个自定义边界框的插槽。
      * @version DragonBones 5.0
      * @language zh_CN
      */
-    Slot* intersectsSegment(
-        float xA, float yA, float xB, float yB,
-        Point* intersectionPointA = nullptr,
-        Point* intersectionPointB = nullptr,
-        Point* normalRadians = nullptr
-    ) const;
+    Slot* intersectsSegment(float xA,
+                            float yA,
+                            float xB,
+                            float yB,
+                            Point* intersectionPointA = nullptr,
+                            Point* intersectionPointB = nullptr,
+                            Point* normalRadians      = nullptr) const;
     /**
      * - Get a specific bone.
      * @param name - The bone name.
@@ -335,10 +336,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline const std::vector<Bone*>& getBones() const
-    {
-        return _bones;
-    }
+    inline const std::vector<Bone*>& getBones() const { return _bones; }
     /**
      * - Get all slots.
      * @see dragonBones.Slot
@@ -351,10 +349,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline const std::vector<Slot*>& getSlots() const
-    {
-        return _slots;
-    }
+    inline const std::vector<Slot*>& getSlots() const { return _slots; }
     /**
      * - Whether to flip the armature horizontally.
      * @version DragonBones 5.5
@@ -365,12 +360,9 @@ public:
      * @version DragonBones 5.5
      * @language zh_CN
      */
-    bool getFlipX() const 
-    { 
-        return _flipX; 
-    }
-    void setFlipX(bool value) 
-    { 
+    bool getFlipX() const { return _flipX; }
+    void setFlipX(bool value)
+    {
         _flipX = value;
         invalidUpdate("");
     }
@@ -385,20 +377,18 @@ public:
      * @version DragonBones 5.5
      * @language zh_CN
      */
-    bool getFlipY() const 
-    { 
-        return _flipY; 
-    }
-    void setFlipY(bool value) 
-    { 
+    bool getFlipY() const { return _flipY; }
+    void setFlipY(bool value)
+    {
         _flipY = value;
         invalidUpdate("");
     }
     /**
      * - The animation cache frame rate, which turns on the animation cache when the set value is greater than 0.
      * There is a certain amount of memory overhead to improve performance by caching animation data in memory.
-     * The frame rate should not be set too high, usually with the frame rate of the animation is similar and lower than the program running frame rate.
-     * When the animation cache is turned on, some features will fail, such as the offset property of bone.
+     * The frame rate should not be set too high, usually with the frame rate of the animation is similar and lower than
+     * the program running frame rate. When the animation cache is turned on, some features will fail, such as the
+     * offset property of bone.
      * @example
      * TypeScript style, for reference only.
      * <pre>
@@ -424,10 +414,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    inline unsigned getCacheFrameRate() const
-    {
-        return _armatureData->cacheFrameRate;
-    }
+    inline unsigned getCacheFrameRate() const { return _armatureData->cacheFrameRate; }
     void setCacheFrameRate(unsigned value);
     /**
      * - The armature name.
@@ -439,10 +426,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline const std::string& getName() const
-    {
-        return _armatureData->name;
-    }
+    inline const std::string& getName() const { return _armatureData->name; }
     /**
      * - The armature data.
      * @see dragonBones.ArmatureData
@@ -455,10 +439,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    inline const ArmatureData* getArmatureData() const
-    {
-        return _armatureData;
-    }
+    inline const ArmatureData* getArmatureData() const { return _armatureData; }
     /**
      * - The animation player.
      * @see dragonBones.Animation
@@ -471,17 +452,11 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline Animation* getAnimation() const
-    {
-        return _animation;
-    }
+    inline Animation* getAnimation() const { return _animation; }
     /**
      * @pivate
      */
-    inline IArmatureProxy* getProxy() const
-    {
-        return _proxy;
-    }
+    inline IArmatureProxy* getProxy() const { return _proxy; }
     /**
      * - The EventDispatcher instance of the armature.
      * @version DragonBones 4.5
@@ -492,10 +467,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    inline IEventDispatcher* getEventDispatcher() const
-    {
-        return _proxy;
-    }
+    inline IEventDispatcher* getEventDispatcher() const { return _proxy; }
     /**
      * - The display container.
      * The display of the slot is displayed as the parent.
@@ -510,25 +482,16 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline void* getDisplay() const
-    {
-        return _display;
-    }
+    inline void* getDisplay() const { return _display; }
     /**
      * @private
      */
-    inline void* getReplacedTexture() const
-    {
-        return _replacedTexture;
-    }
+    inline void* getReplacedTexture() const { return _replacedTexture; }
     void setReplacedTexture(void* value);
     /**
      * @inheritDoc
      */
-    inline WorldClock* getClock() const override
-    {
-        return _clock;
-    }
+    inline WorldClock* getClock() const override { return _clock; }
     void setClock(WorldClock* value) override;
     /**
      * - Get the parent slot which the armature belongs to.
@@ -542,14 +505,11 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    inline Slot* getParent() const
-    {
-        return _parent;
-    }
+    inline Slot* getParent() const { return _parent; }
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     IAnimatable* getAnimatable() const { return (IAnimatable*)this; }
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_ARMATURE_H
+#endif  // DRAGONBONES_ARMATURE_H

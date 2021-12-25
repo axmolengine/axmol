@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -48,8 +48,12 @@ public:
     @param useVertexColors If true, use vertex colors from the chain elements (must
         be true if you intend to use fading)
     */
-    PURibbonTrail(const std::string& name, const std::string &texFile = "", size_t maxElements = 20, size_t numberOfChains = 1, 
-        bool useTextureCoords = true, bool useColours = true);
+    PURibbonTrail(const std::string& name,
+                  const std::string& texFile = "",
+                  size_t maxElements         = 20,
+                  size_t numberOfChains      = 1,
+                  bool useTextureCoords      = true,
+                  bool useColours            = true);
     /// destructor
     virtual ~PURibbonTrail();
 
@@ -64,12 +68,12 @@ public:
     /** Get the chain index for a given Node being tracked. */
     virtual size_t getChainIndexForNode(const Node* n);
 
-    void setAttachedNode(Node *parent) { _parentNode = parent; }
+    void setAttachedNode(Node* parent) { _parentNode = parent; }
 
-    /** Set the length of the trail. 
+    /** Set the length of the trail.
     @remarks
         This sets the length of the trail, in world units. It also sets how
-        far apart each segment will be, ie length / max_elements. 
+        far apart each segment will be, ie length / max_elements.
     @param len The length of the trail in world units
     */
     virtual void setTrailLength(float len);
@@ -83,14 +87,14 @@ public:
     /** @copydoc BillboardChain::clearChain */
     void clearChain(size_t chainIndex) override;
 
-    /** Set the starting ribbon colour for a given segment. 
+    /** Set the starting ribbon colour for a given segment.
     @param chainIndex The index of the chain
     @param col The initial colour
     @note
         Only used if this instance is using vertex colours.
     */
     virtual void setInitialColour(size_t chainIndex, const Vec4& col);
-    /** Set the starting ribbon colour. 
+    /** Set the starting ribbon colour.
     @param chainIndex The index of the chain
     @param r,b,g,a The initial colour
     @note
@@ -100,21 +104,21 @@ public:
     /** Get the starting ribbon colour. */
     virtual const Vec4& getInitialColour(size_t chainIndex) const;
 
-    /** Enables / disables fading the trail using colour. 
+    /** Enables / disables fading the trail using colour.
     @param chainIndex The index of the chain
     @param valuePerSecond The amount to subtract from colour each second
     */
     virtual void setColourChange(size_t chainIndex, const Vec4& valuePerSecond);
 
-    /** Set the starting ribbon width in world units. 
+    /** Set the starting ribbon width in world units.
     @param chainIndex The index of the chain
     @param width The initial width of the ribbon
     */
     virtual void setInitialWidth(size_t chainIndex, float width);
     /** Get the starting ribbon width in world units. */
     virtual float getInitialWidth(size_t chainIndex) const;
-        
-    /** Set the change in ribbon width per second. 
+
+    /** Set the change in ribbon width per second.
     @param chainIndex The index of the chain
     @param widthDeltaPerSecond The amount the width will reduce by per second
     */
@@ -122,7 +126,7 @@ public:
     /** Get the change in ribbon width per second. */
     virtual float getWidthChange(size_t chainIndex) const;
 
-    /** Enables / disables fading the trail using colour. 
+    /** Enables / disables fading the trail using colour.
     @param chainIndex The index of the chain
     @param r,g,b,a The amount to subtract from each colour channel per second
     */
@@ -142,7 +146,6 @@ public:
     void timeUpdate(float time);
 
 protected:
-
     /// Manage updates to the time controller
     void manageController();
     /// Node has changed position, update
@@ -153,7 +156,6 @@ protected:
     void resetAllTrails();
 
 protected:
-
     /// List of nodes being trailed
     NodeList _nodeList;
     /// Mapping of nodes to chain segments
@@ -185,9 +187,8 @@ protected:
     /// Delta width of the ribbon
     RealList _deltaWidth;
 
-    Node *_parentNode;
+    Node* _parentNode;
     bool _needTimeUpdate;
-
 };
 
 NS_CC_END

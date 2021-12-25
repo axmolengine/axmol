@@ -32,43 +32,40 @@
 #include "renderer/backend/Types.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#include <io.h>
+#    include <io.h>
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "platform/android/CCFileUtils-android.h"
-#include <android/asset_manager.h>
+#    include "platform/android/CCFileUtils-android.h"
+#    include <android/asset_manager.h>
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-#include <ftw.h>
+#    include <ftw.h>
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
+#    include <sys/types.h>
+#    include <sys/stat.h>
+#    include <dirent.h>
 #endif
 NS_CC_BEGIN
 
-
 PUMaterial::PUMaterial()
-: isEnabledLight(true)
-, ambientColor(Vec4::ONE)
-, diffuseColor(Vec4::ONE)
-, specularColor(Vec4::ZERO)
-, emissiveColor(Vec4::ZERO)
-, shininess(0.0f)
-, depthTest(true)
-, depthWrite(true)
-, wrapMode(backend::SamplerAddressMode::CLAMP_TO_EDGE)
+    : isEnabledLight(true)
+    , ambientColor(Vec4::ONE)
+    , diffuseColor(Vec4::ONE)
+    , specularColor(Vec4::ZERO)
+    , emissiveColor(Vec4::ZERO)
+    , shininess(0.0f)
+    , depthTest(true)
+    , depthWrite(true)
+    , wrapMode(backend::SamplerAddressMode::CLAMP_TO_EDGE)
 {
     blendFunc.src = backend::BlendFactor::ONE;
     blendFunc.dst = backend::BlendFactor::ZERO;
 }
 
-PUMaterialCache::PUMaterialCache()
-{
-}
-
+PUMaterialCache::PUMaterialCache() {}
 
 PUMaterialCache::~PUMaterialCache()
 {
-    for (auto iter : _materialMap){
+    for (auto iter : _materialMap)
+    {
         iter->release();
     }
     _materialMap.clear();
@@ -80,33 +77,39 @@ PUMaterialCache* PUMaterialCache::Instance()
     return &pmm;
 }
 
-PUMaterial* PUMaterialCache::getMaterial( const std::string &name )
+PUMaterial* PUMaterialCache::getMaterial(const std::string& name)
 {
-    for (auto iter : _materialMap){
+    for (auto iter : _materialMap)
+    {
         if (iter->name == name)
             return iter;
     }
     return nullptr;
 }
 
-bool PUMaterialCache::loadMaterials( const std::string &file )
+bool PUMaterialCache::loadMaterials(const std::string& file)
 {
     bool isFirstCompile = true;
-    auto list = PUScriptCompiler::Instance()->compile(file, isFirstCompile);
-    if (list == nullptr || list->empty()) return false;
-    if (isFirstCompile){
+    auto list           = PUScriptCompiler::Instance()->compile(file, isFirstCompile);
+    if (list == nullptr || list->empty())
+        return false;
+    if (isFirstCompile)
+    {
         PUTranslateManager::Instance()->translateMaterialSystem(this, list);
     }
     return true;
 }
 
-void PUMaterialCache::addMaterial( PUMaterial *material )
+void PUMaterialCache::addMaterial(PUMaterial* material)
 {
-    for (auto iter : _materialMap){
-        if (iter->name == material->name){
-          CCLOG("warning: Material has existed (FilePath: %s,  MaterialName: %s)", material->fileName.c_str(), material->name.c_str());
-        return;
-      }
+    for (auto iter : _materialMap)
+    {
+        if (iter->name == material->name)
+        {
+            CCLOG("warning: Material has existed (FilePath: %s,  MaterialName: %s)", material->fileName.c_str(),
+                  material->name.c_str());
+            return;
+        }
     }
 
     material->retain();
@@ -114,9 +117,9 @@ void PUMaterialCache::addMaterial( PUMaterial *material )
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-int iterPath(const char *fpath, const struct stat* /*sb*/, int typeflag)
+int iterPath(const char* fpath, const struct stat* /*sb*/, int typeflag)
 {
-    if(typeflag == FTW_F)
+    if (typeflag == FTW_F)
     {
         if (FileUtils::getInstance()->getFileExtension(fpath) == ".material")
             PUMaterialCache::Instance()->loadMaterials(fpath);
@@ -125,31 +128,32 @@ int iterPath(const char *fpath, const struct stat* /*sb*/, int typeflag)
 }
 #endif
 
-bool PUMaterialCache::loadMaterialsFromSearchPaths( const std::string &fileFolder )
+bool PUMaterialCache::loadMaterialsFromSearchPaths(const std::string& fileFolder)
 {
     bool state = false;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-        std::string seg("/");
-        std::string fullPath = fileFolder + seg + std::string("*.material");
-        _finddata_t data;
-        intptr_t handle = _findfirst(fullPath.c_str(), &data);
-        int done = 0;
-        while ((handle != -1) && (done == 0))
-        {
-            loadMaterials(fileFolder + seg + std::string(data.name));
-            done = _findnext(handle, &data);
-            state = true;
-        }
-        _findclose(handle);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID/* || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX*/)
+    std::string seg("/");
+    std::string fullPath = fileFolder + seg + std::string("*.material");
+    _finddata_t data;
+    intptr_t handle = _findfirst(fullPath.c_str(), &data);
+    int done        = 0;
+    while ((handle != -1) && (done == 0))
+    {
+        loadMaterials(fileFolder + seg + std::string(data.name));
+        done  = _findnext(handle, &data);
+        state = true;
+    }
+    _findclose(handle);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID /* || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX*/)
     std::string::size_type pos = fileFolder.find("assets/");
-    std::string relativePath = fileFolder;
-    if (pos != std::string::npos) {
+    std::string relativePath   = fileFolder;
+    if (pos != std::string::npos)
+    {
         // "assets/" is at the beginning of the path and we don't want it
         relativePath = fileFolder.substr(pos + strlen("assets/"));
     }
-    AAssetDir *dir = AAssetManager_openDir(FileUtilsAndroid::getAssetManager(), relativePath.c_str());
-    const char *fileName = nullptr;
+    AAssetDir* dir       = AAssetManager_openDir(FileUtilsAndroid::getAssetManager(), relativePath.c_str());
+    const char* fileName = nullptr;
     std::string seg("/");
     while ((fileName = AAssetDir_getNextFileName(dir)) != nullptr)
     {
@@ -164,18 +168,18 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths( const std::string &fileFolde
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     ftw(fileFolder.c_str(), iterPath, 500);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_TIZEN)
-    DIR *d; //dir handle
-    struct dirent *file; //readdir
+    DIR* d;               // dir handle
+    struct dirent* file;  // readdir
     struct stat statbuf;
 
-    if(!(d = opendir(fileFolder.c_str())))
+    if (!(d = opendir(fileFolder.c_str())))
     {
-        CCLOG("error opendir %s!!!\n",fileFolder.c_str());
+        CCLOG("error opendir %s!!!\n", fileFolder.c_str());
         return false;
     }
-    while((file = readdir(d)) != NULL)
+    while ((file = readdir(d)) != NULL)
     {
-        if(strncmp(file->d_name, ".", 1) == 0 || (stat(file->d_name, &statbuf) >= 0 && S_ISDIR(statbuf.st_mode)))
+        if (strncmp(file->d_name, ".", 1) == 0 || (stat(file->d_name, &statbuf) >= 0 && S_ISDIR(statbuf.st_mode)))
         {
             continue;
         }

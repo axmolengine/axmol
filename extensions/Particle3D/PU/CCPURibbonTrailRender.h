@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -41,13 +41,9 @@ NS_CC_BEGIN
 class PURibbonTrailVisualData : public Ref
 {
 public:
-
-    //Constructor
-    PURibbonTrailVisualData (Node* sceneNode, PURibbonTrail* ribbonTrail) : 
-        node(sceneNode),
-        addedToTrail(false),
-        trail(ribbonTrail),
-        index(0){};
+    // Constructor
+    PURibbonTrailVisualData(Node* sceneNode, PURibbonTrail* ribbonTrail)
+        : node(sceneNode), addedToTrail(false), trail(ribbonTrail), index(0){};
 
     Node* node;
     bool addedToTrail;
@@ -78,7 +74,6 @@ public:
 class CC_EX_DLL PURibbonTrailRender : public PURender, public PUListener
 {
 public:
-
     // Constants
     static const bool DEFAULT_USE_VERTEX_COLOURS;
     static const size_t DEFAULT_MAX_ELEMENTS;
@@ -88,19 +83,19 @@ public:
     static const Vec4 DEFAULT_INITIAL_COLOUR;
     static const Vec4 DEFAULT_COLOUR_CHANGE;
 
-    static PURibbonTrailRender* create(const std::string &texFile = "");
+    static PURibbonTrailRender* create(const std::string& texFile = "");
 
     virtual void notifyRescaled(const Vec3& scale) override;
     virtual void prepare() override;
     virtual void unPrepare() override;
-    virtual void updateRender(PUParticle3D *particle, float deltaTime, bool firstParticle) override;
+    virtual void updateRender(PUParticle3D* particle, float deltaTime, bool firstParticle) override;
 
-    virtual void render(Renderer* renderer, const Mat4 &transform, ParticleSystem3D* particleSystem) override;
+    virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
     virtual void particleEmitted(PUParticleSystem3D* particleSystem, PUParticle3D* particle) override;
     virtual void particleExpired(PUParticleSystem3D* particleSystem, PUParticle3D* particle) override;
 
     /** Getters and Setters
-    */
+     */
     bool isUseVertexColors() const;
     void setUseVertexColors(bool useVertexColours);
 
@@ -122,21 +117,19 @@ public:
     const Vec4& getColorChange() const;
     void setColorChange(const Vec4& colourChange);
 
-        /** Deletes all ChildSceneNodes en Entities.
-    */
+    /** Deletes all ChildSceneNodes en Entities.
+     */
     void destroyAll();
 
     virtual PURibbonTrailRender* clone() override;
-    void copyAttributesTo(PURibbonTrailRender *render);
+    void copyAttributesTo(PURibbonTrailRender* render);
 
-CC_CONSTRUCTOR_ACCESS:
-    PURibbonTrailRender();
+    CC_CONSTRUCTOR_ACCESS : PURibbonTrailRender();
     virtual ~PURibbonTrailRender();
 
-    void updateParticles(const ParticlePool &pool);
+    void updateParticles(const ParticlePool& pool);
 
 protected:
-
     std::vector<PURibbonTrailVisualData*> _allVisualData;
     std::vector<PURibbonTrailVisualData*> _visualData;
     size_t _quota;
@@ -154,7 +147,6 @@ protected:
     Node* _childNode;
     std::string _texFile;
 };
-
 
 NS_CC_END
 #endif

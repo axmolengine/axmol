@@ -15,11 +15,11 @@ void TransformObject::_onClear()
     globalTransformMatrix.identity();
     global.identity();
     offset.identity();
-    origin = nullptr;
+    origin   = nullptr;
     userData = nullptr;
 
     _globalDirty = false;
-    _armature = nullptr;
+    _armature    = nullptr;
 }
 
 void TransformObject::updateGlobalTransform()

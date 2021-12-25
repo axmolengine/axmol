@@ -22,7 +22,7 @@ Copyright (c) 2020 c4games.com.
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "RenderPipelineGL.h"
 #include "ShaderModuleGL.h"
 #include "DepthStencilStateGL.h"
@@ -35,42 +35,40 @@ CC_BACKEND_BEGIN
 
 void RenderPipelineGL::update(const RenderTarget*, const PipelineDescriptor& pipelineDescirptor)
 {
-    if(_programGL != pipelineDescirptor.programState->getProgram())
+    if (_programGL != pipelineDescirptor.programState->getProgram())
     {
         CC_SAFE_RELEASE(_programGL);
         _programGL = static_cast<ProgramGL*>(pipelineDescirptor.programState->getProgram());
         CC_SAFE_RETAIN(_programGL);
     }
-    
+
     updateBlendState(pipelineDescirptor.blendDescriptor);
 }
 
 void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)
 {
-    auto blendEnabled = descriptor.blendEnabled;
-    auto rgbBlendOperation = UtilsGL::toGLBlendOperation(descriptor.rgbBlendOperation);
-    auto alphaBlendOperation = UtilsGL::toGLBlendOperation(descriptor.alphaBlendOperation);
-    auto sourceRGBBlendFactor = UtilsGL::toGLBlendFactor(descriptor.sourceRGBBlendFactor);
-    auto destinationRGBBlendFactor = UtilsGL::toGLBlendFactor(descriptor.destinationRGBBlendFactor);
-    auto sourceAlphaBlendFactor = UtilsGL::toGLBlendFactor(descriptor.sourceAlphaBlendFactor);
+    auto blendEnabled                = descriptor.blendEnabled;
+    auto rgbBlendOperation           = UtilsGL::toGLBlendOperation(descriptor.rgbBlendOperation);
+    auto alphaBlendOperation         = UtilsGL::toGLBlendOperation(descriptor.alphaBlendOperation);
+    auto sourceRGBBlendFactor        = UtilsGL::toGLBlendFactor(descriptor.sourceRGBBlendFactor);
+    auto destinationRGBBlendFactor   = UtilsGL::toGLBlendFactor(descriptor.destinationRGBBlendFactor);
+    auto sourceAlphaBlendFactor      = UtilsGL::toGLBlendFactor(descriptor.sourceAlphaBlendFactor);
     auto destinationAlphaBlendFactor = UtilsGL::toGLBlendFactor(descriptor.destinationAlphaBlendFactor);
-    GLboolean writeMaskRed = bitmask::any(descriptor.writeMask, ColorWriteMask::RED);
-    GLboolean writeMaskGreen = bitmask::any(descriptor.writeMask, ColorWriteMask::GREEN);
-    GLboolean writeMaskBlue = bitmask::any(descriptor.writeMask, ColorWriteMask::BLUE);
-    GLboolean writeMaskAlpha = bitmask::any(descriptor.writeMask, ColorWriteMask::ALPHA);
+    GLboolean writeMaskRed           = bitmask::any(descriptor.writeMask, ColorWriteMask::RED);
+    GLboolean writeMaskGreen         = bitmask::any(descriptor.writeMask, ColorWriteMask::GREEN);
+    GLboolean writeMaskBlue          = bitmask::any(descriptor.writeMask, ColorWriteMask::BLUE);
+    GLboolean writeMaskAlpha         = bitmask::any(descriptor.writeMask, ColorWriteMask::ALPHA);
 
     if (blendEnabled)
     {
         glEnable(GL_BLEND);
         glBlendEquationSeparate(rgbBlendOperation, alphaBlendOperation);
-        glBlendFuncSeparate(sourceRGBBlendFactor,
-                            destinationRGBBlendFactor,
-                            sourceAlphaBlendFactor,
+        glBlendFuncSeparate(sourceRGBBlendFactor, destinationRGBBlendFactor, sourceAlphaBlendFactor,
                             destinationAlphaBlendFactor);
     }
     else
         glDisable(GL_BLEND);
-    
+
     glColorMask(writeMaskRed, writeMaskGreen, writeMaskBlue, writeMaskAlpha);
 }
 

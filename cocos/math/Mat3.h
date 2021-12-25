@@ -17,15 +17,16 @@ DEALINGS IN THE SOFTWARE.
  */
 #pragma once
 #ifndef _CCMAT3_H_
-#define _CCMAT3_H_
+#    define _CCMAT3_H_
 
-#include "base/ccMacros.h"
-#include "math/Vec3.h"
-#include "math/Vec4.h"
+#    include "base/ccMacros.h"
+#    include "math/Vec3.h"
+#    include "math/Vec4.h"
 
 NS_CC_MATH_BEGIN
 
-class Mat3 {
+class Mat3
+{
 public:
     float m[9];
 
@@ -85,10 +86,13 @@ public:
      *            elements 3, 7, 11 for a 4x4), false for column major
      *            (translation in elements 12, 13, 14 for a 4x4).
      */
-    template<size_t _Length>
-    void get(float(&data)[_Length], bool rowMajor) {
-        if (_Length == 9) {
-            if (rowMajor) {
+    template <size_t _Length>
+    void get(float (&data)[_Length], bool rowMajor)
+    {
+        if (_Length == 9)
+        {
+            if (rowMajor)
+            {
                 data[0] = m[0];
                 data[1] = m[1];
                 data[2] = m[2];
@@ -99,7 +103,8 @@ public:
                 data[7] = m[7];
                 data[8] = m[8];
             }
-            else {
+            else
+            {
                 data[0] = m[0];
                 data[1] = m[3];
                 data[2] = m[6];
@@ -111,31 +116,35 @@ public:
                 data[8] = m[8];
             }
         }
-        else if (_Length == 16) {
-            if (rowMajor) {
-                data[0] = m[0];
-                data[1] = m[1];
-                data[2] = m[2];
-                data[4] = m[3];
-                data[5] = m[4];
-                data[6] = m[5];
-                data[8] = m[6];
-                data[9] = m[7];
+        else if (_Length == 16)
+        {
+            if (rowMajor)
+            {
+                data[0]  = m[0];
+                data[1]  = m[1];
+                data[2]  = m[2];
+                data[4]  = m[3];
+                data[5]  = m[4];
+                data[6]  = m[5];
+                data[8]  = m[6];
+                data[9]  = m[7];
                 data[10] = m[8];
             }
-            else {
-                data[0] = m[0];
-                data[1] = m[3];
-                data[2] = m[6];
-                data[4] = m[1];
-                data[5] = m[4];
-                data[6] = m[7];
-                data[8] = m[2];
-                data[9] = m[5];
+            else
+            {
+                data[0]  = m[0];
+                data[1]  = m[3];
+                data[2]  = m[6];
+                data[4]  = m[1];
+                data[5]  = m[4];
+                data[6]  = m[7];
+                data[8]  = m[2];
+                data[9]  = m[5];
                 data[10] = m[8];
             }
         }
-        else {
+        else
+        {
             // throw new JmeException("Array size must be 9 or 16 in Mat3.get().");
         }
     }
@@ -153,7 +162,6 @@ public:
      */
     cocos2d::Vec3 getColumn(int i);
 
-
     /**
      * getRow returns one of three rows as specified by the
      * parameter. This row is returned as a cocos2d::Vec3 object.
@@ -168,7 +176,6 @@ public:
     cocos2d::Vec3 getRow(int i);
 
     std::string toString();
-
 
     /**
      *
@@ -239,9 +246,7 @@ public:
      * @param matrix
      *            the matrix to set the value to.
      */
-    void set(float matrix[9]) {
-        set(matrix, true);
-    }
+    void set(float matrix[9]) { set(matrix, true); }
 
     /**
      * set sets the values of this matrix from an array of values;
@@ -262,8 +267,9 @@ public:
      * @param quaternion
      *            the quaternion to create a rotational matrix from.
      */
-    void set(const cocos2d::Quaternion& quaternion) {
-        //quaternion.toRotationMatrix(this);
+    void set(const cocos2d::Quaternion& quaternion)
+    {
+        // quaternion.toRotationMatrix(this);
     }
 
     /**
@@ -280,35 +286,35 @@ public:
     bool isIdentity();
 
     /**
-    * Creates a matrix describing a rotation around the x-axis.
-    *
-    * @param angle The angle of rotation (in radians).
-    * @param dst A matrix to store the result in.
-    */
+     * Creates a matrix describing a rotation around the x-axis.
+     *
+     * @param angle The angle of rotation (in radians).
+     * @param dst A matrix to store the result in.
+     */
     void rotateX(float angle);
 
     /**
-    * Creates a matrix describing a rotation around the y-axis.
-    *
-    * @param angle The angle of rotation (in radians).
-    * @param dst A matrix to store the result in.
-    */
+     * Creates a matrix describing a rotation around the y-axis.
+     *
+     * @param angle The angle of rotation (in radians).
+     * @param dst A matrix to store the result in.
+     */
     void rotateY(float angle);
 
     /**
-    * Creates a matrix describing a rotation around the z-axis.
-    *
-    * @param angle The angle of rotation (in radians).
-    * @param dst A matrix to store the result in.
-    */
+     * Creates a matrix describing a rotation around the z-axis.
+     *
+     * @param angle The angle of rotation (in radians).
+     * @param dst A matrix to store the result in.
+     */
     void rotateZ(float angle);
 
     /**
-    * Creates a matrix describing a rotation around the x-axis.
-    *
-    * @param angle The angle of rotation (in radians).
-    * @param dst A matrix to store the result in.
-    */
+     * Creates a matrix describing a rotation around the x-axis.
+     *
+     * @param angle The angle of rotation (in radians).
+     * @param dst A matrix to store the result in.
+     */
     void rotateX(float s, float c);
 
     /**
@@ -338,7 +344,8 @@ public:
      * @param axis
      *            the axis of rotation.
      */
-    void createRotation(const cocos2d::Vec3& axis, float angle) {
+    void createRotation(const cocos2d::Vec3& axis, float angle)
+    {
         createRotation(axis, std::sin(angle), std::cos(angle));
     }
 
@@ -424,9 +431,7 @@ public:
      *            created. It is safe for mat and product to be the same object.
      * @return a Mat3 object containing the result of this operation
      */
-    Mat3& mult(const Mat3& mat) {
-        return mult(mat, *this);
-    }
+    Mat3& mult(const Mat3& mat) { return mult(mat, *this); }
 
     Mat3& mult(const Mat3& mat, Mat3& product) const;
 
@@ -440,9 +445,7 @@ public:
      */
     cocos2d::Vec3 mult(const cocos2d::Vec3& vec) const;
 
-    Mat3& premultAlpha(float alpha) {
-        return multLocal(alpha);
-    }
+    Mat3& premultAlpha(float alpha) { return multLocal(alpha); }
 
     /**
      * multLocal multiplies this matrix internally by a given float
@@ -455,11 +458,11 @@ public:
     Mat3& multLocal(float scale);
 
     /**
-    * add adds the values of a parameter matrix to this matrix.
-    *
-    * @param mat
-    *            the matrix to add to this.
-    */
+     * add adds the values of a parameter matrix to this matrix.
+     *
+     * @param mat
+     *            the matrix to add to this.
+     */
     Mat3& addLocal(const Mat3& mat);
 
     /**
@@ -472,16 +475,16 @@ public:
      *            the matrix to multiply this matrix by.
      * @return This matrix, after the multiplication
      */
-     /*void multLocal() {
+    /*void multLocal() {
 
-         return mult(mat, this);
-     }*/
+        return mult(mat, this);
+    }*/
 
-     /**
-      * Transposes this matrix in place. Returns this matrix for chaining
-      *
-      * @return This matrix after transpose
-      */
+    /**
+     * Transposes this matrix in place. Returns this matrix for chaining
+     *
+     * @return This matrix after transpose
+     */
     Mat3& transposeLocal();
 
     /**
@@ -497,7 +500,6 @@ public:
      * @return this
      */
     Mat3& invertLocal();
-
 
     /**
      * Places the adjoint of this matrix in store (creates store if null.)

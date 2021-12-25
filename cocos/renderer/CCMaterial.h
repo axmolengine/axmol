@@ -43,7 +43,6 @@
 #include "math/Mat4.h"
 #include "platform/CCPlatformMacros.h"
 
-
 NS_CC_BEGIN
 
 class Technique;
@@ -55,11 +54,11 @@ class RenderState;
 
 namespace backend
 {
-    class ProgramState;
+class ProgramState;
 }
 
 /// Material
-class CC_DLL Material :public Ref
+class CC_DLL Material : public Ref
 {
     friend class Node;
     friend class Technique;
@@ -96,9 +95,14 @@ public:
      */
     static Material* createWithProperties(Properties* materialProperties);
 
-    void draw(MeshCommand* meshCommand, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
-              CustomCommand::PrimitiveType primitive, CustomCommand::IndexFormat indexFormat,
-              unsigned int indexCount, const Mat4& modelView);
+    void draw(MeshCommand* meshCommand,
+              float globalZOrder,
+              backend::Buffer* vertexBuffer,
+              backend::Buffer* indexBuffer,
+              CustomCommand::PrimitiveType primitive,
+              CustomCommand::IndexFormat indexFormat,
+              unsigned int indexCount,
+              const Mat4& modelView);
 
     /// returns the material name
     std::string getName() const;
@@ -110,7 +114,7 @@ public:
      */
     Technique* getTechniqueByName(const std::string& name);
 
-    /** Returns a Technique by index. 
+    /** Returns a Technique by index.
      returns `nullptr` if the index is invalid.
      */
     Technique* getTechniqueByIndex(ssize_t index);
@@ -133,13 +137,11 @@ public:
     /** returns a clone (deep-copy) of the material */
     virtual Material* clone() const;
 
-    inline RenderState::StateBlock &getStateBlock() { return _renderState._state; }
+    inline RenderState::StateBlock& getStateBlock() { return _renderState._state; }
 
-    inline void setStateBlock(const RenderState::StateBlock &state) { 
-        _renderState._state = state; 
-    }
+    inline void setStateBlock(const RenderState::StateBlock& state) { _renderState._state = state; }
 
-    RenderState * getRenderState() { return &_renderState; }
+    RenderState* getRenderState() { return &_renderState; }
 
 protected:
     Material();
@@ -156,7 +158,7 @@ protected:
     bool parseShader(Pass* pass, Properties* properties);
     bool parseSampler(backend::ProgramState* programState, Properties* properties);
     bool parseUniform(backend::ProgramState* programState, Properties* properties, const char* uniformName);
-    bool parseRenderState(RenderState::StateBlock *state, Properties* properties);
+    bool parseRenderState(RenderState::StateBlock* state, Properties* properties);
 
     // material name
     std::string _name;

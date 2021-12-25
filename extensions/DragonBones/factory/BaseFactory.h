@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -35,7 +35,8 @@ DRAGONBONES_NAMESPACE_BEGIN
 /**
  * - Base class for the factory that create the armatures. (Typically only one global factory instance is required)
  * The factory instance create armatures by parsed and added DragonBonesData instances and TextureAtlasData instances.
- * Once the data has been parsed, it has been cached in the factory instance and does not need to be parsed again until it is cleared by the factory instance.
+ * Once the data has been parsed, it has been cached in the factory instance and does not need to be parsed again until
+ * it is cleared by the factory instance.
  * @see dragonBones.DragonBonesData
  * @see dragonBones.TextureAtlasData
  * @see dragonBones.ArmatureData
@@ -83,12 +84,8 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    BaseFactory(DataParser* dataParser = nullptr) :
-        autoSearch(false),
-        _dragonBonesDataMap(),
-        _textureAtlasDataMap(),
-        _dragonBones(nullptr),
-        _dataParser(nullptr)
+    BaseFactory(DataParser* dataParser = nullptr)
+        : autoSearch(false), _dragonBonesDataMap(), _textureAtlasDataMap(), _dragonBones(nullptr), _dataParser(nullptr)
     {
         _dataParser = dataParser != nullptr ? dataParser : &BaseFactory::_jsonParser;
     }
@@ -97,35 +94,41 @@ public:
         clear();
 
         _dragonBones = nullptr;
-        _dataParser = nullptr;
+        _dataParser  = nullptr;
     }
 
 protected:
-    virtual inline bool _isSupportMesh() const
-    {
-        return true;
-    }
+    virtual inline bool _isSupportMesh() const { return true; }
     virtual TextureData* _getTextureData(const std::string& textureAtlasName, const std::string& textureName) const;
-    virtual bool _fillBuildArmaturePackage(
-        BuildArmaturePackage& dataPackage,
-        const std::string& dragonBonesName, const std::string& armatureName, const std::string& skinName, const std::string& textureAtlasName
-    ) const;
+    virtual bool _fillBuildArmaturePackage(BuildArmaturePackage& dataPackage,
+                                           const std::string& dragonBonesName,
+                                           const std::string& armatureName,
+                                           const std::string& skinName,
+                                           const std::string& textureAtlasName) const;
     virtual void _buildBones(const BuildArmaturePackage& dataPackage, Armature* armature) const;
     /**
      * @private
      */
     virtual void _buildSlots(const BuildArmaturePackage& dataPackage, Armature* armature) const;
-    virtual Armature* _buildChildArmature(const BuildArmaturePackage* dataPackage, Slot* slot, DisplayData* displayData) const;
-    virtual std::pair<void*, DisplayType> _getSlotDisplay(const BuildArmaturePackage* dataPackage, DisplayData* displayData, DisplayData* rawDisplayData, Slot* slot) const;
+    virtual Armature* _buildChildArmature(const BuildArmaturePackage* dataPackage,
+                                          Slot* slot,
+                                          DisplayData* displayData) const;
+    virtual std::pair<void*, DisplayType> _getSlotDisplay(const BuildArmaturePackage* dataPackage,
+                                                          DisplayData* displayData,
+                                                          DisplayData* rawDisplayData,
+                                                          Slot* slot) const;
     virtual TextureAtlasData* _buildTextureAtlasData(TextureAtlasData* textureAtlasData, void* textureAtlas) const = 0;
-    virtual Armature* _buildArmature(const BuildArmaturePackage& dataPackage) const = 0;
-    virtual Slot* _buildSlot(const BuildArmaturePackage& dataPackage, const SlotData* slotData, Armature* armature) const = 0;
+    virtual Armature* _buildArmature(const BuildArmaturePackage& dataPackage) const                                = 0;
+    virtual Slot* _buildSlot(const BuildArmaturePackage& dataPackage,
+                             const SlotData* slotData,
+                             Armature* armature) const                                                             = 0;
 
 public:
     /**
      * - Parse the raw data to a DragonBonesData instance and cache it to the factory.
      * @param rawData - The raw data.
-     * @param name - Specify a cache name for the instance so that the instance can be obtained through this name. (If not set, use the instance name instead)
+     * @param name - Specify a cache name for the instance so that the instance can be obtained through this name. (If
+     * not set, use the instance name instead)
      * @param scale - Specify a scaling value for all armatures. (Default: 1.0)
      * @returns DragonBonesData instance
      * @see #getDragonBonesData()
@@ -148,12 +151,16 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual DragonBonesData* parseDragonBonesData(const char* rawData, const std::string& name = "", float scale = 1.0f);
+    virtual DragonBonesData* parseDragonBonesData(const char* rawData,
+                                                  const std::string& name = "",
+                                                  float scale             = 1.0f);
     /**
-     * - Parse the raw texture atlas data and the texture atlas object to a TextureAtlasData instance and cache it to the factory.
+     * - Parse the raw texture atlas data and the texture atlas object to a TextureAtlasData instance and cache it to
+     * the factory.
      * @param rawData - The raw texture atlas data.
      * @param textureAtlas - The texture atlas object.
-     * @param name - Specify a cache name for the instance so that the instance can be obtained through this name. (If not set, use the instance name instead)
+     * @param name - Specify a cache name for the instance so that the instance can be obtained through this name. (If
+     * not set, use the instance name instead)
      * @param scale - Specify a scaling value for the map set. (Default: 1.0)
      * @returns TextureAtlasData instance
      * @see #getTextureAtlasData()
@@ -177,7 +184,10 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual TextureAtlasData* parseTextureAtlasData(const char* rawData, void* textureAtlas, const std::string& name = "", float scale = 1.0f);
+    virtual TextureAtlasData* parseTextureAtlasData(const char* rawData,
+                                                    void* textureAtlas,
+                                                    const std::string& name = "",
+                                                    float scale             = 1.0f);
     /**
      * - Get a specific DragonBonesData instance.
      * @param name - The DragonBonesData instance cache name.
@@ -207,7 +217,8 @@ public:
     /**
      * - Cache a DragonBonesData instance to the factory.
      * @param data - The DragonBonesData instance.
-     * @param name - Specify a cache name for the instance so that the instance can be obtained through this name. (if not set, use the instance name instead)
+     * @param name - Specify a cache name for the instance so that the instance can be obtained through this name. (if
+     * not set, use the instance name instead)
      * @see #parseDragonBonesData()
      * @see #getDragonBonesData()
      * @see #removeDragonBonesData()
@@ -277,7 +288,8 @@ public:
     /**
      * - Cache a TextureAtlasData instance to the factory.
      * @param data - The TextureAtlasData instance.
-     * @param name - Specify a cache name for the instance so that the instance can be obtained through this name. (if not set, use the instance name instead)
+     * @param name - Specify a cache name for the instance so that the instance can be obtained through this name. (if
+     * not set, use the instance name instead)
      * @see #parseTextureAtlasData()
      * @see #getTextureAtlasData()
      * @see #removeTextureAtlasData()
@@ -352,10 +364,14 @@ public:
     virtual void clear(bool disposeData = true);
     /**
      * - Create a armature from cached DragonBonesData instances and TextureAtlasData instances.
-     * Note that when the created armature that is no longer in use, you need to explicitly dispose {@link #dragonBones.Armature#dispose()}.
+     * Note that when the created armature that is no longer in use, you need to explicitly dispose {@link
+     * #dragonBones.Armature#dispose()}.
      * @param armatureName - The armature data name.
-     * @param dragonBonesName - The cached name of the DragonBonesData instance. (If not set, all DragonBonesData instances are retrieved, and when multiple DragonBonesData instances contain a the same name armature data, it may not be possible to accurately create a specific armature)
-     * @param skinName - The skin name, you can set a different ArmatureData name to share it's skin data. (If not set, use the default skin data)
+     * @param dragonBonesName - The cached name of the DragonBonesData instance. (If not set, all DragonBonesData
+     * instances are retrieved, and when multiple DragonBonesData instances contain a the same name armature data, it
+     * may not be possible to accurately create a specific armature)
+     * @param skinName - The skin name, you can set a different ArmatureData name to share it's skin data. (If not set,
+     * use the default skin data)
      * @returns The armature.
      * @example
      * TypeScript style, for reference only.
@@ -372,7 +388,8 @@ public:
      * - 通过缓存的 DragonBonesData 实例和 TextureAtlasData 实例创建一个骨架。
      * 注意，创建的骨架不再使用时，需要显式释放 {@link #dragonBones.Armature#dispose()}。
      * @param armatureName - 骨架数据名称。
-     * @param dragonBonesName - DragonBonesData 实例的缓存名称。 （如果未设置，将检索所有的 DragonBonesData 实例，当多个 DragonBonesData 实例中包含同名的骨架数据时，可能无法准确的创建出特定的骨架）
+     * @param dragonBonesName - DragonBonesData 实例的缓存名称。 （如果未设置，将检索所有的 DragonBonesData 实例，当多个
+     * DragonBonesData 实例中包含同名的骨架数据时，可能无法准确的创建出特定的骨架）
      * @param skinName - 皮肤名称，可以设置一个其他骨架数据名称来共享其皮肤数据。（如果未设置，则使用默认的皮肤数据）
      * @returns 骨架。
      * @example
@@ -386,7 +403,10 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    virtual Armature* buildArmature(const std::string& armatureName, const std::string& dragonBonesName = "", const std::string& skinName = "", const std::string & textureAtlasName = "") const;
+    virtual Armature* buildArmature(const std::string& armatureName,
+                                    const std::string& dragonBonesName  = "",
+                                    const std::string& skinName         = "",
+                                    const std::string& textureAtlasName = "") const;
     /**
      * @private
      */
@@ -399,7 +419,8 @@ public:
      * @param slotName - The slot data name.
      * @param displayName - The display data name.
      * @param slot - The slot.
-     * @param displayIndex - The index of the display data that is replaced. (If it is not set, replaces the current display data)
+     * @param displayIndex - The index of the display data that is replaced. (If it is not set, replaces the current
+     * display data)
      * @example
      * TypeScript style, for reference only.
      * <pre>
@@ -427,17 +448,19 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual bool replaceSlotDisplay(
-        const std::string& dragonBonesName, const std::string& armatureName, const std::string& slotName, const std::string& displayName,
-        Slot* slot, int displayIndex = -1
-    ) const;
+    virtual bool replaceSlotDisplay(const std::string& dragonBonesName,
+                                    const std::string& armatureName,
+                                    const std::string& slotName,
+                                    const std::string& displayName,
+                                    Slot* slot,
+                                    int displayIndex = -1) const;
     /**
      * @private
      */
-    virtual bool replaceSlotDisplayList(
-        const std::string& dragonBonesName, const std::string& armatureName, const std::string& slotName,
-        Slot* slot
-    ) const;
+    virtual bool replaceSlotDisplayList(const std::string& dragonBonesName,
+                                        const std::string& armatureName,
+                                        const std::string& slotName,
+                                        Slot* slot) const;
     /**
      * - Share specific skin data with specific armature.
      * @param armature - The armature.
@@ -478,10 +501,14 @@ public:
      * @version DragonBones 5.6
      * @language zh_CN
      */
-    virtual bool replaceSkin(Armature* armature, SkinData* skin, bool isOverride = false, const std::vector<std::string>* exclude = nullptr) const;
+    virtual bool replaceSkin(Armature* armature,
+                             SkinData* skin,
+                             bool isOverride                         = false,
+                             const std::vector<std::string>* exclude = nullptr) const;
     /**
-     * - Replaces the existing animation data for a specific armature with the animation data for the specific armature data.
-     * This enables you to make a armature template so that other armature without animations can share it's animations.
+     * - Replaces the existing animation data for a specific armature with the animation data for the specific armature
+     * data. This enables you to make a armature template so that other armature without animations can share it's
+     * animations.
      * @param armature - The armtaure.
      * @param armatureData - The armature data.
      * @param isOverride - Whether to completely overwrite the original animation. (Default: false)
@@ -530,10 +557,7 @@ public:
     /**
      * @private
      */
-    inline const std::map<std::string, DragonBonesData*>& getAllDragonBonesData() const
-    {
-        return _dragonBonesDataMap;
-    }
+    inline const std::map<std::string, DragonBonesData*>& getAllDragonBonesData() const { return _dragonBonesDataMap; }
     /**
      * - An Worldclock instance updated by engine.
      * @version DragonBones 5.7
@@ -544,10 +568,7 @@ public:
      * @version DragonBones 5.7
      * @language zh_CN
      */
-    inline WorldClock* getClock() const 
-    {
-        return _dragonBones->getClock();
-    }
+    inline WorldClock* getClock() const { return _dragonBones->getClock(); }
 
     /**
      * - Deprecated, please refer to {@link #replaceSkin}.
@@ -578,15 +599,9 @@ public:
     ArmatureData* armature;
     SkinData* skin;
 
-    BuildArmaturePackage() :
-        dataName(),
-        textureAtlasName(),
-        data(nullptr),
-        armature(nullptr),
-        skin(nullptr)
-    {}
+    BuildArmaturePackage() : dataName(), textureAtlasName(), data(nullptr), armature(nullptr), skin(nullptr) {}
     ~BuildArmaturePackage() {}
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_BASE_FACTORY_H
+#endif  // DRAGONBONES_BASE_FACTORY_H

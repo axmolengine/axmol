@@ -39,25 +39,26 @@ NS_CC_BEGIN
 class Sprite;
 struct CC_DLL ResourceData;
 
-namespace ui {
-    class Scale9Sprite;
-    
+namespace ui
+{
+class Scale9Sprite;
+
 typedef enum
 {
     SLIDER_PERCENTCHANGED
-}SliderEventType;
+} SliderEventType;
 
-typedef void (Ref::*SEL_SlidPercentChangedEvent)(Ref*,SliderEventType);
+typedef void (Ref::*SEL_SlidPercentChangedEvent)(Ref*, SliderEventType);
 #define sliderpercentchangedselector(_SELECTOR) (SEL_SlidPercentChangedEvent)(&_SELECTOR)
 
-/** 
+/**
  * @brief UI Slider widget.
  */
 class CC_GUI_DLL Slider : public Widget
 {
-    
+
     DECLARE_CLASS_GUI_INFO
-    
+
 public:
     /** EventType Slider event type.
      */
@@ -69,27 +70,27 @@ public:
         ON_SLIDEBALL_UP,
         ON_SLIDEBALL_CANCEL
     };
-    typedef std::function<void(Ref*,EventType)> ccSliderCallback;
+    typedef std::function<void(Ref*, EventType)> ccSliderCallback;
     /**
      * Default constructor.
      * @js ctor
      * @lua new
      */
     Slider();
-    
+
     /**
      * Default destructor.
      * @js NA
      * @lua NA
      */
     virtual ~Slider();
-    
+
     /** Create a slider widget.
      *
      * @return An autoreleased Slider object.
      */
     static Slider* create();
-    
+
     /** Create a slider widget with bar texture, ball texture and texture resource type.
      *
      * @param barTextureName Bar texture file name.
@@ -100,59 +101,59 @@ public:
     static Slider* create(const std::string& barTextureName,
                           const std::string& normalBallTextureName,
                           TextureResType resType = TextureResType::LOCAL);
-    
+
     /**
      * Load texture for slider bar.
      *
      * @param fileName   File name of texture.
      * @param resType    @see TextureResType .
      */
-    void loadBarTexture(const std::string& fileName,TextureResType resType = TextureResType::LOCAL);
-    
+    void loadBarTexture(const std::string& fileName, TextureResType resType = TextureResType::LOCAL);
+
     /**
      * Sets if slider is using scale9 renderer.
      * @param able True that using scale9 renderer, false otherwise.
      */
     void setScale9Enabled(bool able);
-    
+
     /**
      * Gets If slider is using scale9 renderer.
      * @return True that using scale9 renderer, false otherwise.
      */
-    bool isScale9Enabled()const;
-    
+    bool isScale9Enabled() const;
+
     /**
      * Sets capinsets for slider, if slider is using scale9 renderer.
      * @param capInsets Capinsets for slider.
      */
-    void setCapInsets(const Rect &capInsets);
-    
+    void setCapInsets(const Rect& capInsets);
+
     /**
      * Sets capinsets for bar slider, if slider is using scale9 renderer.
      * @param capInsets Capinsets for bar slider.
      */
-    void setCapInsetsBarRenderer(const Rect &capInsets);
-    
+    void setCapInsetsBarRenderer(const Rect& capInsets);
+
     /**
      * Gets capinsets for bar slider, if slider is using scale9 renderer.
      * @return capInsets Capinsets for bar slider.
      */
-    const Rect& getCapInsetsBarRenderer()const;
-    
+    const Rect& getCapInsetsBarRenderer() const;
+
     /**
      * Sets capinsets for progress bar slider, if slider is using scale9 renderer.
      * @param capInsets Capinsets for progress bar slider.
      * @js NA
      */
-    void setCapInsetProgressBarRenderer(const Rect &capInsets);
-    
+    void setCapInsetProgressBarRenderer(const Rect& capInsets);
+
     /**
      * Gets capinsets for progress bar slider, if slider is using scale9 renderer.
      * @return Capinsets for progress bar slider.
      * @js NA
      */
-    const Rect& getCapInsetsProgressBarRenderer()const;
-    
+    const Rect& getCapInsetsProgressBarRenderer() const;
+
     /**
      * Load textures for slider ball.
      *
@@ -162,34 +163,34 @@ public:
      * @param texType    @see TextureResType .
      */
     void loadSlidBallTextures(const std::string& normal,
-                              const std::string& pressed = "",
+                              const std::string& pressed  = "",
                               const std::string& disabled = "",
-                              TextureResType texType = TextureResType::LOCAL);
-    
+                              TextureResType texType      = TextureResType::LOCAL);
+
     /**
      * Load normal state texture for slider ball.
      *
      * @param normal    Normal state texture.
      * @param resType    @see TextureResType .
      */
-    void loadSlidBallTextureNormal(const std::string& normal,TextureResType resType = TextureResType::LOCAL);
-    
+    void loadSlidBallTextureNormal(const std::string& normal, TextureResType resType = TextureResType::LOCAL);
+
     /**
      * Load pressed state texture for slider ball.
      *
      * @param pressed    Pressed state texture.
      * @param resType    @see TextureResType .
      */
-    void loadSlidBallTexturePressed(const std::string& pressed,TextureResType resType = TextureResType::LOCAL);
-    
+    void loadSlidBallTexturePressed(const std::string& pressed, TextureResType resType = TextureResType::LOCAL);
+
     /**
      * Load disabled state texture for slider ball.
      *
      * @param disabled   Disabled state texture.
      * @param resType    @see TextureResType .
      */
-    void loadSlidBallTextureDisabled(const std::string& disabled,TextureResType resType = TextureResType::LOCAL);
-    
+    void loadSlidBallTextureDisabled(const std::string& disabled, TextureResType resType = TextureResType::LOCAL);
+
     /**
      * Load dark state texture for slider progress bar.
      *
@@ -197,24 +198,24 @@ public:
      * @param resType    @see TextureResType .
      */
     void loadProgressBarTexture(const std::string& fileName, TextureResType resType = TextureResType::LOCAL);
-    
+
     /**
      * Changes the progress direction of slider.
      * @param percent  Percent value from 1 to 100.
      */
     void setPercent(int percent);
-    
+
     /**
      * Updates the visual elements of the slider.
      */
     void updateVisualSlider();
-    
+
     /**
      * Gets the progress direction of slider.
      *
      * @return percent Percent value from 1 to 100.
      */
-    int getPercent()const;
+    int getPercent() const;
 
     /**
      * Set a large value could give more control to the precision.
@@ -228,8 +229,8 @@ public:
      * @since v3.7
      * @return The maximum percent of the Slider.
      */
-    int getMaxPercent()const;
-    
+    int getMaxPercent() const;
+
     /**
      * Add call back function called when slider's percent has changed to slider.
      *
@@ -237,27 +238,27 @@ public:
      */
     void addEventListener(const ccSliderCallback& callback);
 
-    virtual bool onTouchBegan(Touch *touch, Event *unusedEvent) override;
-    virtual void onTouchMoved(Touch *touch, Event *unusedEvent) override;
-    virtual void onTouchEnded(Touch *touch, Event *unusedEvent) override;
-    virtual void onTouchCancelled(Touch *touch, Event *unusedEvent) override;
-    
-    //override "getVirtualRendererSize" method of widget.
+    virtual bool onTouchBegan(Touch* touch, Event* unusedEvent) override;
+    virtual void onTouchMoved(Touch* touch, Event* unusedEvent) override;
+    virtual void onTouchEnded(Touch* touch, Event* unusedEvent) override;
+    virtual void onTouchCancelled(Touch* touch, Event* unusedEvent) override;
+
+    // override "getVirtualRendererSize" method of widget.
     virtual Vec2 getVirtualRendererSize() const override;
-    
-    //override "getVirtualRenderer" method of widget.
+
+    // override "getVirtualRenderer" method of widget.
     virtual Node* getVirtualRenderer() override;
-    
-    //override "ignoreContentAdaptWithSize" method of widget.
+
+    // override "ignoreContentAdaptWithSize" method of widget.
     virtual void ignoreContentAdaptWithSize(bool ignore) override;
-    
-    //override the widget's hitTest function to perform its own
-    virtual bool hitTest(const Vec2 &pt, const Camera* camera, Vec3 *p) const override;
+
+    // override the widget's hitTest function to perform its own
+    virtual bool hitTest(const Vec2& pt, const Camera* camera, Vec3* p) const override;
     /**
      * Returns the "class name" of widget.
      */
     virtual std::string getDescription() const override;
-    
+
     /** When user pressed the button, the button will zoom to a scale.
      * The final scale of the button  equals (button original scale + _zoomScale)
      * @since v3.3
@@ -267,7 +268,7 @@ public:
      * @brief Return a zoom scale
      * @since v3.3
      */
-    float getZoomScale()const;
+    float getZoomScale() const;
 
     Sprite* getSlidBallNormalRenderer() const;
     Sprite* getSlidBallPressedRenderer() const;
@@ -280,12 +281,11 @@ public:
     ResourceData getBallPressedFile();
     ResourceData getBallDisabledFile();
 
-CC_CONSTRUCTOR_ACCESS:
-    virtual bool init() override;
+    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
 
 protected:
     virtual void initRenderer() override;
-    float getPercentWithBallPos(const Vec2 &pt) const;
+    float getPercentWithBallPos(const Vec2& pt) const;
     void percentChangedEvent(EventType event);
     virtual void onPressStateChangedToNormal() override;
     virtual void onPressStateChangedToPressed() override;
@@ -299,32 +299,33 @@ protected:
     void loadSlidBallTextureNormal(SpriteFrame* spriteframe);
     void loadSlidBallTexturePressed(SpriteFrame* spriteframe);
     void loadSlidBallTextureDisabled(SpriteFrame* spriteframe);
-   
+
     void barRendererScaleChangedWithSize();
     void progressBarRendererScaleChangedWithSize();
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
     virtual void adaptRenderers() override;
+
 protected:
-    Scale9Sprite*  _barRenderer;
+    Scale9Sprite* _barRenderer;
     Scale9Sprite* _progressBarRenderer;
     Vec2 _barTextureSize;
     Rect _originalBarRect;
     Vec2 _progressBarTextureSize;
     Rect _originalProgressBarRect;
-    
+
     Sprite* _slidBallNormalRenderer;
     Sprite* _slidBallPressedRenderer;
     Sprite* _slidBallDisabledRenderer;
     Node* _slidBallRenderer;
-    
+
     float _barLength;
     int _percent;
     int _maxPercent;
-    
+
     bool _scale9Enabled;
     bool _prevIgnoreSize;
-    
+
     float _zoomScale;
     float _sliderBallNormalTextureScaleX;
     float _sliderBallNormalTextureScaleY;
@@ -335,9 +336,9 @@ protected:
     Rect _capInsetsBarRenderer;
     Rect _capInsetsProgressBarRenderer;
 
-    Ref*       _sliderEventListener;
-    
-    ccSliderCallback  _eventCallback;
+    Ref* _sliderEventListener;
+
+    ccSliderCallback _eventCallback;
 
     TextureResType _barTexType;
     TextureResType _progressBarTexType;
@@ -354,7 +355,7 @@ protected:
     std::string _slidBallDisabledTextureFile;
 };
 
-}
+}  // namespace ui
 
 // end of ui group
 /// @}

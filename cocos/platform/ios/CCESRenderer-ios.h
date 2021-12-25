@@ -32,25 +32,29 @@
 #include "platform/CCPlatformConfig.h"
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
-#include "platform/CCPlatformMacros.h"
-#import <QuartzCore/QuartzCore.h>
+#    include "platform/CCPlatformMacros.h"
+#    import <QuartzCore/QuartzCore.h>
 
-#import <OpenGLES/EAGL.h>
-#import <OpenGLES/EAGLDrawable.h>
+#    import <OpenGLES/EAGL.h>
+#    import <OpenGLES/EAGLDrawable.h>
 
 @protocol CCESRenderer <NSObject>
 
-- (id) initWithDepthFormat:(unsigned int)depthFormat withPixelFormat:(unsigned int)pixelFormat withSharegroup:(EAGLSharegroup*)sharegroup withMultiSampling:(BOOL) multiSampling withNumberOfSamples:(unsigned int) requestedSamples;
+- (id)initWithDepthFormat:(unsigned int)depthFormat
+          withPixelFormat:(unsigned int)pixelFormat
+           withSharegroup:(EAGLSharegroup*)sharegroup
+        withMultiSampling:(BOOL)multiSampling
+      withNumberOfSamples:(unsigned int)requestedSamples;
 
-- (BOOL) resizeFromLayer:(CAEAGLLayer *)layer;
+- (BOOL)resizeFromLayer:(CAEAGLLayer*)layer;
 
-- (EAGLContext*) context;
-- (CGSize) backingSize;
+- (EAGLContext*)context;
+- (CGSize)backingSize;
 
-- (unsigned int) colorRenderBuffer;
-- (unsigned int) defaultFrameBuffer;
-- (unsigned int) msaaFrameBuffer;
-- (unsigned int) msaaColorBuffer;
+- (unsigned int)colorRenderBuffer;
+- (unsigned int)defaultFrameBuffer;
+- (unsigned int)msaaFrameBuffer;
+- (unsigned int)msaaColorBuffer;
 @end
 
-#endif // CC_PLATFORM_IOS
+#endif  // CC_PLATFORM_IOS

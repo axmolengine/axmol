@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../Texture.h"
@@ -35,41 +35,41 @@ CC_BACKEND_BEGIN
  * @{
  */
 
-enum {
+enum
+{
     MTL_TEXTURE_2D = 1,
     MTL_TEXTURE_CUBE,
 };
 
 struct TextureInfoMTL
 {
-    TextureInfoMTL(id<MTLDevice> mtlDevice) {
+    TextureInfoMTL(id<MTLDevice> mtlDevice)
+    {
         _mtlDevice = mtlDevice;
         _mtlTextures.fill(nil);
     }
-    ~TextureInfoMTL() {
-        destroy();
-    }
+    ~TextureInfoMTL() { destroy(); }
 
     id<MTLTexture> ensure(int index, int target);
     void destroy();
 
     id<MTLTexture> createTexture(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor, int target);
-    void recreateSampler(const SamplerDescriptor &descriptor);
+    void recreateSampler(const SamplerDescriptor& descriptor);
 
     MTLSamplerAddressMode _sAddressMode;
     MTLSamplerAddressMode _tAddressMode;
     MTLSamplerMinMagFilter _minFilter;
     MTLSamplerMinMagFilter _magFilter;
     MTLSamplerMipFilter _mipFilter;
-    
+
     TextureDescriptor _descriptor;
-    
+
     id<MTLDevice> _mtlDevice;
     std::array<id<MTLTexture>, CC_META_TEXTURES + 1> _mtlTextures;
     int _maxIdx = -1;
 
     id<MTLSamplerState> _mtlSamplerState = nil;
-    unsigned int _bytesPerRow = 0;
+    unsigned int _bytesPerRow            = 0;
 };
 
 /**
@@ -84,37 +84,55 @@ public:
      */
     TextureMTL(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor);
     ~TextureMTL();
-    
+
     /**
      * Update a two-dimensional texture image
      * @param data Specifies a pointer to the image data in memory.
      * @param width Specifies the width of the texture image.
      * @param height Specifies the height of the texture image.
-     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
+     * reduction image.
      */
-    virtual void updateData(uint8_t* data, std::size_t width , std::size_t height, std::size_t level, int index = 0) override;
-    
+    virtual void updateData(uint8_t* data,
+                            std::size_t width,
+                            std::size_t height,
+                            std::size_t level,
+                            int index = 0) override;
+
     /**
      * Update a two-dimensional texture image in a compressed format
      * @param data Specifies a pointer to the compressed image data in memory.
      * @param width Specifies the width of the texture image.
      * @param height Specifies the height of the texture image.
      * @param dataLen Specifies the totoal size of compressed image in bytes.
-     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
+     * reduction image.
      */
-    virtual void updateCompressedData(uint8_t* data, std::size_t width , std::size_t height, std::size_t dataLen, std::size_t level, int index = 0) override;
-    
+    virtual void updateCompressedData(uint8_t* data,
+                                      std::size_t width,
+                                      std::size_t height,
+                                      std::size_t dataLen,
+                                      std::size_t level,
+                                      int index = 0) override;
+
     /**
      * Update a two-dimensional texture subimage
      * @param xoffset Specifies a texel offset in the x direction within the texture array.
      * @param yoffset Specifies a texel offset in the y direction within the texture array.
      * @param width Specifies the width of the texture subimage.
      * @param height Specifies the height of the texture subimage.
-     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
+     * reduction image.
      * @param data Specifies a pointer to the image data in memory.
      */
-    virtual void updateSubData(std::size_t xoffset, std::size_t yoffset, std::size_t width, std::size_t height, std::size_t level, uint8_t* data, int index = 0) override;
-    
+    virtual void updateSubData(std::size_t xoffset,
+                               std::size_t yoffset,
+                               std::size_t width,
+                               std::size_t height,
+                               std::size_t level,
+                               uint8_t* data,
+                               int index = 0) override;
+
     /**
      * Update a two-dimensional texture subimage in a compressed format
      * @param xoffset Specifies a texel offset in the x direction within the texture array.
@@ -122,46 +140,54 @@ public:
      * @param width Specifies the width of the texture subimage.
      * @param height Specifies the height of the texture subimage.
      * @param dataLen Specifies the totoal size of compressed subimage in bytes.
-     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
+     * reduction image.
      * @param data Specifies a pointer to the compressed image data in memory.
      */
-    virtual void updateCompressedSubData(std::size_t xoffset, std::size_t yoffset, std::size_t width, std::size_t height, std::size_t dataLen, std::size_t level, uint8_t* data, int index = 0) override;
-    
+    virtual void updateCompressedSubData(std::size_t xoffset,
+                                         std::size_t yoffset,
+                                         std::size_t width,
+                                         std::size_t height,
+                                         std::size_t dataLen,
+                                         std::size_t level,
+                                         uint8_t* data,
+                                         int index = 0) override;
+
     /**
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
-    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler) override;
-    
+    virtual void updateSamplerDescriptor(const SamplerDescriptor& sampler) override;
+
     /**
      * Generate mipmaps.
      */
     virtual void generateMipmaps() override;
-    
+
     /**
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    virtual void updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index = 0) override;
-    
+    virtual void updateTextureDescriptor(const cocos2d::backend::TextureDescriptor& descriptor, int index = 0) override;
+
     int getCount() const override { return _textureInfo._maxIdx + 1; }
-    
+
     /**
      * Get MTLTexture object. reinterpret_cast<id<MTLTexture>>(handler);
      * @return A MTLTexture object.
      */
-    uintptr_t getHandler(int index = 0) const override {
+    uintptr_t getHandler(int index = 0) const override
+    {
         return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
     }
-    
+
     /**
      * Get MTLSamplerState object
      * @return A MTLSamplerState object.
      */
     inline id<MTLSamplerState> getMTLSamplerState() const { return _textureInfo._mtlSamplerState; }
-    
-private:
 
+private:
     TextureInfoMTL _textureInfo;
 };
 
@@ -177,34 +203,35 @@ public:
      */
     TextureCubeMTL(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor);
     ~TextureCubeMTL();
-    
+
     /**
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
-    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler) override;
-    
+    virtual void updateSamplerDescriptor(const SamplerDescriptor& sampler) override;
+
     /**
      * Update texutre cube data in give slice side.
      * @param side Specifies which slice texture of cube to be update.
      * @param data Specifies a pointer to the image data in memory.
      */
-    virtual void updateFaceData(TextureCubeFace side, void *data, int index = 0) override;
-    
+    virtual void updateFaceData(TextureCubeFace side, void* data, int index = 0) override;
+
     /**
      * Generate mipmaps.
      */
     virtual void generateMipmaps() override;
-    
+
     /**
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    virtual void updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int index = 0) override;
-    
+    virtual void updateTextureDescriptor(const cocos2d::backend::TextureDescriptor& descriptor, int index = 0) override;
+
     int getCount() const override { return _textureInfo._maxIdx + 1; }
-    
-    uintptr_t getHandler(int index = 0) const override {
+
+    uintptr_t getHandler(int index = 0) const override
+    {
         return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
     }
 
@@ -213,11 +240,10 @@ public:
      * @return A MTLSamplerState object.
      */
     inline id<MTLSamplerState> getMTLSamplerState() const { return _textureInfo._mtlSamplerState; }
-    
-private:
 
+private:
     TextureInfoMTL _textureInfo;
-    
+
     MTLRegion _region;
     std::size_t _bytesPerImage = 0;
 };

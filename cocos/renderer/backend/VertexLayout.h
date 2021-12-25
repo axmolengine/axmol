@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -48,39 +48,44 @@ public:
     struct Attribute
     {
         Attribute() = default;
-        Attribute(const std::string& _name, std::size_t _index, VertexFormat _format, std::size_t _offset, bool needToBeNormallized)
-        : name(_name)
-        , format(_format)
-        , offset(_offset)
-        , index(_index)
-        , needToBeNormallized(needToBeNormallized)
+        Attribute(const std::string& _name,
+                  std::size_t _index,
+                  VertexFormat _format,
+                  std::size_t _offset,
+                  bool needToBeNormallized)
+            : name(_name), format(_format), offset(_offset), index(_index), needToBeNormallized(needToBeNormallized)
         {}
-        
-        std::string name; ///< name is used in opengl
-        VertexFormat format = VertexFormat::INT3; 
-        std::size_t offset = 0;
-        std::size_t index = 0; ///< index is used in metal
+
+        std::string name;  ///< name is used in opengl
+        VertexFormat format      = VertexFormat::INT3;
+        std::size_t offset       = 0;
+        std::size_t index        = 0;  ///< index is used in metal
         bool needToBeNormallized = false;
     };
 
     VertexLayout() = default;
-    
+
     /**
      * Set attribute values to name.
      * @param name Specifies the attribute name.
      * @param index Specifies the index of the generic vertex attribute to be modified.
      * @param format Specifies how the vertex attribute data is laid out in memory.
      * @param offset Specifies the byte offset to the first component of the first generic vertex attribute.
-     * @param needToBeNormallized Specifies whether fixed-point data values should be normalized (true) or converted directly as fixed-point values (false) when they are accessed.
+     * @param needToBeNormallized Specifies whether fixed-point data values should be normalized (true) or converted
+     * directly as fixed-point values (false) when they are accessed.
      */
-    void setAttribute(const std::string& name, std::size_t index, VertexFormat format, std::size_t offset, bool needToBeNormallized);
-    
+    void setAttribute(const std::string& name,
+                      std::size_t index,
+                      VertexFormat format,
+                      std::size_t offset,
+                      bool needToBeNormallized);
+
     /**
      * Set stride of vertices.
      * @param stride Specifies the distance between the data of two vertices, in bytes.
      */
     void setLayout(std::size_t stride);
-    
+
     /**
      * Get the distance between the data of two vertices, in bytes.
      * @return The distance between the data of two vertices, in bytes.
@@ -104,13 +109,13 @@ public:
      * Check if vertex layout has been set.
      */
     inline bool isValid() const { return _stride != 0; }
-    
+
 private:
     std::unordered_map<std::string, Attribute> _attributes;
-    std::size_t _stride = 0;
+    std::size_t _stride      = 0;
     VertexStepMode _stepMode = VertexStepMode::VERTEX;
 };
 
-//end of _backend group
+// end of _backend group
 /// @}
 CC_BACKEND_END

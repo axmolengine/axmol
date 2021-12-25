@@ -53,41 +53,41 @@ void HttpCookie::readFile()
         NAME_INDEX,
         VALUE_INDEX,
     };
- 
+
     std::string inString = cocos2d::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
-    if(!inString.empty())
+    if (!inString.empty())
     {
         xsbase::fast_split(inString, '\n', [this](char* s, char* e) {
-            if (*s == '#') // skip comment
+            if (*s == '#')  // skip comment
                 return;
             int count = 0;
             CookieInfo cookieInfo;
             using namespace cxx17;
-            xsbase::fast_split(s, e - s, '\t', [&,this](char* ss, char* ee) {
-                auto ch = *ee; // store
+            xsbase::fast_split(s, e - s, '\t', [&, this](char* ss, char* ee) {
+                auto ch = *ee;  // store
                 *ee     = '\0';
                 switch (count)
                 {
-                    case DOMAIN_INDEX:
-                        cookieInfo.domain.assign(ss, ee - ss);
-                        break;
-                    case PATH_INDEX:
-                        cookieInfo.path.assign(ss, ee - ss);
-                        break;
-                    case SECURE_INDEX:
-                        cookieInfo.secure = cxx17::string_view { ss, (size_t)(ee - ss) } == "TRUE"_sv;
-                        break;
-                    case EXPIRES_INDEX:
-                        cookieInfo.expires = static_cast<time_t>(strtoll(ss, nullptr, 10));
-                        break;
-                    case NAME_INDEX:
-                        cookieInfo.name.assign(ss, ee - ss);
-                        break;
-                    case VALUE_INDEX:
-                        cookieInfo.value.assign(ss, ee - ss);
-                        break;
+                case DOMAIN_INDEX:
+                    cookieInfo.domain.assign(ss, ee - ss);
+                    break;
+                case PATH_INDEX:
+                    cookieInfo.path.assign(ss, ee - ss);
+                    break;
+                case SECURE_INDEX:
+                    cookieInfo.secure = cxx17::string_view{ss, (size_t)(ee - ss)} == "TRUE"_sv;
+                    break;
+                case EXPIRES_INDEX:
+                    cookieInfo.expires = static_cast<time_t>(strtoll(ss, nullptr, 10));
+                    break;
+                case NAME_INDEX:
+                    cookieInfo.name.assign(ss, ee - ss);
+                    break;
+                case VALUE_INDEX:
+                    cookieInfo.value.assign(ss, ee - ss);
+                    break;
                 }
-                *ee = ch; // restore
+                *ee = ch;  // restore
                 ++count;
             });
             if (count >= 7)
@@ -103,7 +103,7 @@ const std::vector<CookieInfo>* HttpCookie::getCookies() const
 
 const CookieInfo* HttpCookie::getMatchCookie(const Uri& uri) const
 {
-    for(auto& cookie : _cookies)
+    for (auto& cookie : _cookies)
     {
         if (cxx20::ends_with(uri.getHost(), cookie.domain) && cxx20::starts_with(uri.getPath(), cookie.path))
             return &cookie;
@@ -114,9 +114,9 @@ const CookieInfo* HttpCookie::getMatchCookie(const Uri& uri) const
 
 void HttpCookie::updateOrAddCookie(CookieInfo* cookie)
 {
-    for(auto& _cookie : _cookies)
+    for (auto& _cookie : _cookies)
     {
-        if(cookie->isSame(_cookie))
+        if (cookie->isSame(_cookie))
         {
             _cookie.updateValue(*cookie);
             return;
@@ -131,8 +131,7 @@ std::string HttpCookie::checkAndGetFormatedMatchCookies(const Uri& uri)
     for (auto iter = _cookies.begin(); iter != _cookies.end();)
     {
         auto& cookie = *iter;
-        if (cxx20::ends_with(uri.getHost(), cookie.domain) &&
-            cxx20::starts_with(uri.getPath(), cookie.path))
+        if (cxx20::ends_with(uri.getHost(), cookie.domain) && cxx20::starts_with(uri.getPath(), cookie.path))
         {
             if (yasio::time_now() >= cookie.expires)
             {
@@ -159,7 +158,7 @@ bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
     xsbase::nzls::fast_split(cookie.c_str(), cookie.length(), ';', [&](const char* start, const char* end) {
         unsigned int count_ = 0;
         while (*start == ' ')
-            ++start; // skip ws
+            ++start;  // skip ws
         if (++count > 1)
         {
             cxx17::string_view key;
@@ -167,12 +166,12 @@ bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
             xsbase::fast_split(start, end - start, '=', [&](const char* s, const char* e) {
                 switch (++count_)
                 {
-                    case 1:
-                        key = cxx17::string_view(s, e - s);
-                        break;
-                    case 2:
-                        value = cxx17::string_view(s, e - s);
-                        break;
+                case 1:
+                    key = cxx17::string_view(s, e - s);
+                    break;
+                case 2:
+                    value = cxx17::string_view(s, e - s);
+                    break;
                 }
             });
 
@@ -195,10 +194,11 @@ bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
                 if (expires_ctime.empty())
                     return;
                 size_t off = 0;
-                auto p = expires_ctime.find_first_of(',');
-                if (p != std::string::npos) {
-                    p = expires_ctime.find_first_not_of(' ', p + 1); // skip ws
-                    if (p != std::string::npos) 
+                auto p     = expires_ctime.find_first_of(',');
+                if (p != std::string::npos)
+                {
+                    p = expires_ctime.find_first_not_of(' ', p + 1);  // skip ws
+                    if (p != std::string::npos)
                         off = p;
                 }
 
@@ -207,29 +207,32 @@ bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
                 ss >> std::get_time(&dt, "%d %b %Y %H:%M:%S");
                 if (!ss.fail())
                     info.expires = mktime(&dt);
-                else {
+                else
+                {
                     ss.str("");
                     ss.clear();
                     ss << (&expires_ctime[off]);
                     ss >> std::get_time(&dt, "%d-%b-%Y %H:%M:%S");
-                    if (!ss.fail()) 
+                    if (!ss.fail())
                         info.expires = mktime(&dt);
                 }
             }
-            else if (cxx20::ic::iequals(key, "secure"_sv)) {
+            else if (cxx20::ic::iequals(key, "secure"_sv))
+            {
                 info.secure = true;
             }
         }
-        else { // first is cookie name
+        else
+        {  // first is cookie name
             xsbase::fast_split(start, end - start, '=', [&](const char* s, const char* e) {
                 switch (++count_)
                 {
-                    case 1:
-                        info.name.assign(s, e - s);
-                        break;
-                    case 2:
-                        info.value.assign(s, e - s);
-                        break;
+                case 1:
+                    info.name.assign(s, e - s);
+                    break;
+                case 2:
+                    info.value.assign(s, e - s);
+                    break;
                 }
             });
         }
@@ -249,18 +252,19 @@ bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
 
 void HttpCookie::writeFile()
 {
-    FILE *out;
+    FILE* out;
     out = fopen(_cookieFileName.c_str(), "wb");
-    fputs("# Netscape HTTP Cookie File\n"
-          "# http://curl.haxx.se/docs/http-cookies.html\n"
-          "# This file was generated by adxe! Edit at your own risk.\n"
-          "# Test adxe cookie write.\n\n",
-          out);
+    fputs(
+        "# Netscape HTTP Cookie File\n"
+        "# http://curl.haxx.se/docs/http-cookies.html\n"
+        "# This file was generated by adxe! Edit at your own risk.\n"
+        "# Test adxe cookie write.\n\n",
+        out);
 
     std::string line;
 
-    char expires[32] = { 0 }; // LONGLONG_STRING_SIZE=20
-    for(auto& cookie : _cookies)
+    char expires[32] = {0};  // LONGLONG_STRING_SIZE=20
+    for (auto& cookie : _cookies)
     {
         line.clear();
         line.append(cookie.domain);
@@ -277,7 +281,7 @@ void HttpCookie::writeFile()
         line.append(cookie.name);
         line.append(1, '\t');
         line.append(cookie.value);
-        //line.append(1, '\n');
+        // line.append(1, '\n');
 
         fprintf(out, "%s\n", line.c_str());
     }

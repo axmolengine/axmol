@@ -29,94 +29,94 @@ THE SOFTWARE.
 #include "DictionaryHelper.h"
 #include "CocosStudioExport.h"
 
-namespace cocostudio {
-    
+namespace cocostudio
+{
+
 class CocoLoader;
 struct stExpCocoNode;
 
-class CCS_DLL ActionManagerEx:public cocos2d::Ref
+class CCS_DLL ActionManagerEx : public cocos2d::Ref
 {
 public:
-
     /**
-    * Default constructor
-    * @js ctor
-    */
+     * Default constructor
+     * @js ctor
+     */
     ActionManagerEx();
 
     /**
-    * Default destructor
-    * @js NA
-    * @lua NA
-    */
+     * Default destructor
+     * @js NA
+     * @lua NA
+     */
     virtual ~ActionManagerEx();
 
     /**
-    * Gets the static instance of ActionManager.
-    * @js getInstance
-    * @lua getInstance
-    */
+     * Gets the static instance of ActionManager.
+     * @js getInstance
+     * @lua getInstance
+     */
     static ActionManagerEx* getInstance();
 
     /**
-    * Purges ActionManager point.
-    * @js purge
-    * @lua destroyActionManager
-    */
+     * Purges ActionManager point.
+     * @js purge
+     * @lua destroyActionManager
+     */
     static void destroyInstance();
 
     /**
-    * Gets an ActionObject with a name.
-    *
-    * @param jsonName  UI file name
-    *
-    * @param actionName  action name in the UI file.
-    *
-    * @return  ActionObject which named as the param name
-    */
-    ActionObject* getActionByName(const char* jsonName,const char* actionName);
+     * Gets an ActionObject with a name.
+     *
+     * @param jsonName  UI file name
+     *
+     * @param actionName  action name in the UI file.
+     *
+     * @return  ActionObject which named as the param name
+     */
+    ActionObject* getActionByName(const char* jsonName, const char* actionName);
 
     /**
-    * Play an Action with a name.
-    *
-    * @param jsonName  UI file name
-    *
-    * @param actionName  action name in the UIfile.
-    *
-    * @return  ActionObject which named as the param name
-    */
-    ActionObject* playActionByName(const char* jsonName,const char* actionName);
+     * Play an Action with a name.
+     *
+     * @param jsonName  UI file name
+     *
+     * @param actionName  action name in the UIfile.
+     *
+     * @return  ActionObject which named as the param name
+     */
+    ActionObject* playActionByName(const char* jsonName, const char* actionName);
 
     /**
-    * Play an Action with a name.
-    *
-    * @param jsonName  UI file name
-    *
-    * @param actionName  action name in the UIfile.
-    *
-    * @param func ui action call back
-    */
-    ActionObject* playActionByName(const char* jsonName,const char* actionName, cocos2d::CallFunc* func);
+     * Play an Action with a name.
+     *
+     * @param jsonName  UI file name
+     *
+     * @param actionName  action name in the UIfile.
+     *
+     * @param func ui action call back
+     */
+    ActionObject* playActionByName(const char* jsonName, const char* actionName, cocos2d::CallFunc* func);
 
     /**
-    * Stop an Action with a name.
-    *
-    * @param jsonName  UI file name
-    *
-    * @param actionName  action name in the UIfile.
-    *
-    * @return  ActionObject which named as the param name
-    */
-    ActionObject* stopActionByName(const char* jsonName,const char* actionName);
+     * Stop an Action with a name.
+     *
+     * @param jsonName  UI file name
+     *
+     * @param actionName  action name in the UIfile.
+     *
+     * @return  ActionObject which named as the param name
+     */
+    ActionObject* stopActionByName(const char* jsonName, const char* actionName);
 
     /*init properties with json dictionary*/
-    void initWithDictionary(const char* jsonName,const rapidjson::Value &dic, Ref* root, int version = 1600);
-    void initWithBinary(const char* file, Ref* root,  CocoLoader* cocoLoader, stExpCocoNode*    pCocoNode);
+    void initWithDictionary(const char* jsonName, const rapidjson::Value& dic, Ref* root, int version = 1600);
+    void initWithBinary(const char* file, Ref* root, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
 
     /**
-    * Release all actions.
-    *
-    */
+     * Release all actions.
+     *
+     */
     void releaseActions();
 
     int getStudioVersionNumber() const;
@@ -126,6 +126,6 @@ protected:
     int _studioVersionNumber;
 };
 
-}
+}  // namespace cocostudio
 
 #endif

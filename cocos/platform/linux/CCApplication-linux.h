@@ -64,7 +64,7 @@ public:
 
     /** @deprecated Use getInstance() instead */
     CC_DEPRECATED_ATTRIBUTE static Application* sharedApplication();
-    
+
     /* override functions */
     virtual LanguageType getCurrentLanguage() override;
 
@@ -72,8 +72,8 @@ public:
     @brief Get current language iso 639-1 code
     @return Current language iso 639-1 code
     */
-    virtual const char * getCurrentLanguageCode() override;
-    
+    virtual const char* getCurrentLanguageCode() override;
+
     /**
     @brief Get application version
     */
@@ -84,30 +84,30 @@ public:
      @param String with url to open.
      @return true if the resource located by the URL was successfully opened; otherwise false.
      */
-    virtual bool openURL(const std::string &url) override;
-
+    virtual bool openURL(const std::string& url) override;
 
     /**
      *  Sets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
      */
     CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string& rootResDir);
-    
-    /** 
+
+    /**
      *  Gets the Resource root path.
-     *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead. 
+     *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead.
      */
     CC_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath();
-    
+
     /**
      @brief Get target platform
      */
     virtual Platform getTargetPlatform() override;
+
 protected:
-    int32_t     _animationInterval;  //micro second
+    int32_t _animationInterval;  // micro second
     std::string _resourceRootPath;
-    
-    static Application * sm_pSharedApplication;
+
+    static Application* sm_pSharedApplication;
 };
 
 NS_CC_END

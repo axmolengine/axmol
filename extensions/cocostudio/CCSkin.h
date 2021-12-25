@@ -32,14 +32,16 @@ THE SOFTWARE.
 #include "CCBone.h"
 #include "CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CCS_DLL Skin : public cocos2d::Sprite
 {
 public:
-    static Skin *create();
-    static Skin *createWithSpriteFrameName(const std::string& pszSpriteFrameName);
-    static Skin *create(const std::string& pszFileName);
+    static Skin* create();
+    static Skin* createWithSpriteFrameName(const std::string& pszSpriteFrameName);
+    static Skin* create(const std::string& pszFileName);
+
 public:
     /**
      *  @js ctor
@@ -54,33 +56,34 @@ public:
 
     cocos2d::Mat4 getNodeToWorldTransform() const override;
     cocos2d::Mat4 getNodeToWorldTransformAR() const;
-    
-    virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags) override;
-    
+
+    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+
     /**
      *  @js NA
      *  @lua NA
      */
-    virtual void setSkinData(const BaseData &data);
+    virtual void setSkinData(const BaseData& data);
     /**
      *  @js NA
      *  @lua NA
      */
-    virtual const BaseData &getSkinData() const;
+    virtual const BaseData& getSkinData() const;
 
-    virtual void setBone(Bone *bone);
-    virtual Bone *getBone() const;
+    virtual void setBone(Bone* bone);
+    virtual Bone* getBone() const;
 
-    virtual const std::string &getDisplayName() const { return _displayName; }
+    virtual const std::string& getDisplayName() const { return _displayName; }
+
 protected:
     BaseData _skinData;
-    Bone *_bone;
-    Armature *_armature;
+    Bone* _bone;
+    Armature* _armature;
     cocos2d::Mat4 _skinTransform;
     std::string _displayName;
-    cocos2d::QuadCommand _quadCommand;     // quad command
+    cocos2d::QuadCommand _quadCommand;  // quad command
 };
 
-}
+}  // namespace cocostudio
 
 #endif /*__CCSKIN_H__*/

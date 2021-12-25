@@ -27,11 +27,12 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
-
-DecorativeDisplay *DecorativeDisplay::create()
+namespace cocostudio
 {
-    DecorativeDisplay *pDisplay = new DecorativeDisplay();
+
+DecorativeDisplay* DecorativeDisplay::create()
+{
+    DecorativeDisplay* pDisplay = new DecorativeDisplay();
     if (pDisplay->init())
     {
         pDisplay->autorelease();
@@ -41,16 +42,13 @@ DecorativeDisplay *DecorativeDisplay::create()
     return nullptr;
 }
 
-DecorativeDisplay::DecorativeDisplay()
-    : _display(nullptr)
-    , _displayData(nullptr)
+DecorativeDisplay::DecorativeDisplay() : _display(nullptr), _displayData(nullptr)
 
 {
 #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     _colliderDetector = nullptr;
 #endif
 }
-
 
 DecorativeDisplay::~DecorativeDisplay(void)
 {
@@ -67,7 +65,7 @@ bool DecorativeDisplay::init()
     return true;
 }
 
-void DecorativeDisplay::setDisplay(cocos2d::Node *display)
+void DecorativeDisplay::setDisplay(cocos2d::Node* display)
 {
     if (_display != display)
     {
@@ -76,5 +74,5 @@ void DecorativeDisplay::setDisplay(cocos2d::Node *display)
         _display = display;
     }
 }
-    
-}
+
+}  // namespace cocostudio

@@ -22,14 +22,16 @@
 #include "astc/astcenc_internal.h"
 #include "yasio/detail/utils.hpp"
 
-#define ASTCDEC_NO_CONTEXT      1
+#define ASTCDEC_NO_CONTEXT 1
 #define ASTCDEC_PRINT_BENCHMARK 0
 
 typedef std::mutex astc_decompress_mutex_t;
 
-struct astc_decompress_task {
+struct astc_decompress_task
+{
     astc_decompress_task() {}
-    ~astc_decompress_task() {
+    ~astc_decompress_task()
+    {
 #if ASTCDEC_NO_CONTEXT
         term_block_size_descriptor(_bsd);
 #else
@@ -38,7 +40,8 @@ struct astc_decompress_task {
 #endif
     }
 
-    void wait_done() {
+    void wait_done()
+    {
 #if ASTCDEC_NO_CONTEXT
         _decompress_pm.wait();
 #else
@@ -60,20 +63,25 @@ struct astc_decompress_task {
     astcenc_image _image_out{};
 };
 
-class astc_decompress_job_manager {
+class astc_decompress_job_manager
+{
 public:
-    static astc_decompress_job_manager* get_instance() {
+    static astc_decompress_job_manager* get_instance()
+    {
         static astc_decompress_job_manager s_instance;
         return &s_instance;
     }
-    astc_decompress_job_manager() {
+    astc_decompress_job_manager()
+    {
         int thread_count = std::thread::hardware_concurrency();
-        for (int i = 0; i < thread_count; ++i) {
+        for (int i = 0; i < thread_count; ++i)
+        {
             _threads.push_back(std::thread{&astc_decompress_job_manager::run, this});
         }
     }
 
-    ~astc_decompress_job_manager() {
+    ~astc_decompress_job_manager()
+    {
         _stopped = true;
 
         _task_queue_mtx.lock();
@@ -81,15 +89,22 @@ public:
         _task_queue_cv.notify_all();
         _task_queue_mtx.unlock();
 
-        for (auto& t : _threads) {
+        for (auto& t : _threads)
+        {
             if (t.joinable())
                 t.join();
         }
         _threads.clear();
     }
 
-    int decompress_parallel_sync(const uint8_t* in, uint32_t inlen, uint8_t* out, unsigned int dim_x,
-        unsigned int dim_y, int block_x, int block_y) {
+    int decompress_parallel_sync(const uint8_t* in,
+                                 uint32_t inlen,
+                                 uint8_t* out,
+                                 unsigned int dim_x,
+                                 unsigned int dim_y,
+                                 int block_x,
+                                 int block_y)
+    {
 
         auto task = make_task(in, inlen, out, dim_x, dim_y, block_x, block_y);
         if (!task)
@@ -98,7 +113,7 @@ public:
         _task_queue_mtx.lock();
         _task_queue.push_back(task);
         _task_queue_mtx.unlock();
-        _task_queue_cv.notify_all(); // notify all thread to process the single decompress task parallel
+        _task_queue_cv.notify_all();  // notify all thread to process the single decompress task parallel
 
         task->wait_done();
 
@@ -113,11 +128,17 @@ public:
     }
 
 private:
-    std::shared_ptr<astc_decompress_task> make_task(const uint8_t* in, unsigned int inlen, uint8_t* out,
-        unsigned int dim_x, unsigned int dim_y, int block_x, int block_y) {
+    std::shared_ptr<astc_decompress_task> make_task(const uint8_t* in,
+                                                    unsigned int inlen,
+                                                    uint8_t* out,
+                                                    unsigned int dim_x,
+                                                    unsigned int dim_y,
+                                                    int block_x,
+                                                    int block_y)
+    {
         unsigned int xblocks = (dim_x + block_x - 1) / block_x;
         unsigned int yblocks = (dim_y + block_y - 1) / block_y;
-        unsigned int zblocks = 1; // (dim_z + block_z - 1) / block_z;
+        unsigned int zblocks = 1;  // (dim_z + block_z - 1) / block_z;
 
         // Check we have enough output space (16 bytes per block)
         auto total_blocks  = xblocks * yblocks * zblocks;
@@ -133,28 +154,29 @@ private:
         task->_xblocks = xblocks;
         task->_yblocks = yblocks;
 #if ASTCDEC_NO_CONTEXT
-        //since astcenc-3.3, doesn't required
-        //static std::once_flag once_flag;
-        //std::call_once(once_flag, init_quant_mode_table);
+        // since astcenc-3.3, doesn't required
+        // static std::once_flag once_flag;
+        // std::call_once(once_flag, init_quant_mode_table);
 
         task->_block_x = block_x;
         task->_block_y = block_y;
         init_block_size_descriptor(block_x, block_y, 1, false, 0 /*unused for decompress*/, task->_bsd);
         task->_decompress_pm.init(total_blocks);
 #else
-        (void) astcenc_config_init(
-            ASTCENC_PRF_LDR, block_x, block_y, 1, 0, ASTCENC_FLG_DECOMPRESS_ONLY, &task->_config);
-        (void) astcenc_context_alloc(&task->_config, (unsigned int) _threads.size(), &task->_context);
+        (void)astcenc_config_init(ASTCENC_PRF_LDR, block_x, block_y, 1, 0, ASTCENC_FLG_DECOMPRESS_ONLY, &task->_config);
+        (void)astcenc_context_alloc(&task->_config, (unsigned int)_threads.size(), &task->_context);
         task->_context->manage_decompress.init(total_blocks);
 #endif
         return task;
     }
-    void run() {
+    void run()
+    {
         const astcenc_swizzle swz_decode{ASTCENC_SWZ_R, ASTCENC_SWZ_G, ASTCENC_SWZ_B, ASTCENC_SWZ_A};
 
         bool no_task_count = false;
 
-        for (;;) {
+        for (;;)
+        {
             std::unique_lock<astc_decompress_mutex_t> lck(_task_queue_mtx);
             if (!_stopped && (_task_queue.empty() || no_task_count))
                 _task_queue_cv.wait(lck);
@@ -165,42 +187,45 @@ private:
             if (_task_queue.empty())
                 continue;
             auto task = _task_queue.front();
-            lck.unlock(); // unlock make sure other thread can work for the task
+            lck.unlock();  // unlock make sure other thread can work for the task
 
             auto& image_out = task->_image_out;
 
 #if ASTCDEC_NO_CONTEXT
             unsigned int block_x = task->_block_x;
             unsigned int block_y = task->_block_y;
-            unsigned int block_z = 1; // task->block_z;
+            unsigned int block_z = 1;  // task->block_z;
             auto& bsd            = task->_bsd;
             auto& decompress_pm  = task->_decompress_pm;
 #else
             unsigned int block_x = task->_config.block_x;
             unsigned int block_y = task->_config.block_y;
-            unsigned int block_z = 1; // task->_config.block_z;
+            unsigned int block_z = 1;  // task->_config.block_z;
             auto& bsd = *task->_context->bsd;
             auto& decompress_pm = task->_context->manage_decompress;
 #endif
             unsigned int xblocks = task->_xblocks;
             unsigned int yblocks = task->_yblocks;
-            unsigned int zblocks = 1; // (image_out.dim_z + block_z - 1) / block_z;
+            unsigned int zblocks = 1;  // (image_out.dim_z + block_z - 1) / block_z;
 
             int row_blocks   = xblocks;
             int plane_blocks = xblocks * yblocks;
 
             image_block blk;
             auto data = task->_in_texels;
-            for (;;) { // process the task
+            for (;;)
+            {  // process the task
                 unsigned int count = 0;
                 unsigned int base  = decompress_pm.get_task_assignment(128, count);
 
                 no_task_count = !count;
-                if (no_task_count) { // this thread will going to suspend until new task added
+                if (no_task_count)
+                {  // this thread will going to suspend until new task added
                     break;
                 }
 
-                for (unsigned int i = base; i < base + count; i++) {
+                for (unsigned int i = base; i < base + count; i++)
+                {
                     // Decode i into x, y, z block indices
                     int z            = i / plane_blocks;
                     unsigned int rem = i - (z * plane_blocks);
@@ -209,7 +234,7 @@ private:
 
                     unsigned int offset           = (((z * yblocks + y) * xblocks) + x) * 16;
                     const uint8_t* bp             = data + offset;
-                    physical_compressed_block pcb = *(const physical_compressed_block*) bp;
+                    physical_compressed_block pcb = *(const physical_compressed_block*)bp;
                     symbolic_compressed_block scb;
 
                     physical_to_symbolic(bsd, pcb, scb);
@@ -233,22 +258,28 @@ private:
     bool _stopped = false;
 };
 
-int astc_decompress_image(const uint8_t* in, uint32_t inlen, uint8_t* out, uint32_t dim_x, uint32_t dim_y,
-    uint32_t block_x, uint32_t block_y) {
+int astc_decompress_image(const uint8_t* in,
+                          uint32_t inlen,
+                          uint8_t* out,
+                          uint32_t dim_x,
+                          uint32_t dim_y,
+                          uint32_t block_x,
+                          uint32_t block_y)
+{
 #if ASTCDEC_PRINT_BENCHMARK
-    struct benchmark_printer {
+    struct benchmark_printer
+    {
         benchmark_printer(const char* fmt, int w, int h, float den)
-            : _fmt(fmt), _w(w), _h(h), _den(den), _start(yasio::highp_clock()) {}
-        ~benchmark_printer() {
-            cocos2d::log(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den);
-        }
+            : _fmt(fmt), _w(w), _h(h), _den(den), _start(yasio::highp_clock())
+        {}
+        ~benchmark_printer() { cocos2d::log(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den); }
         const char* _fmt;
         int _w, _h;
         float _den;
         yasio::highp_time_t _start;
     };
-    benchmark_printer __printer("decompress astc image (%dx%d) cost: %.3lf(ms)", dim_x, dim_y, (float) std::milli::den);
+    benchmark_printer __printer("decompress astc image (%dx%d) cost: %.3lf(ms)", dim_x, dim_y, (float)std::milli::den);
 #endif
-    return astc_decompress_job_manager::get_instance()->decompress_parallel_sync(
-        in, inlen, out, dim_x, dim_y, block_x, block_y);
+    return astc_decompress_job_manager::get_instance()->decompress_parallel_sync(in, inlen, out, dim_x, dim_y, block_x,
+                                                                                 block_y);
 }

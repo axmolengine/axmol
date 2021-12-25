@@ -35,25 +35,18 @@ NS_TIMELINE_BEGIN
 
 typedef struct AnimationInfo
 {
-    AnimationInfo()
-        :startIndex(0)
-        ,endIndex(0)
-    {
-    }
+    AnimationInfo() : startIndex(0), endIndex(0) {}
 
     AnimationInfo(const std::string& otherName, int otherStartIndex, int otherEndIndex)
-    :name(otherName)
-    ,startIndex(otherStartIndex)
-    ,endIndex(otherEndIndex)
-    {
-    }
+        : name(otherName), startIndex(otherStartIndex), endIndex(otherEndIndex)
+    {}
 
     std::string name;
     int startIndex;
     int endIndex;
 
-    //need set call back before clip added to ActionTimeline
-    // or see @ActionTimeline::setAnimationEndCallBack
+    // need set call back before clip added to ActionTimeline
+    //  or see @ActionTimeline::setAnimationEndCallBack
     std::function<void()> clipEndCallBack;
 } AnimationClip;
 
@@ -94,22 +87,22 @@ public:
 
     /** Goto the specified frame index, and start playing from this index.
      * @param startIndex The animation will play from this index.
-     * @param loop Whether or not the animation need loop. 
+     * @param loop Whether or not the animation need loop.
      */
     virtual void gotoFrameAndPlay(int startIndex, bool loop);
 
     /** Goto the specified frame index, and start playing from start index, end at end index.
      * @param startIndex The animation will play from this index.
      * @param endIndex The animation will end at this index.
-     * @param loop Whether or not the animation need loop. 
+     * @param loop Whether or not the animation need loop.
      */
     virtual void gotoFrameAndPlay(int startIndex, int endIndex, bool loop);
 
     /** Goto the specified frame index, and start playing from start index, end at end index.
      * @param startIndex The animation will play from this index.
      * @param endIndex The animation will end at this index.
-     * @param currentFrameIndex set current frame index. 
-     * @param loop Whether or not the animation need loop. 
+     * @param currentFrameIndex set current frame index.
+     * @param loop Whether or not the animation need loop.
      */
     virtual void gotoFrameAndPlay(int startIndex, int endIndex, int currentFrameIndex, bool loop);
 
@@ -127,33 +120,33 @@ public:
     virtual bool isPlaying() const;
 
     /** Set the animation speed, this will speed up or slow down the speed. */
-    virtual void  setTimeSpeed(float speed) { _timeSpeed = speed; }
+    virtual void setTimeSpeed(float speed) { _timeSpeed = speed; }
     /** Get current animation speed. */
     virtual float getTimeSpeed() const { return _timeSpeed; }
 
     /** duration of the whole action*/
     virtual void setDuration(int duration) { _duration = duration; }
-    virtual int  getDuration() const { return _duration; }
+    virtual int getDuration() const { return _duration; }
 
     /** Start frame index of this action*/
     virtual int getStartFrame() const { return _startFrame; }
 
     /** End frame of this action.
-      * When action play to this frame, if action is not loop, then it will stop, 
-      * or it will play from start frame again. */
-    virtual int  getEndFrame() const { return _endFrame; }
+     * When action play to this frame, if action is not loop, then it will stop,
+     * or it will play from start frame again. */
+    virtual int getEndFrame() const { return _endFrame; }
 
     /** Set current frame index, this will cause action plays to this frame. */
     virtual void setCurrentFrame(int frameIndex);
     /** Get current frame. */
-    virtual int  getCurrentFrame() const { return _currentFrame; }
+    virtual int getCurrentFrame() const { return _currentFrame; }
 
     /** add Timeline to ActionTimeline */
     virtual void addTimeline(Timeline* timeline);
     virtual void removeTimeline(Timeline* timeline);
 
     virtual const cocos2d::Vector<Timeline*>& getTimelines() const { return _timelineList; }
-    
+
     /** AnimationInfo*/
     virtual void addAnimationInfo(const AnimationInfo& animationInfo);
     virtual void removeAnimationInfo(std::string animationName);
@@ -166,7 +159,7 @@ public:
     virtual void setAnimationEndCallFunc(const std::string animationName, std::function<void()> func);
 
     /** Set ActionTimeline's frame event callback function */
-    void setFrameEventCallFunc(std::function<void(Frame *)> listener);
+    void setFrameEventCallFunc(std::function<void(Frame*)> listener);
     void clearFrameEventCallFunc();
 
     /** Last frame callback will call when arriving last frame */
@@ -189,17 +182,17 @@ public:
     /** Inherit from Action. */
 
     /** Returns a clone of ActionTimeline */
-    virtual ActionTimeline* clone() const override; 
+    virtual ActionTimeline* clone() const override;
 
-    /** Returns a reverse of ActionTimeline. 
+    /** Returns a reverse of ActionTimeline.
      *  Not implement yet.
      */
     virtual ActionTimeline* reverse() const override { return nullptr; }
 
-    virtual void step(float delta) override; 
-    virtual void startWithTarget(cocos2d::Node *target) override;  
+    virtual void step(float delta) override;
+    virtual void startWithTarget(cocos2d::Node* target) override;
     virtual bool isDone() const override { return false; }
-    
+
     /// @{
     /// @name implement Playable Protocol
     virtual void start() override;
@@ -219,23 +212,22 @@ protected:
     std::map<int, cocos2d::Vector<Timeline*>> _timelineMap;
     cocos2d::Vector<Timeline*> _timelineList;
 
-    int     _duration;
-    double  _time;
-    float   _timeSpeed;
-    float   _frameInternal;
-    bool    _playing;
-    int     _currentFrame;
-    int     _startFrame;
-    int     _endFrame;
-    bool    _loop;
+    int _duration;
+    double _time;
+    float _timeSpeed;
+    float _frameInternal;
+    bool _playing;
+    int _currentFrame;
+    int _startFrame;
+    int _endFrame;
+    bool _loop;
 
     std::function<void(Frame*)> _frameEventListener;
     std::function<void()> _lastFrameListener;
-    std::map<int, std::map<std::string, std::function<void()> > > _frameEndCallFuncs;
+    std::map<int, std::map<std::string, std::function<void()>>> _frameEndCallFuncs;
     std::map<std::string, AnimationInfo> _animationInfos;
 };
 
 NS_TIMELINE_END
-
 
 #endif /*__CCTIMELINE_ACTION_H__*/

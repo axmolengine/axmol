@@ -77,6 +77,4 @@ Vec2 CC_DLL SizeFromString(const std::string& str);
 
 NS_CC_END
 
-#endif // __PLATFORM_CCNS_H__
-
-
+#endif  // __PLATFORM_CCNS_H__

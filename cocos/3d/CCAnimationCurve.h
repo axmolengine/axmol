@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -44,7 +44,7 @@ NS_CC_BEGIN
  */
 enum class EvaluateType
 {
-    INT_LINEAR, 
+    INT_LINEAR,
     INT_NEAR,
     INT_QUAT_SLERP,
     INT_USER_FUNCTION,
@@ -56,13 +56,12 @@ enum class EvaluateType
  * @lua NA
  */
 template <int componentSize>
-class AnimationCurve: public Ref
+class AnimationCurve : public Ref
 {
 public:
-    
     /**create animation curve*/
     static AnimationCurve* create(float* keytime, float* value, int count);
-    
+
     /**
      * evaluate value of time
      * @param time Time to be estimated
@@ -70,34 +69,33 @@ public:
      * @param type EvaluateType
      */
     void evaluate(float time, float* dst, EvaluateType type) const;
-    
+
     /**set evaluate function, allow the user use own function*/
     void setEvaluateFun(std::function<void(float time, float* dst)> fun);
-    
+
     /**get start time*/
     float getStartTime() const;
-    
+
     /**get end time*/
     float getEndTime() const;
-    
-CC_CONSTRUCTOR_ACCESS:
-    
-    AnimationCurve();
+
+    CC_CONSTRUCTOR_ACCESS :
+
+        AnimationCurve();
     virtual ~AnimationCurve();
-    
+
     /**
      * Determine index by time.
      */
     int determineIndex(float time) const;
-    
+
 protected:
-    
-    float* _value;   //
-    float* _keytime; //key time(0 - 1), start time _keytime[0], end time _keytime[_count - 1]
+    float* _value;    //
+    float* _keytime;  // key time(0 - 1), start time _keytime[0], end time _keytime[_count - 1]
     int _count;
-    int _componentSizeByte; //component size in byte, position and scale 3 * sizeof(float), rotation 4 * sizeof(float)
-    
-    std::function<void(float time, float* dst)> _evaluateFun; //user defined function
+    int _componentSizeByte;  // component size in byte, position and scale 3 * sizeof(float), rotation 4 * sizeof(float)
+
+    std::function<void(float time, float* dst)> _evaluateFun;  // user defined function
 };
 
 // end of 3d group

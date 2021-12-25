@@ -26,7 +26,8 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 AffineTransform TransformHelp::helpMatrix1;
 AffineTransform TransformHelp::helpMatrix2;
@@ -36,11 +37,9 @@ Vec2 TransformHelp::helpPoint2;
 
 BaseData helpParentNode;
 
-TransformHelp::TransformHelp()
-{
-}
+TransformHelp::TransformHelp() {}
 
-void TransformHelp::transformFromParent(BaseData &node, const BaseData &parentNode)
+void TransformHelp::transformFromParent(BaseData& node, const BaseData& parentNode)
 {
     nodeToMatrix(node, helpMatrix1);
     nodeToMatrix(parentNode, helpMatrix2);
@@ -51,7 +50,7 @@ void TransformHelp::transformFromParent(BaseData &node, const BaseData &parentNo
     matrixToNode(helpMatrix1, node);
 }
 
-void TransformHelp::transformToParent(BaseData &node, const BaseData &parentNode)
+void TransformHelp::transformToParent(BaseData& node, const BaseData& parentNode)
 {
 
     nodeToMatrix(node, helpMatrix1);
@@ -62,7 +61,7 @@ void TransformHelp::transformToParent(BaseData &node, const BaseData &parentNode
     matrixToNode(helpMatrix1, node);
 }
 
-void TransformHelp::transformFromParentWithoutScale(BaseData &node, const BaseData &parentNode)
+void TransformHelp::transformFromParentWithoutScale(BaseData& node, const BaseData& parentNode)
 {
 
     helpParentNode.copy(&parentNode);
@@ -78,7 +77,7 @@ void TransformHelp::transformFromParentWithoutScale(BaseData &node, const BaseDa
     matrixToNode(helpMatrix1, node);
 }
 
-void TransformHelp::transformToParentWithoutScale(BaseData &node, const BaseData &parentNode)
+void TransformHelp::transformToParentWithoutScale(BaseData& node, const BaseData& parentNode)
 {
 
     helpParentNode.copy(&parentNode);
@@ -93,13 +92,13 @@ void TransformHelp::transformToParentWithoutScale(BaseData &node, const BaseData
     matrixToNode(helpMatrix1, node);
 }
 
-void TransformHelp::nodeToMatrix(const BaseData &node, AffineTransform &matrix)
+void TransformHelp::nodeToMatrix(const BaseData& node, AffineTransform& matrix)
 {
     if (node.skewX == -node.skewY)
     {
         double sine   = sin(node.skewX);
         double cosine = cos(node.skewX);
-        
+
         matrix.a = node.scaleX * cosine;
         matrix.b = node.scaleX * -sine;
         matrix.c = node.scaleY * sine;
@@ -117,7 +116,7 @@ void TransformHelp::nodeToMatrix(const BaseData &node, AffineTransform &matrix)
     matrix.ty = node.y;
 }
 
-void TransformHelp::nodeToMatrix(const BaseData &node, Mat4 &matrix)
+void TransformHelp::nodeToMatrix(const BaseData& node, Mat4& matrix)
 {
     matrix = Mat4::IDENTITY;
 
@@ -138,13 +137,12 @@ void TransformHelp::nodeToMatrix(const BaseData &node, Mat4 &matrix)
         matrix.m[4] = node.scaleY * sin(node.skewX);
         matrix.m[5] = node.scaleY * cos(node.skewX);
     }
-    
+
     matrix.m[12] = node.x;
     matrix.m[13] = node.y;
 }
 
-
-void TransformHelp::matrixToNode(const AffineTransform &matrix, BaseData &node)
+void TransformHelp::matrixToNode(const AffineTransform& matrix, BaseData& node)
 {
     /*
      *  In as3 language, there is a function called "deltaTransformPoint", it calculate a point used give Transform
@@ -152,25 +150,25 @@ void TransformHelp::matrixToNode(const AffineTransform &matrix, BaseData &node)
      */
     helpPoint1.x = 0;
     helpPoint1.y = 1;
-    helpPoint1 = PointApplyAffineTransform(helpPoint1, matrix);
+    helpPoint1   = PointApplyAffineTransform(helpPoint1, matrix);
     helpPoint1.x -= matrix.tx;
     helpPoint1.y -= matrix.ty;
 
     helpPoint2.x = 1;
     helpPoint2.y = 0;
-    helpPoint2 = PointApplyAffineTransform(helpPoint2, matrix);
+    helpPoint2   = PointApplyAffineTransform(helpPoint2, matrix);
     helpPoint2.x -= matrix.tx;
     helpPoint2.y -= matrix.ty;
 
-    node.skewX = -(atan2f(helpPoint1.y, helpPoint1.x) - 1.5707964f);
-    node.skewY = atan2f(helpPoint2.y, helpPoint2.x);
+    node.skewX  = -(atan2f(helpPoint1.y, helpPoint1.x) - 1.5707964f);
+    node.skewY  = atan2f(helpPoint2.y, helpPoint2.x);
     node.scaleX = sqrt(matrix.a * matrix.a + matrix.b * matrix.b);
     node.scaleY = sqrt(matrix.c * matrix.c + matrix.d * matrix.d);
-    node.x = matrix.tx;
-    node.y = matrix.ty;
+    node.x      = matrix.tx;
+    node.y      = matrix.ty;
 }
 
-void TransformHelp::matrixToNode(const Mat4 &matrix, BaseData &node)
+void TransformHelp::matrixToNode(const Mat4& matrix, BaseData& node)
 {
     /*
      *  In as3 language, there is a function called "deltaTransformPoint", it calculate a point used give Transform
@@ -178,26 +176,25 @@ void TransformHelp::matrixToNode(const Mat4 &matrix, BaseData &node)
      */
     helpPoint1.x = 0;
     helpPoint1.y = 1;
-    helpPoint1 = PointApplyTransform(helpPoint1, matrix);
+    helpPoint1   = PointApplyTransform(helpPoint1, matrix);
     helpPoint1.x -= matrix.m[12];
     helpPoint1.y -= matrix.m[13];
 
     helpPoint2.x = 1;
     helpPoint2.y = 0;
-    helpPoint2 = PointApplyTransform(helpPoint2, matrix);
+    helpPoint2   = PointApplyTransform(helpPoint2, matrix);
     helpPoint2.x -= matrix.m[12];
     helpPoint2.y -= matrix.m[13];
 
-    node.skewX = -(atan2f(helpPoint1.y, helpPoint1.x) - 1.5707964f);
-    node.skewY = atan2f(helpPoint2.y, helpPoint2.x);
+    node.skewX  = -(atan2f(helpPoint1.y, helpPoint1.x) - 1.5707964f);
+    node.skewY  = atan2f(helpPoint2.y, helpPoint2.x);
     node.scaleX = sqrt(matrix.m[0] * matrix.m[0] + matrix.m[1] * matrix.m[1]);
     node.scaleY = sqrt(matrix.m[4] * matrix.m[4] + matrix.m[5] * matrix.m[5]);
-    node.x = matrix.m[12];
-    node.y = matrix.m[13];
+    node.x      = matrix.m[12];
+    node.y      = matrix.m[13];
 }
 
-
-void TransformHelp::nodeConcat(BaseData &target, BaseData &source)
+void TransformHelp::nodeConcat(BaseData& target, BaseData& source)
 {
     target.x += source.x;
     target.y += source.y;
@@ -207,7 +204,7 @@ void TransformHelp::nodeConcat(BaseData &target, BaseData &source)
     target.scaleY += source.scaleY;
 }
 
-void TransformHelp::nodeSub(BaseData &target, BaseData &source)
+void TransformHelp::nodeSub(BaseData& target, BaseData& source)
 {
     target.x -= source.x;
     target.y -= source.y;
@@ -217,4 +214,4 @@ void TransformHelp::nodeSub(BaseData &target, BaseData &source)
     target.scaleY -= source.scaleY;
 }
 
-}
+}  // namespace cocostudio

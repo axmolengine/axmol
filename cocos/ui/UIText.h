@@ -40,7 +40,8 @@ NS_CC_BEGIN
 class Label;
 class Sprite;
 
-namespace ui {
+namespace ui
+{
 
 /**
  *  For creating a system font or a TTF font Text
@@ -95,9 +96,7 @@ public:
      * @param fontSize A given font size.
      * @return An autoreleased Text object.
      */
-    static Text* create(const std::string& textContent,
-                        const std::string& fontName,
-                        float fontSize);
+    static Text* create(const std::string& textContent, const std::string& fontName, float fontSize);
 
     /**
      * Changes the string value of label.
@@ -111,7 +110,7 @@ public:
      *
      * @return String value.
      */
-    const std::string& getString()const;
+    const std::string& getString() const;
 
     /**
      * Gets the string length of the label.
@@ -121,7 +120,7 @@ public:
      *
      * @return  String length.
      */
-    ssize_t getStringLength()const;
+    ssize_t getStringLength() const;
 
     /**
      * Sets the font size of label.
@@ -135,7 +134,7 @@ public:
      *
      * @return The font size.
      */
-    float getFontSize()const;
+    float getFontSize() const;
 
     /**
      * Sets the font name of label.
@@ -158,7 +157,7 @@ public:
      *
      * @return Font name.
      */
-    const std::string& getFontName()const;
+    const std::string& getFontName() const;
 
     /** Gets the font type.
      * @return The font type.
@@ -177,12 +176,12 @@ public:
      *
      * @return  Touch scale enabled of label.
      */
-    bool isTouchScaleChangeEnabled()const;
+    bool isTouchScaleChangeEnabled() const;
 
-    //override "getVirtualRendererSize" method of widget.
+    // override "getVirtualRendererSize" method of widget.
     virtual Vec2 getVirtualRendererSize() const override;
 
-    //override "getVirtualRenderer" method of widget.
+    // override "getVirtualRenderer" method of widget.
     virtual Node* getVirtualRenderer() override;
 
     /** Gets the render size in auto mode.
@@ -204,13 +203,13 @@ public:
      * @param size The text rendering area size.
      *
      */
-    void setTextAreaSize(const Vec2 &size);
+    void setTextAreaSize(const Vec2& size);
 
     /** Return the text rendering area size.
      *
      * @return The text rendering area size.
      */
-    const Vec2& getTextAreaSize()const;
+    const Vec2& getTextAreaSize() const;
 
     /** Sets text horizontal alignment.
      *
@@ -222,7 +221,7 @@ public:
      *
      * @return Horizontal text alignment type
      */
-    TextHAlignment getTextHorizontalAlignment()const;
+    TextHAlignment getTextHorizontalAlignment() const;
 
     /** Sets text vertical alignment.
      *
@@ -234,7 +233,7 @@ public:
      *
      * @return Vertical text alignment type
      */
-    TextVAlignment getTextVerticalAlignment()const;
+    TextVAlignment getTextVerticalAlignment() const;
 
     /** Sets text color.
      *
@@ -258,8 +257,8 @@ public:
      * @param blurRadius The blur radius of shadow effect.
      */
     void enableShadow(const Color4B& shadowColor = Color4B::BLACK,
-                      const Vec2 &offset = Vec2(2,-2),
-                      int blurRadius = 0);
+                      const Vec2& offset         = Vec2(2, -2),
+                      int blurRadius             = 0);
 
     /**
      * Enable outline for the label.
@@ -268,7 +267,7 @@ public:
      * @param outlineColor The color of outline.
      * @param outlineSize The size of outline.
      */
-    void enableOutline(const Color4B& outlineColor,int outlineSize = 1);
+    void enableOutline(const Color4B& outlineColor, int outlineSize = 1);
 
     /** Only support for TTF.
      *
@@ -289,49 +288,50 @@ public:
     void disableEffect(LabelEffect effect);
 
     /**
-    * Return whether the shadow effect is enabled.
-    */
+     * Return whether the shadow effect is enabled.
+     */
     bool isShadowEnabled() const;
     /**
-    * Return shadow effect offset value.
-    */
+     * Return shadow effect offset value.
+     */
     Vec2 getShadowOffset() const;
     /**
-    * Return the shadow effect blur radius.
-    */
+     * Return the shadow effect blur radius.
+     */
     float getShadowBlurRadius() const;
     /**
-    * Return the shadow effect color value.
-    */
+     * Return the shadow effect color value.
+     */
     Color4B getShadowColor() const;
     /**
-    * Return the outline effect size value.
-    */
+     * Return the outline effect size value.
+     */
     int getOutlineSize() const;
     /**
-    * Return current effect type.
-    */
+     * Return current effect type.
+     */
     LabelEffect getLabelEffectType() const;
     /**
-    * Return current effect color value.
-    */
+     * Return current effect color value.
+     */
     Color4B getEffectColor() const;
-    
+
     /**
      * Provides a way to treat each character like a Sprite.
      * @warning No support system font.
      */
-    virtual Sprite * getLetter(int lettetIndex);
-    
+    virtual Sprite* getLetter(int lettetIndex);
+
     /**
      * Sets the source blending function.
      *
-     * @param blendFunc A structure with source and destination factor to specify pixel arithmetic. e.g. {BlendFactor::ONE, BlendFactor::ONE}, {BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA}.
+     * @param blendFunc A structure with source and destination factor to specify pixel arithmetic. e.g.
+     * {BlendFactor::ONE, BlendFactor::ONE}, {BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA}.
      * @js NA
      * @lua NA
      */
-    virtual void setBlendFunc(const BlendFunc &blendFunc) override;
-    
+    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+
     /**
      * Returns the blending function that is currently being used.
      *
@@ -339,13 +339,10 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual const BlendFunc &getBlendFunc() const override;
+    virtual const BlendFunc& getBlendFunc() const override;
 
-CC_CONSTRUCTOR_ACCESS:
-    virtual bool init() override;
-    virtual bool init(const std::string& textContent,
-                      const std::string& fontName,
-                      float fontSize);
+    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init(const std::string& textContent, const std::string& fontName, float fontSize);
 
 protected:
     virtual void initRenderer() override;
@@ -358,6 +355,7 @@ protected:
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
     virtual void adaptRenderers() override;
+
 protected:
     bool _touchScaleChangeEnabled;
     float _normalScaleValueX;
@@ -370,7 +368,7 @@ protected:
     Type _type;
 };
 
-}
+}  // namespace ui
 
 NS_CC_END
 

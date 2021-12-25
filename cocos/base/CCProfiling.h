@@ -70,24 +70,23 @@ public:
     bool init();
 
 public:
-    /** returns the singleton 
+    /** returns the singleton
      * @js NA
      * @lua NA
      */
     static Profiler* getInstance();
 
-
-    /** Creates and adds a new timer 
+    /** Creates and adds a new timer
      * @js NA
      * @lua NA
      */
     ProfilingTimer* createAndAddTimerWithName(const char* timerName);
-    /** releases a timer 
+    /** releases a timer
      * @js NA
      * @lua NA
      */
     void releaseTimer(const char* timerName);
-    /** releases all timers 
+    /** releases all timers
      * @js NA
      * @lua NA
      */
@@ -141,9 +140,9 @@ public:
     int32_t numberOfCalls;
 };
 
-extern void CC_DLL ProfilingBeginTimingBlock(const char *timerName);
-extern void CC_DLL ProfilingEndTimingBlock(const char *timerName);
-extern void CC_DLL ProfilingResetTimingBlock(const char *timerName);
+extern void CC_DLL ProfilingBeginTimingBlock(const char* timerName);
+extern void CC_DLL ProfilingEndTimingBlock(const char* timerName);
+extern void CC_DLL ProfilingResetTimingBlock(const char* timerName);
 
 /*
  * cocos2d profiling categories
@@ -160,4 +159,4 @@ extern bool kProfilerCategoryParticles;
 NS_CC_END
 
 /// @endcond
-#endif // __SUPPORT_CCPROFILING_H__
+#endif  // __SUPPORT_CCPROFILING_H__

@@ -35,7 +35,7 @@ NS_CC_BEGIN
 
 namespace backend
 {
-    class Buffer;
+class Buffer;
 }
 
 /**
@@ -63,10 +63,9 @@ public:
     */
     using IndexFormat = backend::IndexFormat;
 
-
     typedef std::function<void()> CallBackFunc;
 
-	/**Constructor.*/
+    /**Constructor.*/
     CustomCommand();
     CustomCommand(const CustomCommand& rhs);
     CustomCommand(CustomCommand&& rhs);
@@ -78,17 +77,17 @@ public:
 
     void assign(const CustomCommand& rhs);
     void assign(CustomCommand&& rhs);
-    
+
 public:
-	/**
-    TODO: should remove it.
-	Init function.
-	@param globalZOrder GlobalZOrder of the render command.
-	@param modelViewTransform When in 3D mode, depth sorting needs modelViewTransform.
-	@param flags Use to identify that the render command is 3D mode or not.
-	*/
+    /**
+TODO: should remove it.
+    Init function.
+    @param globalZOrder GlobalZOrder of the render command.
+    @param modelViewTransform When in 3D mode, depth sorting needs modelViewTransform.
+    @param flags Use to identify that the render command is 3D mode or not.
+    */
     void init(float globalZOrder, const Mat4& modelViewTransform, unsigned int flags);
-    
+
     /**
     Init function. The render command will be in 2D mode.
     @param globalZOrder GlobalZOrder of the render command.
@@ -137,14 +136,16 @@ public:
     /**
     Update some or all contents of vertex buffer.
     @param data Specifies a pointer to the new data that will be copied into the data store.
-    @param offset Specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.
+    @param offset Specifies the offset into the buffer object's data store where data replacement will begin, measured
+    in bytes.
     @param length Specifies the size in bytes of the data store region being replaced.
     */
     void updateVertexBuffer(void* data, std::size_t offset, std::size_t length);
     /**
     Update some or call contents of index buffer
     @param data Specifies a pointer to the new data that will be copied into the data store.
-    @param offset specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.
+    @param offset specifies the offset into the buffer object's data store where data replacement will begin, measured
+    in bytes.
     @param length Specifies the size in bytes of the data store region being replaced.
     */
     void updateIndexBuffer(void* data, std::size_t offset, std::size_t length);
@@ -181,64 +182,71 @@ public:
     @start specifices the starting index of vertex buffer
     @count specifices the number of vertices to be rendered
     */
-    inline void setVertexDrawInfo(std::size_t start, std::size_t count) { _vertexDrawStart = start; _vertexDrawCount = count; }
+    inline void setVertexDrawInfo(std::size_t start, std::size_t count)
+    {
+        _vertexDrawStart = start;
+        _vertexDrawCount = count;
+    }
     inline std::size_t getVertexDrawStart() const { return _vertexDrawStart; }
-    inline std::size_t getVertexDrawCount() const { return _vertexDrawCount;}
+    inline std::size_t getVertexDrawCount() const { return _vertexDrawCount; }
 
     /**
     Set the drawing information if the drawing type is ELEMENT.
     @start specifices the starting index of index buffer
     @count specifices the number of indices to be rendered
     */
-    inline void setIndexDrawInfo(std::size_t start, std::size_t count) { _indexDrawOffset = start * _indexSize; _indexDrawCount = count; }
+    inline void setIndexDrawInfo(std::size_t start, std::size_t count)
+    {
+        _indexDrawOffset = start * _indexSize;
+        _indexDrawCount  = count;
+    }
     inline std::size_t getIndexDrawOffset() const { return _indexDrawOffset; }
     inline std::size_t getIndexDrawCount() const { return _indexDrawCount; }
-    
+
     inline void setLineWidth(float lineWidth) { _lineWidth = lineWidth; }
     inline float getLineWidth() const { return _lineWidth; }
 
     inline IndexFormat getIndexFormat() const { return _indexFormat; }
 
     /**
-    * set a callback which will be invoke before rendering
-    */
-    void setBeforeCallback(const CallBackFunc &before) { _beforeCallback = before; }
+     * set a callback which will be invoke before rendering
+     */
+    void setBeforeCallback(const CallBackFunc& before) { _beforeCallback = before; }
 
     /**
-    * set a callback which will be invoke after rendering
-    */
-    void setAfterCallback(const CallBackFunc &after) { _afterCallback = after; }
+     * set a callback which will be invoke after rendering
+     */
+    void setAfterCallback(const CallBackFunc& after) { _afterCallback = after; }
 
-    const CallBackFunc &getBeforeCallback() { return _beforeCallback; }
+    const CallBackFunc& getBeforeCallback() { return _beforeCallback; }
 
-    const CallBackFunc &getAfterCallback() { return _afterCallback; }
+    const CallBackFunc& getAfterCallback() { return _afterCallback; }
 
 protected:
     std::size_t computeIndexSize() const;
 
     backend::Buffer* _vertexBuffer = nullptr;
-    backend::Buffer* _indexBuffer = nullptr;
-    
+    backend::Buffer* _indexBuffer  = nullptr;
+
     std::size_t _vertexDrawStart = 0;
     std::size_t _vertexDrawCount = 0;
-    
+
     std::size_t _indexDrawOffset = 0;
-    std::size_t _indexDrawCount = 0;
-    
-    DrawType _drawType = DrawType::ELEMENT;
+    std::size_t _indexDrawCount  = 0;
+
+    DrawType _drawType           = DrawType::ELEMENT;
     PrimitiveType _primitiveType = PrimitiveType::TRIANGLE;
-    IndexFormat _indexFormat = IndexFormat::U_SHORT;
-    
+    IndexFormat _indexFormat     = IndexFormat::U_SHORT;
+
     float _lineWidth = 0.0;
-    
+
     std::size_t _indexSize = 0;
 
     std::size_t _vertexCapacity = 0;
-    std::size_t _indexCapacity = 0;
-
+    std::size_t _indexCapacity  = 0;
 
     CallBackFunc _beforeCallback = nullptr;
-    CallBackFunc _afterCallback = nullptr;
+    CallBackFunc _afterCallback  = nullptr;
 };
 
 NS_CC_END

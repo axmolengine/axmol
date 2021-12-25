@@ -5,17 +5,17 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,7 +35,8 @@
 
 NS_CC_BEGIN
 
-namespace ui {
+namespace ui
+{
 
 class EditBox;
 
@@ -68,7 +69,7 @@ public:
     virtual void setMaxLength(int maxLength) override;
     virtual void setTextHorizontalAlignment(TextHAlignment alignment) override;
 
-    virtual int  getMaxLength() override { return _maxLength; }
+    virtual int getMaxLength() override { return _maxLength; }
     virtual const char* getText() override { return _text.c_str(); }
     virtual const char* getPlaceHolder() override { return _placeHolder.c_str(); }
 
@@ -97,7 +98,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void draw(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
+    virtual void draw(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
     /**
      * @js NA
      * @lua NA
@@ -110,40 +111,40 @@ public:
 
     void editBoxEditingDidBegin();
     void editBoxEditingChanged(const std::string& text);
-    void editBoxEditingDidEnd(const std::string& text, EditBoxDelegate::EditBoxEndAction action = EditBoxDelegate::EditBoxEndAction::UNKNOWN);
+    void editBoxEditingDidEnd(const std::string& text,
+                              EditBoxDelegate::EditBoxEndAction action = EditBoxDelegate::EditBoxEndAction::UNKNOWN);
 
-    virtual bool isEditing() override = 0;
-    virtual void createNativeControl(const Rect& frame) = 0;
-    virtual void setNativeFont(const char* pFontName, int fontSize) = 0;
-    virtual void setNativeFontColor(const Color4B& color) = 0;
-    virtual void setNativePlaceholderFont(const char* pFontName, int fontSize) = 0;
-    virtual void setNativePlaceholderFontColor(const Color4B& color) = 0;
-    virtual void setNativeInputMode(EditBox::InputMode inputMode) = 0;
-    virtual void setNativeInputFlag(EditBox::InputFlag inputFlag) = 0;
-    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType) = 0;
+    virtual bool isEditing() override                                                = 0;
+    virtual void createNativeControl(const Rect& frame)                              = 0;
+    virtual void setNativeFont(const char* pFontName, int fontSize)                  = 0;
+    virtual void setNativeFontColor(const Color4B& color)                            = 0;
+    virtual void setNativePlaceholderFont(const char* pFontName, int fontSize)       = 0;
+    virtual void setNativePlaceholderFontColor(const Color4B& color)                 = 0;
+    virtual void setNativeInputMode(EditBox::InputMode inputMode)                    = 0;
+    virtual void setNativeInputFlag(EditBox::InputFlag inputFlag)                    = 0;
+    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)         = 0;
     virtual void setNativeTextHorizontalAlignment(cocos2d::TextHAlignment alignment) = 0;
-    virtual void setNativeText(const char* pText) = 0;
-    virtual void setNativePlaceHolder(const char* pText) = 0;
-    virtual void setNativeVisible(bool visible) = 0;
-    virtual void updateNativeFrame(const Rect& rect) = 0;
-    virtual const char* getNativeDefaultFontName() = 0;
-    virtual void nativeOpenKeyboard() = 0;
-    virtual void nativeCloseKeyboard() = 0;
-    virtual void setNativeMaxLength(int maxLength) {};
-
+    virtual void setNativeText(const char* pText)                                    = 0;
+    virtual void setNativePlaceHolder(const char* pText)                             = 0;
+    virtual void setNativeVisible(bool visible)                                      = 0;
+    virtual void updateNativeFrame(const Rect& rect)                                 = 0;
+    virtual const char* getNativeDefaultFontName()                                   = 0;
+    virtual void nativeOpenKeyboard()                                                = 0;
+    virtual void nativeCloseKeyboard()                                               = 0;
+    virtual void setNativeMaxLength(int maxLength){};
 
 protected:
-    void         initInactiveLabels(const Size& size);
-    void         setInactiveText(const char* pText);
-    void         refreshLabelAlignment();
-    void         placeInactiveLabels(const Size& size);
-    virtual void doAnimationWhenKeyboardMove(float duration, float distance)override {};
+    void initInactiveLabels(const Size& size);
+    void setInactiveText(const char* pText);
+    void refreshLabelAlignment();
+    void placeInactiveLabels(const Size& size);
+    virtual void doAnimationWhenKeyboardMove(float duration, float distance) override{};
 
     Label* _label;
     Label* _labelPlaceHolder;
-    EditBox::InputMode    _editBoxInputMode;
-    EditBox::InputFlag    _editBoxInputFlag;
-    EditBox::KeyboardReturnType  _keyboardReturnType;
+    EditBox::InputMode _editBoxInputMode;
+    EditBox::InputFlag _editBoxInputFlag;
+    EditBox::KeyboardReturnType _keyboardReturnType;
     TextHAlignment _alignment;
 
     std::string _text;
@@ -158,16 +159,13 @@ protected:
     Color4B _colText;
     Color4B _colPlaceHolder;
 
-    int   _maxLength;
+    int _maxLength;
     Size _contentSize;
     bool _editingMode;
 };
 
-
-}
+}  // namespace ui
 
 NS_CC_END
 
-
 #endif /* __UIEditBoxIMPLICOMMON_H__ */
-

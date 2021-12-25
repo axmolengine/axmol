@@ -38,25 +38,24 @@ THE SOFTWARE.
  */
 NS_CC_BEGIN
 
-
 class Ref;
 
-/** 
-  * Interface that defines how to clone an Ref.
-  * @lua NA
-  * @js NA
-  */
+/**
+ * Interface that defines how to clone an Ref.
+ * @lua NA
+ * @js NA
+ */
 class CC_DLL Clonable
 {
 public:
     /** Returns a copy of the Ref. */
     virtual Clonable* clone() const = 0;
-    
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~Clonable() {};
+    virtual ~Clonable(){};
 };
 
 /**
@@ -142,9 +141,9 @@ protected:
 #if CC_ENABLE_SCRIPT_BINDING
 public:
     /// object id, ScriptSupport need public _ID
-    unsigned int        _ID;
+    unsigned int _ID;
     /// Lua reference id
-    int                 _luaID;
+    int _luaID;
     /// scriptObject, support for swift
     void* _scriptObject;
 
@@ -181,4 +180,4 @@ NS_CC_END
 // end of base group
 /** @} */
 
-#endif // __BASE_CCREF_H__
+#endif  // __BASE_CCREF_H__

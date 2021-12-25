@@ -26,15 +26,15 @@
 #include "ui/UIVideoPlayer.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include <unordered_map>
-#include <stdlib.h>
-#include <jni.h>
-#include <string>
-#include "platform/android/jni/JniHelper.h"
-#include "base/CCDirector.h"
-#include "base/CCEventListenerKeyboard.h"
-#include "platform/CCFileUtils.h"
-#include "ui/UIHelper.h"
+#    include <unordered_map>
+#    include <stdlib.h>
+#    include <jni.h>
+#    include <string>
+#    include "platform/android/jni/JniHelper.h"
+#    include "base/CCDirector.h"
+#    include "base/CCEventListenerKeyboard.h"
+#    include "platform/CCFileUtils.h"
+#    include "ui/UIHelper.h"
 
 //-----------------------------------------------------------------------------------------------------------
 
@@ -42,21 +42,26 @@ static const std::string videoHelperClassName = "org.cocos2dx.lib.Cocos2dxVideoH
 
 USING_NS_CC;
 
-static void executeVideoCallback(int index,int event);
+static void executeVideoCallback(int index, int event);
 
-#define QUIT_FULLSCREEN 1000
+#    define QUIT_FULLSCREEN 1000
 
 extern "C" {
-    JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxVideoHelper_nativeExecuteVideoCallback(JNIEnv*, jclass, jint index, jint event) {
-        executeVideoCallback(index,event);
-    }
+JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxVideoHelper_nativeExecuteVideoCallback(JNIEnv*,
+                                                                                            jclass,
+                                                                                            jint index,
+                                                                                            jint event)
+{
+    executeVideoCallback(index, event);
+}
 }
 
 int createVideoWidgetJNI()
 {
     JniMethodInfo t;
     int ret = -1;
-    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "createVideoWidget", "()I")) {
+    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "createVideoWidget", "()I"))
+    {
         ret = t.env->CallStaticIntMethod(t.classID, t.methodID);
 
         t.env->DeleteLocalRef(t.classID);
@@ -68,7 +73,8 @@ int createVideoWidgetJNI()
 void setLoopingJNI(int index, bool looping)
 {
     JniMethodInfo t;
-    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "setLooping", "(IZ)V")) {
+    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "setLooping", "(IZ)V"))
+    {
         t.env->CallStaticVoidMethod(t.classID, t.methodID, index, looping);
 
         t.env->DeleteLocalRef(t.classID);
@@ -78,7 +84,8 @@ void setLoopingJNI(int index, bool looping)
 void setUserInputEnabledJNI(int index, bool enableInput)
 {
     JniMethodInfo t;
-    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "setUserInputEnabled", "(IZ)V")) {
+    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "setUserInputEnabled", "(IZ)V"))
+    {
         t.env->CallStaticVoidMethod(t.classID, t.methodID, index, enableInput);
 
         t.env->DeleteLocalRef(t.classID);
@@ -92,23 +99,23 @@ using namespace cocos2d::ui;
 static std::unordered_map<int, VideoPlayer*> s_allVideoPlayers;
 
 VideoPlayer::VideoPlayer()
-: _fullScreenDirty(false)
-, _fullScreenEnabled(false)
-, _keepAspectRatioEnabled(false)
-, _videoPlayerIndex(-1)
-, _eventCallback(nullptr)
-, _isPlaying(false)
-, _isLooping(false)
-, _isUserInputEnabled(true)
-, _styleType(StyleType::DEFAULT)
+    : _fullScreenDirty(false)
+    , _fullScreenEnabled(false)
+    , _keepAspectRatioEnabled(false)
+    , _videoPlayerIndex(-1)
+    , _eventCallback(nullptr)
+    , _isPlaying(false)
+    , _isLooping(false)
+    , _isUserInputEnabled(true)
+    , _styleType(StyleType::DEFAULT)
 {
-    _videoPlayerIndex = createVideoWidgetJNI();
+    _videoPlayerIndex                    = createVideoWidgetJNI();
     s_allVideoPlayers[_videoPlayerIndex] = this;
 
-#if CC_VIDEOPLAYER_DEBUG_DRAW
+#    if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
     addChild(_debugDrawNode);
-#endif
+#    endif
 }
 
 VideoPlayer::~VideoPlayer()
@@ -119,18 +126,18 @@ VideoPlayer::~VideoPlayer()
 
 void VideoPlayer::setFileName(const std::string& fileName)
 {
-    _videoURL = FileUtils::getInstance()->fullPathForFilename(fileName);
+    _videoURL    = FileUtils::getInstance()->fullPathForFilename(fileName);
     _videoSource = VideoPlayer::Source::FILENAME;
-    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoUrl", _videoPlayerIndex, 
-                                    (int)Source::FILENAME,_videoURL);
+    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoUrl", _videoPlayerIndex, (int)Source::FILENAME,
+                                    _videoURL);
 }
 
 void VideoPlayer::setURL(const std::string& videoUrl)
 {
-    _videoURL = videoUrl;
+    _videoURL    = videoUrl;
     _videoSource = VideoPlayer::Source::URL;
-    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoUrl", _videoPlayerIndex,
-                                    (int)Source::URL,_videoURL);
+    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoUrl", _videoPlayerIndex, (int)Source::URL,
+                                    _videoURL);
 }
 
 void VideoPlayer::setLooping(bool looping)
@@ -150,30 +157,23 @@ void VideoPlayer::setStyle(StyleType style)
     _styleType = style;
 }
 
-void VideoPlayer::draw(Renderer* renderer, const Mat4 &transform, uint32_t flags)
+void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    cocos2d::ui::Widget::draw(renderer,transform,flags);
+    cocos2d::ui::Widget::draw(renderer, transform, flags);
 
     if (flags & FLAGS_TRANSFORM_DIRTY)
     {
         auto uiRect = cocos2d::ui::Helper::convertBoundingBoxToScreen(this);
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoRect", _videoPlayerIndex, 
-                                        (int)uiRect.origin.x, (int)uiRect.origin.y,
-                                        (int)uiRect.size.width, (int)uiRect.size.height);
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoRect", _videoPlayerIndex, (int)uiRect.origin.x,
+                                        (int)uiRect.origin.y, (int)uiRect.size.width, (int)uiRect.size.height);
     }
 
-#if CC_VIDEOPLAYER_DEBUG_DRAW
+#    if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode->clear();
-    auto size = getContentSize();
-    Point vertices[4]=
-    {
-        Point::ZERO,
-        Point(size.width, 0),
-        Point(size.width, size.height),
-        Point(0, size.height)
-    };
+    auto size         = getContentSize();
+    Point vertices[4] = {Point::ZERO, Point(size.width, 0), Point(size.width, size.height), Point(0, size.height)};
     _debugdrawNode->drawPoly(vertices, 4, true, Color4F(1.0, 1.0, 1.0, 1.0));
-#endif
+#    endif
 }
 
 void VideoPlayer::setFullScreenEnabled(bool enabled)
@@ -183,12 +183,12 @@ void VideoPlayer::setFullScreenEnabled(bool enabled)
         _fullScreenEnabled = enabled;
 
         auto frameSize = Director::getInstance()->getOpenGLView()->getFrameSize();
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "setFullScreenEnabled", _videoPlayerIndex, 
-                                        enabled, (int)frameSize.width, (int)frameSize.height);
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "setFullScreenEnabled", _videoPlayerIndex, enabled,
+                                        (int)frameSize.width, (int)frameSize.height);
     }
 }
 
-bool VideoPlayer::isFullScreenEnabled()const
+bool VideoPlayer::isFullScreenEnabled() const
 {
     return _fullScreenEnabled;
 }
@@ -202,7 +202,7 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
     }
 }
 
-#if CC_VIDEOPLAYER_DEBUG_DRAW
+#    if CC_VIDEOPLAYER_DEBUG_DRAW
 void VideoPlayer::drawDebugData()
 {
     Director* director = Director::getInstance();
@@ -213,23 +213,17 @@ void VideoPlayer::drawDebugData()
 
     auto size = getContentSize();
 
-    Point vertices[4]=
-    {
-        Point::ZERO,
-        Point(size.width, 0),
-        Point(size.width, size.height),
-        Point(0, size.height)
-    };
+    Point vertices[4] = {Point::ZERO, Point(size.width, 0), Point(size.width, size.height), Point(0, size.height)};
 
     DrawPrimitives::drawPoly(vertices, 4, true);
 
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
-#endif
+#    endif
 
 void VideoPlayer::play()
 {
-    if (! _videoURL.empty())
+    if (!_videoURL.empty())
     {
         JniHelper::callStaticVoidMethod(videoHelperClassName, "startVideo", _videoPlayerIndex);
     }
@@ -237,7 +231,7 @@ void VideoPlayer::play()
 
 void VideoPlayer::pause()
 {
-    if (! _videoURL.empty())
+    if (!_videoURL.empty())
     {
         JniHelper::callStaticVoidMethod(videoHelperClassName, "pauseVideo", _videoPlayerIndex);
     }
@@ -245,7 +239,7 @@ void VideoPlayer::pause()
 
 void VideoPlayer::resume()
 {
-    if (! _videoURL.empty())
+    if (!_videoURL.empty())
     {
         JniHelper::callStaticVoidMethod(videoHelperClassName, "resumeVideo", _videoPlayerIndex);
     }
@@ -253,7 +247,7 @@ void VideoPlayer::resume()
 
 void VideoPlayer::stop()
 {
-    if (! _videoURL.empty())
+    if (!_videoURL.empty())
     {
         JniHelper::callStaticVoidMethod(videoHelperClassName, "stopVideo", _videoPlayerIndex);
     }
@@ -261,7 +255,7 @@ void VideoPlayer::stop()
 
 void VideoPlayer::seekTo(float sec)
 {
-    if (! _videoURL.empty())
+    if (!_videoURL.empty())
     {
         JniHelper::callStaticVoidMethod(videoHelperClassName, "seekVideoTo", _videoPlayerIndex, int(sec * 1000));
     }
@@ -317,19 +311,22 @@ void VideoPlayer::onPlayEvent(int event)
     if (event == QUIT_FULLSCREEN)
     {
         _fullScreenEnabled = false;
-    } 
+    }
     else
     {
         VideoPlayer::EventType videoEvent = (VideoPlayer::EventType)event;
-        if (videoEvent == VideoPlayer::EventType::PLAYING) {
+        if (videoEvent == VideoPlayer::EventType::PLAYING)
+        {
             _isPlaying = true;
-        } else {
+        }
+        else
+        {
             _isPlaying = false;
         }
 
         if (_eventCallback)
         {
-            _eventCallback(this,videoEvent);
+            _eventCallback(this, videoEvent);
         }
     }
 }
@@ -339,27 +336,27 @@ cocos2d::ui::Widget* VideoPlayer::createCloneInstance()
     return VideoPlayer::create();
 }
 
-void VideoPlayer::copySpecialProperties(Widget *widget)
+void VideoPlayer::copySpecialProperties(Widget* widget)
 {
     VideoPlayer* videoPlayer = dynamic_cast<VideoPlayer*>(widget);
     if (videoPlayer)
     {
-        _isPlaying = videoPlayer->_isPlaying;
-        _isLooping = videoPlayer->_isLooping;
-        _isUserInputEnabled = videoPlayer->_isUserInputEnabled;
-        _styleType = videoPlayer->_styleType;
-        _fullScreenEnabled = videoPlayer->_fullScreenEnabled;
-        _fullScreenDirty = videoPlayer->_fullScreenDirty;
-        _videoURL = videoPlayer->_videoURL;
+        _isPlaying              = videoPlayer->_isPlaying;
+        _isLooping              = videoPlayer->_isLooping;
+        _isUserInputEnabled     = videoPlayer->_isUserInputEnabled;
+        _styleType              = videoPlayer->_styleType;
+        _fullScreenEnabled      = videoPlayer->_fullScreenEnabled;
+        _fullScreenDirty        = videoPlayer->_fullScreenDirty;
+        _videoURL               = videoPlayer->_videoURL;
         _keepAspectRatioEnabled = videoPlayer->_keepAspectRatioEnabled;
-        _videoSource = videoPlayer->_videoSource;
-        _videoPlayerIndex = videoPlayer->_videoPlayerIndex;
-        _eventCallback = videoPlayer->_eventCallback;
-        _videoView = videoPlayer->_videoView;
+        _videoSource            = videoPlayer->_videoSource;
+        _videoPlayerIndex       = videoPlayer->_videoPlayerIndex;
+        _eventCallback          = videoPlayer->_eventCallback;
+        _videoView              = videoPlayer->_videoView;
     }
 }
 
-void executeVideoCallback(int index,int event)
+void executeVideoCallback(int index, int event)
 {
     auto it = s_allVideoPlayers.find(index);
     if (it != s_allVideoPlayers.end())

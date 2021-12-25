@@ -45,7 +45,8 @@ class Texture2D;
 class CC_DLL MotionStreak : public Node, public TextureProtocol
 {
 public:
-    /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture filename.
+    /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture
+     * filename.
      *
      * @param timeToFade The fade time, in seconds.
      * @param minSeg The minimum segments.
@@ -54,9 +55,13 @@ public:
      * @param imagePath The texture file name of stoke.
      * @return An autoreleased MotionStreak object.
      */
-    static MotionStreak* create(float timeToFade, float minSeg, float strokeWidth, const Color3B& strokeColor, const std::string& imagePath);
+    static MotionStreak* create(float timeToFade,
+                                float minSeg,
+                                float strokeWidth,
+                                const Color3B& strokeColor,
+                                const std::string& imagePath);
     /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture.
-     * 
+     *
      * @param timeToFade The fade time, in seconds.
      * @param minSeg The minimum segments.
      * @param strokeWidth The width of stroke.
@@ -64,7 +69,11 @@ public:
      * @param texture The texture name of stoke.
      * @return An autoreleased MotionStreak object.
      */
-    static MotionStreak* create(float timeToFade, float minSeg, float strokeWidth, const Color3B& strokeColor, Texture2D* texture);
+    static MotionStreak* create(float timeToFade,
+                                float minSeg,
+                                float strokeWidth,
+                                const Color3B& strokeColor,
+                                Texture2D* texture);
 
     // Overrides
     virtual void setPosition(const Vec2& position) override;
@@ -77,25 +86,25 @@ public:
     virtual float getPositionY() const override;
     virtual Vec3 getPosition3D() const override;
     /**
-    * @js NA
-    * @lua NA
-    */
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+     * @js NA
+     * @lua NA
+     */
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     /**
-    * @lua NA
-    */
+     * @lua NA
+     */
     virtual void update(float delta) override;
     virtual Texture2D* getTexture() const override;
-    virtual void setTexture(Texture2D *texture) override;
+    virtual void setTexture(Texture2D* texture) override;
     /**
-    * @js NA
-    * @lua NA
-    */
-    virtual void setBlendFunc(const BlendFunc &blendFunc) override;
+     * @js NA
+     * @lua NA
+     */
+    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
     /**
-    * @js NA
-    * @lua NA
-    */
+     * @js NA
+     * @lua NA
+     */
     virtual const BlendFunc& getBlendFunc() const override;
     virtual uint8_t getOpacity() const override;
     virtual void setOpacity(uint8_t opacity) override;
@@ -112,8 +121,8 @@ public:
      */
     void reset();
 
-    /** When fast mode is enabled, new points are added faster but with lower precision. 
-     * 
+    /** When fast mode is enabled, new points are added faster but with lower precision.
+     *
      * @return True if fast mode is enabled.
      */
     bool isFastMode() const { return _fastMode; }
@@ -144,49 +153,49 @@ public:
      */
     void setStartingPositionInitialized(bool bStartingPositionInitialized)
     {
-        _startingPositionInitialized = bStartingPositionInitialized; 
+        _startingPositionInitialized = bStartingPositionInitialized;
     }
-    
+
     bool setProgramState(backend::ProgramState* programState, bool needsRetain) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    MotionStreak();
+    CC_CONSTRUCTOR_ACCESS : MotionStreak();
     virtual ~MotionStreak();
-    
-    /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename */
+
+    /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename
+     */
     bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, const std::string& path);
-    
+
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture  */
     bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);
 
 protected:
-    bool _fastMode = false;
+    bool _fastMode                    = false;
     bool _startingPositionInitialized = false;
 
     /** texture used for the motion streak */
-    Texture2D* _texture = nullptr;
+    Texture2D* _texture  = nullptr;
     BlendFunc _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
     Vec2 _positionR;
 
-    float _stroke = 0.f;
+    float _stroke    = 0.f;
     float _fadeDelta = 0.f;
-    float _minSeg = 0.f;
+    float _minSeg    = 0.f;
 
-    unsigned int _maxPoints = 0;
-    unsigned int _nuPoints = 0;
+    unsigned int _maxPoints        = 0;
+    unsigned int _nuPoints         = 0;
     unsigned int _previousNuPoints = 0;
 
     /** Pointers */
     Vec2* _pointVertexes = nullptr;
-    float* _pointState = nullptr;
+    float* _pointState   = nullptr;
 
-    Vec2* _vertices = nullptr;
-    uint8_t* _colorPointer = nullptr;
-    Tex2F* _texCoords = nullptr;
+    Vec2* _vertices           = nullptr;
+    uint8_t* _colorPointer    = nullptr;
+    Tex2F* _texCoords         = nullptr;
     unsigned int _vertexCount = 0;
-    
+
     CustomCommand _customCommand;
-    
+
     backend::UniformLocation _mvpMatrixLocaiton;
     backend::UniformLocation _textureLocation;
 

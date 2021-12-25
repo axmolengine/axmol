@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "DeviceGL.h"
 #include "RenderPipelineGL.h"
 #include "BufferGL.h"
@@ -39,14 +39,14 @@ Device* Device::getInstance()
 {
     if (!_instance)
         _instance = new DeviceGL();
-    
+
     return _instance;
 }
 
 DeviceGL::DeviceGL()
 {
     _deviceInfo = new DeviceInfoGL();
-    if(!_deviceInfo->init())
+    if (!_deviceInfo->init())
     {
         delete _deviceInfo;
         _deviceInfo = nullptr;
@@ -98,14 +98,14 @@ RenderTarget* DeviceGL::newDefaultRenderTarget(TargetBufferFlags rtf)
 }
 
 RenderTarget* DeviceGL::newRenderTarget(TargetBufferFlags rtf,
-    TextureBackend* colorAttachment,
-    TextureBackend* depthAttachment,
-    TextureBackend* stencilAttachhment)
+                                        TextureBackend* colorAttachment,
+                                        TextureBackend* depthAttachment,
+                                        TextureBackend* stencilAttachhment)
 {
     auto rtGL = new RenderTargetGL(false, this);
     rtGL->setTargetFlags(rtf);
     rtGL->bindFrameBuffer();
-    RenderTarget::ColorAttachment colors{ {colorAttachment, 0} };
+    RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
     rtGL->setColorAttachment(colors);
     rtGL->setDepthAttachment(depthAttachment);
     rtGL->setStencilAttachment(stencilAttachhment);

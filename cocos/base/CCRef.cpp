@@ -30,10 +30,10 @@ THE SOFTWARE.
 #include "base/CCScriptSupport.h"
 
 #if CC_REF_LEAK_DETECTION
-#include <algorithm>    // std::find
-#include <thread>
-#include <mutex>
-#include <vector>
+#    include <algorithm>  // std::find
+#    include <thread>
+#    include <mutex>
+#    include <vector>
 #endif
 
 NS_CC_BEGIN
@@ -44,18 +44,18 @@ static void untrackRef(Ref* ref);
 #endif
 
 Ref::Ref()
-: _referenceCount(1) // when the Ref is created, the reference count of it is 1
+    : _referenceCount(1)  // when the Ref is created, the reference count of it is 1
 #if CC_ENABLE_SCRIPT_BINDING
-, _luaID (0)
-, _scriptObject(nullptr)
-, _rooted(false)
+    , _luaID(0)
+    , _scriptObject(nullptr)
+    , _rooted(false)
 #endif
 {
 #if CC_ENABLE_SCRIPT_BINDING
     static unsigned int uObjectCount = 0;
-    _ID = ++uObjectCount;
+    _ID                              = ++uObjectCount;
 #endif
-    
+
 #if CC_REF_LEAK_DETECTION
     trackRef(this);
 #endif
@@ -70,7 +70,7 @@ Ref::~Ref()
         // if the object is referenced by Lua engine, remove it
         pEngine->removeScriptObjectByObject(this);
     }
-#endif // CC_ENABLE_SCRIPT_BINDING
+#endif  // CC_ENABLE_SCRIPT_BINDING
 
 #if CC_REF_LEAK_DETECTION
     if (_referenceCount != 0)
@@ -100,8 +100,9 @@ void Ref::release()
             //
             // Wrong usage (1):
             //
-            // auto obj = Node::create();   // Ref = 1, but it's an autorelease Ref which means it was in the autorelease pool.
-            // obj->autorelease();   // Wrong: If you wish to invoke autorelease several times, you should retain `obj` first.
+            // auto obj = Node::create();   // Ref = 1, but it's an autorelease Ref which means it was in the
+            // autorelease pool. obj->autorelease();   // Wrong: If you wish to invoke autorelease several times, you
+            // should retain `obj` first.
             //
             // Wrong usage (2):
             //
@@ -165,7 +166,8 @@ void Ref::printLeaks()
         {
             CC_ASSERT(ref);
             const char* type = typeid(*ref).name();
-            log("[memory] LEAK: Ref object '%s' still active with reference count %d.\n", (type ? type : ""), ref->getReferenceCount());
+            log("[memory] LEAK: Ref object '%s' still active with reference count %d.\n", (type ? type : ""),
+                ref->getReferenceCount());
         }
     }
 }
@@ -192,7 +194,6 @@ static void untrackRef(Ref* ref)
     __refAllocationList.erase(iter);
 }
 
-#endif // #if CC_REF_LEAK_DETECTION
-
+#endif  // #if CC_REF_LEAK_DETECTION
 
 NS_CC_END

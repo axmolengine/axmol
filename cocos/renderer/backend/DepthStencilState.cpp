@@ -21,28 +21,25 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "DepthStencilState.h"
 #include "RenderTarget.h"
 
 CC_BACKEND_BEGIN
 
-bool StencilDescriptor::operator==(const StencilDescriptor &rhs) const
+bool StencilDescriptor::operator==(const StencilDescriptor& rhs) const
 {
-    return (stencilFailureOperation == rhs.stencilFailureOperation &&
-            depthFailureOperation == rhs.depthFailureOperation &&
-            depthStencilPassOperation == rhs.depthStencilPassOperation &&
-            stencilCompareFunction == rhs.stencilCompareFunction &&
-            readMask == rhs.readMask &&
-            writeMask == rhs.writeMask);
-
+    return (
+        stencilFailureOperation == rhs.stencilFailureOperation && depthFailureOperation == rhs.depthFailureOperation &&
+        depthStencilPassOperation == rhs.depthStencilPassOperation &&
+        stencilCompareFunction == rhs.stencilCompareFunction && readMask == rhs.readMask && writeMask == rhs.writeMask);
 }
 
-DepthStencilState::~DepthStencilState()
-{}
+DepthStencilState::~DepthStencilState() {}
 
-void DepthStencilState::update(const DepthStencilDescriptor& dsDesc) {
-    _depthStencilInfo = dsDesc;
+void DepthStencilState::update(const DepthStencilDescriptor& dsDesc)
+{
+    _depthStencilInfo        = dsDesc;
     _isBackFrontStencilEqual = dsDesc.backFaceStencil == dsDesc.frontFaceStencil;
 }
 

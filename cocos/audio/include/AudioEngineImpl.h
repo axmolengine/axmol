@@ -26,17 +26,17 @@
  ****************************************************************************/
 #pragma once
 #ifndef __AUDIO_ENGINE_IMPL_H_
-#define __AUDIO_ENGINE_IMPL_H_
+#    define __AUDIO_ENGINE_IMPL_H_
 
-#include "platform/CCPlatformConfig.h"
+#    include "platform/CCPlatformConfig.h"
 
-#include <unordered_map>
-#include <queue>
+#    include <unordered_map>
+#    include <queue>
 
-#include "base/CCRef.h"
-#include "audio/include/AudioMacros.h"
-#include "audio/include/AudioCache.h"
-#include "audio/include/AudioPlayer.h"
+#    include "base/CCRef.h"
+#    include "audio/include/AudioMacros.h"
+#    include "audio/include/AudioCache.h"
+#    include "audio/include/AudioPlayer.h"
 
 NS_CC_BEGIN
 
@@ -49,8 +49,8 @@ public:
     ~AudioEngineImpl();
 
     bool init();
-    AUDIO_ID play2d(const std::string &fileFullPath ,bool loop ,float volume);
-    void setVolume(AUDIO_ID audioID,float volume);
+    AUDIO_ID play2d(const std::string& fileFullPath, bool loop, float volume);
+    void setVolume(AUDIO_ID audioID, float volume);
     void setLoop(AUDIO_ID audioID, bool loop);
     bool pause(AUDIO_ID audioID);
     bool resume(AUDIO_ID audioID);
@@ -59,7 +59,7 @@ public:
     float getDuration(AUDIO_ID audioID);
     float getCurrentTime(AUDIO_ID audioID);
     bool setCurrentTime(AUDIO_ID audioID, float time);
-    void setFinishCallback(AUDIO_ID audioID, const std::function<void (AUDIO_ID, const std::string &)> &callback);
+    void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, const std::string&)>& callback);
 
     void uncache(const std::string& filePath);
     void uncacheAll();
@@ -67,27 +67,27 @@ public:
     void update(float dt);
 
 private:
-    //query players state per frame and dispatch finish callback if possible
+    // query players state per frame and dispatch finish callback if possible
     void _updatePlayers(bool forStop);
-    void _play2d(AudioCache *cache, AUDIO_ID audioID);
+    void _play2d(AudioCache* cache, AUDIO_ID audioID);
     void _unscheduleUpdate();
     ALuint findValidSource();
-#if defined(__APPLE__)
+#    if defined(__APPLE__)
     static ALvoid myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData);
-#endif
+#    endif
     ALuint _alSources[MAX_AUDIOINSTANCES];
 
-    //available sources
+    // available sources
     std::queue<ALuint> _unusedSourcesPool;
 
-    //filePath,bufferInfo
+    // filePath,bufferInfo
     std::unordered_map<std::string, AudioCache> _audioCaches;
 
-    //audioID,AudioInfo
-    std::unordered_map<AUDIO_ID, AudioPlayer*>  _audioPlayers;
+    // audioID,AudioInfo
+    std::unordered_map<AUDIO_ID, AudioPlayer*> _audioPlayers;
     std::recursive_mutex _threadMutex;
 
-    //finish callbacks
+    // finish callbacks
     std::vector<std::function<void()>> _finishCallbacks;
 
     bool _scheduled;
@@ -97,5 +97,4 @@ private:
 };
 
 NS_CC_END
-#endif // __AUDIO_ENGINE_INL_H_
-
+#endif  // __AUDIO_ENGINE_INL_H_
