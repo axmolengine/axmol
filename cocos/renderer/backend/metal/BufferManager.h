@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include <vector>
@@ -48,13 +48,13 @@ public:
      * @param buffer Specifies the buffer to be added.
      */
     static void addBuffer(BufferMTL* buffer);
-    
+
     /**
      * Remove a buffer object from container.
      * @param buffer Specifies the buffer to be removed.
      */
     static void removeBuffer(BufferMTL* buffer);
-    
+
     /**
      * Schedule next available buffer at the beginning of frame for the following render passes.
      */

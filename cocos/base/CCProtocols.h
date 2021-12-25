@@ -43,7 +43,7 @@ class CC_DLL __RGBAProtocol
 {
 public:
     virtual ~__RGBAProtocol() {}
-    
+
     /**
      * Changes the color with R,G,B bytes
      *
@@ -52,7 +52,7 @@ public:
      * @lua NA
      */
     virtual void setColor(const Color3B& color) = 0;
-    
+
     /**
      * Returns color that is currently used.
      *
@@ -61,7 +61,7 @@ public:
      * @lua NA
      */
     virtual const Color3B& getColor() const = 0;
-    
+
     /**
      * Returns the displayed color.
      *
@@ -70,7 +70,7 @@ public:
      * @lua NA
      */
     virtual const Color3B& getDisplayedColor() const = 0;
-    
+
     /**
      * Returns the displayed opacity.
      *
@@ -90,7 +90,7 @@ public:
      * @lua NA
      */
     virtual unsigned char getOpacity() const = 0;
-    
+
     /**
      * Changes the opacity.
      *
@@ -99,9 +99,9 @@ public:
      * @lua NA
      */
     virtual void setOpacity(unsigned char opacity) = 0;
-    
+
     // optional
-    
+
     /**
      * Changes the OpacityModifyRGB property.
      * If this property is set to true, then the rendered color will be affected by opacity.
@@ -113,7 +113,7 @@ public:
      * @lua NA
      */
     virtual void setOpacityModifyRGB(bool value) = 0;
-    
+
     /**
      * Returns whether or not the opacity will be applied using glColor(R,G,B,opacity)
      * or glColor(opacity, opacity, opacity, opacity)
@@ -123,7 +123,7 @@ public:
      * @lua NA
      */
     virtual bool isOpacityModifyRGB() const = 0;
-    
+
     /**
      *  whether or not color should be propagated to its children.
      * @js NA
@@ -135,14 +135,14 @@ public:
      * @lua NA
      */
     virtual void setCascadeColorEnabled(bool cascadeColorEnabled) = 0;
-    
+
     /**
      *  recursive method that updates display color
      * @js NA
      * @lua NA
      */
     virtual void updateDisplayedColor(const Color3B& color) = 0;
-    
+
     /**
      *  whether or not opacity should be propagated to its children.
      * @js NA
@@ -154,7 +154,7 @@ public:
      * @lua NA
      */
     virtual void setCascadeOpacityEnabled(bool cascadeOpacityEnabled) = 0;
-    
+
     /**
      *  recursive method that updates the displayed opacity.
      * @js NA
@@ -176,24 +176,25 @@ public:
     /**
      * Sets the source blending function.
      *
-     * @param blendFunc A structure with source and destination factor to specify pixel arithmetic, 
-     *                  e.g. {BlendFactor::ONE, BlendFactor::ONE}, {BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA}.
+     * @param blendFunc A structure with source and destination factor to specify pixel arithmetic,
+     *                  e.g. {BlendFactor::ONE, BlendFactor::ONE}, {BlendFactor::SRC_ALPHA,
+     * BlendFactor::ONE_MINUS_SRC_ALPHA}.
      * @js NA
      * @lua NA
      */
-    virtual void setBlendFunc(const BlendFunc &blendFunc) = 0;
+    virtual void setBlendFunc(const BlendFunc& blendFunc) = 0;
 
     /**
      * Returns the blending function that is currently being used.
-     * 
+     *
      * @return A BlendFunc structure with source and destination factor which specified pixel arithmetic.
      * @js NA
      * @lua NA
      */
-    virtual const BlendFunc &getBlendFunc() const = 0;
+    virtual const BlendFunc& getBlendFunc() const = 0;
 };
 
-/** 
+/**
  * Node objects that uses a Texture2D to render the images.
  * The texture can have a blending function.
  * If the texture has alpha premultiplied the default blending function is:
@@ -222,7 +223,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void setTexture(Texture2D *texture) = 0;
+    virtual void setTexture(Texture2D* texture) = 0;
 };
 
 /**
@@ -242,8 +243,8 @@ public:
      */
     virtual void setString(std::string_view label) = 0;
 
-    /** 
-     * Returns the string that is currently being used in this label 
+    /**
+     * Returns the string that is currently being used in this label
      *
      * @return The string that is currently being used in this label
      * @js NA
@@ -252,8 +253,8 @@ public:
     virtual const std::string& getString() const = 0;
 };
 
-/** 
- * OpenGL projection protocol 
+/**
+ * OpenGL projection protocol
  */
 class CC_DLL DirectorDelegate
 {
@@ -274,13 +275,13 @@ public:
 class CC_DLL PlayableProtocol
 {
 public:
-    virtual ~PlayableProtocol(){}
-    
+    virtual ~PlayableProtocol() {}
+
     virtual void start() = 0;
-    
+
     virtual void stop() = 0;
 };
 NS_CC_END
 
 /// @endcond
-#endif // __BASE_CCPROTOCOLS_H__
+#endif  // __BASE_CCPROTOCOLS_H__

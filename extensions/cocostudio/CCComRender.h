@@ -29,17 +29,18 @@ THE SOFTWARE.
 #include "2d/CCComponent.h"
 #include "CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CCS_DLL ComRender : public cocos2d::Component
 {
     DECLARE_CLASS_COMPONENT_INFO
- 
+
 public:
     const static std::string COMPONENT_NAME;
 
     static ComRender* create();
-    static ComRender* create(cocos2d::Node *node, const char *comName);
+    static ComRender* create(cocos2d::Node* node, const char* comName);
 
     /**
      * @js NA
@@ -52,36 +53,36 @@ public:
      */
     virtual void onExit() override;
     /**
-    * @js NA
-    * @lua NA
-    */
+     * @js NA
+     * @lua NA
+     */
     virtual void onAdd() override;
     /**
-    * @js NA
-    * @lua NA
-    */
+     * @js NA
+     * @lua NA
+     */
     virtual void onRemove() override;
     virtual bool serialize(void* r) override;
     virtual cocos2d::Node* getNode();
-    virtual void setNode(cocos2d::Node *node);
+    virtual void setNode(cocos2d::Node* node);
 
-CC_CONSTRUCTOR_ACCESS:
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         *  @js ctor
+         */
+        ComRender();
+    ComRender(cocos2d::Node* node, const char* comName);
     /**
-    *  @js ctor
-    */
-    ComRender();
-    ComRender(cocos2d::Node *node, const char *comName);
-    /**
-    * @js NA
-    * @lua NA
-    */
+     * @js NA
+     * @lua NA
+     */
     virtual ~ComRender();
 
 private:
-    bool readJson(const std::string &fileName, rapidjson::Document &doc);
+    bool readJson(const std::string& fileName, rapidjson::Document& doc);
 
-    cocos2d::Node *_render;
+    cocos2d::Node* _render;
 };
 
-}
+}  // namespace cocostudio
 #endif  // __CC_EXTENTIONS_CCCOMRENDER_H__

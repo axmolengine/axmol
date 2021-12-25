@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -136,7 +136,8 @@ public:
     /**
      * - The blend layer.
      * High layer animation state will get the blend weight first.
-     * When the blend weight is assigned more than 1, the remaining animation states will no longer get the weight assigned.
+     * When the blend weight is assigned more than 1, the remaining animation states will no longer get the weight
+     * assigned.
      * @readonly
      * @version DragonBones 5.0
      * @language en_US
@@ -305,7 +306,7 @@ public:
      */
     void removeBoneMask(Armature* armature, const std::string& boneName, bool recursive);
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     int getFadeOutMode() const { return (int)fadeOutMode; }
     void setFadeOutMode(int value) { fadeOutMode = (AnimationFadeOutMode)value; }
 
@@ -317,4 +318,4 @@ public: // For WebAssembly.
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_ANIMATION_CONFIG_H
+#endif  // DRAGONBONES_ANIMATION_CONFIG_H

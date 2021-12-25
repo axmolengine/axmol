@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,49 +35,51 @@ NS_CC_BEGIN
  * @{
  */
 
-namespace ui {
-    
+namespace ui
+{
+
 /**
  * VBox is just a convenient wrapper class for vertical layout type.
  * VBox lays out its children in a single vertical column.
  */
-class CC_GUI_DLL VBox : public Layout{
+class CC_GUI_DLL VBox : public Layout
+{
 public:
-    
     /**
      * Default constructor
      * @js ctor
      * @lua new
      */
     VBox();
-    
+
     /**
      * Default destructor
      * @js NA
      * @lua NA
      */
     virtual ~VBox();
-    
+
     /**
      * Create a empty VBox instance.
      * @return A VBox instance pointer.
      */
     static VBox* create();
-    
+
     /**
      * Create a VBox with a certain size.
      *@param size The content size of the layout.
      *@return A VBox instance pointer.
      */
     static VBox* create(const Vec2& size);
-    
-CC_CONSTRUCTOR_ACCESS:
-    //initializes state of widget.
-    virtual bool init() override;
+
+    CC_CONSTRUCTOR_ACCESS :
+        // initializes state of widget.
+        virtual bool
+        init() override;
     virtual bool initWithSize(const Vec2& size);
 };
-    
-}
+
+}  // namespace ui
 
 // end of ui group
 /// @}

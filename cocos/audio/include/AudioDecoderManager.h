@@ -27,7 +27,8 @@ THE SOFTWARE.
 #pragma once
 #include <string>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class AudioDecoder;
 
@@ -40,5 +41,4 @@ public:
     static void destroyDecoder(AudioDecoder* decoder);
 };
 
-} // namespace cocos2d {
-
+}  // namespace cocos2d

@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include <array>
@@ -36,18 +36,15 @@ CC_BACKEND_BEGIN
  */
 struct TextureInfoGL
 {
-    void applySampler(const SamplerDescriptor &desc, bool isPow2, bool hasMipmaps, GLenum target);
+    void applySampler(const SamplerDescriptor& desc, bool isPow2, bool hasMipmaps, GLenum target);
     void setCurrentTexParameters(GLenum target);
 
-    TextureInfoGL() {
-        textures.fill(0);
-    }
-    ~TextureInfoGL() {
-        destroy();
-    }
+    TextureInfoGL() { textures.fill(0); }
+    ~TextureInfoGL() { destroy(); }
 
-    template<typename _Fty>
-    void foreach(const _Fty& cb) const {
+    template <typename _Fty>
+    void foreach (const _Fty& cb) const
+    {
         GLuint texID;
         int idx = 0;
         while ((texID = textures[idx]))
@@ -57,8 +54,10 @@ struct TextureInfoGL
     GLuint ensure(int index, GLenum target);
     void recreateAll(GLenum target);
 
-    void destroy() {
-        foreach([=](GLuint texID, int) { glDeleteTextures(1, &texID); });
+    void destroy()
+    {
+        foreach ([=](GLuint texID, int) { glDeleteTextures(1, &texID); })
+            ;
         textures.fill(0);
     }
 
@@ -71,15 +70,15 @@ struct TextureInfoGL
     void apply(int slot, int index, GLenum target) const;
     GLuint getName(int index) const { return textures[0]; }
 
-    GLint magFilterGL = GL_LINEAR;
-    GLint minFilterGL = GL_LINEAR;
+    GLint magFilterGL    = GL_LINEAR;
+    GLint minFilterGL    = GL_LINEAR;
     GLint sAddressModeGL = GL_REPEAT;
     GLint tAddressModeGL = GL_REPEAT;
 
     // Used in glTexImage2D().
     GLint internalFormat = GL_RGBA;
-    GLenum format = GL_RGBA;
-    GLenum type = GL_UNSIGNED_BYTE;
+    GLenum format        = GL_RGBA;
+    GLenum type          = GL_UNSIGNED_BYTE;
 
     std::array<GLuint, CC_META_TEXTURES + 1> textures;
     int maxIdx = 0;
@@ -101,37 +100,55 @@ public:
      */
     Texture2DGL(const TextureDescriptor& descriptor);
     ~Texture2DGL();
-    
+
     /**
      * Update a two-dimensional texture image
      * @param data Specifies a pointer to the image data in memory.
      * @param width Specifies the width of the texture image.
      * @param height Specifies the height of the texture image.
-     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
+     * reduction image.
      */
-    virtual void updateData(uint8_t* data, std::size_t width , std::size_t height, std::size_t level, int index = 0) override;
-    
+    virtual void updateData(uint8_t* data,
+                            std::size_t width,
+                            std::size_t height,
+                            std::size_t level,
+                            int index = 0) override;
+
     /**
      * Update a two-dimensional texture image in a compressed format
      * @param data Specifies a pointer to the compressed image data in memory.
      * @param width Specifies the width of the texture image.
      * @param height Specifies the height of the texture image.
      * @param dataLen Specifies the totoal size of compressed image in bytes.
-     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
+     * reduction image.
      */
-    virtual void updateCompressedData(uint8_t* data, std::size_t width , std::size_t height, std::size_t dataLen, std::size_t level, int index = 0) override;
-    
+    virtual void updateCompressedData(uint8_t* data,
+                                      std::size_t width,
+                                      std::size_t height,
+                                      std::size_t dataLen,
+                                      std::size_t level,
+                                      int index = 0) override;
+
     /**
      * Update a two-dimensional texture subimage
      * @param xoffset Specifies a texel offset in the x direction within the texture array.
      * @param yoffset Specifies a texel offset in the y direction within the texture array.
      * @param width Specifies the width of the texture subimage.
      * @param height Specifies the height of the texture subimage.
-     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
+     * reduction image.
      * @param data Specifies a pointer to the image data in memory.
      */
-    virtual void updateSubData(std::size_t xoffset, std::size_t yoffset, std::size_t width, std::size_t height, std::size_t level, uint8_t* data, int index = 0) override;
-    
+    virtual void updateSubData(std::size_t xoffset,
+                               std::size_t yoffset,
+                               std::size_t width,
+                               std::size_t height,
+                               std::size_t level,
+                               uint8_t* data,
+                               int index = 0) override;
+
     /**
      * Update a two-dimensional texture subimage in a compressed format
      * @param xoffset Specifies a texel offset in the x direction within the texture array.
@@ -139,17 +156,25 @@ public:
      * @param width Specifies the width of the texture subimage.
      * @param height Specifies the height of the texture subimage.
      * @param dataLen Specifies the totoal size of compressed subimage in bytes.
-     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.
+     * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
+     * reduction image.
      * @param data Specifies a pointer to the compressed image data in memory.
      */
-    virtual void updateCompressedSubData(std::size_t xoffset, std::size_t yoffset, std::size_t width, std::size_t height, std::size_t dataLen, std::size_t level, uint8_t* data, int index = 0) override;
-    
+    virtual void updateCompressedSubData(std::size_t xoffset,
+                                         std::size_t yoffset,
+                                         std::size_t width,
+                                         std::size_t height,
+                                         std::size_t dataLen,
+                                         std::size_t level,
+                                         uint8_t* data,
+                                         int index = 0) override;
+
     /**
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
-    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler)  override;
-    
+    virtual void updateSamplerDescriptor(const SamplerDescriptor& sampler) override;
+
     /**
      * Generate mipmaps.
      */
@@ -185,7 +210,7 @@ private:
 /**
  * Texture cube.
  */
-class TextureCubeGL: public backend::TextureCubemapBackend
+class TextureCubeGL : public backend::TextureCubemapBackend
 {
 public:
     /**
@@ -193,20 +218,20 @@ public:
      */
     TextureCubeGL(const TextureDescriptor& descriptor);
     ~TextureCubeGL();
-    
+
     /**
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
-    virtual void updateSamplerDescriptor(const SamplerDescriptor &sampler) override;
-    
+    virtual void updateSamplerDescriptor(const SamplerDescriptor& sampler) override;
+
     /**
      * Update texutre cube data in give slice side.
      * @param side Specifies which slice texture of cube to be update.
      * @param data Specifies a pointer to the image data in memory.
      */
-    virtual void updateFaceData(TextureCubeFace side, void *data, int index = 0) override;
-    
+    virtual void updateFaceData(TextureCubeFace side, void* data, int index = 0) override;
+
     /// Generate mipmaps.
     virtual void generateMipmaps() override;
 
@@ -214,7 +239,7 @@ public:
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    virtual void updateTextureDescriptor(const TextureDescriptor& descriptor, int index = 0) override ;
+    virtual void updateTextureDescriptor(const TextureDescriptor& descriptor, int index = 0) override;
 
     /**
      * Get texture object.
@@ -231,11 +256,10 @@ public:
     int getCount() const override { return _textureInfo.maxIdx + 1; }
 
 private:
-
     TextureInfoGL _textureInfo;
     EventListener* _backToForegroundListener = nullptr;
 };
 
-//end of _opengl group
+// end of _opengl group
 /// @}
 CC_BACKEND_END

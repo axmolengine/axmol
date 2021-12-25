@@ -42,18 +42,18 @@ public:
      * @lua NA
      */
     virtual ~Application();
-        
+
     /**
     @brief    Run the message loop.
     */
     int run();
-        
+
     /**
     @brief    Get the current application instance.
     @return Current application instance pointer.
     */
     static Application* getInstance();
-    
+
     /**
      @brief    Callback by Director for limit FPS.
      @param interval    The time, expressed in seconds, between current frame and next.
@@ -65,29 +65,29 @@ public:
     @return Current language config
     */
     virtual LanguageType getCurrentLanguage() override;
-    
+
     /**
      @brief Get current language iso 639-1 code
      @return Current language iso 639-1 code
      */
-    virtual const char * getCurrentLanguageCode() override;
-    
+    virtual const char* getCurrentLanguageCode() override;
+
     /**
      @brief Get target platform
      */
     virtual Platform getTargetPlatform() override;
-    
+
     /**
      @brief Get application version.
      */
     virtual std::string getVersion() override;
-    
+
     /**
      @brief Open url in default browser
      @param String with url to open.
      @return true if the resource located by the URL was successfully opened; otherwise false.
      */
-    virtual bool openURL(const std::string &url) override;
+    virtual bool openURL(const std::string& url) override;
 
     /**
     @brief  This function will be called when the application screen size is changed.
@@ -97,7 +97,7 @@ public:
     virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
 
 protected:
-    static Application * sm_pSharedApplication;
+    static Application* sm_pSharedApplication;
 };
 
 NS_CC_END

@@ -48,10 +48,12 @@ RenderTexture::RenderTexture()
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to save render texture before come to background.
     // Then it can be restored after coming to foreground on Android.
-    auto toBackgroundListener = EventListenerCustom::create(EVENT_COME_TO_BACKGROUND, CC_CALLBACK_1(RenderTexture::listenToBackground, this));
+    auto toBackgroundListener =
+        EventListenerCustom::create(EVENT_COME_TO_BACKGROUND, CC_CALLBACK_1(RenderTexture::listenToBackground, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(toBackgroundListener, this);
 
-    auto toForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, CC_CALLBACK_1(RenderTexture::listenToForeground, this));
+    auto toForegroundListener =
+        EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, CC_CALLBACK_1(RenderTexture::listenToForeground, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(toForegroundListener, this);
 #endif
 }
@@ -71,18 +73,20 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
     // So we disable this pair of message handler at present.
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // to get the rendered texture data
-    auto func = [&](Image* uiTextureImage){
+    auto func = [&](Image* uiTextureImage) {
         if (uiTextureImage)
         {
             CC_SAFE_RELEASE(_UITextureImage);
             _UITextureImage = uiTextureImage;
             CC_SAFE_RETAIN(_UITextureImage);
             const Vec2& s = _texture2D->getContentSizeInPixels();
-            VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4, backend::PixelFormat::RGBA8, s);
+            VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4,
+                                               backend::PixelFormat::RGBA8, s);
 
-            if ( _texture2DCopy )
+            if (_texture2DCopy)
             {
-                VolatileTextureMgr::addDataTexture(_texture2DCopy, uiTextureImage->getData(), s.width * s.height * 4, backend::PixelFormat::RGBA8, s);
+                VolatileTextureMgr::addDataTexture(_texture2DCopy, uiTextureImage->getData(), s.width * s.height * 4,
+                                                   backend::PixelFormat::RGBA8, s);
             }
         }
         else
@@ -101,25 +105,25 @@ void RenderTexture::listenToForeground(EventCustom* /*event*/)
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     const Vec2& s = _texture2D->getContentSizeInPixels();
-    //TODO new-renderer: field _depthAndStencilFormat removal
-//    if (_depthAndStencilFormat != 0)
-//    {
-//        setupDepthAndStencil(s.width, s.height);
-//    }
-    
+    // TODO new-renderer: field _depthAndStencilFormat removal
+    //    if (_depthAndStencilFormat != 0)
+    //    {
+    //        setupDepthAndStencil(s.width, s.height);
+    //    }
+
     _texture2D->setAntiAliasTexParameters();
-    if(_texture2DCopy)
+    if (_texture2DCopy)
     {
         _texture2DCopy->setAntiAliasTexParameters();
     }
 #endif
 }
 
-RenderTexture * RenderTexture::create(int w, int h, backend::PixelFormat eFormat)
+RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat)
 {
-    RenderTexture *ret = new RenderTexture();
+    RenderTexture* ret = new RenderTexture();
 
-    if(ret->initWithWidthAndHeight(w, h, eFormat))
+    if (ret->initWithWidthAndHeight(w, h, eFormat))
     {
         ret->autorelease();
         return ret;
@@ -128,11 +132,11 @@ RenderTexture * RenderTexture::create(int w, int h, backend::PixelFormat eFormat
     return nullptr;
 }
 
-RenderTexture * RenderTexture::create(int w ,int h, backend::PixelFormat eFormat, PixelFormat uDepthStencilFormat)
+RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat, PixelFormat uDepthStencilFormat)
 {
-    RenderTexture *ret = new RenderTexture();
+    RenderTexture* ret = new RenderTexture();
 
-    if(ret->initWithWidthAndHeight(w, h, eFormat, uDepthStencilFormat))
+    if (ret->initWithWidthAndHeight(w, h, eFormat, uDepthStencilFormat))
     {
         ret->autorelease();
         return ret;
@@ -141,11 +145,11 @@ RenderTexture * RenderTexture::create(int w ,int h, backend::PixelFormat eFormat
     return nullptr;
 }
 
-RenderTexture * RenderTexture::create(int w, int h)
+RenderTexture* RenderTexture::create(int w, int h)
 {
-    RenderTexture *ret = new RenderTexture();
+    RenderTexture* ret = new RenderTexture();
 
-    if(ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8, PixelFormat::NONE))
+    if (ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8, PixelFormat::NONE))
     {
         ret->autorelease();
         return ret;
@@ -166,11 +170,11 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
     bool ret = false;
     do
     {
-        _fullRect = _rtTextureRect = Rect(0,0,w,h);
-        w = (int)(w * CC_CONTENT_SCALE_FACTOR());
-        h = (int)(h * CC_CONTENT_SCALE_FACTOR());
-        _fullviewPort = Rect(0,0,w,h);
-        
+        _fullRect = _rtTextureRect = Rect(0, 0, w, h);
+        w                          = (int)(w * CC_CONTENT_SCALE_FACTOR());
+        h                          = (int)(h * CC_CONTENT_SCALE_FACTOR());
+        _fullviewPort              = Rect(0, 0, w, h);
+
         // textures must be power of two squared
         int powW = 0;
         int powH = 0;
@@ -185,30 +189,29 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
             powW = ccNextPOT(w);
             powH = ccNextPOT(h);
         }
-        
+
         backend::TextureDescriptor descriptor;
-        descriptor.width = powW;
-        descriptor.height = powH;
-        descriptor.textureUsage = TextureUsage::RENDER_TARGET;
+        descriptor.width         = powW;
+        descriptor.height        = powH;
+        descriptor.textureUsage  = TextureUsage::RENDER_TARGET;
         descriptor.textureFormat = PixelFormat::RGBA8;
-        _texture2D = new Texture2D();
+        _texture2D               = new Texture2D();
         _texture2D->updateTextureDescriptor(descriptor, !!CC_ENABLE_PREMULTIPLIED_ALPHA);
         _renderTargetFlags = RenderTargetFlag::COLOR;
 
         if (PixelFormat::D24S8 == depthStencilFormat)
         {
-            _renderTargetFlags = RenderTargetFlag::ALL;
+            _renderTargetFlags       = RenderTargetFlag::ALL;
             descriptor.textureFormat = depthStencilFormat;
 
             _depthStencilTexture = new Texture2D();
             _depthStencilTexture->updateTextureDescriptor(descriptor);
         }
 
-        _renderTarget = backend::Device::getInstance()->newRenderTarget(_renderTargetFlags,
-            _texture2D ? _texture2D->getBackendTexture() : nullptr,
+        _renderTarget = backend::Device::getInstance()->newRenderTarget(
+            _renderTargetFlags, _texture2D ? _texture2D->getBackendTexture() : nullptr,
             _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
-            _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr
-        );
+            _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);
 
         clearColorAttachment();
 
@@ -225,11 +228,13 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
         _sprite->setFlippedY(true);
 #endif
 
-        if(_texture2D->hasPremultipliedAlpha()){
+        if (_texture2D->hasPremultipliedAlpha())
+        {
             _sprite->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
             _sprite->setOpacityModifyRGB(true);
         }
-        else {
+        else
+        {
             _sprite->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
             _sprite->setOpacityModifyRGB(false);
         }
@@ -238,13 +243,13 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
 
         // Disabled by default.
         _autoDraw = false;
-        
+
         // add sprite for backward compatibility
         addChild(_sprite);
-        
+
         ret = true;
     } while (0);
-    
+
     return ret;
 }
 
@@ -259,7 +264,7 @@ void RenderTexture::setSprite(Sprite* sprite)
         if (_sprite)
             sEngine->releaseScriptObject(this, _sprite);
     }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     CC_SAFE_RETAIN(sprite);
     CC_SAFE_RELEASE(_sprite);
     _sprite = sprite;
@@ -290,7 +295,13 @@ void RenderTexture::beginWithClear(float r, float g, float b, float a, float dep
     beginWithClear(r, g, b, a, depthValue, stencilValue, ClearFlag::ALL);
 }
 
-void RenderTexture::beginWithClear(float r, float g, float b, float a, float depthValue, int stencilValue, ClearFlag flags)
+void RenderTexture::beginWithClear(float r,
+                                   float g,
+                                   float b,
+                                   float a,
+                                   float depthValue,
+                                   int stencilValue,
+                                   ClearFlag flags)
 {
     setClearColor(Color4F(r, g, b, a));
     setClearDepth(depthValue);
@@ -316,7 +327,7 @@ void RenderTexture::clearStencil(int stencilValue)
     setClearStencil(stencilValue);
 }
 
-void RenderTexture::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)
+void RenderTexture::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
     // override visit.
     // Don't call visit on its children
@@ -324,7 +335,7 @@ void RenderTexture::visit(Renderer *renderer, const Mat4 &parentTransform, uint3
     {
         return;
     }
-    
+
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
     // IMPORTANT:
@@ -338,7 +349,7 @@ void RenderTexture::visit(Renderer *renderer, const Mat4 &parentTransform, uint3
     {
         draw(renderer, _modelViewTransform, flags);
     }
-    
+
     _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
     // FIX ME: Why need to set _orderOfArrival to 0??
@@ -346,7 +357,9 @@ void RenderTexture::visit(Renderer *renderer, const Mat4 &parentTransform, uint3
     // setOrderOfArrival(0);
 }
 
-bool RenderTexture::saveToFileAsNonPMA(const std::string& filename, bool isRGBA, std::function<void(RenderTexture*, const std::string&)> callback)
+bool RenderTexture::saveToFileAsNonPMA(const std::string& filename,
+                                       bool isRGBA,
+                                       std::function<void(RenderTexture*, const std::string&)> callback)
 {
     std::string basename(filename);
     std::transform(basename.begin(), basename.end(), basename.begin(), ::tolower);
@@ -357,7 +370,8 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& filename, bool isRGBA,
     }
     else if (basename.find(".jpg") != std::string::npos)
     {
-        if (isRGBA) CCLOG("RGBA is not supported for JPG format.");
+        if (isRGBA)
+            CCLOG("RGBA is not supported for JPG format.");
         return saveToFileAsNonPMA(filename, Image::Format::JPG, false, callback);
     }
     else
@@ -366,35 +380,42 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& filename, bool isRGBA,
     }
 
     return saveToFileAsNonPMA(filename, Image::Format::JPG, false, callback);
-}     
-                                                              
-bool RenderTexture::saveToFile(const std::string& filename, bool isRGBA, std::function<void (RenderTexture*, const std::string&)> callback)
+}
+
+bool RenderTexture::saveToFile(const std::string& filename,
+                               bool isRGBA,
+                               std::function<void(RenderTexture*, const std::string&)> callback)
 {
     std::string basename(filename);
     std::transform(basename.begin(), basename.end(), basename.begin(), ::tolower);
-    
+
     if (basename.find(".png") != std::string::npos)
     {
         return saveToFile(filename, Image::Format::PNG, isRGBA, callback);
     }
     else if (basename.find(".jpg") != std::string::npos)
     {
-        if (isRGBA) CCLOG("RGBA is not supported for JPG format.");
+        if (isRGBA)
+            CCLOG("RGBA is not supported for JPG format.");
         return saveToFile(filename, Image::Format::JPG, false, callback);
     }
     else
     {
         CCLOG("Only PNG and JPG format are supported now!");
     }
-    
+
     return saveToFile(filename, Image::Format::JPG, false, callback);
 }
 
-bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName, Image::Format format, bool isRGBA, std::function<void(RenderTexture*, const std::string&)> callback)
+bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName,
+                                       Image::Format format,
+                                       bool isRGBA,
+                                       std::function<void(RenderTexture*, const std::string&)> callback)
 {
     CCASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
-        "the image can only be saved as JPG or PNG format");
-    if (isRGBA && format == Image::Format::JPG) CCLOG("RGBA is not supported for JPG format");
+             "the image can only be saved as JPG or PNG format");
+    if (isRGBA && format == Image::Format::JPG)
+        CCLOG("RGBA is not supported for JPG format");
 
     _saveFileCallback = callback;
 
@@ -406,26 +427,29 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName, Image::Forma
     return true;
 }
 
-
-bool RenderTexture::saveToFile(const std::string& fileName, Image::Format format, bool isRGBA, std::function<void (RenderTexture*, const std::string&)> callback)
+bool RenderTexture::saveToFile(const std::string& fileName,
+                               Image::Format format,
+                               bool isRGBA,
+                               std::function<void(RenderTexture*, const std::string&)> callback)
 {
     CCASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
              "the image can only be saved as JPG or PNG format");
-    if (isRGBA && format == Image::Format::JPG) CCLOG("RGBA is not supported for JPG format");
-    
+    if (isRGBA && format == Image::Format::JPG)
+        CCLOG("RGBA is not supported for JPG format");
+
     _saveFileCallback = callback;
-    
+
     std::string fullpath = FileUtils::getInstance()->getWritablePath() + fileName;
     _saveToFileCommand.init(_globalZOrder);
     _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
-    
+
     _director->getRenderer()->addCommand(&_saveToFileCommand);
     return true;
 }
 
 void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool forceNonPMA)
 {
-    auto callbackFunc = [&, filename, isRGBA, forceNonPMA](RefPtr<Image> image){
+    auto callbackFunc = [&, filename, isRGBA, forceNonPMA](RefPtr<Image> image) {
         if (image)
         {
             if (forceNonPMA && image->hasPremultipliedAlpha())
@@ -434,7 +458,7 @@ void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool 
             }
             image->saveToFile(filename, !isRGBA);
         }
-        if(_saveFileCallback)
+        if (_saveFileCallback)
         {
             _saveFileCallback(this, filename);
         }
@@ -449,7 +473,7 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
 
     if ((nullptr == _texture2D))
     {
-        return ;
+        return;
     }
 
     const Vec2& s = _texture2D->getContentSizeInPixels();
@@ -457,39 +481,42 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
     // to get the image size to save
     //        if the saving image domain exceeds the buffer texture domain,
     //        it should be cut
-    int savedBufferWidth = (int)s.width;
-    int savedBufferHeight = (int)s.height;
+    int savedBufferWidth       = (int)s.width;
+    int savedBufferHeight      = (int)s.height;
     bool hasPremultipliedAlpha = _texture2D->hasPremultipliedAlpha();
-    
+
     _director->getRenderer()->readPixels(_renderTarget, [=](const backend::PixelBufferDescriptor& pbd) {
-        if(pbd) {
-            auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(), pbd._width, pbd._height, 8, hasPremultipliedAlpha);
+        if (pbd)
+        {
+            auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(),
+                                                    pbd._width, pbd._height, 8, hasPremultipliedAlpha);
             imageCallback(image);
         }
-        else imageCallback(nullptr);
+        else
+            imageCallback(nullptr);
     });
 }
 
-void RenderTexture::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+void RenderTexture::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     if (_autoDraw)
     {
-        //Begin will create a render group using new render target
+        // Begin will create a render group using new render target
         begin();
 
-        //clear screen
+        // clear screen
         _director->getRenderer()->clear(_clearFlags, _clearColor, _clearDepth, _clearStencil, _globalZOrder);
 
         //! make sure all children are drawn
         sortAllChildren();
 
-        for(const auto &child: _children)
+        for (const auto& child : _children)
         {
             if (child != _sprite)
                 child->visit(renderer, transform, flags);
         }
 
-        //End will pop the current render group
+        // End will pop the current render group
         end();
     }
 }
@@ -502,31 +529,32 @@ void RenderTexture::onBegin()
     _oldTransMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _transformMatrix);
 
-    if(!_keepMatrix)
+    if (!_keepMatrix)
     {
         _director->setProjection(_director->getProjection());
         const Vec2& texSize = _texture2D->getContentSizeInPixels();
 
         // Calculate the adjustment ratios based on the old and new projections
-        Vec2 size = _director->getWinSizeInPixels();
-        float widthRatio = size.width / texSize.width;
+        Vec2 size         = _director->getWinSizeInPixels();
+        float widthRatio  = size.width / texSize.width;
         float heightRatio = size.height / texSize.height;
 
         Mat4 orthoMatrix;
-        Mat4::createOrthographicOffCenter((float)-1.0 / widthRatio, (float)1.0 / widthRatio, (float)-1.0 / heightRatio, (float)1.0 / heightRatio, -1, 1, &orthoMatrix);
+        Mat4::createOrthographicOffCenter((float)-1.0 / widthRatio, (float)1.0 / widthRatio, (float)-1.0 / heightRatio,
+                                          (float)1.0 / heightRatio, -1, 1, &orthoMatrix);
         _director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
     }
 
     Rect viewport;
-    viewport.size.width = _fullviewPort.size.width;
-    viewport.size.height = _fullviewPort.size.height;
-    float viewPortRectWidthRatio = float(viewport.size.width)/_fullRect.size.width;
-    float viewPortRectHeightRatio = float(viewport.size.height)/_fullRect.size.height;
-    viewport.origin.x = (_fullRect.origin.x - _rtTextureRect.origin.x) * viewPortRectWidthRatio;
-    viewport.origin.y = (_fullRect.origin.y - _rtTextureRect.origin.y) * viewPortRectHeightRatio;
+    viewport.size.width           = _fullviewPort.size.width;
+    viewport.size.height          = _fullviewPort.size.height;
+    float viewPortRectWidthRatio  = float(viewport.size.width) / _fullRect.size.width;
+    float viewPortRectHeightRatio = float(viewport.size.height) / _fullRect.size.height;
+    viewport.origin.x             = (_fullRect.origin.x - _rtTextureRect.origin.x) * viewPortRectWidthRatio;
+    viewport.origin.y             = (_fullRect.origin.y - _rtTextureRect.origin.y) * viewPortRectHeightRatio;
 
-    Renderer *renderer = _director->getRenderer();
-    
+    Renderer* renderer = _director->getRenderer();
+
     _oldViewport = renderer->getViewport();
     renderer->setViewPort(viewport.origin.x, viewport.origin.y, viewport.size.width, viewport.size.height);
 
@@ -538,8 +566,8 @@ void RenderTexture::onEnd()
 {
     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _oldProjMatrix);
     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _oldTransMatrix);
-    
-    Renderer *renderer = _director->getRenderer();
+
+    Renderer* renderer = _director->getRenderer();
     renderer->setViewPort(_oldViewport.x, _oldViewport.y, _oldViewport.w, _oldViewport.h);
 
     renderer->setRenderTarget(_oldRenderTarget);
@@ -549,30 +577,31 @@ void RenderTexture::begin()
 {
     _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     _projectionMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    
+
     _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     _transformMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    
-    if(!_keepMatrix)
+
+    if (!_keepMatrix)
     {
         _director->setProjection(_director->getProjection());
-        
+
         const Vec2& texSize = _texture2D->getContentSizeInPixels();
-        
+
         // Calculate the adjustment ratios based on the old and new projections
         Vec2 size = _director->getWinSizeInPixels();
-        
-        float widthRatio = size.width / texSize.width;
+
+        float widthRatio  = size.width / texSize.width;
         float heightRatio = size.height / texSize.height;
-        
+
         Mat4 orthoMatrix;
-        Mat4::createOrthographicOffCenter((float)-1.0 / widthRatio, (float)1.0 / widthRatio, (float)-1.0 / heightRatio, (float)1.0 / heightRatio, -1, 1, &orthoMatrix);
+        Mat4::createOrthographicOffCenter((float)-1.0 / widthRatio, (float)1.0 / widthRatio, (float)-1.0 / heightRatio,
+                                          (float)1.0 / heightRatio, -1, 1, &orthoMatrix);
         _director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
     }
 
     _groupCommand.init(_globalZOrder);
 
-    Renderer *renderer = _director->getRenderer();
+    Renderer* renderer = _director->getRenderer();
     renderer->addCommand(&_groupCommand);
     renderer->pushGroup(_groupCommand.getRenderQueueID());
 
@@ -586,7 +615,7 @@ void RenderTexture::end()
     _endCommand.init(_globalZOrder);
     _endCommand.func = CC_CALLBACK_0(RenderTexture::onEnd, this);
 
-    Renderer *renderer = _director->getRenderer();
+    Renderer* renderer = _director->getRenderer();
     renderer->addCommand(&_endCommand);
     renderer->popGroup();
 
@@ -597,8 +626,7 @@ void RenderTexture::end()
 void RenderTexture::setClearFlags(ClearFlag clearFlags)
 {
     _clearFlags = clearFlags;
-    if (_clearFlags != ClearFlag::NONE
-        && !_depthStencilTexture)
+    if (_clearFlags != ClearFlag::NONE && !_depthStencilTexture)
     {
         _clearFlags = ClearFlag::COLOR;
     }
@@ -606,7 +634,7 @@ void RenderTexture::setClearFlags(ClearFlag clearFlags)
 
 void RenderTexture::clearColorAttachment()
 {
-    auto renderer = _director->getRenderer();
+    auto renderer                      = _director->getRenderer();
     _beforeClearAttachmentCommand.func = [=]() -> void {
         _oldRenderTarget = renderer->getRenderTarget();
         renderer->setRenderTarget(_renderTarget);
@@ -616,9 +644,7 @@ void RenderTexture::clearColorAttachment()
     Color4F color(0.f, 0.f, 0.f, 0.f);
     renderer->clear(ClearFlag::COLOR, color, 1, 0, _globalZOrder);
 
-    _afterClearAttachmentCommand.func = [=]() -> void {
-        renderer->setRenderTarget(_oldRenderTarget);
-    };
+    _afterClearAttachmentCommand.func = [=]() -> void { renderer->setRenderTarget(_oldRenderTarget); };
     renderer->addCommand(&_afterClearAttachmentCommand);
 }
 

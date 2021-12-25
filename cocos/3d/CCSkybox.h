@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -42,13 +42,13 @@ NS_CC_BEGIN
 class TextureCube;
 
 /**
-* Sky box technology is usually used to simulate infinity sky, mountains and other phenomena.
-*/
+ * Sky box technology is usually used to simulate infinity sky, mountains and other phenomena.
+ */
 class CC_DLL Skybox : public Node
 {
 public:
     CREATE_FUNC(Skybox);
-    
+
     /** create skybox from 6 textures.
      @param positive_x texture for the right side of the texture cube face.
      @param negative_x texture for the left side of the texture cube face.
@@ -58,9 +58,12 @@ public:
      @param negative_z texture for the rear side of the texture cube face.
      @return  A new skybox inited with given parameters.
      */
-    static Skybox* create(const std::string& positive_x, const std::string& negative_x,
-                               const std::string& positive_y, const std::string& negative_y,
-                               const std::string& positive_z, const std::string& negative_z);
+    static Skybox* create(const std::string& positive_x,
+                          const std::string& negative_x,
+                          const std::string& positive_y,
+                          const std::string& negative_y,
+                          const std::string& positive_z,
+                          const std::string& negative_z);
 
     /**texture getter and setter*/
     void setTexture(TextureCube*);
@@ -71,38 +74,41 @@ public:
     /** reload sky box after GLESContext reconstructed.*/
     void reload();
 
-CC_CONSTRUCTOR_ACCESS:
-    /**
-    * Constructor.
-    */
-    Skybox();
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * Constructor.
+         */
+        Skybox();
 
     /**
-    * Destructor.
-    */
+     * Destructor.
+     */
     virtual ~Skybox();
 
     /**
-    * init Skybox.
-    */
+     * init Skybox.
+     */
     virtual bool init() override;
-    
+
     /**
      * initialize with texture path
      */
-    bool init(const std::string& positive_x, const std::string& negative_x,
-              const std::string& positive_y, const std::string& negative_y,
-              const std::string& positive_z, const std::string& negative_z);
+    bool init(const std::string& positive_x,
+              const std::string& negative_x,
+              const std::string& positive_y,
+              const std::string& negative_y,
+              const std::string& positive_z,
+              const std::string& negative_z);
 
 protected:
-
     /**
-    * init internal buffers for Skybox.
-    */
+     * init internal buffers for Skybox.
+     */
     void initBuffers();
-    
+
     CustomCommand _customCommand;
-    TextureCube*  _texture;
+    TextureCube* _texture;
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Skybox);
 
@@ -123,4 +129,4 @@ private:
 
 NS_CC_END
 
-#endif // __SKYBOX_H__
+#endif  // __SKYBOX_H__

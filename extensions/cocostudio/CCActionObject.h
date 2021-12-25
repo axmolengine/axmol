@@ -30,133 +30,133 @@ THE SOFTWARE.
 #include "DictionaryHelper.h"
 #include "CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CocoLoader;
 struct stExpCocoNode;
-    
+
 /**
-*  @js NA
-*  @lua NA
-*/
+ *  @js NA
+ *  @lua NA
+ */
 class CCS_DLL ActionObject : public cocos2d::Ref
 {
 public:
-
     /**
-    * Default constructor
-    */
+     * Default constructor
+     */
     ActionObject();
 
     /**
-    * Default destructor
-    */
+     * Default destructor
+     */
     virtual ~ActionObject();
 
     /**
-    * Sets name for object
-    *
-    * @param name    name of object
-    */
+     * Sets name for object
+     *
+     * @param name    name of object
+     */
     void setName(const char* name);
 
     /**
-    * Gets name of object
-    *
-    * @return name of object
-    */
+     * Gets name of object
+     *
+     * @return name of object
+     */
     const char* getName();
 
     /**
-    * Sets if the action will loop play.
-    *
-    * @param bLoop     that if the action will loop play
-    */
+     * Sets if the action will loop play.
+     *
+     * @param bLoop     that if the action will loop play
+     */
     void setLoop(bool bLoop);
 
     /**
-    * Gets if the action will loop play.
-    *
-    * @return   that if the action will loop play
-    */
+     * Gets if the action will loop play.
+     *
+     * @return   that if the action will loop play
+     */
     bool getLoop();
 
     /**
-    * Sets the time interval of frame.
-    *
-    * @param fTime   the time interval of frame
-    */
+     * Sets the time interval of frame.
+     *
+     * @param fTime   the time interval of frame
+     */
     void setUnitTime(float fTime);
 
     /**
-    * Gets the time interval of frame.
-    *
-    * @return the time interval of frame
-    */
+     * Gets the time interval of frame.
+     *
+     * @return the time interval of frame
+     */
     float getUnitTime();
 
     /**
-    * Sets the current time of frame.
-    *
-    * @param fTime   the current time of frame
-    */
+     * Sets the current time of frame.
+     *
+     * @param fTime   the current time of frame
+     */
     void setCurrentTime(float fTime);
 
     /**
-    * Gets the current time of frame.
-    *
-    * @return the current time of frame
-    */
+     * Gets the current time of frame.
+     *
+     * @return the current time of frame
+     */
     float getCurrentTime();
 
     /**
-    * Gets the total time of frame.
-    *
-    * @return the total time of frame
-    */
+     * Gets the total time of frame.
+     *
+     * @return the total time of frame
+     */
     float getTotalTime();
 
     /**
-    * Return if the action is playing.
-    *
-    * @return true if the action is playing, false the otherwise
-    */
+     * Return if the action is playing.
+     *
+     * @return true if the action is playing, false the otherwise
+     */
     bool isPlaying();
 
     /**
-    * Play the action.
-    */
+     * Play the action.
+     */
     void play();
 
     /**
-    * Play the action.
-    *
-    * @param func Action Call Back
-    */
+     * Play the action.
+     *
+     * @param func Action Call Back
+     */
     void play(cocos2d::CallFunc* func);
 
-    /** 
-    * Pause the action.
-    */
+    /**
+     * Pause the action.
+     */
     void pause();
 
     /**
-    * Stop the action.
-    */
+     * Stop the action.
+     */
     void stop();
 
     /**
-    * Adds a ActionNode to play the action.
-    *
-    * @param node    the ActionNode which will play the action
-    */
+     * Adds a ActionNode to play the action.
+     *
+     * @param node    the ActionNode which will play the action
+     */
     void addActionNode(ActionNode* node);
 
     /**
-    * Removes a ActionNode which play the action.
-    *
-    * @param node    the ActionNode which play the action
-    */
+     * Removes a ActionNode which play the action.
+     *
+     * @param node    the ActionNode which play the action
+     */
     void removeActionNode(ActionNode* node);
 
     /*update frame method*/
@@ -164,17 +164,17 @@ public:
 
     /*init properties with a json dictionary*/
     void initWithDictionary(const rapidjson::Value& dic, cocos2d::Ref* root);
-    
-    void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode*    pCocoNode, cocos2d::Ref* root);
 
+    void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, cocos2d::Ref* root);
 
     /*scheduler update function*/
     void simulationActionUpdate(float dt);
+
 protected:
     int valueToInt(const std::string& value);
     bool valueToBool(const std::string& value);
     float valueToFloat(const std::string& value);
-    
+
     cocos2d::Vector<ActionNode*> _actionNodeList;
     std::string _name;
     bool _loop;
@@ -182,11 +182,11 @@ protected:
     bool _bPlaying;
     float _fUnitTime;
     float _currentTime;
-    cocos2d::Scheduler *_pScheduler;
-    cocos2d::CallFunc *_CallBack;
+    cocos2d::Scheduler* _pScheduler;
+    cocos2d::CallFunc* _CallBack;
     float _fTotalTime;
 };
 
-}
+}  // namespace cocostudio
 
 #endif

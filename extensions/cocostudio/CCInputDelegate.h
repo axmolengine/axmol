@@ -33,27 +33,29 @@ THE SOFTWARE.
 #include "base/CCEventListener.h"
 #include "CocosStudioExport.h"
 
-namespace cocos2d {
-    class __Set;
+namespace cocos2d
+{
+class __Set;
 }
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 /**
  *  @lua NA
  */
 class CCS_DLL InputDelegate
 {
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    InputDelegate(void);
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        InputDelegate(void);
     /**
      * @js NA
      */
     virtual ~InputDelegate(void);
-    
+
 public:
     virtual bool isTouchEnabled() const;
     virtual void setTouchEnabled(bool value);
@@ -64,8 +66,8 @@ public:
     virtual void setTouchMode(cocos2d::Touch::DispatchMode mode);
     virtual cocos2d::Touch::DispatchMode getTouchMode() const;
     virtual void setTouchPriority(int priority);
-    virtual int  getTouchPriority() const;
- /** @deprecated Please override onAcceleration */
+    virtual int getTouchPriority() const;
+    /** @deprecated Please override onAcceleration */
     /**
      * @js NA
      */
@@ -118,48 +120,49 @@ public:
     /**
      * @js NA
      */
-    virtual bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event);
+    virtual void onTouchCancelled(cocos2d::Touch* touch, cocos2d::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *event);
+    virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *event);
+    virtual void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *event);
+    virtual void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchesCancelled(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *event);
+    virtual void onTouchesCancelled(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 
-protected:   
+protected:
     bool _touchEnabled;
     cocos2d::EventListener* _touchListener;
     bool _accelerometerEnabled;
-    cocos2d::EventListener*  _accelerometerListener;
+    cocos2d::EventListener* _accelerometerListener;
     bool _keypadEnabled;
-    cocos2d::EventListener*  _keyboardListener;
+    cocos2d::EventListener* _keyboardListener;
+
 private:
-     int _touchPriority;
+    int _touchPriority;
     cocos2d::Touch::DispatchMode _touchMode;
 };
 
-}
+}  // namespace cocostudio
 
 #endif  // __CC_EXTENTIONS_CCINPUTDELEGATE_H__

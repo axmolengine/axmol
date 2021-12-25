@@ -25,23 +25,19 @@ THE SOFTWARE.
 #include "platform/CCPlatformMacros.h"
 #include "DictionaryHelper.h"
 
-namespace cocostudio {
-    
+namespace cocostudio
+{
+
 static DictionaryHelper* sharedHelper = nullptr;
 
-DictionaryHelper::DictionaryHelper()
-{
-    
-}
+DictionaryHelper::DictionaryHelper() {}
 
-DictionaryHelper::~DictionaryHelper()
-{
-    
-}
+DictionaryHelper::~DictionaryHelper() {}
 
 DictionaryHelper* DictionaryHelper::getInstance()
 {
-    if (!sharedHelper) {
+    if (!sharedHelper)
+    {
         sharedHelper = new DictionaryHelper();
     }
     return sharedHelper;
@@ -49,20 +45,20 @@ DictionaryHelper* DictionaryHelper::getInstance()
 
 void DictionaryHelper::destroyInstance()
 {
-	 CC_SAFE_DELETE(sharedHelper);
+    CC_SAFE_DELETE(sharedHelper);
 }
 
-const rapidjson::Value& DictionaryHelper::getSubDictionary_json(const rapidjson::Value &root, const char* key)
+const rapidjson::Value& DictionaryHelper::getSubDictionary_json(const rapidjson::Value& root, const char* key)
 {
-	return root[key];
+    return root[key];
 }
 
-const rapidjson::Value& DictionaryHelper::getSubDictionary_json(const rapidjson::Value &root, const char* key, int idx)
+const rapidjson::Value& DictionaryHelper::getSubDictionary_json(const rapidjson::Value& root, const char* key, int idx)
 {
     return root[key][idx];
 }
 
-const rapidjson::Value& DictionaryHelper::getSubDictionary_json(const rapidjson::Value &root, int idx)
+const rapidjson::Value& DictionaryHelper::getSubDictionary_json(const rapidjson::Value& root, int idx)
 {
     return root[idx];
 }
@@ -70,164 +66,179 @@ const rapidjson::Value& DictionaryHelper::getSubDictionary_json(const rapidjson:
 int DictionaryHelper::getIntValue_json(const rapidjson::Value& root, const char* key, int def)
 {
     int nRet = def;
-    do {
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         CC_BREAK_IF(!root.HasMember(key));
         CC_BREAK_IF(root[key].IsNull());
         nRet = root[key].GetInt();
     } while (0);
-    
+
     return nRet;
 }
 
-
-float DictionaryHelper::getFloatValue_json(const rapidjson::Value& root,const char* key, float def)
+float DictionaryHelper::getFloatValue_json(const rapidjson::Value& root, const char* key, float def)
 {
-	float fRet = def;
-    do {
+    float fRet = def;
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         CC_BREAK_IF(!root.HasMember(key));
         CC_BREAK_IF(root[key].IsNull());
         fRet = (float)root[key].GetDouble();
     } while (0);
-    
+
     return fRet;
 }
 
-bool DictionaryHelper::getBooleanValue_json(const rapidjson::Value& root,const char* key, bool def)
+bool DictionaryHelper::getBooleanValue_json(const rapidjson::Value& root, const char* key, bool def)
 {
     bool bRet = def;
-    do {
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         CC_BREAK_IF(!root.HasMember(key));
         CC_BREAK_IF(root[key].IsNull());
         bRet = root[key].GetBool();
     } while (0);
-    
+
     return bRet;
 }
 
-const char* DictionaryHelper::getStringValue_json(const rapidjson::Value& root,const char* key, const char *def)
+const char* DictionaryHelper::getStringValue_json(const rapidjson::Value& root, const char* key, const char* def)
 {
     const char* sRet = def;
-    do {
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         CC_BREAK_IF(!root.HasMember(key));
         CC_BREAK_IF(root[key].IsNull());
         sRet = root[key].GetString();
     } while (0);
-    
+
     return sRet;
 }
-
-
 
 int DictionaryHelper::getArrayCount_json(const rapidjson::Value& root, const char* key, int def)
 {
     int nRet = def;
-    do {
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         CC_BREAK_IF(!root.HasMember(key));
         CC_BREAK_IF(root[key].IsNull());
         nRet = (int)(root[key].Size());
     } while (0);
-    
+
     return nRet;
 }
 
-
-int DictionaryHelper::getIntValueFromArray_json(const rapidjson::Value& root,const char* arrayKey,int idx, int def)
+int DictionaryHelper::getIntValueFromArray_json(const rapidjson::Value& root, const char* arrayKey, int idx, int def)
 {
     int nRet = def;
-    do {
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         CC_BREAK_IF(!root.HasMember(arrayKey));
         CC_BREAK_IF(root[arrayKey].IsNull());
         CC_BREAK_IF(root[arrayKey][idx].IsNull());
         nRet = root[arrayKey][idx].GetInt();
     } while (0);
-    
+
     return nRet;
 }
 
-
-float DictionaryHelper::getFloatValueFromArray_json(const rapidjson::Value& root,const char* arrayKey,int idx, float def)
+float DictionaryHelper::getFloatValueFromArray_json(const rapidjson::Value& root,
+                                                    const char* arrayKey,
+                                                    int idx,
+                                                    float def)
 {
     float fRet = def;
-    do {
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         CC_BREAK_IF(root[arrayKey].IsNull());
         CC_BREAK_IF(root[arrayKey][idx].IsNull());
         fRet = (float)root[arrayKey][idx].GetDouble();
     } while (0);
-    
+
     return fRet;
 }
 
-bool DictionaryHelper::getBoolValueFromArray_json(const rapidjson::Value& root,const char* arrayKey,int idx, bool def)
+bool DictionaryHelper::getBoolValueFromArray_json(const rapidjson::Value& root, const char* arrayKey, int idx, bool def)
 {
-	bool bRet = def;
-    do {
+    bool bRet = def;
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         CC_BREAK_IF(root[arrayKey].IsNull());
         CC_BREAK_IF(root[arrayKey][idx].IsNull());
         bRet = root[arrayKey][idx].GetBool();
     } while (0);
-    
+
     return bRet;
 }
 
-const char* DictionaryHelper::getStringValueFromArray_json(const rapidjson::Value& root,const char* arrayKey,int idx, const char *def)
+const char* DictionaryHelper::getStringValueFromArray_json(const rapidjson::Value& root,
+                                                           const char* arrayKey,
+                                                           int idx,
+                                                           const char* def)
 {
-    const char *sRet = def;
-    do {
+    const char* sRet = def;
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         CC_BREAK_IF(root[arrayKey].IsNull());
         CC_BREAK_IF(root[arrayKey][idx].IsNull());
         sRet = root[arrayKey][idx].GetString();
     } while (0);
-    
+
     return sRet;
 }
 
-const rapidjson::Value &DictionaryHelper::getDictionaryFromArray_json(const rapidjson::Value &root, const char* key,int idx)
+const rapidjson::Value& DictionaryHelper::getDictionaryFromArray_json(const rapidjson::Value& root,
+                                                                      const char* key,
+                                                                      int idx)
 {
-	return root[key][idx];
+    return root[key][idx];
 }
 
-bool DictionaryHelper::checkObjectExist_json(const rapidjson::Value &root)
+bool DictionaryHelper::checkObjectExist_json(const rapidjson::Value& root)
 {
     bool bRet = false;
-    do {
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         bRet = true;
     } while (0);
-    
+
     return bRet;
 }
 
-bool DictionaryHelper::checkObjectExist_json(const rapidjson::Value &root,const char* key)
+bool DictionaryHelper::checkObjectExist_json(const rapidjson::Value& root, const char* key)
 {
     bool bRet = false;
-    do {
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         bRet = root.HasMember(key);
     } while (0);
-    
+
     return bRet;
 }
 
-bool DictionaryHelper::checkObjectExist_json(const rapidjson::Value &root, int index)
+bool DictionaryHelper::checkObjectExist_json(const rapidjson::Value& root, int index)
 {
     bool bRet = false;
-    do {   
+    do
+    {
         CC_BREAK_IF(root.IsNull());
         CC_BREAK_IF(!root.IsArray());
-        CC_BREAK_IF(index < 0 || root.Size() <= (unsigned int )index);
+        CC_BREAK_IF(index < 0 || root.Size() <= (unsigned int)index);
         bRet = true;
     } while (0);
 
     return bRet;
 }
 
-}
+}  // namespace cocostudio

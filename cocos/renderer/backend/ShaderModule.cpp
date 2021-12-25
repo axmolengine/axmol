@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "ShaderModule.h"
 
 CC_BACKEND_BEGIN
@@ -31,12 +31,8 @@ ShaderStage ShaderModule::getShaderStage() const
     return _stage;
 }
 
-ShaderModule::ShaderModule(ShaderStage stage):
-_stage(stage)
-{
-}
+ShaderModule::ShaderModule(ShaderStage stage) : _stage(stage) {}
 
-ShaderModule::~ShaderModule()
-{}
+ShaderModule::~ShaderModule() {}
 
 CC_BACKEND_END

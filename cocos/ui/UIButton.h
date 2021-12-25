@@ -40,9 +40,10 @@ class Label;
 class SpriteFrame;
 struct CC_DLL ResourceData;
 
-namespace ui{
+namespace ui
+{
 
-    class Scale9Sprite;
+class Scale9Sprite;
 /**
  * Represents a push-button widget.
  * Push-buttons can be pressed, or clicked, by the user to perform an action.
@@ -53,7 +54,6 @@ class CC_GUI_DLL Button : public Widget
     DECLARE_CLASS_GUI_INFO
 
 public:
-
     /**
      * Default constructor.
      */
@@ -82,8 +82,8 @@ public:
      */
     static Button* create(const std::string& normalImage,
                           const std::string& selectedImage = "",
-                          const std::string& disableImage = "",
-                          TextureResType texType = TextureResType::LOCAL);
+                          const std::string& disableImage  = "",
+                          TextureResType texType           = TextureResType::LOCAL);
 
     /**
      * Load textures for button.
@@ -96,7 +96,7 @@ public:
     void loadTextures(const std::string& normal,
                       const std::string& selected,
                       const std::string& disabled = "",
-                      TextureResType texType = TextureResType::LOCAL);
+                      TextureResType texType      = TextureResType::LOCAL);
 
     /**
      * Load normal state texture for button.
@@ -128,46 +128,46 @@ public:
      *
      * @param capInsets    capInset in Rect.
      */
-    void setCapInsets(const Rect &capInsets);
+    void setCapInsets(const Rect& capInsets);
 
     /**
      * Sets capInsets for button, only the normal state scale9 renderer will be affected.
      *
      * @param capInsets    capInsets in Rect.
      */
-    void setCapInsetsNormalRenderer(const Rect &capInsets);
+    void setCapInsetsNormalRenderer(const Rect& capInsets);
 
     /**
      * Return the capInsets of normal state scale9sprite.
      *@return The normal scale9 renderer capInsets.
      */
-    const Rect& getCapInsetsNormalRenderer()const;
+    const Rect& getCapInsetsNormalRenderer() const;
 
     /**
      * Sets capInsets for button, only the pressed state scale9 renderer will be affected.
      *
      * @param capInsets    capInsets in Rect
      */
-    void setCapInsetsPressedRenderer(const Rect &capInsets);
+    void setCapInsetsPressedRenderer(const Rect& capInsets);
 
     /**
      * Return the capInsets of pressed state scale9sprite.
      *@return The pressed scale9 renderer capInsets.
      */
-    const Rect& getCapInsetsPressedRenderer()const;
+    const Rect& getCapInsetsPressedRenderer() const;
 
     /**
      * Sets capInsets for button, only the disabled state scale9 renderer will be affected.
      *
      * @param capInsets  capInsets in Rect.
      */
-    void setCapInsetsDisabledRenderer(const Rect &capInsets);
+    void setCapInsetsDisabledRenderer(const Rect& capInsets);
 
     /**
      * Return the capInsets of disabled state scale9sprite.
      *@return The disabled scale9 renderer capInsets.
      */
-    const Rect& getCapInsetsDisabledRenderer()const;
+    const Rect& getCapInsetsDisabledRenderer() const;
 
     /**
      * Enable scale9 renderer.
@@ -180,7 +180,7 @@ public:
      * Query whether button is using scale9 renderer or not.
      *@return whether button use scale9 renderer or not.
      */
-    bool isScale9Enabled()const;
+    bool isScale9Enabled() const;
 
     /**
      * Enable zooming action when button is pressed.
@@ -189,7 +189,7 @@ public:
      */
     void setPressedActionEnabled(bool enabled);
 
-    //override methods
+    // override methods
     virtual void ignoreContentAdaptWithSize(bool ignore) override;
     virtual Vec2 getVirtualRendererSize() const override;
     virtual Node* getVirtualRenderer() override;
@@ -200,7 +200,7 @@ public:
      * @return The button title.
      * @since v3.3
      */
-    Label* getTitleRenderer()const;
+    Label* getTitleRenderer() const;
 
     /**
      * Change the content of button's title.
@@ -271,7 +271,6 @@ public:
     /** returns the current Label being used */
     Label* getTitleLabel() const;
 
-
     /** @brief When user pressed the button, the button will zoom to a scale.
      * The final scale of the button  equals (button original scale + _zoomScale)
      * @since v3.3
@@ -283,22 +282,22 @@ public:
      * @return the zoom scale in float
      * @since v3.3
      */
-    float getZoomScale()const;
-    
+    float getZoomScale() const;
+
     /**
      * @brief Return the nine-patch sprite of normal state
      * @return the nine-patch sprite of normal state
      * @since v3.9
      */
     Scale9Sprite* getRendererNormal() const { return _buttonNormalRenderer; }
-    
+
     /**
      * @brief Return the nine-patch sprite of clicked state
      * @return the nine-patch sprite of clicked state
      * @since v3.9
      */
     Scale9Sprite* getRendererClicked() const { return _buttonClickedRenderer; }
-    
+
     /**
      * @brief Return the nine-patch sprite of disabled state
      * @return the nine-patch sprite of disabled state
@@ -314,12 +313,11 @@ public:
     ResourceData getPressedFile();
     ResourceData getDisabledFile();
 
-CC_CONSTRUCTOR_ACCESS:
-    virtual bool init() override;
+    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
     virtual bool init(const std::string& normalImage,
                       const std::string& selectedImage = "",
-                      const std::string& disableImage = "",
-                      TextureResType texType = TextureResType::LOCAL);
+                      const std::string& disableImage  = "",
+                      TextureResType texType           = TextureResType::LOCAL);
 
     virtual Vec2 getNormalTextureSize() const;
 
@@ -351,6 +349,7 @@ protected:
     virtual void copySpecialProperties(Widget* model) override;
 
     virtual Vec2 getNormalSize() const;
+
 protected:
     Scale9Sprite* _buttonNormalRenderer;
     Scale9Sprite* _buttonClickedRenderer;
@@ -388,7 +387,7 @@ protected:
     std::string _fontName;
 };
 
-}
+}  // namespace ui
 
 NS_CC_END
 // end of ui group

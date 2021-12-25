@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -94,7 +94,8 @@ private:
 public:
     /**
      * - Creating a Worldclock instance. Typically, you do not need to create Worldclock instance.
-     * When multiple Worldclock instances are running at different speeds, can achieving some specific animation effects, such as bullet time.
+     * When multiple Worldclock instances are running at different speeds, can achieving some specific animation
+     * effects, such as bullet time.
      * @version DragonBones 3.0
      * @language en_US
      */
@@ -104,22 +105,16 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    WorldClock(float timeValue = 0.0f) :
-        time(timeValue),
-        timeScale(1.0f),
-        _systemTime(0.0f),
-        _animatebles(),
-        _clock(nullptr)
+    WorldClock(float timeValue = 0.0f)
+        : time(timeValue), timeScale(1.0f), _systemTime(0.0f), _animatebles(), _clock(nullptr)
     {
         _systemTime = 0.0f;
     }
-    virtual ~WorldClock()
-    {
-        clear();
-    }
+    virtual ~WorldClock() { clear(); }
     /**
      * - Advance time for all IAnimatable instances.
-     * @param passedTime - Passed time. [-1: Automatically calculates the time difference between the current frame and the previous frame, [0~N): Passed time] (In seconds)
+     * @param passedTime - Passed time. [-1: Automatically calculates the time difference between the current frame and
+     * the previous frame, [0~N): Passed time] (In seconds)
      * @version DragonBones 3.0
      * @language en_US
      */
@@ -183,15 +178,12 @@ public:
     /**
      * @inheritDoc
      */
-    inline virtual WorldClock* getClock() const override
-    {
-        return _clock;
-    }
+    inline virtual WorldClock* getClock() const override { return _clock; }
     virtual void setClock(WorldClock* value) override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     static WorldClock* getStaticClock() { return &clock; }
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_WORLD_CLOCK_H
+#endif  // DRAGONBONES_WORLD_CLOCK_H

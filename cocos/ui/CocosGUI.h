@@ -26,7 +26,6 @@ THE SOFTWARE.
 #ifndef __COCOSGUI_H__
 #define __COCOSGUI_H__
 
-
 #include "ui/UIWidget.h"
 #include "ui/UILayout.h"
 #include "ui/UIButton.h"
@@ -48,8 +47,8 @@ THE SOFTWARE.
 #include "ui/UIVBox.h"
 #include "ui/UIRelativeBox.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#include "ui/UIVideoPlayer.h"
-#include "ui/UIWebView/UIWebView.h"
+#    include "ui/UIVideoPlayer.h"
+#    include "ui/UIWebView/UIWebView.h"
 #endif
 #include "ui/GUIExport.h"
 #include "ui/UIScale9Sprite.h"
@@ -62,8 +61,8 @@ THE SOFTWARE.
  * @{
  */
 NS_CC_BEGIN
-namespace ui {
-
+namespace ui
+{
 
 /**
  * Get current cocos GUI module version string.
@@ -71,7 +70,7 @@ namespace ui {
  */
 CC_GUI_DLL const char* CocosGUIVersion();
 
-}
+}  // namespace ui
 
 NS_CC_END
 // end of ui group

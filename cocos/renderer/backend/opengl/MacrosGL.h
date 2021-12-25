@@ -27,25 +27,28 @@
 #include "base/ccMacros.h"
 
 #if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
-#define CHECK_GL_ERROR_DEBUG()
+#    define CHECK_GL_ERROR_DEBUG()
 #else
-#define CHECK_GL_ERROR_DEBUG() \
-    do { \
-        GLenum __error = glGetError(); \
-        if(__error) { \
-            cocos2d::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-        } \
-    } while (false)
-#define CHECK_GL_ERROR_ABORT() \
-    do { \
-        GLenum __error = glGetError(); \
-        if(__error) { \
-            cocos2d::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-            assert(false);\
-        } \
-    } while (false)
+#    define CHECK_GL_ERROR_DEBUG()                                                                            \
+        do                                                                                                    \
+        {                                                                                                     \
+            GLenum __error = glGetError();                                                                    \
+            if (__error)                                                                                      \
+            {                                                                                                 \
+                cocos2d::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
+            }                                                                                                 \
+        } while (false)
+#    define CHECK_GL_ERROR_ABORT()                                                                            \
+        do                                                                                                    \
+        {                                                                                                     \
+            GLenum __error = glGetError();                                                                    \
+            if (__error)                                                                                      \
+            {                                                                                                 \
+                cocos2d::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
+                assert(false);                                                                                \
+            }                                                                                                 \
+        } while (false)
 #endif
-
 
 /**
  * GL assertion that can be used for any OpenGL function call.
@@ -56,12 +59,13 @@
  * function calls.
  */
 #if defined(NDEBUG) || (defined(__APPLE__) && !defined(DEBUG))
-#define CC_GL_ASSERT( gl_code ) gl_code
+#    define CC_GL_ASSERT(gl_code) gl_code
 #else
-#define CC_GL_ASSERT( gl_code ) do \
-{ \
-gl_code; \
-__gl_error_code = glGetError(); \
-CC_ASSERT(__gl_error_code == GL_NO_ERROR, "Error"); \
-} while(0)
+#    define CC_GL_ASSERT(gl_code)                               \
+        do                                                      \
+        {                                                       \
+            gl_code;                                            \
+            __gl_error_code = glGetError();                     \
+            CC_ASSERT(__gl_error_code == GL_NO_ERROR, "Error"); \
+        } while (0)
 #endif

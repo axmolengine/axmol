@@ -27,10 +27,7 @@ void JsonLocalizationManager::destroyInstance()
     }
 }
 
-JsonLocalizationManager::JsonLocalizationManager()
-    :languageData(nullptr)
-{
-}
+JsonLocalizationManager::JsonLocalizationManager() : languageData(nullptr) {}
 
 JsonLocalizationManager::~JsonLocalizationManager()
 {
@@ -60,14 +57,11 @@ std::string JsonLocalizationManager::getLocalizationString(std::string key)
 {
     std::string result = key;
 
-    if (languageData && languageData->HasMember(key.c_str()) &&
-        (*languageData)[key.c_str()].IsString())
+    if (languageData && languageData->HasMember(key.c_str()) && (*languageData)[key.c_str()].IsString())
         result = (*languageData)[key.c_str()].GetString();
 
     return result;
 }
-
-
 
 static BinLocalizationManager* _sharedBinLocalizationManager = nullptr;
 
@@ -90,13 +84,9 @@ void BinLocalizationManager::destroyInstance()
     }
 }
 
-BinLocalizationManager::BinLocalizationManager()
-{
-}
+BinLocalizationManager::BinLocalizationManager() {}
 
-BinLocalizationManager::~BinLocalizationManager()
-{
-}
+BinLocalizationManager::~BinLocalizationManager() {}
 
 bool BinLocalizationManager::initLanguageData(std::string file)
 {
@@ -109,13 +99,13 @@ bool BinLocalizationManager::initLanguageData(std::string file)
         auto lanSet = flatbuffers::GetLanguageSet(buf.getBytes());
         if (lanSet && lanSet->languageItems()->size() > 0)
         {
-            result = true;
+            result     = true;
             auto items = lanSet->languageItems();
-            int count = items->size();
+            int count  = items->size();
             for (int i = 0; i < count; i++)
             {
-                auto it = items->Get(i);
-                std::string key = it->key()->c_str();
+                auto it           = items->Get(i);
+                std::string key   = it->key()->c_str();
                 std::string value = it->value()->c_str();
                 if (!key.empty())
                     languageData[key] = value;
@@ -140,9 +130,7 @@ std::string BinLocalizationManager::getLocalizationString(std::string key)
     return result;
 }
 
-
-
-static bool isCurrentBinManager = true;
+static bool isCurrentBinManager                         = true;
 static ILocalizationManager* _sharedLocalizationManager = nullptr;
 
 ILocalizationManager* LocalizationHelper::getCurrentManager()
@@ -150,16 +138,16 @@ ILocalizationManager* LocalizationHelper::getCurrentManager()
     if (!_sharedLocalizationManager)
     {
         _sharedLocalizationManager = BinLocalizationManager::getInstance();
-        isCurrentBinManager = true;
+        isCurrentBinManager        = true;
     }
-    
+
     return _sharedLocalizationManager;
 }
 
 void LocalizationHelper::setCurrentManager(ILocalizationManager* manager, bool isBinary)
 {
     _sharedLocalizationManager = manager;
-    isCurrentBinManager = isBinary;
+    isCurrentBinManager        = isBinary;
 }
 
 bool LocalizationHelper::isBinManager()

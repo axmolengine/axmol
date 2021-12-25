@@ -54,7 +54,7 @@ Rect::Rect(const Rect& other)
     setRect(other.origin.x, other.origin.y, other.size.x, other.size.y);
 }
 
-Rect& Rect::operator= (const Rect& other)
+Rect& Rect::operator=(const Rect& other)
 {
     setRect(other.origin.x, other.origin.y, other.size.x, other.size.y);
     return *this;
@@ -74,8 +74,7 @@ void Rect::setRect(float x, float y, float width, float height)
 
 bool Rect::equals(const Rect& rect) const
 {
-    return (origin.equals(rect.origin) && 
-            size.equals(rect.size));
+    return (origin.equals(rect.origin) && size.equals(rect.size));
 }
 
 float Rect::getMaxX() const
@@ -112,8 +111,7 @@ bool Rect::containsPoint(const Vec2& point) const
 {
     bool bRet = false;
 
-    if (point.x >= getMinX() && point.x <= getMaxX()
-        && point.y >= getMinY() && point.y <= getMaxY())
+    if (point.x >= getMinX() && point.x <= getMaxX() && point.y >= getMinY() && point.y <= getMaxY())
     {
         bRet = true;
     }
@@ -123,43 +121,39 @@ bool Rect::containsPoint(const Vec2& point) const
 
 bool Rect::intersectsRect(const Rect& rect) const
 {
-    return !(     getMaxX() < rect.getMinX() ||
-             rect.getMaxX() <      getMinX() ||
-                  getMaxY() < rect.getMinY() ||
-             rect.getMaxY() <      getMinY());
+    return !(getMaxX() < rect.getMinX() || rect.getMaxX() < getMinX() || getMaxY() < rect.getMinY() ||
+             rect.getMaxY() < getMinY());
 }
 
 bool Rect::intersectsCircle(const Vec2& center, float radius) const
 {
-    Vec2 rectangleCenter((origin.x + size.x / 2),
-                         (origin.y + size.y / 2));
-    
+    Vec2 rectangleCenter((origin.x + size.x / 2), (origin.y + size.y / 2));
+
     float w = size.x / 2;
     float h = size.y / 2;
-    
+
     float dx = std::abs(center.x - rectangleCenter.x);
     float dy = std::abs(center.y - rectangleCenter.y);
-    
+
     if (dx > (radius + w) || dy > (radius + h))
     {
         return false;
     }
-    
-    Vec2 circleDistance(std::abs(center.x - origin.x - w),
-                        std::abs(center.y - origin.y - h));
-    
+
+    Vec2 circleDistance(std::abs(center.x - origin.x - w), std::abs(center.y - origin.y - h));
+
     if (circleDistance.x <= (w))
     {
         return true;
     }
-    
+
     if (circleDistance.y <= (h))
     {
         return true;
     }
-    
+
     float cornerDistanceSq = powf(circleDistance.x - w, 2) + powf(circleDistance.y - h, 2);
-    
+
     return (cornerDistanceSq <= (powf(radius, 2)));
 }
 
@@ -172,43 +166,43 @@ void Rect::merge(const Rect& rect)
     setRect(minX, minY, maxX - minX, maxY - minY);
 }
 
-Rect Rect::unionWithRect(const Rect & rect) const
+Rect Rect::unionWithRect(const Rect& rect) const
 {
-    float thisLeftX = origin.x;
-    float thisRightX = origin.x + size.x;
-    float thisTopY = origin.y + size.y;
+    float thisLeftX   = origin.x;
+    float thisRightX  = origin.x + size.x;
+    float thisTopY    = origin.y + size.y;
     float thisBottomY = origin.y;
-    
+
     if (thisRightX < thisLeftX)
     {
-        std::swap(thisRightX, thisLeftX);   // This rect has negative width
+        std::swap(thisRightX, thisLeftX);  // This rect has negative width
     }
-    
+
     if (thisTopY < thisBottomY)
     {
-        std::swap(thisTopY, thisBottomY);   // This rect has negative height
+        std::swap(thisTopY, thisBottomY);  // This rect has negative height
     }
-    
-    float otherLeftX = rect.origin.x;
-    float otherRightX = rect.origin.x + rect.size.x;
-    float otherTopY = rect.origin.y + rect.size.y;
+
+    float otherLeftX   = rect.origin.x;
+    float otherRightX  = rect.origin.x + rect.size.x;
+    float otherTopY    = rect.origin.y + rect.size.y;
     float otherBottomY = rect.origin.y;
-    
+
     if (otherRightX < otherLeftX)
     {
-        std::swap(otherRightX, otherLeftX);   // Other rect has negative width
+        std::swap(otherRightX, otherLeftX);  // Other rect has negative width
     }
-    
+
     if (otherTopY < otherBottomY)
     {
-        std::swap(otherTopY, otherBottomY);   // Other rect has negative height
+        std::swap(otherTopY, otherBottomY);  // Other rect has negative height
     }
-    
-    float combinedLeftX = std::min(thisLeftX, otherLeftX);
-    float combinedRightX = std::max(thisRightX, otherRightX);
-    float combinedTopY = std::max(thisTopY, otherTopY);
+
+    float combinedLeftX   = std::min(thisLeftX, otherLeftX);
+    float combinedRightX  = std::max(thisRightX, otherRightX);
+    float combinedTopY    = std::max(thisTopY, otherTopY);
     float combinedBottomY = std::min(thisBottomY, otherBottomY);
-    
+
     return Rect(combinedLeftX, combinedBottomY, combinedRightX - combinedLeftX, combinedTopY - combinedBottomY);
 }
 

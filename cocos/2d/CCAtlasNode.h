@@ -48,32 +48,32 @@ class TextureAtlas;
  * - opacity and RGB colors.
  */
 class CC_DLL AtlasNode : public Node, public TextureProtocol
-{    
+{
 public:
-	/** creates a AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render.
+    /** creates a AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render.
      *
      * @param filename The path of Atlas file.
      * @param tileWidth The width of the item.
      * @param tileHeight The height of the item.
      * @param itemsToRender The quantity of items to render.
      */
-	static AtlasNode * create(const std::string& filename, int tileWidth, int tileHeight, int itemsToRender);
+    static AtlasNode* create(const std::string& filename, int tileWidth, int tileHeight, int itemsToRender);
 
     /** updates the Atlas (indexed vertex array).
-    * Shall be overridden in subclasses.
-    */
+     * Shall be overridden in subclasses.
+     */
     virtual void updateAtlasValues();
-    
+
     // Overrides
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     virtual Texture2D* getTexture() const override;
-    virtual void setTexture(Texture2D *texture) override;
+    virtual void setTexture(Texture2D* texture) override;
     virtual bool isOpacityModifyRGB() const override;
     virtual void setOpacityModifyRGB(bool isOpacityModifyRGB) override;
     virtual const Color3B& getColor() const override;
     virtual void setColor(const Color3B& color) override;
     virtual void setOpacity(uint8_t opacity) override;
-    
+
     /**
      * @code
      * When this function bound into js or lua,the parameter will be changed
@@ -86,51 +86,52 @@ public:
      * @lua NA
      */
     virtual const BlendFunc& getBlendFunc() const override;
-    
+
     /** Set an buffer manager of the texture vertex. */
     void setTextureAtlas(TextureAtlas* textureAtlas);
-    
-    /** Return the buffer manager of the texture vertex. 
+
+    /** Return the buffer manager of the texture vertex.
      *
      * @return Return A TextureAtlas.
      */
     TextureAtlas* getTextureAtlas() const;
-    
+
     void setQuadsToDraw(ssize_t quadsToDraw);
     size_t getQuadsToDraw() const;
 
     bool setProgramState(backend::ProgramState* programState, bool needsRetain = true) override;
 
-CC_CONSTRUCTOR_ACCESS:
-    AtlasNode() = default;
+    CC_CONSTRUCTOR_ACCESS : AtlasNode() = default;
     virtual ~AtlasNode();
 
-    /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
+    /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to
+     * render*/
     bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
-    
-    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity of items to render*/
+
+    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity
+     * of items to render*/
     bool initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
 
 protected:
     friend class Director;
-    
+
     void calculateMaxItems();
     void updateBlendFunc();
     void updateOpacityModifyRGB();
     void setIgnoreContentScaleFactor(bool bIgnoreContentScaleFactor);
 
     /** Chars per row. */
-    int    _itemsPerRow = 0;
+    int _itemsPerRow = 0;
     /** Chars per column. */
-    int    _itemsPerColumn = 0;
+    int _itemsPerColumn = 0;
 
     /** Width of each char. */
-    int    _itemWidth = 0;
+    int _itemWidth = 0;
     /** Height of each char. */
-    int    _itemHeight = 0;
-    
-    Color3B    _colorUnmodified;
-    
+    int _itemHeight = 0;
+
+    Color3B _colorUnmodified;
+
     TextureAtlas* _textureAtlas = nullptr;
     /** Protocol variables. */
     bool _isOpacityModifyRGB = false;
@@ -141,13 +142,12 @@ protected:
 
     /** This variable is only used for LabelAtlas FPS display. So plz don't modify its value. */
     bool _ignoreContentScaleFactor = false;
-    
+
     QuadCommand _quadCommand;
     backend::UniformLocation _mvpMatrixLocation;
-    
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(AtlasNode);
-
 };
 
 // end of base_node group

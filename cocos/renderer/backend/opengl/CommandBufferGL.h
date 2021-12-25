@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../Macros.h"
@@ -62,7 +62,8 @@ public:
 
     /**
      * Sets the current render pipeline state object once
-     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render pass.
+     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render
+     * pass.
      */
     virtual void setRenderPipeline(RenderPipeline* renderPipeline) override;
 
@@ -89,7 +90,7 @@ public:
      * @param depthStencilState Specifies the depth and stencil status
      */
     virtual void updatePipelineState(const RenderTarget* rt, const PipelineDescriptor& descriptor) override;
-    
+
     /**
      * Fixed-function state
      * @param x The x coordinate of the upper-left corner of the viewport.
@@ -137,7 +138,7 @@ public:
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start,  std::size_t count) override;
+    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count) override;
 
     /**
      * Draw primitives with an index list.
@@ -147,9 +148,12 @@ public:
      * @param offset Byte offset within indexBuffer to start reading indexes from.
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
-    */
-    virtual void drawElements(PrimitiveType primitiveType, IndexFormat indexType, std::size_t count, std::size_t offset) override;
-    
+     */
+    virtual void drawElements(PrimitiveType primitiveType,
+                              IndexFormat indexType,
+                              std::size_t count,
+                              std::size_t offset) override;
+
     /**
      * Do some resources release.
      */
@@ -159,13 +163,13 @@ public:
      * Present a drawable and commit a command buffer so it can be executed as soon as possible.
      */
     virtual void endFrame() override;
-    
+
     /**
      * Fixed-function state
      * @param lineWidth Specifies the width of rasterized lines.
      */
     virtual void setLineWidth(float lineWidth) override;
-    
+
     /**
      * Fixed-function state
      * @param x, y Specifies the lower left corner of the scissor box
@@ -181,28 +185,34 @@ public:
     virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
 
 protected:
-    void readPixels(RenderTarget* rt, int x, int y, uint32_t width, uint32_t height, uint32_t bytesPerRow, PixelBufferDescriptor& pbd);
+    void readPixels(RenderTarget* rt,
+                    int x,
+                    int y,
+                    uint32_t width,
+                    uint32_t height,
+                    uint32_t bytesPerRow,
+                    PixelBufferDescriptor& pbd);
 
 private:
     struct Viewport
     {
-        int x = 0;
-        int y = 0;
+        int x          = 0;
+        int y          = 0;
         unsigned int w = 0;
         unsigned int h = 0;
     };
-    
+
     void prepareDrawing() const;
     void bindVertexBuffer(ProgramGL* program) const;
     void setUniforms(ProgramGL* program) const;
     void setUniform(bool isArray, GLuint location, unsigned int size, GLenum uniformType, void* data) const;
     void cleanResources();
 
-    BufferGL* _vertexBuffer = nullptr;
-    ProgramState* _programState = nullptr;
-    BufferGL* _indexBuffer = nullptr;
-    RenderPipelineGL* _renderPipeline = nullptr;
-    CullMode _cullMode = CullMode::NONE;
+    BufferGL* _vertexBuffer                   = nullptr;
+    ProgramState* _programState               = nullptr;
+    BufferGL* _indexBuffer                    = nullptr;
+    RenderPipelineGL* _renderPipeline         = nullptr;
+    CullMode _cullMode                        = CullMode::NONE;
     DepthStencilStateGL* _depthStencilStateGL = nullptr;
     Viewport _viewPort;
     GLboolean _alphaTestEnabled = false;

@@ -11,7 +11,7 @@
  * Shall not disclose such Confidential Information and shall use
  * it only in accordance with the terms of the license agreement
  * you entered into with Samsung
-****************************************************************************/
+ ****************************************************************************/
 #pragma once
 
 #include "platform/CCCommon.h"
@@ -50,13 +50,13 @@ public:
     static int setResolutionPercent(int percent);
 
     /**
-   *@brief  The function is used to set FPS level.
-   *@Warn The input fps level(0-99) corresponds to game fps value(0-60).
-   * FPS level 99 means game FPS value 60.
-   * The purpose of the API is reducing power consumption when we set dynamic fps in some situations.
-   *@param  fps the fps value.
-   *@return  success: 0, fail: -1.
-   */
+     *@brief  The function is used to set FPS level.
+     *@Warn The input fps level(0-99) corresponds to game fps value(0-60).
+     * FPS level 99 means game FPS value 60.
+     * The purpose of the API is reducing power consumption when we set dynamic fps in some situations.
+     *@param  fps the fps value.
+     *@return  success: 0, fail: -1.
+     */
     static int setFPS(int fps);
 
     /**

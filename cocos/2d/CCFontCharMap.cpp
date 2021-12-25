@@ -33,10 +33,10 @@
 
 NS_CC_BEGIN
 
-FontCharMap * FontCharMap::create(const std::string& plistFile)
+FontCharMap* FontCharMap::create(const std::string& plistFile)
 {
-    std::string pathStr = FileUtils::getInstance()->fullPathForFilename(plistFile);
-    std::string relPathStr = pathStr.substr(0, pathStr.find_last_of('/'))+"/";
+    std::string pathStr    = FileUtils::getInstance()->fullPathForFilename(plistFile);
+    std::string relPathStr = pathStr.substr(0, pathStr.find_last_of('/')) + "/";
 
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(pathStr);
 
@@ -44,18 +44,18 @@ FontCharMap * FontCharMap::create(const std::string& plistFile)
 
     std::string textureFilename = relPathStr + dict["textureFilename"].asString();
 
-    unsigned int width = dict["itemWidth"].asInt();
-    unsigned int height = dict["itemHeight"].asInt();
+    unsigned int width     = dict["itemWidth"].asInt();
+    unsigned int height    = dict["itemHeight"].asInt();
     unsigned int startChar = dict["firstChar"].asInt();
 
-    Texture2D *tempTexture = Director::getInstance()->getTextureCache()->addImage(textureFilename);
+    Texture2D* tempTexture = Director::getInstance()->getTextureCache()->addImage(textureFilename);
     if (!tempTexture)
     {
         return nullptr;
     }
-    
-    FontCharMap *tempFont =  new FontCharMap(tempTexture,width,height,startChar);
-    
+
+    FontCharMap* tempFont = new FontCharMap(tempTexture, width, height, startChar);
+
     if (!tempFont)
     {
         return nullptr;
@@ -66,14 +66,14 @@ FontCharMap * FontCharMap::create(const std::string& plistFile)
 
 FontCharMap* FontCharMap::create(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap)
 {
-    Texture2D *tempTexture = Director::getInstance()->getTextureCache()->addImage(charMapFile);
+    Texture2D* tempTexture = Director::getInstance()->getTextureCache()->addImage(charMapFile);
 
     if (!tempTexture)
     {
         return nullptr;
     }
 
-    FontCharMap *tempFont =  new FontCharMap(tempTexture,itemWidth,itemHeight,startCharMap);
+    FontCharMap* tempFont = new FontCharMap(tempTexture, itemWidth, itemHeight, startCharMap);
 
     if (!tempFont)
     {
@@ -85,7 +85,7 @@ FontCharMap* FontCharMap::create(const std::string& charMapFile, int itemWidth, 
 
 FontCharMap* FontCharMap::create(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap)
 {
-    FontCharMap *tempFont =  new FontCharMap(texture,itemWidth,itemHeight,startCharMap);
+    FontCharMap* tempFont = new FontCharMap(texture, itemWidth, itemHeight, startCharMap);
 
     if (!tempFont)
     {
@@ -95,37 +95,34 @@ FontCharMap* FontCharMap::create(Texture2D* texture, int itemWidth, int itemHeig
     return tempFont;
 }
 
-FontCharMap::~FontCharMap()
-{
+FontCharMap::~FontCharMap() {}
 
-}
-
-int* FontCharMap::getHorizontalKerningForTextUTF32(const std::u32string& /*text*/, int & /*outNumLetters*/) const
+int* FontCharMap::getHorizontalKerningForTextUTF32(const std::u32string& /*text*/, int& /*outNumLetters*/) const
 {
     return nullptr;
 }
 
 FontAtlas* FontCharMap::newFontAtlas()
 {
-    FontAtlas *tempAtlas = new FontAtlas(this);
+    FontAtlas* tempAtlas = new FontAtlas(this);
 
-    Vec2 s = _texture->getContentSizeInPixels();
+    Vec2 s             = _texture->getContentSizeInPixels();
     int itemsPerColumn = (int)(s.height / _itemHeight);
-    int itemsPerRow = (int)(s.width / _itemWidth);
+    int itemsPerRow    = (int)(s.width / _itemWidth);
 
     tempAtlas->setLineHeight((float)_itemHeight);
 
     auto contentScaleFactor = CC_CONTENT_SCALE_FACTOR();
 
     FontLetterDefinition tempDefinition;
-    tempDefinition.textureID = 0;
-    tempDefinition.offsetX  = 0.0f;
-    tempDefinition.offsetY  = 0.0f;
+    tempDefinition.textureID       = 0;
+    tempDefinition.offsetX         = 0.0f;
+    tempDefinition.offsetY         = 0.0f;
     tempDefinition.validDefinition = true;
-    tempDefinition.width = _itemWidth / contentScaleFactor;
-    tempDefinition.height = _itemHeight / contentScaleFactor;
-    tempDefinition.xAdvance = _itemWidth;
-    tempDefinition.rotated = false;
+    tempDefinition.width           = _itemWidth / contentScaleFactor;
+    tempDefinition.height          = _itemHeight / contentScaleFactor;
+    tempDefinition.xAdvance        = _itemWidth;
+    tempDefinition.rotated         = false;
 
     int charId = _mapStartChar;
     for (int row = 0; row < itemsPerColumn; ++row)
@@ -139,8 +136,8 @@ FontAtlas* FontCharMap::newFontAtlas()
             charId++;
         }
     }
-    
-    tempAtlas->addTexture(_texture,0);
+
+    tempAtlas->addTexture(_texture, 0);
 
     return tempAtlas;
 }

@@ -31,24 +31,18 @@ NS_CC_BEGIN
 
 const Data Data::Null;
 
-Data::Data() :
-_bytes(nullptr),
-_size(0)
+Data::Data() : _bytes(nullptr), _size(0)
 {
     CCLOGINFO("In the empty constructor of Data.");
 }
 
-Data::Data(Data&& other) :
-_bytes(nullptr),
-_size(0)
+Data::Data(Data&& other) : _bytes(nullptr), _size(0)
 {
     CCLOGINFO("In the move constructor of Data.");
     move(other);
 }
 
-Data::Data(const Data& other) :
-_bytes(nullptr),
-_size(0)
+Data::Data(const Data& other) : _bytes(nullptr), _size(0)
 {
     CCLOGINFO("In the copy constructor of Data.");
     if (other._bytes && other._size)
@@ -63,7 +57,7 @@ Data::~Data()
     clear();
 }
 
-Data& Data::operator= (const Data& other)
+Data& Data::operator=(const Data& other)
 {
     if (this != &other)
     {
@@ -73,7 +67,7 @@ Data& Data::operator= (const Data& other)
     return *this;
 }
 
-Data& Data::operator= (Data&& other)
+Data& Data::operator=(Data&& other)
 {
     if (this != &other)
     {
@@ -85,13 +79,14 @@ Data& Data::operator= (Data&& other)
 
 void Data::move(Data& other)
 {
-    if(_bytes != other._bytes) clear();
-    
+    if (_bytes != other._bytes)
+        clear();
+
     _bytes = other._bytes;
-    _size = other._size;
+    _size  = other._size;
 
     other._bytes = nullptr;
-    other._size = 0;
+    other._size  = 0;
 }
 
 bool Data::isNull() const
@@ -114,7 +109,8 @@ ssize_t Data::copy(const unsigned char* bytes, const ssize_t size)
     CCASSERT(size >= 0, "copy size should be non-negative");
     CCASSERT(bytes, "bytes should not be nullptr");
 
-    if (size <= 0) return 0;
+    if (size <= 0)
+        return 0;
 
     if (bytes != _bytes)
     {
@@ -129,9 +125,11 @@ ssize_t Data::copy(const unsigned char* bytes, const ssize_t size)
 
 uint8_t* Data::resize(ssize_t size)
 {
-    if (_size < size) {
+    if (_size < size)
+    {
         auto newmb = (uint8_t*)realloc(_bytes, size);
-        if (!newmb) return _bytes;
+        if (!newmb)
+            return _bytes;
         _bytes = newmb;
     }
     _size = size;
@@ -141,16 +139,17 @@ uint8_t* Data::resize(ssize_t size)
 void Data::fastSet(uint8_t* bytes, const ssize_t size)
 {
     CCASSERT(size >= 0, "fastSet size should be non-negative");
-    //CCASSERT(bytes, "bytes should not be nullptr");
+    // CCASSERT(bytes, "bytes should not be nullptr");
     _bytes = bytes;
-    _size = size;
+    _size  = size;
 }
 
 void Data::clear()
 {
-    if(_bytes) free(_bytes);
+    if (_bytes)
+        free(_bytes);
     _bytes = nullptr;
-    _size = 0;
+    _size  = 0;
 }
 
 uint8_t* Data::takeBuffer(ssize_t* size)

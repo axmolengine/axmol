@@ -35,21 +35,21 @@ THE SOFTWARE.
 
 namespace flatbuffers
 {
-    class FlatBufferBuilder;
-    
-    struct NodeAction;
-    struct TimeLine;
-    struct PointFrame;
-    struct ScaleFrame;
-    struct ColorFrame;
-    struct TextureFrame;
-    struct EventFrame;
-    struct IntFrame;
-    struct BoolFrame;
-    struct InnerActionFrame;
-    struct EasingData;
-    struct BlendFrame;
-}
+class FlatBufferBuilder;
+
+struct NodeAction;
+struct TimeLine;
+struct PointFrame;
+struct ScaleFrame;
+struct ColorFrame;
+struct TextureFrame;
+struct EventFrame;
+struct IntFrame;
+struct BoolFrame;
+struct InnerActionFrame;
+struct EasingData;
+struct BlendFrame;
+}  // namespace flatbuffers
 
 NS_TIMELINE_BEGIN
 
@@ -59,8 +59,7 @@ class Frame;
 
 class CCS_DLL ActionTimelineCache
 {
-public:    
-    
+public:
     /** Gets the singleton */
     static ActionTimelineCache* getInstance();
 
@@ -73,7 +72,7 @@ public:
 
     /** Remove action with filename, and also remove other resource relate with this file */
     void removeAction(const std::string& fileName);
-    
+
     static ActionTimeline* createAction(const std::string& fileName);
 
     /** Clone a action with the specified name from the container. */
@@ -81,53 +80,51 @@ public:
     ActionTimeline* createActionFromContent(const std::string& fileName, const std::string& content);
 
     ActionTimeline* loadAnimationActionWithFile(const std::string& fileName);
-    ActionTimeline* loadAnimationActionWithContent(const std::string&fileName, const std::string& content);
-    
+    ActionTimeline* loadAnimationActionWithContent(const std::string& fileName, const std::string& content);
+
     ActionTimeline* createActionWithFlatBuffersFile(const std::string& fileName);
-    ActionTimeline* createActionWithDataBuffer(cocos2d::Data data, const std::string &fileName);
+    ActionTimeline* createActionWithDataBuffer(cocos2d::Data data, const std::string& fileName);
 
     ActionTimeline* loadAnimationActionWithFlatBuffersFile(const std::string& fileName);
     ActionTimeline* loadAnimationWithDataBuffer(const cocos2d::Data& data, const std::string& fileName);
-    
-    ActionTimeline* createActionWithFlatBuffersForSimulator(const std::string& fileName);
-    
-protected:
 
+    ActionTimeline* createActionWithFlatBuffersForSimulator(const std::string& fileName);
+
+protected:
     Timeline* loadTimeline(const rapidjson::Value& json);
 
-    Frame* loadVisibleFrame     (const rapidjson::Value& json);
-    Frame* loadPositionFrame    (const rapidjson::Value& json);
-    Frame* loadScaleFrame       (const rapidjson::Value& json);
-    Frame* loadSkewFrame        (const rapidjson::Value& json);
+    Frame* loadVisibleFrame(const rapidjson::Value& json);
+    Frame* loadPositionFrame(const rapidjson::Value& json);
+    Frame* loadScaleFrame(const rapidjson::Value& json);
+    Frame* loadSkewFrame(const rapidjson::Value& json);
     Frame* loadRotationSkewFrame(const rapidjson::Value& json);
-    Frame* loadRotationFrame    (const rapidjson::Value& json);
-    Frame* loadAnchorPointFrame (const rapidjson::Value& json);
-    Frame* loadInnerActionFrame (const rapidjson::Value& json);
-    Frame* loadColorFrame       (const rapidjson::Value& json);
-    Frame* loadTextureFrame     (const rapidjson::Value& json);
-    Frame* loadEventFrame       (const rapidjson::Value& json);
-    Frame* loadZOrderFrame      (const rapidjson::Value& json);
-    
-    
+    Frame* loadRotationFrame(const rapidjson::Value& json);
+    Frame* loadAnchorPointFrame(const rapidjson::Value& json);
+    Frame* loadInnerActionFrame(const rapidjson::Value& json);
+    Frame* loadColorFrame(const rapidjson::Value& json);
+    Frame* loadTextureFrame(const rapidjson::Value& json);
+    Frame* loadEventFrame(const rapidjson::Value& json);
+    Frame* loadZOrderFrame(const rapidjson::Value& json);
+
     Timeline* loadTimelineWithFlatBuffers(const flatbuffers::TimeLine* flatbuffers);
 
-    Frame* loadVisibleFrameWithFlatBuffers      (const flatbuffers::BoolFrame* flatbuffers);
-    Frame* loadPositionFrameWithFlatBuffers     (const flatbuffers::PointFrame* flatbuffers);
-    Frame* loadScaleFrameWithFlatBuffers        (const flatbuffers::ScaleFrame* flatbuffers);
-    Frame* loadRotationSkewFrameWithFlatBuffers (const flatbuffers::ScaleFrame* flatbuffers);
-    Frame* loadColorFrameWithFlatBuffers        (const flatbuffers::ColorFrame* flatbuffers);
-    Frame* loadTextureFrameWithFlatBuffers      (const flatbuffers::TextureFrame* flatbuffers);
-    Frame* loadEventFrameWithFlatBuffers        (const flatbuffers::EventFrame* flatbuffers);
-    Frame* loadAlphaFrameWithFlatBuffers        (const flatbuffers::IntFrame* flatbuffers);
-    Frame* loadAnchorPointFrameWithFlatBuffers  (const flatbuffers::ScaleFrame* flatbuffers);
-    Frame* loadZOrderFrameWithFlatBuffers       (const flatbuffers::IntFrame* flatbuffers);
-    Frame* loadInnerActionFrameWithFlatBuffers  (const flatbuffers::InnerActionFrame* flatbuffers);
-    Frame* loadBlendFrameWithFlatBuffers        (const flatbuffers::BlendFrame* flatbuffers);
+    Frame* loadVisibleFrameWithFlatBuffers(const flatbuffers::BoolFrame* flatbuffers);
+    Frame* loadPositionFrameWithFlatBuffers(const flatbuffers::PointFrame* flatbuffers);
+    Frame* loadScaleFrameWithFlatBuffers(const flatbuffers::ScaleFrame* flatbuffers);
+    Frame* loadRotationSkewFrameWithFlatBuffers(const flatbuffers::ScaleFrame* flatbuffers);
+    Frame* loadColorFrameWithFlatBuffers(const flatbuffers::ColorFrame* flatbuffers);
+    Frame* loadTextureFrameWithFlatBuffers(const flatbuffers::TextureFrame* flatbuffers);
+    Frame* loadEventFrameWithFlatBuffers(const flatbuffers::EventFrame* flatbuffers);
+    Frame* loadAlphaFrameWithFlatBuffers(const flatbuffers::IntFrame* flatbuffers);
+    Frame* loadAnchorPointFrameWithFlatBuffers(const flatbuffers::ScaleFrame* flatbuffers);
+    Frame* loadZOrderFrameWithFlatBuffers(const flatbuffers::IntFrame* flatbuffers);
+    Frame* loadInnerActionFrameWithFlatBuffers(const flatbuffers::InnerActionFrame* flatbuffers);
+    Frame* loadBlendFrameWithFlatBuffers(const flatbuffers::BlendFrame* flatbuffers);
     void loadEasingDataWithFlatBuffers(Frame* frame, const flatbuffers::EasingData* flatbuffers);
 
     inline ActionTimeline* createActionWithDataBuffer(const cocos2d::Data& data);
-protected:
 
+protected:
     typedef std::function<Frame*(const rapidjson::Value& json)> FrameCreateFunc;
     typedef std::pair<std::string, FrameCreateFunc> Pair;
 

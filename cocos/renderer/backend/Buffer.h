@@ -21,17 +21,18 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
 #include "Types.h"
 #include "base/CCRef.h"
 
-namespace cocos2d {
-    class MeshVertexData;
-    class MeshIndexData;
-}
+namespace cocos2d
+{
+class MeshVertexData;
+class MeshIndexData;
+}  // namespace cocos2d
 
 CC_BACKEND_BEGIN
 
@@ -53,11 +54,12 @@ public:
      * @see `updateSubData(void* data, unsigned int offset, unsigned int size)`
      */
     virtual void updateData(void* data, std::size_t size) = 0;
-    
+
     /**
      * @brief Update buffer sub-region data
      * @param data Specifies a pointer to the new data that will be copied into the data store.
-     * @param offset Specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.
+     * @param offset Specifies the offset into the buffer object's data store where data replacement will begin,
+     * measured in bytes.
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateData(void* data, unsigned int size)`
      */
@@ -65,7 +67,8 @@ public:
 
     /**
      * By default, static buffer data will automatically stored when it comes to foreground.
-     * This function is used to indicate whether external data needs to be used to update the buffer instead of using the default stored data.
+     * This function is used to indicate whether external data needs to be used to update the buffer instead of using
+     * the default stored data.
      * @param needDefaultStoredData Specifies whether to use the default stored data.
      */
     virtual void usingDefaultStoredData(bool needDefaultStoredData) = 0;
@@ -79,20 +82,18 @@ public:
 protected:
     /**
      * @param size Specifies the size in bytes of the buffer object's new data store.
-     * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or BufferType::INDEX.
-     * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be GL_STREAM_DRAW, GL_STATIC_DRAW, or GL_DYNAMIC_DRAW.
+     * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or
+     * BufferType::INDEX.
+     * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
+     * GL_STREAM_DRAW, GL_STATIC_DRAW, or GL_DYNAMIC_DRAW.
      */
-    Buffer(std::size_t size, BufferType type, BufferUsage usage)
-    : _usage(usage)
-    , _type(type)
-    , _size(size)
-    {}
-    
+    Buffer(std::size_t size, BufferType type, BufferUsage usage) : _usage(usage), _type(type), _size(size) {}
+
     virtual ~Buffer() = default;
-    
-    BufferUsage _usage = BufferUsage::DYNAMIC; ///< Buffer usage.
-    BufferType _type = BufferType::VERTEX; ///< Buffer type.
-    std::size_t _size = 0; ///< buffer size in bytes.
+
+    BufferUsage _usage = BufferUsage::DYNAMIC;  ///< Buffer usage.
+    BufferType _type   = BufferType::VERTEX;    ///< Buffer type.
+    std::size_t _size  = 0;                     ///< buffer size in bytes.
 };
 
 // end of _backend group

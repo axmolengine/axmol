@@ -9,18 +9,15 @@ DRAGONBONES_NAMESPACE_BEGIN
 
 const std::string DragonBones::VEISION = "5.6.300";
 
-bool DragonBones::yDown = true;
-bool DragonBones::debug = false;
-bool DragonBones::debugDraw = false;
+bool DragonBones::yDown       = true;
+bool DragonBones::debug       = false;
+bool DragonBones::debugDraw   = false;
 bool DragonBones::webAssembly = false;
 
-DragonBones::DragonBones(IEventDispatcher* eventManager) :
-    _events(),
-    _objects(),
-    _clock(nullptr),
-    _eventManager(eventManager)
+DragonBones::DragonBones(IEventDispatcher* eventManager)
+    : _events(), _objects(), _clock(nullptr), _eventManager(eventManager)
 {
-    _clock = new WorldClock();
+    _clock        = new WorldClock();
     _eventManager = eventManager;
 }
 
@@ -31,7 +28,7 @@ DragonBones::~DragonBones()
         delete _clock;
     }
 
-    _clock = nullptr;
+    _clock        = nullptr;
     _eventManager = nullptr;
 }
 void DragonBones::advanceTime(float passedTime)
@@ -51,7 +48,7 @@ void DragonBones::advanceTime(float passedTime)
         for (std::size_t i = 0; i < _events.size(); ++i)
         {
             const auto eventObject = _events[i];
-            const auto armature = eventObject->armature;
+            const auto armature    = eventObject->armature;
             if (armature->_armatureData != nullptr)
             {
                 armature->getProxy()->dispatchDBEvent(eventObject->type, eventObject);
@@ -84,6 +81,5 @@ WorldClock* DragonBones::getClock()
 {
     return _clock;
 }
-
 
 DRAGONBONES_NAMESPACE_END

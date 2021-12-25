@@ -1,6 +1,6 @@
 /****************************************************************************
 Copyright (c) 2015-2017 Chukong Technologies Inc.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,7 +33,6 @@ class BoneNodeReader : public cocos2d::Ref, public cocostudio::NodeReaderProtoco
     DECLARE_CLASS_NODE_READER_INFO
 
 public:
-
     BoneNodeReader();
     ~BoneNodeReader();
 
@@ -42,7 +41,8 @@ public:
     CC_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
-    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
+        pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder* builder) override;
     void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* boneOptions) override;
 

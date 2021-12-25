@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -33,7 +33,7 @@ DRAGONBONES_NAMESPACE_BEGIN
 /**
  * @internal
  */
-class ConstraintData : public BaseObject 
+class ConstraintData : public BaseObject
 {
     ABSTRACT_CLASS(ConstraintData)
 
@@ -47,8 +47,8 @@ public:
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
-    const BoneData* getTarget() const { return  target; }
+public:  // For WebAssembly.
+    const BoneData* getTarget() const { return target; }
     void setTarget(const BoneData* value) { target = value; }
 
     const BoneData* getBone() const { return bone; }
@@ -60,7 +60,7 @@ public: // For WebAssembly.
 /**
  * @internal
  */
-class IKConstraintData : public ConstraintData 
+class IKConstraintData : public ConstraintData
 {
     BIND_CLASS_TYPE_A(IKConstraintData);
 
@@ -74,4 +74,4 @@ protected:
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif //DRAGONBONESCPP_CONSTRAINTDATA_H
+#endif  // DRAGONBONESCPP_CONSTRAINTDATA_H

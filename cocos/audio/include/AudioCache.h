@@ -46,7 +46,6 @@ class AudioPlayer;
 class CC_DLL AudioCache
 {
 public:
-
     enum class State
     {
         INITIAL,
@@ -70,7 +69,7 @@ protected:
 
     void invokingLoadCallbacks();
 
-    //pcm data related stuff
+    // pcm data related stuff
     ALenum _format;
     ALsizei _sampleRate;
     float _duration;
@@ -90,10 +89,10 @@ protected:
     uint32_t _queBufferFrames;
 
     std::mutex _playCallbackMutex;
-    std::vector< std::function<void()> > _playCallbacks;
+    std::vector<std::function<void()>> _playCallbacks;
 
     // loadCallbacks doesn't need mutex since it's invoked only in Cocos thread.
-    std::vector< std::function<void(bool)> > _loadCallbacks;
+    std::vector<std::function<void(bool)>> _loadCallbacks;
 
     std::mutex _readDataTaskMutex;
 

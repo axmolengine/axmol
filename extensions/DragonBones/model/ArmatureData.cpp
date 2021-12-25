@@ -56,11 +56,11 @@ void ArmatureData::_onClear()
         userData->returnToPool();
     }
 
-    type = ArmatureType::Armature;
-    frameRate = 0;
+    type           = ArmatureType::Armature;
+    frameRate      = 0;
     cacheFrameRate = 0;
-    scale = 1.0f;
-    name = "";
+    scale          = 1.0f;
+    name           = "";
     aabb.clear();
     animationNames.clear();
     sortedBones.clear();
@@ -72,11 +72,11 @@ void ArmatureData::_onClear()
     constraints.clear();
     skins.clear();
     animations.clear();
-    parent = nullptr;
-    defaultSkin = nullptr;
+    parent           = nullptr;
+    defaultSkin      = nullptr;
     defaultAnimation = nullptr;
-    canvas = nullptr;
-    userData = nullptr;
+    canvas           = nullptr;
+    userData         = nullptr;
 }
 
 void ArmatureData::sortBones()
@@ -87,9 +87,9 @@ void ArmatureData::sortBones()
         return;
     }
 
-    const auto sortHelper = sortedBones; // Copy.
-    unsigned index = 0;
-    unsigned count = 0;
+    const auto sortHelper = sortedBones;  // Copy.
+    unsigned index        = 0;
+    unsigned count        = 0;
     sortedBones.clear();
     while (count < total)
     {
@@ -105,22 +105,24 @@ void ArmatureData::sortBones()
         }
 
         auto flag = false;
-        for(const auto& pair : constraints)
+        for (const auto& pair : constraints)
         {
             const auto constrait = pair.second;
-            if(constrait->root == bone && std::find(sortedBones.cbegin(), sortedBones.cend(), constrait->target) == sortedBones.cend())
+            if (constrait->root == bone &&
+                std::find(sortedBones.cbegin(), sortedBones.cend(), constrait->target) == sortedBones.cend())
             {
                 flag = true;
                 break;
             }
         }
 
-        if(flag)
+        if (flag)
         {
             continue;
         }
 
-        if (bone->parent != nullptr && std::find(sortedBones.cbegin(), sortedBones.cend(), bone->parent) == sortedBones.cend())
+        if (bone->parent != nullptr &&
+            std::find(sortedBones.cbegin(), sortedBones.cend(), bone->parent) == sortedBones.cend())
         {
             continue;
         }
@@ -132,7 +134,7 @@ void ArmatureData::sortBones()
 
 void ArmatureData::cacheFrames(unsigned value)
 {
-    if (cacheFrameRate > value) // TODO clear cache.
+    if (cacheFrameRate > value)  // TODO clear cache.
     {
         return;
     }
@@ -146,11 +148,11 @@ void ArmatureData::cacheFrames(unsigned value)
 
 int ArmatureData::setCacheFrame(const Matrix& globalTransformMatrix, const Transform& transform)
 {
-    auto& dataArray = *&parent->cachedFrames;
+    auto& dataArray  = *&parent->cachedFrames;
     auto arrayOffset = dataArray.size();
 
     dataArray.resize(arrayOffset + 10);
-    dataArray[arrayOffset] = globalTransformMatrix.a;
+    dataArray[arrayOffset]     = globalTransformMatrix.a;
     dataArray[arrayOffset + 1] = globalTransformMatrix.b;
     dataArray[arrayOffset + 2] = globalTransformMatrix.c;
     dataArray[arrayOffset + 3] = globalTransformMatrix.d;
@@ -166,24 +168,24 @@ int ArmatureData::setCacheFrame(const Matrix& globalTransformMatrix, const Trans
 
 void ArmatureData::getCacheFrame(Matrix& globalTransformMatrix, Transform& transform, unsigned arrayOffset) const
 {
-    auto& dataArray = *&parent->cachedFrames;
-    globalTransformMatrix.a = dataArray[arrayOffset];
-    globalTransformMatrix.b = dataArray[arrayOffset + 1];
-    globalTransformMatrix.c = dataArray[arrayOffset + 2];
-    globalTransformMatrix.d = dataArray[arrayOffset + 3];
+    auto& dataArray          = *&parent->cachedFrames;
+    globalTransformMatrix.a  = dataArray[arrayOffset];
+    globalTransformMatrix.b  = dataArray[arrayOffset + 1];
+    globalTransformMatrix.c  = dataArray[arrayOffset + 2];
+    globalTransformMatrix.d  = dataArray[arrayOffset + 3];
     globalTransformMatrix.tx = dataArray[arrayOffset + 4];
     globalTransformMatrix.ty = dataArray[arrayOffset + 5];
-    transform.rotation = dataArray[arrayOffset + 6];
-    transform.skew = dataArray[arrayOffset + 7];
-    transform.scaleX = dataArray[arrayOffset + 8];
-    transform.scaleY = dataArray[arrayOffset + 9];
-    transform.x = globalTransformMatrix.tx;
-    transform.y = globalTransformMatrix.ty;
+    transform.rotation       = dataArray[arrayOffset + 6];
+    transform.skew           = dataArray[arrayOffset + 7];
+    transform.scaleX         = dataArray[arrayOffset + 8];
+    transform.scaleY         = dataArray[arrayOffset + 9];
+    transform.x              = globalTransformMatrix.tx;
+    transform.y              = globalTransformMatrix.ty;
 }
 
 void ArmatureData::addBone(BoneData* value)
 {
-    if (bones.find(value->name) != bones.cend()) 
+    if (bones.find(value->name) != bones.cend())
     {
         DRAGONBONES_ASSERT(false, "Same bone: " + value->name);
         return;
@@ -205,7 +207,7 @@ void ArmatureData::addSlot(SlotData* value)
     sortedSlots.push_back(value);
 }
 
-void ArmatureData::addConstraint(ConstraintData * value)
+void ArmatureData::addConstraint(ConstraintData* value)
 {
     if (constraints.find(value->name) != constraints.cend())
     {
@@ -224,7 +226,7 @@ void ArmatureData::addSkin(SkinData* value)
         return;
     }
 
-    value->parent = this;
+    value->parent      = this;
     skins[value->name] = value;
 
     if (defaultSkin == nullptr)
@@ -241,7 +243,7 @@ void ArmatureData::addAnimation(AnimationData* value)
         return;
     }
 
-    value->parent = this;
+    value->parent           = this;
     animations[value->name] = value;
     animationNames.push_back(value->name);
     if (defaultAnimation == nullptr)
@@ -256,16 +258,19 @@ void ArmatureData::addAction(ActionData* value, bool isDefault)
     {
         defaultActions.push_back(value);
     }
-    else 
+    else
     {
         actions.push_back(value);
     }
 }
 
-MeshDisplayData* ArmatureData::getMesh(const std::string& skinName, const std::string& slotName, const std::string& meshName) const
+MeshDisplayData* ArmatureData::getMesh(const std::string& skinName,
+                                       const std::string& slotName,
+                                       const std::string& meshName) const
 {
     const auto skin = getSkin(skinName);
-    if (skin == nullptr) {
+    if (skin == nullptr)
+    {
         return nullptr;
     }
 
@@ -280,13 +285,13 @@ void BoneData::_onClear()
     }
 
     inheritTranslation = false;
-    inheritRotation = false;
-    inheritScale = false;
-    inheritReflection = false;
-    length = 0.0f;
-    name = "";
+    inheritRotation    = false;
+    inheritScale       = false;
+    inheritReflection  = false;
+    length             = 0.0f;
+    name               = "";
     transform.identity();
-    parent = nullptr;
+    parent   = nullptr;
     userData = nullptr;
 }
 
@@ -308,13 +313,13 @@ void SlotData::_onClear()
         delete color;
     }
 
-    blendMode = BlendMode::Normal;
+    blendMode    = BlendMode::Normal;
     displayIndex = 0;
-    zOrder = 0;
-    name = "";
-    parent = nullptr;
-    color = nullptr;
-    userData = nullptr;
+    zOrder       = 0;
+    name         = "";
+    parent       = nullptr;
+    color        = nullptr;
+    userData     = nullptr;
 }
 
 DRAGONBONES_NAMESPACE_END

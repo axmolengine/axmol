@@ -3,7 +3,7 @@ Copyright (c) 2009      Sindesso Pty Ltd http://www.sindesso.com/
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
 http://www.cocos2d-x.org
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -32,7 +32,7 @@ NS_CC_BEGIN
 
 PageTurn3D* PageTurn3D::create(float duration, const Vec2& gridSize)
 {
-    PageTurn3D *action = new PageTurn3D();
+    PageTurn3D* action = new PageTurn3D();
 
     if (action->initWithDuration(duration, gridSize))
     {
@@ -44,7 +44,7 @@ PageTurn3D* PageTurn3D::create(float duration, const Vec2& gridSize)
     return nullptr;
 }
 
-PageTurn3D *PageTurn3D::clone() const
+PageTurn3D* PageTurn3D::clone() const
 {
     // no copy constructor
     return PageTurn3D::create(_duration, _gridSize);
@@ -57,7 +57,7 @@ GridBase* PageTurn3D::getGrid()
     {
         result->setNeedDepthTestForBlit(true);
     }
-    
+
     return result;
 }
 
@@ -67,18 +67,18 @@ GridBase* PageTurn3D::getGrid()
  */
 void PageTurn3D::update(float time)
 {
-    float tt = MAX(0, time - 0.25f);
+    float tt      = MAX(0, time - 0.25f);
     float deltaAy = (tt * tt * 500);
-    float ay = -100 - deltaAy;
-    
+    float ay      = -100 - deltaAy;
+
     float deltaTheta = sqrtf(time);
-    float theta = deltaTheta > 0.5f ? (float)M_PI_2*deltaTheta : (float)M_PI_2*(1-deltaTheta);
-    
-    float rotateByYAxis = (2-time)* (float)M_PI;
-    
+    float theta      = deltaTheta > 0.5f ? (float)M_PI_2 * deltaTheta : (float)M_PI_2 * (1 - deltaTheta);
+
+    float rotateByYAxis = (2 - time) * (float)M_PI;
+
     float sinTheta = sinf(theta);
     float cosTheta = cosf(theta);
-    
+
     for (int i = 0; i <= _gridSize.width; ++i)
     {
         for (int j = 0; j <= _gridSize.height; ++j)
@@ -86,19 +86,19 @@ void PageTurn3D::update(float time)
             Vec2 pos((float)i, (float)j);
             // Get original vertex
             Vec3 p = getOriginalVertex(pos);
-            
+
             p.x -= getGridRect().origin.x;
-            float R = sqrtf((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
-            float r = R * sinTheta;
-            float alpha = asinf( p.x / R );
-            float beta = alpha / sinTheta;
-            float cosBeta = cosf( beta );
-            
+            float R       = sqrtf((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
+            float r       = R * sinTheta;
+            float alpha   = asinf(p.x / R);
+            float beta    = alpha / sinTheta;
+            float cosBeta = cosf(beta);
+
             // If beta > PI then we've wrapped around the cone
             // Reduce the radius to stop these points interfering with others
             if (beta <= M_PI)
             {
-                p.x = ( r * sinf(beta));
+                p.x = (r * sinf(beta));
             }
             else
             {
@@ -107,26 +107,25 @@ void PageTurn3D::update(float time)
                 p.x = 0;
             }
 
-            p.y = ( R + ay - ( r * (1 - cosBeta) * sinTheta));
+            p.y = (R + ay - (r * (1 - cosBeta) * sinTheta));
 
             // We scale z here to avoid the animation being
             // too much bigger than the screen due to perspective transform
 
-            p.z = (r * ( 1 - cosBeta ) * cosTheta);// "100" didn't work for
+            p.z = (r * (1 - cosBeta) * cosTheta);  // "100" didn't work for
             p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
             p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
-            p.z/=7;
+            p.z /= 7;
             //    Stop z coord from dropping beneath underlying page in a transition
             // issue #751
-            if( p.z < 0.5f )
+            if (p.z < 0.5f)
             {
                 p.z = 0.5f;
             }
-            
+
             // Set new coords
             p.x += getGridRect().origin.x;
             setVertex(pos, p);
-            
         }
     }
 }

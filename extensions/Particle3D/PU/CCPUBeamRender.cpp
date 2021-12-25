@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -42,14 +42,14 @@
 NS_CC_BEGIN
 
 // Constants
-const bool PUBeamRender::DEFAULT_USE_VERTEX_COLOURS = false;
-const size_t PUBeamRender::DEFAULT_MAX_ELEMENTS = 10;
-const float PUBeamRender::DEFAULT_UPDATE_INTERVAL = 0.1f;
-const float PUBeamRender::DEFAULT_DEVIATION = 300;
-const size_t PUBeamRender::DEFAULT_NUMBER_OF_SEGMENTS = 2;
+const bool PUBeamRender::DEFAULT_USE_VERTEX_COLOURS                               = false;
+const size_t PUBeamRender::DEFAULT_MAX_ELEMENTS                                   = 10;
+const float PUBeamRender::DEFAULT_UPDATE_INTERVAL                                 = 0.1f;
+const float PUBeamRender::DEFAULT_DEVIATION                                       = 300;
+const size_t PUBeamRender::DEFAULT_NUMBER_OF_SEGMENTS                             = 2;
 const PUBillboardChain::TexCoordDirection PUBeamRender::DEFAULT_TEXTURE_DIRECTION = PUBillboardChain::TCD_V;
 
-PUBeamRender* PUBeamRender::create( const std::string &texFile )
+PUBeamRender* PUBeamRender::create(const std::string& texFile)
 {
     auto br = new PUBeamRender();
     br->autorelease();
@@ -57,18 +57,19 @@ PUBeamRender* PUBeamRender::create( const std::string &texFile )
     return br;
 }
 
-void PUBeamRender::render( Renderer* renderer, const Mat4 &transform, ParticleSystem3D* particleSystem )
+void PUBeamRender::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)
 {
-    const ParticlePool &particlePool = particleSystem->getParticlePool();
+    const ParticlePool& particlePool = particleSystem->getParticlePool();
     if (!_isVisible || particlePool.empty() || !_billboardChain)
         return;
 
-    Vec3 basePosition = static_cast<PUParticleSystem3D *>(_particleSystem)->getDerivedPosition();
+    Vec3 basePosition = static_cast<PUParticleSystem3D*>(_particleSystem)->getDerivedPosition();
     for (auto iter : particlePool.getActiveDataList())
     {
-        auto particle = static_cast<PUParticle3D *>(iter);
+        auto particle   = static_cast<PUParticle3D*>(iter);
         auto visualData = static_cast<PUParticle3DBeamVisualData*>(particle->visualData);
-        if (visualData){
+        if (visualData)
+        {
             Vec3 end = particle->position - basePosition;
             PUSimpleSpline spline;
 
@@ -107,16 +108,16 @@ void PUBeamRender::render( Renderer* renderer, const Mat4 &transform, ParticleSy
     _billboardChain->render(renderer, transform, particleSystem);
 }
 
-PUBeamRender::PUBeamRender() : 
-    _billboardChain(0),
-    _quota(0),
-    _useVertexColours(DEFAULT_USE_VERTEX_COLOURS),
-    _maxChainElements(DEFAULT_MAX_ELEMENTS),
-    _updateInterval(DEFAULT_UPDATE_INTERVAL),
-    _deviation(DEFAULT_DEVIATION),
-    _numberOfSegments(DEFAULT_NUMBER_OF_SEGMENTS),
-    _jump(false),
-    _texCoordDirection(DEFAULT_TEXTURE_DIRECTION)
+PUBeamRender::PUBeamRender()
+    : _billboardChain(0)
+    , _quota(0)
+    , _useVertexColours(DEFAULT_USE_VERTEX_COLOURS)
+    , _maxChainElements(DEFAULT_MAX_ELEMENTS)
+    , _updateInterval(DEFAULT_UPDATE_INTERVAL)
+    , _deviation(DEFAULT_DEVIATION)
+    , _numberOfSegments(DEFAULT_NUMBER_OF_SEGMENTS)
+    , _jump(false)
+    , _texCoordDirection(DEFAULT_TEXTURE_DIRECTION)
 {
     autoRotate = true;
 }
@@ -129,23 +130,25 @@ PUBeamRender::~PUBeamRender()
     destroyAll();
 }
 
-void PUBeamRender::particleEmitted( PUParticleSystem3D* particleSystem, PUParticle3D* particle )
+void PUBeamRender::particleEmitted(PUParticleSystem3D* particleSystem, PUParticle3D* particle)
 {
     if (!particle->visualData && !_visualData.empty() && particle->particleType == PUParticle3D::PT_VISUAL)
     {
         particle->visualData = _visualData.back();
-        PUParticle3DBeamVisualData* beamRendererVisualData = static_cast<PUParticle3DBeamVisualData*>(particle->visualData);
-        beamRendererVisualData->setVisible(true, _rendererScale.x * particleSystem->getDefaultWidth()); // PU 1.4
+        PUParticle3DBeamVisualData* beamRendererVisualData =
+            static_cast<PUParticle3DBeamVisualData*>(particle->visualData);
+        beamRendererVisualData->setVisible(true, _rendererScale.x * particleSystem->getDefaultWidth());  // PU 1.4
         _visualData.pop_back();
     }
 }
 
-void PUBeamRender::particleExpired( PUParticleSystem3D* /*particleSystem*/, PUParticle3D* particle )
+void PUBeamRender::particleExpired(PUParticleSystem3D* /*particleSystem*/, PUParticle3D* particle)
 {
     if (particle->visualData)
     {
-        PUParticle3DBeamVisualData* beamRendererVisualData = static_cast<PUParticle3DBeamVisualData*>(particle->visualData);
-        beamRendererVisualData->setVisible(false, 0); // PU 1.4
+        PUParticle3DBeamVisualData* beamRendererVisualData =
+            static_cast<PUParticle3DBeamVisualData*>(particle->visualData);
+        beamRendererVisualData->setVisible(false, 0);  // PU 1.4
         _visualData.push_back(beamRendererVisualData);
         particle->visualData = nullptr;
     }
@@ -155,7 +158,7 @@ void PUBeamRender::particleExpired( PUParticleSystem3D* /*particleSystem*/, PUPa
 bool PUBeamRender::isUseVertexColours() const
 {
     return _useVertexColours;
-} 
+}
 //-----------------------------------------------------------------------
 void PUBeamRender::setUseVertexColours(bool useVertexColours)
 {
@@ -165,17 +168,17 @@ void PUBeamRender::setUseVertexColours(bool useVertexColours)
 
     _billboardChain->setUseVertexColours(_useVertexColours);
     _billboardChain->setUseTextureCoords(!_useVertexColours);
-} 
+}
 //-----------------------------------------------------------------------
 size_t PUBeamRender::getMaxChainElements() const
 {
     return _maxChainElements;
-} 
+}
 //-----------------------------------------------------------------------
 void PUBeamRender::setMaxChainElements(size_t maxChainElements)
 {
     _maxChainElements = maxChainElements;
-} 
+}
 //-----------------------------------------------------------------------
 float PUBeamRender::getUpdateInterval() const
 {
@@ -236,18 +239,18 @@ void PUBeamRender::prepare()
     // Register itself to the technique
     if (_particleSystem)
     {
-        // Although it is safe to assume that technique == mParentTechnique, use the mParentTechnique, because the mParentTechnique is
-        // also used for unregistering.
-        static_cast<PUParticleSystem3D *>(_particleSystem)->addListener(this);
+        // Although it is safe to assume that technique == mParentTechnique, use the mParentTechnique, because the
+        // mParentTechnique is also used for unregistering.
+        static_cast<PUParticleSystem3D*>(_particleSystem)->addListener(this);
     }
 
     _quota = _particleSystem->getParticleQuota();
 
     // Create BillboardChain
-    std::stringstream ss; 
+    std::stringstream ss;
     ss << this;
     _billboardChainName = "Beam" + ss.str();
-    _billboardChain = new PUBillboardChain(_billboardChainName, _texFile);
+    _billboardChain     = new PUBillboardChain(_billboardChainName, _texFile);
     _billboardChain->setDynamic(true);
     _billboardChain->setNumberOfChains(_quota);
     _billboardChain->setMaxChainElements(_maxChainElements);
@@ -263,7 +266,9 @@ void PUBeamRender::prepare()
         for (size_t j = 0; j < _maxChainElements; j++)
         {
             PUBillboardChain::Element element;
-            element = PUBillboardChain::Element(Vec3::ZERO, _rendererScale.x * static_cast<PUParticleSystem3D *>(_particleSystem)->getDefaultWidth(), 0.0f, Vec4::ONE, Quaternion::identity()); // V1.51
+            element = PUBillboardChain::Element(
+                Vec3::ZERO, _rendererScale.x * static_cast<PUParticleSystem3D*>(_particleSystem)->getDefaultWidth(),
+                0.0f, Vec4::ONE, Quaternion::identity());  // V1.51
             _billboardChain->addChainElement(i, element);
         }
 
@@ -274,8 +279,8 @@ void PUBeamRender::prepare()
             visualData->half[numDev].setZero();
             visualData->destinationHalf[numDev].setZero();
         }
-        _allVisualData.push_back(visualData); // Managed by this renderer
-        _visualData.push_back(visualData); // Used to assign to a particle
+        _allVisualData.push_back(visualData);  // Managed by this renderer
+        _visualData.push_back(visualData);     // Used to assign to a particle
     }
 }
 
@@ -284,7 +289,7 @@ void PUBeamRender::unPrepare()
     destroyAll();
 }
 
-void PUBeamRender::updateRender( PUParticle3D *particle, float deltaTime, bool /*firstParticle*/ )
+void PUBeamRender::updateRender(PUParticle3D* particle, float deltaTime, bool /*firstParticle*/)
 {
     if (!particle->visualData)
         return;
@@ -295,17 +300,17 @@ void PUBeamRender::updateRender( PUParticle3D *particle, float deltaTime, bool /
     if (beamRendererVisualData->timeSinceLastUpdate < 0)
     {
 
-        Vec3 end = particle->position - static_cast<PUParticleSystem3D *>(_particleSystem)->getDerivedPosition();
+        Vec3 end = particle->position - static_cast<PUParticleSystem3D*>(_particleSystem)->getDerivedPosition();
         Vec3 perpendicular;
         float divide = (float)_numberOfSegments + 1.0f;
         for (size_t numDev = 0; numDev < _numberOfSegments; ++numDev)
         {
             Vec3::cross(end, Vec3(CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1()), &perpendicular);
             perpendicular.normalize();
-            beamRendererVisualData->destinationHalf[numDev] = (((float)numDev + 1.0f) / divide) * end
-                + Vec3(_rendererScale.x * _deviation * perpendicular.x
-                     , _rendererScale.y * _deviation * perpendicular.y
-                     , _rendererScale.z * _deviation * perpendicular.z);
+            beamRendererVisualData->destinationHalf[numDev] =
+                (((float)numDev + 1.0f) / divide) * end + Vec3(_rendererScale.x * _deviation * perpendicular.x,
+                                                               _rendererScale.y * _deviation * perpendicular.y,
+                                                               _rendererScale.z * _deviation * perpendicular.z);
         }
         beamRendererVisualData->timeSinceLastUpdate += _updateInterval;
     }
@@ -332,7 +337,7 @@ void PUBeamRender::destroyAll()
         return;
 
     // Remove the listener
-    static_cast<PUParticleSystem3D *>(_particleSystem)->removeListener(this);
+    static_cast<PUParticleSystem3D*>(_particleSystem)->removeListener(this);
 
     // Delete the BillboardChain
     CC_SAFE_DELETE(_billboardChain);
@@ -356,7 +361,7 @@ PUBeamRender* PUBeamRender::clone()
     return br;
 }
 
-void PUBeamRender::copyAttributesTo(PUBeamRender *beamRender)
+void PUBeamRender::copyAttributesTo(PUBeamRender* beamRender)
 {
     PURender::copyAttributesTo(beamRender);
     beamRender->setUseVertexColours(_useVertexColours);

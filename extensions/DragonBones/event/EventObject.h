@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -149,7 +149,8 @@ public:
 
 public:
     /**
-     * - If is a frame event, the value is used to describe the time that the event was in the animation timeline. (In seconds)
+     * - If is a frame event, the value is used to describe the time that the event was in the animation timeline. (In
+     * seconds)
      * @version DragonBones 4.5
      * @language en_US
      */
@@ -256,7 +257,7 @@ public:
 protected:
     virtual void _onClear() override;
 
-public: // For WebAssembly.
+public:  // For WebAssembly.
     Armature* getArmature() const { return armature; }
     Bone* getBone() const { return bone; }
     Slot* getSlot() const { return slot; }
@@ -264,4 +265,4 @@ public: // For WebAssembly.
     UserData* getData() const { return data; }
 };
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_EVENT_OBJECT_H
+#endif  // DRAGONBONES_EVENT_OBJECT_H

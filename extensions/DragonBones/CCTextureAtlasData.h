@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -40,15 +40,8 @@ private:
     cocos2d::Texture2D* _renderTexture;
 
 public:
-    CCTextureAtlasData() :
-        _renderTexture(nullptr)
-    {
-        _onClear();
-    }
-    virtual ~CCTextureAtlasData()
-    {
-        _onClear();
-    }
+    CCTextureAtlasData() : _renderTexture(nullptr) { _onClear(); }
+    virtual ~CCTextureAtlasData() { _onClear(); }
 
 protected:
     virtual void _onClear() override;
@@ -63,10 +56,7 @@ public:
      * @version DragonBones 3.0
      * @language en_US
      */
-    inline cocos2d::Texture2D* getRenderTexture() const 
-    {
-        return _renderTexture;
-    }
+    inline cocos2d::Texture2D* getRenderTexture() const { return _renderTexture; }
     void setRenderTexture(cocos2d::Texture2D* value);
 };
 /**
@@ -79,18 +69,11 @@ class CCTextureData : public TextureData
 public:
     cocos2d::SpriteFrame* spriteFrame;
 
-    CCTextureData() :
-        spriteFrame(nullptr)
-    {
-        _onClear();
-    }
-    virtual ~CCTextureData()
-    {
-        _onClear();
-    }
+    CCTextureData() : spriteFrame(nullptr) { _onClear(); }
+    virtual ~CCTextureData() { _onClear(); }
 
 protected:
     virtual void _onClear() override;
 };
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_CC_TEXTUREATLAS_DATA_H
+#endif  // DRAGONBONES_CC_TEXTUREATLAS_DATA_H

@@ -4,7 +4,7 @@
  Copyright (c) 2011      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,7 +34,7 @@ NS_CC_BEGIN
 //
 // InstantAction
 //
-void ActionInstant::startWithTarget(Node *target)
+void ActionInstant::startWithTarget(Node* target)
 {
     FiniteTimeAction::startWithTarget(target);
     _done = false;
@@ -60,7 +60,7 @@ void ActionInstant::update(float /*time*/)
 // Show
 //
 
-Show* Show::create() 
+Show* Show::create()
 {
     Show* ret = new Show();
     ret->autorelease();
@@ -87,9 +87,9 @@ Show* Show::clone() const
 //
 // Hide
 //
-Hide * Hide::create() 
+Hide* Hide::create()
 {
-    Hide *ret = new Hide();
+    Hide* ret = new Hide();
 
     ret->autorelease();
 
@@ -102,7 +102,7 @@ void Hide::update(float time)
     _target->setVisible(false);
 }
 
-ActionInstant *Hide::reverse() const
+ActionInstant* Hide::reverse() const
 {
     return Show::create();
 }
@@ -116,9 +116,9 @@ Hide* Hide::clone() const
 //
 // ToggleVisibility
 //
-ToggleVisibility * ToggleVisibility::create()
+ToggleVisibility* ToggleVisibility::create()
 {
-    ToggleVisibility *ret = new ToggleVisibility();
+    ToggleVisibility* ret = new ToggleVisibility();
     ret->autorelease();
     return ret;
 }
@@ -129,12 +129,12 @@ void ToggleVisibility::update(float time)
     _target->setVisible(!_target->isVisible());
 }
 
-ToggleVisibility * ToggleVisibility::reverse() const
+ToggleVisibility* ToggleVisibility::reverse() const
 {
     return ToggleVisibility::create();
 }
 
-ToggleVisibility * ToggleVisibility::clone() const
+ToggleVisibility* ToggleVisibility::clone() const
 {
     // no copy constructor
     return ToggleVisibility::create();
@@ -143,9 +143,9 @@ ToggleVisibility * ToggleVisibility::clone() const
 //
 // Remove Self
 //
-RemoveSelf * RemoveSelf::create(bool isNeedCleanUp /*= true*/) 
+RemoveSelf* RemoveSelf::create(bool isNeedCleanUp /*= true*/)
 {
-    RemoveSelf *ret = new RemoveSelf();
+    RemoveSelf* ret = new RemoveSelf();
 
     if (ret->init(isNeedCleanUp))
         ret->autorelease();
@@ -167,12 +167,12 @@ void RemoveSelf::update(float time)
     _target->removeFromParentAndCleanup(_isNeedCleanUp);
 }
 
-RemoveSelf *RemoveSelf::reverse() const
+RemoveSelf* RemoveSelf::reverse() const
 {
     return RemoveSelf::create(_isNeedCleanUp);
 }
 
-RemoveSelf * RemoveSelf::clone() const
+RemoveSelf* RemoveSelf::clone() const
 {
     // no copy constructor
     return RemoveSelf::create(_isNeedCleanUp);
@@ -182,9 +182,9 @@ RemoveSelf * RemoveSelf::clone() const
 // FlipX
 //
 
-FlipX *FlipX::create(bool x)
+FlipX* FlipX::create(bool x)
 {
-    FlipX *ret = new FlipX();
+    FlipX* ret = new FlipX();
 
     if (ret->initWithFlipX(x))
     {
@@ -213,7 +213,7 @@ FlipX* FlipX::reverse() const
     return FlipX::create(!_flipX);
 }
 
-FlipX * FlipX::clone() const
+FlipX* FlipX::clone() const
 {
     // no copy constructor
     return FlipX::create(_flipX);
@@ -222,9 +222,9 @@ FlipX * FlipX::clone() const
 // FlipY
 //
 
-FlipY * FlipY::create(bool y)
+FlipY* FlipY::create(bool y)
 {
-    FlipY *ret = new FlipY();
+    FlipY* ret = new FlipY();
 
     if (ret->initWithFlipY(y))
     {
@@ -253,7 +253,7 @@ FlipY* FlipY::reverse() const
     return FlipY::create(!_flipY);
 }
 
-FlipY * FlipY::clone() const
+FlipY* FlipY::clone() const
 {
     // no copy constructor
     return FlipY::create(_flipY);
@@ -265,7 +265,7 @@ FlipY * FlipY::clone() const
 
 Place* Place::create(const Vec2& pos)
 {
-    Place *ret = new Place();
+    Place* ret = new Place();
 
     if (ret->initWithPosition(pos))
     {
@@ -283,13 +283,13 @@ bool Place::initWithPosition(const Vec2& pos)
     return true;
 }
 
-Place * Place::clone() const
+Place* Place::clone() const
 {
     // no copy constructor
     return Place::create(_position);
 }
 
-Place * Place::reverse() const
+Place* Place::reverse() const
 {
     // no reverse, just clone
     return this->clone();
@@ -305,11 +305,11 @@ void Place::update(float time)
 // CallFunc
 //
 
-CallFunc * CallFunc::create(const std::function<void()> &func)
+CallFunc* CallFunc::create(const std::function<void()>& func)
 {
-    CallFunc *ret = new CallFunc();
+    CallFunc* ret = new CallFunc();
 
-    if (ret->initWithFunction(func) )
+    if (ret->initWithFunction(func))
     {
         ret->autorelease();
         return ret;
@@ -319,24 +319,24 @@ CallFunc * CallFunc::create(const std::function<void()> &func)
     return nullptr;
 }
 
-bool CallFunc::initWithFunction(const std::function<void()> &func)
+bool CallFunc::initWithFunction(const std::function<void()>& func)
 {
     _function = func;
     return true;
 }
 
-CallFunc * CallFunc::clone() const
+CallFunc* CallFunc::clone() const
 {
     // no copy constructor
     auto a = new CallFunc();
-    if( _function)
+    if (_function)
         a->initWithFunction(_function);
 
     a->autorelease();
     return a;
 }
 
-CallFunc * CallFunc::reverse() const
+CallFunc* CallFunc::reverse() const
 {
     // no reverse here, just return a clone
     return this->clone();
@@ -350,7 +350,7 @@ void CallFunc::update(float time)
 
 void CallFunc::execute()
 {
-    if( _function )
+    if (_function)
     {
         _function();
     }
@@ -360,11 +360,11 @@ void CallFunc::execute()
 // CallFuncN
 //
 
-CallFuncN * CallFuncN::create(const std::function<void(Node*)> &func)
+CallFuncN* CallFuncN::create(const std::function<void(Node*)>& func)
 {
     auto ret = new CallFuncN();
 
-    if (ret->initWithFunction(func) )
+    if (ret->initWithFunction(func))
     {
         ret->autorelease();
         return ret;
@@ -382,17 +382,17 @@ void CallFuncN::execute()
     }
 }
 
-bool CallFuncN::initWithFunction(const std::function<void (Node *)> &func)
+bool CallFuncN::initWithFunction(const std::function<void(Node*)>& func)
 {
     _functionN = func;
     return true;
 }
 
-CallFuncN * CallFuncN::clone() const
+CallFuncN* CallFuncN::clone() const
 {
     // no copy constructor
     auto a = new CallFuncN();
-    if( _functionN)
+    if (_functionN)
         a->initWithFunction(_functionN);
 
     a->autorelease();

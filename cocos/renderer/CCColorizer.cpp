@@ -13,9 +13,9 @@ NS_CC_BEGIN
 #define FLT_XRC FLT_XRS
 #define FLT_YRS (-1 / FLT_SQRT_3)
 #define FLT_YRC (FLT_SQRT_2 / FLT_SQRT_3)
-#define RLUM    (0.3086)
-#define GLUM    (0.6094)
-#define BLUM    (0.0820)
+#define RLUM (0.3086)
+#define GLUM (0.6094)
+#define BLUM (0.0820)
 
 #define CLZ_PRINTMAT 0
 
@@ -45,9 +45,9 @@ static Vec3 fastest_rgb2hsv(const Color3B& rgb)
     }
 
     float chroma = r - std::min(g, b);
-    h = fabs(K + (g - b) / (6.f * chroma + 1e-20f));
-    s = chroma / (r + 1e-20f);
-    v = r;
+    h            = fabs(K + (g - b) / (6.f * chroma + 1e-20f));
+    s            = chroma / (r + 1e-20f);
+    v            = r;
 
     return Vec3(h, s, v);
 }
@@ -60,70 +60,95 @@ static Vec3 rgb2hsv(const Color3B& rgb)
     float g = rgb.g / 255.0f;
     float b = rgb.b / 255.0f;
 
-    float h, s, v; // h:0-360.0, s:0.0-1.0, v:0.0-1.0
+    float h, s, v;  // h:0-360.0, s:0.0-1.0, v:0.0-1.0
 
-    float max = std::max({ r, g, b });
-    float min = std::min({ r, g, b });
+    float max = std::max({r, g, b});
+    float min = std::min({r, g, b});
 
     v = max;
 
-    if (max == 0.0f) {
+    if (max == 0.0f)
+    {
         s = 0;
         h = 0;
     }
-    else if (max - min == 0.0f) {
+    else if (max - min == 0.0f)
+    {
         s = 0;
         h = 0;
     }
-    else {
+    else
+    {
         s = (max - min) / max;
 
-        if (max == r) {
+        if (max == r)
+        {
             h = 60 * ((g - b) / (max - min)) + 0;
         }
-        else if (max == g) {
+        else if (max == g)
+        {
             h = 60 * ((b - r) / (max - min)) + 120;
         }
-        else {
+        else
+        {
             h = 60 * ((r - g) / (max - min)) + 240;
         }
     }
 
-    if (h < 0) h += 360.0f;
+    if (h < 0)
+        h += 360.0f;
 
-    dst_h = (unsigned char)(h / 2);   // dst_h : 0-180
-    dst_s = (unsigned char)(s/* * 255*/); // dst_s : 0-255
-    dst_v = (unsigned char)(v /** 255*/); // dst_v : 0-255
+    dst_h = (unsigned char)(h / 2);         // dst_h : 0-180
+    dst_s = (unsigned char)(s /* * 255*/);  // dst_s : 0-255
+    dst_v = (unsigned char)(v /** 255*/);   // dst_v : 0-255
 
     return Vec3(dst_h / 180.f, dst_s, dst_v);
 }
 
-static void hsv2rgb(const unsigned char& src_h, const unsigned char& src_s, const unsigned char& src_v, unsigned char& dst_r, unsigned char& dst_g, unsigned char& dst_b)
+static void hsv2rgb(const unsigned char& src_h,
+                    const unsigned char& src_s,
+                    const unsigned char& src_v,
+                    unsigned char& dst_r,
+                    unsigned char& dst_g,
+                    unsigned char& dst_b)
 {
-    float h = src_h * 2.0f; // 0-360
-    float s = src_s / 255.0f; // 0.0-1.0
-    float v = src_v / 255.0f; // 0.0-1.0
+    float h = src_h * 2.0f;    // 0-360
+    float s = src_s / 255.0f;  // 0.0-1.0
+    float v = src_v / 255.0f;  // 0.0-1.0
 
-    float r, g, b; // 0.0-1.0
+    float r, g, b;  // 0.0-1.0
 
-    int   hi = (int)(h / 60.0f) % 6;
+    int hi  = (int)(h / 60.0f) % 6;
     float f = (h / 60.0f) - hi;
     float p = v * (1.0f - s);
     float q = v * (1.0f - s * f);
     float t = v * (1.0f - s * (1.0f - f));
 
-    switch (hi) {
-    case 0: r = v, g = t, b = p; break;
-    case 1: r = q, g = v, b = p; break;
-    case 2: r = p, g = v, b = t; break;
-    case 3: r = p, g = q, b = v; break;
-    case 4: r = t, g = p, b = v; break;
-    case 5: r = v, g = p, b = q; break;
+    switch (hi)
+    {
+    case 0:
+        r = v, g = t, b = p;
+        break;
+    case 1:
+        r = q, g = v, b = p;
+        break;
+    case 2:
+        r = p, g = v, b = t;
+        break;
+    case 3:
+        r = p, g = q, b = v;
+        break;
+    case 4:
+        r = t, g = p, b = v;
+        break;
+    case 5:
+        r = v, g = p, b = q;
+        break;
     }
 
-    dst_r = (unsigned char)(r * 255); // dst_r : 0-255
-    dst_g = (unsigned char)(g * 255); // dst_r : 0-255
-    dst_b = (unsigned char)(b * 255); // dst_r : 0-255
+    dst_r = (unsigned char)(r * 255);  // dst_r : 0-255
+    dst_g = (unsigned char)(g * 255);  // dst_r : 0-255
+    dst_b = (unsigned char)(b * 255);  // dst_r : 0-255
 }
 
 #if CLZ_PRINTMAT
@@ -132,7 +157,8 @@ static void printmat3(float mat[3][3])
     int x, y;
     char svalue[256];
     int n = 0;
-    for (y = 0; y < 3; y++) {
+    for (y = 0; y < 3; y++)
+    {
         for (x = 0; x < 3; x++)
             n += sprintf(svalue + n, "%f ", mat[y][x]);
         n += sprintf(svalue + n, "\n");
@@ -147,7 +173,8 @@ static void printmat4(float mat[4][4])
     int x, y;
     char svalue[256];
     int n = 0;
-    for (y = 0; y < 4; y++) {
+    for (y = 0; y < 4; y++)
+    {
         for (x = 0; x < 4; x++)
             n += sprintf(svalue + n, "%f ", mat[y][x]);
         n += sprintf(svalue + n, "\n");
@@ -157,12 +184,12 @@ static void printmat4(float mat[4][4])
     log("%s", svalue);
 }
 
-inline void printmat3(float(&mat)[9])
+inline void printmat3(float (&mat)[9])
 {
     printmat3((_M3X3&)mat);
 }
 
-inline void printmat4(float(&mat)[16])
+inline void printmat4(float (&mat)[16])
 {
     printmat4((_M4X4&)mat);
 }
@@ -170,17 +197,17 @@ inline void printmat4(float(&mat)[16])
 
 inline void createRotationX(Mat4* dst, float sv, float cv)
 {
-    dst->m[5] = cv;
-    dst->m[6] = sv;
-    dst->m[9] = -sv;
+    dst->m[5]  = cv;
+    dst->m[6]  = sv;
+    dst->m[9]  = -sv;
     dst->m[10] = cv;
 }
 
 inline void createRotationY(Mat4* dst, float sv, float cv)
 {
-    dst->m[0] = cv;
-    dst->m[2] = -sv;
-    dst->m[8] = sv;
+    dst->m[0]  = cv;
+    dst->m[2]  = -sv;
+    dst->m[8]  = sv;
     dst->m[10] = cv;
 }
 
@@ -203,7 +230,7 @@ inline void rotateY(Mat4* dst, float sv, float cv)
 {
     Mat4 temp;
     createRotationY(&temp, sv, cv);
-    Mat4::multiply(temp, *dst, dst); // dst->multiply(temp); pitfall: matrix1 * matrix2 != matrix2 * matrix1
+    Mat4::multiply(temp, *dst, dst);  // dst->multiply(temp); pitfall: matrix1 * matrix2 != matrix2 * matrix1
 }
 
 inline void rotateZ(Mat4* dst, float sv, float cv)
@@ -221,20 +248,18 @@ inline void rotateZ(Mat4* dst, float angle)
 }
 
 /*
-*    matrixmult -
-*        multiply two matricies
-*/
+ *    matrixmult -
+ *        multiply two matricies
+ */
 static void matrixmult(float a[4][4], float b[4][4], float c[4][4])
 {
     int x, y;
     float temp[4][4];
 
     for (y = 0; y < 4; y++)
-        for (x = 0; x < 4; x++) {
-            temp[y][x] = b[y][0] * a[0][x]
-                + b[y][1] * a[1][x]
-                + b[y][2] * a[2][x]
-                + b[y][3] * a[3][x];
+        for (x = 0; x < 4; x++)
+        {
+            temp[y][x] = b[y][0] * a[0][x] + b[y][1] * a[1][x] + b[y][2] * a[2][x] + b[y][3] * a[3][x];
         }
     for (y = 0; y < 4; y++)
         for (x = 0; x < 4; x++)
@@ -242,33 +267,33 @@ static void matrixmult(float a[4][4], float b[4][4], float c[4][4])
 }
 
 /*
-*    identmat -
-*        make an identity matrix
-*/
+ *    identmat -
+ *        make an identity matrix
+ */
 inline void identmat(float* matrix)
 {
-    *matrix++ = 1.0;    /* row 1        */
+    *matrix++ = 1.0; /* row 1        */
     *matrix++ = 0.0;
     *matrix++ = 0.0;
     *matrix++ = 0.0;
-    *matrix++ = 0.0;    /* row 2        */
+    *matrix++ = 0.0; /* row 2        */
     *matrix++ = 1.0;
     *matrix++ = 0.0;
     *matrix++ = 0.0;
-    *matrix++ = 0.0;    /* row 3        */
+    *matrix++ = 0.0; /* row 3        */
     *matrix++ = 0.0;
     *matrix++ = 1.0;
     *matrix++ = 0.0;
-    *matrix++ = 0.0;    /* row 4        */
+    *matrix++ = 0.0; /* row 4        */
     *matrix++ = 0.0;
     *matrix++ = 0.0;
     *matrix++ = 1.0;
 }
 
 /*
-*    xformpnt -
-*        transform a 3D point using a matrix
-*/
+ *    xformpnt -
+ *        transform a 3D point using a matrix
+ */
 static void xformpnt(float matrix[4][4], float x, float y, float z, float* tx, float* ty, float* tz)
 {
     *tx = x * matrix[0][0] + y * matrix[1][0] + z * matrix[2][0] + matrix[3][0];
@@ -277,9 +302,9 @@ static void xformpnt(float matrix[4][4], float x, float y, float z, float* tx, f
 }
 
 /*
-*    cscalemat -
-*        make a color scale marix
-*/
+ *    cscalemat -
+ *        make a color scale marix
+ */
 static void cscalemat(float mat[4][4], float rscale, float gscale, float bscale)
 {
     float mmat[4][4];
@@ -294,7 +319,6 @@ static void cscalemat(float mat[4][4], float rscale, float gscale, float bscale)
     mmat[1][2] = 0.0;
     mmat[1][3] = 0.0;
 
-
     mmat[2][0] = 0.0;
     mmat[2][1] = 0.0;
     mmat[2][2] = bscale;
@@ -308,17 +332,17 @@ static void cscalemat(float mat[4][4], float rscale, float gscale, float bscale)
 }
 
 /*
-*    lummat -
-*        make a luminance marix
-*/
+ *    lummat -
+ *        make a luminance marix
+ */
 static void lummat(float mat[4][4])
 {
     float mmat[4][4];
     float rwgt, gwgt, bwgt;
 
-    rwgt = RLUM;
-    gwgt = GLUM;
-    bwgt = BLUM;
+    rwgt       = RLUM;
+    gwgt       = GLUM;
+    bwgt       = BLUM;
     mmat[0][0] = rwgt;
     mmat[0][1] = rwgt;
     mmat[0][2] = rwgt;
@@ -342,9 +366,9 @@ static void lummat(float mat[4][4])
 }
 
 /*
-*    saturatemat -
-*        make a saturation marix
-*/
+ *    saturatemat -
+ *        make a saturation marix
+ */
 static void saturatemat(float mat[4][4], float sat)
 {
     float mmat[4][4];
@@ -355,15 +379,15 @@ static void saturatemat(float mat[4][4], float sat)
     gwgt = GLUM;
     bwgt = BLUM;
 
-    a = (1.0 - sat) * rwgt + sat;
-    b = (1.0 - sat) * rwgt;
-    c = (1.0 - sat) * rwgt;
-    d = (1.0 - sat) * gwgt;
-    e = (1.0 - sat) * gwgt + sat;
-    f = (1.0 - sat) * gwgt;
-    g = (1.0 - sat) * bwgt;
-    h = (1.0 - sat) * bwgt;
-    i = (1.0 - sat) * bwgt + sat;
+    a          = (1.0 - sat) * rwgt + sat;
+    b          = (1.0 - sat) * rwgt;
+    c          = (1.0 - sat) * rwgt;
+    d          = (1.0 - sat) * gwgt;
+    e          = (1.0 - sat) * gwgt + sat;
+    f          = (1.0 - sat) * gwgt;
+    g          = (1.0 - sat) * bwgt;
+    h          = (1.0 - sat) * bwgt;
+    i          = (1.0 - sat) * bwgt + sat;
     mmat[0][0] = a;
     mmat[0][1] = b;
     mmat[0][2] = c;
@@ -387,9 +411,9 @@ static void saturatemat(float mat[4][4], float sat)
 }
 
 /*
-*    offsetmat -
-*        offset r, g, and b
-*/
+ *    offsetmat -
+ *        offset r, g, and b
+ */
 static void offsetmat(float mat[4][4], float roffset, float goffset, float boffset)
 {
     float mmat[4][4];
@@ -417,9 +441,9 @@ static void offsetmat(float mat[4][4], float roffset, float goffset, float boffs
 }
 
 /*
-*    xrotate -
-*        rotate about the x (red) axis
-*/
+ *    xrotate -
+ *        rotate about the x (red) axis
+ */
 inline void xrotatemat(float mat[4][4], float rs, float rc)
 {
     float mmat[4][4];
@@ -447,9 +471,9 @@ inline void xrotatemat(float mat[4][4], float rs, float rc)
 }
 
 /*
-*    yrotate -
-*        rotate about the y (green) axis
-*/
+ *    yrotate -
+ *        rotate about the y (green) axis
+ */
 static void yrotatemat(float mat[4][4], float rs, float rc)
 {
     float mmat[4][4];
@@ -477,9 +501,9 @@ static void yrotatemat(float mat[4][4], float rs, float rc)
 }
 
 /*
-*    zrotate -
-*        rotate about the z (blue) axis
-*/
+ *    zrotate -
+ *        rotate about the z (blue) axis
+ */
 static void zrotatemat(float mat[4][4], float rs, float rc)
 {
     float mmat[4][4];
@@ -507,9 +531,9 @@ static void zrotatemat(float mat[4][4], float rs, float rc)
 }
 
 /*
-*    zshear -
-*        shear z using x and y.
-*/
+ *    zshear -
+ *        shear z using x and y.
+ */
 static void zshearmat(float mat[4][4], float dx, float dy)
 {
     float mmat[4][4];
@@ -537,9 +561,9 @@ static void zshearmat(float mat[4][4], float dx, float dy)
 }
 
 /*
-*    simplehuerotatemat -
-*        simple hue rotation. This changes luminance
-*/
+ *    simplehuerotatemat -
+ *        simple hue rotation. This changes luminance
+ */
 static void simplehuerotatemat(float mat[4][4], float rot)
 {
     // log("************* simplehuerotatemat");
@@ -555,33 +579,33 @@ static void simplehuerotatemat(float mat[4][4], float rot)
     xrs = 1.0 / mag;
     xrc = 1.0 / mag;
     xrotatemat(mat, xrs, xrc);
-    //printmat(mat);
+    // printmat(mat);
 
     mag = sqrt(3.0);
     yrs = -1.0 / mag;
     yrc = sqrt(2.0) / mag;
     yrotatemat(mat, yrs, yrc);
-    //printmat(mat);
+    // printmat(mat);
 
     /* rotate the hue */
     zrs = sin(rot);
     zrc = cos(rot);
     zrotatemat(mat, zrs, zrc);
-    //printmat(mat);
+    // printmat(mat);
 
     /* rotate the grey vector back into place */
     yrotatemat(mat, -yrs, yrc);
     // printmat(mat);
     xrotatemat(mat, -xrs, xrc);
-    //printmat(mat);
+    // printmat(mat);
 
     // log("############## simplehuerotatemat");
 }
 
 /*
-*    huerotatemat -
-*        rotate the hue, while maintaining luminance.
-*/
+ *    huerotatemat -
+ *        rotate the hue, while maintaining luminance.
+ */
 static void huerotatemat(float mat[4][4], float rot)
 {
     float mmat[4][4];
@@ -627,9 +651,9 @@ static void huerotatemat(float mat[4][4], float rot)
 }
 
 /*
-*    xformpnt -
-*        transform a 3D point using a matrix
-*/
+ *    xformpnt -
+ *        transform a 3D point using a matrix
+ */
 static void xformpnt(Mat3* matrix, float x, float y, float z, float* tx, float* ty, float* tz)
 {
     *tx = x * matrix->m[0] + y * matrix->m[3] + z * matrix->m[6];
@@ -638,33 +662,33 @@ static void xformpnt(Mat3* matrix, float x, float y, float z, float* tx, float* 
 }
 
 /*
-*    zshear -
-*        shear z using x and y.
-*/
+ *    zshear -
+ *        shear z using x and y.
+ */
 static void zshearmat(Mat3* mat, float dx, float dy)
 {
     // float mmat[4][4];
     Mat3 mmat;
-    //mmat[0][0] = 1.0;
-    //mmat[0][1] = 0.0;
+    // mmat[0][0] = 1.0;
+    // mmat[0][1] = 0.0;
     mmat.m[2] = dx;
-    //mmat[0][3] = 0.0;
+    // mmat[0][3] = 0.0;
 
-    //mmat[1][0] = 0.0;
-    //mmat[1][1] = 1.0;
+    // mmat[1][0] = 0.0;
+    // mmat[1][1] = 1.0;
     mmat.m[5] = dy;
-    //mmat[1][3] = 0.0;
+    // mmat[1][3] = 0.0;
 
-    //mmat[2][0] = 0.0;
-    //mmat[2][1] = 0.0;
-    //mmat[2][2] = 1.0;
-    //mmat[2][3] = 0.0;
+    // mmat[2][0] = 0.0;
+    // mmat[2][1] = 0.0;
+    // mmat[2][2] = 1.0;
+    // mmat[2][3] = 0.0;
 
-    //mmat[3][0] = 0.0;
-    //mmat[3][1] = 0.0;
-    //mmat[3][2] = 0.0;
-    //mmat[3][3] = 1.0;
-    mat->mult(mmat);//matrixmult(mmat, mat, mat);
+    // mmat[3][0] = 0.0;
+    // mmat[3][1] = 0.0;
+    // mmat[3][2] = 0.0;
+    // mmat[3][3] = 1.0;
+    mat->mult(mmat);  // matrixmult(mmat, mat, mat);
 }
 
 static void createHueMatrix(Mat4* dst, float angle)
@@ -674,7 +698,7 @@ static void createHueMatrix(Mat4* dst, float angle)
     memcpy(dst, &dst->IDENTITY, sizeof(*dst));
 
     /* rotate the grey vector into positive Z */
-    createRotationX(dst, FLT_XRS, FLT_XRC);// rotateX(dst, FLT_XRS, FLT_XRC);
+    createRotationX(dst, FLT_XRS, FLT_XRC);  // rotateX(dst, FLT_XRS, FLT_XRC);
     rotateY(dst, FLT_YRS, FLT_YRC);
 
     /* rotate the hue */
@@ -694,7 +718,7 @@ static void setMatrixHueOptimized(Mat3* dst, float angle)
     // memcpy(dst, &dst->IDENTITY, sizeof(*dst));
 
     /* rotate the grey vector into positive Z */
-    dst->createRotationX(FLT_XRS, FLT_XRC);// rotateX(dst, FLT_XRS, FLT_XRC);
+    dst->createRotationX(FLT_XRS, FLT_XRC);  // rotateX(dst, FLT_XRS, FLT_XRC);
     dst->rotateY(FLT_YRS, FLT_YRC);
 
     /* shear the space to make the luminance plane horizontal */
@@ -715,9 +739,9 @@ static void setMatrixHueOptimized(Mat3* dst, float angle)
 }
 
 /*
-*    Hue -
-*        HSV - H
-*/
+ *    Hue -
+ *        HSV - H
+ */
 static void setMatrixHue(Mat3* dst, float angle)
 {
     log("************* createHueMat3");
@@ -725,7 +749,7 @@ static void setMatrixHue(Mat3* dst, float angle)
     // memcpy(dst, &dst->IDENTITY, sizeof(*dst));
 
     /* rotate the grey vector into positive Z */
-    dst->createRotationX(FLT_XRS, FLT_XRC);// rotateX(dst, FLT_XRS, FLT_XRC);
+    dst->createRotationX(FLT_XRS, FLT_XRC);  // rotateX(dst, FLT_XRS, FLT_XRC);
     dst->rotateY(FLT_YRS, FLT_YRC);
 
     /* rotate the hue */
@@ -739,9 +763,9 @@ static void setMatrixHue(Mat3* dst, float angle)
 }
 
 /*
-*    saturatemat - 0~1, 0%~100% ?
-*        HSV - S
-*/
+ *    saturatemat - 0~1, 0%~100% ?
+ *        HSV - S
+ */
 static void setMatrixSat(Mat3* dst, float sat)
 {
     Mat3 temp;
@@ -752,15 +776,15 @@ static void setMatrixSat(Mat3* dst, float sat)
     gwgt = GLUM;
     bwgt = BLUM;
 
-    a = (1.0 - sat) * rwgt + sat;
-    b = (1.0 - sat) * rwgt;
-    c = (1.0 - sat) * rwgt;
-    d = (1.0 - sat) * gwgt;
-    e = (1.0 - sat) * gwgt + sat;
-    f = (1.0 - sat) * gwgt;
-    g = (1.0 - sat) * bwgt;
-    h = (1.0 - sat) * bwgt;
-    i = (1.0 - sat) * bwgt + sat;
+    a         = (1.0 - sat) * rwgt + sat;
+    b         = (1.0 - sat) * rwgt;
+    c         = (1.0 - sat) * rwgt;
+    d         = (1.0 - sat) * gwgt;
+    e         = (1.0 - sat) * gwgt + sat;
+    f         = (1.0 - sat) * gwgt;
+    g         = (1.0 - sat) * bwgt;
+    h         = (1.0 - sat) * bwgt;
+    i         = (1.0 - sat) * bwgt + sat;
     temp.m[0] = a;
     temp.m[1] = b;
     temp.m[2] = c;
@@ -769,55 +793,51 @@ static void setMatrixSat(Mat3* dst, float sat)
     temp.m[3] = d;
     temp.m[4] = e;
     temp.m[5] = f;
-    //mmat[1][3] = 0.0;
+    // mmat[1][3] = 0.0;
 
     temp.m[6] = g;
     temp.m[7] = h;
     temp.m[8] = i;
     // mmat[2][3] = 0.0;
 
-    //mmat[3][0] = 0.0;
-    //mmat[3][1] = 0.0;
-    //mmat[3][2] = 0.0;
-    //mmat[3][3] = 1.0;
-    // matrixmult(mmat, mat, mat);
+    // mmat[3][0] = 0.0;
+    // mmat[3][1] = 0.0;
+    // mmat[3][2] = 0.0;
+    // mmat[3][3] = 1.0;
+    //  matrixmult(mmat, mat, mat);
     dst->mult(temp);
 }
 
 /* Value
-*    HSV - V: 0~1, 0%, 100%
-*/
+ *    HSV - V: 0~1, 0%, 100%
+ */
 static void setMatrixVal(Mat3* dst, float value)
 {
     // float mmat[4][4];
     Mat3 temp;
     temp.m[0] = value;
-    //temp.m[1] = 0.0;
-    //temp.m[2] = 0.0;
-    //mmat[0][3] = 0.0;
+    // temp.m[1] = 0.0;
+    // temp.m[2] = 0.0;
+    // mmat[0][3] = 0.0;
 
-    //mmat[1][0] = 0.0;
+    // mmat[1][0] = 0.0;
     temp.m[4] = value;
     // mmat[1][2] = 0.0;
-    //mmat[1][3] = 0.0;
+    // mmat[1][3] = 0.0;
 
-
-    //mmat[2][0] = 0.0;
-    //mmat[2][1] = 0.0;
+    // mmat[2][0] = 0.0;
+    // mmat[2][1] = 0.0;
     temp.m[8] = value;
-    //mmat[2][3] = 0.0;
+    // mmat[2][3] = 0.0;
 
     dst->mult(temp);
     // matrixmult(mmat, mat, mat);
 }
 
-bool Colorizer::enableNodeIntelliShading(Node* node,
-    const Vec3& hsv,
-    const Vec3& filter)
+bool Colorizer::enableNodeIntelliShading(Node* node, const Vec3& hsv, const Vec3& filter)
 {
     if (node == nullptr)
         return false;
-
 
     node->setProgramState(backend::ProgramType::HSV);
 
@@ -826,9 +846,7 @@ bool Colorizer::enableNodeIntelliShading(Node* node,
     return true;
 }
 
-void Colorizer::updateNodeHsv(Node* node,
-    const Vec3& hsv,
-    const Vec3& filter)
+void Colorizer::updateNodeHsv(Node* node, const Vec3& hsv, const Vec3& filter)
 {
     Mat3 hsvMatrix;
     setMatrixHueOptimized(&hsvMatrix, hsv.x);

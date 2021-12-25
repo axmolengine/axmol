@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -100,26 +100,18 @@ public:
      */
     float height;
 
-    Rectangle():
-        x(0.0f),
-        y(0.0f),
-        width(0.0f),
-        height(0.0f)
-    {}
+    Rectangle() : x(0.0f), y(0.0f), width(0.0f), height(0.0f) {}
     /**
      * @private
      */
-    Rectangle(const Rectangle& value)
-    {
-        operator=(value);
-    }
+    Rectangle(const Rectangle& value) { operator=(value); }
     ~Rectangle() {}
 
     inline void operator=(const Rectangle& value)
     {
-        x = value.x;
-        y = value.y;
-        width = value.width;
+        x      = value.x;
+        y      = value.y;
+        width  = value.width;
         height = value.height;
     }
 
@@ -134,4 +126,4 @@ public:
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_RECTANGLE_H
+#endif  // DRAGONBONES_RECTANGLE_H

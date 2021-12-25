@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,30 +36,29 @@ const float PULineEmitter::DEFAULT_MAX_INCREMENT = 0.0f;
 const float PULineEmitter::DEFAULT_MAX_DEVIATION = 0.0f;
 
 //-----------------------------------------------------------------------
-PULineEmitter::PULineEmitter() : 
-    PUEmitter(),
-    _end(DEFAULT_END),
-    _maxDeviation(DEFAULT_MAX_DEVIATION),
-    _minIncrement(DEFAULT_MIN_INCREMENT),
-    _maxIncrement(DEFAULT_MAX_INCREMENT),
-    _increment(0.0f),
-    _length(0.0f),
-    _incrementsLeft(true),
-    _first(true),
-    _scaledMaxDeviation(0.0f),
-    _scaledMinIncrement(0.0f),
-    _scaledMaxIncrement(0.0f),
-    _scaledLength(0.0f)
-{
-}
+PULineEmitter::PULineEmitter()
+    : PUEmitter()
+    , _end(DEFAULT_END)
+    , _maxDeviation(DEFAULT_MAX_DEVIATION)
+    , _minIncrement(DEFAULT_MIN_INCREMENT)
+    , _maxIncrement(DEFAULT_MAX_INCREMENT)
+    , _increment(0.0f)
+    , _length(0.0f)
+    , _incrementsLeft(true)
+    , _first(true)
+    , _scaledMaxDeviation(0.0f)
+    , _scaledMinIncrement(0.0f)
+    , _scaledMaxIncrement(0.0f)
+    , _scaledLength(0.0f)
+{}
 //-----------------------------------------------------------------------
-void PULineEmitter::notifyStart ()
+void PULineEmitter::notifyStart()
 {
     // Reset the incremental attributes to allow a restart.
     PUEmitter::notifyStart();
-    _increment = 0.0f;
+    _increment      = 0.0f;
     _incrementsLeft = true;
-    _first = true;
+    _first          = true;
 }
 //-----------------------------------------------------------------------
 void PULineEmitter::notifyRescaled(const Vec3& scale)
@@ -71,7 +70,7 @@ void PULineEmitter::notifyRescaled(const Vec3& scale)
     _scaledMaxDeviation = _maxDeviation * scaleLength;
     _scaledMinIncrement = _minIncrement * scaleLength;
     _scaledMaxIncrement = (_maxIncrement - _minIncrement) * scaleLength;
-    _scaledLength = _scaledEnd.length();
+    _scaledLength       = _scaledEnd.length();
 }
 //-----------------------------------------------------------------------
 unsigned short PULineEmitter::calculateRequestedParticles(float timeElapsed)
@@ -89,11 +88,12 @@ unsigned short PULineEmitter::calculateRequestedParticles(float timeElapsed)
 
         ////FIXME
         //// For duration + repeat/delay: Clear the particles and start all over again.
-        //if (!_isEnabled)
+        // if (!_isEnabled)
         //{
         //	notifyStart();
-        //	mParentTechnique->lockAllParticles(); // Needed to set the first generated particle also first in the list with particles
-        //}
+        //	mParentTechnique->lockAllParticles(); // Needed to set the first generated particle also first in the
+        //list with particles
+        // }
     }
 
     return requested;
@@ -118,7 +118,7 @@ float PULineEmitter::getMaxIncrement() const
 //-----------------------------------------------------------------------
 void PULineEmitter::setMaxIncrement(float maxIncrement)
 {
-    _maxIncrement = maxIncrement;
+    _maxIncrement       = maxIncrement;
     _scaledMaxIncrement = _maxIncrement * _emitterScale.length();
 }
 //-----------------------------------------------------------------------
@@ -129,7 +129,7 @@ float PULineEmitter::getMinIncrement() const
 //-----------------------------------------------------------------------
 void PULineEmitter::setMinIncrement(float minIncrement)
 {
-    _minIncrement = minIncrement;
+    _minIncrement       = minIncrement;
     _scaledMinIncrement = _minIncrement * _emitterScale.length();
 }
 //-----------------------------------------------------------------------
@@ -140,7 +140,7 @@ float PULineEmitter::getMaxDeviation() const
 //-----------------------------------------------------------------------
 void PULineEmitter::setMaxDeviation(float maxDeviation)
 {
-    _maxDeviation = maxDeviation;
+    _maxDeviation       = maxDeviation;
     _scaledMaxDeviation = _maxDeviation * _emitterScale.length();
 }
 //-----------------------------------------------------------------------
@@ -150,9 +150,7 @@ void PULineEmitter::initParticlePosition(PUParticle3D* particle)
     if (_autoDirection || (_scaledMaxDeviation > 0.0f && !_first))
     {
         // Generate a random vector perpendicular on the line if this is required
-        Vec3::cross(_end, Vec3(CCRANDOM_MINUS1_1(), 
-            CCRANDOM_MINUS1_1(), 
-            CCRANDOM_MINUS1_1()), &_perpendicular);
+        Vec3::cross(_end, Vec3(CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1()), &_perpendicular);
         _perpendicular.normalize();
     }
 
@@ -181,20 +179,20 @@ void PULineEmitter::initParticlePosition(PUParticle3D* particle)
     {
         if (!_first)
         {
-            Vec3 basePosition = _derivedPosition + fraction * _scaledEnd;
-            particle->position = basePosition + _scaledMaxDeviation * CCRANDOM_0_1() * _perpendicular;
-            particle->originalPosition = basePosition;	// Position is without deviation from the line,
+            Vec3 basePosition          = _derivedPosition + fraction * _scaledEnd;
+            particle->position         = basePosition + _scaledMaxDeviation * CCRANDOM_0_1() * _perpendicular;
+            particle->originalPosition = basePosition;  // Position is without deviation from the line,
             // to make affectors a bit faster/easier.
         }
         else
         {
-            particle->position = _derivedPosition;
+            particle->position         = _derivedPosition;
             particle->originalPosition = particle->position;
         }
     }
     else
     {
-        particle->position = _derivedPosition + fraction * _scaledEnd;
+        particle->position         = _derivedPosition + fraction * _scaledEnd;
         particle->originalPosition = particle->position;
     }
 
@@ -209,13 +207,13 @@ void PULineEmitter::initParticleDirection(PUParticle3D* particle)
         generateAngle(angle);
         if (angle != 0.0f)
         {
-            //particle->direction = _perpendicular.randomDeviant(angle, mUpVector);
-            particle->direction = PUUtil::randomDeviant(_perpendicular, angle, _upVector);
+            // particle->direction = _perpendicular.randomDeviant(angle, mUpVector);
+            particle->direction         = PUUtil::randomDeviant(_perpendicular, angle, _upVector);
             particle->originalDirection = particle->direction;
         }
         else
         {
-            particle->direction = _perpendicular;
+            particle->direction         = _perpendicular;
             particle->originalDirection = particle->direction;
         }
     }
@@ -233,12 +231,12 @@ PULineEmitter* PULineEmitter::create()
     return pe;
 }
 
-void PULineEmitter::copyAttributesTo( PUEmitter* emitter )
+void PULineEmitter::copyAttributesTo(PUEmitter* emitter)
 {
     PUEmitter::copyAttributesTo(emitter);
 
     PULineEmitter* lineEmitter = static_cast<PULineEmitter*>(emitter);
-    lineEmitter->setEnd(_end); // Force calculation of the length
+    lineEmitter->setEnd(_end);  // Force calculation of the length
     lineEmitter->_length = _length;
     lineEmitter->setMinIncrement(_minIncrement);
     lineEmitter->setMaxIncrement(_maxIncrement);

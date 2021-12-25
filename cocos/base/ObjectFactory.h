@@ -38,33 +38,33 @@ class CC_DLL ObjectFactory
 {
 public:
     typedef cocos2d::Ref* (*Instance)(void);
-    typedef std::function<cocos2d::Ref* (void)> InstanceFunc;
+    typedef std::function<cocos2d::Ref*(void)> InstanceFunc;
     struct CC_DLL TInfo
     {
         TInfo();
         TInfo(const std::string& type, Instance ins = nullptr);
         TInfo(const std::string& type, InstanceFunc ins = nullptr);
-        TInfo(const TInfo &t);
+        TInfo(const TInfo& t);
         ~TInfo();
-        TInfo& operator= (const TInfo &t);
+        TInfo& operator=(const TInfo& t);
         std::string _class;
         Instance _fun;
         InstanceFunc _func;
     };
-    typedef std::unordered_map<std::string, TInfo>  FactoryMap;
+    typedef std::unordered_map<std::string, TInfo> FactoryMap;
 
     static ObjectFactory* getInstance();
     static void destroyInstance();
-    cocos2d::Ref* createObject(const std::string &name);
+    cocos2d::Ref* createObject(const std::string& name);
 
-    void registerType(const TInfo &t);
+    void registerType(const TInfo& t);
     void removeAll();
 
 protected:
     ObjectFactory();
     virtual ~ObjectFactory();
 
-    static ObjectFactory *_sharedFactory;
+    static ObjectFactory* _sharedFactory;
     FactoryMap _typeMap;
 };
 

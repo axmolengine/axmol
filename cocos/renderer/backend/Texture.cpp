@@ -22,23 +22,22 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "Texture.h"
 #include "TextureUtils.h"
 #include <cassert>
 CC_BACKEND_BEGIN
 
-TextureBackend::~TextureBackend()
-{}
+TextureBackend::~TextureBackend() {}
 
-void TextureBackend::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor, int /*index*/)
+void TextureBackend::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor& descriptor, int /*index*/)
 {
-    _bitsPerPixel = PixelFormatUtils::getBitsPerPixel(descriptor.textureFormat);
-    _textureType = descriptor.textureType;
+    _bitsPerPixel  = PixelFormatUtils::getBitsPerPixel(descriptor.textureFormat);
+    _textureType   = descriptor.textureType;
     _textureFormat = descriptor.textureFormat;
-    _textureUsage = descriptor.textureUsage;
-    _width = descriptor.width;
-    _height = descriptor.height;
+    _textureUsage  = descriptor.textureUsage;
+    _width         = descriptor.width;
+    _height        = descriptor.height;
 }
 
 CC_BACKEND_END

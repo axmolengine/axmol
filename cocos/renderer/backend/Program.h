@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -43,7 +43,6 @@ class ShaderModule;
  * @{
  */
 
-
 /**
  * A program.
  */
@@ -55,7 +54,7 @@ public:
      * @param type Specifies the built-in program type.
      */
     static Program* getBuiltinProgram(uint32_t type);
-    
+
     /**
      * Get uniform location by name.
      * @param uniform Specifies the uniform name.
@@ -75,15 +74,15 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(const std::string& name) const =  0;
+    virtual int getAttributeLocation(const std::string& name) const = 0;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(backend::Attribute name) const =  0;
-    
+    virtual int getAttributeLocation(backend::Attribute name) const = 0;
+
     /**
      * Get maximum vertex location.
      * @return Maximum vertex locaiton.
@@ -113,7 +112,7 @@ public:
      * @ Fragment shader.
      */
     const std::string& getFragmentShader() const { return _fragmentShader; }
-    
+
     /**
      * Get engine built-in program type.
      * @return The built-in program type.
@@ -125,7 +124,7 @@ public:
      * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
      * @return The uniform buffer size in bytes.
      */
-    virtual std::size_t getUniformBufferSize(ShaderStage stage) const =0;
+    virtual std::size_t getUniformBufferSize(ShaderStage stage) const = 0;
 
     /**
      * Get a uniformInfo in given location from the specific shader stage.
@@ -148,7 +147,6 @@ public:
     void setProgramType(uint32_t type);
 
 protected:
-    
     /**
      * @param vs Specifes the vertex shader source.
      * @param fs Specifes the fragment shader source.
@@ -158,7 +156,8 @@ protected:
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     /**
      * In case of EGL context lost, the engine will reload shaders. Thus location of uniform may changed.
-     * The engine will maintain the relationship between the original uniform location and the current active uniform location.
+     * The engine will maintain the relationship between the original uniform location and the current active uniform
+     * location.
      * @param location Specifies original location.
      * @return Current active uniform location.
      * @see `int getOriginalLocation(int location) const`
@@ -167,7 +166,8 @@ protected:
 
     /**
      * In case of EGL context lost, the engine will reload shaders. Thus location of uniform may changed.
-     * The engine will maintain the relationship between the original uniform location and the current active uniform location.
+     * The engine will maintain the relationship between the original uniform location and the current active uniform
+     * location.
      * @param location Specifies the current active uniform location.
      * @return The original uniform location.
      * @see `int getMappedLocation(int location) const`
@@ -182,12 +182,12 @@ protected:
     friend class ProgramState;
 #endif
     friend class ProgramCache;
-    
-    std::string _vertexShader; ///< Vertex shader.
-    std::string _fragmentShader; ///< Fragment shader.
-    uint32_t _programType = ProgramType::CUSTOM_PROGRAM; ///< built-in program type, initial value is CUSTOM_PROGRAM.
+
+    std::string _vertexShader;                            ///< Vertex shader.
+    std::string _fragmentShader;                          ///< Fragment shader.
+    uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
 };
 
-//end of _backend group
+// end of _backend group
 /// @}
 CC_BACKEND_END

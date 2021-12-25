@@ -28,27 +28,24 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-namespace ui {
-    
+namespace ui
+{
+
 static const int LABELATLAS_RENDERER_Z = (-1);
-    
+
 IMPLEMENT_CLASS_GUI_INFO(TextAtlas)
 
-TextAtlas::TextAtlas():
-_labelAtlasRenderer(nullptr),
-_stringValue(""),
-_charMapFileName(""),
-_itemWidth(0),
-_itemHeight(0),
-_startCharMap(""),
-_labelAtlasRendererAdaptDirty(true)
-{
-}
+TextAtlas::TextAtlas()
+    : _labelAtlasRenderer(nullptr)
+    , _stringValue("")
+    , _charMapFileName("")
+    , _itemWidth(0)
+    , _itemHeight(0)
+    , _startCharMap("")
+    , _labelAtlasRendererAdaptDirty(true)
+{}
 
-TextAtlas::~TextAtlas()
-{
-    
-}
+TextAtlas::~TextAtlas() {}
 
 TextAtlas* TextAtlas::create()
 {
@@ -68,12 +65,12 @@ void TextAtlas::initRenderer()
     _labelAtlasRenderer->setAnchorPoint(Point::ANCHOR_MIDDLE);
     addProtectedChild(_labelAtlasRenderer, LABELATLAS_RENDERER_Z, -1);
 }
-    
-TextAtlas* TextAtlas::create(const std::string &stringValue,
-                             const std::string &charMapFile,
+
+TextAtlas* TextAtlas::create(const std::string& stringValue,
+                             const std::string& charMapFile,
                              int itemWidth,
                              int itemHeight,
-                             const std::string &startCharMap)
+                             const std::string& startCharMap)
 {
     TextAtlas* widget = new TextAtlas();
     if (widget->init())
@@ -86,20 +83,24 @@ TextAtlas* TextAtlas::create(const std::string &stringValue,
     return nullptr;
 }
 
-void TextAtlas::setProperty(const std::string& stringValue, const std::string& charMapFile, int itemWidth, int itemHeight, const std::string& startCharMap)
+void TextAtlas::setProperty(const std::string& stringValue,
+                            const std::string& charMapFile,
+                            int itemWidth,
+                            int itemHeight,
+                            const std::string& startCharMap)
 {
-    _stringValue = stringValue;
+    _stringValue     = stringValue;
     _charMapFileName = charMapFile;
-    _itemWidth = itemWidth;
-    _itemHeight = itemHeight;
-    _startCharMap = startCharMap;
-    
+    _itemWidth       = itemWidth;
+    _itemHeight      = itemHeight;
+    _startCharMap    = startCharMap;
+
     _labelAtlasRenderer->setCharMap(_charMapFileName, _itemWidth, _itemHeight, (int)(_startCharMap[0]));
     _labelAtlasRenderer->setString(stringValue);
-    
+
     updateContentSizeWithTextureSize(_labelAtlasRenderer->getContentSize());
     _labelAtlasRendererAdaptDirty = true;
-//    CCLOG("cs w %f, h %f", _contentSize.width, _contentSize.height);
+    //    CCLOG("cs w %f, h %f", _contentSize.width, _contentSize.height);
 }
 
 void TextAtlas::setString(std::string_view value)
@@ -112,15 +113,15 @@ void TextAtlas::setString(std::string_view value)
     _labelAtlasRenderer->setString(value);
     updateContentSizeWithTextureSize(_labelAtlasRenderer->getContentSize());
     _labelAtlasRendererAdaptDirty = true;
-//    CCLOG("cssss w %f, h %f", _contentSize.width, _contentSize.height);
+    //    CCLOG("cssss w %f, h %f", _contentSize.width, _contentSize.height);
 }
 
 const std::string& TextAtlas::getString() const
 {
     return _labelAtlasRenderer->getString();
 }
-    
-ssize_t TextAtlas::getStringLength()const
+
+ssize_t TextAtlas::getStringLength() const
 {
     return _labelAtlasRenderer->getStringLength();
 }
@@ -130,7 +131,7 @@ void TextAtlas::onSizeChanged()
     Widget::onSizeChanged();
     _labelAtlasRendererAdaptDirty = true;
 }
-    
+
 void TextAtlas::adaptRenderers()
 {
     if (_labelAtlasRendererAdaptDirty)
@@ -182,15 +183,16 @@ Widget* TextAtlas::createCloneInstance()
     return TextAtlas::create();
 }
 
-void TextAtlas::copySpecialProperties(Widget *widget)
+void TextAtlas::copySpecialProperties(Widget* widget)
 {
     TextAtlas* labelAtlas = dynamic_cast<TextAtlas*>(widget);
     if (labelAtlas)
     {
-        setProperty(labelAtlas->_stringValue, labelAtlas->_charMapFileName, labelAtlas->_itemWidth, labelAtlas->_itemHeight, labelAtlas->_startCharMap);
+        setProperty(labelAtlas->_stringValue, labelAtlas->_charMapFileName, labelAtlas->_itemWidth,
+                    labelAtlas->_itemHeight, labelAtlas->_startCharMap);
     }
 }
-    
+
 ResourceData TextAtlas::getRenderFile()
 {
     ResourceData rData;
@@ -199,5 +201,5 @@ ResourceData TextAtlas::getRenderFile()
     return rData;
 }
 
-}
+}  // namespace ui
 NS_CC_END

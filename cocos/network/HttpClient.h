@@ -47,9 +47,8 @@
 
 NS_CC_BEGIN
 
-namespace network {
-
-
+namespace network
+{
 
 /** Singleton that handles asynchronous http requests.
  *
@@ -61,9 +60,9 @@ class CC_DLL HttpClient
 {
 public:
     /**
-    * How many requests could be perform concurrency.
-    */
-    static const int MAX_CHANNELS = 21;
+     * How many requests could be perform concurrency.
+     */
+    static const int MAX_CHANNELS       = 21;
     static const int MAX_REDIRECT_COUNT = 3;
 
     /**
@@ -71,7 +70,7 @@ public:
      *
      * @return the instance of HttpClient.
      */
-    static HttpClient *getInstance();
+    static HttpClient* getInstance();
 
     /**
      * Release the instance of HttpClient.
@@ -116,7 +115,7 @@ public:
      *   b. You can specific content-type at custom header, such as:
      *      std::vector<std::string> headers = {"Content-Type: application/json;charset=UTF-8"};
      *      request->setHeaders(headers);
-     *   c. other content type, please see: 
+     *   c. other content type, please see:
      *      https://stackoverflow.com/questions/23714383/what-are-all-the-possible-values-for-http-content-type-header
      */
     bool send(HttpRequest* request);
@@ -155,34 +154,34 @@ public:
      */
     int getTimeoutForRead();
 
-    HttpCookie* getCookie() const {return _cookie; }
+    HttpCookie* getCookie() const { return _cookie; }
 
-    std::recursive_mutex& getCookieFileMutex() {return _cookieFileMutex;}
+    std::recursive_mutex& getCookieFileMutex() { return _cookieFileMutex; }
 
-    std::recursive_mutex& getSSLCaFileMutex() {return _sslCaFileMutex;}
-    
+    std::recursive_mutex& getSSLCaFileMutex() { return _sslCaFileMutex; }
+
     typedef std::function<bool(HttpResponse*)> ClearResponsePredicate;
 
     /**
      * Clears the pending & finished http response
      */
-    void clearResponseQueue(); 
+    void clearResponseQueue();
 
     /**
      * Clears the pending http response
      */
-    void clearPendingResponseQueue(); 
+    void clearPendingResponseQueue();
 
     /**
      * Clears the finished http response
      */
-    void clearFinishedResponseQueue(); 
+    void clearFinishedResponseQueue();
 
     /**
      Sets a predicate function that is going to be called to determine if we proceed
     * each of the pending requests
     *
-    * @param cb predicate function that will be called 
+    * @param cb predicate function that will be called
     */
     void setClearResponsePredicate(ClearResponsePredicate predicate) { _clearResponsePredicate = predicate; }
 
@@ -190,18 +189,18 @@ public:
     bool isDispatchOnWorkThread() const { return _dispatchOnWorkThread; }
 
     /*
-    * When the device network status chagned, you should invoke this function
-    */
+     * When the device network status chagned, you should invoke this function
+     */
     void handleNetworkStatusChanged();
 
     /*
-    * Sets custom dns server list:
-    * format: "xxx.xxx.xxx.xxx[:port],xxx.xxx.xxx.xxx[:port]
-    */
+     * Sets custom dns server list:
+     * format: "xxx.xxx.xxx.xxx[:port],xxx.xxx.xxx.xxx[:port]
+     */
     void setNameServers(const std::string& servers);
 
     yasio::io_service* getInternalService();
-        
+
 private:
     HttpClient();
     virtual ~HttpClient();
@@ -224,7 +223,7 @@ private:
     bool _isInited;
 
     yasio::io_service* _service;
-    
+
     bool _dispatchOnWorkThread;
 
     int _timeoutForConnect;
@@ -252,12 +251,11 @@ private:
     ClearResponsePredicate _clearResponsePredicate;
 };
 
-} // namespace network
+}  // namespace network
 
 NS_CC_END
 
 // end group
 /// @}
 
-#endif //__CCHTTPCLIENT_H__
-
+#endif  //__CCHTTPCLIENT_H__

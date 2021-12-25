@@ -30,24 +30,25 @@ NS_CC_BEGIN
 
 static const float DEFAULT_TIME_IN_SEC_FOR_SCROLL_TO_ITEM = 1.0f;
 
-namespace ui {
-    
+namespace ui
+{
+
 IMPLEMENT_CLASS_GUI_INFO(ListView)
 
-ListView::ListView():
-_model(nullptr),
-_gravity(Gravity::CENTER_VERTICAL),
-_magneticType(MagneticType::NONE),
-_magneticAllowedOutOfBoundary(true),
-_itemsMargin(0.0f),
-_leftPadding(0.0f),
-_topPadding(0.0f),
-_rightPadding(0.0f),
-_bottomPadding(0.0f),
-_scrollTime(DEFAULT_TIME_IN_SEC_FOR_SCROLL_TO_ITEM),
-_curSelectedIndex(-1),
-_innerContainerDoLayoutDirty(true),
-_eventCallback(nullptr)
+ListView::ListView()
+    : _model(nullptr)
+    , _gravity(Gravity::CENTER_VERTICAL)
+    , _magneticType(MagneticType::NONE)
+    , _magneticAllowedOutOfBoundary(true)
+    , _itemsMargin(0.0f)
+    , _leftPadding(0.0f)
+    , _topPadding(0.0f)
+    , _rightPadding(0.0f)
+    , _bottomPadding(0.0f)
+    , _scrollTime(DEFAULT_TIME_IN_SEC_FOR_SCROLL_TO_ITEM)
+    , _curSelectedIndex(-1)
+    , _innerContainerDoLayoutDirty(true)
+    , _eventCallback(nullptr)
 {
     this->setTouchEnabled(true);
 }
@@ -80,7 +81,7 @@ bool ListView::init()
     return false;
 }
 
-void ListView::setItemModel(Widget *model)
+void ListView::setItemModel(Widget* model)
 {
     if (nullptr == model)
     {
@@ -92,11 +93,11 @@ void ListView::setItemModel(Widget *model)
     CC_SAFE_RETAIN(_model);
 }
 
-void ListView::handleReleaseLogic(Touch *touch)
+void ListView::handleReleaseLogic(Touch* touch)
 {
     ScrollView::handleReleaseLogic(touch);
-    
-    if(!_autoScrolling)
+
+    if (!_autoScrolling)
     {
         startMagneticScroll();
     }
@@ -111,56 +112,56 @@ void ListView::updateInnerContainerSize()
 {
     switch (_direction)
     {
-        case Direction::VERTICAL:
+    case Direction::VERTICAL:
+    {
+        size_t length     = _items.size();
+        float totalHeight = (length == 0) ? 0.0f : (length - 1) * _itemsMargin + (_topPadding + _bottomPadding);
+        for (auto& item : _items)
         {
-            size_t length = _items.size();
-            float totalHeight = (length == 0) ? 0.0f : (length - 1) * _itemsMargin + (_topPadding + _bottomPadding);
-            for (auto& item : _items)
-            {
-                totalHeight += item->getContentSize().height * item->getScaleY();
-            }
-            float finalWidth = _contentSize.width;
-            float finalHeight = totalHeight;
-            setInnerContainerSize(Vec2(finalWidth, finalHeight));
-            break;
+            totalHeight += item->getContentSize().height * item->getScaleY();
         }
-        case Direction::HORIZONTAL:
+        float finalWidth  = _contentSize.width;
+        float finalHeight = totalHeight;
+        setInnerContainerSize(Vec2(finalWidth, finalHeight));
+        break;
+    }
+    case Direction::HORIZONTAL:
+    {
+        size_t length    = _items.size();
+        float totalWidth = (length == 0) ? 0.0f : (length - 1) * _itemsMargin + (_leftPadding + _rightPadding);
+        for (auto& item : _items)
         {
-            size_t length = _items.size();
-            float totalWidth = (length == 0) ? 0.0f : (length - 1) * _itemsMargin + (_leftPadding + _rightPadding);
-            for (auto& item : _items)
-            {
-                totalWidth += item->getContentSize().width * item->getScaleX();
-            }
-            float finalWidth = totalWidth;
-            float finalHeight = _contentSize.height;
-            setInnerContainerSize(Vec2(finalWidth, finalHeight));
-            break;
+            totalWidth += item->getContentSize().width * item->getScaleX();
         }
-        default:
-            break;
+        float finalWidth  = totalWidth;
+        float finalHeight = _contentSize.height;
+        setInnerContainerSize(Vec2(finalWidth, finalHeight));
+        break;
+    }
+    default:
+        break;
     }
 }
-    
+
 void ListView::remedyVerticalLayoutParameter(LinearLayoutParameter* layoutParameter, ssize_t itemIndex)
 {
     CCASSERT(nullptr != layoutParameter, "Layout parameter can't be nullptr!");
-    
+
     switch (_gravity)
     {
-        case Gravity::LEFT:
-            layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::LEFT);
-            break;
-        case Gravity::RIGHT:
-            layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::RIGHT);
-            break;
-        case Gravity::CENTER_HORIZONTAL:
-            layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::CENTER_HORIZONTAL);
-            break;
-        default:
-            break;
+    case Gravity::LEFT:
+        layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::LEFT);
+        break;
+    case Gravity::RIGHT:
+        layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::RIGHT);
+        break;
+    case Gravity::CENTER_HORIZONTAL:
+        layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::CENTER_HORIZONTAL);
+        break;
+    default:
+        break;
     }
-    
+
     if (0 == itemIndex)
     {
         layoutParameter->setMargin(Margin(_leftPadding, _topPadding, _rightPadding, 0.f));
@@ -174,24 +175,24 @@ void ListView::remedyVerticalLayoutParameter(LinearLayoutParameter* layoutParame
         layoutParameter->setMargin(Margin(_leftPadding, _itemsMargin, _rightPadding, 0.0f));
     }
 }
-    
+
 void ListView::remedyHorizontalLayoutParameter(LinearLayoutParameter* layoutParameter, ssize_t itemIndex)
 {
     CCASSERT(nullptr != layoutParameter, "Layout parameter can't be nullptr!");
-    
+
     switch (_gravity)
     {
-        case Gravity::TOP:
-            layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::TOP);
-            break;
-        case Gravity::BOTTOM:
-            layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::BOTTOM);
-            break;
-        case Gravity::CENTER_VERTICAL:
-            layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::CENTER_VERTICAL);
-            break;
-        default:
-            break;
+    case Gravity::TOP:
+        layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::TOP);
+        break;
+    case Gravity::BOTTOM:
+        layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::BOTTOM);
+        break;
+    case Gravity::CENTER_VERTICAL:
+        layoutParameter->setGravity(LinearLayoutParameter::LinearGravity::CENTER_VERTICAL);
+        break;
+    default:
+        break;
     }
     if (0 == itemIndex)
     {
@@ -207,33 +208,33 @@ void ListView::remedyHorizontalLayoutParameter(LinearLayoutParameter* layoutPara
     }
 }
 
-void ListView::remedyLayoutParameter(Widget *item)
+void ListView::remedyLayoutParameter(Widget* item)
 {
     CCASSERT(nullptr != item, "ListView Item can't be nullptr!");
-    
+
     LinearLayoutParameter* linearLayoutParameter = (LinearLayoutParameter*)(item->getLayoutParameter());
-    bool isLayoutParameterExists = true;
+    bool isLayoutParameterExists                 = true;
     if (!linearLayoutParameter)
     {
-        linearLayoutParameter = LinearLayoutParameter::create();
+        linearLayoutParameter   = LinearLayoutParameter::create();
         isLayoutParameterExists = false;
     }
     ssize_t itemIndex = getIndex(item);
-    
+
     switch (_direction)
     {
-        case Direction::VERTICAL:
-        {
-            this->remedyVerticalLayoutParameter(linearLayoutParameter, itemIndex);
-            break;
-        }
-        case Direction::HORIZONTAL:
-        {
-            this->remedyHorizontalLayoutParameter(linearLayoutParameter, itemIndex);
-            break;
-        }
-        default:
-            break;
+    case Direction::VERTICAL:
+    {
+        this->remedyVerticalLayoutParameter(linearLayoutParameter, itemIndex);
+        break;
+    }
+    case Direction::HORIZONTAL:
+    {
+        this->remedyHorizontalLayoutParameter(linearLayoutParameter, itemIndex);
+        break;
+    }
+    default:
+        break;
     }
     if (!isLayoutParameterExists)
     {
@@ -262,15 +263,14 @@ void ListView::insertDefaultItem(ssize_t index)
     insertCustomItem(_model->clone(), index);
 }
 
-
 void ListView::pushBackCustomItem(Widget* item)
 {
     remedyLayoutParameter(item);
     addChild(item);
     requestDoLayout();
 }
-    
-void ListView::addChild(cocos2d::Node *child, int zOrder, int tag)
+
+void ListView::addChild(cocos2d::Node* child, int zOrder, int tag)
 {
     ScrollView::addChild(child, zOrder, tag);
 
@@ -281,21 +281,21 @@ void ListView::addChild(cocos2d::Node *child, int zOrder, int tag)
         onItemListChanged();
     }
 }
-    
-void ListView::addChild(cocos2d::Node *child)
+
+void ListView::addChild(cocos2d::Node* child)
 {
     ListView::addChild(child, child->getLocalZOrder(), child->getName());
 }
 
-void ListView::addChild(cocos2d::Node *child, int zOrder)
+void ListView::addChild(cocos2d::Node* child, int zOrder)
 {
     ListView::addChild(child, zOrder, child->getName());
 }
- 
-void ListView::addChild(Node* child, int zOrder, const std::string &name)
+
+void ListView::addChild(Node* child, int zOrder, const std::string& name)
 {
     ScrollView::addChild(child, zOrder, name);
-    
+
     Widget* widget = dynamic_cast<Widget*>(child);
     if (nullptr != widget)
     {
@@ -303,8 +303,8 @@ void ListView::addChild(Node* child, int zOrder, const std::string &name)
         onItemListChanged();
     }
 }
-    
-void ListView::removeChild(cocos2d::Node *child, bool cleanup)
+
+void ListView::removeChild(cocos2d::Node* child, bool cleanup)
 {
     Widget* widget = dynamic_cast<Widget*>(child);
     if (nullptr != widget)
@@ -324,16 +324,16 @@ void ListView::removeChild(cocos2d::Node *child, bool cleanup)
         _items.eraseObject(widget);
         onItemListChanged();
     }
-   
+
     ScrollView::removeChild(child, cleanup);
     requestDoLayout();
 }
-    
+
 void ListView::removeAllChildren()
 {
     this->removeAllChildrenWithCleanup(true);
 }
-    
+
 void ListView::removeAllChildrenWithCleanup(bool cleanup)
 {
     ScrollView::removeAllChildrenWithCleanup(cleanup);
@@ -372,9 +372,9 @@ void ListView::removeItem(ssize_t index)
 
 void ListView::removeLastItem()
 {
-    removeItem(_items.size() -1);
+    removeItem(_items.size() - 1);
 }
-    
+
 void ListView::removeAllItems()
 {
     removeAllChildren();
@@ -394,7 +394,7 @@ Vector<Widget*>& ListView::getItems()
     return _items;
 }
 
-ssize_t ListView::getIndex(Widget *item) const
+ssize_t ListView::getIndex(Widget* item) const
 {
     if (nullptr == item)
     {
@@ -415,7 +415,7 @@ void ListView::setGravity(Gravity gravity)
 
 void ListView::setMagneticType(MagneticType magneticType)
 {
-    _magneticType = magneticType;
+    _magneticType             = magneticType;
     _outOfBoundaryAmountDirty = true;
     startMagneticScroll();
 }
@@ -444,8 +444,8 @@ void ListView::setItemsMargin(float margin)
     _itemsMargin = margin;
     requestDoLayout();
 }
-    
-float ListView::getItemsMargin()const
+
+float ListView::getItemsMargin() const
 {
     return _itemsMargin;
 }
@@ -456,9 +456,9 @@ void ListView::setPadding(float l, float t, float r, float b)
     {
         return;
     }
-    _leftPadding = l;
-    _topPadding = t;
-    _rightPadding = r;
+    _leftPadding   = l;
+    _topPadding    = t;
+    _rightPadding  = r;
     _bottomPadding = b;
     requestDoLayout();
 }
@@ -529,7 +529,7 @@ void ListView::setScrollDuration(float time)
         _scrollTime = time;
 }
 
-float ListView::getScrollDuration() const 
+float ListView::getScrollDuration() const
 {
     return _scrollTime;
 }
@@ -538,18 +538,18 @@ void ListView::setDirection(Direction dir)
 {
     switch (dir)
     {
-        case Direction::NONE:
-        case Direction::BOTH:
-            break;
-        case Direction::VERTICAL:
-            setLayoutType(Type::VERTICAL);
-            break;
-        case Direction::HORIZONTAL:
-            setLayoutType(Type::HORIZONTAL);
-            break;
-        default:
-            return;
-            break;
+    case Direction::NONE:
+    case Direction::BOTH:
+        break;
+    case Direction::VERTICAL:
+        setLayoutType(Type::VERTICAL);
+        break;
+    case Direction::HORIZONTAL:
+        setLayoutType(Type::HORIZONTAL);
+        break;
+    default:
+        return;
+        break;
     }
     ScrollView::setDirection(dir);
 }
@@ -561,7 +561,7 @@ void ListView::requestDoLayout()
 
 void ListView::doLayout()
 {
-    if(!_innerContainerDoLayoutDirty)
+    if (!_innerContainerDoLayoutDirty)
     {
         return;
     }
@@ -577,44 +577,46 @@ void ListView::doLayout()
     _innerContainer->forceDoLayout();
     _innerContainerDoLayoutDirty = false;
 }
-    
+
 void ListView::addEventListener(const ccListViewCallback& callback)
 {
     _eventCallback = callback;
 }
-    
+
 void ListView::selectedItemEvent(TouchEventType event)
 {
     this->retain();
     switch (event)
     {
-        case TouchEventType::BEGAN:
+    case TouchEventType::BEGAN:
+    {
+        if (_eventCallback)
         {
-            if (_eventCallback) {
-                _eventCallback(this,EventType::ON_SELECTED_ITEM_START);
-            }
-            if (_ccEventCallback)
-            {
-                _ccEventCallback(this, static_cast<int>(EventType::ON_SELECTED_ITEM_START));
-            }
+            _eventCallback(this, EventType::ON_SELECTED_ITEM_START);
         }
-        break;
-        default:
+        if (_ccEventCallback)
         {
-            if (_eventCallback) {
-                _eventCallback(this, EventType::ON_SELECTED_ITEM_END);
-            }
-            if (_ccEventCallback)
-            {
-                _ccEventCallback(this, static_cast<int>(EventType::ON_SELECTED_ITEM_END));
-            }
+            _ccEventCallback(this, static_cast<int>(EventType::ON_SELECTED_ITEM_START));
         }
-        break;
+    }
+    break;
+    default:
+    {
+        if (_eventCallback)
+        {
+            _eventCallback(this, EventType::ON_SELECTED_ITEM_END);
+        }
+        if (_ccEventCallback)
+        {
+            _ccEventCallback(this, static_cast<int>(EventType::ON_SELECTED_ITEM_END));
+        }
+    }
+    break;
     }
     this->release();
 }
-    
-void ListView::interceptTouchEvent(TouchEventType event, Widget *sender, Touch* touch)
+
+void ListView::interceptTouchEvent(TouchEventType event, Widget* sender, Touch* touch)
 {
     ScrollView::interceptTouchEvent(event, sender, touch);
     if (!_touchEnabled)
@@ -633,20 +635,27 @@ void ListView::interceptTouchEvent(TouchEventType event, Widget *sender, Touch* 
             }
             parent = dynamic_cast<Widget*>(parent->getParent());
         }
-        if (sender->isHighlighted()) {
+        if (sender->isHighlighted())
+        {
             selectedItemEvent(event);
         }
     }
 }
-    
+
 static Vec2 calculateItemPositionWithAnchor(Widget* item, const Vec2& itemAnchorPoint)
 {
     Vec2 origin(item->getLeftBoundary(), item->getBottomBoundary());
     Vec2 size = item->getContentSize();
     return origin + Vec2(size.width * itemAnchorPoint.x, size.height * itemAnchorPoint.y);
 }
-    
-static Widget* findClosestItem(const Vec2& targetPosition, const Vector<Widget*>& items, const Vec2& itemAnchorPoint, ssize_t firstIndex, float distanceFromFirst, ssize_t lastIndex, float distanceFromLast)
+
+static Widget* findClosestItem(const Vec2& targetPosition,
+                               const Vector<Widget*>& items,
+                               const Vec2& itemAnchorPoint,
+                               ssize_t firstIndex,
+                               float distanceFromFirst,
+                               ssize_t lastIndex,
+                               float distanceFromLast)
 {
     CCASSERT(firstIndex >= 0 && lastIndex < items.size() && firstIndex <= lastIndex, "");
     if (firstIndex == lastIndex)
@@ -664,20 +673,22 @@ static Widget* findClosestItem(const Vec2& targetPosition, const Vector<Widget*>
             return items.at(lastIndex);
         }
     }
-    
+
     // Binary search
-    ssize_t midIndex = (firstIndex + lastIndex) / 2;
-    Vec2 itemPosition = calculateItemPositionWithAnchor(items.at(midIndex), itemAnchorPoint);
+    ssize_t midIndex      = (firstIndex + lastIndex) / 2;
+    Vec2 itemPosition     = calculateItemPositionWithAnchor(items.at(midIndex), itemAnchorPoint);
     float distanceFromMid = (targetPosition - itemPosition).length();
     if (distanceFromFirst <= distanceFromLast)
     {
         // Left half
-        return findClosestItem(targetPosition, items, itemAnchorPoint, firstIndex, distanceFromFirst, midIndex, distanceFromMid);
+        return findClosestItem(targetPosition, items, itemAnchorPoint, firstIndex, distanceFromFirst, midIndex,
+                               distanceFromMid);
     }
     else
     {
         // Right half
-        return findClosestItem(targetPosition, items, itemAnchorPoint, midIndex, distanceFromMid, lastIndex, distanceFromLast);
+        return findClosestItem(targetPosition, items, itemAnchorPoint, midIndex, distanceFromMid, lastIndex,
+                               distanceFromLast);
     }
 }
 
@@ -687,23 +698,25 @@ Widget* ListView::getClosestItemToPosition(const Vec2& targetPosition, const Vec
     {
         return nullptr;
     }
-    
+
     // Find the closest item through binary search
-    ssize_t firstIndex = 0;
-    Vec2 firstPosition = calculateItemPositionWithAnchor(_items.at(firstIndex), itemAnchorPoint);
+    ssize_t firstIndex      = 0;
+    Vec2 firstPosition      = calculateItemPositionWithAnchor(_items.at(firstIndex), itemAnchorPoint);
     float distanceFromFirst = (targetPosition - firstPosition).length();
-    
-    ssize_t lastIndex = _items.size() - 1;
-    Vec2 lastPosition = calculateItemPositionWithAnchor(_items.at(lastIndex), itemAnchorPoint);
+
+    ssize_t lastIndex      = _items.size() - 1;
+    Vec2 lastPosition      = calculateItemPositionWithAnchor(_items.at(lastIndex), itemAnchorPoint);
     float distanceFromLast = (targetPosition - lastPosition).length();
-    
-    return findClosestItem(targetPosition, _items, itemAnchorPoint, firstIndex, distanceFromFirst, lastIndex, distanceFromLast);
+
+    return findClosestItem(targetPosition, _items, itemAnchorPoint, firstIndex, distanceFromFirst, lastIndex,
+                           distanceFromLast);
 }
 
-Widget* ListView::getClosestItemToPositionInCurrentView(const Vec2& positionRatioInView, const Vec2& itemAnchorPoint) const
+Widget* ListView::getClosestItemToPositionInCurrentView(const Vec2& positionRatioInView,
+                                                        const Vec2& itemAnchorPoint) const
 {
     // Calculate the target position
-    Vec2 contentSize = getContentSize();
+    Vec2 contentSize    = getContentSize();
     Vec2 targetPosition = -_innerContainer->getPosition();
     targetPosition.x += contentSize.width * positionRatioInView.x;
     targetPosition.y += contentSize.height * positionRatioInView.y;
@@ -838,9 +851,9 @@ void ListView::jumpToItem(ssize_t itemIndex, const Vec2& positionRatioInView, co
     doLayout();
 
     Vec2 destination = calculateItemDestination(positionRatioInView, item, itemAnchorPoint);
-    if(!_bounceEnabled)
+    if (!_bounceEnabled)
     {
-        Vec2 delta = destination - getInnerContainerPosition();
+        Vec2 delta         = destination - getInnerContainerPosition();
         Vec2 outOfBoundary = getHowMuchOutOfBoundary(delta);
         destination += outOfBoundary;
     }
@@ -852,7 +865,10 @@ void ListView::scrollToItem(ssize_t itemIndex, const Vec2& positionRatioInView, 
     scrollToItem(itemIndex, positionRatioInView, itemAnchorPoint, _scrollTime);
 }
 
-void ListView::scrollToItem(ssize_t itemIndex, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint, float timeInSec)
+void ListView::scrollToItem(ssize_t itemIndex,
+                            const Vec2& positionRatioInView,
+                            const Vec2& itemAnchorPoint,
+                            float timeInSec)
 {
     Widget* item = getItem(itemIndex);
     if (item == nullptr)
@@ -904,7 +920,7 @@ void ListView::copyClonedWidgetChildren(Widget* model)
     }
 }
 
-void ListView::copySpecialProperties(Widget *widget)
+void ListView::copySpecialProperties(Widget* widget)
 {
     ListView* listViewEx = dynamic_cast<ListView*>(widget);
     if (listViewEx)
@@ -919,46 +935,46 @@ void ListView::copySpecialProperties(Widget *widget)
 
 Vec2 ListView::getHowMuchOutOfBoundary(const Vec2& addition)
 {
-    if(!_magneticAllowedOutOfBoundary || _items.empty())
+    if (!_magneticAllowedOutOfBoundary || _items.empty())
     {
         return ScrollView::getHowMuchOutOfBoundary(addition);
     }
-    else if(_magneticType == MagneticType::NONE || _magneticType == MagneticType::BOTH_END)
+    else if (_magneticType == MagneticType::NONE || _magneticType == MagneticType::BOTH_END)
     {
         return ScrollView::getHowMuchOutOfBoundary(addition);
     }
-    else if(addition == Vec2::ZERO && !_outOfBoundaryAmountDirty)
+    else if (addition == Vec2::ZERO && !_outOfBoundaryAmountDirty)
     {
         return _outOfBoundaryAmount;
     }
-    
+
     // If it is allowed to be out of boundary by magnetic, adjust the boundaries according to the magnetic type.
-    float leftBoundary = _leftBoundary;
-    float rightBoundary = _rightBoundary;
-    float topBoundary = _topBoundary;
+    float leftBoundary   = _leftBoundary;
+    float rightBoundary  = _rightBoundary;
+    float topBoundary    = _topBoundary;
     float bottomBoundary = _bottomBoundary;
     {
         ssize_t lastItemIndex = _items.size() - 1;
-        Vec2 contentSize = getContentSize();
+        Vec2 contentSize      = getContentSize();
         Vec2 firstItemAdjustment, lastItemAdjustment;
-        if(_magneticType == MagneticType::CENTER)
+        if (_magneticType == MagneticType::CENTER)
         {
             firstItemAdjustment = (contentSize - _items.at(0)->getContentSize()) / 2;
-            lastItemAdjustment = (contentSize - _items.at(lastItemIndex)->getContentSize()) / 2;
+            lastItemAdjustment  = (contentSize - _items.at(lastItemIndex)->getContentSize()) / 2;
         }
-        else if(_magneticType == MagneticType::LEFT)
+        else if (_magneticType == MagneticType::LEFT)
         {
             lastItemAdjustment = contentSize - _items.at(lastItemIndex)->getContentSize();
         }
-        else if(_magneticType == MagneticType::RIGHT)
+        else if (_magneticType == MagneticType::RIGHT)
         {
             firstItemAdjustment = contentSize - _items.at(0)->getContentSize();
         }
-        else if(_magneticType == MagneticType::TOP)
+        else if (_magneticType == MagneticType::TOP)
         {
             lastItemAdjustment = contentSize - _items.at(lastItemIndex)->getContentSize();
         }
-        else if(_magneticType == MagneticType::BOTTOM)
+        else if (_magneticType == MagneticType::BOTTOM)
         {
             firstItemAdjustment = contentSize - _items.at(0)->getContentSize();
         }
@@ -967,30 +983,30 @@ Vec2 ListView::getHowMuchOutOfBoundary(const Vec2& addition)
         topBoundary -= firstItemAdjustment.y;
         bottomBoundary += lastItemAdjustment.y;
     }
-    
+
     // Calculate the actual amount
     Vec2 outOfBoundaryAmount;
-    if(_innerContainer->getLeftBoundary() + addition.x > leftBoundary)
+    if (_innerContainer->getLeftBoundary() + addition.x > leftBoundary)
     {
         outOfBoundaryAmount.x = leftBoundary - (_innerContainer->getLeftBoundary() + addition.x);
     }
-    else if(_innerContainer->getRightBoundary() + addition.x < rightBoundary)
+    else if (_innerContainer->getRightBoundary() + addition.x < rightBoundary)
     {
         outOfBoundaryAmount.x = rightBoundary - (_innerContainer->getRightBoundary() + addition.x);
     }
-    
-    if(_innerContainer->getTopBoundary() + addition.y < topBoundary)
+
+    if (_innerContainer->getTopBoundary() + addition.y < topBoundary)
     {
         outOfBoundaryAmount.y = topBoundary - (_innerContainer->getTopBoundary() + addition.y);
     }
-    else if(_innerContainer->getBottomBoundary() + addition.y > bottomBoundary)
+    else if (_innerContainer->getBottomBoundary() + addition.y > bottomBoundary)
     {
         outOfBoundaryAmount.y = bottomBoundary - (_innerContainer->getBottomBoundary() + addition.y);
     }
-    
-    if(addition == Vec2::ZERO)
+
+    if (addition == Vec2::ZERO)
     {
-        _outOfBoundaryAmount = outOfBoundaryAmount;
+        _outOfBoundaryAmount      = outOfBoundaryAmount;
         _outOfBoundaryAmountDirty = false;
     }
     return outOfBoundaryAmount;
@@ -998,15 +1014,22 @@ Vec2 ListView::getHowMuchOutOfBoundary(const Vec2& addition)
 
 static Vec2 getAnchorPointByMagneticType(ListView::MagneticType magneticType)
 {
-    switch(magneticType)
+    switch (magneticType)
     {
-        case ListView::MagneticType::NONE: return Vec2::ZERO;
-        case ListView::MagneticType::BOTH_END: return Vec2::ANCHOR_TOP_LEFT;
-        case ListView::MagneticType::CENTER: return Vec2::ANCHOR_MIDDLE;
-        case ListView::MagneticType::LEFT: return Vec2::ANCHOR_MIDDLE_LEFT;
-        case ListView::MagneticType::RIGHT: return Vec2::ANCHOR_MIDDLE_RIGHT;
-        case ListView::MagneticType::TOP: return Vec2::ANCHOR_MIDDLE_TOP;
-        case ListView::MagneticType::BOTTOM: return Vec2::ANCHOR_MIDDLE_BOTTOM;
+    case ListView::MagneticType::NONE:
+        return Vec2::ZERO;
+    case ListView::MagneticType::BOTH_END:
+        return Vec2::ANCHOR_TOP_LEFT;
+    case ListView::MagneticType::CENTER:
+        return Vec2::ANCHOR_MIDDLE;
+    case ListView::MagneticType::LEFT:
+        return Vec2::ANCHOR_MIDDLE_LEFT;
+    case ListView::MagneticType::RIGHT:
+        return Vec2::ANCHOR_MIDDLE_RIGHT;
+    case ListView::MagneticType::TOP:
+        return Vec2::ANCHOR_MIDDLE_TOP;
+    case ListView::MagneticType::BOTTOM:
+        return Vec2::ANCHOR_MIDDLE_BOTTOM;
     }
     return Vec2::ZERO;
 }
@@ -1014,36 +1037,36 @@ static Vec2 getAnchorPointByMagneticType(ListView::MagneticType magneticType)
 void ListView::startAttenuatingAutoScroll(const Vec2& deltaMove, const Vec2& initialVelocity)
 {
     Vec2 adjustedDeltaMove = deltaMove;
-    
-    if(!_items.empty() && _magneticType != MagneticType::NONE)
+
+    if (!_items.empty() && _magneticType != MagneticType::NONE)
     {
         adjustedDeltaMove = flattenVectorByDirection(adjustedDeltaMove);
 
         // If the destination is out of boundary, do nothing here. Because it will be handled by bouncing back.
-        if(getHowMuchOutOfBoundary(adjustedDeltaMove) == Vec2::ZERO)
+        if (getHowMuchOutOfBoundary(adjustedDeltaMove) == Vec2::ZERO)
         {
             MagneticType magType = _magneticType;
-            if(magType == MagneticType::BOTH_END)
+            if (magType == MagneticType::BOTH_END)
             {
-                if(_direction == Direction::HORIZONTAL)
+                if (_direction == Direction::HORIZONTAL)
                 {
                     magType = (adjustedDeltaMove.x > 0 ? MagneticType::LEFT : MagneticType::RIGHT);
                 }
-                else if(_direction == Direction::VERTICAL)
+                else if (_direction == Direction::VERTICAL)
                 {
                     magType = (adjustedDeltaMove.y > 0 ? MagneticType::BOTTOM : MagneticType::TOP);
                 }
             }
-            
+
             // Adjust the delta move amount according to the magnetic type
             Vec2 magneticAnchorPoint = getAnchorPointByMagneticType(magType);
-            Vec2 magneticPosition = -_innerContainer->getPosition();
+            Vec2 magneticPosition    = -_innerContainer->getPosition();
             magneticPosition.x += getContentSize().width * magneticAnchorPoint.x;
             magneticPosition.y += getContentSize().height * magneticAnchorPoint.y;
-            
+
             Widget* pTargetItem = getClosestItemToPosition(magneticPosition - adjustedDeltaMove, magneticAnchorPoint);
-            Vec2 itemPosition = calculateItemPositionWithAnchor(pTargetItem, magneticAnchorPoint);
-            adjustedDeltaMove = magneticPosition - itemPosition;
+            Vec2 itemPosition   = calculateItemPositionWithAnchor(pTargetItem, magneticAnchorPoint);
+            adjustedDeltaMove   = magneticPosition - itemPosition;
         }
     }
     ScrollView::startAttenuatingAutoScroll(adjustedDeltaMove, initialVelocity);
@@ -1051,20 +1074,20 @@ void ListView::startAttenuatingAutoScroll(const Vec2& deltaMove, const Vec2& ini
 
 void ListView::startMagneticScroll()
 {
-    if(_items.empty() || _magneticType == MagneticType::NONE)
+    if (_items.empty() || _magneticType == MagneticType::NONE)
     {
         return;
     }
-    
+
     // Find the closest item
     Vec2 magneticAnchorPoint = getAnchorPointByMagneticType(_magneticType);
-    Vec2 magneticPosition = -_innerContainer->getPosition();
+    Vec2 magneticPosition    = -_innerContainer->getPosition();
     magneticPosition.x += getContentSize().width * magneticAnchorPoint.x;
     magneticPosition.y += getContentSize().height * magneticAnchorPoint.y;
-    
+
     Widget* pTargetItem = getClosestItemToPosition(magneticPosition, magneticAnchorPoint);
     scrollToItem(getIndex(pTargetItem), magneticAnchorPoint, magneticAnchorPoint);
 }
 
-}
+}  // namespace ui
 NS_CC_END

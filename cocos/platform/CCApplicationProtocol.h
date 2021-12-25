@@ -45,18 +45,17 @@ NS_CC_BEGIN
 class CC_DLL ApplicationProtocol
 {
 public:
-
     /** Since WINDOWS and ANDROID are defined as macros, we could not just use these keywords in enumeration(Platform).
      *  Therefore, 'OS_' prefix is added to avoid conflicts with the definitions of system macros.
      */
     enum class Platform
     {
-        OS_WINDOWS,     /**< Windows */
-        OS_LINUX,       /**< Linux */
-        OS_MAC,         /**< Mac OS X*/
-        OS_ANDROID,     /**< Android */
-        OS_IPHONE,      /**< iPhone */
-        OS_IPAD         /**< iPad */
+        OS_WINDOWS, /**< Windows */
+        OS_LINUX,   /**< Linux */
+        OS_MAC,     /**< Mac OS X*/
+        OS_ANDROID, /**< Android */
+        OS_IPHONE,  /**< iPhone */
+        OS_IPAD     /**< iPad */
         // OS_BLACKBERRY,  /**< BlackBerry */
         // OS_NACL,        /**< Native Client in Chrome */
         // OS_EMSCRIPTEN,  /**< Emscripten */
@@ -69,50 +68,51 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~ApplicationProtocol(){
+    virtual ~ApplicationProtocol()
+    {
         /** clean auto release pool. */
         PoolManager::destroyInstance();
     }
 
     /**
-    * @brief    Implement Director and Scene init code here.
-    * @return true    Initialize success, app continue.
-    * @return false   Initialize failed, app terminate.
-    * @js NA
-    * @lua NA
-    */
+     * @brief    Implement Director and Scene init code here.
+     * @return true    Initialize success, app continue.
+     * @return false   Initialize failed, app terminate.
+     * @js NA
+     * @lua NA
+     */
     virtual bool applicationDidFinishLaunching() = 0;
 
     /**
-    * @brief  This function will be called when the application enters background.
-    * @js NA
-    * @lua NA
-    */
+     * @brief  This function will be called when the application enters background.
+     * @js NA
+     * @lua NA
+     */
     virtual void applicationDidEnterBackground() = 0;
 
     /**
-    * @brief  This function will be called when the application enters foreground.
-    * @js NA
-    * @lua NA
-    */
+     * @brief  This function will be called when the application enters foreground.
+     * @js NA
+     * @lua NA
+     */
     virtual void applicationWillEnterForeground() = 0;
 
     /**
-    * @brief    Callback by Director for limit FPS.
-    * @param interval The time, expressed in seconds, between current frame and next.
-    * @js NA
-    * @lua NA
-    */
+     * @brief    Callback by Director for limit FPS.
+     * @param interval The time, expressed in seconds, between current frame and next.
+     * @js NA
+     * @lua NA
+     */
     virtual void setAnimationInterval(float interval) = 0;
 
     /** Subclass override the function to set OpenGL context attribution instead of use default value.
-    * And now can only set six attributions:redBits,greenBits,blueBits,alphaBits,depthBits,stencilBits.
-    * Default value are(5,6,5,0,16,0), usually use as follows:
-    * void AppDelegate::initGLContextAttrs(){
-    *     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
-    *     GLView::setGLContextAttrs(glContextAttrs);
-    * }
-    */
+     * And now can only set six attributions:redBits,greenBits,blueBits,alphaBits,depthBits,stencilBits.
+     * Default value are(5,6,5,0,16,0), usually use as follows:
+     * void AppDelegate::initGLContextAttrs(){
+     *     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
+     *     GLView::setGLContextAttrs(glContextAttrs);
+     * }
+     */
     virtual void initGLContextAttrs() {}
 
     /**
@@ -122,29 +122,29 @@ public:
     * @lua NA
     */
     virtual LanguageType getCurrentLanguage() = 0;
-    
+
     /**
      @brief Get current language iso 639-1 code.
      @return Current language iso 639-1 code.
      * @js NA
      * @lua NA
      */
-    virtual const char * getCurrentLanguageCode() = 0;
-    
+    virtual const char* getCurrentLanguageCode() = 0;
+
     /**
      @brief Get target platform.
      * @js NA
      * @lua NA
      */
     virtual Platform getTargetPlatform() = 0;
-    
+
     /**
      @brief Get application version.
      * @js NA
      * @lua NA
      */
     virtual std::string getVersion() = 0;
-    
+
     /**
      @brief Open url in default browser.
      @param String with url to open.
@@ -152,7 +152,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual bool openURL(const std::string &url) = 0;
+    virtual bool openURL(const std::string& url) = 0;
 };
 
 // end of platform group
@@ -160,4 +160,4 @@ public:
 
 NS_CC_END
 
-#endif    // __CC_APPLICATION_PROTOCOL_H__
+#endif  // __CC_APPLICATION_PROTOCOL_H__

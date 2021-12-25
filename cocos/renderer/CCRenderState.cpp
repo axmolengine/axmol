@@ -39,23 +39,21 @@
 
 NS_CC_BEGIN
 
-
 std::string RenderState::getName() const
 {
     return _name;
 }
 
-
 void RenderState::bindPass(Pass* pass, MeshCommand* command)
 {
     CC_ASSERT(pass);
     assert(pass->_technique && pass->_technique->_material);
-    auto *technique = pass->_technique;
-    auto *material = technique->_material;
-    auto &pipelineDescriptor = command->getPipelineDescriptor();
+    auto* technique          = pass->_technique;
+    auto* material           = technique->_material;
+    auto& pipelineDescriptor = command->getPipelineDescriptor();
 
-    //need reset all state
-    //pipelineDescriptor.blendDescriptor.blendEnabled = true;
+    // need reset all state
+    // pipelineDescriptor.blendDescriptor.blendEnabled = true;
 
     // Get the combined modified state bits for our RenderState hierarchy.
     int32_t overrideBits = _state._modifiedBits;
@@ -68,17 +66,14 @@ void RenderState::bindPass(Pass* pass, MeshCommand* command)
     material->getStateBlock().apply(&pipelineDescriptor);
     technique->getStateBlock().apply(&pipelineDescriptor);
     _state.apply(&pipelineDescriptor);
-
 }
-
 
 RenderState::StateBlock& RenderState::getStateBlock() const
 {
     return _state;
 }
 
-
-void RenderState::StateBlock::bind(PipelineDescriptor *pipelineDescriptor)
+void RenderState::StateBlock::bind(PipelineDescriptor* pipelineDescriptor)
 {
     // When the public bind() is called with no RenderState object passed in,
     // we assume we are being called to bind the state of a single StateBlock,
@@ -90,12 +85,12 @@ void RenderState::StateBlock::bind(PipelineDescriptor *pipelineDescriptor)
     apply(pipelineDescriptor);
 }
 
-void RenderState::StateBlock::apply(PipelineDescriptor *pipelineDescriptor)
+void RenderState::StateBlock::apply(PipelineDescriptor* pipelineDescriptor)
 {
-    //CC_ASSERT(_globalState);
+    // CC_ASSERT(_globalState);
 
     auto renderer = Director::getInstance()->getRenderer();
-    auto &blend = pipelineDescriptor->blendDescriptor;
+    auto& blend   = pipelineDescriptor->blendDescriptor;
 
     // Update any state that differs from _globalState and flip _globalState bits
     if ((_modifiedBits & RS_BLEND))
@@ -112,7 +107,7 @@ void RenderState::StateBlock::apply(PipelineDescriptor *pipelineDescriptor)
     if ((_modifiedBits & RS_CULL_FACE))
     {
         if (!_cullFaceEnabled)
-             renderer->setCullMode(CullMode::NONE);
+            renderer->setCullMode(CullMode::NONE);
     }
 
     if ((_modifiedBits & RS_CULL_FACE_SIDE))
@@ -140,10 +135,10 @@ void RenderState::StateBlock::apply(PipelineDescriptor *pipelineDescriptor)
     }
 }
 
-void RenderState::StateBlock::restoreUnmodifiedStates(int32_t overrideBits, PipelineDescriptor *programState)
+void RenderState::StateBlock::restoreUnmodifiedStates(int32_t overrideBits, PipelineDescriptor* programState)
 {
     auto renderer = Director::getInstance()->getRenderer();
-    auto &blend = programState->blendDescriptor;
+    auto& blend   = programState->blendDescriptor;
 
     // Update any state that differs from _globalState and flip _globalState bits
     if (!(overrideBits & RS_BLEND))
@@ -182,7 +177,6 @@ void RenderState::StateBlock::restoreUnmodifiedStates(int32_t overrideBits, Pipe
         renderer->setDepthWrite(false);
     }
 
-
     if (!(overrideBits & RS_DEPTH_FUNC))
     {
         renderer->setDepthCompareFunction(DepthFunction::LESS);
@@ -198,7 +192,7 @@ static backend::BlendFactor parseBlend(const std::string& value)
 {
     // Convert the string to uppercase for comparison.
     std::string upper(value);
-    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int (*)(int))toupper);
     if (upper == "ZERO")
         return backend::BlendFactor::ZERO;
     else if (upper == "ONE")
@@ -227,7 +221,8 @@ static backend::BlendFactor parseBlend(const std::string& value)
         return backend::BlendFactor::SRC_ALPHA_SATURATE;
     else
     {
-        CCLOG("Unsupported blend value (%s). (Will default to BLEND_ONE if errors are treated as warnings)", value.c_str());
+        CCLOG("Unsupported blend value (%s). (Will default to BLEND_ONE if errors are treated as warnings)",
+              value.c_str());
         return backend::BlendFactor::ONE;
     }
 }
@@ -236,7 +231,7 @@ static DepthFunction parseDepthFunc(const std::string& value)
 {
     // Convert string to uppercase for comparison
     std::string upper(value);
-    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int (*)(int))toupper);
     if (upper == "NEVER")
         return DepthFunction::NEVER;
     else if (upper == "LESS")
@@ -255,7 +250,8 @@ static DepthFunction parseDepthFunc(const std::string& value)
         return DepthFunction::ALWAYS;
     else
     {
-        CCLOG("Unsupported depth function value (%s). Will default to DEPTH_LESS if errors are treated as warnings)", value.c_str());
+        CCLOG("Unsupported depth function value (%s). Will default to DEPTH_LESS if errors are treated as warnings)",
+              value.c_str());
         return DepthFunction::LESS;
     }
 }
@@ -264,17 +260,18 @@ static CullFaceSide parseCullFaceSide(const std::string& value)
 {
     // Convert string to uppercase for comparison
     std::string upper(value);
-    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int (*)(int))toupper);
     if (upper == "BACK")
         return CullFaceSide::BACK;
     else if (upper == "FRONT")
         return CullFaceSide::FRONT;
-// XXX: metal doesn't support back&front culling. Is it needed, since it will draw nothing.
-//    else if (upper == "FRONT_AND_BACK")
-//        return RenderState::CULL_FACE_SIDE_FRONT_AND_BACK;
+    // XXX: metal doesn't support back&front culling. Is it needed, since it will draw nothing.
+    //    else if (upper == "FRONT_AND_BACK")
+    //        return RenderState::CULL_FACE_SIDE_FRONT_AND_BACK;
     else
     {
-        CCLOG("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings.", value.c_str());
+        CCLOG("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings.",
+              value.c_str());
         return CullFaceSide::BACK;
     }
 }
@@ -283,14 +280,15 @@ static FrontFace parseFrontFace(const std::string& value)
 {
     // Convert string to uppercase for comparison
     std::string upper(value);
-    std::transform(upper.begin(), upper.end(), upper.begin(), (int(*)(int))toupper);
+    std::transform(upper.begin(), upper.end(), upper.begin(), (int (*)(int))toupper);
     if (upper == "CCW")
         return FrontFace::COUNTER_CLOCK_WISE;
     else if (upper == "CW")
         return FrontFace::CLOCK_WISE;
     else
     {
-        CCLOG("Unsupported front face side value (%s). Will default to CCW if errors are treated as warnings.", value.c_str());
+        CCLOG("Unsupported front face side value (%s). Will default to CCW if errors are treated as warnings.",
+              value.c_str());
         return FrontFace::COUNTER_CLOCK_WISE;
     }
 }

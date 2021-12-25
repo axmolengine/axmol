@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -76,14 +76,11 @@ public:
     /**
      * @private
      */
-    std::vector<DisplayData*>* getDisplays(const std::string& slotName)
-    {
-        return mapFindB(displays, slotName);
-    }
+    std::vector<DisplayData*>* getDisplays(const std::string& slotName) { return mapFindB(displays, slotName); }
 
-public: // For WebAssembly. TODO parent
+public:  // For WebAssembly. TODO parent
     const std::map<std::string, std::vector<DisplayData*>>& getSlotDisplays() const { return displays; }
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_SKIN_DATA_H
+#endif  // DRAGONBONES_SKIN_DATA_H

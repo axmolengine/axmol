@@ -33,15 +33,15 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-static bool tgaLoadRLEImageData(unsigned char* Buffer, uint32_t bufSize, tImageTGA *info);
-void tgaFlipImage( tImageTGA *info );
+static bool tgaLoadRLEImageData(unsigned char* Buffer, uint32_t bufSize, tImageTGA* info);
+void tgaFlipImage(tImageTGA* info);
 
 // load the image header field from stream
-bool tgaLoadHeader(unsigned char* buffer, uint32_t bufSize, tImageTGA *info)
+bool tgaLoadHeader(unsigned char* buffer, uint32_t bufSize, tImageTGA* info)
 {
     bool ret = false;
 
-    do 
+    do
     {
         size_t step = sizeof(unsigned char) * 2;
         CC_BREAK_IF((step + sizeof(unsigned char)) > bufSize);
@@ -61,7 +61,7 @@ bool tgaLoadHeader(unsigned char* buffer, uint32_t bufSize, tImageTGA *info)
         memcpy(&cGarbage, buffer + step, sizeof(unsigned char));
 
         info->flipped = 0;
-        if ( cGarbage & 0x20 ) 
+        if (cGarbage & 0x20)
         {
             info->flipped = 1;
         }
@@ -71,13 +71,13 @@ bool tgaLoadHeader(unsigned char* buffer, uint32_t bufSize, tImageTGA *info)
     return ret;
 }
 
-bool tgaLoadImageData(unsigned char *Buffer, uint32_t bufSize, tImageTGA *info)
+bool tgaLoadImageData(unsigned char* Buffer, uint32_t bufSize, tImageTGA* info)
 {
     bool ret = false;
 
-    do 
+    do
     {
-        int mode,total,i;
+        int mode, total, i;
         unsigned char aux;
         size_t step = (sizeof(unsigned char) + sizeof(signed short)) * 6;
 
@@ -94,11 +94,11 @@ bool tgaLoadImageData(unsigned char *Buffer, uint32_t bufSize, tImageTGA *info)
         // stores it as BGR(A) so we'll have to swap R and B.
         if (mode >= 3)
         {
-            for (i=0; i < total; i+= mode)
+            for (i = 0; i < total; i += mode)
             {
-                aux = info->imageData[i];
-                info->imageData[i] = info->imageData[i+2];
-                info->imageData[i+2] = aux;
+                aux                    = info->imageData[i];
+                info->imageData[i]     = info->imageData[i + 2];
+                info->imageData[i + 2] = aux;
             }
         }
 
@@ -108,9 +108,9 @@ bool tgaLoadImageData(unsigned char *Buffer, uint32_t bufSize, tImageTGA *info)
     return ret;
 }
 
-static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageTGA *info)
+static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageTGA* info)
 {
-    unsigned int mode,total,i, index = 0;
+    unsigned int mode, total, i, index = 0;
     unsigned char aux[4], runlength = 0;
     unsigned int skip = 0, flag = 0;
     size_t step = (sizeof(unsigned char) + sizeof(signed short)) * 6;
@@ -120,10 +120,10 @@ static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageT
     // total is the number of unsigned chars we'll have to read
     total = info->height * info->width;
 
-    for( i = 0; i < total; i++ )
+    for (i = 0; i < total; i++)
     {
         // if we have a run length pending, run it
-        if ( runlength != 0 )
+        if (runlength != 0)
         {
             // we do, update the run length count
             runlength--;
@@ -138,7 +138,7 @@ static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageT
 
             // see if it's a RLE encoded sequence
             flag = runlength & 0x80;
-            if ( flag )
+            if (flag)
             {
                 runlength -= 128;
             }
@@ -146,7 +146,7 @@ static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageT
         }
 
         // do we need to skip reading this pixel?
-        if ( !skip )
+        if (!skip)
         {
             // no, read in the pixel data
             CC_BREAK_IF((step + sizeof(unsigned char) * mode) > bufSize);
@@ -156,11 +156,11 @@ static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageT
 
             // mode=3 or 4 implies that the image is RGB(A). However TGA
             // stores it as BGR(A) so we'll have to swap R and B.
-            if ( mode >= 3 )
+            if (mode >= 3)
             {
                 unsigned char tmp;
 
-                tmp = aux[0];
+                tmp    = aux[0];
                 aux[0] = aux[2];
                 aux[2] = tmp;
             }
@@ -170,43 +170,44 @@ static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageT
         memcpy(&info->imageData[index], aux, mode);
         index += mode;
     }
-    
+
     return true;
 }
 
-void tgaFlipImage( tImageTGA *info )
+void tgaFlipImage(tImageTGA* info)
 {
     // mode equal the number of components for each pixel
-    int mode = info->pixelDepth / 8;
-    int rowbytes = info->width*mode;
-    unsigned char *row = (unsigned char *)malloc(rowbytes);
+    int mode           = info->pixelDepth / 8;
+    int rowbytes       = info->width * mode;
+    unsigned char* row = (unsigned char*)malloc(rowbytes);
     int y;
-    
-    if (row == nullptr) return;
-    
-    for( y = 0; y < (info->height/2); y++ )
+
+    if (row == nullptr)
+        return;
+
+    for (y = 0; y < (info->height / 2); y++)
     {
-        memcpy(row, &info->imageData[y*rowbytes],rowbytes);
-        memcpy(&info->imageData[y*rowbytes], &info->imageData[(info->height-(y+1))*rowbytes], rowbytes);
-        memcpy(&info->imageData[(info->height-(y+1))*rowbytes], row, rowbytes);
+        memcpy(row, &info->imageData[y * rowbytes], rowbytes);
+        memcpy(&info->imageData[y * rowbytes], &info->imageData[(info->height - (y + 1)) * rowbytes], rowbytes);
+        memcpy(&info->imageData[(info->height - (y + 1)) * rowbytes], row, rowbytes);
     }
-    
+
     free(row);
     info->flipped = 0;
 }
-    
+
 tImageTGA* tgaLoadBuffer(unsigned char* buffer, int32_t size)
 {
-    int mode,total;
-    tImageTGA *info = nullptr;
-    
+    int mode, total;
+    tImageTGA* info = nullptr;
+
     do
     {
-        CC_BREAK_IF(! buffer);
-        info = (tImageTGA *)malloc(sizeof(tImageTGA));
+        CC_BREAK_IF(!buffer);
+        info = (tImageTGA*)malloc(sizeof(tImageTGA));
 
         // get the file header info
-        if (! tgaLoadHeader(buffer, size, info))
+        if (!tgaLoadHeader(buffer, size, info))
         {
             info->status = TGA_ERROR_MEMORY;
             break;
@@ -220,7 +221,7 @@ tImageTGA* tgaLoadBuffer(unsigned char* buffer, int32_t size)
         }
 
         // check for other types (compressed images)
-        if ((info->type != 2) && (info->type !=3) && (info->type !=10) )
+        if ((info->type != 2) && (info->type != 3) && (info->type != 10))
         {
             info->status = TGA_ERROR_COMPRESSED_FILE;
             break;
@@ -231,7 +232,7 @@ tImageTGA* tgaLoadBuffer(unsigned char* buffer, int32_t size)
         // total is the number of unsigned chars to read
         total = info->height * info->width * mode;
         // allocate memory for image pixels
-        info->imageData = (unsigned char *)malloc(sizeof(unsigned char) * total);
+        info->imageData = (unsigned char*)malloc(sizeof(unsigned char) * total);
 
         // check to make sure we have the memory required
         if (info->imageData == nullptr)
@@ -242,7 +243,7 @@ tImageTGA* tgaLoadBuffer(unsigned char* buffer, int32_t size)
 
         bool bLoadImage = false;
         // finally load the image pixels
-        if ( info->type == 10 )
+        if (info->type == 10)
         {
             bLoadImage = tgaLoadRLEImageData(buffer, size, info);
         }
@@ -252,28 +253,28 @@ tImageTGA* tgaLoadBuffer(unsigned char* buffer, int32_t size)
         }
 
         // check for errors when reading the pixels
-        if (! bLoadImage)
+        if (!bLoadImage)
         {
             info->status = TGA_ERROR_READING_FILE;
             break;
         }
         info->status = TGA_OK;
 
-        if ( info->flipped )
+        if (info->flipped)
         {
-            tgaFlipImage( info );
-            if ( info->flipped )
+            tgaFlipImage(info);
+            if (info->flipped)
             {
                 info->status = TGA_ERROR_MEMORY;
             }
         }
-    } while(0);
+    } while (0);
 
     return info;
 }
 
 // this is the function to call when we want to load an image
-tImageTGA * tgaLoad(const char *filename)
+tImageTGA* tgaLoad(const char* filename)
 {
     Data data = FileUtils::getInstance()->getDataFromFile(filename);
 
@@ -281,53 +282,53 @@ tImageTGA * tgaLoad(const char *filename)
     {
         return tgaLoadBuffer(data.getBytes(), data.getSize());
     }
-    
+
     return nullptr;
 }
 
 // converts RGB to grayscale
-void tgaRGBtogreyscale(tImageTGA *info) {
-    
-    int mode,i,j;
-    
-    unsigned char *newImageData;
-    
+void tgaRGBtogreyscale(tImageTGA* info)
+{
+
+    int mode, i, j;
+
+    unsigned char* newImageData;
+
     // if the image is already grayscale do nothing
     if (info->pixelDepth == 8)
         return;
-    
+
     // compute the number of actual components
     mode = info->pixelDepth / 8;
-    
+
     // allocate an array for the new image data
-    newImageData = (unsigned char *)malloc(sizeof(unsigned char) * 
-                                           info->height * info->width);
-    if (newImageData == nullptr) {
+    newImageData = (unsigned char*)malloc(sizeof(unsigned char) * info->height * info->width);
+    if (newImageData == nullptr)
+    {
         return;
     }
-    
+
     // convert pixels: grayscale = o.30 * R + 0.59 * G + 0.11 * B
-    for (i = 0,j = 0; j < info->width * info->height; i +=mode, j++)
-        newImageData[j] =    
-        (unsigned char)(0.30 * info->imageData[i] +
-                        0.59 * info->imageData[i+1] +
-                        0.11 * info->imageData[i+2]);
-    
-    
-    //free old image data
+    for (i = 0, j = 0; j < info->width * info->height; i += mode, j++)
+        newImageData[j] =
+            (unsigned char)(0.30 * info->imageData[i] + 0.59 * info->imageData[i + 1] + 0.11 * info->imageData[i + 2]);
+
+    // free old image data
     free(info->imageData);
-    
+
     // reassign pixelDepth and type according to the new image type
     info->pixelDepth = 8;
-    info->type = 3;
+    info->type       = 3;
     // reassigning imageData to the new array.
     info->imageData = newImageData;
 }
 
 // releases the memory used for the image
-void tgaDestroy(tImageTGA *info) {
-    
-    if (info != nullptr) {
+void tgaDestroy(tImageTGA* info)
+{
+
+    if (info != nullptr)
+    {
         if (info->imageData != nullptr)
         {
             free(info->imageData);

@@ -48,6 +48,7 @@ class ZipFile;
 class CC_DLL FileUtilsAndroid : public FileUtils
 {
     friend class FileUtils;
+
 public:
     FileUtilsAndroid();
     /**
@@ -63,16 +64,17 @@ public:
     /* override functions */
     bool init() override;
 
-    virtual std::string getNewFilename(const std::string &filename) const override;
+    virtual std::string getNewFilename(const std::string& filename) const override;
 
     virtual FileUtils::Status getContents(const std::string& filename, ResizableBuffer* buffer) const override;
 
     virtual std::string getWritablePath() const override;
     std::string getNativeWritableAbsolutePath() const override;
     virtual bool isAbsolutePath(const std::string& strPath) const override;
-    
+
     virtual int64_t getFileSize(const std::string& filepath) const override;
     virtual std::vector<std::string> listFiles(const std::string& dirPath) const override;
+
 private:
     virtual bool isFileExistInternal(const std::string& strFilePath) const override;
     virtual bool isDirectoryExistInternal(const std::string& dirPath) const override;

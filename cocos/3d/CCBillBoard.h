@@ -39,11 +39,10 @@ NS_CC_BEGIN
 class CC_DLL BillBoard : public Sprite
 {
 public:
-
     enum class Mode
     {
-        VIEW_POINT_ORIENTED, // orient to the camera
-        VIEW_PLANE_ORIENTED // orient to the XOY plane of camera
+        VIEW_POINT_ORIENTED,  // orient to the camera
+        VIEW_PLANE_ORIENTED   // orient to the XOY plane of camera
     };
 
     /// @name Creators
@@ -75,7 +74,7 @@ public:
      */
     static BillBoard* create(const std::string& filename, const Rect& rect, Mode mode = Mode::VIEW_POINT_ORIENTED);
 
-     /**
+    /**
      * Creates a BillBoard with a Texture2D object.
      *
      * After creation, the rect will be the size of the texture, and the offset will be (0,0).
@@ -83,7 +82,7 @@ public:
      * @param   texture    A pointer to a Texture2D object.
      * @return  An autoreleased BillBoard object
      */
-    static BillBoard* createWithTexture(Texture2D *texture, Mode mode = Mode::VIEW_POINT_ORIENTED);
+    static BillBoard* createWithTexture(Texture2D* texture, Mode mode = Mode::VIEW_POINT_ORIENTED);
 
     /** Set the billboard rotation mode. */
     void setMode(Mode mode);
@@ -91,30 +90,27 @@ public:
     /** Get the billboard rotation mode. */
     Mode getMode() const;
 
-    //override
-    
+    // override
+
     /** update billboard's transform and turn it towards camera */
-    virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
-    
-    /** 
+    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+
+    /**
      * draw BillBoard object.
      *
      * @lua NA
      */
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-
-CC_CONSTRUCTOR_ACCESS:
-    BillBoard();
+    CC_CONSTRUCTOR_ACCESS : BillBoard();
     virtual ~BillBoard();
 
 protected:
-
     /**
      * calculate a model matrix which keep original translate & scaling but always face to the camera
      */
     bool calculateBillboardTransform();
-    
+
     Mat4 _camWorldMat;
     Mat4 _mvTransform;
 
@@ -123,7 +119,6 @@ protected:
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(BillBoard);
-
 };
 
 // end of 3d group

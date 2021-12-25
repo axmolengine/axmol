@@ -29,19 +29,20 @@ THE SOFTWARE.
 #include "base/CCVector.h"
 #include "base/CCEventListenerCustom.h"
 
-
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CCS_DLL BaseTriggerCondition : public cocos2d::Ref
 {
 protected:
     BaseTriggerCondition(void);
+
 public:
     virtual ~BaseTriggerCondition(void);
     virtual bool init();
     virtual bool detect();
-    virtual void serialize(const rapidjson::Value &val);
-    virtual void serialize(cocostudio::CocoLoader *cocoLoader, cocostudio::stExpCocoNode *cocoNode);
+    virtual void serialize(const rapidjson::Value& val);
+    virtual void serialize(cocostudio::CocoLoader* cocoLoader, cocostudio::stExpCocoNode* cocoNode);
     virtual void removeAll();
 };
 
@@ -49,15 +50,15 @@ class CCS_DLL BaseTriggerAction : public cocos2d::Ref
 {
 protected:
     BaseTriggerAction(void);
+
 public:
     virtual ~BaseTriggerAction(void);
     virtual bool init();
     virtual void done();
-    virtual void serialize(const rapidjson::Value &val);
-    virtual void serialize(cocostudio::CocoLoader *cocoLoader, cocostudio::stExpCocoNode *cocoNode);
+    virtual void serialize(const rapidjson::Value& val);
+    virtual void serialize(cocostudio::CocoLoader* cocoLoader, cocostudio::stExpCocoNode* cocoNode);
     virtual void removeAll();
 };
-
 
 class CCS_DLL TriggerObj : public cocos2d::Ref
 {
@@ -66,15 +67,15 @@ public:
     virtual ~TriggerObj(void);
     virtual bool init();
     static TriggerObj* create(void);
-    
+
     virtual bool detect();
     virtual void done();
     virtual void removeAll();
-    virtual void serialize(const rapidjson::Value &val);
-    virtual void serialize(cocostudio::CocoLoader *cocoLoader, cocostudio::stExpCocoNode *cocoNode);
+    virtual void serialize(const rapidjson::Value& val);
+    virtual void serialize(cocostudio::CocoLoader* cocoLoader, cocostudio::stExpCocoNode* cocoNode);
     unsigned int getId();
     void setEnabled(bool enabled);
-  
+
 private:
     cocos2d::Vector<BaseTriggerCondition*> _cons;
     cocos2d::Vector<BaseTriggerAction*> _acts;
@@ -83,8 +84,6 @@ private:
     cocos2d::Vector<cocos2d::EventListenerCustom*> _listeners;
 };
 
-}
+}  // namespace cocostudio
 
 #endif
-
-

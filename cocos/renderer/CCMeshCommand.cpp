@@ -43,17 +43,17 @@
 
 NS_CC_BEGIN
 
-
 MeshCommand::MeshCommand()
 #if CC_ENABLE_CACHE_TEXTURE_DATA
- : _rendererRecreatedListener(nullptr)
+    : _rendererRecreatedListener(nullptr)
 #endif
 {
     _type = RenderCommand::Type::MESH_COMMAND;
     _is3D = true;
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // listen the event that renderer was recreated on Android/WP8
-    _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, CC_CALLBACK_1(MeshCommand::listenRendererRecreated, this));
+    _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED,
+                                                             CC_CALLBACK_1(MeshCommand::listenRendererRecreated, this));
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
 #endif
 }
@@ -63,9 +63,9 @@ void MeshCommand::init(float globalZOrder)
     CustomCommand::init(globalZOrder);
 }
 
-void MeshCommand::init(float globalZOrder, const Mat4 &transform)
+void MeshCommand::init(float globalZOrder, const Mat4& transform)
 {
-    CustomCommand::init(globalZOrder);        
+    CustomCommand::init(globalZOrder);
     if (Camera::getVisitingCamera())
     {
         _depth = Camera::getVisitingCamera()->getDepthInView(transform);
@@ -81,9 +81,7 @@ MeshCommand::~MeshCommand()
 }
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-void MeshCommand::listenRendererRecreated(EventCustom* event)
-{
-}
+void MeshCommand::listenRendererRecreated(EventCustom* event) {}
 #endif
 
 NS_CC_END

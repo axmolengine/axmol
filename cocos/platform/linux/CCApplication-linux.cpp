@@ -33,23 +33,22 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-
 // sharedApplication pointer
-Application * Application::sm_pSharedApplication = nullptr;
+Application* Application::sm_pSharedApplication = nullptr;
 
-static int32_t getCurrentMillSecond() {
+static int32_t getCurrentMillSecond()
+{
     int32_t lLastTime;
     struct timeval stCurrentTime;
 
-    gettimeofday(&stCurrentTime,NULL);
-    lLastTime = stCurrentTime.tv_sec*1000+stCurrentTime.tv_usec*0.001; // milliseconds
+    gettimeofday(&stCurrentTime, NULL);
+    lLastTime = stCurrentTime.tv_sec * 1000 + stCurrentTime.tv_usec * 0.001;  // milliseconds
     return lLastTime;
 }
 
-Application::Application()
-: _animationInterval(1.0f/60.0f*1000.0f)
+Application::Application() : _animationInterval(1.0f / 60.0f * 1000.0f)
 {
-    CC_ASSERT(! sm_pSharedApplication);
+    CC_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
 }
 
@@ -63,16 +62,16 @@ int Application::run()
 {
     initGLContextAttrs();
     // Initialize instance and cocos2d.
-    if (! applicationDidFinishLaunching())
+    if (!applicationDidFinishLaunching())
     {
         return 0;
     }
 
     int32_t lastTime = 0L;
-    int32_t curTime = 0L;
+    int32_t curTime  = 0L;
 
     auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
+    auto glview   = director->getOpenGLView();
 
     // Retain glview to avoid glview being released in the while loop
     glview->retain();
@@ -87,14 +86,14 @@ int Application::run()
         curTime = getCurrentMillSecond();
         if (curTime - lastTime < _animationInterval)
         {
-            usleep((_animationInterval - curTime + lastTime)*1000);
+            usleep((_animationInterval - curTime + lastTime) * 1000);
         }
     }
     /* Only work on Desktop
-    *  Director::mainLoop is really one frame logic
-    *  when we want to close the window, we should call Director::end();
-    *  then call Director::mainLoop to do release of internal resources
-    */
+     *  Director::mainLoop is really one frame logic
+     *  when we want to close the window, we should call Director::end();
+     *  then call Director::mainLoop to do release of internal resources
+     */
     if (glview->isOpenGLReady())
     {
         director->end();
@@ -107,8 +106,8 @@ int Application::run()
 
 void Application::setAnimationInterval(float interval)
 {
-    //TODO do something else
-    _animationInterval = interval*1000.0f;
+    // TODO do something else
+    _animationInterval = interval * 1000.0f;
 }
 
 void Application::setResourceRootPath(const std::string& rootResDir)
@@ -118,7 +117,7 @@ void Application::setResourceRootPath(const std::string& rootResDir)
     {
         _resourceRootPath += '/';
     }
-    FileUtils* pFileUtils = FileUtils::getInstance();
+    FileUtils* pFileUtils                = FileUtils::getInstance();
     std::vector<std::string> searchPaths = pFileUtils->getSearchPaths();
     searchPaths.insert(searchPaths.begin(), _resourceRootPath);
     pFileUtils->setSearchPaths(searchPaths);
@@ -139,7 +138,7 @@ std::string Application::getVersion()
     return "";
 }
 
-bool Application::openURL(const std::string &url)
+bool Application::openURL(const std::string& url)
 {
     std::string op = std::string("xdg-open '").append(url).append("'");
     return system(op.c_str()) == 0;
@@ -160,23 +159,23 @@ Application* Application::sharedApplication()
     return Application::getInstance();
 }
 
-const char * Application::getCurrentLanguageCode()
+const char* Application::getCurrentLanguageCode()
 {
-    static char code[3]={0};
-    char *pLanguageName = getenv("LANG");
+    static char code[3] = {0};
+    char* pLanguageName = getenv("LANG");
     if (!pLanguageName)
         return "en";
     strtok(pLanguageName, "_");
     if (!pLanguageName)
         return "en";
-    strncpy(code,pLanguageName,2);
-    code[2]='\0';
+    strncpy(code, pLanguageName, 2);
+    code[2] = '\0';
     return code;
 }
 
 LanguageType Application::getCurrentLanguage()
 {
-    char *pLanguageName = getenv("LANG");
+    char* pLanguageName = getenv("LANG");
     if (!pLanguageName)
     {
         return LanguageType::ENGLISH;
@@ -186,7 +185,7 @@ LanguageType Application::getCurrentLanguage()
     {
         return LanguageType::ENGLISH;
     }
-    
+
     return utils::getLanguageTypeByISO2(pLanguageName);
 }
 

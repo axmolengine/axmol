@@ -32,13 +32,13 @@ NS_CC_BEGIN
 Animation3D* Animation3D::create(const std::string& fileName, const std::string& animationName)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
-    std::string key = fullPath + "#" + animationName;
-    auto animation = Animation3DCache::getInstance()->getAnimation(key);
+    std::string key      = fullPath + "#" + animationName;
+    auto animation       = Animation3DCache::getInstance()->getAnimation(key);
     if (animation != nullptr)
         return animation;
-    
+
     animation = new Animation3D();
-    if(animation->initWithFile(fileName, animationName))
+    if (animation->initWithFile(fileName, animationName))
     {
         animation->autorelease();
     }
@@ -46,15 +46,15 @@ Animation3D* Animation3D::create(const std::string& fileName, const std::string&
     {
         CC_SAFE_DELETE(animation);
     }
-    
+
     return animation;
 }
 
 bool Animation3D::initWithFile(const std::string& filename, const std::string& animationName)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
-    
-    //load animation here
+
+    // load animation here
     auto bundle = Bundle3D::createBundle();
     Animation3DData animationdata;
     if (bundle->load(fullPath) && bundle->loadAnimationData(animationName, &animationdata) && init(animationdata))
@@ -64,9 +64,9 @@ bool Animation3D::initWithFile(const std::string& filename, const std::string& a
         Bundle3D::destroyBundle(bundle);
         return true;
     }
-    
+
     Bundle3D::destroyBundle(bundle);
-    
+
     return false;
 }
 
@@ -75,31 +75,22 @@ Animation3D::Curve* Animation3D::getBoneCurveByName(const std::string& name) con
     auto it = _boneCurves.find(name);
     if (it != _boneCurves.end())
         return it->second;
-    
+
     return nullptr;
 }
 
-Animation3D::Animation3D()
-: _duration(0)
-{
-    
-}
+Animation3D::Animation3D() : _duration(0) {}
 
 Animation3D::~Animation3D()
 {
-    for (const auto& itor : _boneCurves) {
+    for (const auto& itor : _boneCurves)
+    {
         Curve* curve = itor.second;
         CC_SAFE_DELETE(curve);
     }
 }
 
-Animation3D::Curve::Curve()
-: translateCurve(nullptr)
-, rotCurve(nullptr)
-, scaleCurve(nullptr)
-{
-    
-}
+Animation3D::Curve::Curve() : translateCurve(nullptr), rotCurve(nullptr), scaleCurve(nullptr) {}
 Animation3D::Curve::~Curve()
 {
     CC_SAFE_RELEASE_NULL(translateCurve);
@@ -107,47 +98,50 @@ Animation3D::Curve::~Curve()
     CC_SAFE_RELEASE_NULL(scaleCurve);
 }
 
-bool Animation3D::init(const Animation3DData &data)
+bool Animation3D::init(const Animation3DData& data)
 {
     _duration = data._totalTime;
 
-    for(const auto& iter : data._translationKeys)
+    for (const auto& iter : data._translationKeys)
     {
         Curve* curve = _boneCurves[iter.first];
-        if( curve == nullptr)
+        if (curve == nullptr)
         {
-            curve = new Curve();
+            curve                   = new Curve();
             _boneCurves[iter.first] = curve;
         }
-        
-        if(iter.second.empty()) continue;
+
+        if (iter.second.empty())
+            continue;
         std::vector<float> keys;
         std::vector<float> values;
-        for(const auto& keyIter : iter.second)
+        for (const auto& keyIter : iter.second)
         {
             keys.push_back(keyIter._time);
             values.push_back(keyIter._key.x);
             values.push_back(keyIter._key.y);
             values.push_back(keyIter._key.z);
         }
-        
+
         curve->translateCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0], (int)keys.size());
-        if(curve->translateCurve) curve->translateCurve->retain();
+        if (curve->translateCurve)
+            curve->translateCurve->retain();
     }
-    
-    for(const auto& iter : data._rotationKeys)
+
+    for (const auto& iter : data._rotationKeys)
     {
         Curve* curve = _boneCurves[iter.first];
-        if( curve == nullptr)
+        if (curve == nullptr)
         {
-            curve = new Curve();
+            curve                   = new Curve();
             _boneCurves[iter.first] = curve;
         }
-        
-        if(iter.second.empty()) continue;
+
+        if (iter.second.empty())
+            continue;
         std::vector<float> keys;
         std::vector<float> values;
-        for(const auto& keyIter : iter.second)
+        for (const auto& keyIter : iter.second)
         {
             keys.push_back(keyIter._time);
             values.push_back(keyIter._key.x);
@@ -155,35 +149,38 @@ bool Animation3D::init(const Animation3DData &data)
             values.push_back(keyIter._key.z);
             values.push_back(keyIter._key.w);
         }
-        
+
         curve->rotCurve = Curve::AnimationCurveQuat::create(&keys[0], &values[0], (int)keys.size());
-        if(curve->rotCurve) curve->rotCurve->retain();
+        if (curve->rotCurve)
+            curve->rotCurve->retain();
     }
-    
-    for(const auto& iter : data._scaleKeys)
+
+    for (const auto& iter : data._scaleKeys)
     {
         Curve* curve = _boneCurves[iter.first];
-        if( curve == nullptr)
+        if (curve == nullptr)
         {
-            curve = new Curve();
+            curve                   = new Curve();
             _boneCurves[iter.first] = curve;
         }
-        
-        if(iter.second.empty()) continue;
+
+        if (iter.second.empty())
+            continue;
         std::vector<float> keys;
         std::vector<float> values;
-        for(const auto& keyIter : iter.second)
+        for (const auto& keyIter : iter.second)
         {
             keys.push_back(keyIter._time);
             values.push_back(keyIter._key.x);
             values.push_back(keyIter._key.y);
             values.push_back(keyIter._key.z);
         }
-        
+
         curve->scaleCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0], (int)keys.size());
-        if(curve->scaleCurve) curve->scaleCurve->retain();
+        if (curve->scaleCurve)
+            curve->scaleCurve->retain();
     }
-    
+
     return true;
 }
 
@@ -194,7 +191,7 @@ Animation3DCache* Animation3DCache::getInstance()
 {
     if (_cacheInstance == nullptr)
         _cacheInstance = new Animation3DCache();
-    
+
     return _cacheInstance;
 }
 void Animation3DCache::destroyInstance()
@@ -215,7 +212,7 @@ void Animation3DCache::addAnimation(const std::string& key, Animation3D* animati
     const auto& it = _animations.find(key);
     if (it != _animations.end())
     {
-        return; // already have this key
+        return;  // already have this key
     }
     _animations[key] = animation;
     animation->retain();
@@ -223,14 +220,16 @@ void Animation3DCache::addAnimation(const std::string& key, Animation3D* animati
 
 void Animation3DCache::removeAllAnimations()
 {
-    for (auto itor : _animations) {
+    for (auto itor : _animations)
+    {
         CC_SAFE_RELEASE(itor.second);
     }
     _animations.clear();
 }
 void Animation3DCache::removeUnusedAnimation()
 {
-    for (auto itor = _animations.begin(); itor != _animations.end(); ) {
+    for (auto itor = _animations.begin(); itor != _animations.end();)
+    {
         if (itor->second->getReferenceCount() == 1)
         {
             itor->second->release();
@@ -241,10 +240,7 @@ void Animation3DCache::removeUnusedAnimation()
     }
 }
 
-Animation3DCache::Animation3DCache()
-{
-    
-}
+Animation3DCache::Animation3DCache() {}
 Animation3DCache::~Animation3DCache()
 {
     removeAllAnimations();

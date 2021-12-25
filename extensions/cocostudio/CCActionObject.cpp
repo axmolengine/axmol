@@ -32,18 +32,19 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 ActionObject::ActionObject()
-: _name("")
-, _loop(false)
-, _bPause(false)
-, _bPlaying(false)
-, _fUnitTime(0.1f)
-, _currentTime(0.0f)
-, _pScheduler(nullptr)
-, _CallBack(nullptr)
-, _fTotalTime(0.0f)
+    : _name("")
+    , _loop(false)
+    , _bPause(false)
+    , _bPlaying(false)
+    , _fUnitTime(0.1f)
+    , _currentTime(0.0f)
+    , _pScheduler(nullptr)
+    , _CallBack(nullptr)
+    , _fTotalTime(0.0f)
 {
     _pScheduler = Director::getInstance()->getScheduler();
     CC_SAFE_RETAIN(_pScheduler);
@@ -79,7 +80,7 @@ bool ActionObject::getLoop()
 void ActionObject::setUnitTime(float fTime)
 {
     _fUnitTime = fTime;
-    for(const auto &e : _actionNodeList)
+    for (const auto& e : _actionNodeList)
     {
         e->setUnitTime(_fUnitTime);
     }
@@ -114,65 +115,72 @@ void ActionObject::initWithDictionary(const rapidjson::Value& dic, Ref* root)
     setLoop(DICTOOL->getBooleanValue_json(dic, "loop"));
     setUnitTime(DICTOOL->getFloatValue_json(dic, "unittime"));
     int actionNodeCount = DICTOOL->getArrayCount_json(dic, "actionnodelist");
-    int maxLength = 0;
-    for (int i=0; i<actionNodeCount; i++) {
+    int maxLength       = 0;
+    for (int i = 0; i < actionNodeCount; i++)
+    {
         ActionNode* actionNode = new ActionNode();
         actionNode->autorelease();
         const rapidjson::Value& actionNodeDic = DICTOOL->getDictionaryFromArray_json(dic, "actionnodelist", i);
-        actionNode->initWithDictionary(actionNodeDic,root);
+        actionNode->initWithDictionary(actionNodeDic, root);
         actionNode->setUnitTime(getUnitTime());
         _actionNodeList.pushBack(actionNode);
-        
+
         int length = actionNode->getLastFrameIndex() - actionNode->getFirstFrameIndex();
-        if(length > maxLength)
+        if (length > maxLength)
             maxLength = length;
     }
-    _fTotalTime = maxLength*_fUnitTime;
+    _fTotalTime = maxLength * _fUnitTime;
 }
 
-void ActionObject::initWithBinary(CocoLoader *cocoLoader,
-                                  stExpCocoNode *cocoNode,
-                                  cocos2d::Ref *root)
+void ActionObject::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, cocos2d::Ref* root)
 {
-    stExpCocoNode *stChildNode = cocoNode->GetChildArray(cocoLoader);
-    stExpCocoNode *actionNodeList = nullptr;
-    int count = cocoNode->GetChildNum();
-    for (int i = 0; i < count; ++i) {
-        std::string key = stChildNode[i].GetName(cocoLoader);
+    stExpCocoNode* stChildNode    = cocoNode->GetChildArray(cocoLoader);
+    stExpCocoNode* actionNodeList = nullptr;
+    int count                     = cocoNode->GetChildNum();
+    for (int i = 0; i < count; ++i)
+    {
+        std::string key   = stChildNode[i].GetName(cocoLoader);
         std::string value = stChildNode[i].GetValue(cocoLoader);
-        if (key == "name") {
+        if (key == "name")
+        {
             setName(value.c_str());
-        }else if (key == "loop"){
+        }
+        else if (key == "loop")
+        {
             setLoop(valueToBool(value));
-        }else if(key == "unittime"){
+        }
+        else if (key == "unittime")
+        {
             setUnitTime(valueToFloat(value));
-        }else if (key == "actionnodelist"){
+        }
+        else if (key == "actionnodelist")
+        {
             actionNodeList = &stChildNode[i];
         }
     }
-    
-    if(nullptr != actionNodeList)
+
+    if (nullptr != actionNodeList)
     {
-        int actionNodeCount = actionNodeList->GetChildNum();
-        stExpCocoNode *actionNodeArray = actionNodeList->GetChildArray(cocoLoader);
-        int maxLength = 0;
-        for (int i=0; i<actionNodeCount; i++) {
+        int actionNodeCount            = actionNodeList->GetChildNum();
+        stExpCocoNode* actionNodeArray = actionNodeList->GetChildArray(cocoLoader);
+        int maxLength                  = 0;
+        for (int i = 0; i < actionNodeCount; i++)
+        {
             ActionNode* actionNode = new ActionNode();
             actionNode->autorelease();
-            
-            actionNode->initWithBinary(cocoLoader, &actionNodeArray[i] , root);
-            
+
+            actionNode->initWithBinary(cocoLoader, &actionNodeArray[i], root);
+
             actionNode->setUnitTime(getUnitTime());
-            
+
             _actionNodeList.pushBack(actionNode);
-            
+
             int length = actionNode->getLastFrameIndex() - actionNode->getFirstFrameIndex();
-            if(length > maxLength)
+            if (length > maxLength)
                 maxLength = length;
         }
-        
-        
-        _fTotalTime = maxLength* _fUnitTime;
+
+        _fTotalTime = maxLength * _fUnitTime;
     }
 }
 
@@ -183,9 +191,12 @@ int ActionObject::valueToInt(const std::string& value)
 bool ActionObject::valueToBool(const std::string& value)
 {
     int intValue = valueToInt(value);
-    if (1 == intValue) {
+    if (1 == intValue)
+    {
         return true;
-    }else{
+    }
+    else
+    {
         return false;
     }
 }
@@ -216,13 +227,14 @@ void ActionObject::play()
 {
     stop();
     this->updateToFrameByTime(0.0f);
-    for(const auto &e : _actionNodeList)
+    for (const auto& e : _actionNodeList)
     {
         e->playAction();
     }
     if (_loop)
     {
-        _pScheduler->schedule(CC_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this, 0.0f , CC_REPEAT_FOREVER, 0.0f, false);
+        _pScheduler->schedule(CC_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this, 0.0f, CC_REPEAT_FOREVER,
+                              0.0f, false);
     }
     else
     {
@@ -233,63 +245,63 @@ void ActionObject::play()
 void ActionObject::play(CallFunc* func)
 {
     this->play();
-	this->_CallBack = func;
-	CC_SAFE_RETAIN(_CallBack);
+    this->_CallBack = func;
+    CC_SAFE_RETAIN(_CallBack);
 }
 void ActionObject::pause()
 {
-	_bPause = true;
-	_bPlaying = false;
+    _bPause   = true;
+    _bPlaying = false;
 }
 
 void ActionObject::stop()
 {
-    for(const auto &e : _actionNodeList)
-	{
-		e->stopAction();
-	}
-	_bPlaying = false;
-	_pScheduler->unschedule(CC_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this);
-	_bPause = false;
+    for (const auto& e : _actionNodeList)
+    {
+        e->stopAction();
+    }
+    _bPlaying = false;
+    _pScheduler->unschedule(CC_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this);
+    _bPause = false;
 }
 
 void ActionObject::updateToFrameByTime(float fTime)
 {
-	_currentTime = fTime;
-    for(const auto &e : _actionNodeList)
-	{
-		e->updateActionToTimeLine(fTime);
-	}
+    _currentTime = fTime;
+    for (const auto& e : _actionNodeList)
+    {
+        e->updateActionToTimeLine(fTime);
+    }
 }
 
 void ActionObject::simulationActionUpdate(float /*dt*/)
 {
-	bool isEnd = true;
-    
-    for(const auto &e : _actionNodeList)
-	{
-		if (!e->isActionDoneOnce())
-		{
-			isEnd = false;
-			break;
-		}
-	}
-    
-	if (isEnd)
-	{
-		if (_CallBack != nullptr)
-		{
-			_CallBack->execute();
-		}
-		if (_loop)
-		{
-			this->play();
-		}
-		else
-		{
-			_bPlaying = false;
-			_pScheduler->unschedule(CC_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this);
-		}
-	}
+    bool isEnd = true;
+
+    for (const auto& e : _actionNodeList)
+    {
+        if (!e->isActionDoneOnce())
+        {
+            isEnd = false;
+            break;
+        }
+    }
+
+    if (isEnd)
+    {
+        if (_CallBack != nullptr)
+        {
+            _CallBack->execute();
+        }
+        if (_loop)
+        {
+            this->play();
+        }
+        else
+        {
+            _bPlaying = false;
+            _pScheduler->unschedule(CC_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this);
+        }
+    }
 }
-}
+}  // namespace cocostudio

@@ -40,16 +40,16 @@ typedef std::vector<std::string> strArray;
 // string toolkit
 static inline void split(const std::string& src, const std::string& token, strArray& vect)
 {
-    size_t nend = 0;
-    size_t nbegin = 0;
+    size_t nend      = 0;
+    size_t nbegin    = 0;
     size_t tokenSize = token.size();
-    while(nend != std::string::npos)
+    while (nend != std::string::npos)
     {
         nend = src.find(token, nbegin);
-        if(nend == std::string::npos)
-            vect.push_back(src.substr(nbegin, src.length()-nbegin));
+        if (nend == std::string::npos)
+            vect.push_back(src.substr(nbegin, src.length() - nbegin));
         else
-            vect.push_back(src.substr(nbegin, nend-nbegin));
+            vect.push_back(src.substr(nbegin, nend - nbegin));
         nbegin = nend + tokenSize;
     }
 }
@@ -62,7 +62,7 @@ static bool splitWithForm(const std::string& content, strArray& strs)
 {
     bool bRet = false;
 
-    do 
+    do
     {
         CC_BREAK_IF(content.empty());
 
@@ -80,7 +80,7 @@ static bool splitWithForm(const std::string& content, strArray& strs)
 
         size_t nPos1 = pointStr.find('{');
         size_t nPos2 = pointStr.find('}');
-        // contain '{' or '}' 
+        // contain '{' or '}'
         CC_BREAK_IF(nPos1 != std::string::npos || nPos2 != std::string::npos);
 
         split(pointStr, ",", strs);
@@ -102,7 +102,7 @@ Rect RectFromString(const std::string& str)
 {
     Rect result = Rect::ZERO;
 
-    do 
+    do
     {
         CC_BREAK_IF(str.empty());
         std::string content = str;
@@ -120,7 +120,7 @@ Rect RectFromString(const std::string& str)
         }
         CC_BREAK_IF(nPosLeft == std::string::npos || nPosRight == std::string::npos);
 
-        content = content.substr(nPosLeft + 1, nPosRight - nPosLeft - 1);
+        content          = content.substr(nPosLeft + 1, nPosRight - nPosLeft - 1);
         size_t nPointEnd = content.find('}');
         CC_BREAK_IF(nPointEnd == std::string::npos);
         nPointEnd = content.find(',', nPointEnd);
@@ -136,10 +136,10 @@ Rect RectFromString(const std::string& str)
         strArray sizeInfo;
         CC_BREAK_IF(!splitWithForm(sizeStr, sizeInfo));
 
-        float x = (float) utils::atof(pointInfo[0].c_str());
-        float y = (float) utils::atof(pointInfo[1].c_str());
-        float width  = (float) utils::atof(sizeInfo[0].c_str());
-        float height = (float) utils::atof(sizeInfo[1].c_str());
+        float x      = (float)utils::atof(pointInfo[0].c_str());
+        float y      = (float)utils::atof(pointInfo[1].c_str());
+        float width  = (float)utils::atof(sizeInfo[0].c_str());
+        float height = (float)utils::atof(sizeInfo[1].c_str());
 
         result = Rect(x, y, width, height);
     } while (0);
@@ -151,13 +151,13 @@ Vec2 PointFromString(const std::string& str)
 {
     Vec2 ret;
 
-    do 
+    do
     {
         strArray strs;
         CC_BREAK_IF(!splitWithForm(str, strs));
 
-        float x = (float) utils::atof(strs[0].c_str());
-        float y = (float) utils::atof(strs[1].c_str());
+        float x = (float)utils::atof(strs[0].c_str());
+        float y = (float)utils::atof(strs[1].c_str());
 
         ret.set(x, y);
     } while (0);
@@ -169,13 +169,13 @@ Vec2 SizeFromString(const std::string& pszContent)
 {
     Vec2 ret = Vec2::ZERO;
 
-    do 
+    do
     {
         strArray strs;
         CC_BREAK_IF(!splitWithForm(pszContent, strs));
 
-        float width  = (float) utils::atof(strs[0].c_str());
-        float height = (float) utils::atof(strs[1].c_str());
+        float width  = (float)utils::atof(strs[0].c_str());
+        float height = (float)utils::atof(strs[1].c_str());
 
         ret = Vec2(width, height);
     } while (0);

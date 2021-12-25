@@ -26,16 +26,12 @@
 #include "base/CCDirector.h"
 #include "base/CCEventDispatcher.h"
 
-
 #include "chipmunk/chipmunk.h"
-
 
 NS_CC_EXT_BEGIN
 
 PhysicsSpriteChipmunk2D::PhysicsSpriteChipmunk2D()
-: _ignoreBodyRotation(false)
-, _CPBody(nullptr)
-, _syncTransform(nullptr)
+    : _ignoreBodyRotation(false), _CPBody(nullptr), _syncTransform(nullptr)
 {}
 
 PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create()
@@ -49,11 +45,11 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create()
     {
         CC_SAFE_DELETE(pRet);
     }
-    
+
     return pRet;
 }
 
-PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D *pTexture)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D* pTexture)
 {
     PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
     if (pRet->initWithTexture(pTexture))
@@ -68,7 +64,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D *p
     return pRet;
 }
 
-PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D *pTexture, const Rect& rect)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D* pTexture, const Rect& rect)
 {
     PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
     if (pRet->initWithTexture(pTexture, rect))
@@ -83,7 +79,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D *p
     return pRet;
 }
 
-PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrame(SpriteFrame *pSpriteFrame)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrame(SpriteFrame* pSpriteFrame)
 {
     PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
     if (pRet->initWithSpriteFrame(pSpriteFrame))
@@ -98,7 +94,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrame(SpriteFr
     return pRet;
 }
 
-PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrameName(const char *pszSpriteFrameName)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrameName(const char* pszSpriteFrameName)
 {
     PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
     if (pRet->initWithSpriteFrameName(pszSpriteFrameName))
@@ -113,7 +109,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrameName(cons
     return pRet;
 }
 
-PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char *pszFileName)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char* pszFileName)
 {
     PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
     if (pRet->initWithFile(pszFileName))
@@ -128,7 +124,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char *pszFileName
     return pRet;
 }
 
-PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char *pszFileName, const Rect& rect)
+PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char* pszFileName, const Rect& rect)
 {
     PhysicsSpriteChipmunk2D* pRet = new PhysicsSpriteChipmunk2D();
     if (pRet->initWithFile(pszFileName, rect))
@@ -169,12 +165,13 @@ const Vec2& PhysicsSpriteChipmunk2D::getPosition() const
 
 void PhysicsSpriteChipmunk2D::getPosition(float* x, float* y) const
 {
-    if (x == nullptr || y == nullptr) {
+    if (x == nullptr || y == nullptr)
+    {
         return;
     }
     const Vec2& pos = getPosFromPhysics();
-    *x = pos.x;
-    *y = pos.y;
+    *x              = pos.x;
+    *y              = pos.y;
 }
 
 float PhysicsSpriteChipmunk2D::getPositionX() const
@@ -202,7 +199,7 @@ cpBody* PhysicsSpriteChipmunk2D::getCPBody() const
     return _CPBody;
 }
 
-void PhysicsSpriteChipmunk2D::setCPBody(cpBody *pBody)
+void PhysicsSpriteChipmunk2D::setCPBody(cpBody* pBody)
 {
     _CPBody = pBody;
 }
@@ -215,7 +212,7 @@ const Vec2& PhysicsSpriteChipmunk2D::getPosFromPhysics() const
 {
     static Vec2 s_physicPosion;
 
-    cpVect cpPos = cpBodyGetPosition(_CPBody);
+    cpVect cpPos   = cpBodyGetPosition(_CPBody);
     s_physicPosion = Vec2(cpPos.x, cpPos.y);
 
     return s_physicPosion;
@@ -227,7 +224,7 @@ void PhysicsSpriteChipmunk2D::setPosition(float x, float y)
     cpBodySetPosition(_CPBody, cpPos);
 }
 
-void PhysicsSpriteChipmunk2D::setPosition(const Vec2 &pos)
+void PhysicsSpriteChipmunk2D::setPosition(const Vec2& pos)
 {
     setPosition(pos.x, pos.y);
 }
@@ -262,7 +259,6 @@ void PhysicsSpriteChipmunk2D::setRotation(float fRotation)
     {
         cpBodySetAngle(_CPBody, -CC_DEGREES_TO_RADIANS(fRotation));
     }
-
 }
 
 void PhysicsSpriteChipmunk2D::syncPhysicsTransform() const
@@ -270,30 +266,44 @@ void PhysicsSpriteChipmunk2D::syncPhysicsTransform() const
     // Although scale is not used by physics engines, it is calculated just in case
     // the sprite is animated (scaled up/down) using actions.
     // For more info see: http://www.cocos2d-iphone.org/forum/topic/68990
-    
-    
+
     cpVect rot = (_ignoreBodyRotation ? cpvforangle(-CC_DEGREES_TO_RADIANS(_rotationX)) : cpBodyGetRotation(_CPBody));
-    float x = cpBodyGetPosition(_CPBody).x + rot.x * -_anchorPointInPoints.x * _scaleX - rot.y * -_anchorPointInPoints.y * _scaleY;
-    float y = cpBodyGetPosition(_CPBody).y + rot.y * -_anchorPointInPoints.x * _scaleX + rot.x * -_anchorPointInPoints.y * _scaleY;
-    
+    float x    = cpBodyGetPosition(_CPBody).x + rot.x * -_anchorPointInPoints.x * _scaleX -
+              rot.y * -_anchorPointInPoints.y * _scaleY;
+    float y = cpBodyGetPosition(_CPBody).y + rot.y * -_anchorPointInPoints.x * _scaleX +
+              rot.x * -_anchorPointInPoints.y * _scaleY;
+
     if (_ignoreAnchorPointForPosition)
     {
         x += _anchorPointInPoints.x;
         y += _anchorPointInPoints.y;
     }
-    
-    float mat[] = {  (float)rot.x * _scaleX, (float)rot.y * _scaleX, 0,  0,
-        (float)-rot.y * _scaleY, (float)rot.x * _scaleY,  0,  0,
-        0,  0,  1,  0,
-        x,    y,  0,  1};
-    
+
+    float mat[] = {(float)rot.x * _scaleX,
+                   (float)rot.y * _scaleX,
+                   0,
+                   0,
+                   (float)-rot.y * _scaleY,
+                   (float)rot.x * _scaleY,
+                   0,
+                   0,
+                   0,
+                   0,
+                   1,
+                   0,
+                   x,
+                   y,
+                   0,
+                   1};
+
     _transform.set(mat);
 }
 
 void PhysicsSpriteChipmunk2D::onEnter()
 {
     Node::onEnter();
-    _syncTransform = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, std::bind(&PhysicsSpriteChipmunk2D::afterUpdate, this, std::placeholders::_1));
+    _syncTransform = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
+        Director::EVENT_AFTER_UPDATE, std::bind(&PhysicsSpriteChipmunk2D::afterUpdate, this, std::placeholders::_1));
     _syncTransform->retain();
 }
 
@@ -310,8 +320,8 @@ void PhysicsSpriteChipmunk2D::onExit()
 void PhysicsSpriteChipmunk2D::afterUpdate(EventCustom* /*event*/)
 {
     syncPhysicsTransform();
-    
-    _transformDirty = false;
+
+    _transformDirty   = false;
     _transformUpdated = true;
     setDirtyRecursively(true);
 }

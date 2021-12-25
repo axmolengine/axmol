@@ -26,17 +26,16 @@
 #import <Foundation/Foundation.h>
 
 @interface CCDirectorCaller : NSObject {
-        id displayLink;
-        int interval;
-        BOOL isAppActive;
+    id displayLink;
+    int interval;
+    BOOL isAppActive;
     CFTimeInterval lastDisplayTime;
 }
-@property (readwrite) int interval;
--(void) startMainLoop;
--(void) stopMainLoop;
--(void) doCaller: (id) sender;
--(void) setAnimationInterval:(double)interval;
-+(id) sharedDirectorCaller;
-+(void) destroy;
+@property(readwrite) int interval;
+- (void)startMainLoop;
+- (void)stopMainLoop;
+- (void)doCaller:(id)sender;
+- (void)setAnimationInterval:(double)interval;
++ (id)sharedDirectorCaller;
++ (void)destroy;
 @end
-

@@ -29,7 +29,7 @@ USING_NS_CC;
 #include <stdlib.h>
 #include <float.h>
 #include <set>
-#include <stddef.h> // offsetof
+#include <stddef.h>  // offsetof
 #include "renderer/CCRenderer.h"
 #include "renderer/ccShaders.h"
 #include "renderer/backend/Device.h"
@@ -45,20 +45,17 @@ USING_NS_CC;
 
 NS_CC_BEGIN
 
-namespace {
-    //It's used for creating a default texture when lightMap is nullpter
-    static unsigned char cc_2x2_white_image[] = {
-        // RGBA8888
-        0xFF, 0xFF, 0xFF, 0xFF,
-        0xFF, 0xFF, 0xFF, 0xFF,
-        0xFF, 0xFF, 0xFF, 0xFF,
-        0xFF, 0xFF, 0xFF, 0xFF
-    };
-}
-
-Terrain * Terrain::create(TerrainData &parameter, CrackFixedType fixedType)
+namespace
 {
-    Terrain * terrain = new Terrain();
+// It's used for creating a default texture when lightMap is nullpter
+static unsigned char cc_2x2_white_image[] = {
+    // RGBA8888
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+}  // namespace
+
+Terrain* Terrain::create(TerrainData& parameter, CrackFixedType fixedType)
+{
+    Terrain* terrain = new Terrain();
     if (terrain->initWithTerrainData(parameter, fixedType))
     {
         terrain->autorelease();
@@ -67,19 +64,19 @@ Terrain * Terrain::create(TerrainData &parameter, CrackFixedType fixedType)
     CC_SAFE_DELETE(terrain);
     return terrain;
 }
-bool Terrain::initWithTerrainData(TerrainData &parameter, CrackFixedType fixedType)
+bool Terrain::initWithTerrainData(TerrainData& parameter, CrackFixedType fixedType)
 {
     this->setSkirtHeightRatio(parameter._skirtHeightRatio);
-    this->_terrainData = parameter;
-    this->_crackFixedType = fixedType;
+    this->_terrainData         = parameter;
+    this->_crackFixedType      = fixedType;
     this->_isCameraViewChanged = true;
-    //chunksize
+    // chunksize
     this->_chunkSize = parameter._chunkSize;
-    bool initResult = true;
+    bool initResult  = true;
 
-    //init heightmap
+    // init heightmap
     initResult &= this->initHeightMap(parameter._heightMapSrc);
-    //init textures alpha map,detail Maps
+    // init textures alpha map,detail Maps
     initResult &= this->initTextures();
     initResult &= this->initProperties();
 
@@ -94,12 +91,11 @@ void cocos2d::Terrain::setLightMap(const std::string& fileName)
     _lightMap = new Texture2D();
     _lightMap->initWithImage(image);
 
-    Texture2D::TexParams tRepeatParams;//set texture parameters
+    Texture2D::TexParams tRepeatParams;  // set texture parameters
     tRepeatParams.magFilter = tRepeatParams.minFilter = backend::SamplerFilter::LINEAR;
-    tRepeatParams.sAddressMode = backend::SamplerAddressMode::REPEAT;
-    tRepeatParams.tAddressMode = backend::SamplerAddressMode::REPEAT;
+    tRepeatParams.sAddressMode                        = backend::SamplerAddressMode::REPEAT;
+    tRepeatParams.tAddressMode                        = backend::SamplerAddressMode::REPEAT;
     _lightMap->setTexParameters(tRepeatParams);
-
 }
 
 void cocos2d::Terrain::setLightDir(const Vec3& lightDir)
@@ -113,8 +109,8 @@ bool Terrain::initProperties()
     setProgramState(new backend::ProgramState(program), false);
 
     _stateBlock.depthWrite = true;
-    _stateBlock.depthTest = true;
-    _stateBlock.cullFace = backend::CullMode::FRONT;
+    _stateBlock.depthTest  = true;
+    _stateBlock.cullFace   = backend::CullMode::FRONT;
 
     setDrawWire(false);
     setIsEnableFrustumCull(true);
@@ -122,7 +118,7 @@ bool Terrain::initProperties()
     return true;
 }
 
-void Terrain::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags)
+void Terrain::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags)
 {
     auto modelMatrix = getNodeToWorldTransform();
     if (memcmp(&modelMatrix, &_terrainModelMatrix, sizeof(Mat4)) != 0)
@@ -131,8 +127,8 @@ void Terrain::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, 
         _quadRoot->preCalculateAABB(_terrainModelMatrix);
     }
 
-    auto &projectionMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto finalMatrix = projectionMatrix * transform;
+    auto& projectionMatrix = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    auto finalMatrix       = projectionMatrix * transform;
     _programState->setUniform(_mvpMatrixLocation, &finalMatrix.m, sizeof(finalMatrix.m));
 
     _programState->setUniform(_lightDirLocation, &_lightDir, sizeof(_lightDir));
@@ -144,7 +140,7 @@ void Terrain::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, 
     }
     else
     {
-        float detailMapSize[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+        float detailMapSize[4] = {0.0f, 0.0f, 0.0f, 0.0f};
         for (int i = 0; i < _maxDetailMapValue; ++i)
         {
             _programState->setTexture(_detailMapLocation[i], i, _detailMapTextures[i]->getBackendTexture());
@@ -175,21 +171,20 @@ void Terrain::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, 
     if (memcmp(&_CameraMatrix, &camera->getViewMatrix(), sizeof(Mat4)) != 0)
     {
         _isCameraViewChanged = true;
-        _CameraMatrix = camera->getViewMatrix();
+        _CameraMatrix        = camera->getViewMatrix();
     }
-
 
     if (_isCameraViewChanged)
     {
         auto m = camera->getNodeToWorldTransform();
-        //set lod
+        // set lod
         setChunksLOD(Vec3(m.m[12], m.m[13], m.m[14]));
     }
 
     if (_isCameraViewChanged)
     {
-        _quadRoot->resetNeedDraw(true);//reset it
-        //camera frustum culling
+        _quadRoot->resetNeedDraw(true);  // reset it
+        // camera frustum culling
         if (_isEnableFrustumCull)
         {
             _quadRoot->cullByCamera(camera, _terrainModelMatrix);
@@ -200,19 +195,19 @@ void Terrain::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, 
     {
         _isCameraViewChanged = false;
     }
-
 }
 
 bool Terrain::initHeightMap(const std::string& heightMap)
 {
     _heightMapImage = new Image();
     _heightMapImage->initWithImageFile(heightMap);
-    _data = _heightMapImage->getData();
-    _imageWidth = _heightMapImage->getWidth();
+    _data        = _heightMapImage->getData();
+    _imageWidth  = _heightMapImage->getWidth();
     _imageHeight = _heightMapImage->getHeight();
 
-    //only the image size  is the Powers Of Two(POT) or POT+1
-    if ((utils::isPOT(_imageWidth) && utils::isPOT(_imageHeight)) || (utils::isPOT(_imageWidth - 1) && utils::isPOT(_imageHeight - 1)))
+    // only the image size  is the Powers Of Two(POT) or POT+1
+    if ((utils::isPOT(_imageWidth) && utils::isPOT(_imageHeight)) ||
+        (utils::isPOT(_imageWidth - 1) && utils::isPOT(_imageHeight - 1)))
     {
         int chunk_amount_y = _imageHeight / _chunkSize.height;
         int chunk_amount_x = _imageWidth / _chunkSize.width;
@@ -224,21 +219,25 @@ bool Terrain::initHeightMap(const std::string& heightMap)
         {
             for (int n = 0; n < chunk_amount_x; n++)
             {
-                _chunkesArray[m][n] = new Chunk(this);
+                _chunkesArray[m][n]        = new Chunk(this);
                 _chunkesArray[m][n]->_size = _chunkSize;
                 _chunkesArray[m][n]->generate(_imageWidth, _imageHeight, m, n, _data);
             }
         }
 
-        //calculate the neighbor
+        // calculate the neighbor
         for (int m = 0; m < chunk_amount_y; m++)
         {
             for (int n = 0; n < chunk_amount_x; n++)
             {
-                if (n - 1 >= 0) _chunkesArray[m][n]->_left = _chunkesArray[m][n - 1];
-                if (n + 1 < chunk_amount_x) _chunkesArray[m][n]->_right = _chunkesArray[m][n + 1];
-                if (m - 1 >= 0) _chunkesArray[m][n]->_back = _chunkesArray[m - 1][n];
-                if (m + 1 < chunk_amount_y) _chunkesArray[m][n]->_front = _chunkesArray[m + 1][n];
+                if (n - 1 >= 0)
+                    _chunkesArray[m][n]->_left = _chunkesArray[m][n - 1];
+                if (n + 1 < chunk_amount_x)
+                    _chunkesArray[m][n]->_right = _chunkesArray[m][n + 1];
+                if (m - 1 >= 0)
+                    _chunkesArray[m][n]->_back = _chunkesArray[m - 1][n];
+                if (m + 1 < chunk_amount_y)
+                    _chunkesArray[m][n]->_front = _chunkesArray[m + 1][n];
             }
         }
         _quadRoot = new QuadTree(0, 0, _imageWidth, _imageHeight, this);
@@ -261,16 +260,12 @@ Terrain::Terrain()
 #endif
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED,
-        [this](EventCustom*)
-    {
-        reload();
-    }
-    );
+    _backToForegroundListener =
+        EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { reload(); });
     _director->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
 #ifdef CC_USE_METAL
-    auto image = new Image();
+    auto image          = new Image();
     bool CC_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
     CCASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
     _dummyTexture = new Texture2D();
@@ -286,9 +281,9 @@ void Terrain::setChunksLOD(const Vec3& cameraPos)
     for (int m = 0; m < chunk_amount_y; m++)
         for (int n = 0; n < chunk_amount_x; n++)
         {
-            AABB aabb = _chunkesArray[m][n]->_parent->_worldSpaceAABB;
-            auto center = aabb.getCenter();
-            float dist = Vec2(center.x, center.z).distance(Vec2(cameraPos.x, cameraPos.z));
+            AABB aabb                        = _chunkesArray[m][n]->_parent->_worldSpaceAABB;
+            auto center                      = aabb.getCenter();
+            float dist                       = Vec2(center.x, center.z).distance(Vec2(cameraPos.x, cameraPos.z));
             _chunkesArray[m][n]->_currentLod = 3;
             for (int i = 0; i < 3; ++i)
             {
@@ -301,32 +296,31 @@ void Terrain::setChunksLOD(const Vec3& cameraPos)
         }
 }
 
-float Terrain::getHeight(float x, float z, Vec3 * normal) const
+float Terrain::getHeight(float x, float z, Vec3* normal) const
 {
     Vec2 pos(x, z);
 
-    //top-left
-    Vec2 tl(-1 * _terrainData._mapScale*_imageWidth / 2, -1 * _terrainData._mapScale*_imageHeight / 2);
+    // top-left
+    Vec2 tl(-1 * _terrainData._mapScale * _imageWidth / 2, -1 * _terrainData._mapScale * _imageHeight / 2);
     auto mulResult = getNodeToWorldTransform() * Vec4(tl.x, 0.0f, tl.y, 1.0f);
     tl.set(mulResult.x, mulResult.z);
 
     Vec2 to_tl = pos - tl;
 
-    //real size
-    Vec2 size(_imageWidth*_terrainData._mapScale, _imageHeight*_terrainData._mapScale);
+    // real size
+    Vec2 size(_imageWidth * _terrainData._mapScale, _imageHeight * _terrainData._mapScale);
     mulResult = getNodeToWorldTransform() * Vec4(size.x, 0.0f, size.y, 0.0f);
     size.set(mulResult.x, mulResult.z);
 
-    float width_ratio = to_tl.x / size.x;
+    float width_ratio  = to_tl.x / size.x;
     float height_ratio = to_tl.y / size.y;
 
     float image_x = width_ratio * _imageWidth;
     float image_y = height_ratio * _imageHeight;
-    float u = image_x - (int)image_x;
-    float v = image_y - (int)image_y;
-    float i = (int)image_x;
-    float j = (int)image_y;
-
+    float u       = image_x - (int)image_x;
+    float v       = image_y - (int)image_y;
+    float i       = (int)image_x;
+    float j       = (int)image_y;
 
     if (image_x >= _imageWidth - 1 || image_y >= _imageHeight - 1 || image_x < 0 || image_y < 0)
     {
@@ -338,19 +332,23 @@ float Terrain::getHeight(float x, float z, Vec3 * normal) const
     }
     else
     {
-        float a = getImageHeight(i, j)*getScaleY();
-        float b = getImageHeight(i, j + 1)*getScaleY();
-        float c = getImageHeight(i + 1, j)*getScaleY();
-        float d = getImageHeight(i + 1, j + 1)*getScaleY();
+        float a = getImageHeight(i, j) * getScaleY();
+        float b = getImageHeight(i, j + 1) * getScaleY();
+        float c = getImageHeight(i + 1, j) * getScaleY();
+        float d = getImageHeight(i + 1, j + 1) * getScaleY();
         if (normal)
         {
             normal->x = c - b;
             normal->y = 2;
             normal->z = d - a;
             normal->normalize();
-            //(*normal) = (1-u)*(1-v)*getNormal(i,j)+ (1-u)*v*getNormal(i,j+1) + u*(1-v)*getNormal(i+1,j)+ u*v*getNormal(i+1,j+1);
+            //(*normal) = (1-u)*(1-v)*getNormal(i,j)+ (1-u)*v*getNormal(i,j+1) + u*(1-v)*getNormal(i+1,j)+
+            //u*v*getNormal(i+1,j+1);
         }
-        float result = (1 - u)*(1 - v)*getImageHeight(i, j)*getScaleY() + (1 - u)*v*getImageHeight(i, j + 1)*getScaleY() + u * (1 - v)*getImageHeight(i + 1, j)*getScaleY() + u * v*getImageHeight(i + 1, j + 1)*getScaleY();
+        float result = (1 - u) * (1 - v) * getImageHeight(i, j) * getScaleY() +
+                       (1 - u) * v * getImageHeight(i, j + 1) * getScaleY() +
+                       u * (1 - v) * getImageHeight(i + 1, j) * getScaleY() +
+                       u * v * getImageHeight(i + 1, j + 1) * getScaleY();
         return result;
     }
 }
@@ -368,7 +366,7 @@ float Terrain::getImageHeight(int pixel_x, int pixel_y) const
     case backend::PixelFormat::BGRA8:
         byte_stride = 4;
         break;
-    case  backend::PixelFormat::RGB8:
+    case backend::PixelFormat::RGB8:
         byte_stride = 3;
         break;
     case backend::PixelFormat::L8:
@@ -377,7 +375,8 @@ float Terrain::getImageHeight(int pixel_x, int pixel_y) const
     default:
         break;
     }
-    return _data[(pixel_y*_imageWidth + pixel_x)*byte_stride] * 1.0 / 255 * _terrainData._mapHeight - 0.5*_terrainData._mapHeight;
+    return _data[(pixel_y * _imageWidth + pixel_x) * byte_stride] * 1.0 / 255 * _terrainData._mapHeight -
+           0.5 * _terrainData._mapHeight;
 }
 
 void Terrain::loadVertices()
@@ -390,15 +389,17 @@ void Terrain::loadVertices()
         {
             float height = getImageHeight(j, i);
             TerrainVertexData v;
-            v._position = Vec3(j*_terrainData._mapScale - _imageWidth / 2 * _terrainData._mapScale, //x
-                height, //y
-                i*_terrainData._mapScale - _imageHeight / 2 * _terrainData._mapScale);//z
-            v._texcoord = Tex2F(j*1.0 / _imageWidth, i*1.0 / _imageHeight);
+            v._position = Vec3(j * _terrainData._mapScale - _imageWidth / 2 * _terrainData._mapScale,    // x
+                               height,                                                                   // y
+                               i * _terrainData._mapScale - _imageHeight / 2 * _terrainData._mapScale);  // z
+            v._texcoord = Tex2F(j * 1.0 / _imageWidth, i * 1.0 / _imageHeight);
             _vertices.push_back(v);
 
-            //update the min & max height;
-            if (height > _maxHeight) _maxHeight = height;
-            if (height < _minHeight) _minHeight = height;
+            // update the min & max height;
+            if (height > _maxHeight)
+                _maxHeight = height;
+            if (height < _minHeight)
+                _minHeight = height;
         }
     }
 }
@@ -406,7 +407,7 @@ void Terrain::loadVertices()
 void Terrain::calculateNormal()
 {
     _indices.clear();
-    //we generate whole terrain indices(global indices) for correct normal calculate
+    // we generate whole terrain indices(global indices) for correct normal calculate
     for (int i = 0; i < _imageHeight - 1; i += 1)
     {
         for (int j = 0; j < _imageWidth - 1; j += 1)
@@ -422,12 +423,13 @@ void Terrain::calculateNormal()
             _indices.push_back(nLocIndex + _imageWidth + 1);
         }
     }
-    for (size_t i = 0, size = _indices.size(); i < size; i += 3) {
+    for (size_t i = 0, size = _indices.size(); i < size; i += 3)
+    {
         unsigned int Index0 = _indices[i];
         unsigned int Index1 = _indices[i + 1];
         unsigned int Index2 = _indices[i + 2];
-        Vec3 v1 = _vertices[Index1]._position - _vertices[Index0]._position;
-        Vec3 v2 = _vertices[Index2]._position - _vertices[Index0]._position;
+        Vec3 v1             = _vertices[Index1]._position - _vertices[Index0]._position;
+        Vec3 v2             = _vertices[Index2]._position - _vertices[Index0]._position;
         Vec3 Normal;
         Vec3::cross(v1, v2, &Normal);
         Normal.normalize();
@@ -436,10 +438,11 @@ void Terrain::calculateNormal()
         _vertices[Index2]._normal += Normal;
     }
 
-    for (auto &vertex : _vertices) {
+    for (auto& vertex : _vertices)
+    {
         vertex._normal.normalize();
     }
-    //global indices no need at all
+    // global indices no need at all
     _indices.clear();
 }
 
@@ -492,10 +495,10 @@ Terrain::~Terrain()
 
 cocos2d::Vec3 Terrain::getNormal(int pixel_x, int pixel_y) const
 {
-    float a = getImageHeight(pixel_x, pixel_y)*getScaleY();
-    float b = getImageHeight(pixel_x, pixel_y + 1)*getScaleY();
-    float c = getImageHeight(pixel_x + 1, pixel_y)*getScaleY();
-    float d = getImageHeight(pixel_x + 1, pixel_y + 1)*getScaleY();
+    float a = getImageHeight(pixel_x, pixel_y) * getScaleY();
+    float b = getImageHeight(pixel_x, pixel_y + 1) * getScaleY();
+    float c = getImageHeight(pixel_x + 1, pixel_y) * getScaleY();
+    float d = getImageHeight(pixel_x + 1, pixel_y + 1) * getScaleY();
     Vec3 normal;
     normal.x = c - b;
     normal.y = 2;
@@ -504,7 +507,7 @@ cocos2d::Vec3 Terrain::getNormal(int pixel_x, int pixel_y) const
     return normal;
 }
 
-cocos2d::Vec3 Terrain::getIntersectionPoint(const Ray & ray) const
+cocos2d::Vec3 Terrain::getIntersectionPoint(const Ray& ray) const
 {
     Vec3 collisionPoint;
     if (getIntersectionPoint(ray, collisionPoint))
@@ -517,22 +520,22 @@ cocos2d::Vec3 Terrain::getIntersectionPoint(const Ray & ray) const
     }
 }
 
-bool Terrain::getIntersectionPoint(const Ray & ray_, Vec3 & intersectionPoint) const
+bool Terrain::getIntersectionPoint(const Ray& ray_, Vec3& intersectionPoint) const
 {
     // convert ray from world space to local space
     Ray ray(ray_);
     getWorldToNodeTransform().transformPoint(&(ray._origin));
 
-    std::set<Chunk *> closeList;
+    std::set<Chunk*> closeList;
     Vec2 start = Vec2(ray_._origin.x, ray_._origin.z);
-    Vec2 dir = Vec2(ray._direction.x, ray._direction.z);
-    start = convertToTerrainSpace(start);
+    Vec2 dir   = Vec2(ray._direction.x, ray._direction.z);
+    start      = convertToTerrainSpace(start);
     start.x /= (_terrainData._chunkSize.width + 1);
     start.y /= (_terrainData._chunkSize.height + 1);
-    Vec2 delta = dir.getNormalized();
-    auto width = float(_imageWidth) / (_terrainData._chunkSize.width + 1);
-    auto height = float(_imageHeight) / (_terrainData._chunkSize.height + 1);
-    bool hasIntersect = false;
+    Vec2 delta             = dir.getNormalized();
+    auto width             = float(_imageWidth) / (_terrainData._chunkSize.width + 1);
+    auto height            = float(_imageHeight) / (_terrainData._chunkSize.height + 1);
+    bool hasIntersect      = false;
     float intersectionDist = FLT_MAX;
     Vec3 tmpIntersectionPoint;
     for (;;)
@@ -541,8 +544,10 @@ bool Terrain::getIntersectionPoint(const Ray & ray_, Vec3 & intersectionPoint) c
         int x2 = ceilf(start.x);
         int y1 = floorf(start.y);
         int y2 = ceilf(start.y);
-        for (int x = x1; x <= x2; x++) {
-            for (int y = y1; y <= y2; y++) {
+        for (int x = x1; x <= x2; x++)
+        {
+            for (int y = y1; y <= y2; y++)
+            {
                 auto chunk = getChunkByIndex(x, y);
                 if (chunk)
                 {
@@ -553,8 +558,8 @@ bool Terrain::getIntersectionPoint(const Ray & ray_, Vec3 & intersectionPoint) c
                             float dist = (ray._origin - tmpIntersectionPoint).length();
                             if (intersectionDist > dist)
                             {
-                                hasIntersect = true;
-                                intersectionDist = dist;
+                                hasIntersect      = true;
+                                intersectionDist  = dist;
                                 intersectionPoint = tmpIntersectionPoint;
                             }
                         }
@@ -586,19 +591,19 @@ cocos2d::Vec2 Terrain::convertToTerrainSpace(const Vec2& worldSpaceXZ) const
 {
     Vec2 pos(worldSpaceXZ.x, worldSpaceXZ.y);
 
-    //top-left
-    Vec2 tl(-1 * _terrainData._mapScale*_imageWidth / 2, -1 * _terrainData._mapScale*_imageHeight / 2);
-    auto result = getNodeToWorldTransform()*Vec4(tl.x, 0.0f, tl.y, 1.0f);
+    // top-left
+    Vec2 tl(-1 * _terrainData._mapScale * _imageWidth / 2, -1 * _terrainData._mapScale * _imageHeight / 2);
+    auto result = getNodeToWorldTransform() * Vec4(tl.x, 0.0f, tl.y, 1.0f);
     tl.set(result.x, result.z);
 
     Vec2 to_tl = pos - tl;
 
-    //real size
-    Vec2 size(_imageWidth*_terrainData._mapScale, _imageHeight*_terrainData._mapScale);
-    result = getNodeToWorldTransform()*Vec4(size.x, 0.0f, size.y, 0.0f);
+    // real size
+    Vec2 size(_imageWidth * _terrainData._mapScale, _imageHeight * _terrainData._mapScale);
+    result = getNodeToWorldTransform() * Vec4(size.x, 0.0f, size.y, 0.0f);
     size.set(result.x, result.z);
 
-    float width_ratio = to_tl.x / size.x;
+    float width_ratio  = to_tl.x / size.x;
     float height_ratio = to_tl.y / size.y;
 
     float image_x = width_ratio * _imageWidth;
@@ -640,32 +645,34 @@ cocos2d::AABB Terrain::getAABB()
     return _quadRoot->_worldSpaceAABB;
 }
 
-Terrain::QuadTree * Terrain::getQuadTree()
+Terrain::QuadTree* Terrain::getQuadTree()
 {
     return _quadRoot;
 }
-
 
 std::vector<float> Terrain::getHeightData() const
 {
     std::vector<float> data;
     data.resize(_imageWidth * _imageHeight);
-    for (int i = 0; i < _imageHeight; ++i) {
-        for (int j = 0; j < _imageWidth; j++) {
-            int idx = i * _imageWidth + j;
+    for (int i = 0; i < _imageHeight; ++i)
+    {
+        for (int j = 0; j < _imageWidth; j++)
+        {
+            int idx   = i * _imageWidth + j;
             data[idx] = (_vertices[idx]._position.y);
         }
     }
     return data;
 }
 
-Terrain::Chunk * cocos2d::Terrain::getChunkByIndex(int x, int y) const
+Terrain::Chunk* cocos2d::Terrain::getChunkByIndex(int x, int y) const
 {
-    if (x < 0 || y < 0 || x >= MAX_CHUNKES || y >= MAX_CHUNKES) return nullptr;
+    if (x < 0 || y < 0 || x >= MAX_CHUNKES || y >= MAX_CHUNKES)
+        return nullptr;
     return _chunkesArray[y][x];
 }
 
-void Terrain::setAlphaMap(cocos2d::Texture2D * newAlphaMapTexture)
+void Terrain::setAlphaMap(cocos2d::Texture2D* newAlphaMapTexture)
 {
     CC_SAFE_RETAIN(newAlphaMapTexture);
     CC_SAFE_RELEASE(_alphaMap);
@@ -685,18 +692,18 @@ void Terrain::setDetailMap(unsigned int index, DetailMap detailMap)
         _detailMapTextures[index]->release();
     }
     _detailMapTextures[index] = new Texture2D();
-    auto textImage = new Image();
+    auto textImage            = new Image();
     textImage->initWithImageFile(detailMap._detailMapSrc);
     _detailMapTextures[index]->initWithImage(textImage);
     delete textImage;
 }
 
-Terrain::ChunkIndices Terrain::lookForIndicesLOD(int neighborLod[4], int selfLod, bool * result)
+Terrain::ChunkIndices Terrain::lookForIndicesLOD(int neighborLod[4], int selfLod, bool* result)
 {
     (*result) = false;
     ChunkIndices tmp;
     tmp._indexBuffer = nullptr;
-    tmp._size = 0;
+    tmp._size        = 0;
     if (_chunkLodIndicesSet.empty())
     {
         (*result) = false;
@@ -720,14 +727,15 @@ Terrain::ChunkIndices Terrain::lookForIndicesLOD(int neighborLod[4], int selfLod
     return tmp;
 }
 
-Terrain::ChunkIndices Terrain::insertIndicesLOD(int neighborLod[4], int selfLod, uint16_t * indices, int size)
+Terrain::ChunkIndices Terrain::insertIndicesLOD(int neighborLod[4], int selfLod, uint16_t* indices, int size)
 {
     ChunkLODIndices lodIndices;
     memcpy(lodIndices._relativeLod, neighborLod, sizeof(int[4]));
-    lodIndices._relativeLod[4] = selfLod;
+    lodIndices._relativeLod[4]     = selfLod;
     lodIndices._chunkIndices._size = size;
 
-    auto buffer = backend::Device::getInstance()->newBuffer(sizeof(uint16_t) * size, backend::BufferType::INDEX, backend::BufferUsage::STATIC);
+    auto buffer = backend::Device::getInstance()->newBuffer(sizeof(uint16_t) * size, backend::BufferType::INDEX,
+                                                            backend::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
     CC_SAFE_RELEASE_NULL(lodIndices._chunkIndices._indexBuffer);
@@ -736,11 +744,11 @@ Terrain::ChunkIndices Terrain::insertIndicesLOD(int neighborLod[4], int selfLod,
     return lodIndices._chunkIndices;
 }
 
-Terrain::ChunkIndices Terrain::lookForIndicesLODSkrit(int selfLod, bool * result)
+Terrain::ChunkIndices Terrain::lookForIndicesLODSkrit(int selfLod, bool* result)
 {
     ChunkIndices badResult;
     badResult._indexBuffer = nullptr;
-    badResult._size = 0;
+    badResult._size        = 0;
     if (this->_chunkLodIndicesSkirtSet.empty())
     {
         (*result) = false;
@@ -758,14 +766,15 @@ Terrain::ChunkIndices Terrain::lookForIndicesLODSkrit(int selfLod, bool * result
     return badResult;
 }
 
-Terrain::ChunkIndices Terrain::insertIndicesLODSkirt(int selfLod, uint16_t * indices, int size)
+Terrain::ChunkIndices Terrain::insertIndicesLODSkirt(int selfLod, uint16_t* indices, int size)
 {
     ChunkLODIndicesSkirt skirtIndices;
-    skirtIndices._selfLod = selfLod;
+    skirtIndices._selfLod            = selfLod;
     skirtIndices._chunkIndices._size = size;
 
-    auto buffer = backend::Device::getInstance()->newBuffer(sizeof(uint16_t) * size, backend::BufferType::INDEX, backend::BufferUsage::STATIC);
-    buffer->updateData(indices, sizeof(uint16_t)*size);
+    auto buffer = backend::Device::getInstance()->newBuffer(sizeof(uint16_t) * size, backend::BufferType::INDEX,
+                                                            backend::BufferUsage::STATIC);
+    buffer->updateData(indices, sizeof(uint16_t) * size);
 
     CC_SAFE_RELEASE_NULL(skirtIndices._chunkIndices._indexBuffer);
     skirtIndices._chunkIndices._indexBuffer = buffer;
@@ -788,22 +797,24 @@ void Terrain::onEnter()
 
 void Terrain::cacheUniformAttribLocation()
 {
-    auto vertexLayout = _programState->getVertexLayout();
+    auto vertexLayout         = _programState->getVertexLayout();
     const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter = attributeInfo.find("a_position");
-    if(iter != attributeInfo.end())
+    auto iter                 = attributeInfo.find("a_position");
+    if (iter != attributeInfo.end())
     {
         vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
     }
     iter = attributeInfo.find("a_texCoord");
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, offsetof(TerrainVertexData, _texcoord), false);
+        vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
+                                   offsetof(TerrainVertexData, _texcoord), false);
     }
     iter = attributeInfo.find("a_normal");
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_normal", iter->second.location, backend::VertexFormat::FLOAT3, offsetof(TerrainVertexData, _normal), false);
+        vertexLayout->setAttribute("a_normal", iter->second.location, backend::VertexFormat::FLOAT3,
+                                   offsetof(TerrainVertexData, _normal), false);
     }
     vertexLayout->setLayout(sizeof(TerrainVertexData));
 
@@ -815,7 +826,7 @@ void Terrain::cacheUniformAttribLocation()
     _detailMapSizeLocation.reset();
 
     _alphaIsHasAlphaMapLocation = _programState->getUniformLocation("u_has_alpha");
-    _lightMapCheckLocation = _programState->getUniformLocation("u_has_light_map");
+    _lightMapCheckLocation      = _programState->getUniformLocation("u_has_light_map");
     if (!_alphaMap)
     {
         _detailMapLocation[0] = _programState->getUniformLocation("u_texture0");
@@ -829,12 +840,12 @@ void Terrain::cacheUniformAttribLocation()
             _detailMapLocation[i] = _programState->getUniformLocation(str);
         }
 
-        _detailMapSizeLocation = _programState->getUniformLocation("u_detailSize"); //float[4]
+        _detailMapSizeLocation = _programState->getUniformLocation("u_detailSize");  // float[4]
 
         _alphaMapLocation = _programState->getUniformLocation("u_alphaMap");
     }
-    _lightMapLocation = _programState->getUniformLocation("u_lightMap");
-    _lightDirLocation = _programState->getUniformLocation("u_lightDir");
+    _lightMapLocation  = _programState->getUniformLocation("u_lightMap");
+    _lightDirLocation  = _programState->getUniformLocation("u_lightDir");
     _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
 }
 
@@ -856,22 +867,22 @@ bool Terrain::initTextures()
         texture->initWithImage(textImage);
         texture->generateMipmap();
         _detailMapTextures[0] = texture;
-        texParam.minFilter = backend::SamplerFilter::LINEAR;
-        texParam.magFilter = backend::SamplerFilter::LINEAR;
+        texParam.minFilter    = backend::SamplerFilter::LINEAR;
+        texParam.magFilter    = backend::SamplerFilter::LINEAR;
         texture->setTexParameters(texParam);
         delete textImage;
     }
     else
     {
-        //alpha map
+        // alpha map
         auto image = new Image();
         image->initWithImageFile(_terrainData._alphaMapSrc);
         _alphaMap = new Texture2D();
         _alphaMap->initWithImage(image);
         texParam.sAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
         texParam.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
-        texParam.minFilter = backend::SamplerFilter::LINEAR;
-        texParam.magFilter = backend::SamplerFilter::LINEAR;
+        texParam.minFilter    = backend::SamplerFilter::LINEAR;
+        texParam.magFilter    = backend::SamplerFilter::LINEAR;
         _alphaMap->setTexParameters(texParam);
         delete image;
 
@@ -887,8 +898,8 @@ bool Terrain::initTextures()
 
             texParam.sAddressMode = backend::SamplerAddressMode::REPEAT;
             texParam.tAddressMode = backend::SamplerAddressMode::REPEAT;
-            texParam.minFilter = backend::SamplerFilter::LINEAR;
-            texParam.magFilter = backend::SamplerFilter::LINEAR;
+            texParam.minFilter    = backend::SamplerFilter::LINEAR;
+            texParam.magFilter    = backend::SamplerFilter::LINEAR;
             texture->setTexParameters(texParam);
         }
     }
@@ -916,22 +927,25 @@ void Terrain::reload()
 
 void Terrain::Chunk::finish()
 {
-    //generate two VBO ,the first for vertices, we just setup datas once ,won't changed at all
-    //the second vbo for the indices, because we use level of detail technique to each chunk, so we will modified frequently
+    // generate two VBO ,the first for vertices, we just setup datas once ,won't changed at all
+    // the second vbo for the indices, because we use level of detail technique to each chunk, so we will modified
+    // frequently
 
     CC_SAFE_RELEASE_NULL(_buffer);
-    _buffer = backend::Device::getInstance()->newBuffer(sizeof(TerrainVertexData) * _originalVertices.size(), backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+    _buffer = backend::Device::getInstance()->newBuffer(sizeof(TerrainVertexData) * _originalVertices.size(),
+                                                        backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
 
-    _buffer->updateData(&_originalVertices[0], sizeof(TerrainVertexData)*_originalVertices.size());
+    _buffer->updateData(&_originalVertices[0], sizeof(TerrainVertexData) * _originalVertices.size());
 
     calculateSlope();
 
     for (int i = 0; i < 4; ++i)
     {
         int step = 1 << _currentLod;
-        //reserve the indices size, the first part is the core part of the chunk, the second part & third part is for fix crack
-        int indicesAmount = (_terrain->_chunkSize.width / step + 1)*(_terrain->_chunkSize.height / step + 1) * 6 + (_terrain->_chunkSize.height / step) * 6
-            + (_terrain->_chunkSize.width / step) * 6;
+        // reserve the indices size, the first part is the core part of the chunk, the second part & third part is for
+        // fix crack
+        int indicesAmount = (_terrain->_chunkSize.width / step + 1) * (_terrain->_chunkSize.height / step + 1) * 6 +
+                            (_terrain->_chunkSize.height / step) * 6 + (_terrain->_chunkSize.width / step) * 6;
         _lod[i]._indices.reserve(indicesAmount);
     }
     _oldLod = -1;
@@ -954,20 +968,19 @@ void Terrain::Chunk::bindAndDraw()
         default:
             break;
         }
-
     }
 
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
     CCASSERT(_buffer && _chunkIndices._indexBuffer, "buffer should not be nullptr");
     _command.setIndexBuffer(_chunkIndices._indexBuffer, backend::IndexFormat::U_SHORT);
     _command.setVertexBuffer(_buffer);
-    _command.getPipelineDescriptor().programState = _terrain->_programState; 
+    _command.getPipelineDescriptor().programState = _terrain->_programState;
     _command.setIndexDrawInfo(0, _chunkIndices._size);
     renderer->addCommand(&_command);
     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _chunkIndices._size);
 }
 
-void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const unsigned char * /*data*/)
+void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const unsigned char* /*data*/)
 {
     _posY = m;
     _posX = n;
@@ -975,80 +988,88 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
     {
     case CrackFixedType::SKIRT:
     {
-        for (int i = _size.height*m; i <= _size.height*(m + 1); ++i)
+        for (int i = _size.height * m; i <= _size.height * (m + 1); ++i)
         {
-            if (i >= imageHei) break;
-            for (int j = _size.width*n; j <= _size.width*(n + 1); j++)
+            if (i >= imageHei)
+                break;
+            for (int j = _size.width * n; j <= _size.width * (n + 1); j++)
             {
-                if (j >= imgWidth)break;
-                auto v = _terrain->_vertices[i*imgWidth + j];
+                if (j >= imgWidth)
+                    break;
+                auto v = _terrain->_vertices[i * imgWidth + j];
                 _originalVertices.push_back(v);
             }
         }
         // add four skirts
 
-        float skirtHeight = _terrain->_skirtRatio *_terrain->_terrainData._mapScale * 8;
+        float skirtHeight = _terrain->_skirtRatio * _terrain->_terrainData._mapScale * 8;
         //#1
         _terrain->_skirtVerticesOffset[0] = (int)_originalVertices.size();
-        for (int i = _size.height*m; i <= _size.height*(m + 1); ++i)
+        for (int i = _size.height * m; i <= _size.height * (m + 1); ++i)
         {
-            auto v = _terrain->_vertices[i*imgWidth + _size.width*(n + 1)];
+            auto v = _terrain->_vertices[i * imgWidth + _size.width * (n + 1)];
             v._position.y -= skirtHeight;
             _originalVertices.push_back(v);
         }
 
         //#2
         _terrain->_skirtVerticesOffset[1] = (int)_originalVertices.size();
-        for (int j = _size.width*n; j <= _size.width*(n + 1); j++)
+        for (int j = _size.width * n; j <= _size.width * (n + 1); j++)
         {
-            auto v = _terrain->_vertices[_size.height*(m + 1)*imgWidth + j];
+            auto v = _terrain->_vertices[_size.height * (m + 1) * imgWidth + j];
             v._position.y -= skirtHeight;
             _originalVertices.push_back(v);
         }
 
         //#3
         _terrain->_skirtVerticesOffset[2] = (int)_originalVertices.size();
-        for (int i = _size.height*m; i <= _size.height*(m + 1); ++i)
+        for (int i = _size.height * m; i <= _size.height * (m + 1); ++i)
         {
-            auto v = _terrain->_vertices[i*imgWidth + _size.width*n];
+            auto v = _terrain->_vertices[i * imgWidth + _size.width * n];
             v._position.y -= skirtHeight;
             _originalVertices.push_back(v);
         }
 
         //#4
         _terrain->_skirtVerticesOffset[3] = (int)_originalVertices.size();
-        for (int j = _size.width*n; j <= _size.width*(n + 1); j++)
+        for (int j = _size.width * n; j <= _size.width * (n + 1); j++)
         {
-            auto v = _terrain->_vertices[_size.height*m*imgWidth + j];
+            auto v = _terrain->_vertices[_size.height * m * imgWidth + j];
             v._position.y -= skirtHeight;
-            //v.position.y = -5;
+            // v.position.y = -5;
             _originalVertices.push_back(v);
         }
     }
     break;
     case CrackFixedType::INCREASE_LOWER:
     {
-        for (int i = _size.height*m; i <= _size.height*(m + 1); ++i)
+        for (int i = _size.height * m; i <= _size.height * (m + 1); ++i)
         {
-            if (i >= imageHei) break;
-            for (int j = _size.width*n; j <= _size.width*(n + 1); j++)
+            if (i >= imageHei)
+                break;
+            for (int j = _size.width * n; j <= _size.width * (n + 1); j++)
             {
-                if (j >= imgWidth)break;
-                auto v = _terrain->_vertices[i*imgWidth + j];
+                if (j >= imgWidth)
+                    break;
+                auto v = _terrain->_vertices[i * imgWidth + j];
                 _originalVertices.push_back(v);
             }
         }
     }
     break;
     }
-    //store triangle:
+    // store triangle:
     for (int i = 0; i < _size.height; ++i)
     {
         for (int j = 0; j < _size.width; j++)
         {
             int nLocIndex = i * (_size.width + 1) + j;
-            Triangle a(_originalVertices[nLocIndex]._position, _originalVertices[nLocIndex + 1 * (_size.width + 1)]._position, _originalVertices[nLocIndex + 1]._position);
-            Triangle b(_originalVertices[nLocIndex + 1]._position, _originalVertices[nLocIndex + 1 * (_size.width + 1)]._position, _originalVertices[nLocIndex + 1 * (_size.width + 1) + 1]._position);
+            Triangle a(_originalVertices[nLocIndex]._position,
+                       _originalVertices[nLocIndex + 1 * (_size.width + 1)]._position,
+                       _originalVertices[nLocIndex + 1]._position);
+            Triangle b(_originalVertices[nLocIndex + 1]._position,
+                       _originalVertices[nLocIndex + 1 * (_size.width + 1)]._position,
+                       _originalVertices[nLocIndex + 1 * (_size.width + 1) + 1]._position);
 
             _trianglesList.push_back(a);
             _trianglesList.push_back(b);
@@ -1059,15 +1080,15 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
     finish();
 }
 
-Terrain::Chunk::Chunk(Terrain *terrain)
+Terrain::Chunk::Chunk(Terrain* terrain)
 {
-    _terrain = terrain;
+    _terrain    = terrain;
     _currentLod = 0;
-    _left = nullptr;
-    _right = nullptr;
-    _back = nullptr;
-    _front = nullptr;
-    _oldLod = -1;
+    _left       = nullptr;
+    _right      = nullptr;
+    _back       = nullptr;
+    _front      = nullptr;
+    _oldLod     = -1;
     for (int i = 0; i < 4; ++i)
     {
         _neighborOldLOD[i] = -1;
@@ -1078,11 +1099,10 @@ Terrain::Chunk::Chunk(Terrain *terrain)
     _command.setPrimitiveType(MeshCommand::PrimitiveType::TRIANGLE);
     _command.setDrawType(MeshCommand::DrawType::ELEMENT);
 
-
     _command.setBeforeCallback(CC_CALLBACK_0(Terrain::onBeforeDraw, terrain));
     _command.setAfterCallback(CC_CALLBACK_0(Terrain::onAfterDraw, terrain));
 
-    auto &pipelineDescriptor = _command.getPipelineDescriptor();
+    auto& pipelineDescriptor                        = _command.getPipelineDescriptor();
     pipelineDescriptor.blendDescriptor.blendEnabled = false;
 }
 
@@ -1093,26 +1113,38 @@ void Terrain::Chunk::updateIndicesLOD()
     {
         currentNeighborLOD[0] = _left->_currentLod;
     }
-    else { currentNeighborLOD[0] = -1; }
+    else
+    {
+        currentNeighborLOD[0] = -1;
+    }
     if (_right)
     {
         currentNeighborLOD[1] = _right->_currentLod;
     }
-    else { currentNeighborLOD[1] = -1; }
+    else
+    {
+        currentNeighborLOD[1] = -1;
+    }
     if (_back)
     {
         currentNeighborLOD[2] = _back->_currentLod;
     }
-    else { currentNeighborLOD[2] = -1; }
+    else
+    {
+        currentNeighborLOD[2] = -1;
+    }
     if (_front)
     {
         currentNeighborLOD[3] = _front->_currentLod;
     }
-    else { currentNeighborLOD[3] = -1; }
+    else
+    {
+        currentNeighborLOD[3] = -1;
+    }
 
     if (_oldLod == _currentLod && (memcmp(currentNeighborLOD, _neighborOldLOD, sizeof(currentNeighborLOD)) == 0))
     {
-        return;// no need to update
+        return;  // no need to update
     }
     bool isOk;
     _chunkIndices = _terrain->lookForIndicesLOD(currentNeighborLOD, _currentLod, &isOk);
@@ -1121,16 +1153,16 @@ void Terrain::Chunk::updateIndicesLOD()
         return;
     }
     memcpy(_neighborOldLOD, currentNeighborLOD, sizeof(currentNeighborLOD));
-    _oldLod = _currentLod;
+    _oldLod   = _currentLod;
     int gridY = _size.height;
     int gridX = _size.width;
 
     int step = 1 << _currentLod;
-    if ((_left&&_left->_currentLod > _currentLod) || (_right&&_right->_currentLod > _currentLod)
-        || (_back&&_back->_currentLod > _currentLod) || (_front && _front->_currentLod > _currentLod))
-        //need update indices.
+    if ((_left && _left->_currentLod > _currentLod) || (_right && _right->_currentLod > _currentLod) ||
+        (_back && _back->_currentLod > _currentLod) || (_front && _front->_currentLod > _currentLod))
+    // need update indices.
     {
-        //t-junction inner
+        // t-junction inner
         _lod[_currentLod]._indices.clear();
         for (int i = step; i < gridY - step; i += step)
         {
@@ -1146,139 +1178,148 @@ void Terrain::Chunk::updateIndicesLOD()
                 _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1) + step);
             }
         }
-        //fix T-crack
+        // fix T-crack
         int next_step = 1 << (_currentLod + 1);
-        if (_left&&_left->_currentLod > _currentLod)//left
+        if (_left && _left->_currentLod > _currentLod)  // left
         {
             for (int i = 0; i < gridY; i += next_step)
             {
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + step);
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1));
-                _lod[_currentLod]._indices.push_back((i + next_step)*(gridX + 1));
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + step);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1));
+                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1));
 
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + step);
-                _lod[_currentLod]._indices.push_back((i + next_step)*(gridX + 1));
-                _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1) + step);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + step);
+                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1));
+                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + step);
 
-                _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1) + step);
-                _lod[_currentLod]._indices.push_back((i + next_step)*(gridX + 1));
-                _lod[_currentLod]._indices.push_back((i + next_step)*(gridX + 1) + step);
+                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + step);
+                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1));
+                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1) + step);
             }
         }
-        else {
+        else
+        {
             int start = 0;
-            int end = gridY;
-            if (_front&&_front->_currentLod > _currentLod) end -= step;
-            if (_back&&_back->_currentLod > _currentLod) start += step;
+            int end   = gridY;
+            if (_front && _front->_currentLod > _currentLod)
+                end -= step;
+            if (_back && _back->_currentLod > _currentLod)
+                start += step;
             for (int i = start; i < end; i += step)
             {
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + step);
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1));
-                _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1));
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + step);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1));
+                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1));
 
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + step);
-                _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1));
-                _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1) + step);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + step);
+                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1));
+                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + step);
             }
         }
 
-        if (_right&&_right->_currentLod > _currentLod)//LEFT
+        if (_right && _right->_currentLod > _currentLod)  // LEFT
         {
             for (int i = 0; i < gridY; i += next_step)
             {
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + gridX);
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + gridX - step);
-                _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + gridX - step);
 
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + gridX);
-                _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1) + gridX - step);
-                _lod[_currentLod]._indices.push_back((i + next_step)*(gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1) + gridX - step);
 
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + gridX);
-                _lod[_currentLod]._indices.push_back((i + next_step)*(gridX + 1) + gridX - step);
-                _lod[_currentLod]._indices.push_back((i + next_step)*(gridX + 1) + gridX);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1) + gridX);
             }
         }
-        else {
+        else
+        {
             int start = 0;
-            int end = gridY;
-            if (_front&&_front->_currentLod > _currentLod) end -= step;
-            if (_back&&_back->_currentLod > _currentLod) start += step;
+            int end   = gridY;
+            if (_front && _front->_currentLod > _currentLod)
+                end -= step;
+            if (_back && _back->_currentLod > _currentLod)
+                start += step;
             for (int i = start; i < end; i += step)
             {
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + gridX);
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + gridX - step);
-                _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + gridX - step);
 
-                _lod[_currentLod]._indices.push_back(i*(gridX + 1) + gridX);
-                _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1) + gridX - step);
-                _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1) + gridX);
+                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + gridX);
             }
         }
-        if (_front&&_front->_currentLod > _currentLod)//front
+        if (_front && _front->_currentLod > _currentLod)  // front
         {
             for (int i = 0; i < gridX; i += next_step)
             {
-                _lod[_currentLod]._indices.push_back((gridY - step)*(gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(gridY*(gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back((gridY - step)*(gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i);
+                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i);
+                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + step);
 
-                _lod[_currentLod]._indices.push_back((gridY - step)*(gridX + 1) + i + step);
-                _lod[_currentLod]._indices.push_back(gridY*(gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(gridY*(gridX + 1) + i + next_step);
+                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i);
+                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i + next_step);
 
-                _lod[_currentLod]._indices.push_back((gridY - step)*(gridX + 1) + i + step);
-                _lod[_currentLod]._indices.push_back(gridY*(gridX + 1) + i + next_step);
-                _lod[_currentLod]._indices.push_back((gridY - step)*(gridX + 1) + i + next_step);
+                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i + next_step);
+                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + next_step);
             }
         }
         else
         {
             for (int i = step; i < gridX - step; i += step)
             {
-                _lod[_currentLod]._indices.push_back((gridY - step)*(gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(gridY*(gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back((gridY - step)*(gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i);
+                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i);
+                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + step);
 
-                _lod[_currentLod]._indices.push_back((gridY - step)*(gridX + 1) + i + step);
-                _lod[_currentLod]._indices.push_back(gridY*(gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(gridY*(gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i);
+                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i + step);
             }
         }
-        if (_back&&_back->_currentLod > _currentLod)//back
+        if (_back && _back->_currentLod > _currentLod)  // back
         {
             for (int i = 0; i < gridX; i += next_step)
             {
                 _lod[_currentLod]._indices.push_back(i);
-                _lod[_currentLod]._indices.push_back(step*(gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(step*(gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i);
+                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + step);
 
                 _lod[_currentLod]._indices.push_back(i);
-                _lod[_currentLod]._indices.push_back(step*(gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + step);
                 _lod[_currentLod]._indices.push_back(i + next_step);
 
                 _lod[_currentLod]._indices.push_back(i + next_step);
-                _lod[_currentLod]._indices.push_back(step*(gridX + 1) + i + step);
-                _lod[_currentLod]._indices.push_back(step*(gridX + 1) + i + next_step);
+                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + next_step);
             }
         }
-        else {
+        else
+        {
             for (int i = step; i < gridX - step; i += step)
             {
                 _lod[_currentLod]._indices.push_back(i);
-                _lod[_currentLod]._indices.push_back(step*(gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(step*(gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i);
+                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + step);
 
                 _lod[_currentLod]._indices.push_back(i);
-                _lod[_currentLod]._indices.push_back(step*(gridX + 1) + i + step);
+                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + step);
                 _lod[_currentLod]._indices.push_back(i + step);
             }
         }
 
-        _chunkIndices = _terrain->insertIndicesLOD(currentNeighborLOD, _currentLod, &_lod[_currentLod]._indices[0], (int)_lod[_currentLod]._indices.size());
+        _chunkIndices = _terrain->insertIndicesLOD(currentNeighborLOD, _currentLod, &_lod[_currentLod]._indices[0],
+                                                   (int)_lod[_currentLod]._indices.size());
     }
-    else {
-        //No lod difference, use simple method
+    else
+    {
+        // No lod difference, use simple method
         _lod[_currentLod]._indices.clear();
         for (int i = 0; i < gridY; i += step)
         {
@@ -1295,13 +1336,14 @@ void Terrain::Chunk::updateIndicesLOD()
                 _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1) + step);
             }
         }
-        _chunkIndices = _terrain->insertIndicesLOD(currentNeighborLOD, _currentLod, &_lod[_currentLod]._indices[0], (int)_lod[_currentLod]._indices.size());
+        _chunkIndices = _terrain->insertIndicesLOD(currentNeighborLOD, _currentLod, &_lod[_currentLod]._indices[0],
+                                                   (int)_lod[_currentLod]._indices.size());
     }
 }
 
 void Terrain::Chunk::calculateAABB()
 {
-    std::vector<Vec3>pos;
+    std::vector<Vec3> pos;
     for (size_t i = 0, size = _originalVertices.size(); i < size; ++i)
     {
         pos.push_back(_originalVertices[i]._position);
@@ -1311,7 +1353,7 @@ void Terrain::Chunk::calculateAABB()
 
 void Terrain::Chunk::calculateSlope()
 {
-    //find max slope
+    // find max slope
     auto lowest = _originalVertices[0]._position;
     for (size_t i = 0, size = _originalVertices.size(); i < size; ++i)
     {
@@ -1331,7 +1373,7 @@ void Terrain::Chunk::calculateSlope()
     Vec2 a(lowest.x, lowest.z);
     Vec2 b(highest.x, highest.z);
     float dist = a.distance(b);
-    _slope = (highest.y - lowest.y) / dist;
+    _slope     = (highest.y - lowest.y) / dist;
 }
 
 bool Terrain::Chunk::getIntersectPointWithRay(const Ray& ray, Vec3& intersectPoint)
@@ -1340,7 +1382,7 @@ bool Terrain::Chunk::getIntersectPointWithRay(const Ray& ray, Vec3& intersectPoi
         return false;
 
     float minDist = FLT_MAX;
-    bool isFind = false;
+    bool isFind   = false;
     for (const auto& triangle : _trianglesList)
     {
         Vec3 p;
@@ -1350,7 +1392,7 @@ bool Terrain::Chunk::getIntersectPointWithRay(const Ray& ray, Vec3& intersectPoi
             if (dist < minDist)
             {
                 intersectPoint = p;
-                minDist = dist;
+                minDist        = dist;
             }
             isFind = true;
         }
@@ -1361,10 +1403,13 @@ bool Terrain::Chunk::getIntersectPointWithRay(const Ray& ray, Vec3& intersectPoi
 
 void Terrain::Chunk::updateVerticesForLOD()
 {
-    if (_oldLod == _currentLod) { return; } // no need to update vertices
+    if (_oldLod == _currentLod)
+    {
+        return;
+    }  // no need to update vertices
     _currentVertices = _originalVertices;
-    int gridY = _size.height;
-    int gridX = _size.width;
+    int gridY        = _size.height;
+    int gridX        = _size.width;
 
     if (_currentLod >= 2 && std::abs(_slope) > 1.2f)
     {
@@ -1374,17 +1419,17 @@ void Terrain::Chunk::updateVerticesForLOD()
             {
                 // use linear-sample adjust vertices height
                 float height = 0;
-                float count = 0;
+                float count  = 0;
                 for (int n = i - step / 2; n < i + step / 2; n++)
                 {
                     for (int m = j - step / 2; m < j + step / 2; m++)
                     {
-                        float weight = (step / 2 - std::abs(n - i))*(step / 2 - std::abs(m - j));
-                        height += _originalVertices[m*(gridX + 1) + n]._position.y;
+                        float weight = (step / 2 - std::abs(n - i)) * (step / 2 - std::abs(m - j));
+                        height += _originalVertices[m * (gridX + 1) + n]._position.y;
                         count += weight;
                     }
                 }
-                _currentVertices[i*(gridX + 1) + j]._position.y = height / count;
+                _currentVertices[i * (gridX + 1) + j]._position.y = height / count;
             }
     }
 
@@ -1398,16 +1443,18 @@ Terrain::Chunk::~Chunk()
 
 void Terrain::Chunk::updateIndicesLODSkirt()
 {
-    if (_oldLod == _currentLod) return;
+    if (_oldLod == _currentLod)
+        return;
     _oldLod = _currentLod;
     bool isOk;
     _chunkIndices = _terrain->lookForIndicesLODSkrit(_currentLod, &isOk);
-    if (isOk) return;
+    if (isOk)
+        return;
 
     int gridY = _size.height;
     int gridX = _size.width;
-    int step = 1 << _currentLod;
-    int k = 0;
+    int step  = 1 << _currentLod;
+    int k     = 0;
     for (int i = 0; i < gridY; i += step, k += step)
     {
         for (int j = 0; j < gridX; j += step)
@@ -1422,24 +1469,24 @@ void Terrain::Chunk::updateIndicesLODSkirt()
             _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1) + step);
         }
     }
-    //add skirt
+    // add skirt
     //#1
     for (int i = 0; i < gridY; i += step)
     {
         int nLocIndex = i * (gridX + 1) + gridX;
         _lod[_currentLod]._indices.push_back(nLocIndex);
         _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1));
-        _lod[_currentLod]._indices.push_back((gridY + 1) *(gridX + 1) + i);
+        _lod[_currentLod]._indices.push_back((gridY + 1) * (gridX + 1) + i);
 
-        _lod[_currentLod]._indices.push_back((gridY + 1) *(gridX + 1) + i);
+        _lod[_currentLod]._indices.push_back((gridY + 1) * (gridX + 1) + i);
         _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1));
-        _lod[_currentLod]._indices.push_back((gridY + 1) *(gridX + 1) + i + step);
+        _lod[_currentLod]._indices.push_back((gridY + 1) * (gridX + 1) + i + step);
     }
 
     //#2
     for (int j = 0; j < gridX; j += step)
     {
-        int nLocIndex = (gridY)* (gridX + 1) + j;
+        int nLocIndex = (gridY) * (gridX + 1) + j;
         _lod[_currentLod]._indices.push_back(nLocIndex);
         _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[1] + j);
         _lod[_currentLod]._indices.push_back(nLocIndex + step);
@@ -1455,9 +1502,9 @@ void Terrain::Chunk::updateIndicesLODSkirt()
         int nLocIndex = i * (gridX + 1);
         _lod[_currentLod]._indices.push_back(nLocIndex);
         _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[2] + i);
-        _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1));
+        _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1));
 
-        _lod[_currentLod]._indices.push_back((i + step)*(gridX + 1));
+        _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1));
         _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[2] + i);
         _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[2] + i + step);
     }
@@ -1470,38 +1517,38 @@ void Terrain::Chunk::updateIndicesLODSkirt()
         _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[3] + j);
         _lod[_currentLod]._indices.push_back(nLocIndex);
 
-
         _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[3] + j + step);
         _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[3] + j);
         _lod[_currentLod]._indices.push_back(nLocIndex + step);
     }
 
-    _chunkIndices = _terrain->insertIndicesLODSkirt(_currentLod, &_lod[_currentLod]._indices[0], (int)_lod[_currentLod]._indices.size());
+    _chunkIndices = _terrain->insertIndicesLODSkirt(_currentLod, &_lod[_currentLod]._indices[0],
+                                                    (int)_lod[_currentLod]._indices.size());
 }
 
-Terrain::QuadTree::QuadTree(int x, int y, int w, int h, Terrain * terrain)
+Terrain::QuadTree::QuadTree(int x, int y, int w, int h, Terrain* terrain)
 {
-    _terrain = terrain;
-    _needDraw = true;
-    _parent = nullptr;
-    _tl = nullptr;
-    _tr = nullptr;
-    _bl = nullptr;
-    _br = nullptr;
-    _posX = x;
-    _posY = y;
+    _terrain      = terrain;
+    _needDraw     = true;
+    _parent       = nullptr;
+    _tl           = nullptr;
+    _tr           = nullptr;
+    _bl           = nullptr;
+    _br           = nullptr;
+    _posX         = x;
+    _posY         = y;
     this->_height = h;
-    this->_width = w;
-    if (_width > terrain->_chunkSize.width &&_height > terrain->_chunkSize.height) //subdivision
+    this->_width  = w;
+    if (_width > terrain->_chunkSize.width && _height > terrain->_chunkSize.height)  // subdivision
     {
-        _isTerminal = false;
-        this->_tl = new QuadTree(x, y, _width / 2, _height / 2, terrain);
+        _isTerminal        = false;
+        this->_tl          = new QuadTree(x, y, _width / 2, _height / 2, terrain);
         this->_tl->_parent = this;
-        this->_tr = new QuadTree(x + _width / 2, y, _width / 2, _height / 2, terrain);
+        this->_tr          = new QuadTree(x + _width / 2, y, _width / 2, _height / 2, terrain);
         this->_tr->_parent = this;
-        this->_bl = new QuadTree(x, y + _height / 2, _width / 2, _height / 2, terrain);
+        this->_bl          = new QuadTree(x, y + _height / 2, _width / 2, _height / 2, terrain);
         this->_bl->_parent = this;
-        this->_br = new QuadTree(x + _width / 2, y + _height / 2, _width / 2, _height / 2, terrain);
+        this->_br          = new QuadTree(x + _width / 2, y + _height / 2, _width / 2, _height / 2, terrain);
         this->_br->_parent = this;
 
         _localAABB.merge(_tl->_localAABB);
@@ -1509,16 +1556,16 @@ Terrain::QuadTree::QuadTree(int x, int y, int w, int h, Terrain * terrain)
         _localAABB.merge(_bl->_localAABB);
         _localAABB.merge(_br->_localAABB);
     }
-    else // is terminal Node
+    else  // is terminal Node
     {
-        int m = _posY / terrain->_chunkSize.height;
-        int n = _posX / terrain->_chunkSize.width;
-        _chunk = terrain->_chunkesArray[m][n];
-        _isTerminal = true;
-        _localAABB = _chunk->_aabb;
+        int m           = _posY / terrain->_chunkSize.height;
+        int n           = _posX / terrain->_chunkSize.width;
+        _chunk          = terrain->_chunkesArray[m][n];
+        _isTerminal     = true;
+        _localAABB      = _chunk->_aabb;
         _chunk->_parent = this;
 
-        for (auto & triangle : _chunk->_trianglesList)
+        for (auto& triangle : _chunk->_trianglesList)
         {
             triangle.transform(_terrain->getNodeToWorldTransform());
         }
@@ -1529,8 +1576,10 @@ Terrain::QuadTree::QuadTree(int x, int y, int w, int h, Terrain * terrain)
 
 void Terrain::QuadTree::draw()
 {
-    if (!_needDraw)return;
-    if (_isTerminal) {
+    if (!_needDraw)
+        return;
+    if (_isTerminal)
+    {
         this->_chunk->bindAndDraw();
     }
     else
@@ -1554,13 +1603,14 @@ void Terrain::QuadTree::resetNeedDraw(bool value)
     }
 }
 
-void Terrain::QuadTree::cullByCamera(const Camera * camera, const Mat4 & worldTransform)
+void Terrain::QuadTree::cullByCamera(const Camera* camera, const Mat4& worldTransform)
 {
-    if(!camera->isVisibleInFrustum(&_worldSpaceAABB))
+    if (!camera->isVisibleInFrustum(&_worldSpaceAABB))
     {
         this->resetNeedDraw(false);
     }
-    else if (!_isTerminal) {
+    else if (!_isTerminal)
+    {
         _tl->cullByCamera(camera, worldTransform);
         _tr->cullByCamera(camera, worldTransform);
         _bl->cullByCamera(camera, worldTransform);
@@ -1568,12 +1618,13 @@ void Terrain::QuadTree::cullByCamera(const Camera * camera, const Mat4 & worldTr
     }
 }
 
-void Terrain::QuadTree::preCalculateAABB(const Mat4 & worldTransform)
+void Terrain::QuadTree::preCalculateAABB(const Mat4& worldTransform)
 {
 
     _worldSpaceAABB = _localAABB;
     _worldSpaceAABB.transform(worldTransform);
-    if (!_isTerminal) {
+    if (!_isTerminal)
+    {
         _tl->preCalculateAABB(worldTransform);
         _tr->preCalculateAABB(worldTransform);
         _bl->preCalculateAABB(worldTransform);
@@ -1583,67 +1634,87 @@ void Terrain::QuadTree::preCalculateAABB(const Mat4 & worldTransform)
 
 Terrain::QuadTree::~QuadTree()
 {
-    if (_tl) delete _tl;
-    if (_tr) delete _tr;
-    if (_bl) delete _bl;
-    if (_br) delete _br;
+    if (_tl)
+        delete _tl;
+    if (_tr)
+        delete _tr;
+    if (_bl)
+        delete _bl;
+    if (_br)
+        delete _br;
 }
 
-Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::string& textureSrc, const Vec2 & chunksize, float height, float scale)
+Terrain::TerrainData::TerrainData(const std::string& heightMapsrc,
+                                  const std::string& textureSrc,
+                                  const Vec2& chunksize,
+                                  float height,
+                                  float scale)
 {
-    this->_heightMapSrc = heightMapsrc;
+    this->_heightMapSrc                = heightMapsrc;
     this->_detailMaps[0]._detailMapSrc = textureSrc;
-    this->_alphaMapSrc = "";
-    this->_chunkSize = chunksize;
-    this->_mapHeight = height;
-    this->_mapScale = scale;
-    _skirtHeightRatio = 1;
+    this->_alphaMapSrc                 = "";
+    this->_chunkSize                   = chunksize;
+    this->_mapHeight                   = height;
+    this->_mapScale                    = scale;
+    _skirtHeightRatio                  = 1;
 }
 
-Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1, const DetailMap& detail2, const DetailMap& detail3, const DetailMap& detail4, const Vec2 & chunksize, float height, float scale)
+Terrain::TerrainData::TerrainData(const std::string& heightMapsrc,
+                                  const std::string& alphamap,
+                                  const DetailMap& detail1,
+                                  const DetailMap& detail2,
+                                  const DetailMap& detail3,
+                                  const DetailMap& detail4,
+                                  const Vec2& chunksize,
+                                  float height,
+                                  float scale)
 {
-    this->_heightMapSrc = heightMapsrc;
-    this->_alphaMapSrc = alphamap;
+    this->_heightMapSrc  = heightMapsrc;
+    this->_alphaMapSrc   = alphamap;
     this->_detailMaps[0] = detail1;
     this->_detailMaps[1] = detail2;
     this->_detailMaps[2] = detail3;
     this->_detailMaps[3] = detail4;
-    this->_chunkSize = chunksize;
-    this->_mapHeight = height;
-    this->_mapScale = scale;
-    _detailMapAmount = 4;
-    _skirtHeightRatio = 1;
+    this->_chunkSize     = chunksize;
+    this->_mapHeight     = height;
+    this->_mapScale      = scale;
+    _detailMapAmount     = 4;
+    _skirtHeightRatio    = 1;
 }
 
-Terrain::TerrainData::TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1, const DetailMap& detail2, const DetailMap& detail3, const Vec2 & chunksize /*= Vec2(32,32)*/, float height /*= 2*/, float scale /*= 0.1*/)
+Terrain::TerrainData::TerrainData(const std::string& heightMapsrc,
+                                  const std::string& alphamap,
+                                  const DetailMap& detail1,
+                                  const DetailMap& detail2,
+                                  const DetailMap& detail3,
+                                  const Vec2& chunksize /*= Vec2(32,32)*/,
+                                  float height /*= 2*/,
+                                  float scale /*= 0.1*/)
 {
-    this->_heightMapSrc = heightMapsrc;
-    this->_alphaMapSrc = alphamap;
+    this->_heightMapSrc  = heightMapsrc;
+    this->_alphaMapSrc   = alphamap;
     this->_detailMaps[0] = detail1;
     this->_detailMaps[1] = detail2;
     this->_detailMaps[2] = detail3;
-    this->_chunkSize = chunksize;
-    this->_mapHeight = height;
-    this->_mapScale = scale;
-    _detailMapAmount = 3;
-    _skirtHeightRatio = 1;
+    this->_chunkSize     = chunksize;
+    this->_mapHeight     = height;
+    this->_mapScale      = scale;
+    _detailMapAmount     = 3;
+    _skirtHeightRatio    = 1;
 }
 
-Terrain::TerrainData::TerrainData()
-{
+Terrain::TerrainData::TerrainData() {}
 
-}
-
-Terrain::ChunkIndices::ChunkIndices(const Terrain::ChunkIndices &other)
+Terrain::ChunkIndices::ChunkIndices(const Terrain::ChunkIndices& other)
 {
     _indexBuffer = other._indexBuffer;
     CC_SAFE_RETAIN(_indexBuffer);
     _size = other._size;
 }
 
-Terrain::ChunkIndices& Terrain::ChunkIndices::operator=(const Terrain::ChunkIndices &other)
+Terrain::ChunkIndices& Terrain::ChunkIndices::operator=(const Terrain::ChunkIndices& other)
 {
-    if(other._indexBuffer != _indexBuffer)
+    if (other._indexBuffer != _indexBuffer)
     {
         CC_SAFE_RELEASE_NULL(_indexBuffer);
         _indexBuffer = other._indexBuffer;
@@ -1660,13 +1731,13 @@ Terrain::ChunkIndices::~ChunkIndices()
 
 Terrain::DetailMap::DetailMap(const std::string& detailMapPath, float size /*= 35*/)
 {
-    this->_detailMapSrc = detailMapPath;
+    this->_detailMapSrc  = detailMapPath;
     this->_detailMapSize = size;
 }
 
 Terrain::DetailMap::DetailMap()
 {
-    _detailMapSrc = "";
+    _detailMapSrc  = "";
     _detailMapSize = 35;
 }
 
@@ -1684,7 +1755,7 @@ void Terrain::Triangle::transform(const cocos2d::Mat4& matrix)
     matrix.transformPoint(&_p3);
 }
 
-//Please refer to 3D Math Primer for Graphics and Game Development
+// Please refer to 3D Math Primer for Graphics and Game Development
 bool Terrain::Triangle::getIntersectPoint(const Ray& ray, Vec3& intersectPoint) const
 {
     // E1
@@ -1708,7 +1779,7 @@ bool Terrain::Triangle::getIntersectPoint(const Ray& ray, Vec3& intersectPoint) 
     }
     else
     {
-        T = _p1 - ray._origin;
+        T   = _p1 - ray._origin;
         det = -det;
     }
 
@@ -1716,9 +1787,9 @@ bool Terrain::Triangle::getIntersectPoint(const Ray& ray, Vec3& intersectPoint) 
     if (det < 0.0001f)
         return false;
 
-    float t; // ray dist
-    float u, v;//barycentric coordinate
-   // Calculate u and make sure u <= 1
+    float t;     // ray dist
+    float u, v;  // barycentric coordinate
+    // Calculate u and make sure u <= 1
     u = T.dot(P);
     if (u < 0.0f || u > det)
         return false;
@@ -1756,10 +1827,10 @@ void Terrain::onAfterDraw()
 void Terrain::StateBlock::save()
 {
     auto renderer = Director::getInstance()->getRenderer();
-    depthWrite = renderer->getDepthWrite();
-    depthTest = renderer->getDepthTest();
-    cullFace = renderer->getCullMode();
-    winding = renderer->getWinding();
+    depthWrite    = renderer->getDepthWrite();
+    depthTest     = renderer->getDepthTest();
+    cullFace      = renderer->getCullMode();
+    winding       = renderer->getWinding();
 }
 
 void Terrain::StateBlock::apply()

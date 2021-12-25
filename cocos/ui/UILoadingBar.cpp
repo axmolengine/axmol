@@ -35,32 +35,29 @@ NS_CC_BEGIN
  Instead of scaling the sprite, set call setContentSize both in scale9 and non-scale9 modes
  */
 
-namespace ui {
-    
-static const int BAR_RENDERER_Z = (-1);
-    
-IMPLEMENT_CLASS_GUI_INFO(LoadingBar)
-    
-LoadingBar::LoadingBar():
-_direction(Direction::LEFT),
-_percent(100.0),
-_totalLength(0),
-_barRenderer(nullptr),
-_renderBarTexType(TextureResType::LOCAL),
-_barRendererTextureSize(Vec2::ZERO),
-_originalRect(Rect::ZERO),
-_scale9Enabled(false),
-_prevIgnoreSize(true),
-_capInsets(Rect::ZERO),
-_barRendererAdaptDirty(true),
-_textureFile("")
+namespace ui
 {
-}
 
-LoadingBar::~LoadingBar()
-{
-    
-}
+static const int BAR_RENDERER_Z = (-1);
+
+IMPLEMENT_CLASS_GUI_INFO(LoadingBar)
+
+LoadingBar::LoadingBar()
+    : _direction(Direction::LEFT)
+    , _percent(100.0)
+    , _totalLength(0)
+    , _barRenderer(nullptr)
+    , _renderBarTexType(TextureResType::LOCAL)
+    , _barRendererTextureSize(Vec2::ZERO)
+    , _originalRect(Rect::ZERO)
+    , _scale9Enabled(false)
+    , _prevIgnoreSize(true)
+    , _capInsets(Rect::ZERO)
+    , _barRendererAdaptDirty(true)
+    , _textureFile("")
+{}
+
+LoadingBar::~LoadingBar() {}
 
 LoadingBar* LoadingBar::create()
 {
@@ -73,21 +70,19 @@ LoadingBar* LoadingBar::create()
     CC_SAFE_DELETE(widget);
     return nullptr;
 }
-    
-LoadingBar* LoadingBar::create(const std::string &textureName, float percentage)
+
+LoadingBar* LoadingBar::create(const std::string& textureName, float percentage)
 {
     return LoadingBar::create(textureName, TextureResType::LOCAL, percentage);
 }
-    
-LoadingBar* LoadingBar::create(const std::string &textureName,
-                               TextureResType texType,
-                               float percentage)
+
+LoadingBar* LoadingBar::create(const std::string& textureName, TextureResType texType, float percentage)
 {
     LoadingBar* widget = new LoadingBar;
     if (widget->init())
     {
         widget->autorelease();
-        widget->loadTexture(textureName,texType);
+        widget->loadTexture(textureName, texType);
         widget->setPercent(percentage);
         return widget;
     }
@@ -100,10 +95,9 @@ void LoadingBar::initRenderer()
     _barRenderer = Scale9Sprite::create();
     _barRenderer->setScale9Enabled(false);
     addProtectedChild(_barRenderer, BAR_RENDERER_Z, -1);
-    _barRenderer->setAnchorPoint(Vec2(0.0f,0.5f));
+    _barRenderer->setAnchorPoint(Vec2(0.0f, 0.5f));
 }
 
-    
 void LoadingBar::setDirection(cocos2d::ui::LoadingBar::Direction direction)
 {
     if (_direction == direction)
@@ -111,49 +105,49 @@ void LoadingBar::setDirection(cocos2d::ui::LoadingBar::Direction direction)
         return;
     }
     _direction = direction;
-    
+
     switch (_direction)
     {
-        case Direction::LEFT:
-            _barRenderer->setAnchorPoint(Vec2(0.0f,0.5f));
-            _barRenderer->setPosition(Vec2(0.0f,_contentSize.height*0.5f));
-            break;
-        case Direction::RIGHT:
-            _barRenderer->setAnchorPoint(Vec2(1.0f,0.5f));
-            _barRenderer->setPosition(Vec2(_totalLength,_contentSize.height*0.5f));
-            break;
+    case Direction::LEFT:
+        _barRenderer->setAnchorPoint(Vec2(0.0f, 0.5f));
+        _barRenderer->setPosition(Vec2(0.0f, _contentSize.height * 0.5f));
+        break;
+    case Direction::RIGHT:
+        _barRenderer->setAnchorPoint(Vec2(1.0f, 0.5f));
+        _barRenderer->setPosition(Vec2(_totalLength, _contentSize.height * 0.5f));
+        break;
     }
     this->handleSpriteFlipX();
 }
 
-LoadingBar::Direction LoadingBar::getDirection()const
+LoadingBar::Direction LoadingBar::getDirection() const
 {
     return _direction;
 }
-    
 
-void LoadingBar::loadTexture(const std::string& texture,TextureResType texType)
+void LoadingBar::loadTexture(const std::string& texture, TextureResType texType)
 {
     if (texture.empty())
     {
         return;
     }
-    _textureFile = texture;
+    _textureFile      = texture;
     _renderBarTexType = texType;
     switch (_renderBarTexType)
     {
-        case TextureResType::LOCAL:
-            _barRenderer->setTexture(texture);
-            break;
-        case TextureResType::PLIST:
-            _barRenderer->setSpriteFrame(texture);
-            break;
-        default:
-            break;
+    case TextureResType::LOCAL:
+        _barRenderer->setTexture(texture);
+        break;
+    case TextureResType::PLIST:
+        _barRenderer->setSpriteFrame(texture);
+        break;
+    default:
+        break;
     }
-    
-    //FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
-    if (!_ignoreSize && _customSize.equals(Vec2::ZERO)) {
+
+    // FIXME: https://github.com/cocos2d/cocos2d-x/issues/12249
+    if (!_ignoreSize && _customSize.equals(Vec2::ZERO))
+    {
         _customSize = _barRenderer->getContentSize();
     }
     this->setupTexture();
@@ -168,16 +162,16 @@ void LoadingBar::loadTexture(SpriteFrame* spriteframe)
 void LoadingBar::setupTexture()
 {
     _barRendererTextureSize = _barRenderer->getContentSize();
-    _originalRect = _barRenderer->getTextureRect();
+    _originalRect           = _barRenderer->getTextureRect();
 
     switch (_direction)
     {
-        case Direction::LEFT:
-            _barRenderer->setAnchorPoint(Vec2(0.0f,0.5f));
-            break;
-        case Direction::RIGHT:
-            _barRenderer->setAnchorPoint(Vec2(1.0f,0.5f));
-            break;
+    case Direction::LEFT:
+        _barRenderer->setAnchorPoint(Vec2(0.0f, 0.5f));
+        break;
+    case Direction::RIGHT:
+        _barRenderer->setAnchorPoint(Vec2(1.0f, 0.5f));
+        break;
     }
     this->handleSpriteFlipX();
 
@@ -189,12 +183,11 @@ void LoadingBar::setupTexture()
 
     updateContentSizeWithTextureSize(_barRendererTextureSize);
 
-
     this->updateProgressBar();
 
     _barRendererAdaptDirty = true;
 }
-    
+
 void LoadingBar::handleSpriteFlipX()
 {
     if (_direction == Direction::LEFT)
@@ -239,12 +232,12 @@ void LoadingBar::setScale9Enabled(bool enabled)
     _barRendererAdaptDirty = true;
 }
 
-bool LoadingBar::isScale9Enabled()const
+bool LoadingBar::isScale9Enabled() const
 {
     return _scale9Enabled;
 }
-    
-void LoadingBar::setCapInsets(const Rect &capInsets)
+
+void LoadingBar::setCapInsets(const Rect& capInsets)
 {
     _capInsets = ui::Helper::restrictCapInsetRect(capInsets, _barRendererTextureSize);
     if (!_scale9Enabled)
@@ -258,11 +251,11 @@ void LoadingBar::setCapInsets(const Rect &capInsets)
     _barRenderer->setCapInsets(_capInsets);
 }
 
-const Rect& LoadingBar::getCapInsets()const
+const Rect& LoadingBar::getCapInsets() const
 {
     return _capInsets;
 }
-    
+
 void LoadingBar::setPercent(float percent)
 {
     if (percent > 100)
@@ -277,16 +270,16 @@ void LoadingBar::setPercent(float percent)
     {
         return;
     }
-     _percent = percent;
-    
+    _percent = percent;
+
     if (_totalLength <= 0)
     {
         return;
     }
-    
+
     this->updateProgressBar();
 }
-    
+
 void LoadingBar::updateProgressBar()
 {
     if (_scale9Enabled)
@@ -295,8 +288,8 @@ void LoadingBar::updateProgressBar()
     }
     else
     {
-        float res = _percent / 100.0f;
-        Rect rect = _barRenderer->getTextureRect();
+        float res       = _percent / 100.0f;
+        Rect rect       = _barRenderer->getTextureRect();
         rect.size.width = _barRendererTextureSize.width * res;
         _barRenderer->setTextureRect(rect, _barRenderer->isTextureRectRotated(), rect.size);
     }
@@ -312,7 +305,7 @@ void LoadingBar::onSizeChanged()
     Widget::onSizeChanged();
     _barRendererAdaptDirty = true;
 }
-    
+
 void LoadingBar::adaptRenderers()
 {
     if (_barRendererAdaptDirty)
@@ -367,7 +360,7 @@ void LoadingBar::barRendererScaleChangedWithSize()
         }
         else
         {
-            
+
             Vec2 textureSize = _barRendererTextureSize;
             if (textureSize.width <= 0.0f || textureSize.height <= 0.0f)
             {
@@ -382,14 +375,14 @@ void LoadingBar::barRendererScaleChangedWithSize()
     }
     switch (_direction)
     {
-        case Direction::LEFT:
-            _barRenderer->setPosition(Vec2(0.0f,_contentSize.height*0.5f));
-            break;
-        case Direction::RIGHT:
-            _barRenderer->setPosition(Vec2(_totalLength,_contentSize.height*0.5f));
-            break;
-        default:
-            break;
+    case Direction::LEFT:
+        _barRenderer->setPosition(Vec2(0.0f, _contentSize.height * 0.5f));
+        break;
+    case Direction::RIGHT:
+        _barRenderer->setPosition(Vec2(_totalLength, _contentSize.height * 0.5f));
+        break;
+    default:
+        break;
     }
 }
 
@@ -409,7 +402,7 @@ Widget* LoadingBar::createCloneInstance()
     return LoadingBar::create();
 }
 
-void LoadingBar::copySpecialProperties(Widget *widget)
+void LoadingBar::copySpecialProperties(Widget* widget)
 {
     LoadingBar* loadingBar = dynamic_cast<LoadingBar*>(widget);
     if (loadingBar)
@@ -424,8 +417,8 @@ void LoadingBar::copySpecialProperties(Widget *widget)
         setCapInsets(loadingBar->_capInsets);
         setPercent(loadingBar->_percent);
         setDirection(loadingBar->_direction);
-        _textureFile = loadingBar->_textureFile;
-        _totalLength = loadingBar->_totalLength;
+        _textureFile            = loadingBar->_textureFile;
+        _totalLength            = loadingBar->_totalLength;
         _barRendererTextureSize = loadingBar->_barRendererTextureSize;
     }
 }
@@ -438,6 +431,6 @@ ResourceData LoadingBar::getRenderFile()
     return rData;
 }
 
-}
+}  // namespace ui
 
 NS_CC_END

@@ -40,36 +40,36 @@ void AnimationData::_onClear()
         zOrderTimeline->returnToPool();
     }
 
-    frameIntOffset = 0;
+    frameIntOffset   = 0;
     frameFloatOffset = 0;
-    frameOffset = 0;
-    frameCount = 0;
-    playTimes = 0;
-    duration = 0.0f;
-    scale = 1.0f;
-    fadeInTime = 0.0f;
-    cacheFrameRate = 0.0f;
-    name = "";
+    frameOffset      = 0;
+    frameCount       = 0;
+    playTimes        = 0;
+    duration         = 0.0f;
+    scale            = 1.0f;
+    fadeInTime       = 0.0f;
+    cacheFrameRate   = 0.0f;
+    name             = "";
     cachedFrames.clear();
     boneTimelines.clear();
     slotTimelines.clear();
     constraintTimelines.clear();
     boneCachedFrameIndices.clear();
     slotCachedFrameIndices.clear();
-    parent = nullptr;
+    parent         = nullptr;
     actionTimeline = nullptr;
     zOrderTimeline = nullptr;
 }
 
 void AnimationData::cacheFrames(unsigned frameRate)
 {
-    if (cacheFrameRate > 0.0f) // TODO clear cache.
+    if (cacheFrameRate > 0.0f)  // TODO clear cache.
     {
         return;
     }
 
-    cacheFrameRate = std::max(std::ceil(frameRate * scale), 1.0f);
-    const auto cacheFrameCount = std::ceil(cacheFrameRate * duration) + 1; // Cache one more frame.
+    cacheFrameRate             = std::max(std::ceil(frameRate * scale), 1.0f);
+    const auto cacheFrameCount = std::ceil(cacheFrameRate * duration) + 1;  // Cache one more frame.
 
     cachedFrames.resize(cacheFrameCount, false);
 
@@ -87,7 +87,7 @@ void AnimationData::cacheFrames(unsigned frameRate)
 void AnimationData::addBoneTimeline(BoneData* bone, TimelineData* value)
 {
     auto& timelines = boneTimelines[bone->name];
-    if(std::find(timelines.cbegin(), timelines.cend(), value) == timelines.cend())
+    if (std::find(timelines.cbegin(), timelines.cend(), value) == timelines.cend())
     {
         timelines.push_back(value);
     }
@@ -113,8 +113,8 @@ void AnimationData::addConstraintTimeline(ConstraintData* constraint, TimelineDa
 
 void TimelineData::_onClear()
 {
-    type = TimelineType::BoneAll;
-    offset = 0;
+    type               = TimelineType::BoneAll;
+    offset             = 0;
     frameIndicesOffset = -1;
 }
 

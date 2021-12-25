@@ -29,11 +29,11 @@
 /// @cond DO_NOT_SHOW
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
-#include <basetsd.h>
-#ifndef __SSIZE_T
-#define __SSIZE_T
+#    include <basetsd.h>
+#    ifndef __SSIZE_T
+#        define __SSIZE_T
 typedef SSIZE_T ssize_t;
-#endif // __SSIZE_T
+#    endif  // __SSIZE_T
 #endif
 
 #include <thread>
@@ -52,61 +52,61 @@ typedef SSIZE_T ssize_t;
 NS_CC_BEGIN
 
 /// The max length of CCLog message.
-static const int MAX_LOG_LENGTH = 16*1024;
+static const int MAX_LOG_LENGTH = 16 * 1024;
 
 /**
  @brief Output Debug message.
  */
-void CC_DLL log(const char * format, ...) CC_FORMAT_PRINTF(1, 2);
+void CC_DLL log(const char* format, ...) CC_FORMAT_PRINTF(1, 2);
 
 /** Console is helper class that lets the developer control the game from TCP connection.
  Console will spawn a new thread that will listen to a specified TCP port.
  Console has a basic token parser. Each token is associated with an std::function<void(int)>.
  If the std::function<> needs to use the cocos2d API, it needs to call
- 
+
  ```
  scheduler->performFunctionInCocosThread( ... );
  ```
  */
 
-class CC_DLL Console
-    : public Ref
+class CC_DLL Console : public Ref
 {
 public:
     /** Console Utils */
-    class Utility {
+    class Utility
+    {
     public:
         // Trimming functions
         static std::string& ltrim(std::string& s);
         static std::string& rtrim(std::string& s);
         static std::string& trim(std::string& s);
-        
+
         // split
         static std::vector<std::string>& split(const std::string& s, char delim, std::vector<std::string>& elems);
         static std::vector<std::string> split(const std::string& s, char delim);
-        
+
         /** Checks myString is a floating-point type. */
         static bool isFloat(const std::string& myString);
-        
+
         /** send a message to console */
         static ssize_t sendToConsole(int fd, const void* buffer, size_t length, int flags = 0);
-        
+
         /** my dprintf() */
-        static ssize_t mydprintf(int sock, const char *format, ...);
-        
+        static ssize_t mydprintf(int sock, const char* format, ...);
+
         /** send prompt string to console */
         static void sendPrompt(int fd);
-        
+
         /** set a new string for the prompt. */
-        static void setPrompt(const std::string &prompt);
-        
+        static void setPrompt(const std::string& prompt);
+
         /** get the prompt string. */
         static const std::string& getPrompt();
-        
+
     private:
-        static std::string _prompt;  /*!< prompt */
+        static std::string _prompt; /*!< prompt */
     };
-    
+
     /** Command Struct */
     class CC_DLL Command
     {
@@ -131,22 +131,22 @@ public:
 
         /** Move operator */
         Command& operator=(Command&& o);
-        
+
         /** add callback */
         void addCallback(const Callback& callback);
-        
+
         /** add sub command */
         void addSubCommand(const Command& subCmd);
-        
+
         /** get sub command */
         const Command* getSubCommand(const std::string& subCmdName) const;
-        
+
         /** delete sub command */
         void delSubCommand(const std::string& subCmdName);
-        
+
         /** help command handler */
         void commandHelp(int fd, const std::string& args);
-        
+
         /** generic command handler */
         void commandGeneric(int fd, const std::string& args);
 
@@ -183,45 +183,45 @@ public:
     void addCommand(const Command& cmd);
     void addSubCommand(const std::string& cmdName, const Command& subCmd);
     void addSubCommand(Command& cmd, const Command& subCmd);
-    
+
     /** get custom command */
     const Command* getCommand(const std::string& cmdName);
     const Command* getSubCommand(const std::string& cmdName, const std::string& subCmdName);
     const Command* getSubCommand(const Command& cmd, const std::string& subCmdName);
-    
+
     /** delete custom command */
     void delCommand(const std::string& cmdName);
     void delSubCommand(const std::string& cmdName, const std::string& subCmdName);
     void delSubCommand(Command& cmd, const std::string& subCmdName);
 
     /** log something in the console */
-    void log(const char *buf);
+    void log(const char* buf);
 
     /**
      * set bind address
      *
      * @address : 127.0.0.1
      */
-    void setBindAddress(const std::string &address);
+    void setBindAddress(const std::string& address);
 
     /** Checks whether the server for console is bound with ipv6 address */
     bool isIpv6Server() const;
-    
+
     /** The command separator */
     CC_SYNTHESIZE(char, _commandSeparator, CommandSeparator);
 
 protected:
     // Main Loop
     void loop();
-    
+
     // Helpers
-    ssize_t readline(socket_native_type fd, char *buf, size_t maxlen);
+    ssize_t readline(socket_native_type fd, char* buf, size_t maxlen);
     ssize_t readBytes(socket_native_type fd, char* buffer, size_t maxlen, bool* more);
     bool parseCommand(socket_native_type fd);
     void performCommand(socket_native_type fd, const std::string& command);
-    
+
     void addClient();
-    
+
     // create a map of command.
     void createCommandAllocator();
     void createCommandConfig();
@@ -289,14 +289,15 @@ protected:
     intptr_t _touchId;
 
     std::string _bindAddress;
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Console);
-    
+
     // helper functions
     int printSceneGraph(socket_native_type fd, Node* node, int level);
     void printSceneGraphBoot(socket_native_type fd);
     void printFileUtils(socket_native_type fd);
-    
+
     /** send help message to console */
     static void sendHelp(socket_native_type fd,
                          const std::unordered_map<std::string, Command*>& commands,

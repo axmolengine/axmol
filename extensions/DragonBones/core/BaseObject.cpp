@@ -1,17 +1,17 @@
 ﻿#include "BaseObject.h"
 DRAGONBONES_NAMESPACE_BEGIN
 
-unsigned BaseObject::_hashCode = 0;
+unsigned BaseObject::_hashCode        = 0;
 unsigned BaseObject::_defaultMaxCount = 3000;
 std::map<std::size_t, unsigned> BaseObject::_maxCountMap;
 std::map<std::size_t, std::vector<BaseObject*>> BaseObject::_poolsMap;
 
 void BaseObject::_returnObject(BaseObject* object)
 {
-    const auto classType = object->getClassTypeIndex();
+    const auto classType        = object->getClassTypeIndex();
     const auto maxCountIterator = _maxCountMap.find(classType);
-    const auto maxCount = maxCountIterator != _maxCountMap.end() ? maxCountIterator->second : _defaultMaxCount;
-    auto& pool = _poolsMap[classType];
+    const auto maxCount         = maxCountIterator != _maxCountMap.end() ? maxCountIterator->second : _defaultMaxCount;
+    auto& pool                  = _poolsMap[classType];
     if (pool.size() < maxCount)
     {
         if (!object->_isInPool)

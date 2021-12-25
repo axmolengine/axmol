@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,18 +30,19 @@
 NS_CC_BEGIN
 //-----------------------------------------------------------------------
 // Constants
-const bool PUGeometryRotator::DEFAULT_USE_OWN = false;
+const bool PUGeometryRotator::DEFAULT_USE_OWN         = false;
 const float PUGeometryRotator::DEFAULT_ROTATION_SPEED = 10.0f;
 const Vec3 PUGeometryRotator::DEFAULT_ROTATION_AXIS(0, 0, 0);
 
 //-----------------------------------------------------------------------
-PUGeometryRotator::PUGeometryRotator() : 
-    PUAffector(),
-    _scaledRotationSpeed(0.0f),
-    _useOwnRotationSpeed(DEFAULT_USE_OWN),
-    //mQ(Quaternion::IDENTITY),
-    _rotationAxis(DEFAULT_ROTATION_AXIS),
-    _rotationAxisSet(false)
+PUGeometryRotator::PUGeometryRotator()
+    : PUAffector()
+    , _scaledRotationSpeed(0.0f)
+    , _useOwnRotationSpeed(DEFAULT_USE_OWN)
+    ,
+    // mQ(Quaternion::IDENTITY),
+    _rotationAxis(DEFAULT_ROTATION_AXIS)
+    , _rotationAxisSet(false)
 {
     _dynRotationSpeed = new PUDynamicAttributeFixed();
     (static_cast<PUDynamicAttributeFixed*>(_dynRotationSpeed))->setValue(DEFAULT_ROTATION_SPEED);
@@ -60,7 +61,7 @@ const Vec3& PUGeometryRotator::getRotationAxis() const
 //-----------------------------------------------------------------------
 void PUGeometryRotator::setRotationAxis(const Vec3& rotationAxis)
 {
-    _rotationAxis = rotationAxis;
+    _rotationAxis    = rotationAxis;
     _rotationAxisSet = true;
 }
 //-----------------------------------------------------------------------
@@ -83,12 +84,12 @@ void PUGeometryRotator::setRotationSpeed(PUDynamicAttribute* dynRotationSpeed)
     _dynRotationSpeed = dynRotationSpeed;
 }
 //-----------------------------------------------------------------------
-bool PUGeometryRotator::useOwnRotationSpeed () const
+bool PUGeometryRotator::useOwnRotationSpeed() const
 {
     return _useOwnRotationSpeed;
 }
 //-----------------------------------------------------------------------
-void PUGeometryRotator::setUseOwnRotationSpeed (bool useOwnRotationSpeed)
+void PUGeometryRotator::setUseOwnRotationSpeed(bool useOwnRotationSpeed)
 {
     _useOwnRotationSpeed = useOwnRotationSpeed;
 }
@@ -101,11 +102,11 @@ float PUGeometryRotator::calculateRotationSpeed(PUParticle3D* particle)
 void PUGeometryRotator::initParticleForEmission(PUParticle3D* particle)
 {
     //// Only continue if the particle is a visual particle
-    //if (particle->particleType != Particle::PT_VISUAL)
+    // if (particle->particleType != Particle::PT_VISUAL)
     //	return;
-    //for (auto iter : _particleSystem->getParticlePool().getActiveParticleList())
+    // for (auto iter : _particleSystem->getParticlePool().getActiveParticleList())
     {
-        //PUParticle3D *particle = static_cast<PUParticle3D*>(iter);
+        // PUParticle3D *particle = static_cast<PUParticle3D*>(iter);
         if (!_rotationAxisSet)
         {
             // Set initial random rotation axis and orientation(PU 1.4)
@@ -129,12 +130,12 @@ void PUGeometryRotator::initParticleForEmission(PUParticle3D* particle)
 }
 //-----------------------------------------------------------------------
 
-void PUGeometryRotator::updatePUAffector( PUParticle3D *particle, float deltaTime )
+void PUGeometryRotator::updatePUAffector(PUParticle3D* particle, float deltaTime)
 {
-    //for (auto iter : _particleSystem->getParticles())
+    // for (auto iter : _particleSystem->getParticles())
     {
-        //PUParticle3D *particle = iter;
-        // Rotate the geometry
+        // PUParticle3D *particle = iter;
+        //  Rotate the geometry
 
         if (_useOwnRotationSpeed)
         {
@@ -171,15 +172,15 @@ PUGeometryRotator* PUGeometryRotator::create()
     return pgr;
 }
 
-void PUGeometryRotator::copyAttributesTo( PUAffector* affector )
+void PUGeometryRotator::copyAttributesTo(PUAffector* affector)
 {
     PUAffector::copyAttributesTo(affector);
 
     PUGeometryRotator* geometryRotator = static_cast<PUGeometryRotator*>(affector);
     geometryRotator->setRotationSpeed(getRotationSpeed()->clone());
     geometryRotator->_useOwnRotationSpeed = _useOwnRotationSpeed;
-    geometryRotator->_rotationAxis = _rotationAxis;
-    geometryRotator->_rotationAxisSet = _rotationAxisSet;
+    geometryRotator->_rotationAxis        = _rotationAxis;
+    geometryRotator->_rotationAxisSet     = _rotationAxisSet;
 }
 
 //-----------------------------------------------------------------------

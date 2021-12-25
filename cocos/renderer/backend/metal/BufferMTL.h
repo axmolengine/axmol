@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../Buffer.h"
@@ -37,7 +37,8 @@ CC_BACKEND_BEGIN
 /**
  * @brief Used to store vertex and index data data.
  * Dynamic buffer data refers to frequently updated data stored in a buffer.
- * To avoid creating new buffers per frame and to minimize processor idle time between frames, implement a triple buffering model to update dynamic buffer.
+ * To avoid creating new buffers per frame and to minimize processor idle time between frames, implement a triple
+ * buffering model to update dynamic buffer.
  */
 class BufferMTL : public Buffer
 {
@@ -47,12 +48,14 @@ public:
      * @brief BufferMTL constructor
      * @param mtlDevice The device for which MTLBuffer object was created.
      * @param size Specifies the size in bytes of the buffer object's new data store.
-     * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or BufferType::INDEX.
-     * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be BufferUsage::STATIC, BufferUsage::DYNAMIC.
+     * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or
+     * BufferType::INDEX.
+     * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
+     * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      */
     BufferMTL(id<MTLDevice> mtlDevice, std::size_t size, BufferType type, BufferUsage usage);
     ~BufferMTL();
-    
+
     /// @name Update Buffer
     /**
      * @brief Update buffer data
@@ -61,37 +64,38 @@ public:
      * @see `updateSubData(void* data, unsigned int offset, unsigned int size)`
      */
     virtual void updateData(void* data, std::size_t size) override;
-    
+
     /**
      * @brief Update buffer sub-region data
      * @param data Specifies a pointer to the new data that will be copied into the data store.
-     * @param offset Specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.
+     * @param offset Specifies the offset into the buffer object's data store where data replacement will begin,
+     * measured in bytes.
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateData(void* data, unsigned int size)`
      */
     virtual void updateSubData(void* data, std::size_t offset, std::size_t size) override;
-    
+
     /**
      * Emply implementation. Mainly used in EGL context lost.
      */
-    virtual void usingDefaultStoredData(bool needDefaultStoredData) override {};
-    
+    virtual void usingDefaultStoredData(bool needDefaultStoredData) override{};
+
     /// @name Setters & Getters
     id<MTLBuffer> getMTLBuffer() const;
-    
+
     /**
      * @brief a triple buffering
      * Will switch to next buffer and use the buffer in the following render pass in current frame.
      */
     void beginFrame();
-    
+
 private:
     void updateIndex();
 
-    id<MTLBuffer> _mtlBuffer = nil;
+    id<MTLBuffer> _mtlBuffer            = nil;
     NSMutableArray* _dynamicDataBuffers = nil;
-    int _currentFrameIndex = 0;
-    bool _indexUpdated = false;
+    int _currentFrameIndex              = 0;
+    bool _indexUpdated                  = false;
 };
 
 // end of _metal group

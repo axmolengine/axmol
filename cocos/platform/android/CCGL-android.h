@@ -25,23 +25,23 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#define glClearDepth                glClearDepthf
-#define glDeleteVertexArrays        glDeleteVertexArraysOES
-#define glGenVertexArrays           glGenVertexArraysOES
-#define glBindVertexArray           glBindVertexArrayOES
-#define glMapBuffer                 glMapBufferOES
-#define glUnmapBuffer               glUnmapBufferOES
+#define glClearDepth glClearDepthf
+#define glDeleteVertexArrays glDeleteVertexArraysOES
+#define glGenVertexArrays glGenVertexArraysOES
+#define glBindVertexArray glBindVertexArrayOES
+#define glMapBuffer glMapBufferOES
+#define glUnmapBuffer glUnmapBufferOES
 
-#define GL_DEPTH24_STENCIL8         GL_DEPTH24_STENCIL8_OES
-#define GL_DEPTH_STENCIL            GL_DEPTH_STENCIL_OES
-#define GL_UNSIGNED_INT_24_8        GL_UNSIGNED_INT_24_8_OES
-#define GL_WRITE_ONLY               GL_WRITE_ONLY_OES
+#define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
+#define GL_DEPTH_STENCIL GL_DEPTH_STENCIL_OES
+#define GL_UNSIGNED_INT_24_8 GL_UNSIGNED_INT_24_8_OES
+#define GL_WRITE_ONLY GL_WRITE_ONLY_OES
 
-// GL_GLEXT_PROTOTYPES isn't defined in glplatform.h on android ndk r7 
+// GL_GLEXT_PROTOTYPES isn't defined in glplatform.h on android ndk r7
 // we manually define it here
 #include <GLES2/gl2platform.h>
 #ifndef GL_GLEXT_PROTOTYPES
-#define GL_GLEXT_PROTOTYPES 1
+#    define GL_GLEXT_PROTOTYPES 1
 #endif
 
 // normal process
@@ -51,10 +51,10 @@ THE SOFTWARE.
 typedef char GLchar;
 // android defines GL_BGRA_EXT but not GL_BRGA
 #ifndef GL_BGRA
-#define GL_BGRA  0x80E1
+#    define GL_BGRA 0x80E1
 #endif
 
-//declare here while define in EGLView_android.cpp
+// declare here while define in EGLView_android.cpp
 extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOESEXT;
 extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOESEXT;
 extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT;
@@ -65,34 +65,34 @@ extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT;
 
 /* gles3/gl */
 #if !defined(GL_SRGB8)
-#define GL_SRGB8 0x8C41
+#    define GL_SRGB8 0x8C41
 #endif
 
 #if !defined(GL_SRGB8_ALPHA8)
-#define GL_SRGB8_ALPHA8 0x8C43
+#    define GL_SRGB8_ALPHA8 0x8C43
 #endif
 
 #if !defined(GL_COMPRESSED_RGB8_ETC2)
-#define GL_COMPRESSED_RGB8_ETC2 0x9274
+#    define GL_COMPRESSED_RGB8_ETC2 0x9274
 #endif
 
 #if !defined(GL_COMPRESSED_SRGB8_ETC2)
-#define GL_COMPRESSED_SRGB8_ETC2 0x9275
+#    define GL_COMPRESSED_SRGB8_ETC2 0x9275
 #endif
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
-#define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
+#    define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
 #endif
 
 #if !defined(GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC)
-#define GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC 0x9279
+#    define GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC 0x9279
 #endif
 
 /* gles2/glext */
 #ifndef GL_EXT_texture_compression_s3tc_srgb
-#define GL_EXT_texture_compression_s3tc_srgb 1
-#define GL_COMPRESSED_SRGB_S3TC_DXT1_EXT  0x8C4C
-#define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT 0x8C4D
-#define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT 0x8C4E
-#define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT 0x8C4F
+#    define GL_EXT_texture_compression_s3tc_srgb 1
+#    define GL_COMPRESSED_SRGB_S3TC_DXT1_EXT 0x8C4C
+#    define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT 0x8C4D
+#    define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT 0x8C4E
+#    define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT 0x8C4F
 #endif /* GL_EXT_texture_compression_s3tc_srgb */

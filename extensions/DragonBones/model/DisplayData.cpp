@@ -15,18 +15,18 @@ void VerticesData::clear()
         weight->returnToPool();
     }
 
-    isShared = false;
+    isShared      = false;
     inheritDeform = false;
-    offset = 0;
-    data = nullptr;
-    weight = nullptr;
+    offset        = 0;
+    data          = nullptr;
+    weight        = nullptr;
 }
 
 void VerticesData::shareFrom(const VerticesData& value)
 {
     isShared = true;
-    offset = value.offset;
-    weight = value.weight;
+    offset   = value.offset;
+    weight   = value.weight;
 }
 
 void DisplayData::_onClear()
@@ -50,12 +50,12 @@ void ArmatureDisplayData::_onClear()
 {
     DisplayData::_onClear();
 
-    for(const auto action : actions)
+    for (const auto action : actions)
     {
         action->returnToPool();
     }
 
-    type = DisplayType::Armature;
+    type             = DisplayType::Armature;
     inheritAnimation = false;
     actions.clear();
     armature = nullptr;
@@ -79,18 +79,18 @@ void BoundingBoxDisplayData::_onClear()
 {
     DisplayData::_onClear();
 
-    if(boundingBox != nullptr)
+    if (boundingBox != nullptr)
     {
         boundingBox->returnToPool();
     }
 
-    type = DisplayType::BoundingBox;
+    type        = DisplayType::BoundingBox;
     boundingBox = nullptr;
 }
 
 void WeightData::_onClear()
 {
-    count = 0;
+    count  = 0;
     offset = 0;
     bones.clear();
 }

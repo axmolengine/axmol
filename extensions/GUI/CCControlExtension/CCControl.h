@@ -4,19 +4,19 @@
  *
  * Copyright 2011 Yannick Loriot.
  * http://yannickloriot.com
- * 
+ *
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +28,6 @@
  * Converted to c++ / cocos2d-x by Angus C
  */
 
-
 #ifndef __CCCONTROL_H__
 #define __CCCONTROL_H__
 
@@ -37,7 +36,6 @@
 #include "extensions/ExtensionExport.h"
 
 NS_CC_EXT_BEGIN
-
 
 class Invocation;
 
@@ -51,14 +49,13 @@ class Invocation;
 /** Number of kinds of control event. */
 #define kControlEventTotalNumber 9
 
-
 /*
  * @class
- * Control is inspired by the UIControl API class from the UIKit library of 
- * CocoaTouch. It provides a base class for control Sprites such as Button 
+ * Control is inspired by the UIControl API class from the UIKit library of
+ * CocoaTouch. It provides a base class for control Sprites such as Button
  * or Slider that convey user intent to the application.
  *
- * The goal of Control is to define an interface and base implementation for 
+ * The goal of Control is to define an interface and base implementation for
  * preparing action messages and initially dispatching them to their targets when
  * certain events occur.
  *
@@ -70,26 +67,34 @@ public:
     /** Kinds of possible events for the control objects. */
     enum class CC_EX_DLL EventType
     {
-        TOUCH_DOWN           = 1 << 0,    // A touch-down event in the control.
-        DRAG_INSIDE          = 1 << 1,    // An event where a finger is dragged inside the bounds of the control.
-        DRAG_OUTSIDE         = 1 << 2,    // An event where a finger is dragged just outside the bounds of the control.
-        DRAG_ENTER           = 1 << 3,    // An event where a finger is dragged into the bounds of the control.
-        DRAG_EXIT            = 1 << 4,    // An event where a finger is dragged from within a control to outside its bounds.
-        TOUCH_UP_INSIDE      = 1 << 5,    // A touch-up event in the control where the finger is inside the bounds of the control.
-        TOUCH_UP_OUTSIDE     = 1 << 6,    // A touch-up event in the control where the finger is outside the bounds of the control.
-        TOUCH_CANCEL         = 1 << 7,    // A system event canceling the current touches for the control.
-        VALUE_CHANGED        = 1 << 8      // A touch dragging or otherwise manipulating a control, causing it to emit a series of different values.
+        TOUCH_DOWN   = 1 << 0,  // A touch-down event in the control.
+        DRAG_INSIDE  = 1 << 1,  // An event where a finger is dragged inside the bounds of the control.
+        DRAG_OUTSIDE = 1 << 2,  // An event where a finger is dragged just outside the bounds of the control.
+        DRAG_ENTER   = 1 << 3,  // An event where a finger is dragged into the bounds of the control.
+        DRAG_EXIT    = 1 << 4,  // An event where a finger is dragged from within a control to outside its bounds.
+        TOUCH_UP_INSIDE =
+            1 << 5,  // A touch-up event in the control where the finger is inside the bounds of the control.
+        TOUCH_UP_OUTSIDE =
+            1 << 6,  // A touch-up event in the control where the finger is outside the bounds of the control.
+        TOUCH_CANCEL  = 1 << 7,  // A system event canceling the current touches for the control.
+        VALUE_CHANGED = 1 << 8   // A touch dragging or otherwise manipulating a control, causing it to emit a series of
+                                 // different values.
     };
-    
+
     typedef void (Ref::*Handler)(Ref*, EventType);
-    
+
     /** The possible state for a control.  */
     enum class State
     {
-        NORMAL         = 1 << 0, // The normal, or default state of a control that is, enabled but neither selected nor highlighted.
-        HIGH_LIGHTED   = 1 << 1, // Highlighted state of a control. A control enters this state when a touch down, drag inside or drag enter is performed. You can retrieve and set this value through the highlighted property.
-        DISABLED       = 1 << 2, // Disabled state of a control. This state indicates that the control is currently disabled. You can retrieve and set this value through the enabled property.
-        SELECTED       = 1 << 3  // Selected state of a control. This state indicates that the control is currently selected. You can retrieve and set this value through the selected property.
+        NORMAL =
+            1 << 0,  // The normal, or default state of a control that is, enabled but neither selected nor highlighted.
+        HIGH_LIGHTED =
+            1 << 1,  // Highlighted state of a control. A control enters this state when a touch down, drag inside or
+                     // drag enter is performed. You can retrieve and set this value through the highlighted property.
+        DISABLED = 1 << 2,  // Disabled state of a control. This state indicates that the control is currently disabled.
+                            // You can retrieve and set this value through the enabled property.
+        SELECTED = 1 << 3   // Selected state of a control. This state indicates that the control is currently selected.
+                            // You can retrieve and set this value through the selected property.
     };
 
     /** Creates a Control object */
@@ -161,7 +166,7 @@ public:
     virtual void onTouchMoved(Touch* touch, Event* event);
     virtual void onTouchEnded(Touch* touch, Event* event);
     virtual void onTouchCancelled(Touch* touch, Event* event);
-    
+
     /**
      * Returns a boolean value that indicates whether a touch is inside the bounds
      * of the receiver. The given touch must be relative to the world.
@@ -170,17 +175,17 @@ public:
      *
      * @return Whether a touch is inside the receiver's rect.
      */
-    virtual bool isTouchInside(Touch * touch);
+    virtual bool isTouchInside(Touch* touch);
 
     // Overrides
     virtual bool isOpacityModifyRGB() const override;
     virtual void setOpacityModifyRGB(bool bOpacityModifyRGB) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    Control();
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        Control();
     /**
      * @js NA
      * @lua NA
@@ -191,7 +196,7 @@ CC_CONSTRUCTOR_ACCESS:
 
 protected:
     /**
-     * Returns an Invocation object able to construct messages using a given 
+     * Returns an Invocation object able to construct messages using a given
      * target-action pair. (The invocation may optionally include the sender and
      * the event as parameters, in that order)
      *
@@ -200,26 +205,26 @@ protected:
      * @param controlEvent A control events for which the action message is sent.
      * See "CCControlEvent" for constants.
      *
-     * @return an Invocation object able to construct messages using a given 
+     * @return an Invocation object able to construct messages using a given
      * target-action pair.
      */
     Invocation* invocationWithTargetAndActionForControlEvent(Ref* target, Handler action, EventType controlEvent);
 
     /**
-    * Returns the Invocation list for the given control event. If the list does
-    * not exist, it'll create an empty array before returning it.
-    *
-    * @param controlEvent A control events for which the action message is sent.
-    * See "CCControlEvent" for constants.
-    *
-    * @return the Invocation list for the given control event.
-    */
+     * Returns the Invocation list for the given control event. If the list does
+     * not exist, it'll create an empty array before returning it.
+     *
+     * @param controlEvent A control events for which the action message is sent.
+     * See "CCControlEvent" for constants.
+     *
+     * @return the Invocation list for the given control event.
+     */
     Vector<Invocation*>& dispatchListforControlEvent(EventType controlEvent);
 
     /**
-     * Adds a target and action for a particular event to an internal dispatch 
+     * Adds a target and action for a particular event to an internal dispatch
      * table.
-     * The action message may optionally include the sender and the event as 
+     * The action message may optionally include the sender and the event as
      * parameters, in that order.
      * When you call this method, target is not retained.
      *
@@ -230,7 +235,7 @@ protected:
      * See "CCControlEvent" for constants.
      */
     void addTargetWithActionForControlEvent(Ref* target, Handler action, EventType controlEvent);
-    
+
     /**
      * Removes a target and action for a particular event from an internal dispatch
      * table.
@@ -259,7 +264,7 @@ protected:
      */
     std::unordered_map<int, Vector<Invocation*>*> _dispatchTable;
 
-    //CCRGBAProtocol
+    // CCRGBAProtocol
     bool _isOpacityModifyRGB;
 
     /** The current control state constant. */

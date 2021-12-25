@@ -41,7 +41,7 @@
 NS_CC_BEGIN
 
 using CullMode = backend::CullMode;
-using Winding = backend::Winding;
+using Winding  = backend::Winding;
 
 namespace backend
 {
@@ -52,7 +52,7 @@ class RenderPass;
 class TextureBackend;
 class RenderTarget;
 struct PixelBufferDescriptor;
-}
+}  // namespace backend
 
 class EventListenerCustom;
 class TrianglesCommand;
@@ -107,11 +107,11 @@ public:
     std::vector<RenderCommand*>& getSubQueue(QUEUE_GROUP group) { return _commands[group]; }
     /**Get the number of render commands contained in a subqueue.*/
     ssize_t getSubQueueSize(QUEUE_GROUP group) const { return _commands[group].size(); }
-    
+
 protected:
     /**The commands in the render queue.*/
     std::vector<RenderCommand*> _commands[QUEUE_COUNT];
-    
+
     /**Cull state.*/
     bool _isCullEnabled;
     /**Depth test enable state.*/
@@ -122,7 +122,6 @@ protected:
 
 class GroupCommandManager;
 
-
 /* Class responsible for the rendering in.
 
 Whenever possible prefer to use `TrianglesCommand` objects since the renderer will automatically batch them.
@@ -130,7 +129,6 @@ Whenever possible prefer to use `TrianglesCommand` objects since the renderer wi
 class CC_DLL Renderer
 {
 public:
-    
     /**The max number of vertices in a vertex buffer object.*/
     static const int VBO_SIZE = 65536;
     /**The max number of indices in a index buffer.*/
@@ -144,7 +142,7 @@ public:
     /**Destructor.*/
     ~Renderer();
 
-    //TODO: manage GLView inside Render itself
+    // TODO: manage GLView inside Render itself
     void init();
 
     /** Adds a `RenderComamnd` into the renderer */
@@ -209,13 +207,13 @@ public:
 
     /**
      * Get depth clear value.
-     * @return Depth clear value. 
+     * @return Depth clear value.
      */
     float getClearDepth() const;
 
     /**
-     * Get the index when the stencil buffer is cleared. 
-     * @return The index used when the stencil buffer is cleared. 
+     * Get the index when the stencil buffer is cleared.
+     * @return The index used when the stencil buffer is cleared.
      */
     unsigned int getClearStencil() const;
 
@@ -234,13 +232,13 @@ public:
     // depth/stencil state.
 
     /**
-     * Enable/disable depth test. 
+     * Enable/disable depth test.
      * @param value true means enable depth test, otherwise false.
      */
     void setDepthTest(bool value);
 
     /**
-     *  Enable/disable to update depth buffer. 
+     *  Enable/disable to update depth buffer.
      * @param value true means enable writing into the depth buffer, otherwise false.
      */
     void setDepthWrite(bool value);
@@ -270,7 +268,7 @@ public:
     backend::CompareFunction getDepthCompareFunction() const;
 
     /**
-     * Enable/disable stencil test. 
+     * Enable/disable stencil test.
      * @param value true means enable stencil test, otherwise false.
      */
     void setStencilTest(bool value);
@@ -278,16 +276,18 @@ public:
     /**
      * Set front and back function and reference value for stencil testing.
      * @param func Specifies the stencil test function.
-     * @param ref Specifies the reference value for the stencil test. 
-     * @readMask Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. 
+     * @param ref Specifies the reference value for the stencil test.
+     * @readMask Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test
+     * is done.
      */
     void setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask);
 
     /**
      * Set front and back stencil test actions.
-     * @param stencilFailureOp Specifies the action to take when the stencil test fails. 
-     * @param depthFailureOp Specifies the stencil action when the stencil test passes, but the depth test fails. 
-     * @param stencilDepthPassOp Specifies the stencil action when both the stencil test and the depth test pass, or when the stencil test passes and either there is no depth buffer or depth testing is not enabled. 
+     * @param stencilFailureOp Specifies the action to take when the stencil test fails.
+     * @param depthFailureOp Specifies the stencil action when the stencil test passes, but the depth test fails.
+     * @param stencilDepthPassOp Specifies the stencil action when both the stencil test and the depth test pass, or
+     * when the stencil test passes and either there is no depth buffer or depth testing is not enabled.
      */
     void setStencilOperation(backend::StencilOperation stencilFailureOp,
                              backend::StencilOperation depthFailureOp,
@@ -296,7 +296,7 @@ public:
     /**
      * Control the front and back writing of individual bits in the stencil planes.
      * @param mask Specifies a bit mask to enable and disable writing of individual bits in the stencil planes.
-     */                
+     */
     void setStencilWriteMask(unsigned int mask);
 
     /**
@@ -305,23 +305,24 @@ public:
      */
     bool getStencilTest() const;
 
-    /// Get the action to take when the stencil test fails. 
+    /// Get the action to take when the stencil test fails.
     backend::StencilOperation getStencilFailureOperation() const;
 
-    /// Get the stencil action when the stencil test passes, but the depth test fails. 
+    /// Get the stencil action when the stencil test passes, but the depth test fails.
     backend::StencilOperation getStencilPassDepthFailureOperation() const;
 
-    /// Get the stencil action when both the stencil test and the depth test pass, or when the stencil test passes and either there is no depth buffer or depth testing is not enabled. 
+    /// Get the stencil action when both the stencil test and the depth test pass, or when the stencil test passes and
+    /// either there is no depth buffer or depth testing is not enabled.
     backend::StencilOperation getStencilDepthPassOperation() const;
 
     /// Get the stencil test function.
     backend::CompareFunction getStencilCompareFunction() const;
-    
+
     /**
      * Get the stencil readMask.
      * @return Stencil read mask.
      * @see `setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)`
-     */ 
+     */
     unsigned int getStencilReadMask() const;
 
     /**
@@ -329,20 +330,20 @@ public:
      * @return Stencil write mask.
      * @see `setStencilWriteMask(unsigned int mask)`
      */
-    unsigned int getStencilWriteMask() const; 
-    
+    unsigned int getStencilWriteMask() const;
+
     /**
-     * Get stencil reference value set by `setStencilCompareFunction`. 
+     * Get stencil reference value set by `setStencilCompareFunction`.
      * @return Stencil reference value.
      * @see `setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)`
      */
     unsigned int getStencilReferenceValue() const;
-    
+
     /**
      * Sets depth stencil descriptor
      */
     void setDepthStencilDesc(const backend::DepthStencilDescriptor& dsDesc);
-    
+
     /**
      * Gets depth stencil descriptor
      */
@@ -385,7 +386,7 @@ public:
     const Viewport& getViewport() const { return _viewport; }
 
     /**
-     * Enable/disable scissor test. 
+     * Enable/disable scissor test.
      * @param enabled true if enable scissor test, false otherwise.
      */
     void setScissorTest(bool enabled);
@@ -397,16 +398,16 @@ public:
      * @param height Specifies the height of the scissor box
      */
     void setScissorRect(float x, float y, float width, float height);
-    bool getScissorTest() const; ///< Get whether scissor test is enabled or not.
-    const ScissorRect& getScissorRect() const; ///< Get scissor rectangle.
+    bool getScissorTest() const;                ///< Get whether scissor test is enabled or not.
+    const ScissorRect& getScissorRect() const;  ///< Get scissor rectangle.
 
     /** returns whether or not a rectangle is visible or not */
     bool checkVisibility(const Mat4& transform, const Vec2& size);
-    
+
     /** read pixels from RenderTarget or screen framebuffer */
     void readPixels(backend::RenderTarget* rt, std::function<void(const backend::PixelBufferDescriptor&)> callback);
-    
-    void beginRenderPass(); /// Begin a render pass.
+
+    void beginRenderPass();  /// Begin a render pass.
     void endRenderPass();
 
 protected:
@@ -430,17 +431,19 @@ protected:
 
         /**
          * Reset avalable buffer index to zero.
-         * That means when get vertex buffer or index buffer, the earliest created buffer object in the cache will be returned.
+         * That means when get vertex buffer or index buffer, the earliest created buffer object in the cache will be
+         * returned.
          */
         void putbackAllBuffers();
 
         /**
-         * Buffer will be created If next buffer unavailable in the cache, otherwise set the buffer index in order to get the next available buffer.
+         * Buffer will be created If next buffer unavailable in the cache, otherwise set the buffer index in order to
+         * get the next available buffer.
          */
         void prepareNextBuffer();
 
-        backend::Buffer* getVertexBuffer() const; ///< Get the vertex buffer.
-        backend::Buffer* getIndexBuffer() const; ///< Get the index buffer.
+        backend::Buffer* getVertexBuffer() const;  ///< Get the vertex buffer.
+        backend::Buffer* getIndexBuffer() const;   ///< Get the index buffer.
 
     private:
         void createBuffer();
@@ -450,19 +453,19 @@ protected:
         std::vector<backend::Buffer*> _indexBufferPool;
     };
 
-    inline GroupCommandManager * getGroupCommandManager() const { return _groupCommandManager; }
+    inline GroupCommandManager* getGroupCommandManager() const { return _groupCommandManager; }
     void drawBatchedTriangles();
     void drawCustomCommand(RenderCommand* command);
     void drawMeshCommand(RenderCommand* command);
 
-    bool beginFrame(); /// Indicate the begining of a frame
-    void endFrame(); /// Finish a frame.
+    bool beginFrame();  /// Indicate the begining of a frame
+    void endFrame();    /// Finish a frame.
 
-    ///Draw the previews queued triangles and flush previous context
+    /// Draw the previews queued triangles and flush previous context
     void flush();
-    
+
     void flush2D();
-    
+
     void flush3D();
 
     void flushTriangles();
@@ -473,35 +476,35 @@ protected:
     void doVisitRenderQueue(const std::vector<RenderCommand*>&);
 
     void fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int vertexBufferOffset);
-  
+
     void pushStateBlock();
 
     void popStateBlock();
-    
+
     CallbackCommand* nextClearCommand();
 
     backend::RenderPipeline* _renderPipeline = nullptr;
 
     Viewport _viewport;
-    CullMode _cullMode  = CullMode::NONE;
-    Winding _winding    = Winding::COUNTER_CLOCK_WISE; //default front face is CCW in GL
+    CullMode _cullMode = CullMode::NONE;
+    Winding _winding   = Winding::COUNTER_CLOCK_WISE;  // default front face is CCW in GL
 
     std::stack<int> _commandGroupStack;
-    
+
     std::vector<RenderQueue> _renderGroups;
 
     std::vector<TrianglesCommand*> _queuedTriangleCommands;
-    
+
     // the pool for clear commands
     std::vector<CallbackCommand*> _clearCommandsPool;
 
-    //for TrianglesCommand
+    // for TrianglesCommand
     V3F_C4B_T2F _verts[VBO_SIZE];
     unsigned short _indices[INDEX_VBO_SIZE];
     backend::Buffer* _vertexBuffer = nullptr;
-    backend::Buffer* _indexBuffer = nullptr;
+    backend::Buffer* _indexBuffer  = nullptr;
     TriangleCommandBufferManager _triangleCommandBufferManager;
-    
+
     backend::CommandBuffer* _commandBuffer = nullptr;
     backend::RenderPassDescriptor _renderPassDesc;
 
@@ -511,9 +514,9 @@ protected:
     // Internal structure that has the information for the batches
     struct TriBatchToDraw
     {
-        TrianglesCommand* cmd = nullptr;  // needed for the Material
+        TrianglesCommand* cmd      = nullptr;  // needed for the Material
         unsigned int indicesToDraw = 0;
-        unsigned int offset = 0;
+        unsigned int offset        = 0;
     };
     // capacity of the array of TriBatches
     int _triBatchesToDrawCapacity = 500;
@@ -521,25 +524,25 @@ protected:
     TriBatchToDraw* _triBatchesToDraw = nullptr;
 
     unsigned int _queuedTotalVertexCount = 0;
-    unsigned int _queuedTotalIndexCount = 0;
-    unsigned int _queuedVertexCount = 0;
-    unsigned int _queuedIndexCount = 0;
-    unsigned int _filledIndex = 0;
-    unsigned int _filledVertex = 0;
+    unsigned int _queuedTotalIndexCount  = 0;
+    unsigned int _queuedVertexCount      = 0;
+    unsigned int _queuedIndexCount       = 0;
+    unsigned int _filledIndex            = 0;
+    unsigned int _filledVertex           = 0;
 
     // stats
-    size_t _drawnBatches = 0;
+    size_t _drawnBatches  = 0;
     size_t _drawnVertices = 0;
-    //the flag for checking whether renderer is rendering
-    bool _isRendering = false;
+    // the flag for checking whether renderer is rendering
+    bool _isRendering      = false;
     bool _isDepthTestFor2D = false;
-        
+
     GroupCommandManager* _groupCommandManager = nullptr;
 
     unsigned int _stencilRef = 0;
 
     backend::RenderTarget* _defaultRT = nullptr;
-    backend::RenderTarget* _currentRT = nullptr; // weak ref
+    backend::RenderTarget* _currentRT = nullptr;  // weak ref
 
     Color4F _clearColor = Color4F::BLACK;
     ClearFlag _clearFlag;
@@ -550,11 +553,12 @@ protected:
         bool isEnabled = false;
     };
     ScissorState _scissorState;
-    
-    struct StateBlock{
-        bool depthTest = false;
-        bool depthWrite = false;
-        backend::CullMode  cullMode = backend::CullMode::NONE;
+
+    struct StateBlock
+    {
+        bool depthTest             = false;
+        bool depthWrite            = false;
+        backend::CullMode cullMode = backend::CullMode::NONE;
     };
 
     std::deque<StateBlock> _stateBlockStack;

@@ -49,71 +49,70 @@ static cxx17::string_view adxelua_tosv(lua_State* L, int arg)
     return cxx17::string_view{s, l};
 }
 
-extern "C"
+extern "C" {
+int cocos2dx_lua_loader(lua_State* L)
 {
-    int cocos2dx_lua_loader(lua_State *L)
+    auto relativePath = adxelua_tostr(L, 1);
+
+    //  convert any '.' to '/'
+    size_t pos = relativePath.find_first_of('.');
+    while (pos != std::string::npos)
     {
-        auto relativePath = adxelua_tostr(L, 1);
-
-        //  convert any '.' to '/'
-        size_t pos        = relativePath.find_first_of('.');
-        while (pos != std::string::npos)
-        {
-            relativePath[pos] = '/';
-            pos               = relativePath.find_first_of('.');
-        }
-
-        // search file in package.path
-        Data chunk;
-        std::string resolvedPath;
-        auto fileUtils = FileUtils::getInstance();
-
-        lua_getglobal(L, "package");
-        lua_getfield(L, -1, "path");
-        auto searchpath = adxelua_tosv(L, -1);
-        lua_pop(L, 1);
-        size_t begin = 0;
-        size_t next = searchpath.find_first_of(';', 0);
-
-        do
-        {
-            if (next == std::string::npos)
-                next = searchpath.length();
-            auto prefix = searchpath.substr(begin, next - begin);
-            if (prefix[0] == '.' && prefix[1] == '/')
-                prefix = prefix.substr(2);
-
-            // reserve enough for file path to avoid memory realloc when replace ? to strPath
-            resolvedPath.reserve(prefix.length() + relativePath.length());
-
-            resolvedPath.assign(prefix.data(), prefix.length());
-            pos = resolvedPath.find_last_of('?');
-            assert(pos != std::string::npos); // package search path should have '?'
-            if (pos != std::string::npos)
-            {
-                resolvedPath.replace(pos, 1, relativePath);
-            }
-
-            if (fileUtils->isFileExist(resolvedPath))
-            {
-                chunk = fileUtils->getDataFromFile(resolvedPath);
-                break;
-            }
-
-            begin = next + 1;
-            next = searchpath.find_first_of(';', begin);
-        } while (begin < searchpath.length());
-
-        int nret = chunk.getSize() > 0 ? 1 : 0;
-        if (nret)
-        {
-            LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-            resolvedPath.insert(resolvedPath.begin(), '@');  // lua standard, add file chunck mark '@'
-            stack->luaLoadBuffer(L, reinterpret_cast<const char*>(chunk.getBytes()), static_cast<int>(chunk.getSize()),
-                                 resolvedPath.c_str());
-        }
-        else
-            CCLOG("can not get file data of %s", resolvedPath.c_str());
-        return nret;
+        relativePath[pos] = '/';
+        pos               = relativePath.find_first_of('.');
     }
+
+    // search file in package.path
+    Data chunk;
+    std::string resolvedPath;
+    auto fileUtils = FileUtils::getInstance();
+
+    lua_getglobal(L, "package");
+    lua_getfield(L, -1, "path");
+    auto searchpath = adxelua_tosv(L, -1);
+    lua_pop(L, 1);
+    size_t begin = 0;
+    size_t next  = searchpath.find_first_of(';', 0);
+
+    do
+    {
+        if (next == std::string::npos)
+            next = searchpath.length();
+        auto prefix = searchpath.substr(begin, next - begin);
+        if (prefix[0] == '.' && prefix[1] == '/')
+            prefix = prefix.substr(2);
+
+        // reserve enough for file path to avoid memory realloc when replace ? to strPath
+        resolvedPath.reserve(prefix.length() + relativePath.length());
+
+        resolvedPath.assign(prefix.data(), prefix.length());
+        pos = resolvedPath.find_last_of('?');
+        assert(pos != std::string::npos);  // package search path should have '?'
+        if (pos != std::string::npos)
+        {
+            resolvedPath.replace(pos, 1, relativePath);
+        }
+
+        if (fileUtils->isFileExist(resolvedPath))
+        {
+            chunk = fileUtils->getDataFromFile(resolvedPath);
+            break;
+        }
+
+        begin = next + 1;
+        next  = searchpath.find_first_of(';', begin);
+    } while (begin < searchpath.length());
+
+    int nret = chunk.getSize() > 0 ? 1 : 0;
+    if (nret)
+    {
+        LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
+        resolvedPath.insert(resolvedPath.begin(), '@');  // lua standard, add file chunck mark '@'
+        stack->luaLoadBuffer(L, reinterpret_cast<const char*>(chunk.getBytes()), static_cast<int>(chunk.getSize()),
+                             resolvedPath.c_str());
+    }
+    else
+        CCLOG("can not get file data of %s", resolvedPath.c_str());
+    return nret;
+}
 }

@@ -31,7 +31,8 @@
 #include "vorbis/vorbisfile.h"
 #include <memory>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
@@ -54,8 +55,10 @@ public:
     /**
      * @brief Reads audio frames of PCM format.
      * @param framesToRead The number of frames excepted to be read.
-     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| / samplesPerBlock * _bytesPerBlock.
-     * @return The number of frames actually read, it's probably less than 'framesToRead'. Returns 0 means reach the end of file.
+     * @param pcmBuf The buffer to hold the frames to be read, its size should be >= |framesToRead| / samplesPerBlock *
+     * _bytesPerBlock.
+     * @return The number of frames actually read, it's probably less than 'framesToRead'. Returns 0 means reach the end
+     * of file.
      */
     uint32_t read(uint32_t framesToRead, char* pcmBuf) override;
 
@@ -75,4 +78,4 @@ protected:
     friend class AudioDecoderManager;
 };
 
-} // namespace cocos2d {
+}  // namespace cocos2d

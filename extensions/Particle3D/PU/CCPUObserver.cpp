@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,28 +32,28 @@
 NS_CC_BEGIN
 
 // Constants
-const bool PUObserver::DEFAULT_ENABLED = true;
+const bool PUObserver::DEFAULT_ENABLED                             = true;
 const PUParticle3D::ParticleType PUObserver::DEFAULT_PARTICLE_TYPE = PUParticle3D::PT_VISUAL;
-const float PUObserver::DEFAULT_INTERVAL = 0.05f;
-const bool PUObserver::DEFAULT_UNTIL_EVENT = false;
+const float PUObserver::DEFAULT_INTERVAL                           = 0.05f;
+const bool PUObserver::DEFAULT_UNTIL_EVENT                         = false;
 
 //-----------------------------------------------------------------------
-PUObserver::PUObserver() : 
-    _particleSystem(nullptr),
-    _enabled(DEFAULT_ENABLED),
-    _originalEnabled(DEFAULT_ENABLED),
-    _originalEnabledSet(false),
-    _observe(true),
-    _observeUntilEvent(DEFAULT_UNTIL_EVENT),
-    _eventHandlersExecuted(false),
-    _observerScale(Vec3::ONE),
-    _particleTypeToObserve(DEFAULT_PARTICLE_TYPE),
-    _particleTypeToObserveSet(false),
-    _observerInterval(DEFAULT_INTERVAL),
-    _observerIntervalRemainder(0.0),
-    _observerIntervalSet(false)
+PUObserver::PUObserver()
+    : _particleSystem(nullptr)
+    , _enabled(DEFAULT_ENABLED)
+    , _originalEnabled(DEFAULT_ENABLED)
+    , _originalEnabledSet(false)
+    , _observe(true)
+    , _observeUntilEvent(DEFAULT_UNTIL_EVENT)
+    , _eventHandlersExecuted(false)
+    , _observerScale(Vec3::ONE)
+    , _particleTypeToObserve(DEFAULT_PARTICLE_TYPE)
+    , _particleTypeToObserveSet(false)
+    , _observerInterval(DEFAULT_INTERVAL)
+    , _observerIntervalRemainder(0.0)
+    , _observerIntervalSet(false)
 {
-    //mAliasType = AT_OBSERVER;
+    // mAliasType = AT_OBSERVER;
 }
 //-----------------------------------------------------------------------
 PUObserver::~PUObserver()
@@ -61,10 +61,10 @@ PUObserver::~PUObserver()
     destroyAllEventHandlers();
 }
 //-----------------------------------------------------------------------
-void PUObserver::notifyStart ()
+void PUObserver::notifyStart()
 {
     _eventHandlersExecuted = false;
-    _observe = true;
+    _observe               = true;
     setEnabled(_originalEnabled);
 }
 //-----------------------------------------------------------------------
@@ -84,7 +84,7 @@ void PUObserver::setEnabled(bool enabled)
     if (!_originalEnabledSet)
     {
         // Only one time is permitted
-        _originalEnabled = enabled;
+        _originalEnabled    = enabled;
         _originalEnabledSet = true;
     }
 }
@@ -101,7 +101,7 @@ float PUObserver::getObserverInterval() const
 //-----------------------------------------------------------------------
 void PUObserver::setObserverInterval(float observerInterval)
 {
-    _observerInterval = observerInterval;
+    _observerInterval    = observerInterval;
     _observerIntervalSet = true;
 }
 //-----------------------------------------------------------------------
@@ -162,13 +162,13 @@ void PUObserver::removeEventHandler(PUEventHandler* eventHandler)
     eventHandler->setParentObserver(0);
 }
 //-----------------------------------------------------------------------
-PUEventHandler* PUObserver::getEventHandler (size_t index) const
+PUEventHandler* PUObserver::getEventHandler(size_t index) const
 {
     CCASSERT(index < _eventHandlers.size(), "EventHandler index out of bounds!");
     return _eventHandlers[index];
 }
 //-----------------------------------------------------------------------
-PUEventHandler* PUObserver::getEventHandler (const std::string& eventHandlerName) const
+PUEventHandler* PUObserver::getEventHandler(const std::string& eventHandlerName) const
 {
     if (eventHandlerName.empty())
         return nullptr;
@@ -186,7 +186,7 @@ PUEventHandler* PUObserver::getEventHandler (const std::string& eventHandlerName
     return nullptr;
 }
 //-----------------------------------------------------------------------
-size_t PUObserver::getNumEventHandlers () const
+size_t PUObserver::getNumEventHandlers() const
 {
     return _eventHandlers.size();
 }
@@ -200,7 +200,7 @@ void PUObserver::destroyEventHandler(PUEventHandler* eventHandler)
         if (*it == eventHandler)
         {
             // Destroy it
-            //ParticleSystemManager::getSingletonPtr()->destroyEventHandler(*it);
+            // ParticleSystemManager::getSingletonPtr()->destroyEventHandler(*it);
             (*it)->release();
             _eventHandlers.erase(it);
             break;
@@ -208,29 +208,29 @@ void PUObserver::destroyEventHandler(PUEventHandler* eventHandler)
     }
 }
 //-----------------------------------------------------------------------
-void PUObserver::destroyEventHandler (size_t index)
+void PUObserver::destroyEventHandler(size_t index)
 {
     destroyEventHandler(getEventHandler(index));
 }
 //-----------------------------------------------------------------------
-void PUObserver::destroyAllEventHandlers ()
+void PUObserver::destroyAllEventHandlers()
 {
     ParticleEventHandlerIterator it;
     for (it = _eventHandlers.begin(); it != _eventHandlers.end(); ++it)
     {
         (*it)->release();
-        //ParticleSystemManager::getSingletonPtr()->destroyEventHandler(*it);
+        // ParticleSystemManager::getSingletonPtr()->destroyEventHandler(*it);
     }
     _eventHandlers.clear();
 }
 //-----------------------------------------------------------------------
 void PUObserver::setParticleTypeToObserve(const PUParticle3D::ParticleType particleTypeToObserve)
 {
-    _particleTypeToObserve = particleTypeToObserve;
+    _particleTypeToObserve    = particleTypeToObserve;
     _particleTypeToObserveSet = true;
 }
 //-----------------------------------------------------------------------
-void PUObserver::handleObserve (PUParticle3D* particle, float timeElapsed)
+void PUObserver::handleObserve(PUParticle3D* particle, float timeElapsed)
 {
     if (_enabled && _observe)
     {
@@ -242,12 +242,12 @@ void PUObserver::handleObserve (PUParticle3D* particle, float timeElapsed)
         if (observe(particle, timeElapsed))
         {
             // Handle the event
-            handleEvent (particle, timeElapsed);
+            handleEvent(particle, timeElapsed);
         }
     }
 }
 //-----------------------------------------------------------------------
-void PUObserver::handleEvent (PUParticle3D* particle, float timeElapsed)
+void PUObserver::handleEvent(PUParticle3D* particle, float timeElapsed)
 {
     if (_eventHandlers.empty())
         return;
@@ -266,7 +266,7 @@ bool PUObserver::isParticleTypeToObserveSet() const
     return _particleTypeToObserveSet;
 }
 
-void PUObserver::preUpdateObserver( float deltaTime )
+void PUObserver::preUpdateObserver(float deltaTime)
 {
     if (!_enabled)
         return;
@@ -286,7 +286,7 @@ void PUObserver::preUpdateObserver( float deltaTime )
     }
 }
 
-void PUObserver::updateObserver( PUParticle3D *particle, float deltaTime, bool firstParticle )
+void PUObserver::updateObserver(PUParticle3D* particle, float deltaTime, bool firstParticle)
 {
     if (!_enabled)
         return;
@@ -304,41 +304,36 @@ void PUObserver::updateObserver( PUParticle3D *particle, float deltaTime, bool f
     handleObserve(particle, deltaTime);
 }
 
-void PUObserver::postUpdateObserver( float /*deltaTime*/ )
-{
+void PUObserver::postUpdateObserver(float /*deltaTime*/) {}
 
-}
+void PUObserver::firstParticleUpdate(PUParticle3D* /*particle*/, float /*deltaTime*/) {}
 
-void PUObserver::firstParticleUpdate( PUParticle3D* /*particle*/, float /*deltaTime*/ )
-{
-
-}
-
-void PUObserver::copyAttributesTo( PUObserver* observer )
+void PUObserver::copyAttributesTo(PUObserver* observer)
 {
     // Copy attributes
     observer->setName(_name);
     observer->setObserverType(_observerType);
-    observer->_particleTypeToObserve = _particleTypeToObserve;
-    observer->_particleTypeToObserveSet = _particleTypeToObserveSet;
-    observer->_particleSystem = _particleSystem;
-    observer->_observerScale = _observerScale;
-    observer->_observerInterval = _observerInterval;
+    observer->_particleTypeToObserve     = _particleTypeToObserve;
+    observer->_particleTypeToObserveSet  = _particleTypeToObserveSet;
+    observer->_particleSystem            = _particleSystem;
+    observer->_observerScale             = _observerScale;
+    observer->_observerInterval          = _observerInterval;
     observer->_observerIntervalRemainder = _observerIntervalRemainder;
-    observer->_observerIntervalSet = _observerIntervalSet;
-    observer->_observeUntilEvent = _observeUntilEvent;
-    observer->_eventHandlersExecuted = _eventHandlersExecuted;
-    observer->_enabled = _enabled;
-    observer->_originalEnabled = _originalEnabled;
-    observer->_originalEnabledSet = _originalEnabledSet;
+    observer->_observerIntervalSet       = _observerIntervalSet;
+    observer->_observeUntilEvent         = _observeUntilEvent;
+    observer->_eventHandlersExecuted     = _eventHandlersExecuted;
+    observer->_enabled                   = _enabled;
+    observer->_originalEnabled           = _originalEnabled;
+    observer->_originalEnabledSet        = _originalEnabledSet;
 
     // Copy event handlers
-    size_t i = 0;
+    size_t i                     = 0;
     PUEventHandler* eventHandler = 0;
-    for(i = 0; i < getNumEventHandlers(); ++i)
+    for (i = 0; i < getNumEventHandlers(); ++i)
     {
         eventHandler = getEventHandler(i);
-        PUEventHandler *clonedEventHandler = PUEventHandlerManager::Instance()->createEventHandler(eventHandler->getEventHandlerType());
+        PUEventHandler* clonedEventHandler =
+            PUEventHandlerManager::Instance()->createEventHandler(eventHandler->getEventHandlerType());
         eventHandler->copyAttributesTo(clonedEventHandler);
         observer->addEventHandler(clonedEventHandler);
     }

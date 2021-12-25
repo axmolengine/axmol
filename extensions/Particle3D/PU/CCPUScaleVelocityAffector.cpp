@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,10 +32,7 @@ NS_CC_BEGIN
 const float PUScaleVelocityAffector::DEFAULT_VELOCITY_SCALE = 1.0f;
 
 //-----------------------------------------------------------------------
-PUScaleVelocityAffector::PUScaleVelocityAffector() : 
-    PUAffector(),
-    _sinceStartSystem(false),
-    _stopAtFlip(false)
+PUScaleVelocityAffector::PUScaleVelocityAffector() : PUAffector(), _sinceStartSystem(false), _stopAtFlip(false)
 {
     _dynScaleVelocity = new PUDynamicAttributeFixed();
     (static_cast<PUDynamicAttributeFixed*>(_dynScaleVelocity))->setValue(DEFAULT_VELOCITY_SCALE);
@@ -49,23 +46,27 @@ PUScaleVelocityAffector::~PUScaleVelocityAffector()
     }
 }
 //-----------------------------------------------------------------------
-void PUScaleVelocityAffector::updatePUAffector( PUParticle3D *particle, float deltaTime )
+void PUScaleVelocityAffector::updatePUAffector(PUParticle3D* particle, float deltaTime)
 {
-    //for (auto iter : _particleSystem->getParticles())
+    // for (auto iter : _particleSystem->getParticles())
     {
-       // PUParticle3D *particle = iter;
+        // PUParticle3D *particle = iter;
         float ds = 0;
         if (_sinceStartSystem)
         {
-            // If control points are used (curved type), the first value of each control point is seconds from the start of the system
-            ds = deltaTime * _dynamicAttributeHelper.calculate(_dynScaleVelocity, (static_cast<PUParticleSystem3D *>(_particleSystem))->getTimeElapsedSinceStart());
+            // If control points are used (curved type), the first value of each control point is seconds from the start
+            // of the system
+            ds = deltaTime * _dynamicAttributeHelper.calculate(
+                                 _dynScaleVelocity,
+                                 (static_cast<PUParticleSystem3D*>(_particleSystem))->getTimeElapsedSinceStart());
         }
         else
         {
-            // If control points are used (curved type), the first value of each control point is the fraction of the particle lifetime [0..1]
+            // If control points are used (curved type), the first value of each control point is the fraction of the
+            // particle lifetime [0..1]
             ds = deltaTime * _dynamicAttributeHelper.calculate(_dynScaleVelocity, particle->timeFraction);
         }
-        float length = particle->direction.length(); // Use length for a better delta direction value
+        float length    = particle->direction.length();  // Use length for a better delta direction value
         Vec3 calculated = particle->direction;
         calculated.x += ds * (particle->direction.x / length);
         calculated.y += ds * (particle->direction.y / length);
@@ -112,14 +113,14 @@ PUScaleVelocityAffector* PUScaleVelocityAffector::create()
     return psva;
 }
 
-void PUScaleVelocityAffector::copyAttributesTo( PUAffector* affector )
+void PUScaleVelocityAffector::copyAttributesTo(PUAffector* affector)
 {
     PUAffector::copyAttributesTo(affector);
 
     PUScaleVelocityAffector* scaleVelocityAffector = static_cast<PUScaleVelocityAffector*>(affector);
     scaleVelocityAffector->setDynScaleVelocity(getDynScaleVelocity()->clone());
     scaleVelocityAffector->_sinceStartSystem = _sinceStartSystem;
-    scaleVelocityAffector->_stopAtFlip = _stopAtFlip;
+    scaleVelocityAffector->_stopAtFlip       = _stopAtFlip;
 }
 
 NS_CC_END

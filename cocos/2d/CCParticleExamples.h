@@ -55,17 +55,18 @@ public:
      * @js NA
      */
     static ParticleFire* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleFire(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleFire()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleFire(){}
+    virtual ~ParticleFire() {}
 
     bool init() override { return initWithTotalParticles(250); }
     virtual bool initWithTotalParticles(int numberOfParticles) override;
@@ -92,24 +93,24 @@ public:
      * @js NA
      */
     static ParticleFireworks* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleFireworks(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleFireworks()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleFireworks(){}
+    virtual ~ParticleFireworks() {}
 
-    bool init(){ return initWithTotalParticles(1500); }
+    bool init() { return initWithTotalParticles(1500); }
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ParticleFireworks);
-
 };
 
 /** @class ParticleSun
@@ -130,24 +131,24 @@ public:
      * @js NA
      */
     static ParticleSun* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleSun(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleSun()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleSun(){}
+    virtual ~ParticleSun() {}
 
-    bool init(){ return initWithTotalParticles(350); }
+    bool init() { return initWithTotalParticles(350); }
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ParticleSun);
-
 };
 
 /** @class ParticleGalaxy
@@ -168,24 +169,24 @@ public:
      * @js NA
      */
     static ParticleGalaxy* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleGalaxy(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleGalaxy()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleGalaxy(){}
+    virtual ~ParticleGalaxy() {}
 
-    bool init(){ return initWithTotalParticles(200); }
+    bool init() { return initWithTotalParticles(200); }
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ParticleGalaxy);
-
 };
 
 /** @class ParticleFlower
@@ -206,19 +207,20 @@ public:
      * @js NA
      */
     static ParticleFlower* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleFlower(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleFlower()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleFlower(){}
+    virtual ~ParticleFlower() {}
 
-    bool init(){ return initWithTotalParticles(250); }
+    bool init() { return initWithTotalParticles(250); }
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
@@ -235,7 +237,7 @@ public:
      *
      * @return An autoreleased ParticleMeteor object.
      */
-    static ParticleMeteor * create();
+    static ParticleMeteor* create();
     /** Create a meteor particle system withe a fixed number of particles.
      *
      * @param numberOfParticles A given number of particles.
@@ -243,19 +245,20 @@ public:
      * @js NA
      */
     static ParticleMeteor* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleMeteor(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleMeteor()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleMeteor(){}
+    virtual ~ParticleMeteor() {}
 
-    bool init(){ return initWithTotalParticles(150); }
+    bool init() { return initWithTotalParticles(150); }
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
@@ -280,24 +283,24 @@ public:
      * @js NA
      */
     static ParticleSpiral* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleSpiral(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleSpiral()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleSpiral(){}
+    virtual ~ParticleSpiral() {}
 
-    bool init(){ return initWithTotalParticles(500); }
+    bool init() { return initWithTotalParticles(500); }
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ParticleSpiral);
-
 };
 
 /** @class ParticleExplosion
@@ -318,19 +321,20 @@ public:
      * @js NA
      */
     static ParticleExplosion* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleExplosion(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleExplosion()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleExplosion(){}
+    virtual ~ParticleExplosion() {}
 
-    bool init(){ return initWithTotalParticles(700); }
+    bool init() { return initWithTotalParticles(700); }
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
@@ -355,19 +359,20 @@ public:
      * @js NA
      */
     static ParticleSmoke* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleSmoke(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleSmoke()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleSmoke(){}
+    virtual ~ParticleSmoke() {}
 
-    bool init(){ return initWithTotalParticles(200); }
+    bool init() { return initWithTotalParticles(200); }
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
@@ -392,19 +397,20 @@ public:
      * @js NA
      */
     static ParticleSnow* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleSnow(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleSnow()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleSnow(){}
+    virtual ~ParticleSnow() {}
 
-    bool init(){ return initWithTotalParticles(700); }
+    bool init() { return initWithTotalParticles(700); }
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
@@ -429,19 +435,20 @@ public:
      * @js NA
      */
     static ParticleRain* createWithTotalParticles(int numberOfParticles);
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    ParticleRain(){}
+
+    CC_CONSTRUCTOR_ACCESS :
+        /**
+         * @js ctor
+         */
+        ParticleRain()
+    {}
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleRain(){}
+    virtual ~ParticleRain() {}
 
-    bool init(){ return initWithTotalParticles(1000); }
+    bool init() { return initWithTotalParticles(1000); }
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
@@ -453,4 +460,4 @@ private:
 
 NS_CC_END
 
-#endif //__CCPARTICLE_EXAMPLE_H__
+#endif  //__CCPARTICLE_EXAMPLE_H__

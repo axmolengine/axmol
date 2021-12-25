@@ -27,30 +27,30 @@
 #pragma once
 
 #if !defined(CC_USE_MOJOAL)
-#define CC_USE_MOJOAL 0
+#    define CC_USE_MOJOAL 0
 #endif
 
 #if !defined(__APPLE__)
-#if !defined(CC_USE_ALSOFT) && !CC_USE_MOJOAL
-#define CC_USE_ALSOFT 1
-#endif
+#    if !defined(CC_USE_ALSOFT) && !CC_USE_MOJOAL
+#        define CC_USE_ALSOFT 1
+#    endif
 #endif
 
 // if CC_USE_MOJOAL, force disable openal-soft
 #if CC_USE_MOJOAL
-#define CC_USE_ALSOFT 0
+#    define CC_USE_ALSOFT 0
 #endif
 
 #if !CC_USE_ALSOFT && !CC_USE_MOJOAL
-#import <OpenAL/al.h>
-#import <OpenAL/alc.h>
-#define MAX_AUDIOINSTANCES 24
+#    import <OpenAL/al.h>
+#    import <OpenAL/alc.h>
+#    define MAX_AUDIOINSTANCES 24
 #else
-#define AL_ALEXT_PROTOTYPES 1
-#include "AL/al.h"
-#include "AL/alc.h"
-#if !CC_USE_MOJOAL
-#include "AL/alext.h"
-#endif
-#define MAX_AUDIOINSTANCES 32
+#    define AL_ALEXT_PROTOTYPES 1
+#    include "AL/al.h"
+#    include "AL/alc.h"
+#    if !CC_USE_MOJOAL
+#        include "AL/alext.h"
+#    endif
+#    define MAX_AUDIOINSTANCES 32
 #endif

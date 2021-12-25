@@ -40,11 +40,11 @@ THE SOFTWARE.
 NS_CC_BEGIN
 
 FT_Library FontFreeType::_FTlibrary;
-bool FontFreeType::_FTInitialized           = false;
+bool FontFreeType::_FTInitialized = false;
 #if !defined(__ANDROID__)
-bool FontFreeType::_streamParsingEnabled    = true;
+bool FontFreeType::_streamParsingEnabled = true;
 #else
-bool FontFreeType::_streamParsingEnabled    = false;
+bool FontFreeType::_streamParsingEnabled = false;
 #endif
 bool FontFreeType::_doNativeBytecodeHinting = true;
 const int FontFreeType::DistanceMapSpread   = 6;
@@ -110,7 +110,7 @@ FontFreeType* FontFreeType::create(std::string_view fontName,
         tempFont->autorelease();
         return tempFont;
     }
-    
+
     delete tempFont;
     return nullptr;
 }
@@ -197,7 +197,7 @@ bool FontFreeType::loadFontFace(std::string_view fontName, float fontSize)
         fts->read               = ft_stream_read_callback;
         fts->close              = ft_stream_close_callback;
         fts->size               = static_cast<unsigned long>(fs->size());
-        fts->descriptor.pointer = fs.release(); // transfer ownership to FT_Open_Face
+        fts->descriptor.pointer = fs.release();  // transfer ownership to FT_Open_Face
 
         FT_Open_Args args = {0};
         args.flags        = FT_OPEN_STREAM;
@@ -224,8 +224,8 @@ bool FontFreeType::loadFontFace(std::string_view fontName, float fontSize)
 
         ++sharableData->referenceCount;
         auto& data = sharableData->data;
-        if (data.isNull() || FT_New_Memory_Face(getFTLibrary(), data.getBytes(),
-                                                static_cast<FT_Long>(data.getSize()), 0, &face))
+        if (data.isNull() ||
+            FT_New_Memory_Face(getFTLibrary(), data.getBytes(), static_cast<FT_Long>(data.getSize()), 0, &face))
             return false;
     }
 
@@ -418,7 +418,8 @@ unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
             break;
         if (_distanceFieldEnabled && _fontFace->glyph->bitmap.buffer)
         {
-            // Require freetype version > 2.11.0, because freetype 2.11.0 sdf has memory access bug, see: https://gitlab.freedesktop.org/freetype/freetype/-/issues/1077
+            // Require freetype version > 2.11.0, because freetype 2.11.0 sdf has memory access bug, see:
+            // https://gitlab.freedesktop.org/freetype/freetype/-/issues/1077
             FT_Render_Glyph(_fontFace->glyph, FT_Render_Mode::FT_RENDER_MODE_SDF);
         }
 
@@ -634,19 +635,19 @@ std::string_view FontFreeType::getGlyphCollection() const
     std::string_view glyphCollection;
     switch (_usedGlyphs)
     {
-        case cocos2d::GlyphCollection::DYNAMIC:
-            break;
-        case cocos2d::GlyphCollection::NEHE:
-            glyphCollection = _glyphNEHE;
-            break;
-        case cocos2d::GlyphCollection::ASCII:
-            glyphCollection = _glyphASCII;
-            break;
-        case cocos2d::GlyphCollection::CUSTOM:
-            glyphCollection = _customGlyphs;
-            break;
-        default:
-            break;
+    case cocos2d::GlyphCollection::DYNAMIC:
+        break;
+    case cocos2d::GlyphCollection::NEHE:
+        glyphCollection = _glyphNEHE;
+        break;
+    case cocos2d::GlyphCollection::ASCII:
+        glyphCollection = _glyphASCII;
+        break;
+    case cocos2d::GlyphCollection::CUSTOM:
+        glyphCollection = _customGlyphs;
+        break;
+    default:
+        break;
     }
 
     return glyphCollection;

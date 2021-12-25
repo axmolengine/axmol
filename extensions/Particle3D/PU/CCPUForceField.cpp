@@ -2,19 +2,19 @@
  Copyright (C) 2013 Henry van Merode. All rights reserved.
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -77,7 +77,7 @@ void PUForceFieldCalculationFactory::setPersistence(double persistence)
 //-----------------------------------------------------------------------
 unsigned int PUForceFieldCalculationFactory::getForceFieldSize() const
 {
-    return 1; // Return default cubic size
+    return 1;  // Return default cubic size
 }
 //-----------------------------------------------------------------------
 void PUForceFieldCalculationFactory::setForceFieldSize(unsigned int forceFieldSize)
@@ -107,22 +107,22 @@ void PUForceFieldCalculationFactory::setWorldSize(const Vec3& worldSize)
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 void PURealTimeForceFieldCalculationFactory::generate(unsigned int /*forceFieldSize*/,
-                                                    unsigned short octaves, 
-                                                    double frequency, 
-                                                    double amplitude, 
-                                                    double persistence, 
-                                                    const Vec3& worldSize)
+                                                      unsigned short octaves,
+                                                      double frequency,
+                                                      double amplitude,
+                                                      double persistence,
+                                                      const Vec3& worldSize)
 {
-    _octaves = octaves;
-    _frequency = frequency;
-    _amplitude = amplitude;
+    _octaves     = octaves;
+    _frequency   = frequency;
+    _amplitude   = amplitude;
     _persistence = persistence;
-    _worldSize = worldSize;
+    _worldSize   = worldSize;
     _noise3D.initialise(octaves, frequency, amplitude, persistence);
 
     if (worldSize != Vec3::ZERO)
     {
-        _mapScale.x = 1.0f / worldSize.x; // Remark: forceFieldSize is not used, because it is a unit cube
+        _mapScale.x = 1.0f / worldSize.x;  // Remark: forceFieldSize is not used, because it is a unit cube
         _mapScale.y = 1.0f / worldSize.y;
         _mapScale.z = 1.0f / worldSize.z;
     }
@@ -134,35 +134,33 @@ void PURealTimeForceFieldCalculationFactory::determineForce(const Vec3& position
     _mappedPosition.y = _mapScale.y * position.y;
     _mappedPosition.z = _mapScale.z * position.z;
 
-    if (_mappedPosition.x < 0.0f || _mappedPosition.x > 1.0f ||
-        _mappedPosition.y < 0.0f || _mappedPosition.y > 1.0f ||
+    if (_mappedPosition.x < 0.0f || _mappedPosition.x > 1.0f || _mappedPosition.y < 0.0f || _mappedPosition.y > 1.0f ||
         _mappedPosition.z < 0.0f || _mappedPosition.z > 1.0f)
     {
         // Position is outside the forcefield (outside the unit cube)
         return;
     }
 
-    force.x = (float)(_noise3D.noise(_mappedPosition.x + delta, _mappedPosition.y, _mappedPosition.z) - 
-        _noise3D.noise(_mappedPosition.x - delta, _mappedPosition.y, _mappedPosition.z));
-    force.y = (float)(_noise3D.noise(_mappedPosition.x, _mappedPosition.y + delta, _mappedPosition.z) - 
-        _noise3D.noise(_mappedPosition.x, _mappedPosition.y - delta, _mappedPosition.z));
-    force.z = (float)(_noise3D.noise(_mappedPosition.x, _mappedPosition.y, _mappedPosition.z + delta) - 
-        _noise3D.noise(_mappedPosition.x, _mappedPosition.y, _mappedPosition.z - delta));
+    force.x = (float)(_noise3D.noise(_mappedPosition.x + delta, _mappedPosition.y, _mappedPosition.z) -
+                      _noise3D.noise(_mappedPosition.x - delta, _mappedPosition.y, _mappedPosition.z));
+    force.y = (float)(_noise3D.noise(_mappedPosition.x, _mappedPosition.y + delta, _mappedPosition.z) -
+                      _noise3D.noise(_mappedPosition.x, _mappedPosition.y - delta, _mappedPosition.z));
+    force.z = (float)(_noise3D.noise(_mappedPosition.x, _mappedPosition.y, _mappedPosition.z + delta) -
+                      _noise3D.noise(_mappedPosition.x, _mappedPosition.y, _mappedPosition.z - delta));
 }
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
-PUForceField::PUForceField() :
-    _octaves(2),
-    _frequency(1.0f),
-    _amplitude(1.0f),
-    _persistence(1.0f),
-    _worldSize(PUForceFieldCalculationFactory::DEFAULT_WORLDSIZE),
-    _forceFieldSize(64),
-    _forceFieldCalculationFactory(0),
-    _forceFieldType(FF_REALTIME_CALC)
-{
-}
+PUForceField::PUForceField()
+    : _octaves(2)
+    , _frequency(1.0f)
+    , _amplitude(1.0f)
+    , _persistence(1.0f)
+    , _worldSize(PUForceFieldCalculationFactory::DEFAULT_WORLDSIZE)
+    , _forceFieldSize(64)
+    , _forceFieldCalculationFactory(0)
+    , _forceFieldType(FF_REALTIME_CALC)
+{}
 //-----------------------------------------------------------------------
 PUForceField::~PUForceField()
 {
@@ -173,13 +171,13 @@ PUForceField::~PUForceField()
 }
 //-----------------------------------------------------------------------
 void PUForceField::initialise(ForceFieldType type,
-                            const Vec3& position,
-                            unsigned int forceFieldSize, 
-                            unsigned short octaves, 
-                            double frequency, 
-                            double amplitude, 
-                            double persistence, 
-                            const Vec3& worldSize)
+                              const Vec3& position,
+                              unsigned int forceFieldSize,
+                              unsigned short octaves,
+                              double frequency,
+                              double amplitude,
+                              double persistence,
+                              const Vec3& worldSize)
 
 {
     // Initialise first
@@ -193,12 +191,12 @@ void PUForceField::initialise(ForceFieldType type,
 }
 //-----------------------------------------------------------------------
 void PUForceField::initialise(ForceFieldType type,
-                            unsigned int forceFieldSize, 
-                            unsigned short octaves, 
-                            double frequency, 
-                            double amplitude, 
-                            double persistence, 
-                            const Vec3& worldSize)
+                              unsigned int forceFieldSize,
+                              unsigned short octaves,
+                              double frequency,
+                              double amplitude,
+                              double persistence,
+                              const Vec3& worldSize)
 {
     // Create a factory
     _forceFieldCalculationFactory = createForceFieldCalculationFactory(type);
@@ -249,7 +247,7 @@ PUForceFieldCalculationFactory* PUForceField::createForceFieldCalculationFactory
     if (type == FF_MATRIX_CALC)
     {
         // Use precreated matrix
-        //setForceFieldCalculationFactory(new MatrixForceFieldCalculationFactory());
+        // setForceFieldCalculationFactory(new MatrixForceFieldCalculationFactory());
         return getForceFieldCalculationFactory();
     }
     else

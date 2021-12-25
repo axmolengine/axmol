@@ -26,11 +26,13 @@
 
 #include "base/CCController.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 )
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||   \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
-#include "base/CCEventDispatcher.h"
-#include "base/CCEventController.h"
-#include "base/CCDirector.h"
+#    include "base/CCEventDispatcher.h"
+#    include "base/CCEventController.h"
+#    include "base/CCDirector.h"
 
 NS_CC_BEGIN
 
@@ -38,7 +40,7 @@ std::vector<Controller*> Controller::s_allController;
 
 Controller* Controller::getControllerByTag(int tag)
 {
-    for (auto controller:Controller::s_allController)
+    for (auto controller : Controller::s_allController)
     {
         if (controller->_controllerTag == tag)
         {
@@ -60,22 +62,21 @@ Controller* Controller::getControllerByDeviceId(int deviceId)
     return nullptr;
 }
 
-
 void Controller::init()
 {
     for (int key = Key::JOYSTICK_LEFT_X; key < Key::KEY_MAX; ++key)
     {
         _allKeyStatus[key].isPressed = false;
-        _allKeyStatus[key].value = 0.0f;
+        _allKeyStatus[key].value     = 0.0f;
 
         _allKeyPrevStatus[key].isPressed = false;
-        _allKeyPrevStatus[key].value = 0.0f;
+        _allKeyPrevStatus[key].value     = 0.0f;
     }
 
     _eventDispatcher = Director::getInstance()->getEventDispatcher();
-    _connectEvent = new EventController(EventController::ControllerEventType::CONNECTION, this, false);
-    _keyEvent = new EventController(EventController::ControllerEventType::BUTTON_STATUS_CHANGED, this, 0);
-    _axisEvent = new EventController(EventController::ControllerEventType::AXIS_STATUS_CHANGED, this, 0);
+    _connectEvent    = new EventController(EventController::ControllerEventType::CONNECTION, this, false);
+    _keyEvent        = new EventController(EventController::ControllerEventType::BUTTON_STATUS_CHANGED, this, 0);
+    _axisEvent       = new EventController(EventController::ControllerEventType::AXIS_STATUS_CHANGED, this, 0);
 }
 
 const Controller::KeyStatus& Controller::getKeyStatus(int keyCode)
@@ -83,7 +84,7 @@ const Controller::KeyStatus& Controller::getKeyStatus(int keyCode)
     if (_allKeyStatus.find(keyCode) == _allKeyStatus.end())
     {
         _allKeyStatus[keyCode].isPressed = false;
-        _allKeyStatus[keyCode].value = 0.0f;
+        _allKeyStatus[keyCode].value     = 0.0f;
     }
 
     return _allKeyStatus[keyCode];
@@ -105,10 +106,10 @@ void Controller::onDisconnected()
 
 void Controller::onButtonEvent(int keyCode, bool isPressed, float value, bool isAnalog)
 {
-    _allKeyPrevStatus[keyCode] = _allKeyStatus[keyCode];
+    _allKeyPrevStatus[keyCode]       = _allKeyStatus[keyCode];
     _allKeyStatus[keyCode].isPressed = isPressed;
-    _allKeyStatus[keyCode].value = value;
-    _allKeyStatus[keyCode].isAnalog = isAnalog;
+    _allKeyStatus[keyCode].value     = value;
+    _allKeyStatus[keyCode].isAnalog  = isAnalog;
 
     _keyEvent->setKeyCode(keyCode);
     _eventDispatcher->dispatchEvent(_keyEvent);
@@ -116,8 +117,8 @@ void Controller::onButtonEvent(int keyCode, bool isPressed, float value, bool is
 
 void Controller::onAxisEvent(int axisCode, float value, bool isAnalog)
 {
-    _allKeyPrevStatus[axisCode] = _allKeyStatus[axisCode];
-    _allKeyStatus[axisCode].value = value;
+    _allKeyPrevStatus[axisCode]      = _allKeyStatus[axisCode];
+    _allKeyStatus[axisCode].value    = value;
     _allKeyStatus[axisCode].isAnalog = isAnalog;
 
     _axisEvent->setKeyCode(axisCode);
@@ -126,4 +127,5 @@ void Controller::onAxisEvent(int axisCode, float value, bool isAnalog)
 
 NS_CC_END
 
-#endif // (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#endif  // (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM ==
+        // CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,23 +34,23 @@
 
 NS_CC_BEGIN
 
-Skybox::Skybox():
-    _texture(nullptr)
-{
-}
+Skybox::Skybox() : _texture(nullptr) {}
 
 Skybox::~Skybox()
 {
     _texture->release();
 }
 
-Skybox* Skybox::create(const std::string& positive_x, const std::string& negative_x,
-               const std::string& positive_y, const std::string& negative_y,
-               const std::string& positive_z, const std::string& negative_z)
+Skybox* Skybox::create(const std::string& positive_x,
+                       const std::string& negative_x,
+                       const std::string& positive_y,
+                       const std::string& negative_y,
+                       const std::string& positive_z,
+                       const std::string& negative_z)
 {
     auto ret = new Skybox();
     ret->init(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
-    
+
     ret->autorelease();
     return ret;
 }
@@ -67,36 +67,40 @@ bool Skybox::init()
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::SKYBOX_3D);
     setProgramState(new backend::ProgramState(program), false);
 
-    auto &pipelineDescriptor = _customCommand.getPipelineDescriptor();
-    auto layout = _programState->getVertexLayout();
+    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
+    auto layout              = _programState->getVertexLayout();
 
     pipelineDescriptor.programState = _programState;
     // disable blend
-    pipelineDescriptor.blendDescriptor.blendEnabled = false; 
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+    pipelineDescriptor.blendDescriptor.blendEnabled = false;
+    const auto& attributeInfo                       = _programState->getProgram()->getActiveAttributes();
     const auto& iter = attributeInfo.find(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION);
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
-        layout->setAttribute(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION, iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
+        layout->setAttribute(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION, iter->second.location,
+                             backend::VertexFormat::FLOAT3, 0, false);
     }
     layout->setLayout(sizeof(Vec3));
 
-    _uniformColorLoc = _programState->getUniformLocation("u_color");
+    _uniformColorLoc     = _programState->getUniformLocation("u_color");
     _uniformCameraRotLoc = _programState->getUniformLocation("u_cameraRot");
-    _uniformEnvLoc = _programState->getUniformLocation("u_Env");
+    _uniformEnvLoc       = _programState->getUniformLocation("u_Env");
 
     initBuffers();
     return true;
 }
 
-bool Skybox::init(const std::string& positive_x, const std::string& negative_x,
-          const std::string& positive_y, const std::string& negative_y,
-          const std::string& positive_z, const std::string& negative_z)
+bool Skybox::init(const std::string& positive_x,
+                  const std::string& negative_x,
+                  const std::string& positive_y,
+                  const std::string& negative_y,
+                  const std::string& positive_z,
+                  const std::string& negative_z)
 {
     auto texture = TextureCube::create(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
     if (texture == nullptr)
         return false;
-    
+
     init();
     setTexture(texture);
     texture->release();
@@ -106,34 +110,31 @@ bool Skybox::init(const std::string& positive_x, const std::string& negative_x,
 void Skybox::initBuffers()
 {
 
-	// The skybox is rendered using a purpose-built shader which makes use of
-	// the shader language's inherent support for cubemaps. Hence there is no
-	// need to build a cube mesh. All that is needed is a single quad that
-	// covers the entire screen. The vertex shader will draw the appropriate
-	// view of the cubemap onto that quad.
-	//
-	// The vertex shader does not apply either the model/view matrix or the
-	// projection matrix, so the appropriate quad is one with unit coordinates
-	// in the x and y dimensions. Such a quad will exactly cover the screen.
-	// To ensure that the skybox is rendered behind all other objects, z needs
-	// to be 1.0, but the vertex shader overwrites z to 1.0, so - for the sake
-	// of z-buffering - it is unimportant what we set it to for the vertices
-	// of the quad.
-	//
-	// The quad vertex positions are also used in deriving a direction
-	// vector for the cubemap lookup. We choose z = -1 which matches the
-	// negative-z pointing direction of the camera and gives a field of
-	// view of 90deg in both x and y, if not otherwise adjusted. That fov
-	// is then adjusted to exactly match the camera by applying a prescaling
-	// to the camera's world transformation before sending it to the shader.
+    // The skybox is rendered using a purpose-built shader which makes use of
+    // the shader language's inherent support for cubemaps. Hence there is no
+    // need to build a cube mesh. All that is needed is a single quad that
+    // covers the entire screen. The vertex shader will draw the appropriate
+    // view of the cubemap onto that quad.
+    //
+    // The vertex shader does not apply either the model/view matrix or the
+    // projection matrix, so the appropriate quad is one with unit coordinates
+    // in the x and y dimensions. Such a quad will exactly cover the screen.
+    // To ensure that the skybox is rendered behind all other objects, z needs
+    // to be 1.0, but the vertex shader overwrites z to 1.0, so - for the sake
+    // of z-buffering - it is unimportant what we set it to for the vertices
+    // of the quad.
+    //
+    // The quad vertex positions are also used in deriving a direction
+    // vector for the cubemap lookup. We choose z = -1 which matches the
+    // negative-z pointing direction of the camera and gives a field of
+    // view of 90deg in both x and y, if not otherwise adjusted. That fov
+    // is then adjusted to exactly match the camera by applying a prescaling
+    // to the camera's world transformation before sending it to the shader.
 
     // init vertex buffer object
-    Vec3 vexBuf[] =
-    {
-        Vec3(1, -1, -1), Vec3(1, 1, -1), Vec3(-1, 1, -1), Vec3(-1, -1, -1)
-    };
+    Vec3 vexBuf[] = {Vec3(1, -1, -1), Vec3(1, 1, -1), Vec3(-1, 1, -1), Vec3(-1, -1, -1)};
 
-    uint16_t idxBuf[] = { 0, 1, 2, 0, 2, 3 };
+    uint16_t idxBuf[] = {0, 1, 2, 0, 2, 3};
 
     _customCommand.createVertexBuffer(sizeof(Vec3), sizeof(vexBuf), CustomCommand::BufferUsage::STATIC);
     _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, 6, CustomCommand::BufferUsage::STATIC);
@@ -151,7 +152,7 @@ void Skybox::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     auto camera = Camera::getVisitingCamera();
 
     Mat4 cameraModelMat = camera->getNodeToWorldTransform();
-    Mat4 projectionMat = camera->getProjectionMatrix();
+    Mat4 projectionMat  = camera->getProjectionMatrix();
     // Ignore the translation
     cameraModelMat.m[12] = cameraModelMat.m[13] = cameraModelMat.m[14] = 0;
     // prescale the matrix to account for the camera fov
@@ -180,11 +181,11 @@ void Skybox::reload()
 
 void Skybox::onBeforeDraw()
 {
-    auto *renderer = _director->getRenderer();
-    
+    auto* renderer = _director->getRenderer();
+
     _rendererDepthTestEnabled = renderer->getDepthTest();
-    _rendererDepthCmpFunc = renderer->getDepthCompareFunction();
-    _rendererCullMode = renderer->getCullMode();
+    _rendererDepthCmpFunc     = renderer->getDepthCompareFunction();
+    _rendererCullMode         = renderer->getCullMode();
 
     renderer->setDepthTest(true);
     renderer->setDepthCompareFunction(backend::CompareFunction::LESS_EQUAL);
@@ -193,7 +194,7 @@ void Skybox::onBeforeDraw()
 
 void Skybox::onAfterDraw()
 {
-    auto *renderer = _director->getRenderer();
+    auto* renderer = _director->getRenderer();
     renderer->setDepthTest(_rendererDepthTestEnabled);
     renderer->setDepthCompareFunction(_rendererDepthCmpFunc);
     renderer->setCullMode(_rendererCullMode);

@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +26,10 @@
 #include "navmesh/CCNavMeshObstacle.h"
 #if CC_USE_NAVMESH
 
-#include "navmesh/CCNavMesh.h"
-#include "2d/CCNode.h"
-#include "2d/CCScene.h"
-#include "recast/DetourTileCache.h"
+#    include "navmesh/CCNavMesh.h"
+#    include "2d/CCNode.h"
+#    include "2d/CCScene.h"
+#    include "recast/DetourTileCache.h"
 
 NS_CC_BEGIN
 
@@ -52,19 +52,10 @@ const std::string& NavMeshObstacle::getNavMeshObstacleComponentName()
 }
 
 NavMeshObstacle::NavMeshObstacle()
-: _radius(0.0f)
-, _height(0.0f)
-, _syncFlag(NODE_AND_NODE)
-, _obstacleID(-1)
-, _tileCache(nullptr)
-{
+    : _radius(0.0f), _height(0.0f), _syncFlag(NODE_AND_NODE), _obstacleID(-1), _tileCache(nullptr)
+{}
 
-}
-
-cocos2d::NavMeshObstacle::~NavMeshObstacle()
-{
-
-}
+cocos2d::NavMeshObstacle::~NavMeshObstacle() {}
 
 bool NavMeshObstacle::initWith(float radius, float height)
 {
@@ -77,33 +68,37 @@ bool NavMeshObstacle::initWith(float radius, float height)
 void cocos2d::NavMeshObstacle::removeFrom(dtTileCache* /*tileCache*/)
 {
     _tileCache->removeObstacle(_obstacleID);
-    _tileCache = nullptr;
+    _tileCache  = nullptr;
     _obstacleID = -1;
 }
 
-void cocos2d::NavMeshObstacle::addTo(dtTileCache *tileCache)
+void cocos2d::NavMeshObstacle::addTo(dtTileCache* tileCache)
 {
     _tileCache = tileCache;
-    Mat4 mat = _owner->getNodeToWorldTransform();
+    Mat4 mat   = _owner->getNodeToWorldTransform();
     _tileCache->addObstacle(&mat.m[12], _radius, _height, &_obstacleID);
 }
 
 void cocos2d::NavMeshObstacle::onExit()
 {
-    if (_obstacleID == -1) return;
+    if (_obstacleID == -1)
+        return;
     Component::onExit();
     auto scene = _owner->getScene();
-    if (scene && scene->getNavMesh()){
+    if (scene && scene->getNavMesh())
+    {
         scene->getNavMesh()->removeNavMeshObstacle(this);
     }
 }
 
 void cocos2d::NavMeshObstacle::onEnter()
 {
-    if (_obstacleID != -1) return;
+    if (_obstacleID != -1)
+        return;
     Component::onEnter();
     auto scene = _owner->getScene();
-    if (scene && scene->getNavMesh()){
+    if (scene && scene->getNavMesh())
+    {
         scene->getNavMesh()->addNavMeshObstacle(this);
     }
 }
@@ -122,11 +117,13 @@ void cocos2d::NavMeshObstacle::preUpdate(float /*delta*/)
 
 void NavMeshObstacle::syncToNode()
 {
-    if (_tileCache){
+    if (_tileCache)
+    {
         auto obstacle = _tileCache->getObstacleByRef(_obstacleID);
-        if (obstacle && obstacle->type == DT_OBSTACLE_CYLINDER){
+        if (obstacle && obstacle->type == DT_OBSTACLE_CYLINDER)
+        {
             auto& cylinder = obstacle->cylinder;
-            Vec3 localPos = Vec3(cylinder.pos[0], cylinder.pos[1], cylinder.pos[2]);
+            Vec3 localPos  = Vec3(cylinder.pos[0], cylinder.pos[1], cylinder.pos[2]);
             if (_owner->getParent())
                 _owner->getParent()->getWorldToNodeTransform().transformPoint(localPos, &localPos);
             _owner->setPosition3D(localPos);
@@ -148,14 +145,16 @@ void cocos2d::NavMeshObstacle::setHeight(float height)
 
 void NavMeshObstacle::syncToObstacle()
 {
-    if (_tileCache){
+    if (_tileCache)
+    {
         auto obstacle = _tileCache->getObstacleByRef(_obstacleID);
-        if (obstacle && obstacle->type == DT_OBSTACLE_CYLINDER){
-            Mat4 mat = _owner->getNodeToWorldTransform();
+        if (obstacle && obstacle->type == DT_OBSTACLE_CYLINDER)
+        {
+            Mat4 mat       = _owner->getNodeToWorldTransform();
             auto& cylinder = obstacle->cylinder;
-            if ((mat.m[12] != cylinder.pos[0] && mat.m[13] != cylinder.pos[1] && mat.m[14] != cylinder.pos[2])
-                || cylinder.radius != _radius
-                || cylinder.height != _height){
+            if ((mat.m[12] != cylinder.pos[0] && mat.m[13] != cylinder.pos[1] && mat.m[14] != cylinder.pos[2]) ||
+                cylinder.radius != _radius || cylinder.height != _height)
+            {
                 _tileCache->removeObstacle(_obstacleID);
                 _tileCache->addObstacle(&mat.m[12], _radius, _height, &_obstacleID);
             }
@@ -165,4 +164,4 @@ void NavMeshObstacle::syncToObstacle()
 
 NS_CC_END
 
-#endif //CC_USE_NAVMESH
+#endif  // CC_USE_NAVMESH

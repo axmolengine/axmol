@@ -41,7 +41,7 @@ std::string UserData::getString(unsigned index) const
 
 void ActionData::_onClear()
 {
-    if (data != nullptr) 
+    if (data != nullptr)
     {
         data->returnToPool();
     }

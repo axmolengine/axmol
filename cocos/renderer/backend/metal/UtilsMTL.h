@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../Macros.h"
@@ -50,14 +50,14 @@ struct UtilsMTL
      * init GPU texture supported formats
      */
     static void initGPUTextureFormats();
-    
+
     /**
      * Update default color attachment texture.
      * @param texture Specifies the texture to be setted to the color attachemnt.
      */
     static void updateDefaultColorAttachmentTexture(id<MTLTexture> texture);
     static void resizeDefaultAttachmentTexture(std::size_t width, std::size_t height);
-    
+
     /**
      * Get the default combined depth and stencil texture.
      * @return The default combined depth and stencil texture.
@@ -70,7 +70,7 @@ struct UtilsMTL
      * @return A MTLPixelFormat.
      */
     static MTLPixelFormat toMTLPixelFormat(PixelFormat textureFormat);
-    
+
     /**
      * Generate a complete set of mipmaps in given texture.
      * @param texture Specifies a texture to generate mipmap.
@@ -85,11 +85,10 @@ struct UtilsMTL
      * @param format Specifies the format of the image.
      */
     static void swizzleImage(unsigned char* image, std::size_t width, std::size_t height, MTLPixelFormat format);
-    
+
 private:
     static id<MTLTexture> createDepthStencilAttachmentTexture();
 
-    
     static id<MTLTexture> _defaultColorAttachmentTexture;
     static id<MTLTexture> _defaultDepthStencilAttachmentTexture;
 };

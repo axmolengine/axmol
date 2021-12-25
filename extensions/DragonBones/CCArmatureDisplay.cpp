@@ -34,7 +34,7 @@ void CCArmatureDisplay::dbClear()
 
 void CCArmatureDisplay::dispose(bool disposeProxy)
 {
-    if (_armature != nullptr) 
+    if (_armature != nullptr)
     {
         _armature->dispose();
         _armature = nullptr;
@@ -44,14 +44,12 @@ void CCArmatureDisplay::dispose(bool disposeProxy)
 void CCArmatureDisplay::dbUpdate()
 {
     const auto drawed = DragonBones::debugDraw;
-    if (drawed || _debugDraw) 
+    if (drawed || _debugDraw)
     {
         _debugDraw = drawed;
-        if (_debugDraw) 
-        {
-
-        }
-        else 
+        if (_debugDraw)
+        {}
+        else
         {
             // TODO
         }
@@ -60,8 +58,7 @@ void CCArmatureDisplay::dbUpdate()
 
 void CCArmatureDisplay::addDBEventListener(const std::string& type, const std::function<void(EventObject*)>& callback)
 {
-    auto lambda = [callback](cocos2d::EventCustom* event) -> void 
-    {
+    auto lambda = [callback](cocos2d::EventCustom* event) -> void {
         callback(static_cast<EventObject*>(event->getUserData()));
     };
     _dispatcher->addCustomEventListener(type, lambda);
@@ -72,7 +69,8 @@ void CCArmatureDisplay::dispatchDBEvent(const std::string& type, EventObject* va
     _dispatcher->dispatchCustomEvent(type, value);
 }
 
-void CCArmatureDisplay::removeDBEventListener(const std::string& type, const std::function<void(EventObject*)>& callback)
+void CCArmatureDisplay::removeDBEventListener(const std::string& type,
+                                              const std::function<void(EventObject*)>& callback)
 {
     // TODO
     _dispatcher->removeCustomEventListeners(type);
@@ -81,27 +79,27 @@ void CCArmatureDisplay::removeDBEventListener(const std::string& type, const std
 cocos2d::Rect CCArmatureDisplay::getBoundingBox() const
 {
     auto isFirst = true;
-    float minX = 0.0f;
-    float minY = 0.0f;
-    float maxX = 0.0f;
-    float maxY = 0.0f;
+    float minX   = 0.0f;
+    float minY   = 0.0f;
+    float maxX   = 0.0f;
+    float maxY   = 0.0f;
 
     for (const auto slot : _armature->getSlots())
     {
         if (!slot->getVisible() || !slot->getDisplay())
-        { 
+        {
             continue;
         }
-        
+
         const auto display = static_cast<CCSlot*>(slot)->getCCDisplay();
-        const auto bounds = display->getBoundingBox();
+        const auto bounds  = display->getBoundingBox();
         if (isFirst)
         {
             isFirst = false;
-            minX = bounds.getMinX();
-            minY = bounds.getMinY();
-            maxX = bounds.getMaxX();
-            maxY = bounds.getMaxY();
+            minX    = bounds.getMinX();
+            minY    = bounds.getMinY();
+            maxX    = bounds.getMaxX();
+            maxY    = bounds.getMaxY();
         }
         else
         {
@@ -137,8 +135,8 @@ bool DBCCSprite::_checkVisibility(const cocos2d::Mat4& transform, const cocos2d:
 {
     auto scene = cocos2d::Director::getInstance()->getRunningScene();
 
-    //If draw to Rendertexture, return true directly.
-    // only cull the default camera. The culling algorithm is valid for default camera.
+    // If draw to Rendertexture, return true directly.
+    //  only cull the default camera. The culling algorithm is valid for default camera.
     if (!scene || (scene && scene->getDefaultCamera() != cocos2d::Camera::getVisitingCamera()))
         return true;
 
@@ -155,8 +153,10 @@ bool DBCCSprite::_checkVisibility(const cocos2d::Mat4& transform, const cocos2d:
     cocos2d::Vec2 v2p = cocos2d::Camera::getVisitingCamera()->projectGL(v3p);
 
     // convert content size to world coordinates
-    float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]), fabsf(hSizeX * transform.m[0] - hSizeY * transform.m[4]));
-    float wshh = std::max(fabsf(hSizeX * transform.m[1] + hSizeY * transform.m[5]), fabsf(hSizeX * transform.m[1] - hSizeY * transform.m[5]));
+    float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]),
+                          fabsf(hSizeX * transform.m[0] - hSizeY * transform.m[4]));
+    float wshh = std::max(fabsf(hSizeX * transform.m[1] + hSizeY * transform.m[5]),
+                          fabsf(hSizeX * transform.m[1] - hSizeY * transform.m[5]));
 
     // enlarge visible rect half size in screen coord
     visiableRect.origin.x -= wshw;
@@ -170,17 +170,20 @@ bool DBCCSprite::_checkVisibility(const cocos2d::Mat4& transform, const cocos2d:
 void DBCCSprite::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags)
 {
 #if CC_USE_CULLING
-#if COCOS2D_VERSION >= 0x00031400
+#    if COCOS2D_VERSION >= 0x00031400
     const auto& rect = _polyInfo.getRect();
-#else
+#    else
     const auto& rect = _polyInfo.rect;
-#endif
-    
+#    endif
+
     // Don't do calculate the culling if the transform was not updated
     auto visitingCamera = cocos2d::Camera::getVisitingCamera();
-    auto defaultCamera = cocos2d::Camera::getDefaultCamera();
-    if (visitingCamera == defaultCamera) {
-        _insideBounds = ((flags & FLAGS_TRANSFORM_DIRTY) || visitingCamera->isViewProjectionUpdated()) ? _checkVisibility(transform, _contentSize, rect) : _insideBounds;
+    auto defaultCamera  = cocos2d::Camera::getDefaultCamera();
+    if (visitingCamera == defaultCamera)
+    {
+        _insideBounds = ((flags & FLAGS_TRANSFORM_DIRTY) || visitingCamera->isViewProjectionUpdated())
+                            ? _checkVisibility(transform, _contentSize, rect)
+                            : _insideBounds;
     }
     else
     {
@@ -193,31 +196,32 @@ void DBCCSprite::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transfor
 #if COCOS2D_VERSION >= 0x00040000
         _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags);
 #else
-        _trianglesCommand.init(_globalZOrder, _texture->getName(), getGLProgramState(), _blendFunc, _polyInfo.triangles, transform, flags);
+        _trianglesCommand.init(_globalZOrder, _texture->getName(), getGLProgramState(), _blendFunc, _polyInfo.triangles,
+                               transform, flags);
 #endif
         renderer->addCommand(&_trianglesCommand);
 
 #if CC_SPRITE_DEBUG_DRAW
         _debugDrawNode->clear();
-        auto count = _polyInfo.triangles.indexCount / 3;
+        auto count   = _polyInfo.triangles.indexCount / 3;
         auto indices = _polyInfo.triangles.indices;
-        auto verts = _polyInfo.triangles.verts;
+        auto verts   = _polyInfo.triangles.verts;
         for (ssize_t i = 0; i < count; i++)
         {
-            //draw 3 lines
+            // draw 3 lines
             auto from = verts[indices[i * 3]].vertices;
-            auto to = verts[indices[i * 3 + 1]].vertices;
+            auto to   = verts[indices[i * 3 + 1]].vertices;
             _debugDrawNode->drawLine(cocos2d::Vec2(from.x, from.y), cocos2d::Vec2(to.x, to.y), cocos2d::Color4F::WHITE);
 
             from = verts[indices[i * 3 + 1]].vertices;
-            to = verts[indices[i * 3 + 2]].vertices;
+            to   = verts[indices[i * 3 + 2]].vertices;
             _debugDrawNode->drawLine(cocos2d::Vec2(from.x, from.y), cocos2d::Vec2(to.x, to.y), cocos2d::Color4F::WHITE);
 
             from = verts[indices[i * 3 + 2]].vertices;
-            to = verts[indices[i * 3]].vertices;
+            to   = verts[indices[i * 3]].vertices;
             _debugDrawNode->drawLine(cocos2d::Vec2(from.x, from.y), cocos2d::Vec2(to.x, to.y), cocos2d::Color4F::WHITE);
         }
-#endif //CC_SPRITE_DEBUG_DRAW
+#endif  // CC_SPRITE_DEBUG_DRAW
     }
 }
 

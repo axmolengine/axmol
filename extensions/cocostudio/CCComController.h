@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "CocosStudioExport.h"
 #include "2d/CCComponent.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CCS_DLL ComController : public cocos2d::Component, public InputDelegate
 {
@@ -40,7 +41,7 @@ public:
      *  @js ctor
      */
     ComController();
-    
+
 public:
     const static std::string COMPONENT_NAME;
 
@@ -67,19 +68,19 @@ public:
     virtual void onExit() override;
 
     /**
-    * @js NA
-    * @lua NA
-    */
+     * @js NA
+     * @lua NA
+     */
     virtual void onAdd() override;
 
     /**
-    * @js NA
-    * @lua NA
-    */
+     * @js NA
+     * @lua NA
+     */
     virtual void onRemove() override;
     virtual void update(float delta) override;
 };
 
-}
+}  // namespace cocostudio
 
 #endif  // __CC_EXTENTIONS_CCCOMCONTROLLER_H__

@@ -69,74 +69,86 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #import "platform/CCPlatformConfig.h"
 #if defined(CC_USE_GLES)
-#import "platform/ios/CCESRenderer-ios.h"
+#    import "platform/ios/CCESRenderer-ios.h"
 #endif
 
-//CLASS INTERFACE:
+// CLASS INTERFACE:
 
 /** CCEAGLView Class.
  * This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
  * The view content is basically an EAGL surface you render your OpenGL scene into.
  * Note that setting the view non-opaque will only work if the EAGL surface has an alpha channel.
  */
-@interface CCEAGLView : UIView
-{
+@interface CCEAGLView : UIView {
 #if defined(CC_USE_GLES)
-    id<CCESRenderer>        renderer_;
+    id<CCESRenderer> renderer_;
 #endif
-    BOOL                    preserveBackbuffer_;
-    CGRect                  safeArea_;
-    BOOL                    discardFramebufferSupported_;
+    BOOL preserveBackbuffer_;
+    CGRect safeArea_;
+    BOOL discardFramebufferSupported_;
 
-    //fsaa addition
-    unsigned int            requestedSamples_;
+    // fsaa addition
+    unsigned int requestedSamples_;
 }
 
 /** creates an initializes an CCEAGLView with a frame and 0-bit depth buffer, and a RGB565 color buffer */
-+ (id) viewWithFrame:(CGRect)frame;
++ (id)viewWithFrame:(CGRect)frame;
 /** creates an initializes an CCEAGLView with a frame, a color buffer format, and 0-bit depth buffer */
-+ (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format;
++ (id)viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format;
 /** creates an initializes an CCEAGLView with a frame, a color buffer format, and a depth buffer format */
-+ (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth;
-/** creates an initializes an CCEAGLView with a frame, a color buffer format, a depth buffer format, a sharegroup, and multisampling */
-+ (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth preserveBackbuffer:(BOOL)retained sharegroup:(EAGLSharegroup*)sharegroup multiSampling:(BOOL)multisampling numberOfSamples:(unsigned int)samples;
++ (id)viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth;
+/** creates an initializes an CCEAGLView with a frame, a color buffer format, a depth buffer format, a sharegroup, and
+ * multisampling */
++ (id)viewWithFrame:(CGRect)frame
+           pixelFormat:(NSString*)format
+           depthFormat:(GLuint)depth
+    preserveBackbuffer:(BOOL)retained
+            sharegroup:(EAGLSharegroup*)sharegroup
+         multiSampling:(BOOL)multisampling
+       numberOfSamples:(unsigned int)samples;
 
 /** Initializes an CCEAGLView with a frame and 0-bit depth buffer, and a RGB565 color buffer */
-- (id) initWithFrame:(CGRect)frame; //These also set the current context
+- (id)initWithFrame:(CGRect)frame;  // These also set the current context
 /** Initializes an CCEAGLView with a frame, a color buffer format, and 0-bit depth buffer */
-- (id) initWithFrame:(CGRect)frame pixelFormat:(NSString*)format;
-/** Initializes an CCEAGLView with a frame, a color buffer format, a depth buffer format, a sharegroup and multisampling support */
-- (id) initWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth preserveBackbuffer:(BOOL)retained sharegroup:(EAGLSharegroup*)sharegroup multiSampling:(BOOL)sampling numberOfSamples:(unsigned int)nSamples;
+- (id)initWithFrame:(CGRect)frame pixelFormat:(NSString*)format;
+/** Initializes an CCEAGLView with a frame, a color buffer format, a depth buffer format, a sharegroup and multisampling
+ * support */
+- (id)initWithFrame:(CGRect)frame
+           pixelFormat:(NSString*)format
+           depthFormat:(GLuint)depth
+    preserveBackbuffer:(BOOL)retained
+            sharegroup:(EAGLSharegroup*)sharegroup
+         multiSampling:(BOOL)sampling
+       numberOfSamples:(unsigned int)nSamples;
 
 //// * pixel format: it could be RGBA8 (32-bit) or RGB565 (16-bit)
-@property(nonatomic,readonly) NSString* pixelFormat;
+@property(nonatomic, readonly) NSString* pixelFormat;
 /** depth format of the render buffer: 0, 16 or 24 bits*/
-@property(nonatomic,readonly) GLuint depthFormat;
+@property(nonatomic, readonly) GLuint depthFormat;
 
 /** returns surface size in pixels */
-@property(nonatomic,readonly) CGSize surfaceSize;
+@property(nonatomic, readonly) CGSize surfaceSize;
 
 #if defined(CC_USE_GLES)
 /** OpenGL context */
-@property(nonatomic,readonly) EAGLContext *context;
+@property(nonatomic, readonly) EAGLContext* context;
 #endif
 
-@property(nonatomic,readwrite) BOOL multiSampling;
+@property(nonatomic, readwrite) BOOL multiSampling;
 @property(nonatomic, readonly) BOOL isKeyboardShown;
 
-
 /** CCEAGLView uses double-buffer. This method swaps the buffers */
--(void) swapBuffers;
+- (void)swapBuffers;
 
-- (CGRect) convertRectFromViewToSurface:(CGRect)rect;
-- (CGPoint) convertPointFromViewToSurface:(CGPoint)point;
+- (CGRect)convertRectFromViewToSurface:(CGRect)rect;
+- (CGPoint)convertPointFromViewToSurface:(CGPoint)point;
 
--(int) getWidth;
--(int) getHeight;
+- (int)getWidth;
+- (int)getHeight;
 
--(void) doAnimationWhenKeyboardMoveWithDuration:(float) duration distance:(float) dis;
--(void) doAnimationWhenAnotherEditBeClicked;
+- (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)dis;
+- (void)doAnimationWhenAnotherEditBeClicked;
 
--(void) showKeyboard;
--(void) hideKeyboard;
+- (void)showKeyboard;
+- (void)hideKeyboard;
 @end

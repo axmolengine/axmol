@@ -68,16 +68,16 @@ public:
      @param flags Flag used to indicate whether the command should be draw at 3D mode or not.
      */
     void init(float globalZOrder, const Mat4& modelViewTransform, unsigned int flags);
-    
+
     /** Get global Z order. */
     float getGlobalOrder() const { return _globalOrder; }
 
     /** Returns the Command type. */
     Type getType() const { return _type; }
-    
+
     /** Returns whether is transparent. */
     bool isTransparent() const { return _isTransparent; }
-    
+
     /** Set transparent flag. */
     void setTransparent(bool isTransparent) { _isTransparent = isTransparent; }
     /**
@@ -95,14 +95,14 @@ public:
     /// Can use the result to change the descriptor content.
     inline PipelineDescriptor& getPipelineDescriptor() { return _pipelineDescriptor; }
 
-    const Mat4 & getMV() const { return _mv; }
+    const Mat4& getMV() const { return _mv; }
 
 protected:
     /**Constructor.*/
     RenderCommand();
     /**Destructor.*/
     virtual ~RenderCommand();
-    //used for debug but it is not implemented.
+    // used for debug but it is not implemented.
     void printID();
 
     /**Type used in order to avoid dynamic cast, faster. */
@@ -110,19 +110,19 @@ protected:
 
     /** Commands are sort by global Z order. */
     float _globalOrder = 0.f;
-    
+
     /** Transparent flag. */
-    bool  _isTransparent = true;
-    
+    bool _isTransparent = true;
+
     /**
      QuadCommand and TrianglesCommand could be auto batched if there material ID is the same, however, if
      a command is skip batching, it would be forced to draw in a separate function call, and break the batch.
      */
     bool _skipBatching = false;
-    
+
     /** Is the command been rendered on 3D pass. */
     bool _is3D = false;
-    
+
     /** Depth from the model view matrix.*/
     float _depth = 0.f;
 

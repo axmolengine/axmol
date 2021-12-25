@@ -43,8 +43,9 @@ NS_CC_BEGIN
 class EventListenerTouchOneByOne;
 class Camera;
 
-namespace ui {
-    class LayoutComponent;
+namespace ui
+{
+class LayoutComponent;
 
 /**
  *@brief Base class for all ui widgets.
@@ -64,7 +65,7 @@ public:
         UP,
         DOWN
     };
-    
+
     /**
      * Widget position type for layout.
      */
@@ -73,7 +74,7 @@ public:
         ABSOLUTE,
         PERCENT
     };
-    
+
     /**
      * Widget size type for layout.
      */
@@ -82,7 +83,7 @@ public:
         ABSOLUTE,
         PERCENT
     };
-    
+
     /**
      * Touch event type.
      */
@@ -93,7 +94,7 @@ public:
         ENDED,
         CANCELED
     };
-    
+
     /**
      * Texture resource type.
      * - LOCAL:  It means the texture is loaded from image.
@@ -104,7 +105,7 @@ public:
         LOCAL = 0,
         PLIST = 1
     };
-    
+
     /**
      * Widget bright style.
      */
@@ -115,11 +116,10 @@ public:
         HIGHLIGHT
     };
 
-    
     /**
      * Widget touch event callback.
      */
-    typedef std::function<void(Ref*,Widget::TouchEventType)> ccWidgetTouchCallback;
+    typedef std::function<void(Ref*, Widget::TouchEventType)> ccWidgetTouchCallback;
     /**
      * Widget click event callback.
      */
@@ -135,7 +135,7 @@ public:
      * @lua new
      */
     Widget();
-    
+
     /**
      * Default destructor
      * @js NA
@@ -149,7 +149,7 @@ public:
 
     /**
      * Sets whether the widget is enabled
-     * 
+     *
      * true if the widget is enabled, widget may be touched , false if the widget is disabled, widget cannot be touched.
      *
      * Note: If you want to change the widget's appearance  to disabled state, you should also call  `setBright(false)`.
@@ -197,7 +197,8 @@ public:
      *
      * @see BrightStyle
      *
-     * @param style   BrightStyle::NORMAL means the widget is in normal state, BrightStyle::HIGHLIGHT means the widget is in highlight state.
+     * @param style   BrightStyle::NORMAL means the widget is in normal state, BrightStyle::HIGHLIGHT means the widget
+     * is in highlight state.
      */
     void setBrightStyle(BrightStyle style);
 
@@ -251,14 +252,14 @@ public:
     /**
      * @js NA
      */
-    virtual void visit(cocos2d::Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
+    virtual void visit(cocos2d::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /**
      * Set a callback to touch vent listener.
      *@param callback  The callback in `ccWidgetEventCallback.`
      */
     void addTouchEventListener(const ccWidgetTouchCallback& callback);
-    
+
     /**
      * Set a click event handler to the widget.
      * @param callback The callback in `ccWidgetClickCallback`.
@@ -280,14 +281,14 @@ public:
      *
      * @param pos  The position (x,y) of the widget in OpenGL coordinates
      */
-    virtual void setPosition(const Vec2 &pos) override;
+    virtual void setPosition(const Vec2& pos) override;
 
     /**
      * Set the percent(x,y) of the widget in OpenGL coordinates
      *
      * @param percent  The percent (x,y) of the widget in OpenGL coordinates
      */
-    void setPositionPercent(const Vec2 &percent);
+    void setPositionPercent(const Vec2& percent);
 
     /**
      * Gets the percent (x,y) of the widget in OpenGL coordinates
@@ -332,7 +333,7 @@ public:
      *
      * @return true if the widget is flipped horizontally, false otherwise.
      */
-    virtual bool isFlippedX()const{return _flippedX;};
+    virtual bool isFlippedX() const { return _flippedX; };
 
     /**
      * Sets whether the widget should be flipped vertically or not.
@@ -350,9 +351,9 @@ public:
      *
      * @return true if the widget is flipped vertically, false otherwise.
      */
-    virtual bool isFlippedY()const{return _flippedY;};
+    virtual bool isFlippedY() const { return _flippedY; };
 
-    //override the setScale function of Node
+    // override the setScale function of Node
     virtual void setScaleX(float scaleX) override;
     virtual void setScaleY(float scaleY) override;
     virtual void setScale(float scale) override;
@@ -375,19 +376,19 @@ public:
      * Gets the touch began point of widget when widget is selected.
      * @return the touch began point.
      */
-    const Vec2& getTouchBeganPosition()const;
+    const Vec2& getTouchBeganPosition() const;
 
     /*
      * Gets the touch move point of widget when widget is selected.
      * @return the touch move point.
      */
-    const Vec2& getTouchMovePosition()const;
+    const Vec2& getTouchMovePosition() const;
 
     /*
      * Gets the touch end point of widget when widget is selected.
      * @return the touch end point.
      */
-    const Vec2& getTouchEndPosition()const;
+    const Vec2& getTouchEndPosition() const;
 
     /**
      * Changes the size that is widget's size
@@ -400,7 +401,7 @@ public:
      *
      * @param percent that is widget's percent size
      */
-    virtual void setSizePercent(const Vec2 &percent);
+    virtual void setSizePercent(const Vec2& percent);
 
     /**
      * Changes the size type of widget.
@@ -417,19 +418,19 @@ public:
      * @see `SizeType`
      */
     SizeType getSizeType() const;
-    
+
     /**
      * Get the user defined widget size.
      *@return User defined size.
      */
     const Vec2& getCustomSize() const;
-    
+
     /**
      * Get the content size of widget.
      * @warning This API exists mainly for keeping back compatibility.
-     * @return 
+     * @return
      */
-    virtual const Vec2& getLayoutSize() {return _contentSize;};
+    virtual const Vec2& getLayoutSize() { return _contentSize; };
 
     /**
      * Get size percent of widget.
@@ -447,7 +448,7 @@ public:
      * @param p         Point to a Vec3 for store the intersect point, if don't need them set to nullptr.
      * @return true if the point is in widget's content space, false otherwise.
      */
-    virtual bool hitTest(const Vec2 &pt, const Camera* camera, Vec3 *p) const;
+    virtual bool hitTest(const Vec2& pt, const Camera* camera, Vec3* p) const;
 
     /**
      * A callback which will be called when touch began event is issued.
@@ -455,28 +456,28 @@ public:
      *@param unusedEvent The touch event info.
      *@return True if user want to handle touches, false otherwise.
      */
-    virtual bool onTouchBegan(Touch *touch, Event *unusedEvent);
+    virtual bool onTouchBegan(Touch* touch, Event* unusedEvent);
 
     /**
      * A callback which will be called when touch moved event is issued.
      *@param touch The touch info.
      *@param unusedEvent The touch event info.
      */
-    virtual void onTouchMoved(Touch *touch, Event *unusedEvent);
+    virtual void onTouchMoved(Touch* touch, Event* unusedEvent);
 
     /**
      * A callback which will be called when touch ended event is issued.
      *@param touch The touch info.
      *@param unusedEvent The touch event info.
      */
-    virtual void onTouchEnded(Touch *touch, Event *unusedEvent);
+    virtual void onTouchEnded(Touch* touch, Event* unusedEvent);
 
     /**
      * A callback which will be called when touch cancelled event is issued.
      *@param touch The touch info.
      *@param unusedEvent The touch event info.
      */
-    virtual void onTouchCancelled(Touch *touch, Event *unusedEvent);
+    virtual void onTouchCancelled(Touch* touch, Event* unusedEvent);
 
     /**
      * Sets a LayoutParameter to widget.
@@ -492,11 +493,11 @@ public:
      * @see LayoutParameter
      * @return LayoutParameter
      */
-    LayoutParameter* getLayoutParameter()const override;
+    LayoutParameter* getLayoutParameter() const override;
 
     /**
      * Toggle whether ignore user defined content size for widget.
-     * Set true will ignore user defined content size which means 
+     * Set true will ignore user defined content size which means
      * the widget size is always equal to the return value of `getVirtualRendererSize`.
      *
      * @param ignore set member variable _ignoreSize to ignore
@@ -515,7 +516,7 @@ public:
      *
      * @return Position of widget in world space.
      */
-    Vec2 getWorldPosition()const;
+    Vec2 getWorldPosition() const;
 
     /**
      * Gets the inner Renderer node of widget.
@@ -526,13 +527,11 @@ public:
      */
     virtual Node* getVirtualRenderer();
 
-
     /**
      *  Get the virtual renderer's size
      *@return Widget virtual renderer size.
      */
     virtual Vec2 getVirtualRendererSize() const;
-    
 
     /**
      * Returns the string representation of widget class name
@@ -549,7 +548,7 @@ public:
      * @lua NA
      */
     virtual void onEnter() override;
-    
+
     /**
      * @lua NA
      */
@@ -565,7 +564,7 @@ public:
      * Update all children's contents size and position recursively.
      */
     void updateSizeAndPosition(const Vec2& parentSize);
-    
+
     /**
      * Set the tag of action.
      *@param tag  A integer tag value.
@@ -576,23 +575,23 @@ public:
      * Get the action tag.
      *@return Action tag.
      */
-    int getActionTag()const;
-    
+    int getActionTag() const;
+
     /**
      * @brief Allow widget touch events to propagate to its parents. Set false will disable propagation
      * @param isPropagate  True to allow propagation, false otherwise.
      * @since v3.3
      */
     void setPropagateTouchEvents(bool isPropagate);
-    
+
     /**
      * Return whether the widget is propagate touch events to its parents or not
      * @return whether touch event propagation is allowed or not.
      * @since v3.3
      */
-     
-    bool isPropagateTouchEvents()const;
-    
+
+    bool isPropagateTouchEvents() const;
+
     /**
      * Toggle widget swallow touch option.
      * @brief Specify widget to swallow touches or not
@@ -600,47 +599,47 @@ public:
      * @since v3.3
      */
     void setSwallowTouches(bool swallow);
-    
+
     /**
      * Return whether the widget is swallowing touch or not
      * @return Whether touch is swallowed.
      * @since v3.3
      */
-    bool isSwallowTouches()const;
-    
+    bool isSwallowTouches() const;
+
     /**
      * Query whether widget is focused or not.
      *@return  whether the widget is focused or not
      */
-    bool isFocused()const;
-    
+    bool isFocused() const;
+
     /**
      * Toggle widget focus status.
      *@param focus  pass true to let the widget get focus or pass false to let the widget lose focus
      */
     void setFocused(bool focus);
-    
+
     /**
      * Query widget's focus enable state.
      *@return true represent the widget could accept focus, false represent the widget couldn't accept focus
      */
-    bool isFocusEnabled()const;
-    
+    bool isFocusEnabled() const;
+
     /**
      * Allow widget to accept focus.
      *@param enable pass true/false to enable/disable the focus ability of a widget
      */
     void setFocusEnabled(bool enable);
-    
+
     /**
-     *  When a widget is in a layout, you could call this method to get the next focused widget within a specified direction. 
-     *  If the widget is not in a layout, it will return itself
+     *  When a widget is in a layout, you could call this method to get the next focused widget within a specified
+     *direction. If the widget is not in a layout, it will return itself
      *@param direction the direction to look for the next focused widget in a layout
      *@param current  the current focused widget
      *@return the next focused widget in a layout
      */
     virtual Widget* findNextFocusedWidget(FocusDirection direction, Widget* current);
-    
+
     /**
      * when a widget calls this method, it will get focus immediately.
      */
@@ -659,16 +658,16 @@ public:
     static void enableDpadNavigation(bool enable);
 
     /**
-     * When a widget lose/get focus, this method will be called. Be Caution when you provide your own version, 
+     * When a widget lose/get focus, this method will be called. Be Caution when you provide your own version,
      * you must call widget->setFocused(true/false) to change the focus state of the current focused widget;
      */
-    std::function<void(Widget*,Widget*)> onFocusChanged;
+    std::function<void(Widget*, Widget*)> onFocusChanged;
 
     /**
      * use this function to manually specify the next focused widget regards to each direction
      */
     std::function<Widget*(FocusDirection)> onNextFocusedWidget;
-    
+
     /**
      *Toggle use unify size.
      *@param enable True to use unify size, false otherwise.
@@ -676,10 +675,10 @@ public:
     void setUnifySizeEnabled(bool enable);
 
     /**
-     * Query whether unify size enable state. 
+     * Query whether unify size enable state.
      *@return true represent the widget use Unify size, false represent the widget couldn't use Unify size
      */
-    bool isUnifySizeEnabled()const;
+    bool isUnifySizeEnabled() const;
 
     /**
      * Set callback name.
@@ -687,13 +686,12 @@ public:
      */
     void setCallbackName(const std::string& callbackName) { _callbackName = callbackName; }
 
-
     /**
      * Query callback name.
      *@return The callback name.
      */
-    const std::string& getCallbackName() const{ return _callbackName; }
-    
+    const std::string& getCallbackName() const { return _callbackName; }
+
     /**
      * Set callback type.
      * @param callbackType A string representation of callback type.
@@ -704,7 +702,7 @@ public:
      * Query callback type.
      *@return Callback type string.
      */
-    const std::string& getCallbackType() const{ return _callbackType; }
+    const std::string& getCallbackType() const { return _callbackType; }
 
     /**
      * Toggle layout component enable.
@@ -713,58 +711,58 @@ public:
     void setLayoutComponentEnabled(bool enable);
 
     /**
-     * Query whether layout component is enabled or not. 
+     * Query whether layout component is enabled or not.
      *@return true represent the widget use Layout Component, false represent the widget couldn't use Layout Component.
      */
-    bool isLayoutComponentEnabled()const;
+    bool isLayoutComponentEnabled() const;
 
-CC_CONSTRUCTOR_ACCESS:
-    
-    friend class PageView;
+    CC_CONSTRUCTOR_ACCESS :
 
-    //initializes state of widget.
+        friend class PageView;
+
+    // initializes state of widget.
     virtual bool init() override;
 
     /*
-     * @brief Sends the touch event to widget's parent, if a widget wants to handle touch event under another widget, 
+     * @brief Sends the touch event to widget's parent, if a widget wants to handle touch event under another widget,
      *        it must override this function.
      * @param  event  the touch event type, it could be BEGAN/MOVED/CANCELED/ENDED
      * @param parent
      * @param point
      */
-    virtual void interceptTouchEvent(TouchEventType event, Widget* sender, Touch *touch);
-    
+    virtual void interceptTouchEvent(TouchEventType event, Widget* sender, Touch* touch);
+
     /**
      *@brief Propagate touch events to its parents
      */
-    void propagateTouchEvent(TouchEventType event, Widget* sender, Touch *touch);
-    
+    void propagateTouchEvent(TouchEventType event, Widget* sender, Touch* touch);
+
     /**
      * This method is called when a focus change event happens
      *@param widgetLostFocus  The widget which lose its focus
      *@param widgetGetFocus  The widget which get its focus
      */
     void onFocusChange(Widget* widgetLostFocus, Widget* widgetGetFocus);
-    
+
     /**
      * Dispatch a EventFocus through a EventDispatcher
      *@param widgetLoseFocus  The widget which lose its focus
      *@param widgetGetFocus he widget which get its focus
      */
-    void  dispatchFocusEvent(Widget* widgetLoseFocus, Widget* widgetGetFocus);
-    
+    void dispatchFocusEvent(Widget* widgetLoseFocus, Widget* widgetGetFocus);
+
 protected:
-    //call back function called when size changed.
+    // call back function called when size changed.
     virtual void onSizeChanged();
 
-    //initializes renderer of widget.
+    // initializes renderer of widget.
     virtual void initRenderer();
 
-    //call back function called widget's state changed to normal.
+    // call back function called widget's state changed to normal.
     virtual void onPressStateChangedToNormal();
-    //call back function called widget's state changed to selected.
+    // call back function called widget's state changed to selected.
     virtual void onPressStateChangedToPressed();
-    //call back function called widget's state changed to dark.
+    // call back function called widget's state changed to dark.
     virtual void onPressStateChangedToDisabled();
 
     void pushDownEvent();
@@ -773,18 +771,17 @@ protected:
     virtual void releaseUpEvent();
     virtual void cancelUpEvent();
 
-    
     virtual void adaptRenderers(){};
     void updateChildrenDisplayedRGBA();
-    
+
     void copyProperties(Widget* model);
     virtual Widget* createCloneInstance();
     virtual void copySpecialProperties(Widget* model);
     virtual void copyClonedWidgetChildren(Widget* model);
-    
+
     Widget* getWidgetParent();
     void updateContentSizeWithTextureSize(const Vec2& size);
-    
+
     bool isAncestorsEnabled();
     Widget* getAncestorWidget(Node* node);
     bool isAncestorsVisible(Node* node);
@@ -807,7 +804,7 @@ protected:
     SizeType _sizeType;
     PositionType _positionType;
 
-    //used for search widget by action tag in UIHelper class
+    // used for search widget by action tag in UIHelper class
     int _actionTag;
 
     Vec2 _customSize;
@@ -818,7 +815,7 @@ protected:
     bool _hitted;
     // weak reference of the camera which made the widget passed the hit test when response touch begin event
     // it's useful in the next touch move/end events
-    const Camera *_hittedByCamera;
+    const Camera* _hittedByCamera;
     EventListenerTouchOneByOne* _touchListener;
     Vec2 _touchBeganPosition;
     Vec2 _touchMovePosition;
@@ -827,8 +824,8 @@ protected:
     bool _flippedX;
     bool _flippedY;
 
-    //use map to enable switch back and forth for user layout parameters
-    Map<int,LayoutParameter*> _layoutParameterDictionary;
+    // use map to enable switch back and forth for user layout parameters
+    Map<int, LayoutParameter*> _layoutParameterDictionary;
     LayoutParameter::Type _layoutParameterType;
 
     bool _focused;
@@ -836,20 +833,21 @@ protected:
     /**
      * store the only one focused widget
      */
-    static Widget *_focusedWidget;  //both layout & widget will be stored in this variable
+    static Widget* _focusedWidget;  // both layout & widget will be stored in this variable
 
-    Ref*       _touchEventListener;
+    Ref* _touchEventListener;
     ccWidgetTouchCallback _touchEventCallback;
     ccWidgetClickCallback _clickEventListener;
     ccWidgetEventCallback _ccEventCallback;
-    
+
     std::string _callbackType;
     std::string _callbackName;
+
 private:
     class FocusNavigationController;
     static FocusNavigationController* _focusNavigationController;
 };
-}
+}  // namespace ui
 
 NS_CC_END
 // end of ui group

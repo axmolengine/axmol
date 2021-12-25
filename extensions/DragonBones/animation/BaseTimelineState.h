@@ -9,10 +9,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -40,8 +40,8 @@ protected:
      */
     enum class TweenState
     {
-        None = 0,
-        Once = 1,
+        None   = 0,
+        Once   = 1,
         Always = 2
     };
 
@@ -80,7 +80,7 @@ protected:
 protected:
     virtual void _onClear() override;
     virtual void _onArriveAtFrame() = 0;
-    virtual void _onUpdateFrame() = 0;
+    virtual void _onUpdateFrame()   = 0;
     bool _setCurrentTime(float passedTime);
 
 public:
@@ -101,19 +101,19 @@ private:
         auto value = progress;
         switch (tweenType)
         {
-            case TweenType::QuadIn:
-                value = std::pow(progress, 2.0f);
-                break;
+        case TweenType::QuadIn:
+            value = std::pow(progress, 2.0f);
+            break;
 
-            case TweenType::QuadOut:
-                value = 1.0f - std::pow(1.0f - progress, 2.0f);
-                break;
+        case TweenType::QuadOut:
+            value = 1.0f - std::pow(1.0f - progress, 2.0f);
+            break;
 
-            case TweenType::QuadInOut:
-                value = 0.5f * (1.0f - std::cos(progress * Transform::PI));
-                break;
-            default:
-                break;
+        case TweenType::QuadInOut:
+            value = 0.5f * (1.0f - std::cos(progress * Transform::PI));
+            break;
+        default:
+            break;
         }
 
         return (value - progress) * easing + progress;
@@ -121,19 +121,19 @@ private:
 
     inline static float _getEasingCurveValue(float progress, const int16_t* samples, unsigned count, unsigned offset)
     {
-        if (progress <= 0.0f) 
+        if (progress <= 0.0f)
         {
             return 0.0f;
         }
-        else if (progress >= 1.0f) 
+        else if (progress >= 1.0f)
         {
             return 1.0f;
         }
 
-        const auto segmentCount = count + 1; // + 2 - 1
-        const auto valueIndex = (unsigned)(progress * segmentCount);
-        const auto fromValue = valueIndex == 0 ? 0.0f : samples[offset + valueIndex - 1];
-        const auto toValue = (valueIndex == segmentCount - 1) ? 10000.0f : samples[offset + valueIndex];
+        const auto segmentCount = count + 1;  // + 2 - 1
+        const auto valueIndex   = (unsigned)(progress * segmentCount);
+        const auto fromValue    = valueIndex == 0 ? 0.0f : samples[offset + valueIndex - 1];
+        const auto toValue      = (valueIndex == segmentCount - 1) ? 10000.0f : samples[offset + valueIndex];
 
         return (fromValue + (toValue - fromValue) * (progress * segmentCount - valueIndex)) * 0.0001f;
     }
@@ -196,4 +196,4 @@ protected:
 };
 
 DRAGONBONES_NAMESPACE_END
-#endif // DRAGONBONES_BASE_TIMELINE_STATE_H
+#endif  // DRAGONBONES_BASE_TIMELINE_STATE_H
