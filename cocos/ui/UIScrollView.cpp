@@ -287,7 +287,7 @@ void ScrollView::addChild(Node* child, int zOrder, int tag)
     _innerContainer->addChild(child, zOrder, tag);
 }
 
-void ScrollView::addChild(Node* child, int zOrder, const std::string& name)
+void ScrollView::addChild(Node* child, int zOrder, std::string_view name)
 {
     child->setGlobalZOrder(_globalZOrder);
     _innerContainer->addChild(child, zOrder, name);
@@ -328,7 +328,7 @@ Node* ScrollView::getChildByTag(int tag) const
     return _innerContainer->getChildByTag(tag);
 }
 
-Node* ScrollView::getChildByName(const std::string& name) const
+Node* ScrollView::getChildByName(std::string_view name) const
 {
     return _innerContainer->getChildByName(name);
 }

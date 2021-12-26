@@ -104,7 +104,7 @@ void HttpClient::enableCookies(const char* cookieFile)
     _cookie->readFile();
 }
 
-void HttpClient::setSSLVerification(const std::string& caFile)
+void HttpClient::setSSLVerification(std::string_view caFile)
 {
     std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     _sslCaFilename = caFile;
@@ -167,9 +167,9 @@ void HttpClient::handleNetworkStatusChanged()
     _service->set_option(YOPT_S_DNS_DIRTY, 1);
 }
 
-void HttpClient::setNameServers(const std::string& servers)
+void HttpClient::setNameServers(std::string_view servers)
 {
-    _service->set_option(YOPT_S_DNS_LIST, servers.c_str());
+    _service->set_option(YOPT_S_DNS_LIST, servers.data());
 }
 
 yasio::io_service* HttpClient::getInternalService()
@@ -208,7 +208,7 @@ int HttpClient::tryTakeAvailChannel()
     return -1;
 }
 
-void HttpClient::processResponse(HttpResponse* response, const std::string& url)
+void HttpClient::processResponse(HttpResponse* response, std::string_view url)
 {
     auto channelIndex = tryTakeAvailChannel();
     response->retain();
@@ -221,7 +221,7 @@ void HttpClient::processResponse(HttpResponse* response, const std::string& url)
             auto& requestUri       = response->getRequestUri();
             auto channelHandle     = _service->channel_at(channelIndex);
             channelHandle->ud_.ptr = response;
-            _service->set_option(YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().c_str(),
+            _service->set_option(YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().data(),
                                  (int)requestUri.getPort());
             if (requestUri.isSecure())
                 _service->open(channelIndex, YCK_SSL_CLIENT);
@@ -530,13 +530,13 @@ int HttpClient::getTimeoutForRead()
     return _timeoutForRead;
 }
 
-const std::string& HttpClient::getCookieFilename()
+std::string_view HttpClient::getCookieFilename()
 {
     std::lock_guard<std::recursive_mutex> lock(_cookieFileMutex);
     return _cookieFilename;
 }
 
-const std::string& HttpClient::getSSLVerification()
+std::string_view HttpClient::getSSLVerification()
 {
     std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     return _sslCaFilename;

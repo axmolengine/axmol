@@ -80,99 +80,99 @@ public:
      * @param id The id of the armature data
      * @param armatureData ArmatureData *
      */
-    void addArmatureData(const std::string& id, ArmatureData* armatureData, const std::string& configFilePath = "");
+    void addArmatureData(std::string_view id, ArmatureData* armatureData, std::string_view configFilePath = "");
 
     /**
      *    @brief    get armature data
      *    @param    id the id of the armature data you want to get
      *  @return    ArmatureData *
      */
-    ArmatureData* getArmatureData(const std::string& id);
+    ArmatureData* getArmatureData(std::string_view id);
 
     /**
      *    @brief    remove armature data
      *    @param    id the id of the armature data you want to get
      */
-    void removeArmatureData(const std::string& id);
+    void removeArmatureData(std::string_view id);
 
     /**
      *    @brief    add animation data
      *    @param     id the id of the animation data
      *  @return AnimationData *
      */
-    void addAnimationData(const std::string& id, AnimationData* animationData, const std::string& configFilePath = "");
+    void addAnimationData(std::string_view id, AnimationData* animationData, std::string_view configFilePath = "");
 
     /**
      *    @brief    get animation data from _animationDatas(Dictionary)
      *    @param     id the id of the animation data you want to get
      *  @return AnimationData *
      */
-    AnimationData* getAnimationData(const std::string& id);
+    AnimationData* getAnimationData(std::string_view id);
 
     /**
      *    @brief    remove animation data
      *    @param     id the id of the animation data
      */
-    void removeAnimationData(const std::string& id);
+    void removeAnimationData(std::string_view id);
 
     /**
      *    @brief    add texture data
      *    @param     id the id of the texture data
      *  @return TextureData *
      */
-    void addTextureData(const std::string& id, TextureData* textureData, const std::string& configFilePath = "");
+    void addTextureData(std::string_view id, TextureData* textureData, std::string_view configFilePath = "");
 
     /**
      *    @brief    get texture data
      *    @param     id the id of the texture data you want to get
      *  @return TextureData *
      */
-    TextureData* getTextureData(const std::string& id);
+    TextureData* getTextureData(std::string_view id);
 
     /**
      *    @brief    remove texture data
      *    @param     id the id of the texture data you want to get
      */
-    void removeTextureData(const std::string& id);
+    void removeTextureData(std::string_view id);
 
     /**
      *    @brief    Add ArmatureFileInfo, it is managed by ArmatureDataManager.
      */
-    void addArmatureFileInfo(const std::string& configFilePath);
+    void addArmatureFileInfo(std::string_view configFilePath);
 
     /**
      *    @brief    Add ArmatureFileInfo, it is managed by ArmatureDataManager.
      *            It will load data in a new thread
      */
-    void addArmatureFileInfoAsync(const std::string& configFilePath,
+    void addArmatureFileInfoAsync(std::string_view configFilePath,
                                   cocos2d::Ref* target,
                                   cocos2d::SEL_SCHEDULE selector);
 
     /**
      *    @brief    Add ArmatureFileInfo, it is managed by ArmatureDataManager.
      */
-    void addArmatureFileInfo(const std::string& imagePath,
-                             const std::string& plistPath,
-                             const std::string& configFilePath);
+    void addArmatureFileInfo(std::string_view imagePath,
+                             std::string_view plistPath,
+                             std::string_view configFilePath);
 
     /**
      *    @brief    Add ArmatureFileInfo, it is managed by ArmatureDataManager.
      *            It will load data in a new thread
      */
-    void addArmatureFileInfoAsync(const std::string& imagePath,
-                                  const std::string& plistPath,
-                                  const std::string& configFilePath,
+    void addArmatureFileInfoAsync(std::string_view imagePath,
+                                  std::string_view plistPath,
+                                  std::string_view configFilePath,
                                   cocos2d::Ref* target,
                                   cocos2d::SEL_SCHEDULE selector);
 
     /**
      *    @brief    Add sprite frame to CCSpriteFrameCache, it will save display name and it's relative image name
      */
-    void addSpriteFrameFromFile(const std::string& plistPath,
-                                const std::string& imagePath,
-                                const std::string& configFilePath = "");
+    void addSpriteFrameFromFile(std::string_view plistPath,
+                                std::string_view imagePath,
+                                std::string_view configFilePath = "");
 
-    virtual void removeArmatureFileInfo(const std::string& configFilePath);
+    virtual void removeArmatureFileInfo(std::string_view configFilePath);
 
     /**
      *    @brief    Judge whether or not need auto load sprite file
@@ -184,8 +184,8 @@ public:
     const cocos2d::Map<std::string, TextureData*>& getTextureDatas() const;
 
 public:
-    void addRelativeData(const std::string& configFilePath);
-    RelativeData* getRelativeData(const std::string& configFilePath);
+    void addRelativeData(std::string_view configFilePath);
+    RelativeData* getRelativeData(std::string_view configFilePath);
 
 private:
     /**

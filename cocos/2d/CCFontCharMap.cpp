@@ -33,7 +33,7 @@
 
 NS_CC_BEGIN
 
-FontCharMap* FontCharMap::create(const std::string& plistFile)
+FontCharMap* FontCharMap::create(std::string_view plistFile)
 {
     std::string pathStr    = FileUtils::getInstance()->fullPathForFilename(plistFile);
     std::string relPathStr = pathStr.substr(0, pathStr.find_last_of('/')) + "/";
@@ -64,7 +64,7 @@ FontCharMap* FontCharMap::create(const std::string& plistFile)
     return tempFont;
 }
 
-FontCharMap* FontCharMap::create(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap)
+FontCharMap* FontCharMap::create(std::string_view charMapFile, int itemWidth, int itemHeight, int startCharMap)
 {
     Texture2D* tempTexture = Director::getInstance()->getTextureCache()->addImage(charMapFile);
 

@@ -204,9 +204,10 @@ std::string& Console::Utility::trim(std::string& s)
     return Console::Utility::ltrim(Console::Utility::rtrim(s));
 }
 
-std::vector<std::string>& Console::Utility::split(const std::string& s, char delim, std::vector<std::string>& elems)
+std::vector<std::string>& Console::Utility::split(std::string_view s, char delim, std::vector<std::string>& elems)
 {
-    std::stringstream ss(s);
+    std::stringstream ss;
+    ss << s;
     std::string item;
     while (std::getline(ss, item, delim))
     {
@@ -215,7 +216,7 @@ std::vector<std::string>& Console::Utility::split(const std::string& s, char del
     return elems;
 }
 
-std::vector<std::string> Console::Utility::split(const std::string& s, char delim)
+std::vector<std::string> Console::Utility::split(std::string_view s, char delim)
 {
     std::vector<std::string> elems;
     Console::Utility::split(s, delim, elems);
@@ -223,13 +224,14 @@ std::vector<std::string> Console::Utility::split(const std::string& s, char deli
 }
 
 // isFloat taken from http://stackoverflow.com/questions/447206/c-isfloat-function
-bool Console::Utility::isFloat(const std::string& myString)
+bool Console::Utility::isFloat(std::string_view myString)
 {
-    std::istringstream iss(myString);
+    std::stringstream ss;
+    ss << myString;
     float f;
-    iss >> std::noskipws >> f;  // noskipws considers leading whitespace invalid
+    ss >> std::noskipws >> f;  // noskipws considers leading whitespace invalid
     // Check the entire string was consumed and if either failbit or badbit is set
-    return iss.eof() && !iss.fail();
+    return ss.eof() && !ss.fail();
 }
 
 ssize_t Console::Utility::sendToConsole(int fd, const void* buffer, size_t length, int flags)
@@ -275,12 +277,12 @@ void Console::Utility::sendPrompt(int fd)
     send(fd, prompt, strlen(prompt), 0);
 }
 
-void Console::Utility::setPrompt(const std::string& prompt)
+void Console::Utility::setPrompt(std::string_view prompt)
 {
     _prompt = prompt;
 }
 
-const std::string& Console::Utility::getPrompt()
+std::string_view Console::Utility::getPrompt()
 {
     return _prompt;
 }
@@ -291,11 +293,11 @@ const std::string& Console::Utility::getPrompt()
 
 Console::Command::Command() : _callback(nullptr) {}
 
-Console::Command::Command(const std::string& name, const std::string& help)
+Console::Command::Command(std::string_view name, std::string_view help)
     : _name(name), _help(help), _callback(nullptr)
 {}
 
-Console::Command::Command(const std::string& name, const std::string& help, const Callback& callback)
+Console::Command::Command(std::string_view name, std::string_view help, const Callback& callback)
     : _name(name), _help(help), _callback(callback)
 {}
 
@@ -378,7 +380,7 @@ void Console::Command::addSubCommand(const Command& subCmd)
     _subCommands[subCmd._name] = cmd;
 }
 
-const Console::Command* Console::Command::getSubCommand(const std::string& subCmdName) const
+const Console::Command* Console::Command::getSubCommand(std::string_view subCmdName) const
 {
     auto it = _subCommands.find(subCmdName);
     if (it != _subCommands.end())
@@ -389,7 +391,7 @@ const Console::Command* Console::Command::getSubCommand(const std::string& subCm
     return nullptr;
 }
 
-void Console::Command::delSubCommand(const std::string& subCmdName)
+void Console::Command::delSubCommand(std::string_view subCmdName)
 {
     auto iter = _subCommands.find(subCmdName);
     if (iter != _subCommands.end())
@@ -399,7 +401,7 @@ void Console::Command::delSubCommand(const std::string& subCmdName)
     }
 }
 
-void Console::Command::commandHelp(int fd, const std::string& /*args*/)
+void Console::Command::commandHelp(int fd, std::string_view /*args*/)
 {
     if (!_help.empty())
     {
@@ -412,7 +414,7 @@ void Console::Command::commandHelp(int fd, const std::string& /*args*/)
     }
 }
 
-void Console::Command::commandGeneric(int fd, const std::string& args)
+void Console::Command::commandGeneric(int fd, std::string_view args)
 {
     // The first argument (including the empty)
     std::string key(args);
@@ -621,10 +623,10 @@ void Console::addCommand(const Command& cmd)
         delete iter->second;
         _commands.erase(iter);
     }
-    _commands[cmd.getName()] = newCommand;
+    _commands.emplace(cmd.getName(), newCommand);  // _commands[cmd.getName()] = newCommand;
 }
 
-void Console::addSubCommand(const std::string& cmdName, const Command& subCmd)
+void Console::addSubCommand(std::string_view cmdName, const Command& subCmd)
 {
     auto it = _commands.find(cmdName);
     if (it != _commands.end())
@@ -639,7 +641,7 @@ void Console::addSubCommand(Command& cmd, const Command& subCmd)
     cmd.addSubCommand(subCmd);
 }
 
-const Console::Command* Console::getCommand(const std::string& cmdName)
+const Console::Command* Console::getCommand(std::string_view cmdName)
 {
     auto it = _commands.find(cmdName);
     if (it != _commands.end())
@@ -650,7 +652,7 @@ const Console::Command* Console::getCommand(const std::string& cmdName)
     return nullptr;
 }
 
-const Console::Command* Console::getSubCommand(const std::string& cmdName, const std::string& subCmdName)
+const Console::Command* Console::getSubCommand(std::string_view cmdName, std::string_view subCmdName)
 {
     auto it = _commands.find(cmdName);
     if (it != _commands.end())
@@ -661,12 +663,12 @@ const Console::Command* Console::getSubCommand(const std::string& cmdName, const
     return nullptr;
 }
 
-const Console::Command* Console::getSubCommand(const Command& cmd, const std::string& subCmdName)
+const Console::Command* Console::getSubCommand(const Command& cmd, std::string_view subCmdName)
 {
     return cmd.getSubCommand(subCmdName);
 }
 
-void Console::delCommand(const std::string& cmdName)
+void Console::delCommand(std::string_view cmdName)
 {
     auto it = _commands.find(cmdName);
     if (it != _commands.end())
@@ -676,7 +678,7 @@ void Console::delCommand(const std::string& cmdName)
     }
 }
 
-void Console::delSubCommand(const std::string& cmdName, const std::string& subCmdName)
+void Console::delSubCommand(std::string_view cmdName, std::string_view subCmdName)
 {
     auto it = _commands.find(cmdName);
     if (it != _commands.end())
@@ -686,7 +688,7 @@ void Console::delSubCommand(const std::string& cmdName, const std::string& subCm
     }
 }
 
-void Console::delSubCommand(Command& cmd, const std::string& subCmdName)
+void Console::delSubCommand(Command& cmd, std::string_view subCmdName)
 {
     cmd.delSubCommand(subCmdName);
 }
@@ -701,7 +703,7 @@ void Console::log(const char* buf)
     }
 }
 
-void Console::setBindAddress(const std::string& address)
+void Console::setBindAddress(std::string_view address)
 {
     _bindAddress = address;
 }
@@ -973,7 +975,7 @@ bool Console::parseCommand(socket_native_type fd)
     return true;
 }
 
-void Console::performCommand(socket_native_type fd, const std::string& command)
+void Console::performCommand(socket_native_type fd, std::string_view command)
 {
     std::vector<std::string> args = Console::Utility::split(command, ' ');
     if (args.empty())
@@ -998,7 +1000,7 @@ void Console::performCommand(socket_native_type fd, const std::string& command)
     }
     else
     {
-        throw std::runtime_error("Unknown command " + command + ". Type 'help' for options\n");
+        throw std::runtime_error(std::string{"Unknown command "}.append(command).append(". Type 'help' for options\n"));
     }
 }
 
@@ -1162,7 +1164,7 @@ void Console::createCommandVersion()
 // commands
 //
 
-void Console::commandAllocator(socket_native_type fd, const std::string& /*args*/)
+void Console::commandAllocator(socket_native_type fd, std::string_view /*args*/)
 {
 #if CC_ENABLE_ALLOCATOR_DIAGNOSTICS
     auto info = allocator::AllocatorDiagnostics::instance()->diagnostics();
@@ -1173,7 +1175,7 @@ void Console::commandAllocator(socket_native_type fd, const std::string& /*args*
 #endif
 }
 
-void Console::commandConfig(socket_native_type fd, const std::string& /*args*/)
+void Console::commandConfig(socket_native_type fd, std::string_view /*args*/)
 {
     Scheduler* sched = Director::getInstance()->getScheduler();
     sched->performFunctionInCocosThread([=]() {
@@ -1182,49 +1184,49 @@ void Console::commandConfig(socket_native_type fd, const std::string& /*args*/)
     });
 }
 
-void Console::commandDebugMsg(socket_native_type fd, const std::string& /*args*/)
+void Console::commandDebugMsg(socket_native_type fd, std::string_view /*args*/)
 {
     Console::Utility::mydprintf(fd, "Debug message is: %s\n", _sendDebugStrings ? "on" : "off");
 }
 
-void Console::commandDebugMsgSubCommandOnOff(socket_native_type /*fd*/, const std::string& args)
+void Console::commandDebugMsgSubCommandOnOff(socket_native_type /*fd*/, std::string_view args)
 {
     _sendDebugStrings = (args.compare("on") == 0);
 }
 
-void Console::commandDirectorSubCommandPause(socket_native_type /*fd*/, const std::string& /*args*/)
+void Console::commandDirectorSubCommandPause(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     auto director    = Director::getInstance();
     Scheduler* sched = director->getScheduler();
     sched->performFunctionInCocosThread([]() { Director::getInstance()->pause(); });
 }
 
-void Console::commandDirectorSubCommandResume(socket_native_type /*fd*/, const std::string& /*args*/)
+void Console::commandDirectorSubCommandResume(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     auto director = Director::getInstance();
     director->resume();
 }
 
-void Console::commandDirectorSubCommandStop(socket_native_type /*fd*/, const std::string& /*args*/)
+void Console::commandDirectorSubCommandStop(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     auto director    = Director::getInstance();
     Scheduler* sched = director->getScheduler();
     sched->performFunctionInCocosThread([]() { Director::getInstance()->stopAnimation(); });
 }
 
-void Console::commandDirectorSubCommandStart(socket_native_type /*fd*/, const std::string& /*args*/)
+void Console::commandDirectorSubCommandStart(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     auto director = Director::getInstance();
     director->startAnimation();
 }
 
-void Console::commandDirectorSubCommandEnd(socket_native_type /*fd*/, const std::string& /*args*/)
+void Console::commandDirectorSubCommandEnd(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     auto director = Director::getInstance();
     director->end();
 }
 
-void Console::commandExit(socket_native_type fd, const std::string& /*args*/)
+void Console::commandExit(socket_native_type fd, std::string_view /*args*/)
 {
     FD_CLR(fd, &_read_set);
     _fds.erase(std::remove(_fds.begin(), _fds.end(), fd), _fds.end());
@@ -1235,23 +1237,23 @@ void Console::commandExit(socket_native_type fd, const std::string& /*args*/)
 #endif
 }
 
-void Console::commandFileUtils(socket_native_type fd, const std::string& /*args*/)
+void Console::commandFileUtils(socket_native_type fd, std::string_view /*args*/)
 {
     Scheduler* sched = Director::getInstance()->getScheduler();
     sched->performFunctionInCocosThread(std::bind(&Console::printFileUtils, this, fd));
 }
 
-void Console::commandFileUtilsSubCommandFlush(socket_native_type /*fd*/, const std::string& /*args*/)
+void Console::commandFileUtilsSubCommandFlush(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     FileUtils::getInstance()->purgeCachedEntries();
 }
 
-void Console::commandFps(socket_native_type fd, const std::string& /*args*/)
+void Console::commandFps(socket_native_type fd, std::string_view /*args*/)
 {
     Console::Utility::mydprintf(fd, "FPS is: %s\n", Director::getInstance()->isDisplayStats() ? "on" : "off");
 }
 
-void Console::commandFpsSubCommandOnOff(socket_native_type /*fd*/, const std::string& args)
+void Console::commandFpsSubCommandOnOff(socket_native_type /*fd*/, std::string_view args)
 {
     bool state       = (args.compare("on") == 0);
     Director* dir    = Director::getInstance();
@@ -1259,12 +1261,12 @@ void Console::commandFpsSubCommandOnOff(socket_native_type /*fd*/, const std::st
     sched->performFunctionInCocosThread(std::bind(&Director::setDisplayStats, dir, state));
 }
 
-void Console::commandHelp(socket_native_type fd, const std::string& /*args*/)
+void Console::commandHelp(socket_native_type fd, std::string_view /*args*/)
 {
     sendHelp(fd, _commands, "\nAvailable commands:\n");
 }
 
-void Console::commandProjection(socket_native_type fd, const std::string& /*args*/)
+void Console::commandProjection(socket_native_type fd, std::string_view /*args*/)
 {
     auto director = Director::getInstance();
     char buf[20];
@@ -1288,25 +1290,26 @@ void Console::commandProjection(socket_native_type fd, const std::string& /*args
     Console::Utility::mydprintf(fd, "Current projection: %s\n", buf);
 }
 
-void Console::commandProjectionSubCommand2d(socket_native_type /*fd*/, const std::string& /*args*/)
+void Console::commandProjectionSubCommand2d(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     auto director    = Director::getInstance();
     Scheduler* sched = director->getScheduler();
     sched->performFunctionInCocosThread([=]() { director->setProjection(Director::Projection::_2D); });
 }
 
-void Console::commandProjectionSubCommand3d(socket_native_type /*fd*/, const std::string& /*args*/)
+void Console::commandProjectionSubCommand3d(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     auto director    = Director::getInstance();
     Scheduler* sched = director->getScheduler();
     sched->performFunctionInCocosThread([=]() { director->setProjection(Director::Projection::_3D); });
 }
 
-void Console::commandResolution(socket_native_type /*fd*/, const std::string& args)
+void Console::commandResolution(socket_native_type /*fd*/, std::string_view args)
 {
     int policy;
     float width, height;
-    std::istringstream stream(args);
+    std::stringstream stream;
+    stream << args;
     stream >> width >> height >> policy;
 
     Scheduler* sched = Director::getInstance()->getScheduler();
@@ -1316,7 +1319,7 @@ void Console::commandResolution(socket_native_type /*fd*/, const std::string& ar
     });
 }
 
-void Console::commandResolutionSubCommandEmpty(socket_native_type fd, const std::string& /*args*/)
+void Console::commandResolutionSubCommandEmpty(socket_native_type fd, std::string_view /*args*/)
 {
     auto director        = Director::getInstance();
     Vec2 points          = director->getWinSize();
@@ -1340,13 +1343,13 @@ void Console::commandResolutionSubCommandEmpty(socket_native_type fd, const std:
                                 (int)visibleRect.origin.y, (int)visibleRect.size.width, (int)visibleRect.size.height);
 }
 
-void Console::commandSceneGraph(socket_native_type fd, const std::string& /*args*/)
+void Console::commandSceneGraph(socket_native_type fd, std::string_view /*args*/)
 {
     Scheduler* sched = Director::getInstance()->getScheduler();
     sched->performFunctionInCocosThread(std::bind(&Console::printSceneGraphBoot, this, fd));
 }
 
-void Console::commandTextures(socket_native_type fd, const std::string& /*args*/)
+void Console::commandTextures(socket_native_type fd, std::string_view /*args*/)
 {
     Scheduler* sched = Director::getInstance()->getScheduler();
     sched->performFunctionInCocosThread([=]() {
@@ -1356,13 +1359,13 @@ void Console::commandTextures(socket_native_type fd, const std::string& /*args*/
     });
 }
 
-void Console::commandTexturesSubCommandFlush(socket_native_type /*fd*/, const std::string& /*args*/)
+void Console::commandTexturesSubCommandFlush(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     Scheduler* sched = Director::getInstance()->getScheduler();
     sched->performFunctionInCocosThread([]() { Director::getInstance()->getTextureCache()->removeAllTextures(); });
 }
 
-void Console::commandTouchSubCommandTap(socket_native_type fd, const std::string& args)
+void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view args)
 {
     auto argv = Console::Utility::split(args, ' ');
 
@@ -1387,7 +1390,7 @@ void Console::commandTouchSubCommandTap(socket_native_type fd, const std::string
     }
 }
 
-void Console::commandTouchSubCommandSwipe(socket_native_type fd, const std::string& args)
+void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_view args)
 {
     auto argv = Console::Utility::split(args, ' ');
 
@@ -1558,7 +1561,7 @@ void Console::commandUpload(socket_native_type fd)
     }
 }
 
-void Console::commandVersion(socket_native_type fd, const std::string& /*args*/)
+void Console::commandVersion(socket_native_type fd, std::string_view /*args*/)
 {
     Console::Utility::mydprintf(fd, "%s\n", adxeVersion());
 }
@@ -1619,7 +1622,7 @@ void Console::printFileUtils(socket_native_type fd)
 }
 
 void Console::sendHelp(socket_native_type fd,
-                       const std::unordered_map<std::string, Command*>& commands,
+                       const hlookup::string_map<Command*>& commands,
                        const char* msg)
 {
     Console::Utility::sendToConsole(fd, msg, strlen(msg));
@@ -1629,14 +1632,14 @@ void Console::sendHelp(socket_native_type fd,
         if (command->getHelp().empty())
             continue;
 
-        Console::Utility::mydprintf(fd, "\t%s", command->getName().c_str());
-        ssize_t tabs = strlen(command->getName().c_str()) / 8;
+        Console::Utility::mydprintf(fd, "\t%s", command->getName().data());
+        ssize_t tabs = strlen(command->getName().data()) / 8;
         tabs         = 3 - tabs;
         for (int j = 0; j < tabs; j++)
         {
             Console::Utility::mydprintf(fd, "\t");
         }
-        Console::Utility::mydprintf(fd, "%s\n", command->getHelp().c_str());
+        Console::Utility::mydprintf(fd, "%s\n", command->getHelp().data());
     }
 }
 

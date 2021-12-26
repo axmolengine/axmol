@@ -72,7 +72,7 @@ protected:
 
     float _volume;
     bool _loop;
-    std::function<void(AUDIO_ID, const std::string&)> _finishCallbak;
+    std::function<void(AUDIO_ID, std::string_view)> _finishCallbak;
 
     bool _isDestroyed;
     bool _removeByAudioEngine;

@@ -292,7 +292,7 @@ void ListView::addChild(cocos2d::Node* child, int zOrder)
     ListView::addChild(child, zOrder, child->getName());
 }
 
-void ListView::addChild(Node* child, int zOrder, const std::string& name)
+void ListView::addChild(Node* child, int zOrder, std::string_view name)
 {
     ScrollView::addChild(child, zOrder, name);
 

@@ -75,7 +75,7 @@ public:
      * @param filename Particle plist file name.
      * @return An autoreleased ParticleSystemQuad object.
      */
-    static ParticleSystemQuad* create(const std::string& filename);
+    static ParticleSystemQuad* create(std::string_view filename);
     /** Creates a Particle Emitter with a dictionary.
      *
      * @param dictionary Particle dictionary.

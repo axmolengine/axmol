@@ -75,7 +75,7 @@ Bone3D* MeshSkin::getBoneByIndex(unsigned int index) const
 
     return nullptr;
 }
-Bone3D* MeshSkin::getBoneByName(const std::string& id) const
+Bone3D* MeshSkin::getBoneByName(std::string_view id) const
 {
     // search from skin bones
     for (const auto& it : _skinBones)

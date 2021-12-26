@@ -91,7 +91,7 @@ ParticleSystemQuad::~ParticleSystemQuad()
 
 // implementation ParticleSystemQuad
 
-ParticleSystemQuad* ParticleSystemQuad::create(const std::string& filename)
+ParticleSystemQuad* ParticleSystemQuad::create(std::string_view filename)
 {
     ParticleSystemQuad* ret = new ParticleSystemQuad();
     if (ret->initWithFile(filename))

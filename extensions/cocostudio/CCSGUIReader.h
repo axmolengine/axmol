@@ -76,15 +76,15 @@ public:
      */
     cocos2d::Size getFileDesignSize(const char* fileName) const;
 
-    void setFilePath(const std::string& strFilePath) { m_strFilePath = strFilePath; }
-    const std::string& getFilePath() const { return m_strFilePath; }
+    void setFilePath(std::string_view strFilePath) { m_strFilePath = strFilePath; }
+    std::string_view getFilePath() const { return m_strFilePath; }
 
-    void registerTypeAndCallBack(const std::string& classType,
+    void registerTypeAndCallBack(std::string_view classType,
                                  cocos2d::ObjectFactory::Instance ins,
                                  Ref* object,
                                  SEL_ParseEvent callBack);
 
-    void registerTypeAndCallBack(const std::string& classType,
+    void registerTypeAndCallBack(std::string_view classType,
                                  cocos2d::ObjectFactory::InstanceFunc ins,
                                  Ref* object,
                                  SEL_ParseEvent callBack);
@@ -118,7 +118,7 @@ public:
                                                         cocos2d::ui::Widget* widget,
                                                         const rapidjson::Value& options) = 0;
 
-    virtual void setPropsForAllCustomWidgetFromJsonDictionary(const std::string& classType,
+    virtual void setPropsForAllCustomWidgetFromJsonDictionary(std::string_view classType,
                                                               cocos2d::ui::Widget* widget,
                                                               const rapidjson::Value& customOptions) = 0;
 
@@ -134,12 +134,12 @@ public:
 
 protected:
     void setAnchorPointForWidget(cocos2d::ui::Widget* widget, const rapidjson::Value& options);
-    std::string getWidgetReaderClassName(const std::string& classname);
+    std::string getWidgetReaderClassName(std::string_view classname);
     std::string getWidgetReaderClassName(cocos2d::ui::Widget* widget);
 
-    std::string getGUIClassName(const std::string& name);
-    cocos2d::ui::Widget* createGUI(const std::string& classname);
-    WidgetReaderProtocol* createWidgetReaderProtocol(const std::string& classname);
+    std::string getGUIClassName(std::string_view name);
+    cocos2d::ui::Widget* createGUI(std::string_view classname);
+    WidgetReaderProtocol* createWidgetReaderProtocol(std::string_view classname);
 
 protected:
     std::string m_strFilePath;
@@ -189,7 +189,7 @@ public:
     virtual void setPropsForAllWidgetFromJsonDictionary(WidgetReaderProtocol* reader,
                                                         cocos2d::ui::Widget* widget,
                                                         const rapidjson::Value& options) override;
-    virtual void setPropsForAllCustomWidgetFromJsonDictionary(const std::string& classType,
+    virtual void setPropsForAllCustomWidgetFromJsonDictionary(std::string_view classType,
                                                               cocos2d::ui::Widget* widget,
                                                               const rapidjson::Value& customOptions) override;
 };
@@ -217,7 +217,7 @@ public:
                                                 CocoLoader* cocoLoader,
                                                 stExpCocoNode* pCocoNode) override;
 
-    virtual void setPropsForAllCustomWidgetFromBinary(const std::string& classType,
+    virtual void setPropsForAllCustomWidgetFromBinary(std::string_view classType,
                                                       cocos2d::ui::Widget* widget,
                                                       CocoLoader* cocoLoader,
                                                       stExpCocoNode* pCocoNode);
@@ -228,7 +228,7 @@ public:
                                                         cocos2d::ui::Widget* widget,
                                                         const rapidjson::Value& options) override;
 
-    virtual void setPropsForAllCustomWidgetFromJsonDictionary(const std::string& classType,
+    virtual void setPropsForAllCustomWidgetFromJsonDictionary(std::string_view classType,
                                                               cocos2d::ui::Widget* widget,
                                                               const rapidjson::Value& customOptions) override;
 };

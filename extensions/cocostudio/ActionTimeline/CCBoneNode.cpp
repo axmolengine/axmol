@@ -108,7 +108,7 @@ void BoneNode::addChild(cocos2d::Node* child, int localZOrder, int tag)
     Node::addChild(child, localZOrder, tag);
 }
 
-void BoneNode::addChild(Node* child, int localZOrder, const std::string& name)
+void BoneNode::addChild(Node* child, int localZOrder, std::string_view name)
 {
     addToChildrenListHelper(child);
     Node::addChild(child, localZOrder, name);
@@ -240,7 +240,7 @@ void BoneNode::displaySkin(SkinNode* skin, bool hideOthers)
     }
 }
 
-void BoneNode::displaySkin(const std::string& skinName, bool hideOthers)
+void BoneNode::displaySkin(std::string_view skinName, bool hideOthers)
 {
     for (auto& skin : _boneSkins)
     {
@@ -661,7 +661,7 @@ void BoneNode::setLocalZOrder(int localZOrder)
         _rootSkeleton->_subBonesOrderDirty = true;
 }
 
-void BoneNode::setName(const std::string& name)
+void BoneNode::setName(std::string_view name)
 {
     auto oldname = getName();
     Node::setName(name);

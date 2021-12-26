@@ -112,13 +112,13 @@ public:
 
     /** Todo
      */
-    const std::string& getEmitterType() const { return _emitterType; }
-    void setEmitterType(const std::string& emitterType) { _emitterType = emitterType; };
+    std::string_view getEmitterType() const { return _emitterType; }
+    void setEmitterType(std::string_view emitterType) { _emitterType = emitterType; };
 
     /** Todo
      */
-    const std::string& getName() const { return _name; }
-    void setName(const std::string& name) { _name = name; };
+    std::string_view getName() const { return _name; }
+    void setName(std::string_view name) { _name = name; };
 
     /** Todo
      */
@@ -188,8 +188,8 @@ public:
 
     /** Todo
      */
-    const std::string& getEmitsName() const { return _emitsName; }
-    void setEmitsName(const std::string& emitsName);
+    std::string_view getEmitsName() const { return _emitsName; }
+    void setEmitsName(std::string_view emitsName);
     PUParticle3D::ParticleType getEmitsType() const { return _emitsType; }
     void setEmitsType(PUParticle3D::ParticleType type) { _emitsType = type; };
     Ref* getEmitsEntityPtr() const;

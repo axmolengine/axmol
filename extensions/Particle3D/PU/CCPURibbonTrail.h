@@ -48,8 +48,8 @@ public:
     @param useVertexColors If true, use vertex colors from the chain elements (must
         be true if you intend to use fading)
     */
-    PURibbonTrail(const std::string& name,
-                  const std::string& texFile = "",
+    PURibbonTrail(std::string_view name,
+                  std::string_view texFile = "",
                   size_t maxElements         = 20,
                   size_t numberOfChains      = 1,
                   bool useTextureCoords      = true,

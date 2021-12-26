@@ -126,7 +126,7 @@ void ActionTimelineCache::init()
      */
 }
 
-void ActionTimelineCache::removeAction(const std::string& fileName)
+void ActionTimelineCache::removeAction(std::string_view fileName)
 {
     if (_animationActions.find(fileName) != _animationActions.end())
     {
@@ -134,7 +134,7 @@ void ActionTimelineCache::removeAction(const std::string& fileName)
     }
 }
 
-ActionTimeline* ActionTimelineCache::createAction(const std::string& filename)
+ActionTimeline* ActionTimelineCache::createAction(std::string_view filename)
 {
     std::string path   = filename;
     size_t pos         = path.find_last_of('.');
@@ -154,7 +154,7 @@ ActionTimeline* ActionTimelineCache::createAction(const std::string& filename)
     return nullptr;
 }
 
-ActionTimeline* ActionTimelineCache::createActionFromJson(const std::string& fileName)
+ActionTimeline* ActionTimelineCache::createActionFromJson(std::string_view fileName)
 {
     ActionTimeline* action = _animationActions.at(fileName);
     if (action == nullptr)
@@ -164,7 +164,7 @@ ActionTimeline* ActionTimelineCache::createActionFromJson(const std::string& fil
     return action->clone();
 }
 
-ActionTimeline* ActionTimelineCache::createActionFromContent(const std::string& fileName, const std::string& content)
+ActionTimeline* ActionTimelineCache::createActionFromContent(std::string_view fileName, std::string_view content)
 {
     ActionTimeline* action = _animationActions.at(fileName);
     if (action == nullptr)
@@ -174,7 +174,7 @@ ActionTimeline* ActionTimelineCache::createActionFromContent(const std::string& 
     return action->clone();
 }
 
-ActionTimeline* ActionTimelineCache::loadAnimationActionWithFile(const std::string& fileName)
+ActionTimeline* ActionTimelineCache::loadAnimationActionWithFile(std::string_view fileName)
 {
     // Read content from file
     std::string fullPath   = FileUtils::getInstance()->fullPathForFilename(fileName);
@@ -183,8 +183,8 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithFile(const std::stri
     return loadAnimationActionWithContent(fileName, contentStr);
 }
 
-ActionTimeline* ActionTimelineCache::loadAnimationActionWithContent(const std::string& fileName,
-                                                                    const std::string& content)
+ActionTimeline* ActionTimelineCache::loadAnimationActionWithContent(std::string_view fileName,
+                                                                    std::string_view content)
 {
     // if already exists an action with filename, then return this action
     ActionTimeline* action = _animationActions.at(fileName);
@@ -415,7 +415,7 @@ Frame* ActionTimelineCache::loadZOrderFrame(const rapidjson::Value& json)
     return frame;
 }
 
-ActionTimeline* ActionTimelineCache::createActionWithFlatBuffersFile(const std::string& fileName)
+ActionTimeline* ActionTimelineCache::createActionWithFlatBuffersFile(std::string_view fileName)
 {
     ActionTimeline* action = _animationActions.at(fileName);
     if (action == NULL)
@@ -425,7 +425,7 @@ ActionTimeline* ActionTimelineCache::createActionWithFlatBuffersFile(const std::
     return action->clone();
 }
 
-ActionTimeline* ActionTimelineCache::createActionWithDataBuffer(Data data, const std::string& fileName)
+ActionTimeline* ActionTimelineCache::createActionWithDataBuffer(Data data, std::string_view fileName)
 {
     ActionTimeline* action = _animationActions.at(fileName);
     if (action == NULL)
@@ -435,7 +435,7 @@ ActionTimeline* ActionTimelineCache::createActionWithDataBuffer(Data data, const
     return action->clone();
 }
 
-ActionTimeline* ActionTimelineCache::loadAnimationActionWithFlatBuffersFile(const std::string& fileName)
+ActionTimeline* ActionTimelineCache::loadAnimationActionWithFlatBuffersFile(std::string_view fileName)
 {
     // if already exists an action with filename, then return this action
     ActionTimeline* action = _animationActions.at(fileName);
@@ -455,7 +455,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithFlatBuffersFile(cons
     return action;
 }
 
-ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const cocos2d::Data& data, const std::string& fileName)
+ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const cocos2d::Data& data, std::string_view fileName)
 {
     // if already exists an action with filename, then return this action
     ActionTimeline* action = _animationActions.at(fileName);
@@ -953,7 +953,7 @@ void ActionTimelineCache::loadEasingDataWithFlatBuffers(cocostudio::timeline::Fr
     }
 }
 
-ActionTimeline* ActionTimelineCache::createActionWithFlatBuffersForSimulator(const std::string& fileName)
+ActionTimeline* ActionTimelineCache::createActionWithFlatBuffersForSimulator(std::string_view fileName)
 {
     FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
     fbs->_isSimulator         = true;

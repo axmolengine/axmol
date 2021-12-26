@@ -271,7 +271,7 @@ static int lua_downloader_setOnTaskError(lua_State* L)
     saveCallback(L, d, "setOnTaskError");
 
     d->setOnTaskError(
-        [d, L](const DownloadTask& task, int errorCode, int errorCodeInternal, const std::string& errorSt) {
+        [d, L](const DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorSt) {
             int ret = getCallback(L, d, "setOnTaskError");  // stack callbackfn
             if (ret)
             {

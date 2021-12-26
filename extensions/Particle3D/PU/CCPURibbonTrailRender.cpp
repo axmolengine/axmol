@@ -48,7 +48,7 @@ const bool PURibbonTrailRender::DEFAULT_RANDOM_INITIAL_COLOUR = true;
 const Vec4 PURibbonTrailRender::DEFAULT_INITIAL_COLOUR(1, 1, 1, 1);
 const Vec4 PURibbonTrailRender::DEFAULT_COLOUR_CHANGE(0.5, 0.5, 0.5, 0.5);
 
-PURibbonTrailRender* PURibbonTrailRender::create(const std::string& texFile)
+PURibbonTrailRender* PURibbonTrailRender::create(std::string_view texFile)
 {
     auto br = new PURibbonTrailRender();
     br->autorelease();

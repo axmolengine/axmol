@@ -314,7 +314,7 @@ public:
      * @param fileName   File name of texture.
      * @param resType    @see TextureResType .
      */
-    void setIndicatorIndexNodesTexture(const std::string& texName,
+    void setIndicatorIndexNodesTexture(std::string_view texName,
                                        Widget::TextureResType texType = Widget::TextureResType::LOCAL);
 
     /**

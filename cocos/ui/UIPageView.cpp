@@ -465,7 +465,7 @@ float PageView::getIndicatorIndexNodesScale() const
     return _indicator->getIndexNodesScale();
 }
 
-void PageView::setIndicatorIndexNodesTexture(const std::string& texName, Widget::TextureResType texType)
+void PageView::setIndicatorIndexNodesTexture(std::string_view texName, Widget::TextureResType texType)
 {
     if (_indicator != nullptr)
     {

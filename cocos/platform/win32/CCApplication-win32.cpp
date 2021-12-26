@@ -287,14 +287,14 @@ std::string Application::getVersion()
     return verString;
 }
 
-bool Application::openURL(const std::string& url)
+bool Application::openURL(std::string_view url)
 {
     std::wstring wURL = ntcvt::from_chars(url, CP_UTF8);
     HINSTANCE r       = ShellExecuteW(NULL, L"open", wURL.c_str(), NULL, NULL, SW_SHOWNORMAL);
     return (size_t)r > 32;
 }
 
-void Application::setResourceRootPath(const std::string& rootResDir)
+void Application::setResourceRootPath(std::string_view rootResDir)
 {
     _resourceRootPath = rootResDir;
     std::replace(_resourceRootPath.begin(), _resourceRootPath.end(), '\\', '/');
@@ -308,12 +308,12 @@ void Application::setResourceRootPath(const std::string& rootResDir)
     pFileUtils->setSearchPaths(searchPaths);
 }
 
-const std::string& Application::getResourceRootPath(void)
+std::string_view Application::getResourceRootPath(void)
 {
     return _resourceRootPath;
 }
 
-void Application::setStartupScriptFilename(const std::string& startupScriptFile)
+void Application::setStartupScriptFilename(std::string_view startupScriptFile)
 {
     _startupScriptFilename = startupScriptFile;
     std::replace(_startupScriptFilename.begin(), _startupScriptFilename.end(), '\\', '/');

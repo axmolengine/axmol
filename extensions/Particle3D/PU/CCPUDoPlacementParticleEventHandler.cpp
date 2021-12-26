@@ -241,7 +241,7 @@ void PUDoPlacementParticleEventHandler::particleExpired(PUParticleSystem3D* /*pa
 {}
 
 //-----------------------------------------------------------------------
-void PUDoPlacementParticleEventHandler::setForceEmitterName(const std::string& forceEmitterName)
+void PUDoPlacementParticleEventHandler::setForceEmitterName(std::string_view forceEmitterName)
 {
     _forceEmitterName = forceEmitterName;
 }

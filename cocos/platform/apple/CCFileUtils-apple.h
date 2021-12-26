@@ -51,21 +51,21 @@ public:
     /* override functions */
     virtual std::string getWritablePath() const override;
     virtual std::string getNativeWritableAbsolutePath() const override;
-    virtual std::string getFullPathForFilenameWithinDirectory(const std::string& directory,
-                                                              const std::string& filename) const override;
+    virtual std::string getFullPathForFilenameWithinDirectory(std::string_view directory,
+                                                              std::string_view filename) const override;
 
 #if CC_FILEUTILS_APPLE_ENABLE_OBJC
     void setBundle(NSBundle* bundle);
 #endif
 
-    virtual bool createDirectory(const std::string& path) const override;
-    virtual std::string getPathForDirectory(const std::string& dir,
-                                            const std::string& resolutionDiretory,
-                                            const std::string& searchPath) const override;
+    virtual bool createDirectory(std::string_view path) const override;
+    virtual std::string getPathForDirectory(std::string_view dir,
+                                            std::string_view resolutionDiretory,
+                                            std::string_view searchPath) const override;
 
 private:
-    virtual bool isFileExistInternal(const std::string& filePath) const override;
-    virtual bool removeDirectory(const std::string& dirPath) const override;
+    virtual bool isFileExistInternal(std::string_view filePath) const override;
+    virtual bool removeDirectory(std::string_view dirPath) const override;
 
     struct IMPL;
     std::unique_ptr<IMPL> pimpl_;

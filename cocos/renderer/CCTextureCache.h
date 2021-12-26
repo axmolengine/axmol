@@ -64,7 +64,7 @@ class CC_DLL TextureCache : public Ref
 {
 public:
     // ETC1 ALPHA supports.
-    static void setETC1AlphaFileSuffix(const std::string& suffix);
+    static void setETC1AlphaFileSuffix(std::string_view suffix);
     static std::string getETC1AlphaFileSuffix();
 
 public:
@@ -92,7 +92,7 @@ public:
     * Supported image extensions: .png, .bmp, .jpeg, .pvr.
      @param filepath The file path.
     */
-    Texture2D* addImage(const std::string& filepath);
+    Texture2D* addImage(std::string_view filepath);
 
     /** Returns a Texture2D object given a file image.
     * If the file image was not previously loaded, it will create a new Texture2D object and it will return it.
@@ -104,11 +104,11 @@ public:
      @param callback A callback function would be invoked after the image is loaded.
      @since v0.8
     */
-    virtual void addImageAsync(const std::string& filepath, const std::function<void(Texture2D*)>& callback);
+    virtual void addImageAsync(std::string_view filepath, const std::function<void(Texture2D*)>& callback);
 
-    void addImageAsync(const std::string& path,
+    void addImageAsync(std::string_view path,
                        const std::function<void(Texture2D*)>& callback,
-                       const std::string& callbackKey);
+                       std::string_view callbackKey);
 
     /** Unbind a specified bound image asynchronous callback.
      * In the case an object who was bound to an image asynchronous callback was destroyed before the callback is
@@ -116,7 +116,7 @@ public:
      * @param filename It's the related/absolute path of the file image.
      * @since v3.1
      */
-    virtual void unbindImageAsync(const std::string& filename);
+    virtual void unbindImageAsync(std::string_view filename);
 
     /** Unbind all bound image asynchronous load callbacks.
      * @since v3.1
@@ -129,13 +129,13 @@ public:
      * @param key The "key" parameter will be used as the "key" for the cache.
      * If "key" is nil, then a new texture will be created each time.
      */
-    Texture2D* addImage(Image* image, const std::string& key);
+    Texture2D* addImage(Image* image, std::string_view key);
 
     /** Returns an already created texture. Returns nil if the texture doesn't exist.
     @param key It's the related/absolute path of the file image.
     @since v0.99.5
     */
-    Texture2D* getTextureForKey(const std::string& key) const;
+    Texture2D* getTextureForKey(std::string_view key) const;
 
     /** Reload texture from the image file.
      * If the file image hasn't loaded before, load it.
@@ -143,7 +143,7 @@ public:
      * @param fileName It's the related/absolute path of the file image.
      * @return True if the reloading is succeed, otherwise return false.
      */
-    bool reloadTexture(const std::string& fileName);
+    bool reloadTexture(std::string_view fileName);
 
     /** Purges the dictionary of loaded textures.
      * Call this method if you receive the "Memory Warning".
@@ -168,7 +168,7 @@ public:
     @param key It's the related/absolute path of the file image.
     @since v0.99.4
     */
-    void removeTextureForKey(const std::string& key);
+    void removeTextureForKey(std::string_view key);
 
     /** Output to CCLOG the current contents of this TextureCache.
      * This will attempt to calculate the size of each texture, and the total texture memory in use.
@@ -198,12 +198,12 @@ public:
      *
      * @since v3.10
      */
-    void renameTextureWithKey(const std::string& srcName, const std::string& dstName);
+    void renameTextureWithKey(std::string_view srcName, std::string_view dstName);
 
 private:
     void addImageAsyncCallBack(float dt);
     void loadImage();
-    void parseNinePatchImage(Image* image, Texture2D* texture, const std::string& path);
+    void parseNinePatchImage(Image* image, Texture2D* texture, std::string_view path);
 
 public:
 protected:
@@ -224,7 +224,7 @@ protected:
 
     int _asyncRefCount;
 
-    std::unordered_map<std::string, Texture2D*> _textures;
+    hlookup::string_map<Texture2D*> _textures;
 
     static std::string s_etc1AlphaFileSuffix;
 };
@@ -272,7 +272,7 @@ protected:
 class CC_DLL VolatileTextureMgr
 {
 public:
-    static void addImageTexture(Texture2D* tt, const std::string& imageFileName);
+    static void addImageTexture(Texture2D* tt, std::string_view imageFileName);
     static void addStringTexture(Texture2D* tt, const char* text, const FontDefinition& fontDefinition);
     static void addDataTexture(Texture2D* tt,
                                void* data,
@@ -292,7 +292,7 @@ public:
     static VolatileTexture* findVolotileTexture(Texture2D* tt);
 
 private:
-    static void reloadTexture(Texture2D* texture, const std::string& filename, backend::PixelFormat pixelFormat);
+    static void reloadTexture(Texture2D* texture, std::string_view filename, backend::PixelFormat pixelFormat);
 };
 
 #endif

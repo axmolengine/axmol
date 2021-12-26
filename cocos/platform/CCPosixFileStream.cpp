@@ -19,7 +19,7 @@ struct PXIoF
     long long (*size)(PXFileHandle& handle);
 };
 
-static int pfs_posix_open(const std::string& path, FileStream::Mode mode, PXFileHandle& handle)
+static int pfs_posix_open(std::string_view path, FileStream::Mode mode, PXFileHandle& handle)
 {
     switch (mode)
     {
@@ -127,7 +127,7 @@ PosixFileStream::~PosixFileStream()
     internalClose();
 }
 
-bool PosixFileStream::open(const std::string& path, FileStream::Mode mode)
+bool PosixFileStream::open(std::string_view path, FileStream::Mode mode)
 {
     bool ok = false;
 #if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID

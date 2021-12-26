@@ -45,7 +45,7 @@ namespace cocos2d {
         closeInternal();
     }
 
-    bool AudioDecoderEXT::open(const std::string& fullPath)
+    bool AudioDecoderEXT::open(std::string_view fullPath)
     {
         bool ret = false;
         CFURLRef fileURL = nil;

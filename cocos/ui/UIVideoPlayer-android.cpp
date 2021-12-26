@@ -124,7 +124,7 @@ VideoPlayer::~VideoPlayer()
     JniHelper::callStaticVoidMethod(videoHelperClassName, "removeVideoWidget", _videoPlayerIndex);
 }
 
-void VideoPlayer::setFileName(const std::string& fileName)
+void VideoPlayer::setFileName(std::string_view fileName)
 {
     _videoURL    = FileUtils::getInstance()->fullPathForFilename(fileName);
     _videoSource = VideoPlayer::Source::FILENAME;
@@ -132,7 +132,7 @@ void VideoPlayer::setFileName(const std::string& fileName)
                                     _videoURL);
 }
 
-void VideoPlayer::setURL(const std::string& videoUrl)
+void VideoPlayer::setURL(std::string_view videoUrl)
 {
     _videoURL    = videoUrl;
     _videoSource = VideoPlayer::Source::URL;

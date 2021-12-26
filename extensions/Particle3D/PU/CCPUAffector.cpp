@@ -161,16 +161,16 @@ void PUAffector::copyAttributesTo(PUAffector* affector)
     affector->_excludedEmitters     = _excludedEmitters;
 }
 
-void PUAffector::addEmitterToExclude(const std::string& emitterName)
+void PUAffector::addEmitterToExclude(std::string_view emitterName)
 {
     auto iter = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
     if (iter == _excludedEmitters.end())
     {
-        _excludedEmitters.push_back(emitterName);
+        _excludedEmitters.push_back(std::string{emitterName});
     }
 }
 
-void PUAffector::removeEmitterToExclude(const std::string& emitterName)
+void PUAffector::removeEmitterToExclude(std::string_view emitterName)
 {
     auto iter = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
     if (iter != _excludedEmitters.end())
@@ -189,7 +189,7 @@ void PUAffector::process(PUParticle3D* particle, float delta, bool firstParticle
     if (!_excludedEmitters.empty() && particle->parentEmitter)
     {
         // Return if the emitter which emits this particle is part of the vector
-        std::string emitterName = particle->parentEmitter->getName();
+        auto emitterName = particle->parentEmitter->getName();
         auto iter               = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
         if (iter != _excludedEmitters.end())
         {

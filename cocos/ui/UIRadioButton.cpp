@@ -52,11 +52,11 @@ RadioButton* RadioButton::create()
     return nullptr;
 }
 
-RadioButton* RadioButton::create(const std::string& backGround,
-                                 const std::string& backGroundSelected,
-                                 const std::string& cross,
-                                 const std::string& backGroundDisabled,
-                                 const std::string& frontCrossDisabled,
+RadioButton* RadioButton::create(std::string_view backGround,
+                                 std::string_view backGroundSelected,
+                                 std::string_view cross,
+                                 std::string_view backGroundDisabled,
+                                 std::string_view frontCrossDisabled,
                                  TextureResType texType)
 {
     RadioButton* pWidget = new RadioButton();
@@ -69,7 +69,7 @@ RadioButton* RadioButton::create(const std::string& backGround,
     return nullptr;
 }
 
-RadioButton* RadioButton::create(const std::string& backGround, const std::string& cross, TextureResType texType)
+RadioButton* RadioButton::create(std::string_view backGround, std::string_view cross, TextureResType texType)
 {
     RadioButton* pWidget = new RadioButton();
     if (pWidget->init(backGround, "", cross, "", "", texType))

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -75,7 +75,7 @@ public:
     virtual void update()                                                 = 0;
     virtual void invalidUpdate()                                          = 0;
 
-    inline const std::string& getName() { return _constraintData->name; }
+    inline std::string_view getName() { return _constraintData->name; }
 };
 /**
  * @internal

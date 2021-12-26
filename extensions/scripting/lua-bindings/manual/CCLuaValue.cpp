@@ -60,7 +60,7 @@ const LuaValue LuaValue::stringValue(const char* stringValue)
     return value;
 }
 
-const LuaValue LuaValue::stringValue(const std::string& stringValue)
+const LuaValue LuaValue::stringValue(std::string_view stringValue)
 {
     LuaValue value;
     value._type              = LuaValueTypeString;
@@ -94,7 +94,7 @@ const LuaValue LuaValue::ccobjectValue(Ref* ccobjectValue, const char* objectTyp
     return value;
 }
 
-const LuaValue LuaValue::ccobjectValue(Ref* ccobjectValue, const std::string& objectTypename)
+const LuaValue LuaValue::ccobjectValue(Ref* ccobjectValue, std::string_view objectTypename)
 {
     return LuaValue::ccobjectValue(ccobjectValue, objectTypename.c_str());
 }

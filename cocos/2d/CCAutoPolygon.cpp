@@ -168,7 +168,7 @@ float PolygonInfo::getArea() const
     return area;
 }
 
-AutoPolygon::AutoPolygon(const std::string& filename)
+AutoPolygon::AutoPolygon(std::string_view filename)
     : _image(nullptr), _data(nullptr), _filename(""), _width(0), _height(0), _scaleFactor(0)
 {
     _filename = filename;
@@ -714,7 +714,7 @@ PolygonInfo AutoPolygon::generateTriangles(const Rect& rect, float epsilon, floa
     return ret;
 }
 
-PolygonInfo AutoPolygon::generatePolygon(const std::string& filename, const Rect& rect, float epsilon, float threshold)
+PolygonInfo AutoPolygon::generatePolygon(std::string_view filename, const Rect& rect, float epsilon, float threshold)
 {
     AutoPolygon ap(filename);
     return ap.generateTriangles(rect, epsilon, threshold);

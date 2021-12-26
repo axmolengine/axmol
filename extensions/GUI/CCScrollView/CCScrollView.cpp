@@ -327,7 +327,7 @@ void ScrollView::setZoomScaleInDuration(float s, float dt)
     }
 }
 
-void ScrollView::updateTweenAction(float value, const std::string& /*key*/)
+void ScrollView::updateTweenAction(float value, std::string_view /*key*/)
 {
     this->setZoomScale(value);
 }
@@ -551,7 +551,7 @@ void ScrollView::removeAllChildren()
     removeAllChildrenWithCleanup(true);
 }
 
-void ScrollView::addChild(Node* child, int zOrder, const std::string& name)
+void ScrollView::addChild(Node* child, int zOrder, std::string_view name)
 {
     if (_container != child)
     {

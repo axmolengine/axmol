@@ -44,7 +44,7 @@ public:
     /**
      *get bonenode in skeleton node by bone name
      */
-    BoneNode* getBoneNode(const std::string& boneName);
+    BoneNode* getBoneNode(std::string_view boneName);
 
     /**
      *get All bones in this skeleton, <bone's name, BoneNode>
@@ -61,7 +61,7 @@ public:
      *@brief: change displays
      *@param: skinGroupName have
      */
-    void changeSkins(const std::string& skinGroupName);
+    void changeSkins(std::string_view skinGroupName);
 
     /**
      *@brief: add a boneSkinNameMap as a SkinGroup named groupName

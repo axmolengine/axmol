@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -79,7 +79,7 @@ public:
     virtual ~ComRender();
 
 private:
-    bool readJson(const std::string& fileName, rapidjson::Document& doc);
+    bool readJson(std::string_view fileName, rapidjson::Document& doc);
 
     cocos2d::Node* _render;
 };

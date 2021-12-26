@@ -52,7 +52,7 @@ public:
      * @param stage Specify what kinds of shader to be created.
      * @param source Specify the shader source.
      */
-    ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, const std::string& source);
+    ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source);
     ~ShaderModuleMTL();
 
     /**
@@ -97,7 +97,7 @@ public:
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    int getUniformLocation(const std::string& name) const;
+    int getUniformLocation(std::string_view name) const;
 
     /**
      * Get attribute location by engine built-in attribute enum name.

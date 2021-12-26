@@ -50,8 +50,8 @@ namespace ui
 
 #    define LOGD(...) __android_log_print(ANDROID_LOG_ERROR, "", __VA_ARGS__)
 static void editBoxEditingDidBegin(int index);
-static void editBoxEditingDidChanged(int index, const std::string& text);
-static void editBoxEditingDidEnd(int index, const std::string& text, int action);
+static void editBoxEditingDidChanged(int index, std::string_view text);
+static void editBoxEditingDidEnd(int index, std::string_view text, int action);
 extern "C" {
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxEditBoxHelper_editBoxEditingDidBegin(JNIEnv*, jclass, jint index)
 {
@@ -221,7 +221,7 @@ void editBoxEditingDidBegin(int index)
         s_allEditBoxes[index]->editBoxEditingDidBegin();
     }
 }
-void editBoxEditingDidChanged(int index, const std::string& text)
+void editBoxEditingDidChanged(int index, std::string_view text)
 {
     auto it = s_allEditBoxes.find(index);
     if (it != s_allEditBoxes.end())
@@ -230,7 +230,7 @@ void editBoxEditingDidChanged(int index, const std::string& text)
     }
 }
 
-void editBoxEditingDidEnd(int index, const std::string& text, int action)
+void editBoxEditingDidEnd(int index, std::string_view text, int action)
 {
     auto it = s_allEditBoxes.find(index);
     if (it != s_allEditBoxes.end())

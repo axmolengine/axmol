@@ -55,7 +55,7 @@ class CC_DLL MeshIndexData : public Ref
 {
 public:
     /** create  */
-    static MeshIndexData* create(const std::string& id,
+    static MeshIndexData* create(std::string_view id,
                                  MeshVertexData* vertexData,
                                  backend::Buffer* indexbuffer,
                                  const AABB& aabb);
@@ -74,8 +74,8 @@ public:
     const AABB& getAABB() const { return _aabb; }
 
     /** id setter and getter */
-    void setId(const std::string& id) { _id = id; }
-    const std::string& getId() const { return _id; }
+    void setId(std::string_view id) { _id = id; }
+    std::string_view getId() const { return _id; }
 
     /**primitive type setter & getter*/
     MeshCommand::PrimitiveType getPrimitiveType() const { return _primitiveType; }
@@ -128,7 +128,7 @@ public:
     /** get index data by index */
     MeshIndexData* getMeshIndexDataByIndex(int index) const { return _indexs.at(index); }
     /** get index data by id */
-    MeshIndexData* getMeshIndexDataById(const std::string& id) const;
+    MeshIndexData* getMeshIndexDataById(std::string_view id) const;
 
     ssize_t getSizePerVertex() const { return _sizePerVertex; }
 

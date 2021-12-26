@@ -57,7 +57,7 @@ Armature* Armature::create()
     return nullptr;
 }
 
-Armature* Armature::create(const std::string& name)
+Armature* Armature::create(std::string_view name)
 {
     Armature* armature = new Armature();
     if (armature->init(name))
@@ -69,7 +69,7 @@ Armature* Armature::create(const std::string& name)
     return nullptr;
 }
 
-Armature* Armature::create(const std::string& name, Bone* parentBone)
+Armature* Armature::create(std::string_view name, Bone* parentBone)
 {
     Armature* armature = new Armature();
     if (armature->init(name, parentBone))
@@ -102,7 +102,7 @@ bool Armature::init()
     return init("");
 }
 
-bool Armature::init(const std::string& name)
+bool Armature::init(std::string_view name)
 {
     bool bRet = false;
     do
@@ -182,13 +182,13 @@ bool Armature::init(const std::string& name)
     return bRet;
 }
 
-bool Armature::init(const std::string& name, Bone* parentBone)
+bool Armature::init(std::string_view name, Bone* parentBone)
 {
     _parentBone = parentBone;
     return init(name);
 }
 
-Bone* Armature::createBone(const std::string& boneName)
+Bone* Armature::createBone(std::string_view boneName)
 {
     Bone* existedBone = getBone(boneName);
     if (existedBone != nullptr)
@@ -217,7 +217,7 @@ Bone* Armature::createBone(const std::string& boneName)
     return bone;
 }
 
-void Armature::addBone(Bone* bone, const std::string& parentName)
+void Armature::addBone(Bone* bone, std::string_view parentName)
 {
     CCASSERT(bone != nullptr, "Argument must be non-nil");
     CCASSERT(_boneDic.at(bone->getName()) == nullptr, "bone already added. It can't be added again");
@@ -260,12 +260,12 @@ void Armature::removeBone(Bone* bone, bool recursion)
     removeChild(bone, true);
 }
 
-Bone* Armature::getBone(const std::string& name) const
+Bone* Armature::getBone(std::string_view name) const
 {
     return _boneDic.at(name);
 }
 
-void Armature::changeBoneParent(Bone* bone, const std::string& parentName)
+void Armature::changeBoneParent(Bone* bone, std::string_view parentName)
 {
     CCASSERT(bone != nullptr, "bone must be added to the bone dictionary!");
 

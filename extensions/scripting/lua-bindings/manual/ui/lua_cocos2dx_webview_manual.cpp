@@ -63,8 +63,8 @@ static int lua_cocos2dx_WebView_setOnShouldStartLoading(lua_State* L)
 #endif
 
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
-        std::function<bool(ui::WebView * sender, const std::string& url)> callback =
-            [L, handler](ui::WebView* sender, const std::string& url) -> bool {
+        std::function<bool(ui::WebView * sender, std::string_view url)> callback =
+            [L, handler](ui::WebView* sender, std::string_view url) -> bool {
             toluafix_pushusertype_ccobject(L, sender->_ID, &(sender->_luaID), (void*)sender, "ccui.WebView");
             tolua_pushcppstring(L, url);
             return LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
@@ -119,8 +119,8 @@ static int lua_cocos2dx_WebView_setOnDidFinishLoading(lua_State* L)
 #endif
 
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
-        std::function<void(ui::WebView * sender, const std::string& url)> callback =
-            [L, handler](ui::WebView* sender, const std::string& url) {
+        std::function<void(ui::WebView * sender, std::string_view url)> callback =
+            [L, handler](ui::WebView* sender, std::string_view url) {
                 toluafix_pushusertype_ccobject(L, sender->_ID, &(sender->_luaID), (void*)sender, "ccui.WebView");
                 tolua_pushcppstring(L, url);
                 LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
@@ -174,8 +174,8 @@ static int lua_cocos2dx_WebView_setOnDidFailLoading(lua_State* L)
 #endif
 
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
-        std::function<void(ui::WebView * sender, const std::string& url)> callback =
-            [L, handler](ui::WebView* sender, const std::string& url) {
+        std::function<void(ui::WebView * sender, std::string_view url)> callback =
+            [L, handler](ui::WebView* sender, std::string_view url) {
                 toluafix_pushusertype_ccobject(L, sender->_ID, &(sender->_luaID), (void*)sender, "ccui.WebView");
                 tolua_pushcppstring(L, url);
                 LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);

@@ -63,7 +63,7 @@ void adjustScriptFileName(std::string& scriptFileName)
 
 int ComponentLua::_index = 0;
 
-ComponentLua* ComponentLua::create(const std::string& scriptFileName)
+ComponentLua* ComponentLua::create(std::string_view scriptFileName)
 {
     CC_ASSERT(!scriptFileName.empty());
 
@@ -79,7 +79,7 @@ ComponentLua* ComponentLua::create(const std::string& scriptFileName)
     return componentLua;
 }
 
-ComponentLua::ComponentLua(const std::string& scriptFileName)
+ComponentLua::ComponentLua(std::string_view scriptFileName)
     : _scriptFileName(scriptFileName), _table(nullptr), _strIndex("")
 {
     _succeedLoadingScript = loadAndExecuteScript();
@@ -134,7 +134,7 @@ void ComponentLua::onExit()
     }
 }
 
-bool ComponentLua::getLuaFunction(const std::string& functionName)
+bool ComponentLua::getLuaFunction(std::string_view functionName)
 {
     lua_State* l = LuaEngine::getInstance()->getLuaStack()->getLuaState();
 

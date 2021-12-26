@@ -47,7 +47,7 @@ public:
      * @param vertexShader Specifes the vertex shader source.
      * @param fragmentShader Specifes the fragment shader source.
      */
-    ProgramMTL(const std::string& vertexShader, const std::string& fragmentShader);
+    ProgramMTL(std::string_view vertexShader, std::string_view fragmentShader);
     virtual ~ProgramMTL();
 
     /**
@@ -55,7 +55,7 @@ public:
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    virtual UniformLocation getUniformLocation(const std::string& uniform) const override;
+    virtual UniformLocation getUniformLocation(std::string_view uniform) const override;
 
     /**
      * Get uniform location by engine built-in uniform enum name.
@@ -69,7 +69,7 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(const std::string& name) const override;
+    virtual int getAttributeLocation(std::string_view name) const override;
 
     /**
      * Get attribute location by engine built-in attribute enum name.

@@ -191,11 +191,6 @@ void ParticleData::release()
 Vector<ParticleSystem*> ParticleSystem::__allInstances;
 float ParticleSystem::__totalParticleCountFactor = 1.0f;
 
-inline static const cocos2d::Value& optValue(const ValueMap& dictionary, const std::string& key)
-{
-    return dictionary.find(key) != dictionary.cend() ? dictionary.at(key) : cocos2d::Value::Null;
-}
-
 ParticleSystem::ParticleSystem()
     : _isBlendAdditive(false)
     , _isAutoRemoveOnFinish(false)
@@ -250,7 +245,7 @@ ParticleSystem::ParticleSystem()
 }
 // implementation ParticleSystem
 
-ParticleSystem* ParticleSystem::create(const std::string& plistFile)
+ParticleSystem* ParticleSystem::create(std::string_view plistFile)
 {
     ParticleSystem* ret = new ParticleSystem();
     if (ret->initWithFile(plistFile))
@@ -290,7 +285,7 @@ bool ParticleSystem::init()
     return initWithTotalParticles(150);
 }
 
-bool ParticleSystem::initWithFile(const std::string& plistFile)
+bool ParticleSystem::initWithFile(std::string_view plistFile)
 {
     bool ret      = false;
     _plistFile    = FileUtils::getInstance()->fullPathForFilename(plistFile);
@@ -299,7 +294,7 @@ bool ParticleSystem::initWithFile(const std::string& plistFile)
     CCASSERT(!dict.empty(), "Particles: file not found");
 
     // FIXME: compute path from a path, should define a function somewhere to do it
-    string listFilePath = plistFile;
+    auto listFilePath = plistFile;
     if (listFilePath.find('/') != string::npos)
     {
         listFilePath = listFilePath.substr(0, listFilePath.rfind('/') + 1);
@@ -318,7 +313,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary)
     return initWithDictionary(dictionary, "");
 }
 
-bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, const std::string& dirname)
+bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_view dirname)
 {
     bool ret              = false;
     unsigned char* buffer = nullptr;
@@ -487,12 +482,12 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, const std::s
                     if (!dirname.empty() && textureDir != dirname)
                     {
                         textureName = textureName.substr(rPos + 1);
-                        textureName = dirname + textureName;
+                        textureName.insert(0, dirname);  // textureName = dirname + textureName;
                     }
                 }
                 else if (!dirname.empty() && !textureName.empty())
                 {
-                    textureName = dirname + textureName;
+                    textureName.insert(0, dirname);  // textureName = dirname + textureName;
                 }
 
                 Texture2D* tex = nullptr;

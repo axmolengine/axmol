@@ -140,7 +140,7 @@ class CCS_DLL DisplayData : public cocos2d::Ref
 public:
     CC_CREATE_NO_PARAM_NO_INIT(DisplayData)
 
-    static std::string changeDisplayToTexture(const std::string& displayName);
+    static std::string changeDisplayToTexture(std::string_view displayName);
 
 public:
     /**
@@ -282,7 +282,7 @@ public:
 
     bool init();
     void addBoneData(BoneData* boneData);
-    BoneData* getBoneData(const std::string& boneName);
+    BoneData* getBoneData(std::string_view boneName);
 
 public:
     std::string name;
@@ -409,7 +409,7 @@ public:
     ~MovementData(void);
 
     void addMovementBoneData(MovementBoneData* movBoneData);
-    MovementBoneData* getMovementBoneData(const std::string& boneName);
+    MovementBoneData* getMovementBoneData(std::string_view boneName);
 
 public:
     std::string name;
@@ -443,7 +443,7 @@ public:
 
     /**
      * @brief    save movement bone data
-     * @key    const std::string&
+     * @key    std::string_view
      * @value    MovementBoneData *
      */
     cocos2d::Map<std::string, MovementBoneData*> movBoneDataDic;
@@ -472,7 +472,7 @@ public:
     ~AnimationData(void);
 
     void addMovement(MovementData* movData);
-    MovementData* getMovement(const std::string& movementName);
+    MovementData* getMovement(std::string_view movementName);
     ssize_t getMovementCount();
 
 public:

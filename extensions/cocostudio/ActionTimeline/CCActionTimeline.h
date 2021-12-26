@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
 
 http://www.cocos2d-x.org
@@ -37,7 +37,7 @@ typedef struct AnimationInfo
 {
     AnimationInfo() : startIndex(0), endIndex(0) {}
 
-    AnimationInfo(const std::string& otherName, int otherStartIndex, int otherEndIndex)
+    AnimationInfo(std::string_view otherName, int otherStartIndex, int otherEndIndex)
         : name(otherName), startIndex(otherStartIndex), endIndex(otherEndIndex)
     {}
 
@@ -150,8 +150,8 @@ public:
     /** AnimationInfo*/
     virtual void addAnimationInfo(const AnimationInfo& animationInfo);
     virtual void removeAnimationInfo(std::string animationName);
-    virtual bool IsAnimationInfoExists(const std::string& animationName);
-    virtual const AnimationInfo& getAnimationInfo(const std::string& animationName);
+    virtual bool IsAnimationInfoExists(std::string_view animationName);
+    virtual const AnimationInfo& getAnimationInfo(std::string_view animationName);
     /**add a frame end call back to animation's end frame
      * @param animationName  @addFrameEndCallFunc, make the animationName as funcKey
      * @param func the callback function
@@ -171,9 +171,9 @@ public:
      * @param funcKey for identity the callback function
      * @param func the callback function
      */
-    virtual void addFrameEndCallFunc(int frameIndex, const std::string& funcKey, std::function<void()> func);
+    virtual void addFrameEndCallFunc(int frameIndex, std::string_view funcKey, std::function<void()> func);
     // remove callback function after frameIndex which identified with funcKey
-    virtual void removeFrameEndCallFunc(int frameIndex, const std::string& funcKey);
+    virtual void removeFrameEndCallFunc(int frameIndex, std::string_view funcKey);
     // clear callback functions after frameIndex
     virtual void removeFrameEndCallFuncs(int frameIndex);
     // clear all the callback functions after frameIndexs in this actiontimeline

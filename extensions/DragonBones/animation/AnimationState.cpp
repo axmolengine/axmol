@@ -1,4 +1,4 @@
-﻿#include "AnimationState.h"
+#include "AnimationState.h"
 #include "WorldClock.h"
 #include "../model/DisplayData.h"
 #include "../model/AnimationConfig.h"
@@ -745,12 +745,12 @@ void AnimationState::fadeOut(float fadeOutTime, bool pausePlayhead)
     _fadeTime      = fadeTotalTime * (1.0f - _fadeProgress);
 }
 
-bool AnimationState::containsBoneMask(const std::string& boneName) const
+bool AnimationState::containsBoneMask(std::string_view boneName) const
 {
     return _boneMask.empty() || std::find(_boneMask.cbegin(), _boneMask.cend(), boneName) != _boneMask.cend();
 }
 
-void AnimationState::addBoneMask(const std::string& boneName, bool recursive)
+void AnimationState::addBoneMask(std::string_view boneName, bool recursive)
 {
     const auto currentBone = _armature->getBone(boneName);
     if (currentBone == nullptr)
@@ -778,7 +778,7 @@ void AnimationState::addBoneMask(const std::string& boneName, bool recursive)
     _timelineDirty = 1;
 }
 
-void AnimationState::removeBoneMask(const std::string& boneName, bool recursive)
+void AnimationState::removeBoneMask(std::string_view boneName, bool recursive)
 {
     {
         auto iterator = std::find(_boneMask.begin(), _boneMask.end(), boneName);

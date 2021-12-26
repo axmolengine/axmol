@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -123,7 +123,7 @@ public:
      *         loop = 0 : this animation is not loop
      *         loop > 0 : this animation is loop
      */
-    virtual void play(const std::string& animationName, int durationTo = -1, int loop = -1);
+    virtual void play(std::string_view animationName, int durationTo = -1, int loop = -1);
 
     /**
      * Play animation by index, the other param is the same to play.
@@ -192,10 +192,10 @@ public:
     CC_DEPRECATED_ATTRIBUTE void setFrameEventCallFunc(cocos2d::Ref* target, SEL_FrameEventCallFunc callFunc);
 
     void setMovementEventCallFunc(
-        std::function<void(Armature* armature, MovementEventType movementType, const std::string& movementID)>
+        std::function<void(Armature* armature, MovementEventType movementType, std::string_view movementID)>
             listener);
     void setFrameEventCallFunc(
-        std::function<void(Bone* bone, const std::string& frameEventName, int originFrameIndex, int currentFrameIndex)>
+        std::function<void(Bone* bone, std::string_view frameEventName, int originFrameIndex, int currentFrameIndex)>
             listener);
 
     virtual void setAnimationData(AnimationData* data)
@@ -257,12 +257,12 @@ protected:
      * @js NA
      * @lua NA
      */
-    void frameEvent(Bone* bone, const std::string& frameEventName, int originFrameIndex, int currentFrameIndex);
+    void frameEvent(Bone* bone, std::string_view frameEventName, int originFrameIndex, int currentFrameIndex);
 
     /**
      * Emit a movement event
      */
-    void movementEvent(Armature* armature, MovementEventType movementType, const std::string& movementID);
+    void movementEvent(Armature* armature, MovementEventType movementType, std::string_view movementID);
 
     void updateMovementList();
 
@@ -322,9 +322,9 @@ protected:
     cocos2d::Ref* _movementEventTarget;
     cocos2d::Ref* _frameEventTarget;
 
-    std::function<void(Armature* armature, MovementEventType movementType, const std::string& movementID)>
+    std::function<void(Armature* armature, MovementEventType movementType, std::string_view movementID)>
         _movementEventListener;
-    std::function<void(Bone* bone, const std::string& frameEventName, int originFrameIndex, int currentFrameIndex)>
+    std::function<void(Bone* bone, std::string_view frameEventName, int originFrameIndex, int currentFrameIndex)>
         _frameEventListener;
 };
 

@@ -83,7 +83,7 @@ public:
     static const Vec4 DEFAULT_INITIAL_COLOUR;
     static const Vec4 DEFAULT_COLOUR_CHANGE;
 
-    static PURibbonTrailRender* create(const std::string& texFile = "");
+    static PURibbonTrailRender* create(std::string_view texFile = "");
 
     virtual void notifyRescaled(const Vec3& scale) override;
     virtual void prepare() override;

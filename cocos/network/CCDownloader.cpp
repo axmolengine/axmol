@@ -39,17 +39,17 @@ DownloadTask::DownloadTask()
     DLLOG("Construct DownloadTask %p", this);
 }
 
-DownloadTask::DownloadTask(const std::string& srcUrl, const std::string& identifier)
+DownloadTask::DownloadTask(std::string_view srcUrl, std::string_view identifier)
 {
     this->requestURL = srcUrl;
     this->identifier = identifier;
     this->background = false;
 }
 
-DownloadTask::DownloadTask(const std::string& srcUrl,
-                           const std::string& storagePath,
-                           const std::string& checksum,
-                           const std::string& identifier,
+DownloadTask::DownloadTask(std::string_view srcUrl,
+                           std::string_view storagePath,
+                           std::string_view checksum,
+                           std::string_view identifier,
                            bool background)
 {
     this->requestURL  = srcUrl;
@@ -87,7 +87,7 @@ Downloader::Downloader(const DownloaderHints& hints)
     };
 
     _impl->onTaskFinish = [this](const DownloadTask& task, int errorCode, int errorCodeInternal,
-                                 const std::string& errorStr, std::vector<unsigned char>& data) {
+                                 std::string_view errorStr, std::vector<unsigned char>& data) {
         if (DownloadTask::ERROR_NO_ERROR != errorCode)
         {
             if (onTaskError)
@@ -121,8 +121,8 @@ Downloader::~Downloader()
     DLLOG("Destruct Downloader %p", this);
 }
 
-std::shared_ptr<DownloadTask> Downloader::createDownloadDataTask(const std::string& srcUrl,
-                                                                 const std::string& identifier /* = ""*/)
+std::shared_ptr<DownloadTask> Downloader::createDownloadDataTask(std::string_view srcUrl,
+                                                                 std::string_view identifier /* = ""*/)
 {
     auto task = std::make_shared<DownloadTask>(srcUrl, identifier);
 
@@ -143,10 +143,10 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadDataTask(const std::stri
     return task;
 }
 
-std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(const std::string& srcUrl,
-                                                                 const std::string& storagePath,
-                                                                 const std::string& identifier,
-                                                                 const std::string& md5checksum,
+std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(std::string_view srcUrl,
+                                                                 std::string_view storagePath,
+                                                                 std::string_view identifier,
+                                                                 std::string_view md5checksum,
                                                                  bool background)
 {
     auto task = std::make_shared<DownloadTask>(srcUrl, storagePath, md5checksum, identifier, background);
@@ -167,7 +167,7 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(const std::stri
     return task;
 }
 
-// std::string Downloader::getFileNameFromUrl(const std::string& srcUrl)
+// std::string Downloader::getFileNameFromUrl(std::string_view srcUrl)
 //{
 //    // Find file name and file extension
 //    std::string filename;

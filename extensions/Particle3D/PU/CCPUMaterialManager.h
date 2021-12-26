@@ -63,9 +63,9 @@ public:
 
     static PUMaterialCache* Instance();
 
-    bool loadMaterials(const std::string& file);
-    bool loadMaterialsFromSearchPaths(const std::string& fileFolder);
-    PUMaterial* getMaterial(const std::string& name);
+    bool loadMaterials(std::string_view file);
+    bool loadMaterialsFromSearchPaths(std::string_view fileFolder);
+    PUMaterial* getMaterial(std::string_view name);
     void addMaterial(PUMaterial* material);
 
 protected:

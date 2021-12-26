@@ -129,7 +129,7 @@ public:
      * @param   filename A path to image file, e.g., "scene1/monster.png".
      * @return  An autoreleased sprite object.
      */
-    static Sprite* create(const std::string& filename);
+    static Sprite* create(std::string_view filename);
 
     /**
      * Creates a polygon sprite with a polygon info.
@@ -149,7 +149,7 @@ public:
      * @param   rect     A subrect of the image file.
      * @return  An autoreleased sprite object.
      */
-    static Sprite* create(const std::string& filename, const Rect& rect);
+    static Sprite* create(std::string_view filename, const Rect& rect);
 
     /**
      * Creates a sprite with a Texture2D object.
@@ -191,7 +191,7 @@ public:
      * @param   spriteFrameName The name of sprite frame.
      * @return  An autoreleased sprite object.
      */
-    static Sprite* createWithSpriteFrameName(const std::string& spriteFrameName);
+    static Sprite* createWithSpriteFrameName(std::string_view spriteFrameName);
 
     //  end of creators group
     /// @}
@@ -233,7 +233,7 @@ public:
      *  @memberof Sprite
      *  It will call `setTextureRect()` with the texture's content size.
      */
-    virtual void setTexture(const std::string& filename);
+    virtual void setTexture(std::string_view filename);
 
     /** @overload
      *
@@ -304,7 +304,7 @@ public:
     /** @{
      * Sets a new SpriteFrame to the Sprite.
      */
-    virtual void setSpriteFrame(const std::string& spriteFrameName);
+    virtual void setSpriteFrame(std::string_view spriteFrameName);
     virtual void setSpriteFrame(SpriteFrame* newFrame);
     /** @} */
 
@@ -326,7 +326,7 @@ public:
      * Changes the display frame with animation name and index.
      * The animation name will be get from the AnimationCache.
      */
-    virtual void setDisplayFrameWithAnimationName(const std::string& animationName, unsigned int frameIndex);
+    virtual void setDisplayFrameWithAnimationName(std::string_view animationName, unsigned int frameIndex);
     /// @}
 
     /// @{
@@ -370,7 +370,7 @@ public:
     virtual void reorderChild(Node* child, int zOrder) override;
     using Node::addChild;
     virtual void addChild(Node* child, int zOrder, int tag) override;
-    virtual void addChild(Node* child, int zOrder, const std::string& name) override;
+    virtual void addChild(Node* child, int zOrder, std::string_view name) override;
     virtual void sortAllChildren() override;
     virtual void setScale(float scale) override;
     virtual void setPositionZ(float positionZ) override;
@@ -513,7 +513,7 @@ public:
     /// @}
 
     int getResourceType() const { return _fileType; }
-    const std::string& getResourceName() const { return _fileName; }
+    std::string_view getResourceName() const { return _fileName; }
 
     CC_CONSTRUCTOR_ACCESS :
         /**
@@ -588,7 +588,7 @@ public:
      * @param   spriteFrameName  A key string that can fetched a valid SpriteFrame from SpriteFrameCache.
      * @return  True if the sprite is initialized properly, false otherwise.
      */
-    virtual bool initWithSpriteFrameName(const std::string& spriteFrameName);
+    virtual bool initWithSpriteFrameName(std::string_view spriteFrameName);
 
     /**
      * Initializes a sprite with an image filename.
@@ -601,7 +601,7 @@ public:
      * @return  True if the sprite is initialized properly, false otherwise.
      * @lua     init
      */
-    virtual bool initWithFile(const std::string& filename);
+    virtual bool initWithFile(std::string_view filename);
 
     /**
      * Initializes a sprite with an image filename, and a rect.
@@ -615,7 +615,7 @@ public:
      * @return  True if the sprite is initialized properly, false otherwise.
      * @lua     init
      */
-    virtual bool initWithFile(const std::string& filename, const Rect& rect);
+    virtual bool initWithFile(std::string_view filename, const Rect& rect);
 
     virtual void setVertexLayout();
 

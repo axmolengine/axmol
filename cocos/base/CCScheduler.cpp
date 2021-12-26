@@ -188,7 +188,7 @@ TimerTargetCallback::TimerTargetCallback() : _target(nullptr), _callback(nullptr
 bool TimerTargetCallback::initWithCallback(Scheduler* scheduler,
                                            const ccSchedulerFunc& callback,
                                            void* target,
-                                           const std::string& key,
+                                           std::string_view key,
                                            float seconds,
                                            unsigned int repeat,
                                            float delay)
@@ -283,7 +283,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
                          void* target,
                          float interval,
                          bool paused,
-                         const std::string& key)
+                         std::string_view key)
 {
     this->schedule(callback, target, interval, CC_REPEAT_FOREVER, 0.0f, paused, key);
 }
@@ -294,7 +294,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
                          unsigned int repeat,
                          float delay,
                          bool paused,
-                         const std::string& key)
+                         std::string_view key)
 {
     CCASSERT(target, "Argument target must be non-nullptr");
     CCASSERT(!key.empty(), "key should not be empty!");
@@ -344,7 +344,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
     timer->release();
 }
 
-void Scheduler::unschedule(const std::string& key, void* target)
+void Scheduler::unschedule(std::string_view key, void* target)
 {
     // explicit handle nil arguments when removing an object
     if (target == nullptr || key.empty())
@@ -513,7 +513,7 @@ void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void* target, 
     }
 }
 
-bool Scheduler::isScheduled(const std::string& key, const void* target) const
+bool Scheduler::isScheduled(std::string_view key, const void* target) const
 {
     CCASSERT(!key.empty(), "Argument key must not be empty");
     CCASSERT(target, "Argument target must be non-nullptr");

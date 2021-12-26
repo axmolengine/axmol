@@ -31,7 +31,7 @@ namespace {
     const std::string metalSpecificDefine = "#define METAL\n";
 }
 
-ProgramMTL::ProgramMTL(const std::string& vertexShader, const std::string& fragmentShader)
+ProgramMTL::ProgramMTL(std::string_view vertexShader, std::string_view fragmentShader)
 : Program(vertexShader, fragmentShader)
 {
     _vertexShader = static_cast<ShaderModuleMTL*>(ShaderCache::newVertexShaderModule(vertexShader));
@@ -81,7 +81,7 @@ UniformLocation ProgramMTL::getUniformLocation(backend::Uniform name) const
     return uniformLocation;
 }
 
-UniformLocation ProgramMTL::getUniformLocation(const std::string& uniform) const
+UniformLocation ProgramMTL::getUniformLocation(std::string_view uniform) const
 {
     UniformLocation uniformLocation;
     auto vsLocation = _vertexShader->getUniformLocation(uniform);

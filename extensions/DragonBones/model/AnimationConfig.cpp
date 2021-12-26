@@ -1,4 +1,4 @@
-﻿#include "AnimationConfig.h"
+#include "AnimationConfig.h"
 #include "../armature/Armature.h"
 #include "../armature/Bone.h"
 
@@ -63,12 +63,12 @@ void AnimationConfig::copyFrom(AnimationConfig* value)
     boneMask         = value->boneMask;
 }
 
-bool AnimationConfig::containsBoneMask(const std::string& boneName) const
+bool AnimationConfig::containsBoneMask(std::string_view boneName) const
 {
     return boneMask.empty() || std::find(boneMask.cbegin(), boneMask.cend(), boneName) != boneMask.cend();
 }
 
-void AnimationConfig::addBoneMask(Armature* armature, const std::string& boneName, bool recursive)
+void AnimationConfig::addBoneMask(Armature* armature, std::string_view boneName, bool recursive)
 {
     const auto currentBone = armature->getBone(boneName);
     if (currentBone == nullptr)
@@ -94,7 +94,7 @@ void AnimationConfig::addBoneMask(Armature* armature, const std::string& boneNam
     }
 }
 
-void AnimationConfig::removeBoneMask(Armature* armature, const std::string& boneName, bool recursive)
+void AnimationConfig::removeBoneMask(Armature* armature, std::string_view boneName, bool recursive)
 {
     {
         auto iterator = std::find(boneMask.begin(), boneMask.end(), boneName);

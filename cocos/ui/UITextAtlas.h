@@ -82,11 +82,11 @@ public:
      * @param startCharMap The starting char of the atlas.
      * @return An autoreleased TextAtlas object.
      */
-    static TextAtlas* create(const std::string& stringValue,
-                             const std::string& charMapFile,
+    static TextAtlas* create(std::string_view stringValue,
+                             std::string_view charMapFile,
                              int itemWidth,
                              int itemHeight,
-                             const std::string& startCharMap);
+                             std::string_view startCharMap);
 
     /** Initializes the LabelAtlas with a string, a char map file(the atlas), the width and height of each element and
      * the starting char of the atlas.
@@ -98,11 +98,11 @@ public:
      * @param startCharMap The starting char of the atlas.
      */
 
-    void setProperty(const std::string& stringValue,
-                     const std::string& charMapFile,
+    void setProperty(std::string_view stringValue,
+                     std::string_view charMapFile,
                      int itemWidth,
                      int itemHeight,
-                     const std::string& startCharMap);
+                     std::string_view startCharMap);
 
     /**Set string value for labelatlas.
      *
@@ -114,7 +114,7 @@ public:
      *
      * @return The string value of TextAtlas.
      */
-    const std::string& getString() const;
+    std::string_view getString() const;
 
     /**
      * Gets the string length of the label.

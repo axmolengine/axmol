@@ -84,12 +84,12 @@ NS_CC_BEGIN
 //	mStep = step;
 // }
 ////-----------------------------------------------------------------------
-// const std::string& Particle3DVertexEmitter::getMeshName() const
+// std::string_view Particle3DVertexEmitter::getMeshName() const
 //{
 //	return mMeshName;
 // }
 ////-----------------------------------------------------------------------
-// void Particle3DVertexEmitter::setMeshName(const std::string& meshName)
+// void Particle3DVertexEmitter::setMeshName(std::string_view meshName)
 //{
 //	_setDefaults(); // Triggers loading the new mesh
 //	mMeshName = meshName;

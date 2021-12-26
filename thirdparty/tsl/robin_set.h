@@ -101,12 +101,13 @@ class robin_set {
     key_type& operator()(Key& key) noexcept { return key; }
   };
 
-  using ht = detail_robin_hash::robin_hash<Key, KeySelect, void, Hash, KeyEqual,
+  using ht = detail_robin_hash::robin_hash<Key, const Key, KeySelect, void, Hash, KeyEqual,
                                            Allocator, StoreHash, GrowthPolicy>;
 
  public:
   using key_type = typename ht::key_type;
   using value_type = typename ht::value_type;
+  using iterator_value_type = typename ht::iterator_value_type;
   using size_type = typename ht::size_type;
   using difference_type = typename ht::difference_type;
   using hasher = typename ht::hasher;
@@ -547,8 +548,8 @@ class robin_set {
   void min_load_factor(float ml) { m_ht.min_load_factor(ml); }
   void max_load_factor(float ml) { m_ht.max_load_factor(ml); }
 
-  void rehash(size_type n) { m_ht.rehash(n); }
-  void reserve(size_type n) { m_ht.reserve(n); }
+  void rehash(size_type count_) { m_ht.rehash(count_); }
+  void reserve(size_type count_) { m_ht.reserve(count_); }
 
   /*
    * Observers

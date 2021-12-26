@@ -54,7 +54,7 @@ const char* SceneReader::sceneReaderVersion()
 }
 
 cocos2d::Node* SceneReader::createNodeWithSceneFile(
-    const std::string& fileName,
+    std::string_view fileName,
     AttachComponentType attachComponent /*= AttachComponentType::EMPTY_NODE*/)
 {
     std::string fileExtension = cocos2d::FileUtils::getInstance()->getFileExtension(fileName);
@@ -166,7 +166,7 @@ cocos2d::Node* SceneReader::createNodeWithSceneFile(
     return nullptr;
 }
 
-bool SceneReader::readJson(const std::string& fileName, rapidjson::Document& doc)
+bool SceneReader::readJson(std::string_view fileName, rapidjson::Document& doc)
 {
     bool ret = false;
     do
@@ -210,14 +210,14 @@ Node* SceneReader::nodeByTag(Node* parent, int tag)
     return _retNode;
 }
 
-cocos2d::Component* SceneReader::createComponent(const std::string& classname)
+cocos2d::Component* SceneReader::createComponent(std::string_view classname)
 {
     std::string name = this->getComponentClassName(classname);
     Ref* object      = ObjectFactory::getInstance()->createObject(name);
 
     return dynamic_cast<Component*>(object);
 }
-std::string SceneReader::getComponentClassName(const std::string& name)
+std::string SceneReader::getComponentClassName(std::string_view name)
 {
     std::string comName;
     if (name == "CCSprite" || name == "CCTMXTiledMap" || name == "CCParticleSystemQuad" || name == "CCArmature" ||

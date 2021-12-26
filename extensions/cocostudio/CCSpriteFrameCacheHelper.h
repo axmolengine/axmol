@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -60,12 +60,12 @@ public:
     /**
      *    @brief    Add sprite frame to CCSpriteFrameCache, it will save display name and it's relative image name
      */
-    void addSpriteFrameFromFile(const std::string& plistPath, const std::string& imagePath);
-    void removeSpriteFrameFromFile(const std::string& plistPath);
+    void addSpriteFrameFromFile(std::string_view plistPath, std::string_view imagePath);
+    void removeSpriteFrameFromFile(std::string_view plistPath);
 
 private:
-    void retainSpriteFrames(const std::string& plistPath);
-    void releaseSpriteFrames(const std::string& plistPath);
+    void retainSpriteFrames(std::string_view plistPath);
+    void releaseSpriteFrames(std::string_view plistPath);
 
     SpriteFrameCacheHelper();
     ~SpriteFrameCacheHelper();

@@ -56,7 +56,7 @@ struct ManifestAsset
     int downloadState;
 };
 
-typedef std::unordered_map<std::string, DownloadUnit> DownloadUnits;
+typedef hlookup::string_map<DownloadUnit> DownloadUnits;
 
 class CC_EX_DLL Manifest : public Ref
 {
@@ -99,19 +99,19 @@ public:
 
     /** @brief Gets remote package url.
      */
-    const std::string& getPackageUrl() const;
+    std::string_view getPackageUrl() const;
 
     /** @brief Gets remote manifest file url.
      */
-    const std::string& getManifestFileUrl() const;
+    std::string_view getManifestFileUrl() const;
 
     /** @brief Gets remote version file url.
      */
-    const std::string& getVersionFileUrl() const;
+    std::string_view getVersionFileUrl() const;
 
     /** @brief Gets manifest version.
      */
-    const std::string& getVersion() const;
+    std::string_view getVersion() const;
 
     /** @brief Get the search paths list related to the Manifest.
      */
@@ -121,22 +121,22 @@ protected:
     /** @brief Constructor for Manifest class
      * @param manifestUrl Url of the local manifest
      */
-    Manifest(const std::string& manifestUrl = "");
+    Manifest(std::string_view manifestUrl = "");
 
     /** @brief Load the json file into local json object
      * @param url Url of the json file
      */
-    void loadJson(const std::string& url);
+    void loadJson(std::string_view url);
 
     /** @brief Parse the version file information into this manifest
      * @param versionUrl Url of the local version file
      */
-    void parseVersion(const std::string& versionUrl);
+    void parseVersion(std::string_view versionUrl);
 
     /** @brief Parse the manifest file information into this manifest
      * @param manifestUrl Url of the local manifest
      */
-    void parse(const std::string& manifestUrl);
+    void parse(std::string_view manifestUrl);
 
     /** @brief Check whether the version of this manifest equals to another.
      * @param b   The other manifest
@@ -151,12 +151,12 @@ protected:
      */
     bool versionGreater(
         const Manifest* b,
-        const std::function<int(const std::string& versionA, const std::string& versionB)>& handle) const;
+        const std::function<int(std::string_view versionA, std::string_view versionB)>& handle) const;
 
     /** @brief Generate difference between this Manifest and another.
      * @param b   The other manifest
      */
-    std::unordered_map<std::string, AssetDiff> genDiff(const Manifest* b) const;
+    hlookup::string_map<AssetDiff> genDiff(const Manifest* b) const;
 
     /** @brief Generate resuming download assets list
      * @param units   The download units reference to be modified by the generation result
@@ -171,9 +171,9 @@ protected:
 
     void loadManifest(const rapidjson::Document& json);
 
-    void saveToFile(const std::string& filepath);
+    void saveToFile(std::string_view filepath);
 
-    Asset parseAsset(const std::string& path, const rapidjson::Value& json);
+    Asset parseAsset(std::string_view path, const rapidjson::Value& json);
 
     void clear();
 
@@ -183,26 +183,26 @@ protected:
 
     /** @brief Gets all groups version.
      */
-    const std::unordered_map<std::string, std::string>& getGroupVerions() const;
+    const hlookup::string_map<std::string>& getGroupVerions() const;
 
     /** @brief Gets version for the given group.
      * @param group   Key of the requested group
      */
-    const std::string& getGroupVersion(const std::string& group) const;
+    std::string_view getGroupVersion(std::string_view group) const;
 
     /**
      * @brief Gets assets.
      * @lua NA
      */
-    const std::unordered_map<std::string, Asset>& getAssets() const;
+    const hlookup::string_map<Asset>& getAssets() const;
 
     /** @brief Set the download state for an asset
      * @param key   Key of the asset to set
      * @param state The current download state of the asset
      */
-    void setAssetDownloadState(const std::string& key, const DownloadState& state);
+    void setAssetDownloadState(std::string_view key, const DownloadState& state);
 
-    void setManifestRoot(const std::string& root) { _manifestRoot = root; };
+    void setManifestRoot(std::string_view root) { _manifestRoot = root; };
 
 private:
     //! Indicate whether the version informations have been fully loaded
@@ -233,13 +233,13 @@ private:
     std::vector<std::string> _groups;
 
     //! The versions of all local group [Optional]
-    std::unordered_map<std::string, std::string> _groupVer;
+    hlookup::string_map<std::string> _groupVer;
 
     //! The version of local engine
     std::string _engineVer;
 
     //! Full assets list
-    std::unordered_map<std::string, Asset> _assets;
+    hlookup::string_map<Asset> _assets;
 
     //! All search paths
     std::vector<std::string> _searchPaths;

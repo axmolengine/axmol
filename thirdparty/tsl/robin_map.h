@@ -119,9 +119,11 @@ class robin_map {
     value_type& operator()(std::pair<Key, T>& key_value) noexcept {
       return key_value.second;
     }
+
+    value_type& operator()(std::pair<const Key, T>& key_value) noexcept { return key_value.second; }
   };
 
-  using ht = detail_robin_hash::robin_hash<std::pair<Key, T>, KeySelect,
+  using ht = detail_robin_hash::robin_hash<std::pair<Key, T>, std::pair<const Key, T>, KeySelect,
                                            ValueSelect, Hash, KeyEqual,
                                            Allocator, StoreHash, GrowthPolicy>;
 
@@ -129,6 +131,7 @@ class robin_map {
   using key_type = typename ht::key_type;
   using mapped_type = T;
   using value_type = typename ht::value_type;
+  using iterator_value_type = typename ht::iterator_value_type;
   using size_type = typename ht::size_type;
   using difference_type = typename ht::difference_type;
   using hasher = typename ht::hasher;
@@ -445,8 +448,15 @@ class robin_map {
     return m_ht.at(key, precalculated_hash);
   }
 
-  T& operator[](const Key& key) { return m_ht[key]; }
-  T& operator[](Key&& key) { return m_ht[std::move(key)]; }
+  template <
+      class K, class KE = KeyEqual,
+      typename std::enable_if<has_is_transparent<KE>::value>::type* = nullptr>
+  T& operator[](const K& key) { return m_ht[key]; }
+  
+  template <
+      class K, class KE = KeyEqual,
+      typename std::enable_if<has_is_transparent<KE>::value>::type* = nullptr>
+  T& operator[](K&& key) { return m_ht[std::move(key)]; }
 
   size_type count(const Key& key) const { return m_ht.count(key); }
 
@@ -692,8 +702,8 @@ class robin_map {
   void min_load_factor(float ml) { m_ht.min_load_factor(ml); }
   void max_load_factor(float ml) { m_ht.max_load_factor(ml); }
 
-  void rehash(size_type n) { m_ht.rehash(n); }
-  void reserve(size_type n) { m_ht.reserve(n); }
+  void rehash(size_type count_) { m_ht.rehash(count_); }
+  void reserve(size_type count_) { m_ht.reserve(count_); }
 
   /*
    * Observers

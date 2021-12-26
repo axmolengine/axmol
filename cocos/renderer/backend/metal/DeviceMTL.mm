@@ -131,7 +131,7 @@ RenderTarget* DeviceMTL::newRenderTarget(TargetBufferFlags rtf,
     return rtGL;
 }
 
-ShaderModule* DeviceMTL::newShaderModule(ShaderStage stage, const std::string& source)
+ShaderModule* DeviceMTL::newShaderModule(ShaderStage stage, std::string_view source)
 {
     return new ShaderModuleMTL(_mtlDevice, stage, source);
 }
@@ -146,7 +146,7 @@ RenderPipeline* DeviceMTL::newRenderPipeline()
     return new RenderPipelineMTL(_mtlDevice);
 }
 
-Program* DeviceMTL::newProgram(const std::string& vertexShader, const std::string& fragmentShader)
+Program* DeviceMTL::newProgram(std::string_view vertexShader, std::string_view fragmentShader)
 {
     return new ProgramMTL(vertexShader, fragmentShader);
 }
