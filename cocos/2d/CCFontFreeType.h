@@ -101,12 +101,12 @@ public:
 
     int getFontAscender() const;
     const char* getFontFamily() const;
-    const std::string& getFontName() const { return _fontName; }
+    std::string_view getFontName() const { return _fontName; }
 
     virtual FontAtlas* newFontAtlas() override;
     virtual int getFontMaxHeight() const override { return _lineHeight; }
 
-    static void releaseFont(const std::string& fontName);
+    static void releaseFont(std::string_view fontName);
 
     static FT_Library getFTLibrary();
 

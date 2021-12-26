@@ -93,11 +93,11 @@ public:
      *
      * @return A CheckBox instance pointer.
      */
-    static CheckBox* create(const std::string& backGround,
-                            const std::string& backGroundSelected,
-                            const std::string& cross,
-                            const std::string& backGroundDisabled,
-                            const std::string& frontCrossDisabled,
+    static CheckBox* create(std::string_view backGround,
+                            std::string_view backGroundSelected,
+                            std::string_view cross,
+                            std::string_view backGroundDisabled,
+                            std::string_view frontCrossDisabled,
                             TextureResType texType = TextureResType::LOCAL);
 
     /**
@@ -108,8 +108,8 @@ public:
      * @param texType  The texture's resource type in `Widget::TextureResType`.
      * @return A CheckBox instance pointer
      */
-    static CheckBox* create(const std::string& backGround,
-                            const std::string& cross,
+    static CheckBox* create(std::string_view backGround,
+                            std::string_view cross,
                             TextureResType texType = TextureResType::LOCAL);
 
     /**

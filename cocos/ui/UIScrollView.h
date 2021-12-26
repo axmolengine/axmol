@@ -343,7 +343,7 @@ public:
     virtual void addChild(Node* child) override;
     virtual void addChild(Node* child, int localZOrder) override;
     virtual void addChild(Node* child, int localZOrder, int tag) override;
-    virtual void addChild(Node* child, int localZOrder, const std::string& name) override;
+    virtual void addChild(Node* child, int localZOrder, std::string_view name) override;
     virtual void removeAllChildren() override;
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;
     virtual void removeChild(Node* child, bool cleanup = true) override;
@@ -351,7 +351,7 @@ public:
     virtual const Vector<Node*>& getChildren() const override;
     virtual ssize_t getChildrenCount() const override;
     virtual Node* getChildByTag(int tag) const override;
-    virtual Node* getChildByName(const std::string& name) const override;
+    virtual Node* getChildByName(std::string_view name) const override;
     // touch event callback
     virtual bool onTouchBegan(Touch* touch, Event* unusedEvent) override;
     virtual void onTouchMoved(Touch* touch, Event* unusedEvent) override;

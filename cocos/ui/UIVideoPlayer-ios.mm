@@ -290,14 +290,14 @@ VideoPlayer::~VideoPlayer()
     }
 }
 
-void VideoPlayer::setFileName(const std::string& fileName)
+void VideoPlayer::setFileName(std::string_view fileName)
 {
     _videoURL = FileUtils::getInstance()->fullPathForFilename(fileName);
     _videoSource = VideoPlayer::Source::FILENAME;
     [((UIVideoViewWrapperIos*)_videoView) setURL:(int)_videoSource :_videoURL];
 }
 
-void VideoPlayer::setURL(const std::string& videoUrl)
+void VideoPlayer::setURL(std::string_view videoUrl)
 {
     _videoURL = videoUrl;
     _videoSource = VideoPlayer::Source::URL;

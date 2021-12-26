@@ -279,12 +279,12 @@ Rect GLView::getScissorRect() const
     return Rect(x, y, w, h);
 }
 
-void GLView::setViewName(const std::string& viewname)
+void GLView::setViewName(std::string_view viewname)
 {
     _viewName = viewname;
 }
 
-const std::string& GLView::getViewName() const
+std::string_view GLView::getViewName() const
 {
     return _viewName;
 }

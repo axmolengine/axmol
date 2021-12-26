@@ -53,7 +53,7 @@ BillBoard* BillBoard::createWithTexture(Texture2D* texture, Mode mode)
     return nullptr;
 }
 
-BillBoard* BillBoard::create(const std::string& filename, Mode mode)
+BillBoard* BillBoard::create(std::string_view filename, Mode mode)
 {
     BillBoard* billboard = new BillBoard();
     if (billboard->initWithFile(filename))
@@ -66,7 +66,7 @@ BillBoard* BillBoard::create(const std::string& filename, Mode mode)
     return nullptr;
 }
 
-BillBoard* BillBoard::create(const std::string& filename, const Rect& rect, Mode mode)
+BillBoard* BillBoard::create(std::string_view filename, const Rect& rect, Mode mode)
 {
     BillBoard* billboard = new BillBoard();
     if (billboard->initWithFile(filename, rect))

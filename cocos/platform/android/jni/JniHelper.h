@@ -74,7 +74,7 @@ public:
     @if no such method will log error
     */
     template <typename... Ts>
-    static void callStaticVoidMethod(const std::string& className, const std::string& methodName, Ts... xs)
+    static void callStaticVoidMethod(std::string_view className, std::string_view methodName, Ts... xs)
     {
         cocos2d::JniMethodInfo t;
         std::string signature = "(" + std::string(getJNISignature(xs...)) + ")V";
@@ -96,7 +96,7 @@ public:
     @return value from Java static boolean method if there are proper JniMethodInfo; otherwise false.
     */
     template <typename... Ts>
-    static bool callStaticBooleanMethod(const std::string& className, const std::string& methodName, Ts... xs)
+    static bool callStaticBooleanMethod(std::string_view className, std::string_view methodName, Ts... xs)
     {
         jboolean jret = JNI_FALSE;
         cocos2d::JniMethodInfo t;
@@ -120,7 +120,7 @@ public:
     @return value from Java static int method if there are proper JniMethodInfo; otherwise 0.
     */
     template <typename... Ts>
-    static int callStaticIntMethod(const std::string& className, const std::string& methodName, Ts... xs)
+    static int callStaticIntMethod(std::string_view className, std::string_view methodName, Ts... xs)
     {
         jint ret = 0;
         cocos2d::JniMethodInfo t;
@@ -144,7 +144,7 @@ public:
     @return value from Java static float method if there are proper JniMethodInfo; otherwise 0.
     */
     template <typename... Ts>
-    static float callStaticFloatMethod(const std::string& className, const std::string& methodName, Ts... xs)
+    static float callStaticFloatMethod(std::string_view className, std::string_view methodName, Ts... xs)
     {
         jfloat ret = 0.0;
         cocos2d::JniMethodInfo t;
@@ -168,7 +168,7 @@ public:
     @return address of JniMethodInfo if there are proper JniMethodInfo; otherwise nullptr.
     */
     template <typename... Ts>
-    static float* callStaticFloatArrayMethod(const std::string& className, const std::string& methodName, Ts... xs)
+    static float* callStaticFloatArrayMethod(std::string_view className, std::string_view methodName, Ts... xs)
     {
         static float ret[32];
         cocos2d::JniMethodInfo t;
@@ -204,7 +204,7 @@ public:
     @return address of JniMethodInfo if there are proper JniMethodInfo; otherwise nullptr.
     */
     template <typename... Ts>
-    static int* callStaticIntArrayMethod(const std::string& className, const std::string& methodName, Ts... xs)
+    static int* callStaticIntArrayMethod(std::string_view className, std::string_view methodName, Ts... xs)
     {
         static int ret[32];
         cocos2d::JniMethodInfo t;
@@ -240,7 +240,7 @@ public:
     @return JniMethodInfo of Vec3 type if there are proper JniMethodInfo; otherwise Vec3(0, 0, 0).
     */
     template <typename... Ts>
-    static Vec3 callStaticVec3Method(const std::string& className, const std::string& methodName, Ts... xs)
+    static Vec3 callStaticVec3Method(std::string_view className, std::string_view methodName, Ts... xs)
     {
         Vec3 ret;
         cocos2d::JniMethodInfo t;
@@ -274,7 +274,7 @@ public:
     @return value from Java static double method if there are proper JniMethodInfo; otherwise 0.
     */
     template <typename... Ts>
-    static double callStaticDoubleMethod(const std::string& className, const std::string& methodName, Ts... xs)
+    static double callStaticDoubleMethod(std::string_view className, std::string_view methodName, Ts... xs)
     {
         jdouble ret = 0.0;
         cocos2d::JniMethodInfo t;
@@ -298,7 +298,7 @@ public:
     @return JniMethodInfo of string type if there are proper JniMethodInfo; otherwise empty string.
     */
     template <typename... Ts>
-    static std::string callStaticStringMethod(const std::string& className, const std::string& methodName, Ts... xs)
+    static std::string callStaticStringMethod(std::string_view className, std::string_view methodName, Ts... xs)
     {
         std::string ret;
 
@@ -334,7 +334,7 @@ private:
 
     static jstring convert(LocalRefMapType& localRefs, cocos2d::JniMethodInfo& t, const char* x);
 
-    static jstring convert(LocalRefMapType& localRefs, cocos2d::JniMethodInfo& t, const std::string& x);
+    static jstring convert(LocalRefMapType& localRefs, cocos2d::JniMethodInfo& t, std::string_view x);
 
     inline static jint convert(LocalRefMapType&, cocos2d::JniMethodInfo&, int32_t value)
     {
@@ -395,7 +395,7 @@ private:
 
     static std::string getJNISignature(const char*) { return "Ljava/lang/String;"; }
 
-    static std::string getJNISignature(const std::string&) { return "Ljava/lang/String;"; }
+    static std::string getJNISignature(std::string_view) { return "Ljava/lang/String;"; }
 
     template <typename T>
     static std::string getJNISignature(T x)
@@ -411,7 +411,7 @@ private:
         return getJNISignature(x) + getJNISignature(xs...);
     }
 
-    static void reportError(const std::string& className, const std::string& methodName, const std::string& signature);
+    static void reportError(std::string_view className, std::string_view methodName, std::string_view signature);
 };
 
 NS_CC_END

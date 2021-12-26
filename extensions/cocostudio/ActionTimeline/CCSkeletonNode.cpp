@@ -308,7 +308,7 @@ void SkeletonNode::changeSkins(const std::map<std::string, std::string>& boneSki
     }
 }
 
-void SkeletonNode::changeSkins(const std::string& skinGroupName)
+void SkeletonNode::changeSkins(std::string_view skinGroupName)
 {
     auto suit = _skinGroupMap.find(skinGroupName);
     if (suit != _skinGroupMap.end())
@@ -317,7 +317,7 @@ void SkeletonNode::changeSkins(const std::string& skinGroupName)
     }
 }
 
-BoneNode* SkeletonNode::getBoneNode(const std::string& boneName)
+BoneNode* SkeletonNode::getBoneNode(std::string_view boneName)
 {
     auto iter = _subBonesMap.find(boneName);
     if (iter != _subBonesMap.end())

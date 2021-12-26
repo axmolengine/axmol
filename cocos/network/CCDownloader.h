@@ -72,11 +72,11 @@ public:
     } mutable progressInfo;
 
     DownloadTask();
-    DownloadTask(const std::string& srcUrl, const std::string& identifier);
-    DownloadTask(const std::string& srcUrl,
-                 const std::string& storagePath,
-                 const std::string& checksum,  // currently is MD5
-                 const std::string& identifier,
+    DownloadTask(std::string_view srcUrl, std::string_view identifier);
+    DownloadTask(std::string_view srcUrl,
+                 std::string_view storagePath,
+                 std::string_view checksum,  // currently is MD5
+                 std::string_view identifier,
                  bool background);
 
     virtual ~DownloadTask();
@@ -114,7 +114,7 @@ public:
 
     std::function<void(const DownloadTask& task)> onTaskProgress;
 
-    std::function<void(const DownloadTask& task, int errorCode, int errorCodeInternal, const std::string& errorStr)>
+    std::function<void(const DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorStr)>
         onTaskError;
 
     void setOnFileTaskSuccess(const std::function<void(const DownloadTask& task)>& callback)
@@ -129,18 +129,18 @@ public:
 
     void setOnTaskError(
         const std::function<
-            void(const DownloadTask& task, int errorCode, int errorCodeInternal, const std::string& errorStr)>&
+            void(const DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorStr)>&
             callback)
     {
         onTaskError = callback;
     };
 
-    std::shared_ptr<DownloadTask> createDownloadDataTask(const std::string& srcUrl, const std::string& identifier = "");
+    std::shared_ptr<DownloadTask> createDownloadDataTask(std::string_view srcUrl, std::string_view identifier = "");
 
-    std::shared_ptr<DownloadTask> createDownloadFileTask(const std::string& srcUrl,
-                                                         const std::string& storagePath,
-                                                         const std::string& identifier = "",
-                                                         const std::string& checksum   = "",
+    std::shared_ptr<DownloadTask> createDownloadFileTask(std::string_view srcUrl,
+                                                         std::string_view storagePath,
+                                                         std::string_view identifier = "",
+                                                         std::string_view checksum   = "",
                                                          bool background               = false);
 
 private:

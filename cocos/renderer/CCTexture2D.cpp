@@ -460,7 +460,7 @@ bool Texture2D::initWithImage(Image* image, backend::PixelFormat format)
 
 // implementation Texture2D (Text)
 bool Texture2D::initWithString(const char* text,
-                               const std::string& fontName,
+                               std::string_view fontName,
                                float fontSize,
                                const Vec2& dimensions /* = Vec2(0, 0)*/,
                                TextHAlignment hAlignment /* =  TextHAlignment::CENTER */,

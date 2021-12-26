@@ -160,7 +160,7 @@ cocos2d::Size GUIReader::getFileDesignSize(const char* fileName) const
     return Size(w, h);
 }
 
-void GUIReader::registerTypeAndCallBack(const std::string& classType,
+void GUIReader::registerTypeAndCallBack(std::string_view classType,
                                         ObjectFactory::Instance ins,
                                         Ref* object,
                                         SEL_ParseEvent callBack)
@@ -181,7 +181,7 @@ void GUIReader::registerTypeAndCallBack(const std::string& classType,
     }
 }
 
-void GUIReader::registerTypeAndCallBack(const std::string& classType,
+void GUIReader::registerTypeAndCallBack(std::string_view classType,
                                         ObjectFactory::InstanceFunc ins,
                                         Ref* object,
                                         SEL_ParseEvent callBack)
@@ -309,7 +309,7 @@ std::string WidgetPropertiesReader::getWidgetReaderClassName(Widget* widget)
     return readerName;
 }
 
-std::string WidgetPropertiesReader::getGUIClassName(const std::string& name)
+std::string WidgetPropertiesReader::getGUIClassName(std::string_view name)
 {
     std::string convertedClassName = name;
     if (name == "Panel")
@@ -340,7 +340,7 @@ std::string WidgetPropertiesReader::getGUIClassName(const std::string& name)
     return convertedClassName;
 }
 
-cocos2d::ui::Widget* WidgetPropertiesReader::createGUI(const std::string& classname)
+cocos2d::ui::Widget* WidgetPropertiesReader::createGUI(std::string_view classname)
 {
     std::string name = this->getGUIClassName(classname);
 
@@ -349,7 +349,7 @@ cocos2d::ui::Widget* WidgetPropertiesReader::createGUI(const std::string& classn
     return dynamic_cast<ui::Widget*>(object);
 }
 
-WidgetReaderProtocol* WidgetPropertiesReader::createWidgetReaderProtocol(const std::string& classname)
+WidgetReaderProtocol* WidgetPropertiesReader::createWidgetReaderProtocol(std::string_view classname)
 {
     Ref* object = ObjectFactory::getInstance()->createObject(classname);
 
@@ -426,7 +426,7 @@ Widget* GUIReader::widgetFromBinaryFile(const char* fileName)
     return widget;
 }
 
-std::string WidgetPropertiesReader::getWidgetReaderClassName(const std::string& classname)
+std::string WidgetPropertiesReader::getWidgetReaderClassName(std::string_view classname)
 {
     // create widget reader to parse properties of widget
     std::string readerName = classname;
@@ -1240,7 +1240,7 @@ void WidgetPropertiesReader0250::setPropsForAllWidgetFromJsonDictionary(WidgetRe
                                                                         const rapidjson::Value& /*options*/)
 {}
 
-void WidgetPropertiesReader0250::setPropsForAllCustomWidgetFromJsonDictionary(const std::string& /*classType*/,
+void WidgetPropertiesReader0250::setPropsForAllCustomWidgetFromJsonDictionary(std::string_view /*classType*/,
                                                                               cocos2d::ui::Widget* /*widget*/,
                                                                               const rapidjson::Value& /*customOptions*/)
 {}
@@ -1542,7 +1542,7 @@ void WidgetPropertiesReader0300::setPropsForAllWidgetFromBinary(WidgetReaderProt
     reader->setPropsFromBinary(widget, cocoLoader, cocoNode);
 }
 
-void WidgetPropertiesReader0300::setPropsForAllCustomWidgetFromBinary(const std::string& /*classType*/,
+void WidgetPropertiesReader0300::setPropsForAllCustomWidgetFromBinary(std::string_view /*classType*/,
                                                                       cocos2d::ui::Widget* /*widget*/,
                                                                       CocoLoader* /*cocoLoader*/,
                                                                       stExpCocoNode* /*pCocoNode*/)
@@ -1637,7 +1637,7 @@ void WidgetPropertiesReader0300::setPropsForAllWidgetFromJsonDictionary(WidgetRe
     reader->setPropsFromJsonDictionary(widget, options);
 }
 
-void WidgetPropertiesReader0300::setPropsForAllCustomWidgetFromJsonDictionary(const std::string& classType,
+void WidgetPropertiesReader0300::setPropsForAllCustomWidgetFromJsonDictionary(std::string_view classType,
                                                                               cocos2d::ui::Widget* widget,
                                                                               const rapidjson::Value& customOptions)
 {

@@ -78,7 +78,7 @@ struct LuaArmatureMovementEventData
     int movementType;
     std::string movementID;
     
-    LuaArmatureMovementEventData(cocos2d::Ref* _objTarget, int _movementType,const std::string& _movementID):objTarget(_objTarget),movementType(_movementType),movementID(_movementID)
+    LuaArmatureMovementEventData(cocos2d::Ref* _objTarget, int _movementType,std::string_view _movementID):objTarget(_objTarget),movementType(_movementType),movementID(_movementID)
     {
     }
 };
@@ -90,7 +90,7 @@ struct LuaArmatureFrameEventData
     int originFrameIndex;
     int currentFrameIndex;
     
-    LuaArmatureFrameEventData( cocos2d::Ref* _objTarget, const std::string& _frameEventName, int _originFrameIndex, int _currentFrameIndex):objTarget(_objTarget), frameEventName(_frameEventName),originFrameIndex(_originFrameIndex), currentFrameIndex(_currentFrameIndex)
+    LuaArmatureFrameEventData( cocos2d::Ref* _objTarget, std::string_view _frameEventName, int _originFrameIndex, int _currentFrameIndex):objTarget(_objTarget), frameEventName(_frameEventName),originFrameIndex(_originFrameIndex), currentFrameIndex(_currentFrameIndex)
     {
     }
 };

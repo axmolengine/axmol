@@ -68,7 +68,7 @@ public:
      @param file The file path.
      @param capacity Capacity for Quads.
     */
-    static TextureAtlas* create(const std::string& file, ssize_t capacity);
+    static TextureAtlas* create(std::string_view file, ssize_t capacity);
 
     /** Creates a TextureAtlas with a previously initialized Texture2D object, and
      * with an initial capacity for n Quads.
@@ -95,7 +95,7 @@ public:
      @param file The file path.
      @param capacity Capacity for Quads.
     */
-    bool initWithFile(const std::string& file, ssize_t capacity);
+    bool initWithFile(std::string_view file, ssize_t capacity);
 
     /** Initializes a TextureAtlas with a previously initialized Texture2D object, and
     * with an initial capacity for Quads.

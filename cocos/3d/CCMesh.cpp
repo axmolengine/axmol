@@ -228,7 +228,7 @@ Mesh* Mesh::create(const std::vector<float>& vertices,
     return create("", indexData);
 }
 
-Mesh* Mesh::create(const std::string& name, MeshIndexData* indexData, MeshSkin* skin)
+Mesh* Mesh::create(std::string_view name, MeshIndexData* indexData, MeshSkin* skin)
 {
     auto state = new Mesh();
     state->autorelease();
@@ -255,7 +255,7 @@ bool Mesh::isVisible() const
     return _visible;
 }
 
-void Mesh::setTexture(const std::string& texPath)
+void Mesh::setTexture(std::string_view texPath)
 {
     _texFile = texPath;
     auto tex = Director::getInstance()->getTextureCache()->addImage(texPath);
@@ -307,7 +307,7 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
     }
 }
 
-void Mesh::setTexture(const std::string& texPath, NTextureData::Usage usage)
+void Mesh::setTexture(std::string_view texPath, NTextureData::Usage usage)
 {
     auto tex = Director::getInstance()->getTextureCache()->addImage(texPath);
     setTexture(tex, usage);

@@ -92,7 +92,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* newProgram(const std::string& vertexShader, const std::string& fragmentShader) override;
+    virtual Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
 
 protected:
     /**
@@ -101,7 +101,7 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string& source) override;
+    virtual ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) override;
 
     GLint _defaultFBO = 0;  // The value gets from glGetIntegerv, so need to use GLint
 };

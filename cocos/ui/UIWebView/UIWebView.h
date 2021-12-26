@@ -59,7 +59,7 @@ public:
      *
      * @see WebView::setOnJSCallback()
      */
-    void setJavascriptInterfaceScheme(const std::string& scheme);
+    void setJavascriptInterfaceScheme(std::string_view scheme);
 
     /**
      * Sets the main page contents, MIME type, content encoding, and base URL.
@@ -70,9 +70,9 @@ public:
      * @param baseURL The base URL for the content.
      */
     void loadData(const cocos2d::Data& data,
-                  const std::string& MIMEType,
-                  const std::string& encoding,
-                  const std::string& baseURL);
+                  std::string_view MIMEType,
+                  std::string_view encoding,
+                  std::string_view baseURL);
 
     /**
      * Sets the main page content and base URL.
@@ -80,28 +80,28 @@ public:
      * @param string The content for the main page.
      * @param baseURL The base URL for the content.
      */
-    void loadHTMLString(const std::string& string, const std::string& baseURL = "");
+    void loadHTMLString(std::string_view string, std::string_view baseURL = "");
 
     /**
      * Loads the given URL. It doesn't clean cached data.
      *
      * @param url Content URL.
      */
-    void loadURL(const std::string& url);
+    void loadURL(std::string_view url);
 
     /**
      * Loads the given URL with cleaning cached data or not.
      * @param url Content URL.
      * @cleanCachedData Whether to clean cached data.
      */
-    void loadURL(const std::string& url, bool cleanCachedData);
+    void loadURL(std::string_view url, bool cleanCachedData);
 
     /**
      * Loads the given fileName.
      *
      * @param fileName Content fileName.
      */
-    void loadFile(const std::string& fileName);
+    void loadFile(std::string_view fileName);
 
     /**
      * Stops the current load.
@@ -140,7 +140,7 @@ public:
     /**
      * Evaluates JavaScript in the context of the currently displayed page.
      */
-    void evaluateJS(const std::string& js);
+    void evaluateJS(std::string_view js);
 
     /**
      * Set WebView should support zooming. The default value is false.
@@ -153,12 +153,12 @@ public:
      * @param callback The web view that is about to load new content.
      * @return YES if the web view should begin loading content; otherwise, NO.
      */
-    void setOnShouldStartLoading(const std::function<bool(WebView* sender, const std::string& url)>& callback);
+    void setOnShouldStartLoading(const std::function<bool(WebView* sender, std::string_view url)>& callback);
 
     /**
      * A callback which will be called when a WebView event happens.
      */
-    typedef std::function<void(WebView* sender, const std::string& url)> ccWebViewCallback;
+    typedef std::function<void(WebView* sender, std::string_view url)> ccWebViewCallback;
 
     /**
      * Call after a web view finishes loading.
@@ -182,7 +182,7 @@ public:
     /**
      * Get the callback when WebView is about to start.
      */
-    std::function<bool(WebView* sender, const std::string& url)> getOnShouldStartLoading() const;
+    std::function<bool(WebView* sender, std::string_view url)> getOnShouldStartLoading() const;
 
     /**
      * Get the callback when WebView has finished loading.
@@ -231,7 +231,7 @@ protected:
     virtual cocos2d::ui::Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
 
-    std::function<bool(WebView* sender, const std::string& url)> _onShouldStartLoading = nullptr;
+    std::function<bool(WebView* sender, std::string_view url)> _onShouldStartLoading = nullptr;
     ccWebViewCallback _onDidFinishLoading                                              = nullptr;
     ccWebViewCallback _onDidFailLoading                                                = nullptr;
     ccWebViewCallback _onJSCallback                                                    = nullptr;

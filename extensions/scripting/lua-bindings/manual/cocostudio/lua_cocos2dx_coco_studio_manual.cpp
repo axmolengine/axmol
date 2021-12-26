@@ -112,7 +112,7 @@ static int lua_cocos2dx_ArmatureAnimation_setMovementEventCallFunc(lua_State* L)
                                                           ScriptHandlerMgr::HandlerType::ARMATURE_EVENT);
 
         self->setMovementEventCallFunc(
-            [=](Armature* armature, MovementEventType movementType, const std::string& movementID) {
+            [=](Armature* armature, MovementEventType movementType, std::string_view movementID) {
                 if (0 != handler)
                 {
                     std::string strMovementID = movementID;
@@ -188,7 +188,7 @@ static int lua_cocos2dx_ArmatureAnimation_setFrameEventCallFunc(lua_State* L)
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)wrapper, handler,
                                                           ScriptHandlerMgr::HandlerType::ARMATURE_EVENT);
 
-        self->setFrameEventCallFunc([=](cocostudio::Bone* bone, const std::string& frameEventName, int originFrameIndex,
+        self->setFrameEventCallFunc([=](cocostudio::Bone* bone, std::string_view frameEventName, int originFrameIndex,
                                         int currentFrameIndex) {
             if (0 != handler)
             {

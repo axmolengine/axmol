@@ -77,7 +77,7 @@ PUMaterialCache* PUMaterialCache::Instance()
     return &pmm;
 }
 
-PUMaterial* PUMaterialCache::getMaterial(const std::string& name)
+PUMaterial* PUMaterialCache::getMaterial(std::string_view name)
 {
     for (auto iter : _materialMap)
     {
@@ -87,7 +87,7 @@ PUMaterial* PUMaterialCache::getMaterial(const std::string& name)
     return nullptr;
 }
 
-bool PUMaterialCache::loadMaterials(const std::string& file)
+bool PUMaterialCache::loadMaterials(std::string_view file)
 {
     bool isFirstCompile = true;
     auto list           = PUScriptCompiler::Instance()->compile(file, isFirstCompile);
@@ -128,18 +128,23 @@ int iterPath(const char* fpath, const struct stat* /*sb*/, int typeflag)
 }
 #endif
 
-bool PUMaterialCache::loadMaterialsFromSearchPaths(const std::string& fileFolder)
+bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
 {
     bool state = false;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     std::string seg("/");
-    std::string fullPath = fileFolder + seg + std::string("*.material");
+    std::string fullPath{fileFolder};
+    fullPath += seg;
+    fullPath += std::string("*.material");
     _finddata_t data;
     intptr_t handle = _findfirst(fullPath.c_str(), &data);
     int done        = 0;
     while ((handle != -1) && (done == 0))
     {
-        loadMaterials(fileFolder + seg + std::string(data.name));
+        fullPath = fileFolder;
+        fullPath += seg;
+        fullPath += data.name;
+        loadMaterials(fullPath);
         done  = _findnext(handle, &data);
         state = true;
     }

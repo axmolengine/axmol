@@ -35,7 +35,7 @@ NS_CC_BEGIN
 
 // implementation of SpriteFrame
 
-SpriteFrame* SpriteFrame::create(const std::string& filename, const Rect& rect)
+SpriteFrame* SpriteFrame::create(std::string_view filename, const Rect& rect)
 {
     SpriteFrame* spriteFrame = new SpriteFrame();
     spriteFrame->initWithTextureFilename(filename, rect);
@@ -70,7 +70,7 @@ SpriteFrame* SpriteFrame::createWithTexture(Texture2D* texture,
     return nullptr;
 }
 
-SpriteFrame* SpriteFrame::create(const std::string& filename,
+SpriteFrame* SpriteFrame::create(std::string_view filename,
                                  const Rect& rect,
                                  bool rotated,
                                  const Vec2& offset,
@@ -94,7 +94,7 @@ bool SpriteFrame::initWithTexture(Texture2D* texture, const Rect& rect)
     return initWithTexture(texture, rectInPixels, false, Vec2::ZERO, rectInPixels.size);
 }
 
-bool SpriteFrame::initWithTextureFilename(const std::string& filename, const Rect& rect)
+bool SpriteFrame::initWithTextureFilename(std::string_view filename, const Rect& rect)
 {
     Rect rectInPixels = CC_RECT_POINTS_TO_PIXELS(rect);
     return initWithTextureFilename(filename, rectInPixels, false, Vec2::ZERO, rectInPixels.size);
@@ -126,7 +126,7 @@ bool SpriteFrame::initWithTexture(Texture2D* texture,
     return true;
 }
 
-bool SpriteFrame::initWithTextureFilename(const std::string& filename,
+bool SpriteFrame::initWithTextureFilename(std::string_view filename,
                                           const Rect& rect,
                                           bool rotated,
                                           const Vec2& offset,

@@ -98,8 +98,8 @@ public:
      * @param resType Texture resource type.
      * @return An autoreleased Slider object.
      */
-    static Slider* create(const std::string& barTextureName,
-                          const std::string& normalBallTextureName,
+    static Slider* create(std::string_view barTextureName,
+                          std::string_view normalBallTextureName,
                           TextureResType resType = TextureResType::LOCAL);
 
     /**
@@ -108,7 +108,7 @@ public:
      * @param fileName   File name of texture.
      * @param resType    @see TextureResType .
      */
-    void loadBarTexture(const std::string& fileName, TextureResType resType = TextureResType::LOCAL);
+    void loadBarTexture(std::string_view fileName, TextureResType resType = TextureResType::LOCAL);
 
     /**
      * Sets if slider is using scale9 renderer.
@@ -162,9 +162,9 @@ public:
      * @param disabled    Disabled state texture.
      * @param texType    @see TextureResType .
      */
-    void loadSlidBallTextures(const std::string& normal,
-                              const std::string& pressed  = "",
-                              const std::string& disabled = "",
+    void loadSlidBallTextures(std::string_view normal,
+                              std::string_view pressed  = "",
+                              std::string_view disabled = "",
                               TextureResType texType      = TextureResType::LOCAL);
 
     /**
@@ -173,7 +173,7 @@ public:
      * @param normal    Normal state texture.
      * @param resType    @see TextureResType .
      */
-    void loadSlidBallTextureNormal(const std::string& normal, TextureResType resType = TextureResType::LOCAL);
+    void loadSlidBallTextureNormal(std::string_view normal, TextureResType resType = TextureResType::LOCAL);
 
     /**
      * Load pressed state texture for slider ball.
@@ -181,7 +181,7 @@ public:
      * @param pressed    Pressed state texture.
      * @param resType    @see TextureResType .
      */
-    void loadSlidBallTexturePressed(const std::string& pressed, TextureResType resType = TextureResType::LOCAL);
+    void loadSlidBallTexturePressed(std::string_view pressed, TextureResType resType = TextureResType::LOCAL);
 
     /**
      * Load disabled state texture for slider ball.
@@ -189,7 +189,7 @@ public:
      * @param disabled   Disabled state texture.
      * @param resType    @see TextureResType .
      */
-    void loadSlidBallTextureDisabled(const std::string& disabled, TextureResType resType = TextureResType::LOCAL);
+    void loadSlidBallTextureDisabled(std::string_view disabled, TextureResType resType = TextureResType::LOCAL);
 
     /**
      * Load dark state texture for slider progress bar.
@@ -197,7 +197,7 @@ public:
      * @param fileName   File path of texture.
      * @param resType    @see TextureResType .
      */
-    void loadProgressBarTexture(const std::string& fileName, TextureResType resType = TextureResType::LOCAL);
+    void loadProgressBarTexture(std::string_view fileName, TextureResType resType = TextureResType::LOCAL);
 
     /**
      * Changes the progress direction of slider.

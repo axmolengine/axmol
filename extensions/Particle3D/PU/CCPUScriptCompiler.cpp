@@ -67,19 +67,20 @@ std::string PUObjectAbstractNode::getValue() const
     return cls;
 }
 
-void PUObjectAbstractNode::addVariable(const std::string& inName)
+void PUObjectAbstractNode::addVariable(std::string_view inName)
 {
     _env.emplace(inName, "");
 }
 
-void PUObjectAbstractNode::setVariable(const std::string& inName, const std::string& value)
+void PUObjectAbstractNode::setVariable(std::string_view inName, std::string_view value)
 {
-    _env[inName] = value;
+    // _env[inName] = value;
+    hlookup::set_item(_env, inName, value);
 }
 
-std::pair<bool, std::string> PUObjectAbstractNode::getVariable(const std::string& inName) const
+std::pair<bool, std::string> PUObjectAbstractNode::getVariable(std::string_view inName) const
 {
-    std::unordered_map<std::string, std::string>::const_iterator i = _env.find(inName);
+    auto i = _env.find(inName);
     if (i != _env.end())
         return std::make_pair(true, i->second);
 
@@ -94,7 +95,7 @@ std::pair<bool, std::string> PUObjectAbstractNode::getVariable(const std::string
     return std::make_pair(false, "");
 }
 
-const std::unordered_map<std::string, std::string>& PUObjectAbstractNode::getVariables() const
+const hlookup::string_map<std::string>& PUObjectAbstractNode::getVariables() const
 {
     return _env;
 }
@@ -187,15 +188,16 @@ PUScriptCompiler::~PUScriptCompiler()
     _compiledScripts.clear();
 }
 
-bool PUScriptCompiler::compile(const PUConcreteNodeList& nodes, const std::string& file)
+hlookup::string_map<PUAbstractNodeList>::iterator PUScriptCompiler::compile(const PUConcreteNodeList& nodes,
+                                                                               std::string_view file)
 {
     if (nodes.empty())
-        return false;
+        return _compiledScripts.end();
 
     PUAbstractNodeList aNodes;
     convertToAST(nodes, aNodes);
 
-    _compiledScripts[file] = aNodes;
+    return hlookup::set_item(_compiledScripts, file, aNodes);  // _compiledScripts[file] = aNodes;
     // for(PUAbstractNodeList::iterator i = aNodes.begin(); i != aNodes.end(); ++i)
     //{
     //     PUScriptTranslator *translator = PUTranslateManager::Instance()->getTranslator(*i);
@@ -212,10 +214,10 @@ bool PUScriptCompiler::compile(const PUConcreteNodeList& nodes, const std::strin
     // for (auto iter : aNodes){
     //     delete iter;
     // }
-    return true;
+    // return true;
 }
 
-const PUAbstractNodeList* PUScriptCompiler::compile(const std::string& file, bool& isFirstCompile)
+const PUAbstractNodeList* PUScriptCompiler::compile(std::string_view file, bool& isFirstCompile)
 {
     auto iter = _compiledScripts.find(file);
     if (iter != _compiledScripts.end())
@@ -231,7 +233,7 @@ const PUAbstractNodeList* PUScriptCompiler::compile(const std::string& file, boo
     PUConcreteNodeList creteNodeList;
     lexer.openLexer(data, file, tokenList);
     parser.parse(creteNodeList, tokenList);
-    bool state = compile(creteNodeList, file);
+    auto it = compile(creteNodeList, file);
 
     for (auto iter1 : creteNodeList)
     {
@@ -244,9 +246,9 @@ const PUAbstractNodeList* PUScriptCompiler::compile(const std::string& file, boo
     }
 
     isFirstCompile = true;
-    if (state)
+    if (it != _compiledScripts.end())
     {
-        return &_compiledScripts[file];
+        return &it->second;
     }
     return nullptr;
 }

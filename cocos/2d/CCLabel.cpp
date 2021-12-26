@@ -240,8 +240,8 @@ Label* Label::create()
     return ret;
 }
 
-Label* Label::createWithSystemFont(const std::string& text,
-                                   const std::string& font,
+Label* Label::createWithSystemFont(std::string_view text,
+                                   std::string_view font,
                                    float fontSize,
                                    const Vec2& dimensions /* = Vec2::ZERO */,
                                    TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
@@ -259,8 +259,8 @@ Label* Label::createWithSystemFont(const std::string& text,
     return ret;
 }
 
-Label* Label::createWithTTF(const std::string& text,
-                            const std::string& fontFile,
+Label* Label::createWithTTF(std::string_view text,
+                            std::string_view fontFile,
                             float fontSize,
                             const Vec2& dimensions /* = Vec2::ZERO */,
                             TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
@@ -279,7 +279,7 @@ Label* Label::createWithTTF(const std::string& text,
 }
 
 Label* Label::createWithTTF(const TTFConfig& ttfConfig,
-                            const std::string& text,
+                            std::string_view text,
                             TextHAlignment hAlignment /* = TextHAlignment::CENTER */,
                             int maxLineWidth /* = 0 */)
 {
@@ -295,8 +295,8 @@ Label* Label::createWithTTF(const TTFConfig& ttfConfig,
     return nullptr;
 }
 
-Label* Label::createWithBMFont(const std::string& bmfontPath,
-                               const std::string& text,
+Label* Label::createWithBMFont(std::string_view bmfontPath,
+                               std::string_view text,
                                const TextHAlignment& hAlignment,
                                int maxLineWidth)
 {
@@ -315,8 +315,8 @@ Label* Label::createWithBMFont(const std::string& bmfontPath,
     return nullptr;
 }
 
-Label* Label::createWithBMFont(const std::string& bmfontPath,
-                               const std::string& text,
+Label* Label::createWithBMFont(std::string_view bmfontPath,
+                               std::string_view text,
                                const TextHAlignment& hAlignment,
                                int maxLineWidth,
                                const Rect& imageRect,
@@ -337,11 +337,11 @@ Label* Label::createWithBMFont(const std::string& bmfontPath,
     return nullptr;
 }
 
-Label* Label::createWithBMFont(const std::string& bmfontPath,
-                               const std::string& text,
+Label* Label::createWithBMFont(std::string_view bmfontPath,
+                               std::string_view text,
                                const TextHAlignment& hAlignment,
                                int maxLineWidth,
-                               const std::string& subTextureKey)
+                               std::string_view subTextureKey)
 {
     auto ret = new Label(hAlignment);
 
@@ -358,8 +358,8 @@ Label* Label::createWithBMFont(const std::string& bmfontPath,
     return nullptr;
 }
 
-Label* Label::createWithBMFont(const std::string& bmfontPath,
-                               const std::string& text,
+Label* Label::createWithBMFont(std::string_view bmfontPath,
+                               std::string_view text,
                                const TextHAlignment& hAlignment,
                                int maxLineWidth,
                                const Vec2& imageOffset)
@@ -368,7 +368,7 @@ Label* Label::createWithBMFont(const std::string& bmfontPath,
                             false);
 }
 
-Label* Label::createWithCharMap(const std::string& plistFile)
+Label* Label::createWithCharMap(std::string_view plistFile)
 {
     auto ret = new Label();
 
@@ -396,7 +396,7 @@ Label* Label::createWithCharMap(Texture2D* texture, int itemWidth, int itemHeigh
     return nullptr;
 }
 
-Label* Label::createWithCharMap(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap)
+Label* Label::createWithCharMap(std::string_view charMapFile, int itemWidth, int itemHeight, int startCharMap)
 {
     auto ret = new Label();
 
@@ -410,7 +410,7 @@ Label* Label::createWithCharMap(const std::string& charMapFile, int itemWidth, i
     return nullptr;
 }
 
-bool Label::setCharMap(const std::string& plistFile)
+bool Label::setCharMap(std::string_view plistFile)
 {
     auto newAtlas = FontAtlasCache::getFontAtlasCharMap(plistFile);
 
@@ -426,8 +426,8 @@ bool Label::setCharMap(const std::string& plistFile)
     return true;
 }
 
-bool Label::initWithTTF(const std::string& text,
-                        const std::string& fontFilePath,
+bool Label::initWithTTF(std::string_view text,
+                        std::string_view fontFilePath,
                         float fontSize,
                         const Vec2& dimensions,
                         TextHAlignment /*hAlignment*/,
@@ -447,7 +447,7 @@ bool Label::initWithTTF(const std::string& text,
 }
 
 bool Label::initWithTTF(const TTFConfig& ttfConfig,
-                        const std::string& text,
+                        std::string_view text,
                         TextHAlignment /*hAlignment*/,
                         int maxLineWidth)
 {
@@ -476,7 +476,7 @@ bool Label::setCharMap(Texture2D* texture, int itemWidth, int itemHeight, int st
     return true;
 }
 
-bool Label::setCharMap(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap)
+bool Label::setCharMap(std::string_view charMapFile, int itemWidth, int itemHeight, int startCharMap)
 {
     auto newAtlas = FontAtlasCache::getFontAtlasCharMap(charMapFile, itemWidth, itemHeight, startCharMap);
 
@@ -841,7 +841,7 @@ bool Label::setTTFConfig(const TTFConfig& ttfConfig)
     return setTTFConfigInternal(ttfConfig);
 }
 
-bool Label::setBMFontFilePath(const std::string& bmfontFilePath, float fontSize)
+bool Label::setBMFontFilePath(std::string_view bmfontFilePath, float fontSize)
 {
     FontAtlas* newAtlas = FontAtlasCache::getFontAtlasFNT(bmfontFilePath);
 
@@ -875,7 +875,7 @@ bool Label::setBMFontFilePath(const std::string& bmfontFilePath, float fontSize)
     return true;
 }
 
-bool Label::setBMFontFilePath(const std::string& bmfontFilePath,
+bool Label::setBMFontFilePath(std::string_view bmfontFilePath,
                               const Rect& imageRect,
                               bool imageRotated,
                               float fontSize)
@@ -914,7 +914,7 @@ bool Label::setBMFontFilePath(const std::string& bmfontFilePath,
     return true;
 }
 
-bool Label::setBMFontFilePath(const std::string& bmfontFilePath, const std::string& subTextureKey, float fontSize)
+bool Label::setBMFontFilePath(std::string_view bmfontFilePath, std::string_view subTextureKey, float fontSize)
 {
     FontAtlas* newAtlas = FontAtlasCache::getFontAtlasFNT(bmfontFilePath, subTextureKey);
 
@@ -949,7 +949,7 @@ bool Label::setBMFontFilePath(const std::string& bmfontFilePath, const std::stri
     return true;
 }
 
-bool Label::setBMFontFilePath(const std::string& bmfontFilePath, const Vec2& imageOffset, float fontSize)
+bool Label::setBMFontFilePath(std::string_view bmfontFilePath, const Vec2& imageOffset, float fontSize)
 {
     return setBMFontFilePath(bmfontFilePath, Rect(imageOffset.x, imageOffset.y, 0, 0), false);
 }
@@ -2105,7 +2105,7 @@ void Label::drawSelf(bool visibleByCamera, Renderer* renderer, uint32_t flags)
     }
 }
 
-void Label::setSystemFontName(const std::string& systemFont)
+void Label::setSystemFontName(std::string_view systemFont)
 {
     if (systemFont != _systemFont)
     {

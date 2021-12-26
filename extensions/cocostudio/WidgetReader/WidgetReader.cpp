@@ -98,9 +98,9 @@ WidgetReader::WidgetReader()
     , _opacity(255)
     , _isAdaptScreen(false)
 {
-    valueToInt = [=](const std::string& str) -> int { return atoi(str.c_str()); };
+    valueToInt = [=](std::string_view str) -> int { return atoi(str.c_str()); };
 
-    valueToBool = [=](const std::string& str) -> bool {
+    valueToBool = [=](std::string_view str) -> bool {
         int intValue = valueToInt(str);
         if (1 == intValue)
         {
@@ -112,7 +112,7 @@ WidgetReader::WidgetReader()
         }
     };
 
-    valueToFloat = [=](const std::string& str) -> float { return utils::atof(str.c_str()); };
+    valueToFloat = [=](std::string_view str) -> float { return utils::atof(str.c_str()); };
 }
 
 WidgetReader::~WidgetReader() {}
@@ -303,7 +303,7 @@ void WidgetReader::endSetBasicProperties(Widget* widget)
 }
 
 std::string WidgetReader::getResourcePath(const rapidjson::Value& dict,
-                                          const std::string& key,
+                                          std::string_view key,
                                           cocos2d::ui::Widget::TextureResType texType)
 {
     std::string jsonPath      = GUIReader::getInstance()->getFilePath();
@@ -940,7 +940,7 @@ Node* WidgetReader::createNodeWithFlatBuffers(const flatbuffers::Table* widgetOp
     return widget;
 }
 
-std::string WidgetReader::getResourcePath(const std::string& path, cocos2d::ui::Widget::TextureResType texType)
+std::string WidgetReader::getResourcePath(std::string_view path, cocos2d::ui::Widget::TextureResType texType)
 {
     std::string filePath      = GUIReader::getInstance()->getFilePath();
     const char* imageFileName = path.c_str();

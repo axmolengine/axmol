@@ -4546,7 +4546,7 @@ EventListenerAcceleration* LuaEventListenerAcceleration::create()
     return eventAcceleration;
 }
 
-EventListenerCustom* LuaEventListenerCustom::create(const std::string& eventName)
+EventListenerCustom* LuaEventListenerCustom::create(std::string_view eventName)
 {
     EventListenerCustom* eventCustom = new EventListenerCustom();
     if (eventCustom->init(eventName, [=](EventCustom* event) {
@@ -6109,7 +6109,7 @@ static int lua_cocos2dx_Console_addCommand(lua_State* tolua_S)
             handler = (toluafix_ref_function(tolua_S, 3, 0));
             ScriptHandlerMgr::getInstance()->addCustomHandler((void*)cobj, handler);
 
-            Console::Command outValue = {name, help, [=](int fd, const std::string& args) {
+            Console::Command outValue = {name, help, [=](int fd, std::string_view args) {
                                              auto stack = LuaEngine::getInstance()->getLuaStack();
                                              auto Ls    = stack->getLuaState();
                                              // lua-callback, the third param;
@@ -7430,7 +7430,7 @@ static int tolua_cocos2d_utils_captureScreen(lua_State* tolua_S)
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         std::string fileName = tolua_tocppstring(tolua_S, 3, "");
         cocos2d::utils::captureScreen(
-            [=](bool succeed, const std::string& name) {
+            [=](bool succeed, std::string_view name) {
                 auto stack = LuaEngine::getInstance()->getLuaStack();
                 auto Ls    = stack->getLuaState();
                 tolua_pushboolean(Ls, succeed);

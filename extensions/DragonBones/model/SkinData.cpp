@@ -1,4 +1,4 @@
-﻿#include "SkinData.h"
+#include "SkinData.h"
 #include "DisplayData.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
@@ -21,7 +21,7 @@ void SkinData::_onClear()
     parent = nullptr;
 }
 
-void SkinData::addDisplay(const std::string& slotName, DisplayData* value)
+void SkinData::addDisplay(std::string_view slotName, DisplayData* value)
 {
     if (value != nullptr)
     {
@@ -31,7 +31,7 @@ void SkinData::addDisplay(const std::string& slotName, DisplayData* value)
     displays[slotName].push_back(value);  // TODO clear prev
 }
 
-DisplayData* SkinData::getDisplay(const std::string& slotName, const std::string& displayName)
+DisplayData* SkinData::getDisplay(std::string_view slotName, std::string_view displayName)
 {
     const auto slotDisplays = getDisplays(slotName);
     if (slotDisplays != nullptr)

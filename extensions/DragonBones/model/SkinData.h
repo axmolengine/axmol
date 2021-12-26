@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -24,6 +24,7 @@
 #define DRAGONBONES_SKIN_DATA_H
 
 #include "../core/BaseObject.h"
+#include "base/hlookup.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**
@@ -55,7 +56,7 @@ public:
     /**
      * @private
      */
-    std::map<std::string, std::vector<DisplayData*>> displays;
+    hlookup::string_map<std::vector<DisplayData*>> displays;
     /**
      * @private
      */
@@ -68,15 +69,15 @@ public:
     /**
      * @internal
      */
-    void addDisplay(const std::string& slotName, DisplayData* value);
+    void addDisplay(std::string_view slotName, DisplayData* value);
     /**
      * @private
      */
-    DisplayData* getDisplay(const std::string& slotName, const std::string& displayName);
+    DisplayData* getDisplay(std::string_view slotName, std::string_view displayName);
     /**
      * @private
      */
-    std::vector<DisplayData*>* getDisplays(const std::string& slotName) { return mapFindB(displays, slotName); }
+    std::vector<DisplayData*>* getDisplays(std::string_view slotName) { return mapFindB(displays, slotName); }
 
 public:  // For WebAssembly. TODO parent
     const std::map<std::string, std::vector<DisplayData*>>& getSlotDisplays() const { return displays; }

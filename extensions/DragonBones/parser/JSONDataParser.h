@@ -1,4 +1,4 @@
-﻿#ifndef DRAGONBONES_JSON_DATA_PARSER_H
+#ifndef DRAGONBONES_JSON_DATA_PARSER_H
 #define DRAGONBONES_JSON_DATA_PARSER_H
 
 #include "DataParser.h"
@@ -81,7 +81,7 @@ protected:
 
     inline static std::string _getString(const rapidjson::Value& rawData,
                                          const char* key,
-                                         const std::string& defaultValue)
+                                         std::string_view defaultValue)
     {
         if (rawData.HasMember(key))
         {
@@ -118,7 +118,7 @@ protected:
 
     inline static std::string _getParameter(const rapidjson::Value& rawData,
                                             std::size_t index,
-                                            const std::string& defaultValue)
+                                            std::string_view defaultValue)
     {
         if (rawData.Size() > index)
         {

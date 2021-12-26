@@ -38,7 +38,7 @@ USING_NS_CC;
 
 // Utility functions (shared with SceneLoader).
 /** @script{ignore} */
-void calculateNamespacePath(const std::string& urlString,
+void calculateNamespacePath(std::string_view urlString,
                             std::string& fileString,
                             std::vector<std::string>& namespacePath);
 /** @script{ignore} */
@@ -79,7 +79,7 @@ Properties::Properties(Data* data, ssize_t* dataIdx)
 
 Properties::Properties(Data* data,
                        ssize_t* dataIdx,
-                       const std::string& name,
+                       std::string_view name,
                        const char* id,
                        const char* parentID,
                        Properties* parent)
@@ -97,7 +97,7 @@ Properties::Properties(Data* data,
     rewind();
 }
 
-Properties* Properties::createNonRefCounted(const std::string& url)
+Properties* Properties::createNonRefCounted(std::string_view url)
 {
     if (url.empty())
     {
@@ -106,7 +106,7 @@ Properties* Properties::createNonRefCounted(const std::string& url)
     }
 
     // Calculate the file and full namespace path from the specified url.
-    std::string urlString = url;
+    auto& urlString = url;
     std::string fileString;
     std::vector<std::string> namespacePath;
     calculateNamespacePath(urlString, fileString, namespacePath);
@@ -122,7 +122,7 @@ Properties* Properties::createNonRefCounted(const std::string& url)
     Properties* p = getPropertiesFromNamespacePath(properties, namespacePath);
     if (!p)
     {
-        CCLOGWARN("Failed to load properties from url '%s'.", url.c_str());
+        CCLOGWARN("Failed to load properties from url '%s'.", url.data());
         CC_SAFE_DELETE(properties);
         return nullptr;
     }
@@ -1093,7 +1093,7 @@ void Properties::setDirectoryPath(const std::string* path)
     }
 }
 
-void Properties::setDirectoryPath(const std::string& path)
+void Properties::setDirectoryPath(std::string_view path)
 {
     if (_dirPath == NULL)
     {
@@ -1105,7 +1105,7 @@ void Properties::setDirectoryPath(const std::string& path)
     }
 }
 
-void calculateNamespacePath(const std::string& urlString,
+void calculateNamespacePath(std::string_view urlString,
                             std::string& fileString,
                             std::vector<std::string>& namespacePath)
 {
@@ -1115,13 +1115,13 @@ void calculateNamespacePath(const std::string& urlString,
     if (loc != std::string::npos)
     {
         fileString                      = urlString.substr(0, loc);
-        std::string namespacePathString = urlString.substr(loc + 1);
+        auto namespacePathString = urlString.substr(loc + 1);
         while ((loc = namespacePathString.find('/')) != std::string::npos)
         {
-            namespacePath.push_back(namespacePathString.substr(0, loc));
+            namespacePath.push_back(std::string{namespacePathString.substr(0, loc)});
             namespacePathString = namespacePathString.substr(loc + 1);
         }
-        namespacePath.push_back(namespacePathString);
+        namespacePath.push_back(std::string{namespacePathString});
     }
     else
     {

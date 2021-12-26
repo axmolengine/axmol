@@ -172,13 +172,13 @@ bool Application::openURL(const std::string &url)
     return [[NSWorkspace sharedWorkspace] openURL:nsUrl];
 }
 
-void Application::setStartupScriptFilename(const std::string& startupScriptFile)
+void Application::setStartupScriptFilename(std::string_view startupScriptFile)
 {
     _startupScriptFilename = startupScriptFile;
     std::replace(_startupScriptFilename.begin(), _startupScriptFilename.end(), '\\', '/');
 }
 
-const std::string& Application::getStartupScriptFilename()
+std::string_view Application::getStartupScriptFilename()
 {
     return _startupScriptFilename;
 }

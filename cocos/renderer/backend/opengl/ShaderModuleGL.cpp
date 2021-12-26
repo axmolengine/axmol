@@ -31,7 +31,7 @@
 
 CC_BACKEND_BEGIN
 
-ShaderModuleGL::ShaderModuleGL(ShaderStage stage, const std::string& source) : ShaderModule(stage)
+ShaderModuleGL::ShaderModuleGL(ShaderStage stage, std::string_view source) : ShaderModule(stage)
 {
     compileShader(stage, source);
 }
@@ -41,10 +41,10 @@ ShaderModuleGL::~ShaderModuleGL()
     deleteShader();
 }
 
-void ShaderModuleGL::compileShader(ShaderStage stage, const std::string& source)
+void ShaderModuleGL::compileShader(ShaderStage stage, std::string_view source)
 {
     GLenum shaderType       = stage == ShaderStage::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
-    const GLchar* sourcePtr = reinterpret_cast<const GLchar*>(source.c_str());
+    const GLchar* sourcePtr = reinterpret_cast<const GLchar*>(source.data());
     _shader                 = glCreateShader(shaderType);
     if (!_shader)
         return;
@@ -64,7 +64,7 @@ void ShaderModuleGL::compileShader(ShaderStage stage, const std::string& source)
             cocos2d::Data errorLog{};
             glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.resize(logLength));
             cocos2d::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.getBytes(),
-                         source.c_str());
+                         source.data());
         }
         else
         {

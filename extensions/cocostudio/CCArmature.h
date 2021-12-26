@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -85,9 +85,9 @@ public:
      * @param  name Armature will use the name to find the ArmatureData to initializes it.
      * @return A initialized armature which is marked as "autorelease".
      */
-    static Armature* create(const std::string& name);
+    static Armature* create(std::string_view name);
 
-    static Armature* create(const std::string& name, Bone* parentBone);
+    static Armature* create(std::string_view name, Bone* parentBone);
 
 public:
     /**
@@ -109,29 +109,29 @@ public:
      * Init an armature with specified name
      * @param name Armature name
      */
-    virtual bool init(const std::string& name);
+    virtual bool init(std::string_view name);
 
-    virtual bool init(const std::string& name, Bone* parentBone);
+    virtual bool init(std::string_view name, Bone* parentBone);
     /**
      * Add a Bone to this Armature,
      *
      * @param bone  The Bone you want to add to Armature
      * @param parentName   The parent Bone's name you want to add to . If it's  nullptr, then set Armature to its parent
      */
-    virtual void addBone(Bone* bone, const std::string& parentName);
+    virtual void addBone(Bone* bone, std::string_view parentName);
     /**
      * Get a bone with the specified name
      *
      * @param name The bone's name you want to get
      */
-    virtual Bone* getBone(const std::string& name) const;
+    virtual Bone* getBone(std::string_view name) const;
     /**
      * Change a bone's parent with the specified parent name.
      *
      * @param bone The bone you want to change parent
      * @param parentName The new parent's name.
      */
-    virtual void changeBoneParent(Bone* bone, const std::string& parentName);
+    virtual void changeBoneParent(Bone* bone, std::string_view parentName);
     /**
      * Remove a bone with the specified name. If recursion it will also remove child Bone recursionly.
      *
@@ -246,7 +246,7 @@ protected:
      * @js NA
      * @lua NA
      */
-    Bone* createBone(const std::string& boneName);
+    Bone* createBone(std::string_view boneName);
 
 protected:
     ArmatureData* _armatureData;

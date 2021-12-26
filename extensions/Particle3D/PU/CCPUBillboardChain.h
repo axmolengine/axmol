@@ -77,8 +77,8 @@ public:
     @param useVertexColours If true, use vertex colours from the chain elements
     @param dynamic If true, buffers are created with the intention of being updated
     */
-    PUBillboardChain(const std::string& name,
-                     const std::string& texFile = "",
+    PUBillboardChain(std::string_view name,
+                     std::string_view texFile = "",
                      size_t maxElements         = 20,
                      size_t numberOfChains      = 1,
                      bool useTextureCoords      = true,
@@ -245,7 +245,7 @@ protected:
     /// Update the contents of the index buffer
     virtual void updateIndexBuffer();
 
-    void init(const std::string& texFile);
+    void init(std::string_view texFile);
 
 private:
     void onBeforeDraw();

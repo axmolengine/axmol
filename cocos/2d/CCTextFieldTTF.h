@@ -98,28 +98,28 @@ public:
     /** Creates a TextFieldTTF from a fontname, alignment, dimension and font size.
      * @js NA
      */
-    static TextFieldTTF* textFieldWithPlaceHolder(const std::string& placeholder,
+    static TextFieldTTF* textFieldWithPlaceHolder(std::string_view placeholder,
                                                   const Vec2& dimensions,
                                                   TextHAlignment alignment,
-                                                  const std::string& fontName,
+                                                  std::string_view fontName,
                                                   float fontSize);
 
     /** Creates a TextFieldTTF from a fontname and font size.
      * @js NA
      */
-    static TextFieldTTF* textFieldWithPlaceHolder(const std::string& placeholder,
-                                                  const std::string& fontName,
+    static TextFieldTTF* textFieldWithPlaceHolder(std::string_view placeholder,
+                                                  std::string_view fontName,
                                                   float fontSize);
 
     /** Initializes the TextFieldTTF with a font name, alignment, dimension and font size. */
-    bool initWithPlaceHolder(const std::string& placeholder,
+    bool initWithPlaceHolder(std::string_view placeholder,
                              const Vec2& dimensions,
                              TextHAlignment alignment,
-                             const std::string& fontName,
+                             std::string_view fontName,
                              float fontSize);
 
     /** Initializes the TextFieldTTF with a font name and font size. */
-    bool initWithPlaceHolder(const std::string& placeholder, const std::string& fontName, float fontSize);
+    bool initWithPlaceHolder(std::string_view placeholder, std::string_view fontName, float fontSize);
 
     /**
      *@brief    Open keyboard and receive input text.
@@ -183,26 +183,26 @@ public:
      * Append to input text of TextField.
      *@param text The append text of TextField.
      */
-    virtual void appendString(const std::string& text);
+    virtual void appendString(std::string_view text);
 
     /**
      * Query the input text of TextField.
      *@return Get the input text of TextField.
      */
-    virtual const std::string& getString() const override;
+    virtual std::string_view getString() const override;
 
     /**
      * Change placeholder text.
      * place holder text displayed when there is no text in the text field.
      *@param text  The placeholder string.
      */
-    virtual void setPlaceHolder(const std::string& text);
+    virtual void setPlaceHolder(std::string_view text);
 
     /**
      * Query the placeholder string.
      *@return The placeholder string.
      */
-    virtual const std::string& getPlaceHolder() const;
+    virtual std::string_view getPlaceHolder() const;
 
     /**
      * Set enable secure text entry representation.
@@ -211,8 +211,8 @@ public:
      * @js NA
      */
     virtual void setSecureTextEntry(bool value);
-    virtual void setPasswordTextStyle(const std::string& text);
-    const std::string& getPasswordTextStyle() const;
+    virtual void setPasswordTextStyle(std::string_view text);
+    std::string_view getPasswordTextStyle() const;
 
     /**
      * Query whether the currently display mode is secure text entry or not.
@@ -260,7 +260,7 @@ protected:
     virtual void didDetachWithIME() override;
     virtual void insertText(const char* text, size_t len) override;
     virtual void deleteBackward() override;
-    virtual const std::string& getContentText() override;
+    virtual std::string_view getContentText() override;
     virtual void controlKey(EventKeyboard::KeyCode keyCode) override;
 
     TextFieldDelegate* _delegate;

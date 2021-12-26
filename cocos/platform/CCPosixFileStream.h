@@ -114,7 +114,7 @@ public:
         APPEND,
     };
 
-    bool open(const std::string& path, FileStream::Mode mode) override;
+    bool open(std::string_view path, FileStream::Mode mode) override;
     int close() override;
 
     int seek(int64_t offset, int origin) override;

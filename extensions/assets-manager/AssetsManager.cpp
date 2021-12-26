@@ -182,7 +182,7 @@ AssetsManager::AssetsManager(const char* packageUrl /* =nullptr */,
     checkStoragePath();
     // convert downloader error code to AssetsManager::ErrorCode
     _downloader->onTaskError = [this](const DownloadTask& /*task*/, int errorCode, int /*errorCodeInternal*/,
-                                      const std::string& /*errorStr*/) {
+                                      std::string_view /*errorStr*/) {
         _isDownloading = false;
 
         if (nullptr == _delegate)
@@ -278,10 +278,10 @@ void AssetsManager::checkStoragePath()
 }
 
 // Multiple key names
-static std::string keyWithHash(const char* prefix, const std::string& url)
+static std::string keyWithHash(const char* prefix, std::string_view url)
 {
     char buf[256];
-    sprintf(buf, "%s%zd", prefix, std::hash<std::string>()(url));
+    sprintf(buf, "%s%zd", prefix, std::hash<std::string_view>()(url));
     return buf;
 }
 
@@ -565,9 +565,9 @@ void AssetsManager::setVersionFileUrl(const char* versionFileUrl)
     _versionFileUrl = versionFileUrl;
 }
 
-string AssetsManager::getVersion()
+std::string_view AssetsManager::getVersion()
 {
-    return UserDefault::getInstance()->getStringForKey(keyOfVersion().c_str());
+    return UserDefault::getInstance()->getStringForKey(keyOfVersion().data());
 }
 
 void AssetsManager::deleteVersion()

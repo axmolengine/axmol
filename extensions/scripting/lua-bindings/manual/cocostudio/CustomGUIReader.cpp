@@ -85,7 +85,7 @@ void CustomGUIReader::init(std::string& className, int createFunc, int setPropsF
     (*callbackMap)[className] = parseselector(CustomGUIReader::setCustomProps);
 }
 
-void CustomGUIReader::setCustomProps(const std::string& classType,
+void CustomGUIReader::setCustomProps(std::string_view classType,
                                      cocos2d::Ref* widget,
                                      const rapidjson::Value& customOptions)
 {

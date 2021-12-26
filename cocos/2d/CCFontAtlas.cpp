@@ -520,9 +520,9 @@ void FontAtlas::setLineHeight(float newHeight)
     _lineHeight = newHeight;
 }
 
-std::string FontAtlas::getFontName() const
+std::string_view FontAtlas::getFontName() const
 {
-    std::string fontName = _fontFreeType ? _fontFreeType->getFontName() : "";
+    std::string_view fontName = _fontFreeType ? _fontFreeType->getFontName() : ""sv;
     if (fontName.empty())
         return fontName;
     auto idx = fontName.rfind('/');

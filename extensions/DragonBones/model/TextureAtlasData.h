@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -100,7 +100,7 @@ public:
     /**
      * @private
      */
-    inline TextureData* getTexture(const std::string& textureName) const { return mapFind(textures, textureName); }
+    inline TextureData* getTexture(std::string_view textureName) const { return mapFind(textures, textureName); }
 
 protected:
     virtual void _onClear() override;

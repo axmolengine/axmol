@@ -69,16 +69,16 @@ public:
      */
     static TextBMFont* create();
 
-    static TextBMFont* create(const std::string& text, const std::string& filename);
+    static TextBMFont* create(std::string_view text, std::string_view filename);
 
     /** init a bitmap font atlas with an initial string and the FNT file */
-    void setFntFile(const std::string& fileName);
+    void setFntFile(std::string_view fileName);
 
     /** set string value for labelbmfont*/
-    void setString(const std::string& value);
+    void setString(std::string_view value);
 
     /** get string value for labelbmfont*/
-    const std::string& getString() const;
+    std::string_view getString() const;
 
     /**
      * Gets the string length of the label.

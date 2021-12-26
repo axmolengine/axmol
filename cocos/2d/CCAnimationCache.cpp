@@ -63,12 +63,12 @@ AnimationCache::~AnimationCache()
     CCLOGINFO("deallocing AnimationCache: %p", this);
 }
 
-void AnimationCache::addAnimation(Animation* animation, const std::string& name)
+void AnimationCache::addAnimation(Animation* animation, std::string_view name)
 {
-    _animations.insert(name, animation);
+    _animations.insert(std::string{name}, animation);
 }
 
-void AnimationCache::removeAnimation(const std::string& name)
+void AnimationCache::removeAnimation(std::string_view name)
 {
     if (name.empty())
         return;
@@ -76,7 +76,7 @@ void AnimationCache::removeAnimation(const std::string& name)
     _animations.erase(name);
 }
 
-Animation* AnimationCache::getAnimation(const std::string& name)
+Animation* AnimationCache::getAnimation(std::string_view name)
 {
     return _animations.at(name);
 }
@@ -205,7 +205,7 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
     }
 }
 
-void AnimationCache::addAnimationsWithDictionary(const ValueMap& dictionary, const std::string& plist)
+void AnimationCache::addAnimationsWithDictionary(const ValueMap& dictionary, std::string_view plist)
 {
     auto anisItr = dictionary.find("animations");
     if (anisItr == dictionary.end())
@@ -245,7 +245,7 @@ void AnimationCache::addAnimationsWithDictionary(const ValueMap& dictionary, con
 }
 
 /** Read an NSDictionary from a plist file and parse it automatically for animations */
-void AnimationCache::addAnimationsWithFile(const std::string& plist)
+void AnimationCache::addAnimationsWithFile(std::string_view plist)
 {
     CCASSERT(!plist.empty(), "Invalid texture file name");
     if (plist.empty())
@@ -259,7 +259,7 @@ void AnimationCache::addAnimationsWithFile(const std::string& plist)
     CCASSERT(!dict.empty(), "CCAnimationCache: File could not be found");
     if (dict.empty())
     {
-        log("AnimationCache::addAnimationsWithFile error:%s not exist!", plist.c_str());
+        log("AnimationCache::addAnimationsWithFile error:%s not exist!", plist.data());
     }
 
     addAnimationsWithDictionary(dict, plist);

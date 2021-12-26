@@ -111,7 +111,7 @@ void ImageViewReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
 
     const rapidjson::Value& imageFileNameDic = DICTOOL->getSubDictionary_json(options, P_FileNameData);
     int imageFileNameType                    = DICTOOL->getIntValue_json(imageFileNameDic, P_ResourceType);
-    const std::string& imageFilePath         = DICTOOL->getStringValue_json(imageFileNameDic, P_Path);
+    std::string_view imageFilePath         = DICTOOL->getStringValue_json(imageFileNameDic, P_Path);
 
     if (!imageFilePath.empty())
     {

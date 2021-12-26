@@ -115,7 +115,7 @@ std::string FileUtilsLinux::getNativeWritableAbsolutePath() const
     return _writablePath;
 }
 
-bool FileUtilsLinux::isFileExistInternal(const std::string& strFilePath) const
+bool FileUtilsLinux::isFileExistInternal(std::string_view strFilePath) const
 {
     DECLARE_GUARD;
     if (strFilePath.empty())

@@ -141,8 +141,8 @@ void FlatBuffersSerialize::deleteFlatBufferBuilder()
     }
 }
 
-std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(const std::string& xmlFileName,
-                                                                  const std::string& flatbuffersFileName)
+std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(std::string_view xmlFileName,
+                                                                  std::string_view flatbuffersFileName)
 {
     std::string inFullpath = FileUtils::getInstance()->fullPathForFilename(xmlFileName).c_str();
 
@@ -157,7 +157,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(const std::str
 }
 
 std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLBuffer(std::string& xmlBuffer,
-                                                                    const std::string& flatbuffersFileName)
+                                                                    std::string_view flatbuffersFileName)
 {
     // xml parse
     pugi::xml_document document;
@@ -168,7 +168,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLBuffer(std::string&
     return "";
 }
 
-std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, const std::string& flatbuffersFileName)
+std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, std::string_view flatbuffersFileName)
 {
     auto thiz = FlatBuffersSerialize::getInstance();
 
@@ -451,7 +451,7 @@ int FlatBuffersSerialize::getResourceType(std::string key)
     return 1;
 }
 
-std::string FlatBuffersSerialize::getGUIClassName(const std::string& name)
+std::string FlatBuffersSerialize::getGUIClassName(std::string_view name)
 {
     std::string convertedClassName = name;
     if (name == "Panel")
@@ -1231,7 +1231,7 @@ flatbuffers::Offset<flatbuffers::EasingData> FlatBuffersSerialize::createEasingD
 }
 
 /* create flat buffers with XML */
-FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulator(const std::string& xmlFileName)
+FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulator(std::string_view xmlFileName)
 {
     std::string inFullpath = FileUtils::getInstance()->fullPathForFilename(xmlFileName);
 
@@ -1520,9 +1520,9 @@ Offset<ProjectNodeOptions> FlatBuffersSerialize::createProjectNodeOptionsForSimu
 }
 
 /* Serialize language XML file to Flat Buffers file. */
-std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData(const std::string& xmlFilePath,
-                                                                                 const std::string& flatBuffersFilePath,
-                                                                                 const std::string& languageName)
+std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData(std::string_view xmlFilePath,
+                                                                                 std::string_view flatBuffersFilePath,
+                                                                                 std::string_view languageName)
 {
     // Read and parse XML data file.
     if (!FileUtils::getInstance()->isFileExist(xmlFilePath))

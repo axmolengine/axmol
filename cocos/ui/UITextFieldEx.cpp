@@ -28,8 +28,8 @@ NS_CC_BEGIN
 #    define nxbeep(t)
 #endif
 
-static Label* createLabel(const std::string& text,
-                          const std::string& font,
+static Label* createLabel(std::string_view text,
+                          std::string_view font,
                           float fontSize,
                           const Vec2& dimensions    = Vec2::ZERO,
                           TextHAlignment hAlignment = TextHAlignment::LEFT,
@@ -161,7 +161,7 @@ static int _truncateUTF8String(const char* text, int limit, int& nb)
     return n;
 }
 
-static void internalSetLableFont(Label* l, const std::string& fontName, float fontSize)
+static void internalSetLableFont(Label* l, std::string_view fontName, float fontSize)
 {
     if (FileUtils::getInstance()->isFileExist(fontName))
     {
@@ -178,7 +178,7 @@ static void internalSetLableFont(Label* l, const std::string& fontName, float fo
     }
 }
 
-static float internalCalcStringWidth(std::string_view s, const std::string& fontName, float fontSize)
+static float internalCalcStringWidth(std::string_view s, std::string_view fontName, float fontSize)
 {
     auto label = createLabel(std::string{s}, fontName, fontSize);
     return label->getContentSize().width;
@@ -269,8 +269,8 @@ TextFieldEx::~TextFieldEx()
 //////////////////////////////////////////////////////////////////////////
 // static constructor
 //////////////////////////////////////////////////////////////////////////
-TextFieldEx* TextFieldEx::create(const std::string& placeholder,
-                                 const std::string& fontName,
+TextFieldEx* TextFieldEx::create(std::string_view placeholder,
+                                 std::string_view fontName,
                                  float fontSize,
                                  float cursorWidth,
                                  const Color4B& cursorColor)
@@ -292,8 +292,8 @@ TextFieldEx* TextFieldEx::create(const std::string& placeholder,
 //////////////////////////////////////////////////////////////////////////
 // initialize
 //////////////////////////////////////////////////////////////////////////
-bool TextFieldEx::initWithPlaceHolder(const std::string& placeholder,
-                                      const std::string& fontName,
+bool TextFieldEx::initWithPlaceHolder(std::string_view placeholder,
+                                      std::string_view fontName,
                                       float fontSize,
                                       float cursorWidth,
                                       const Color4B& cursorColor)
@@ -316,12 +316,12 @@ bool TextFieldEx::initWithPlaceHolder(const std::string& placeholder,
     return true;
 }
 
-const std::string& TextFieldEx::getTextFontName() const
+std::string_view TextFieldEx::getTextFontName() const
 {
     return this->fontName;
 }
 
-void TextFieldEx::setTextFontName(const std::string& fontName)
+void TextFieldEx::setTextFontName(std::string_view fontName)
 {
     if (FileUtils::getInstance()->isFileExist(fontName))
     {
@@ -740,7 +740,7 @@ void TextFieldEx::handleDeleteKeyEvent()
         this->onTextModify();
 }
 
-const std::string& TextFieldEx::getContentText()
+std::string_view TextFieldEx::getContentText()
 {
     return inputText;
 }
@@ -784,7 +784,7 @@ void TextFieldEx::setPlaceholderColor(const Color4B& color)
 //////////////////////////////////////////////////////////////////////////
 
 // input text property
-void TextFieldEx::setString(const std::string& text)
+void TextFieldEx::setString(std::string_view text)
 {
     static char bulletString[] = {(char)0xe2, (char)0x80, (char)0xa2, (char)0x00};
 
@@ -838,13 +838,13 @@ void TextFieldEx::updateContentSize(void)
     this->setContentSize(renderLabel->getContentSize());
 }
 
-const std::string& TextFieldEx::getString() const
+std::string_view TextFieldEx::getString() const
 {
     return inputText;
 }
 
 // place holder text property
-void TextFieldEx::setPlaceholderText(const std::string& text)
+void TextFieldEx::setPlaceholderText(std::string_view text)
 {
     placeHolder = text;
     if (inputText.empty())
@@ -854,7 +854,7 @@ void TextFieldEx::setPlaceholderText(const std::string& text)
     }
 }
 
-const std::string& TextFieldEx::getPlaceholderText() const
+std::string_view TextFieldEx::getPlaceholderText() const
 {
     return placeHolder;
 }

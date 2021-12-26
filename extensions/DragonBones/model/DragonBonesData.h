@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -158,7 +158,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline ArmatureData* getArmature(const std::string& armatureName) const
+    inline ArmatureData* getArmature(std::string_view armatureName) const
     {
         return mapFind<ArmatureData>(armatures, armatureName);
     }

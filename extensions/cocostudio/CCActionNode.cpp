@@ -188,11 +188,11 @@ void ActionNode::initWithDictionary(const rapidjson::Value& dic, Ref* root)
     initActionNodeFromRoot(root);
 }
 
-int ActionNode::valueToInt(const std::string& value)
+int ActionNode::valueToInt(std::string_view value)
 {
     return atoi(value.c_str());
 }
-bool ActionNode::valueToBool(const std::string& value)
+bool ActionNode::valueToBool(std::string_view value)
 {
     int intValue = valueToInt(value);
     if (1 == intValue)
@@ -204,7 +204,7 @@ bool ActionNode::valueToBool(const std::string& value)
         return false;
     }
 }
-float ActionNode::valueToFloat(const std::string& value)
+float ActionNode::valueToFloat(std::string_view value)
 {
     return utils::atof(value.c_str());
 }

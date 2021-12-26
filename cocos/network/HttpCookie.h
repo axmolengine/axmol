@@ -90,7 +90,7 @@ public:
     void readFile();
 
     void writeFile();
-    void setCookieFileName(const std::string& fileName);
+    void setCookieFileName(std::string_view fileName);
 
     const std::vector<CookieInfo>* getCookies() const;
     const CookieInfo* getMatchCookie(const Uri& uri) const;
@@ -98,7 +98,7 @@ public:
 
     // Check match cookies for http request
     std::string checkAndGetFormatedMatchCookies(const Uri& uri);
-    bool updateOrAddCookie(const std::string& cookie, const Uri& uri);
+    bool updateOrAddCookie(std::string_view cookie, const Uri& uri);
 
 private:
     std::string _cookieFileName;

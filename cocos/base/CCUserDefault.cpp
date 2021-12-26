@@ -211,12 +211,12 @@ double UserDefault::getDoubleForKey(const char* pKey, double defaultValue)
     return defaultValue;
 }
 
-std::string UserDefault::getStringForKey(const char* pKey)
+std::string_view UserDefault::getStringForKey(const char* pKey)
 {
     return getStringForKey(pKey, "");
 }
 
-std::string UserDefault::getStringForKey(const char* pKey, const std::string& defaultValue)
+std::string_view UserDefault::getStringForKey(const char* pKey, std::string_view defaultValue)
 {
     auto pValue = getValueForKey(pKey);
     if (pValue)
@@ -225,7 +225,7 @@ std::string UserDefault::getStringForKey(const char* pKey, const std::string& de
     return defaultValue;
 }
 
-const std::string* UserDefault::getValueForKey(const std::string& key)
+const std::string* UserDefault::getValueForKey(std::string_view key)
 {
     // do lazyInit at here to make sure _encryptEnabled works well,
     lazyInit();
@@ -294,7 +294,7 @@ void UserDefault::setDoubleForKey(const char* pKey, double value)
     setStringForKey(pKey, tmp);
 }
 
-void UserDefault::setStringForKey(const char* pKey, const std::string& value)
+void UserDefault::setStringForKey(const char* pKey, std::string_view value)
 {
     // ignore empty key
     if (!pKey || !*pKey)
@@ -338,7 +338,7 @@ void UserDefault::setStringForKey(const char* pKey, const std::string& value)
 #endif
 }
 
-void UserDefault::setValueForKey(const std::string& key, const std::string& value)
+void UserDefault::setValueForKey(std::string_view key, std::string_view value)
 {
     // do lazyInit at here to make sure _encryptEnabled works well
     lazyInit();
@@ -346,7 +346,7 @@ void UserDefault::setValueForKey(const std::string& key, const std::string& valu
     updateValueForKey(key, value);
 }
 
-void UserDefault::updateValueForKey(const std::string& key, const std::string& value)
+void UserDefault::updateValueForKey(std::string_view key, std::string_view value)
 {
     auto it = _values.find(key);
     if (it != _values.end())

@@ -49,7 +49,7 @@ public:
     ~AudioEngineImpl();
 
     bool init();
-    AUDIO_ID play2d(const std::string& fileFullPath, bool loop, float volume);
+    AUDIO_ID play2d(std::string_view fileFullPath, bool loop, float volume);
     void setVolume(AUDIO_ID audioID, float volume);
     void setLoop(AUDIO_ID audioID, bool loop);
     bool pause(AUDIO_ID audioID);
@@ -59,11 +59,11 @@ public:
     float getDuration(AUDIO_ID audioID);
     float getCurrentTime(AUDIO_ID audioID);
     bool setCurrentTime(AUDIO_ID audioID, float time);
-    void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, const std::string&)>& callback);
+    void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, std::string_view)>& callback);
 
-    void uncache(const std::string& filePath);
+    void uncache(std::string_view filePath);
     void uncacheAll();
-    AudioCache* preload(const std::string& filePath, std::function<void(bool)> callback);
+    AudioCache* preload(std::string_view filePath, std::function<void(bool)> callback);
     void update(float dt);
 
 private:
@@ -81,7 +81,7 @@ private:
     std::queue<ALuint> _unusedSourcesPool;
 
     // filePath,bufferInfo
-    std::unordered_map<std::string, AudioCache> _audioCaches;
+    hlookup::string_map<std::unique_ptr<AudioCache>> _audioCaches;
 
     // audioID,AudioInfo
     std::unordered_map<AUDIO_ID, AudioPlayer*> _audioPlayers;

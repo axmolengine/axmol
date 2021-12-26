@@ -517,7 +517,7 @@ bool PUScriptTranslator::getQuaternion(PUAbstractNodeList::const_iterator i,
 //-------------------------------------------------------------------------
 bool PUScriptTranslator::passValidateProperty(PUScriptCompiler* compiler,
                                               PUPropertyAbstractNode* prop,
-                                              const std::string& token2,
+                                              std::string_view token2,
                                               ValidationType validationType)
 {
     if (!passValidatePropertyNoValues(compiler, prop, token2))
@@ -594,7 +594,7 @@ bool PUScriptTranslator::passValidateProperty(PUScriptCompiler* compiler,
 //-------------------------------------------------------------------------
 bool PUScriptTranslator::passValidatePropertyNoValues(PUScriptCompiler* /*compiler*/,
                                                       PUPropertyAbstractNode* prop,
-                                                      const std::string& /*token2*/)
+                                                      std::string_view /*token2*/)
 {
     if (prop->values.empty())
     {
@@ -607,7 +607,7 @@ bool PUScriptTranslator::passValidatePropertyNoValues(PUScriptCompiler* /*compil
 //-------------------------------------------------------------------------
 bool PUScriptTranslator::passValidatePropertyNumberOfValues(PUScriptCompiler* /*compiler*/,
                                                             PUPropertyAbstractNode* prop,
-                                                            const std::string& /*token2*/,
+                                                            std::string_view /*token2*/,
                                                             unsigned short numberOfValues)
 {
     if (prop->values.size() > numberOfValues)
@@ -619,7 +619,7 @@ bool PUScriptTranslator::passValidatePropertyNumberOfValues(PUScriptCompiler* /*
 //-------------------------------------------------------------------------
 bool PUScriptTranslator::passValidatePropertyNumberOfValuesRange(PUScriptCompiler* /*compiler*/,
                                                                  PUPropertyAbstractNode* prop,
-                                                                 const std::string& /*token2*/,
+                                                                 std::string_view /*token2*/,
                                                                  unsigned short minNumberOfValues,
                                                                  unsigned short maxNumberOfValues)
 {

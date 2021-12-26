@@ -280,7 +280,7 @@ void CSLoader::init()
     _componentFuncs.insert(ComponentPair(ClassName_ComAudio, std::bind(&CSLoader::loadComAudio, this, _1)));
 }
 
-Node* CSLoader::createNode(const std::string& filename)
+Node* CSLoader::createNode(std::string_view filename)
 {
     std::string path   = filename;
     size_t pos         = path.find_last_of('.');
@@ -300,7 +300,7 @@ Node* CSLoader::createNode(const std::string& filename)
     return nullptr;
 }
 
-Node* CSLoader::createNode(const std::string& filename, const ccNodeLoadCallback& callback)
+Node* CSLoader::createNode(std::string_view filename, const ccNodeLoadCallback& callback)
 {
     std::string path   = filename;
     size_t pos         = path.find_last_of('.');
@@ -316,7 +316,7 @@ Node* CSLoader::createNode(const std::string& filename, const ccNodeLoadCallback
     return nullptr;
 }
 
-Node* CSLoader::createNodeWithVisibleSize(const std::string& filename)
+Node* CSLoader::createNodeWithVisibleSize(std::string_view filename)
 {
     auto node = createNode(filename);
     if (node != nullptr)
@@ -328,7 +328,7 @@ Node* CSLoader::createNodeWithVisibleSize(const std::string& filename)
     return node;
 }
 
-Node* CSLoader::createNodeWithVisibleSize(const std::string& filename, const ccNodeLoadCallback& callback)
+Node* CSLoader::createNodeWithVisibleSize(std::string_view filename, const ccNodeLoadCallback& callback)
 {
     auto node = createNode(filename, callback);
     if (node != nullptr)
@@ -340,7 +340,7 @@ Node* CSLoader::createNodeWithVisibleSize(const std::string& filename, const ccN
     return node;
 }
 
-std::string CSLoader::getExtentionName(const std::string& name)
+std::string CSLoader::getExtentionName(std::string_view name)
 {
     std::string path   = name;
     size_t pos         = path.find_last_of('.');
@@ -349,7 +349,7 @@ std::string CSLoader::getExtentionName(const std::string& name)
     return result;
 }
 
-ActionTimeline* CSLoader::createTimeline(const std::string& filename)
+ActionTimeline* CSLoader::createTimeline(std::string_view filename)
 {
     std::string suffix = getExtentionName(filename);
 
@@ -367,7 +367,7 @@ ActionTimeline* CSLoader::createTimeline(const std::string& filename)
     return nullptr;
 }
 
-ActionTimeline* CSLoader::createTimeline(const Data& data, const std::string& filename)
+ActionTimeline* CSLoader::createTimeline(const Data& data, std::string_view filename)
 {
     std::string suffix = getExtentionName(filename);
 
@@ -387,7 +387,7 @@ ActionTimeline* CSLoader::createTimeline(const Data& data, const std::string& fi
 }
 
 /*
-ActionTimelineNode* CSLoader::createActionTimelineNode(const std::string& filename)
+ActionTimelineNode* CSLoader::createActionTimelineNode(std::string_view filename)
 {
     Node* root = createNode(filename);
     ActionTimeline* action = createTimeline(filename);
@@ -401,7 +401,7 @@ ActionTimelineNode* CSLoader::createActionTimelineNode(const std::string& filena
     ActionTimelineNode* node = ActionTimelineNode::create(root, action);
     return node;
 }
-ActionTimelineNode* CSLoader::createActionTimelineNode(const std::string& filename, int startIndex, int endIndex, bool
+ActionTimelineNode* CSLoader::createActionTimelineNode(std::string_view filename, int startIndex, int endIndex, bool
 loop)
 {
     ActionTimelineNode* node = createActionTimelineNode(filename);
@@ -413,7 +413,7 @@ loop)
 }
  */
 
-Node* CSLoader::createNodeFromJson(const std::string& filename)
+Node* CSLoader::createNodeFromJson(std::string_view filename)
 {
     if (_recordJsonPath)
     {
@@ -432,7 +432,7 @@ Node* CSLoader::createNodeFromJson(const std::string& filename)
     return node;
 }
 
-Node* CSLoader::loadNodeWithFile(const std::string& fileName)
+Node* CSLoader::loadNodeWithFile(std::string_view fileName)
 {
     // Read content from file
     std::string contentStr = FileUtils::getInstance()->getStringFromFile(fileName);
@@ -445,7 +445,7 @@ Node* CSLoader::loadNodeWithFile(const std::string& fileName)
     return node;
 }
 
-Node* CSLoader::loadNodeWithContent(const std::string& content)
+Node* CSLoader::loadNodeWithContent(std::string_view content)
 {
     rapidjson::Document doc;
     doc.Parse<0>(content.c_str());
@@ -961,12 +961,12 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
     return node;
 }
 
-Node* CSLoader::createNodeWithFlatBuffersFile(const std::string& filename)
+Node* CSLoader::createNodeWithFlatBuffersFile(std::string_view filename)
 {
     return createNodeWithFlatBuffersFile(filename, nullptr);
 }
 
-Node* CSLoader::createNodeWithFlatBuffersFile(const std::string& filename, const ccNodeLoadCallback& callback)
+Node* CSLoader::createNodeWithFlatBuffersFile(std::string_view filename, const ccNodeLoadCallback& callback)
 {
     Node* node = nodeWithFlatBuffersFile(filename, callback);
 
@@ -995,12 +995,12 @@ inline void CSLoader::reconstructNestNode(cocos2d::Node* node)
     }
 }
 
-Node* CSLoader::nodeWithFlatBuffersFile(const std::string& fileName)
+Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName)
 {
     return nodeWithFlatBuffersFile(fileName, nullptr);
 }
 
-Node* CSLoader::nodeWithFlatBuffersFile(const std::string& fileName, const ccNodeLoadCallback& callback)
+Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeLoadCallback& callback)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
 
@@ -1248,8 +1248,8 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const
     }
 }
 
-bool CSLoader::bindCallback(const std::string& callbackName,
-                            const std::string& callbackType,
+bool CSLoader::bindCallback(std::string_view callbackName,
+                            std::string_view callbackType,
                             cocos2d::ui::Widget* sender,
                             cocos2d::Node* handler)
 {
@@ -1293,7 +1293,7 @@ bool CSLoader::bindCallback(const std::string& callbackName,
     return false;
 }
 
-bool CSLoader::isWidget(const std::string& type)
+bool CSLoader::isWidget(std::string_view type)
 {
     return (type == ClassName_Panel || type == ClassName_Button || type == ClassName_CheckBox ||
             type == ClassName_ImageView || type == ClassName_TextAtlas || type == ClassName_LabelAtlas ||
@@ -1303,7 +1303,7 @@ bool CSLoader::isWidget(const std::string& type)
             type == ClassName_PageView || type == ClassName_Widget || type == ClassName_Label);
 }
 
-bool CSLoader::isCustomWidget(const std::string& type)
+bool CSLoader::isCustomWidget(std::string_view type)
 {
     Widget* widget = dynamic_cast<Widget*>(ObjectFactory::getInstance()->createObject(type));
     if (widget)
@@ -1315,7 +1315,7 @@ bool CSLoader::isCustomWidget(const std::string& type)
     return false;
 }
 
-std::string CSLoader::getGUIClassName(const std::string& name)
+std::string CSLoader::getGUIClassName(std::string_view name)
 {
     std::string convertedClassName = name;
     if (name == "Panel")
@@ -1412,7 +1412,7 @@ std::string CSLoader::getWidgetReaderClassName(Widget* widget)
     return readerName;
 }
 
-void CSLoader::registReaderObject(const std::string& className, ObjectFactory::Instance ins)
+void CSLoader::registReaderObject(std::string_view className, ObjectFactory::Instance ins)
 {
     ObjectFactory::TInfo t;
     t._class = className;
@@ -1421,7 +1421,7 @@ void CSLoader::registReaderObject(const std::string& className, ObjectFactory::I
     ObjectFactory::getInstance()->registerType(t);
 }
 
-Node* CSLoader::createNodeWithFlatBuffersForSimulator(const std::string& filename)
+Node* CSLoader::createNodeWithFlatBuffersForSimulator(std::string_view filename)
 {
     FlatBuffersSerialize* fbs  = FlatBuffersSerialize::getInstance();
     fbs->_isSimulator          = true;

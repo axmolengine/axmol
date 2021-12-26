@@ -105,7 +105,7 @@ std::string FileUtilsApple::getNativeWritableAbsolutePath() const
     return strRet;
 }
 
-bool FileUtilsApple::isFileExistInternal(const std::string& filePath) const
+bool FileUtilsApple::isFileExistInternal(std::string_view filePath) const
 {
     if (filePath.empty())
     {
@@ -158,7 +158,7 @@ static int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, str
     return ret;
 }
 
-bool FileUtilsApple::removeDirectory(const std::string& path) const
+bool FileUtilsApple::removeDirectory(std::string_view path) const
 {
     if (path.empty())
     {
@@ -200,7 +200,7 @@ std::string FileUtilsApple::getPathForDirectory(const std::string &dir, const st
 }
 
 
-std::string FileUtilsApple::getFullPathForFilenameWithinDirectory(const std::string& directory, const std::string& filename) const
+std::string FileUtilsApple::getFullPathForFilenameWithinDirectory(std::string_view directory, std::string_view filename) const
 {
     if (directory[0] != '/')
     {
@@ -222,7 +222,7 @@ std::string FileUtilsApple::getFullPathForFilenameWithinDirectory(const std::str
     return "";
 }
 
-bool FileUtilsApple::createDirectory(const std::string& path) const
+bool FileUtilsApple::createDirectory(std::string_view path) const
 {
     CCASSERT(!path.empty(), "Invalid path");
     

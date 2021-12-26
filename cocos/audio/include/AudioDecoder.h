@@ -60,7 +60,7 @@ public:
      * @brief Opens an audio file specified by a file path.
      * @return true if succeed, otherwise false.
      */
-    virtual bool open(const std::string& path) = 0;
+    virtual bool open(std::string_view path) = 0;
 
     /**
      * @brief Checks whether decoder has opened file successfully.

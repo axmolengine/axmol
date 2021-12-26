@@ -314,12 +314,12 @@ GLViewImpl::~GLViewImpl()
     glfwTerminate();
 }
 
-GLViewImpl* GLViewImpl::create(const std::string& viewName)
+GLViewImpl* GLViewImpl::create(std::string_view viewName)
 {
     return GLViewImpl::create(viewName, false);
 }
 
-GLViewImpl* GLViewImpl::create(const std::string& viewName, bool resizable)
+GLViewImpl* GLViewImpl::create(std::string_view viewName, bool resizable)
 {
     auto ret = new GLViewImpl;
     if(ret->initWithRect(viewName, Rect(0, 0, 960, 640), 1.0f, resizable)) {
@@ -330,7 +330,7 @@ GLViewImpl* GLViewImpl::create(const std::string& viewName, bool resizable)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithRect(const std::string& viewName, Rect rect, float frameZoomFactor, bool resizable)
+GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, Rect rect, float frameZoomFactor, bool resizable)
 {
     auto ret = new GLViewImpl;
     if(ret->initWithRect(viewName, rect, frameZoomFactor, resizable)) {
@@ -341,7 +341,7 @@ GLViewImpl* GLViewImpl::createWithRect(const std::string& viewName, Rect rect, f
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName)
+GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
 {
     auto ret = new GLViewImpl();
     if(ret->initWithFullScreen(viewName)) {
@@ -352,7 +352,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName, const GLFWvidmode &videoMode, GLFWmonitor *monitor)
+GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName, const GLFWvidmode &videoMode, GLFWmonitor *monitor)
 {
     auto ret = new GLViewImpl();
     if(ret->initWithFullscreen(viewName, videoMode, monitor)) {
@@ -363,7 +363,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName, const 
     return nullptr;
 }
 
-bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float frameZoomFactor, bool resizable)
+bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZoomFactor, bool resizable)
 {
     setViewName(viewName);
 
@@ -470,7 +470,7 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
     return true;
 }
 
-bool GLViewImpl::initWithFullScreen(const std::string& viewName)
+bool GLViewImpl::initWithFullScreen(std::string_view viewName)
 {
     //Create fullscreen window on primary monitor at its current video mode.
     _monitor = glfwGetPrimaryMonitor();
@@ -555,7 +555,7 @@ void GLViewImpl::setIMEKeyboardState(bool /*bOpen*/)
 }
 
 #if CC_ICON_SET_SUPPORT
-void GLViewImpl::setIcon(const std::string& filename) const {
+void GLViewImpl::setIcon(std::string_view filename) const {
     std::vector<std::string> vec = {filename};
     this->setIcon(vec);
 }

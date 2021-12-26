@@ -89,21 +89,21 @@ public:
      *
      * @return the cookie filename
      */
-    const std::string& getCookieFilename();
+    std::string_view getCookieFilename();
 
     /**
      * Set root certificate path for SSL verification.
      *
      * @param caFile a full path of root certificate.if it is empty, SSL verification is disabled.
      */
-    void setSSLVerification(const std::string& caFile);
+    void setSSLVerification(std::string_view caFile);
 
     /**
      * Get the ssl CA filename
      *
      * @return the ssl CA filename
      */
-    const std::string& getSSLVerification();
+    std::string_view getSSLVerification();
 
     /**
      * Send http request concurrently, non-blocking
@@ -197,7 +197,7 @@ public:
      * Sets custom dns server list:
      * format: "xxx.xxx.xxx.xxx[:port],xxx.xxx.xxx.xxx[:port]
      */
-    void setNameServers(const std::string& servers);
+    void setNameServers(std::string_view servers);
 
     yasio::io_service* getInternalService();
 
@@ -205,7 +205,7 @@ private:
     HttpClient();
     virtual ~HttpClient();
 
-    void processResponse(HttpResponse* response, const std::string& url);
+    void processResponse(HttpResponse* response, std::string_view url);
 
     int tryTakeAvailChannel();
 

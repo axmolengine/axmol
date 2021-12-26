@@ -30,7 +30,7 @@ static cocos2d::Node* createArmatureNode()
     return cocostudio::Armature::create();
 }
 
-static cocos2d::ParticleSystemQuad* createParticleSystemQuad(const std::string& path)
+static cocos2d::ParticleSystemQuad* createParticleSystemQuad(std::string_view path)
 {
     return cocos2d::ParticleSystemQuad::create(path);
 }
@@ -61,8 +61,8 @@ bool (*onAfterLoadObjectAsset)(cocos2d::Node*,
                                cocos2d::ResourceData& assets,
                                int index /*= 0*/)                        = &onLoadObjectAssetDummy;
 void (*onLoadSpriteFramesWithFile)(std::string& file)                    = nullptr;
-void (*onNestingNodeLoading)(const std::string& filePath)                = nullptr;
-void (*onNestingNodeLoaded)(cocos2d::Node*, const std::string& filePath) = nullptr;
+void (*onNestingNodeLoading)(std::string_view filePath)                = nullptr;
+void (*onNestingNodeLoaded)(cocos2d::Node*, std::string_view filePath) = nullptr;
 cocos2d::Node* (*aNode)();
 cocos2d::ui::Widget* (*aWidget)();
 cocos2d::Sprite* (*aSprite)();
@@ -137,7 +137,7 @@ cocos2d::ResourceData cocos2d::wext::makeResourceData(const flatbuffers::Resourc
     return fileData;
 }
 
-cocos2d::ResourceData cocos2d::wext::makeResourceData(const std::string& path, int type)
+cocos2d::ResourceData cocos2d::wext::makeResourceData(std::string_view path, int type)
 {
     cocos2d::ResourceData fileData;
     fileData.file = path;

@@ -319,12 +319,12 @@ void ActionTimeline::removeAnimationInfo(std::string animationName)
     _animationInfos.erase(animationName);
 }
 
-bool ActionTimeline::IsAnimationInfoExists(const std::string& animationName)
+bool ActionTimeline::IsAnimationInfoExists(std::string_view animationName)
 {
     return _animationInfos.find(animationName) != _animationInfos.end();
 }
 
-const AnimationInfo& ActionTimeline::getAnimationInfo(const std::string& animationName)
+const AnimationInfo& ActionTimeline::getAnimationInfo(std::string_view animationName)
 {
     return _animationInfos.find(animationName)->second;
 }
@@ -369,7 +369,7 @@ void ActionTimeline::emitFrameEvent(Frame* frame)
     }
 }
 
-void ActionTimeline::addFrameEndCallFunc(int frameIndex, const std::string& funcKey, std::function<void()> func)
+void ActionTimeline::addFrameEndCallFunc(int frameIndex, std::string_view funcKey, std::function<void()> func)
 {
     if (func != nullptr)
     {
@@ -377,7 +377,7 @@ void ActionTimeline::addFrameEndCallFunc(int frameIndex, const std::string& func
     }
 }
 
-void ActionTimeline::removeFrameEndCallFunc(int frameIndex, const std::string& funcKey)
+void ActionTimeline::removeFrameEndCallFunc(int frameIndex, std::string_view funcKey)
 {
     auto endClipCallsIter = _frameEndCallFuncs.find(frameIndex);
     if (endClipCallsIter != _frameEndCallFuncs.end())

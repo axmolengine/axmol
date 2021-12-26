@@ -162,7 +162,7 @@ const PUTriangle::PositionAndNormal PUTriangle::getRandomVertexAndNormal()
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
-MeshInfo::MeshInfo(const std::string& /*meshName*/,
+MeshInfo::MeshInfo(std::string_view /*meshName*/,
                    MeshSurfaceDistribution distribution,
                    const Quaternion& /*orientation*/,
                    const Vec3& /*scale*/)
@@ -527,12 +527,12 @@ void PUMeshSurfaceEmitter::initParticleDirection(PUParticle3D* particle)
     }
 }
 //-----------------------------------------------------------------------
-const std::string& PUMeshSurfaceEmitter::getMeshName() const
+std::string_view PUMeshSurfaceEmitter::getMeshName() const
 {
     return _meshName;
 }
 //-----------------------------------------------------------------------
-void PUMeshSurfaceEmitter::setMeshName(const std::string& meshName, bool doBuild)
+void PUMeshSurfaceEmitter::setMeshName(std::string_view meshName, bool doBuild)
 {
     _meshName = meshName;
 

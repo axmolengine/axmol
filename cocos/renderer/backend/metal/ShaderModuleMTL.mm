@@ -29,7 +29,7 @@
 
 CC_BACKEND_BEGIN
 
-ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, const std::string& source)
+ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source)
 : ShaderModule(stage)
 {
     // Convert GLSL shader to metal shader
@@ -159,7 +159,7 @@ int ShaderModuleMTL::getUniformLocation(Uniform name) const
     return _uniformLocation[name];
 }
 
-int ShaderModuleMTL::getUniformLocation(const std::string& name) const
+int ShaderModuleMTL::getUniformLocation(std::string_view name) const
 {
     const auto& iter = _uniformInfos.find(name);
     if(iter != _uniformInfos.end())

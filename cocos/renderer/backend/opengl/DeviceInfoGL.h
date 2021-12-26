@@ -79,7 +79,7 @@ public:
     virtual bool checkForFeatureSupported(FeatureType feature) override;
 
 private:
-    bool checkForGLExtension(const std::string& searchName) const;
+    bool checkForGLExtension(std::string_view searchName) const;
 
     static bool checkSupportsCompressedFormat(int compressedFormat);
 

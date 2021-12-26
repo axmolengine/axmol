@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -325,7 +325,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    bool containsBoneMask(const std::string& boneName) const;
+    bool containsBoneMask(std::string_view boneName) const;
     /**
      * - Add a specific bone mask.
      * @param boneName - The bone name.
@@ -340,7 +340,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    void addBoneMask(const std::string& boneName, bool recursive = true);
+    void addBoneMask(std::string_view boneName, bool recursive = true);
     /**
      * - Remove the mask of a specific bone.
      * @param boneName - The bone name.
@@ -355,7 +355,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    void removeBoneMask(const std::string& boneName, bool recursive = true);
+    void removeBoneMask(std::string_view boneName, bool recursive = true);
     /**
      * - Remove all bone masks.
      * @version DragonBones 3.0
@@ -456,7 +456,7 @@ public:
      */
     float getCurrentTime() const;
     void setCurrentTime(float value);
-    inline const std::string& getName() const { return name; }
+    inline std::string_view getName() const { return name; }
 
     /**
      * - The animation data.
