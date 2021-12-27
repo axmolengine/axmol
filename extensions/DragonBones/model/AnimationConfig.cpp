@@ -78,7 +78,7 @@ void AnimationConfig::addBoneMask(Armature* armature, std::string_view boneName,
 
     if (std::find(boneMask.cbegin(), boneMask.cend(), boneName) == boneMask.cend())  // Add mixing
     {
-        boneMask.push_back(boneName);
+        boneMask.push_back(std::string{boneName});
     }
 
     if (recursive)  // Add recursive mixing.
@@ -88,7 +88,7 @@ void AnimationConfig::addBoneMask(Armature* armature, std::string_view boneName,
             if (std::find(boneMask.cbegin(), boneMask.cend(), bone->getName()) == boneMask.cend() &&
                 currentBone->contains(bone))
             {
-                boneMask.push_back(bone->getName());
+                boneMask.push_back(std::string{bone->getName()});
             }
         }
     }
@@ -131,7 +131,7 @@ void AnimationConfig::removeBoneMask(Armature* armature, std::string_view boneNa
 
                     if (!currentBone->contains(bone))
                     {
-                        boneMask.push_back(bone->getName());
+                        boneMask.push_back(std::string{bone->getName()});
                     }
                 }
             }

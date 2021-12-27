@@ -43,8 +43,8 @@ enum MovementEventType
 class Armature;
 class Bone;
 
-typedef void (cocos2d::Ref::*SEL_MovementEventCallFunc)(Armature*, MovementEventType, const std::string&);
-typedef void (cocos2d::Ref::*SEL_FrameEventCallFunc)(Bone*, const std::string&, int, int);
+typedef void (cocos2d::Ref::*SEL_MovementEventCallFunc)(Armature*, MovementEventType, std::string_view);
+typedef void (cocos2d::Ref::*SEL_FrameEventCallFunc)(Bone*, std::string_view, int, int);
 
 #define movementEvent_selector(_SELECTOR) (cocostudio::SEL_MovementEventCallFunc)(&_SELECTOR)
 #define frameEvent_selector(_SELECTOR) (cocostudio::SEL_FrameEventCallFunc)(&_SELECTOR)

@@ -311,7 +311,7 @@ std::string WidgetPropertiesReader::getWidgetReaderClassName(Widget* widget)
 
 std::string WidgetPropertiesReader::getGUIClassName(std::string_view name)
 {
-    std::string convertedClassName = name;
+    std::string convertedClassName;
     if (name == "Panel")
     {
         convertedClassName = "Layout";
@@ -336,6 +336,8 @@ std::string WidgetPropertiesReader::getGUIClassName(std::string_view name)
     {
         convertedClassName = "TextBMFont";
     }
+    else
+        convertedClassName = name;
 
     return convertedClassName;
 }
@@ -429,7 +431,7 @@ Widget* GUIReader::widgetFromBinaryFile(const char* fileName)
 std::string WidgetPropertiesReader::getWidgetReaderClassName(std::string_view classname)
 {
     // create widget reader to parse properties of widget
-    std::string readerName = classname;
+    std::string readerName;
     if (readerName == "Panel")
     {
         readerName = "Layout";
@@ -454,6 +456,8 @@ std::string WidgetPropertiesReader::getWidgetReaderClassName(std::string_view cl
     {
         readerName = "TextBMFont";
     }
+    else
+        readerName = classname;
     readerName.append("Reader");
     return readerName;
 }
@@ -1643,10 +1647,10 @@ void WidgetPropertiesReader0300::setPropsForAllCustomWidgetFromJsonDictionary(st
 {
     GUIReader* guiReader = GUIReader::getInstance();
 
-    std::map<std::string, Ref*>* object_map = guiReader->getParseObjectMap();
+    hlookup::string_map<Ref*>* object_map = guiReader->getParseObjectMap();
     Ref* object                             = (*object_map)[classType];
 
-    std::map<std::string, SEL_ParseEvent>* selector_map = guiReader->getParseCallBackMap();
+    hlookup::string_map<SEL_ParseEvent>* selector_map = guiReader->getParseCallBackMap();
     SEL_ParseEvent selector                             = (*selector_map)[classType];
 
     if (object && selector)

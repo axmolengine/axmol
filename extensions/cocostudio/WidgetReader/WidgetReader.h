@@ -79,9 +79,9 @@ protected:
     void beginSetBasicProperties(cocos2d::ui::Widget* widget);
     void endSetBasicProperties(cocos2d::ui::Widget* widget);
 
-    std::function<int(const std::string&)> valueToInt;
-    std::function<bool(const std::string&)> valueToBool;
-    std::function<float(const std::string&)> valueToFloat;
+    std::function<int(std::string_view)> valueToInt;
+    std::function<bool(std::string_view)> valueToBool;
+    std::function<float(std::string_view)> valueToFloat;
 
     float _sizePercentX;
     float _sizePercentY;

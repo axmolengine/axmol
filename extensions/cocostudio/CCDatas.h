@@ -286,7 +286,7 @@ public:
 
 public:
     std::string name;
-    cocos2d::Map<std::string, BoneData*> boneDataDic;
+    cocos2d::StringMap<BoneData*> boneDataDic;
     float dataVersion;
 };
 
@@ -446,7 +446,7 @@ public:
      * @key    std::string_view
      * @value    MovementBoneData *
      */
-    cocos2d::Map<std::string, MovementBoneData*> movBoneDataDic;
+    cocos2d::StringMap<MovementBoneData*> movBoneDataDic;
 };
 
 /**
@@ -477,7 +477,7 @@ public:
 
 public:
     std::string name;
-    cocos2d::Map<std::string, MovementData*> movementDataDic;
+    cocos2d::StringMap<MovementData*> movementDataDic;
     std::vector<std::string> movementNames;
 };
 

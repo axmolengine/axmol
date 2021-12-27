@@ -138,7 +138,7 @@ void ArmatureAnimation::setSpeedScale(float speedScale)
 
     _processScale = !_movementData ? _speedScale : _speedScale * _movementData->scale;
 
-    const Map<std::string, Bone*>& map = _armature->getBoneDic();
+    auto& map = _armature->getBoneDic();
     for (auto& element : map)
     {
         Bone* bone = element.second;
@@ -212,7 +212,7 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
     MovementBoneData* movementBoneData = nullptr;
     _tweenList.clear();
 
-    const Map<std::string, Bone*>& map = _armature->getBoneDic();
+    auto& map = _armature->getBoneDic();
     for (auto& element : map)
     {
         Bone* bone       = element.second;

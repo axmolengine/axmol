@@ -282,9 +282,9 @@ void CSLoader::init()
 
 Node* CSLoader::createNode(std::string_view filename)
 {
-    std::string path   = filename;
+    auto path   = filename;
     size_t pos         = path.find_last_of('.');
-    std::string suffix = path.substr(pos + 1, path.length());
+    auto suffix = path.substr(pos + 1, path.length());
 
     CSLoader* load = CSLoader::getInstance();
 
@@ -302,9 +302,9 @@ Node* CSLoader::createNode(std::string_view filename)
 
 Node* CSLoader::createNode(std::string_view filename, const ccNodeLoadCallback& callback)
 {
-    std::string path   = filename;
+    auto path          = filename;
     size_t pos         = path.find_last_of('.');
-    std::string suffix = path.substr(pos + 1, path.length());
+    auto suffix        = path.substr(pos + 1, path.length());
 
     CSLoader* load = CSLoader::getInstance();
 
@@ -340,18 +340,18 @@ Node* CSLoader::createNodeWithVisibleSize(std::string_view filename, const ccNod
     return node;
 }
 
-std::string CSLoader::getExtentionName(std::string_view name)
+std::string_view CSLoader::getExtentionName(std::string_view name)
 {
-    std::string path   = name;
+    auto path          = name;
     size_t pos         = path.find_last_of('.');
-    std::string result = path.substr(pos + 1, path.length());
+    auto result         = path.substr(pos + 1, path.length());
 
     return result;
 }
 
 ActionTimeline* CSLoader::createTimeline(std::string_view filename)
 {
-    std::string suffix = getExtentionName(filename);
+    auto suffix = getExtentionName(filename);
 
     ActionTimelineCache* cache = ActionTimelineCache::getInstance();
 
@@ -369,7 +369,7 @@ ActionTimeline* CSLoader::createTimeline(std::string_view filename)
 
 ActionTimeline* CSLoader::createTimeline(const Data& data, std::string_view filename)
 {
-    std::string suffix = getExtentionName(filename);
+    auto suffix = getExtentionName(filename);
 
     ActionTimelineCache* cache = ActionTimelineCache::getInstance();
 
@@ -379,7 +379,7 @@ ActionTimeline* CSLoader::createTimeline(const Data& data, std::string_view file
     }
     else if (suffix == "json" || suffix == "ExportJson")
     {
-        std::string content((char*)data.getBytes(), data.getSize());
+        std::string_view content((char*)data.getBytes(), data.getSize());
         return cache->createActionFromContent(filename, content);
     }
 
@@ -417,7 +417,7 @@ Node* CSLoader::createNodeFromJson(std::string_view filename)
 {
     if (_recordJsonPath)
     {
-        std::string jsonPath = filename.substr(0, filename.find_last_of('/') + 1);
+        auto jsonPath = filename.substr(0, filename.find_last_of('/') + 1);
         GUIReader::getInstance()->setFilePath(jsonPath);
 
         _jsonPath = jsonPath;
@@ -448,7 +448,7 @@ Node* CSLoader::loadNodeWithFile(std::string_view fileName)
 Node* CSLoader::loadNodeWithContent(std::string_view content)
 {
     rapidjson::Document doc;
-    doc.Parse<0>(content.c_str());
+    doc.Parse<0>(content.data(), content.length());
     if (doc.HasParseError())
     {
         CCLOG("GetParseError %d\n", doc.GetParseError());
@@ -760,10 +760,10 @@ Node* CSLoader::loadWidget(const rapidjson::Value& json)
 
     if (isWidget(classname))
     {
-        std::string readerName = getGUIClassName(classname);
+        std::string readerName{getGUIClassName(classname)};
         readerName.append("Reader");
 
-        std::string guiClassName = getGUIClassName(classname);
+        std::string_view guiClassName = getGUIClassName(classname);
         widget                   = dynamic_cast<Widget*>(ObjectFactory::getInstance()->createObject(guiClassName));
         // fix memory leak for v3.3
         // widget->retain();
@@ -785,7 +785,7 @@ Node* CSLoader::loadWidget(const rapidjson::Value& json)
 
         //
         // 1st., custom widget parse properties of parent widget with parent widget reader
-        std::string readerName = getWidgetReaderClassName(widget);
+        std::string_view readerName = getWidgetReaderClassName(widget);
         WidgetReaderProtocol* reader =
             dynamic_cast<WidgetReaderProtocol*>(ObjectFactory::getInstance()->createObject(readerName));
         if (reader && widget)
@@ -990,7 +990,7 @@ inline void CSLoader::reconstructNestNode(cocos2d::Node* node)
         else
         {
             _rootNode = _callbackHandlers.back();
-            CCLOG("after pop back _rootNode name = %s", _rootNode->getName().c_str());
+            CCLOG("after pop back _rootNode name = %s", _rootNode->getName().data());
         }
     }
 }
@@ -1010,7 +1010,7 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
 
     if (buf.isNull())
     {
-        CCLOG("CSLoader::nodeWithFlatBuffersFile - failed read file: %s", fileName.c_str());
+        CCLOG("CSLoader::nodeWithFlatBuffersFile - failed read file: %s", fileName.data());
         CC_ASSERT(false);
         return nullptr;
     }
@@ -1144,7 +1144,7 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const
             {
                 classname = customClassName;
             }
-            std::string readername = getGUIClassName(classname);
+            std::string readername{getGUIClassName(classname)};
             readername.append("Reader");
 
             NodeReaderProtocol* reader =
@@ -1178,8 +1178,8 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const
             Widget* widget = dynamic_cast<Widget*>(node);
             if (widget)
             {
-                std::string callbackName = widget->getCallbackName();
-                std::string callbackType = widget->getCallbackType();
+                auto callbackName = widget->getCallbackName();
+                auto callbackType = widget->getCallbackType();
 
                 bindCallback(callbackName, callbackType, widget, _rootNode);
             }
@@ -1288,7 +1288,7 @@ bool CSLoader::bindCallback(std::string_view callbackName,
         }
     }
 
-    CCLOG("callBackName %s cannot be found", callbackName.c_str());
+    CCLOG("callBackName %s cannot be found", callbackName.data());
 
     return false;
 }
@@ -1315,40 +1315,42 @@ bool CSLoader::isCustomWidget(std::string_view type)
     return false;
 }
 
-std::string CSLoader::getGUIClassName(std::string_view name)
+std::string_view CSLoader::getGUIClassName(std::string_view name)
 {
-    std::string convertedClassName = name;
+    std::string_view convertedClassName;
     if (name == "Panel")
     {
-        convertedClassName = "Layout";
+        convertedClassName = "Layout"sv;
     }
     else if (name == "TextArea")
     {
-        convertedClassName = "Text";
+        convertedClassName = "Text"sv;
     }
     else if (name == "TextButton")
     {
-        convertedClassName = "Button";
+        convertedClassName = "Button"sv;
     }
     else if (name == "Label")
     {
-        convertedClassName = "Text";
+        convertedClassName = "Text"sv;
     }
     else if (name == "LabelAtlas")
     {
-        convertedClassName = "TextAtlas";
+        convertedClassName = "TextAtlas"sv;
     }
     else if (name == "LabelBMFont")
     {
-        convertedClassName = "TextBMFont";
+        convertedClassName = "TextBMFont"sv;
     }
+    else
+        convertedClassName = name;
 
     return convertedClassName;
 }
 
-std::string CSLoader::getWidgetReaderClassName(Widget* widget)
+std::string_view CSLoader::getWidgetReaderClassName(Widget* widget)
 {
-    std::string readerName;
+    std::string_view readerName;
 
     // 1st., custom widget parse properties of parent widget with parent widget reader
     if (dynamic_cast<Button*>(widget))
@@ -1408,6 +1410,8 @@ std::string CSLoader::getWidgetReaderClassName(Widget* widget)
     {
         readerName = "WidgetReader";
     }
+    else
+        readerName = hlookup::empty_sv;
 
     return readerName;
 }
@@ -1495,7 +1499,7 @@ Node* CSLoader::nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree* nod
     }
     else
     {
-        std::string readername = getGUIClassName(classname);
+        std::string readername{getGUIClassName(classname)};
         readername.append("Reader");
 
         NodeReaderProtocol* reader =
@@ -1508,8 +1512,8 @@ Node* CSLoader::nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree* nod
         Widget* widget = dynamic_cast<Widget*>(node);
         if (widget)
         {
-            std::string callbackName = widget->getCallbackName();
-            std::string callbackType = widget->getCallbackType();
+            auto callbackName = widget->getCallbackName();
+            auto callbackType = widget->getCallbackType();
 
             bindCallback(callbackName, callbackType, widget, _rootNode);
         }

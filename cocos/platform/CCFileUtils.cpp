@@ -638,7 +638,7 @@ std::string FileUtils::getPathForFilename(std::string_view filename,
                                           std::string_view searchPath) const
 {
     auto file      = filename;
-    std::string file_path = "";
+    std::string_view file_path = hlookup::empty_sv;
     size_t pos            = filename.find_last_of('/');
     if (pos != std::string::npos)
     {

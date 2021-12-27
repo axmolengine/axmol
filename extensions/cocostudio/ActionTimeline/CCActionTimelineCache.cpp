@@ -136,9 +136,9 @@ void ActionTimelineCache::removeAction(std::string_view fileName)
 
 ActionTimeline* ActionTimelineCache::createAction(std::string_view filename)
 {
-    std::string path   = filename;
-    size_t pos         = path.find_last_of('.');
-    std::string suffix = path.substr(pos + 1, path.length());
+    auto path   = filename;
+    size_t pos  = path.find_last_of('.');
+    auto suffix = path.substr(pos + 1, path.length());
 
     ActionTimelineCache* cache = ActionTimelineCache::getInstance();
 
@@ -183,8 +183,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithFile(std::string_vie
     return loadAnimationActionWithContent(fileName, contentStr);
 }
 
-ActionTimeline* ActionTimelineCache::loadAnimationActionWithContent(std::string_view fileName,
-                                                                    std::string_view content)
+ActionTimeline* ActionTimelineCache::loadAnimationActionWithContent(std::string_view fileName, std::string_view content)
 {
     // if already exists an action with filename, then return this action
     ActionTimeline* action = _animationActions.at(fileName);
@@ -192,7 +191,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithContent(std::string_
         return action;
 
     rapidjson::Document doc;
-    doc.Parse<0>(content.c_str());
+    doc.Parse<0>(content.data(), content.length());
     if (doc.HasParseError())
     {
         CCLOG("GetParseError %d\n", doc.GetParseError());
@@ -442,7 +441,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithFlatBuffersFile(std:
     if (action)
         return action;
 
-    std::string path = fileName;
+    auto path = fileName;
 
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
 
@@ -462,7 +461,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const cocos2d::
     if (action)
         return action;
 
-    std::string path = fileName;
+    auto path = fileName;
 
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
 

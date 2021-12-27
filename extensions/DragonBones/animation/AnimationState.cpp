@@ -83,7 +83,7 @@ void AnimationState::_onClear()
 void AnimationState::_updateTimelines()
 {
     {  // Update constraint timelines.
-        std::map<std::string, std::vector<ConstraintTimelineState*>> constraintTimelines;
+        hlookup::string_map<std::vector<ConstraintTimelineState*>> constraintTimelines;
         for (const auto timeline : _constraintTimelines)  // Create constraint timelines map.
         {
             constraintTimelines[timeline->constraint->getName()].push_back(timeline);
@@ -137,7 +137,7 @@ void AnimationState::_updateTimelines()
 void AnimationState::_updateBoneAndSlotTimelines()
 {
     {  // Update bone timelines.
-        std::map<std::string, std::vector<BoneTimelineState*>> boneTimelines;
+        hlookup::string_map<std::vector<BoneTimelineState*>> boneTimelines;
         for (const auto timeline : _boneTimelines)  // Create bone timelines map.
         {
             boneTimelines[timeline->bone->getName()].push_back(timeline);
@@ -238,7 +238,7 @@ void AnimationState::_updateBoneAndSlotTimelines()
     }
 
     {  // Update slot timelines.
-        std::map<std::string, std::vector<SlotTimelineState*>> slotTimelines;
+        hlookup::string_map<std::vector<SlotTimelineState*>> slotTimelines;
         std::vector<unsigned> ffdFlags;
         for (const auto timeline : _slotTimelines)  // Create slot timelines map.
         {
@@ -760,7 +760,7 @@ void AnimationState::addBoneMask(std::string_view boneName, bool recursive)
 
     if (std::find(_boneMask.cbegin(), _boneMask.cend(), boneName) == _boneMask.cend())
     {
-        _boneMask.push_back(boneName);
+        _boneMask.push_back(std::string{boneName});
     }
 
     if (recursive)  // Add recursive mixing.
@@ -770,7 +770,7 @@ void AnimationState::addBoneMask(std::string_view boneName, bool recursive)
             if (std::find(_boneMask.cbegin(), _boneMask.cend(), bone->getName()) == _boneMask.cend() &&
                 currentBone->contains(bone))
             {
-                _boneMask.push_back(bone->getName());
+                _boneMask.push_back(std::string{bone->getName()});
             }
         }
     }
@@ -816,7 +816,7 @@ void AnimationState::removeBoneMask(std::string_view boneName, bool recursive)
 
                     if (!currentBone->contains(bone))
                     {
-                        _boneMask.push_back(bone->getName());
+                        _boneMask.push_back(std::string{bone->getName()});
                     }
                 }
             }

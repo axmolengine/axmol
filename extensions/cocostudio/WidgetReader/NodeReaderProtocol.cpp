@@ -79,7 +79,7 @@ cocos2d::ui::Layout* (*aLayout)();
 cocos2d::ui::ScrollView* (*aScrollView)();
 cocos2d::ui::ListView* (*aListView)();
 cocos2d::ui::PageView* (*aPageView)();
-cocos2d::ParticleSystemQuad* (*aParticleSystemQuad)(const std::string&);
+cocos2d::ParticleSystemQuad* (*aParticleSystemQuad)(std::string_view);
 cocos2d::Node* (*aArmatureNode)();
 cocostudio::timeline::SkeletonNode* (*aSkeletonNode)();
 cocostudio::timeline::BoneNode* (*aBoneNode)();

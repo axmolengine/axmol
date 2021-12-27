@@ -144,7 +144,7 @@ public:
      * Get Armature's bone dictionary
      * @return Armature's bone dictionary
      */
-    const cocos2d::Map<std::string, Bone*>& getBoneDic() const;
+    const cocos2d::StringMap<Bone*>& getBoneDic() const;
 
     /**
      * This boundingBox will calculate all bones' boundingBox every time
@@ -258,7 +258,7 @@ protected:
 
     mutable bool _armatureTransformDirty;
 
-    cocos2d::Map<std::string, Bone*>
+    cocos2d::StringMap<Bone*>
         _boneDic;  //! The dictionary of the bones, include all bones in the armature, no matter it is the direct bone
                    //! or the indirect bone. It is different from m_pChindren.
 

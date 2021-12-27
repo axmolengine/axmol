@@ -291,6 +291,13 @@ public:
         return _data.erase(position);
     }
 
+    iterator erase(iterator position)
+    {
+        CCASSERT(position != _data.cend(), "Invalid iterator!");
+        position->second->release();
+        return _data.erase(position);
+    }
+
     /**
      * Removes an element with an iterator from the Map<K, V> container.
      *

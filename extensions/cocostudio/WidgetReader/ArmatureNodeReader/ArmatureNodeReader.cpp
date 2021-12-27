@@ -241,5 +241,5 @@ std::string ArmatureNodeReader::getArmatureName(std::string_view exporJsonPath)
 
     if (start == -1)
         start = 0;
-    return exporJsonPath.substr(start, end - start);
+    return std::string{exporJsonPath.substr(start, end - start)};
 }

@@ -50,7 +50,7 @@ struct stExpCocoNode;
 
 #define kCCSVersion 1.0
 
-typedef void (cocos2d::Ref::*SEL_ParseEvent)(const std::string&, cocos2d::Ref*, const rapidjson::Value&);
+typedef void (cocos2d::Ref::*SEL_ParseEvent)(std::string_view, cocos2d::Ref*, const rapidjson::Value&);
 #define parseselector(_SELECTOR) (SEL_ParseEvent)(&_SELECTOR)
 
 class CCS_DLL GUIReader : public cocos2d::Ref
@@ -96,9 +96,9 @@ protected:
     std::string m_strFilePath;
     cocos2d::ValueMap _fileDesignSizes;
 
-    typedef std::map<std::string, SEL_ParseEvent> ParseCallBackMap;
+    typedef hlookup::string_map<SEL_ParseEvent> ParseCallBackMap;
     ParseCallBackMap _mapParseSelector;
-    typedef std::map<std::string, Ref*> ParseObjectMap;
+    typedef hlookup::string_map<Ref*> ParseObjectMap;
     ParseObjectMap _mapObject;
 
 public:

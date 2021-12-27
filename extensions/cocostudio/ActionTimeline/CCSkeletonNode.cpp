@@ -298,7 +298,7 @@ void SkeletonNode::batchDrawAllSubBones()
 #endif  // CC_STUDIO_ENABLED_VIEW
 }
 
-void SkeletonNode::changeSkins(const std::map<std::string, std::string>& boneSkinNameMap)
+void SkeletonNode::changeSkins(const hlookup::string_map<std::string>& boneSkinNameMap)
 {
     for (auto& boneskin : boneSkinNameMap)
     {
@@ -327,14 +327,14 @@ BoneNode* SkeletonNode::getBoneNode(std::string_view boneName)
     return nullptr;
 }
 
-const cocos2d::Map<std::string, BoneNode*>& SkeletonNode::getAllSubBonesMap() const
+const cocos2d::StringMap<BoneNode*>& SkeletonNode::getAllSubBonesMap() const
 {
     return _subBonesMap;
 }
 
-void SkeletonNode::addSkinGroup(std::string groupName, std::map<std::string, std::string> boneSkinNameMap)
+void SkeletonNode::addSkinGroup(std::string groupName, hlookup::string_map<std::string> boneSkinNameMap)
 {
-    _skinGroupMap.emplace(groupName, boneSkinNameMap);
+    _skinGroupMap.emplace(groupName, std::move(boneSkinNameMap));
 }
 
 void SkeletonNode::checkSubBonesDirty()

@@ -129,7 +129,7 @@ void DisplayManager::addDisplay(Node* display, int index)
         skin->setBone(_bone);
         displayData = SpriteDisplayData::create();
 
-        DisplayFactory::initSpriteDisplay(_bone, decoDisplay, skin->getDisplayName().c_str(), skin);
+        DisplayFactory::initSpriteDisplay(_bone, decoDisplay, skin->getDisplayName().data(), skin);
 
         if (SpriteDisplayData* spriteDisplayData = (SpriteDisplayData*)decoDisplay->getDisplayData())
         {

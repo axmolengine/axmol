@@ -251,7 +251,7 @@ private:
     std::vector<SlotTimelineState*> _slotTimelines;
     std::vector<ConstraintTimelineState*> _constraintTimelines;
     std::vector<std::pair<TimelineState*, BaseTimelineType>> _poseTimelines;
-    std::map<std::string, BonePose*> _bonePoses;
+    hlookup::string_map<BonePose*> _bonePoses;
     Armature* _armature;
     ZOrderTimelineState* _zOrderTimeline;
 

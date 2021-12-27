@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -84,7 +84,7 @@ public:
     /**
      * @private
      */
-    std::map<std::string, TextureData*> textures;
+    hlookup::string_map<TextureData*> textures;
     /**
      * @private
      */
@@ -100,13 +100,16 @@ public:
     /**
      * @private
      */
-    inline TextureData* getTexture(std::string_view textureName) const { return mapFind(textures, textureName); }
+    inline TextureData* getTexture(std::string_view textureName) const
+    {
+        return mapFind(textures, textureName);
+    }
 
 protected:
     virtual void _onClear() override;
 
 public:  // For WebAssembly.
-    const std::map<std::string, TextureData*>& getTextures() const { return textures; }
+    const hlookup::string_map<TextureData*>& getTextures() const { return textures; }
 };
 /**
  * @internal

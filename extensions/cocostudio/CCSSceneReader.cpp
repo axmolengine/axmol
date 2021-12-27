@@ -161,7 +161,7 @@ cocos2d::Node* SceneReader::createNodeWithSceneFile(
     }
     else
     {
-        log("read file [%s] error!\n", fileName.c_str());
+        log("read file [%s] error!\n", fileName.data());
     }
     return nullptr;
 }

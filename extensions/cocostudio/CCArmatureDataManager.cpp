@@ -122,7 +122,7 @@ void ArmatureDataManager::addArmatureData(std::string_view id,
 {
     if (RelativeData* data = getRelativeData(configFilePath))
     {
-        data->armatures.push_back(id);
+        data->armatures.push_back(std::string{id});
     }
 
     _armarureDatas.insert(id, armatureData);
@@ -144,7 +144,7 @@ void ArmatureDataManager::addAnimationData(std::string_view id,
 {
     if (RelativeData* data = getRelativeData(configFilePath))
     {
-        data->animations.push_back(id);
+        data->animations.push_back(std::string{id});
     }
 
     _animationDatas.insert(id, animationData);
@@ -166,7 +166,7 @@ void ArmatureDataManager::addTextureData(std::string_view id,
 {
     if (RelativeData* data = getRelativeData(configFilePath))
     {
-        data->textures.push_back(id);
+        data->textures.push_back(std::string{id});
     }
 
     _textureDatas.insert(id, textureData);
@@ -230,7 +230,7 @@ void ArmatureDataManager::addSpriteFrameFromFile(std::string_view plistPath,
 {
     if (RelativeData* data = getRelativeData(configFilePath))
     {
-        data->plistFiles.push_back(plistPath);
+        data->plistFiles.push_back(std::string{plistPath});
     }
     SpriteFrameCacheHelper::getInstance()->addSpriteFrameFromFile(plistPath, imagePath);
 }
@@ -240,15 +240,15 @@ bool ArmatureDataManager::isAutoLoadSpriteFile()
     return _autoLoadSpriteFile;
 }
 
-const cocos2d::Map<std::string, ArmatureData*>& ArmatureDataManager::getArmatureDatas() const
+const cocos2d::StringMap<ArmatureData*>& ArmatureDataManager::getArmatureDatas() const
 {
     return _armarureDatas;
 }
-const cocos2d::Map<std::string, AnimationData*>& ArmatureDataManager::getAnimationDatas() const
+const cocos2d::StringMap<AnimationData*>& ArmatureDataManager::getAnimationDatas() const
 {
     return _animationDatas;
 }
-const cocos2d::Map<std::string, TextureData*>& ArmatureDataManager::getTextureDatas() const
+const cocos2d::StringMap<TextureData*>& ArmatureDataManager::getTextureDatas() const
 {
     return _textureDatas;
 }

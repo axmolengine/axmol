@@ -80,8 +80,7 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
             auto tempAtlas = font->newFontAtlas();
             if (tempAtlas)
             {
-                _atlasMap[atlasName] = tempAtlas;
-                return _atlasMap[atlasName];
+                return _atlasMap.emplace(atlasName, tempAtlas).first->second;
             }
         }
     }
