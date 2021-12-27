@@ -36,6 +36,8 @@ THE SOFTWARE.
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "yasio/cxx17/string_view.hpp"
+
 #define LOG_TAG "CCFileUtils-android.cpp"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
@@ -171,7 +173,7 @@ bool FileUtilsAndroid::isFileExistInternal(std::string_view strFilePath) const
     // Check whether file exists in apk.
     if (strFilePath[0] != '/')
     {
-        const char* s = strFilePath.c_str();
+        const char* s = strFilePath.data();
 
         // Found "assets/" at the beginning of the path and we don't want it
         if (strFilePath.find(_defaultResRootPath) == 0)
@@ -198,7 +200,7 @@ bool FileUtilsAndroid::isFileExistInternal(std::string_view strFilePath) const
     else
     {
         struct stat st;
-        if (::stat(strFilePath.c_str(), &st) == 0)
+        if (::stat(strFilePath.data(), &st) == 0)
             bFound = S_ISREG(st.st_mode);
     }
     return bFound;
@@ -211,13 +213,17 @@ bool FileUtilsAndroid::isDirectoryExistInternal(std::string_view dirPath) const
         return false;
     }
 
-    std::string dirPathCopy = dirPath;
-    if (dirPathCopy[dirPathCopy.length() - 1] == '/')
+    std::string_view path;
+    std::string dirPathCopy;
+    if (dirPath[dirPath.length() - 1] == '/')
     {
-        dirPathCopy.erase(dirPathCopy.length() - 1);
+        dirPathCopy.assign(dirPath.data(), dirPath.length() - 1);
+        path = dirPathCopy;
     }
+    else
+        path = dirPath;
 
-    const char* s = dirPathCopy.c_str();
+    const char* s = path.data();
 
     // find absolute path in flash memory
     if (s[0] == '/')
@@ -275,13 +281,16 @@ int64_t FileUtilsAndroid::getFileSize(std::string_view filepath) const
 
     if (FileUtilsAndroid::assetmanager)
     {
-        string relativePath = filepath;
-        if (filepath.find(_defaultResRootPath) == 0)
+        std::string_view path;
+        std::string relativePath;
+        if (cxx20::starts_with(filepath, _defaultResRootPath))
         {
-            relativePath = filepath.substr(_defaultResRootPath.size());
+            path = relativePath = filepath.substr(_defaultResRootPath.size());
         }
+        else
+            path = filepath;
 
-        AAsset* asset = AAssetManager_open(FileUtilsAndroid::assetmanager, relativePath.data(), AASSET_MODE_UNKNOWN);
+        AAsset* asset = AAssetManager_open(FileUtilsAndroid::assetmanager, path.data(), AASSET_MODE_UNKNOWN);
         if (asset)
         {
             size = AAsset_getLength(asset);
@@ -414,7 +423,7 @@ std::string FileUtilsAndroid::getNativeWritableAbsolutePath() const
 {
     // Fix for Nexus 10 (Android 4.2 multi-user environment)
     // the path is retrieved through Java Context.getCacheDir() method
-    std::string path = JniHelper::callStaticStringMethod("org.cocos2dx.lib.Cocos2dxHelper", "getCocos2dxWritablePath");
+    std::string path = JniHelper::callStaticStringMethod("org.cocos2dx.lib.Cocos2dxHelper"sv, "getCocos2dxWritablePath"sv);
     if (!path.empty())
         path.append("/");
 

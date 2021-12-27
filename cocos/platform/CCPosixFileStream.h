@@ -54,7 +54,7 @@
 #    define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
 
 #    define O_OVERLAP_FLAGS O_CREAT | O_RDWR, S_IRWXU
-#    define posix_open_cxx(path, ...) ::open(path.c_str(), ##__VA_ARGS__)
+#    define posix_open_cxx(path, ...) ::open(path.data(), ##__VA_ARGS__)
 #    define posix_open ::open
 #    define posix_close ::close
 #    define posix_lseek ::lseek

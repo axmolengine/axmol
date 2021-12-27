@@ -292,7 +292,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
             obs.write_bytes(uri.getPath());
             if (!usePostData)
             {
-                auto& query = uri.getQuery();
+                auto query = uri.getQuery();
                 if (!query.empty())
                 {
                     obs.write_byte('?');

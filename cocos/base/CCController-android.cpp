@@ -53,7 +53,7 @@ public:
     static void onConnected(std::string_view deviceName, int deviceId)
     {
         // Check whether the controller is already connected.
-        CCLOG("onConnected %s,%d", deviceName.c_str(), deviceId);
+        CCLOG("onConnected %s,%d", deviceName.data(), deviceId);
 
         auto iter = findController(deviceName, deviceId);
         if (iter != Controller::s_allController.end())
@@ -70,7 +70,7 @@ public:
 
     static void onDisconnected(std::string_view deviceName, int deviceId)
     {
-        CCLOG("onDisconnected %s,%d", deviceName.c_str(), deviceId);
+        CCLOG("onDisconnected %s,%d", deviceName.data(), deviceId);
 
         auto iter = findController(deviceName, deviceId);
         if (iter == Controller::s_allController.end())
@@ -159,7 +159,7 @@ Controller::Controller()
 
 void Controller::receiveExternalKeyEvent(int externalKeyCode, bool receive)
 {
-    JniHelper::callStaticVoidMethod("org.cocos2dx.lib.GameControllerHelper", "receiveExternalKeyEvent", _deviceId,
+    JniHelper::callStaticVoidMethod("org.cocos2dx.lib.GameControllerHelper"sv, "receiveExternalKeyEvent"sv, _deviceId,
                                     externalKeyCode, receive);
 }
 
