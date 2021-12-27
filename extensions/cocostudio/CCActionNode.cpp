@@ -190,7 +190,7 @@ void ActionNode::initWithDictionary(const rapidjson::Value& dic, Ref* root)
 
 int ActionNode::valueToInt(std::string_view value)
 {
-    return atoi(value.c_str());
+    return atoi(value.data());
 }
 bool ActionNode::valueToBool(std::string_view value)
 {
@@ -206,7 +206,7 @@ bool ActionNode::valueToBool(std::string_view value)
 }
 float ActionNode::valueToFloat(std::string_view value)
 {
-    return utils::atof(value.c_str());
+    return utils::atof(value.data());
 }
 
 void ActionNode::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, cocos2d::Ref* root)

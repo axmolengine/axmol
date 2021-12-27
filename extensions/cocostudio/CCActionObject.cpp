@@ -186,7 +186,7 @@ void ActionObject::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNod
 
 int ActionObject::valueToInt(std::string_view value)
 {
-    return atoi(value.c_str());
+    return atoi(value.data());
 }
 bool ActionObject::valueToBool(std::string_view value)
 {
@@ -202,7 +202,7 @@ bool ActionObject::valueToBool(std::string_view value)
 }
 float ActionObject::valueToFloat(std::string_view value)
 {
-    return utils::atof(value.c_str());
+    return utils::atof(value.data());
 }
 
 void ActionObject::addActionNode(ActionNode* node)

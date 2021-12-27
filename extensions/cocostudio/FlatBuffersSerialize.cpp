@@ -453,7 +453,7 @@ int FlatBuffersSerialize::getResourceType(std::string key)
 
 std::string FlatBuffersSerialize::getGUIClassName(std::string_view name)
 {
-    std::string convertedClassName = name;
+    std::string convertedClassName;
     if (name == "Panel")
     {
         convertedClassName = "Layout";
@@ -478,6 +478,8 @@ std::string FlatBuffersSerialize::getGUIClassName(std::string_view name)
     {
         convertedClassName = "TextBMFont";
     }
+    else
+        convertedClassName = name;
 
     return convertedClassName;
 }
@@ -1560,7 +1562,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
                 hasKeyReaded = true;
             }
             // Record corresponding text.
-            else if (strcmp(languageName.c_str(), childElement.name()) == 0)
+            else if (languageName == childElement.name())
             {
                 const char* langText = childElement.text().as_string();
                 if (langText && langText[0] != '\0')

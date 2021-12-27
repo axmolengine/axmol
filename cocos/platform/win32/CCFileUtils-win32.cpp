@@ -84,17 +84,9 @@ static void _checkWorkingPath()
         WCHAR utf16Path[CC_MAX_PATH] = {0};
         int nNum                     = GetCurrentDirectoryW(CC_MAX_PATH - 2, utf16Path);
 
+        s_workingPath.reserve(nNum + 1);
         s_workingPath.assign(utf16Path, nNum);
-
-        //char utf8WorkingDir[CC_MAX_PATH] = {0};
-        //nNum =
-        //    WideCharToMultiByte(CP_UTF8, 0, utf16Path, nNum, utf8WorkingDir, sizeof(utf8WorkingDir), nullptr, nullptr);
-        //if (nNum < (CC_MAX_PATH - 2))
-        //{
-        //    utf8WorkingDir[nNum]     = '\\';
-        //    utf8WorkingDir[nNum + 1] = '\0';
-        //    s_workingPath            = convertPathFormatToUnixStyle(utf8WorkingDir);
-        //}
+        s_workingPath.push_back('\\');
     }
 }
 

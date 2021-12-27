@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -107,7 +107,7 @@ public:
     /**
      * @private
      */
-    std::map<std::string, ArmatureData*> armatures;
+    hlookup::string_map<ArmatureData*> armatures;
     /**
      * @internal
      */
@@ -160,7 +160,7 @@ public:
      */
     inline ArmatureData* getArmature(std::string_view armatureName) const
     {
-        return mapFind<ArmatureData>(armatures, armatureName);
+        return mapFind(armatures, armatureName);
     }
 
 protected:

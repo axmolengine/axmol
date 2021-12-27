@@ -22,7 +22,7 @@ struct string_hash
 
     size_t operator()(const char* str) const { return hash_type{}(str); }
     size_t operator()(std::string_view str) const { return hash_type{}(str); }
-    size_t operator()(std::string const& str) const { return hash_type{}(str); }
+    size_t operator()(const std::string& str) const { return hash_type{}(str); }
 };
 
 struct equal_to
@@ -51,7 +51,7 @@ inline auto set_item(_Cont& cont, std::string_view key, _Valty&& _Val)
 {
     typename _Cont::iterator it = cont.find(key);
     if (it != cont.end())
-        it.value() = std::move(_Val);
+        it->second = std::move(_Val);
     else
         it = cont.emplace(std::string{key}, std::forward<_Valty>(_Val)).first;
     return it;

@@ -47,7 +47,7 @@ bool BaseFactory::_fillBuildArmaturePackage(BuildArmaturePackage& dataPackage,
                                             std::string_view skinName,
                                             std::string_view textureAtlasName) const
 {
-    std::string mapName              = dragonBonesName;
+    auto mapName              = dragonBonesName;
     DragonBonesData* dragonBonesData = nullptr;
     ArmatureData* armatureData       = nullptr;
 
@@ -141,7 +141,7 @@ void BaseFactory::_buildSlots(const BuildArmaturePackage& dataPackage, Armature*
         return;
     }
 
-    std::map<std::string, std::vector<DisplayData*>*> skinSlots;
+    hlookup::string_map<std::vector<DisplayData*>*> skinSlots;
     for (auto& pair : defaultSkin->displays)
     {
         auto& displays        = pair.second;

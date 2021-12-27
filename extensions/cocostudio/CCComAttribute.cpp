@@ -77,12 +77,12 @@ int ComAttribute::getInt(std::string_view key, int def) const
         return v.asInt();
     }
 
-    if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))
+    if (!DICTOOL->checkObjectExist_json(_doc, key.data()))
     {
         return def;
     }
 
-    return DICTOOL->getIntValue_json(_doc, key.c_str());
+    return DICTOOL->getIntValue_json(_doc, key.data());
 }
 
 float ComAttribute::getFloat(std::string_view key, float def) const
@@ -93,11 +93,11 @@ float ComAttribute::getFloat(std::string_view key, float def) const
         return v.asFloat();
     }
 
-    if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))
+    if (!DICTOOL->checkObjectExist_json(_doc, key.data()))
     {
         return def;
     }
-    return DICTOOL->getFloatValue_json(_doc, key.c_str());
+    return DICTOOL->getFloatValue_json(_doc, key.data());
 }
 
 bool ComAttribute::getBool(std::string_view key, bool def) const
@@ -108,12 +108,12 @@ bool ComAttribute::getBool(std::string_view key, bool def) const
         return v.asBool();
     }
 
-    if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))
+    if (!DICTOOL->checkObjectExist_json(_doc, key.data()))
     {
         return def;
     }
 
-    return DICTOOL->getBooleanValue_json(_doc, key.c_str());
+    return DICTOOL->getBooleanValue_json(_doc, key.data());
 }
 
 std::string ComAttribute::getString(std::string_view key, std::string_view def) const
@@ -124,12 +124,12 @@ std::string ComAttribute::getString(std::string_view key, std::string_view def) 
         return v.asString();
     }
 
-    if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))
+    if (!DICTOOL->checkObjectExist_json(_doc, key.data()))
     {
-        return def;
+        return std::string{def};
     }
 
-    return DICTOOL->getStringValue_json(_doc, key.c_str());
+    return DICTOOL->getStringValue_json(_doc, key.data());
 }
 
 ComAttribute* ComAttribute::create()

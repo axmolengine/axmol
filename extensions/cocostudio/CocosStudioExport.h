@@ -31,4 +31,6 @@
 #    define CCS_DLL
 #endif
 
+#include "base/hlookup.h"
+
 #endif /* __CCEXTENSIONEXPORT_H__*/

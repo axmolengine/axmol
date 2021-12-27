@@ -147,11 +147,11 @@ protected:
     bool isWidget(std::string_view type);
     bool isCustomWidget(std::string_view type);
 
-    std::string getGUIClassName(std::string_view name);
-    std::string getWidgetReaderClassName(cocos2d::ui::Widget* widget);
+    std::string_view getGUIClassName(std::string_view name);
+    std::string_view getWidgetReaderClassName(cocos2d::ui::Widget* widget);
 
     inline void reconstructNestNode(cocos2d::Node* node);
-    static inline std::string getExtentionName(std::string_view name);
+    static inline std::string_view getExtentionName(std::string_view name);
 
     typedef std::function<cocos2d::Node*(const rapidjson::Value& json)> NodeCreateFunc;
     typedef std::pair<std::string, NodeCreateFunc> Pair;

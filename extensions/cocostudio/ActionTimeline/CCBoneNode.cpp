@@ -75,20 +75,20 @@ bool BoneNode::init()
     setProgramState(new cocos2d::backend::ProgramState(program), false);
     pipelineDescriptor.programState = _programState;
 
-    _mvpLocation = _programState->getUniformLocation("u_MVPMatrix");
+    _mvpLocation = _programState->getUniformLocation("u_MVPMatrix"sv);
 
     auto vertexLayout         = _programState->getVertexLayout();
     const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position");
+    auto iter                 = attributeInfo.find("a_position"sv);
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_position", iter->second.location, cocos2d::backend::VertexFormat::FLOAT3, 0,
+        vertexLayout->setAttribute("a_position"sv, iter->second.location, cocos2d::backend::VertexFormat::FLOAT3, 0,
                                    false);
     }
-    iter = attributeInfo.find("a_color");
+    iter = attributeInfo.find("a_color"sv);
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_color", iter->second.location, cocos2d::backend::VertexFormat::FLOAT4,
+        vertexLayout->setAttribute("a_color"sv, iter->second.location, cocos2d::backend::VertexFormat::FLOAT4,
                                    3 * sizeof(float), false);
     }
     vertexLayout->setLayout(7 * sizeof(float));
@@ -152,7 +152,7 @@ void BoneNode::removeFromBoneList(BoneNode* bone)
         {
             auto subBones = bone->getAllSubBones();
             subBones.pushBack(bone);
-            for (auto& subBone : subBones)
+            for (auto subBone : subBones)
             {
                 if (subBone->_rootSkeleton == nullptr)
                     continue;
@@ -186,7 +186,7 @@ void BoneNode::addToBoneList(BoneNode* bone)
         {
             auto subBones = bone->getAllSubBones();
             subBones.pushBack(bone);
-            for (auto& subBone : subBones)
+            for (auto subBone : subBones)
             {
                 subBone->_rootSkeleton = _rootSkeleton;
                 auto bonename          = subBone->getName();
@@ -198,8 +198,8 @@ void BoneNode::addToBoneList(BoneNode* bone)
                     _rootSkeleton->_subBonesOrderDirty = true;
                 }
                 else
-                    CCLOG("already has a bone named %s in skeleton %s", bonename.c_str(),
-                          _rootSkeleton->getName().c_str());
+                    CCLOG("already has a bone named %s in skeleton %s", bonename.data(),
+                          _rootSkeleton->getName().data());
             }
         }
         else

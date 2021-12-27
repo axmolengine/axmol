@@ -128,8 +128,8 @@ protected:
     typedef std::function<Frame*(const rapidjson::Value& json)> FrameCreateFunc;
     typedef std::pair<std::string, FrameCreateFunc> Pair;
 
-    std::unordered_map<std::string, FrameCreateFunc> _funcs;
-    cocos2d::Map<std::string, ActionTimeline*> _animationActions;
+    hlookup::string_map<FrameCreateFunc> _funcs;
+    cocos2d::StringMap<ActionTimeline*> _animationActions;
 };
 
 NS_TIMELINE_END

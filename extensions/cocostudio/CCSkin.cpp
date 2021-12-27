@@ -94,7 +94,7 @@ bool Skin::initWithSpriteFrameName(std::string_view spriteFrameName)
     }
     else
     {
-        CCLOG("Can't find CCSpriteFrame with %s. Please check your .plist file", spriteFrameName.c_str());
+        CCLOG("Can't find CCSpriteFrame with %s. Please check your .plist file", spriteFrameName.data());
         ret = false;
     }
 

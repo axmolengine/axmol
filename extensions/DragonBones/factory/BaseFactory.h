@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -68,8 +68,8 @@ public:
     bool autoSearch;
 
 protected:
-    std::map<std::string, DragonBonesData*> _dragonBonesDataMap;
-    std::map<std::string, std::vector<TextureAtlasData*>> _textureAtlasDataMap;
+    hlookup::string_map<DragonBonesData*> _dragonBonesDataMap;
+    hlookup::string_map<std::vector<TextureAtlasData*>> _textureAtlasDataMap;
     DragonBones* _dragonBones;
     DataParser* _dataParser;
 
@@ -550,14 +550,14 @@ public:
     /**
      * @private
      */
-    inline const std::map<std::string, std::vector<TextureAtlasData*>>& getAllTextureAtlasData() const
+    inline const hlookup::string_map<std::vector<TextureAtlasData*>>& getAllTextureAtlasData() const
     {
         return _textureAtlasDataMap;
     }
     /**
      * @private
      */
-    inline const std::map<std::string, DragonBonesData*>& getAllDragonBonesData() const { return _dragonBonesDataMap; }
+    inline const hlookup::string_map<DragonBonesData*>& getAllDragonBonesData() const { return _dragonBonesDataMap; }
     /**
      * - An Worldclock instance updated by engine.
      * @version DragonBones 5.7

@@ -294,7 +294,7 @@ void Armature::changeBoneParent(Bone* bone, std::string_view parentName)
     }
 }
 
-const cocos2d::Map<std::string, Bone*>& Armature::getBoneDic() const
+const cocos2d::StringMap<Bone*>& Armature::getBoneDic() const
 {
     return _boneDic;
 }

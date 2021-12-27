@@ -80,7 +80,7 @@ public:
     std::vector<DisplayData*>* getDisplays(std::string_view slotName) { return mapFindB(displays, slotName); }
 
 public:  // For WebAssembly. TODO parent
-    const std::map<std::string, std::vector<DisplayData*>>& getSlotDisplays() const { return displays; }
+    const hlookup::string_map<std::vector<DisplayData*>>& getSlotDisplays() const { return displays; }
 };
 
 DRAGONBONES_NAMESPACE_END

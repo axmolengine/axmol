@@ -179,9 +179,9 @@ public:
      */
     bool isAutoLoadSpriteFile();
 
-    const cocos2d::Map<std::string, ArmatureData*>& getArmatureDatas() const;
-    const cocos2d::Map<std::string, AnimationData*>& getAnimationDatas() const;
-    const cocos2d::Map<std::string, TextureData*>& getTextureDatas() const;
+    const cocos2d::StringMap<ArmatureData*>& getArmatureDatas() const;
+    const cocos2d::StringMap<AnimationData*>& getAnimationDatas() const;
+    const cocos2d::StringMap<TextureData*>& getTextureDatas() const;
 
 public:
     void addRelativeData(std::string_view configFilePath);
@@ -193,25 +193,25 @@ private:
      *  @key    std::string
      *  @value    ArmatureData *
      */
-    cocos2d::Map<std::string, ArmatureData*> _armarureDatas;
+    cocos2d::StringMap<ArmatureData*> _armarureDatas;
 
     /**
      *    @brief    save animation datas
      *  @key    std::string
      *  @value    AnimationData *
      */
-    cocos2d::Map<std::string, AnimationData*> _animationDatas;
+    cocos2d::StringMap<AnimationData*> _animationDatas;
 
     /**
      *    @brief    save texture datas
      *  @key    std::string
      *  @value    TextureData *
      */
-    cocos2d::Map<std::string, TextureData*> _textureDatas;
+    cocos2d::StringMap<TextureData*> _textureDatas;
 
     bool _autoLoadSpriteFile;
 
-    std::unordered_map<std::string, RelativeData> _relativeDatas;
+    hlookup::string_map<RelativeData> _relativeDatas;
 };
 
 }  // namespace cocostudio
