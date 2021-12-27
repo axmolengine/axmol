@@ -741,7 +741,7 @@ void Texture2D::initProgram()
 
     // setup vertex layout
     auto vertexLayout = _programState->getVertexLayout();
-    auto& attributes  = _programState->getProgram()->getActiveAttributes();
+    auto attributes  = _programState->getProgram()->getActiveAttributes();
     auto iter         = attributes.find("a_position");
     if (iter != attributes.end())
         vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);

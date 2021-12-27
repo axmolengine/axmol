@@ -28,6 +28,8 @@
 
 #include <iosfwd>
 #include <stdint.h>
+#include <string>
+#include <string_view>
 
 namespace cocos2d
 {

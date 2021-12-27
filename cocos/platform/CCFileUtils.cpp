@@ -1206,7 +1206,7 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
 bool FileUtils::isDirectoryExistInternal(std::string_view dirPath) const
 {
     struct stat st;
-    if (stat(dirPath.c_str(), &st) == 0)
+    if (stat(dirPath.data(), &st) == 0)
     {
         return S_ISDIR(st.st_mode);
     }
@@ -1223,7 +1223,7 @@ bool FileUtils::createDirectory(std::string_view path) const
     // Split the path
     size_t start = 0;
     size_t found = path.find_first_of("/\\", start);
-    std::string subpath;
+    std::string_view subpath;
     std::vector<std::string> dirs;
 
     if (found != std::string::npos)
@@ -1232,14 +1232,14 @@ bool FileUtils::createDirectory(std::string_view path) const
         {
             subpath = path.substr(start, found - start + 1);
             if (!subpath.empty())
-                dirs.push_back(subpath);
+                dirs.push_back(std::string{subpath});
             start = found + 1;
             found = path.find_first_of("/\\", start);
             if (found == std::string::npos)
             {
                 if (start < path.length())
                 {
-                    dirs.push_back(path.substr(start));
+                    dirs.push_back(std::string{path.substr(start)});
                 }
                 break;
             }
@@ -1249,17 +1249,17 @@ bool FileUtils::createDirectory(std::string_view path) const
     DIR* dir = NULL;
 
     // Create path recursively
-    subpath = "";
+    std::string strSubpath;
     for (const auto& iter : dirs)
     {
-        subpath += iter;
-        dir = opendir(subpath.c_str());
+        strSubpath += iter;
+        dir = opendir(strSubpath.c_str());
 
         if (!dir)
         {
             // directory doesn't exist, should create a new one
 
-            int ret = mkdir(subpath.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+            int ret = mkdir(strSubpath.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
             if (ret != 0 && (errno != EEXIST))
             {
                 // current directory can not be created, sub directories can not be created too
@@ -1296,14 +1296,14 @@ bool FileUtils::removeDirectory(std::string_view path) const
 #    if !defined(CC_TARGET_OS_TVOS)
 
 #        if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
-    if (nftw(path.c_str(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS) == -1)
+    if (nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS) == -1)
         return false;
     else
         return true;
 #        else
-    std::string command = "rm -r ";
+    std::string command = "rm -r \""s;
     // Path may include space.
-    command += "\"" + path + "\"";
+    command.append(path).append("\"", 1);
     if (system(command.c_str()) >= 0)
         return true;
     else
@@ -1317,7 +1317,7 @@ bool FileUtils::removeDirectory(std::string_view path) const
 
 bool FileUtils::removeFile(std::string_view path) const
 {
-    if (remove(path.c_str()))
+    if (remove(path.data()))
     {
         return false;
     }
@@ -1332,11 +1332,11 @@ bool FileUtils::renameFile(std::string_view oldfullpath, std::string_view newful
     CCASSERT(!oldfullpath.empty(), "Invalid path");
     CCASSERT(!newfullpath.empty(), "Invalid path");
 
-    int errorCode = rename(oldfullpath.c_str(), newfullpath.c_str());
+    int errorCode = rename(oldfullpath.data(), newfullpath.data());
 
     if (0 != errorCode)
     {
-        CCLOGERROR("Fail to rename file %s to %s !Error code is %d", oldfullpath.c_str(), newfullpath.c_str(),
+        CCLOGERROR("Fail to rename file %s to %s !Error code is %d", oldfullpath.data(), newfullpath.data(),
                    errorCode);
         return false;
     }
@@ -1346,8 +1346,10 @@ bool FileUtils::renameFile(std::string_view oldfullpath, std::string_view newful
 bool FileUtils::renameFile(std::string_view path, std::string_view oldname, std::string_view name) const
 {
     CCASSERT(!path.empty(), "Invalid path");
-    std::string oldPath = path + oldname;
-    std::string newPath = path + name;
+    std::string oldPath{path};
+    oldPath += oldname;
+    std::string newPath{path};
+    newPath += name;
 
     return this->renameFile(oldPath, newPath);
 }
@@ -1356,17 +1358,21 @@ int64_t FileUtils::getFileSize(std::string_view filepath) const
 {
     CCASSERT(!filepath.empty(), "Invalid path");
 
-    std::string fullpath = filepath;
+    std::string_view path;
+    std::string fullpath;
     if (!isAbsolutePath(filepath))
     {
         fullpath = fullPathForFilename(filepath);
         if (fullpath.empty())
             return 0;
+        path = fullpath;
     }
+    else
+        path = filepath;
 
     struct stat info;
     // Get data associated with "crt_stat.c":
-    int result = ::stat(fullpath.c_str(), &info);
+    int result = ::stat(path.data(), &info);
 
     // Check if statistics are valid:
     if (result != 0)

@@ -337,7 +337,7 @@ void Sprite3DMaterialCache::removeAllSprite3DMaterial()
 {
     for (auto& itr : _materials)
     {
-        CC_SAFE_RELEASE_NULL(const_cast<Texture2D*>(itr.second));
+        CC_SAFE_RELEASE_NULL(itr.second);
     }
     _materials.clear();
 }
