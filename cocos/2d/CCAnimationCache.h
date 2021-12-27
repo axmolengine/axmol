@@ -120,7 +120,7 @@ private:
     void parseVersion2(const ValueMap& animations);
 
 private:
-    Map<std::string, Animation*, hlookup::string_hash, hlookup::equal_to> _animations;
+    StringMap<Animation*> _animations;
     static AnimationCache* s_sharedAnimationCache;
 };
 

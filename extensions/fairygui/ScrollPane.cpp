@@ -722,13 +722,13 @@ void ScrollPane::changeContentSizeOnScrolling(float deltaWidth, float deltaHeigh
         if (deltaWidth != 0 && isRightmost)
         {
             _xPos = _overlapSize.width;
-            _container->setPositionX(_container->getPositionX() - _xPos);
+            _container->setPositionX(-_xPos);
         }
 
         if (deltaHeight != 0 && isBottom)
         {
             _yPos = _overlapSize.height;
-            _container->setPositionY2(_container->getPositionY2() - _yPos);
+            _container->setPositionY2(-_yPos);
         }
     }
 

@@ -357,11 +357,7 @@ class robin_hash : private Hash, private KeyEqual, private GrowthPolicy {
       "GrowthPolicy::bucket_for_hash must be noexcept.");
   static_assert(noexcept(std::declval<GrowthPolicy>().clear()),
                 "GrowthPolicy::clear must be noexcept.");
-
  public:
-  template <bool IsConst>
-  class robin_iterator;
-
   using key_type = typename KeySelect::key_type;
   using value_type = ValueType;
   using iterator_value_type = IteratorValueType;
@@ -374,8 +370,7 @@ class robin_hash : private Hash, private KeyEqual, private GrowthPolicy {
   using const_reference = const value_type&;
   using pointer = value_type*;
   using const_pointer = const value_type*;
-  using iterator = robin_iterator<false>;
-  using const_iterator = robin_iterator<true>;
+
 
  private:
   /**
@@ -387,11 +382,9 @@ class robin_hash : private Hash, private KeyEqual, private GrowthPolicy {
       StoreHash ||
       ((sizeof(tsl::detail_robin_hash::bucket_entry<value_type, true>) ==
         sizeof(tsl::detail_robin_hash::bucket_entry<value_type, false>)) &&
-       (sizeof(std::size_t) == sizeof(truncated_hash_type) ||
-        is_power_of_two_policy<GrowthPolicy>::value) &&
+       (sizeof(std::size_t) == sizeof(truncated_hash_type) || is_power_of_two_policy<GrowthPolicy>::value) &&
        // Don't store the hash for primitive types with default hash.
-       (!std::is_arithmetic<key_type>::value ||
-        !std::is_same<Hash, std::hash<key_type>>::value));
+       (!std::is_arithmetic<key_type>::value || !std::is_same<Hash, std::hash<key_type>>::value));
 
   /**
    * Only use the stored hash on lookup if we are explicitly asked. We are not
@@ -406,29 +399,33 @@ class robin_hash : private Hash, private KeyEqual, private GrowthPolicy {
    * power of two modulo, we just mask the least significant bytes, we just have
    * to check that the truncated_hash_type didn't truncated more bytes.
    */
-  static bool USE_STORED_HASH_ON_REHASH(size_type bucket_count) {
-    if (STORE_HASH && sizeof(std::size_t) == sizeof(truncated_hash_type)) {
-      TSL_RH_UNUSED(bucket_count);
-      return true;
-    } else if (STORE_HASH && is_power_of_two_policy<GrowthPolicy>::value) {
-      tsl_rh_assert(bucket_count > 0);
-      return (bucket_count - 1) <=
-             (std::numeric_limits<truncated_hash_type>::max)();
-    } else {
-      TSL_RH_UNUSED(bucket_count);
-      return false;
-    }
+  static bool USE_STORED_HASH_ON_REHASH(size_type bucket_count)
+  {
+      if (STORE_HASH && sizeof(std::size_t) == sizeof(truncated_hash_type))
+      {
+          TSL_RH_UNUSED(bucket_count);
+          return true;
+      }
+      else if (STORE_HASH && is_power_of_two_policy<GrowthPolicy>::value)
+      {
+          tsl_rh_assert(bucket_count > 0);
+          return (bucket_count - 1) <= (std::numeric_limits<truncated_hash_type>::max)();
+      }
+      else
+      {
+          TSL_RH_UNUSED(bucket_count);
+          return false;
+      }
   }
 
+public:
   using bucket_entry =
       tsl::detail_robin_hash::bucket_entry<value_type, STORE_HASH>;
   using distance_type = typename bucket_entry::distance_type;
 
-  using buckets_allocator = typename std::allocator_traits<
-      allocator_type>::template rebind_alloc<bucket_entry>;
+  using buckets_allocator      = typename std::allocator_traits<allocator_type>::template rebind_alloc<bucket_entry>;
   using buckets_container_type = std::vector<bucket_entry, buckets_allocator>;
 
- public:
   /**
    * The 'operator*()' and 'operator->()' methods return a const reference and
    * const pointer respectively to the stored value type.
@@ -440,154 +437,155 @@ class robin_hash : private Hash, private KeyEqual, private GrowthPolicy {
    * instead of a `const std::pair<Key, T>&`, the user may modify the key which
    * will put the map in a undefined state.
    */
-   template <>
-   class robin_iterator<false> {
-     friend class robin_hash;
+  class robin_iterator
+  {
+      friend class robin_hash;
 
-   private:
-     using bucket_entry_ptr = typename std::conditional<false, const bucket_entry*, bucket_entry*>::type;
+  private:
+      using bucket_entry_ptr = typename std::conditional<false, const bucket_entry*, bucket_entry*>::type;
 
-     robin_iterator(bucket_entry_ptr bucket) noexcept : m_bucket(bucket) {}
+      robin_iterator(bucket_entry_ptr bucket) noexcept : m_bucket(bucket) {}
 
-   public:
-     using iterator_category = std::forward_iterator_tag;
-     using value_type        = typename robin_hash::iterator_value_type;
-     using difference_type   = std::ptrdiff_t;
-     using reference         = value_type&;
-     using pointer           = value_type*;
+  public:
+      using iterator_category = std::forward_iterator_tag;
+      using value_type        = typename robin_hash::iterator_value_type;
+      using difference_type   = std::ptrdiff_t;
+      using reference         = value_type&;
+      using pointer           = value_type*;
 
-     robin_iterator() noexcept {}
+      robin_iterator() noexcept {}
 
-     robin_iterator(const robin_iterator& other) = default;
-     robin_iterator(robin_iterator&& other)      = default;
-     robin_iterator& operator=(const robin_iterator& other) = default;
-     robin_iterator& operator=(robin_iterator&& other) = default;
+      robin_iterator(const robin_iterator& other) = default;
+      robin_iterator(robin_iterator&& other)      = default;
+      robin_iterator& operator=(const robin_iterator& other) = default;
+      robin_iterator& operator=(robin_iterator&& other) = default;
 
-     const typename robin_hash::key_type& key() const { return KeySelect()(m_bucket->value()); }
+      const typename robin_hash::key_type& key() const { return KeySelect()(m_bucket->value()); }
 
-     template <class U = ValueSelect, 
-         typename std::enable_if<has_mapped_type<U>::value>::type* = nullptr>
-     typename U::value_type& value() const
-     {
-       return U()(m_bucket->value());
-     }
-
-     reference operator*() const { return *reinterpret_cast<pointer>(std::addressof(m_bucket->value())); }
-
-     pointer operator->() const { return reinterpret_cast<pointer>(std::addressof(m_bucket->value())); }
-
-     robin_iterator& operator++()
-     {
-       while (true)
-       {
-         if (m_bucket->last_bucket())
-         {
-           ++m_bucket;
-           return *this;
-         }
-
-         ++m_bucket;
-         if (!m_bucket->empty())
-         {
-           return *this;
-         }
-       }
-     }
-
-     robin_iterator operator++(int)
-     {
-       robin_iterator tmp(*this);
-       ++*this;
-
-       return tmp;
-     }
-
-     friend bool operator==(const robin_iterator& lhs, const robin_iterator& rhs) { return lhs.m_bucket == rhs.m_bucket; }
-
-     friend bool operator!=(const robin_iterator& lhs, const robin_iterator& rhs) { return !(lhs == rhs); }
-
-   private:
-     bucket_entry_ptr m_bucket;
-   };
-
-
-  template <>
-  class robin_iterator<true> {
-    friend class robin_hash;
-
-   private:
-    using bucket_entry_ptr =
-        typename std::conditional<true, const bucket_entry*,
-                                  bucket_entry*>::type;
-
-    robin_iterator(bucket_entry_ptr bucket) noexcept : m_bucket(bucket) {}
-
-   public:
-    using iterator_category = std::forward_iterator_tag;
-    using value_type = const typename robin_hash::value_type;
-    using difference_type = std::ptrdiff_t;
-    using reference = value_type&;
-    using pointer = value_type*;
-
-    robin_iterator() noexcept {}
-
-    // Copy constructor from iterator to const_iterator.
-    robin_iterator(const robin_iterator<false>& other) noexcept
-        : m_bucket(other.m_bucket) {}
-
-    robin_iterator(const robin_iterator& other) = default;
-    robin_iterator(robin_iterator&& other) = default;
-    robin_iterator& operator=(const robin_iterator& other) = default;
-    robin_iterator& operator=(robin_iterator&& other) = default;
-
-    const typename robin_hash::key_type& key() const {
-      return KeySelect()(m_bucket->value());
-    }
-
-    template <class U = ValueSelect,
-              typename std::enable_if<has_mapped_type<U>::value>::type* = nullptr>
-    const typename U::value_type& value() const {
-      return U()(m_bucket->value());
-    }
-
-    reference operator*() const { return m_bucket->value(); }
-
-    pointer operator->() const { return std::addressof(m_bucket->value()); }
-
-    robin_iterator& operator++() {
-      while (true) {
-        if (m_bucket->last_bucket()) {
-          ++m_bucket;
-          return *this;
-        }
-
-        ++m_bucket;
-        if (!m_bucket->empty()) {
-          return *this;
-        }
+      template <class U = ValueSelect, typename std::enable_if<has_mapped_type<U>::value>::type* = nullptr>
+      typename U::value_type& value() const
+      {
+          return U()(m_bucket->value());
       }
-    }
 
-    robin_iterator operator++(int) {
-      robin_iterator tmp(*this);
-      ++*this;
+      reference operator*() const { return *reinterpret_cast<pointer>(std::addressof(m_bucket->value())); }
 
-      return tmp;
-    }
+      pointer operator->() const { return reinterpret_cast<pointer>(std::addressof(m_bucket->value())); }
 
-    friend bool operator==(const robin_iterator& lhs,
-                           const robin_iterator& rhs) {
-      return lhs.m_bucket == rhs.m_bucket;
-    }
+      robin_iterator& operator++()
+      {
+          while (true)
+          {
+              if (m_bucket->last_bucket())
+              {
+                  ++m_bucket;
+                  return *this;
+              }
 
-    friend bool operator!=(const robin_iterator& lhs,
-                           const robin_iterator& rhs) {
-      return !(lhs == rhs);
-    }
+              ++m_bucket;
+              if (!m_bucket->empty())
+              {
+                  return *this;
+              }
+          }
+      }
 
-   private:
-    bucket_entry_ptr m_bucket;
+      robin_iterator operator++(int)
+      {
+          robin_iterator tmp(*this);
+          ++*this;
+
+          return tmp;
+      }
+
+      friend bool operator==(const robin_iterator& lhs, const robin_iterator& rhs)
+      {
+          return lhs.m_bucket == rhs.m_bucket;
+      }
+
+      friend bool operator!=(const robin_iterator& lhs, const robin_iterator& rhs) { return !(lhs == rhs); }
+
+  private:
+      bucket_entry_ptr m_bucket;
   };
+
+  class robin_const_iterator
+  {
+      friend class robin_hash;
+
+  private:
+      using bucket_entry_ptr = typename std::conditional<true, const bucket_entry*, bucket_entry*>::type;
+
+      robin_const_iterator(bucket_entry_ptr bucket) noexcept : m_bucket(bucket) {}
+
+  public:
+      using iterator_category = std::forward_iterator_tag;
+      using value_type        = const typename robin_hash::value_type;
+      using difference_type   = std::ptrdiff_t;
+      using reference         = value_type&;
+      using pointer           = value_type*;
+
+      robin_const_iterator() noexcept {}
+
+      // Copy constructor from iterator to const_iterator.
+      robin_const_iterator(const robin_iterator& other) noexcept : m_bucket(other.m_bucket) {}
+
+      robin_const_iterator(const robin_const_iterator& other) = default;
+      robin_const_iterator(robin_const_iterator&& other) = default;
+      robin_const_iterator& operator=(const robin_const_iterator& other) = default;
+      robin_const_iterator& operator=(robin_const_iterator&& other) = default;
+
+      const typename robin_hash::key_type& key() const { return KeySelect()(m_bucket->value()); }
+
+      template <class U = ValueSelect, typename std::enable_if<has_mapped_type<U>::value>::type* = nullptr>
+      const typename U::value_type& value() const
+      {
+          return U()(m_bucket->value());
+      }
+
+      reference operator*() const { return m_bucket->value(); }
+
+      pointer operator->() const { return std::addressof(m_bucket->value()); }
+
+      robin_const_iterator& operator++()
+      {
+          while (true)
+          {
+              if (m_bucket->last_bucket())
+              {
+                  ++m_bucket;
+                  return *this;
+              }
+
+              ++m_bucket;
+              if (!m_bucket->empty())
+              {
+                  return *this;
+              }
+          }
+      }
+
+      robin_const_iterator operator++(int)
+      {
+          robin_iterator tmp(*this);
+          ++*this;
+
+          return tmp;
+      }
+
+      friend bool operator==(const robin_const_iterator& lhs, const robin_const_iterator& rhs)
+      {
+          return lhs.m_bucket == rhs.m_bucket;
+      }
+
+      friend bool operator!=(const robin_const_iterator& lhs, const robin_const_iterator& rhs) { return !(lhs == rhs); }
+
+  private:
+      bucket_entry_ptr m_bucket;
+  };
+
+  using iterator = robin_iterator;
+  using const_iterator = robin_const_iterator;
 
  public:
 #if defined(__cplusplus) && __cplusplus >= 201402L
