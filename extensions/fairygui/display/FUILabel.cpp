@@ -118,7 +118,7 @@ void FUILabel::applyTextFormat()
         disableEffect(LabelEffect::SHADOW);
 }
 
-bool FUILabel::setBMFontFilePath(const std::string& bmfontFilePath, const Vec2& imageOffset, float fontSize)
+bool FUILabel::setBMFontFilePath(std::string_view bmfontFilePath, const Vec2& imageOffset, float fontSize)
 {
     BitmapFont* bmFont = (BitmapFont*)UIPackage::getItemAssetByURL(bmfontFilePath, PackageItemType::FONT);
     if (bmFont == nullptr)
