@@ -151,20 +151,21 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     _findclose(handle);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID /* || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX*/)
     std::string::size_type pos = fileFolder.find("assets/");
-    std::string relativePath   = fileFolder;
+    std::string_view relativePath   = fileFolder;
     if (pos != std::string::npos)
     {
         // "assets/" is at the beginning of the path and we don't want it
         relativePath = fileFolder.substr(pos + strlen("assets/"));
     }
-    AAssetDir* dir       = AAssetManager_openDir(FileUtilsAndroid::getAssetManager(), relativePath.c_str());
+    AAssetDir* dir       = AAssetManager_openDir(FileUtilsAndroid::getAssetManager(), relativePath.data());
     const char* fileName = nullptr;
-    std::string seg("/");
+    std::string_view seg("/",1);
+    std::string fullpath;
     while ((fileName = AAssetDir_getNextFileName(dir)) != nullptr)
     {
         if (FileUtils::getInstance()->getFileExtension(fileName) == ".material")
         {
-            std::string fullpath = fileFolder + seg + std::string(fileName);
+            fullpath.assign(fileFolder).append(seg).append(fileName);
             loadMaterials(fullpath);
         }
     }
