@@ -45,6 +45,10 @@
 // In the file:
 // member function with suffix "Proc" designed called in DownloaderCURL::_threadProc
 // member function without suffix designed called in main thread
+// !!! Don't change the `long` type to `int32_t` at this file, because
+// some curl variadic API require explicit number types, please refer to:
+//   https://curl.se/libcurl/c/curl_easy_getinfo.html
+//   https://curl.se/libcurl/c/curl_easy_setopt.html
 
 #define CC_CURL_POLL_TIMEOUT_MS 50  // wait until DNS query done
 
@@ -507,15 +511,15 @@ private:
 
         if (task->background)
         {
-            curl_easy_setopt(handle, CURLOPT_NOPROGRESS, false);
+            curl_easy_setopt(handle, CURLOPT_NOPROGRESS, 0L);
             curl_easy_setopt(handle, CURLOPT_PROGRESSDATA, task.get());
             curl_easy_setopt(handle, CURLOPT_PROGRESSFUNCTION, _progressCallbackProc);
         }
         else
         {
-            curl_easy_setopt(handle, CURLOPT_NOPROGRESS, true);
+            curl_easy_setopt(handle, CURLOPT_NOPROGRESS, 1L);
         }
-        curl_easy_setopt(handle, CURLOPT_FAILONERROR, true);
+        curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1L);
         curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1L);
 
         curl_easy_setopt(handle, CURLOPT_OPENSOCKETFUNCTION, _openSocketCallback);
@@ -535,8 +539,8 @@ private:
         else
         {
             // get header options
-            curl_easy_setopt(handle, CURLOPT_HEADER, 1);
-            curl_easy_setopt(handle, CURLOPT_NOBODY, 1);
+            curl_easy_setopt(handle, CURLOPT_HEADER, 1L);
+            curl_easy_setopt(handle, CURLOPT_NOBODY, 1L);
         }
 
         //            if (!sProxy.empty())
@@ -548,20 +552,14 @@ private:
             curl_easy_setopt(handle, CURLOPT_CONNECTTIMEOUT, hints.timeoutInSeconds);
         }
 
-        static const int32_t LOW_SPEED_LIMIT = 1;
-        static const int32_t LOW_SPEED_TIME  = 10;
-        curl_easy_setopt(handle, CURLOPT_LOW_SPEED_LIMIT, LOW_SPEED_LIMIT);
-        curl_easy_setopt(handle, CURLOPT_LOW_SPEED_TIME, LOW_SPEED_TIME);
+        curl_easy_setopt(handle, CURLOPT_LOW_SPEED_LIMIT, 1L);
+        curl_easy_setopt(handle, CURLOPT_LOW_SPEED_TIME, 10L);
 
-        curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0L);
+        curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0L);
 
-        static const int MAX_REDIRS = 5;
-        if (MAX_REDIRS)
-        {
-            curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, true);
-            curl_easy_setopt(handle, CURLOPT_MAXREDIRS, MAX_REDIRS);
-        }
+        curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
+        curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 5L);
 
         coTask->_curl = handle;
 
@@ -574,7 +572,7 @@ private:
         CURLcode rc = CURLE_OK;
         do
         {
-            int32_t httpResponseCode = 0;
+            long httpResponseCode = 0;
             rc                       = curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &httpResponseCode);
             if (CURLE_OK != rc)
             {
@@ -612,7 +610,7 @@ private:
 
             // set header info to coTask
             std::lock_guard<std::recursive_mutex> lock(coTask->_mutex);
-            coTask->_totalBytesExpected = (int64_t)contentLen;
+            coTask->_totalBytesExpected = static_cast<int64_t>(contentLen);
             coTask->_acceptRanges       = acceptRanges;
             if (acceptRanges && fileSize > 0)
             {
