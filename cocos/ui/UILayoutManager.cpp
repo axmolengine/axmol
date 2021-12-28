@@ -236,7 +236,7 @@ Widget* RelativeLayoutManager::getRelativeWidget(Widget* widget)
 {
     Widget* relativeWidget                   = nullptr;
     RelativeLayoutParameter* layoutParameter = dynamic_cast<RelativeLayoutParameter*>(widget->getLayoutParameter());
-    auto relativeName           = layoutParameter->getRelativeToWidgetName();
+    auto relativeName                        = layoutParameter->getRelativeToWidgetName();
 
     if (!relativeName.empty())
     {

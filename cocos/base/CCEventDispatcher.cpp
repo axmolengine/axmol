@@ -451,9 +451,9 @@ void EventDispatcher::addEventListener(EventListener* listener)
 
 void EventDispatcher::forceAddEventListener(EventListener* listener)
 {
-    EventListenerVector* listeners       = nullptr;
-    auto listenerID = listener->getListenerID();
-    auto itr                             = _listenerMap.find(listenerID);
+    EventListenerVector* listeners = nullptr;
+    auto listenerID                = listener->getListenerID();
+    auto itr                       = _listenerMap.find(listenerID);
     if (itr == _listenerMap.end())
     {
 
@@ -1303,8 +1303,7 @@ void EventDispatcher::sortEventListeners(std::string_view listenerID)
     }
 }
 
-void EventDispatcher::sortEventListenersOfSceneGraphPriority(std::string_view listenerID,
-                                                             Node* rootNode)
+void EventDispatcher::sortEventListenersOfSceneGraphPriority(std::string_view listenerID, Node* rootNode)
 {
     auto listeners = getListeners(listenerID);
 

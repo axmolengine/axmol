@@ -280,7 +280,7 @@ void DataReaderHelper::addDataFromFile(std::string_view filePath)
 
     //! find the base file path
     std::string basefilePath;
-    size_t pos               = filePath.find_last_of('/');
+    size_t pos = filePath.find_last_of('/');
 
     if (pos != std::string::npos)
     {
@@ -346,7 +346,7 @@ void DataReaderHelper::addDataFromFileAsync(std::string_view imagePath,
 
     //! find the base file path
     std::string basefilePath;
-    size_t pos               = filePath.find_last_of('/');
+    size_t pos = filePath.find_last_of('/');
 
     if (pos != std::string::npos)
     {
@@ -499,7 +499,8 @@ void DataReaderHelper::addDataFromCache(std::string_view pFileContent, DataInfo*
 {
     pugi::xml_document document;
     pugi::xml_parse_result ret = document.load_buffer(pFileContent.data(), pFileContent.length());
-    if(!ret) return;
+    if (!ret)
+        return;
 
     auto root                  = document.document_element();
     dataInfo->flashToolVersion = root.attribute(VERSION).as_float();

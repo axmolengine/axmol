@@ -150,8 +150,8 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     }
     _findclose(handle);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID /* || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX*/)
-    std::string::size_type pos = fileFolder.find("assets/");
-    std::string_view relativePath   = fileFolder;
+    std::string::size_type pos    = fileFolder.find("assets/");
+    std::string_view relativePath = fileFolder;
     if (pos != std::string::npos)
     {
         // "assets/" is at the beginning of the path and we don't want it
@@ -159,7 +159,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     }
     AAssetDir* dir       = AAssetManager_openDir(FileUtilsAndroid::getAssetManager(), relativePath.data());
     const char* fileName = nullptr;
-    std::string_view seg("/",1);
+    std::string_view seg("/", 1);
     std::string fullpath;
     while ((fileName = AAssetDir_getNextFileName(dir)) != nullptr)
     {

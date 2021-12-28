@@ -59,7 +59,7 @@ static int cmpVersion(std::string_view v1, std::string_view v2)
 
     if (filled1 == 0 || filled2 == 0)
     {
-        return v1 != v2; // strcmp(v1.data(), v2.data());
+        return v1 != v2;  // strcmp(v1.data(), v2.data());
     }
     for (i = 0; i < 4; i++)
     {
@@ -161,8 +161,8 @@ bool Manifest::versionEquals(const Manifest* b) const
     // Check group versions
     else
     {
-        std::vector<std::string> bGroups                       = b->getGroups();
-        auto& bGroupVer = b->getGroupVerions();
+        std::vector<std::string> bGroups = b->getGroups();
+        auto& bGroupVer                  = b->getGroupVerions();
         // Check group size
         if (bGroups.size() != _groups.size())
             return false;
@@ -186,8 +186,8 @@ bool Manifest::versionGreater(
     const Manifest* b,
     const std::function<int(std::string_view versionA, std::string_view versionB)>& handle) const
 {
-    std::string_view localVersion    = getVersion();
-    std::string_view bVersion = b->getVersion();
+    std::string_view localVersion = getVersion();
+    std::string_view bVersion     = b->getVersion();
     bool greater;
     if (handle)
     {

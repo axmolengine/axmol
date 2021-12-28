@@ -684,9 +684,7 @@ public:
 
     /** Validate whether a property has values.
      */
-    bool passValidatePropertyNoValues(PUScriptCompiler* compiler,
-                                      PUPropertyAbstractNode* prop,
-                                      std::string_view token);
+    bool passValidatePropertyNoValues(PUScriptCompiler* compiler, PUPropertyAbstractNode* prop, std::string_view token);
 
     /** Validate whether the number of values is correct.
      */

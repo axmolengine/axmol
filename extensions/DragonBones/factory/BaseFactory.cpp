@@ -47,7 +47,7 @@ bool BaseFactory::_fillBuildArmaturePackage(BuildArmaturePackage& dataPackage,
                                             std::string_view skinName,
                                             std::string_view textureAtlasName) const
 {
-    auto mapName              = dragonBonesName;
+    auto mapName                     = dragonBonesName;
     DragonBonesData* dragonBonesData = nullptr;
     ArmatureData* armatureData       = nullptr;
 

@@ -139,9 +139,9 @@ void Label::updateBMFontScale()
     auto font = _fontAtlas->getFont();
     if (_currentLabelType == LabelType::BMFONT)
     {
-        FontFNT* bmFont        = (FontFNT*)font;
+        FontFNT* bmFont       = (FontFNT*)font;
         auto originalFontSize = bmFont->getOriginalFontSize();
-        _bmfontScale           = _bmFontSize * CC_CONTENT_SCALE_FACTOR() / originalFontSize;
+        _bmfontScale          = _bmFontSize * CC_CONTENT_SCALE_FACTOR() / originalFontSize;
     }
     else
     {

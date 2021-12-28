@@ -98,7 +98,7 @@ private:
     cocos2d::Vec2 _squareVertices[8];
     VertexData _vertexData[8];
 
-    hlookup::string_map<hlookup::string_map<std::string> >
+    hlookup::string_map<hlookup::string_map<std::string>>
         _skinGroupMap;  // map< suit name, map< bone name, skin name> >
     CC_DISALLOW_COPY_AND_ASSIGN(SkeletonNode);
 

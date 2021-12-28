@@ -278,9 +278,7 @@ public:
          * @return True if the auto binding is handled and the associated parameter is
          *      bound, false otherwise.
          */
-        virtual bool resolveAutoBinding(ProgramState*,
-                                        std::string_view uniformName,
-                                        std::string_view autoBinding) = 0;
+        virtual bool resolveAutoBinding(ProgramState*, std::string_view uniformName, std::string_view autoBinding) = 0;
     };
     /**
      * Sets a uniform auto-binding.
