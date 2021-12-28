@@ -54,7 +54,7 @@ namespace cocos2d {
             BREAK_IF_ERR_LOG(fullPath.empty(), "Invalid path!");
 
             _fileStream = cocos2d::FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
-            BREAK_IF_ERR_LOG(_fileStream == nullptr, "FileUtils::openFileStream FAILED for file: %s", fullPath.c_str());
+            BREAK_IF_ERR_LOG(_fileStream == nullptr, "FileUtils::openFileStream FAILED for file: %s", fullPath.data());
             if (_fileStream)
             {
                 _streamSize = _fileStream->size(); // cache the stream size
@@ -100,7 +100,7 @@ namespace cocos2d {
             propertySize = sizeof(totalFrames);
             status = ExtAudioFileGetProperty(_extRef, kExtAudioFileProperty_FileLengthFrames, &propertySize, &totalFrames);
             BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileGetProperty(kExtAudioFileProperty_FileLengthFrames) FAILED, Error = %d",(int)status);
-            BREAK_IF_ERR_LOG(totalFrames <= 0, "Total frames is 0, it's an invalid audio file: %s", fullPath.c_str());
+            BREAK_IF_ERR_LOG(totalFrames <= 0, "Total frames is 0, it's an invalid audio file: %s", fullPath.data());
             _totalFrames = static_cast<uint32_t>(totalFrames);
             _isOpened = true;
 

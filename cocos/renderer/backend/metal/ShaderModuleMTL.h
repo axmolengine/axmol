@@ -71,7 +71,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    inline const std::unordered_map<std::string, UniformInfo>& getAllActiveUniformInfo() const { return _uniformInfos; }
+    inline const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo() const { return _uniformInfos; }
 
     /**
      * Get maximum uniform location.
@@ -83,7 +83,7 @@ public:
      * Get active attribute informations.
      * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
      */
-    inline const std::unordered_map<std::string, AttributeBindInfo> getAttributeInfo() const { return _attributeInfo; }
+    inline const hlookup::string_map<AttributeBindInfo> getAttributeInfo() const { return _attributeInfo; }
 
     /**
      * Get uniform location by engine built-in uniform enum name.
@@ -128,9 +128,9 @@ private:
 
     id<MTLFunction> _mtlFunction = nil;
 
-    std::unordered_map<std::string, UniformInfo> _uniformInfos;
+    hlookup::string_map<UniformInfo> _uniformInfos;
     std::unordered_map<int, UniformInfo> _activeUniformInfos;
-    std::unordered_map<std::string, AttributeBindInfo> _attributeInfo;
+    hlookup::string_map<AttributeBindInfo> _attributeInfo;
 
     int _maxLocation = -1;
     int _uniformLocation[UNIFORM_MAX];

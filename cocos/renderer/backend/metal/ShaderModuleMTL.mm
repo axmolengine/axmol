@@ -36,11 +36,11 @@ ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std
     //TODO: don't crreate/destroy ctx every time.
     glslopt_ctx* ctx = glslopt_initialize(kGlslTargetMetal);
     glslopt_shader_type shaderType = stage == ShaderStage::VERTEX ? kGlslOptShaderVertex : kGlslOptShaderFragment;
-    glslopt_shader* glslShader = glslopt_optimize(ctx, shaderType, source.c_str(), 0);
+    glslopt_shader* glslShader = glslopt_optimize(ctx, shaderType, source.data(), 0);
     if (!glslShader)
     {
         NSLog(@"Can not translate GLSL shader to metal shader:");
-        NSLog(@"%s", source.c_str());
+        NSLog(@"%s", source.data());
         return;
     }
     
@@ -48,7 +48,7 @@ ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std
     if (!metalShader)
     {
         NSLog(@"Can not get metal shader:");
-        NSLog(@"%s", source.c_str());
+        NSLog(@"%s", source.data());
         glslopt_cleanup(ctx);
         return;
     }
@@ -161,10 +161,10 @@ int ShaderModuleMTL::getUniformLocation(Uniform name) const
 
 int ShaderModuleMTL::getUniformLocation(std::string_view name) const
 {
-    const auto& iter = _uniformInfos.find(name);
+    auto iter = _uniformInfos.find(name);
     if(iter != _uniformInfos.end())
     {
-        return _uniformInfos.at(name).location;
+        return iter->second.location;
     }
     else
         return -1;
