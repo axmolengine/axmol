@@ -94,7 +94,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    const std::unordered_map<std::string, AttributeBindInfo> getActiveAttributes() const override;
+    const hlookup::string_map<AttributeBindInfo> getActiveAttributes() const override;
 
     /**
      * Get maximum vertex location.
@@ -127,7 +127,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const std::unordered_map<std::string, UniformInfo>& getAllActiveUniformInfo(
+    virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(
         ShaderStage stage) const override;
 
 private:
