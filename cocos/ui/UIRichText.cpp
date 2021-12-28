@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -1402,7 +1403,7 @@ cocos2d::Color3B RichText::color3BWithString(std::string_view color)
 {
     if (color.length() == 4)
     {
-        int r, g, b;
+        unsigned int r, g, b;
         sscanf(color.data(), "%*c%1x%1x%1x", &r, &g, &b);
         r += r * 16;
         g += g * 16;
@@ -1411,13 +1412,13 @@ cocos2d::Color3B RichText::color3BWithString(std::string_view color)
     }
     else if (color.length() == 7)
     {
-        int r, g, b;
+        unsigned int r, g, b;
         sscanf(color.data(), "%*c%2x%2x%2x", &r, &g, &b);
         return Color3B(r, g, b);
     }
     else if (color.length() == 9)
     {
-        int r, g, b, a;
+        unsigned int r, g, b, a;
         sscanf(color.data(), "%*c%2x%2x%2x%2x", &r, &g, &b, &a);
         return Color3B(r, g, b);
     }
