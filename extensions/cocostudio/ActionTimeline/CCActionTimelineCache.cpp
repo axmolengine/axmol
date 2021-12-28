@@ -441,8 +441,6 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithFlatBuffersFile(std:
     if (action)
         return action;
 
-    auto path = fileName;
-
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
 
     CC_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
@@ -460,8 +458,6 @@ ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const cocos2d::
     ActionTimeline* action = _animationActions.at(fileName);
     if (action)
         return action;
-
-    auto path = fileName;
 
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
 
