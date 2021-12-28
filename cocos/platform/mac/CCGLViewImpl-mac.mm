@@ -481,7 +481,7 @@ bool GLViewImpl::initWithFullScreen(std::string_view viewName)
     return initWithRect(viewName, Rect(0, 0, (float)videoMode->width, (float)videoMode->height), 1.0f, false);
 }
 
-bool GLViewImpl::initWithFullscreen(const std::string& viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor)
+bool GLViewImpl::initWithFullscreen(std::string_view viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor)
 {
     // Create fullscreen on specified monitor at the specified video mode.
     _monitor = monitor;
