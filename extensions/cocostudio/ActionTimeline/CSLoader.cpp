@@ -283,7 +283,7 @@ void CSLoader::init()
 Node* CSLoader::createNode(std::string_view filename)
 {
     auto path   = filename;
-    size_t pos         = path.find_last_of('.');
+    size_t pos  = path.find_last_of('.');
     auto suffix = path.substr(pos + 1, path.length());
 
     CSLoader* load = CSLoader::getInstance();
@@ -302,9 +302,9 @@ Node* CSLoader::createNode(std::string_view filename)
 
 Node* CSLoader::createNode(std::string_view filename, const ccNodeLoadCallback& callback)
 {
-    auto path          = filename;
-    size_t pos         = path.find_last_of('.');
-    auto suffix        = path.substr(pos + 1, path.length());
+    auto path   = filename;
+    size_t pos  = path.find_last_of('.');
+    auto suffix = path.substr(pos + 1, path.length());
 
     CSLoader* load = CSLoader::getInstance();
 
@@ -342,9 +342,9 @@ Node* CSLoader::createNodeWithVisibleSize(std::string_view filename, const ccNod
 
 std::string_view CSLoader::getExtentionName(std::string_view name)
 {
-    auto path          = name;
-    size_t pos         = path.find_last_of('.');
-    auto result         = path.substr(pos + 1, path.length());
+    auto path   = name;
+    size_t pos  = path.find_last_of('.');
+    auto result = path.substr(pos + 1, path.length());
 
     return result;
 }
@@ -764,7 +764,7 @@ Node* CSLoader::loadWidget(const rapidjson::Value& json)
         readerName.append("Reader");
 
         std::string_view guiClassName = getGUIClassName(classname);
-        widget                   = dynamic_cast<Widget*>(ObjectFactory::getInstance()->createObject(guiClassName));
+        widget                        = dynamic_cast<Widget*>(ObjectFactory::getInstance()->createObject(guiClassName));
         // fix memory leak for v3.3
         // widget->retain();
 

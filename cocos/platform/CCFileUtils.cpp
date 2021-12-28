@@ -590,9 +590,7 @@ FileUtils::Status FileUtils::getContents(std::string_view filename, ResizableBuf
     return Status::OK;
 }
 
-void FileUtils::writeValueMapToFile(ValueMap dict,
-                                    std::string_view fullPath,
-                                    std::function<void(bool)> callback) const
+void FileUtils::writeValueMapToFile(ValueMap dict, std::string_view fullPath, std::function<void(bool)> callback) const
 {
 
     performOperationOffthread(
@@ -637,9 +635,9 @@ std::string FileUtils::getPathForFilename(std::string_view filename,
                                           std::string_view resolutionDirectory,
                                           std::string_view searchPath) const
 {
-    auto file      = filename;
+    auto file                  = filename;
     std::string_view file_path = hlookup::empty_sv;
-    size_t pos            = filename.find_last_of('/');
+    size_t pos                 = filename.find_last_of('/');
     if (pos != std::string::npos)
     {
         file_path = filename.substr(0, pos + 1);
@@ -1336,8 +1334,7 @@ bool FileUtils::renameFile(std::string_view oldfullpath, std::string_view newful
 
     if (0 != errorCode)
     {
-        CCLOGERROR("Fail to rename file %s to %s !Error code is %d", oldfullpath.data(), newfullpath.data(),
-                   errorCode);
+        CCLOGERROR("Fail to rename file %s to %s !Error code is %d", oldfullpath.data(), newfullpath.data(), errorCode);
         return false;
     }
     return true;

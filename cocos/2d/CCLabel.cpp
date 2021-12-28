@@ -875,10 +875,7 @@ bool Label::setBMFontFilePath(std::string_view bmfontFilePath, float fontSize)
     return true;
 }
 
-bool Label::setBMFontFilePath(std::string_view bmfontFilePath,
-                              const Rect& imageRect,
-                              bool imageRotated,
-                              float fontSize)
+bool Label::setBMFontFilePath(std::string_view bmfontFilePath, const Rect& imageRect, bool imageRotated, float fontSize)
 {
     FontAtlas* newAtlas = FontAtlasCache::getFontAtlasFNT(bmfontFilePath, imageRect, imageRotated);
 

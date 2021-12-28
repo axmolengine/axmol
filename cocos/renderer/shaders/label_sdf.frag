@@ -21,30 +21,32 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+ 
+const char* label_distanceNormal_frag = R"(
 
-#include "BufferManager.h"
-#include "BufferMTL.h"
+#ifdef GL_ES
+precision lowp float;
+#endif
 
-CC_BACKEND_BEGIN
+varying vec4 v_fragmentColor;
+varying vec2 v_texCoord;
 
-std::vector<BufferMTL*> BufferManager::_buffers;
+uniform vec4 u_textColor;
+uniform sampler2D u_texture;
 
-void BufferManager::addBuffer(BufferMTL* buffer)
+void main()
 {
-    _buffers.push_back(buffer);
+    vec4 color = texture2D(u_texture, v_texCoord);
+    //the texture use dual channel 16-bit output for distance_map
+    //float dist = color.b+color.g/256.0;
+    // the texture use single channel 8-bit output for distance_map
+    float dist = color.a;
+    //TODO: Implementation 'fwidth' for glsl 1.0
+    float width = fwidth(dist);
+    //assign width for constant will lead to a little bit fuzzy,it's temporary measure.
+    //float width = 0.04;
+    //float width = 1.0/16.0;
+    float alpha = smoothstep(0.5-width, 0.5+width, dist) * u_textColor.a;
+    gl_FragColor = v_fragmentColor * vec4(u_textColor.rgb,alpha);
 }
-
-void BufferManager::removeBuffer(BufferMTL* buffer)
-{
-    auto iter = std::find(_buffers.begin(), _buffers.end(), buffer);
-    if (_buffers.end() != iter)
-        _buffers.erase(iter);
-}
-
-void BufferManager::beginFrame()
-{
-    for (auto& buffer : _buffers)
-        buffer->beginFrame();
-}
-
-CC_BACKEND_END
+)";

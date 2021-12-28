@@ -37,7 +37,7 @@ Application* Application::sm_pSharedApplication = nullptr;
 
 Application::Application()
 {
-    CC_ASSERT(! sm_pSharedApplication);
+    CC_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
 }
 
@@ -58,7 +58,7 @@ int Application::run()
 
 void Application::setAnimationInterval(float interval)
 {
-    [[CCDirectorCaller sharedDirectorCaller] setAnimationInterval: interval ];
+    [[CCDirectorCaller sharedDirectorCaller] setAnimationInterval:interval];
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,39 +71,39 @@ Application* Application::getInstance()
     return sm_pSharedApplication;
 }
 
-const char * Application::getCurrentLanguageCode()
+const char* Application::getCurrentLanguageCode()
 {
-    static char code[3]={0};
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
-    NSString *currentLanguage = [languages objectAtIndex:0];
+    static char code[3]       = {0};
+    NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
+    NSArray* languages        = [defaults objectForKey:@"AppleLanguages"];
+    NSString* currentLanguage = [languages objectAtIndex:0];
 
     // get the current language code.(such as English is "en", Chinese is "zh" and so on)
-    NSDictionary* temp = [NSLocale componentsFromLocaleIdentifier:currentLanguage];
-    NSString * languageCode = [temp objectForKey:NSLocaleLanguageCode];
+    NSDictionary* temp     = [NSLocale componentsFromLocaleIdentifier:currentLanguage];
+    NSString* languageCode = [temp objectForKey:NSLocaleLanguageCode];
     [languageCode getCString:code maxLength:3 encoding:NSASCIIStringEncoding];
-    code[2]='\0';
+    code[2] = '\0';
     return code;
 }
 
 LanguageType Application::getCurrentLanguage()
 {
     // get the current language and country config
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
-    NSString *currentLanguage = [languages objectAtIndex:0];
+    NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
+    NSArray* languages        = [defaults objectForKey:@"AppleLanguages"];
+    NSString* currentLanguage = [languages objectAtIndex:0];
 
     // get the current language code.(such as English is "en", Chinese is "zh" and so on)
-    NSDictionary* temp = [NSLocale componentsFromLocaleIdentifier:currentLanguage];
-    NSString * languageCode = [temp objectForKey:NSLocaleLanguageCode];
+    NSDictionary* temp     = [NSLocale componentsFromLocaleIdentifier:currentLanguage];
+    NSString* languageCode = [temp objectForKey:NSLocaleLanguageCode];
 
     return utils::getLanguageTypeByISO2([languageCode UTF8String]);
-
 }
 
 Application::Platform Application::getTargetPlatform()
 {
-    if ([UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad) // idiom for iOS <= 3.2, otherwise: [UIDevice userInterfaceIdiom] is faster.
+    if ([UIDevice.currentDevice userInterfaceIdiom] ==
+        UIUserInterfaceIdiomPad)  // idiom for iOS <= 3.2, otherwise: [UIDevice userInterfaceIdiom] is faster.
     {
         return Platform::OS_IPAD;
     }
@@ -113,21 +113,23 @@ Application::Platform Application::getTargetPlatform()
     }
 }
 
-std::string Application::getVersion() {
+std::string Application::getVersion()
+{
     NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    if (version) {
+    if (version)
+    {
         return [version UTF8String];
     }
     return "";
 }
 
-bool Application::openURL(const std::string &url)
+bool Application::openURL(const std::string& url)
 {
     NSString* msg = [NSString stringWithCString:url.c_str() encoding:NSUTF8StringEncoding];
-    NSURL* nsUrl = [NSURL URLWithString:msg];
-    
+    NSURL* nsUrl  = [NSURL URLWithString:msg];
+
     id application = [UIApplication sharedApplication];
-    if ([application respondsToSelector:@selector(openURL:options:completionHandler:)] )
+    if ([application respondsToSelector:@selector(openURL:options:completionHandler:)])
     {
         [application openURL:nsUrl options:@{} completionHandler:nil];
     }
@@ -137,8 +139,6 @@ bool Application::openURL(const std::string &url)
     }
 }
 
-void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {
-
-}
+void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
 
 NS_CC_END

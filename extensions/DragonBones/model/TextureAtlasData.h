@@ -100,10 +100,7 @@ public:
     /**
      * @private
      */
-    inline TextureData* getTexture(std::string_view textureName) const
-    {
-        return mapFind(textures, textureName);
-    }
+    inline TextureData* getTexture(std::string_view textureName) const { return mapFind(textures, textureName); }
 
 protected:
     virtual void _onClear() override;

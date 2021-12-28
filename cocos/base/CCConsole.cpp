@@ -293,8 +293,7 @@ std::string_view Console::Utility::getPrompt()
 
 Console::Command::Command() : _callback(nullptr) {}
 
-Console::Command::Command(std::string_view name, std::string_view help)
-    : _name(name), _help(help), _callback(nullptr)
+Console::Command::Command(std::string_view name, std::string_view help) : _name(name), _help(help), _callback(nullptr)
 {}
 
 Console::Command::Command(std::string_view name, std::string_view help, const Callback& callback)
@@ -1621,9 +1620,7 @@ void Console::printFileUtils(socket_native_type fd)
     Console::Utility::sendPrompt(fd);
 }
 
-void Console::sendHelp(socket_native_type fd,
-                       const hlookup::string_map<Command*>& commands,
-                       const char* msg)
+void Console::sendHelp(socket_native_type fd, const hlookup::string_map<Command*>& commands, const char* msg)
 {
     Console::Utility::sendToConsole(fd, msg, strlen(msg));
     for (auto& it : commands)

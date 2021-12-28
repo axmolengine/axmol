@@ -288,9 +288,10 @@ void SpriteFrameCache::insertFrame(const std::shared_ptr<SpriteSheet>& spriteShe
 {
     spriteSheet->frames.emplace(frameName);
     _spriteFrames.insert(frameName, spriteFrame);  // add SpriteFrame
-    _spriteSheets[spriteSheet->path]        = spriteSheet;
-    hlookup::set_item(_spriteFrameToSpriteSheetMap, frameName, spriteSheet);  // _spriteFrameToSpriteSheetMap[frameName] = spriteSheet;  // insert
-                                                 // index frameName->plist
+    _spriteSheets[spriteSheet->path] = spriteSheet;
+    hlookup::set_item(_spriteFrameToSpriteSheetMap, frameName,
+                      spriteSheet);  // _spriteFrameToSpriteSheetMap[frameName] = spriteSheet;  // insert
+                                     // index frameName->plist
 }
 
 bool SpriteFrameCache::eraseFrame(std::string_view frameName)

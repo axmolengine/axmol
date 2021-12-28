@@ -160,9 +160,7 @@ void ArmatureDataManager::removeAnimationData(std::string_view id)
     _animationDatas.erase(id);
 }
 
-void ArmatureDataManager::addTextureData(std::string_view id,
-                                         TextureData* textureData,
-                                         std::string_view configFilePath)
+void ArmatureDataManager::addTextureData(std::string_view id, TextureData* textureData, std::string_view configFilePath)
 {
     if (RelativeData* data = getRelativeData(configFilePath))
     {
@@ -190,9 +188,7 @@ void ArmatureDataManager::addArmatureFileInfo(std::string_view configFilePath)
     DataReaderHelper::getInstance()->addDataFromFile(configFilePath);
 }
 
-void ArmatureDataManager::addArmatureFileInfoAsync(std::string_view configFilePath,
-                                                   Ref* target,
-                                                   SEL_SCHEDULE selector)
+void ArmatureDataManager::addArmatureFileInfoAsync(std::string_view configFilePath, Ref* target, SEL_SCHEDULE selector)
 {
     addRelativeData(configFilePath);
 

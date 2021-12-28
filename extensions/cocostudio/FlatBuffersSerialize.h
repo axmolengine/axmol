@@ -111,8 +111,7 @@ public:
     static std::string serializeFlatBuffersWithXMLFile(std::string_view xmlFileName,
                                                        std::string_view flatbuffersFileName);
     /* x-studio spec: serialize flat buffers with XML buffer */
-    static std::string serializeFlatBuffersWithXMLBuffer(std::string& xmlBuffer,
-                                                         std::string_view flatbuffersFileName);
+    static std::string serializeFlatBuffersWithXMLBuffer(std::string& xmlBuffer, std::string_view flatbuffersFileName);
     static std::string serializeFlatBuffersWithOpaque(void* opaque, std::string_view flatbuffersFileName);
 
     // NodeTree

@@ -1114,7 +1114,7 @@ void calculateNamespacePath(std::string_view urlString,
     size_t loc = urlString.rfind('#');
     if (loc != std::string::npos)
     {
-        fileString                      = urlString.substr(0, loc);
+        fileString               = urlString.substr(0, loc);
         auto namespacePathString = urlString.substr(loc + 1);
         while ((loc = namespacePathString.find('/')) != std::string::npos)
         {

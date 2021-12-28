@@ -223,7 +223,7 @@ public:
      *       Member type K is the keys for the elements in the container. defined in Map<K, V> as an alias of its first
      * template parameter (Key).
      */
-    template<typename K2>
+    template <typename K2>
     const V at(const K2& key) const
     {
         auto iter = _data.find(key);
@@ -305,19 +305,19 @@ public:
      *        Member type 'K' is the type of the keys for the elements in the container,
      *        defined in Map<K, V> as an alias of its first template parameter (Key).
      */
-    //size_t erase(const K& k)
+    // size_t erase(const K& k)
     //{
-    //    auto iter = _data.find(k);
-    //    if (iter != _data.end())
-    //    {
-    //        iter->second->release();
-    //        _data.erase(iter);
-    //        return 1;
-    //    }
-    //    return 0;
-    //}
+    //     auto iter = _data.find(k);
+    //     if (iter != _data.end())
+    //     {
+    //         iter->second->release();
+    //         _data.erase(iter);
+    //         return 1;
+    //     }
+    //     return 0;
+    // }
 
-    template<typename _K2>
+    template <typename _K2>
     size_t erase(const _K2& k)
     {
         auto iter = _data.find(k);
@@ -335,7 +335,7 @@ public:
      *
      * @param keys Keys of elements to be erased.
      */
-    template<typename _K2>
+    template <typename _K2>
     void erase(const std::vector<_K2>& keys)
     {
         for (const auto& key : keys)
@@ -438,7 +438,7 @@ protected:
     RefMap _data;
 };
 
-template<typename _Valty>
+template <typename _Valty>
 using StringMap = Map<std::string, _Valty, hlookup::string_hash, hlookup::equal_to>;
 
 NS_CC_END
