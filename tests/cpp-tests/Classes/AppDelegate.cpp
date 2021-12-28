@@ -36,21 +36,18 @@ USING_NS_CC;
 
 // Enable log on Debug version
 #ifndef NDEBUG
-#define COCOS2D_DEBUG 1
+#    define COCOS2D_DEBUG 1
 #else
-#define COCOS2D_DEBUG 0
+#    define COCOS2D_DEBUG 0
 #endif
 
-AppDelegate::AppDelegate()
-: _testController(nullptr)
-{
-}
+AppDelegate::AppDelegate() : _testController(nullptr) {}
 
 AppDelegate::~AppDelegate()
 {
-    //SimpleAudioEngine::end();
-    //TODO: minggo
-    // cocostudio::ArmatureDataManager::destroyInstance();
+    // SimpleAudioEngine::end();
+    // TODO: minggo
+    //  cocostudio::ArmatureDataManager::destroyInstance();
 }
 
 // if you want a different context, modify the value of glContextAttrs
@@ -75,42 +72,42 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // initialize director
     auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
-    if (!glview) {
+    auto glview   = director->getOpenGLView();
+    if (!glview)
+    {
         std::string title = "Cpp Tests";
 #ifndef NDEBUG
         title += " *Debug*",
 #endif
-        glview = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height));
+            glview = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height));
         director->setOpenGLView(glview);
     }
-    
+
     director->setDisplayStats(true);
     director->setAnimationInterval(1.0f / 60);
 
     auto screenSize = glview->getFrameSize();
 
-
     auto fileUtils = FileUtils::getInstance();
     std::vector<std::string> searchPaths;
-    
+
     if (screenSize.height > 320)
     {
         searchPaths.push_back("hd");
         searchPaths.push_back("ccs-res/hd");
         searchPaths.push_back("ccs-res");
         searchPaths.push_back("Manifests");
-        director->setContentScaleFactor(resourceSize.height/designSize.height);
+        director->setContentScaleFactor(resourceSize.height / designSize.height);
 
         searchPaths.push_back("hd/ActionTimeline");
     }
     else
     {
         searchPaths.push_back("ccs-res");
-        
+
         searchPaths.push_back("ActionTimeline");
     }
-    
+
     fileUtils->setSearchPaths(searchPaths);
 
     glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
@@ -129,9 +126,9 @@ void AppDelegate::applicationDidEnterBackground()
 {
     if (_testController)
     {
-//        _testController->onEnterBackground();
+        //        _testController->onEnterBackground();
     }
-    
+
     Director::getInstance()->stopAnimation();
 }
 
@@ -140,8 +137,8 @@ void AppDelegate::applicationWillEnterForeground()
 {
     if (_testController)
     {
-//        _testController->onEnterForeground();
+        //        _testController->onEnterForeground();
     }
-    
+
     Director::getInstance()->startAnimation();
 }

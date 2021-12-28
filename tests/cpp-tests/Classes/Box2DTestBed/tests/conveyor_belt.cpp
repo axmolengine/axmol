@@ -25,77 +25,70 @@
 class ConveyorBelt : public Test
 {
 public:
+    ConveyorBelt()
+    {
+        // Ground
+        {
+            b2BodyDef bd;
+            b2Body* ground = m_world->CreateBody(&bd);
 
-	ConveyorBelt()
-	{
-		// Ground
-		{
-			b2BodyDef bd;
-			b2Body* ground = m_world->CreateBody(&bd);
+            b2EdgeShape shape;
+            shape.SetTwoSided(b2Vec2(-20.0f, 0.0f), b2Vec2(20.0f, 0.0f));
+            ground->CreateFixture(&shape, 0.0f);
+        }
 
-			b2EdgeShape shape;
-			shape.SetTwoSided(b2Vec2(-20.0f, 0.0f), b2Vec2(20.0f, 0.0f));
-			ground->CreateFixture(&shape, 0.0f);
-		}
+        // Platform
+        {
+            b2BodyDef bd;
+            bd.position.Set(-5.0f, 5.0f);
+            b2Body* body = m_world->CreateBody(&bd);
 
-		// Platform
-		{
-			b2BodyDef bd;
-			bd.position.Set(-5.0f, 5.0f);
-			b2Body* body = m_world->CreateBody(&bd);
+            b2PolygonShape shape;
+            shape.SetAsBox(10.0f, 0.5f);
 
-			b2PolygonShape shape;
-			shape.SetAsBox(10.0f, 0.5f);
+            b2FixtureDef fd;
+            fd.shape    = &shape;
+            fd.friction = 0.8f;
+            m_platform  = body->CreateFixture(&fd);
+        }
 
-			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.friction = 0.8f;
-			m_platform = body->CreateFixture(&fd);
-		}
+        // Boxes
+        for (int32 i = 0; i < 5; ++i)
+        {
+            b2BodyDef bd;
+            bd.type = b2_dynamicBody;
+            bd.position.Set(-10.0f + 2.0f * i, 7.0f);
+            b2Body* body = m_world->CreateBody(&bd);
 
-		// Boxes
-		for (int32 i = 0; i < 5; ++i)
-		{
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-10.0f + 2.0f * i, 7.0f);
-			b2Body* body = m_world->CreateBody(&bd);
+            b2PolygonShape shape;
+            shape.SetAsBox(0.5f, 0.5f);
+            body->CreateFixture(&shape, 20.0f);
+        }
+    }
 
-			b2PolygonShape shape;
-			shape.SetAsBox(0.5f, 0.5f);
-			body->CreateFixture(&shape, 20.0f);
-		}
-	}
+    void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override
+    {
+        Test::PreSolve(contact, oldManifold);
 
-	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override
-	{
-		Test::PreSolve(contact, oldManifold);
+        b2Fixture* fixtureA = contact->GetFixtureA();
+        b2Fixture* fixtureB = contact->GetFixtureB();
 
-		b2Fixture* fixtureA = contact->GetFixtureA();
-		b2Fixture* fixtureB = contact->GetFixtureB();
+        if (fixtureA == m_platform)
+        {
+            contact->SetTangentSpeed(5.0f);
+        }
 
-		if (fixtureA == m_platform)
-		{
-			contact->SetTangentSpeed(5.0f);
-		}
+        if (fixtureB == m_platform)
+        {
+            contact->SetTangentSpeed(-5.0f);
+        }
+    }
 
-		if (fixtureB == m_platform)
-		{
-			contact->SetTangentSpeed(-5.0f);
-		}
-	}
+    void Step(Settings& settings) override { Test::Step(settings); }
 
-	void Step(Settings& settings) override
-	{
-		Test::Step(settings);
-	}
+    static Test* Create() { return new ConveyorBelt; }
 
-	static Test* Create()
-	{
-		return new ConveyorBelt;
-	}
-
-	b2Fixture* m_platform;
+    b2Fixture* m_platform;
 };
 
 static int testIndex = RegisterTest("Examples", "Conveyor Belt", ConveyorBelt::Create);

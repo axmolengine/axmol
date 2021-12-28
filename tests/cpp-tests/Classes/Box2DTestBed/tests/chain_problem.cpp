@@ -25,17 +25,16 @@
 class ChainProblem : public Test
 {
 public:
-
     ChainProblem()
     {
         {
             b2Vec2 g(0.0f, -10.0f);
             m_world->SetGravity(g);
-            b2Body** bodies = (b2Body**)b2Alloc(2 * sizeof(b2Body*));
+            b2Body** bodies  = (b2Body**)b2Alloc(2 * sizeof(b2Body*));
             b2Joint** joints = (b2Joint**)b2Alloc(0 * sizeof(b2Joint*));
             {
                 b2BodyDef bd;
-                bd.type = b2BodyType(0);
+                bd.type   = b2BodyType(0);
                 bodies[0] = m_world->CreateBody(&bd);
 
                 {
@@ -56,14 +55,14 @@ public:
             {
                 b2BodyDef bd;
                 bd.type = b2BodyType(2);
-                //bd.position.Set(6.033980250358582e-01f, 3.028350114822388e+00f);
+                // bd.position.Set(6.033980250358582e-01f, 3.028350114822388e+00f);
                 bd.position.Set(1.0f, 3.0f);
                 bodies[1] = m_world->CreateBody(&bd);
 
                 {
                     b2FixtureDef fd;
                     fd.friction = 0.2f;
-                    fd.density = 10.0f;
+                    fd.density  = 10.0f;
                     b2PolygonShape shape;
                     b2Vec2 vs[8];
                     vs[0].Set(0.5f, -3.0f);
@@ -84,11 +83,7 @@ public:
         }
     }
 
-    static Test* Create()
-    {
-        return new ChainProblem;
-    }
-
+    static Test* Create() { return new ChainProblem; }
 };
 
 static int testIndex = RegisterTest("Bugs", "Chain Problem", ChainProblem::Create);

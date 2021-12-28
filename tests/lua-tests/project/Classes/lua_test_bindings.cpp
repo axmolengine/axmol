@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,17 +31,17 @@ NS_CC_BEGIN
 /**
  * Copy DrawNode for 3D geometry drawing.
  */
-class DrawNode3D: public Node
+class DrawNode3D : public Node
 {
 public:
     /** creates and initialize a DrawNode3D node */
     static DrawNode3D* create();
-    
+
     /**
      * Draw 3D Line
      */
-    void drawLine(const Vec3 &from, const Vec3 &to, const Color4F &color);
-    
+    void drawLine(const Vec3& from, const Vec3& to, const Color4F& color);
+
     /**
      * Draw 3D cube
      * @param point to a vertex array who has 8 element.
@@ -55,17 +55,17 @@ public:
      *        vertices[7]:Left-top-back.
      * @param color
      */
-    void drawCube(Vec3* vertices, const Color4F &color);
-    
+    void drawCube(Vec3* vertices, const Color4F& color);
+
     /** Clear the geometry in the node's buffer. */
     void clear();
-    
+
     /**
      * @js NA
      * @lua NA
      */
     const BlendFunc& getBlendFunc() const;
-    
+
     /**
      * @code
      * When this function bound into js or lua,the parameter will be changed
@@ -73,48 +73,41 @@ public:
      * @endcode
      * @lua NA
      */
-    void setBlendFunc(const BlendFunc &blendFunc);
-   
-    
+    void setBlendFunc(const BlendFunc& blendFunc);
+
     // Overrides
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    DrawNode3D();
+    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+
+    CC_CONSTRUCTOR_ACCESS : DrawNode3D();
     virtual ~DrawNode3D();
     virtual bool init() override;
-    
+
 protected:
     struct V3F_C4B
     {
-        Vec3     vertices;
-        Color4B  colors;
+        Vec3 vertices;
+        Color4B colors;
     };
     void ensureCapacity(int count);
-    
-    std::vector<V3F_C4B>        _buffer;
-    
-    BlendFunc                   _blendFunc          = BlendFunc::ALPHA_PREMULTIPLIED;
-    CustomCommand               _customCommand;
-    backend::ProgramState *     _programState       = nullptr;
-    bool                        _dirty              = false;
-    backend::UniformLocation    _locMVPMatrix;
-    
+
+    std::vector<V3F_C4B> _buffer;
+
+    BlendFunc _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
+    CustomCommand _customCommand;
+    backend::ProgramState* _programState = nullptr;
+    bool _dirty                          = false;
+    backend::UniformLocation _locMVPMatrix;
+
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(DrawNode3D);
 
-    bool                        _rendererDepthTestEnabled   = false;
+    bool _rendererDepthTestEnabled = false;
 
     void onBeforeDraw();
     void onAfterDraw();
 };
 
-
-
-
-DrawNode3D::DrawNode3D()
-{
-}
+DrawNode3D::DrawNode3D() {}
 
 DrawNode3D::~DrawNode3D()
 {
@@ -132,26 +125,26 @@ DrawNode3D* DrawNode3D::create()
     {
         CC_SAFE_DELETE(ret);
     }
-    
+
     return ret;
 }
 
 void DrawNode3D::ensureCapacity(int count)
 {
-    CCASSERT(count>=0, "capacity must be >= 0");
-    
-    if(_buffer.size() + count > _buffer.capacity())
+    CCASSERT(count >= 0, "capacity must be >= 0");
+
+    if (_buffer.size() + count > _buffer.capacity())
     {
-        auto newSize = MAX(_buffer.capacity() + (_buffer.capacity() >> 1) , count + _buffer.size());
+        auto newSize = MAX(_buffer.capacity() + (_buffer.capacity() >> 1), count + _buffer.size());
         _buffer.reserve(newSize);
-	}
+    }
 }
 
 bool DrawNode3D::init()
 {
 
-    _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
-    auto program = backend::Program::getBuiltinProgram(backend::ProgramType::LINE_COLOR_3D);
+    _blendFunc    = BlendFunc::ALPHA_PREMULTIPLIED;
+    auto program  = backend::Program::getBuiltinProgram(backend::ProgramType::LINE_COLOR_3D);
     _programState = new backend::ProgramState(program);
 
     _locMVPMatrix = _programState->getUniformLocation("u_MVPMatrix");
@@ -162,10 +155,11 @@ bool DrawNode3D::init()
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
 
-    auto layout = _programState->getVertexLayout();
-    const auto &attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end()) {
+    auto layout               = _programState->getVertexLayout();
+    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+    auto iter                 = attributeInfo.find("a_position");
+    if (iter != attributeInfo.end())
+    {
         layout->setAttribute(iter->first, iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
     }
     iter = attributeInfo.find("a_color");
@@ -175,7 +169,8 @@ bool DrawNode3D::init()
     }
     layout->setLayout(sizeof(V3F_C4B));
 
-    _customCommand.createVertexBuffer(sizeof(V3F_C4B), INITIAL_VERTEX_BUFFER_LENGTH, CustomCommand::BufferUsage::DYNAMIC);
+    _customCommand.createVertexBuffer(sizeof(V3F_C4B), INITIAL_VERTEX_BUFFER_LENGTH,
+                                      CustomCommand::BufferUsage::DYNAMIC);
 
     _customCommand.getPipelineDescriptor().programState = _programState;
 
@@ -186,7 +181,7 @@ bool DrawNode3D::init()
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Need to listen the event only when not use batchnode, because it will use VBO
-    auto listener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom* event){
+    auto listener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom* event) {
         /** listen the event that coming to foreground on Android */
         this->init();
     });
@@ -197,17 +192,18 @@ bool DrawNode3D::init()
     return true;
 }
 
-void DrawNode3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder);
-    //update mvp matrix
-    auto &matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto mvp = matrixP * transform;
+    // update mvp matrix
+    auto& matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    auto mvp      = matrixP * transform;
     _programState->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));
 
-    if (_customCommand.getVertexCapacity() < _buffer.size()) {
+    if (_customCommand.getVertexCapacity() < _buffer.size())
+    {
         auto s = _buffer.size();
-        _customCommand.createVertexBuffer(sizeof(V3F_C4B), s + s/2, CustomCommand::BufferUsage::DYNAMIC);
+        _customCommand.createVertexBuffer(sizeof(V3F_C4B), s + s / 2, CustomCommand::BufferUsage::DYNAMIC);
     }
 
     if (_dirty && !_buffer.empty())
@@ -225,34 +221,36 @@ void DrawNode3D::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
     }
 }
 
-
-void DrawNode3D::drawLine(const Vec3 &from, const Vec3 &to, const Color4F &color)
+void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color4F& color)
 {
     unsigned int vertex_count = 2;
     ensureCapacity(vertex_count);
-    
+
     Color4B col = Color4B(color);
-    V3F_C4B a = {Vec3(from.x, from.y, from.z), col};
-    V3F_C4B b = {Vec3(to.x, to.y, to.z), col, };
+    V3F_C4B a   = {Vec3(from.x, from.y, from.z), col};
+    V3F_C4B b   = {
+        Vec3(to.x, to.y, to.z),
+        col,
+    };
     _buffer.emplace_back(a);
     _buffer.emplace_back(b);
     _dirty = true;
 }
 
-void DrawNode3D::drawCube(Vec3* vertices, const Color4F &color)
+void DrawNode3D::drawCube(Vec3* vertices, const Color4F& color)
 {
     // front face
     drawLine(vertices[0], vertices[1], color);
     drawLine(vertices[1], vertices[2], color);
     drawLine(vertices[2], vertices[3], color);
     drawLine(vertices[3], vertices[0], color);
-    
+
     // back face
     drawLine(vertices[4], vertices[5], color);
     drawLine(vertices[5], vertices[6], color);
     drawLine(vertices[6], vertices[7], color);
     drawLine(vertices[7], vertices[4], color);
-    
+
     // edge
     drawLine(vertices[0], vertices[7], color);
     drawLine(vertices[1], vertices[6], color);
@@ -271,26 +269,26 @@ const BlendFunc& DrawNode3D::getBlendFunc() const
     return _blendFunc;
 }
 
-void DrawNode3D::setBlendFunc(const BlendFunc &blendFunc)
+void DrawNode3D::setBlendFunc(const BlendFunc& blendFunc)
 {
     _blendFunc = blendFunc;
-    //update blend mode
-    auto &blend = _customCommand.getPipelineDescriptor().blendDescriptor;
-    blend.blendEnabled = true;
+    // update blend mode
+    auto& blend                = _customCommand.getPipelineDescriptor().blendDescriptor;
+    blend.blendEnabled         = true;
     blend.sourceRGBBlendFactor = blend.sourceAlphaBlendFactor = _blendFunc.src;
     blend.destinationRGBBlendFactor = blend.destinationAlphaBlendFactor = _blendFunc.dst;
 }
 
 void DrawNode3D::onBeforeDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer            = Director::getInstance()->getRenderer();
     _rendererDepthTestEnabled = renderer->getDepthTest();
     renderer->setDepthTest(true);
 }
 
 void DrawNode3D::onAfterDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
     renderer->setDepthTest(_rendererDepthTestEnabled);
 }
 
@@ -301,7 +299,7 @@ void DrawNode3D::onAfterDraw()
  If call `create` by passing {index1 = 111, index2 = 112, index3 = 113} from lua,
  the type 111,112,113 would be judged as string type before 3.3rc1
  **/
-class ValueTypeJudgeInTable:public Node
+class ValueTypeJudgeInTable : public Node
 {
 public:
     static ValueTypeJudgeInTable* create(ValueMap valueMap);
@@ -311,245 +309,247 @@ ValueTypeJudgeInTable* ValueTypeJudgeInTable::create(ValueMap valueMap)
 {
     ValueTypeJudgeInTable* ret = new ValueTypeJudgeInTable();
     ret->autorelease();
-    
+
     int index = 0;
     for (const auto& iter : valueMap)
     {
         Value::Type type = iter.second.getTypeFamily();
-        if (type == Value::Type::STRING) {
+        if (type == Value::Type::STRING)
+        {
             CCLOG("The type of index %d is string", index);
         }
-        
-        if (type == Value::Type::INTEGER || type == Value::Type::DOUBLE || type == Value::Type::FLOAT) {
+
+        if (type == Value::Type::INTEGER || type == Value::Type::DOUBLE || type == Value::Type::FLOAT)
+        {
             CCLOG("The type of index %d is number", index);
         }
-        
+
         ++index;
     }
-    
+
     return ret;
 }
 NS_CC_END
 
 int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
 {
-    int argc = 0;
+    int argc                  = 0;
     cocos2d::DrawNode3D* cobj = nullptr;
-    bool ok  = true;
-    
+    bool ok                   = true;
+
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
-    
-    
+
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L,1,"cc.DrawNode3D",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+        goto tolua_lerror;
 #endif
-    
-    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L,1,0);
-    
+
+    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L, 1, 0);
+
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(L,"invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_getBlendFunc'", nullptr);
+        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_getBlendFunc'", nullptr);
         return 0;
     }
 #endif
-    
-    argc = lua_gettop(L)-1;
+
+    argc = lua_gettop(L) - 1;
     if (argc == 0)
     {
-        if(!ok)
+        if (!ok)
             return 0;
         const cocos2d::BlendFunc& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(L, ret);
         return 1;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:getBlendFunc",argc, 0);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:getBlendFunc", argc, 0);
     return 0;
-    
+
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L,"#ferror in function 'lua_cocos2dx_DrawNode3D_getBlendFunc'.",&tolua_err);
+    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_getBlendFunc'.", &tolua_err);
 #endif
-    
+
     return 0;
 }
 
 int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
 {
-    int argc = 0;
+    int argc                  = 0;
     cocos2d::DrawNode3D* cobj = nullptr;
-    bool ok = true;
-    
+    bool ok                   = true;
+
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
-    
-    
+
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L,1,"cc.DrawNode3D",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+        goto tolua_lerror;
 #endif
-    
-    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L,1,0);
-    
+
+    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L, 1, 0);
+
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(L,"invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'", nullptr);
+        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'", nullptr);
         return 0;
     }
 #endif
-    
-    argc = lua_gettop(L)-1;
+
+    argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
         cocos2d::BlendFunc arg0;
-        
+
         ok &= luaval_to_blendfunc(L, 2, &arg0, "cc.Sprite3D:setBlendFunc");
-        if(!ok)
+        if (!ok)
         {
-            tolua_error(L,"invalid arguments in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'", nullptr);
+            tolua_error(L, "invalid arguments in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'", nullptr);
             return 0;
         }
         cobj->setBlendFunc(arg0);
         return 0;
     }
-    
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:setBlendFunc",argc, 1);
+
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:setBlendFunc", argc, 1);
     return 0;
-    
+
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L,"#ferror in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'.",&tolua_err);
+    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'.", &tolua_err);
 #endif
-    
+
     return 0;
 }
 
 int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
 {
-    int argc = 0;
+    int argc                  = 0;
     cocos2d::DrawNode3D* cobj = nullptr;
-    bool ok  = true;
-    
+    bool ok                   = true;
+
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
-    
-    
+
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L,1,"cc.DrawNode3D",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+        goto tolua_lerror;
 #endif
-    
-    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L,1,0);
-    
+
+    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L, 1, 0);
+
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(L,"invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_drawLine'", nullptr);
+        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_drawLine'", nullptr);
         return 0;
     }
 #endif
-    
-    argc = lua_gettop(L)-1;
+
+    argc = lua_gettop(L) - 1;
     if (argc == 3)
     {
         cocos2d::Vec3 arg0;
         cocos2d::Vec3 arg1;
         cocos2d::Color4F arg2;
-        
+
         ok &= luaval_to_vec3(L, 2, &arg0, "cc.DrawNode3D:drawLine");
-        
+
         ok &= luaval_to_vec3(L, 3, &arg1, "cc.DrawNode3D:drawLine");
-        
-        ok &=luaval_to_color4f(L, 4, &arg2, "cc.DrawNode3D:drawLine");
-        if(!ok)
+
+        ok &= luaval_to_color4f(L, 4, &arg2, "cc.DrawNode3D:drawLine");
+        if (!ok)
             return 0;
         cobj->drawLine(arg0, arg1, arg2);
         return 0;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:drawLine",argc, 3);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:drawLine", argc, 3);
     return 0;
-    
+
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L,"#ferror in function 'lua_cocos2dx_DrawNode3D_drawLine'.",&tolua_err);
+    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_drawLine'.", &tolua_err);
 #endif
-    
+
     return 0;
 }
 
 int lua_cocos2dx_DrawNode3D_clear(lua_State* L)
 {
-    int argc = 0;
+    int argc                  = 0;
     cocos2d::DrawNode3D* cobj = nullptr;
-    bool ok  = true;
-    
+    bool ok                   = true;
+
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
-    
-    
+
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L,1,"cc.DrawNode3D",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+        goto tolua_lerror;
 #endif
-    
-    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L,1,0);
-    
+
+    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L, 1, 0);
+
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(L,"invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_clear'", nullptr);
+        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_clear'", nullptr);
         return 0;
     }
 #endif
-    
-    argc = lua_gettop(L)-1;
+
+    argc = lua_gettop(L) - 1;
     if (argc == 0)
     {
-        if(!ok)
+        if (!ok)
             return 0;
         cobj->clear();
         return 0;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:clear",argc, 0);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:clear", argc, 0);
     return 0;
-    
+
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L,"#ferror in function 'lua_cocos2dx_DrawNode3D_clear'.",&tolua_err);
+    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_clear'.", &tolua_err);
 #endif
-    
+
     return 0;
 }
 
 int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
 {
-    int argc = 0;
+    int argc                  = 0;
     cocos2d::DrawNode3D* cobj = nullptr;
-    bool ok  = true;
-    
+    bool ok                   = true;
+
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
-    
-    
+
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L,1,"cc.DrawNode3D",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+        goto tolua_lerror;
 #endif
-    
-    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L,1,0);
-    
+
+    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L, 1, 0);
+
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(L,"invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_drawCube'", nullptr);
+        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_drawCube'", nullptr);
         return 0;
     }
 #endif
-    
-    argc = lua_gettop(L)-1;
+
+    argc = lua_gettop(L) - 1;
     if (argc == 2)
     {
         std::vector<cocos2d::Vec3> arg0;
@@ -572,7 +572,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
             }
 #endif
             ok &= luaval_to_vec3(L, lua_gettop(L), &vec3);
-            
+
 #if COCOS2D_DEBUG >= 1
             if (!ok)
             {
@@ -580,25 +580,25 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
                 goto tolua_lerror;
             }
 #endif
-            //arg0[i] = vec3;
+            // arg0[i] = vec3;
             arg0.push_back(vec3);
             lua_pop(L, 1);
         }
-        
-        ok &=luaval_to_color4f(L, 3, &arg1, "cc.DrawNode3D:drawCube");
-        if(!ok)
+
+        ok &= luaval_to_color4f(L, 3, &arg1, "cc.DrawNode3D:drawCube");
+        if (!ok)
             return 0;
         cobj->drawCube(&arg0[0], arg1);
         return 0;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:drawCube",argc, 2);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:drawCube", argc, 2);
     return 0;
-    
+
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L,"#ferror in function 'lua_cocos2dx_DrawNode3D_drawCube'.",&tolua_err);
+    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_drawCube'.", &tolua_err);
 #endif
-    
+
     return 0;
 }
 
@@ -606,47 +606,48 @@ int lua_cocos2dx_DrawNode3D_create(lua_State* L)
 {
     int argc = 0;
     bool ok  = true;
-    
+
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
-    
+
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(L,1,"cc.DrawNode3D",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+        goto tolua_lerror;
 #endif
-    
+
     argc = lua_gettop(L) - 1;
-    
+
     if (argc == 0)
     {
-        if(!ok)
+        if (!ok)
             return 0;
         cocos2d::DrawNode3D* ret = cocos2d::DrawNode3D::create();
-        object_to_luaval<cocos2d::DrawNode3D>(L, "cc.DrawNode3D",(cocos2d::DrawNode3D*)ret);
+        object_to_luaval<cocos2d::DrawNode3D>(L, "cc.DrawNode3D", (cocos2d::DrawNode3D*)ret);
         return 1;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "cc.DrawNode3D:create",argc, 0);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "cc.DrawNode3D:create", argc, 0);
     return 0;
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L,"#ferror in function 'lua_cocos2dx_DrawNode3D_create'.",&tolua_err);
+    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_create'.", &tolua_err);
 #endif
     return 0;
 }
 
 int lua_register_cocos2dx_DrawNode3D(lua_State* L)
 {
-    tolua_usertype(L,"cc.DrawNode3D");
-    tolua_cclass(L,"DrawNode3D","cc.DrawNode3D","cc.Node",nullptr);
-    
-    tolua_beginmodule(L,"DrawNode3D");
-    tolua_function(L,"getBlendFunc",lua_cocos2dx_DrawNode3D_getBlendFunc);
-    tolua_function(L,"drawLine",lua_cocos2dx_DrawNode3D_drawLine);
-    tolua_function(L,"clear",lua_cocos2dx_DrawNode3D_clear);
-    tolua_function(L,"drawCube",lua_cocos2dx_DrawNode3D_drawCube);
-    tolua_function(L,"create", lua_cocos2dx_DrawNode3D_create);
+    tolua_usertype(L, "cc.DrawNode3D");
+    tolua_cclass(L, "DrawNode3D", "cc.DrawNode3D", "cc.Node", nullptr);
+
+    tolua_beginmodule(L, "DrawNode3D");
+    tolua_function(L, "getBlendFunc", lua_cocos2dx_DrawNode3D_getBlendFunc);
+    tolua_function(L, "drawLine", lua_cocos2dx_DrawNode3D_drawLine);
+    tolua_function(L, "clear", lua_cocos2dx_DrawNode3D_clear);
+    tolua_function(L, "drawCube", lua_cocos2dx_DrawNode3D_drawCube);
+    tolua_function(L, "create", lua_cocos2dx_DrawNode3D_create);
     tolua_endmodule(L);
-    auto typeName = typeid(cocos2d::DrawNode3D).name();
+    auto typeName                                    = typeid(cocos2d::DrawNode3D).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.DrawNode3D";
     g_typeCast[typeName]                             = "cc.DrawNode3D";
     return 1;
@@ -656,47 +657,49 @@ int lua_cocos2dx_ValueTypeJudgeInTable_create(lua_State* L)
 {
     int argc = 0;
     bool ok  = true;
-    
+
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
-    
+
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(L,1,"cc.ValueTypeJudgeInTable",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(L, 1, "cc.ValueTypeJudgeInTable", 0, &tolua_err))
+        goto tolua_lerror;
 #endif
-    
+
     argc = lua_gettop(L) - 1;
-    
+
     if (argc == 1)
     {
         cocos2d::ValueMap arg0;
         ok &= luaval_to_ccvaluemap(L, 2, &arg0, "cc.ValueTypeJudgeInTable:create");
-        if(!ok)
+        if (!ok)
             return 0;
         cocos2d::ValueTypeJudgeInTable* ret = cocos2d::ValueTypeJudgeInTable::create(arg0);
-        object_to_luaval<cocos2d::ValueTypeJudgeInTable>(L, "cc.ValueTypeJudgeInTable",(cocos2d::ValueTypeJudgeInTable*)ret);
+        object_to_luaval<cocos2d::ValueTypeJudgeInTable>(L, "cc.ValueTypeJudgeInTable",
+                                                         (cocos2d::ValueTypeJudgeInTable*)ret);
         return 1;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ValueTypeJudgeInTable:create",argc, 1);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ValueTypeJudgeInTable:create", argc, 1);
     return 0;
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L, "#ferror in function 'lua_cocos2dx_ValueTypeJudgeInTable_create'.",&tolua_err);
+    tolua_error(L, "#ferror in function 'lua_cocos2dx_ValueTypeJudgeInTable_create'.", &tolua_err);
 #endif
     return 0;
 }
 
 int lua_register_cocos2dx_ValueTypeJudgeInTable(lua_State* L)
 {
-    tolua_usertype(L,"cc.ValueTypeJudgeInTable");
-    tolua_cclass(L,"ValueTypeJudgeInTable","cc.ValueTypeJudgeInTable","cc.Node",nullptr);
-    
-    tolua_beginmodule(L,"ValueTypeJudgeInTable");
-        tolua_function(L,"create", lua_cocos2dx_ValueTypeJudgeInTable_create);
+    tolua_usertype(L, "cc.ValueTypeJudgeInTable");
+    tolua_cclass(L, "ValueTypeJudgeInTable", "cc.ValueTypeJudgeInTable", "cc.Node", nullptr);
+
+    tolua_beginmodule(L, "ValueTypeJudgeInTable");
+    tolua_function(L, "create", lua_cocos2dx_ValueTypeJudgeInTable_create);
     tolua_endmodule(L);
-    auto typeName = typeid(cocos2d::ValueTypeJudgeInTable).name();
+    auto typeName                                    = typeid(cocos2d::ValueTypeJudgeInTable).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.ValueTypeJudgeInTable";
-    g_typeCast[typeName] = "cc.ValueTypeJudgeInTable";
+    g_typeCast[typeName]                             = "cc.ValueTypeJudgeInTable";
     return 1;
 }
 
@@ -705,8 +708,8 @@ int register_test_binding(lua_State* L)
     tolua_open(L);
     tolua_module(L, "cc", 0);
     tolua_beginmodule(L, "cc");
-        lua_register_cocos2dx_DrawNode3D(L);
-        lua_register_cocos2dx_ValueTypeJudgeInTable(L);
+    lua_register_cocos2dx_DrawNode3D(L);
+    lua_register_cocos2dx_ValueTypeJudgeInTable(L);
     tolua_endmodule(L);
     return 0;
 }

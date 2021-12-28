@@ -34,11 +34,11 @@ DEFINE_TEST_SUITE(ActionsEaseTests);
 class EaseSpriteDemo : public TestCase
 {
 protected:
-    cocos2d::Sprite*    _grossini;
-    cocos2d::Sprite*    _tamara;
-    cocos2d::Sprite*    _kathia;
+    cocos2d::Sprite* _grossini;
+    cocos2d::Sprite* _tamara;
+    cocos2d::Sprite* _kathia;
 
-    std::string    _title;
+    std::string _title;
 
 public:
     EaseSpriteDemo();
@@ -46,7 +46,7 @@ public:
 
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
-    
+
     void centerSprites(unsigned int numberOfSprites);
 
     void positionForTwo();
@@ -225,7 +225,6 @@ public:
     virtual std::string subtitle() const override;
 };
 
-
 class SpriteEaseCircle : public EaseSpriteDemo
 {
 public:
@@ -271,6 +270,5 @@ public:
 
     void altertime(float dt);
 };
-
 
 #endif

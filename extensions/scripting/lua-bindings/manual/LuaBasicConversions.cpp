@@ -1564,10 +1564,7 @@ bool luaval_to_std_vector_string(lua_State* L, int lo, std::vector<std::string>*
     return ok;
 }
 
-bool luaval_to_std_vector_string_view(lua_State* L,
-    int lo,
-    std::vector<std::string_view>* ret,
-    const char* funcName)
+bool luaval_to_std_vector_string_view(lua_State* L, int lo, std::vector<std::string_view>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -1584,7 +1581,7 @@ bool luaval_to_std_vector_string_view(lua_State* L,
 
     if (ok)
     {
-        size_t len        = lua_objlen(L, lo);
+        size_t len             = lua_objlen(L, lo);
         std::string_view value = "";
         for (size_t i = 0; i < len; i++)
         {
@@ -2902,9 +2899,7 @@ void std_map_string_string_to_luaval(lua_State* L, const std::map<std::string, s
     }
 }
 
-bool luaval_to_std_map_string_string(lua_State* L,
-                                     int lo, hlookup::string_map<std::string>* ret,
-                                     const char* funcName)
+bool luaval_to_std_map_string_string(lua_State* L, int lo, hlookup::string_map<std::string>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;

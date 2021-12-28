@@ -494,7 +494,8 @@ Spawn* ActionNode::refreshActionProperty()
                     // #11173 Fixed every node of UI animation(json) is starting at frame 0.
                     //                  if (frame->getFrameIndex() > 0)
                     //				    {
-                    //					    DelayTime* cDelayTime = DelayTime::create(frame->getFrameIndex()
+                    //					    DelayTime* cDelayTime =
+                    //DelayTime::create(frame->getFrameIndex()
                     //* getUnitTime()); 					    if (cDelayTime != nullptr)
                     //						    cSequenceArray.pushBack(static_cast<FiniteTimeAction*>(cDelayTime));
                     //				    }

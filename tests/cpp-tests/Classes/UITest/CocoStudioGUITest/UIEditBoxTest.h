@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,13 +36,13 @@ public:
     CREATE_FUNC(UIEditBoxTest);
 
     virtual bool init() override;
-    
-    virtual void editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox)override;
-    virtual void editBoxEditingDidEndWithAction(cocos2d::ui::EditBox* editBox, cocos2d::ui::EditBoxDelegate::EditBoxEndAction action)override;
-    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text)override;
-    virtual void editBoxReturn(cocos2d::ui::EditBox* editBox)override;
 
-    
+    virtual void editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox) override;
+    virtual void editBoxEditingDidEndWithAction(cocos2d::ui::EditBox* editBox,
+                                                cocos2d::ui::EditBoxDelegate::EditBoxEndAction action) override;
+    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text) override;
+    virtual void editBoxReturn(cocos2d::ui::EditBox* editBox) override;
+
 protected:
     cocos2d::Label* _TTFShowEditReturn;
     cocos2d::ui::EditBox* _editName;
@@ -55,14 +55,13 @@ class UIEditBoxTestToggleVisibility : public UIScene, public cocos2d::ui::EditBo
 {
 public:
     CREATE_FUNC(UIEditBoxTestToggleVisibility);
-    
+
     virtual bool init() override;
-    
-    virtual void editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox)override;
-    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text)override;
-    virtual void editBoxReturn(cocos2d::ui::EditBox* editBox)override;
-    
-    
+
+    virtual void editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox) override;
+    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text) override;
+    virtual void editBoxReturn(cocos2d::ui::EditBox* editBox) override;
+
 protected:
     cocos2d::Label* _TTFShowEditReturn;
     cocos2d::ui::EditBox* _editName;
@@ -75,7 +74,7 @@ class UIEditBoxTestTextHorizontalAlignment : public UIScene
 {
 public:
     CREATE_FUNC(UIEditBoxTestTextHorizontalAlignment);
-    
+
     virtual bool init() override;
 };
 
