@@ -1630,7 +1630,7 @@ void Console::sendHelp(socket_native_type fd, const hlookup::string_map<Command*
             continue;
 
         Console::Utility::mydprintf(fd, "\t%s", command->getName().data());
-        ssize_t tabs = strlen(command->getName().data()) / 8;
+        ssize_t tabs = command->getName().length() / 8;
         tabs         = 3 - tabs;
         for (int j = 0; j < tabs; j++)
         {
