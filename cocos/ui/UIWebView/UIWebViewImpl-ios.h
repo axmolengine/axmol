@@ -27,6 +27,8 @@
 
 #include <stdint.h>
 #include <iosfwd>
+#include <string>
+#include <string_view>
 
 @class UIWebViewWrapper;
 
