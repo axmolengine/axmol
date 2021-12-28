@@ -814,8 +814,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void listFilesAsync(std::string_view dirPath,
-                                std::function<void(std::vector<std::string>)> callback) const;
+    virtual void listFilesAsync(std::string_view dirPath, std::function<void(std::vector<std::string>)> callback) const;
 
     /**
      *  List all files recursively in a directory.

@@ -83,7 +83,7 @@ public:
     static Button* create(std::string_view normalImage,
                           std::string_view selectedImage = "",
                           std::string_view disableImage  = "",
-                          TextureResType texType           = TextureResType::LOCAL);
+                          TextureResType texType         = TextureResType::LOCAL);
 
     /**
      * Load textures for button.
@@ -96,7 +96,7 @@ public:
     void loadTextures(std::string_view normal,
                       std::string_view selected,
                       std::string_view disabled = "",
-                      TextureResType texType      = TextureResType::LOCAL);
+                      TextureResType texType    = TextureResType::LOCAL);
 
     /**
      * Load normal state texture for button.
@@ -317,7 +317,7 @@ public:
     virtual bool init(std::string_view normalImage,
                       std::string_view selectedImage = "",
                       std::string_view disableImage  = "",
-                      TextureResType texType           = TextureResType::LOCAL);
+                      TextureResType texType         = TextureResType::LOCAL);
 
     virtual Vec2 getNormalTextureSize() const;
 

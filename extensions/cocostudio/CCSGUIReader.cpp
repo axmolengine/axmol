@@ -1648,10 +1648,10 @@ void WidgetPropertiesReader0300::setPropsForAllCustomWidgetFromJsonDictionary(st
     GUIReader* guiReader = GUIReader::getInstance();
 
     hlookup::string_map<Ref*>* object_map = guiReader->getParseObjectMap();
-    Ref* object                             = (*object_map)[classType];
+    Ref* object                           = (*object_map)[classType];
 
     hlookup::string_map<SEL_ParseEvent>* selector_map = guiReader->getParseCallBackMap();
-    SEL_ParseEvent selector                             = (*selector_map)[classType];
+    SEL_ParseEvent selector                           = (*selector_map)[classType];
 
     if (object && selector)
     {

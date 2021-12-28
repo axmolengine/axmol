@@ -232,9 +232,9 @@ protected:
     virtual void copySpecialProperties(Widget* model) override;
 
     std::function<bool(WebView* sender, std::string_view url)> _onShouldStartLoading = nullptr;
-    ccWebViewCallback _onDidFinishLoading                                              = nullptr;
-    ccWebViewCallback _onDidFailLoading                                                = nullptr;
-    ccWebViewCallback _onJSCallback                                                    = nullptr;
+    ccWebViewCallback _onDidFinishLoading                                            = nullptr;
+    ccWebViewCallback _onDidFailLoading                                              = nullptr;
+    ccWebViewCallback _onJSCallback                                                  = nullptr;
 
     CC_CONSTRUCTOR_ACCESS :
         /**

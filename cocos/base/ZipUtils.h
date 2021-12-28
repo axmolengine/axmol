@@ -325,9 +325,7 @@ public:
      *  @warning Recall: you are responsible for calling free() on any Non-nullptr pointer returned.
      */
     CC_DEPRECATED()
-    static unsigned char* getFileDataFromZip(std::string_view zipFilePath,
-                                             std::string_view filename,
-                                             ssize_t* size);
+    static unsigned char* getFileDataFromZip(std::string_view zipFilePath, std::string_view filename, ssize_t* size);
 
 private:
     /* Only used internal for createWithBuffer() */

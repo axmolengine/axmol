@@ -122,8 +122,8 @@ void VertexAttribBinding::parseAttributes()
     _attributes.clear();
     _vertexAttribsFlags = 0;
 
-    auto program     = _programState->getProgram();
-    _attributes      = program->getActiveAttributes();
+    auto program = _programState->getProgram();
+    _attributes  = program->getActiveAttributes();
 }
 
 bool VertexAttribBinding::hasAttribute(const shaderinfos::VertexKey& key) const

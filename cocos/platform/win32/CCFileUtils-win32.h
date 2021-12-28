@@ -63,9 +63,7 @@ protected:
      *  @param name     The new name of the file.
      *  @return True if the file have been renamed successfully, false if not.
      */
-    virtual bool renameFile(std::string_view path,
-                            std::string_view oldname,
-                            std::string_view name) const override;
+    virtual bool renameFile(std::string_view path, std::string_view oldname, std::string_view name) const override;
 
     /**
      *  Renames a file under the given directory.

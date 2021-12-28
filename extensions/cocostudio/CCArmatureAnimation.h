@@ -192,8 +192,7 @@ public:
     CC_DEPRECATED_ATTRIBUTE void setFrameEventCallFunc(cocos2d::Ref* target, SEL_FrameEventCallFunc callFunc);
 
     void setMovementEventCallFunc(
-        std::function<void(Armature* armature, MovementEventType movementType, std::string_view movementID)>
-            listener);
+        std::function<void(Armature* armature, MovementEventType movementType, std::string_view movementID)> listener);
     void setFrameEventCallFunc(
         std::function<void(Bone* bone, std::string_view frameEventName, int originFrameIndex, int currentFrameIndex)>
             listener);

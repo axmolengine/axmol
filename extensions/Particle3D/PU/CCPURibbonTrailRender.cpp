@@ -233,7 +233,7 @@ void PURibbonTrailRender::prepare()
         ss << this;
         std::string childNodeNodeName = "ParticleUniverse" + ss.str();
         //_childNode =
-        //mParentTechnique->getParentSystem()->getParentSceneNode()->createChildSceneNode(childNodeNodeName);
+        // mParentTechnique->getParentSystem()->getParentSceneNode()->createChildSceneNode(childNodeNodeName);
         //_childNode->setInheritOrientation(false);
         auto parent = _particleSystem->getParent();
         if (parent)
@@ -270,7 +270,7 @@ void PURibbonTrailRender::prepare()
             // sceneNodeName = "ParticleUniverse" + ss.str() + StringConverter::toString(i);
             // RibbonTrailRendererVisualData* visualData =
             //	PU_NEW_T(RibbonTrailRendererVisualData,
-            //MEMCATEGORY_SCENE_OBJECTS)(_childNode->createChildSceneNode(sceneNodeName), _trail);
+            // MEMCATEGORY_SCENE_OBJECTS)(_childNode->createChildSceneNode(sceneNodeName), _trail);
             // visualData->node->setInheritOrientation(false);
             auto node = Node::create();
             _childNode->addChild(node);

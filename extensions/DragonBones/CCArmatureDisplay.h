@@ -91,8 +91,7 @@ public:
     /**
      * @inheritDoc
      */
-    virtual void addDBEventListener(std::string_view type,
-                                    const std::function<void(EventObject*)>& listener) override;
+    virtual void addDBEventListener(std::string_view type, const std::function<void(EventObject*)>& listener) override;
     /**
      * @inheritDoc
      */

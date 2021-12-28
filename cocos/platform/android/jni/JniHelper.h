@@ -398,7 +398,7 @@ private:
     static std::string getJNISignature(const char*) { return "Ljava/lang/String;"; }
 
     static std::string getJNISignature(std::string_view) { return "Ljava/lang/String;"; }
-    
+
     static std::string getJNISignature(const std::string&) { return "Ljava/lang/String;"; }
 
     template <typename T>

@@ -92,7 +92,7 @@ unsigned short PULineEmitter::calculateRequestedParticles(float timeElapsed)
         //{
         //	notifyStart();
         //	mParentTechnique->lockAllParticles(); // Needed to set the first generated particle also first in the
-        //list with particles
+        // list with particles
         // }
     }
 

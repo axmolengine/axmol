@@ -103,9 +103,7 @@ Slider* Slider::create()
     return nullptr;
 }
 
-Slider* Slider::create(std::string_view barTextureName,
-                       std::string_view normalBallTextureName,
-                       TextureResType resType)
+Slider* Slider::create(std::string_view barTextureName, std::string_view normalBallTextureName, TextureResType resType)
 {
     Slider* widget = new Slider();
     if (widget->init())

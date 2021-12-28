@@ -151,9 +151,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual DragonBonesData* parseDragonBonesData(const char* rawData,
-                                                  std::string_view name = "",
-                                                  float scale             = 1.0f);
+    virtual DragonBonesData* parseDragonBonesData(const char* rawData, std::string_view name = "", float scale = 1.0f);
     /**
      * - Parse the raw texture atlas data and the texture atlas object to a TextureAtlasData instance and cache it to
      * the factory.
@@ -187,7 +185,7 @@ public:
     virtual TextureAtlasData* parseTextureAtlasData(const char* rawData,
                                                     void* textureAtlas,
                                                     std::string_view name = "",
-                                                    float scale             = 1.0f);
+                                                    float scale           = 1.0f);
     /**
      * - Get a specific DragonBonesData instance.
      * @param name - The DragonBonesData instance cache name.
