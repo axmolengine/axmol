@@ -594,6 +594,11 @@ CC_LUA_DLL bool luaval_to_std_vector_string(lua_State* L,
                                             std::vector<std::string>* ret,
                                             const char* funcName = "");
 
+CC_LUA_DLL bool luaval_to_std_vector_string_view(lua_State* L,
+                                            int lo,
+                                            std::vector<std::string_view>* ret,
+                                            const char* funcName = "");
+
 /**
  * Get a pointer points to a std::vector<std::int> from a Lua array table in the stack.
  *
@@ -870,7 +875,7 @@ extern bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<cocos2d:
 
 extern bool luaval_to_std_map_string_string(lua_State* L,
                                             int lo,
-                                            std::map<std::string, std::string>* ret,
+                                            hlookup::string_map<std::string>* ret,
                                             const char* funcName);
 
 /**@}**/
@@ -1140,7 +1145,7 @@ void ccvector_to_luaval(lua_State* L, const cocos2d::Vector<T>& inValue)
  * @param v a cocos2d::Map object.
  */
 template <class T>
-void ccmap_string_key_to_luaval(lua_State* L, const cocos2d::Map<std::string, T>& v)
+void ccmap_string_key_to_luaval(lua_State* L, const cocos2d::StringMap<T>& v)
 {
     lua_newtable(L);
 
@@ -1149,7 +1154,7 @@ void ccmap_string_key_to_luaval(lua_State* L, const cocos2d::Map<std::string, T>
 
     for (auto iter = v.begin(); iter != v.end(); ++iter)
     {
-        std::string key = iter->first;
+        auto& key = iter->first;
         T obj           = iter->second;
         if (nullptr != dynamic_cast<cocos2d::Ref*>(obj))
         {
@@ -1362,7 +1367,7 @@ CC_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const cocos2d::backend::
 
 CC_LUA_DLL void program_activeattrs_to_luaval(
     lua_State* L,
-    const std::unordered_map<std::string, cocos2d::backend::AttributeBindInfo>& map);
+    const hlookup::string_map<cocos2d::backend::AttributeBindInfo>& map);
 
 // end group
 /// @}
