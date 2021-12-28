@@ -210,7 +210,7 @@ bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned in
     return true;
 }
 
-hlookup::string_map<AttributeBindInfo> ProgramGL::getActiveAttributes() const
+const hlookup::string_map<AttributeBindInfo> ProgramGL::getActiveAttributes() const
 {
     hlookup::string_map<AttributeBindInfo> attributes;
 
