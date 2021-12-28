@@ -292,7 +292,7 @@ void UIRadioButtonTwoGroupsTest::clearRadioButtonGroup(Ref* sender)
     }
 }
 
-void UIRadioButtonTwoGroupsTest::addLog(const std::string& log)
+void UIRadioButtonTwoGroupsTest::addLog(std::string_view log)
 {
     std::string existingLog = _logConsole->getString();
     if(!existingLog.empty())

@@ -76,7 +76,7 @@ class Effect;
 class EffectSprite : public Sprite
 {
 public:
-    static EffectSprite *create(const std::string& filename) {
+    static EffectSprite *create(std::string_view filename) {
         auto ret = new EffectSprite;
         if(ret->initWithFile(filename)) {
             ret->autorelease();
@@ -392,7 +392,7 @@ class EffectNormalMapped : public Effect
 {
 public:
     CREATE_FUNC(EffectNormalMapped);
-    static EffectNormalMapped* create(const std::string&normalMapFileName)
+    static EffectNormalMapped* create(std::string_viewnormalMapFileName)
     {
         EffectNormalMapped *normalMappedSprite = new EffectNormalMapped();
         if (normalMappedSprite->init() && normalMappedSprite->initNormalMap(normalMapFileName))
@@ -410,7 +410,7 @@ public:
     float getKBump()const{return _kBump;}
 protected:
     bool init();
-    bool initNormalMap(const std::string&normalMapFileName);
+    bool initNormalMap(std::string_viewnormalMapFileName);
     virtual void setTarget(EffectSprite* sprite) override;
     EffectSprite* _sprite;
     Vec3 _lightPos;
@@ -424,7 +424,7 @@ bool EffectNormalMapped::init()
     _kBump = 2;
     return true;
 }
-bool EffectNormalMapped::initNormalMap(const std::string& normalMapFileName)
+bool EffectNormalMapped::initNormalMap(std::string_view normalMapFileName)
 {
     auto normalMapTexture = Director::getInstance()->getTextureCache()->addImage(normalMapFileName);
     SET_TEXTURE(_programState, "u_normalMap", 1, normalMapTexture->getBackendTexture());

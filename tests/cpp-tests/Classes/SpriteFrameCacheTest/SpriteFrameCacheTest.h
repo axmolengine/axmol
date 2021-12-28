@@ -91,7 +91,7 @@ public:
     ~SpriteFrameCacheJsonAtlasTest() override;
 
 private:
-    void loadSpriteFrames(const std::string& file, cocos2d::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, cocos2d::backend::PixelFormat expectedFormat);
 
     cocos2d::Label* infoLabel;
 };

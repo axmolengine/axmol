@@ -91,7 +91,7 @@ public:
     /**
      * You should NEVER call this method, unless you know what you are doing.
      */
-    void setTestCaseName(const std::string& name) { _testCaseName = name; }
+    void setTestCaseName(std::string_view name) { _testCaseName = name; }
     std::string getTestCaseName() const { return _testCaseName; }
 
     const cocos2d::Label* getSubtitleLable() const { return _subtitleLabel; }
@@ -143,7 +143,7 @@ public:
     void setTestParent(TestBase* parent) { _parentTest = parent; }
     TestBase* getTestParent() { return _parentTest; }
 
-    void setTestName(const std::string& testName) { _testName = testName; }
+    void setTestName(std::string_view testName) { _testName = testName; }
     std::string getTestName() const { return _testName; }
 protected:
     TestBase();
@@ -163,7 +163,7 @@ class TestController;
 class TestSuite : public TestBase
 {
 public:
-    void addTestCase(const std::string& testName, std::function<cocos2d::Scene*()> callback);
+    void addTestCase(std::string_view testName, std::function<cocos2d::Scene*()> callback);
 
     virtual void restartCurrTest();
     virtual void enterNextTest();
@@ -190,7 +190,7 @@ public:
     TestList();
     ~TestList();
 
-    void addTest(const std::string& testName, std::function<TestBase*()> callback);
+    void addTest(std::string_view testName, std::function<TestBase*()> callback);
 
     virtual void runThisTest() override;
 

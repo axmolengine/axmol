@@ -554,7 +554,7 @@ void SchedulerSchedulesAndRemove::scheduleAndUnschedule(float /*dt*/)
 // TestNode
 //
 //------------------------------------------------------------------
-void TestNode::initWithString(const std::string& str, int priority)
+void TestNode::initWithString(std::string_view str, int priority)
 {
     _string = str;
     scheduleUpdateWithPriority(priority);

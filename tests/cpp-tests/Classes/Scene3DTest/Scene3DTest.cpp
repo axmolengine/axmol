@@ -48,7 +48,7 @@ public:
         RenderState::StateBlock::invalidate(cocos2d::RenderState::StateBlock::RS_ALL_ONES);
     }
     
-    static SkeletonAnimationCullingFix* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1)
+    static SkeletonAnimationCullingFix* createWithFile (std::string_view skeletonDataFile, std::string_view atlasFile, float scale = 1)
     {
         SkeletonAnimationCullingFix* node = new SkeletonAnimationCullingFix();
         spAtlas* atlas = spAtlas_createFromFile(atlasFile.c_str(), 0);
@@ -694,7 +694,7 @@ void Scene3DTestScene::createDetailDlg()
         Director::getInstance()->getTextureCache()->removeTextureForKey(_snapshotFile);
         _osdScene->removeChildByTag(SNAPSHOT_TAG);
         _snapshotFile = "CaptureScreenTest.png";
-        utils::captureScreen([this](bool succeed, const std::string& outputFile)
+        utils::captureScreen([this](bool succeed, std::string_view outputFile)
         {
             if (!succeed)
             {

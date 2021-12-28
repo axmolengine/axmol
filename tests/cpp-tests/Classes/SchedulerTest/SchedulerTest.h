@@ -226,7 +226,7 @@ public:
 
     ~TestNode();
 
-    void initWithString(const std::string& str, int priority);
+    void initWithString(std::string_view str, int priority);
     virtual void update(float dt) override;
 private:
     std::string _string;

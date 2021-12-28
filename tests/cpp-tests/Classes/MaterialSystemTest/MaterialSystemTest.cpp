@@ -184,13 +184,13 @@ void Material_2DEffects::updateCCTimeUniforms(float)
  */
 class EffectAutoBindingResolver : public backend::ProgramState::AutoBindingResolver
 {
-    virtual bool resolveAutoBinding(backend::ProgramState* programState,/* Node* node,*/ const std::string& uniform, const std::string& autoBinding) override;
+    virtual bool resolveAutoBinding(backend::ProgramState* programState,/* Node* node,*/ std::string_view uniform, std::string_view autoBinding) override;
 
     void callbackRadius(backend::ProgramState* programState, backend::UniformLocation uniform);
     void callbackColor(backend::ProgramState* programState, backend::UniformLocation uniform);
 };
 
-bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* programState, /*Node* node,*/ const std::string& uniform, const std::string& autoBinding)
+bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* programState, /*Node* node,*/ std::string_view uniform, std::string_view autoBinding)
 {
     if (autoBinding.compare("DYNAMIC_RADIUS")==0)
     {

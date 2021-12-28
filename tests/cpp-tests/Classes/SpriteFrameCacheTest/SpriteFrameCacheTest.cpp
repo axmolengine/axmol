@@ -148,7 +148,7 @@ public:
 
     uint32_t getFormat() override { return FORMAT; }
 
-    void load(const std::string& filePath, SpriteFrameCache& cache) override
+    void load(std::string_view filePath, SpriteFrameCache& cache) override
     {
         CCASSERT(!filePath.empty(), "atlas filename should not be nullptr");
 
@@ -199,7 +199,7 @@ public:
         addSpriteFramesWithJson(jDoc, texturePath, filePath, cache);
     }
 
-    void load(const std::string& filePath, Texture2D* texture, SpriteFrameCache& cache) override
+    void load(std::string_view filePath, Texture2D* texture, SpriteFrameCache& cache) override
     {
         const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
         rapidjson::Document jDoc;
@@ -209,7 +209,7 @@ public:
         addSpriteFramesWithJson(jDoc, texture, filePath, cache);
     }
 
-    void load(const std::string& filePath, const std::string& textureFileName, SpriteFrameCache& cache) override
+    void load(std::string_view filePath, std::string_view textureFileName, SpriteFrameCache& cache) override
     {
         CCASSERT(!textureFileName.empty(), "texture name should not be null");
         const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
@@ -232,7 +232,7 @@ public:
         addSpriteFramesWithJson(jDoc, texture, "by#addSpriteFramesWithFileContent()", cache);
     }
 
-    void reload(const std::string& filePath, SpriteFrameCache& cache) override
+    void reload(std::string_view filePath, SpriteFrameCache& cache) override
     {
         const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
         rapidjson::Document doc;
@@ -285,7 +285,7 @@ public:
     }
 
 protected:
-    void addSpriteFramesWithJson(const rapidjson::Document& doc, const std::string& texturePath, const std::string& atlasPath, SpriteFrameCache& cache)
+    void addSpriteFramesWithJson(const rapidjson::Document& doc, std::string_view texturePath, std::string_view atlasPath, SpriteFrameCache& cache)
     {
         std::string pixelFormatName;
         auto&& metaItr = doc.FindMember("meta");
@@ -338,7 +338,7 @@ protected:
         }
     }
 
-    void addSpriteFramesWithJson(const rapidjson::Document& doc, Texture2D* texture, const std::string& atlasPath, SpriteFrameCache& cache)
+    void addSpriteFramesWithJson(const rapidjson::Document& doc, Texture2D* texture, std::string_view atlasPath, SpriteFrameCache& cache)
     {
         auto&& framesItr = doc.FindMember("frames");
         if (framesItr == doc.MemberEnd())
@@ -409,7 +409,7 @@ protected:
         CC_SAFE_DELETE(image);
     }
 
-    void reloadSpriteFramesWithDictionary(const rapidjson::Document& doc, Texture2D* texture, const std::string& atlasPath, SpriteFrameCache& cache)
+    void reloadSpriteFramesWithDictionary(const rapidjson::Document& doc, Texture2D* texture, std::string_view atlasPath, SpriteFrameCache& cache)
     {
         auto&& framesItr = doc.FindMember("frames");
         if (framesItr == doc.MemberEnd())
@@ -484,7 +484,7 @@ SpriteFrameCacheJsonAtlasTest::~SpriteFrameCacheJsonAtlasTest()
     cache->deregisterSpriteSheetLoader(GenericJsonArraySpriteSheetLoader::FORMAT);
 }
 
-void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(const std::string& file, cocos2d::backend::PixelFormat expectedFormat)
+void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file, cocos2d::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file, GenericJsonArraySpriteSheetLoader::FORMAT);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");

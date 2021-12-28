@@ -257,7 +257,7 @@ TransitionsTests::TransitionsTests()
     }
 }
 
-TestLayer1* TestLayer1::create(const std::string& transitionName)
+TestLayer1* TestLayer1::create(std::string_view transitionName)
 {
     auto layer = new TestLayer1(transitionName);
     if (layer->init())
@@ -273,7 +273,7 @@ TestLayer1* TestLayer1::create(const std::string& transitionName)
     return layer;
 }
 
-TestLayer1::TestLayer1(const std::string& transitionName)
+TestLayer1::TestLayer1(std::string_view transitionName)
 {
     float x,y;
 
@@ -333,7 +333,7 @@ void TestLayer1::onExit()
     log("Scene 1 onExit");
 }
 
-TestLayer2* TestLayer2::create(const std::string& transitionName)
+TestLayer2* TestLayer2::create(std::string_view transitionName)
 {
     auto layer = new TestLayer2(transitionName);
     if (layer->init())
@@ -349,7 +349,7 @@ TestLayer2* TestLayer2::create(const std::string& transitionName)
     return layer;
 }
 
-TestLayer2::TestLayer2(const std::string& transitionName)
+TestLayer2::TestLayer2(std::string_view transitionName)
 {
     float x,y;
 

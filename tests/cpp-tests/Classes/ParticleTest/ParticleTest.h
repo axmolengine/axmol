@@ -185,7 +185,7 @@ public:
 class DemoParticleFromFile : public ParticleDemo
 {
 public:
-    static DemoParticleFromFile* create(const std::string& file)
+    static DemoParticleFromFile* create(std::string_view file)
     {
         auto ret = new DemoParticleFromFile;
         if (ret->init())

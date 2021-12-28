@@ -174,7 +174,7 @@ protected:
     ~CaptureScreenTest();
 
     void onCaptured(cocos2d::Ref*);
-    void afterCaptured(bool succeed, const std::string& outputFile);
+    void afterCaptured(bool succeed, std::string_view outputFile);
 
     std::string _filename;
 };

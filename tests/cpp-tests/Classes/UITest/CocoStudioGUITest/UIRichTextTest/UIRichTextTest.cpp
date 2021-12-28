@@ -1720,7 +1720,7 @@ bool UIRichTextXMLExtend::init()
         // RichText
         _richText = RichText::createWithXML("<span>CloseNormal-tag:<br /><CloseNormal /><br /><br />CloseSelected-tag:<br /><CloseSelected></CloseSelected></span>",
             defaults,
-            [](const std::string& url) {
+            [](std::string_view url) {
             Application::getInstance()->openURL(url);
         });
         _richText->ignoreContentAdaptWithSize(false);

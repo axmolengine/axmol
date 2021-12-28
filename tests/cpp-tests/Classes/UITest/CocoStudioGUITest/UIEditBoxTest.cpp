@@ -147,10 +147,10 @@ void UIEditBoxTest::editBoxEditingDidEndWithAction(cocos2d::ui::EditBox* editBox
     log("editBox %p DidEnd with action %d!", editBox, action);
 }
 
-void UIEditBoxTest::editBoxTextChanged(cocos2d::ui::EditBox* editBox, const std::string& text)
+void UIEditBoxTest::editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text)
 {
-    log("editBox %p TextChanged, text: %s ", editBox, text.c_str());
-    editBox->setText(text.c_str());
+    log("editBox %p TextChanged, text: %s ", editBox, text.data());
+    editBox->setText(text.data());
 }
 
 void UIEditBoxTest::editBoxReturn(ui::EditBox* editBox)
@@ -274,9 +274,9 @@ void UIEditBoxTestToggleVisibility::editBoxEditingDidBegin(cocos2d::ui::EditBox*
     log("editBox %p DidBegin !", editBox);
 }
 
-void UIEditBoxTestToggleVisibility::editBoxTextChanged(cocos2d::ui::EditBox* editBox, const std::string& text)
+void UIEditBoxTestToggleVisibility::editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text)
 {
-    log("editBox %p TextChanged, text: %s ", editBox, text.c_str());
+    log("editBox %p TextChanged, text: %s ", editBox, text.data());
 }
 
 void UIEditBoxTestToggleVisibility::editBoxReturn(ui::EditBox* editBox)
@@ -309,17 +309,17 @@ bool UIEditBoxTestTextHorizontalAlignment::init() {
     const auto visibleSize = glview->getVisibleSize();
     const auto editBoxSize = Size(visibleSize.width - 100, visibleSize.height * 0.1f);
   
-    const auto createEditBox = [this, editBoxSize, visibleOrigin, visibleSize](const std::string& text,
+    const auto createEditBox = [this, editBoxSize, visibleOrigin, visibleSize](std::string_view text,
                                       const TextHAlignment alignment,
                                       const int position_y) {
         ui::EditBox* editbox = ui::EditBox::create(editBoxSize + Size(0,40), ui::Scale9Sprite::create("extensions/green_edit.png"));
         editbox->setPosition(Vec2(visibleOrigin.x+visibleSize.width/2-50, (float)position_y));
         editbox->setFontColor(Color3B::RED);
-        editbox->setPlaceHolder(text.c_str());
+        editbox->setPlaceHolder(text.data());
         editbox->setPlaceholderFontColor(Color3B::WHITE);
         editbox->setPlaceholderFontSize((int)editBoxSize.height/2);
         editbox->setFontSize((int)editBoxSize.height/2);
-        editbox->setText(text.c_str());
+        editbox->setText(text.data());
         editbox->setTextHorizontalAlignment(alignment);
         editbox->setReturnType(ui::EditBox::KeyboardReturnType::DONE);
         addChild(editbox);
