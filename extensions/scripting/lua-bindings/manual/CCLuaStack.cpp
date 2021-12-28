@@ -353,8 +353,8 @@ void LuaStack::pushLuaValueDict(const LuaValueDict& dict)
     for (LuaValueDictIterator it = dict.begin(); it != dict.end(); ++it)
     {
         lua_pushlstring(_state, it->first.c_str(), it->first.length()); /* L: table key */
-        pushLuaValue(it->second);                  /* L: table key value */
-        lua_rawset(_state, -3);                    /* table.key = value, L: table */
+        pushLuaValue(it->second);                                       /* L: table key value */
+        lua_rawset(_state, -3);                                         /* table.key = value, L: table */
     }
 }
 

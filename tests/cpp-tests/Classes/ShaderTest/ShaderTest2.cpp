@@ -32,18 +32,21 @@
 
 USING_NS_CC;
 
-#define SET_UNIFORM(ps, name, value)  do {   \
-decltype(value) __v = value;                           \
-auto __loc = (ps)->getUniformLocation(name);  \
-(ps)->setUniform(__loc, &__v, sizeof(__v));  \
-} while(false) 
+#define SET_UNIFORM(ps, name, value)                          \
+    do                                                        \
+    {                                                         \
+        decltype(value) __v = value;                          \
+        auto __loc          = (ps)->getUniformLocation(name); \
+        (ps)->setUniform(__loc, &__v, sizeof(__v));           \
+    } while (false)
 
-#define SET_TEXTURE(ps, name, idx, value)  do {   \
-auto * __v = value;                           \
-auto __loc = (ps)->getUniformLocation(name);  \
-(ps)->setTexture(__loc, idx, __v);  \
-} while(false) 
-
+#define SET_TEXTURE(ps, name, idx, value)            \
+    do                                               \
+    {                                                \
+        auto* __v  = value;                          \
+        auto __loc = (ps)->getUniformLocation(name); \
+        (ps)->setTexture(__loc, idx, __v);           \
+    } while (false)
 
 Shader2Tests::Shader2Tests()
 {
@@ -54,13 +57,13 @@ Shader2Tests::Shader2Tests()
 //
 // EffectSprite
 //
-static int tuple_sort( const std::tuple<ssize_t,Effect*,QuadCommand> &tuple1, const std::tuple<ssize_t,Effect*,QuadCommand> &tuple2 )
+static int tuple_sort(const std::tuple<ssize_t, Effect*, QuadCommand>& tuple1,
+                      const std::tuple<ssize_t, Effect*, QuadCommand>& tuple2)
 {
     return std::get<0>(tuple1) < std::get<0>(tuple2);
 }
 
-
-static void updateUniforms(backend::ProgramState *programState)
+static void updateUniforms(backend::ProgramState* programState)
 {
     float time = Director::getInstance()->getTotalFrames() * Director::getInstance()->getAnimationInterval();
     Vec4 uTime(time / 10.0f, time, time * 2.0f, time * 4.0f);
@@ -76,9 +79,11 @@ class Effect;
 class EffectSprite : public Sprite
 {
 public:
-    static EffectSprite *create(std::string_view filename) {
+    static EffectSprite* create(std::string_view filename)
+    {
         auto ret = new EffectSprite;
-        if(ret->initWithFile(filename)) {
+        if (ret->initWithFile(filename))
+        {
             ret->autorelease();
             return ret;
         }
@@ -86,8 +91,10 @@ public:
         return nullptr;
     }
 
-    void setEffect(Effect* effect) {
-        if(_defaultEffect != effect) {
+    void setEffect(Effect* effect)
+    {
+        if (_defaultEffect != effect)
+        {
             effect->setTarget(this);
 
             CC_SAFE_RELEASE(_defaultEffect);
@@ -97,34 +104,37 @@ public:
             setProgramState(_defaultEffect->getProgramState());
         }
     }
-    void addEffect(Effect *effect, ssize_t order) {
+    void addEffect(Effect* effect, ssize_t order)
+    {
         effect->retain();
         effect->setTarget(this);
 
-        _effects.push_back(std::make_tuple(order,effect,QuadCommand()));
+        _effects.push_back(std::make_tuple(order, effect, QuadCommand()));
 
         std::sort(std::begin(_effects), std::end(_effects), tuple_sort);
     }
 
-    void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override
     {
 #if CC_USE_CULLING
         // Don't do calculate the culling if the transform was not updated
-        _insideBounds = (flags & FLAGS_TRANSFORM_DIRTY) ? renderer->checkVisibility(transform, _contentSize) : _insideBounds;
+        _insideBounds =
+            (flags & FLAGS_TRANSFORM_DIRTY) ? renderer->checkVisibility(transform, _contentSize) : _insideBounds;
 
-        if(_insideBounds)
+        if (_insideBounds)
 #endif
         {
             // negative effects: order < 0
-            int idx=0;
-            for(auto &effect : _effects) {
+            int idx = 0;
+            for (auto& effect : _effects)
+            {
 
-                if(std::get<0>(effect) >=0)
+                if (std::get<0>(effect) >= 0)
                     break;
                 auto* programState = std::get<1>(effect)->getProgramState();
                 if (programState)
                 {
-                    QuadCommand &q = std::get<2>(effect);
+                    QuadCommand& q = std::get<2>(effect);
                     q.init(_globalZOrder, _texture, _blendFunc, &_quad, 1, transform, flags);
                     updateUniforms(programState);
                     renderer->addCommand(&q);
@@ -139,8 +149,9 @@ public:
             renderer->addCommand(&_trianglesCommand);
 
             // positive effects: order >= 0
-            for(auto it = std::begin(_effects)+idx; it != std::end(_effects); ++it) {
-                QuadCommand &q = std::get<2>(*it);
+            for (auto it = std::begin(_effects) + idx; it != std::end(_effects); ++it)
+            {
+                QuadCommand& q     = std::get<2>(*it);
                 auto* programState = std::get<1>(*it)->getProgramState();
                 updateUniforms(programState);
                 q.init(_globalZOrder, _texture, _blendFunc, &_quad, 1, transform, flags);
@@ -150,19 +161,19 @@ public:
             }
         }
     }
+
 protected:
-    EffectSprite() : _defaultEffect(nullptr)
+    EffectSprite() : _defaultEffect(nullptr) { _effects.reserve(2); }
+    ~EffectSprite()
     {
-        _effects.reserve(2);
-    }
-    ~EffectSprite() {
-        for(auto &tuple : _effects) {
+        for (auto& tuple : _effects)
+        {
             std::get<1>(tuple)->release();
         }
         CC_SAFE_RELEASE(_defaultEffect);
     }
 
-    std::vector<std::tuple<ssize_t,Effect*,QuadCommand>> _effects;
+    std::vector<std::tuple<ssize_t, Effect*, QuadCommand>> _effects;
     Effect* _defaultEffect;
 };
 
@@ -170,16 +181,16 @@ protected:
 // Effect
 //
 
-bool Effect::initProgramState(const std::string &fragmentFilename)
+bool Effect::initProgramState(const std::string& fragmentFilename)
 {
-    auto fileUtiles = FileUtils::getInstance();
+    auto fileUtiles       = FileUtils::getInstance();
     auto fragmentFullPath = fileUtiles->fullPathForFilename(fragmentFilename);
-    auto fragSource = fileUtiles->getStringFromFile(fragmentFullPath);
-    
+    auto fragSource       = fileUtiles->getStringFromFile(fragmentFullPath);
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _fragSource = fragSource;
 #endif
-    auto program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.c_str());
+    auto program      = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.c_str());
     auto programState = new backend::ProgramState(program);
     CC_SAFE_RELEASE(_programState);
     CC_SAFE_RELEASE(program);
@@ -188,9 +199,7 @@ bool Effect::initProgramState(const std::string &fragmentFilename)
     return _programState != nullptr;
 }
 
-Effect::Effect()
-{
-}
+Effect::Effect() {}
 
 Effect::~Effect()
 {
@@ -202,22 +211,22 @@ class EffectBlur : public Effect
 {
 public:
     CREATE_FUNC(EffectBlur);
-    virtual void setTarget(EffectSprite *sprite) override;
+    virtual void setTarget(EffectSprite* sprite) override;
     void setBlurRadius(float radius);
     void setBlurSampleNum(float num);
 
 protected:
     bool init(float blurRadius = 10.0f, float sampleNum = 5.0f);
-    
+
     float _blurRadius;
     float _blurSampleNum;
 };
 
-void EffectBlur::setTarget(EffectSprite *sprite)
+void EffectBlur::setTarget(EffectSprite* sprite)
 {
     if (_programState == nullptr)
         return;
-    
+
     Size size = sprite->getTexture()->getContentSizeInPixels();
     SET_UNIFORM(_programState, "resolution", size);
     SET_UNIFORM(_programState, "blurRadius", _blurRadius);
@@ -227,9 +236,9 @@ void EffectBlur::setTarget(EffectSprite *sprite)
 bool EffectBlur::init(float blurRadius, float sampleNum)
 {
     initProgramState("Shaders/example_Blur.fsh");
-    _blurRadius = blurRadius;
+    _blurRadius    = blurRadius;
     _blurSampleNum = sampleNum;
-    
+
     return true;
 }
 
@@ -254,7 +263,7 @@ public:
         initProgramState("Shaders/example_Outline.fsh");
 
         Vec3 color(1.0f, 0.2f, 0.3f);
-        float radius = 0.01f;
+        float radius    = 0.01f;
         float threshold = 1.75;
 
         SET_UNIFORM(_programState, "u_outlineColor", color);
@@ -271,7 +280,8 @@ public:
     CREATE_FUNC(EffectNoise);
 
 protected:
-    bool init() {
+    bool init()
+    {
         initProgramState("Shaders/example_Noisy.fsh");
         return true;
     }
@@ -290,7 +300,8 @@ public:
     CREATE_FUNC(EffectEdgeDetect);
 
 protected:
-    bool init() {
+    bool init()
+    {
         initProgramState("Shaders/example_EdgeDetection.fsh");
         return true;
     }
@@ -309,7 +320,8 @@ public:
     CREATE_FUNC(EffectGreyScale);
 
 protected:
-    bool init() {
+    bool init()
+    {
         initProgramState("Shaders/example_GreyScale.fsh");
         return true;
     }
@@ -322,7 +334,8 @@ public:
     CREATE_FUNC(EffectSepia);
 
 protected:
-    bool init() {
+    bool init()
+    {
         initProgramState("Shaders/example_Sepia.fsh");
         return true;
     }
@@ -335,7 +348,8 @@ public:
     CREATE_FUNC(EffectBloom);
 
 protected:
-    bool init() {
+    bool init()
+    {
         initProgramState("Shaders/example_Bloom.fsh");
         return true;
     }
@@ -354,7 +368,8 @@ public:
     CREATE_FUNC(EffectCelShading);
 
 protected:
-    bool init() {
+    bool init()
+    {
         initProgramState("Shaders/example_CelShading.fsh");
         return true;
     }
@@ -373,7 +388,8 @@ public:
     CREATE_FUNC(EffectLensFlare);
 
 protected:
-    bool init() {
+    bool init()
+    {
         initProgramState("Shaders/example_LensFlare.fsh");
         return true;
     }
@@ -384,7 +400,6 @@ protected:
         SET_UNIFORM(_programState, "textureResolution", Vec2(s.width, s.height));
         s = Director::getInstance()->getWinSize();
         SET_UNIFORM(_programState, "resolution", Vec2(s.width, s.height));
-
     }
 };
 
@@ -394,10 +409,10 @@ public:
     CREATE_FUNC(EffectNormalMapped);
     static EffectNormalMapped* create(std::string_viewnormalMapFileName)
     {
-        EffectNormalMapped *normalMappedSprite = new EffectNormalMapped();
+        EffectNormalMapped* normalMappedSprite = new EffectNormalMapped();
         if (normalMappedSprite->init() && normalMappedSprite->initNormalMap(normalMapFileName))
         {
-            
+
             normalMappedSprite->autorelease();
             return normalMappedSprite;
         }
@@ -407,7 +422,8 @@ public:
     void setKBump(float value);
     void setLightPos(const Vec3& pos);
     void setLightColor(const Color4F& color);
-    float getKBump()const{return _kBump;}
+    float getKBump() const { return _kBump; }
+
 protected:
     bool init();
     bool initNormalMap(std::string_viewnormalMapFileName);
@@ -415,7 +431,7 @@ protected:
     EffectSprite* _sprite;
     Vec3 _lightPos;
     Color4F _lightColor;
-    float  _kBump;
+    float _kBump;
 };
 
 bool EffectNormalMapped::init()
@@ -441,7 +457,6 @@ void EffectNormalMapped::setKBump(float value)
 {
     _kBump = value;
     SET_UNIFORM(_programState, "u_kBump", _kBump);
-
 }
 
 void EffectNormalMapped::setLightPos(const Vec3& pos)
@@ -454,54 +469,50 @@ void EffectNormalMapped::setLightColor(const Color4F& color)
 {
     _lightColor = color;
     SET_UNIFORM(_programState, "u_diffuseL", Vec3(_lightColor.r, _lightColor.g, _lightColor.b));
-
 }
 
-EffectSpriteTest::EffectSpriteTest()
-{
-}
+EffectSpriteTest::EffectSpriteTest() {}
 
 bool EffectSpriteTest::init()
 {
-    if (ShaderTestDemo2::init()) {
+    if (ShaderTestDemo2::init())
+    {
 
         auto layer = LayerColor::create(Color4B::BLUE);
         this->addChild(layer);
 
         auto s = Director::getInstance()->getWinSize();
 
-        auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png",
-                                          [&](Ref *sender) {
-                                              _vectorIndex--;
-                                              if(_vectorIndex<0)
-                                                  _vectorIndex = _effects.size()-1;
-                                              _sprite->setEffect(_effects.at(_vectorIndex));
-                                          });
+        auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Ref* sender) {
+            _vectorIndex--;
+            if (_vectorIndex < 0)
+                _vectorIndex = _effects.size() - 1;
+            _sprite->setEffect(_effects.at(_vectorIndex));
+        });
 
-        auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png",
-                                          [&](Ref *sender) {
-                                              _vectorIndex++;
-                                              if(_vectorIndex>=_effects.size())
-                                                  _vectorIndex = 0;
-                                              _sprite->setEffect(_effects.at(_vectorIndex));
-                                          });
+        auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Ref* sender) {
+            _vectorIndex++;
+            if (_vectorIndex >= _effects.size())
+                _vectorIndex = 0;
+            _sprite->setEffect(_effects.at(_vectorIndex));
+        });
 
         auto menu = Menu::create(itemPrev, itemNext, nullptr);
         menu->alignItemsHorizontally();
         menu->setScale(0.5);
-        menu->setAnchorPoint(Vec2(0.0f,0.0f));
-        menu->setPosition(Vec2(s.width/2,70.0f));
+        menu->setAnchorPoint(Vec2(0.0f, 0.0f));
+        menu->setPosition(Vec2(s.width / 2, 70.0f));
         addChild(menu);
 
         _sprite = EffectSprite::create("Images/grossini.png");
-        _sprite->setPosition(Vec2(0.0f, s.height/2));
+        _sprite->setPosition(Vec2(0.0f, s.height / 2));
         addChild(_sprite);
 
-        auto jump = JumpBy::create(4, Vec2(s.width,0.0f), 100, 4);
-        auto rot = RotateBy::create(4, 720);
-        auto spawn = Spawn::create(jump, rot, nullptr);
-        auto rev = spawn->reverse();
-        auto seq = Sequence::create(spawn, rev, nullptr);
+        auto jump   = JumpBy::create(4, Vec2(s.width, 0.0f), 100, 4);
+        auto rot    = RotateBy::create(4, 720);
+        auto spawn  = Spawn::create(jump, rot, nullptr);
+        auto rev    = spawn->reverse();
+        auto seq    = Sequence::create(spawn, rev, nullptr);
         auto repeat = RepeatForever::create(seq);
         _sprite->runAction(repeat);
 
@@ -517,44 +528,44 @@ bool EffectSpriteTest::init()
         _effects.pushBack(EffectLensFlare::create());
 
         _vectorIndex = 0;
-        _sprite->setEffect( _effects.at(_vectorIndex) );
+        _sprite->setEffect(_effects.at(_vectorIndex));
 
-//        _sprite->addEffect( _effects.at(8), -10 );
-//        _sprite->addEffect( _effects.at(1), 1 );
-        
+        //        _sprite->addEffect( _effects.at(8), -10 );
+        //        _sprite->addEffect( _effects.at(1), 1 );
+
         return true;
     }
     return false;
 }
 
-EffectSpriteLamp::EffectSpriteLamp()
-{
-}
+EffectSpriteLamp::EffectSpriteLamp() {}
 
 bool EffectSpriteLamp::init()
 {
-    if (ShaderTestDemo2::init()) {
-        
-        auto s = Director::getInstance()->getWinSize();
+    if (ShaderTestDemo2::init())
+    {
+
+        auto s  = Director::getInstance()->getWinSize();
         _sprite = EffectSprite::create("Images/elephant1_Diffuse.png");
-        //auto contentSize = _sprite->getContentSize();
-        _sprite->setPosition(Vec2(s.width/2, s.height/2));
+        // auto contentSize = _sprite->getContentSize();
+        _sprite->setPosition(Vec2(s.width / 2, s.height / 2));
         addChild(_sprite);
-        
+
         auto lampEffect = EffectNormalMapped::create("Images/elephant1_Normal.png");
-        
-        Vec3 pos(150,150, 50);
+
+        Vec3 pos(150, 150, 50);
         _lightSprite = Sprite::create("Images/ball.png");
         this->addChild(_lightSprite);
-        _lightSprite->setPosition(Vec2(pos.x, s.height- pos.y));
+        _lightSprite->setPosition(Vec2(pos.x, s.height - pos.y));
         Mat4 mat = _sprite->getNodeToWorldTransform();
-        Point lightPosInLocalSpace = PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
-        lampEffect->setLightColor(Color4F(1,1,1,1));
+        Point lightPosInLocalSpace =
+            PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
+        lampEffect->setLightColor(Color4F(1, 1, 1, 1));
         lampEffect->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
         lampEffect->setKBump(2);
         _sprite->setEffect(lampEffect);
-        _effect = lampEffect;
-        auto listener = EventListenerTouchAllAtOnce::create();
+        _effect                  = lampEffect;
+        auto listener            = EventListenerTouchAllAtOnce::create();
         listener->onTouchesBegan = CC_CALLBACK_2(EffectSpriteLamp::onTouchesBegan, this);
         listener->onTouchesMoved = CC_CALLBACK_2(EffectSpriteLamp::onTouchesMoved, this);
         listener->onTouchesEnded = CC_CALLBACK_2(EffectSpriteLamp::onTouchesEnded, this);
@@ -564,48 +575,50 @@ bool EffectSpriteLamp::init()
     return false;
 }
 
-
-void EffectSpriteLamp::onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event)
+void EffectSpriteLamp::onTouchesBegan(const std::vector<Touch*>& touches, Event* unused_event)
 {
-    for ( auto &item: touches )
+    for (auto& item : touches)
     {
-        auto touch = item;
-        auto s = Director::getInstance()->getWinSize();
+        auto touch         = item;
+        auto s             = Director::getInstance()->getWinSize();
         Point loc_winSpace = touch->getLocationInView();
-        _lightSprite->setPosition(Vec2( loc_winSpace.x,  s.height - loc_winSpace.y));
-        Vec3 pos(loc_winSpace.x,loc_winSpace.y, 50);
+        _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
+        Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
         Mat4 mat = _sprite->getNodeToWorldTransform();
-        Point lightPosInLocalSpace = PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
+        Point lightPosInLocalSpace =
+            PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
         ((EffectNormalMapped*)_effect)->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
     }
 }
 
-void EffectSpriteLamp::onTouchesMoved(const std::vector<Touch*>& touches, Event *unused_event)
+void EffectSpriteLamp::onTouchesMoved(const std::vector<Touch*>& touches, Event* unused_event)
 {
-    for ( auto &item: touches )
+    for (auto& item : touches)
     {
-        auto touch = item;
-        auto s = Director::getInstance()->getWinSize();
+        auto touch         = item;
+        auto s             = Director::getInstance()->getWinSize();
         Point loc_winSpace = touch->getLocationInView();
-        _lightSprite->setPosition(Vec2( loc_winSpace.x, s.height - loc_winSpace.y));
-        Vec3 pos(loc_winSpace.x,loc_winSpace.y, 50);
+        _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
+        Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
         Mat4 mat = _sprite->getNodeToWorldTransform();
-        Point lightPosInLocalSpace = PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
+        Point lightPosInLocalSpace =
+            PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
         ((EffectNormalMapped*)_effect)->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
     }
 }
 
-void EffectSpriteLamp::onTouchesEnded(const std::vector<Touch*>& touches, Event *unused_event)
+void EffectSpriteLamp::onTouchesEnded(const std::vector<Touch*>& touches, Event* unused_event)
 {
-    for ( auto &item: touches )
+    for (auto& item : touches)
     {
-        auto touch = item;
-        auto s = Director::getInstance()->getWinSize();
+        auto touch         = item;
+        auto s             = Director::getInstance()->getWinSize();
         Point loc_winSpace = touch->getLocationInView();
-        _lightSprite->setPosition(Vec2( loc_winSpace.x, s.height - loc_winSpace.y));
-        Vec3 pos(loc_winSpace.x,loc_winSpace.y, 50);
+        _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
+        Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
         Mat4 mat = _sprite->getNodeToWorldTransform();
-        Point lightPosInLocalSpace = PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
+        Point lightPosInLocalSpace =
+            PointApplyAffineTransform(Vec2(pos.x, pos.y), _sprite->getWorldToNodeAffineTransform());
         ((EffectNormalMapped*)_effect)->setLightPos(Vec3(lightPosInLocalSpace.x, lightPosInLocalSpace.y, 50.0f));
     }
 }

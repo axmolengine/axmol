@@ -26,10 +26,10 @@
 #include "platform/CCPlatformConfig.h"
 
 #ifndef __VIBRATE_TEST_H_
-#define __VIBRATE_TEST_H_
+#    define __VIBRATE_TEST_H_
 
-#include "cocos2d.h"
-#include "../BaseTest.h"
+#    include "cocos2d.h"
+#    include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(VibrateTests);
 
@@ -38,24 +38,22 @@ class VibrateTestDemo : public TestCase
 public:
     virtual std::string title() const override;
     virtual void onExit() override;
-   
 };
 
 class VibrateControlTest : public VibrateTestDemo
 {
 public:
-    CREATE_FUNC(VibrateControlTest);    
+    CREATE_FUNC(VibrateControlTest);
     virtual ~VibrateControlTest();
-    
-    virtual bool init()override;    
+
+    virtual bool init() override;
     virtual std::string title() const override;
-    
+
 private:
     float _duration = 0.f;
-    
-    void* _durationLabel = nullptr;
+
+    void* _durationLabel  = nullptr;
     void* _durationSlider = nullptr;
 };
-
 
 #endif /* defined(__VIBRATE_TEST_H_) */

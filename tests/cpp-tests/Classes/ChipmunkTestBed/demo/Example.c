@@ -29,12 +29,13 @@
 #include "chipmunk/chipmunk_unsafe.h"
 #include "ChipmunkDemo.h"
 
-static void update(cpSpace* space, double dt) {
+static void update(cpSpace* space, double dt)
+{
     cpSpaceStep(space, dt);
 }
 
-
-static cpSpace* init(void) {
+static cpSpace* init(void)
+{
     cpSpace* space = cpSpaceNew();
     cpSpaceSetIterations(space, 5);
     space->damping = 0.1;
@@ -42,7 +43,6 @@ static cpSpace* init(void) {
     cpShape *shape1, *shape2;
 
     cpFloat mass = 1.0f;
-
 
     {
         cpFloat size = 100.0;
@@ -67,8 +67,9 @@ static cpSpace* init(void) {
         const int NUM_VERTS = 5;
 
         cpVect verts[NUM_VERTS];
-        for (int i = 0; i < NUM_VERTS; i++) {
-            cpFloat angle = -2 * M_PI * i / ((cpFloat) NUM_VERTS);
+        for (int i = 0; i < NUM_VERTS; i++)
+        {
+            cpFloat angle = -2 * M_PI * i / ((cpFloat)NUM_VERTS);
             verts[i]      = cpv(size / 2.0 * cos(angle), size / 2.0 * sin(angle));
         }
 
@@ -82,8 +83,9 @@ static cpSpace* init(void) {
         const int NUM_VERTS = 4;
 
         cpVect verts[NUM_VERTS];
-        for (int i = 0; i < NUM_VERTS; i++) {
-            cpFloat angle = -2 * M_PI * i / ((cpFloat) NUM_VERTS);
+        for (int i = 0; i < NUM_VERTS; i++)
+        {
+            cpFloat angle = -2 * M_PI * i / ((cpFloat)NUM_VERTS);
             verts[i]      = cpv(size / 2.0 * cos(angle), size / 2.0 * sin(angle));
         }
 
@@ -115,16 +117,12 @@ static cpSpace* init(void) {
     return space;
 }
 
-static void destroy(cpSpace* space) {
+static void destroy(cpSpace* space)
+{
     ChipmunkDemoFreeSpaceChildren(space);
     cpSpaceFree(space);
 }
 
 ChipmunkDemo Example = {
-    "Template to start (GJK)",
-    1.0f / 60.0f,
-    init,
-    update,
-    ChipmunkDemoDefaultDrawImpl,
-    destroy,
+    "Template to start (GJK)", 1.0f / 60.0f, init, update, ChipmunkDemoDefaultDrawImpl, destroy,
 };

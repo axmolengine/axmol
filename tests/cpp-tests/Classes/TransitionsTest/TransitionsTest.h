@@ -29,7 +29,6 @@
 
 #include "../BaseTest.h"
 
-
 DEFINE_TEST_SUITE(TransitionsTests);
 
 class TransitionsTest : public TestCase

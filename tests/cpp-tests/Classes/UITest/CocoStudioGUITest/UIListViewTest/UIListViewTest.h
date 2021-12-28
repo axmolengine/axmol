@@ -1,19 +1,19 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -43,11 +43,11 @@ public:
     void selectedItemEvent(cocos2d::Ref* sender, cocos2d::ui::ListView::EventType type);
     void selectedItemEventScrollView(cocos2d::Ref* sender, cocos2d::ui::ScrollView::EventType type);
     virtual void update(float dt) override;
-    
+
 protected:
     float getItemPositionYInView(cocos2d::ui::Widget* item) const;
     void updateItem(int itemID, int templateID);
-    
+
     cocos2d::ui::Text* _displayValueLabel = nullptr;
     // How many items we actually spawn, these items will be reused.
     // Should > listview.width / templateWidth + 2.
@@ -56,15 +56,15 @@ protected:
     int _totalCount = 50;
     // when item is away from bufferSzone, we relocate it.
     // Should be larger than List item width.
-    float _bufferZone = 45.f;
+    float _bufferZone         = 45.f;
     float _itemTemplateHeight = 0.f;
     // Could tweak this value to adjust ListView data update rate.
     float _updateInterval = (1.0f / 24);
-    float _updateTimer = 0.f;
+    float _updateTimer    = 0.f;
     // Use this value to detect if we are scrolling left or right
-    float _lastContentPosY = 0.f;
-    float _reuseItemOffset = 0.f;
-    cocos2d::ui::ListView* _listView =nullptr;
+    float _lastContentPosY           = 0.f;
+    float _reuseItemOffset           = 0.f;
+    cocos2d::ui::ListView* _listView = nullptr;
     std::vector<std::string> _array;
     cocos2d::ui::Text* _indexLabels[3] = {nullptr};
 };
@@ -80,10 +80,11 @@ public:
     virtual bool init() override;
     void selectedItemEvent(cocos2d::Ref* sender, cocos2d::ui::ListView::EventType type);
     virtual void update(float dt) override;
+
 protected:
     float getItemPositionXInView(cocos2d::ui::Widget* item) const;
     void updateItem(int itemID, int templateID);
-    
+
     cocos2d::ui::Text* _displayValueLabel = nullptr;
     // How many items we actually spawn, these items will be reused.
     // Should > listview.width / templateWidth + 2.
@@ -91,15 +92,15 @@ protected:
     // How many items we need for the ListView. Usually this is a big number.
     int _totalCount = 50;
     // when item is away from bufferSzone, we relocate it.
-    float _bufferZone = 140.f;
+    float _bufferZone        = 140.f;
     float _itemTemplateWidth = 0.f;
     // Could tweak this value to adjust ListView data update rate.
-    float _updateInterval = 1.0f / 24;
-    float _updateTimer = 0.f;
-    float _lastContentPosX = 0.f;
-    float _reuseItemOffset = 0.f;
+    float _updateInterval            = 1.0f / 24;
+    float _updateTimer               = 0.f;
+    float _lastContentPosX           = 0.f;
+    float _reuseItemOffset           = 0.f;
     cocos2d::ui::ListView* _listView = nullptr;
-    
+
     std::vector<std::string> _array;
 };
 
@@ -107,7 +108,7 @@ class Issue12692 : public UIScene
 {
 public:
     CREATE_FUNC(Issue12692);
-    
+
     virtual bool init() override;
 };
 
@@ -115,10 +116,9 @@ class Issue8316 : public UIScene
 {
 public:
     CREATE_FUNC(Issue8316);
-    
+
     virtual bool init() override;
 };
-
 
 // Test for scroll to item
 class UIListViewTest_ScrollToItem : public UIScene
@@ -126,7 +126,7 @@ class UIListViewTest_ScrollToItem : public UIScene
 protected:
     virtual bool init() override;
     virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const = 0;
-    
+
     cocos2d::ui::ListView* _listView;
     cocos2d::ui::Text* _titleLabel;
     int _nextIndex;
@@ -152,18 +152,16 @@ public:
     }
 };
 
-
 // Test for magnetic scroll
 class UIListViewTest_Magnetic : public UIScene
 {
 protected:
     virtual bool init() override;
     virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const = 0;
-    
+
     cocos2d::ui::ListView* _listView;
     cocos2d::ui::Text* _titleLabel;
     cocos2d::ui::Text* _indexLabels[5];
-    
 };
 
 class UIListViewTest_MagneticVertical : public UIListViewTest_Magnetic
@@ -186,7 +184,6 @@ public:
     }
 };
 
-
 // Test for setting padding
 class UIListViewTest_Padding : public UIScene
 {
@@ -194,13 +191,12 @@ protected:
     virtual bool init() override;
     virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const = 0;
 
-    void sliderEvent(cocos2d::Ref *pSender, cocos2d::ui::Slider::EventType type);
+    void sliderEvent(cocos2d::Ref* pSender, cocos2d::ui::Slider::EventType type);
 
     cocos2d::ui::ListView* _listView;
     cocos2d::ui::Text* _titleLabel;
     cocos2d::ui::Text* _indexLabels[5];
     cocos2d::ui::Text* _paddingLabels[4];
-
 };
 
 class UIListViewTest_PaddingVertical : public UIListViewTest_Padding

@@ -318,8 +318,8 @@ const PUTriangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal(const s
 //			}
 //
 //			const Ogre::VertexElement* posElem =
-// vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION); 			const Ogre::VertexElement*
-// normalElem = vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_NORMAL);
+// vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION); 			const
+// Ogre::VertexElement* normalElem = vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_NORMAL);
 // Ogre::HardwareVertexBufferSharedPtr vbuf = vertex_data->vertexBufferBinding->getBuffer(posElem->getSource());
 // unsigned char* vertex = static_cast<unsigned char*>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
 // float* pReal;

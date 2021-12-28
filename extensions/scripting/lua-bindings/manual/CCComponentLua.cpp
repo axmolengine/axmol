@@ -142,14 +142,14 @@ bool ComponentLua::getLuaFunction(std::string_view functionName)
 {
     lua_State* l = LuaEngine::getInstance()->getLuaStack()->getLuaState();
 
-    lua_pushstring(l, KEY_COMPONENT);         // stack: "component"
-    lua_rawget(l, LUA_REGISTRYINDEX);         // stack: table_of_component
-    lua_pushstring(l, _strIndex.c_str());     // stack: table_of_component strIndex
-    lua_rawget(l, -2);                        // stack: table_of_component table_of_this
+    lua_pushstring(l, KEY_COMPONENT);                                // stack: "component"
+    lua_rawget(l, LUA_REGISTRYINDEX);                                // stack: table_of_component
+    lua_pushstring(l, _strIndex.c_str());                            // stack: table_of_component strIndex
+    lua_rawget(l, -2);                                               // stack: table_of_component table_of_this
     lua_pushlstring(l, functionName.data(), functionName.length());  // stack: table_of_component table_of_this "update"
-    lua_rawget(l, -2);                        // stack: table_of_component table_of_this table_of_this["update"]
-    lua_remove(l, -2);                        // stack: table_of_component table_of_this["update"]
-    lua_remove(l, -2);                        // stack: table_of_this["update"]
+    lua_rawget(l, -2);  // stack: table_of_component table_of_this table_of_this["update"]
+    lua_remove(l, -2);  // stack: table_of_component table_of_this["update"]
+    lua_remove(l, -2);  // stack: table_of_this["update"]
 
     int type = lua_type(l, -1);
     //    if (type != LUA_TFUNCTION)

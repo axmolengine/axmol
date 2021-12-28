@@ -31,61 +31,70 @@
 
 using namespace cocos2d;
 
-ZipTests::ZipTests() {
+ZipTests::ZipTests()
+{
     ADD_TEST_CASE(UnZipNormalFile);
     ADD_TEST_CASE(UnZipWithPassword);
 }
 
-std::string ZipTest::title() const {
+std::string ZipTest::title() const
+{
     return "Unzip Test";
 }
 
-
-static void unzipTest(Label *label, const std::string &originFile, const std::string &tmpName, const std::string &zipFile, std::string_view password = "")
+static void unzipTest(Label* label,
+                      const std::string& originFile,
+                      const std::string& tmpName,
+                      const std::string& zipFile,
+                      std::string_view password = "")
 {
 
     auto fu = FileUtils::getInstance();
     cocos2d::Data origContent;
     const int BUFF_SIZE = 1024;
-    char *buff = nullptr;
+    char* buff          = nullptr;
     std::vector<char> fileData;
-    bool hasError = false;
+    bool hasError          = false;
     unz_file_info fileInfo = {0};
-    char fileName[40] = {0};
+    char fileName[40]      = {0};
 
     auto newLocal = fu->getWritablePath() + tmpName;
-    //copy file to support android
+    // copy file to support android
 
-    if(fu->isFileExist(newLocal)) {
+    if (fu->isFileExist(newLocal))
+    {
         CCLOG("Remove file %s", newLocal.c_str());
         fu->removeFile(newLocal);
     }
 
     CCLOG("Copy %s to %s", zipFile.c_str(), newLocal.c_str());
     auto writeSuccess = fu->writeDataToFile(fu->getDataFromFile(zipFile), newLocal);
-    if(!writeSuccess) {
+    if (!writeSuccess)
+    {
         label->setString("Failed to copy zip file to writable path");
         return;
     }
 
     unzFile fp = unzOpen(newLocal.c_str());
-    if(!fp) {
+    if (!fp)
+    {
         CCLOG("Failed to open zip file %s", newLocal.c_str());
         label->setString("Failed to open zip file");
         return;
     }
 
     int err = unzGoToFirstFile(fp);
-    if(err != UNZ_OK) {
+    if (err != UNZ_OK)
+    {
         label->setString("Failed to local first file");
         goto close_and_return;
     }
 
-    unzGetCurrentFileInfo(fp, &fileInfo, fileName, sizeof(fileName) -1, nullptr, 0, nullptr, 0 );
+    unzGetCurrentFileInfo(fp, &fileInfo, fileName, sizeof(fileName) - 1, nullptr, 0, nullptr, 0);
 
     CCASSERT(strncmp("10k.txt", fileName, 7) == 0, "file name should be 10k.txt");
 
-    if(password.empty())
+    if (password.empty())
     {
         err = unzOpenCurrentFile(fp);
     }
@@ -94,20 +103,24 @@ static void unzipTest(Label *label, const std::string &originFile, const std::st
         err = unzOpenCurrentFilePassword(fp, password.c_str());
     }
 
-    if(err != UNZ_OK) {
+    if (err != UNZ_OK)
+    {
         label->setString("failed to open zip file");
         goto close_and_return;
     }
 
     buff = new char[BUFF_SIZE];
 
-    for(;;) {
-        int retSize =  unzReadCurrentFile(fp, buff, BUFF_SIZE);
-        if(retSize < 0) {
+    for (;;)
+    {
+        int retSize = unzReadCurrentFile(fp, buff, BUFF_SIZE);
+        if (retSize < 0)
+        {
             hasError = true;
             break;
         }
-        else if(retSize == 0) {
+        else if (retSize == 0)
+        {
             break;
         }
 
@@ -116,52 +129,59 @@ static void unzipTest(Label *label, const std::string &originFile, const std::st
 
     delete[] buff;
 
-    if(hasError) {
+    if (hasError)
+    {
         label->setString("unzip error! read error!");
         goto close_and_return;
     }
 
     origContent = FileUtils::getInstance()->getDataFromFile(originFile);
 
-    if(origContent.getSize() == fileData.size() &&
-       memcmp(origContent.getBytes(), fileData.data(), fileData.size()) == 0) {
+    if (origContent.getSize() == fileData.size() &&
+        memcmp(origContent.getBytes(), fileData.data(), fileData.size()) == 0)
+    {
         label->setString("unzip ok!");
-    } else {
+    }
+    else
+    {
         label->setString("unzip error! data mismatch!");
     }
 close_and_return:
     unzClose(fp);
 }
 
-
-void UnZipNormalFile::onEnter() {
+void UnZipNormalFile::onEnter()
+{
     TestCase::onEnter();
 
     const auto winSize = Director::getInstance()->getWinSize();
 
-    Label *label = Label::createWithTTF("unziping file", "fonts/Marker Felt.ttf", 23);
-    label->setPosition(winSize.width/2, winSize.height/2);
+    Label* label = Label::createWithTTF("unziping file", "fonts/Marker Felt.ttf", 23);
+    label->setPosition(winSize.width / 2, winSize.height / 2);
     addChild(label);
 
     unzipTest(label, "zip/10k.txt", "10-nopasswd.zip", "zip/10k-nopass.zip");
 }
 
-std::string UnZipNormalFile::subtitle() const {
+std::string UnZipNormalFile::subtitle() const
+{
     return "unzip without password";
 }
 
-void UnZipWithPassword::onEnter() {
+void UnZipWithPassword::onEnter()
+{
     TestCase::onEnter();
 
     const auto winSize = Director::getInstance()->getWinSize();
 
-    Label *label = Label::createWithTTF("unziping file", "fonts/Marker Felt.ttf", 23);
-    label->setPosition(winSize.width/2, winSize.height/2);
+    Label* label = Label::createWithTTF("unziping file", "fonts/Marker Felt.ttf", 23);
+    label->setPosition(winSize.width / 2, winSize.height / 2);
     addChild(label);
 
     unzipTest(label, "zip/10k.txt", "10.zip", "zip/10k.zip", "123456");
 }
 
-std::string UnZipWithPassword::subtitle() const {
+std::string UnZipWithPassword::subtitle() const
+{
     return "unzip with password";
 }
