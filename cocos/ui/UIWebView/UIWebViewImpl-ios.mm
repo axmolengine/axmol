@@ -191,7 +191,7 @@
 
 - (void)setJavascriptInterfaceScheme:(std::string_view)scheme
 {
-    self.jsScheme = @(scheme.c_str());
+    self.jsScheme = @(scheme.data());
 }
 
 - (void)loadData:(std::string_view)data
@@ -200,12 +200,12 @@
              baseURL:(std::string_view)baseURL
 {
     auto path = [[NSBundle mainBundle] resourcePath];
-    path      = [path stringByAppendingPathComponent:@(baseURL.c_str())];
+    path      = [path stringByAppendingPathComponent:@(baseURL.data())];
     auto url  = [NSURL fileURLWithPath:path];
 
-    [self.wkWebView loadData:[NSData dataWithBytes:data.c_str() length:data.length()]
-                     MIMEType:@(MIMEType.c_str())
-        characterEncodingName:@(encodingName.c_str())
+    [self.wkWebView loadData:[NSData dataWithBytes:data.data() length:data.length()]
+                     MIMEType:@(MIMEType.data())
+        characterEncodingName:@(encodingName.data())
                       baseURL:url];
 }
 
@@ -216,9 +216,9 @@
         [self setupWebView];
     }
     auto path = [[NSBundle mainBundle] resourcePath];
-    path      = [path stringByAppendingPathComponent:@(baseURL.c_str())];
+    path      = [path stringByAppendingPathComponent:@(baseURL.data())];
     auto url  = [NSURL fileURLWithPath:path];
-    [self.wkWebView loadHTMLString:@(string.c_str()) baseURL:url];
+    [self.wkWebView loadHTMLString:@(string.data()) baseURL:url];
 }
 
 - (void)loadUrl:(std::string_view)urlString cleanCachedData:(BOOL)needCleanCachedData
@@ -227,7 +227,7 @@
     {
         [self setupWebView];
     }
-    NSURL* url = [NSURL URLWithString:@(urlString.c_str())];
+    NSURL* url = [NSURL URLWithString:@(urlString.data())];
 
     NSURLRequest* request = nil;
     if (needCleanCachedData)
@@ -246,7 +246,7 @@
     {
         [self setupWebView];
     }
-    NSURL* url            = [NSURL fileURLWithPath:@(filePath.c_str())];
+    NSURL* url            = [NSURL fileURLWithPath:@(filePath.data())];
     NSURLRequest* request = [NSURLRequest requestWithURL:url];
     [self.wkWebView loadRequest:request];
 }
@@ -287,7 +287,7 @@
     {
         [self setupWebView];
     }
-    [self.wkWebView evaluateJavaScript:@(js.c_str()) completionHandler:nil];
+    [self.wkWebView evaluateJavaScript:@(js.data()) completionHandler:nil];
 }
 
 - (void)setScalesPageToFit:(const bool)scalesPageToFit

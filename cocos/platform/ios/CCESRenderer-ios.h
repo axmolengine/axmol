@@ -32,7 +32,7 @@
 #include "platform/CCPlatformConfig.h"
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
-#    include "platform/CCPlatformMacros.h"
+// #    include "platform/CCPlatformMacros.h"
 #    import <QuartzCore/QuartzCore.h>
 
 #    import <OpenGLES/EAGL.h>
