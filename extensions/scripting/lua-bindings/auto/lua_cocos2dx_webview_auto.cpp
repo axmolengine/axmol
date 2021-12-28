@@ -128,9 +128,9 @@ int lua_cocos2dx_webview_WebView_loadHTMLString(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccui.WebView:loadHTMLString");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccui.WebView:loadHTMLString");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_webview_WebView_loadHTMLString'", nullptr);
@@ -142,12 +142,12 @@ int lua_cocos2dx_webview_WebView_loadHTMLString(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        std::string arg0;
-        std::string arg1;
+        std::string_view arg0;
+        std::string_view arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccui.WebView:loadHTMLString");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccui.WebView:loadHTMLString");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccui.WebView:loadHTMLString");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccui.WebView:loadHTMLString");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_webview_WebView_loadHTMLString'", nullptr);
@@ -339,9 +339,9 @@ int lua_cocos2dx_webview_WebView_loadFile(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccui.WebView:loadFile");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccui.WebView:loadFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_webview_WebView_loadFile'", nullptr);
@@ -384,8 +384,8 @@ int lua_cocos2dx_webview_WebView_loadURL(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccui.WebView:loadURL");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccui.WebView:loadURL");
 
             if (!ok) { break; }
             bool arg1;
@@ -400,8 +400,8 @@ int lua_cocos2dx_webview_WebView_loadURL(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccui.WebView:loadURL");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccui.WebView:loadURL");
 
             if (!ok) { break; }
             cobj->loadURL(arg0);
@@ -498,9 +498,9 @@ int lua_cocos2dx_webview_WebView_evaluateJS(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccui.WebView:evaluateJS");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccui.WebView:evaluateJS");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_webview_WebView_evaluateJS'", nullptr);
@@ -830,9 +830,9 @@ int lua_cocos2dx_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccui.WebView:setJavascriptInterfaceScheme");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccui.WebView:setJavascriptInterfaceScheme");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_webview_WebView_setJavascriptInterfaceScheme'", nullptr);
