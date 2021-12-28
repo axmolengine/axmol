@@ -2,8 +2,9 @@
 Copyright (c) 2011      Laschweinski
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxeproject.github.io
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -115,22 +116,23 @@ std::string FileUtilsLinux::getNativeWritableAbsolutePath() const
     return _writablePath;
 }
 
-bool FileUtilsLinux::isFileExistInternal(std::string_view strFilePath) const
+bool FileUtilsLinux::isFileExistInternal(std::string_view path) const
 {
     DECLARE_GUARD;
-    if (strFilePath.empty())
+    if (path.empty())
     {
         return false;
     }
 
-    std::string strPath = strFilePath;
-    if (!isAbsolutePath(strPath))
+    std::string strPath;
+    if (!isAbsolutePath(path))
     {  // Not absolute path, add the default root path at the beginning.
-        strPath.insert(0, _defaultResRootPath);
+        strPath.assign(_defaultResRootPath).append(path);
+        path = strPath;
     }
 
     struct stat sts;
-    return (stat(strPath.c_str(), &sts) == 0) && S_ISREG(sts.st_mode);
+    return (stat(path.data(), &sts) == 0) && S_ISREG(sts.st_mode);
 }
 
 NS_CC_END
