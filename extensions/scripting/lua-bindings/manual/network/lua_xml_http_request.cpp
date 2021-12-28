@@ -621,7 +621,8 @@ static int lua_get_XMLHttpRequest_statusText(lua_State* L)
     }
 #endif
 
-    lua_pushstring(L, self->getStatusText().c_str());
+    auto statusText = self->getStatusText();
+    lua_pushlstring(L, statusText.data(), statusText.length());
 
     return 1;
 

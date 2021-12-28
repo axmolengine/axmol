@@ -915,8 +915,8 @@ void MyXMLVisitor::setTagDescription(std::string_view tag,
         MyXMLVisitor::_tagTables, tag,
         TagBehavior{
             isFontElement,
-            std::move(
-                handleVisitEnter)});  // MyXMLVisitor::_tagTables[tag] = {isFontElement, std::move(handleVisitEnter)};
+         std::move(
+             handleVisitEnter)});  // MyXMLVisitor::_tagTables[tag] = {isFontElement, std::move(handleVisitEnter)};
 }
 
 void MyXMLVisitor::removeTagDescription(std::string_view tag)
@@ -2080,7 +2080,7 @@ float RichText::stripTrailingWhitespace(const Vector<cocos2d::Node*>& row)
     {
         if (auto label = dynamic_cast<Label*>(row.back()))
         {
-            const auto width = label->getContentSize().width;
+            const auto width         = label->getContentSize().width;
             std::string trimmedString{label->getString()};
             rtrim(trimmedString);
             if (label->getString() != trimmedString)

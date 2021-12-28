@@ -149,8 +149,9 @@ protected:
      * @param [handle]  Customized comparasion handle function
      * @return Greater or not
      */
-    bool versionGreater(const Manifest* b,
-                        const std::function<int(std::string_view versionA, std::string_view versionB)>& handle) const;
+    bool versionGreater(
+        const Manifest* b,
+        const std::function<int(std::string_view versionA, std::string_view versionB)>& handle) const;
 
     /** @brief Generate difference between this Manifest and another.
      * @param b   The other manifest

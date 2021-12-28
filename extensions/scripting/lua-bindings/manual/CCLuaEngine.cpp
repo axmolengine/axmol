@@ -185,7 +185,7 @@ bool LuaEngine::parseConfig(ConfigType type, std::string_view str)
     }
 
     _stack->pushInt((int)type);
-    _stack->pushString(str.c_str());
+    _stack->pushString(str.data(), str.length());
 
     return _stack->executeFunction(2);
 }

@@ -96,7 +96,7 @@ const LuaValue LuaValue::ccobjectValue(Ref* ccobjectValue, const char* objectTyp
 
 const LuaValue LuaValue::ccobjectValue(Ref* ccobjectValue, std::string_view objectTypename)
 {
-    return LuaValue::ccobjectValue(ccobjectValue, objectTypename.c_str());
+    return LuaValue::ccobjectValue(ccobjectValue, objectTypename.data());
 }
 
 LuaValue::LuaValue(const LuaValue& rhs)

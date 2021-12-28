@@ -341,7 +341,9 @@ public:
                                    float fontSize = 0);
 
     /** Sets a new bitmap font to Label */
-    virtual bool setBMFontFilePath(std::string_view bmfontFilePath, std::string_view subTextureKey, float fontSize = 0);
+    virtual bool setBMFontFilePath(std::string_view bmfontFilePath,
+                                   std::string_view subTextureKey,
+                                   float fontSize = 0);
 
     /** Sets a new bitmap font to Label */
     CC_DEPRECATED_ATTRIBUTE virtual bool setBMFontFilePath(std::string_view bmfontFilePath,

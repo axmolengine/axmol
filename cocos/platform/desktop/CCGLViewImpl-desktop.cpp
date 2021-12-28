@@ -575,18 +575,18 @@ void GLViewImpl::pollEvents()
 
 void GLViewImpl::enableRetina(bool enabled)
 {  // official v4 comment follow sources
-   // #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-   //     _isRetinaEnabled = enabled;
-   //     if (_isRetinaEnabled)
-   //     {
-   //         _retinaFactor = 1;
-   //     }
-   //     else
-   //     {
-   //         _retinaFactor = 2;
-   //     }
-   //     updateFrameSize();
-   // #endif
+    // #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+    //     _isRetinaEnabled = enabled;
+    //     if (_isRetinaEnabled)
+    //     {
+    //         _retinaFactor = 1;
+    //     }
+    //     else
+    //     {
+    //         _retinaFactor = 2;
+    //     }
+    //     updateFrameSize();
+    // #endif
 }
 
 void GLViewImpl::setIMEKeyboardState(bool /*bOpen*/) {}

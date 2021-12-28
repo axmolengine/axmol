@@ -299,7 +299,9 @@ private:
     void printFileUtils(socket_native_type fd);
 
     /** send help message to console */
-    static void sendHelp(socket_native_type fd, const hlookup::string_map<Command*>& commands, const char* msg);
+    static void sendHelp(socket_native_type fd,
+                         const hlookup::string_map<Command*>& commands,
+                         const char* msg);
 };
 
 NS_CC_END

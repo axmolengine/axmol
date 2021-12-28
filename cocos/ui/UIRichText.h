@@ -186,7 +186,7 @@ public:
                                    std::string_view fontName,
                                    float fontSize,
                                    uint32_t flags              = 0,
-                                   std::string_view url        = "",
+                                   std::string_view url      = "",
                                    const Color3B& outlineColor = Color3B::WHITE,
                                    int outlineSize             = -1,
                                    const Color3B& shadowColor  = Color3B::BLACK,
@@ -245,7 +245,7 @@ public:
               const Color3B& color,
               uint8_t opacity,
               std::string_view filePath,
-              std::string_view url           = "",
+              std::string_view url         = "",
               Widget::TextureResType texType = Widget::TextureResType::LOCAL);
 
     /**
@@ -263,7 +263,7 @@ public:
                                     const Color3B& color,
                                     uint8_t opacity,
                                     std::string_view filePath,
-                                    std::string_view url           = "",
+                                    std::string_view url         = "",
                                     Widget::TextureResType texType = Widget::TextureResType::LOCAL);
 
     void setWidth(int width);
@@ -517,24 +517,24 @@ public:
         HorizontalAlignment a); /*!< sets the horizontal alignment mode: LEFT, CENTER, or RIGHT */
     HorizontalAlignment getHorizontalAlignment() const; /*!< returns the current horizontal alignment mode */
     void setFontColor(
-        std::string_view color);             /*!< Set the font color. @param color the #RRGGBB hexadecimal notation. */
-    std::string getFontColor();              /*!< return the current font color */
-    Color3B getFontColor3B();                /*!< return the current font color */
-    void setFontSize(float size);            /*!< Set the font size. @param size the font size. */
-    float getFontSize();                     /*!< return the current font size */
-    void setFontFace(std::string_view face); /*!< Set the font face. @param face the font face. */
-    std::string getFontFace();               /*!< return the current font face */
+        std::string_view color); /*!< Set the font color. @param color the #RRGGBB hexadecimal notation. */
+    std::string getFontColor();    /*!< return the current font color */
+    Color3B getFontColor3B();      /*!< return the current font color */
+    void setFontSize(float size);  /*!< Set the font size. @param size the font size. */
+    float getFontSize();           /*!< return the current font size */
+    void setFontFace(std::string_view face);         /*!< Set the font face. @param face the font face. */
+    std::string getFontFace();                         /*!< return the current font face */
     void setAnchorFontColor(std::string_view color); /*!< Set the font color of a-tag. @param face the font color. */
-    std::string getAnchorFontColor();                /*!< return the current font color of a-tag */
-    cocos2d::Color3B getAnchorFontColor3B();         /*!< return the current font color of a-tag */
-    void setAnchorTextBold(bool enable);             /*!< enable bold text of a-tag */
-    bool isAnchorTextBoldEnabled();                  /*!< valid style is bold text of a-tag? */
-    void setAnchorTextItalic(bool enable);           /*!< enable italic text of a-tag */
-    bool isAnchorTextItalicEnabled();                /*!< valid style is italic text of a-tag? */
-    void setAnchorTextDel(bool enable);              /*!< enable the strikethrough of a-tag */
-    bool isAnchorTextDelEnabled();                   /*!< valid strikethrough of a-tag? */
-    void setAnchorTextUnderline(bool enable);        /*!< enable the underline of a-tag */
-    bool isAnchorTextUnderlineEnabled();             /*!< valid underline of a-tag? */
+    std::string getAnchorFontColor();                  /*!< return the current font color of a-tag */
+    cocos2d::Color3B getAnchorFontColor3B();           /*!< return the current font color of a-tag */
+    void setAnchorTextBold(bool enable);               /*!< enable bold text of a-tag */
+    bool isAnchorTextBoldEnabled();                    /*!< valid style is bold text of a-tag? */
+    void setAnchorTextItalic(bool enable);             /*!< enable italic text of a-tag */
+    bool isAnchorTextItalicEnabled();                  /*!< valid style is italic text of a-tag? */
+    void setAnchorTextDel(bool enable);                /*!< enable the strikethrough of a-tag */
+    bool isAnchorTextDelEnabled();                     /*!< valid strikethrough of a-tag? */
+    void setAnchorTextUnderline(bool enable);          /*!< enable the underline of a-tag */
+    bool isAnchorTextUnderlineEnabled();               /*!< valid underline of a-tag? */
     /** @brief enable the outline of a-tag */
     void setAnchorTextOutline(bool enable, const Color3B& outlineColor = Color3B::WHITE, int outlineSize = -1);
     bool isAnchorTextOutlineEnabled();     /*!< valid outline of a-tag? */
@@ -555,7 +555,7 @@ public:
     void setDefaults(const ValueMap& defaults); /*!< set the default values */
     ValueMap getDefaults() const;               /*!< returns the default values */
 
-    cocos2d::Color3B color3BWithString(std::string_view color);     /*!< convert a color string into a Color3B. */
+    cocos2d::Color3B color3BWithString(std::string_view color);   /*!< convert a color string into a Color3B. */
     std::string stringWithColor3B(const cocos2d::Color3B& color3b); /*!< convert a Color3B into a color string. */
     std::string stringWithColor4B(const cocos2d::Color4B& color4b); /*!< convert a Color4B into a color string. */
 
@@ -599,7 +599,7 @@ protected:
                             const Color3B& color,
                             uint8_t opacity,
                             uint32_t flags,
-                            std::string_view url        = "",
+                            std::string_view url      = "",
                             const Color3B& outlineColor = Color3B::WHITE,
                             int outlineSize             = -1,
                             const Color3B& shadowColor  = Color3B::BLACK,

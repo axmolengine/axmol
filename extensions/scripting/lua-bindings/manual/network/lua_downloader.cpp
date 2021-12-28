@@ -270,26 +270,27 @@ static int lua_downloader_setOnTaskError(lua_State* L)
     luaL_argcheck(L, lua_isfunction(L, 2), 2, "should be a function");
     saveCallback(L, d, "setOnTaskError");
 
-    d->setOnTaskError([d, L](const DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorSt) {
-        int ret = getCallback(L, d, "setOnTaskError");  // stack callbackfn
-        if (ret)
-        {
-            pushTaskTable(L, task);  // stack callbackfn, task
-            lua_pushnumber(L, errorCode);
-            lua_pushnumber(L, errorCodeInternal);
-            lua_pushstring(L, errorSt.c_str());
-            if (lua_pcall(L, 4, 0, 0) != 0)
+    d->setOnTaskError(
+        [d, L](const DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorSt) {
+            int ret = getCallback(L, d, "setOnTaskError");  // stack callbackfn
+            if (ret)
+            {
+                pushTaskTable(L, task);  // stack callbackfn, task
+                lua_pushnumber(L, errorCode);
+                lua_pushnumber(L, errorCodeInternal);
+                lua_pushlstring(L, errorSt.data(), errorSt.length());
+                if (lua_pcall(L, 4, 0, 0) != 0)
+                {
+                    lua_pop(L, 1);  // remove callback or nil
+                    luaL_error(L, "cc.Downloader.setOnTaskError invoke callback error!");
+                    return;
+                }
+            }
+            else
             {
                 lua_pop(L, 1);  // remove callback or nil
-                luaL_error(L, "cc.Downloader.setOnTaskError invoke callback error!");
-                return;
             }
-        }
-        else
-        {
-            lua_pop(L, 1);  // remove callback or nil
-        }
-    });
+        });
 
     return 0;
 }

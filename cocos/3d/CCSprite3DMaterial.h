@@ -178,8 +178,8 @@ public:
     ~Sprite3DMaterialCache();
 
 protected:
-    static Sprite3DMaterialCache* _cacheInstance;  // instance
-    hlookup::string_map<Texture2D*> _materials;    // cached material
+    static Sprite3DMaterialCache* _cacheInstance;            // instance
+    hlookup::string_map<Texture2D*> _materials;  // cached material
 };
 
 // end of 3d group

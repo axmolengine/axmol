@@ -260,7 +260,9 @@ public:
     /**
      * @private
      */
-    MeshDisplayData* getMesh(std::string_view skinName, std::string_view slotName, std::string_view meshName) const;
+    MeshDisplayData* getMesh(std::string_view skinName,
+                             std::string_view slotName,
+                             std::string_view meshName) const;
     /**
      * - Get a specific animation data.
      * @param animationName - The animation animationName.

@@ -79,11 +79,11 @@ public:
     */
     PUBillboardChain(std::string_view name,
                      std::string_view texFile = "",
-                     size_t maxElements       = 20,
-                     size_t numberOfChains    = 1,
-                     bool useTextureCoords    = true,
-                     bool useColours          = true,
-                     bool dynamic             = true);
+                     size_t maxElements         = 20,
+                     size_t numberOfChains      = 1,
+                     bool useTextureCoords      = true,
+                     bool useColours            = true,
+                     bool dynamic               = true);
     /// destructor
     virtual ~PUBillboardChain();
 

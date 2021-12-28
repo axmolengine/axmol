@@ -40,17 +40,18 @@ static int32_t getCurrentMillSecond()
 {
     int32_t lLastTime = 0;
     struct timeval stCurrentTime;
-
-    gettimeofday(&stCurrentTime, NULL);
-    lLastTime = stCurrentTime.tv_sec * 1000 + stCurrentTime.tv_usec * 0.001;  // milliseconds
+    
+    gettimeofday(&stCurrentTime,NULL);
+    lLastTime = stCurrentTime.tv_sec*1000+stCurrentTime.tv_usec*0.001; // milliseconds
     return lLastTime;
 }
 
 Application* Application::sm_pSharedApplication = nullptr;
 
-Application::Application() : _animationInterval(1.0f / 60.0f * 1000.0f)
+Application::Application()
+: _animationInterval(1.0f/60.0f*1000.0f)
 {
-    CCASSERT(!sm_pSharedApplication, "sm_pSharedApplication already exist");
+    CCASSERT(! sm_pSharedApplication, "sm_pSharedApplication already exist");
     sm_pSharedApplication = this;
 }
 
@@ -63,53 +64,53 @@ Application::~Application()
 int Application::run()
 {
     initGLContextAttrs();
-    if (!applicationDidFinishLaunching())
+    if(!applicationDidFinishLaunching())
     {
         return 1;
     }
-
+    
     int32_t lastTime = 0L;
-    int32_t curTime  = 0L;
-
+    int32_t curTime = 0L;
+    
     auto director = Director::getInstance();
-    auto glview   = director->getOpenGLView();
-
+    auto glview = director->getOpenGLView();
+    
     // Retain glview to avoid glview being released in the while loop
     glview->retain();
 
     while (!glview->windowShouldClose())
     {
         lastTime = getCurrentMillSecond();
-
+        
         director->mainLoop();
         glview->pollEvents();
 
         curTime = getCurrentMillSecond();
         if (curTime - lastTime < _animationInterval)
         {
-            usleep(static_cast<useconds_t>((_animationInterval - curTime + lastTime) * 1000));
+            usleep(static_cast<useconds_t>((_animationInterval - curTime + lastTime)*1000));
         }
     }
 
     /* Only work on Desktop
-     *  Director::mainLoop is really one frame logic
-     *  when we want to close the window, we should call Director::end();
-     *  then call Director::mainLoop to do release of internal resources
-     */
+    *  Director::mainLoop is really one frame logic
+    *  when we want to close the window, we should call Director::end();
+    *  then call Director::mainLoop to do release of internal resources
+    */
     if (glview->isOpenGLReady())
     {
         director->end();
         director->mainLoop();
     }
-
+    
     glview->release();
-
+    
     return 0;
 }
 
 void Application::setAnimationInterval(float interval)
 {
-    _animationInterval = interval * 1000.0f;
+    _animationInterval = interval*1000.0f;
 }
 
 Application::Platform Application::getTargetPlatform()
@@ -117,11 +118,9 @@ Application::Platform Application::getTargetPlatform()
     return Platform::OS_MAC;
 }
 
-std::string Application::getVersion()
-{
+std::string Application::getVersion() {
     NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    if (version)
-    {
+    if (version) {
         return [version UTF8String];
     }
     return "";
@@ -137,39 +136,39 @@ Application* Application::getInstance()
     return sm_pSharedApplication;
 }
 
-const char* Application::getCurrentLanguageCode()
+const char * Application::getCurrentLanguageCode()
 {
-    static char code[3]       = {0};
-    NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
-    NSArray* languages        = [defaults objectForKey:@"AppleLanguages"];
-    NSString* currentLanguage = [languages objectAtIndex:0];
-
+    static char code[3]={0};
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
+    NSString *currentLanguage = [languages objectAtIndex:0];
+    
     // get the current language code.(such as English is "en", Chinese is "zh" and so on)
-    NSDictionary* temp     = [NSLocale componentsFromLocaleIdentifier:currentLanguage];
-    NSString* languageCode = [temp objectForKey:NSLocaleLanguageCode];
+    NSDictionary* temp = [NSLocale componentsFromLocaleIdentifier:currentLanguage];
+    NSString * languageCode = [temp objectForKey:NSLocaleLanguageCode];
     [languageCode getCString:code maxLength:3 encoding:NSASCIIStringEncoding];
-    code[2] = '\0';
+    code[2]='\0';
     return code;
 }
 
 LanguageType Application::getCurrentLanguage()
 {
     // get the current language and country config
-    NSUserDefaults* defaults  = [NSUserDefaults standardUserDefaults];
-    NSArray* languages        = [defaults objectForKey:@"AppleLanguages"];
-    NSString* currentLanguage = [languages objectAtIndex:0];
-
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
+    NSString *currentLanguage = [languages objectAtIndex:0];
+    
     // get the current language code.(such as English is "en", Chinese is "zh" and so on)
-    NSDictionary* temp     = [NSLocale componentsFromLocaleIdentifier:currentLanguage];
-    NSString* languageCode = [temp objectForKey:NSLocaleLanguageCode];
-
+    NSDictionary* temp = [NSLocale componentsFromLocaleIdentifier:currentLanguage];
+    NSString * languageCode = [temp objectForKey:NSLocaleLanguageCode];
+    
     return utils::getLanguageTypeByISO2([languageCode UTF8String]);
 }
 
-bool Application::openURL(const std::string& url)
+bool Application::openURL(const std::string &url)
 {
     NSString* msg = [NSString stringWithCString:url.c_str() encoding:NSUTF8StringEncoding];
-    NSURL* nsUrl  = [NSURL URLWithString:msg];
+    NSURL* nsUrl = [NSURL URLWithString:msg];
     return [[NSWorkspace sharedWorkspace] openURL:nsUrl];
 }
 

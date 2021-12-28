@@ -56,11 +56,11 @@ namespace wext
 {
 bool (*onBeforeLoadObjectAsset)(cocos2d::Node*,
                                 cocos2d::ResourceData& assets,
-                                int index /*= 0*/)                     = &onLoadObjectAssetDummy;
+                                int index /*= 0*/)                       = &onLoadObjectAssetDummy;
 bool (*onAfterLoadObjectAsset)(cocos2d::Node*,
                                cocos2d::ResourceData& assets,
-                               int index /*= 0*/)                      = &onLoadObjectAssetDummy;
-void (*onLoadSpriteFramesWithFile)(std::string& file)                  = nullptr;
+                               int index /*= 0*/)                        = &onLoadObjectAssetDummy;
+void (*onLoadSpriteFramesWithFile)(std::string& file)                    = nullptr;
 void (*onNestingNodeLoading)(std::string_view filePath)                = nullptr;
 void (*onNestingNodeLoaded)(cocos2d::Node*, std::string_view filePath) = nullptr;
 cocos2d::Node* (*aNode)();

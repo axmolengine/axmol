@@ -52,7 +52,7 @@ static std::string s_exePath;
 static std::string convertPathFormatToUnixStyle(std::string_view path)
 {
     std::string ret{path};
-    int len = ret.length();
+    int len         = ret.length();
     for (int i = 0; i < len; ++i)
     {
         if (ret[i] == '\\')
@@ -129,7 +129,7 @@ bool FileUtilsWin32::init()
     DECLARE_GUARD;
 
     _checkWorkingPath();
-    _defaultResRootPath      = ntcvt::from_chars(s_workingPath);
+    _defaultResRootPath = ntcvt::from_chars(s_workingPath);
     _defaultResRootPathUtf16 = s_workingPath;
 
     bool bRet = FileUtils::init();

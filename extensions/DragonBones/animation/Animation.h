@@ -215,7 +215,7 @@ public:
                            float fadeInTime                 = -1.f,
                            int playTimes                    = -1,
                            int layer                        = 0,
-                           std::string_view group           = "",
+                           std::string_view group         = "",
                            AnimationFadeOutMode fadeOutMode = AnimationFadeOutMode::SameLayerAndGroup);
     /**
      * - Play a specific animation from the specific time.

@@ -224,7 +224,7 @@ public:
                            std::string_view normalImage,
                            std::string_view pressedImage  = "",
                            std::string_view disabledImage = "",
-                           TextureResType texType         = TextureResType::LOCAL);
+                           TextureResType texType           = TextureResType::LOCAL);
 
     /**
      * Constructor.
@@ -284,7 +284,7 @@ public:
                                 std::string_view normalImage,
                                 std::string_view pressedImage  = "",
                                 std::string_view disabledImage = "",
-                                TextureResType texType         = TextureResType::LOCAL);
+                                TextureResType texType           = TextureResType::LOCAL);
 
     /**
      * Load textures for edit box.
@@ -297,7 +297,7 @@ public:
     void loadTextures(std::string_view normal,
                       std::string_view pressed,
                       std::string_view disabled = "",
-                      TextureResType texType    = TextureResType::LOCAL);
+                      TextureResType texType      = TextureResType::LOCAL);
 
     /**
      * Load normal state texture for edit box.

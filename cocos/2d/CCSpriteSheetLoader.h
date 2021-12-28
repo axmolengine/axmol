@@ -72,13 +72,13 @@ public:
 class ISpriteSheetLoader
 {
 public:
-    virtual ~ISpriteSheetLoader()                                                                           = default;
-    virtual uint32_t getFormat()                                                                            = 0;
-    virtual void load(std::string_view filePath, SpriteFrameCache& cache)                                   = 0;
-    virtual void load(std::string_view filePath, Texture2D* texture, SpriteFrameCache& cache)               = 0;
+    virtual ~ISpriteSheetLoader()                                                               = default;
+    virtual uint32_t getFormat()                                                                = 0;
+    virtual void load(std::string_view filePath, SpriteFrameCache& cache)                     = 0;
+    virtual void load(std::string_view filePath, Texture2D* texture, SpriteFrameCache& cache) = 0;
     virtual void load(std::string_view filePath, std::string_view textureFileName, SpriteFrameCache& cache) = 0;
-    virtual void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache)                     = 0;
-    virtual void reload(std::string_view filePath, SpriteFrameCache& cache)                                 = 0;
+    virtual void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache)                         = 0;
+    virtual void reload(std::string_view filePath, SpriteFrameCache& cache)                                   = 0;
 };
 
 class SpriteSheetLoader : public ISpriteSheetLoader
@@ -92,12 +92,12 @@ public:
                                const std::vector<int>& triangleIndices,
                                PolygonInfo& polygonInfo);
 
-    uint32_t getFormat() override                                                                            = 0;
-    void load(std::string_view filePath, SpriteFrameCache& cache) override                                   = 0;
-    void load(std::string_view filePath, Texture2D* texture, SpriteFrameCache& cache) override               = 0;
+    uint32_t getFormat() override                                                                                = 0;
+    void load(std::string_view filePath, SpriteFrameCache& cache) override                                     = 0;
+    void load(std::string_view filePath, Texture2D* texture, SpriteFrameCache& cache) override                 = 0;
     void load(std::string_view filePath, std::string_view textureFileName, SpriteFrameCache& cache) override = 0;
-    void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override                     = 0;
-    void reload(std::string_view filePath, SpriteFrameCache& cache) override                                 = 0;
+    void load(const Data& content, Texture2D* texture, SpriteFrameCache& cache) override                         = 0;
+    void reload(std::string_view filePath, SpriteFrameCache& cache) override                                   = 0;
 };
 
 // end of _2d group

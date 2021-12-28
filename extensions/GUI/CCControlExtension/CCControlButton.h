@@ -207,7 +207,9 @@ public:
                                                   cocos2d::ui::Scale9Sprite* backgroundSprite,
                                                   bool adjustBackGroundSize);
     virtual bool initWithBackgroundSprite(cocos2d::ui::Scale9Sprite* sprite);
-    virtual bool initWithTitleAndFontNameAndFontSize(std::string_view title, std::string_view fontName, float fontSize);
+    virtual bool initWithTitleAndFontNameAndFontSize(std::string_view title,
+                                                     std::string_view fontName,
+                                                     float fontSize);
 
 protected:
     bool _isPushed;

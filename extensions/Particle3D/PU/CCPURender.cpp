@@ -227,25 +227,25 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
 
         //_posuvcolors[vertexindex].position = (position + (- halfwidth - halfheight + halfwidth * offsetX + halfheight
         //* offsetY)); _posuvcolors[vertexindex].color = particle->color; _posuvcolors[vertexindex].uv.set(val.x +
-        // texOffset.x, val.y + texOffset.y);
+        //texOffset.x, val.y + texOffset.y);
 
         // val.set(particle->rt_uv.x - texOffset.x, particle->lb_uv.y - texOffset.y);
         // val.set(val.x * costheta - val.y * sintheta, val.x * sintheta + val.y * costheta);
         //_posuvcolors[vertexindex + 1].position = (position + (halfwidth - halfheight + halfwidth * offsetX +
-        // halfheight * offsetY)); _posuvcolors[vertexindex + 1].color = particle->color; _posuvcolors[vertexindex +
-        // 1].uv.set(val.x + texOffset.x, val.y + texOffset.y);
+        //halfheight * offsetY)); _posuvcolors[vertexindex + 1].color = particle->color; _posuvcolors[vertexindex +
+        //1].uv.set(val.x + texOffset.x, val.y + texOffset.y);
         //
         // val.set(particle->lb_uv.x - texOffset.x, particle->rt_uv.y - texOffset.y);
         // val.set(val.x * costheta - val.y * sintheta, val.x * sintheta + val.y * costheta);
         //_posuvcolors[vertexindex + 2].position = (position + (- halfwidth + halfheight + halfwidth * offsetX +
-        // halfheight * offsetY)); _posuvcolors[vertexindex + 2].color = particle->color; _posuvcolors[vertexindex +
-        // 2].uv.set(val.x + texOffset.x, val.y + texOffset.y);
+        //halfheight * offsetY)); _posuvcolors[vertexindex + 2].color = particle->color; _posuvcolors[vertexindex +
+        //2].uv.set(val.x + texOffset.x, val.y + texOffset.y);
         //
         // val.set(particle->rt_uv.x - texOffset.x, particle->rt_uv.y - texOffset.y);
         // val.set(val.x * costheta - val.y * sintheta, val.x * sintheta + val.y * costheta);
         //_posuvcolors[vertexindex + 3].position = (position + (halfwidth + halfheight + halfwidth * offsetX +
-        // halfheight * offsetY)); _posuvcolors[vertexindex + 3].color = particle->color; _posuvcolors[vertexindex +
-        // 3].uv.set(val.x + texOffset.x, val.y + texOffset.y);
+        //halfheight * offsetY)); _posuvcolors[vertexindex + 3].color = particle->color; _posuvcolors[vertexindex +
+        //3].uv.set(val.x + texOffset.x, val.y + texOffset.y);
         //
         //
         //_indexData[index] = vertexindex;
@@ -488,7 +488,8 @@ PUParticle3DQuadRender* PUParticle3DQuadRender::clone()
     return render;
 }
 
-PUParticle3DModelRender* PUParticle3DModelRender::create(std::string_view modelFile, std::string_view texFile /*= ""*/)
+PUParticle3DModelRender* PUParticle3DModelRender::create(std::string_view modelFile,
+                                                         std::string_view texFile /*= ""*/)
 {
     auto ret        = new PUParticle3DModelRender();
     ret->_modelFile = modelFile;

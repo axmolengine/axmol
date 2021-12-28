@@ -166,7 +166,7 @@ void Animate3D::startWithTarget(Node* target)
                 for (const auto& iter : boneCurves)
                 {
                     std::string_view boneName = iter.first;
-                    auto skin                 = sprite->getSkeleton();
+                    auto skin                   = sprite->getSkeleton();
                     if (skin)
                     {
                         auto bone = skin->getBoneByName(boneName);
@@ -204,7 +204,7 @@ void Animate3D::startWithTarget(Node* target)
             for (const auto& iter : boneCurves)
             {
                 std::string_view boneName = iter.first;
-                Node* node                = nullptr;
+                Node* node                  = nullptr;
                 if (target->getName() == boneName)
                     node = target;
                 else

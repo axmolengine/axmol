@@ -184,7 +184,7 @@ NS_CC_BEGIN
 // void Particle3DVertexEmitter::_loadMesh ()
 //{
 //	Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().load(mMeshName,
-// Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME); 	mMesh = mesh.getPointer(); 	mMeshProcessed = false;
+//Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME); 	mMesh = mesh.getPointer(); 	mMeshProcessed = false;
 //
 //	if (mMesh->getNumSubMeshes() > 0)
 //	{

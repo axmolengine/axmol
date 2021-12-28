@@ -78,7 +78,7 @@ Index of this file:
 #        endif
 #        pragma clang diagnostic ignored "-Wunknown-pragmas"  // warning: unknown warning group 'xxx'
 #        pragma clang diagnostic ignored "-Wold-style-cast"   // warning: use of old-style cast // yes, they are more
-                                                              // terse.
+                                                             // terse.
 #        pragma clang diagnostic ignored \
             "-Wfloat-equal"  // warning: comparing floating point with == or != is unsafe // storing and comparing
                              // against same constants (typically 0.0f) is ok.

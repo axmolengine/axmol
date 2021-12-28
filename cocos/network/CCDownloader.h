@@ -129,7 +129,8 @@ public:
 
     void setOnTaskError(
         const std::function<
-            void(const DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorStr)>& callback)
+            void(const DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorStr)>&
+            callback)
     {
         onTaskError = callback;
     };
@@ -140,7 +141,7 @@ public:
                                                          std::string_view storagePath,
                                                          std::string_view identifier = "",
                                                          std::string_view checksum   = "",
-                                                         bool background             = false);
+                                                         bool background               = false);
 
 private:
     std::unique_ptr<IDownloaderImpl> _impl;

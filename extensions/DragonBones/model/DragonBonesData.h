@@ -158,7 +158,10 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline ArmatureData* getArmature(std::string_view armatureName) const { return mapFind(armatures, armatureName); }
+    inline ArmatureData* getArmature(std::string_view armatureName) const
+    {
+        return mapFind(armatures, armatureName);
+    }
 
 protected:
     virtual void _onClear() override;

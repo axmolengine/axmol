@@ -69,7 +69,8 @@ void CCArmatureDisplay::dispatchDBEvent(std::string_view type, EventObject* valu
     _dispatcher->dispatchCustomEvent(type, value);
 }
 
-void CCArmatureDisplay::removeDBEventListener(std::string_view type, const std::function<void(EventObject*)>& callback)
+void CCArmatureDisplay::removeDBEventListener(std::string_view type,
+                                              const std::function<void(EventObject*)>& callback)
 {
     // TODO
     _dispatcher->removeCustomEventListeners(type);

@@ -151,7 +151,9 @@ public:
     /**
      *    @brief    Add ArmatureFileInfo, it is managed by ArmatureDataManager.
      */
-    void addArmatureFileInfo(std::string_view imagePath, std::string_view plistPath, std::string_view configFilePath);
+    void addArmatureFileInfo(std::string_view imagePath,
+                             std::string_view plistPath,
+                             std::string_view configFilePath);
 
     /**
      *    @brief    Add ArmatureFileInfo, it is managed by ArmatureDataManager.

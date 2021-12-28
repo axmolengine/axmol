@@ -41,31 +41,27 @@ THE SOFTWARE.
 @synthesize tokenizer;
 @synthesize autocorrectionType;
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    if (self = [super initWithFrame:frame])
-    {
-        self.myMarkedText       = nil;
+- (instancetype) initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame] ) {
+        self.myMarkedText = nil;
         self.autocorrectionType = UITextAutocorrectionTypeNo;
     }
-
+    
     return self;
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self]; // remove keyboard notification
     [self.myMarkedText release];
     [self removeFromSuperview];
     [super dealloc];
 }
 
-- (BOOL)canBecomeFirstResponder
-{
+- (BOOL) canBecomeFirstResponder {
     return YES;
 }
 
-- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self resignFirstResponder];
     [self removeFromSuperview];
@@ -73,190 +69,159 @@ THE SOFTWARE.
 
 #pragma TextInput protocol
 
-- (id<UITextInputDelegate>)inputDelegate
-{
+- (id<UITextInputDelegate>)inputDelegate {
     return nil;
 }
 
-- (void)setInputDelegate:(id<UITextInputDelegate>)inputDelegate
-{}
+- (void)setInputDelegate:(id<UITextInputDelegate>)inputDelegate {
+    
+}
 
-- (void)setSelectedTextRange:(UITextRange*)aSelectedTextRange
-{
+- (void)setSelectedTextRange:(UITextRange *)aSelectedTextRange {
     CCLOG("UITextRange:setSelectedTextRange");
 }
 
-- (UITextRange*)selectedTextRange
-{
+- (UITextRange *)selectedTextRange {
     return [[[UITextRange alloc] init] autorelease];
 }
 
-- (void)deleteBackward
-{
-    if (nil != self.myMarkedText)
-    {
+- (void)deleteBackward {
+    if (nil != self.myMarkedText) {
         [self.myMarkedText release];
         self.myMarkedText = nil;
     }
     cocos2d::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
 }
 
-- (void)insertText:(nonnull NSString*)text
-{
-    if (nil != self.myMarkedText)
-    {
+- (void)insertText:(nonnull NSString *)text {
+    if (nil != self.myMarkedText) {
         [self.myMarkedText release];
         self.myMarkedText = nil;
     }
-    const char* pszText = [text cStringUsingEncoding:NSUTF8StringEncoding];
+    const char * pszText = [text cStringUsingEncoding:NSUTF8StringEncoding];
     cocos2d::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
 }
 
-- (NSWritingDirection)baseWritingDirectionForPosition:(nonnull UITextPosition*)position
-                                          inDirection:(UITextStorageDirection)direction
-{
+- (NSWritingDirection)baseWritingDirectionForPosition:(nonnull UITextPosition *)position inDirection:(UITextStorageDirection)direction {
     CCLOG("baseWritingDirectionForPosition");
     return NSWritingDirectionLeftToRight;
 }
 
-- (CGRect)caretRectForPosition:(nonnull UITextPosition*)position
-{
+- (CGRect)caretRectForPosition:(nonnull UITextPosition *)position {
     CCLOG("caretRectForPosition");
     return CGRectZero;
 }
 
-- (nullable UITextRange*)characterRangeAtPoint:(CGPoint)point
-{
+- (nullable UITextRange *)characterRangeAtPoint:(CGPoint)point {
     CCLOG("characterRangeAtPoint");
     return nil;
 }
 
-- (nullable UITextRange*)characterRangeByExtendingPosition:(nonnull UITextPosition*)position
-                                               inDirection:(UITextLayoutDirection)direction
-{
+- (nullable UITextRange *)characterRangeByExtendingPosition:(nonnull UITextPosition *)position inDirection:(UITextLayoutDirection)direction {
     CCLOG("characterRangeByExtendingPosition");
     return nil;
 }
 
-- (nullable UITextPosition*)closestPositionToPoint:(CGPoint)point
-{
+- (nullable UITextPosition *)closestPositionToPoint:(CGPoint)point {
     CCLOG("closestPositionToPoint");
     return nil;
 }
 
-- (nullable UITextPosition*)closestPositionToPoint:(CGPoint)point withinRange:(nonnull UITextRange*)range
-{
+- (nullable UITextPosition *)closestPositionToPoint:(CGPoint)point withinRange:(nonnull UITextRange *)range {
     CCLOG("closestPositionToPoint");
     return nil;
 }
 
-- (NSComparisonResult)comparePosition:(nonnull UITextPosition*)position toPosition:(nonnull UITextPosition*)other
-{
+- (NSComparisonResult)comparePosition:(nonnull UITextPosition *)position toPosition:(nonnull UITextPosition *)other {
     CCLOG("comparePosition");
     return (NSComparisonResult)0;
 }
 
-- (CGRect)firstRectForRange:(nonnull UITextRange*)range
-{
+- (CGRect)firstRectForRange:(nonnull UITextRange *)range {
     CCLOG("firstRectForRange");
     return CGRectNull;
 }
 
-- (NSInteger)offsetFromPosition:(nonnull UITextPosition*)from toPosition:(nonnull UITextPosition*)toPosition
-{
+- (NSInteger)offsetFromPosition:(nonnull UITextPosition *)from toPosition:(nonnull UITextPosition *)toPosition {
     CCLOG("offsetFromPosition");
     return 0;
 }
 
-- (nullable UITextPosition*)positionFromPosition:(nonnull UITextPosition*)position
-                                     inDirection:(UITextLayoutDirection)direction
-                                          offset:(NSInteger)offset
-{
+- (nullable UITextPosition *)positionFromPosition:(nonnull UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset {
     CCLOG("positionFromPosition");
     return nil;
 }
 
-- (nullable UITextPosition*)positionFromPosition:(nonnull UITextPosition*)position offset:(NSInteger)offset
-{
+- (nullable UITextPosition *)positionFromPosition:(nonnull UITextPosition *)position offset:(NSInteger)offset {
     CCLOG("positionFromPosition");
     return nil;
 }
 
-- (nullable UITextPosition*)positionWithinRange:(nonnull UITextRange*)range
-                            farthestInDirection:(UITextLayoutDirection)direction
-{
+- (nullable UITextPosition *)positionWithinRange:(nonnull UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction {
     CCLOG("positionWithinRange");
     return nil;
 }
 
-- (void)replaceRange:(nonnull UITextRange*)range withText:(nonnull NSString*)text
-{}
+- (void)replaceRange:(nonnull UITextRange *)range withText:(nonnull NSString *)text {
+    
+}
 
-- (nonnull NSArray<UITextSelectionRect*>*)selectionRectsForRange:(nonnull UITextRange*)range
-{
+- (nonnull NSArray<UITextSelectionRect *> *)selectionRectsForRange:(nonnull UITextRange *)range {
     CCLOG("selectionRectsForRange");
     return nil;
 }
 
-- (void)setBaseWritingDirection:(NSWritingDirection)writingDirection forRange:(nonnull UITextRange*)range
-{}
+- (void)setBaseWritingDirection:(NSWritingDirection)writingDirection forRange:(nonnull UITextRange *)range {
+    
+}
 
-- (void)setMarkedText:(nullable NSString*)markedText selectedRange:(NSRange)selectedRange
-{
+- (void)setMarkedText:(nullable NSString *)markedText selectedRange:(NSRange)selectedRange {
     CCLOG("setMarkedText");
-    if (markedText == self.myMarkedText)
-    {
+    if (markedText == self.myMarkedText) {
         return;
     }
-    if (nil != self.myMarkedText)
-    {
+    if (nil != self.myMarkedText) {
         [self.myMarkedText release];
     }
     self.myMarkedText = markedText;
     [self.myMarkedText retain];
 }
 
-- (UITextRange*)markedTextRange
+- (UITextRange *)markedTextRange
 {
     CCLOG("markedTextRange");
-    if (nil != self.myMarkedText)
-    {
+    if (nil != self.myMarkedText) {
         return [[[UITextRange alloc] init] autorelease];
     }
-    return nil;  // Nil if no marked text.
+    return nil; // Nil if no marked text.
 }
 
-- (nullable NSString*)textInRange:(nonnull UITextRange*)range
-{
+- (nullable NSString *)textInRange:(nonnull UITextRange *)range {
     CCLOG("textInRange");
-    if (nil != self.myMarkedText)
-    {
+    if (nil != self.myMarkedText) {
         return self.myMarkedText;
     }
     return nil;
 }
 
-- (nullable UITextRange*)textRangeFromPosition:(nonnull UITextPosition*)fromPosition
-                                    toPosition:(nonnull UITextPosition*)toPosition
-{
+- (nullable UITextRange *)textRangeFromPosition:(nonnull UITextPosition *)fromPosition toPosition:(nonnull UITextPosition *)toPosition {
     CCLOG("textRangeFromPosition");
     return nil;
 }
 
-- (void)unmarkText
-{
+- (void)unmarkText {
     CCLOG("unmarkText");
     if (nil == self.myMarkedText)
     {
         return;
     }
-    const char* pszText = [self.myMarkedText cStringUsingEncoding:NSUTF8StringEncoding];
+    const char * pszText = [self.myMarkedText cStringUsingEncoding:NSUTF8StringEncoding];
     cocos2d::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
     [self.myMarkedText release];
     self.myMarkedText = nil;
 }
 
-- (void)encodeWithCoder:(nonnull NSCoder*)coder
-{}
+- (void)encodeWithCoder:(nonnull NSCoder *)coder {
+}
 
 @end

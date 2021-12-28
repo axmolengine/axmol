@@ -115,8 +115,7 @@ static int lua_cocos2dx_ArmatureAnimation_setMovementEventCallFunc(lua_State* L)
             [=](Armature* armature, MovementEventType movementType, std::string_view movementID) {
                 if (0 != handler)
                 {
-                    std::string strMovementID = movementID;
-                    LuaArmatureMovementEventData movementData(armature, (int)movementType, strMovementID);
+                    LuaArmatureMovementEventData movementData(armature, (int)movementType, movementID);
 
                     LuaArmatureWrapperEventData wrapperData(
                         LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::MOVEMENT_EVENT, (void*)&movementData);
@@ -188,22 +187,22 @@ static int lua_cocos2dx_ArmatureAnimation_setFrameEventCallFunc(lua_State* L)
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)wrapper, handler,
                                                           ScriptHandlerMgr::HandlerType::ARMATURE_EVENT);
 
-        self->setFrameEventCallFunc(
-            [=](cocostudio::Bone* bone, std::string_view frameEventName, int originFrameIndex, int currentFrameIndex) {
-                if (0 != handler)
-                {
-                    std::string strFrameEventName(frameEventName);
+        self->setFrameEventCallFunc([=](cocostudio::Bone* bone, std::string_view frameEventName, int originFrameIndex,
+                                        int currentFrameIndex) {
+            if (0 != handler)
+            {
+                std::string strFrameEventName(frameEventName);
 
-                    LuaArmatureFrameEventData frameData(bone, frameEventName, originFrameIndex, currentFrameIndex);
+                LuaArmatureFrameEventData frameData(bone, frameEventName, originFrameIndex, currentFrameIndex);
 
-                    LuaArmatureWrapperEventData wrapperData(
-                        LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::FRAME_EVENT, (void*)&frameData);
+                LuaArmatureWrapperEventData wrapperData(
+                    LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::FRAME_EVENT, (void*)&frameData);
 
-                    BasicScriptData data((void*)vec.at(0), (void*)&wrapperData);
+                BasicScriptData data((void*)vec.at(0), (void*)&wrapperData);
 
-                    LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::ARMATURE_EVENT, (void*)&data);
-                }
-            });
+                LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::ARMATURE_EVENT, (void*)&data);
+            }
+        });
 
         return 0;
     }

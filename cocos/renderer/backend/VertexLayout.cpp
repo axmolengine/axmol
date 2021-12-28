@@ -41,7 +41,7 @@ void VertexLayout::setAttribute(std::string_view name,
     hlookup::set_item(
         _attributes, name,
         Attribute{name, index, format, offset,
-                  needToBeNormallized});  // _attributes[name] = {name, index, format, offset, needToBeNormallized};
+         needToBeNormallized});  // _attributes[name] = {name, index, format, offset, needToBeNormallized};
 }
 
 void VertexLayout::setLayout(std::size_t stride)

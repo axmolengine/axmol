@@ -33,7 +33,7 @@ Animation3D* Animation3D::create(std::string_view fileName, std::string_view ani
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
     fullPath.append("#").append(animationName);
-    auto animation = Animation3DCache::getInstance()->getAnimation(fullPath);
+    auto animation       = Animation3DCache::getInstance()->getAnimation(fullPath);
     if (animation != nullptr)
         return animation;
 

@@ -190,7 +190,7 @@ void PUAffector::process(PUParticle3D* particle, float delta, bool firstParticle
     {
         // Return if the emitter which emits this particle is part of the vector
         auto emitterName = particle->parentEmitter->getName();
-        auto iter        = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
+        auto iter               = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
         if (iter != _excludedEmitters.end())
         {
             return;

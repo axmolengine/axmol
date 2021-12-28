@@ -6114,7 +6114,7 @@ static int lua_cocos2dx_Console_addCommand(lua_State* tolua_S)
                                              auto Ls    = stack->getLuaState();
                                              // lua-callback, the third param;
                                              tolua_pushnumber(Ls, fd);
-                                             tolua_pushstring(Ls, args.c_str());
+                                             tolua_pushstring(Ls, args.data());
 
                                              stack->executeFunctionByHandler(handler, 2);
                                          }};
@@ -6928,7 +6928,7 @@ int lua_cocos2dx_get_PolygonInfo_filename(lua_State* tolua_S)
         return 0;
     }
 #endif
-    tolua_pushcppstring(tolua_S, cobj->getFilename());
+    tolua_pushstring(tolua_S, cobj->getFilename().data());
     return 1;
 
 #if COCOS2D_DEBUG >= 1
@@ -7434,7 +7434,7 @@ static int tolua_cocos2d_utils_captureScreen(lua_State* tolua_S)
                 auto stack = LuaEngine::getInstance()->getLuaStack();
                 auto Ls    = stack->getLuaState();
                 tolua_pushboolean(Ls, succeed);
-                tolua_pushstring(Ls, name.c_str());
+                tolua_pushstring(Ls, name.data());
                 stack->executeFunctionByHandler(handler, 2);
                 toluafix_remove_function_by_refid(tolua_S, handler);
             },

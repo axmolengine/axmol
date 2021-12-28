@@ -74,7 +74,9 @@ void PlistSpriteSheetLoader::load(std::string_view filePath, Texture2D* texture,
     addSpriteFramesWithDictionary(dict, texture, filePath, cache);
 }
 
-void PlistSpriteSheetLoader::load(std::string_view filePath, std::string_view textureFileName, SpriteFrameCache& cache)
+void PlistSpriteSheetLoader::load(std::string_view filePath,
+                                  std::string_view textureFileName,
+                                  SpriteFrameCache& cache)
 {
     CCASSERT(!textureFileName.empty(), "texture name should not be null");
     const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
@@ -399,7 +401,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
 
     for (auto& iter : framesDict)
     {
-        const ValueMap& frameDict        = iter.second.asValueMap();
+        const ValueMap& frameDict         = iter.second.asValueMap();
         std::string_view spriteFrameName = iter.first;
 
         cache.eraseFrame(spriteFrameName);

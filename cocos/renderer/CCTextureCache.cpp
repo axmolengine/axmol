@@ -588,12 +588,12 @@ void TextureCache::removeTexture(Texture2D* texture)
 
 void TextureCache::removeTextureForKey(std::string_view textureKeyName)
 {
-    auto it = _textures.find(textureKeyName);
+    auto it         = _textures.find(textureKeyName);
 
     if (it == _textures.end())
     {
         auto key = FileUtils::getInstance()->fullPathForFilename(textureKeyName);
-        it       = _textures.find(key);
+        it  = _textures.find(key);
     }
 
     if (it != _textures.end())
@@ -605,12 +605,12 @@ void TextureCache::removeTextureForKey(std::string_view textureKeyName)
 
 Texture2D* TextureCache::getTextureForKey(std::string_view textureKeyName) const
 {
-    auto it = _textures.find(textureKeyName);
+    auto it         = _textures.find(textureKeyName);
 
     if (it == _textures.end())
     {
         auto key = FileUtils::getInstance()->fullPathForFilename(textureKeyName);
-        it       = _textures.find(key);
+        it  = _textures.find(key);
     }
 
     if (it != _textures.end())
@@ -677,12 +677,12 @@ std::string TextureCache::getCachedTextureInfo() const
 
 void TextureCache::renameTextureWithKey(std::string_view srcName, std::string_view dstName)
 {
-    auto it = _textures.find(srcName);
+    auto it         = _textures.find(srcName);
 
     if (it == _textures.end())
     {
         auto key = FileUtils::getInstance()->fullPathForFilename(srcName);
-        it       = _textures.find(key);
+        it  = _textures.find(key);
     }
 
     if (it != _textures.end())
@@ -864,7 +864,9 @@ void VolatileTextureMgr::reloadAllTextures()
     _isReloading = false;
 }
 
-void VolatileTextureMgr::reloadTexture(Texture2D* texture, std::string_view filename, backend::PixelFormat pixelFormat)
+void VolatileTextureMgr::reloadTexture(Texture2D* texture,
+                                       std::string_view filename,
+                                       backend::PixelFormat pixelFormat)
 {
     if (!texture)
         return;

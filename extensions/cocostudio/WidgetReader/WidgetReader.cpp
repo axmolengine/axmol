@@ -306,7 +306,7 @@ std::string WidgetReader::getResourcePath(const rapidjson::Value& dict,
                                           std::string_view key,
                                           cocos2d::ui::Widget::TextureResType texType)
 {
-    std::string_view jsonPath = GUIReader::getInstance()->getFilePath();
+    std::string_view jsonPath      = GUIReader::getInstance()->getFilePath();
     const char* imageFileName = DICTOOL->getStringValue_json(dict, key.data());
     std::string imageFileName_tp;
     if (nullptr != imageFileName)
@@ -942,7 +942,7 @@ Node* WidgetReader::createNodeWithFlatBuffers(const flatbuffers::Table* widgetOp
 
 std::string WidgetReader::getResourcePath(std::string_view path, cocos2d::ui::Widget::TextureResType texType)
 {
-    std::string_view filePath = GUIReader::getInstance()->getFilePath();
+    std::string_view filePath      = GUIReader::getInstance()->getFilePath();
     std::string imageFileName_tp;
     if (!path.empty())
     {
