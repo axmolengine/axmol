@@ -178,9 +178,9 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     struct dirent* file;  // readdir
     struct stat statbuf;
 
-    if (!(d = opendir(fileFolder.c_str())))
+    if (!(d = opendir(fileFolder.data())))
     {
-        CCLOG("error opendir %s!!!\n", fileFolder.c_str());
+        CCLOG("error opendir %s!!!\n", fileFolder.data());
         return false;
     }
     while ((file = readdir(d)) != NULL)
@@ -192,7 +192,8 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
 
         if (FileUtils::getInstance()->getFileExtension(file->d_name) == ".material")
         {
-            std::string fullpath = fileFolder + "/" + file->d_name;
+            std::string fullpath{fileFolder};
+            fullpath.append("/"sv).append(file->d_name);
             CCLOG("%s", fullpath.c_str());
             loadMaterials(fullpath);
             state = true;
