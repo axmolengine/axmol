@@ -37,9 +37,9 @@ public:
     CREATE_FUNC(WebViewTest);
 
     virtual bool init() override;
-    bool onWebViewShouldStartLoading(cocos2d::ui::WebView* sender, const std::string& url);
-    void onWebViewDidFinishLoading(cocos2d::ui::WebView* sender, const std::string& url);
-    void onWebViewDidFailLoading(cocos2d::ui::WebView* sender, const std::string& url);
+    bool onWebViewShouldStartLoading(cocos2d::ui::WebView* sender, std::string_view url);
+    void onWebViewDidFinishLoading(cocos2d::ui::WebView* sender, std::string_view url);
+    void onWebViewDidFailLoading(cocos2d::ui::WebView* sender, std::string_view url);
 
 private:
     cocos2d::ui::WebView* _webView;

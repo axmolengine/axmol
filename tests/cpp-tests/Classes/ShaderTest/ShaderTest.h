@@ -140,7 +140,7 @@ class ShaderNode : public cocos2d::Node
 {
 public:
     CREATE_FUNC(ShaderNode);
-    static ShaderNode* shaderNodeWithVertex(const std::string& vert, const std::string& frag);
+    static ShaderNode* shaderNodeWithVertex(std::string_view vert, std::string_view frag);
 
     virtual void update(float dt) override;
     virtual void setPosition(const cocos2d::Vec2& newPosition) override;
@@ -150,8 +150,8 @@ protected:
     ShaderNode();
     ~ShaderNode();
 
-    bool initWithVertex(const std::string& vert, const std::string& frag);
-    void loadShaderVertex(const std::string& vert, const std::string& frag);
+    bool initWithVertex(std::string_view vert, std::string_view frag);
+    void loadShaderVertex(std::string_view vert, std::string_view frag);
 
     virtual bool setProgramState(cocos2d::backend::ProgramState* programState, bool needsRetain = true) override
     {

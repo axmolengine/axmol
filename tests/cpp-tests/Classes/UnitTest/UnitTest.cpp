@@ -373,7 +373,7 @@ void TemplateMapTest::onEnter()
     UnitTestDemo::onEnter();
 
     auto createMap = []() {
-        Map<std::string, Node*> ret;
+        StringMap<Node*> ret;
         for (int i = 0; i < 20; ++i)
         {
             auto node = Node::create();
@@ -392,7 +392,7 @@ void TemplateMapTest::onEnter()
     CCASSERT(map1.keys(Node::create()).empty(), "map1's keys don't contain a empty Node.");
 
     // Move constructor
-    Map<std::string, Node*> map2 = createMap();
+    auto map2 = createMap();
     for (const auto& e : map2)
     {
         CC_UNUSED_PARAM(e);
@@ -400,7 +400,7 @@ void TemplateMapTest::onEnter()
     }
 
     // Copy constructor
-    Map<std::string, Node*> map3(map2);
+    auto map3(map2);
     for (const auto& e : map3)
     {
         CC_UNUSED_PARAM(e);
@@ -408,7 +408,7 @@ void TemplateMapTest::onEnter()
     }
 
     // Move assignment operator
-    Map<std::string, Node*> map4;
+    StringMap<Node*> map4;
     auto unusedNode = Node::create();
     map4.insert("unused", unusedNode);
     map4 = createMap();
@@ -420,7 +420,7 @@ void TemplateMapTest::onEnter()
     }
 
     // Copy assignment operator
-    Map<std::string, Node*> map5;
+    StringMap<Node*> map5;
     map5 = map4;
     for (const auto& e : map5)
     {
@@ -500,7 +500,7 @@ void TemplateMapTest::onEnter()
     CCASSERT(map6.at("insert03") == node3, "The element at insert03 is equal to node3.");
 
     // erase
-    Map<std::string, Node*> mapForErase = createMap();
+    StringMap<Node*> mapForErase = createMap();
     mapForErase.erase(mapForErase.find("9"));
     CCASSERT(mapForErase.find("9") == mapForErase.end(), "9 is already removed.");
     CCASSERT(mapForErase.size() == 19, "mapForErase's size is 19.");
@@ -517,7 +517,7 @@ void TemplateMapTest::onEnter()
     CCASSERT(mapForErase.size() == 15, "mapForErase's size is 15.");
 
     // clear
-    Map<std::string, Node*> mapForClear = createMap();
+    StringMap<Node*> mapForClear = createMap();
     auto mapForClearCopy                = mapForClear;
     mapForClear.clear();
 
@@ -530,7 +530,7 @@ void TemplateMapTest::onEnter()
     // get random object
     // Set the seed by time
     std::srand((unsigned)time(nullptr));
-    Map<std::string, Node*> mapForRandom = createMap();
+    StringMap<Node*> mapForRandom = createMap();
     log("<--- begin ---->");
     for (int i = 0; i < mapForRandom.size(); ++i)
     {
@@ -539,7 +539,7 @@ void TemplateMapTest::onEnter()
     log("<---- end  ---->");
 
     // Self assignment
-    Map<std::string, Node*> mapForSelfAssign = createMap();
+    StringMap<Node*> mapForSelfAssign = createMap();
     mapForSelfAssign                         = mapForSelfAssign;
     CCASSERT(mapForSelfAssign.size() == 20, "mapForSelfAssign's size is 20.");
 
@@ -559,7 +559,7 @@ void TemplateMapTest::onEnter()
     }
 }
 
-void TemplateMapTest::constFunc(const Map<std::string, Node*>& map) const
+void TemplateMapTest::constFunc(const StringMap<Node*>& map) const
 {
     log("[%s]=(tag)%d", "0", map.at("0")->getTag());
     log("[%s]=(tag)%d", "1", map.find("1")->second->getTag());

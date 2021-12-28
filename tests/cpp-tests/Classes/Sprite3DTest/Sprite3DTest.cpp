@@ -2591,7 +2591,7 @@ void Sprite3DPropertyTest::printMeshName(cocos2d::Ref* sender)
     Vector<Mesh*> meshes = _sprite->getMeshes();
     for (Mesh* mesh : meshes)
     {
-        log("MeshName: %s ", mesh->getName().c_str());
+        log("MeshName: %s ", mesh->getName().data());
     }
     CCLOG("MeshName End");
 }

@@ -74,7 +74,7 @@ bool WebViewTest::init()
         resetBtn->addClickEventListener([=](Ref*) {
             if (urlTextField->getString().size() != 0)
             {
-                _webView->loadURL(std::string("https://") + urlTextField->getString());
+                _webView->loadURL(std::string("https://").append(urlTextField->getString()));
             }
         });
         this->addChild(resetBtn);
@@ -172,21 +172,21 @@ bool WebViewTest::init()
     return false;
 }
 
-bool WebViewTest::onWebViewShouldStartLoading(ui::WebView* sender, const std::string& url)
+bool WebViewTest::onWebViewShouldStartLoading(ui::WebView* sender, std::string_view url)
 {
-    CCLOG("onWebViewShouldStartLoading, url is %s", url.c_str());
+    CCLOG("onWebViewShouldStartLoading, url is %s", url.data());
     // don't do any OpenGL operation here!! It's forbidden!
     return true;
 }
 
-void WebViewTest::onWebViewDidFinishLoading(ui::WebView* sender, const std::string& url)
+void WebViewTest::onWebViewDidFinishLoading(ui::WebView* sender, std::string_view url)
 {
     auto node = (ui::Button*)this->getChildByName("evalJs");
     node->setTitleText("start loading...");
-    CCLOG("onWebViewDidFinishLoading, url is %s", url.c_str());
+    CCLOG("onWebViewDidFinishLoading, url is %s", url.data());
 }
 
-void WebViewTest::onWebViewDidFailLoading(ui::WebView* sender, const std::string& url)
+void WebViewTest::onWebViewDidFailLoading(ui::WebView* sender, std::string_view url)
 {
-    CCLOG("onWebViewDidFailLoading, url is %s", url.c_str());
+    CCLOG("onWebViewDidFailLoading, url is %s", url.data());
 }

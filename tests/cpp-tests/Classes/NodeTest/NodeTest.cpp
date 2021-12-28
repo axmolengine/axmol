@@ -936,7 +936,7 @@ std::string NodeGlobalZValueTest::subtitle() const
 class MySprite : public Sprite
 {
 public:
-    static MySprite* create(const std::string& spritefilename)
+    static MySprite* create(std::string_view spritefilename)
     {
         auto sprite = new MySprite;
         sprite->initWithFile(spritefilename);

@@ -86,7 +86,7 @@ ShaderNode* ShaderNode::shaderNodeWithVertex(std::string_view vert, std::string_
     return node;
 }
 
-bool ShaderNode::initWithVertex(std::string_view vert, const std::string& frag)
+bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
 {
     _vertFileName = vert;
     _fragFileName = frag;
@@ -124,7 +124,7 @@ bool ShaderNode::initWithVertex(std::string_view vert, const std::string& frag)
     return true;
 }
 
-void ShaderNode::loadShaderVertex(const std::string& vert, const std::string& frag)
+void ShaderNode::loadShaderVertex(std::string_view vert, std::string_view frag)
 {
     auto fileUtiles = FileUtils::getInstance();
 
