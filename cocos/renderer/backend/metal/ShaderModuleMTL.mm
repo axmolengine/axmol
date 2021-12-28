@@ -222,7 +222,7 @@ int ShaderModuleMTL::getAttributeLocation(Attribute name) const
     return _attributeLocation[name];
 }
 
-int ShaderModuleMTL::getAttributeLocation(std::string name)
+int ShaderModuleMTL::getAttributeLocation(std::string_view name)
 {
     auto iter = _attributeInfo.find(name);
     if (iter != _attributeInfo.end())

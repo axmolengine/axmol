@@ -172,7 +172,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     AAssetDir_close(dir);
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-    ftw(fileFolder.c_str(), iterPath, 500);
+    ftw(fileFolder.data(), iterPath, 500);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_TIZEN)
     DIR* d;               // dir handle
     struct dirent* file;  // readdir

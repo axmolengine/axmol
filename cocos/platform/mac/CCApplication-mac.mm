@@ -168,7 +168,7 @@ LanguageType Application::getCurrentLanguage()
 
 bool Application::openURL(std::string_view url)
 {
-    NSString* msg = [NSString stringWithCString:url.c_str() encoding:NSUTF8StringEncoding];
+    NSString* msg = [NSString stringWithCString:url.data() encoding:NSUTF8StringEncoding];
     NSURL* nsUrl  = [NSURL URLWithString:msg];
     return [[NSWorkspace sharedWorkspace] openURL:nsUrl];
 }

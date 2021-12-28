@@ -118,7 +118,7 @@ int ProgramMTL::getMaxFragmentLocation() const
     return _fragmentShader->getMaxLocation();
 }
 
-const std::unordered_map<std::string, AttributeBindInfo> ProgramMTL::getActiveAttributes() const
+hlookup::string_map<AttributeBindInfo> ProgramMTL::getActiveAttributes() const
 {
     return _vertexShader->getAttributeInfo();
 }
@@ -166,7 +166,7 @@ std::size_t ProgramMTL::getUniformBufferSize(ShaderStage stage) const
     return 0;
 }
 
-const std::unordered_map<std::string, UniformInfo>& ProgramMTL::getAllActiveUniformInfo(ShaderStage stage) const
+const hlookup::string_map<UniformInfo>& ProgramMTL::getAllActiveUniformInfo(ShaderStage stage) const
 {
     switch (stage)
     {
@@ -176,7 +176,6 @@ const std::unordered_map<std::string, UniformInfo>& ProgramMTL::getAllActiveUnif
         return _fragmentShader->getAllActiveUniformInfo();
     default:
         CCASSERT(false, "Invalid shader stage.");
-        break;
     }
 }
 
