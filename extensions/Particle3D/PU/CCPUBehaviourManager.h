@@ -41,8 +41,8 @@ public:
 
     /**
      */
-    PUScriptTranslator* getTranslator(std::string_view type);
-    PUBehaviour* createBehaviour(std::string_view type);
+    PUScriptTranslator* getTranslator(const std::string& type);
+    PUBehaviour* createBehaviour(const std::string& type);
 
     CC_CONSTRUCTOR_ACCESS : PUBehaviourManager();
     ~PUBehaviourManager();

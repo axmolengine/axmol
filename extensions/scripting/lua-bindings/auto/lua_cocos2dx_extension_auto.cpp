@@ -471,8 +471,8 @@ int lua_cocos2dx_extension_AssetsManager_getVersion(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_AssetsManager_getVersion'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getVersion();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        std::string ret = cobj->getVersion();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.AssetsManager:getVersion",argc, 0);
@@ -1158,11 +1158,11 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 3) 
     {
-        std::string_view arg0;
+        std::string arg0;
         cocos2d::extension::AssetsManagerEx* arg1;
         cocos2d::extension::EventAssetsManagerEx::EventCode arg2;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_object<cocos2d::extension::AssetsManagerEx>(tolua_S, 3, "cc.AssetsManagerEx",&arg1, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1181,12 +1181,12 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     }
     if (argc == 4) 
     {
-        std::string_view arg0;
+        std::string arg0;
         cocos2d::extension::AssetsManagerEx* arg1;
         cocos2d::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_object<cocos2d::extension::AssetsManagerEx>(tolua_S, 3, "cc.AssetsManagerEx",&arg1, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1207,13 +1207,13 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     }
     if (argc == 5) 
     {
-        std::string_view arg0;
+        std::string arg0;
         cocos2d::extension::AssetsManagerEx* arg1;
         cocos2d::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_object<cocos2d::extension::AssetsManagerEx>(tolua_S, 3, "cc.AssetsManagerEx",&arg1, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1236,14 +1236,14 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     }
     if (argc == 6) 
     {
-        std::string_view arg0;
+        std::string arg0;
         cocos2d::extension::AssetsManagerEx* arg1;
         cocos2d::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
-        std::string_view arg5;
+        std::string arg5;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_object<cocos2d::extension::AssetsManagerEx>(tolua_S, 3, "cc.AssetsManagerEx",&arg1, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1253,7 +1253,7 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_number(tolua_S, 6,&arg4, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 7,&arg5, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_EventAssetsManagerEx_constructor'", nullptr);
@@ -1268,15 +1268,15 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     }
     if (argc == 7) 
     {
-        std::string_view arg0;
+        std::string arg0;
         cocos2d::extension::AssetsManagerEx* arg1;
         cocos2d::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
-        std::string_view arg5;
-        std::string_view arg6;
+        std::string arg5;
+        std::string arg6;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_object<cocos2d::extension::AssetsManagerEx>(tolua_S, 3, "cc.AssetsManagerEx",&arg1, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1286,9 +1286,9 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_number(tolua_S, 6,&arg4, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 7,&arg5, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 8,&arg6, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_EventAssetsManagerEx_constructor'", nullptr);
@@ -1303,16 +1303,16 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     }
     if (argc == 8) 
     {
-        std::string_view arg0;
+        std::string arg0;
         cocos2d::extension::AssetsManagerEx* arg1;
         cocos2d::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
-        std::string_view arg5;
-        std::string_view arg6;
+        std::string arg5;
+        std::string arg6;
         int arg7;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_object<cocos2d::extension::AssetsManagerEx>(tolua_S, 3, "cc.AssetsManagerEx",&arg1, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1322,9 +1322,9 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_number(tolua_S, 6,&arg4, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 7,&arg5, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 8,&arg6, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_int32(tolua_S, 9,(int *)&arg7, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
@@ -1341,17 +1341,17 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     }
     if (argc == 9) 
     {
-        std::string_view arg0;
+        std::string arg0;
         cocos2d::extension::AssetsManagerEx* arg1;
         cocos2d::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
-        std::string_view arg5;
-        std::string_view arg6;
+        std::string arg5;
+        std::string arg6;
         int arg7;
         int arg8;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_object<cocos2d::extension::AssetsManagerEx>(tolua_S, 3, "cc.AssetsManagerEx",&arg1, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1361,9 +1361,9 @@ int lua_cocos2dx_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_number(tolua_S, 6,&arg4, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 7,&arg5, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 8,&arg6, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_int32(tolua_S, 9,(int *)&arg7, "cc.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1451,8 +1451,8 @@ int lua_cocos2dx_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Manifest_getManifestFileUrl'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getManifestFileUrl();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getManifestFileUrl();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Manifest:getManifestFileUrl",argc, 0);
@@ -1592,8 +1592,8 @@ int lua_cocos2dx_extension_Manifest_getPackageUrl(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Manifest_getPackageUrl'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getPackageUrl();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getPackageUrl();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Manifest:getPackageUrl",argc, 0);
@@ -1639,8 +1639,8 @@ int lua_cocos2dx_extension_Manifest_getVersion(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Manifest_getVersion'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getVersion();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getVersion();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Manifest:getVersion",argc, 0);
@@ -1686,8 +1686,8 @@ int lua_cocos2dx_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_Manifest_getVersionFileUrl'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getVersionFileUrl();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getVersionFileUrl();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Manifest:getVersionFileUrl",argc, 0);
@@ -1942,7 +1942,7 @@ int lua_cocos2dx_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<bool (std::string_view, cocos2d::extension::ManifestAsset)> arg0;
+        std::function<bool (const std::string&, cocos2d::extension::ManifestAsset)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -2001,8 +2001,8 @@ int lua_cocos2dx_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_AssetsManagerEx_getStoragePath'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getStoragePath();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getStoragePath();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.AssetsManagerEx:getStoragePath",argc, 0);
@@ -2090,7 +2090,7 @@ int lua_cocos2dx_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* to
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<int (std::string_view, std::string_view)> arg0;
+        std::function<int (const std::string&, const std::string&)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -2324,10 +2324,10 @@ int lua_cocos2dx_extension_AssetsManagerEx_create(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        std::string_view arg0;
-        std::string_view arg1;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AssetsManagerEx:create");
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.AssetsManagerEx:create");
+        std::string arg0;
+        std::string arg1;
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.AssetsManagerEx:create");
+        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.AssetsManagerEx:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_AssetsManagerEx_create'", nullptr);
@@ -2360,12 +2360,12 @@ int lua_cocos2dx_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string_view arg0;
-        std::string_view arg1;
+        std::string arg0;
+        std::string arg1;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AssetsManagerEx:AssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.AssetsManagerEx:AssetsManagerEx");
 
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.AssetsManagerEx:AssetsManagerEx");
+        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.AssetsManagerEx:AssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_AssetsManagerEx_constructor'", nullptr);
@@ -3604,9 +3604,9 @@ int lua_cocos2dx_extension_PUParticleSystem3D_initWithFilePath(lua_State* tolua_
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:initWithFilePath");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:initWithFilePath");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_PUParticleSystem3D_initWithFilePath'", nullptr);
@@ -3845,12 +3845,12 @@ int lua_cocos2dx_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath(lu
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string_view arg0;
-        std::string_view arg1;
+        std::string arg0;
+        std::string arg1;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:initWithFilePathAndMaterialPath");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:initWithFilePathAndMaterialPath");
 
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.PUParticleSystem3D:initWithFilePathAndMaterialPath");
+        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.PUParticleSystem3D:initWithFilePathAndMaterialPath");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath'", nullptr);
@@ -3950,8 +3950,8 @@ int lua_cocos2dx_extension_PUParticleSystem3D_getMaterialName(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_PUParticleSystem3D_getMaterialName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getMaterialName();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getMaterialName();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PUParticleSystem3D:getMaterialName",argc, 0);
@@ -4821,9 +4821,9 @@ int lua_cocos2dx_extension_PUParticleSystem3D_setMaterialName(lua_State* tolua_S
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:setMaterialName");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:setMaterialName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_PUParticleSystem3D_setMaterialName'", nullptr);
@@ -5403,9 +5403,9 @@ int lua_cocos2dx_extension_PUParticleSystem3D_initSystem(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:initSystem");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:initSystem");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_extension_PUParticleSystem3D_initSystem'", nullptr);
@@ -5641,8 +5641,8 @@ int lua_cocos2dx_extension_PUParticleSystem3D_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:create");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:create");
             if (!ok) { break; }
             cocos2d::PUParticleSystem3D* ret = cocos2d::PUParticleSystem3D::create(arg0);
             object_to_luaval<cocos2d::PUParticleSystem3D>(tolua_S, "cc.PUParticleSystem3D",(cocos2d::PUParticleSystem3D*)ret);
@@ -5664,11 +5664,11 @@ int lua_cocos2dx_extension_PUParticleSystem3D_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:create");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.PUParticleSystem3D:create");
             if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.PUParticleSystem3D:create");
+            std::string arg1;
+            ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.PUParticleSystem3D:create");
             if (!ok) { break; }
             cocos2d::PUParticleSystem3D* ret = cocos2d::PUParticleSystem3D::create(arg0, arg1);
             object_to_luaval<cocos2d::PUParticleSystem3D>(tolua_S, "cc.PUParticleSystem3D",(cocos2d::PUParticleSystem3D*)ret);

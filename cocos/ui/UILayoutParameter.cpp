@@ -146,22 +146,22 @@ RelativeLayoutParameter::RelativeAlign RelativeLayoutParameter::getAlign() const
     return _relativeAlign;
 }
 
-void RelativeLayoutParameter::setRelativeToWidgetName(std::string_view name)
+void RelativeLayoutParameter::setRelativeToWidgetName(const std::string& name)
 {
     _relativeWidgetName = name;
 }
 
-std::string_view RelativeLayoutParameter::getRelativeToWidgetName() const
+const std::string& RelativeLayoutParameter::getRelativeToWidgetName() const
 {
     return _relativeWidgetName;
 }
 
-void RelativeLayoutParameter::setRelativeName(std::string_view name)
+void RelativeLayoutParameter::setRelativeName(const std::string& name)
 {
     _relativeLayoutName = name;
 }
 
-std::string_view RelativeLayoutParameter::getRelativeName() const
+const std::string& RelativeLayoutParameter::getRelativeName() const
 {
     return _relativeLayoutName;
 }

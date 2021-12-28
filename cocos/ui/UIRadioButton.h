@@ -98,11 +98,11 @@ public:
      *
      * @return A RadioButton instance pointer.
      */
-    static RadioButton* create(std::string_view backGround,
-                               std::string_view backGroundSelected,
-                               std::string_view cross,
-                               std::string_view backGroundDisabled,
-                               std::string_view frontCrossDisabled,
+    static RadioButton* create(const std::string& backGround,
+                               const std::string& backGroundSelected,
+                               const std::string& cross,
+                               const std::string& backGroundDisabled,
+                               const std::string& frontCrossDisabled,
                                TextureResType texType = TextureResType::LOCAL);
 
     /**
@@ -113,8 +113,8 @@ public:
      * @param texType  The texture's resource type in `Widget::TextureResType`.
      * @return A RadioButton instance pointer
      */
-    static RadioButton* create(std::string_view backGround,
-                               std::string_view cross,
+    static RadioButton* create(const std::string& backGround,
+                               const std::string& cross,
                                TextureResType texType = TextureResType::LOCAL);
 
     /**

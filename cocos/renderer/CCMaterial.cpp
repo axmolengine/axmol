@@ -48,7 +48,7 @@ NS_CC_BEGIN
 
 namespace
 {
-std::string replaceDefines(std::string_view compileTimeDefines)
+std::string replaceDefines(const std::string& compileTimeDefines)
 {
 
     auto defineParts = Console::Utility::split(compileTimeDefines, ';');
@@ -72,7 +72,7 @@ std::string replaceDefines(std::string_view compileTimeDefines)
 static const char* getOptionalString(Properties* properties, const char* key, const char* defaultValue);
 static bool isValidUniform(const char* name);
 
-Material* Material::createWithFilename(std::string_view filepath)
+Material* Material::createWithFilename(const std::string& filepath)
 {
     auto validfilename = FileUtils::getInstance()->fullPathForFilename(filepath);
     if (!validfilename.empty())
@@ -130,7 +130,7 @@ bool Material::initWithProgramState(backend::ProgramState* state)
     return false;
 }
 
-bool Material::initWithFile(std::string_view validfilename)
+bool Material::initWithFile(const std::string& validfilename)
 {
     // Warning: properties is not a "Ref" object, must be manually deleted
     Properties* properties = Properties::createNonRefCounted(validfilename);
@@ -496,7 +496,7 @@ bool Material::parseRenderState(RenderState::StateBlock* state, Properties* prop
     return true;
 }
 
-void Material::setName(std::string_view name)
+void Material::setName(const std::string& name)
 {
     _name = name;
 }
@@ -542,7 +542,7 @@ const Vector<Technique*>& Material::getTechniques() const
     return _techniques;
 }
 
-Technique* Material::getTechniqueByName(std::string_view name)
+Technique* Material::getTechniqueByName(const std::string& name)
 {
     for (const auto& technique : _techniques)
     {
@@ -564,7 +564,7 @@ void Material::addTechnique(Technique* technique)
     _techniques.pushBack(technique);
 }
 
-void Material::setTechnique(std::string_view techniqueName)
+void Material::setTechnique(const std::string& techniqueName)
 {
     auto technique = getTechniqueByName(techniqueName);
     if (technique)

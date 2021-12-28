@@ -1,4 +1,4 @@
-#ifndef DRAGONBONES_JSON_DATA_PARSER_H
+﻿#ifndef DRAGONBONES_JSON_DATA_PARSER_H
 #define DRAGONBONES_JSON_DATA_PARSER_H
 
 #include "DataParser.h"
@@ -81,7 +81,7 @@ protected:
 
     inline static std::string _getString(const rapidjson::Value& rawData,
                                          const char* key,
-                                         std::string_view defaultValue)
+                                         const std::string& defaultValue)
     {
         if (rawData.HasMember(key))
         {
@@ -93,7 +93,7 @@ protected:
             return dragonBones::to_string(rawData[key].GetDouble());
         }
 
-        return std::string{defaultValue};
+        return defaultValue;
     }
 
     inline static int _getParameter(const rapidjson::Value& rawData, std::size_t index, int defaultValue)
@@ -118,14 +118,14 @@ protected:
 
     inline static std::string _getParameter(const rapidjson::Value& rawData,
                                             std::size_t index,
-                                            std::string_view defaultValue)
+                                            const std::string& defaultValue)
     {
         if (rawData.Size() > index)
         {
             return rawData[(int)index].GetString();
         }
 
-        return std::string{defaultValue};
+        return defaultValue;
     }
 
 protected:
@@ -160,10 +160,10 @@ private:
     std::vector<const rapidjson::Value*> _cacheRawMeshes;
     std::vector<MeshDisplayData*> _cacheMeshes;
     std::vector<ActionFrame> _actionFrames;
-    hlookup::string_map<const rapidjson::Value*> _weightSlotPose;
-    hlookup::string_map<const rapidjson::Value*> _weightBonePoses;
-    hlookup::string_map<std::vector<BoneData*>> _cacheBones;
-    hlookup::string_map<std::vector<ActionData*>> _slotChildActions;
+    std::map<std::string, const rapidjson::Value*> _weightSlotPose;
+    std::map<std::string, const rapidjson::Value*> _weightBonePoses;
+    std::map<std::string, std::vector<BoneData*>> _cacheBones;
+    std::map<std::string, std::vector<ActionData*>> _slotChildActions;
 
 public:
     JSONDataParser()

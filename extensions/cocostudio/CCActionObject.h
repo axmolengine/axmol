@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -171,9 +171,9 @@ public:
     void simulationActionUpdate(float dt);
 
 protected:
-    int valueToInt(std::string_view value);
-    bool valueToBool(std::string_view value);
-    float valueToFloat(std::string_view value);
+    int valueToInt(const std::string& value);
+    bool valueToBool(const std::string& value);
+    float valueToFloat(const std::string& value);
 
     cocos2d::Vector<ActionNode*> _actionNodeList;
     std::string _name;

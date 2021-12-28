@@ -109,10 +109,10 @@ TextFieldTTF::~TextFieldTTF() {}
 // static constructor
 //////////////////////////////////////////////////////////////////////////
 
-TextFieldTTF* TextFieldTTF::textFieldWithPlaceHolder(std::string_view placeholder,
+TextFieldTTF* TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeholder,
                                                      const Vec2& dimensions,
                                                      TextHAlignment alignment,
-                                                     std::string_view fontName,
+                                                     const std::string& fontName,
                                                      float fontSize)
 {
     TextFieldTTF* ret = new TextFieldTTF();
@@ -129,8 +129,8 @@ TextFieldTTF* TextFieldTTF::textFieldWithPlaceHolder(std::string_view placeholde
     return nullptr;
 }
 
-TextFieldTTF* TextFieldTTF::textFieldWithPlaceHolder(std::string_view placeholder,
-                                                     std::string_view fontName,
+TextFieldTTF* TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeholder,
+                                                     const std::string& fontName,
                                                      float fontSize)
 {
     TextFieldTTF* ret = new TextFieldTTF();
@@ -151,10 +151,10 @@ TextFieldTTF* TextFieldTTF::textFieldWithPlaceHolder(std::string_view placeholde
 // initialize
 //////////////////////////////////////////////////////////////////////////
 
-bool TextFieldTTF::initWithPlaceHolder(std::string_view placeholder,
+bool TextFieldTTF::initWithPlaceHolder(const std::string& placeholder,
                                        const Vec2& dimensions,
                                        TextHAlignment alignment,
-                                       std::string_view fontName,
+                                       const std::string& fontName,
                                        float fontSize)
 {
     setDimensions(dimensions.width, dimensions.height);
@@ -162,7 +162,7 @@ bool TextFieldTTF::initWithPlaceHolder(std::string_view placeholder,
 
     return initWithPlaceHolder(placeholder, fontName, fontSize);
 }
-bool TextFieldTTF::initWithPlaceHolder(std::string_view placeholder, std::string_view fontName, float fontSize)
+bool TextFieldTTF::initWithPlaceHolder(const std::string& placeholder, const std::string& fontName, float fontSize)
 {
     _placeHolder = placeholder;
 
@@ -366,7 +366,7 @@ void TextFieldTTF::deleteBackward()
     }
 }
 
-std::string_view TextFieldTTF::getContentText()
+const std::string& TextFieldTTF::getContentText()
 {
     return _inputText;
 }
@@ -573,9 +573,9 @@ void TextFieldTTF::setString(std::string_view text)
     _charCount = charCount;
 }
 
-void TextFieldTTF::appendString(std::string_view text)
+void TextFieldTTF::appendString(const std::string& text)
 {
-    insertText(text.data(), text.length());
+    insertText(text.c_str(), text.length());
 }
 
 void TextFieldTTF::makeStringSupportCursor(std::string& displayText)
@@ -677,13 +677,13 @@ void TextFieldTTF::controlKey(EventKeyboard::KeyCode keyCode)
     }
 }
 
-std::string_view TextFieldTTF::getString() const
+const std::string& TextFieldTTF::getString() const
 {
     return _inputText;
 }
 
 // place holder text property
-void TextFieldTTF::setPlaceHolder(std::string_view text)
+void TextFieldTTF::setPlaceHolder(const std::string& text)
 {
     _placeHolder = text;
     if (_inputText.empty() && !_isAttachWithIME)
@@ -693,7 +693,7 @@ void TextFieldTTF::setPlaceHolder(std::string_view text)
     }
 }
 
-std::string_view TextFieldTTF::getPlaceHolder() const
+const std::string& TextFieldTTF::getPlaceHolder() const
 {
     return _placeHolder;
 }
@@ -733,7 +733,7 @@ void TextFieldTTF::setSecureTextEntry(bool value)
     }
 }
 
-void TextFieldTTF::setPasswordTextStyle(std::string_view text)
+void TextFieldTTF::setPasswordTextStyle(const std::string& text)
 {
     if (text.length() < 1)
     {
@@ -747,7 +747,7 @@ void TextFieldTTF::setPasswordTextStyle(std::string_view text)
     }
 }
 
-std::string_view TextFieldTTF::getPasswordTextStyle() const
+const std::string& TextFieldTTF::getPasswordTextStyle() const
 {
     return _passwordStyleText;
 }

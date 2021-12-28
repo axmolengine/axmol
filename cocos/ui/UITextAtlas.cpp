@@ -66,11 +66,11 @@ void TextAtlas::initRenderer()
     addProtectedChild(_labelAtlasRenderer, LABELATLAS_RENDERER_Z, -1);
 }
 
-TextAtlas* TextAtlas::create(std::string_view stringValue,
-                             std::string_view charMapFile,
+TextAtlas* TextAtlas::create(const std::string& stringValue,
+                             const std::string& charMapFile,
                              int itemWidth,
                              int itemHeight,
-                             std::string_view startCharMap)
+                             const std::string& startCharMap)
 {
     TextAtlas* widget = new TextAtlas();
     if (widget->init())
@@ -83,11 +83,11 @@ TextAtlas* TextAtlas::create(std::string_view stringValue,
     return nullptr;
 }
 
-void TextAtlas::setProperty(std::string_view stringValue,
-                            std::string_view charMapFile,
+void TextAtlas::setProperty(const std::string& stringValue,
+                            const std::string& charMapFile,
                             int itemWidth,
                             int itemHeight,
-                            std::string_view startCharMap)
+                            const std::string& startCharMap)
 {
     _stringValue     = stringValue;
     _charMapFileName = charMapFile;
@@ -116,7 +116,7 @@ void TextAtlas::setString(std::string_view value)
     //    CCLOG("cssss w %f, h %f", _contentSize.width, _contentSize.height);
 }
 
-std::string_view TextAtlas::getString() const
+const std::string& TextAtlas::getString() const
 {
     return _labelAtlasRenderer->getString();
 }

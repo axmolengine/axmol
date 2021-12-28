@@ -207,7 +207,7 @@ struct CC_EX_DLL PUParticle3D : public Particle3D
 class CC_EX_DLL PUParticleSystem3D : public ParticleSystem3D
 {
 public:
-    typedef hlookup::string_map<ParticlePool> ParticlePoolMap;
+    typedef std::unordered_map<std::string, ParticlePool> ParticlePoolMap;
 
     static const float DEFAULT_WIDTH;
     static const float DEFAULT_HEIGHT;
@@ -218,8 +218,8 @@ public:
     static const float DEFAULT_MAX_VELOCITY;
 
     static PUParticleSystem3D* create();
-    static PUParticleSystem3D* create(std::string_view filePath);
-    static PUParticleSystem3D* create(std::string_view filePath, std::string_view materialPath);
+    static PUParticleSystem3D* create(const std::string& filePath);
+    static PUParticleSystem3D* create(const std::string& filePath, const std::string& materialPath);
 
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
@@ -296,8 +296,8 @@ public:
      */
     void setMaxVelocity(float maxVelocity);
 
-    void setMaterialName(std::string_view name) { _matName = name; };
-    std::string_view getMaterialName() const { return _matName; };
+    void setMaterialName(const std::string& name) { _matName = name; };
+    const std::string& getMaterialName() const { return _matName; };
 
     /** Forces emission of particles.
      * @remarks The number of requested particles are the exact number that are emitted. No down-scaling is applied.
@@ -309,8 +309,8 @@ public:
      */
     void addEmitter(PUEmitter* emitter);
 
-    PUAffector* getAffector(std::string_view name);
-    PUEmitter* getEmitter(std::string_view name);
+    PUAffector* getAffector(const std::string& name);
+    PUEmitter* getEmitter(const std::string& name);
     void removeAllEmitter();
 
     void addListener(PUListener* listener);
@@ -318,7 +318,7 @@ public:
     void removeAllListener();
 
     void addObserver(PUObserver* observer);
-    PUObserver* getObserver(std::string_view name);
+    PUObserver* getObserver(const std::string& name);
     void removerAllObserver();
 
     void addBehaviourTemplate(PUBehaviour* behaviour);
@@ -346,13 +346,13 @@ public:
     virtual PUParticleSystem3D* clone();
     virtual void copyAttributesTo(PUParticleSystem3D* system);
 
-    bool initSystem(std::string_view filePath);
+    bool initSystem(const std::string& filePath);
 
     CC_CONSTRUCTOR_ACCESS : PUParticleSystem3D();
     virtual ~PUParticleSystem3D();
 
-    bool initWithFilePath(std::string_view filePath);
-    bool initWithFilePathAndMaterialPath(std::string_view filePath, std::string_view materialPath);
+    bool initWithFilePath(const std::string& filePath);
+    bool initWithFilePathAndMaterialPath(const std::string& filePath, const std::string& materialPath);
 
 protected:
     void prepared();

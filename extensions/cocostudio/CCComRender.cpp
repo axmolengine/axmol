@@ -383,7 +383,7 @@ ComRender* ComRender::create(cocos2d::Node* node, const char* comName)
     return ret;
 }
 
-bool ComRender::readJson(std::string_view fileName, rapidjson::Document& doc)
+bool ComRender::readJson(const std::string& fileName, rapidjson::Document& doc)
 {
     bool ret = false;
     do

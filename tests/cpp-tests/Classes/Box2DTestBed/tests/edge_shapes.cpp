@@ -26,219 +26,228 @@
 class EdgeShapesCallback : public b2RayCastCallback
 {
 public:
-    EdgeShapesCallback() { m_fixture = NULL; }
+	EdgeShapesCallback()
+	{
+		m_fixture = NULL;
+	}
 
-    float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override
-    {
-        m_fixture = fixture;
-        m_point   = point;
-        m_normal  = normal;
+	float ReportFixture(b2Fixture* fixture, const b2Vec2& point,
+						  const b2Vec2& normal, float fraction) override
+	{
+		m_fixture = fixture;
+		m_point = point;
+		m_normal = normal;
 
-        return fraction;
-    }
+		return fraction;
+	}
 
-    b2Fixture* m_fixture;
-    b2Vec2 m_point;
-    b2Vec2 m_normal;
+	b2Fixture* m_fixture;
+	b2Vec2 m_point;
+	b2Vec2 m_normal;
 };
 
 class EdgeShapes : public Test
 {
 public:
-    enum
-    {
-        e_maxBodies = 256
-    };
 
-    EdgeShapes()
-    {
-        // Ground body
-        {
-            b2BodyDef bd;
-            b2Body* ground = m_world->CreateBody(&bd);
+	enum
+	{
+		e_maxBodies = 256
+	};
 
-            float x1 = -20.0f;
-            float y1 = 2.0f * cosf(x1 / 10.0f * b2_pi);
-            for (int32 i = 0; i < 80; ++i)
-            {
-                float x2 = x1 + 0.5f;
-                float y2 = 2.0f * cosf(x2 / 10.0f * b2_pi);
+	EdgeShapes()
+	{
+		// Ground body
+		{
+			b2BodyDef bd;
+			b2Body* ground = m_world->CreateBody(&bd);
 
-                b2EdgeShape shape;
-                shape.SetTwoSided(b2Vec2(x1, y1), b2Vec2(x2, y2));
-                ground->CreateFixture(&shape, 0.0f);
+			float x1 = -20.0f;
+			float y1 = 2.0f * cosf(x1 / 10.0f * b2_pi);
+			for (int32 i = 0; i < 80; ++i)
+			{
+				float x2 = x1 + 0.5f;
+				float y2 = 2.0f * cosf(x2 / 10.0f * b2_pi);
 
-                x1 = x2;
-                y1 = y2;
-            }
-        }
+				b2EdgeShape shape;
+				shape.SetTwoSided(b2Vec2(x1, y1), b2Vec2(x2, y2));
+				ground->CreateFixture(&shape, 0.0f);
 
-        {
-            b2Vec2 vertices[3];
-            vertices[0].Set(-0.5f, 0.0f);
-            vertices[1].Set(0.5f, 0.0f);
-            vertices[2].Set(0.0f, 1.5f);
-            m_polygons[0].Set(vertices, 3);
-        }
+				x1 = x2;
+				y1 = y2;
+			}
+		}
 
-        {
-            b2Vec2 vertices[3];
-            vertices[0].Set(-0.1f, 0.0f);
-            vertices[1].Set(0.1f, 0.0f);
-            vertices[2].Set(0.0f, 1.5f);
-            m_polygons[1].Set(vertices, 3);
-        }
+		{
+		b2Vec2 vertices[3];
+		vertices[0].Set(-0.5f, 0.0f);
+		vertices[1].Set(0.5f, 0.0f);
+		vertices[2].Set(0.0f, 1.5f);
+		m_polygons[0].Set(vertices, 3);
+	}
 
-        {
-            float w = 1.0f;
-            float b = w / (2.0f + b2Sqrt(2.0f));
-            float s = b2Sqrt(2.0f) * b;
+		{
+			b2Vec2 vertices[3];
+			vertices[0].Set(-0.1f, 0.0f);
+			vertices[1].Set(0.1f, 0.0f);
+			vertices[2].Set(0.0f, 1.5f);
+			m_polygons[1].Set(vertices, 3);
+		}
 
-            b2Vec2 vertices[8];
-            vertices[0].Set(0.5f * s, 0.0f);
-            vertices[1].Set(0.5f * w, b);
-            vertices[2].Set(0.5f * w, b + s);
-            vertices[3].Set(0.5f * s, w);
-            vertices[4].Set(-0.5f * s, w);
-            vertices[5].Set(-0.5f * w, b + s);
-            vertices[6].Set(-0.5f * w, b);
-            vertices[7].Set(-0.5f * s, 0.0f);
+		{
+			float w = 1.0f;
+			float b = w / (2.0f + b2Sqrt(2.0f));
+			float s = b2Sqrt(2.0f) * b;
 
-            m_polygons[2].Set(vertices, 8);
-        }
+			b2Vec2 vertices[8];
+			vertices[0].Set(0.5f * s, 0.0f);
+			vertices[1].Set(0.5f * w, b);
+			vertices[2].Set(0.5f * w, b + s);
+			vertices[3].Set(0.5f * s, w);
+			vertices[4].Set(-0.5f * s, w);
+			vertices[5].Set(-0.5f * w, b + s);
+			vertices[6].Set(-0.5f * w, b);
+			vertices[7].Set(-0.5f * s, 0.0f);
 
-        {
-            m_polygons[3].SetAsBox(0.5f, 0.5f);
-        }
+			m_polygons[2].Set(vertices, 8);
+		}
 
-        {
-            m_circle.m_radius = 0.5f;
-        }
+		{
+			m_polygons[3].SetAsBox(0.5f, 0.5f);
+		}
 
-        m_bodyIndex = 0;
-        memset(m_bodies, 0, sizeof(m_bodies));
+		{
+			m_circle.m_radius = 0.5f;
+		}
 
-        m_angle = 0.0f;
-    }
+		m_bodyIndex = 0;
+		memset(m_bodies, 0, sizeof(m_bodies));
 
-    void Create(int32 index)
-    {
-        if (m_bodies[m_bodyIndex] != NULL)
-        {
-            m_world->DestroyBody(m_bodies[m_bodyIndex]);
-            m_bodies[m_bodyIndex] = NULL;
-        }
+		m_angle = 0.0f;
+	}
 
-        b2BodyDef bd;
+	void Create(int32 index)
+	{
+		if (m_bodies[m_bodyIndex] != NULL)
+		{
+			m_world->DestroyBody(m_bodies[m_bodyIndex]);
+			m_bodies[m_bodyIndex] = NULL;
+		}
 
-        float x = RandomFloat(-10.0f, 10.0f);
-        float y = RandomFloat(10.0f, 20.0f);
-        bd.position.Set(x, y);
-        bd.angle = RandomFloat(-b2_pi, b2_pi);
-        bd.type  = b2_dynamicBody;
+		b2BodyDef bd;
 
-        if (index == 4)
-        {
-            bd.angularDamping = 0.02f;
-        }
+		float x = RandomFloat(-10.0f, 10.0f);
+		float y = RandomFloat(10.0f, 20.0f);
+		bd.position.Set(x, y);
+		bd.angle = RandomFloat(-b2_pi, b2_pi);
+		bd.type = b2_dynamicBody;
 
-        m_bodies[m_bodyIndex] = m_world->CreateBody(&bd);
+		if (index == 4)
+		{
+			bd.angularDamping = 0.02f;
+		}
 
-        if (index < 4)
-        {
-            b2FixtureDef fd;
-            fd.shape    = m_polygons + index;
-            fd.friction = 0.3f;
-            fd.density  = 20.0f;
-            m_bodies[m_bodyIndex]->CreateFixture(&fd);
-        }
-        else
-        {
-            b2FixtureDef fd;
-            fd.shape    = &m_circle;
-            fd.friction = 0.3f;
-            fd.density  = 20.0f;
-            m_bodies[m_bodyIndex]->CreateFixture(&fd);
-        }
+		m_bodies[m_bodyIndex] = m_world->CreateBody(&bd);
 
-        m_bodyIndex = (m_bodyIndex + 1) % e_maxBodies;
-    }
+		if (index < 4)
+		{
+			b2FixtureDef fd;
+			fd.shape = m_polygons + index;
+			fd.friction = 0.3f;
+			fd.density = 20.0f;
+			m_bodies[m_bodyIndex]->CreateFixture(&fd);
+		}
+		else
+		{
+			b2FixtureDef fd;
+			fd.shape = &m_circle;
+			fd.friction = 0.3f;
+			fd.density = 20.0f;
+			m_bodies[m_bodyIndex]->CreateFixture(&fd);
+		}
 
-    void DestroyBody()
-    {
-        for (int32 i = 0; i < e_maxBodies; ++i)
-        {
-            if (m_bodies[i] != NULL)
-            {
-                m_world->DestroyBody(m_bodies[i]);
-                m_bodies[i] = NULL;
-                return;
-            }
-        }
-    }
+		m_bodyIndex = (m_bodyIndex + 1) % e_maxBodies;
+	}
 
-    void Keyboard(int key) override
-    {
-        switch (key)
-        {
-        case GLFW_KEY_1:
-        case GLFW_KEY_2:
-        case GLFW_KEY_3:
-        case GLFW_KEY_4:
-        case GLFW_KEY_5:
-            Create(key - GLFW_KEY_1);
-            break;
+	void DestroyBody()
+	{
+		for (int32 i = 0; i < e_maxBodies; ++i)
+		{
+			if (m_bodies[i] != NULL)
+			{
+				m_world->DestroyBody(m_bodies[i]);
+				m_bodies[i] = NULL;
+				return;
+			}
+		}
+	}
 
-        case GLFW_KEY_D:
-            DestroyBody();
-            break;
-        }
-    }
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_1:
+		case GLFW_KEY_2:
+		case GLFW_KEY_3:
+		case GLFW_KEY_4:
+		case GLFW_KEY_5:
+			Create(key - GLFW_KEY_1);
+			break;
 
-    void Step(Settings& settings) override
-    {
-        bool advanceRay = settings.m_pause == 0 || settings.m_singleStep;
+		case GLFW_KEY_D:
+			DestroyBody();
+			break;
+		}
+	}
 
-        Test::Step(settings);
-        DrawString(5, m_textLine, "Press 1-5 to drop stuff");
+	void Step(Settings& settings) override
+	{
+		bool advanceRay = settings.m_pause == 0 || settings.m_singleStep;
 
-        float L = 25.0f;
-        b2Vec2 point1(0.0f, 10.0f);
-        b2Vec2 d(L * cosf(m_angle), -L * b2Abs(sinf(m_angle)));
-        b2Vec2 point2 = point1 + d;
+		Test::Step(settings);
+		DrawString(5, m_textLine, "Press 1-5 to drop stuff");
+		
 
-        EdgeShapesCallback callback;
+		float L = 25.0f;
+		b2Vec2 point1(0.0f, 10.0f);
+		b2Vec2 d(L * cosf(m_angle), -L * b2Abs(sinf(m_angle)));
+		b2Vec2 point2 = point1 + d;
 
-        m_world->RayCast(&callback, point1, point2);
+		EdgeShapesCallback callback;
 
-        if (callback.m_fixture)
-        {
-            g_debugDraw.DrawPoint(callback.m_point, 5.0f, b2Color(0.4f, 0.9f, 0.4f));
+		m_world->RayCast(&callback, point1, point2);
 
-            g_debugDraw.DrawSegment(point1, callback.m_point, b2Color(0.8f, 0.8f, 0.8f));
+		if (callback.m_fixture)
+		{
+			g_debugDraw.DrawPoint(callback.m_point, 5.0f, b2Color(0.4f, 0.9f, 0.4f));
 
-            b2Vec2 head = callback.m_point + 0.5f * callback.m_normal;
-            g_debugDraw.DrawSegment(callback.m_point, head, b2Color(0.9f, 0.9f, 0.4f));
-        }
-        else
-        {
-            g_debugDraw.DrawSegment(point1, point2, b2Color(0.8f, 0.8f, 0.8f));
-        }
+			g_debugDraw.DrawSegment(point1, callback.m_point, b2Color(0.8f, 0.8f, 0.8f));
 
-        if (advanceRay)
-        {
-            m_angle += 0.25f * b2_pi / 180.0f;
-        }
-    }
+			b2Vec2 head = callback.m_point + 0.5f * callback.m_normal;
+			g_debugDraw.DrawSegment(callback.m_point, head, b2Color(0.9f, 0.9f, 0.4f));
+		}
+		else
+		{
+			g_debugDraw.DrawSegment(point1, point2, b2Color(0.8f, 0.8f, 0.8f));
+		}
 
-    static Test* Create() { return new EdgeShapes; }
+		if (advanceRay)
+		{
+			m_angle += 0.25f * b2_pi / 180.0f;
+		}
+	}
 
-    int32 m_bodyIndex;
-    b2Body* m_bodies[e_maxBodies];
-    b2PolygonShape m_polygons[4];
-    b2CircleShape m_circle;
+	static Test* Create()
+	{
+		return new EdgeShapes;
+	}
 
-    float m_angle;
+	int32 m_bodyIndex;
+	b2Body* m_bodies[e_maxBodies];
+	b2PolygonShape m_polygons[4];
+	b2CircleShape m_circle;
+
+	float m_angle;
 };
 
 static int testIndex = RegisterTest("Geometry", "Edge Shapes", EdgeShapes::Create);

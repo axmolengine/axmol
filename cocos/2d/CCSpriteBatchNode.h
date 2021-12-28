@@ -84,7 +84,7 @@ public:
      * @param capacity The capacity of children.
      * @return Return an autorelease object.
      */
-    static SpriteBatchNode* create(std::string_view fileImage, ssize_t capacity = DEFAULT_CAPACITY);
+    static SpriteBatchNode* create(const std::string& fileImage, ssize_t capacity = DEFAULT_CAPACITY);
 
     /** Returns the TextureAtlas object.
      *
@@ -195,7 +195,7 @@ public:
 
     using Node::addChild;
     virtual void addChild(Node* child, int zOrder, int tag) override;
-    virtual void addChild(Node* child, int zOrder, std::string_view name) override;
+    virtual void addChild(Node* child, int zOrder, const std::string& name) override;
     virtual void reorderChild(Node* child, int zOrder) override;
 
     virtual void removeChild(Node* child, bool cleanup) override;
@@ -250,7 +250,7 @@ public:
      * @js init
      * @lua init
      */
-    bool initWithFile(std::string_view fileImage, ssize_t capacity = DEFAULT_CAPACITY);
+    bool initWithFile(const std::string& fileImage, ssize_t capacity = DEFAULT_CAPACITY);
     bool init() override;
 
 protected:

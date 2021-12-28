@@ -108,7 +108,7 @@ public:
     {
         /*Constructors*/
         DetailMap();
-        DetailMap(std::string_view detailMapSrc, float size = 35);
+        DetailMap(const std::string& detailMapSrc, float size = 35);
         /*detail Image source file path*/
         std::string _detailMapSrc;
         /*detailMapSize determine how many tiles that Terrain represent*/
@@ -136,14 +136,14 @@ public:
         /**empty constructor*/
         TerrainData();
         /**constructor, this constructor construct a simple terrain which only have 1 detailmap*/
-        TerrainData(std::string_view heightMapsrc,
-                    std::string_view textureSrc,
+        TerrainData(const std::string& heightMapsrc,
+                    const std::string& textureSrc,
                     const Vec2& chunksize = Vec2(32, 32),
                     float mapHeight       = 2,
                     float mapScale        = 0.1);
         /**constructor, this constructor construct a terrain which have 4 detailmaps, 1 alpha map*/
-        TerrainData(std::string_view heightMapsrc,
-                    std::string_view alphamap,
+        TerrainData(const std::string& heightMapsrc,
+                    const std::string& alphamap,
                     const DetailMap& detail1,
                     const DetailMap& detail2,
                     const DetailMap& detail3,
@@ -152,8 +152,8 @@ public:
                     float mapHeight       = 2,
                     float mapScale        = 0.1);
         /**constructor, this constructor construct a terrain which have 3 detailmaps, 1 alpha map*/
-        TerrainData(std::string_view heightMapsrc,
-                    std::string_view alphamap,
+        TerrainData(const std::string& heightMapsrc,
+                    const std::string& alphamap,
                     const DetailMap& detail1,
                     const DetailMap& detail2,
                     const DetailMap& detail3,
@@ -337,7 +337,7 @@ private:
 
 public:
     /** set light map texture */
-    void setLightMap(std::string_view fileName);
+    void setLightMap(const std::string& fileName);
 
     /**
      set directional light for the terrain
@@ -349,7 +349,7 @@ public:
     /**initialize all Properties which terrain need */
     bool initProperties();
     /**initialize heightMap data */
-    bool initHeightMap(std::string_view heightMap);
+    bool initHeightMap(const std::string& heightMap);
     /**initialize alphaMap ,detailMaps textures*/
     bool initTextures();
     /**create entry*/
@@ -429,7 +429,7 @@ public:
     /**
      * reset the heightmap data.
      */
-    void resetHeightMap(std::string_view heightMap);
+    void resetHeightMap(const std::string& heightMap);
 
     /**
      * get the terrain's minimal height.

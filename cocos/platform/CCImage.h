@@ -148,7 +148,7 @@ public:
     @param path   the absolute file path.
     @return true if loaded correctly.
     */
-    bool initWithImageFile(std::string_view path);
+    bool initWithImageFile(const std::string& path);
 
     /**
     @brief Load image from stream buffer.
@@ -191,7 +191,7 @@ public:
      @param    filePath        the file's absolute path, including file suffix.
      @param    isToRGB        whether the image is saved as RGB format.
      */
-    bool saveToFile(std::string_view filename, bool isToRGB = true);
+    bool saveToFile(const std::string& filename, bool isToRGB = true);
     void premultiplyAlpha();
     void reversePremultipliedAlpha();
 
@@ -218,8 +218,8 @@ protected:
     // fast forward pixels to GPU if ownData
     void forwardPixels(uint8_t* data, ssize_t dataLen, int offset, bool ownData);
 
-    bool saveImageToPNG(std::string_view filePath, bool isToRGB = true);
-    bool saveImageToJPG(std::string_view filePath);
+    bool saveImageToPNG(const std::string& filePath, bool isToRGB = true);
+    bool saveImageToJPG(const std::string& filePath);
 
 protected:
     /**
@@ -259,7 +259,7 @@ protected:
      @param imageType the type of image, currently only supporting two types.
      @return  true if loaded correctly.
      */
-    bool initWithImageFileThreadSafe(std::string_view fullpath);
+    bool initWithImageFileThreadSafe(const std::string& fullpath);
 
     Format detectFormat(const uint8_t* data, ssize_t dataLen);
     bool isPng(const uint8_t* data, ssize_t dataLen);

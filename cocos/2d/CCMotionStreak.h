@@ -59,7 +59,7 @@ public:
                                 float minSeg,
                                 float strokeWidth,
                                 const Color3B& strokeColor,
-                                std::string_view imagePath);
+                                const std::string& imagePath);
     /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture.
      *
      * @param timeToFade The fade time, in seconds.
@@ -163,7 +163,7 @@ public:
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename
      */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, const std::string& path);
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture  */
     bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);

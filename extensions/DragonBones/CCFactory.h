@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -102,9 +102,9 @@ protected:
                              Armature* armature) const override;
 
 public:
-    virtual DragonBonesData* loadDragonBonesData(std::string_view filePath,
-                                                 std::string_view name = "",
-                                                 float scale           = 1.0f);
+    virtual DragonBonesData* loadDragonBonesData(const std::string& filePath,
+                                                 const std::string& name = "",
+                                                 float scale             = 1.0f);
     /**
      * - Load and parse a texture atlas data and texture from the local and cache them to the factory.
      * @param  filePath - The file path of texture atlas data.
@@ -132,9 +132,9 @@ public:
      * </pre>
      * @language zh_CN
      */
-    virtual TextureAtlasData* loadTextureAtlasData(std::string_view filePath,
-                                                   std::string_view name = "",
-                                                   float scale           = 1.0f);
+    virtual TextureAtlasData* loadTextureAtlasData(const std::string& filePath,
+                                                   const std::string& name = "",
+                                                   float scale             = 1.0f);
     /**
      * - Create a armature from cached DragonBonesData instances and TextureAtlasData instances, then use the {@link
      * #clock} to update it. The difference is that the armature created by {@link #buildArmature} is not WorldClock
@@ -168,10 +168,10 @@ public:
      * </pre>
      * @language zh_CN
      */
-    virtual CCArmatureDisplay* buildArmatureDisplay(std::string_view armatureName,
-                                                    std::string_view dragonBonesName  = "",
-                                                    std::string_view skinName         = "",
-                                                    std::string_view textureAtlasName = "") const;
+    virtual CCArmatureDisplay* buildArmatureDisplay(const std::string& armatureName,
+                                                    const std::string& dragonBonesName  = "",
+                                                    const std::string& skinName         = "",
+                                                    const std::string& textureAtlasName = "") const;
     /**
      * - Create the display object with the specified texture.
      * @param textureName - The texture data name.
@@ -186,8 +186,8 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    virtual cocos2d::Sprite* getTextureDisplay(std::string_view textureName,
-                                               std::string_view dragonBonesName = "") const;
+    virtual cocos2d::Sprite* getTextureDisplay(const std::string& textureName,
+                                               const std::string& dragonBonesName = "") const;
     /**
      * - A global sound event manager.
      * Sound events can be listened to uniformly from the manager.

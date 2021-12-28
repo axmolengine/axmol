@@ -43,17 +43,17 @@ class CC_DLL FontAtlasCache
 public:
     static FontAtlas* getFontAtlasTTF(const _ttfConfig* config);
 
-    static FontAtlas* getFontAtlasFNT(std::string_view fontFileName);
-    static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, std::string_view subTextureKey);
-    static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, const Rect& imageRect, bool imageRotated);
-    CC_DEPRECATED_ATTRIBUTE static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, const Vec2& imageOffset);
+    static FontAtlas* getFontAtlasFNT(const std::string& fontFileName);
+    static FontAtlas* getFontAtlasFNT(const std::string& fontFileName, const std::string& subTextureKey);
+    static FontAtlas* getFontAtlasFNT(const std::string& fontFileName, const Rect& imageRect, bool imageRotated);
+    CC_DEPRECATED_ATTRIBUTE static FontAtlas* getFontAtlasFNT(const std::string& fontFileName, const Vec2& imageOffset);
 
-    static FontAtlas* getFontAtlasCharMap(std::string_view charMapFile,
+    static FontAtlas* getFontAtlasCharMap(const std::string& charMapFile,
                                           int itemWidth,
                                           int itemHeight,
                                           int startCharMap);
     static FontAtlas* getFontAtlasCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
-    static FontAtlas* getFontAtlasCharMap(std::string_view plistFile);
+    static FontAtlas* getFontAtlasCharMap(const std::string& plistFile);
 
     static bool releaseFontAtlas(FontAtlas* atlas);
 
@@ -66,19 +66,19 @@ public:
      CAUTION : All component use this font texture should be reset font name, though the file name is same!
                otherwise, it will cause program crash!
     */
-    static void reloadFontAtlasFNT(std::string_view fontFileName, const Rect& imageRect, bool imageRotated);
+    static void reloadFontAtlasFNT(const std::string& fontFileName, const Rect& imageRect, bool imageRotated);
 
-    CC_DEPRECATED_ATTRIBUTE static void reloadFontAtlasFNT(std::string_view fontFileName,
+    CC_DEPRECATED_ATTRIBUTE static void reloadFontAtlasFNT(const std::string& fontFileName,
                                                            const Vec2& imageOffset = Vec2::ZERO);
 
     /** Unload all texture atlas texture create by special file name.
      CAUTION : All component use this font texture should be reset font name, though the file name is same!
                otherwise, it will cause program crash!
     */
-    static void unloadFontAtlasTTF(std::string_view fontFileName);
+    static void unloadFontAtlasTTF(const std::string& fontFileName);
 
 private:
-    static hlookup::string_map<FontAtlas*> _atlasMap;
+    static std::unordered_map<std::string, FontAtlas*> _atlasMap;
 };
 
 NS_CC_END

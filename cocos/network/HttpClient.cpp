@@ -104,7 +104,7 @@ void HttpClient::enableCookies(const char* cookieFile)
     _cookie->readFile();
 }
 
-void HttpClient::setSSLVerification(std::string_view caFile)
+void HttpClient::setSSLVerification(const std::string& caFile)
 {
     std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     _sslCaFilename = caFile;
@@ -167,9 +167,9 @@ void HttpClient::handleNetworkStatusChanged()
     _service->set_option(YOPT_S_DNS_DIRTY, 1);
 }
 
-void HttpClient::setNameServers(std::string_view servers)
+void HttpClient::setNameServers(const std::string& servers)
 {
-    _service->set_option(YOPT_S_DNS_LIST, servers.data());
+    _service->set_option(YOPT_S_DNS_LIST, servers.c_str());
 }
 
 yasio::io_service* HttpClient::getInternalService()
@@ -208,7 +208,7 @@ int HttpClient::tryTakeAvailChannel()
     return -1;
 }
 
-void HttpClient::processResponse(HttpResponse* response, std::string_view url)
+void HttpClient::processResponse(HttpResponse* response, const std::string& url)
 {
     auto channelIndex = tryTakeAvailChannel();
     response->retain();
@@ -221,7 +221,7 @@ void HttpClient::processResponse(HttpResponse* response, std::string_view url)
             auto& requestUri       = response->getRequestUri();
             auto channelHandle     = _service->channel_at(channelIndex);
             channelHandle->ud_.ptr = response;
-            _service->set_option(YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().data(),
+            _service->set_option(YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().c_str(),
                                  (int)requestUri.getPort());
             if (requestUri.isSecure())
                 _service->open(channelIndex, YCK_SSL_CLIENT);
@@ -292,7 +292,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
             obs.write_bytes(uri.getPath());
             if (!usePostData)
             {
-                auto query = uri.getQuery();
+                auto& query = uri.getQuery();
                 if (!query.empty())
                 {
                     obs.write_byte('?');
@@ -530,13 +530,13 @@ int HttpClient::getTimeoutForRead()
     return _timeoutForRead;
 }
 
-std::string_view HttpClient::getCookieFilename()
+const std::string& HttpClient::getCookieFilename()
 {
     std::lock_guard<std::recursive_mutex> lock(_cookieFileMutex);
     return _cookieFilename;
 }
 
-std::string_view HttpClient::getSSLVerification()
+const std::string& HttpClient::getSSLVerification()
 {
     std::lock_guard<std::recursive_mutex> lock(_sslCaFileMutex);
     return _sslCaFilename;

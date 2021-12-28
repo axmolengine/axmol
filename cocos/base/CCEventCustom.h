@@ -47,7 +47,7 @@ public:
      * @param eventName A given name of the custom event.
      * @js ctor
      */
-    EventCustom(std::string_view eventName);
+    EventCustom(const std::string& eventName);
 
     /** Sets user data.
      *
@@ -65,7 +65,7 @@ public:
      *
      * @return The name of the event.
      */
-    std::string_view getEventName() const { return _eventName; }
+    const std::string& getEventName() const { return _eventName; }
 
 protected:
     void* _userData;  ///< User data

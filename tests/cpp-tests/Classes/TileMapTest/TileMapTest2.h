@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
+ 
  http://www.cocos2d-x.org
-
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
-
+ 
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
-
+ 
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -54,7 +54,7 @@ class TileMapEditTestNew : public TileDemoNew
 {
 public:
     CREATE_FUNC(TileMapEditTestNew);
-    TileMapEditTestNew();
+    TileMapEditTestNew ();
     virtual std::string title() const override;
 
     void updateMap(float dt);
@@ -100,7 +100,6 @@ class TMXReadWriteTestNew : public TileDemoNew
 {
     unsigned int _gid;
     unsigned int _gid2;
-
 public:
     CREATE_FUNC(TMXReadWriteTestNew);
     TMXReadWriteTestNew();
@@ -192,14 +191,13 @@ public:
 
 class TMXIsoZorderNew : public TileDemoNew
 {
-    cocos2d::Sprite* _tamara;
-
+    cocos2d::Sprite*    _tamara;
 public:
     CREATE_FUNC(TMXIsoZorderNew);
     TMXIsoZorderNew();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual void onExit() override;
+    virtual void onExit()override;
 
     ~TMXIsoZorderNew();
     void repositionSprite(float dt);
@@ -207,8 +205,7 @@ public:
 
 class TMXOrthoZorderNew : public TileDemoNew
 {
-    cocos2d::Sprite* _tamara;
-
+    cocos2d::Sprite*    _tamara;
 public:
     CREATE_FUNC(TMXOrthoZorderNew);
     TMXOrthoZorderNew();
@@ -221,8 +218,7 @@ public:
 
 class TMXIsoVertexZNew : public TileDemoNew
 {
-    cocos2d::Sprite* _tamara;
-
+    cocos2d::Sprite*    _tamara;
 public:
     CREATE_FUNC(TMXIsoVertexZNew);
     TMXIsoVertexZNew();
@@ -237,8 +233,7 @@ public:
 
 class TMXOrthoVertexZNew : public TileDemoNew
 {
-    cocos2d::Sprite* _tamara;
-
+    cocos2d::Sprite*    _tamara;
 public:
     CREATE_FUNC(TMXOrthoVertexZNew);
     TMXOrthoVertexZNew();
@@ -336,7 +331,7 @@ public:
     CREATE_FUNC(TMXGIDObjectsTestNew);
     TMXGIDObjectsTestNew();
     virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    virtual std::string subtitle() const override;   
 };
 
 class TileAnimTestNew : public TileDemoNew

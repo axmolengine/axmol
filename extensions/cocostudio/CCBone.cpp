@@ -47,7 +47,7 @@ Bone* Bone::create()
     return nullptr;
 }
 
-Bone* Bone::create(std::string_view name)
+Bone* Bone::create(const std::string& name)
 {
 
     Bone* pBone = new Bone();
@@ -95,7 +95,7 @@ bool Bone::init()
     return Bone::init(nullptr);
 }
 
-bool Bone::init(std::string_view name)
+bool Bone::init(const std::string& name)
 {
     bool bRet = false;
     do
@@ -416,7 +416,7 @@ void Bone::changeDisplayByIndex(int index, bool force)
     changeDisplayWithIndex(index, force);
 }
 
-void Bone::changeDisplayByName(std::string_view name, bool force)
+void Bone::changeDisplayByName(const std::string& name, bool force)
 {
     changeDisplayWithName(name, force);
 }
@@ -426,7 +426,7 @@ void Bone::changeDisplayWithIndex(int index, bool force)
     _displayManager->changeDisplayWithIndex(index, force);
 }
 
-void Bone::changeDisplayWithName(std::string_view name, bool force)
+void Bone::changeDisplayWithName(const std::string& name, bool force)
 {
     _displayManager->changeDisplayWithName(name, force);
 }

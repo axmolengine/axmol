@@ -36,236 +36,220 @@ VibrateTests::VibrateTests()
     ADD_TEST_CASE(VibrateControlTest);
 }
 
-namespace
-{
-class TextButton : public cocos2d::Label
-{
-public:
-    static TextButton* create(std::string_view text, const std::function<void(TextButton*)>& onTriggered)
+namespace {
+    class TextButton : public cocos2d::Label
     {
-        auto ret = new TextButton();
-
-        TTFConfig ttfconfig("fonts/arial.ttf", 25);
-        if (ret->setTTFConfig(ttfconfig))
+    public:
+        
+        static TextButton *create(const std::string& text, const std::function<void(TextButton*)> &onTriggered)
         {
-            ret->setString(text);
-            ret->_onTriggered = onTriggered;
-
-            ret->autorelease();
-
-            return ret;
+            auto ret = new TextButton();
+            
+            TTFConfig ttfconfig("fonts/arial.ttf",25);
+            if (ret->setTTFConfig(ttfconfig)) {
+                ret->setString(text);
+                ret->_onTriggered = onTriggered;
+                
+                ret->autorelease();
+                
+                return ret;
+            }
+            
+            delete ret;
+            return nullptr;
         }
-
-        delete ret;
-        return nullptr;
-    }
-
-    void setEnabled(bool enabled)
-    {
-        _enabled = enabled;
-        if (_enabled)
+        
+        void setEnabled(bool enabled)
         {
-            this->setColor(Color3B::WHITE);
+            _enabled = enabled;
+            if(_enabled){
+                this->setColor(Color3B::WHITE);
+            }
+            else {
+                this->setColor(Color3B::GRAY);
+            }
         }
-        else
+        
+    private:
+        TextButton()
         {
-            this->setColor(Color3B::GRAY);
+            auto listener = EventListenerTouchOneByOne::create();
+            listener->setSwallowTouches(true);
+            
+            listener->onTouchBegan = CC_CALLBACK_2(TextButton::onTouchBegan, this);
+            listener->onTouchEnded = CC_CALLBACK_2(TextButton::onTouchEnded, this);
+            listener->onTouchCancelled = CC_CALLBACK_2(TextButton::onTouchCancelled, this);
+            
+            _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);            
         }
-    }
-
-private:
-    TextButton()
-    {
-        auto listener = EventListenerTouchOneByOne::create();
-        listener->setSwallowTouches(true);
-
-        listener->onTouchBegan     = CC_CALLBACK_2(TextButton::onTouchBegan, this);
-        listener->onTouchEnded     = CC_CALLBACK_2(TextButton::onTouchEnded, this);
-        listener->onTouchCancelled = CC_CALLBACK_2(TextButton::onTouchCancelled, this);
-
-        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-    }
-
-    bool touchHits(Touch* touch)
-    {
-        auto hitPos = this->convertToNodeSpace(touch->getLocation());
-        if (hitPos.x >= 0 && hitPos.y >= 0 && hitPos.x <= _contentSize.width && hitPos.y <= _contentSize.height)
+        
+        bool touchHits(Touch  *touch)
         {
-            return true;
+            auto hitPos = this->convertToNodeSpace(touch->getLocation());
+            if (hitPos.x >= 0 && hitPos.y >= 0 && hitPos.x <= _contentSize.width && hitPos.y <= _contentSize.height) {
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
-
-    bool onTouchBegan(Touch* touch, Event* event)
-    {
-        auto hits = touchHits(touch);
-        if (hits)
-        {
-            scaleButtonTo(0.95f);
-        }
-        return hits;
-    }
-
-    void onTouchEnded(Touch* touch, Event* event)
-    {
-        if (_enabled)
+        
+        bool onTouchBegan(Touch  *touch, Event  *event)
         {
             auto hits = touchHits(touch);
-            if (hits && _onTriggered)
-            {
-                _onTriggered(this);
+            if (hits){
+                scaleButtonTo(0.95f);
             }
+            return hits;
         }
-
-        scaleButtonTo(1);
-    }
-
-    void onTouchCancelled(Touch* touch, Event* event) { scaleButtonTo(1); }
-
-    void scaleButtonTo(float scale)
-    {
-        auto action = ScaleTo::create(0.05f, scale);
-        action->setTag(10000);
-        stopActionByTag(10000);
-        runAction(action);
-    }
-
-    std::function<void(TextButton*)> _onTriggered = nullptr;
-
-    bool _enabled = true;
-};
-
-class SliderEx : public Slider
-{
-public:
-    enum class TouchEvent
-    {
-        DOWN,
-        MOVE,
-        UP,
-        CANCEL
-    };
-    typedef std::function<void(SliderEx*, float, TouchEvent)> ccSliderExCallback;
-
-    static SliderEx* create()
-    {
-        auto ret = new SliderEx();
-        if (ret->init())
+        
+        void onTouchEnded(Touch  *touch, Event  *event)
         {
-            ret->_callback = nullptr;
-            ret->loadBarTexture("ccs-res/cocosui/sliderTrack.png");
-            ret->loadSlidBallTextures("ccs-res/cocosui/sliderThumb.png", "ccs-res/cocosui/sliderThumb.png", "");
-            ret->loadProgressBarTexture("ccs-res/cocosui/sliderProgress.png");
-
-            ret->autorelease();
-
+            if(_enabled) {
+                auto hits = touchHits(touch);
+                if (hits && _onTriggered){
+                    _onTriggered(this);
+                }
+            }
+            
+            scaleButtonTo(1);
+        }
+        
+        void onTouchCancelled(Touch  *touch, Event  *event)
+        {
+            scaleButtonTo(1);
+        }
+        
+        void scaleButtonTo(float scale)
+        {
+            auto action = ScaleTo::create(0.05f, scale);
+            action->setTag(10000);
+            stopActionByTag(10000);
+            runAction(action);
+        }
+        
+        std::function<void(TextButton*)> _onTriggered = nullptr;
+        
+        bool _enabled = true;
+    };
+    
+    class SliderEx : public Slider
+    {
+    public:
+        enum class TouchEvent
+        {
+            DOWN,
+            MOVE,
+            UP,
+            CANCEL
+        };
+        typedef std::function<void(SliderEx*,float,TouchEvent)> ccSliderExCallback;
+        
+        static SliderEx* create(){
+            auto ret = new SliderEx();
+            if (ret->init())
+            {
+                ret->_callback = nullptr;
+                ret->loadBarTexture("ccs-res/cocosui/sliderTrack.png");
+                ret->loadSlidBallTextures("ccs-res/cocosui/sliderThumb.png", "ccs-res/cocosui/sliderThumb.png", "");
+                ret->loadProgressBarTexture("ccs-res/cocosui/sliderProgress.png");
+                
+                ret->autorelease();
+                
+                return ret;
+            }
+            CC_SAFE_DELETE(ret);
             return ret;
         }
-        CC_SAFE_DELETE(ret);
-        return ret;
-    }
-
-    void setCallBack(const ccSliderExCallback& callback) { _callback = callback; }
-
-    void setRatio(float ratio)
-    {
-        if (ratio > 1.0f)
-        {
-            ratio = 1.0f;
+        
+        void setCallBack(const ccSliderExCallback& callback){
+            _callback = callback;
         }
-        else if (ratio < 0.0f)
-        {
-            ratio = 0.0f;
-        }
-
-        _ratio   = ratio;
-        _percent = 100 * _ratio;
-
-        float dis = _barLength * _ratio;
-        _slidBallRenderer->setPosition(Vec2(dis, _contentSize.height / 2.0f));
-        if (_scale9Enabled)
-        {
-            _progressBarRenderer->setPreferredSize(Size(dis, _progressBarTextureSize.height));
-        }
-        else
-        {
-            auto spriteRenderer = _progressBarRenderer->getSprite();
-
-            if (nullptr != spriteRenderer)
+        
+        void setRatio(float ratio) {
+            if (ratio > 1.0f){
+                ratio = 1.0f;
+            }
+            else if (ratio < 0.0f){
+                ratio = 0.0f;
+            }
+            
+            _ratio = ratio;
+            _percent = 100 * _ratio;
+            
+            float dis = _barLength * _ratio;
+            _slidBallRenderer->setPosition(Vec2(dis, _contentSize.height / 2.0f));
+            if (_scale9Enabled){
+                _progressBarRenderer->setPreferredSize(Size(dis,_progressBarTextureSize.height));
+            }
+            else
             {
-                Rect rect       = spriteRenderer->getTextureRect();
-                rect.size.width = _progressBarTextureSize.width * _ratio;
-                spriteRenderer->setTextureRect(rect, spriteRenderer->isTextureRectRotated(), rect.size);
+                auto spriteRenderer = _progressBarRenderer->getSprite();
+                
+                if (nullptr != spriteRenderer) {
+                    Rect rect = spriteRenderer->getTextureRect();
+                    rect.size.width = _progressBarTextureSize.width * _ratio;
+                    spriteRenderer->setTextureRect(rect, spriteRenderer->isTextureRectRotated(), rect.size);
+                }
             }
         }
-    }
-
-    virtual bool onTouchBegan(Touch* touch, Event* unusedEvent) override
-    {
-        auto ret = Slider::onTouchBegan(touch, unusedEvent);
-        if (ret && _callback)
-        {
-            _touchEvent = TouchEvent::DOWN;
-            Vec2 nsp    = convertToNodeSpace(_touchBeganPosition);
-            _ratio      = nsp.x / _barLength;
-            if (_ratio < 0.0f)
+        
+        virtual bool onTouchBegan(Touch *touch, Event *unusedEvent) override{
+            auto ret = Slider::onTouchBegan(touch, unusedEvent);
+            if(ret && _callback){
+                _touchEvent = TouchEvent::DOWN;
+                Vec2 nsp = convertToNodeSpace(_touchBeganPosition);
+                _ratio = nsp.x / _barLength;
+                if(_ratio < 0.0f)
+                    _ratio = 0.0f;
+                else if(_ratio > 1.0f)
+                    _ratio = 1.0f;
+                _callback(this,_ratio,_touchEvent);
+            }
+            return ret;
+        }
+        
+        virtual void onTouchMoved(Touch *touch, Event *unusedEvent) override{
+            _touchEvent = TouchEvent::MOVE;
+            Slider::onTouchMoved(touch, unusedEvent);
+            Vec2 nsp = convertToNodeSpace(_touchMovePosition);
+            _ratio = nsp.x / _barLength;
+            if(_ratio < 0.0f)
                 _ratio = 0.0f;
-            else if (_ratio > 1.0f)
+            else if(_ratio > 1.0f)
                 _ratio = 1.0f;
-            _callback(this, _ratio, _touchEvent);
+            if(_callback){
+                _callback(this,_ratio,_touchEvent);
+            }
         }
-        return ret;
-    }
-
-    virtual void onTouchMoved(Touch* touch, Event* unusedEvent) override
-    {
-        _touchEvent = TouchEvent::MOVE;
-        Slider::onTouchMoved(touch, unusedEvent);
-        Vec2 nsp = convertToNodeSpace(_touchMovePosition);
-        _ratio   = nsp.x / _barLength;
-        if (_ratio < 0.0f)
-            _ratio = 0.0f;
-        else if (_ratio > 1.0f)
-            _ratio = 1.0f;
-        if (_callback)
-        {
-            _callback(this, _ratio, _touchEvent);
+        
+        virtual void onTouchEnded(Touch *touch, Event *unusedEvent) override{
+            _touchEvent = TouchEvent::UP;
+            Slider::onTouchEnded(touch, unusedEvent);
+            Vec2 nsp = convertToNodeSpace(_touchEndPosition);
+            _ratio = nsp.x / _barLength;
+            if(_ratio < 0.0f)
+                _ratio = 0.0f;
+            else if(_ratio > 1.0f)
+                _ratio = 1.0f;
+            if(_callback){
+                _callback(this,_ratio,_touchEvent);
+            }
         }
-    }
-
-    virtual void onTouchEnded(Touch* touch, Event* unusedEvent) override
-    {
-        _touchEvent = TouchEvent::UP;
-        Slider::onTouchEnded(touch, unusedEvent);
-        Vec2 nsp = convertToNodeSpace(_touchEndPosition);
-        _ratio   = nsp.x / _barLength;
-        if (_ratio < 0.0f)
-            _ratio = 0.0f;
-        else if (_ratio > 1.0f)
-            _ratio = 1.0f;
-        if (_callback)
-        {
-            _callback(this, _ratio, _touchEvent);
+        
+        virtual void onTouchCancelled(Touch *touch, Event *unusedEvent) override{
+            _touchEvent = TouchEvent::CANCEL;
+            Slider::onTouchCancelled(touch, unusedEvent);
+            
+            if(_callback){
+                _callback(this,_ratio,_touchEvent);
+            }
         }
-    }
-
-    virtual void onTouchCancelled(Touch* touch, Event* unusedEvent) override
-    {
-        _touchEvent = TouchEvent::CANCEL;
-        Slider::onTouchCancelled(touch, unusedEvent);
-
-        if (_callback)
-        {
-            _callback(this, _ratio, _touchEvent);
-        }
-    }
-
-private:
-    TouchEvent _touchEvent;
-    float _ratio;
-    ccSliderExCallback _callback;
-};
-}  // namespace
+        
+    private:
+        TouchEvent _touchEvent;
+        float _ratio;
+        ccSliderExCallback _callback;
+    };
+}
 
 void VibrateTestDemo::onExit()
 {
@@ -280,17 +264,19 @@ std::string VibrateTestDemo::title() const
 // VibrateControlTest
 bool VibrateControlTest::init()
 {
-    auto ret  = VibrateTestDemo::init();
+    auto ret = VibrateTestDemo::init();
     _duration = 0.1f;
-
+    
     std::string fontFilePath = "fonts/arial.ttf";
-
+    
     auto& layerSize = this->getContentSize();
 
-    auto vibrateItem = TextButton::create("vibrate", [&](TextButton* button) { Device::vibrate(_duration); });
+    auto vibrateItem = TextButton::create("vibrate", [&](TextButton* button){
+        Device::vibrate(_duration);
+    });
     vibrateItem->setPosition(layerSize.width * 0.5f, layerSize.height * 0.7f);
     addChild(vibrateItem);
-
+    
     auto durationLabelValue = StringUtils::format("duration: %.3fs", _duration);
 
     auto durationLabel = Label::createWithTTF(durationLabelValue, fontFilePath, 20);
@@ -301,19 +287,21 @@ bool VibrateControlTest::init()
 
     auto durationSlider = SliderEx::create();
     durationSlider->setPercent(0);
-    durationSlider->setCallBack([&](SliderEx* sender, float ratio, SliderEx::TouchEvent event) {
-        _duration               = ratio * 1.9f + 0.1f;  // From 0.1s to 2s
+    durationSlider->setCallBack([&](SliderEx* sender, float ratio, SliderEx::TouchEvent event){
+        _duration = ratio * 1.9f + 0.1f; // From 0.1s to 2s
         auto durationLabelValue = StringUtils::format("duration: %.3fs", _duration);
         (static_cast<Label*>(_durationLabel))->setString(durationLabelValue);
     });
     durationSlider->setPosition(Vec2(layerSize.width * 0.5f, layerSize.height * 0.35f));
     addChild(durationSlider);
     _durationSlider = durationSlider;
-
+        
     return ret;
 }
 
-VibrateControlTest::~VibrateControlTest() {}
+VibrateControlTest::~VibrateControlTest()
+{
+}
 
 std::string VibrateControlTest::title() const
 {

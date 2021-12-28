@@ -90,7 +90,7 @@ public:
      * @js NA
      * @lua NA
      */
-    bool parse(std::string_view filename);
+    bool parse(const std::string& filename);
 
     /**
      * New API for performance.

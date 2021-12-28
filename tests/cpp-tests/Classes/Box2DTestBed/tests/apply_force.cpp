@@ -28,172 +28,176 @@
 class ApplyForce : public Test
 {
 public:
-    ApplyForce()
-    {
-        m_world->SetGravity(b2Vec2(0.0f, 0.0f));
+	ApplyForce()
+	{
+		m_world->SetGravity(b2Vec2(0.0f, 0.0f));
 
-        const float k_restitution = 0.4f;
+		const float k_restitution = 0.4f;
 
-        b2Body* ground;
-        {
-            b2BodyDef bd;
-            bd.position.Set(0.0f, 20.0f);
-            ground = m_world->CreateBody(&bd);
+		b2Body* ground;
+		{
+			b2BodyDef bd;
+			bd.position.Set(0.0f, 20.0f);
+			ground = m_world->CreateBody(&bd);
 
-            b2EdgeShape shape;
+			b2EdgeShape shape;
 
-            b2FixtureDef sd;
-            sd.shape       = &shape;
-            sd.density     = 0.0f;
-            sd.restitution = k_restitution;
+			b2FixtureDef sd;
+			sd.shape = &shape;
+			sd.density = 0.0f;
+			sd.restitution = k_restitution;
 
-            // Left vertical
-            shape.SetTwoSided(b2Vec2(-20.0f, -20.0f), b2Vec2(-20.0f, 20.0f));
-            ground->CreateFixture(&sd);
+			// Left vertical
+			shape.SetTwoSided(b2Vec2(-20.0f, -20.0f), b2Vec2(-20.0f, 20.0f));
+			ground->CreateFixture(&sd);
 
-            // Right vertical
-            shape.SetTwoSided(b2Vec2(20.0f, -20.0f), b2Vec2(20.0f, 20.0f));
-            ground->CreateFixture(&sd);
+			// Right vertical
+			shape.SetTwoSided(b2Vec2(20.0f, -20.0f), b2Vec2(20.0f, 20.0f));
+			ground->CreateFixture(&sd);
 
-            // Top horizontal
-            shape.SetTwoSided(b2Vec2(-20.0f, 20.0f), b2Vec2(20.0f, 20.0f));
-            ground->CreateFixture(&sd);
+			// Top horizontal
+			shape.SetTwoSided(b2Vec2(-20.0f, 20.0f), b2Vec2(20.0f, 20.0f));
+			ground->CreateFixture(&sd);
 
-            // Bottom horizontal
-            shape.SetTwoSided(b2Vec2(-20.0f, -20.0f), b2Vec2(20.0f, -20.0f));
-            ground->CreateFixture(&sd);
-        }
+			// Bottom horizontal
+			shape.SetTwoSided(b2Vec2(-20.0f, -20.0f), b2Vec2(20.0f, -20.0f));
+			ground->CreateFixture(&sd);
+		}
 
-        {
-            b2Transform xf1;
-            xf1.q.Set(0.3524f * b2_pi);
-            xf1.p = xf1.q.GetXAxis();
+		{
+			b2Transform xf1;
+			xf1.q.Set(0.3524f * b2_pi);
+			xf1.p = xf1.q.GetXAxis();
 
-            b2Vec2 vertices[3];
-            vertices[0] = b2Mul(xf1, b2Vec2(-1.0f, 0.0f));
-            vertices[1] = b2Mul(xf1, b2Vec2(1.0f, 0.0f));
-            vertices[2] = b2Mul(xf1, b2Vec2(0.0f, 0.5f));
+			b2Vec2 vertices[3];
+			vertices[0] = b2Mul(xf1, b2Vec2(-1.0f, 0.0f));
+			vertices[1] = b2Mul(xf1, b2Vec2(1.0f, 0.0f));
+			vertices[2] = b2Mul(xf1, b2Vec2(0.0f, 0.5f));
+			
+			b2PolygonShape poly1;
+			poly1.Set(vertices, 3);
 
-            b2PolygonShape poly1;
-            poly1.Set(vertices, 3);
+			b2FixtureDef sd1;
+			sd1.shape = &poly1;
+			sd1.density = 2.0f;
 
-            b2FixtureDef sd1;
-            sd1.shape   = &poly1;
-            sd1.density = 2.0f;
+			b2Transform xf2;
+			xf2.q.Set(-0.3524f * b2_pi);
+			xf2.p = -xf2.q.GetXAxis();
 
-            b2Transform xf2;
-            xf2.q.Set(-0.3524f * b2_pi);
-            xf2.p = -xf2.q.GetXAxis();
+			vertices[0] = b2Mul(xf2, b2Vec2(-1.0f, 0.0f));
+			vertices[1] = b2Mul(xf2, b2Vec2(1.0f, 0.0f));
+			vertices[2] = b2Mul(xf2, b2Vec2(0.0f, 0.5f));
+			
+			b2PolygonShape poly2;
+			poly2.Set(vertices, 3);
 
-            vertices[0] = b2Mul(xf2, b2Vec2(-1.0f, 0.0f));
-            vertices[1] = b2Mul(xf2, b2Vec2(1.0f, 0.0f));
-            vertices[2] = b2Mul(xf2, b2Vec2(0.0f, 0.5f));
+			b2FixtureDef sd2;
+			sd2.shape = &poly2;
+			sd2.density = 2.0f;
 
-            b2PolygonShape poly2;
-            poly2.Set(vertices, 3);
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
 
-            b2FixtureDef sd2;
-            sd2.shape   = &poly2;
-            sd2.density = 2.0f;
+			bd.position.Set(0.0f, 3.0);
+			bd.angle = b2_pi;
+			bd.allowSleep = false;
+			m_body = m_world->CreateBody(&bd);
+			m_body->CreateFixture(&sd1);
+			m_body->CreateFixture(&sd2);
 
-            b2BodyDef bd;
-            bd.type = b2_dynamicBody;
+			float gravity = 10.0f;
+			float I = m_body->GetInertia();
+			float mass = m_body->GetMass();
 
-            bd.position.Set(0.0f, 3.0);
-            bd.angle      = b2_pi;
-            bd.allowSleep = false;
-            m_body        = m_world->CreateBody(&bd);
-            m_body->CreateFixture(&sd1);
-            m_body->CreateFixture(&sd2);
+			// Compute an effective radius that can be used to
+			// set the max torque for a friction joint
+			// For a circle: I = 0.5 * m * r * r ==> r = sqrt(2 * I / m)
+			float radius = b2Sqrt(2.0f * I / mass);
 
-            float gravity = 10.0f;
-            float I       = m_body->GetInertia();
-            float mass    = m_body->GetMass();
+			b2FrictionJointDef jd;
+			jd.bodyA = ground;
+			jd.bodyB = m_body;
+			jd.localAnchorA.SetZero();
+			jd.localAnchorB = m_body->GetLocalCenter();
+			jd.collideConnected = true;
+			jd.maxForce = 0.5f * mass * gravity;
+			jd.maxTorque = 0.2f * mass * radius * gravity;
 
-            // Compute an effective radius that can be used to
-            // set the max torque for a friction joint
-            // For a circle: I = 0.5 * m * r * r ==> r = sqrt(2 * I / m)
-            float radius = b2Sqrt(2.0f * I / mass);
+			m_world->CreateJoint(&jd);
+		}
 
-            b2FrictionJointDef jd;
-            jd.bodyA = ground;
-            jd.bodyB = m_body;
-            jd.localAnchorA.SetZero();
-            jd.localAnchorB     = m_body->GetLocalCenter();
-            jd.collideConnected = true;
-            jd.maxForce         = 0.5f * mass * gravity;
-            jd.maxTorque        = 0.2f * mass * radius * gravity;
+		{
+			b2PolygonShape shape;
+			shape.SetAsBox(0.5f, 0.5f);
 
-            m_world->CreateJoint(&jd);
-        }
+			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 1.0f;
+			fd.friction = 0.3f;
 
-        {
-            b2PolygonShape shape;
-            shape.SetAsBox(0.5f, 0.5f);
+			for (int i = 0; i < 10; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
 
-            b2FixtureDef fd;
-            fd.shape    = &shape;
-            fd.density  = 1.0f;
-            fd.friction = 0.3f;
+				bd.position.Set(0.0f, 7.0f + 1.54f * i);
+				b2Body* body = m_world->CreateBody(&bd);
 
-            for (int i = 0; i < 10; ++i)
-            {
-                b2BodyDef bd;
-                bd.type = b2_dynamicBody;
+				body->CreateFixture(&fd);
 
-                bd.position.Set(0.0f, 7.0f + 1.54f * i);
-                b2Body* body = m_world->CreateBody(&bd);
+				float gravity = 10.0f;
+				float I = body->GetInertia();
+				float mass = body->GetMass();
 
-                body->CreateFixture(&fd);
+				// For a circle: I = 0.5 * m * r * r ==> r = sqrt(2 * I / m)
+				float radius = b2Sqrt(2.0f * I / mass);
 
-                float gravity = 10.0f;
-                float I       = body->GetInertia();
-                float mass    = body->GetMass();
+				b2FrictionJointDef jd;
+				jd.localAnchorA.SetZero();
+				jd.localAnchorB.SetZero();
+				jd.bodyA = ground;
+				jd.bodyB = body;
+				jd.collideConnected = true;
+				jd.maxForce = mass * gravity;
+				jd.maxTorque = 0.1f * mass * radius * gravity;
 
-                // For a circle: I = 0.5 * m * r * r ==> r = sqrt(2 * I / m)
-                float radius = b2Sqrt(2.0f * I / mass);
+				m_world->CreateJoint(&jd);
+			}
+		}
+	}
 
-                b2FrictionJointDef jd;
-                jd.localAnchorA.SetZero();
-                jd.localAnchorB.SetZero();
-                jd.bodyA            = ground;
-                jd.bodyB            = body;
-                jd.collideConnected = true;
-                jd.maxForce         = mass * gravity;
-                jd.maxTorque        = 0.1f * mass * radius * gravity;
+	void Step(Settings& settings) override
+	{
+		DrawString(5, m_textLine, "Forward (W), Turn (A) and (D)");
+		
 
-                m_world->CreateJoint(&jd);
-            }
-        }
-    }
+		//if (glfwGetKey(g_mainWindow, GLFW_KEY_W) == GLFW_PRESS)
+		//{
+		//	b2Vec2 f = m_body->GetWorldVector(b2Vec2(0.0f, -50.0f));
+		//	b2Vec2 p = m_body->GetWorldPoint(b2Vec2(0.0f, 3.0f));
+		//	m_body->ApplyForce(f, p, true);
+		//}
 
-    void Step(Settings& settings) override
-    {
-        DrawString(5, m_textLine, "Forward (W), Turn (A) and (D)");
+		//if (glfwGetKey(g_mainWindow, GLFW_KEY_A) == GLFW_PRESS)
+		//{
+		//	m_body->ApplyTorque(10.0f, true);
+		//}
 
-        // if (glfwGetKey(g_mainWindow, GLFW_KEY_W) == GLFW_PRESS)
-        //{
-        //	b2Vec2 f = m_body->GetWorldVector(b2Vec2(0.0f, -50.0f));
-        //	b2Vec2 p = m_body->GetWorldPoint(b2Vec2(0.0f, 3.0f));
-        //	m_body->ApplyForce(f, p, true);
-        // }
+		//if (glfwGetKey(g_mainWindow, GLFW_KEY_D) == GLFW_PRESS)
+		//{
+		//	m_body->ApplyTorque(-10.0f, true);
+		//}
 
-        // if (glfwGetKey(g_mainWindow, GLFW_KEY_A) == GLFW_PRESS)
-        //{
-        //	m_body->ApplyTorque(10.0f, true);
-        // }
+		Test::Step(settings);
+	}
 
-        // if (glfwGetKey(g_mainWindow, GLFW_KEY_D) == GLFW_PRESS)
-        //{
-        //	m_body->ApplyTorque(-10.0f, true);
-        // }
+	static Test* Create()
+	{
+		return new ApplyForce;
+	}
 
-        Test::Step(settings);
-    }
-
-    static Test* Create() { return new ApplyForce; }
-
-    b2Body* m_body;
+	b2Body* m_body;
 };
 
 static int testIndex = RegisterTest("Forces", "Apply Force", ApplyForce::Create);

@@ -45,7 +45,7 @@ NavMeshObstacle* NavMeshObstacle::create(float radius, float height)
     return nullptr;
 }
 
-std::string_view NavMeshObstacle::getNavMeshObstacleComponentName()
+const std::string& NavMeshObstacle::getNavMeshObstacleComponentName()
 {
     static std::string comName = "___NavMeshObstacleComponent___";
     return comName;

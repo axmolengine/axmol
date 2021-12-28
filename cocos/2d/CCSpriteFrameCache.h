@@ -117,7 +117,7 @@ public:
 
     /** Adds multiple Sprite Frames from a plist file.
      * A texture will be loaded automatically. The texture name will composed by replacing the .plist suffix with .png.
-     * If you want to use another texture, you should use the addSpriteFramesWithFile(std::string_view plist, const
+     * If you want to use another texture, you should use the addSpriteFramesWithFile(const std::string& plist, const
      * std::string& textureFileName) method.
      * @js addSpriteFrames
      * @lua addSpriteFrames
@@ -125,7 +125,7 @@ public:
      * @param spriteSheetFileName file name.
      * @param spriteSheetFormat
      */
-    void addSpriteFramesWithFile(std::string_view spriteSheetFileName,
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName,
                                  uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
 
     /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames.
@@ -137,8 +137,8 @@ public:
      * @param textureFileName Texture file name.
      * @param spriteSheetFormat
      */
-    void addSpriteFramesWithFile(std::string_view spriteSheetFileName,
-                                 std::string_view textureFileName,
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName,
+                                 const std::string& textureFileName,
                                  uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
 
     /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames.
@@ -149,7 +149,7 @@ public:
      * @param texture Texture pointer.
      * @param spriteSheetFormat
      */
-    void addSpriteFramesWithFile(std::string_view spriteSheetFileName,
+    void addSpriteFramesWithFile(const std::string& spriteSheetFileName,
                                  Texture2D* texture,
                                  uint32_t spriteSheetFormat = SpriteSheetFormat::PLIST);
 
@@ -172,7 +172,7 @@ public:
      * @param frame A certain sprite frame.
      * @param frameName The name of the sprite frame.
      */
-    void addSpriteFrame(SpriteFrame* frame, std::string_view frameName);
+    void addSpriteFrame(SpriteFrame* frame, const std::string& frameName);
 
     /** Check if multiple Sprite Frames from a plist file have been loaded.
      * @js NA
@@ -181,7 +181,7 @@ public:
      * @param plist Plist file name.
      * @return True if the file is loaded.
      */
-    bool isSpriteFramesWithFileLoaded(std::string_view plist) const;
+    bool isSpriteFramesWithFileLoaded(const std::string& plist) const;
 
     /** Purges the dictionary of loaded sprite frames.
      * Call this method if you receive the "Memory Warning".
@@ -202,7 +202,7 @@ public:
      *
      * @param name The name of the sprite frame that needs to removed.
      */
-    void removeSpriteFrameByName(std::string_view name);
+    void removeSpriteFrameByName(const std::string& name);
 
     /** Removes multiple Sprite Frames from a plist file.
      * Sprite Frames stored in this file will be removed.
@@ -211,7 +211,7 @@ public:
      *
      * @param plist The name of the plist that needs to removed.
      */
-    void removeSpriteFramesFromFile(std::string_view plist);
+    void removeSpriteFramesFromFile(const std::string& plist);
 
     /** Removes multiple Sprite Frames from a plist file content.
      * Sprite Frames stored in this file will be removed.
@@ -220,7 +220,7 @@ public:
      * @param plist_content The string of the plist content that needs to removed.
      * @js NA
      */
-    void removeSpriteFramesFromFileContent(std::string_view plist_content);
+    void removeSpriteFramesFromFileContent(const std::string& plist_content);
 
     /** Removes all Sprite Frames associated with the specified textures.
      * It is convenient to call this method when a specific texture needs to be removed.
@@ -239,22 +239,22 @@ public:
      * @param name A certain sprite frame name.
      * @return The sprite frame.
      */
-    SpriteFrame* getSpriteFrameByName(std::string_view name);
+    SpriteFrame* getSpriteFrameByName(const std::string& name);
 
-    bool reloadTexture(std::string_view spriteSheetFileName);
+    bool reloadTexture(const std::string& spriteSheetFileName);
 
-    SpriteFrame* findFrame(std::string_view frame);
+    SpriteFrame* findFrame(const std::string& frame);
 
     /**  Record SpriteFrame with plist and frame name, add frame name
      *    and plist to index
      */
     void insertFrame(const std::shared_ptr<SpriteSheet>& spriteSheet,
-                     std::string_view frameName,
+                     const std::string& frameName,
                      SpriteFrame* frameObj);
 
     /** Delete frame from cache, rebuild index
      */
-    bool eraseFrame(std::string_view frameName);
+    bool eraseFrame(const std::string& frameName);
 
     void addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Rect& capInsets, Texture2D* texture);
 
@@ -277,35 +277,30 @@ protected:
     bool eraseFrames(const std::vector<std::string>& frame);
     /** Delete frame from index and SpriteFrame is kept.
      */
-    bool removeSpriteSheet(std::string_view spriteSheetFileName);
+    bool removeSpriteSheet(const std::string& spriteSheetFileName);
     /** Clear index and all SpriteFrames.
      */
     void clear();
 
-    inline bool hasFrame(std::string_view frame) const;
-    inline bool isSpriteSheetInUse(std::string_view spriteSheetFileName) const;
+    inline bool hasFrame(const std::string& frame) const;
+    inline bool isSpriteSheetInUse(const std::string& spriteSheetFileName) const;
 
-    inline StringMap<SpriteFrame*>& getSpriteFrames();
+    inline Map<std::string, SpriteFrame*>& getSpriteFrames();
 
-    void markPlistFull(std::string_view spriteSheetFileName, bool full)
+    void markPlistFull(const std::string& spriteSheetFileName, bool full)
     {
-        // _spriteSheets[spriteSheetFileName]->full = full;
-        auto it = _spriteSheets.find(spriteSheetFileName);
-        if (it != _spriteSheets.end())
-        {
-            it.value()->full = full;
-        }
+        _spriteSheets[spriteSheetFileName]->full = full;
     }
-    bool isPlistFull(std::string_view spriteSheetFileName) const
+    bool isPlistFull(const std::string& spriteSheetFileName) const
     {
-        auto it = _spriteSheets.find(spriteSheetFileName);
+        auto&& it = _spriteSheets.find(spriteSheetFileName);
         return it == _spriteSheets.end() ? false : it->second->full;
     }
 
 private:
-    StringMap<SpriteFrame*> _spriteFrames;
-    hlookup::string_map<std::shared_ptr<SpriteSheet>> _spriteSheets;
-    hlookup::string_map<std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
+    Map<std::string, SpriteFrame*> _spriteFrames;
+    std::unordered_map<std::string, std::shared_ptr<SpriteSheet>> _spriteSheets;
+    std::unordered_map<std::string, std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
 
     std::map<uint32_t, std::shared_ptr<ISpriteSheetLoader>> _spriteSheetLoaders;
 };

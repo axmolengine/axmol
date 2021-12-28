@@ -57,11 +57,11 @@ public:
      * @param frontCrossDisabled    The front cross disabled state image name.
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTextures(std::string_view background,
-                      std::string_view backgroundSelected,
-                      std::string_view cross,
-                      std::string_view backgroundDisabled,
-                      std::string_view frontCrossDisabled,
+    void loadTextures(const std::string& background,
+                      const std::string& backgroundSelected,
+                      const std::string& cross,
+                      const std::string& backgroundDisabled,
+                      const std::string& frontCrossDisabled,
                       TextureResType texType = TextureResType::LOCAL);
 
     /**
@@ -70,7 +70,7 @@ public:
      * @param backGround   The background image name.
      * @param type    @see `Widget::TextureResType`
      */
-    void loadTextureBackGround(std::string_view backGround, TextureResType type = TextureResType::LOCAL);
+    void loadTextureBackGround(const std::string& backGround, TextureResType type = TextureResType::LOCAL);
 
     /**
      * Load background selected state texture for check button.
@@ -78,7 +78,7 @@ public:
      * @param backGroundSelected    The background selected state image name.
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTextureBackGroundSelected(std::string_view backGroundSelected,
+    void loadTextureBackGroundSelected(const std::string& backGroundSelected,
                                        TextureResType texType = TextureResType::LOCAL);
 
     /**
@@ -87,7 +87,7 @@ public:
      * @param crossTextureName    The cross texture name.
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTextureFrontCross(std::string_view crossTextureName, TextureResType texType = TextureResType::LOCAL);
+    void loadTextureFrontCross(const std::string& crossTextureName, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Load background disabled state texture for checkbox.
@@ -96,7 +96,7 @@ public:
      *
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTextureBackGroundDisabled(std::string_view backGroundDisabled,
+    void loadTextureBackGroundDisabled(const std::string& backGroundDisabled,
                                        TextureResType texType = TextureResType::LOCAL);
 
     /**
@@ -105,7 +105,7 @@ public:
      * @param frontCrossDisabled    The front cross disabled state texture name.
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTextureFrontCrossDisabled(std::string_view frontCrossDisabled,
+    void loadTextureFrontCrossDisabled(const std::string& frontCrossDisabled,
                                        TextureResType texType = TextureResType::LOCAL);
 
     /**
@@ -174,11 +174,11 @@ public:
     ResourceData getCrossDisabledFile();
 
     CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
-    virtual bool init(std::string_view backGround,
-                      std::string_view backGroundSelected,
-                      std::string_view cross,
-                      std::string_view backGroundDisabled,
-                      std::string_view frontCrossDisabled,
+    virtual bool init(const std::string& backGround,
+                      const std::string& backGroundSelected,
+                      const std::string& cross,
+                      const std::string& backGroundDisabled,
+                      const std::string& frontCrossDisabled,
                       TextureResType texType = TextureResType::LOCAL);
 
 protected:

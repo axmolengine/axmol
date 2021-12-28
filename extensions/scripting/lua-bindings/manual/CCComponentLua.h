@@ -34,9 +34,9 @@ NS_CC_BEGIN
 class ComponentLua : public Component
 {
 public:
-    static ComponentLua* create(std::string_view scriptFileName);
+    static ComponentLua* create(const std::string& scriptFileName);
 
-    ComponentLua(std::string_view scriptFileName);
+    ComponentLua(const std::string& scriptFileName);
     /**
      * This function is used to be invoked from lua side to get the corresponding script object of this component.
      */
@@ -52,7 +52,7 @@ private:
     bool loadAndExecuteScript();
     void getUserData();
     void storeLuaTable();
-    bool getLuaFunction(std::string_view functionName);
+    bool getLuaFunction(const std::string& functionName);
     void removeLuaTable();
 
     static void initClass();

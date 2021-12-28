@@ -3,19 +3,19 @@
  Copyright (c) 2012 James Chen
  Copyright (c) 2015 Mazyad Alabduljaleel
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
+ 
  http://www.cocos2d-x.org
-
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
-
+ 
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
-
+ 
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,6 +34,7 @@
  * http://stackoverflow.com/questions/18244790/changing-uitextfield-placeholder-font
  */
 
+
 @implementation CCUISingleLineTextField
 
 #pragma mark - Init & Dealloc
@@ -48,28 +49,29 @@
 
 #pragma mark - Properties
 
-- (UIColor*)placeholderTextColor
+- (UIColor *)placeholderTextColor
 {
     return _placeholderTextColor;
 }
 
-- (UIFont*)placeholderFont
+- (UIFont *)placeholderFont
 {
     return _placeholderFont;
 }
 
 #pragma mark - Public methods
 
-- (void)drawPlaceholderInRect:(CGRect)rect
-{
-    NSDictionary* attributes =
-        @{NSForegroundColorAttributeName : _placeholderTextColor, NSFontAttributeName : _placeholderFont};
-
+- (void)drawPlaceholderInRect:(CGRect)rect {
+	NSDictionary *attributes = @{
+		NSForegroundColorAttributeName:_placeholderTextColor,
+		NSFontAttributeName:_placeholderFont
+	};
+    
     // center vertically
     CGSize textSize = [self.placeholder sizeWithAttributes:attributes];
-    CGFloat hdif    = rect.size.height - textSize.height;
-    hdif            = MAX(0, hdif);
-    rect.origin.y += ceil(hdif / 2.0);
+    CGFloat hdif = rect.size.height - textSize.height;
+    hdif = MAX(0, hdif);
+    rect.origin.y += ceil(hdif/2.0);
 
     [[self placeholder] drawInRect:rect withAttributes:attributes];
 }
@@ -77,7 +79,7 @@
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
     auto glview = cocos2d::Director::getInstance()->getOpenGLView();
-
+    
     float padding = CC_EDIT_BOX_PADDING * glview->getScaleX() / glview->getContentScaleFactor();
     return CGRectInset(bounds, padding, padding);
 }

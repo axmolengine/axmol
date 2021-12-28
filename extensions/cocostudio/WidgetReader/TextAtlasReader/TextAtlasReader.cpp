@@ -97,7 +97,7 @@ void TextAtlasReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
 {
     WidgetReader::setPropsFromJsonDictionary(widget, options);
 
-    std::string_view jsonPath = GUIReader::getInstance()->getFilePath();
+    std::string jsonPath = GUIReader::getInstance()->getFilePath();
 
     TextAtlas* labelAtlas = static_cast<TextAtlas*>(widget);
     //        bool sv = DICTOOL->checkObjectExist_json(options, P_StringValue);
@@ -112,7 +112,7 @@ void TextAtlasReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
     {
     case 0:
     {
-        std::string tp_c{jsonPath};
+        std::string tp_c    = jsonPath;
         const char* cmfPath = DICTOOL->getStringValue_json(cmftDic, P_Path);
         const char* cmf_tp  = tp_c.append(cmfPath).c_str();
         labelAtlas->setProperty(DICTOOL->getStringValue_json(options, P_StringValue, "12345678"), cmf_tp,

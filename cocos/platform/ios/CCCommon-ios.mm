@@ -36,30 +36,29 @@
 NS_CC_BEGIN
 
 // ios no MessageBox, use log instead
-void ccMessageBox(const char* msg, const char* title)
+void ccMessageBox(const char * msg, const char * title)
 {
     // only enable it on iOS.
     // FIXME: Implement it for tvOS
 #if !defined(CC_TARGET_OS_TVOS)
-    NSString* tmpTitle = (title) ? [NSString stringWithUTF8String:title] : nil;
-    NSString* tmpMsg   = (msg) ? [NSString stringWithUTF8String:msg] : nil;
+    NSString * tmpTitle = (title) ? [NSString stringWithUTF8String : title] : nil;
+    NSString * tmpMsg = (msg) ? [NSString stringWithUTF8String : msg] : nil;
 
     UIAlertController* alertController = [UIAlertController alertControllerWithTitle:tmpTitle
-                                                                             message:tmpMsg
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
+                               message:tmpMsg
+                               preferredStyle:UIAlertControllerStyleAlert];
 
-    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                            style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction* action){
-                                                          }];
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                   handler:^(UIAlertAction * action) {}];
 
     [alertController addAction:defaultAction];
     auto rootViewController = [UIApplication sharedApplication].windows[0].rootViewController;
     [rootViewController presentViewController:alertController animated:YES completion:nil];
 #endif
+
 }
 
-void LuaLog(const char* format)
+void LuaLog(const char * format)
 {
     puts(format);
 }

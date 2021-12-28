@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -296,15 +296,15 @@ public:
     /**
      * @private
      */
-    bool containsBoneMask(std::string_view boneName) const;
+    bool containsBoneMask(const std::string& boneName) const;
     /**
      * @private
      */
-    void addBoneMask(Armature* armature, std::string_view boneName, bool recursive);
+    void addBoneMask(Armature* armature, const std::string& boneName, bool recursive);
     /**
      * @private
      */
-    void removeBoneMask(Armature* armature, std::string_view boneName, bool recursive);
+    void removeBoneMask(Armature* armature, const std::string& boneName, bool recursive);
 
 public:  // For WebAssembly.
     int getFadeOutMode() const { return (int)fadeOutMode; }

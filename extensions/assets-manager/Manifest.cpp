@@ -50,16 +50,16 @@
 
 NS_CC_EXT_BEGIN
 
-static int cmpVersion(std::string_view v1, std::string_view v2)
+static int cmpVersion(const std::string& v1, const std::string& v2)
 {
     int i;
     int oct_v1[4] = {0}, oct_v2[4] = {0};
-    int filled1 = std::sscanf(v1.data(), "%d.%d.%d.%d", &oct_v1[0], &oct_v1[1], &oct_v1[2], &oct_v1[3]);
-    int filled2 = std::sscanf(v2.data(), "%d.%d.%d.%d", &oct_v2[0], &oct_v2[1], &oct_v2[2], &oct_v2[3]);
+    int filled1 = std::sscanf(v1.c_str(), "%d.%d.%d.%d", &oct_v1[0], &oct_v1[1], &oct_v1[2], &oct_v1[3]);
+    int filled2 = std::sscanf(v2.c_str(), "%d.%d.%d.%d", &oct_v2[0], &oct_v2[1], &oct_v2[2], &oct_v2[3]);
 
     if (filled1 == 0 || filled2 == 0)
     {
-        return v1 != v2;  // strcmp(v1.data(), v2.data());
+        return strcmp(v1.c_str(), v2.c_str());
     }
     for (i = 0; i < 4; i++)
     {
@@ -71,7 +71,7 @@ static int cmpVersion(std::string_view v1, std::string_view v2)
     return 0;
 }
 
-Manifest::Manifest(std::string_view manifestUrl /* = ""*/)
+Manifest::Manifest(const std::string& manifestUrl /* = ""*/)
     : _versionLoaded(false)
     , _loaded(false)
     , _manifestRoot("")
@@ -86,7 +86,7 @@ Manifest::Manifest(std::string_view manifestUrl /* = ""*/)
         parse(manifestUrl);
 }
 
-void Manifest::loadJson(std::string_view url)
+void Manifest::loadJson(const std::string& url)
 {
     clear();
     std::string content;
@@ -97,7 +97,7 @@ void Manifest::loadJson(std::string_view url)
 
         if (content.empty())
         {
-            CCLOG("Fail to retrieve local file content: %s\n", url.data());
+            CCLOG("Fail to retrieve local file content: %s\n", url.c_str());
         }
         else
         {
@@ -116,7 +116,7 @@ void Manifest::loadJson(std::string_view url)
     }
 }
 
-void Manifest::parseVersion(std::string_view versionUrl)
+void Manifest::parseVersion(const std::string& versionUrl)
 {
     loadJson(versionUrl);
 
@@ -126,7 +126,7 @@ void Manifest::parseVersion(std::string_view versionUrl)
     }
 }
 
-void Manifest::parse(std::string_view manifestUrl)
+void Manifest::parse(const std::string& manifestUrl)
 {
     loadJson(manifestUrl);
 
@@ -161,8 +161,8 @@ bool Manifest::versionEquals(const Manifest* b) const
     // Check group versions
     else
     {
-        std::vector<std::string> bGroups = b->getGroups();
-        auto& bGroupVer                  = b->getGroupVerions();
+        std::vector<std::string> bGroups                       = b->getGroups();
+        std::unordered_map<std::string, std::string> bGroupVer = b->getGroupVerions();
         // Check group size
         if (bGroups.size() != _groups.size())
             return false;
@@ -184,10 +184,10 @@ bool Manifest::versionEquals(const Manifest* b) const
 
 bool Manifest::versionGreater(
     const Manifest* b,
-    const std::function<int(std::string_view versionA, std::string_view versionB)>& handle) const
+    const std::function<int(const std::string& versionA, const std::string& versionB)>& handle) const
 {
-    std::string_view localVersion = getVersion();
-    std::string_view bVersion     = b->getVersion();
+    std::string localVersion    = getVersion();
+    const std::string& bVersion = b->getVersion();
     bool greater;
     if (handle)
     {
@@ -200,16 +200,16 @@ bool Manifest::versionGreater(
     return greater;
 }
 
-hlookup::string_map<Manifest::AssetDiff> Manifest::genDiff(const Manifest* b) const
+std::unordered_map<std::string, Manifest::AssetDiff> Manifest::genDiff(const Manifest* b) const
 {
-    hlookup::string_map<AssetDiff> diff_map;
-    auto& bAssets = b->getAssets();
+    std::unordered_map<std::string, AssetDiff> diff_map;
+    const std::unordered_map<std::string, Asset>& bAssets = b->getAssets();
 
     std::string key;
     Asset valueA;
     Asset valueB;
 
-    hlookup::string_map<Asset>::const_iterator valueIt, it;
+    std::unordered_map<std::string, Asset>::const_iterator valueIt, it;
     for (it = _assets.begin(); it != _assets.end(); ++it)
     {
         key    = it->first;
@@ -317,22 +317,22 @@ void Manifest::prependSearchPaths()
     }
 }
 
-std::string_view Manifest::getPackageUrl() const
+const std::string& Manifest::getPackageUrl() const
 {
     return _packageUrl;
 }
 
-std::string_view Manifest::getManifestFileUrl() const
+const std::string& Manifest::getManifestFileUrl() const
 {
     return _remoteManifestUrl;
 }
 
-std::string_view Manifest::getVersionFileUrl() const
+const std::string& Manifest::getVersionFileUrl() const
 {
     return _remoteVersionUrl;
 }
 
-std::string_view Manifest::getVersion() const
+const std::string& Manifest::getVersion() const
 {
     return _version;
 }
@@ -342,22 +342,22 @@ const std::vector<std::string>& Manifest::getGroups() const
     return _groups;
 }
 
-const hlookup::string_map<std::string>& Manifest::getGroupVerions() const
+const std::unordered_map<std::string, std::string>& Manifest::getGroupVerions() const
 {
     return _groupVer;
 }
 
-std::string_view Manifest::getGroupVersion(std::string_view group) const
+const std::string& Manifest::getGroupVersion(const std::string& group) const
 {
     return _groupVer.at(group);
 }
 
-const hlookup::string_map<Manifest::Asset>& Manifest::getAssets() const
+const std::unordered_map<std::string, Manifest::Asset>& Manifest::getAssets() const
 {
     return _assets;
 }
 
-void Manifest::setAssetDownloadState(std::string_view key, const Manifest::DownloadState& state)
+void Manifest::setAssetDownloadState(const std::string& key, const Manifest::DownloadState& state)
 {
     auto valueIt = _assets.find(key);
     if (valueIt != _assets.end())
@@ -372,9 +372,9 @@ void Manifest::setAssetDownloadState(std::string_view key, const Manifest::Downl
                 rapidjson::Value& assets = _json[KEY_ASSETS];
                 if (assets.IsObject())
                 {
-                    if (assets.HasMember(key.data()))
+                    if (assets.HasMember(key.c_str()))
                     {
-                        rapidjson::Value& entry = assets[key.data()];
+                        rapidjson::Value& entry = assets[key.c_str()];
                         if (entry.HasMember(KEY_DOWNLOAD_STATE) && entry[KEY_DOWNLOAD_STATE].IsInt())
                         {
                             entry[KEY_DOWNLOAD_STATE].SetInt((int)state);
@@ -413,7 +413,7 @@ void Manifest::clear()
     }
 }
 
-Manifest::Asset Manifest::parseAsset(std::string_view path, const rapidjson::Value& json)
+Manifest::Asset Manifest::parseAsset(const std::string& path, const rapidjson::Value& json)
 {
     Asset asset;
     asset.path = path;
@@ -553,7 +553,7 @@ void Manifest::loadManifest(const rapidjson::Document& json)
     _loaded = true;
 }
 
-void Manifest::saveToFile(std::string_view filepath)
+void Manifest::saveToFile(const std::string& filepath)
 {
     rapidjson::StringBuffer buffer;
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);

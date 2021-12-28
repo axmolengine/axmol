@@ -505,7 +505,7 @@ ArmatureMovementDispatcher::~ArmatureMovementDispatcher(void)
 
 void ArmatureMovementDispatcher::animationEvent(Armature* armature,
                                                 MovementEventType movementType,
-                                                std::string_view movementID)
+                                                const std::string& movementID)
 {
     for (auto iter = _mapEventAnimation->begin(); iter != _mapEventAnimation->end(); ++iter)
     {

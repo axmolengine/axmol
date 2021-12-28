@@ -35,10 +35,13 @@ class UITabControlTest : public UIScene
 public:
     CREATE_FUNC(UITabControlTest);
 
+
     UITabControlTest();
     ~UITabControlTest();
 
     bool init() override;
+
 };
 
-#endif  //__TestCpp__UITabControlTest__
+
+#endif //__TestCpp__UITabControlTest__

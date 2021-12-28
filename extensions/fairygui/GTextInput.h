@@ -36,7 +36,7 @@ protected:
     virtual void setTextFieldText() override;
 
     virtual void editBoxReturn(cocos2d::ui::EditBox* editBox) override;
-    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text) override;
+    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, const std::string& text) override;
 
 private:
     FUIInput* _input;

@@ -135,7 +135,7 @@ public:
      * @param stringValue a std::string object.
      * @return a LuaValue object.
      */
-    static const LuaValue stringValue(std::string_view stringValue);
+    static const LuaValue stringValue(const std::string& stringValue);
 
     /**
      * Construct a LuaValue object by a LuaValueDict value.
@@ -169,7 +169,7 @@ public:
      * @param objectTypename a std::string object represent the typename of object.
      * @return a LuaValue object.
      */
-    static const LuaValue ccobjectValue(Ref* ccobjectValue, std::string_view objectTypename);
+    static const LuaValue ccobjectValue(Ref* ccobjectValue, const std::string& objectTypename);
 
     /**
      * Default constructor of LuaValue.
@@ -204,7 +204,7 @@ public:
      *
      * @return the reference of _ccobjectType.
      */
-    std::string_view getObjectTypename() const { return *_ccobjectType; }
+    const std::string& getObjectTypename() const { return *_ccobjectType; }
 
     /**
      * Get the int value of LuaValue object.
@@ -232,7 +232,7 @@ public:
      *
      * @return the reference about string value.
      */
-    std::string_view stringValue() const { return *_field.stringValue; }
+    const std::string& stringValue() const { return *_field.stringValue; }
 
     /**
      * Get the LuaValueDict value of LuaValue object.

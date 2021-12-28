@@ -56,12 +56,12 @@ public:
        @param negative_z texture for the rear side of the texture cube face.
        @return  A new texture cube inited with given parameters.
     */
-    static TextureCube* create(std::string_view positive_x,
-                               std::string_view negative_x,
-                               std::string_view positive_y,
-                               std::string_view negative_y,
-                               std::string_view positive_z,
-                               std::string_view negative_z);
+    static TextureCube* create(const std::string& positive_x,
+                               const std::string& negative_x,
+                               const std::string& positive_y,
+                               const std::string& negative_y,
+                               const std::string& positive_z,
+                               const std::string& negative_z);
 
     /** Sets the min filter, mag filter, wrap s and wrap t texture parameters.
     If the texture size is NPOT (non power of 2), then in can only use GL_CLAMP_TO_EDGE in GL_TEXTURE_WRAP_{S,T}.
@@ -86,12 +86,12 @@ public:
     virtual ~TextureCube();
 
 protected:
-    bool init(std::string_view positive_x,
-              std::string_view negative_x,
-              std::string_view positive_y,
-              std::string_view negative_y,
-              std::string_view positive_z,
-              std::string_view negative_z);
+    bool init(const std::string& positive_x,
+              const std::string& negative_x,
+              const std::string& positive_y,
+              const std::string& negative_y,
+              const std::string& positive_z,
+              const std::string& negative_z);
 
 private:
     std::vector<std::string> _imgPath;

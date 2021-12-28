@@ -1,4 +1,4 @@
-#include "Animation.h"
+﻿#include "Animation.h"
 #include "../model/DisplayData.h"
 #include "../model/AnimationConfig.h"
 #include "../model/AnimationData.h"
@@ -216,7 +216,7 @@ void Animation::reset()
     _lastAnimationState = nullptr;
 }
 
-void Animation::stop(std::string_view animationName)
+void Animation::stop(const std::string& animationName)
 {
     if (!animationName.empty())
     {
@@ -384,7 +384,7 @@ AnimationState* Animation::playConfig(AnimationConfig* animationConfig)
     return animationState;
 }
 
-AnimationState* Animation::play(std::string_view animationName, int playTimes)
+AnimationState* Animation::play(const std::string& animationName, int playTimes)
 {
     _animationConfig->clear();
     _animationConfig->resetToPose = true;
@@ -418,18 +418,18 @@ AnimationState* Animation::play(std::string_view animationName, int playTimes)
     return _lastAnimationState;
 }
 #ifdef EGRET_WASM
-AnimationState* Animation::fadeIn(std::string_view animationName,
+AnimationState* Animation::fadeIn(const std::string& animationName,
                                   float fadeInTime,
                                   int playTimes,
                                   int layer,
-                                  std::string_view group,
+                                  const std::string& group,
                                   int fadeOutMode /*AnimationFadeOutMode*/
 #else
-AnimationState* Animation::fadeIn(std::string_view animationName,
+AnimationState* Animation::fadeIn(const std::string& animationName,
                                   float fadeInTime,
                                   int playTimes,
                                   int layer,
-                                  std::string_view group,
+                                  const std::string& group,
                                   AnimationFadeOutMode fadeOutMode
 #endif  // EGRET_WASM
 )
@@ -445,7 +445,7 @@ AnimationState* Animation::fadeIn(std::string_view animationName,
     return playConfig(_animationConfig);
 }
 
-AnimationState* Animation::gotoAndPlayByTime(std::string_view animationName, float time, int playTimes)
+AnimationState* Animation::gotoAndPlayByTime(const std::string& animationName, float time, int playTimes)
 {
     _animationConfig->clear();
     _animationConfig->resetToPose = true;
@@ -457,7 +457,7 @@ AnimationState* Animation::gotoAndPlayByTime(std::string_view animationName, flo
     return playConfig(_animationConfig);
 }
 
-AnimationState* Animation::gotoAndPlayByFrame(std::string_view animationName, unsigned frame, int playTimes)
+AnimationState* Animation::gotoAndPlayByFrame(const std::string& animationName, unsigned frame, int playTimes)
 {
     _animationConfig->clear();
     _animationConfig->resetToPose = true;
@@ -474,7 +474,7 @@ AnimationState* Animation::gotoAndPlayByFrame(std::string_view animationName, un
     return playConfig(_animationConfig);
 }
 
-AnimationState* Animation::gotoAndPlayByProgress(std::string_view animationName, float progress, int playTimes)
+AnimationState* Animation::gotoAndPlayByProgress(const std::string& animationName, float progress, int playTimes)
 {
     _animationConfig->clear();
     _animationConfig->resetToPose = true;
@@ -491,7 +491,7 @@ AnimationState* Animation::gotoAndPlayByProgress(std::string_view animationName,
     return playConfig(_animationConfig);
 }
 
-AnimationState* Animation::gotoAndStopByTime(std::string_view animationName, float time)
+AnimationState* Animation::gotoAndStopByTime(const std::string& animationName, float time)
 {
     const auto animationState = gotoAndPlayByTime(animationName, time, 1);
     if (animationState != nullptr)
@@ -502,7 +502,7 @@ AnimationState* Animation::gotoAndStopByTime(std::string_view animationName, flo
     return animationState;
 }
 
-AnimationState* Animation::gotoAndStopByFrame(std::string_view animationName, unsigned frame)
+AnimationState* Animation::gotoAndStopByFrame(const std::string& animationName, unsigned frame)
 {
     const auto animationState = gotoAndPlayByFrame(animationName, frame, 1);
     if (animationState != nullptr)
@@ -513,7 +513,7 @@ AnimationState* Animation::gotoAndStopByFrame(std::string_view animationName, un
     return animationState;
 }
 
-AnimationState* Animation::gotoAndStopByProgress(std::string_view animationName, float progress)
+AnimationState* Animation::gotoAndStopByProgress(const std::string& animationName, float progress)
 {
     const auto animationState = gotoAndPlayByProgress(animationName, progress, 1);
     if (animationState != nullptr)
@@ -524,7 +524,7 @@ AnimationState* Animation::gotoAndStopByProgress(std::string_view animationName,
     return animationState;
 }
 
-AnimationState* Animation::getState(std::string_view animationName) const
+AnimationState* Animation::getState(const std::string& animationName) const
 {
     int i = _animationStates.size();
     while (i--)
@@ -539,7 +539,7 @@ AnimationState* Animation::getState(std::string_view animationName) const
     return nullptr;
 }
 
-bool Animation::hasAnimation(std::string_view animationName) const
+bool Animation::hasAnimation(const std::string& animationName) const
 {
     return _animations.find(animationName) != _animations.end();
 }
@@ -570,7 +570,7 @@ bool Animation::isCompleted() const
     return !_animationStates.empty();
 }
 
-std::string_view Animation::getLastAnimationName() const
+const std::string& Animation::getLastAnimationName() const
 {
     if (_lastAnimationState != nullptr)
     {
@@ -581,7 +581,7 @@ std::string_view Animation::getLastAnimationName() const
     return DEFAULT_NAME;
 }
 
-void Animation::setAnimations(const hlookup::string_map<AnimationData*>& value)
+void Animation::setAnimations(const std::map<std::string, AnimationData*>& value)
 {
     if (_animations == value)
     {

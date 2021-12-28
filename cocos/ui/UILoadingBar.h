@@ -88,7 +88,7 @@ public:
      * @param percentage A percentage in float.
      * @return A LoadingBar instance.
      */
-    static LoadingBar* create(std::string_view textureName, float percentage = 0);
+    static LoadingBar* create(const std::string& textureName, float percentage = 0);
 
     /**
      * @brief Create a LoadingBar with a texture name along with its texture type and a predefined progress value.
@@ -98,7 +98,7 @@ public:
      * @param percentage A percentage in float, default value is 0.
      * @return A LoadingBar instance.
      */
-    static LoadingBar* create(std::string_view textureName, TextureResType texType, float percentage = 0);
+    static LoadingBar* create(const std::string& textureName, TextureResType texType, float percentage = 0);
 
     /**
      * Change the progress direction of LoadingBar.
@@ -122,7 +122,7 @@ public:
      * @param texture   File name of texture.
      * @param texType   Texture resource type,@see TextureResType.
      */
-    void loadTexture(std::string_view texture, TextureResType texType = TextureResType::LOCAL);
+    void loadTexture(const std::string& texture, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Changes the progress value of LoadingBar.

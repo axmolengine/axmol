@@ -135,6 +135,7 @@ protected:
     SchedulerCallbackTest();
 };
 
+
 class NodeToWorld : public TestCocosNodeDemo
 {
 public:
@@ -179,7 +180,7 @@ public:
 
 protected:
     CameraZoomTest();
-    float _z;
+    float    _z;
 };
 
 class CameraCenterTest : public TestCocosNodeDemo
@@ -188,7 +189,7 @@ public:
     CREATE_FUNC(CameraCenterTest);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-
+    
     virtual void onEnter() override;
     virtual void onExit() override;
 
@@ -308,10 +309,10 @@ public:
     CREATE_FUNC(NodeNormalizedPositionBugTest);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-
+    
 protected:
     NodeNormalizedPositionBugTest();
-
+    
     void update(float dt) override;
     float _accum;
     cocos2d::Sprite* sprite;
@@ -323,7 +324,7 @@ public:
     CREATE_FUNC(NodeNameTest);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-
+    
     virtual void onEnter() override;
     virtual void onExit() override;
 

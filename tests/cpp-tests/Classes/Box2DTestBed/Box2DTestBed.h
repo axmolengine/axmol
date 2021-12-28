@@ -31,14 +31,15 @@
 
 DEFINE_TEST_SUITE(Box2DTestBedTests);
 
+
 class Test;
 typedef Test* TestCreateFcn();
 
 struct TestEntry
 {
-    const char* category;
-    const char* name;
-    TestCreateFcn* createFcn;
+	const char* category;
+	const char* name;
+	TestCreateFcn* createFcn;
 };
 
 #define MAX_TESTS 256
@@ -49,53 +50,55 @@ int RegisterTest(const char* category, const char* name, TestCreateFcn* fcn);
 class Box2DTestBed : public TestCase, cocos2d::Layer
 {
 public:
-    static Box2DTestBed* createWithEntryID(int entryId);
+	static Box2DTestBed* createWithEntryID(int entryId);
 
-    Box2DTestBed();
-    virtual ~Box2DTestBed();
+	Box2DTestBed();
+	virtual ~Box2DTestBed();
 
-    void onEnter() override;
-    void onExit() override;
+	void onEnter() override;
+	void onExit() override;
 
-    void onDrawImGui();
+	void onDrawImGui();
 
-    void initPhysics();
-    void update(float dt) override;
+	void initPhysics();
+	void update(float dt) override;
 
-    void createResetButton();
+	void createResetButton();
 
-    bool initWithEntryID(int entryId);
+	bool initWithEntryID(int entryId);
 
-    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 
-    void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);
-    void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);
+	void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);
+	void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);
 
-    void onMouseDown(cocos2d::Event* event);
-    void onMouseUp(cocos2d::Event* event);
-    void onMouseMove(cocos2d::Event* event);
-    void onMouseScroll(cocos2d::Event* event);
+	void onMouseDown(cocos2d::Event* event);
+	void onMouseUp(cocos2d::Event* event);
+	void onMouseMove(cocos2d::Event* event);
+	void onMouseScroll(cocos2d::Event* event);
 
-    cocos2d::EventListenerTouchOneByOne* _touchListener;
-    cocos2d::EventListenerKeyboard* _keyboardListener;
+	cocos2d::EventListenerTouchOneByOne* _touchListener;
+	cocos2d::EventListenerKeyboard* _keyboardListener;
 
-    TestEntry* m_entry;
-    Test* m_test;
-    int m_entryID;
+	TestEntry* m_entry;
+	Test* m_test;
+	int m_entryID;
 
 private:
-    b2World* world;
-    cocos2d::Texture2D* _spriteTexture;
 
-    b2Vec2 pos;
-    b2Vec2 oldPos;
-    bool button[2];
+	b2World* world;
+	cocos2d::Texture2D* _spriteTexture;
 
-    // Debug stuff
-    cocos2d::DrawNode* debugDrawNode;
-    cocos2d::extension::PhysicsDebugNodeBox2D g_debugDraw;
+	b2Vec2 pos;
+	b2Vec2 oldPos;
+	bool button[2];
+
+	// Debug stuff
+	cocos2d::DrawNode* debugDrawNode;
+	cocos2d::extension::PhysicsDebugNodeBox2D g_debugDraw;
+
 };
 
 #endif

@@ -31,13 +31,16 @@ USING_NS_CC;
 
 #define TRANSITION_DURATION (1.2f)
 
-class FadeWhiteTransition : public TransitionFade
+class FadeWhiteTransition : public TransitionFade 
 {
 public:
-    static TransitionScene* create(float t, Scene* s) { return TransitionFade::create(t, s, Color3B::WHITE); }
+    static TransitionScene* create(float t, Scene* s)
+    {
+        return TransitionFade::create(t, s, Color3B::WHITE); 
+    }
 };
 
-class FlipXLeftOver : public TransitionFlipX
+class FlipXLeftOver : public TransitionFlipX 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
@@ -46,7 +49,7 @@ public:
     }
 };
 
-class FlipXRightOver : public TransitionFlipX
+class FlipXRightOver : public TransitionFlipX 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
@@ -55,34 +58,34 @@ public:
     }
 };
 
-class FlipYUpOver : public TransitionFlipY
+class FlipYUpOver : public TransitionFlipY 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
     {
-        return TransitionFlipY::create(t, s, TransitionScene::Orientation::UP_OVER);
+        return TransitionFlipY::create(t, s, TransitionScene::Orientation::UP_OVER); 
     }
 };
 
-class FlipYDownOver : public TransitionFlipY
+class FlipYDownOver : public TransitionFlipY 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
     {
-        return TransitionFlipY::create(t, s, TransitionScene::Orientation::DOWN_OVER);
+        return TransitionFlipY::create(t, s, TransitionScene::Orientation::DOWN_OVER); 
     }
 };
 
-class FlipAngularLeftOver : public TransitionFlipAngular
+class FlipAngularLeftOver : public TransitionFlipAngular 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
     {
-        return TransitionFlipAngular::create(t, s, TransitionScene::Orientation::LEFT_OVER);
+        return TransitionFlipAngular::create(t, s, TransitionScene::Orientation::LEFT_OVER); 
     }
 };
 
-class FlipAngularRightOver : public TransitionFlipAngular
+class FlipAngularRightOver : public TransitionFlipAngular 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
@@ -91,16 +94,16 @@ public:
     }
 };
 
-class ZoomFlipXLeftOver : public TransitionZoomFlipX
+class ZoomFlipXLeftOver : public TransitionZoomFlipX 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
     {
-        return TransitionZoomFlipX::create(t, s, TransitionScene::Orientation::LEFT_OVER);
+        return TransitionZoomFlipX::create(t, s, TransitionScene::Orientation::LEFT_OVER); 
     }
 };
 
-class ZoomFlipXRightOver : public TransitionZoomFlipX
+class ZoomFlipXRightOver : public TransitionZoomFlipX 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
@@ -109,34 +112,35 @@ public:
     }
 };
 
-class ZoomFlipYUpOver : public TransitionZoomFlipY
+class ZoomFlipYUpOver : public TransitionZoomFlipY 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
     {
-        return TransitionZoomFlipY::create(t, s, TransitionScene::Orientation::UP_OVER);
+        return TransitionZoomFlipY::create(t, s, TransitionScene::Orientation::UP_OVER); 
+
     }
 };
 
-class ZoomFlipYDownOver : public TransitionZoomFlipY
+class ZoomFlipYDownOver : public TransitionZoomFlipY 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
     {
-        return TransitionZoomFlipY::create(t, s, TransitionScene::Orientation::DOWN_OVER);
+        return TransitionZoomFlipY::create(t, s, TransitionScene::Orientation::DOWN_OVER); 
     }
 };
 
-class ZoomFlipAngularLeftOver : public TransitionZoomFlipAngular
+class ZoomFlipAngularLeftOver : public TransitionZoomFlipAngular 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
     {
-        return TransitionZoomFlipAngular::create(t, s, TransitionScene::Orientation::LEFT_OVER);
+        return TransitionZoomFlipAngular::create(t, s, TransitionScene::Orientation::LEFT_OVER); 
     }
 };
 
-class ZoomFlipAngularRightOver : public TransitionZoomFlipAngular
+class ZoomFlipAngularRightOver : public TransitionZoomFlipAngular 
 {
 public:
     static TransitionScene* create(float t, Scene* s)
@@ -148,25 +152,30 @@ public:
 class PageTransitionForward : public TransitionPageTurn
 {
 public:
-    static TransitionScene* create(float t, Scene* s) { return TransitionPageTurn::create(t, s, false); }
+    static TransitionScene* create(float t, Scene* s)
+    {
+        return TransitionPageTurn::create(t, s, false);
+    }
 };
 
 class PageTransitionBackward : public TransitionPageTurn
 {
 public:
-    static TransitionScene* create(float t, Scene* s) { return TransitionPageTurn::create(t, s, true); }
+    static TransitionScene* create(float t, Scene* s)
+    {
+        return TransitionPageTurn::create(t, s, true);
+    }
 };
 
 #define STRINGIFY(x) #x
 
-#define TRANS(__className__)                                                                     \
-    {                                                                                            \
-        [](float t, Scene* s) { return __className__::create(t, s); }, STRINGIFY(__className__), \
+#define TRANS(__className__) {                                      \
+    [](float t, Scene* s){ return __className__::create(t,s);},     \
+        STRINGIFY(__className__),                                   \
     }
-struct _transitions
-{
+struct _transitions {
     std::function<TransitionScene*(float t, Scene* s)> function;
-    const char* name;
+    const char * name;
 } transitions[] = {
     TRANS(TransitionJumpZoom),
     TRANS(TransitionProgressRadialCCW),
@@ -227,7 +236,7 @@ TransitionsTests::TransitionsTests()
 
     for (auto& test : transitions)
     {
-        addTestCase(test.name, [sceneIndex]() {
+        addTestCase(test.name, [sceneIndex](){
             auto scene = TransitionsTest::create();
             // fix bug #486, without setDepthTest(false), FlipX,Y will flickers
             Director::getInstance()->getRenderer()->setDepthTest(false);
@@ -248,7 +257,7 @@ TransitionsTests::TransitionsTests()
     }
 }
 
-TestLayer1* TestLayer1::create(std::string_view transitionName)
+TestLayer1* TestLayer1::create(const std::string& transitionName)
 {
     auto layer = new TestLayer1(transitionName);
     if (layer->init())
@@ -264,34 +273,40 @@ TestLayer1* TestLayer1::create(std::string_view transitionName)
     return layer;
 }
 
-TestLayer1::TestLayer1(std::string_view transitionName)
+TestLayer1::TestLayer1(const std::string& transitionName)
 {
-    float x, y;
+    float x,y;
 
     auto size = Director::getInstance()->getWinSize();
-    x         = size.width;
-    y         = size.height;
+    x = size.width;
+    y = size.height;
 
     auto bg1 = Sprite::create(s_back1);
-    bg1->setPosition(Vec2(size.width / 2, size.height / 2));
+    bg1->setPosition( Vec2(size.width/2, size.height/2) );
     addChild(bg1, -1);
 
     auto title = Label::createWithTTF(transitionName, "fonts/Thonburi.ttf", 32);
     addChild(title);
-    title->setColor(Color3B(255, 32, 32));
-    title->setPosition(Vec2(x / 2, y - 100));
+    title->setColor( Color3B(255,32,32) );
+    title->setPosition( Vec2(x/2, y-100) );
 
     auto label = Label::createWithTTF("SCENE 1", "fonts/Marker Felt.ttf", 38);
-    label->setColor(Color3B(16, 16, 255));
-    label->setPosition(Vec2(x / 2, y / 2));
-    addChild(label);
+    label->setColor( Color3B(16,16,255));
+    label->setPosition( Vec2(x/2,y/2));    
+    addChild( label);
 
-    schedule(CC_SCHEDULE_SELECTOR(TestLayer1::step), 1.0f);
+    schedule( CC_SCHEDULE_SELECTOR(TestLayer1::step), 1.0f); 
 }
 
-TestLayer1::~TestLayer1() {}
+TestLayer1::~TestLayer1()
+{
 
-void TestLayer1::step(float dt) {}
+}
+
+void TestLayer1::step(float dt)
+{
+
+}
 
 void TestLayer1::onEnter()
 {
@@ -318,7 +333,7 @@ void TestLayer1::onExit()
     log("Scene 1 onExit");
 }
 
-TestLayer2* TestLayer2::create(std::string_view transitionName)
+TestLayer2* TestLayer2::create(const std::string& transitionName)
 {
     auto layer = new TestLayer2(transitionName);
     if (layer->init())
@@ -334,34 +349,40 @@ TestLayer2* TestLayer2::create(std::string_view transitionName)
     return layer;
 }
 
-TestLayer2::TestLayer2(std::string_view transitionName)
+TestLayer2::TestLayer2(const std::string& transitionName)
 {
-    float x, y;
+    float x,y;
 
     auto size = Director::getInstance()->getWinSize();
-    x         = size.width;
-    y         = size.height;
+    x = size.width;
+    y = size.height;
 
     auto bg1 = Sprite::create(s_back2);
-    bg1->setPosition(Vec2(size.width / 2, size.height / 2));
+    bg1->setPosition( Vec2(size.width/2, size.height/2) );
     addChild(bg1, -1);
 
     auto title = Label::createWithTTF(transitionName, "fonts/Thonburi.ttf", 32);
     addChild(title);
-    title->setColor(Color3B(255, 32, 32));
-    title->setPosition(Vec2(x / 2, y - 100));
+    title->setColor( Color3B(255,32,32) );
+    title->setPosition( Vec2(x/2, y-100) );
 
     auto label = Label::createWithTTF("SCENE 2", "fonts/Marker Felt.ttf", 38);
-    label->setColor(Color3B(16, 16, 255));
-    label->setPosition(Vec2(x / 2, y / 2));
-    addChild(label);
+    label->setColor( Color3B(16,16,255));
+    label->setPosition( Vec2(x/2,y/2));    
+    addChild( label);
 
     schedule(CC_SCHEDULE_SELECTOR(TestLayer2::step), 1.0f);
 }
 
-TestLayer2::~TestLayer2() {}
+TestLayer2::~TestLayer2()
+{
 
-void TestLayer2::step(float dt) {}
+}
+
+void TestLayer2::step(float dt)
+{
+
+}
 
 void TestLayer2::onEnter()
 {

@@ -124,7 +124,7 @@ public:
      * @return Uniform location.
      * @see `backend::UniformLocation getUniformLocation(backend::Uniform name) const`
      */
-    backend::UniformLocation getUniformLocation(std::string_view uniform) const;
+    backend::UniformLocation getUniformLocation(const std::string& uniform) const;
 
     /**
      * Get uniform location in a more efficient way by the given built-in uniform name.
@@ -138,15 +138,15 @@ public:
      * Get an attribute location by the actual attribute name.
      * @param name Specifies the attribute name.
      * @return Attribute location.
-     * @see `int getAttributeLocation(std::string_view name) const`
+     * @see `int getAttributeLocation(const std::string& name) const`
      */
-    inline int getAttributeLocation(std::string_view name) const { return _program->getAttributeLocation(name); }
+    inline int getAttributeLocation(const std::string& name) const { return _program->getAttributeLocation(name); }
 
     /**
      * Get an attribute location by the engine built-in attribute name.
      * @param name Specifies the built-in attribute name.
      * @return Attribute location.
-     * @see `int getAttributeLocation(std::string_view name) const`
+     * @see `int getAttributeLocation(const std::string& name) const`
      */
     inline int getAttributeLocation(Attribute name) const { return _program->getAttributeLocation(name); }
 
@@ -278,7 +278,9 @@ public:
          * @return True if the auto binding is handled and the associated parameter is
          *      bound, false otherwise.
          */
-        virtual bool resolveAutoBinding(ProgramState*, std::string_view uniformName, std::string_view autoBinding) = 0;
+        virtual bool resolveAutoBinding(ProgramState*,
+                                        const std::string& uniformName,
+                                        const std::string& autoBinding) = 0;
     };
     /**
      * Sets a uniform auto-binding.
@@ -290,7 +292,7 @@ public:
      * @param uniformName The name of the material parameter to store an auto-binding for.
      * @param autoBinding A string matching one of the built-in AutoBinding enum constants.
      */
-    void setParameterAutoBinding(std::string_view uniformName, std::string_view autoBinding);
+    void setParameterAutoBinding(const std::string& uniformName, const std::string& autoBinding);
 
     inline std::shared_ptr<VertexLayout> getVertexLayout() const { return _vertexLayout; }
 
@@ -377,7 +379,7 @@ protected:
      * @param uniformName Name of the shader uniform.
      * @param autoBinding Name of the auto binding.
      */
-    void applyAutoBinding(std::string_view, std::string_view);
+    void applyAutoBinding(const std::string&, const std::string&);
 
     backend::Program* _program = nullptr;
     std::unordered_map<UniformLocation, UniformCallback, UniformLocation> _callbackUniforms;

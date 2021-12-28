@@ -47,9 +47,9 @@ const int AudioEngine::INVALID_AUDIO_ID = -1;
 const float AudioEngine::TIME_UNKNOWN   = -1.0f;
 
 // audio file path,audio IDs
-hlookup::string_map<std::list<AUDIO_ID>> AudioEngine::_audioPathIDMap;
+std::unordered_map<std::string, std::list<AUDIO_ID>> AudioEngine::_audioPathIDMap;
 // profileName,ProfileHelper
-hlookup::string_map<AudioEngine::ProfileHelper> AudioEngine::_audioPathProfileHelperMap;
+std::unordered_map<std::string, AudioEngine::ProfileHelper> AudioEngine::_audioPathProfileHelperMap;
 unsigned int AudioEngine::_maxInstances                        = MAX_AUDIOINSTANCES;
 AudioEngine::ProfileHelper* AudioEngine::_defaultProfileHelper = nullptr;
 std::unordered_map<AUDIO_ID, AudioEngine::AudioInfo> AudioEngine::_audioIDInfoMap;
@@ -172,7 +172,7 @@ bool AudioEngine::lazyInit()
     return true;
 }
 
-AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume, const AudioProfile* profile)
+AUDIO_ID AudioEngine::play2d(const std::string& filePath, bool loop, float volume, const AudioProfile* profile)
 {
     AUDIO_ID ret = AudioEngine::INVALID_AUDIO_ID;
 
@@ -203,7 +203,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
 
         if (_audioIDInfoMap.size() >= _maxInstances)
         {
-            log("Fail to play %s cause by limited max instance of AudioEngine", filePath.data());
+            log("Fail to play %s cause by limited max instance of AudioEngine", filePath.c_str());
             break;
         }
         if (profileHelper)
@@ -211,7 +211,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
             if (profileHelper->profile.maxInstances != 0 &&
                 profileHelper->audioIDs.size() >= profileHelper->profile.maxInstances)
             {
-                log("Fail to play %s cause by limited max instance of AudioProfile", filePath.data());
+                log("Fail to play %s cause by limited max instance of AudioProfile", filePath.c_str());
                 break;
             }
             if (profileHelper->profile.minDelay > TIME_DELAY_PRECISION)
@@ -220,7 +220,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
                 if (profileHelper->lastPlayTime > TIME_DELAY_PRECISION &&
                     currTime - profileHelper->lastPlayTime <= profileHelper->profile.minDelay)
                 {
-                    log("Fail to play %s cause by limited minimum delay", filePath.data());
+                    log("Fail to play %s cause by limited minimum delay", filePath.c_str());
                     break;
                 }
             }
@@ -238,7 +238,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
         ret = _audioEngineImpl->play2d(filePath, loop, volume);
         if (ret != INVALID_AUDIO_ID)
         {
-            _audioPathIDMap[filePath.data()].push_back(ret);
+            _audioPathIDMap[filePath].push_back(ret);
             auto it = _audioPathIDMap.find(filePath);
 
             auto& audioRef    = _audioIDInfoMap[ret];
@@ -380,7 +380,7 @@ void AudioEngine::stopAll()
     _audioIDInfoMap.clear();
 }
 
-void AudioEngine::uncache(std::string_view filePath)
+void AudioEngine::uncache(const std::string& filePath)
 {
     if (!_audioEngineImpl)
     {
@@ -463,7 +463,7 @@ float AudioEngine::getCurrentTime(AUDIO_ID audioID)
     return 0.0f;
 }
 
-void AudioEngine::setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, std::string_view)>& callback)
+void AudioEngine::setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, const std::string&)>& callback)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end())
@@ -539,7 +539,7 @@ AudioProfile* AudioEngine::getDefaultProfile()
     return &_defaultProfileHelper->profile;
 }
 
-AudioProfile* AudioEngine::getProfile(std::string_view name)
+AudioProfile* AudioEngine::getProfile(const std::string& name)
 {
     auto it = _audioPathProfileHelperMap.find(name);
     if (it != _audioPathProfileHelperMap.end())
@@ -552,7 +552,7 @@ AudioProfile* AudioEngine::getProfile(std::string_view name)
     }
 }
 
-void AudioEngine::preload(std::string_view filePath, std::function<void(bool isSuccess)> callback)
+void AudioEngine::preload(const std::string& filePath, std::function<void(bool isSuccess)> callback)
 {
     if (!isEnabled())
     {

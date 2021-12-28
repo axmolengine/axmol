@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
+ 
  http://www.cocos2d-x.org
-
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
-
+ 
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
-
+ 
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,44 +45,45 @@ Bug12847Layer::~Bug12847Layer()
     Director::getInstance()->setProjection(_projection);
 }
 
+
 bool Bug12847Layer::init()
 {
     if (BugsTestBase::init())
     {
         Director::getInstance()->setProjection(Director::Projection::_2D);
         auto _visibleSize = Director::getInstance()->getVisibleSize();
-
-        // Create with Sprite
+        
+        //Create with Sprite
         {
             sprite1 = Sprite::create("Images/bug12847_sprite.png");
             sprite1->getTexture()->setAliasTexParameters();
-            sprite1->setPosition(Vec2(_visibleSize.width / 3, 50.0f));
+            sprite1->setPosition(Vec2(_visibleSize.width/3, 50.0f));
             this->addChild(sprite1, 1);
-
+            
             sprite2 = Sprite::create("Images/bug12847_sprite.png");
             sprite2->getTexture()->setAliasTexParameters();
             sprite2->setPosition(sprite1->getPosition() + Vec2(0.0f, sprite1->getContentSize().height));
             this->addChild(sprite2, 1);
         }
-        // Create with SpriteFrame
+        //Create with SpriteFrame
         {
             SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/bug12847_spriteframe.plist");
-
+            
             sprite3 = Sprite::createWithSpriteFrameName("bug12847_sprite2.png");
             sprite3->getTexture()->setAliasTexParameters();
-            sprite3->setPosition(Vec2(_visibleSize.width * 2 / 3, 50.0f));
+            sprite3->setPosition(Vec2(_visibleSize.width * 2/3, 50.0f));
             this->addChild(sprite3, 1);
-
+            
             sprite4 = Sprite::createWithSpriteFrameName("bug12847_sprite2.png");
             sprite4->getTexture()->setAliasTexParameters();
             sprite4->setPosition(sprite3->getPosition() + Vec2(0.0f, sprite3->getContentSize().height));
             this->addChild(sprite4, 1);
         }
-
+        
         this->scheduleUpdate();
         return true;
     }
-
+    
     return false;
 }
 

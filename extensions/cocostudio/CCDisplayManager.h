@@ -80,7 +80,7 @@ public:
      * @deprecated, please use changeDisplayWithIndex and changeDisplayWithName
      */
     CC_DEPRECATED_ATTRIBUTE void changeDisplayByIndex(int index, bool force);
-    CC_DEPRECATED_ATTRIBUTE void changeDisplayByName(std::string_view name, bool force);
+    CC_DEPRECATED_ATTRIBUTE void changeDisplayByName(const std::string& name, bool force);
 
     /**
      * Change display by index. You can just use this method to change display in the display list.
@@ -93,7 +93,7 @@ public:
      * index edit in the flash every key frame.
      */
     void changeDisplayWithIndex(int index, bool force);
-    void changeDisplayWithName(std::string_view name, bool force);
+    void changeDisplayWithName(const std::string& name, bool force);
 
     cocos2d::Node* getDisplayRenderNode() const;
     DisplayType getDisplayRenderNodeType() const;

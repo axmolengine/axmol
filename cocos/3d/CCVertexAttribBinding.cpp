@@ -122,8 +122,9 @@ void VertexAttribBinding::parseAttributes()
     _attributes.clear();
     _vertexAttribsFlags = 0;
 
-    auto program = _programState->getProgram();
-    _attributes  = program->getActiveAttributes();
+    auto program     = _programState->getProgram();
+    auto& attributes = program->getActiveAttributes();
+    _attributes      = attributes;
 }
 
 bool VertexAttribBinding::hasAttribute(const shaderinfos::VertexKey& key) const
@@ -132,7 +133,7 @@ bool VertexAttribBinding::hasAttribute(const shaderinfos::VertexKey& key) const
     return _attributes.find(name) != _attributes.end();
 }
 
-backend::AttributeBindInfo* VertexAttribBinding::getVertexAttribValue(std::string_view name)
+backend::AttributeBindInfo* VertexAttribBinding::getVertexAttribValue(const std::string& name)
 {
     const auto itr = _attributes.find(name);
     if (itr != _attributes.end())
@@ -140,7 +141,7 @@ backend::AttributeBindInfo* VertexAttribBinding::getVertexAttribValue(std::strin
     return nullptr;
 }
 
-void VertexAttribBinding::setVertexAttribPointer(std::string_view name,
+void VertexAttribBinding::setVertexAttribPointer(const std::string& name,
                                                  backend::VertexFormat type,
                                                  bool normalized,
                                                  int offset,

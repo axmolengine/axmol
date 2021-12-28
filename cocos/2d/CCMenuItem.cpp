@@ -180,13 +180,13 @@ bool MenuItemLabel::initWithLabel(Node* label, const ccMenuCallback& callback)
 
 MenuItemLabel::~MenuItemLabel() {}
 
-void MenuItemLabel::setString(std::string_view label)
+void MenuItemLabel::setString(const std::string& label)
 {
     dynamic_cast<LabelProtocol*>(_label)->setString(label);
     this->setContentSize(_label->getContentSize());
 }
 
-std::string_view MenuItemLabel::getString() const
+std::string MenuItemLabel::getString() const
 {
     auto label = dynamic_cast<LabelProtocol*>(_label);
     return label->getString();
@@ -259,8 +259,8 @@ void MenuItemLabel::setEnabled(bool enabled)
 // CCMenuItemAtlasFont
 //
 
-MenuItemAtlasFont* MenuItemAtlasFont::create(std::string_view value,
-                                             std::string_view charMapFile,
+MenuItemAtlasFont* MenuItemAtlasFont::create(const std::string& value,
+                                             const std::string& charMapFile,
                                              int itemWidth,
                                              int itemHeight,
                                              char startCharMap)
@@ -269,8 +269,8 @@ MenuItemAtlasFont* MenuItemAtlasFont::create(std::string_view value,
                                      (const ccMenuCallback&)nullptr);
 }
 
-MenuItemAtlasFont* MenuItemAtlasFont::create(std::string_view value,
-                                             std::string_view charMapFile,
+MenuItemAtlasFont* MenuItemAtlasFont::create(const std::string& value,
+                                             const std::string& charMapFile,
                                              int itemWidth,
                                              int itemHeight,
                                              char startCharMap,
@@ -282,8 +282,8 @@ MenuItemAtlasFont* MenuItemAtlasFont::create(std::string_view value,
     return ret;
 }
 
-bool MenuItemAtlasFont::initWithString(std::string_view value,
-                                       std::string_view charMapFile,
+bool MenuItemAtlasFont::initWithString(const std::string& value,
+                                       const std::string& charMapFile,
                                        int itemWidth,
                                        int itemHeight,
                                        char startCharMap,
@@ -312,7 +312,7 @@ int MenuItemFont::getFontSize()
     return _globalFontSize;
 }
 
-void MenuItemFont::setFontName(std::string_view name)
+void MenuItemFont::setFontName(const std::string& name)
 {
     if (_globalFontNameRelease)
     {
@@ -322,12 +322,12 @@ void MenuItemFont::setFontName(std::string_view name)
     _globalFontNameRelease = true;
 }
 
-std::string_view MenuItemFont::getFontName()
+const std::string& MenuItemFont::getFontName()
 {
     return _globalFontName;
 }
 
-MenuItemFont* MenuItemFont::create(std::string_view value, const ccMenuCallback& callback)
+MenuItemFont* MenuItemFont::create(const std::string& value, const ccMenuCallback& callback)
 {
     MenuItemFont* ret = new MenuItemFont();
     ret->initWithString(value, callback);
@@ -335,7 +335,7 @@ MenuItemFont* MenuItemFont::create(std::string_view value, const ccMenuCallback&
     return ret;
 }
 
-MenuItemFont* MenuItemFont::create(std::string_view value)
+MenuItemFont* MenuItemFont::create(const std::string& value)
 {
     MenuItemFont* ret = new MenuItemFont();
     ret->initWithString(value, (const ccMenuCallback&)nullptr);
@@ -350,7 +350,7 @@ MenuItemFont::~MenuItemFont()
     CCLOGINFO("In the destructor of MenuItemFont (%p).", this);
 }
 
-bool MenuItemFont::initWithString(std::string_view value, const ccMenuCallback& callback)
+bool MenuItemFont::initWithString(const std::string& value, const ccMenuCallback& callback)
 {
     CCASSERT(!value.empty(), "Value length must be greater than 0");
 
@@ -377,14 +377,14 @@ int MenuItemFont::getFontSizeObj() const
     return _fontSize;
 }
 
-void MenuItemFont::setFontNameObj(std::string_view name)
+void MenuItemFont::setFontNameObj(const std::string& name)
 {
     _fontName = name;
     dynamic_cast<Label*>(_label)->setSystemFontName(_fontName);
     this->setContentSize(dynamic_cast<Label*>(_label)->getContentSize());
 }
 
-std::string_view MenuItemFont::getFontNameObj() const
+const std::string& MenuItemFont::getFontNameObj() const
 {
     return _fontName;
 }
@@ -600,21 +600,21 @@ bool MenuItemImage::init()
     return initWithNormalImage("", "", "", (const ccMenuCallback&)nullptr);
 }
 
-MenuItemImage* MenuItemImage::create(std::string_view normalImage, std::string_view selectedImage)
+MenuItemImage* MenuItemImage::create(const std::string& normalImage, const std::string& selectedImage)
 {
     return MenuItemImage::create(normalImage, selectedImage, "", (const ccMenuCallback&)nullptr);
 }
 
-MenuItemImage* MenuItemImage::create(std::string_view normalImage,
-                                     std::string_view selectedImage,
+MenuItemImage* MenuItemImage::create(const std::string& normalImage,
+                                     const std::string& selectedImage,
                                      const ccMenuCallback& callback)
 {
     return MenuItemImage::create(normalImage, selectedImage, "", callback);
 }
 
-MenuItemImage* MenuItemImage::create(std::string_view normalImage,
-                                     std::string_view selectedImage,
-                                     std::string_view disabledImage,
+MenuItemImage* MenuItemImage::create(const std::string& normalImage,
+                                     const std::string& selectedImage,
+                                     const std::string& disabledImage,
                                      const ccMenuCallback& callback)
 {
     MenuItemImage* ret = new MenuItemImage();
@@ -627,9 +627,9 @@ MenuItemImage* MenuItemImage::create(std::string_view normalImage,
     return nullptr;
 }
 
-MenuItemImage* MenuItemImage::create(std::string_view normalImage,
-                                     std::string_view selectedImage,
-                                     std::string_view disabledImage)
+MenuItemImage* MenuItemImage::create(const std::string& normalImage,
+                                     const std::string& selectedImage,
+                                     const std::string& disabledImage)
 {
     MenuItemImage* ret = new MenuItemImage();
     if (ret->initWithNormalImage(normalImage, selectedImage, disabledImage, (const ccMenuCallback&)nullptr))
@@ -641,9 +641,9 @@ MenuItemImage* MenuItemImage::create(std::string_view normalImage,
     return nullptr;
 }
 
-bool MenuItemImage::initWithNormalImage(std::string_view normalImage,
-                                        std::string_view selectedImage,
-                                        std::string_view disabledImage,
+bool MenuItemImage::initWithNormalImage(const std::string& normalImage,
+                                        const std::string& selectedImage,
+                                        const std::string& disabledImage,
                                         const ccMenuCallback& callback)
 {
     Node* normalSprite   = nullptr;

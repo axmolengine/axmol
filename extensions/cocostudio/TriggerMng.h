@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -46,7 +46,7 @@ public:
 public:
     void addAnimationEventCallBack(cocos2d::Ref* pTarget, SEL_MovementEventCallFunc mecf);
     void removeAnnimationEventCallBack(cocos2d::Ref* pTarget, SEL_MovementEventCallFunc mecf);
-    void animationEvent(Armature* armature, MovementEventType movementType, std::string_view movementID);
+    void animationEvent(Armature* armature, MovementEventType movementType, const std::string& movementID);
 
 private:
     std::unordered_map<cocos2d::Ref*, SEL_MovementEventCallFunc>* _mapEventAnimation;

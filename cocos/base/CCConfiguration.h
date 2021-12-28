@@ -205,7 +205,7 @@ public:
      * @param searchName A given search name.
      * @return Is true if an OpenGL is supported.
      */
-    bool checkForGLExtension(std::string_view searchName) const;
+    bool checkForGLExtension(const std::string& searchName) const;
 
     /** Initialize method.
      *
@@ -219,14 +219,14 @@ public:
      * @param defaultValue if not find the value, return the defaultValue.
      * @return
      */
-    const Value& getValue(std::string_view key, const Value& defaultValue = Value::Null) const;
+    const Value& getValue(const std::string& key, const Value& defaultValue = Value::Null) const;
 
     /** Sets a new key/value pair  in the configuration dictionary.
      *
      * @param key A given key.
      * @param value A given value.
      */
-    void setValue(std::string_view key, const Value& value);
+    void setValue(const std::string& key, const Value& value);
 
     /** Returns the Configuration info.
      *
@@ -243,7 +243,7 @@ public:
      *
      * @param filename Config file name.
      */
-    void loadConfigFile(std::string_view filename);
+    void loadConfigFile(const std::string& filename);
 
     static const char* CONFIG_FILE_LOADED;
 

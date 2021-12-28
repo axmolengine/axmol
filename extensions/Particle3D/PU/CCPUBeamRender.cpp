@@ -49,7 +49,7 @@ const float PUBeamRender::DEFAULT_DEVIATION                                     
 const size_t PUBeamRender::DEFAULT_NUMBER_OF_SEGMENTS                             = 2;
 const PUBillboardChain::TexCoordDirection PUBeamRender::DEFAULT_TEXTURE_DIRECTION = PUBillboardChain::TCD_V;
 
-PUBeamRender* PUBeamRender::create(std::string_view texFile)
+PUBeamRender* PUBeamRender::create(const std::string& texFile)
 {
     auto br = new PUBeamRender();
     br->autorelease();

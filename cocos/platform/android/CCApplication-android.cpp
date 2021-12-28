@@ -43,7 +43,7 @@ extern "C" size_t __ctype_get_mb_cur_max(void)
 }
 #endif
 
-static constexpr std::string_view helperClassName = "org.cocos2dx.lib.Cocos2dxHelper"sv;
+static const std::string helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
 
 NS_CC_BEGIN
 
@@ -75,7 +75,7 @@ int Application::run()
 
 void Application::setAnimationInterval(float interval)
 {
-    JniHelper::callStaticVoidMethod("org/cocos2dx/lib/Cocos2dxRenderer"sv, "setAnimationInterval"sv, interval);
+    JniHelper::callStaticVoidMethod("org/cocos2dx/lib/Cocos2dxRenderer", "setAnimationInterval", interval);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ Application* Application::sharedApplication()
 const char* Application::getCurrentLanguageCode()
 {
     static char code[3]  = {0};
-    std::string language = JniHelper::callStaticStringMethod(helperClassName, "getCurrentLanguage"sv);
+    std::string language = JniHelper::callStaticStringMethod(helperClassName, "getCurrentLanguage");
     strncpy(code, language.c_str(), 2);
     code[2] = '\0';
     return code;
@@ -116,12 +116,12 @@ Application::Platform Application::getTargetPlatform()
 
 std::string Application::getVersion()
 {
-    return JniHelper::callStaticStringMethod(helperClassName, "getVersion"sv);
+    return JniHelper::callStaticStringMethod(helperClassName, "getVersion");
 }
 
-bool Application::openURL(std::string_view url)
+bool Application::openURL(const std::string& url)
 {
-    return JniHelper::callStaticBooleanMethod(helperClassName, "openURL"sv, url);
+    return JniHelper::callStaticBooleanMethod(helperClassName, "openURL", url);
 }
 
 void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}

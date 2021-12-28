@@ -34,10 +34,9 @@ DEFINE_TEST_SUITE(ActionsTests);
 class ActionsDemo : public TestCase
 {
 protected:
-    cocos2d::Sprite* _grossini;
-    cocos2d::Sprite* _tamara;
-    cocos2d::Sprite* _kathia;
-
+    cocos2d::Sprite*    _grossini;
+    cocos2d::Sprite*    _tamara;
+    cocos2d::Sprite*    _kathia;
 public:
     virtual void onEnter() override;
     virtual void onExit() override;
@@ -60,7 +59,7 @@ class ActionMove3D : public ActionsDemo
 {
 public:
     CREATE_FUNC(ActionMove3D);
-
+    
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 };
@@ -182,7 +181,7 @@ public:
     virtual void onExit() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-
+    
 private:
     cocos2d::EventListenerCustom* _frameDisplayedListener;
 };
@@ -296,8 +295,8 @@ class ActionRemoveSelf : public ActionsDemo
 public:
     CREATE_FUNC(ActionRemoveSelf);
 
-    virtual void onEnter() override;
-    virtual std::string subtitle() const override;
+	virtual void onEnter() override;
+	virtual std::string subtitle() const override;
 };
 
 class ActionRepeatForever : public ActionsDemo
@@ -355,6 +354,7 @@ public:
     void callback3(Node* pTarget, int32_t data);
 };
 
+
 class ActionFollow : public ActionsDemo
 {
 public:
@@ -366,10 +366,10 @@ public:
 
 class ActionFollowWithOffset : public ActionsDemo
 {
-
+    
 public:
     CREATE_FUNC(ActionFollowWithOffset);
-
+    
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 };
@@ -466,7 +466,6 @@ public:
     void log(Node* sender);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-
 private:
     cocos2d::Sprite* _spriteTmp;
 };
@@ -526,7 +525,6 @@ public:
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
     virtual std::string title() const override;
-
 private:
     int _testInteger;
 };
@@ -535,11 +533,10 @@ class Issue2599 : public ActionsDemo
 {
 public:
     CREATE_FUNC(Issue2599);
-
+    
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
     virtual std::string title() const override;
-
 private:
     int _count;
 };
@@ -550,7 +547,7 @@ public:
     CREATE_FUNC(ActionCatmullRom);
 
     ~ActionCatmullRom();
-
+    
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
     virtual std::string title() const override;
@@ -562,7 +559,7 @@ public:
     CREATE_FUNC(ActionCardinalSpline);
 
     ~ActionCardinalSpline();
-
+    
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
     virtual std::string title() const override;
@@ -577,13 +574,12 @@ public:
     virtual ~PauseResumeActions();
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
-    virtual std::string title() const override;
-
+    virtual std::string title() const override;    
 private:
     cocos2d::Vector<Node*> _pausedTargets;
 };
 
-class ActionResize : public ActionsDemo
+class ActionResize : public ActionsDemo 
 {
 public:
     CREATE_FUNC(ActionResize);
@@ -609,7 +605,6 @@ public:
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
     virtual std::string title() const override;
-
 private:
     int _count;
 };
@@ -622,7 +617,6 @@ public:
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
     virtual std::string title() const override;
-
 private:
     int _count;
 };
@@ -631,28 +625,30 @@ class SequenceWithFinalInstant : public ActionsDemo
 {
 public:
     CREATE_FUNC(SequenceWithFinalInstant);
-
+    
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
     virtual void onExit() override;
-
+    
 private:
     cocos2d::ActionManager* _manager;
     cocos2d::Node* _target;
+    
 };
 
 class Issue18003 : public ActionsDemo
 {
 public:
     CREATE_FUNC(Issue18003);
-
+    
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
     virtual void onExit() override;
-
+    
 private:
     cocos2d::ActionManager* _manager;
     cocos2d::Node* _target;
+    
 };
 
 #endif

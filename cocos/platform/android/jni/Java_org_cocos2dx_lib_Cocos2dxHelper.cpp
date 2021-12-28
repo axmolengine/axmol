@@ -37,7 +37,7 @@ THE SOFTWARE.
 #define LOG_TAG "Java_org_cocos2dx_lib_Cocos2dxHelper.cpp"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
-static constexpr std::string_view className = "org.cocos2dx.lib.Cocos2dxHelper"sv;
+static const std::string className = "org.cocos2dx.lib.Cocos2dxHelper";
 
 static EditTextCallback s_editTextCallback = nullptr;
 static void* s_ctx                         = nullptr;
@@ -126,7 +126,7 @@ const char* getApkPath()
 {
     if (g_apkPath.empty())
     {
-        g_apkPath = JniHelper::callStaticStringMethod(className, "getAssetsPath"sv);
+        g_apkPath = JniHelper::callStaticStringMethod(className, "getAssetsPath");
     }
 
     return g_apkPath.c_str();
@@ -134,7 +134,7 @@ const char* getApkPath()
 
 std::string getPackageNameJNI()
 {
-    return JniHelper::callStaticStringMethod(className, "getCocos2dxPackageName"sv);
+    return JniHelper::callStaticStringMethod(className, "getCocos2dxPackageName");
 }
 
 int getObbAssetFileDescriptorJNI(const char* path, int64_t* startOffset, int64_t* size)
@@ -142,7 +142,7 @@ int getObbAssetFileDescriptorJNI(const char* path, int64_t* startOffset, int64_t
     JniMethodInfo methodInfo;
     int fd = 0;
 
-    if (JniHelper::getStaticMethodInfo(methodInfo, className.data(), "getObbAssetFileDescriptor",
+    if (JniHelper::getStaticMethodInfo(methodInfo, className.c_str(), "getObbAssetFileDescriptor",
                                        "(Ljava/lang/String;)[J"))
     {
         jstring stringArg = methodInfo.env->NewStringUTF(path);
@@ -181,7 +181,7 @@ void conversionEncodingJNI(const char* src, int byteSize, const char* fromCharse
 {
     JniMethodInfo methodInfo;
 
-    if (JniHelper::getStaticMethodInfo(methodInfo, className.data(), "conversionEncoding",
+    if (JniHelper::getStaticMethodInfo(methodInfo, className.c_str(), "conversionEncoding",
                                        "([BLjava/lang/String;Ljava/lang/String;)[B"))
     {
         jbyteArray strArray = methodInfo.env->NewByteArray(byteSize);

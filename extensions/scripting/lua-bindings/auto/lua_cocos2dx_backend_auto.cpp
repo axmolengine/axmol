@@ -572,8 +572,8 @@ int lua_cocos2dx_backend_Program_getFragmentShader(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_backend_Program_getFragmentShader'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getFragmentShader();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getFragmentShader();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccb.Program:getFragmentShader",argc, 0);
@@ -671,8 +671,8 @@ int lua_cocos2dx_backend_Program_getUniformLocation(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccb.Program:getUniformLocation");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccb.Program:getUniformLocation");
 
             if (!ok) { break; }
             cocos2d::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
@@ -771,7 +771,7 @@ int lua_cocos2dx_backend_Program_getActiveAttributes(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_backend_Program_getActiveAttributes'", nullptr);
             return 0;
         }
-        tsl::robin_map<std::string, cocos2d::backend::AttributeBindInfo, hlookup::string_hash, hlookup::equal_to> ret = cobj->getActiveAttributes();
+        std::unordered_map<std::string, cocos2d::backend::AttributeBindInfo> ret = cobj->getActiveAttributes();
         program_activeattrs_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -820,8 +820,8 @@ int lua_cocos2dx_backend_Program_getAttributeLocation(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccb.Program:getAttributeLocation");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccb.Program:getAttributeLocation");
 
             if (!ok) { break; }
             int ret = cobj->getAttributeLocation(arg0);
@@ -873,8 +873,8 @@ int lua_cocos2dx_backend_Program_getVertexShader(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_backend_Program_getVertexShader'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getVertexShader();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getVertexShader();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccb.Program:getVertexShader",argc, 0);
@@ -1125,13 +1125,13 @@ int lua_cocos2dx_backend_VertexLayout_setAttribute(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 5) 
     {
-        std::string_view arg0;
+        std::string arg0;
         unsigned int arg1;
         cocos2d::backend::VertexFormat arg2;
         unsigned int arg3;
         bool arg4;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccb.VertexLayout:setAttribute");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccb.VertexLayout:setAttribute");
 
         ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ccb.VertexLayout:setAttribute");
 
@@ -1293,8 +1293,8 @@ int lua_cocos2dx_backend_ProgramState_setTexture(lua_State* tolua_S)
             ok &= luaval_to_uniformLocation(tolua_S, 2, arg0, "ccb.ProgramState:setTexture");
 
             if (!ok) { break; }
-            int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccb.ProgramState:setTexture");
+            unsigned short arg1;
+            ok &= luaval_to_ushort(tolua_S, 3, &arg1, "ccb.ProgramState:setTexture");
 
             if (!ok) { break; }
             cocos2d::backend::TextureBackend* arg2;
@@ -1325,12 +1325,12 @@ int lua_cocos2dx_backend_ProgramState_setTexture(lua_State* tolua_S)
             ok &= luaval_to_uniformLocation(tolua_S, 2, arg0, "ccb.ProgramState:setTexture");
 
             if (!ok) { break; }
-            int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccb.ProgramState:setTexture");
+            unsigned short arg1;
+            ok &= luaval_to_ushort(tolua_S, 3, &arg1, "ccb.ProgramState:setTexture");
 
             if (!ok) { break; }
-            int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ccb.ProgramState:setTexture");
+            unsigned short arg2;
+            ok &= luaval_to_ushort(tolua_S, 4, &arg2, "ccb.ProgramState:setTexture");
 
             if (!ok) { break; }
             cocos2d::backend::TextureBackend* arg3;
@@ -1489,12 +1489,12 @@ int lua_cocos2dx_backend_ProgramState_setParameterAutoBinding(lua_State* tolua_S
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string_view arg0;
-        std::string_view arg1;
+        std::string arg0;
+        std::string arg1;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccb.ProgramState:setParameterAutoBinding");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccb.ProgramState:setParameterAutoBinding");
 
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccb.ProgramState:setParameterAutoBinding");
+        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccb.ProgramState:setParameterAutoBinding");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_backend_ProgramState_setParameterAutoBinding'", nullptr);
@@ -1643,8 +1643,8 @@ int lua_cocos2dx_backend_ProgramState_getAttributeLocation(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccb.ProgramState:getAttributeLocation");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccb.ProgramState:getAttributeLocation");
 
             if (!ok) { break; }
             int ret = cobj->getAttributeLocation(arg0);
@@ -2992,12 +2992,12 @@ int lua_cocos2dx_backend_Device_newProgram(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string_view arg0;
-        std::string_view arg1;
+        std::string arg0;
+        std::string arg1;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccb.Device:newProgram");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccb.Device:newProgram");
 
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccb.Device:newProgram");
+        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccb.Device:newProgram");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_backend_Device_newProgram'", nullptr);

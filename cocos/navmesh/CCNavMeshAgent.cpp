@@ -60,7 +60,7 @@ NavMeshAgent* NavMeshAgent::create(const NavMeshAgentParam& param)
     return nullptr;
 }
 
-std::string_view NavMeshAgent::getNavMeshAgentComponentName()
+const std::string& NavMeshAgent::getNavMeshAgentComponentName()
 {
     static std::string comName = "___NavMeshAgentComponent___";
     return comName;

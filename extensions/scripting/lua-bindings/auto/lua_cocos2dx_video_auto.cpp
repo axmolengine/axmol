@@ -36,8 +36,8 @@ int lua_cocos2dx_video_VideoPlayer_getFileName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_video_VideoPlayer_getFileName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getFileName();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getFileName();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccui.VideoPlayer:getFileName",argc, 0);
@@ -83,8 +83,8 @@ int lua_cocos2dx_video_VideoPlayer_getURL(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_video_VideoPlayer_getURL'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getURL();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getURL();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccui.VideoPlayer:getURL",argc, 0);
@@ -366,9 +366,9 @@ int lua_cocos2dx_video_VideoPlayer_setFileName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccui.VideoPlayer:setFileName");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccui.VideoPlayer:setFileName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_video_VideoPlayer_setFileName'", nullptr);
@@ -416,9 +416,9 @@ int lua_cocos2dx_video_VideoPlayer_setURL(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccui.VideoPlayer:setURL");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccui.VideoPlayer:setURL");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_video_VideoPlayer_setURL'", nullptr);

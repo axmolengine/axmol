@@ -59,7 +59,7 @@ public:
     /** creates a TileMap with a tile file (atlas) with a map file and the width and height of each tile in points.
      The tile file will be loaded using the TextureMgr.
      */
-    static TileMapAtlas* create(std::string_view tile, std::string_view mapFile, int tileWidth, int tileHeight);
+    static TileMapAtlas* create(const std::string& tile, const std::string& mapFile, int tileWidth, int tileHeight);
     /**
      * @js ctor
      */
@@ -73,7 +73,7 @@ public:
     /** initializes a TileMap with a tile file (atlas) with a map file and the width and height of each tile in points.
     The file will be loaded using the TextureMgr.
     */
-    bool initWithTileFile(std::string_view tile, std::string_view mapFile, int tileWidth, int tileHeight);
+    bool initWithTileFile(const std::string& tile, const std::string& mapFile, int tileWidth, int tileHeight);
     /**
      * Returns a tile from position x,y.
      *For the moment only channel R is used
@@ -100,7 +100,7 @@ public:
     void setTGAInfo(struct sImageTGA* TGAInfo) { _TGAInfo = TGAInfo; }
 
 protected:
-    void loadTGAfile(std::string_view file);
+    void loadTGAfile(const std::string& file);
     void calculateItemsToRender();
     void updateAtlasValueAt(const Vec2& pos, const Color3B& value, int index);
     void updateAtlasValues();

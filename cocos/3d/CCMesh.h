@@ -83,7 +83,7 @@ public:
      * create mesh
      * @lua NA
      */
-    static Mesh* create(std::string_view name, MeshIndexData* indexData, MeshSkin* skin = nullptr);
+    static Mesh* create(const std::string& name, MeshIndexData* indexData, MeshSkin* skin = nullptr);
 
     /**
      * get vertex buffer
@@ -109,7 +109,7 @@ public:
      * call setTexture(texPath, NTextureData::Usage::Diffuse)
      * @param texPath texture path
      */
-    void setTexture(std::string_view texPath);
+    void setTexture(const std::string& texPath);
     /**
      * set texture (diffuse), which is responsible for the main appearance. It is also means main texture, you can also
      * call setTexture(texPath, NTextureData::Usage::Diffuse)
@@ -128,7 +128,7 @@ public:
      * @param texPath texture path
      * @param usage Usage of this texture
      */
-    void setTexture(std::string_view texPath, NTextureData::Usage usage);
+    void setTexture(const std::string& texPath, NTextureData::Usage usage);
     /**
      * Get texture (diffuse), which is responsible for the main appearance. It is also means main texture, you can also
      * call getTexture(NTextureData::Usage::Diffuse)
@@ -168,7 +168,7 @@ public:
     backend::ProgramState* getProgramState() const;
 
     /**name getter */
-    std::string_view getName() const { return _name; }
+    const std::string& getName() const { return _name; }
 
     void setBlendFunc(const BlendFunc& blendFunc);
     const BlendFunc& getBlendFunc() const;
@@ -225,7 +225,7 @@ public:
     /**Mesh index data setter*/
     void setMeshIndexData(MeshIndexData* indexdata);
     /**name setter*/
-    void setName(std::string_view name) { _name = name; }
+    void setName(const std::string& name) { _name = name; }
 
     /**
      * calculate the AABB of the mesh

@@ -49,3 +49,4 @@ public:
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 };
+

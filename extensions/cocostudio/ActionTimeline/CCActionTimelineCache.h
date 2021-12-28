@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
 
 http://www.cocos2d-x.org
@@ -71,24 +71,24 @@ public:
     void init();
 
     /** Remove action with filename, and also remove other resource relate with this file */
-    void removeAction(std::string_view fileName);
+    void removeAction(const std::string& fileName);
 
-    static ActionTimeline* createAction(std::string_view fileName);
+    static ActionTimeline* createAction(const std::string& fileName);
 
     /** Clone a action with the specified name from the container. */
-    ActionTimeline* createActionFromJson(std::string_view fileName);
-    ActionTimeline* createActionFromContent(std::string_view fileName, std::string_view content);
+    ActionTimeline* createActionFromJson(const std::string& fileName);
+    ActionTimeline* createActionFromContent(const std::string& fileName, const std::string& content);
 
-    ActionTimeline* loadAnimationActionWithFile(std::string_view fileName);
-    ActionTimeline* loadAnimationActionWithContent(std::string_view fileName, std::string_view content);
+    ActionTimeline* loadAnimationActionWithFile(const std::string& fileName);
+    ActionTimeline* loadAnimationActionWithContent(const std::string& fileName, const std::string& content);
 
-    ActionTimeline* createActionWithFlatBuffersFile(std::string_view fileName);
-    ActionTimeline* createActionWithDataBuffer(cocos2d::Data data, std::string_view fileName);
+    ActionTimeline* createActionWithFlatBuffersFile(const std::string& fileName);
+    ActionTimeline* createActionWithDataBuffer(cocos2d::Data data, const std::string& fileName);
 
-    ActionTimeline* loadAnimationActionWithFlatBuffersFile(std::string_view fileName);
-    ActionTimeline* loadAnimationWithDataBuffer(const cocos2d::Data& data, std::string_view fileName);
+    ActionTimeline* loadAnimationActionWithFlatBuffersFile(const std::string& fileName);
+    ActionTimeline* loadAnimationWithDataBuffer(const cocos2d::Data& data, const std::string& fileName);
 
-    ActionTimeline* createActionWithFlatBuffersForSimulator(std::string_view fileName);
+    ActionTimeline* createActionWithFlatBuffersForSimulator(const std::string& fileName);
 
 protected:
     Timeline* loadTimeline(const rapidjson::Value& json);
@@ -128,8 +128,8 @@ protected:
     typedef std::function<Frame*(const rapidjson::Value& json)> FrameCreateFunc;
     typedef std::pair<std::string, FrameCreateFunc> Pair;
 
-    hlookup::string_map<FrameCreateFunc> _funcs;
-    cocos2d::StringMap<ActionTimeline*> _animationActions;
+    std::unordered_map<std::string, FrameCreateFunc> _funcs;
+    cocos2d::Map<std::string, ActionTimeline*> _animationActions;
 };
 
 NS_TIMELINE_END

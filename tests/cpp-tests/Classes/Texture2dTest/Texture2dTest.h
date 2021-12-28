@@ -45,6 +45,7 @@ public:
     virtual std::string title() const override;
     virtual void onEnter() override;
 
+
     cocos2d::Node* _background;
 };
 
@@ -464,7 +465,6 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
-
 private:
     int _imageOffset;
 };
@@ -516,11 +516,10 @@ public:
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
     virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
-
 protected:
     void onDraw(const cocos2d::Mat4& transform, uint32_t flags);
 
-    cocos2d::Texture2D *_tex1, *_Tex2F;
+    cocos2d::Texture2D* _tex1, *_Tex2F;
 };
 
 class TextureDrawInRect : public TextureDemo
@@ -532,11 +531,10 @@ public:
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
     virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
-
 protected:
     void onDraw(const cocos2d::Mat4& transform, uint32_t flags);
 
-    cocos2d::Texture2D *_tex1, *_Tex2F;
+    cocos2d::Texture2D* _tex1, *_Tex2F;
 };
 
 class TextureMemoryAlloc : public TextureDemo
@@ -548,7 +546,6 @@ public:
     virtual std::string subtitle() const override;
     void updateImage(cocos2d::Ref* sender);
     void changeBackgroundVisible(cocos2d::Ref* sender);
-
 private:
     cocos2d::Sprite* _background;
 };
@@ -558,11 +555,11 @@ class TexturePVRv3Premult : public TextureDemo
 public:
     CREATE_FUNC(TexturePVRv3Premult);
     TexturePVRv3Premult();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-
-    void transformSprite(cocos2d::Sprite* sprite);
+    
+    void transformSprite(cocos2d::Sprite *sprite);
 };
 
 // S3TC Dxt1 texture format test
@@ -571,7 +568,7 @@ class TextureS3TCDxt1 : public TextureDemo
 public:
     CREATE_FUNC(TextureS3TCDxt1);
     TextureS3TCDxt1();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -582,7 +579,7 @@ class TextureS3TCDxt3 : public TextureDemo
 public:
     CREATE_FUNC(TextureS3TCDxt3);
     TextureS3TCDxt3();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -593,10 +590,11 @@ class TextureS3TCDxt5 : public TextureDemo
 public:
     CREATE_FUNC(TextureS3TCDxt5);
     TextureS3TCDxt5();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
+
 
 // S3TC texture with no mipmaps test
 class TextureS3TCWithNoMipmaps : public TextureDemo
@@ -604,7 +602,7 @@ class TextureS3TCWithNoMipmaps : public TextureDemo
 public:
     CREATE_FUNC(TextureS3TCWithNoMipmaps);
     TextureS3TCWithNoMipmaps();
-
+    
     virtual std::string title() const override;
 };
 
@@ -614,32 +612,33 @@ class TextureATITCRGB : public TextureDemo
 public:
     CREATE_FUNC(TextureATITCRGB);
     TextureATITCRGB();
-
+    
     virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    virtual std::string subtitle() const override;    
 };
 
-// ATITC RGBA Explicit texture format test
+//ATITC RGBA Explicit texture format test
 class TextureATITCExplicit : public TextureDemo
 {
 public:
     CREATE_FUNC(TextureATITCExplicit);
     TextureATITCExplicit();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
 
-// ATITC RGBA Interpolated texture format test
+//ATITC RGBA Interpolated texture format test
 class TextureATITCInterpolated : public TextureDemo
 {
 public:
     CREATE_FUNC(TextureATITCInterpolated);
     TextureATITCInterpolated();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
+
 
 // RGB888 texture convert test
 class TextureConvertRGB888 : public TextureDemo
@@ -681,4 +680,4 @@ public:
     virtual std::string subtitle() const override;
 };
 
-#endif  // __TEXTURE2D_TEST_H__
+#endif // __TEXTURE2D_TEST_H__

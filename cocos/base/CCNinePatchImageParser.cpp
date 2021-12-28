@@ -179,7 +179,7 @@ void NinePatchImageParser::setSpriteFrameInfo(Image* image, const cocos2d::Rect&
     this->_isRotated  = rotated;
 }
 
-bool NinePatchImageParser::isNinePatchImage(std::string_view filepath)
+bool NinePatchImageParser::isNinePatchImage(const std::string& filepath)
 {
     size_t length = filepath.length();
     if (length < 7)

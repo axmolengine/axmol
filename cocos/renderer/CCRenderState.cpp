@@ -183,12 +183,12 @@ void RenderState::StateBlock::restoreUnmodifiedStates(int32_t overrideBits, Pipe
     }
 }
 
-static bool parseBoolean(std::string_view value)
+static bool parseBoolean(const std::string& value)
 {
     return (value.compare("true") == 0);
 }
 
-static backend::BlendFactor parseBlend(std::string_view value)
+static backend::BlendFactor parseBlend(const std::string& value)
 {
     // Convert the string to uppercase for comparison.
     std::string upper(value);
@@ -222,12 +222,12 @@ static backend::BlendFactor parseBlend(std::string_view value)
     else
     {
         CCLOG("Unsupported blend value (%s). (Will default to BLEND_ONE if errors are treated as warnings)",
-              value.data());
+              value.c_str());
         return backend::BlendFactor::ONE;
     }
 }
 
-static DepthFunction parseDepthFunc(std::string_view value)
+static DepthFunction parseDepthFunc(const std::string& value)
 {
     // Convert string to uppercase for comparison
     std::string upper(value);
@@ -251,12 +251,12 @@ static DepthFunction parseDepthFunc(std::string_view value)
     else
     {
         CCLOG("Unsupported depth function value (%s). Will default to DEPTH_LESS if errors are treated as warnings)",
-              value.data());
+              value.c_str());
         return DepthFunction::LESS;
     }
 }
 
-static CullFaceSide parseCullFaceSide(std::string_view value)
+static CullFaceSide parseCullFaceSide(const std::string& value)
 {
     // Convert string to uppercase for comparison
     std::string upper(value);
@@ -271,12 +271,12 @@ static CullFaceSide parseCullFaceSide(std::string_view value)
     else
     {
         CCLOG("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings.",
-              value.data());
+              value.c_str());
         return CullFaceSide::BACK;
     }
 }
 
-static FrontFace parseFrontFace(std::string_view value)
+static FrontFace parseFrontFace(const std::string& value)
 {
     // Convert string to uppercase for comparison
     std::string upper(value);
@@ -288,12 +288,12 @@ static FrontFace parseFrontFace(std::string_view value)
     else
     {
         CCLOG("Unsupported front face side value (%s). Will default to CCW if errors are treated as warnings.",
-              value.data());
+              value.c_str());
         return FrontFace::COUNTER_CLOCK_WISE;
     }
 }
 
-void RenderState::StateBlock::setState(std::string_view name, std::string_view value)
+void RenderState::StateBlock::setState(const std::string& name, const std::string& value)
 {
     if (name.compare("blend") == 0)
     {
@@ -333,7 +333,7 @@ void RenderState::StateBlock::setState(std::string_view name, std::string_view v
     }
     else
     {
-        CCLOG("Unsupported render state string '%s'.", name.data());
+        CCLOG("Unsupported render state string '%s'.", name.c_str());
     }
 }
 

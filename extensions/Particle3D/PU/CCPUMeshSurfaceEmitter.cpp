@@ -162,7 +162,7 @@ const PUTriangle::PositionAndNormal PUTriangle::getRandomVertexAndNormal()
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
-MeshInfo::MeshInfo(std::string_view /*meshName*/,
+MeshInfo::MeshInfo(const std::string& /*meshName*/,
                    MeshSurfaceDistribution distribution,
                    const Quaternion& /*orientation*/,
                    const Vec3& /*scale*/)
@@ -307,7 +307,7 @@ const PUTriangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal(const s
 //	{
 //		Ogre::SubMesh* submesh = mesh->getSubMesh(i);
 //		Ogre::VertexData* vertex_data = submesh->useSharedVertices ? mesh->sharedVertexData :
-// submesh->vertexData;
+//submesh->vertexData;
 //
 //		if((!submesh->useSharedVertices)||(submesh->useSharedVertices && !added_shared))
 //		{
@@ -318,11 +318,10 @@ const PUTriangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal(const s
 //			}
 //
 //			const Ogre::VertexElement* posElem =
-// vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION); 			const
-// Ogre::VertexElement* normalElem = vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_NORMAL);
-// Ogre::HardwareVertexBufferSharedPtr vbuf = vertex_data->vertexBufferBinding->getBuffer(posElem->getSource());
-// unsigned char* vertex = static_cast<unsigned char*>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
-// float* pReal;
+//vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION); 			const Ogre::VertexElement* normalElem =
+//vertex_data->vertexDeclaration->findElementBySemantic(Ogre::VES_NORMAL); 			Ogre::HardwareVertexBufferSharedPtr vbuf =
+//vertex_data->vertexBufferBinding->getBuffer(posElem->getSource()); 			unsigned char* vertex = static_cast<unsigned
+//char*>(vbuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY)); 			float* pReal;
 //
 //			for( size_t j = 0; j < vertex_data->vertexCount; ++j, vertex += vbuf->getVertexSize())
 //			{
@@ -360,7 +359,7 @@ const PUTriangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal(const s
 //			for ( size_t k = 0; k < numTrisMultThree; ++k)
 //			{
 //				indices[index_offset++] = static_cast<unsigned long>(pShort[k]) + static_cast<unsigned
-// long>(offset);
+//long>(offset);
 //			}
 //		}
 //
@@ -528,12 +527,12 @@ void PUMeshSurfaceEmitter::initParticleDirection(PUParticle3D* particle)
     }
 }
 //-----------------------------------------------------------------------
-std::string_view PUMeshSurfaceEmitter::getMeshName() const
+const std::string& PUMeshSurfaceEmitter::getMeshName() const
 {
     return _meshName;
 }
 //-----------------------------------------------------------------------
-void PUMeshSurfaceEmitter::setMeshName(std::string_view meshName, bool doBuild)
+void PUMeshSurfaceEmitter::setMeshName(const std::string& meshName, bool doBuild)
 {
     _meshName = meshName;
 

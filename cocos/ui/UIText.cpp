@@ -71,7 +71,7 @@ bool Text::init()
     return false;
 }
 
-Text* Text::create(std::string_view textContent, std::string_view fontName, float fontSize)
+Text* Text::create(const std::string& textContent, const std::string& fontName, float fontSize)
 {
     Text* text = new Text();
     if (text->init(textContent, fontName, fontSize))
@@ -83,7 +83,7 @@ Text* Text::create(std::string_view textContent, std::string_view fontName, floa
     return nullptr;
 }
 
-bool Text::init(std::string_view textContent, std::string_view fontName, float fontSize)
+bool Text::init(const std::string& textContent, const std::string& fontName, float fontSize)
 {
     bool ret = true;
     do
@@ -117,7 +117,7 @@ void Text::setString(std::string_view text)
     _labelRendererAdaptDirty = true;
 }
 
-std::string_view Text::getString() const
+const std::string& Text::getString() const
 {
     return _labelRenderer->getString();
 }
@@ -149,7 +149,7 @@ float Text::getFontSize() const
     return _fontSize;
 }
 
-void Text::setFontName(std::string_view name)
+void Text::setFontName(const std::string& name)
 {
     if (FileUtils::getInstance()->isFileExist(name))
     {
@@ -173,7 +173,7 @@ void Text::setFontName(std::string_view name)
     _labelRendererAdaptDirty = true;
 }
 
-std::string_view Text::getFontName() const
+const std::string& Text::getFontName() const
 {
     return _fontName;
 }

@@ -103,7 +103,9 @@ Slider* Slider::create()
     return nullptr;
 }
 
-Slider* Slider::create(std::string_view barTextureName, std::string_view normalBallTextureName, TextureResType resType)
+Slider* Slider::create(const std::string& barTextureName,
+                       const std::string& normalBallTextureName,
+                       TextureResType resType)
 {
     Slider* widget = new Slider();
     if (widget->init())
@@ -155,7 +157,7 @@ void Slider::initRenderer()
     addProtectedChild(_slidBallRenderer, SLIDBALL_RENDERER_Z, -1);
 }
 
-void Slider::loadBarTexture(std::string_view fileName, TextureResType texType)
+void Slider::loadBarTexture(const std::string& fileName, TextureResType texType)
 {
     _textureFile = fileName;
     _barTexType  = texType;
@@ -200,7 +202,7 @@ void Slider::setupBarTexture()
     _originalBarRect = _barRenderer->getTextureRect();
 }
 
-void Slider::loadProgressBarTexture(std::string_view fileName, TextureResType texType)
+void Slider::loadProgressBarTexture(const std::string& fileName, TextureResType texType)
 {
     _progressBarTextureFile = fileName;
     _progressBarTexType     = texType;
@@ -328,9 +330,9 @@ const Rect& Slider::getCapInsetsProgressBarRenderer() const
     return _capInsetsProgressBarRenderer;
 }
 
-void Slider::loadSlidBallTextures(std::string_view normal,
-                                  std::string_view pressed,
-                                  std::string_view disabled,
+void Slider::loadSlidBallTextures(const std::string& normal,
+                                  const std::string& pressed,
+                                  const std::string& disabled,
                                   TextureResType texType)
 {
     loadSlidBallTextureNormal(normal, texType);
@@ -338,7 +340,7 @@ void Slider::loadSlidBallTextures(std::string_view normal,
     loadSlidBallTextureDisabled(disabled, texType);
 }
 
-void Slider::loadSlidBallTextureNormal(std::string_view normal, TextureResType texType)
+void Slider::loadSlidBallTextureNormal(const std::string& normal, TextureResType texType)
 {
     _slidBallNormalTextureFile = normal;
     _ballNTexType              = texType;
@@ -368,7 +370,7 @@ void Slider::loadSlidBallTextureNormal(SpriteFrame* spriteframe)
     this->updateChildrenDisplayedRGBA();
 }
 
-void Slider::loadSlidBallTexturePressed(std::string_view pressed, TextureResType texType)
+void Slider::loadSlidBallTexturePressed(const std::string& pressed, TextureResType texType)
 {
     _slidBallPressedTextureFile       = pressed;
     _isSliderBallPressedTextureLoaded = !pressed.empty();
@@ -400,7 +402,7 @@ void Slider::loadSlidBallTexturePressed(SpriteFrame* spriteframe)
     this->updateChildrenDisplayedRGBA();
 }
 
-void Slider::loadSlidBallTextureDisabled(std::string_view disabled, TextureResType texType)
+void Slider::loadSlidBallTextureDisabled(const std::string& disabled, TextureResType texType)
 {
     _slidBallDisabledTextureFile        = disabled;
     _isSliderBallDisabledTexturedLoaded = !disabled.empty();

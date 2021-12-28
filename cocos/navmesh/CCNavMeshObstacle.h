@@ -64,7 +64,7 @@ public:
     @param height The height of obstacle.
     */
     static NavMeshObstacle* create(float radius, float height);
-    static std::string_view getNavMeshObstacleComponentName();
+    static const std::string& getNavMeshObstacleComponentName();
 
     virtual void onEnter() override;
     virtual void onExit() override;

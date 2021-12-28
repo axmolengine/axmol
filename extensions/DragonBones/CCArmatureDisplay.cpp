@@ -1,4 +1,4 @@
-#include "CCArmatureDisplay.h"
+﻿#include "CCArmatureDisplay.h"
 #include "CCSlot.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
@@ -56,7 +56,7 @@ void CCArmatureDisplay::dbUpdate()
     }
 }
 
-void CCArmatureDisplay::addDBEventListener(std::string_view type, const std::function<void(EventObject*)>& callback)
+void CCArmatureDisplay::addDBEventListener(const std::string& type, const std::function<void(EventObject*)>& callback)
 {
     auto lambda = [callback](cocos2d::EventCustom* event) -> void {
         callback(static_cast<EventObject*>(event->getUserData()));
@@ -64,12 +64,13 @@ void CCArmatureDisplay::addDBEventListener(std::string_view type, const std::fun
     _dispatcher->addCustomEventListener(type, lambda);
 }
 
-void CCArmatureDisplay::dispatchDBEvent(std::string_view type, EventObject* value)
+void CCArmatureDisplay::dispatchDBEvent(const std::string& type, EventObject* value)
 {
     _dispatcher->dispatchCustomEvent(type, value);
 }
 
-void CCArmatureDisplay::removeDBEventListener(std::string_view type, const std::function<void(EventObject*)>& callback)
+void CCArmatureDisplay::removeDBEventListener(const std::string& type,
+                                              const std::function<void(EventObject*)>& callback)
 {
     // TODO
     _dispatcher->removeCustomEventListeners(type);

@@ -137,7 +137,7 @@ protected:
     * @js NA
     * @lua NA
     */
-    virtual std::string_view getContentText() { return STD_STRING_EMPTY; }
+    virtual const std::string& getContentText() { return STD_STRING_EMPTY; }
 
     //////////////////////////////////////////////////////////////////////////
     // keyboard show/hide notification

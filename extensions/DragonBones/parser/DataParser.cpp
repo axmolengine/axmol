@@ -1,4 +1,4 @@
-#include "DataParser.h"
+﻿#include "DataParser.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -125,9 +125,9 @@ const char* DataParser::GOTO_AND_PLAY = "gotoAndPlay";
 
 const char* DataParser::DEFAULT_NAME = "default";
 
-TextureFormat DataParser::_getTextureFormat(std::string_view value)
+TextureFormat DataParser::_getTextureFormat(const std::string& value)
 {
-    std::string lower{value};
+    auto lower = value;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 
     if (lower == "rgba8888")
@@ -158,9 +158,9 @@ TextureFormat DataParser::_getTextureFormat(std::string_view value)
     return TextureFormat::DEFAULT;
 }
 
-ArmatureType DataParser::_getArmatureType(std::string_view value)
+ArmatureType DataParser::_getArmatureType(const std::string& value)
 {
-    std::string lower{value};
+    auto lower = value;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 
     if (lower == "armature")
@@ -179,9 +179,9 @@ ArmatureType DataParser::_getArmatureType(std::string_view value)
     return ArmatureType::Armature;
 }
 
-DisplayType DataParser::_getDisplayType(std::string_view value)
+DisplayType DataParser::_getDisplayType(const std::string& value)
 {
-    std::string lower{value};
+    auto lower = value;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 
     if (lower == "image")
@@ -204,9 +204,9 @@ DisplayType DataParser::_getDisplayType(std::string_view value)
     return DisplayType::Image;
 }
 
-BoundingBoxType DataParser::_getBoundingBoxType(std::string_view value)
+BoundingBoxType DataParser::_getBoundingBoxType(const std::string& value)
 {
-    std::string lower{value};
+    auto lower = value;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 
     if (lower == "rectangle")
@@ -225,9 +225,9 @@ BoundingBoxType DataParser::_getBoundingBoxType(std::string_view value)
     return BoundingBoxType::Rectangle;
 }
 
-ActionType DataParser::_getActionType(std::string_view value)
+ActionType DataParser::_getActionType(const std::string& value)
 {
-    std::string lower{value};
+    auto lower = value;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 
     if (lower == "play")
@@ -246,9 +246,9 @@ ActionType DataParser::_getActionType(std::string_view value)
     return ActionType::Play;
 }
 
-BlendMode DataParser::_getBlendMode(std::string_view value)
+BlendMode DataParser::_getBlendMode(const std::string& value)
 {
-    std::string lower{value};
+    auto lower = value;
     std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 
     if (lower == "normal")

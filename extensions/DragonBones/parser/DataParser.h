@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -166,12 +166,12 @@ protected:
 
     static const char* DEFAULT_NAME;
 
-    static TextureFormat _getTextureFormat(std::string_view value);
-    static ArmatureType _getArmatureType(std::string_view value);
-    static DisplayType _getDisplayType(std::string_view value);
-    static BoundingBoxType _getBoundingBoxType(std::string_view value);
-    static ActionType _getActionType(std::string_view value);
-    static BlendMode _getBlendMode(std::string_view value);
+    static TextureFormat _getTextureFormat(const std::string& value);
+    static ArmatureType _getArmatureType(const std::string& value);
+    static DisplayType _getDisplayType(const std::string& value);
+    static BoundingBoxType _getBoundingBoxType(const std::string& value);
+    static ActionType _getActionType(const std::string& value);
+    static BlendMode _getBlendMode(const std::string& value);
 
 public:
     virtual DragonBonesData* parseDragonBonesData(const char* rawData, float scale = 1.0f)                          = 0;

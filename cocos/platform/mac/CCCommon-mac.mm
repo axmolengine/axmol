@@ -33,25 +33,25 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-void LuaLog(const char* format)
+void LuaLog(const char * format)
 {
     puts(format);
 }
 
 // ios no MessageBox, use log instead
-void ccMessageBox(const char* msg, const char* title)
+void ccMessageBox(const char * msg, const char * title)
 {
-    NSString* tmpTitle = (title) ? [NSString stringWithUTF8String:title] : nil;
-    NSString* tmpMsg   = (msg) ? [NSString stringWithUTF8String:msg] : nil;
+    NSString * tmpTitle = (title) ? [NSString stringWithUTF8String : title] : nil;
+    NSString * tmpMsg = (msg) ? [NSString stringWithUTF8String : msg] : nil;
 
-    NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
     [alert addButtonWithTitle:@"OK"];
     [alert setMessageText:tmpMsg];
     [alert setInformativeText:tmpTitle];
     [alert setAlertStyle:NSAlertStyleWarning];
 
     auto glview = Director::getInstance()->getOpenGLView();
-    id window   = glview->getCocoaWindow();
+    id window = glview->getCocoaWindow();
     [alert beginSheetModalForWindow:window completionHandler:nil];
 }
 

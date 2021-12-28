@@ -57,11 +57,11 @@ public:
 
     /** Get the name of the affector that must be enabled or disabled.
      */
-    std::string_view getAffectorName() const { return _affectorName; };
+    const std::string& getAffectorName() const { return _affectorName; };
 
     /** Set the name of the affector.
      */
-    void setAffectorName(std::string_view affectorName) { _affectorName = affectorName; };
+    void setAffectorName(const std::string& affectorName) { _affectorName = affectorName; };
 
     /** If the _handle() function of this class is invoked (by an Observer), it searches the
         ParticleAffector defined by the its name.

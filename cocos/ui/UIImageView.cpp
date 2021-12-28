@@ -50,7 +50,7 @@ ImageView::ImageView()
 
 ImageView::~ImageView() {}
 
-ImageView* ImageView::create(std::string_view imageFileName, TextureResType texType)
+ImageView* ImageView::create(const std::string& imageFileName, TextureResType texType)
 {
     ImageView* widget = new ImageView();
     if (widget->init(imageFileName, texType))
@@ -89,7 +89,7 @@ bool ImageView::init()
     return ret;
 }
 
-bool ImageView::init(std::string_view imageFileName, TextureResType texType)
+bool ImageView::init(const std::string& imageFileName, TextureResType texType)
 {
     bool bRet = true;
     do
@@ -113,7 +113,7 @@ void ImageView::initRenderer()
     addProtectedChild(_imageRenderer, IMAGE_RENDERER_Z, -1);
 }
 
-void ImageView::loadTexture(std::string_view fileName, TextureResType texType)
+void ImageView::loadTexture(const std::string& fileName, TextureResType texType)
 {
     if (fileName.empty())
     {

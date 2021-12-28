@@ -69,7 +69,7 @@ public:
     };
 
     /**read all animation or only the animation with given animationName? animationName == "" read the first.*/
-    static Animation3D* create(std::string_view filename, std::string_view animationName = "");
+    static Animation3D* create(const std::string& filename, const std::string& animationName = "");
 
     /**get duration*/
     float getDuration() const { return _duration; }
@@ -79,10 +79,10 @@ public:
      *
      * @lua NA
      */
-    Curve* getBoneCurveByName(std::string_view name) const;
+    Curve* getBoneCurveByName(const std::string& name) const;
 
     /**get the bone Curves set*/
-    const hlookup::string_map<Curve*>& getBoneCurves() const { return _boneCurves; }
+    const std::unordered_map<std::string, Curve*>& getBoneCurves() const { return _boneCurves; }
 
     CC_CONSTRUCTOR_ACCESS : Animation3D();
     virtual ~Animation3D();
@@ -90,10 +90,10 @@ public:
     bool init(const Animation3DData& data);
 
     /**init Animation3D with file name and animation name*/
-    bool initWithFile(std::string_view filename, std::string_view animationName);
+    bool initWithFile(const std::string& filename, const std::string& animationName);
 
 protected:
-    hlookup::string_map<Curve*> _boneCurves;  // bone curves map, key bone name, value AnimationCurve
+    std::unordered_map<std::string, Curve*> _boneCurves;  // bone curves map, key bone name, value AnimationCurve
 
     float _duration;  // animation duration
 };
@@ -109,10 +109,10 @@ public:
     static void destroyInstance();
 
     /**get animation by key*/
-    Animation3D* getAnimation(std::string_view key);
+    Animation3D* getAnimation(const std::string& key);
 
     /**add animation to cache*/
-    void addAnimation(std::string_view key, Animation3D* animation);
+    void addAnimation(const std::string& key, Animation3D* animation);
 
     /**remove all animation*/
     void removeAllAnimations();
@@ -125,7 +125,7 @@ protected:
 
     static Animation3DCache* _cacheInstance;  // cache instance
 
-    hlookup::string_map<Animation3D*> _animations;  // cached animations
+    std::unordered_map<std::string, Animation3D*> _animations;  // cached animations
 };
 
 // end of 3d group

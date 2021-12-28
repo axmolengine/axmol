@@ -273,7 +273,7 @@ public:
      @param overflow Whether shrink font size when content larger than the dimensions.
      */
     bool initWithString(const char* text,
-                        std::string_view fontName,
+                        const std::string& fontName,
                         float fontSize,
                         const Vec2& dimensions    = Vec2(0, 0),
                         TextHAlignment hAlignment = TextHAlignment::CENTER,

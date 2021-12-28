@@ -59,7 +59,7 @@ public:
     @param value The new value of the specified key.
     @param key The key of property which should be updated.
     */
-    virtual void updateTweenAction(float value, std::string_view key) = 0;
+    virtual void updateTweenAction(float value, const std::string& key) = 0;
 };
 
 /** ActionTween
@@ -93,7 +93,7 @@ public:
      * @param to The value of the specified property when the action end.
      * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
      */
-    static ActionTween* create(float duration, std::string_view key, float from, float to);
+    static ActionTween* create(float duration, const std::string& key, float from, float to);
 
     // Overrides
     void startWithTarget(Node* target) override;
@@ -111,7 +111,7 @@ public:
          * @return If the initialization success, return true; otherwise, return false.
          */
         bool
-        initWithDuration(float duration, std::string_view key, float from, float to);
+        initWithDuration(float duration, const std::string& key, float from, float to);
 
 protected:
     std::string _key;

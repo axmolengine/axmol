@@ -50,8 +50,8 @@ public:
 
     /**
      */
-    PUScriptTranslator* getTranslator(std::string_view type);
-    PUObserver* createObserver(std::string_view type);
+    PUScriptTranslator* getTranslator(const std::string& type);
+    PUObserver* createObserver(const std::string& type);
 
     CC_CONSTRUCTOR_ACCESS :
 

@@ -84,12 +84,12 @@ NS_CC_BEGIN
 //	mStep = step;
 // }
 ////-----------------------------------------------------------------------
-// std::string_view Particle3DVertexEmitter::getMeshName() const
+// const std::string& Particle3DVertexEmitter::getMeshName() const
 //{
 //	return mMeshName;
 // }
 ////-----------------------------------------------------------------------
-// void Particle3DVertexEmitter::setMeshName(std::string_view meshName)
+// void Particle3DVertexEmitter::setMeshName(const std::string& meshName)
 //{
 //	_setDefaults(); // Triggers loading the new mesh
 //	mMeshName = meshName;
@@ -184,7 +184,7 @@ NS_CC_BEGIN
 // void Particle3DVertexEmitter::_loadMesh ()
 //{
 //	Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().load(mMeshName,
-// Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME); 	mMesh = mesh.getPointer(); 	mMeshProcessed = false;
+//Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME); 	mMesh = mesh.getPointer(); 	mMeshProcessed = false;
 //
 //	if (mMesh->getNumSubMeshes() > 0)
 //	{

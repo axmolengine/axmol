@@ -92,9 +92,9 @@ Button* Button::create()
     return nullptr;
 }
 
-Button* Button::create(std::string_view normalImage,
-                       std::string_view selectedImage,
-                       std::string_view disableImage,
+Button* Button::create(const std::string& normalImage,
+                       const std::string& selectedImage,
+                       const std::string& disableImage,
                        TextureResType texType)
 {
     Button* btn = new Button;
@@ -107,9 +107,9 @@ Button* Button::create(std::string_view normalImage,
     return nullptr;
 }
 
-bool Button::init(std::string_view normalImage,
-                  std::string_view selectedImage,
-                  std::string_view disableImage,
+bool Button::init(const std::string& normalImage,
+                  const std::string& selectedImage,
+                  const std::string& disableImage,
                   TextureResType texType)
 {
 
@@ -250,9 +250,9 @@ void Button::ignoreContentAdaptWithSize(bool ignore)
     }
 }
 
-void Button::loadTextures(std::string_view normal,
-                          std::string_view selected,
-                          std::string_view disabled,
+void Button::loadTextures(const std::string& normal,
+                          const std::string& selected,
+                          const std::string& disabled,
                           TextureResType texType)
 {
     loadTextureNormal(normal, texType);
@@ -260,7 +260,7 @@ void Button::loadTextures(std::string_view normal,
     loadTextureDisabled(disabled, texType);
 }
 
-void Button::loadTextureNormal(std::string_view normal, TextureResType texType)
+void Button::loadTextureNormal(const std::string& normal, TextureResType texType)
 {
     _normalFileName    = normal;
     _normalTexType     = texType;
@@ -319,7 +319,7 @@ void Button::loadTextureNormal(SpriteFrame* normalSpriteFrame)
     this->setupNormalTexture(nullptr != normalSpriteFrame);
 }
 
-void Button::loadTexturePressed(std::string_view selected, TextureResType texType)
+void Button::loadTexturePressed(const std::string& selected, TextureResType texType)
 {
     _clickedFileName   = selected;
     _pressedTexType    = texType;
@@ -362,7 +362,7 @@ void Button::loadTexturePressed(SpriteFrame* pressedSpriteFrame)
     this->setupPressedTexture(nullptr != pressedSpriteFrame);
 }
 
-void Button::loadTextureDisabled(std::string_view disabled, TextureResType texType)
+void Button::loadTextureDisabled(const std::string& disabled, TextureResType texType)
 {
     _disabledFileName  = disabled;
     _disabledTexType   = texType;
@@ -718,7 +718,7 @@ void Button::setTitleAlignment(TextHAlignment hAlignment, TextVAlignment vAlignm
     _titleRenderer->setAlignment(hAlignment, vAlignment);
 }
 
-void Button::setTitleText(std::string_view text)
+void Button::setTitleText(const std::string& text)
 {
     if (text.compare(getTitleText()) == 0)
     {
@@ -737,7 +737,7 @@ void Button::setTitleText(std::string_view text)
     updateTitleLocation();
 }
 
-std::string_view Button::getTitleText() const
+std::string Button::getTitleText() const
 {
     if (!_titleRenderer)
     {
@@ -806,13 +806,13 @@ float Button::getZoomScale() const
     return _zoomScale;
 }
 
-void Button::setTitleFontName(std::string_view fontName)
+void Button::setTitleFontName(const std::string& fontName)
 {
     createTitleRendererIfNull();
 
     if (FileUtils::getInstance()->isFileExist(fontName))
     {
-        std::string lowerCasedFontName{fontName};
+        std::string lowerCasedFontName = fontName;
         std::transform(lowerCasedFontName.begin(), lowerCasedFontName.end(), lowerCasedFontName.begin(), ::tolower);
         if (lowerCasedFontName.find(".fnt") != std::string::npos)
         {
@@ -838,7 +838,7 @@ Label* Button::getTitleRenderer() const
     return _titleRenderer;
 }
 
-std::string_view Button::getTitleFontName() const
+std::string Button::getTitleFontName() const
 {
     if (_titleRenderer)
     {
@@ -857,7 +857,7 @@ std::string_view Button::getTitleFontName() const
         }
     }
 
-    return ""sv;
+    return "";
 }
 
 std::string Button::getDescription() const

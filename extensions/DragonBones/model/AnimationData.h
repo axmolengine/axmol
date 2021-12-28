@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -126,23 +126,23 @@ public:
     /**
      * @private
      */
-    hlookup::string_map<std::vector<TimelineData*>> boneTimelines;
+    std::map<std::string, std::vector<TimelineData*>> boneTimelines;
     /**
      * @private
      */
-    hlookup::string_map<std::vector<TimelineData*>> slotTimelines;
+    std::map<std::string, std::vector<TimelineData*>> slotTimelines;
     /**
      * @private
      */
-    hlookup::string_map<std::vector<TimelineData*>> constraintTimelines;
+    std::map<std::string, std::vector<TimelineData*>> constraintTimelines;
     /**
      * @private
      */
-    hlookup::string_map<std::vector<int>> boneCachedFrameIndices;
+    std::map<std::string, std::vector<int>> boneCachedFrameIndices;
     /**
      * @private
      */
-    hlookup::string_map<std::vector<int>> slotCachedFrameIndices;
+    std::map<std::string, std::vector<int>> slotCachedFrameIndices;
     /**
      * @private
      */
@@ -181,35 +181,35 @@ public:
     /**
      * @private
      */
-    std::vector<TimelineData*>* getBoneTimelines(std::string_view timelineName)
+    std::vector<TimelineData*>* getBoneTimelines(const std::string& timelineName)
     {
         return mapFindB(boneTimelines, timelineName);
     }
     /**
      * @private
      */
-    inline std::vector<TimelineData*>* getSlotTimelines(std::string_view timelineName)
+    inline std::vector<TimelineData*>* getSlotTimelines(const std::string& timelineName)
     {
         return mapFindB(slotTimelines, timelineName);
     }
     /**
      * @private
      */
-    inline std::vector<TimelineData*>* getConstraintTimelines(std::string_view timelineName)
+    inline std::vector<TimelineData*>* getConstraintTimelines(const std::string& timelineName)
     {
         return mapFindB(constraintTimelines, timelineName);
     }
     /**
      * @private
      */
-    inline std::vector<int>* getBoneCachedFrameIndices(std::string_view boneName)
+    inline std::vector<int>* getBoneCachedFrameIndices(const std::string& boneName)
     {
         return mapFindB(boneCachedFrameIndices, boneName);
     }
     /**
      * @private
      */
-    inline std::vector<int>* getSlotCachedFrameIndices(std::string_view slotName)
+    inline std::vector<int>* getSlotCachedFrameIndices(const std::string& slotName)
     {
         return mapFindB(slotCachedFrameIndices, slotName);
     }

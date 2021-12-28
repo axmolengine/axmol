@@ -27,7 +27,6 @@
 #define __CCMAP_H__
 
 #define USE_STD_UNORDERED_MAP 1
-#define USE_ROBIN_MAP 1
 
 #include "base/ccMacros.h"
 #include "base/CCRef.h"
@@ -52,12 +51,12 @@ NS_CC_BEGIN
  * @js NA
  * @lua NA
  */
-template <class K, class V, typename H = std::hash<K>, typename E = std::equal_to<K>>
+template <class K, class V>
 class Map
 {
 public:
 #if USE_STD_UNORDERED_MAP
-    typedef tsl::robin_map<K, V, H, E> RefMap;
+    typedef std::unordered_map<K, V> RefMap;
 #else
     typedef std::map<K, V> RefMap;
 #endif
@@ -87,14 +86,14 @@ public:
     const_iterator cend() const { return _data.cend(); }
 
     /** Default constructor */
-    Map() : _data()
+    Map<K, V>() : _data()
     {
         static_assert(std::is_convertible<V, Ref*>::value, "Invalid Type for cocos2d::Map<K, V>!");
         CCLOGINFO("In the default constructor of Map!");
     }
 
     /** Constructor with capacity. */
-    explicit Map(ssize_t capacity) : _data()
+    explicit Map<K, V>(ssize_t capacity) : _data()
     {
         static_assert(std::is_convertible<V, Ref*>::value, "Invalid Type for cocos2d::Map<K, V>!");
         CCLOGINFO("In the constructor with capacity of Map!");
@@ -102,7 +101,7 @@ public:
     }
 
     /** Copy constructor. */
-    Map(const Map& other)
+    Map<K, V>(const Map<K, V>& other)
     {
         static_assert(std::is_convertible<V, Ref*>::value, "Invalid Type for cocos2d::Map<K, V>!");
         CCLOGINFO("In the copy constructor of Map!");
@@ -111,7 +110,7 @@ public:
     }
 
     /** Move constructor. */
-    Map(Map&& other)
+    Map<K, V>(Map<K, V>&& other)
     {
         static_assert(std::is_convertible<V, Ref*>::value, "Invalid Type for cocos2d::Map<K, V>!");
         CCLOGINFO("In the move constructor of Map!");
@@ -122,7 +121,7 @@ public:
      * Destructor.
      * It will release all objects in map.
      */
-    ~Map()
+    ~Map<K, V>()
     {
         CCLOGINFO("In the destructor of Map!");
         clear();
@@ -149,7 +148,7 @@ public:
     /** Returns the number of elements in bucket n. */
     ssize_t bucketSize(ssize_t n) const
     {
-#if USE_STD_UNORDERED_MAP && !defined(USE_ROBIN_MAP)
+#if USE_STD_UNORDERED_MAP
         return _data.bucket_size(n);
 #else
         return 0;
@@ -159,7 +158,7 @@ public:
     /** Returns the bucket number where the element with key k is located. */
     ssize_t bucket(const K& k) const
     {
-#if USE_STD_UNORDERED_MAP && !defined(USE_ROBIN_MAP)
+#if USE_STD_UNORDERED_MAP
         return _data.bucket(k);
 #else
         return 0;
@@ -224,8 +223,7 @@ public:
      *       Member type K is the keys for the elements in the container. defined in Map<K, V> as an alias of its first
      * template parameter (Key).
      */
-    template <typename K2>
-    const V at(const K2& key) const
+    const V at(const K& key) const
     {
         auto iter = _data.find(key);
         if (iter != _data.end())
@@ -233,8 +231,7 @@ public:
         return nullptr;
     }
 
-    template <typename K2>
-    V at(const K2& key)
+    V at(const K& key)
     {
         auto iter = _data.find(key);
         if (iter != _data.end())
@@ -250,17 +247,9 @@ public:
      *        Member type 'K' is the type of the keys for the elements in the container,
      *        defined in Map<K, V> as an alias of its first template parameter (Key).
      */
-    template <typename K2>
-    const_iterator find(const K2& key) const
-    {
-        return _data.find(key);
-    }
+    const_iterator find(const K& key) const { return _data.find(key); }
 
-    template <typename K2>
-    iterator find(const K2& key)
-    {
-        return _data.find(key);
-    }
+    iterator find(const K& key) { return _data.find(key); }
 
     /**
      * Inserts new elements in the map.
@@ -270,8 +259,7 @@ public:
      * @param key The key to be inserted.
      * @param object The object to be inserted.
      */
-    template <typename K2>
-    void insert(const K2& key, V object)
+    void insert(const K& key, V object)
     {
         CCASSERT(object != nullptr, "Object is nullptr!");
         object->retain();
@@ -292,13 +280,6 @@ public:
         return _data.erase(position);
     }
 
-    iterator erase(iterator position)
-    {
-        CCASSERT(position != _data.cend(), "Invalid iterator!");
-        position->second->release();
-        return _data.erase(position);
-    }
-
     /**
      * Removes an element with an iterator from the Map<K, V> container.
      *
@@ -306,20 +287,7 @@ public:
      *        Member type 'K' is the type of the keys for the elements in the container,
      *        defined in Map<K, V> as an alias of its first template parameter (Key).
      */
-    // size_t erase(const K& k)
-    //{
-    //     auto iter = _data.find(k);
-    //     if (iter != _data.end())
-    //     {
-    //         iter->second->release();
-    //         _data.erase(iter);
-    //         return 1;
-    //     }
-    //     return 0;
-    // }
-
-    template <typename _K2>
-    size_t erase(const _K2& k)
+    size_t erase(const K& k)
     {
         auto iter = _data.find(k);
         if (iter != _data.end())
@@ -336,8 +304,7 @@ public:
      *
      * @param keys Keys of elements to be erased.
      */
-    template <typename _K2>
-    void erase(const std::vector<_K2>& keys)
+    void erase(const std::vector<K>& keys)
     {
         for (const auto& key : keys)
         {
@@ -402,7 +369,7 @@ public:
     //    }
 
     /** Copy assignment operator. */
-    Map& operator=(const Map& other)
+    Map<K, V>& operator=(const Map<K, V>& other)
     {
         if (this != &other)
         {
@@ -415,7 +382,7 @@ public:
     }
 
     /** Move assignment operator. */
-    Map& operator=(Map&& other)
+    Map<K, V>& operator=(Map<K, V>&& other)
     {
         if (this != &other)
         {
@@ -438,9 +405,6 @@ protected:
 
     RefMap _data;
 };
-
-template <typename _Valty>
-using StringMap = Map<std::string, _Valty, hlookup::string_hash, hlookup::equal_to>;
 
 NS_CC_END
 // end group

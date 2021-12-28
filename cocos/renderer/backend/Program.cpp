@@ -27,7 +27,7 @@
 
 CC_BACKEND_BEGIN
 
-Program::Program(std::string_view vs, std::string_view fs) : _vertexShader(vs), _fragmentShader(fs) {}
+Program::Program(const std::string& vs, const std::string& fs) : _vertexShader(vs), _fragmentShader(fs) {}
 
 void Program::setProgramType(uint32_t type)
 {

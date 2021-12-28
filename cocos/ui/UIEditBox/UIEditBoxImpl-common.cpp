@@ -346,7 +346,7 @@ void EditBoxImplCommon::closeKeyboard()
     _editingMode = false;
 }
 
-void EditBoxImplCommon::onEndEditing(std::string_view /*text*/)
+void EditBoxImplCommon::onEndEditing(const std::string& /*text*/)
 {
     _editBox->setBrightStyle(Widget::BrightStyle::NORMAL);
     _editingMode = false;
@@ -374,7 +374,7 @@ void EditBoxImplCommon::editBoxEditingDidBegin()
 #endif
 }
 
-void EditBoxImplCommon::editBoxEditingDidEnd(std::string_view text, EditBoxDelegate::EditBoxEndAction action)
+void EditBoxImplCommon::editBoxEditingDidEnd(const std::string& text, EditBoxDelegate::EditBoxEndAction action)
 {
     // LOGD("textFieldShouldEndEditing...");
     _text = text;
@@ -405,7 +405,7 @@ void EditBoxImplCommon::editBoxEditingDidEnd(std::string_view text, EditBoxDeleg
     }
 }
 
-void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
+void EditBoxImplCommon::editBoxEditingChanged(const std::string& text)
 {
     // LOGD("editBoxTextChanged...");
     cocos2d::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();

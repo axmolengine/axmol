@@ -40,13 +40,13 @@ public:
     static GLViewImpl* createWithEAGLView(void* eaGLView);
 
     /** creates a GLViewImpl with a title name in fullscreen mode */
-    static GLViewImpl* create(std::string_view viewName);
+    static GLViewImpl* create(const std::string& viewName);
 
     /** creates a GLViewImpl with a title name, a rect and the zoom factor */
-    static GLViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f);
+    static GLViewImpl* createWithRect(const std::string& viewName, const Rect& rect, float frameZoomFactor = 1.0f);
 
     /** creates a GLViewImpl with a name in fullscreen mode */
-    static GLViewImpl* createWithFullScreen(std::string_view viewName);
+    static GLViewImpl* createWithFullScreen(const std::string& viewName);
 
     static void convertAttrs();
     static void* _pixelFormat;
@@ -78,8 +78,8 @@ protected:
     virtual ~GLViewImpl();
 
     bool initWithEAGLView(void* eaGLView);
-    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor);
-    bool initWithFullScreen(std::string_view viewName);
+    bool initWithRect(const std::string& viewName, const Rect& rect, float frameZoomFactor);
+    bool initWithFullScreen(const std::string& viewName);
 
     // the objective-c CCEAGLView instance
     void* _eaglview;

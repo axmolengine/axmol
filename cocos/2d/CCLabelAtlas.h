@@ -58,8 +58,8 @@ class CC_DLL LabelAtlas : public AtlasNode, public LabelProtocol
 public:
     /** Creates the LabelAtlas with a string, a char map file(the atlas), the width and height of each element and the
      * starting char of the atlas. */
-    static LabelAtlas* create(std::string_view string,
-                              std::string_view charMapFile,
+    static LabelAtlas* create(const std::string& string,
+                              const std::string& charMapFile,
                               int itemWidth,
                               int itemHeight,
                               int startCharMap);
@@ -68,13 +68,13 @@ public:
      * Creates the LabelAtlas with a string and a configuration file.
      * @since v2.0
      */
-    static LabelAtlas* create(std::string_view string, std::string_view fntFile);
+    static LabelAtlas* create(const std::string& string, const std::string& fntFile);
 
     /**
      * Creates the LabelAtlas with a string, a texture, the width and height of each element and the starting char of
      * the atlas.
      */
-    static LabelAtlas* create(std::string_view string,
+    static LabelAtlas* create(const std::string& string,
                               Texture2D* texture,
                               int itemWidth,
                               int itemHeight,
@@ -82,8 +82,8 @@ public:
 
     /** Initializes the LabelAtlas with a string, a char map file(the atlas), the width and height of each element and
      * the starting char of the atlas. */
-    bool initWithString(std::string_view string,
-                        std::string_view charMapFile,
+    bool initWithString(const std::string& string,
+                        const std::string& charMapFile,
                         int itemWidth,
                         int itemHeight,
                         int startCharMap);
@@ -92,14 +92,14 @@ public:
      * Initializes the LabelAtlas with a string and a configuration file.
      * @since v2.0
      */
-    bool initWithString(std::string_view string, std::string_view fntFile);
+    bool initWithString(const std::string& string, const std::string& fntFile);
 
     /** Initializes the LabelAtlas with a string, a texture, the width and height in points of each element and the
      * starting char of the atlas */
-    bool initWithString(std::string_view string, Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
+    bool initWithString(const std::string& string, Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
 
     virtual void setString(std::string_view label) override;
-    virtual std::string_view getString() const override;
+    virtual const std::string& getString() const override;
 
     virtual void updateAtlasValues() override;
     /**

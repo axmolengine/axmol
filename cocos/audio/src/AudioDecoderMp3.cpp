@@ -126,7 +126,7 @@ AudioDecoderMp3::~AudioDecoderMp3()
     close();
 }
 
-bool AudioDecoderMp3::open(std::string_view fullPath)
+bool AudioDecoderMp3::open(const std::string& fullPath)
 {
 #if !CC_USE_MPG123
     do

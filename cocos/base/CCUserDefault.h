@@ -149,7 +149,7 @@ public:
      * @return String value of the key.
      * @js NA
      */
-    std::string_view getStringForKey(const char* key);
+    std::string getStringForKey(const char* key);
 
     /**
      * Get string value by key, if the key doesn't exist, will return passed default value.
@@ -158,7 +158,7 @@ public:
      * @return String value of the key.
      * @js NA
      */
-    virtual std::string_view getStringForKey(const char* key, std::string_view defaultValue);
+    virtual std::string getStringForKey(const char* key, const std::string& defaultValue);
 
     // set value methods
 
@@ -203,7 +203,7 @@ public:
      * @param value A string value to set to the key.
      * @js NA
      */
-    virtual void setStringForKey(const char* key, std::string_view value);
+    virtual void setStringForKey(const char* key, const std::string& value);
 
     /**
      * Since we reimplement UserDefault with file mapping io,
@@ -265,16 +265,16 @@ protected:
     void closeFileMapping();
 
     // The low level API of all getXXXForKey
-    const std::string* getValueForKey(std::string_view key);
+    const std::string* getValueForKey(const std::string& key);
 
     // The low level API of all setXXXForKey
-    void setValueForKey(std::string_view key, std::string_view value);
+    void setValueForKey(const std::string& key, const std::string& value);
 
     // Update value without lazyInit
-    void updateValueForKey(std::string_view key, std::string_view value);
+    void updateValueForKey(const std::string& key, const std::string& value);
 
 protected:
-    hlookup::string_map<std::string> _values;
+    std::unordered_map<std::string, std::string> _values;
 
     static UserDefault* _userDefault;
     std::string _filePath;

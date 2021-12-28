@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
 
 http://www.cocos2d-x.org
@@ -293,7 +293,7 @@ public:
     void setEndFrameIndex(int frameIndex);
     inline int getEndFrameIndex() const { return _endFrameIndex; }
 
-    void setAnimationName(std::string_view animationNamed);
+    void setAnimationName(const std::string& animationNamed);
 
     inline void setSingleFrameIndex(int frameIndex) { _singleFrameIndex = frameIndex; }
     inline int getSingleFrameIndex() const { return _singleFrameIndex; }

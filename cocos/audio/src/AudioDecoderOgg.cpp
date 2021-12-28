@@ -70,7 +70,7 @@ AudioDecoderOgg::~AudioDecoderOgg()
     close();
 }
 
-bool AudioDecoderOgg::open(std::string_view fullPath)
+bool AudioDecoderOgg::open(const std::string& fullPath)
 {
     auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ).release();
     if (!fs)

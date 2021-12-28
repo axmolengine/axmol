@@ -108,7 +108,7 @@ ParticleBatchNode* ParticleBatchNode::createWithTexture(Texture2D* tex, int capa
  * creation with File Image
  */
 
-ParticleBatchNode* ParticleBatchNode::create(std::string_view imageFile, int capacity /* = kParticleDefaultCapacity*/)
+ParticleBatchNode* ParticleBatchNode::create(const std::string& imageFile, int capacity /* = kParticleDefaultCapacity*/)
 {
     ParticleBatchNode* p = new ParticleBatchNode();
     if (p->initWithFile(imageFile, capacity))
@@ -140,7 +140,7 @@ bool ParticleBatchNode::initWithTexture(Texture2D* tex, int capacity)
 /*
  * init with FileImage
  */
-bool ParticleBatchNode::initWithFile(std::string_view fileImage, int capacity)
+bool ParticleBatchNode::initWithFile(const std::string& fileImage, int capacity)
 {
     Texture2D* tex = _director->getTextureCache()->addImage(fileImage);
     return initWithTexture(tex, capacity);
@@ -193,7 +193,7 @@ void ParticleBatchNode::addChild(Node* aChild, int zOrder, int tag)
     addChildByTagOrName(child, zOrder, tag, "", true);
 }
 
-void ParticleBatchNode::addChild(Node* aChild, int zOrder, std::string_view name)
+void ParticleBatchNode::addChild(Node* aChild, int zOrder, const std::string& name)
 {
     CCASSERT(aChild != nullptr, "Argument must be non-nullptr");
     CCASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
@@ -208,7 +208,7 @@ void ParticleBatchNode::addChild(Node* aChild, int zOrder, std::string_view name
 void ParticleBatchNode::addChildByTagOrName(ParticleSystem* child,
                                             int zOrder,
                                             int tag,
-                                            std::string_view name,
+                                            const std::string& name,
                                             bool setTag)
 {
     // If this is the 1st children, then copy blending function
@@ -251,7 +251,7 @@ void ParticleBatchNode::addChildByTagOrName(ParticleSystem* child,
 // faster
 // FIXME: or possibly using vertexZ for reordering, that would be fastest
 // this helper is almost equivalent to Node's addChild, but doesn't make use of the lazy sorting
-int ParticleBatchNode::addChildHelper(ParticleSystem* child, int z, int aTag, std::string_view name, bool setTag)
+int ParticleBatchNode::addChildHelper(ParticleSystem* child, int z, int aTag, const std::string& name, bool setTag)
 {
     CCASSERT(child != nullptr, "Argument must be non-nil");
     CCASSERT(child->getParent() == nullptr, "child already added. It can't be added again");

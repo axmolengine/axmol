@@ -78,7 +78,7 @@ static bool wav_scan_chunk(WAV_FILE* wavf, uint32_t chunkID, void* header, void*
     }
     return false;
 }
-static bool wav_open(std::string_view fullPath, WAV_FILE* wavf)
+static bool wav_open(const std::string& fullPath, WAV_FILE* wavf)
 {
     wavf->Stream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
     if (!wavf->Stream)
@@ -192,7 +192,7 @@ AudioDecoderWav::~AudioDecoderWav()
     close();
 }
 
-bool AudioDecoderWav::open(std::string_view fullPath)
+bool AudioDecoderWav::open(const std::string& fullPath)
 {
     if (wav_open(fullPath, &_wavf))
     {

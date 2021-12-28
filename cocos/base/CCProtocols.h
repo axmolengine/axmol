@@ -250,7 +250,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual std::string_view getString() const = 0;
+    virtual const std::string& getString() const = 0;
 };
 
 /**

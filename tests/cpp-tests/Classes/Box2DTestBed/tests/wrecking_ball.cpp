@@ -34,128 +34,132 @@
 class WreckingBall : public Test
 {
 public:
-    WreckingBall()
-    {
-        b2Body* ground = NULL;
-        {
-            b2BodyDef bd;
-            ground = m_world->CreateBody(&bd);
+	WreckingBall()
+	{
+		b2Body* ground = NULL;
+		{
+			b2BodyDef bd;
+			ground = m_world->CreateBody(&bd);
 
-            b2EdgeShape shape;
-            shape.SetTwoSided(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
-            ground->CreateFixture(&shape, 0.0f);
-        }
+			b2EdgeShape shape;
+			shape.SetTwoSided(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
+			ground->CreateFixture(&shape, 0.0f);
+		}
 
-        {
-            b2PolygonShape shape;
-            shape.SetAsBox(0.5f, 0.125f);
+		{
+			b2PolygonShape shape;
+			shape.SetAsBox(0.5f, 0.125f);
 
-            b2FixtureDef fd;
-            fd.shape               = &shape;
-            fd.density             = 20.0f;
-            fd.friction            = 0.2f;
-            fd.filter.categoryBits = 0x0001;
-            fd.filter.maskBits     = 0xFFFF & ~0x0002;
+			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 20.0f;
+			fd.friction = 0.2f;
+			fd.filter.categoryBits = 0x0001;
+			fd.filter.maskBits = 0xFFFF & ~0x0002;
 
-            b2RevoluteJointDef jd;
-            jd.collideConnected = false;
+			b2RevoluteJointDef jd;
+			jd.collideConnected = false;
 
-            const int32 N = 10;
-            const float y = 15.0f;
-            m_distanceJointDef.localAnchorA.Set(0.0f, y);
+			const int32 N = 10;
+			const float y = 15.0f;
+			m_distanceJointDef.localAnchorA.Set(0.0f, y);
 
-            b2Body* prevBody = ground;
-            for (int32 i = 0; i < N; ++i)
-            {
-                b2BodyDef bd;
-                bd.type = b2_dynamicBody;
-                bd.position.Set(0.5f + 1.0f * i, y);
-                if (i == N - 1)
-                {
-                    bd.position.Set(1.0f * i, y);
-                    bd.angularDamping = 0.4f;
-                }
+			b2Body* prevBody = ground;
+			for (int32 i = 0; i < N; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position.Set(0.5f + 1.0f * i, y);
+				if (i == N - 1)
+				{
+					bd.position.Set(1.0f * i, y);
+					bd.angularDamping = 0.4f;
+				}
 
-                b2Body* body = m_world->CreateBody(&bd);
+				b2Body* body = m_world->CreateBody(&bd);
 
-                if (i == N - 1)
-                {
-                    b2CircleShape circleShape;
-                    circleShape.m_radius = 1.5f;
-                    b2FixtureDef sfd;
-                    sfd.shape               = &circleShape;
-                    sfd.density             = 100.0f;
-                    sfd.filter.categoryBits = 0x0002;
-                    body->CreateFixture(&sfd);
-                }
-                else
-                {
-                    body->CreateFixture(&fd);
-                }
+				if (i == N - 1)
+				{
+					b2CircleShape circleShape;
+					circleShape.m_radius = 1.5f;
+					b2FixtureDef sfd;
+					sfd.shape = &circleShape;
+					sfd.density = 100.0f;
+					sfd.filter.categoryBits = 0x0002;
+					body->CreateFixture(&sfd);
+				}
+				else
+				{
+					body->CreateFixture(&fd);
+				}
 
-                b2Vec2 anchor(float(i), y);
-                jd.Initialize(prevBody, body, anchor);
-                m_world->CreateJoint(&jd);
+				b2Vec2 anchor(float(i), y);
+				jd.Initialize(prevBody, body, anchor);
+				m_world->CreateJoint(&jd);
 
-                prevBody = body;
-            }
+				prevBody = body;
+			}
 
-            m_distanceJointDef.localAnchorB.SetZero();
+			m_distanceJointDef.localAnchorB.SetZero();
 
-            float extraLength            = 0.01f;
-            m_distanceJointDef.minLength = 0.0f;
-            m_distanceJointDef.maxLength = N - 1.0f + extraLength;
-            m_distanceJointDef.bodyB     = prevBody;
-        }
+			float extraLength = 0.01f;
+			m_distanceJointDef.minLength = 0.0f;
+			m_distanceJointDef.maxLength = N - 1.0f + extraLength;
+			m_distanceJointDef.bodyB = prevBody;
+		}
 
-        {
-            m_distanceJointDef.bodyA = ground;
-            m_distanceJoint          = m_world->CreateJoint(&m_distanceJointDef);
-            m_stabilize              = true;
-        }
-    }
+		{
+			m_distanceJointDef.bodyA = ground;
+			m_distanceJoint = m_world->CreateJoint(&m_distanceJointDef);
+			m_stabilize = true;
+		}
+	}
 
-    void UpdateUI() override
-    {
-        //		ImGui::SetNextWindowPos(ImVec2(Test::g_debugDraw.debugNodeOffset.x, 100.0f));
-        ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
-        ImGui::Begin("Wrecking Ball Controls", nullptr, ImGuiWindowFlags_NoResize);
+	void UpdateUI() override
+	{
+//		ImGui::SetNextWindowPos(ImVec2(Test::g_debugDraw.debugNodeOffset.x, 100.0f));
+		ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
+		ImGui::Begin("Wrecking Ball Controls", nullptr, ImGuiWindowFlags_NoResize);
 
-        if (ImGui::Checkbox("Stabilize", &m_stabilize))
-        {
-            if (m_stabilize == true && m_distanceJoint == nullptr)
-            {
-                m_distanceJoint = m_world->CreateJoint(&m_distanceJointDef);
-            }
-            else if (m_stabilize == false && m_distanceJoint != nullptr)
-            {
-                m_world->DestroyJoint(m_distanceJoint);
-                m_distanceJoint = nullptr;
-            }
-        }
+		if (ImGui::Checkbox("Stabilize", &m_stabilize))
+		{
+			if (m_stabilize == true && m_distanceJoint == nullptr)
+			{
+				m_distanceJoint = m_world->CreateJoint(&m_distanceJointDef);
+			}
+			else if (m_stabilize == false && m_distanceJoint != nullptr)
+			{
+				m_world->DestroyJoint(m_distanceJoint);
+				m_distanceJoint = nullptr;
+			}
+		}
 
-        ImGui::End();
-    }
+		ImGui::End();
+	}
 
-    void Step(Settings& settings) override
-    {
-        Test::Step(settings);
+	void Step(Settings& settings) override
+	{
+		Test::Step(settings);
 
-        if (m_distanceJoint)
-        {
-            DrawString(5, m_textLine, "Distance Joint ON");
-        }
-        else
-        {
-            DrawString(5, m_textLine, "Distance Joint OFF");
-        }
-    }
+		if (m_distanceJoint)
+		{
+			DrawString(5, m_textLine, "Distance Joint ON");
+		}
+		else
+		{
+			DrawString(5, m_textLine, "Distance Joint OFF");
+		}
+		
+	}
 
-    static Test* Create() { return new WreckingBall; }
+	static Test* Create()
+	{
+		return new WreckingBall;
+	}
 
-    b2DistanceJointDef m_distanceJointDef;
-    b2Joint* m_distanceJoint;
-    bool m_stabilize;
+	b2DistanceJointDef m_distanceJointDef;
+	b2Joint* m_distanceJoint;
+	bool m_stabilize;
 };
 
 static int testIndex = RegisterTest("Examples", "Wrecking Ball", WreckingBall::Create);

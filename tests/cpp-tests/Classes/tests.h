@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
+ 
  http://www.cocos2d-x.org
-
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
-
+ 
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
-
+ 
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,32 +25,33 @@
 #ifndef _TESTS_H_
 #define _TESTS_H_
 
+
 #include "Box2DTest/Box2dTest.h"
 #include "Box2DTestBed/Box2DTestBed.h"
 
+
 #include "ChipmunkTest/ChipmunkTest.h"
 #if defined(CC_PLATFORM_PC)
-#    include "ChipmunkTestBed/ChipmunkTestBed.h"
+#include "ChipmunkTestBed/ChipmunkTestBed.h"
 #endif
 
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_MARMALADE)
-#    include "ClippingNodeTest/ClippingNodeTest.h"
+#include "ClippingNodeTest/ClippingNodeTest.h"
 #endif
 #include "NewAudioEngineTest/NewAudioEngineTest.h"
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_EMSCRIPEN)
-#    if (CC_TARGET_PLATFORM != CC_PLATFORM_MARMALADE)
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_MARMALADE)
 // bada don't support libcurl
-#        if (CC_TARGET_PLATFORM != CC_PLATFORM_BADA)
-#            include "CurlTest/CurlTest.h"
-#        endif
-#    endif
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_BADA)
+#include "CurlTest/CurlTest.h"
+#endif
+#endif
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#    include "JNITest/JNITest.h"
+#include "JNITest/JNITest.h"
 #endif
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || \
-     CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-#    include "WindowTest/WindowTest.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#include "WindowTest/WindowTest.h"
 #endif
 
 // sort them alphabetically. thanks
@@ -120,6 +121,6 @@
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "ZipTest/ZipTests.h"
 #if defined(CC_PLATFORM_PC)
-#    include "ImGuiEXTTest/ImGuiEXTTest.h"
+#include "ImGuiEXTTest/ImGuiEXTTest.h"
 #endif
 #endif

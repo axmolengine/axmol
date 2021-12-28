@@ -55,7 +55,7 @@ Skin* Skin::create()
     return nullptr;
 }
 
-Skin* Skin::createWithSpriteFrameName(std::string_view pszSpriteFrameName)
+Skin* Skin::createWithSpriteFrameName(const std::string& pszSpriteFrameName)
 {
     Skin* skin = new Skin();
     if (skin->initWithSpriteFrameName(pszSpriteFrameName))
@@ -67,7 +67,7 @@ Skin* Skin::createWithSpriteFrameName(std::string_view pszSpriteFrameName)
     return nullptr;
 }
 
-Skin* Skin::create(std::string_view pszFileName)
+Skin* Skin::create(const std::string& pszFileName)
 {
     Skin* skin = new Skin();
     if (skin->initWithFile(pszFileName))
@@ -81,7 +81,7 @@ Skin* Skin::create(std::string_view pszFileName)
 
 Skin::Skin() : _bone(nullptr), _armature(nullptr), _displayName(), _skinTransform(Mat4::IDENTITY) {}
 
-bool Skin::initWithSpriteFrameName(std::string_view spriteFrameName)
+bool Skin::initWithSpriteFrameName(const std::string& spriteFrameName)
 {
     CCAssert(spriteFrameName != "", "");
 
@@ -94,7 +94,7 @@ bool Skin::initWithSpriteFrameName(std::string_view spriteFrameName)
     }
     else
     {
-        CCLOG("Can't find CCSpriteFrame with %s. Please check your .plist file", spriteFrameName.data());
+        CCLOG("Can't find CCSpriteFrame with %s. Please check your .plist file", spriteFrameName.c_str());
         ret = false;
     }
 
@@ -103,7 +103,7 @@ bool Skin::initWithSpriteFrameName(std::string_view spriteFrameName)
     return ret;
 }
 
-bool Skin::initWithFile(std::string_view filename)
+bool Skin::initWithFile(const std::string& filename)
 {
     bool ret = Sprite::initWithFile(filename);
 

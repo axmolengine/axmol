@@ -112,7 +112,7 @@ RenderTarget* DeviceGL::newRenderTarget(TargetBufferFlags rtf,
     return rtGL;
 }
 
-ShaderModule* DeviceGL::newShaderModule(ShaderStage stage, std::string_view source)
+ShaderModule* DeviceGL::newShaderModule(ShaderStage stage, const std::string& source)
 {
     return new ShaderModuleGL(stage, source);
 }
@@ -127,7 +127,7 @@ RenderPipeline* DeviceGL::newRenderPipeline()
     return new RenderPipelineGL();
 }
 
-Program* DeviceGL::newProgram(std::string_view vertexShader, std::string_view fragmentShader)
+Program* DeviceGL::newProgram(const std::string& vertexShader, const std::string& fragmentShader)
 {
     return new ProgramGL(vertexShader, fragmentShader);
 }

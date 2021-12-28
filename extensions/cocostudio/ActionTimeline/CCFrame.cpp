@@ -548,7 +548,7 @@ void InnerActionFrame::setEndFrameIndex(int frameIndex)
     _endFrameIndex = frameIndex;
 }
 
-void InnerActionFrame::setAnimationName(std::string_view animationName)
+void InnerActionFrame::setAnimationName(const std::string& animationName)
 {
     if (!_enterWithName)
     {

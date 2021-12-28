@@ -1115,7 +1115,7 @@ you share your issues (on GitHub or privately).
 #        endif
 #        pragma clang diagnostic ignored "-Wunknown-pragmas"  // warning: unknown warning group 'xxx'
 #        pragma clang diagnostic ignored "-Wold-style-cast"   // warning: use of old-style cast // yes, they are more
-                                                              // terse.
+                                                             // terse.
 #        pragma clang diagnostic ignored \
             "-Wfloat-equal"  // warning: comparing floating point with == or != is unsafe // storing and comparing
                              // against same constants (typically 0.0f) is ok.
@@ -19477,7 +19477,7 @@ void ImGui::DebugNodeViewport(ImGuiViewportP* viewport)
         }
         BulletText("Flags: 0x%04X =%s%s%s%s%s%s%s%s%s%s%s%s", viewport->Flags,
                    //(flags & ImGuiViewportFlags_IsPlatformWindow) ? " IsPlatformWindow" : "", // Omitting because it is
-                   // the standard
+                   //the standard
                    (flags & ImGuiViewportFlags_IsPlatformMonitor) ? " IsPlatformMonitor" : "",
                    (flags & ImGuiViewportFlags_OwnedByApp) ? " OwnedByApp" : "",
                    (flags & ImGuiViewportFlags_NoDecoration) ? " NoDecoration" : "",

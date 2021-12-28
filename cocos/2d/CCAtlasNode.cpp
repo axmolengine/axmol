@@ -47,7 +47,7 @@ AtlasNode::~AtlasNode()
     CC_SAFE_RELEASE(_textureAtlas);
 }
 
-AtlasNode* AtlasNode::create(std::string_view tile, int tileWidth, int tileHeight, int itemsToRender)
+AtlasNode* AtlasNode::create(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
 {
     AtlasNode* ret = new AtlasNode();
     if (ret->initWithTileFile(tile, tileWidth, tileHeight, itemsToRender))
@@ -59,7 +59,7 @@ AtlasNode* AtlasNode::create(std::string_view tile, int tileWidth, int tileHeigh
     return nullptr;
 }
 
-bool AtlasNode::initWithTileFile(std::string_view tile, int tileWidth, int tileHeight, int itemsToRender)
+bool AtlasNode::initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
 {
     CCASSERT(!tile.empty(), "file size should not be empty");
     Texture2D* texture = _director->getTextureCache()->addImage(tile);
@@ -222,7 +222,7 @@ void AtlasNode::setIgnoreContentScaleFactor(bool ignoreContentScaleFactor)
         auto label = dynamic_cast<LabelProtocol*>(this);
         if (label)
         {
-            Vec2 s = Vec2(static_cast<float>(label->getString().size() * _itemWidth), static_cast<float>(_itemHeight));
+            Vec2 s = Vec2(label->getString().size() * _itemWidth, _itemHeight);
             this->setContentSize(s);
         }
     }

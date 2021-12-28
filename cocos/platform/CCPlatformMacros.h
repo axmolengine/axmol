@@ -32,7 +32,6 @@ Copyright (c) 2021 Bytedance Inc.
  * Define some platform specific macros.
  */
 #include "base/ccConfig.h"
-#include "base/hlookup.h"
 #include "platform/CCPlatformConfig.h"
 #include "platform/CCPlatformDefine.h"
 

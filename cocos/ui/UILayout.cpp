@@ -166,7 +166,7 @@ void Layout::addChild(Node* child, int zOrder, int tag)
     _doLayoutDirty = true;
 }
 
-void Layout::addChild(Node* child, int zOrder, std::string_view name)
+void Layout::addChild(Node* child, int zOrder, const std::string& name)
 {
     if (dynamic_cast<Widget*>(child))
     {
@@ -566,7 +566,7 @@ bool Layout::isBackGroundImageScale9Enabled() const
     return _backGroundScale9Enabled;
 }
 
-void Layout::setBackGroundImage(std::string_view fileName, TextureResType texType)
+void Layout::setBackGroundImage(const std::string& fileName, TextureResType texType)
 {
     if (fileName.empty())
     {

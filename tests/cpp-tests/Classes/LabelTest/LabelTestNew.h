@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
+ 
  http://www.cocos2d-x.org
-
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
-
+ 
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
-
+ 
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,12 +34,12 @@
 DEFINE_TEST_SUITE(NewLabelTests);
 
 class AtlasDemoNew : public TestCase
-{};
+{
+};
 
 class LabelFNTColorAndOpacity : public AtlasDemoNew
 {
-    float _time;
-
+    float        _time;
 public:
     CREATE_FUNC(LabelFNTColorAndOpacity);
 
@@ -53,8 +53,7 @@ public:
 
 class LabelFNTSpriteActions : public AtlasDemoNew
 {
-    float _time;
-
+    float        _time;
 public:
     CREATE_FUNC(LabelFNTSpriteActions);
 
@@ -74,6 +73,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
+
 
 class LabelFNTOffset : public AtlasDemoNew
 {
@@ -180,13 +180,13 @@ public:
     virtual std::string getItemString(cocos2d::MenuItemFont* item);
 
 protected:
-    cocos2d::Label* _label      = nullptr;
+    cocos2d::Label* _label = nullptr;
     cocos2d::Sprite* _arrowsBar = nullptr;
-    cocos2d::Sprite* _arrows    = nullptr;
+    cocos2d::Sprite* _arrows = nullptr;
     std::vector<cocos2d::MenuItemFont*> _menuItems;
-    cocos2d::MenuItemFont* _lastSentenceItem  = nullptr;
-    cocos2d::MenuItemFont* _lastAlignmentItem = nullptr;
-    bool _drag                                = false;
+    cocos2d::MenuItemFont *_lastSentenceItem = nullptr;
+    cocos2d::MenuItemFont *_lastAlignmentItem = nullptr;
+    bool _drag = false;
 };
 
 class LabelFNTMultiLineAlignmentUNICODE : public LabelFNTMultiLineAlignment
@@ -218,7 +218,7 @@ public:
     CREATE_FUNC(LabelFNTBounds);
 
     LabelFNTBounds();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -232,6 +232,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
+
 
 class LabelFNTMultiFontAtlasWithRotation : public AtlasDemoNew
 {
@@ -271,7 +272,7 @@ public:
     CREATE_FUNC(LabelTTFUnicodeNew);
 
     LabelTTFUnicodeNew();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -284,22 +285,24 @@ public:
     LabelTTFDynamicAlignment();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-
+    
 private:
+    
     void setAlignmentLeft(cocos2d::Ref* sender);
     void setAlignmentCenter(cocos2d::Ref* sender);
     void setAlignmentRight(cocos2d::Ref* sender);
     void updateAlignment();
-
+    
     cocos2d::Label* _label;
-    cocos2d::TextHAlignment _horizAlign;
+    cocos2d::TextHAlignment   _horizAlign;
+    
 };
 
 class LabelTTFEmoji : public AtlasDemoNew
 {
 public:
     CREATE_FUNC(LabelTTFEmoji);
-
+    
     LabelTTFEmoji();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -375,7 +378,6 @@ public:
     virtual std::string subtitle() const override;
 
     void sliderEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
-
 private:
     cocos2d::Label* shadowLabelOutline;
     cocos2d::Label* shadowLabelTTF;
@@ -396,7 +398,7 @@ public:
     void step(float dt);
 
 private:
-    float _time;
+    float _time; 
 };
 
 class LabelCharMapColorTest : public AtlasDemoNew
@@ -413,7 +415,7 @@ public:
     void actionFinishCallback();
 
 private:
-    float _time;
+    float _time; 
 };
 
 class LabelCrashTest : public AtlasDemoNew
@@ -457,14 +459,13 @@ public:
     LabelAlignmentTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-
 private:
-    void setAlignmentLeft(cocos2d::Ref* sender);
-    void setAlignmentCenter(cocos2d::Ref* sender);
-    void setAlignmentRight(cocos2d::Ref* sender);
-    void setAlignmentTop(cocos2d::Ref* sender);
-    void setAlignmentMiddle(cocos2d::Ref* sender);
-    void setAlignmentBottom(cocos2d::Ref* sender);
+    void  setAlignmentLeft(cocos2d::Ref* sender);
+    void  setAlignmentCenter(cocos2d::Ref* sender);
+    void  setAlignmentRight(cocos2d::Ref* sender);
+    void  setAlignmentTop(cocos2d::Ref* sender);
+    void  setAlignmentMiddle(cocos2d::Ref* sender);
+    void  setAlignmentBottom(cocos2d::Ref* sender);
 
     cocos2d::Label* _label;
 };
@@ -502,7 +503,6 @@ public:
     virtual std::string subtitle() const override;
 
     void sliderEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
-
 private:
     cocos2d::Label* label;
 };
@@ -518,7 +518,6 @@ public:
     virtual std::string subtitle() const override;
 
     void sliderEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
-
 private:
     cocos2d::Label* label;
 };
@@ -704,18 +703,18 @@ class LabelLayoutBaseTest : public AtlasDemoNew
 {
 public:
     LabelLayoutBaseTest();
-    void updateDrawNodeSize(const cocos2d::Size& drawNodeSize);
+    void updateDrawNodeSize(const cocos2d::Size &drawNodeSize);
     cocos2d::extension::ControlStepper* makeControlStepper();
     void valueChanged(cocos2d::Ref* sender, cocos2d::extension::Control::EventType controlEvent);
 
 protected:
-    void setAlignmentLeft(cocos2d::Ref* sender);
-    void setAlignmentCenter(cocos2d::Ref* sender);
-    void setAlignmentRight(cocos2d::Ref* sender);
-    void setAlignmentTop(cocos2d::Ref* sender);
-    void setAlignmentMiddle(cocos2d::Ref* sender);
-    void setAlignmentBottom(cocos2d::Ref* sender);
-
+    void  setAlignmentLeft(cocos2d::Ref* sender);
+    void  setAlignmentCenter(cocos2d::Ref* sender);
+    void  setAlignmentRight(cocos2d::Ref* sender);
+    void  setAlignmentTop(cocos2d::Ref* sender);
+    void  setAlignmentMiddle(cocos2d::Ref* sender);
+    void  setAlignmentBottom(cocos2d::Ref* sender);
+    
     void initWrapOption(const cocos2d::Size& size);
     void initToggleLabelTypeOption(const cocos2d::Size& size);
     void initAlignmentOption(const cocos2d::Size& size);
@@ -801,7 +800,7 @@ public:
 
     LabelToggleTypeTest();
     void initToggleCheckboxes();
-    void onChangedRadioButtonSelect(cocos2d::ui::RadioButton* radioButton, cocos2d::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(cocos2d::ui::RadioButton* radioButton,cocos2d::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -814,7 +813,7 @@ public:
 
     LabelSystemFontTest();
     void initToggleCheckboxes();
-    void onChangedRadioButtonSelect(cocos2d::ui::RadioButton* radioButton, cocos2d::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(cocos2d::ui::RadioButton* radioButton,cocos2d::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -835,9 +834,9 @@ class LabelIssue13846Test : public AtlasDemoNew
 {
 public:
     CREATE_FUNC(LabelIssue13846Test);
-
+    
     LabelIssue13846Test();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -982,9 +981,9 @@ class LabelIssueLineGap : public AtlasDemoNew
 {
 public:
     CREATE_FUNC(LabelIssueLineGap);
-
+    
     LabelIssueLineGap();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -993,11 +992,11 @@ class LabelIssue17902 : public AtlasDemoNew
 {
 public:
     CREATE_FUNC(LabelIssue17902);
-
+    
     LabelIssue17902();
 
     virtual void purgeCachedData();
-
+    
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -1016,8 +1015,7 @@ protected:
     int _i = 0;
 };
 
-class LabelLetterColorsTest : public AtlasDemoNew
-{
+class LabelLetterColorsTest : public AtlasDemoNew {
 public:
     CREATE_FUNC(LabelLetterColorsTest);
 

@@ -43,7 +43,7 @@ public:
 
     Ref* createInstance();
 
-    void setCustomProps(std::string_view classType, cocos2d::Ref* widget, const rapidjson::Value& customOptions);
+    void setCustomProps(const std::string& classType, cocos2d::Ref* widget, const rapidjson::Value& customOptions);
 
 private:
     std::string _className;

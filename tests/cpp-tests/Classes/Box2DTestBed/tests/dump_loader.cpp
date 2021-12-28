@@ -26,58 +26,63 @@
 class DumpLoader : public Test
 {
 public:
-    DumpLoader()
-    {
-        b2ChainShape chainShape;
-        b2Vec2 vertices[] = {b2Vec2(-5, 0), b2Vec2(5, 0), b2Vec2(5, 5), b2Vec2(4, 1), b2Vec2(-4, 1), b2Vec2(-5, 5)};
-        chainShape.CreateLoop(vertices, 6);
 
-        b2FixtureDef groundFixtureDef;
-        groundFixtureDef.density = 0;
-        groundFixtureDef.shape   = &chainShape;
+	DumpLoader()
+	{
+		b2ChainShape chainShape;
+		b2Vec2 vertices[] = {b2Vec2(-5,0), b2Vec2(5,0), b2Vec2(5,5), b2Vec2(4,1), b2Vec2(-4,1), b2Vec2(-5,5)};
+		chainShape.CreateLoop(vertices, 6);
 
-        b2BodyDef groundBodyDef;
-        groundBodyDef.type = b2_staticBody;
+		b2FixtureDef groundFixtureDef;
+		groundFixtureDef.density = 0;
+		groundFixtureDef.shape = &chainShape;
 
-        b2Body* groundBody           = m_world->CreateBody(&groundBodyDef);
-        b2Fixture* groundBodyFixture = groundBody->CreateFixture(&groundFixtureDef);
+		b2BodyDef groundBodyDef;
+		groundBodyDef.type = b2_staticBody;
 
-        b2CircleShape ballShape;
-        ballShape.m_radius = 1;
+		b2Body *groundBody = m_world->CreateBody(&groundBodyDef);
+		b2Fixture *groundBodyFixture = groundBody->CreateFixture(&groundFixtureDef);
 
-        b2FixtureDef ballFixtureDef;
-        ballFixtureDef.restitution = 0.75f;
-        ballFixtureDef.density     = 1;
-        ballFixtureDef.shape       = &ballShape;
+		b2CircleShape ballShape;
+		ballShape.m_radius = 1;
 
-        b2BodyDef ballBodyDef;
-        ballBodyDef.type     = b2BodyType::b2_dynamicBody;
-        ballBodyDef.position = b2Vec2(0, 10);
-        // ballBodyDef.angularDamping = 0.2f;
+		b2FixtureDef ballFixtureDef;
+		ballFixtureDef.restitution = 0.75f;
+		ballFixtureDef.density = 1;
+		ballFixtureDef.shape = &ballShape;
 
-        m_ball                 = m_world->CreateBody(&ballBodyDef);
-        b2Fixture* ballFixture = m_ball->CreateFixture(&ballFixtureDef);
-        m_ball->ApplyForceToCenter(b2Vec2(-1000, -400), true);
-    }
+		b2BodyDef ballBodyDef;
+		ballBodyDef.type = b2BodyType::b2_dynamicBody;
+		ballBodyDef.position = b2Vec2(0, 10);
+		// ballBodyDef.angularDamping = 0.2f;
 
-    void Step(Settings& settings) override
-    {
-        b2Vec2 v    = m_ball->GetLinearVelocity();
-        float omega = m_ball->GetAngularVelocity();
+		m_ball = m_world->CreateBody(&ballBodyDef);
+		b2Fixture *ballFixture = m_ball->CreateFixture(&ballFixtureDef);
+		m_ball->ApplyForceToCenter(b2Vec2(-1000, -400), true);
+	}
 
-        b2MassData massData;
-        m_ball->GetMassData(&massData);
+	void Step(Settings& settings) override
+	{
+		b2Vec2 v = m_ball->GetLinearVelocity();
+		float omega = m_ball->GetAngularVelocity();
 
-        float ke = 0.5f * massData.mass * b2Dot(v, v) + 0.5f * massData.I * omega * omega;
+		b2MassData massData;
+		m_ball->GetMassData(&massData);
 
-        DrawString(5, m_textLine, "kinetic energy = %.6f", ke);
+		float ke = 0.5f * massData.mass * b2Dot(v, v) + 0.5f * massData.I * omega * omega;
 
-        Test::Step(settings);
-    }
+		DrawString(5, m_textLine, "kinetic energy = %.6f", ke);
+		
 
-    static Test* Create() { return new DumpLoader; }
+		Test::Step(settings);
+	}
 
-    b2Body* m_ball;
+	static Test* Create()
+	{
+		return new DumpLoader;
+	}
+
+	b2Body* m_ball;
 };
 
 static int testIndex = RegisterTest("Bugs", "Dump Loader", DumpLoader::Create);

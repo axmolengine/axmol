@@ -263,7 +263,7 @@ backend::UniformLocation ProgramState::getUniformLocation(backend::Uniform name)
     return _program->getUniformLocation(name);
 }
 
-backend::UniformLocation ProgramState::getUniformLocation(std::string_view uniform) const
+backend::UniformLocation ProgramState::getUniformLocation(const std::string& uniform) const
 {
     return _program->getUniformLocation(uniform);
 }
@@ -514,13 +514,13 @@ void ProgramState::setTextureArray(int location,
 #endif
 }
 
-void ProgramState::setParameterAutoBinding(std::string_view uniform, std::string_view autoBinding)
+void ProgramState::setParameterAutoBinding(const std::string& uniform, const std::string& autoBinding)
 {
     _autoBindings.emplace(uniform, autoBinding);
     applyAutoBinding(uniform, autoBinding);
 }
 
-void ProgramState::applyAutoBinding(std::string_view uniformName, std::string_view autoBinding)
+void ProgramState::applyAutoBinding(const std::string& uniformName, const std::string& autoBinding)
 {
     for (const auto resolver : _customAutoBindingResolvers)
     {

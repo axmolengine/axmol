@@ -7,7 +7,7 @@ on:
         # actions run ID
         description: 'Commit clang-format changes?'
         # Default value if no value is explicitly provided
-        default: 'false'
+        default: false
         # Input has to be provided for the workflow to run
         required: false
 
@@ -21,9 +21,9 @@ jobs:
     - name: Run clang-format lint
       uses: DoozyX/clang-format-lint-action@v0.13
       with:
-        source: './cocos ./extensions ./tests ./templates'
-        exclude: './thidrparty ./extensions/fairygui ./extensions/scripting/lua-bindings/auto ./extensions/spine ./tests/fairygui-tests'
-        extensions: 'h,cpp,c,mm'
+        source: './cocos ./extensions'
+        exclude: './thidrparty ./extensions/fairygui ./extensions/scripting/lua-bindings/auto ./extensions/spine'
+        extensions: 'h,cpp,c'
         clangFormatVersion: 13
         inplace: True
     - name: Commit clang-format changes

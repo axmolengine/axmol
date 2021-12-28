@@ -137,10 +137,10 @@ public:
     static MenuItemLabel* create(Node* label);
 
     /** Sets a new string to the inner label. */
-    void setString(std::string_view label);
+    void setString(const std::string& label);
 
     /** Get the inner string of the inner label. */
-    std::string_view getString() const;
+    std::string getString() const;
 
     /** Gets the color that will be used when the item is disabled. */
     const Color3B& getDisabledColor() const { return _disabledColor; }
@@ -196,14 +196,14 @@ class CC_DLL MenuItemAtlasFont : public MenuItemLabel
 {
 public:
     /** Creates a menu item from a string and atlas with a target/selector. */
-    static MenuItemAtlasFont* create(std::string_view value,
-                                     std::string_view charMapFile,
+    static MenuItemAtlasFont* create(const std::string& value,
+                                     const std::string& charMapFile,
                                      int itemWidth,
                                      int itemHeight,
                                      char startCharMap);
     /** Creates a menu item from a string and atlas. Use it with MenuItemToggle. */
-    static MenuItemAtlasFont* create(std::string_view value,
-                                     std::string_view charMapFile,
+    static MenuItemAtlasFont* create(const std::string& value,
+                                     const std::string& charMapFile,
                                      int itemWidth,
                                      int itemHeight,
                                      char startCharMap,
@@ -222,8 +222,8 @@ public:
     virtual ~MenuItemAtlasFont() {}
 
     /** Initializes a menu item from a string and atlas with a target/selector. */
-    bool initWithString(std::string_view value,
-                        std::string_view charMapFile,
+    bool initWithString(const std::string& value,
+                        const std::string& charMapFile,
                         int itemWidth,
                         int itemHeight,
                         char startCharMap,
@@ -240,18 +240,18 @@ class CC_DLL MenuItemFont : public MenuItemLabel
 {
 public:
     /** Creates a menu item from a string without target/selector. To be used with MenuItemToggle. */
-    static MenuItemFont* create(std::string_view value = "");
+    static MenuItemFont* create(const std::string& value = "");
     /** Creates a menu item from a string with a target/selector. */
-    static MenuItemFont* create(std::string_view value, const ccMenuCallback& callback);
+    static MenuItemFont* create(const std::string& value, const ccMenuCallback& callback);
 
     /** Set default font size. */
     static void setFontSize(int size);
     /** Get default font size. */
     static int getFontSize();
     /** Set the default font name. */
-    static void setFontName(std::string_view name);
+    static void setFontName(const std::string& name);
     /** Get the default font name. */
-    static std::string_view getFontName();
+    static const std::string& getFontName();
 
     /** Set font size.
      * c++ can not overload static and non-static member functions with the same parameter types.
@@ -274,13 +274,13 @@ public:
      * @js setFontName
      * @js NA
      */
-    void setFontNameObj(std::string_view name);
+    void setFontNameObj(const std::string& name);
 
     /** Returns the name of the Font.
      * @js getFontNameObj
      * @js NA
      */
-    std::string_view getFontNameObj() const;
+    const std::string& getFontNameObj() const;
 
     CC_CONSTRUCTOR_ACCESS :
         /**
@@ -294,7 +294,7 @@ public:
     virtual ~MenuItemFont();
 
     /** Initializes a menu item from a string with a target/selector. */
-    bool initWithString(std::string_view value, const ccMenuCallback& callback);
+    bool initWithString(const std::string& value, const ccMenuCallback& callback);
 
 protected:
     int _fontSize;
@@ -392,19 +392,19 @@ public:
     /** Creates an MenuItemImage. */
     static MenuItemImage* create();
     /** Creates a menu item with a normal and selected image.*/
-    static MenuItemImage* create(std::string_view normalImage, std::string_view selectedImage);
+    static MenuItemImage* create(const std::string& normalImage, const std::string& selectedImage);
     /** Creates a menu item with a normal,selected  and disabled image.*/
-    static MenuItemImage* create(std::string_view normalImage,
-                                 std::string_view selectedImage,
-                                 std::string_view disabledImage);
+    static MenuItemImage* create(const std::string& normalImage,
+                                 const std::string& selectedImage,
+                                 const std::string& disabledImage);
     /** Creates a menu item with a normal and selected image with a callable object. */
-    static MenuItemImage* create(std::string_view normalImage,
-                                 std::string_view selectedImage,
+    static MenuItemImage* create(const std::string& normalImage,
+                                 const std::string& selectedImage,
                                  const ccMenuCallback& callback);
     /** Creates a menu item with a normal,selected and disabled image with a callable object. */
-    static MenuItemImage* create(std::string_view normalImage,
-                                 std::string_view selectedImage,
-                                 std::string_view disabledImage,
+    static MenuItemImage* create(const std::string& normalImage,
+                                 const std::string& selectedImage,
+                                 const std::string& disabledImage,
                                  const ccMenuCallback& callback);
 
     /** Sets the sprite frame for the normal image. */
@@ -429,9 +429,9 @@ public:
     bool init();
 
     /** Initializes a menu item with a normal, selected and disabled image with a callable object. */
-    bool initWithNormalImage(std::string_view normalImage,
-                             std::string_view selectedImage,
-                             std::string_view disabledImage,
+    bool initWithNormalImage(const std::string& normalImage,
+                             const std::string& selectedImage,
+                             const std::string& disabledImage,
                              const ccMenuCallback& callback);
 
 private:

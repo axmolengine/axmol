@@ -1930,8 +1930,8 @@ int lua_cocos2dx_physics_PhysicsShapeBox_getSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics_PhysicsShapeBox_getSize'", nullptr);
             return 0;
         }
-        cocos2d::Vec2 ret = cobj->getSize();
-        vec2_to_luaval(tolua_S, ret);
+        cocos2d::Size ret = cobj->getSize();
+        size_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsShapeBox:getSize",argc, 0);
@@ -1961,8 +1961,8 @@ int lua_cocos2dx_physics_PhysicsShapeBox_create(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        cocos2d::Vec2 arg0;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsShapeBox:create");
+        cocos2d::Size arg0;
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsShapeBox:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics_PhysicsShapeBox_create'", nullptr);
@@ -1974,9 +1974,9 @@ int lua_cocos2dx_physics_PhysicsShapeBox_create(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsShapeBox:create");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsShapeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsShapeBox:create");
         if(!ok)
         {
@@ -1989,10 +1989,10 @@ int lua_cocos2dx_physics_PhysicsShapeBox_create(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
         cocos2d::Vec2 arg2;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsShapeBox:create");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsShapeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsShapeBox:create");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "cc.PhysicsShapeBox:create");
         if(!ok)
@@ -2006,11 +2006,11 @@ int lua_cocos2dx_physics_PhysicsShapeBox_create(lua_State* tolua_S)
     }
     if (argc == 4)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
         cocos2d::Vec2 arg2;
         double arg3;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsShapeBox:create");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsShapeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsShapeBox:create");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "cc.PhysicsShapeBox:create");
         ok &= luaval_to_number(tolua_S, 5,&arg3, "cc.PhysicsShapeBox:create");
@@ -2326,8 +2326,8 @@ int lua_cocos2dx_physics_PhysicsShapeEdgeBox_create(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        cocos2d::Vec2 arg0;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsShapeEdgeBox:create");
+        cocos2d::Size arg0;
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsShapeEdgeBox:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics_PhysicsShapeEdgeBox_create'", nullptr);
@@ -2339,9 +2339,9 @@ int lua_cocos2dx_physics_PhysicsShapeEdgeBox_create(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsShapeEdgeBox:create");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsShapeEdgeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsShapeEdgeBox:create");
         if(!ok)
         {
@@ -2354,10 +2354,10 @@ int lua_cocos2dx_physics_PhysicsShapeEdgeBox_create(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
         double arg2;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsShapeEdgeBox:create");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsShapeEdgeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsShapeEdgeBox:create");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.PhysicsShapeEdgeBox:create");
         if(!ok)
@@ -2371,11 +2371,11 @@ int lua_cocos2dx_physics_PhysicsShapeEdgeBox_create(lua_State* tolua_S)
     }
     if (argc == 4)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
         double arg2;
         cocos2d::Vec2 arg3;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsShapeEdgeBox:create");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsShapeEdgeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsShapeEdgeBox:create");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.PhysicsShapeEdgeBox:create");
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "cc.PhysicsShapeEdgeBox:create");
@@ -5515,8 +5515,8 @@ int lua_cocos2dx_physics_PhysicsBody_createBox(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        cocos2d::Vec2 arg0;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsBody:createBox");
+        cocos2d::Size arg0;
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsBody:createBox");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_createBox'", nullptr);
@@ -5528,9 +5528,9 @@ int lua_cocos2dx_physics_PhysicsBody_createBox(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsBody:createBox");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsBody:createBox");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsBody:createBox");
         if(!ok)
         {
@@ -5543,10 +5543,10 @@ int lua_cocos2dx_physics_PhysicsBody_createBox(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
         cocos2d::Vec2 arg2;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsBody:createBox");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsBody:createBox");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsBody:createBox");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "cc.PhysicsBody:createBox");
         if(!ok)
@@ -5718,8 +5718,8 @@ int lua_cocos2dx_physics_PhysicsBody_createEdgeBox(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        cocos2d::Vec2 arg0;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsBody:createEdgeBox");
+        cocos2d::Size arg0;
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsBody:createEdgeBox");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_createEdgeBox'", nullptr);
@@ -5731,9 +5731,9 @@ int lua_cocos2dx_physics_PhysicsBody_createEdgeBox(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsBody:createEdgeBox");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsBody:createEdgeBox");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsBody:createEdgeBox");
         if(!ok)
         {
@@ -5746,10 +5746,10 @@ int lua_cocos2dx_physics_PhysicsBody_createEdgeBox(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
         double arg2;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsBody:createEdgeBox");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsBody:createEdgeBox");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsBody:createEdgeBox");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.PhysicsBody:createEdgeBox");
         if(!ok)
@@ -5763,11 +5763,11 @@ int lua_cocos2dx_physics_PhysicsBody_createEdgeBox(lua_State* tolua_S)
     }
     if (argc == 4)
     {
-        cocos2d::Vec2 arg0;
+        cocos2d::Size arg0;
         cocos2d::PhysicsMaterial arg1;
         double arg2;
         cocos2d::Vec2 arg3;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.PhysicsBody:createEdgeBox");
+        ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.PhysicsBody:createEdgeBox");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "cc.PhysicsBody:createEdgeBox");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.PhysicsBody:createEdgeBox");
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "cc.PhysicsBody:createEdgeBox");

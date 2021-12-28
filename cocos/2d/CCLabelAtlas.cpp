@@ -40,8 +40,8 @@ NS_CC_BEGIN
 
 // CCLabelAtlas - Creation & Init
 
-LabelAtlas* LabelAtlas::create(std::string_view string,
-                               std::string_view charMapFile,
+LabelAtlas* LabelAtlas::create(const std::string& string,
+                               const std::string& charMapFile,
                                int itemWidth,
                                int itemHeight,
                                int startCharMap)
@@ -56,8 +56,8 @@ LabelAtlas* LabelAtlas::create(std::string_view string,
     return nullptr;
 }
 
-bool LabelAtlas::initWithString(std::string_view string,
-                                std::string_view charMapFile,
+bool LabelAtlas::initWithString(const std::string& string,
+                                const std::string& charMapFile,
                                 int itemWidth,
                                 int itemHeight,
                                 int startCharMap)
@@ -66,7 +66,7 @@ bool LabelAtlas::initWithString(std::string_view string,
     return initWithString(string, texture, itemWidth, itemHeight, startCharMap);
 }
 
-bool LabelAtlas::initWithString(std::string_view string,
+bool LabelAtlas::initWithString(const std::string& string,
                                 Texture2D* texture,
                                 int itemWidth,
                                 int itemHeight,
@@ -81,7 +81,7 @@ bool LabelAtlas::initWithString(std::string_view string,
     return false;
 }
 
-LabelAtlas* LabelAtlas::create(std::string_view string, std::string_view fntFile)
+LabelAtlas* LabelAtlas::create(const std::string& string, const std::string& fntFile)
 {
     LabelAtlas* ret = new LabelAtlas();
 
@@ -97,7 +97,7 @@ LabelAtlas* LabelAtlas::create(std::string_view string, std::string_view fntFile
     return ret;
 }
 
-LabelAtlas* LabelAtlas::create(std::string_view string,
+LabelAtlas* LabelAtlas::create(const std::string& string,
                                Texture2D* texture,
                                int itemWidth,
                                int itemHeight,
@@ -117,7 +117,7 @@ LabelAtlas* LabelAtlas::create(std::string_view string,
     return ret;
 }
 
-bool LabelAtlas::initWithString(std::string_view theString, std::string_view fntFile)
+bool LabelAtlas::initWithString(const std::string& theString, const std::string& fntFile)
 {
     std::string pathStr    = FileUtils::getInstance()->fullPathForFilename(fntFile);
     std::string relPathStr = pathStr.substr(0, pathStr.find_last_of('/')) + "/";
@@ -128,8 +128,8 @@ bool LabelAtlas::initWithString(std::string_view theString, std::string_view fnt
 
     std::string textureFilename = relPathStr + dict["textureFilename"].asString();
 
-    unsigned int width     = static_cast<unsigned int>(dict["itemWidth"].asInt() / CC_CONTENT_SCALE_FACTOR());
-    unsigned int height    = static_cast<unsigned int>(dict["itemHeight"].asInt() / CC_CONTENT_SCALE_FACTOR());
+    unsigned int width     = dict["itemWidth"].asInt() / CC_CONTENT_SCALE_FACTOR();
+    unsigned int height    = dict["itemHeight"].asInt() / CC_CONTENT_SCALE_FACTOR();
     unsigned int startChar = dict["firstChar"].asInt();
 
     this->initWithString(theString, textureFilename, width, height, startChar);
@@ -156,8 +156,8 @@ void LabelAtlas::updateAtlasValues()
     float itemHeightInPixels = _itemHeight * CC_CONTENT_SCALE_FACTOR();
     if (_ignoreContentScaleFactor)
     {
-        itemWidthInPixels  = static_cast<float>(_itemWidth);
-        itemHeightInPixels = static_cast<float>(_itemHeight);
+        itemWidthInPixels  = _itemWidth;
+        itemHeightInPixels = _itemHeight;
     }
 
     CCASSERT(n <= _textureAtlas->getCapacity(), "updateAtlasValues: Invalid String length");
@@ -239,7 +239,7 @@ void LabelAtlas::setString(std::string_view label)
     _quadsToDraw = len;
 }
 
-std::string_view LabelAtlas::getString() const
+const std::string& LabelAtlas::getString() const
 {
     return _string;
 }

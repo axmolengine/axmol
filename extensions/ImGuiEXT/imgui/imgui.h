@@ -2114,9 +2114,9 @@ enum ImGuiTableFlags_
 // Obsolete names (will be removed soon)
 #    ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 //, ImGuiTableFlags_ColumnsWidthFixed = ImGuiTableFlags_SizingFixedFit, ImGuiTableFlags_ColumnsWidthStretch =
-// ImGuiTableFlags_SizingStretchSame   // WIP Tables 2020/12 , ImGuiTableFlags_SizingPolicyFixed =
-// ImGuiTableFlags_SizingFixedFit, ImGuiTableFlags_SizingPolicyStretch = ImGuiTableFlags_SizingStretchSame   // WIP
-// Tables 2021/01
+//ImGuiTableFlags_SizingStretchSame   // WIP Tables 2020/12 , ImGuiTableFlags_SizingPolicyFixed =
+//ImGuiTableFlags_SizingFixedFit, ImGuiTableFlags_SizingPolicyStretch = ImGuiTableFlags_SizingStretchSame   // WIP
+//Tables 2021/01
 #    endif
 };
 

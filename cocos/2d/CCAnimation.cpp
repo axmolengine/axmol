@@ -165,7 +165,7 @@ void Animation::addSpriteFrame(SpriteFrame* spriteFrame)
     _totalDelayUnits++;
 }
 
-void Animation::addSpriteFrameWithFile(std::string_view filename)
+void Animation::addSpriteFrameWithFile(const std::string& filename)
 {
     Texture2D* texture = Director::getInstance()->getTextureCache()->addImage(filename);
     Rect rect          = Rect::ZERO;

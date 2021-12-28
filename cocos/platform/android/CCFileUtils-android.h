@@ -64,20 +64,20 @@ public:
     /* override functions */
     bool init() override;
 
-    virtual std::string getNewFilename(std::string_view filename) const override;
+    virtual std::string getNewFilename(const std::string& filename) const override;
 
-    virtual FileUtils::Status getContents(std::string_view filename, ResizableBuffer* buffer) const override;
+    virtual FileUtils::Status getContents(const std::string& filename, ResizableBuffer* buffer) const override;
 
     virtual std::string getWritablePath() const override;
     std::string getNativeWritableAbsolutePath() const override;
-    virtual bool isAbsolutePath(std::string_view strPath) const override;
+    virtual bool isAbsolutePath(const std::string& strPath) const override;
 
-    virtual int64_t getFileSize(std::string_view filepath) const override;
-    virtual std::vector<std::string> listFiles(std::string_view dirPath) const override;
+    virtual int64_t getFileSize(const std::string& filepath) const override;
+    virtual std::vector<std::string> listFiles(const std::string& dirPath) const override;
 
 private:
-    virtual bool isFileExistInternal(std::string_view strFilePath) const override;
-    virtual bool isDirectoryExistInternal(std::string_view dirPath) const override;
+    virtual bool isFileExistInternal(const std::string& strFilePath) const override;
+    virtual bool isDirectoryExistInternal(const std::string& dirPath) const override;
 
     static AAssetManager* assetmanager;
     static ZipFile* obbfile;

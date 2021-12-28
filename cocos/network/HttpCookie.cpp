@@ -151,11 +151,11 @@ std::string HttpCookie::checkAndGetFormatedMatchCookies(const Uri& uri)
     return ret;
 }
 
-bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
+bool HttpCookie::updateOrAddCookie(const std::string& cookie, const Uri& uri)
 {
     unsigned int count = 0;
     CookieInfo info;
-    xsbase::nzls::fast_split(cookie.data(), cookie.length(), ';', [&](const char* start, const char* end) {
+    xsbase::nzls::fast_split(cookie.c_str(), cookie.length(), ';', [&](const char* start, const char* end) {
         unsigned int count_ = 0;
         while (*start == ' ')
             ++start;  // skip ws
@@ -289,7 +289,7 @@ void HttpCookie::writeFile()
     fclose(out);
 }
 
-void HttpCookie::setCookieFileName(std::string_view filename)
+void HttpCookie::setCookieFileName(const std::string& filename)
 {
     _cookieFileName = filename;
 }

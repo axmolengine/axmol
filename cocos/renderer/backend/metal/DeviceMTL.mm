@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
+ 
 #include "DeviceMTL.h"
 #include "CommandBufferMTL.h"
 #include "BufferMTL.h"
@@ -37,12 +37,12 @@
 
 CC_BACKEND_BEGIN
 
-CAMetalLayer* DeviceMTL::_metalLayer            = nil;
+CAMetalLayer* DeviceMTL::_metalLayer = nil;
 id<CAMetalDrawable> DeviceMTL::_currentDrawable = nil;
 
 Device* Device::getInstance()
 {
-    if (!Device::_instance)
+    if (! Device::_instance)
         Device::_instance = new DeviceMTL();
 
     return Device::_instance;
@@ -55,9 +55,9 @@ void DeviceMTL::setCAMetalLayer(CAMetalLayer* metalLayer)
 
 id<CAMetalDrawable> DeviceMTL::getCurrentDrawable()
 {
-    if (!DeviceMTL::_currentDrawable)
+    if (! DeviceMTL::_currentDrawable)
         DeviceMTL::_currentDrawable = [DeviceMTL::_metalLayer nextDrawable];
-
+    
     return DeviceMTL::_currentDrawable;
 }
 
@@ -68,10 +68,10 @@ void DeviceMTL::resetCurrentDrawable()
 
 DeviceMTL::DeviceMTL()
 {
-    _mtlDevice       = DeviceMTL::_metalLayer.device;
+    _mtlDevice = DeviceMTL::_metalLayer.device;
     _mtlCommandQueue = [_mtlDevice newCommandQueue];
-    _deviceInfo      = new DeviceInfoMTL(_mtlDevice);
-    if (!_deviceInfo->init())
+    _deviceInfo = new DeviceInfoMTL(_mtlDevice);
+    if(!_deviceInfo->init())
     {
         delete _deviceInfo;
         _deviceInfo = nullptr;
@@ -97,15 +97,15 @@ Buffer* DeviceMTL::newBuffer(std::size_t size, BufferType type, BufferUsage usag
 
 TextureBackend* DeviceMTL::newTexture(const TextureDescriptor& descriptor)
 {
-    switch (descriptor.textureType)
+    switch(descriptor.textureType)
     {
-    case TextureType::TEXTURE_2D:
-        return new TextureMTL(_mtlDevice, descriptor);
-    case TextureType::TEXTURE_CUBE:
-        return new TextureCubeMTL(_mtlDevice, descriptor);
-    default:
-        CCASSERT(false, "invalidate texture type");
-        return nullptr;
+        case TextureType::TEXTURE_2D:
+            return new TextureMTL(_mtlDevice, descriptor);
+        case TextureType::TEXTURE_CUBE:
+            return new TextureCubeMTL(_mtlDevice, descriptor);
+        default:
+            CCASSERT(false, "invalidate texture type");
+            return nullptr;
     }
 }
 
@@ -117,21 +117,21 @@ RenderTarget* DeviceMTL::newDefaultRenderTarget(TargetBufferFlags rtf)
 }
 
 RenderTarget* DeviceMTL::newRenderTarget(TargetBufferFlags rtf,
-                                         TextureBackend* colorAttachment,
-                                         TextureBackend* depthAttachment,
-                                         TextureBackend* stencilAttachhment)
+    TextureBackend* colorAttachment,
+    TextureBackend* depthAttachment,
+    TextureBackend* stencilAttachhment)
 {
     auto rtGL = new RenderTargetMTL(false);
     rtGL->setTargetFlags(rtf);
     rtGL->bindFrameBuffer();
-    RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
+    RenderTarget::ColorAttachment colors{ {colorAttachment, 0} };
     rtGL->setColorAttachment(colors);
     rtGL->setDepthAttachment(depthAttachment);
     rtGL->setStencilAttachment(stencilAttachhment);
     return rtGL;
 }
 
-ShaderModule* DeviceMTL::newShaderModule(ShaderStage stage, std::string_view source)
+ShaderModule* DeviceMTL::newShaderModule(ShaderStage stage, const std::string& source)
 {
     return new ShaderModuleMTL(_mtlDevice, stage, source);
 }
@@ -146,7 +146,7 @@ RenderPipeline* DeviceMTL::newRenderPipeline()
     return new RenderPipelineMTL(_mtlDevice);
 }
 
-Program* DeviceMTL::newProgram(std::string_view vertexShader, std::string_view fragmentShader)
+Program* DeviceMTL::newProgram(const std::string& vertexShader, const std::string& fragmentShader)
 {
     return new ProgramMTL(vertexShader, fragmentShader);
 }

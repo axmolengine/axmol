@@ -30,12 +30,12 @@ NS_CC_BEGIN
 
 ObjectFactory::TInfo::TInfo() : _class(""), _fun(nullptr), _func(nullptr) {}
 
-ObjectFactory::TInfo::TInfo(std::string_view type, Instance ins) : _class(type), _fun(ins), _func(nullptr)
+ObjectFactory::TInfo::TInfo(const std::string& type, Instance ins) : _class(type), _fun(ins), _func(nullptr)
 {
     ObjectFactory::getInstance()->registerType(*this);
 }
 
-ObjectFactory::TInfo::TInfo(std::string_view type, InstanceFunc ins) : _class(type), _fun(nullptr), _func(ins)
+ObjectFactory::TInfo::TInfo(const std::string& type, InstanceFunc ins) : _class(type), _fun(nullptr), _func(ins)
 {
     ObjectFactory::getInstance()->registerType(*this);
 }
@@ -85,16 +85,12 @@ void ObjectFactory::destroyInstance()
     CC_SAFE_DELETE(_sharedFactory);
 }
 
-Ref* ObjectFactory::createObject(std::string_view name)
+Ref* ObjectFactory::createObject(const std::string& name)
 {
     Ref* o = nullptr;
     do
     {
-        // const TInfo t = _typeMap[name.data];
-        auto it = _typeMap.find(name);
-        if (it == _typeMap.end())
-            break;
-        auto& t = it->second;
+        const TInfo t = _typeMap[name];
         if (t._fun != nullptr)
         {
             o = t._fun();

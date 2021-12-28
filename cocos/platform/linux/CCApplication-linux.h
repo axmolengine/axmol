@@ -84,19 +84,19 @@ public:
      @param String with url to open.
      @return true if the resource located by the URL was successfully opened; otherwise false.
      */
-    virtual bool openURL(std::string_view url) override;
+    virtual bool openURL(const std::string& url) override;
 
     /**
      *  Sets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
      */
-    CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(std::string_view rootResDir);
+    CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string& rootResDir);
 
     /**
      *  Gets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead.
      */
-    CC_DEPRECATED_ATTRIBUTE std::string_view getResourceRootPath();
+    CC_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath();
 
     /**
      @brief Get target platform

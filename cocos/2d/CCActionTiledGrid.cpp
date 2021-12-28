@@ -247,7 +247,7 @@ Vec2 ShuffleTiles::getDelta(const Vec2& pos) const
     pos2.x = (float)(_tilesOrder[idx] / (int)_gridSize.height);
     pos2.y = (float)(_tilesOrder[idx] % (int)_gridSize.height);
 
-    return Vec2(static_cast<float>((int)(pos2.x - pos.width)), static_cast<float>((int)(pos2.y - pos.height)));
+    return Vec2((int)(pos2.x - pos.width), (int)(pos2.y - pos.height));
 }
 
 void ShuffleTiles::placeTile(const Vec2& pos, Tile* t)

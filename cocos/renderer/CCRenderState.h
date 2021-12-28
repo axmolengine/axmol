@@ -194,7 +194,7 @@ public:
          * @param name Name of the render state to set.
          * @param value Value of the specified render state.
          */
-        void setState(std::string_view name, std::string_view value);
+        void setState(const std::string& name, const std::string& value);
 
         uint32_t getHash() const;
         bool isDirty() const;

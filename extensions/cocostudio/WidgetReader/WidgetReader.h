@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
  http://www.cocos2d-x.org
@@ -66,7 +66,7 @@ public:
 
 protected:
     std::string getResourcePath(const rapidjson::Value& dict,
-                                std::string_view key,
+                                const std::string& key,
                                 cocos2d::ui::Widget::TextureResType texType);
     void setAnchorPointForWidget(cocos2d::ui::Widget* widget, const rapidjson::Value& options);
 
@@ -74,14 +74,14 @@ protected:
                                 stExpCocoNode* pCocoNode,
                                 cocos2d::ui::Widget::TextureResType texType);
 
-    std::string getResourcePath(std::string_view path, cocos2d::ui::Widget::TextureResType texType);
+    std::string getResourcePath(const std::string& path, cocos2d::ui::Widget::TextureResType texType);
 
     void beginSetBasicProperties(cocos2d::ui::Widget* widget);
     void endSetBasicProperties(cocos2d::ui::Widget* widget);
 
-    std::function<int(std::string_view)> valueToInt;
-    std::function<bool(std::string_view)> valueToBool;
-    std::function<float(std::string_view)> valueToFloat;
+    std::function<int(const std::string&)> valueToInt;
+    std::function<bool(const std::string&)> valueToBool;
+    std::function<float(const std::string&)> valueToFloat;
 
     float _sizePercentX;
     float _sizePercentY;

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -343,7 +343,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline std::string_view getName() const { return _slotData->name; }
+    inline const std::string& getName() const { return _slotData->name; }
     /**
      * - Contains a display list of display objects or child armatures.
      * @version DragonBones 3.0

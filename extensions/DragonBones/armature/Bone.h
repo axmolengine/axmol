@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -198,7 +198,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline std::string_view getName() const { return _boneData->name; }
+    inline const std::string& getName() const { return _boneData->name; }
     /**
      * - The parent bone to which it belongs.
      * @version DragonBones 3.0
