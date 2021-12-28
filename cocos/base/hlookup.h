@@ -1,3 +1,4 @@
+// Heterogeneous lookup support on c++17 with robin_hash
 // C++20 demo: Heterogeneous lookup for unordered containers (transparent hashing)
 // https://en.cppreference.com/w/cpp/container/unordered_map/find
 #pragma once
@@ -54,7 +55,7 @@ inline auto set_item(_Cont& cont, std::string_view k, _Valty&& v)
     if (it != cont.end())
         it->second = std::forward<_Valty>(v);
     else
-        it = cont.emplace(std::string{key}, std::forward<_Valty>(v)).first;
+        it = cont.emplace(k, std::forward<_Valty>(v)).first;
     return it;
 }
 
