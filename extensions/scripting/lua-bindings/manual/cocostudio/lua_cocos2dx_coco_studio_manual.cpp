@@ -115,8 +115,7 @@ static int lua_cocos2dx_ArmatureAnimation_setMovementEventCallFunc(lua_State* L)
             [=](Armature* armature, MovementEventType movementType, std::string_view movementID) {
                 if (0 != handler)
                 {
-                    std::string strMovementID = movementID;
-                    LuaArmatureMovementEventData movementData(armature, (int)movementType, strMovementID);
+                    LuaArmatureMovementEventData movementData(armature, (int)movementType, movementID);
 
                     LuaArmatureWrapperEventData wrapperData(
                         LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::MOVEMENT_EVENT, (void*)&movementData);

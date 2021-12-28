@@ -278,7 +278,7 @@ static int lua_downloader_setOnTaskError(lua_State* L)
                 pushTaskTable(L, task);  // stack callbackfn, task
                 lua_pushnumber(L, errorCode);
                 lua_pushnumber(L, errorCodeInternal);
-                lua_pushstring(L, errorSt.c_str());
+                lua_pushlstring(L, errorSt.data(), errorSt.length());
                 if (lua_pcall(L, 4, 0, 0) != 0)
                 {
                     lua_pop(L, 1);  // remove callback or nil

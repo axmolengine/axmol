@@ -2402,7 +2402,7 @@ void ccvalue_to_luaval(lua_State* L, const cocos2d::Value& inValue)
         lua_pushinteger(L, obj.asInt64());
         break;
     case Value::Type::STRING:
-        lua_pushstring(L, obj.asStringRef().c_str());
+        lua_pushstring(L, obj.asStringRef().data());
         break;
     case Value::Type::VECTOR:
         ccvaluevector_to_luaval(L, obj.asValueVector());
@@ -2527,7 +2527,7 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const cocos2d::ValueMapIntKey& inV
         case Value::Type::STRING:
         {
             lua_pushstring(L, key.c_str());
-            lua_pushstring(L, obj.asStringRef().c_str());
+            lua_pushstring(L, obj.asStringRef().data());
             lua_rawset(L, -3);
         }
         break;
@@ -2728,7 +2728,7 @@ void ccvector_std_string_to_luaval(lua_State* L, const std::vector<std::string>&
     for (std::string_view value : inValue)
     {
         lua_pushnumber(L, (lua_Number)index);
-        lua_pushstring(L, value.c_str());
+        lua_pushlstring(L, value.data(), value.length());
         lua_rawset(L, -3);
         ++index;
     }
