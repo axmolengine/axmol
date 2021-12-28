@@ -111,7 +111,7 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    int getAttributeLocation(std::string name);
+    int getAttributeLocation(std::string_view name);
 
     /**
      * Get uniform buffer size in bytes that holds all the uniforms.
