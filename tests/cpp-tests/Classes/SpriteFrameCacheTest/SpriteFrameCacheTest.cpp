@@ -74,7 +74,7 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
     Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
 }
 
-void SpriteFrameCachePixelFormatTest::loadSpriteFrames(const std::string& file,
+void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
                                                        cocos2d::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
@@ -86,8 +86,9 @@ void SpriteFrameCachePixelFormatTest::loadSpriteFrames(const std::string& file,
 #ifndef CC_USE_METAL
     CC_ASSERT(texture->getPixelFormat() == expectedFormat);
 #endif
-    const std::string textureInfo = StringUtils::format("%s: %.2f KB\r\n", texture->getStringForFormat(), memorySize);
-    infoLabel->setString(infoLabel->getString() + textureInfo);
+    const std::string textureInfo =
+        StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(), texture->getStringForFormat(), memorySize);
+    infoLabel->setString(textureInfo);
 
     SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(file);
     Director::getInstance()->getTextureCache()->removeTexture(texture);
@@ -104,7 +105,7 @@ SpriteFrameCacheLoadMultipleTimes::SpriteFrameCacheLoadMultipleTimes()
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
 }
 
-void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(const std::string& file,
+void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(std::string_view file,
                                                          cocos2d::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
@@ -123,7 +124,7 @@ SpriteFrameCacheFullCheck::SpriteFrameCacheFullCheck()
     loadSpriteFrames("Images/test_polygon.plist", backend::PixelFormat::RGBA8);
 }
 
-void SpriteFrameCacheFullCheck::loadSpriteFrames(const std::string& file, cocos2d::backend::PixelFormat expectedFormat)
+void SpriteFrameCacheFullCheck::loadSpriteFrames(std::string_view file, cocos2d::backend::PixelFormat expectedFormat)
 {
     auto cache = SpriteFrameCache::getInstance();
 
@@ -157,7 +158,7 @@ public:
         if (fullPath.empty())
         {
             // return if plist file doesn't exist
-            CCLOG("GenericJsonArraySpriteSheetLoader: can not find %s", filePath.c_str());
+            CCLOG("GenericJsonArraySpriteSheetLoader: can not find %s", filePath.data());
             return;
         }
 
@@ -481,7 +482,7 @@ SpriteFrameCacheJsonAtlasTest::SpriteFrameCacheJsonAtlasTest()
     infoLabel->setPosition(screenSize.width * 0.5f, screenSize.height * 0.7f);
     addChild(infoLabel);
 
-    loadSpriteFrames("Images/sprite_frames_test/test_RGB8888_generic.json", backend::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGB8888_generic.json"sv, backend::PixelFormat::RGBA8);
 }
 
 SpriteFrameCacheJsonAtlasTest::~SpriteFrameCacheJsonAtlasTest()
@@ -494,7 +495,7 @@ void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
                                                      cocos2d::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file, GenericJsonArraySpriteSheetLoader::FORMAT);
-    SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
+    SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png"sv);
     Texture2D* texture       = spriteFrame->getTexture();
     const ssize_t bitsPerKB  = 8 * 1024;
     const double memorySize  = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
@@ -502,8 +503,9 @@ void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
 #ifndef CC_USE_METAL
     CC_ASSERT(texture->getPixelFormat() == expectedFormat);
 #endif
-    const std::string textureInfo = StringUtils::format("%s: %.2f KB\r\n", texture->getStringForFormat(), memorySize);
-    infoLabel->setString(infoLabel->getString() + textureInfo);
+    const std::string textureInfo =
+        StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(), texture->getStringForFormat(), memorySize);
+    infoLabel->setString(textureInfo);
 
     SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(file);
     Director::getInstance()->getTextureCache()->removeTexture(texture);

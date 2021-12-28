@@ -48,7 +48,7 @@ public:
     virtual void setTarget(EffectSprite* sprite) {}
 
 protected:
-    bool initProgramState(const std::string& fragmentFilename);
+    bool initProgramState(std::string_view fragmentFilename);
     Effect();
     virtual ~Effect();
     cocos2d::backend::ProgramState* _programState = nullptr;

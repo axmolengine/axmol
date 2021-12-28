@@ -43,9 +43,9 @@ USING_NS_CC;
 class DurationRecorder
 {
 public:
-    void startTick(const std::string& key) { _durations[key] = -now(); }
+    void startTick(std::string_view key) { _durations[key] = -now(); }
 
-    int endTick(const std::string& key)
+    int endTick(std::string_view key)
     {
         auto n   = now();
         auto itr = _durations.find(key);
@@ -69,7 +69,7 @@ public:
     void reset() { _durations.clear(); }
 
 private:
-    std::map<std::string, int64_t> _durations;
+    hlookup::string_map<int64_t> _durations;
 };
 
 NewRendererTests::NewRendererTests()

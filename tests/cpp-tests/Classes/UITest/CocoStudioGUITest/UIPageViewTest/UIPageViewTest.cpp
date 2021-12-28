@@ -219,7 +219,7 @@ void UIPageViewButtonTest::onButtonClicked(Ref* sender, Widget::TouchEventType t
 {
     if (type == Widget::TouchEventType::ENDED)
     {
-        log("button %s clicked", static_cast<Button*>(sender)->getName().c_str());
+        log("button %s clicked", static_cast<Button*>(sender)->getName().data());
     }
 }
 

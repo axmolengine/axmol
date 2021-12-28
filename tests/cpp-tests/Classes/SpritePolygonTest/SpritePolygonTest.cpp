@@ -348,11 +348,11 @@ void SpritePolygonTestSlider::updateLabel(const cocos2d::Sprite* sp, const Polyg
     Label* label  = (Label*)(sp->getChildByName(sp->getName()));
     auto filename = sp->getName();
     auto size     = pinfo.getRect().size / Director::getInstance()->getContentScaleFactor();
-    label->setString(filename + "\nVerts: " + Value((int)pinfo.getVertCount()).asString() +
+    label->setString((std::string)filename + "\nVerts: " + Value((int)pinfo.getVertCount()).asString() +
                      "\nPixels: " + Value((int)(pinfo.getArea() / (size.width * size.height) * 100)).asString() + "%");
 }
 
-Sprite* SpritePolygonTestSlider::makeSprite(const std::string& filename, const Vec2& pos)
+Sprite* SpritePolygonTestSlider::makeSprite(std::string_view filename, const Vec2& pos)
 {
     // Sprite
     auto quadSize    = Sprite::create(filename)->getContentSize();
@@ -374,7 +374,7 @@ Sprite* SpritePolygonTestSlider::makeSprite(const std::string& filename, const V
     // Label
     auto ttfConfig = TTFConfig("fonts/arial.ttf", 8);
     auto spArea    = Label::createWithTTF(
-           ttfConfig, filename + "\nVerts: " + Value((int)pinfo.getVertCount()).asString() +
+           ttfConfig, (std::string)filename + "\nVerts: " + Value((int)pinfo.getVertCount()).asString() +
                           "\nPixels: " + Value((int)(pinfo.getArea() / originalSize * 100)).asString() + "%");
     ret->addChild(spArea);
     spArea->setAnchorPoint(Vec2(0.0f, 1.0f));

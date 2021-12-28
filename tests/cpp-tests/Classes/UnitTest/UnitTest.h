@@ -52,7 +52,7 @@ public:
     CREATE_FUNC(TemplateMapTest);
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
-    void constFunc(const cocos2d::Map<std::string, cocos2d::Node*>& map) const;
+    void constFunc(const cocos2d::StringMap<cocos2d::Node*>& map) const;
 };
 
 class ValueTest : public UnitTestDemo

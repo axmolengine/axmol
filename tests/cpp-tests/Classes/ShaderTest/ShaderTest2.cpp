@@ -181,7 +181,7 @@ protected:
 // Effect
 //
 
-bool Effect::initProgramState(const std::string& fragmentFilename)
+bool Effect::initProgramState(std::string_view fragmentFilename)
 {
     auto fileUtiles       = FileUtils::getInstance();
     auto fragmentFullPath = fileUtiles->fullPathForFilename(fragmentFilename);
@@ -407,7 +407,7 @@ class EffectNormalMapped : public Effect
 {
 public:
     CREATE_FUNC(EffectNormalMapped);
-    static EffectNormalMapped* create(std::string_viewnormalMapFileName)
+    static EffectNormalMapped* create(std::string_view normalMapFileName)
     {
         EffectNormalMapped* normalMappedSprite = new EffectNormalMapped();
         if (normalMappedSprite->init() && normalMappedSprite->initNormalMap(normalMapFileName))
@@ -426,7 +426,7 @@ public:
 
 protected:
     bool init();
-    bool initNormalMap(std::string_viewnormalMapFileName);
+    bool initNormalMap(std::string_view normalMapFileName);
     virtual void setTarget(EffectSprite* sprite) override;
     EffectSprite* _sprite;
     Vec3 _lightPos;

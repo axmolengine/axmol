@@ -291,12 +291,12 @@ void UIRadioButtonTwoGroupsTest::clearRadioButtonGroup(Ref* sender)
 
 void UIRadioButtonTwoGroupsTest::addLog(std::string_view log)
 {
-    std::string existingLog = _logConsole->getString();
+    std::string existingLog{_logConsole->getString()};
     if (!existingLog.empty())
     {
         existingLog = existingLog + "\n";
     }
-    existingLog = existingLog + log;
+    existingLog += log;
     ++_numberOfLogLines;
 
     if (_numberOfLogLines > 10)

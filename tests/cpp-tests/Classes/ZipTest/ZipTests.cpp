@@ -43,9 +43,9 @@ std::string ZipTest::title() const
 }
 
 static void unzipTest(Label* label,
-                      const std::string& originFile,
-                      const std::string& tmpName,
-                      const std::string& zipFile,
+                      std::string_view originFile,
+                      std::string_view tmpName,
+                      std::string_view zipFile,
                       std::string_view password = "")
 {
 
@@ -58,7 +58,8 @@ static void unzipTest(Label* label,
     unz_file_info fileInfo = {0};
     char fileName[40]      = {0};
 
-    auto newLocal = fu->getWritablePath() + tmpName;
+    std::string newLocal{fu->getWritablePath()};
+    newLocal += tmpName;
     // copy file to support android
 
     if (fu->isFileExist(newLocal))
@@ -67,7 +68,7 @@ static void unzipTest(Label* label,
         fu->removeFile(newLocal);
     }
 
-    CCLOG("Copy %s to %s", zipFile.c_str(), newLocal.c_str());
+    CCLOG("Copy %s to %s", zipFile.data(), newLocal.c_str());
     auto writeSuccess = fu->writeDataToFile(fu->getDataFromFile(zipFile), newLocal);
     if (!writeSuccess)
     {
@@ -100,7 +101,7 @@ static void unzipTest(Label* label,
     }
     else
     {
-        err = unzOpenCurrentFilePassword(fp, password.c_str());
+        err = unzOpenCurrentFilePassword(fp, password.data());
     }
 
     if (err != UNZ_OK)
