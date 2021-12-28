@@ -456,7 +456,7 @@ class robin_map {
   template <
       class K, class KE = KeyEqual,
       typename std::enable_if<has_is_transparent<KE>::value>::type* = nullptr>
-  T& operator[](K&& key) { return m_ht[std::move(key)]; }
+  T& operator[](K&& key) { return m_ht[std::forward<K>(key)]; }
 
   size_type count(const Key& key) const { return m_ht.count(key); }
 
