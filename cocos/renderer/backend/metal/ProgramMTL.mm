@@ -118,7 +118,7 @@ int ProgramMTL::getMaxFragmentLocation() const
     return _fragmentShader->getMaxLocation();
 }
 
-hlookup::string_map<AttributeBindInfo> ProgramMTL::getActiveAttributes() const
+const hlookup::string_map<AttributeBindInfo> ProgramMTL::getActiveAttributes() const
 {
     return _vertexShader->getAttributeInfo();
 }
