@@ -7,6 +7,7 @@
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 #include "tsl/robin_map.h"
 #include "tsl/robin_set.h"
 
@@ -47,13 +48,13 @@ using string_map = tsl::robin_map<std::string, _Valty, string_hash, equal_to>;
 using string_set = tsl::robin_set<std::string, string_hash, equal_to>;
 
 template <typename _Cont, typename _Valty>
-inline auto set_item(_Cont& cont, std::string_view key, _Valty&& _Val)
+inline auto set_item(_Cont& cont, std::string_view k, _Valty&& v)
 {
-    typename _Cont::iterator it = cont.find(key);
+    typename _Cont::iterator it = cont.find(k);
     if (it != cont.end())
-        it->second = std::move(_Val);
+        it->second = std::forward<_Valty>(v);
     else
-        it = cont.emplace(std::string{key}, std::forward<_Valty>(_Val)).first;
+        it = cont.emplace(std::string{key}, std::forward<_Valty>(v)).first;
     return it;
 }
 
