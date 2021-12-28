@@ -38,7 +38,7 @@
 
 //-----------------------------------------------------------------------------------------------------------
 
-static const std::string videoHelperClassName = "org.cocos2dx.lib.Cocos2dxVideoHelper";
+static constexpr std::string_view videoHelperClassName = "org.cocos2dx.lib.Cocos2dxVideoHelper"sv;
 
 USING_NS_CC;
 
@@ -60,7 +60,7 @@ int createVideoWidgetJNI()
 {
     JniMethodInfo t;
     int ret = -1;
-    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "createVideoWidget", "()I"))
+    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.data(), "createVideoWidget", "()I"))
     {
         ret = t.env->CallStaticIntMethod(t.classID, t.methodID);
 
@@ -73,7 +73,7 @@ int createVideoWidgetJNI()
 void setLoopingJNI(int index, bool looping)
 {
     JniMethodInfo t;
-    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "setLooping", "(IZ)V"))
+    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.data(), "setLooping", "(IZ)V"))
     {
         t.env->CallStaticVoidMethod(t.classID, t.methodID, index, looping);
 
@@ -84,7 +84,7 @@ void setLoopingJNI(int index, bool looping)
 void setUserInputEnabledJNI(int index, bool enableInput)
 {
     JniMethodInfo t;
-    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "setUserInputEnabled", "(IZ)V"))
+    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.data(), "setUserInputEnabled", "(IZ)V"))
     {
         t.env->CallStaticVoidMethod(t.classID, t.methodID, index, enableInput);
 
@@ -121,22 +121,22 @@ VideoPlayer::VideoPlayer()
 VideoPlayer::~VideoPlayer()
 {
     s_allVideoPlayers.erase(_videoPlayerIndex);
-    JniHelper::callStaticVoidMethod(videoHelperClassName, "removeVideoWidget", _videoPlayerIndex);
+    JniHelper::callStaticVoidMethod(videoHelperClassName, "removeVideoWidget"sv, _videoPlayerIndex);
 }
 
-void VideoPlayer::setFileName(const std::string& fileName)
+void VideoPlayer::setFileName(std::string_view fileName)
 {
     _videoURL    = FileUtils::getInstance()->fullPathForFilename(fileName);
     _videoSource = VideoPlayer::Source::FILENAME;
-    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoUrl", _videoPlayerIndex, (int)Source::FILENAME,
+    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoUrl"sv, _videoPlayerIndex, (int)Source::FILENAME,
                                     _videoURL);
 }
 
-void VideoPlayer::setURL(const std::string& videoUrl)
+void VideoPlayer::setURL(std::string_view videoUrl)
 {
     _videoURL    = videoUrl;
     _videoSource = VideoPlayer::Source::URL;
-    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoUrl", _videoPlayerIndex, (int)Source::URL,
+    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoUrl"sv, _videoPlayerIndex, (int)Source::URL,
                                     _videoURL);
 }
 
@@ -164,7 +164,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
     if (flags & FLAGS_TRANSFORM_DIRTY)
     {
         auto uiRect = cocos2d::ui::Helper::convertBoundingBoxToScreen(this);
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoRect", _videoPlayerIndex, (int)uiRect.origin.x,
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoRect"sv, _videoPlayerIndex, (int)uiRect.origin.x,
                                         (int)uiRect.origin.y, (int)uiRect.size.width, (int)uiRect.size.height);
     }
 
@@ -183,7 +183,7 @@ void VideoPlayer::setFullScreenEnabled(bool enabled)
         _fullScreenEnabled = enabled;
 
         auto frameSize = Director::getInstance()->getOpenGLView()->getFrameSize();
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "setFullScreenEnabled", _videoPlayerIndex, enabled,
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "setFullScreenEnabled"sv, _videoPlayerIndex, enabled,
                                         (int)frameSize.width, (int)frameSize.height);
     }
 }
@@ -198,7 +198,7 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
     if (_keepAspectRatioEnabled != enable)
     {
         _keepAspectRatioEnabled = enable;
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoKeepRatioEnabled", _videoPlayerIndex, enable);
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoKeepRatioEnabled"sv, _videoPlayerIndex, enable);
     }
 }
 
@@ -225,7 +225,7 @@ void VideoPlayer::play()
 {
     if (!_videoURL.empty())
     {
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "startVideo", _videoPlayerIndex);
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "startVideo"sv, _videoPlayerIndex);
     }
 }
 
@@ -233,7 +233,7 @@ void VideoPlayer::pause()
 {
     if (!_videoURL.empty())
     {
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "pauseVideo", _videoPlayerIndex);
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "pauseVideo"sv, _videoPlayerIndex);
     }
 }
 
@@ -241,7 +241,7 @@ void VideoPlayer::resume()
 {
     if (!_videoURL.empty())
     {
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "resumeVideo", _videoPlayerIndex);
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "resumeVideo"sv, _videoPlayerIndex);
     }
 }
 
@@ -249,7 +249,7 @@ void VideoPlayer::stop()
 {
     if (!_videoURL.empty())
     {
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "stopVideo", _videoPlayerIndex);
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "stopVideo"sv, _videoPlayerIndex);
     }
 }
 
@@ -257,7 +257,7 @@ void VideoPlayer::seekTo(float sec)
 {
     if (!_videoURL.empty())
     {
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "seekVideoTo", _videoPlayerIndex, int(sec * 1000));
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "seekVideoTo"sv, _videoPlayerIndex, int(sec * 1000));
     }
 }
 
@@ -282,7 +282,7 @@ void VideoPlayer::setVisible(bool visible)
 
     if (!visible || isRunning())
     {
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoVisible", _videoPlayerIndex, visible);
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoVisible"sv, _videoPlayerIndex, visible);
     }
 }
 
@@ -291,14 +291,14 @@ void VideoPlayer::onEnter()
     Widget::onEnter();
     if (isVisible() && !_videoURL.empty())
     {
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoVisible", _videoPlayerIndex, true);
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoVisible"sv, _videoPlayerIndex, true);
     }
 }
 
 void VideoPlayer::onExit()
 {
     Widget::onExit();
-    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoVisible", _videoPlayerIndex, false);
+    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoVisible"sv, _videoPlayerIndex, false);
 }
 
 void VideoPlayer::addEventListener(const VideoPlayer::ccVideoPlayerCallback& callback)

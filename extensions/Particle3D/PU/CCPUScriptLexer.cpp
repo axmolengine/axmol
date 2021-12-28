@@ -31,7 +31,7 @@ PUScriptLexer::PUScriptLexer() {}
 
 PUScriptLexer::~PUScriptLexer() {}
 
-void PUScriptLexer::openLexer(const std::string& str, const std::string& source, PUScriptTokenList& tokens)
+void PUScriptLexer::openLexer(std::string_view str, std::string_view source, PUScriptTokenList& tokens)
 {
     enum
     {
@@ -55,7 +55,7 @@ void PUScriptLexer::openLexer(const std::string& str, const std::string& source,
     //
     // Iterate over the input
 
-    std::string::const_iterator i = str.begin(), end = str.end();
+    std::string_view::const_iterator i = str.begin(), end = str.end();
     while (i != end)
     {
         lastc = c;
@@ -233,7 +233,7 @@ void PUScriptLexer::openLexer(const std::string& str, const std::string& source,
     }
 }
 
-void PUScriptLexer::setToken(const std::string& lexeme, int line, const std::string& source, PUScriptTokenList* tokens)
+void PUScriptLexer::setToken(std::string_view lexeme, int line, std::string_view source, PUScriptTokenList* tokens)
 {
 
     const char openBracket = '{', closeBracket = '}', colon = ':', quote = '\"', var = '$';

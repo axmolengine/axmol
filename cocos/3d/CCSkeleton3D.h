@@ -61,7 +61,7 @@ public:
     const Mat4& getWorldMat();
 
     /**get bone name*/
-    const std::string& getName() const { return _name; }
+    std::string_view getName() const { return _name; }
 
     /**
      * set animation value
@@ -78,7 +78,7 @@ public:
     /**
      * Creates C3DBone.
      */
-    static Bone3D* create(const std::string& id);
+    static Bone3D* create(std::string_view id);
 
     /**
      * Sets the inverse bind pose matrix.
@@ -139,7 +139,7 @@ protected:
     /**
      * Constructor.
      */
-    Bone3D(const std::string& id);
+    Bone3D(std::string_view id);
 
     /**
      * Destructor.
@@ -190,7 +190,7 @@ public:
 
     /**get bone*/
     Bone3D* getBoneByIndex(unsigned int index) const;
-    Bone3D* getBoneByName(const std::string& id) const;
+    Bone3D* getBoneByName(std::string_view id) const;
 
     /**get & set root bone*/
     ssize_t getRootCount() const;

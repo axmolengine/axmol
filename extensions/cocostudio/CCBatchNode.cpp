@@ -69,7 +69,7 @@ void BatchNode::addChild(Node* child, int zOrder, int tag)
     }
 }
 
-void BatchNode::addChild(cocos2d::Node* child, int zOrder, const std::string& name)
+void BatchNode::addChild(cocos2d::Node* child, int zOrder, std::string_view name)
 {
     Node::addChild(child, zOrder, name);
     Armature* armature = dynamic_cast<Armature*>(child);

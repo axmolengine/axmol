@@ -78,7 +78,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void updateTweenAction(float value, const std::string& key) override;
+    virtual void updateTweenAction(float value, std::string_view key) override;
 
     /** Contains the position (in x-axis) of the slider inside the receiver. */
     float _sliderXPosition;
@@ -214,7 +214,7 @@ bool ControlSwitchSprite::initWithMaskSprite(Sprite* maskSprite,
     return false;
 }
 
-void ControlSwitchSprite::updateTweenAction(float value, const std::string& key)
+void ControlSwitchSprite::updateTweenAction(float value, std::string_view key)
 {
     CCLOGINFO("key = %s, value = %f", key.c_str(), value);
     setSliderXPosition(value);

@@ -76,7 +76,7 @@ static float stripTrailingWhitespace(const std::vector<Node*>& row) {
     if (!row.empty()) {
         if (auto label = dynamic_cast<Label*>(row.back())) {
             const auto width = label->getContentSize().width;
-            auto str = label->getString();
+            std::string str{label->getString()};
             rtrim(str);
             if (label->getString() != str) {
                 label->setString(str);

@@ -188,7 +188,7 @@ public:
      * @return if __onParseConfig function exist in the Lua, it return the value that _stack->executeFunction returns
      * otherwise return false.
      */
-    virtual bool parseConfig(ConfigType type, const std::string& str) override;
+    virtual bool parseConfig(ConfigType type, std::string_view str) override;
 
     /**
      * When some events triggered in the c++ also needs to pass on to lua to handle, we could call this function to send

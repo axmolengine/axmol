@@ -52,7 +52,7 @@ public:
 
     using Node::addChild;
     // add child, and add child to bone list and skeleton's sub bone map or add it to skin list
-    virtual void addChild(cocos2d::Node* child, int localZOrder, const std::string& name) override;
+    virtual void addChild(cocos2d::Node* child, int localZOrder, std::string_view name) override;
     virtual void addChild(cocos2d::Node* child, int localZOrder, int tag) override;
 
     // remove child, and remove child from bone list and skeleton's sub bone map or remove it from skin list
@@ -94,7 +94,7 @@ public:
      *         prefer to use display(SkinNode* skin, bool hideOthers = false)
      * @param: hideOthers, set other skins invisible
      */
-    virtual void displaySkin(const std::string& skinName, bool hideOthers);
+    virtual void displaySkin(std::string_view skinName, bool hideOthers);
 
     // get the skins which is visible (displaying skins)
     virtual cocos2d::Vector<SkinNode*> getVisibleSkins() const;
@@ -146,7 +146,7 @@ public:
     virtual void setLocalZOrder(int localZOrder) override;
 
     // set name, and replace the subbone map in skeleton
-    virtual void setName(const std::string& name) override;
+    virtual void setName(std::string_view name) override;
 
     // set visible, and dirty the debugdraw to make debugdraw's render layer right
     virtual void setVisible(bool visible) override;

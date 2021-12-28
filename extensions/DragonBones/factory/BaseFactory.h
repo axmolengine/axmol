@@ -68,8 +68,8 @@ public:
     bool autoSearch;
 
 protected:
-    std::map<std::string, DragonBonesData*> _dragonBonesDataMap;
-    std::map<std::string, std::vector<TextureAtlasData*>> _textureAtlasDataMap;
+    hlookup::string_map<DragonBonesData*> _dragonBonesDataMap;
+    hlookup::string_map<std::vector<TextureAtlasData*>> _textureAtlasDataMap;
     DragonBones* _dragonBones;
     DataParser* _dataParser;
 
@@ -99,12 +99,12 @@ public:
 
 protected:
     virtual inline bool _isSupportMesh() const { return true; }
-    virtual TextureData* _getTextureData(const std::string& textureAtlasName, const std::string& textureName) const;
+    virtual TextureData* _getTextureData(std::string_view textureAtlasName, std::string_view textureName) const;
     virtual bool _fillBuildArmaturePackage(BuildArmaturePackage& dataPackage,
-                                           const std::string& dragonBonesName,
-                                           const std::string& armatureName,
-                                           const std::string& skinName,
-                                           const std::string& textureAtlasName) const;
+                                           std::string_view dragonBonesName,
+                                           std::string_view armatureName,
+                                           std::string_view skinName,
+                                           std::string_view textureAtlasName) const;
     virtual void _buildBones(const BuildArmaturePackage& dataPackage, Armature* armature) const;
     /**
      * @private
@@ -151,9 +151,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual DragonBonesData* parseDragonBonesData(const char* rawData,
-                                                  const std::string& name = "",
-                                                  float scale             = 1.0f);
+    virtual DragonBonesData* parseDragonBonesData(const char* rawData, std::string_view name = "", float scale = 1.0f);
     /**
      * - Parse the raw texture atlas data and the texture atlas object to a TextureAtlasData instance and cache it to
      * the factory.
@@ -186,8 +184,8 @@ public:
      */
     virtual TextureAtlasData* parseTextureAtlasData(const char* rawData,
                                                     void* textureAtlas,
-                                                    const std::string& name = "",
-                                                    float scale             = 1.0f);
+                                                    std::string_view name = "",
+                                                    float scale           = 1.0f);
     /**
      * - Get a specific DragonBonesData instance.
      * @param name - The DragonBonesData instance cache name.
@@ -210,7 +208,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline DragonBonesData* getDragonBonesData(const std::string& name) const
+    inline DragonBonesData* getDragonBonesData(std::string_view name) const
     {
         return mapFind(_dragonBonesDataMap, name);
     }
@@ -237,7 +235,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    virtual void addDragonBonesData(DragonBonesData* data, const std::string& name = "");
+    virtual void addDragonBonesData(DragonBonesData* data, std::string_view name = "");
     /**
      * - Remove a DragonBonesData instance.
      * @param name - The DragonBonesData instance cache name.
@@ -260,7 +258,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    virtual void removeDragonBonesData(const std::string& name, bool disposeData = true);
+    virtual void removeDragonBonesData(std::string_view name, bool disposeData = true);
     /**
      * - Get a list of specific TextureAtlasData instances.
      * @param name - The TextureAtlasData cahce name.
@@ -281,7 +279,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline std::vector<TextureAtlasData*>* getTextureAtlasData(const std::string& name)
+    inline std::vector<TextureAtlasData*>* getTextureAtlasData(std::string_view name)
     {
         return mapFindB(_textureAtlasDataMap, name);
     }
@@ -308,7 +306,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    virtual void addTextureAtlasData(TextureAtlasData* data, const std::string& name = "");
+    virtual void addTextureAtlasData(TextureAtlasData* data, std::string_view name = "");
     /**
      * - Remove a TextureAtlasData instance.
      * @param name - The TextureAtlasData instance cache name.
@@ -331,7 +329,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    virtual void removeTextureAtlasData(const std::string& name, bool disposeData = true);
+    virtual void removeTextureAtlasData(std::string_view name, bool disposeData = true);
     /**
      * - Get a specific armature data.
      * @param name - The armature data name.
@@ -348,7 +346,7 @@ public:
      * @version DragonBones 5.1
      * @language zh_CN
      */
-    virtual ArmatureData* getArmatureData(const std::string& name, const std::string& dragonBonesName = "") const;
+    virtual ArmatureData* getArmatureData(std::string_view name, std::string_view dragonBonesName = "") const;
     /**
      * - Clear all cached DragonBonesData instances and TextureAtlasData instances.
      * @param disposeData - Whether to dispose data.
@@ -403,10 +401,10 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    virtual Armature* buildArmature(const std::string& armatureName,
-                                    const std::string& dragonBonesName  = "",
-                                    const std::string& skinName         = "",
-                                    const std::string& textureAtlasName = "") const;
+    virtual Armature* buildArmature(std::string_view armatureName,
+                                    std::string_view dragonBonesName  = "",
+                                    std::string_view skinName         = "",
+                                    std::string_view textureAtlasName = "") const;
     /**
      * @private
      */
@@ -448,18 +446,18 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual bool replaceSlotDisplay(const std::string& dragonBonesName,
-                                    const std::string& armatureName,
-                                    const std::string& slotName,
-                                    const std::string& displayName,
+    virtual bool replaceSlotDisplay(std::string_view dragonBonesName,
+                                    std::string_view armatureName,
+                                    std::string_view slotName,
+                                    std::string_view displayName,
                                     Slot* slot,
                                     int displayIndex = -1) const;
     /**
      * @private
      */
-    virtual bool replaceSlotDisplayList(const std::string& dragonBonesName,
-                                        const std::string& armatureName,
-                                        const std::string& slotName,
+    virtual bool replaceSlotDisplayList(std::string_view dragonBonesName,
+                                        std::string_view armatureName,
+                                        std::string_view slotName,
                                         Slot* slot) const;
     /**
      * - Share specific skin data with specific armature.
@@ -550,14 +548,14 @@ public:
     /**
      * @private
      */
-    inline const std::map<std::string, std::vector<TextureAtlasData*>>& getAllTextureAtlasData() const
+    inline const hlookup::string_map<std::vector<TextureAtlasData*>>& getAllTextureAtlasData() const
     {
         return _textureAtlasDataMap;
     }
     /**
      * @private
      */
-    inline const std::map<std::string, DragonBonesData*>& getAllDragonBonesData() const { return _dragonBonesDataMap; }
+    inline const hlookup::string_map<DragonBonesData*>& getAllDragonBonesData() const { return _dragonBonesDataMap; }
     /**
      * - An Worldclock instance updated by engine.
      * @version DragonBones 5.7

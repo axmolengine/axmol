@@ -35,7 +35,7 @@ NS_CC_BEGIN
 
 void ccMessageBox(const char* pszMsg, const char* pszTitle)
 {
-    JniHelper::callStaticVoidMethod("org.cocos2dx.lib.Cocos2dxHelper", "showDialog", pszTitle, pszMsg);
+    JniHelper::callStaticVoidMethod("org.cocos2dx.lib.Cocos2dxHelper"sv, "showDialog"sv, pszTitle, pszMsg);
 }
 
 void LuaLog(const char* pszFormat)

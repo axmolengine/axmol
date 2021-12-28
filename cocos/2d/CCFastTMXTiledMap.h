@@ -101,7 +101,7 @@ public:
      *
      * @return An autorelease object.
      */
-    static FastTMXTiledMap* create(const std::string& tmxFile);
+    static FastTMXTiledMap* create(std::string_view tmxFile);
 
     /** Initializes a TMX Tiled Map with a TMX formatted XML string and a path to TMX resources.
      *
@@ -109,25 +109,25 @@ public:
      * @param resourcePath A path to TMX resources.
      * @return An autorelease object.
      */
-    static FastTMXTiledMap* createWithXML(const std::string& tmxString, const std::string& resourcePath);
+    static FastTMXTiledMap* createWithXML(std::string_view tmxString, std::string_view resourcePath);
 
     /** Return the FastTMXLayer for the specific layer.
      *
      * @return Return the FastTMXLayer for the specific layer.
      */
-    FastTMXLayer* getLayer(const std::string& layerName) const;
+    FastTMXLayer* getLayer(std::string_view layerName) const;
 
     /** Return the TMXObjectGroup for the specific group.
      *
      * @return Return the TMXObjectGroup for the specific group.
      */
-    TMXObjectGroup* getObjectGroup(const std::string& groupName) const;
+    TMXObjectGroup* getObjectGroup(std::string_view groupName) const;
 
     /** Return the value for the specific property name.
      *
      * @return Return the value for the specific property name.
      */
-    Value getProperty(const std::string& propertyName) const;
+    Value getProperty(std::string_view propertyName) const;
 
     /** Return properties dictionary for tile GID.
      *
@@ -207,7 +207,7 @@ public:
 
     int getLayerCount() const { return _layerCount; }
 
-    const std::string& getResourceFile() const { return _tmxFile; }
+    std::string_view getResourceFile() const { return _tmxFile; }
 
     CC_CONSTRUCTOR_ACCESS :
         /**
@@ -221,10 +221,10 @@ public:
     virtual ~FastTMXTiledMap();
 
     /** initializes a TMX Tiled Map with a TMX file */
-    bool initWithTMXFile(const std::string& tmxFile);
+    bool initWithTMXFile(std::string_view tmxFile);
 
     /** initializes a TMX Tiled Map with a TMX formatted XML string and a path to TMX resources */
-    bool initWithXML(const std::string& tmxString, const std::string& resourcePath);
+    bool initWithXML(std::string_view tmxString, std::string_view resourcePath);
 
 protected:
     FastTMXLayer* parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);

@@ -87,7 +87,7 @@ public:
      * @param path Path of material file
      * @return Created material
      */
-    static Sprite3DMaterial* createWithFilename(const std::string& path);
+    static Sprite3DMaterial* createWithFilename(std::string_view path);
 
     /**
      * Create material with GLProgramState
@@ -162,10 +162,10 @@ public:
     static void destroyInstance();
 
     /**add to cache*/
-    bool addSprite3DMaterial(const std::string& key, Texture2D* tex);
+    bool addSprite3DMaterial(std::string_view key, Texture2D* tex);
 
     /**get material from cache*/
-    Texture2D* getSprite3DMaterial(const std::string& key);
+    Texture2D* getSprite3DMaterial(std::string_view key);
 
     /**remove all spritematerial*/
     void removeAllSprite3DMaterial();
@@ -178,8 +178,8 @@ public:
     ~Sprite3DMaterialCache();
 
 protected:
-    static Sprite3DMaterialCache* _cacheInstance;            // instance
-    std::unordered_map<std::string, Texture2D*> _materials;  // cached material
+    static Sprite3DMaterialCache* _cacheInstance;  // instance
+    hlookup::string_map<Texture2D*> _materials;    // cached material
 };
 
 // end of 3d group

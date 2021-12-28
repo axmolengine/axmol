@@ -78,23 +78,23 @@ public:
      @param String with url to open.
      @return true if the resource located by the URL was successfully opened; otherwise false.
      */
-    virtual bool openURL(const std::string& url);
+    virtual bool openURL(std::string_view url);
 
     /**
      *  Sets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
      */
-    CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string& rootResDir);
+    CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(std::string_view rootResDir);
 
     /**
      *  Gets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead.
      */
-    CC_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath();
+    CC_DEPRECATED_ATTRIBUTE std::string_view getResourceRootPath();
 
-    void setStartupScriptFilename(const std::string& startupScriptFile);
+    void setStartupScriptFilename(std::string_view startupScriptFile);
 
-    const std::string& getStartupScriptFilename() { return _startupScriptFilename; }
+    std::string_view getStartupScriptFilename() { return _startupScriptFilename; }
 
 protected:
     HINSTANCE _instance;

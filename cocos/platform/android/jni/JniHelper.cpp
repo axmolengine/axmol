@@ -319,6 +319,11 @@ jstring JniHelper::convert(LocalRefMapType& localRefs, cocos2d::JniMethodInfo& t
     return ret;
 }
 
+jstring JniHelper::convert(LocalRefMapType& localRefs, cocos2d::JniMethodInfo& t, std::string_view x)
+{
+    return convert(localRefs, t, x.data());
+}
+
 jstring JniHelper::convert(LocalRefMapType& localRefs, cocos2d::JniMethodInfo& t, const std::string& x)
 {
     return convert(localRefs, t, x.c_str());
@@ -338,10 +343,10 @@ void JniHelper::deleteLocalRefs(JNIEnv* env, LocalRefMapType& localRefs)
     localRefs[env].clear();
 }
 
-void JniHelper::reportError(const std::string& className, const std::string& methodName, const std::string& signature)
+void JniHelper::reportError(std::string_view className, std::string_view methodName, std::string_view signature)
 {
-    LOGE("Failed to find static java method. Class name: %s, method name: %s, signature: %s ", className.c_str(),
-         methodName.c_str(), signature.c_str());
+    LOGE("Failed to find static java method. Class name: %s, method name: %s, signature: %s ", className.data(),
+         methodName.data(), signature.data());
 }
 
 }  // namespace cocos2d

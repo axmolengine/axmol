@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2014 cocos2d-x.org
 
 http://www.cocos2d-x.org
@@ -59,7 +59,7 @@ public:
     cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
 
 private:
-    std::string getArmatureName(const std::string& exporJsonPath);
+    std::string getArmatureName(std::string_view exporJsonPath);
 };
 
 #endif /* defined(__ARMATURENODEREADER_H_) */

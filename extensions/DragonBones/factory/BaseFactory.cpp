@@ -1,11 +1,11 @@
-﻿#include "BaseFactory.h"
+#include "BaseFactory.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 
 JSONDataParser BaseFactory::_jsonParser;
 BinaryDataParser BaseFactory::_binaryParser;
 
-TextureData* BaseFactory::_getTextureData(const std::string& textureAtlasName, const std::string& textureName) const
+TextureData* BaseFactory::_getTextureData(std::string_view textureAtlasName, std::string_view textureName) const
 {
     const auto iterator = _textureAtlasDataMap.find(textureAtlasName);
     if (iterator != _textureAtlasDataMap.end())
@@ -42,12 +42,12 @@ TextureData* BaseFactory::_getTextureData(const std::string& textureAtlasName, c
 }
 
 bool BaseFactory::_fillBuildArmaturePackage(BuildArmaturePackage& dataPackage,
-                                            const std::string& dragonBonesName,
-                                            const std::string& armatureName,
-                                            const std::string& skinName,
-                                            const std::string& textureAtlasName) const
+                                            std::string_view dragonBonesName,
+                                            std::string_view armatureName,
+                                            std::string_view skinName,
+                                            std::string_view textureAtlasName) const
 {
-    std::string mapName              = dragonBonesName;
+    auto mapName                     = dragonBonesName;
     DragonBonesData* dragonBonesData = nullptr;
     ArmatureData* armatureData       = nullptr;
 
@@ -141,7 +141,7 @@ void BaseFactory::_buildSlots(const BuildArmaturePackage& dataPackage, Armature*
         return;
     }
 
-    std::map<std::string, std::vector<DisplayData*>*> skinSlots;
+    hlookup::string_map<std::vector<DisplayData*>*> skinSlots;
     for (auto& pair : defaultSkin->displays)
     {
         auto& displays        = pair.second;
@@ -309,7 +309,7 @@ std::pair<void*, DisplayType> BaseFactory::_getSlotDisplay(const BuildArmaturePa
     return display;
 }
 
-DragonBonesData* BaseFactory::parseDragonBonesData(const char* rawData, const std::string& name, float scale)
+DragonBonesData* BaseFactory::parseDragonBonesData(const char* rawData, std::string_view name, float scale)
 {
     DRAGONBONES_ASSERT(rawData != nullptr, "");
 
@@ -350,7 +350,7 @@ DragonBonesData* BaseFactory::parseDragonBonesData(const char* rawData, const st
 
 TextureAtlasData* BaseFactory::parseTextureAtlasData(const char* rawData,
                                                      void* textureAtlas,
-                                                     const std::string& name,
+                                                     std::string_view name,
                                                      float scale)
 {
     const auto textureAtlasData = _buildTextureAtlasData(nullptr, nullptr);
@@ -361,7 +361,7 @@ TextureAtlasData* BaseFactory::parseTextureAtlasData(const char* rawData,
     return textureAtlasData;
 }
 
-void BaseFactory::addDragonBonesData(DragonBonesData* data, const std::string& name)
+void BaseFactory::addDragonBonesData(DragonBonesData* data, std::string_view name)
 {
     const auto& mapName = !name.empty() ? name : data->name;
     if (_dragonBonesDataMap.find(mapName) != _dragonBonesDataMap.cend())
@@ -378,7 +378,7 @@ void BaseFactory::addDragonBonesData(DragonBonesData* data, const std::string& n
     _dragonBonesDataMap[mapName] = data;
 }
 
-void BaseFactory::removeDragonBonesData(const std::string& name, bool disposeData)
+void BaseFactory::removeDragonBonesData(std::string_view name, bool disposeData)
 {
     const auto iterator = _dragonBonesDataMap.find(name);
     if (iterator != _dragonBonesDataMap.cend())
@@ -392,7 +392,7 @@ void BaseFactory::removeDragonBonesData(const std::string& name, bool disposeDat
     }
 }
 
-void BaseFactory::addTextureAtlasData(TextureAtlasData* data, const std::string& name)
+void BaseFactory::addTextureAtlasData(TextureAtlasData* data, std::string_view name)
 {
     const auto& mapName    = !name.empty() ? name : data->name;
     auto& textureAtlasList = _textureAtlasDataMap[mapName];
@@ -402,7 +402,7 @@ void BaseFactory::addTextureAtlasData(TextureAtlasData* data, const std::string&
     }
 }
 
-void BaseFactory::removeTextureAtlasData(const std::string& name, bool disposeData)
+void BaseFactory::removeTextureAtlasData(std::string_view name, bool disposeData)
 {
     const auto iterator = _textureAtlasDataMap.find(name);
     if (iterator != _textureAtlasDataMap.end())
@@ -419,7 +419,7 @@ void BaseFactory::removeTextureAtlasData(const std::string& name, bool disposeDa
     }
 }
 
-ArmatureData* BaseFactory::getArmatureData(const std::string& name, const std::string& dragonBonesName) const
+ArmatureData* BaseFactory::getArmatureData(std::string_view name, std::string_view dragonBonesName) const
 {
     BuildArmaturePackage dataPackage;
     if (!_fillBuildArmaturePackage(dataPackage, dragonBonesName, name, "", ""))
@@ -452,10 +452,10 @@ void BaseFactory::clear(bool disposeData)
     _textureAtlasDataMap.clear();
 }
 
-Armature* BaseFactory::buildArmature(const std::string& armatureName,
-                                     const std::string& dragonBonesName,
-                                     const std::string& skinName,
-                                     const std::string& textureAtlasName) const
+Armature* BaseFactory::buildArmature(std::string_view armatureName,
+                                     std::string_view dragonBonesName,
+                                     std::string_view skinName,
+                                     std::string_view textureAtlasName) const
 {
     BuildArmaturePackage dataPackage;
     if (!_fillBuildArmaturePackage(dataPackage, dragonBonesName, armatureName, skinName, textureAtlasName))
@@ -512,10 +512,10 @@ void BaseFactory::replaceDisplay(Slot* slot, DisplayData* displayData, int displ
     slot->setDisplayList(displayList);
 }
 
-bool BaseFactory::replaceSlotDisplay(const std::string& dragonBonesName,
-                                     const std::string& armatureName,
-                                     const std::string& slotName,
-                                     const std::string& displayName,
+bool BaseFactory::replaceSlotDisplay(std::string_view dragonBonesName,
+                                     std::string_view armatureName,
+                                     std::string_view slotName,
+                                     std::string_view displayName,
                                      Slot* slot,
                                      int displayIndex) const
 {
@@ -538,9 +538,9 @@ bool BaseFactory::replaceSlotDisplay(const std::string& dragonBonesName,
     return true;
 }
 
-bool BaseFactory::replaceSlotDisplayList(const std::string& dragonBonesName,
-                                         const std::string& armatureName,
-                                         const std::string& slotName,
+bool BaseFactory::replaceSlotDisplayList(std::string_view dragonBonesName,
+                                         std::string_view armatureName,
+                                         std::string_view slotName,
                                          Slot* slot) const
 {
     DRAGONBONES_ASSERT(slot, "Arguments error.");

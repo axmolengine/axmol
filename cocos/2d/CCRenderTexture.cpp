@@ -357,9 +357,7 @@ void RenderTexture::visit(Renderer* renderer, const Mat4& parentTransform, uint3
     // setOrderOfArrival(0);
 }
 
-bool RenderTexture::saveToFileAsNonPMA(const std::string& filename,
-                                       bool isRGBA,
-                                       std::function<void(RenderTexture*, const std::string&)> callback)
+bool RenderTexture::saveToFileAsNonPMA(std::string_view filename, bool isRGBA, SaveFileCallbackType callback)
 {
     std::string basename(filename);
     std::transform(basename.begin(), basename.end(), basename.begin(), ::tolower);
@@ -382,9 +380,7 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& filename,
     return saveToFileAsNonPMA(filename, Image::Format::JPG, false, callback);
 }
 
-bool RenderTexture::saveToFile(const std::string& filename,
-                               bool isRGBA,
-                               std::function<void(RenderTexture*, const std::string&)> callback)
+bool RenderTexture::saveToFile(std::string_view filename, bool isRGBA, SaveFileCallbackType callback)
 {
     std::string basename(filename);
     std::transform(basename.begin(), basename.end(), basename.begin(), ::tolower);
@@ -407,10 +403,10 @@ bool RenderTexture::saveToFile(const std::string& filename,
     return saveToFile(filename, Image::Format::JPG, false, callback);
 }
 
-bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName,
+bool RenderTexture::saveToFileAsNonPMA(std::string_view fileName,
                                        Image::Format format,
                                        bool isRGBA,
-                                       std::function<void(RenderTexture*, const std::string&)> callback)
+                                       SaveFileCallbackType callback)
 {
     CCASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
              "the image can only be saved as JPG or PNG format");
@@ -419,7 +415,7 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName,
 
     _saveFileCallback = callback;
 
-    std::string fullpath = FileUtils::getInstance()->getWritablePath() + fileName;
+    std::string fullpath = FileUtils::getInstance()->getWritablePath().append(fileName);
     _saveToFileCommand.init(_globalZOrder);
     _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, true);
 
@@ -427,10 +423,10 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName,
     return true;
 }
 
-bool RenderTexture::saveToFile(const std::string& fileName,
+bool RenderTexture::saveToFile(std::string_view fileName,
                                Image::Format format,
                                bool isRGBA,
-                               std::function<void(RenderTexture*, const std::string&)> callback)
+                               std::function<void(RenderTexture*, std::string_view)> callback)
 {
     CCASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
              "the image can only be saved as JPG or PNG format");
@@ -439,7 +435,7 @@ bool RenderTexture::saveToFile(const std::string& fileName,
 
     _saveFileCallback = callback;
 
-    std::string fullpath = FileUtils::getInstance()->getWritablePath() + fileName;
+    std::string fullpath = FileUtils::getInstance()->getWritablePath().append(fileName);
     _saveToFileCommand.init(_globalZOrder);
     _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
 
@@ -447,7 +443,7 @@ bool RenderTexture::saveToFile(const std::string& fileName,
     return true;
 }
 
-void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool forceNonPMA)
+void RenderTexture::onSaveToFile(std::string_view filename, bool isRGBA, bool forceNonPMA)
 {
     auto callbackFunc = [&, filename, isRGBA, forceNonPMA](RefPtr<Image> image) {
         if (image)

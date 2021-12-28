@@ -130,7 +130,7 @@ void PUObserver::notifyRescaled(const Vec3& scale)
     }
 }
 //-----------------------------------------------------------------------
-PUEventHandler* PUObserver::createEventHandler(const std::string& eventHandlerType)
+PUEventHandler* PUObserver::createEventHandler(std::string_view eventHandlerType)
 {
     PUEventHandler* eventHandler = PUEventHandlerManager::Instance()->createEventHandler(eventHandlerType);
     addEventHandler(eventHandler);
@@ -168,7 +168,7 @@ PUEventHandler* PUObserver::getEventHandler(size_t index) const
     return _eventHandlers[index];
 }
 //-----------------------------------------------------------------------
-PUEventHandler* PUObserver::getEventHandler(const std::string& eventHandlerName) const
+PUEventHandler* PUObserver::getEventHandler(std::string_view eventHandlerName) const
 {
     if (eventHandlerName.empty())
         return nullptr;

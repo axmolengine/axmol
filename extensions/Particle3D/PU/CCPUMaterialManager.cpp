@@ -77,7 +77,7 @@ PUMaterialCache* PUMaterialCache::Instance()
     return &pmm;
 }
 
-PUMaterial* PUMaterialCache::getMaterial(const std::string& name)
+PUMaterial* PUMaterialCache::getMaterial(std::string_view name)
 {
     for (auto iter : _materialMap)
     {
@@ -87,7 +87,7 @@ PUMaterial* PUMaterialCache::getMaterial(const std::string& name)
     return nullptr;
 }
 
-bool PUMaterialCache::loadMaterials(const std::string& file)
+bool PUMaterialCache::loadMaterials(std::string_view file)
 {
     bool isFirstCompile = true;
     auto list           = PUScriptCompiler::Instance()->compile(file, isFirstCompile);
@@ -128,53 +128,59 @@ int iterPath(const char* fpath, const struct stat* /*sb*/, int typeflag)
 }
 #endif
 
-bool PUMaterialCache::loadMaterialsFromSearchPaths(const std::string& fileFolder)
+bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
 {
     bool state = false;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     std::string seg("/");
-    std::string fullPath = fileFolder + seg + std::string("*.material");
+    std::string fullPath{fileFolder};
+    fullPath += seg;
+    fullPath += std::string("*.material");
     _finddata_t data;
     intptr_t handle = _findfirst(fullPath.c_str(), &data);
     int done        = 0;
     while ((handle != -1) && (done == 0))
     {
-        loadMaterials(fileFolder + seg + std::string(data.name));
+        fullPath = fileFolder;
+        fullPath += seg;
+        fullPath += data.name;
+        loadMaterials(fullPath);
         done  = _findnext(handle, &data);
         state = true;
     }
     _findclose(handle);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID /* || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX*/)
-    std::string::size_type pos = fileFolder.find("assets/");
-    std::string relativePath   = fileFolder;
+    std::string::size_type pos    = fileFolder.find("assets/");
+    std::string_view relativePath = fileFolder;
     if (pos != std::string::npos)
     {
         // "assets/" is at the beginning of the path and we don't want it
         relativePath = fileFolder.substr(pos + strlen("assets/"));
     }
-    AAssetDir* dir       = AAssetManager_openDir(FileUtilsAndroid::getAssetManager(), relativePath.c_str());
+    AAssetDir* dir       = AAssetManager_openDir(FileUtilsAndroid::getAssetManager(), relativePath.data());
     const char* fileName = nullptr;
-    std::string seg("/");
+    std::string_view seg("/", 1);
+    std::string fullpath;
     while ((fileName = AAssetDir_getNextFileName(dir)) != nullptr)
     {
         if (FileUtils::getInstance()->getFileExtension(fileName) == ".material")
         {
-            std::string fullpath = fileFolder + seg + std::string(fileName);
+            fullpath.assign(fileFolder).append(seg).append(fileName);
             loadMaterials(fullpath);
         }
     }
     AAssetDir_close(dir);
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-    ftw(fileFolder.c_str(), iterPath, 500);
+    ftw(fileFolder.data(), iterPath, 500);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_TIZEN)
     DIR* d;               // dir handle
     struct dirent* file;  // readdir
     struct stat statbuf;
 
-    if (!(d = opendir(fileFolder.c_str())))
+    if (!(d = opendir(fileFolder.data())))
     {
-        CCLOG("error opendir %s!!!\n", fileFolder.c_str());
+        CCLOG("error opendir %s!!!\n", fileFolder.data());
         return false;
     }
     while ((file = readdir(d)) != NULL)
@@ -186,7 +192,8 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(const std::string& fileFolder
 
         if (FileUtils::getInstance()->getFileExtension(file->d_name) == ".material")
         {
-            std::string fullpath = fileFolder + "/" + file->d_name;
+            std::string fullpath{fileFolder};
+            fullpath.append("/"sv).append(file->d_name);
             CCLOG("%s", fullpath.c_str());
             loadMaterials(fullpath);
             state = true;

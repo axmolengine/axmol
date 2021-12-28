@@ -38,7 +38,7 @@ AutoreleasePool::AutoreleasePool()
     PoolManager::getInstance()->push(this);
 }
 
-AutoreleasePool::AutoreleasePool(const std::string& name)
+AutoreleasePool::AutoreleasePool(std::string_view name)
     : _name(name)
 #if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
     , _isClearing(false)

@@ -52,7 +52,7 @@ UICCTextField::UICCTextField()
 
 UICCTextField::~UICCTextField() {}
 
-UICCTextField* UICCTextField::create(const std::string& placeholder, const std::string& fontName, float fontSize)
+UICCTextField* UICCTextField::create(std::string_view placeholder, std::string_view fontName, float fontSize)
 {
     UICCTextField* pRet = new UICCTextField();
 
@@ -191,12 +191,12 @@ bool UICCTextField::isPasswordEnabled() const
     return this->isSecureTextEntry();
 }
 
-void UICCTextField::setPasswordStyleText(const std::string& styleText)
+void UICCTextField::setPasswordStyleText(std::string_view styleText)
 {
     this->setPasswordTextStyle(styleText);
 }
 
-void UICCTextField::setPasswordText(const std::string& text)
+void UICCTextField::setPasswordText(std::string_view text)
 {
     std::string tempStr = "";
     int32_t text_count  = StringUtils::getCharacterCountInUTF8String(text);
@@ -292,7 +292,7 @@ TextField* TextField::create()
     return nullptr;
 }
 
-TextField* TextField::create(const std::string& placeholder, const std::string& fontName, int fontSize)
+TextField* TextField::create(std::string_view placeholder, std::string_view fontName, int fontSize)
 {
     TextField* widget = new TextField();
     if (widget->init())
@@ -358,7 +358,7 @@ Vec2 TextField::getTouchSize() const
     return Vec2(_touchWidth, _touchHeight);
 }
 
-void TextField::setString(const std::string& text)
+void TextField::setString(std::string_view text)
 {
     std::string strText(text);
 
@@ -386,14 +386,14 @@ void TextField::setString(const std::string& text)
     updateContentSizeWithTextureSize(_textFieldRenderer->getContentSize());
 }
 
-void TextField::setPlaceHolder(const std::string& value)
+void TextField::setPlaceHolder(std::string_view value)
 {
     _textFieldRenderer->setPlaceHolder(value);
     _textFieldRendererAdaptDirty = true;
     updateContentSizeWithTextureSize(_textFieldRenderer->getContentSize());
 }
 
-const std::string& TextField::getPlaceHolder() const
+std::string_view TextField::getPlaceHolder() const
 {
     return _textFieldRenderer->getPlaceHolder();
 }
@@ -449,11 +449,11 @@ int TextField::getFontSize() const
     return _fontSize;
 }
 
-void TextField::setFontName(const std::string& name)
+void TextField::setFontName(std::string_view name)
 {
     if (FileUtils::getInstance()->isFileExist(name))
     {
-        std::string lcName = name;
+        std::string lcName{name};
         std::transform(lcName.begin(), lcName.end(), lcName.begin(), ::tolower);
         if (lcName.substr(lcName.length() - 4) == ".fnt")
         {
@@ -483,7 +483,7 @@ void TextField::setFontName(const std::string& name)
     updateContentSizeWithTextureSize(_textFieldRenderer->getContentSize());
 }
 
-const std::string& TextField::getFontName() const
+std::string_view TextField::getFontName() const
 {
     return _fontName;
 }
@@ -493,7 +493,7 @@ void TextField::didNotSelectSelf()
     _textFieldRenderer->detachWithIME();
 }
 
-const std::string& TextField::getString() const
+std::string_view TextField::getString() const
 {
     return _textFieldRenderer->getString();
 }
@@ -563,7 +563,7 @@ void TextField::setPasswordStyleText(const char* styleText)
 
 const char* TextField::getPasswordStyleText() const
 {
-    return _textFieldRenderer->getPasswordTextStyle().c_str();
+    return _textFieldRenderer->getPasswordTextStyle().data();
 }
 
 void TextField::update(float /*dt*/)

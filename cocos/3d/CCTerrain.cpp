@@ -83,7 +83,7 @@ bool Terrain::initWithTerrainData(TerrainData& parameter, CrackFixedType fixedTy
     return initResult;
 }
 
-void cocos2d::Terrain::setLightMap(const std::string& fileName)
+void cocos2d::Terrain::setLightMap(std::string_view fileName)
 {
     CC_SAFE_RELEASE(_lightMap);
     auto image = new Image();
@@ -197,7 +197,7 @@ void Terrain::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, 
     }
 }
 
-bool Terrain::initHeightMap(const std::string& heightMap)
+bool Terrain::initHeightMap(std::string_view heightMap)
 {
     _heightMapImage = new Image();
     _heightMapImage->initWithImageFile(heightMap);
@@ -343,7 +343,7 @@ float Terrain::getHeight(float x, float z, Vec3* normal) const
             normal->z = d - a;
             normal->normalize();
             //(*normal) = (1-u)*(1-v)*getNormal(i,j)+ (1-u)*v*getNormal(i,j+1) + u*(1-v)*getNormal(i+1,j)+
-            //u*v*getNormal(i+1,j+1);
+            // u*v*getNormal(i+1,j+1);
         }
         float result = (1 - u) * (1 - v) * getImageHeight(i, j) * getScaleY() +
                        (1 - u) * v * getImageHeight(i, j + 1) * getScaleY() +
@@ -611,7 +611,7 @@ cocos2d::Vec2 Terrain::convertToTerrainSpace(const Vec2& worldSpaceXZ) const
     return Vec2(image_x, image_y);
 }
 
-void Terrain::resetHeightMap(const std::string& heightMap)
+void Terrain::resetHeightMap(std::string_view heightMap)
 {
     _heightMapImage->release();
     _vertices.clear();
@@ -1154,8 +1154,8 @@ void Terrain::Chunk::updateIndicesLOD()
     }
     memcpy(_neighborOldLOD, currentNeighborLOD, sizeof(currentNeighborLOD));
     _oldLod   = _currentLod;
-    int gridY = _size.height;
-    int gridX = _size.width;
+    int gridY = static_cast<int>(_size.height);
+    int gridX = static_cast<int>(_size.width);
 
     int step = 1 << _currentLod;
     if ((_left && _left->_currentLod > _currentLod) || (_right && _right->_currentLod > _currentLod) ||
@@ -1644,8 +1644,8 @@ Terrain::QuadTree::~QuadTree()
         delete _br;
 }
 
-Terrain::TerrainData::TerrainData(const std::string& heightMapsrc,
-                                  const std::string& textureSrc,
+Terrain::TerrainData::TerrainData(std::string_view heightMapsrc,
+                                  std::string_view textureSrc,
                                   const Vec2& chunksize,
                                   float height,
                                   float scale)
@@ -1659,8 +1659,8 @@ Terrain::TerrainData::TerrainData(const std::string& heightMapsrc,
     _skirtHeightRatio                  = 1;
 }
 
-Terrain::TerrainData::TerrainData(const std::string& heightMapsrc,
-                                  const std::string& alphamap,
+Terrain::TerrainData::TerrainData(std::string_view heightMapsrc,
+                                  std::string_view alphamap,
                                   const DetailMap& detail1,
                                   const DetailMap& detail2,
                                   const DetailMap& detail3,
@@ -1682,8 +1682,8 @@ Terrain::TerrainData::TerrainData(const std::string& heightMapsrc,
     _skirtHeightRatio    = 1;
 }
 
-Terrain::TerrainData::TerrainData(const std::string& heightMapsrc,
-                                  const std::string& alphamap,
+Terrain::TerrainData::TerrainData(std::string_view heightMapsrc,
+                                  std::string_view alphamap,
                                   const DetailMap& detail1,
                                   const DetailMap& detail2,
                                   const DetailMap& detail3,
@@ -1729,7 +1729,7 @@ Terrain::ChunkIndices::~ChunkIndices()
     CC_SAFE_RELEASE_NULL(_indexBuffer);
 }
 
-Terrain::DetailMap::DetailMap(const std::string& detailMapPath, float size /*= 35*/)
+Terrain::DetailMap::DetailMap(std::string_view detailMapPath, float size /*= 35*/)
 {
     this->_detailMapSrc  = detailMapPath;
     this->_detailMapSize = size;

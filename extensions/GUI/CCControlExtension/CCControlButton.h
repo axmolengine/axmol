@@ -57,7 +57,7 @@ public:
     static ControlButton* create();
     static ControlButton* create(cocos2d::ui::Scale9Sprite* sprite);
     static ControlButton* create(Node* label, cocos2d::ui::Scale9Sprite* backgroundSprite);
-    static ControlButton* create(const std::string& title, const std::string& fontName, float fontSize);
+    static ControlButton* create(std::string_view title, std::string_view fontName, float fontSize);
     static ControlButton* create(Node* label, cocos2d::ui::Scale9Sprite* backgroundSprite, bool adjustBackGroundSize);
 
     virtual void needsLayout() override;
@@ -87,7 +87,7 @@ public:
      * @param state The state that uses the specified title. The values are described
      * in "CCControlState".
      */
-    virtual void setTitleForState(const std::string& title, State state);
+    virtual void setTitleForState(std::string_view title, State state);
 
     /**
      * Returns the title color used for a state.
@@ -128,8 +128,8 @@ public:
      */
     virtual void setTitleLabelForState(Node* label, State state);
 
-    virtual void setTitleTTFForState(const std::string& fntFile, State state);
-    virtual const std::string& getTitleTTFForState(State state);
+    virtual void setTitleTTFForState(std::string_view fntFile, State state);
+    virtual std::string_view getTitleTTFForState(State state);
 
     virtual void setTitleTTFSizeForState(float size, State state);
     virtual float getTitleTTFSizeForState(State state);
@@ -140,8 +140,8 @@ public:
      * @param state The state that uses the specified fntFile. The values are described
      * in "CCControlState".
      */
-    virtual void setTitleBMFontForState(const std::string& fntFile, State state);
-    virtual const std::string& getTitleBMFontForState(State state);
+    virtual void setTitleBMFontForState(std::string_view fntFile, State state);
+    virtual std::string_view getTitleBMFontForState(State state);
 
     /**
      * Returns the background sprite used for a state.
@@ -188,7 +188,7 @@ public:
     virtual void setColor(const Color3B&) override;
     virtual void updateDisplayedColor(const Color3B& parentColor) override;
 
-    const std::string& getCurrentTitle() const { return _currentTitle; };
+    std::string_view getCurrentTitle() const { return _currentTitle; };
     std::string getCurrentTitle() { return _currentTitle; };
 
     CC_CONSTRUCTOR_ACCESS :
@@ -207,9 +207,7 @@ public:
                                                   cocos2d::ui::Scale9Sprite* backgroundSprite,
                                                   bool adjustBackGroundSize);
     virtual bool initWithBackgroundSprite(cocos2d::ui::Scale9Sprite* sprite);
-    virtual bool initWithTitleAndFontNameAndFontSize(const std::string& title,
-                                                     const std::string& fontName,
-                                                     float fontSize);
+    virtual bool initWithTitleAndFontNameAndFontSize(std::string_view title, std::string_view fontName, float fontSize);
 
 protected:
     bool _isPushed;

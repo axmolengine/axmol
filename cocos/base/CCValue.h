@@ -43,7 +43,7 @@ NS_CC_BEGIN
 class Value;
 
 typedef std::vector<Value> ValueVector;
-typedef std::unordered_map<std::string, Value> ValueMap;
+typedef hlookup::string_map<Value> ValueMap;
 typedef std::unordered_map<int, Value> ValueMapIntKey;
 
 CC_DLL extern const ValueVector ValueVectorNull;
@@ -91,7 +91,7 @@ public:
     explicit Value(const char* v);
 
     /** Create a Value by a string. */
-    explicit Value(const std::string& v);
+    explicit Value(std::string_view v);
 
     explicit Value(std::string&& v);
 
@@ -142,7 +142,7 @@ public:
     /** Assignment operator, assign from char* to Value. */
     Value& operator=(const char* v);
     /** Assignment operator, assign from string to Value. */
-    Value& operator=(const std::string& v);
+    Value& operator=(std::string_view v);
     Value& operator=(std::string&& v);
 
     /** Assignment operator, assign from ValueVector to Value. */
@@ -193,7 +193,7 @@ public:
     std::string asString() const;
 
     /** Gets as a string value reference without conversion, if value type is not string will return "" */
-    const std::string& asStringRef() const;
+    std::string_view asStringRef() const;
 
     /** Gets as a ValueVector reference. Will convert to ValueVector if possible, or will trigger assert error. */
     ValueVector& asValueVector();
@@ -278,6 +278,11 @@ private:
 
     Type _type;
 };
+
+inline const cocos2d::Value& optValue(const ValueMap& dictionary, std::string_view key)
+{
+    return dictionary.find(key) != dictionary.cend() ? dictionary.at(key) : cocos2d::Value::Null;
+}
 
 /** @} */
 

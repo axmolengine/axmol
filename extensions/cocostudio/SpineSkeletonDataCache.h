@@ -39,7 +39,7 @@ public:
     void removeAllUnusedData(void);
 
 public:
-    std::map<std::string, SkeletonData*> _cacheTable;
+    hlookup::string_map<SkeletonData*> _cacheTable;
     void (*_reportError)(const char* pszFormat, ...);
 };
 
@@ -76,7 +76,7 @@ public:
     void removeAllUnusedData(void);
 
 public:
-    std::map<std::string, SkeletonData*> _cacheTable;
+    hlookup::string_map<SkeletonData*> _cacheTable;
     void (*_reportError)(const char* pszFormat, ...);
 };
 

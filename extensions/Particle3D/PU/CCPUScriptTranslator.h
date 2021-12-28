@@ -679,27 +679,25 @@ public:
      */
     bool passValidateProperty(PUScriptCompiler* compiler,
                               PUPropertyAbstractNode* prop,
-                              const std::string& token,
+                              std::string_view token,
                               ValidationType validationType);
 
     /** Validate whether a property has values.
      */
-    bool passValidatePropertyNoValues(PUScriptCompiler* compiler,
-                                      PUPropertyAbstractNode* prop,
-                                      const std::string& token);
+    bool passValidatePropertyNoValues(PUScriptCompiler* compiler, PUPropertyAbstractNode* prop, std::string_view token);
 
     /** Validate whether the number of values is correct.
      */
     bool passValidatePropertyNumberOfValues(PUScriptCompiler* compiler,
                                             PUPropertyAbstractNode* prop,
-                                            const std::string& token,
+                                            std::string_view token,
                                             unsigned short numberOfValues);
 
     /** Validate whether the number of values is between a range.
      */
     bool passValidatePropertyNumberOfValuesRange(PUScriptCompiler* compiler,
                                                  PUPropertyAbstractNode* prop,
-                                                 const std::string& token,
+                                                 std::string_view token,
                                                  unsigned short minNumberOfValues,
                                                  unsigned short maxNumberOfValues);
 

@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +28,8 @@
 
 USING_NS_CC;
 
-enum {
+enum
+{
     kTagParticleCount = 1,
 };
 
@@ -45,7 +46,7 @@ void DemoFirework::onEnter()
     _emitter->retain();
     _background->addChild(_emitter, 10);
 
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_stars1) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
 
     setEmitterPosition();
 }
@@ -54,7 +55,6 @@ std::string DemoFirework::subtitle() const
 {
     return "ParticleFireworks";
 }
-
 
 //------------------------------------------------------------------
 //
@@ -69,9 +69,9 @@ void DemoFire::onEnter()
     _emitter->retain();
     _background->addChild(_emitter, 10);
 
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );//.pvr");
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));  //.pvr");
     auto p = _emitter->getPosition();
-    _emitter->setPosition( Vec2(p.x, 100.0f) );
+    _emitter->setPosition(Vec2(p.x, 100.0f));
 
     setEmitterPosition();
 }
@@ -94,7 +94,7 @@ void DemoSun::onEnter()
     _emitter->retain();
     _background->addChild(_emitter, 10);
 
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
 
     setEmitterPosition();
 }
@@ -112,17 +112,15 @@ std::string DemoSun::subtitle() const
 void DemoPause::onEnter()
 {
     ParticleDemo::onEnter();
-    
+
     _emitter = ParticleSmoke::create();
     _emitter->retain();
     _background->addChild(_emitter, 10);
-    
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );
-    
+
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
+
     setEmitterPosition();
     schedule(CC_SCHEDULE_SELECTOR(DemoPause::pauseEmitter), 2.0f);
-
-
 }
 void DemoPause::pauseEmitter(float time)
 {
@@ -154,7 +152,7 @@ void DemoGalaxy::onEnter()
     _emitter->retain();
     _background->addChild(_emitter, 10);
 
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
 
     setEmitterPosition();
 }
@@ -176,7 +174,7 @@ void DemoFlower::onEnter()
     _emitter = ParticleFlower::create();
     _emitter->retain();
     _background->addChild(_emitter, 10);
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_stars1) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
 
     setEmitterPosition();
 }
@@ -200,7 +198,7 @@ void DemoBigFlower::onEnter()
 
     _background->addChild(_emitter, 10);
     ////_emitter->release();    // win32 :  use this line or remove this line and use autorelease()
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_stars1) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
 
     _emitter->setDuration(-1);
 
@@ -224,7 +222,7 @@ void DemoBigFlower::onEnter()
     _emitter->setTangentialAccelVar(0);
 
     // emitter position
-    _emitter->setPosition( Vec2(160,240) );
+    _emitter->setPosition(Vec2(160, 240));
     _emitter->setPosVar(Vec2::ZERO);
 
     // life of particles
@@ -256,7 +254,7 @@ void DemoBigFlower::onEnter()
     _emitter->setEndSize(ParticleSystem::START_SIZE_EQUAL_TO_END_SIZE);
 
     // emits per second
-    _emitter->setEmissionRate(_emitter->getTotalParticles()/_emitter->getLife());
+    _emitter->setEmissionRate(_emitter->getTotalParticles() / _emitter->getLife());
 
     // additive
     _emitter->setBlendAdditive(true);
@@ -283,7 +281,7 @@ void DemoRotFlower::onEnter()
 
     _background->addChild(_emitter, 10);
     ////_emitter->release();    // win32 : Remove this line
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_stars2) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars2));
 
     // duration
     _emitter->setDuration(-1);
@@ -308,7 +306,7 @@ void DemoRotFlower::onEnter()
     _emitter->setTangentialAccelVar(0);
 
     // emitter position
-    _emitter->setPosition( Vec2(160,240) );
+    _emitter->setPosition(Vec2(160, 240));
     _emitter->setPosVar(Vec2::ZERO);
 
     // life of particles
@@ -340,7 +338,7 @@ void DemoRotFlower::onEnter()
     _emitter->setEndSize(ParticleSystem::START_SIZE_EQUAL_TO_END_SIZE);
 
     // emits per second
-    _emitter->setEmissionRate(_emitter->getTotalParticles()/_emitter->getLife());
+    _emitter->setEmissionRate(_emitter->getTotalParticles() / _emitter->getLife());
 
     // additive
     _emitter->setBlendAdditive(false);
@@ -366,7 +364,7 @@ void DemoMeteor::onEnter()
     _emitter->retain();
     _background->addChild(_emitter, 10);
 
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
 
     setEmitterPosition();
 }
@@ -389,7 +387,7 @@ void DemoSpiral::onEnter()
     _emitter->retain();
     _background->addChild(_emitter, 10);
 
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
 
     setEmitterPosition();
 }
@@ -412,7 +410,7 @@ void DemoExplosion::onEnter()
     _emitter->retain();
     _background->addChild(_emitter, 10);
 
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_stars1) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
 
     _emitter->setAutoRemoveOnFinish(true);
 
@@ -436,10 +434,10 @@ void DemoSmoke::onEnter()
     _emitter = ParticleSmoke::create();
     _emitter->retain();
     _background->addChild(_emitter, 10);
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
 
     auto p = _emitter->getPosition();
-    _emitter->setPosition( Vec2( p.x, 100.0f) );
+    _emitter->setPosition(Vec2(p.x, 100.0f));
 
     setEmitterPosition();
 }
@@ -463,31 +461,30 @@ void DemoSnow::onEnter()
     _background->addChild(_emitter, 10);
 
     auto p = _emitter->getPosition();
-    _emitter->setPosition( Vec2( p.x, p.y-110) );
+    _emitter->setPosition(Vec2(p.x, p.y - 110));
     _emitter->setLife(3);
     _emitter->setLifeVar(1);
 
     // gravity
-    _emitter->setGravity(Vec2(0.0f,-10.0f));
+    _emitter->setGravity(Vec2(0.0f, -10.0f));
 
     // speed of particles
     _emitter->setSpeed(130);
     _emitter->setSpeedVar(30);
 
-
     Color4F startColor = _emitter->getStartColor();
-    startColor.r = 0.9f;
-    startColor.g = 0.9f;
-    startColor.b = 0.9f;
+    startColor.r       = 0.9f;
+    startColor.g       = 0.9f;
+    startColor.b       = 0.9f;
     _emitter->setStartColor(startColor);
 
     Color4F startColorVar = _emitter->getStartColorVar();
-    startColorVar.b = 0.1f;
+    startColorVar.b       = 0.1f;
     _emitter->setStartColorVar(startColorVar);
 
-    _emitter->setEmissionRate(_emitter->getTotalParticles()/_emitter->getLife());
+    _emitter->setEmissionRate(_emitter->getTotalParticles() / _emitter->getLife());
 
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_snow) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_snow));
 
     setEmitterPosition();
 }
@@ -511,10 +508,10 @@ void DemoRain::onEnter()
     _background->addChild(_emitter, 10);
 
     auto p = _emitter->getPosition();
-    _emitter->setPosition( Vec2( p.x, p.y-100) );
+    _emitter->setPosition(Vec2(p.x, p.y - 100));
     _emitter->setLife(4);
 
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
 
     setEmitterPosition();
 }
@@ -533,8 +530,8 @@ void DemoModernArt::onEnter()
 {
     ParticleDemo::onEnter();
 
-//FIXME: If use ParticleSystemPoint, bada 1.0 device will crash.
-//  Crash place: ParticleSystemPoint.cpp Line 149, function: glDrawArrays(GL_POINTS, 0, _particleIdx);
+    // FIXME: If use ParticleSystemPoint, bada 1.0 device will crash.
+    //   Crash place: ParticleSystemPoint.cpp Line 149, function: glDrawArrays(GL_POINTS, 0, _particleIdx);
     _emitter = ParticleSystemQuad::createWithTotalParticles(1000);
     _emitter->retain();
 
@@ -547,7 +544,7 @@ void DemoModernArt::onEnter()
     _emitter->setDuration(-1);
 
     // gravity
-    _emitter->setGravity(Vec2(0.0f,0.0f));
+    _emitter->setGravity(Vec2(0.0f, 0.0f));
 
     // angle
     _emitter->setAngle(0);
@@ -566,7 +563,7 @@ void DemoModernArt::onEnter()
     _emitter->setSpeedVar(10);
 
     // emitter position
-    _emitter->setPosition( Vec2( s.width/2, s.height/2) );
+    _emitter->setPosition(Vec2(s.width / 2, s.height / 2));
     _emitter->setPosVar(Vec2::ZERO);
 
     // life of particles
@@ -574,7 +571,7 @@ void DemoModernArt::onEnter()
     _emitter->setLifeVar(0.3f);
 
     // emits per frame
-    _emitter->setEmissionRate(_emitter->getTotalParticles()/_emitter->getLife());
+    _emitter->setEmissionRate(_emitter->getTotalParticles() / _emitter->getLife());
 
     // color of particles
     Color4F startColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -596,7 +593,7 @@ void DemoModernArt::onEnter()
     _emitter->setEndSizeVar(8.0f);
 
     // texture
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
 
     // additive
     _emitter->setBlendAdditive(false);
@@ -623,7 +620,7 @@ void DemoRing::onEnter()
 
     _background->addChild(_emitter, 10);
 
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_stars1) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
     _emitter->setLifeVar(0);
     _emitter->setLife(10);
     _emitter->setSpeed(100);
@@ -656,23 +653,23 @@ void ParallaxParticle::onEnter()
     auto p1 = Sprite::create(s_back3);
     auto p2 = Sprite::create(s_back3);
 
-    p->addChild( p1, 1, Vec2(0.5f,1.0f), Vec2(0.0f,250.0f) );
-    p->addChild(p2, 2, Vec2(1.5f,1.0f), Vec2(0.0f,50.0f) );
+    p->addChild(p1, 1, Vec2(0.5f, 1.0f), Vec2(0.0f, 250.0f));
+    p->addChild(p2, 2, Vec2(1.5f, 1.0f), Vec2(0.0f, 50.0f));
 
     _emitter = ParticleFlower::create();
     _emitter->retain();
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
 
     p1->addChild(_emitter, 10);
-    _emitter->setPosition( Vec2(250,200) );
+    _emitter->setPosition(Vec2(250, 200));
 
     auto par = ParticleSun::create();
     p2->addChild(par, 10);
-    par->setTexture( Director::getInstance()->getTextureCache()->addImage(s_fire) );
+    par->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
 
-    auto move = MoveBy::create(4, Vec2(300.0f,0.0f));
+    auto move      = MoveBy::create(4, Vec2(300.0f, 0.0f));
     auto move_back = move->reverse();
-    auto seq = Sequence::create( move, move_back, nullptr);
+    auto seq       = Sequence::create(move, move_back, nullptr);
     p->runAction(RepeatForever::create(seq));
 }
 
@@ -690,7 +687,7 @@ void RadiusMode1::onEnter()
 {
     ParticleDemo::onEnter();
 
-	_color->setColor(Color3B::BLACK);
+    _color->setColor(Color3B::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -715,14 +712,13 @@ void RadiusMode1::onEnter()
     _emitter->setRotatePerSecond(180);
     _emitter->setRotatePerSecondVar(0);
 
-
     // angle
     _emitter->setAngle(90);
     _emitter->setAngleVar(0);
 
     // emitter position
     auto size = Director::getInstance()->getWinSize();
-    _emitter->setPosition(Vec2(size.width/2, size.height/2));
+    _emitter->setPosition(Vec2(size.width / 2, size.height / 2));
     _emitter->setPosVar(Vec2::ZERO);
 
     // life of particles
@@ -799,14 +795,13 @@ void RadiusMode2::onEnter()
     _emitter->setRotatePerSecond(45);
     _emitter->setRotatePerSecondVar(0);
 
-
     // angle
     _emitter->setAngle(90);
     _emitter->setAngleVar(0);
 
     // emitter position
     auto size = Director::getInstance()->getWinSize();
-    _emitter->setPosition(Vec2(size.width/2, size.height/2));
+    _emitter->setPosition(Vec2(size.width / 2, size.height / 2));
     _emitter->setPosVar(Vec2::ZERO);
 
     // life of particles
@@ -883,14 +878,13 @@ void Issue704::onEnter()
     _emitter->setRotatePerSecond(0);
     _emitter->setRotatePerSecondVar(0);
 
-
     // angle
     _emitter->setAngle(90);
     _emitter->setAngleVar(0);
 
     // emitter position
     auto size = Director::getInstance()->getWinSize();
-    _emitter->setPosition(Vec2(size.width/2, size.height/2));
+    _emitter->setPosition(Vec2(size.width / 2, size.height / 2));
     _emitter->setPosVar(Vec2::ZERO);
 
     // life of particles
@@ -955,7 +949,8 @@ void Issue870::onEnter()
     _background = nullptr;
 
     _emitter = ParticleSystemQuad::create("Particles/SpinningPeas.plist");
-    _emitter->setTextureWithRect(Director::getInstance()->getTextureCache()->addImage("Images/particles.png"), Rect(0,0,32,32));
+    _emitter->setTextureWithRect(Director::getInstance()->getTextureCache()->addImage("Images/particles.png"),
+                                 Rect(0, 0, 32, 32));
     addChild(_emitter, 10);
     _emitter->retain();
 
@@ -965,8 +960,8 @@ void Issue870::onEnter()
 
 void Issue870::updateQuads(float dt)
 {
-    _index = (_index + 1) % 4;
-    auto rect = Rect(_index * 32, 0, 32, 32);
+    _index      = (_index + 1) % 4;
+    auto rect   = Rect(_index * 32, 0, 32, 32);
     auto system = (ParticleSystemQuad*)_emitter;
     system->setTextureWithRect(_emitter->getTexture(), rect);
 }
@@ -995,7 +990,7 @@ void DemoParticleFromFile::onEnter()
     _background = nullptr;
 
     std::string filename = "Particles/" + _title + ".plist";
-    _emitter = ParticleSystemQuad::create(filename);
+    _emitter             = ParticleSystemQuad::create(filename);
     _emitter->retain();
     addChild(_emitter, 10);
 
@@ -1038,22 +1033,22 @@ ParticleTests::ParticleTests()
     ADD_TEST_CASE(DemoRing);
     ADD_TEST_CASE(ParallaxParticle);
     ADD_TEST_CASE(DemoPause);
-    addTestCase("BoilingFoam", [](){return DemoParticleFromFile::create("BoilingFoam");});
-    addTestCase("BurstPipe", [](){return DemoParticleFromFile::create("BurstPipe"); });
-    addTestCase("Comet", [](){return DemoParticleFromFile::create("Comet"); });
-    addTestCase("debian", [](){return DemoParticleFromFile::create("debian"); });
-    addTestCase("ExplodingRing", [](){return DemoParticleFromFile::create("ExplodingRing"); });
-    addTestCase("LavaFlow", [](){return DemoParticleFromFile::create("LavaFlow"); });
-    addTestCase("SpinningPeas", [](){return DemoParticleFromFile::create("SpinningPeas"); });
-    addTestCase("SpookyPeas", [](){return DemoParticleFromFile::create("SpookyPeas"); });
-    addTestCase("Upsidedown", [](){return DemoParticleFromFile::create("Upsidedown"); });
-    addTestCase("Flower", [](){return DemoParticleFromFile::create("Flower"); });
-    addTestCase("Spiral", [](){return DemoParticleFromFile::create("Spiral"); });
-    addTestCase("Galaxy", [](){return DemoParticleFromFile::create("Galaxy"); });
-    addTestCase("Phoenix", [](){return DemoParticleFromFile::create("Phoenix"); });
-    addTestCase("lines", [](){return DemoParticleFromFile::create("lines"); });
-    addTestCase("ButterFly", [](){return DemoParticleFromFile::create("ButterFly"); });
-    addTestCase("ButterFlyYFlipped", [](){return DemoParticleFromFile::create("ButterFlyYFlipped"); });
+    addTestCase("BoilingFoam", []() { return DemoParticleFromFile::create("BoilingFoam"); });
+    addTestCase("BurstPipe", []() { return DemoParticleFromFile::create("BurstPipe"); });
+    addTestCase("Comet", []() { return DemoParticleFromFile::create("Comet"); });
+    addTestCase("debian", []() { return DemoParticleFromFile::create("debian"); });
+    addTestCase("ExplodingRing", []() { return DemoParticleFromFile::create("ExplodingRing"); });
+    addTestCase("LavaFlow", []() { return DemoParticleFromFile::create("LavaFlow"); });
+    addTestCase("SpinningPeas", []() { return DemoParticleFromFile::create("SpinningPeas"); });
+    addTestCase("SpookyPeas", []() { return DemoParticleFromFile::create("SpookyPeas"); });
+    addTestCase("Upsidedown", []() { return DemoParticleFromFile::create("Upsidedown"); });
+    addTestCase("Flower", []() { return DemoParticleFromFile::create("Flower"); });
+    addTestCase("Spiral", []() { return DemoParticleFromFile::create("Spiral"); });
+    addTestCase("Galaxy", []() { return DemoParticleFromFile::create("Galaxy"); });
+    addTestCase("Phoenix", []() { return DemoParticleFromFile::create("Phoenix"); });
+    addTestCase("lines", []() { return DemoParticleFromFile::create("lines"); });
+    addTestCase("ButterFly", []() { return DemoParticleFromFile::create("ButterFly"); });
+    addTestCase("ButterFlyYFlipped", []() { return DemoParticleFromFile::create("ButterFlyYFlipped"); });
     ADD_TEST_CASE(RadiusMode1);
     ADD_TEST_CASE(RadiusMode2);
     ADD_TEST_CASE(Issue704);
@@ -1086,12 +1081,12 @@ void ParticleDemo::onEnter()
 
     MenuItemFont::setFontSize(32);
 
-	_color = LayerColor::create( Color4B(127,127,127,255) );
-	this->addChild(_color);
+    _color = LayerColor::create(Color4B(127, 127, 127, 255));
+    this->addChild(_color);
 
     _emitter = nullptr;
 
-    auto listener = EventListenerTouchAllAtOnce::create();
+    auto listener            = EventListenerTouchAllAtOnce::create();
     listener->onTouchesBegan = CC_CALLBACK_2(ParticleDemo::onTouchesBegan, this);
     listener->onTouchesMoved = CC_CALLBACK_2(ParticleDemo::onTouchesMoved, this);
     listener->onTouchesEnded = CC_CALLBACK_2(ParticleDemo::onTouchesEnded, this);
@@ -1099,34 +1094,31 @@ void ParticleDemo::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
 
-    auto item4 = MenuItemToggle::createWithCallback( CC_CALLBACK_1(ParticleDemo::toggleCallback, this),
-                                                               MenuItemFont::create( "Free Movement" ),
-                                                               MenuItemFont::create( "Relative Movement" ),
-                                                               MenuItemFont::create( "Grouped Movement" ),
-                                                               nullptr );
+    auto item4 = MenuItemToggle::createWithCallback(
+        CC_CALLBACK_1(ParticleDemo::toggleCallback, this), MenuItemFont::create("Free Movement"),
+        MenuItemFont::create("Relative Movement"), MenuItemFont::create("Grouped Movement"), nullptr);
 
     auto menu = Menu::create(item4, nullptr);
 
-    menu->setPosition( Vec2::ZERO );
-    item4->setPosition( Vec2( VisibleRect::left().x, VisibleRect::bottom().y+ 100) );
-    item4->setAnchorPoint( Vec2(0,0) );
+    menu->setPosition(Vec2::ZERO);
+    item4->setPosition(Vec2(VisibleRect::left().x, VisibleRect::bottom().y + 100));
+    item4->setAnchorPoint(Vec2(0, 0));
 
-    addChild( menu, 100 );
+    addChild(menu, 100);
 
     auto labelAtlas = LabelAtlas::create("0000", "fps_images.png", 12, 32, '.');
     addChild(labelAtlas, 100, kTagParticleCount);
-    labelAtlas->setPosition(Vec2(s.width-66,50.0f));
+    labelAtlas->setPosition(Vec2(s.width - 66, 50.0f));
 
     // moving background
     _background = Sprite::create(s_back3);
     addChild(_background, 5);
-    _background->setPosition( Vec2(s.width/2, s.height-180) );
+    _background->setPosition(Vec2(s.width / 2, s.height - 180));
 
-    auto move = MoveBy::create(4, Vec2(300,0) );
+    auto move      = MoveBy::create(4, Vec2(300, 0));
     auto move_back = move->reverse();
-    auto seq = Sequence::create( move, move_back, nullptr);
-    _background->runAction( RepeatForever::create(seq) );
-
+    auto seq       = Sequence::create(move, move_back, nullptr);
+    _background->runAction(RepeatForever::create(seq));
 
     scheduleUpdate();
 }
@@ -1141,17 +1133,17 @@ std::string ParticleDemo::subtitle() const
     return "No title";
 }
 
-void ParticleDemo::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event)
+void ParticleDemo::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
 {
     onTouchesEnded(touches, event);
 }
 
-void ParticleDemo::onTouchesMoved(const std::vector<Touch*>& touches, Event  *event)
+void ParticleDemo::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
 {
     return onTouchesEnded(touches, event);
 }
 
-void ParticleDemo::onTouchesEnded(const std::vector<Touch*>& touches, Event  *event)
+void ParticleDemo::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
     auto touch = touches[0];
 
@@ -1165,7 +1157,7 @@ void ParticleDemo::onTouchesEnded(const std::vector<Touch*>& touches, Event  *ev
 
     if (_emitter != nullptr)
     {
-        _emitter->setPosition(location -pos);
+        _emitter->setPosition(location - pos);
     }
 }
 
@@ -1173,7 +1165,7 @@ void ParticleDemo::update(float dt)
 {
     if (_emitter)
     {
-        auto atlas = (LabelAtlas*)getChildByTag(kTagParticleCount);
+        auto atlas  = (LabelAtlas*)getChildByTag(kTagParticleCount);
         char str[5] = {0};
         sprintf(str, "%04d", _emitter->getParticleCount());
         atlas->setString(str);
@@ -1189,7 +1181,7 @@ void ParticleDemo::toggleCallback(Ref* sender)
         else if (_emitter->getPositionType() == ParticleSystem::PositionType::FREE)
             _emitter->setPositionType(ParticleSystem::PositionType::RELATIVE);
         else if (_emitter->getPositionType() == ParticleSystem::PositionType::RELATIVE)
-            _emitter->setPositionType(ParticleSystem::PositionType::GROUPED );
+            _emitter->setPositionType(ParticleSystem::PositionType::GROUPED);
     }
 }
 
@@ -1198,7 +1190,7 @@ void ParticleDemo::setEmitterPosition()
     auto s = Director::getInstance()->getWinSize();
     if (_emitter != nullptr)
     {
-        _emitter->setPosition( Vec2(s.width / 2, s.height / 2) );
+        _emitter->setPosition(Vec2(s.width / 2, s.height / 2));
     }
 }
 
@@ -1220,24 +1212,24 @@ void ParticleBatchHybrid::onEnter()
 
     addChild(batch, 10);
 
-     schedule(CC_SCHEDULE_SELECTOR(ParticleBatchHybrid::switchRender), 2.0f);
+    schedule(CC_SCHEDULE_SELECTOR(ParticleBatchHybrid::switchRender), 2.0f);
 
-     auto node = Node::create();
-     addChild(node);
+    auto node = Node::create();
+    addChild(node);
 
-     _parent1 = batch;
-     _parent2 = node;
+    _parent1 = batch;
+    _parent2 = node;
 }
 
 void ParticleBatchHybrid::switchRender(float dt)
 {
-     bool usingBatch = ( _emitter->getBatchNode() != nullptr );
-     _emitter->removeFromParentAndCleanup(false);
+    bool usingBatch = (_emitter->getBatchNode() != nullptr);
+    _emitter->removeFromParentAndCleanup(false);
 
-     auto newParent = (usingBatch ? _parent2  : _parent1 );
-     newParent->addChild(_emitter);
+    auto newParent = (usingBatch ? _parent2 : _parent1);
+    newParent->addChild(_emitter);
 
-     log("Particle: Using new parent: %s", usingBatch ? "CCNode" : "CCParticleBatchNode");
+    log("Particle: Using new parent: %s", usingBatch ? "CCNode" : "CCParticleBatchNode");
 }
 
 std::string ParticleBatchHybrid::title() const
@@ -1261,17 +1253,17 @@ void ParticleBatchMultipleEmitters::onEnter()
     _background = nullptr;
 
     auto emitter1 = ParticleSystemQuad::create("Particles/LavaFlow.plist");
-    emitter1->setStartColor(Color4F(1,0,0,1));
+    emitter1->setStartColor(Color4F(1, 0, 0, 1));
     auto emitter2 = ParticleSystemQuad::create("Particles/LavaFlow.plist");
-    emitter2->setStartColor(Color4F(0,1,0,1));
+    emitter2->setStartColor(Color4F(0, 1, 0, 1));
     auto emitter3 = ParticleSystemQuad::create("Particles/LavaFlow.plist");
-    emitter3->setStartColor(Color4F(0,0,1,1));
+    emitter3->setStartColor(Color4F(0, 0, 1, 1));
 
     auto s = Director::getInstance()->getWinSize();
 
-    emitter1->setPosition(Vec2( s.width/1.25f, s.height/1.25f));
-    emitter2->setPosition(Vec2( s.width/2, s.height/2));
-    emitter3->setPosition(Vec2( s.width/4, s.height/4));
+    emitter1->setPosition(Vec2(s.width / 1.25f, s.height / 1.25f));
+    emitter2->setPosition(Vec2(s.width / 2, s.height / 2));
+    emitter3->setPosition(Vec2(s.width / 4, s.height / 4));
 
     auto batch = ParticleBatchNode::createWithTexture(emitter1->getTexture());
 
@@ -1303,38 +1295,38 @@ void ParticleReorder::onEnter()
     removeChild(_background, true);
     _background = nullptr;
 
-    auto ignore = ParticleSystemQuad::create("Particles/SmallSun.plist");
+    auto ignore  = ParticleSystemQuad::create("Particles/SmallSun.plist");
     auto parent1 = Node::create();
     auto parent2 = ParticleBatchNode::createWithTexture(ignore->getTexture());
     ignore->unscheduleUpdate();
 
-    for( unsigned int i=0; i<2;i++)
+    for (unsigned int i = 0; i < 2; i++)
     {
-        auto parent = ( i==0 ? parent1 : parent2 );
+        auto parent = (i == 0 ? parent1 : parent2);
 
         auto emitter1 = ParticleSystemQuad::create("Particles/SmallSun.plist");
-        emitter1->setStartColor(Color4F(1,0,0,1));
+        emitter1->setStartColor(Color4F(1, 0, 0, 1));
         emitter1->setBlendAdditive(false);
         auto emitter2 = ParticleSystemQuad::create("Particles/SmallSun.plist");
-        emitter2->setStartColor(Color4F(0,1,0,1));
+        emitter2->setStartColor(Color4F(0, 1, 0, 1));
         emitter2->setBlendAdditive(false);
         auto emitter3 = ParticleSystemQuad::create("Particles/SmallSun.plist");
-        emitter3->setStartColor(Color4F(0,0,1,1));
+        emitter3->setStartColor(Color4F(0, 0, 1, 1));
         emitter3->setBlendAdditive(false);
 
         auto s = Director::getInstance()->getWinSize();
 
-        int neg = (i==0 ? 1 : -1 );
+        int neg = (i == 0 ? 1 : -1);
 
-        emitter1->setPosition(Vec2( s.width/2-30,    s.height/2+60*neg));
-        emitter2->setPosition(Vec2( s.width/2,        s.height/2+60*neg));
-        emitter3->setPosition(Vec2( s.width/2+30,    s.height/2+60*neg));
+        emitter1->setPosition(Vec2(s.width / 2 - 30, s.height / 2 + 60 * neg));
+        emitter2->setPosition(Vec2(s.width / 2, s.height / 2 + 60 * neg));
+        emitter3->setPosition(Vec2(s.width / 2 + 30, s.height / 2 + 60 * neg));
 
         parent->addChild(emitter1, 0, 1);
         parent->addChild(emitter2, 0, 2);
         parent->addChild(emitter3, 0, 3);
 
-        addChild(parent, 10, 1000+i);
+        addChild(parent, 10, 1000 + i);
     }
 
     schedule(CC_SCHEDULE_SELECTOR(ParticleReorder::reorderParticles), 1.0f);
@@ -1352,24 +1344,28 @@ std::string ParticleReorder::subtitle() const
 
 void ParticleReorder::reorderParticles(float dt)
 {
-    for( int i=0; i<2;i++) {
-        auto parent = getChildByTag(1000+i);
+    for (int i = 0; i < 2; i++)
+    {
+        auto parent = getChildByTag(1000 + i);
 
         auto child1 = parent->getChildByTag(1);
         auto child2 = parent->getChildByTag(2);
         auto child3 = parent->getChildByTag(3);
 
-        if( _order % 3 == 0 ) {
+        if (_order % 3 == 0)
+        {
             parent->reorderChild(child1, 1);
             parent->reorderChild(child2, 2);
             parent->reorderChild(child3, 3);
-
-        } else if (_order % 3 == 1 ) {
+        }
+        else if (_order % 3 == 1)
+        {
             parent->reorderChild(child1, 3);
             parent->reorderChild(child2, 1);
             parent->reorderChild(child3, 2);
-
-        } else if (_order % 3 == 2 ) {
+        }
+        else if (_order % 3 == 2)
+        {
             parent->reorderChild(child1, 2);
             parent->reorderChild(child2, 3);
             parent->reorderChild(child3, 1);
@@ -1382,7 +1378,7 @@ void ParticleReorder::reorderParticles(float dt)
 class RainbowEffect : public ParticleSystemQuad
 {
 public:
-    bool init()override;
+    bool init() override;
     virtual bool initWithTotalParticles(int numberOfParticles) override;
     virtual void update(float dt) override;
 };
@@ -1394,7 +1390,7 @@ bool RainbowEffect::init()
 
 bool RainbowEffect::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // additive
         setBlendAdditive(false);
@@ -1406,7 +1402,7 @@ bool RainbowEffect::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(ParticleSystem::Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0.0f,0.0f));
+        setGravity(Vec2(0.0f, 0.0f));
 
         // Gravity mode: radial acceleration
         setRadialAccel(0);
@@ -1416,14 +1412,13 @@ bool RainbowEffect::initWithTotalParticles(int numberOfParticles)
         setSpeed(120);
         setSpeedVar(0);
 
-
         // angle
         setAngle(180);
         setAngleVar(0);
 
         // emitter position
         auto winSize = Director::getInstance()->getWinSize();
-        setPosition(Vec2(winSize.width/2, winSize.height/2));
+        setPosition(Vec2(winSize.width / 2, winSize.height / 2));
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -1436,7 +1431,7 @@ bool RainbowEffect::initWithTotalParticles(int numberOfParticles)
         setEndSize(ParticleSystem::START_SIZE_EQUAL_TO_END_SIZE);
 
         // emits per seconds
-        setEmissionRate(getTotalParticles()/getLife());
+        setEmissionRate(getTotalParticles() / getLife());
 
         // color of particles
         setStartColor(Color4F(Color4B(50, 50, 50, 50)));
@@ -1446,10 +1441,10 @@ bool RainbowEffect::initWithTotalParticles(int numberOfParticles)
         _startColorVar.g = 0.0f;
         _startColorVar.b = 0.0f;
         _startColorVar.a = 0.0f;
-        _endColorVar.r = 0.0f;
-        _endColorVar.g = 0.0f;
-        _endColorVar.b = 0.0f;
-        _endColorVar.a = 0.0f;
+        _endColorVar.r   = 0.0f;
+        _endColorVar.g   = 0.0f;
+        _endColorVar.b   = 0.0f;
+        _endColorVar.a   = 0.0f;
 
         setTexture(Director::getInstance()->getTextureCache()->addImage("Images/particles.png"));
         return true;
@@ -1464,7 +1459,6 @@ void RainbowEffect::update(float dt)
     ParticleSystemQuad::update(dt);
 }
 
-
 void Issue1201::onEnter()
 {
     ParticleDemo::onEnter();
@@ -1473,14 +1467,14 @@ void Issue1201::onEnter()
     removeChild(_background, true);
     _background = nullptr;
 
-    RainbowEffect *particle = new RainbowEffect();
+    RainbowEffect* particle = new RainbowEffect();
     particle->initWithTotalParticles(50);
 
     addChild(particle);
 
     auto s = Director::getInstance()->getWinSize();
 
-    particle->setPosition(Vec2(s.width/2, s.height/2));
+    particle->setPosition(Vec2(s.width / 2, s.height / 2));
 
     _emitter = particle;
 }
@@ -1505,17 +1499,17 @@ void MultipleParticleSystems::onEnter()
 
     Director::getInstance()->getTextureCache()->addImage("Images/particles.png");
 
-    for (int i = 0; i<5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         auto particleSystem = ParticleSystemQuad::create("Particles/SpinningPeas.plist");
 
-        particleSystem->setPosition(Vec2(i*50.0f,i*50.0f));
+        particleSystem->setPosition(Vec2(i * 50.0f, i * 50.0f));
 
         particleSystem->setPositionType(ParticleSystem::PositionType::GROUPED);
         addChild(particleSystem);
     }
 
     _emitter = nullptr;
-
 }
 
 std::string MultipleParticleSystems::title() const
@@ -1530,11 +1524,12 @@ std::string MultipleParticleSystems::subtitle() const
 
 void MultipleParticleSystems::update(float dt)
 {
-    auto atlas = (LabelAtlas*) getChildByTag(kTagParticleCount);
+    auto atlas = (LabelAtlas*)getChildByTag(kTagParticleCount);
 
-    unsigned int count = 0; 
-    
-    for(const auto &child : _children) {
+    unsigned int count = 0;
+
+    for (const auto& child : _children)
+    {
         auto item = dynamic_cast<ParticleSystem*>(child);
         if (item != nullptr)
         {
@@ -1557,16 +1552,17 @@ void MultipleParticleSystemsBatched::onEnter()
     removeChild(_background, true);
     _background = nullptr;
 
-    ParticleBatchNode *batchNode = ParticleBatchNode::createWithTexture(nullptr, 3000);
+    ParticleBatchNode* batchNode = ParticleBatchNode::createWithTexture(nullptr, 3000);
 
     addChild(batchNode, 1, 2);
 
-    for (int i = 0; i<5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
 
         auto particleSystem = ParticleSystemQuad::create("Particles/SpinningPeas.plist");
 
         particleSystem->setPositionType(ParticleSystem::PositionType::GROUPED);
-        particleSystem->setPosition(Vec2(i*50.0f,i*50.0f));
+        particleSystem->setPosition(Vec2(i * 50.0f, i * 50.0f));
 
         batchNode->setTexture(particleSystem->getTexture());
         batchNode->addChild(particleSystem);
@@ -1577,12 +1573,13 @@ void MultipleParticleSystemsBatched::onEnter()
 
 void MultipleParticleSystemsBatched::update(float dt)
 {
-    auto atlas = (LabelAtlas*) getChildByTag(kTagParticleCount);
+    auto atlas = (LabelAtlas*)getChildByTag(kTagParticleCount);
 
     int count = 0;
 
     auto batchNode = getChildByTag(2);
-    for(const auto &child : batchNode->getChildren()) {
+    for (const auto& child : batchNode->getChildren())
+    {
         auto item = dynamic_cast<ParticleSystem*>(child);
         if (item != nullptr)
         {
@@ -1615,12 +1612,13 @@ void AddAndDeleteParticleSystems::onEnter()
     removeChild(_background, true);
     _background = nullptr;
 
-    //adds the texture inside the plist to the texture cache
+    // adds the texture inside the plist to the texture cache
     _batchNode = ParticleBatchNode::createWithTexture((Texture2D*)nullptr, 16000);
 
     addChild(_batchNode, 1, 2);
 
-    for (int i = 0; i<6; i++) {
+    for (int i = 0; i < 6; i++)
+    {
 
         auto particleSystem = ParticleSystemQuad::create("Particles/Spiral.plist");
         _batchNode->setTexture(particleSystem->getTexture());
@@ -1628,34 +1626,32 @@ void AddAndDeleteParticleSystems::onEnter()
         particleSystem->setPositionType(ParticleSystem::PositionType::GROUPED);
         particleSystem->setTotalParticles(200);
 
-        particleSystem->setPosition(Vec2(i*15 +100.0f,i*15+100.0f));
+        particleSystem->setPosition(Vec2(i * 15 + 100.0f, i * 15 + 100.0f));
 
         unsigned int randZ = rand() % 100;
         _batchNode->addChild(particleSystem, randZ, -1);
-
     }
 
     schedule(CC_SCHEDULE_SELECTOR(AddAndDeleteParticleSystems::removeSystem), 0.5f);
     _emitter = nullptr;
-
 }
 
 void AddAndDeleteParticleSystems::removeSystem(float dt)
 {
     ssize_t nChildrenCount = _batchNode->getChildren().size();
-    if (nChildrenCount > 0) 
+    if (nChildrenCount > 0)
     {
         CCLOG("remove random system");
         unsigned int uRand = rand() % (nChildrenCount - 1);
         _batchNode->removeChild(_batchNode->getChildren().at(uRand), true);
 
         auto particleSystem = ParticleSystemQuad::create("Particles/Spiral.plist");
-        //add new
+        // add new
 
         particleSystem->setPositionType(ParticleSystem::PositionType::GROUPED);
         particleSystem->setTotalParticles(200);
 
-        particleSystem->setPosition(Vec2(rand() % 300 ,rand() % 400));
+        particleSystem->setPosition(Vec2(rand() % 300, rand() % 400));
 
         CCLOG("add a new system");
         unsigned int randZ = rand() % 100;
@@ -1665,12 +1661,13 @@ void AddAndDeleteParticleSystems::removeSystem(float dt)
 
 void AddAndDeleteParticleSystems::update(float dt)
 {
-    auto atlas = (LabelAtlas*) getChildByTag(kTagParticleCount);
+    auto atlas = (LabelAtlas*)getChildByTag(kTagParticleCount);
 
     int count = 0;
 
     auto batchNode = getChildByTag(2);
-    for(const auto &child : batchNode->getChildren()) {
+    for (const auto& child : batchNode->getChildren())
+    {
         auto item = dynamic_cast<ParticleSystem*>(child);
         if (item != nullptr)
         {
@@ -1700,15 +1697,15 @@ void ReorderParticleSystems::onEnter()
     ParticleDemo::onEnter();
 
     _color->setColor(Color3B::BLACK);
-    removeChild(_background ,true);
+    removeChild(_background, true);
     _background = nullptr;
 
-    _batchNode = ParticleBatchNode::create("Images/stars-grayscale.png" ,3000);
+    _batchNode = ParticleBatchNode::create("Images/stars-grayscale.png", 3000);
 
     addChild(_batchNode, 1, 2);
 
-
-    for (int i = 0; i<3; i++) {
+    for (int i = 0; i < 3; i++)
+    {
 
         auto particleSystem = ParticleSystemQuad::createWithTotalParticles(200);
         particleSystem->retain();
@@ -1724,13 +1721,12 @@ void ReorderParticleSystems::onEnter()
         particleSystem->setStartRadius(100);
         particleSystem->setStartRadiusVar(0);
         particleSystem->setEndRadius(ParticleSystem::START_RADIUS_EQUAL_TO_END_RADIUS);
-        particleSystem->setEndRadiusVar(0);    // not used when start == end
+        particleSystem->setEndRadiusVar(0);  // not used when start == end
 
         // radius mode: degrees per second
         // 45 * 4 seconds of life = 180 degrees
         particleSystem->setRotatePerSecond(45);
         particleSystem->setRotatePerSecondVar(0);
-
 
         // angle
         particleSystem->setAngle(90);
@@ -1750,8 +1746,8 @@ void ReorderParticleSystems::onEnter()
         particleSystem->setEndSpinVar(0);
 
         // color of particles
-        float color[3] = {0,0,0};
-        color[i] = 1;
+        float color[3] = {0, 0, 0};
+        color[i]       = 1;
         Color4F startColor(color[0], color[1], color[2], 1.0f);
         particleSystem->setStartColor(startColor);
 
@@ -1770,12 +1766,11 @@ void ReorderParticleSystems::onEnter()
         particleSystem->setEndSize(ParticleSystem::START_SIZE_EQUAL_TO_END_SIZE);
 
         // emits per second
-        particleSystem->setEmissionRate(particleSystem->getTotalParticles()/particleSystem->getLife());
+        particleSystem->setEmissionRate(particleSystem->getTotalParticles() / particleSystem->getLife());
 
         // additive
 
-        particleSystem->setPosition(Vec2(i*10+120.0f,200.0f));
-
+        particleSystem->setPosition(Vec2(i * 10 + 120.0f, 200.0f));
 
         _batchNode->addChild(particleSystem);
         particleSystem->setPositionType(ParticleSystem::PositionType::FREE);
@@ -1783,20 +1778,17 @@ void ReorderParticleSystems::onEnter()
         particleSystem->release();
 
         //[pBNode addChild:particleSystem z:10 tag:0);
-
     }
 
     schedule(CC_SCHEDULE_SELECTOR(ReorderParticleSystems::reorderSystem), 2.0f);
     _emitter = nullptr;
-
 }
 
 void ReorderParticleSystems::reorderSystem(float time)
 {
     auto system = static_cast<ParticleSystem*>(_batchNode->getChildren().at(1));
-    _batchNode->reorderChild(system, system->getLocalZOrder() - 1);     
+    _batchNode->reorderChild(system, system->getLocalZOrder() - 1);
 }
-
 
 void ReorderParticleSystems::update(float dt)
 {
@@ -1805,7 +1797,8 @@ void ReorderParticleSystems::update(float dt)
     int count = 0;
 
     auto batchNode = getChildByTag(2);
-    for(const auto &child : batchNode->getChildren()) {
+    for (const auto& child : batchNode->getChildren())
+    {
         auto item = dynamic_cast<ParticleSystem*>(child);
         if (item != nullptr)
         {
@@ -1849,7 +1842,7 @@ void PremultipliedAlphaTest::readdParticle(float delta)
     {
         this->addChild(_emitter);
     }
-    
+
     _hasEmitter = !_hasEmitter;
 }
 
@@ -1857,17 +1850,17 @@ void PremultipliedAlphaTest::onEnter()
 {
     ParticleDemo::onEnter();
 
-	_color->setColor(Color3B::BLUE);
+    _color->setColor(Color3B::BLUE);
     this->removeChild(_background, true);
     _background = nullptr;
 
     _emitter = ParticleSystemQuad::create("Particles/BoilingFoam.plist");
     _emitter->retain();
     // Particle Designer "normal" blend func causes black halo on premul textures (ignores multiplication)
-    //this->emitter.blendFunc = (BlendFunc){ BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA };
+    // this->emitter.blendFunc = (BlendFunc){ BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA };
 
     // Cocos2d "normal" blend func for premul causes alpha to be ignored (oversaturates colors)
-    _emitter->setBlendFunc( BlendFunc::ALPHA_PREMULTIPLIED );
+    _emitter->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
 
     CCASSERT(_emitter->isOpacityModifyRGB(), "Particle texture does not have premultiplied alpha, test is useless");
 
@@ -1881,7 +1874,7 @@ void PremultipliedAlphaTest::onEnter()
 
     this->addChild(_emitter, 10);
     _hasEmitter = true;
-    
+
     schedule(CC_SCHEDULE_SELECTOR(PremultipliedAlphaTest::readdParticle), 1.0f);
 }
 
@@ -1891,13 +1884,13 @@ void PremultipliedAlphaTest2::onEnter()
 {
     ParticleDemo::onEnter();
 
-	_color->setColor(Color3B::BLACK);
+    _color->setColor(Color3B::BLACK);
     this->removeChild(_background, true);
     _background = nullptr;
 
     _emitter = ParticleSystemQuad::create("Particles/TestPremultipliedAlpha.plist");
     _emitter->retain();
-    this->addChild(_emitter ,10);
+    this->addChild(_emitter, 10);
 }
 
 std::string PremultipliedAlphaTest2::title() const
@@ -1910,26 +1903,25 @@ std::string PremultipliedAlphaTest2::subtitle() const
     return "Arrows should be faded";
 }
 
-
 // Issue3990
 
 void Issue3990::onEnter()
 {
     ParticleDemo::onEnter();
-    
-	_color->setColor(Color3B::BLACK);
+
+    _color->setColor(Color3B::BLACK);
     this->removeChild(_background, true);
     _background = nullptr;
-    
+
     _emitter = ParticleSystemQuad::create("Particles/Spiral.plist");
-    
+
     _emitter->setPositionType(ParticleSystem::PositionType::GROUPED);
     _emitter->setTotalParticles(1000);
     _emitter->setEmissionRate(_emitter->getTotalParticles() / _emitter->getLife());
     _emitter->setPosition(VisibleRect::center());
-    
+
     _emitter->retain();
-    this->addChild(_emitter ,10);
+    this->addChild(_emitter, 10);
 }
 
 std::string Issue3990::title() const
@@ -1942,20 +1934,19 @@ std::string Issue3990::subtitle() const
     return "Show '998' or '999' at bottom right side";
 }
 
-
 // ParticleVisibleTest
 void ParticleVisibleTest::onEnter()
 {
     ParticleDemo::onEnter();
-    
+
     _emitter = ParticleFireworks::create();
     _emitter->retain();
     _background->addChild(_emitter, 10);
-    
-    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage(s_stars1) );
-    
+
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
     schedule(CC_SCHEDULE_SELECTOR(ParticleVisibleTest::callback), 1);
-    
+
     setEmitterPosition();
 }
 
@@ -1981,17 +1972,18 @@ void ParticleAutoBatching::onEnter()
 {
     ParticleDemo::onEnter();
 
-	_color->setColor(Color3B::BLACK);
+    _color->setColor(Color3B::BLACK);
     this->removeChild(_background, true);
     _background = nullptr;
 
     Size s = Director::getInstance()->getWinSize();
 
-    for(int i=0; i<10; i++) {
+    for (int i = 0; i < 10; i++)
+    {
         auto particle = ParticleSystemQuad::create("Particles/SmallSun.plist");
         particle->setTotalParticles(100);
-        particle->setPosition(Vec2(i*s.width/11, s.height/2));
-        this->addChild(particle ,10);
+        particle->setPosition(Vec2(i * s.width / 11, s.height / 2));
+        this->addChild(particle, 10);
     }
 }
 
@@ -2005,43 +1997,39 @@ std::string ParticleAutoBatching::subtitle() const
     return "All 10 particles should be drawin in one batch";
 }
 
-
 //
 // ParticleResetTotalParticles
 //
 void ParticleResetTotalParticles::onEnter()
 {
     ParticleDemo::onEnter();
-    
+
     _color->setColor(Color3B::BLACK);
     removeChild(_background, true);
     _background = nullptr;
-    
+
     auto p = ParticleFire::createWithTotalParticles(10);
     this->addChild(p);
-    
+
     auto add = MenuItemFont::create("add 10 particles",
-                                    [p](Ref*)->void
-                                    {
-                                        p->setTotalParticles(p->getTotalParticles() + 10 );
-                                    });
+                                    [p](Ref*) -> void { p->setTotalParticles(p->getTotalParticles() + 10); });
     add->setFontSizeObj(20);
     add->setPosition(Vec2(0, 25));
-    
-    auto remove = MenuItemFont::create("remove 10 particles",
-                                       [p](Ref*)->void
-                                       {
-                                           int count = p->getTotalParticles() - 10;
-                                           if (count < 0) { count = 0; }
-                                           p->setTotalParticles(count);
-                                       });
+
+    auto remove = MenuItemFont::create("remove 10 particles", [p](Ref*) -> void {
+        int count = p->getTotalParticles() - 10;
+        if (count < 0)
+        {
+            count = 0;
+        }
+        p->setTotalParticles(count);
+    });
     remove->setPosition(Vec2(0, -25));
     remove->setFontSizeObj(20);
-    
+
     auto menu = Menu::create(add, remove, nullptr);
     menu->setPosition(Vec2(VisibleRect::center()));
     this->addChild(menu);
-    
 }
 
 std::string ParticleResetTotalParticles::title() const
@@ -2096,7 +2084,7 @@ void ParticleSpriteFrame::onEnter()
 
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Particles/SpriteFrame.plist");
 
-    _emitter->setDisplayFrame( SpriteFrameCache::getInstance()->getSpriteFrameByName("dot.png") );
+    _emitter->setDisplayFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("dot.png"));
 
     setEmitterPosition();
 }

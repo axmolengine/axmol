@@ -80,10 +80,10 @@ public:
      * @param texType    @see `TextureResType`
      * @return a Button instance.
      */
-    static Button* create(const std::string& normalImage,
-                          const std::string& selectedImage = "",
-                          const std::string& disableImage  = "",
-                          TextureResType texType           = TextureResType::LOCAL);
+    static Button* create(std::string_view normalImage,
+                          std::string_view selectedImage = "",
+                          std::string_view disableImage  = "",
+                          TextureResType texType         = TextureResType::LOCAL);
 
     /**
      * Load textures for button.
@@ -93,10 +93,10 @@ public:
      * @param disabled    disabled state texture name.
      * @param texType    @see `TextureResType`
      */
-    void loadTextures(const std::string& normal,
-                      const std::string& selected,
-                      const std::string& disabled = "",
-                      TextureResType texType      = TextureResType::LOCAL);
+    void loadTextures(std::string_view normal,
+                      std::string_view selected,
+                      std::string_view disabled = "",
+                      TextureResType texType    = TextureResType::LOCAL);
 
     /**
      * Load normal state texture for button.
@@ -104,7 +104,7 @@ public:
      * @param normal    normal state texture.
      * @param texType    @see `TextureResType`
      */
-    void loadTextureNormal(const std::string& normal, TextureResType texType = TextureResType::LOCAL);
+    void loadTextureNormal(std::string_view normal, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Load selected state texture for button.
@@ -112,7 +112,7 @@ public:
      * @param selected    selected state texture.
      * @param texType    @see `TextureResType`
      */
-    void loadTexturePressed(const std::string& selected, TextureResType texType = TextureResType::LOCAL);
+    void loadTexturePressed(std::string_view selected, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Load disabled state texture for button.
@@ -120,7 +120,7 @@ public:
      * @param disabled    dark state texture.
      * @param texType    @see `TextureResType`
      */
-    void loadTextureDisabled(const std::string& disabled, TextureResType texType = TextureResType::LOCAL);
+    void loadTextureDisabled(std::string_view disabled, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Sets capInsets for button.
@@ -206,13 +206,13 @@ public:
      * Change the content of button's title.
      *@param text The title in std::string.
      */
-    void setTitleText(const std::string& text);
+    void setTitleText(std::string_view text);
 
     /**
      * Query the button title content.
      *@return Get the button's title content.
      */
-    std::string getTitleText() const;
+    std::string_view getTitleText() const;
 
     /**
      * Change the color of button's title.
@@ -242,13 +242,13 @@ public:
      * Change the font name of button's title
      *@param fontName a font name string.
      */
-    void setTitleFontName(const std::string& fontName);
+    void setTitleFontName(std::string_view fontName);
 
     /**
      * Query the font name of button's title
      *@return font name in std::string
      */
-    std::string getTitleFontName() const;
+    std::string_view getTitleFontName() const;
 
     /**
      * Sets the title's text horizontal alignment.
@@ -314,10 +314,10 @@ public:
     ResourceData getDisabledFile();
 
     CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
-    virtual bool init(const std::string& normalImage,
-                      const std::string& selectedImage = "",
-                      const std::string& disableImage  = "",
-                      TextureResType texType           = TextureResType::LOCAL);
+    virtual bool init(std::string_view normalImage,
+                      std::string_view selectedImage = "",
+                      std::string_view disableImage  = "",
+                      TextureResType texType         = TextureResType::LOCAL);
 
     virtual Vec2 getNormalTextureSize() const;
 

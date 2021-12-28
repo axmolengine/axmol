@@ -76,16 +76,16 @@ public:
     inline int getReadyState() const { return _readyState; }
 
     inline cocos2d::network::HttpRequest* getHttpRequest() const { return _httpRequest; }
-    inline const std::string& getStatusText() const { return _statusText; }
+    inline std::string_view getStatusText() const { return _statusText; }
 
     inline void setStatus(int status) { _status = status; }
     inline int getStatus() { return _status; }
 
-    inline const std::string& getUrl() { return _url; }
-    inline void setUrl(const std::string& url) { _url = url; }
+    inline std::string_view getUrl() { return _url; }
+    inline void setUrl(std::string_view url) { _url = url; }
 
-    inline const std::string& getMethod() const { return _meth; }
-    inline void setMethod(const std::string& meth) { _meth = meth; }
+    inline std::string_view getMethod() const { return _meth; }
+    inline void setMethod(std::string_view meth) { _meth = meth; }
 
     inline void setAsync(bool isAsync) { _isAsync = isAsync; }
     inline void setIsNetWork(bool isNetWork) { _isNetwork = isNetWork; }
@@ -621,7 +621,8 @@ static int lua_get_XMLHttpRequest_statusText(lua_State* L)
     }
 #endif
 
-    lua_pushstring(L, self->getStatusText().c_str());
+    auto statusText = self->getStatusText();
+    lua_pushlstring(L, statusText.data(), statusText.length());
 
     return 1;
 

@@ -122,7 +122,7 @@ void GTextInput::editBoxReturn(cocos2d::ui::EditBox * editBox)
     // dispatchEvent(UIEventType::Submit);
 }
 
-void GTextInput::editBoxTextChanged(cocos2d::ui::EditBox* editBox, const std::string& text)
+void GTextInput::editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view /*text*/)
 {
     _text.clear();
     _text.append(_input->getText());

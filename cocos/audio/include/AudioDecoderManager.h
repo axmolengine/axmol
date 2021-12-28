@@ -37,7 +37,7 @@ class AudioDecoderManager
 public:
     static bool init();
     static void destroy();
-    static AudioDecoder* createDecoder(const std::string& path);
+    static AudioDecoder* createDecoder(std::string_view path);
     static void destroyDecoder(AudioDecoder* decoder);
 };
 

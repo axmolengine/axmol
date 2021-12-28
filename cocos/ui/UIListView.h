@@ -309,7 +309,7 @@ public:
     virtual void addChild(Node* child) override;
     virtual void addChild(Node* child, int localZOrder) override;
     virtual void addChild(Node* child, int zOrder, int tag) override;
-    virtual void addChild(Node* child, int zOrder, const std::string& name) override;
+    virtual void addChild(Node* child, int zOrder, std::string_view name) override;
     virtual void removeAllChildren() override;
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;
     virtual void removeChild(Node* child, bool cleanup = true) override;

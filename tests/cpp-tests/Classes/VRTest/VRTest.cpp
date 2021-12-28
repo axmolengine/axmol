@@ -44,11 +44,10 @@ VRTest1::VRTest1()
     auto size = Director::getInstance()->getVisibleSize();
 
     auto image = Sprite::create("Images/background.png");
-    image->setPosition(size/2);
+    image->setPosition(size / 2);
     addChild(image);
 
-    auto button = MenuItemFont::create("Enable / Disable VR", [](Ref* ref){
-
+    auto button = MenuItemFont::create("Enable / Disable VR", [](Ref* ref) {
         auto glview = Director::getInstance()->getOpenGLView();
         auto vrimpl = glview->getVR();
         if (vrimpl)
@@ -65,7 +64,7 @@ VRTest1::VRTest1()
     auto menu = Menu::create(button, nullptr);
     addChild(menu);
 
-    menu->setPosition(size / 6 );
+    menu->setPosition(size / 6);
 }
 
 std::string VRTest1::title() const
@@ -77,6 +76,3 @@ std::string VRTest1::subtitle() const
 {
     return "Enable / Disable it with the button";
 }
-
-
-

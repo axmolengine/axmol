@@ -247,7 +247,7 @@ void IMEDispatcher::dispatchControlKey(EventKeyboard::KeyCode keyCode)
     } while (0);
 }
 
-const std::string& IMEDispatcher::getContentText()
+std::string_view IMEDispatcher::getContentText()
 {
     if (_impl && _impl->_delegateWithIme)
     {

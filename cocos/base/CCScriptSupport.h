@@ -756,7 +756,7 @@ public:
      * @lua NA
      * @js NA
      */
-    virtual bool parseConfig(ConfigType type, const std::string& str) = 0;
+    virtual bool parseConfig(ConfigType type, std::string_view str) = 0;
 
     /** Root a Reference.
      It tells the Garbage Collector that the associated Scripting object should not be collected

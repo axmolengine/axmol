@@ -148,11 +148,11 @@ public:
     bool init(int tag,
               const Color3B& color,
               uint8_t opacity,
-              const std::string& text,
-              const std::string& fontName,
+              std::string_view text,
+              std::string_view fontName,
               float fontSize,
               uint32_t flags,
-              const std::string& url,
+              std::string_view url,
               const Color3B& outlineColor = Color3B::WHITE,
               int outlineSize             = -1,
               const Color3B& shadowColor  = Color3B::BLACK,
@@ -182,11 +182,11 @@ public:
     static RichElementText* create(int tag,
                                    const Color3B& color,
                                    uint8_t opacity,
-                                   const std::string& text,
-                                   const std::string& fontName,
+                                   std::string_view text,
+                                   std::string_view fontName,
                                    float fontSize,
                                    uint32_t flags              = 0,
-                                   const std::string& url      = "",
+                                   std::string_view url        = "",
                                    const Color3B& outlineColor = Color3B::WHITE,
                                    int outlineSize             = -1,
                                    const Color3B& shadowColor  = Color3B::BLACK,
@@ -244,8 +244,8 @@ public:
     bool init(int tag,
               const Color3B& color,
               uint8_t opacity,
-              const std::string& filePath,
-              const std::string& url         = "",
+              std::string_view filePath,
+              std::string_view url           = "",
               Widget::TextureResType texType = Widget::TextureResType::LOCAL);
 
     /**
@@ -262,13 +262,13 @@ public:
     static RichElementImage* create(int tag,
                                     const Color3B& color,
                                     uint8_t opacity,
-                                    const std::string& filePath,
-                                    const std::string& url         = "",
+                                    std::string_view filePath,
+                                    std::string_view url           = "",
                                     Widget::TextureResType texType = Widget::TextureResType::LOCAL);
 
     void setWidth(int width);
     void setHeight(int height);
-    void setUrl(const std::string& url);
+    void setUrl(std::string_view url);
 
 protected:
     std::string _filePath;
@@ -386,7 +386,7 @@ public:
      * @brief call to open a resource specified by a URL
      * @param url a URL
      */
-    typedef std::function<void(const std::string& url)> OpenUrlHandler;
+    typedef std::function<void(std::string_view url)> OpenUrlHandler;
 
     /**
      * @brief called on the specified tag
@@ -461,7 +461,7 @@ public:
      *
      * @return RichText instance.
      */
-    static RichText* createWithXML(const std::string& xml,
+    static RichText* createWithXML(std::string_view xml,
                                    const ValueMap& defaults            = ValueMap(),
                                    const OpenUrlHandler& handleOpenUrl = nullptr);
 
@@ -517,24 +517,24 @@ public:
         HorizontalAlignment a); /*!< sets the horizontal alignment mode: LEFT, CENTER, or RIGHT */
     HorizontalAlignment getHorizontalAlignment() const; /*!< returns the current horizontal alignment mode */
     void setFontColor(
-        const std::string& color); /*!< Set the font color. @param color the #RRGGBB hexadecimal notation. */
-    std::string getFontColor();    /*!< return the current font color */
-    Color3B getFontColor3B();      /*!< return the current font color */
-    void setFontSize(float size);  /*!< Set the font size. @param size the font size. */
-    float getFontSize();           /*!< return the current font size */
-    void setFontFace(const std::string& face);         /*!< Set the font face. @param face the font face. */
-    std::string getFontFace();                         /*!< return the current font face */
-    void setAnchorFontColor(const std::string& color); /*!< Set the font color of a-tag. @param face the font color. */
-    std::string getAnchorFontColor();                  /*!< return the current font color of a-tag */
-    cocos2d::Color3B getAnchorFontColor3B();           /*!< return the current font color of a-tag */
-    void setAnchorTextBold(bool enable);               /*!< enable bold text of a-tag */
-    bool isAnchorTextBoldEnabled();                    /*!< valid style is bold text of a-tag? */
-    void setAnchorTextItalic(bool enable);             /*!< enable italic text of a-tag */
-    bool isAnchorTextItalicEnabled();                  /*!< valid style is italic text of a-tag? */
-    void setAnchorTextDel(bool enable);                /*!< enable the strikethrough of a-tag */
-    bool isAnchorTextDelEnabled();                     /*!< valid strikethrough of a-tag? */
-    void setAnchorTextUnderline(bool enable);          /*!< enable the underline of a-tag */
-    bool isAnchorTextUnderlineEnabled();               /*!< valid underline of a-tag? */
+        std::string_view color);             /*!< Set the font color. @param color the #RRGGBB hexadecimal notation. */
+    std::string getFontColor();              /*!< return the current font color */
+    Color3B getFontColor3B();                /*!< return the current font color */
+    void setFontSize(float size);            /*!< Set the font size. @param size the font size. */
+    float getFontSize();                     /*!< return the current font size */
+    void setFontFace(std::string_view face); /*!< Set the font face. @param face the font face. */
+    std::string getFontFace();               /*!< return the current font face */
+    void setAnchorFontColor(std::string_view color); /*!< Set the font color of a-tag. @param face the font color. */
+    std::string getAnchorFontColor();                /*!< return the current font color of a-tag */
+    cocos2d::Color3B getAnchorFontColor3B();         /*!< return the current font color of a-tag */
+    void setAnchorTextBold(bool enable);             /*!< enable bold text of a-tag */
+    bool isAnchorTextBoldEnabled();                  /*!< valid style is bold text of a-tag? */
+    void setAnchorTextItalic(bool enable);           /*!< enable italic text of a-tag */
+    bool isAnchorTextItalicEnabled();                /*!< valid style is italic text of a-tag? */
+    void setAnchorTextDel(bool enable);              /*!< enable the strikethrough of a-tag */
+    bool isAnchorTextDelEnabled();                   /*!< valid strikethrough of a-tag? */
+    void setAnchorTextUnderline(bool enable);        /*!< enable the underline of a-tag */
+    bool isAnchorTextUnderlineEnabled();             /*!< valid underline of a-tag? */
     /** @brief enable the outline of a-tag */
     void setAnchorTextOutline(bool enable, const Color3B& outlineColor = Color3B::WHITE, int outlineSize = -1);
     bool isAnchorTextOutlineEnabled();     /*!< valid outline of a-tag? */
@@ -555,7 +555,7 @@ public:
     void setDefaults(const ValueMap& defaults); /*!< set the default values */
     ValueMap getDefaults() const;               /*!< returns the default values */
 
-    cocos2d::Color3B color3BWithString(const std::string& color);   /*!< convert a color string into a Color3B. */
+    cocos2d::Color3B color3BWithString(std::string_view color);     /*!< convert a color string into a Color3B. */
     std::string stringWithColor3B(const cocos2d::Color3B& color3b); /*!< convert a Color3B into a color string. */
     std::string stringWithColor4B(const cocos2d::Color4B& color4b); /*!< convert a Color4B into a color string. */
 
@@ -565,15 +565,15 @@ public:
      * @param isFontElement use attributes of text tag
      * @param handleVisitEnter callback
      */
-    static void setTagDescription(const std::string& tag, bool isFontElement, VisitEnterHandler handleVisitEnter);
+    static void setTagDescription(std::string_view tag, bool isFontElement, VisitEnterHandler handleVisitEnter);
 
     /**
      * @brief remove a callback to own tag.
      * @param tag tag's name
      */
-    static void removeTagDescription(const std::string& tag);
+    static void removeTagDescription(std::string_view tag);
 
-    void openUrl(const std::string& url);
+    void openUrl(std::string_view url);
 
     /**
      * @brief Asks the callback to open a resource specified by a URL.
@@ -584,7 +584,7 @@ public:
 
     CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
 
-    bool initWithXML(const std::string& xml,
+    bool initWithXML(std::string_view xml,
                      const ValueMap& defaults            = ValueMap(),
                      const OpenUrlHandler& handleOpenUrl = nullptr);
 
@@ -593,26 +593,26 @@ protected:
 
     virtual void initRenderer() override;
     void pushToContainer(Node* renderer);
-    void handleTextRenderer(const std::string& text,
-                            const std::string& fontName,
+    void handleTextRenderer(std::string_view text,
+                            std::string_view fontName,
                             float fontSize,
                             const Color3B& color,
                             uint8_t opacity,
                             uint32_t flags,
-                            const std::string& url      = "",
+                            std::string_view url        = "",
                             const Color3B& outlineColor = Color3B::WHITE,
                             int outlineSize             = -1,
                             const Color3B& shadowColor  = Color3B::BLACK,
                             const Vec2& shadowOffset    = Vec2(2.0, -2.0),
                             int shadowBlurRadius        = 0,
                             const Color3B& glowColor    = Color3B::WHITE);
-    void handleImageRenderer(const std::string& filePath,
+    void handleImageRenderer(std::string_view filePath,
                              Widget::TextureResType textureType,
                              const Color3B& color,
                              uint8_t opacity,
                              int width,
                              int height,
-                             const std::string& url);
+                             std::string_view url);
     void handleCustomRenderer(Node* renderer);
     void formatRenderers();
     void addNewLine();

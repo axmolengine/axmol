@@ -29,14 +29,14 @@ public:
      */
     virtual ~TextFieldEx();
 
-    static TextFieldEx* create(const std::string& placeholder,
-                               const std::string& fontName,
+    static TextFieldEx* create(std::string_view placeholder,
+                               std::string_view fontName,
                                float fontSize,
                                float cursorWidth    = 2,
                                const Color4B& color = Color4B::WHITE);
 
-    bool initWithPlaceHolder(const std::string& placeholder,
-                             const std::string& fontName,
+    bool initWithPlaceHolder(std::string_view placeholder,
+                             std::string_view fontName,
                              float fontSize,
                              float cursorWidth    = 2,
                              const Color4B& color = Color4B::WHITE);
@@ -58,8 +58,8 @@ public:
     const Color3B& getCursorColor(void) const;
 
     // input text property
-    virtual void setString(const std::string& text);
-    virtual const std::string& getString() const;
+    virtual void setString(std::string_view text);
+    virtual std::string_view getString() const;
 
     // Continuous touch event trigger support.
     void setContinuousTouchDelayTime(float delay) { _continuousTouchDelayTime = delay; }
@@ -71,8 +71,8 @@ public:
 
     // place holder text property
     // place holder text displayed when there is no text in the text field.
-    virtual void setPlaceholderText(const std::string& text);
-    virtual const std::string& getPlaceholderText(void) const;
+    virtual void setPlaceholderText(std::string_view text);
+    virtual std::string_view getPlaceholderText(void) const;
 
     virtual void setPasswordEnabled(bool value);
     virtual bool isPasswordEnabled() const;
@@ -97,8 +97,8 @@ public:
     /// fonts
     void setTextFontSize(float size);
     float getTextFontSize() const;
-    void setTextFontName(const std::string& fontName);
-    const std::string& getTextFontName() const;
+    void setTextFontName(std::string_view fontName);
+    std::string_view getTextFontName() const;
 
     CC_SYNTHESIZE(size_t, charLimit, CharLimit);
 
@@ -122,7 +122,7 @@ protected:
     virtual bool canDetachWithIME() override;
 
     virtual void deleteBackward() override;
-    virtual const std::string& getContentText() override;
+    virtual std::string_view getContentText() override;
 
     void handleDeleteKeyEvent();
 

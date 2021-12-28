@@ -799,7 +799,7 @@ void FastTMXLayer::removeChild(Node* node, bool cleanup)
 }
 
 // TMXLayer - Properties
-Value FastTMXLayer::getProperty(const std::string& propertyName) const
+Value FastTMXLayer::getProperty(std::string_view propertyName) const
 {
     auto propItr = _properties.find(propertyName);
     if (propItr != _properties.end())

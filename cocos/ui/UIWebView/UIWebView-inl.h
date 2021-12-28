@@ -53,35 +53,35 @@ WebView* WebView::create()
     return nullptr;
 }
 
-void WebView::setJavascriptInterfaceScheme(const std::string& scheme)
+void WebView::setJavascriptInterfaceScheme(std::string_view scheme)
 {
     _impl->setJavascriptInterfaceScheme(scheme);
 }
 
 void WebView::loadData(const cocos2d::Data& data,
-                       const std::string& MIMEType,
-                       const std::string& encoding,
-                       const std::string& baseURL)
+                       std::string_view MIMEType,
+                       std::string_view encoding,
+                       std::string_view baseURL)
 {
     _impl->loadData(data, MIMEType, encoding, baseURL);
 }
 
-void WebView::loadHTMLString(const std::string& string, const std::string& baseURL)
+void WebView::loadHTMLString(std::string_view string, std::string_view baseURL)
 {
     _impl->loadHTMLString(string, baseURL);
 }
 
-void WebView::loadURL(const std::string& url)
+void WebView::loadURL(std::string_view url)
 {
     this->loadURL(url, false);
 }
 
-void WebView::loadURL(const std::string& url, bool cleanCachedData)
+void WebView::loadURL(std::string_view url, bool cleanCachedData)
 {
     _impl->loadURL(url, cleanCachedData);
 }
 
-void WebView::loadFile(const std::string& fileName)
+void WebView::loadFile(std::string_view fileName)
 {
     _impl->loadFile(fileName);
 }
@@ -116,7 +116,7 @@ void WebView::goForward()
     _impl->goForward();
 }
 
-void WebView::evaluateJS(const std::string& js)
+void WebView::evaluateJS(std::string_view js)
 {
     _impl->evaluateJS(js);
 }
@@ -204,7 +204,7 @@ void WebView::setOnDidFinishLoading(const ccWebViewCallback& callback)
     _onDidFinishLoading = callback;
 }
 
-void WebView::setOnShouldStartLoading(const std::function<bool(WebView* sender, const std::string& url)>& callback)
+void WebView::setOnShouldStartLoading(const std::function<bool(WebView* sender, std::string_view url)>& callback)
 {
     _onShouldStartLoading = callback;
 }
@@ -214,7 +214,7 @@ void WebView::setOnJSCallback(const ccWebViewCallback& callback)
     _onJSCallback = callback;
 }
 
-std::function<bool(WebView* sender, const std::string& url)> WebView::getOnShouldStartLoading() const
+std::function<bool(WebView* sender, std::string_view url)> WebView::getOnShouldStartLoading() const
 {
     return _onShouldStartLoading;
 }

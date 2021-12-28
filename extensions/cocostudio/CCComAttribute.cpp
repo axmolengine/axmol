@@ -49,27 +49,27 @@ bool ComAttribute::init()
     return true;
 }
 
-void ComAttribute::setInt(const std::string& key, int value)
+void ComAttribute::setInt(std::string_view key, int value)
 {
     _dict[key] = cocos2d::Value(value);
 }
 
-void ComAttribute::setFloat(const std::string& key, float value)
+void ComAttribute::setFloat(std::string_view key, float value)
 {
     _dict[key] = cocos2d::Value(value);
 }
 
-void ComAttribute::setBool(const std::string& key, bool value)
+void ComAttribute::setBool(std::string_view key, bool value)
 {
     _dict[key] = cocos2d::Value(value);
 }
 
-void ComAttribute::setString(const std::string& key, const std::string& value)
+void ComAttribute::setString(std::string_view key, std::string_view value)
 {
     _dict[key] = cocos2d::Value(value);
 }
 
-int ComAttribute::getInt(const std::string& key, int def) const
+int ComAttribute::getInt(std::string_view key, int def) const
 {
     if (_dict.find(key) != _dict.end())
     {
@@ -77,15 +77,15 @@ int ComAttribute::getInt(const std::string& key, int def) const
         return v.asInt();
     }
 
-    if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))
+    if (!DICTOOL->checkObjectExist_json(_doc, key.data()))
     {
         return def;
     }
 
-    return DICTOOL->getIntValue_json(_doc, key.c_str());
+    return DICTOOL->getIntValue_json(_doc, key.data());
 }
 
-float ComAttribute::getFloat(const std::string& key, float def) const
+float ComAttribute::getFloat(std::string_view key, float def) const
 {
     if (_dict.find(key) != _dict.end())
     {
@@ -93,14 +93,14 @@ float ComAttribute::getFloat(const std::string& key, float def) const
         return v.asFloat();
     }
 
-    if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))
+    if (!DICTOOL->checkObjectExist_json(_doc, key.data()))
     {
         return def;
     }
-    return DICTOOL->getFloatValue_json(_doc, key.c_str());
+    return DICTOOL->getFloatValue_json(_doc, key.data());
 }
 
-bool ComAttribute::getBool(const std::string& key, bool def) const
+bool ComAttribute::getBool(std::string_view key, bool def) const
 {
     if (_dict.find(key) != _dict.end())
     {
@@ -108,15 +108,15 @@ bool ComAttribute::getBool(const std::string& key, bool def) const
         return v.asBool();
     }
 
-    if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))
+    if (!DICTOOL->checkObjectExist_json(_doc, key.data()))
     {
         return def;
     }
 
-    return DICTOOL->getBooleanValue_json(_doc, key.c_str());
+    return DICTOOL->getBooleanValue_json(_doc, key.data());
 }
 
-std::string ComAttribute::getString(const std::string& key, const std::string& def) const
+std::string ComAttribute::getString(std::string_view key, std::string_view def) const
 {
     if (_dict.find(key) != _dict.end())
     {
@@ -124,12 +124,12 @@ std::string ComAttribute::getString(const std::string& key, const std::string& d
         return v.asString();
     }
 
-    if (!DICTOOL->checkObjectExist_json(_doc, key.c_str()))
+    if (!DICTOOL->checkObjectExist_json(_doc, key.data()))
     {
-        return def;
+        return std::string{def};
     }
 
-    return DICTOOL->getStringValue_json(_doc, key.c_str());
+    return DICTOOL->getStringValue_json(_doc, key.data());
 }
 
 ComAttribute* ComAttribute::create()
@@ -206,7 +206,7 @@ bool ComAttribute::serialize(void* r)
     return ret;
 }
 
-bool ComAttribute::parse(const std::string& jsonFile)
+bool ComAttribute::parse(std::string_view jsonFile)
 {
     bool ret = false;
     do

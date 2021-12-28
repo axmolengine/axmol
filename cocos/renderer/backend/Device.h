@@ -125,7 +125,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* newProgram(const std::string& vertexShader, const std::string& fragmentShader) = 0;
+    virtual Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) = 0;
 
     /**
      * Get a DeviceInfo object.
@@ -140,7 +140,7 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string& source) = 0;
+    virtual ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) = 0;
 
     DeviceInfo* _deviceInfo = nullptr;  ///< Device information.
 

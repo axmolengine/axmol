@@ -48,11 +48,11 @@ CheckBox* CheckBox::create()
     return nullptr;
 }
 
-CheckBox* CheckBox::create(const std::string& backGround,
-                           const std::string& backGroundSelected,
-                           const std::string& cross,
-                           const std::string& backGroundDisabled,
-                           const std::string& frontCrossDisabled,
+CheckBox* CheckBox::create(std::string_view backGround,
+                           std::string_view backGroundSelected,
+                           std::string_view cross,
+                           std::string_view backGroundDisabled,
+                           std::string_view frontCrossDisabled,
                            TextureResType texType)
 {
     CheckBox* pWidget = new CheckBox;
@@ -65,7 +65,7 @@ CheckBox* CheckBox::create(const std::string& backGround,
     return nullptr;
 }
 
-CheckBox* CheckBox::create(const std::string& backGround, const std::string& cross, TextureResType texType)
+CheckBox* CheckBox::create(std::string_view backGround, std::string_view cross, TextureResType texType)
 {
     CheckBox* pWidget = new CheckBox;
     if (pWidget->init(backGround, "", cross, "", "", texType))

@@ -38,7 +38,7 @@ PUBehaviourManager* PUBehaviourManager::Instance()
     return &pam;
 }
 
-PUScriptTranslator* PUBehaviourManager::getTranslator(const std::string& type)
+PUScriptTranslator* PUBehaviourManager::getTranslator(std::string_view type)
 {
     if (type == "Slave")
     {
@@ -47,7 +47,7 @@ PUScriptTranslator* PUBehaviourManager::getTranslator(const std::string& type)
     return nullptr;
 }
 
-PUBehaviour* PUBehaviourManager::createBehaviour(const std::string& type)
+PUBehaviour* PUBehaviourManager::createBehaviour(std::string_view type)
 {
     if (type == "Slave")
     {

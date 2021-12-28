@@ -125,14 +125,14 @@ public:
      *
      * @param url the string object.
      */
-    void setUrl(const std::string& url) { _url = url; }
+    void setUrl(std::string_view url) { _url = url; }
 
     /**
      * Get the url address of HttpRequest object.
      *
      * @return const char* the pointer of _url.
      */
-    const std::string& getUrl() const { return _url; }
+    std::string_view getUrl() const { return _url; }
 
     /**
      * Set the request data of HttpRequest object.
@@ -168,7 +168,7 @@ public:
      *
      * @param tag the string object.
      */
-    void setTag(const std::string& tag) { _tag = tag; }
+    void setTag(std::string_view tag) { _tag = tag; }
 
     /**
      * Get the string tag to identify the request.

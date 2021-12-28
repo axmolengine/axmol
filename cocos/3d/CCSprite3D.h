@@ -62,10 +62,10 @@ public:
     static Sprite3D* create();
 
     /** creates a Sprite3D*/
-    static Sprite3D* create(const std::string& modelPath);
+    static Sprite3D* create(std::string_view modelPath);
 
     // creates a Sprite3D. It only supports one texture, and overrides the internal texture with 'texturePath'
-    static Sprite3D* create(const std::string& modelPath, const std::string& texturePath);
+    static Sprite3D* create(std::string_view modelPath, std::string_view texturePath);
 
     /** create 3d sprite asynchronously
      * If the 3d model was previously loaded, it will create a new 3d sprite and the callback will be called at once.
@@ -76,31 +76,31 @@ public:
      * @param callback callback after loading
      * @param callbackparam user defined parameter for the callback
      */
-    static void createAsync(const std::string& modelPath,
+    static void createAsync(std::string_view modelPath,
                             const std::function<void(Sprite3D*, void*)>& callback,
                             void* callbackparam);
 
-    static void createAsync(const std::string& modelPath,
-                            const std::string& texturePath,
+    static void createAsync(std::string_view modelPath,
+                            std::string_view texturePath,
                             const std::function<void(Sprite3D*, void*)>& callback,
                             void* callbackparam);
 
     /**set diffuse texture, set the first if multiple textures exist*/
-    void setTexture(const std::string& texFile);
+    void setTexture(std::string_view texFile);
     void setTexture(Texture2D* texture);
 
     /**get Mesh by index*/
     Mesh* getMeshByIndex(int index) const;
 
     /**get Mesh by Name, it returns the first one if there are more than one mesh with the same name */
-    Mesh* getMeshByName(const std::string& name) const;
+    Mesh* getMeshByName(std::string_view name) const;
 
     /**
      * get mesh array by name, returns all meshes with the given name
      *
      * @lua NA
      */
-    std::vector<Mesh*> getMeshArrayByName(const std::string& name) const;
+    std::vector<Mesh*> getMeshArrayByName(std::string_view name) const;
 
     /**get mesh*/
     Mesh* getMesh() const;
@@ -111,10 +111,10 @@ public:
     Skeleton3D* getSkeleton() const { return _skeleton; }
 
     /**get AttachNode by bone name, return nullptr if not exist*/
-    AttachNode* getAttachNode(const std::string& boneName);
+    AttachNode* getAttachNode(std::string_view boneName);
 
     /**remove attach node*/
-    void removeAttachNode(const std::string& boneName);
+    void removeAttachNode(std::string_view boneName);
 
     /**remove all attach nodes*/
     void removeAllAttachNode();
@@ -214,19 +214,16 @@ public:
 
     virtual bool init() override;
 
-    bool initWithFile(const std::string& path);
+    bool initWithFile(std::string_view path);
 
     bool initFrom(const NodeDatas& nodedatas, const MeshDatas& meshdatas, const MaterialDatas& materialdatas);
 
     /**load sprite3d from cache, return true if succeed, false otherwise*/
-    bool loadFromCache(const std::string& path);
+    bool loadFromCache(std::string_view path);
 
     /** load file and set it to meshedatas, nodedatas and materialdatas, obj file .mtl file should be at the same
      * directory if exist */
-    bool loadFromFile(const std::string& path,
-                      NodeDatas* nodedatas,
-                      MeshDatas* meshdatas,
-                      MaterialDatas* materialdatas);
+    bool loadFromFile(std::string_view path, NodeDatas* nodedatas, MeshDatas* meshdatas, MaterialDatas* materialdatas);
 
     /**
      * Visits this Sprite3D's children and draw them recursively.
@@ -242,7 +239,7 @@ public:
     Sprite3D* createSprite3DNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas);
 
     /**get MeshIndexData by Id*/
-    MeshIndexData* getMeshIndexData(const std::string& indexId) const;
+    MeshIndexData* getMeshIndexData(std::string_view indexId) const;
 
     void addMesh(Mesh* mesh);
 
@@ -257,7 +254,7 @@ protected:
 
     Vector<MeshVertexData*> _meshVertexDatas;
 
-    std::unordered_map<std::string, AttachNode*> _attachments;
+    hlookup::string_map<AttachNode*> _attachments;
 
     BlendFunc _blend;
 
@@ -319,17 +316,17 @@ public:
      *
      * @lua NA
      */
-    Sprite3DData* getSpriteData(const std::string& key) const;
+    Sprite3DData* getSpriteData(std::string_view key) const;
 
     /**
      * add the SpriteData into Sprite3D by given the specified key
      *
      * @lua NA
      */
-    bool addSprite3DData(const std::string& key, Sprite3DData* spritedata);
+    bool addSprite3DData(std::string_view key, Sprite3DData* spritedata);
 
     /**remove the SpriteData from Sprite3D by given the specified key*/
-    void removeSprite3DData(const std::string& key);
+    void removeSprite3DData(std::string_view key);
 
     /**remove all the SpriteData from Sprite3D*/
     void removeAllSprite3DData();
@@ -339,7 +336,7 @@ public:
 
 protected:
     static Sprite3DCache* _cacheInstance;
-    std::unordered_map<std::string, Sprite3DData*> _spriteDatas;  // cached sprite data
+    hlookup::string_map<Sprite3DData*> _spriteDatas;  // cached sprite data
 };
 
 // end of 3d group

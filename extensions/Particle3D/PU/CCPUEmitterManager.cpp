@@ -45,7 +45,7 @@ PUEmitterManager* PUEmitterManager::Instance()
     return &ptm;
 }
 
-PUScriptTranslator* PUEmitterManager::getTranslator(const std::string& type)
+PUScriptTranslator* PUEmitterManager::getTranslator(std::string_view type)
 {
     if (type == "Box")
     {
@@ -86,7 +86,7 @@ PUScriptTranslator* PUEmitterManager::getTranslator(const std::string& type)
     return nullptr;
 }
 
-PUEmitter* PUEmitterManager::createEmitter(const std::string& type)
+PUEmitter* PUEmitterManager::createEmitter(std::string_view type)
 {
     if (type == "Box")
     {

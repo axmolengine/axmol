@@ -84,7 +84,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeDeleteBackwa
 
 JNIEXPORT jstring JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeGetContentText(JNIEnv* env, jclass)
 {
-    std::string pszText = cocos2d::IMEDispatcher::sharedDispatcher()->getContentText();
+    auto pszText = cocos2d::IMEDispatcher::sharedDispatcher()->getContentText();
     return cocos2d::StringUtils::newStringUTFJNI(env, pszText);
 }
 }

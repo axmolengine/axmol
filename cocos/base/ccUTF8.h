@@ -147,7 +147,7 @@ CC_DLL std::string getStringUTFCharsJNI(JNIEnv* env, jstring srcjStr, bool* ret 
  *  @param ret     True if the conversion succeeds and the ret pointer isn't null
  *  @returns the result of jstring,the jstring need to DeleteLocalRef(jstring);
  */
-CC_DLL jstring newStringUTFJNI(JNIEnv* env, const std::string& utf8Str, bool* ret = nullptr);
+CC_DLL jstring newStringUTFJNI(JNIEnv* env, std::string_view utf8Str, bool* ret = nullptr);
 #endif
 
 /**
@@ -199,7 +199,7 @@ CC_DLL bool isUnicodeNonBreaking(char32_t ch);
  *  @param utf8 An UTF-8 encoded string.
  *  @returns The length of the string in characters.
  */
-CC_DLL int32_t getCharacterCountInUTF8String(const std::string& utf8);
+CC_DLL int32_t getCharacterCountInUTF8String(std::string_view utf8);
 
 /**
  *  @brief Gets the index of the last character that is not equal to the character given.
@@ -245,18 +245,18 @@ public:
     typedef std::vector<CharUTF8> CharUTF8Store;
 
     StringUTF8();
-    StringUTF8(const std::string& newStr);
+    StringUTF8(std::string_view newStr);
     ~StringUTF8();
 
     std::size_t length() const;
-    void replace(const std::string& newStr);
+    void replace(std::string_view newStr);
 
     std::string getAsCharSequence() const;
     std::string getAsCharSequence(std::size_t pos) const;
     std::string getAsCharSequence(std::size_t pos, std::size_t len) const;
 
     bool deleteChar(std::size_t pos);
-    bool insert(std::size_t pos, const std::string& insertStr);
+    bool insert(std::size_t pos, std::string_view insertStr);
     bool insert(std::size_t pos, const StringUTF8& insertStr);
 
     CharUTF8Store& getString() { return _str; }

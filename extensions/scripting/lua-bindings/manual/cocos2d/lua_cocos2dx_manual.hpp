@@ -44,7 +44,7 @@ NS_CC_BEGIN
 class LuaEventListenerCustom
 {
 public:
-    static EventListenerCustom* create(const std::string& eventName);
+    static EventListenerCustom* create(std::string_view eventName);
 };
 
 class LuaEventListenerAcceleration

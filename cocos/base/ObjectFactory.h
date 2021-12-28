@@ -42,8 +42,8 @@ public:
     struct CC_DLL TInfo
     {
         TInfo();
-        TInfo(const std::string& type, Instance ins = nullptr);
-        TInfo(const std::string& type, InstanceFunc ins = nullptr);
+        TInfo(std::string_view type, Instance ins = nullptr);
+        TInfo(std::string_view type, InstanceFunc ins = nullptr);
         TInfo(const TInfo& t);
         ~TInfo();
         TInfo& operator=(const TInfo& t);
@@ -51,11 +51,11 @@ public:
         Instance _fun;
         InstanceFunc _func;
     };
-    typedef std::unordered_map<std::string, TInfo> FactoryMap;
+    typedef hlookup::string_map<TInfo> FactoryMap;
 
     static ObjectFactory* getInstance();
     static void destroyInstance();
-    cocos2d::Ref* createObject(const std::string& name);
+    cocos2d::Ref* createObject(std::string_view name);
 
     void registerType(const TInfo& t);
     void removeAll();

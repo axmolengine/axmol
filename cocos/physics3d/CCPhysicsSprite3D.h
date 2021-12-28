@@ -48,13 +48,13 @@ class CC_DLL PhysicsSprite3D : public cocos2d::Sprite3D
 {
 public:
     /** creates a PhysicsSprite3D*/
-    static PhysicsSprite3D* create(const std::string& modelPath,
+    static PhysicsSprite3D* create(std::string_view modelPath,
                                    Physics3DRigidBodyDes* rigidDes,
                                    const cocos2d::Vec3& translateInPhysics = cocos2d::Vec3::ZERO,
                                    const cocos2d::Quaternion& rotInPhsyics = cocos2d::Quaternion::ZERO);
 
     /** creates a PhysicsSprite3D as a collider*/
-    static PhysicsSprite3D* createWithCollider(const std::string& modelPath,
+    static PhysicsSprite3D* createWithCollider(std::string_view modelPath,
                                                Physics3DColliderDes* colliderDes,
                                                const cocos2d::Vec3& translateInPhysics = cocos2d::Vec3::ZERO,
                                                const cocos2d::Quaternion& rotInPhsyics = cocos2d::Quaternion::ZERO);

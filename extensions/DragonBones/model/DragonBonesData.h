@@ -107,7 +107,7 @@ public:
     /**
      * @private
      */
-    std::map<std::string, ArmatureData*> armatures;
+    hlookup::string_map<ArmatureData*> armatures;
     /**
      * @internal
      */
@@ -158,10 +158,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline ArmatureData* getArmature(const std::string& armatureName) const
-    {
-        return mapFind<ArmatureData>(armatures, armatureName);
-    }
+    inline ArmatureData* getArmature(std::string_view armatureName) const { return mapFind(armatures, armatureName); }
 
 protected:
     virtual void _onClear() override;

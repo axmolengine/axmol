@@ -60,7 +60,7 @@ void AudioDecoderManager::destroy()
 #endif
 }
 
-AudioDecoder* AudioDecoderManager::createDecoder(const std::string& path)
+AudioDecoder* AudioDecoderManager::createDecoder(std::string_view path)
 {
     cxx17::string_view svPath(path);
     if (cxx20::ic::ends_with(svPath, ".ogg"))
