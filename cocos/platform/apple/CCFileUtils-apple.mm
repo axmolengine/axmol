@@ -171,9 +171,9 @@ bool FileUtilsApple::removeDirectory(std::string_view path) const
         return true;
 }
 
-std::string FileUtilsApple::getPathForDirectory(const std::string& dir,
-                                                const std::string& resolutionDiretory,
-                                                const std::string& searchPath) const
+std::string FileUtilsApple::getPathForDirectory(std::string_view dir,
+                                                std::string_view resolutionDiretory,
+                                                std::string_view searchPath) const
 {
     auto path = searchPath + resolutionDiretory + dir;
 
