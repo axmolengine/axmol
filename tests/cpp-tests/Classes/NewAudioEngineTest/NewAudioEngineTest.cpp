@@ -64,7 +64,7 @@ namespace {
     {
     public:
         
-        static TextButton *create(const std::string& text, const std::function<void(TextButton*)> &onTriggered)
+        static TextButton *create(std::string_view text, const std::function<void(TextButton*)> &onTriggered)
         {
             auto ret = new TextButton();
             
@@ -246,7 +246,7 @@ bool AudioControlTest::init()
                 _isStopped = false;
                 
                 button->setEnabled(false);
-                AudioEngine::setFinishCallback(_audioID, [&](int id, const std::string& filePath){
+                AudioEngine::setFinishCallback(_audioID, [&](int id, std::string_view filePath){
                     log("_audioID(%d), _isStopped:(%d), played over!!!", _audioID, _isStopped);
                     
                     _playOverLabel->setVisible(true);
@@ -527,7 +527,7 @@ bool PlaySimultaneouslyTest::init()
             if(audioId != AudioEngine::INVALID_AUDIO_ID){
                 _playingcount += 1;
                 
-                AudioEngine::setFinishCallback(audioId, [&](int id, const std::string& filePath){
+                AudioEngine::setFinishCallback(audioId, [&](int id, std::string_view filePath){
                     _playingcount -= 1;
                     if(_playingcount <= 0){
                         ((TextButton*)_playItem)->setEnabled(true);
@@ -591,7 +591,7 @@ bool AudioProfileTest::init()
                 sprintf(show,"audio count:%d",_audioCount);
                 _showLabel->setString(show);
                 
-                AudioEngine::setFinishCallback(id, [&](int id, const std::string& filePath){
+                AudioEngine::setFinishCallback(id, [&](int id, std::string_view filePath){
                     _audioCount -= 1;
                     char show[30];
                     sprintf(show,"audio count:%d",_audioCount);
@@ -1155,22 +1155,22 @@ std::string AudioPlayInFinishedCB::subtitle() const
     return "After played over, click again, should also hear 3 audios";
 }
 
-void AudioPlayInFinishedCB::doPlay(const std::string& filename)
+void AudioPlayInFinishedCB::doPlay(std::string_view filename)
 {
     int playID = AudioEngine::play2d(filename, false, 1);
-    AudioEngine::setFinishCallback(playID, [this](int finishID, const std::string& file){
+    AudioEngine::setFinishCallback(playID, [this](int finishID, std::string_view file){
         _playList.pop_front();
-        log("finish music %s",file.c_str());
+        log("finish music %s",file.data());
         if (!_playList.empty()) {
-            const std::string& name = _playList.front();
+            std::string_view name = _playList.front();
             doPlay(name);
         }
     });
 }
 
-void AudioPlayInFinishedCB::playMusic(const std::string& filename)
+void AudioPlayInFinishedCB::playMusic(std::string_view filename)
 {
-    _playList.push_back(filename);
+    _playList.push_back(std::string{filename});
     if (_playList.size() == 1) {
         doPlay(filename);
     }
@@ -1182,7 +1182,7 @@ void AudioUncacheInFinishedCB::onEnter()
     AudioEngineTestDemo::onEnter();
 
     int id = AudioEngine::play2d("background.mp3");
-    AudioEngine::setFinishCallback(id, [](int i, const std::string& str){
+    AudioEngine::setFinishCallback(id, [](int i, std::string_view str){
         AudioEngine::uncacheAll();
     });
 }

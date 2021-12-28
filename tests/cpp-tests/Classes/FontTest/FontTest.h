@@ -33,7 +33,7 @@ DEFINE_TEST_SUITE(FontTests);
 class FontTest : public TestCase
 {
 public:
-    static FontTest* create(const std::string& fontFile)
+    static FontTest* create(std::string_view fontFile)
     {
         auto ret = new FontTest;
         if (ret->init())
@@ -50,7 +50,7 @@ public:
         return ret;
     }
 
-    void showFont(const std::string& fontFile);
+    void showFont(std::string_view fontFile);
 
     virtual std::string title() const override;
 };

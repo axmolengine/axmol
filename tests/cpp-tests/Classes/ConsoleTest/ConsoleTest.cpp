@@ -74,10 +74,10 @@ ConsoleCustomCommand::ConsoleCustomCommand()
 {
     _console = Director::getInstance()->getConsole();
     static Console::Command commands[] = {
-        {"hello", "This is just a user generated command", [](int fd, const std::string& args) {
+        {"hello", "This is just a user generated command", [](int fd, std::string_view args) {
             const char msg[] = "how are you?\nArguments passed: ";
             send(fd, msg, sizeof(msg),0);
-            send(fd, args.c_str(), args.length(),0);
+            send(fd, args.data(), args.length(),0);
             send(fd, "\n",1,0);
         }},
     };

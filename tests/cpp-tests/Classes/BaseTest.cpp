@@ -142,11 +142,12 @@ void TestList::deatchTableView() {
     CC_SAFE_RELEASE_NULL(_tableView);
 }
 
-void TestList::addTest(const std::string& testName, std::function<TestBase*()> callback)
+void TestList::addTest(std::string_view testName, std::function<TestBase*()> callback)
 {
     if (!testName.empty())
     {
-        _childTestNames.emplace_back(StringUtils::format("%d", static_cast<int>(_childTestNames.size() + 1)) + ":" + testName);
+        _childTestNames.emplace_back(
+            StringUtils::format("%d:%s", static_cast<int>(_childTestNames.size() + 1), testName.data()));
         _testCallbacks.emplace_back(callback);
     }
 }
@@ -282,7 +283,7 @@ ssize_t TestList::numberOfCellsInTableView(TableView *table)
 }
 
 //TestSuite
-void TestSuite::addTestCase(const std::string& testName, std::function<Scene*()> callback)
+void TestSuite::addTestCase(std::string_view testName, std::function<Scene*()> callback)
 {
     if (!testName.empty() && callback)
     {

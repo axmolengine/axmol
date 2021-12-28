@@ -47,7 +47,7 @@ HttpClientTest::HttpClientTest()
     auto cafile = FileUtils::getInstance()->fullPathForFilename("cacert.pem");
     httpClient->setSSLVerification(cafile);
     httpClient->enableCookies(nullptr);
-    CCLOG("The http cookie will store to: %s", httpClient->getCookieFilename().c_str());
+    CCLOG("The http cookie will store to: %s", httpClient->getCookieFilename().data());
 
     const int MARGIN = 40;
     const int SPACE = 35;

@@ -298,14 +298,14 @@ struct DownloaderTest : public TestCase
         downloader->onTaskError = [this](const cocos2d::network::DownloadTask& task,
                                          int errorCode,
                                          int errorCodeInternal,
-                                         const std::string& errorStr)
+                                         std::string_view errorStr)
         {
             log("Failed to download : %s, identifier(%s) error code(%d), internal error code(%d) desc(%s)"
                 , task.requestURL.c_str()
                 , task.identifier.c_str()
                 , errorCode
                 , errorCodeInternal
-                , errorStr.c_str());
+                , errorStr.data());
             auto view = this->getChildByName(task.identifier);
             auto status = (Label*)view->getChildByTag(TAG_STATUS);
             status->setString(errorStr.length() ? errorStr : "Download failed.");
@@ -350,13 +350,13 @@ struct DownloaderMultiTask : public TestCase
             log("downloader task success: %s", task.identifier.c_str());
         });
 
-        downloader->onTaskError = ([] (const network::DownloadTask& task, int errorCode, int errorCodeInternal, const std::string& errorStr) {
+        downloader->onTaskError = ([] (const network::DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorStr) {
             log("downloader task failed : %s, identifier(%s) error code(%d), internal error code(%d) desc(%s)"
                 , task.requestURL.c_str()
                 , task.identifier.c_str()
                 , errorCode
                 , errorCodeInternal
-                , errorStr.c_str());
+                , errorStr.data());
         });
     }
 };

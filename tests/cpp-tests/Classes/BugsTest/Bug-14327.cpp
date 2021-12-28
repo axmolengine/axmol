@@ -102,9 +102,9 @@ void Bug14327Layer::editBoxEditingDidEndWithAction(cocos2d::ui::EditBox* editBox
     log("editBox %p DidEnd !", editBox);
 }
 
-void Bug14327Layer::editBoxTextChanged(cocos2d::ui::EditBox* editBox, const std::string& text)
+void Bug14327Layer::editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text)
 {
-    log("editBox %p TextChanged, text: %s ", editBox, text.c_str());
+    log("editBox %p TextChanged, text: %s ", editBox, text.data());
 }
 
 void Bug14327Layer::editBoxReturn(ui::EditBox* editBox)

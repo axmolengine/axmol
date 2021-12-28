@@ -39,7 +39,7 @@ public:
     
     virtual void editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox)override;
     virtual void editBoxEditingDidEndWithAction(cocos2d::ui::EditBox* editBox, cocos2d::ui::EditBoxDelegate::EditBoxEndAction action)override;
-    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, const std::string& text)override;
+    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text)override;
     virtual void editBoxReturn(cocos2d::ui::EditBox* editBox)override;
 
     
@@ -59,7 +59,7 @@ public:
     virtual bool init() override;
     
     virtual void editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox)override;
-    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, const std::string& text)override;
+    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text)override;
     virtual void editBoxReturn(cocos2d::ui::EditBox* editBox)override;
     
     

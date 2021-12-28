@@ -322,8 +322,8 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    void doPlay(const std::string& filename);
-    void playMusic(const std::string& filename);
+    void doPlay(std::string_view filename);
+    void playMusic(std::string_view filename);
     std::list<std::string> _playList;
 };
 

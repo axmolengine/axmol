@@ -203,12 +203,12 @@ class SpriteInGroupCommand : public Sprite
 protected:
     GroupCommand _spriteWrapperCommand;
 public:
-    static SpriteInGroupCommand* create(const std::string& filename);
+    static SpriteInGroupCommand* create(std::string_view filename);
     
     virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
 };
 
-SpriteInGroupCommand* SpriteInGroupCommand::create(const std::string &filename)
+SpriteInGroupCommand* SpriteInGroupCommand::create(std::string_view filename)
 {
     SpriteInGroupCommand* sprite = new SpriteInGroupCommand();
     sprite->initWithFile(filename);
@@ -682,7 +682,7 @@ void CaptureScreenTest::onCaptured(Ref*)
     utils::captureScreen(CC_CALLBACK_2(CaptureScreenTest::afterCaptured, this), _filename);
 }
 
-void CaptureScreenTest::afterCaptured(bool succeed, const std::string& outputFile)
+void CaptureScreenTest::afterCaptured(bool succeed, std::string_view outputFile)
 {
     if (succeed)
     {

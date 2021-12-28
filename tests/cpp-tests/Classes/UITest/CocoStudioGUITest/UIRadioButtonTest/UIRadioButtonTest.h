@@ -66,7 +66,7 @@ public:
 
     
 protected:
-    void addLog(const std::string& log);
+    void addLog(std::string_view log);
     
     cocos2d::ui::RadioButtonGroup* _radioButtonGroups[2];
     cocos2d::ui::Text* _groupEventLabel;

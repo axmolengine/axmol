@@ -78,7 +78,7 @@ class SpritePolygonTestSlider : public SpritePolygonTestCase
 protected:
     cocos2d::Label *_epsilonLabel;
     int _tagIndex;
-    cocos2d::Sprite* makeSprite(const std::string& filename, const cocos2d::Vec2& pos);
+    cocos2d::Sprite* makeSprite(std::string_view filename, const cocos2d::Vec2& pos);
     virtual bool init() override;
     void initSliders();
     virtual void initSprites(){};

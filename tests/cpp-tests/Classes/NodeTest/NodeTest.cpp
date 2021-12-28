@@ -1280,7 +1280,7 @@ void NodeNameTest::test(float dt)
     {
         sprintf(name, "node%d", i);
         auto node = parent->getChildByName(name);
-        log("find child: %s", node->getName().c_str());
+        log("find child: %s", node->getName().data());
     }
     
     // enumerateChildren()

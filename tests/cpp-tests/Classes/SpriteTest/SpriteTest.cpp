@@ -3429,7 +3429,7 @@ class MySprite1 : public Sprite
 public:
     CREATE_FUNC(MySprite1);
     MySprite1() {}
-    static MySprite1* createWithSpriteFrameName(const std::string& spriteFrameName)
+    static MySprite1* createWithSpriteFrameName(std::string_view spriteFrameName)
     {
         auto sprite = MySprite1::create();
         sprite->setSpriteFrame(spriteFrameName);
@@ -3442,7 +3442,7 @@ class MySprite2 : public Sprite
 public:
     CREATE_FUNC(MySprite2);
     MySprite2() {}
-    static MySprite2* create(const std::string& name)
+    static MySprite2* create(std::string_view name)
     {
         auto sprite = MySprite2::create();
         sprite ->setTexture(name);

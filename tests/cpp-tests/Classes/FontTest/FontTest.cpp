@@ -80,7 +80,7 @@ FontTests::FontTests()
 	ADD_TEST_CASE(FontReplacementTest);
 }
 
-void FontTest::showFont(const std::string& fontFile)
+void FontTest::showFont(std::string_view fontFile)
 {
     auto s = Director::getInstance()->getWinSize();
 

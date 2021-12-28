@@ -41,7 +41,7 @@ std::string ZipTest::title() const {
 }
 
 
-static void unzipTest(Label *label, const std::string &originFile, const std::string &tmpName, const std::string &zipFile, const std::string& password = "")
+static void unzipTest(Label *label, const std::string &originFile, const std::string &tmpName, const std::string &zipFile, std::string_view password = "")
 {
 
     auto fu = FileUtils::getInstance();

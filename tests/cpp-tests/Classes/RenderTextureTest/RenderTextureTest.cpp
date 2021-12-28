@@ -100,7 +100,7 @@ void RenderTextureSave::saveImageWithPremultipliedAlpha(cocos2d::Ref* sender)
     char png[20];
     sprintf(png, "image-pma-%d.png", counter);
 
-    auto callback = [&](RenderTexture* rt, const std::string& path)
+    auto callback = [&](RenderTexture* rt, std::string_view path)
     {
         auto sprite = Sprite::create(path);
         addChild(sprite);
@@ -126,7 +126,7 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(cocos2d::Ref *sender)
     char png[20];
     sprintf(png, "image-no-pma-%d.png", counter);
     
-    auto callback = [&](RenderTexture* rt, const std::string& path)
+    auto callback = [&](RenderTexture* rt, std::string_view path)
     {
         auto sprite = Sprite::create(path);
         addChild(sprite);
@@ -790,7 +790,7 @@ Issue16113Test::Issue16113Test()
         text->setPosition(winSize.width / 2,winSize.height/2);
         text->Node::visit();
         target->end();
-        auto callback = [&](RenderTexture* rt, const std::string& path){
+        auto callback = [&](RenderTexture* rt, std::string_view path){
             rt->release();
         };
         target->retain();

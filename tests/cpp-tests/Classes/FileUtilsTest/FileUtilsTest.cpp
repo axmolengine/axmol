@@ -576,7 +576,7 @@ public:
 };
 NS_CC_END
 
-static void saveAsBinaryText(const std::string& filename, const std::vector<char>& binary){
+static void saveAsBinaryText(std::string_view filename, const std::vector<char>& binary){
     auto fs = FileUtils::getInstance();
     std::string text(binary.begin(), binary.end());
     fs->writeStringToFile(text, filename);
@@ -965,10 +965,10 @@ void TestUnicodePath::onEnter()
     std::string filename = "测试文件.test";
 
     std::string act;
-    auto getMsg = [&act](bool b, const std::string& path)-> std::string
+    auto getMsg = [&act](bool b, std::string_view path)-> std::string
     {
         char msg[512];
-        snprintf((char *)msg, 512, "%s for %s path: \"%s\"", b ? "success" : "failed", act.c_str(), path.c_str());
+        snprintf((char *)msg, 512, "%s for %s path: \"%s\"", b ? "success" : "failed", act.c_str(), path.data());
         return std::string(msg);
     };
 
@@ -1097,10 +1097,10 @@ void TestIsDirectoryExistAsync::onEnter()
     int x = s.width/2, y = s.height/3;
     
     std::string dir;
-    auto getMsg = [](bool b, const std::string& dir)-> std::string
+    auto getMsg = [](bool b, std::string_view dir)-> std::string
     {
         char msg[512];
-        snprintf((char *)msg, 512, "%s for dir: \"%s\"", b ? "success" : "failed", dir.c_str());
+        snprintf((char *)msg, 512, "%s for dir: \"%s\"", b ? "success" : "failed", dir.data());
         return std::string(msg);
     };
     
@@ -1220,9 +1220,11 @@ void TestWriteStringAsync::onEnter()
         CCASSERT(success, "Write String to data failed");
         writeResult->setString("write success:" + writeDataStr);
 
-        FileUtils::getInstance()->getStringFromFile(fullPath, [=](const std::string& value) {
+        FileUtils::getInstance()->getStringFromFile(fullPath, [=](std::string_view value) {
             CCASSERT(!value.empty(), "String should be readable");
-            readResult->setString("read success: " + value);
+
+            std::string strVal = "read success: ";
+            readResult->setString(strVal.append(value));
         });
     });
 }

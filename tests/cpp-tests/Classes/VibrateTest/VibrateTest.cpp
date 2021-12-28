@@ -41,7 +41,7 @@ namespace {
     {
     public:
         
-        static TextButton *create(const std::string& text, const std::function<void(TextButton*)> &onTriggered)
+        static TextButton *create(std::string_view text, const std::function<void(TextButton*)> &onTriggered)
         {
             auto ret = new TextButton();
             
