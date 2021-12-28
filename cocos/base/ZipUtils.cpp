@@ -774,7 +774,7 @@ std::vector<std::string> ZipFile::listFiles(std::string_view pathname) const
         if (cxx20::starts_with(filename, cxx17::string_view{dirname}))
         {
             std::string_view suffix{filename.substr(dirname.length())};
-            auto pos           = suffix.find('/');
+            auto pos = suffix.find('/');
             if (pos == std::string::npos)
             {
                 fileSet.insert(std::string{suffix});
@@ -923,7 +923,7 @@ bool ZipFile::zfopen(std::string_view fileName, ZipFileStream* zfs)
     auto it = _data->fileList.find(fileName);
     if (it != _data->fileList.end())
     {
-        zfs->entry = &it->second;
+        zfs->entry  = &it->second;
         zfs->offset = 0;
         return true;
     }

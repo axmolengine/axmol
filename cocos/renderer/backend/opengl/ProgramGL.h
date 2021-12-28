@@ -149,8 +149,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(
-        ShaderStage stage) const override;
+    virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
 
 private:
     void compileProgram();

@@ -343,7 +343,7 @@ float Terrain::getHeight(float x, float z, Vec3* normal) const
             normal->z = d - a;
             normal->normalize();
             //(*normal) = (1-u)*(1-v)*getNormal(i,j)+ (1-u)*v*getNormal(i,j+1) + u*(1-v)*getNormal(i+1,j)+
-            //u*v*getNormal(i+1,j+1);
+            // u*v*getNormal(i+1,j+1);
         }
         float result = (1 - u) * (1 - v) * getImageHeight(i, j) * getScaleY() +
                        (1 - u) * v * getImageHeight(i, j + 1) * getScaleY() +

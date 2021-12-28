@@ -149,8 +149,7 @@ public:
     static FontFNT* create(std::string_view fntFilePath, std::string_view subTextureKey);
     static FontFNT* create(std::string_view fntFilePath);
 
-    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(std::string_view fntFilePath,
-                                                   const Vec2& imageOffset = Vec2::ZERO);
+    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(std::string_view fntFilePath, const Vec2& imageOffset = Vec2::ZERO);
 
     /** Purges the cached data.
     Removes from memory the cached configurations and the atlas name dictionary.

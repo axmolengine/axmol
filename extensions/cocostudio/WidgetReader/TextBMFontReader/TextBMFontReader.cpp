@@ -92,7 +92,7 @@ void TextBMFontReader::setPropsFromJsonDictionary(Widget* widget, const rapidjso
     {
     case 0:
     {
-        std::string tp_c { jsonPath };
+        std::string tp_c{jsonPath};
         const char* cmfPath = DICTOOL->getStringValue_json(cmftDic, P_Path);
         const char* cmf_tp  = tp_c.append(cmfPath).c_str();
         labelBMFont->setFntFile(cmf_tp);

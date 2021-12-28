@@ -165,7 +165,7 @@ public:
     void loadSlidBallTextures(std::string_view normal,
                               std::string_view pressed  = "",
                               std::string_view disabled = "",
-                              TextureResType texType      = TextureResType::LOCAL);
+                              TextureResType texType    = TextureResType::LOCAL);
 
     /**
      * Load normal state texture for slider ball.

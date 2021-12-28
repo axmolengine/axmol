@@ -104,7 +104,7 @@ protected:
 public:
     virtual DragonBonesData* loadDragonBonesData(std::string_view filePath,
                                                  std::string_view name = "",
-                                                 float scale             = 1.0f);
+                                                 float scale           = 1.0f);
     /**
      * - Load and parse a texture atlas data and texture from the local and cache them to the factory.
      * @param  filePath - The file path of texture atlas data.
@@ -134,7 +134,7 @@ public:
      */
     virtual TextureAtlasData* loadTextureAtlasData(std::string_view filePath,
                                                    std::string_view name = "",
-                                                   float scale             = 1.0f);
+                                                   float scale           = 1.0f);
     /**
      * - Create a armature from cached DragonBonesData instances and TextureAtlasData instances, then use the {@link
      * #clock} to update it. The difference is that the armature created by {@link #buildArmature} is not WorldClock
