@@ -27,6 +27,7 @@
 #define __CCMAP_H__
 
 #define USE_STD_UNORDERED_MAP 1
+#define USE_ROBIN_MAP 1
 
 #include "base/ccMacros.h"
 #include "base/CCRef.h"
@@ -148,7 +149,7 @@ public:
     /** Returns the number of elements in bucket n. */
     ssize_t bucketSize(ssize_t n) const
     {
-#if USE_STD_UNORDERED_MAP
+#if USE_STD_UNORDERED_MAP && !defined(USE_ROBIN_MAP)
         return _data.bucket_size(n);
 #else
         return 0;
@@ -158,7 +159,7 @@ public:
     /** Returns the bucket number where the element with key k is located. */
     ssize_t bucket(const K& k) const
     {
-#if USE_STD_UNORDERED_MAP
+#if USE_STD_UNORDERED_MAP && !defined(USE_ROBIN_MAP)
         return _data.bucket(k);
 #else
         return 0;

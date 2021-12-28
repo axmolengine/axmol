@@ -157,8 +157,8 @@ public:
                 // add a new dictionary into the pre dictionary
                 CCASSERT(!_dictStack.empty(), "The state is wrong!");
                 ValueMap* preDict   = _dictStack.top();
-                (*preDict)[_curKey] = Value(ValueMap());
-                _curDict            = &(*preDict)[_curKey].asValueMap();
+                auto& curVal = hlookup::set_item(*preDict, _curKey, Value(ValueMap()))->second;
+                _curDict            = &curVal.asValueMap();
             }
 
             // record the dict state
