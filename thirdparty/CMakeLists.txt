@@ -304,6 +304,7 @@ if(BUILD_DEP_LLHTTP)
     target_link_libraries(thirdparty llhttp)
 endif()
 
+# yaml
 if(BUILD_DEP_YAML_CPP)
     set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
@@ -316,6 +317,7 @@ if(BUILD_DEP_YAML_CPP)
     # target_link_libraries(thirdparty yaml-cpp)
 endif()
 
+# kcp
 if(BUILD_DEP_KCP)
     add_subdirectory(kcp)
     configure_target_outdir(kcp)
@@ -323,12 +325,16 @@ if(BUILD_DEP_KCP)
     target_compile_definitions(thirdparty PUBLIC YASIO_HAVE_KCP=1)
 endif()
 
+# fmt-lib
 add_subdirectory(fmt)
 target_link_libraries(thirdparty fmt-header-only)
 configure_target_outdir(fmt)
 
 # put "thirdparty" into thirdparty folder, too
 configure_target_outdir(thirdparty)
+
+# robin-map
+target_include_directories(thirdparty PUBLIC "robin-map/include")
 
 if(MACOSX OR IOS)
     add_subdirectory(glsl-optimizer)
