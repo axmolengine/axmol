@@ -79,6 +79,11 @@
 - Version: git d78c3d2
 - License: MIT
 
+## jni.hpp
+- Upstream: https://github.com/mapbox/jni.hpp
+- Version: v4.0.0
+- License: MIT-like
+
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
 - Version: 2.1.2

@@ -2,8 +2,9 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxeproject.github.io
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +32,17 @@ THE SOFTWARE.
 #include <vector>
 #include <unordered_map>
 #include <functional>
+#include <type_traits>
 #include "platform/CCPlatformMacros.h"
 #include "math/Vec3.h"
+#include "jni/jni.hpp"
+
+namespace jni {
+    template <> struct TypeSignature<bool> { constexpr auto operator()() const { return TypeSignature<jboolean>{}(); } };
+    template <> struct TypeSignature<const char*> { constexpr auto operator()() const { return TypeSignature<jni::String>{}(); } };
+    template <> struct TypeSignature<std::string_view> { constexpr auto operator()() const { return TypeSignature<jni::String>{}(); } };
+    template <> struct TypeSignature<std::string> { constexpr auto operator()() const { return TypeSignature<jni::String>{}(); } };
+}
 
 NS_CC_BEGIN
 
@@ -74,11 +84,11 @@ public:
     @if no such method will log error
     */
     template <typename... Ts>
-    static void callStaticVoidMethod(std::string_view className, std::string_view methodName, Ts... xs)
+    static void callStaticVoidMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         cocos2d::JniMethodInfo t;
-        std::string signature = "(" + std::string(getJNISignature(xs...)) + ")V";
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className.data(), methodName.data(), signature.c_str()))
+        const char* signature = jni::TypeSignature<void(std::decay_t<Ts>...)>{}();
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             t.env->CallStaticVoidMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -96,12 +106,12 @@ public:
     @return value from Java static boolean method if there are proper JniMethodInfo; otherwise false.
     */
     template <typename... Ts>
-    static bool callStaticBooleanMethod(std::string_view className, std::string_view methodName, Ts... xs)
+    static bool callStaticBooleanMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jboolean jret = JNI_FALSE;
         cocos2d::JniMethodInfo t;
-        std::string signature = "(" + std::string(getJNISignature(xs...)) + ")Z";
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className.data(), methodName.data(), signature.c_str()))
+        const char* signature = jni::TypeSignature<jboolean(std::decay_t<Ts>...)>{}();
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jret = t.env->CallStaticBooleanMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -120,12 +130,12 @@ public:
     @return value from Java static int method if there are proper JniMethodInfo; otherwise 0.
     */
     template <typename... Ts>
-    static int callStaticIntMethod(std::string_view className, std::string_view methodName, Ts... xs)
+    static int callStaticIntMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jint ret = 0;
         cocos2d::JniMethodInfo t;
-        std::string signature = "(" + std::string(getJNISignature(xs...)) + ")I";
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className.data(), methodName.data(), signature.c_str()))
+        const char* signature = jni::TypeSignature<jint(std::decay_t<Ts>...)>{}();
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             ret = t.env->CallStaticIntMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -144,12 +154,12 @@ public:
     @return value from Java static float method if there are proper JniMethodInfo; otherwise 0.
     */
     template <typename... Ts>
-    static float callStaticFloatMethod(std::string_view className, std::string_view methodName, Ts... xs)
+    static float callStaticFloatMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jfloat ret = 0.0;
         cocos2d::JniMethodInfo t;
-        std::string signature = "(" + std::string(getJNISignature(xs...)) + ")F";
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className.data(), methodName.data(), signature.c_str()))
+        const char* signature = jni::TypeSignature<jfloat(std::decay_t<Ts>...)>{}();
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             ret = t.env->CallStaticFloatMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -168,12 +178,12 @@ public:
     @return address of JniMethodInfo if there are proper JniMethodInfo; otherwise nullptr.
     */
     template <typename... Ts>
-    static float* callStaticFloatArrayMethod(std::string_view className, std::string_view methodName, Ts... xs)
+    static float* callStaticFloatArrayMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         static float ret[32];
         cocos2d::JniMethodInfo t;
-        std::string signature = "(" + std::string(getJNISignature(xs...)) + ")[F";
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className.data(), methodName.data(), signature.c_str()))
+        const char* signature = jni::TypeSignature<jni::Array<jfloat>(std::decay_t<Ts>...)>{}();
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jfloatArray array =
@@ -204,12 +214,12 @@ public:
     @return address of JniMethodInfo if there are proper JniMethodInfo; otherwise nullptr.
     */
     template <typename... Ts>
-    static int* callStaticIntArrayMethod(std::string_view className, std::string_view methodName, Ts... xs)
+    static int* callStaticIntArrayMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         static int ret[32];
         cocos2d::JniMethodInfo t;
-        std::string signature = "(" + std::string(getJNISignature(xs...)) + ")[I";
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className.data(), methodName.data(), signature.c_str()))
+        const char* signature = jni::TypeSignature<jni::Array<jint>(std::decay_t<Ts>...)>{}();
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jintArray array =
@@ -240,12 +250,12 @@ public:
     @return JniMethodInfo of Vec3 type if there are proper JniMethodInfo; otherwise Vec3(0, 0, 0).
     */
     template <typename... Ts>
-    static Vec3 callStaticVec3Method(std::string_view className, std::string_view methodName, Ts... xs)
+    static Vec3 callStaticVec3Method(const char* className, const char* methodName, Ts&&... xs)
     {
         Vec3 ret;
         cocos2d::JniMethodInfo t;
-        std::string signature = "(" + std::string(getJNISignature(xs...)) + ")[F";
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className.data(), methodName.data(), signature.c_str()))
+        const char* signature = jni::TypeSignature<jni::Array<jfloat>(std::decay_t<Ts>...)>{}();
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jfloatArray array =
@@ -274,12 +284,12 @@ public:
     @return value from Java static double method if there are proper JniMethodInfo; otherwise 0.
     */
     template <typename... Ts>
-    static double callStaticDoubleMethod(std::string_view className, std::string_view methodName, Ts... xs)
+    static double callStaticDoubleMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jdouble ret = 0.0;
         cocos2d::JniMethodInfo t;
-        std::string signature = "(" + std::string(getJNISignature(xs...)) + ")D";
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className.data(), methodName.data(), signature.c_str()))
+        const char* signature = jni::TypeSignature<jdouble(std::decay_t<Ts>...)>{}();
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             ret = t.env->CallStaticDoubleMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -298,13 +308,13 @@ public:
     @return JniMethodInfo of string type if there are proper JniMethodInfo; otherwise empty string.
     */
     template <typename... Ts>
-    static std::string callStaticStringMethod(std::string_view className, std::string_view methodName, Ts... xs)
+    static std::string callStaticStringMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         std::string ret;
 
         cocos2d::JniMethodInfo t;
-        std::string signature = "(" + std::string(getJNISignature(xs...)) + ")Ljava/lang/String;";
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className.data(), methodName.data(), signature.c_str()))
+        const char* signature = jni::TypeSignature<jni::String(std::decay_t<Ts>...)>{}();
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jstring jret = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -379,43 +389,7 @@ private:
 
     static void deleteLocalRefs(JNIEnv* env, LocalRefMapType& localRefs);
 
-    static std::string getJNISignature() { return ""; }
-
-    static std::string getJNISignature(bool) { return "Z"; }
-
-    static std::string getJNISignature(char) { return "C"; }
-
-    static std::string getJNISignature(short) { return "S"; }
-
-    static std::string getJNISignature(int) { return "I"; }
-
-    static std::string getJNISignature(long) { return "J"; }
-
-    static std::string getJNISignature(float) { return "F"; }
-
-    static std::string getJNISignature(double) { return "D"; }
-
-    static std::string getJNISignature(const char*) { return "Ljava/lang/String;"; }
-
-    static std::string getJNISignature(std::string_view) { return "Ljava/lang/String;"; }
-
-    static std::string getJNISignature(const std::string&) { return "Ljava/lang/String;"; }
-
-    template <typename T>
-    static std::string getJNISignature(T x)
-    {
-        // This template should never be instantiated
-        static_assert(sizeof(x) == 0, "Unsupported argument type");
-        return "";
-    }
-
-    template <typename T, typename... Ts>
-    static std::string getJNISignature(T x, Ts... xs)
-    {
-        return getJNISignature(x) + getJNISignature(xs...);
-    }
-
-    static void reportError(std::string_view className, std::string_view methodName, std::string_view signature);
+    static void reportError(const char* className, const char* methodName, const char* signature);
 };
 
 NS_CC_END

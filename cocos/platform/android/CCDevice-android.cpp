@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "yasio/cxx17/string_view.hpp"
 
-static constexpr std::string_view helperClassName = "org.cocos2dx.lib.Cocos2dxHelper"sv;
+static const char* helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
 
 NS_CC_BEGIN
 
@@ -42,7 +42,7 @@ int Device::getDPI()
     static int dpi = -1;
     if (dpi == -1)
     {
-        dpi = JniHelper::callStaticIntMethod(helperClassName, "getDPI"sv);
+        dpi = JniHelper::callStaticIntMethod(helperClassName, "getDPI");
     }
     return dpi;
 }
@@ -51,17 +51,17 @@ void Device::setAccelerometerEnabled(bool isEnabled)
 {
     if (isEnabled)
     {
-        JniHelper::callStaticVoidMethod(helperClassName, "enableAccelerometer"sv);
+        JniHelper::callStaticVoidMethod(helperClassName, "enableAccelerometer");
     }
     else
     {
-        JniHelper::callStaticVoidMethod(helperClassName, "disableAccelerometer"sv);
+        JniHelper::callStaticVoidMethod(helperClassName, "disableAccelerometer");
     }
 }
 
 void Device::setAccelerometerInterval(float interval)
 {
-    JniHelper::callStaticVoidMethod(helperClassName, "setAccelerometerInterval"sv, interval);
+    JniHelper::callStaticVoidMethod(helperClassName, "setAccelerometerInterval", interval);
 }
 
 class BitmapDC
@@ -176,12 +176,12 @@ Data Device::getTextureDataForText(const char* text,
 
 void Device::setKeepScreenOn(bool value)
 {
-    JniHelper::callStaticVoidMethod(helperClassName, "setKeepScreenOn"sv, value);
+    JniHelper::callStaticVoidMethod(helperClassName, "setKeepScreenOn", value);
 }
 
 void Device::vibrate(float duration)
 {
-    JniHelper::callStaticVoidMethod(helperClassName, "vibrate"sv, duration);
+    JniHelper::callStaticVoidMethod(helperClassName, "vibrate", duration);
 }
 
 NS_CC_END

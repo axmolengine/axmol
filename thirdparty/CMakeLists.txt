@@ -68,6 +68,7 @@ add_library(thirdparty STATIC empty.cpp)
 # header only libs
 target_include_directories(thirdparty
 	INTERFACE "robin-map/include"
+    INTERFACE "jni.hpp/include"
 )
 
 if(MACOSX OR ANDROID OR WINDOWS)
