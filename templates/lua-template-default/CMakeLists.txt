@@ -132,17 +132,16 @@ set(APP_SRC ${GAME_HEADER} ${GAME_SOURCE})
 # mark app complie info and libs info
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${APP_SRC})
+    target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
 else()
     add_library(${APP_NAME} SHARED ${APP_SRC})
-    add_subdirectory(${ADXE_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
-    target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
     add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/cocos/lua-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
-
+    # whole archive ${ADXE_LUA_LIB} to make sure JNI_Onload can be invoke from java 
+    target_link_libraries(${APP_NAME} -Wl,--whole-archive ${ADXE_LUA_LIB} -Wl,--whole-archive)
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src/proj.android/app/src")
 endif()
 
-target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
 target_include_directories(${APP_NAME} PRIVATE ${RUNTIME_SRC_ROOT}/Classes)
 
 # mark app resources, resource will be copy auto after mark
