@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include <android/api-level.h>
 #include <jni.h>
 
+#include "jni/jni.hpp"
+
 #define LOG_TAG "main"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
@@ -71,6 +73,8 @@ __sighandler_t bsd_signal(int s, __sighandler_t f)
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 {
     JniHelper::setJavaVM(vm);
+
+    const char* signature = jni::TypeSignature<jlong(jni::String, jni::String, jboolean)>{}();
 
     cocos_android_app_init(JniHelper::getEnv());
 

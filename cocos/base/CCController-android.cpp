@@ -159,7 +159,7 @@ Controller::Controller()
 
 void Controller::receiveExternalKeyEvent(int externalKeyCode, bool receive)
 {
-    JniHelper::callStaticVoidMethod("org.cocos2dx.lib.GameControllerHelper"sv, "receiveExternalKeyEvent"sv, _deviceId,
+    JniHelper::callStaticVoidMethod("org.cocos2dx.lib.GameControllerHelper", "receiveExternalKeyEvent", _deviceId,
                                     externalKeyCode, receive);
 }
 
