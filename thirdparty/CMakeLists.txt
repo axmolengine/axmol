@@ -66,8 +66,7 @@ endif()
 add_library(thirdparty STATIC empty.cpp)
 
 # header only libs
-target_include_directories(thirdparty 
-    PUBLIC "robin-map/include"
+target_include_directories(thirdparty
 	INTERFACE "robin-map/include"
 )
 
