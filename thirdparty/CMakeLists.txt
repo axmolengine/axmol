@@ -65,8 +65,11 @@ endif()
 
 add_library(thirdparty STATIC empty.cpp)
 
-# robin-map
-include_directories("robin-map/include")
+# header only libs
+target_include_directories(thirdparty 
+    PUBLIC "robin-map/include"
+	INTERFACE "robin-map/include"
+)
 
 if(MACOSX OR ANDROID OR WINDOWS)
     add_subdirectory(zlib)
