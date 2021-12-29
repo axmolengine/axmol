@@ -37,7 +37,7 @@ struct equal_to
         return static_cast<_Ty1&&>(_Left) == static_cast<_Ty2&&>(_Right);
     }
 
-    using is_transparent = int;
+    using is_transparent = void;
 };
 
 template <typename _Valty>
