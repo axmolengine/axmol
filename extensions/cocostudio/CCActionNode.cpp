@@ -495,7 +495,7 @@ Spawn* ActionNode::refreshActionProperty()
                     //                  if (frame->getFrameIndex() > 0)
                     //				    {
                     //					    DelayTime* cDelayTime =
-                    //DelayTime::create(frame->getFrameIndex()
+                    // DelayTime::create(frame->getFrameIndex()
                     //* getUnitTime()); 					    if (cDelayTime != nullptr)
                     //						    cSequenceArray.pushBack(static_cast<FiniteTimeAction*>(cDelayTime));
                     //				    }

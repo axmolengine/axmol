@@ -37,12 +37,29 @@ THE SOFTWARE.
 #include "math/Vec3.h"
 #include "jni/jni.hpp"
 
-namespace jni {
-    template <> struct TypeSignature<bool> { constexpr auto operator()() const { return TypeSignature<jboolean>{}(); } };
-    template <> struct TypeSignature<const char*> { constexpr auto operator()() const { return TypeSignature<jni::String>{}(); } };
-    template <> struct TypeSignature<std::string_view> { constexpr auto operator()() const { return TypeSignature<jni::String>{}(); } };
-    template <> struct TypeSignature<std::string> { constexpr auto operator()() const { return TypeSignature<jni::String>{}(); } };
-}
+namespace jni
+{
+template <>
+struct TypeSignature<bool>
+{
+    constexpr auto operator()() const { return TypeSignature<jboolean>{}(); }
+};
+template <>
+struct TypeSignature<const char*>
+{
+    constexpr auto operator()() const { return TypeSignature<jni::String>{}(); }
+};
+template <>
+struct TypeSignature<std::string_view>
+{
+    constexpr auto operator()() const { return TypeSignature<jni::String>{}(); }
+};
+template <>
+struct TypeSignature<std::string>
+{
+    constexpr auto operator()() const { return TypeSignature<jni::String>{}(); }
+};
+}  // namespace jni
 
 NS_CC_BEGIN
 

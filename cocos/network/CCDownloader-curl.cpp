@@ -573,7 +573,7 @@ private:
         do
         {
             long httpResponseCode = 0;
-            rc                       = curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &httpResponseCode);
+            rc                    = curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &httpResponseCode);
             if (CURLE_OK != rc)
             {
                 break;

@@ -142,8 +142,7 @@ int getObbAssetFileDescriptorJNI(const char* path, int64_t* startOffset, int64_t
     JniMethodInfo methodInfo;
     int fd = 0;
 
-    if (JniHelper::getStaticMethodInfo(methodInfo, className, "getObbAssetFileDescriptor",
-                                       "(Ljava/lang/String;)[J"))
+    if (JniHelper::getStaticMethodInfo(methodInfo, className, "getObbAssetFileDescriptor", "(Ljava/lang/String;)[J"))
     {
         jstring stringArg = methodInfo.env->NewStringUTF(path);
         jlongArray newArray =
