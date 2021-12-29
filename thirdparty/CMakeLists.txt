@@ -68,8 +68,13 @@ add_library(thirdparty STATIC empty.cpp)
 # header only libs
 target_include_directories(thirdparty
 	INTERFACE "robin-map/include"
-    INTERFACE "jni.hpp/include"
 )
+
+if (ANDROID)
+    target_include_directories(thirdparty
+        INTERFACE "jni.hpp/include"
+    )
+endif()
 
 if(MACOSX OR ANDROID OR WINDOWS)
     add_subdirectory(zlib)
