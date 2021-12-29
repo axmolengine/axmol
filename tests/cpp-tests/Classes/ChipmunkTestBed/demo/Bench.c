@@ -44,7 +44,7 @@ static void add_circle(cpSpace* space, int index, cpFloat radius)
     cpFloat mass = radius * radius / 25.0f;
     cpBody* body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, radius, cpvzero)));
     //	cpBody *body = cpSpaceAddBody(space, cpBodyInit(&bodies[i], mass, cpMomentForCircle(mass, 0.0f, radius,
-    //cpvzero)));
+    // cpvzero)));
     cpBodySetPosition(body, cpvmult(frand_unit_circle(), 180.0f));
 
     cpShape* shape = cpSpaceAddShape(space, cpCircleShapeNew(body, radius, cpvzero));

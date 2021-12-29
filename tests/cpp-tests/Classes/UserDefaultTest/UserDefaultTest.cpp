@@ -103,8 +103,9 @@ UserDefaultTest::UserDefaultTest()
 void UserDefaultTest::doTest()
 {
     std::string strVal{this->_label->getString()};
-    this->_label->setString(strVal.append("\n"
-                            "********************** init value ***********************"));
+    this->_label->setString(
+        strVal.append("\n"
+                      "********************** init value ***********************"));
 
     // set default value
 
@@ -127,9 +128,10 @@ void UserDefaultTest::doTest()
 
     // CCUserDefault::getInstance()->flush();
 
-    strVal = this->_label->getString(); 
-    this->_label->setString(strVal.append("\n"
-                            "********************** after change value ***********************"));
+    strVal = this->_label->getString();
+    this->_label->setString(
+        strVal.append("\n"
+                      "********************** after change value ***********************"));
 
     // change the value
 
@@ -152,9 +154,10 @@ void UserDefaultTest::doTest()
     //    logData<float>("float_data");
     //    logData<double>("double_data");
 
-    strVal = this->_label->getString(); 
-    this->_label->setString(strVal.append("\n"
-                            "********************** after delete value ***********************"));
+    strVal = this->_label->getString();
+    this->_label->setString(
+        strVal.append("\n"
+                      "********************** after delete value ***********************"));
 
     UserDefault::getInstance()->deleteValueForKey("string");
     UserDefault::getInstance()->deleteValueForKey("integer");

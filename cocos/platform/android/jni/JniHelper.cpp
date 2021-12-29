@@ -345,8 +345,8 @@ void JniHelper::deleteLocalRefs(JNIEnv* env, LocalRefMapType& localRefs)
 
 void JniHelper::reportError(const char* className, const char* methodName, const char* signature)
 {
-    LOGE("Failed to find static java method. Class name: %s, method name: %s, signature: %s ", className,
-         methodName, signature);
+    LOGE("Failed to find static java method. Class name: %s, method name: %s, signature: %s ", className, methodName,
+         signature);
 }
 
 }  // namespace cocos2d

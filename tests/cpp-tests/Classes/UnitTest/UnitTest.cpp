@@ -518,7 +518,7 @@ void TemplateMapTest::onEnter()
 
     // clear
     StringMap<Node*> mapForClear = createMap();
-    auto mapForClearCopy                = mapForClear;
+    auto mapForClearCopy         = mapForClear;
     mapForClear.clear();
 
     for (const auto& e : mapForClearCopy)
@@ -540,7 +540,7 @@ void TemplateMapTest::onEnter()
 
     // Self assignment
     StringMap<Node*> mapForSelfAssign = createMap();
-    mapForSelfAssign                         = mapForSelfAssign;
+    mapForSelfAssign                  = mapForSelfAssign;
     CCASSERT(mapForSelfAssign.size() == 20, "mapForSelfAssign's size is 20.");
 
     for (const auto& e : mapForSelfAssign)

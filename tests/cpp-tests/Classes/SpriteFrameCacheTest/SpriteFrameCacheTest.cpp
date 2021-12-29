@@ -86,8 +86,8 @@ void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
 #ifndef CC_USE_METAL
     CC_ASSERT(texture->getPixelFormat() == expectedFormat);
 #endif
-    const std::string textureInfo =
-        StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(), texture->getStringForFormat(), memorySize);
+    const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
+                                                        texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);
 
     SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(file);
@@ -495,16 +495,17 @@ void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
                                                      cocos2d::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file, GenericJsonArraySpriteSheetLoader::FORMAT);
-    SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png"sv);
-    Texture2D* texture       = spriteFrame->getTexture();
-    const ssize_t bitsPerKB  = 8 * 1024;
-    const double memorySize  = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
+    SpriteFrame* spriteFrame =
+        SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png"sv);
+    Texture2D* texture      = spriteFrame->getTexture();
+    const ssize_t bitsPerKB = 8 * 1024;
+    const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
 #ifndef CC_USE_METAL
     CC_ASSERT(texture->getPixelFormat() == expectedFormat);
 #endif
-    const std::string textureInfo =
-        StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(), texture->getStringForFormat(), memorySize);
+    const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
+                                                        texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);
 
     SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(file);
