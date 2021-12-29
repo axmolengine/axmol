@@ -1,8 +1,9 @@
 /****************************************************************************
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -73,8 +74,6 @@ __sighandler_t bsd_signal(int s, __sighandler_t f)
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 {
     JniHelper::setJavaVM(vm);
-
-    const char* signature = jni::TypeSignature<jlong(jni::String, jni::String, jboolean)>{}();
 
     cocos_android_app_init(JniHelper::getEnv());
 
