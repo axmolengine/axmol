@@ -65,6 +65,9 @@ endif()
 
 add_library(thirdparty STATIC empty.cpp)
 
+# robin-map
+include_directories("robin-map/include")
+
 if(MACOSX OR ANDROID OR WINDOWS)
     add_subdirectory(zlib)
     target_link_libraries(thirdparty 
@@ -332,9 +335,6 @@ configure_target_outdir(fmt)
 
 # put "thirdparty" into thirdparty folder, too
 configure_target_outdir(thirdparty)
-
-# robin-map
-include_directories("robin-map/include")
 
 if(MACOSX OR IOS)
     add_subdirectory(glsl-optimizer)
