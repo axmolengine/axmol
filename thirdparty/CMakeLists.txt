@@ -334,7 +334,7 @@ configure_target_outdir(fmt)
 configure_target_outdir(thirdparty)
 
 # robin-map
-target_include_directories(thirdparty PUBLIC "robin-map/include")
+include_directories("robin-map/include")
 
 if(MACOSX OR IOS)
     add_subdirectory(glsl-optimizer)
