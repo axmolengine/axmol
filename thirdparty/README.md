@@ -198,6 +198,11 @@
 - Version: 2.27
 - License: MIT
 
+## tinydir
+- Upstream: https://github.com/cxong/tinydir
+- Version: git 1.2.4-ec6bff2 (168)
+- License: BSD-2-Clause
+
 ## unzip (minizip-1.2)
 - Upstream: https://github.com/simdsoft/mz12
 - Version: 1.2 with bugfixs & improvements
