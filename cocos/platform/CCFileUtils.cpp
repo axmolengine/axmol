@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 #include <stack>
 #include <sstream>
+#include <algorithm>
 
 #include "base/CCData.h"
 #include "base/ccMacros.h"
@@ -43,11 +44,30 @@ THE SOFTWARE.
 #    include "unzip.h"
 #endif
 #include <sys/stat.h>
+#include <filesystem>
+
+#if defined(_WIN32)
+#include "ntcvt/ntcvt.hpp"
+#endif
 
 #include "pugixml/pugixml.hpp"
 #define DECLARE_GUARD (void)0
 
+namespace stdfs = std::filesystem;
+
 NS_CC_BEGIN
+
+#if defined(_WIN32)
+inline stdfs::path toFspath(const std::string_view& pathSV)
+{
+    return stdfs::path{ntcvt::from_chars(pathSV)};
+}
+#else
+inline stdfs::path toFspath(const std::string_view& pathSV)
+{
+    return stdfs::path{pathSV};
+}
+#endif
 
 // Implement DictMaker
 
@@ -1133,6 +1153,74 @@ std::unique_ptr<FileStream> FileUtils::openFileStream(std::string_view filePath,
     return nullptr;
 }
 
+std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
+{
+    const auto fullPath = fullPathForDirectory(dirPath);
+    auto fsPath         = toFspath(fullPath);
+    if (!std::filesystem::is_directory(fsPath))
+    {
+        return {};
+    }
+    std::vector<std::string> files = {};
+    for (const auto& entry : std::filesystem::directory_iterator(fsPath))
+    {
+        const auto isDir = entry.is_directory();
+        if (isDir || entry.is_regular_file())
+        {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#    ifdef __cpp_lib_char8_t
+            std::u8string u8path = entry.path().u8string();
+            std::string pathStr  = {u8path.begin(), u8path.end()};
+#    else
+            std::string pathStr = entry.path().u8string();
+#    endif
+            std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
+#else
+            std::string pathStr = entry.path().string();
+#endif
+            if (isDir)
+            {
+                pathStr += '/';
+            }
+            files.emplace_back(std::move(pathStr));
+        }
+    }
+    return files;
+}
+
+void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const
+{
+    const auto fullPath = fullPathForDirectory(dirPath);
+    auto fsPath         = toFspath(fullPath);
+    if (!std::filesystem::is_directory(fsPath))
+    {
+        return;
+    }
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(fsPath))
+    {
+        const auto isDir = entry.is_directory();
+        if (isDir || entry.is_regular_file())
+        {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#    ifdef __cpp_lib_char8_t
+            std::u8string u8path = entry.path().u8string();
+            std::string pathStr  = {u8path.begin(), u8path.end()};
+#    else
+            std::string pathStr = entry.path().u8string();
+#    endif
+            std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
+#else
+            std::string pathStr = entry.path().string();
+#endif
+            if (isDir)
+            {
+                pathStr += '/';
+            }
+            files->emplace_back(std::move(pathStr));
+        }
+    }
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 // windows os implement should override in platform specific FileUtiles class
 bool FileUtils::isDirectoryExistInternal(std::string_view dirPath) const
@@ -1177,20 +1265,7 @@ int64_t FileUtils::getFileSize(std::string_view filepath) const
     return 0;
 }
 
-std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
-{
-    CCASSERT(false, "FileUtils not support listFiles");
-    return std::vector<std::string>();
-}
-
-void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const
-{
-    CCASSERT(false, "FileUtils not support listFilesRecursively");
-    return;
-}
-
 #else
-#    include "tinydir/tinydir.h"
 // default implements for unix like os
 #    include <sys/types.h>
 #    include <errno.h>
@@ -1380,92 +1455,6 @@ int64_t FileUtils::getFileSize(std::string_view filepath) const
     else
     {
         return info.st_size;
-    }
-}
-
-std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
-{
-    std::vector<std::string> files;
-    std::string fullpath = fullPathForDirectory(dirPath);
-    if (!fullpath.empty() && isDirectoryExist(fullpath))
-    {
-        tinydir_dir dir;
-        std::string fullpathstr = fullpath;
-
-        if (tinydir_open(&dir, &fullpathstr[0]) != -1)
-        {
-            while (dir.has_next)
-            {
-                tinydir_file file;
-                if (tinydir_readfile(&dir, &file) == -1)
-                {
-                    // Error getting file
-                    break;
-                }
-                std::string filepath = file.path;
-
-                if (strcmp(file.name, ".") != 0 && strcmp(file.name, "..") != 0)
-                {
-                    if (file.is_dir)
-                        filepath.push_back('/');
-
-                    files.push_back(std::move(filepath));
-                }
-
-                if (tinydir_next(&dir) == -1)
-                {
-                    // Error getting next file
-                    break;
-                }
-            }
-        }
-        tinydir_close(&dir);
-    }
-    return files;
-}
-
-void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const
-{
-    std::string fullpath = fullPathForDirectory(dirPath);
-    if (isDirectoryExist(fullpath))
-    {
-        tinydir_dir dir;
-        std::string fullpathstr = fullpath;
-
-        if (tinydir_open(&dir, &fullpathstr[0]) != -1)
-        {
-            while (dir.has_next)
-            {
-                tinydir_file file;
-                if (tinydir_readfile(&dir, &file) == -1)
-                {
-                    // Error getting file
-                    break;
-                }
-
-                if (strcmp(file.name, ".") != 0 && strcmp(file.name, "..") != 0)
-                {
-                    std::string filepath = file.path;
-                    if (file.is_dir)
-                    {
-                        filepath.push_back('/');
-                        files->push_back(filepath);
-                        listFilesRecursively(filepath, files);
-                    }
-                    else
-                    {
-                        files->push_back(std::move(filepath));
-                    }
-                }
-
-                if (tinydir_next(&dir) == -1)
-                {
-                    // Error getting next file
-                    break;
-                }
-            }
-        }
-        tinydir_close(&dir);
     }
 }
 
