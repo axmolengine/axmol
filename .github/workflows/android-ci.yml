@@ -16,12 +16,9 @@ on:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  TRAVIS_OS_NAME: linux
+  GH_OS_NAME: linux
   BUILD_TARGET: android
-  # Simple let github action to build all (TODO: optimize in the future)
-  TRAVIS_PULL_REQUEST: true
   BUILD_TYPE: Release
-  GITHUB_CI: true
   PYENV_VERSION: 2.7.18
 
 jobs:

@@ -46,11 +46,11 @@ function install_python_module_for_osx()
 }
 
 # set up environment according os and target
-function install_environement_for_pull_request()
+function install_environement()
 {
-    echo "Building pull request ..."
+    echo "Installing environement ..."
 
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    if [ "$GH_OS_NAME" == "linux" ]; then
         sudo apt-get update
         sudo apt-get install ninja-build
         ninja --version
@@ -67,7 +67,7 @@ function install_environement_for_pull_request()
         fi
     fi
 
-    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    if [ "$GH_OS_NAME" == "osx" ]; then
         brew install nasm
         nasm -v
         
@@ -75,67 +75,19 @@ function install_environement_for_pull_request()
     fi
 }
 
-# should generate binding codes & cocos_files.json after merging
-# function install_environement_for_after_merge()
-# {
-#     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-#         install_python_module_for_osx
-#     fi
-
-#     echo "Building merge commit ..."
-# }
-
 # install newer python for android for ssl connection
-if [ "$BUILD_TARGET" == "android" ]; then
-    if [ $GITHUB_CI ]; then
-        echo "Installing pyenv for github ci..."
-        curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-        export PATH="/home/runner/.pyenv/bin:$PATH"
-    else
-        # upgrade pyenv
-        cd $(pyenv root) && git checkout master && git pull && cd -
-    fi
+if [ "$GH_OS_NAME" == "linux" ]; then
+    echo "Installing pyenv for github ci..."
+    curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+    export PATH="/home/runner/.pyenv/bin:$PATH"
     pyenv install --list
     pyenv install $PYENV_VERSION
     pyenv versions
-    # pip install pyOpenSSL ndg-httpsclient pyasn1
-    # set by PYENV_VERSION environment variable implicit
-    # pyenv global $PYENV_VERSION
 fi
 
 python -V
 cmake --version
 
-if [ "$BUILD_TARGET" == "android_cocos_new_test" ]; then
-    sudo apt-get update
-    sudo apt-get install ninja-build
-    ninja --version
-    sudo pip install retry
-    python $ADXE_ROOT/tools/appveyor-scripts/setup_android.py
-    exit 0
-fi
-
-if [ "$BUILD_TARGET" == "linux_cocos_new_test" ]; then
-    install_linux_environment
-    # linux new lua project, so need to install
-    sudo pip install retry
-    python $ADXE_ROOT/tools/appveyor-scripts/setup_android.py --ndk_only
-    exit 0
-fi
-
-# build pull request
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-    install_environement_for_pull_request
-fi
-
-# run after merging
-# - make cocos robot to send PR to cocos2d-x for new binding codes
-# - generate cocos_files.json for template
-# if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-#     # only one job need to send PR, linux virtual machine has better performance
-#     if [ $TRAVIS_OS_NAME == "linux" ] && [ x$GEN_BINDING_AND_COCOSFILE == x"true" ]; then
-#         install_environement_for_after_merge
-#     fi 
-# fi
+install_environement
 
 echo "before-install.sh execution finished!"
