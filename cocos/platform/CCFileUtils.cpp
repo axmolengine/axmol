@@ -47,7 +47,7 @@ THE SOFTWARE.
 #include <filesystem>
 
 #if defined(_WIN32)
-#include "ntcvt/ntcvt.hpp"
+#    include "ntcvt/ntcvt.hpp"
 #endif
 
 #include "pugixml/pugixml.hpp"
@@ -490,8 +490,8 @@ void FileUtils::writeStringToFile(std::string dataStr,
                                   std::function<void(bool)> callback) const
 {
     performOperationOffthread(
-        [fullPath](std::string_view dataStrIn) -> bool {
-            return FileUtils::getInstance()->writeStringToFile(dataStrIn, fullPath);
+        [path = std::string{fullPath}](std::string_view dataStrIn) -> bool {
+            return FileUtils::getInstance()->writeStringToFile(dataStrIn, path);
         },
         std::move(callback), std::move(dataStr));
 }
@@ -504,7 +504,9 @@ bool FileUtils::writeDataToFile(const Data& data, std::string_view fullPath) con
 void FileUtils::writeDataToFile(Data data, std::string_view fullPath, std::function<void(bool)> callback) const
 {
     performOperationOffthread(
-        [fullPath](const Data& dataIn) -> bool { return FileUtils::getInstance()->writeDataToFile(dataIn, fullPath); },
+        [path = std::string{fullPath}](const Data& dataIn) -> bool {
+            return FileUtils::getInstance()->writeDataToFile(dataIn, path);
+        },
         std::move(callback), std::move(data));
 }
 
@@ -554,7 +556,7 @@ void FileUtils::getStringFromFile(std::string_view path, std::function<void(std:
     // thread safe, and accessing the fullPath cache and searching the search paths is not thread safe
     auto fullPath = fullPathForFilename(path);
     performOperationOffthread(
-        [fullPath]() -> std::string { return FileUtils::getInstance()->getStringFromFile(fullPath); },
+        [path = std::string{fullPath}]() -> std::string { return FileUtils::getInstance()->getStringFromFile(path); },
         std::move(callback));
 }
 
@@ -568,8 +570,9 @@ Data FileUtils::getDataFromFile(std::string_view filename) const
 void FileUtils::getDataFromFile(std::string_view filename, std::function<void(Data)> callback) const
 {
     auto fullPath = fullPathForFilename(filename);
-    performOperationOffthread([fullPath]() -> Data { return FileUtils::getInstance()->getDataFromFile(fullPath); },
-                              std::move(callback));
+    performOperationOffthread(
+        [path = std::string{fullPath}]() -> Data { return FileUtils::getInstance()->getDataFromFile(path); },
+        std::move(callback));
 }
 
 FileUtils::Status FileUtils::getContents(std::string_view filename, ResizableBuffer* buffer) const
@@ -614,8 +617,8 @@ void FileUtils::writeValueMapToFile(ValueMap dict, std::string_view fullPath, st
 {
 
     performOperationOffthread(
-        [fullPath](const ValueMap& dictIn) -> bool {
-            return FileUtils::getInstance()->writeValueMapToFile(dictIn, fullPath);
+        [path = std::string{fullPath}](const ValueMap& dictIn) -> bool {
+            return FileUtils::getInstance()->writeValueMapToFile(dictIn, path);
         },
         std::move(callback), std::move(dict));
 }
@@ -625,8 +628,8 @@ void FileUtils::writeValueVectorToFile(ValueVector vecData,
                                        std::function<void(bool)> callback) const
 {
     performOperationOffthread(
-        [fullPath](const ValueVector& vecDataIn) -> bool {
-            return FileUtils::getInstance()->writeValueVectorToFile(vecDataIn, fullPath);
+        [path = std::string{fullPath}](const ValueVector& vecDataIn) -> bool {
+            return FileUtils::getInstance()->writeValueVectorToFile(vecDataIn, path);
         },
         std::move(callback), std::move(vecData));
 }
@@ -1028,8 +1031,9 @@ bool FileUtils::isFileExist(std::string_view filename) const
 void FileUtils::isFileExist(std::string_view filename, std::function<void(bool)> callback) const
 {
     auto fullPath = fullPathForFilename(filename);
-    performOperationOffthread([fullPath]() -> bool { return FileUtils::getInstance()->isFileExist(fullPath); },
-                              std::move(callback));
+    performOperationOffthread(
+        [path = std::string{fullPath}]() -> bool { return FileUtils::getInstance()->isFileExist(path); },
+        std::move(callback));
 }
 
 bool FileUtils::isAbsolutePath(std::string_view path) const
@@ -1072,27 +1076,31 @@ bool FileUtils::isDirectoryExist(std::string_view dirPath) const
 void FileUtils::isDirectoryExist(std::string_view fullPath, std::function<void(bool)> callback) const
 {
     CCASSERT(isAbsolutePath(fullPath), "Async isDirectoryExist only accepts absolute file paths");
-    performOperationOffthread([fullPath]() -> bool { return FileUtils::getInstance()->isDirectoryExist(fullPath); },
-                              std::move(callback));
+    performOperationOffthread(
+        [path = std::string{fullPath}]() -> bool { return FileUtils::getInstance()->isDirectoryExist(path); },
+        std::move(callback));
 }
 
 void FileUtils::createDirectory(std::string_view dirPath, std::function<void(bool)> callback) const
 {
-    performOperationOffthread([dirPath]() -> bool { return FileUtils::getInstance()->createDirectory(dirPath); },
-                              std::move(callback));
+    performOperationOffthread(
+        [path = std::string{dirPath}]() -> bool { return FileUtils::getInstance()->createDirectory(path); },
+        std::move(callback));
 }
 
 void FileUtils::removeDirectory(std::string_view dirPath, std::function<void(bool)> callback) const
 {
-    performOperationOffthread([dirPath]() -> bool { return FileUtils::getInstance()->removeDirectory(dirPath); },
-                              std::move(callback));
+    performOperationOffthread(
+        [path = std::string{dirPath}]() -> bool { return FileUtils::getInstance()->removeDirectory(path); },
+        std::move(callback));
 }
 
 void FileUtils::removeFile(std::string_view filepath, std::function<void(bool)> callback) const
 {
     auto fullPath = fullPathForFilename(filepath);
-    performOperationOffthread([fullPath]() -> bool { return FileUtils::getInstance()->removeFile(fullPath); },
-                              std::move(callback));
+    performOperationOffthread(
+        [path = std::string{fullPath}]() -> bool { return FileUtils::getInstance()->removeFile(path); },
+        std::move(callback));
 }
 
 void FileUtils::renameFile(std::string_view path,
@@ -1101,7 +1109,9 @@ void FileUtils::renameFile(std::string_view path,
                            std::function<void(bool)> callback) const
 {
     performOperationOffthread(
-        [path, oldname, name]() -> bool { return FileUtils::getInstance()->renameFile(path, oldname, name); },
+        [path = std::string{path}, oldname = std::string{oldname}, name = std::string{name}]() -> bool {
+            return FileUtils::getInstance()->renameFile(path, oldname, name);
+        },
         std::move(callback));
 }
 
@@ -1110,21 +1120,23 @@ void FileUtils::renameFile(std::string_view oldfullpath,
                            std::function<void(bool)> callback) const
 {
     performOperationOffthread(
-        [oldfullpath, newfullpath]() { return FileUtils::getInstance()->renameFile(oldfullpath, newfullpath); },
+        [oldpath = std::string{oldfullpath}, newpath = std::string{newfullpath}]() {
+            return FileUtils::getInstance()->renameFile(oldpath, newpath);
+        },
         std::move(callback));
 }
 
 void FileUtils::getFileSize(std::string_view filepath, std::function<void(int64_t)> callback) const
 {
     auto fullPath = fullPathForFilename(filepath);
-    performOperationOffthread([fullPath]() { return FileUtils::getInstance()->getFileSize(fullPath); },
+    performOperationOffthread([path = std::string{fullPath}]() { return FileUtils::getInstance()->getFileSize(path); },
                               std::move(callback));
 }
 
 void FileUtils::listFilesAsync(std::string_view dirPath, std::function<void(std::vector<std::string>)> callback) const
 {
     auto fullPath = fullPathForDirectory(dirPath);
-    performOperationOffthread([fullPath]() { return FileUtils::getInstance()->listFiles(fullPath); },
+    performOperationOffthread([path = std::string{fullPath}]() { return FileUtils::getInstance()->listFiles(path); },
                               std::move(callback));
 }
 
@@ -1133,9 +1145,9 @@ void FileUtils::listFilesRecursivelyAsync(std::string_view dirPath,
 {
     auto fullPath = fullPathForDirectory(dirPath);
     performOperationOffthread(
-        [fullPath]() {
+        [path = std::string{fullPath}]() {
             std::vector<std::string> retval;
-            FileUtils::getInstance()->listFilesRecursively(fullPath, &retval);
+            FileUtils::getInstance()->listFilesRecursively(path, &retval);
             return retval;
         },
         std::move(callback));
