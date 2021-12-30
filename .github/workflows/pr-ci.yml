@@ -8,6 +8,7 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  PYENV_VERSION: 2.7.18
 
 jobs:
   build-windows:
@@ -58,7 +59,6 @@ jobs:
     env:
       GH_OS_NAME: linux
       BUILD_TARGET: android
-      PYENV_VERSION: 2.7.18
       BUILD_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
