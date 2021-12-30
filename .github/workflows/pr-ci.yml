@@ -8,7 +8,6 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
-  PYENV_VERSION: 2.7.18
 
 jobs:
   build-windows:
@@ -44,8 +43,8 @@ jobs:
           lfs: 'true'
       - name: Build
         run: |
-          tools/travis-scripts/before-install.sh
-          tools/travis-scripts/run-script.sh
+          tools/unix-ci/before-install.sh
+          tools/unix-ci/run-script.sh
 
   build-android:
     name: build-android
@@ -59,6 +58,7 @@ jobs:
     env:
       GH_OS_NAME: linux
       BUILD_TARGET: android
+      PYENV_VERSION: 2.7.18
       BUILD_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
@@ -67,8 +67,8 @@ jobs:
           lfs: 'true'
       - name: Build
         run: |
-          tools/travis-scripts/before-install.sh
-          tools/travis-scripts/run-script.sh
+          tools/unix-ci/before-install.sh
+          tools/unix-ci/run-script.sh
 
   build-osx:
     name: build-osx
@@ -83,8 +83,8 @@ jobs:
           lfs: 'true'
       - name: Build
         run: |
-          tools/travis-scripts/before-install.sh
-          tools/travis-scripts/run-script.sh
+          tools/unix-ci/before-install.sh
+          tools/unix-ci/run-script.sh
  
   build-ios:
     name: build-ios
@@ -99,5 +99,5 @@ jobs:
           lfs: 'true'
       - name: Build
         run: |
-          tools/travis-scripts/before-install.sh
-          tools/travis-scripts/run-script.sh
+          tools/unix-ci/before-install.sh
+          tools/unix-ci/run-script.sh
