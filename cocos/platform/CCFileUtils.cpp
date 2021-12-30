@@ -44,7 +44,6 @@ THE SOFTWARE.
 #    include "unzip.h"
 #endif
 #include <sys/stat.h>
-#include <filesystem>
 
 #if defined(_WIN32)
 #    include "ntcvt/ntcvt.hpp"
@@ -55,23 +54,30 @@ THE SOFTWARE.
 #endif
 
 #include "pugixml/pugixml.hpp"
+
 #define DECLARE_GUARD (void)0
 
+#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS || (defined(__NDK_MAJOR__) && __NDK_MAJOR__ >= 22)
+#    define ADXE_HAVE_STDFS 1
+#    include <filesystem>
 namespace stdfs = std::filesystem;
-
-NS_CC_BEGIN
-
-#if defined(_WIN32)
+#    if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)
 {
     return stdfs::path{ntcvt::from_chars(pathSV)};
 }
-#else
+#    else
 inline stdfs::path toFspath(const std::string_view& pathSV)
 {
     return stdfs::path{pathSV};
 }
+#    endif
+#else
+#    include "tinydir/tinydir.h"
+#    define ADXE_HAVE_STDFS 0
 #endif
+
+NS_CC_BEGIN
 
 // Implement DictMaker
 
@@ -1173,7 +1179,7 @@ std::unique_ptr<FileStream> FileUtils::openFileStream(std::string_view filePath,
  a. ios: require ios 13.0+
  b. android: require ndk-r22+
 */
-#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS && (defined(__NDK_MAJOR__) && __NDK_MAJOR__ >= 22)
+#if ADXE_HAVE_STDFS
 std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
 {
     const auto fullPath = fullPathForDirectory(dirPath);
