@@ -26,9 +26,9 @@ function install_android_sdk()
     # full cmd: echo yes|cmdline-tools/bin/sdkmanager --verbose --sdk_root=sdk platform-tools "cmdline-tools;latest" "platforms;android-28" "build-tools;29.0.2" "ndk;19.2.5345600"
     if [ "$BUILD_TARGET" == "android" ]\
         || [ "$BUILD_TARGET" == "android_lua" ] ; then
-        python $ADXE_ROOT/tools/appveyor-scripts/setup_android.py
+        python $ADXE_ROOT/tools/unix-ci/setup_android.py
     else
-        python $ADXE_ROOT/tools/appveyor-scripts/setup_android.py --ndk_only
+        python $ADXE_ROOT/tools/unix-ci/setup_android.py --ndk_only
     fi
 }
 
