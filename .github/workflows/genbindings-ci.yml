@@ -33,4 +33,4 @@ jobs:
         arch: ${{ env.BUILD_ARCH }}
 
     - name: Build
-      run: tools\windows-ci\genbindings.ps1
+      run: tools\win-ci\genbindings.ps1
