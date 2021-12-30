@@ -26,7 +26,6 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "platform/win32/CCFileUtils-win32.h"
 #include "platform/CCCommon.h"
-#include "tinydir/tinydir.h"
 #include <Shlobj.h>
 #include <cstdlib>
 #include <regex>
@@ -230,52 +229,6 @@ std::string FileUtilsWin32::getFullPathForFilenameWithinDirectory(std::string_vi
     return FileUtils::getFullPathForFilenameWithinDirectory(unixDirectory, unixFilename);
 }
 
-void FileUtilsWin32::listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const
-{
-    std::string fullpath = fullPathForDirectory(dirPath);
-    if (isDirectoryExist(fullpath))
-    {
-        tinydir_dir dir;
-        std::wstring fullpathstr = ntcvt::from_chars(fullpath);
-
-        if (tinydir_open(&dir, &fullpathstr[0]) != -1)
-        {
-            while (dir.has_next)
-            {
-                tinydir_file file;
-                if (tinydir_readfile(&dir, &file) == -1)
-                {
-                    // Error getting file
-                    break;
-                }
-                std::string fileName = ntcvt::from_chars(file.name);
-
-                if (fileName != "." && fileName != "..")
-                {
-                    std::string filepath = ntcvt::from_chars(file.path);
-                    if (file.is_dir)
-                    {
-                        filepath.push_back('/');
-                        files->push_back(filepath);
-                        listFilesRecursively(filepath, files);
-                    }
-                    else
-                    {
-                        files->push_back(std::move(filepath));
-                    }
-                }
-
-                if (tinydir_next(&dir) == -1)
-                {
-                    // Error getting next file
-                    break;
-                }
-            }
-        }
-        tinydir_close(&dir);
-    }
-}
-
 int64_t FileUtilsWin32::getFileSize(std::string_view filepath) const
 {
     if (filepath.empty())
@@ -285,49 +238,6 @@ int64_t FileUtilsWin32::getFileSize(std::string_view filepath) const
         !(attrs.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         return static_cast<long long>(attrs.nFileSizeHigh) << 32 | static_cast<unsigned long long>(attrs.nFileSizeLow);
     return -1;
-}
-
-std::vector<std::string> FileUtilsWin32::listFiles(std::string_view dirPath) const
-{
-    std::string fullpath = fullPathForDirectory(dirPath);
-    std::vector<std::string> files;
-    if (isDirectoryExist(fullpath))
-    {
-        tinydir_dir dir;
-        std::wstring fullpathstr = ntcvt::from_chars(fullpath);
-
-        if (tinydir_open(&dir, &fullpathstr[0]) != -1)
-        {
-            while (dir.has_next)
-            {
-                tinydir_file file;
-                if (tinydir_readfile(&dir, &file) == -1)
-                {
-                    // Error getting file
-                    break;
-                }
-
-                std::string fileName = ntcvt::from_chars(file.name);
-                if (fileName != "." && fileName != "..")
-                {
-                    std::string filepath = ntcvt::from_chars(file.path);
-                    if (file.is_dir)
-                    {
-                        filepath.push_back('/');
-                    }
-                    files.push_back(std::move(filepath));
-                }
-
-                if (tinydir_next(&dir) == -1)
-                {
-                    // Error getting next file
-                    break;
-                }
-            }
-        }
-        tinydir_close(&dir);
-    }
-    return files;
 }
 
 std::string FileUtilsWin32::getWritablePath() const

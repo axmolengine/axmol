@@ -134,22 +134,6 @@ protected:
     virtual std::string getFullPathForFilenameWithinDirectory(std::string_view directory,
                                                               std::string_view filename) const override;
 
-    /**
-     *  List all files in a directory.
-     *
-     *  @param dirPath The path of the directory, it could be a relative or an absolute path.
-     *  @return File paths in a string vector
-     */
-    virtual std::vector<std::string> listFiles(std::string_view dirPath) const override;
-
-    /**
-     *  List all files recursively in a directory.
-     *
-     *  @param dirPath The path of the directory, it could be a relative or an absolute path.
-     *  @return File paths in a string vector
-     */
-    virtual void listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const override;
-
 private:
     std::wstring_view _defaultResRootPathUtf16;
 };
