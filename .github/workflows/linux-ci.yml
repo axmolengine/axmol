@@ -19,6 +19,7 @@ env:
   GH_OS_NAME: linux
   BUILD_TARGET: linux
   BUILD_TYPE: Release
+  PYENV_VERSION: 2.7.18
 
 jobs:
   build:
