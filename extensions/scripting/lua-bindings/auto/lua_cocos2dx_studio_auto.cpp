@@ -17029,8 +17029,8 @@ int lua_cocos2dx_studio_TextureFrame_getTextureName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_TextureFrame_getTextureName'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getTextureName();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        std::string_view ret = cobj->getTextureName();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureFrame:getTextureName",argc, 0);
@@ -19783,8 +19783,8 @@ int lua_cocos2dx_studio_EventFrame_getEvent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_EventFrame_getEvent'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getEvent();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        std::string_view ret = cobj->getEvent();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.EventFrame:getEvent",argc, 0);
