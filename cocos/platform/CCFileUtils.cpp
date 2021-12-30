@@ -57,7 +57,7 @@ THE SOFTWARE.
 
 #define DECLARE_GUARD (void)0
 
-#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS || (defined(__NDK_MAJOR__) && __NDK_MAJOR__ >= 22)
+#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS && (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID || (defined(__NDK_MAJOR__) && __NDK_MAJOR__ >= 22) )
 #    define ADXE_HAVE_STDFS 1
 #    include <filesystem>
 namespace stdfs = std::filesystem;
