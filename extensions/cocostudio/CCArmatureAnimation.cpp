@@ -138,7 +138,7 @@ void ArmatureAnimation::setSpeedScale(float speedScale)
 
     _processScale = !_movementData ? _speedScale : _speedScale * _movementData->scale;
 
-    auto& map = _armature->getBoneDic();
+    const Map<std::string, Bone*>& map = _armature->getBoneDic();
     for (auto& element : map)
     {
         Bone* bone = element.second;
@@ -156,7 +156,7 @@ float ArmatureAnimation::getSpeedScale() const
     return _speedScale;
 }
 
-void ArmatureAnimation::play(std::string_view animationName, int durationTo, int loop)
+void ArmatureAnimation::play(const std::string& animationName, int durationTo, int loop)
 {
     if (animationName.empty())
     {
@@ -212,7 +212,7 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
     MovementBoneData* movementBoneData = nullptr;
     _tweenList.clear();
 
-    auto& map = _armature->getBoneDic();
+    const Map<std::string, Bone*>& map = _armature->getBoneDic();
     for (auto& element : map)
     {
         Bone* bone       = element.second;
@@ -469,12 +469,12 @@ void ArmatureAnimation::setFrameEventCallFunc(Ref* target, SEL_FrameEventCallFun
 }
 
 void ArmatureAnimation::setMovementEventCallFunc(
-    std::function<void(Armature* armature, MovementEventType movementType, std::string_view movementID)> listener)
+    std::function<void(Armature* armature, MovementEventType movementType, const std::string& movementID)> listener)
 {
     _movementEventListener = listener;
 }
 void ArmatureAnimation::setFrameEventCallFunc(
-    std::function<void(Bone* bone, std::string_view frameEventName, int originFrameIndex, int currentFrameIndex)>
+    std::function<void(Bone* bone, const std::string& frameEventName, int originFrameIndex, int currentFrameIndex)>
         listener)
 {
     _frameEventListener = listener;
@@ -488,7 +488,7 @@ void ArmatureAnimation::setUserObject(Ref* pUserObject)
 }
 
 void ArmatureAnimation::frameEvent(Bone* bone,
-                                   std::string_view frameEventName,
+                                   const std::string& frameEventName,
                                    int originFrameIndex,
                                    int currentFrameIndex)
 {
@@ -504,7 +504,7 @@ void ArmatureAnimation::frameEvent(Bone* bone,
     }
 }
 
-void ArmatureAnimation::movementEvent(Armature* armature, MovementEventType movementType, std::string_view movementID)
+void ArmatureAnimation::movementEvent(Armature* armature, MovementEventType movementType, const std::string& movementID)
 {
     if ((_movementEventTarget && _movementEventCallFunc) || _movementEventListener)
     {

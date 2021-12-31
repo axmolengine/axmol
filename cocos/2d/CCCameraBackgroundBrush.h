@@ -105,12 +105,12 @@ public:
      @param negative_z texture for the rear side of the texture cube face.
      @return  A new brush inited with given parameters.
      */
-    static CameraBackgroundSkyBoxBrush* createSkyboxBrush(std::string_view positive_x,
-                                                          std::string_view negative_x,
-                                                          std::string_view positive_y,
-                                                          std::string_view negative_y,
-                                                          std::string_view positive_z,
-                                                          std::string_view negative_z);
+    static CameraBackgroundSkyBoxBrush* createSkyboxBrush(const std::string& positive_x,
+                                                          const std::string& negative_x,
+                                                          const std::string& positive_y,
+                                                          const std::string& negative_y,
+                                                          const std::string& positive_z,
+                                                          const std::string& negative_z);
     /**
      * draw the background
      */
@@ -253,12 +253,12 @@ public:
      @param negative_z texture for the rear side of the texture cube face.
      @return  A new brush inited with given parameters.
      */
-    static CameraBackgroundSkyBoxBrush* create(std::string_view positive_x,
-                                               std::string_view negative_x,
-                                               std::string_view positive_y,
-                                               std::string_view negative_y,
-                                               std::string_view positive_z,
-                                               std::string_view negative_z);
+    static CameraBackgroundSkyBoxBrush* create(const std::string& positive_x,
+                                               const std::string& negative_x,
+                                               const std::string& positive_y,
+                                               const std::string& negative_y,
+                                               const std::string& positive_z,
+                                               const std::string& negative_z);
 
     /** Creates a Skybox brush with 6 textures.
      */

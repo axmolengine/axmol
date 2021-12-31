@@ -92,7 +92,7 @@ Rect TMXTilesetInfo::getRectForGID(uint32_t gid)
 
 // implementation TMXMapInfo
 
-TMXMapInfo* TMXMapInfo::create(std::string_view tmxFile)
+TMXMapInfo* TMXMapInfo::create(const std::string& tmxFile)
 {
     TMXMapInfo* ret = new TMXMapInfo();
     if (ret->initWithTMXFile(tmxFile))
@@ -104,7 +104,7 @@ TMXMapInfo* TMXMapInfo::create(std::string_view tmxFile)
     return nullptr;
 }
 
-TMXMapInfo* TMXMapInfo::createWithXML(std::string_view tmxString, std::string_view resourcePath)
+TMXMapInfo* TMXMapInfo::createWithXML(const std::string& tmxString, const std::string& resourcePath)
 {
     TMXMapInfo* ret = new TMXMapInfo();
     if (ret->initWithXML(tmxString, resourcePath))
@@ -116,7 +116,7 @@ TMXMapInfo* TMXMapInfo::createWithXML(std::string_view tmxString, std::string_vi
     return nullptr;
 }
 
-void TMXMapInfo::internalInit(std::string_view tmxFileName, std::string_view resourcePath)
+void TMXMapInfo::internalInit(const std::string& tmxFileName, const std::string& resourcePath)
 {
     if (!tmxFileName.empty())
     {
@@ -138,13 +138,13 @@ void TMXMapInfo::internalInit(std::string_view tmxFileName, std::string_view res
     _currentFirstGID   = -1;
 }
 
-bool TMXMapInfo::initWithXML(std::string_view tmxString, std::string_view resourcePath)
+bool TMXMapInfo::initWithXML(const std::string& tmxString, const std::string& resourcePath)
 {
     internalInit("", resourcePath);
     return parseXMLString(tmxString);
 }
 
-bool TMXMapInfo::initWithTMXFile(std::string_view tmxFile)
+bool TMXMapInfo::initWithTMXFile(const std::string& tmxFile)
 {
     internalInit(tmxFile, "");
     return parseXMLFile(_TMXFileName);
@@ -171,7 +171,7 @@ TMXMapInfo::~TMXMapInfo()
     CCLOGINFO("deallocing TMXMapInfo: %p", this);
 }
 
-bool TMXMapInfo::parseXMLString(std::string_view xmlString)
+bool TMXMapInfo::parseXMLString(const std::string& xmlString)
 {
     size_t len = xmlString.size();
     if (len <= 0)
@@ -186,10 +186,10 @@ bool TMXMapInfo::parseXMLString(std::string_view xmlString)
 
     parser.setDelegator(this);
 
-    return parser.parse(xmlString.data(), len);
+    return parser.parse(xmlString.c_str(), len);
 }
 
-bool TMXMapInfo::parseXMLFile(std::string_view xmlFilename)
+bool TMXMapInfo::parseXMLFile(const std::string& xmlFilename)
 {
     SAXParser parser;
 
@@ -265,7 +265,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             tmxMapInfo->setStaggerIndex(TMXStaggerIndex_Even);
         }
 
-        auto hexSideLength = attributeDict["hexsidelength"].asInt();
+        float hexSideLength = attributeDict["hexsidelength"].asFloat();
         tmxMapInfo->setHexSideLength(hexSideLength);
 
         Vec2 s;
@@ -348,7 +348,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
             Vec2 layerSize      = layer->_layerSize;
             uint32_t gid        = static_cast<uint32_t>(attributeDict["gid"].asUnsignedInt());
-            int tilesAmount     = static_cast<int>(layerSize.width * layerSize.height);
+            int tilesAmount     = layerSize.width * layerSize.height;
 
             if (_xmlTileIndex < tilesAmount)
             {
@@ -443,7 +443,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
 
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
             Vec2 layerSize      = layer->_layerSize;
-            int tilesAmount     = static_cast<int>(layerSize.width * layerSize.height);
+            int tilesAmount     = layerSize.width * layerSize.height;
 
             uint32_t* tiles = (uint32_t*)malloc(tilesAmount * sizeof(uint32_t));
             // set all value to 0
@@ -688,10 +688,10 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
 
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
-            auto currentString = tmxMapInfo->getCurrentString();
+            std::string currentString = tmxMapInfo->getCurrentString();
             unsigned char* buffer;
             auto len =
-                base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(), &buffer);
+                base64Decode((unsigned char*)currentString.c_str(), (unsigned int)currentString.length(), &buffer);
             if (!buffer)
             {
                 CCLOG("cocos2d: TiledMap: decode data error");
@@ -733,11 +733,10 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             tmxMapInfo->setStoringCharacters(false);
-            auto currentString = tmxMapInfo->getCurrentString();
+            std::string currentString = tmxMapInfo->getCurrentString();
 
             vector<string> gidTokens;
-            std::stringstream filestr;
-            filestr << currentString;
+            istringstream filestr(currentString);
             string sRow;
             while (getline(filestr, sRow, '\n'))
             {
@@ -811,7 +810,7 @@ void TMXMapInfo::textHandler(void* /*ctx*/, const char* ch, size_t len)
 
     if (tmxMapInfo->isStoringCharacters())
     {
-        std::string currentString{tmxMapInfo->getCurrentString()};
+        std::string currentString = tmxMapInfo->getCurrentString();
         currentString += text;
         tmxMapInfo->setCurrentString(currentString);
     }

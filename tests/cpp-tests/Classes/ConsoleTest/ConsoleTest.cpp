@@ -28,13 +28,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
-#    include <unistd.h>
-#    include <sys/types.h>
-#    include <sys/socket.h>
-#    include <netdb.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #else
-#    include <io.h>
-#    include <WS2tcpip.h>
+#include <io.h>
+#include <WS2tcpip.h>
 #endif
 
 USING_NS_CC;
@@ -51,9 +51,13 @@ ConsoleTests::ConsoleTests()
     ADD_TEST_CASE(ConsoleUploadFile);
 }
 
-BaseTestConsole::BaseTestConsole() {}
+BaseTestConsole::BaseTestConsole()
+{
+}
 
-BaseTestConsole::~BaseTestConsole() {}
+BaseTestConsole::~BaseTestConsole()
+{
+}
 
 std::string BaseTestConsole::title() const
 {
@@ -68,20 +72,21 @@ std::string BaseTestConsole::title() const
 
 ConsoleCustomCommand::ConsoleCustomCommand()
 {
-    _console                           = Director::getInstance()->getConsole();
+    _console = Director::getInstance()->getConsole();
     static Console::Command commands[] = {
-        {"hello", "This is just a user generated command",
-         [](int fd, std::string_view args) {
-             const char msg[] = "how are you?\nArguments passed: ";
-             send(fd, msg, sizeof(msg), 0);
-             send(fd, args.data(), args.length(), 0);
-             send(fd, "\n", 1, 0);
-         }},
+        {"hello", "This is just a user generated command", [](int fd, const std::string& args) {
+            const char msg[] = "how are you?\nArguments passed: ";
+            send(fd, msg, sizeof(msg),0);
+            send(fd, args.c_str(), args.length(),0);
+            send(fd, "\n",1,0);
+        }},
     };
     _console->addCommand(commands[0]);
 }
 
-ConsoleCustomCommand::~ConsoleCustomCommand() {}
+ConsoleCustomCommand::~ConsoleCustomCommand()
+{
+}
 
 void ConsoleCustomCommand::onEnter()
 {
@@ -98,6 +103,7 @@ std::string ConsoleCustomCommand::subtitle() const
     return "telnet localhost 5678";
 }
 
+
 //------------------------------------------------------------------
 //
 // ConsoleUploadFile
@@ -106,22 +112,26 @@ std::string ConsoleCustomCommand::subtitle() const
 
 ConsoleUploadFile::ConsoleUploadFile()
 {
-    std::srand((unsigned)time(nullptr));
-    int id = rand() % 100000;
+    std::srand ((unsigned)time(nullptr));
+    int id = rand()%100000;
     char buf[32];
     sprintf(buf, "%d", id);
     _targetFileName = std::string("grossini") + buf + ".png";
 
-    std::thread t = std::thread(&ConsoleUploadFile::uploadFile, this);
+    std::thread t = std::thread( &ConsoleUploadFile::uploadFile, this);
     t.detach();
 }
 
 void ConsoleUploadFile::onEnter()
 {
     BaseTestConsole::onEnter();
+    
 }
 
-ConsoleUploadFile::~ConsoleUploadFile() {}
+ConsoleUploadFile::~ConsoleUploadFile()
+{
+    
+}
 
 void ConsoleUploadFile::uploadFile()
 {
@@ -140,14 +150,14 @@ void ConsoleUploadFile::uploadFile()
     /* Obtain address(es) matching host/port */
 
     memset(&hints, 0, sizeof(struct addrinfo));
-    hints.ai_family   = AF_UNSPEC;   /* Allow IPv4 or IPv6 */
+    hints.ai_family = AF_UNSPEC;    /* Allow IPv4 or IPv6 */
     hints.ai_socktype = SOCK_STREAM; /* stream socket */
-    hints.ai_flags    = 0;
-    hints.ai_protocol = 0; /* Any protocol */
+    hints.ai_flags = 0;
+    hints.ai_protocol = 0;          /* Any protocol */
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     WSADATA wsaData;
-    WSAStartup(MAKEWORD(2, 2), &wsaData);
+    WSAStartup(MAKEWORD(2, 2),&wsaData);
 #endif
 
     std::string nodeName;
@@ -157,7 +167,7 @@ void ConsoleUploadFile::uploadFile()
         nodeName = "localhost";
 
     s = getaddrinfo(nodeName.c_str(), "5678", &hints, &result);
-    if (s != 0)
+    if (s != 0) 
     {
         CCLOG("ConsoleUploadFile: getaddrinfo error");
         return;
@@ -168,14 +178,14 @@ void ConsoleUploadFile::uploadFile()
       If socket(2) (or connect(2)) fails, we (close the socket
       and) try the next address. */
 
-    for (rp = result; rp != nullptr; rp = rp->ai_next)
-    {
-        sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+    for (rp = result; rp != nullptr; rp = rp->ai_next) {
+        sfd = socket(rp->ai_family, rp->ai_socktype,
+                    rp->ai_protocol);
         if (sfd == -1)
             continue;
 
         if (connect(sfd, rp->ai_addr, rp->ai_addrlen) != -1)
-            break; /* Success */
+            break;                  /* Success */
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
         closesocket(sfd);
@@ -184,13 +194,12 @@ void ConsoleUploadFile::uploadFile()
 #endif
     }
 
-    if (rp == nullptr)
-    { /* No address succeeded */
+    if (rp == nullptr) {               /* No address succeeded */
         CCLOG("ConsoleUploadFile: could not connect!");
         return;
     }
 
-    freeaddrinfo(result); /* No longer needed */
+    freeaddrinfo(result);           /* No longer needed */
 
     std::string tmp = "upload";
 
@@ -200,9 +209,9 @@ void ConsoleUploadFile::uploadFile()
     char cmd[512] = {0};
 
     strcpy(cmd, tmp.c_str());
-    send(sfd, cmd, strlen(cmd), 0);
+    send(sfd,cmd,strlen(cmd),0);
 
-    size_t offset   = 0;
+    size_t offset = 0;
     auto readBuffer = [&offset](char* buf, size_t bytes, const Data& data) -> ssize_t {
         if (offset >= data.getSize())
             return 0;
@@ -215,11 +224,11 @@ void ConsoleUploadFile::uploadFile()
         return actualReadBytes;
     };
 
-    while (true)
+    while(true)
     {
         char buffer[3], *out;
-        unsigned char* in;
-        in = (unsigned char*)buffer;
+        unsigned char *in;
+        in = (unsigned char *)buffer;
         // copy the file into the buffer:
         ssize_t ret = readBuffer(buffer, 3, srcFileData);
         if (ret > 0)
@@ -227,16 +236,16 @@ void ConsoleUploadFile::uploadFile()
             int len = base64Encode(in, (unsigned int)ret, &out);
             send(sfd, out, len, 0);
             free(out);
-            if (ret < 3)
+            if(ret < 3)
             {
-                // eof
+                //eof
                 log("Reach the end, total send: %d bytes", (int)offset);
                 break;
             }
         }
         else
         {
-            // read error
+            //read error
             break;
         }
     }
@@ -262,8 +271,9 @@ std::string ConsoleUploadFile::title() const
 std::string ConsoleUploadFile::subtitle() const
 {
     auto sharedFileUtils = FileUtils::getInstance();
-
+    
     std::string writablePath = sharedFileUtils->getWritablePath();
 
     return "file uploaded to:" + writablePath + _targetFileName;
 }
+

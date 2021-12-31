@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -56,7 +56,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual bool hasDBEventListener(std::string_view type) const = 0;
+    virtual bool hasDBEventListener(const std::string& type) const = 0;
     /**
      * - Dispatches an event into the event flow.
      * @param type - Event type.
@@ -73,7 +73,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual void dispatchDBEvent(std::string_view type, EventObject* value) = 0;
+    virtual void dispatchDBEvent(const std::string& type, EventObject* value) = 0;
     /**
      * - Add an event listener object so that the listener receives notification of an event.
      * @param type - Event type.
@@ -90,7 +90,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual void addDBEventListener(std::string_view type, const std::function<void(EventObject*)>& listener) = 0;
+    virtual void addDBEventListener(const std::string& type, const std::function<void(EventObject*)>& listener) = 0;
     /**
      * - Removes a listener from the object.
      * @param type - Event type.
@@ -107,7 +107,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    virtual void removeDBEventListener(std::string_view type, const std::function<void(EventObject*)>& listener) = 0;
+    virtual void removeDBEventListener(const std::string& type, const std::function<void(EventObject*)>& listener) = 0;
 };
 
 DRAGONBONES_NAMESPACE_END

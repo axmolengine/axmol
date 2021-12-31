@@ -119,7 +119,7 @@ public:
     };
 
     /** Constructor **/
-    MeshInfo(std::string_view meshName,
+    MeshInfo(const std::string& meshName,
              const MeshSurfaceDistribution distribution = MSD_HOMOGENEOUS,
              const Quaternion& orientation              = Quaternion(),
              const Vec3& scale                          = Vec3::ZERO);
@@ -173,11 +173,11 @@ public:
 
     /** Returns the mesh name.
      */
-    std::string_view getMeshName() const;
+    const std::string& getMeshName() const;
 
     /** Sets the mesh name.
      */
-    void setMeshName(std::string_view meshName, bool doBuild = true);
+    void setMeshName(const std::string& meshName, bool doBuild = true);
 
     /** Returns true if normals are used for the particle direction.
      */

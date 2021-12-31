@@ -1,4 +1,4 @@
-#include "Armature.h"
+﻿#include "Armature.h"
 #include "../model/TextureAtlasData.h"
 #include "../model/UserData.h"
 #include "../animation/WorldClock.h"
@@ -275,7 +275,7 @@ void Armature::advanceTime(float passedTime)
     _proxy->dbUpdate();
 }
 
-void Armature::invalidUpdate(std::string_view boneName, bool updateSlot)
+void Armature::invalidUpdate(const std::string& boneName, bool updateSlot)
 {
     if (!boneName.empty())
     {
@@ -431,7 +431,7 @@ Slot* Armature::intersectsSegment(float xA,
     return intSlotA;
 }
 
-Bone* Armature::getBone(std::string_view name) const
+Bone* Armature::getBone(const std::string& name) const
 {
     for (const auto& bone : _bones)
     {
@@ -451,7 +451,7 @@ Bone* Armature::getBoneByDisplay(void* display) const
     return slot != nullptr ? slot->getParent() : nullptr;
 }
 
-Slot* Armature::getSlot(std::string_view name) const
+Slot* Armature::getSlot(const std::string& name) const
 {
     for (const auto slot : _slots)
     {

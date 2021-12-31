@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
+ 
 #include "BufferMTL.h"
 #include "../Macros.h"
 #include "BufferManager.h"
@@ -29,15 +29,15 @@
 CC_BACKEND_BEGIN
 
 BufferMTL::BufferMTL(id<MTLDevice> mtlDevice, std::size_t size, BufferType type, BufferUsage usage)
-    : Buffer(size, type, usage)
+: Buffer(size, type, usage)
 {
     if (BufferUsage::DYNAMIC == usage)
     {
-        NSMutableArray* mutableDynamicDataBuffers = [NSMutableArray arrayWithCapacity:MAX_INFLIGHT_BUFFER];
+        NSMutableArray *mutableDynamicDataBuffers = [NSMutableArray arrayWithCapacity:MAX_INFLIGHT_BUFFER];
         for (int i = 0; i < MAX_INFLIGHT_BUFFER; ++i)
         {
             // Create a new buffer with enough capacity to store one instance of the dynamic buffer data
-            id<MTLBuffer> dynamicDataBuffer = [mtlDevice newBufferWithLength:size options:MTLResourceStorageModeShared];
+            id <MTLBuffer> dynamicDataBuffer = [mtlDevice newBufferWithLength:size options:MTLResourceStorageModeShared];
             [mutableDynamicDataBuffers addObject:dynamicDataBuffer];
         }
         _dynamicDataBuffers = [mutableDynamicDataBuffers copy];
@@ -97,8 +97,8 @@ void BufferMTL::updateIndex()
     if (BufferUsage::DYNAMIC == _usage && !_indexUpdated)
     {
         _currentFrameIndex = (_currentFrameIndex + 1) % MAX_INFLIGHT_BUFFER;
-        _mtlBuffer         = _dynamicDataBuffers[_currentFrameIndex];
-        _indexUpdated      = true;
+        _mtlBuffer = _dynamicDataBuffers[_currentFrameIndex];
+        _indexUpdated = true;
     }
 }
 

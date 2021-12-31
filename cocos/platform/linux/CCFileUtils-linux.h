@@ -56,7 +56,7 @@ public:
     std::string getNativeWritableAbsolutePath() const override;
 
 private:
-    virtual bool isFileExistInternal(std::string_view strFilePath) const override;
+    virtual bool isFileExistInternal(const std::string& strFilePath) const override;
 };
 
 // end of platform group

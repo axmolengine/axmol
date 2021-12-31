@@ -40,7 +40,7 @@ TMXObjectGroup::~TMXObjectGroup()
     CCLOGINFO("deallocing TMXObjectGroup: %p", this);
 }
 
-ValueMap TMXObjectGroup::getObject(std::string_view objectName) const
+ValueMap TMXObjectGroup::getObject(const std::string& objectName) const
 {
     if (!_objects.empty())
     {
@@ -59,7 +59,7 @@ ValueMap TMXObjectGroup::getObject(std::string_view objectName) const
     return ValueMap();
 }
 
-Value TMXObjectGroup::getProperty(std::string_view propertyName) const
+Value TMXObjectGroup::getProperty(const std::string& propertyName) const
 {
     if (_properties.find(propertyName) != _properties.end())
         return _properties.at(propertyName);

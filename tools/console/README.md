@@ -1,6 +1,19 @@
 # adxe-console
 
 
+
+## Download
+
+```sh
+$ NOT DONE YET
+```
+
+## Install
+
+```sh
+$ NOT DONE YET
+```
+
 ## Vision of adxe-console
 
 

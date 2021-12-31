@@ -92,7 +92,7 @@ CC_DLL void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imag
  * etc.).
  * @since v4.0
  */
-CC_DLL void captureScreen(std::function<void(bool, std::string_view)> afterCap, std::string_view filename);
+CC_DLL void captureScreen(std::function<void(bool, const std::string&)> afterCap, const std::string& filename);
 
 /** Find children by name, it will return all child that has the same name.
  * It supports c++ 11 regular expression. It is  a helper function of `Node::enumerateChildren()`.
@@ -103,7 +103,7 @@ CC_DLL void captureScreen(std::function<void(bool, std::string_view)> afterCap, 
  * @return Array of Nodes that matches the name
  * @since v3.2
  */
-CC_DLL std::vector<Node*> findChildren(const Node& node, std::string_view name);
+CC_DLL std::vector<Node*> findChildren(const Node& node, const std::string& name);
 
 /** Same to ::atof, but strip the string, remain 7 numbers after '.' before call atof.
  * Why we need this? Because in android c++_static, atof ( and std::atof ) is unsupported for numbers have long decimal
@@ -151,7 +151,7 @@ CC_DLL Sprite* createSpriteFromBase64(const char* base64String);
 
  * @return  Returns found node or nullptr
  */
-CC_DLL Node* findChild(Node* levelRoot, std::string_view name);
+CC_DLL Node* findChild(Node* levelRoot, const std::string& name);
 
 /**
  * Find a child by tag recursively
@@ -166,7 +166,7 @@ CC_DLL Node* findChild(Node* levelRoot, int tag);
  * @return  Returns found node or nullptr with specified type 'T'
  */
 template <typename T>
-inline T findChild(Node* levelRoot, std::string_view name)
+inline T findChild(Node* levelRoot, const std::string& name)
 {
     return dynamic_cast<T>(findChild(levelRoot, name));
 }
@@ -187,7 +187,7 @@ inline T findChild(Node* levelRoot, int tag)
  *  @param filename The file to calculate md5 hash.
  *  @return The md5 hash for the file
  */
-CC_DLL std::string getFileMD5Hash(std::string_view filename);
+CC_DLL std::string getFileMD5Hash(const std::string& filename);
 
 /**
  *  Gets the md5 hash for the given buffer.

@@ -259,7 +259,7 @@ PUParticleSystem3D* PUParticleSystem3D::create()
     return pups;
 }
 
-PUParticleSystem3D* PUParticleSystem3D::create(std::string_view filePath, std::string_view materialPath)
+PUParticleSystem3D* PUParticleSystem3D::create(const std::string& filePath, const std::string& materialPath)
 {
     PUParticleSystem3D* ret = new PUParticleSystem3D();
     if (ret->initWithFilePathAndMaterialPath(filePath, materialPath))
@@ -274,7 +274,7 @@ PUParticleSystem3D* PUParticleSystem3D::create(std::string_view filePath, std::s
     }
 }
 
-PUParticleSystem3D* PUParticleSystem3D::create(std::string_view filePath)
+PUParticleSystem3D* PUParticleSystem3D::create(const std::string& filePath)
 {
     PUParticleSystem3D* ret = new PUParticleSystem3D();
     if (ret->initWithFilePath(filePath))
@@ -289,7 +289,7 @@ PUParticleSystem3D* PUParticleSystem3D::create(std::string_view filePath)
     }
 }
 
-bool PUParticleSystem3D::initWithFilePath(std::string_view filePath)
+bool PUParticleSystem3D::initWithFilePath(const std::string& filePath)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
     convertToUnixStylePath(fullPath);
@@ -318,7 +318,7 @@ bool PUParticleSystem3D::initWithFilePath(std::string_view filePath)
     return true;
 }
 
-bool PUParticleSystem3D::initWithFilePathAndMaterialPath(std::string_view filePath, std::string_view materialPath)
+bool PUParticleSystem3D::initWithFilePathAndMaterialPath(const std::string& filePath, const std::string& materialPath)
 {
     std::string matfullPath = FileUtils::getInstance()->fullPathForFilename(materialPath);
     convertToUnixStylePath(matfullPath);
@@ -629,24 +629,24 @@ void PUParticleSystem3D::unPrepared()
         _particlePool.lockAllDatas();
         for (auto& iter : _emittedEmitterParticlePool)
         {
-            PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
+            PUParticle3D* particle = static_cast<PUParticle3D*>(iter.second.getFirst());
             while (particle)
             {
                 static_cast<PUEmitter*>(particle->particleEntityPtr)->unPrepare();
-                particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getNext());
+                particle = static_cast<PUParticle3D*>(iter.second.getNext());
             }
-            const_cast<ParticlePool&>(iter.second).lockAllDatas();
+            iter.second.lockAllDatas();
         }
 
         for (auto& iter : _emittedSystemParticlePool)
         {
-            PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
+            PUParticle3D* particle = static_cast<PUParticle3D*>(iter.second.getFirst());
             while (particle)
             {
                 static_cast<PUParticleSystem3D*>(particle->particleEntityPtr)->unPrepared();
-                particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getNext());
+                particle = static_cast<PUParticle3D*>(iter.second.getNext());
             }
-            const_cast<ParticlePool&>(iter.second).lockAllDatas();
+            iter.second.lockAllDatas();
         }
         _prepared = false;
     }
@@ -692,21 +692,21 @@ void PUParticleSystem3D::preUpdator(float elapsedTime)
 
     for (auto& iter : _emittedEmitterParticlePool)
     {
-        PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
+        PUParticle3D* particle = static_cast<PUParticle3D*>(iter.second.getFirst());
         while (particle)
         {
             static_cast<PUEmitter*>(particle->particleEntityPtr)->preUpdateEmitter(elapsedTime);
-            particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getNext());
+            particle = static_cast<PUParticle3D*>(iter.second.getNext());
         }
     }
 
     for (auto& iter : _emittedSystemParticlePool)
     {
-        PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
+        PUParticle3D* particle = static_cast<PUParticle3D*>(iter.second.getFirst());
         while (particle)
         {
             static_cast<PUParticleSystem3D*>(particle->particleEntityPtr)->preUpdator(elapsedTime);
-            particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getNext());
+            particle = static_cast<PUParticle3D*>(iter.second.getNext());
         }
     }
 }
@@ -719,12 +719,12 @@ void PUParticleSystem3D::updator(float elapsedTime)
 
     for (auto& iter : _emittedEmitterParticlePool)
     {
-        processParticle(const_cast<ParticlePool&>(iter.second), firstActiveParticle, firstParticle, elapsedTime);
+        processParticle(iter.second, firstActiveParticle, firstParticle, elapsedTime);
     }
 
     for (auto& iter : _emittedSystemParticlePool)
     {
-        processParticle(const_cast<ParticlePool&>(iter.second), firstActiveParticle, firstParticle, elapsedTime);
+        processParticle(iter.second, firstActiveParticle, firstParticle, elapsedTime);
     }
 }
 
@@ -763,21 +763,21 @@ void PUParticleSystem3D::postUpdator(float elapsedTime)
 
     for (auto& iter : _emittedEmitterParticlePool)
     {
-        PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
+        PUParticle3D* particle = static_cast<PUParticle3D*>(iter.second.getFirst());
         while (particle)
         {
             static_cast<PUEmitter*>(particle->particleEntityPtr)->postUpdateEmitter(elapsedTime);
-            particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getNext());
+            particle = static_cast<PUParticle3D*>(iter.second.getNext());
         }
     }
 
     for (auto& iter : _emittedSystemParticlePool)
     {
-        PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
+        PUParticle3D* particle = static_cast<PUParticle3D*>(iter.second.getFirst());
         while (particle)
         {
             static_cast<PUParticleSystem3D*>(particle->particleEntityPtr)->postUpdator(elapsedTime);
-            particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getNext());
+            particle = static_cast<PUParticle3D*>(iter.second.getNext());
         }
     }
 }
@@ -901,7 +901,7 @@ void PUParticleSystem3D::setMaxVelocity(float maxVelocity)
     _maxVelocitySet = true;
 }
 
-bool PUParticleSystem3D::initSystem(std::string_view filePath)
+bool PUParticleSystem3D::initSystem(const std::string& filePath)
 {
     bool isFirstCompile = true;
     auto list           = PUScriptCompiler::Instance()->compile(filePath, isFirstCompile);
@@ -922,7 +922,7 @@ void PUParticleSystem3D::addEmitter(PUEmitter* emitter)
     }
 }
 
-PUAffector* PUParticleSystem3D::getAffector(std::string_view name)
+PUAffector* PUParticleSystem3D::getAffector(const std::string& name)
 {
     for (auto iter : _affectors)
     {
@@ -934,7 +934,7 @@ PUAffector* PUParticleSystem3D::getAffector(std::string_view name)
     return nullptr;
 }
 
-PUEmitter* PUParticleSystem3D::getEmitter(std::string_view name)
+PUEmitter* PUParticleSystem3D::getEmitter(const std::string& name)
 {
     for (auto iter : _emitters)
     {
@@ -1040,7 +1040,7 @@ void PUParticleSystem3D::addObserver(PUObserver* observer)
     }
 }
 
-PUObserver* PUParticleSystem3D::getObserver(std::string_view name)
+PUObserver* PUParticleSystem3D::getObserver(const std::string& name)
 {
     for (auto iter : _observers)
     {
@@ -1074,21 +1074,21 @@ void PUParticleSystem3D::notifyRescaled(const Vec3& scl)
 
     for (auto& iter : _emittedEmitterParticlePool)
     {
-        PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
+        PUParticle3D* particle = static_cast<PUParticle3D*>(iter.second.getFirst());
         while (particle)
         {
             static_cast<PUEmitter*>(particle->particleEntityPtr)->notifyRescaled(scl);
-            particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getNext());
+            particle = static_cast<PUParticle3D*>(iter.second.getNext());
         }
     }
 
     for (auto& iter : _emittedSystemParticlePool)
     {
-        PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
+        PUParticle3D* particle = static_cast<PUParticle3D*>(iter.second.getFirst());
         while (particle)
         {
             static_cast<PUParticleSystem3D*>(particle->particleEntityPtr)->notifyRescaled(scl);
-            particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getNext());
+            particle = static_cast<PUParticle3D*>(iter.second.getNext());
         }
     }
 }
@@ -1113,7 +1113,7 @@ void PUParticleSystem3D::initParticleForExpiration(PUParticle3D* particle, float
         it->particleExpired(this, particle);
     }
     ///** Externs are also called to perform expiration activities. If needed, affectors and emitters may be added, but
-    /// at the moment
+    ///at the moment
     //	there is no reason for (and we don't want to waste cpu resources).
     //*/
     // if (!mExterns.empty())
@@ -1164,12 +1164,12 @@ void PUParticleSystem3D::clearAllParticles()
     _particlePool.lockAllDatas();
     for (auto& iter : _emittedEmitterParticlePool)
     {
-        const_cast<ParticlePool&>(iter.second).lockAllDatas();
+        iter.second.lockAllDatas();
     }
 
     for (auto& iter : _emittedSystemParticlePool)
     {
-        const_cast<ParticlePool&>(iter.second).lockAllDatas();
+        iter.second.lockAllDatas();
     }
 }
 
@@ -1303,11 +1303,11 @@ void PUParticleSystem3D::draw(Renderer* renderer, const Mat4& transform, uint32_
     {
         for (auto& iter : _emittedSystemParticlePool)
         {
-            PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
+            PUParticle3D* particle = static_cast<PUParticle3D*>(iter.second.getFirst());
             while (particle)
             {
                 static_cast<PUParticleSystem3D*>(particle->particleEntityPtr)->draw(renderer, transform, flags);
-                particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getNext());
+                particle = static_cast<PUParticle3D*>(iter.second.getNext());
             }
         }
     }

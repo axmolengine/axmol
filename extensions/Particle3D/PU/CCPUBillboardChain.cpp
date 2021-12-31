@@ -48,8 +48,8 @@ PUBillboardChain::Element::Element(const Vec3& pos, float w, float tex, const Ve
     : position(pos), width(w), texCoord(tex), color(col), orientation(ori)
 {}
 //-----------------------------------------------------------------------
-PUBillboardChain::PUBillboardChain(std::string_view /*name*/,
-                                   std::string_view texFile,
+PUBillboardChain::PUBillboardChain(const std::string& /*name*/,
+                                   const std::string& texFile,
                                    size_t maxElements,
                                    size_t numberOfChains,
                                    bool useTextureCoords,
@@ -627,7 +627,7 @@ void PUBillboardChain::updateIndexBuffer()
     }
 }
 //-----------------------------------------------------------------------
-void PUBillboardChain::init(std::string_view texFile)
+void PUBillboardChain::init(const std::string& texFile)
 {
     CC_SAFE_RELEASE_NULL(_programState);
 

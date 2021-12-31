@@ -35,7 +35,7 @@ DEFINE_TEST_SUITE(VRTests);
 class VRTestDemo : public TestCase
 {
 protected:
-    std::string _title;
+    std::string    _title;
 
 public:
 };
@@ -48,5 +48,6 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
+
 
 #endif

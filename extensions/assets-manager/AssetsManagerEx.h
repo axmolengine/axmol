@@ -77,7 +77,7 @@ public:
      @warning   The cached manifest in your storage path have higher priority and will be searched first,
                 only if it doesn't exist, AssetsManagerEx will use the given manifestUrl.
      */
-    static AssetsManagerEx* create(std::string_view manifestUrl, std::string_view storagePath);
+    static AssetsManagerEx* create(const std::string& manifestUrl, const std::string& storagePath);
 
     /** @brief  Check out if there is a new version of manifest.
      *          You may use this method before updating, then let user determine whether
@@ -99,7 +99,7 @@ public:
 
     /** @brief Gets storage path.
      */
-    std::string_view getStoragePath() const;
+    const std::string& getStoragePath() const;
 
     /** @brief Function for retrieving the local manifest object
      */
@@ -120,7 +120,8 @@ public:
     /** @brief Set the handle function for comparing manifests versions
      * @param handle    The compare function
      */
-    void setVersionCompareHandle(const std::function<int(std::string_view versionA, std::string_view versionB)>& handle)
+    void setVersionCompareHandle(
+        const std::function<int(const std::string& versionA, const std::string& versionB)>& handle)
     {
         _versionCompareHandle = handle;
     };
@@ -129,37 +130,37 @@ public:
      * verification
      * @param callback  The verify callback function
      */
-    void setVerifyCallback(const std::function<bool(std::string_view path, Manifest::Asset asset)>& callback)
+    void setVerifyCallback(const std::function<bool(const std::string& path, Manifest::Asset asset)>& callback)
     {
         _verifyCallback = callback;
     };
 
     CC_CONSTRUCTOR_ACCESS :
 
-        AssetsManagerEx(std::string_view manifestUrl, std::string_view storagePath);
+        AssetsManagerEx(const std::string& manifestUrl, const std::string& storagePath);
 
     virtual ~AssetsManagerEx();
 
 protected:
-    std::string_view basename(std::string_view path) const;
+    std::string basename(const std::string& path) const;
 
-    std::string get(std::string_view key) const;
+    std::string get(const std::string& key) const;
 
-    void initManifests(std::string_view manifestUrl);
+    void initManifests(const std::string& manifestUrl);
 
-    void loadLocalManifest(std::string_view manifestUrl);
+    void loadLocalManifest(const std::string& manifestUrl);
 
     void prepareLocalManifest();
 
-    void setStoragePath(std::string_view storagePath);
+    void setStoragePath(const std::string& storagePath);
 
     void adjustPath(std::string& path);
 
     void dispatchUpdateEvent(EventAssetsManagerEx::EventCode code,
-                             std::string_view message = "",
-                             std::string_view assetId = "",
-                             int curle_code           = 0,
-                             int curlm_code           = 0);
+                             const std::string& message = "",
+                             const std::string& assetId = "",
+                             int curle_code             = 0,
+                             int curlm_code             = 0);
 
     void downloadVersion();
     void parseVersion();
@@ -167,8 +168,8 @@ protected:
     void parseManifest();
     void startUpdate();
     void updateSucceed();
-    bool decompress(std::string_view filename);
-    void decompressDownloadedZip(std::string_view customId, std::string_view storagePath);
+    bool decompress(const std::string& filename);
+    void decompressDownloadedZip(const std::string& customId, const std::string& storagePath);
 
     /** @brief Update a list of assets under the current AssetsManagerEx context
      */
@@ -186,12 +187,12 @@ protected:
      */
     void queueDowload();
 
-    void fileError(std::string_view identifier,
-                   std::string_view errorStr,
+    void fileError(const std::string& identifier,
+                   const std::string& errorStr,
                    int errorCode         = 0,
                    int errorCodeInternal = 0);
 
-    void fileSuccess(std::string_view customId, std::string_view storagePath);
+    void fileSuccess(const std::string& customId, const std::string& storagePath);
 
     /** @brief  Call back function for error handling,
      the error will then be reported to user's listener registed in addUpdateEventListener
@@ -203,7 +204,7 @@ protected:
     virtual void onError(const network::DownloadTask& task,
                          int errorCode,
                          int errorCodeInternal,
-                         std::string_view errorStr);
+                         const std::string& errorStr);
 
     /** @brief  Call back function for recording downloading percent of the current asset,
      the progression will then be reported to user's listener registed in addUpdateProgressEventListener
@@ -215,7 +216,7 @@ protected:
      * @js NA
      * @lua NA
      */
-    virtual void onProgress(double total, double downloaded, std::string_view url, std::string_view customId);
+    virtual void onProgress(double total, double downloaded, const std::string& url, const std::string& customId);
 
     /** @brief  Call back function for success of the current asset
      the success event will then be send to user's listener registed in addUpdateEventListener
@@ -225,7 +226,7 @@ protected:
      * @js NA
      * @lua NA
      */
-    virtual void onSuccess(std::string_view srcUrl, std::string_view storagePath, std::string_view customId);
+    virtual void onSuccess(const std::string& srcUrl, const std::string& storagePath, const std::string& customId);
 
 private:
     void batchDownload();
@@ -249,7 +250,7 @@ private:
     std::shared_ptr<network::Downloader> _downloader;
 
     //! The reference to the local assets
-    const hlookup::string_map<Manifest::Asset>* _assets = nullptr;
+    const std::unordered_map<std::string, Manifest::Asset>* _assets = nullptr;
 
     //! The path to store successfully downloaded version.
     std::string _storagePath;
@@ -319,7 +320,7 @@ private:
     double _totalSize;
 
     //! Downloaded size for each file
-    hlookup::string_map<double> _downloadedSize;
+    std::unordered_map<std::string, double> _downloadedSize;
 
     //! Total number of assets to download
     int _totalToDownload = 0;
@@ -329,10 +330,10 @@ private:
     float _nextSavePoint = 0.f;
 
     //! Handle function to compare versions between different manifests
-    std::function<int(std::string_view versionA, std::string_view versionB)> _versionCompareHandle = nullptr;
+    std::function<int(const std::string& versionA, const std::string& versionB)> _versionCompareHandle = nullptr;
 
     //! Callback function to verify the downloaded assets
-    std::function<bool(std::string_view path, Manifest::Asset asset)> _verifyCallback = nullptr;
+    std::function<bool(const std::string& path, Manifest::Asset asset)> _verifyCallback = nullptr;
 
     //! Marker for whether the assets manager is inited
     bool _inited = false;

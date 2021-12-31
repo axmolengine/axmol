@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -162,9 +162,9 @@ public:
     virtual bool isActionDoneOnce();
 
 protected:
-    int valueToInt(std::string_view value);
-    bool valueToBool(std::string_view value);
-    float valueToFloat(std::string_view value);
+    int valueToInt(const std::string& value);
+    bool valueToBool(const std::string& value);
+    float valueToFloat(const std::string& value);
 
     int _currentFrameIndex;
     int _destFrameIndex;

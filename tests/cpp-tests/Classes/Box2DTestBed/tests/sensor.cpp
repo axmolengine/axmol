@@ -27,22 +27,23 @@
 class Sensors : public Test
 {
 public:
-    enum
-    {
-        e_count = 7
-    };
 
-    Sensors()
-    {
-        {
-            b2BodyDef bd;
-            b2Body* ground = m_world->CreateBody(&bd);
+	enum
+	{
+		e_count = 7
+	};
 
-            {
-                b2EdgeShape shape;
-                shape.SetTwoSided(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
-                ground->CreateFixture(&shape, 0.0f);
-            }
+	Sensors()
+	{
+		{
+			b2BodyDef bd;
+			b2Body* ground = m_world->CreateBody(&bd);
+
+			{
+				b2EdgeShape shape;
+				shape.SetTwoSided(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
+				ground->CreateFixture(&shape, 0.0f);
+			}
 
 #if 0
 			{
@@ -52,140 +53,143 @@ public:
 				m_sensor = ground->CreateFixture(&sd);
 			}
 #else
-            {
-                b2CircleShape shape;
-                shape.m_radius = 5.0f;
-                shape.m_p.Set(0.0f, 10.0f);
+			{
+				b2CircleShape shape;
+				shape.m_radius = 5.0f;
+				shape.m_p.Set(0.0f, 10.0f);
 
-                b2FixtureDef fd;
-                fd.shape    = &shape;
-                fd.isSensor = true;
-                m_sensor    = ground->CreateFixture(&fd);
-            }
+				b2FixtureDef fd;
+				fd.shape = &shape;
+				fd.isSensor = true;
+				m_sensor = ground->CreateFixture(&fd);
+			}
 #endif
-        }
+		}
 
-        {
-            b2CircleShape shape;
-            shape.m_radius = 1.0f;
+		{
+			b2CircleShape shape;
+			shape.m_radius = 1.0f;
 
-            for (int32 i = 0; i < e_count; ++i)
-            {
-                b2BodyDef bd;
-                bd.type = b2_dynamicBody;
-                bd.position.Set(-10.0f + 3.0f * i, 20.0f);
-                bd.userData.pointer = i;
+			for (int32 i = 0; i < e_count; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position.Set(-10.0f + 3.0f * i, 20.0f);
+				bd.userData.pointer = i;
 
-                m_touching[i] = false;
-                m_bodies[i]   = m_world->CreateBody(&bd);
+				m_touching[i] = false;
+				m_bodies[i] = m_world->CreateBody(&bd);
 
-                m_bodies[i]->CreateFixture(&shape, 1.0f);
-            }
-        }
+				m_bodies[i]->CreateFixture(&shape, 1.0f);
+			}
+		}
 
-        m_force = 100.0f;
-    }
+		m_force = 100.0f;
+	}
 
-    // Implement contact listener.
-    void BeginContact(b2Contact* contact) override
-    {
-        b2Fixture* fixtureA = contact->GetFixtureA();
-        b2Fixture* fixtureB = contact->GetFixtureB();
+	// Implement contact listener.
+	void BeginContact(b2Contact* contact) override
+	{
+		b2Fixture* fixtureA = contact->GetFixtureA();
+		b2Fixture* fixtureB = contact->GetFixtureB();
 
-        if (fixtureA == m_sensor)
-        {
-            uintptr_t index = fixtureB->GetBody()->GetUserData().pointer;
-            if (index < e_count)
-            {
-                m_touching[index] = true;
-            }
-        }
+		if (fixtureA == m_sensor)
+		{
+			uintptr_t index = fixtureB->GetBody()->GetUserData().pointer;
+			if (index < e_count)
+			{
+				m_touching[index] = true;
+			}
+		}
 
-        if (fixtureB == m_sensor)
-        {
-            uintptr_t index = fixtureA->GetBody()->GetUserData().pointer;
-            if (index < e_count)
-            {
-                m_touching[index] = true;
-            }
-        }
-    }
+		if (fixtureB == m_sensor)
+		{
+			uintptr_t index = fixtureA->GetBody()->GetUserData().pointer;
+			if (index < e_count)
+			{
+				m_touching[index] = true;
+			}
+		}
+	}
 
-    // Implement contact listener.
-    void EndContact(b2Contact* contact) override
-    {
-        b2Fixture* fixtureA = contact->GetFixtureA();
-        b2Fixture* fixtureB = contact->GetFixtureB();
+	// Implement contact listener.
+	void EndContact(b2Contact* contact) override
+	{
+		b2Fixture* fixtureA = contact->GetFixtureA();
+		b2Fixture* fixtureB = contact->GetFixtureB();
 
-        if (fixtureA == m_sensor)
-        {
-            uintptr_t index = fixtureB->GetBody()->GetUserData().pointer;
-            if (index < e_count)
-            {
-                m_touching[index] = false;
-            }
-        }
+		if (fixtureA == m_sensor)
+		{
+			uintptr_t index = fixtureB->GetBody()->GetUserData().pointer;
+			if (index < e_count)
+			{
+				m_touching[index] = false;
+			}
+		}
 
-        if (fixtureB == m_sensor)
-        {
-            uintptr_t index = fixtureA->GetBody()->GetUserData().pointer;
-            if (index < e_count)
-            {
-                m_touching[index] = false;
-            }
-        }
-    }
+		if (fixtureB == m_sensor)
+		{
+			uintptr_t index = fixtureA->GetBody()->GetUserData().pointer;
+			if (index < e_count)
+			{
+				m_touching[index] = false;
+			}
+		}
+	}
 
-    void UpdateUI() override
-    {
-        // ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
-        ImGui::SetNextWindowSize(ImVec2(200.0f, 60.0f));
-        ImGui::Begin("Sensor Controls", nullptr, ImGuiWindowFlags_NoResize);
+	void UpdateUI() override
+	{
+		//ImGui::SetNextWindowPos(ImVec2(10.0f, 100.0f));
+		ImGui::SetNextWindowSize(ImVec2(200.0f, 60.0f));
+		ImGui::Begin("Sensor Controls", nullptr, ImGuiWindowFlags_NoResize);
 
-        ImGui::SliderFloat("Force", &m_force, 0.0f, 2000.0f, "%.0f");
+		ImGui::SliderFloat("Force", &m_force, 0.0f, 2000.0f, "%.0f");
 
-        ImGui::End();
-    }
+		ImGui::End();
+	}
 
-    void Step(Settings& settings) override
-    {
-        Test::Step(settings);
+	void Step(Settings& settings) override
+	{
+		Test::Step(settings);
 
-        // Traverse the contact results. Apply a force on shapes
-        // that overlap the sensor.
-        for (int32 i = 0; i < e_count; ++i)
-        {
-            if (m_touching[i] == false)
-            {
-                continue;
-            }
+		// Traverse the contact results. Apply a force on shapes
+		// that overlap the sensor.
+		for (int32 i = 0; i < e_count; ++i)
+		{
+			if (m_touching[i] == false)
+			{
+				continue;
+			}
 
-            b2Body* body   = m_bodies[i];
-            b2Body* ground = m_sensor->GetBody();
+			b2Body* body = m_bodies[i];
+			b2Body* ground = m_sensor->GetBody();
 
-            b2CircleShape* circle = (b2CircleShape*)m_sensor->GetShape();
-            b2Vec2 center         = ground->GetWorldPoint(circle->m_p);
+			b2CircleShape* circle = (b2CircleShape*)m_sensor->GetShape();
+			b2Vec2 center = ground->GetWorldPoint(circle->m_p);
 
-            b2Vec2 position = body->GetPosition();
+			b2Vec2 position = body->GetPosition();
 
-            b2Vec2 d = center - position;
-            if (d.LengthSquared() < FLT_EPSILON * FLT_EPSILON)
-            {
-                continue;
-            }
+			b2Vec2 d = center - position;
+			if (d.LengthSquared() < FLT_EPSILON * FLT_EPSILON)
+			{
+				continue;
+			}
 
-            d.Normalize();
-            b2Vec2 F = m_force * d;
-            body->ApplyForce(F, position, false);
-        }
-    }
+			d.Normalize();
+			b2Vec2 F = m_force * d;
+			body->ApplyForce(F, position, false);
+		}
+	}
 
-    static Test* Create() { return new Sensors; }
+	static Test* Create()
+	{
+		return new Sensors;
+	}
 
-    b2Fixture* m_sensor;
-    b2Body* m_bodies[e_count];
-    float m_force;
-    bool m_touching[e_count];
+	b2Fixture* m_sensor;
+	b2Body* m_bodies[e_count];
+	float m_force;
+	bool m_touching[e_count];
 };
 
 static int testIndex = RegisterTest("Collision", "Sensors", Sensors::Create);

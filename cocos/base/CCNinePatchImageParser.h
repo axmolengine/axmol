@@ -51,7 +51,7 @@ public:
      *
      * @return If the filename contains ".9.png", then return true, otherwise false.
      */
-    static bool isNinePatchImage(std::string_view filename);
+    static bool isNinePatchImage(const std::string& filename);
 
     /**
      * Default constructor.

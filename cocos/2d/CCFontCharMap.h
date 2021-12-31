@@ -38,9 +38,9 @@ class Texture2D;
 class FontCharMap : public Font
 {
 public:
-    static FontCharMap* create(std::string_view charMapFile, int itemWidth, int itemHeight, int startCharMap);
+    static FontCharMap* create(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap);
     static FontCharMap* create(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
-    static FontCharMap* create(std::string_view plistFile);
+    static FontCharMap* create(const std::string& plistFile);
 
     virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
     virtual FontAtlas* newFontAtlas() override;

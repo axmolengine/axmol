@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -39,8 +39,8 @@ class CCS_DLL Skin : public cocos2d::Sprite
 {
 public:
     static Skin* create();
-    static Skin* createWithSpriteFrameName(std::string_view pszSpriteFrameName);
-    static Skin* create(std::string_view pszFileName);
+    static Skin* createWithSpriteFrameName(const std::string& pszSpriteFrameName);
+    static Skin* create(const std::string& pszFileName);
 
 public:
     /**
@@ -48,8 +48,8 @@ public:
      */
     Skin();
 
-    virtual bool initWithSpriteFrameName(std::string_view spriteFrameName) override;
-    virtual bool initWithFile(std::string_view filename) override;
+    virtual bool initWithSpriteFrameName(const std::string& spriteFrameName) override;
+    virtual bool initWithFile(const std::string& filename) override;
 
     void updateArmatureTransform();
     void updateTransform() override;
@@ -73,7 +73,7 @@ public:
     virtual void setBone(Bone* bone);
     virtual Bone* getBone() const;
 
-    virtual std::string_view getDisplayName() const { return _displayName; }
+    virtual const std::string& getDisplayName() const { return _displayName; }
 
 protected:
     BaseData _skinData;

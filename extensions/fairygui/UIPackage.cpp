@@ -200,7 +200,7 @@ string UIPackage::getItemURL(const string& pkgName, const string& resName)
     return STD_STRING_EMPTY;
 }
 
-PackageItem* UIPackage::getItemByURL(std::string_view url)
+PackageItem* UIPackage::getItemByURL(const string& url)
 {
     if (url.size() == 0)
         return nullptr;
@@ -214,22 +214,22 @@ PackageItem* UIPackage::getItemByURL(std::string_view url)
     {
         if (url.size() > 13)
         {
-            std::string pkgId{url.substr(5, 8)};
+            string pkgId = url.substr(5, 8);
             UIPackage* pkg = getById(pkgId);
             if (pkg != nullptr)
             {
-                std::string srcId{url.substr(13)};
+                string srcId = url.substr(13);
                 return pkg->getItem(srcId);
             }
         }
     }
     else
     {
-        std::string pkgName{url.substr(pos1 + 2, pos2 - pos1 - 2)};
+        string pkgName = url.substr(pos1 + 2, pos2 - pos1 - 2);
         UIPackage* pkg = getByName(pkgName);
         if (pkg != nullptr)
         {
-            std::string srcName{url.substr(pos2 + 1)};
+            string srcName = url.substr(pos2 + 1);
             return pkg->getItemByName(srcName);
         }
     }
@@ -274,7 +274,7 @@ void* UIPackage::getItemAsset(const std::string& pkgName, const std::string& res
     return nullptr;
 }
 
-void* UIPackage::getItemAssetByURL(std::string_view url, PackageItemType type)
+void* UIPackage::getItemAssetByURL(const std::string& url, PackageItemType type)
 {
     PackageItem* pi = UIPackage::getItemByURL(url);
     if (pi)

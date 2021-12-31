@@ -44,8 +44,8 @@ class CC_EX_DLL PUEventHandler : public Ref
 public:
     /** Todo
      */
-    std::string_view getName() const { return _name; };
-    void setName(std::string_view name) { _name = name; };
+    const std::string& getName() const { return _name; };
+    void setName(const std::string& name) { _name = name; };
 
     /** Todo
      */
@@ -54,8 +54,8 @@ public:
 
     /** Todo
      */
-    std::string_view getEventHandlerType() const { return _eventHandlerType; };
-    void setEventHandlerType(std::string_view eventHandlerType) { _eventHandlerType = eventHandlerType; };
+    const std::string& getEventHandlerType() const { return _eventHandlerType; };
+    void setEventHandlerType(const std::string& eventHandlerType) { _eventHandlerType = eventHandlerType; };
 
     /** Notify that the event handler is rescaled.
      */

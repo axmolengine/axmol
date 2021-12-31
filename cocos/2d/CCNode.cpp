@@ -56,7 +56,7 @@ THE SOFTWARE.
 /*
  * 4.5x faster than std::hash in release mode
  */
-#define CC_HASH_NODE_NAME(name) (!name.empty() ? XXH3_64bits(name.data(), name.length()) : 0)
+#define CC_HASH_NODE_NAME(name) (!name.empty() ? XXH3_64bits(name.c_str(), name.length()) : 0)
 
 NS_CC_BEGIN
 
@@ -695,12 +695,12 @@ void Node::setTag(int tag)
     _tag = tag;
 }
 
-std::string_view Node::getName() const
+const std::string& Node::getName() const
 {
     return _name;
 }
 
-void Node::setName(std::string_view name)
+void Node::setName(const std::string& name)
 {
     updateParentChildrenIndexer(name);
     _name = name;
@@ -717,7 +717,7 @@ void Node::updateParentChildrenIndexer(int tag)
     }
 }
 
-void Node::updateParentChildrenIndexer(std::string_view name)
+void Node::updateParentChildrenIndexer(const std::string& name)
 {
     uint64_t newHash           = CC_HASH_NODE_NAME(name);
     auto parentChildrenIndexer = getParentChildrenIndexer();
@@ -817,7 +817,7 @@ Node* Node::getChildByTag(int tag) const
     return nullptr;
 }
 
-Node* Node::getChildByName(std::string_view name) const
+Node* Node::getChildByName(const std::string& name) const
 {
     // CCASSERT(!name.empty(), "Invalid name");
     auto hash = CC_HASH_NODE_NAME(name);
@@ -837,7 +837,7 @@ Node* Node::getChildByName(std::string_view name) const
     return nullptr;
 }
 
-void Node::enumerateChildren(std::string_view name, std::function<bool(Node*)> callback) const
+void Node::enumerateChildren(const std::string& name, std::function<bool(Node*)> callback) const
 {
     CCASSERT(!name.empty(), "Invalid name");
     CCASSERT(callback != nullptr, "Invalid callback function");
@@ -865,7 +865,7 @@ void Node::enumerateChildren(std::string_view name, std::function<bool(Node*)> c
     }
 
     // Remove '//', '/..' if exist
-    auto newName = name.substr(subStrStartPos, subStrlength);
+    std::string newName = name.substr(subStrStartPos, subStrlength);
 
     const Node* target = this;
 
@@ -886,15 +886,15 @@ void Node::enumerateChildren(std::string_view name, std::function<bool(Node*)> c
     else
     {
         // name is xxx
-        target->doEnumerate(std::string{newName}, callback);
+        target->doEnumerate(newName, callback);
     }
 }
 
-bool Node::doEnumerateRecursive(const Node* node, std::string_view name, std::function<bool(Node*)> callback) const
+bool Node::doEnumerateRecursive(const Node* node, const std::string& name, std::function<bool(Node*)> callback) const
 {
     bool ret = false;
 
-    if (node->doEnumerate(std::string{name}, callback))
+    if (node->doEnumerate(name, callback))
     {
         // search itself
         ret = true;
@@ -966,7 +966,7 @@ void Node::addChild(Node* child, int localZOrder, int tag)
     addChildHelper(child, localZOrder, tag, "", true);
 }
 
-void Node::addChild(Node* child, int localZOrder, std::string_view name)
+void Node::addChild(Node* child, int localZOrder, const std::string& name)
 {
     CCASSERT(child != nullptr, "Argument must be non-nil");
     CCASSERT(child->_parent == nullptr, "child already added. It can't be added again");
@@ -974,7 +974,7 @@ void Node::addChild(Node* child, int localZOrder, std::string_view name)
     addChildHelper(child, localZOrder, INVALID_TAG, name, false);
 }
 
-void Node::addChildHelper(Node* child, int localZOrder, int tag, std::string_view name, bool setTag)
+void Node::addChildHelper(Node* child, int localZOrder, int tag, const std::string& name, bool setTag)
 {
     auto assertNotSelfChild([this, child]() -> bool {
         for (Node* parent(getParent()); parent != nullptr; parent = parent->getParent())
@@ -1088,7 +1088,7 @@ void Node::removeChildByTag(int tag, bool cleanup /* = true */)
     }
 }
 
-void Node::removeChildByName(std::string_view name, bool cleanup)
+void Node::removeChildByName(const std::string& name, bool cleanup)
 {
     CCASSERT(!name.empty(), "Invalid name");
 
@@ -1096,7 +1096,7 @@ void Node::removeChildByName(std::string_view name, bool cleanup)
 
     if (child == nullptr)
     {
-        CCLOG("cocos2d: removeChildByName(name = %s): child not found!", name.data());
+        CCLOG("cocos2d: removeChildByName(name = %s): child not found!", name.c_str());
     }
     else
     {
@@ -1490,7 +1490,7 @@ bool Node::isScheduled(SEL_SCHEDULE selector) const
     return _scheduler->isScheduled(selector, this);
 }
 
-bool Node::isScheduled(std::string_view key) const
+bool Node::isScheduled(const std::string& key) const
 {
     return _scheduler->isScheduled(key, this);
 }
@@ -1547,12 +1547,12 @@ void Node::schedule(SEL_SCHEDULE selector, float interval, unsigned int repeat, 
     _scheduler->schedule(selector, this, interval, repeat, delay, !_running);
 }
 
-void Node::schedule(const std::function<void(float)>& callback, std::string_view key)
+void Node::schedule(const std::function<void(float)>& callback, const std::string& key)
 {
     _scheduler->schedule(callback, this, 0, !_running, key);
 }
 
-void Node::schedule(const std::function<void(float)>& callback, float interval, std::string_view key)
+void Node::schedule(const std::function<void(float)>& callback, float interval, const std::string& key)
 {
     _scheduler->schedule(callback, this, interval, !_running, key);
 }
@@ -1561,7 +1561,7 @@ void Node::schedule(const std::function<void(float)>& callback,
                     float interval,
                     unsigned int repeat,
                     float delay,
-                    std::string_view key)
+                    const std::string& key)
 {
     _scheduler->schedule(callback, this, interval, repeat, delay, !_running, key);
 }
@@ -1571,7 +1571,7 @@ void Node::scheduleOnce(SEL_SCHEDULE selector, float delay)
     this->schedule(selector, 0.0f, 0, delay);
 }
 
-void Node::scheduleOnce(const std::function<void(float)>& callback, float delay, std::string_view key)
+void Node::scheduleOnce(const std::function<void(float)>& callback, float delay, const std::string& key)
 {
     _scheduler->schedule(callback, this, 0, 0, delay, !_running, key);
 }
@@ -1585,7 +1585,7 @@ void Node::unschedule(SEL_SCHEDULE selector)
     _scheduler->unschedule(selector, this);
 }
 
-void Node::unschedule(std::string_view key)
+void Node::unschedule(const std::string& key)
 {
     _scheduler->unschedule(key, this);
 }
@@ -1923,7 +1923,7 @@ void Node::updateTransform()
 
 // MARK: components
 
-Component* Node::getComponent(std::string_view name)
+Component* Node::getComponent(const std::string& name)
 {
     if (_componentContainer)
         return _componentContainer->get(name);
@@ -1943,7 +1943,7 @@ bool Node::addComponent(Component* component)
     return _componentContainer->add(component);
 }
 
-bool Node::removeComponent(std::string_view name)
+bool Node::removeComponent(const std::string& name)
 {
     if (_componentContainer)
         return _componentContainer->remove(name);

@@ -61,7 +61,6 @@ class EventCustom;
 class CC_DLL RenderTexture : public Node
 {
 public:
-    using SaveFileCallbackType = std::function<void(RenderTexture*, std::string_view)>;
     /** Initializes a RenderTexture object with width and height in Points and a pixel format( only RGB and RGBA formats
      * are valid ) and depthStencil format.
      *
@@ -172,7 +171,9 @@ public:
      * @param callback When the file is save finished,it will callback this function.
      * @return Returns true if the operation is successful.
      */
-    bool saveToFileAsNonPMA(std::string_view filename, bool isRGBA = true, SaveFileCallbackType = nullptr);
+    bool saveToFileAsNonPMA(const std::string& filename,
+                            bool isRGBA                                                      = true,
+                            std::function<void(RenderTexture*, const std::string&)> callback = nullptr);
 
     /** Saves the texture into a file using JPEG format. The file will be saved in the Documents folder.
      * Returns true if the operation is successful.
@@ -182,7 +183,9 @@ public:
      * @param callback When the file is save finished,it will callback this function.
      * @return Returns true if the operation is successful.
      */
-    bool saveToFile(std::string_view filename, bool isRGBA = true, SaveFileCallbackType = nullptr);
+    bool saveToFile(const std::string& filename,
+                    bool isRGBA                                                      = true,
+                    std::function<void(RenderTexture*, const std::string&)> callback = nullptr);
 
     /** saves the texture into a file in non-PMA. The format could be JPG or PNG. The file will be saved in the
       Documents folder. Returns true if the operation is successful.
@@ -198,10 +201,10 @@ public:
       * @param callback When the file is save finished,it will callback this function.
       * @return Returns true if the operation is successful.
       */
-    bool saveToFileAsNonPMA(std::string_view fileName,
+    bool saveToFileAsNonPMA(const std::string& fileName,
                             Image::Format format,
                             bool isRGBA,
-                            SaveFileCallbackType callback);
+                            std::function<void(RenderTexture*, const std::string&)> callback);
 
     /** saves the texture into a file. The format could be JPG or PNG. The file will be saved in the Documents folder.
         Returns true if the operation is successful.
@@ -217,10 +220,10 @@ public:
      * @param callback When the file is save finished,it will callback this function.
      * @return Returns true if the operation is successful.
      */
-    bool saveToFile(std::string_view filename,
+    bool saveToFile(const std::string& filename,
                     Image::Format format,
-                    bool isRGBA                   = true,
-                    SaveFileCallbackType callback = nullptr);
+                    bool isRGBA                                                      = true,
+                    std::function<void(RenderTexture*, const std::string&)> callback = nullptr);
 
     /** Listen "come to background" message, and save render texture.
      * It only has effect on Android.
@@ -364,7 +367,7 @@ protected:
     void onEnd();
     void clearColorAttachment();
 
-    void onSaveToFile(std::string_view fileName, bool isRGBA = true, bool forceNonPMA = false);
+    void onSaveToFile(const std::string& fileName, bool isRGBA = true, bool forceNonPMA = false);
 
     bool _keepMatrix = false;
     Rect _rtTextureRect;
@@ -408,7 +411,7 @@ protected:
      and the command and callback will be executed twice.
     */
     CallbackCommand _saveToFileCommand;
-    std::function<void(RenderTexture*, std::string_view)> _saveFileCallback = nullptr;
+    std::function<void(RenderTexture*, const std::string&)> _saveFileCallback = nullptr;
 
     Mat4 _oldTransMatrix, _oldProjMatrix;
     Mat4 _transformMatrix, _projectionMatrix;

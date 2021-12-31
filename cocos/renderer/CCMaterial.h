@@ -78,7 +78,7 @@ public:
      *
      * @return A new Material or NULL if there was an error.
      */
-    static Material* createWithFilename(std::string_view path);
+    static Material* createWithFilename(const std::string& path);
 
     /** Creates a Material with a GLProgramState.
      It will only contain one Technique and one Pass.
@@ -107,12 +107,12 @@ public:
     /// returns the material name
     std::string getName() const;
     /// sets the material name
-    void setName(std::string_view name);
+    void setName(const std::string& name);
 
     /** Returns a Technique by its name.
      returns `nullptr` if the Technique can't be found.
      */
-    Technique* getTechniqueByName(std::string_view name);
+    Technique* getTechniqueByName(const std::string& name);
 
     /** Returns a Technique by index.
      returns `nullptr` if the index is invalid.
@@ -132,7 +132,7 @@ public:
     void addTechnique(Technique* technique);
 
     /** Sets the current technique */
-    void setTechnique(std::string_view techniqueName);
+    void setTechnique(const std::string& techniqueName);
 
     /** returns a clone (deep-copy) of the material */
     virtual Material* clone() const;
@@ -147,7 +147,7 @@ protected:
     Material();
     ~Material();
     bool initWithProgramState(backend::ProgramState* state);
-    bool initWithFile(std::string_view file);
+    bool initWithFile(const std::string& file);
     bool initWithProperties(Properties* materialProperties);
 
     void setTarget(Node* target);

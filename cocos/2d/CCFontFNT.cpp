@@ -56,15 +56,15 @@ struct _FontDefHashElement;
 //
 // FNTConfig Cache - free functions
 //
-static StringMap<BMFontConfiguration*>* s_configurations = nullptr;
+static Map<std::string, BMFontConfiguration*>* s_configurations = nullptr;
 
-BMFontConfiguration* FNTConfigLoadFile(std::string_view fntFile)
+BMFontConfiguration* FNTConfigLoadFile(const std::string& fntFile)
 {
     BMFontConfiguration* ret = nullptr;
 
     if (s_configurations == nullptr)
     {
-        s_configurations = new StringMap<BMFontConfiguration*>();
+        s_configurations = new Map<std::string, BMFontConfiguration*>();
     }
 
     ret = s_configurations->at(fntFile);
@@ -84,7 +84,7 @@ BMFontConfiguration* FNTConfigLoadFile(std::string_view fntFile)
 // BitmapFontConfiguration
 //
 
-BMFontConfiguration* BMFontConfiguration::create(std::string_view FNTfile)
+BMFontConfiguration* BMFontConfiguration::create(const std::string& FNTfile)
 {
     BMFontConfiguration* ret = new BMFontConfiguration();
     if (ret->initWithFNTfile(FNTfile))
@@ -96,7 +96,7 @@ BMFontConfiguration* BMFontConfiguration::create(std::string_view FNTfile)
     return nullptr;
 }
 
-bool BMFontConfiguration::initWithFNTfile(std::string_view FNTfile)
+bool BMFontConfiguration::initWithFNTfile(const std::string& FNTfile)
 {
     _characterSet = this->parseConfigFile(FNTfile);
 
@@ -141,7 +141,7 @@ void BMFontConfiguration::purgeFontDefDictionary()
     _fontDefDictionary.clear();
 }
 
-std::set<unsigned int>* BMFontConfiguration::parseConfigFile(std::string_view controlFile)
+std::set<unsigned int>* BMFontConfiguration::parseConfigFile(const std::string& controlFile)
 {
     std::string data = FileUtils::getInstance()->getStringFromFile(controlFile);
     if (data.empty())
@@ -156,7 +156,7 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(std::string_view co
     }
     if (data[0] == 0)
     {
-        CCLOG("cocos2d: Error parsing FNTfile %s", controlFile.data());
+        CCLOG("cocos2d: Error parsing FNTfile %s", controlFile.c_str());
         return nullptr;
     }
     auto contents = data.c_str();
@@ -223,7 +223,7 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(std::string_view co
 
 std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char* pData,
                                                                    uint32_t size,
-                                                                   std::string_view controlFile)
+                                                                   const std::string& controlFile)
 {
     /* based on http://www.angelcode.com/products/bmfont/doc/file_format.html file format */
 
@@ -399,7 +399,7 @@ std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char
     return validCharsString;
 }
 
-void BMFontConfiguration::parseImageFileName(const char* line, std::string_view fntFile)
+void BMFontConfiguration::parseImageFileName(const char* line, const std::string& fntFile)
 {
     //////////////////////////////////////////////////////////////////////////
     // line to parse:
@@ -528,7 +528,7 @@ void BMFontConfiguration::parseKerningEntry(const char* line)
     _kerningDictionary[key] = amount;
 }
 
-FontFNT* FontFNT::create(std::string_view fntFilePath, const Rect& imageRect, bool imageRotated)
+FontFNT* FontFNT::create(const std::string& fntFilePath, const Rect& imageRect, bool imageRotated)
 {
     const auto newConf = FNTConfigLoadFile(fntFilePath);
     if (!newConf)
@@ -545,7 +545,7 @@ FontFNT* FontFNT::create(std::string_view fntFilePath, const Rect& imageRect, bo
     return tempFont;
 }
 
-FontFNT* FontFNT::create(std::string_view fntFilePath, std::string_view subTextureKey)
+FontFNT* FontFNT::create(const std::string& fntFilePath, const std::string& subTextureKey)
 {
     const auto newConf = FNTConfigLoadFile(fntFilePath);
     if (!newConf)
@@ -567,7 +567,7 @@ FontFNT* FontFNT::create(std::string_view fntFilePath, std::string_view subTextu
     return tempFont;
 }
 
-FontFNT* FontFNT::create(std::string_view fntFilePath)
+FontFNT* FontFNT::create(const std::string& fntFilePath)
 {
     const auto newConf = FNTConfigLoadFile(fntFilePath);
     if (!newConf)
@@ -590,7 +590,7 @@ FontFNT* FontFNT::create(std::string_view fntFilePath)
     return tempFont;
 }
 
-FontFNT* FontFNT::create(std::string_view fntFilePath, const Vec2& imageOffset)
+FontFNT* FontFNT::create(const std::string& fntFilePath, const Vec2& imageOffset)
 {
     return create(fntFilePath, Rect(imageOffset.x, imageOffset.y, 0, 0), false);
 }
@@ -762,11 +762,11 @@ FontAtlas* FontFNT::newFontAtlas()
     return tempAtlas;
 }
 
-void FontFNT::reloadBMFontResource(std::string_view fntFilePath)
+void FontFNT::reloadBMFontResource(const std::string& fntFilePath)
 {
     if (s_configurations == nullptr)
     {
-        s_configurations = new StringMap<BMFontConfiguration*>();
+        s_configurations = new Map<std::string, BMFontConfiguration*>();
     }
 
     BMFontConfiguration* ret = s_configurations->at(fntFilePath);

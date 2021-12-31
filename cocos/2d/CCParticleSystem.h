@@ -237,7 +237,7 @@ public:
      * @param plistFile Particle plist file name.
      * @return An autoreleased ParticleSystem object.
      */
-    static ParticleSystem* create(std::string_view plistFile);
+    static ParticleSystem* create(const std::string& plistFile);
 
     /** Create a system with a fixed number of particles.
      *
@@ -761,7 +761,7 @@ public:
      */
     virtual const BlendFunc& getBlendFunc() const override;
 
-    std::string_view getResourceFile() const { return _plistFile; }
+    const std::string& getResourceFile() const { return _plistFile; }
 
     /// @{
     /// @name implement Playable Protocol
@@ -793,7 +793,7 @@ public:
      http://particledesigner.71squared.com/
      @since v0.99.3
      */
-    bool initWithFile(std::string_view plistFile);
+    bool initWithFile(const std::string& plistFile);
 
     /** initializes a QuadParticleSystem from a Dictionary.
      @since v0.99.3
@@ -803,7 +803,7 @@ public:
     /** initializes a particle system from a NSDictionary and the path from where to load the png
      @since v2.1
      */
-    bool initWithDictionary(const ValueMap& dictionary, std::string_view dirname);
+    bool initWithDictionary(const ValueMap& dictionary, const std::string& dirname);
 
     //! Initializes a system with a fixed number of particles
     virtual bool initWithTotalParticles(int numberOfParticles);

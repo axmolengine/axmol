@@ -90,11 +90,11 @@ public:
      @param String with url to open.
      @return true if the resource located by the URL was successfully opened; otherwise false.
      */
-    virtual bool openURL(std::string_view url) override;
+    virtual bool openURL(const std::string& url) override;
 
-    void setStartupScriptFilename(std::string_view startupScriptFile);
+    void setStartupScriptFilename(const std::string& startupScriptFile);
 
-    std::string_view getStartupScriptFilename();
+    const std::string& getStartupScriptFilename();
 
 protected:
     static Application* sm_pSharedApplication;

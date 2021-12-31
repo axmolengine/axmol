@@ -37,6 +37,7 @@ USING_NS_CC;
 
 static void printProperties(Properties* properties, int indent);
 
+
 // MARK: Tests
 
 MaterialSystemTest::MaterialSystemTest()
@@ -65,7 +66,7 @@ void Material_Sprite3DTest::onEnter()
     sprite->setScale(8.f);
     sprite->setTexture("Sprite3DTest/boss.png");
     this->addChild(sprite);
-    sprite->setPositionNormalized(Vec2(0.5f, 0.5f));
+    sprite->setPositionNormalized(Vec2(0.5f,0.5f));
 }
 
 std::string Material_Sprite3DTest::subtitle() const
@@ -78,20 +79,25 @@ void Material_MultipleSprite3D::onEnter()
     MaterialSystemBaseTest::onEnter();
 
     const char* names[] = {
-        "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/ReskinGirl.c3b",
+        "Sprite3DTest/ReskinGirl.c3b",
+        "Sprite3DTest/ReskinGirl.c3b",
+        "Sprite3DTest/ReskinGirl.c3b",
+        "Sprite3DTest/ReskinGirl.c3b",
+        "Sprite3DTest/ReskinGirl.c3b",
+        "Sprite3DTest/ReskinGirl.c3b",
+        "Sprite3DTest/ReskinGirl.c3b",
+        "Sprite3DTest/ReskinGirl.c3b",
     };
 
     const int totalNames = sizeof(names) / sizeof(names[0]);
 
     auto size = Director::getInstance()->getWinSize();
 
-    for (int i = 0; i < totalNames; i++)
+    for(int i=0;i<totalNames;i++)
     {
         auto sprite = Sprite3D::create(names[i]);
         this->addChild(sprite);
-        sprite->setPosition(Vec2((size.width / (totalNames + 1)) * (i + 1), size.height / 4));
+        sprite->setPosition(Vec2((size.width/(totalNames+1))*(i+1), size.height/4));
         sprite->setScale(3);
     }
 }
@@ -113,7 +119,7 @@ void Material_2DEffects::onEnter()
     // Print the properties of every namespace within this one.
     printProperties(properties, 0);
 
-    Material* mat1 = Material::createWithProperties(properties);
+    Material *mat1 = Material::createWithProperties(properties);
 
     auto spriteBlur = Sprite::create("Images/grossini.png");
     spriteBlur->setPositionNormalized(Vec2(0.2f, 0.5f));
@@ -137,13 +143,11 @@ void Material_2DEffects::onEnter()
 
     timeUniforms.clear();
 
-#define FETCH_CCTIME_LOCATION(sprite)                                   \
-    do                                                                  \
-    {                                                                   \
-        auto programState = sprite->getProgramState();                  \
-        auto location     = programState->getUniformLocation("u_Time"); \
-        timeUniforms.emplace_back(programState, location);              \
-    } while (0)
+#define FETCH_CCTIME_LOCATION(sprite) do {                                  \
+        auto programState = sprite->getProgramState();                      \
+        auto location     = programState->getUniformLocation("u_Time");    \
+        timeUniforms.emplace_back(programState, location);                  \
+    }while(0)
 
     FETCH_CCTIME_LOCATION(spriteBlur);
     FETCH_CCTIME_LOCATION(spriteOutline);
@@ -165,7 +169,7 @@ void Material_2DEffects::updateCCTimeUniforms(float)
 {
     float time = Director::getInstance()->getTotalFrames() * Director::getInstance()->getAnimationInterval();
     Vec4 random(time / 10.0f, time, time * 2.0f, time * 4.0f);
-    for (auto& loc : timeUniforms)
+    for (auto &loc : timeUniforms)
     {
         loc.programState->setUniform(loc.location, &random, sizeof(random));
     }
@@ -180,25 +184,21 @@ void Material_2DEffects::updateCCTimeUniforms(float)
  */
 class EffectAutoBindingResolver : public backend::ProgramState::AutoBindingResolver
 {
-    virtual bool resolveAutoBinding(backend::ProgramState* programState,
-                                    /* Node* node,*/ std::string_view uniform,
-                                    std::string_view autoBinding) override;
+    virtual bool resolveAutoBinding(backend::ProgramState* programState,/* Node* node,*/ const std::string& uniform, const std::string& autoBinding) override;
 
     void callbackRadius(backend::ProgramState* programState, backend::UniformLocation uniform);
     void callbackColor(backend::ProgramState* programState, backend::UniformLocation uniform);
 };
 
-bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* programState,
-                                                   /*Node* node,*/ std::string_view uniform,
-                                                   std::string_view autoBinding)
+bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* programState, /*Node* node,*/ const std::string& uniform, const std::string& autoBinding)
 {
-    if (autoBinding.compare("DYNAMIC_RADIUS") == 0)
+    if (autoBinding.compare("DYNAMIC_RADIUS")==0)
     {
         auto loc = programState->getUniformLocation(uniform);
         programState->setCallbackUniform(loc, CC_CALLBACK_2(EffectAutoBindingResolver::callbackRadius, this));
         return true;
     }
-    else if (autoBinding.compare("OUTLINE_COLOR") == 0)
+    else if (autoBinding.compare("OUTLINE_COLOR")==0)
     {
         auto loc = programState->getUniformLocation(uniform);
         programState->setCallbackUniform(loc, CC_CALLBACK_2(EffectAutoBindingResolver::callbackColor, this));
@@ -207,13 +207,13 @@ bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* progra
     return false;
 }
 
-void EffectAutoBindingResolver::callbackRadius(backend::ProgramState* programState, backend::UniformLocation uniform)
+void EffectAutoBindingResolver::callbackRadius(backend::ProgramState *programState, backend::UniformLocation uniform)
 {
     float f = CCRANDOM_0_1() * 10;
     programState->setUniform(uniform, &f, sizeof(f));
 }
 
-void EffectAutoBindingResolver::callbackColor(backend::ProgramState* programState, backend::UniformLocation uniform)
+void EffectAutoBindingResolver::callbackColor(backend::ProgramState *programState, backend::UniformLocation uniform)
 {
     float r = CCRANDOM_0_1();
     float g = CCRANDOM_0_1();
@@ -233,17 +233,18 @@ Material_AutoBindings::~Material_AutoBindings()
     delete _resolver;
 }
 
+
 void Material_AutoBindings::onEnter()
 {
     MaterialSystemBaseTest::onEnter();
 
-    //    auto properties = Properties::createNonRefCounted("Materials/2d_effects.material#sample");
+//    auto properties = Properties::createNonRefCounted("Materials/2d_effects.material#sample");
     auto properties = Properties::createNonRefCounted("Materials/auto_binding_test.material#sample");
 
     // Print the properties of every namespace within this one.
     printProperties(properties, 0);
 
-    Material* mat1 = Material::createWithProperties(properties);
+    Material *mat1 = Material::createWithProperties(properties);
 
     auto spriteBlur = Sprite::create("Images/grossini.png");
     spriteBlur->setPositionNormalized(Vec2(0.2f, 0.5f));
@@ -266,8 +267,8 @@ void Material_AutoBindings::onEnter()
     spriteEdgeDetect->setProgramState(mat1->getTechniqueByName("edge_detect")->getPassByIndex(0)->getProgramState());
 
     _noiseProgramState = spriteNoise->getProgramState();
-    _locationTime      = _noiseProgramState->getUniformLocation("u_Time");
-
+    _locationTime = _noiseProgramState->getUniformLocation("u_Time");
+    
     schedule(CC_SCHEDULE_SELECTOR(Material_AutoBindings::updateUniformTime));
     // properties is not a "Ref" object
     CC_SAFE_DELETE(properties);
@@ -295,23 +296,24 @@ void Material_setTechnique::onEnter()
     auto sprite = Sprite3D::create("Sprite3DTest/boss1.obj");
     sprite->setScale(6);
     this->addChild(sprite);
-    sprite->setPositionNormalized(Vec2(0.5f, 0.5f));
+    sprite->setPositionNormalized(Vec2(0.5f,0.5f));
     _sprite = sprite;
 
-    Material* mat = Material::createWithFilename("Materials/3d_effects.material");
+
+    Material *mat = Material::createWithFilename("Materials/3d_effects.material");
     sprite->setMaterial(mat);
 
     // lights
     auto light1 = AmbientLight::create(Color3B::RED);
     addChild(light1);
 
-    auto light2 = DirectionLight::create(Vec3(-1, 1, 0), Color3B::GREEN);
+    auto light2 = DirectionLight::create(Vec3(-1,1,0), Color3B::GREEN);
     addChild(light2);
 
-    this->schedule(CC_CALLBACK_1(Material_setTechnique::changeMaterial, this), 1, "cookie");
+    this->schedule(CC_CALLBACK_1(Material_setTechnique::changeMaterial, this),  1, "cookie");
     _techniqueState = 0;
 
-    auto rot    = RotateBy::create(5, Vec3(30.0f, 60.0f, 270.0f));
+    auto rot = RotateBy::create(5, Vec3(30.0f,60.0f,270.0f));
     auto repeat = RepeatForever::create(rot);
     sprite->runAction(repeat);
 }
@@ -326,17 +328,17 @@ void Material_setTechnique::changeMaterial(float dt)
     // get it from Mesh 0
     switch (_techniqueState)
     {
-    case 0:
-        _sprite->getMaterial(0)->setTechnique("lit");
-        break;
-    case 1:
-        _sprite->getMaterial(0)->setTechnique("normal");
-        break;
-    case 2:
-        _sprite->getMaterial(0)->setTechnique("outline");
-        break;
-    default:
-        break;
+        case 0:
+            _sprite->getMaterial(0)->setTechnique("lit");
+            break;
+        case 1:
+            _sprite->getMaterial(0)->setTechnique("normal");
+            break;
+        case 2:
+            _sprite->getMaterial(0)->setTechnique("outline");
+            break;
+        default:
+            break;
     }
 
     _techniqueState = (_techniqueState + 1) % 3;
@@ -354,10 +356,10 @@ void Material_clone::onEnter()
     this->addChild(sprite);
     sprite->setPositionNormalized(Vec2(0.25f, 0.5f));
 
-    Material* mat = Material::createWithFilename("Materials/3d_effects.material");
+    Material *mat = Material::createWithFilename("Materials/3d_effects.material");
     sprite->setMaterial(mat);
 
-    auto rot    = RotateBy::create(5, Vec3(360.0f, 240.0f, 120.0f));
+    auto rot = RotateBy::create(5, Vec3(360.0f,240.0f,120.0f));
     auto repeat = RepeatForever::create(rot);
     sprite->runAction(repeat);
 
@@ -383,7 +385,8 @@ void Material_clone::onEnter()
     mat->setTechnique("outline");
 
     // should affect only sprite 3
-    //    mat2->setTechnique("normal");
+//    mat2->setTechnique("normal");
+
 }
 
 std::string Material_clone::subtitle() const
@@ -399,74 +402,76 @@ const int SHOW_LEBAL_TAG = 114;
 void Material_parsePerformance::onEnter()
 {
     MaterialSystemBaseTest::onEnter();
-
+    
     _maxParsingCoumt = 5e3;
-
+    
     auto screenSize = Director::getInstance()->getWinSize();
-
+    
     ui::Slider* slider = ui::Slider::create();
     slider->loadBarTexture("cocosui/sliderTrack.png");
     slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
     slider->loadProgressBarTexture("cocosui/sliderProgress.png");
     slider->setPercent(50);
-
+    
     slider->setPosition(Vec2(screenSize.width / 2.0f, screenSize.height / 3.0f));
     slider->addEventListener([&](Ref* sender, ui::Slider::EventType type) {
+        
         if (type == ui::Slider::EventType::ON_SLIDEBALL_UP)
         {
             ui::Slider* slider = dynamic_cast<ui::Slider*>(sender);
-            float p            = slider->getPercent() / 100.0f;
+            float p = slider->getPercent() / 100.0f;
             slider->setTouchEnabled(false);
             CCLOG("Will parsing material %d times", (int)(p * _maxParsingCoumt));
             Label* label = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
-            if (label)
+            if(label)
             {
                 label->setString("Testing start!");
             }
             this->scheduleOnce(
-                [this, p, slider](float) {
-                    this->parsingTesting(p * _maxParsingCoumt);
-                    slider->setTouchEnabled(true);
-                },
-                1.0, "schedule test parsing");
+                               [this, p, slider](float)
+                               {
+                                   this->parsingTesting(p * _maxParsingCoumt);
+                                   slider->setTouchEnabled(true);
+                               },
+                               1.0, "schedule test parsing");
+            
         }
     });
-
+    
     addChild(slider);
-
-    auto label = Label::createWithSystemFont(
-        "Max parsing count is 10000, which may crash because of high memory consumption.", "Helvetica", 10);
+    
+    auto label = Label::createWithSystemFont("Max parsing count is 10000, which may crash because of high memory consumption.", "Helvetica", 10);
     label->setPosition(Vec2(screenSize.width / 2.0f, screenSize.height / 2.0f - 20));
     addChild(label);
     label = Label::createWithSystemFont("Slide to test parsing performance", "Helvetica", 10);
     label->setPosition(Vec2(screenSize.width / 2.0f, screenSize.height / 2.0f));
     addChild(label);
-
+    
     label = Label::createWithSystemFont("", "Helvetica", 10);
     label->setPosition(Vec2(screenSize.width / 2.0f, screenSize.height / 2.0f + 20));
     label->setTag(SHOW_LEBAL_TAG);
     addChild(label);
+
 }
 
 void Material_parsePerformance::parsingTesting(unsigned int count)
 {
     std::clock_t begin = std::clock();
-
+    
     for (unsigned int i = 0; i < count; i++)
     {
         Material::createWithFilename("Materials/2d_effects.material");
         Material::createWithFilename("Materials/3d_effects.material");
     }
-
-    std::clock_t end    = std::clock();
+    
+    std::clock_t end = std::clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-    Label* label        = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
-    if (label)
+    Label* label = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
+    if(label)
     {
-        std::string str = StringUtils::format("Testing completed! Took: %.3f seconds for parsing material %d times.",
-                                              elapsed_secs, count);
+        std::string str = StringUtils::format("Testing completed! Took: %.3f seconds for parsing material %d times.", elapsed_secs, count);
         label->setString(str);
-
+        
         CCLOG("Took: %.3f seconds for parsing material %d times.", elapsed_secs, count);
     }
 }
@@ -482,17 +487,17 @@ static void printProperties(Properties* properties, int indent)
 {
     // Print the name and ID of the current namespace.
     const char* spacename = properties->getNamespace();
-    const char* id        = properties->getId();
+    const char* id = properties->getId();
     char chindent[64];
-    int i = 0;
-    for (i = 0; i < indent * 2; i++)
+    int i=0;
+    for(i=0; i<indent*2;i++)
         chindent[i] = ' ';
     chindent[i] = '\0';
 
     log("%sNamespace: %s  ID: %s\n%s{", chindent, spacename, id, chindent);
 
     // Print all properties in this namespace.
-    const char* name  = properties->getNextProperty();
+    const char* name = properties->getNextProperty();
     const char* value = NULL;
     while (name != NULL)
     {
@@ -504,9 +509,9 @@ static void printProperties(Properties* properties, int indent)
     Properties* space = properties->getNextNamespace();
     while (space != NULL)
     {
-        printProperties(space, indent + 1);
+        printProperties(space, indent+1);
         space = properties->getNextNamespace();
     }
 
-    log("%s}\n", chindent);
+    log("%s}\n",chindent);
 }

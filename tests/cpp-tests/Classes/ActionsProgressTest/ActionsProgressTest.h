@@ -104,4 +104,4 @@ public:
     virtual std::string subtitle() const override;
 };
 
-#endif  // _ACTIONS__PROGRESS_TEST_H_
+#endif // _ACTIONS__PROGRESS_TEST_H_

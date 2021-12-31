@@ -107,7 +107,7 @@ void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstr
             //				else
             //				{
             //					compiler->addError(PUScriptCompiler::CE_NUMBEREXPECTED, prop->file,
-            // prop->line,
+            //prop->line,
             //                                                "PU Compiler: lod_distances expects only numbers as
             //                                                arguments");
             //				}
@@ -238,8 +238,7 @@ void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstr
             //				{
             //					ParticleTechnique* technique = static_cast<ParticleTechnique*>(alias);
             //					ParticleTechnique* newTechnique =
-            // ParticleSystemManager::getSingletonPtr()->cloneTechnique(technique);
-            // mSystem->addTechnique(newTechnique);
+            //ParticleSystemManager::getSingletonPtr()->cloneTechnique(technique); 					mSystem->addTechnique(newTechnique);
             //				}
             //			}
             //		}

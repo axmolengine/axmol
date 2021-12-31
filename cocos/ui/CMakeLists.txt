@@ -1,23 +1,14 @@
 if(WINDOWS)
-    if(ADXE_ENABLE_WEBVIEW2)
-        set(COCOS_UI_SPECIFIC_HEADER
-            ui/UIEditBox/UIEditBoxImpl-win32.h
-            ui/UIWebView/UIWebViewImpl-win32.h
-            ui/UIWebView/UIWebView.h
-            )
-        set(COCOS_UI_SPECIFIC_SRC
-            ui/UIEditBox/UIEditBoxImpl-win32.cpp
-            ui/UIWebView/UIWebViewImpl-win32.cpp
-            ui/UIWebView/UIWebView.cpp
-            )
-    else()
-        set(COCOS_UI_SPECIFIC_HEADER
-            ui/UIEditBox/UIEditBoxImpl-win32.h
-            )
-        set(COCOS_UI_SPECIFIC_SRC
-            ui/UIEditBox/UIEditBoxImpl-win32.cpp
-            )
-    endif()
+    set(COCOS_UI_SPECIFIC_HEADER
+        ui/UIEditBox/UIEditBoxImpl-win32.h
+        ui/UIWebView/UIWebViewImpl-win32.h
+        ui/UIWebView/UIWebView.h
+        )
+    set(COCOS_UI_SPECIFIC_SRC
+        ui/UIEditBox/UIEditBoxImpl-win32.cpp
+        ui/UIWebView/UIWebViewImpl-win32.cpp
+        ui/UIWebView/UIWebView.cpp
+        )
 elseif(APPLE)
     if(MACOSX)
         set(COCOS_UI_SPECIFIC_HEADER

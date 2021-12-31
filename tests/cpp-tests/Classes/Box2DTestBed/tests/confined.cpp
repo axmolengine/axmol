@@ -25,141 +25,146 @@
 class Confined : public Test
 {
 public:
-    enum
-    {
-        e_columnCount = 0,
-        e_rowCount    = 0
-    };
 
-    Confined()
-    {
-        {
-            b2BodyDef bd;
-            b2Body* ground = m_world->CreateBody(&bd);
+	enum
+	{
+		e_columnCount = 0,
+		e_rowCount = 0
+	};
 
-            b2EdgeShape shape;
+	Confined()
+	{
+		{
+			b2BodyDef bd;
+			b2Body* ground = m_world->CreateBody(&bd);
 
-            // Floor
-            shape.SetTwoSided(b2Vec2(-10.0f, 0.0f), b2Vec2(10.0f, 0.0f));
-            ground->CreateFixture(&shape, 0.0f);
+			b2EdgeShape shape;
 
-            // Left wall
-            shape.SetTwoSided(b2Vec2(-10.0f, 0.0f), b2Vec2(-10.0f, 20.0f));
-            ground->CreateFixture(&shape, 0.0f);
+			// Floor
+			shape.SetTwoSided(b2Vec2(-10.0f, 0.0f), b2Vec2(10.0f, 0.0f));
+			ground->CreateFixture(&shape, 0.0f);
 
-            // Right wall
-            shape.SetTwoSided(b2Vec2(10.0f, 0.0f), b2Vec2(10.0f, 20.0f));
-            ground->CreateFixture(&shape, 0.0f);
+			// Left wall
+			shape.SetTwoSided(b2Vec2(-10.0f, 0.0f), b2Vec2(-10.0f, 20.0f));
+			ground->CreateFixture(&shape, 0.0f);
 
-            // Roof
-            shape.SetTwoSided(b2Vec2(-10.0f, 20.0f), b2Vec2(10.0f, 20.0f));
-            ground->CreateFixture(&shape, 0.0f);
-        }
+			// Right wall
+			shape.SetTwoSided(b2Vec2(10.0f, 0.0f), b2Vec2(10.0f, 20.0f));
+			ground->CreateFixture(&shape, 0.0f);
 
-        float radius = 0.5f;
-        b2CircleShape shape;
-        shape.m_p.SetZero();
-        shape.m_radius = radius;
+			// Roof
+			shape.SetTwoSided(b2Vec2(-10.0f, 20.0f), b2Vec2(10.0f, 20.0f));
+			ground->CreateFixture(&shape, 0.0f);
+		}
 
-        b2FixtureDef fd;
-        fd.shape    = &shape;
-        fd.density  = 1.0f;
-        fd.friction = 0.1f;
+		float radius = 0.5f;
+		b2CircleShape shape;
+		shape.m_p.SetZero();
+		shape.m_radius = radius;
 
-        for (int32 j = 0; j < e_columnCount; ++j)
-        {
-            for (int i = 0; i < e_rowCount; ++i)
-            {
-                b2BodyDef bd;
-                bd.type = b2_dynamicBody;
-                bd.position.Set(-10.0f + (2.1f * j + 1.0f + 0.01f * i) * radius, (2.0f * i + 1.0f) * radius);
-                b2Body* body = m_world->CreateBody(&bd);
+		b2FixtureDef fd;
+		fd.shape = &shape;
+		fd.density = 1.0f;
+		fd.friction = 0.1f;
 
-                body->CreateFixture(&fd);
-            }
-        }
+		for (int32 j = 0; j < e_columnCount; ++j)
+		{
+			for (int i = 0; i < e_rowCount; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position.Set(-10.0f + (2.1f * j + 1.0f + 0.01f * i) * radius, (2.0f * i + 1.0f) * radius);
+				b2Body* body = m_world->CreateBody(&bd);
 
-        m_world->SetGravity(b2Vec2(0.0f, 0.0f));
-    }
+				body->CreateFixture(&fd);
+			}
+		}
 
-    void CreateCircle()
-    {
-        float radius = 2.0f;
-        b2CircleShape shape;
-        shape.m_p.SetZero();
-        shape.m_radius = radius;
+		m_world->SetGravity(b2Vec2(0.0f, 0.0f));
+	}
 
-        b2FixtureDef fd;
-        fd.shape    = &shape;
-        fd.density  = 1.0f;
-        fd.friction = 0.0f;
+	void CreateCircle()
+	{
+		float radius = 2.0f;
+		b2CircleShape shape;
+		shape.m_p.SetZero();
+		shape.m_radius = radius;
 
-        b2Vec2 p(RandomFloat(), 3.0f + RandomFloat());
-        b2BodyDef bd;
-        bd.type     = b2_dynamicBody;
-        bd.position = p;
-        // bd.allowSleep = false;
-        b2Body* body = m_world->CreateBody(&bd);
+		b2FixtureDef fd;
+		fd.shape = &shape;
+		fd.density = 1.0f;
+		fd.friction = 0.0f;
 
-        body->CreateFixture(&fd);
-    }
+		b2Vec2 p(RandomFloat(), 3.0f + RandomFloat());
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position = p;
+		//bd.allowSleep = false;
+		b2Body* body = m_world->CreateBody(&bd);
 
-    void Keyboard(int key) override
-    {
-        switch (key)
-        {
-        case GLFW_KEY_C:
-            CreateCircle();
-            break;
-        }
-    }
+		body->CreateFixture(&fd);
+	}
 
-    void Step(Settings& settings) override
-    {
-        bool sleeping = true;
-        for (b2Body* b = m_world->GetBodyList(); b; b = b->GetNext())
-        {
-            if (b->GetType() != b2_dynamicBody)
-            {
-                continue;
-            }
+	void Keyboard(int key) override
+	{
+		switch (key)
+		{
+		case GLFW_KEY_C:
+			CreateCircle();
+			break;
+		}
+	}
 
-            if (b->IsAwake())
-            {
-                sleeping = false;
-            }
-        }
+	void Step(Settings& settings) override
+	{
+		bool sleeping = true;
+		for (b2Body* b = m_world->GetBodyList(); b; b = b->GetNext())
+		{
+			if (b->GetType() != b2_dynamicBody)
+			{
+				continue;
+			}
 
-        if (m_stepCount == 180)
-        {
-            m_stepCount += 0;
-        }
+			if (b->IsAwake())
+			{
+				sleeping = false;
+			}
+		}
 
-        // if (sleeping)
-        //{
-        //	CreateCircle();
-        // }
+		if (m_stepCount == 180)
+		{
+			m_stepCount += 0;
+		}
 
-        Test::Step(settings);
+		//if (sleeping)
+		//{
+		//	CreateCircle();
+		//}
 
-        for (b2Body* b = m_world->GetBodyList(); b; b = b->GetNext())
-        {
-            if (b->GetType() != b2_dynamicBody)
-            {
-                continue;
-            }
+		Test::Step(settings);
 
-            b2Vec2 p = b->GetPosition();
-            if (p.x <= -10.0f || 10.0f <= p.x || p.y <= 0.0f || 20.0f <= p.y)
-            {
-                p.x += 0.0f;
-            }
-        }
+		for (b2Body* b = m_world->GetBodyList(); b; b = b->GetNext())
+		{
+			if (b->GetType() != b2_dynamicBody)
+			{
+				continue;
+			}
 
-        DrawString(5, m_textLine, "Press 'c' to create a circle.");
-    }
+			b2Vec2 p = b->GetPosition();
+			if (p.x <= -10.0f || 10.0f <= p.x || p.y <= 0.0f || 20.0f <= p.y)
+			{
+				p.x += 0.0f;
+			}
+		}
 
-    static Test* Create() { return new Confined; }
+		DrawString(5, m_textLine, "Press 'c' to create a circle.");
+		
+	}
+
+	static Test* Create()
+	{
+		return new Confined;
+	}
 };
 
 static int testIndex = RegisterTest("Solver", "Confined", Confined::Create);

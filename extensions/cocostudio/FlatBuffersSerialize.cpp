@@ -141,8 +141,8 @@ void FlatBuffersSerialize::deleteFlatBufferBuilder()
     }
 }
 
-std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(std::string_view xmlFileName,
-                                                                  std::string_view flatbuffersFileName)
+std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(const std::string& xmlFileName,
+                                                                  const std::string& flatbuffersFileName)
 {
     std::string inFullpath = FileUtils::getInstance()->fullPathForFilename(xmlFileName).c_str();
 
@@ -157,7 +157,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFile(std::string_vi
 }
 
 std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLBuffer(std::string& xmlBuffer,
-                                                                    std::string_view flatbuffersFileName)
+                                                                    const std::string& flatbuffersFileName)
 {
     // xml parse
     pugi::xml_document document;
@@ -168,7 +168,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLBuffer(std::string&
     return "";
 }
 
-std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, std::string_view flatbuffersFileName)
+std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, const std::string& flatbuffersFileName)
 {
     auto thiz = FlatBuffersSerialize::getInstance();
 
@@ -451,9 +451,9 @@ int FlatBuffersSerialize::getResourceType(std::string key)
     return 1;
 }
 
-std::string FlatBuffersSerialize::getGUIClassName(std::string_view name)
+std::string FlatBuffersSerialize::getGUIClassName(const std::string& name)
 {
-    std::string convertedClassName;
+    std::string convertedClassName = name;
     if (name == "Panel")
     {
         convertedClassName = "Layout";
@@ -478,8 +478,6 @@ std::string FlatBuffersSerialize::getGUIClassName(std::string_view name)
     {
         convertedClassName = "TextBMFont";
     }
-    else
-        convertedClassName = name;
 
     return convertedClassName;
 }
@@ -1233,7 +1231,7 @@ flatbuffers::Offset<flatbuffers::EasingData> FlatBuffersSerialize::createEasingD
 }
 
 /* create flat buffers with XML */
-FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulator(std::string_view xmlFileName)
+FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulator(const std::string& xmlFileName)
 {
     std::string inFullpath = FileUtils::getInstance()->fullPathForFilename(xmlFileName);
 
@@ -1522,9 +1520,9 @@ Offset<ProjectNodeOptions> FlatBuffersSerialize::createProjectNodeOptionsForSimu
 }
 
 /* Serialize language XML file to Flat Buffers file. */
-std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData(std::string_view xmlFilePath,
-                                                                                 std::string_view flatBuffersFilePath,
-                                                                                 std::string_view languageName)
+std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData(const std::string& xmlFilePath,
+                                                                                 const std::string& flatBuffersFilePath,
+                                                                                 const std::string& languageName)
 {
     // Read and parse XML data file.
     if (!FileUtils::getInstance()->isFileExist(xmlFilePath))
@@ -1562,7 +1560,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
                 hasKeyReaded = true;
             }
             // Record corresponding text.
-            else if (languageName == childElement.name())
+            else if (strcmp(languageName.c_str(), childElement.name()) == 0)
             {
                 const char* langText = childElement.text().as_string();
                 if (langText && langText[0] != '\0')

@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  Copyright (c) 2015 cocos2d-x.org
 
  http://www.cocos2d-x.org
@@ -69,7 +69,7 @@ public:
     static ComExtensionData* create();
     virtual bool init() override;
 
-    virtual void setCustomProperty(std::string_view customProperty) { _customProperty = customProperty; }
+    virtual void setCustomProperty(const std::string& customProperty) { _customProperty = customProperty; }
     virtual std::string getCustomProperty() const { return _customProperty; };
 
     virtual void setActionTag(int actionTag);

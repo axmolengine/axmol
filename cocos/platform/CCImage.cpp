@@ -601,7 +601,7 @@ Image::~Image()
     }
 }
 
-bool Image::initWithImageFile(std::string_view path)
+bool Image::initWithImageFile(const std::string& path)
 {
     bool ret  = false;
     _filePath = FileUtils::getInstance()->fullPathForFilename(path);
@@ -618,7 +618,7 @@ bool Image::initWithImageFile(std::string_view path)
     return ret;
 }
 
-bool Image::initWithImageFileThreadSafe(std::string_view fullpath)
+bool Image::initWithImageFileThreadSafe(const std::string& fullpath)
 {
     bool ret  = false;
     _filePath = fullpath;
@@ -2193,7 +2193,7 @@ void Image::forwardPixels(uint8_t* data, ssize_t dataLen, int offset, bool ownDa
 }
 
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
-bool Image::saveToFile(std::string_view filename, bool isToRGB)
+bool Image::saveToFile(const std::string& filename, bool isToRGB)
 {
     // only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
     if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))
@@ -2216,13 +2216,13 @@ bool Image::saveToFile(std::string_view filename, bool isToRGB)
     }
     else
     {
-        CCLOG("cocos2d: Image: saveToFile no support file extension(only .png or .jpg) for file: %s", filename.data());
+        CCLOG("cocos2d: Image: saveToFile no support file extension(only .png or .jpg) for file: %s", filename.c_str());
         return false;
     }
 }
 #endif
 
-bool Image::saveImageToPNG(std::string_view filePath, bool isToRGB)
+bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
 {
 #if CC_USE_PNG
     bool ret = false;
@@ -2365,7 +2365,7 @@ bool Image::saveImageToPNG(std::string_view filePath, bool isToRGB)
 #endif  // CC_USE_PNG
 }
 
-bool Image::saveImageToJPG(std::string_view filePath)
+bool Image::saveImageToJPG(const std::string& filePath)
 {
 #if CC_USE_JPEG
     bool ret = false;

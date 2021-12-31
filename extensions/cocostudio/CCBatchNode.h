@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -58,7 +58,7 @@ public:
     virtual bool init() override;
     using Node::addChild;
     virtual void addChild(cocos2d::Node* pChild, int zOrder, int tag) override;
-    virtual void addChild(cocos2d::Node* pChild, int zOrder, std::string_view name) override;
+    virtual void addChild(cocos2d::Node* pChild, int zOrder, const std::string& name) override;
     virtual void removeChild(cocos2d::Node* child, bool cleanup) override;
     virtual void visit(cocos2d::Renderer* renderer,
                        const cocos2d::Mat4& parentTransform,

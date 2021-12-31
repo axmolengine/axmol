@@ -84,7 +84,7 @@ public:
     /**
      * @private
      */
-    hlookup::string_map<TextureData*> textures;
+    std::map<std::string, TextureData*> textures;
     /**
      * @private
      */
@@ -100,13 +100,13 @@ public:
     /**
      * @private
      */
-    inline TextureData* getTexture(std::string_view textureName) const { return mapFind(textures, textureName); }
+    inline TextureData* getTexture(const std::string& textureName) const { return mapFind(textures, textureName); }
 
 protected:
     virtual void _onClear() override;
 
 public:  // For WebAssembly.
-    const hlookup::string_map<TextureData*>& getTextures() const { return textures; }
+    const std::map<std::string, TextureData*>& getTextures() const { return textures; }
 };
 /**
  * @internal

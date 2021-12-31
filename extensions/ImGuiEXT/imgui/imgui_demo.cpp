@@ -112,7 +112,7 @@ Index of this file:
 #        endif
 #        pragma clang diagnostic ignored "-Wunknown-pragmas"  // warning: unknown warning group 'xxx'
 #        pragma clang diagnostic ignored "-Wold-style-cast"   // warning: use of old-style cast // yes, they are more
-                                                              // terse.
+                                                             // terse.
 #        pragma clang diagnostic ignored \
             "-Wdeprecated-declarations"  // warning: 'xx' is deprecated: The POSIX name for this..   // for strdup used
                                          // in demo code (so user can copy & paste the code)

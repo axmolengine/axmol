@@ -33,7 +33,6 @@
 #include <functional>
 #include <sstream>
 #include <assert.h>
-#include "base/hlookup.h"
 // dragonBones assert
 #define DRAGONBONES_ASSERT(cond, msg) \
     do                                \
@@ -360,15 +359,15 @@ inline int indexOf(const std::vector<T>& vector, const T& value)
     return -1;
 }
 
-template <class Cont>
-inline auto mapFind(Cont& map, std::string_view key)
+template <class T>
+inline T* mapFind(const std::map<std::string, T*>& map, const std::string& key)
 {
     auto iterator = map.find(key);
     return (iterator != map.end()) ? iterator->second : nullptr;
 }
 
-template <class Cont>
-inline auto mapFindB(Cont& map, std::string_view key)
+template <class T>
+inline T* mapFindB(std::map<std::string, T>& map, const std::string& key)
 {
     auto iterator = map.find(key);
     return (iterator != map.end()) ? &iterator->second : nullptr;

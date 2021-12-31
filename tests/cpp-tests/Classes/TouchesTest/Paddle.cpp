@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
+ 
  http://www.cocos2d-x.org
-
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
-
+ 
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
-
+ 
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,9 +26,13 @@
 
 USING_NS_CC;
 
-Paddle::Paddle() {}
+Paddle::Paddle()
+{
+}
 
-Paddle::~Paddle() {}
+Paddle::~Paddle()
+{
+}
 
 Rect Paddle::getRect()
 {
@@ -47,35 +51,35 @@ Paddle* Paddle::createWithTexture(Texture2D* aTexture)
 
 bool Paddle::initWithTexture(Texture2D* aTexture)
 {
-    if (Sprite::initWithTexture(aTexture))
+    if( Sprite::initWithTexture(aTexture) )
     {
         _state = kPaddleStateUngrabbed;
     }
-
+    
     return true;
 }
 
 void Paddle::onEnter()
 {
     Sprite::onEnter();
-
+    
     // Register Touch Event
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
-
+    
     listener->onTouchBegan = CC_CALLBACK_2(Paddle::onTouchBegan, this);
     listener->onTouchMoved = CC_CALLBACK_2(Paddle::onTouchMoved, this);
     listener->onTouchEnded = CC_CALLBACK_2(Paddle::onTouchEnded, this);
-
+    
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
 void Paddle::onExit()
 {
-    //    auto director = Director::getInstance();
-    //    director->getTouchDispatcher()->removeDelegate(this);
+//    auto director = Director::getInstance();
+//    director->getTouchDispatcher()->removeDelegate(this);
     Sprite::onExit();
-}
+}    
 
 bool Paddle::containsTouchLocation(Touch* touch)
 {
@@ -84,14 +88,11 @@ bool Paddle::containsTouchLocation(Touch* touch)
 
 bool Paddle::onTouchBegan(Touch* touch, Event* event)
 {
-    CCLOG("Paddle::onTouchBegan id = %d, x = %f, y = %f", touch->getID(), touch->getLocation().x,
-          touch->getLocation().y);
-
-    if (_state != kPaddleStateUngrabbed)
-        return false;
-    if (!containsTouchLocation(touch))
-        return false;
-
+    CCLOG("Paddle::onTouchBegan id = %d, x = %f, y = %f", touch->getID(), touch->getLocation().x, touch->getLocation().y);
+    
+    if (_state != kPaddleStateUngrabbed) return false;
+    if ( !containsTouchLocation(touch) ) return false;
+    
     _state = kPaddleStateGrabbed;
     CCLOG("return true");
     return true;
@@ -105,15 +106,14 @@ void Paddle::onTouchMoved(Touch* touch, Event* event)
     // Actually, it would be even more complicated since in the Cocos dispatcher
     // you get Sets instead of 1 UITouch, so you'd need to loop through the set
     // in each touchXXX method.
-
-    CCLOG("Paddle::onTouchMoved id = %d, x = %f, y = %f", touch->getID(), touch->getLocation().x,
-          touch->getLocation().y);
-
-    CCASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
-
+    
+    CCLOG("Paddle::onTouchMoved id = %d, x = %f, y = %f", touch->getID(), touch->getLocation().x, touch->getLocation().y);
+    
+    CCASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");    
+    
     auto touchPoint = touch->getLocation();
-
-    setPosition(Vec2(touchPoint.x, getPosition().y));
+    
+    setPosition( Vec2(touchPoint.x, getPosition().y) );
 }
 
 Paddle* Paddle::clone() const
@@ -127,7 +127,7 @@ Paddle* Paddle::clone() const
 
 void Paddle::onTouchEnded(Touch* touch, Event* event)
 {
-    CCASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
-
+    CCASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");    
+    
     _state = kPaddleStateUngrabbed;
-}
+} 

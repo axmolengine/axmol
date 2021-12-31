@@ -4203,7 +4203,7 @@ public:
         return iter;
     }
 
-    static void onConnected(std::string_view deviceName, int deviceId)
+    static void onConnected(const std::string& deviceName, int deviceId)
     {
         // Check whether the controller is already registered
         auto iter = findController(deviceId);
@@ -4222,7 +4222,7 @@ public:
             if (deviceName.compare(it.first) == 0)
             {
                 // Found controller profile. Attach it to the controller:
-                CCLOG("ControllerImpl: Found input profile for controller: %s", deviceName.data());
+                CCLOG("ControllerImpl: Found input profile for controller: %s", deviceName.c_str());
                 controller->_buttonInputMap = it.second.first;
                 controller->_axisInputMap   = it.second.second;
 
@@ -4241,7 +4241,7 @@ public:
                         CCLOG(
                             "ControllerImpl: Could not find a button input mapping for controller \"%s\", and keyCode "
                             "\"%d\". This keyCode will not match any from Controller::Key",
-                            controller->getDeviceName().data(), i);
+                            controller->getDeviceName().c_str(), i);
                     }
                 }
 
@@ -4255,7 +4255,7 @@ public:
                         CCLOG(
                             "ControllerImpl: Could not find an axis input mapping for controller \"%s\", and keyCode "
                             "\"%d\". This keyCode will not match any from Controller::Key",
-                            controller->getDeviceName().data(), i);
+                            controller->getDeviceName().c_str(), i);
                     }
                 }
 #    endif
@@ -4268,12 +4268,12 @@ public:
 #    ifdef COCOS2D_DEBUG
         if (controller->_buttonInputMap.empty())
         {
-            CCLOG("ControllerImpl: Could not find a button input map for controller: %s", deviceName.data());
+            CCLOG("ControllerImpl: Could not find a button input map for controller: %s", deviceName.c_str());
         }
 
         if (controller->_axisInputMap.empty())
         {
-            CCLOG("ControllerImpl: Could not find an axis input map for controller: %s", deviceName.data());
+            CCLOG("ControllerImpl: Could not find an axis input map for controller: %s", deviceName.c_str());
         }
 #    endif
 

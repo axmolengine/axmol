@@ -143,7 +143,7 @@ bool Uri::operator==(const Uri& o) const
             _queryParams == o._queryParams);
 }
 
-Uri Uri::parse(std::string_view str)
+Uri Uri::parse(const std::string& str)
 {
     Uri uri;
 
@@ -155,7 +155,7 @@ Uri Uri::parse(std::string_view str)
     return uri;
 }
 
-bool Uri::doParse(std::string_view str)
+bool Uri::doParse(const std::string& str)
 {
     static const std::regex uriRegex(
         "([a-zA-Z][a-zA-Z0-9+.-]*):"  // scheme:
@@ -182,7 +182,7 @@ bool Uri::doParse(std::string_view str)
     std::smatch match;
     if (UNLIKELY(!std::regex_match(copied.cbegin(), copied.cend(), match, uriRegex)))
     {
-        CCLOGERROR("Invalid URI: %s", str.data());
+        CCLOGERROR("Invalid URI: %s", str.c_str());
         return false;
     }
 

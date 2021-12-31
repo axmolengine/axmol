@@ -126,7 +126,7 @@ public:
      *
      * @see `AudioProfile`
      */
-    static AUDIO_ID play2d(std::string_view filePath,
+    static AUDIO_ID play2d(const std::string& filePath,
                            bool loop                   = false,
                            float volume                = 1.0f,
                            const AudioProfile* profile = nullptr);
@@ -232,7 +232,7 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @param callback
      */
-    static void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, std::string_view)>& callback);
+    static void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, const std::string&)>& callback);
 
     /**
      * Gets the maximum number of simultaneous audio instance of AudioEngine.
@@ -253,7 +253,7 @@ public:
      * @warning This can lead to stop related audio first.
      * @param filePath Audio file path.
      */
-    static void uncache(std::string_view filePath);
+    static void uncache(const std::string& filePath);
 
     /**
      * Uncache all audio data from internal buffer.
@@ -276,20 +276,20 @@ public:
      * @param profileName A name of audio profile.
      * @return The audio profile.
      */
-    static AudioProfile* getProfile(std::string_view profileName);
+    static AudioProfile* getProfile(const std::string& profileName);
 
     /**
      * Preload audio file.
      * @param filePath The file path of an audio.
      */
-    static void preload(std::string_view filePath) { preload(filePath, nullptr); }
+    static void preload(const std::string& filePath) { preload(filePath, nullptr); }
 
     /**
      * Preload audio file.
      * @param filePath The file path of an audio.
      * @param callback A callback which will be called after loading is finished.
      */
-    static void preload(std::string_view filePath, std::function<void(bool isSuccess)> callback);
+    static void preload(const std::string& filePath, std::function<void(bool isSuccess)> callback);
 
     /**
      * Gets playing audio count.
@@ -346,10 +346,10 @@ protected:
     static std::unordered_map<AUDIO_ID, AudioInfo> _audioIDInfoMap;
 
     // audio file path,audio IDs
-    static hlookup::string_map<std::list<AUDIO_ID>> _audioPathIDMap;
+    static std::unordered_map<std::string, std::list<AUDIO_ID>> _audioPathIDMap;
 
     // profileName,ProfileHelper
-    static hlookup::string_map<ProfileHelper> _audioPathProfileHelperMap;
+    static std::unordered_map<std::string, ProfileHelper> _audioPathProfileHelperMap;
 
     static unsigned int _maxInstances;
 

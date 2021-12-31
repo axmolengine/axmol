@@ -98,7 +98,7 @@ std::string Technique::getName() const
     return _name;
 }
 
-void Technique::setName(std::string_view name)
+void Technique::setName(const std::string& name)
 {
     _name = name;
 }

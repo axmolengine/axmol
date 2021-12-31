@@ -37,11 +37,11 @@ class TestCase;
 
 namespace cocos2d
 {
-class Director;
-class Touch;
-class Event;
-class EventListenerTouchOneByOne;
-}  // namespace cocos2d
+    class Director;
+    class Touch;
+    class Event;
+    class EventListenerTouchOneByOne;
+}
 
 class TestController
 {
@@ -64,7 +64,6 @@ public:
     void setCurrTestSuite(TestSuite* testSuite) { _testSuite = testSuite; }
     TestSuite* getCurrTestSuite() { return _testSuite; }
     bool isAutoTestRunning() const { return !_stopAutoTest; }
-
 private:
     TestController();
 
@@ -74,7 +73,7 @@ private:
     void traverseTestSuite(TestSuite* testSuite);
     bool checkTest(TestCase* testCase);
 
-    void logEx(const char* format, ...);
+    void logEx(const char * format, ...);
 
     std::atomic<bool> _stopAutoTest;
     bool _isRunInBackground;

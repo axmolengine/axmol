@@ -183,7 +183,7 @@ public:
      * @return The created Properties or NULL if there was an error.
      * @script{create}
      */
-    static Properties* createNonRefCounted(std::string_view url);
+    static Properties* createNonRefCounted(const std::string& url);
 
     /**
      * Destructor.
@@ -533,7 +533,7 @@ private:
     {
         std::string name;
         std::string value;
-        Property(std::string_view aname, std::string_view avalue) : name(aname), value(avalue) {}
+        Property(const std::string& aname, const std::string& avalue) : name(aname), value(avalue) {}
     };
 
     /**
@@ -554,7 +554,7 @@ private:
      */
     Properties(Data* data,
                ssize_t* dataIdx,
-               std::string_view name,
+               const std::string& name,
                const char* id,
                const char* parentID,
                Properties* parent);
@@ -578,7 +578,7 @@ private:
     Properties* clone();
 
     void setDirectoryPath(const std::string* path);
-    void setDirectoryPath(std::string_view path);
+    void setDirectoryPath(const std::string& path);
 
     /**
      * Reads the next character from the Data. Returns EOF if the end of the Data is reached.

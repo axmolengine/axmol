@@ -53,7 +53,7 @@ public:
      * @param  name If name is not null, then set name to the bone's name
      * @return A initialized bone which is marked as "autorelease".
      */
-    static Bone* create(std::string_view name);
+    static Bone* create(const std::string& name);
 
 public:
     /**
@@ -75,7 +75,7 @@ public:
      * Initializes a Bone with the specified name
      * @param name Bone's name.
      */
-    virtual bool init(std::string_view name);
+    virtual bool init(const std::string& name);
 
     /**
      * Add display and use displayData to init the display.
@@ -95,10 +95,10 @@ public:
     void removeDisplay(int index);
 
     CC_DEPRECATED_ATTRIBUTE void changeDisplayByIndex(int index, bool force);
-    CC_DEPRECATED_ATTRIBUTE void changeDisplayByName(std::string_view name, bool force);
+    CC_DEPRECATED_ATTRIBUTE void changeDisplayByName(const std::string& name, bool force);
 
     void changeDisplayWithIndex(int index, bool force);
-    void changeDisplayWithName(std::string_view name, bool force);
+    void changeDisplayWithName(const std::string& name, bool force);
 
     /**
      * Add a child to this bone, and it will let this child call setParent(Bone *parent) function to set self to it's

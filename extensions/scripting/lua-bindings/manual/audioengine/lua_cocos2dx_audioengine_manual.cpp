@@ -269,11 +269,11 @@ int lua_cocos2dx_audioengine_AudioEngine_setFinishCallback(lua_State* tolua_S)
 
         LUA_FUNCTION handler = (toluafix_ref_function(tolua_S, 3, 0));
 
-        cocos2d::AudioEngine::setFinishCallback(arg0, [=](int audioID, std::string_view filePath) {
+        cocos2d::AudioEngine::setFinishCallback(arg0, [=](int audioID, std::string filePath) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
 
             stack->pushInt(audioID);
-            stack->pushString(filePath);
+            stack->pushString(filePath.c_str());
 
             stack->executeFunctionByHandler(handler, 2);
 

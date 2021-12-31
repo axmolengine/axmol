@@ -67,7 +67,7 @@ public:
     std::function<void(const DownloadTask& task,
                        int errorCode,
                        int errorCodeInternal,
-                       std::string_view errorStr,
+                       const std::string& errorStr,
                        std::vector<unsigned char>& data)>
         onTaskFinish;
 

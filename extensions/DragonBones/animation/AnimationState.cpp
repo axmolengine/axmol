@@ -1,4 +1,4 @@
-#include "AnimationState.h"
+﻿#include "AnimationState.h"
 #include "WorldClock.h"
 #include "../model/DisplayData.h"
 #include "../model/AnimationConfig.h"
@@ -83,7 +83,7 @@ void AnimationState::_onClear()
 void AnimationState::_updateTimelines()
 {
     {  // Update constraint timelines.
-        hlookup::string_map<std::vector<ConstraintTimelineState*>> constraintTimelines;
+        std::map<std::string, std::vector<ConstraintTimelineState*>> constraintTimelines;
         for (const auto timeline : _constraintTimelines)  // Create constraint timelines map.
         {
             constraintTimelines[timeline->constraint->getName()].push_back(timeline);
@@ -137,7 +137,7 @@ void AnimationState::_updateTimelines()
 void AnimationState::_updateBoneAndSlotTimelines()
 {
     {  // Update bone timelines.
-        hlookup::string_map<std::vector<BoneTimelineState*>> boneTimelines;
+        std::map<std::string, std::vector<BoneTimelineState*>> boneTimelines;
         for (const auto timeline : _boneTimelines)  // Create bone timelines map.
         {
             boneTimelines[timeline->bone->getName()].push_back(timeline);
@@ -238,7 +238,7 @@ void AnimationState::_updateBoneAndSlotTimelines()
     }
 
     {  // Update slot timelines.
-        hlookup::string_map<std::vector<SlotTimelineState*>> slotTimelines;
+        std::map<std::string, std::vector<SlotTimelineState*>> slotTimelines;
         std::vector<unsigned> ffdFlags;
         for (const auto timeline : _slotTimelines)  // Create slot timelines map.
         {
@@ -745,12 +745,12 @@ void AnimationState::fadeOut(float fadeOutTime, bool pausePlayhead)
     _fadeTime      = fadeTotalTime * (1.0f - _fadeProgress);
 }
 
-bool AnimationState::containsBoneMask(std::string_view boneName) const
+bool AnimationState::containsBoneMask(const std::string& boneName) const
 {
     return _boneMask.empty() || std::find(_boneMask.cbegin(), _boneMask.cend(), boneName) != _boneMask.cend();
 }
 
-void AnimationState::addBoneMask(std::string_view boneName, bool recursive)
+void AnimationState::addBoneMask(const std::string& boneName, bool recursive)
 {
     const auto currentBone = _armature->getBone(boneName);
     if (currentBone == nullptr)
@@ -760,7 +760,7 @@ void AnimationState::addBoneMask(std::string_view boneName, bool recursive)
 
     if (std::find(_boneMask.cbegin(), _boneMask.cend(), boneName) == _boneMask.cend())
     {
-        _boneMask.push_back(std::string{boneName});
+        _boneMask.push_back(boneName);
     }
 
     if (recursive)  // Add recursive mixing.
@@ -770,7 +770,7 @@ void AnimationState::addBoneMask(std::string_view boneName, bool recursive)
             if (std::find(_boneMask.cbegin(), _boneMask.cend(), bone->getName()) == _boneMask.cend() &&
                 currentBone->contains(bone))
             {
-                _boneMask.push_back(std::string{bone->getName()});
+                _boneMask.push_back(bone->getName());
             }
         }
     }
@@ -778,7 +778,7 @@ void AnimationState::addBoneMask(std::string_view boneName, bool recursive)
     _timelineDirty = 1;
 }
 
-void AnimationState::removeBoneMask(std::string_view boneName, bool recursive)
+void AnimationState::removeBoneMask(const std::string& boneName, bool recursive)
 {
     {
         auto iterator = std::find(_boneMask.begin(), _boneMask.end(), boneName);
@@ -816,7 +816,7 @@ void AnimationState::removeBoneMask(std::string_view boneName, bool recursive)
 
                     if (!currentBone->contains(bone))
                     {
-                        _boneMask.push_back(std::string{bone->getName()});
+                        _boneMask.push_back(bone->getName());
                     }
                 }
             }

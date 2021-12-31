@@ -94,8 +94,8 @@ public:
      */
     VertexAttribBinding* getVertexAttributeBinding() const;
 
-    void setName(std::string_view name) { _name = name; }
-    std::string_view getName() const { return _name; }
+    void setName(const std::string& name) { _name = name; }
+    const std::string& getName() const { return _name; }
 
     inline RenderState::StateBlock& getStateBlock() { return _renderState._state; }
 

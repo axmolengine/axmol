@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -113,23 +113,23 @@ public:
     /**
      * @private
      */
-    hlookup::string_map<BoneData*> bones;
+    std::map<std::string, BoneData*> bones;
     /**
      * @private
      */
-    hlookup::string_map<SlotData*> slots;
+    std::map<std::string, SlotData*> slots;
     /**
      * @private
      */
-    hlookup::string_map<ConstraintData*> constraints;
+    std::map<std::string, ConstraintData*> constraints;
     /**
      * @private
      */
-    hlookup::string_map<SkinData*> skins;
+    std::map<std::string, SkinData*> skins;
     /**
      * @private
      */
-    hlookup::string_map<AnimationData*> animations;
+    std::map<std::string, AnimationData*> animations;
     /**
      * - The default skin data.
      * @version DragonBones 4.5
@@ -223,7 +223,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline BoneData* getBone(std::string_view boneName) const { return mapFind(bones, boneName); }
+    inline BoneData* getBone(const std::string& boneName) const { return mapFind<BoneData>(bones, boneName); }
     /**
      * - Get a specific slot data.
      * @param slotName - The slot name.
@@ -236,13 +236,13 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline SlotData* getSlot(std::string_view slotName) const { return mapFind(slots, slotName); }
+    inline SlotData* getSlot(const std::string& slotName) const { return mapFind<SlotData>(slots, slotName); }
     /**
      * @private
      */
-    inline ConstraintData* getConstraint(std::string_view constraintName) const
+    inline ConstraintData* getConstraint(const std::string& constraintName) const
     {
-        return mapFind(constraints, constraintName);
+        return mapFind<ConstraintData>(constraints, constraintName);
     }
     /**
      * - Get a specific skin data.
@@ -256,11 +256,13 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline SkinData* getSkin(std::string_view skinName) const { return mapFind(skins, skinName); }
+    inline SkinData* getSkin(const std::string& skinName) const { return mapFind(skins, skinName); }
     /**
      * @private
      */
-    MeshDisplayData* getMesh(std::string_view skinName, std::string_view slotName, std::string_view meshName) const;
+    MeshDisplayData* getMesh(const std::string& skinName,
+                             const std::string& slotName,
+                             const std::string& meshName) const;
     /**
      * - Get a specific animation data.
      * @param animationName - The animation animationName.
@@ -273,7 +275,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline AnimationData* getAnimation(std::string_view animationName) const
+    inline AnimationData* getAnimation(const std::string& animationName) const
     {
         return mapFind(animations, animationName);
     }

@@ -53,7 +53,7 @@ Scale9Sprite* Scale9Sprite::create()
     return nullptr;
 }
 
-Scale9Sprite* Scale9Sprite::create(std::string_view filename, const Rect& rect, const Rect& capInsets)
+Scale9Sprite* Scale9Sprite::create(const std::string& filename, const Rect& rect, const Rect& capInsets)
 {
     Scale9Sprite* ret = new Scale9Sprite();
     if (ret->initWithFile(filename, rect, capInsets))
@@ -65,12 +65,12 @@ Scale9Sprite* Scale9Sprite::create(std::string_view filename, const Rect& rect, 
     return nullptr;
 }
 
-Scale9Sprite* Scale9Sprite::create(std::string_view filename, const Rect& rect)
+Scale9Sprite* Scale9Sprite::create(const std::string& filename, const Rect& rect)
 {
     return create(filename, rect, Rect::ZERO);
 }
 
-Scale9Sprite* Scale9Sprite::create(const Rect& capInsets, std::string_view file)
+Scale9Sprite* Scale9Sprite::create(const Rect& capInsets, const std::string& file)
 {
     Scale9Sprite* ret = new Scale9Sprite();
     if (ret->initWithFile(capInsets, file))
@@ -82,7 +82,7 @@ Scale9Sprite* Scale9Sprite::create(const Rect& capInsets, std::string_view file)
     return nullptr;
 }
 
-Scale9Sprite* Scale9Sprite::create(std::string_view fileaname)
+Scale9Sprite* Scale9Sprite::create(const std::string& fileaname)
 {
     return create(Rect::ZERO, fileaname);
 }
@@ -104,7 +104,7 @@ Scale9Sprite* Scale9Sprite::createWithSpriteFrame(SpriteFrame* spriteFrame)
     return createWithSpriteFrame(spriteFrame, Rect::ZERO);
 }
 
-Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(std::string_view spriteFrameName, const Rect& capInsets)
+Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(const std::string& spriteFrameName, const Rect& capInsets)
 {
     Scale9Sprite* ret = new Scale9Sprite();
     if (ret->initWithSpriteFrameName(spriteFrameName, capInsets))
@@ -116,7 +116,7 @@ Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(std::string_view spriteFra
     return nullptr;
 }
 
-Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(std::string_view spriteFrameName)
+Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(const std::string& spriteFrameName)
 {
     Scale9Sprite* ret = new Scale9Sprite();
     if (ret->initWithSpriteFrameName(spriteFrameName, Rect::ZERO))
@@ -142,7 +142,7 @@ Scale9Sprite::Scale9Sprite()
 
 Scale9Sprite::~Scale9Sprite() {}
 
-bool Scale9Sprite::initWithFile(const Rect& capInsets, std::string_view file)
+bool Scale9Sprite::initWithFile(const Rect& capInsets, const std::string& file)
 {
     // calls super
     bool ret = Sprite::initWithFile(file);
@@ -150,7 +150,7 @@ bool Scale9Sprite::initWithFile(const Rect& capInsets, std::string_view file)
     return ret;
 }
 
-bool Scale9Sprite::initWithFile(std::string_view filename)
+bool Scale9Sprite::initWithFile(const std::string& filename)
 {
     // calls super
     auto originalCapInsets = this->getCapInsets();
@@ -159,7 +159,7 @@ bool Scale9Sprite::initWithFile(std::string_view filename)
     return ret;
 }
 
-bool Scale9Sprite::initWithFile(std::string_view filename, const Rect& rect)
+bool Scale9Sprite::initWithFile(const std::string& filename, const Rect& rect)
 {
     // calls super
     auto originalCapInsets = this->getCapInsets();
@@ -176,7 +176,7 @@ bool Scale9Sprite::initWithSpriteFrame(SpriteFrame* spriteFrame, const Rect& cap
     return ret;
 }
 
-bool Scale9Sprite::initWithSpriteFrameName(std::string_view spriteFrameName, const Rect& capInsets)
+bool Scale9Sprite::initWithSpriteFrameName(const std::string& spriteFrameName, const Rect& capInsets)
 {
     // calls super
     bool ret = Sprite::initWithSpriteFrameName(spriteFrameName);
@@ -184,7 +184,7 @@ bool Scale9Sprite::initWithSpriteFrameName(std::string_view spriteFrameName, con
     return ret;
 }
 
-bool Scale9Sprite::initWithSpriteFrameName(std::string_view spriteFrameName)
+bool Scale9Sprite::initWithSpriteFrameName(const std::string& spriteFrameName)
 {
     // calls super
     auto originalCapInsets = this->getCapInsets();
@@ -242,7 +242,7 @@ bool Scale9Sprite::init(Sprite* sprite,
     return ret;
 }
 
-bool Scale9Sprite::initWithFile(std::string_view filename, const Rect& rect, const Rect& capInsets)
+bool Scale9Sprite::initWithFile(const std::string& filename, const Rect& rect, const Rect& capInsets)
 {
     // calls super
     bool ret = false;

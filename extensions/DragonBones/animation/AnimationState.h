@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -251,7 +251,7 @@ private:
     std::vector<SlotTimelineState*> _slotTimelines;
     std::vector<ConstraintTimelineState*> _constraintTimelines;
     std::vector<std::pair<TimelineState*, BaseTimelineType>> _poseTimelines;
-    hlookup::string_map<BonePose*> _bonePoses;
+    std::map<std::string, BonePose*> _bonePoses;
     Armature* _armature;
     ZOrderTimelineState* _zOrderTimeline;
 
@@ -325,7 +325,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    bool containsBoneMask(std::string_view boneName) const;
+    bool containsBoneMask(const std::string& boneName) const;
     /**
      * - Add a specific bone mask.
      * @param boneName - The bone name.
@@ -340,7 +340,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    void addBoneMask(std::string_view boneName, bool recursive = true);
+    void addBoneMask(const std::string& boneName, bool recursive = true);
     /**
      * - Remove the mask of a specific bone.
      * @param boneName - The bone name.
@@ -355,7 +355,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    void removeBoneMask(std::string_view boneName, bool recursive = true);
+    void removeBoneMask(const std::string& boneName, bool recursive = true);
     /**
      * - Remove all bone masks.
      * @version DragonBones 3.0
@@ -456,7 +456,7 @@ public:
      */
     float getCurrentTime() const;
     void setCurrentTime(float value);
-    inline std::string_view getName() const { return name; }
+    inline const std::string& getName() const { return name; }
 
     /**
      * - The animation data.

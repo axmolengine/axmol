@@ -104,9 +104,10 @@ set(APP_SRC ${GAME_HEADER} ${GAME_SOURCE})
 
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${APP_SRC})
-    target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
 else()
     add_library(${APP_NAME} SHARED ${APP_SRC})
+    add_subdirectory(${ADXE_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/cpp-android)
+    target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
     add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/cocos/lua-android)
     if(${CMAKE_ANDROID_ARCH_ABI} STREQUAL "x86")
         #add `-Wl,--no-warn-shared-textrel` to fix warning "shared library text segment is not shareable clang"
@@ -115,11 +116,9 @@ else()
         target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
     endif()
 
-    # whole archive ${ADXE_LUA_LIB} to make sure JNI_Onload can be invoke from java
-    target_link_libraries(${APP_NAME} -Wl,--whole-archive ${ADXE_CORE_LIB} -Wl,--no-whole-archive)
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
-
+target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
 target_include_directories(${APP_NAME} PRIVATE Classes)
 
 if(WIN64)

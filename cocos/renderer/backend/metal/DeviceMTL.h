@@ -133,7 +133,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    virtual Program* newProgram(const std::string& vertexShader, const std::string& fragmentShader) override;
 
     /**
      * Get a MTLDevice object.
@@ -154,7 +154,7 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) override;
+    virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string& source) override;
 
 private:
     static CAMetalLayer* _metalLayer;

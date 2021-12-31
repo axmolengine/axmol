@@ -64,7 +64,7 @@ SpriteBatchNode* SpriteBatchNode::createWithTexture(Texture2D* tex, ssize_t capa
  * creation with File Image
  */
 
-SpriteBatchNode* SpriteBatchNode::create(std::string_view fileImage, ssize_t capacity /* = DEFAULT_CAPACITY*/)
+SpriteBatchNode* SpriteBatchNode::create(const std::string& fileImage, ssize_t capacity /* = DEFAULT_CAPACITY*/)
 {
     SpriteBatchNode* batchNode = new SpriteBatchNode();
     if (batchNode->initWithFile(fileImage, capacity))
@@ -168,7 +168,7 @@ bool SpriteBatchNode::init()
 /*
  * init with FileImage
  */
-bool SpriteBatchNode::initWithFile(std::string_view fileImage, ssize_t capacity /* = DEFAULT_CAPACITY*/)
+bool SpriteBatchNode::initWithFile(const std::string& fileImage, ssize_t capacity /* = DEFAULT_CAPACITY*/)
 {
     Texture2D* texture2D = _director->getTextureCache()->addImage(fileImage);
     return initWithTexture(texture2D, capacity);
@@ -236,7 +236,7 @@ void SpriteBatchNode::addChild(Node* child, int zOrder, int tag)
     appendChild(sprite);
 }
 
-void SpriteBatchNode::addChild(Node* child, int zOrder, std::string_view name)
+void SpriteBatchNode::addChild(Node* child, int zOrder, const std::string& name)
 {
     CCASSERT(child != nullptr, "child should not be null");
     CCASSERT(dynamic_cast<Sprite*>(child) != nullptr, "CCSpriteBatchNode only supports Sprites as children");

@@ -137,7 +137,7 @@ public:
 
     /* @brief Gets current version code.
      */
-    std::string_view getVersion();
+    std::string getVersion();
 
     /* @brief Deletes recorded version code.
      */

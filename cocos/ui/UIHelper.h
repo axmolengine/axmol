@@ -66,7 +66,7 @@ public:
      * @param name      The widget name.
      * @return Widget instance pointer.
      */
-    static Widget* seekWidgetByName(Widget* root, std::string_view name);
+    static Widget* seekWidgetByName(Widget* root, const std::string& name);
 
     /**
      * Find a widget with a specific action tag from root widget
@@ -87,7 +87,7 @@ public:
      * @return a UTF8 substring
      * @js NA
      */
-    static std::string getSubStringOfUTF8String(std::string_view str,
+    static std::string getSubStringOfUTF8String(const std::string& str,
                                                 std::string::size_type start,
                                                 std::string::size_type length);
 

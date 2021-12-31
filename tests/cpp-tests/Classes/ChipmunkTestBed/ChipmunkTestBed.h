@@ -20,9 +20,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//
-// cocos2d
-//
+ //
+ // cocos2d
+ //
 #ifndef __CHIPMUNKTESTBED_H__
 #define __CHIPMUNKTESTBED_H__
 
@@ -33,312 +33,290 @@
 
 #include "demo/ChipmunkDemo.h"
 
-class ChipmunkTestBed : public TestCase
-{
+class ChipmunkTestBed : public TestCase {
 public:
-    CREATE_FUNC(ChipmunkTestBed);
+	CREATE_FUNC(ChipmunkTestBed);
 
-    ChipmunkTestBed();
-    ~ChipmunkTestBed();
+	ChipmunkTestBed();
+	~ChipmunkTestBed();
 
-    void onEnter() override;
-    void createResetButton();
-    void reset(cocos2d::Ref* sender);
+	void onEnter() override;
+	void createResetButton();
+	void reset(cocos2d::Ref* sender);
 
-    void update(float dt) override;
-    virtual void initPhysics();
+	void update(float dt) override;
+	virtual void initPhysics();
 
-    void onMouseDown(cocos2d::Event* event);
-    void onMouseUp(cocos2d::Event* event);
-    void onMouseMove(cocos2d::Event* event);
-    void DrawInfo();
-    void updateInit(ChipmunkDemo tt);
+	void onMouseDown(cocos2d::Event* event);
+	void onMouseUp(cocos2d::Event* event);
+	void onMouseMove(cocos2d::Event* event);
+	void DrawInfo();
+	void updateInit(ChipmunkDemo tt);
 
-    cpSpace* _space;                                              // strong ref
-    cocos2d::extension::PhysicsDebugNodeChipmunk2D* _debugLayer;  // weak ref
-    int keyPresses;
-    bool mousePresses = false;
+	cpSpace* _space; // strong ref
+	cocos2d::extension::PhysicsDebugNodeChipmunk2D* _debugLayer; // weak ref
+	int keyPresses;
+	bool mousePresses = false;
 
 private:
-    cocos2d::EventListenerMouse* _mouseListener;
-    cocos2d::Node* _trackNode;
-    cocos2d::DrawNode* draw;
-    cocos2d::Label* drawInfo;
+	cocos2d::EventListenerMouse* _mouseListener;
+	cocos2d::Node* _trackNode;
+	cocos2d::DrawNode* draw;
+	cocos2d::Label* drawInfo;
+
 };
 
-class LogoSmashDemo : public ChipmunkTestBed
-{
+class LogoSmashDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(LogoSmashDemo);
-    std::string title() const override;
-    void onEnter() override;
+	CREATE_FUNC(LogoSmashDemo);
+	std::string title() const override;
+	void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class PlinkDemo : public ChipmunkTestBed
-{
+class PlinkDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(PlinkDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	CREATE_FUNC(PlinkDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class TumbleDemo : public ChipmunkTestBed
-{
-public:
-    CREATE_FUNC(TumbleDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+class TumbleDemo : public ChipmunkTestBed {
+public:
+	CREATE_FUNC(TumbleDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
+
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class PyramidStackDemo : public ChipmunkTestBed
-{
+class PyramidStackDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(PyramidStackDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(PyramidStackDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class PyramidToppleDemo : public ChipmunkTestBed
-{
+class PyramidToppleDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(PyramidToppleDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(PyramidToppleDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class ChainsDemo : public ChipmunkTestBed
-{
+class ChainsDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(ChainsDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(ChainsDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class OneWayDemo : public ChipmunkTestBed
-{
+class OneWayDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(OneWayDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(OneWayDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class PlanetDemo : public ChipmunkTestBed
-{
+class PlanetDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(PlanetDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(PlanetDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class TheoJansenDemo : public ChipmunkTestBed
-{
+class TheoJansenDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(TheoJansenDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(TheoJansenDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class TankDemo : public ChipmunkTestBed
-{
+class TankDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(TankDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(TankDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class BenchDemo : public ChipmunkTestBed
-{
+class BenchDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(BenchDemo);
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(BenchDemo);
+	virtual std::string title() const override;
+	virtual std::string subtitle() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class SpringiesDemo : public ChipmunkTestBed
-{
+class SpringiesDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(SpringiesDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(SpringiesDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class StickyDemo : public ChipmunkTestBed
-{
+class StickyDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(StickyDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(StickyDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class ShatterDemo : public ChipmunkTestBed
-{
+class ShatterDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(ShatterDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(ShatterDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class CraneDemo : public ChipmunkTestBed
-{
+class CraneDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(CraneDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(CraneDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class JointsDemo : public ChipmunkTestBed
-{
+class JointsDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(JointsDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(JointsDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class ConvexDemo : public ChipmunkTestBed
-{
+class ConvexDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(ConvexDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(ConvexDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class PumpDemo : public ChipmunkTestBed
-{
+class PumpDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(PumpDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(PumpDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class PlatformerPlayerDemo : public ChipmunkTestBed
-{
+class PlatformerPlayerDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(PlatformerPlayerDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(PlatformerPlayerDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class QueryDemo : public ChipmunkTestBed
-{
+class QueryDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(QueryDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(QueryDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class ContactGraphDemo : public ChipmunkTestBed
-{
-public:
-    CREATE_FUNC(ContactGraphDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+class ContactGraphDemo : public ChipmunkTestBed {
+public:
+	CREATE_FUNC(ContactGraphDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
+
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class BuoyancyDemo : public ChipmunkTestBed
-{
+class BuoyancyDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(BuoyancyDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(BuoyancyDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class SliceDemo : public ChipmunkTestBed
-{
+class SliceDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(SliceDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(SliceDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class UnicycleDemo : public ChipmunkTestBed
-{
+class UnicycleDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(UnicycleDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(UnicycleDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 
-class ExampleDemo : public ChipmunkTestBed
-{
+class ExampleDemo : public ChipmunkTestBed {
 public:
-    CREATE_FUNC(ExampleDemo);
-    virtual std::string title() const override;
-    virtual void onEnter() override;
+	CREATE_FUNC(ExampleDemo);
+	virtual std::string title() const override;
+	virtual void onEnter() override;
 
-    void initPhysics() override;
-    virtual void update(float dt) override;
+	void initPhysics() override;
+	virtual void update(float dt) override;
 };
 DEFINE_TEST_SUITE(ChipmunkTestBedTests);
 

@@ -39,6 +39,7 @@ public:
     virtual std::string title() const override;
 };
 
+
 class ConsoleCustomCommand : public BaseTestConsole
 {
 public:
@@ -52,7 +53,7 @@ protected:
     ConsoleCustomCommand();
     virtual ~ConsoleCustomCommand();
 
-    cocos2d::Console* _console;
+    cocos2d::Console *_console;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ConsoleCustomCommand);
@@ -72,11 +73,10 @@ protected:
     virtual ~ConsoleUploadFile();
 
     void uploadFile();
-
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ConsoleUploadFile);
 
     std::string _targetFileName;
 };
 
-#endif  // _CONSOLE_TEST_H_
+#endif // _CONSOLE_TEST_H_

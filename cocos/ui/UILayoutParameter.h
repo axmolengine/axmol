@@ -363,27 +363,27 @@ public:
      *
      * @param name Relative widget name.
      */
-    void setRelativeToWidgetName(std::string_view name);
+    void setRelativeToWidgetName(const std::string& name);
 
     /**
      * Get the relative widget name.
      * @return name A relative widget name in string.
      */
-    std::string_view getRelativeToWidgetName() const;
+    const std::string& getRelativeToWidgetName() const;
 
     /**
      * Set a name for LayoutParameter in Relative Layout.
      *
      * @param name A string name.
      */
-    void setRelativeName(std::string_view name);
+    void setRelativeName(const std::string& name);
 
     /**
      * Get a name of LayoutParameter in Relative Layout.
      *
      * @return name Relative name in string.
      */
-    std::string_view getRelativeName() const;
+    const std::string& getRelativeName() const;
 
     // override functions.
     virtual LayoutParameter* createCloneInstance() override;

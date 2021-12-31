@@ -68,7 +68,7 @@ public:
      * @param vertexShader Specifes the vertex shader source.
      * @param fragmentShader Specifes the fragment shader source.
      */
-    ProgramGL(std::string_view vertexShader, std::string_view fragmentShader);
+    ProgramGL(const std::string& vertexShader, const std::string& fragmentShader);
 
     ~ProgramGL();
 
@@ -89,7 +89,7 @@ public:
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    virtual UniformLocation getUniformLocation(std::string_view uniform) const override;
+    virtual UniformLocation getUniformLocation(const std::string& uniform) const override;
 
     /**
      * Get uniform location by engine built-in uniform enum name.
@@ -103,7 +103,7 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(std::string_view name) const override;
+    virtual int getAttributeLocation(const std::string& name) const override;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
@@ -128,7 +128,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    virtual const hlookup::string_map<AttributeBindInfo> getActiveAttributes() const override;
+    virtual const std::unordered_map<std::string, AttributeBindInfo> getActiveAttributes() const override;
 
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.
@@ -149,11 +149,12 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
+    virtual const std::unordered_map<std::string, UniformInfo>& getAllActiveUniformInfo(
+        ShaderStage stage) const override;
 
 private:
     void compileProgram();
-    bool getAttributeLocation(std::string_view attributeName, unsigned int& location) const;
+    bool getAttributeLocation(const std::string& attributeName, unsigned int& location) const;
     void computeUniformInfos();
     void computeLocations();
 #if CC_ENABLE_CACHE_TEXTURE_DATA
@@ -171,7 +172,7 @@ private:
     ShaderModuleGL* _fragmentShaderModule = nullptr;
 
     std::vector<AttributeInfo> _attributeInfos;
-    hlookup::string_map<UniformInfo> _activeUniformInfos;
+    std::unordered_map<std::string, UniformInfo> _activeUniformInfos;
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     std::unordered_map<std::string, int>
         _originalUniformLocations;  ///< record the uniform location when shader was first created.

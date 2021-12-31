@@ -30,7 +30,7 @@ NS_CC_BEGIN
 
 EventListenerCustom::EventListenerCustom() : _onCustomEvent(nullptr) {}
 
-EventListenerCustom* EventListenerCustom::create(std::string_view eventName,
+EventListenerCustom* EventListenerCustom::create(const std::string& eventName,
                                                  const std::function<void(EventCustom*)>& callback)
 {
     EventListenerCustom* ret = new EventListenerCustom();
@@ -45,7 +45,7 @@ EventListenerCustom* EventListenerCustom::create(std::string_view eventName,
     return ret;
 }
 
-bool EventListenerCustom::init(std::string_view listenerId, const std::function<void(EventCustom*)>& callback)
+bool EventListenerCustom::init(const ListenerID& listenerId, const std::function<void(EventCustom*)>& callback)
 {
     bool ret = false;
 

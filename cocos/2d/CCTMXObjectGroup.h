@@ -60,13 +60,13 @@ public:
      *
      * @return The group name.
      */
-    std::string_view getGroupName() const { return _groupName; }
+    const std::string& getGroupName() const { return _groupName; }
 
     /** Set the group name.
      *
      * @param groupName A string,it is used to set the group name.
      */
-    void setGroupName(std::string_view groupName) { _groupName = groupName; }
+    void setGroupName(const std::string& groupName) { _groupName = groupName; }
 
     /** Return the value for the specific property name.
      *
@@ -74,14 +74,14 @@ public:
      * @return Return the value for the specific property name.
      * @js NA
      */
-    Value getProperty(std::string_view propertyName) const;
+    Value getProperty(const std::string& propertyName) const;
 
     /** Return the dictionary for the specific object name.
      * It will return the 1st object found on the array for the given name.
      *
      * @return Return the dictionary for the specific object name.
      */
-    ValueMap getObject(std::string_view objectName) const;
+    ValueMap getObject(const std::string& objectName) const;
 
     /** Gets the offset position of child objects.
      *

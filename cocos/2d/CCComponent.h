@@ -60,8 +60,8 @@ public:
     bool isEnabled() const { return _enabled; }
     virtual void setEnabled(bool enabled);
 
-    std::string_view getName() const { return _name; }
-    virtual void setName(std::string_view name) { _name = name; }
+    const std::string& getName() const { return _name; }
+    virtual void setName(const std::string& name) { _name = name; }
 
     Node* getOwner() const { return _owner; }
     virtual void setOwner(Node* owner);

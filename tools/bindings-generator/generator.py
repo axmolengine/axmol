@@ -82,8 +82,6 @@ stl_type_map = {
     'std::unordered_map': 2,
     'std::unordered_multimap': 2,
     'std::map': 2,
-    'tsl::robin_map': 2,
-    'hlookup::string_map': 2,
     'std::multimap': 2,
     'std::vector': 1,
     'std::list': 1,
@@ -93,8 +91,6 @@ stl_type_map = {
     'std::multiset': 1,
     'std::unordered_set': 1,
     'std::unordered_multiset': 1,
-    'tsl::robin_set': 1,
-    'hlookup::string_set': 1,
     'std::stack': 1,
     'std::queue': 1,
     'std::deque': 1,
@@ -104,8 +100,6 @@ stl_type_map = {
     'unordered_multimap': 2,
     'map': 2,
     'multimap': 2,
-    'robin_map': 2,
-    'string_map': 2,
     'vector': 1,
     'list': 1,
     'forward_list': 1,
@@ -114,8 +108,6 @@ stl_type_map = {
     'multiset': 1,
     'unordered_set': 1,
     'unordered_multiset': 1,
-    'robin_set': 1,
-    'string_set': 1,
     'stack': 1,
     'queue': 1,
     'deque': 1,
@@ -229,23 +221,8 @@ def normalize_type_str(s, depth=1):
             return 'std::string' + last_section
         else:
             return 'std::string'
-
-    # for std::string_view
-    if sections[0] == 'const std::basic_string_view' or sections[0] == 'const basic_string_view':
-        last_section = sections[len(sections) - 1]
-        if last_section == '&' or last_section == '*' or last_section.startswith('::'):
-            return 'const std::string_view' + last_section
-        else:
-            return 'const std::string_view'
-
-    elif sections[0] == 'std::basic_string_view' or sections[0] == 'basic_string_view':
-        last_section = sections[len(sections) - 1]
-        if last_section == '&' or last_section == '*' or last_section.startswith('::'):
-            return 'std::string_view' + last_section
-        else:
-            return 'std::string_view'        
            
-    # for compatible cxx17::string_view
+    # for string_view
     if sections[0] == 'const cxx17::basic_string_view' or sections[0] == 'const basic_string_view':
         last_section = sections[len(sections) - 1]
         if last_section == '&' or last_section == '*' or last_section.startswith('::'):
@@ -478,8 +455,6 @@ class NativeType(object):
                 and not nt.namespaced_name.startswith('std::function') \
                 and not nt.namespaced_name.startswith('std::string') \
                 and not nt.namespaced_name.startswith('std::basic_string') \
-                and not nt.namespaced_name.startswith('std::string_view') \
-                and not nt.namespaced_name.startswith('std::basic_string_view') \
                 and not nt.namespaced_name.startswith('cxx17::string_view') \
                 and not nt.namespaced_name.startswith('cxx17::basic_string_view'):
                 nt.is_object = True
@@ -659,12 +634,6 @@ class NativeType(object):
         return "#pragma warning NO CONVERSION TO NATIVE FOR " + self.name + "\n" + convert_opts['level'] * "\t" +  "ok = false"
 
     def to_string(self, generator):
-
-        if self.name.find("robin_map<std::string, ") == 0:
-            self.name = self.name.replace(">", ", hlookup::string_hash, hlookup::equal_to>")
-            self.namespaced_name = self.namespaced_name.replace(">", ", hlookup::string_hash, hlookup::equal_to>")
-            self.whole_name = self.whole_name.replace(">", ", hlookup::string_hash, hlookup::equal_to>")
-
         conversions = generator.config['conversions']
         if conversions.has_key('native_types'):
             native_types_dict = conversions['native_types']
@@ -709,9 +678,6 @@ class NativeType(object):
 
         if to_replace:
             name = to_replace
-
-        if name.find("tsl::robin_map<std::string, ") >= 0:
-            name = name.replace(">", ", hlookup::string_hash, hlookup::equal_to>")
 
         return name
 
@@ -1662,8 +1628,6 @@ class Generator(object):
         if namespace_class_name.find("::") >= 0:
             if namespace_class_name.find("std::") == 0 or namespace_class_name.find("cxx17::") == 0:
                 return namespace_class_name
-            if namespace_class_name.find("tsl::") == 0 or namespace_class_name.find("hlookup::") == 0:
-                return namespace_class_name
             else:
                 raise Exception("The namespace (%s) conversion wasn't set in 'ns_map' section of the conversions.yaml" % namespace_class_name)
         else:
@@ -1673,8 +1637,6 @@ class Generator(object):
         script_ns_dict = self.config['conversions']['ns_map']
         for (k, v) in script_ns_dict.items():
             if namespace_class_name.find("std::") == 0 or namespace_class_name.find("cxx17::") == 0:
-                return False
-            if namespace_class_name.find("tsl::") == 0 or namespace_class_name.find("hlookup::") == 0:
                 return False
             if namespace_class_name.find(k) >= 0:
                 return True
@@ -1697,8 +1659,6 @@ class Generator(object):
                 return "Array"
             if namespace_class_name.find("std::map") == 0 or namespace_class_name.find("std::unordered_map") == 0:
                 return "map_object"
-            if namespace_class_name.find("tsl::robin_") >= 0 or namespace_class_name.find("hlookup::string_map") == 0:
-                return "map_object"
             if namespace_class_name.find("std::function") == 0:
                 return "function"
 
@@ -1714,7 +1674,7 @@ class Generator(object):
                     return "mat4_object"
                 if namespace_class_name.find("cocos2d::Vector") == 0:
                     return "Array"
-                if namespace_class_name.find("cocos2d::Map") == 0 or namespace_class_name.find("cocos2d::StringMap") == 0:
+                if namespace_class_name.find("cocos2d::Map") == 0:
                     return "map_object"
                 if namespace_class_name.find("cocos2d::Point")  == 0:
                     return "point_object"
@@ -1743,8 +1703,6 @@ class Generator(object):
                 return "array_table"
             if namespace_class_name.find("std::map") == 0 or namespace_class_name.find("std::unordered_map") == 0:
                 return "map_table"
-            if namespace_class_name.find("tsl::robin_") >= 0 or namespace_class_name.find("hlookup::string_map") == 0:
-                return "map_table"
             if namespace_class_name.find("std::function") == 0:
                 return "function"
 
@@ -1760,7 +1718,7 @@ class Generator(object):
                     return "array_table"
                 if namespace_class_name.find("cocos2d::Mat4") == 0:
                     return "mat4_table"
-                if namespace_class_name.find("cocos2d::Map") == 0 or namespace_class_name.find("cocos2d::StringMap") == 0:
+                if namespace_class_name.find("cocos2d::Map") == 0:
                     return "map_table"
                 if namespace_class_name.find("cocos2d::Point")  == 0:
                     return "point_table"
@@ -1804,7 +1762,7 @@ class Generator(object):
         if self.is_cocos_class(namespace_class_name):
             if namespace_class_name.find("cocos2d::Vector") >=0:
                 return "new Array()"
-            if namespace_class_name.find("cocos2d::Map") >=0 or namespace_class_name.find("cocos2d::StringMap") >=0:
+            if namespace_class_name.find("cocos2d::Map") >=0:
                 return "map_object"
             if is_enum:
                 return 0
@@ -1829,8 +1787,6 @@ class Generator(object):
             return "new Array()"
 
         if lower_name.find("std::map") >= 0 or lower_name.find("std::unordered_map") >= 0 or lower_name.find("unordered_map") >= 0 or lower_name.find("map") >= 0:
-            return "map_object"
-        if lower_name.find("robin_") >= 0:
             return "map_object"
 
         if lower_name == "std::function":

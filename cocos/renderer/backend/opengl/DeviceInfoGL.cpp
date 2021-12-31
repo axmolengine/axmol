@@ -169,7 +169,7 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
     return featureSupported;
 }
 
-bool DeviceInfoGL::checkForGLExtension(std::string_view searchName) const
+bool DeviceInfoGL::checkForGLExtension(const std::string& searchName) const
 {
     return _glExtensions.find(searchName) != std::string::npos;
 }

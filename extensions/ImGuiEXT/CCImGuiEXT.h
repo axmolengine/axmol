@@ -50,10 +50,10 @@ public:
     /// </summary>
     /// <param name="fontFile"></param>
     /// <param name="glyphRange"></param>
-    void addFont(std::string_view fontFile,
+    void addFont(const std::string& fontFile,
                  float fontSize             = DEFAULT_FONT_SIZE,
                  CHS_GLYPH_RANGE glyphRange = CHS_GLYPH_RANGE::NONE);
-    void removeFont(std::string_view fontFile);
+    void removeFont(const std::string& fontFile);
     void clearFonts();
 
     /// <summary>
@@ -62,13 +62,13 @@ public:
     /// <param name="id">The FOURCC id of render loop, starts with '#', such as "#abcd"</id>
     /// <param name="func">the ImGui render loop</param>
     /// <param name="target">The target scene to track event, nullptr for global, useful for global GM tools</param>
-    bool addRenderLoop(std::string_view id, std::function<void()> func, Scene* target);
+    bool addRenderLoop(const std::string& id, std::function<void()> func, Scene* target);
 
     /// <summary>
     /// Remove ImGui render loop
     /// </summary>
     /// <param name="id">FOURCC starts with '#', such as "#abcd"</id>
-    void removeRenderLoop(std::string_view id);
+    void removeRenderLoop(const std::string& id);
 
     void end();
 
@@ -112,7 +112,7 @@ public:
     static void setLabelColor(Label* label, bool disabled = false);
     static void setLabelColor(Label* label, ImGuiCol col);
 
-    ImWchar* addGlyphRanges(std::string_view key, const std::vector<ImWchar>& ranges);
+    ImWchar* addGlyphRanges(const std::string& key, const std::vector<ImWchar>& ranges);
     static void mergeFontGlyphs(ImFont* dst, ImFont* src, ImWchar start, ImWchar end);
     int getCCRefId(Ref* p);
 
@@ -126,8 +126,8 @@ public:
     void setMarkdownLinkCallback(const MdLinkCallback& f);
     void setMarkdownImageCallback(const MdImageCallback& f);
     void setMarkdownFont(int index, ImFont* font, bool seperator, float scale = 1.f);
-    void setMarkdownLinkIcon(std::string_view icon);
-    void markdown(std::string_view content);
+    void setMarkdownLinkIcon(const std::string& icon);
+    void markdown(const std::string& content);
 #endif
 
 private:
@@ -154,7 +154,7 @@ private:
     std::unordered_map<Ref*, int> usedCCRefIdMap;
     // cocos objects should be retained until next frame
     Vector<Ref*> usedCCRef;
-    hlookup::string_map<std::vector<ImWchar>> glyphRanges;
+    std::unordered_map<std::string, std::vector<ImWchar>> glyphRanges;
 
     float _contentZoomFactor = 1.0f;
 
@@ -168,7 +168,7 @@ private:
         CHS_GLYPH_RANGE glyphRange;
     };
 
-    hlookup::string_map<FontInfo> _fontsInfoMap;
+    std::unordered_map<std::string, FontInfo> _fontsInfoMap;
 
     bool _purgeNextLoop = false;
 };

@@ -63,7 +63,7 @@ public:
      * @param   filename A path to image file, e.g., "scene1/monster.png"
      * @return  An autoreleased BillBoard object.
      */
-    static BillBoard* create(std::string_view filename, Mode mode = Mode::VIEW_POINT_ORIENTED);
+    static BillBoard* create(const std::string& filename, Mode mode = Mode::VIEW_POINT_ORIENTED);
 
     /**
      * Creates a BillBoard with an image filename and a rect.
@@ -72,7 +72,7 @@ public:
      * @param   rect     A subrect of the image file
      * @return  An autoreleased BillBoard object
      */
-    static BillBoard* create(std::string_view filename, const Rect& rect, Mode mode = Mode::VIEW_POINT_ORIENTED);
+    static BillBoard* create(const std::string& filename, const Rect& rect, Mode mode = Mode::VIEW_POINT_ORIENTED);
 
     /**
      * Creates a BillBoard with a Texture2D object.

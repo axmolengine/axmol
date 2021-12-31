@@ -32,12 +32,12 @@ int lua_cocos2dx_3d_Animation3D_initWithFile(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string_view arg0;
-        std::string_view arg1;
+        std::string arg0;
+        std::string arg1;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Animation3D:initWithFile");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Animation3D:initWithFile");
 
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.Animation3D:initWithFile");
+        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.Animation3D:initWithFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Animation3D_initWithFile'", nullptr);
@@ -172,8 +172,8 @@ int lua_cocos2dx_3d_Animation3D_create(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Animation3D:create");
+        std::string arg0;
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Animation3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Animation3D_create'", nullptr);
@@ -185,10 +185,10 @@ int lua_cocos2dx_3d_Animation3D_create(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        std::string_view arg0;
-        std::string_view arg1;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Animation3D:create");
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.Animation3D:create");
+        std::string arg0;
+        std::string arg1;
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Animation3D:create");
+        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.Animation3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Animation3D_create'", nullptr);
@@ -1341,18 +1341,18 @@ int lua_cocos2dx_3d_TextureCube_create(lua_State* tolua_S)
 
     if (argc == 6)
     {
-        std::string_view arg0;
-        std::string_view arg1;
-        std::string_view arg2;
-        std::string_view arg3;
-        std::string_view arg4;
-        std::string_view arg5;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.TextureCube:create");
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.TextureCube:create");
-        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "cc.TextureCube:create");
-        ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "cc.TextureCube:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "cc.TextureCube:create");
-        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "cc.TextureCube:create");
+        std::string arg0;
+        std::string arg1;
+        std::string arg2;
+        std::string arg3;
+        std::string arg4;
+        std::string arg5;
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.TextureCube:create");
+        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.TextureCube:create");
+        ok &= luaval_to_std_string(tolua_S, 4,&arg2, "cc.TextureCube:create");
+        ok &= luaval_to_std_string(tolua_S, 5,&arg3, "cc.TextureCube:create");
+        ok &= luaval_to_std_string(tolua_S, 6,&arg4, "cc.TextureCube:create");
+        ok &= luaval_to_std_string(tolua_S, 7,&arg5, "cc.TextureCube:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_TextureCube_create'", nullptr);
@@ -1641,8 +1641,8 @@ int lua_cocos2dx_3d_BillBoard_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.BillBoard:create");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.BillBoard:create");
             if (!ok) { break; }
             cocos2d::BillBoard* ret = cocos2d::BillBoard::create(arg0);
             object_to_luaval<cocos2d::BillBoard>(tolua_S, "cc.BillBoard",(cocos2d::BillBoard*)ret);
@@ -1654,8 +1654,8 @@ int lua_cocos2dx_3d_BillBoard_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.BillBoard:create");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.BillBoard:create");
             if (!ok) { break; }
             cocos2d::BillBoard::Mode arg1;
             ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.BillBoard:create");
@@ -1693,8 +1693,8 @@ int lua_cocos2dx_3d_BillBoard_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.BillBoard:create");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.BillBoard:create");
             if (!ok) { break; }
             cocos2d::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.BillBoard:create");
@@ -1709,8 +1709,8 @@ int lua_cocos2dx_3d_BillBoard_create(lua_State* tolua_S)
     {
         if (argc == 3)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.BillBoard:create");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.BillBoard:create");
             if (!ok) { break; }
             cocos2d::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.BillBoard:create");
@@ -2071,8 +2071,8 @@ int lua_cocos2dx_3d_Mesh_getName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Mesh_getName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getName();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getName();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Mesh:getName",argc, 0);
@@ -2325,9 +2325,9 @@ int lua_cocos2dx_3d_Mesh_setName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Mesh:setName");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Mesh:setName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Mesh_setName'", nullptr);
@@ -2938,9 +2938,9 @@ int lua_cocos2dx_3d_Skeleton3D_getBoneByName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Skeleton3D:getBoneByName");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Skeleton3D:getBoneByName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Skeleton3D_getBoneByName'", nullptr);
@@ -3392,24 +3392,24 @@ int lua_cocos2dx_3d_Skybox_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 6) 
     {
-        std::string_view arg0;
-        std::string_view arg1;
-        std::string_view arg2;
-        std::string_view arg3;
-        std::string_view arg4;
-        std::string_view arg5;
+        std::string arg0;
+        std::string arg1;
+        std::string arg2;
+        std::string arg3;
+        std::string arg4;
+        std::string arg5;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Skybox:init");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Skybox:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.Skybox:init");
+        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.Skybox:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "cc.Skybox:init");
+        ok &= luaval_to_std_string(tolua_S, 4,&arg2, "cc.Skybox:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "cc.Skybox:init");
+        ok &= luaval_to_std_string(tolua_S, 5,&arg3, "cc.Skybox:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "cc.Skybox:init");
+        ok &= luaval_to_std_string(tolua_S, 6,&arg4, "cc.Skybox:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "cc.Skybox:init");
+        ok &= luaval_to_std_string(tolua_S, 7,&arg5, "cc.Skybox:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Skybox_init'", nullptr);
@@ -3497,23 +3497,23 @@ int lua_cocos2dx_3d_Skybox_create(lua_State* tolua_S)
     {
         if (argc == 6)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Skybox:create");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Skybox:create");
             if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.Skybox:create");
+            std::string arg1;
+            ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.Skybox:create");
             if (!ok) { break; }
-            std::string_view arg2;
-            ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "cc.Skybox:create");
+            std::string arg2;
+            ok &= luaval_to_std_string(tolua_S, 4,&arg2, "cc.Skybox:create");
             if (!ok) { break; }
-            std::string_view arg3;
-            ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "cc.Skybox:create");
+            std::string arg3;
+            ok &= luaval_to_std_string(tolua_S, 5,&arg3, "cc.Skybox:create");
             if (!ok) { break; }
-            std::string_view arg4;
-            ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "cc.Skybox:create");
+            std::string arg4;
+            ok &= luaval_to_std_string(tolua_S, 6,&arg4, "cc.Skybox:create");
             if (!ok) { break; }
-            std::string_view arg5;
-            ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "cc.Skybox:create");
+            std::string arg5;
+            ok &= luaval_to_std_string(tolua_S, 7,&arg5, "cc.Skybox:create");
             if (!ok) { break; }
             cocos2d::Skybox* ret = cocos2d::Skybox::create(arg0, arg1, arg2, arg3, arg4, arg5);
             object_to_luaval<cocos2d::Skybox>(tolua_S, "cc.Skybox",(cocos2d::Skybox*)ret);
@@ -3685,8 +3685,8 @@ int lua_cocos2dx_3d_Sprite3D_setTexture(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite3D:setTexture");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Sprite3D:setTexture");
 
             if (!ok) { break; }
             cobj->setTexture(arg0);
@@ -4321,9 +4321,9 @@ int lua_cocos2dx_3d_Sprite3D_getAttachNode(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite3D:getAttachNode");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Sprite3D:getAttachNode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Sprite3D_getAttachNode'", nullptr);
@@ -4532,9 +4532,9 @@ int lua_cocos2dx_3d_Sprite3D_removeAttachNode(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite3D:removeAttachNode");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Sprite3D:removeAttachNode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Sprite3D_removeAttachNode'", nullptr);
@@ -4679,9 +4679,9 @@ int lua_cocos2dx_3d_Sprite3D_getMeshByName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite3D:getMeshByName");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Sprite3D:getMeshByName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Sprite3D_getMeshByName'", nullptr);
@@ -4719,8 +4719,8 @@ int lua_cocos2dx_3d_Sprite3D_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite3D:create");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Sprite3D:create");
             if (!ok) { break; }
             cocos2d::Sprite3D* ret = cocos2d::Sprite3D::create(arg0);
             object_to_luaval<cocos2d::Sprite3D>(tolua_S, "cc.Sprite3D",(cocos2d::Sprite3D*)ret);
@@ -4742,11 +4742,11 @@ int lua_cocos2dx_3d_Sprite3D_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite3D:create");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Sprite3D:create");
             if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.Sprite3D:create");
+            std::string arg1;
+            ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.Sprite3D:create");
             if (!ok) { break; }
             cocos2d::Sprite3D* ret = cocos2d::Sprite3D::create(arg0, arg1);
             object_to_luaval<cocos2d::Sprite3D>(tolua_S, "cc.Sprite3D",(cocos2d::Sprite3D*)ret);
@@ -4832,9 +4832,9 @@ int lua_cocos2dx_3d_Sprite3DCache_removeSprite3DData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite3DCache:removeSprite3DData");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Sprite3DCache:removeSprite3DData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Sprite3DCache_removeSprite3DData'", nullptr);
@@ -5092,8 +5092,8 @@ int lua_cocos2dx_3d_Sprite3DMaterial_createWithFilename(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite3DMaterial:createWithFilename");
+        std::string arg0;
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Sprite3DMaterial:createWithFilename");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Sprite3DMaterial_createWithFilename'", nullptr);
@@ -5316,9 +5316,9 @@ int lua_cocos2dx_3d_Terrain_initHeightMap(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Terrain:initHeightMap");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Terrain:initHeightMap");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Terrain_initHeightMap'", nullptr);
@@ -5567,9 +5567,9 @@ int lua_cocos2dx_3d_Terrain_resetHeightMap(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Terrain:resetHeightMap");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Terrain:resetHeightMap");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Terrain_resetHeightMap'", nullptr);
@@ -6026,8 +6026,8 @@ int lua_cocos2dx_3d_Terrain_getTerrainSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Terrain_getTerrainSize'", nullptr);
             return 0;
         }
-        cocos2d::Vec2 ret = cobj->getTerrainSize();
-        vec2_to_luaval(tolua_S, ret);
+        cocos2d::Size ret = cobj->getTerrainSize();
+        size_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Terrain:getTerrainSize",argc, 0);
@@ -6221,9 +6221,9 @@ int lua_cocos2dx_3d_Terrain_setLightMap(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Terrain:setLightMap");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Terrain:setLightMap");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Terrain_setLightMap'", nullptr);
@@ -6494,9 +6494,9 @@ int lua_cocos2dx_3d_Bundle3D_load(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Bundle3D:load");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Bundle3D:load");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Bundle3D_load'", nullptr);
@@ -6544,10 +6544,10 @@ int lua_cocos2dx_3d_Bundle3D_loadSkinData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string_view arg0;
+        std::string arg0;
         cocos2d::SkinData* arg1;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Bundle3D:loadSkinData");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Bundle3D:loadSkinData");
 
         #pragma warning NO CONVERSION TO NATIVE FOR SkinData*
 		ok = false;
@@ -6747,10 +6747,10 @@ int lua_cocos2dx_3d_Bundle3D_loadAnimationData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string_view arg0;
+        std::string arg0;
         cocos2d::Animation3DData* arg1;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Bundle3D:loadAnimationData");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Bundle3D:loadAnimationData");
 
         #pragma warning NO CONVERSION TO NATIVE FOR Animation3DData*
 		ok = false;
@@ -6790,8 +6790,8 @@ int lua_cocos2dx_3d_Bundle3D_parseSamplerAddressMode(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Bundle3D:parseSamplerAddressMode");
+        std::string arg0;
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Bundle3D:parseSamplerAddressMode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Bundle3D_parseSamplerAddressMode'", nullptr);
@@ -6896,9 +6896,9 @@ int lua_cocos2dx_3d_Bundle3D_parseGLDataType(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        std::string_view arg0;
+        std::string arg0;
         int arg1;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Bundle3D:parseGLDataType");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.Bundle3D:parseGLDataType");
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.Bundle3D:parseGLDataType");
         if(!ok)
         {

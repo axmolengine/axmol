@@ -108,7 +108,7 @@ public:
      * @param capInsets A specified cap insets.
      * @return A Scale9Sprite instance.
      */
-    static Scale9Sprite* create(std::string_view file, const Rect& rect, const Rect& capInsets);
+    static Scale9Sprite* create(const std::string& file, const Rect& rect, const Rect& capInsets);
 
     /**
      * Creates a 9-slice sprite with a texture file. The whole texture will be
@@ -119,7 +119,7 @@ public:
      * @param file A texture file name.
      * @return A Scale9Sprite instance.
      */
-    static Scale9Sprite* create(const Rect& capInsets, std::string_view file);
+    static Scale9Sprite* create(const Rect& capInsets, const std::string& file);
 
     /**
      * Creates a 9-slice sprite with a texture file and a delimitation zone. The
@@ -130,7 +130,7 @@ public:
      * @param rect A delimitation zone.
      * @return A Scale9Sprite instance.
      */
-    static Scale9Sprite* create(std::string_view file, const Rect& rect);
+    static Scale9Sprite* create(const std::string& file, const Rect& rect);
 
     /**
      * Creates a 9-slice sprite with a texture file. The whole texture will be
@@ -140,7 +140,7 @@ public:
      * @param file A texture file name.
      * @return A Scale9Sprite instance.
      */
-    static Scale9Sprite* create(std::string_view file);
+    static Scale9Sprite* create(const std::string& file);
 
     /**
      * Creates a 9-slice sprite with an sprite frame.
@@ -177,7 +177,7 @@ public:
      * @param spriteFrameName A sprite frame name.
      * @return A Scale9Sprite instance.
      */
-    static Scale9Sprite* createWithSpriteFrameName(std::string_view spriteFrameName);
+    static Scale9Sprite* createWithSpriteFrameName(const std::string& spriteFrameName);
 
     /**
      * Creates a 9-slice sprite with an sprite frame name and the centre of its zone.
@@ -190,7 +190,7 @@ public:
      * @param capInsets A delimitation zone.
      * @return A Scale9Sprite instance.
      */
-    static Scale9Sprite* createWithSpriteFrameName(std::string_view spriteFrameName, const Rect& capInsets);
+    static Scale9Sprite* createWithSpriteFrameName(const std::string& spriteFrameName, const Rect& capInsets);
 
     // overridden methods that takes different parameters
     using Sprite::initWithFile;
@@ -212,7 +212,7 @@ public:
      * @param capInsets The values to use for the cap insets.
      * @return True if initialize success, false otherwise.
      */
-    virtual bool initWithFile(std::string_view file, const Rect& rect, const Rect& capInsets);
+    virtual bool initWithFile(const std::string& file, const Rect& rect, const Rect& capInsets);
 
     /**
      * Initializes a 9-slice sprite with a texture file and with the specified cap
@@ -225,7 +225,7 @@ public:
      * @param capInsets The values to use for the cap insets.
      * @return True if initializes success, false otherwise.
      */
-    virtual bool initWithFile(const Rect& capInsets, std::string_view file);
+    virtual bool initWithFile(const Rect& capInsets, const std::string& file);
 
     /**
      * Initializes a 9-slice sprite with an sprite frame and with the specified
@@ -251,7 +251,7 @@ public:
      * @param capInsets The values to use for the cap insets.
      * @return True if initializes success, false otherwise.
      */
-    virtual bool initWithSpriteFrameName(std::string_view spriteFrameName, const Rect& capInsets);
+    virtual bool initWithSpriteFrameName(const std::string& spriteFrameName, const Rect& capInsets);
 
     // override function
 
@@ -268,7 +268,7 @@ public:
      * texture's full rect.
      * @return True if initializes success, false otherwise.
      */
-    virtual bool initWithFile(std::string_view file, const Rect& rect) override;
+    virtual bool initWithFile(const std::string& file, const Rect& rect) override;
 
     /**
      * Initializes a 9-slice sprite with a texture file. The whole texture will be
@@ -280,7 +280,7 @@ public:
      * @param file The name of the texture file.
      * @return True if initializes success, false otherwise.
      */
-    virtual bool initWithFile(std::string_view file) override;
+    virtual bool initWithFile(const std::string& file) override;
 
     /**
      * Initializes a 9-slice sprite with an sprite frame name.
@@ -291,7 +291,7 @@ public:
      * @param spriteFrameName The sprite frame name.
      * @return True if initializes success, false otherwise.
      */
-    virtual bool initWithSpriteFrameName(std::string_view spriteFrameName) override;
+    virtual bool initWithSpriteFrameName(const std::string& spriteFrameName) override;
 
     virtual bool init() override;
 

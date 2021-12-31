@@ -308,13 +308,13 @@ public:
      *
      * @param viewname A string will be set to the view as name.
      */
-    virtual void setViewName(std::string_view viewname);
+    virtual void setViewName(const std::string& viewname);
 
     /** Get the view name.
      *
      * @return The view name.
      */
-    std::string_view getViewName() const;
+    const std::string& getViewName() const;
 
     /** Touch events are handled by default; if you want to customize your handlers, please override this function.
      *
@@ -367,14 +367,14 @@ public:
      *
      * @param filename A path to image file, e.g., "icons/cusom.png".
      */
-    virtual void setIcon(std::string_view filename) const {};
+    virtual void setIcon(const std::string& filename) const {};
 
     /** Set window icon (implemented for windows and linux).
      * Best icon (based on size) will be auto selected.
      *
      * @param filelist The array contains icons.
      */
-    virtual void setIcon(const std::vector<std::string_view>& filelist) const {};
+    virtual void setIcon(const std::vector<std::string>& filelist) const {};
 
     /** Set default window icon (implemented for windows and linux).
      * On windows it will use icon from .exe file (if included).

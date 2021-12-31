@@ -66,7 +66,7 @@ public:
      * @param rect A specified rect.
      * @return An autoreleased SpriteFrame object.
      */
-    static SpriteFrame* create(std::string_view filename, const Rect& rect);
+    static SpriteFrame* create(const std::string& filename, const Rect& rect);
 
     /** Create a SpriteFrame with a texture filename, rect, rotated, offset and originalSize in pixels.
      The originalSize is the size in pixels of the frame before being trimmed.
@@ -78,7 +78,7 @@ public:
      * @param originalSize A specified original size.
      * @return An autoreleased SpriteFrame object.
      */
-    static SpriteFrame* create(std::string_view filename,
+    static SpriteFrame* create(const std::string& filename,
                                const Rect& rect,
                                bool rotated,
                                const Vec2& offset,
@@ -279,7 +279,7 @@ public:
     /** Initializes a SpriteFrame with a texture filename, rect in points;
      It is assumed that the frame was not trimmed.
      */
-    bool initWithTextureFilename(std::string_view filename, const Rect& rect);
+    bool initWithTextureFilename(const std::string& filename, const Rect& rect);
 
     /** Initializes a SpriteFrame with a texture, rect, rotated, offset and originalSize in pixels.
      The originalSize is the size in points of the frame before being trimmed.
@@ -295,7 +295,7 @@ public:
 
      @since v1.1
      */
-    bool initWithTextureFilename(std::string_view filename,
+    bool initWithTextureFilename(const std::string& filename,
                                  const Rect& rect,
                                  bool rotated,
                                  const Vec2& offset,

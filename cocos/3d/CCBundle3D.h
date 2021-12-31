@@ -64,32 +64,32 @@ public:
      * get define data type
      * @param str The type in string
      */
-    static backend::VertexFormat parseGLDataType(std::string_view str, int size);
+    static backend::VertexFormat parseGLDataType(const std::string& str, int size);
 
     /**
      * get define data type
      * @param str The type in string
      */
-    static backend::SamplerAddressMode parseSamplerAddressMode(std::string_view str);
+    static backend::SamplerAddressMode parseSamplerAddressMode(const std::string& str);
 
     /**
      * load a file. You must load a file first, then call loadMeshData, loadSkinData, and so on
      * @param path File to be loaded
      * @return result of load
      */
-    virtual bool load(std::string_view path);
+    virtual bool load(const std::string& path);
 
     /**
      * load skin data from bundle
      * @param id The ID of the skin, load the first Skin in the bundle if it is empty
      */
-    virtual bool loadSkinData(std::string_view id, SkinData* skindata);
+    virtual bool loadSkinData(const std::string& id, SkinData* skindata);
 
     /**
      * load material data from bundle
      * @param id The ID of the animation, load the first animation in the bundle if it is empty
      */
-    virtual bool loadAnimationData(std::string_view id, Animation3DData* animationdata);
+    virtual bool loadAnimationData(const std::string& id, Animation3DData* animationdata);
 
     // since 3.3, to support reskin
     virtual bool loadMeshDatas(MeshDatas& meshdatas);
@@ -102,21 +102,21 @@ public:
      * load triangle list
      * @param path the file path to load
      */
-    static std::vector<Vec3> getTrianglesList(std::string_view path);
+    static std::vector<Vec3> getTrianglesList(const std::string& path);
 
     // load .obj file
     static bool loadObj(MeshDatas& meshdatas,
                         MaterialDatas& materialdatas,
                         NodeDatas& nodedatas,
-                        std::string_view fullPath,
+                        const std::string& fullPath,
                         const char* mtl_basepath = nullptr);
 
     // calculate aabb
     static AABB calculateAABB(const std::vector<float>& vertex, int stride, const std::vector<unsigned short>& index);
 
 protected:
-    bool loadJson(std::string_view path);
-    bool loadBinary(std::string_view path);
+    bool loadJson(const std::string& path);
+    bool loadBinary(const std::string& path);
     bool loadMeshDatasJson(MeshDatas& meshdatas);
     bool loadMeshDataJson_0_1(MeshDatas& meshdatas);
     bool loadMeshDataJson_0_2(MeshDatas& meshdatas);
@@ -137,8 +137,8 @@ protected:
     bool loadMaterialDataJson(MaterialData* materialdata);
     bool loadMaterialDataJson_0_1(MaterialData* materialdata);
     bool loadMaterialDataJson_0_2(MaterialData* materialdata);
-    bool loadAnimationDataJson(std::string_view id, Animation3DData* animationdata);
-    bool loadAnimationDataBinary(std::string_view id, Animation3DData* animationdata);
+    bool loadAnimationDataJson(const std::string& id, Animation3DData* animationdata);
+    bool loadAnimationDataBinary(const std::string& id, Animation3DData* animationdata);
 
     /**
      * load nodes of json
@@ -156,26 +156,26 @@ protected:
      * get define data type
      * @param str The type in string
      */
-    NTextureData::Usage parseGLTextureType(std::string_view str);
+    NTextureData::Usage parseGLTextureType(const std::string& str);
 
     /**
      * get vertex attribute type
      * @param str The type in string
      */
-    shaderinfos::VertexKey parseGLProgramAttribute(std::string_view str);
+    shaderinfos::VertexKey parseGLProgramAttribute(const std::string& str);
 
     /*
      * get model path
      * @param str Full path of model file
      */
-    void getModelRelativePath(std::string_view path);
+    void getModelRelativePath(const std::string& path);
 
     /*
      * set the read position in buffer to the target type
      * @param The data type
      * @param The data id
      */
-    Reference* seekToFirstType(unsigned int type, std::string_view id = "");
+    Reference* seekToFirstType(unsigned int type, const std::string& id = "");
 
     CC_CONSTRUCTOR_ACCESS : Bundle3D();
     virtual ~Bundle3D();

@@ -97,7 +97,7 @@ public:
     @param param The parameters of agent.
     */
     static NavMeshAgent* create(const NavMeshAgentParam& param);
-    static std::string_view getNavMeshAgentComponentName();
+    static const std::string& getNavMeshAgentComponentName();
 
     virtual void onEnter() override;
     virtual void onExit() override;

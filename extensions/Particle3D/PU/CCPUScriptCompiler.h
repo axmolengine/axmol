@@ -72,7 +72,7 @@ public:
 class CC_EX_DLL PUObjectAbstractNode : public PUAbstractNode
 {
 private:
-    hlookup::string_map<std::string> _env;
+    std::unordered_map<std::string, std::string> _env;
 
 public:
     std::string name, cls;
@@ -88,10 +88,10 @@ public:
     PUAbstractNode* clone() const;
     std::string getValue() const;
 
-    void addVariable(std::string_view name);
-    void setVariable(std::string_view name, std::string_view value);
-    std::pair<bool, std::string> getVariable(std::string_view name) const;
-    const hlookup::string_map<std::string>& getVariables() const;
+    void addVariable(const std::string& name);
+    void setVariable(const std::string& name, const std::string& value);
+    std::pair<bool, std::string> getVariable(const std::string& name) const;
+    const std::unordered_map<std::string, std::string>& getVariables() const;
 };
 
 /** This abstract node represents a script property */
@@ -130,9 +130,9 @@ class CC_EX_DLL PUScriptCompiler
 {
 
 private:
-    hlookup::string_map<PUAbstractNodeList>::iterator compile(const PUConcreteNodeList& nodes, std::string_view file);
+    bool compile(const PUConcreteNodeList& nodes, const std::string& file);
     // is it excluded?//
-    bool isNameExcluded(std::string_view cls, PUAbstractNode* parent);
+    bool isNameExcluded(const std::string& cls, PUAbstractNode* parent);
 
 public:
     typedef std::unordered_map<std::string, unsigned int> IdMap;
@@ -141,7 +141,7 @@ public:
 
     void setParticleSystem3D(PUParticleSystem3D* pu);
 
-    const PUAbstractNodeList* compile(std::string_view file, bool& isFirstCompile);
+    const PUAbstractNodeList* compile(const std::string& file, bool& isFirstCompile);
 
     void convertToAST(const PUConcreteNodeList& nodes, PUAbstractNodeList& aNodes);
 
@@ -155,7 +155,7 @@ private:
     void visit(PUConcreteNode* node);
 
 private:
-    hlookup::string_map<PUAbstractNodeList> _compiledScripts;
+    std::unordered_map<std::string, PUAbstractNodeList> _compiledScripts;
     PUAbstractNode* _current;
     PUAbstractNodeList* _nodes;
     PUParticleSystem3D* _PUParticleSystem3D;

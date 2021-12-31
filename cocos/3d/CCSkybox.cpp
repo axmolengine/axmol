@@ -41,12 +41,12 @@ Skybox::~Skybox()
     _texture->release();
 }
 
-Skybox* Skybox::create(std::string_view positive_x,
-                       std::string_view negative_x,
-                       std::string_view positive_y,
-                       std::string_view negative_y,
-                       std::string_view positive_z,
-                       std::string_view negative_z)
+Skybox* Skybox::create(const std::string& positive_x,
+                       const std::string& negative_x,
+                       const std::string& positive_y,
+                       const std::string& negative_y,
+                       const std::string& positive_z,
+                       const std::string& negative_z)
 {
     auto ret = new Skybox();
     ret->init(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
@@ -90,12 +90,12 @@ bool Skybox::init()
     return true;
 }
 
-bool Skybox::init(std::string_view positive_x,
-                  std::string_view negative_x,
-                  std::string_view positive_y,
-                  std::string_view negative_y,
-                  std::string_view positive_z,
-                  std::string_view negative_z)
+bool Skybox::init(const std::string& positive_x,
+                  const std::string& negative_x,
+                  const std::string& positive_y,
+                  const std::string& negative_y,
+                  const std::string& positive_z,
+                  const std::string& negative_z)
 {
     auto texture = TextureCube::create(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
     if (texture == nullptr)

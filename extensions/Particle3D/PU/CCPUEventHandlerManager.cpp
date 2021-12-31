@@ -44,7 +44,7 @@ PUEventHandlerManager* PUEventHandlerManager::Instance()
     return &pem;
 }
 
-PUScriptTranslator* PUEventHandlerManager::getTranslator(std::string_view type)
+PUScriptTranslator* PUEventHandlerManager::getTranslator(const std::string& type)
 {
     if (type == "DoAffector")
     {
@@ -77,7 +77,7 @@ PUScriptTranslator* PUEventHandlerManager::getTranslator(std::string_view type)
     return nullptr;
 }
 
-PUEventHandler* PUEventHandlerManager::createEventHandler(std::string_view type)
+PUEventHandler* PUEventHandlerManager::createEventHandler(const std::string& type)
 {
     if (type == "DoAffector")
     {

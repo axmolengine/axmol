@@ -75,7 +75,7 @@ public:
     MaterialReader() {}
     virtual ~MaterialReader() {}
 
-    virtual std::string operator()(std::string_view matId,
+    virtual std::string operator()(const std::string& matId,
                                    std::vector<material_t>& materials,
                                    std::map<std::string, int>& matMap) = 0;
 };
@@ -83,9 +83,9 @@ public:
 class MaterialFileReader : public MaterialReader
 {
 public:
-    MaterialFileReader(std::string_view mtl_basepath) : m_mtlBasePath(mtl_basepath) {}
+    MaterialFileReader(const std::string& mtl_basepath) : m_mtlBasePath(mtl_basepath) {}
     virtual ~MaterialFileReader() {}
-    virtual std::string operator()(std::string_view matId,
+    virtual std::string operator()(const std::string& matId,
                                    std::vector<material_t>& materials,
                                    std::map<std::string, int>& matMap);
 

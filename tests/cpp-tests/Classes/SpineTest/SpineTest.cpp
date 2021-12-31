@@ -34,6 +34,7 @@ using namespace cocos2d;
 using namespace std;
 using namespace spine;
 
+
 #define NUM_SKELETONS 50
 #define SPINE_NODE_SCALE_FACTOR 0.4
 
@@ -43,12 +44,9 @@ PowInterpolation pow2(2);
 PowOutInterpolation powOut2(2);
 SwirlVertexEffect effect(400, powOut2);
 
-#define SCALE_SKELETON_NODE(node)                    \
-    do                                               \
-    {                                                \
-        if (node)                                    \
-            node->setScale(SPINE_NODE_SCALE_FACTOR); \
-    } while (false)
+
+
+#define SCALE_SKELETON_NODE(node) do { if(node) node->setScale(SPINE_NODE_SCALE_FACTOR); } while(false)
 
 //------------------------------------------------------------------
 //
@@ -56,9 +54,10 @@ SwirlVertexEffect effect(400, powOut2);
 //
 //------------------------------------------------------------------
 
+
 SpineTests::SpineTests()
 {
-    auto fu      = FileUtils::getInstance();
+    auto fu = FileUtils::getInstance();
     _searchPaths = fu->getSearchPaths();
     fu->addSearchPath("spine", true);
 
@@ -88,24 +87,27 @@ SpineTests::~SpineTests()
 #endif
 }
 
-SpineTestLayer::SpineTestLayer() : _title("") {}
+SpineTestLayer::SpineTestLayer()
+: _title("")
+{}
 
-SpineTestLayer::~SpineTestLayer() {}
-
-std::string SpineTestLayer::title() const
+SpineTestLayer::~SpineTestLayer()
 {
-    return _title;
+
 }
 
+std::string SpineTestLayer::title() const
+ {
+     return _title;
+ }
+
 bool SpineTestLayer::init()
-{
-    if (!TestCase::init())
-        return false;
+{   
+    if (!TestCase::init()) return false;
 
     EventListenerTouchOneByOne* listener = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan               = [this](Touch* touch, cocos2d::Event* event) -> bool {
-        if (!skeletonNode)
-            return true;
+    listener->onTouchBegan = [this](Touch* touch, cocos2d::Event* event) -> bool {
+        if (!skeletonNode) return true;
         _touchIndex = (_touchIndex + 1) % 3;
         if (_touchIndex == 0)
         {
@@ -132,11 +134,9 @@ bool SpineTestLayer::init()
 }
 
 // BatchingExample
-bool BatchingExample::init()
-{
-    if (!SpineTestLayer::init())
-        return false;
-
+bool BatchingExample::init () {
+    if (!SpineTestLayer::init()) return false;
+    
     _title = "Batching";
 
     _atlas = new (__FILE__, __LINE__) Atlas("spineboy.atlas", &textureLoader, true);
@@ -148,10 +148,9 @@ bool BatchingExample::init()
 
     // Load the skeleton data.
     SkeletonJson* json = new (__FILE__, __LINE__) SkeletonJson(_attachmentLoader);
-    json->setScale(0.6f);  // Resizes skeleton data to 60% of the size it was in Spine.
+    json->setScale(0.6f); // Resizes skeleton data to 60% of the size it was in Spine.
     _skeletonData = json->readSkeletonDataFile("spineboy-pro.json");
-    CCASSERT(_skeletonData,
-             (json->getError().isEmpty() ? json->getError().buffer() : "Error reading skeleton data file."));
+    CCASSERT(_skeletonData, (json->getError().isEmpty() ? json->getError().buffer() : "Error reading skeleton data file."));
     delete json;
 
     // Setup mix times.
@@ -161,8 +160,7 @@ bool BatchingExample::init()
 
     int xMin = _contentSize.width * 0.10f, xMax = _contentSize.width * 0.90f;
     int yMin = 0, yMax = _contentSize.height * 0.7f;
-    for (int i = 0; i < NUM_SKELETONS; i++)
-    {
+    for (int i = 0; i < NUM_SKELETONS; i++) {
         // Each skeleton node shares the same atlas, skeleton data, and mix times.
         SkeletonAnimation* skeletonNode = SkeletonAnimation::createWithData(_skeletonData, false);
         skeletonNode->setAnimationStateData(_stateData);
@@ -174,19 +172,22 @@ bool BatchingExample::init()
         // alternative setting two color tint for groups of 10 skeletons
         // should end up with #skeletons / 10 batches
         // if (j++ < 10)
-        //			skeletonNode->setTwoColorTint(true);
-        //		if (j == 20) j = 0;
+//			skeletonNode->setTwoColorTint(true);
+//		if (j == 20) j = 0;
         // skeletonNode->setTwoColorTint(true);
 
-        skeletonNode->setPosition(Vec2(RandomHelper::random_int(xMin, xMax), RandomHelper::random_int(yMin, yMax)));
+        skeletonNode->setPosition(Vec2(
+            RandomHelper::random_int(xMin, xMax),
+            RandomHelper::random_int(yMin, yMax)
+        ));
         addChild(skeletonNode);
     }
     SCALE_SKELETON_NODE(skeletonNode);
     return true;
 }
 
-BatchingExample::~BatchingExample()
-{
+
+BatchingExample::~BatchingExample() {
     // SkeletonAnimation instances are cocos2d-x nodes and are disposed of automatically as normal, but the data created
     // manually to be shared across multiple SkeletonAnimations needs to be disposed of manually.
 
@@ -196,13 +197,13 @@ BatchingExample::~BatchingExample()
     delete _atlas;
 }
 
-bool CoinExample::init()
-{
 
-    if (!SpineTestLayer::init())
-        return false;
+bool CoinExample::init() {
+    
+    if (!SpineTestLayer::init()) return false;
 
     _title = "Coin";
+
 
     skeletonNode = SkeletonAnimation::createWithBinaryFile("coin-pro.skel", "coin.atlas", 1);
     skeletonNode->setAnimation(0, "animation", true);
@@ -215,12 +216,12 @@ bool CoinExample::init()
     return true;
 }
 
-bool GoblinsExample::init()
-{
-    if (!SpineTestLayer::init())
-        return false;
 
-    _title       = "Goblins";
+
+bool GoblinsExample::init() {
+    if (!SpineTestLayer::init()) return false;
+
+    _title = "Goblins";
     skeletonNode = SkeletonAnimation::createWithJsonFile("goblins-pro.json", "goblins.atlas", 1.5f);
     skeletonNode->setAnimation(0, "walk", true);
     skeletonNode->setSkin("goblin");
@@ -231,10 +232,9 @@ bool GoblinsExample::init()
     return true;
 }
 
-bool IKExample::init()
-{
-    if (!SpineTestLayer::init())
-        return false;
+
+bool IKExample::init() {
+    if (!SpineTestLayer::init()) return false;
 
     _title = "IKExample";
 
@@ -262,11 +262,11 @@ bool IKExample::init()
     // the current mouse location. The location is converted
     // to the skeleton's coordinate system.
     EventListenerMouse* mouseListener = EventListenerMouse::create();
-    mouseListener->onMouseMove        = [this](cocos2d::Event* event) -> void {
+    mouseListener->onMouseMove = [this](cocos2d::Event* event) -> void {
         // convert the mosue location to the skeleton's coordinate space
         // and store it.
         EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
-        position               = skeletonNode->convertToNodeSpace(mouseEvent->getLocationInView());
+        position = skeletonNode->convertToNodeSpace(mouseEvent->getLocationInView());
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
@@ -284,7 +284,7 @@ bool IKExample::init()
     // again so the change of the IK target position is
     // applied to the rest of the skeleton.
     skeletonNode->setPostUpdateWorldTransformsListener([this](SkeletonAnimation* node) -> void {
-        Bone* crosshair = node->findBone("crosshair");  // The bone should be cached
+        Bone* crosshair = node->findBone("crosshair"); // The bone should be cached
         float localX = 0, localY = 0;
         crosshair->getParent()->worldToLocal(position.x, position.y, localX, localY);
         crosshair->setX(localX);
@@ -292,23 +292,22 @@ bool IKExample::init()
         crosshair->setAppliedValid(false);
 
         node->getSkeleton()->updateWorldTransform();
-    });
+        });
 
     SCALE_SKELETON_NODE(skeletonNode);
     return true;
 }
 
-MixAndMatchExample::~MixAndMatchExample()
-{
+
+
+MixAndMatchExample::~MixAndMatchExample() {
     delete skin;
     delete skin2;
 }
 
-bool MixAndMatchExample::init()
-{
-    if (!SpineTestLayer::init())
-        return false;
-
+bool MixAndMatchExample::init() {
+    if (!SpineTestLayer::init()) return false;
+    
     _title = "Mix and Match";
 
     skeletonNode = SkeletonAnimation::createWithBinaryFile("mix-and-match-pro.skel", "mix-and-match.atlas", 0.5);
@@ -319,7 +318,7 @@ bool MixAndMatchExample::init()
     // skins. Using the skin API, a new skin is created which is
     // a combination of all these individual item skins.
     SkeletonData* skeletonData = skeletonNode->getSkeleton()->getData();
-    skin                       = new (__FILE__, __LINE__) Skin("mix-and-match");
+    skin = new (__FILE__, __LINE__) Skin("mix-and-match");
     skin->addSkin(skeletonData->findSkin("skin-base"));
     skin->addSkin(skeletonData->findSkin("nose/short"));
     skin->addSkin(skeletonData->findSkin("eyelids/girly"));
@@ -331,7 +330,7 @@ bool MixAndMatchExample::init()
     skin->addSkin(skeletonData->findSkin("accessories/hat-red-yellow"));
     skeletonNode->getSkeleton()->setSkin(skin);
 
-    skeletonNode->setPosition(Vec2(_contentSize.width / 3, _contentSize.height / 2 - 100));
+    skeletonNode->setPosition(Vec2(_contentSize.width / 3, _contentSize.height / 2 - 100 ));
     addChild(skeletonNode);
 
     SCALE_SKELETON_NODE(skeletonNode);
@@ -347,7 +346,7 @@ bool MixAndMatchExample::init()
     // skins. Using the skin API, a new skin is created which is
     // a combination of all these individual item skins.
     SkeletonData* skeletonData2 = skeletonNode->getSkeleton()->getData();
-    skin2                       = new (__FILE__, __LINE__) Skin("mix-and-match");
+    skin2 = new (__FILE__, __LINE__) Skin("mix-and-match");
     skin2->addSkin(skeletonData->findSkin("skin-base"));
     skin2->addSkin(skeletonData->findSkin("nose/short"));
     skin2->addSkin(skeletonData->findSkin("eyelids/girly"));
@@ -368,12 +367,11 @@ bool MixAndMatchExample::init()
     return true;
 }
 
-bool RaptorExample::init()
-{
-    if (!SpineTestLayer::init())
-        return false;
 
-    _title       = "Raptor";
+bool RaptorExample::init() {
+    if (!SpineTestLayer::init()) return false;
+
+    _title = "Raptor";
     skeletonNode = SkeletonAnimation::createWithJsonFile("raptor-pro.json", "raptor.atlas", 0.5f);
     skeletonNode->setAnimation(0, "walk", true);
     skeletonNode->addAnimation(1, "gun-grab", false, 2);
@@ -393,20 +391,16 @@ bool RaptorExample::init()
     return true;
 }
 
-void RaptorExample::update(float fDelta)
-{
+void RaptorExample::update(float fDelta) {
     swirlTime += fDelta;
     float percent = spine::MathUtil::fmod(swirlTime, 2);
-    if (percent > 1)
-        percent = 1 - (percent - 1);
+    if (percent > 1) percent = 1 - (percent - 1);
     effect.setAngle(pow2.interpolate(-60.0f, 60.0f, percent));
 }
 
-bool SkeletonRendererSeparatorExample::init()
-{
-    if (!SpineTestLayer::init())
-        return false;
-
+bool SkeletonRendererSeparatorExample::init() {
+    if (!SpineTestLayer::init()) return false;
+    
     _title = "Seperator";
 
     // Spineboy's back, which will manage the animation and GPU resources
@@ -414,8 +408,7 @@ bool SkeletonRendererSeparatorExample::init()
     skeletonNode = SkeletonAnimation::createWithJsonFile("spineboy-pro.json", "spineboy.atlas", 0.6f);
     skeletonNode->setMix("walk", "jump", 0.4);
     skeletonNode->setAnimation(0, "walk", true);
-    skeletonNode->setSlotsRange(skeletonNode->findSlot("rear-upper-arm")->getData().getIndex(),
-                                skeletonNode->findSlot("rear-shin")->getData().getIndex());
+    skeletonNode->setSlotsRange(skeletonNode->findSlot("rear-upper-arm")->getData().getIndex(), skeletonNode->findSlot("rear-shin")->getData().getIndex());
     skeletonNode->setPosition(Vec2(_contentSize.width / 2, 20));
 
     // A simple rectangle to go between the front and back slots of Spineboy
@@ -446,16 +439,14 @@ bool SkeletonRendererSeparatorExample::init()
     return true;
 }
 
-void SkeletonRendererSeparatorExample::update(float deltaTime)
-{
+void SkeletonRendererSeparatorExample::update(float deltaTime) {
     // Test releasing memory.
     // Director::getInstance()->replaceScene(SpineboyExample::scene());
 }
 
-bool SpineboyExample::init()
-{
-    if (!SpineTestLayer::init())
-        return false;
+
+bool SpineboyExample::init() {
+    if (!SpineTestLayer::init()) return false;
 
     _title = "Spineboy";
 
@@ -463,15 +454,22 @@ bool SpineboyExample::init()
 
     skeletonNode->setStartListener([](TrackEntry* entry) {
         log("%d start: %s", entry->getTrackIndex(), entry->getAnimation()->getName().buffer());
-    });
-    skeletonNode->setInterruptListener([](TrackEntry* entry) { log("%d interrupt", entry->getTrackIndex()); });
-    skeletonNode->setEndListener([](TrackEntry* entry) { log("%d end", entry->getTrackIndex()); });
-    skeletonNode->setCompleteListener([](TrackEntry* entry) { log("%d complete", entry->getTrackIndex()); });
-    skeletonNode->setDisposeListener([](TrackEntry* entry) { log("%d dispose", entry->getTrackIndex()); });
+        });
+    skeletonNode->setInterruptListener([](TrackEntry* entry) {
+        log("%d interrupt", entry->getTrackIndex());
+        });
+    skeletonNode->setEndListener([](TrackEntry* entry) {
+        log("%d end", entry->getTrackIndex());
+        });
+    skeletonNode->setCompleteListener([](TrackEntry* entry) {
+        log("%d complete", entry->getTrackIndex());
+        });
+    skeletonNode->setDisposeListener([](TrackEntry* entry) {
+        log("%d dispose", entry->getTrackIndex());
+        });
     skeletonNode->setEventListener([](TrackEntry* entry, spine::Event* event) {
-        log("%d event: %s, %d, %f, %s", entry->getTrackIndex(), event->getData().getName().buffer(),
-            event->getIntValue(), event->getFloatValue(), event->getStringValue().buffer());
-    });
+        log("%d event: %s, %d, %f, %s", entry->getTrackIndex(), event->getData().getName().buffer(), event->getIntValue(), event->getFloatValue(), event->getStringValue().buffer());
+        });
 
     skeletonNode->setMix("walk", "jump", 0.4);
     skeletonNode->setMix("jump", "run", 0.4);
@@ -479,11 +477,12 @@ bool SpineboyExample::init()
     TrackEntry* jumpEntry = skeletonNode->addAnimation(0, "jump", false, 1);
     skeletonNode->addAnimation(0, "run", true);
 
-    skeletonNode->setTrackStartListener(jumpEntry, [](TrackEntry* entry) { log("jumped!"); });
+    skeletonNode->setTrackStartListener(jumpEntry, [](TrackEntry* entry) {
+        log("jumped!");
+        });
 
     // skeletonNode->addAnimation(1, "test", true);
-    // skeletonNode->runAction(RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1),
-    // DelayTime::create(5), NULL)));
+    // skeletonNode->runAction(RepeatForever::create(Sequence::create(FadeOut::create(1), FadeIn::create(1), DelayTime::create(5), NULL)));
 
     skeletonNode->setPosition(Vec2(_contentSize.width / 2, 20));
     addChild(skeletonNode);
@@ -494,18 +493,16 @@ bool SpineboyExample::init()
     return true;
 }
 
-void SpineboyExample::update(float deltaTime)
-{
+void SpineboyExample::update(float deltaTime) {
     // Test releasing memory.
     // Director::getInstance()->replaceScene(SpineboyExample::scene());
 }
 
-bool TankExample::init()
-{
-    if (!SpineTestLayer::init())
-        return false;
 
-    _title       = "Tank";
+bool TankExample::init() {
+    if (!SpineTestLayer::init()) return false;
+
+    _title = "Tank";
     skeletonNode = SkeletonAnimation::createWithBinaryFile("tank-pro.skel", "tank.atlas", 0.5f);
     skeletonNode->setAnimation(0, "shoot", true);
 

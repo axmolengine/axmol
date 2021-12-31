@@ -72,7 +72,7 @@ Sprite* Sprite::createWithTexture(Texture2D* texture, const Rect& rect, bool rot
     return nullptr;
 }
 
-Sprite* Sprite::create(std::string_view filename)
+Sprite* Sprite::create(const std::string& filename)
 {
     Sprite* sprite = new Sprite();
     if (sprite->initWithFile(filename))
@@ -96,7 +96,7 @@ Sprite* Sprite::create(const PolygonInfo& info)
     return nullptr;
 }
 
-Sprite* Sprite::create(std::string_view filename, const Rect& rect)
+Sprite* Sprite::create(const std::string& filename, const Rect& rect)
 {
     Sprite* sprite = new Sprite();
     if (sprite->initWithFile(filename, rect))
@@ -120,13 +120,13 @@ Sprite* Sprite::createWithSpriteFrame(SpriteFrame* spriteFrame)
     return nullptr;
 }
 
-Sprite* Sprite::createWithSpriteFrameName(std::string_view spriteFrameName)
+Sprite* Sprite::createWithSpriteFrameName(const std::string& spriteFrameName)
 {
     SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
 
 #if COCOS2D_DEBUG > 0
     char msg[256] = {0};
-    sprintf(msg, "Invalid spriteFrameName: %s", spriteFrameName.data());
+    sprintf(msg, "Invalid spriteFrameName: %s", spriteFrameName.c_str());
     CCASSERT(frame != nullptr, msg);
 #endif
 
@@ -167,7 +167,7 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect)
     return initWithTexture(texture, rect, false);
 }
 
-bool Sprite::initWithFile(std::string_view filename)
+bool Sprite::initWithFile(const std::string& filename)
 {
     if (filename.empty())
     {
@@ -191,7 +191,7 @@ bool Sprite::initWithFile(std::string_view filename)
     return false;
 }
 
-bool Sprite::initWithFile(std::string_view filename, const Rect& rect)
+bool Sprite::initWithFile(const std::string& filename, const Rect& rect)
 {
     CCASSERT(!filename.empty(), "Invalid filename");
     if (filename.empty())
@@ -209,7 +209,7 @@ bool Sprite::initWithFile(std::string_view filename, const Rect& rect)
     return false;
 }
 
-bool Sprite::initWithSpriteFrameName(std::string_view spriteFrameName)
+bool Sprite::initWithSpriteFrameName(const std::string& spriteFrameName)
 {
     CCASSERT(!spriteFrameName.empty(), "Invalid spriteFrameName");
     if (spriteFrameName.empty())
@@ -332,7 +332,7 @@ static unsigned char cc_2x2_white_image[] = {
 #define CC_2x2_WHITE_IMAGE_KEY "/cc_2x2_white_image"
 
 // MARK: texture
-void Sprite::setTexture(std::string_view filename)
+void Sprite::setTexture(const std::string& filename)
 {
     Texture2D* texture = _director->getTextureCache()->addImage(filename);
     setTexture(texture);
@@ -1132,7 +1132,7 @@ void Sprite::addChild(Node* child, int zOrder, int tag)
     Node::addChild(child, zOrder, tag);
 }
 
-void Sprite::addChild(Node* child, int zOrder, std::string_view name)
+void Sprite::addChild(Node* child, int zOrder, const std::string& name)
 {
     CCASSERT(child != nullptr, "Argument must be non-nullptr");
     if (child == nullptr)
@@ -1539,7 +1539,7 @@ bool Sprite::isOpacityModifyRGB() const
 
 // MARK: Frames
 
-void Sprite::setSpriteFrame(std::string_view spriteFrameName)
+void Sprite::setSpriteFrame(const std::string& spriteFrameName)
 {
     CCASSERT(!spriteFrameName.empty(), "spriteFrameName must not be empty");
     if (spriteFrameName.empty())
@@ -1590,7 +1590,7 @@ void Sprite::setSpriteFrame(SpriteFrame* spriteFrame)
         setCenterRect(spriteFrame->getCenterRect());
 }
 
-void Sprite::setDisplayFrameWithAnimationName(std::string_view animationName, unsigned int frameIndex)
+void Sprite::setDisplayFrameWithAnimationName(const std::string& animationName, unsigned int frameIndex)
 {
     CCASSERT(!animationName.empty(), "CCSprite#setDisplayFrameWithAnimationName. animationName must not be nullptr");
     if (animationName.empty())

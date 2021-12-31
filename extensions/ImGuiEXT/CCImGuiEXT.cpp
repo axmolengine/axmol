@@ -5,12 +5,12 @@
 
 NS_CC_EXT_BEGIN
 
-static uint32_t fourccValue(std::string_view str)
+static uint32_t fourccValue(const std::string& str)
 {
     if (str.empty() || str[0] != '#')
         return (uint32_t)-1;
     uint32_t value = 0;
-    memcpy(&value, str.data() + 1, std::min(sizeof(value), str.size() - 1));
+    memcpy(&value, str.c_str() + 1, std::min(sizeof(value), str.size() - 1));
     return value;
 }
 
@@ -246,7 +246,7 @@ float ImGuiEXT::scaleAllByDPI(float userScale)
     return zoomFactor;
 }
 
-void ImGuiEXT::addFont(std::string_view fontFile, float fontSize, CHS_GLYPH_RANGE glyphRange)
+void ImGuiEXT::addFont(const std::string& fontFile, float fontSize, CHS_GLYPH_RANGE glyphRange)
 {
     if (FileUtils::getInstance()->isFileExistInternal(fontFile))
     {
@@ -255,7 +255,7 @@ void ImGuiEXT::addFont(std::string_view fontFile, float fontSize, CHS_GLYPH_RANG
     }
 }
 
-void ImGuiEXT::removeFont(std::string_view fontFile)
+void ImGuiEXT::removeFont(const std::string& fontFile)
 {
     auto count = _fontsInfoMap.size();
     _fontsInfoMap.erase(fontFile);
@@ -339,7 +339,7 @@ void ImGuiEXT::update()
     // commands will be processed after update
 }
 
-bool ImGuiEXT::addRenderLoop(std::string_view id, std::function<void()> func, Scene* target)
+bool ImGuiEXT::addRenderLoop(const std::string& id, std::function<void()> func, Scene* target)
 {
     // TODO: check whether exist
     auto fourccId = fourccValue(id);
@@ -362,7 +362,7 @@ bool ImGuiEXT::addRenderLoop(std::string_view id, std::function<void()> func, Sc
     return false;
 }
 
-void ImGuiEXT::removeRenderLoop(std::string_view id)
+void ImGuiEXT::removeRenderLoop(const std::string& id)
 {
     auto fourccId   = fourccValue(id);
     const auto iter = _renderPiplines.find(fourccId);
@@ -603,16 +603,16 @@ void ImGuiEXT::setLabelColor(Label* label, ImGuiCol col)
         setLabelColor(label, ImGui::GetStyleColorVec4(col));
 }
 
-ImWchar* ImGuiEXT::addGlyphRanges(std::string_view key, const std::vector<ImWchar>& ranges)
+ImWchar* ImGuiEXT::addGlyphRanges(const std::string& key, const std::vector<ImWchar>& ranges)
 {
     auto it = glyphRanges.find(key);
     // the pointer must be persistant, do not replace
     if (it != glyphRanges.end())
         return it->second.data();
-    it = glyphRanges.emplace(key, ranges).first;  // glyphRanges[key] = ranges;
+    glyphRanges[key] = ranges;
     if (ranges.empty())
-        it->second.push_back(0);
-    return it->second.data();
+        glyphRanges[key].push_back(0);
+    return glyphRanges[key].data();
 }
 
 void ImGuiEXT::mergeFontGlyphs(ImFont* dst, ImFont* src, ImWchar start, ImWchar end)
@@ -712,13 +712,13 @@ void ImGuiEXT::setMarkdownFont(int index, ImFont* font, bool seperator, float sc
     ImGuiMarkdownConfig.headingScales[index]  = scale;
 }
 
-void ImGuiEXT::setMarkdownLinkIcon(std::string_view icon)
+void ImGuiEXT::setMarkdownLinkIcon(const std::string& icon)
 {
     ImGuiMarkdownLinkIcon        = icon;
     ImGuiMarkdownConfig.linkIcon = ImGuiMarkdownLinkIcon.c_str();
 }
 
-void ImGuiEXT::markdown(std::string_view content)
+void ImGuiEXT::markdown(const std::string& content)
 {
     ImGui::Markdown(content.c_str(), content.size(), ImGuiMarkdownConfig);
 }

@@ -54,15 +54,15 @@ public:
     virtual bool init() override;
     virtual bool serialize(void* r) override;
 
-    void setInt(std::string_view key, int value);
-    void setFloat(std::string_view key, float value);
-    void setBool(std::string_view key, bool value);
-    void setString(std::string_view key, std::string_view value);
-    int getInt(std::string_view key, int def = 0) const;
-    float getFloat(std::string_view key, float def = 0.0f) const;
-    bool getBool(std::string_view key, bool def = false) const;
-    std::string getString(std::string_view key, std::string_view def = "") const;
-    bool parse(std::string_view jsonFile);
+    void setInt(const std::string& key, int value);
+    void setFloat(const std::string& key, float value);
+    void setBool(const std::string& key, bool value);
+    void setString(const std::string& key, const std::string& value);
+    int getInt(const std::string& key, int def = 0) const;
+    float getFloat(const std::string& key, float def = 0.0f) const;
+    bool getBool(const std::string& key, bool def = false) const;
+    std::string getString(const std::string& key, const std::string& def = "") const;
+    bool parse(const std::string& jsonFile);
 
 private:
     cocos2d::ValueMap _dict;

@@ -36,7 +36,7 @@ NS_CC_BEGIN
 
 // implementation TileMapAtlas
 
-TileMapAtlas* TileMapAtlas::create(std::string_view tile, std::string_view mapFile, int tileWidth, int tileHeight)
+TileMapAtlas* TileMapAtlas::create(const std::string& tile, const std::string& mapFile, int tileWidth, int tileHeight)
 {
     TileMapAtlas* ret = new TileMapAtlas();
     if (ret->initWithTileFile(tile, mapFile, tileWidth, tileHeight))
@@ -48,7 +48,7 @@ TileMapAtlas* TileMapAtlas::create(std::string_view tile, std::string_view mapFi
     return nullptr;
 }
 
-bool TileMapAtlas::initWithTileFile(std::string_view tile, std::string_view mapFile, int tileWidth, int tileHeight)
+bool TileMapAtlas::initWithTileFile(const std::string& tile, const std::string& mapFile, int tileWidth, int tileHeight)
 {
     this->loadTGAfile(mapFile);
     this->calculateItemsToRender();
@@ -100,7 +100,7 @@ void TileMapAtlas::calculateItemsToRender()
     }
 }
 
-void TileMapAtlas::loadTGAfile(std::string_view file)
+void TileMapAtlas::loadTGAfile(const std::string& file)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(file);
 

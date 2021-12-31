@@ -25,104 +25,109 @@
 class Platformer : public Test
 {
 public:
-    enum State
-    {
-        e_unknown,
-        e_above,
-        e_below
-    };
 
-    Platformer()
-    {
-        // Ground
-        {
-            b2BodyDef bd;
-            b2Body* ground = m_world->CreateBody(&bd);
+	enum State
+	{
+		e_unknown,
+		e_above,
+		e_below
+	};
 
-            b2EdgeShape shape;
-            shape.SetTwoSided(b2Vec2(-20.0f, 0.0f), b2Vec2(20.0f, 0.0f));
-            ground->CreateFixture(&shape, 0.0f);
-        }
+	Platformer()
+	{
+		// Ground
+		{
+			b2BodyDef bd;
+			b2Body* ground = m_world->CreateBody(&bd);
 
-        // Platform
-        {
-            b2BodyDef bd;
-            bd.position.Set(0.0f, 10.0f);
-            b2Body* body = m_world->CreateBody(&bd);
+			b2EdgeShape shape;
+			shape.SetTwoSided(b2Vec2(-20.0f, 0.0f), b2Vec2(20.0f, 0.0f));
+			ground->CreateFixture(&shape, 0.0f);
+		}
 
-            b2PolygonShape shape;
-            shape.SetAsBox(3.0f, 0.5f);
-            m_platform = body->CreateFixture(&shape, 0.0f);
+		// Platform
+		{
+			b2BodyDef bd;
+			bd.position.Set(0.0f, 10.0f);
+			b2Body* body = m_world->CreateBody(&bd);
 
-            m_bottom = 10.0f - 0.5f;
-            m_top    = 10.0f + 0.5f;
-        }
+			b2PolygonShape shape;
+			shape.SetAsBox(3.0f, 0.5f);
+			m_platform = body->CreateFixture(&shape, 0.0f);
 
-        // Actor
-        {
-            b2BodyDef bd;
-            bd.type = b2_dynamicBody;
-            bd.position.Set(0.0f, 12.0f);
-            b2Body* body = m_world->CreateBody(&bd);
+			m_bottom = 10.0f - 0.5f;
+			m_top = 10.0f + 0.5f;
+		}
 
-            m_radius = 0.5f;
-            b2CircleShape shape;
-            shape.m_radius = m_radius;
-            m_character    = body->CreateFixture(&shape, 20.0f);
+		// Actor
+		{
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(0.0f, 12.0f);
+			b2Body* body = m_world->CreateBody(&bd);
 
-            body->SetLinearVelocity(b2Vec2(0.0f, -50.0f));
+			m_radius = 0.5f;
+			b2CircleShape shape;
+			shape.m_radius = m_radius;
+			m_character = body->CreateFixture(&shape, 20.0f);
 
-            m_state = e_unknown;
-        }
-    }
+			body->SetLinearVelocity(b2Vec2(0.0f, -50.0f));
 
-    void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override
-    {
-        Test::PreSolve(contact, oldManifold);
+			m_state = e_unknown;
+		}
+	}
 
-        b2Fixture* fixtureA = contact->GetFixtureA();
-        b2Fixture* fixtureB = contact->GetFixtureB();
+	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override
+	{
+		Test::PreSolve(contact, oldManifold);
 
-        if (fixtureA != m_platform && fixtureA != m_character)
-        {
-            return;
-        }
+		b2Fixture* fixtureA = contact->GetFixtureA();
+		b2Fixture* fixtureB = contact->GetFixtureB();
 
-        if (fixtureB != m_platform && fixtureB != m_character)
-        {
-            return;
-        }
+		if (fixtureA != m_platform && fixtureA != m_character)
+		{
+			return;
+		}
+
+		if (fixtureB != m_platform && fixtureB != m_character)
+		{
+			return;
+		}
 
 #if 1
-        b2Vec2 position = m_character->GetBody()->GetPosition();
+		b2Vec2 position = m_character->GetBody()->GetPosition();
 
-        if (position.y < m_top + m_radius - 3.0f * b2_linearSlop)
-        {
-            contact->SetEnabled(false);
-        }
+		if (position.y < m_top + m_radius - 3.0f * b2_linearSlop)
+		{
+			contact->SetEnabled(false);
+		}
 #else
         b2Vec2 v = m_character->GetBody()->GetLinearVelocity();
         if (v.y > 0.0f)
-        {
+		{
             contact->SetEnabled(false);
         }
 #endif
-    }
+	}
 
-    void Step(Settings& settings) override
-    {
-        Test::Step(settings);
+	void Step(Settings& settings) override
+	{
+		Test::Step(settings);
 
-        b2Vec2 v = m_character->GetBody()->GetLinearVelocity();
+		b2Vec2 v = m_character->GetBody()->GetLinearVelocity();
         DrawString(5, m_textLine, "Character Linear Velocity: %f", v.y);
-    }
+		
+	}
 
-    static Test* Create() { return new Platformer; }
+	static Test* Create()
+	{
+		return new Platformer;
+	}
 
-    float m_radius, m_top, m_bottom;
-    State m_state;
-    b2Fixture* m_platform;
-    b2Fixture* m_character;
+	float m_radius, m_top, m_bottom;
+	State m_state;
+	b2Fixture* m_platform;
+	b2Fixture* m_character;
 };
 
 static int testIndex = RegisterTest("Examples", "Platformer", Platformer::Create);

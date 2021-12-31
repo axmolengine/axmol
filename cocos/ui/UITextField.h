@@ -74,7 +74,7 @@ public:
      *@param fontSize Font size in float.
      *@return A UICCTextField instance.
      */
-    static UICCTextField* create(std::string_view placeholder, std::string_view fontName, float fontSize);
+    static UICCTextField* create(const std::string& placeholder, const std::string& fontName, float fontSize);
 
     // override functions
     virtual bool onTextFieldAttachWithIME(TextFieldTTF* pSender) override;
@@ -142,14 +142,14 @@ public:
      *
      * @param styleText The styleText for password mask, the default value is "*".
      */
-    void setPasswordStyleText(std::string_view styleText);
+    void setPasswordStyleText(const std::string& styleText);
 
     /**
      * @brief Set the password text content.
      *
      * @param text The content of password.
      */
-    void setPasswordText(std::string_view text);
+    void setPasswordText(const std::string& text);
 
     /**
      * @brief Toggle attach with IME.
@@ -270,7 +270,7 @@ public:
      * @param fontSize The font size.
      * @return A TextField instance.
      */
-    static TextField* create(std::string_view placeholder, std::string_view fontName, int fontSize);
+    static TextField* create(const std::string& placeholder, const std::string& fontName, int fontSize);
 
     /**
      * @brief Set the touch size
@@ -300,14 +300,14 @@ public:
      *
      * @param value The string value of placeholder.
      */
-    void setPlaceHolder(std::string_view value);
+    void setPlaceHolder(const std::string& value);
 
     /**
      * @brief Get the placeholder of TextField.
      *
      * @return A placeholder string.
      */
-    std::string_view getPlaceHolder() const;
+    const std::string& getPlaceHolder() const;
 
     /**
      * @brief Query the placeholder string color.
@@ -363,14 +363,14 @@ public:
      *
      * @param name The font name string.
      */
-    void setFontName(std::string_view name);
+    void setFontName(const std::string& name);
 
     /**
      * @brief Query the TextField's font name.
      *
      * @return The font name string.
      */
-    std::string_view getFontName() const;
+    const std::string& getFontName() const;
 
     /**
      * @brief Detach the IME.
@@ -381,13 +381,13 @@ public:
      *Change content of TextField.
      *@param text A string content.
      */
-    void setString(std::string_view text);
+    void setString(const std::string& text);
 
     /**
      *Query the content of TextField.
      *@return The string value of TextField.
      */
-    std::string_view getString() const;
+    const std::string& getString() const;
 
     virtual bool onTouchBegan(Touch* touch, Event* unusedEvent) override;
 

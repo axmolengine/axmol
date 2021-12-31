@@ -31,7 +31,7 @@
 
 NS_CC_BEGIN
 
-PhysicsSprite3D* PhysicsSprite3D::create(std::string_view modelPath,
+PhysicsSprite3D* PhysicsSprite3D::create(const std::string& modelPath,
                                          Physics3DRigidBodyDes* rigidDes,
                                          const cocos2d::Vec3& translateInPhysics,
                                          const cocos2d::Quaternion& rotInPhsyics)
@@ -50,7 +50,7 @@ PhysicsSprite3D* PhysicsSprite3D::create(std::string_view modelPath,
     return ret;
 }
 
-PhysicsSprite3D* PhysicsSprite3D::createWithCollider(std::string_view modelPath,
+PhysicsSprite3D* PhysicsSprite3D::createWithCollider(const std::string& modelPath,
                                                      Physics3DColliderDes* colliderDes,
                                                      const cocos2d::Vec3& translateInPhysics,
                                                      const cocos2d::Quaternion& rotInPhsyics)

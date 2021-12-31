@@ -90,8 +90,8 @@ int lua_cocos2dx_controller_Controller_getDeviceName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_controller_Controller_getDeviceName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getDeviceName();
-        lua_pushlstring(tolua_S,ret.data(),ret.length());
+        const std::string& ret = cobj->getDeviceName();
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Controller:getDeviceName",argc, 0);

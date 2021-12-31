@@ -110,7 +110,7 @@ void Application::setAnimationInterval(float interval)
     _animationInterval = interval * 1000.0f;
 }
 
-void Application::setResourceRootPath(std::string_view rootResDir)
+void Application::setResourceRootPath(const std::string& rootResDir)
 {
     _resourceRootPath = rootResDir;
     if (_resourceRootPath[_resourceRootPath.length() - 1] != '/')
@@ -123,7 +123,7 @@ void Application::setResourceRootPath(std::string_view rootResDir)
     pFileUtils->setSearchPaths(searchPaths);
 }
 
-std::string_view Application::getResourceRootPath()
+const std::string& Application::getResourceRootPath()
 {
     return _resourceRootPath;
 }
@@ -138,7 +138,7 @@ std::string Application::getVersion()
     return "";
 }
 
-bool Application::openURL(std::string_view url)
+bool Application::openURL(const std::string& url)
 {
     std::string op = std::string("xdg-open '").append(url).append("'");
     return system(op.c_str()) == 0;

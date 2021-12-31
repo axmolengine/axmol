@@ -47,8 +47,8 @@ public:
     virtual void unPrepare(){};
     virtual void updateRender(PUParticle3D* particle, float deltaTime, bool firstParticle);
 
-    std::string_view getRenderType() const { return _renderType; };
-    void setRenderType(std::string_view observerType) { _renderType = observerType; };
+    const std::string& getRenderType() const { return _renderType; };
+    void setRenderType(const std::string& observerType) { _renderType = observerType; };
 
     virtual PURender* clone() = 0;
     void copyAttributesTo(PURender* render);
@@ -70,7 +70,7 @@ public:
     virtual ~PUParticle3DEntityRender();
 
 protected:
-    bool initRender(std::string_view texFile);
+    bool initRender(const std::string& texFile);
 
     void onBeforeDraw();
 
@@ -141,7 +141,7 @@ public:
         VERTEX
     };
 
-    static PUParticle3DQuadRender* create(std::string_view texFile = "");
+    static PUParticle3DQuadRender* create(const std::string& texFile = "");
 
     void setType(Type type);
     Type getType() const { return _type; }
@@ -191,7 +191,7 @@ protected:
 class CC_EX_DLL PUParticle3DModelRender : public PURender
 {
 public:
-    static PUParticle3DModelRender* create(std::string_view modelFile, std::string_view texFile = "");
+    static PUParticle3DModelRender* create(const std::string& modelFile, const std::string& texFile = "");
 
     virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
@@ -212,7 +212,7 @@ protected:
 class CC_EX_DLL PUParticle3DBoxRender : public PUParticle3DEntityRender
 {
 public:
-    static PUParticle3DBoxRender* create(std::string_view texFile = "");
+    static PUParticle3DBoxRender* create(const std::string& texFile = "");
 
     virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
@@ -228,7 +228,7 @@ protected:
 class CC_EX_DLL PUSphereRender : public PUParticle3DEntityRender
 {
 public:
-    static PUSphereRender* create(std::string_view texFile = "");
+    static PUSphereRender* create(const std::string& texFile = "");
 
     virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 

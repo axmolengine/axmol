@@ -762,7 +762,7 @@ public:
      * @param name      A string to identify the node easily. Please refer to `setName(int)`.
      *
      */
-    virtual void addChild(Node* child, int localZOrder, std::string_view name);
+    virtual void addChild(Node* child, int localZOrder, const std::string& name);
     /**
      * Gets a child from the container with its tag.
      *
@@ -796,7 +796,7 @@ public:
      *
      * @since v3.2
      */
-    virtual Node* getChildByName(std::string_view name) const;
+    virtual Node* getChildByName(const std::string& name) const;
     /**
      * Gets a child from the container with its name that can be cast to Type T.
      *
@@ -805,7 +805,7 @@ public:
      * @return a Node with the given name that can be cast to Type T.
      */
     template <typename T>
-    T getChildByName(std::string_view name) const
+    T getChildByName(const std::string& name) const
     {
         return static_cast<T>(getChildByName(name));
     }
@@ -835,7 +835,7 @@ public:
      *
      * @since v3.2
      */
-    virtual void enumerateChildren(std::string_view name, std::function<bool(Node* node)> callback) const;
+    virtual void enumerateChildren(const std::string& name, std::function<bool(Node* node)> callback) const;
     /**
      * Returns the array of the node's children.
      *
@@ -909,7 +909,7 @@ public:
      * @param name       A string that identifies a child node.
      * @param cleanup   True if all running actions and callbacks on the child node will be cleanup, false otherwise.
      */
-    virtual void removeChildByName(std::string_view name, bool cleanup = true);
+    virtual void removeChildByName(const std::string& name, bool cleanup = true);
     /**
      * Removes all children from the container with a cleanup.
      *
@@ -989,13 +989,13 @@ public:
      *
      * @since v3.2
      */
-    virtual std::string_view getName() const;
+    virtual const std::string& getName() const;
     /** Changes the name that is used to identify the node easily.
      * @param name A string that identifies the node.
      *
      * @since v3.2
      */
-    virtual void setName(std::string_view name);
+    virtual void setName(const std::string& name);
 
     /**
      * Returns a custom user data pointer.
@@ -1306,7 +1306,7 @@ public:
      * @js NA
      * @lua NA
      */
-    bool isScheduled(std::string_view key) const;
+    bool isScheduled(const std::string& key) const;
 
     /**
      * Schedules the "update" method.
@@ -1385,7 +1385,7 @@ public:
      * @param key           The key of the lambda function. To be used if you want to unschedule it.
      * @lua NA
      */
-    void scheduleOnce(const std::function<void(float)>& callback, float delay, std::string_view key);
+    void scheduleOnce(const std::function<void(float)>& callback, float delay, const std::string& key);
 
     /**
      * Schedules a custom selector, the scheduled selector will be ticked every frame.
@@ -1403,7 +1403,7 @@ public:
      * @param key           The key of the lambda function. To be used if you want to unschedule it.
      * @lua NA
      */
-    void schedule(const std::function<void(float)>& callback, std::string_view key);
+    void schedule(const std::function<void(float)>& callback, const std::string& key);
 
     /**
      * Schedules a lambda function. The scheduled lambda function will be called every "interval" seconds
@@ -1413,7 +1413,7 @@ public:
      * @param key           The key of the lambda function. To be used if you want to unschedule it
      * @lua NA
      */
-    void schedule(const std::function<void(float)>& callback, float interval, std::string_view key);
+    void schedule(const std::function<void(float)>& callback, float interval, const std::string& key);
 
     /**
      * Schedules a lambda function.
@@ -1430,7 +1430,7 @@ public:
                   float interval,
                   unsigned int repeat,
                   float delay,
-                  std::string_view key);
+                  const std::string& key);
 
     /**
      * Unschedules a custom selector.
@@ -1447,7 +1447,7 @@ public:
      * @param key      The key of the lambda function to be unscheduled.
      * @lua NA
      */
-    void unschedule(std::string_view key);
+    void unschedule(const std::string& key);
 
     /**
      * Unschedule all scheduled selectors and lambda functions: custom selectors, and the 'update' selector and lambda
@@ -1633,7 +1633,7 @@ public:
      * @param name A given name of component.
      * @return The Component by name.
      */
-    Component* getComponent(std::string_view name);
+    Component* getComponent(const std::string& name);
 
     /**
      * Adds a component.
@@ -1649,7 +1649,7 @@ public:
      * @param name A given name of component.
      * @return True if removed success.
      */
-    virtual bool removeComponent(std::string_view name);
+    virtual bool removeComponent(const std::string& name);
 
     /**
      * Removes a component by its pointer.
@@ -1854,7 +1854,7 @@ protected:
     virtual void updateColor() {}
 
     bool doEnumerate(std::string name, std::function<bool(Node*)> callback) const;
-    bool doEnumerateRecursive(const Node* node, std::string_view name, std::function<bool(Node*)> callback) const;
+    bool doEnumerateRecursive(const Node* node, const std::string& name, std::function<bool(Node*)> callback) const;
 
     // check whether this camera mask is visible by the current visiting camera
     bool isVisitableByVisitingCamera() const;
@@ -1865,10 +1865,10 @@ protected:
     void updateRotation3D();
 
     void updateParentChildrenIndexer(int tag);
-    void updateParentChildrenIndexer(std::string_view name);
+    void updateParentChildrenIndexer(const std::string& name);
 
 private:
-    void addChildHelper(Node* child, int localZOrder, int tag, std::string_view name, bool setTag);
+    void addChildHelper(Node* child, int localZOrder, int tag, const std::string& name, bool setTag);
 
     NodeIndexerMap_t* getParentChildrenIndexer();
 

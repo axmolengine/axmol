@@ -155,7 +155,7 @@ private:
      * @param value a string pointer that point to response data buffer.
      * @param n the defined size that the response data buffer would be copied.
      */
-    bool prepareForProcess(std::string_view url)
+    bool prepareForProcess(const std::string& url)
     {
         /* Resets response status */
         _finished = false;

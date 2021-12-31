@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-ActionTween* ActionTween::create(float duration, std::string_view key, float from, float to)
+ActionTween* ActionTween::create(float duration, const std::string& key, float from, float to)
 {
     ActionTween* ret = new ActionTween();
     if (ret->initWithDuration(duration, key, from, to))
@@ -42,7 +42,7 @@ ActionTween* ActionTween::create(float duration, std::string_view key, float fro
     return nullptr;
 }
 
-bool ActionTween::initWithDuration(float duration, std::string_view key, float from, float to)
+bool ActionTween::initWithDuration(float duration, const std::string& key, float from, float to)
 {
     if (ActionInterval::initWithDuration(duration))
     {

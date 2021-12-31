@@ -28,8 +28,6 @@
 
 #include <iosfwd>
 #include <stdint.h>
-#include <string>
-#include <string_view>
 
 namespace cocos2d
 {
@@ -55,19 +53,19 @@ public:
 
     virtual ~WebViewImpl();
 
-    void setJavascriptInterfaceScheme(std::string_view scheme);
+    void setJavascriptInterfaceScheme(const std::string& scheme);
 
     void loadData(const cocos2d::Data& data,
-                  std::string_view MIMEType,
-                  std::string_view encoding,
-                  std::string_view baseURL);
+                  const std::string& MIMEType,
+                  const std::string& encoding,
+                  const std::string& baseURL);
 
-    void loadHTMLString(std::string_view string, std::string_view baseURL);
+    void loadHTMLString(const std::string& string, const std::string& baseURL);
 
-    void loadURL(std::string_view url);
-    void loadURL(std::string_view url, bool cleanCachedData);
+    void loadURL(const std::string& url);
+    void loadURL(const std::string& url, bool cleanCachedData);
 
-    void loadFile(std::string_view fileName);
+    void loadFile(const std::string& fileName);
 
     void stopLoading();
 
@@ -81,7 +79,7 @@ public:
 
     void goForward();
 
-    void evaluateJS(std::string_view js);
+    void evaluateJS(const std::string& js);
 
     void setScalesPageToFit(const bool scalesPageToFit);
 
@@ -97,10 +95,10 @@ public:
 
     void setBackgroundTransparent();
 
-    static bool shouldStartLoading(const int viewTag, std::string_view url);
-    static void didFinishLoading(const int viewTag, std::string_view url);
-    static void didFailLoading(const int viewTag, std::string_view url);
-    static void onJsCallback(const int viewTag, std::string_view message);
+    static bool shouldStartLoading(const int viewTag, const std::string& url);
+    static void didFinishLoading(const int viewTag, const std::string& url);
+    static void didFailLoading(const int viewTag, const std::string& url);
+    static void onJsCallback(const int viewTag, const std::string& message);
 
 private:
     int _viewTag;

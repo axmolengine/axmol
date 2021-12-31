@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev
-      - main
+      - release
     paths:
       - cmake/**/*
       - cocos/**/*
@@ -44,4 +44,4 @@ jobs:
         arch: ${{ env.BUILD_ARCH }}
 
     - name: Build
-      run: tools\win-ci\build.ps1 $env:BUILD_ARCH
+      run: tools\windows-ci\build.ps1 $env:BUILD_ARCH

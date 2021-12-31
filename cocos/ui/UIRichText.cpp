@@ -1,9 +1,8 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
 
- https://adxeproject.github.io
+ http://www.cocos2d-x.org
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -52,7 +51,7 @@ public:
     static const std::string COMPONENT_NAME; /*!< component name */
 
     static ListenerComponent* create(Node* parent,
-                                     std::string_view url,
+                                     const std::string& url,
                                      const RichText::OpenUrlHandler handleOpenUrl = nullptr)
     {
         auto component = new ListenerComponent(parent, url, std::move(handleOpenUrl));
@@ -60,7 +59,7 @@ public:
         return component;
     }
 
-    explicit ListenerComponent(Node* parent, std::string_view url, const RichText::OpenUrlHandler handleOpenUrl)
+    explicit ListenerComponent(Node* parent, const std::string& url, const RichText::OpenUrlHandler handleOpenUrl)
         : _parent(parent), _url(url), _handleOpenUrl(std::move(handleOpenUrl))
     {
         setName(ListenerComponent::COMPONENT_NAME);
@@ -125,11 +124,11 @@ void RichElement::setColor(const Color3B& color)
 RichElementText* RichElementText::create(int tag,
                                          const Color3B& color,
                                          uint8_t opacity,
-                                         std::string_view text,
-                                         std::string_view fontName,
+                                         const std::string& text,
+                                         const std::string& fontName,
                                          float fontSize,
                                          uint32_t flags,
-                                         std::string_view url,
+                                         const std::string& url,
                                          const Color3B& outlineColor,
                                          int outlineSize,
                                          const Color3B& shadowColor,
@@ -151,11 +150,11 @@ RichElementText* RichElementText::create(int tag,
 bool RichElementText::init(int tag,
                            const Color3B& color,
                            uint8_t opacity,
-                           std::string_view text,
-                           std::string_view fontName,
+                           const std::string& text,
+                           const std::string& fontName,
                            float fontSize,
                            uint32_t flags,
-                           std::string_view url,
+                           const std::string& url,
                            const Color3B& outlineColor,
                            int outlineSize,
                            const Color3B& shadowColor,
@@ -184,8 +183,8 @@ bool RichElementText::init(int tag,
 RichElementImage* RichElementImage::create(int tag,
                                            const Color3B& color,
                                            uint8_t opacity,
-                                           std::string_view filePath,
-                                           std::string_view url,
+                                           const std::string& filePath,
+                                           const std::string& url,
                                            Widget::TextureResType texType)
 {
     RichElementImage* element = new RichElementImage();
@@ -201,8 +200,8 @@ RichElementImage* RichElementImage::create(int tag,
 bool RichElementImage::init(int tag,
                             const Color3B& color,
                             uint8_t opacity,
-                            std::string_view filePath,
-                            std::string_view url,
+                            const std::string& filePath,
+                            const std::string& url,
                             Widget::TextureResType texType)
 {
     if (RichElement::init(tag, color, opacity))
@@ -227,7 +226,7 @@ void RichElementImage::setHeight(int height)
     _height = height;
 }
 
-void RichElementImage::setUrl(std::string_view url)
+void RichElementImage::setUrl(const std::string& url)
 {
     _url = url;
 }
@@ -335,7 +334,7 @@ private:
         bool isFontElement;
         RichText::VisitEnterHandler handleVisitEnter;
     };
-    typedef hlookup::string_map<TagBehavior> TagTables;
+    typedef std::unordered_map<std::string, TagBehavior> TagTables;
 
     static TagTables _tagTables;
 
@@ -377,11 +376,11 @@ public:
 
     void pushBackElement(RichElement* element);
 
-    static void setTagDescription(std::string_view tag,
+    static void setTagDescription(const std::string& tag,
                                   bool isFontElement,
                                   RichText::VisitEnterHandler&& handleVisitEnter);
 
-    static void removeTagDescription(std::string_view tag);
+    static void removeTagDescription(const std::string& tag);
 
 private:
     ValueMap tagAttrMapWithXMLElement(const char** attrs);
@@ -908,19 +907,14 @@ void MyXMLVisitor::pushBackElement(RichElement* element)
     _richText->pushBackElement(element);
 }
 
-void MyXMLVisitor::setTagDescription(std::string_view tag,
+void MyXMLVisitor::setTagDescription(const std::string& tag,
                                      bool isFontElement,
                                      RichText::VisitEnterHandler&& handleVisitEnter)
 {
-    hlookup::set_item(
-        MyXMLVisitor::_tagTables, tag,
-        TagBehavior{
-            isFontElement,
-            std::move(
-                handleVisitEnter)});  // MyXMLVisitor::_tagTables[tag] = {isFontElement, std::move(handleVisitEnter)};
+    MyXMLVisitor::_tagTables[tag] = {isFontElement, std::move(handleVisitEnter)};
 }
 
-void MyXMLVisitor::removeTagDescription(std::string_view tag)
+void MyXMLVisitor::removeTagDescription(const std::string& tag)
 {
     MyXMLVisitor::_tagTables.erase(tag);
 }
@@ -1010,7 +1004,7 @@ RichText* RichText::create()
     return nullptr;
 }
 
-RichText* RichText::createWithXML(std::string_view xml, const ValueMap& defaults, const OpenUrlHandler& handleOpenUrl)
+RichText* RichText::createWithXML(const std::string& xml, const ValueMap& defaults, const OpenUrlHandler& handleOpenUrl)
 {
     RichText* widget = new RichText();
     if (widget->initWithXML(xml, defaults, handleOpenUrl))
@@ -1031,7 +1025,7 @@ bool RichText::init()
     return false;
 }
 
-bool RichText::initWithXML(std::string_view origxml, const ValueMap& defaults, const OpenUrlHandler& handleOpenUrl)
+bool RichText::initWithXML(const std::string& origxml, const ValueMap& defaults, const OpenUrlHandler& handleOpenUrl)
 {
     static std::function<std::string(RichText*)> startTagFont = [](RichText* richText) {
         std::string fontFace = richText->getFontFace();
@@ -1115,7 +1109,7 @@ void RichText::setHorizontalAlignment(cocos2d::ui::RichText::HorizontalAlignment
     }
 }
 
-void RichText::setFontColor(std::string_view color)
+void RichText::setFontColor(const std::string& color)
 {
     _defaults[KEY_FONT_COLOR_STRING] = color;
 }
@@ -1140,7 +1134,7 @@ float RichText::getFontSize()
     return _defaults.at(KEY_FONT_SIZE).asFloat();
 }
 
-void RichText::setFontFace(std::string_view face)
+void RichText::setFontFace(const std::string& face)
 {
     _defaults[KEY_FONT_FACE] = face;
 }
@@ -1150,7 +1144,7 @@ std::string RichText::getFontFace()
     return _defaults.at(KEY_FONT_FACE).asString();
 }
 
-void RichText::setAnchorFontColor(std::string_view color)
+void RichText::setAnchorFontColor(const std::string& color)
 {
     _defaults[KEY_ANCHOR_FONT_COLOR_STRING] = color;
 }
@@ -1399,12 +1393,12 @@ ValueMap RichText::getDefaults() const
     return defaults;
 }
 
-cocos2d::Color3B RichText::color3BWithString(std::string_view color)
+cocos2d::Color3B RichText::color3BWithString(const std::string& color)
 {
     if (color.length() == 4)
     {
-        unsigned int r, g, b;
-        sscanf(color.data(), "%*c%1x%1x%1x", &r, &g, &b);
+        int r, g, b;
+        sscanf(color.c_str(), "%*c%1x%1x%1x", &r, &g, &b);
         r += r * 16;
         g += g * 16;
         b += b * 16;
@@ -1412,14 +1406,14 @@ cocos2d::Color3B RichText::color3BWithString(std::string_view color)
     }
     else if (color.length() == 7)
     {
-        unsigned int r, g, b;
-        sscanf(color.data(), "%*c%2x%2x%2x", &r, &g, &b);
+        int r, g, b;
+        sscanf(color.c_str(), "%*c%2x%2x%2x", &r, &g, &b);
         return Color3B(r, g, b);
     }
     else if (color.length() == 9)
     {
-        unsigned int r, g, b, a;
-        sscanf(color.data(), "%*c%2x%2x%2x%2x", &r, &g, &b, &a);
+        int r, g, b, a;
+        sscanf(color.c_str(), "%*c%2x%2x%2x%2x", &r, &g, &b, &a);
         return Color3B(r, g, b);
     }
     return Color3B::WHITE;
@@ -1446,17 +1440,17 @@ std::string RichText::stringWithColor4B(const cocos2d::Color4B& color4b)
     return std::string(buf, 9);
 }
 
-void RichText::setTagDescription(std::string_view tag, bool isFontElement, VisitEnterHandler handleVisitEnter)
+void RichText::setTagDescription(const std::string& tag, bool isFontElement, VisitEnterHandler handleVisitEnter)
 {
     MyXMLVisitor::setTagDescription(tag, isFontElement, std::move(handleVisitEnter));
 }
 
-void RichText::removeTagDescription(std::string_view tag)
+void RichText::removeTagDescription(const std::string& tag)
 {
     MyXMLVisitor::removeTagDescription(tag);
 }
 
-void RichText::openUrl(std::string_view url)
+void RichText::openUrl(const std::string& url)
 {
     if (_handleOpenUrl)
     {
@@ -1773,13 +1767,13 @@ int findSplitPositionForChar(Label* label,
 }
 }  // namespace
 
-void RichText::handleTextRenderer(std::string_view text,
-                                  std::string_view fontName,
+void RichText::handleTextRenderer(const std::string& text,
+                                  const std::string& fontName,
                                   float fontSize,
                                   const Color3B& color,
                                   uint8_t opacity,
                                   uint32_t flags,
-                                  std::string_view url,
+                                  const std::string& url,
                                   const Color3B& outlineColor,
                                   int outlineSize,
                                   const Color3B& shadowColor,
@@ -1791,8 +1785,7 @@ void RichText::handleTextRenderer(std::string_view text,
     RichText::WrapMode wrapMode = static_cast<RichText::WrapMode>(_defaults.at(KEY_WRAP_MODE).asInt());
 
     // split text by \n
-    std::stringstream ss;
-    ss << text;
+    std::stringstream ss(text);
     std::string currentText;
     size_t realLines = 0;
     while (std::getline(ss, currentText, '\n'))
@@ -1884,13 +1877,13 @@ void RichText::handleTextRenderer(std::string_view text,
     }
 }
 
-void RichText::handleImageRenderer(std::string_view filePath,
+void RichText::handleImageRenderer(const std::string& filePath,
                                    Widget::TextureResType textureType,
                                    const Color3B& /*color*/,
                                    uint8_t /*opacity*/,
                                    int width,
                                    int height,
-                                   std::string_view url)
+                                   const std::string& url)
 {
     Sprite* imageRenderer;
     if (textureType == Widget::TextureResType::LOCAL)
@@ -2069,9 +2062,10 @@ bool isWhitespace(char c)
 {
     return std::isspace(c, std::locale());
 }
-void rtrim(std::string& s)
+std::string rtrim(std::string s)
 {
     s.erase(std::find_if_not(s.rbegin(), s.rend(), isWhitespace).base(), s.end());
+    return s;
 }
 }  // namespace
 
@@ -2081,9 +2075,8 @@ float RichText::stripTrailingWhitespace(const Vector<cocos2d::Node*>& row)
     {
         if (auto label = dynamic_cast<Label*>(row.back()))
         {
-            const auto width = label->getContentSize().width;
-            std::string trimmedString{label->getString()};
-            rtrim(trimmedString);
+            const auto width         = label->getContentSize().width;
+            const auto trimmedString = rtrim(label->getString());
             if (label->getString() != trimmedString)
             {
                 label->setString(trimmedString);

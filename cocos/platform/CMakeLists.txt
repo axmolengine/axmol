@@ -30,14 +30,6 @@ if(ANDROID)
         platform/android/CCGLViewImpl-android.cpp
         platform/android/CCFileUtils-android.cpp
         platform/android/CCEnhanceAPI-android.cpp
-        platform/android/CCDevice-android.cpp
-        platform/android/javaactivity-android.cpp
-        platform/android/jni/JniHelper.cpp
-        platform/android/jni/TouchesJni.cpp
-        platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxAccelerometer.cpp
-        platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxBitmap.cpp
-        platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.cpp
-        platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxRenderer.cpp
     )
 elseif(WINDOWS)
     set(COCOS_PLATFORM_SPECIFIC_HEADER

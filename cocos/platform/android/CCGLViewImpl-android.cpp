@@ -50,7 +50,7 @@ void initExtensions()
 
 NS_CC_BEGIN
 
-GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, Rect rect, float frameZoomFactor)
+GLViewImpl* GLViewImpl::createWithRect(const std::string& viewName, Rect rect, float frameZoomFactor)
 {
     auto ret = new GLViewImpl;
     if (ret && ret->initWithRect(viewName, rect, frameZoomFactor))
@@ -62,7 +62,7 @@ GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, Rect rect, flo
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::create(std::string_view viewName)
+GLViewImpl* GLViewImpl::create(const std::string& viewName)
 {
     auto ret = new GLViewImpl;
     if (ret && ret->initWithFullScreen(viewName))
@@ -74,7 +74,7 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
+GLViewImpl* GLViewImpl::createWithFullScreen(const std::string& viewName)
 {
     auto ret = new GLViewImpl();
     if (ret && ret->initWithFullScreen(viewName))
@@ -93,12 +93,12 @@ GLViewImpl::GLViewImpl()
 
 GLViewImpl::~GLViewImpl() {}
 
-bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZoomFactor)
+bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float frameZoomFactor)
 {
     return true;
 }
 
-bool GLViewImpl::initWithFullScreen(std::string_view viewName)
+bool GLViewImpl::initWithFullScreen(const std::string& viewName)
 {
     return true;
 }

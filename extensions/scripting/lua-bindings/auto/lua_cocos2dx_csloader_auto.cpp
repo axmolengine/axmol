@@ -31,9 +31,9 @@ int lua_cocos2dx_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.CSLoader:createNodeFromJson");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.CSLoader:createNodeFromJson");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_csloader_CSLoader_createNodeFromJson'", nullptr);
@@ -81,9 +81,9 @@ int lua_cocos2dx_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolu
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.CSLoader:createNodeWithFlatBuffersFile");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.CSLoader:createNodeWithFlatBuffersFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_csloader_CSLoader_createNodeWithFlatBuffersFile'", nullptr);
@@ -131,9 +131,9 @@ int lua_cocos2dx_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.CSLoader:loadNodeWithFile");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.CSLoader:loadNodeWithFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_csloader_CSLoader_loadNodeWithFile'", nullptr);
@@ -181,14 +181,14 @@ int lua_cocos2dx_csloader_CSLoader_bindCallback(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 4) 
     {
-        std::string_view arg0;
-        std::string_view arg1;
+        std::string arg0;
+        std::string arg1;
         cocos2d::ui::Widget* arg2;
         cocos2d::Node* arg3;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.CSLoader:bindCallback");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.CSLoader:bindCallback");
 
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.CSLoader:bindCallback");
+        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.CSLoader:bindCallback");
 
         ok &= luaval_to_object<cocos2d::ui::Widget>(tolua_S, 4, "ccui.Widget",&arg2, "cc.CSLoader:bindCallback");
 
@@ -337,9 +337,9 @@ int lua_cocos2dx_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.CSLoader:loadNodeWithContent");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.CSLoader:loadNodeWithContent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_csloader_CSLoader_loadNodeWithContent'", nullptr);
@@ -531,9 +531,9 @@ int lua_cocos2dx_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_Sta
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string_view arg0;
+        std::string arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.CSLoader:createNodeWithFlatBuffersForSimulator");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.CSLoader:createNodeWithFlatBuffersForSimulator");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_csloader_CSLoader_createNodeWithFlatBuffersForSimulator'", nullptr);
@@ -605,8 +605,8 @@ int lua_cocos2dx_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.CSLoader:createNodeWithVisibleSize");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.CSLoader:createNodeWithVisibleSize");
             if (!ok) { break; }
             std::function<void (cocos2d::Ref *)> arg1;
             do {
@@ -625,8 +625,8 @@ int lua_cocos2dx_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.CSLoader:createNodeWithVisibleSize");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.CSLoader:createNodeWithVisibleSize");
             if (!ok) { break; }
             cocos2d::Node* ret = cocos2d::CSLoader::createNodeWithVisibleSize(arg0);
             object_to_luaval<cocos2d::Node>(tolua_S, "cc.Node",(cocos2d::Node*)ret);

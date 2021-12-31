@@ -86,7 +86,7 @@ public:
     float getLineHeight() const { return _lineHeight; }
     void setLineHeight(float newHeight);
 
-    std::string_view getFontName() const;
+    std::string getFontName() const;
 
     Texture2D* getTexture(int slot);
     const Font* getFont() const { return _font; }

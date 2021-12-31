@@ -658,7 +658,7 @@ struct ZipFilePrivate
     std::unique_ptr<ourmemory_s> memfs;
 
     // std::unordered_map is faster if available on the platform
-    typedef hlookup::string_map<struct ZipEntryInfo> FileListContainer;
+    typedef std::unordered_map<std::string, struct ZipEntryInfo> FileListContainer;
     FileListContainer fileList;
 
     zlib_filefunc_def functionOverrides{};
@@ -683,10 +683,10 @@ ZipFile::ZipFile() : _data(new ZipFilePrivate())
     _data->zipFile = nullptr;
 }
 
-ZipFile::ZipFile(std::string_view zipFile, std::string_view filter) : _data(new ZipFilePrivate())
+ZipFile::ZipFile(const std::string& zipFile, const std::string& filter) : _data(new ZipFilePrivate())
 {
     _data->zipFileName = zipFile;
-    _data->zipFile     = unzOpen2(zipFile.data(), &_data->functionOverrides);
+    _data->zipFile     = unzOpen2(zipFile.c_str(), &_data->functionOverrides);
     setFilter(filter);
 }
 
@@ -700,7 +700,7 @@ ZipFile::~ZipFile()
     CC_SAFE_DELETE(_data);
 }
 
-bool ZipFile::setFilter(std::string_view filter)
+bool ZipFile::setFilter(const std::string& filter)
 {
     bool ret = false;
     do
@@ -743,7 +743,7 @@ bool ZipFile::setFilter(std::string_view filter)
     return ret;
 }
 
-bool ZipFile::fileExists(std::string_view fileName) const
+bool ZipFile::fileExists(const std::string& fileName) const
 {
     bool ret = false;
     do
@@ -756,7 +756,7 @@ bool ZipFile::fileExists(std::string_view fileName) const
     return ret;
 }
 
-std::vector<std::string> ZipFile::listFiles(std::string_view pathname) const
+std::vector<std::string> ZipFile::listFiles(const std::string& pathname) const
 {
 
     // filter files which `filename.startsWith(pathname)`
@@ -766,23 +766,22 @@ std::vector<std::string> ZipFile::listFiles(std::string_view pathname) const
     ZipFilePrivate::FileListContainer::const_iterator it  = _data->fileList.begin();
     ZipFilePrivate::FileListContainer::const_iterator end = _data->fileList.end();
     // ensure pathname ends with `/` as a directory
-    std::string ensureDir;
-    std::string_view dirname = pathname[pathname.length() - 1] == '/' ? pathname : (ensureDir.append(pathname) += '/');
+    std::string dirname = pathname[pathname.length() - 1] == '/' ? pathname : pathname + "/";
     for (auto& item : _data->fileList)
     {
-        std::string_view filename = item.first;
-        if (cxx20::starts_with(filename, cxx17::string_view{dirname}))
+        const std::string& filename = item.first;
+        if (cxx20::starts_with(cxx17::string_view{filename}, cxx17::string_view{dirname}))
         {
-            std::string_view suffix{filename.substr(dirname.length())};
-            auto pos = suffix.find('/');
+            std::string suffix = filename.substr(dirname.length());
+            auto pos           = suffix.find('/');
             if (pos == std::string::npos)
             {
-                fileSet.insert(std::string{suffix});
+                fileSet.insert(suffix);
             }
             else
             {
                 // fileSet.insert(parts[0] + "/");
-                fileSet.insert(std::string{suffix.substr(0, pos + 1)});
+                fileSet.insert(suffix.substr(0, pos + 1));
             }
         }
     }
@@ -790,7 +789,7 @@ std::vector<std::string> ZipFile::listFiles(std::string_view pathname) const
     return std::vector<std::string>{fileSet.begin(), fileSet.end()};
 }
 
-unsigned char* ZipFile::getFileData(std::string_view fileName, ssize_t* size)
+unsigned char* ZipFile::getFileData(const std::string& fileName, ssize_t* size)
 {
     unsigned char* buffer = nullptr;
     if (size)
@@ -801,7 +800,7 @@ unsigned char* ZipFile::getFileData(std::string_view fileName, ssize_t* size)
         CC_BREAK_IF(!_data->zipFile);
         CC_BREAK_IF(fileName.empty());
 
-        auto it = _data->fileList.find(fileName);
+        ZipFilePrivate::FileListContainer::iterator it = _data->fileList.find(fileName);
         CC_BREAK_IF(it == _data->fileList.end());
 
         ZipEntryInfo& fileInfo = it->second;
@@ -829,7 +828,7 @@ unsigned char* ZipFile::getFileData(std::string_view fileName, ssize_t* size)
     return buffer;
 }
 
-bool ZipFile::getFileData(std::string_view fileName, ResizableBuffer* buffer)
+bool ZipFile::getFileData(const std::string& fileName, ResizableBuffer* buffer)
 {
     bool res = false;
     do
@@ -916,7 +915,7 @@ bool ZipFile::initWithBuffer(const void* buffer, unsigned int size)
     return true;
 }
 
-bool ZipFile::zfopen(std::string_view fileName, ZipFileStream* zfs)
+bool ZipFile::zfopen(const std::string& fileName, ZipFileStream* zfs)
 {
     if (!zfs)
         return false;
@@ -1006,7 +1005,7 @@ long long ZipFile::zfsize(ZipFileStream* zfs)
     return -1;
 }
 
-unsigned char* ZipFile::getFileDataFromZip(std::string_view zipFilePath, std::string_view filename, ssize_t* size)
+unsigned char* ZipFile::getFileDataFromZip(const std::string& zipFilePath, const std::string& filename, ssize_t* size)
 {
     unsigned char* buffer = nullptr;
     unzFile file          = nullptr;
@@ -1016,11 +1015,11 @@ unsigned char* ZipFile::getFileDataFromZip(std::string_view zipFilePath, std::st
     {
         CC_BREAK_IF(zipFilePath.empty());
 
-        file = unzOpen(zipFilePath.data());
+        file = unzOpen(zipFilePath.c_str());
         CC_BREAK_IF(!file);
 
         // minizip 1.2.0 is same with other platforms
-        int ret = unzLocateFile(file, filename.data(), nullptr);
+        int ret = unzLocateFile(file, filename.c_str(), nullptr);
 
         CC_BREAK_IF(UNZ_OK != ret);
 

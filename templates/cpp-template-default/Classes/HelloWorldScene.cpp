@@ -48,8 +48,8 @@ bool HelloWorld::init()
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     auto origin      = Director::getInstance()->getVisibleOrigin();
-    auto safeArea    = Director::getInstance()->getSafeAreaRect();
-    auto safeOrigin  = safeArea.origin;
+    auto safeArea = Director::getInstance()->getSafeAreaRect();
+    auto safeOrigin = safeArea.origin;
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -97,7 +97,7 @@ bool HelloWorld::init()
     }
 
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png"sv);
+    auto sprite = Sprite::create("HelloWorld.png");
     if (sprite == nullptr)
     {
         problemLoading("'HelloWorld.png'");

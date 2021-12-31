@@ -70,21 +70,21 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import "platform/ios/CCInputView-ios.h"
 
 #if defined(CC_USE_METAL)
-#    import <Metal/Metal.h>
-#    import "renderer/backend/metal/DeviceMTL.h"
-#    import "renderer/backend/metal/UtilsMTL.h"
+#import <Metal/Metal.h>
+#import "renderer/backend/metal/DeviceMTL.h"
+#import "renderer/backend/metal/UtilsMTL.h"
 #else
-#    import "platform/ios/CCGLViewImpl-ios.h"
-#    import "platform/ios/CCES2Renderer-ios.h"
-#    import "platform/ios/OpenGL_Internal-ios.h"
+#import "platform/ios/CCGLViewImpl-ios.h"
+#import "platform/ios/CCES2Renderer-ios.h"
+#import "platform/ios/OpenGL_Internal-ios.h"
 #endif
 
-// CLASS IMPLEMENTATIONS:
+//CLASS IMPLEMENTATIONS:
 
-#define IOS_MAX_TOUCHES_COUNT 10
+#define IOS_MAX_TOUCHES_COUNT     10
 
 @interface CCEAGLView ()
-@property(nonatomic) CCInputView* textInputView;
+@property (nonatomic) CCInputView* textInputView;
 @property(nonatomic, readwrite, assign) BOOL isKeyboardShown;
 @property(nonatomic, copy) NSNotification* keyboardShowNotification;
 @property(nonatomic, assign) CGRect originalRect;
@@ -92,17 +92,17 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 @implementation CCEAGLView
 
-@synthesize surfaceSize = size_;
-@synthesize pixelFormat = pixelformat_, depthFormat = depthFormat_;
+@synthesize surfaceSize=size_;
+@synthesize pixelFormat=pixelformat_, depthFormat=depthFormat_;
 #if !defined(CC_USE_METAL)
-@synthesize context = context_;
+@synthesize context=context_;
 #endif
-@synthesize multiSampling            = multiSampling_;
+@synthesize multiSampling=multiSampling_;
 @synthesize keyboardShowNotification = keyboardShowNotification_;
 @synthesize isKeyboardShown;
 @synthesize originalRect = originalRect_;
 
-+ (Class)layerClass
++ (Class) layerClass
 {
 #if defined(CC_USE_METAL)
     return [CAMetalLayer class];
@@ -111,191 +111,153 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #endif
 }
 
-+ (id)viewWithFrame:(CGRect)frame
++ (id) viewWithFrame:(CGRect)frame
 {
     return [[[self alloc] initWithFrame:frame] autorelease];
 }
 
-+ (id)viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format
++ (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format
 {
-    return [[[self alloc] initWithFrame:frame pixelFormat:format] autorelease];
+    return [[[self alloc]initWithFrame:frame pixelFormat:format] autorelease];
 }
 
-+ (id)viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth
++ (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth
 {
-    return [[[self alloc] initWithFrame:frame
-                            pixelFormat:format
-                            depthFormat:depth
-                     preserveBackbuffer:NO
-                             sharegroup:nil
-                          multiSampling:NO
-                        numberOfSamples:0] autorelease];
+    return [[[self alloc] initWithFrame:frame pixelFormat:format depthFormat:depth preserveBackbuffer:NO sharegroup:nil multiSampling:NO numberOfSamples:0] autorelease];
 }
 
-+ (id)viewWithFrame:(CGRect)frame
-           pixelFormat:(NSString*)format
-           depthFormat:(GLuint)depth
-    preserveBackbuffer:(BOOL)retained
-            sharegroup:(EAGLSharegroup*)sharegroup
-         multiSampling:(BOOL)multisampling
-       numberOfSamples:(unsigned int)samples
++ (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth preserveBackbuffer:(BOOL)retained sharegroup:(EAGLSharegroup*)sharegroup multiSampling:(BOOL)multisampling numberOfSamples:(unsigned int)samples
 {
-    return [[[self alloc] initWithFrame:frame
-                            pixelFormat:format
-                            depthFormat:depth
-                     preserveBackbuffer:retained
-                             sharegroup:sharegroup
-                          multiSampling:multisampling
-                        numberOfSamples:samples] autorelease];
+    return [[[self alloc]initWithFrame:frame pixelFormat:format depthFormat:depth preserveBackbuffer:retained sharegroup:sharegroup multiSampling:multisampling numberOfSamples:samples] autorelease];
 }
 
-- (id)initWithFrame:(CGRect)frame
+- (id) initWithFrame:(CGRect)frame
 {
-    return [self initWithFrame:frame
-                   pixelFormat:kEAGLColorFormatRGB565
-                   depthFormat:0
-            preserveBackbuffer:NO
-                    sharegroup:nil
-                 multiSampling:NO
-               numberOfSamples:0];
+    return [self initWithFrame:frame pixelFormat:kEAGLColorFormatRGB565 depthFormat:0 preserveBackbuffer:NO sharegroup:nil multiSampling:NO numberOfSamples:0];
 }
 
-- (id)initWithFrame:(CGRect)frame pixelFormat:(NSString*)format
+- (id) initWithFrame:(CGRect)frame pixelFormat:(NSString*)format 
 {
-    return [self initWithFrame:frame
-                   pixelFormat:format
-                   depthFormat:0
-            preserveBackbuffer:NO
-                    sharegroup:nil
-                 multiSampling:NO
-               numberOfSamples:0];
+    return [self initWithFrame:frame pixelFormat:format depthFormat:0 preserveBackbuffer:NO sharegroup:nil multiSampling:NO numberOfSamples:0];
 }
 
-- (id)initWithFrame:(CGRect)frame
-           pixelFormat:(NSString*)format
-           depthFormat:(GLuint)depth
-    preserveBackbuffer:(BOOL)retained
-            sharegroup:(EAGLSharegroup*)sharegroup
-         multiSampling:(BOOL)sampling
-       numberOfSamples:(unsigned int)nSamples
+- (id) initWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth preserveBackbuffer:(BOOL)retained sharegroup:(EAGLSharegroup*)sharegroup multiSampling:(BOOL)sampling numberOfSamples:(unsigned int)nSamples
 {
-    if ((self = [super initWithFrame:frame]))
+    if((self = [super initWithFrame:frame]))
     {
         self.textInputView = [[CCInputView alloc] initWithFrame:frame];
 
-        originalRect_                 = self.frame;
+        originalRect_ = self.frame;
         self.keyboardShowNotification = nil;
         if ([self respondsToSelector:@selector(setContentScaleFactor:)])
         {
             self.contentScaleFactor = [[UIScreen mainScreen] scale];
         }
-
+        
 #if defined(CC_USE_METAL)
         id<MTLDevice> device = MTLCreateSystemDefaultDevice();
         if (!device)
         {
-            CCLOG("Doesn't support metal.");
-            return nil;
+             CCLOG("Doesn't support metal.");
+             return nil;
         }
-        CAMetalLayer* metalLayer   = (CAMetalLayer*)[self layer];
-        metalLayer.device          = device;
-        metalLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
+        CAMetalLayer* metalLayer = (CAMetalLayer*)[self layer];
+        metalLayer.device = device;
+        metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
         metalLayer.framebufferOnly = YES;
         cocos2d::backend::DeviceMTL::setCAMetalLayer(metalLayer);
 #else
-        pixelformat_        = format;
-        depthFormat_        = depth;
-        multiSampling_      = sampling;
-        requestedSamples_   = nSamples;
+        pixelformat_ = format;
+        depthFormat_ = depth;
+        multiSampling_ = sampling;
+        requestedSamples_ = nSamples;
         preserveBackbuffer_ = retained;
-        if (![self setupSurfaceWithSharegroup:sharegroup])
-        {
+        if( ! [self setupSurfaceWithSharegroup:sharegroup] ) {
             [self release];
             return nil;
         }
 #endif
     }
-
+    
     return self;
 }
 
-- (id)initWithCoder:(NSCoder*)aDecoder
+-(id) initWithCoder:(NSCoder *)aDecoder
 {
-    if ((self = [super initWithCoder:aDecoder]))
+    if ( (self = [super initWithCoder:aDecoder]) )
     {
         self.textInputView = [[CCInputView alloc] initWithCoder:aDecoder];
 #if defined(CC_USE_METAL)
         size_ = [self bounds].size;
 #else
         CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
-
-        pixelformat_      = kEAGLColorFormatRGB565;
-        depthFormat_      = 0;  // GL_DEPTH_COMPONENT24_OES;
-        multiSampling_    = NO;
+        
+        pixelformat_ = kEAGLColorFormatRGB565;
+        depthFormat_ = 0; // GL_DEPTH_COMPONENT24_OES;
+        multiSampling_= NO;
         requestedSamples_ = 0;
-        size_             = [eaglLayer bounds].size;
-
-        if (![self setupSurfaceWithSharegroup:nil])
-        {
+        size_ = [eaglLayer bounds].size;
+        
+        if( ! [self setupSurfaceWithSharegroup:nil] ) {
             [self release];
             return nil;
         }
 #endif
     }
-
+    
     return self;
 }
 
-- (int)getWidth
+-(int) getWidth
 {
     CGSize bound = [self bounds].size;
     return (int)bound.width * self.contentScaleFactor;
 }
 
-- (int)getHeight
+-(int) getHeight
 {
     CGSize bound = [self bounds].size;
     return (int)bound.height * self.contentScaleFactor;
 }
 
 #if !defined(CC_USE_METAL)
-- (BOOL)setupSurfaceWithSharegroup:(EAGLSharegroup*)sharegroup
+-(BOOL) setupSurfaceWithSharegroup:(EAGLSharegroup*)sharegroup
 {
-    CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
-
+    CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+    
     eaglLayer.opaque = YES;
-    eaglLayer.drawableProperties =
-        [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:preserveBackbuffer_],
-                                                   kEAGLDrawablePropertyRetainedBacking, pixelformat_,
-                                                   kEAGLDrawablePropertyColorFormat, nil];
-
+    eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSNumber numberWithBool:preserveBackbuffer_], kEAGLDrawablePropertyRetainedBacking,
+                                    pixelformat_, kEAGLDrawablePropertyColorFormat, nil];
+    
+    
     renderer_ = [[CCES2Renderer alloc] initWithDepthFormat:depthFormat_
-                                           withPixelFormat:[self convertPixelFormat:pixelformat_]
-                                            withSharegroup:sharegroup
-                                         withMultiSampling:multiSampling_
-                                       withNumberOfSamples:requestedSamples_];
-
+                                         withPixelFormat:[self convertPixelFormat:pixelformat_]
+                                          withSharegroup:sharegroup
+                                       withMultiSampling:multiSampling_
+                                     withNumberOfSamples:requestedSamples_];
+    
     NSAssert(renderer_, @"OpenGL ES 2.O is required.");
     if (!renderer_)
         return NO;
-
+    
     context_ = [renderer_ context];
-
-#    if GL_EXT_discard_framebuffer == 1
-    discardFramebufferSupported_ = YES;
-#    else
-    discardFramebufferSupported_ = NO;
-#    endif
-
+    
+    #if GL_EXT_discard_framebuffer == 1
+        discardFramebufferSupported_ = YES;
+    #else
+        discardFramebufferSupported_ = NO;
+    #endif
+    
     CHECK_GL_ERROR();
-
+    
     return YES;
 }
 #endif
 
-- (void)dealloc
+- (void) dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
+    [[NSNotificationCenter defaultCenter] removeObserver:self]; // remove keyboard notification
 #if !defined(CC_USE_METAL)
     [renderer_ release];
 #endif
@@ -303,29 +265,29 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     [super dealloc];
 }
 
-- (void)layoutSubviews
+- (void) layoutSubviews
 {
     if (!cocos2d::Director::getInstance()->isValid())
         return;
-
+    
 #if defined(CC_USE_METAL)
     size_ = [self bounds].size;
     size_.width *= self.contentScaleFactor;
     size_.height *= self.contentScaleFactor;
-    cocos2d::backend::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height);
+    cocos2d::backend::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height); 
 #else
     [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
     size_ = [renderer_ backingSize];
 
     // Issue #914 #924
-    //     Director *director = [Director sharedDirector];
-    //     [director reshapeProjection:size_];
+//     Director *director = [Director sharedDirector];
+//     [director reshapeProjection:size_];
     cocos2d::Size size;
-    size.width  = size_.width;
+    size.width = size_.width;
     size.height = size_.height;
-    // cocos2d::Director::getInstance()->reshapeProjection(size);
+    //cocos2d::Director::getInstance()->reshapeProjection(size);
 #endif
-
+    
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])
     {
@@ -334,28 +296,29 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 }
 
 #if defined(CC_USE_METAL)
-- (void)swapBuffers
-{}
+- (void) swapBuffers
+{
+}
 #else
-- (void)swapBuffers
+- (void) swapBuffers
 {
     // IMPORTANT:
-    // - preconditions
-    //    -> context_ MUST be the OpenGL context
-    //    -> renderbuffer_ must be the RENDER BUFFER
+        // - preconditions
+        //    -> context_ MUST be the OpenGL context
+        //    -> renderbuffer_ must be the RENDER BUFFER
 
-#    ifdef __IPHONE_4_0
-
+#ifdef __IPHONE_4_0
+    
     if (multiSampling_)
     {
         /* Resolve from msaaFramebuffer to resolveFramebuffer */
-        // glDisable(GL_SCISSOR_TEST);
+        //glDisable(GL_SCISSOR_TEST);
         glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, [renderer_ msaaFrameBuffer]);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, [renderer_ defaultFrameBuffer]);
         glResolveMultisampleFramebufferAPPLE();
     }
-
-    if (discardFramebufferSupported_)
+    
+    if(discardFramebufferSupported_)
     {
         if (multiSampling_)
         {
@@ -369,98 +332,97 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
                 GLenum attachments[] = {GL_COLOR_ATTACHMENT0};
                 glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 1, attachments);
             }
-
+            
             glBindRenderbuffer(GL_RENDERBUFFER, [renderer_ colorRenderBuffer]);
+    
         }
-
+        
         // not MSAA
-        else if (depthFormat_)
-        {
-            GLenum attachments[] = {GL_DEPTH_ATTACHMENT};
+        else if (depthFormat_ ) {
+            GLenum attachments[] = { GL_DEPTH_ATTACHMENT};
             glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, attachments);
         }
     }
+    
+#endif // __IPHONE_4_0
+    
+     if(![context_ presentRenderbuffer:GL_RENDERBUFFER])
+        {
+//         CCLOG(@"cocos2d: Failed to swap renderbuffer in %s\n", __FUNCTION__);
+        }
 
-#    endif  // __IPHONE_4_0
-
-    if (![context_ presentRenderbuffer:GL_RENDERBUFFER])
-    {
-        //         CCLOG(@"cocos2d: Failed to swap renderbuffer in %s\n", __FUNCTION__);
-    }
-
-#    if COCOS2D_DEBUG
+#if COCOS2D_DEBUG
     CHECK_GL_ERROR();
-#    endif
-
+#endif
+    
     // We can safely re-bind the framebuffer here, since this will be the
     // 1st instruction of the new main loop
-    if (multiSampling_)
+    if( multiSampling_ )
         glBindFramebuffer(GL_FRAMEBUFFER, [renderer_ msaaFrameBuffer]);
 }
 
-- (unsigned int)convertPixelFormat:(NSString*)pixelFormat
+- (unsigned int) convertPixelFormat:(NSString*) pixelFormat
 {
     // define the pixel format
     GLenum pFormat;
-
-    if ([pixelFormat isEqualToString:@"EAGLColorFormat565"])
+    
+    
+    if([pixelFormat isEqualToString:@"EAGLColorFormat565"])
         pFormat = GL_RGB565;
     else
         pFormat = GL_RGBA8_OES;
-
+    
     return pFormat;
 }
 #endif
 
 #pragma mark CCEAGLView - Point conversion
 
-- (CGPoint)convertPointFromViewToSurface:(CGPoint)point
+- (CGPoint) convertPointFromViewToSurface:(CGPoint)point
 {
     CGRect bounds = [self bounds];
-
+    
     CGPoint ret;
     ret.x = (point.x - bounds.origin.x) / bounds.size.width * size_.width;
-    ret.y = (point.y - bounds.origin.y) / bounds.size.height * size_.height;
-
+    ret.y =  (point.y - bounds.origin.y) / bounds.size.height * size_.height;
+    
     return ret;
 }
 
-- (CGRect)convertRectFromViewToSurface:(CGRect)rect
+- (CGRect) convertRectFromViewToSurface:(CGRect)rect
 {
     CGRect bounds = [self bounds];
-
+    
     CGRect ret;
-    ret.origin.x    = (rect.origin.x - bounds.origin.x) / bounds.size.width * size_.width;
-    ret.origin.y    = (rect.origin.y - bounds.origin.y) / bounds.size.height * size_.height;
-    ret.size.width  = rect.size.width / bounds.size.width * size_.width;
+    ret.origin.x = (rect.origin.x - bounds.origin.x) / bounds.size.width * size_.width;
+    ret.origin.y = (rect.origin.y - bounds.origin.y) / bounds.size.height * size_.height;
+    ret.size.width = rect.size.width / bounds.size.width * size_.width;
     ret.size.height = rect.size.height / bounds.size.height * size_.height;
-
+    
     return ret;
 }
 
 // Pass the touches to the superview
 #pragma mark CCEAGLView - Touch Delegate
-- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if (self.isKeyboardShown)
         [self closeKeyboardOpenedByEditBox];
-
+    
     UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
-    float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-
+    float xs[IOS_MAX_TOUCHES_COUNT] = {0.0f};
+    float ys[IOS_MAX_TOUCHES_COUNT] = {0.0f};
+    
     int i = 0;
-    for (UITouch* touch in touches)
-    {
-        if (i >= IOS_MAX_TOUCHES_COUNT)
-        {
+    for (UITouch *touch in touches) {
+        if (i >= IOS_MAX_TOUCHES_COUNT) {
             CCLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 
         ids[i] = touch;
-        xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
-        ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
+        xs[i] = [touch locationInView: [touch view]].x * self.contentScaleFactor;
+        ys[i] = [touch locationInView: [touch view]].y * self.contentScaleFactor;
         ++i;
     }
 
@@ -468,30 +430,27 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     glview->handleTouchesBegin(i, (intptr_t*)ids, xs, ys);
 }
 
-- (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
-    float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float fs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float ms[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-
+    float xs[IOS_MAX_TOUCHES_COUNT] = {0.0f};
+    float ys[IOS_MAX_TOUCHES_COUNT] = {0.0f};
+    float fs[IOS_MAX_TOUCHES_COUNT] = {0.0f};
+    float ms[IOS_MAX_TOUCHES_COUNT] = {0.0f};
+    
     int i = 0;
-    for (UITouch* touch in touches)
-    {
-        if (i >= IOS_MAX_TOUCHES_COUNT)
-        {
+    for (UITouch *touch in touches) {
+        if (i >= IOS_MAX_TOUCHES_COUNT) {
             CCLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 
         ids[i] = touch;
-        xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
-        ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
+        xs[i] = [touch locationInView: [touch view]].x * self.contentScaleFactor;
+        ys[i] = [touch locationInView: [touch view]].y * self.contentScaleFactor;
 #if defined(__IPHONE_9_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0)
         // running on iOS 9.0 or higher version
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0f)
-        {
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0f) {
             fs[i] = touch.force;
             ms[i] = touch.maximumPossibleForce;
         }
@@ -503,49 +462,45 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     glview->handleTouchesMove(i, (intptr_t*)ids, xs, ys, fs, ms);
 }
 
-- (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
-    float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-
+    float xs[IOS_MAX_TOUCHES_COUNT] = {0.0f};
+    float ys[IOS_MAX_TOUCHES_COUNT] = {0.0f};
+    
     int i = 0;
-    for (UITouch* touch in touches)
-    {
-        if (i >= IOS_MAX_TOUCHES_COUNT)
-        {
+    for (UITouch *touch in touches) {
+        if (i >= IOS_MAX_TOUCHES_COUNT) {
             CCLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 
         ids[i] = touch;
-        xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
-        ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
+        xs[i] = [touch locationInView: [touch view]].x * self.contentScaleFactor;
+        ys[i] = [touch locationInView: [touch view]].y * self.contentScaleFactor;
         ++i;
     }
 
     auto glview = cocos2d::Director::getInstance()->getOpenGLView();
     glview->handleTouchesEnd(i, (intptr_t*)ids, xs, ys);
 }
-
-- (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
+    
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
-    float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-    float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
-
+    float xs[IOS_MAX_TOUCHES_COUNT] = {0.0f};
+    float ys[IOS_MAX_TOUCHES_COUNT] = {0.0f};
+    
     int i = 0;
-    for (UITouch* touch in touches)
-    {
-        if (i >= IOS_MAX_TOUCHES_COUNT)
-        {
+    for (UITouch *touch in touches) {
+        if (i >= IOS_MAX_TOUCHES_COUNT) {
             CCLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
-
+        
         ids[i] = touch;
-        xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
-        ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
+        xs[i] = [touch locationInView: [touch view]].x * self.contentScaleFactor;
+        ys[i] = [touch locationInView: [touch view]].y * self.contentScaleFactor;
         ++i;
     }
 
@@ -553,90 +508,83 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     glview->handleTouchesCancel(i, (intptr_t*)ids, xs, ys);
 }
 
-- (void)showKeyboard
+- (void) showKeyboard
 {
     [self addSubview:self.textInputView];
     [self.textInputView becomeFirstResponder];
 }
 
-- (void)hideKeyboard
+- (void) hideKeyboard
 {
     [self.textInputView resignFirstResponder];
     [self.textInputView removeFromSuperview];
 }
 
-- (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)dis
+-(void) doAnimationWhenKeyboardMoveWithDuration:(float) duration distance:(float) dis
 {
     [UIView beginAnimations:nil context:nullptr];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationBeginsFromCurrentState:YES];
+        [UIView setAnimationDelegate:self];
+        [UIView setAnimationDuration:duration];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        
+        //NSLog(@"[animation] dis = %f, scale = %f \n", dis, cocos2d::GLView::getInstance()->getScaleY());
+        
+        if (dis < 0.0f) dis = 0.0f;
 
-    // NSLog(@"[animation] dis = %f, scale = %f \n", dis, cocos2d::GLView::getInstance()->getScaleY());
+        auto glview = cocos2d::Director::getInstance()->getOpenGLView();
+        dis *= glview->getScaleY();
+        
+        dis /= self.contentScaleFactor;
 
-    if (dis < 0.0f)
-        dis = 0.0f;
-
-    auto glview = cocos2d::Director::getInstance()->getOpenGLView();
-    dis *= glview->getScaleY();
-
-    dis /= self.contentScaleFactor;
-
-#if defined(CC_TARGET_OS_TVOS)
-    self.frame = CGRectMake(originalRect_.origin.x, originalRect_.origin.y - dis, originalRect_.size.width,
-                            originalRect_.size.height);
-#else
-    switch (getFixedOrientation([[UIApplication sharedApplication] statusBarOrientation]))
-    {
-    case UIInterfaceOrientationPortrait:
-        self.frame = CGRectMake(originalRect_.origin.x, originalRect_.origin.y - dis, originalRect_.size.width,
-                                originalRect_.size.height);
-        break;
-
-    case UIInterfaceOrientationPortraitUpsideDown:
-        self.frame = CGRectMake(originalRect_.origin.x, originalRect_.origin.y + dis, originalRect_.size.width,
-                                originalRect_.size.height);
-        break;
-
-    case UIInterfaceOrientationLandscapeLeft:
-        self.frame = CGRectMake(originalRect_.origin.x - dis, originalRect_.origin.y, originalRect_.size.width,
-                                originalRect_.size.height);
-        break;
-
-    case UIInterfaceOrientationLandscapeRight:
-        self.frame = CGRectMake(originalRect_.origin.x + dis, originalRect_.origin.y, originalRect_.size.width,
-                                originalRect_.size.height);
-        break;
-
-    default:
-        break;
-    }
-#endif
-
-    [UIView commitAnimations];
+    #if defined(CC_TARGET_OS_TVOS)
+        self.frame = CGRectMake(originalRect_.origin.x, originalRect_.origin.y - dis, originalRect_.size.width, originalRect_.size.height);
+    #else
+        switch (getFixedOrientation([[UIApplication sharedApplication] statusBarOrientation]))
+        {
+            case UIInterfaceOrientationPortrait:
+                self.frame = CGRectMake(originalRect_.origin.x, originalRect_.origin.y - dis, originalRect_.size.width, originalRect_.size.height);
+                break;
+                
+            case UIInterfaceOrientationPortraitUpsideDown:
+                self.frame = CGRectMake(originalRect_.origin.x, originalRect_.origin.y + dis, originalRect_.size.width, originalRect_.size.height);
+                break;
+                
+            case UIInterfaceOrientationLandscapeLeft:
+                self.frame = CGRectMake(originalRect_.origin.x - dis, originalRect_.origin.y , originalRect_.size.width, originalRect_.size.height);
+                break;
+                
+            case UIInterfaceOrientationLandscapeRight:
+                self.frame = CGRectMake(originalRect_.origin.x + dis, originalRect_.origin.y , originalRect_.size.width, originalRect_.size.height);
+                break;
+                
+            default:
+                break;
+        }
+    #endif
+        
+        [UIView commitAnimations];
 }
 
-- (void)doAnimationWhenAnotherEditBeClicked
+-(void) doAnimationWhenAnotherEditBeClicked
 {
     if (self.keyboardShowNotification != nil)
     {
-        [[NSNotificationCenter defaultCenter] postNotification:self.keyboardShowNotification];
+        [[NSNotificationCenter defaultCenter]postNotification:self.keyboardShowNotification];
     }
 }
 
 #pragma UIKeyboard notification
 
 #if !defined(CC_TARGET_OS_TVOS)
-namespace
-{
-UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrientation)
-{
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+namespace {
+    UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrientation)
     {
-        statusBarOrientation = UIInterfaceOrientationPortrait;
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+        {
+            statusBarOrientation = UIInterfaceOrientationPortrait;
+        }
+        return statusBarOrientation;
     }
-    return statusBarOrientation;
-}
 }
 #endif
 
@@ -645,89 +593,87 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
 #if !defined(CC_TARGET_OS_TVOS)
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onUIKeyboardNotification:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
+                                                 name:UIKeyboardWillShowNotification object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onUIKeyboardNotification:)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
+                                                 name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onUIKeyboardNotification:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
+                                                 name:UIKeyboardWillHideNotification object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onUIKeyboardNotification:)
-                                                 name:UIKeyboardDidHideNotification
-                                               object:nil];
+                                                 name:UIKeyboardDidHideNotification object:nil];
 #endif
 }
 
-- (void)onUIKeyboardNotification:(NSNotification*)notif
+- (void)onUIKeyboardNotification:(NSNotification *)notif
 {
-    NSString* type = notif.name;
-
+    NSString * type = notif.name;
+    
     NSDictionary* info = [notif userInfo];
-    CGRect begin = [self convertRect:[[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue] fromView:self];
-    CGRect end   = [self convertRect:[[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:self];
+    CGRect begin = [self convertRect:
+                    [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue]
+                            fromView:self];
+    CGRect end = [self convertRect:
+                  [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue]
+                          fromView:self];
     double aniDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-
+    
     CGSize viewSize = self.frame.size;
 
     CGFloat tmp;
     switch (getFixedOrientation([[UIApplication sharedApplication] statusBarOrientation]))
     {
-    case UIInterfaceOrientationPortrait:
-        begin.origin.y = viewSize.height - begin.origin.y - begin.size.height;
-        end.origin.y   = viewSize.height - end.origin.y - end.size.height;
-        break;
-
-    case UIInterfaceOrientationPortraitUpsideDown:
-        begin.origin.x = viewSize.width - (begin.origin.x + begin.size.width);
-        end.origin.x   = viewSize.width - (end.origin.x + end.size.width);
-        break;
-
-    case UIInterfaceOrientationLandscapeLeft:
-        std::swap(begin.size.width, begin.size.height);
-        std::swap(end.size.width, end.size.height);
-        std::swap(viewSize.width, viewSize.height);
-
-        tmp            = begin.origin.x;
-        begin.origin.x = begin.origin.y;
-        begin.origin.y = viewSize.height - tmp - begin.size.height;
-        tmp            = end.origin.x;
-        end.origin.x   = end.origin.y;
-        end.origin.y   = viewSize.height - tmp - end.size.height;
-        break;
-
-    case UIInterfaceOrientationLandscapeRight:
-        std::swap(begin.size.width, begin.size.height);
-        std::swap(end.size.width, end.size.height);
-        std::swap(viewSize.width, viewSize.height);
-
-        tmp            = begin.origin.x;
-        begin.origin.x = begin.origin.y;
-        begin.origin.y = tmp;
-        tmp            = end.origin.x;
-        end.origin.x   = end.origin.y;
-        end.origin.y   = tmp;
-        break;
-
-    default:
-        break;
+        case UIInterfaceOrientationPortrait:
+            begin.origin.y = viewSize.height - begin.origin.y - begin.size.height;
+            end.origin.y = viewSize.height - end.origin.y - end.size.height;
+            break;
+            
+        case UIInterfaceOrientationPortraitUpsideDown:
+            begin.origin.x = viewSize.width - (begin.origin.x + begin.size.width);
+            end.origin.x = viewSize.width - (end.origin.x + end.size.width);
+            break;
+            
+        case UIInterfaceOrientationLandscapeLeft:
+            std::swap(begin.size.width, begin.size.height);
+            std::swap(end.size.width, end.size.height);
+            std::swap(viewSize.width, viewSize.height);
+            
+            tmp = begin.origin.x;
+            begin.origin.x = begin.origin.y;
+            begin.origin.y = viewSize.height - tmp - begin.size.height;
+            tmp = end.origin.x;
+            end.origin.x = end.origin.y;
+            end.origin.y = viewSize.height - tmp - end.size.height;
+            break;
+            
+        case UIInterfaceOrientationLandscapeRight:
+            std::swap(begin.size.width, begin.size.height);
+            std::swap(end.size.width, end.size.height);
+            std::swap(viewSize.width, viewSize.height);
+            
+            tmp = begin.origin.x;
+            begin.origin.x = begin.origin.y;
+            begin.origin.y = tmp;
+            tmp = end.origin.x;
+            end.origin.x = end.origin.y;
+            end.origin.y = tmp;
+            break;
+            
+        default:
+            break;
     }
 
-    auto glview  = cocos2d::Director::getInstance()->getOpenGLView();
+    auto glview = cocos2d::Director::getInstance()->getOpenGLView();
     float scaleX = glview->getScaleX();
     float scaleY = glview->getScaleY();
-
+    
     // Convert to pixel coordinate
-    begin = CGRectApplyAffineTransform(
-        begin, CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
-    end = CGRectApplyAffineTransform(
-        end, CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
-
+    begin = CGRectApplyAffineTransform(begin, CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
+    end = CGRectApplyAffineTransform(end, CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
+    
     float offestY = glview->getViewPortRect().origin.y;
     if (offestY < 0.0f)
     {
@@ -735,18 +681,23 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
         begin.size.height -= offestY;
         end.size.height -= offestY;
     }
-
+    
     // Convert to design coordinate
-    begin = CGRectApplyAffineTransform(begin,
-                                       CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
-    end   = CGRectApplyAffineTransform(end,
-                                       CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
+    begin = CGRectApplyAffineTransform(begin, CGAffineTransformScale(CGAffineTransformIdentity, 1.0f/scaleX, 1.0f/scaleY));
+    end = CGRectApplyAffineTransform(end, CGAffineTransformScale(CGAffineTransformIdentity, 1.0f/scaleX, 1.0f/scaleY));
 
+    
     cocos2d::IMEKeyboardNotificationInfo notiInfo;
-    notiInfo.begin    = cocos2d::Rect(begin.origin.x, begin.origin.y, begin.size.width, begin.size.height);
-    notiInfo.end      = cocos2d::Rect(end.origin.x, end.origin.y, end.size.width, end.size.height);
+    notiInfo.begin = cocos2d::Rect(begin.origin.x,
+                                     begin.origin.y,
+                                     begin.size.width,
+                                     begin.size.height);
+    notiInfo.end = cocos2d::Rect(end.origin.x,
+                                   end.origin.y,
+                                   end.size.width,
+                                   end.size.height);
     notiInfo.duration = (float)aniDuration;
-
+    
     cocos2d::IMEDispatcher* dispatcher = cocos2d::IMEDispatcher::sharedDispatcher();
     if (UIKeyboardWillShowNotification == type)
     {
@@ -769,14 +720,14 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
 }
 
 // Close the keyboard opened by EditBox
-- (void)closeKeyboardOpenedByEditBox
+-(void) closeKeyboardOpenedByEditBox
 {
-    NSArray* subviews = self.subviews;
-
-    for (UIView* view in subviews)
+    NSArray *subviews = self.subviews;
+    
+    for(UIView* view in subviews)
     {
-        if ([view isKindOfClass:NSClassFromString(@"UITextView")] ||
-            [view isKindOfClass:NSClassFromString(@"UITextField")])
+        if([view isKindOfClass:NSClassFromString(@"UITextView")] ||
+           [view isKindOfClass:NSClassFromString(@"UITextField")])
         {
             if ([view isFirstResponder])
             {

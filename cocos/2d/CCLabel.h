@@ -166,8 +166,8 @@ public:
      *
      * @return An automatically released Label object.
      */
-    static Label* createWithSystemFont(std::string_view text,
-                                       std::string_view font,
+    static Label* createWithSystemFont(const std::string& text,
+                                       const std::string& font,
                                        float fontSize,
                                        const Vec2& dimensions    = Vec2::ZERO,
                                        TextHAlignment hAlignment = TextHAlignment::LEFT,
@@ -185,8 +185,8 @@ public:
      *
      * @return An automatically released Label object.
      */
-    static Label* createWithTTF(std::string_view text,
-                                std::string_view fontFilePath,
+    static Label* createWithTTF(const std::string& text,
+                                const std::string& fontFilePath,
                                 float fontSize,
                                 const Vec2& dimensions    = Vec2::ZERO,
                                 TextHAlignment hAlignment = TextHAlignment::LEFT,
@@ -204,7 +204,7 @@ public:
      * @see TTFConfig setTTFConfig setMaxLineWidth
      */
     static Label* createWithTTF(const TTFConfig& ttfConfig,
-                                std::string_view text,
+                                const std::string& text,
                                 TextHAlignment hAlignment = TextHAlignment::LEFT,
                                 int maxLineWidth          = 0);
 
@@ -219,8 +219,8 @@ public:
      * @return An automatically released Label object.
      * @see setBMFontFilePath setMaxLineWidth
      */
-    static Label* createWithBMFont(std::string_view bmfontPath,
-                                   std::string_view text,
+    static Label* createWithBMFont(const std::string& bmfontPath,
+                                   const std::string& text,
                                    const TextHAlignment& hAlignment = TextHAlignment::LEFT,
                                    int maxLineWidth                 = 0);
 
@@ -237,8 +237,8 @@ public:
      * @return An automatically released Label object.
      * @see setBMFontFilePath setMaxLineWidth
      */
-    static Label* createWithBMFont(std::string_view bmfontPath,
-                                   std::string_view text,
+    static Label* createWithBMFont(const std::string& bmfontPath,
+                                   const std::string& text,
                                    const TextHAlignment& hAlignment,
                                    int maxLineWidth,
                                    const Rect& imageRect,
@@ -256,11 +256,11 @@ public:
      * @return An automatically released Label object.
      * @see setBMFontFilePath setMaxLineWidth
      */
-    static Label* createWithBMFont(std::string_view bmfontPath,
-                                   std::string_view text,
+    static Label* createWithBMFont(const std::string& bmfontPath,
+                                   const std::string& text,
                                    const TextHAlignment& hAlignment,
                                    int maxLineWidth,
-                                   std::string_view subTextureKey);
+                                   const std::string& subTextureKey);
 
     /**
      * Allocates and initializes a Label, with a bitmap font file.
@@ -274,8 +274,8 @@ public:
      * @return An automatically released Label object.
      * @see setBMFontFilePath setMaxLineWidth
      */
-    CC_DEPRECATED_ATTRIBUTE static Label* createWithBMFont(std::string_view bmfontPath,
-                                                           std::string_view text,
+    CC_DEPRECATED_ATTRIBUTE static Label* createWithBMFont(const std::string& bmfontPath,
+                                                           const std::string& text,
                                                            const TextHAlignment& hAlignment,
                                                            int maxLineWidth,
                                                            const Vec2& imageOffset);
@@ -290,7 +290,7 @@ public:
      *
      * @return An automatically released Label object.
      */
-    static Label* createWithCharMap(std::string_view charMapFile, int itemWidth, int itemHeight, int startCharMap);
+    static Label* createWithCharMap(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap);
 
     /**
      * Allocates and initializes a Label, with char map configuration.
@@ -311,7 +311,7 @@ public:
      *
      * @return An automatically released Label object.
      */
-    static Label* createWithCharMap(std::string_view plistFile);
+    static Label* createWithCharMap(const std::string& plistFile);
 
     //  end of creators group
     /// @}
@@ -332,31 +332,33 @@ public:
     virtual const TTFConfig& getTTFConfig() const { return _fontConfig; }
 
     /** Sets a new bitmap font to Label */
-    virtual bool setBMFontFilePath(std::string_view bmfontFilePath, float fontSize = 0);
+    virtual bool setBMFontFilePath(const std::string& bmfontFilePath, float fontSize = 0);
 
     /** Sets a new bitmap font to Label */
-    virtual bool setBMFontFilePath(std::string_view bmfontFilePath,
+    virtual bool setBMFontFilePath(const std::string& bmfontFilePath,
                                    const Rect& imageRect,
                                    bool imageRotated,
                                    float fontSize = 0);
 
     /** Sets a new bitmap font to Label */
-    virtual bool setBMFontFilePath(std::string_view bmfontFilePath, std::string_view subTextureKey, float fontSize = 0);
+    virtual bool setBMFontFilePath(const std::string& bmfontFilePath,
+                                   const std::string& subTextureKey,
+                                   float fontSize = 0);
 
     /** Sets a new bitmap font to Label */
-    CC_DEPRECATED_ATTRIBUTE virtual bool setBMFontFilePath(std::string_view bmfontFilePath,
+    CC_DEPRECATED_ATTRIBUTE virtual bool setBMFontFilePath(const std::string& bmfontFilePath,
                                                            const Vec2& imageOffset,
                                                            float fontSize = 0);
 
     /** Returns the bitmap font used by the Label.*/
-    std::string_view getBMFontFilePath() const { return _bmFontPath; }
+    const std::string& getBMFontFilePath() const { return _bmFontPath; }
 
     /**
      * Sets a new char map configuration to Label.
      *
-     * @see `createWithCharMap(std::string_view,int,int,int)`
+     * @see `createWithCharMap(const std::string&,int,int,int)`
      */
-    virtual bool setCharMap(std::string_view charMapFile, int itemWidth, int itemHeight, int startCharMap);
+    virtual bool setCharMap(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap);
 
     /**
      * Sets a new char map configuration to Label.
@@ -368,9 +370,9 @@ public:
     /**
      * Sets a new char map configuration to Label.
      *
-     * @see `createWithCharMap(std::string_view)`
+     * @see `createWithCharMap(const std::string&)`
      */
-    virtual bool setCharMap(std::string_view plistFile);
+    virtual bool setCharMap(const std::string& plistFile);
 
     /**
      * Sets a new system font to Label.
@@ -378,10 +380,10 @@ public:
      * @param font A font file or a font family name.
      * @warning
      */
-    virtual void setSystemFontName(std::string_view font);
+    virtual void setSystemFontName(const std::string& font);
 
     /** Returns the system font used by the Label.*/
-    virtual std::string_view getSystemFontName() const { return _systemFont; }
+    virtual const std::string& getSystemFontName() const { return _systemFont; }
 
     /* Sets the system font size of Label.*/
     virtual void setSystemFontSize(float fontSize);
@@ -401,7 +403,7 @@ public:
     virtual void setString(std::string_view text) override;
 
     /** Return the text the Label is currently displaying.*/
-    virtual std::string_view getString() const override { return _utf8Text; }
+    virtual const std::string& getString() const override { return _utf8Text; }
 
     /**
      * Return the number of lines of text.
@@ -714,15 +716,15 @@ public:
      */
     virtual ~Label();
 
-    bool initWithTTF(std::string_view text,
-                     std::string_view fontFilePath,
+    bool initWithTTF(const std::string& text,
+                     const std::string& fontFilePath,
                      float fontSize,
                      const Vec2& dimensions    = Vec2::ZERO,
                      TextHAlignment hAlignment = TextHAlignment::LEFT,
                      TextVAlignment vAlignment = TextVAlignment::TOP);
 
     bool initWithTTF(const TTFConfig& ttfConfig,
-                     std::string_view text,
+                     const std::string& text,
                      TextHAlignment hAlignment = TextHAlignment::LEFT,
                      int maxLineWidth          = 0);
 

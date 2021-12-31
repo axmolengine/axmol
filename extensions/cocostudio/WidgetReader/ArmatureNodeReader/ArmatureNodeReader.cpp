@@ -145,7 +145,7 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flat
 #if defined(CC_BUILD_WITH_DRANGBONES) && CC_BUILD_WITH_DRANGBONES
         auto filep = filepath.rfind('.');
         if (filep != std::string::npos && strcmp(&filepath[filep], ".json") == 0)
-        {  // Currently, adjust by file ext, regard as DragonBones 4.5/5.0
+        {   // Currently, adjust by file ext, regard as DragonBones 4.5/5.0
             // 4.5 texture info is fixed as texture.png, texture.json
             // 5.o texture info is _tex.json _tex.png
             auto sharedFactory         = dragonBones::CCFactory::getFactory();
@@ -230,7 +230,7 @@ cocos2d::Node* ArmatureNodeReader::createNodeWithFlatBuffers(const flatbuffers::
     return node;
 }
 
-std::string ArmatureNodeReader::getArmatureName(std::string_view exporJsonPath)
+std::string ArmatureNodeReader::getArmatureName(const std::string& exporJsonPath)
 {
     // FileUtils.getFileData(exporJsonPath, "r", size)   // need read armature name in exportJsonPath
     size_t end    = exporJsonPath.find_last_of(".");
@@ -241,5 +241,5 @@ std::string ArmatureNodeReader::getArmatureName(std::string_view exporJsonPath)
 
     if (start == -1)
         start = 0;
-    return std::string{exporJsonPath.substr(start, end - start)};
+    return exporJsonPath.substr(start, end - start);
 }

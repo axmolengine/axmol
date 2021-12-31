@@ -87,7 +87,7 @@ public:
      * @param capacity A capacity of particles.
      * @return An autoreleased ParticleBatchNode object.
      */
-    static ParticleBatchNode* create(std::string_view fileImage, int capacity = kParticleDefaultCapacity);
+    static ParticleBatchNode* create(const std::string& fileImage, int capacity = kParticleDefaultCapacity);
 
     /** Inserts a child into the ParticleBatchNode.
      *
@@ -127,7 +127,7 @@ public:
 
     using Node::addChild;
     virtual void addChild(Node* child, int zOrder, int tag) override;
-    virtual void addChild(Node* child, int zOrder, std::string_view name) override;
+    virtual void addChild(Node* child, int zOrder, const std::string& name) override;
     virtual void removeChild(Node* child, bool cleanup) override;
     virtual void reorderChild(Node* child, int zOrder) override;
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
@@ -163,15 +163,15 @@ public:
 
     /** initializes the particle system with the name of a file on disk (for a list of supported formats look at the
      * Texture2D class), a capacity of particles */
-    bool initWithFile(std::string_view fileImage, int capacity);
+    bool initWithFile(const std::string& fileImage, int capacity);
 
 private:
     void updateAllAtlasIndexes();
     void increaseAtlasCapacityTo(ssize_t quantity);
     int searchNewPositionInChildrenForZ(int z);
     void getCurrentIndex(int* oldIndex, int* newIndex, Node* child, int z);
-    int addChildHelper(ParticleSystem* child, int z, int aTag, std::string_view name, bool setTag);
-    void addChildByTagOrName(ParticleSystem* child, int z, int tag, std::string_view name, bool setTag);
+    int addChildHelper(ParticleSystem* child, int z, int aTag, const std::string& name, bool setTag);
+    void addChildByTagOrName(ParticleSystem* child, int z, int tag, const std::string& name, bool setTag);
     void updateBlendFunc();
 
     void updateProgramStateTexture();

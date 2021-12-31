@@ -171,7 +171,7 @@ public:
      * @param fileName image file path.
      * @param texType @see TextureResType.
      */
-    void setBackGroundImage(std::string_view fileName, TextureResType texType = TextureResType::LOCAL);
+    void setBackGroundImage(const std::string& fileName, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Sets a background image capinsets for layout, it only affects the scale9 enabled background image
@@ -371,7 +371,7 @@ public:
      * @param tag       A integer to identify the node easily. Please refer to setTag(int)
      */
     virtual void addChild(Node* child, int localZOrder, int tag) override;
-    virtual void addChild(Node* child, int localZOrder, std::string_view name) override;
+    virtual void addChild(Node* child, int localZOrder, const std::string& name) override;
 
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 

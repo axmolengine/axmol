@@ -152,7 +152,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual bool openURL(std::string_view url) = 0;
+    virtual bool openURL(const std::string& url) = 0;
 };
 
 // end of platform group

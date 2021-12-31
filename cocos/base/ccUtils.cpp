@@ -178,13 +178,13 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
 }
 
 // [DEPRECATED]
-void captureScreen(std::function<void(bool, std::string_view)> afterCap, std::string_view filename)
+void captureScreen(std::function<void(bool, const std::string&)> afterCap, const std::string& filename)
 {
     std::string outfile;
     if (FileUtils::getInstance()->isAbsolutePath(filename))
         outfile = filename;
     else
-        outfile = FileUtils::getInstance()->getWritablePath().append(filename);
+        outfile = FileUtils::getInstance()->getWritablePath() + filename;
 
     captureScreen([_afterCap = std::move(afterCap), _outfile = std::move(outfile)](RefPtr<Image> image) mutable {
         AsyncTaskPool::getInstance()->enqueue(
@@ -199,7 +199,7 @@ void captureScreen(std::function<void(bool, std::string_view)> afterCap, std::st
     });
 }
 
-std::vector<Node*> findChildren(const Node& node, std::string_view name)
+std::vector<Node*> findChildren(const Node& node, const std::string& name)
 {
     std::vector<Node*> vec;
 
@@ -348,7 +348,7 @@ Sprite* createSpriteFromBase64(const char* base64String)
     return sprite;
 }
 
-Node* findChild(Node* levelRoot, std::string_view name)
+Node* findChild(Node* levelRoot, const std::string& name)
 {
     if (levelRoot == nullptr || name.empty())
         return nullptr;
@@ -389,7 +389,7 @@ Node* findChild(Node* levelRoot, int tag)
     return nullptr;
 }
 
-std::string getFileMD5Hash(std::string_view filename)
+std::string getFileMD5Hash(const std::string& filename)
 {
     Data data;
     FileUtils::getInstance()->getContents(filename, &data);

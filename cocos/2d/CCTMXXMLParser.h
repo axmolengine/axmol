@@ -250,9 +250,9 @@ class CC_DLL TMXMapInfo : public Ref, public SAXDelegator
 {
 public:
     /** creates a TMX Format with a tmx file */
-    static TMXMapInfo* create(std::string_view tmxFile);
+    static TMXMapInfo* create(const std::string& tmxFile);
     /** creates a TMX Format with an XML string and a TMX resource path */
-    static TMXMapInfo* createWithXML(std::string_view tmxString, std::string_view resourcePath);
+    static TMXMapInfo* createWithXML(const std::string& tmxString, const std::string& resourcePath);
 
     /**
      * @js ctor
@@ -265,13 +265,13 @@ public:
     virtual ~TMXMapInfo();
 
     /** initializes a TMX format with a  tmx file */
-    bool initWithTMXFile(std::string_view tmxFile);
+    bool initWithTMXFile(const std::string& tmxFile);
     /** initializes a TMX format with an XML string and a TMX resource path */
-    bool initWithXML(std::string_view tmxString, std::string_view resourcePath);
+    bool initWithXML(const std::string& tmxString, const std::string& resourcePath);
     /** initializes parsing of an XML file, either a tmx (Map) file or tsx (Tileset) file */
-    bool parseXMLFile(std::string_view xmlFilename);
+    bool parseXMLFile(const std::string& xmlFilename);
     /* initializes parsing of an XML string, either a tmx (Map) string or tsx (Tileset) string */
-    bool parseXMLString(std::string_view xmlString);
+    bool parseXMLString(const std::string& xmlString);
 
     ValueMapIntKey& getTileProperties() { return _tileProperties; };
     void setTileProperties(const ValueMapIntKey& tileProperties) { _tileProperties = tileProperties; }
@@ -353,14 +353,14 @@ public:
      */
     void textHandler(void* ctx, const char* ch, size_t len) override;
 
-    std::string_view getCurrentString() const { return _currentString; }
-    void setCurrentString(std::string_view currentString) { _currentString = currentString; }
-    std::string_view getTMXFileName() const { return _TMXFileName; }
-    void setTMXFileName(std::string_view fileName) { _TMXFileName = fileName; }
-    std::string_view getExternalTilesetFileName() const { return _externalTilesetFilename; }
+    const std::string& getCurrentString() const { return _currentString; }
+    void setCurrentString(const std::string& currentString) { _currentString = currentString; }
+    const std::string& getTMXFileName() const { return _TMXFileName; }
+    void setTMXFileName(const std::string& fileName) { _TMXFileName = fileName; }
+    const std::string& getExternalTilesetFileName() const { return _externalTilesetFilename; }
 
 protected:
-    void internalInit(std::string_view tmxFileName, std::string_view resourcePath);
+    void internalInit(const std::string& tmxFileName, const std::string& resourcePath);
 
     /// map orientation
     int _orientation;

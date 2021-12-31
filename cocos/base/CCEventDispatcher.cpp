@@ -451,9 +451,9 @@ void EventDispatcher::addEventListener(EventListener* listener)
 
 void EventDispatcher::forceAddEventListener(EventListener* listener)
 {
-    EventListenerVector* listeners = nullptr;
-    auto listenerID                = listener->getListenerID();
-    auto itr                       = _listenerMap.find(listenerID);
+    EventListenerVector* listeners       = nullptr;
+    EventListener::ListenerID listenerID = listener->getListenerID();
+    auto itr                             = _listenerMap.find(listenerID);
     if (itr == _listenerMap.end())
     {
 
@@ -579,7 +579,7 @@ void EventDispatcher::addEventListenerWithFixedPriority(EventListener* listener,
     addEventListener(listener);
 }
 
-EventListenerCustom* EventDispatcher::addCustomEventListener(std::string_view eventName,
+EventListenerCustom* EventDispatcher::addCustomEventListener(const std::string& eventName,
                                                              const std::function<void(EventCustom*)>& callback)
 {
     EventListenerCustom* listener = EventListenerCustom::create(eventName, callback);
@@ -931,14 +931,14 @@ void EventDispatcher::dispatchEvent(Event* event)
     updateListeners(event);
 }
 
-void EventDispatcher::dispatchCustomEvent(std::string_view eventName, void* optionalUserData)
+void EventDispatcher::dispatchCustomEvent(const std::string& eventName, void* optionalUserData)
 {
     EventCustom ev(eventName);
     ev.setUserData(optionalUserData);
     dispatchEvent(&ev);
 }
 
-bool EventDispatcher::hasEventListener(std::string_view listenerID) const
+bool EventDispatcher::hasEventListener(const EventListener::ListenerID& listenerID) const
 {
     return getListeners(listenerID) != nullptr;
 }
@@ -1268,7 +1268,7 @@ void EventDispatcher::updateDirtyFlagForSceneGraph()
     }
 }
 
-void EventDispatcher::sortEventListeners(std::string_view listenerID)
+void EventDispatcher::sortEventListeners(const EventListener::ListenerID& listenerID)
 {
     DirtyFlag dirtyFlag = DirtyFlag::NONE;
 
@@ -1303,7 +1303,8 @@ void EventDispatcher::sortEventListeners(std::string_view listenerID)
     }
 }
 
-void EventDispatcher::sortEventListenersOfSceneGraphPriority(std::string_view listenerID, Node* rootNode)
+void EventDispatcher::sortEventListenersOfSceneGraphPriority(const EventListener::ListenerID& listenerID,
+                                                             Node* rootNode)
 {
     auto listeners = getListeners(listenerID);
 
@@ -1336,7 +1337,7 @@ void EventDispatcher::sortEventListenersOfSceneGraphPriority(std::string_view li
 #endif
 }
 
-void EventDispatcher::sortEventListenersOfFixedPriority(std::string_view listenerID)
+void EventDispatcher::sortEventListenersOfFixedPriority(const EventListener::ListenerID& listenerID)
 {
     auto listeners = getListeners(listenerID);
 
@@ -1373,7 +1374,7 @@ void EventDispatcher::sortEventListenersOfFixedPriority(std::string_view listene
 #endif
 }
 
-EventDispatcher::EventListenerVector* EventDispatcher::getListeners(std::string_view listenerID) const
+EventDispatcher::EventListenerVector* EventDispatcher::getListeners(const EventListener::ListenerID& listenerID) const
 {
     auto iter = _listenerMap.find(listenerID);
     if (iter != _listenerMap.end())
@@ -1384,7 +1385,7 @@ EventDispatcher::EventListenerVector* EventDispatcher::getListeners(std::string_
     return nullptr;
 }
 
-void EventDispatcher::removeEventListenersForListenerID(std::string_view listenerID)
+void EventDispatcher::removeEventListenersForListenerID(const EventListener::ListenerID& listenerID)
 {
     auto listenerItemIter = _listenerMap.find(listenerID);
     if (listenerItemIter != _listenerMap.end())
@@ -1478,7 +1479,7 @@ void EventDispatcher::removeEventListenersForType(EventListener::Type listenerTy
     }
 }
 
-void EventDispatcher::removeCustomEventListeners(std::string_view customEventName)
+void EventDispatcher::removeCustomEventListeners(const std::string& customEventName)
 {
     removeEventListenersForListenerID(customEventName);
 }
@@ -1538,7 +1539,7 @@ void EventDispatcher::setDirtyForNode(Node* node)
     }
 }
 
-void EventDispatcher::setDirty(std::string_view listenerID, DirtyFlag flag)
+void EventDispatcher::setDirty(const EventListener::ListenerID& listenerID, DirtyFlag flag)
 {
     auto iter = _priorityDirtyFlagMap.find(listenerID);
     if (iter == _priorityDirtyFlagMap.end())

@@ -117,8 +117,8 @@ public:
 
     const Rect& getRect() const { return _rect; }
     void setRect(const Rect& rect) { _rect = rect; }
-    std::string_view getFilename() const { return _filename; }
-    void setFilename(std::string_view filename) { _filename = filename; }
+    const std::string& getFilename() const { return _filename; }
+    void setFilename(const std::string& filename) { _filename = filename; }
 
     // FIXME: this should be a property, not a public ivar
     TrianglesCommand::Triangles triangles;
@@ -147,7 +147,7 @@ public:
      * @param   filename    a path to image file, e.g., "scene1/monster.png".
      * @return  an AutoPolygon object;
      */
-    AutoPolygon(std::string_view filename);
+    AutoPolygon(const std::string& filename);
 
     /**
      * Destructor of AutoPolygon.
@@ -254,7 +254,7 @@ public:
      * auto sp = Sprite::create(AutoPolygon::generatePolygon("grossini.png"));
      * @endcode
      */
-    static PolygonInfo generatePolygon(std::string_view filename,
+    static PolygonInfo generatePolygon(const std::string& filename,
                                        const Rect& rect = Rect::ZERO,
                                        float epsilon    = 2.0f,
                                        float threshold  = 0.05f);

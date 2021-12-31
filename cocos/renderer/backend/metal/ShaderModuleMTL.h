@@ -52,7 +52,7 @@ public:
      * @param stage Specify what kinds of shader to be created.
      * @param source Specify the shader source.
      */
-    ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source);
+    ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, const std::string& source);
     ~ShaderModuleMTL();
 
     /**
@@ -71,7 +71,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    inline const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo() const { return _uniformInfos; }
+    inline const std::unordered_map<std::string, UniformInfo>& getAllActiveUniformInfo() const { return _uniformInfos; }
 
     /**
      * Get maximum uniform location.
@@ -83,7 +83,7 @@ public:
      * Get active attribute informations.
      * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
      */
-    inline const hlookup::string_map<AttributeBindInfo> getAttributeInfo() const { return _attributeInfo; }
+    inline const std::unordered_map<std::string, AttributeBindInfo> getAttributeInfo() const { return _attributeInfo; }
 
     /**
      * Get uniform location by engine built-in uniform enum name.
@@ -97,7 +97,7 @@ public:
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    int getUniformLocation(std::string_view name) const;
+    int getUniformLocation(const std::string& name) const;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
@@ -111,7 +111,7 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    int getAttributeLocation(std::string_view name);
+    int getAttributeLocation(std::string name);
 
     /**
      * Get uniform buffer size in bytes that holds all the uniforms.
@@ -128,9 +128,9 @@ private:
 
     id<MTLFunction> _mtlFunction = nil;
 
-    hlookup::string_map<UniformInfo> _uniformInfos;
+    std::unordered_map<std::string, UniformInfo> _uniformInfos;
     std::unordered_map<int, UniformInfo> _activeUniformInfos;
-    hlookup::string_map<AttributeBindInfo> _attributeInfo;
+    std::unordered_map<std::string, AttributeBindInfo> _attributeInfo;
 
     int _maxLocation = -1;
     int _uniformLocation[UNIFORM_MAX];

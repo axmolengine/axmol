@@ -184,8 +184,8 @@ int lua_cocos2dx_audioengine_AudioEngine_uncache(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:uncache");
+        std::string arg0;
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.AudioEngine:uncache");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_uncache'", nullptr);
@@ -607,8 +607,8 @@ int lua_cocos2dx_audioengine_AudioEngine_preload(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:preload");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.AudioEngine:preload");
             if (!ok) { break; }
             std::function<void (bool)> arg1;
             do {
@@ -627,8 +627,8 @@ int lua_cocos2dx_audioengine_AudioEngine_preload(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:preload");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.AudioEngine:preload");
             if (!ok) { break; }
             cocos2d::AudioEngine::preload(arg0);
             lua_settop(tolua_S, 1);
@@ -697,8 +697,8 @@ int lua_cocos2dx_audioengine_AudioEngine_play2d(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:play2d");
+        std::string arg0;
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.AudioEngine:play2d");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_play2d'", nullptr);
@@ -710,9 +710,9 @@ int lua_cocos2dx_audioengine_AudioEngine_play2d(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        std::string_view arg0;
+        std::string arg0;
         bool arg1;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:play2d");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.AudioEngine:play2d");
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "cc.AudioEngine:play2d");
         if(!ok)
         {
@@ -725,10 +725,10 @@ int lua_cocos2dx_audioengine_AudioEngine_play2d(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        std::string_view arg0;
+        std::string arg0;
         bool arg1;
         double arg2;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:play2d");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.AudioEngine:play2d");
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "cc.AudioEngine:play2d");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.AudioEngine:play2d");
         if(!ok)
@@ -742,11 +742,11 @@ int lua_cocos2dx_audioengine_AudioEngine_play2d(lua_State* tolua_S)
     }
     if (argc == 4)
     {
-        std::string_view arg0;
+        std::string arg0;
         bool arg1;
         double arg2;
         const cocos2d::AudioProfile* arg3;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:play2d");
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.AudioEngine:play2d");
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "cc.AudioEngine:play2d");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.AudioEngine:play2d");
         ok &= luaval_to_object<const cocos2d::AudioProfile>(tolua_S, 5, "cc.AudioProfile",&arg3, "cc.AudioEngine:play2d");
@@ -1035,8 +1035,8 @@ int lua_cocos2dx_audioengine_AudioEngine_getProfile(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:getProfile");
+            std::string arg0;
+            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.AudioEngine:getProfile");
             if (!ok) { break; }
             cocos2d::AudioProfile* ret = cocos2d::AudioEngine::getProfile(arg0);
             object_to_luaval<cocos2d::AudioProfile>(tolua_S, "cc.AudioProfile",(cocos2d::AudioProfile*)ret);

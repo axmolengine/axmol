@@ -61,7 +61,7 @@ MotionStreak3D* MotionStreak3D::create(float fade,
                                        float minSeg,
                                        float stroke,
                                        const Color3B& color,
-                                       std::string_view path)
+                                       const std::string& path)
 {
     MotionStreak3D* ret = new MotionStreak3D();
     if (ret && ret->initWithFade(fade, minSeg, stroke, color, path))
@@ -87,7 +87,7 @@ MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, c
     return nullptr;
 }
 
-bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
+bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, const std::string& path)
 {
     CCASSERT(!path.empty(), "Invalid filename");
 
