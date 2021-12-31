@@ -24,7 +24,7 @@
 
 #include "LayerTest.h"
 #include "../testResource.h"
-#include "../cocos/ui/UIText.h"
+#include "../core/ui/UIText.h"
 
 USING_NS_CC;
 

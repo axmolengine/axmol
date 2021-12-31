@@ -7,7 +7,7 @@ on:
       - release
     paths:
       - cmake/**/*
-      - cocos/**/*
+      - core/**/*
       - extensions/**/*
       - tests/**/*
       - thirdparty/**/*

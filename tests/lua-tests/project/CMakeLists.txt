@@ -21,7 +21,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
 
     include(CocosBuildSet)
     set(BUILD_LUA_LIBS ON)
-    add_subdirectory(${ADXE_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
+    add_subdirectory(${ADXE_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/adxe/core)
 endif()
 
 set(GAME_HEADER
@@ -107,7 +107,7 @@ if(NOT ANDROID)
     target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
 else()
     add_library(${APP_NAME} SHARED ${APP_SRC})
-    add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/cocos/lua-android)
+    add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/core/lua-android)
     if(${CMAKE_ANDROID_ARCH_ABI} STREQUAL "x86")
         #add `-Wl,--no-warn-shared-textrel` to fix warning "shared library text segment is not shareable clang"
         target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive -Wl,--no-warn-shared-textrel)

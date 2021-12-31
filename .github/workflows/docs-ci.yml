@@ -7,7 +7,7 @@ on:
     branches:
       - dev
     paths:
-      - cocos/**/*
+      - core/**/*
       - docs/**/*
       - .github/workflows/docs-ci.yml
 

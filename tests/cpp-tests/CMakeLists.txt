@@ -21,7 +21,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
 
     include(CocosBuildSet)
-    add_subdirectory(${ADXE_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
+    add_subdirectory(${ADXE_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/adxe/core)
 endif()
 
 # record sources, headers, resources...

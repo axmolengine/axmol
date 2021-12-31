@@ -47,7 +47,7 @@ class CCPluginCompile(adxe.CCPlugin):
     BACKUP_SUFFIX = "-backup"
     ENGINE_JS_DIRS = [
         "frameworks/js-bindings/bindings/script",
-        "cocos/scripting/js-bindings/script"
+        "core/scripting/js-bindings/script"
     ]
 
     CMAKE_VS_GENERATOR_MAP = {

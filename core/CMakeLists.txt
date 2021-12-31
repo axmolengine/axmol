@@ -129,14 +129,14 @@ target_include_directories(${ADXE_CORE_LIB}
     PUBLIC ${ADXE_ROOT_PATH}
     PUBLIC ${ADXE_ROOT_PATH}/thirdparty
     PUBLIC ${ADXE_ROOT_PATH}/extensions
-    PUBLIC ${ADXE_ROOT_PATH}/cocos
-    PUBLIC ${ADXE_ROOT_PATH}/cocos/platform
+    PUBLIC ${ADXE_ROOT_PATH}/core
+    PUBLIC ${ADXE_ROOT_PATH}/core/platform
 
     INTERFACE ${ADXE_ROOT_PATH}/thirdparty
     INTERFACE ${ADXE_ROOT_PATH}/extensions
-    INTERFACE ${ADXE_ROOT_PATH}/cocos/base
-    INTERFACE ${ADXE_ROOT_PATH}/cocos/audio/include
-    INTERFACE ${ADXE_ROOT_PATH}/cocos/platform/${PLATFORM_FOLDER}
+    INTERFACE ${ADXE_ROOT_PATH}/core/base
+    INTERFACE ${ADXE_ROOT_PATH}/core/audio/include
+    INTERFACE ${ADXE_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
 )
 
 set_target_properties(${ADXE_CORE_LIB}
@@ -150,7 +150,7 @@ set_target_properties(${ADXE_CORE_LIB}
 
 ## Lua bindings lib
 # if(BUILD_LUA_LIBS)
-#     add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/cocos/lua-bindings)
+#     add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/core/lua-bindings)
 # endif()
 
 if(XCODE OR VS)
