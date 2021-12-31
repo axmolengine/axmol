@@ -74,7 +74,7 @@ public:
 
 private:
     static TabHeaderReader* _tabheaderReaderInstance;
-    int getResourceType(std::string key);
+    int getResourceType(std::string_view key);
 };
 
 class TabItemReader : public cocos2d::Ref, public cocostudio::NodeReaderProtocol

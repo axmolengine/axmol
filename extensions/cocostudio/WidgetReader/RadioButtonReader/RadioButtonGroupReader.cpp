@@ -61,8 +61,8 @@ Offset<Table> RadioButtonGroupReader::createOptionsWithFlatBuffers(pugi::xml_nod
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "AllowedNoSelection")
         {
@@ -97,7 +97,7 @@ Node* RadioButtonGroupReader::createNodeWithFlatBuffers(const flatbuffers::Table
     return node;
 }
 
-/*int RadioButtonGroupReader::getResourceType(std::string key)
+/*int RadioButtonGroupReader::getResourceType(std::string_view key)
 {
     if(key == "Normal" || key == "Default")
     {

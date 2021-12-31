@@ -78,8 +78,8 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "CheckedState")
         {
@@ -96,7 +96,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "NormalBackFileData")
         {
@@ -108,7 +108,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -143,7 +143,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -178,7 +178,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -213,7 +213,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -248,7 +248,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -618,7 +618,7 @@ Node* RadioButtonReader::createNodeWithFlatBuffers(const flatbuffers::Table* che
     return radioButton;
 }
 
-int RadioButtonReader::getResourceType(std::string key)
+int RadioButtonReader::getResourceType(std::string_view key)
 {
     if (key == "Normal" || key == "Default")
     {

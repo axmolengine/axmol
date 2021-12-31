@@ -89,8 +89,8 @@ Offset<Table> SpineSkeletonReader::createOptionsWithFlatBuffers(pugi::xml_node o
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "DataFile")
         {
@@ -114,7 +114,7 @@ Offset<Table> SpineSkeletonReader::createOptionsWithFlatBuffers(pugi::xml_node o
         }
         else if (name == "TimeScale")
         {
-            timeScale = atof(value.c_str());
+            timeScale = atof(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -124,7 +124,7 @@ Offset<Table> SpineSkeletonReader::createOptionsWithFlatBuffers(pugi::xml_node o
         auto child = objectData.first_child();
         while (child)
         {
-            std::string name = child.name();
+            std::string_view name = child.name();
 
             if (name == "DataFile")
             {
@@ -136,7 +136,7 @@ Offset<Table> SpineSkeletonReader::createOptionsWithFlatBuffers(pugi::xml_node o
                 while (attribute)
                 {
                     name = attribute.name();
-                    std::string value = attribute.value();
+                    std::string_view value = attribute.value();
 
                     if (name == "Path")
                     {
@@ -168,15 +168,15 @@ Offset<Table> SpineSkeletonReader::createOptionsWithFlatBuffers(pugi::xml_node o
                 while (attribute)
                 {
                     name = attribute.name();
-                    std::string value = attribute.value();
+                    std::string_view value = attribute.value();
 
                     if (name == "Src")
                     {
-                        blendFunc.src = atoi(value.c_str());
+                        blendFunc.src = atoi(value.data());
                     }
                     else if (name == "Dst")
                     {
-                        blendFunc.dst = atoi(value.c_str());
+                        blendFunc.dst = atoi(value.data());
                     }
 
                     attribute = attribute.next_attribute();
@@ -245,7 +245,7 @@ Node* SpineSkeletonReader::createNodeWithFlatBuffers(const flatbuffers::Table* s
     return node;
 }
 
-int SpineSkeletonReader::getResourceType(std::string key)
+int SpineSkeletonReader::getResourceType(std::string_view key)
 {
     if (key == "Normal" || key == "Default")
     {

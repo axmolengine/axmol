@@ -150,8 +150,8 @@ Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "LabelText")
         {
@@ -159,11 +159,11 @@ Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objec
         }
         else if (name == "CharWidth")
         {
-            itemWidth = atoi(value.c_str());
+            itemWidth = atoi(value.data());
         }
         else if (name == "CharHeight")
         {
-            itemHeight = atoi(value.c_str());
+            itemHeight = atoi(value.data());
         }
         else if (name == "StartChar")
         {
@@ -177,7 +177,7 @@ Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "LabelAtlasFileImage_CNB")
         {
@@ -189,7 +189,7 @@ Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objec
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {

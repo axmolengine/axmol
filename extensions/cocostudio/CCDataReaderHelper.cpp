@@ -586,12 +586,12 @@ ArmatureData* DataReaderHelper::decodeArmature(pugi::xml_node& armatureXML, Data
         /*
          *  If this bone have parent, then get the parent bone xml
          */
-        const char* parentName = boneXML.attribute(A_PARENT).as_string();
+        auto parentName = boneXML.attribute(A_PARENT).as_string();
         pugi::xml_node parentXML;
-        if (parentName)
+        if (!parentName.empty())
         {
             parentXML                 = armatureXML.child(BONE);
-            std::string parentNameStr = parentName;
+            auto parentNameStr = parentName;
             while (parentXML)
             {
                 if (parentNameStr == parentXML.attribute(A_NAME).as_string())
@@ -687,7 +687,7 @@ AnimationData* DataReaderHelper::decodeAnimation(pugi::xml_node& animationXML, D
 {
     AnimationData* aniData = new AnimationData();
 
-    const char* name = animationXML.attribute(A_NAME).as_string();
+    auto name = animationXML.attribute(A_NAME).as_string();
 
     ArmatureData* armatureData = ArmatureDataManager::getInstance()->getArmatureData(name);
 
@@ -713,7 +713,7 @@ MovementData* DataReaderHelper::decodeMovement(pugi::xml_node& movementXML,
 {
     MovementData* movementData = new MovementData();
 
-    const char* movName = movementXML.attribute(A_NAME).as_string();
+    auto movName = movementXML.attribute(A_NAME).as_string();
     movementData->name  = movName;
 
     pugiext::query_attribute(movementXML, A_DURATION, &movementData->duration);
@@ -721,13 +721,12 @@ MovementData* DataReaderHelper::decodeMovement(pugi::xml_node& movementXML,
     pugiext::query_attribute(movementXML, A_DURATION_TWEEN, &movementData->durationTween);
     pugiext::query_attribute(movementXML, A_LOOP, &movementData->loop);
 
-    const char* _easing = movementXML.attribute(A_TWEEN_EASING).as_string();
-    if (_easing != nullptr)
+    auto _easing = movementXML.attribute(A_TWEEN_EASING).as_string();
+    if (!_easing.empty())
     {
-        std::string str = _easing;
-        if (strcmp(_easing, FL_NAN) != 0)
+        if (_easing != FL_NAN)
         {
-            int tweenEasing           = atoi(_easing);
+            int tweenEasing           = atoi(_easing.data());
             movementData->tweenEasing = tweenEasing == 2 ? cocos2d::tweenfunc::Sine_EaseInOut : (TweenType)tweenEasing;
         }
         else
@@ -739,7 +738,7 @@ MovementData* DataReaderHelper::decodeMovement(pugi::xml_node& movementXML,
     pugi::xml_node movBoneXml = movementXML.child(BONE);
     while (movBoneXml)
     {
-        const char* boneName = movBoneXml.attribute(A_NAME).as_string();
+        auto boneName = movBoneXml.attribute(A_NAME).as_string();
 
         if (movementData->getMovementBoneData(boneName))
         {
@@ -1669,7 +1668,7 @@ void DataReaderHelper::addDataFromBinaryCache(const char* fileContent, DataInfo*
                 if (key.compare(CONTENT_SCALE) == 0)
                 {
                     std::string value      = tpChildArray[i].GetValue(&tCocoLoader);
-                    dataInfo->contentScale = utils::atof(value.c_str());
+                    dataInfo->contentScale = utils::atof(value.data());
                 }
                 else if (0 == key.compare(ARMATURE_DATA))
                 {

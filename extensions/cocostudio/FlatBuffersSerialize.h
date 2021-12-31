@@ -115,7 +115,7 @@ public:
     static std::string serializeFlatBuffersWithOpaque(void* opaque, std::string_view flatbuffersFileName);
 
     // NodeTree
-    flatbuffers::Offset<flatbuffers::NodeTree> createNodeTree(pugi::xml_node objectData, std::string classType);
+    flatbuffers::Offset<flatbuffers::NodeTree> createNodeTree(pugi::xml_node objectData, std::string_view classType);
 
     // NodeAction
     flatbuffers::Offset<flatbuffers::NodeAction> createNodeAction(pugi::xml_node objectData);
@@ -136,14 +136,14 @@ public:
     flatbuffers::Offset<flatbuffers::AnimationInfo> createAnimationInfo(pugi::xml_node objectData);
     /**/
 
-    int getResourceType(std::string key);
+    int getResourceType(std::string_view key);
     std::string getGUIClassName(std::string_view name);
     std::string getWidgetReaderClassName(cocos2d::ui::Widget* widget);
 
     /* create flat buffers with XML */
     flatbuffers::FlatBufferBuilder* createFlatBuffersWithXMLFileForSimulator(std::string_view xmlFileName);
     flatbuffers::Offset<flatbuffers::NodeTree> createNodeTreeForSimulator(pugi::xml_node objectData,
-                                                                          std::string classType);
+                                                                          std::string_view classType);
     flatbuffers::Offset<flatbuffers::ProjectNodeOptions> createProjectNodeOptionsForSimulator(
         pugi::xml_node objectData);
     /**/

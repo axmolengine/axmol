@@ -61,8 +61,8 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute.name();
-        std::string value     = attribute.value();
+        std::string_view attriname = attribute.name();
+        std::string_view value     = attribute.value();
 
         if (attriname == "IsLoop")
         {
@@ -82,11 +82,11 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
         }
         else if (attriname == "ArmatureScale")
         {
-            armatureScale = atof(value.c_str());
+            armatureScale = atof(value.data());
         }
         else if (attriname == "TimeScale")
         {
-            timeScale = atof(value.c_str());
+            timeScale = atof(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -95,7 +95,7 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
     auto child = objectData.first_child();
     while (child)
     {
-        std::string attriname = child.name();
+        std::string_view attriname = child.name();
         if (attriname == "FileData")
         {
             attribute = child.first_attribute();
@@ -103,7 +103,7 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "Type")
                 {

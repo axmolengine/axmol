@@ -15,7 +15,7 @@ NS_FGUI_BEGIN
 
 using namespace std;
 
-std::unordered_map<std::string, std::unordered_map<std::string, std::string>> TranslationHelper::strings;
+hlookup::string_map<hlookup::string_map<std::string> > TranslationHelper::strings;
 
 void TranslationHelper::loadFromXML(const char* xmlString, size_t nBytes)
 {
@@ -25,21 +25,21 @@ void TranslationHelper::loadFromXML(const char* xmlString, size_t nBytes)
     pugi::xml_document doc;
     if (doc.load_buffer(xmlString, nBytes)) {
         auto root = doc.document_element();
-        auto ele = doc.child("string");
+        auto ele = doc.child("string"sv);
         while (ele)
         {
-            std::string key = ele.attribute("name").value();
-            std::string text = ele.text().as_string();
+            auto key = ele.attribute("name"sv).value();
+            auto text = ele.text().as_string();
             size_t i = key.find("-");
             if (i == std::string::npos)
                 continue;
 
-            std::string key2 = key.substr(0, i);
-            std::string key3 = key.substr(i + 1);
+            auto key2 = key.substr(0, i);
+            auto key3 = key.substr(i + 1);
             auto& col = TranslationHelper::strings[key2];
             col[key3] = text;
 
-            ele = ele.next_sibling("string");
+            ele = ele.next_sibling("string"sv);
         }
     }
 #else

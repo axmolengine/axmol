@@ -113,8 +113,8 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute.name();
-        std::string value     = attribute.value();
+        std::string_view attriname = attribute.name();
+        std::string_view value     = attribute.value();
 
         if (attriname == "Name")
         {
@@ -134,7 +134,7 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
         }
         else if (attriname == "skyBoxMask")
         {
-            skyBoxMask = atoi(value.c_str());
+            skyBoxMask = atoi(value.data());
         }
         else if (attriname == "UserData")
         {
@@ -154,7 +154,7 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     auto child = objectData.first_child();
     while (child)
     {
-        std::string childName = child.name();
+        std::string_view childName = child.name();
 
         if (childName == "LeftImage")
         {
@@ -162,8 +162,8 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                std::string attributeName = attribute.name();
-                std::string value         = attribute.value();
+                std::string_view attributeName = attribute.name();
+                std::string_view value         = attribute.value();
 
                 if (attributeName == "Path")
                 {
@@ -193,8 +193,8 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                std::string attributeName = attribute.name();
-                std::string value         = attribute.value();
+                std::string_view attributeName = attribute.name();
+                std::string_view value         = attribute.value();
 
                 if (attributeName == "Path")
                 {
@@ -224,8 +224,8 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                std::string attributeName = attribute.name();
-                std::string value         = attribute.value();
+                std::string_view attributeName = attribute.name();
+                std::string_view value         = attribute.value();
 
                 if (attributeName == "Path")
                 {
@@ -255,8 +255,8 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                std::string attributeName = attribute.name();
-                std::string value         = attribute.value();
+                std::string_view attributeName = attribute.name();
+                std::string_view value         = attribute.value();
 
                 if (attributeName == "Path")
                 {
@@ -286,8 +286,8 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                std::string attributeName = attribute.name();
-                std::string value         = attribute.value();
+                std::string_view attributeName = attribute.name();
+                std::string_view value         = attribute.value();
 
                 if (attributeName == "Path")
                 {
@@ -317,8 +317,8 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                std::string attributeName = attribute.name();
-                std::string value         = attribute.value();
+                std::string_view attributeName = attribute.name();
+                std::string_view value         = attribute.value();
 
                 if (attributeName == "Path")
                 {
@@ -411,7 +411,7 @@ Node* GameNode3DReader::createNodeWithFlatBuffers(const flatbuffers::Table* node
     return node;
 }
 
-int GameNode3DReader::getResourceType(std::string key)
+int GameNode3DReader::getResourceType(std::string_view key)
 {
     if (key == "Normal" || key == "Default")
     {

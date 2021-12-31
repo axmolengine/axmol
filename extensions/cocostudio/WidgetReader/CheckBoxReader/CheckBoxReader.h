@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
  http://www.cocos2d-x.org
@@ -49,7 +49,7 @@ public:
                                                                          flatbuffers::FlatBufferBuilder* builder);
     void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* checkBoxOptions);
     cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* checkBoxOptions);
-    virtual int getResourceType(std::string key);
+    virtual int getResourceType(std::string_view key);
 };
 }  // namespace cocostudio
 

@@ -71,12 +71,12 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "Length")
         {
-            length = atof(value.c_str());
+            length = atof(value.data());
         }
         attribute = attribute.next_attribute();
     }
@@ -84,7 +84,7 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
         if (name == "BlendFunc")
         {
             pugi::xml_attribute battribute = child.first_attribute();
@@ -92,15 +92,15 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (battribute)
             {
                 name              = battribute.name();
-                std::string value = battribute.value();
+                std::string_view value = battribute.value();
 
                 if (name == "Src")
                 {
-                    blendFunc.src = utils::toBackendBlendFactor(atoi(value.c_str()));
+                    blendFunc.src = utils::toBackendBlendFactor(atoi(value.data()));
                 }
                 else if (name == "Dst")
                 {
-                    blendFunc.dst = utils::toBackendBlendFactor(atoi(value.c_str()));
+                    blendFunc.dst = utils::toBackendBlendFactor(atoi(value.data()));
                 }
 
                 battribute = battribute.next_attribute();

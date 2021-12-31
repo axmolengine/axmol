@@ -178,8 +178,8 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "TouchScaleChangeAble")
         {
@@ -195,7 +195,7 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
         }
         else if (name == "FontSize")
         {
-            fontSize = atoi(value.c_str());
+            fontSize = atoi(value.data());
         }
         else if (name == "FontName")
         {
@@ -203,11 +203,11 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
         }
         else if (name == "AreaWidth")
         {
-            areaWidth = atoi(value.c_str());
+            areaWidth = atoi(value.data());
         }
         else if (name == "AreaHeight")
         {
-            areaHeight = atoi(value.c_str());
+            areaHeight = atoi(value.data());
         }
         else if (name == "HorizontalAlignmentType")
         {
@@ -249,7 +249,7 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
         }
         else if (name == "OutlineSize")
         {
-            outlineSize = atoi(value.c_str());
+            outlineSize = atoi(value.data());
         }
         else if (name == "ShadowEnabled")
         {
@@ -257,15 +257,15 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
         }
         else if (name == "ShadowOffsetX")
         {
-            shadowOffset.width = atof(value.c_str());
+            shadowOffset.width = atof(value.data());
         }
         else if (name == "ShadowOffsetY")
         {
-            shadowOffset.height = atof(value.c_str());
+            shadowOffset.height = atof(value.data());
         }
         else if (name == "ShadowBlurRadius")
         {
-            shadowBlurRadius = atoi(value.c_str());
+            shadowBlurRadius = atoi(value.data());
         }
         else if (name == "GlowEnabled")
         {
@@ -295,7 +295,7 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "FontResource")
         {
@@ -304,7 +304,7 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -329,23 +329,23 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "A")
                 {
-                    outlineColor.a = atoi(value.c_str());
+                    outlineColor.a = atoi(value.data());
                 }
                 else if (name == "R")
                 {
-                    outlineColor.r = atoi(value.c_str());
+                    outlineColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    outlineColor.g = atoi(value.c_str());
+                    outlineColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    outlineColor.b = atoi(value.c_str());
+                    outlineColor.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -358,23 +358,23 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "A")
                 {
-                    shadowColor.a = atoi(value.c_str());
+                    shadowColor.a = atoi(value.data());
                 }
                 else if (name == "R")
                 {
-                    shadowColor.r = atoi(value.c_str());
+                    shadowColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    shadowColor.g = atoi(value.c_str());
+                    shadowColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    shadowColor.b = atoi(value.c_str());
+                    shadowColor.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -387,23 +387,23 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "A")
                 {
-                    glowColor.a = atoi(value.c_str());
+                    glowColor.a = atoi(value.data());
                 }
                 else if (name == "R")
                 {
-                    glowColor.r = atoi(value.c_str());
+                    glowColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    glowColor.g = atoi(value.c_str());
+                    glowColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    glowColor.b = atoi(value.c_str());
+                    glowColor.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();

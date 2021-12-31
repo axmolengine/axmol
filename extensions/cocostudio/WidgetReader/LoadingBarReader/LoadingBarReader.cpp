@@ -155,8 +155,8 @@ Offset<Table> LoadingBarReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "ProgressType")
         {
@@ -164,7 +164,7 @@ Offset<Table> LoadingBarReader::createOptionsWithFlatBuffers(pugi::xml_node obje
         }
         else if (name == "ProgressInfo")
         {
-            percent = atoi(value.c_str());
+            percent = atoi(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -174,7 +174,7 @@ Offset<Table> LoadingBarReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "ImageFileData")
         {
@@ -186,7 +186,7 @@ Offset<Table> LoadingBarReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -311,7 +311,7 @@ Node* LoadingBarReader::createNodeWithFlatBuffers(const flatbuffers::Table* load
     return loadingBar;
 }
 
-int LoadingBarReader::getResourceType(std::string key)
+int LoadingBarReader::getResourceType(std::string_view key)
 {
     if (key == "Normal" || key == "Default")
     {

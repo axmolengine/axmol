@@ -79,8 +79,8 @@ Offset<Table> ComAudioReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute.name();
-        std::string value     = attribute.value();
+        std::string_view attriname = attribute.name();
+        std::string_view value     = attribute.value();
 
         if (attriname == "Loop")
         {
@@ -88,7 +88,7 @@ Offset<Table> ComAudioReader::createOptionsWithFlatBuffers(pugi::xml_node object
         }
         else if (attriname == "Volume")
         {
-            volume = atof(value.c_str());
+            volume = atof(value.data());
         }
         else if (attriname == "Name")
         {
@@ -102,7 +102,7 @@ Offset<Table> ComAudioReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto child = objectData.first_child();
     while (child)
     {
-        std::string attriname = child.name();
+        std::string_view attriname = child.name();
 
         if (attriname == "FileData")
         {
@@ -111,7 +111,7 @@ Offset<Table> ComAudioReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "Path")
                 {

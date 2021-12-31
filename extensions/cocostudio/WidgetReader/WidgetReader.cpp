@@ -458,8 +458,8 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     pugi::xml_attribute attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute.name();
-        std::string value     = attribute.value();
+        std::string_view attriname = attribute.name();
+        std::string_view value     = attribute.value();
 
         if (attriname == "Name")
         {
@@ -467,19 +467,19 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
         }
         else if (attriname == "ActionTag")
         {
-            actionTag = atol(value.c_str());
+            actionTag = atol(value.data());
         }
         else if (attriname == "RotationSkewX")
         {
-            rotationSkew.x = atof(value.c_str());
+            rotationSkew.x = atof(value.data());
         }
         else if (attriname == "RotationSkewY")
         {
-            rotationSkew.y = atof(value.c_str());
+            rotationSkew.y = atof(value.data());
         }
         else if (attriname == "Rotation")
         {
-            //            rotation = atoi(value.c_str());
+            //            rotation = atoi(value.data());
         }
         else if (attriname == "FlipX")
         {
@@ -491,7 +491,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
         }
         else if (attriname == "ZOrder")
         {
-            zOrder = atoi(value.c_str());
+            zOrder = atoi(value.data());
         }
         else if (attriname == "Visible")
         {
@@ -503,11 +503,11 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
         }
         else if (attriname == "Alpha")
         {
-            alpha = atoi(value.c_str());
+            alpha = atoi(value.data());
         }
         else if (attriname == "Tag")
         {
-            tag = atoi(value.c_str());
+            tag = atoi(value.data());
         }
         else if (attriname == "TouchEnable")
         {
@@ -571,19 +571,19 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
         }
         else if (attriname == P_Layout_LeftMargin)
         {
-            leftMargin = atof(value.c_str());
+            leftMargin = atof(value.data());
         }
         else if (attriname == P_Layout_RightMargin)
         {
-            rightMargin = atof(value.c_str());
+            rightMargin = atof(value.data());
         }
         else if (attriname == P_Layout_TopMargin)
         {
-            topMargin = atof(value.c_str());
+            topMargin = atof(value.data());
         }
         else if (attriname == P_Layout_BottomMargin)
         {
-            bottomMargin = atof(value.c_str());
+            bottomMargin = atof(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -592,7 +592,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     auto child = objectData.first_child();
     while (child)
     {
-        std::string attriname = child.name();
+        std::string_view attriname = child.name();
         if (attriname == "Position")
         {
             attribute = child.first_attribute();
@@ -600,15 +600,15 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "X")
                 {
-                    position.x = atof(value.c_str());
+                    position.x = atof(value.data());
                 }
                 else if (attriname == "Y")
                 {
-                    position.y = atof(value.c_str());
+                    position.y = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -621,15 +621,15 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "ScaleX")
                 {
-                    scale.x = atof(value.c_str());
+                    scale.x = atof(value.data());
                 }
                 else if (attriname == "ScaleY")
                 {
-                    scale.y = atof(value.c_str());
+                    scale.y = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -642,15 +642,15 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "ScaleX")
                 {
-                    anchorPoint.x = atof(value.c_str());
+                    anchorPoint.x = atof(value.data());
                 }
                 else if (attriname == "ScaleY")
                 {
-                    anchorPoint.y = atof(value.c_str());
+                    anchorPoint.y = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -663,23 +663,23 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "A")
                 {
-                    color.a = atoi(value.c_str());
+                    color.a = atoi(value.data());
                 }
                 else if (attriname == "R")
                 {
-                    color.r = atoi(value.c_str());
+                    color.r = atoi(value.data());
                 }
                 else if (attriname == "G")
                 {
-                    color.g = atoi(value.c_str());
+                    color.g = atoi(value.data());
                 }
                 else if (attriname == "B")
                 {
-                    color.b = atoi(value.c_str());
+                    color.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -692,15 +692,15 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "X")
                 {
-                    size.x = atof(value.c_str());
+                    size.x = atof(value.data());
                 }
                 else if (attriname == "Y")
                 {
-                    size.y = atof(value.c_str());
+                    size.y = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -713,15 +713,15 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "X")
                 {
-                    positionXPercent = atof(value.c_str());
+                    positionXPercent = atof(value.data());
                 }
                 else if (attriname == "Y")
                 {
-                    positionYPercent = atof(value.c_str());
+                    positionYPercent = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -734,15 +734,15 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "X")
                 {
-                    sizeXPercent = atof(value.c_str());
+                    sizeXPercent = atof(value.data());
                 }
                 else if (attriname == "Y")
                 {
-                    sizeYPercent = atof(value.c_str());
+                    sizeYPercent = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
