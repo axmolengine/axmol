@@ -512,35 +512,35 @@ void SceneReader::setPropertyFromJsonDict(CocoLoader* cocoLoader, stExpCocoNode*
 
         if (key == "x")
         {
-            node->setPositionX(utils::atof(value.c_str()));
+            node->setPositionX(utils::atof(value.data()));
         }
         else if (key == "y")
         {
-            node->setPositionY(utils::atof(value.c_str()));
+            node->setPositionY(utils::atof(value.data()));
         }
         else if (key == "visible")
         {
-            node->setVisible(atoi(value.c_str()) != 0);
+            node->setVisible(atoi(value.data()) != 0);
         }
         else if (key == "objecttag")
         {
-            node->setTag(atoi(value.c_str()));
+            node->setTag(atoi(value.data()));
         }
         else if (key == "zorder")
         {
-            node->setLocalZOrder(atoi(value.c_str()));
+            node->setLocalZOrder(atoi(value.data()));
         }
         else if (key == "scalex")
         {
-            node->setScaleX(utils::atof(value.c_str()));
+            node->setScaleX(utils::atof(value.data()));
         }
         else if (key == "scaley")
         {
-            node->setScaleY(atof(value.c_str()));
+            node->setScaleY(atof(value.data()));
         }
         else if (key == "rotation")
         {
-            node->setRotation(utils::atof(value.c_str()));
+            node->setRotation(utils::atof(value.data()));
         }
         else if (key == "name")
         {

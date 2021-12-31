@@ -322,8 +322,8 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "ClipAble")
         {
@@ -331,11 +331,11 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
         }
         else if (name == "ComboBoxIndex")
         {
-            colorType = atoi(value.c_str());
+            colorType = atoi(value.data());
         }
         else if (name == "BackColorAlpha")
         {
-            bgColorOpacity = atoi(value.c_str());
+            bgColorOpacity = atoi(value.data());
         }
         else if (name == "Scale9Enable")
         {
@@ -346,19 +346,19 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
         }
         else if (name == "Scale9OriginX")
         {
-            capInsets.origin.x = atof(value.c_str());
+            capInsets.origin.x = atof(value.data());
         }
         else if (name == "Scale9OriginY")
         {
-            capInsets.origin.y = atof(value.c_str());
+            capInsets.origin.y = atof(value.data());
         }
         else if (name == "Scale9Width")
         {
-            capInsets.size.width = atof(value.c_str());
+            capInsets.size.width = atof(value.data());
         }
         else if (name == "Scale9Height")
         {
-            capInsets.size.height = atof(value.c_str());
+            capInsets.size.height = atof(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -368,7 +368,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "Size" && backGroundScale9Enabled)
         {
@@ -377,15 +377,15 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "X")
                 {
-                    scale9Size.width = atof(value.c_str());
+                    scale9Size.width = atof(value.data());
                 }
                 else if (name == "Y")
                 {
-                    scale9Size.height = atof(value.c_str());
+                    scale9Size.height = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -398,19 +398,19 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "R")
                 {
-                    bgColor.r = atoi(value.c_str());
+                    bgColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    bgColor.g = atoi(value.c_str());
+                    bgColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    bgColor.b = atoi(value.c_str());
+                    bgColor.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -423,19 +423,19 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "R")
                 {
-                    bgEndColor.r = atoi(value.c_str());
+                    bgEndColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    bgEndColor.g = atoi(value.c_str());
+                    bgEndColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    bgEndColor.b = atoi(value.c_str());
+                    bgEndColor.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -448,19 +448,19 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "R")
                 {
-                    bgStartColor.r = atoi(value.c_str());
+                    bgStartColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    bgStartColor.g = atoi(value.c_str());
+                    bgStartColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    bgStartColor.b = atoi(value.c_str());
+                    bgStartColor.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -472,15 +472,15 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "ScaleX")
                 {
-                    colorVector.x = atof(value.c_str());
+                    colorVector.x = atof(value.data());
                 }
                 else if (name == "ScaleY")
                 {
-                    colorVector.y = atof(value.c_str());
+                    colorVector.y = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -496,7 +496,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -673,7 +673,7 @@ Node* LayoutReader::createNodeWithFlatBuffers(const flatbuffers::Table* layoutOp
     return layout;
 }
 
-int LayoutReader::getResourceType(std::string key)
+int LayoutReader::getResourceType(std::string_view key)
 {
     if (key == "Normal" || key == "Default")
     {

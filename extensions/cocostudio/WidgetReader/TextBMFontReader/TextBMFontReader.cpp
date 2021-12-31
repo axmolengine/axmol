@@ -128,8 +128,8 @@ Offset<Table> TextBMFontReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "LabelText")
         {
@@ -147,7 +147,7 @@ Offset<Table> TextBMFontReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "LabelBMFontFile_CNB")
         {
@@ -156,7 +156,7 @@ Offset<Table> TextBMFontReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {

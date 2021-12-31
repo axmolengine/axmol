@@ -77,7 +77,7 @@ Offset<Table> GameMapReader::createOptionsWithFlatBuffers(pugi::xml_node objectD
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "FileData")
         {
@@ -86,7 +86,7 @@ Offset<Table> GameMapReader::createOptionsWithFlatBuffers(pugi::xml_node objectD
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {

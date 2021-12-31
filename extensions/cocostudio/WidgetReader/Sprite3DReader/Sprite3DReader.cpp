@@ -82,15 +82,15 @@ Vec2 Sprite3DReader::getVec2Attribute(pugi::xml_attribute attribute) const
     while (attribute)
     {
         attriname         = attribute.name();
-        std::string value = attribute.value();
+        std::string_view value = attribute.value();
 
         if (attriname == "X")
         {
-            ret.x = atof(value.c_str());
+            ret.x = atof(value.data());
         }
         else if (attriname == "Y")
         {
-            ret.y = atof(value.c_str());
+            ret.y = atof(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -116,7 +116,7 @@ Offset<Table> Sprite3DReader::createOptionsWithFlatBuffers(pugi::xml_node object
     while (attribute)
     {
         attriname         = attribute.name();
-        std::string value = attribute.value();
+        std::string_view value = attribute.value();
 
         if (attriname == "RunAction3D")
         {
@@ -163,7 +163,7 @@ Offset<Table> Sprite3DReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "FileData")
         {
@@ -172,7 +172,7 @@ Offset<Table> Sprite3DReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {

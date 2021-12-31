@@ -90,8 +90,8 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "PlaceHolderText")
         {
@@ -107,7 +107,7 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
         }
         else if (name == "FontSize")
         {
-            fontSize = atoi(value.c_str());
+            fontSize = atoi(value.data());
         }
         else if (name == "FontName")
         {
@@ -115,7 +115,7 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
         }
         else if (name == "MaxLengthText")
         {
-            maxLength = atoi(value.c_str());
+            maxLength = atoi(value.data());
         }
         else if (name == "PasswordEnable")
         {
@@ -141,7 +141,7 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "FontResource")
         {
@@ -150,7 +150,7 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -175,23 +175,23 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "A")
                 {
-                    textColor.a = atoi(value.c_str());
+                    textColor.a = atoi(value.data());
                 }
                 else if (name == "R")
                 {
-                    textColor.r = atoi(value.c_str());
+                    textColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    textColor.g = atoi(value.c_str());
+                    textColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    textColor.b = atoi(value.c_str());
+                    textColor.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -204,23 +204,23 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "A")
                 {
-                    placeholderColor.a = atoi(value.c_str());
+                    placeholderColor.a = atoi(value.data());
                 }
                 else if (name == "R")
                 {
-                    placeholderColor.r = atoi(value.c_str());
+                    placeholderColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    placeholderColor.g = atoi(value.c_str());
+                    placeholderColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    placeholderColor.b = atoi(value.c_str());
+                    placeholderColor.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -233,23 +233,23 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "A")
                 {
-                    cursorColor.a = atoi(value.c_str());
+                    cursorColor.a = atoi(value.data());
                 }
                 else if (name == "R")
                 {
-                    cursorColor.r = atoi(value.c_str());
+                    cursorColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    cursorColor.g = atoi(value.c_str());
+                    cursorColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    cursorColor.b = atoi(value.c_str());
+                    cursorColor.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();

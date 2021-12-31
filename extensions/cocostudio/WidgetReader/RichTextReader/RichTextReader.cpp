@@ -52,8 +52,8 @@ Offset<Table> RichTextReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "XmlDefinition")
         {

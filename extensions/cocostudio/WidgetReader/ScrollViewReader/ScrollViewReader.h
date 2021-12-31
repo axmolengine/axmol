@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
  http://www.cocos2d-x.org
@@ -50,7 +50,7 @@ public:
     void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* scrollViewOptions);
     cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* scrollViewOptions);
 
-    int getResourceType(std::string key);
+    int getResourceType(std::string_view key);
 };
 }  // namespace cocostudio
 
