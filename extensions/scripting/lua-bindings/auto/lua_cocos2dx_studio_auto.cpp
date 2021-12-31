@@ -17071,9 +17071,9 @@ int lua_cocos2dx_studio_TextureFrame_setTextureName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.TextureFrame:setTextureName");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.TextureFrame:setTextureName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_TextureFrame_setTextureName'", nullptr);
@@ -19681,9 +19681,9 @@ int lua_cocos2dx_studio_EventFrame_setEvent(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.EventFrame:setEvent");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.EventFrame:setEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_EventFrame_setEvent'", nullptr);

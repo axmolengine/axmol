@@ -1544,8 +1544,8 @@ class Generator(object):
         # else:
         #     docfilepath = os.path.join(docfiledir, self.out_file + "_api.js")
 
-        self.impl_file = open(implfilepath, "w+")
-        self.head_file = open(headfilepath, "w+")
+        self.impl_file = open(implfilepath, "wb+")
+        self.head_file = open(headfilepath, "wb+")
         # self.doc_file = open(docfilepath, "w+")
 
         layout_h = Template(file=os.path.join(self.target, "templates", "layout_head.h"),
